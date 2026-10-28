@@ -20,9 +20,9 @@ periodic transverse boundaries, and the nonlinear velocity-correction solver.
 | Origin skill | academic-research-suite, experiment-agent |
 | Origin mode | plan |
 | Origin date | 2026-10-28 |
-| Version label | hit_inflow_plan_v3 |
-| Verification status | Milestone 2 core build and numerical tests VERIFIED on Linux; inlet integration and downstream validation pending |
-| Milestone status | Milestones 1 and 2 CLOSED on 2026-10-28; Milestones 3-8 pending |
+| Version label | hit_inflow_plan_v4 |
+| Verification status | Milestone 3 full-3D inlet and manufactured verification VERIFIED on Linux; Homogeneous1D and downstream validation pending |
+| Milestone status | Milestones 1-3 CLOSED on 2026-10-28; Milestones 4-8 pending |
 | Source baseline | `a3b7efc8fef7e075390f0f59457dfdac30f0b6ed` |
 | Project branch | `codex/hit-inflow-generator` |
 
@@ -31,7 +31,9 @@ and restart contracts are recorded in the completed
 [Milestone 1 specification](hit-inflow-milestone-1.md). Its configuration fixtures
 and experimental inputs are checked. The
 [Milestone 2 core and its focused numerical checks](hit-inflow-milestone-2.md)
-are complete; the runtime inlet and downstream validation remain scheduled work.
+are complete. The
+[Milestone 3 full-3D inlet and solver verification](hit-inflow-milestone-3.md)
+are also complete; Homogeneous1D and downstream validation remain scheduled work.
 
 ## Scope and intended behavior
 
@@ -552,6 +554,20 @@ with their sampling confidence intervals, not an exact isotropy requirement on
 each finite realization. Invalid inputs must fail with useful messages.
 
 ### Milestone 3 Integrate the full three dimensional inlet
+
+**Status: CLOSED on 2026-10-28.** The three-component inlet, strict runtime
+configuration, collective geometry checks, sparse-REF mapping and pre-pressure
+update are implemented, documented, built and installed on Linux. All 19 core
+and 7 boundary unit cases pass, as do two new and six existing solver
+regressions. Raw manufactured velocity errors converge at orders 2.0918,
+1.9986 and 1.9955; increasing expansion modes from 12 to 14 at the finest
+timestep changes the error by 0.1499%. The mean-only limit, HOutflow smoke
+case, projected-flux refinement and preliminary four-rank full-3D runs pass,
+including rank zero without inlet faces and coordinated missing-table
+rejection. The [closure report](hit-inflow-milestone-3.md) and
+[Linux receipt](hit-inflow-milestone-3-validation.json) record exact revisions,
+commands, hashes and limits. Homogeneous1D, full MPI reproducibility and restart
+requirements remain in Milestone 4.
 
 Implement the vector boundary class and its pre-pressure update. Register the
 factory type, build sources, and documentation entry. Project samples onto a
