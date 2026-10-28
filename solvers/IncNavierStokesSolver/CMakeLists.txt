@@ -99,6 +99,8 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
     ADD_NEKTAR_PERFORMANCE_TEST(Perf_ChanStability)
 
     ADD_NEKTAR_TEST(Kovasznay_Flow_3modes)
+    ADD_NEKTAR_TEST(HITInflowMeanOnly3D)
+    ADD_NEKTAR_TEST(HITInflowManufactured3D)
     ADD_NEKTAR_TEST(ThermStab_dir)
     ADD_NEKTAR_TEST(ChannelStability)
     ADD_NEKTAR_TEST(ThermStab_adj)

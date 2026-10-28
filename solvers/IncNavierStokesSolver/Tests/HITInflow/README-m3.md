@@ -5,6 +5,12 @@ Milestone 1 experimental data. They do not model the downstream experimental
 decay. Numerical conclusions must use the Linux build and solver environment
 described in the repository's `AGENTS.md`.
 
+`HITInflowMeanOnly3D` and `HITInflowManufactured3D` are registered solver
+regressions. `HITBoundaryUnitTests` exercises the actual boundary manager,
+strict configuration and geometry guards, constrained projection, repeatability,
+normal-velocity acceleration and projected-flux spatial convergence. The full
+temporal-order study below is a separate numerical acceptance check.
+
 `generate_m3_cases.py` uses only the Python standard library. It regenerates six
 complete XML sessions, `m3-narrow-band.dat`, and a small independent oracle,
 `m3-manufactured-reference.json`. The committed XML files can be loaded directly
