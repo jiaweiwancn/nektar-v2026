@@ -20,13 +20,50 @@ namespace Nektar::HITBoundaryTests
 {
 namespace
 {
+struct TemporaryInputs
+{
+    fs::path directory = fs::temp_directory_path() /
+                         LibUtilities::UniquePath("hit-boundary-inputs");
+    unsigned int next = 0;
+    TemporaryInputs()
+    {
+        if (!fs::create_directory(directory))
+        {
+            throw std::runtime_error("Cannot create HIT boundary test directory");
+        }
+    }
+    ~TemporaryInputs()
+    {
+        try
+        {
+            fs::remove_all(directory);
+        }
+        catch (...)
+        {
+        }
+    }
+};
+
+TemporaryInputs &Inputs()
+{
+    static TemporaryInputs inputs;
+    return inputs;
+}
+
 LibUtilities::SessionReaderSharedPtr Session(const std::string &fixture)
 {
     char name[] = "HITBoundaryUnitTests";
     char *arguments[] = {name, nullptr};
-    std::vector<std::string> files{
-        fs::path(fixture).is_absolute()
-            ? fixture : std::string(HIT_TEST_FIXTURE_DIR) + "/" + fixture};
+    const fs::path original = fs::path(fixture).is_absolute()
+                                  ? fs::path(fixture)
+                                  : fs::path(HIT_TEST_FIXTURE_DIR) / fixture;
+    auto &inputs = Inputs();
+    const auto copy = inputs.directory /
+                      ("case-" + std::to_string(inputs.next++) + ".xml");
+    fs::copy_file(original, copy);
+    // Collection autotuning writes .opt beside a session. Keep these outputs
+    // in the test's TMPDIR rather than beside the checked-in fixtures.
+    std::vector<std::string> files{copy.string()};
     auto comm = LibUtilities::CommSerial::create(1, arguments);
     auto session = LibUtilities::SessionReader::CreateInstance(1, arguments,
                                                                files, comm);
@@ -37,7 +74,7 @@ LibUtilities::SessionReaderSharedPtr Session(const std::string &fixture)
 LibUtilities::SessionReaderSharedPtr Reload(
     const LibUtilities::SessionReaderSharedPtr &session)
 {
-    const auto path = fs::temp_directory_path() /
+    const auto path = Inputs().directory /
                       (LibUtilities::UniquePath("hit-boundary").string() + ".xml");
     BOOST_REQUIRE(session->GetDocument().SaveFile(path.string().c_str()));
     try
