@@ -26,8 +26,10 @@ LibUtilities::SessionReaderSharedPtr Session(const std::string &fixture)
     std::vector<std::string> files{std::string(HIT_TEST_FIXTURE_DIR) + "/" +
                                    fixture};
     auto comm = LibUtilities::CommSerial::create(1, arguments);
-    return LibUtilities::SessionReader::CreateInstance(1, arguments, files,
-                                                       comm);
+    auto session = LibUtilities::SessionReader::CreateInstance(1, arguments,
+                                                               files, comm);
+    session->InitSession();
+    return session;
 }
 
 TiXmlElement *Region(const LibUtilities::SessionReaderSharedPtr &session)
@@ -45,20 +47,26 @@ struct BoundaryFixture
     std::shared_ptr<SolverUtils::HITGenerator> reference;
     int inlet = -1;
 
-    explicit BoundaryFixture(const std::string &file)
+    explicit BoundaryFixture(
+        const std::string &file,
+        const std::function<void(TiXmlElement *)> &change = {})
         : session(Session(file)), fields(4)
     {
         // Resolve the smooth periodic modes accurately enough to measure flux
         // independently of low-degree spatial truncation.
-        session->GetDocument().RootElement()->FirstChildElement("EXPANSIONS")
-            ->FirstChildElement("E")->SetAttribute("NUMMODES", "12");
         auto graph = SpatialDomains::MeshGraphIO::Read(session);
+        graph->ReadExpansionInfo();
+        graph->SetExpansionInfoToNumModes(12);
         for (int component = 0; component < 4; ++component)
         {
             fields[component] =
                 MemoryManager<MultiRegions::ContField>::AllocateSharedPtr(
                     session, graph, session->GetVariable(component), true,
                     true);
+        }
+        if (change)
+        {
+            change(Region(session));
         }
         configuration = HITInflowConfig::Load(session);
         reference = std::make_shared<SolverUtils::HITGenerator>(
@@ -170,6 +178,34 @@ BOOST_AUTO_TEST_CASE(MeanOnlyProjectedBoundary)
     }
     fixture.manager.UpdatePrescribedVelocity(0.02);
     fixture.CheckSamples(0.02);
+}
+
+BOOST_AUTO_TEST_CASE(RejectInconsistentGeometry)
+{
+    BOOST_CHECK_THROW(
+        BoundaryFixture("m3-mean-only.xml", [](auto region) {
+            region->FirstChildElement("ORIGIN")->SetAttribute("X", "0.1");
+        }), std::exception);
+    BOOST_CHECK_THROW(
+        BoundaryFixture("m3-mean-only.xml", [](auto region) {
+            region->FirstChildElement("SYNTHESIS")->SetAttribute("LY", "6");
+        }), std::exception);
+}
+
+BOOST_AUTO_TEST_CASE(NoHITConfigurationIsOptional)
+{
+    auto session = Session("m3-mean-only.xml");
+    auto root = session->GetDocument().RootElement();
+    root->RemoveChild(root->FirstChildElement("HITINFLOW"));
+    auto inlet = root->FirstChildElement("CONDITIONS")
+                     ->FirstChildElement("BOUNDARYCONDITIONS")
+                     ->FirstChildElement("REGION");
+    for (auto velocity = inlet->FirstChildElement("D"); velocity;
+         velocity = velocity->NextSiblingElement("D"))
+    {
+        velocity->RemoveAttribute("USERDEFINEDTYPE");
+    }
+    BOOST_CHECK(!HITInflowConfig::Load(session));
 }
 
 BOOST_AUTO_TEST_CASE(ThreeComponentsTimeAndRepeatability)
