@@ -20,17 +20,18 @@ periodic transverse boundaries, and the nonlinear velocity-correction solver.
 | Origin skill | academic-research-suite, experiment-agent |
 | Origin mode | plan |
 | Origin date | 2026-10-28 |
-| Version label | hit_inflow_plan_v2 |
-| Verification status | UNVERIFIED numerical implementation and results; design based on source and paper inspection |
-| Milestone status | Milestone 1 CLOSED on 2026-10-28; Milestones 2-8 pending |
+| Version label | hit_inflow_plan_v3 |
+| Verification status | Milestone 2 core build and numerical tests VERIFIED on Linux; inlet integration and downstream validation pending |
+| Milestone status | Milestones 1 and 2 CLOSED on 2026-10-28; Milestones 3-8 pending |
 | Source baseline | `a3b7efc8fef7e075390f0f59457dfdac30f0b6ed` |
 | Project branch | `codex/hit-inflow-generator` |
 
 The binding version 1 interface, solver support, random-number, normalization,
 and restart contracts are recorded in the completed
 [Milestone 1 specification](hit-inflow-milestone-1.md). Its configuration fixtures
-and experimental inputs are checked, while the runtime inlet and numerical
-validation remain scheduled work.
+and experimental inputs are checked. The
+[Milestone 2 core and its focused numerical checks](hit-inflow-milestone-2.md)
+are complete; the runtime inlet and downstream validation remain scheduled work.
 
 ## Scope and intended behavior
 
@@ -528,6 +529,17 @@ verified units and station mapping, and the exact supported combinations of
 solver, expansion, and boundary type are recorded.
 
 ### Milestone 2 Implement spectra and transverse mode generation
+
+**Status: CLOSED on 2026-10-28.** The reusable C++ spectrum and Fourier synthesis
+core is implemented under `library/SolverUtils/Turbulence/`. All 19 focused
+Boost cases passed on Linux at tested revision
+`a6790a4a505a78e363759383478599efe2bd837b`, including independent tensor and
+derivative checks and two 4096-seed statistical ensembles. The
+[closure record](hit-inflow-milestone-2.md) and
+[Linux validation receipt](hit-inflow-milestone-2-validation.json) contain the
+API, exact commands, numerical diagnostics and worker allocation. The library
+and public headers were rebuilt and installed. Solver inlet integration remains
+in Milestone 3 onward.
 
 Implement von Karman and tabulated spectra, validation, cutoffs, Gaussian
 coefficients, conjugate pairing, zero-mode handling, deterministic mode IDs,

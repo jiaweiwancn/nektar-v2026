@@ -1,0 +1,69 @@
+{
+  "allocation": {
+    "OMP_NUM_THREADS": 1,
+    "OPENBLAS_NUM_THREADS": 1,
+    "maximum_compiler_workers": 16,
+    "mpi_ranks": 0,
+    "test_workers": 1
+  },
+  "build_directory": "/home/jay/build/nektar-v2026-mpi",
+  "build_settings": {
+    "CMAKE_BUILD_TYPE": "Release",
+    "CMAKE_CXX_COMPILER": "/usr/bin/g++",
+    "CMAKE_CXX_FLAGS": "",
+    "CMAKE_CXX_FLAGS_RELEASE": "-O3 -DNDEBUG",
+    "NEKTAR_BUILD_UNIT_TESTS": "ON",
+    "NEKTAR_USE_FFTW": "OFF",
+    "NEKTAR_USE_MPI": "ON"
+  },
+  "commands": [
+    "cmake -S /media/jay/\u65b0\u52a0\u5377/nektar-v2026 -B /home/jay/build/nektar-v2026-mpi",
+    "cmake --build /home/jay/build/nektar-v2026-mpi --target SolverUtilsUnitTests --parallel 16",
+    "ctest --test-dir /home/jay/build/nektar-v2026-mpi -R '^HITCoreUnitTests$' --output-on-failure --parallel 1 -V",
+    "/home/jay/build/nektar-v2026-mpi/library/UnitTests/SolverUtils/SolverUtilsUnitTests --run_test='HITCore/*Ensemble*' --log_level=message --report_level=detailed --color_output=false",
+    "cmake --install /home/jay/build/nektar-v2026-mpi"
+  ],
+  "compiler": "g++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0",
+  "file_sha256": {
+    "library/SolverUtils/CMakeLists.txt": "78be025acc20c06234c3e054d5d8516a65c5bef643ee6ad212614d6d646ebce7",
+    "library/SolverUtils/Turbulence/HITGenerator.cpp": "c7d03d04c7868d676f1d3835d48fb46cd879a96ab8f98ba44f2084c7ba34a84a",
+    "library/SolverUtils/Turbulence/HITGenerator.h": "eb66c736f9b0b5880859a45042dfe14dab3c1c38bcf335719ab8ae387854bcd5",
+    "library/SolverUtils/Turbulence/HITSpectrum.cpp": "a49219a268879f8894e49aa0b6f6e946355b400ad3ef9dd2ab0ffc453f84e7a5",
+    "library/SolverUtils/Turbulence/HITSpectrum.h": "b6a1f9672526ef4da04e027877953df20dbcd453f03f4bb94c063eb1c3549d2a",
+    "library/UnitTests/CMakeLists.txt": "4725b9cffce221715dcd12eacbbedf7e65c7af2760c32519cb26c1dc8ff71a83",
+    "library/UnitTests/SolverUtils/CMakeLists.txt": "75b3ce587e91f18004494714797d43346de90354233a79618ffcff1a90ce54ef",
+    "library/UnitTests/SolverUtils/TestHIT.cpp": "b384378fd4a623bec1780e484ea7c2c54e73035ff9f126563f4369cadfbe058d",
+    "library/UnitTests/SolverUtils/main.cpp": "9b5831e8a94e3b97ab90ee858d2bc0c35217e34bcba91a9cc3c4e914cc012b8f"
+  },
+  "fixture_manifest_sha256": "6eac80b5db4308d3b58b750a0fe61c62653fd7715e183ddab2bfbaa3b40b88b1",
+  "installed_header_sha256": {
+    "/home/jay/.local/opt/nektar-v2026-mpi/include/nektar++/SolverUtils/Turbulence/HITGenerator.h": "eb66c736f9b0b5880859a45042dfe14dab3c1c38bcf335719ab8ae387854bcd5",
+    "/home/jay/.local/opt/nektar-v2026-mpi/include/nektar++/SolverUtils/Turbulence/HITSpectrum.h": "b6a1f9672526ef4da04e027877953df20dbcd453f03f4bb94c063eb1c3549d2a"
+  },
+  "log_sha256": {
+    "build.log": "165fdfe7fd6abf5d43932dd89bfc07fd9400f89cc80625cb6759e28d648328c3",
+    "configure.log": "f4bc9c6d9c5364263855d66fee7da52ab7dac487f8cd18a3480b441dc86acdd1",
+    "ensemble-diagnostics.log": "02d57624c0f73e9c877569881cd0f1d507369fca37b72f1eb13e88891425263d",
+    "hit-core.log": "f75036ae69ccf965b9d87c509c5fc0c4322d3ad61d036047102d6210762229b7",
+    "install.log": "2bc66c99c4331473f2e04d8f378c428ca8a84a6665df73f4efa527bb77e3457b"
+  },
+  "milestone": 2,
+  "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.35",
+  "results": {
+    "cpp_cases_passed": 19,
+    "ctest_failed": 0,
+    "ctest_passed": 1,
+    "ensemble_acceptance": "six analytical standard errors; logged values rounded by Boost output",
+    "ensemble_samples": 4096,
+    "field_energy_variance": 0.00026885,
+    "field_mean_energy": 0.0739417,
+    "gaussian_abs_squared_mean_component0": 1.01875,
+    "target_energy": 0.073926,
+    "theoretical_energy_variance": 0.00026893
+  },
+  "run_directory": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-2/a6790a4",
+  "scope": "Spectrum and Fourier synthesis core only; no inlet boundary, MPI distribution, solver simulation, or experimental decay validation.",
+  "source_status": "",
+  "status": "PASS",
+  "tested_revision": "a6790a4a505a78e363759383478599efe2bd837b"
+}
