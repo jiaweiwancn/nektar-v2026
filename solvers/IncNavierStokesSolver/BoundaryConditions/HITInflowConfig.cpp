@@ -183,7 +183,9 @@ void AgreeError(const CommSharedPtr &comm, std::string error)
     if (failedRank != INT_MAX)
     {
         BroadcastString(comm, error, failedRank);
-        throw std::invalid_argument(error);
+        // The solver's main handler catches NekError/std::runtime_error.
+        // Report the agreed input failure through that path on every rank.
+        NEKERROR(ErrorUtil::efatal, error);
     }
 }
 

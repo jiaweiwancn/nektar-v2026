@@ -46,8 +46,8 @@ void Agree(const LibUtilities::CommSharedPtr &comm,
         std::copy(localError.begin(), localError.end(), bytes.begin());
     }
     comm->Bcast(bytes, owner);
-    throw std::invalid_argument("HITInflow geometry: " +
-                                std::string(bytes.begin(), bytes.end()));
+    NEKERROR(ErrorUtil::efatal,
+             "HITInflow geometry: " + std::string(bytes.begin(), bytes.end()));
 }
 
 enum RegionKind
