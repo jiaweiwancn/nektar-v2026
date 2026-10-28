@@ -1,0 +1,234 @@
+\section{Forcing}
+\label{sec:xml:forcing}
+An optional section of the file allows forcing functions to be defined. These are enclosed in the
+\inltt{FORCING} tag. The forcing type is enclosed within the \inltt{FORCE} tag and expressed in the file as:
+
+\begin{lstlisting}[style=XMLStyle] 
+<FORCE TYPE="[NAME]">
+    ...
+</FORCE>
+\end{lstlisting}
+
+The force type can be any one of the following.
+
+\subsection{Absorption}
+This force type allows the user to apply an absorption layer (essentially a porous region) anywhere in the domain. The user may also specify a velocity profile to be imposed at the start of this layer, and in the event of a time-dependent simulation, this profile can be modulated with a time-dependent function. These velocity functions and the function defining the region in which to apply the absorption layer are expressed in the \inltt{CONDITIONS} section, however the name of these functions are defined here by the \inltt{COEFF} tag for the layer, the \inltt{REFFLOW} tag for the velocity profile, and the \inltt{REFFLOWTIME} for the time-dependent function.  
+
+\begin{lstlisting}[style=XMLStyle] 
+<FORCE TYPE="Absorption">
+    <COEFF> [FUNCTION NAME] <COEFF/>
+    <REFFLOW> [FUNCTION NAME] <REFFLOW/>
+    <REFFLOWTIME> [FUNCTION NAME] <REFFLOWTIME/>
+    <BOUNDARYREGIONS> 1,4 <BOUNDARYREGIONS/>
+</FORCE>
+\end{lstlisting}
+If a list of \inltt{BOUNDARYREGIONS} is specified, the distance to these regions is available as additional variable \inltt{r} in the definition of the \inltt{COEFF} function:
+\begin{lstlisting}[style=XMLStyle]
+<FUNCTION NAME="AbsorptionCoefficient">
+    <E VAR="p" EVARS="r" VALUE="-5000 * exp(-0.5 * (3*r / 0.4)^2)" />
+    <E VAR="u" EVARS="r" VALUE="-5000 * exp(-0.5 * (3*r / 0.4)^2)" />
+    <E VAR="v" EVARS="r" VALUE="-5000 * exp(-0.5 * (3*r / 0.4)^2)" />
+</FUNCTION>
+\end{lstlisting}
+
+\subsection{Body}
+This force type specifies the name of a body forcing function expressed in the \inltt{CONDITIONS} section.
+
+\begin{lstlisting}[style=XMLStyle] 
+<FORCE TYPE="Body">
+    <BODYFORCE> [FUNCTION NAME] <BODYFORCE/>
+</FORCE>
+\end{lstlisting}
+
+\subsection{Synthetic turbulence generator}
+This force type allows the user to apply synthetic turbulence generation in the flow field. The Synthetic Eddy Method is implemented. The approach developed here is based on a source term formulation. This formulation allows the user to apply synthetic turbulence generation in any specific area of the domain, not only in the boundary condition as most methodologies do. So that, after defining a synthetic eddy region (box of eddies), the user can randomly release eddies inside this box which are going to be convected downstream and will produce turbulence depending on the flow conditions. Each eddy  that leaves the synthetic eddy region is reintroduced in the inlet plane of the box, so this mechanism re-energise the system, roughly speaking. 
+
+Below it is shown how to define the Synthetic Eddy Method for a fully three-dimensional Navier-Stokes simulation. Note that this definition is under the \inltt{FORCING} tag. Firstly, in the \inltt{TYPE} entry, we define the force type as \texttt{IncNSSyntheticTurbulence} for the incompressible solver and \texttt{CFSSyntheticTurbulence} for the compressible solver. In the \inltt{BoxOfEddies} tag, under the \inltt{FORCE} tag, the center plane of the synthetic eddy region is defined. The coordinates of its center are given by \texttt{x0, y0, z0} and lengths of its sides are \texttt{lyref}  and \texttt{lzref} in the $y$- and $z$-directions, respectively. Note that the length in the x-direction is defined in the characteristic length scale function (see below), so that \inltt{l00}  defines the value of $l_{x}$. In the \inltt{Sigma} tag, we define the standard deviation (\texttt{sigma}) of the Gaussian function with zero mean, which is used to compute the stochastic signal. After that, the bulk velocity (\texttt{Ub}) of the flow must be provided in the \inltt{BulkVelocity} tag. 
+
+\begin{lstlisting}[style=XMLStyle] 
+<FORCE TYPE="IncNSSyntheticTurbulence">
+    <BoxOfEddies> x0 y0 z0 lyref lzref </BoxOfEddies>
+    <Sigma> sigma </Sigma>
+    <BulkVelocity> Ub </BulkVelocity>
+    <ReynoldsStresses> [ReynoldsStresses FUNCTION NAME] </ReynoldsStresses>
+    <CharLengthScales> [LenScales FUNCTION NAME] </CharLengthScales>
+</FORCE>
+\end{lstlisting}
+
+In order to define the Reynolds stresses (\inltt{ReynoldsStresses} tag) and the characteristic length scales  (\inltt{CharLengthScales} tag) of the eddies, the name of the functions which define them must be given. These functions must be placed under the   \inltt{CONDITIONS} tag. Both functions are provided below. It is worthy mentioning that it is possible to define space-dependent functions for each Reynolds stress. In other words, the user can, for instance, provide the analytical solution of the Reynolds stresses close to the wall (boundary). This information is essential to calculate the velocity fluctuations. 
+
+\begin{lstlisting}[style=XMLStyle] 
+<FUNCTION NAME="ReynoldsStresses">
+    <E VAR="r00" VALUE="1e-3" /> 
+    <E VAR="r10" VALUE="10*y+y^2+5*y^3" />
+    <E VAR="r20" VALUE="0.0"  />
+    <E VAR="r11" VALUE="1e-3" />
+    <E VAR="r21" VALUE="0.0"  />
+    <E VAR="r22" VALUE="1e-3" />
+ </FUNCTION>
+\end{lstlisting}
+
+Also, in the Synthetic Eddy Method implemented here, an isotropic or anisotropic turbulence can be described depending on the values provided in the characteristic length scale function.  For an isotropic turbulence, all the values must be the same.
+
+\begin{lstlisting}[style=XMLStyle] 
+<FUNCTION NAME="LenScales">
+    <E VAR="l00" VALUE="1.0"   />
+    <E VAR="l10" VALUE="0.085" />
+    <E VAR="l20" VALUE="0.125" />
+    <E VAR="l01" VALUE="0.4"   />
+    <E VAR="l11" VALUE="0.085" />
+    <E VAR="l21" VALUE="0.125" />
+    <E VAR="l02" VALUE="0.4"   />
+    <E VAR="l12" VALUE="0.170" />
+    <E VAR="l22" VALUE="0.25"  />
+</FUNCTION>
+\end{lstlisting}
+
+Note that the synthetic turbulence generator is only supported for fully three-dimensional simulations.
+
+\subsection{MovingReferenceFrame}
+This force type allows the solution of incompressilbe Navier-Stokes in moving frame of reference. The moving frame is attached the to body and can have translational, rotational or both motions. Although the Navier-Stokes equations are solved in a moving reference frame, our formulation is based on the absolute velocity and pressure (in inertial frame). However, note that these absolute velocities and any other vector quantities are expressed using the coordinate basis of the moving frame. Further, note that if you are using the FilterAeroForces, the force vector $\left(F_x, F_y, F_z\right)$ is automatically converted and output in the inertial frame (ground reference frame).
+
+To use this formulation the user need to specify the force type inside the \inltt{FORCING} tag as follwos:
+
+\begin{lstlisting}[style=XMLStyle]
+<FORCE TYPE="MovingReferenceFrame">
+    <FRAMEVELOCITY> [MRF FUNCTION NAME] </FRAMEVELOCITY>
+    <PIVOTPOINT> x0,  y0,  z0  </PIVOTPOINT>
+</FORCE>
+\end{lstlisting}
+
+Here we are required to provide one function for this force type which defines the linear velocity and the angular velocity of reference frame or both. In the case of rotating frame, i.e. when we are prescribing the angular velocity of reference frame, we can provide a coordinate of \inltt{PIVOTPOINT}, around which the frame is rotating. If no pivot point provided, the origin of coordinates in the moving reference frame will be used as the pivot point.
+Note that the frame velocities (both linear and angular velocities) must be defined in the inertial stationary frame of reference,i.e. ground reference frame (and expressed using the basis of inertial stationary frame), however, the Poivot point is in the moving reference frame.
+
+Examples of linear and angular velocity funcitons together with their usage in the Forcing is shown below:
+
+\begin{lstlisting}[style=XMLStyle]
+<CONDITIONS>
+
+<FUNCTION NAME="VelMRF">
+    <E VAR="u" VALUE="2*sin(PI*t)" />
+    <E VAR="v" VALUE="0.1" />
+    <E VAR="w" VALUE="0" />
+    <E VAR="Omega_x" VALUE="0" />
+    <E VAR="Omega_y" VALUE="0" />
+    <E VAR="Omega_z" VALUE="0.3*cos(2*PI*t)" />
+</FUNCTION>
+
+</CONDITIONS>
+
+<FORCING>
+
+    <FORCE TYPE="MovingReferenceFrame">
+        <FRAMEVELOCITY> VelMRF </FRAMEVELOCITY>
+        <PIVOTPOINT> 0.2, 0.0, 0.0  </PIVOTPOINT>
+    </FORCE>
+
+</FORCING>
+\end{lstlisting}
+
+
+The moving frame function defines the velocity of the body frame observed in the inertial reference frame $$\mathbf{u}_{frame} = \mathbf{u}_0 + \mathbf{\Omega}\times (\mathbf{x}-\mathbf{x}_0).$$ This means that these functions (such as the \inltt{VelMRF} in the above example) are defined and expressed in the stationary inertial frame (ground frame).
+
+Here, $\mathbf{u}_0 = (\text{u, v, w})$ is the translational velocity, $\mathbf{\Omega}=(\text{Omega\_x, Omega\_y, Omega\_z})$ is the angular velocity.
+$\mathbf{x}_0=(0.2, 0.0, 0.0)$ is the rotation pivot and it is fixed in the body frame.
+Translational motion is allowed for all dimensions while rotational motion is currently restricted to z (omega\_z) for 2D, 3DH1D and full 3D simulations.
+
+Finally, note that when using \inltt{MovingReferenceFrame} force type, for any open part of the computational domain that the user specifies the velocity, such as inlet and free stream boundary conditions, the \inltt{USERDEFINEDTYPE="MovingFrameDomainVel"} tag can be used for velocity components. For example if boundary \inltt{ID=2} is the inlet with \inltt{Uinfx} and \inltt{Uinfy} the values of inlet velocities defined as parameters, the boundary condition for this boundary becomes:
+
+\begin{lstlisting}[style=XMLStyle]
+<REGION REF="2"> 
+   <D VAR="u" USERDEFINEDTYPE="MovingFrameDomainVel" VALUE="Uinfx" />
+   <D VAR="v" USERDEFINEDTYPE="MovingFrameDomainVel" VALUE="Uinfy" />
+   <N VAR="p" USERDEFINEDTYPE="H" VALUE="0" />  
+</REGION>
+\end{lstlisting}
+
+for the wall boundary conditions on the surface of the body, we need to use \inltt{MovingFrameWall} tag as shown below:
+
+\begin{lstlisting}[style=XMLStyle]
+<REGION REF="0"> 
+    <D VAR="u" USERDEFINEDTYPE="MovingFrameWall" VALUE="Uinfx" />
+    <D VAR="v" USERDEFINEDTYPE="MovingFrameWall" VALUE="Uinfy" />
+    <N VAR="p" USERDEFINEDTYPE="H" VALUE="0" />  
+</REGION>
+\end{lstlisting}
+
+The outlet and pressure boundary conditions are the same as before. In practical, It is not necessary to set the \inltt{MovingFrameDomainVel} or \inltt{MovingFrameWall} tag for all velocity components. In the circumstance when the analytical solution of a velocity component in the body frame is available, the value can still be prescribed as a normal Dirichlet-type boundary condition.
+
+In addition to the prescribed motion, the frame velocity can also be determined from the fluid-body interaction. One example is as follows:
+\begin{lstlisting}[style=XMLStyle]
+<CONDITIONS>
+    <FUNCTION NAME="VelMRF">
+        <E VAR="u" VALUE="0.0" />
+        <E VAR="v" VALUE="0" />
+        <E VAR="Omega_z" VALUE="cos(t)"/>
+    </FUNCTION>
+
+    <FUNCTION NAME="InitDisp">
+        <E VAR="x" VALUE="0" />
+        <E VAR="y" VALUE="0" />
+        <E VAR="Theta_z" VALUE="0"/>
+    </FUNCTION>
+
+    <FUNCTION NAME="ExtForce">
+        <E VAR="fx" VALUE="-1" />
+        <E VAR="fy" VALUE="0" />
+        <E VAR="Mz" VALUE="0"/>
+    </FUNCTION>
+</CONDITIONS>
+
+<FORCING>
+    <FORCE TYPE="MovingReferenceFrame">
+        <FRAMEVELOCITY> VelMRF </FRAMEVELOCITY>
+        <EXTERNALFORCE>  ExtForce </EXTERNALFORCE>
+        <INITIALDISPLACEMENT>  InitDisp </INITIALDISPLACEMENT>
+        <MASS>         1.0, 0., 0,  0,1,0,  0,0,1 </MASS>
+        <MOTIONPRESCRIBED>  0, 1 ,1 </MOTIONPRESCRIBED>
+        <PIVOTPOINT> 0. , 0,0 </PIVOTPOINT>
+    </FORCE>
+</FORCING>
+\end{lstlisting}
+
+The meanings of the parameters are:
+\begin{center}
+	\begin{tabularx}{0.99\textwidth}{lXr}
+		\toprule
+		\textbf{Option name} & \textbf{Description} & \textbf{Default}
+		 \\
+		\midrule
+		\inltt{MOTIONPRESCRIBED}      &A vector that denotes a certain degree of freedom is prescribed by the \inltt{FRAMEVELOCITY} (\texttt{1}) or determined from fluid force (\texttt{0}).  & \texttt{1}\\
+		\inltt{EXTERNALFORCE}      & External force exerted on the body, (fx, fy, fz, Mx, My, Mz).  & \texttt{0}\\
+		\inltt{MASS}      & Mass matrix of the body system. Its size is $3\times3$ in 2D and $4\times4$ in 3D.  & \texttt{0} \\
+        \inltt{DAMPING}      & Damper matrix of the body system. Its size is $3\times3$ in 2D and $4\times4$ in 3D.  & \texttt{0} \\
+        \inltt{RIGIDITY}      & Stiffness matrix of the body system. Its size is $3\times3$ in 2D and $4\times4$ in 3D.  & \texttt{0} \\
+		\inltt{INITIALDISPLACEMENT}      & A function to set the initial displacement of the body, (x, y, z, Theta\_x, Theta\_y, Theta\_z).  & \texttt{0} \\
+        \inltt{TRAVELINGWAVESPEED}      & A traveling wave motion can be set to simulation problem such as a traveling wave propagating along an infinite geometry.  & \texttt{0} \\
+        \inltt{OutputFile}      & Output file name.  & \texttt{SessionFileName.mrf} \\
+        \inltt{OutputFrequency}      & Output frequency of the body's motion.  & \texttt{1} \\
+		\bottomrule
+	\end{tabularx}
+\end{center}
+
+\subsection{Programmatic}
+This force type allows a forcing function to be applied directly within the code, thus it has no associated function. 
+
+\begin{lstlisting}[style=XMLStyle] 
+<FORCE TYPE="Programmatic">
+</FORCE>
+\end{lstlisting}
+
+
+\subsection{Noise}
+This force type allows the user to specify the magnitude of a white noise force. 
+Optional arguments can also be used to define the frequency in time steps to recompute the noise (default is never)
+ and the number of time steps to apply the noise (default is the entire simulation).  
+
+\begin{lstlisting}[style=XMLStyle] 
+<FORCE TYPE="Noise">
+    <WHITENOISE> [VALUE] <WHITENOISE/>
+    <!-- Optional arguments -->
+    <UPDATEFREQ> [VALUE] <UPDATEFREQ/>
+    <NSTEPS> [VALUE] <NSTEPS/>
+</FORCE>
+\end{lstlisting}
