@@ -280,7 +280,7 @@ public:
 
     NekDouble Attribute(const TiXmlElement *element, const std::string &name)
     {
-        return Evaluate(element->Attribute(name),
+        return Evaluate(element->Attribute(name.c_str()),
                         element->ValueStr() + "/@" + name);
     }
 
