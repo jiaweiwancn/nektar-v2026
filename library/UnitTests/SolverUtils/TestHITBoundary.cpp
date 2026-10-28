@@ -5,6 +5,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <IncNavierStokesSolver/BoundaryConditions/IncBoundaryConditions.h>
+#include <LibUtilities/BasicUtils/Filesystem.hpp>
 #include <LibUtilities/Communication/CommSerial.h>
 #include <MultiRegions/ContField.h>
 #include <SpatialDomains/MeshGraphIO.h>
@@ -23,13 +24,33 @@ LibUtilities::SessionReaderSharedPtr Session(const std::string &fixture)
 {
     char name[] = "HITBoundaryUnitTests";
     char *arguments[] = {name, nullptr};
-    std::vector<std::string> files{std::string(HIT_TEST_FIXTURE_DIR) + "/" +
-                                   fixture};
+    std::vector<std::string> files{
+        fs::path(fixture).is_absolute()
+            ? fixture : std::string(HIT_TEST_FIXTURE_DIR) + "/" + fixture};
     auto comm = LibUtilities::CommSerial::create(1, arguments);
     auto session = LibUtilities::SessionReader::CreateInstance(1, arguments,
                                                                files, comm);
     session->InitSession();
     return session;
+}
+
+LibUtilities::SessionReaderSharedPtr Reload(
+    const LibUtilities::SessionReaderSharedPtr &session)
+{
+    const auto path = fs::temp_directory_path() /
+                      (LibUtilities::UniquePath("hit-boundary").string() + ".xml");
+    BOOST_REQUIRE(session->GetDocument().SaveFile(path.string().c_str()));
+    try
+    {
+        auto result = Session(path.string());
+        fs::remove(path);
+        return result;
+    }
+    catch (...)
+    {
+        fs::remove(path);
+        throw;
+    }
 }
 
 TiXmlElement *Region(const LibUtilities::SessionReaderSharedPtr &session)
@@ -143,6 +164,8 @@ BOOST_AUTO_TEST_CASE(StrictConfigurationFailures)
                            ->SetAttribute("AMPLITUDE", "1"); },
         [](auto root) { root->FirstChildElement("CUTOFF")
                            ->SetAttribute("KMAX", "100"); },
+        [](auto root) { root->FirstChildElement("CUTOFF")
+                           ->SetAttribute("KMAX", "awgn(1)"); },
         [](auto root) { root->InsertEndChild(*root->FirstChildElement("ORIGIN")); }
     };
     for (const auto &change : changes)
@@ -160,7 +183,12 @@ BOOST_AUTO_TEST_CASE(StrictConfigurationFailures)
     BOOST_CHECK_THROW(HITInflowConfig::Load(session), std::exception);
 
     session = Session("m3-mean-only.xml");
-    session->SetSolverInfo("HOMOGENEOUS", "1D");
+    TiXmlElement homogeneous("I");
+    homogeneous.SetAttribute("PROPERTY", "HOMOGENEOUS");
+    homogeneous.SetAttribute("VALUE", "1D");
+    session->GetDocument().RootElement()->FirstChildElement("CONDITIONS")
+        ->FirstChildElement("SOLVERINFO")->InsertEndChild(homogeneous);
+    session = Reload(session);
     BOOST_CHECK_THROW(HITInflowConfig::Load(session), std::exception);
     session = Session("m3-mean-only.xml");
     session->SetSolverInfo("Extrapolation", "SubStepping");
@@ -168,6 +196,15 @@ BOOST_AUTO_TEST_CASE(StrictConfigurationFailures)
     session = Session("m3-mean-only.xml");
     NekDouble cfl = 0.5;
     session->SetParameter("CFL", cfl);
+    BOOST_CHECK_THROW(HITInflowConfig::Load(session), std::exception);
+    session = Session("m3-mean-only.xml");
+    auto order = session->GetDocument().RootElement()
+                     ->FirstChildElement("CONDITIONS")
+                     ->FirstChildElement("TIMEINTEGRATIONSCHEME")
+                     ->FirstChildElement("ORDER");
+    order->Clear();
+    order->LinkEndChild(new TiXmlText("3"));
+    session = Reload(session);
     BOOST_CHECK_THROW(HITInflowConfig::Load(session), std::exception);
 }
 
