@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Milestone 1 configuration contract, not a runnable mesh/session.
+     HITInflow support is implemented in later milestones. The short duration
+     and coarse cutoff illustrate syntax, not the experimental decay case.
+     Launch future assembled cases with this directory as the working directory. -->
+<NEKTAR>
+    <CONDITIONS>
+        <SOLVERINFO>
+            <I PROPERTY="SolverType" VALUE="VelocityCorrectionScheme" />
+            <I PROPERTY="EQTYPE" VALUE="UnsteadyNavierStokes" />
+            <I PROPERTY="EvolutionOperator" VALUE="Nonlinear" />
+            <I PROPERTY="Projection" VALUE="Continuous" />
+            <I PROPERTY="Extrapolation" VALUE="Standard" />
+            <I PROPERTY="HOMOGENEOUS" VALUE="1D" />
+        </SOLVERINFO>
+        <TIMEINTEGRATIONSCHEME>
+            <METHOD> IMEX </METHOD>
+            <ORDER> 2 </ORDER>
+        </TIMEINTEGRATIONSCHEME>
+        <PARAMETERS>
+            <P> Ubar = 12.7 </P>
+            <P> Kinvis = 1.5e-5 </P>
+            <P> TimeStep = 1e-4 </P>
+            <P> NumSteps = 500 </P>
+            <P> HomModesZ = 32 </P>
+            <P> LZ = 0.254 </P>
+        </PARAMETERS>
+        <VARIABLES>
+            <V ID="0"> u </V>
+            <V ID="1"> v </V>
+            <V ID="2"> w </V>
+            <V ID="3"> p </V>
+        </VARIABLES>
+        <BOUNDARYREGIONS>
+            <B ID="7"> C[1] </B>
+        </BOUNDARYREGIONS>
+        <BOUNDARYCONDITIONS>
+            <REGION REF="7">
+                <D VAR="u" USERDEFINEDTYPE="HITInflow" VALUE="Ubar" />
+                <D VAR="v" USERDEFINEDTYPE="HITInflow" VALUE="0" />
+                <D VAR="w" USERDEFINEDTYPE="HITInflow" VALUE="0" />
+                <N VAR="p" USERDEFINEDTYPE="H" VALUE="0" />
+            </REGION>
+        </BOUNDARYCONDITIONS>
+        <FUNCTION NAME="InitialConditions">
+            <E VAR="u" VALUE="Ubar" />
+            <E VAR="v" VALUE="0" />
+            <E VAR="w" VALUE="0" />
+            <E VAR="p" VALUE="0" />
+        </FUNCTION>
+    </CONDITIONS>
+    <HITINFLOW VERSION="1" UNITS="SI">
+        <REGION REF="7">
+            <ORIGIN X="0" Y="0" Z="0" />
+            <SYNTHESIS LX="1.27" LY="0.254" LZ="LZ"
+                       NX="128" NY="32" NZ="HomModesZ"
+                       SEED="20261028" TIMEORIGIN="0"
+                       RECORDDURATION="0.05" REPEAT="Error" />
+            <SPECTRUM TYPE="Tabulated" FILE="cbc1971_theta42_spectrum_3d.dat"
+                      INTERPOLATION="LogLinear" LOW="K4" HIGH="Gaussian"
+                      NORMALIZATION="Preserve" />
+            <CUTOFF KMAX="200" TAPERSTART="160" />
+        </REGION>
+    </HITINFLOW>
+</NEKTAR>

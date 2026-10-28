@@ -20,10 +20,17 @@ periodic transverse boundaries, and the nonlinear velocity-correction solver.
 | Origin skill | academic-research-suite, experiment-agent |
 | Origin mode | plan |
 | Origin date | 2026-10-28 |
-| Version label | hit_inflow_plan_v1 |
+| Version label | hit_inflow_plan_v2 |
 | Verification status | UNVERIFIED numerical implementation and results; design based on source and paper inspection |
+| Milestone status | Milestone 1 CLOSED on 2026-10-28; Milestones 2-8 pending |
 | Source baseline | `a3b7efc8fef7e075390f0f59457dfdac30f0b6ed` |
 | Project branch | `codex/hit-inflow-generator` |
+
+The binding version 1 interface, solver support, random-number, normalization,
+and restart contracts are recorded in the completed
+[Milestone 1 specification](hit-inflow-milestone-1.md). Its configuration fixtures
+and experimental inputs are checked, while the runtime inlet and numerical
+validation remain scheduled work.
 
 ## Scope and intended behavior
 
@@ -242,7 +249,10 @@ value does not request a literal zero pressure gradient. Supply updated velocity
 coefficients before the pressure extrapolation reads them.
 
 Begin with the standard semi-implicit velocity-correction scheme and nonlinear
-advection. Enable appropriate spectral/hp and homogeneous dealiasing for the
+advection, fixed steps, and blank-variant IMEX order 2 with its order-1 startup.
+Use the explicit supported-combination matrix in the Milestone 1 specification;
+do not treat other integrators or solver variants as supported by default.
+Enable appropriate spectral/hp and homogeneous dealiasing for the
 resolved decay study. Keep physical viscosity distinct from artificial
 stabilization. If spectral vanishing viscosity (SVV) is required, report its
 parameters and its contribution to the energy budget, and describe that run as
@@ -284,11 +294,14 @@ The key scheduling issue is visible at the source baseline:
    `EvaluatePressureBCs`.
 
 Adding the turbulence inlet only to the last call would make its acceleration
-stale. Introduce an explicit prescribed-velocity phase, invoked by the existing
-boundary update path, while preserving existing pressure-aware post-pressure
-updates. Audit initialization and the time integrator's stage times. Limit the
-initial advertised support to schemes exercised by tests; do not claim all
-substepping, implicit, weak-pressure, or mapped variants automatically work.
+stale. Add an explicit prescribed-velocity hook at the end of
+`SetBoundaryConditions(time)`, preserving pressure-aware post-pressure updates.
+For this IMEX variant, the RHS also runs at its completed stage time, so do not
+add another inlet advance using `rhsTime+TimeStep` inside pressure evaluation.
+Load/broadcast settings on all session ranks before local boundary construction;
+ranks with no inlet cannot participate in collectives inside an inlet constructor.
+Keep the initial supported integrator restriction until manufactured-inlet tests
+establish the numerical behavior. See the completed source audit for anchors.
 
 For full 3D, sample physical coordinates and project onto the face expansions.
 For `Homogeneous1D`, follow
@@ -494,6 +507,16 @@ spectrum is needed. Report window effects in a streamwise inhomogeneous flow.
 
 ### Milestone 1 Finalize interfaces and benchmark inputs
 
+**Status: CLOSED on 2026-10-28.** The
+[interface specification](hit-inflow-milestone-1.md), configuration fragments,
+source transcription, SI fixture files, and preparation/contract checkers are
+saved. The [closure record](hit-inflow-milestone-1-validation.md) and
+[Linux receipt](hit-inflow-milestone-1-validation.json) record the tested snapshot.
+Both XML examples, the mean-only limit, 26 invalid configurations, all six
+spectra, station mapping, units, and data digests passed the one-worker Linux
+checks. This closes the interface/input milestone, not the future runtime
+parser, stochastic implementation, or solver/numerical milestones.
+
 Confirm branch and checkout states. Finalize the region configuration schema,
 RNG contract, Fourier convention, spectrum file format, supported time
 integrator, and startup behavior. Prepare the small experimental tables from
@@ -698,6 +721,11 @@ Stage only intended files. Existing untracked literature copies, `AGENTS.md`,
 and macOS metadata are separate from the plan commit. Do not add the supplied
 PDFs or generated production data merely because they are present locally.
 Keep the Linux working tree and unrelated user branches intact during sync.
+
+The Mac supports direct GitHub SSH authentication. Push this branch with
+`git@github.com:jiaweiwancn/nektar-v2026.git`; this checkout uses that push URL
+while retaining its existing fetch URL. There is no need to relay pushes through
+the Linux server.
 
 The final deliverable is the implementation with passing focused checks and a
 reproducible downstream comparison, including any documented physical or

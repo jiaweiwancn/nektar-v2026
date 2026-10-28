@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Milestone 1 configuration contract for a full 3D expansion. No mesh is
+     supplied and HITInflow is not implemented yet. Values illustrate syntax,
+     not a validated production resolution or fitted experimental spectrum. -->
+<NEKTAR>
+    <CONDITIONS>
+        <SOLVERINFO>
+            <I PROPERTY="SolverType" VALUE="VelocityCorrectionScheme" />
+            <I PROPERTY="EQTYPE" VALUE="UnsteadyNavierStokes" />
+            <I PROPERTY="EvolutionOperator" VALUE="Nonlinear" />
+            <I PROPERTY="Projection" VALUE="Continuous" />
+            <I PROPERTY="Extrapolation" VALUE="Standard" />
+        </SOLVERINFO>
+        <TIMEINTEGRATIONSCHEME>
+            <METHOD> IMEX </METHOD>
+            <ORDER> 2 </ORDER>
+        </TIMEINTEGRATIONSCHEME>
+        <PARAMETERS>
+            <P> Ubar = 12.7 </P>
+            <P> Kinvis = 1.5e-5 </P>
+            <P> TimeStep = 1e-4 </P>
+            <P> NumSteps = 500 </P>
+        </PARAMETERS>
+        <VARIABLES>
+            <V ID="0"> u </V>
+            <V ID="1"> v </V>
+            <V ID="2"> w </V>
+            <V ID="3"> p </V>
+        </VARIABLES>
+        <BOUNDARYREGIONS>
+            <B ID="7"> C[1] </B>
+        </BOUNDARYREGIONS>
+        <BOUNDARYCONDITIONS>
+            <REGION REF="7">
+                <D VAR="u" USERDEFINEDTYPE="HITInflow" VALUE="Ubar" />
+                <D VAR="v" USERDEFINEDTYPE="HITInflow" VALUE="0" />
+                <D VAR="w" USERDEFINEDTYPE="HITInflow" VALUE="0" />
+                <N VAR="p" USERDEFINEDTYPE="H" VALUE="0" />
+            </REGION>
+        </BOUNDARYCONDITIONS>
+        <FUNCTION NAME="InitialConditions">
+            <E VAR="u" VALUE="Ubar" />
+            <E VAR="v" VALUE="0" />
+            <E VAR="w" VALUE="0" />
+            <E VAR="p" VALUE="0" />
+        </FUNCTION>
+    </CONDITIONS>
+    <HITINFLOW VERSION="1" UNITS="SI">
+        <REGION REF="7">
+            <ORIGIN X="0" Y="0" Z="0" />
+            <SYNTHESIS LX="1.27" LY="0.254" LZ="0.254"
+                       NX="128" NY="32" NZ="32"
+                       SEED="20261028" TIMEORIGIN="0"
+                       RECORDDURATION="0.05" REPEAT="Error" />
+            <SPECTRUM TYPE="VonKarman" LENGTH="0.03"
+                      NORMALIZATION="TargetRMS" RMS="0.222" />
+            <CUTOFF KMAX="200" TAPERSTART="160" />
+        </REGION>
+    </HITINFLOW>
+</NEKTAR>

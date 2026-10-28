@@ -1,0 +1,57 @@
+{
+  "OMP_NUM_THREADS": "1",
+  "OPENBLAS_NUM_THREADS": "1",
+  "archive_sha256": "98355c253655106926d7d8774de1b9bc833ac99ed1c2a8a1aaefa7f7a82c4b6e",
+  "candidate_base_revision": "132f4582e438ead0d81f45da671bcd3b813e56b1",
+  "checks": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "solvers/IncNavierStokesSolver/Tests/HITInflow/prepare_cbc1971.py",
+        "--check"
+      ],
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "PASS: six spectra, station mapping, missing values, SI conversions, and SHA-256 manifest\n"
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "solvers/IncNavierStokesSolver/Tests/HITInflow/check_contract.py",
+        "--json"
+      ],
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "{\n  \"data_manifest_sha256\": \"6eac80b5db4308d3b58b750a0fe61c62653fd7715e183ddab2bfbaa3b40b88b1\",\n  \"example_sha256\": {\n    \"hit-inflow-tabulated.xml\": \"f89b4a1bb68465e5832277a265e5f75053b7c8c24990ae6be0eddd1843ddfdae\",\n    \"hit-inflow-vonkarman.xml\": \"3472476db0269fdbd9e1293d638b423df9bcec9fd4eb26c3eb525a2151dc5a3d\"\n  },\n  \"examples\": 2,\n  \"mean_only_case\": \"PASS\",\n  \"rejection_cases\": 26,\n  \"status\": \"PASS\"\n}\n"
+    }
+  ],
+  "file_sha256": {
+    "docs/plans/hit-inflow-implementation-plan.md": "d0ee823aab9023f7fc39b0d448119f497411313970be93bf86f09312308ff70b",
+    "docs/plans/hit-inflow-milestone-1.md": "95c37d633ef23a6a4709319937071d47771772740c8f357a51520ad588ada8cb",
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/README.md": "78e3195fc5a73f20ccc9c16a5281950ee941e039b3a162735d0d24be81390b53",
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/cbc1971-manifest.json": "6eac80b5db4308d3b58b750a0fe61c62653fd7715e183ddab2bfbaa3b40b88b1",
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/cbc1971-source.json": "031df95c54eb05fb5cc94c81dd5a35bb687890f4336a3f3f80bdfe42c52f3590",
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/cbc1971_stations.dat": "208432677fcc2f57fd2ecf7c37cea3140bbd11bf9efd94a8131d533e94e4f836",
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/cbc1971_theta171_longitudinal_1d.dat": "b64397819cd2ab721b782c224b113fa5a61a1fe84eb1dcff4a1d10970eb0345d",
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/cbc1971_theta171_spectrum_3d.dat": "41cff79a5a8a13267a2db216a7918074f8d4193e38dcd248c4ddae7a9085fe5e",
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/cbc1971_theta42_longitudinal_1d.dat": "5784745af9d6d3c63065c6880777ad0ce75dde47a2e27373c734344a60e4a4da",
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/cbc1971_theta42_spectrum_3d.dat": "ca5551dc1872df7442cebbb6d82eac657307e394fa0726cbd7fce56939f20181",
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/cbc1971_theta98_longitudinal_1d.dat": "897581af236e50361ea9fda01e15e06994b7d036973e1f8245e578c6eb1912b7",
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/cbc1971_theta98_spectrum_3d.dat": "736d3a31bdbd6bf482f0f0210cbe6bb29c5eeafb95d93da784cb6e4eb82139cf",
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/check_contract.py": "69c934ab6798cf0dcc6792d654b5af998731461e39928f031c8393250b5287fb",
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/hit-inflow-tabulated.xml": "f89b4a1bb68465e5832277a265e5f75053b7c8c24990ae6be0eddd1843ddfdae",
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/hit-inflow-vonkarman.xml": "3472476db0269fdbd9e1293d638b423df9bcec9fd4eb26c3eb525a2151dc5a3d",
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/prepare_cbc1971.py": "8bcb7da93860f95579206021f219f2adc71e9aea7684b0eaf4a3133a1b6c8e8d"
+  },
+  "linux_checkout_branch": "main",
+  "linux_checkout_revision": "a3b7efc8fef7e075390f0f59457dfdac30f0b6ed",
+  "linux_checkout_status": "",
+  "mpi_ranks": 0,
+  "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.35",
+  "python": "3.10.12",
+  "run_directory": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-1/e1b92c4971e5",
+  "snapshot_sha256": "e1b92c4971e5859a0bae4719aa53dbe5d824995bfeb50e4bf03793b08fdbbee7",
+  "status": "PASS",
+  "verified_files": 16,
+  "workers": 1
+}
