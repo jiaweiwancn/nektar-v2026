@@ -39,6 +39,9 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
         ./Forcing/ForcingStabilityCoupledLNS.cpp
         ./BoundaryConditions/IncBoundaryConditions.cpp
         ./BoundaryConditions/IncBaseCondition.cpp
+        ./BoundaryConditions/HITInflow.cpp
+        ./BoundaryConditions/HITInflowConfig.cpp
+        ./BoundaryConditions/HITInflowGeometry.cpp
         ./BoundaryConditions/MovingFrameFar.cpp
         ./BoundaryConditions/StaticWall.cpp
         ./BoundaryConditions/TransMovingWall.cpp
@@ -76,6 +79,9 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
             Forcing/ForcingStabilityCoupledLNS.h
             BoundaryConditions/IncBoundaryConditions.h
             BoundaryConditions/IncBaseCondition.h
+            BoundaryConditions/HITInflow.h
+            BoundaryConditions/HITInflowConfig.h
+            BoundaryConditions/HITInflowGeometry.h
             BoundaryConditions/MovingFrameFar.h
             BoundaryConditions/StaticWall.h
             BoundaryConditions/TransMovingWall.h

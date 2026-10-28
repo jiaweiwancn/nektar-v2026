@@ -33,13 +33,43 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <IncNavierStokesSolver/BoundaryConditions/IncBoundaryConditions.h>
+#include <IncNavierStokesSolver/BoundaryConditions/HITInflow.h>
+#include <IncNavierStokesSolver/BoundaryConditions/HITInflowGeometry.h>
 #include <LibUtilities/Communication/Comm.h>
+#include <iostream>
+#include <stdexcept>
+
+namespace
+{
+// Every session rank participates, including ranks with no inlet faces.
+void AgreeOnHITError(const Nektar::LibUtilities::CommSharedPtr &comm,
+                     std::string error)
+{
+    int first = error.empty() ? comm->GetSize() : comm->GetRank();
+    comm->AllReduce(first, Nektar::LibUtilities::ReduceMin);
+    if (first == comm->GetSize())
+    {
+        return;
+    }
+    int size = error.size();
+    comm->Bcast(size, first);
+    Nektar::Array<Nektar::OneD, char> bytes(size);
+    if (comm->GetRank() == first)
+    {
+        std::copy(error.begin(), error.end(), bytes.begin());
+    }
+    comm->Bcast(bytes, first);
+    NEKERROR(Nektar::ErrorUtil::efatal,
+             "HITInflow: " + std::string(bytes.begin(), bytes.end()));
+}
+} // namespace
 
 namespace Nektar
 {
 
 std::set<std::string> IncBoundaryConditions::m_BndType = {
-    "MovingFrameFar", "StaticWall", "TransMovingWall", "MovingFrameWall"};
+    "MovingFrameFar", "StaticWall", "TransMovingWall", "MovingFrameWall",
+    "HITInflow"};
 
 IncBoundaryConditions::IncBoundaryConditions()
 {
@@ -53,6 +83,52 @@ void IncBoundaryConditions::Initialize(
     const LibUtilities::SessionReaderSharedPtr pSession,
     Array<OneD, MultiRegions::ExpListSharedPtr> pFields)
 {
+    // Configuration and file distribution must precede the local factory loop.
+    m_hitConfiguration = HITInflowConfig::Load(pSession);
+    std::vector<int> regionIds;
+    if (m_hitConfiguration)
+    {
+        // BoundaryConditions creates boundary communicators: construct it on
+        // every session rank, even if this partition has no inlet faces.
+        SpatialDomains::BoundaryConditions boundaries(pSession,
+                                                     pFields[0]->GetGraph());
+        regionIds = HITInflowGeometry::Validate(pSession, pFields,
+                                                *m_hitConfiguration,
+                                                boundaries);
+        std::string error;
+        try
+        {
+            const auto bytes = SolverUtils::HITGenerator::EstimateModeBytes(
+                m_hitConfiguration->generator, *m_hitConfiguration->spectrum);
+            if (pSession->GetComm()->GetRank() == 0)
+            {
+                std::cout << "HITInflow synthesis preflight: " << bytes
+                          << " mode bytes per rank (direct Fourier sum)"
+                          << std::endl;
+            }
+            m_hitGenerator = std::make_shared<SolverUtils::HITGenerator>(
+                m_hitConfiguration->generator, *m_hitConfiguration->spectrum);
+        }
+        catch (const std::exception &exception)
+        {
+            error = exception.what();
+        }
+        AgreeOnHITError(pSession->GetComm(), error);
+        if (pSession->GetComm()->GetRank() == 0)
+        {
+            const auto diagnostics = m_hitGenerator->Diagnostics();
+            std::cout << "HITInflow configuration: "
+                      << m_hitConfiguration->description << '\n'
+                      << "HITInflow independent modes: "
+                      << diagnostics.independentModes
+                      << ", expected K: " << diagnostics.expectedKineticEnergy
+                      << ", realized K: " << diagnostics.realizedKineticEnergy
+                      << ", energy scale: " << diagnostics.energyScale << '\n'
+                      << "HITInflow spectrum SHA256: "
+                      << m_hitConfiguration->spectrumDigest << std::endl;
+        }
+    }
+
     switch (pFields[0]->GetExpType())
     {
         case MultiRegions::e2D:
@@ -98,28 +174,63 @@ void IncBoundaryConditions::Initialize(
     BndConds[m_spacedim] = pFields[npress]->GetBndConditions();
     BndExp[m_spacedim]   = pFields[npress]->GetBndCondExpansions();
 
-    for (size_t n = 0; n < BndExp[0].size(); ++n)
+    std::string hitError;
+    try
     {
-        Array<OneD, SpatialDomains::BoundaryConditionShPtr> cond(
-            BndConds.size());
-        Array<OneD, MultiRegions::ExpListSharedPtr> exp(BndConds.size());
-        std::string bndtype;
-        for (int k = 0; k < BndConds.size(); ++k)
+        for (size_t n = 0; n < BndExp[0].size(); ++n)
         {
-            cond[k] = BndConds[k][n];
-            exp[k]  = BndExp[k][n];
-            if (bndtype.size() == 0 &&
-                m_BndType.find(cond[k]->GetUserDefined()) != m_BndType.end())
+            Array<OneD, SpatialDomains::BoundaryConditionShPtr> cond(
+                BndConds.size());
+            Array<OneD, MultiRegions::ExpListSharedPtr> exp(BndConds.size());
+            std::string bndtype;
+            for (int k = 0; k < BndConds.size(); ++k)
             {
-                bndtype = cond[k]->GetUserDefined();
+                cond[k] = BndConds[k][n];
+                exp[k]  = BndExp[k][n];
+                if (bndtype.empty() &&
+                    m_BndType.count(cond[k]->GetUserDefined()))
+                {
+                    bndtype = cond[k]->GetUserDefined();
+                }
+            }
+            if (!bndtype.empty())
+            {
+                m_bounds[n] = GetIncBCFactory().CreateInstance(
+                    bndtype, pSession, pFields, cond, exp, n, m_spacedim,
+                    m_bnd_dim);
+                if (bndtype == "HITInflow")
+                {
+                    if (!m_hitConfiguration || n >= regionIds.size() ||
+                        regionIds[n] != m_hitConfiguration->regionId)
+                    {
+                        throw std::invalid_argument(
+                            "HIT boundary does not match the configured global REF");
+                    }
+                    std::dynamic_pointer_cast<HITInflow>(m_bounds[n])->Configure(
+                        m_hitConfiguration, m_hitGenerator);
+                }
             }
         }
-        if (bndtype.size())
+    }
+    catch (const std::exception &exception)
+    {
+        if (!m_hitConfiguration)
         {
-            m_bounds[n] = GetIncBCFactory().CreateInstance(
-                bndtype, pSession, pFields, cond, exp, n, m_spacedim,
-                m_bnd_dim);
+            throw;
         }
+        hitError = exception.what();
+    }
+    if (m_hitConfiguration)
+    {
+        AgreeOnHITError(pSession->GetComm(), hitError);
+    }
+}
+
+void IncBoundaryConditions::UpdatePrescribedVelocity(NekDouble time)
+{
+    for (const auto &boundary : m_bounds)
+    {
+        boundary.second->UpdatePrescribedVelocity(time);
     }
 }
 

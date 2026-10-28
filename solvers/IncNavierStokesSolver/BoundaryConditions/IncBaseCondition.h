@@ -72,6 +72,12 @@ public:
         v_Initialise(pSession);
     }
 
+    /// Supply prescribed velocity traces before pressure boundary evaluation.
+    void UpdatePrescribedVelocity(NekDouble time)
+    {
+        v_UpdatePrescribedVelocity(time);
+    }
+
     void Update(const Array<OneD, const Array<OneD, NekDouble>> &fields,
                 const Array<OneD, const Array<OneD, NekDouble>> &Adv,
                 std::map<std::string, NekDouble> &params)
@@ -88,6 +94,10 @@ protected:
 
     virtual void v_Initialise(
         const LibUtilities::SessionReaderSharedPtr &pSession);
+
+    virtual void v_UpdatePrescribedVelocity([[maybe_unused]] NekDouble time)
+    {
+    }
 
     virtual void v_Update(
         [[maybe_unused]] const Array<OneD, const Array<OneD, NekDouble>>

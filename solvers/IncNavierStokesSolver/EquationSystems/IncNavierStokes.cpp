@@ -350,6 +350,14 @@ void IncNavierStokes::SetBoundaryConditions(NekDouble time)
     // Enforcing the boundary conditions (Inlet and wall) for the
     // Moving reference frame
     SetZeroNormalVelocity();
+
+    // HIT traces must already be available when extrapolation reads the
+    // prescribed normal velocity. The ordinary boundary-manager Update remains
+    // after pressure evaluation for existing pressure-modifying conditions.
+    if (m_IncNavierStokesBCs)
+    {
+        m_IncNavierStokesBCs->UpdatePrescribedVelocity(time);
+    }
 }
 
 /**

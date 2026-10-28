@@ -34,6 +34,7 @@
 
 #ifndef NEKTAR_SOLVERS_INCBOUNDARYCONDITIONS_H
 #define NEKTAR_SOLVERS_INCBOUNDARYCONDITIONS_H
+#include <IncNavierStokesSolver/BoundaryConditions/HITInflowConfig.h>
 #include <IncNavierStokesSolver/BoundaryConditions/IncBaseCondition.h>
 #include <LibUtilities/BasicUtils/NekFactory.hpp>
 #include <LibUtilities/BasicUtils/SessionReader.h>
@@ -58,11 +59,15 @@ public:
                 const Array<OneD, const Array<OneD, NekDouble>> &Adv,
                 std::map<std::string, NekDouble> &params);
 
+    void UpdatePrescribedVelocity(NekDouble time);
+
 protected:
     std::map<int, IncBaseConditionSharedPtr> m_bounds;
     static std::set<std::string> m_BndType;
     int m_spacedim;
     int m_bnd_dim;
+    std::shared_ptr<const HITInflowConfiguration> m_hitConfiguration;
+    std::shared_ptr<const SolverUtils::HITGenerator> m_hitGenerator;
 };
 
 } // namespace Nektar
