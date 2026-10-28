@@ -35,6 +35,7 @@
 #include <IncNavierStokesSolver/BoundaryConditions/IncBoundaryConditions.h>
 #include <IncNavierStokesSolver/BoundaryConditions/HITInflow.h>
 #include <IncNavierStokesSolver/BoundaryConditions/HITInflowGeometry.h>
+#include <IncNavierStokesSolver/BoundaryConditions/HITInflowRestart.h>
 #include <LibUtilities/Communication/Comm.h>
 #include <iostream>
 #include <stdexcept>
@@ -85,6 +86,8 @@ void IncBoundaryConditions::Initialize(
 {
     // Configuration and file distribution must precede the local factory loop.
     m_hitConfiguration = HITInflowConfig::Load(pSession);
+    m_hitSession = pSession;
+    m_hitMetadataPrepared = false;
     std::vector<int> regionIds;
     if (m_hitConfiguration)
     {
@@ -231,6 +234,17 @@ void IncBoundaryConditions::UpdatePrescribedVelocity(NekDouble time)
     for (const auto &boundary : m_bounds)
     {
         boundary.second->UpdatePrescribedVelocity(time);
+    }
+}
+
+void IncBoundaryConditions::PrepareFieldMetadata(
+    LibUtilities::FieldMetaDataMap &metadata, NekDouble time)
+{
+    if (m_hitConfiguration && !m_hitMetadataPrepared)
+    {
+        HITInflowRestart::Prepare(m_hitSession, *m_hitConfiguration,
+                                 *m_hitGenerator, metadata, time);
+        m_hitMetadataPrepared = true;
     }
 }
 

@@ -20,6 +20,8 @@ public:
     /// Collective on every session rank, including ranks without inlet faces.
     /// The supplied BoundaryConditions must already have been constructed on
     /// every rank. Return global XML REF IDs in local boundary-array order.
+    /// Validate six explicit box sides in full 3D, or four xy sides and the
+    /// implicit Fourier z period in Homogeneous1D.
     static std::vector<int> Validate(
         const LibUtilities::SessionReaderSharedPtr &session,
         const Array<OneD, MultiRegions::ExpListSharedPtr> &fields,

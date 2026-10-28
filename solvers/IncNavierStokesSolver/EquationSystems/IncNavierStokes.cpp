@@ -356,6 +356,7 @@ void IncNavierStokes::SetBoundaryConditions(NekDouble time)
     // after pressure evaluation for existing pressure-modifying conditions.
     if (m_IncNavierStokesBCs)
     {
+        m_IncNavierStokesBCs->PrepareFieldMetadata(m_fieldMetaDataMap, time);
         m_IncNavierStokesBCs->UpdatePrescribedVelocity(time);
     }
 }

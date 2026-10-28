@@ -47,10 +47,13 @@ void HITInflow::Configure(
     std::shared_ptr<const HITInflowConfiguration> configuration,
     std::shared_ptr<const SolverUtils::HITGenerator> generator)
 {
-    if (!configuration || !generator || m_spacedim != 3 || m_bnddim != 3)
+    const bool supported = m_field->GetExpType() == MultiRegions::e3D ||
+                           m_field->GetExpType() == MultiRegions::e3DH1D;
+    if (!configuration || !generator || !supported || m_spacedim != 3 ||
+        (m_bnddim != 2 && m_bnddim != 3))
     {
         throw std::invalid_argument(
-            "HITInflow requires a configured full three-dimensional inlet");
+            "HITInflow requires a configured full 3D or Homogeneous1D inlet");
     }
     for (int component = 0; component < 3; ++component)
     {

@@ -1289,13 +1289,14 @@ onto the boundary expansion introduces spatial approximation error, so mesh
 and timestep convergence and the resulting solver divergence must still be
 checked.
 
-The initial implementation supports a full three-dimensional continuous
-expansion, \inltt{VelocityCorrectionScheme}, \inltt{UnsteadyNavierStokes},
+The inlet supports full three-dimensional continuous expansions and
+multiple-mode \inltt{Homogeneous1D} Fourier expansions, with
+\inltt{VelocityCorrectionScheme}, \inltt{UnsteadyNavierStokes},
 nonlinear advection, \inltt{Standard} extrapolation and fixed-step, order-two
 \inltt{IMEX} with an empty variant. The variables must be \inltt{u,v,w,p} in
-that order. Homogeneous expansions, other integrators, moving frames and
-flow-rate control are rejected. Homogeneous1D and restart validation are
-separate subsequent milestones. Ordinary \inltt{Body} forcing is permitted,
+that order. Single/half modes, Homogeneous2D, homogeneous strips, other
+integrators, moving frames and flow-rate control are rejected.
+Ordinary \inltt{Body} forcing is permitted,
 including for manufactured solutions.
 
 Use a rectangular domain with one boundary region on each side. The inlet is
@@ -1313,6 +1314,20 @@ streamwise length. For example, on inlet region 7:
     <N VAR="p" USERDEFINEDTYPE="H" VALUE="0" />
 </REGION>
 \end{lstlisting}
+
+For Homogeneous1D, use a rectangular xy mesh with four boundary regions,
+periodic y conditions for all four variables, and Fourier periodicity in z:
+\begin{lstlisting}[style=XMLStyle]
+<I PROPERTY="HOMOGENEOUS" VALUE="1D" />
+<I PROPERTY="USEFFT" VALUE="FFTW" />
+\end{lstlisting}
+\inltt{USEFFT} is optional; omit it for matrix transforms. FFTW requires
+\inltt{NEKTAR\_USE\_FFTW=ON}. Set a positive \inltt{LZ} parameter equal to
+the synthesis \inltt{LZ}, and even \inltt{HomModesZ} of at least four. The
+cutoff must also lie below $\pi\,\mathtt{HomModesZ}/L_Z$. MPI homogeneous
+partitioning uses \inltt{--npz}; the Fourier plane count divided by
+\inltt{npz} must be even. The inlet fills all physical planes using their
+global coordinates, then applies the existing constrained transform once.
 
 Here \inltt{Ubar} is a positive constant session parameter. The three velocity
 expressions must be constant; the inlet overwrites the trace with mean plus
@@ -1379,8 +1394,24 @@ SHA256 digest, mode memory and expected and realized kinetic energy.
 The reference implementation evaluates a direct Fourier sum and is intended
 for validation before large production records are attempted.
 
+Checkpoints and final field output store the generator identity, numerical
+environment and reconstructed coefficient digest. Restart all of
+\inltt{u,v,w,p} from one common field file or parallel field directory.
+Missing or realization-changing metadata is rejected before the initial inlet
+trace is supplied. The actual restored time and complete requested job must
+fit the declared record. Record duration, repeat policy, output frequency,
+timestep and MPI decomposition may change provided their independent validity
+checks pass; they do not reseed or reset the phase. The native IMEX integrator
+reinitializes its multistep history, so an evolved restart is compared within
+numerical error rather than required to match an uninterrupted flow bitwise.
+Both the \inltt{Checkpoint} filter and legacy step checkpoints preserve this
+metadata. Checkpoints written before this metadata was introduced cannot be
+used as verified HIT restarts.
+
 Small full-three-dimensional examples and reproducible manufactured tests are
 in \inltt{solvers/IncNavierStokesSolver/Tests/HITInflow/README-m3.md}.
+Homogeneous1D, MPI and restart inputs are described in \inltt{README-m4.md}
+in the same directory.
 
 \subsubsection{Womersley Boundary Condition}
 

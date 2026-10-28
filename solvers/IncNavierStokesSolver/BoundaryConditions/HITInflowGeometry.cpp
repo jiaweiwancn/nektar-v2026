@@ -5,6 +5,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <IncNavierStokesSolver/BoundaryConditions/HITInflowGeometry.h>
+#include <LibUtilities/Foundations/Basis.h>
 #include <SpatialDomains/PointGeom.h>
 #include <boost/algorithm/string/predicate.hpp>
 #include <algorithm>
@@ -133,16 +134,83 @@ std::vector<int> HITInflowGeometry::Validate(
     auto comm = session->GetComm()->GetSpaceComm();
     std::string error;
     std::vector<int> localIds;
+    Array<OneD, MultiRegions::ExpListSharedPtr> geometryFields(4);
+    bool homogeneous = false;
+    bool countGeometry = true;
+    int dimensions = 3;
+    NekDouble homogeneousLength = 0.0;
     try
     {
         Require(fields.size() == 4,
-                "only the full 3D u, v, w, p field layout is supported");
+                "only the u, v, w, p field layout is supported");
         Require(!session->DefinesTag("CreateBndRegions"),
                 "CreateBndRegions is unsupported");
+        Require(fields[0] &&
+                    (fields[0]->GetExpType() == MultiRegions::e3D ||
+                     fields[0]->GetExpType() == MultiRegions::e3DH1D),
+                "only full 3D and Homogeneous1D fields are supported");
+        homogeneous = fields[0]->GetExpType() == MultiRegions::e3DH1D;
+        dimensions = homogeneous ? 2 : 3;
         for (int v = 0; v < 4; ++v)
         {
-            Require(fields[v] && fields[v]->GetExpType() == MultiRegions::e3D,
-                    "only full 3D fields are supported in this milestone");
+            Require(fields[v] &&
+                        fields[v]->GetExpType() == fields[0]->GetExpType(),
+                    "velocity and pressure expansion types must agree");
+            geometryFields[v] =
+                homogeneous ? fields[v]->GetPlane(0) : fields[v];
+        }
+        if (homogeneous)
+        {
+            Require(!session->DefinesSolverInfo("HomoStrip"),
+                    "HITInflow does not support homogeneous strips");
+            homogeneousLength = fields[0]->GetHomoLen();
+            Require(std::isfinite(homogeneousLength) && homogeneousLength > 0.0,
+                    "the homogeneous period must be finite and positive");
+            Require(std::abs(homogeneousLength -
+                             configuration.generator.lengths[2]) <=
+                        1e-10 * std::max(1.0, homogeneousLength),
+                    "synthesis LZ must equal the homogeneous period");
+            auto basis = fields[0]->GetHomogeneousBasis();
+            const int modes = basis->GetNumModes();
+            Require(basis->GetBasisType() == LibUtilities::eFourier &&
+                        basis->GetPointsType() ==
+                            LibUtilities::eFourierEvenlySpaced &&
+                        modes >= 4 && modes % 2 == 0 &&
+                        basis->GetNumPoints() == modes,
+                    "Homogeneous1D requires an even full Fourier basis with at "
+                    "least four modes and matching physical planes");
+            Require(configuration.generator.kMax <
+                        std::acos(-1.0) * modes / homogeneousLength,
+                    "HIT cutoff must lie strictly below the solver's "
+                    "homogeneous Nyquist wavenumber");
+            const auto planeIds = fields[0]->GetZIDs();
+            Require(planeIds.size() > 0,
+                    "each homogeneous rank must own physical planes");
+            // Every homogeneous rank has the same xy partition. Count its
+            // geometric measure once, on the owner of global physical plane 0.
+            countGeometry = planeIds[0] == 0;
+            for (int v = 0; v < 4; ++v)
+            {
+                auto otherBasis = fields[v]->GetHomogeneousBasis();
+                const auto otherIds = fields[v]->GetZIDs();
+                Require(fields[v]->GetHomoLen() == homogeneousLength &&
+                            otherBasis->GetBasisType() ==
+                                LibUtilities::eFourier &&
+                            otherBasis->GetPointsType() ==
+                                LibUtilities::eFourierEvenlySpaced &&
+                            otherBasis->GetNumModes() == modes &&
+                            otherBasis->GetNumPoints() == modes &&
+                            otherIds.size() == planeIds.size() &&
+                            std::equal(planeIds.begin(), planeIds.end(),
+                                       otherIds.begin()),
+                        "velocity and pressure homogeneous bases and plane "
+                        "ownership must agree");
+                Require(geometryFields[v] &&
+                            (geometryFields[v]->GetExpSize() == 0 ||
+                             geometryFields[v]->GetCoordim(0) == 2),
+                        "Homogeneous1D requires an xy mesh with coordinate "
+                        "dimension two");
+            }
         }
 
         // DisContField::GenerateBoundaryConditionExpansion visits this map in
@@ -202,19 +270,24 @@ std::vector<int> HITInflowGeometry::Validate(
     Array<OneD, int> metadataMax(2 * n, std::numeric_limits<int>::min());
     try
     {
-        Require(n == 6,
-                "this milestone requires one rectangular boundary region on "
-                "each of the six box sides");
+        Require(n == 2 * dimensions,
+                homogeneous
+                    ? "Homogeneous1D requires four rectangular xy boundary "
+                      "regions and implicit periodicity in z"
+                    : "full 3D requires one rectangular boundary region on "
+                      "each of the six box sides");
         Require(index.count(configuration.regionId) == 1,
                 "configured inlet REF is absent from the mesh");
 
         Array<OneD, Array<OneD, NekDouble>> coordinates(3);
         for (int d = 0; d < 3; ++d)
         {
-            coordinates[d] = Array<OneD, NekDouble>(fields[0]->GetTotPoints());
+            coordinates[d] =
+                Array<OneD, NekDouble>(geometryFields[0]->GetTotPoints(), 0.0);
         }
-        fields[0]->GetCoords(coordinates[0], coordinates[1], coordinates[2]);
-        for (int d = 0; d < 3; ++d)
+        geometryFields[0]->GetCoords(coordinates[0], coordinates[1],
+                                    coordinates[2]);
+        for (int d = 0; d < dimensions; ++d)
         {
             for (NekDouble value : coordinates[d])
             {
@@ -225,20 +298,27 @@ std::vector<int> HITInflowGeometry::Validate(
         }
         // Collapsed-coordinate simplex quadrature need not contain every
         // vertex. Include vertices so a valid tetrahedral box has exact spans.
-        for (int e = 0; e < fields[0]->GetExpSize(); ++e)
+        for (int e = 0; e < geometryFields[0]->GetExpSize(); ++e)
         {
-            auto geometry = fields[0]->GetExp(e)->GetGeom();
+            auto geometry = geometryFields[0]->GetExp(e)->GetGeom();
             for (int v = 0; v < geometry->GetNumVerts(); ++v)
             {
                 std::array<NekDouble, 3> point;
                 geometry->GetVertex(v)->GetCoords(point[0], point[1], point[2]);
-                for (int d = 0; d < 3; ++d)
+                for (int d = 0; d < dimensions; ++d)
                 {
                     Require(std::isfinite(point[d]), "non-finite mesh vertex");
                     domainMin[d] = std::min(domainMin[d], point[d]);
                     domainMax[d] = std::max(domainMax[d], point[d]);
                 }
             }
+        }
+        if (homogeneous)
+        {
+            // Fourier quadrature excludes the duplicated z=LZ endpoint. Its
+            // geometric extent is the implicit period, not sampled z extrema.
+            domainMin[2] = 0.0;
+            domainMax[2] = homogeneousLength;
         }
 
         for (int local = 0; local < localIds.size(); ++local)
@@ -249,12 +329,12 @@ std::vector<int> HITInflowGeometry::Validate(
             metadataMin[2 * global] = metadataMax[2 * global] = kind.first;
             metadataMin[2 * global + 1] = metadataMax[2 * global + 1] = kind.second;
 
-            auto boundary = fields[0]->GetBndCondExpansions()[local];
+            auto boundary = geometryFields[0]->GetBndCondExpansions()[local];
             Require(boundary && boundary->GetTotPoints() > 0,
                     "empty local boundary expansion");
             for (int v = 1; v < 4; ++v)
             {
-                auto other = fields[v]->GetBndCondExpansions()[local];
+                auto other = geometryFields[v]->GetBndCondExpansions()[local];
                 Require(other && other->GetExpSize() == boundary->GetExpSize(),
                         "boundary geometry differs between velocity and pressure");
                 for (int e = 0; e < boundary->GetExpSize(); ++e)
@@ -267,12 +347,13 @@ std::vector<int> HITInflowGeometry::Validate(
 
             for (int d = 0; d < 3; ++d)
             {
-                coordinates[d] = Array<OneD, NekDouble>(boundary->GetTotPoints());
+                coordinates[d] =
+                    Array<OneD, NekDouble>(boundary->GetTotPoints(), 0.0);
             }
             boundary->GetCoords(coordinates[0], coordinates[1], coordinates[2]);
             Array<OneD, Array<OneD, NekDouble>> normals;
-            fields[0]->GetBoundaryNormals(local, normals);
-            for (int d = 0; d < 3; ++d)
+            geometryFields[0]->GetBoundaryNormals(local, normals);
+            for (int d = 0; d < dimensions; ++d)
             {
                 for (int q = 0; q < boundary->GetTotPoints(); ++q)
                 {
@@ -289,6 +370,13 @@ std::vector<int> HITInflowGeometry::Validate(
                         regionMax[6 * global + d + 3], normals[d][q]);
                 }
             }
+            if (homogeneous)
+            {
+                regionMin[6 * global + 2] = 0.0;
+                regionMax[6 * global + 2] = homogeneousLength;
+                regionMin[6 * global + 5] = 0.0;
+                regionMax[6 * global + 5] = 0.0;
+            }
             points[global] = boundary->GetTotPoints();
 
             for (int e = 0; e < boundary->GetExpSize(); ++e)
@@ -298,7 +386,7 @@ std::vector<int> HITInflowGeometry::Validate(
                 {
                     std::array<NekDouble, 3> point;
                     geometry->GetVertex(v)->GetCoords(point[0], point[1], point[2]);
-                    for (int d = 0; d < 3; ++d)
+                    for (int d = 0; d < dimensions; ++d)
                     {
                         Require(std::isfinite(point[d]),
                                 "non-finite boundary vertex");
@@ -313,10 +401,12 @@ std::vector<int> HITInflowGeometry::Validate(
             // ExpList::Integral is collective on the boundary communicator.
             // Integrate individual faces locally, then reduce exactly once.
             Array<OneD, NekDouble> ones(boundary->GetTotPoints(), 1.0);
-            for (int e = 0; e < boundary->GetExpSize(); ++e)
+            for (int e = 0; countGeometry && e < boundary->GetExpSize(); ++e)
             {
-                area[global] += boundary->GetExp(e)->Integral(
-                    ones + boundary->GetPhys_Offset(e));
+                area[global] +=
+                    (homogeneous ? homogeneousLength : 1.0) *
+                    boundary->GetExp(e)->Integral(
+                        ones + boundary->GetPhys_Offset(e));
             }
         }
     }
@@ -369,7 +459,7 @@ std::vector<int> HITInflowGeometry::Validate(
                         metadataMin[2 * i + 1] == metadataMax[2 * i + 1],
                     label + " boundary types or partners disagree across ranks");
             int side = -1;
-            for (int d = 0; d < 3; ++d)
+            for (int d = 0; d < dimensions; ++d)
             {
                 if (!near(regionMin[6 * i + d], regionMax[6 * i + d]))
                 {
@@ -416,7 +506,7 @@ std::vector<int> HITInflowGeometry::Validate(
                     "configured HITInflow REF must be the x- box side");
         }
 
-        for (int side = 0; side < 6; ++side)
+        for (int side = 0; side < 2 * dimensions; ++side)
         {
             Require(sides[side] >= 0, "a rectangular box side is missing");
             if (side >= 2)

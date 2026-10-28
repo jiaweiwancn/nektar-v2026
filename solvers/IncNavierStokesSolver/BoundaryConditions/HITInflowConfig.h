@@ -20,6 +20,8 @@ struct HITInflowConfiguration
     SolverUtils::HITGeneratorConfig generator;
     std::shared_ptr<const SolverUtils::HITSpectrum> spectrum;
     std::string spectrumDigest;
+    /// Resolved kind/parameters/tail policies, excluding the input pathname.
+    std::string spectrumDefinition;
     /// Canonical resolved settings for diagnostics and later restart metadata.
     std::string description;
 };

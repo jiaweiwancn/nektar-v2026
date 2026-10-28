@@ -10,17 +10,27 @@ IF(TARGET SolverUtils)
 
     # Exercise the actual boundary objects without requiring solver libraries.
     SET(HIT_BOUNDARY_DIR ${CMAKE_SOURCE_DIR}/solvers/IncNavierStokesSolver/BoundaryConditions)
-    ADD_NEKTAR_EXECUTABLE(HITBoundaryUnitTests
-        COMPONENT unit-test DEPENDS SolverUtils
-        SOURCES main.cpp TestHITBoundary.cpp
+    SET(HIT_BOUNDARY_SOURCES
         ${HIT_BOUNDARY_DIR}/IncBaseCondition.cpp
         ${HIT_BOUNDARY_DIR}/IncBoundaryConditions.cpp
         ${HIT_BOUNDARY_DIR}/HITInflow.cpp
         ${HIT_BOUNDARY_DIR}/HITInflowConfig.cpp
-        ${HIT_BOUNDARY_DIR}/HITInflowGeometry.cpp)
+        ${HIT_BOUNDARY_DIR}/HITInflowGeometry.cpp
+        ${HIT_BOUNDARY_DIR}/HITInflowRestart.cpp)
+    ADD_NEKTAR_EXECUTABLE(HITBoundaryUnitTests
+        COMPONENT unit-test DEPENDS SolverUtils
+        SOURCES main.cpp TestHITBoundary.cpp TestHITRestart.cpp ${HIT_BOUNDARY_SOURCES})
     TARGET_INCLUDE_DIRECTORIES(HITBoundaryUnitTests PRIVATE ${CMAKE_SOURCE_DIR}/solvers)
     TARGET_COMPILE_DEFINITIONS(HITBoundaryUnitTests PRIVATE
         HIT_TEST_FIXTURE_DIR="${CMAKE_SOURCE_DIR}/solvers/IncNavierStokesSolver/Tests/HITInflow")
     ADD_TEST(NAME HITBoundaryUnitTests
-        COMMAND HITBoundaryUnitTests --detect_memory_leaks=0)
+        COMMAND HITBoundaryUnitTests --run_test=HITBoundary --detect_memory_leaks=0)
+    ADD_TEST(NAME HITRestartUnitTests
+        COMMAND HITBoundaryUnitTests --run_test=HITRestart --detect_memory_leaks=0)
+    ADD_NEKTAR_EXECUTABLE(HITBoundaryProbe
+        COMPONENT unit-test DEPENDS SolverUtils
+        SOURCES HITBoundaryProbe.cpp ${HIT_BOUNDARY_SOURCES})
+    TARGET_INCLUDE_DIRECTORIES(HITBoundaryProbe PRIVATE ${CMAKE_SOURCE_DIR}/solvers)
+    ADD_NEKTAR_EXECUTABLE(HITFieldCompare
+        COMPONENT unit-test DEPENDS SolverUtils SOURCES HITFieldCompare.cpp)
 ENDIF()

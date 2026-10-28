@@ -272,7 +272,10 @@ public:
 
     /// Get hold of FieldInfoMap so it can be updated
     SOLVER_UTILS_EXPORT inline LibUtilities::FieldMetaDataMap &
-    UpdateFieldMetaDataMap();
+    UpdateFieldMetaDataMap()
+    {
+        return m_fieldMetaDataMap;
+    }
 
     /// Return final time
     SOLVER_UTILS_EXPORT inline NekDouble GetTime()

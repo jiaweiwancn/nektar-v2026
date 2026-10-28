@@ -32,7 +32,12 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <SolverUtils/EquationSystem.h>
 #include <SolverUtils/Filters/FilterCheckpoint.h>
+#include <iomanip>
+#include <limits>
+#include <locale>
+#include <sstream>
 
 namespace Nektar::SolverUtils
 {
@@ -123,7 +128,18 @@ void FilterCheckpoint::v_Update(
                                         pFields[j]->UpdateCoeffs());
         }
     }
-    m_fld->Write(vOutputFilename, FieldDef, FieldData);
+    // Preserve equation metadata, including the HIT realization descriptor.
+    // Update a copy so checkpoint timing does not mutate the equation's map.
+    const auto equation = m_equ.lock();
+    ASSERTL0(equation, "Checkpoint filter's equation system is unavailable");
+    LibUtilities::FieldMetaDataMap metadata(equation->UpdateFieldMetaDataMap());
+    std::ostringstream timeValue;
+    timeValue.imbue(std::locale::classic());
+    timeValue << std::setprecision(std::numeric_limits<NekDouble>::max_digits10)
+              << time;
+    metadata["Time"]       = timeValue.str();
+    metadata["ChkFileNum"] = std::to_string(m_outputIndex);
+    m_fld->Write(vOutputFilename, FieldDef, FieldData, metadata);
     m_outputIndex++;
 }
 

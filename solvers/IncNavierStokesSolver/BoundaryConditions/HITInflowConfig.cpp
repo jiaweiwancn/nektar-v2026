@@ -765,11 +765,22 @@ Resolved Resolve(const SessionReaderSharedPtr &session,
     SolverInfo(session, "Projection", "Continuous", "Continuous");
     SolverInfo(session, "Extrapolation", "Standard", "Standard");
     SolverInfo(session, "Driver", "Standard", "Standard");
-    if (session->DefinesSolverInfo("HOMOGENEOUS") ||
-        session->DefinesSolverInfo("ModeType"))
+    const bool homogeneous = session->DefinesSolverInfo("HOMOGENEOUS");
+    if (homogeneous)
     {
-        Invalid("Milestone 3 supports full 3D only; Homogeneous1D and Fourier "
-                "plane support are scheduled for Milestone 4");
+        const auto kind = Upper(session->GetSolverInfo("HOMOGENEOUS"));
+        if (kind != "1D" && kind != "HOMOGENEOUS1D" && kind != "HOMO1D")
+        {
+            Invalid("only full 3D or Homogeneous1D Fourier expansions are supported");
+        }
+    }
+    if ((session->DefinesSolverInfo("ModeType") &&
+         (!homogeneous || Upper(session->GetSolverInfo("ModeType")) !=
+                              "MULTIPLEMODES")) ||
+        session->DefinesSolverInfo("HomoStrip"))
+    {
+        Invalid("require multiple Fourier modes; single/half modes and HomoStrip "
+                "are unsupported");
     }
     if (session->GetComm()->IsParallelInTime())
     {
@@ -803,11 +814,11 @@ Resolved Resolve(const SessionReaderSharedPtr &session,
     auto geometry = root->FirstChildElement("GEOMETRY");
     if (geometry &&
         ((geometry->Attribute("DIM") &&
-          std::string(geometry->Attribute("DIM")) != "3") ||
+          std::string(geometry->Attribute("DIM")) != (homogeneous ? "2" : "3")) ||
          (geometry->Attribute("SPACE") &&
-          std::string(geometry->Attribute("SPACE")) != "3")))
+          std::string(geometry->Attribute("SPACE")) != (homogeneous ? "2" : "3"))))
     {
-        Invalid("require full three-dimensional geometry");
+        Invalid("require full 3D geometry or a 2D xy mesh with Homogeneous1D z");
     }
     bool body = false;
     for (auto forcing = root->FirstChildElement("FORCING"); forcing;
@@ -931,6 +942,26 @@ Resolved Resolve(const SessionReaderSharedPtr &session,
     generator.allowRepeat = repeat == "Allow";
     generator.kMax = scalar.Attribute(cutoff, "KMAX");
     generator.taperStart = scalar.Attribute(cutoff, "TAPERSTART");
+    int homogeneousModes = 0;
+    if (homogeneous)
+    {
+        const auto modes = Parameter(session, "HomModesZ", 0.0);
+        const auto length = Parameter(session, "LZ", 0.0);
+        if (modes < 4 || modes > INT_MAX || std::floor(modes) != modes ||
+            static_cast<int>(modes) % 2 != 0 || !(length > 0.0))
+        {
+            Invalid("Homogeneous1D requires even HomModesZ >= 4 and positive LZ");
+        }
+        homogeneousModes = static_cast<int>(modes);
+        const auto tolerance = 128 * std::numeric_limits<NekDouble>::epsilon() *
+                               std::max(length, generator.lengths[2]);
+        if (std::abs(length - generator.lengths[2]) > tolerance ||
+            !(generator.kMax < std::acos(-1.0) * modes / length))
+        {
+            Invalid("Homogeneous1D LZ must match synthesis LZ, with KMAX strictly "
+                    "below the solver's z Nyquist wavenumber");
+        }
+    }
 
     // TYPE and NORMALIZATION are checked before the type-specific attribute set.
     const char *typeAttribute = spectrum->Attribute("TYPE");
@@ -1006,6 +1037,21 @@ Resolved Resolve(const SessionReaderSharedPtr &session,
         configuration.spectrumDigest = HITInflowConfig::SHA256(result.table);
     }
     SetSpectrum(result);
+    std::ostringstream spectrumDefinition;
+    spectrumDefinition.imbue(std::locale::classic());
+    spectrumDefinition << std::setprecision(std::numeric_limits<NekDouble>::max_digits10)
+                       << type;
+    if (result.tabulated)
+    {
+        spectrumDefinition << " INTERPOLATION=" << interpolation
+                           << " LOW=" << low << " HIGH=" << high;
+    }
+    else
+    {
+        spectrumDefinition << " LENGTH=" << result.length
+                           << " AMPLITUDE=" << result.amplitude;
+    }
+    configuration.spectrumDefinition = spectrumDefinition.str();
     std::size_t modeBytes =
         HITGenerator::EstimateModeBytes(generator, *configuration.spectrum);
     long double duration = static_cast<long double>(numSteps) * generator.timeStep;
@@ -1022,7 +1068,8 @@ Resolved Resolve(const SessionReaderSharedPtr &session,
     description.imbue(std::locale::classic());
     description << std::setprecision(std::numeric_limits<NekDouble>::max_digits10)
                 << "HITInflow VERSION=1 UNITS=SI algorithm=" << HITGenerator::Algorithm()
-                << " expansion=Full3D regionREF=" << configuration.regionId
+                << " expansion=" << (homogeneous ? "Homogeneous1D" : "Full3D")
+                << " regionREF=" << configuration.regionId
                 << " seed=" << generator.seed;
     for (int direction = 0; direction < 3; ++direction)
     {
@@ -1054,6 +1101,10 @@ Resolved Resolve(const SessionReaderSharedPtr &session,
     }
     description << " estimatedModeBytes=" << modeBytes
                 << " externalMomentumSource=" << (body ? "Body" : "None");
+    if (homogeneous)
+    {
+        description << " HomModesZ=" << homogeneousModes;
+    }
     configuration.description = description.str();
     return result;
 }
@@ -1084,6 +1135,7 @@ void BroadcastResolved(const CommSharedPtr &comm, Resolved &resolved)
     BroadcastString(comm, seed, 0);
     BroadcastString(comm, resolved.table, 0);
     BroadcastString(comm, configuration.spectrumDigest, 0);
+    BroadcastString(comm, configuration.spectrumDefinition, 0);
     BroadcastString(comm, configuration.description, 0);
     configuration.regionId = integers[0];
     generator.counts = {integers[1], integers[2], integers[3]};

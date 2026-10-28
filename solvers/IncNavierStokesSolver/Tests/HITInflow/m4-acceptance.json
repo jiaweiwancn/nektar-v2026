@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "purpose": "Milestone 4 criteria fixed before the numerical runs",
+  "raw_probe_max_error": 5e-13,
+  "same_grid_raw_and_projected_sample_tolerance": 5e-12,
+  "nonzero_z_coefficient_energy_per_component_minimum": 1e-12,
+  "cross_representation_projection_limit_p8": 0.002,
+  "cross_representation_projection_limit_p10": 0.00005,
+  "cross_representation_projection_refinement_maximum_ratio": 0.1,
+  "mean_only_L2_Linf_maximum": 1e-10,
+  "same_representation_evolved_velocity_Linf_maximum": 2e-9,
+  "same_representation_evolved_pressure_Linf_maximum": 2e-8,
+  "cross_representation_velocity_norm_relative_difference_maximum": 0.01,
+  "cross_representation_norm_refinement_maximum_ratio": 0.5,
+  "restart_velocity_Linf_maximum": 0.0002,
+  "restart_pressure_Linf_maximum": 0.002,
+  "restart_dt_refinement_velocity_difference_maximum_ratio": 0.75,
+  "notes": [
+    "Exact realization and repeated coefficients are required within one build; projected traces have polynomial approximation error.",
+    "MPI field bounds account for reductions, iterative residual tolerance 1e-12, and pressure conditioning/time differentiation.",
+    "Restart flow history is reinitialized by the native IMEX integrator; compare bounded evolved error and timestep refinement, separately from exact inlet reconstruction.",
+    "Do not lower an acceptance standard after inspecting a failed result; diagnose representation, mapping, solver tolerance, or resolution."
+  ]
+}

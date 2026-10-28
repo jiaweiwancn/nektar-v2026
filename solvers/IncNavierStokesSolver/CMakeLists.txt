@@ -42,6 +42,7 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
         ./BoundaryConditions/HITInflow.cpp
         ./BoundaryConditions/HITInflowConfig.cpp
         ./BoundaryConditions/HITInflowGeometry.cpp
+        ./BoundaryConditions/HITInflowRestart.cpp
         ./BoundaryConditions/MovingFrameFar.cpp
         ./BoundaryConditions/StaticWall.cpp
         ./BoundaryConditions/TransMovingWall.cpp
@@ -82,6 +83,7 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
             BoundaryConditions/HITInflow.h
             BoundaryConditions/HITInflowConfig.h
             BoundaryConditions/HITInflowGeometry.h
+            BoundaryConditions/HITInflowRestart.h
             BoundaryConditions/MovingFrameFar.h
             BoundaryConditions/StaticWall.h
             BoundaryConditions/TransMovingWall.h
@@ -101,6 +103,7 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
     ADD_NEKTAR_TEST(Kovasznay_Flow_3modes)
     ADD_NEKTAR_TEST(HITInflowMeanOnly3D)
     ADD_NEKTAR_TEST(HITInflowManufactured3D)
+    ADD_NEKTAR_TEST(HITInflowHomogeneous1DMean)
     ADD_NEKTAR_TEST(ThermStab_dir)
     ADD_NEKTAR_TEST(ChannelStability)
     ADD_NEKTAR_TEST(ThermStab_adj)

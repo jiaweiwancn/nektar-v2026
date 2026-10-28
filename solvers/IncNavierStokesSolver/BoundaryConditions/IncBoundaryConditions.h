@@ -38,6 +38,7 @@
 #include <IncNavierStokesSolver/BoundaryConditions/IncBaseCondition.h>
 #include <LibUtilities/BasicUtils/NekFactory.hpp>
 #include <LibUtilities/BasicUtils/SessionReader.h>
+#include <LibUtilities/BasicUtils/FieldIO.h>
 #include <LibUtilities/BasicUtils/SharedArray.hpp>
 #include <LibUtilities/Memory/NekMemoryManager.hpp>
 #include <MultiRegions/ExpList.h>
@@ -60,6 +61,8 @@ public:
                 std::map<std::string, NekDouble> &params);
 
     void UpdatePrescribedVelocity(NekDouble time);
+    void PrepareFieldMetadata(LibUtilities::FieldMetaDataMap &metadata,
+                              NekDouble time);
 
 protected:
     std::map<int, IncBaseConditionSharedPtr> m_bounds;
@@ -68,6 +71,8 @@ protected:
     int m_bnd_dim;
     std::shared_ptr<const HITInflowConfiguration> m_hitConfiguration;
     std::shared_ptr<const SolverUtils::HITGenerator> m_hitGenerator;
+    LibUtilities::SessionReaderSharedPtr m_hitSession;
+    bool m_hitMetadataPrepared = false;
 };
 
 } // namespace Nektar
