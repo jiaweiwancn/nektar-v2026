@@ -40,6 +40,10 @@ available for bounded analysis and controllers. A saved
 initial common CPU set was found to occupy one socket. Each long rank is pinned
 to one physical core; the combined allowed set still contains exactly 64 CPUs.
 No session, field or solver binary was changed by that placement adjustment.
+After both short queues completed, the remaining long pair uses 48 MPI ranks.
+The separate fine-recording control used eight ranks, bringing the maximum
+simultaneous solver allocation to 60 ranks. A saved process/thread affinity
+audit verifies the 64-CPU union, with one OpenMP/OpenBLAS thread per rank.
 
 ## Feasible physical scope
 
@@ -238,6 +242,14 @@ half-widths are 2.23%, 2.03% and 2.78%; four/sixteen-block w half-widths are
 The largest fine-record z-spectrum Parseval residual is `1.5e-15`.
 
 ![Coarse recording-length and block diagnostics](hit-inflow-milestone-6-figures/m6-recording-sensitivity.png)
+
+![Fine recording-length and block diagnostics](hit-inflow-milestone-6-figures/m6-recording-sensitivity-fine.png)
+
+The figure titles identify the polynomial degree, timestep and Fourier slots.
+Filled circles show full-window variances/K; the separate open diamonds and
+intervals describe mean block energy. These estimators are not interchangeable.
+The figures and their input hashes were generated on Linux; the fine recording
+figure has its own `provenance-fine.json` receipt.
 
 The exact finite-lattice tensor also predicts continuous-time centering bias:
 for a 0.1 s inlet window the expected component biases are -7.68%, -3.94%,

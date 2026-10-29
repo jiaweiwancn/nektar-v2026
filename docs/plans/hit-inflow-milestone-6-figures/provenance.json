@@ -1,0 +1,493 @@
+{
+  "schema": "NEKTAR_HIT_M6_FIGURES_V1",
+  "created_utc": "2026-10-29T08:00:49.651464+00:00",
+  "plotting_script": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/812a2c8/analysis-scripts/plot_m6-d841193.py",
+    "sha256": "22e33b120dd6ab26eb7a5d6e22e0a4c9bb49df69f72eb5ec1f22de1920963620"
+  },
+  "matplotlib_version": "3.5.1",
+  "backend": "Agg",
+  "quantities_in_column_order": [
+    "u",
+    "v",
+    "w",
+    "K"
+  ],
+  "arguments": {
+    "short_root": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/a72ac7a/study",
+    "sampling_root": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/812a2c8/sampling-study",
+    "long_root": null,
+    "skip_long": true,
+    "output": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/812a2c8/figures-coarse-d841193"
+  },
+  "input_files": {
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/a72ac7a/study/base/manifest.json": {
+      "sha256": "a33cea29083b3238cd38ef01827f2d959a5fc6dd20b3e230db5ab4fad981c4a0",
+      "bytes": 571432
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/a72ac7a/study/base/statistics.json": {
+      "sha256": "2b8b136f3cdbd62eec2e684ab316527aab4c0f34f02654af9f10f009493faaa5",
+      "bytes": 28325
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/a72ac7a/study/base/run.receipt.json": {
+      "sha256": "d48fc8a710f03f26c0a1cd64dc456b451f6871d705f52d445fe96b6a250fad40",
+      "bytes": 1953
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/a72ac7a/study/base/pilot.flow.json": {
+      "sha256": "5b1a6cb4913b61ab6f6ba0e7ad6de1ccb3b44a3c48d3c5bd425c3697ea8ae1d9",
+      "bytes": 702
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/a72ac7a/study/buffer09/manifest.json": {
+      "sha256": "e4bf8177b0d20c7e90de663d866e2e1bf6775f8f0d79c369bb8f66f537cddaa6",
+      "bytes": 571410
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/a72ac7a/study/buffer09/statistics.json": {
+      "sha256": "a54b2e282e57afa103ce3685a05649b43547a62a55869472a5e1046a3a77bbe0",
+      "bytes": 28360
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/a72ac7a/study/buffer09/run.receipt.json": {
+      "sha256": "85885dbd8ffc59470d1d12e50fff608b25ccc864c11af3f306d456fc8565bfb0",
+      "bytes": 1954
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/a72ac7a/study/buffer12/manifest.json": {
+      "sha256": "b00785797575befc2e8b3327046c734ef21a581222ca1e9c285fb94d8e348c8a",
+      "bytes": 571427
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/a72ac7a/study/buffer12/statistics.json": {
+      "sha256": "445d75daace73150ee44d868e8139cfe9eb30c4c51cfc0e9d496896eb20b8241",
+      "bytes": 28360
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/a72ac7a/study/buffer12/run.receipt.json": {
+      "sha256": "f40e75a2d9c9feb817dad017b5aac56b79f60657de83e3299609aac7c99697e1",
+      "bytes": 1954
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/a72ac7a/study/dt-half/manifest.json": {
+      "sha256": "1e2057fc85ba8d53e50964d6345b02c74ca1b635d41122bdef2e61b9715c18fd",
+      "bytes": 571438
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/a72ac7a/study/dt-half/statistics.json": {
+      "sha256": "77d9ffbab38107f41a377d8c32f20987eec8401520f851f77fd58b1cbfd437d3",
+      "bytes": 28369
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/a72ac7a/study/dt-half/run.receipt.json": {
+      "sha256": "da2a1f9ae0eedd45f03c73a04bceb38cd5592be2b856ff77d14a02976b40dfb8",
+      "bytes": 1953
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/a72ac7a/study/h05/manifest.json": {
+      "sha256": "8ddde3636681cd709ba55abfca908061a1dee7950134080f22471f0ee1b7676d",
+      "bytes": 571437
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/a72ac7a/study/h05/statistics.json": {
+      "sha256": "8e8c938a81cf595382de5bfbabf6025c83374dc5a503e709fd18aeb42f152be1",
+      "bytes": 28335
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/a72ac7a/study/h05/run.receipt.json": {
+      "sha256": "f8c6c1087fb19bb4759ab18d370e6491a556e3d562e1cce03df266cb3c577616",
+      "bytes": 1954
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/a72ac7a/study/h05/pilot.flow.json": {
+      "sha256": "9279efdb7e932a0ad0d5b3fd06881802a6c5b245d1b9c026166e88429f0ffe43",
+      "bytes": 706
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/a72ac7a/study/p9/manifest.json": {
+      "sha256": "a47e3fdbe2eb661223bfbe359a508b0eefc91de632baa4ecf5b00ba7e7972090",
+      "bytes": 571431
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/a72ac7a/study/p9/statistics.json": {
+      "sha256": "16c3ee5938a236cfc726e883136f8cf56ed5e0acd0fae4ddfa2f670cced47b1c",
+      "bytes": 28351
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/a72ac7a/study/p9/run.receipt.json": {
+      "sha256": "15075a9b272f9d3a617da599de4ebb47c997d3cc8f3f9dcf292631e52ccb3eca",
+      "bytes": 1954
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/a72ac7a/study/p9/pilot.flow.json": {
+      "sha256": "f961dd8af2e75440e70e0e36ec868283a487db906cc6953dc6c7cffc7132b246",
+      "bytes": 707
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/a72ac7a/study/svv-double/manifest.json": {
+      "sha256": "2d235585781a2745506ff3bbab729578e1ade9881af8350b45c703841f360af0",
+      "bytes": 571441
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/a72ac7a/study/svv-double/statistics.json": {
+      "sha256": "50761f303602cbe636b19056f02ea59147382afd9e2ea0c03f3a5fa4c48a5049",
+      "bytes": 28332
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/a72ac7a/study/svv-double/run.receipt.json": {
+      "sha256": "96fc4fc508e278e4071ad9a91d8f69e58c871b11ba2dc2a61989a53a0d93dcde",
+      "bytes": 1953
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/a72ac7a/study/svv-half/manifest.json": {
+      "sha256": "57dc7680951637c47669782c43d2597c1ff1567bf63099b0aaebcf0a0c5d284f",
+      "bytes": 571445
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/a72ac7a/study/svv-half/statistics.json": {
+      "sha256": "d4a90cd1727b605c37fe990739c7bcb8d5f1a8fa2ab5f8c503095d2af062171c",
+      "bytes": 28358
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/a72ac7a/study/svv-half/run.receipt.json": {
+      "sha256": "efa288bb446ee67e93fc2abf1a2a35fe3a8c5f8ce4c4b482d96da1cf228ee9e2",
+      "bytes": 1951
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/a72ac7a/study/z64/manifest.json": {
+      "sha256": "c89a625079a9be3fddf11370432784b1ea9069b6a05e7457106b28d9c9fb0e3f",
+      "bytes": 1144007
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/a72ac7a/study/z64/statistics.json": {
+      "sha256": "d89e999bbe64452aa0248a1ead1e433a501a1c86c75d729c4d06bf0f726df5cd",
+      "bytes": 28356
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/a72ac7a/study/z64/run.receipt.json": {
+      "sha256": "28377d60161d402b7d93e9398270cdca850366d98f3056e7b8ce7dae39526b9a",
+      "bytes": 1952
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/812a2c8/sampling-study/record01.json": {
+      "sha256": "2ef4625eb135bbe22993e1ba95c75afb1b8e68c02eac59f13543b024731611ad",
+      "bytes": 41549
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/812a2c8/sampling-study/record03.json": {
+      "sha256": "983e53122629fcf7ea8d09ac6b60a000b7b0644365d4453b79d74b5a7be06d85",
+      "bytes": 41549
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/812a2c8/sampling-study/record07.json": {
+      "sha256": "851a6af68028cd85d20da7a156724e8f0f34df9616ab75690b50bae337a27ab2",
+      "bytes": 41600
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/812a2c8/sampling-study/record07-blocks4.json": {
+      "sha256": "79fac3c8f8ac0b4ed7ba3de7fbf68db5e674b5dd34033f0e8a5f916d91c5919b",
+      "bytes": 25918
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/812a2c8/sampling-study/record07-blocks16.json": {
+      "sha256": "6eec93f4fb9d678d7413e5dad60a946d78af75c4ac5b13542de34b5886139a9d",
+      "bytes": 34627
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/812a2c8/followup-study/record08/manifest.json": {
+      "sha256": "6edeebb0e63522d4be836f96a128fb1dff37cd2c3a8b358e1d116724f37c7b76",
+      "bytes": 571774
+    }
+  },
+  "case_source_revisions": {
+    "base": "a72ac7ac341c91f34abd7d035d179c267a299b9b",
+    "buffer09": "a72ac7ac341c91f34abd7d035d179c267a299b9b",
+    "buffer12": "a72ac7ac341c91f34abd7d035d179c267a299b9b",
+    "dt-half": "a72ac7ac341c91f34abd7d035d179c267a299b9b",
+    "h05": "a72ac7ac341c91f34abd7d035d179c267a299b9b",
+    "p9": "a72ac7ac341c91f34abd7d035d179c267a299b9b",
+    "svv-double": "a72ac7ac341c91f34abd7d035d179c267a299b9b",
+    "svv-half": "a72ac7ac341c91f34abd7d035d179c267a299b9b",
+    "z64": "a72ac7ac341c91f34abd7d035d179c267a299b9b"
+  },
+  "figures": {
+    "m6-short-sensitivity": [
+      "m6-short-sensitivity.png",
+      "m6-short-sensitivity.svg"
+    ],
+    "m6-recording-sensitivity": [
+      "m6-recording-sensitivity.png",
+      "m6-recording-sensitivity.svg"
+    ]
+  },
+  "plotted_data": {
+    "short": {
+      "rows": [
+        {
+          "label": "base  vs  h05",
+          "case": "base",
+          "reference": "h05",
+          "shared_stations_x_m": [
+            0.0,
+            0.15,
+            0.45
+          ],
+          "maximum_absolute_change_percent": [
+            0.7267243018806855,
+            1.7956334382448982,
+            2.124492789377514,
+            1.542143926229393
+          ]
+        },
+        {
+          "label": "p9  vs  h05",
+          "case": "p9",
+          "reference": "h05",
+          "shared_stations_x_m": [
+            0.0,
+            0.15,
+            0.45
+          ],
+          "maximum_absolute_change_percent": [
+            0.014893049326075368,
+            0.1694990154830152,
+            0.14084406991073414,
+            0.10807827768413042
+          ]
+        },
+        {
+          "label": "dt-half  vs  base",
+          "case": "dt-half",
+          "reference": "base",
+          "shared_stations_x_m": [
+            0.0,
+            0.15,
+            0.45
+          ],
+          "maximum_absolute_change_percent": [
+            0.19624248022846327,
+            0.5268764582500909,
+            0.4903277674237099,
+            0.40270453350168317
+          ]
+        },
+        {
+          "label": "z64  vs  base",
+          "case": "z64",
+          "reference": "base",
+          "shared_stations_x_m": [
+            0.0,
+            0.15,
+            0.45
+          ],
+          "maximum_absolute_change_percent": [
+            0.0016991744322090102,
+            0.0016964633699996826,
+            0.00023877818645401202,
+            0.0012267339969046264
+          ]
+        },
+        {
+          "label": "buffer09  vs  base",
+          "case": "buffer09",
+          "reference": "base",
+          "shared_stations_x_m": [
+            0.0,
+            0.15,
+            0.45
+          ],
+          "maximum_absolute_change_percent": [
+            0.0010187288336669868,
+            0.0025991684227613583,
+            0.00296004184746107,
+            0.002178547904546297
+          ]
+        },
+        {
+          "label": "buffer12  vs  base",
+          "case": "buffer12",
+          "reference": "base",
+          "shared_stations_x_m": [
+            0.0,
+            0.15,
+            0.45
+          ],
+          "maximum_absolute_change_percent": [
+            0.0010341529484750444,
+            0.0025422154285489377,
+            0.003134325135186904,
+            0.002220853949684895
+          ]
+        },
+        {
+          "label": "svv-half  vs  base",
+          "case": "svv-half",
+          "reference": "base",
+          "shared_stations_x_m": [
+            0.0,
+            0.15,
+            0.45
+          ],
+          "maximum_absolute_change_percent": [
+            0.13428374844217528,
+            0.2369646292922027,
+            0.25146846960987673,
+            0.2067498225363294
+          ]
+        },
+        {
+          "label": "svv-double  vs  base",
+          "case": "svv-double",
+          "reference": "base",
+          "shared_stations_x_m": [
+            0.0,
+            0.15,
+            0.45
+          ],
+          "maximum_absolute_change_percent": [
+            0.23684999963012202,
+            0.2397278458125434,
+            0.25365543176931554,
+            0.2432466394173471
+          ]
+        }
+      ],
+      "work_case_order": [
+        "base",
+        "p9",
+        "h05"
+      ],
+      "molecular_m2_s3": [
+        0.002610223733197824,
+        0.00262589951969523,
+        0.0026329180168719107
+      ],
+      "svv_xy_plus_z_m2_s3": [
+        0.012213291742496817,
+        0.00042036637209037986,
+        9.915752160602034e-05
+      ]
+    },
+    "sampling": {
+      "station_x_m": 0.45,
+      "configuration_label": "p=7, dt=0.0001 s, Nz=32",
+      "widths_s": [
+        0.09999999999999246,
+        0.2999999999999704,
+        0.6999999999999263
+      ],
+      "full_window_change_percent": [
+        [
+          -4.572638885493909,
+          -4.32817698483511,
+          -7.077505281828512,
+          -5.315141345022156
+        ],
+        [
+          -0.40009876991706905,
+          -1.4352027071537505,
+          -3.2442965455564465,
+          -1.6813335740218402
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "conditional_8_block_energy_relative_to_record07_percent": [
+        [
+          {
+            "mean_of_blocks": -4.600621588609336,
+            "conditional_95_percent_t_interval": [
+              -9.606071134316732,
+              0.4048279570980702
+            ]
+          },
+          {
+            "mean_of_blocks": -4.4024026073718,
+            "conditional_95_percent_t_interval": [
+              -8.980419365353779,
+              0.1756141506101682
+            ]
+          },
+          {
+            "mean_of_blocks": -7.0495749314611444,
+            "conditional_95_percent_t_interval": [
+              -11.909226370174691,
+              -2.1899234927475995
+            ]
+          },
+          {
+            "mean_of_blocks": -5.340163634495239,
+            "conditional_95_percent_t_interval": [
+              -7.622136664394879,
+              -3.0581906045955987
+            ]
+          }
+        ],
+        [
+          {
+            "mean_of_blocks": -0.4244945653911105,
+            "conditional_95_percent_t_interval": [
+              -2.9112109797909937,
+              2.0622218490087727
+            ]
+          },
+          {
+            "mean_of_blocks": -1.4398116170771291,
+            "conditional_95_percent_t_interval": [
+              -3.7552874674449175,
+              0.8756642332906595
+            ]
+          },
+          {
+            "mean_of_blocks": -3.2772310669542914,
+            "conditional_95_percent_t_interval": [
+              -6.439026189660383,
+              -0.11543594424819975
+            ]
+          },
+          {
+            "mean_of_blocks": -1.7019341492594666,
+            "conditional_95_percent_t_interval": [
+              -3.7775425798224274,
+              0.3736742813034941
+            ]
+          }
+        ],
+        [
+          {
+            "mean_of_blocks": 0.007898195004332228,
+            "conditional_95_percent_t_interval": [
+              -2.2271815886500237,
+              2.242977978658688
+            ]
+          },
+          {
+            "mean_of_blocks": 0.004536232788460032,
+            "conditional_95_percent_t_interval": [
+              -2.076607164434152,
+              2.085679630011072
+            ]
+          },
+          {
+            "mean_of_blocks": 0.015307814660713322,
+            "conditional_95_percent_t_interval": [
+              -2.7505781219779477,
+              2.7811937512993743
+            ]
+          },
+          {
+            "mean_of_blocks": 0.009213799707049669,
+            "conditional_95_percent_t_interval": [
+              -1.2780499362186621,
+              1.2964775356327616
+            ]
+          }
+        ]
+      ],
+      "block_counts": [
+        4,
+        8,
+        16
+      ],
+      "conditional_ci_halfwidth_percent": [
+        [
+          2.537172010117027,
+          2.3528639717669284,
+          4.527468417054988,
+          2.008149606479877
+        ],
+        [
+          2.235079783654356,
+          2.081143397222612,
+          2.7658859366386612,
+          1.2872637359257117
+        ],
+        [
+          2.0101506604363295,
+          2.268466790884969,
+          2.0933601356698377,
+          1.2952244431195374
+        ]
+      ]
+    },
+    "long": null
+  },
+  "long_omission": "Explicit --skip-long; no long results were read or fabricated",
+  "definitions": {
+    "short_relative_change": "100*(case-reference)/reference; absolute maximum over shared stations, separately for var(u),var(v),var(w),K",
+    "sampling_reference": "record07 full-window variance/K; conditional intervals describe mean block energy, not the full-window variance estimator",
+    "work": "Final-field instantaneous volume means, m^2/s^3; molecular=2*nu*S:S, total SVV work=xy+z",
+    "interpretation": "Descriptive sensitivity only. The 2% guides do not imply acceptance. Conditional Student-t intervals assume approximately stationary independent blocks; nonoverlap is not proof of independence. No downstream experimental data were loaded."
+  }
+}
