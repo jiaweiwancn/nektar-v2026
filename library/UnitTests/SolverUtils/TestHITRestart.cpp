@@ -334,8 +334,9 @@ BOOST_AUTO_TEST_CASE(RestartSourceCannotBorrowEquationDefaults)
     char name[] = "HITRestartUnitTests";
     char *arguments[] = {name, nullptr};
     auto comm = LibUtilities::CommSerial::create(1, arguments);
+    std::vector<std::string> filenames{input};
     auto session = LibUtilities::SessionReader::CreateInstance(
-        1, arguments, std::vector<std::string>{input}, comm);
+        1, arguments, filenames, comm);
     session->InitSession();
     const auto configuration = HITInflowConfig::Load(session);
     BOOST_REQUIRE(configuration);
