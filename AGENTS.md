@@ -52,11 +52,11 @@ MPI/thread configuration.
 
 ## Linux worker limit
 
-- **Never employ more than 72 workers in total on the Linux server.** This is a
+- **Never employ more than 64 workers in total on the Linux server.** This is a
   hard limit even though the server exposes more CPUs.
 - Apply the limit to compiler jobs, MPI ranks, test-runner concurrency, and other
   parallel or background work. Account for concurrent jobs and threads within
-  each MPI rank so their combined worker count stays at or below 72.
+  each MPI rank so their combined worker count stays at or below 64.
 - Set parallelism explicitly. Avoid unbounded build parallelism or automatically
   using all CPUs reported by `nproc` or similar tools.
 - For MPI jobs, default to `OMP_NUM_THREADS=1` and `OPENBLAS_NUM_THREADS=1`.
@@ -65,7 +65,7 @@ MPI/thread configuration.
 - Choose parallel test-runner settings according to the MPI ranks and threads
   used by all tests that can run concurrently.
 
-For example, this rebuild uses 32 compiler workers and must share the 72-worker
+For example, this rebuild uses 32 compiler workers and must share the 64-worker
 budget with any other concurrent work:
 
 ```bash
