@@ -70,8 +70,8 @@ inline std::array<NekDouble, 2> SVVWork(
             for (int element = 0; element < geometry->GetExpSize(); ++element)
             {
                 auto expansion = geometry->GetExp(element);
-                ASSERTL0(expansion->GetShapeType() == LibUtilities::eQuadrilateral &&
-                             expansion->GetGeom()->GetMetricInfo()->GetGtype() == SpatialDomains::eRegular,
+                ASSERTL0(expansion->DetShapeType() == LibUtilities::eQuadrilateral &&
+                             expansion->GetGeomFactors()->GetGtype() == SpatialDomains::eRegular,
                          "Pilot SVV work supports affine quadrilaterals");
                 NekDouble h = 0.0;
                 for (int edge = 0; edge < expansion->GetGeom()->GetNumEdges(); ++edge)
@@ -89,7 +89,7 @@ inline std::array<NekDouble, 2> SVVWork(
                     factors[StdRegions::eFactorSVVDGKerDiffCoeff] = speed * h / p;
                 }
                 const StdRegions::StdMatrixKey key(StdRegions::eLaplacian,
-                    expansion->GetShapeType(), *expansion, factors);
+                    expansion->DetShapeType(), *expansion, factors);
                 const int count = expansion->GetTotPoints();
                 const int offset = plane * planePoints + geometry->GetPhys_Offset(element);
                 for (int component = 0; component < 3; ++component)
@@ -122,7 +122,7 @@ inline std::array<NekDouble, 2> SVVWork(
         for (int component = 0; component < 3; ++component)
         {
             Array<OneD, NekDouble> transformed(field->GetNpoints());
-            field->HomogeneousFwdTrans(derivatives[component][2], transformed);
+            field->HomogeneousFwdTrans(field->GetNpoints(), derivatives[component][2], transformed);
             NekDouble parseval = 0.0;
             for (int plane = 0; plane < planes; ++plane)
             {

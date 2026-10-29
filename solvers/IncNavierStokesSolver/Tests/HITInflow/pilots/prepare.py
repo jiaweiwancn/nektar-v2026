@@ -318,6 +318,7 @@ def prepare(args):
         "sampling": {"stations_x_m": stations, "probe_shape_yz": [probe_ny, probe_nz],
                      "probe_order": "station, then y, then z; uniform half-open periodic grids",
                      "probes": probes, "requested_outlet_buffer_m": args.buffer,
+                     "station_bound_roundoff_allowance_m": station_tolerance,
                      "actual_last_station_outlet_distance_m": args.length - max(stations),
                      "estimator": "Temporal central variance at each fixed point, then arithmetic spatial average"},
         "svv": {"model_xy": args.svv, "coefficient_xy": args.svv_coeff,

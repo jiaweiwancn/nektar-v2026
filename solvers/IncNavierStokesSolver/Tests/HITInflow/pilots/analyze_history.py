@@ -16,6 +16,7 @@ import math
 from pathlib import Path
 import re
 import statistics
+import sys
 
 
 class Moments:
@@ -90,7 +91,12 @@ def history_frames(path, probes, sample_dt, hasher=None):
             if not current:
                 frame_time = time
                 if previous_time is not None:
-                    if time <= previous_time or not close(time - previous_time, sample_dt, sample_dt):
+                    # A subtraction of absolute solver times incurs roundoff
+                    # on their magnitude, not merely on the small interval.
+                    interval_tolerance = (64 * sys.float_info.epsilon *
+                                          max(abs(time), abs(previous_time), sample_dt)
+                                          + 2e-12 * sample_dt)
+                    if time <= previous_time or abs(time - previous_time - sample_dt) > interval_tolerance:
                         raise ValueError(f"line {line_number}: nonuniform/duplicate history time")
             elif not close(time, frame_time, sample_dt):
                 raise ValueError(f"line {line_number}: incomplete equal-time point frame")
