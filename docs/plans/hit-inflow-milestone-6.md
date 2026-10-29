@@ -22,7 +22,7 @@ predeclare sampling screens and claim limits before Milestone 7 scoring.
 | Corrected 22 registered solver regressions | `812a2c8` |
 | Long and follow-up solver inputs/runners | `812a2c8` |
 | Optional spectral analysis | `a3caa84` |
-| Authoritative host | `jay-Super-Server`, accessed through `ssh linux-usb` |
+| Authoritative host | `jay-Super-Server`; initial `ssh linux-usb`, resumed through `ssh jay@100.105.247.110` |
 | Main run storage | `/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-6` |
 
 The C++ sources are unchanged between `d74cae8` and `812a2c8`. Later changes in
@@ -177,6 +177,26 @@ The fine short chain is also complete. At degree 9, `dt=1e-4` versus
 32 by 32 to 64 by 64 changes results by at most 0.01483%. These controls cover
 x through 0.45 m, not the final comparison stations. All 21 completed short
 cases have verified manifest/prepared-XML and receipt/executed-XML hash chains.
+
+Four additional matched controls at degree 10 are complete, with identical
+0.1--0.2 s windows and 0.5 ms sampling:
+
+| Candidate control versus degree 10, dt=25 microseconds | Maximum variance/K change | z-spectrum L1 | z-derivative moment |
+| --- | ---: | ---: | ---: |
+| dt=12.5 microseconds | 0.009041% | 0.009094% | 0.005954% |
+| 64 Fourier slots | 0.001868% | 0.019351% | 0.116981% |
+| Half SVV strength | 0.022341% | 0.023112% | 0.030306% |
+| Double SVV strength | 0.025371% | 0.025800% | 0.033323% |
+
+The complete comparison now contains 25 short controls, each with its prepared
+and executed input hash chains verified. These additional tests use two
+concurrent four-rank jobs on eight spare CPUs, bringing the simultaneous solver
+allocation to 56 ranks while the long pair runs. No native iteration-limit
+warnings occurred. Their bounds remain near-field results through x=0.45 m;
+they do not quantify far-field timestep, Fourier or SVV-strength sensitivity.
+The spectral comparisons use the same completed histories and record window;
+the largest Parseval residual is `8.7e-16`. The z-derivative moment remains a
+directional measure, not total molecular dissipation.
 
 ![Short-domain numerical/model sensitivities and instantaneous work](hit-inflow-milestone-6-figures/m6-short-sensitivity.png)
 

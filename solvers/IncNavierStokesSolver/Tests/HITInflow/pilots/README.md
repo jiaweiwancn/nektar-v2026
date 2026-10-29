@@ -174,3 +174,13 @@ native build metadata, commands, flow JSON and complete x-column slab CSV
 hashes. Slab energy is instantaneous about prescribed Ubar, rather than
 temporal-central TKE. Use this with the active solver installation, before
 replacing its libraries, to retain consistent diagnostic operators.
+
+`plot_m6_diagnostics.py --long-root CASES --statistics-root SPECTRAL_JSONS
+--profiles-root NATIVE_PROFILES --output NEW_DIRECTORY` adds a completed
+long-domain PNG/SVG figure and hashed provenance. Each statistics file is named
+`long-p9.json` or `long-p10.json`; each profile directory has the collector's
+completed receipt for checkpoints at 0.85, 0.90 and 0.95 s. The tool checks input
+identity/window, slab hashes and slab/global work closure. It plots temporal
+TKE and discrete z mode energy separately from native molecular/SVV work and
+fixed-reference divergence. Snapshot ranges are descriptive, not confidence
+intervals. Run beside `plot_m6.py`, which provides shared validation helpers.
