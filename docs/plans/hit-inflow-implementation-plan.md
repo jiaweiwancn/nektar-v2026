@@ -22,7 +22,7 @@ periodic transverse boundaries, and the nonlinear velocity-correction solver.
 | Origin date | 2026-10-28 |
 | Version label | hit_inflow_plan_v7 |
 | Verification status | Inlet/core, MPI/backends, restart and regressions VERIFIED on Linux; limited-band SVV configuration/error budget frozen; downstream physical validation pending |
-| Milestone status | Milestones 1-3 CLOSED on 2026-10-28; Milestones 4-6 CLOSED on 2026-10-29; Milestones 7-8 pending |
+| Milestone status | Milestones 1-3 CLOSED on 2026-10-28; Milestones 4-6 CLOSED on 2026-10-29; Milestone 7 in progress; Milestone 8 pending |
 | Source baseline | `a3b7efc8fef7e075390f0f59457dfdac30f0b6ed` |
 | Project branch | `codex/hit-inflow-generator` |
 
@@ -678,7 +678,9 @@ and define the result as a limited validation rather than claiming full DNS.
 
 ### Milestone 7 Compare downstream decay with experiment
 
-**Status: PENDING.** The frozen M6 recipe is a limited-band SVV follow-up.
+**Status: IN PROGRESS.** The [M7 report](hit-inflow-milestone-7.md) and
+[predeclared protocol](hit-inflow-milestone-7-protocol.md) track the CBC and
+von Karman production pairs. The frozen M6 recipe is a limited-band SVV follow-up.
 Apply its predeclared sampling/adjustment qualification before precision claims.
 Full-band experimental comparisons must retain the inlet's excluded scales and
 unquantified far-field effects; numerical-test success is not physical fidelity.
