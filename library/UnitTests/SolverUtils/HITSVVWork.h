@@ -7,7 +7,10 @@
 #define NEKTAR_HITSVVWORK_H
 
 #include <MultiRegions/ExpList.h>
+#include <algorithm>
+#include <array>
 #include <cmath>
+#include <regex>
 
 namespace Nektar::HITTestTools
 {
@@ -20,10 +23,16 @@ inline std::array<NekDouble, 2> SVVWork(
     NekDouble volume)
 {
     std::array<NekDouble, 2> work{};
+    ASSERTL0(std::isfinite(volume) && volume > 0.0,
+             "SVV work requires positive finite volume");
     bool dg = false, exponential = false, fourier = false;
     session->MatchSolverInfo("SpectralVanishingViscositySpectralHP", "DGKernel", dg, false);
     session->MatchSolverInfo("SpectralVanishingViscositySpectralHP", "ExpKernel", exponential, false);
     session->MatchSolverInfo("SpectralVanishingViscosityHomo1D", "ExpKernel", fourier, false);
+    ASSERTL0(!session->DefinesSolverInfo("SpectralVanishingViscosity") &&
+                 (!session->DefinesSolverInfo("SpectralVanishingViscositySpectralHP") || dg || exponential) &&
+                 (!session->DefinesSolverInfo("SpectralVanishingViscosityHomo1D") || fourier),
+             "Pilot SVV work supports explicit SpectralHP DG/Exp and Homo1D Exp switches only");
     if (!dg && !exponential && !fourier)
     {
         return work;
@@ -46,7 +55,11 @@ inline std::array<NekDouble, 2> SVVWork(
             speed = 0.0;
             for (const auto &variable : {"u", "v", "w"})
             {
-                const auto component = session->GetFunction("SVVVelocityMagnitude", variable)->Evaluate();
+                const auto function = session->GetFunction("SVVVelocityMagnitude", variable);
+                ASSERTL0(!std::regex_search(function->GetExpression(),
+                             std::regex("\\b(x|y|z|t|awgn|rand|random)\\b", std::regex::icase)),
+                         "Pilot SVV work requires constant SVVVelocityMagnitude");
+                const auto component = function->Evaluate();
                 speed += component * component;
             }
             speed = std::sqrt(speed);

@@ -153,8 +153,9 @@ def prepare(args):
     if not stations or len(set(stations)) != len(stations):
         raise ValueError("stations must be nonempty and unique")
     stations.sort()
+    station_tolerance = 64 * sys.float_info.epsilon * max(args.length, args.width)
     if args.buffer >= args.length or any(not math.isfinite(x) or x < 0 or
-                                         x > args.length - args.buffer for x in stations):
+                                         x > args.length - args.buffer + station_tolerance for x in stations):
         raise ValueError("all stations must lie in [0,length-buffer], with buffer<length")
     probe_ny, probe_nz = tuple_ints(args.probe_grid, 2, "probe-grid")
     if min(probe_ny, probe_nz) < 2:
@@ -171,10 +172,17 @@ def prepare(args):
     if len(periodic_stress_steps) > 16:
         raise ValueError("native stress snapshot schedule exceeds 16 writes; increase record-start")
     initial = None
+    initial_hashes = {}
     if args.initial_field:
         initial = args.initial_field.expanduser().resolve()
-        if not initial.is_file():
-            raise ValueError("initial-field must be an existing single native .fld/.chk file")
+        if initial.is_file():
+            initial_hashes[initial.name] = digest(initial)
+        elif initial.is_dir() and (initial / "Info.xml").is_file():
+            files = sorted((path for path in initial.rglob("*") if path.is_file()),
+                           key=lambda path: path.relative_to(initial).as_posix())
+            initial_hashes = {path.relative_to(initial).as_posix(): digest(path) for path in files}
+        else:
+            raise ValueError("initial-field must be an existing native field file or MPI field directory containing Info.xml")
     output = args.output.expanduser().resolve()
     output.mkdir(parents=True, exist_ok=True)
     targets = ("pilot.xml", "manifest.json", SPECTRUM.name)
@@ -319,6 +327,10 @@ def prepare(args):
                 "note": "Separate xy/z solver properties; DG xy coefficient scales with native h/p and prescribed constant speed. ExpKernel xy coefficient is direct viscosity, not DG scaling."},
         "initial_conditions": {"kind": "native_field" if initial else "mean_only",
                                "path": str(initial) if initial else None,
+                               "storage": ("mpi_directory" if initial.is_dir() else "single_file") if initial else None,
+                               "files_sha256": initial_hashes,
+                               "files_receipt_sha256": hashlib.sha256(json.dumps(initial_hashes, sort_keys=True,
+                                   separators=(",", ":")).encode("utf-8")).hexdigest() if initial else None,
                                "time_note": "Designed for a time-zero initial field. Native nonzero-Time restart fields require a separately reviewed absolute-time schedule."},
         "limitations": ["No downstream experimental input or fitting", "Finite box, cutoff, taper, SVV and startup require explicit convergence/error-budget checks",
                         "8x8 default probe grid resolves statistics at sampled points; it need not resolve all transverse solver modes",
@@ -327,7 +339,8 @@ def prepare(args):
                    SPECTRUM.name: digest(output / SPECTRUM.name)},
     }
     if initial:
-        manifest["sha256"][str(initial)] = digest(initial)
+        for relative, checksum in initial_hashes.items():
+            manifest["sha256"][str(initial / relative) if initial.is_dir() else str(initial)] = checksum
     analyzer = HERE / "analyze_history.py"
     if analyzer.exists():
         manifest["sha256"]["analyze_history.py"] = digest(analyzer)

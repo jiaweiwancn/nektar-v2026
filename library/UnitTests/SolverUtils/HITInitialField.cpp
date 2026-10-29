@@ -196,7 +196,7 @@ int main(int argc, char *argv[])
             {
                 definitions[block]->m_fields.push_back(session->GetVariable(variable));
                 fields[0]->AppendFieldData(definitions[block], data[block],
-                                           fields[variable]->GetCoeffs());
+                                           fields[variable]->UpdateCoeffs());
             }
         }
         const auto writeStart = Clock::now();
