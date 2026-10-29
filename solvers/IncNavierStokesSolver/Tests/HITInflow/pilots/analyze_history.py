@@ -5,6 +5,7 @@ Temporal central moments are computed independently at each fixed probe, then
 averaged over each half-open yz plane. Block intervals are conditional sampling
 diagnostics, not an experimental uncertainty estimate or proof of independence.
 Only the Python standard library is required; the history is streamed twice.
+An explicit flag optionally uses NumPy for z transforms and lag products only.
 """
 
 import argparse
@@ -174,6 +175,12 @@ def relative_difference(a, b):
 
 
 def analyze(args):
+    np = None
+    if getattr(args, "numpy_transforms", False):
+        try:
+            import numpy as np
+        except ImportError as error:
+            raise ValueError("--numpy-transforms requires NumPy in the selected Python environment") from error
     manifest_path = args.manifest.resolve()
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     if manifest.get("schema") != "NEKTAR_HIT_PILOT_V1":
@@ -226,19 +233,33 @@ def analyze(args):
     if any(lag < 1 or lag >= overall.n for lag in lags):
         raise ValueError("correlation lags must lie in [1,selected_sample_count)")
     ring = deque(maxlen=max(lags) if lags else 0)
-    correlations = {lag: [[0.0] * 3 for _ in stations] for lag in lags}
+    correlations = {lag: (np.zeros((len(stations), 3), dtype=np.float64)
+                          if np is not None else [[0.0] * 3 for _ in stations]) for lag in lags}
     shape = manifest["sampling"]["probe_shape_yz"]
     ny, nz = shape
     spectra = None
+    if np is not None:
+        if any(not isinstance(n, int) or isinstance(n, bool) or n < 1 for n in shape):
+            raise ValueError("NumPy transforms require positive integer probe shape")
+        if len(stations) * ny * nz != len(probes):
+            raise ValueError("NumPy transform shape does not match the complete probe count")
+    if args.z_spectra or np is not None:
+        expected = [(s, iy, iz) for s in range(len(stations)) for iy in range(ny) for iz in range(nz)]
+        if [(p["station_index"], p["iy"], p["iz"]) for p in probes] != expected:
+            raise ValueError("z-spectra/NumPy transforms require canonical station,y,z probe order")
     if args.z_spectra:
         if nz < manifest["mesh"]["hom_modes_z"]:
             raise ValueError("z-spectra requires probe Nz>=solver HomModesZ to avoid unreported spatial aliasing")
-        expected = [(s, iy, iz) for s in range(len(stations)) for iy in range(ny) for iz in range(nz)]
-        if [(p["station_index"], p["iy"], p["iz"]) for p in probes] != expected:
-            raise ValueError("z-spectra requires canonical station,y,z probe order")
-        weights = [[cmath.exp(-2j * math.pi * m * iz / nz) / nz for iz in range(nz)]
-                   for m in range(nz // 2 + 1)]
-        spectra = [[[0.0] * (nz // 2 + 1) for _ in range(3)] for _ in stations]
+        if np is None:
+            weights = [[cmath.exp(-2j * math.pi * m * iz / nz) / nz for iz in range(nz)]
+                       for m in range(nz // 2 + 1)]
+            spectra = [[[0.0] * (nz // 2 + 1) for _ in range(3)] for _ in stations]
+        else:
+            spectra = np.zeros((len(stations), 3, nz // 2 + 1), dtype=np.float64)
+            one_sided = np.full((1, 1, nz // 2 + 1), 2.0, dtype=np.float64)
+            one_sided[..., 0] = 1.0
+            if nz % 2 == 0:
+                one_sided[..., -1] = 1.0
     selected = 0
     for time, values in history_frames(history, probes, sample_dt):
         if not start - tolerance <= time <= end + tolerance:
@@ -256,29 +277,51 @@ def analyze(args):
                 window_times[name].append(time)
             window_times[name][-1] = time
         centered = [value - mean for value, mean in zip(values, overall.mean)]
-        for lag in lags:
-            if selected >= lag:
-                previous = ring[-lag]
-                for station, ids in enumerate(station_ids):
-                    for component in range(3):
-                        correlations[lag][station][component] += sum(
-                            centered[3*i+component] * previous[3*i+component] for i in ids) / len(ids)
-        if lags:
-            ring.append(centered)
-        if spectra is not None:
-            for station in range(len(stations)):
-                for iy in range(ny):
-                    first = (station * ny + iy) * nz
-                    for component in range(3):
-                        row = [centered[3*(first + iz)+component] for iz in range(nz)]
-                        for mode, weight in enumerate(weights):
-                            coefficient = sum(value * w for value, w in zip(row, weight))
-                            factor = 1 if mode == 0 or (nz % 2 == 0 and mode == nz // 2) else 2
-                            spectra[station][component][mode] += factor * abs(coefficient)**2
+        if np is not None:
+            frame = np.asarray(centered, dtype=np.float64, order="C")
+            if frame.dtype != np.dtype("float64") or frame.shape != (3 * len(probes),) or not np.isfinite(frame).all():
+                raise ValueError("NumPy transforms require a finite flat float64 velocity frame")
+            frame = frame.reshape((len(stations), ny, nz, 3))
+            with np.errstate(over="raise", invalid="raise", divide="raise"):
+                for lag in lags:
+                    if selected >= lag:
+                        correlations[lag] += np.sum(frame * ring[-lag], axis=(1, 2), dtype=np.float64) / (ny * nz)
+                if spectra is not None:
+                    coefficients = np.fft.rfft(frame, axis=2) / nz
+                    if (coefficients.dtype != np.dtype("complex128") or
+                            coefficients.shape != (len(stations), ny, nz // 2 + 1, 3) or
+                            not np.isfinite(coefficients).all()):
+                        raise ValueError("NumPy z FFT returned invalid complex128 coefficients")
+                    spectra += np.sum(np.abs(coefficients)**2, axis=1, dtype=np.float64).transpose(0, 2, 1) * one_sided
+            if lags:
+                ring.append(frame)
+        else:
+            for lag in lags:
+                if selected >= lag:
+                    previous = ring[-lag]
+                    for station, ids in enumerate(station_ids):
+                        for component in range(3):
+                            correlations[lag][station][component] += sum(
+                                centered[3*i+component] * previous[3*i+component] for i in ids) / len(ids)
+            if lags:
+                ring.append(centered)
+            if spectra is not None:
+                for station in range(len(stations)):
+                    for iy in range(ny):
+                        first = (station * ny + iy) * nz
+                        for component in range(3):
+                            row = [centered[3*(first + iz)+component] for iz in range(nz)]
+                            for mode, weight in enumerate(weights):
+                                coefficient = sum(value * w for value, w in zip(row, weight))
+                                factor = 1 if mode == 0 or (nz % 2 == 0 and mode == nz // 2) else 2
+                                spectra[station][component][mode] += factor * abs(coefficient)**2
         selected += 1
     after = history.stat()
     if selected != overall.n or (before.st_size, before.st_mtime_ns) != (after.st_size, after.st_mtime_ns):
         raise ValueError("history changed while being analyzed; analyze a completed immutable record")
+    if np is not None:
+        correlations = {lag: value.tolist() for lag, value in correlations.items()}
+        spectra = spectra.tolist() if spectra is not None else None
     summary = plane_summary(overall, station_ids)
     window_summaries = {name: {"samples": moment.n, "first_last_times_s": window_times[name],
                                 "planes": plane_summary(moment, station_ids)}
@@ -333,6 +376,13 @@ def analyze(args):
         "limitations": ["Finite record and probe grid require duration/grid checks", "No experimental downstream data were loaded",
                         "No pass/fail thresholds or stationarity/independence claims are inferred automatically",
                         "At record-start=0 history includes initial state; native ReynoldsStresses begins at the first sampled solver step"]}
+    if np is not None:
+        result["optional_transform_backend"] = {
+            "name": "numpy", "version": np.__version__, "dtype": "float64",
+            "frame_shape_station_y_z_component": [len(stations), ny, nz, 3],
+            "accelerated_operations": (["temporal_lag_products"] if lags else []) +
+                                      (["z_rfft_divided_by_Nz"] if spectra is not None else []),
+            "reduction_note": "Float64 reduction order can differ from stdlib; streamed validation, temporal centering, moments, blocks and estimator definitions are unchanged."}
     if lags:
         result["temporal_correlations"] = {
             "definition": "Time-pair covariance about each probe's full-window temporal mean, spatially averaged, divided by that component's plane-averaged full-window variance; no instantaneous plane centering.",
@@ -369,11 +419,13 @@ def main():
     parser.add_argument("--end", type=float, help="Inclusive end, defaults to manifest end")
     parser.add_argument("--blocks", type=int, default=8)
     parser.add_argument("--correlation-lags", default="", help="Optional comma-separated positive integer sample lags")
-    parser.add_argument("--z-spectra", action="store_true", help="Optional stdlib DFT; requires probe Nz>=solver HomModesZ")
+    parser.add_argument("--z-spectra", action="store_true", help="Optional z DFT (stdlib by default); requires probe Nz>=solver HomModesZ")
+    parser.add_argument("--numpy-transforms", action="store_true",
+                        help="Explicit optional NumPy acceleration of z DFT/lag products; moments remain stdlib")
     args = parser.parse_args()
     try:
         analyze(args)
-    except (ValueError, OSError, KeyError, TypeError, OverflowError) as error:
+    except (ValueError, OSError, KeyError, TypeError, OverflowError, FloatingPointError) as error:
         parser.error(str(error))
 
 
