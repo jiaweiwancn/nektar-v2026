@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Prepare an affine, periodic-y/Homogeneous1D-z CBC upstream-spectrum pilot.
+"""Prepare an affine, periodic-y/Homogeneous1D-z inflow-spectrum pilot.
 
 This standard-library tool creates inputs only. Numerical and performance
 validation belongs on the Linux host specified by AGENTS.md.
@@ -117,6 +117,19 @@ def add_function(conditions, name, values):
 
 
 def prepare(args):
+    spectrum_kind = args.spectrum
+    if spectrum_kind == "von-karman":
+        if args.vk_length is None or args.vk_amplitude is None:
+            raise ValueError("von-karman requires both --vk-length and --vk-amplitude")
+        finite_positive(args.vk_length, "vk-length")
+        finite_positive(args.vk_amplitude, "vk-amplitude", zero=True)
+        if args.taper is None:
+            raise ValueError("von-karman requires an explicit --taper with the common --cutoff")
+    elif spectrum_kind == "cbc":
+        if args.vk_length is not None or args.vk_amplitude is not None:
+            raise ValueError("--vk-length/--vk-amplitude are unused with --spectrum cbc")
+    else:
+        raise ValueError("spectrum must be cbc or von-karman")
     for label in ("length", "width", "h", "dt", "duration", "cutoff", "synthesis_length"):
         finite_positive(getattr(args, label), label)
     finite_positive(args.record_start, "record-start", zero=True)
@@ -190,7 +203,7 @@ def prepare(args):
             raise ValueError("initial-field must be an existing native field file or MPI field directory containing Info.xml")
     output = args.output.expanduser().resolve()
     output.mkdir(parents=True, exist_ok=True)
-    targets = ("pilot.xml", "manifest.json", SPECTRUM.name)
+    targets = ("pilot.xml", "manifest.json") + ((SPECTRUM.name,) if spectrum_kind == "cbc" else ())
     if any((output / name).exists() for name in targets):
         raise ValueError("output already contains pilot inputs; use a new directory")
     nx, ny = max(1, math.ceil(args.length / args.h)), max(1, math.ceil(args.width / args.h))
@@ -268,8 +281,12 @@ def prepare(args):
     sub(region, "SYNTHESIS", LX=number(periods[0]), LY=number(periods[1]), LZ=number(periods[2]),
         NX=str(counts[0]), NY=str(counts[1]), NZ=str(counts[2]), SEED=str(args.seed),
         TIMEORIGIN="0", RECORDDURATION=number(synthetic_duration), REPEAT="Error")
-    sub(region, "SPECTRUM", TYPE="Tabulated", FILE=SPECTRUM.name,
-        INTERPOLATION="LogLinear", LOW="K4", HIGH="Gaussian", NORMALIZATION="Preserve")
+    if spectrum_kind == "cbc":
+        sub(region, "SPECTRUM", TYPE="Tabulated", FILE=SPECTRUM.name,
+            INTERPOLATION="LogLinear", LOW="K4", HIGH="Gaussian", NORMALIZATION="Preserve")
+    else:
+        sub(region, "SPECTRUM", TYPE="VonKarman", LENGTH=number(args.vk_length),
+            AMPLITUDE=number(args.vk_amplitude), NORMALIZATION="Preserve")
     sub(region, "CUTOFF", KMAX=number(args.cutoff), TAPERSTART=number(taper))
     probes = []
     for station_index, x in enumerate(stations):
@@ -293,7 +310,8 @@ def prepare(args):
     ET.indent(root, space="    ")
     case = output / "pilot.xml"
     case.write_text(ET.tostring(root, encoding="unicode", xml_declaration=True) + "\n", encoding="utf-8")
-    shutil.copyfile(SPECTRUM, output / SPECTRUM.name)
+    if spectrum_kind == "cbc":
+        shutil.copyfile(SPECTRUM, output / SPECTRUM.name)
     knobs = vars(args).copy()
     knobs["output"] = str(output)
     knobs["initial_field"] = str(initial) if initial else None
@@ -348,9 +366,29 @@ def prepare(args):
         "limitations": ["No downstream experimental input or fitting", "Finite box, cutoff, taper, SVV and startup require explicit convergence/error-budget checks",
                         "8x8 default probe grid resolves statistics at sampled points; it need not resolve all transverse solver modes",
                         "Time-based checkpoints disabled; step checkpoints are optional. Native final solver field and cumulative stress fields remain enabled"],
-        "sha256": {"prepare.py": digest(Path(__file__)), "pilot.xml": digest(case),
-                   SPECTRUM.name: digest(output / SPECTRUM.name)},
+        "sha256": {"prepare.py": digest(Path(__file__)), "pilot.xml": digest(case)},
     }
+    if spectrum_kind == "cbc":
+        manifest["sha256"][SPECTRUM.name] = digest(output / SPECTRUM.name)
+    else:
+        manifest["physics"] = {
+            "mean_velocity_m_s": U, "kinvis_m2_s": NU,
+            "spectrum": "VonKarman analytic shell-3D; upstream-only parameter calibration",
+            "spectrum_type": "VonKarman", "normalization": "Preserve",
+            "vk_length_m": args.vk_length, "vk_amplitude": args.vk_amplitude,
+            "vk_amplitude_units": "m^(4/3)/s2",
+            "formula": "E(k)=A*L^(5/3)*(L*k)^4/(1+(L*k)^2)^(17/6)",
+            "interpolation": None, "low_extension": "Analytic k^4",
+            "high_extension": "Analytic uncut k^(-5/3) inertial tail",
+            "parameter_provenance": {
+                "source": "Explicit --vk-length and --vk-amplitude; prepare.py performs no fit",
+                "permitted_calibration": "Upstream component urms=0.222 m/s and longitudinal Lf=0.024 m only",
+                "excluded_calibration": "No downstream data or Table 4 dissipation fitting",
+                "fit_derivation": "Caller must retain the upstream-only fit derivation separately"},
+            "length_note": "L is the native von Karman shape parameter, distinct from longitudinal integral scale Lf",
+            "uncut_dissipation_note": "For A>0 the uncut k^(-5/3) tail has finite K and divergent integral k^2*E dk/dissipation; A=0 is identically zero",
+            "retained_band_note": "Common explicit cutoff and cos^2 energy taper regularize the retained band; amplitude is preserved with no retained-band renormalization",
+        }
     if initial:
         for relative, checksum in initial_hashes.items():
             manifest["sha256"][str(initial / relative) if initial.is_dir() else str(initial)] = checksum
@@ -364,6 +402,10 @@ def prepare(args):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--spectrum", choices=("cbc", "von-karman"), default="cbc",
+                        help="CBC upstream table by default, or analytic native von Karman")
+    parser.add_argument("--vk-length", type=float, help="Native von Karman L in metres, distinct from Lf; required for von-karman")
+    parser.add_argument("--vk-amplitude", type=float, help="Preserved native von Karman A (m^(4/3)/s2); required for von-karman, nonnegative")
     for flag in ("length", "width", "h", "dt", "duration", "cutoff"):
         parser.add_argument("--" + flag, type=float, required=True)
     parser.add_argument("--modes", type=int, required=True, help="Spectral/hp expansion modes; polynomial degree=modes-1")
@@ -372,7 +414,7 @@ def main():
     parser.add_argument("--sample-every", type=int, default=1)
     parser.add_argument("--checkpoint-every", type=int, default=0)
     parser.add_argument("--seed", type=int, default=20261028)
-    parser.add_argument("--taper", type=float, help="Absolute taper-start wavenumber, rad/m (default 0.8*cutoff)")
+    parser.add_argument("--taper", type=float, help="Absolute taper-start wavenumber, rad/m (CBC default 0.8*cutoff; required for von-karman)")
     parser.add_argument("--synthesis-length", type=float, default=32.0)
     parser.add_argument("--synthesis-counts", default="auto", help="auto or NX,NY,NZ; all strict Nyquist")
     parser.add_argument("--buffer", type=float, default=0.0, help="Required distance after last station; metadata, no sponge")

@@ -1,0 +1,49 @@
+{
+  "schema": "NEKTAR_HIT_M7_UPSTREAM_FIT_V1",
+  "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/cbc1971-source.json",
+  "source_sha256": "031df95c54eb05fb5cc94c81dd5a35bb687890f4336a3f3f80bdfe42c52f3590",
+  "used_data": {
+    "grid_M_m": 0.0508,
+    "theta": 42,
+    "u_rms_m_s": 0.222,
+    "Lf_m": 0.024
+  },
+  "downstream_data_used": false,
+  "upstream_dissipation_used_in_fit": false,
+  "model": "E(k)=A*L^(5/3)*(L*k)^4/(1+(L*k)^2)^(17/6)",
+  "I4": 1.0325159139214712,
+  "I3": 0.32727272727272694,
+  "length_m": 0.032135646697566765,
+  "amplitude_m4_3_s2": 0.708341072215995,
+  "uncut_K_m2_s2": 0.073926,
+  "uncut_Lf_m": 0.024,
+  "uncut_dissipation": "divergent inertial tail",
+  "cutoff_rad_m": 100,
+  "energy_taper_start_rad_m": 80,
+  "normalization": "Preserve",
+  "represented_continuum": {
+    "moments": {
+      "-1": {
+        "value": 0.0005486841343725426,
+        "absolute_quadrature_error": 1.432053637892474e-14
+      },
+      "0": {
+        "value": 0.024951374206366103,
+        "absolute_quadrature_error": 2.689154646613584e-13
+      },
+      "2": {
+        "value": 83.70793619520883,
+        "absolute_quadrature_error": 2.0666453668372247e-10
+      }
+    },
+    "K_m2_s2": 0.024951374206366103,
+    "epsilon_m2_s3": 0.002511238085856265,
+    "Lf_m": 0.05181303937699327,
+    "retained_fraction_of_upstream_K": 0.33751825076923003
+  },
+  "limitations": [
+    "Continuum input model, not finite-lattice or CFD measurement",
+    "Lf fitting uses isotropy and the unbounded uncut model; filtered scales differ",
+    "No restoration of energy lost to cutoff/taper; no downstream fitting"
+  ]
+}
