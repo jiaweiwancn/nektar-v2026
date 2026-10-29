@@ -34,6 +34,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <iomanip>
+#include <limits>
 
 #include <SpatialDomains/MeshGraphIOXml.h>
 #include <SpatialDomains/MeshPartition.h>
@@ -2574,7 +2575,11 @@ void MeshGraphIOXml::ResolveGeomRef3D(const std::string &prevToken,
 void WriteVert(PointGeom *vert, TiXmlElement *vertTag)
 {
     std::stringstream s;
-    s << std::scientific << std::setprecision(8) << (*vert)(0) << " "
+    // Partitioning must retain the original coordinates: rounding here changes
+    // both the mesh and coordinate-dependent boundary data with MPI rank count.
+    s << std::scientific
+      << std::setprecision(std::numeric_limits<NekDouble>::max_digits10 - 1)
+      << (*vert)(0) << " "
       << (*vert)(1) << " " << (*vert)(2);
     TiXmlElement *v = new TiXmlElement("V");
     v->SetAttribute("ID", vert->GetGlobalID());
