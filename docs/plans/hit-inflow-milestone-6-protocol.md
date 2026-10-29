@@ -62,6 +62,30 @@ finite-record sampling; spectrum interpolation/tails and excluded scales;
 stabilization/model dependence. A sampling confidence interval is not an error
 bar for an unrepresented dissipation range.
 
+## SVV pilots
+
+Use independent spectral/hp and Fourier switches. The candidate uses the native
+DG kernel in x-y with SVVDiffCoeff=1 and constant SVVVelocityMagnitude=(12.7,0,0).
+This gives base viscosity 12.7*h/p times the native optimized modal kernel.
+The z kernel is exponential, with separately recorded cutoff and viscosity.
+Compare half/double SVV strength on identical realizations and sampling windows.
+SVV sensitivity is a model uncertainty, not a physical-viscosity refinement.
+
+The code review identified unequal damping of full-Fourier cosine/sine partners
+when the kernel uses packed slot IDs. The candidate corrects that mapping to
+physical wavenumber IDs and adds a sine/cosine analytic diffusion regression.
+Require that regression before the SVV pilots. The flow diagnostic measures
+native instantaneous SVV work separately in x-y and z, with a Fourier Parseval
+check. This work is distinguished from temporal fluctuation dissipation.
+
+The kernel choice follows the local user guide and constant-Peclet design in
+[Moura, Sherwin and Peiro (2016)](https://doi.org/10.1016/j.jcp.2015.12.009)
+and the spatially developing flow study of
+[Moura et al. (2020)](https://doi.org/10.1016/j.jcp.2019.109112).
+These provide stabilization guidance, not a guarantee of CBC spectral fidelity.
+The broader LES use of SVV is described by
+[Karamanos and Karniadakis (2000)](https://doi.org/10.1006/jcph.2000.6552).
+
 ## Scope if DNS is infeasible
 
 The upstream Kolmogorov length is approximately 0.2905 mm for nu=1.5e-5 and

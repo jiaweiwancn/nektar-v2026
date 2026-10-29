@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<NEKTAR>
+    <!-- Equal physical m=3 cosine/sine damping, independent of Fourier phase. -->
+    <GEOMETRY DIM="2" SPACE="2">
+        <VERTEX>
+            <V ID="0">0 0 0</V>
+            <V ID="1">0.5 0 0</V>
+            <V ID="2">1 0 0</V>
+            <V ID="3">0 3.1415926535897931 0</V>
+            <V ID="4">0.5 3.1415926535897931 0</V>
+            <V ID="5">1 3.1415926535897931 0</V>
+            <V ID="6">0 6.2831853071795862 0</V>
+            <V ID="7">0.5 6.2831853071795862 0</V>
+            <V ID="8">1 6.2831853071795862 0</V>
+        </VERTEX>
+        <EDGE>
+            <E ID="0">0 1</E>
+            <E ID="1">1 2</E>
+            <E ID="2">0 3</E>
+            <E ID="3">1 4</E>
+            <E ID="4">2 5</E>
+            <E ID="5">3 4</E>
+            <E ID="6">4 5</E>
+            <E ID="7">3 6</E>
+            <E ID="8">4 7</E>
+            <E ID="9">5 8</E>
+            <E ID="10">6 7</E>
+            <E ID="11">7 8</E>
+        </EDGE>
+        <ELEMENT>
+            <Q ID="0">0 3 5 2</Q>
+            <Q ID="1">1 4 6 3</Q>
+            <Q ID="2">5 8 10 7</Q>
+            <Q ID="3">6 9 11 8</Q>
+        </ELEMENT>
+        <COMPOSITE>
+            <C ID="0">Q[0-3]</C>
+            <C ID="1">E[2,7]</C>
+            <C ID="2">E[4,9]</C>
+            <C ID="3">E[0,1]</C>
+            <C ID="4">E[10,11]</C>
+        </COMPOSITE>
+        <DOMAIN>C[0]</DOMAIN>
+    </GEOMETRY>
+    <EXPANSIONS>
+        <E COMPOSITE="C[0]" NUMMODES="4" FIELDS="u,v,w,p" TYPE="MODIFIED" />
+    </EXPANSIONS>
+    <CONDITIONS>
+        <SOLVERINFO>
+            <I PROPERTY="SolverType" VALUE="VelocityCorrectionScheme" />
+            <I PROPERTY="EQTYPE" VALUE="UnsteadyNavierStokes" />
+            <I PROPERTY="Projection" VALUE="Continuous" />
+            <I PROPERTY="AdvectionForm" VALUE="Convective" />
+            <I PROPERTY="Extrapolation" VALUE="Standard" />
+            <I PROPERTY="GlobalSysSoln" VALUE="DirectStaticCond" />
+            <I PROPERTY="HOMOGENEOUS" VALUE="1D" />
+            <I PROPERTY="SpectralVanishingViscosityHomo1D" VALUE="ExpKernel" />
+        </SOLVERINFO>
+        <TIMEINTEGRATIONSCHEME>
+            <METHOD>IMEX</METHOD>
+            <ORDER>2</ORDER>
+        </TIMEINTEGRATIONSCHEME>
+        <PARAMETERS>
+            <P>Kinvis = 0.01</P>
+            <P>TimeStep = 0.001</P>
+            <P>NumSteps = 100</P>
+            <P>IO_InfoSteps = 100</P>
+            <P>IO_CheckSteps = 0</P>
+            <P>HomModesZ = 8</P>
+            <P>LZ = 6.2831853071795862</P>
+            <P>SVVCutoffRatioHomo1D = 0.5</P>
+            <P>SVVDiffCoeffHomo1D = 0.1</P>
+            <P>DecayRate = 9*(Kinvis+SVVDiffCoeffHomo1D*exp(-1))</P>
+        </PARAMETERS>
+        <VARIABLES>
+            <V ID="0">u</V>
+            <V ID="1">v</V>
+            <V ID="2">w</V>
+            <V ID="3">p</V>
+        </VARIABLES>
+        <BOUNDARYREGIONS>
+            <B ID="7">C[1]</B>
+            <B ID="11">C[2]</B>
+            <B ID="21">C[3]</B>
+            <B ID="22">C[4]</B>
+        </BOUNDARYREGIONS>
+        <BOUNDARYCONDITIONS>
+            <REGION REF="7">
+                <P VAR="u" VALUE="[11]" />
+                <P VAR="v" VALUE="[11]" />
+                <P VAR="w" VALUE="[11]" />
+                <P VAR="p" VALUE="[11]" />
+            </REGION>
+            <REGION REF="11">
+                <P VAR="u" VALUE="[7]" />
+                <P VAR="v" VALUE="[7]" />
+                <P VAR="w" VALUE="[7]" />
+                <P VAR="p" VALUE="[7]" />
+            </REGION>
+            <REGION REF="21">
+                <P VAR="u" VALUE="[22]" />
+                <P VAR="v" VALUE="[22]" />
+                <P VAR="w" VALUE="[22]" />
+                <P VAR="p" VALUE="[22]" />
+            </REGION>
+            <REGION REF="22">
+                <P VAR="u" VALUE="[21]" />
+                <P VAR="v" VALUE="[21]" />
+                <P VAR="w" VALUE="[21]" />
+                <P VAR="p" VALUE="[21]" />
+            </REGION>
+        </BOUNDARYCONDITIONS>
+        <FUNCTION NAME="InitialConditions">
+            <E VAR="u" VALUE="1+0.05*sin(3*z)" />
+            <E VAR="v" VALUE="0.05*cos(3*z)" />
+            <E VAR="w" VALUE="0" />
+            <E VAR="p" VALUE="0" />
+        </FUNCTION>
+        <FUNCTION NAME="ExactSolution">
+            <E VAR="u" VALUE="1+0.05*sin(3*z)*exp(-DecayRate*t)" />
+            <E VAR="v" VALUE="0.05*cos(3*z)*exp(-DecayRate*t)" />
+            <E VAR="w" VALUE="0" />
+            <E VAR="p" VALUE="0" />
+        </FUNCTION>
+    </CONDITIONS>
+</NEKTAR>

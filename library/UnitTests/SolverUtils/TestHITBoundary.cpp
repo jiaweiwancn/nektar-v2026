@@ -12,8 +12,10 @@
 #include <boost/test/unit_test.hpp>
 #include <tinyxml.h>
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <functional>
+#include <limits>
 #include <vector>
 
 namespace Nektar::HITBoundaryTests
@@ -159,16 +161,31 @@ struct BoundaryFixture
         const int points = boundary->GetTotPoints();
         Array<OneD, NekDouble> x(points), y(points), z(points);
         boundary->GetCoords(x, y, z);
+        const auto diagnostics = reference->Diagnostics();
+        std::array<NekDouble, 3> roundoff{};
+        for (int component = 0; component < 3; ++component)
+        {
+            const auto mean = component == 0
+                                  ? std::abs(reference->GetConfig().meanSpeed)
+                                  : 0.0;
+            roundoff[component] =
+                64.0 * std::numeric_limits<NekDouble>::epsilon() *
+                (mean + std::sqrt(diagnostics.expectedCovariance[component][component]));
+        }
         for (int point = 0; point < points; ++point)
         {
             const auto expected = reference->Evaluate(
                 {x[point], y[point], z[point]}, time);
             for (int component = 0; component < 3; ++component)
             {
-                BOOST_CHECK_EQUAL(
-                    fields[component]->GetBndCondExpansions()[inlet]
-                        ->GetPhys()[point],
-                    expected.velocity[component]);
+                // Transverse grouping reassociates sums and phase products.
+                // Compare independent evaluation paths at a velocity-scaled
+                // roundoff bound; repeated coefficients remain exact below.
+                const auto actual = fields[component]
+                                        ->GetBndCondExpansions()[inlet]
+                                        ->GetPhys()[point];
+                BOOST_CHECK_LE(std::abs(actual - expected.velocity[component]),
+                               roundoff[component]);
             }
         }
     }

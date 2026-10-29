@@ -42,6 +42,7 @@
 #include <SolverUtils/Core/Misc.h>
 
 #include <boost/algorithm/string.hpp>
+#include <cmath>
 
 namespace Nektar
 {
@@ -1112,21 +1113,28 @@ void VelocityCorrectionScheme::SetUpSVV(void)
 
             size_t num_planes = planes.size();
             Array<OneD, NekDouble> SVV(num_planes, 0.0);
-            NekDouble fac;
             size_t kmodes = m_fields[0]->GetHomogeneousBasis()->GetNumModes();
-            size_t pstart;
-
-            pstart = m_sVVCutoffRatioHomo1D * kmodes;
+            const bool fullFourier = m_fields[0]->GetHomogeneousBasis()
+                                         ->GetBasisType() ==
+                                     LibUtilities::eFourier;
+            // Full Fourier slots 2*m and 2*m+1 are the cosine/sine partners
+            // of one physical wavenumber. Their viscosity must agree so that
+            // translating the field in z does not change its damping.
+            // Reduced single/half-mode bases retain their existing convention.
+            const NekDouble nMax = static_cast<NekDouble>(
+                fullFourier ? kmodes / 2 : kmodes);
+            const NekDouble cutoff =
+                std::floor(m_sVVCutoffRatioHomo1D * nMax);
 
             for (size_t n = 0; n < num_planes; ++n)
             {
-                if (planes[n] > pstart)
+                const NekDouble mode = static_cast<NekDouble>(
+                    fullFourier ? planes[n] / 2 : planes[n]);
+                if (mode > cutoff)
                 {
-                    fac = (NekDouble)((planes[n] - kmodes) *
-                                      (planes[n] - kmodes)) /
-                          ((NekDouble)((planes[n] - pstart) *
-                                       (planes[n] - pstart)));
-                    SVV[n] = m_sVVDiffCoeffHomo1D * exp(-fac) / m_kinvis;
+                    const NekDouble ratio = (mode - nMax) / (mode - cutoff);
+                    SVV[n] = m_sVVDiffCoeffHomo1D *
+                             std::exp(-ratio * ratio) / m_kinvis;
                 }
             }
 

@@ -121,11 +121,17 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
             SOURCES ${HIT_TEST_DIR}/HITFieldCompare.cpp)
         ADD_NEKTAR_EXECUTABLE(HITFlowDiagnostics COMPONENT tests DEPENDS SolverUtils
             SOURCES ${HIT_TEST_DIR}/HITFlowDiagnostics.cpp)
-        FOREACH(hit_tool HITBoundaryProbe HITFieldCompare HITFlowDiagnostics)
+        ADD_NEKTAR_EXECUTABLE(HITInitialField COMPONENT tests DEPENDS SolverUtils
+            SOURCES ${HIT_TEST_DIR}/HITInitialField.cpp ${HIT_TEST_BOUNDARY_SOURCES})
+        ADD_NEKTAR_EXECUTABLE(HITInflowBenchmark COMPONENT tests DEPENDS SolverUtils
+            SOURCES ${HIT_TEST_DIR}/HITInflowBenchmark.cpp ${HIT_TEST_BOUNDARY_SOURCES})
+        FOREACH(hit_tool HITBoundaryProbe HITFieldCompare HITFlowDiagnostics
+                         HITInitialField HITInflowBenchmark)
             TARGET_INCLUDE_DIRECTORIES(${hit_tool} PRIVATE ${CMAKE_SOURCE_DIR}/solvers)
             TARGET_COMPILE_DEFINITIONS(${hit_tool} PRIVATE ENABLE_NEKTAR_EXCEPTIONS)
         ENDFOREACH()
         ADD_NEKTAR_TEST(HITInflow_m5_single_mode)
+        ADD_NEKTAR_TEST(HITInflowSVVFourierPair)
         ADD_NEKTAR_TEST(HITInflowSeededH1D)
         ADD_NEKTAR_TEST(HITInflowTabulatedH1D)
         ADD_NEKTAR_TEST(HITInflowRestartH1D)

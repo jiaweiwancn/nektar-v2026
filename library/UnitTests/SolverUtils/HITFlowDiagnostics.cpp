@@ -6,6 +6,7 @@
 
 #include "HITFieldIO.h"
 #include "HITTestFields.h"
+#include "HITSVVWork.h"
 #include <cmath>
 #include <fstream>
 #include <iomanip>
@@ -32,11 +33,13 @@ int main(int argc, char *argv[])
         auto data = HITTestTools::ImportFields(session, fields, argv[argc - 1]);
         const int points = fields[0]->GetNpoints();
         Array<OneD, NekDouble> divergence(points, 0.0), ones(points, 1.0);
+        std::array<std::array<Array<OneD, NekDouble>, 3>, 3> derivatives;
         NekDouble velocitySquared = 0.0, gradientSquared = 0.0;
         for (int component = 0; component < 3; ++component)
         {
             Array<OneD, NekDouble> dx(points), dy(points), dz(points);
             fields[component]->PhysDeriv(data.physical[component], dx, dy, dz);
+            derivatives[component] = {dx, dy, dz};
             const auto &diagonal = component == 0 ? dx : component == 1 ? dy : dz;
             for (int q = 0; q < points; ++q)
             {
@@ -51,6 +54,27 @@ int main(int argc, char *argv[])
             velocitySquared += norm * norm;
         }
         const NekDouble volume = fields[0]->Integral(ones);
+        NekDouble viscosity;
+        session->LoadParameter("Kinvis", viscosity);
+        Array<OneD, NekDouble> strainSquared(points, 0.0);
+        for (int i = 0; i < 3; ++i)
+        {
+            for (int j = 0; j < 3; ++j)
+            {
+                for (int q = 0; q < points; ++q)
+                {
+                    const NekDouble strain = 0.5 *
+                        (derivatives[i][j][q] + derivatives[j][i][q]);
+                    strainSquared[q] += strain * strain;
+                }
+            }
+        }
+        // Instantaneous total resolved strain, not a temporal fluctuation
+        // statistic. Its distinction from Reynolds-stress dissipation matters
+        // during startup and in a spatially developing mean field.
+        const NekDouble resolvedStrainDissipation =
+            2.0 * viscosity * fields[0]->Integral(strainSquared) / volume;
+        const auto svvWork = HITTestTools::SVVWork(session, fields[0], derivatives, volume);
         const NekDouble velocityNorm = std::sqrt(velocitySquared);
         const NekDouble divNorm = fields[0]->L2(divergence);
         const NekDouble divIntegral = fields[0]->Integral(divergence);
@@ -125,6 +149,14 @@ int main(int argc, char *argv[])
                << ",\"velocity_l2\":" << velocityNorm
                << ",\"reference_length\":" << referenceLength
                << ",\"gradient_l2\":" << std::sqrt(gradientSquared)
+               << ",\"viscosity\":" << viscosity
+               << ",\"instantaneous_resolved_strain_dissipation\":"
+               << resolvedStrainDissipation
+               << ",\"instantaneous_svv_work_xy\":" << svvWork[0]
+               << ",\"instantaneous_svv_work_z\":" << svvWork[1]
+               << ",\"divergence_rms\":" << divNorm / std::sqrt(volume)
+               << ",\"divergence_fixed_cbc_reference\":"
+               << 0.024 * divNorm / (0.222 * std::sqrt(volume))
                << ",\"divergence_l2\":" << divNorm
                << ",\"divergence_integral\":" << divIntegral
                << ",\"relative_divergence\":" << relativeDivergence
