@@ -1,0 +1,1063 @@
+{
+  "milestone": 5,
+  "status": "CLOSED",
+  "closed_date": "2026-10-29",
+  "collected_utc": "2026-10-29T02:46:26.981978+00:00",
+  "branch": "codex/hit-inflow-generator",
+  "final_implementation_revision": "ce05c35edbf737eecc8e2aab1561ac57294199b1",
+  "tested_revisions": {
+    "initial_build_and_39_unit_cases": "46e4da4594b4edaae84a5bfe0814e495b420c187",
+    "registered_19_regressions_and_unit_disabled_build": "ce05c35edbf737eecc8e2aab1561ac57294199b1",
+    "checker_integrity_and_H1D_diagnostics": "ce05c35edbf737eecc8e2aab1561ac57294199b1",
+    "manufactured_diagnostic_tool": "46e4da4594b4edaae84a5bfe0814e495b420c187",
+    "retained_manufactured_temporal_fields": "98fb4c857528885172c2b12dc2001895df11b996",
+    "retained_manufactured_spatial_field": "974a973f6e8ab109ad32cef34bebe5b3785048f1"
+  },
+  "revision_note": "After the first build, only native test-helper argument/validation logic and .tst definitions/calibrated criteria changed. Production generator, boundary sampling and flow equations are unchanged from M4. The final complete 19-test registered CTest batch uses ce05c35.",
+  "host": "jay-Super-Server",
+  "source": "/media/jay/新加卷/nektar-v2026",
+  "build": "/home/jay/build/nektar-v2026-mpi",
+  "installation": "/home/jay/.local/opt/nektar-v2026-mpi",
+  "run_root": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4",
+  "run_directory_note": "46e4da4 is the initial M5 candidate label; final tested revisions are recorded separately.",
+  "source_worktree_clean": true,
+  "compiler": "g++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0",
+  "MPI_runtime": "mpirun (Open MPI) 4.1.2",
+  "build_configuration": {
+    "CMAKE_BUILD_TYPE": "Release",
+    "CMAKE_CXX_STANDARD": "17",
+    "NEKTAR_BUILD_SOLVER_LIBS": "OFF",
+    "NEKTAR_BUILD_TESTS": "ON",
+    "NEKTAR_BUILD_UNIT_TESTS": "ON",
+    "NEKTAR_TEST_FORCEMPIEXEC": "OFF",
+    "NEKTAR_USE_FFTW": "ON",
+    "NEKTAR_USE_HDF5": "OFF",
+    "NEKTAR_USE_MPI": "ON"
+  },
+  "workers": {
+    "hard_limit": 72,
+    "compiler_jobs": 32,
+    "initial_ctest_concurrency": 1,
+    "final_ctest_worker_slots": 8,
+    "maximum_single_MPI_ranks": 8,
+    "maximum_concurrent_validation_workers": 9,
+    "OMP_NUM_THREADS": 1,
+    "OPENBLAS_NUM_THREADS": 1,
+    "build_solver_overlap": false
+  },
+  "unit_tests": {
+    "ctest_entries": 3,
+    "core_cases": 23,
+    "boundary_cases": 7,
+    "restart_cases": 9,
+    "total_cases": 39,
+    "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/units.log"
+  },
+  "registered_regressions": {
+    "total": 19,
+    "HIT_cases": 11,
+    "new_HIT_cases": 8,
+    "legacy_cases": 8,
+    "all_passed": true,
+    "commands_exported_verbatim": true,
+    "working_directory_override": "External per-test directories; native executables resolved by symlinks to their actual build targets.",
+    "scheduler": "CTest --parallel 8; PROCESSORS set to each exact .tst maximum rank count",
+    "records": [
+      {
+        "name": "IncNavierStokesSolver_HITInflowMeanOnly3D",
+        "command": [
+          "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+          "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflowMeanOnly3D.tst"
+        ],
+        "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/ctest-working/IncNavierStokesSolver_HITInflowMeanOnly3D",
+        "processors": 1
+      },
+      {
+        "name": "IncNavierStokesSolver_HITInflowManufactured3D",
+        "command": [
+          "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+          "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflowManufactured3D.tst"
+        ],
+        "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/ctest-working/IncNavierStokesSolver_HITInflowManufactured3D",
+        "processors": 1
+      },
+      {
+        "name": "IncNavierStokesSolver_HITInflowHomogeneous1DMean",
+        "command": [
+          "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+          "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflowHomogeneous1DMean.tst"
+        ],
+        "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/ctest-working/IncNavierStokesSolver_HITInflowHomogeneous1DMean",
+        "processors": 1
+      },
+      {
+        "name": "IncNavierStokesSolver_HITInflow_m5_single_mode",
+        "command": [
+          "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+          "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow_m5_single_mode.tst"
+        ],
+        "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/ctest-working/IncNavierStokesSolver_HITInflow_m5_single_mode",
+        "processors": 1
+      },
+      {
+        "name": "IncNavierStokesSolver_HITInflowSeededH1D",
+        "command": [
+          "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+          "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflowSeededH1D.tst"
+        ],
+        "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/ctest-working/IncNavierStokesSolver_HITInflowSeededH1D",
+        "processors": 1
+      },
+      {
+        "name": "IncNavierStokesSolver_HITInflowTabulatedH1D",
+        "command": [
+          "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+          "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflowTabulatedH1D.tst"
+        ],
+        "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/ctest-working/IncNavierStokesSolver_HITInflowTabulatedH1D",
+        "processors": 1
+      },
+      {
+        "name": "IncNavierStokesSolver_HITInflowRestartH1D",
+        "command": [
+          "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+          "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflowRestartH1D.tst"
+        ],
+        "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/ctest-working/IncNavierStokesSolver_HITInflowRestartH1D",
+        "processors": 1
+      },
+      {
+        "name": "IncNavierStokesSolver_HITInflowProjectionH1D",
+        "command": [
+          "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+          "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflowProjectionH1D.tst"
+        ],
+        "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/ctest-working/IncNavierStokesSolver_HITInflowProjectionH1D",
+        "processors": 1
+      },
+      {
+        "name": "IncNavierStokesSolver_HITInflowDivergenceFlux3D",
+        "command": [
+          "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+          "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflowDivergenceFlux3D.tst"
+        ],
+        "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/ctest-working/IncNavierStokesSolver_HITInflowDivergenceFlux3D",
+        "processors": 1
+      },
+      {
+        "name": "IncNavierStokesSolver_HITInflowProjectionH1D_FFTW",
+        "command": [
+          "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+          "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflowProjectionH1D_FFTW.tst"
+        ],
+        "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/ctest-working/IncNavierStokesSolver_HITInflowProjectionH1D_FFTW",
+        "processors": 1
+      },
+      {
+        "name": "IncNavierStokesSolver_HITInflowMPIH1D",
+        "command": [
+          "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+          "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflowMPIH1D.tst"
+        ],
+        "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/ctest-working/IncNavierStokesSolver_HITInflowMPIH1D",
+        "processors": 8
+      },
+      {
+        "name": "IncNavierStokesSolver_ChanFlow_3DH1D_bcsfromfiles",
+        "command": [
+          "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+          "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/ChanFlow_3DH1D_bcsfromfiles.tst"
+        ],
+        "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/ctest-working/IncNavierStokesSolver_ChanFlow_3DH1D_bcsfromfiles",
+        "processors": 1
+      },
+      {
+        "name": "IncNavierStokesSolver_KovaFlow_m8_short_HOBC",
+        "command": [
+          "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+          "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/KovaFlow_m8_short_HOBC.tst"
+        ],
+        "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/ctest-working/IncNavierStokesSolver_KovaFlow_m8_short_HOBC",
+        "processors": 1
+      },
+      {
+        "name": "IncNavierStokesSolver_MovingRefFrame_translation",
+        "command": [
+          "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+          "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/MovingRefFrame_translation.tst"
+        ],
+        "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/ctest-working/IncNavierStokesSolver_MovingRefFrame_translation",
+        "processors": 1
+      },
+      {
+        "name": "IncNavierStokesSolver_MovingRefFrame_Rot_SimpleDomain",
+        "command": [
+          "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+          "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/MovingRefFrame_Rot_SimpleDomain.tst"
+        ],
+        "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/ctest-working/IncNavierStokesSolver_MovingRefFrame_Rot_SimpleDomain",
+        "processors": 1
+      },
+      {
+        "name": "IncNavierStokesSolver_ChanFlow_3DH1D_FFT",
+        "command": [
+          "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+          "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/ChanFlow_3DH1D_FFT.tst"
+        ],
+        "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/ctest-working/IncNavierStokesSolver_ChanFlow_3DH1D_FFT",
+        "processors": 1
+      },
+      {
+        "name": "IncNavierStokesSolver_KovaFlow_3DH1D_MVM_FFTW_Consistency",
+        "command": [
+          "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+          "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/KovaFlow_3DH1D_MVM_FFTW_Consistency.tst"
+        ],
+        "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/ctest-working/IncNavierStokesSolver_KovaFlow_3DH1D_MVM_FFTW_Consistency",
+        "processors": 1
+      },
+      {
+        "name": "IncNavierStokesSolver_ChanFlow_3DH1D_Parallel_mode1",
+        "command": [
+          "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+          "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/ChanFlow_3DH1D_Parallel_mode1.tst"
+        ],
+        "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/ctest-working/IncNavierStokesSolver_ChanFlow_3DH1D_Parallel_mode1",
+        "processors": 2
+      },
+      {
+        "name": "IncNavierStokesSolver_ChanFlow_3DH1D_Parallel_mode2",
+        "command": [
+          "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+          "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/ChanFlow_3DH1D_Parallel_mode2.tst"
+        ],
+        "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/ctest-working/IncNavierStokesSolver_ChanFlow_3DH1D_Parallel_mode2",
+        "processors": 2
+      }
+    ],
+    "junit": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/registered-results.xml"
+  },
+  "unit_tests_disabled_proof": {
+    "configured_NEKTAR_BUILD_UNIT_TESTS": "OFF",
+    "native_helpers_built_without_unit_targets": true,
+    "unit_CTest_entries_absent_during_export": true,
+    "all_19_registered_solver_cases_passed": true,
+    "restored_NEKTAR_BUILD_UNIT_TESTS": "ON"
+  },
+  "acceptance": {
+    "inherited_and_analytical_file": "solvers/IncNavierStokesSolver/Tests/HITInflow/m5-acceptance.json",
+    "inherited_sha256": "b171e5cdb5e82635bfdf2be282b57841e9a0d3bcb6207ffa7edb688ca4c5f566",
+    "inherited_byte_identical_to": "46e4da4",
+    "manufactured_calibration_file": "solvers/IncNavierStokesSolver/Tests/HITInflow/m5-flow-acceptance.json",
+    "manufactured_sha256": "8e028551a0e69b627938a2927e29b51458b5b3b7b9bcd1883b0e80325bfd6729",
+    "manufactured_byte_identical_to": "ce05c35",
+    "inherited": {
+      "schema": 1,
+      "purpose": "M5 durable criteria inherited from closed M3/M4 evidence or analytical bounds, before M5 solver runs",
+      "seeded_u_L2_Linf_tolerance": 2e-05,
+      "seeded_v_w_p_L2_Linf_tolerance": 2e-06,
+      "probe_raw_error": 5e-13,
+      "probe_projection_error": 2e-06,
+      "probe_nonzero_z": 1,
+      "MPI_velocity_Linf": 2e-09,
+      "MPI_pressure_Linf": 2e-08,
+      "restart_velocity_Linf": 0.0002,
+      "restart_pressure_Linf": 0.002,
+      "core_normalized_transversality_and_divergence": 1e-12,
+      "core_normalized_finite_difference_derivatives": 1e-08,
+      "flow_diagnostic_threshold_policy": "Freeze the evolved bulk divergence and net-flux regression limits only after a manufactured-solution polynomial/timestep pilot; record its values and refinement separately from these fixed synthesis/partition bounds."
+    },
+    "manufactured": {
+      "schema": 1,
+      "scope": "M3 two-mode manufactured full-3D case, p12, dt=0.01, t=0.1, fixed native solver settings; not a production HIT tolerance",
+      "normalization": {
+        "divergence": "cbrt(volume)*L2(div u)/sqrt(sum_i L2(u_i)^2)",
+        "flux": "abs(Q_in+Q_out)/(0.5*(abs(Q_in)+abs(Q_out)))",
+        "gauss": "abs(integral(div u)-Q_in-Q_out)/(0.5*(abs(Q_in)+abs(Q_out)))"
+      },
+      "bounds": {
+        "divergence_L2": 1e-05,
+        "dimensionless_divergence": 1e-05,
+        "relative_net_flux_imbalance": 1e-08,
+        "relative_gauss_residual": 1e-11
+      },
+      "diagnostic_revision": "46e4da4",
+      "reference_solution_revisions": [
+        "98fb4c8",
+        "974a973"
+      ],
+      "evidence": [
+        {
+          "name": "p12-dt010",
+          "source_xml_sha256": "21dc5ddbeb4646a95ad60a9c29963f119f5be0c40fdcbaaf7c660dafa7a396d5",
+          "source_field_sha256": "4837474b8c89cf025e8955799c73d1dd3ac4a287be07bdc36a012b3561654777",
+          "diagnostics": {
+            "volume": 9.869604401089356,
+            "velocity_l2": 3.148426225226721,
+            "reference_length": 2.1450293971110255,
+            "gradient_l2": 0.35030733701273115,
+            "divergence_l2": 4.7667409600340685e-06,
+            "divergence_integral": 3.5209813723271685e-09,
+            "relative_divergence": 3.2475906234550604e-06,
+            "inlet_flux": -9.869604401089362,
+            "outlet_flux": 9.869604404610348,
+            "relative_flux_imbalance": 3.567504861973278e-10,
+            "gauss_relative_residual": 4.860341518006818e-16
+          }
+        },
+        {
+          "name": "p12-dt005",
+          "source_xml_sha256": "95c57ee6d921dca77f30ce8a1fb8e14754e3308c16766a8b3b563b863b461e44",
+          "source_field_sha256": "4abd36b9c5b37253a6d884838a483c07a20e481c51d2abaf35c7825a90fa8d93",
+          "diagnostics": {
+            "volume": 9.869604401089356,
+            "velocity_l2": 3.1484257611422066,
+            "reference_length": 2.1450293971110255,
+            "gradient_l2": 0.3502965287090096,
+            "divergence_l2": 3.0316092730055683e-07,
+            "divergence_integral": 1.6597418993107585e-11,
+            "relative_divergence": 2.0654420667655084e-07,
+            "inlet_flux": -9.869604401089362,
+            "outlet_flux": 9.869604401105956,
+            "relative_flux_imbalance": 1.6813972393697502e-12,
+            "gauss_relative_residual": 2.728984183140314e-16
+          }
+        },
+        {
+          "name": "p12-dt0025",
+          "source_xml_sha256": "53c8eeb7c86c3c64f58e7b0128c036df7e2aa48844d92c5f0c165310532f1d84",
+          "source_field_sha256": "675ae48833eceef5b3abfcb4f45995eff89a545adeb097d794d93eddb919496b",
+          "diagnostics": {
+            "volume": 9.869604401089356,
+            "velocity_l2": 3.1484256465716163,
+            "reference_length": 2.1450293971110255,
+            "gradient_l2": 0.35029404473507686,
+            "divergence_l2": 5.094679891070363e-08,
+            "divergence_integral": -1.5552714309098438e-11,
+            "relative_divergence": 3.4710167435957404e-08,
+            "inlet_flux": -9.869604401089362,
+            "outlet_flux": 9.869604401073808,
+            "relative_flux_imbalance": 1.575927448934437e-12,
+            "gauss_relative_residual": 1.0802628421848937e-16
+          }
+        },
+        {
+          "name": "p12-dt00125",
+          "source_xml_sha256": "6a6a8c02a2fd34d611b9ca7cad03032b6224477629bc934195470a7684f1ed0f",
+          "source_field_sha256": "c279ef3d81c480a04a0b99773eab4081cb7af218e5bcf3dee5062bdbe9ceae3f",
+          "diagnostics": {
+            "volume": 9.869604401089356,
+            "velocity_l2": 3.1484256180151347,
+            "reference_length": 2.1450293971110255,
+            "gradient_l2": 0.35029343283054265,
+            "divergence_l2": 1.0140601237700148e-08,
+            "divergence_integral": -3.2192989377664e-12,
+            "relative_divergence": 6.908814245057608e-09,
+            "inlet_flux": -9.869604401089362,
+            "outlet_flux": 9.869604401086143,
+            "relative_flux_imbalance": 3.261284305010753e-13,
+            "gauss_relative_residual": 5.474837199011137e-17
+          }
+        },
+        {
+          "name": "p14-dt00125",
+          "source_xml_sha256": "586a969b122d7aac3c02bccb2d5b19537cf4b156db0613723ab3652781a76661",
+          "source_field_sha256": "1135f5495d409cd10f4ce4f88384de6aa6b1f6a2047203ea5b12dffd7fc00fd4",
+          "diagnostics": {
+            "volume": 9.869604401089363,
+            "velocity_l2": 3.1484256179496186,
+            "reference_length": 2.145029397111026,
+            "gradient_l2": 0.3502934318695709,
+            "divergence_l2": 6.4026168825774014e-09,
+            "divergence_integral": -4.442930345368493e-12,
+            "relative_divergence": 4.36211716524905e-09,
+            "inlet_flux": -9.86960440108936,
+            "outlet_flux": 9.86960440108492,
+            "relative_flux_imbalance": 4.4977646127055057e-13,
+            "gauss_relative_residual": 3.8650016274680715e-16
+          }
+        }
+      ],
+      "decision": "The p12 dt=0.01 observed divergence and net flux fit these bounds; four timestep levels and a p14 check show decrease toward numerical error. Bounds are frozen before the fresh diagnostic regression is run. Algebraic generator tolerances remain separate."
+    }
+  },
+  "final_comparison_measurements": {
+    "HITInflowRestartH1D": {
+      "physical_field_differences": {
+        "u": {
+          "l2": 3.3648509904660024e-06,
+          "linf": 1.8797097847134125e-06,
+          "first_l2": 6.288924298004004,
+          "second_l2": 6.28892416314165
+        },
+        "v": {
+          "l2": 7.085544558177325e-06,
+          "linf": 7.627959014495922e-06,
+          "first_l2": 0.10082384602244858,
+          "second_l2": 0.10082547956377269
+        },
+        "w": {
+          "l2": 1.1267243013554405e-05,
+          "linf": 1.1530094959223691e-05,
+          "first_l2": 0.1953654798716387,
+          "second_l2": 0.19536696768364226
+        },
+        "p": {
+          "l2": 2.0513667083550425e-05,
+          "linf": 1.4830899552150615e-05,
+          "first_l2": 0.00817314859369821,
+          "second_l2": 0.00817541496232067
+        }
+      },
+      "maximum_velocity_linf": 1.1530094959223691e-05,
+      "pressure_linf": 1.4830899552150615e-05,
+      "identity_matches": true,
+      "time_matches": true,
+      "nonzero_velocity_components": 3
+    },
+    "HITInflowMPIH1D": {
+      "physical_field_differences": {
+        "u": {
+          "l2": 9.923227853239791e-14,
+          "linf": 6.761258219967203e-13,
+          "first_l2": 6.288924298004004,
+          "second_l2": 6.288924298004006
+        },
+        "v": {
+          "l2": 9.1807106280437e-13,
+          "linf": 3.355473966173625e-12,
+          "first_l2": 0.10082384602244858,
+          "second_l2": 0.10082384602244342
+        },
+        "w": {
+          "l2": 3.267442035686914e-14,
+          "linf": 6.746773278942797e-14,
+          "first_l2": 0.1953654798716387,
+          "second_l2": 0.1953654798716392
+        },
+        "p": {
+          "l2": 7.190232869171226e-12,
+          "linf": 5.474242315960803e-12,
+          "first_l2": 0.00817314859369821,
+          "second_l2": 0.008173148590593926
+        }
+      },
+      "maximum_velocity_linf": 3.355473966173625e-12,
+      "pressure_linf": 5.474242315960803e-12,
+      "identity_matches": true,
+      "time_matches": true,
+      "nonzero_velocity_components": 3
+    },
+    "HITInflowDivergenceFlux3D": {
+      "divergence_l2": 4.766740902278364e-06,
+      "relative_divergence": 3.2475905841061516e-06,
+      "relative_flux_imbalance": 3.567332078698902e-10,
+      "gauss_relative_residual": 9.131208178407358e-17
+    }
+  },
+  "manufactured_pilot": [
+    {
+      "name": "p12-dt010",
+      "command": [
+        "/home/jay/build/nektar-v2026-mpi/solvers/IncNavierStokesSolver/HITFlowDiagnostics",
+        "case.xml",
+        "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-3/98fb4c8/cases/m3-manufactured-dt0.01000.fld"
+      ],
+      "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/flow-pilot/p12-dt010",
+      "exit_code": 0,
+      "seconds": 25.472730927000157,
+      "source_xml_sha256": "21dc5ddbeb4646a95ad60a9c29963f119f5be0c40fdcbaaf7c660dafa7a396d5",
+      "source_field_sha256": "4837474b8c89cf025e8955799c73d1dd3ac4a287be07bdc36a012b3561654777",
+      "diagnostics": {
+        "volume": 9.869604401089356,
+        "velocity_l2": 3.148426225226721,
+        "reference_length": 2.1450293971110255,
+        "gradient_l2": 0.35030733701273115,
+        "divergence_l2": 4.7667409600340685e-06,
+        "divergence_integral": 3.5209813723271685e-09,
+        "relative_divergence": 3.2475906234550604e-06,
+        "inlet_flux": -9.869604401089362,
+        "outlet_flux": 9.869604404610348,
+        "relative_flux_imbalance": 3.567504861973278e-10,
+        "gauss_relative_residual": 4.860341518006818e-16
+      }
+    },
+    {
+      "name": "p12-dt005",
+      "command": [
+        "/home/jay/build/nektar-v2026-mpi/solvers/IncNavierStokesSolver/HITFlowDiagnostics",
+        "case.xml",
+        "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-3/98fb4c8/cases/m3-manufactured-dt0.00500.fld"
+      ],
+      "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/flow-pilot/p12-dt005",
+      "exit_code": 0,
+      "seconds": 25.32374270299988,
+      "source_xml_sha256": "95c57ee6d921dca77f30ce8a1fb8e14754e3308c16766a8b3b563b863b461e44",
+      "source_field_sha256": "4abd36b9c5b37253a6d884838a483c07a20e481c51d2abaf35c7825a90fa8d93",
+      "diagnostics": {
+        "volume": 9.869604401089356,
+        "velocity_l2": 3.1484257611422066,
+        "reference_length": 2.1450293971110255,
+        "gradient_l2": 0.3502965287090096,
+        "divergence_l2": 3.0316092730055683e-07,
+        "divergence_integral": 1.6597418993107585e-11,
+        "relative_divergence": 2.0654420667655084e-07,
+        "inlet_flux": -9.869604401089362,
+        "outlet_flux": 9.869604401105956,
+        "relative_flux_imbalance": 1.6813972393697502e-12,
+        "gauss_relative_residual": 2.728984183140314e-16
+      }
+    },
+    {
+      "name": "p12-dt0025",
+      "command": [
+        "/home/jay/build/nektar-v2026-mpi/solvers/IncNavierStokesSolver/HITFlowDiagnostics",
+        "case.xml",
+        "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-3/98fb4c8/cases/m3-manufactured-dt0.00250.fld"
+      ],
+      "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/flow-pilot/p12-dt0025",
+      "exit_code": 0,
+      "seconds": 24.621643287000552,
+      "source_xml_sha256": "53c8eeb7c86c3c64f58e7b0128c036df7e2aa48844d92c5f0c165310532f1d84",
+      "source_field_sha256": "675ae48833eceef5b3abfcb4f45995eff89a545adeb097d794d93eddb919496b",
+      "diagnostics": {
+        "volume": 9.869604401089356,
+        "velocity_l2": 3.1484256465716163,
+        "reference_length": 2.1450293971110255,
+        "gradient_l2": 0.35029404473507686,
+        "divergence_l2": 5.094679891070363e-08,
+        "divergence_integral": -1.5552714309098438e-11,
+        "relative_divergence": 3.4710167435957404e-08,
+        "inlet_flux": -9.869604401089362,
+        "outlet_flux": 9.869604401073808,
+        "relative_flux_imbalance": 1.575927448934437e-12,
+        "gauss_relative_residual": 1.0802628421848937e-16
+      }
+    },
+    {
+      "name": "p12-dt00125",
+      "command": [
+        "/home/jay/build/nektar-v2026-mpi/solvers/IncNavierStokesSolver/HITFlowDiagnostics",
+        "case.xml",
+        "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-3/98fb4c8/cases/m3-manufactured-dt0.00125.fld"
+      ],
+      "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/flow-pilot/p12-dt00125",
+      "exit_code": 0,
+      "seconds": 24.371328874000028,
+      "source_xml_sha256": "6a6a8c02a2fd34d611b9ca7cad03032b6224477629bc934195470a7684f1ed0f",
+      "source_field_sha256": "c279ef3d81c480a04a0b99773eab4081cb7af218e5bcf3dee5062bdbe9ceae3f",
+      "diagnostics": {
+        "volume": 9.869604401089356,
+        "velocity_l2": 3.1484256180151347,
+        "reference_length": 2.1450293971110255,
+        "gradient_l2": 0.35029343283054265,
+        "divergence_l2": 1.0140601237700148e-08,
+        "divergence_integral": -3.2192989377664e-12,
+        "relative_divergence": 6.908814245057608e-09,
+        "inlet_flux": -9.869604401089362,
+        "outlet_flux": 9.869604401086143,
+        "relative_flux_imbalance": 3.261284305010753e-13,
+        "gauss_relative_residual": 5.474837199011137e-17
+      }
+    },
+    {
+      "name": "p14-dt00125",
+      "command": [
+        "/home/jay/build/nektar-v2026-mpi/solvers/IncNavierStokesSolver/HITFlowDiagnostics",
+        "case.xml",
+        "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-3/974a973/spatial14/m3-manufactured-dt0.00125.fld"
+      ],
+      "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/flow-pilot/p14-dt00125",
+      "exit_code": 0,
+      "seconds": 37.10119700500036,
+      "source_xml_sha256": "586a969b122d7aac3c02bccb2d5b19537cf4b156db0613723ab3652781a76661",
+      "source_field_sha256": "1135f5495d409cd10f4ce4f88384de6aa6b1f6a2047203ea5b12dffd7fc00fd4",
+      "diagnostics": {
+        "volume": 9.869604401089363,
+        "velocity_l2": 3.1484256179496186,
+        "reference_length": 2.145029397111026,
+        "gradient_l2": 0.3502934318695709,
+        "divergence_l2": 6.4026168825774014e-09,
+        "divergence_integral": -4.442930345368493e-12,
+        "relative_divergence": 4.36211716524905e-09,
+        "inlet_flux": -9.86960440108936,
+        "outlet_flux": 9.86960440108492,
+        "relative_flux_imbalance": 4.4977646127055057e-13,
+        "gauss_relative_residual": 3.8650016274680715e-16
+      }
+    }
+  ],
+  "checker_integrity": [
+    {
+      "name": "malformed-time",
+      "command": [
+        "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+        "--verbose",
+        "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/checker-integrity/malformed-time/negative.tst"
+      ],
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "passed": true,
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/checker-integrity/malformed-time/tester.log"
+    },
+    {
+      "name": "zero-import",
+      "command": [
+        "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+        "--verbose",
+        "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/checker-integrity/zero-import/negative.tst"
+      ],
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "passed": true,
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/checker-integrity/zero-import/tester.log"
+    },
+    {
+      "name": "partial-partition",
+      "command": [
+        "/home/jay/build/nektar-v2026-mpi/solvers/IncNavierStokesSolver/HITFieldCompare",
+        "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-von-karman-serial/m4-h1d-von-karman.xml",
+        "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-von-karman-serial/m4-h1d-von-karman.fld",
+        "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-von-karman-mesh4/m4-h1d-von-karman.fld/P0000000.fld"
+      ],
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "passed": true,
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/checker-integrity/partial-partition/compare.log"
+    }
+  ],
+  "H1D_transient_diagnostic": [
+    {
+      "case": "h1d-von-karman-serial",
+      "command": [
+        "/home/jay/build/nektar-v2026-mpi/solvers/IncNavierStokesSolver/HITFlowDiagnostics",
+        "case.xml",
+        "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-von-karman-serial/m4-h1d-von-karman.fld"
+      ],
+      "diagnostics": {
+        "volume": 39.47841760435743,
+        "velocity_l2": 6.292765842193514,
+        "reference_length": 3.4050219214767545,
+        "gradient_l2": 1.0590946170469537,
+        "divergence_l2": 0.0023923221729848193,
+        "divergence_integral": 3.98038161506508e-06,
+        "relative_divergence": 0.0012944879320996212,
+        "inlet_flux": -39.47841760435743,
+        "outlet_flux": 39.47842158473905,
+        "relative_flux_imbalance": 1.008242392078737e-07,
+        "gauss_relative_residual": 1.4398904997365273e-16
+      },
+      "source_field_sha256": "4dbd27332b5b7c399ffbc0dbeda9476092e7f6898bd61899a299d171e9d4fed4"
+    },
+    {
+      "case": "h1d-fftw-serial",
+      "command": [
+        "/home/jay/build/nektar-v2026-mpi/solvers/IncNavierStokesSolver/HITFlowDiagnostics",
+        "case.xml",
+        "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-fftw-serial/m4-h1d-fftw.fld"
+      ],
+      "diagnostics": {
+        "volume": 39.47841760435743,
+        "velocity_l2": 6.292765842193514,
+        "reference_length": 3.4050219214767545,
+        "gradient_l2": 1.0590946170469593,
+        "divergence_l2": 0.002392322173026045,
+        "divergence_integral": 3.980381369229625e-06,
+        "relative_divergence": 0.0012944879321219287,
+        "inlet_flux": -39.47841760435743,
+        "outlet_flux": 39.478421584738804,
+        "relative_flux_imbalance": 1.0082423290848413e-07,
+        "gauss_relative_residual": 7.168365488364592e-17
+      },
+      "source_field_sha256": "01bb5492b16ebc19fc9ab204d8d98aee5ae5cdddce8ca9148544150efb6fefcd"
+    }
+  ],
+  "source_and_fixture_sha256": {
+    "library/UnitTests/SolverUtils/CMakeLists.txt": "a7838774b0adbca8ad527236b8bdaeba0d6de7bc4c9bbbba3cf7e436ed2c571a",
+    "library/UnitTests/SolverUtils/HITBoundaryProbe.cpp": "bcb2ad688bab0e36feee7a3f07e2cb79c23551b01d3fd15218278d5deef60980",
+    "library/UnitTests/SolverUtils/HITFieldCompare.cpp": "8ecc5e1e18d64f67c83ebec4acea8be9f678ffb1fd4f4ab4c4555fa762648e99",
+    "library/UnitTests/SolverUtils/HITFieldIO.h": "f275b6094eee4be51fc87addc03372cb8fc41119c9d6487a0b4ef00586d95432",
+    "library/UnitTests/SolverUtils/HITFlowDiagnostics.cpp": "6458ab63f7ac8d9d572e1ec0550553dfc5ead08bfb9f6ddf9c53021e42b35ba7",
+    "library/UnitTests/SolverUtils/HITTestFields.h": "951b40adfd6e4a5ec0711f9f09dff142fdccd548b28eb9d8dfcd51005171c00b",
+    "library/UnitTests/SolverUtils/TestHIT.cpp": "b384378fd4a623bec1780e484ea7c2c54e73035ff9f126563f4369cadfbe058d",
+    "library/UnitTests/SolverUtils/TestHITSingleMode.cpp": "6543cb4eed17d60a6ae3a1b16c1ab7a750a891557f5250d23532ac43de219142",
+    "library/UnitTests/SolverUtils/TestHITBoundary.cpp": "853399b542c429ca60dd235d995998be909a9bdd0784b585ab62071872962756",
+    "library/UnitTests/SolverUtils/TestHITRestart.cpp": "debb00f6732e7cbaa5b2d0a90191c7a7471463815d87e839774fc62b2afa6d2b",
+    "solvers/IncNavierStokesSolver/CMakeLists.txt": "d59b47f0cb66086db10d6cef58ce0106fb9a549b37797080a4be129f751556d1",
+    "solvers/IncNavierStokesSolver/Tests/HITInflowDivergenceFlux3D.tst": "9f638bde2cb255576d9f2ced58f2263cbcf6d315e2418832820e72e3e12cca1e",
+    "solvers/IncNavierStokesSolver/Tests/HITInflowHomogeneous1DMean.tst": "1012ffa305dd2f449883237485e6182ad03398bfe9657931d770f47ad14b2cd6",
+    "solvers/IncNavierStokesSolver/Tests/HITInflowMPIH1D.tst": "e073a35047335ff7284ce9afaa09f6f04f59cc9862477bd518115212416bead8",
+    "solvers/IncNavierStokesSolver/Tests/HITInflowManufactured3D.tst": "961446ee9633075d2c23bfe0b9816908f951b71f6bb910dfcc9d5662e416a253",
+    "solvers/IncNavierStokesSolver/Tests/HITInflowMeanOnly3D.tst": "d3ad7e8f36fa74f567258f0a0e2899165828b91200ec0a8e9d40a446b0750678",
+    "solvers/IncNavierStokesSolver/Tests/HITInflowProjectionH1D.tst": "c2b03a060b9f5176c27eb0fd0a59e6c10a2ad18a4c753e7cc44c4081c59e5219",
+    "solvers/IncNavierStokesSolver/Tests/HITInflowProjectionH1D_FFTW.tst": "030612ab8e1b90bf9a0cfe2a7a2c9b6539f38d53cb336f1b2d28dc68c187e81c",
+    "solvers/IncNavierStokesSolver/Tests/HITInflowRestartH1D.tst": "b186ff0a6d91a510c5ae31b99057c48995bdea4007aadfef13e8dfbc4897bed9",
+    "solvers/IncNavierStokesSolver/Tests/HITInflowSeededH1D.tst": "838fb97644d6fbf068689c1b6efc8e87213b2fda516d75bd9fe5d1f1b575af48",
+    "solvers/IncNavierStokesSolver/Tests/HITInflowTabulatedH1D.tst": "8058ef1cca003b88ea9484b25c26a9d31a525900c7244cff16b2b39c8fe808f6",
+    "solvers/IncNavierStokesSolver/Tests/HITInflow_m5_single_mode.tst": "53fdd788cf570ce32ea0b517ebe427904c845c29ea0f11c6fa5514a1ebd4c848",
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/m5-acceptance.json": "b171e5cdb5e82635bfdf2be282b57841e9a0d3bcb6207ffa7edb688ca4c5f566",
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/m5-flow-acceptance.json": "8e028551a0e69b627938a2927e29b51458b5b3b7b9bcd1883b0e80325bfd6729",
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/m5-h1d-mpi.xml": "dfbeec780f628f0295f3e9debc7d8ee9e5a1c4aa8f988ca7d9eb8ff0466e97c4",
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/m5-single-mode-reference.json": "3a693f4a6dd0b1a07e5eea0581cd4680d58ff16c76798a66801d13562610a6d4",
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/m5-single-mode.xml": "bc86bea742d13869175091b2a0380cbb809875ea70a64b1ab6e2fc8781d9b253",
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/generate_m5_single_mode.py": "9382a27e7c083bd2b4d54eb97a01a00559f70bc6c960ffebda1a6cef20723452"
+  },
+  "logs": {
+    "configure.log": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/configure.log",
+      "sha256": "c867e51b3eb150e8895552c08c8fa54f8996e26a054d2142cdcb84c154f40dbb",
+      "bytes": 1370
+    },
+    "build.log": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/build.log",
+      "sha256": "24c3c5cab99e8e0b1d6c7a3e67df73f748154dee76cb519c2e49a2ff20563f17",
+      "bytes": 7900
+    },
+    "install.log": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/install.log",
+      "sha256": "c4f796bfe44ba95d79282a6276a3535ed3efa2e38f93306bc3ccf45a594333ab",
+      "bytes": 130837
+    },
+    "units.log": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/units.log",
+      "sha256": "0185355ba0fec81369a3c0783fec5621735ffaa584b6ace8580e28a891c6a0e8",
+      "bytes": 516
+    },
+    "selected-test-inventory.log": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/selected-test-inventory.log",
+      "sha256": "a6ae668f45a7fca649677bf30c2cd1dbabc76e258b7b68b12b5e3143a352d249",
+      "bytes": 1920
+    },
+    "configure-native-options.log": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/configure-native-options.log",
+      "sha256": "c867e51b3eb150e8895552c08c8fa54f8996e26a054d2142cdcb84c154f40dbb",
+      "bytes": 1370
+    },
+    "build-native-options.log": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/build-native-options.log",
+      "sha256": "c5bf448eb6685282f4d6d93543905243be2ce02a3b60d480a721e61f94bb2d26",
+      "bytes": 3150
+    },
+    "install-native-options.log": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/install-native-options.log",
+      "sha256": "78e166c329bded1345c4cd1cbd2bebc94b6dfcf5489c12bedcbd05395d14ef3f",
+      "bytes": 129899
+    },
+    "configure-unit-off.log": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/configure-unit-off.log",
+      "sha256": "c867e51b3eb150e8895552c08c8fa54f8996e26a054d2142cdcb84c154f40dbb",
+      "bytes": 1370
+    },
+    "build-unit-off.log": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/build-unit-off.log",
+      "sha256": "ed1e88b3812b9d4ff596b025ef9555ee5965786b66aaa548676571454ad8c3e1",
+      "bytes": 2740
+    },
+    "configure-unit-restored.log": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/configure-unit-restored.log",
+      "sha256": "c867e51b3eb150e8895552c08c8fa54f8996e26a054d2142cdcb84c154f40dbb",
+      "bytes": 1370
+    },
+    "registered-ctest.log": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/registered-ctest.log",
+      "sha256": "d44b0e10437a89607bbc7038c13405b0db3ec04594e5b6413ecb32b0318e4b03",
+      "bytes": 3387
+    },
+    "registered-results.xml": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/registered-results.xml",
+      "sha256": "f5395fa98e2681bba5478f38bbbc61ae806ac5ecad5d517d0e560b04858d9082",
+      "bytes": 3880
+    },
+    "registered-test-inventory.json": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/registered-test-inventory.json",
+      "sha256": "5f28e91b084d5ea9995157667a86ddab21a21fd3e7867feb63319c0cb7eec87e",
+      "bytes": 8619
+    },
+    "exported-test-records.json": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/exported-test-records.json",
+      "sha256": "8a523ce4838183dd0c18624fbb0c42b49523cf76acb05bb4f7a4bfdf9382403b",
+      "bytes": 8363
+    },
+    "checker-integrity-results.json": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/checker-integrity-results.json",
+      "sha256": "3bdcce770c178c3b2827e3b30f3e8824eadbe301c2828e30735d3d730aafce57",
+      "bytes": 1714
+    },
+    "flow-pilot-results.json": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/flow-pilot-results.json",
+      "sha256": "a482b8a50c9c75a9af1f0b5f5bdb767766f6819ae2883532643c9d06ccfdeb28",
+      "bytes": 5918
+    },
+    "h1d-diagnostic-results.json": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/h1d-diagnostic-results.json",
+      "sha256": "cfd6ea366fc6245e891f197b080a988ec60ee734ca7199c12a6619ef2abb15df",
+      "bytes": 1666
+    },
+    "regression-results.json": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/regression-results.json",
+      "sha256": "82fde29eaa6846133fbe08606e396a4bf7e76c02a5a123e942c8204236c4c4d9",
+      "bytes": 10581
+    },
+    "regression-fixed-results.json": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/regression-fixed-results.json",
+      "sha256": "dc6f1ecb972afb5d4c9cb6df9cf01069a76d14e2bd38312abc293457e3e80e0f",
+      "bytes": 1749
+    }
+  },
+  "execution_helpers": {
+    "verify_checks.py": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/verify_checks.py",
+      "sha256": "daa33d9da26b30fd3feed684f74db429b4352d767b4f9ba47bd106293d2c2ee6"
+    },
+    "collect_receipt.py": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/collect_receipt.py",
+      "sha256": "b1a98f066b876c4e5bb571d058408e11a58253da4768d57968f004cbae9fe150"
+    },
+    "export_registered_tests.py": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/export_registered_tests.py",
+      "sha256": "35c42239a933a033acdb03ab3365210e032c8d5b3f29f2efeb093bdcf3760d6c"
+    }
+  },
+  "raw_artifact_manifest": {
+    "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/artifact-manifest.json",
+    "sha256": "a9ef950145c13226703091dd4f6363b61a9a19ba7bf897b81ccbaf582e83b207",
+    "file_count": 85
+  },
+  "commands": {
+    "build": [
+      "cmake",
+      "--build",
+      "/home/jay/build/nektar-v2026-mpi",
+      "--target",
+      "IncNavierStokesSolver",
+      "SolverUtilsUnitTests",
+      "HITBoundaryUnitTests",
+      "HITBoundaryProbe",
+      "HITFieldCompare",
+      "HITFlowDiagnostics",
+      "Tester",
+      "--parallel",
+      "32"
+    ],
+    "units": [
+      "ctest",
+      "--test-dir",
+      "/home/jay/build/nektar-v2026-mpi",
+      "-R",
+      "^(HITCoreUnitTests|HITBoundaryUnitTests|HITRestartUnitTests)$",
+      "--parallel",
+      "1",
+      "--output-on-failure"
+    ],
+    "optional_unit_configuration": [
+      "cmake",
+      "-S",
+      "/media/jay/新加卷/nektar-v2026",
+      "-B",
+      "/home/jay/build/nektar-v2026-mpi",
+      "-DNEKTAR_BUILD_UNIT_TESTS=OFF"
+    ],
+    "registered_ctest": [
+      "ctest",
+      "--test-dir",
+      "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/registered-ctest",
+      "--parallel",
+      "8",
+      "--output-on-failure",
+      "--output-junit",
+      "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-5/46e4da4/registered-results.xml"
+    ],
+    "restoration": [
+      "cmake",
+      "-S",
+      "/media/jay/新加卷/nektar-v2026",
+      "-B",
+      "/home/jay/build/nektar-v2026-mpi",
+      "-DNEKTAR_BUILD_UNIT_TESTS=ON"
+    ]
+  },
+  "limitations": [
+    "Regression inputs are small manufactured/transient cases, not downstream physical decay validation.",
+    "Bulk divergence/flux limits apply to the specified manufactured p12 dt=0.01 case; the short mean-initialized stochastic H1D case has relative divergence about 1.29e-3 and requires later startup/resolution analysis.",
+    "Diagnostic/operator checks and checkpoint comparisons use native XML fields; HDF5 is disabled in this build.",
+    "Existing Tester serial-first/MPI-later launcher behavior is avoided by MPI-first ordering and explicit eight-rank scheduling, not changed by M5."
+  ],
+  "registered_input_sha256": {
+    "solvers/IncNavierStokesSolver/Tests/HITInflowMeanOnly3D.tst": {
+      "bytes": 965,
+      "sha256": "d3ad7e8f36fa74f567258f0a0e2899165828b91200ec0a8e9d40a446b0750678"
+    },
+    "solvers/IncNavierStokesSolver/Tests/test.opt": {
+      "bytes": 3230,
+      "sha256": "9e9b01382228acbce4d5418574feb21eb571d7dfd12058bf9fc0ea9429bb7d30"
+    },
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/m3-mean-only.xml": {
+      "bytes": 7490,
+      "sha256": "0edfb261ce6c0aca9b1bf6dbb931ed1a6afd8d0c7e459af44460df324bb57e89"
+    },
+    "solvers/IncNavierStokesSolver/Tests/HITInflowManufactured3D.tst": {
+      "bytes": 1063,
+      "sha256": "961446ee9633075d2c23bfe0b9816908f951b71f6bb910dfcc9d5662e416a253"
+    },
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/m3-manufactured-dt0.01000.xml": {
+      "bytes": 10843,
+      "sha256": "8c69247f62b493a3ef24e25778e98537208355fa6ea16a52cbadaeeaafaacd72"
+    },
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/m3-narrow-band.dat": {
+      "bytes": 236,
+      "sha256": "865d81ad44ef51a83bde04bbbb2134125c0508ef918d643f7884e7895072b191"
+    },
+    "solvers/IncNavierStokesSolver/Tests/HITInflowHomogeneous1DMean.tst": {
+      "bytes": 974,
+      "sha256": "1012ffa305dd2f449883237485e6182ad03398bfe9657931d770f47ad14b2cd6"
+    },
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/m4-h1d-mean-only.xml": {
+      "bytes": 5099,
+      "sha256": "dcdf751b951d3a1a6e36a57c540c6a7b3407770d2df6f959b886acdd75d1ffb3"
+    },
+    "solvers/IncNavierStokesSolver/Tests/HITInflow_m5_single_mode.tst": {
+      "bytes": 1263,
+      "sha256": "53fdd788cf570ce32ea0b517ebe427904c845c29ea0f11c6fa5514a1ebd4c848"
+    },
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/m5-single-mode.xml": {
+      "bytes": 8092,
+      "sha256": "bc86bea742d13869175091b2a0380cbb809875ea70a64b1ab6e2fc8781d9b253"
+    },
+    "solvers/IncNavierStokesSolver/Tests/HITInflowSeededH1D.tst": {
+      "bytes": 1025,
+      "sha256": "838fb97644d6fbf068689c1b6efc8e87213b2fda516d75bd9fe5d1f1b575af48"
+    },
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/m4-h1d-von-karman.xml": {
+      "bytes": 4914,
+      "sha256": "26541486302be5f5d8f82b5b428b834f37441d64c43d04dd3f40d527760f8ab1"
+    },
+    "solvers/IncNavierStokesSolver/Tests/HITInflowTabulatedH1D.tst": {
+      "bytes": 1111,
+      "sha256": "8058ef1cca003b88ea9484b25c26a9d31a525900c7244cff16b2b39c8fe808f6"
+    },
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/m4-h1d-tabulated.xml": {
+      "bytes": 4960,
+      "sha256": "7eabe43fe6127b73a0290959fe1bba80adee3be6900b6974d5cf10ef6d881e7a"
+    },
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/m4-shell-spectrum.dat": {
+      "bytes": 236,
+      "sha256": "865d81ad44ef51a83bde04bbbb2134125c0508ef918d643f7884e7895072b191"
+    },
+    "solvers/IncNavierStokesSolver/Tests/HITInflowRestartH1D.tst": {
+      "bytes": 2685,
+      "sha256": "b186ff0a6d91a510c5ae31b99057c48995bdea4007aadfef13e8dfbc4897bed9"
+    },
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/m4-h1d-checkpoint-filter.xml": {
+      "bytes": 5108,
+      "sha256": "42724256c155b6d10732898569e02c832669438968f86fe422891c32101a6c3e"
+    },
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/m4-h1d-filter-restart.xml": {
+      "bytes": 4826,
+      "sha256": "adb8dccc7cf260b26ff7212197ebac552489b2e5b0cd54265f95b44adc9adeeb"
+    },
+    "solvers/IncNavierStokesSolver/Tests/HITInflowProjectionH1D.tst": {
+      "bytes": 876,
+      "sha256": "c2b03a060b9f5176c27eb0fd0a59e6c10a2ad18a4c753e7cc44c4081c59e5219"
+    },
+    "solvers/IncNavierStokesSolver/Tests/HITInflowDivergenceFlux3D.tst": {
+      "bytes": 1341,
+      "sha256": "9f638bde2cb255576d9f2ced58f2263cbcf6d315e2418832820e72e3e12cca1e"
+    },
+    "solvers/IncNavierStokesSolver/Tests/HITInflowProjectionH1D_FFTW.tst": {
+      "bytes": 864,
+      "sha256": "030612ab8e1b90bf9a0cfe2a7a2c9b6539f38d53cb336f1b2d28dc68c187e81c"
+    },
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/m4-h1d-fftw.xml": {
+      "bytes": 4963,
+      "sha256": "7033c0df99b8577c985996903deebd74e6348d39c14ea6d2f891957f8e59faca"
+    },
+    "solvers/IncNavierStokesSolver/Tests/HITInflowMPIH1D.tst": {
+      "bytes": 2372,
+      "sha256": "e073a35047335ff7284ce9afaa09f6f04f59cc9862477bd518115212416bead8"
+    },
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/m5-h1d-mpi.xml": {
+      "bytes": 4845,
+      "sha256": "dfbeec780f628f0295f3e9debc7d8ee9e5a1c4aa8f988ca7d9eb8ff0466e97c4"
+    },
+    "solvers/IncNavierStokesSolver/Tests/ChanFlow_3DH1D_bcsfromfiles.tst": {
+      "bytes": 1197,
+      "sha256": "f780e5d471a4fa45d7cd48d89b27823731214f76eab3f97870d25fdc33b20abe"
+    },
+    "solvers/IncNavierStokesSolver/Tests/ChanFlow_3DH1D_bcsfromfiles.xml": {
+      "bytes": 4565,
+      "sha256": "41ed4a43146135962c35494fe80eba48b8123221fe83a87cb0e9b673771c91ca"
+    },
+    "solvers/IncNavierStokesSolver/Tests/ChanFlow_3DH1D_bcsfromfiles_walls.bc": {
+      "bytes": 1828,
+      "sha256": "502eb9fe6130542a01474325387ab72ba301f5b539c9bda7b5cc72f955366f09"
+    },
+    "solvers/IncNavierStokesSolver/Tests/ChanFlow_3DH1D_bcsfromfiles_inflow.bc": {
+      "bytes": 1602,
+      "sha256": "e50bd2a453abee996b7e2b53609e9de9905e426cdfa2bebf2c38fefbb43b8cff"
+    },
+    "solvers/IncNavierStokesSolver/Tests/KovaFlow_m8_short_HOBC.tst": {
+      "bytes": 858,
+      "sha256": "7675397a39d4446462b23557417fbbcb4df8884e622c24113c59d5d166ca0023"
+    },
+    "solvers/IncNavierStokesSolver/Tests/KovaFlow_m8_short_HOBC.xml": {
+      "bytes": 6515,
+      "sha256": "f3cd491d01e5ec2b162ed05448bb9acf3a4d39cfe19fbbf1b4b31d202c296616"
+    },
+    "solvers/IncNavierStokesSolver/Tests/MovingRefFrame_translation.tst": {
+      "bytes": 925,
+      "sha256": "49e4a0829f75606738bc73fa306642c2f88b5191117a191ea5b86ab2edad46f7"
+    },
+    "solvers/IncNavierStokesSolver/Tests/MovingRefFrame_translation.xml": {
+      "bytes": 89553,
+      "sha256": "ac8ec194ee1c74f56f5f542814b3475e0c7f971c603307512fb38d148287811b"
+    },
+    "solvers/IncNavierStokesSolver/Tests/MovingRefFrame_translation.rst": {
+      "bytes": 105875,
+      "sha256": "2ded385432b66e4e66ae1fb58b1dd6a3b7a70d998e2e4872b4a7eb00c23082d8"
+    },
+    "solvers/IncNavierStokesSolver/Tests/MovingRefFrame_Rot_SimpleDomain.tst": {
+      "bytes": 891,
+      "sha256": "ee7c6a6e5f51c446cd419ed4bfb607645d3c829626754ffa5c7e6eabc2b99b75"
+    },
+    "solvers/IncNavierStokesSolver/Tests/MovingRefFrame_Rot_SimpleDomain.xml": {
+      "bytes": 10209,
+      "sha256": "12c815046d5f4e330283606a8d0d333b44f96a887fd20bce426f45ac2be29604"
+    },
+    "solvers/IncNavierStokesSolver/Tests/ChanFlow_3DH1D_FFT.tst": {
+      "bytes": 1008,
+      "sha256": "3a5d0619a3281f92e48f5cd1625ad71411996f97701fa9270c7f1f724e697a62"
+    },
+    "solvers/IncNavierStokesSolver/Tests/ChanFlow_3DH1D_FFT.xml": {
+      "bytes": 4346,
+      "sha256": "7d110effed03749411e7a95c7657579100216df202c287d8b3a2b4773acafd16"
+    },
+    "solvers/IncNavierStokesSolver/Tests/KovaFlow_3DH1D_MVM_FFTW_Consistency.tst": {
+      "bytes": 1148,
+      "sha256": "5957353abe8ec3216e65d401a0c8678821d40b2116b62e4ae9591277f05447a3"
+    },
+    "solvers/IncNavierStokesSolver/Tests/KovaFlow_3DH1D_MVM_FFTW_Consistency.xml": {
+      "bytes": 6292,
+      "sha256": "a97e8d1e9944d42a53e3dee328c5120e0f7abb4274adda7dd378c81c7606e7ae"
+    },
+    "solvers/IncNavierStokesSolver/Tests/KovaFlow_3DH1D_MVM_FFTW_Consistency.rst": {
+      "bytes": 190629,
+      "sha256": "c9097f07779339057c3134348e45855bf338ab135fcd8cb789600a26622ff8d4"
+    },
+    "solvers/IncNavierStokesSolver/Tests/ChanFlow_3DH1D_Parallel_mode1.tst": {
+      "bytes": 1074,
+      "sha256": "eeee6139907e7c3ea612d85d9034c53409120614f6d3c4d94438666d7b5c76f0"
+    },
+    "solvers/IncNavierStokesSolver/Tests/ChanFlow_3DH1D_Parallel_mode1.xml": {
+      "bytes": 4634,
+      "sha256": "312960711bee79fb363381e06f93f33cc7fb11d8ccc6c9b57d489c507e723e3b"
+    },
+    "solvers/IncNavierStokesSolver/Tests/ChanFlow_3DH1D_Parallel_mode2.tst": {
+      "bytes": 1083,
+      "sha256": "a63d2eb15eeec651ca14f4c6fa216e80518692a135ef4f2d582c39b1bf2ceb3a"
+    },
+    "solvers/IncNavierStokesSolver/Tests/ChanFlow_3DH1D_Parallel_mode2.xml": {
+      "bytes": 4634,
+      "sha256": "aa25ebcbcb11340a2caa7ec26df2721f86cdc99c1c00fdcaaf49cc8d653949bc"
+    }
+  }
+}

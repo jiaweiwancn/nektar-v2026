@@ -20,9 +20,9 @@ periodic transverse boundaries, and the nonlinear velocity-correction solver.
 | Origin skill | academic-research-suite, experiment-agent |
 | Origin mode | plan |
 | Origin date | 2026-10-28 |
-| Version label | hit_inflow_plan_v5 |
-| Verification status | Full-3D and Homogeneous1D inlet, MPI/backends and restart VERIFIED on Linux; downstream physical validation pending |
-| Milestone status | Milestones 1-3 CLOSED on 2026-10-28; Milestone 4 CLOSED on 2026-10-29; Milestones 5-8 pending |
+| Version label | hit_inflow_plan_v6 |
+| Verification status | Inlet/core, MPI/backends, restart and focused regressions VERIFIED on Linux; production and downstream physical validation pending |
+| Milestone status | Milestones 1-3 CLOSED on 2026-10-28; Milestones 4-5 CLOSED on 2026-10-29; Milestones 6-8 pending |
 | Source baseline | `a3b7efc8fef7e075390f0f59457dfdac30f0b6ed` |
 | Project branch | `codex/hit-inflow-generator` |
 
@@ -34,7 +34,9 @@ and experimental inputs are checked. The
 are complete. The
 [Milestone 3 full-3D inlet and solver verification](hit-inflow-milestone-3.md)
 and [Milestone 4 Homogeneous1D, MPI and restart verification](hit-inflow-milestone-4.md)
-are also complete. Downstream physical validation remains scheduled work.
+are also complete. [Milestone 5 focused regression coverage](hit-inflow-milestone-5.md)
+is complete. Production resolution and downstream physical validation remain
+scheduled work.
 
 ## Scope and intended behavior
 
@@ -609,6 +611,21 @@ partition count. Require numerical agreement within reduction and solver
 tolerances for evolved statistics rather than bitwise equality of MPI solutions.
 
 ### Milestone 5 Establish focused regression coverage
+
+**Status: CLOSED on 2026-10-29.** Eight new registered solver regressions cover
+an exact single transverse pair, seeded/tabulated Homogeneous1D fields,
+matrix/FFTW projection, preferred-filter restart, mixed eight-rank MPI and
+manufactured bulk divergence/flux. Four added core cases remove dimensional
+normalization floors and test analytic invariants across physical rescalings.
+All 39 unit cases and nineteen selected solver regressions pass on Linux;
+the complete solver set also passes with optional unit tests disabled.
+Manufactured p/dt evidence calibrates the solver divergence/flux limits,
+separately from algebraic generator tolerances. The
+[closure report](hit-inflow-milestone-5.md) and
+[Linux receipt](hit-inflow-milestone-5-validation.json) record exact revisions,
+commands, source/data hashes, checker rejection tests and the short stochastic
+fixture's remaining divergence/resolution limitation. Production pilots and
+experimental decay validation remain in Milestones 6-8.
 
 Add small reproducible `.xml` and `.tst` cases to the incompressible solver
 tests and register them with `ADD_NEKTAR_TEST`. Add core checks to the existing
