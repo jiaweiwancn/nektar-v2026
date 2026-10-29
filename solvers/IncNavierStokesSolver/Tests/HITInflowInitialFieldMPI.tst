@@ -3,21 +3,21 @@
     <description>Native HIT initial-field projection preserves a constant mean through mesh/Fourier MPI assembly</description>
     <segment type="sequential">
         <executable>HITInitialField</executable>
-        <parameters>--npz 2 m4-h1d-mean-only.xml initial.fld</parameters>
+        <parameters>--npz 2 m6-h1d-mean-initial.xml initial.fld</parameters>
         <processes>4</processes>
     </segment>
     <segment type="sequential">
         <executable>IncNavierStokesSolver</executable>
-        <parameters>--npz 2 m4-h1d-mean-only.xml</parameters>
+        <parameters>--npz 2 m6-h1d-mean-initial.xml</parameters>
         <processes>4</processes>
     </segment>
     <segment type="sequential">
         <executable>HITFieldCompare</executable>
-        <parameters>m4-h1d-mean-only.xml initial.fld m4-h1d-mean-only.fld</parameters>
+        <parameters>m6-h1d-mean-initial.xml initial.fld m6-h1d-mean-initial.fld</parameters>
         <processes>1</processes>
     </segment>
     <files>
-        <file description="Mean initial-field assembly input">HITInflow/m4-h1d-mean-only.xml</file>
+        <file description="Mean initial-field assembly input">HITInflow/m6-h1d-mean-initial.xml</file>
     </files>
     <metrics>
         <metric type="Regex" id="1">

@@ -18,6 +18,8 @@
 #include <map>
 #include <memory>
 #include <sstream>
+#include <stdexcept>
+#include <utility>
 #include <vector>
 
 using namespace Nektar;
@@ -105,6 +107,7 @@ int main(int argc, char *argv[])
 
         const int count = fields[0]->GetNpoints();
         unsigned long long globalPoints = count, globalGroups = 0;
+        unsigned long long globalUniquePoints = 0;
         unsigned long long grouped = 0, reference = 0, cachePeak = 0;
         unsigned long long groupsMaximum = 0;
         const auto samplingStart = Clock::now();
@@ -126,32 +129,63 @@ int main(int argc, char *argv[])
             // indices, while the resulting velocity is written into the fields.
             for (const auto &group : groups)
             {
-                std::vector<SolverUtils::HITVector> points;
-                points.reserve(group.second.size());
+                // Adjacent elements repeat quadrature coordinates on shared
+                // traces. Merge exact coordinates within this x plane only;
+                // coordinates differing by even one ulp remain separate keys.
+                std::map<std::pair<NekDouble, NekDouble>, std::vector<int>> unique;
                 for (int point : group.second)
                 {
-                    points.push_back({x[point], y[point], z[point]});
+                    unique[{y[point], z[point]}].push_back(point);
                 }
+                std::vector<SolverUtils::HITVector> points;
+                points.reserve(unique.size());
+                for (const auto &entry : unique)
+                {
+                    points.push_back({group.first, entry.first.first,
+                                      entry.first.second});
+                }
+                globalUniquePoints += points.size();
                 SolverUtils::HITPlaneEvaluator evaluator(*generator, points);
+                constexpr std::size_t maximumReferenceProducts = 50000000;
+                // Division tests the product bound without overflowing size_t.
+                if (!evaluator.IsGrouped() && !points.empty() &&
+                    generator->GetModes().size() >
+                        maximumReferenceProducts / points.size())
+                {
+                    throw std::runtime_error(
+                        "Plane evaluator " + evaluator.Method() + " requires " +
+                        std::to_string(generator->GetModes().size()) +
+                        " modes times " + std::to_string(points.size()) +
+                        " unique points, exceeding the 50000000 direct-sum "
+                        "work limit. Increase npz to reduce points per rank, "
+                        "or increase the HITPlaneEvaluator cache allowance.");
+                }
                 std::vector<SolverUtils::HITVector> velocity;
                 evaluator.Evaluate(time, velocity);
-                ASSERTL0(velocity.size() == group.second.size(),
+                ASSERTL0(velocity.size() == unique.size(),
                          "Initial-field evaluator returned the wrong sample count");
                 grouped += evaluator.IsGrouped();
                 reference += !evaluator.IsGrouped();
                 cachePeak = std::max(cachePeak,
                     static_cast<unsigned long long>(evaluator.CacheBytes()));
-                for (std::size_t sample = 0; sample < group.second.size(); ++sample)
+                std::size_t sample = 0;
+                for (const auto &entry : unique)
                 {
-                    const int point = group.second[sample];
                     for (int component = 0; component < 3; ++component)
                     {
                         ASSERTL0(std::isfinite(velocity[sample][component]),
                                  "Non-finite initial velocity");
-                        fields[component]->UpdatePhys()[point] =
-                            velocity[sample][component];
                     }
-                    fields[3]->UpdatePhys()[point] = 0.0;
+                    for (int point : entry.second)
+                    {
+                        for (int component = 0; component < 3; ++component)
+                        {
+                            fields[component]->UpdatePhys()[point] =
+                                velocity[sample][component];
+                        }
+                        fields[3]->UpdatePhys()[point] = 0.0;
+                    }
+                    ++sample;
                 }
             }
         }
@@ -226,6 +260,7 @@ int main(int argc, char *argv[])
         NekDouble writeSeconds = Seconds(writeStart);
 
         comm->AllReduce(globalPoints, LibUtilities::ReduceSum);
+        comm->AllReduce(globalUniquePoints, LibUtilities::ReduceSum);
         comm->AllReduce(globalGroups, LibUtilities::ReduceSum);
         comm->AllReduce(grouped, LibUtilities::ReduceSum);
         comm->AllReduce(reference, LibUtilities::ReduceSum);
@@ -242,6 +277,7 @@ int main(int argc, char *argv[])
                 << "HIT_INITIAL_FIELD {\"time\":" << time
                 << ",\"ranks\":" << comm->GetSize()
                 << ",\"global_quadrature_points\":" << globalPoints
+                << ",\"global_sampled_unique_points\":" << globalUniquePoints
                 << ",\"plane_groups_sum\":" << globalGroups
                 << ",\"plane_groups_max_per_rank\":" << groupsMaximum
                 << ",\"grouped_planes\":" << grouped

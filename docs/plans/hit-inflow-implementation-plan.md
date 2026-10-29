@@ -726,7 +726,7 @@ manifest containing the revision, tracked diff if any, configuration hashes,
 seed, dependency/build information, command, rank decomposition, thread counts,
 output locations, and start/end times.
 
-Never exceed 72 total Linux workers, counting simultaneous builds, test
+Never exceed 64 total Linux workers, counting simultaneous builds, test
 processes, MPI ranks, and threads in every rank. Inspect other active work before
 allocating workers. Default to `OMP_NUM_THREADS=1` and
 `OPENBLAS_NUM_THREADS=1`; also limit other threaded numerical libraries if used.

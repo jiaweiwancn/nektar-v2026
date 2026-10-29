@@ -65,6 +65,10 @@ def main():
     args = parser.parse_args()
     if not 1 <= args.ranks <= 64 or args.npz < 1 or args.ranks % args.npz:
         parser.error("require 1..64 ranks, positive npz dividing ranks")
+    # All ranks, MPI helper threads and child processes inherit one CPU set.
+    # The user reduced the server-wide ceiling to 64 CPUs on 2026-10-29.
+    if hasattr(os, "sched_getaffinity"):
+        os.sched_setaffinity(0, sorted(os.sched_getaffinity(0))[:64])
     session = args.session.resolve()
     directory = session.parent
     source = Path(__file__).resolve().parents[4]
@@ -77,10 +81,12 @@ def main():
     environment = dict(os.environ, OMP_NUM_THREADS="1", OPENBLAS_NUM_THREADS="1",
                        TMPDIR=str(directory / "tmp"))
     (directory / "tmp").mkdir(exist_ok=True)
-    mpi = ["mpirun", "-n", str(args.ranks)]
+    mpi = ["mpirun", "--bind-to", "none", "-n", str(args.ranks)]
     parallel = ["--npz", str(args.npz)] if args.npz > 1 else []
     receipt = {"revision": args.source_revision, "ranks": args.ranks,
                "npz": args.npz, "omp_threads": 1, "openblas_threads": 1,
+               "cpu_affinity": sorted(os.sched_getaffinity(0)) if hasattr(os, "sched_getaffinity") else None,
+               "total_server_cpu_limit": 64,
                "started_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
                "original_session_sha256": hashlib.sha256(session.read_bytes()).hexdigest()}
     tree = ET.parse(session)

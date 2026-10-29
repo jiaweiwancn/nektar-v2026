@@ -1,0 +1,157 @@
+{
+  "schema": "NEKTAR_HIT_M6_STUDY_V1",
+  "purpose": "Predeclared physical resolution/domain pilots; production settings remain unfrozen until analysis",
+  "baseline": {
+    "length": 0.6,
+    "width": 0.6,
+    "h": 0.1,
+    "modes": 8,
+    "hom-modes": 32,
+    "dt": 0.0001,
+    "duration": 0.2,
+    "record-start": 0.1,
+    "sample-every": 5,
+    "cutoff": 100,
+    "taper": 80,
+    "synthesis-length": 32,
+    "seed": 20261028,
+    "stations": "0,0.15,0.45",
+    "buffer": 0.15,
+    "probe-grid": "32,32",
+    "dealias": true,
+    "svv": "dg",
+    "svv-coeff": 1,
+    "svv-z-coeff": 0.0238125,
+    "svv-z-cutoff": 0.75
+  },
+  "cases": [
+    {
+      "id": "base"
+    },
+    {
+      "id": "p9",
+      "override": {
+        "modes": 10
+      }
+    },
+    {
+      "id": "h05",
+      "override": {
+        "h": 0.05
+      }
+    },
+    {
+      "id": "band200-cost",
+      "override": {
+        "cutoff": 200,
+        "taper": 160,
+        "h": 0.05,
+        "hom-modes": 64,
+        "dt": 5e-05,
+        "sample-every": 10,
+        "duration": 0.12,
+        "record-start": 0.06,
+        "probe-grid": "64,64",
+        "svv-z-coeff": 0.01190625
+      }
+    },
+    {
+      "id": "z64",
+      "override": {
+        "hom-modes": 64,
+        "probe-grid": "32,64"
+      }
+    },
+    {
+      "id": "dt-half",
+      "override": {
+        "dt": 5e-05,
+        "sample-every": 10
+      }
+    },
+    {
+      "id": "buffer09",
+      "override": {
+        "length": 0.9,
+        "buffer": 0.45
+      }
+    },
+    {
+      "id": "buffer12",
+      "override": {
+        "length": 1.2,
+        "buffer": 0.75
+      }
+    },
+    {
+      "id": "span09",
+      "override": {
+        "width": 0.9,
+        "hom-modes": 48,
+        "probe-grid": "48,48"
+      }
+    },
+    {
+      "id": "span12",
+      "override": {
+        "width": 1.2,
+        "hom-modes": 64,
+        "probe-grid": "64,64"
+      }
+    },
+    {
+      "id": "svv-half",
+      "override": {
+        "svv-coeff": 0.5,
+        "svv-z-coeff": 0.01190625
+      }
+    },
+    {
+      "id": "svv-double",
+      "override": {
+        "svv-coeff": 2,
+        "svv-z-coeff": 0.047625
+      }
+    },
+    {
+      "id": "no-svv",
+      "override": {
+        "svv": "none"
+      }
+    },
+    {
+      "id": "mean-start",
+      "mean_initial": true
+    },
+    {
+      "id": "record08",
+      "override": {
+        "duration": 0.8
+      }
+    },
+    {
+      "id": "base-seed2",
+      "override": {
+        "seed": 20261029
+      }
+    },
+    {
+      "id": "span09-seed2",
+      "override": {
+        "seed": 20261029,
+        "width": 0.9,
+        "hom-modes": 48,
+        "probe-grid": "48,48"
+      }
+    },
+    {
+      "id": "span12-seed2",
+      "override": {
+        "seed": 20261029,
+        "width": 1.2,
+        "hom-modes": 64,
+        "probe-grid": "64,64"
+      }
+    }
+  ]
+}

@@ -17,7 +17,7 @@ it does not restore missing energy or dissipation.
 2. Measure generator construction, plane sampling, initialization and solver
    cost before allocating long runs. Check actual peak memory as well as mode
    storage. Record all MPI ranks and thread counts; total workers never exceed
-   72. Keep generated fields and logs outside the source checkout.
+   64. Keep generated fields and logs outside the source checkout.
 3. Start with a short physical domain and cutoff near 100 rad/m. Independently
    vary inlet projection, spectral/hp resolution, homogeneous planes, timestep,
    transverse span and outlet buffer. Keep synthesis settings and seed fixed
@@ -70,6 +70,10 @@ This gives base viscosity 12.7*h/p times the native optimized modal kernel.
 The z kernel is exponential, with separately recorded cutoff and viscosity.
 Compare half/double SVV strength on identical realizations and sampling windows.
 SVV sensitivity is a model uncertainty, not a physical-viscosity refinement.
+The quadrilateral DG kernel uses a tabulated filter and ignores the numerical
+SVVCutoffRatio value. Refining h/p or Fourier resolution also changes the SVV
+operator, so resolution comparisons measure their combined effect. No claim of
+a common fixed-viscosity PDE is attached to those comparisons.
 
 The code review identified unequal damping of full-Fourier cosine/sine partners
 when the kernel uses packed slot IDs. The candidate corrects that mapping to
@@ -77,6 +81,18 @@ physical wavenumber IDs and adds a sine/cosine analytic diffusion regression.
 Require that regression before the SVV pilots. The flow diagnostic measures
 native instantaneous SVV work separately in x-y and z, with a Fourier Parseval
 check. This work is distinguished from temporal fluctuation dissipation.
+
+All M6 jobs now share an affinity set of at most 64 logical CPUs, following the
+user's stricter limit. The study runner permits at most 60 MPI ranks in total,
+leaving capacity for its controller and serial postprocessing, with one OpenMP
+and OpenBLAS thread per rank.
+
+The benchmark also integrates the exact finite-lattice tensor multiplied by
+1-sinc(U*kx*T/2)^2. This gives the expected continuous-time central variance for
+a window T and explicitly accounts for time-independent kx=0 modes. Its bias
+relative to ensemble variance is a finite-window effect, separate from the
+conditional block sampling intervals. Avoiding exact recurrence alone does not
+establish low-frequency convergence.
 
 The kernel choice follows the local user guide and constant-Peclet design in
 [Moura, Sherwin and Peiro (2016)](https://doi.org/10.1016/j.jcp.2015.12.009)
