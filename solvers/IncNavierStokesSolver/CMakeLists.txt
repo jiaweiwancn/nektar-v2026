@@ -104,6 +104,41 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
     ADD_NEKTAR_TEST(HITInflowMeanOnly3D)
     ADD_NEKTAR_TEST(HITInflowManufactured3D)
     ADD_NEKTAR_TEST(HITInflowHomogeneous1DMean)
+
+    # Native regression tools also build when the optional unit tests are off.
+    IF(NEKTAR_BUILD_TESTS)
+        SET(HIT_TEST_DIR ${CMAKE_SOURCE_DIR}/library/UnitTests/SolverUtils)
+        SET(HIT_TEST_BOUNDARY_SOURCES
+            BoundaryConditions/IncBaseCondition.cpp
+            BoundaryConditions/IncBoundaryConditions.cpp
+            BoundaryConditions/HITInflow.cpp
+            BoundaryConditions/HITInflowConfig.cpp
+            BoundaryConditions/HITInflowGeometry.cpp
+            BoundaryConditions/HITInflowRestart.cpp)
+        ADD_NEKTAR_EXECUTABLE(HITBoundaryProbe COMPONENT tests DEPENDS SolverUtils
+            SOURCES ${HIT_TEST_DIR}/HITBoundaryProbe.cpp ${HIT_TEST_BOUNDARY_SOURCES})
+        ADD_NEKTAR_EXECUTABLE(HITFieldCompare COMPONENT tests DEPENDS SolverUtils
+            SOURCES ${HIT_TEST_DIR}/HITFieldCompare.cpp)
+        ADD_NEKTAR_EXECUTABLE(HITFlowDiagnostics COMPONENT tests DEPENDS SolverUtils
+            SOURCES ${HIT_TEST_DIR}/HITFlowDiagnostics.cpp)
+        FOREACH(hit_tool HITBoundaryProbe HITFieldCompare HITFlowDiagnostics)
+            TARGET_INCLUDE_DIRECTORIES(${hit_tool} PRIVATE ${CMAKE_SOURCE_DIR}/solvers)
+            TARGET_COMPILE_DEFINITIONS(${hit_tool} PRIVATE ENABLE_NEKTAR_EXCEPTIONS)
+        ENDFOREACH()
+        ADD_NEKTAR_TEST(HITInflow_m5_single_mode)
+        ADD_NEKTAR_TEST(HITInflowSeededH1D)
+        ADD_NEKTAR_TEST(HITInflowTabulatedH1D)
+        ADD_NEKTAR_TEST(HITInflowRestartH1D)
+        ADD_NEKTAR_TEST(HITInflowProjectionH1D)
+        IF(NEKTAR_USE_FFTW)
+            ADD_NEKTAR_TEST(HITInflowProjectionH1D_FFTW)
+        ENDIF()
+        IF(NEKTAR_USE_MPI)
+            ADD_NEKTAR_TEST(HITInflowMPIH1D)
+            SET_TESTS_PROPERTIES(IncNavierStokesSolver_HITInflowMPIH1D
+                PROPERTIES PROCESSORS 8)
+        ENDIF()
+    ENDIF()
     ADD_NEKTAR_TEST(ThermStab_dir)
     ADD_NEKTAR_TEST(ChannelStability)
     ADD_NEKTAR_TEST(ThermStab_adj)

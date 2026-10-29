@@ -152,6 +152,13 @@ int main(int argc, char *argv[])
             ASSERTL0(output.good(), "Cannot write HIT probe summary");
             std::cout << "HIT boundary probe: " << points << " samples, maximum raw error "
                       << rawError << std::endl;
+            std::cout << std::setprecision(17)
+                      << "HIT_PROBE raw_error " << rawError
+                      << " projection_error "
+                      << *std::max_element(maximum.begin(), maximum.end())
+                      << " nonzero_z "
+                      << (*std::min_element(nonzero.begin(), nonzero.end()) > 1e-12)
+                      << " repeat " << repeat << std::endl;
         }
         session->Finalise();
         return 0;

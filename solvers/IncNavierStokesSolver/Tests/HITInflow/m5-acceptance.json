@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "purpose": "M5 durable criteria inherited from closed M3/M4 evidence or analytical bounds, before M5 solver runs",
+  "seeded_u_L2_Linf_tolerance": 2e-05,
+  "seeded_v_w_p_L2_Linf_tolerance": 2e-06,
+  "probe_raw_error": 5e-13,
+  "probe_projection_error": 2e-06,
+  "probe_nonzero_z": 1,
+  "MPI_velocity_Linf": 2e-09,
+  "MPI_pressure_Linf": 2e-08,
+  "restart_velocity_Linf": 0.0002,
+  "restart_pressure_Linf": 0.002,
+  "core_normalized_transversality_and_divergence": 1e-12,
+  "core_normalized_finite_difference_derivatives": 1e-08,
+  "flow_diagnostic_threshold_policy": "Freeze the evolved bulk divergence and net-flux regression limits only after a manufactured-solution polynomial/timestep pilot; record its values and refinement separately from these fixed synthesis/partition bounds."
+}
