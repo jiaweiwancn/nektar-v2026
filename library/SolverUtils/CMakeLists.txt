@@ -5,6 +5,7 @@ SET(SOLVER_UTILS_SOURCES
   Core/SessionFunction.cpp
   Turbulence/HITSpectrum.cpp
   Turbulence/HITGenerator.cpp
+  Turbulence/HITPlaneEvaluator.cpp
   AdvectionSystem.cpp
   ALEHelper.cpp
   Advection/Advection.cpp
@@ -67,6 +68,7 @@ SET(SOLVER_UTILS_HEADERS
   Core/SessionFunction.h
   Turbulence/HITSpectrum.h
   Turbulence/HITGenerator.h
+  Turbulence/HITPlaneEvaluator.h
   AdvectionSystem.h
   ALEHelper.h
   Advection/Advection.h

@@ -344,7 +344,7 @@ std::size_t HITGenerator::EstimateModeBytes(const HITGeneratorConfig &config,
     return Preflight(config, spectrum, lattice).bytes;
 }
 
-HITSample HITGenerator::Evaluate(const HITVector &point, NekDouble time) const
+void HITGenerator::ValidateTime(NekDouble time) const
 {
     Require(std::isfinite(time), "evaluation time must be finite");
     const NekDouble end = m_config.timeOrigin + m_config.recordDuration;
@@ -354,6 +354,11 @@ HITSample HITGenerator::Evaluate(const HITVector &point, NekDouble time) const
         1e-10 * m_config.recordDuration);
     Require(time >= m_config.timeOrigin - tolerance && time <= end + tolerance,
             "evaluation time is outside the declared record");
+}
+
+HITSample HITGenerator::Evaluate(const HITVector &point, NekDouble time) const
+{
+    ValidateTime(time);
     std::array<long double, 3> displacement;
     for (std::size_t d = 0; d < 3; ++d)
     {

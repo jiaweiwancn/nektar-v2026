@@ -9,6 +9,7 @@
 
 #include <IncNavierStokesSolver/BoundaryConditions/HITInflowConfig.h>
 #include <IncNavierStokesSolver/BoundaryConditions/IncBaseCondition.h>
+#include <SolverUtils/Turbulence/HITPlaneEvaluator.h>
 
 namespace Nektar
 {
@@ -54,6 +55,8 @@ protected:
 private:
     std::shared_ptr<const HITInflowConfiguration> m_configuration;
     std::shared_ptr<const SolverUtils::HITGenerator> m_generator;
+    std::unique_ptr<SolverUtils::HITPlaneEvaluator> m_evaluator;
+    std::vector<SolverUtils::HITVector> m_velocities;
 };
 } // namespace Nektar
 

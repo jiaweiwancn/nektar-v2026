@@ -84,19 +84,25 @@ void HITInflow::Configure(
     }
     m_configuration = std::move(configuration);
     m_generator     = std::move(generator);
+    std::vector<SolverUtils::HITVector> points(m_npoints);
+    for (int point = 0; point < m_npoints; ++point)
+    {
+        points[point] = {m_coords[0][point], m_coords[1][point],
+                         m_coords[2][point]};
+    }
+    m_evaluator = std::make_unique<SolverUtils::HITPlaneEvaluator>(
+        *m_generator, points);
 }
 
 void HITInflow::v_UpdatePrescribedVelocity(NekDouble time)
 {
-    ASSERTL0(m_generator, "HITInflow was not configured before its first update");
+    ASSERTL0(m_evaluator, "HITInflow was not configured before its first update");
+    m_evaluator->Evaluate(time, m_velocities);
     for (int point = 0; point < m_npoints; ++point)
     {
-        const SolverUtils::HITVector location{
-            m_coords[0][point], m_coords[1][point], m_coords[2][point]};
-        const auto sample = m_generator->Evaluate(location, time);
         for (int component = 0; component < 3; ++component)
         {
-            m_BndExp[component]->UpdatePhys()[point] = sample.velocity[component];
+            m_BndExp[component]->UpdatePhys()[point] = m_velocities[point][component];
         }
     }
     for (int component = 0; component < 3; ++component)

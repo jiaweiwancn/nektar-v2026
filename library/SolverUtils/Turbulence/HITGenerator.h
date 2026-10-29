@@ -103,6 +103,8 @@ public:
     static const char *Algorithm();
 
 private:
+    friend class HITPlaneEvaluator;
+    void ValidateTime(NekDouble time) const;
     HITGeneratorConfig m_config;
     std::vector<HITFourierMode> m_modes;
     HITDiagnostics m_diagnostics;
