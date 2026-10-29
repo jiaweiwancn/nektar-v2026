@@ -142,3 +142,10 @@ spectra, not spherical shell spectra or the experiment's longitudinal spectrum.
 Their standard-library DFT costs O(Nz2) per sampled row. No automatic physical
 acceptance thresholds are inferred. Provenance hashes cover prepared inputs,
 the analyzer, history and manifest.
+
+For dense completed records, `--numpy-transforms` explicitly selects optional
+NumPy FFTs and vectorized temporal lag products. It retains the same streamed
+validation, scalar moments, temporal centering, blocks and estimator definitions.
+Its backend/version/dtype are recorded; floating-point reduction order may differ
+for transforms and correlations. NumPy is imported only when requested. The
+default analyzer continues to require only the Python standard library.
