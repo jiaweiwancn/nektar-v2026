@@ -19,7 +19,7 @@ IF(TARGET SolverUtils)
         ${HIT_BOUNDARY_DIR}/HITInflowRestart.cpp)
     ADD_NEKTAR_EXECUTABLE(HITBoundaryUnitTests
         COMPONENT unit-test DEPENDS SolverUtils
-        SOURCES main.cpp TestHITBoundary.cpp TestHITRestart.cpp ${HIT_BOUNDARY_SOURCES})
+        SOURCES main.cpp TestHITBoundary.cpp TestHITRestart.cpp TestHITSVVWork.cpp ${HIT_BOUNDARY_SOURCES})
     TARGET_INCLUDE_DIRECTORIES(HITBoundaryUnitTests PRIVATE ${CMAKE_SOURCE_DIR}/solvers)
     TARGET_COMPILE_DEFINITIONS(HITBoundaryUnitTests PRIVATE
         HIT_TEST_FIXTURE_DIR="${CMAKE_SOURCE_DIR}/solvers/IncNavierStokesSolver/Tests/HITInflow")
@@ -27,4 +27,6 @@ IF(TARGET SolverUtils)
         COMMAND HITBoundaryUnitTests --run_test=HITBoundary --detect_memory_leaks=0)
     ADD_TEST(NAME HITRestartUnitTests
         COMMAND HITBoundaryUnitTests --run_test=HITRestart --detect_memory_leaks=0)
+    ADD_TEST(NAME HITSVVWorkUnitTests
+        COMMAND HITBoundaryUnitTests --run_test=HITSVVWork --detect_memory_leaks=0)
 ENDIF()

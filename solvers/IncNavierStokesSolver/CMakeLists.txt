@@ -141,6 +141,9 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
             ADD_NEKTAR_TEST(HITInflowProjectionH1D_FFTW)
         ENDIF()
         IF(NEKTAR_USE_MPI)
+            ADD_NEKTAR_TEST(HITInflowInitialFieldMPI)
+            SET_TESTS_PROPERTIES(IncNavierStokesSolver_HITInflowInitialFieldMPI
+                PROPERTIES PROCESSORS 4)
             ADD_NEKTAR_TEST(HITInflowMPIH1D)
             SET_TESTS_PROPERTIES(IncNavierStokesSolver_HITInflowMPIH1D
                 PROPERTIES PROCESSORS 8)

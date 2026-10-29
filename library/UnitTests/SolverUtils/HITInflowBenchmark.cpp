@@ -85,6 +85,7 @@ int main(int argc, char *argv[])
         arguments.push_back(nullptr);
         auto session = LibUtilities::SessionReader::CreateInstance(
             argc - 2, arguments.data());
+        session->InitSession();
         ASSERTL0(session->GetComm()->GetSize() == 1,
                  "Run HITInflowBenchmark with one process");
 

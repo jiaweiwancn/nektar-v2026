@@ -171,12 +171,32 @@ int main(int argc, char *argv[])
             // transform exactly once, after constrained planar projection.
             field->FwdTransBndConstrained(field->GetPhys(), field->UpdateCoeffs());
             field->AvgAssemble();
+            // AvgAssemble packs the global coefficients into this array;
+            // Dirichlet imposition uses local element coefficient indices.
+            field->GlobalToLocal();
             field->ImposeDirichletConditions(field->UpdateCoeffs());
             field->LocalToGlobal();
             field->GlobalToLocal();
             field->SetPhysState(false);
         }
         NekDouble projectionSeconds = Seconds(projectionStart);
+        std::array<NekDouble, 4> projectionL2{}, projectionLinf{}, projectedMean{};
+        Array<OneD, NekDouble> ones(count, 1.0);
+        const NekDouble volume = fields[0]->Integral(ones);
+        ASSERTL0(std::isfinite(volume) && volume > 0.0,
+                 "Initial field requires positive finite volume");
+        for (int variable = 0; variable < 4; ++variable)
+        {
+            Array<OneD, NekDouble> projected(count), difference(count);
+            fields[variable]->BwdTrans(fields[variable]->GetCoeffs(), projected);
+            for (int q = 0; q < count; ++q)
+            {
+                difference[q] = projected[q] - fields[variable]->GetPhys()[q];
+            }
+            projectionL2[variable] = fields[variable]->L2(difference);
+            projectionLinf[variable] = fields[variable]->Linf(difference);
+            projectedMean[variable] = fields[variable]->Integral(projected) / volume;
+        }
 
         NekDouble viscosity = 0.0;
         session->LoadParameter("Kinvis", viscosity, 0.0);
@@ -237,7 +257,13 @@ int main(int argc, char *argv[])
                 << ",\"setup_seconds_max\":" << setupSeconds
                 << ",\"sampling_seconds_max\":" << samplingSeconds
                 << ",\"projection_seconds_max\":" << projectionSeconds
-                << ",\"write_seconds_max\":" << writeSeconds << "}\n";
+                << ",\"write_seconds_max\":" << writeSeconds
+                << ",\"projection_l2\":[" << projectionL2[0] << ',' << projectionL2[1]
+                << ',' << projectionL2[2] << ',' << projectionL2[3] << ']'
+                << ",\"projection_linf\":[" << projectionLinf[0] << ',' << projectionLinf[1]
+                << ',' << projectionLinf[2] << ',' << projectionLinf[3] << ']'
+                << ",\"projected_mean\":[" << projectedMean[0] << ',' << projectedMean[1]
+                << ',' << projectedMean[2] << ',' << projectedMean[3] << "]}\n";
         }
         session->Finalise();
         return 0;
