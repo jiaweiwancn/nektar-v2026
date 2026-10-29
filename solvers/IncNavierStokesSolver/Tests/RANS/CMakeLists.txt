@@ -9,16 +9,29 @@ get_filename_component(RANS_SOURCE_ROOT "${CMAKE_CURRENT_LIST_DIR}/../../../.." 
 add_definitions(${NEKTAR++_DEFINITIONS} -DENABLE_NEKTAR_EXCEPTIONS)
 include_directories(${RANS_SOURCE_ROOT}/library)
 include_directories(SYSTEM ${NEKTAR++_INCLUDE_DIRS} ${NEKTAR++_TP_INCLUDE_DIRS})
+add_library(RANSKernels STATIC
+    ${RANS_SOURCE_ROOT}/library/SolverUtils/Turbulence/RANSModels.cpp
+    ${RANS_SOURCE_ROOT}/library/SolverUtils/Turbulence/AnalyticalWallFunction.cpp)
+target_compile_definitions(RANSKernels PRIVATE SOLVER_UTILS_EXPORTS)
 add_executable(RANSWallLayerProbe
     ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSWallLayerProbe.cpp)
+add_executable(RANSKernelProbe
+    ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSKernelProbe.cpp)
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    target_compile_options(RANSWallLayerProbe PRIVATE
-        -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror)
+    foreach(rans_target RANSKernels RANSWallLayerProbe RANSKernelProbe)
+        target_compile_options(${rans_target} PRIVATE
+            -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror)
+    endforeach()
 endif()
 target_link_libraries(RANSWallLayerProbe
-    ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
+    RANSKernels ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
+target_link_libraries(RANSKernelProbe RANSKernels)
 enable_testing()
 add_test(NAME RANSWallLayerPrototype COMMAND RANSWallLayerProbe
     --output ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-layer.json)
 set_tests_properties(RANSWallLayerPrototype PROPERTIES
     PROCESSORS 1 TIMEOUT 60 ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
+add_test(NAME RANSKernelUnitTests COMMAND RANSKernelProbe
+    --output ${CMAKE_CURRENT_BINARY_DIR}/rans-kernels.json)
+set_tests_properties(RANSKernelUnitTests PROPERTIES
+    PROCESSORS 1 TIMEOUT 120 ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")

@@ -6,6 +6,8 @@ SET(SOLVER_UTILS_SOURCES
   Turbulence/HITSpectrum.cpp
   Turbulence/HITGenerator.cpp
   Turbulence/HITPlaneEvaluator.cpp
+  Turbulence/RANSModels.cpp
+  Turbulence/AnalyticalWallFunction.cpp
   AdvectionSystem.cpp
   ALEHelper.cpp
   Advection/Advection.cpp
@@ -70,6 +72,8 @@ SET(SOLVER_UTILS_HEADERS
   Turbulence/HITGenerator.h
   Turbulence/HITPlaneEvaluator.h
   Turbulence/RANSWallStrip.h
+  Turbulence/RANSModels.h
+  Turbulence/AnalyticalWallFunction.h
   AdvectionSystem.h
   ALEHelper.h
   Advection/Advection.h

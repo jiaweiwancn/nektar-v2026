@@ -107,13 +107,21 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
 
     # Native regression tools also build when the optional unit tests are off.
     IF(NEKTAR_BUILD_TESTS)
-        ADD_NEKTAR_EXECUTABLE(RANSWallLayerProbe COMPONENT tests DEPENDS LocalRegions
+        ADD_NEKTAR_EXECUTABLE(RANSWallLayerProbe COMPONENT tests DEPENDS SolverUtils
             SOURCES ${CMAKE_SOURCE_DIR}/library/UnitTests/SolverUtils/RANSWallLayerProbe.cpp)
         TARGET_COMPILE_DEFINITIONS(RANSWallLayerProbe PRIVATE ENABLE_NEKTAR_EXCEPTIONS)
         ADD_TEST(NAME RANSWallLayerPrototype COMMAND RANSWallLayerProbe
             --output ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-layer.json)
         SET_TESTS_PROPERTIES(RANSWallLayerPrototype PROPERTIES
             PROCESSORS 1 TIMEOUT 60
+            ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
+        ADD_NEKTAR_EXECUTABLE(RANSKernelProbe COMPONENT tests DEPENDS SolverUtils
+            SOURCES ${CMAKE_SOURCE_DIR}/library/UnitTests/SolverUtils/RANSKernelProbe.cpp)
+        TARGET_COMPILE_DEFINITIONS(RANSKernelProbe PRIVATE ENABLE_NEKTAR_EXCEPTIONS)
+        ADD_TEST(NAME RANSKernelUnitTests COMMAND RANSKernelProbe
+            --output ${CMAKE_CURRENT_BINARY_DIR}/rans-kernels.json)
+        SET_TESTS_PROPERTIES(RANSKernelUnitTests PROPERTIES
+            PROCESSORS 1 TIMEOUT 120
             ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
         SET(HIT_TEST_DIR ${CMAKE_SOURCE_DIR}/library/UnitTests/SolverUtils)
         SET(HIT_TEST_BOUNDARY_SOURCES

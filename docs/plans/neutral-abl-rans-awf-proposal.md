@@ -22,8 +22,8 @@ original integrated row without inventing those additional inner equations.
 | Origin skill | academic-research-suite, experiment-agent |
 | Origin mode | plan |
 | Origin date | 2026-10-29 |
-| Version label | neutral_abl_rans_proposal_v2 |
-| Verification status | Milestone 1 CLOSED on 2026-10-29 with Linux prototype validation; general closure and URANS solver implementation pending |
+| Version label | neutral_abl_rans_proposal_v3 |
+| Verification status | Milestones 1–2 CLOSED on 2026-10-29 with Linux column/kernel validation; URANS solver integration pending |
 | Mac source baseline | `6522fc9c74edab0e445aade16f7facea3f5987a3` |
 | New project branch | `codex/neutral-abl-rans-awf` |
 | Linux source observed | `812a2c84946d1fdad2b042c265e3e4ed32914138`, clean, on `codex/hit-inflow-generator` |
@@ -34,6 +34,12 @@ The branch includes the existing HIT work. Milestone 1 has parent revision
 worktree and a separate prototype build against the installed libraries, leaving
 the primary checkout, shared build, installation, and ongoing HIT experiments
 unchanged. Existing untracked literature, guidance, and figures remain untouched.
+
+[Milestone 2](neutral-abl-rans-awf-milestone-2.md) adds the reusable standard/CLS
+closure and original/corrected AWF kernels, with independent tensor/quadrature
+checks and a serial/MPI column regression. Its tested parent is `fd82c37`, which
+adds the repository workflow instructions to the Milestone 1 branch. Source
+hashes and completion evidence are recorded with that milestone.
 
 ## Findings in the current implementation
 
@@ -457,7 +463,7 @@ exact retention of analytical samples.
 | Milestone | Deliverable and completion condition |
 | --- | --- |
 | 1 Wall discretization and residual prototype | CLOSED. Conservative strip selected; P/N/H, matching, pressure/no-slip interpretation, integrated source and algebraic elimination fixed. Native column residual, conservation, h/p/quadrature, and MPI checks passed in the Milestone 1 specification. |
-| 2 Independent closure and AWF kernels | Default roots, full tensors, original wall branches, corrected budgets, forcing identities, admissibility, and recovery pass independent tests. |
+| 2 Independent closure and AWF kernels | CLOSED. Default/configured roots, full tensors, original wall branches, corrected budgets, forcing identities, admissibility, switch, and recovery pass independent Linux tests; native serial/MPI column regression passes with the general CLS kernel. See the Milestone 2 specification. |
 | 3 Standard model URANS transport | Variable diffusion and stiff sources work with consistent pressure, controlled unsteady convergence, and the Richards–Norris control case. |
 | 4 CLS and original AWF integration | Full cubic stress and Yap are active; original AWF is available as a measurable baseline. |
 | 5 Corrected AWF integration | The actual matching anchor, integrated k source replacement, algebraic dissipation constraint, switch, and diagnostics satisfy the assembled residual audit. |

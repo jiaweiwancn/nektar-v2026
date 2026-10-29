@@ -5,11 +5,13 @@
 //
 // Milestone 1 research prototype. Native Nektar++ segment transforms, derivatives
 // and weak products above H, with a separate control-volume strip below H.
-// Only the simple-shear reduction of CLS is used here. This is not a general
-// CLS implementation and is not an IncNavierStokesSolver equation system.
+// Milestone 2 evaluates the general CLS point kernel on simple-shear inputs.
+// The wall reference quadrature stays independent. This is not an installed
+// IncNavierStokesSolver equation system or a full nonlinear URANS timestep.
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <SolverUtils/Turbulence/RANSWallStrip.h>
+#include <SolverUtils/Turbulence/RANSModels.h>
 #include <LibUtilities/Communication/Comm.h>
 #include <LibUtilities/Foundations/ManagerAccess.h>
 #include <LocalRegions/SegExp.h>
@@ -33,8 +35,9 @@ using namespace Nektar::SolverUtils;
 
 namespace
 {
-constexpr double qStar = 3.190675081624288;
-constexpr double kappa = 0.440553905186659;
+const auto modelReference = RANSNeutralReference::CLS();
+const double qStar = modelReference.Q();
+const double kappa = modelReference.Kappa();
 constexpr double sigmaE = 1.3;
 using Vector = std::vector<double>;
 using Matrix = std::vector<Vector>;
@@ -156,18 +159,6 @@ void Sum(const LibUtilities::CommSharedPtr &comm, Matrix &matrix)
     {
         std::copy_n(values.begin() + i * n, n, matrix[i].begin());
     }
-}
-
-double Cmu(double q)
-{
-    // The exponential factor has rounded to 1 well before nested exp overflows.
-    const double damping = q > 8.0 ? 1.0 : -std::expm1(-0.36 * std::exp(0.75 * q));
-    return 0.3 * damping / (1.0 + 0.35 * std::pow(q, 1.5));
-}
-
-double Yap(double ratio)
-{
-    return 0.83 * std::max(0.0, ratio - 1.0) * ratio * ratio;
 }
 
 struct ReferenceWall
@@ -402,20 +393,20 @@ Record Column(const ReferenceWall &wall, int degree, int subdivisions,
         for (int i = 0; i < nq; ++i)
         {
             Require(epsilon[i] > 0.0, "Projected dissipation became nonpositive");
-            const double invariant = wall.K * std::abs(gradU[i]) / epsilon[i];
-            const double nut = Cmu(invariant) * wall.K * wall.K / epsilon[i];
-            const double production = nut * gradU[i] * gradU[i];
-            const double ratio = std::pow(wall.K, 1.5) / (2.5 * epsilon[i] * z[i]);
-            const double Y = epsilon[i] * epsilon[i] / wall.K * Yap(ratio);
+            RANSTensor gradient{};
+            gradient[0][2]=gradU[i];
+            const auto closure=EvaluateRANSClosure(
+                RANSModel::CLSHighRe,wall.K,epsilon[i],gradient,z[i]);
+            const double nut=closure.eddyViscosity, production=closure.production;
+            const double Y=closure.yap;
             Require(std::isfinite(nut) && nut > 0.0 && std::isfinite(production) &&
                     std::isfinite(Y), "Nonfinite simple-shear constitutive state");
             fu[i] = nut * gradU[i];
             fk[i] = production - epsilon[i];
             fe[i] = nut / sigmaE * gradE[i];
-            se[i] = 1.44 * epsilon[i] / wall.K * production -
-                    1.92 * epsilon[i] * epsilon[i] / wall.K + Y;
+            se[i] = closure.epsilonSource;
             // Nonlinear normal stress after absorbing 2k/3 into pressure.
-            normal[i] = -0.14666666666666666667 * wall.K * production / epsilon[i];
+            normal[i] = closure.quadraticStress[2][2]+closure.cubicStress[2][2];
             yy[i] = Y;
             errorU = std::max(errorU, std::abs(u[i] - wall.U(z[i])) / wall.ustar);
             errorE = std::max(errorE, std::abs(epsilon[i] / wall.Epsilon(z[i]) - 1.0));
