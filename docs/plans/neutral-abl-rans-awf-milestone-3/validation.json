@@ -1,0 +1,3172 @@
+{
+  "schema": 1,
+  "milestone": "neutral_abl_rans_awf_m3",
+  "status": "passed",
+  "utc": "2026-10-29T12:07:37.607050+00:00",
+  "source_parent": "1e60b6d31cb3bc90f9ad43a24e62ec60936bdd49",
+  "source_sha256": {
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSVelocityCorrectionScheme.h": "ff7f45813e0f25656656c0e1587675313aef0a2d2ec3cd0a9fc6d7434f11e457",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSVelocityCorrectionScheme.cpp": "4258324c8f8b7ae0ce9574a33cb21db4fa600b8c167d26b8c8ecc25fcdaf816c",
+    "solvers/IncNavierStokesSolver/EquationSystems/IncNavierStokes.h": "40e60b0ac1fd8a446d50e7428286ee3475d6512821f5a3bfa5952d483ade7deb",
+    "library/UnitTests/SolverUtils/RANSFieldAudit.cpp": "4ec58129bf6dd329b858a8ddf2407b985036f90a4d820abfb87c850ad7d1a79c",
+    "solvers/IncNavierStokesSolver/Tests/RANS/validate_m3.py": "bacbdee84aa3fc7ea7c5d03e0c0af865e2af001c07b847beeb7fb9c22fbbae2f",
+    "solvers/IncNavierStokesSolver/Tests/RANS/generate_m3.py": "c6852375de6725a2bda73e7c4c7644dee1f1834f8ba03eeb9b2bdf995be10a68",
+    "library/SolverUtils/Turbulence/RANSModels.cpp": "2e2bd22c243b8050ab04b33aacf2c4f91793a96fc2d70299ebbcf8716ce317ae",
+    "library/SolverUtils/Turbulence/RANSModels.h": "953dd36fba019767985f790316892c91d0c8433c817a0a56e195da281ed82f2b",
+    "solvers/IncNavierStokesSolver/CMakeLists.txt": "c82b2b7af0a3913427448a99d280ed08425de445019e909ef7d8d5fee32cb06a",
+    "solvers/IncNavierStokesSolver/Tests/RANS/CMakeLists.txt": "10cb3962c6be51c83b4316f3b3a94ad878732544eb02fa8315aa644852c251d6",
+    "solvers/IncNavierStokesSolver/Tests/RANS/StandardRANS_MMS.xml": "e8317495fdfeec09ed883f050f3acb6ef3fcb7dc58eb8586372ff0c39822c1c9",
+    "solvers/IncNavierStokesSolver/Tests/TGV3d_2_2.xml": "2c4400d6cf0002db594d572dbf09ed1637e63a2cf1cd7768a170308dec78c553"
+  },
+  "binary_sha256": {
+    "IncNavierStokesSolver": "823bd20d30dfe0c01d5dcc303bd4e2907ee20a4ae97db842830230b33f50fd28",
+    "RANSFieldAudit": "bc73a6ba4a556cd5d2e50c6d105cc48cefe43abb99926a37a13b463699e5a13b"
+  },
+  "cpu_affinity": [
+    112,
+    113,
+    114,
+    115,
+    116,
+    117,
+    118,
+    119,
+    120,
+    121,
+    122,
+    123,
+    124,
+    125,
+    126,
+    127
+  ],
+  "maximum_project_workers": 16,
+  "maximum_mpi_ranks": 4,
+  "maximum_concurrent_serial_cases": 3,
+  "mpi_overlaps_serial_pool": false,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "time_refinement_rates": {
+    "1": {
+      "u": [
+        0.9465175560060788,
+        0.9721531399639634
+      ],
+      "v": [
+        0.9465213529292827,
+        0.9721559202309684
+      ],
+      "k": [
+        0.7868176450116058,
+        0.8390834057678817
+      ],
+      "eps": [
+        0.9480615592768744,
+        0.9730884247027585
+      ],
+      "p": [
+        1.0001863324425788,
+        1.0001217681225973
+      ]
+    },
+    "2": {
+      "u": [
+        2.3427577299679303,
+        2.161775405331044
+      ],
+      "v": [
+        2.3426329131073182,
+        2.161743433264535
+      ],
+      "k": [
+        1.8990598485189754,
+        1.9532266975219652
+      ],
+      "eps": [
+        2.119674848732961,
+        2.0646799719234417
+      ],
+      "p": [
+        2.000802334794074,
+        2.0002623176099097
+      ]
+    }
+  },
+  "decay_rates": {
+    "k": [
+      2.167140671076884,
+      2.0580908005364216
+    ],
+    "eps": [
+      2.1789675058710274,
+      2.046941350710045
+    ]
+  },
+  "full_field_comparisons": {
+    "mms_o2_dt0.025__mms_mpi": {
+      "time": 0.19999999999999998,
+      "fields": {
+        "u": {
+          "l2_error": 2.4875053376853455e-06,
+          "linf_error": 5.535868375169603e-06,
+          "difference_l2": 1.7833684256972969e-13,
+          "difference_linf": 8.167946299788426e-13,
+          "min": -0.01249901099614612,
+          "max": 0.012498939666152975
+        },
+        "v": {
+          "l2_error": 2.4878777587319435e-06,
+          "linf_error": 5.627408457883204e-06,
+          "difference_l2": 2.1249094731452803e-13,
+          "difference_linf": 1.9058390648786497e-12,
+          "min": -0.012498848126070264,
+          "max": 0.012499101468279481
+        },
+        "k": {
+          "l2_error": 6.78475187143869e-07,
+          "linf_error": 1.3658064865751385e-06,
+          "difference_l2": 5.925183539292967e-13,
+          "difference_linf": 5.5075943805604766e-12,
+          "min": 1.009933466539753,
+          "max": 1.309933466539753
+        },
+        "eps": {
+          "l2_error": 2.2693434721159913e-05,
+          "linf_error": 3.951211661357146e-05,
+          "difference_l2": 5.049565811334098e-13,
+          "difference_linf": 5.069167308136002e-12,
+          "min": 0.7294019973352373,
+          "max": 0.9294019973352372
+        },
+        "p": {
+          "l2_error": 1.806491608689771e-05,
+          "linf_error": 3.720765120371339e-05,
+          "difference_l2": 3.6388284052366345e-12,
+          "difference_linf": 1.0711675990648928e-10,
+          "min": -0.15897317776353978,
+          "max": 0.1589730868700739
+        }
+      }
+    },
+    "mms_o2_dt0.025__mms_quadrature": {
+      "time": 0.19999999999999998,
+      "fields": {
+        "u": {
+          "l2_error": 2.4875053376853455e-06,
+          "linf_error": 5.535868375169603e-06,
+          "difference_l2": 1.7057955792203327e-16,
+          "difference_linf": 5.325601071248798e-16,
+          "min": -0.01249901099614612,
+          "max": 0.012498939666152975
+        },
+        "v": {
+          "l2_error": 2.4878777587319435e-06,
+          "linf_error": 5.627408457883204e-06,
+          "difference_l2": 1.3643843125767972e-16,
+          "difference_linf": 5.030698080332741e-16,
+          "min": -0.012498848126070264,
+          "max": 0.012499101468279481
+        },
+        "k": {
+          "l2_error": 6.78475187143869e-07,
+          "linf_error": 1.3658064865751385e-06,
+          "difference_l2": 3.493070872852886e-14,
+          "difference_linf": 9.459100169806334e-14,
+          "min": 1.009933466539753,
+          "max": 1.309933466539753
+        },
+        "eps": {
+          "l2_error": 2.2693434721159913e-05,
+          "linf_error": 3.951211661357146e-05,
+          "difference_l2": 1.9941523975737786e-14,
+          "difference_linf": 4.807265696626928e-14,
+          "min": 0.7294019973352373,
+          "max": 0.9294019973352372
+        },
+        "p": {
+          "l2_error": 1.806491608689771e-05,
+          "linf_error": 3.720765120371339e-05,
+          "difference_l2": 8.764590915108086e-15,
+          "difference_linf": 2.6256774532384952e-14,
+          "min": -0.15897317776353978,
+          "max": 0.1589730868700739
+        }
+      }
+    },
+    "decay_3d__decay_3d_mpi": {
+      "time": 0.19999999999999998,
+      "fields": {
+        "u": {
+          "l2_error": 0,
+          "linf_error": 0,
+          "difference_l2": 0,
+          "difference_linf": 0,
+          "min": 0,
+          "max": 0
+        },
+        "v": {
+          "l2_error": 0,
+          "linf_error": 0,
+          "difference_l2": 0,
+          "difference_linf": 0,
+          "min": 0,
+          "max": 0
+        },
+        "w": {
+          "l2_error": 0,
+          "linf_error": 0,
+          "difference_l2": 0,
+          "difference_linf": 0,
+          "min": 0,
+          "max": 0
+        },
+        "k": {
+          "l2_error": 0.014115071802112826,
+          "linf_error": 0.0008962172305061467,
+          "difference_l2": 3.426264822332385e-10,
+          "difference_linf": 3.118150182501722e-10,
+          "min": 0.6210637174238596,
+          "max": 0.6210637174242861
+        },
+        "eps": {
+          "l2_error": 0.08456718442632659,
+          "linf_error": 0.005369478020089247,
+          "difference_l2": 4.618016406305584e-10,
+          "difference_linf": 4.2422798607333334e-10,
+          "min": 1.2041468624149614,
+          "max": 1.2041468624152825
+        },
+        "p": {
+          "l2_error": 0,
+          "linf_error": 0,
+          "difference_l2": 0,
+          "difference_linf": 0,
+          "min": 0,
+          "max": 0
+        }
+      }
+    }
+  },
+  "cases": {
+    "mms_o1_dt0.05": {
+      "fingerprint": {
+        "fixture_sha256": "229ce88b0002e9d4badb927a686111329eb11132396814cf6ff458344dc1e434",
+        "binaries": {
+          "IncNavierStokesSolver": "823bd20d30dfe0c01d5dcc303bd4e2907ee20a4ae97db842830230b33f50fd28",
+          "RANSFieldAudit": "bc73a6ba4a556cd5d2e50c6d105cc48cefe43abb99926a37a13b463699e5a13b"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.05,
+        "steps": 4,
+        "order": 1,
+        "modes": 7
+      },
+      "dimension": 2,
+      "kind": "mms",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "mms_o1_dt0.05.xml"
+      ],
+      "field_audit": {
+        "time": 0.2,
+        "fields": {
+          "u": {
+            "l2_error": 5.7546240411567526e-05,
+            "linf_error": 0.0001248928138716937,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012379714232695275,
+            "max": 0.012379582720656451
+          },
+          "v": {
+            "l2_error": 5.755066142108093e-05,
+            "linf_error": 0.0001253107871207991,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012380158022200233,
+            "max": 0.012379164747407346
+          },
+          "k": {
+            "l2_error": 4.89872984339369e-06,
+            "linf_error": 9.917819440596887e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.009933466539753,
+            "max": 1.309933466539753
+          },
+          "eps": {
+            "l2_error": 0.00034870081973822133,
+            "linf_error": 0.0005111904906702769,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.7294019973352373,
+            "max": 0.9294019973352372
+          },
+          "p": {
+            "l2_error": 0.0014430034871806428,
+            "linf_error": 0.0028967102257101696,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.15691097898802575,
+            "max": 0.15690931514516526
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 4,
+        "maximum_iterations": 88.0,
+        "maximum_change": 9.091115880932588e-12,
+        "maximum_pressure_correction": 9.585078783068306e-11,
+        "maximum_strong_divergence_l2": 1.1520191534024474e-06,
+        "maximum_weak_divergence_l2": 5.891971583782818e-11,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.1239109866422837,
+        "last_min_nut": 0.12585228029357837
+      },
+      "artifacts_sha256": {
+        "audit.log": "4f3b7b59652aac6613a04393633ba4dc16dbb193f42a1268c39da35c9d16c7df",
+        "mms_o1_dt0.05.log": "c4f8a52fbdc47af19c852d221836559fad8441f848f08ebb0e33fbc9e89b5b6e",
+        "mms_o1_dt0.05.rans.csv": "f3b246aadbd7f19e4a2e82631c18913a9e64d95dd5a860ff2305cdee836429ba",
+        "mms_o1_dt0.05.xml": "229ce88b0002e9d4badb927a686111329eb11132396814cf6ff458344dc1e434",
+        "mms_o1_dt0.bak0.his": "07f164e673d7d3753c54a005b75cac92d2d6897d26be96f5abf9f84d537470a4",
+        "mms_o1_dt0.bak1.his": "78e66e8ca3cc7ca4de0c7844565f6cbd1ede8d021992cfe3f36f34e88390b39f",
+        "mms_o1_dt0.bak2.his": "78e66e8ca3cc7ca4de0c7844565f6cbd1ede8d021992cfe3f36f34e88390b39f",
+        "mms_o1_dt0.his": "78e66e8ca3cc7ca4de0c7844565f6cbd1ede8d021992cfe3f36f34e88390b39f"
+      }
+    },
+    "mms_o1_dt0.025": {
+      "fingerprint": {
+        "fixture_sha256": "28900599b5f5312d2f1b7b3a73ce5a94e11b4131313bed7d27b836f1bb46efa2",
+        "binaries": {
+          "IncNavierStokesSolver": "823bd20d30dfe0c01d5dcc303bd4e2907ee20a4ae97db842830230b33f50fd28",
+          "RANSFieldAudit": "bc73a6ba4a556cd5d2e50c6d105cc48cefe43abb99926a37a13b463699e5a13b"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.025,
+        "steps": 8,
+        "order": 1,
+        "modes": 7
+      },
+      "dimension": 2,
+      "kind": "mms",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "mms_o1_dt0.025.xml"
+      ],
+      "field_audit": {
+        "time": 0.19999999999999998,
+        "fields": {
+          "u": {
+            "l2_error": 2.9859792123960005e-05,
+            "linf_error": 6.48711975994188e-05,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012439683999692943,
+            "max": 0.012439604336928726
+          },
+          "v": {
+            "l2_error": 2.986200752092727e-05,
+            "linf_error": 6.506128966241552e-05,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012439888505569749,
+            "max": 0.01243941424486573
+          },
+          "k": {
+            "l2_error": 2.8394078406689777e-06,
+            "linf_error": 5.83271300591548e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.009933466539753,
+            "max": 1.309933466539753
+          },
+          "eps": {
+            "l2_error": 0.00018074154953329883,
+            "linf_error": 0.0002646948182348785,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.7294019973352373,
+            "max": 0.9294019973352372
+          },
+          "p": {
+            "l2_error": 0.0007214085634677236,
+            "linf_error": 0.0014609097414840788,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.15794215667593062,
+            "max": 0.15794120558724709
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 8,
+        "maximum_iterations": 78.0,
+        "maximum_change": 8.07865059571089e-12,
+        "maximum_pressure_correction": 9.854197884061769e-11,
+        "maximum_strong_divergence_l2": 6.96749927994295e-07,
+        "maximum_weak_divergence_l2": 5.389898059119526e-11,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.12359763811841501,
+        "last_min_nut": 0.12585228029357837
+      },
+      "artifacts_sha256": {
+        "audit.log": "456739a052e7aee47eada88a0215985804a6c7372b2cf387312db23a81aee906",
+        "mms_o1_dt0.025.log": "af11dce4a1ff82073a80a953ac7f828dab50d1cb3b10f630d03dad524ab3727b",
+        "mms_o1_dt0.025.rans.csv": "071ab082233e47ab21c7cca14f165d3b6144b00f9ccacbb41a5bd31d8383dd9b",
+        "mms_o1_dt0.025.xml": "28900599b5f5312d2f1b7b3a73ce5a94e11b4131313bed7d27b836f1bb46efa2",
+        "mms_o1_dt0.bak0.his": "3ad09947e6835156be4cd2cfed869d4853fe4d11721d5a336b946fbad68cdbe3",
+        "mms_o1_dt0.bak1.his": "5a0973b23774a7b9ce1c1a94e51bf79486c7556e281d4b72f13c60b795cd2bae",
+        "mms_o1_dt0.his": "5a0973b23774a7b9ce1c1a94e51bf79486c7556e281d4b72f13c60b795cd2bae"
+      }
+    },
+    "mms_o2_dt0.05": {
+      "fingerprint": {
+        "fixture_sha256": "c5f47dc385d287c37a86c77370b3597c0ebe4e5b94865c9d968f0682dfbafb20",
+        "binaries": {
+          "IncNavierStokesSolver": "823bd20d30dfe0c01d5dcc303bd4e2907ee20a4ae97db842830230b33f50fd28",
+          "RANSFieldAudit": "bc73a6ba4a556cd5d2e50c6d105cc48cefe43abb99926a37a13b463699e5a13b"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.05,
+        "steps": 4,
+        "order": 2,
+        "modes": 7
+      },
+      "dimension": 2,
+      "kind": "mms",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "mms_o2_dt0.05.xml"
+      ],
+      "field_audit": {
+        "time": 0.2,
+        "fields": {
+          "u": {
+            "l2_error": 1.2618402333427852e-05,
+            "linf_error": 2.811729573022441e-05,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012476607689946021,
+            "max": 0.01247635823879792
+          },
+          "v": {
+            "l2_error": 1.2619199703109512e-05,
+            "linf_error": 2.83703598252822e-05,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012476105174702865,
+            "max": 0.012476867561975864
+          },
+          "k": {
+            "l2_error": 2.530509356550719e-06,
+            "linf_error": 5.560315192498777e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.009933466539753,
+            "max": 1.309933466539753
+          },
+          "eps": {
+            "l2_error": 9.862475632359415e-05,
+            "linf_error": 0.0001636851057662536,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.7294019973352373,
+            "max": 0.9294019973352372
+          },
+          "p": {
+            "l2_error": 7.229986173210799e-05,
+            "linf_error": 0.0001518396756857443,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.15908016343293202,
+            "max": 0.15907966320653402
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 4,
+        "maximum_iterations": 88.0,
+        "maximum_change": 9.091115880932588e-12,
+        "maximum_pressure_correction": 9.845554546284858e-11,
+        "maximum_strong_divergence_l2": 1.1520191534024474e-06,
+        "maximum_weak_divergence_l2": 5.891971583782818e-11,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.1239109866422837,
+        "last_min_nut": 0.12585228029357837
+      },
+      "artifacts_sha256": {
+        "audit.log": "c9309a6318de4eebddfb468f3417eccfc8404ebec0de483750b5c988892aab5e",
+        "mms_o2_dt0.05.log": "e76dc48c2def9ae05f8703321b98184bad08ff71349a8bb63fcef1f171949328",
+        "mms_o2_dt0.05.rans.csv": "cedc65b3f225d546f46b97813871d58dc2301f161dd9b8d99bf7a5600f5c8882",
+        "mms_o2_dt0.05.xml": "c5f47dc385d287c37a86c77370b3597c0ebe4e5b94865c9d968f0682dfbafb20",
+        "mms_o2_dt0.bak0.his": "02ab7f1d0a907291d15fc5c04b2955e1fb6e4e17ab10169050ed0455bb2d9bdf",
+        "mms_o2_dt0.bak1.his": "04b6af9c40e9d55852ab4ea817d3cdbc573af1a3773f67401820ee6e4f71b829",
+        "mms_o2_dt0.his": "04b6af9c40e9d55852ab4ea817d3cdbc573af1a3773f67401820ee6e4f71b829"
+      }
+    },
+    "mms_o1_dt0.0125": {
+      "fingerprint": {
+        "fixture_sha256": "52fa17686185bd4e30090477b64cdd0162a5fd0d1c0bd4742328a7ac65ecb002",
+        "binaries": {
+          "IncNavierStokesSolver": "823bd20d30dfe0c01d5dcc303bd4e2907ee20a4ae97db842830230b33f50fd28",
+          "RANSFieldAudit": "bc73a6ba4a556cd5d2e50c6d105cc48cefe43abb99926a37a13b463699e5a13b"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.0125,
+        "steps": 16,
+        "order": 1,
+        "modes": 7
+      },
+      "dimension": 2,
+      "kind": "mms",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "mms_o1_dt0.0125.xml"
+      ],
+      "field_audit": {
+        "time": 0.20000000000000004,
+        "fields": {
+          "u": {
+            "l2_error": 1.522087167322676e-05,
+            "linf_error": 3.308615211346927e-05,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012471433854796798,
+            "max": 0.012471389382414676
+          },
+          "v": {
+            "l2_error": 1.5221971625344696e-05,
+            "linf_error": 3.3173590671670486e-05,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.01247152887845706,
+            "max": 0.012471301943856474
+          },
+          "k": {
+            "l2_error": 1.5872250289362496e-06,
+            "linf_error": 3.180367426303121e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.009933466539753,
+            "max": 1.309933466539753
+          },
+          "eps": {
+            "l2_error": 9.207234343152848e-05,
+            "linf_error": 0.0001348037737263219,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.7294019973352373,
+            "max": 0.9294019973352372
+          },
+          "p": {
+            "l2_error": 0.0003606738384118737,
+            "linf_error": 0.0007335368120614527,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.15844408101359014,
+            "max": 0.15844357774590728
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 16,
+        "maximum_iterations": 69.0,
+        "maximum_change": 9.696664044628323e-12,
+        "maximum_pressure_correction": 9.935826931979105e-11,
+        "maximum_strong_divergence_l2": 3.7564270884865303e-07,
+        "maximum_weak_divergence_l2": 6.951518547103132e-11,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.12344222128580934,
+        "last_min_nut": 0.12585228029357837
+      },
+      "artifacts_sha256": {
+        "audit.log": "be033d8df217f105b7109476d3c3256cf7b621d18d39c39cb1eebcedc2c25497",
+        "mms_o1_dt0.0125.log": "d18220b62b6371a7c08026d2b23994539f40fe7da0adfbb369772437feee7d79",
+        "mms_o1_dt0.0125.rans.csv": "b55f24cd40ba95f38ed6746871917e938d47272919cb1453c2865dc90ae2d0b4",
+        "mms_o1_dt0.0125.xml": "52fa17686185bd4e30090477b64cdd0162a5fd0d1c0bd4742328a7ac65ecb002",
+        "mms_o1_dt0.bak0.his": "155c7862d9dec942e9d1681341367ddf1a20998ecc94f425f56952d4bcc38b71",
+        "mms_o1_dt0.bak1.his": "23398ac1c2a1211e3adfc8785b7a5fa1cc23e4a90aaa282e03a05e81242cb8c1",
+        "mms_o1_dt0.his": "23398ac1c2a1211e3adfc8785b7a5fa1cc23e4a90aaa282e03a05e81242cb8c1"
+      }
+    },
+    "mms_o2_dt0.025": {
+      "fingerprint": {
+        "fixture_sha256": "242cb0f7d3bd255a616611df27c195c8c3f9215d24223795e1f6eea8e0deed10",
+        "binaries": {
+          "IncNavierStokesSolver": "823bd20d30dfe0c01d5dcc303bd4e2907ee20a4ae97db842830230b33f50fd28",
+          "RANSFieldAudit": "bc73a6ba4a556cd5d2e50c6d105cc48cefe43abb99926a37a13b463699e5a13b"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.025,
+        "steps": 8,
+        "order": 2,
+        "modes": 7
+      },
+      "dimension": 2,
+      "kind": "mms",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "mms_o2_dt0.025.xml"
+      ],
+      "field_audit": {
+        "time": 0.19999999999999998,
+        "fields": {
+          "u": {
+            "l2_error": 2.4875053376853455e-06,
+            "linf_error": 5.535868375169603e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.01249901099614612,
+            "max": 0.012498939666152975
+          },
+          "v": {
+            "l2_error": 2.4878777587319435e-06,
+            "linf_error": 5.627408457883204e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012498848126070264,
+            "max": 0.012499101468279481
+          },
+          "k": {
+            "l2_error": 6.78475187143869e-07,
+            "linf_error": 1.3658064865751385e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.009933466539753,
+            "max": 1.309933466539753
+          },
+          "eps": {
+            "l2_error": 2.2693434721159913e-05,
+            "linf_error": 3.951211661357146e-05,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.7294019973352373,
+            "max": 0.9294019973352372
+          },
+          "p": {
+            "l2_error": 1.806491608689771e-05,
+            "linf_error": 3.720765120371339e-05,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.15897317776353978,
+            "max": 0.1589730868700739
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 8,
+        "maximum_iterations": 78.0,
+        "maximum_change": 8.07865059571089e-12,
+        "maximum_pressure_correction": 9.912968249287572e-11,
+        "maximum_strong_divergence_l2": 6.96749927994295e-07,
+        "maximum_weak_divergence_l2": 5.389898059119526e-11,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.12359763811841501,
+        "last_min_nut": 0.12585228029357837
+      },
+      "artifacts_sha256": {
+        "audit.log": "1bfed537bb68a0bfc2ca2e9aa519997913d3594256897da0f9c4a3fc49b5e2d7",
+        "mms_o2_dt0.025.log": "12699c3c1323556b8c37546deb0b4f049956bf9d9e0bb9b2fe4c5a282da65548",
+        "mms_o2_dt0.025.rans.csv": "ca5fe00a4a77278c67248e87597738e0ad8deadb190df77ab6bbbd558df602a7",
+        "mms_o2_dt0.025.xml": "242cb0f7d3bd255a616611df27c195c8c3f9215d24223795e1f6eea8e0deed10",
+        "mms_o2_dt0.bak0.his": "c72866b082b5217fe5e3489cf12d47c6e3f7a0b8462612c90769b3e747b8e176",
+        "mms_o2_dt0.bak1.his": "dd4b1b247636cd9934670b037aaef5051c2c61283aee43fd0cdf7875a42b28b1",
+        "mms_o2_dt0.his": "dd4b1b247636cd9934670b037aaef5051c2c61283aee43fd0cdf7875a42b28b1"
+      }
+    },
+    "mms_o2_dt0.0125": {
+      "fingerprint": {
+        "fixture_sha256": "3b4df78279cad18b68f1cacc03f9e061ccdf298e24cc963fd3287c6725924894",
+        "binaries": {
+          "IncNavierStokesSolver": "823bd20d30dfe0c01d5dcc303bd4e2907ee20a4ae97db842830230b33f50fd28",
+          "RANSFieldAudit": "bc73a6ba4a556cd5d2e50c6d105cc48cefe43abb99926a37a13b463699e5a13b"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.0125,
+        "steps": 16,
+        "order": 2,
+        "modes": 7
+      },
+      "dimension": 2,
+      "kind": "mms",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "mms_o2_dt0.0125.xml"
+      ],
+      "field_audit": {
+        "time": 0.20000000000000004,
+        "fields": {
+          "u": {
+            "l2_error": 5.55910376340086e-07,
+            "linf_error": 1.2371715813076084e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012503255421522372,
+            "max": 0.012503238362946837
+          },
+          "v": {
+            "l2_error": 5.56005927101513e-07,
+            "linf_error": 1.2597048364374613e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.01250321582969171,
+            "max": 0.012503277495654209
+          },
+          "k": {
+            "l2_error": 1.7520808593961532e-07,
+            "linf_error": 3.3773256480351677e-07,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.009933466539753,
+            "max": 1.309933466539753
+          },
+          "eps": {
+            "l2_error": 5.424623857642119e-06,
+            "linf_error": 9.57417302527297e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.7294019973352373,
+            "max": 0.9294019973352372
+          },
+          "p": {
+            "l2_error": 4.515407934333742e-06,
+            "linf_error": 9.254425881982664e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.15894596395455032,
+            "max": 0.15894594274221321
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 16,
+        "maximum_iterations": 68.0,
+        "maximum_change": 9.696664044628323e-12,
+        "maximum_pressure_correction": 9.921884335600671e-11,
+        "maximum_strong_divergence_l2": 3.712311302329746e-07,
+        "maximum_weak_divergence_l2": 6.951518547103132e-11,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.12344222128580934,
+        "last_min_nut": 0.12585228029357837
+      },
+      "artifacts_sha256": {
+        "audit.log": "fb7668f401b754e0fbcd86972de40330728a735bc1daf2c331895b40d3f2e504",
+        "mms_o2_dt0.0125.log": "46baefc953497f24a5f35e0246163b7c6d6125c71fd8fb4006300d64a3d55bbf",
+        "mms_o2_dt0.0125.rans.csv": "f18bd20c3c5822df4121962dd1c2606668887a218d1b836693ffb8b09cefe9cd",
+        "mms_o2_dt0.0125.xml": "3b4df78279cad18b68f1cacc03f9e061ccdf298e24cc963fd3287c6725924894",
+        "mms_o2_dt0.bak0.his": "6320676a0a45c89270e8b481d507f045bba239f56cb4de91076b34ca1c0f4e71",
+        "mms_o2_dt0.his": "6320676a0a45c89270e8b481d507f045bba239f56cb4de91076b34ca1c0f4e71"
+      }
+    },
+    "mms_highre": {
+      "fingerprint": {
+        "fixture_sha256": "f061b846bf3cde1b00c3e96570b908b5815712582b42ec88287d96dce338fb5a",
+        "binaries": {
+          "IncNavierStokesSolver": "823bd20d30dfe0c01d5dcc303bd4e2907ee20a4ae97db842830230b33f50fd28",
+          "RANSFieldAudit": "bc73a6ba4a556cd5d2e50c6d105cc48cefe43abb99926a37a13b463699e5a13b"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.025,
+        "steps": 8,
+        "order": 2,
+        "modes": 7,
+        "diffusion": "HighRe"
+      },
+      "dimension": 2,
+      "kind": "mms",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "mms_highre.xml"
+      ],
+      "field_audit": {
+        "time": 0.19999999999999998,
+        "fields": {
+          "u": {
+            "l2_error": 2.791534499005999e-06,
+            "linf_error": 6.214104318431543e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012498341479830805,
+            "max": 0.012498261430209713
+          },
+          "v": {
+            "l2_error": 2.791913517349978e-06,
+            "linf_error": 6.309401040441656e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012498166133487705,
+            "max": 0.012498437324212271
+          },
+          "k": {
+            "l2_error": 7.644894318872751e-07,
+            "linf_error": 1.7131532823455586e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.009933466539753,
+            "max": 1.309933466539753
+          },
+          "eps": {
+            "l2_error": 2.4633380026564013e-05,
+            "linf_error": 4.113250907444854e-05,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.7294019973352373,
+            "max": 0.9294019973352372
+          },
+          "p": {
+            "l2_error": 1.806200329702336e-05,
+            "linf_error": 3.717715599887983e-05,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.15897322498695668,
+            "max": 0.15897311777882178
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 8,
+        "maximum_iterations": 77.0,
+        "maximum_change": 1.028800232939081e-11,
+        "maximum_pressure_correction": 9.935093766672457e-11,
+        "maximum_strong_divergence_l2": 7.491171537172669e-07,
+        "maximum_weak_divergence_l2": 6.919757599091661e-11,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.12359763811841047,
+        "last_min_nut": 0.12585228029357837
+      },
+      "artifacts_sha256": {
+        "audit.log": "15d1f66e285887905372053e68b6870de5aaefa3379b9676115dd546c62f212b",
+        "mms_highre.bak0.his": "657e09a1d149f6749d73a38c0e5e94fb4ade300e6507c574e61fca05bb420328",
+        "mms_highre.his": "c3cdc4d02080714de0961c0a166eed9324f865a8843770e8d512a9077c0ab246",
+        "mms_highre.log": "bd34b78aedfe2d90ec51b3409cb17598913608e6b350740852b8c3c1f7517931",
+        "mms_highre.rans.csv": "d2de8c51731c995d3c07515a3e2089ae0e348d5322afe148e155434d7031ebb5",
+        "mms_highre.xml": "f061b846bf3cde1b00c3e96570b908b5815712582b42ec88287d96dce338fb5a"
+      }
+    },
+    "mms_quadrature": {
+      "fingerprint": {
+        "fixture_sha256": "0e596cb548bc095983ec5264682c6b2b6a2cff29a004ca0523136aa657be7cd9",
+        "binaries": {
+          "IncNavierStokesSolver": "823bd20d30dfe0c01d5dcc303bd4e2907ee20a4ae97db842830230b33f50fd28",
+          "RANSFieldAudit": "bc73a6ba4a556cd5d2e50c6d105cc48cefe43abb99926a37a13b463699e5a13b"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.025,
+        "steps": 8,
+        "order": 2,
+        "modes": 7,
+        "points": 14
+      },
+      "dimension": 2,
+      "kind": "mms",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "mms_quadrature.xml"
+      ],
+      "field_audit": {
+        "time": 0.19999999999999998,
+        "fields": {
+          "u": {
+            "l2_error": 2.487505337780638e-06,
+            "linf_error": 5.5812590871954365e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012480055130060801,
+            "max": 0.012479993207380233
+          },
+          "v": {
+            "l2_error": 2.4878777588310125e-06,
+            "linf_error": 5.657516802965931e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012479914428529653,
+            "max": 0.0124801343663074
+          },
+          "k": {
+            "l2_error": 6.784751818820403e-07,
+            "linf_error": 1.3674935122054421e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.009933466539753,
+            "max": 1.309933466539753
+          },
+          "eps": {
+            "l2_error": 2.269343470403371e-05,
+            "linf_error": 3.950436224919862e-05,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.7294019973352373,
+            "max": 0.9294019973352372
+          },
+          "p": {
+            "l2_error": 1.8064916091690254e-05,
+            "linf_error": 3.7224297056159816e-05,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.15897317776354253,
+            "max": 0.1589730868700694
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 8,
+        "maximum_iterations": 78.0,
+        "maximum_change": 8.206068311845949e-12,
+        "maximum_pressure_correction": 9.912970517312262e-11,
+        "maximum_strong_divergence_l2": 6.96749927216886e-07,
+        "maximum_weak_divergence_l2": 5.3898989235064465e-11,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.12359763811841501,
+        "last_min_nut": 0.12585228029357837
+      },
+      "artifacts_sha256": {
+        "audit.log": "e80e0150c72ee0a7d56125446b1fb9effe07422f83461b0999e5578ab4649328",
+        "mms_quadrature.bak0.his": "0e904e6b2aa298aa3fe9b836ddc0e9fad5a5ea2ea1a0c573e7f310300cd36eb4",
+        "mms_quadrature.his": "d5c0bd35bc791af28c72efb923b6a5352a7863b25aacc1a7b50d0d5933da31e0",
+        "mms_quadrature.log": "15699b40b2b958c758ce8ec61723aa43b07eb9c47362b3fa640c62433923ca2a",
+        "mms_quadrature.rans.csv": "4618ac5cd3e167a0950fe6487b7196073d80d091304c89bed08d14d0f8977087",
+        "mms_quadrature.xml": "0e596cb548bc095983ec5264682c6b2b6a2cff29a004ca0523136aa657be7cd9"
+      }
+    },
+    "mms_gauge_offset": {
+      "fingerprint": {
+        "fixture_sha256": "2b96b946783fc68def5114d4acb26505975fe1de6697da9aafaabaa1c96e8eb9",
+        "binaries": {
+          "IncNavierStokesSolver": "823bd20d30dfe0c01d5dcc303bd4e2907ee20a4ae97db842830230b33f50fd28",
+          "RANSFieldAudit": "bc73a6ba4a556cd5d2e50c6d105cc48cefe43abb99926a37a13b463699e5a13b"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.025,
+        "steps": 8,
+        "order": 2,
+        "modes": 7
+      },
+      "dimension": 2,
+      "kind": "mms",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "mms_gauge_offset.xml"
+      ],
+      "field_audit": {
+        "time": 0.19999999999999998,
+        "fields": {
+          "u": {
+            "l2_error": 2.4875053376847237e-06,
+            "linf_error": 5.535868375169603e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012499010996146122,
+            "max": 0.012498939666152975
+          },
+          "v": {
+            "l2_error": 2.487877758731441e-06,
+            "linf_error": 5.627408457878e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012498848126070269,
+            "max": 0.012499101468279476
+          },
+          "k": {
+            "l2_error": 6.78475187167973e-07,
+            "linf_error": 1.3658064861310493e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.009933466539753,
+            "max": 1.309933466539753
+          },
+          "eps": {
+            "l2_error": 2.2693434720776996e-05,
+            "linf_error": 3.9512116612017145e-05,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.7294019973352373,
+            "max": 0.9294019973352372
+          },
+          "p": {
+            "l2_error": 1.8064916086125437e-05,
+            "linf_error": 3.7207651189336e-05,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.1589731777635438,
+            "max": 0.15897308687007125
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 8,
+        "maximum_iterations": 78.0,
+        "maximum_change": 8.078687133324103e-12,
+        "maximum_pressure_correction": 9.912962017863937e-11,
+        "maximum_strong_divergence_l2": 6.967499223013599e-07,
+        "maximum_weak_divergence_l2": 5.3898930309713455e-11,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.12359763811841501,
+        "last_min_nut": 0.12585228029357837
+      },
+      "artifacts_sha256": {
+        "audit.log": "83aedda7ae49a08f7ff9312991390a103ea0466f81a53c3edc9f260066434e7f",
+        "mms_gauge_offset.bak0.his": "72f2915144550d4f5dbb251dd90b90aee71c0bdf98d80550154898e980611440",
+        "mms_gauge_offset.his": "919a9f0bba8b51c1915da1b8191d10ec45bc1b2baec754ddeeafa8ec164342db",
+        "mms_gauge_offset.log": "b38aaf6a037804385f3ac01917ad2f4b4c1880100a4c48e834f151e463633529",
+        "mms_gauge_offset.rans.csv": "f58745db4ef94c1bd698c5c58324990199694c953bffd052b5d2394e05b6d30d",
+        "mms_gauge_offset.xml": "2b96b946783fc68def5114d4acb26505975fe1de6697da9aafaabaa1c96e8eb9"
+      }
+    },
+    "mms_missing_transpose": {
+      "fingerprint": {
+        "fixture_sha256": "1fba42e4a3fe45e547956fbf5043469aced7910c47ed3e3ec908c3af86d31b05",
+        "binaries": {
+          "IncNavierStokesSolver": "823bd20d30dfe0c01d5dcc303bd4e2907ee20a4ae97db842830230b33f50fd28",
+          "RANSFieldAudit": "bc73a6ba4a556cd5d2e50c6d105cc48cefe43abb99926a37a13b463699e5a13b"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.0125,
+        "steps": 16,
+        "order": 2,
+        "modes": 7,
+        "missing_transpose": true
+      },
+      "dimension": 2,
+      "kind": "mms",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "mms_missing_transpose.xml"
+      ],
+      "field_audit": {
+        "time": 0.20000000000000004,
+        "fields": {
+          "u": {
+            "l2_error": 8.591660867683266e-07,
+            "linf_error": 1.8986583937129903e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012502599131704154,
+            "max": 0.012502576876134432
+          },
+          "v": {
+            "l2_error": 8.515780414161399e-07,
+            "linf_error": 1.929090756998611e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012502546443771148,
+            "max": 0.012502632969932415
+          },
+          "k": {
+            "l2_error": 1.7438048970011329e-07,
+            "linf_error": 3.3325942938589037e-07,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.009933466539753,
+            "max": 1.309933466539753
+          },
+          "eps": {
+            "l2_error": 5.421520716642492e-06,
+            "linf_error": 9.572430564319667e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.7294019973352373,
+            "max": 0.9294019973352372
+          },
+          "p": {
+            "l2_error": 0.00019221951689413008,
+            "linf_error": 0.00041297779081884674,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.15894520364497605,
+            "max": 0.1589466280612582
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 16,
+        "maximum_iterations": 68.0,
+        "maximum_change": 1.2911237563025674e-12,
+        "maximum_pressure_correction": 9.925414679852334e-11,
+        "maximum_strong_divergence_l2": 3.717267159490339e-07,
+        "maximum_weak_divergence_l2": 1.4985697399485144e-11,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.12344222128588131,
+        "last_min_nut": 0.12585228029357837
+      },
+      "artifacts_sha256": {
+        "audit.log": "4ade53a2575aaf28fccf10a8964ba3132e6a2e9674b7634bee708530969cd2e7",
+        "mms_missing_transpose.bak0.his": "535833847993d77e0ace207fc22e7bb243fe18dc1abaecb84614723f4292e5c0",
+        "mms_missing_transpose.his": "68b9dbd505152f9f47c1c6c5657d6cc62db8bb56fecb5e370d12249265dc47da",
+        "mms_missing_transpose.log": "8f47102cfadf340f28dab6535a12fecc61e823afef63ca3aca97a926051348a4",
+        "mms_missing_transpose.rans.csv": "3e3323974d35509662d07163a88a76fd5486c10566cf0fa946d6744b31f66994",
+        "mms_missing_transpose.xml": "1fba42e4a3fe45e547956fbf5043469aced7910c47ed3e3ec908c3af86d31b05"
+      }
+    },
+    "stiff_euler": {
+      "fingerprint": {
+        "fixture_sha256": "e11fcedbfba63c2d7700f8550ab9bca8f05f0168b57789ef01e9692d55a9da94",
+        "binaries": {
+          "IncNavierStokesSolver": "823bd20d30dfe0c01d5dcc303bd4e2907ee20a4ae97db842830230b33f50fd28",
+          "RANSFieldAudit": "bc73a6ba4a556cd5d2e50c6d105cc48cefe43abb99926a37a13b463699e5a13b"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.1,
+        "steps": 2,
+        "order": 1,
+        "modes": 5
+      },
+      "dimension": 2,
+      "kind": "stiff",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "stiff_euler.xml"
+      ],
+      "field_audit": {
+        "time": 0.2,
+        "fields": {
+          "u": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          },
+          "v": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          },
+          "k": {
+            "l2_error": 0.00830949825175938,
+            "linf_error": 0.008309498251772032,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.08842110929436034,
+            "max": 0.0884211092943932
+          },
+          "eps": {
+            "l2_error": 1.2468046822571972,
+            "linf_error": 1.2468046822573204,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.6395086579560112,
+            "max": 1.6395086579564437
+          },
+          "p": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 2,
+        "maximum_iterations": 39.0,
+        "maximum_change": 6.37217992188844e-11,
+        "maximum_pressure_correction": 0.0,
+        "maximum_strong_divergence_l2": 0.0,
+        "maximum_weak_divergence_l2": 0.0,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.000766724233390998,
+        "last_min_nut": 0.00042918122313363467
+      },
+      "artifacts_sha256": {
+        "audit.log": "e9f80a27971ccab5edc5a08ed9bdea7a73e1da28b4fe7f0d4567105da4eac97d",
+        "stiff_euler.bak0.his": "8a3409c797de9dcd3518ae3c0e5f23c57d427b3f656694b4e5a8e84f47e759a6",
+        "stiff_euler.his": "8a3409c797de9dcd3518ae3c0e5f23c57d427b3f656694b4e5a8e84f47e759a6",
+        "stiff_euler.log": "761c7a64b8227b2d6a118603e68cdd6234e4f35c021a9602723a838235ad6b75",
+        "stiff_euler.rans.csv": "f3ffb01351a1a35bed065307d109aac6deed27693e552cedc8d857cead0b4f14",
+        "stiff_euler.xml": "e11fcedbfba63c2d7700f8550ab9bca8f05f0168b57789ef01e9692d55a9da94"
+      }
+    },
+    "stiff_bdf2_guard": {
+      "fingerprint": {
+        "fixture_sha256": "c87347183a30c4893265a8e6fc8c040ae23632a8b6e6fff819f8d0b6ac5dc3e4",
+        "binaries": {
+          "IncNavierStokesSolver": "823bd20d30dfe0c01d5dcc303bd4e2907ee20a4ae97db842830230b33f50fd28",
+          "RANSFieldAudit": "bc73a6ba4a556cd5d2e50c6d105cc48cefe43abb99926a37a13b463699e5a13b"
+        },
+        "ranks": 1,
+        "rejection": "positivity guard"
+      },
+      "options": {
+        "dt": 0.1,
+        "steps": 2,
+        "order": 2,
+        "modes": 5
+      },
+      "dimension": 2,
+      "kind": "stiff",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "stiff_bdf2_guard.xml"
+      ],
+      "expected_rejection": "positivity guard"
+    },
+    "decay_dt0.025": {
+      "fingerprint": {
+        "fixture_sha256": "c07d6212a9a043fcd7bc83a25a2f375aecb65008b56b1f24f65d6160b34d7ab1",
+        "binaries": {
+          "IncNavierStokesSolver": "823bd20d30dfe0c01d5dcc303bd4e2907ee20a4ae97db842830230b33f50fd28",
+          "RANSFieldAudit": "bc73a6ba4a556cd5d2e50c6d105cc48cefe43abb99926a37a13b463699e5a13b"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.025,
+        "steps": 8,
+        "order": 2,
+        "modes": 4
+      },
+      "dimension": 2,
+      "kind": "decay",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "decay_dt0.025.xml"
+      ],
+      "field_audit": {
+        "time": 0.19999999999999998,
+        "fields": {
+          "u": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          },
+          "v": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          },
+          "k": {
+            "l2_error": 0.0008962172301652465,
+            "linf_error": 0.0008962172301816285,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.6210637174239358,
+            "max": 0.6210637174239616
+          },
+          "eps": {
+            "l2_error": 0.005369478019903349,
+            "linf_error": 0.0053694780199240455,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.204146862415073,
+            "max": 1.2041468624151173
+          },
+          "p": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 8,
+        "maximum_iterations": 30.0,
+        "maximum_change": 8.74566947442479e-11,
+        "maximum_pressure_correction": 0.0,
+        "maximum_strong_divergence_l2": 0.0,
+        "maximum_weak_divergence_l2": 0.0,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.029721159804536122,
+        "last_min_nut": 0.0288293843403976
+      },
+      "artifacts_sha256": {
+        "audit.log": "ab8622549780d18466079c6d535881bb68c56866fa00fbb9f08092f2bce00113",
+        "decay_dt0.025.log": "5cc5d609937f06ecc44086e752df5ee51c91e57ed004ca1de3cf1077e7c1392e",
+        "decay_dt0.025.rans.csv": "98be9169871ab7dca75d80bb04e040d14252e04f6a5c50b6bebcc172d0b6e769",
+        "decay_dt0.025.xml": "c07d6212a9a043fcd7bc83a25a2f375aecb65008b56b1f24f65d6160b34d7ab1",
+        "decay_dt0.bak0.his": "7334c14cfd9ad0543253979c5e1ab6dfc268790bd3fa0395460473dc7ca4e1cd",
+        "decay_dt0.his": "7334c14cfd9ad0543253979c5e1ab6dfc268790bd3fa0395460473dc7ca4e1cd"
+      }
+    },
+    "decay_dt0.0125": {
+      "fingerprint": {
+        "fixture_sha256": "2cc10ff0f2affc89330fbd27e16d5e061028bc66199d3af1b53daeebc32ad8a1",
+        "binaries": {
+          "IncNavierStokesSolver": "823bd20d30dfe0c01d5dcc303bd4e2907ee20a4ae97db842830230b33f50fd28",
+          "RANSFieldAudit": "bc73a6ba4a556cd5d2e50c6d105cc48cefe43abb99926a37a13b463699e5a13b"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.0125,
+        "steps": 16,
+        "order": 2,
+        "modes": 4
+      },
+      "dimension": 2,
+      "kind": "decay",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "decay_dt0.0125.xml"
+      ],
+      "field_audit": {
+        "time": 0.20000000000000004,
+        "fields": {
+          "u": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          },
+          "v": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          },
+          "k": {
+            "l2_error": 0.00019954412342731726,
+            "linf_error": 0.00019954412345024597,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.6203670443171838,
+            "max": 0.6203670443172302
+          },
+          "eps": {
+            "l2_error": 0.0011857618952628975,
+            "linf_error": 0.00118576189530617,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.19996314629043,
+            "max": 1.1999631462904994
+          },
+          "p": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 16,
+        "maximum_iterations": 30.0,
+        "maximum_change": 7.163747879637859e-11,
+        "maximum_pressure_correction": 0.0,
+        "maximum_strong_divergence_l2": 0.0,
+        "maximum_weak_divergence_l2": 0.0,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.02988195207852074,
+        "last_min_nut": 0.028865031711883222
+      },
+      "artifacts_sha256": {
+        "audit.log": "c97eb52e0421d6898af3d8909283028e3e7483828815d68dd627fa30093eafec",
+        "decay_dt0.0125.log": "7394b50d5c0fc68f9c5a8cfe8661c8daa8d587a415a108575f106994bcdc16f8",
+        "decay_dt0.0125.rans.csv": "e5999fa628031a908136a55edfbff16317679c98cf9581fb4f18320c07ff9fec",
+        "decay_dt0.0125.xml": "2cc10ff0f2affc89330fbd27e16d5e061028bc66199d3af1b53daeebc32ad8a1",
+        "decay_dt0.bak0.his": "966c0d138d6a06113da6ac40881e16f5e8da3d788b8c99f12ba361b4a247e8af",
+        "decay_dt0.his": "966c0d138d6a06113da6ac40881e16f5e8da3d788b8c99f12ba361b4a247e8af"
+      }
+    },
+    "decay_dt0.00625": {
+      "fingerprint": {
+        "fixture_sha256": "8db7d19bd55f8a6c9ba168d2be2092ca0bf47c89b66de679e1a180f60003133b",
+        "binaries": {
+          "IncNavierStokesSolver": "823bd20d30dfe0c01d5dcc303bd4e2907ee20a4ae97db842830230b33f50fd28",
+          "RANSFieldAudit": "bc73a6ba4a556cd5d2e50c6d105cc48cefe43abb99926a37a13b463699e5a13b"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.00625,
+        "steps": 32,
+        "order": 2,
+        "modes": 4
+      },
+      "dimension": 2,
+      "kind": "decay",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "decay_dt0.00625.xml"
+      ],
+      "field_audit": {
+        "time": 0.2000000000000001,
+        "fields": {
+          "u": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          },
+          "v": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          },
+          "k": {
+            "l2_error": 4.791724910685566e-05,
+            "linf_error": 4.791724912356354e-05,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.6202154174428478,
+            "max": 0.6202154174429034
+          },
+          "eps": {
+            "l2_error": 0.00028695034031832046,
+            "linf_error": 0.0002869503403590823,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.1990643347354637,
+            "max": 1.1990643347355519
+          },
+          "p": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 32,
+        "maximum_iterations": 29.0,
+        "maximum_change": 9.804432228022327e-11,
+        "maximum_pressure_correction": 0.0,
+        "maximum_strong_divergence_l2": 0.0,
+        "maximum_weak_divergence_l2": 0.0,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.029947488160668678,
+        "last_min_nut": 0.02887254983758689
+      },
+      "artifacts_sha256": {
+        "audit.log": "be9d4393460162f2dae7026ed5afd807bec32910d8d7909f9daee0d241a49226",
+        "decay_dt0.00625.log": "3a8835962955ee99be2042c23c5a86a2d1b7ac4a3b05ca5341feae1ffc3f1ad8",
+        "decay_dt0.00625.rans.csv": "9e6a858a82321156154b093789a013a55c97b725415cef4df48c00a7de3965e8",
+        "decay_dt0.00625.xml": "8db7d19bd55f8a6c9ba168d2be2092ca0bf47c89b66de679e1a180f60003133b",
+        "decay_dt0.bak0.his": "9657af26a73c570e1ce7d1de945319c60b1433464b849c0cddcc6c2d1b9f4396",
+        "decay_dt0.his": "9657af26a73c570e1ce7d1de945319c60b1433464b849c0cddcc6c2d1b9f4396"
+      }
+    },
+    "decay_3d": {
+      "fingerprint": {
+        "fixture_sha256": "85ef85364587bd79cd62ec654e8d55ed7fad3d2b7f8f46c10a6dec6810ab1437",
+        "binaries": {
+          "IncNavierStokesSolver": "823bd20d30dfe0c01d5dcc303bd4e2907ee20a4ae97db842830230b33f50fd28",
+          "RANSFieldAudit": "bc73a6ba4a556cd5d2e50c6d105cc48cefe43abb99926a37a13b463699e5a13b"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.025,
+        "steps": 8,
+        "order": 2,
+        "modes": 4
+      },
+      "dimension": 3,
+      "kind": "decay",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "decay_3d.xml"
+      ],
+      "field_audit": {
+        "time": 0.19999999999999998,
+        "fields": {
+          "u": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          },
+          "v": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          },
+          "w": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          },
+          "k": {
+            "l2_error": 0.014115071802112826,
+            "linf_error": 0.0008962172305061467,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.6210637174238596,
+            "max": 0.6210637174242861
+          },
+          "eps": {
+            "l2_error": 0.08456718442632659,
+            "linf_error": 0.005369478020089247,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.2041468624149614,
+            "max": 1.2041468624152825
+          },
+          "p": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 8,
+        "maximum_iterations": 30.0,
+        "maximum_change": 8.747771039019803e-11,
+        "maximum_pressure_correction": 0.0,
+        "maximum_strong_divergence_l2": 0.0,
+        "maximum_weak_divergence_l2": 0.0,
+        "maximum_live_global_systems": 10.0,
+        "first_live_global_systems": 10.0,
+        "last_live_global_systems": 10.0,
+        "first_min_nut": 0.02972115980453155,
+        "last_min_nut": 0.02882938434039176
+      },
+      "artifacts_sha256": {
+        "audit.log": "f1511cbc91f16d94658d9729589c201a3e31cca010b1fd209e42bdf542276836",
+        "decay_3d.his": "724784081fee7048e5861eff70f9f41b84d94d470e8f4ba9680f75fcd8b78be1",
+        "decay_3d.log": "cdba536570ed6ba0a811b80c7af99d6c84b328b059f8d32758247c6629263945",
+        "decay_3d.rans.csv": "6e0a1c6cb177463fe092d193c8aaeda28c1c336da3ffef6f4780b9a77746de48",
+        "decay_3d.xml": "85ef85364587bd79cd62ec654e8d55ed7fad3d2b7f8f46c10a6dec6810ab1437"
+      }
+    },
+    "decay_3d_mpi": {
+      "fingerprint": {
+        "fixture_sha256": "c75d598db2b40fed60c7eff5e28181c6ea0c4460a8898873dc758efd0570dab4",
+        "binaries": {
+          "IncNavierStokesSolver": "823bd20d30dfe0c01d5dcc303bd4e2907ee20a4ae97db842830230b33f50fd28",
+          "RANSFieldAudit": "bc73a6ba4a556cd5d2e50c6d105cc48cefe43abb99926a37a13b463699e5a13b"
+        },
+        "ranks": 4,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.025,
+        "steps": 8,
+        "order": 2,
+        "modes": 4
+      },
+      "dimension": 3,
+      "kind": "decay",
+      "ranks": 4,
+      "solver_command": [
+        "mpirun",
+        "--bind-to",
+        "none",
+        "--map-by",
+        "slot",
+        "-np",
+        "4",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "decay_3d_mpi.xml"
+      ],
+      "field_audit": {
+        "time": 0.19999999999999998,
+        "fields": {
+          "u": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          },
+          "v": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          },
+          "w": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          },
+          "k": {
+            "l2_error": 0.014115071799183856,
+            "linf_error": 0.000896217330705551,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.6210637171124711,
+            "max": 0.6210637175244855
+          },
+          "eps": {
+            "l2_error": 0.08456718441798507,
+            "linf_error": 0.005369478152883689,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.204146861991053,
+            "max": 1.204146862548077
+          },
+          "p": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 8,
+        "maximum_iterations": 30.0,
+        "maximum_change": 9.647401876394107e-11,
+        "maximum_pressure_correction": 0.0,
+        "maximum_strong_divergence_l2": 0.0,
+        "maximum_weak_divergence_l2": 0.0,
+        "maximum_live_global_systems": 10.0,
+        "first_live_global_systems": 10.0,
+        "last_live_global_systems": 10.0,
+        "first_min_nut": 0.02972115980208476,
+        "last_min_nut": 0.028829384321642365
+      },
+      "artifacts_sha256": {
+        "audit.log": "531127bd9726caf64599a096d13caaf1e02d2a9c2848ba9fa4bf20fb8a49ce16",
+        "decay_3d_mpi.his": "51e5af0fc15fe5da7396b212f6b674b895d73fa4bff2206c7322ff5812e1abcb",
+        "decay_3d_mpi.log": "0a8bedc94b14584babc25bf27dad1712e477d67641945412b5d73c632f009f30",
+        "decay_3d_mpi.rans.csv": "f582a9b3629748d2d95ce69fa455a8aac3c900f4dbc8b9740443379f6aae92bc",
+        "decay_3d_mpi.xml": "c75d598db2b40fed60c7eff5e28181c6ea0c4460a8898873dc758efd0570dab4"
+      }
+    },
+    "mms_3d": {
+      "fingerprint": {
+        "fixture_sha256": "aa9b5d6ecfd5f1755a54c5b24122a914d96fb07c12520315e1483d147656fb90",
+        "binaries": {
+          "IncNavierStokesSolver": "823bd20d30dfe0c01d5dcc303bd4e2907ee20a4ae97db842830230b33f50fd28",
+          "RANSFieldAudit": "bc73a6ba4a556cd5d2e50c6d105cc48cefe43abb99926a37a13b463699e5a13b"
+        },
+        "ranks": 4,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.01,
+        "steps": 2,
+        "order": 2,
+        "modes": 5,
+        "points": 11
+      },
+      "dimension": 3,
+      "kind": "mms",
+      "ranks": 4,
+      "solver_command": [
+        "mpirun",
+        "--bind-to",
+        "none",
+        "--map-by",
+        "slot",
+        "-np",
+        "4",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "mms_3d.xml"
+      ],
+      "field_audit": {
+        "time": 0.02,
+        "fields": {
+          "u": {
+            "l2_error": 6.260814788521114e-07,
+            "linf_error": 2.191044287981614e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.007369629682636356,
+            "max": 0.007369660842523218
+          },
+          "v": {
+            "l2_error": 6.273340552076653e-07,
+            "linf_error": 2.215941300204305e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.007924598216905852,
+            "max": 0.007924572679842487
+          },
+          "w": {
+            "l2_error": 4.540623995392639e-08,
+            "linf_error": 1.47397448217821e-07,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.004038140558093678,
+            "max": 0.004038140792085668
+          },
+          "k": {
+            "l2_error": 1.0759804262369859e-08,
+            "linf_error": 2.5397045577690847e-08,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.0003999733338667,
+            "max": 1.1803999733338666
+          },
+          "eps": {
+            "l2_error": 2.412532869240952e-06,
+            "linf_error": 3.308477754315753e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.7099980000666657,
+            "max": 0.7999980000666658
+          },
+          "p": {
+            "l2_error": 3.6886507414086827e-06,
+            "linf_error": 9.216938779560424e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.16049103565048384,
+            "max": 0.1604910373630517
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 2,
+        "maximum_iterations": 59.0,
+        "maximum_change": 4.786233909204185e-12,
+        "maximum_pressure_correction": 9.929379432372549e-11,
+        "maximum_strong_divergence_l2": 4.3210434115753943e-07,
+        "maximum_weak_divergence_l2": 4.673447787590375e-12,
+        "maximum_live_global_systems": 10.0,
+        "first_live_global_systems": 10.0,
+        "last_live_global_systems": 10.0,
+        "first_min_nut": 0.12681136113347385,
+        "last_min_nut": 0.12686234269634383
+      },
+      "artifacts_sha256": {
+        "audit.log": "7b6639b185f756bd52ca98c022f75c05e61548dddeb33c1e83c49d2f83c11ac0",
+        "mms_3d.his": "c50070711c38dd1d27555d773512275375b988545a8215aa742818fba790d575",
+        "mms_3d.log": "d97d67a80a79da06fea40aaefb0d41d6295772473c617bb752ba6f6106c44c40",
+        "mms_3d.rans.csv": "d9d24dc0e8bab6bd160b7f0447a9cf40baae2a4e8afa3340f0252df499a6eea2",
+        "mms_3d.xml": "aa9b5d6ecfd5f1755a54c5b24122a914d96fb07c12520315e1483d147656fb90"
+      }
+    },
+    "mms_mpi": {
+      "fingerprint": {
+        "fixture_sha256": "591bc635f16b939234a4c3e1a08b9293c5fcbc9ea969c879d443d44a02f1897e",
+        "binaries": {
+          "IncNavierStokesSolver": "823bd20d30dfe0c01d5dcc303bd4e2907ee20a4ae97db842830230b33f50fd28",
+          "RANSFieldAudit": "bc73a6ba4a556cd5d2e50c6d105cc48cefe43abb99926a37a13b463699e5a13b"
+        },
+        "ranks": 4,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.025,
+        "steps": 8,
+        "order": 2,
+        "modes": 7
+      },
+      "dimension": 2,
+      "kind": "mms",
+      "ranks": 4,
+      "solver_command": [
+        "mpirun",
+        "--bind-to",
+        "none",
+        "--map-by",
+        "slot",
+        "-np",
+        "4",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "mms_mpi.xml"
+      ],
+      "field_audit": {
+        "time": 0.19999999999999998,
+        "fields": {
+          "u": {
+            "l2_error": 2.487505336192302e-06,
+            "linf_error": 5.535868397694987e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012499010996140033,
+            "max": 0.01249893966613045
+          },
+          "v": {
+            "l2_error": 2.4878777590559773e-06,
+            "linf_error": 5.627408548028109e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012498848125980119,
+            "max": 0.012499101468315562
+          },
+          "k": {
+            "l2_error": 6.784753298851005e-07,
+            "linf_error": 1.3658081905454367e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.009933466539753,
+            "max": 1.309933466539753
+          },
+          "eps": {
+            "l2_error": 2.2693434800574425e-05,
+            "linf_error": 3.951211487351891e-05,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.7294019973352373,
+            "max": 0.9294019973352372
+          },
+          "p": {
+            "l2_error": 1.8064916098088032e-05,
+            "linf_error": 3.720765214781929e-05,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.15897317780933978,
+            "max": 0.15897308693605738
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 8,
+        "maximum_iterations": 78.0,
+        "maximum_change": 8.122752904321517e-12,
+        "maximum_pressure_correction": 9.657967139274684e-11,
+        "maximum_strong_divergence_l2": 6.967499417965452e-07,
+        "maximum_weak_divergence_l2": 5.253763943090472e-11,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.12359763811841501,
+        "last_min_nut": 0.12585228029357837
+      },
+      "artifacts_sha256": {
+        "audit.log": "890aab16f678f697786b6d4ce046b1ee7806acb40e9189d9d2ad4f5654633ad0",
+        "mms_mpi.his": "cd583012c633c6573427233f3c4e100a8f3144f8926d9a6cd93baf9f6b785591",
+        "mms_mpi.log": "4a1574538c8c07933ab030d6dd9026326b5a12c477769eb973528ffa36a6f499",
+        "mms_mpi.rans.csv": "277a44803f8e3a3ac92cfc09ada92598529a3b0b2b7aa6af52fd972402b61ed2",
+        "mms_mpi.xml": "591bc635f16b939234a4c3e1a08b9293c5fcbc9ea969c879d443d44a02f1897e"
+      }
+    },
+    "mpi_invalid_state": {
+      "fingerprint": {
+        "fixture_sha256": "8d135b67c71aa932cf59143f00821ae0653a50ca9350e3909a307d188f7542e5",
+        "binaries": {
+          "IncNavierStokesSolver": "823bd20d30dfe0c01d5dcc303bd4e2907ee20a4ae97db842830230b33f50fd28",
+          "RANSFieldAudit": "bc73a6ba4a556cd5d2e50c6d105cc48cefe43abb99926a37a13b463699e5a13b"
+        },
+        "ranks": 4,
+        "rejection": "positivity guard"
+      },
+      "options": {
+        "dt": 0.025,
+        "steps": 2,
+        "order": 2,
+        "modes": 5
+      },
+      "dimension": 2,
+      "kind": "mms",
+      "ranks": 4,
+      "solver_command": [
+        "mpirun",
+        "--bind-to",
+        "none",
+        "--map-by",
+        "slot",
+        "-np",
+        "4",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "mpi_invalid_state.xml"
+      ],
+      "expected_rejection": "positivity guard"
+    },
+    "abl_p4": {
+      "fingerprint": {
+        "fixture_sha256": "5d4ab6b67a75e713a083dfd0d142b99ff7d2488348a453e33f5ee222cea5b33d",
+        "binaries": {
+          "IncNavierStokesSolver": "823bd20d30dfe0c01d5dcc303bd4e2907ee20a4ae97db842830230b33f50fd28",
+          "RANSFieldAudit": "bc73a6ba4a556cd5d2e50c6d105cc48cefe43abb99926a37a13b463699e5a13b"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.05,
+        "steps": 20,
+        "order": 2,
+        "modes": 5,
+        "diffusion": "HighRe",
+        "tolerance": 1e-09
+      },
+      "dimension": 2,
+      "kind": "abl",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "abl_p4.xml"
+      ],
+      "field_audit": {
+        "time": 1.0000000000000002,
+        "fields": {
+          "u": {
+            "l2_error": 0.008156172995794032,
+            "linf_error": 0.00018508086412261093,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 7.410224772136713,
+            "max": 11.767792502184976
+          },
+          "v": {
+            "l2_error": 1.174119420534255e-12,
+            "linf_error": 5.010739949253931e-14,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -2.4466887572755462e-14,
+            "max": 5.010739949253931e-14
+          },
+          "k": {
+            "l2_error": 0.0035141375783507263,
+            "linf_error": 0.00010025838460214764,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.6155862422935343,
+            "max": 1.6156867112366478
+          },
+          "eps": {
+            "l2_error": 0.0027804640884174494,
+            "linf_error": 0.00012131570887657928,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.026001958442423742,
+            "max": 0.38995210822672605
+          },
+          "p": {
+            "l2_error": 2.0589346527803474e-10,
+            "linf_error": 6.205236475632933e-12,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -6.205236475632933e-12,
+            "max": 3.1778926312134373e-12
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 20,
+        "maximum_iterations": 22.0,
+        "maximum_change": 9.94496207606943e-10,
+        "maximum_pressure_correction": 3.3311067455064408e-12,
+        "maximum_strong_divergence_l2": 1.5686940340737145e-12,
+        "maximum_weak_divergence_l2": 2.829005232155504e-14,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.602443782805423,
+        "last_min_nut": 0.6024407132058912
+      },
+      "artifacts_sha256": {
+        "abl_p4.his": "092bb35c65ce587e0e9dd3d00c03c3bfaedad12a5b4012c19768a16ea9db9158",
+        "abl_p4.log": "b46c8e646dccb5e16e6aad99c4abc088ad98e4871c1075fa2ec3ffe9e1fee0b6",
+        "abl_p4.rans.csv": "99455b321a51bdada788ff8b988c5f833507504dbc47fc20e2465df4e9c3938b",
+        "abl_p4.xml": "5d4ab6b67a75e713a083dfd0d142b99ff7d2488348a453e33f5ee222cea5b33d",
+        "audit.log": "4bbb1702b21fb9803899f05ae29b4444795a4c6e10adcc547252ea56b2a31d55"
+      }
+    },
+    "abl_p6": {
+      "fingerprint": {
+        "fixture_sha256": "6637f8bf60b1c53818c036bca8c0271b408b39fdbdc11c6f8fd1bc1bac964dd5",
+        "binaries": {
+          "IncNavierStokesSolver": "823bd20d30dfe0c01d5dcc303bd4e2907ee20a4ae97db842830230b33f50fd28",
+          "RANSFieldAudit": "bc73a6ba4a556cd5d2e50c6d105cc48cefe43abb99926a37a13b463699e5a13b"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.05,
+        "steps": 20,
+        "order": 2,
+        "modes": 7,
+        "diffusion": "HighRe",
+        "tolerance": 1e-09
+      },
+      "dimension": 2,
+      "kind": "abl",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "abl_p6.xml"
+      ],
+      "field_audit": {
+        "time": 1.0000000000000002,
+        "fields": {
+          "u": {
+            "l2_error": 0.00017613670889818356,
+            "linf_error": 3.527975350081647e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 7.410233541281818,
+            "max": 11.76779063442959
+          },
+          "v": {
+            "l2_error": 1.1136095928016628e-11,
+            "linf_error": 5.940566266733706e-13,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -5.940566266733706e-13,
+            "max": 2.5528126114247905e-13
+          },
+          "k": {
+            "l2_error": 0.00010970967896257037,
+            "linf_error": 2.440310292728398e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.6156840603678437,
+            "max": 1.6156864454483157
+          },
+          "eps": {
+            "l2_error": 8.457726807845432e-05,
+            "linf_error": 3.573816829360865e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.02599834438773066,
+            "max": 0.38997260002280404
+          },
+          "p": {
+            "l2_error": 1.742798253502949e-10,
+            "linf_error": 5.344374184996063e-12,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -5.344374184996063e-12,
+            "max": 4.597834231145767e-12
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 20,
+        "maximum_iterations": 16.0,
+        "maximum_change": 9.944018941610011e-10,
+        "maximum_pressure_correction": 6.574782238346681e-12,
+        "maximum_strong_divergence_l2": 6.694017286372695e-12,
+        "maximum_weak_divergence_l2": 8.25664480866447e-14,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.6024514244424556,
+        "last_min_nut": 0.6024512657800524
+      },
+      "artifacts_sha256": {
+        "abl_p6.his": "d6620441d8ba2e0acfd0edc92d3b41327c904ce8e48ab0d0a807e1ca2f08ea16",
+        "abl_p6.log": "7f9a1a3234ee55eb626b963f1b877fc6f405830c1361e2335cfc67e9762ced97",
+        "abl_p6.rans.csv": "45e8fcd0810ac197941a0986262ce29730447f28ba6b43df2b19aef063952ff9",
+        "abl_p6.xml": "6637f8bf60b1c53818c036bca8c0271b408b39fdbdc11c6f8fd1bc1bac964dd5",
+        "audit.log": "3b20f48e016d40cfd8f8a6d01970a5752abb3bf8ae01bc1017261c16a0a11fe7"
+      }
+    },
+    "abl_p8": {
+      "fingerprint": {
+        "fixture_sha256": "280bd2d49275c62bfe04ddbab78d4da99c81057b527ed8f89107cdd779c8a915",
+        "binaries": {
+          "IncNavierStokesSolver": "823bd20d30dfe0c01d5dcc303bd4e2907ee20a4ae97db842830230b33f50fd28",
+          "RANSFieldAudit": "bc73a6ba4a556cd5d2e50c6d105cc48cefe43abb99926a37a13b463699e5a13b"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.05,
+        "steps": 20,
+        "order": 2,
+        "modes": 9,
+        "diffusion": "HighRe",
+        "tolerance": 1e-09
+      },
+      "dimension": 2,
+      "kind": "abl",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "abl_p8.xml"
+      ],
+      "field_audit": {
+        "time": 1.0000000000000002,
+        "fields": {
+          "u": {
+            "l2_error": 4.162185346163988e-06,
+            "linf_error": 9.14970161858264e-08,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 7.410234231212346,
+            "max": 11.767790155513099
+          },
+          "v": {
+            "l2_error": 3.3514469035839775e-11,
+            "linf_error": 1.1452860787562631e-12,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -6.526320044281191e-13,
+            "max": 1.1452860787562631e-12
+          },
+          "k": {
+            "l2_error": 3.528264111834116e-06,
+            "linf_error": 7.640566357380862e-08,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.6156864242724729,
+            "max": 1.6156864963827633
+          },
+          "eps": {
+            "l2_error": 2.534534873987238e-06,
+            "linf_error": 1.0763662106061389e-07,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.02599820859789255,
+            "max": 0.3899730482175141
+          },
+          "p": {
+            "l2_error": 2.6725699285353385e-10,
+            "linf_error": 1.2193955122898263e-11,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -1.2193955122898263e-11,
+            "max": 7.445655687517556e-12
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 20,
+        "maximum_iterations": 10.0,
+        "maximum_change": 9.056374539184731e-10,
+        "maximum_pressure_correction": 1.2471893174304199e-11,
+        "maximum_strong_divergence_l2": 1.0568245840591794e-11,
+        "maximum_weak_divergence_l2": 2.877075438929817e-13,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.6024515045844512,
+        "last_min_nut": 0.6024514965701341
+      },
+      "artifacts_sha256": {
+        "abl_p8.his": "1470ace1b641793a0fdf3eb9673ae7e408358986e144588a00d470055c97f039",
+        "abl_p8.log": "5d7388c8e7c462a2646cb5fe062c12d8f63cca78d24fe41a2a2671ec144bb764",
+        "abl_p8.rans.csv": "eb12b6a535943b73d8d994dfb68a8fd1b8cb5973a09a96b7fb01f1d1c5d64dcf",
+        "abl_p8.xml": "280bd2d49275c62bfe04ddbab78d4da99c81057b527ed8f89107cdd779c8a915",
+        "audit.log": "71cb80c852e9f661ca988e8986d6a9b4916f7b8567f193ad7ea8371ef1e23925"
+      }
+    },
+    "abl_wrong_top": {
+      "fingerprint": {
+        "fixture_sha256": "20f9dea37cc9bfb38f13619b6389d6ba8cee5d8a6c2a8cbf56bcb3b1674bf32a",
+        "binaries": {
+          "IncNavierStokesSolver": "823bd20d30dfe0c01d5dcc303bd4e2907ee20a4ae97db842830230b33f50fd28",
+          "RANSFieldAudit": "bc73a6ba4a556cd5d2e50c6d105cc48cefe43abb99926a37a13b463699e5a13b"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.05,
+        "steps": 20,
+        "order": 2,
+        "modes": 9,
+        "diffusion": "HighRe",
+        "tolerance": 1e-09,
+        "top_flux": false
+      },
+      "dimension": 2,
+      "kind": "abl",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "abl_wrong_top.xml"
+      ],
+      "field_audit": {
+        "time": 1.0000000000000002,
+        "fields": {
+          "u": {
+            "l2_error": 0.08716815102495298,
+            "linf_error": 0.006486732344328061,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 7.410234231695914,
+            "max": 11.774276866925838
+          },
+          "v": {
+            "l2_error": 3.376707166097093e-11,
+            "linf_error": 1.1603709673675792e-12,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -6.363003259428994e-13,
+            "max": 1.1603709673675792e-12
+          },
+          "k": {
+            "l2_error": 0.01714787852907454,
+            "linf_error": 0.00043831340758249127,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.615248187270554,
+            "max": 1.6156864722599944
+          },
+          "eps": {
+            "l2_error": 0.0505091463717524,
+            "linf_error": 0.002579163215187568,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.028577367367206064,
+            "max": 0.3899730478292927
+          },
+          "p": {
+            "l2_error": 3.8272291828779365e-10,
+            "linf_error": 1.3256600407698777e-11,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -9.822057498777188e-12,
+            "max": 1.3256600407698777e-11
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 20,
+        "maximum_iterations": 22.0,
+        "maximum_change": 9.720637327567323e-10,
+        "maximum_pressure_correction": 1.1660722761735787e-11,
+        "maximum_strong_divergence_l2": 1.0272505648419937e-11,
+        "maximum_weak_divergence_l2": 2.697893069912725e-13,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.6024515036212736,
+        "last_min_nut": 0.6024514972550559
+      },
+      "artifacts_sha256": {
+        "abl_wrong_top.his": "fbae6d5d7ea7370c1dcfbfd8c74df6d8d2945c3a38cb62a09995ab81d8d3df3b",
+        "abl_wrong_top.log": "8dd8e9dc5953e0cb115844789c3043e45435552eb2dfd26b642e7edf463b81da",
+        "abl_wrong_top.rans.csv": "07780815fdc80e1bc8bfcc9e1f76c8197483b10237092a780fe9b937d3be0088",
+        "abl_wrong_top.xml": "20f9dea37cc9bfb38f13619b6389d6ba8cee5d8a6c2a8cbf56bcb3b1674bf32a",
+        "audit.log": "60baa6c7bfd0b7d62a8ecf9136e61e4afc51646b658fc5ca97c9c9dee8dda97a"
+      }
+    },
+    "abl_shifted": {
+      "fingerprint": {
+        "fixture_sha256": "3ceba957e0515b08ba9425d289277489f6ea4e039df927208a17562ef2abdefc",
+        "binaries": {
+          "IncNavierStokesSolver": "823bd20d30dfe0c01d5dcc303bd4e2907ee20a4ae97db842830230b33f50fd28",
+          "RANSFieldAudit": "bc73a6ba4a556cd5d2e50c6d105cc48cefe43abb99926a37a13b463699e5a13b"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.05,
+        "steps": 20,
+        "order": 2,
+        "modes": 9,
+        "diffusion": "HighRe",
+        "tolerance": 1e-09
+      },
+      "dimension": 2,
+      "kind": "abl_shift",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "abl_shifted.xml"
+      ],
+      "field_audit": {
+        "time": 1.0000000000000002,
+        "fields": {
+          "u": {
+            "l2_error": 4.071771657551079e-06,
+            "linf_error": 8.511864457716456e-08,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 7.423858652615009,
+            "max": 11.765080054118922
+          },
+          "v": {
+            "l2_error": 3.994453345084334e-11,
+            "linf_error": 1.7129183722845569e-12,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -1.4157055780744337e-12,
+            "max": 1.7129183722845569e-12
+          },
+          "k": {
+            "l2_error": 3.347806665446424e-06,
+            "linf_error": 7.07016769574409e-08,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.6146480411454345,
+            "max": 1.6146481076318528
+          },
+          "eps": {
+            "l2_error": 2.4086099698526473e-06,
+            "linf_error": 9.99758586472943e-08,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.02595584540236332,
+            "max": 0.3857397631642905
+          },
+          "p": {
+            "l2_error": 5.260993321173402e-10,
+            "linf_error": 2.8248426318858647e-11,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -2.8248426318858647e-11,
+            "max": 1.4961522729712734e-11
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 20,
+        "maximum_iterations": 9.0,
+        "maximum_change": 9.846831683368862e-10,
+        "maximum_pressure_correction": 1.6417045744635658e-11,
+        "maximum_strong_divergence_l2": 1.177623908351502e-11,
+        "maximum_weak_divergence_l2": 2.8876494836762803e-13,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.6082804574038214,
+        "last_min_nut": 0.608280449356437
+      },
+      "artifacts_sha256": {
+        "abl_shifted.his": "8f29be7ec5cb61280451c8855742878c350905d892b3a8420ea1d3c5b7c6037c",
+        "abl_shifted.log": "06722972d43d2fbfcc7a82fe9773bf8c4e3c98c882050a461f525b4d3caa1887",
+        "abl_shifted.rans.csv": "ca8f9b75664cc1be5632d971e0862a5a0f7a5edc4afa0c516b33d103ac581084",
+        "abl_shifted.xml": "3ceba957e0515b08ba9425d289277489f6ea4e039df927208a17562ef2abdefc",
+        "audit.log": "037f4005c3c9946aef3be56de58ba753fc1cca865dbfd3e68aff3414803af69d"
+      }
+    },
+    "abl_molecular": {
+      "fingerprint": {
+        "fixture_sha256": "bffe62e6fc3dff76020324be3eaf0cc2468b3c65b80a83cc561b2e631d4a9d5f",
+        "binaries": {
+          "IncNavierStokesSolver": "823bd20d30dfe0c01d5dcc303bd4e2907ee20a4ae97db842830230b33f50fd28",
+          "RANSFieldAudit": "bc73a6ba4a556cd5d2e50c6d105cc48cefe43abb99926a37a13b463699e5a13b"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.05,
+        "steps": 20,
+        "order": 2,
+        "modes": 9,
+        "diffusion": "Molecular",
+        "tolerance": 1e-09
+      },
+      "dimension": 2,
+      "kind": "abl",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "abl_molecular.xml"
+      ],
+      "field_audit": {
+        "time": 1.0000000000000002,
+        "fields": {
+          "u": {
+            "l2_error": 0.069916494172141,
+            "linf_error": 0.007428082890694299,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 7.417662345537832,
+            "max": 11.767576821297729
+          },
+          "v": {
+            "l2_error": 3.3595787826666407e-11,
+            "linf_error": 1.1197908226789899e-12,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -6.57579177265113e-13,
+            "max": 1.1197908226789899e-12
+          },
+          "k": {
+            "l2_error": 0.07356680530099408,
+            "linf_error": 0.004728741470997999,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.6109577592071385,
+            "max": 1.6156863649492175
+          },
+          "eps": {
+            "l2_error": 0.017258043968547174,
+            "linf_error": 0.0017107882712767974,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.026001708434200167,
+            "max": 0.3882622740102325
+          },
+          "p": {
+            "l2_error": 4.090567373589537e-10,
+            "linf_error": 1.1751266601287837e-11,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -9.803770178009994e-12,
+            "max": 1.1751266601287837e-11
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 20,
+        "maximum_iterations": 28.0,
+        "maximum_change": 9.999209238387152e-10,
+        "maximum_pressure_correction": 7.922241309040708e-12,
+        "maximum_strong_divergence_l2": 1.068297778345455e-11,
+        "maximum_weak_divergence_l2": 2.545254023401106e-13,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.6023964758153061,
+        "last_min_nut": 0.6015692391686911
+      },
+      "artifacts_sha256": {
+        "abl_molecular.his": "a692a21ef450389aa4c143cf8761b9b0643829fe238b831e317a25f2044e306f",
+        "abl_molecular.log": "995d96b2afee8fa967ac34fe5d9e932577432e7aa78f9448a43f8c0a02cb57a1",
+        "abl_molecular.rans.csv": "f54483ca207a8f19dd818854b7d2703a7939d6acfe19acbf5896674c918bb22e",
+        "abl_molecular.xml": "bffe62e6fc3dff76020324be3eaf0cc2468b3c65b80a83cc561b2e631d4a9d5f",
+        "audit.log": "54bc3e8c5325ea0baf21e22d1bf3a7d1916290df39c7d66cf16e1ad61050de51"
+      }
+    },
+    "abl_flowthrough": {
+      "fingerprint": {
+        "fixture_sha256": "d1b8d73a215affdbbecc36fb0770953b5c32cf02eff02fe008ca1a2d50d7f1bb",
+        "binaries": {
+          "IncNavierStokesSolver": "823bd20d30dfe0c01d5dcc303bd4e2907ee20a4ae97db842830230b33f50fd28",
+          "RANSFieldAudit": "bc73a6ba4a556cd5d2e50c6d105cc48cefe43abb99926a37a13b463699e5a13b"
+        },
+        "ranks": 4,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.05,
+        "steps": 600,
+        "order": 2,
+        "modes": 9,
+        "diffusion": "HighRe",
+        "tolerance": 1e-09
+      },
+      "dimension": 2,
+      "kind": "abl",
+      "ranks": 4,
+      "solver_command": [
+        "mpirun",
+        "--bind-to",
+        "none",
+        "--map-by",
+        "slot",
+        "-np",
+        "4",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "abl_flowthrough.xml"
+      ],
+      "field_audit": {
+        "time": 30.00000000000029,
+        "fields": {
+          "u": {
+            "l2_error": 7.88278672116169e-06,
+            "linf_error": 1.8406264956638552e-07,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 7.410234151169222,
+            "max": 11.767790259872964
+          },
+          "v": {
+            "l2_error": 1.8475034195981758e-08,
+            "linf_error": 7.521214647133317e-10,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -3.536154633300779e-10,
+            "max": 7.521214647133317e-10
+          },
+          "k": {
+            "l2_error": 4.424057676738331e-06,
+            "linf_error": 6.03878271832059e-08,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.6156864402903093,
+            "max": 1.6156864683403396
+          },
+          "eps": {
+            "l2_error": 2.175469165406651e-06,
+            "linf_error": 1.1826581663987312e-07,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.02599820442186164,
+            "max": 0.38997304607510463
+          },
+          "p": {
+            "l2_error": 1.1518547371480911e-07,
+            "linf_error": 5.071557438179927e-09,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -4.60260534734461e-09,
+            "max": 5.071557438179927e-09
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 600,
+        "maximum_iterations": 18.0,
+        "maximum_change": 9.89427742206202e-10,
+        "maximum_pressure_correction": 9.991609473274086e-10,
+        "maximum_strong_divergence_l2": 2.3077911424232473e-08,
+        "maximum_weak_divergence_l2": 7.914658163796915e-11,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.6024515045765759,
+        "last_min_nut": 0.6024514962085724
+      },
+      "artifacts_sha256": {
+        "abl_flowthrough.his": "b609e5dd3c984f2ea4405d7e23a3aeab6c9f1cbc2909b9df261c364fd5aceb21",
+        "abl_flowthrough.log": "ae62102c9058de9c1a352afbe3ad09d24e1dcbdda42b68ce77e55acd5c77a354",
+        "abl_flowthrough.rans.csv": "be00ccfb69f9aca1e4f79fd74540c1868fdfa37c44b631046241f5809580f13b",
+        "abl_flowthrough.xml": "d1b8d73a215affdbbecc36fb0770953b5c32cf02eff02fe008ca1a2d50d7f1bb",
+        "audit.log": "c307b9272ca06e65ab95d3a2df0ebd08058c0ee3a689255268c1b221db93cb43"
+      }
+    }
+  },
+  "commands": [
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "mms_o1_dt0.0125.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/mms_o1_dt0.0125",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "mms_o1_dt0.025.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/mms_o1_dt0.025",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "mms_o1_dt0.05.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/mms_o1_dt0.05",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/RANSFieldAudit",
+        "mms_o1_dt0.05.xml",
+        "mms_o1_dt0.05.fld",
+        "mms_o1_dt0.05.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/mms_o1_dt0.05",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "mms_o2_dt0.05.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/mms_o2_dt0.05",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/RANSFieldAudit",
+        "mms_o1_dt0.025.xml",
+        "mms_o1_dt0.025.fld",
+        "mms_o1_dt0.025.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/mms_o1_dt0.025",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "mms_o2_dt0.025.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/mms_o2_dt0.025",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/RANSFieldAudit",
+        "mms_o2_dt0.05.xml",
+        "mms_o2_dt0.05.fld",
+        "mms_o2_dt0.05.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/mms_o2_dt0.05",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "mms_o2_dt0.0125.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/mms_o2_dt0.0125",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/RANSFieldAudit",
+        "mms_o1_dt0.0125.xml",
+        "mms_o1_dt0.0125.fld",
+        "mms_o1_dt0.0125.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/mms_o1_dt0.0125",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/RANSFieldAudit",
+        "mms_o2_dt0.025.xml",
+        "mms_o2_dt0.025.fld",
+        "mms_o2_dt0.025.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/mms_o2_dt0.025",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/RANSFieldAudit",
+        "mms_o2_dt0.0125.xml",
+        "mms_o2_dt0.0125.fld",
+        "mms_o2_dt0.0125.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/mms_o2_dt0.0125",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "mms_highre.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/mms_highre",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/RANSFieldAudit",
+        "mms_highre.xml",
+        "mms_highre.fld",
+        "mms_highre.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/mms_highre",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "mms_quadrature.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/mms_quadrature",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/RANSFieldAudit",
+        "mms_quadrature.xml",
+        "mms_quadrature.fld",
+        "mms_quadrature.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/mms_quadrature",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "mms_gauge_offset.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/mms_gauge_offset",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/RANSFieldAudit",
+        "mms_gauge_offset.xml",
+        "mms_gauge_offset.fld",
+        "mms_gauge_offset.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/mms_gauge_offset",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "mms_missing_transpose.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/mms_missing_transpose",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/RANSFieldAudit",
+        "mms_missing_transpose.xml",
+        "mms_missing_transpose.fld",
+        "mms_missing_transpose.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/mms_missing_transpose",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "stiff_euler.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/stiff_euler",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/RANSFieldAudit",
+        "stiff_euler.xml",
+        "stiff_euler.fld",
+        "stiff_euler.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/stiff_euler",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "stiff_bdf2_guard.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/stiff_bdf2_guard",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "decay_dt0.025.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/decay_dt0.025",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/RANSFieldAudit",
+        "decay_dt0.025.xml",
+        "decay_dt0.025.fld",
+        "decay_dt0.025.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/decay_dt0.025",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "decay_dt0.0125.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/decay_dt0.0125",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/RANSFieldAudit",
+        "decay_dt0.0125.xml",
+        "decay_dt0.0125.fld",
+        "decay_dt0.0125.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/decay_dt0.0125",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "decay_dt0.00625.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/decay_dt0.00625",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/RANSFieldAudit",
+        "decay_dt0.00625.xml",
+        "decay_dt0.00625.fld",
+        "decay_dt0.00625.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/decay_dt0.00625",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "decay_3d.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/decay_3d",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/RANSFieldAudit",
+        "decay_3d.xml",
+        "decay_3d.fld",
+        "decay_3d.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/decay_3d",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "mpirun",
+        "--bind-to",
+        "none",
+        "--map-by",
+        "slot",
+        "-np",
+        "4",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "decay_3d_mpi.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/decay_3d_mpi",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/RANSFieldAudit",
+        "decay_3d_mpi.xml",
+        "decay_3d_mpi.fld",
+        "decay_3d_mpi.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/decay_3d_mpi",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "mpirun",
+        "--bind-to",
+        "none",
+        "--map-by",
+        "slot",
+        "-np",
+        "4",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "mms_3d.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/mms_3d",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/RANSFieldAudit",
+        "mms_3d.xml",
+        "mms_3d.fld",
+        "mms_3d.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/mms_3d",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "mpirun",
+        "--bind-to",
+        "none",
+        "--map-by",
+        "slot",
+        "-np",
+        "4",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "mms_mpi.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/mms_mpi",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/RANSFieldAudit",
+        "mms_mpi.xml",
+        "mms_mpi.fld",
+        "mms_mpi.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/mms_mpi",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/RANSFieldAudit",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/mms_o2_dt0.025/mms_o2_dt0.025.xml",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/mms_o2_dt0.025/mms_o2_dt0.025.fld",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/mms_mpi/mms_mpi.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/mms_mpi",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/RANSFieldAudit",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/mms_o2_dt0.025/mms_o2_dt0.025.xml",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/mms_o2_dt0.025/mms_o2_dt0.025.fld",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/mms_quadrature/mms_quadrature.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/mms_quadrature",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/RANSFieldAudit",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/decay_3d/decay_3d.xml",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/decay_3d/decay_3d.fld",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/decay_3d_mpi/decay_3d_mpi.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/decay_3d_mpi",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "mpirun",
+        "--bind-to",
+        "none",
+        "--map-by",
+        "slot",
+        "-np",
+        "4",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "mpi_invalid_state.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/mpi_invalid_state",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "abl_p4.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/abl_p4",
+      "timeout": 900
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/RANSFieldAudit",
+        "abl_p4.xml",
+        "abl_p4.fld",
+        "abl_p4.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/abl_p4",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "abl_p6.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/abl_p6",
+      "timeout": 900
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/RANSFieldAudit",
+        "abl_p6.xml",
+        "abl_p6.fld",
+        "abl_p6.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/abl_p6",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "abl_p8.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/abl_p8",
+      "timeout": 900
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/RANSFieldAudit",
+        "abl_p8.xml",
+        "abl_p8.fld",
+        "abl_p8.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/abl_p8",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "abl_wrong_top.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/abl_wrong_top",
+      "timeout": 900
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/RANSFieldAudit",
+        "abl_wrong_top.xml",
+        "abl_wrong_top.fld",
+        "abl_wrong_top.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/abl_wrong_top",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "abl_shifted.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/abl_shifted",
+      "timeout": 900
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/RANSFieldAudit",
+        "abl_shifted.xml",
+        "abl_shifted.fld",
+        "abl_shifted.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/abl_shifted",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "abl_molecular.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/abl_molecular",
+      "timeout": 900
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/RANSFieldAudit",
+        "abl_molecular.xml",
+        "abl_molecular.fld",
+        "abl_molecular.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/abl_molecular",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "mpirun",
+        "--bind-to",
+        "none",
+        "--map-by",
+        "slot",
+        "-np",
+        "4",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "abl_flowthrough.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/abl_flowthrough",
+      "timeout": 900
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/RANSFieldAudit",
+        "abl_flowthrough.xml",
+        "abl_flowthrough.fld",
+        "abl_flowthrough.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/abl_flowthrough",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/build/IncNavierStokesSolver",
+        "KovaFlow_m8_short_HOBC.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m3-transport/validation/legacy",
+      "timeout": 240
+    }
+  ],
+  "legacy_vcs_regression": "passed"
+}

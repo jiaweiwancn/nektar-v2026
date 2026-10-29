@@ -129,6 +129,57 @@ from equation Eq.~\eqref{eqn.pressurebcs} to become
 \end{equation}
 Further details for this scheme can be found in the Developer-Guide.
 
+\subsubsection{Standard k--epsilon unsteady RANS}
+\label{RANSVCSScheme}
+
+The opt-in \inltt{RANSVelocityCorrectionScheme} advances the standard
+$k$--$\epsilon$ model using variable turbulent diffusion, the full symmetric
+momentum stress, implicit turbulence losses and a coupled pressure iteration.
+Select it using
+\begin{lstlisting}[style=XmlStyle]
+<I PROPERTY="SolverType" VALUE="RANSVelocityCorrectionScheme" />
+<I PROPERTY="TurbulenceModel" VALUE="StandardKEpsilon" />
+<I PROPERTY="RANSResolvedDiffusion" VALUE="HighRe" />
+<I PROPERTY="Projection" VALUE="Galerkin" />
+\end{lstlisting}
+The initial implementation supports full 2D and 3D continuous expansions and
+constant-step IMEX of order one or two. Use variables
+\inltt{u,v,k,eps,p} in 2D or \inltt{u,v,w,k,eps,p} in 3D. The saved pressure
+is $\pi=p_{\mathrm{mechanical}}/\rho+2k/3$, with zero volume mean. The tested
+mixed approximation has velocity/scalar degree $p$ and continuous pressure
+degree $p-2$, with identical physical quadrature points for every field.
+
+\inltt{HighRe} retains turbulent diffusion alone in the resolved equations;
+\inltt{Molecular} adds molecular diffusion. \inltt{Kinvis} remains a positive
+physical viscosity in both modes. The transport parameters are
+\inltt{RANSCmu}, \inltt{RANSCepsilon1}, \inltt{RANSCepsilon2},
+\inltt{RANSSigmaK} and \inltt{RANSSigmaEpsilon}; their defaults are
+0.09, 1.44, 1.92, 1 and 1.3. Do not use the legacy
+\inltt{DiffusionCoefficient} function for this path.
+
+Nonperiodic boundaries prescribe normal velocity and use a pressure Neumann
+entry tagged \inltt{RANSPressure}. This marker selects the coupled normal
+momentum treatment. A flat lower standoff boundary can use tangential
+Neumann entries tagged \inltt{RANSLogLaw}, zero normal Dirichlet velocity,
+zero $k$ flux and algebraic epsilon Dirichlet data. Its aerodynamic roughness
+and optional standard-model height shift are \inltt{RANSZ0} and
+\inltt{RANSHeightShift}. Neumann data in this path represent diffusion gradient
+fluxes for scalars and symmetric-stress traction for momentum.
+
+\inltt{RANSNonlinearTolerance} and \inltt{RANSMaxIterations} control each
+implicit stage. Nonfinite or nonpositive $k$ and epsilon fail collectively;
+\inltt{RANSMinimumK} and \inltt{RANSMinimumEpsilon} can set stricter rejection
+thresholds. No floor is applied. Stage diagnostics are written to
+\inltt{<session>.rans.csv}. BDF2 requires an appropriate timestep for positivity.
+SVV, GJP, homogeneous expansions, substepping and open pressure-outflow
+conditions are outside the initial supported configuration.
+
+A complete manufactured example, \inltt{StandardRANS\_MMS.xml}, is supplied in
+\path{solvers/IncNavierStokesSolver/Tests/RANS}.
+The accompanying README describes the kernel, unsteady transport, MPI and
+neutral-ABL control tests. CLS and analytical-wall-function solver coupling
+are separate implementation milestones.
+
 \subsubsection{Implicit Velocity Correction Scheme}
 \label{VCSImplicitScheme}
 
@@ -788,6 +839,7 @@ Velocity Correction Scheme (VCS) & \texttt{VelocityCorrectionScheme} & 2D, Quasi
 Implicit VCS & \texttt{VCSImplicit} & 2D and 3D & CG\\
 VCS with coordinate transformation & \texttt{VCSMapping} & 2D, Quasi-3d and 3D & CG, CG-DG\\
 VCS with weak pressure & \texttt{VCSWeakPressure} & 2D, Quasi-3D, 3D & CG, CG-DG\\
+Standard RANS & \texttt{RANSVelocityCorrectionScheme} & 2D, 3D & CG\\
 Smoothed Profile Method (SPM)    & \texttt{SmoothedProfileMethod}    & 2D, Quasi-3D, 3D & CG, CG-DG\\
 Direct solver & \texttt{CoupledLinearisedNS} & 2D, Quasi-3D &CG\\
 \bottomrule

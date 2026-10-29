@@ -26,7 +26,41 @@ endif()
 target_link_libraries(RANSWallLayerProbe
     RANSKernels ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
 target_link_libraries(RANSKernelProbe RANSKernels)
+option(RANS_BUILD_SOLVER "Build the complete incompressible solver in isolation" OFF)
+if(RANS_BUILD_SOLVER)
+    set(RANS_SOLVER_ROOT ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver)
+    # Use the production source list so registrations and legacy paths match
+    # the normal executable. No shared installation is overwritten.
+    file(READ ${RANS_SOLVER_ROOT}/CMakeLists.txt rans_solver_cmake)
+    string(REGEX MATCH "LIBRARY_SOURCES[^)]*" rans_library_block "${rans_solver_cmake}")
+    string(REGEX MATCHALL "\\./[A-Za-z0-9_/]+\\.cpp" rans_solver_sources "${rans_library_block}")
+    set(rans_absolute_sources ${RANS_SOLVER_ROOT}/IncNavierStokesSolver.cpp)
+    foreach(rans_source ${rans_solver_sources})
+        list(APPEND rans_absolute_sources ${RANS_SOLVER_ROOT}/${rans_source})
+    endforeach()
+    add_executable(IncNavierStokesSolver ${rans_absolute_sources})
+    target_include_directories(IncNavierStokesSolver PRIVATE ${RANS_SOURCE_ROOT}/solvers)
+    target_link_libraries(IncNavierStokesSolver RANSKernels
+        ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
+    add_executable(RANSFieldAudit ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSFieldAudit.cpp)
+    target_link_libraries(RANSFieldAudit ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(RANSFieldAudit PRIVATE
+            -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror)
+        set_source_files_properties(
+            ${RANS_SOLVER_ROOT}/./EquationSystems/RANSVelocityCorrectionScheme.cpp
+            PROPERTIES COMPILE_OPTIONS "-Wall;-Wextra;-Wpedantic;-Wno-sign-compare;-Werror")
+    endif()
+endif()
 enable_testing()
+if(RANS_BUILD_SOLVER)
+    file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke)
+    add_test(NAME RANSStandardTransportSmoke COMMAND IncNavierStokesSolver
+        ${CMAKE_CURRENT_LIST_DIR}/StandardRANS_MMS.xml)
+    set_tests_properties(RANSStandardTransportSmoke PROPERTIES
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke
+        PROCESSORS 1 TIMEOUT 120 ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
+endif()
 add_test(NAME RANSWallLayerPrototype COMMAND RANSWallLayerProbe
     --output ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-layer.json)
 set_tests_properties(RANSWallLayerPrototype PROPERTIES

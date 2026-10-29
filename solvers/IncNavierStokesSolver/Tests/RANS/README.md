@@ -1,5 +1,39 @@
 # Neutral ABL RANS kernel and wall-layer tests
 
+Milestone 3 provides an opt-in `RANSVelocityCorrectionScheme` for standard
+k–epsilon URANS. Its [specification](../../../../docs/plans/neutral-abl-rans-awf-milestone-3.md)
+defines the implicit nonlinear stage, mixed pressure space, boundary fluxes,
+pressure convention, and scope. Build the complete executable in isolation
+by adding `-DRANS_BUILD_SOLVER=ON` to the CMake command below. It compiles the
+production incompressible-solver source list against the installed native
+libraries and preserves the shared installation used by other experiments.
+
+Use `StandardRANS_MMS.xml` for a short manufactured smoke test, registered as
+`RANSStandardTransportSmoke` in both the main and external builds. The full
+Milestone 3 study is:
+
+```bash
+taskset -c 112-127 python3 solvers/IncNavierStokesSolver/Tests/RANS/validate_m3.py \
+  --build "$RANS_RUN/build" --output "$RANS_RUN/validation-m3"
+```
+
+Set `RANS_RUN` and TMPDIR as described below. The fixture generator needs SymPy;
+the validator otherwise uses the Python standard library and the native
+`RANSFieldAudit` executable. Temporal cases use at most three concurrent
+one-rank jobs. That pool closes before sequential four-rank MPI cases start.
+Affinity and library threads are limited before loading generator dependencies.
+`--skip-long-abl` is a pilot option and cannot close the milestone. Completed
+cases are reused only when their exact fixture and executable hashes match.
+
+The accepted configuration uses full 2D/3D CG velocity and scalar fields, with
+degree p−2 continuous pressure at the same quadrature points. All physical
+pressure boundaries use the `RANSPressure` Neumann marker with prescribed normal
+velocity. The lower standard wall uses tangential `RANSLogLaw` Neumann data,
+zero normal Dirichlet velocity, zero k flux and algebraic epsilon Dirichlet
+data at a positive standoff height. See the supplied fixture and generator for
+complete XML, including explicit quadrature settings. Saved `p` means reduced
+pressure, `pi = p_mechanical/rho + 2k/3`.
+
 Milestone 1 selects a control-volume wall strip on `0 < z < H`, coupled to
 native continuous spectral elements on `H <= z <= Z`. The mathematical
 contract and completion evidence are in
@@ -10,8 +44,8 @@ normal mass balance, interface signs, native outer weak residuals, h/p and
 quadrature convergence, inconsistent-boundary controls, and a conservative
 backward-Euler step with frozen reference viscosity. The outer residual now
 calls the general CLS kernel at the native simple-shear gradients, including
-its variable coefficient, full stress, and algebraic Yap term. The complete
-URANS timestep remains a subsequent milestone.
+its variable coefficient, full stress, and algebraic Yap term. This probe tests
+the wall strip; coupled CLS/AWF URANS transport remains a subsequent milestone.
 
 Milestone 2 adds `RANSKernelProbe` and an independent Python oracle. They test
 standard k–epsilon and CLS tensors/sources, configured reference roots, original
@@ -72,6 +106,7 @@ with `--probe "$RANS_RUN/build/RANSWallLayerProbe"`, `--output` and
 `--mpi-ranks 4`. It now exercises the general CLS kernel through the column.
 Keep historical Milestone 1 reports unchanged when running this regression.
 
-A successful result establishes the specified local model contracts and column
-convergence. Full nonlinear URANS integration and analytical inlet preservation
-in IncNavierStokesSolver remain later milestones.
+A successful kernel/column result establishes the specified local model
+contracts and column convergence. Milestone 3 adds standard-model unsteady
+transport. CLS/AWF solver coupling and the full analytical inlet/outlet
+preservation study remain later milestones.

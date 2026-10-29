@@ -16,6 +16,7 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
         ./EquationSystems/VelocityCorrectionScheme.cpp
         ./EquationSystems/VelocityCorrectionSchemeImplicit.cpp
         ./EquationSystems/VelocityCorrectionSchemeWeakPressure.cpp
+        ./EquationSystems/RANSVelocityCorrectionScheme.cpp
         ./EquationSystems/SmoothedProfileMethod.cpp
         ./EquationSystems/VCSMapping.cpp
         ./EquationSystems/Extrapolate.cpp
@@ -71,6 +72,7 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
             EquationSystems/VelocityCorrectionScheme.h
             EquationSystems/VelocityCorrectionSchemeImplicit.h
             EquationSystems/VelocityCorrectionSchemeWeakPressure.h
+            EquationSystems/RANSVelocityCorrectionScheme.h
             EquationSystems/WeakPressureExtrapolate.h
             Filters/FilterAeroForcesSPM.h
             Filters/FilterMovingBody.h
@@ -121,6 +123,15 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
         ADD_TEST(NAME RANSKernelUnitTests COMMAND RANSKernelProbe
             --output ${CMAKE_CURRENT_BINARY_DIR}/rans-kernels.json)
         SET_TESTS_PROPERTIES(RANSKernelUnitTests PROPERTIES
+            PROCESSORS 1 TIMEOUT 120
+            ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
+        ADD_NEKTAR_EXECUTABLE(RANSFieldAudit COMPONENT tests DEPENDS MultiRegions
+            SOURCES ${CMAKE_SOURCE_DIR}/library/UnitTests/SolverUtils/RANSFieldAudit.cpp)
+        FILE(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke)
+        ADD_TEST(NAME RANSStandardTransportSmoke COMMAND IncNavierStokesSolver
+            ${CMAKE_CURRENT_SOURCE_DIR}/Tests/RANS/StandardRANS_MMS.xml)
+        SET_TESTS_PROPERTIES(RANSStandardTransportSmoke PROPERTIES
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke
             PROCESSORS 1 TIMEOUT 120
             ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
         SET(HIT_TEST_DIR ${CMAKE_SOURCE_DIR}/library/UnitTests/SolverUtils)

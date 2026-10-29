@@ -62,6 +62,7 @@ enum SolverType
     eWeakPressure,
     eVCSImplicit,
     eImplicit,
+    eRANSVelocityCorrectionScheme,
 };
 
 enum EquationType
