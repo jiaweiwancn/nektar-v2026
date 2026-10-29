@@ -8,6 +8,8 @@ as downstream solver validation.
 This implements Milestone 6 of the [implementation plan](hit-inflow-implementation-plan.md)
 under the [predeclared protocol](hit-inflow-milestone-6-protocol.md). No downstream
 experimental values have been fitted or scored. Milestone 7 remains separate.
+The [follow-up qualification rules](hit-inflow-milestone-6-qualification.md)
+predeclare sampling screens and claim limits before Milestone 7 scoring.
 
 ## Scope and provenance
 
@@ -70,10 +72,11 @@ represented-band limitation, not a measured downstream error bar. No retained
 band is silently rescaled to restore the missing energy.
 
 The upstream Kolmogorov length is approximately 0.2905 mm. Even the planning
-threshold `k*eta=1` would require roughly 3.96 billion retained modes in this
+threshold `k*eta=1` would require roughly 3.97 billion retained modes in this
 synthesis box, or about 349 GB of mode payload **per rank**, exceeding the
 server's approximately 251 GiB RAM before fields and matrices. Uniform Nyquist
-spacing over the 9 by 0.6 by 0.6 m domain gives approximately 4.4 billion points.
+spacing over the 9 by 0.6 by 0.6 m domain gives approximately 4.27 billion points
+(`9863*658*658`); the arithmetic is saved in `dns-planning-arithmetic.json`.
 These are arithmetic planning estimates, not allocations or measured DNS runs.
 They motivate a limited-band study with explicit SVV, rather than a full DNS
 claim. SVV stabilizes represented modes; it does not supply the omitted inlet
