@@ -6,6 +6,7 @@
 
 #include <IncNavierStokesSolver/BoundaryConditions/HITInflowRestart.h>
 #include <LibUtilities/BasicConst/GitRevision.h>
+#include <LibUtilities/BasicUtils/Filesystem.hpp>
 #include <algorithm>
 #include <cfenv>
 #include <cmath>
@@ -218,14 +219,37 @@ void HITInflowRestart::Prepare(
         }
         if (fileVariables)
         {
-            if (fileVariables != 4 || !metadata.count("Time"))
+            if (fileVariables != 4)
             {
                 throw std::invalid_argument(
                     "HITInflow: restart requires all u,v,w,p and stored Time metadata");
             }
-            // Native CheckForRestartTime has imported this map already. Do not
-            // seed new keys before this verification: native imports merge.
-            Verify(metadata, expected);
+            // Native imports merge into an equation map that already contains
+            // Time=0. Read an empty map so absent source keys cannot be supplied
+            // by those defaults (or any other preexisting equation metadata).
+            fs::path source(filename);
+            if (fs::is_directory(source))
+            {
+                source /= "Info.xml";
+            }
+            const auto path = LibUtilities::PortablePath(source);
+            LibUtilities::FieldMetaDataMap stored;
+            auto reader = LibUtilities::FieldIO::CreateForFile(session, path);
+            reader->ImportFieldMetaData(path, stored);
+            if (!stored.count("Time"))
+            {
+                throw std::invalid_argument(
+                    "HITInflow: restart requires stored Time metadata");
+            }
+            std::size_t consumed = 0;
+            const auto storedTime = std::stod(stored.at("Time"), &consumed);
+            if (!std::isfinite(storedTime) ||
+                consumed != stored.at("Time").size())
+            {
+                throw std::invalid_argument(
+                    "HITInflow: restart requires valid stored Time metadata");
+            }
+            Verify(stored, expected);
         }
         const auto &config = generator.GetConfig();
         const long double begin = config.timeOrigin;

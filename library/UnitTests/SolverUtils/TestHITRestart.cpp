@@ -5,6 +5,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <IncNavierStokesSolver/BoundaryConditions/HITInflowRestart.h>
+#include <LibUtilities/BasicUtils/Filesystem.hpp>
+#include <LibUtilities/Communication/CommSerial.h>
 #include <boost/test/unit_test.hpp>
 #include <tinyxml.h>
 
@@ -305,6 +307,77 @@ BOOST_AUTO_TEST_CASE(MetadataSurvivesXMLWhitespaceProcessing)
         values[node->ValueStr()] = node->GetText();
     }
     BOOST_CHECK_NO_THROW(HITInflowRestart::Verify(values, expected));
+}
+
+BOOST_AUTO_TEST_CASE(RestartSourceCannotBorrowEquationDefaults)
+{
+    struct TemporaryFiles
+    {
+        fs::path directory = fs::temp_directory_path() /
+                             LibUtilities::UniquePath("hit-restart-source");
+        TemporaryFiles() { fs::create_directory(directory); }
+        ~TemporaryFiles()
+        {
+            try { fs::remove_all(directory); }
+            catch (...) {}
+        }
+    } files;
+    const auto checkpoint = (files.directory / "input.chk").string();
+    const auto input = (files.directory / "session.xml").string();
+    TiXmlDocument document;
+    BOOST_REQUIRE(document.LoadFile(
+        (fs::path(HIT_TEST_FIXTURE_DIR) / "m4-h1d-restart.xml").string()));
+    document.RootElement()->FirstChildElement("CONDITIONS")
+        ->FirstChildElement("FUNCTION")->FirstChildElement("F")
+        ->SetAttribute("FILE", checkpoint);
+    BOOST_REQUIRE(document.SaveFile(input));
+    char name[] = "HITRestartUnitTests";
+    char *arguments[] = {name, nullptr};
+    auto comm = LibUtilities::CommSerial::create(1, arguments);
+    auto session = LibUtilities::SessionReader::CreateInstance(
+        1, arguments, std::vector<std::string>{input}, comm);
+    session->InitSession();
+    const auto configuration = HITInflowConfig::Load(session);
+    BOOST_REQUIRE(configuration);
+    const HITGenerator generator(configuration->generator,
+                                  *configuration->spectrum);
+    const auto identity = HITInflowRestart::Describe(*configuration, generator);
+    const auto write = [&](const Metadata &values)
+    {
+        TiXmlDocument field;
+        auto root = new TiXmlElement("NEKTAR");
+        field.LinkEndChild(root);
+        auto metadata = new TiXmlElement("Metadata");
+        root->LinkEndChild(metadata);
+        for (const auto &entry : values)
+        {
+            auto element = new TiXmlElement(entry.first);
+            element->LinkEndChild(new TiXmlText(entry.second));
+            metadata->LinkEndChild(element);
+        }
+        BOOST_REQUIRE(field.SaveFile(checkpoint));
+    };
+    auto merged = identity;
+    merged["Time"] = "0"; // The native unsteady equation's preexisting default.
+    write(identity);     // Source has every identity key but no stored Time.
+    BOOST_CHECK_THROW(HITInflowRestart::Prepare(
+        session, *configuration, generator, merged, 0.0), std::exception);
+
+    merged["Time"] = "0.01";
+    write(Metadata{{"Time", "0.01"}}); // Defaults must not supply identity either.
+    BOOST_CHECK_THROW(HITInflowRestart::Prepare(
+        session, *configuration, generator, merged, 0.01), std::exception);
+
+    auto invalidTime = merged;
+    invalidTime["Time"] = "0.01suffix";
+    write(invalidTime);
+    BOOST_CHECK_THROW(HITInflowRestart::Prepare(
+        session, *configuration, generator, merged, 0.01), std::exception);
+
+    write(merged);
+    BOOST_CHECK_NO_THROW(HITInflowRestart::Prepare(
+        session, *configuration, generator, merged, 0.01));
+    session->Finalise();
 }
 
 BOOST_AUTO_TEST_SUITE_END()
