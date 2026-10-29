@@ -94,15 +94,45 @@ HITPlaneEvaluator::HITPlaneEvaluator(
         m_method = "MeanOnly";
         return;
     }
+    NekDouble maxCoefficient = 0.0;
     for (const auto &mode : modes)
     {
         for (int direction = 0; direction < 3; ++direction)
         {
             m_maxAbsWave[direction] = std::max(
                 m_maxAbsWave[direction], std::abs(mode.wavevector[direction]));
+            maxCoefficient = std::max(
+                maxCoefficient, std::abs(mode.coefficient[direction]));
         }
     }
     const auto &config = generator.GetConfig();
+    const NekDouble maxWave = std::max(
+        {m_maxAbsWave[0], m_maxAbsWave[1], m_maxAbsWave[2]});
+    const long double logWave = maxWave > 0.0
+        ? std::log(static_cast<long double>(maxWave)) : 0.0L;
+    const long double logSpeed = std::max(
+        0.0L, std::log(static_cast<long double>(config.meanSpeed)));
+    const long double logLimit = std::log(
+        static_cast<long double>(std::numeric_limits<NekDouble>::max()) / 16.0L);
+    // Reference() also evaluates gradients and time derivatives. Bound their
+    // paired sums without forming products or using possibly underflowed K.
+    // Separately protect the reference's intermediate 2*U*k multiplications,
+    // even when the subsequent coefficient is tiny or zero.
+    const long double logPartial =
+        std::log(2.0L) + std::max(0.0L, logWave) + logSpeed;
+    long double logDerivative = 0.0L;
+    if (maxWave > 0.0 && maxCoefficient > 0.0)
+    {
+        logDerivative = std::log(2.0L) +
+            std::log(static_cast<long double>(modes.size())) + logWave +
+            std::log(static_cast<long double>(maxCoefficient)) + logSpeed;
+    }
+    if (!std::isfinite(logPartial) || !std::isfinite(logDerivative) ||
+        logPartial > logLimit || logDerivative > logLimit)
+    {
+        m_method = "ReferenceDerivativeRange";
+        return;
+    }
     if (!SafeAtTime(config.timeOrigin) ||
         !SafeAtTime(config.timeOrigin + config.recordDuration))
     {

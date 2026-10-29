@@ -260,5 +260,87 @@ BOOST_AUTO_TEST_CASE(PlaneScaledUnitsAndTabulatedSpectrum)
     Compare(generator, plane, points, 0.0);
 }
 
+BOOST_AUTO_TEST_CASE(PlaneDerivativeRangePreservesReferenceExceptions)
+{
+    struct Scenario
+    {
+        const char *name;
+        NekDouble length, speed, rms, dt, duration;
+        bool partialProductOnly;
+    };
+    const std::array<Scenario, 2> scenarios{{
+        {"unrepresentable derivative", 1.0, 1e250, 1e100, 1e-252,
+         1e-251, false},
+        {"overflowing intermediate product", 1e10, 1e308, 1e-100, 1e-307,
+         1e-306, true}}};
+    for (const auto &scenario : scenarios)
+    {
+        BOOST_TEST_CONTEXT(scenario.name)
+        {
+            auto config = Configuration(scenario.length);
+            config.meanSpeed = scenario.speed;
+            config.targetRMS = scenario.rms;
+            config.timeStep = scenario.dt;
+            config.recordDuration = scenario.duration;
+            const HITGenerator generator(config,
+                HITSpectrum::VonKarman(0.8 * scenario.length, 1.0));
+            const std::vector<HITVector> points{config.origin};
+            // Every phase is zero here. Velocities remain finite even when
+            // the reference's left-associated time-derivative product fails.
+            HITVector velocity{config.meanSpeed, 0.0, 0.0};
+            long double maxWave = 0.0L, maxCoefficient = 0.0L;
+            for (const auto &mode : generator.GetModes())
+            {
+                for (int component = 0; component < 3; ++component)
+                {
+                    velocity[component] +=
+                        2.0 * mode.coefficient[component].real();
+                    maxWave = std::max(maxWave,
+                        std::abs(static_cast<long double>(
+                            mode.wavevector[component])));
+                    maxCoefficient = std::max(maxCoefficient,
+                        static_cast<long double>(
+                            std::abs(mode.coefficient[component])));
+                }
+            }
+            for (const auto value : velocity)
+            {
+                BOOST_REQUIRE(std::isfinite(value));
+            }
+            if (scenario.partialProductOnly)
+            {
+                // Isolate the partial-product guard: the complete paired
+                // derivative bound fits, but 2*U overflows before the small
+                // wavenumber and coefficient are multiplied. Timesteps and
+                // record lengths stay in the normal floating-point range.
+                const long double bound =
+                    (2.0L * generator.GetModes().size() * maxWave *
+                     maxCoefficient) * config.meanSpeed;
+                BOOST_REQUIRE(std::isfinite(bound));
+                BOOST_CHECK_LE(bound,
+                    static_cast<long double>(
+                        std::numeric_limits<NekDouble>::max()) / 16.0L);
+                BOOST_CHECK_GT(2.0L * config.meanSpeed,
+                    static_cast<long double>(
+                        std::numeric_limits<NekDouble>::max()));
+            }
+            BOOST_CHECK_THROW(generator.Evaluate(config.origin, 0.0),
+                              std::overflow_error);
+            const HITPlaneEvaluator unlimited(
+                generator, points, std::numeric_limits<std::size_t>::max());
+            const HITPlaneEvaluator forcedFallback(generator, points, 0);
+            std::vector<HITVector> values;
+            for (const auto *plane : {&unlimited, &forcedFallback})
+            {
+                BOOST_CHECK(!plane->IsGrouped());
+                BOOST_CHECK_EQUAL(plane->Method(), "ReferenceDerivativeRange");
+                BOOST_CHECK_EQUAL(plane->CacheBytes(), 0U);
+                BOOST_CHECK_THROW(plane->Evaluate(0.0, values),
+                                  std::overflow_error);
+            }
+        }
+    }
+}
+
 BOOST_AUTO_TEST_SUITE_END()
 } // namespace Nektar::SolverUtils::HITPlaneTests
