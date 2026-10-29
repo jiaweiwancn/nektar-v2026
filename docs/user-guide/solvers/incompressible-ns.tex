@@ -1402,7 +1402,10 @@ environment and reconstructed coefficient digest. Restart all of
 \inltt{u,v,w,p} from one common field file or parallel field directory.
 Missing or realization-changing metadata is rejected before the initial inlet
 trace is supplied. The actual restored time and complete requested job must
-fit the declared record. Record duration, repeat policy, output frequency,
+fit the declared record. The \inltt{--set-start-time} option may only restate
+the stored checkpoint time;
+a different value is rejected to preserve the inlet phase. Record duration,
+repeat policy, output frequency,
 timestep and MPI decomposition may change provided their independent validity
 checks pass; they do not reseed or reset the phase. The native IMEX integrator
 reinitializes its multistep history, so an evolved restart is compared within

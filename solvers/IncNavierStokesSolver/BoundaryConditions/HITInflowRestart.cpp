@@ -249,6 +249,14 @@ void HITInflowRestart::Prepare(
                 throw std::invalid_argument(
                     "HITInflow: restart requires valid stored Time metadata");
             }
+            const auto timeTolerance =
+                64.0 * std::numeric_limits<NekDouble>::epsilon() *
+                std::max({1.0, std::abs(storedTime), std::abs(initialTime)});
+            if (std::abs(storedTime - initialTime) > timeTolerance)
+            {
+                throw std::invalid_argument(
+                    "HITInflow: restart time override would reset the inlet phase");
+            }
             Verify(stored, expected);
         }
         const auto &config = generator.GetConfig();

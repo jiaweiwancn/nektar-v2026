@@ -286,6 +286,8 @@ before initial Dirichlet conditions are imposed. An interior mean-only initial
 condition is permitted and is used in the configuration fragments; its
 transients must flush before statistics are sampled. There is no automatic
 amplitude ramp, random reseeding, or resetting of phase on restart.
+The stored checkpoint time is required; `--set-start-time` may only restate
+that time within floating-point tolerance, rather than change the phase.
 
 Generator restart metadata must contain the schema/algorithm versions, seed,
 resolved grid and periods, origin, mean velocity, phase time origin, spectrum

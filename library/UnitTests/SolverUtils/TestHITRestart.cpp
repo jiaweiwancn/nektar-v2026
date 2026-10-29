@@ -376,6 +376,8 @@ BOOST_AUTO_TEST_CASE(RestartSourceCannotBorrowEquationDefaults)
         session, *configuration, generator, merged, 0.01), std::exception);
 
     write(merged);
+    BOOST_CHECK_THROW(HITInflowRestart::Prepare(
+        session, *configuration, generator, merged, 0.0), std::exception);
     BOOST_CHECK_NO_THROW(HITInflowRestart::Prepare(
         session, *configuration, generator, merged, 0.01));
     session->Finalise();
