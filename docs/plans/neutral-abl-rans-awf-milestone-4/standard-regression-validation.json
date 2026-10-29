@@ -1,0 +1,3144 @@
+{
+  "schema": 1,
+  "milestone": "neutral_abl_rans_awf_m3",
+  "status": "passed",
+  "utc": "2026-10-29T14:29:36.399389+00:00",
+  "source_parent": "7f3ce79ad2fa404c95f0aa89c6137c97d8e624b8",
+  "source_sha256": {
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSVelocityCorrectionScheme.h": "d39df386714818544bebc3cf7102d0ec4080fa77237d5dc31db5eecd31099186",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSVelocityCorrectionScheme.cpp": "992286bfb46dd9d635f7d8733b82cda48dea0c570f8e900e37d1a309792df5b4",
+    "solvers/IncNavierStokesSolver/EquationSystems/IncNavierStokes.h": "40e60b0ac1fd8a446d50e7428286ee3475d6512821f5a3bfa5952d483ade7deb",
+    "library/UnitTests/SolverUtils/RANSFieldAudit.cpp": "709699dee965bd09f557d3a557b41e1cc2c7a38688862ad98edb52eaf20351e9",
+    "solvers/IncNavierStokesSolver/Tests/RANS/validate_m3.py": "bacbdee84aa3fc7ea7c5d03e0c0af865e2af001c07b847beeb7fb9c22fbbae2f",
+    "solvers/IncNavierStokesSolver/Tests/RANS/generate_m3.py": "c6852375de6725a2bda73e7c4c7644dee1f1834f8ba03eeb9b2bdf995be10a68",
+    "library/SolverUtils/Turbulence/RANSModels.cpp": "2e2bd22c243b8050ab04b33aacf2c4f91793a96fc2d70299ebbcf8716ce317ae",
+    "library/SolverUtils/Turbulence/RANSModels.h": "953dd36fba019767985f790316892c91d0c8433c817a0a56e195da281ed82f2b",
+    "solvers/IncNavierStokesSolver/CMakeLists.txt": "f9d883c1c5f7ac0fdc9b404ab5addda75190eda2c6c661bf75514f509bf30d8e",
+    "solvers/IncNavierStokesSolver/Tests/RANS/CMakeLists.txt": "a2935aa1480972a1ac820aa4abb2f984b99b7ee86484fa97e67fe1597bad084f",
+    "solvers/IncNavierStokesSolver/Tests/RANS/StandardRANS_MMS.xml": "e8317495fdfeec09ed883f050f3acb6ef3fcb7dc58eb8586372ff0c39822c1c9",
+    "solvers/IncNavierStokesSolver/Tests/TGV3d_2_2.xml": "2c4400d6cf0002db594d572dbf09ed1637e63a2cf1cd7768a170308dec78c553"
+  },
+  "binary_sha256": {
+    "IncNavierStokesSolver": "b978de9e9210b603c05d7996026ec57276101d211e3c3abda4d702b7a9b14f8d",
+    "RANSFieldAudit": "07f353b7534c6c3b5887ace15d16e7d8a181175cb06f569f734f46ef47f070cb"
+  },
+  "cpu_affinity": [
+    120,
+    121,
+    122,
+    123,
+    124,
+    125,
+    126,
+    127
+  ],
+  "maximum_project_workers": 16,
+  "maximum_mpi_ranks": 4,
+  "maximum_concurrent_serial_cases": 3,
+  "mpi_overlaps_serial_pool": false,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "time_refinement_rates": {
+    "1": {
+      "u": [
+        0.9465175560061146,
+        0.972153139963957
+      ],
+      "v": [
+        0.9465213529293023,
+        0.9721559202309563
+      ],
+      "k": [
+        0.7868176449482976,
+        0.839083405496833
+      ],
+      "eps": [
+        0.9480615592772689,
+        0.9730884247031585
+      ],
+      "p": [
+        1.000186332447336,
+        1.0001217681250067
+      ]
+    },
+    "2": {
+      "u": [
+        2.34275772996822,
+        2.1617754053353346
+      ],
+      "v": [
+        2.342632913107485,
+        2.1617434332707477
+      ],
+      "k": [
+        1.8990598484248014,
+        1.9532266996463643
+      ],
+      "eps": [
+        2.119674848757534,
+        2.064679971943939
+      ],
+      "p": [
+        2.0008023348576063,
+        2.0002623170451646
+      ]
+    }
+  },
+  "decay_rates": {
+    "k": [
+      2.167140671076884,
+      2.0580908005364216
+    ],
+    "eps": [
+      2.1789675058710274,
+      2.046941350710045
+    ]
+  },
+  "full_field_comparisons": {
+    "mms_o2_dt0.025__mms_mpi": {
+      "time": 0.19999999999999998,
+      "fields": {
+        "u": {
+          "l2_error": 2.487505337684671e-06,
+          "linf_error": 5.535868375164399e-06,
+          "difference_l2": 1.7509563632678648e-13,
+          "difference_linf": 8.085309765454296e-13,
+          "min": -0.012499010996146134,
+          "max": 0.01249893966615298
+        },
+        "v": {
+          "l2_error": 2.4878777587319033e-06,
+          "linf_error": 5.627408457881469e-06,
+          "difference_l2": 2.126375322893201e-13,
+          "difference_linf": 1.9106149895518778e-12,
+          "min": -0.012498848126070265,
+          "max": 0.012499101468279478
+        },
+        "k": {
+          "l2_error": 6.784751871916299e-07,
+          "linf_error": 1.3658064863530939e-06,
+          "difference_l2": 5.924889432574507e-13,
+          "difference_linf": 5.511147094239277e-12,
+          "min": 1.009933466539753,
+          "max": 1.309933466539753
+        },
+        "eps": {
+          "l2_error": 2.269343472074535e-05,
+          "linf_error": 3.951211660901954e-05,
+          "difference_l2": 5.047998582638781e-13,
+          "difference_linf": 5.068723218926152e-12,
+          "min": 0.7294019973352373,
+          "max": 0.9294019973352372
+        },
+        "p": {
+          "l2_error": 1.806491608546016e-05,
+          "linf_error": 3.7207651191695224e-05,
+          "difference_l2": 3.716283252458848e-12,
+          "difference_linf": 1.0780934478482607e-10,
+          "min": -0.15897317776353767,
+          "max": 0.15897308687006698
+        }
+      }
+    },
+    "mms_o2_dt0.025__mms_quadrature": {
+      "time": 0.19999999999999998,
+      "fields": {
+        "u": {
+          "l2_error": 2.487505337684671e-06,
+          "linf_error": 5.535868375164399e-06,
+          "difference_l2": 1.7275484539433664e-16,
+          "difference_linf": 5.342948306008566e-16,
+          "min": -0.012499010996146134,
+          "max": 0.01249893966615298
+        },
+        "v": {
+          "l2_error": 2.4878777587319033e-06,
+          "linf_error": 5.627408457881469e-06,
+          "difference_l2": 1.3607675959381394e-16,
+          "difference_linf": 4.996003610813204e-16,
+          "min": -0.012498848126070265,
+          "max": 0.012499101468279478
+        },
+        "k": {
+          "l2_error": 6.784751871916299e-07,
+          "linf_error": 1.3658064863530939e-06,
+          "difference_l2": 3.516147345161183e-14,
+          "difference_linf": 9.414691248821327e-14,
+          "min": 1.009933466539753,
+          "max": 1.309933466539753
+        },
+        "eps": {
+          "l2_error": 2.269343472074535e-05,
+          "linf_error": 3.951211660901954e-05,
+          "difference_l2": 1.938770022125333e-14,
+          "difference_linf": 4.39648317751562e-14,
+          "min": 0.7294019973352373,
+          "max": 0.9294019973352372
+        },
+        "p": {
+          "l2_error": 1.806491608546016e-05,
+          "linf_error": 3.7207651191695224e-05,
+          "difference_l2": 1.2099101291771874e-14,
+          "difference_linf": 2.7283730830163222e-14,
+          "min": -0.15897317776353767,
+          "max": 0.15897308687006698
+        }
+      }
+    },
+    "decay_3d__decay_3d_mpi": {
+      "time": 0.19999999999999998,
+      "fields": {
+        "u": {
+          "l2_error": 0,
+          "linf_error": 0,
+          "difference_l2": 0,
+          "difference_linf": 0,
+          "min": 0,
+          "max": 0
+        },
+        "v": {
+          "l2_error": 0,
+          "linf_error": 0,
+          "difference_l2": 0,
+          "difference_linf": 0,
+          "min": 0,
+          "max": 0
+        },
+        "w": {
+          "l2_error": 0,
+          "linf_error": 0,
+          "difference_l2": 0,
+          "difference_linf": 0,
+          "min": 0,
+          "max": 0
+        },
+        "k": {
+          "l2_error": 0.014115071802112826,
+          "linf_error": 0.0008962172305061467,
+          "difference_l2": 2.6540311127543215e-10,
+          "difference_linf": 2.4291291200739806e-10,
+          "min": 0.6210637174238596,
+          "max": 0.6210637174242861
+        },
+        "eps": {
+          "l2_error": 0.08456718442632659,
+          "linf_error": 0.005369478020089247,
+          "difference_l2": 4.867499611370424e-10,
+          "difference_linf": 4.497022754179625e-10,
+          "min": 1.2041468624149614,
+          "max": 1.2041468624152825
+        },
+        "p": {
+          "l2_error": 0,
+          "linf_error": 0,
+          "difference_l2": 0,
+          "difference_linf": 0,
+          "min": 0,
+          "max": 0
+        }
+      }
+    }
+  },
+  "cases": {
+    "mms_o1_dt0.05": {
+      "fingerprint": {
+        "fixture_sha256": "229ce88b0002e9d4badb927a686111329eb11132396814cf6ff458344dc1e434",
+        "binaries": {
+          "IncNavierStokesSolver": "b978de9e9210b603c05d7996026ec57276101d211e3c3abda4d702b7a9b14f8d",
+          "RANSFieldAudit": "07f353b7534c6c3b5887ace15d16e7d8a181175cb06f569f734f46ef47f070cb"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.05,
+        "steps": 4,
+        "order": 1,
+        "modes": 7
+      },
+      "dimension": 2,
+      "kind": "mms",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "mms_o1_dt0.05.xml"
+      ],
+      "field_audit": {
+        "time": 0.2,
+        "fields": {
+          "u": {
+            "l2_error": 5.75462404115676e-05,
+            "linf_error": 0.0001248928138716989,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.01237971423269527,
+            "max": 0.012379582720656446
+          },
+          "v": {
+            "l2_error": 5.75506614210804e-05,
+            "linf_error": 0.00012531078712079563,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.01238015802220024,
+            "max": 0.01237916474740735
+          },
+          "k": {
+            "l2_error": 4.898729843332775e-06,
+            "linf_error": 9.917819440152797e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.009933466539753,
+            "max": 1.309933466539753
+          },
+          "eps": {
+            "l2_error": 0.00034870081973815617,
+            "linf_error": 0.0005111904906696108,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.7294019973352373,
+            "max": 0.9294019973352372
+          },
+          "p": {
+            "l2_error": 0.00144300348718356,
+            "linf_error": 0.002896710225717525,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.15691097898803247,
+            "max": 0.15690931514516188
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 4,
+        "maximum_iterations": 88.0,
+        "maximum_change": 9.091117615656064e-12,
+        "maximum_pressure_correction": 9.585083775425236e-11,
+        "maximum_strong_divergence_l2": 1.15201915340474e-06,
+        "maximum_weak_divergence_l2": 5.891970316697807e-11,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.1239109866422837,
+        "last_min_nut": 0.12585228029357837
+      },
+      "artifacts_sha256": {
+        "audit.log": "2fbbf7bd049b3d214db195a370687e501e18b2e4dfa06cbcbca9b38ffe8e12a0",
+        "mms_o1_dt0.05.log": "856b0a4ac461fe135f3e55bb7d49b66f363229735e6da0359f88b3bd6245f172",
+        "mms_o1_dt0.05.rans.csv": "9650f19aeb74eeee4d4c0a333f729c52374574d6402042175e415e0714a3f846",
+        "mms_o1_dt0.05.xml": "229ce88b0002e9d4badb927a686111329eb11132396814cf6ff458344dc1e434",
+        "mms_o1_dt0.his": "07f164e673d7d3753c54a005b75cac92d2d6897d26be96f5abf9f84d537470a4"
+      }
+    },
+    "mms_o1_dt0.025": {
+      "fingerprint": {
+        "fixture_sha256": "28900599b5f5312d2f1b7b3a73ce5a94e11b4131313bed7d27b836f1bb46efa2",
+        "binaries": {
+          "IncNavierStokesSolver": "b978de9e9210b603c05d7996026ec57276101d211e3c3abda4d702b7a9b14f8d",
+          "RANSFieldAudit": "07f353b7534c6c3b5887ace15d16e7d8a181175cb06f569f734f46ef47f070cb"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.025,
+        "steps": 8,
+        "order": 1,
+        "modes": 7
+      },
+      "dimension": 2,
+      "kind": "mms",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "mms_o1_dt0.025.xml"
+      ],
+      "field_audit": {
+        "time": 0.19999999999999998,
+        "fields": {
+          "u": {
+            "l2_error": 2.98597921239593e-05,
+            "linf_error": 6.48711975994136e-05,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.01243968399969293,
+            "max": 0.012439604336928731
+          },
+          "v": {
+            "l2_error": 2.9862007520926593e-05,
+            "linf_error": 6.506128966241552e-05,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012439888505569745,
+            "max": 0.01243941424486573
+          },
+          "k": {
+            "l2_error": 2.839407840758268e-06,
+            "linf_error": 5.832713006137524e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.009933466539753,
+            "max": 1.309933466539753
+          },
+          "eps": {
+            "l2_error": 0.00018074154953321564,
+            "linf_error": 0.00026469481823421237,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.7294019973352373,
+            "max": 0.9294019973352372
+          },
+          "p": {
+            "l2_error": 0.0007214085634668034,
+            "linf_error": 0.0014609097414785555,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.15794215667593126,
+            "max": 0.15794120558724356
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 8,
+        "maximum_iterations": 78.0,
+        "maximum_change": 8.078651571492845e-12,
+        "maximum_pressure_correction": 9.854189699955573e-11,
+        "maximum_strong_divergence_l2": 6.967499279929524e-07,
+        "maximum_weak_divergence_l2": 5.389898867740721e-11,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.12359763811841501,
+        "last_min_nut": 0.12585228029357837
+      },
+      "artifacts_sha256": {
+        "audit.log": "961f967de51ddbb6e1be1b4f123d229873b1836d07dfee9fcd4b33cd0a6b943b",
+        "mms_o1_dt0.025.log": "e877c30eb741d4e76b167e0f61ce5c11f28c39002121c5ace47618539f0a1311",
+        "mms_o1_dt0.025.rans.csv": "40aeefe000f6e38c3c65818b5c94db0b282e770fe68710bd1d5960e9f55fa8ea",
+        "mms_o1_dt0.025.xml": "28900599b5f5312d2f1b7b3a73ce5a94e11b4131313bed7d27b836f1bb46efa2",
+        "mms_o1_dt0.his": "3ad09947e6835156be4cd2cfed869d4853fe4d11721d5a336b946fbad68cdbe3"
+      }
+    },
+    "mms_o2_dt0.05": {
+      "fingerprint": {
+        "fixture_sha256": "c5f47dc385d287c37a86c77370b3597c0ebe4e5b94865c9d968f0682dfbafb20",
+        "binaries": {
+          "IncNavierStokesSolver": "b978de9e9210b603c05d7996026ec57276101d211e3c3abda4d702b7a9b14f8d",
+          "RANSFieldAudit": "07f353b7534c6c3b5887ace15d16e7d8a181175cb06f569f734f46ef47f070cb"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.05,
+        "steps": 4,
+        "order": 2,
+        "modes": 7
+      },
+      "dimension": 2,
+      "kind": "mms",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "mms_o2_dt0.05.xml"
+      ],
+      "field_audit": {
+        "time": 0.2,
+        "fields": {
+          "u": {
+            "l2_error": 1.2618402333426964e-05,
+            "linf_error": 2.811729573022788e-05,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012476607689946035,
+            "max": 0.012476358238797917
+          },
+          "v": {
+            "l2_error": 1.2619199703110764e-05,
+            "linf_error": 2.8370359825278732e-05,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012476105174702868,
+            "max": 0.012476867561975859
+          },
+          "k": {
+            "l2_error": 2.5305093565636697e-06,
+            "linf_error": 5.5603151922767324e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.009933466539753,
+            "max": 1.309933466539753
+          },
+          "eps": {
+            "l2_error": 9.86247563234723e-05,
+            "linf_error": 0.00016368510576503237,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.7294019973352373,
+            "max": 0.9294019973352372
+          },
+          "p": {
+            "l2_error": 7.229986172953845e-05,
+            "linf_error": 0.00015183967568027645,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.15908016343293185,
+            "max": 0.15907966320653338
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 4,
+        "maximum_iterations": 88.0,
+        "maximum_change": 9.091117615656064e-12,
+        "maximum_pressure_correction": 9.845577758327281e-11,
+        "maximum_strong_divergence_l2": 1.15201915340474e-06,
+        "maximum_weak_divergence_l2": 5.891970316697807e-11,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.1239109866422837,
+        "last_min_nut": 0.12585228029357837
+      },
+      "artifacts_sha256": {
+        "audit.log": "fa5a783f6cae5ffbce0622d27540d04eb0f9f327c0550d0356aa1d1a23b403ec",
+        "mms_o2_dt0.05.log": "d5964894a5c35888d0747bc8203dc0f91f7c716d4e143a925d4c84bd3996a8ca",
+        "mms_o2_dt0.05.rans.csv": "afa564f7fe95a1c2564456ce361c03e64ffbff59e3c67519b9c2846f7828c8c2",
+        "mms_o2_dt0.05.xml": "c5f47dc385d287c37a86c77370b3597c0ebe4e5b94865c9d968f0682dfbafb20",
+        "mms_o2_dt0.his": "02ab7f1d0a907291d15fc5c04b2955e1fb6e4e17ab10169050ed0455bb2d9bdf"
+      }
+    },
+    "mms_o1_dt0.0125": {
+      "fingerprint": {
+        "fixture_sha256": "52fa17686185bd4e30090477b64cdd0162a5fd0d1c0bd4742328a7ac65ecb002",
+        "binaries": {
+          "IncNavierStokesSolver": "b978de9e9210b603c05d7996026ec57276101d211e3c3abda4d702b7a9b14f8d",
+          "RANSFieldAudit": "07f353b7534c6c3b5887ace15d16e7d8a181175cb06f569f734f46ef47f070cb"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.0125,
+        "steps": 16,
+        "order": 1,
+        "modes": 7
+      },
+      "dimension": 2,
+      "kind": "mms",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "mms_o1_dt0.0125.xml"
+      ],
+      "field_audit": {
+        "time": 0.20000000000000004,
+        "fields": {
+          "u": {
+            "l2_error": 1.5220871673226468e-05,
+            "linf_error": 3.3086152113467535e-05,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.01247143385479678,
+            "max": 0.012471389382414677
+          },
+          "v": {
+            "l2_error": 1.522197162534448e-05,
+            "linf_error": 3.3173590671670486e-05,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012471528878457065,
+            "max": 0.012471301943856474
+          },
+          "k": {
+            "l2_error": 1.5872250292843651e-06,
+            "linf_error": 3.1803674271912996e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.009933466539753,
+            "max": 1.309933466539753
+          },
+          "eps": {
+            "l2_error": 9.207234343146057e-05,
+            "linf_error": 0.00013480377372798724,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.7294019973352373,
+            "max": 0.9294019973352372
+          },
+          "p": {
+            "l2_error": 0.00036067383841081126,
+            "linf_error": 0.0007335368120550412,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.1584440810135923,
+            "max": 0.15844357774591075
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 16,
+        "maximum_iterations": 69.0,
+        "maximum_change": 9.696660683601588e-12,
+        "maximum_pressure_correction": 9.935811672562075e-11,
+        "maximum_strong_divergence_l2": 3.756427088509211e-07,
+        "maximum_weak_divergence_l2": 6.951518449465532e-11,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.12344222128580934,
+        "last_min_nut": 0.12585228029357837
+      },
+      "artifacts_sha256": {
+        "audit.log": "52e101e4df964535acf151fa9323680ea0135e7953a59bf05db6294e012de9f2",
+        "mms_o1_dt0.0125.log": "1b5bfaa1508d1d032cf308c152f0071a6435694b2e92945a83e48b5b3fe7e33b",
+        "mms_o1_dt0.0125.rans.csv": "a197d543ce097c7427ec0063af9633ac3201904939d028406479424f42e49cbd",
+        "mms_o1_dt0.0125.xml": "52fa17686185bd4e30090477b64cdd0162a5fd0d1c0bd4742328a7ac65ecb002",
+        "mms_o1_dt0.his": "155c7862d9dec942e9d1681341367ddf1a20998ecc94f425f56952d4bcc38b71"
+      }
+    },
+    "mms_o2_dt0.025": {
+      "fingerprint": {
+        "fixture_sha256": "242cb0f7d3bd255a616611df27c195c8c3f9215d24223795e1f6eea8e0deed10",
+        "binaries": {
+          "IncNavierStokesSolver": "b978de9e9210b603c05d7996026ec57276101d211e3c3abda4d702b7a9b14f8d",
+          "RANSFieldAudit": "07f353b7534c6c3b5887ace15d16e7d8a181175cb06f569f734f46ef47f070cb"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.025,
+        "steps": 8,
+        "order": 2,
+        "modes": 7
+      },
+      "dimension": 2,
+      "kind": "mms",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "mms_o2_dt0.025.xml"
+      ],
+      "field_audit": {
+        "time": 0.19999999999999998,
+        "fields": {
+          "u": {
+            "l2_error": 2.487505337684671e-06,
+            "linf_error": 5.535868375164399e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012499010996146134,
+            "max": 0.01249893966615298
+          },
+          "v": {
+            "l2_error": 2.4878777587319033e-06,
+            "linf_error": 5.627408457881469e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012498848126070265,
+            "max": 0.012499101468279478
+          },
+          "k": {
+            "l2_error": 6.784751871916299e-07,
+            "linf_error": 1.3658064863530939e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.009933466539753,
+            "max": 1.309933466539753
+          },
+          "eps": {
+            "l2_error": 2.269343472074535e-05,
+            "linf_error": 3.951211660901954e-05,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.7294019973352373,
+            "max": 0.9294019973352372
+          },
+          "p": {
+            "l2_error": 1.806491608546016e-05,
+            "linf_error": 3.7207651191695224e-05,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.15897317776353767,
+            "max": 0.15897308687006698
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 8,
+        "maximum_iterations": 78.0,
+        "maximum_change": 8.078651571492845e-12,
+        "maximum_pressure_correction": 9.9129050424551e-11,
+        "maximum_strong_divergence_l2": 6.967499279929524e-07,
+        "maximum_weak_divergence_l2": 5.389898867740721e-11,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.12359763811841501,
+        "last_min_nut": 0.12585228029357837
+      },
+      "artifacts_sha256": {
+        "audit.log": "746a1705a6de99b7b9d4d50ae244bffa280a3670f6bb61214e44eb4969c1c7e9",
+        "mms_o2_dt0.025.log": "fe36c05f3689eca9c1af46586ceac2dbf29c81c2141ea72b6b1834b411a8e1d2",
+        "mms_o2_dt0.025.rans.csv": "3b3d2fffb619c5138f1265f2b421eb7d2a3fcaabddcbd737d64543f453c47dad",
+        "mms_o2_dt0.025.xml": "242cb0f7d3bd255a616611df27c195c8c3f9215d24223795e1f6eea8e0deed10",
+        "mms_o2_dt0.his": "c72866b082b5217fe5e3489cf12d47c6e3f7a0b8462612c90769b3e747b8e176"
+      }
+    },
+    "mms_o2_dt0.0125": {
+      "fingerprint": {
+        "fixture_sha256": "3b4df78279cad18b68f1cacc03f9e061ccdf298e24cc963fd3287c6725924894",
+        "binaries": {
+          "IncNavierStokesSolver": "b978de9e9210b603c05d7996026ec57276101d211e3c3abda4d702b7a9b14f8d",
+          "RANSFieldAudit": "07f353b7534c6c3b5887ace15d16e7d8a181175cb06f569f734f46ef47f070cb"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.0125,
+        "steps": 16,
+        "order": 2,
+        "modes": 7
+      },
+      "dimension": 2,
+      "kind": "mms",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "mms_o2_dt0.0125.xml"
+      ],
+      "field_audit": {
+        "time": 0.20000000000000004,
+        "fields": {
+          "u": {
+            "l2_error": 5.559103763382818e-07,
+            "linf_error": 1.2371715813093431e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012503255421522362,
+            "max": 0.012503238362946836
+          },
+          "v": {
+            "l2_error": 5.560059270991095e-07,
+            "linf_error": 1.2597048364374613e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.01250321582969171,
+            "max": 0.01250327749565422
+          },
+          "k": {
+            "l2_error": 1.7520808569395136e-07,
+            "linf_error": 3.3773256369329374e-07,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.009933466539753,
+            "max": 1.309933466539753
+          },
+          "eps": {
+            "l2_error": 5.424623857465952e-06,
+            "linf_error": 9.574173023607635e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.7294019973352373,
+            "max": 0.9294019973352372
+          },
+          "p": {
+            "l2_error": 4.515407935741982e-06,
+            "linf_error": 9.254425881233264e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.15894596395453991,
+            "max": 0.1589459427422089
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 16,
+        "maximum_iterations": 68.0,
+        "maximum_change": 9.696660683601588e-12,
+        "maximum_pressure_correction": 9.921884826363512e-11,
+        "maximum_strong_divergence_l2": 3.712311302325762e-07,
+        "maximum_weak_divergence_l2": 6.951518449465532e-11,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.12344222128580934,
+        "last_min_nut": 0.12585228029357837
+      },
+      "artifacts_sha256": {
+        "audit.log": "fa1acf8cb86ff6f35e812391b987b2d0cadc0e055b403dbcf1ca85cfa69fc04c",
+        "mms_o2_dt0.0125.log": "48d3bc817e0d7a46f5978c5876baa361bffbfb763f9257e6b4831dd79a526f23",
+        "mms_o2_dt0.0125.rans.csv": "75af62c713e765099705c0aa8bb55f77b37a6ca2ea8b616590909105c9e0c10c",
+        "mms_o2_dt0.0125.xml": "3b4df78279cad18b68f1cacc03f9e061ccdf298e24cc963fd3287c6725924894",
+        "mms_o2_dt0.his": "110b6e882529fcc77df8e88975b374f21be6281ad23a4e751e0214e278451e34"
+      }
+    },
+    "mms_highre": {
+      "fingerprint": {
+        "fixture_sha256": "f061b846bf3cde1b00c3e96570b908b5815712582b42ec88287d96dce338fb5a",
+        "binaries": {
+          "IncNavierStokesSolver": "b978de9e9210b603c05d7996026ec57276101d211e3c3abda4d702b7a9b14f8d",
+          "RANSFieldAudit": "07f353b7534c6c3b5887ace15d16e7d8a181175cb06f569f734f46ef47f070cb"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.025,
+        "steps": 8,
+        "order": 2,
+        "modes": 7,
+        "diffusion": "HighRe"
+      },
+      "dimension": 2,
+      "kind": "mms",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "mms_highre.xml"
+      ],
+      "field_audit": {
+        "time": 0.19999999999999998,
+        "fields": {
+          "u": {
+            "l2_error": 2.7915344990084337e-06,
+            "linf_error": 6.21410431845236e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012498341479830793,
+            "max": 0.012498261430209693
+          },
+          "v": {
+            "l2_error": 2.791913517351828e-06,
+            "linf_error": 6.3094010404399214e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012498166133487707,
+            "max": 0.01249843732421226
+          },
+          "k": {
+            "l2_error": 7.64489431985549e-07,
+            "linf_error": 1.7131532819014694e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.009933466539753,
+            "max": 1.309933466539753
+          },
+          "eps": {
+            "l2_error": 2.4633380026685643e-05,
+            "linf_error": 4.1132509076002854e-05,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.7294019973352373,
+            "max": 0.9294019973352372
+          },
+          "p": {
+            "l2_error": 1.806200329552271e-05,
+            "linf_error": 3.717715599491078e-05,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.1589732249869559,
+            "max": 0.1589731177788148
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 8,
+        "maximum_iterations": 77.0,
+        "maximum_change": 1.0288008075662325e-11,
+        "maximum_pressure_correction": 9.935054383391187e-11,
+        "maximum_strong_divergence_l2": 7.491171537243448e-07,
+        "maximum_weak_divergence_l2": 6.919758051380792e-11,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.12359763811841047,
+        "last_min_nut": 0.12585228029357837
+      },
+      "artifacts_sha256": {
+        "audit.log": "c10cdf4fd94d52749d789bf8ce74d766b22598d59f4c0cc87e11ebf1865e3dc5",
+        "mms_highre.his": "657e09a1d149f6749d73a38c0e5e94fb4ade300e6507c574e61fca05bb420328",
+        "mms_highre.log": "7ca4cadaf2c9dc4c186759da22b3d4d5e0348ea954ab951f5f4f550ae0166654",
+        "mms_highre.rans.csv": "f61300cf0a67802dddd69124a641040a5a467098c4f15d65c8867e4684f8e048",
+        "mms_highre.xml": "f061b846bf3cde1b00c3e96570b908b5815712582b42ec88287d96dce338fb5a"
+      }
+    },
+    "mms_quadrature": {
+      "fingerprint": {
+        "fixture_sha256": "0e596cb548bc095983ec5264682c6b2b6a2cff29a004ca0523136aa657be7cd9",
+        "binaries": {
+          "IncNavierStokesSolver": "b978de9e9210b603c05d7996026ec57276101d211e3c3abda4d702b7a9b14f8d",
+          "RANSFieldAudit": "07f353b7534c6c3b5887ace15d16e7d8a181175cb06f569f734f46ef47f070cb"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.025,
+        "steps": 8,
+        "order": 2,
+        "modes": 7,
+        "points": 14
+      },
+      "dimension": 2,
+      "kind": "mms",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "mms_quadrature.xml"
+      ],
+      "field_audit": {
+        "time": 0.19999999999999998,
+        "fields": {
+          "u": {
+            "l2_error": 2.4875053377795207e-06,
+            "linf_error": 5.581259087185028e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012480055130060803,
+            "max": 0.012479993207380241
+          },
+          "v": {
+            "l2_error": 2.4878777588293595e-06,
+            "linf_error": 5.657516802960727e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012479914428529658,
+            "max": 0.01248013436630741
+          },
+          "k": {
+            "l2_error": 6.78475181990897e-07,
+            "linf_error": 1.367493512871576e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.009933466539753,
+            "max": 1.309933466539753
+          },
+          "eps": {
+            "l2_error": 2.2693434704187937e-05,
+            "linf_error": 3.950436224686715e-05,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.7294019973352373,
+            "max": 0.9294019973352372
+          },
+          "p": {
+            "l2_error": 1.8064916091286276e-05,
+            "linf_error": 3.722429705343977e-05,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.15897317776353545,
+            "max": 0.15897308687006545
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 8,
+        "maximum_iterations": 78.0,
+        "maximum_change": 8.206066360282038e-12,
+        "maximum_pressure_correction": 9.912980918602929e-11,
+        "maximum_strong_divergence_l2": 6.96749927219082e-07,
+        "maximum_weak_divergence_l2": 5.3898994028620705e-11,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.12359763811841501,
+        "last_min_nut": 0.12585228029357837
+      },
+      "artifacts_sha256": {
+        "audit.log": "b3edcaf5e3de18bc2ed623d5cbf9351d49a0f90815af4745f066546f7908081d",
+        "mms_quadrature.his": "0e904e6b2aa298aa3fe9b836ddc0e9fad5a5ea2ea1a0c573e7f310300cd36eb4",
+        "mms_quadrature.log": "b30bf78da7ada185ab737168c5160c59f16fb5eec70eb50398c503b176880b7e",
+        "mms_quadrature.rans.csv": "3a927d74ecfdcc0de07d905ed6d65f1e1c84643f6690b28a5052d4c292359321",
+        "mms_quadrature.xml": "0e596cb548bc095983ec5264682c6b2b6a2cff29a004ca0523136aa657be7cd9"
+      }
+    },
+    "mms_gauge_offset": {
+      "fingerprint": {
+        "fixture_sha256": "2b96b946783fc68def5114d4acb26505975fe1de6697da9aafaabaa1c96e8eb9",
+        "binaries": {
+          "IncNavierStokesSolver": "b978de9e9210b603c05d7996026ec57276101d211e3c3abda4d702b7a9b14f8d",
+          "RANSFieldAudit": "07f353b7534c6c3b5887ace15d16e7d8a181175cb06f569f734f46ef47f070cb"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.025,
+        "steps": 8,
+        "order": 2,
+        "modes": 7
+      },
+      "dimension": 2,
+      "kind": "mms",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "mms_gauge_offset.xml"
+      ],
+      "field_audit": {
+        "time": 0.19999999999999998,
+        "fields": {
+          "u": {
+            "l2_error": 2.4875053376851434e-06,
+            "linf_error": 5.5358683751730725e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012499010996146129,
+            "max": 0.012498939666152972
+          },
+          "v": {
+            "l2_error": 2.487877758732061e-06,
+            "linf_error": 5.627408457881469e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012498848126070265,
+            "max": 0.012499101468279473
+          },
+          "k": {
+            "l2_error": 6.784751871672992e-07,
+            "linf_error": 1.3658064861310493e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.009933466539753,
+            "max": 1.309933466539753
+          },
+          "eps": {
+            "l2_error": 2.26934347206863e-05,
+            "linf_error": 3.951211661668008e-05,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.7294019973352373,
+            "max": 0.9294019973352372
+          },
+          "p": {
+            "l2_error": 1.8064916088498796e-05,
+            "linf_error": 3.720765119916147e-05,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.1589731777635435,
+            "max": 0.15897308687007136
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 8,
+        "maximum_iterations": 78.0,
+        "maximum_change": 8.078501084231304e-12,
+        "maximum_pressure_correction": 9.912964527041658e-11,
+        "maximum_strong_divergence_l2": 6.967499267560967e-07,
+        "maximum_weak_divergence_l2": 5.3898377948227266e-11,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.12359763811841501,
+        "last_min_nut": 0.12585228029357837
+      },
+      "artifacts_sha256": {
+        "audit.log": "6cb92b54e6e9c6d9eda8dea1e09cb1ee0f3ef8dbdb5e30c5257b9c0d1e0be3e4",
+        "mms_gauge_offset.his": "72f2915144550d4f5dbb251dd90b90aee71c0bdf98d80550154898e980611440",
+        "mms_gauge_offset.log": "b4b50ab86df494beea97f2248225df92e2b14a2d64529614637faa0c00490b31",
+        "mms_gauge_offset.rans.csv": "88775350164a5eb6ae3d28d4b5328c38d6e51491be7f6ee9bc20cc3a99c738be",
+        "mms_gauge_offset.xml": "2b96b946783fc68def5114d4acb26505975fe1de6697da9aafaabaa1c96e8eb9"
+      }
+    },
+    "mms_missing_transpose": {
+      "fingerprint": {
+        "fixture_sha256": "1fba42e4a3fe45e547956fbf5043469aced7910c47ed3e3ec908c3af86d31b05",
+        "binaries": {
+          "IncNavierStokesSolver": "b978de9e9210b603c05d7996026ec57276101d211e3c3abda4d702b7a9b14f8d",
+          "RANSFieldAudit": "07f353b7534c6c3b5887ace15d16e7d8a181175cb06f569f734f46ef47f070cb"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.0125,
+        "steps": 16,
+        "order": 2,
+        "modes": 7,
+        "missing_transpose": true
+      },
+      "dimension": 2,
+      "kind": "mms",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "mms_missing_transpose.xml"
+      ],
+      "field_audit": {
+        "time": 0.20000000000000004,
+        "fields": {
+          "u": {
+            "l2_error": 8.591660867661749e-07,
+            "linf_error": 1.8986583936991125e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012502599131704165,
+            "max": 0.012502576876134446
+          },
+          "v": {
+            "l2_error": 8.515780414141512e-07,
+            "linf_error": 1.929090756991672e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012502546443771155,
+            "max": 0.012502632969932407
+          },
+          "k": {
+            "l2_error": 1.743804895913472e-07,
+            "linf_error": 3.3325942894180116e-07,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.009933466539753,
+            "max": 1.309933466539753
+          },
+          "eps": {
+            "l2_error": 5.421520716821493e-06,
+            "linf_error": 9.572430554549705e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.7294019973352373,
+            "max": 0.9294019973352372
+          },
+          "p": {
+            "l2_error": 0.00019221951689350305,
+            "linf_error": 0.0004129777908181047,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.15894520364497608,
+            "max": 0.1589466280612577
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 16,
+        "maximum_iterations": 68.0,
+        "maximum_change": 1.2911224823650147e-12,
+        "maximum_pressure_correction": 9.925437181768171e-11,
+        "maximum_strong_divergence_l2": 3.7172671594981405e-07,
+        "maximum_weak_divergence_l2": 1.4985662770910683e-11,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.12344222128588131,
+        "last_min_nut": 0.12585228029357837
+      },
+      "artifacts_sha256": {
+        "audit.log": "65275e8a7b3e864bb3988052986abb04879a04dab754c6f14d64ba51cdde67d5",
+        "mms_missing_transpose.his": "535833847993d77e0ace207fc22e7bb243fe18dc1abaecb84614723f4292e5c0",
+        "mms_missing_transpose.log": "2b0f3a1c88683ab688aa0fce2f1f47d11d9991b597914dd3c743963b49aa067c",
+        "mms_missing_transpose.rans.csv": "6f79539146b33ac11fa6942f39a307f295be6519bc12762c5c61c4ec4f65c297",
+        "mms_missing_transpose.xml": "1fba42e4a3fe45e547956fbf5043469aced7910c47ed3e3ec908c3af86d31b05"
+      }
+    },
+    "stiff_euler": {
+      "fingerprint": {
+        "fixture_sha256": "e11fcedbfba63c2d7700f8550ab9bca8f05f0168b57789ef01e9692d55a9da94",
+        "binaries": {
+          "IncNavierStokesSolver": "b978de9e9210b603c05d7996026ec57276101d211e3c3abda4d702b7a9b14f8d",
+          "RANSFieldAudit": "07f353b7534c6c3b5887ace15d16e7d8a181175cb06f569f734f46ef47f070cb"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.1,
+        "steps": 2,
+        "order": 1,
+        "modes": 5
+      },
+      "dimension": 2,
+      "kind": "stiff",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "stiff_euler.xml"
+      ],
+      "field_audit": {
+        "time": 0.2,
+        "fields": {
+          "u": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          },
+          "v": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          },
+          "k": {
+            "l2_error": 0.00830949825175938,
+            "linf_error": 0.008309498251772032,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.08842110929436034,
+            "max": 0.0884211092943932
+          },
+          "eps": {
+            "l2_error": 1.2468046822571972,
+            "linf_error": 1.2468046822573204,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.6395086579560112,
+            "max": 1.6395086579564437
+          },
+          "p": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 2,
+        "maximum_iterations": 39.0,
+        "maximum_change": 6.37217992188844e-11,
+        "maximum_pressure_correction": 0.0,
+        "maximum_strong_divergence_l2": 0.0,
+        "maximum_weak_divergence_l2": 0.0,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.000766724233390998,
+        "last_min_nut": 0.00042918122313363467
+      },
+      "artifacts_sha256": {
+        "audit.log": "e9f80a27971ccab5edc5a08ed9bdea7a73e1da28b4fe7f0d4567105da4eac97d",
+        "stiff_euler.his": "8a3409c797de9dcd3518ae3c0e5f23c57d427b3f656694b4e5a8e84f47e759a6",
+        "stiff_euler.log": "5b725148dba5d1a7279b7e82001e6d1d81bb4b7ba70d1917f1f4edbe58195c2c",
+        "stiff_euler.rans.csv": "f3ffb01351a1a35bed065307d109aac6deed27693e552cedc8d857cead0b4f14",
+        "stiff_euler.xml": "e11fcedbfba63c2d7700f8550ab9bca8f05f0168b57789ef01e9692d55a9da94"
+      }
+    },
+    "stiff_bdf2_guard": {
+      "fingerprint": {
+        "fixture_sha256": "c87347183a30c4893265a8e6fc8c040ae23632a8b6e6fff819f8d0b6ac5dc3e4",
+        "binaries": {
+          "IncNavierStokesSolver": "b978de9e9210b603c05d7996026ec57276101d211e3c3abda4d702b7a9b14f8d",
+          "RANSFieldAudit": "07f353b7534c6c3b5887ace15d16e7d8a181175cb06f569f734f46ef47f070cb"
+        },
+        "ranks": 1,
+        "rejection": "positivity guard"
+      },
+      "options": {
+        "dt": 0.1,
+        "steps": 2,
+        "order": 2,
+        "modes": 5
+      },
+      "dimension": 2,
+      "kind": "stiff",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "stiff_bdf2_guard.xml"
+      ],
+      "expected_rejection": "positivity guard"
+    },
+    "decay_dt0.025": {
+      "fingerprint": {
+        "fixture_sha256": "c07d6212a9a043fcd7bc83a25a2f375aecb65008b56b1f24f65d6160b34d7ab1",
+        "binaries": {
+          "IncNavierStokesSolver": "b978de9e9210b603c05d7996026ec57276101d211e3c3abda4d702b7a9b14f8d",
+          "RANSFieldAudit": "07f353b7534c6c3b5887ace15d16e7d8a181175cb06f569f734f46ef47f070cb"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.025,
+        "steps": 8,
+        "order": 2,
+        "modes": 4
+      },
+      "dimension": 2,
+      "kind": "decay",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "decay_dt0.025.xml"
+      ],
+      "field_audit": {
+        "time": 0.19999999999999998,
+        "fields": {
+          "u": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          },
+          "v": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          },
+          "k": {
+            "l2_error": 0.0008962172301652465,
+            "linf_error": 0.0008962172301816285,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.6210637174239358,
+            "max": 0.6210637174239616
+          },
+          "eps": {
+            "l2_error": 0.005369478019903349,
+            "linf_error": 0.0053694780199240455,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.204146862415073,
+            "max": 1.2041468624151173
+          },
+          "p": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 8,
+        "maximum_iterations": 30.0,
+        "maximum_change": 8.74566947442479e-11,
+        "maximum_pressure_correction": 0.0,
+        "maximum_strong_divergence_l2": 0.0,
+        "maximum_weak_divergence_l2": 0.0,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.029721159804536122,
+        "last_min_nut": 0.0288293843403976
+      },
+      "artifacts_sha256": {
+        "audit.log": "ab8622549780d18466079c6d535881bb68c56866fa00fbb9f08092f2bce00113",
+        "decay_dt0.025.log": "1c09de503c06b065078e408a804b0889645a52593f5f90d8e72f33ddc0229f2c",
+        "decay_dt0.025.rans.csv": "98be9169871ab7dca75d80bb04e040d14252e04f6a5c50b6bebcc172d0b6e769",
+        "decay_dt0.025.xml": "c07d6212a9a043fcd7bc83a25a2f375aecb65008b56b1f24f65d6160b34d7ab1",
+        "decay_dt0.his": "7334c14cfd9ad0543253979c5e1ab6dfc268790bd3fa0395460473dc7ca4e1cd"
+      }
+    },
+    "decay_dt0.0125": {
+      "fingerprint": {
+        "fixture_sha256": "2cc10ff0f2affc89330fbd27e16d5e061028bc66199d3af1b53daeebc32ad8a1",
+        "binaries": {
+          "IncNavierStokesSolver": "b978de9e9210b603c05d7996026ec57276101d211e3c3abda4d702b7a9b14f8d",
+          "RANSFieldAudit": "07f353b7534c6c3b5887ace15d16e7d8a181175cb06f569f734f46ef47f070cb"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.0125,
+        "steps": 16,
+        "order": 2,
+        "modes": 4
+      },
+      "dimension": 2,
+      "kind": "decay",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "decay_dt0.0125.xml"
+      ],
+      "field_audit": {
+        "time": 0.20000000000000004,
+        "fields": {
+          "u": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          },
+          "v": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          },
+          "k": {
+            "l2_error": 0.00019954412342731726,
+            "linf_error": 0.00019954412345024597,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.6203670443171838,
+            "max": 0.6203670443172302
+          },
+          "eps": {
+            "l2_error": 0.0011857618952628975,
+            "linf_error": 0.00118576189530617,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.19996314629043,
+            "max": 1.1999631462904994
+          },
+          "p": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 16,
+        "maximum_iterations": 30.0,
+        "maximum_change": 7.163747879637859e-11,
+        "maximum_pressure_correction": 0.0,
+        "maximum_strong_divergence_l2": 0.0,
+        "maximum_weak_divergence_l2": 0.0,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.02988195207852074,
+        "last_min_nut": 0.028865031711883222
+      },
+      "artifacts_sha256": {
+        "audit.log": "c97eb52e0421d6898af3d8909283028e3e7483828815d68dd627fa30093eafec",
+        "decay_dt0.0125.log": "ae6aca0ba8f2fd420bb9bd508e9136a7d7f71b02cbcc536a1c9ac026cc3d7cec",
+        "decay_dt0.0125.rans.csv": "e5999fa628031a908136a55edfbff16317679c98cf9581fb4f18320c07ff9fec",
+        "decay_dt0.0125.xml": "2cc10ff0f2affc89330fbd27e16d5e061028bc66199d3af1b53daeebc32ad8a1",
+        "decay_dt0.his": "966c0d138d6a06113da6ac40881e16f5e8da3d788b8c99f12ba361b4a247e8af"
+      }
+    },
+    "decay_dt0.00625": {
+      "fingerprint": {
+        "fixture_sha256": "8db7d19bd55f8a6c9ba168d2be2092ca0bf47c89b66de679e1a180f60003133b",
+        "binaries": {
+          "IncNavierStokesSolver": "b978de9e9210b603c05d7996026ec57276101d211e3c3abda4d702b7a9b14f8d",
+          "RANSFieldAudit": "07f353b7534c6c3b5887ace15d16e7d8a181175cb06f569f734f46ef47f070cb"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.00625,
+        "steps": 32,
+        "order": 2,
+        "modes": 4
+      },
+      "dimension": 2,
+      "kind": "decay",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "decay_dt0.00625.xml"
+      ],
+      "field_audit": {
+        "time": 0.2000000000000001,
+        "fields": {
+          "u": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          },
+          "v": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          },
+          "k": {
+            "l2_error": 4.791724910685566e-05,
+            "linf_error": 4.791724912356354e-05,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.6202154174428478,
+            "max": 0.6202154174429034
+          },
+          "eps": {
+            "l2_error": 0.00028695034031832046,
+            "linf_error": 0.0002869503403590823,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.1990643347354637,
+            "max": 1.1990643347355519
+          },
+          "p": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 32,
+        "maximum_iterations": 29.0,
+        "maximum_change": 9.804432228022327e-11,
+        "maximum_pressure_correction": 0.0,
+        "maximum_strong_divergence_l2": 0.0,
+        "maximum_weak_divergence_l2": 0.0,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.029947488160668678,
+        "last_min_nut": 0.02887254983758689
+      },
+      "artifacts_sha256": {
+        "audit.log": "be9d4393460162f2dae7026ed5afd807bec32910d8d7909f9daee0d241a49226",
+        "decay_dt0.00625.log": "aa5a3750285ddaa4304f2203ef73b6523116a5b5b55f492898c8254faa56b8fc",
+        "decay_dt0.00625.rans.csv": "9e6a858a82321156154b093789a013a55c97b725415cef4df48c00a7de3965e8",
+        "decay_dt0.00625.xml": "8db7d19bd55f8a6c9ba168d2be2092ca0bf47c89b66de679e1a180f60003133b",
+        "decay_dt0.his": "9657af26a73c570e1ce7d1de945319c60b1433464b849c0cddcc6c2d1b9f4396"
+      }
+    },
+    "decay_3d": {
+      "fingerprint": {
+        "fixture_sha256": "85ef85364587bd79cd62ec654e8d55ed7fad3d2b7f8f46c10a6dec6810ab1437",
+        "binaries": {
+          "IncNavierStokesSolver": "b978de9e9210b603c05d7996026ec57276101d211e3c3abda4d702b7a9b14f8d",
+          "RANSFieldAudit": "07f353b7534c6c3b5887ace15d16e7d8a181175cb06f569f734f46ef47f070cb"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.025,
+        "steps": 8,
+        "order": 2,
+        "modes": 4
+      },
+      "dimension": 3,
+      "kind": "decay",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "decay_3d.xml"
+      ],
+      "field_audit": {
+        "time": 0.19999999999999998,
+        "fields": {
+          "u": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          },
+          "v": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          },
+          "w": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          },
+          "k": {
+            "l2_error": 0.014115071802112826,
+            "linf_error": 0.0008962172305061467,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.6210637174238596,
+            "max": 0.6210637174242861
+          },
+          "eps": {
+            "l2_error": 0.08456718442632659,
+            "linf_error": 0.005369478020089247,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.2041468624149614,
+            "max": 1.2041468624152825
+          },
+          "p": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 8,
+        "maximum_iterations": 30.0,
+        "maximum_change": 8.747771039019803e-11,
+        "maximum_pressure_correction": 0.0,
+        "maximum_strong_divergence_l2": 0.0,
+        "maximum_weak_divergence_l2": 0.0,
+        "maximum_live_global_systems": 10.0,
+        "first_live_global_systems": 10.0,
+        "last_live_global_systems": 10.0,
+        "first_min_nut": 0.02972115980453155,
+        "last_min_nut": 0.02882938434039176
+      },
+      "artifacts_sha256": {
+        "audit.log": "f1511cbc91f16d94658d9729589c201a3e31cca010b1fd209e42bdf542276836",
+        "decay_3d.his": "724784081fee7048e5861eff70f9f41b84d94d470e8f4ba9680f75fcd8b78be1",
+        "decay_3d.log": "8dd84be4c5276c8065b4b19d8f2362b8650beb5f461ded901cc2e4c4a6bc886f",
+        "decay_3d.rans.csv": "6e0a1c6cb177463fe092d193c8aaeda28c1c336da3ffef6f4780b9a77746de48",
+        "decay_3d.xml": "85ef85364587bd79cd62ec654e8d55ed7fad3d2b7f8f46c10a6dec6810ab1437"
+      }
+    },
+    "decay_3d_mpi": {
+      "fingerprint": {
+        "fixture_sha256": "c75d598db2b40fed60c7eff5e28181c6ea0c4460a8898873dc758efd0570dab4",
+        "binaries": {
+          "IncNavierStokesSolver": "b978de9e9210b603c05d7996026ec57276101d211e3c3abda4d702b7a9b14f8d",
+          "RANSFieldAudit": "07f353b7534c6c3b5887ace15d16e7d8a181175cb06f569f734f46ef47f070cb"
+        },
+        "ranks": 4,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.025,
+        "steps": 8,
+        "order": 2,
+        "modes": 4
+      },
+      "dimension": 3,
+      "kind": "decay",
+      "ranks": 4,
+      "solver_command": [
+        "mpirun",
+        "--bind-to",
+        "none",
+        "--map-by",
+        "slot",
+        "-np",
+        "4",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "decay_3d_mpi.xml"
+      ],
+      "field_audit": {
+        "time": 0.19999999999999998,
+        "fields": {
+          "u": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          },
+          "v": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          },
+          "w": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          },
+          "k": {
+            "l2_error": 0.014115071797814658,
+            "linf_error": 0.0008962173069216872,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.621063717181073,
+            "max": 0.6210637175007017
+          },
+          "eps": {
+            "l2_error": 0.08456718441418551,
+            "linf_error": 0.0053694781541515635,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.2041468619655085,
+            "max": 1.2041468625493448
+          },
+          "p": {
+            "l2_error": 0,
+            "linf_error": 0,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0,
+            "max": 0
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 8,
+        "maximum_iterations": 30.0,
+        "maximum_change": 9.509932861689852e-11,
+        "maximum_pressure_correction": 0.0,
+        "maximum_strong_divergence_l2": 0.0,
+        "maximum_weak_divergence_l2": 0.0,
+        "maximum_live_global_systems": 10.0,
+        "first_live_global_systems": 10.0,
+        "last_live_global_systems": 10.0,
+        "first_min_nut": 0.029721159802110195,
+        "last_min_nut": 0.028829384328592774
+      },
+      "artifacts_sha256": {
+        "audit.log": "9ae2315981341580242111cfcd9d55062595a6419188bd31fe7e6c0f0a227214",
+        "decay_3d_mpi.his": "d45d99693f80e83457e87978dd5d31622d434774f125e23a4b923d98b15e3448",
+        "decay_3d_mpi.log": "0367dacae1213e1264796b6de421ed3acad10f96376152d5eb0bb6daf507d4bc",
+        "decay_3d_mpi.rans.csv": "532b4b1d980fea7559fef6cb06ddb415efaf534ea295b6a5f4ecbbd86b9ce26e",
+        "decay_3d_mpi.xml": "c75d598db2b40fed60c7eff5e28181c6ea0c4460a8898873dc758efd0570dab4"
+      }
+    },
+    "mms_3d": {
+      "fingerprint": {
+        "fixture_sha256": "aa9b5d6ecfd5f1755a54c5b24122a914d96fb07c12520315e1483d147656fb90",
+        "binaries": {
+          "IncNavierStokesSolver": "b978de9e9210b603c05d7996026ec57276101d211e3c3abda4d702b7a9b14f8d",
+          "RANSFieldAudit": "07f353b7534c6c3b5887ace15d16e7d8a181175cb06f569f734f46ef47f070cb"
+        },
+        "ranks": 4,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.01,
+        "steps": 2,
+        "order": 2,
+        "modes": 5,
+        "points": 11
+      },
+      "dimension": 3,
+      "kind": "mms",
+      "ranks": 4,
+      "solver_command": [
+        "mpirun",
+        "--bind-to",
+        "none",
+        "--map-by",
+        "slot",
+        "-np",
+        "4",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "mms_3d.xml"
+      ],
+      "field_audit": {
+        "time": 0.02,
+        "fields": {
+          "u": {
+            "l2_error": 6.260814788521114e-07,
+            "linf_error": 2.191044287981614e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.007369629682636356,
+            "max": 0.007369660842523218
+          },
+          "v": {
+            "l2_error": 6.273340552076653e-07,
+            "linf_error": 2.215941300204305e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.007924598216905852,
+            "max": 0.007924572679842487
+          },
+          "w": {
+            "l2_error": 4.540623995392639e-08,
+            "linf_error": 1.47397448217821e-07,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.004038140558093678,
+            "max": 0.004038140792085668
+          },
+          "k": {
+            "l2_error": 1.0759804262369859e-08,
+            "linf_error": 2.5397045577690847e-08,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.0003999733338667,
+            "max": 1.1803999733338666
+          },
+          "eps": {
+            "l2_error": 2.412532869240952e-06,
+            "linf_error": 3.308477754315753e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.7099980000666657,
+            "max": 0.7999980000666658
+          },
+          "p": {
+            "l2_error": 3.6886507414086827e-06,
+            "linf_error": 9.216938779560424e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.16049103565048384,
+            "max": 0.1604910373630517
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 2,
+        "maximum_iterations": 59.0,
+        "maximum_change": 4.786233909204185e-12,
+        "maximum_pressure_correction": 9.929379432372549e-11,
+        "maximum_strong_divergence_l2": 4.3210434115753943e-07,
+        "maximum_weak_divergence_l2": 4.673447787590375e-12,
+        "maximum_live_global_systems": 10.0,
+        "first_live_global_systems": 10.0,
+        "last_live_global_systems": 10.0,
+        "first_min_nut": 0.12681136113347385,
+        "last_min_nut": 0.12686234269634383
+      },
+      "artifacts_sha256": {
+        "audit.log": "7b6639b185f756bd52ca98c022f75c05e61548dddeb33c1e83c49d2f83c11ac0",
+        "mms_3d.his": "c50070711c38dd1d27555d773512275375b988545a8215aa742818fba790d575",
+        "mms_3d.log": "4cfab2e13dee51f0a9e18c3ab9facc16cd773ee26b2da316c8ca124965f63ee1",
+        "mms_3d.rans.csv": "d9d24dc0e8bab6bd160b7f0447a9cf40baae2a4e8afa3340f0252df499a6eea2",
+        "mms_3d.xml": "aa9b5d6ecfd5f1755a54c5b24122a914d96fb07c12520315e1483d147656fb90"
+      }
+    },
+    "mms_mpi": {
+      "fingerprint": {
+        "fixture_sha256": "591bc635f16b939234a4c3e1a08b9293c5fcbc9ea969c879d443d44a02f1897e",
+        "binaries": {
+          "IncNavierStokesSolver": "b978de9e9210b603c05d7996026ec57276101d211e3c3abda4d702b7a9b14f8d",
+          "RANSFieldAudit": "07f353b7534c6c3b5887ace15d16e7d8a181175cb06f569f734f46ef47f070cb"
+        },
+        "ranks": 4,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.025,
+        "steps": 8,
+        "order": 2,
+        "modes": 7
+      },
+      "dimension": 2,
+      "kind": "mms",
+      "ranks": 4,
+      "solver_command": [
+        "mpirun",
+        "--bind-to",
+        "none",
+        "--map-by",
+        "slot",
+        "-np",
+        "4",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "mms_mpi.xml"
+      ],
+      "field_audit": {
+        "time": 0.19999999999999998,
+        "fields": {
+          "u": {
+            "l2_error": 2.4875053353784512e-06,
+            "linf_error": 5.535868396851912e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012499010996141535,
+            "max": 0.012498939666131293
+          },
+          "v": {
+            "l2_error": 2.487877758200968e-06,
+            "linf_error": 5.627408537160067e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.012498848125990987,
+            "max": 0.012499101468314882
+          },
+          "k": {
+            "l2_error": 6.784753297831472e-07,
+            "linf_error": 1.3658081887690798e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.009933466539753,
+            "max": 1.309933466539753
+          },
+          "eps": {
+            "l2_error": 2.2693434798874904e-05,
+            "linf_error": 3.951211487218664e-05,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.7294019973352373,
+            "max": 0.9294019973352372
+          },
+          "p": {
+            "l2_error": 1.8064916087006876e-05,
+            "linf_error": 3.720765199308196e-05,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -0.1589731778140961,
+            "max": 0.15897308693548048
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 8,
+        "maximum_iterations": 78.0,
+        "maximum_change": 8.122748133831958e-12,
+        "maximum_pressure_correction": 9.679792444510228e-11,
+        "maximum_strong_divergence_l2": 6.967499417948109e-07,
+        "maximum_weak_divergence_l2": 5.2537655099691734e-11,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.12359763811841501,
+        "last_min_nut": 0.12585228029357837
+      },
+      "artifacts_sha256": {
+        "audit.log": "3b5c5d45c3a2c43210400768b92a9f46b119233ae766c09a162dc515836b200b",
+        "mms_mpi.his": "7f9c7f29709e413a10bb9812d99d502cc7b9195f83c5e2fda805b6ae33d087f7",
+        "mms_mpi.log": "0cf23e2693a323baf410f41622df8af1687d12f6cee75cf45ea0efdd10e22bbc",
+        "mms_mpi.rans.csv": "a1683638118f44def8e396f0851a66afc8f5cd6483db7f399f6571b48506f018",
+        "mms_mpi.xml": "591bc635f16b939234a4c3e1a08b9293c5fcbc9ea969c879d443d44a02f1897e"
+      }
+    },
+    "mpi_invalid_state": {
+      "fingerprint": {
+        "fixture_sha256": "8d135b67c71aa932cf59143f00821ae0653a50ca9350e3909a307d188f7542e5",
+        "binaries": {
+          "IncNavierStokesSolver": "b978de9e9210b603c05d7996026ec57276101d211e3c3abda4d702b7a9b14f8d",
+          "RANSFieldAudit": "07f353b7534c6c3b5887ace15d16e7d8a181175cb06f569f734f46ef47f070cb"
+        },
+        "ranks": 4,
+        "rejection": "positivity guard"
+      },
+      "options": {
+        "dt": 0.025,
+        "steps": 2,
+        "order": 2,
+        "modes": 5
+      },
+      "dimension": 2,
+      "kind": "mms",
+      "ranks": 4,
+      "solver_command": [
+        "mpirun",
+        "--bind-to",
+        "none",
+        "--map-by",
+        "slot",
+        "-np",
+        "4",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "mpi_invalid_state.xml"
+      ],
+      "expected_rejection": "positivity guard"
+    },
+    "abl_p4": {
+      "fingerprint": {
+        "fixture_sha256": "5d4ab6b67a75e713a083dfd0d142b99ff7d2488348a453e33f5ee222cea5b33d",
+        "binaries": {
+          "IncNavierStokesSolver": "b978de9e9210b603c05d7996026ec57276101d211e3c3abda4d702b7a9b14f8d",
+          "RANSFieldAudit": "07f353b7534c6c3b5887ace15d16e7d8a181175cb06f569f734f46ef47f070cb"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.05,
+        "steps": 20,
+        "order": 2,
+        "modes": 5,
+        "diffusion": "HighRe",
+        "tolerance": 1e-09
+      },
+      "dimension": 2,
+      "kind": "abl",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "abl_p4.xml"
+      ],
+      "field_audit": {
+        "time": 1.0000000000000002,
+        "fields": {
+          "u": {
+            "l2_error": 0.00815617299556691,
+            "linf_error": 0.00018508086414570357,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 7.410224772136708,
+            "max": 11.76779250218475
+          },
+          "v": {
+            "l2_error": 1.2542667003685138e-12,
+            "linf_error": 5.098695362241478e-14,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -2.4874691918712737e-14,
+            "max": 5.098695362241478e-14
+          },
+          "k": {
+            "l2_error": 0.0035141375783159195,
+            "linf_error": 0.00010025838462390801,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.6155862422935126,
+            "max": 1.6156867112366213
+          },
+          "eps": {
+            "l2_error": 0.0027804640884204167,
+            "linf_error": 0.00012131570887036203,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.026001958442423513,
+            "max": 0.38995210822671844
+          },
+          "p": {
+            "l2_error": 2.3093884668368e-10,
+            "linf_error": 6.929811569747881e-12,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -6.929811569747881e-12,
+            "max": 2.7932721840938103e-12
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 20,
+        "maximum_iterations": 22.0,
+        "maximum_change": 9.94493098982474e-10,
+        "maximum_pressure_correction": 5.382276907367547e-12,
+        "maximum_strong_divergence_l2": 1.5227837922260024e-12,
+        "maximum_weak_divergence_l2": 2.8344399020313596e-14,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.6024437828054235,
+        "last_min_nut": 0.6024407132059117
+      },
+      "artifacts_sha256": {
+        "abl_p4.his": "e066c1fbc18863c975ce07baf7caaed9036bb042deb56542981a18f2a9990fae",
+        "abl_p4.log": "3c26d19ec6d5ba0273fa82d0bd3c7bec973334c2c17aea4fb8e2d1d1d6aff45d",
+        "abl_p4.rans.csv": "993378aa12e285791f0f4332e0cd7348c0cd9e8d546d159727ae6a7081c7aab4",
+        "abl_p4.xml": "5d4ab6b67a75e713a083dfd0d142b99ff7d2488348a453e33f5ee222cea5b33d",
+        "audit.log": "dad0c79740189d623582ae5251b0271d5ff240737d21dc48232a103f14b2f7dc"
+      }
+    },
+    "abl_p6": {
+      "fingerprint": {
+        "fixture_sha256": "6637f8bf60b1c53818c036bca8c0271b408b39fdbdc11c6f8fd1bc1bac964dd5",
+        "binaries": {
+          "IncNavierStokesSolver": "b978de9e9210b603c05d7996026ec57276101d211e3c3abda4d702b7a9b14f8d",
+          "RANSFieldAudit": "07f353b7534c6c3b5887ace15d16e7d8a181175cb06f569f734f46ef47f070cb"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.05,
+        "steps": 20,
+        "order": 2,
+        "modes": 7,
+        "diffusion": "HighRe",
+        "tolerance": 1e-09
+      },
+      "dimension": 2,
+      "kind": "abl",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "abl_p6.xml"
+      ],
+      "field_audit": {
+        "time": 1.0000000000000002,
+        "fields": {
+          "u": {
+            "l2_error": 0.00017613670910387563,
+            "linf_error": 3.5279756112061023e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 7.410233541281783,
+            "max": 11.7677906344297
+          },
+          "v": {
+            "l2_error": 1.0977514441080954e-11,
+            "linf_error": 6.071255793594355e-13,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -6.071255793594355e-13,
+            "max": 2.6080471415000116e-13
+          },
+          "k": {
+            "l2_error": 0.00010970967890161519,
+            "linf_error": 2.4403102902859075e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.6156840603678462,
+            "max": 1.6156864454483446
+          },
+          "eps": {
+            "l2_error": 8.457726808256794e-05,
+            "linf_error": 3.5738168304710882e-06,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.025998344387729612,
+            "max": 0.3899726000228086
+          },
+          "p": {
+            "l2_error": 3.5350234466609564e-10,
+            "linf_error": 8.069065534023056e-12,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -8.069065534023056e-12,
+            "max": 5.546431508657395e-12
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 20,
+        "maximum_iterations": 16.0,
+        "maximum_change": 9.944015610940937e-10,
+        "maximum_pressure_correction": 6.904769353581524e-12,
+        "maximum_strong_divergence_l2": 6.701306549934596e-12,
+        "maximum_weak_divergence_l2": 9.411886194110774e-14,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.6024514244424568,
+        "last_min_nut": 0.6024512657800496
+      },
+      "artifacts_sha256": {
+        "abl_p6.his": "0a82270e3be31b0e4b2cb80f50923a33edf0553a5f862f6104eefbde9baa7a48",
+        "abl_p6.log": "c876df0ec2ea2d070c736f9480857e45d8e3282a7eb56939c89925a7e70a240a",
+        "abl_p6.rans.csv": "89c743362751f5ad4058eae7f7f30a9bf843f624a85b0d2ac4d7fba59e6c61f9",
+        "abl_p6.xml": "6637f8bf60b1c53818c036bca8c0271b408b39fdbdc11c6f8fd1bc1bac964dd5",
+        "audit.log": "ccf68d549359dfabc6b51549a817cd20802b675c2bc7cc8575e2e49f5c452ef8"
+      }
+    },
+    "abl_p8": {
+      "fingerprint": {
+        "fixture_sha256": "280bd2d49275c62bfe04ddbab78d4da99c81057b527ed8f89107cdd779c8a915",
+        "binaries": {
+          "IncNavierStokesSolver": "b978de9e9210b603c05d7996026ec57276101d211e3c3abda4d702b7a9b14f8d",
+          "RANSFieldAudit": "07f353b7534c6c3b5887ace15d16e7d8a181175cb06f569f734f46ef47f070cb"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.05,
+        "steps": 20,
+        "order": 2,
+        "modes": 9,
+        "diffusion": "HighRe",
+        "tolerance": 1e-09
+      },
+      "dimension": 2,
+      "kind": "abl",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "abl_p8.xml"
+      ],
+      "field_audit": {
+        "time": 1.0000000000000002,
+        "fields": {
+          "u": {
+            "l2_error": 4.162185400246374e-06,
+            "linf_error": 9.149700375132852e-08,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 7.410234231212383,
+            "max": 11.767790155512737
+          },
+          "v": {
+            "l2_error": 3.3739363492635975e-11,
+            "linf_error": 1.1581904004814742e-12,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -6.376727922579113e-13,
+            "max": 1.1581904004814742e-12
+          },
+          "k": {
+            "l2_error": 3.5282640159830937e-06,
+            "linf_error": 7.640567956102018e-08,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.615686424272457,
+            "max": 1.6156864963827626
+          },
+          "eps": {
+            "l2_error": 2.5345348777197093e-06,
+            "linf_error": 1.0763675450942145e-07,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.025998208597892387,
+            "max": 0.3899730482175114
+          },
+          "p": {
+            "l2_error": 3.1023619247417646e-10,
+            "linf_error": 1.1326104664497183e-11,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -1.1326104664497183e-11,
+            "max": 7.137300077572807e-12
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 20,
+        "maximum_iterations": 10.0,
+        "maximum_change": 9.05637675963078e-10,
+        "maximum_pressure_correction": 1.7240235469018377e-11,
+        "maximum_strong_divergence_l2": 1.055290767552767e-11,
+        "maximum_weak_divergence_l2": 3.406705801683333e-13,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.6024515045844482,
+        "last_min_nut": 0.6024514965702331
+      },
+      "artifacts_sha256": {
+        "abl_p8.his": "54620fd8b9ecba0e5b77214a1cf1f62f3b5a71c34f2b8408b7fe9024d719dc27",
+        "abl_p8.log": "f9a4bb99d3830a251c28c6928045209a57c3b72026681d485f9a157cc496c496",
+        "abl_p8.rans.csv": "da9781cc619c3e27b3d223a15a29a9c33e8fdcf1f3cd16fbd26cb31d5ae7b987",
+        "abl_p8.xml": "280bd2d49275c62bfe04ddbab78d4da99c81057b527ed8f89107cdd779c8a915",
+        "audit.log": "dadadd52d8796fb64314d4da6a04e7c99fe8627bcff59abfd12d25837c95c0d4"
+      }
+    },
+    "abl_wrong_top": {
+      "fingerprint": {
+        "fixture_sha256": "20f9dea37cc9bfb38f13619b6389d6ba8cee5d8a6c2a8cbf56bcb3b1674bf32a",
+        "binaries": {
+          "IncNavierStokesSolver": "b978de9e9210b603c05d7996026ec57276101d211e3c3abda4d702b7a9b14f8d",
+          "RANSFieldAudit": "07f353b7534c6c3b5887ace15d16e7d8a181175cb06f569f734f46ef47f070cb"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.05,
+        "steps": 20,
+        "order": 2,
+        "modes": 9,
+        "diffusion": "HighRe",
+        "tolerance": 1e-09,
+        "top_flux": false
+      },
+      "dimension": 2,
+      "kind": "abl",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "abl_wrong_top.xml"
+      ],
+      "field_audit": {
+        "time": 1.0000000000000002,
+        "fields": {
+          "u": {
+            "l2_error": 0.08716815102516588,
+            "linf_error": 0.006486732345237556,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 7.410234231695892,
+            "max": 11.774276866926748
+          },
+          "v": {
+            "l2_error": 3.398971614237361e-11,
+            "linf_error": 1.217294471792956e-12,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -6.27405881844334e-13,
+            "max": 1.217294471792956e-12
+          },
+          "k": {
+            "l2_error": 0.01714787852909147,
+            "linf_error": 0.0004383134075269801,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.6152481872706095,
+            "max": 1.6156864722599973
+          },
+          "eps": {
+            "l2_error": 0.05050914637175748,
+            "linf_error": 0.002579163215186829,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.02857736736720735,
+            "max": 0.38997304782929226
+          },
+          "p": {
+            "l2_error": 4.0693484021778105e-10,
+            "linf_error": 1.4648556205838175e-11,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -1.4648556205838175e-11,
+            "max": 1.4262248363166258e-11
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 20,
+        "maximum_iterations": 22.0,
+        "maximum_change": 9.720741774681833e-10,
+        "maximum_pressure_correction": 1.0657125196767281e-11,
+        "maximum_strong_divergence_l2": 1.0203624604401232e-11,
+        "maximum_weak_divergence_l2": 2.504795534916332e-13,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.6024515036212741,
+        "last_min_nut": 0.6024514972550925
+      },
+      "artifacts_sha256": {
+        "abl_wrong_top.his": "5bc75546c6d0890d398ab0a6910522e430b865b8c49e97d0f779effaccd0d15b",
+        "abl_wrong_top.log": "371acdfe15cda55685825c57f68a423531f842bbab79a6a845ef6673215878dc",
+        "abl_wrong_top.rans.csv": "2685b064f2f19feec48017f430e3946b034ad12db3a53ba68c527e1da7adf382",
+        "abl_wrong_top.xml": "20f9dea37cc9bfb38f13619b6389d6ba8cee5d8a6c2a8cbf56bcb3b1674bf32a",
+        "audit.log": "2dc0fb409c78af576631c7d264aef6be07c0b1efa3e28d2c8bbc5b61e755eec5"
+      }
+    },
+    "abl_shifted": {
+      "fingerprint": {
+        "fixture_sha256": "3ceba957e0515b08ba9425d289277489f6ea4e039df927208a17562ef2abdefc",
+        "binaries": {
+          "IncNavierStokesSolver": "b978de9e9210b603c05d7996026ec57276101d211e3c3abda4d702b7a9b14f8d",
+          "RANSFieldAudit": "07f353b7534c6c3b5887ace15d16e7d8a181175cb06f569f734f46ef47f070cb"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.05,
+        "steps": 20,
+        "order": 2,
+        "modes": 9,
+        "diffusion": "HighRe",
+        "tolerance": 1e-09
+      },
+      "dimension": 2,
+      "kind": "abl_shift",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "abl_shifted.xml"
+      ],
+      "field_audit": {
+        "time": 1.0000000000000002,
+        "fields": {
+          "u": {
+            "l2_error": 4.071771437979945e-06,
+            "linf_error": 8.511869786786974e-08,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 7.423858652614795,
+            "max": 11.765080054118576
+          },
+          "v": {
+            "l2_error": 3.866895431523208e-11,
+            "linf_error": 1.6265188977667026e-12,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -1.3756030067049078e-12,
+            "max": 1.6265188977667026e-12
+          },
+          "k": {
+            "l2_error": 3.34780662173131e-06,
+            "linf_error": 7.07018439349838e-08,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.6146480411452675,
+            "max": 1.6146481076318233
+          },
+          "eps": {
+            "l2_error": 2.408609969295574e-06,
+            "linf_error": 9.997594202504345e-08,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.025955845402361708,
+            "max": 0.3857397631643041
+          },
+          "p": {
+            "l2_error": 4.4347039518313884e-10,
+            "linf_error": 2.4780991058517898e-11,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -2.4780991058517898e-11,
+            "max": 1.045026213970979e-11
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 20,
+        "maximum_iterations": 9.0,
+        "maximum_change": 9.846790050005438e-10,
+        "maximum_pressure_correction": 1.3474017598950861e-11,
+        "maximum_strong_divergence_l2": 1.1862476819678334e-11,
+        "maximum_weak_divergence_l2": 3.9418053050040084e-13,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.6082804574038192,
+        "last_min_nut": 0.6082804493563474
+      },
+      "artifacts_sha256": {
+        "abl_shifted.his": "8b8bb61d18315400041f91bb916908ef35cd9249dcb8e16cdb56db64602c3666",
+        "abl_shifted.log": "794a9180e4fd629a7f4f5082935f464b32eb6e9b84170dcf598e8416d6261704",
+        "abl_shifted.rans.csv": "723985d85a83d7a3b685c9cea0241986af34af4697385c73e4c752dbfb3dbce9",
+        "abl_shifted.xml": "3ceba957e0515b08ba9425d289277489f6ea4e039df927208a17562ef2abdefc",
+        "audit.log": "28c86bf0a5a2ee5dc1acfece441601d3c527317e2d7af4d4f565c6f425a5137c"
+      }
+    },
+    "abl_molecular": {
+      "fingerprint": {
+        "fixture_sha256": "bffe62e6fc3dff76020324be3eaf0cc2468b3c65b80a83cc561b2e631d4a9d5f",
+        "binaries": {
+          "IncNavierStokesSolver": "b978de9e9210b603c05d7996026ec57276101d211e3c3abda4d702b7a9b14f8d",
+          "RANSFieldAudit": "07f353b7534c6c3b5887ace15d16e7d8a181175cb06f569f734f46ef47f070cb"
+        },
+        "ranks": 1,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.05,
+        "steps": 20,
+        "order": 2,
+        "modes": 9,
+        "diffusion": "Molecular",
+        "tolerance": 1e-09
+      },
+      "dimension": 2,
+      "kind": "abl",
+      "ranks": 1,
+      "solver_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "abl_molecular.xml"
+      ],
+      "field_audit": {
+        "time": 1.0000000000000002,
+        "fields": {
+          "u": {
+            "l2_error": 0.06991649417215078,
+            "linf_error": 0.007428082891758336,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 7.417662345537817,
+            "max": 11.767576821297332
+          },
+          "v": {
+            "l2_error": 3.336379691025722e-11,
+            "linf_error": 1.0773295145301673e-12,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -6.695527247012613e-13,
+            "max": 1.0773295145301673e-12
+          },
+          "k": {
+            "l2_error": 0.07356680530091497,
+            "linf_error": 0.004728741470981346,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.6109577592071551,
+            "max": 1.6156863649492266
+          },
+          "eps": {
+            "l2_error": 0.01725804396852872,
+            "linf_error": 0.0017107882713350286,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.026001708434199657,
+            "max": 0.3882622740102287
+          },
+          "p": {
+            "l2_error": 3.652900325253783e-10,
+            "linf_error": 1.3031302798733921e-11,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -1.3031302798733921e-11,
+            "max": 1.2350537131196472e-11
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 20,
+        "maximum_iterations": 28.0,
+        "maximum_change": 9.999247541081502e-10,
+        "maximum_pressure_correction": 1.4879622097300987e-11,
+        "maximum_strong_divergence_l2": 1.0526150265811629e-11,
+        "maximum_weak_divergence_l2": 3.2491563642694167e-13,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.6023964758152991,
+        "last_min_nut": 0.6015692391685918
+      },
+      "artifacts_sha256": {
+        "abl_molecular.his": "21f4a2fca524a72b2cb4f3ccad797fbca543d89fc56b4b5d00e1a6583995cb1d",
+        "abl_molecular.log": "6a29d6b3507aa34710af9a6be63f4810dc2634e69e7cb9ed86aca9a041b2aeb1",
+        "abl_molecular.rans.csv": "cbf3451181fe4567161fbbd76654fcce44d4ba3e5906782a3f4a7d5a96bf6938",
+        "abl_molecular.xml": "bffe62e6fc3dff76020324be3eaf0cc2468b3c65b80a83cc561b2e631d4a9d5f",
+        "audit.log": "d12399dbfcfb21bbf28549106bbb6a15ba53d3d58655e499199e517ea6465e9e"
+      }
+    },
+    "abl_flowthrough": {
+      "fingerprint": {
+        "fixture_sha256": "d1b8d73a215affdbbecc36fb0770953b5c32cf02eff02fe008ca1a2d50d7f1bb",
+        "binaries": {
+          "IncNavierStokesSolver": "b978de9e9210b603c05d7996026ec57276101d211e3c3abda4d702b7a9b14f8d",
+          "RANSFieldAudit": "07f353b7534c6c3b5887ace15d16e7d8a181175cb06f569f734f46ef47f070cb"
+        },
+        "ranks": 4,
+        "rejection": null
+      },
+      "options": {
+        "dt": 0.05,
+        "steps": 600,
+        "order": 2,
+        "modes": 9,
+        "diffusion": "HighRe",
+        "tolerance": 1e-09
+      },
+      "dimension": 2,
+      "kind": "abl",
+      "ranks": 4,
+      "solver_command": [
+        "mpirun",
+        "--bind-to",
+        "none",
+        "--map-by",
+        "slot",
+        "-np",
+        "4",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "abl_flowthrough.xml"
+      ],
+      "field_audit": {
+        "time": 30.00000000000029,
+        "fields": {
+          "u": {
+            "l2_error": 7.882522466214701e-06,
+            "linf_error": 1.8388612232911328e-07,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 7.4102341513682415,
+            "max": 11.767790259552616
+          },
+          "v": {
+            "l2_error": 1.751270291116925e-08,
+            "linf_error": 7.095007352127698e-10,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -3.476453661164396e-10,
+            "max": 7.095007352127698e-10
+          },
+          "k": {
+            "l2_error": 4.426014115969008e-06,
+            "linf_error": 6.03281662403532e-08,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 1.6156864403499702,
+            "max": 1.6156864682132188
+          },
+          "eps": {
+            "l2_error": 2.175460995581856e-06,
+            "linf_error": 1.182646098829565e-07,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": 0.025998204423559945,
+            "max": 0.3899730460440179
+          },
+          "p": {
+            "l2_error": 1.1984052601991535e-07,
+            "linf_error": 5.40811327865791e-09,
+            "difference_l2": 0,
+            "difference_linf": 0,
+            "min": -4.136664341305826e-09,
+            "max": 5.40811327865791e-09
+          }
+        }
+      },
+      "diagnostics": {
+        "stages": 600,
+        "maximum_iterations": 16.0,
+        "maximum_change": 9.894218326945995e-10,
+        "maximum_pressure_correction": 9.98217940653743e-10,
+        "maximum_strong_divergence_l2": 2.3235159308483285e-08,
+        "maximum_weak_divergence_l2": 1.0766723940820946e-10,
+        "maximum_live_global_systems": 8.0,
+        "first_live_global_systems": 8.0,
+        "last_live_global_systems": 8.0,
+        "first_min_nut": 0.6024515045765677,
+        "last_min_nut": 0.6024514962004528
+      },
+      "artifacts_sha256": {
+        "abl_flowthrough.his": "ddd194b96be097aaa88f0d841c6e8980ec1d3fb07ff2aca4a724c7d7c6520bd6",
+        "abl_flowthrough.log": "ee4a4a164eb9bfea9d73c47627af17096d65060b28e325118d4b2282e01eac3f",
+        "abl_flowthrough.rans.csv": "5337521f540098326adc68c25ece9beb848754581173aedf3d1cfc6f3608aae0",
+        "abl_flowthrough.xml": "d1b8d73a215affdbbecc36fb0770953b5c32cf02eff02fe008ca1a2d50d7f1bb",
+        "audit.log": "a49080e0c88c3793a5321498cce17789d030eb1720696c0195e9697dad35934e"
+      }
+    }
+  },
+  "commands": [
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "mms_o1_dt0.0125.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/mms_o1_dt0.0125",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "mms_o1_dt0.05.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/mms_o1_dt0.05",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "mms_o1_dt0.025.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/mms_o1_dt0.025",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/RANSFieldAudit",
+        "mms_o1_dt0.05.xml",
+        "mms_o1_dt0.05.fld",
+        "mms_o1_dt0.05.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/mms_o1_dt0.05",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "mms_o2_dt0.05.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/mms_o2_dt0.05",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/RANSFieldAudit",
+        "mms_o1_dt0.025.xml",
+        "mms_o1_dt0.025.fld",
+        "mms_o1_dt0.025.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/mms_o1_dt0.025",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "mms_o2_dt0.025.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/mms_o2_dt0.025",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/RANSFieldAudit",
+        "mms_o2_dt0.05.xml",
+        "mms_o2_dt0.05.fld",
+        "mms_o2_dt0.05.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/mms_o2_dt0.05",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "mms_o2_dt0.0125.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/mms_o2_dt0.0125",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/RANSFieldAudit",
+        "mms_o1_dt0.0125.xml",
+        "mms_o1_dt0.0125.fld",
+        "mms_o1_dt0.0125.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/mms_o1_dt0.0125",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/RANSFieldAudit",
+        "mms_o2_dt0.025.xml",
+        "mms_o2_dt0.025.fld",
+        "mms_o2_dt0.025.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/mms_o2_dt0.025",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/RANSFieldAudit",
+        "mms_o2_dt0.0125.xml",
+        "mms_o2_dt0.0125.fld",
+        "mms_o2_dt0.0125.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/mms_o2_dt0.0125",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "mms_highre.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/mms_highre",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/RANSFieldAudit",
+        "mms_highre.xml",
+        "mms_highre.fld",
+        "mms_highre.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/mms_highre",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "mms_quadrature.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/mms_quadrature",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/RANSFieldAudit",
+        "mms_quadrature.xml",
+        "mms_quadrature.fld",
+        "mms_quadrature.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/mms_quadrature",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "mms_gauge_offset.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/mms_gauge_offset",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/RANSFieldAudit",
+        "mms_gauge_offset.xml",
+        "mms_gauge_offset.fld",
+        "mms_gauge_offset.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/mms_gauge_offset",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "mms_missing_transpose.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/mms_missing_transpose",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/RANSFieldAudit",
+        "mms_missing_transpose.xml",
+        "mms_missing_transpose.fld",
+        "mms_missing_transpose.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/mms_missing_transpose",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "stiff_euler.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/stiff_euler",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/RANSFieldAudit",
+        "stiff_euler.xml",
+        "stiff_euler.fld",
+        "stiff_euler.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/stiff_euler",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "stiff_bdf2_guard.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/stiff_bdf2_guard",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "decay_dt0.025.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/decay_dt0.025",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/RANSFieldAudit",
+        "decay_dt0.025.xml",
+        "decay_dt0.025.fld",
+        "decay_dt0.025.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/decay_dt0.025",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "decay_dt0.0125.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/decay_dt0.0125",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/RANSFieldAudit",
+        "decay_dt0.0125.xml",
+        "decay_dt0.0125.fld",
+        "decay_dt0.0125.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/decay_dt0.0125",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "decay_dt0.00625.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/decay_dt0.00625",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/RANSFieldAudit",
+        "decay_dt0.00625.xml",
+        "decay_dt0.00625.fld",
+        "decay_dt0.00625.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/decay_dt0.00625",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "decay_3d.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/decay_3d",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/RANSFieldAudit",
+        "decay_3d.xml",
+        "decay_3d.fld",
+        "decay_3d.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/decay_3d",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "mpirun",
+        "--bind-to",
+        "none",
+        "--map-by",
+        "slot",
+        "-np",
+        "4",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "decay_3d_mpi.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/decay_3d_mpi",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/RANSFieldAudit",
+        "decay_3d_mpi.xml",
+        "decay_3d_mpi.fld",
+        "decay_3d_mpi.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/decay_3d_mpi",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "mpirun",
+        "--bind-to",
+        "none",
+        "--map-by",
+        "slot",
+        "-np",
+        "4",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "mms_3d.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/mms_3d",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/RANSFieldAudit",
+        "mms_3d.xml",
+        "mms_3d.fld",
+        "mms_3d.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/mms_3d",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "mpirun",
+        "--bind-to",
+        "none",
+        "--map-by",
+        "slot",
+        "-np",
+        "4",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "mms_mpi.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/mms_mpi",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/RANSFieldAudit",
+        "mms_mpi.xml",
+        "mms_mpi.fld",
+        "mms_mpi.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/mms_mpi",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/RANSFieldAudit",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/mms_o2_dt0.025/mms_o2_dt0.025.xml",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/mms_o2_dt0.025/mms_o2_dt0.025.fld",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/mms_mpi/mms_mpi.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/mms_mpi",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/RANSFieldAudit",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/mms_o2_dt0.025/mms_o2_dt0.025.xml",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/mms_o2_dt0.025/mms_o2_dt0.025.fld",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/mms_quadrature/mms_quadrature.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/mms_quadrature",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/RANSFieldAudit",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/decay_3d/decay_3d.xml",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/decay_3d/decay_3d.fld",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/decay_3d_mpi/decay_3d_mpi.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/decay_3d_mpi",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "mpirun",
+        "--bind-to",
+        "none",
+        "--map-by",
+        "slot",
+        "-np",
+        "4",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "mpi_invalid_state.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/mpi_invalid_state",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "abl_p4.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/abl_p4",
+      "timeout": 900
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/RANSFieldAudit",
+        "abl_p4.xml",
+        "abl_p4.fld",
+        "abl_p4.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/abl_p4",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "abl_p6.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/abl_p6",
+      "timeout": 900
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/RANSFieldAudit",
+        "abl_p6.xml",
+        "abl_p6.fld",
+        "abl_p6.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/abl_p6",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "abl_p8.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/abl_p8",
+      "timeout": 900
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/RANSFieldAudit",
+        "abl_p8.xml",
+        "abl_p8.fld",
+        "abl_p8.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/abl_p8",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "abl_wrong_top.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/abl_wrong_top",
+      "timeout": 900
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/RANSFieldAudit",
+        "abl_wrong_top.xml",
+        "abl_wrong_top.fld",
+        "abl_wrong_top.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/abl_wrong_top",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "abl_shifted.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/abl_shifted",
+      "timeout": 900
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/RANSFieldAudit",
+        "abl_shifted.xml",
+        "abl_shifted.fld",
+        "abl_shifted.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/abl_shifted",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "abl_molecular.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/abl_molecular",
+      "timeout": 900
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/RANSFieldAudit",
+        "abl_molecular.xml",
+        "abl_molecular.fld",
+        "abl_molecular.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/abl_molecular",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "mpirun",
+        "--bind-to",
+        "none",
+        "--map-by",
+        "slot",
+        "-np",
+        "4",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "abl_flowthrough.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/abl_flowthrough",
+      "timeout": 900
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/RANSFieldAudit",
+        "abl_flowthrough.xml",
+        "abl_flowthrough.fld",
+        "abl_flowthrough.fld"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/abl_flowthrough",
+      "timeout": 240
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/build/IncNavierStokesSolver",
+        "KovaFlow_m8_short_HOBC.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/standard-regression/legacy",
+      "timeout": 240
+    }
+  ],
+  "legacy_vcs_regression": "passed"
+}

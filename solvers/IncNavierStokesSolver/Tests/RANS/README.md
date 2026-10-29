@@ -1,5 +1,30 @@
 # Neutral ABL RANS kernel and wall-layer tests
 
+Milestone 4 adds `TurbulenceModel=CLSHighRe` with primary dissipation
+`eps_tilde`, the full cubic covariance and algebraic Yap source. The optional
+`RANSWallModel=AWFOriginal` couples the original wall function through the
+conservative CV-to-CG strip. Its [specification](../../../../docs/plans/neutral-abl-rans-awf-milestone-4.md)
+defines the physical frame, forcing, strip inertia, normal velocity, algebraic
+dissipation, ownership, and conservation diagnostics. `CLS_MMS.xml` and
+`AWFOriginal.xml` are short CTest fixtures. With the isolated full executable
+built as below, run the sequential Linux acceptance study with
+
+```bash
+taskset -c 112-127 python3 solvers/IncNavierStokesSolver/Tests/RANS/validate_m4.py \
+  --build "$RANS_RUN/build" --output "$RANS_RUN/validation-m4"
+taskset -c 112-127 python3 solvers/IncNavierStokesSolver/Tests/RANS/plot_m4.py \
+  "$RANS_RUN/validation-m4/validation.json" "$RANS_RUN/figures-m4"
+```
+
+It uses at most four MPI ranks, one case at a time, with numerical threads set
+to one. The generator uses SymPy for independent manufactured forcing and
+SciPy quadrature for the original-AWF oracle. Original-AWF wall data use Robin
+tangential/k entries tagged `AWFOriginal`, Dirichlet normal velocity and
+positive initial epsilon data, and the coupled pressure marker. Epsilon and
+normal traces are subsequently determined within the nonlinear stage.
+The original baseline intentionally retains the note's wall-source imbalance.
+The equilibrium correction and switch remain Milestone 5.
+
 Milestone 3 provides an opt-in `RANSVelocityCorrectionScheme` for standard
 k–epsilon URANS. Its [specification](../../../../docs/plans/neutral-abl-rans-awf-milestone-3.md)
 defines the implicit nonlinear stage, mixed pressure space, boundary fluxes,
@@ -44,8 +69,8 @@ normal mass balance, interface signs, native outer weak residuals, h/p and
 quadrature convergence, inconsistent-boundary controls, and a conservative
 backward-Euler step with frozen reference viscosity. The outer residual now
 calls the general CLS kernel at the native simple-shear gradients, including
-its variable coefficient, full stress, and algebraic Yap term. This probe tests
-the wall strip; coupled CLS/AWF URANS transport remains a subsequent milestone.
+its variable coefficient, full stress, and algebraic Yap term. This probe
+isolates the wall strip; native coupled transport is covered by Milestone 4.
 
 Milestone 2 adds `RANSKernelProbe` and an independent Python oracle. They test
 standard k–epsilon and CLS tensors/sources, configured reference roots, original
@@ -108,5 +133,5 @@ Keep historical Milestone 1 reports unchanged when running this regression.
 
 A successful kernel/column result establishes the specified local model
 contracts and column convergence. Milestone 3 adds standard-model unsteady
-transport. CLS/AWF solver coupling and the full analytical inlet/outlet
-preservation study remain later milestones.
+transport, and Milestone 4 adds CLS and the original AWF. Corrected-AWF coupling
+and the full analytical inlet/outlet preservation study remain later milestones.

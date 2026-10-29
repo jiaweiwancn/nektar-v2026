@@ -1,0 +1,240 @@
+{
+  "schema": 1,
+  "milestone": "neutral_abl_rans_awf_m4",
+  "utc": "2026-10-29T14:51:14.447220+00:00",
+  "authoritative_run": "/media/jay/新加卷/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf",
+  "connection": "jay@100.105.247.110 (Tailscale)",
+  "source_parent": "7f3ce79ad2fa404c95f0aa89c6137c97d8e624b8",
+  "source_sha256": {
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSVelocityCorrectionScheme.cpp": "992286bfb46dd9d635f7d8733b82cda48dea0c570f8e900e37d1a309792df5b4",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSVelocityCorrectionScheme.h": "d39df386714818544bebc3cf7102d0ec4080fa77237d5dc31db5eecd31099186",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSAnalyticalWallStrip.cpp": "4c5214fbac7c0fd0c45d90e495e70b674484bb935ca95d3d04829d25d021da90",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSAnalyticalWallStrip.h": "cef8fb34892a6694cb3cf1734113853fc9465501b5b15b83888ee9364bc0288b",
+    "solvers/IncNavierStokesSolver/Tests/RANS/generate_m4.py": "dd8058665975af0154bef07ae38137c11792d8c15fa00882ac6ae7955a2a5b76",
+    "solvers/IncNavierStokesSolver/Tests/RANS/validate_m4.py": "b67868a8c182c0d438133e334b254a7500b606f5cc99b6715ac4a0f4b9f26920",
+    "solvers/IncNavierStokesSolver/Tests/RANS/CMakeLists.txt": "a2935aa1480972a1ac820aa4abb2f984b99b7ee86484fa97e67fe1597bad084f",
+    "library/UnitTests/SolverUtils/RANSFieldAudit.cpp": "709699dee965bd09f557d3a557b41e1cc2c7a38688862ad98edb52eaf20351e9",
+    "solvers/IncNavierStokesSolver/CMakeLists.txt": "f9d883c1c5f7ac0fdc9b404ab5addda75190eda2c6c661bf75514f509bf30d8e",
+    "solvers/IncNavierStokesSolver/Tests/RANS/generate_m3.py": "c6852375de6725a2bda73e7c4c7644dee1f1834f8ba03eeb9b2bdf995be10a68",
+    "solvers/IncNavierStokesSolver/Tests/TGV3d_2_2.xml": "2c4400d6cf0002db594d572dbf09ed1637e63a2cf1cd7768a170308dec78c553",
+    "solvers/IncNavierStokesSolver/Tests/RANS/CLS_MMS.xml": "ffc9a91ce69dd6106af625a371a5464846dd1289ec2ad93226d64d7a4e7823d0",
+    "solvers/IncNavierStokesSolver/Tests/RANS/AWFOriginal.xml": "d816f54e0e65f92c4bfafab572207a36810540cf6b0584a2acea180c061741c5",
+    "solvers/IncNavierStokesSolver/Tests/RANS/plot_m4.py": "c7d9321eaf4c9e8d5661baf39386e7353ead0d7130a1f45de89713990e6770df",
+    "library/SolverUtils/Turbulence/RANSModels.cpp": "2e2bd22c243b8050ab04b33aacf2c4f91793a96fc2d70299ebbcf8716ce317ae",
+    "library/SolverUtils/Turbulence/RANSModels.h": "953dd36fba019767985f790316892c91d0c8433c817a0a56e195da281ed82f2b",
+    "library/SolverUtils/Turbulence/AnalyticalWallFunction.cpp": "23891d4f9925bfdc782421f3f1113eb1ef737375e062f699f91d42ca99b5f09a",
+    "library/SolverUtils/Turbulence/AnalyticalWallFunction.h": "7193b8f886d66a97422ca7bee0c1a45061c5dad22b29a3511c9de6d2c8a89bda",
+    "library/SolverUtils/Turbulence/RANSWallStrip.h": "6b2763823817c41dc73549c36e8aeed412280c052008cf99e69b901293073654"
+  },
+  "source_state": {
+    "path": "/media/jay/新加卷/nektar-v2026-runs/neutral-abl-rans-awf/m4-cls-original-awf/source",
+    "revision": "7f3ce79ad2fa404c95f0aa89c6137c97d8e624b8",
+    "branch": "",
+    "status_porcelain": "M library/UnitTests/SolverUtils/RANSFieldAudit.cpp\n M solvers/IncNavierStokesSolver/CMakeLists.txt\n M solvers/IncNavierStokesSolver/EquationSystems/RANSVelocityCorrectionScheme.cpp\n M solvers/IncNavierStokesSolver/EquationSystems/RANSVelocityCorrectionScheme.h\n M solvers/IncNavierStokesSolver/Tests/RANS/CMakeLists.txt\n?? solvers/IncNavierStokesSolver/EquationSystems/RANSAnalyticalWallStrip.cpp\n?? solvers/IncNavierStokesSolver/EquationSystems/RANSAnalyticalWallStrip.h\n?? solvers/IncNavierStokesSolver/Tests/RANS/AWFOriginal.awf.csv\n?? solvers/IncNavierStokesSolver/Tests/RANS/AWFOriginal.fld\n?? solvers/IncNavierStokesSolver/Tests/RANS/AWFOriginal.his\n?? solvers/IncNavierStokesSolver/Tests/RANS/AWFOriginal.opt\n?? solvers/IncNavierStokesSolver/Tests/RANS/AWFOriginal.rans.csv\n?? solvers/IncNavierStokesSolver/Tests/RANS/AWFOriginal.xml\n?? solvers/IncNavierStokesSolver/Tests/RANS/CLS_MMS.fld\n?? solvers/IncNavierStokesSolver/Tests/RANS/CLS_MMS.his\n?? solvers/IncNavierStokesSolver/Tests/RANS/CLS_MMS.opt\n?? solvers/IncNavierStokesSolver/Tests/RANS/CLS_MMS.rans.csv\n?? solvers/IncNavierStokesSolver/Tests/RANS/CLS_MMS.xml\n?? solvers/IncNavierStokesSolver/Tests/RANS/StandardRANS_MMS.fld\n?? solvers/IncNavierStokesSolver/Tests/RANS/StandardRANS_MMS.his\n?? solvers/IncNavierStokesSolver/Tests/RANS/StandardRANS_MMS.opt\n?? solvers/IncNavierStokesSolver/Tests/RANS/StandardRANS_MMS.rans.csv\n?? solvers/IncNavierStokesSolver/Tests/RANS/generate_m4.py\n?? solvers/IncNavierStokesSolver/Tests/RANS/plot_m4.py\n?? solvers/IncNavierStokesSolver/Tests/RANS/validate_m4.py"
+  },
+  "primary_checkout_after_validation": {
+    "path": "/media/jay/新加卷/nektar-v2026",
+    "revision": "da607a9a46d6b11d7b30e67441c878139e11adf2",
+    "branch": "codex/hit-inflow-generator",
+    "status_porcelain": "?? solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/__pycache__/"
+  },
+  "primary_revision_before_validation": "29f467b6428ce5efc58d97d4cb481fbda0e432b1",
+  "toolchain": {
+    "compiler": "c++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0",
+    "cmake": "cmake version 3.22.1",
+    "mpi": "mpirun (Open MPI) 4.1.2",
+    "python": "3.10.12",
+    "numpy": "1.21.5",
+    "scipy": "1.8.0",
+    "sympy": "1.9",
+    "matplotlib": "3.5.1",
+    "system": "Linux-6.8.0-138-generic-x86_64-with-glibc2.35"
+  },
+  "cmake_cache": {
+    "CMAKE_BUILD_TYPE:STRING": "Release",
+    "CMAKE_CXX_COMPILER:FILEPATH": "/usr/bin/c++",
+    "CMAKE_CXX_FLAGS:STRING": "",
+    "CMAKE_CXX_FLAGS_RELEASE:STRING": "-O3 -DNDEBUG",
+    "Nektar++_DIR:UNINITIALIZED": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake",
+    "RANS_BUILD_SOLVER:BOOL": "ON"
+  },
+  "binary_sha256": {
+    "IncNavierStokesSolver": "b978de9e9210b603c05d7996026ec57276101d211e3c3abda4d702b7a9b14f8d",
+    "RANSFieldAudit": "07f353b7534c6c3b5887ace15d16e7d8a181175cb06f569f734f46ef47f070cb"
+  },
+  "standard_binary_sha256": {
+    "IncNavierStokesSolver": "b978de9e9210b603c05d7996026ec57276101d211e3c3abda4d702b7a9b14f8d",
+    "RANSFieldAudit": "07f353b7534c6c3b5887ace15d16e7d8a181175cb06f569f734f46ef47f070cb"
+  },
+  "linked_libraries": {
+    "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSolverUtils.so.5.9.0": {
+      "sha256": "feecc71827fdb5e5b723609cd0140a019766e104eb8713d2d4aeec0043a9efc4",
+      "mtime_utc": "2026-10-29T11:53:34+00:00"
+    },
+    "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libFieldUtils.so.5.9.0": {
+      "sha256": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+      "mtime_utc": "2026-10-29T11:53:32+00:00"
+    },
+    "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libGlobalMapping.so.5.9.0": {
+      "sha256": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+      "mtime_utc": "2026-10-29T11:53:31+00:00"
+    },
+    "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0": {
+      "sha256": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+      "mtime_utc": "2026-10-29T11:53:31+00:00"
+    },
+    "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0": {
+      "sha256": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+      "mtime_utc": "2026-10-29T11:53:30+00:00"
+    },
+    "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSpatialDomains.so.5.9.0": {
+      "sha256": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+      "mtime_utc": "2026-10-29T11:53:29+00:00"
+    },
+    "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0": {
+      "sha256": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+      "mtime_utc": "2026-10-29T11:53:29+00:00"
+    },
+    "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0": {
+      "sha256": "b917f18dcc4320186ae8d5cb4753ae47f60e1c28baff20fbe17c2d5d59f4f026",
+      "mtime_utc": "2026-10-29T11:53:28+00:00"
+    },
+    "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0": {
+      "sha256": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+      "mtime_utc": "2022-03-16T22:34:02+00:00"
+    },
+    "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0": {
+      "sha256": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+      "mtime_utc": "2026-10-29T11:53:30+00:00"
+    },
+    "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0": {
+      "sha256": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+      "mtime_utc": "2022-03-16T22:34:02+00:00"
+    },
+    "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0": {
+      "sha256": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+      "mtime_utc": "2026-10-29T11:53:29+00:00"
+    }
+  },
+  "ldd": "linux-vdso.so.1 (0x00007fffd2de6000)\n\tlibSolverUtils.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libSolverUtils.so.5.9.0 (0x000078e378800000)\n\tlibFieldUtils.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libFieldUtils.so.5.9.0 (0x000078e378400000)\n\tlibmpi_cxx.so.40 => /lib/x86_64-linux-gnu/libmpi_cxx.so.40 (0x000078e378d20000)\n\tlibmpi.so.40 => /lib/x86_64-linux-gnu/libmpi.so.40 (0x000078e3782c9000)\n\tlibGlobalMapping.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libGlobalMapping.so.5.9.0 (0x000078e378c8b000)\n\tlibMultiRegions.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0 (0x000078e377e00000)\n\tlibLocalRegions.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0 (0x000078e377a00000)\n\tlibSpatialDomains.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libSpatialDomains.so.5.9.0 (0x000078e377600000)\n\tlibStdRegions.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0 (0x000078e377200000)\n\tlibLibUtilities.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0 (0x000078e376c00000)\n\tlibblas.so.3 => /lib/x86_64-linux-gnu/libblas.so.3 (0x000078e378267000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x000078e376800000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x000078e377d19000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x000078e378c67000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x000078e376400000)\n\tlibboost_program_options.so.1.74.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0 (0x000078e3787bb000)\n\tliblapack.so.3 => /lib/x86_64-linux-gnu/liblapack.so.3 (0x000078e375c00000)\n\tlibopen-pal.so.40 => /lib/x86_64-linux-gnu/libopen-pal.so.40 (0x000078e377c66000)\n\tlibopen-rte.so.40 => /lib/x86_64-linux-gnu/libopen-rte.so.40 (0x000078e377943000)\n\tlibhwloc.so.15 => /lib/x86_64-linux-gnu/libhwloc.so.15 (0x000078e37820b000)\n\tlibCollections.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0 (0x000078e37708d000)\n\tlibptscotch-6.1.so => /lib/x86_64-linux-gnu/libptscotch-6.1.so (0x000078e377870000)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x000078e378c47000)\n\tlibfftw3.so.3 => /lib/x86_64-linux-gnu/libfftw3.so.3 (0x000078e375800000)\n\tlibboost_iostreams.so.1.74.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0 (0x000078e3781f3000)\n\tlibopenblas.so.0 => /lib/x86_64-linux-gnu/libopenblas.so.0 (0x000078e3733b0000)\n\t/lib64/ld-linux-x86-64.so.2 (0x000078e378fd9000)\n\tlibgfortran.so.5 => /lib/x86_64-linux-gnu/libgfortran.so.5 (0x000078e373000000)\n\tlibevent_core-2.1.so.7 => /lib/x86_64-linux-gnu/libevent_core-2.1.so.7 (0x000078e377c31000)\n\tlibevent_pthreads-2.1.so.7 => /lib/x86_64-linux-gnu/libevent_pthreads-2.1.so.7 (0x000078e3787b6000)\n\tlibudev.so.1 => /lib/x86_64-linux-gnu/libudev.so.1 (0x000078e377846000)\n\tlibMatrixFreeOps.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0 (0x000078e370200000)\n\tlibptscotcherr-6.1.so => /lib/x86_64-linux-gnu/libptscotcherr-6.1.so (0x000078e3781ee000)\n\tlibbz2.so.1.0 => /lib/x86_64-linux-gnu/libbz2.so.1.0 (0x000078e3781db000)\n\tliblzma.so.5 => /lib/x86_64-linux-gnu/liblzma.so.5 (0x000078e37781b000)\n\tlibzstd.so.1 => /lib/x86_64-linux-gnu/libzstd.so.1 (0x000078e377531000)\n\tlibquadmath.so.0 => /lib/x86_64-linux-gnu/libquadmath.so.0 (0x000078e3774e9000)",
+  "shared_installation": "/home/jay/.local/opt/nektar-v2026-mpi",
+  "shared_build": "/home/jay/build/nektar-v2026-mpi",
+  "shared_build_and_install_modified_by_this_milestone": false,
+  "installation_env_sha256": "499e66936aa127c3a8d06de04d49d8affea059ce41c51ba93a5cb83487376c3b",
+  "parallelism": {
+    "maximum_project_workers": 16,
+    "initial_build_workers": 8,
+    "incremental_build_workers": 4,
+    "maximum_numerical_workers": 8,
+    "m4_affinity": [
+      112,
+      113,
+      114,
+      115,
+      116,
+      117,
+      118,
+      119
+    ],
+    "regression_affinity": [
+      120,
+      121,
+      122,
+      123,
+      124,
+      125,
+      126,
+      127
+    ],
+    "maximum_mpi_ranks_per_case": 4,
+    "ctest_parallel": 1,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "sequence": "Build completed before solvers. M4 cases sequential on CPUs 112-119; a second stream on CPUs 120-127 ran CTest then the standard regression then the kernel regression. No more than two four-rank cases overlapped. The standard temporal pool has three serial workers and closes before MPI cases.",
+    "other_jobs": "An unrelated 48-rank HIT run was left untouched."
+  },
+  "acceptance": {
+    "m4_status": "passed",
+    "m4_cases": 27,
+    "standard_status": "passed",
+    "standard_cases": 27,
+    "kernel_status": "passed",
+    "ctest": "5/5 passed; see ctest.log"
+  },
+  "provenance_note": "The external Release executable compiles the full production incompressible-solver source list against the existing MPI core installation. Native field core provenance may identify the older installed-core revision; the source parent, individual source SHA256s and executable SHA256s identify the tested RANS implementation. No shared rebuild or install was performed.",
+  "artifacts": {
+    "configure.log": {
+      "bytes": 421,
+      "sha256": "fd16cef560b4634f823c164b4439d84e3e621a590f3a2bbd019a4215f83c6f59"
+    },
+    "build.log": {
+      "bytes": 543,
+      "sha256": "1e1057c6ca46bc67e8759886ededb9fb83842808331c63a32126bd8d2981620f"
+    },
+    "ctest.log": {
+      "bytes": 829,
+      "sha256": "8b30ba8980853e8d7a64752c18f914032b8fb48145141cdda32058c9d96a34f5"
+    },
+    "validate.log": {
+      "bytes": 9853,
+      "sha256": "5e0a36ca393e5dd8e767d35c380899931eea29e3caa041a258c0c54373cac052"
+    },
+    "validate-final.log": {
+      "bytes": 9517,
+      "sha256": "ffe0d1968680f1f0ee857702a5d6e2badb9a7f69dcafd8770f0c7321619aac4d"
+    },
+    "standard-regression.log": {
+      "bytes": 5790,
+      "sha256": "de00be6fef319263828b9d51d9ef92c660369cdcfb356a6e82a1b6fb667cc4ea"
+    },
+    "kernel-regression.log": {
+      "bytes": 3352,
+      "sha256": "c3526317440e128755d83885d97a2bfa2b90789ce07b413fe4983bd080207636"
+    },
+    "validation/validation.json": {
+      "bytes": 251281,
+      "sha256": "3bba164ddcc709ac97224ceac206015fce97aceffc741523120df36ff440c86e"
+    },
+    "standard-regression/validation.json": {
+      "bytes": 115376,
+      "sha256": "7dcc753210984adefbc22cc74dc20ace1649d6b85750532edc0025c0893de2c1"
+    },
+    "kernel-regression/validation.json": {
+      "bytes": 10347,
+      "sha256": "854f1c0d2f8a6a8bab85b39bd06e80fc5acd58771b9cd7c64ddeabf10f1b0866"
+    },
+    "figures/cls-temporal.pdf": {
+      "bytes": 17059,
+      "sha256": "f7f0d7c415178e2b54ae727f9e7d219aa04153d51b0af24e4cd1b412c344bc5e"
+    },
+    "figures/cls-temporal.png": {
+      "bytes": 100790,
+      "sha256": "6294435dcf4b63c426dae147d77411c102c6ae6100e8f5dbd0abaaa4d45e4c91"
+    },
+    "figures/original-awf-baseline.pdf": {
+      "bytes": 20082,
+      "sha256": "9a35776fb480e8ffbf5e8253ca534d750933e81ec2e7121e1e8190111ace7d8f"
+    },
+    "figures/original-awf-baseline.png": {
+      "bytes": 111471,
+      "sha256": "7c0ca379f14ca233dab668e131f12e203530d4e3544e07761cea4f9519ab1908"
+    },
+    "kernel-regression/column-mpi.json": {
+      "bytes": 9397,
+      "sha256": "871f42746fb8b873b12817eeacffd033b54e90828fa185ebe937d1cd4ba5411c"
+    },
+    "kernel-regression/column-serial.json": {
+      "bytes": 9397,
+      "sha256": "52391e50e8eb121c0424b275e1252b1291410c4519a6380764de8c1d6e2cf6d4"
+    },
+    "kernel-regression/kernels.json": {
+      "bytes": 258242,
+      "sha256": "7110d168d216665691619e280848ec0746089e9350dca5109abf36a2bd180358"
+    }
+  }
+}

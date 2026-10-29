@@ -177,8 +177,65 @@ conditions are outside the initial supported configuration.
 A complete manufactured example, \inltt{StandardRANS\_MMS.xml}, is supplied in
 \path{solvers/IncNavierStokesSolver/Tests/RANS}.
 The accompanying README describes the kernel, unsteady transport, MPI and
-neutral-ABL control tests. CLS and analytical-wall-function solver coupling
-are separate implementation milestones.
+neutral-ABL control tests.
+
+\subsubsection{High Reynolds number CLS and original analytical wall function}
+\label{CLSRANSScheme}
+
+The same solver supports the high Reynolds number cubic Craft--Launder--Suga
+closure. Select \inltt{TurbulenceModel=CLSHighRe} and use
+\inltt{u,v,k,eps\_tilde,p} in 2D or \inltt{u,v,w,k,eps\_tilde,p} in 3D.
+The full quadratic/cubic covariance, variable $C(q)$, consistent production
+and algebraic Yap source are updated in each implicit stage. In 2D, mesh
+$x,y$ represent physical $x,z$ and solver $v$ is wall-normal velocity.
+In 3D the physical and solver axes coincide.
+
+Yap uses geometric distance above the flat physical wall at
+\inltt{RANSWallOrigin}, default zero. All resolved points must have positive
+distance. \inltt{RANSYapCoefficient} and \inltt{RANSYapLength} default to
+0.83 and 2.5. Both diffusion modes retain the high-Re convention that
+transported modified dissipation equals modeled total dissipation;
+\inltt{Molecular} adds resolved molecular diffusion without the low-Re
+dissipation split, damping or additional near-wall source.
+CLS defaults to state relaxation 0.1, pressure relaxation 0.25 and at most
+800 nonlinear iterations per stage. The standard model retains its defaults.
+\inltt{RANSPressureTolerance} can set a separate pressure-increment criterion;
+it defaults to \inltt{RANSNonlinearTolerance}. State change and weak continuity
+retain the latter tolerance.
+
+For the original analytical wall function, additionally select
+\begin{lstlisting}[style=XmlStyle]
+<I PROPERTY="RANSWallModel" VALUE="AWFOriginal" />
+\end{lstlisting}
+The CG domain begins at the flat interface height
+\inltt{RANSStripHeight}, default 2. The representative strip point P and
+outer sample N are \inltt{RANSStripPointP} and \inltt{RANSStripPointN},
+default 1 and 4, with $0<P<H<N$. These heights are relative to the physical
+wall. \inltt{RANSRoughnessHeight}, default 0.1, is equivalent sand-grain
+roughness, distinct from aerodynamic roughness length.
+
+At H, tangential velocity and $k$ use Robin entries tagged
+\inltt{AWFOriginal}. Their initial primitive coefficient is replaced by the
+strip inertia at each stage. Normal velocity and modified dissipation use
+Dirichlet entries, with positive initial dissipation data; the coupled
+algorithm then sets their traces from integrated strip continuity and the
+original auxiliary dissipation profile. Pressure uses the
+\inltt{RANSPressure} marker. The strip retains its momentum and $k$ inventories,
+mean production and mean dissipation. No slip is enforced by the auxiliary
+wall solution below H. Normal velocity at H can be nonzero in a nonuniform
+flow. The initial adapter supports flat quadrilateral/hexahedral layers and
+deterministic \inltt{Body}/\inltt{Field} forcing.
+
+Additional saved fields \inltt{rans\_nut}, \inltt{rans\_P},
+\inltt{rans\_Yap}, \inltt{rans\_eps\_total}, six modeled covariance
+components and quadratic/cubic norms are polynomial projections of current
+model evaluations. Wall inventories, constraints, flux budgets and MPI sample
+ownership are reported in \inltt{<session>.awf.csv}.
+The original AWF intentionally retains its dissipation mismatch on the
+analytical CLS reference. The equilibrium correction is a separate policy.
+
+Complete small examples \inltt{CLS\_MMS.xml} and \inltt{AWFOriginal.xml}
+are supplied in \path{solvers/IncNavierStokesSolver/Tests/RANS}.
 
 \subsubsection{Implicit Velocity Correction Scheme}
 \label{VCSImplicitScheme}

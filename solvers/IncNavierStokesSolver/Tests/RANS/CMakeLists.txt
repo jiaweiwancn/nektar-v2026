@@ -49,6 +49,7 @@ if(RANS_BUILD_SOLVER)
             -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror)
         set_source_files_properties(
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSVelocityCorrectionScheme.cpp
+            ${RANS_SOLVER_ROOT}/./EquationSystems/RANSAnalyticalWallStrip.cpp
             PROPERTIES COMPILE_OPTIONS "-Wall;-Wextra;-Wpedantic;-Wno-sign-compare;-Werror")
     endif()
 endif()
@@ -58,6 +59,13 @@ if(RANS_BUILD_SOLVER)
     add_test(NAME RANSStandardTransportSmoke COMMAND IncNavierStokesSolver
         ${CMAKE_CURRENT_LIST_DIR}/StandardRANS_MMS.xml)
     set_tests_properties(RANSStandardTransportSmoke PROPERTIES
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke
+        PROCESSORS 1 TIMEOUT 120 ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
+    add_test(NAME RANSCLSTransportSmoke COMMAND IncNavierStokesSolver
+        ${CMAKE_CURRENT_LIST_DIR}/CLS_MMS.xml)
+    add_test(NAME RANSAWFOriginalSmoke COMMAND IncNavierStokesSolver
+        ${CMAKE_CURRENT_LIST_DIR}/AWFOriginal.xml)
+    set_tests_properties(RANSCLSTransportSmoke RANSAWFOriginalSmoke PROPERTIES
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke
         PROCESSORS 1 TIMEOUT 120 ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
 endif()

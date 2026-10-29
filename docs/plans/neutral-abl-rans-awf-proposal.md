@@ -22,8 +22,8 @@ original integrated row without inventing those additional inner equations.
 | Origin skill | academic-research-suite, experiment-agent |
 | Origin mode | plan |
 | Origin date | 2026-10-29 |
-| Version label | neutral_abl_rans_proposal_v4 |
-| Verification status | Milestones 1–3 CLOSED on 2026-10-29 with Linux column, kernel and standard-model URANS validation; CLS/AWF solver coupling pending |
+| Version label | neutral_abl_rans_proposal_v5 |
+| Verification status | Milestones 1–4 CLOSED on 2026-10-29 with Linux column, kernel, standard/CLS URANS and original-AWF validation; corrected-AWF coupling pending |
 | Mac source baseline | `6522fc9c74edab0e445aade16f7facea3f5987a3` |
 | New project branch | `codex/neutral-abl-rans-awf` |
 | Linux source observed | `812a2c84946d1fdad2b042c265e3e4ed32914138`, clean, on `codex/hit-inflow-generator` |
@@ -46,8 +46,17 @@ URANS solver, full variable symmetric stress, implicit losses, a coupled weak
 pressure iteration, and a compatible log law at a flat standoff boundary.
 The independent unsteady manufactured, decay, 3D, serial/MPI, boundary-control
 and 30-second periodic ABL tests pass on Linux. This standard boundary does not
-add the CLS/AWF conservative strip; that integration remains Milestones 4–5.
-The full inlet/outlet preservation study remains Milestone 6.
+add the CLS/AWF conservative strip.
+
+[Milestone 4](neutral-abl-rans-awf-milestone-4.md) adds full cubic CLS transport,
+algebraic Yap and the original AWF through the conservative strip, including
+its time-dependent inventory, algebraic dissipation and normal velocity.
+All 27 CLS/AWF acceptance cases pass, with independent tensor/quadrature
+forcing, serial/four-rank field audits, 3D coupling and conservation checks.
+Standard transport and kernel regressions also pass. The original baseline
+retains the note's source imbalance and evolves away from the CLS reference.
+Corrected-AWF coupling remains Milestone 5; the full inlet/outlet and restart
+preservation study remains Milestone 6.
 
 ## Findings at the proposal baseline
 
@@ -473,7 +482,7 @@ exact retention of analytical samples.
 | 1 Wall discretization and residual prototype | CLOSED. Conservative strip selected; P/N/H, matching, pressure/no-slip interpretation, integrated source and algebraic elimination fixed. Native column residual, conservation, h/p/quadrature, and MPI checks passed in the Milestone 1 specification. |
 | 2 Independent closure and AWF kernels | CLOSED. Default/configured roots, full tensors, original wall branches, corrected budgets, forcing identities, admissibility, switch, and recovery pass independent Linux tests; native serial/MPI column regression passes with the general CLS kernel. See the Milestone 2 specification. |
 | 3 Standard model URANS transport | CLOSED. Variable symmetric stress, implicit losses and coupled weak pressure pass unsteady manufactured, decay, 3D, quadrature, gauge and MPI tests. The compatible standard ABL control refines spatially and remains within 0.1% for one nominal periodic flow-through; native kernel and legacy VCS regressions pass. See the Milestone 3 specification. |
-| 4 CLS and original AWF integration | Full cubic stress and Yap are active; original AWF is available as a measurable baseline. |
+| 4 CLS and original AWF integration | CLOSED. Full cubic stress and Yap pass independent unsteady/3D controls and spatial refinement. Conservative original-AWF strip coupling passes point/mean/traction recovery, inventory budgets, nonuniform normal velocity, serial/MPI and invalid-state checks; the original dissipation mismatch remains measurable. See the Milestone 4 specification and its 27-case Linux evidence. |
 | 5 Corrected AWF integration | The actual matching anchor, integrated k source replacement, algebraic dissipation constraint, switch, and diagnostics satisfy the assembled residual audit. |
 | 6 Preservation and robustness study | 2D and full-3D empty-domain comparisons, h/p/dt studies, fixed-H versus varying-H studies, perturbations, MPI, and restart results are recorded. |
 | 7 Documentation and delivery | Reproducible fixtures, commands, tested revisions, limitations, and user configuration are complete. Terrain work begins from this measured baseline. |

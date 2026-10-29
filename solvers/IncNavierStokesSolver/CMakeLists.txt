@@ -17,6 +17,7 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
         ./EquationSystems/VelocityCorrectionSchemeImplicit.cpp
         ./EquationSystems/VelocityCorrectionSchemeWeakPressure.cpp
         ./EquationSystems/RANSVelocityCorrectionScheme.cpp
+        ./EquationSystems/RANSAnalyticalWallStrip.cpp
         ./EquationSystems/SmoothedProfileMethod.cpp
         ./EquationSystems/VCSMapping.cpp
         ./EquationSystems/Extrapolate.cpp
@@ -73,6 +74,7 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
             EquationSystems/VelocityCorrectionSchemeImplicit.h
             EquationSystems/VelocityCorrectionSchemeWeakPressure.h
             EquationSystems/RANSVelocityCorrectionScheme.h
+            EquationSystems/RANSAnalyticalWallStrip.h
             EquationSystems/WeakPressureExtrapolate.h
             Filters/FilterAeroForcesSPM.h
             Filters/FilterMovingBody.h
@@ -131,6 +133,14 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
         ADD_TEST(NAME RANSStandardTransportSmoke COMMAND IncNavierStokesSolver
             ${CMAKE_CURRENT_SOURCE_DIR}/Tests/RANS/StandardRANS_MMS.xml)
         SET_TESTS_PROPERTIES(RANSStandardTransportSmoke PROPERTIES
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke
+            PROCESSORS 1 TIMEOUT 120
+            ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
+        ADD_TEST(NAME RANSCLSTransportSmoke COMMAND IncNavierStokesSolver
+            ${CMAKE_CURRENT_SOURCE_DIR}/Tests/RANS/CLS_MMS.xml)
+        ADD_TEST(NAME RANSAWFOriginalSmoke COMMAND IncNavierStokesSolver
+            ${CMAKE_CURRENT_SOURCE_DIR}/Tests/RANS/AWFOriginal.xml)
+        SET_TESTS_PROPERTIES(RANSCLSTransportSmoke RANSAWFOriginalSmoke PROPERTIES
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke
             PROCESSORS 1 TIMEOUT 120
             ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")

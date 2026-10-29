@@ -8,11 +8,12 @@
 
 #include <IncNavierStokesSolver/EquationSystems/VelocityCorrectionSchemeWeakPressure.h>
 #include <SolverUtils/Turbulence/RANSModels.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSAnalyticalWallStrip.h>
 #include <fstream>
 
 namespace Nektar
 {
-/** Variable-diffusion standard k-epsilon transport. Each IMEX implicit stage
+/** Variable-diffusion standard/CLS k-epsilon transport. Each IMEX implicit stage
  * solves the nonlinear stress/source equations and incompressibility together.
  * Pressure is pi = p/rho + 2k/3. A pressure-defect iteration replaces the
  * constant-viscosity curl-curl extrapolation used by the legacy VCS path.
@@ -50,6 +51,8 @@ protected:
     void v_GetPressure(
         const Array<OneD, const Array<OneD, NekDouble>> &fields,
         Array<OneD, NekDouble> &pressure) override;
+    void v_ExtraFldOutput(std::vector<Array<OneD, NekDouble>> &coefficients,
+                          std::vector<std::string> &variables) override;
 
 private:
     using Fields = Array<OneD, Array<OneD, NekDouble>>;
@@ -71,10 +74,15 @@ private:
     void RequireEverywhere(bool valid, const std::string &message) const;
 
     SolverUtils::RANSParameters m_parameters;
+    SolverUtils::RANSModel m_model;
+    Array<OneD, NekDouble> m_wallDistance;
+    Gradients m_nonlinearStress;
+    std::shared_ptr<RANSAnalyticalWallStrip> m_wallStrip;
+    NekDouble m_wallOrigin;
     std::shared_ptr<const SolverUtils::RANSNeutralReference> m_reference;
     MultiRegions::ExpListSharedPtr m_pressureMass;
     int m_k, m_epsilon, m_maxIterations;
-    NekDouble m_resolvedNu, m_tolerance, m_pressureRelaxation, m_relaxation;
+    NekDouble m_resolvedNu, m_tolerance, m_pressureTolerance, m_pressureRelaxation, m_relaxation;
     NekDouble m_minimumK, m_minimumEpsilon, m_z0, m_heightShift;
     std::ofstream m_diagnostics;
     static std::string solverTypeLookupId;

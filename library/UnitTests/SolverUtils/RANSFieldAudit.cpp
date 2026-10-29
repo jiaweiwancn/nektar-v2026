@@ -18,7 +18,7 @@ using Fields = Array<OneD, MultiRegions::ExpListSharedPtr>;
 using Values = Array<OneD, Array<OneD, NekDouble>>;
 
 Values Import(const LibUtilities::SessionReaderSharedPtr &session,
-              const Fields &fields, const std::string &path,
+              const Fields &fields, const std::vector<std::string> &names, const std::string &path,
               LibUtilities::FieldMetaDataMap &metadata)
 {
     std::vector<LibUtilities::FieldDefinitionsSharedPtr> definitions;
@@ -32,7 +32,7 @@ Values Import(const LibUtilities::SessionReaderSharedPtr &session,
         for (int e = 0; e < fields[f]->GetExpSize(); ++e)
             expected.insert(fields[f]->GetExp(e)->GetGeom()->GetGlobalID());
         Vmath::Zero(fields[f]->GetNcoeffs(), fields[f]->UpdateCoeffs(), 1);
-        std::string name = session->GetVariable(f);
+        std::string name = names[f];
         for (int b = 0; b < definitions.size(); ++b)
         {
             auto &definition = definitions[b];
@@ -69,7 +69,12 @@ int main(int argc, char **argv)
         auto session = LibUtilities::SessionReader::CreateInstance(2, arguments);
         ASSERTL0(session->GetComm()->GetSize() == 1, "Audit all partitions with one process");
         auto graph = SpatialDomains::MeshGraphIO::Read(session);
-        Fields fields(session->GetVariables().size());
+        std::vector<std::string> names = session->GetVariables();
+        for (const auto &name : {"rans_nut", "rans_P", "rans_Yap", "rans_eps_total",
+             "rans_R_xx", "rans_R_yy", "rans_R_zz", "rans_R_xy", "rans_R_xz", "rans_R_yz",
+             "rans_quadratic_norm", "rans_cubic_norm"})
+            if (session->DefinesFunction("ExactSolution", name)) names.push_back(name);
+        Fields fields(names.size());
         // EquationSystem::WriteFld embeds lower-order pressure coefficients
         // in the first field's expansion. Audit that complete saved space,
         // including the padded modes, before comparing physical values.
@@ -77,8 +82,8 @@ int main(int argc, char **argv)
             session, graph, session->GetVariable(0), true, false);
         for (int f = 1; f < fields.size(); ++f) fields[f] = fields[0];
         LibUtilities::FieldMetaDataMap firstMeta, secondMeta;
-        auto first = Import(session, fields, argv[2], firstMeta);
-        auto second = Import(session, fields, argv[3], secondMeta);
+        auto first = Import(session, fields, names, argv[2], firstMeta);
+        auto second = Import(session, fields, names, argv[3], secondMeta);
         ASSERTL0(firstMeta.count("Time") && secondMeta.count("Time"), "Missing field time");
         const double time = std::stod(firstMeta.at("Time"));
         ASSERTL0(std::abs(time - std::stod(secondMeta.at("Time"))) < 1e-12, "Mismatched field times");
@@ -88,7 +93,7 @@ int main(int argc, char **argv)
         std::cout << std::setprecision(17) << "{\"time\":" << time << ",\"fields\":{";
         for (int f = 0; f < fields.size(); ++f)
         {
-            const auto name = session->GetVariable(f);
+            const auto &name = names[f];
             session->GetFunction("ExactSolution", name)->Evaluate(x, y, z, time, exact);
             double errorMax = 0, differenceMax = 0;
             double minimum = std::numeric_limits<double>::max(), maximum = -minimum;
