@@ -194,7 +194,6 @@ def plot_short(plt, output, cases, rows):
     ax.axvline(2, color="#777777", linestyle="--", label="2% sensitivity target")
     ax.set_yticks(range(len(rows)), [row["label"] for row in rows])
     ax.invert_yaxis()
-    ax.set_xscale("symlog", linthresh=2)
     ax.set_xlabel(r"Max over shared $x$ of $|$case $-$ reference$|$/reference (%)")
     ax.set_title("Short-domain full-window sensitivity")
     ax.grid(axis="x", alpha=.2)
@@ -204,9 +203,12 @@ def plot_short(plt, output, cases, rows):
         flow = cases[name]["flow"]
         molecular.append(flow["instantaneous_resolved_strain_dissipation"])
         svv.append(flow["instantaneous_svv_work_xy"] + flow["instantaneous_svv_work_z"])
+    if any(value <= 0 for value in molecular + svv):
+        raise ValueError("logarithmic work plot requires positive measured rates")
     work.bar([i - .19 for i in range(3)], molecular, .38, label=r"Molecular $2\nu S:S$", color=COLORS[0])
     work.bar([i + .19 for i in range(3)], svv, .38, label="SVV work: xy + z", color=COLORS[1])
     work.set_xticks(range(3), ["base", "p9", "h05"])
+    work.set_yscale("log")
     work.set_ylabel(r"Volume-mean instantaneous work ($\mathrm{m^2\,s^{-3}}$)")
     work.set_title("Final-field instantaneous work")
     work.grid(axis="y", alpha=.2)

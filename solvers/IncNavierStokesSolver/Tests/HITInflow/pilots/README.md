@@ -149,3 +149,17 @@ validation, scalar moments, temporal centering, blocks and estimator definitions
 Its backend/version/dtype are recorded; floating-point reduction order may differ
 for transforms and correlations. NumPy is imported only when requested. The
 default analyzer continues to require only the Python standard library.
+
+`plot_m6.py` renders measured short sensitivities, recording/block diagnostics
+and completed long spatial comparisons as PNG/SVG with hashed provenance.
+It requires Matplotlib. Use `--short-root`, `--sampling-root`, `--long-root`
+and a fresh `--output` directory; `--skip-long` explicitly omits unfinished long
+cases. It never turns a plotted sensitivity into a milestone decision.
+
+`spectrum_budget.py --spectrum TABLE --output budget.json` uses SciPy quadrature
+to compare continuum interpolation, low/high extensions, and the 100/200 rad/m
+tapered bands without normalization. `--native-source-root SOURCE` adds hashes
+of the native policy implementations when running an isolated script copy.
+Its moments and derived isotropic length scales describe the continuum input
+model; finite-lattice expectations, seeded records and solver results remain
+separate quantities. Quadrature errors do not estimate input-model uncertainty.
