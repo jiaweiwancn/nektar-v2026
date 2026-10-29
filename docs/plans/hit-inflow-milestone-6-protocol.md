@@ -1,6 +1,8 @@
 # Milestone 6 pilot protocol
 
-Status: execution in progress; this document is not a closure receipt.
+Status: execution complete. The predeclared gates below are retained; the
+[closure report](hit-inflow-milestone-6.md) records the failed 2% target and
+explicitly limited production choice. This protocol is not the closure receipt.
 
 Use upstream CBC1971 station 42 only to select inlet amplitudes and scales.
 Do not calibrate parameters to stations 98 or 171 during this milestone.

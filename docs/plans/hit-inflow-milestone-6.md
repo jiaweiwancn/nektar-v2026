@@ -1,9 +1,14 @@
 # HIT inflow Milestone 6: resolution, domain and resource study
 
-**Status: IN PROGRESS.** The full-distance pilots must finish before the
-production configuration and Milestone 6 closure can be signed off. This report
-records completed evidence without treating timing trials or analytical models
-as downstream solver validation.
+**Status: CLOSED on 2026-10-29 as a limited-band SVV feasibility study.** Both
+full-distance pilots, all 25 short controls, final native diagnostics and the
+guarded-source validation are complete. The [production recipe](hit-inflow-milestone-6-production-study.json)
+and [machine-readable receipt](hit-inflow-milestone-6-validation.json) are saved.
+
+**The 2% full-distance refinement target was not met:** the largest component
+variance change is 4.154%. Spatial adjustment and sampling limitations remain.
+The frozen recipe supports a qualified engineering follow-up; it establishes
+neither full-DNS accuracy nor full-spectrum CBC fidelity.
 
 This implements Milestone 6 of the [implementation plan](hit-inflow-implementation-plan.md)
 under the [predeclared protocol](hit-inflow-milestone-6-protocol.md). No downstream
@@ -18,20 +23,24 @@ predeclare sampling screens and claim limits before Milestone 7 scoring.
 | Origin skill | academic-research-suite, experiment-agent |
 | Mode | implementation and numerical verification |
 | Branch | `codex/hit-inflow-generator` |
-| C++ build and 47 unit cases | `d74cae8` |
-| Corrected 22 registered solver regressions | `812a2c8` |
+| Physical pilot C++ build | `d74cae8` |
+| Final guarded build, 48 unit cases and 22 registered regressions | `29f467b6428ce5efc58d97d4cb481fbda0e432b1` |
 | Long and follow-up solver inputs/runners | `812a2c8` |
 | Optional spectral analysis | `a3caa84` |
 | Authoritative host | `jay-Super-Server`; initial `ssh linux-usb`, resumed through `ssh jay@100.105.247.110` |
 | Main run storage | `/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-6` |
 
-The C++ sources are unchanged between `d74cae8` and `812a2c8`. Later changes in
-`a3caa84` concern optional Python postprocessing. The active solver checkout
-remains clean at `812a2c8`; the optional analyzer was copied into external run
-storage with its source hash, without replacing running solver libraries.
+The C++ sources are unchanged between `d74cae8` and `812a2c8`. Optional Python
+postprocessing was copied into external run storage with its source hash.
+After all native jobs finished, Linux was synchronized, configured, rebuilt and
+installed at `29f467b`. Its additional C++ change is the sampler range guard;
+the normal CBC evaluation arithmetic is unchanged. A native metadata fixture
+confirms the exact pilot coefficient digest remains
+`10cf3c068556656932363e3c2a892c497a4930a1bd5b24cefb8d03fee9ff9963`.
 
 All M6 work uses at most **64 CPUs**, following the user's stricter limit.
-M6 rebuilds use 32 jobs after its native jobs finish. OpenMP and OpenBLAS use one thread
+Earlier rebuilds used 32 jobs; the final rebuild used 16 after native jobs
+finished, leaving shared-server headroom. OpenMP and OpenBLAS use one thread
 per MPI rank. The initial allocation was two long cases of 28 ranks each
 (`npz=2`) plus one short case of four ranks (`npz=4`): 60 MPI ranks. After a
 matched decomposition timing/field check, the long pair was restarted from
@@ -135,7 +144,8 @@ are checked against the assembled stiffness quadratic form and Parseval's
 relation. Native initialization also now correctly unpacks assembled global
 coefficients before imposing local Dirichlet values.
 
-All **47 unit cases** pass in four suites, and all **22 selected solver
+All **48 unit cases** pass in four suites (30 core, 7 boundary, 9 restart and
+2 SVV-work cases), and all **22 selected solver
 regressions** pass, including eight legacy controls. The regression batch uses
 CTest with eight worker slots and exact registered Tester commands in external
 working directories. Two initial failures exposed checking issues: the first
@@ -149,9 +159,11 @@ Earlier signed-maximum initialization diagnostics are excluded from Linf claims.
 Final source review added a conservative cached-sampler range guard at
 `6522fc9`, preserving the reference evaluator's exception behavior when unused
 derivative products overflow. The CBC grouped evaluation arithmetic is
-unchanged. Its additional unit case and final Linux rebuild remain pending
-until the active solver jobs finish; the 47-case result above refers to the
-actual pilot build.
+unchanged. Its additional unit case passes in the final Linux build. A repeat
+512-point benchmark measures 1.147 ms per grouped plane and 6.616 ms per direct
+reference point, with maximum velocity/variance errors of `5.17e-13 m/s` and
+`4.48e-15 m2/s2`. The disjoint second stream also passes direct/grouped checks.
+These timings remain sampler measurements, rather than solver speedups.
 
 The explicit NumPy spectral backend agrees with the standard-library reference
 on a native history and independent even/odd transform fixtures. Scalar means,
@@ -313,27 +325,47 @@ analytical expectation differs from both the actual seeded record and sampling
 intervals. Avoiding recurrence does not by itself establish low-frequency
 convergence.
 
-## Full-distance pilots and remaining qualification
+## Completed full-distance pilots
 
-The current 9 m pilots use degrees 9 and 10, h=0.1 m, 32 Fourier slots,
+The completed 9 m pilots use degrees 9 and 10, h=0.1 m, 32 Fourier slots,
 `dt=2.5e-5 s`, both dealiasing switches, and an absolute 0.8--0.95 s record.
 They reach x=3.612896 and 8.322564 m with a 0.677436 m outlet buffer and retain
 step checkpoints every 0.05 s. The 0.8 s start exceeds the 0.70866 s nominal
-domain transit; actual startup and spatial adjustment still require inspection.
+domain transit. The late-profile and window checks below retain the limits of
+that startup choice rather than equating nominal transit with equilibration.
 
 The smaller timestep follows a scalar IMEX2 calibration using the native
 lattice/spectrum, not a replacement for Navier--Stokes validation. At the final
 convection age, `dt=5e-5` gives modeled transverse variance error about 1.40%
 but correlation about 0.9595; `dt=2.5e-5` reduces these to 0.179% and 0.9974.
 Space, nonlinear evolution, pressure, SVV and boundary effects are excluded
-from that analytical model. The fine short-case timestep chain and matched
-long-degree comparison must provide the corresponding solver evidence.
+from that analytical model. Actual short timestep and long-degree controls
+provide separate solver evidence; a full-distance timestep bound is not measured.
 
-Native checkpoint postprocessing will provide complete x-column slabs of
+Native checkpoint postprocessing provides complete x-column slabs of
 molecular strain dissipation, separate x-y/z SVV work, divergence and
 instantaneous energy about prescribed Ubar. That energy is explicitly labelled
 and cannot be substituted for temporal-central TKE. Direction-labelled z
 spectra and correlations are computed separately from immutable histories.
+
+Both runs completed all 38,000 steps and all 301 declared recording samples.
+The matched degree-9 versus degree-10 comparison gives:
+
+| x, m | Degree-9 K, m2/s2 | Degree-10 K, m2/s2 | K change relative to degree 10 |
+| --- | ---: | ---: | ---: |
+| 0 | 0.02454259 | 0.02454258 | 0.000034% |
+| 3.612896 | 0.02303583 | 0.02345397 | -1.783% |
+| 5.5 | 0.01993290 | 0.02065546 | -3.498% |
+| 8.322564 | 0.01598203 | 0.01663125 | -3.904% |
+
+At the final station, u/v/w variances change by -3.504%/-4.154%/-4.057%.
+The conditional eight-block w and K intervals there do not overlap. The
+provisional 2% target therefore fails; broad intervals elsewhere do not reverse
+that decision. Refining DG degree changes both resolution and the SVV operator.
+The maximum z-spectrum L1 and z-derivative-moment changes are 4.599% and 12.861%.
+Neither integral energy nor dissipation is labelled converged at 2%.
+
+![Completed long-domain refinement comparison](hit-inflow-milestone-6-figures/m6-long-sensitivity.png)
 
 The degree-9 pilot is complete with 301 samples over the entire declared
 0.8--0.95 s window. Its temporal-central K is 0.02454259 m2/s2 at the inlet,
@@ -352,6 +384,12 @@ stations, eight-block component interval half-widths reach 6.56%, 7.20% and
 isolate a startup transient. Few correlated blocks cannot establish confidence
 coverage or stationary far-field statistics.
 
+The degree-10 record gives similar conditional limits: maximum eight-block
+u/v/w/K half-widths are 6.56%/7.15%/4.77%/3.35%; maximum four/sixteen-block K
+half-widths are 5.70%/3.07%. The 0.15 s pilot records do not establish the
+adequacy of the proposed 0.8 s production record at the far stations. The
+predeclared follow-up rules require that qualification before precision claims.
+
 All three late degree-9 native profiles are complete at 0.85, 0.90 and 0.95 s.
 Volume-mean molecular work is approximately 0.004756--0.004762 m2/s3, x-y SVV
 work 0.009171--0.009237, and z SVV work 0.0004760--0.0004810. Molecular slab peaks
@@ -367,6 +405,38 @@ z-derivative moments. The last active mode m=15 contains less than `1e-5` of
 each component variance, with strong SVV rolloff at m=14--15. That rolloff
 does not bound the model effect of moving the Fourier/SVV cutoff. The small
 near-field Fourier sensitivity cannot be transferred to this far-field tail.
+
+The same three late profiles are complete at degree 10. Their molecular peaks
+also lie at x=6.35--6.95 m; x-y SVV peaks reach x=7.15 m in one snapshot. The
+three-snapshot volume means are:
+
+| Degree | Molecular work | SVV x-y work | SVV z work | Total SVV / molecular | Fixed-reference divergence |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 9 | 0.00475969 | 0.00920976 | 0.00047838 | 2.0355 | 0.0084786 |
+| 10 | 0.00538499 | 0.00773896 | 0.00056030 | 1.5412 | 0.0090741 |
+
+Work has units m2/s3. Raw mean slab-integrated divergence RMS values are
+0.07843/0.08394 s-1. These are finite discretization diagnostics; analytical
+generator solenoidality does not imply exact pointwise discrete solenoidality.
+Mean molecular work is about 13% higher at degree 10 relative to degree 9.
+Model and resolution sensitivity in gradient quantities is larger than the K sensitivity.
+
+At the final degree-10 station, kz>100 rad/m contributes
+15.31%/14.53%/7.01% of component variance and 52.43%/51.29%/41.11% of its
+z-derivative moment. The inlet cutoff is not a cutoff imposed on the evolving
+solution: nonlinear interactions generate this tail. The full Fourier solver
+has active modes through m=15 (`kz=157.08 rad/m`), with a null Nyquist slot.
+The spectral rolloff is controlled by the recorded SVV model; far-field Fourier
+and SVV-strength convergence remain unquantified.
+
+![Long-domain energy, spectra, work and divergence](hit-inflow-milestone-6-figures/m6-long-diagnostics.png)
+
+The shaded native ranges describe three snapshots, not confidence intervals.
+K is temporal-central, whereas the native work uses instantaneous total fields.
+The first degree-9 profile launch stopped before processing because the new SSH
+shell lacked `env.sh`; it was rerun successfully after activation. Its failed
+orchestration receipt is superseded by the completed native profile receipt;
+the CFD run was not repeated.
 
 The first six native long-domain profiles are complete at t=0.1, 0.2 and 0.3 s
 for both degrees, each with all 90 x columns and checkpoint-partition hashes
@@ -395,14 +465,87 @@ velocity difference was `3.1e-7 m/s`. The current long pair retains iterative
 velocity solves and direct multilevel pressure solves. IMEX2 remains the
 binding HIT time-integration contract.
 
-The matched linear-solver resource trials are complete; the long pilots are
-still running. A separate eight-rank degree-10 recording control repeats the
-0.8 s short-domain run with the fine timestep, bringing the concurrent MPI
-allocation to 60 ranks while it runs.
-The final production choice, measured runtime/RAM/storage budget, adjustment
-assessment, uncertainty criteria and machine-readable closure receipt remain
-outstanding. A proposed longer production record must stay inside the
-`32/12.7 = 2.519685 s` synthesis period, including startup and clock margin.
+The separate eight-rank degree-10 recording control completed the 0.8 s short
+run with the fine timestep. Together with the long pair and residual four-rank
+queue, its maximum simultaneous solver allocation was 60 ranks.
+
+## Frozen feasible configuration and error budget
+
+The saved production recipe selects degree 10, h=0.1 m, 32 Fourier slots,
+IMEX2 with dt=25 microseconds, a 9 by 0.6 by 0.6 m domain, the 100/80-rad/m
+inlet band, both dealiasing switches, DG coefficient 1, and separate z exponential
+viscosity 0.0238125 with cutoff ratio 0.75. Velocity solves remain iterative;
+pressure uses `XxtMultiLevelStaticCond` with native Scotch reordering. This is
+the highest tested optimized DG degree, selected for a limited follow-up rather
+than because the full-distance 2% target passed.
+
+Use the disjoint input-counter streams 20261028 and 4315228324. The selected
+job ends at 1.6 s after a 0.8 s startup, leaving a 0.8 s recording window. Its
+declared synthetic duration is 1.60005 s, strictly below the 2.519685 s repeat
+period. The complete initial-domain/time footprint is 29.320635 m within the
+32 m synthesis period. This prevents reuse over the declared footprint without
+establishing low-frequency or far-field statistical convergence.
+
+| Full 0.95 s pilot, 24 ranks / npz=8 | Degree 9 | Degree 10 |
+| --- | ---: | ---: |
+| Measured solver wall time, s | 16,369.50 | 20,053.89 |
+| Sampled sum of process-tree RSS, GiB | 10.35 | 13.09 |
+| Stored case data, GiB | 5.31 | 5.64 |
+| Linear runtime estimate for a 1.6 s job, h | 7.66 | 9.38 |
+
+The last row is a planning extrapolation, not a production measurement. For the
+selected degree-10 recipe, reserve 12 hours, 32 GiB memory and 20 GiB storage per
+case as planning headroom. Two concurrent 24-rank cases use 48 computational
+workers with OMP/OpenBLAS one, leaving room within the hard 64-worker limit.
+The two-stream production jobs themselves remain Milestone 7 work.
+
+| Error-budget entry | Measured evidence | Qualification limit |
+| --- | --- | --- |
+| Generator / inlet projection | Cached/direct error below 6.7e-13 m/s; sampled degree-10 projection max 1.105e-5 m/s | Sampled points/times, not a global supremum bound |
+| Spatial resolution and DG model | Near-field degree 9/10 change 0.150%; full-distance max 4.154%; z-gradient change 12.861% | Full-distance 2% target failed; coupled model/resolution |
+| Timestep | Degree-10 25/12.5-microsecond near-field change 0.009041% | Far-field bound not quantified; scalar IMEX result is a model only |
+| Fourier representation | Degree-10 near-field variance change 0.001868%, z-gradient change 0.116981% | Large downstream nonlinear tail; far-field/model-cutoff bound not quantified |
+| Transverse period | Input covariance change below 0.080%; short box/realization differences up to 11.19% | Adjacent-seed controls are not independent replicas; no CFD box-convergence bound |
+| Outlet buffer | Short-domain changes below 0.0032%; long buffer 0.677436 m | No isolated far-field buffer bound |
+| Startup / adjustment | Nominal flush exceeded; three late native profiles; short mean/Gaussian control agrees | Development persists beyond first station; equilibrium length indeterminate |
+| Sampling / centering | 4/8/16-block and half-window checks; fine 0.7 s short record; exact inlet centering bias | Conditional intervals, not proven independence/coverage; production duration must qualify at every station |
+| Spectrum policy / omitted scales | Selected-band interpolation K/epsilon shifts 0.874%/1.360%; only 35.2%/0.56% of upstream reference K/epsilon injected | Input-model sensitivity and missing scales, not numerical or sampling error bars |
+| SVV strength / dissipation | Near-field strength changes below 0.026%; native molecular and x-y/z work measured separately | Long strength sensitivity not quantified; SVV/molecular work ratio 1.54 at degree 10 |
+
+These entries are not independent and are not added in quadrature. No total 2%
+accuracy bound is asserted. The feasible input, measured limitations and fixed
+qualification rules close the M6 configuration/feasibility objective under its
+predeclared limited-validation option. Full-band experimental scoring remains
+pending. A development section calibrated using upstream data only, longer
+records/disjoint streams, and long-domain refinements remain qualification
+options before a stronger physical claim.
+
+## Reproduction and final validation
+
+The final Linux build used Release, C++17, MPI/FFTW enabled and HDF5 disabled,
+with `-O3 -DNDEBUG`. Configure/build/install used the existing build and prefix
+from AGENTS.md, with `cmake --build ... --parallel 16`. The four exact registered
+unit entries were run with:
+
+```bash
+ctest --test-dir /home/jay/build/nektar-v2026-mpi --verbose --parallel 1 \
+  --output-on-failure -R '^HIT(Core|Boundary|Restart|SVVWork)UnitTests$'
+```
+
+The 22 exact registered Tester commands were exported to external per-test
+working directories and run with CTest `--parallel 8`, using each test's native
+MPI rank count as its PROCESSORS allocation. Source revision, commands, logs,
+JUnit, benchmark results and coefficient identity are retained under
+`29f467b-final-validation` below the main run root. All 48 unit cases and all
+22 regressions pass. Final figures were generated on Linux and visually reviewed
+on the Mac, with source/input hashes retained beside PNG/SVG assets.
+
+To run the frozen recipe later, activate the installation environment, keep
+OMP/OpenBLAS one, and pass `--jobs 2 --ranks 24 --npz 8` explicitly to
+`Tests/HITInflow/run_m6_study.py` under the incompressible solver's directory,
+with the saved production-study JSON and a fresh output directory below the
+Linux heavy-run root. The extra recipe metadata documents qualification and
+planning reserves; the CLI allocation remains explicit.
 
 ## SVV interpretation
 

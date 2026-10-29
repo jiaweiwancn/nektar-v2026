@@ -1,8 +1,8 @@
 {
   "schema": "NEKTAR_HIT_M6_FIGURES_V1",
-  "created_utc": "2026-10-29T08:00:49.651464+00:00",
+  "created_utc": "2026-10-29T11:54:51.250681+00:00",
   "plotting_script": {
-    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/812a2c8/analysis-scripts/plot_m6-d841193.py",
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/812a2c8/analysis-scripts/plot_m6.py",
     "sha256": "22e33b120dd6ab26eb7a5d6e22e0a4c9bb49df69f72eb5ec1f22de1920963620"
   },
   "matplotlib_version": "3.5.1",
@@ -16,9 +16,9 @@
   "arguments": {
     "short_root": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/a72ac7a/study",
     "sampling_root": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/812a2c8/sampling-study",
-    "long_root": null,
-    "skip_long": true,
-    "output": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/812a2c8/figures-coarse-d841193"
+    "long_root": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/812a2c8/long-npz8-study",
+    "skip_long": false,
+    "output": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/812a2c8/figures-final-1595c82"
   },
   "input_files": {
     "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/a72ac7a/study/base/manifest.json": {
@@ -164,6 +164,30 @@
     "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/812a2c8/followup-study/record08/manifest.json": {
       "sha256": "6edeebb0e63522d4be836f96a128fb1dff37cd2c3a8b358e1d116724f37c7b76",
       "bytes": 571774
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/812a2c8/long-npz8-study/long-p9/manifest.json": {
+      "sha256": "e1dee39e93e6899ca0753aeff53aba176a5d793284f642e6a6f8253c24da5c5b",
+      "bytes": 3063993
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/812a2c8/long-npz8-study/long-p9/statistics.json": {
+      "sha256": "10565322994f9ac5ff06819f5e82128af2b4b2d752ffaf8038f11a6f74670e9e",
+      "bytes": 70620
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/812a2c8/long-npz8-study/long-p9/run.receipt.json": {
+      "sha256": "8eedb12653d94ff676a61ffdff4d25705d35bfc19d691c42145355fce4447cf1",
+      "bytes": 2103
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/812a2c8/long-npz8-study/long-p10/manifest.json": {
+      "sha256": "2597d7d65e2147f9f29d32cc8b87d5ba248ad26be7996276bc128cddf35e6a7e",
+      "bytes": 3063996
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/812a2c8/long-npz8-study/long-p10/statistics.json": {
+      "sha256": "509b4285da070227b05f7d1d97b90fca87baa63ab699cbbe7e49873bee1595ee",
+      "bytes": 70623
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-6/812a2c8/long-npz8-study/long-p10/run.receipt.json": {
+      "sha256": "7e5b61fe5fcd188b7a0c5071ddbf60491fed53f9ab0dd7a215d70eab104f721f",
+      "bytes": 2104
     }
   },
   "case_source_revisions": {
@@ -175,7 +199,9 @@
     "p9": "a72ac7ac341c91f34abd7d035d179c267a299b9b",
     "svv-double": "a72ac7ac341c91f34abd7d035d179c267a299b9b",
     "svv-half": "a72ac7ac341c91f34abd7d035d179c267a299b9b",
-    "z64": "a72ac7ac341c91f34abd7d035d179c267a299b9b"
+    "z64": "a72ac7ac341c91f34abd7d035d179c267a299b9b",
+    "long-p9": "812a2c84946d1fdad2b042c265e3e4ed32914138",
+    "long-p10": "812a2c84946d1fdad2b042c265e3e4ed32914138"
   },
   "figures": {
     "m6-short-sensitivity": [
@@ -185,6 +211,10 @@
     "m6-recording-sensitivity": [
       "m6-recording-sensitivity.png",
       "m6-recording-sensitivity.svg"
+    ],
+    "m6-long-sensitivity": [
+      "m6-long-sensitivity.png",
+      "m6-long-sensitivity.svg"
     ]
   },
   "plotted_data": {
@@ -481,9 +511,70 @@
         ]
       ]
     },
-    "long": null
+    "long": {
+      "shared_stations_x_m": [
+        0.0,
+        0.15,
+        0.45,
+        1.0,
+        2.0,
+        3.612896,
+        5.5,
+        8.322564
+      ],
+      "p9_minus_p10_percent": [
+        [
+          4.4556928698606216e-05,
+          1.1311569872811796e-05,
+          4.382746604779184e-05,
+          3.346126096852791e-05
+        ],
+        [
+          -0.013516436861053936,
+          -0.09124468912072978,
+          -0.10145394267970514,
+          -0.06813420951771994
+        ],
+        [
+          -0.03016001247951423,
+          -0.13353798682916043,
+          -0.15369101993608195,
+          -0.10508131563351847
+        ],
+        [
+          -0.0867395321772437,
+          -0.29224678078854577,
+          -0.3190641822244584,
+          -0.23285008875521804
+        ],
+        [
+          -0.516020303719963,
+          -1.0784295056447073,
+          -1.0982444574362442,
+          -0.8986896821218953
+        ],
+        [
+          -1.4765773415747967,
+          -1.8434556812806915,
+          -2.0254084015678027,
+          -1.7828169659996635
+        ],
+        [
+          -2.898297064645201,
+          -3.6508434988084235,
+          -3.9304335121937712,
+          -3.4981597109445106
+        ],
+        [
+          -3.5041184273478576,
+          -4.153984442416414,
+          -4.05663423625428,
+          -3.903653195344023
+        ]
+      ]
+    }
   },
-  "long_omission": "Explicit --skip-long; no long results were read or fabricated",
+  "long_omission": null,
   "definitions": {
     "short_relative_change": "100*(case-reference)/reference; absolute maximum over shared stations, separately for var(u),var(v),var(w),K",
     "sampling_reference": "record07 full-window variance/K; conditional intervals describe mean block energy, not the full-window variance estimator",

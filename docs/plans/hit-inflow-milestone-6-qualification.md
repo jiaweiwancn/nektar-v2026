@@ -1,8 +1,9 @@
 # Qualification rules for the limited-band HIT follow-up
 
 Predeclared on 2026-10-29 during Milestone 6, before Milestone 7 experimental
-scoring. Milestone 6 remains in progress until its long pilots, final build,
-production manifest and error budget are complete. These rules supplement the
+scoring. Milestone 6 is closed as a limited feasibility study; its
+[production recipe](hit-inflow-milestone-6-production-study.json) and
+[measured error budget](hit-inflow-milestone-6.md) are frozen. These rules supplement the
 [pilot protocol](hit-inflow-milestone-6-protocol.md); they do not declare the
 current candidate converged.
 

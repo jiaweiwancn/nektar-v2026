@@ -20,9 +20,9 @@ periodic transverse boundaries, and the nonlinear velocity-correction solver.
 | Origin skill | academic-research-suite, experiment-agent |
 | Origin mode | plan |
 | Origin date | 2026-10-28 |
-| Version label | hit_inflow_plan_v6 |
-| Verification status | Inlet/core, MPI/backends, restart and focused regressions VERIFIED on Linux; production and downstream physical validation pending |
-| Milestone status | Milestones 1-3 CLOSED on 2026-10-28; Milestones 4-5 CLOSED on 2026-10-29; Milestones 6-8 pending |
+| Version label | hit_inflow_plan_v7 |
+| Verification status | Inlet/core, MPI/backends, restart and regressions VERIFIED on Linux; limited-band SVV configuration/error budget frozen; downstream physical validation pending |
+| Milestone status | Milestones 1-3 CLOSED on 2026-10-28; Milestones 4-6 CLOSED on 2026-10-29; Milestones 7-8 pending |
 | Source baseline | `a3b7efc8fef7e075390f0f59457dfdac30f0b6ed` |
 | Project branch | `codex/hit-inflow-generator` |
 
@@ -35,9 +35,11 @@ are complete. The
 [Milestone 3 full-3D inlet and solver verification](hit-inflow-milestone-3.md)
 and [Milestone 4 Homogeneous1D, MPI and restart verification](hit-inflow-milestone-4.md)
 are also complete. [Milestone 5 focused regression coverage](hit-inflow-milestone-5.md)
-is complete. [Milestone 6 pilot evidence](hit-inflow-milestone-6.md) is being
-collected; full-distance SVV runs remain in progress. Production resolution and
-downstream physical validation remain scheduled work.
+is complete. [Milestone 6 pilots and error budget](hit-inflow-milestone-6.md)
+are complete, with a frozen limited-band SVV recipe. The full-distance 2%
+refinement target failed (4.154% maximum variance change); full-spectrum CBC
+fidelity and far-field sampling qualification remain unestablished. Downstream
+experimental comparison remains scheduled work.
 
 ## Scope and intended behavior
 
@@ -648,6 +650,15 @@ unrelated heavy suites by default.
 
 ### Milestone 6 Run resolution and domain pilots
 
+**Status: CLOSED on 2026-10-29 under the limited-validation option below.** Both
+9 m pilots and all 25 short controls completed. The
+[report](hit-inflow-milestone-6.md), [validation receipt](hit-inflow-milestone-6-validation.json),
+[frozen recipe](hit-inflow-milestone-6-production-study.json), and
+[follow-up qualification rules](hit-inflow-milestone-6-qualification.md) record
+measured resources, unresolved/model-dependent effects and sampling limits.
+The final guarded build passes 48 unit cases and 22 registered regressions.
+The recipe is feasible; it is not labelled 2%-converged or a full-DNS CBC case.
+
 Begin with inexpensive Linux pilot runs. Refine the inlet representation,
 spectral/hp mesh, homogeneous mode count, timestep, transverse periods, and
 outlet buffer independently. Measure startup, the adjustment length, recording
@@ -666,6 +677,11 @@ exist. If DNS is impractical, report the resolved band and modeled dissipation
 and define the result as a limited validation rather than claiming full DNS.
 
 ### Milestone 7 Compare downstream decay with experiment
+
+**Status: PENDING.** The frozen M6 recipe is a limited-band SVV follow-up.
+Apply its predeclared sampling/adjustment qualification before precision claims.
+Full-band experimental comparisons must retain the inlet's excluded scales and
+unquantified far-field effects; numerical-test success is not physical fidelity.
 
 Run the experimental-spectrum case first, then the von Karman alternative using
 the same upstream constraints. Sample the reference plane and downstream

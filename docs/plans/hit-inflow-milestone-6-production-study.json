@@ -1,0 +1,81 @@
+{
+  "schema": "NEKTAR_HIT_M6_STUDY_V1",
+  "purpose": "Frozen limited-band SVV follow-up recipe selected from completed Milestone6 pilots; no downstream experimental fitting or full-DNS accuracy claim",
+  "status": "FROZEN_LIMITED_VALIDATION",
+  "frozen_date": "2026-10-29",
+  "evidence": "hit-inflow-milestone-6-validation.json",
+  "qualification_rules": "hit-inflow-milestone-6-qualification.md",
+  "qualification": {
+    "full_distance_2_percent_refinement_target_met": false,
+    "measured_maximum_variance_K_change_percent": 4.153984442416414,
+    "full_band_CBC_fidelity_established": false,
+    "production_sampling_qualification": "Must be measured at every station before precision claims; the 0.8 s record is a feasible choice, not a proven far-field uncertainty bound",
+    "adjustment": "Development persists beyond the first comparison station; an equilibrium adjustment length is not established",
+    "unquantified_far_field_controls": ["timestep", "Fourier/SVV cutoff", "transverse period", "outlet buffer", "SVV strength"]
+  },
+  "recommended_CLI_allocation": {
+    "jobs": 2,
+    "ranks_per_job": 24,
+    "npz": 8,
+    "OMP_NUM_THREADS": 1,
+    "OPENBLAS_NUM_THREADS": 1,
+    "hard_server_worker_limit": 64,
+    "note": "Pass --jobs 2 --ranks 24 --npz 8 explicitly; allocation metadata is informative and does not override CLI defaults"
+  },
+  "planning_reserve_per_case": {
+    "runtime_hours": 12,
+    "memory_GiB": 32,
+    "storage_GiB": 20,
+    "basis": "Measured 0.95 s degree10 pilot:20053.8921 s wall,13.0892 GiB sampled process-tree RSS,5.6372 GiB case storage; linear 1.6 s runtime estimate9.38194 h. Production not yet run."
+  },
+  "recurrence_preflight": {
+    "declared_job_duration_with_margin_s": 1.6000500000000002,
+    "synthetic_repeat_period_s": 2.5196850393700787,
+    "complete_space_time_footprint_m": 29.320635000000003,
+    "synthetic_length_m": 32,
+    "passed": true
+  },
+  "stream_policy": {
+    "algorithm": "SplitMix64BoxMuller52V1",
+    "synthesis_counts": [1020, 20, 20],
+    "enclosing_input_counter_ranges_inclusive": [[20261028, 22709027], [4315228324, 4317676323]],
+    "disjoint_nonwrapping_ranges": true,
+    "caveat": "Avoids direct counter reuse; does not prove statistical independence. Recheck if lattice counts change."
+  },
+  "baseline": {
+    "length": 9,
+    "width": 0.6,
+    "h": 0.1,
+    "modes": 11,
+    "hom-modes": 32,
+    "dt": 2.5e-05,
+    "duration": 1.6,
+    "record-start": 0.8,
+    "sample-every": 20,
+    "cutoff": 100,
+    "taper": 80,
+    "synthesis-length": 32,
+    "seed": 20261028,
+    "stations": "0,0.15,0.45,1,2,3.612896,5.5,8.322564",
+    "buffer": 0.677436,
+    "probe-grid": "64,32",
+    "dealias": true,
+    "svv": "dg",
+    "svv-coeff": 1,
+    "svv-z-coeff": 0.0238125,
+    "svv-z-cutoff": 0.75,
+    "pressure-solver": "XxtMultiLevelStaticCond",
+    "checkpoint-every": 2000
+  },
+  "cases": [
+    {
+      "id": "cbc-seed-20261028"
+    },
+    {
+      "id": "cbc-seed-4315228324",
+      "override": {
+        "seed": 4315228324
+      }
+    }
+  ]
+}
