@@ -191,7 +191,13 @@ nonzero Fourier content in all velocities. Maximum projected errors are:
 | --- | ---: |
 | Baseline degree 7 | 0.0010390 |
 | Degree 9 | 0.00005707 |
+| Degree 10, long-case inlet | 0.00001105 |
 | h=0.05 m, degree 7 | 0.000006562 |
+
+The degree-10 check uses 11,520 quadrature samples over five absolute-time calls
+in the long-case declared interval, two MPI ranks with `npz=2`, and CPUs 6--7.
+Its maximum raw error is `5.76e-13 m/s`; repeated coefficients are identical.
+These are errors at the sampled native points/times, not global supremum bounds.
 
 Integrated-energy agreement does not establish dissipation agreement. At the
 final short snapshot, total instantaneous SVV work divided by molecular strain
@@ -200,6 +206,18 @@ degree-9 and h-refined cases. The corresponding fixed-reference divergence norms
 are approximately 0.009395, 0.001868 and 0.001233. These distinguish converging
 spatial representation from exact pointwise discrete solenoidality. Small net
 flux/Gauss residuals alone do not establish the latter.
+
+The matched 0.1--0.2 s z-spectrum checks give maximum normalized L1 differences
+of 2.1245% for degree 7 versus h-refinement, 0.1695% for degree 9 versus
+h-refinement, and 0.01793% for doubled Fourier slots versus the baseline.
+For the separate z-derivative moment `sum(kz^2 * variance_per_mode)`, the
+corresponding maximum changes are 2.5024%, 0.2220% and 0.1078%. This derivative
+moment is neither total molecular dissipation nor SVV work. In the fine 0.7 s
+record at x=0.45 m, modes with `kz>100 rad/m` contain about
+0.206%/0.213%/0.0463% of u/v/w variance but 1.90%/1.97%/0.823% of their
+z-derivative moments. Nonlinear generation of a tail is therefore visible even
+when its contribution to K is small. The direction-labelled spectra and source
+hashes are retained in `812a2c8/z-spectral-sensitivity.json`.
 
 The no-SVV control failed with NaNs and repeated native iteration-limit warnings.
 It is retained as a rejected stability control; it establishes no universal
@@ -280,6 +298,17 @@ molecular strain dissipation, separate x-y/z SVV work, divergence and
 instantaneous energy about prescribed Ubar. That energy is explicitly labelled
 and cannot be substituted for temporal-central TKE. Direction-labelled z
 spectra and correlations are computed separately from immutable histories.
+
+The first six native long-domain profiles are complete at t=0.1, 0.2 and 0.3 s
+for both degrees, each with all 90 x columns and checkpoint-partition hashes
+verified before and after reading. At 0.3 s the volume-mean molecular strain
+dissipation is 0.004556/0.004941 m2/s3 at degrees 9/10; total SVV work is
+0.009293/0.007369 m2/s3. The fixed-reference divergence norms are
+0.008223/0.008351. These warmup fields show substantial modeled work and ongoing
+cascade development. They precede the domain flush and cannot establish a
+post-start adjustment length or converged downstream statistics. The serial
+diagnostic commands, native build metadata, JSON/CSV hashes and timings are in
+`812a2c8/early-long-profiles/{long-p9,long-p10}/receipt.json`.
 
 The replacement runs are under `812a2c8/long-npz8-study`. The original
 `long-study` warmups are explicitly marked as performance interruptions and
