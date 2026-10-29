@@ -41,7 +41,9 @@ def run(command, directory, stem, environment):
             peak_rss_kib = max(peak_rss_kib, rss)
             peak_threads = max(peak_threads, threads)
             time.sleep(2)
+    iteration_limit = "Exceeded maxIt" in (directory / (stem + ".log")).read_text(errors="replace")
     result = {"command": command, "exit_code": process.returncode,
+              "native_iteration_limit_exceeded": iteration_limit,
               "wall_seconds": time.monotonic() - start,
               "sampled_process_tree_peak_rss_kib": peak_rss_kib,
               "sampled_process_tree_peak_threads": peak_threads,
@@ -52,7 +54,7 @@ def run(command, directory, stem, environment):
         json.dumps(result, indent=2) + "\n")
     if process.returncode:
         raise RuntimeError(f"{stem} exited {process.returncode}; inspect its log")
-    if "Exceeded maxIt" in (directory / (stem + ".log")).read_text(errors="replace"):
+    if iteration_limit:
         raise RuntimeError(f"{stem} exceeded the native iterative-solver limit; result rejected")
     return result
 

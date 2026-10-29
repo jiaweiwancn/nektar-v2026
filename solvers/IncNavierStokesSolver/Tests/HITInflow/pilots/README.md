@@ -30,10 +30,13 @@ The synthesis box has periods `(synthesis-length,width,width)`. The default
 Nyquist wavenumber; an explicit `NX,NY,NZ` must meet the same constraint. The
 solver z grid must also meet strict Nyquist. `--taper` is an absolute taper-start
 wavenumber; default is `0.8*cutoff`. `REPEAT=Error` requires
-`duration<synthesis-length/12.7`. Counts, seed, periods, spectrum, cutoff and taper
+`duration+2*dt<synthesis-length/12.7`. The declared synthetic record reserves
+two timesteps beyond the job end to cover accumulated clock roundoff; sampling
+uses the actual absolute solver time. Counts, seed, periods, spectrum, cutoff and taper
 must stay fixed during solver resolution/time-step refinement. The continuum
 mode count in the manifest is a cost estimate, not a discrete retained-mode
-count. The current generator evaluates the retained Fourier sum directly.
+count. The inlet groups the retained Fourier sum by transverse wavenumber and
+caches spatial phases; the reference direct sum remains available for checks.
 
 The only experimental input is the committed upstream shell spectrum. Its
 interpolation/extensions are `LogLinear`, `K4`, `Gaussian`, with `Preserve`
@@ -44,6 +47,11 @@ of the CBC experiment and needs a documented numerical/model error budget.
 
 Velocity correction uses nonlinear unsteady Navier--Stokes, IMEX2, Standard
 extrapolation, continuous projection, and an iterative solve tolerance 1e-12.
+`--pressure-solver XxtMultiLevelStaticCond` selects the tested direct pressure
+option while retaining iterative velocity solves. `run_m6_case.py` then adds
+the native `--use-scotch` reordering option. It limits its inherited CPU affinity
+to 64 CPUs and fixes OpenMP/OpenBLAS to one thread per rank; concurrent jobs
+must share the same total 64-CPU budget.
 The inlet sets all three velocities with `HITInflow` and pressure with `H`;
 the outlet uses native `HOutflow`. `--buffer` validates the distance from the
 last requested station to the outlet and records it; it adds no sponge force.
@@ -59,6 +67,8 @@ DG scaling. Choose `--svv-coeff` explicitly for an exponential-kernel study;
 the common CLI default 1 is not an experimentally calibrated viscosity.
 The homogeneous exponential coefficient/cutoff are always explicit when SVV
 is enabled (defaults 0.001 and 0.75). Every SVV knob is recorded even when off.
+The quadrilateral DG kernel ignores the cutoff-ratio parameter: it uses its
+native tabulated modal filter. Refining the resolution also changes this model.
 
 Initial conditions are the mean flow by default. `--initial-field FILE_OR_DIR`
 writes a native `F VAR="u,v,w,p"` initial condition referencing an existing
@@ -74,8 +84,9 @@ half-open yz probes, with x stations sorted and probe order station/y/z.
 Output includes the initial state and every `sample-every` steps. Duration and
 record-start must align with these steps. The default 8x8 probe grid need not
 resolve every solver transverse mode; refine it independently for statistics.
-No checkpoints are requested (`IO_CheckSteps=IO_CheckTime=0`), although the
-native final solver field and cumulative Reynolds stress fields are retained.
+Step checkpoints are disabled by default; `--checkpoint-every STEPS` enables
+them for postprocessing. Time-based checkpoints remain disabled. The native
+final solver field and cumulative Reynolds stress fields are retained.
 
 Native `ReynoldsStresses` uses `OutputStartTime=record-start`, nonmoving central
 moments and `SampleFrequency=sample-every`. Its fixed output frequency is the

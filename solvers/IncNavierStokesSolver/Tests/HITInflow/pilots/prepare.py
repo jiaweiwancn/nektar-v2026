@@ -125,6 +125,8 @@ def prepare(args):
         raise ValueError("modes must be >=4; hom-modes must be even and >=4")
     if args.sample_every < 1 or not 0 <= args.seed < 2**64:
         raise ValueError("sample-every must be positive; seed must fit uint64")
+    if args.checkpoint_every < 0:
+        raise ValueError("checkpoint-every must be nonnegative")
     steps = integer_steps(args.duration, args.dt, "duration")
     start_step = integer_steps(args.record_start, args.dt, "record-start")
     if steps < 2 or not 0 <= start_step < steps:
@@ -220,7 +222,7 @@ def prepare(args):
     sub(scheme, "ORDER", "2")
     parameters = sub(conditions, "PARAMETERS")
     values = [("Ubar", U), ("Kinvis", NU), ("TimeStep", args.dt), ("NumSteps", steps),
-              ("IO_InfoSteps", max(1, steps // 20)), ("IO_CheckSteps", 0),
+              ("IO_InfoSteps", max(1, steps // 20)), ("IO_CheckSteps", args.checkpoint_every),
               ("IO_CheckTime", 0), ("FinTime", 0), ("CFL", 0), ("Flowrate", 0),
               ("HomModesZ", args.hom_modes), ("LZ", args.width),
               ("IterativeSolverTolerance", 1e-12)]
@@ -318,6 +320,7 @@ def prepare(args):
                  "end_s": args.duration, "record_start_s": args.record_start,
                  "declared_synthetic_record_duration_s": synthetic_duration,
                  "synthetic_record_end_margin_s": 2 * args.dt,
+                 "checkpoint_every_steps": args.checkpoint_every,
                  "sample_every_steps": args.sample_every, "sample_dt_s": args.dt * args.sample_every,
                  "history_includes_initial_state": True,
                  "stress_first_sample_s": args.record_start if start_step else args.dt * args.sample_every,
@@ -344,7 +347,7 @@ def prepare(args):
                                "time_note": "Designed for a time-zero initial field. Native nonzero-Time restart fields require a separately reviewed absolute-time schedule."},
         "limitations": ["No downstream experimental input or fitting", "Finite box, cutoff, taper, SVV and startup require explicit convergence/error-budget checks",
                         "8x8 default probe grid resolves statistics at sampled points; it need not resolve all transverse solver modes",
-                        "Checkpoint steps/time disabled; native final solver field and cumulative stress fields remain enabled"],
+                        "Time-based checkpoints disabled; step checkpoints are optional. Native final solver field and cumulative stress fields remain enabled"],
         "sha256": {"prepare.py": digest(Path(__file__)), "pilot.xml": digest(case),
                    SPECTRUM.name: digest(output / SPECTRUM.name)},
     }
@@ -367,6 +370,7 @@ def main():
     parser.add_argument("--hom-modes", type=int, required=True, help="Even full Fourier packing size")
     parser.add_argument("--record-start", type=float, default=0.0)
     parser.add_argument("--sample-every", type=int, default=1)
+    parser.add_argument("--checkpoint-every", type=int, default=0)
     parser.add_argument("--seed", type=int, default=20261028)
     parser.add_argument("--taper", type=float, help="Absolute taper-start wavenumber, rad/m (default 0.8*cutoff)")
     parser.add_argument("--synthesis-length", type=float, default=32.0)

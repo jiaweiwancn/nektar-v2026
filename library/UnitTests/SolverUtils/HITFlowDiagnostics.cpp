@@ -11,9 +11,141 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <limits>
+#include <map>
+#include <utility>
 #include <vector>
 
 using namespace Nektar;
+
+namespace
+{
+void WriteSlabs(
+    const LibUtilities::SessionReaderSharedPtr &session,
+    const MultiRegions::ExpListSharedPtr &field,
+    const Array<OneD, Array<OneD, NekDouble>> &physical,
+    const Array<OneD, NekDouble> &strainSquared,
+    const Array<OneD, NekDouble> &divergence,
+    const std::array<Array<OneD, NekDouble>, 2> &svvDensity,
+    NekDouble viscosity, NekDouble volume)
+{
+    ASSERTL0(session->GetComm()->GetSize() == 1 &&
+                 field->GetExpType() == MultiRegions::e3DH1D,
+             "Slab profiles require a complete serial H1D field");
+    NekDouble mean;
+    session->LoadParameter("Ubar", mean);
+    ASSERTL0(std::isfinite(mean), "Slab profiles require finite prescribed Ubar");
+    const auto geometry = field->GetPlane(0);
+    const int planes = field->GetZIDs().size();
+    const int planePoints = geometry->GetNpoints();
+    const NekDouble weight = field->GetHomoLen() / planes;
+    using Interval = std::pair<NekDouble, NekDouble>;
+    std::vector<Interval> intervals(geometry->GetExpSize());
+    std::map<Interval, std::array<NekDouble, 9>> slabs;
+    const NekDouble large = std::numeric_limits<NekDouble>::max();
+    NekDouble yMin = large, yMax = -large;
+    for (int element = 0; element < geometry->GetExpSize(); ++element)
+    {
+        const auto expansion = geometry->GetExp(element);
+        const auto shape = expansion->GetGeom();
+        ASSERTL0(expansion->DetShapeType() == LibUtilities::eQuadrilateral &&
+                     expansion->GetGeomFactors()->GetGtype() == SpatialDomains::eRegular,
+                 "Slab profiles require affine quadrilaterals");
+        std::array<NekDouble, 2> lower{large, large}, upper{-large, -large};
+        for (int vertex = 0; vertex < 4; ++vertex)
+        {
+            std::array<NekDouble, 3> coordinates;
+            shape->GetVertex(vertex)->GetCoords(coordinates[0], coordinates[1], coordinates[2]);
+            for (int d = 0; d < 2; ++d)
+            {
+                lower[d] = std::min(lower[d], coordinates[d]);
+                upper[d] = std::max(upper[d], coordinates[d]);
+            }
+        }
+        ASSERTL0(upper[0] > lower[0] && upper[1] > lower[1],
+                 "Degenerate slab element");
+        // An affine quadrilateral fills its coordinate bounding rectangle
+        // exactly only when its edges align with the x and y axes.
+        Array<OneD, NekDouble> localOnes(expansion->GetTotPoints(), 1.0);
+        const auto area = expansion->Integral(localOnes);
+        const auto rectangle = (upper[0] - lower[0]) * (upper[1] - lower[1]);
+        ASSERTL0(area > 0 && std::abs(area - rectangle) <= 1e-10 * rectangle,
+                 "Slab profiles require axis-aligned quadrilaterals");
+        intervals[element] = {lower[0], upper[0]};
+        slabs[intervals[element]] = {};
+        yMin = std::min(yMin, lower[1]);
+        yMax = std::max(yMax, upper[1]);
+    }
+    // Integrate complete x-element columns across y and all physical Fourier
+    // planes. Full-span z integration preserves the spectral SVV work identity.
+    for (int plane = 0; plane < planes; ++plane)
+    {
+        auto planeGeometry = field->GetPlane(plane);
+        for (int element = 0; element < planeGeometry->GetExpSize(); ++element)
+        {
+            auto expansion = planeGeometry->GetExp(element);
+            const int count = expansion->GetTotPoints();
+            const int offset = plane * planePoints + planeGeometry->GetPhys_Offset(element);
+            Array<OneD, NekDouble> localOnes(count, 1.0), energy(count, 0.0),
+                divergenceSquared(count);
+            for (int q = 0; q < count; ++q)
+            {
+                const int point = offset + q;
+                for (int component = 0; component < 3; ++component)
+                {
+                    const auto velocity = physical[component][point];
+                    const auto fluctuation = velocity - (component == 0 ? mean : 0.0);
+                    energy[q] += 0.5 * fluctuation * fluctuation;
+                }
+                divergenceSquared[q] = divergence[point] * divergence[point];
+            }
+            auto &integrals = slabs.at(intervals[element]);
+            integrals[0] += weight * expansion->Integral(localOnes);
+            for (int component = 0; component < 3; ++component)
+            {
+                integrals[component + 1] += weight * expansion->Integral(physical[component] + offset);
+            }
+            integrals[4] += weight * expansion->Integral(energy);
+            integrals[5] += 2 * viscosity * weight * expansion->Integral(strainSquared + offset);
+            integrals[6] += weight * expansion->Integral(svvDensity[0] + offset);
+            integrals[7] += weight * expansion->Integral(svvDensity[1] + offset);
+            integrals[8] += weight * expansion->Integral(divergenceSquared);
+        }
+    }
+    std::ofstream output(session->GetSessionName() + ".slabs.csv");
+    output << std::setprecision(17)
+           << "xmin,xmax,xmid,volume,mean_u,mean_v,mean_w,"
+           << "instantaneous_K_about_prescribed_mean,molecular_strain_dissipation,"
+           << "svv_xy,svv_z,divergence_rms\n";
+    NekDouble totalVolume = 0.0;
+    for (const auto &slab : slabs)
+    {
+        const auto &integrals = slab.second;
+        const auto slabVolume = integrals[0];
+        const auto expectedVolume = (slab.first.second - slab.first.first) *
+                                    (yMax - yMin) * field->GetHomoLen();
+        ASSERTL0(slabVolume > 0 && std::abs(slabVolume - expectedVolume) <=
+                     1e-9 * expectedVolume,
+                 "Slab profiles require complete y columns and full-span z volume");
+        for (const auto value : integrals)
+        {
+            ASSERTL0(std::isfinite(value), "Non-finite slab integral");
+        }
+        output << slab.first.first << ',' << slab.first.second << ','
+               << 0.5 * (slab.first.first + slab.first.second) << ',' << slabVolume;
+        // K is instantaneous energy about fixed Ubar, not temporal-central TKE.
+        for (int quantity = 1; quantity < 8; ++quantity)
+        {
+            output << ',' << integrals[quantity] / slabVolume;
+        }
+        output << ',' << std::sqrt(std::max(0.0, integrals[8] / slabVolume)) << '\n';
+        totalVolume += slabVolume;
+    }
+    ASSERTL0(std::abs(totalVolume - volume) <= 1e-10 * volume,
+             "Slab volumes do not cover the imported field");
+    ASSERTL0(output.good(), "Cannot write HIT slab profiles");
+}
+} // namespace
 
 int main(int argc, char *argv[])
 {
@@ -32,6 +164,7 @@ int main(int argc, char *argv[])
         auto fields = HITTestTools::Fields(session, graph);
         auto data = HITTestTools::ImportFields(session, fields, argv[argc - 1]);
         const int points = fields[0]->GetNpoints();
+        const bool homogeneous = fields[0]->GetExpType() == MultiRegions::e3DH1D;
         Array<OneD, NekDouble> divergence(points, 0.0), ones(points, 1.0);
         std::array<std::array<Array<OneD, NekDouble>, 3>, 3> derivatives;
         NekDouble velocitySquared = 0.0, gradientSquared = 0.0;
@@ -74,7 +207,9 @@ int main(int argc, char *argv[])
         // during startup and in a spatially developing mean field.
         const NekDouble resolvedStrainDissipation =
             2.0 * viscosity * fields[0]->Integral(strainSquared) / volume;
-        const auto svvWork = HITTestTools::SVVWork(session, fields[0], derivatives, volume);
+        std::array<Array<OneD, NekDouble>, 2> svvDensity;
+        const auto svvWork = HITTestTools::SVVWork(session, fields[0], derivatives,
+            volume, homogeneous ? &svvDensity : nullptr);
         const NekDouble velocityNorm = std::sqrt(velocitySquared);
         const NekDouble divNorm = fields[0]->L2(divergence);
         const NekDouble divIntegral = fields[0]->Integral(divergence);
@@ -88,7 +223,6 @@ int main(int argc, char *argv[])
         // with its uniform Fourier quadrature weight. This tool imports the
         // complete field and runs serially, so no boundary-local collectives
         // are entered by only a subset of MPI ranks.
-        const bool homogeneous = fields[0]->GetExpType() == MultiRegions::e3DH1D;
         const int planes = homogeneous ? fields[0]->GetZIDs().size() : 1;
         const NekDouble weight = homogeneous ? fields[0]->GetHomoLen() / planes : 1.0;
         NekDouble inletFlux = 0.0, outletFlux = 0.0;
@@ -142,6 +276,11 @@ int main(int argc, char *argv[])
                           relativeDivergence, relativeFlux, gauss, gradientSquared})
         {
             ASSERTL0(std::isfinite(value), "Non-finite HIT flow diagnostic");
+        }
+        if (homogeneous)
+        {
+            WriteSlabs(session, fields[0], data.physical, strainSquared,
+                       divergence, svvDensity, viscosity, volume);
         }
         std::ofstream output(session->GetSessionName() + ".flow.json");
         output << std::setprecision(17)

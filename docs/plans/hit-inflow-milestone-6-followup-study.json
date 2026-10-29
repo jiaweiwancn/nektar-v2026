@@ -1,0 +1,90 @@
+{
+  "schema": "NEKTAR_HIT_M6_STUDY_V1",
+  "purpose": "Resume the four unsubmitted stable cases after the original no-SVV control failed; add focused fine-grid/time/sampling checks",
+  "baseline": {
+    "length": 0.6,
+    "width": 0.6,
+    "h": 0.1,
+    "modes": 8,
+    "hom-modes": 32,
+    "dt": 0.0001,
+    "duration": 0.2,
+    "record-start": 0.1,
+    "sample-every": 5,
+    "cutoff": 100,
+    "taper": 80,
+    "synthesis-length": 32,
+    "seed": 20261028,
+    "stations": "0,0.15,0.45",
+    "buffer": 0.15,
+    "probe-grid": "32,32",
+    "dealias": true,
+    "svv": "dg",
+    "svv-coeff": 1,
+    "svv-z-coeff": 0.0238125,
+    "svv-z-cutoff": 0.75
+  },
+  "cases": [
+    {
+      "id": "record08",
+      "override": {
+        "duration": 0.8
+      }
+    },
+    {
+      "id": "base-seed2",
+      "override": {
+        "seed": 20261029
+      }
+    },
+    {
+      "id": "span09-seed2",
+      "override": {
+        "seed": 20261029,
+        "width": 0.9,
+        "hom-modes": 48,
+        "probe-grid": "48,48"
+      }
+    },
+    {
+      "id": "span12-seed2",
+      "override": {
+        "seed": 20261029,
+        "width": 1.2,
+        "hom-modes": 64,
+        "probe-grid": "64,64"
+      }
+    },
+    {
+      "id": "p9-dt-half",
+      "override": {
+        "modes": 10,
+        "dt": 5e-05,
+        "sample-every": 10
+      }
+    },
+    {
+      "id": "p9-dt-quarter",
+      "override": {
+        "modes": 10,
+        "dt": 2.5e-05,
+        "sample-every": 20
+      }
+    },
+    {
+      "id": "p10-dt-quarter",
+      "override": {
+        "modes": 11,
+        "dt": 2.5e-05,
+        "sample-every": 20
+      }
+    },
+    {
+      "id": "p9-probe64",
+      "override": {
+        "modes": 10,
+        "probe-grid": "64,64"
+      }
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "schema": "NEKTAR_HIT_M6_STUDY_V1",
+  "purpose": "Full experimental-distance startup and spatial-refinement pilots; no downstream experimental fitting; duration shorter than proposed production record",
+  "baseline": {
+    "length": 9,
+    "width": 0.6,
+    "h": 0.1,
+    "modes": 10,
+    "hom-modes": 32,
+    "dt": 2.5e-05,
+    "duration": 0.95,
+    "record-start": 0.8,
+    "sample-every": 20,
+    "cutoff": 100,
+    "taper": 80,
+    "synthesis-length": 32,
+    "seed": 20261028,
+    "stations": "0,0.15,0.45,1,2,3.612896,5.5,8.322564",
+    "buffer": 0.677436,
+    "probe-grid": "64,32",
+    "dealias": true,
+    "svv": "dg",
+    "svv-coeff": 1,
+    "svv-z-coeff": 0.0238125,
+    "svv-z-cutoff": 0.75,
+    "pressure-solver": "XxtMultiLevelStaticCond",
+    "checkpoint-every": 2000
+  },
+  "cases": [
+    {
+      "id": "long-p9"
+    },
+    {
+      "id": "long-p10",
+      "override": {
+        "modes": 11
+      }
+    }
+  ]
+}

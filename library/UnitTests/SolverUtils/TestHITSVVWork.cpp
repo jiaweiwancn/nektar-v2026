@@ -198,8 +198,9 @@ BOOST_AUTO_TEST_CASE(DGWorkMatchesNativeStiffnessQuadraticForm)
 {
     Fixture fixture;
     const auto gradients = fixture.Sample(true, true);
+    std::array<Array<OneD, NekDouble>, 2> density;
     const auto work = HITTestTools::SVVWork(fixture.session, fixture.fields[0],
-                                           gradients, fixture.volume);
+                                           gradients, fixture.volume, &density);
     const auto matrixWork = fixture.MatrixWork();
     const NekDouble expectedFourier = amplitude * amplitude * wave * wave *
                                       0.1 * std::exp(-1.0);
@@ -208,6 +209,13 @@ BOOST_AUTO_TEST_CASE(DGWorkMatchesNativeStiffnessQuadraticForm)
     BOOST_REQUIRE_GT(work[1], 0.0);
     BOOST_CHECK_CLOSE_FRACTION(work[0], matrixWork, 1e-9);
     BOOST_CHECK_CLOSE_FRACTION(work[1], expectedFourier, 1e-9);
+    for (int direction = 0; direction < 2; ++direction)
+    {
+        BOOST_REQUIRE_EQUAL(density[direction].size(), fixture.fields[0]->GetNpoints());
+        BOOST_CHECK_CLOSE_FRACTION(
+            fixture.fields[0]->Integral(density[direction]) / fixture.volume,
+            work[direction], 1e-9);
+    }
     BOOST_TEST_MESSAGE("SVV xy bulk work: helper=" << work[0]
         << ", native stiffness difference=" << matrixWork
         << "; Fourier work=" << work[1] << ", analytic=" << expectedFourier);
@@ -223,13 +231,28 @@ BOOST_AUTO_TEST_CASE(FourierWorkAndParsevalAreIndependentOfPhase)
         BOOST_TEST_CONTEXT("phase=" << phase)
         {
             const auto gradients = fixture.Sample(false, false, phase);
+            std::array<Array<OneD, NekDouble>, 2> density;
             const auto work = HITTestTools::SVVWork(fixture.session,
-                fixture.fields[0], gradients, fixture.volume);
+                fixture.fields[0], gradients, fixture.volume, &density);
             const auto derivativeNorm = fixture.fields[0]->L2(gradients[0][2]);
             BOOST_CHECK_CLOSE_FRACTION(derivativeNorm * derivativeNorm /
                                        fixture.volume, variance, 1e-10);
             BOOST_CHECK_CLOSE_FRACTION(work[1], expectedWork, 1e-10);
             BOOST_CHECK_SMALL(work[0], 1e-20);
+            for (int direction = 0; direction < 2; ++direction)
+            {
+                BOOST_REQUIRE_EQUAL(density[direction].size(), fixture.fields[0]->GetNpoints());
+                const auto integral = fixture.fields[0]->Integral(density[direction]) /
+                                      fixture.volume;
+                if (work[direction] == 0.0)
+                {
+                    BOOST_CHECK_SMALL(integral, 1e-20);
+                }
+                else
+                {
+                    BOOST_CHECK_CLOSE_FRACTION(integral, work[direction], 1e-9);
+                }
+            }
         }
     }
 }

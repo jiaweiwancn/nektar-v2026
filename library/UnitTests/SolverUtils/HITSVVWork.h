@@ -20,11 +20,19 @@ inline std::array<NekDouble, 2> SVVWork(
     const LibUtilities::SessionReaderSharedPtr &session,
     const MultiRegions::ExpListSharedPtr &field,
     const std::array<std::array<Array<OneD, NekDouble>, 3>, 3> &derivatives,
-    NekDouble volume)
+    NekDouble volume,
+    std::array<Array<OneD, NekDouble>, 2> *density = nullptr)
 {
     std::array<NekDouble, 2> work{};
     ASSERTL0(std::isfinite(volume) && volume > 0.0,
              "SVV work requires positive finite volume");
+    if (density)
+    {
+        for (auto &values : *density)
+        {
+            values = Array<OneD, NekDouble>(field->GetNpoints(), 0.0);
+        }
+    }
     bool dg = false, exponential = false, fourier = false;
     session->MatchSolverInfo("SpectralVanishingViscositySpectralHP", "DGKernel", dg, false);
     session->MatchSolverInfo("SpectralVanishingViscositySpectralHP", "ExpKernel", exponential, false);
@@ -105,6 +113,10 @@ inline std::array<NekDouble, 2> SVVWork(
                         for (int q = 0; q < count; ++q)
                         {
                             product[q] = filtered[q] * derivatives[component][direction][offset + q];
+                            if (density)
+                            {
+                                (*density)[0][offset + q] += product[q];
+                            }
                         }
                         work[0] += length / planes * expansion->Integral(product) / volume;
                     }
@@ -123,6 +135,11 @@ inline std::array<NekDouble, 2> SVVWork(
         {
             Array<OneD, NekDouble> transformed(field->GetNpoints());
             field->HomogeneousFwdTrans(field->GetNpoints(), derivatives[component][2], transformed);
+            Array<OneD, NekDouble> filtered;
+            if (density)
+            {
+                filtered = Array<OneD, NekDouble>(field->GetNpoints(), 0.0);
+            }
             NekDouble parseval = 0.0;
             for (int plane = 0; plane < planes; ++plane)
             {
@@ -139,13 +156,31 @@ inline std::array<NekDouble, 2> SVVWork(
                 if (wave > start)
                 {
                     const NekDouble ratio = NekDouble(wave - maximum) / (wave - start);
-                    work[1] += zCoefficient * std::exp(-ratio * ratio) * norm / volume;
+                    const NekDouble factor = zCoefficient * std::exp(-ratio * ratio);
+                    work[1] += factor * norm / volume;
+                    if (density)
+                    {
+                        for (int q = 0; q < planePoints; ++q)
+                        {
+                            const int offset = plane * planePoints + q;
+                            filtered[offset] = factor * transformed[offset];
+                        }
+                    }
                 }
             }
             const auto physicalNorm = field->L2(derivatives[component][2]);
             ASSERTL0(std::abs(parseval - physicalNorm * physicalNorm) <=
                          1e-10 * std::max(parseval, physicalNorm * physicalNorm),
                      "Fourier SVV diagnostic failed its Parseval check");
+            if (density)
+            {
+                Array<OneD, NekDouble> physical(field->GetNpoints());
+                field->HomogeneousBwdTrans(field->GetNpoints(), filtered, physical);
+                for (int q = 0; q < field->GetNpoints(); ++q)
+                {
+                    (*density)[1][q] += derivatives[component][2][q] * physical[q];
+                }
+            }
         }
     }
     ASSERTL0(std::isfinite(work[0]) && std::isfinite(work[1]) &&
