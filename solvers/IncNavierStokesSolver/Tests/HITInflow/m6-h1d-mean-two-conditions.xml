@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<NEKTAR>
+    <!-- Overlay for m6-h1d-mean-initial.xml. A command-line parameter override
+         does not update the interpreter's already-parsed Ubar expression. -->
+    <CONDITIONS>
+        <SOLVERINFO>
+            <I PROPERTY="SolverType" VALUE="VelocityCorrectionScheme" />
+            <I PROPERTY="EQTYPE" VALUE="UnsteadyNavierStokes" />
+            <I PROPERTY="EvolutionOperator" VALUE="Nonlinear" />
+            <I PROPERTY="Projection" VALUE="Continuous" />
+            <I PROPERTY="AdvectionForm" VALUE="Convective" />
+            <I PROPERTY="Extrapolation" VALUE="Standard" />
+            <I PROPERTY="GlobalSysSoln" VALUE="IterativeStaticCond" />
+            <I PROPERTY="HOMOGENEOUS" VALUE="1D" />
+        </SOLVERINFO>
+        <TIMEINTEGRATIONSCHEME><METHOD>IMEX</METHOD><ORDER>2</ORDER></TIMEINTEGRATIONSCHEME>
+        <PARAMETERS>
+            <P>Ubar = 2</P>
+            <P>Kinvis = 0.01</P>
+            <P>TimeStep = 0.001</P>
+            <P>NumSteps = 20</P>
+            <P>IO_InfoSteps = 20</P>
+            <P>IO_CheckSteps = 0</P>
+            <P>FinTime = 0</P>
+            <P>CFL = 0</P>
+            <P>IO_CheckTime = 0</P>
+            <P>Flowrate = 0</P>
+            <P>IterativeSolverTolerance = 1e-14</P>
+            <P>HomModesZ = 8</P>
+            <P>LZ = 6.2831853071795862</P>
+        </PARAMETERS>
+        <VARIABLES><V ID="0">u</V><V ID="1">v</V><V ID="2">w</V><V ID="3">p</V></VARIABLES>
+        <BOUNDARYREGIONS>
+            <B ID="7">C[1]</B><B ID="11">C[2]</B><B ID="21">C[3]</B><B ID="22">C[4]</B>
+        </BOUNDARYREGIONS>
+        <BOUNDARYCONDITIONS>
+            <REGION REF="7">
+                <D VAR="u" USERDEFINEDTYPE="HITInflow" VALUE="Ubar" />
+                <D VAR="v" USERDEFINEDTYPE="HITInflow" VALUE="0" />
+                <D VAR="w" USERDEFINEDTYPE="HITInflow" VALUE="0" />
+                <N VAR="p" USERDEFINEDTYPE="H" VALUE="0" />
+            </REGION>
+            <REGION REF="11">
+                <N VAR="u" USERDEFINEDTYPE="HOutflow" VALUE="0" />
+                <N VAR="v" USERDEFINEDTYPE="HOutflow" VALUE="0" />
+                <N VAR="w" USERDEFINEDTYPE="HOutflow" VALUE="0" />
+                <D VAR="p" USERDEFINEDTYPE="HOutflow" VALUE="0" />
+            </REGION>
+            <REGION REF="21">
+                <P VAR="u" VALUE="[22]" /><P VAR="v" VALUE="[22]" />
+                <P VAR="w" VALUE="[22]" /><P VAR="p" VALUE="[22]" />
+            </REGION>
+            <REGION REF="22">
+                <P VAR="u" VALUE="[21]" /><P VAR="v" VALUE="[21]" />
+                <P VAR="w" VALUE="[21]" /><P VAR="p" VALUE="[21]" />
+            </REGION>
+        </BOUNDARYCONDITIONS>
+        <FUNCTION NAME="InitialConditions">
+            <E VAR="u" VALUE="Ubar" /><E VAR="v" VALUE="0" />
+            <E VAR="w" VALUE="0" /><E VAR="p" VALUE="0" />
+        </FUNCTION>
+        <FUNCTION NAME="ExactSolution">
+            <E VAR="u" VALUE="Ubar" /><E VAR="v" VALUE="0" />
+            <E VAR="w" VALUE="0" /><E VAR="p" VALUE="0" />
+        </FUNCTION>
+    </CONDITIONS>
+</NEKTAR>

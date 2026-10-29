@@ -70,6 +70,13 @@ is enabled (defaults 0.001 and 0.75). Every SVV knob is recorded even when off.
 The quadrilateral DG kernel ignores the cutoff-ratio parameter: it uses its
 native tabulated modal filter. Refining the resolution also changes this model.
 
+`compare_study.py --root STUDY_DIR --reference CASE --output comparison.json`
+compares completed case statistics, preserves their hashes and resource receipts,
+and reports skipped failures. Paired block differences require the same canonical
+inlet and aligned sampling windows; span, seed and window changes remain unpaired.
+Its conditional intervals and 2% sensitivity flag are descriptive diagnostics.
+They neither establish independent blocks nor close a validation milestone.
+
 Initial conditions are the mean flow by default. `--initial-field FILE_OR_DIR`
 writes a native `F VAR="u,v,w,p"` initial condition referencing an existing
 field file or an MPI partition directory containing `Info.xml`. Paths and

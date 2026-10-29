@@ -3,12 +3,12 @@
     <description>HIT field comparison reports absolute error for a uniformly negative difference</description>
     <segment type="sequential">
         <executable>HITInitialField</executable>
-        <parameters>--parameter Ubar=1 m6-h1d-mean-initial.xml one.fld</parameters>
+        <parameters>m6-h1d-mean-initial.xml one.fld</parameters>
         <processes>1</processes>
     </segment>
     <segment type="sequential">
         <executable>HITInitialField</executable>
-        <parameters>--parameter Ubar=2 m6-h1d-mean-initial.xml two.fld</parameters>
+        <parameters>m6-h1d-mean-initial.xml m6-h1d-mean-two-conditions.xml two.fld</parameters>
         <processes>1</processes>
     </segment>
     <segment type="sequential">
@@ -18,6 +18,7 @@
     </segment>
     <files>
         <file description="Mean-only initial field input">HITInflow/m6-h1d-mean-initial.xml</file>
+        <file description="Second mean supplied before expression parsing">HITInflow/m6-h1d-mean-two-conditions.xml</file>
     </files>
     <metrics>
         <metric type="Regex" id="1">
