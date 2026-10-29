@@ -10,23 +10,26 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <vector>
 
 using namespace Nektar;
 
 int main(int argc, char *argv[])
 {
-    if (argc != 3)
+    if (argc < 3)
     {
-        std::cerr << "Usage: HITFlowDiagnostics session.xml solution.fld\n";
+        std::cerr << "Usage: HITFlowDiagnostics [session options] session.xml solution.fld\n";
         return 2;
     }
     try
     {
-        char *arguments[] = {argv[0], argv[1], nullptr};
-        auto session = LibUtilities::SessionReader::CreateInstance(2, arguments);
+        std::vector<char *> arguments(argv, argv + argc - 1);
+        arguments.push_back(nullptr);
+        auto session = LibUtilities::SessionReader::CreateInstance(
+            argc - 1, arguments.data());
         auto graph = SpatialDomains::MeshGraphIO::Read(session);
         auto fields = HITTestTools::Fields(session, graph);
-        auto data = HITTestTools::ImportFields(session, fields, argv[2]);
+        auto data = HITTestTools::ImportFields(session, fields, argv[argc - 1]);
         const int points = fields[0]->GetNpoints();
         Array<OneD, NekDouble> divergence(points, 0.0), ones(points, 1.0);
         NekDouble velocitySquared = 0.0, gradientSquared = 0.0;

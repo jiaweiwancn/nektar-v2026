@@ -57,5 +57,13 @@
                 </match>
             </matches>
         </metric>
+        <metric type="Regex" id="3">
+            <regex>HIT_FIELD_NONZERO velocity_components ([0-3])</regex>
+            <matches>
+                <match>
+                    <field id="0">3</field>
+                </match>
+            </matches>
+        </metric>
     </metrics>
 </test>

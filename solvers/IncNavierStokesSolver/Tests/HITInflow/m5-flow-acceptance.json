@@ -1,0 +1,113 @@
+{
+  "schema": 1,
+  "scope": "M3 two-mode manufactured full-3D case, p12, dt=0.01, t=0.1, fixed native solver settings; not a production HIT tolerance",
+  "normalization": {
+    "divergence": "cbrt(volume)*L2(div u)/sqrt(sum_i L2(u_i)^2)",
+    "flux": "abs(Q_in+Q_out)/(0.5*(abs(Q_in)+abs(Q_out)))",
+    "gauss": "abs(integral(div u)-Q_in-Q_out)/(0.5*(abs(Q_in)+abs(Q_out)))"
+  },
+  "bounds": {
+    "divergence_L2": 1e-05,
+    "dimensionless_divergence": 1e-05,
+    "relative_net_flux_imbalance": 1e-08,
+    "relative_gauss_residual": 1e-11
+  },
+  "diagnostic_revision": "46e4da4",
+  "reference_solution_revisions": [
+    "98fb4c8",
+    "974a973"
+  ],
+  "evidence": [
+    {
+      "name": "p12-dt010",
+      "source_xml_sha256": "21dc5ddbeb4646a95ad60a9c29963f119f5be0c40fdcbaaf7c660dafa7a396d5",
+      "source_field_sha256": "4837474b8c89cf025e8955799c73d1dd3ac4a287be07bdc36a012b3561654777",
+      "diagnostics": {
+        "volume": 9.869604401089356,
+        "velocity_l2": 3.148426225226721,
+        "reference_length": 2.1450293971110255,
+        "gradient_l2": 0.35030733701273115,
+        "divergence_l2": 4.7667409600340685e-06,
+        "divergence_integral": 3.5209813723271685e-09,
+        "relative_divergence": 3.2475906234550604e-06,
+        "inlet_flux": -9.869604401089362,
+        "outlet_flux": 9.869604404610348,
+        "relative_flux_imbalance": 3.567504861973278e-10,
+        "gauss_relative_residual": 4.860341518006818e-16
+      }
+    },
+    {
+      "name": "p12-dt005",
+      "source_xml_sha256": "95c57ee6d921dca77f30ce8a1fb8e14754e3308c16766a8b3b563b863b461e44",
+      "source_field_sha256": "4abd36b9c5b37253a6d884838a483c07a20e481c51d2abaf35c7825a90fa8d93",
+      "diagnostics": {
+        "volume": 9.869604401089356,
+        "velocity_l2": 3.1484257611422066,
+        "reference_length": 2.1450293971110255,
+        "gradient_l2": 0.3502965287090096,
+        "divergence_l2": 3.0316092730055683e-07,
+        "divergence_integral": 1.6597418993107585e-11,
+        "relative_divergence": 2.0654420667655084e-07,
+        "inlet_flux": -9.869604401089362,
+        "outlet_flux": 9.869604401105956,
+        "relative_flux_imbalance": 1.6813972393697502e-12,
+        "gauss_relative_residual": 2.728984183140314e-16
+      }
+    },
+    {
+      "name": "p12-dt0025",
+      "source_xml_sha256": "53c8eeb7c86c3c64f58e7b0128c036df7e2aa48844d92c5f0c165310532f1d84",
+      "source_field_sha256": "675ae48833eceef5b3abfcb4f45995eff89a545adeb097d794d93eddb919496b",
+      "diagnostics": {
+        "volume": 9.869604401089356,
+        "velocity_l2": 3.1484256465716163,
+        "reference_length": 2.1450293971110255,
+        "gradient_l2": 0.35029404473507686,
+        "divergence_l2": 5.094679891070363e-08,
+        "divergence_integral": -1.5552714309098438e-11,
+        "relative_divergence": 3.4710167435957404e-08,
+        "inlet_flux": -9.869604401089362,
+        "outlet_flux": 9.869604401073808,
+        "relative_flux_imbalance": 1.575927448934437e-12,
+        "gauss_relative_residual": 1.0802628421848937e-16
+      }
+    },
+    {
+      "name": "p12-dt00125",
+      "source_xml_sha256": "6a6a8c02a2fd34d611b9ca7cad03032b6224477629bc934195470a7684f1ed0f",
+      "source_field_sha256": "c279ef3d81c480a04a0b99773eab4081cb7af218e5bcf3dee5062bdbe9ceae3f",
+      "diagnostics": {
+        "volume": 9.869604401089356,
+        "velocity_l2": 3.1484256180151347,
+        "reference_length": 2.1450293971110255,
+        "gradient_l2": 0.35029343283054265,
+        "divergence_l2": 1.0140601237700148e-08,
+        "divergence_integral": -3.2192989377664e-12,
+        "relative_divergence": 6.908814245057608e-09,
+        "inlet_flux": -9.869604401089362,
+        "outlet_flux": 9.869604401086143,
+        "relative_flux_imbalance": 3.261284305010753e-13,
+        "gauss_relative_residual": 5.474837199011137e-17
+      }
+    },
+    {
+      "name": "p14-dt00125",
+      "source_xml_sha256": "586a969b122d7aac3c02bccb2d5b19537cf4b156db0613723ab3652781a76661",
+      "source_field_sha256": "1135f5495d409cd10f4ce4f88384de6aa6b1f6a2047203ea5b12dffd7fc00fd4",
+      "diagnostics": {
+        "volume": 9.869604401089363,
+        "velocity_l2": 3.1484256179496186,
+        "reference_length": 2.145029397111026,
+        "gradient_l2": 0.3502934318695709,
+        "divergence_l2": 6.4026168825774014e-09,
+        "divergence_integral": -4.442930345368493e-12,
+        "relative_divergence": 4.36211716524905e-09,
+        "inlet_flux": -9.86960440108936,
+        "outlet_flux": 9.86960440108492,
+        "relative_flux_imbalance": 4.4977646127055057e-13,
+        "gauss_relative_residual": 3.8650016274680715e-16
+      }
+    }
+  ],
+  "decision": "The p12 dt=0.01 observed divergence and net flux fit these bounds; four timestep levels and a p14 check show decrease toward numerical error. Bounds are frozen before the fresh diagnostic regression is run. Algebraic generator tolerances remain separate."
+}
