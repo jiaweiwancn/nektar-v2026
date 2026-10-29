@@ -69,6 +69,7 @@ SET(SOLVER_UTILS_HEADERS
   Turbulence/HITSpectrum.h
   Turbulence/HITGenerator.h
   Turbulence/HITPlaneEvaluator.h
+  Turbulence/RANSWallStrip.h
   AdvectionSystem.h
   ALEHelper.h
   Advection/Advection.h

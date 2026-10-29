@@ -1,0 +1,104 @@
+{
+  "schema": 1,
+  "status": "passed",
+  "milestone": "neutral_abl_rans_awf_m1",
+  "scope": "simple_shear_cls_outer_residual_and_frozen_linear_be",
+  "utc": "2026-10-29T08:32:54.736955+00:00",
+  "source_commit": "d8411938909169c0b30651fb6727a43c47cf0a19",
+  "source_status": [
+    " M library/SolverUtils/CMakeLists.txt",
+    " M solvers/IncNavierStokesSolver/CMakeLists.txt",
+    "?? library/SolverUtils/Turbulence/RANSWallStrip.h",
+    "?? library/UnitTests/SolverUtils/RANSWallLayerProbe.cpp",
+    "?? solvers/IncNavierStokesSolver/Tests/RANS/"
+  ],
+  "source_sha256": {
+    "library/SolverUtils/Turbulence/RANSWallStrip.h": "6b2763823817c41dc73549c36e8aeed412280c052008cf99e69b901293073654",
+    "library/UnitTests/SolverUtils/RANSWallLayerProbe.cpp": "2975005baef24f4ad342f8fd4f293668d391e66be3fb25ff163c07a8b82c3c02",
+    "library/SolverUtils/CMakeLists.txt": "0013a01fc0f68bdc55fc053aefe6053d4eea3ab5008b2704b338d266c7099006",
+    "solvers/IncNavierStokesSolver/CMakeLists.txt": "ac390becdff6ce23a61fb0e75e4847569e8c8d413a73968de947af08d97bc233",
+    "solvers/IncNavierStokesSolver/Tests/RANS/CMakeLists.txt": "d5aab1d73d6ce51342d71a640c894957ec4660a0a7ef3e628355463be8454190",
+    "solvers/IncNavierStokesSolver/Tests/RANS/validate_m1.py": "7f4ed7254691ab2046555883ee8abb5795c048b422b0137b3cef80095bde0c75"
+  },
+  "probe_sha256": "785c8292bcaa04ec322a0b6988af9c539a582ea5b45171ec16554a7b806ef23b",
+  "python": "3.10.12",
+  "system": "Linux-6.8.0-138-generic-x86_64-with-glibc2.35",
+  "cpu_affinity": [
+    112,
+    113,
+    114,
+    115,
+    116,
+    117,
+    118,
+    119,
+    120,
+    121,
+    122,
+    123,
+    124,
+    125,
+    126,
+    127
+  ],
+  "maximum_project_cpus": 16,
+  "maximum_test_ranks": 4,
+  "thread_environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "commands": [
+    [
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m1-prototype/build/RANSWallLayerProbe",
+      "--output",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m1-prototype/validation-final/serial.json"
+    ],
+    [
+      "mpirun",
+      "--bind-to",
+      "none",
+      "--map-by",
+      "slot",
+      "-np",
+      "4",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m1-prototype/build/RANSWallLayerProbe",
+      "--mpi",
+      "--output",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/neutral-abl-rans-awf/m1-prototype/validation-final/mpi.json"
+    ]
+  ],
+  "serial_mpi_maximum_difference": 4.4415866655173747e-17,
+  "wall_source_mean": -2.64206940424035e-16,
+  "wall_source_linear_moment": 0.008677571953968887,
+  "fine_column": {
+    "degree": 14,
+    "subdivisions": 1,
+    "quadrature": 36,
+    "dofs": 57,
+    "sample_owner": 0,
+    "momentum": 1.0101631265786284e-10,
+    "k": 2.1348882689016816e-11,
+    "epsilon": 3.3211552450905593e-09,
+    "normal_momentum": 2.994916339298665e-10,
+    "continuity": 0,
+    "u_projection_error": 2.2670754162845697e-12,
+    "epsilon_projection_error": 1.502487023685717e-11,
+    "matching_constraint": 0,
+    "linear_stationary_vertex_error": 7.327471962526033e-14,
+    "linear_be_reference_defect": 1.00252574866154e-11,
+    "linear_be_conservation_error": 1.188112108696515e-12,
+    "linear_be_stationary_defect": 7.382983113757291e-14,
+    "control_missing_yap": 0.0009001994572181966,
+    "control_zero_top_epsilon_flux": 0.07764116594474198,
+    "control_wrong_wall_traction": 0.04002969203069356,
+    "control_pressure_gradient": 0.009999999999999978,
+    "control_crossflow_divergence": 0.0049999999999999975
+  },
+  "reports": {
+    "serial.json": "9ec02664494f3deefe0f5210e14d0f747dbcc9564c603855bfdf96fe556043b4",
+    "mpi.json": "7e78eb5e0ac030cbeb78be0ab644685768090d448fcb1dca36bb66cba155695a"
+  }
+}

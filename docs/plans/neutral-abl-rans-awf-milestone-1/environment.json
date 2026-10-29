@@ -1,0 +1,51 @@
+{
+  "schema": 1,
+  "primary_linux_head_after": "812a2c84946d1fdad2b042c265e3e4ed32914138",
+  "primary_linux_status_after": "",
+  "prototype_source_parent": "d8411938909169c0b30651fb6727a43c47cf0a19",
+  "native_dependency_source_changes_from_primary_revision": false,
+  "installed_native_libraries_sha256": {
+    "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0": "f6d32386b27e576e570b3735c778085270e3f35be2ed54f158ba414c3b05292b",
+    "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+    "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+    "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc"
+  },
+  "compiler": "c++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0",
+  "cmake": "cmake version 3.22.1",
+  "compile_flags": [
+    "CXX_DEFINES = -DENABLE_NEKTAR_EXCEPTIONS -DNEKTAR_MEMORY_POOL_ENABLED -DNEKTAR_MPI_TYPE=0 -DNEKTAR_USE_MPI -DNEKTAR_USE_SCOTCH -DTIXML_USE_STL",
+    "CXX_FLAGS = -O3 -DNDEBUG   -DNEKTAR_USE_MPI -pthread -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror -std=gnu++17"
+  ],
+  "build_workers_maximum": 4,
+  "build_cpu_affinity": [
+    112,
+    113,
+    114,
+    115,
+    116,
+    117,
+    118,
+    119,
+    120,
+    121,
+    122,
+    123,
+    124,
+    125,
+    126,
+    127
+  ],
+  "ctest_parallelism": 1,
+  "build_and_installation_policy": "external prototype build; shared build and installation unchanged",
+  "log_sha256": {
+    "build.log": "a5af3b5acc14428bf1db0decfe7f0d83c79f3b2c15234f9420c4e357500b842b",
+    "ctest.log": "4d3386319789a32aefd2d071b51d6ab6f53418e658f8539227cb03cd3b4d6f1f",
+    "validation-final.log": "704c375b16fc5e6c4e01aa0fbdb45fe5732d877f0ec4aa0d1f17d81882356633"
+  },
+  "commands": [
+    "cmake -S source/solvers/IncNavierStokesSolver/Tests/RANS -B build -DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake -DCMAKE_BUILD_TYPE=Release",
+    "taskset -c 112-127 cmake --build build --parallel 4",
+    "taskset -c 112-127 ctest --test-dir build -R ^RANSWallLayerPrototype$ --output-on-failure --parallel 1",
+    "python3 source/solvers/IncNavierStokesSolver/Tests/RANS/validate_m1.py --probe build/RANSWallLayerProbe --output validation-final --mpi-ranks 4"
+  ]
+}
