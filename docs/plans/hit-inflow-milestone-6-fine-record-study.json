@@ -1,0 +1,30 @@
+{
+  "schema": "NEKTAR_HIT_M6_STUDY_V1",
+  "purpose": "Repeat the recording-duration control at degree 10 and dt=2.5e-5 before production freeze; same canonical inlet and probe grid as p10-dt-quarter; no downstream experimental scoring",
+  "baseline": {
+    "length": 0.6,
+    "width": 0.6,
+    "h": 0.1,
+    "modes": 11,
+    "hom-modes": 32,
+    "dt": 0.000025,
+    "duration": 0.8,
+    "record-start": 0.1,
+    "sample-every": 20,
+    "cutoff": 100,
+    "taper": 80,
+    "synthesis-length": 32,
+    "seed": 20261028,
+    "stations": "0,0.15,0.45",
+    "buffer": 0.15,
+    "probe-grid": "32,32",
+    "dealias": true,
+    "svv": "dg",
+    "svv-coeff": 1,
+    "svv-z-coeff": 0.0238125,
+    "svv-z-cutoff": 0.75
+  },
+  "cases": [
+    {"id": "p10-record08"}
+  ]
+}

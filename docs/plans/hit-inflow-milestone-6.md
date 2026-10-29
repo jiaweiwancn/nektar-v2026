@@ -30,9 +30,12 @@ storage with its source hash, without replacing running solver libraries.
 
 All M6 work uses at most **64 CPUs**, following the user's stricter limit.
 Builds use 32 jobs and never overlap solvers. OpenMP and OpenBLAS use one thread
-per MPI rank. The current allocation is two long cases of 28 ranks each
-(`npz=2`) plus one short case of four ranks (`npz=4`): 60 MPI ranks, with four
-CPUs reserved for controllers or bounded postprocessing. A saved
+per MPI rank. The initial allocation was two long cases of 28 ranks each
+(`npz=2`) plus one short case of four ranks (`npz=4`): 60 MPI ranks. After a
+matched decomposition timing/field check, the long pair was restarted from
+time zero in fresh storage with 24 ranks each and `npz=8`. Together with the
+four-rank short queue this uses 52 MPI ranks; the other allowed CPUs remain
+available for bounded analysis and controllers. A saved
 `live-affinity-change.json` records placement across both sockets after the
 initial common CPU set was found to occupy one socket. Each long rank is pinned
 to one physical core; the combined allowed set still contains exactly 64 CPUs.
@@ -213,7 +216,26 @@ instantaneous energy about prescribed Ubar. That energy is explicitly labelled
 and cannot be substituted for temporal-central TKE. Direction-labelled z
 spectra and correlations are computed separately from immutable histories.
 
-The long pilots and matched linear-solver resource trial are still running.
+The replacement runs are under `812a2c8/long-npz8-study`. The original
+`long-study` warmups are explicitly marked as performance interruptions and
+retain their checkpoints; they are not post-flush validation results. In the
+matched dense-probe timing trials, steady integration costs with `npz=8` were
+approximately 0.351 s/step at degree 9 and 0.486 s/step at degree 10, compared
+with approximately 0.489/0.711 s/step in the original allocation. These timings
+exclude sampled-step filter work. The tested split gives maximum velocity
+differences below `3.7e-11 m/s` against the reference layout after 40 steps.
+
+A separate four-rank control using direct multilevel velocity solves as well
+as pressure gave an approximately 20% steady integration improvement but
+larger setup time and sampled memory (24.4 versus 8.77 GiB). Its maximum
+velocity difference was `3.1e-7 m/s`. The current long pair retains iterative
+velocity solves and direct multilevel pressure solves. IMEX2 remains the
+binding HIT time-integration contract.
+
+The matched linear-solver resource trials are complete; the long pilots are
+still running. A separate eight-rank degree-10 recording control repeats the
+0.8 s short-domain run with the fine timestep, bringing the concurrent MPI
+allocation to 60 ranks while it runs.
 The final production choice, measured runtime/RAM/storage budget, adjustment
 assessment, uncertainty criteria and machine-readable closure receipt remain
 outstanding. A proposed longer production record must stay inside the
