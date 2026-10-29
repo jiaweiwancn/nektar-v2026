@@ -35,8 +35,9 @@ are complete. The
 [Milestone 3 full-3D inlet and solver verification](hit-inflow-milestone-3.md)
 and [Milestone 4 Homogeneous1D, MPI and restart verification](hit-inflow-milestone-4.md)
 are also complete. [Milestone 5 focused regression coverage](hit-inflow-milestone-5.md)
-is complete. Production resolution and downstream physical validation remain
-scheduled work.
+is complete. [Milestone 6 pilot evidence](hit-inflow-milestone-6.md) is being
+collected; full-distance SVV runs remain in progress. Production resolution and
+downstream physical validation remain scheduled work.
 
 ## Scope and intended behavior
 

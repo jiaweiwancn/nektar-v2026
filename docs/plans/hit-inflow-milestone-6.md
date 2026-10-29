@@ -75,6 +75,27 @@ They motivate a limited-band study with explicit SVV, rather than a full DNS
 claim. SVV stabilizes represented modes; it does not supply the omitted inlet
 energy or guarantee the experimental cascade.
 
+Continuum quadrature separates the prescribed input model from the finite
+lattice. With the selected policies, the uncut model gives `K=0.0767724` and
+`epsilon=0.406073`, respectively 3.85% above and 14.33% below the upstream
+reference totals. These were not renormalized. The 100/80-rad/m continuum model
+gives `K=0.0260131`, `epsilon=0.00265244`, component rms 0.131689 m/s, Taylor
+scale 0.038355 m and longitudinal integral scale 0.050112 m. The uncut model's
+integral scale is 0.024248 m. Filtering therefore changes the inlet scales as
+well as its energy; full-band experimental totals cannot be used as direct
+acceptance targets for this limited configuration.
+
+At the selected 100/80 cutoff, replacing log-log interpolation by linear
+interpolation changes continuum K/epsilon by +0.874%/+1.360%; replacing the
+low-k K4 extension by zero changes them by -1.984%/-0.167%, and changes the
+integral scale by -3.923%. The high extension has no effect below the final
+table row at 2000 rad/m. In the uncut model, removing that Gaussian extension
+changes epsilon by -12.823% but K by only -0.404%. These are input-policy
+sensitivities, not experimental uncertainty estimates. Segmented quadrature
+errors and cutoff/taper loss closure are retained in `spectrum-budget.json`.
+The quoted length scales describe the continuum input, not a periodic seeded
+correlation integral with a nonzero kx=0 asymptote.
+
 ## Implementation and verification
 
 The inlet evaluator now groups modes by transverse wavenumber, retains distinct
@@ -109,6 +130,13 @@ former; the latter now has a `2e-11` pressure bound, while velocity bounds remai
 `5e-12`. Helpers now compute maximum absolute errors over the full communicator.
 Earlier signed-maximum initialization diagnostics are excluded from Linf claims.
 
+Final source review added a conservative cached-sampler range guard at
+`6522fc9`, preserving the reference evaluator's exception behavior when unused
+derivative products overflow. The CBC grouped evaluation arithmetic is
+unchanged. Its additional unit case and final Linux rebuild remain pending
+until the active solver jobs finish; the 47-case result above refers to the
+actual pilot build.
+
 The explicit NumPy spectral backend agrees with the standard-library reference
 on a native history and independent even/odd transform fixtures. Scalar means,
 variances, blocks and windows are identical. Transform/correlation differences
@@ -134,6 +162,16 @@ with the finest mesh would confound the changed parameter with spatial error.
 | Domain length increased to 0.9 / 1.2 m | 0.00296% / 0.00313% |
 | Mean-only instead of Gaussian-consistent initialization | 0.0000177% |
 | SVV coefficients halved / doubled | 0.2515% / 0.2537% |
+
+The fine short chain is also complete. At degree 9, `dt=1e-4` versus
+`2.5e-5 s` changes a component variance/K by at most 0.5993%; `5e-5` versus
+`2.5e-5 s` changes it by at most 0.06830%. At the common `2.5e-5 s`, degrees
+9 and 10 agree within 0.1499%. Increasing the degree-9 probe grid from
+32 by 32 to 64 by 64 changes results by at most 0.01483%. These controls cover
+x through 0.45 m, not the final comparison stations. All 21 completed short
+cases have verified manifest/prepared-XML and receipt/executed-XML hash chains.
+
+![Short-domain numerical/model sensitivities and instantaneous work](hit-inflow-milestone-6-figures/m6-short-sensitivity.png)
 
 The degree-7 baseline fails the provisional 2% spatial target: its w variance
 at x=0.45 m is 2.1245% below the h-refined reference. Degree 9 is a better
@@ -164,7 +202,12 @@ It is retained as a rejected stability control; it establishes no universal
 claim that every unstabilized configuration is unstable. Span changes alter the
 mode lattice and realization, even at the same seed. The first 0.9/1.2 m span
 results differ from the fine reference by up to 8.25%/6.93%; they are unpaired
-box-plus-realization sensitivities. Second-seed controls are still being run.
+box-plus-realization sensitivities. With both seeds, the short-record deviations
+from the original baseline reach 11.19%; no 2% span-convergence claim follows.
+By contrast, native expected inlet covariance changes by less than 0.080% when
+the span increases from 0.6 to 0.9/1.2 m. This isolates a small finite-lattice
+input effect without establishing independence of the evolving solver from its
+periodic box or removing finite-record realization scatter.
 
 ## Recording length and uncertainty
 
@@ -185,6 +228,16 @@ record, eight-block conditional component interval half-widths at x=0.45 m are
 give 2.01%, 2.27% and 2.09%. Some block correlations remain substantial. These
 intervals are conditional diagnostics, not established independent-sample
 confidence bounds or 2% equivalence tests.
+
+The fine degree-10, `dt=2.5e-5 s` recording control is complete. At x=0.45 m,
+its 0.1/0.3/0.7 s records give K=0.02436192721/0.02529112500/0.02572218246.
+The initial 0.1--0.2 s prefix agrees with the separate short fine solve to
+`7.7e-13 m2/s2` in component variance. At 0.7 s, its eight-block interval
+half-widths are 2.23%, 2.03% and 2.78%; four/sixteen-block w half-widths are
+4.48%/2.11%. The recording-length conclusion survives spatial/time refinement.
+The largest fine-record z-spectrum Parseval residual is `1.5e-15`.
+
+![Coarse recording-length and block diagnostics](hit-inflow-milestone-6-figures/m6-recording-sensitivity.png)
 
 The exact finite-lattice tensor also predicts continuous-time centering bias:
 for a 0.1 s inlet window the expected component biases are -7.68%, -3.94%,

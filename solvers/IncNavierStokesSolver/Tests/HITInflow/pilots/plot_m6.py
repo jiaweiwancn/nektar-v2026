@@ -151,6 +151,10 @@ def sampling_data(inputs, root):
     if any(v <= 0 for v in ref):
         raise ValueError("record07 reference variance/K must be positive")
     source = {key: reference["inputs"][key] for key in ("history_sha256", "manifest_sha256")}
+    manifest_path = Path(reference["inputs"]["manifest"])
+    manifest = inputs.read(manifest_path)
+    if inputs.files[str(manifest_path.resolve())]["sha256"] != source["manifest_sha256"]:
+        raise ValueError("sampling manifest digest does not match the statistics")
     changes, intervals, widths = [], [], []
     for stats, expected_width in zip(records, (0.1, 0.3, 0.7)):
         if any(stats["inputs"][key] != value for key, value in source.items()):
@@ -176,7 +180,10 @@ def sampling_data(inputs, root):
         halfwidths.append([50 * (b["conditional_95_percent_t_interval"][1] -
                                  b["conditional_95_percent_t_interval"][0]) / base
                            for b, base in zip(block_metrics(stats, x, count), ref)])
-    return {"station_x_m": x, "widths_s": widths, "full_window_change_percent": changes,
+    return {"station_x_m": x,
+            "configuration_label": f"p={manifest['mesh']['polynomial_degree']}, "
+                f"dt={manifest['time']['dt_s']:g} s, Nz={manifest['mesh']['hom_modes_z']}",
+            "widths_s": widths, "full_window_change_percent": changes,
             "conditional_8_block_energy_relative_to_record07_percent": intervals,
             "block_counts": [4, 8, 16], "conditional_ci_halfwidth_percent": halfwidths}
 
@@ -239,7 +246,8 @@ def plot_sampling(plt, output, data):
     ax.set_xticks([.1, .3, .7])
     ax.set_xlabel("Recording width (s), from t = 0.1 s")
     ax.set_ylabel("Change / fixed 0.7 s full-window statistic (%)")
-    ax.set_title(r"$x=0.45$ m: full-window values and 8-block energy CIs")
+    ax.set_title(data["configuration_label"] + "\n" +
+                 r"$x=0.45$ m: full-window values and 8-block energy CIs")
     ax.legend(fontsize=9)
     blocks.set_xticks([4, 8, 16])
     blocks.set_xlabel("Number of contiguous blocks (fixed 0.7 s record)")
