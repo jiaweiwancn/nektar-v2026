@@ -1,0 +1,87 @@
+{
+  "schema": "nektar.hit.cbc1971.full_band_correlation.v1",
+  "source": {
+    "authors": "G. Comte-Bellot and S. Corrsin",
+    "year": 1971,
+    "doi": "10.1017/S0022112071001599",
+    "pdf_sha256": "e8067700a0ed678c33fa92e5e3f3d737df98d976e5f3b1478612f071536962d3",
+    "table": "5",
+    "printed_page": 302,
+    "pdf_page_one_based": 30,
+    "pdf_page_offset": 272,
+    "transcription_checked": "2026-10-29",
+    "method": "Exact numeric transcription reviewed visually against the complete original PDF page. No figure digitization, smoothing, interpolation, or inferred values."
+  },
+  "observable": {
+    "name": "Full-band two-time streamwise-velocity correlation following the mean flow",
+    "symbol": "R11(Ubar*Delta_t,0,0;t0,Delta_t)",
+    "definition": "<u1_prime(x0,t)*u1_prime(x0+Delta_x,t+Delta_t)> / sqrt(<u1_prime(x0)^2>*<u1_prime(x0+Delta_x)^2>), with Delta_t=Delta_x/Ubar and zero transverse separation",
+    "units": "dimensionless",
+    "reference_velocity_component": "streamwise u1 fluctuation",
+    "temporal_delay_sign": "The downstream signal is sampled later than the upstream signal by positive Delta_x/Ubar.",
+    "coordinate": "xi=Ubar*Delta_t/M=Delta_x/M",
+    "coordinate_units": "dimensionless",
+    "coordinate_caution": "xi is not Delta_theta. theta=U0*t/M; in the constant measurement-speed region xi=(Ubar/U0)*(theta-theta0).",
+    "approach_speed_m_s": "10",
+    "measurement_speed_m_s": "12.7",
+    "mean_speed_source_printed_page": 289,
+    "experimental_uncertainty": "No universal numeric error bar is supplied by this table. The source discusses probe-wake extrapolation, finite instrument response, finite records, and downstream inhomogeneity separately."
+  },
+  "grids": [
+    {
+      "id": "grid_5_08_cm",
+      "mesh_m": "0.0508",
+      "upstream_theta0": "42",
+      "columns": ["xi_Ubar_Delta_t_over_M", "R11"],
+      "units": ["dimensionless", "dimensionless"],
+      "rows": [
+        ["0.375", "0.94"],
+        ["0.75", "0.89"],
+        ["1.3", "0.83"],
+        ["2.5", "0.765"],
+        ["4.0", "0.72"],
+        ["6.0", "0.58"],
+        ["8.0", "0.535"],
+        ["12", "0.46"],
+        ["18", "0.40"],
+        ["27", "0.30"],
+        ["36", "0.255"],
+        ["48", "0.21"],
+        ["90", "0.125"],
+        ["125", "0.10"],
+        ["172", "0.07"]
+      ]
+    },
+    {
+      "id": "grid_2_54_cm",
+      "mesh_m": "0.0254",
+      "upstream_theta0": "45",
+      "columns": ["xi_Ubar_Delta_t_over_M", "R11"],
+      "units": ["dimensionless", "dimensionless"],
+      "rows": [
+        ["8", "0.545"],
+        ["18", "0.39"],
+        ["125", "0.107"],
+        ["225", "0.0685"],
+        ["340", "0.0095"],
+        [null, null],
+        [null, null],
+        [null, null],
+        [null, null],
+        [null, null],
+        [null, null],
+        [null, null],
+        [null, null],
+        [null, null],
+        [null, null]
+      ]
+    }
+  ],
+  "conventions": {
+    "numbers": "Decimal strings preserve printed precision, with the source decimal middle dot represented by an ASCII full stop.",
+    "missing": "null preserves the printed dash cells in the 2.54 cm grid column. These are absent measurements, not zero correlations; the two grids' row coordinates are independent.",
+    "uncertain_transcriptions": [],
+    "derived_origin": "No (0,1) row is added because Table 5 does not print it, although it follows from correlation normalization.",
+    "grid_selection": "The implemented principal CBC benchmark uses only the 5.08 cm grid with upstream theta0=42; do not combine the two grid datasets."
+  }
+}
