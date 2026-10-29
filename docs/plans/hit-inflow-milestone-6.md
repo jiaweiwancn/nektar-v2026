@@ -229,6 +229,10 @@ mode lattice and realization, even at the same seed. The first 0.9/1.2 m span
 results differ from the fine reference by up to 8.25%/6.93%; they are unpaired
 box-plus-realization sensitivities. With both seeds, the short-record deviations
 from the original baseline reach 11.19%; no 2% span-convergence claim follows.
+These adjacent seeds share random-counter inputs in the frozen version-1
+mapping and are distinct-realization controls, not established independent
+ensemble replicates. The follow-up qualification rules select disjoint
+input-counter streams for production while preserving the version-1 algorithm.
 By contrast, native expected inlet covariance changes by less than 0.080% when
 the span increases from 0.6 to 0.9/1.2 m. This isolates a small finite-lattice
 input effect without establishing independence of the evolving solver from its

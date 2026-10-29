@@ -1389,13 +1389,22 @@ to a shell spectrum before using this input. \inltt{LogLinear} interpolation,
 \inltt{SEED} is an unsigned decimal 64-bit integer. The seed, resolved
 synthesis settings and actual solver time determine the realization, so
 repeated boundary evaluations do not advance random state.
+Different seeds alone do not establish independent realizations. Version 1
+mixes the counter $\mathrm{SEED}+6m+q$ modulo $2^{64}$, where $m$ is the lattice
+mode ID and $q=0,\ldots,5$, so adjacent seeds reuse counter inputs. For ensemble
+studies, select and record disjoint enclosing input-counter ranges
+$[s,s+6N_XN_YN_Z-1]$ for the synthesis lattice, accounting for possible modulo
+wrap. This avoids direct counter reuse without proving statistical independence.
 \inltt{TIMEORIGIN} fixes its phase origin; \inltt{RECORDDURATION} must cover
 the declared run. The frozen record repeats after $L_X/U_{\rm bar}$;
 \inltt{REPEAT="Error"} requires the record to be shorter than this period.
 \inltt{Allow} explicitly permits reuse. Startup reports the settings, spectrum
 SHA256 digest, mode memory and expected and realized kinetic energy.
-The reference implementation evaluates a direct Fourier sum and is intended
-for validation before large production records are attempted.
+The generator retains a direct Fourier sum as its reference. Planar inlet
+evaluation groups transverse modes and caches spatial phases within a 64 MiB
+payload limit per plane, preserving coefficients and absolute time. Unsupported,
+cache-limited or extreme-range cases use the direct reference fallback. Measure
+mode storage and evaluation cost before attempting large production records.
 
 Checkpoints and final field output store the generator identity, numerical
 environment and reconstructed coefficient digest. Restart all of

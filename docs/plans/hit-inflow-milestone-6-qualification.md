@@ -30,11 +30,22 @@ tuning to stations 98 or 171.
 
 ## Recording and sampling qualification
 
-The candidate follow-up uses two independent seeds, 20261028 and 20261029, a
+The candidate follow-up uses two disjoint seeded streams, 20261028 and
+4315228324 (separated by `2^32`), a
 0.8 s startup and a subsequent 0.8 s recording interval. This duration is a
 feasible selection to be tested at every station. The completed short-domain
 records do not establish far-field stationarity, independent blocks, or a 2%
 statistical uncertainty bound.
+
+The frozen version-1 mapping is `Mix64(seed + 6*modeId + q)` modulo `2^64`,
+with `q=0..5`. Adjacent seeds reuse counter words, so the earlier
+20261028/20261029 pilot pair describes distinct realizations without establishing
+independence. For counts `(1020,20,20)`, each complete enclosing counter range
+has `6*1020*20*20 = 2448000` words. The proposed production ranges are disjoint
+and do not wrap. This avoids direct counter reuse; it is not a proof of
+statistical independence of pseudorandom streams. Record/check the ranges again
+if the lattice counts change. The version-1 RNG and existing pilot identities
+remain unchanged.
 
 Before uncertainty-weighted experimental scoring:
 
@@ -61,6 +72,12 @@ Before uncertainty-weighted experimental scoring:
    ensemble, with a new recurrence-safe input when needed, before claiming
    precision unsupported by the available data. Do not silently remove a seed
    or choose a favorable time window.
+
+For the window screen, the relative change is
+`100*abs(full-final_half)/max(abs(full),abs(final_half))`, zero if both estimates
+vanish, matching the analyzer's symmetric window-change definition. Normalize
+an interval half-width by the nonnegative full-window variance/K; a zero
+denominator with a nonzero half-width is flagged, rather than divided by zero.
 
 Finite-window centering bias from the exact inlet tensor is a separate entry.
 Its frozen kx=0 contribution and continuous-time expectation do not quantify
