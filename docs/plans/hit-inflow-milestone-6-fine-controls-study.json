@@ -1,0 +1,57 @@
+{
+  "schema": "NEKTAR_HIT_M6_STUDY_V1",
+  "purpose": "Matched short-domain controls at the degree-10 candidate; separate native timestep, Fourier and SVV-strength sensitivities without downstream fitting",
+  "baseline": {
+    "length": 0.6,
+    "width": 0.6,
+    "h": 0.1,
+    "modes": 11,
+    "hom-modes": 32,
+    "dt": 2.5e-05,
+    "duration": 0.2,
+    "record-start": 0.1,
+    "sample-every": 20,
+    "cutoff": 100,
+    "taper": 80,
+    "synthesis-length": 32,
+    "seed": 20261028,
+    "stations": "0,0.15,0.45",
+    "buffer": 0.15,
+    "probe-grid": "32,32",
+    "dealias": true,
+    "svv": "dg",
+    "svv-coeff": 1,
+    "svv-z-coeff": 0.0238125,
+    "svv-z-cutoff": 0.75
+  },
+  "cases": [
+    {
+      "id": "p10-dt-eighth",
+      "override": {
+        "dt": 1.25e-05,
+        "sample-every": 40
+      }
+    },
+    {
+      "id": "p10-z64",
+      "override": {
+        "hom-modes": 64,
+        "probe-grid": "32,64"
+      }
+    },
+    {
+      "id": "p10-svv-half",
+      "override": {
+        "svv-coeff": 0.5,
+        "svv-z-coeff": 0.01190625
+      }
+    },
+    {
+      "id": "p10-svv-double",
+      "override": {
+        "svv-coeff": 2,
+        "svv-z-coeff": 0.047625
+      }
+    }
+  ]
+}
