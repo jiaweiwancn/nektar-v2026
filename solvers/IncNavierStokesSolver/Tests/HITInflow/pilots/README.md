@@ -163,3 +163,14 @@ of the native policy implementations when running an isolated script copy.
 Its moments and derived isotropic length scales describe the continuum input
 model; finite-lattice expectations, seeded records and solver results remain
 separate quantities. Quadrature errors do not estimate input-model uncertainty.
+
+`checkpoint_profiles.py CASE --checkpoints 2 4 6 --output NEW_DIRECTORY --cpu 7`
+runs native `HITFlowDiagnostics` on completed partitioned checkpoints. It uses
+one CPU and one OpenMP/OpenBLAS thread, copies session/spectrum inputs to
+separate output directories, and hashes every checkpoint partition before and
+after reading. A later checkpoint or a successful completed run receipt is
+required so that the currently written checkpoint is not analyzed. It records
+native build metadata, commands, flow JSON and complete x-column slab CSV
+hashes. Slab energy is instantaneous about prescribed Ubar, rather than
+temporal-central TKE. Use this with the active solver installation, before
+replacing its libraries, to retain consistent diagnostic operators.
