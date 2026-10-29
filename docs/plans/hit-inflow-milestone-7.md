@@ -88,6 +88,33 @@ The declared synthetic interval and full space-time footprint remain below the
 of eight stations, sampled every 0.0005 s. Raw data, fields, checkpoints and
 large analysis caches remain outside the source checkout.
 
+## Analysis implementation checks
+
+At source `da607a9`, all 15 focused analyzer/native-work tests pass on Linux
+(eight analyzer and seven collector tests), alongside four preparation tests.
+They check one-sided even/odd FFT normalization and the frequency/wavenumber
+Jacobian, periodic-Hann energy normalization, exact frozen-advection lag sign,
+window/block flags, immutable-input protection, periodic correlation conventions,
+analytical native slab closure, interpolation and derived-scale units.
+
+The completed M6 degree-10 native history was independently processed through
+the new cache/analyzer. Its 301 selected samples reproduce the saved component
+variances and K within 6.94e-18 m2/s2; the maximum boxcar Parseval residual is
+2.22e-16. This pipeline check uses an explicit 128-sample Welch segment for the
+short fixture; production retains the frozen 512-sample choice.
+
+A matched full-field comparison at t=0.1 s gives exactly zero L2 and maximum
+absolute differences in u/v/w/p between the original `d74cae8` pilot and the
+new `29f467b` production build. Checkpoint hashes were unchanged during reading.
+The declared recording durations differ, so this is a field/control comparison,
+not a claim that the restart identity metadata is interchangeable.
+
+A separately labelled synthetic analytic-signal fixture exercises all four
+model/stream labels and renders the comparison plots. Its values are not CFD
+results and are excluded from production scoring. Figure layout and source
+conventions were checked before production data become available. Native work
+plots and the actual production figures still require final inspection.
+
 ## Analysis and qualification
 
 The production comparisons, sampling diagnostics and native late profiles
