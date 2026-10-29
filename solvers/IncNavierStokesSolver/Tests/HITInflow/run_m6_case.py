@@ -52,6 +52,8 @@ def run(command, directory, stem, environment):
         json.dumps(result, indent=2) + "\n")
     if process.returncode:
         raise RuntimeError(f"{stem} exited {process.returncode}; inspect its log")
+    if "Exceeded maxIt" in (directory / (stem + ".log")).read_text(errors="replace"):
+        raise RuntimeError(f"{stem} exceeded the native iterative-solver limit; result rejected")
     return result
 
 
@@ -91,6 +93,11 @@ def main():
                "original_session_sha256": hashlib.sha256(session.read_bytes()).hexdigest()}
     tree = ET.parse(session)
     conditions = tree.getroot().find("CONDITIONS")
+    # Multilevel pressure condensation uses the native Scotch reordering path.
+    if any("MultiLevel" in node.get("VALUE", "")
+           for node in conditions.findall("./GLOBALSYSSOLNINFO/V/I")
+           if node.get("PROPERTY", "").lower() == "globalsyssoln"):
+        parallel.append("--use-scotch")
     functions = [node for node in conditions.findall("FUNCTION")
                  if node.get("NAME", "").lower() == "initialconditions"]
     for node in functions:

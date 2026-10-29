@@ -223,12 +223,17 @@ int main(int argc, char *argv[])
         {
             Array<OneD, NekDouble> projected(count), difference(count);
             fields[variable]->BwdTrans(fields[variable]->GetCoeffs(), projected);
+            NekDouble maximumDifference = 0.0;
             for (int q = 0; q < count; ++q)
             {
                 difference[q] = projected[q] - fields[variable]->GetPhys()[q];
+                maximumDifference =
+                    std::max(maximumDifference, std::abs(difference[q]));
             }
             projectionL2[variable] = fields[variable]->L2(difference);
-            projectionLinf[variable] = fields[variable]->Linf(difference);
+            // Include negative errors and every homogeneous/mesh MPI rank.
+            comm->AllReduce(maximumDifference, LibUtilities::ReduceMax);
+            projectionLinf[variable] = maximumDifference;
             projectedMean[variable] = fields[variable]->Integral(projected) / volume;
         }
 

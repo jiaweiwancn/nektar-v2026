@@ -131,8 +131,11 @@ def prepare(args):
         raise ValueError("duration needs >=2 steps and record-start must precede duration")
     if start_step % args.sample_every or steps % args.sample_every:
         raise ValueError("record-start and duration steps must be multiples of sample-every")
-    if args.duration >= args.synthesis_length / U:
-        raise ValueError("REPEAT=Error requires duration < synthesis-length / 12.7")
+    # The solver accumulates floating-point timesteps. Keep its final callback
+    # inside a declared record without weakening the core's strict time guard.
+    synthetic_duration = args.duration + 2 * args.dt
+    if synthetic_duration >= args.synthesis_length / U:
+        raise ValueError("REPEAT=Error requires duration + 2*dt < synthesis-length / 12.7")
     taper = 0.8 * args.cutoff if args.taper is None else args.taper
     if not math.isfinite(taper) or not 0 <= taper < args.cutoff:
         raise ValueError("taper is an absolute wavenumber and must satisfy 0<=taper<cutoff")
@@ -227,6 +230,10 @@ def prepare(args):
                    ("SVVCutoffRatioHomo1D", args.svv_z_cutoff)]
     for key, value in values:
         sub(parameters, "P", f"{key} = {number(value)}")
+    if args.pressure_solver != "IterativeStaticCond":
+        global_info = sub(conditions, "GLOBALSYSSOLNINFO")
+        pressure = sub(global_info, "V", VAR="p")
+        sub(pressure, "I", PROPERTY="GlobalSysSoln", VALUE=args.pressure_solver)
     variables = sub(conditions, "VARIABLES")
     for index, variable in enumerate(VARIABLES):
         sub(variables, "V", variable, ID=str(index))
@@ -258,7 +265,7 @@ def prepare(args):
     sub(region, "ORIGIN", X="0", Y="0", Z="0")
     sub(region, "SYNTHESIS", LX=number(periods[0]), LY=number(periods[1]), LZ=number(periods[2]),
         NX=str(counts[0]), NY=str(counts[1]), NZ=str(counts[2]), SEED=str(args.seed),
-        TIMEORIGIN="0", RECORDDURATION=number(args.duration), REPEAT="Error")
+        TIMEORIGIN="0", RECORDDURATION=number(synthetic_duration), REPEAT="Error")
     sub(region, "SPECTRUM", TYPE="Tabulated", FILE=SPECTRUM.name,
         INTERPOLATION="LogLinear", LOW="K4", HIGH="Gaussian", NORMALIZATION="Preserve")
     sub(region, "CUTOFF", KMAX=number(args.cutoff), TAPERSTART=number(taper))
@@ -309,6 +316,8 @@ def prepare(args):
                       "mode_estimate_note": "Sphere-volume estimate only; not the retained discrete mode count"},
         "time": {"dt_s": args.dt, "steps": steps, "initial_time_s": 0,
                  "end_s": args.duration, "record_start_s": args.record_start,
+                 "declared_synthetic_record_duration_s": synthetic_duration,
+                 "synthetic_record_end_margin_s": 2 * args.dt,
                  "sample_every_steps": args.sample_every, "sample_dt_s": args.dt * args.sample_every,
                  "history_includes_initial_state": True,
                  "stress_first_sample_s": args.record_start if start_step else args.dt * args.sample_every,
@@ -364,6 +373,8 @@ def main():
     parser.add_argument("--synthesis-counts", default="auto", help="auto or NX,NY,NZ; all strict Nyquist")
     parser.add_argument("--buffer", type=float, default=0.0, help="Required distance after last station; metadata, no sponge")
     parser.add_argument("--backend", choices=("FFTW", "Matrix"), default="FFTW")
+    parser.add_argument("--pressure-solver", choices=("IterativeStaticCond", "XxtStaticCond", "XxtMultiLevelStaticCond"),
+                        default="IterativeStaticCond")
     parser.add_argument("--dealias", action="store_true", help="Enable both Fourier and spectral/hp dealiasing")
     parser.add_argument("--stations", required=True, help="Comma-separated probe x coordinates, m")
     parser.add_argument("--probe-grid", default="8,8", help="Half-open y,z probe counts (default 8,8)")

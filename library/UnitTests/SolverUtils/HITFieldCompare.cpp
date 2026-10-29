@@ -59,12 +59,19 @@ int main(int argc, char *argv[])
         for (int variable = 0; variable < 4; ++variable)
         {
             Array<OneD, NekDouble> difference(fields[variable]->GetNpoints());
+            NekDouble maximumDifference = 0.0;
             for (int point = 0; point < difference.size(); ++point)
             {
                 difference[point] = first.physical[variable][point] -
                                     second.physical[variable][point];
                 ASSERTL0(std::isfinite(difference[point]), "Non-finite field difference");
+                maximumDifference =
+                    std::max(maximumDifference, std::abs(difference[point]));
             }
+            // ExpList::Linf(inarray) uses a signed maximum. A comparison error
+            // needs the maximum magnitude over the complete communicator.
+            session->GetComm()->AllReduce(maximumDifference,
+                                          LibUtilities::ReduceMax);
             const auto firstNorm = fields[variable]->L2(first.physical[variable]);
             const auto secondNorm = fields[variable]->L2(second.physical[variable]);
             ASSERTL0(std::isfinite(firstNorm) && std::isfinite(secondNorm),
@@ -72,7 +79,7 @@ int main(int argc, char *argv[])
             nonzeroVelocityComponents += variable < 3 && firstNorm > 0.0 && secondNorm > 0.0;
             std::cout << '"' << session->GetVariable(variable) << "\":{\"l2\":"
                       << fields[variable]->L2(difference)
-                      << ",\"linf\":" << fields[variable]->Linf(difference)
+                      << ",\"linf\":" << maximumDifference
                       << ",\"first_l2\":" << firstNorm
                       << ",\"second_l2\":" << secondNorm
                       << '}' << (variable == 3 ? "\n" : ",\n");
