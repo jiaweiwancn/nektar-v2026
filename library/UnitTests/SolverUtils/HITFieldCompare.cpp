@@ -10,7 +10,9 @@
 #include <cmath>
 #include <iomanip>
 #include <iostream>
+#include <locale>
 #include <set>
+#include <sstream>
 
 using namespace Nektar;
 
@@ -44,6 +46,13 @@ int main(int argc, char *argv[])
                 auto field = fields[variable];
                 const bool homogeneous = field->GetExpType() == MultiRegions::e3DH1D;
                 const auto expectedDefinition = field->GetFieldDefinitions().front();
+                // GeneralGetFieldDefinitions retains one mode tuple per
+                // element even for uniform order; FieldIO writes only the
+                // first tuple in a UNIORDER block.
+                const auto dimensions = expectedDefinition->m_basis.size();
+                ASSERTL0(expectedDefinition->m_uniOrder &&
+                             expectedDefinition->m_numModes.size() >= dimensions,
+                         "Field comparison requires uniform expansion modes");
                 std::set<std::pair<int, int>> expected, coverage;
                 std::vector<int> planeIds{0};
                 if (homogeneous)
@@ -72,13 +81,26 @@ int main(int argc, char *argv[])
                         ASSERTL0(definition->m_numHomogeneousDir == (homogeneous ? 1 : 0) &&
                                      definition->m_basis == expectedDefinition->m_basis &&
                                      definition->m_uniOrder &&
-                                     definition->m_numModes == expectedDefinition->m_numModes,
+                                     definition->m_numModes.size() == dimensions &&
+                                     std::equal(definition->m_numModes.begin(),
+                                                definition->m_numModes.end(),
+                                                expectedDefinition->m_numModes.begin()),
                                  "Field comparison requires matching representation and expansion modes");
                         if (homogeneous)
                         {
+                            // The native XML field writer uses six significant
+                            // digits for HOMOGENEOUSLENGTHS. Accept that exact
+                            // round trip as well as a full-precision header.
+                            std::ostringstream xmlLength;
+                            xmlLength.imbue(std::locale::classic());
+                            xmlLength << field->GetHomoLen();
+                            const auto xmlPeriod = std::stod(xmlLength.str());
                             ASSERTL0(definition->m_homogeneousLengths.size() == 1 &&
-                                std::abs(definition->m_homogeneousLengths[0] - field->GetHomoLen()) <
-                                    1e-12 * field->GetHomoLen(), "Mismatched homogeneous period");
+                                (std::abs(definition->m_homogeneousLengths[0] - field->GetHomoLen()) <
+                                     1e-12 * field->GetHomoLen() ||
+                                 std::abs(definition->m_homogeneousLengths[0] - xmlPeriod) <
+                                     1e-12 * field->GetHomoLen()),
+                                "Mismatched homogeneous period");
                         }
                         std::vector<int> storedPlanes{0};
                         if (homogeneous)
