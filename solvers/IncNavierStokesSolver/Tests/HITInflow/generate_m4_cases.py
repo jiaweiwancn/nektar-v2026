@@ -71,7 +71,7 @@ def make_case(homogeneous, kind, modes, homogeneous_modes, dt, steps):
     parameter(root, "TimeStep", dt)
     parameter(root, "NumSteps", steps)
     parameter(root, "IO_InfoSteps", steps)
-    parameter(root, "IterativeSolverTolerance", 1e-12)
+    parameter(root, "IterativeSolverTolerance", 1e-14)
     solver_info(root, "GlobalSysSoln", "IterativeStaticCond")
     root.find("./HITINFLOW/REGION/SYNTHESIS").set("RECORDDURATION", m3.number(dt * steps))
     if homogeneous:
