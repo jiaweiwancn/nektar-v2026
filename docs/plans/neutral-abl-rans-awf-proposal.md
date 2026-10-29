@@ -22,8 +22,8 @@ original integrated row without inventing those additional inner equations.
 | Origin skill | academic-research-suite, experiment-agent |
 | Origin mode | plan |
 | Origin date | 2026-10-29 |
-| Version label | neutral_abl_rans_proposal_v5 |
-| Verification status | Milestones 1–4 CLOSED on 2026-10-29 with Linux column, kernel, standard/CLS URANS and original-AWF validation; corrected-AWF coupling pending |
+| Version label | neutral_abl_rans_proposal_v6 |
+| Verification status | Milestones 1–5 CLOSED; Milestone 5 closed on 2026-10-30 with Linux corrected-AWF assembly, switch, recovery and 3D refinement evidence; full preservation study pending |
 | Mac source baseline | `6522fc9c74edab0e445aade16f7facea3f5987a3` |
 | New project branch | `codex/neutral-abl-rans-awf` |
 | Linux source observed | `812a2c84946d1fdad2b042c265e3e4ed32914138`, clean, on `codex/hit-inflow-generator` |
@@ -55,7 +55,14 @@ All 27 CLS/AWF acceptance cases pass, with independent tensor/quadrature
 forcing, serial/four-rank field audits, 3D coupling and conservation checks.
 Standard transport and kernel regressions also pass. The original baseline
 retains the note's source imbalance and evolves away from the CLS reference.
-Corrected-AWF coupling remains Milestone 5; the full inlet/outlet and restart
+[Milestone 5](neutral-abl-rans-awf-milestone-5.md) couples the corrected
+dissipation distribution and seven-sensor switch using the current configured
+CLS reference. Its 34-case Linux acceptance checks native assembled residuals,
+wall/volume budgets, source/point consistency, exact baseline recovery,
+cutoff/regime handling and serial/MPI fields. The coarse 3D reference leaves
+the switch plateau because of representation error; degree refinement restores
+the plateau with unchanged thresholds. The original-AWF, standard-model and
+kernel regressions also pass. The full inlet/outlet, restart and longer
 preservation study remains Milestone 6.
 
 ## Findings at the proposal baseline
@@ -329,10 +336,11 @@ The adapter must satisfy the following contracts before it becomes the default:
    polynomial order changes. Validate sample ownership across MPI partitions.
 
 The strip avoids an inner polynomial trial/test space. Its assembly contracts
-are verified by the milestone's column prototype. Multidimensional tangential
-transport, strip continuity coupled to the pressure projection, nonlinear
-boundary solves, and restart remain integration work. A conventional off-wall
-traction boundary alone would omit the integrated source and strip inventory.
+are verified by the column prototype. Milestone 4 adds multidimensional
+tangential transport, strip continuity coupled to pressure and nonlinear
+boundary solves; Milestone 5 adds the corrected policy and switch. Restart
+verification remains Milestone 6. A conventional off-wall traction boundary
+alone would omit the integrated source and strip inventory.
 
 For the initial deliverable, restrict the wall geometry to flat, aligned
 quadrilateral layers in 2D and extruded hexahedral layers in full 3D. General
@@ -346,20 +354,21 @@ general variable coefficients can couple Fourier modes.
 | --- | --- |
 | `library/SolverUtils/Turbulence/` | Pure standard and CLS closure kernels, AWF kernels, and neutral-reference construction, separated from the existing HIT code. |
 | `solvers/IncNavierStokesSolver/EquationSystems/RANSVelocityCorrectionScheme.*` | Active scalar transport, variable diffusion and source assembly, coupled updates, pressure convention, and residual inspection. |
-| `solvers/IncNavierStokesSolver/EquationSystems/RANSExtrapolate.*` | Pressure and outflow contributions consistent with RANS stresses. |
+| Coupled weak pressure implementation in `RANSVelocityCorrectionScheme.*` | Actual normal-velocity trace and full RANS momentum enter the pressure iteration. General open-outflow support remains outside the initial configuration. |
 | Solver-local RANS wall-layer classes and boundary adapters | Sampling, geometry, constraints, weak fluxes, layer source replacement, MPI communication, and original versus corrected wall policy. |
-| `solvers/IncNavierStokesSolver/Filters/` | Modelled covariance, eddy viscosity, production, Yap term, wall traction, switch, cutoff, admissibility, and balance diagnostics. |
+| RANS extra field output and solver-local stage/wall CSVs | Modeled covariance, eddy viscosity, production, Yap, wall traction, switch, cutoff, admissibility and balance diagnostics; distinct from existing resolved-fluctuation filters. |
 | `library/UnitTests/SolverUtils/` and `solvers/IncNavierStokesSolver/Tests/RANS/` | Algebraic tests, boundary/residual probes, small solver fixtures, and reference comparisons. |
 | Existing CMake lists and incompressible solver user/developer guides | Registration, tests, configuration, equations, supported combinations, and limitations. |
 
-Proposed configuration concepts are `TurbulenceModel=StandardKEpsilon|CLSHighRe`,
-`RANSWallModel=NeutralABLLogLaw|AWFOriginal|AWFEquilibrium`, and an explicit
-resolved molecular-term mode. Geometry, physical frame, h or z0, matching rule,
-guards, switch parameters, and reference parameters must be validated together.
-These names describe a proposed interface and are not currently accepted XML.
-Reject incompatible closure/wall combinations. Initially reserve
-`AWFEquilibrium` for CLS; extending its constants and proof to standard
-k–epsilon is a separate derivation.
+The implemented configuration uses `TurbulenceModel=StandardKEpsilon|CLSHighRe`,
+`RANSWallModel=None|AWFOriginal|AWFEquilibrium`, and an explicit resolved
+molecular-term mode. The standard neutral log wall uses the `RANSLogLaw`
+boundary tag with `RANSWallModel=None`. Geometry, physical frame, h or z0,
+matching rule, guards, switch parameters and reference parameters must be
+validated together. Incompatible closure/wall combinations are rejected.
+`AWFEquilibrium` is reserved for CLS; extending its constants and proof to
+standard k–epsilon is a separate derivation. The user guide and milestone
+specifications give accepted XML rather than these initial design concepts.
 
 Output and restart must preserve both transported turbulence fields, the
 pressure convention, model constants, wall geometry, and any additional layer
@@ -483,7 +492,7 @@ exact retention of analytical samples.
 | 2 Independent closure and AWF kernels | CLOSED. Default/configured roots, full tensors, original wall branches, corrected budgets, forcing identities, admissibility, switch, and recovery pass independent Linux tests; native serial/MPI column regression passes with the general CLS kernel. See the Milestone 2 specification. |
 | 3 Standard model URANS transport | CLOSED. Variable symmetric stress, implicit losses and coupled weak pressure pass unsteady manufactured, decay, 3D, quadrature, gauge and MPI tests. The compatible standard ABL control refines spatially and remains within 0.1% for one nominal periodic flow-through; native kernel and legacy VCS regressions pass. See the Milestone 3 specification. |
 | 4 CLS and original AWF integration | CLOSED. Full cubic stress and Yap pass independent unsteady/3D controls and spatial refinement. Conservative original-AWF strip coupling passes point/mean/traction recovery, inventory budgets, nonuniform normal velocity, serial/MPI and invalid-state checks; the original dissipation mismatch remains measurable. See the Milestone 4 specification and its 27-case Linux evidence. |
-| 5 Corrected AWF integration | The actual matching anchor, integrated k source replacement, algebraic dissipation constraint, switch, and diagnostics satisfy the assembled residual audit. |
+| 5 Corrected AWF integration | CLOSED. Current configured reference, matching anchor, one integrated source, algebraic EP/EH and the compact switch pass 34 native Linux cases, including assembled residual refinement, independent forcing/sensors, exact original-form recovery, strict preflight/fallback, MPI and 3D sensor refinement. All original/standard/kernel regressions pass. See the Milestone 5 specification and evidence. |
 | 6 Preservation and robustness study | 2D and full-3D empty-domain comparisons, h/p/dt studies, fixed-H versus varying-H studies, perturbations, MPI, and restart results are recorded. |
 | 7 Documentation and delivery | Reproducible fixtures, commands, tested revisions, limitations, and user configuration are complete. Terrain work begins from this measured baseline. |
 

@@ -65,7 +65,9 @@ if(RANS_BUILD_SOLVER)
         ${CMAKE_CURRENT_LIST_DIR}/CLS_MMS.xml)
     add_test(NAME RANSAWFOriginalSmoke COMMAND IncNavierStokesSolver
         ${CMAKE_CURRENT_LIST_DIR}/AWFOriginal.xml)
-    set_tests_properties(RANSCLSTransportSmoke RANSAWFOriginalSmoke PROPERTIES
+    add_test(NAME RANSAWFEquilibriumSmoke COMMAND IncNavierStokesSolver
+        ${CMAKE_CURRENT_LIST_DIR}/AWFEquilibrium.xml)
+    set_tests_properties(RANSCLSTransportSmoke RANSAWFOriginalSmoke RANSAWFEquilibriumSmoke PROPERTIES
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke
         PROCESSORS 1 TIMEOUT 120 ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
 endif()

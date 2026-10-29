@@ -159,12 +159,12 @@ void RANSVelocityCorrectionScheme::v_InitObject(bool declareField)
                  std::isfinite(m_heightShift) && m_heightShift >= 0,
              "Invalid RANS iteration, positivity or wall parameters");
     m_session->LoadSolverInfo("RANSWallModel", wallModel, "None");
-    ASSERTL0(wallModel == "None" || wallModel == "AWFOriginal",
-             "RANSWallModel currently supports None or AWFOriginal");
+    ASSERTL0(wallModel == "None" || wallModel == "AWFOriginal" || wallModel == "AWFEquilibrium",
+             "RANSWallModel supports None, AWFOriginal or AWFEquilibrium");
     ASSERTL0(m_model != RANSModel::CLSHighRe || m_heightShift == 0,
              "CLS uses geometric wall distance without a roughness height shift");
-    ASSERTL0(wallModel != "AWFOriginal" || m_model == RANSModel::CLSHighRe,
-             "The original AWF strip currently requires CLSHighRe");
+    ASSERTL0(wallModel == "None" || m_model == RANSModel::CLSHighRe,
+             "The analytical wall strip requires CLSHighRe");
     bool valid = true;
     for (int b = 0; b < m_pressure->GetBndConditions().size(); ++b)
     {
@@ -176,9 +176,9 @@ void RANSVelocityCorrectionScheme::v_InitObject(bool declareField)
         valid &= pbc->GetBoundaryConditionType() == SpatialDomains::eNeumann &&
                  pbc->GetUserDefined() == "RANSPressure";
         const auto tag = m_fields[0]->GetBndConditions()[b]->GetUserDefined();
-        if (tag == "AWFOriginal")
+        if (tag == "AWFOriginal" || tag == "AWFEquilibrium")
         {
-            valid &= wallModel == "AWFOriginal";
+            valid &= wallModel == tag;
             for (int i = 0; i < dim - 1; ++i)
                 valid &= m_fields[i]->GetBndConditions()[b]->GetBoundaryConditionType() == SpatialDomains::eRobin &&
                          m_fields[i]->GetBndConditions()[b]->GetUserDefined() == tag;
@@ -213,13 +213,14 @@ void RANSVelocityCorrectionScheme::v_InitObject(bool declareField)
         }
     }
     RequireEverywhere(valid, "pressure boundaries need RANSPressure and prescribed normal velocity; log walls need tangential Neumann, normal Dirichlet, k Neumann, eps Dirichlet");
-    if (wallModel == "AWFOriginal")
+    m_wallModel = wallModel;
+    if (wallModel != "None")
     {
         for (const auto &force : m_forcing)
             ASSERTL0(std::dynamic_pointer_cast<ForcingBody>(force),
                 "The initial AWF adapter supports Body/Field forcing only, since its current forcing is evaluated within the implicit iteration");
         m_wallStrip = std::make_shared<RANSAnalyticalWallStrip>(
-            m_session, m_fields, dim, m_wallOrigin);
+            m_session, m_fields, dim, m_wallOrigin, *m_reference);
     }
     // Pressure's Poisson map has an artificial pinned vertex. Mass inverses
     // used by the preconditioner must span the FULL pressure space, including
@@ -255,14 +256,25 @@ void RANSVelocityCorrectionScheme::v_DoInitialise(bool dump)
     for (int i = 0; i < initial.size(); ++i)
         initial[i] = m_fields[i]->UpdatePhys();
     CheckState(initial);
+    if (m_wallStrip) m_wallStrip->CheckInitialState(initial);
+    int auditStage = 0;
+    m_session->LoadParameter("RANSStageAudit", auditStage, 0);
+    ASSERTL0(auditStage == 0 || auditStage == 1, "RANSStageAudit must be 0 or 1");
+    m_auditStage = auditStage;
     m_fieldMetaDataMap["RANSModel"] = m_model == RANSModel::CLSHighRe ? "CLSHighRe" : "StandardKEpsilon";
     m_fieldMetaDataMap["RANSDissipation"] = "high-Re: eps_total=eps_transport; molecular mode adds diffusion only";
     m_fieldMetaDataMap["RANSPhysicalFrame"] = m_velocity.size() == 2 ? "mesh(x,y)=physical(x,z)" : "physical(x,y,z)";
-    m_fieldMetaDataMap["RANSWallModel"] = m_wallStrip ? "AWFOriginal conservative strip" : "None or standard log law";
+    m_fieldMetaDataMap["RANSWallModel"] = m_wallStrip ? m_wallModel + " conservative strip" : "None or standard log law";
     m_fieldMetaDataMap["RANSPressure"] = "pi=p/rho+2k/3";
     m_fieldMetaDataMap["RANSResolvedNu"] = std::to_string(m_resolvedNu);
     if (m_session->GetComm()->GetRank() == 0)
     {
+        if (m_auditStage)
+        {
+            m_residualDiagnostics.open(m_session->GetSessionName() + ".rans-residual.csv");
+            ASSERTL0(m_residualDiagnostics.good(), "Cannot open RANS residual audit");
+            m_residualDiagnostics << "time,phase,field,free_coefficient_l2,free_coefficient_linf\n" << std::setprecision(17);
+        }
         m_diagnostics.open(m_session->GetSessionName() + ".rans.csv");
         ASSERTL0(m_diagnostics.good(), "Cannot open RANS diagnostics");
         m_diagnostics << "time,iterations,change,pressure_correction,divergence_l2,weak_divergence_l2,min_k,min_eps,min_nut,max_nut,live_global_systems,guard_activations\n" << std::setprecision(17);
@@ -276,6 +288,7 @@ void RANSVelocityCorrectionScheme::v_GenerateSummary(SummaryList &summary)
         "High-Re CLS, full cubic stress and algebraic Yap" : "Standard k-epsilon, full symmetric stress");
     AddSummaryItem(summary, "RANS resolved molecular viscosity", m_resolvedNu);
     AddSummaryItem(summary, "RANS neutral kappa", m_reference->Kappa());
+    AddSummaryItem(summary, "RANS wall model", m_wallModel);
     AddSummaryItem(summary, "RANS implicit stage", "nonlinear Picard + pressure defect iteration");
     AddSummaryItem(summary, "RANS pressure correction tolerance", m_pressureTolerance);
 }
@@ -448,6 +461,128 @@ void RANSVelocityCorrectionScheme::Closure(
     RequireEverywhere(valid, "point closure rejected a nonfinite gradient or arithmetic range failure");
 }
 
+void RANSVelocityCorrectionScheme::UpdateWall(
+    const Fields &state, const Fields &predictor, const Gradients &gradient,
+    const Array<OneD, NekDouble> &pressure, NekDouble time, NekDouble alpha)
+{
+    if (!m_wallStrip) return;
+    const int nf = state.size(), dim = m_velocity.size(), nq = pressure.size();
+    Fields advection(nf), body(nf), pressureForce(dim), convection(dim);
+    for (int i = 0; i < nf; ++i)
+    {
+        advection[i] = Array<OneD, NekDouble>(nq, 0.0);
+        body[i] = Array<OneD, NekDouble>(nq, 0.0);
+    }
+    EvaluateAdvectionTerms(state, advection, time);
+    for (auto &force : m_forcing) force->Apply(m_fields, state, body, time);
+    Array<OneD, NekDouble> mechanical(nq);
+    Vmath::Svtvp(nq, -2.0/3.0, state[m_k], 1, pressure, 1, mechanical, 1);
+    for (int i = 0; i < dim; ++i)
+    {
+        pressureForce[i] = Array<OneD, NekDouble>(nq);
+        convection[i] = Array<OneD, NekDouble>(nq);
+        m_fields[0]->PhysDeriv(DirCartesianMap[i], mechanical, pressureForce[i]);
+        Vmath::Smul(nq, -1.0, advection[i], 1, convection[i], 1);
+    }
+    m_wallStrip->Update(state, predictor, gradient, pressureForce, convection, body, alpha);
+}
+
+void RANSVelocityCorrectionScheme::AuditStage(
+    const Fields &state, const Fields &predictor, const Fields &diffusion,
+    const Fields &gain, const Fields &loss,
+    const Array<OneD, NekDouble> &pressure, NekDouble time, NekDouble alpha, int phase)
+{
+    // Assemble the complete nonlinear stage residual on the actual trial
+    // state. No solve, equilibrium subtraction or analytical derivative enters
+    // this audit. Norms are in the native free global coefficient basis.
+    const int dim = m_velocity.size(), nq = pressure.size();
+    auto record = [&](const MultiRegions::ExpListSharedPtr &field,
+                      const Array<OneD, NekDouble> &local, const std::string &name)
+    {
+        auto cg = std::dynamic_pointer_cast<MultiRegions::ContField>(field);
+        const auto map = cg->GetLocalToGlobalMap();
+        Array<OneD, NekDouble> global(map->GetNumGlobalCoeffs());
+        cg->Assemble(local, global);
+        double squared = 0, maximum = 0;
+        for (int j = map->GetNumGlobalDirBndCoeffs(); j < global.size(); ++j)
+            if (map->GetGlobalToUniversalMapUnique(j) > 0)
+            {
+                squared += global[j] * global[j];
+                maximum = std::max(maximum, std::abs(global[j]));
+            }
+        m_session->GetComm()->AllReduce(squared, LibUtilities::ReduceSum);
+        maximum = Maximum(maximum);
+        if (m_residualDiagnostics.is_open())
+            m_residualDiagnostics << time << ',' << phase << ',' << name << ','
+                << std::sqrt(squared) << ',' << maximum << '\n' << std::flush;
+    };
+    for (int i = 0; i < state.size(); ++i)
+    {
+        bool supported = true;
+        for (const auto &bc : m_fields[i]->GetBndConditions())
+            if (bc->GetBoundaryConditionType() == SpatialDomains::eRobin)
+                supported &= m_wallStrip && bc->GetUserDefined() == m_wallModel;
+        RequireEverywhere(supported, "RANSStageAudit supports only the analytical strip's Robin mass");
+        const int nc = m_fields[i]->GetNcoeffs();
+        Array<OneD, NekDouble> source(nq), local(nc), weak(nc), boundary(nc, 0.0);
+        for (int q = 0; q < nq; ++q)
+            source[q] = alpha * (state[i][q] - predictor[i][q]) - gain[i][q] + loss[i][q] * state[i][q];
+        if (i < dim)
+        {
+            Array<OneD, NekDouble> gradient(nq);
+            m_pressure->PhysDeriv(DirCartesianMap[i], pressure, gradient);
+            Vmath::Vadd(nq, source, 1, gradient, 1, source, 1);
+        }
+        m_fields[i]->IProductWRTBase(source, local);
+        Fields flux(dim);
+        for (int j = 0; j < dim; ++j)
+        {
+            flux[j] = Array<OneD, NekDouble>(nq);
+            m_fields[i]->PhysDeriv(DirCartesianMap[j], state[i], flux[j]);
+            if (i < dim)
+            {
+                Array<OneD, NekDouble> transpose(nq);
+                m_fields[j]->PhysDeriv(DirCartesianMap[i], state[j], transpose);
+                Vmath::Vadd(nq, flux[j], 1, transpose, 1, flux[j], 1);
+            }
+            Vmath::Vmul(nq, diffusion[i], 1, flux[j], 1, flux[j], 1);
+            if (i < dim) Vmath::Vsub(nq, flux[j], 1, m_nonlinearStress[i][j], 1, flux[j], 1);
+        }
+        m_fields[i]->IProductWRTDerivBase(flux, weak);
+        Vmath::Vadd(nc, local, 1, weak, 1, local, 1);
+        m_fields[i]->ImposeNeumannConditions(boundary);
+        m_fields[i]->ImposeRobinConditions(boundary);
+        Vmath::Vsub(nc, local, 1, boundary, 1, local, 1);
+        if (m_wallStrip) m_wallStrip->AddRobinAuditResidual(i, state, local);
+        record(m_fields[i], local, m_session->GetVariable(i));
+    }
+    Fields velocity(dim);
+    for (int i = 0; i < dim; ++i) velocity[i] = state[i];
+    Array<OneD, NekDouble> weak(m_pressureMass->GetNcoeffs());
+    m_pressureMass->IProductWRTDerivBase(velocity, weak);
+    Vmath::Smul(weak.size(), -1.0, weak, 1, weak, 1);
+    auto cg = std::dynamic_pointer_cast<MultiRegions::ContField>(m_pressureMass);
+    const auto map = cg->GetLocalToGlobalMap();
+    int offset = 0;
+    for (int b = 0; b < m_pressureMass->GetBndCondExpansions().size(); ++b)
+    {
+        auto boundary = m_pressureMass->GetBndCondExpansions()[b];
+        if (m_pressureMass->GetBndConditions()[b]->GetBoundaryConditionType() != SpatialDomains::ePeriodic)
+        {
+            Fields trace(dim);
+            for (int i = 0; i < dim; ++i) m_fields[i]->ExtractPhysToBnd(b, state[i], trace[i]);
+            Array<OneD, NekDouble> coefficients(boundary->GetNcoeffs());
+            boundary->NormVectorIProductWRTBase(trace, coefficients);
+            for (int j = 0; j < coefficients.size(); ++j)
+                weak[map->GetBndCondCoeffsToLocalCoeffsMap()[offset+j]] +=
+                    map->GetBndCondCoeffsToLocalCoeffsSign()[offset+j] * coefficients[j];
+        }
+        offset += boundary->GetNcoeffs();
+    }
+    record(m_pressureMass, weak, "continuity");
+    if (m_wallStrip && phase == 0) m_wallStrip->WritePointDiagnostics(time, phase);
+}
+
 void RANSVelocityCorrectionScheme::SolveField(
     int field, const Array<OneD, NekDouble> &rhs,
     const Array<OneD, NekDouble> &diffusion,
@@ -550,7 +685,7 @@ void RANSVelocityCorrectionScheme::v_SolveUnsteadyStokesSystem(
     const int nf = m_nConvectiveFields, nq = m_fields[0]->GetTotPoints();
     const int nc = m_fields[0]->GetNcoeffs(), dim = m_velocity.size();
     const double alpha = 1.0 / lambda;
-    Fields state(nf), next(nf), diffusion(nf), gain(nf), loss(nf);
+    Fields state(nf), next(nf), diffusion(nf), gain(nf), loss(nf), predictor(nf);
     Gradients gradient(dim);
     for (int i = 0; i < nf; ++i)
     {
@@ -559,6 +694,7 @@ void RANSVelocityCorrectionScheme::v_SolveUnsteadyStokesSystem(
         diffusion[i] = Array<OneD, NekDouble>(nq);
         gain[i] = Array<OneD, NekDouble>(nq, 0.0);
         loss[i] = Array<OneD, NekDouble>(nq, 0.0);
+        predictor[i] = input[i];
         Vmath::Vcopy(nq, m_fields[i]->GetPhys(), 1, state[i], 1);
     }
     for (int i = 0; i < dim; ++i)
@@ -578,34 +714,9 @@ void RANSVelocityCorrectionScheme::v_SolveUnsteadyStokesSystem(
     {
         Closure(state, gradient, diffusion, gain, loss);
         UpdateLogWall(state);
-        if (m_wallStrip)
-        {
-            Fields advection(nf), body(nf), pressureForce(dim), acceleration(dim);
-            for (int i = 0; i < nf; ++i)
-            {
-                advection[i] = Array<OneD, NekDouble>(nq, 0.0);
-                body[i] = Array<OneD, NekDouble>(nq, 0.0);
-            }
-            EvaluateAdvectionTerms(state, advection, time);
-            for (auto &force : m_forcing) force->Apply(m_fields, state, body, time);
-            Array<OneD, NekDouble> mechanical(nq);
-            Vmath::Svtvp(nq, -2.0/3.0, state[m_k], 1, pressure, 1, mechanical, 1);
-            for (int i = 0; i < dim; ++i)
-            {
-                pressureForce[i] = Array<OneD, NekDouble>(nq);
-                acceleration[i] = Array<OneD, NekDouble>(nq);
-                m_fields[0]->PhysDeriv(DirCartesianMap[i], mechanical, pressureForce[i]);
-                Vmath::Smul(nq, -1.0, advection[i], 1, acceleration[i], 1);
-                Vmath::Vsub(nq, acceleration[i], 1, body[i], 1, acceleration[i], 1);
-            }
-            Fields predictor(nf);
-            for (int i = 0; i < nf; ++i)
-            {
-                predictor[i] = Array<OneD, NekDouble>(nq);
-                Vmath::Vcopy(nq, input[i], 1, predictor[i], 1);
-            }
-            m_wallStrip->Update(state, predictor, gradient, pressureForce, acceleration, alpha);
-        }
+        UpdateWall(state, predictor, gradient, pressure, time, alpha);
+        if (m_auditStage && iteration == 0)
+            AuditStage(state, predictor, diffusion, gain, loss, pressure, time, alpha, 0);
         for (int i = 0; i < nf; ++i)
         {
             for (int q = 0; q < nq; ++q)
@@ -674,8 +785,17 @@ void RANSVelocityCorrectionScheme::v_SolveUnsteadyStokesSystem(
     // and correspond to the last fixed-point residual, with no profile reset.
     for (int i = 0; i < nf; ++i)
         Vmath::Vcopy(nq, next[i], 1, output[i], 1);
+    if (m_auditStage)
+    {
+        Closure(next, gradient, diffusion, gain, loss);
+        UpdateWall(next, predictor, gradient, pressure, time, alpha);
+        AuditStage(next, predictor, diffusion, gain, loss, pressure, time, alpha, 1);
+    }
     if (m_wallStrip)
+    {
         m_wallStrip->WriteDiagnostics(time, next, gain, loss, pressure);
+        m_wallStrip->WritePointDiagnostics(time, 1);
+    }
     // pi is already continuous (a sum of CG increments). A global mass solve
     // on the singular pressure map would impose its pinned vertex on pi.
     m_pressure->FwdTransLocalElmt(pressure, m_pressure->UpdateCoeffs());

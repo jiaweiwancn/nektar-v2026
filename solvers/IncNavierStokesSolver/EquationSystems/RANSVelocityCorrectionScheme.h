@@ -59,6 +59,14 @@ private:
     using Gradients = Array<OneD, Fields>;
     void CheckState(const Fields &state) const;
     void UpdateLogWall(const Fields &state);
+    void UpdateWall(const Fields &state, const Fields &predictor,
+                    const Gradients &gradient,
+                    const Array<OneD, NekDouble> &pressure,
+                    NekDouble time, NekDouble alpha);
+    void AuditStage(const Fields &state, const Fields &predictor,
+                    const Fields &diffusion, const Fields &gain, const Fields &loss,
+                    const Array<OneD, NekDouble> &pressure,
+                    NekDouble time, NekDouble alpha, int phase);
     void Closure(const Fields &state, Gradients &gradient, Fields &diffusion,
                  Fields &gain, Fields &loss);
     void SolveField(int field, const Array<OneD, NekDouble> &rhs,
@@ -84,7 +92,10 @@ private:
     int m_k, m_epsilon, m_maxIterations;
     NekDouble m_resolvedNu, m_tolerance, m_pressureTolerance, m_pressureRelaxation, m_relaxation;
     NekDouble m_minimumK, m_minimumEpsilon, m_z0, m_heightShift;
+    bool m_auditStage = false;
+    std::string m_wallModel;
     std::ofstream m_diagnostics;
+    std::ofstream m_residualDiagnostics;
     static std::string solverTypeLookupId;
 };
 } // namespace Nektar

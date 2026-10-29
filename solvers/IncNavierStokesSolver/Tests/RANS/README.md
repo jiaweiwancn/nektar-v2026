@@ -1,5 +1,32 @@
 # Neutral ABL RANS kernel and wall-layer tests
 
+Milestone 5 adds `RANSWallModel=AWFEquilibrium` for CLS. Fixed weighting
+isolates the dissipation correction; switched weighting uses seven independent
+resolved indicators and explicitly supplied `RANSAWFOn`/`RANSAWFOff`
+thresholds. The current configured CLS reference, cutoff admissibility,
+original-form fallback and strict preflight are described in the
+[Milestone 5 specification](../../../../docs/plans/neutral-abl-rans-awf-milestone-5.md).
+Use `AWFEquilibrium` Robin tags for tangential velocity and k. The small
+`AWFEquilibrium.xml` fixture is registered as `RANSAWFEquilibriumSmoke` in
+the production and external builds. Run the complete Linux study with:
+
+```bash
+taskset -c 112-127 python3 solvers/IncNavierStokesSolver/Tests/RANS/validate_m5.py \
+  --build "$RANS_RUN/build" --output "$RANS_RUN/validation-m5"
+taskset -c 112-127 python3 solvers/IncNavierStokesSolver/Tests/RANS/plot_m5.py \
+  "$RANS_RUN/validation-m5/validation.json" "$RANS_RUN/figures-m5"
+```
+
+The study audits actual native stage residuals, full fields, surface budgets,
+and per-point switch/source/traction receipts against independent quadrature.
+Its `--pilot` option cannot close the milestone. Cases are reused only when
+the exact session and both solver/audit executable fingerprints match.
+All numerical threads are one and cases run sequentially, using at most
+four MPI ranks. Raw point CSVs and case receipts remain under the Linux run
+directory; the compact validation manifest records their hashes and summaries.
+No default switch thresholds imply terrain calibration. Full inlet/outlet,
+restart and longer preservation studies remain Milestone 6.
+
 Milestone 4 adds `TurbulenceModel=CLSHighRe` with primary dissipation
 `eps_tilde`, the full cubic covariance and algebraic Yap source. The optional
 `RANSWallModel=AWFOriginal` couples the original wall function through the
@@ -23,7 +50,7 @@ tangential/k entries tagged `AWFOriginal`, Dirichlet normal velocity and
 positive initial epsilon data, and the coupled pressure marker. Epsilon and
 normal traces are subsequently determined within the nonlinear stage.
 The original baseline intentionally retains the note's wall-source imbalance.
-The equilibrium correction and switch remain Milestone 5.
+The equilibrium correction and switch are added by Milestone 5.
 
 Milestone 3 provides an opt-in `RANSVelocityCorrectionScheme` for standard
 k–epsilon URANS. Its [specification](../../../../docs/plans/neutral-abl-rans-awf-milestone-3.md)
@@ -133,5 +160,6 @@ Keep historical Milestone 1 reports unchanged when running this regression.
 
 A successful kernel/column result establishes the specified local model
 contracts and column convergence. Milestone 3 adds standard-model unsteady
-transport, and Milestone 4 adds CLS and the original AWF. Corrected-AWF coupling
-and the full analytical inlet/outlet preservation study remain later milestones.
+transport, Milestone 4 adds CLS and the original AWF, and Milestone 5 adds the
+corrected-AWF coupling. The full analytical inlet/outlet preservation study
+remains a later milestone.

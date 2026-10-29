@@ -26,10 +26,15 @@ public:
     RANSAnalyticalWallStrip(
         const LibUtilities::SessionReaderSharedPtr &session,
         const Array<OneD, MultiRegions::ExpListSharedPtr> &fields,
-        int dimension, NekDouble wallOrigin);
+        int dimension, NekDouble wallOrigin,
+        const SolverUtils::RANSNeutralReference &reference);
+    void CheckInitialState(const Fields &state) const;
     void Update(const Fields &state, const Fields &predictor,
                 const Gradients &gradient, const Fields &pressureForce,
-                const Fields &convectionMinusBodyForce, NekDouble alpha);
+                const Fields &convection, const Fields &bodyForce, NekDouble alpha);
+    void AddRobinAuditResidual(int field, const Fields &state,
+                              Array<OneD, NekDouble> &residual) const;
+    void WritePointDiagnostics(NekDouble time, int phase);
     void WriteDiagnostics(NekDouble time, const Fields &state,
                           const Fields &gain, const Fields &loss,
                           const Array<OneD, NekDouble> &pressure);
@@ -48,6 +53,21 @@ private:
     SolverUtils::RANSWallStripGeometry m_geometry;
     SolverUtils::AWFGeometry m_awfGeometry;
     SolverUtils::AWFParameters m_parameters;
+    SolverUtils::RANSNeutralReference m_reference;
+    SolverUtils::AWFSwitchParameters m_switch;
+    SolverUtils::AWFFailurePolicy m_failurePolicy;
+    std::string m_wallModel;
+    bool m_equilibrium = false, m_switched = false, m_writePoints = false;
+    NekDouble m_fixedWeight = 1, m_minimumRe = 100;
+    struct PointData
+    {
+        SolverUtils::AWFIndependentSamples samples{};
+        SolverUtils::EquilibriumAWFValues selected{};
+        SolverUtils::CLSEquilibriumAWFReference reference{};
+        SolverUtils::AWFValues original{};
+        double wallRe = 0;
+    };
+    std::vector<PointData> m_points;
     int m_dim, m_localPoints, m_globalPoints, m_globalOffset, m_remoteSamples;
     int m_wallRanks = 0, m_remoteWithoutWallSamples = 0;
     NekDouble m_minimumK, m_minimumEpsilon;
@@ -58,6 +78,7 @@ private:
     Array<OneD, NekDouble> m_production, m_dissipation, m_epsilonP,
         m_epsilonH, m_kP, m_tractionX, m_tractionY, m_forcingX;
     std::ofstream m_diagnostics;
+    std::ofstream m_pointDiagnostics;
 };
 } // namespace Nektar
 #endif

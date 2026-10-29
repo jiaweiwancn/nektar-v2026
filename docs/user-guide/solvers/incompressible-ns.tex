@@ -232,10 +232,55 @@ components and quadratic/cubic norms are polynomial projections of current
 model evaluations. Wall inventories, constraints, flux budgets and MPI sample
 ownership are reported in \inltt{<session>.awf.csv}.
 The original AWF intentionally retains its dissipation mismatch on the
-analytical CLS reference. The equilibrium correction is a separate policy.
+analytical CLS reference.
 
 Complete small examples \inltt{CLS\_MMS.xml} and \inltt{AWFOriginal.xml}
 are supplied in \path{solvers/IncNavierStokesSolver/Tests/RANS}.
+
+\subsubsection{Equilibrium-preserving analytical wall function}
+
+Select \inltt{RANSWallModel=AWFEquilibrium} with \inltt{CLSHighRe}, and
+replace the tangential velocity/$k$ Robin tags by \inltt{AWFEquilibrium}.
+All other wall-strip geometry, variable ordering and boundary types remain
+as above. At each current positive strip $K_P$, the policy constructs the
+configured CLS zero-forcing reference and its finite capped auxiliary
+dissipation. It blends the strip mean and the P/H dissipation values with
+one common weight. Original AWF traction and production still use the actual
+current velocity and forcing. No reference residual is subtracted.
+
+\inltt{RANSAWFWeight=Fixed} uses \inltt{RANSAWFFixedWeight}, default one,
+in $[0,1]$. Weight zero exactly recovers the original wall operator.
+The default \inltt{RANSAWFWeight=Switched} requires explicit parameters
+\inltt{RANSAWFOn} and \inltt{RANSAWFOff}, with $0<\mathrm{on}<\mathrm{off}$.
+The compact switch has exact plateaus at one and zero. Its seven independent
+indicators sense matching velocity, the P/N log increment, $k_N$,
+$\varepsilon_N$, pressure minus body acceleration, convection, and normal
+velocity. Parameters \inltt{RANSAWFWeightU}, \inltt{RANSAWFWeightDeltaU},
+\inltt{RANSAWFWeightK}, \inltt{RANSAWFWeightEpsilon},
+\inltt{RANSAWFWeightPressure}, \inltt{RANSAWFWeightConvection} and
+\inltt{RANSAWFWeightNormal} default to one and must be nonnegative, with at
+least one positive value. \inltt{RANSAWFDirectionX/Y} specify a fixed nonzero
+incoming horizontal direction, default $(1,0)$. Direction Y must vanish in
+2D. The thresholds and weights require application-specific validation.
+
+The correction requires $z_c\leq P$ and a high Reynolds number wall regime.
+The configurable gate \inltt{RANSAWFMinimumRe}, default 100, applies to
+$\sqrt{K_P}H/\nu$. \inltt{RANSAWFFailurePolicy=UseOriginal}, default,
+reports an original-form fallback outside these conditions.
+\inltt{RequirePreservation} rejects an inadmissible requested reference,
+including a collective initial preflight. The cutoff is never clipped.
+The actual matching anchor determines aerodynamic roughness; an additional
+\inltt{RANSZ0} is rejected with this policy.
+
+The wall CSV reports switch ranges, cutoff, admissibility, reference production
+and fallback counts. \inltt{RANSAWFPointDiagnostics=1} adds per-rank point
+receipts with all independent inputs and sensors. \inltt{RANSStageAudit=1}
+adds complete assembled stage-residual norms in the native free coefficient
+basis. These coefficient norms differ from physical $L^2$ error norms.
+\inltt{AWFEquilibrium.xml} supplies a small switched example in the same
+RANS test directory. The accompanying specification records measured
+refinement and recovery tests; finite polynomial degree does not exactly
+represent the analytical logarithm and reciprocal-height profiles.
 
 \subsubsection{Implicit Velocity Correction Scheme}
 \label{VCSImplicitScheme}
