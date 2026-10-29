@@ -95,6 +95,8 @@ def make_case(homogeneous, kind, modes, homogeneous_modes, dt, steps):
                            "NORMALIZATION": "TargetRMS", "RMS": "0.05"}
     elif kind == "mean-only":
         spectrum.set("RMS", "0")
+        # Isolate exact DC preservation from iterative pressure-solve noise.
+        solver_info(root, "GlobalSysSoln", "DirectStaticCond")
         m3.function(root.find("CONDITIONS"), "ExactSolution", ["Ubar", "0", "0", "0"])
     elif kind == "fftw":
         if not homogeneous:

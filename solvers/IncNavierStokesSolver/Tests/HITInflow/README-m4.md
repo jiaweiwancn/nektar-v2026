@@ -25,8 +25,11 @@ cutoff 1.55, taper start 1.5, and ensemble target RMS 0.05.
 | `m4-h1d-restart.xml`, `m4-full3d-restart.xml` | Read the corresponding segment checkpoint and advance the remaining 10 steps |
 | `m4-h1d-checkpoint-filter.xml`, `m4-h1d-filter-restart.xml` | Exercise metadata and restored time through the preferred Checkpoint filter |
 
-All cases use `IterativeStaticCond` and `IterativeSolverTolerance=1e-12` to
-make serial/MPI comparisons meaningful at a common requested solver tolerance.
+Stochastic cases use `IterativeStaticCond` and
+`IterativeSolverTolerance=1e-12` to make serial/MPI comparisons meaningful at a
+common requested solver tolerance. The exact uniform-flow cases use
+`DirectStaticCond` to isolate DC preservation from iterative pressure-solve
+noise; their error bound remains `1e-10` for every component and pressure.
 The predeclared numerical acceptance bounds are in `m4-acceptance.json`.
 Sparse inlet REF 7 prescribes all three velocity components and high-order
 pressure data. Outlet REF 11 uses the existing Neumann/Dirichlet HOutflow

@@ -1324,7 +1324,10 @@ periodic y conditions for all four variables, and Fourier periodicity in z:
 \inltt{USEFFT} is optional; omit it for matrix transforms. FFTW requires
 \inltt{NEKTAR\_USE\_FFTW=ON}. Set a positive \inltt{LZ} parameter equal to
 the synthesis \inltt{LZ}, and even \inltt{HomModesZ} of at least four. The
-cutoff must also lie below $\pi\,\mathtt{HomModesZ}/L_Z$. MPI homogeneous
+cutoff must also lie below $\pi\,\mathtt{HomModesZ}/L_Z$. The synthesis
+\inltt{NZ} defines the random lattice independently of \inltt{HomModesZ},
+which may be increased to refine the solver's representation of the same
+retained modes. MPI homogeneous
 partitioning uses \inltt{--npz}; the Fourier plane count divided by
 \inltt{npz} must be even. The inlet fills all physical planes using their
 global coordinates, then applies the existing constrained transform once.

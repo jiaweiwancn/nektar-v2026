@@ -110,9 +110,15 @@ still meets the period policy; it does not change the realization.
 Require `KMAX < min(pi*NX/LX, pi*NY/LY, pi*NZ/LZ)` and
 `Ubar*KMAX*TimeStep < pi`. These bounds prevent obvious aliasing; they do not
 establish physical resolution or replace refinement. In `Homogeneous1D`, require
-`NZ=HomModesZ` and the same `LZ` as the homogeneous expansion. Require the y and
-z computational periods to match the synthetic box periods. The full mesh and
-boundary topology checks are implemented and tested in Milestones 3-4.
+the same `LZ` as the homogeneous expansion and additionally
+`KMAX < pi*HomModesZ/LZ`, with even `HomModesZ >= 4`. Synthesis `NZ` and solver
+`HomModesZ` are independent: the former defines the immutable random lattice;
+the latter samples and represents its retained band. Increasing the solver
+plane count must not change the realization. This Milestone 4 clarification
+replaces the original `NZ=HomModesZ` restriction and allows Fourier refinement
+of one fixed inflow. Require the y and z computational periods to match the
+synthetic box periods. The full mesh and boundary topology checks are
+implemented and tested in Milestones 3-4.
 
 Reject grid products that overflow allocation arithmetic or the RNG counter
 range defined below. Log the estimated mode memory before allocation.
