@@ -20,9 +20,9 @@ periodic transverse boundaries, and the nonlinear velocity-correction solver.
 | Origin skill | academic-research-suite, experiment-agent |
 | Origin mode | plan |
 | Origin date | 2026-10-28 |
-| Version label | hit_inflow_plan_v4 |
-| Verification status | Milestone 3 full-3D inlet and manufactured verification VERIFIED on Linux; Homogeneous1D and downstream validation pending |
-| Milestone status | Milestones 1-3 CLOSED on 2026-10-28; Milestones 4-8 pending |
+| Version label | hit_inflow_plan_v5 |
+| Verification status | Full-3D and Homogeneous1D inlet, MPI/backends and restart VERIFIED on Linux; downstream physical validation pending |
+| Milestone status | Milestones 1-3 CLOSED on 2026-10-28; Milestone 4 CLOSED on 2026-10-29; Milestones 5-8 pending |
 | Source baseline | `a3b7efc8fef7e075390f0f59457dfdac30f0b6ed` |
 | Project branch | `codex/hit-inflow-generator` |
 
@@ -33,7 +33,8 @@ and experimental inputs are checked. The
 [Milestone 2 core and its focused numerical checks](hit-inflow-milestone-2.md)
 are complete. The
 [Milestone 3 full-3D inlet and solver verification](hit-inflow-milestone-3.md)
-are also complete; Homogeneous1D and downstream validation remain scheduled work.
+and [Milestone 4 Homogeneous1D, MPI and restart verification](hit-inflow-milestone-4.md)
+are also complete. Downstream physical validation remains scheduled work.
 
 ## Scope and intended behavior
 
@@ -566,8 +567,8 @@ case, projected-flux refinement and preliminary four-rank full-3D runs pass,
 including rank zero without inlet faces and coordinated missing-table
 rejection. The [closure report](hit-inflow-milestone-3.md) and
 [Linux receipt](hit-inflow-milestone-3-validation.json) record exact revisions,
-commands, hashes and limits. Homogeneous1D, full MPI reproducibility and restart
-requirements remain in Milestone 4.
+commands, hashes and limits. The Homogeneous1D, full MPI reproducibility and
+restart requirements deferred by this milestone are closed in Milestone 4.
 
 Implement the vector boundary class and its pre-pressure update. Register the
 factory type, build sources, and documentation entry. Project samples onto a
@@ -579,6 +580,22 @@ solver's expected temporal accuracy and the new type does not disturb existing
 boundary regressions. Repeated evaluations at the same time must be identical.
 
 ### Milestone 4 Add Homogeneous1D and MPI support
+
+**Status: CLOSED on 2026-10-29.** Full-Fourier Homogeneous1D sampling uses the
+existing constrained transform once, and both representations preserve the
+same immutable realization. All 35 focused unit cases, ten selected solver
+regressions, 18 probe/solver case pairs and nine MPI/backend comparisons pass
+on Linux. Mesh, Fourier and mixed layouts include eight ranks and ranks with
+no inlet faces. Polynomial refinement reduces the common-coordinate inlet
+difference from `1.13e-4` to `3.13e-6`; full-precision evolved velocity norms
+also converge. Source-verified checkpoints preserve phase, reject missing or
+changed identity/time and pass native IMEX restart-error refinement. Matrix
+and FFTW backends agree within the fixed bounds. The
+[closure report](hit-inflow-milestone-4.md) and
+[Linux receipt](hit-inflow-milestone-4-validation.json) record revisions,
+commands, hashes, diagnosed failures and limits. This closes representation
+and restart support; production resolution and experimental decay validation
+remain later milestones.
 
 Implement physical boundary sampling with the existing distributed transforms.
 Verify real Fourier packing, nonzero-mode content, period matching, all three

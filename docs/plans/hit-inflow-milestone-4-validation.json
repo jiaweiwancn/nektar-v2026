@@ -1,0 +1,2802 @@
+{
+  "milestone": 4,
+  "status": "CLOSED",
+  "closed_date": "2026-10-29",
+  "collected_utc": "2026-10-29T01:54:09.171112+00:00",
+  "branch": "codex/hit-inflow-generator",
+  "final_implementation_revision": "bbc49bd91d1e3b7e282a4dd9edae7de3de2258e5",
+  "tested_revisions": {
+    "final_build_units_restart_native_norms": "bbc49bd91d1e3b7e282a4dd9edae7de3de2258e5",
+    "baseline_MPI_and_FFTW_runtime": "8bd06ea0260426ca8798002deba7f606eaa122a3",
+    "final_fixture_tolerance": "0049141d47c3d9150d242e8c0fa235b6815487e5",
+    "polynomial_and_Fourier_refinement_runtime": "2b332866acaced98ff14130ba65bc62626bb0cd7",
+    "selected_legacy_regressions": "8bd06ea0260426ca8798002deba7f606eaa122a3"
+  },
+  "revision_note": "The final changes after baseline MPI validation only tighten source-checkpoint metadata/time verification and its tests; Fourier synthesis, sampling, projection, mesh precision, flow equations and integration timing are unchanged. Both representations and checkpoint paths were rerun on the final restart implementation.",
+  "host": "jay-Super-Server",
+  "source": "/media/jay/新加卷/nektar-v2026",
+  "build": "/home/jay/build/nektar-v2026-mpi",
+  "installation": "/home/jay/.local/opt/nektar-v2026-mpi",
+  "run_root": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b",
+  "run_directory_note": "Directory label 6f8040b identifies the initial M4 candidate; tested revisions are recorded independently.",
+  "source_worktree_clean": true,
+  "compiler": "g++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0",
+  "build_configuration": {
+    "CMAKE_BUILD_TYPE": "Release",
+    "CMAKE_CXX_FLAGS_RELEASE": "-O3 -DNDEBUG",
+    "CMAKE_CXX_STANDARD": "17",
+    "FFTW_INCLUDE_DIR": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/dependencies/fftw3-dev/usr/include",
+    "FFTW_LIBRARY": "/lib/x86_64-linux-gnu/libfftw3.so.3",
+    "NEKTAR_BUILD_SOLVER_LIBS": "OFF",
+    "NEKTAR_BUILD_TESTS": "ON",
+    "NEKTAR_BUILD_UNIT_TESTS": "ON",
+    "NEKTAR_USE_FFTW": "ON",
+    "NEKTAR_USE_HDF5": "OFF",
+    "NEKTAR_USE_MPI": "ON",
+    "THIRDPARTY_BUILD_FFTW": "OFF"
+  },
+  "workers": {
+    "hard_limit": 72,
+    "compiler_jobs": 32,
+    "ctest_concurrency": 1,
+    "solver_MPI_ranks": [
+      1,
+      4,
+      8
+    ],
+    "selected_legacy_MPI_ranks": 2,
+    "maximum_scheduled_solver_workers": 18,
+    "OMP_NUM_THREADS": 1,
+    "OPENBLAS_NUM_THREADS": 1,
+    "build_solver_overlap": false
+  },
+  "acceptance": {
+    "file": "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/m4-acceptance.json",
+    "sha256": "6947d807f823e6ddf2dce336576074719a5107aef9e51ed6ad643a454534e922",
+    "byte_identical_to_pre_run_commit": "6f8040b",
+    "criteria": {
+      "schema": 1,
+      "purpose": "Milestone 4 criteria fixed before the numerical runs",
+      "raw_probe_max_error": 5e-13,
+      "same_grid_raw_and_projected_sample_tolerance": 5e-12,
+      "nonzero_z_coefficient_energy_per_component_minimum": 1e-12,
+      "cross_representation_projection_limit_p8": 0.002,
+      "cross_representation_projection_limit_p10": 5e-05,
+      "cross_representation_projection_refinement_maximum_ratio": 0.1,
+      "mean_only_L2_Linf_maximum": 1e-10,
+      "same_representation_evolved_velocity_Linf_maximum": 2e-09,
+      "same_representation_evolved_pressure_Linf_maximum": 2e-08,
+      "cross_representation_velocity_norm_relative_difference_maximum": 0.01,
+      "cross_representation_norm_refinement_maximum_ratio": 0.5,
+      "restart_velocity_Linf_maximum": 0.0002,
+      "restart_pressure_Linf_maximum": 0.002,
+      "restart_dt_refinement_velocity_difference_maximum_ratio": 0.75,
+      "notes": [
+        "Exact realization and repeated coefficients are required within one build; projected traces have polynomial approximation error.",
+        "MPI field bounds account for reductions, iterative residual tolerance 1e-12, and pressure conditioning/time differentiation.",
+        "Restart flow history is reinitialized by the native IMEX integrator; compare bounded evolved error and timestep refinement, separately from exact inlet reconstruction.",
+        "Do not lower an acceptance standard after inspecting a failed result; diagnose representation, mapping, solver tolerance, or resolution."
+      ]
+    },
+    "initial_stochastic_solver_tolerance": 1e-12,
+    "final_stochastic_solver_tolerance": 1e-14,
+    "mean_only_solver": "DirectStaticCond",
+    "note": "No numeric acceptance bound was changed. The pre-run note mentioning 1e-12 records the initial tolerance, which was tightened after its full-3D MPI comparison failed."
+  },
+  "unit_tests": {
+    "ctest_entries": 3,
+    "boost_cases": {
+      "HITCore": 19,
+      "HITBoundary": 7,
+      "HITRestart": 9
+    },
+    "total_cases": 35,
+    "log": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/unit-tests-final.log",
+      "sha256": "2c430d46cfb09eaa50a3eec3d9908fd144d6e0fe86412de4cfc74caed613791f",
+      "bytes": 516
+    }
+  },
+  "regressions": [
+    {
+      "name": "HITInflowMeanOnly3D",
+      "revision": "8bd06ea0260426ca8798002deba7f606eaa122a3",
+      "exit_code": 0,
+      "seconds": 1.4171713519999685,
+      "command": [
+        "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+        "--verbose",
+        "--executable",
+        "/home/jay/.local/opt/nektar-v2026-mpi/bin/IncNavierStokesSolver",
+        "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflowMeanOnly3D.tst"
+      ],
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/regressions-final-runtime/HITInflowMeanOnly3D/tester.log"
+    },
+    {
+      "name": "HITInflowManufactured3D",
+      "revision": "8bd06ea0260426ca8798002deba7f606eaa122a3",
+      "exit_code": 0,
+      "seconds": 51.18084971799999,
+      "command": [
+        "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+        "--verbose",
+        "--executable",
+        "/home/jay/.local/opt/nektar-v2026-mpi/bin/IncNavierStokesSolver",
+        "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflowManufactured3D.tst"
+      ],
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/regressions-final-runtime/HITInflowManufactured3D/tester.log"
+    },
+    {
+      "name": "HITInflowHomogeneous1DMean",
+      "revision": "8bd06ea0260426ca8798002deba7f606eaa122a3",
+      "exit_code": 0,
+      "seconds": 0.8663196620000235,
+      "command": [
+        "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+        "--verbose",
+        "--executable",
+        "/home/jay/.local/opt/nektar-v2026-mpi/bin/IncNavierStokesSolver",
+        "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflowHomogeneous1DMean.tst"
+      ],
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/regressions-final-runtime/HITInflowHomogeneous1DMean/tester.log"
+    },
+    {
+      "name": "ChanFlow_3DH1D_bcsfromfiles",
+      "revision": "8bd06ea0260426ca8798002deba7f606eaa122a3",
+      "exit_code": 0,
+      "seconds": 1.2168478210001012,
+      "command": [
+        "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+        "--verbose",
+        "--executable",
+        "/home/jay/.local/opt/nektar-v2026-mpi/bin/IncNavierStokesSolver",
+        "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/ChanFlow_3DH1D_bcsfromfiles.tst"
+      ],
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/regressions-final-runtime/ChanFlow_3DH1D_bcsfromfiles/tester.log"
+    },
+    {
+      "name": "ChanFlow_3DH1D_FFT",
+      "revision": "8bd06ea0260426ca8798002deba7f606eaa122a3",
+      "exit_code": 0,
+      "seconds": 1.5677810859997408,
+      "command": [
+        "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+        "--verbose",
+        "--executable",
+        "/home/jay/.local/opt/nektar-v2026-mpi/bin/IncNavierStokesSolver",
+        "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/ChanFlow_3DH1D_FFT.tst"
+      ],
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/regressions-final-runtime/ChanFlow_3DH1D_FFT/tester.log"
+    },
+    {
+      "name": "KovaFlow_3DH1D_MVM_FFTW_Consistency",
+      "revision": "8bd06ea0260426ca8798002deba7f606eaa122a3",
+      "exit_code": 0,
+      "seconds": 0.9664022910001222,
+      "command": [
+        "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+        "--verbose",
+        "--executable",
+        "/home/jay/.local/opt/nektar-v2026-mpi/bin/IncNavierStokesSolver",
+        "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/KovaFlow_3DH1D_MVM_FFTW_Consistency.tst"
+      ],
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/regressions-final-runtime/KovaFlow_3DH1D_MVM_FFTW_Consistency/tester.log"
+    },
+    {
+      "name": "MovingRefFrame_translation",
+      "revision": "8bd06ea0260426ca8798002deba7f606eaa122a3",
+      "exit_code": 0,
+      "seconds": 1.4673509639997064,
+      "command": [
+        "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+        "--verbose",
+        "--executable",
+        "/home/jay/.local/opt/nektar-v2026-mpi/bin/IncNavierStokesSolver",
+        "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/MovingRefFrame_translation.tst"
+      ],
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/regressions-final-runtime/MovingRefFrame_translation/tester.log"
+    },
+    {
+      "name": "MovingRefFrame_Rot_SimpleDomain",
+      "revision": "8bd06ea0260426ca8798002deba7f606eaa122a3",
+      "exit_code": 0,
+      "seconds": 1.2166573499998776,
+      "command": [
+        "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+        "--verbose",
+        "--executable",
+        "/home/jay/.local/opt/nektar-v2026-mpi/bin/IncNavierStokesSolver",
+        "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/MovingRefFrame_Rot_SimpleDomain.tst"
+      ],
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/regressions-final-runtime/MovingRefFrame_Rot_SimpleDomain/tester.log"
+    },
+    {
+      "name": "ChanFlow_3DH1D_Parallel_mode1",
+      "revision": "8bd06ea0260426ca8798002deba7f606eaa122a3",
+      "exit_code": 0,
+      "seconds": 0.8162423180001497,
+      "command": [
+        "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+        "--verbose",
+        "--executable",
+        "/home/jay/.local/opt/nektar-v2026-mpi/bin/IncNavierStokesSolver",
+        "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/ChanFlow_3DH1D_Parallel_mode1.tst"
+      ],
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/regressions-final-runtime/ChanFlow_3DH1D_Parallel_mode1/tester.log"
+    },
+    {
+      "name": "ChanFlow_3DH1D_Parallel_mode2",
+      "revision": "8bd06ea0260426ca8798002deba7f606eaa122a3",
+      "exit_code": 0,
+      "seconds": 0.7656978529998923,
+      "command": [
+        "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+        "--verbose",
+        "--executable",
+        "/home/jay/.local/opt/nektar-v2026-mpi/bin/IncNavierStokesSolver",
+        "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/ChanFlow_3DH1D_Parallel_mode2.tst"
+      ],
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/regressions-final-runtime/ChanFlow_3DH1D_Parallel_mode2/tester.log"
+    }
+  ],
+  "case_results": {
+    "h1d-mean-only-serial": {
+      "probe": {
+        "ranks": 1,
+        "points": 720,
+        "raw_max_error": 0,
+        "projection_max_error": [
+          2.220446049250313e-16,
+          0,
+          0
+        ],
+        "nonzero_z_coeff_energy": [
+          5.508527834213672e-32,
+          0,
+          0
+        ],
+        "repeat_identical": true,
+        "identity_sha256": "ecedafd355edc47250ad1126d5685c403d369f56279614bc27996a4afdf44c2e",
+        "modes_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "generator_modes": 0,
+        "kind": "probe",
+        "maximum_projection_error": 0.002,
+        "passed": true
+      },
+      "solver": {
+        "kind": "solver",
+        "session": "m4-h1d-mean-only.xml",
+        "log": "solver.log",
+        "start_time": 0.0,
+        "final_time": 0.02,
+        "identity_sha256": "ecedafd355edc47250ad1126d5685c403d369f56279614bc27996a4afdf44c2e",
+        "l2": {
+          "u": 4.16935e-13,
+          "v": 3.15941e-13,
+          "w": 3.2532e-16,
+          "p": 3.37566e-12
+        },
+        "linf": {
+          "u": 6.12399e-13,
+          "v": 1.21624e-13,
+          "w": 1.2134e-16,
+          "p": 3.96661e-12
+        },
+        "passed": true
+      }
+    },
+    "h1d-von-karman-serial": {
+      "probe": {
+        "ranks": 1,
+        "points": 720,
+        "raw_max_error": 0,
+        "projection_max_error": [
+          5.69034154018766e-07,
+          4.2818779072764657e-07,
+          9.08395247321836e-08
+        ],
+        "nonzero_z_coeff_energy": [
+          0.0757839986422081,
+          0.040388201082591904,
+          0.011546968721927333
+        ],
+        "repeat_identical": true,
+        "identity_sha256": "94e209ef76eab45bfdc233abe78af5f368f1b500a8ce5a93c30d8fef2f5f9c38",
+        "modes_sha256": "2b0d695f9f3fc283538923af3c417d578468ad61145fbd0ea7d29b4ffb9511c3",
+        "generator_modes": 9,
+        "kind": "probe",
+        "maximum_projection_error": 0.002,
+        "passed": true
+      },
+      "solver": {
+        "kind": "solver",
+        "session": "m4-h1d-von-karman.xml",
+        "log": "solver.log",
+        "start_time": 0.0,
+        "final_time": 0.02,
+        "identity_sha256": "94e209ef76eab45bfdc233abe78af5f368f1b500a8ce5a93c30d8fef2f5f9c38",
+        "l2": {
+          "u": 6.28892,
+          "v": 0.100824,
+          "w": 0.195365,
+          "p": 0.00817315
+        },
+        "linf": {
+          "u": 1.13202,
+          "v": 0.059959,
+          "w": 0.125703,
+          "p": 0.00587705
+        },
+        "passed": true
+      }
+    },
+    "h1d-tabulated-serial": {
+      "probe": {
+        "ranks": 1,
+        "points": 720,
+        "raw_max_error": 0,
+        "projection_max_error": [
+          7.523566791789449e-07,
+          5.476560999799485e-07,
+          4.41929653122175e-07
+        ],
+        "nonzero_z_coeff_energy": [
+          0.10910636676889567,
+          0.06935963988708643,
+          0.018889274972033243
+        ],
+        "repeat_identical": true,
+        "identity_sha256": "64378640a976162fee8ec0854eba5de9bfd547025421608532e37eb8a8f596c6",
+        "modes_sha256": "8cbfc485f4f4b107b7a7e095cb7493da43e0e53852a4369c0cf13ccfc06e345f",
+        "generator_modes": 6,
+        "kind": "probe",
+        "maximum_projection_error": 0.002,
+        "passed": true
+      },
+      "solver": {
+        "kind": "solver",
+        "session": "m4-h1d-tabulated.xml",
+        "log": "solver.log",
+        "start_time": 0.0,
+        "final_time": 0.02,
+        "identity_sha256": "64378640a976162fee8ec0854eba5de9bfd547025421608532e37eb8a8f596c6",
+        "l2": {
+          "u": 6.28855,
+          "v": 0.139403,
+          "w": 0.155972,
+          "p": 0.00803102
+        },
+        "linf": {
+          "u": 1.10136,
+          "v": 0.0986928,
+          "w": 0.108804,
+          "p": 0.00675348
+        },
+        "passed": true
+      }
+    },
+    "full3d-mean-only-serial": {
+      "probe": {
+        "ranks": 1,
+        "points": 810,
+        "raw_max_error": 0,
+        "projection_max_error": [
+          0,
+          0,
+          0
+        ],
+        "nonzero_z_coeff_energy": [
+          0,
+          0,
+          0
+        ],
+        "repeat_identical": true,
+        "identity_sha256": "ecedafd355edc47250ad1126d5685c403d369f56279614bc27996a4afdf44c2e",
+        "modes_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "generator_modes": 0,
+        "kind": "probe",
+        "maximum_projection_error": 0.002,
+        "passed": true
+      },
+      "solver": {
+        "kind": "solver",
+        "session": "m4-full3d-mean-only.xml",
+        "log": "solver.log",
+        "start_time": 0.0,
+        "final_time": 0.02,
+        "identity_sha256": "ecedafd355edc47250ad1126d5685c403d369f56279614bc27996a4afdf44c2e",
+        "l2": {
+          "u": 3.02432e-11,
+          "v": 1.82568e-11,
+          "w": 2.27458e-11,
+          "p": 7.27206e-12
+        },
+        "linf": {
+          "u": 1.91007e-11,
+          "v": 1.36737e-11,
+          "w": 1.16534e-11,
+          "p": 7.57214e-11
+        },
+        "passed": true
+      }
+    },
+    "full3d-von-karman-serial": {
+      "probe": {
+        "ranks": 1,
+        "points": 810,
+        "raw_max_error": 0,
+        "projection_max_error": [
+          0.00017023562779749923,
+          6.703494674676139e-05,
+          4.908111259549486e-05
+        ],
+        "nonzero_z_coeff_energy": [
+          0,
+          0,
+          0
+        ],
+        "repeat_identical": true,
+        "identity_sha256": "94e209ef76eab45bfdc233abe78af5f368f1b500a8ce5a93c30d8fef2f5f9c38",
+        "modes_sha256": "2b0d695f9f3fc283538923af3c417d578468ad61145fbd0ea7d29b4ffb9511c3",
+        "generator_modes": 9,
+        "kind": "probe",
+        "maximum_projection_error": 0.002,
+        "passed": true
+      },
+      "solver": {
+        "kind": "solver",
+        "session": "m4-full3d-von-karman.xml",
+        "log": "solver.log",
+        "start_time": 0.0,
+        "final_time": 0.02,
+        "identity_sha256": "94e209ef76eab45bfdc233abe78af5f368f1b500a8ce5a93c30d8fef2f5f9c38",
+        "l2": {
+          "u": 6.28888,
+          "v": 0.100809,
+          "w": 0.19535,
+          "p": 0.00816475
+        },
+        "linf": {
+          "u": 1.12659,
+          "v": 0.0570358,
+          "w": 0.124117,
+          "p": 0.00618718
+        },
+        "passed": true
+      }
+    },
+    "full3d-tabulated-serial": {
+      "probe": {
+        "ranks": 1,
+        "points": 810,
+        "raw_max_error": 0,
+        "projection_max_error": [
+          0.0001875977257328465,
+          0.00012319512718492187,
+          6.243976360305326e-05
+        ],
+        "nonzero_z_coeff_energy": [
+          0,
+          0,
+          0
+        ],
+        "repeat_identical": true,
+        "identity_sha256": "64378640a976162fee8ec0854eba5de9bfd547025421608532e37eb8a8f596c6",
+        "modes_sha256": "8cbfc485f4f4b107b7a7e095cb7493da43e0e53852a4369c0cf13ccfc06e345f",
+        "generator_modes": 6,
+        "kind": "probe",
+        "maximum_projection_error": 0.002,
+        "passed": true
+      },
+      "solver": {
+        "kind": "solver",
+        "session": "m4-full3d-tabulated.xml",
+        "log": "solver.log",
+        "start_time": 0.0,
+        "final_time": 0.02,
+        "identity_sha256": "64378640a976162fee8ec0854eba5de9bfd547025421608532e37eb8a8f596c6",
+        "l2": {
+          "u": 6.28851,
+          "v": 0.139388,
+          "w": 0.155953,
+          "p": 0.00802136
+        },
+        "linf": {
+          "u": 1.09822,
+          "v": 0.098601,
+          "w": 0.110139,
+          "p": 0.00662016
+        },
+        "passed": true
+      }
+    },
+    "h1d-fftw-serial": {
+      "probe": {
+        "ranks": 1,
+        "points": 720,
+        "raw_max_error": 0,
+        "projection_max_error": [
+          5.69034154018766e-07,
+          4.2818779072764657e-07,
+          9.08395247321836e-08
+        ],
+        "nonzero_z_coeff_energy": [
+          0.07578399864220807,
+          0.04038820108259191,
+          0.011546968721927335
+        ],
+        "repeat_identical": true,
+        "identity_sha256": "94e209ef76eab45bfdc233abe78af5f368f1b500a8ce5a93c30d8fef2f5f9c38",
+        "modes_sha256": "2b0d695f9f3fc283538923af3c417d578468ad61145fbd0ea7d29b4ffb9511c3",
+        "generator_modes": 9,
+        "kind": "probe",
+        "maximum_projection_error": 0.002,
+        "passed": true
+      },
+      "solver": {
+        "kind": "solver",
+        "session": "m4-h1d-fftw.xml",
+        "log": "solver.log",
+        "start_time": 0.0,
+        "final_time": 0.02,
+        "identity_sha256": "94e209ef76eab45bfdc233abe78af5f368f1b500a8ce5a93c30d8fef2f5f9c38",
+        "l2": {
+          "u": 6.28892,
+          "v": 0.100824,
+          "w": 0.195365,
+          "p": 0.00817315
+        },
+        "linf": {
+          "u": 1.13202,
+          "v": 0.059959,
+          "w": 0.125703,
+          "p": 0.00587705
+        },
+        "passed": true
+      }
+    },
+    "h1d-von-karman-mesh4": {
+      "probe": {
+        "ranks": 4,
+        "points": 720,
+        "raw_max_error": 0,
+        "projection_max_error": [
+          5.69034154018766e-07,
+          4.2818779072764657e-07,
+          9.08395247321836e-08
+        ],
+        "nonzero_z_coeff_energy": [
+          0.07578399864220808,
+          0.04038820108259191,
+          0.011546968721927335
+        ],
+        "repeat_identical": true,
+        "identity_sha256": "94e209ef76eab45bfdc233abe78af5f368f1b500a8ce5a93c30d8fef2f5f9c38",
+        "modes_sha256": "2b0d695f9f3fc283538923af3c417d578468ad61145fbd0ea7d29b4ffb9511c3",
+        "generator_modes": 9,
+        "kind": "probe",
+        "maximum_projection_error": 0.002,
+        "passed": true
+      },
+      "solver": {
+        "kind": "solver",
+        "session": "m4-h1d-von-karman.xml",
+        "log": "solver.log",
+        "start_time": 0.0,
+        "final_time": 0.02,
+        "identity_sha256": "94e209ef76eab45bfdc233abe78af5f368f1b500a8ce5a93c30d8fef2f5f9c38",
+        "l2": {
+          "u": 6.28892,
+          "v": 0.100824,
+          "w": 0.195365,
+          "p": 0.00817315
+        },
+        "linf": {
+          "u": 1.13202,
+          "v": 0.059959,
+          "w": 0.125703,
+          "p": 0.00587705
+        },
+        "passed": true
+      }
+    },
+    "h1d-von-karman-homogeneous4": {
+      "probe": {
+        "ranks": 4,
+        "points": 720,
+        "raw_max_error": 0,
+        "projection_max_error": [
+          5.69034154018766e-07,
+          4.2818779072764657e-07,
+          9.08395247321836e-08
+        ],
+        "nonzero_z_coeff_energy": [
+          0.0757839986422081,
+          0.040388201082591904,
+          0.011546968721927333
+        ],
+        "repeat_identical": true,
+        "identity_sha256": "94e209ef76eab45bfdc233abe78af5f368f1b500a8ce5a93c30d8fef2f5f9c38",
+        "modes_sha256": "2b0d695f9f3fc283538923af3c417d578468ad61145fbd0ea7d29b4ffb9511c3",
+        "generator_modes": 9,
+        "kind": "probe",
+        "maximum_projection_error": 0.002,
+        "passed": true
+      },
+      "solver": {
+        "kind": "solver",
+        "session": "m4-h1d-von-karman.xml",
+        "log": "solver.log",
+        "start_time": 0.0,
+        "final_time": 0.02,
+        "identity_sha256": "94e209ef76eab45bfdc233abe78af5f368f1b500a8ce5a93c30d8fef2f5f9c38",
+        "l2": {
+          "u": 6.28892,
+          "v": 0.100824,
+          "w": 0.195365,
+          "p": 0.00817315
+        },
+        "linf": {
+          "u": 1.11483,
+          "v": 0.0490385,
+          "w": 0.125703,
+          "p": 0.00587705
+        },
+        "passed": true
+      }
+    },
+    "h1d-von-karman-mixed4": {
+      "probe": {
+        "ranks": 4,
+        "points": 720,
+        "raw_max_error": 0,
+        "projection_max_error": [
+          5.69034154018766e-07,
+          4.2818779072764657e-07,
+          9.08395247321836e-08
+        ],
+        "nonzero_z_coeff_energy": [
+          0.07578399864220808,
+          0.04038820108259191,
+          0.011546968721927335
+        ],
+        "repeat_identical": true,
+        "identity_sha256": "94e209ef76eab45bfdc233abe78af5f368f1b500a8ce5a93c30d8fef2f5f9c38",
+        "modes_sha256": "2b0d695f9f3fc283538923af3c417d578468ad61145fbd0ea7d29b4ffb9511c3",
+        "generator_modes": 9,
+        "kind": "probe",
+        "maximum_projection_error": 0.002,
+        "passed": true
+      },
+      "solver": {
+        "kind": "solver",
+        "session": "m4-h1d-von-karman.xml",
+        "log": "solver.log",
+        "start_time": 0.0,
+        "final_time": 0.02,
+        "identity_sha256": "94e209ef76eab45bfdc233abe78af5f368f1b500a8ce5a93c30d8fef2f5f9c38",
+        "l2": {
+          "u": 6.28892,
+          "v": 0.100824,
+          "w": 0.195365,
+          "p": 0.00817315
+        },
+        "linf": {
+          "u": 1.11483,
+          "v": 0.059959,
+          "w": 0.125703,
+          "p": 0.00587705
+        },
+        "passed": true
+      }
+    },
+    "h1d-von-karman-mixed8": {
+      "probe": {
+        "ranks": 8,
+        "points": 720,
+        "raw_max_error": 0,
+        "projection_max_error": [
+          5.69034154018766e-07,
+          4.2818779072764657e-07,
+          9.08395247321836e-08
+        ],
+        "nonzero_z_coeff_energy": [
+          0.07578399864220808,
+          0.04038820108259191,
+          0.011546968721927335
+        ],
+        "repeat_identical": true,
+        "identity_sha256": "94e209ef76eab45bfdc233abe78af5f368f1b500a8ce5a93c30d8fef2f5f9c38",
+        "modes_sha256": "2b0d695f9f3fc283538923af3c417d578468ad61145fbd0ea7d29b4ffb9511c3",
+        "generator_modes": 9,
+        "kind": "probe",
+        "maximum_projection_error": 0.002,
+        "passed": true
+      },
+      "solver": {
+        "kind": "solver",
+        "session": "m4-h1d-von-karman.xml",
+        "log": "solver.log",
+        "start_time": 0.0,
+        "final_time": 0.02,
+        "identity_sha256": "94e209ef76eab45bfdc233abe78af5f368f1b500a8ce5a93c30d8fef2f5f9c38",
+        "l2": {
+          "u": 6.28892,
+          "v": 0.100824,
+          "w": 0.195365,
+          "p": 0.00817315
+        },
+        "linf": {
+          "u": 1.11483,
+          "v": 0.059959,
+          "w": 0.125703,
+          "p": 0.00587705
+        },
+        "passed": true
+      }
+    },
+    "full3d-von-karman-mesh4": {
+      "probe": {
+        "ranks": 4,
+        "points": 810,
+        "raw_max_error": 0,
+        "projection_max_error": [
+          0.00017023562779749923,
+          6.703494674676139e-05,
+          4.908111259549486e-05
+        ],
+        "nonzero_z_coeff_energy": [
+          0,
+          0,
+          0
+        ],
+        "repeat_identical": true,
+        "identity_sha256": "94e209ef76eab45bfdc233abe78af5f368f1b500a8ce5a93c30d8fef2f5f9c38",
+        "modes_sha256": "2b0d695f9f3fc283538923af3c417d578468ad61145fbd0ea7d29b4ffb9511c3",
+        "generator_modes": 9,
+        "kind": "probe",
+        "maximum_projection_error": 0.002,
+        "passed": true
+      },
+      "solver": {
+        "kind": "solver",
+        "session": "m4-full3d-von-karman.xml",
+        "log": "solver.log",
+        "start_time": 0.0,
+        "final_time": 0.02,
+        "identity_sha256": "94e209ef76eab45bfdc233abe78af5f368f1b500a8ce5a93c30d8fef2f5f9c38",
+        "l2": {
+          "u": 6.28888,
+          "v": 0.100809,
+          "w": 0.19535,
+          "p": 0.00816475
+        },
+        "linf": {
+          "u": 1.12659,
+          "v": 0.0570358,
+          "w": 0.124117,
+          "p": 0.00618718
+        },
+        "passed": true
+      }
+    },
+    "h1d-tabulated-mixed4": {
+      "probe": {
+        "ranks": 4,
+        "points": 720,
+        "raw_max_error": 0,
+        "projection_max_error": [
+          7.523566791789449e-07,
+          5.476560999799485e-07,
+          4.41929653122175e-07
+        ],
+        "nonzero_z_coeff_energy": [
+          0.10910636676889565,
+          0.06935963988708643,
+          0.018889274972033243
+        ],
+        "repeat_identical": true,
+        "identity_sha256": "64378640a976162fee8ec0854eba5de9bfd547025421608532e37eb8a8f596c6",
+        "modes_sha256": "8cbfc485f4f4b107b7a7e095cb7493da43e0e53852a4369c0cf13ccfc06e345f",
+        "generator_modes": 6,
+        "kind": "probe",
+        "maximum_projection_error": 0.002,
+        "passed": true
+      },
+      "solver": {
+        "kind": "solver",
+        "session": "m4-h1d-tabulated.xml",
+        "log": "solver.log",
+        "start_time": 0.0,
+        "final_time": 0.02,
+        "identity_sha256": "64378640a976162fee8ec0854eba5de9bfd547025421608532e37eb8a8f596c6",
+        "l2": {
+          "u": 6.28855,
+          "v": 0.139403,
+          "w": 0.155972,
+          "p": 0.00803102
+        },
+        "linf": {
+          "u": 1.10136,
+          "v": 0.0961791,
+          "w": 0.108804,
+          "p": 0.00675348
+        },
+        "passed": true
+      }
+    },
+    "h1d-fftw-mixed4": {
+      "probe": {
+        "ranks": 4,
+        "points": 720,
+        "raw_max_error": 0,
+        "projection_max_error": [
+          5.69034154018766e-07,
+          4.2818779072764657e-07,
+          9.08395247321836e-08
+        ],
+        "nonzero_z_coeff_energy": [
+          0.07578399864220807,
+          0.04038820108259192,
+          0.011546968721927335
+        ],
+        "repeat_identical": true,
+        "identity_sha256": "94e209ef76eab45bfdc233abe78af5f368f1b500a8ce5a93c30d8fef2f5f9c38",
+        "modes_sha256": "2b0d695f9f3fc283538923af3c417d578468ad61145fbd0ea7d29b4ffb9511c3",
+        "generator_modes": 9,
+        "kind": "probe",
+        "maximum_projection_error": 0.002,
+        "passed": true
+      },
+      "solver": {
+        "kind": "solver",
+        "session": "m4-h1d-fftw.xml",
+        "log": "solver.log",
+        "start_time": 0.0,
+        "final_time": 0.02,
+        "identity_sha256": "94e209ef76eab45bfdc233abe78af5f368f1b500a8ce5a93c30d8fef2f5f9c38",
+        "l2": {
+          "u": 6.28892,
+          "v": 0.100824,
+          "w": 0.195365,
+          "p": 0.00817315
+        },
+        "linf": {
+          "u": 1.11483,
+          "v": 0.059959,
+          "w": 0.125703,
+          "p": 0.00587705
+        },
+        "passed": true
+      }
+    },
+    "h1d-tabulated-mixed8": {
+      "probe": {
+        "ranks": 8,
+        "points": 720,
+        "raw_max_error": 0,
+        "projection_max_error": [
+          7.523566791789449e-07,
+          5.476560999799485e-07,
+          4.41929653122175e-07
+        ],
+        "nonzero_z_coeff_energy": [
+          0.10910636676889565,
+          0.06935963988708643,
+          0.018889274972033243
+        ],
+        "repeat_identical": true,
+        "identity_sha256": "64378640a976162fee8ec0854eba5de9bfd547025421608532e37eb8a8f596c6",
+        "modes_sha256": "8cbfc485f4f4b107b7a7e095cb7493da43e0e53852a4369c0cf13ccfc06e345f",
+        "generator_modes": 6,
+        "kind": "probe",
+        "maximum_projection_error": 0.002,
+        "passed": true
+      },
+      "solver": {
+        "kind": "solver",
+        "session": "m4-h1d-tabulated.xml",
+        "log": "m4-h1d-tabulated.solver.log",
+        "start_time": 0.0,
+        "final_time": 0.02,
+        "identity_sha256": "64378640a976162fee8ec0854eba5de9bfd547025421608532e37eb8a8f596c6",
+        "l2": {
+          "u": 6.28855,
+          "v": 0.139403,
+          "w": 0.155972,
+          "p": 0.00803102
+        },
+        "linf": {
+          "u": 1.10136,
+          "v": 0.0961791,
+          "w": 0.108804,
+          "p": 0.00675348
+        },
+        "passed": true
+      }
+    },
+    "h1d-von-karman-p10": {
+      "probe": {
+        "ranks": 1,
+        "points": 880,
+        "raw_max_error": 0,
+        "projection_max_error": [
+          4.156517130482484e-09,
+          3.1277026558973464e-09,
+          6.635383631437008e-10
+        ],
+        "nonzero_z_coeff_energy": [
+          0.07578392627387791,
+          0.040388145611515165,
+          0.011546964945385542
+        ],
+        "repeat_identical": true,
+        "identity_sha256": "94e209ef76eab45bfdc233abe78af5f368f1b500a8ce5a93c30d8fef2f5f9c38",
+        "modes_sha256": "2b0d695f9f3fc283538923af3c417d578468ad61145fbd0ea7d29b4ffb9511c3",
+        "generator_modes": 9,
+        "kind": "probe",
+        "maximum_projection_error": 5e-05,
+        "passed": true
+      },
+      "solver": {
+        "kind": "solver",
+        "session": "m4-h1d-von-karman.xml",
+        "log": "solver.log",
+        "start_time": 0.0,
+        "final_time": 0.02,
+        "identity_sha256": "94e209ef76eab45bfdc233abe78af5f368f1b500a8ce5a93c30d8fef2f5f9c38",
+        "l2": {
+          "u": 6.28892,
+          "v": 0.100871,
+          "w": 0.195455,
+          "p": 0.0117137
+        },
+        "linf": {
+          "u": 1.13179,
+          "v": 0.0599593,
+          "w": 0.126028,
+          "p": 0.00703099
+        },
+        "passed": true
+      }
+    },
+    "full3d-von-karman-p10": {
+      "probe": {
+        "ranks": 1,
+        "points": 1210,
+        "raw_max_error": 0,
+        "projection_max_error": [
+          5.175146383429308e-06,
+          2.038777507665235e-06,
+          1.4934541351513397e-06
+        ],
+        "nonzero_z_coeff_energy": [
+          0,
+          0,
+          0
+        ],
+        "repeat_identical": true,
+        "identity_sha256": "94e209ef76eab45bfdc233abe78af5f368f1b500a8ce5a93c30d8fef2f5f9c38",
+        "modes_sha256": "2b0d695f9f3fc283538923af3c417d578468ad61145fbd0ea7d29b4ffb9511c3",
+        "generator_modes": 9,
+        "kind": "probe",
+        "maximum_projection_error": 5e-05,
+        "passed": true
+      },
+      "solver": {
+        "kind": "solver",
+        "session": "m4-full3d-von-karman.xml",
+        "log": "solver.log",
+        "start_time": 0.0,
+        "final_time": 0.02,
+        "identity_sha256": "94e209ef76eab45bfdc233abe78af5f368f1b500a8ce5a93c30d8fef2f5f9c38",
+        "l2": {
+          "u": 6.28893,
+          "v": 0.100871,
+          "w": 0.195456,
+          "p": 0.0117138
+        },
+        "linf": {
+          "u": 1.13213,
+          "v": 0.0582477,
+          "w": 0.126203,
+          "p": 0.00691866
+        },
+        "passed": true
+      }
+    },
+    "h1d-von-karman-h16": {
+      "probe": {
+        "ranks": 1,
+        "points": 1440,
+        "raw_max_error": 0,
+        "projection_max_error": [
+          5.913237768329083e-07,
+          4.281877907241771e-07,
+          9.083952474953083e-08
+        ],
+        "nonzero_z_coeff_energy": [
+          0.07578399864220806,
+          0.04038820108259192,
+          0.01154696872192733
+        ],
+        "repeat_identical": true,
+        "identity_sha256": "94e209ef76eab45bfdc233abe78af5f368f1b500a8ce5a93c30d8fef2f5f9c38",
+        "modes_sha256": "2b0d695f9f3fc283538923af3c417d578468ad61145fbd0ea7d29b4ffb9511c3",
+        "generator_modes": 9,
+        "kind": "probe",
+        "maximum_projection_error": 0.002,
+        "passed": true
+      },
+      "solver": {
+        "kind": "solver",
+        "session": "m4-h1d-von-karman.xml",
+        "log": "solver.log",
+        "start_time": 0.0,
+        "final_time": 0.02,
+        "identity_sha256": "94e209ef76eab45bfdc233abe78af5f368f1b500a8ce5a93c30d8fef2f5f9c38",
+        "l2": {
+          "u": 6.28892,
+          "v": 0.100824,
+          "w": 0.195365,
+          "p": 0.00817315
+        },
+        "linf": {
+          "u": 1.13202,
+          "v": 0.0608991,
+          "w": 0.125703,
+          "p": 0.00601647
+        },
+        "passed": true
+      }
+    }
+  },
+  "partition_and_transform_comparisons": {
+    "h1d-von-karman-mesh4": {
+      "samples": {
+        "kind": "samples",
+        "common_samples": 384,
+        "sample_counts": [
+          384,
+          384
+        ],
+        "raw_max_difference": 0.0,
+        "projected_max_difference": 0.0,
+        "identical_realization": true,
+        "projected_limit": 5e-12,
+        "passed": true
+      },
+      "fields": {
+        "kind": "fields",
+        "errors": {
+          "u": {
+            "l2": 6.190727732356371e-14,
+            "linf": 2.496891582381977e-13,
+            "first_l2": 6.288924298004008,
+            "second_l2": 6.288924298004008
+          },
+          "v": {
+            "l2": 9.177684769847833e-13,
+            "linf": 3.3663230894227097e-12,
+            "first_l2": 0.10082384602244858,
+            "second_l2": 0.10082384602244389
+          },
+          "w": {
+            "l2": 3.227791634722345e-14,
+            "linf": 6.088705928330995e-14,
+            "first_l2": 0.19536547987163916,
+            "second_l2": 0.19536547987163905
+          },
+          "p": {
+            "l2": 6.6372297617630255e-12,
+            "linf": 1.3918284222629723e-11,
+            "first_l2": 0.00817314859409003,
+            "second_l2": 0.008173148593159834
+          }
+        },
+        "maximum_velocity_linf": 3.3663230894227097e-12,
+        "velocity_limit": 2e-09,
+        "pressure_limit": 2e-08,
+        "passed": true
+      }
+    },
+    "h1d-von-karman-homogeneous4": {
+      "samples": {
+        "kind": "samples",
+        "common_samples": 384,
+        "sample_counts": [
+          384,
+          384
+        ],
+        "raw_max_difference": 0.0,
+        "projected_max_difference": 0.0,
+        "identical_realization": true,
+        "projected_limit": 5e-12,
+        "passed": true
+      },
+      "fields": {
+        "kind": "fields",
+        "errors": {
+          "u": {
+            "l2": 5.195165195920786e-14,
+            "linf": 4.022338018216942e-13,
+            "first_l2": 6.288924298004008,
+            "second_l2": 6.28892429800401
+          },
+          "v": {
+            "l2": 1.6758945887643403e-14,
+            "linf": 2.1828025498216164e-14,
+            "first_l2": 0.10082384602244858,
+            "second_l2": 0.10082384602244852
+          },
+          "w": {
+            "l2": 1.2453748651785686e-14,
+            "linf": 2.6456267732122285e-14,
+            "first_l2": 0.19536547987163916,
+            "second_l2": 0.19536547987163896
+          },
+          "p": {
+            "l2": 1.1805622003338065e-11,
+            "linf": 1.180910539711269e-11,
+            "first_l2": 0.00817314859409003,
+            "second_l2": 0.00817314858665925
+          }
+        },
+        "maximum_velocity_linf": 4.022338018216942e-13,
+        "velocity_limit": 2e-09,
+        "pressure_limit": 2e-08,
+        "passed": true
+      }
+    },
+    "h1d-von-karman-mixed4": {
+      "samples": {
+        "kind": "samples",
+        "common_samples": 384,
+        "sample_counts": [
+          384,
+          384
+        ],
+        "raw_max_difference": 0.0,
+        "projected_max_difference": 0.0,
+        "identical_realization": true,
+        "projected_limit": 5e-12,
+        "passed": true
+      },
+      "fields": {
+        "kind": "fields",
+        "errors": {
+          "u": {
+            "l2": 8.695236435605097e-14,
+            "linf": 8.160139230994901e-13,
+            "first_l2": 6.288924298004008,
+            "second_l2": 6.28892429800401
+          },
+          "v": {
+            "l2": 9.18366368180831e-13,
+            "linf": 3.369097305284084e-12,
+            "first_l2": 0.10082384602244858,
+            "second_l2": 0.10082384602244346
+          },
+          "w": {
+            "l2": 2.997623688751118e-14,
+            "linf": 5.5603958937222586e-14,
+            "first_l2": 0.19536547987163916,
+            "second_l2": 0.1953654798716391
+          },
+          "p": {
+            "l2": 8.606141691076395e-12,
+            "linf": 8.906733748974272e-12,
+            "first_l2": 0.00817314859409003,
+            "second_l2": 0.008173148588884653
+          }
+        },
+        "maximum_velocity_linf": 3.369097305284084e-12,
+        "velocity_limit": 2e-09,
+        "pressure_limit": 2e-08,
+        "passed": true
+      }
+    },
+    "h1d-von-karman-mixed8": {
+      "samples": {
+        "kind": "samples",
+        "common_samples": 384,
+        "sample_counts": [
+          384,
+          384
+        ],
+        "raw_max_difference": 0.0,
+        "projected_max_difference": 0.0,
+        "identical_realization": true,
+        "projected_limit": 5e-12,
+        "passed": true
+      },
+      "fields": {
+        "kind": "fields",
+        "errors": {
+          "u": {
+            "l2": 5.438054553930268e-14,
+            "linf": 1.851852005074761e-13,
+            "first_l2": 6.288924298004008,
+            "second_l2": 6.288924298004009
+          },
+          "v": {
+            "l2": 9.183928974041016e-13,
+            "linf": 3.3693963824533643e-12,
+            "first_l2": 0.10082384602244858,
+            "second_l2": 0.10082384602244353
+          },
+          "w": {
+            "l2": 3.08074070285236e-14,
+            "linf": 6.045511313779173e-14,
+            "first_l2": 0.19536547987163916,
+            "second_l2": 0.1953654798716391
+          },
+          "p": {
+            "l2": 9.350558434829496e-12,
+            "linf": 8.575766182253308e-12,
+            "first_l2": 0.00817314859409003,
+            "second_l2": 0.0081731485884063
+          }
+        },
+        "maximum_velocity_linf": 3.3693963824533643e-12,
+        "velocity_limit": 2e-09,
+        "pressure_limit": 2e-08,
+        "passed": true
+      }
+    },
+    "full3d-von-karman-mesh4": {
+      "samples": {
+        "kind": "samples",
+        "common_samples": 384,
+        "sample_counts": [
+          384,
+          384
+        ],
+        "raw_max_difference": 0.0,
+        "projected_max_difference": 0.0,
+        "identical_realization": true,
+        "projected_limit": 5e-12,
+        "passed": true
+      },
+      "fields": {
+        "kind": "fields",
+        "errors": {
+          "u": {
+            "l2": 1.746498885445194e-11,
+            "linf": 1.6418866266576515e-10,
+            "first_l2": 6.288882528980229,
+            "second_l2": 6.288882528980388
+          },
+          "v": {
+            "l2": 2.065906838083559e-11,
+            "linf": 9.378431711781765e-11,
+            "first_l2": 0.10080922061147823,
+            "second_l2": 0.10080922061185132
+          },
+          "w": {
+            "l2": 1.9750300498148087e-11,
+            "linf": 7.965605838778853e-11,
+            "first_l2": 0.19535012318991465,
+            "second_l2": 0.19535012318930858
+          },
+          "p": {
+            "l2": 5.37109554431828e-10,
+            "linf": 7.598569468948713e-10,
+            "first_l2": 0.008164747900084266,
+            "second_l2": 0.008164747966342659
+          }
+        },
+        "maximum_velocity_linf": 1.6418866266576515e-10,
+        "velocity_limit": 2e-09,
+        "pressure_limit": 2e-08,
+        "passed": true
+      }
+    },
+    "h1d-tabulated-mixed4": {
+      "samples": {
+        "kind": "samples",
+        "common_samples": 384,
+        "sample_counts": [
+          384,
+          384
+        ],
+        "raw_max_difference": 0.0,
+        "projected_max_difference": 0.0,
+        "identical_realization": true,
+        "projected_limit": 5e-12,
+        "passed": true
+      },
+      "fields": {
+        "kind": "fields",
+        "errors": {
+          "u": {
+            "l2": 4.368079965133197e-13,
+            "linf": 8.468781231840694e-13,
+            "first_l2": 6.2885508510281785,
+            "second_l2": 6.288550851028155
+          },
+          "v": {
+            "l2": 6.965779096430463e-13,
+            "linf": 9.071597639742635e-13,
+            "first_l2": 0.1394028067482202,
+            "second_l2": 0.13940280674821398
+          },
+          "w": {
+            "l2": 5.720268041913216e-13,
+            "linf": 9.261688638240173e-13,
+            "first_l2": 0.15597171624610842,
+            "second_l2": 0.1559717162461134
+          },
+          "p": {
+            "l2": 3.106925086180746e-11,
+            "linf": 1.711586178777119e-11,
+            "first_l2": 0.008031017514522358,
+            "second_l2": 0.008031017533851072
+          }
+        },
+        "maximum_velocity_linf": 9.261688638240173e-13,
+        "velocity_limit": 2e-09,
+        "pressure_limit": 2e-08,
+        "passed": true
+      }
+    },
+    "h1d-fftw-mixed4": {
+      "samples": {
+        "kind": "samples",
+        "common_samples": 384,
+        "sample_counts": [
+          384,
+          384
+        ],
+        "raw_max_difference": 0.0,
+        "projected_max_difference": 5.551115123125783e-16,
+        "identical_realization": true,
+        "projected_limit": 5e-12,
+        "passed": true
+      },
+      "fields": {
+        "kind": "fields",
+        "errors": {
+          "u": {
+            "l2": 5.973970592335259e-14,
+            "linf": 2.540190280342358e-13,
+            "first_l2": 6.288924298004008,
+            "second_l2": 6.288924298004011
+          },
+          "v": {
+            "l2": 9.185321610757054e-13,
+            "linf": 3.3737353731001785e-12,
+            "first_l2": 0.1008238460224486,
+            "second_l2": 0.100823846022444
+          },
+          "w": {
+            "l2": 2.8036273956395816e-14,
+            "linf": 5.310682449355397e-14,
+            "first_l2": 0.19536547987163916,
+            "second_l2": 0.1953654798716388
+          },
+          "p": {
+            "l2": 1.3481146229643382e-11,
+            "linf": 5.53566264008265e-12,
+            "first_l2": 0.008173148594090032,
+            "second_l2": 0.008173148585751333
+          }
+        },
+        "maximum_velocity_linf": 3.3737353731001785e-12,
+        "velocity_limit": 2e-09,
+        "pressure_limit": 2e-08,
+        "passed": true
+      }
+    },
+    "h1d-tabulated-mixed8": {
+      "samples": {
+        "kind": "samples",
+        "common_samples": 384,
+        "sample_counts": [
+          384,
+          384
+        ],
+        "raw_max_difference": 0.0,
+        "projected_max_difference": 0.0,
+        "identical_realization": true,
+        "projected_limit": 5e-12,
+        "passed": true
+      },
+      "fields": {
+        "kind": "fields",
+        "errors": {
+          "u": {
+            "l2": 4.3329420632889136e-13,
+            "linf": 4.292122213200855e-13,
+            "first_l2": 6.2885508510281785,
+            "second_l2": 6.288550851028171
+          },
+          "v": {
+            "l2": 7.137445379378498e-13,
+            "linf": 9.182134219631877e-13,
+            "first_l2": 0.1394028067482202,
+            "second_l2": 0.13940280674821415
+          },
+          "w": {
+            "l2": 2.7866581335473906e-13,
+            "linf": 3.653159046969334e-13,
+            "first_l2": 0.15597171624610842,
+            "second_l2": 0.15597171624610845
+          },
+          "p": {
+            "l2": 2.723435522808492e-11,
+            "linf": 1.0709069563205262e-11,
+            "first_l2": 0.008031017514522358,
+            "second_l2": 0.00803101752931704
+          }
+        },
+        "maximum_velocity_linf": 9.182134219631877e-13,
+        "velocity_limit": 2e-09,
+        "pressure_limit": 2e-08,
+        "passed": true
+      }
+    },
+    "h1d-fftw-serial": {
+      "samples": {
+        "kind": "samples",
+        "common_samples": 384,
+        "sample_counts": [
+          384,
+          384
+        ],
+        "raw_max_difference": 0.0,
+        "projected_max_difference": 5.551115123125783e-16,
+        "identical_realization": true,
+        "projected_limit": 5e-12,
+        "passed": true
+      },
+      "fields": {
+        "kind": "fields",
+        "errors": {
+          "u": {
+            "l2": 4.8204230300749574e-14,
+            "linf": 2.3092638912203256e-13,
+            "first_l2": 6.288924298004008,
+            "second_l2": 6.288924298004009
+          },
+          "v": {
+            "l2": 2.2552325034069742e-14,
+            "linf": 2.772955476348926e-14,
+            "first_l2": 0.1008238460224486,
+            "second_l2": 0.1008238460224482
+          },
+          "w": {
+            "l2": 1.3358520086637144e-14,
+            "linf": 2.7595547374970053e-14,
+            "first_l2": 0.19536547987163916,
+            "second_l2": 0.19536547987163846
+          },
+          "p": {
+            "l2": 7.184494130192219e-12,
+            "linf": 8.639487996536799e-12,
+            "first_l2": 0.008173148594090032,
+            "second_l2": 0.008173148589758567
+          }
+        },
+        "maximum_velocity_linf": 2.3092638912203256e-13,
+        "velocity_limit": 2e-09,
+        "pressure_limit": 2e-08,
+        "passed": true
+      }
+    }
+  },
+  "representation_refinement": {
+    "full3d-von-karman-serial/cross-projection.json": {
+      "kind": "samples",
+      "common_samples": 96,
+      "sample_counts": [
+        384,
+        384
+      ],
+      "raw_max_difference": 4.440892098500626e-16,
+      "projected_max_difference": 0.00011338831841956054,
+      "identical_realization": true,
+      "projected_limit": 0.002,
+      "passed": true
+    },
+    "full3d-tabulated-serial/cross-projection.json": {
+      "kind": "samples",
+      "common_samples": 96,
+      "sample_counts": [
+        384,
+        384
+      ],
+      "raw_max_difference": 2.220446049250313e-16,
+      "projected_max_difference": 0.00012520671900118074,
+      "identical_realization": true,
+      "projected_limit": 0.002,
+      "passed": true
+    },
+    "full3d-von-karman-p10/cross-projection.json": {
+      "kind": "samples",
+      "common_samples": 120,
+      "sample_counts": [
+        480,
+        600
+      ],
+      "raw_max_difference": 4.440892098500626e-16,
+      "projected_max_difference": 3.12565144333643e-06,
+      "identical_realization": true,
+      "projected_limit": 5e-05,
+      "passed": true
+    },
+    "full3d-von-karman-p10/cross-projection-refinement.json": {
+      "kind": "refinement",
+      "metric": "projected_max_difference",
+      "coarse": 0.00011338831841956054,
+      "fine": 3.12565144333643e-06,
+      "ratio": 0.02756590349784415,
+      "maximum_ratio": 0.1,
+      "passed": true
+    },
+    "full3d-von-karman-serial/native-cross-statistics.json": {
+      "kind": "statistics",
+      "relative_velocity_l2_differences": {
+        "u": 6.6416801665966785e-06,
+        "v": 0.00014505904651850854,
+        "w": 7.860488830777125e-05
+      },
+      "maximum_relative_velocity_l2_difference": 0.00014505904651850854,
+      "maximum_pressure_l2_difference": 8.400694005764736e-06,
+      "relative_velocity_limit": 0.01,
+      "passed": true
+    },
+    "full3d-tabulated-serial/native-cross-statistics.json": {
+      "kind": "statistics",
+      "relative_velocity_l2_differences": {
+        "u": 6.350684218936413e-06,
+        "v": 0.00010696666003213317,
+        "w": 0.00012165543574831426
+      },
+      "maximum_relative_velocity_l2_difference": 0.00012165543574831426,
+      "maximum_pressure_l2_difference": 9.658207837439162e-06,
+      "relative_velocity_limit": 0.01,
+      "passed": true
+    },
+    "full3d-von-karman-p10/native-cross-statistics.json": {
+      "kind": "statistics",
+      "relative_velocity_l2_differences": {
+        "u": 1.326012258115225e-07,
+        "v": 2.890928570087482e-06,
+        "w": 1.5643690101477592e-06
+      },
+      "maximum_relative_velocity_l2_difference": 2.890928570087482e-06,
+      "maximum_pressure_l2_difference": 9.585804335889014e-08,
+      "relative_velocity_limit": 0.01,
+      "passed": true
+    },
+    "full3d-von-karman-p10/native-statistics-refinement.json": {
+      "kind": "refinement",
+      "metric": "maximum_relative_velocity_l2_difference",
+      "coarse": 0.00014505904651850854,
+      "fine": 2.890928570087482e-06,
+      "ratio": 0.019929322847979835,
+      "maximum_ratio": 0.5,
+      "passed": true
+    },
+    "h1d-von-karman-h16/fourier-samples.json": {
+      "kind": "samples",
+      "common_samples": 384,
+      "sample_counts": [
+        384,
+        768
+      ],
+      "raw_max_difference": 0.0,
+      "projected_max_difference": 6.661338147750939e-16,
+      "identical_realization": true,
+      "projected_limit": 5e-12,
+      "passed": true
+    },
+    "h1d-von-karman-h16/native-fourier-statistics.json": {
+      "kind": "statistics",
+      "relative_velocity_l2_differences": {
+        "u": 4.236869666162225e-16,
+        "v": 5.505756169914227e-16,
+        "w": 3.2676102225372577e-15
+      },
+      "maximum_relative_velocity_l2_difference": 3.2676102225372577e-15,
+      "maximum_pressure_l2_difference": 1.1016233064653491e-11,
+      "relative_velocity_limit": 0.01,
+      "passed": true
+    }
+  },
+  "restart_results": {
+    "h1d-restart-coarse/restart-fields.json": {
+      "kind": "fields",
+      "errors": {
+        "u": {
+          "l2": 3.3648510435013657e-06,
+          "linf": 1.879709815355568e-06,
+          "first_l2": 6.288924298004008,
+          "second_l2": 6.288924163141652
+        },
+        "v": {
+          "l2": 7.085544571415158e-06,
+          "linf": 7.627959030205578e-06,
+          "first_l2": 0.10082384602244858,
+          "second_l2": 0.10082547956375319
+        },
+        "w": {
+          "l2": 1.1267243045825884e-05,
+          "linf": 1.1530094931523627e-05,
+          "first_l2": 0.19536547987163916,
+          "second_l2": 0.19536696768372708
+        },
+        "p": {
+          "l2": 2.051366521575522e-05,
+          "linf": 1.4830899395803458e-05,
+          "first_l2": 0.00817314859409003,
+          "second_l2": 0.008175414960695328
+        }
+      },
+      "maximum_velocity_linf": 1.1530094931523627e-05,
+      "velocity_limit": 0.0002,
+      "pressure_limit": 0.002,
+      "passed": true
+    },
+    "h1d-restart-fine/restart-fields.json": {
+      "kind": "fields",
+      "errors": {
+        "u": {
+          "l2": 7.842298189786117e-07,
+          "linf": 4.471768622060779e-07,
+          "first_l2": 6.288923686054496,
+          "second_l2": 6.288923654962266
+        },
+        "v": {
+          "l2": 1.7239237132618518e-06,
+          "linf": 1.7925531356974278e-06,
+          "first_l2": 0.10082058432052568,
+          "second_l2": 0.10082096795817137
+        },
+        "w": {
+          "l2": 2.7472930719112676e-06,
+          "linf": 2.7323556724551112e-06,
+          "first_l2": 0.19536953258366324,
+          "second_l2": 0.1953698958768521
+        },
+        "p": {
+          "l2": 3.690564885850299e-06,
+          "linf": 4.350484676144241e-06,
+          "first_l2": 0.008175755553314987,
+          "second_l2": 0.008175969282701602
+        }
+      },
+      "maximum_velocity_linf": 2.7323556724551112e-06,
+      "velocity_limit": 0.0002,
+      "pressure_limit": 0.002,
+      "passed": true
+    },
+    "h1d-restart-fine/restart-refinement.json": {
+      "kind": "refinement",
+      "metric": "maximum_velocity_linf",
+      "coarse": 1.1530094931523627e-05,
+      "fine": 2.7323556724551112e-06,
+      "ratio": 0.23697599097686253,
+      "maximum_ratio": 0.75,
+      "passed": true
+    },
+    "full3d-restart-coarse/restart-fields.json": {
+      "kind": "fields",
+      "errors": {
+        "u": {
+          "l2": 3.364292274505902e-06,
+          "linf": 1.7788105459715098e-06,
+          "first_l2": 6.288882528980229,
+          "second_l2": 6.2888823941717105
+        },
+        "v": {
+          "l2": 7.084550120164476e-06,
+          "linf": 7.550429602667941e-06,
+          "first_l2": 0.10080922061147823,
+          "second_l2": 0.10081085367503385
+        },
+        "w": {
+          "l2": 1.1265207666067969e-05,
+          "linf": 1.1485841617545067e-05,
+          "first_l2": 0.19535012318991465,
+          "second_l2": 0.1953516106329382
+        },
+        "p": {
+          "l2": 2.051230185031398e-05,
+          "linf": 1.4710482415508609e-05,
+          "first_l2": 0.008164747900084266,
+          "second_l2": 0.008167002984091214
+        }
+      },
+      "maximum_velocity_linf": 1.1485841617545067e-05,
+      "velocity_limit": 0.0002,
+      "pressure_limit": 0.002,
+      "passed": true
+    },
+    "full3d-restart-fine/restart-fields.json": {
+      "kind": "fields",
+      "errors": {
+        "u": {
+          "l2": 7.841043708720811e-07,
+          "linf": 4.2345624651218827e-07,
+          "first_l2": 6.288881920076658,
+          "second_l2": 6.288881888994598
+        },
+        "v": {
+          "l2": 1.7236805322715977e-06,
+          "linf": 1.7768886415789331e-06,
+          "first_l2": 0.10080596553027625,
+          "second_l2": 0.10080634905281596
+        },
+        "w": {
+          "l2": 2.7468000219982636e-06,
+          "linf": 2.7230113867904304e-06,
+          "first_l2": 0.19535417452114276,
+          "second_l2": 0.19535453773038935
+        },
+        "p": {
+          "l2": 3.690158163957818e-06,
+          "linf": 4.1711568477425555e-06,
+          "first_l2": 0.008167580043118872,
+          "second_l2": 0.008167791829461661
+        }
+      },
+      "maximum_velocity_linf": 2.7230113867904304e-06,
+      "velocity_limit": 0.0002,
+      "pressure_limit": 0.002,
+      "passed": true
+    },
+    "full3d-restart-fine/restart-refinement.json": {
+      "kind": "refinement",
+      "metric": "maximum_velocity_linf",
+      "coarse": 1.1485841617545067e-05,
+      "fine": 2.7230113867904304e-06,
+      "ratio": 0.23707547757152816,
+      "maximum_ratio": 0.75,
+      "passed": true
+    },
+    "h1d-filter-restart/restart-fields.json": {
+      "kind": "fields",
+      "errors": {
+        "u": {
+          "l2": 3.3648510435013657e-06,
+          "linf": 1.879709815355568e-06,
+          "first_l2": 6.288924298004008,
+          "second_l2": 6.288924163141652
+        },
+        "v": {
+          "l2": 7.085544571415158e-06,
+          "linf": 7.627959030205578e-06,
+          "first_l2": 0.10082384602244858,
+          "second_l2": 0.10082547956375319
+        },
+        "w": {
+          "l2": 1.1267243045825884e-05,
+          "linf": 1.1530094931523627e-05,
+          "first_l2": 0.19536547987163916,
+          "second_l2": 0.19536696768372708
+        },
+        "p": {
+          "l2": 2.051366521575522e-05,
+          "linf": 1.4830899395803458e-05,
+          "first_l2": 0.00817314859409003,
+          "second_l2": 0.008175414960695328
+        }
+      },
+      "maximum_velocity_linf": 1.1530094931523627e-05,
+      "velocity_limit": 0.0002,
+      "pressure_limit": 0.002,
+      "passed": true
+    },
+    "h1d-restart-mpi/mpi-restart-fields.json": {
+      "kind": "fields",
+      "errors": {
+        "u": {
+          "l2": 4.2486105132678783e-13,
+          "linf": 3.239630785856207e-13,
+          "first_l2": 6.288924163141652,
+          "second_l2": 6.288924163141652
+        },
+        "v": {
+          "l2": 1.1775792727756129e-12,
+          "linf": 2.842289771598505e-12,
+          "first_l2": 0.10082547956375319,
+          "second_l2": 0.10082547956378651
+        },
+        "w": {
+          "l2": 2.4384163802110307e-13,
+          "linf": 1.5067114222944156e-13,
+          "first_l2": 0.19536696768372708,
+          "second_l2": 0.1953669676836738
+        },
+        "p": {
+          "l2": 1.0044083268395002e-10,
+          "linf": 7.396339497898335e-11,
+          "first_l2": 0.008175414960695328,
+          "second_l2": 0.008175414958334043
+        }
+      },
+      "maximum_velocity_linf": 2.842289771598505e-12,
+      "velocity_limit": 2e-09,
+      "pressure_limit": 2e-08,
+      "passed": true
+    },
+    "restart-guards/tabulated/restart-fields.json": {
+      "kind": "fields",
+      "errors": {
+        "u": {
+          "l2": 3.4804864310780803e-06,
+          "linf": 1.4538975243727492e-06,
+          "first_l2": 6.2885508510281785,
+          "second_l2": 6.288550715612647
+        },
+        "v": {
+          "l2": 8.54081692823352e-06,
+          "linf": 9.444695449049856e-06,
+          "first_l2": 0.1394028067482202,
+          "second_l2": 0.13940484595380104
+        },
+        "w": {
+          "l2": 9.978785778747937e-06,
+          "linf": 1.0829201000664423e-05,
+          "first_l2": 0.15597171624610842,
+          "second_l2": 0.15597295105807757
+        },
+        "p": {
+          "l2": 2.6589974912654145e-05,
+          "linf": 1.9695864376541826e-05,
+          "first_l2": 0.008031017514522358,
+          "second_l2": 0.008034702558586668
+        }
+      },
+      "maximum_velocity_linf": 1.0829201000664423e-05,
+      "velocity_limit": 0.0002,
+      "pressure_limit": 0.002,
+      "passed": true
+    }
+  },
+  "configuration_and_field_guards": [
+    {
+      "name": "missing-table",
+      "command": [
+        "mpirun",
+        "-np",
+        "4",
+        "/home/jay/build/nektar-v2026-mpi/library/UnitTests/SolverUtils/HITBoundaryProbe",
+        "--npz",
+        "2",
+        "case.xml"
+      ],
+      "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/guards/missing-table",
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/guards/missing-table/missing-table.log",
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "expected_token": "cannot read spectrum file",
+      "seconds": 1.7194316200002504,
+      "passed": true
+    },
+    {
+      "name": "period-mismatch",
+      "command": [
+        "mpirun",
+        "-np",
+        "4",
+        "/home/jay/build/nektar-v2026-mpi/library/UnitTests/SolverUtils/HITBoundaryProbe",
+        "--npz",
+        "2",
+        "case.xml"
+      ],
+      "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/guards/period-mismatch",
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/guards/period-mismatch/period-mismatch.log",
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "expected_token": "LZ must match",
+      "seconds": 0.7164769470000465,
+      "passed": true
+    },
+    {
+      "name": "nyquist",
+      "command": [
+        "mpirun",
+        "-np",
+        "4",
+        "/home/jay/build/nektar-v2026-mpi/library/UnitTests/SolverUtils/HITBoundaryProbe",
+        "--npz",
+        "2",
+        "case.xml"
+      ],
+      "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/guards/nyquist",
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/guards/nyquist/nyquist.log",
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "expected_token": "Nyquist",
+      "seconds": 1.7197624079999514,
+      "passed": true
+    },
+    {
+      "name": "half-mode",
+      "command": [
+        "mpirun",
+        "-np",
+        "4",
+        "/home/jay/build/nektar-v2026-mpi/library/UnitTests/SolverUtils/HITBoundaryProbe",
+        "--npz",
+        "2",
+        "case.xml"
+      ],
+      "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/guards/half-mode",
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/guards/half-mode/half-mode.log",
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "expected_token": "single/half modes",
+      "seconds": 1.7196060109999962,
+      "passed": true
+    },
+    {
+      "name": "strip",
+      "command": [
+        "mpirun",
+        "-np",
+        "4",
+        "/home/jay/build/nektar-v2026-mpi/library/UnitTests/SolverUtils/HITBoundaryProbe",
+        "--npz",
+        "2",
+        "case.xml"
+      ],
+      "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/guards/strip",
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/guards/strip/strip.log",
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "expected_token": "HomoStrip",
+      "seconds": 1.7193629270000201,
+      "passed": true
+    },
+    {
+      "name": "mode-mismatch",
+      "command": [
+        "/home/jay/build/nektar-v2026-mpi/library/UnitTests/SolverUtils/HITFieldCompare",
+        "case.xml",
+        "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-von-karman-serial/m4-h1d-von-karman.fld",
+        "changed.fld"
+      ],
+      "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/guards/mode-mismatch",
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/guards/mode-mismatch/mode-mismatch.log",
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "expected_token": "matching representation and expansion modes",
+      "seconds": 0.7662166800000705,
+      "passed": true
+    },
+    {
+      "name": "field-period-mismatch",
+      "command": [
+        "/home/jay/build/nektar-v2026-mpi/library/UnitTests/SolverUtils/HITFieldCompare",
+        "case.xml",
+        "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-von-karman-serial/m4-h1d-von-karman.fld",
+        "changed.fld"
+      ],
+      "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/guards/field-period-mismatch",
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/guards/field-period-mismatch/field-period-mismatch.log",
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "expected_token": "Mismatched homogeneous period",
+      "seconds": 4.224489899000218,
+      "passed": true
+    },
+    {
+      "name": "missing-plane",
+      "command": [
+        "/home/jay/build/nektar-v2026-mpi/library/UnitTests/SolverUtils/HITFieldCompare",
+        "case.xml",
+        "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-von-karman-serial/m4-h1d-von-karman.fld",
+        "changed.fld"
+      ],
+      "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/guards/missing-plane",
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/guards/missing-plane/missing-plane.log",
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "expected_token": "",
+      "seconds": 3.673521640999752,
+      "passed": true
+    },
+    {
+      "name": "partial-partition",
+      "command": [
+        "/home/jay/build/nektar-v2026-mpi/library/UnitTests/SolverUtils/HITFieldCompare",
+        "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-von-karman-serial/m4-h1d-von-karman.xml",
+        "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-von-karman-serial/m4-h1d-von-karman.fld",
+        "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-von-karman-mesh4/m4-h1d-von-karman.fld/P0000000.fld"
+      ],
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/guards/partial-partition/compare.log",
+      "exit_code": 1,
+      "passed": true
+    }
+  ],
+  "restart_guards": [
+    {
+      "name": "seed",
+      "command": [
+        "mpirun",
+        "-np",
+        "4",
+        "/home/jay/.local/opt/nektar-v2026-mpi/bin/IncNavierStokesSolver",
+        "--npz",
+        "2",
+        "case.xml"
+      ],
+      "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/restart-guards/seed",
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/restart-guards/seed/solver.log",
+      "exit_code": 1,
+      "seconds": 0.7158787660000598,
+      "passed": true
+    },
+    {
+      "name": "missing-identity",
+      "command": [
+        "/home/jay/.local/opt/nektar-v2026-mpi/bin/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/restart-guards/missing-identity",
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/restart-guards/missing-identity/solver.log",
+      "exit_code": 1,
+      "seconds": 0.7662168189999647,
+      "passed": true
+    },
+    {
+      "name": "missing-time",
+      "command": [
+        "/home/jay/.local/opt/nektar-v2026-mpi/bin/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/restart-guards/missing-time",
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/restart-guards/missing-time/solver.log",
+      "exit_code": 1,
+      "seconds": 0.7161976269999286,
+      "passed": true
+    },
+    {
+      "name": "invalid-time",
+      "command": [
+        "/home/jay/.local/opt/nektar-v2026-mpi/bin/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/restart-guards/invalid-time",
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/restart-guards/invalid-time/solver.log",
+      "exit_code": 1,
+      "seconds": 3.7733581990000857,
+      "passed": true
+    },
+    {
+      "name": "phase-reset",
+      "command": [
+        "mpirun",
+        "-np",
+        "4",
+        "/home/jay/.local/opt/nektar-v2026-mpi/bin/IncNavierStokesSolver",
+        "--npz",
+        "2",
+        "--set-start-time",
+        "0",
+        "case.xml"
+      ],
+      "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/restart-guards/phase-reset",
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/restart-guards/phase-reset/solver.log",
+      "exit_code": 1,
+      "seconds": 3.7234846679998554,
+      "passed": true
+    },
+    {
+      "name": "environment",
+      "command": [
+        "mpirun",
+        "-np",
+        "4",
+        "/home/jay/.local/opt/nektar-v2026-mpi/bin/IncNavierStokesSolver",
+        "--npz",
+        "2",
+        "case.xml"
+      ],
+      "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/restart-guards/environment",
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/restart-guards/environment/solver.log",
+      "exit_code": 1,
+      "seconds": 1.721219592000125,
+      "passed": true
+    },
+    {
+      "name": "overrun",
+      "command": [
+        "/home/jay/.local/opt/nektar-v2026-mpi/bin/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/restart-guards/overrun",
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/restart-guards/overrun/solver.log",
+      "exit_code": 1,
+      "seconds": 0.7662249099998917,
+      "passed": true
+    },
+    {
+      "name": "mixed-initial",
+      "command": [
+        "/home/jay/.local/opt/nektar-v2026-mpi/bin/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/restart-guards/mixed-initial",
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/restart-guards/mixed-initial/solver.log",
+      "exit_code": 1,
+      "seconds": 0.716299829000036,
+      "passed": true
+    },
+    {
+      "name": "different-files",
+      "command": [
+        "/home/jay/.local/opt/nektar-v2026-mpi/bin/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/restart-guards/different-files",
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/restart-guards/different-files/solver.log",
+      "exit_code": 1,
+      "seconds": 0.7163463329998194,
+      "passed": true
+    },
+    {
+      "name": "mutable-policy",
+      "command": [
+        "/home/jay/.local/opt/nektar-v2026-mpi/bin/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/restart-guards/mutable-policy",
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/restart-guards/mutable-policy/solver.log",
+      "exit_code": 0,
+      "seconds": 0.9517391769995811,
+      "passed": true
+    },
+    {
+      "name": "tabulated-segment",
+      "command": [
+        "/home/jay/.local/opt/nektar-v2026-mpi/bin/IncNavierStokesSolver",
+        "tab-segment.xml"
+      ],
+      "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/restart-guards/tabulated",
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/restart-guards/tabulated/tabulated-segment.log",
+      "exit_code": 0,
+      "seconds": 4.374814790000073,
+      "passed": true
+    },
+    {
+      "name": "tabulated-restart",
+      "command": [
+        "mpirun",
+        "-np",
+        "4",
+        "/home/jay/.local/opt/nektar-v2026-mpi/bin/IncNavierStokesSolver",
+        "--npz",
+        "2",
+        "tab-restart.xml"
+      ],
+      "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/restart-guards/tabulated",
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/restart-guards/tabulated/tabulated-restart.log",
+      "exit_code": 0,
+      "seconds": 2.72160464100034,
+      "passed": true
+    },
+    {
+      "name": "tabulated-restart-fields",
+      "command": [
+        "/home/jay/build/nektar-v2026-mpi/library/UnitTests/SolverUtils/HITFieldCompare",
+        "tab-restart.xml",
+        "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-tabulated-serial/m4-h1d-tabulated.fld",
+        "tab-restart.fld"
+      ],
+      "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/restart-guards/tabulated",
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/restart-guards/tabulated/tabulated-restart-fields.log",
+      "exit_code": 0,
+      "seconds": 0.8166602950000197,
+      "passed": true
+    },
+    {
+      "name": "tabulated-changed-bytes",
+      "command": [
+        "mpirun",
+        "-np",
+        "4",
+        "/home/jay/.local/opt/nektar-v2026-mpi/bin/IncNavierStokesSolver",
+        "--npz",
+        "2",
+        "tab-restart.xml"
+      ],
+      "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/restart-guards/tabulated",
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/restart-guards/tabulated/tabulated-changed-bytes.log",
+      "exit_code": 1,
+      "seconds": 0.7159617239999534,
+      "passed": true
+    }
+  ],
+  "checkpoint_metadata": [
+    {
+      "file": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-restart-coarse/m4-h1d-segment_1.chk",
+      "sha256": "28a1409482be458f2f0c58d23c65856e86035efbc9b780271a1512427f15b6e7",
+      "time": "0.010000000000000002",
+      "hit_metadata": {
+        "HITInflow.Algorithm": "SplitMix64BoxMuller52V1",
+        "HITInflow.BuildGit": "bbc49bd91d1e3b7e282a4dd9edae7de3de2258e5",
+        "HITInflow.Counts": "4 4 4",
+        "HITInflow.Cutoff": "1.55",
+        "HITInflow.EnergyScale": "0.043912490040650606",
+        "HITInflow.Environment": "compiler=11.4.0;platform=Linux;glibc=2.35;cplusplus=201703;sizeof=8;digits=53;iec559=1;round=0;fastmath=0",
+        "HITInflow.IdentitySHA256": "94e209ef76eab45bfdc233abe78af5f368f1b500a8ce5a93c30d8fef2f5f9c38",
+        "HITInflow.Lengths": "6.2831853071795862 6.2831853071795862 6.2831853071795862",
+        "HITInflow.Mean": "1 0 0",
+        "HITInflow.ModesSHA256": "2b0d695f9f3fc283538923af3c417d578468ad61145fbd0ea7d29b4ffb9511c3",
+        "HITInflow.Normalization": "TargetRMS",
+        "HITInflow.NormalizedTable": "none",
+        "HITInflow.Origin": "0 0 0",
+        "HITInflow.RecordDuration": "0.02",
+        "HITInflow.Repeat": "Error",
+        "HITInflow.Schema": "1",
+        "HITInflow.Seed": "20261028",
+        "HITInflow.Spectrum": "VonKarman LENGTH=0.80000000000000004 AMPLITUDE=1",
+        "HITInflow.SpectrumSHA256": "none",
+        "HITInflow.TaperStart": "1.5",
+        "HITInflow.TargetRMS": "0.050000000000000003",
+        "HITInflow.TimeOrigin": "0",
+        "HITInflow.TimeStep": "0.001"
+      }
+    },
+    {
+      "file": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/full3d-restart-coarse/m4-full3d-segment_1.chk",
+      "sha256": "b01bb4a7d8236df4d25c76bc33da1b9b0e6a3838411d8639a0fe07dd363f20ab",
+      "time": "0.010000000000000002",
+      "hit_metadata": {
+        "HITInflow.Algorithm": "SplitMix64BoxMuller52V1",
+        "HITInflow.BuildGit": "bbc49bd91d1e3b7e282a4dd9edae7de3de2258e5",
+        "HITInflow.Counts": "4 4 4",
+        "HITInflow.Cutoff": "1.55",
+        "HITInflow.EnergyScale": "0.043912490040650606",
+        "HITInflow.Environment": "compiler=11.4.0;platform=Linux;glibc=2.35;cplusplus=201703;sizeof=8;digits=53;iec559=1;round=0;fastmath=0",
+        "HITInflow.IdentitySHA256": "94e209ef76eab45bfdc233abe78af5f368f1b500a8ce5a93c30d8fef2f5f9c38",
+        "HITInflow.Lengths": "6.2831853071795862 6.2831853071795862 6.2831853071795862",
+        "HITInflow.Mean": "1 0 0",
+        "HITInflow.ModesSHA256": "2b0d695f9f3fc283538923af3c417d578468ad61145fbd0ea7d29b4ffb9511c3",
+        "HITInflow.Normalization": "TargetRMS",
+        "HITInflow.NormalizedTable": "none",
+        "HITInflow.Origin": "0 0 0",
+        "HITInflow.RecordDuration": "0.02",
+        "HITInflow.Repeat": "Error",
+        "HITInflow.Schema": "1",
+        "HITInflow.Seed": "20261028",
+        "HITInflow.Spectrum": "VonKarman LENGTH=0.80000000000000004 AMPLITUDE=1",
+        "HITInflow.SpectrumSHA256": "none",
+        "HITInflow.TaperStart": "1.5",
+        "HITInflow.TargetRMS": "0.050000000000000003",
+        "HITInflow.TimeOrigin": "0",
+        "HITInflow.TimeStep": "0.001"
+      }
+    },
+    {
+      "file": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-filter-restart/m4-h1d-filter_1.chk",
+      "sha256": "918e216775321b66c5831c6ac3c52672de5fca75ce66fc52697d14491fe36c38",
+      "time": "0.010000000000000002",
+      "hit_metadata": {
+        "HITInflow.Algorithm": "SplitMix64BoxMuller52V1",
+        "HITInflow.BuildGit": "bbc49bd91d1e3b7e282a4dd9edae7de3de2258e5",
+        "HITInflow.Counts": "4 4 4",
+        "HITInflow.Cutoff": "1.55",
+        "HITInflow.EnergyScale": "0.043912490040650606",
+        "HITInflow.Environment": "compiler=11.4.0;platform=Linux;glibc=2.35;cplusplus=201703;sizeof=8;digits=53;iec559=1;round=0;fastmath=0",
+        "HITInflow.IdentitySHA256": "94e209ef76eab45bfdc233abe78af5f368f1b500a8ce5a93c30d8fef2f5f9c38",
+        "HITInflow.Lengths": "6.2831853071795862 6.2831853071795862 6.2831853071795862",
+        "HITInflow.Mean": "1 0 0",
+        "HITInflow.ModesSHA256": "2b0d695f9f3fc283538923af3c417d578468ad61145fbd0ea7d29b4ffb9511c3",
+        "HITInflow.Normalization": "TargetRMS",
+        "HITInflow.NormalizedTable": "none",
+        "HITInflow.Origin": "0 0 0",
+        "HITInflow.RecordDuration": "0.02",
+        "HITInflow.Repeat": "Error",
+        "HITInflow.Schema": "1",
+        "HITInflow.Seed": "20261028",
+        "HITInflow.Spectrum": "VonKarman LENGTH=0.80000000000000004 AMPLITUDE=1",
+        "HITInflow.SpectrumSHA256": "none",
+        "HITInflow.TaperStart": "1.5",
+        "HITInflow.TargetRMS": "0.050000000000000003",
+        "HITInflow.TimeOrigin": "0",
+        "HITInflow.TimeStep": "0.001"
+      }
+    },
+    {
+      "file": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/restart-guards/tabulated/tab-segment_1.chk",
+      "sha256": "29b64adc94b72d0ba95f2f2870634d41decea8fa42699422720580b54f9f657d",
+      "time": "0.010000000000000002",
+      "hit_metadata": {
+        "HITInflow.Algorithm": "SplitMix64BoxMuller52V1",
+        "HITInflow.BuildGit": "bbc49bd91d1e3b7e282a4dd9edae7de3de2258e5",
+        "HITInflow.Counts": "4 4 4",
+        "HITInflow.Cutoff": "1.55",
+        "HITInflow.EnergyScale": "0.0078539816339744852",
+        "HITInflow.Environment": "compiler=11.4.0;platform=Linux;glibc=2.35;cplusplus=201703;sizeof=8;digits=53;iec559=1;round=0;fastmath=0",
+        "HITInflow.IdentitySHA256": "64378640a976162fee8ec0854eba5de9bfd547025421608532e37eb8a8f596c6",
+        "HITInflow.Lengths": "6.2831853071795862 6.2831853071795862 6.2831853071795862",
+        "HITInflow.Mean": "1 0 0",
+        "HITInflow.ModesSHA256": "8cbfc485f4f4b107b7a7e095cb7493da43e0e53852a4369c0cf13ccfc06e345f",
+        "HITInflow.Normalization": "TargetRMS",
+        "HITInflow.NormalizedTable": "1.1000000000000001 0 1.4142135623730951 0.0078539816339744852 1.6000000000000001 0",
+        "HITInflow.Origin": "0 0 0",
+        "HITInflow.RecordDuration": "0.02",
+        "HITInflow.Repeat": "Error",
+        "HITInflow.Schema": "1",
+        "HITInflow.Seed": "20261028",
+        "HITInflow.Spectrum": "Tabulated INTERPOLATION=Linear LOW=Zero HIGH=Zero",
+        "HITInflow.SpectrumSHA256": "865d81ad44ef51a83bde04bbbb2134125c0508ef918d643f7884e7895072b191",
+        "HITInflow.TaperStart": "1.5",
+        "HITInflow.TargetRMS": "0.050000000000000003",
+        "HITInflow.TimeOrigin": "0",
+        "HITInflow.TimeStep": "0.001"
+      }
+    }
+  ],
+  "partition_vertex_checks": [
+    {
+      "case": "h1d-von-karman-mesh4",
+      "partition_files": [
+        {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-von-karman-mesh4/m4-h1d-von-karman_xml/P0000000.xml",
+          "sha256": "ef7d459a57098133224b5837fe27527a2473311aa2dbeec651c5037aab0fdabe",
+          "vertices": 4
+        },
+        {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-von-karman-mesh4/m4-h1d-von-karman_xml/P0000001.xml",
+          "sha256": "e75a2e8ed1099d3b3026def5ed2fe9e6284c299def1f438d64b57eb026bfb575",
+          "vertices": 4
+        },
+        {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-von-karman-mesh4/m4-h1d-von-karman_xml/P0000002.xml",
+          "sha256": "443eb8513265ecd8f91599d49a2f313899a7293201803df1f398fe9f5265114c",
+          "vertices": 4
+        },
+        {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-von-karman-mesh4/m4-h1d-von-karman_xml/P0000003.xml",
+          "sha256": "d870caa49dc81883432dfda37e2f00ebb616e5d2dc2db3576f98198173c0e1e6",
+          "vertices": 4
+        }
+      ],
+      "vertices_roundtrip_exact": true,
+      "ranks_without_inlet": [
+        0,
+        3
+      ]
+    },
+    {
+      "case": "h1d-von-karman-homogeneous4",
+      "partition_files": [],
+      "vertices_roundtrip_exact": true,
+      "ranks_without_inlet": []
+    },
+    {
+      "case": "h1d-von-karman-mixed4",
+      "partition_files": [
+        {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-von-karman-mixed4/m4-h1d-von-karman_xml/P0000000.xml",
+          "sha256": "67912597c15c3f95411cb41d9d65164ba86adb6bd125cbd03bf64289b45fe4a7",
+          "vertices": 6
+        },
+        {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-von-karman-mixed4/m4-h1d-von-karman_xml/P0000001.xml",
+          "sha256": "0feaba29e0e27b062985b55f578762be6c2296bd1a5d3f5e831b9afccdddc124",
+          "vertices": 6
+        }
+      ],
+      "vertices_roundtrip_exact": true,
+      "ranks_without_inlet": []
+    },
+    {
+      "case": "h1d-von-karman-mixed8",
+      "partition_files": [
+        {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-von-karman-mixed8/m4-h1d-von-karman_xml/P0000000.xml",
+          "sha256": "ef7d459a57098133224b5837fe27527a2473311aa2dbeec651c5037aab0fdabe",
+          "vertices": 4
+        },
+        {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-von-karman-mixed8/m4-h1d-von-karman_xml/P0000001.xml",
+          "sha256": "e75a2e8ed1099d3b3026def5ed2fe9e6284c299def1f438d64b57eb026bfb575",
+          "vertices": 4
+        },
+        {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-von-karman-mixed8/m4-h1d-von-karman_xml/P0000002.xml",
+          "sha256": "443eb8513265ecd8f91599d49a2f313899a7293201803df1f398fe9f5265114c",
+          "vertices": 4
+        },
+        {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-von-karman-mixed8/m4-h1d-von-karman_xml/P0000003.xml",
+          "sha256": "d870caa49dc81883432dfda37e2f00ebb616e5d2dc2db3576f98198173c0e1e6",
+          "vertices": 4
+        }
+      ],
+      "vertices_roundtrip_exact": true,
+      "ranks_without_inlet": [
+        0,
+        3,
+        4,
+        7
+      ]
+    },
+    {
+      "case": "full3d-von-karman-mesh4",
+      "partition_files": [
+        {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/full3d-von-karman-mesh4/m4-full3d-von-karman_xml/P0000000.xml",
+          "sha256": "7d5a096f0c134eb23a6454c1adb3eaa32b6b5f3ed5ccaa352cda37c7a5402fd5",
+          "vertices": 8
+        },
+        {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/full3d-von-karman-mesh4/m4-full3d-von-karman_xml/P0000001.xml",
+          "sha256": "b3a2203445fe9679c79365cb9c61c39fa5c422ca65a7550423566c670aadce6e",
+          "vertices": 8
+        },
+        {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/full3d-von-karman-mesh4/m4-full3d-von-karman_xml/P0000002.xml",
+          "sha256": "ace81e9ddb33f607502f5407696bb318dd8242d995427cd56171f9fc0ca816f7",
+          "vertices": 8
+        },
+        {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/full3d-von-karman-mesh4/m4-full3d-von-karman_xml/P0000003.xml",
+          "sha256": "d375b188c34da35aeea8b30bda90fef1422aac2b374d9d01565791f9fa94ec9a",
+          "vertices": 8
+        }
+      ],
+      "vertices_roundtrip_exact": true,
+      "ranks_without_inlet": [
+        0,
+        3
+      ]
+    },
+    {
+      "case": "h1d-tabulated-mixed4",
+      "partition_files": [
+        {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-tabulated-mixed4/m4-h1d-tabulated_xml/P0000000.xml",
+          "sha256": "8973b9f19b11e721eca70761b8f5abc14ffeffcd53f43c196e3bb63989de8f57",
+          "vertices": 6
+        },
+        {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-tabulated-mixed4/m4-h1d-tabulated_xml/P0000001.xml",
+          "sha256": "f45088ff423b6955fdfefb09830b4a12d23ba6e4eea0ff2ea2642853ececd8a9",
+          "vertices": 6
+        }
+      ],
+      "vertices_roundtrip_exact": true,
+      "ranks_without_inlet": []
+    },
+    {
+      "case": "h1d-fftw-mixed4",
+      "partition_files": [
+        {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-fftw-mixed4/m4-h1d-fftw_xml/P0000000.xml",
+          "sha256": "1b67a326317f0ad8dada58a9fdae00c71a65171d52f884047b398550b30b7c22",
+          "vertices": 6
+        },
+        {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-fftw-mixed4/m4-h1d-fftw_xml/P0000001.xml",
+          "sha256": "03d9898dd0c9013d13d869afa17b105e2ef36ad12aa62b540d0f28b06e4175de",
+          "vertices": 6
+        }
+      ],
+      "vertices_roundtrip_exact": true,
+      "ranks_without_inlet": []
+    },
+    {
+      "case": "h1d-tabulated-mixed8",
+      "partition_files": [
+        {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-tabulated-mixed8/m4-h1d-tabulated_xml/P0000000.xml",
+          "sha256": "762023e0fadac7b08753a9ee0e460c5369a0f6b28c845973b5c4a7492d689d95",
+          "vertices": 4
+        },
+        {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-tabulated-mixed8/m4-h1d-tabulated_xml/P0000001.xml",
+          "sha256": "f7812917a56d4e66ba761031f959ee7cecf7cdcf899ae51333f69caa38905af7",
+          "vertices": 4
+        },
+        {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-tabulated-mixed8/m4-h1d-tabulated_xml/P0000002.xml",
+          "sha256": "89a92a19e1c3dd51c82a1c6f019d12d0365a303c80f6b355c239c76d7d4c0c70",
+          "vertices": 4
+        },
+        {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-tabulated-mixed8/m4-h1d-tabulated_xml/P0000003.xml",
+          "sha256": "c8201b85c89462bf6aca2cc358ac2726d929eb35d3aefc4aba8cde9cad864c0e",
+          "vertices": 4
+        }
+      ],
+      "vertices_roundtrip_exact": true,
+      "ranks_without_inlet": [
+        0,
+        3,
+        4,
+        7
+      ]
+    }
+  ],
+  "fixture_sha256": {
+    "m4-acceptance.json": "6947d807f823e6ddf2dce336576074719a5107aef9e51ed6ad643a454534e922",
+    "m4-full3d-mean-only.xml": "163cc8325299af49f57b55cd61fda87aaa29a3d6333725c909d9db463b5cb62c",
+    "m4-full3d-restart.xml": "0c0163cd1d858bcd2153a7859898df176f9d3ae023f09b113595ee9672b20857",
+    "m4-full3d-segment.xml": "a5d0fc040819b8dd2355bab8cc38d35ebbb2cf932755d5e9f0969270af4a40a9",
+    "m4-full3d-tabulated.xml": "a12551724a6c570516accdec16b086803a641ed6c15b5a4ddfdf75542415d47b",
+    "m4-full3d-von-karman.xml": "186a8b09b23a518b65eb3d7d71e5c236fa421dc1f54eadc6e9c67784659f7b56",
+    "m4-h1d-checkpoint-filter.xml": "42724256c155b6d10732898569e02c832669438968f86fe422891c32101a6c3e",
+    "m4-h1d-fftw.xml": "7033c0df99b8577c985996903deebd74e6348d39c14ea6d2f891957f8e59faca",
+    "m4-h1d-filter-restart.xml": "adb8dccc7cf260b26ff7212197ebac552489b2e5b0cd54265f95b44adc9adeeb",
+    "m4-h1d-mean-only.xml": "dcdf751b951d3a1a6e36a57c540c6a7b3407770d2df6f959b886acdd75d1ffb3",
+    "m4-h1d-restart.xml": "1eaddaa58d819085612bac228db551c43ab9d93e3cbea2d33bec6f782a9594a0",
+    "m4-h1d-segment.xml": "13cd073afefd8b6b837742c173103663978a4b17f55ebe2ac3382b34720c2826",
+    "m4-h1d-tabulated.xml": "7eabe43fe6127b73a0290959fe1bba80adee3be6900b6974d5cf10ef6d881e7a",
+    "m4-h1d-von-karman.xml": "26541486302be5f5d8f82b5b428b834f37441d64c43d04dd3f40d527760f8ab1",
+    "m4-shell-spectrum.dat": "865d81ad44ef51a83bde04bbbb2134125c0508ef918d643f7884e7895072b191",
+    "generate_m4_cases.py": "e8650aade6bee0d9ea6f45ce5762765207aecdc81025901b016eac5db3cfea7c",
+    "check_m4_cases.py": "fafa371ee55ccd6bc9988ebea5aab1895bc682f8459cccd8e7f12546bb9bf94c",
+    "README-m4.md": "105d3b36f16f9b077250d01ab932ed38e5af1203a002e76be04de7d4be478327"
+  },
+  "execution_helpers": {
+    "run_guards.py": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/run_guards.py",
+      "sha256": "e65571e24a4e18f83acaa1e4429e1847043371bba719433d41a038bb70df2665"
+    },
+    "run_m4-initial.py": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/run_m4-initial.py",
+      "sha256": "25d46ad6bb5d51da0d01eef900ae448aaa53cad1bc3365a4a6b2f6426dcfd4e5"
+    },
+    "run_m4.py": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/run_m4.py",
+      "sha256": "e91a0413e99d1407372ed219ab3d4d83831f3bd2e5c5199fc997beea9cb577eb"
+    },
+    "run_native_norms.py": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/run_native_norms.py",
+      "sha256": "cc339d8edbc1deb86bbe3f2218b67e05b585815e84a370fb9f9fc7a4bca2ac63"
+    },
+    "run_restart_guards.py": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/run_restart_guards.py",
+      "sha256": "d89b0d8aa61140609f16b863d30968d206c05ec81f99cbba7160d8bd20a356ed"
+    }
+  },
+  "logs": {
+    "build-final.log": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/build-final.log",
+      "sha256": "2a69bb0a9cd2808c45462983b64ea2aef30b222f5e74bf129e9b940e71ac8aef",
+      "bytes": 5494
+    },
+    "install-final.log": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/install-final.log",
+      "sha256": "acf7095bc5a727a7e28cfb5b2145ddaf3d11e8ca2da87cb4f2f811512f3ae3fd",
+      "bytes": 130018
+    },
+    "unit-tests-final.log": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/unit-tests-final.log",
+      "sha256": "2c430d46cfb09eaa50a3eec3d9908fd144d6e0fe86412de4cfc74caed613791f",
+      "bytes": 516
+    },
+    "build-probes.log": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/build-probes.log",
+      "sha256": "7646812f738bab45884ab550feb7e8f1a2ec81182e8a01d14577025141ac60aa",
+      "bytes": 3108
+    },
+    "rebuild-fieldcompare.log": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/rebuild-fieldcompare.log",
+      "sha256": "ffdb50d96a783c3ce413284a9b813b12f8001c9b9530d6ea6d9d7fb38d0e0c16",
+      "bytes": 3439
+    },
+    "rebuild-vertex-precision.log": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/rebuild-vertex-precision.log",
+      "sha256": "42000ca240bbbba11b0fe75008f0bc90b88e2abfb49f5d59adb1d38f293cf283",
+      "bytes": 6419
+    },
+    "rebuild-source-metadata-fixed.log": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/rebuild-source-metadata-fixed.log",
+      "sha256": "9f5dde32bbece79ee1ac7d511c9fe2e6f8ec01b93609a7840e7e305412ce662a",
+      "bytes": 5180
+    },
+    "commands.jsonl": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/commands.jsonl",
+      "sha256": "79b12c715ad20510373d57ef2fa9c418574919bed1d566b8fe82e9844038bffb",
+      "bytes": 201235
+    },
+    "native-norm-commands.json": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/native-norm-commands.json",
+      "sha256": "49d4cc11592cca8772bd5e29e2a59450560bd237adb606b194c2752b7ca04bac",
+      "bytes": 8121
+    },
+    "regressions-final-runtime/results.json": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/regressions-final-runtime/results.json",
+      "sha256": "a75d89286a9a90644ff47f8da5ff56f0e22dd62468bce05c5404c8f06b716d0f",
+      "bytes": 6341
+    },
+    "guards/results.json": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/guards/results.json",
+      "sha256": "a7249d8f94eb6454ea557f510868d22cdac292f008e145f9c747a4fdbf70ecde",
+      "bytes": 5242
+    },
+    "restart-guards/results.json": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/restart-guards/results.json",
+      "sha256": "aae799697ca3394c2878526c08aa936f2b1312a537177188b9eb7818de286ddf",
+      "bytes": 7306
+    },
+    "partition-precision-check.json": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/partition-precision-check.json",
+      "sha256": "6ca42c634fb327a5467d807863751867468e5fea28b460d1d71a2bac2d5a5a34",
+      "bytes": 7224
+    }
+  },
+  "command_history": {
+    "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/commands.jsonl",
+    "sha256": "79b12c715ad20510373d57ef2fa9c418574919bed1d566b8fe82e9844038bffb",
+    "record_count": 353,
+    "failed_diagnostic_records": [
+      {
+        "command": [
+          "python3",
+          "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/check_m4_cases.py",
+          "--json",
+          "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/full3d-mean-only-serial/solver-check.json",
+          "solver",
+          "m4-full3d-mean-only.xml",
+          "solver.log",
+          "--mean-only"
+        ],
+        "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/full3d-mean-only-serial",
+        "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/full3d-mean-only-serial/solver-check.check.log",
+        "exit_code": 1,
+        "seconds": 0.06475024700012
+      },
+      {
+        "command": [
+          "/home/jay/build/nektar-v2026-mpi/library/UnitTests/SolverUtils/HITFieldCompare",
+          "m4-h1d-fftw.xml",
+          "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-von-karman-serial/m4-h1d-von-karman.fld",
+          "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-fftw-serial/m4-h1d-fftw.fld"
+        ],
+        "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-fftw-serial",
+        "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-fftw-serial/fields-check.log",
+        "exit_code": 1,
+        "seconds": 0.6658384530001058
+      },
+      {
+        "command": [
+          "python3",
+          "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/check_m4_cases.py",
+          "--json",
+          "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-von-karman-mesh4/samples-check.json",
+          "samples",
+          "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-von-karman-serial/m4-h1d-von-karman.probe.json",
+          "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-von-karman-mesh4/m4-h1d-von-karman.probe.json",
+          "--projected-limit",
+          "5e-12"
+        ],
+        "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-von-karman-mesh4",
+        "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/h1d-von-karman-mesh4/samples-check.check.log",
+        "exit_code": 2,
+        "seconds": 0.06455238600005941
+      },
+      {
+        "command": [
+          "python3",
+          "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/check_m4_cases.py",
+          "--json",
+          "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/full3d-von-karman-mesh4/fields-check.json",
+          "fields",
+          "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/full3d-von-karman-mesh4/fields-check.log",
+          "--velocity-limit",
+          "2e-9",
+          "--pressure-limit",
+          "2e-8"
+        ],
+        "cwd": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/full3d-von-karman-mesh4",
+        "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/full3d-von-karman-mesh4/fields-check.check.log",
+        "exit_code": 1,
+        "seconds": 0.0645822550000048
+      }
+    ]
+  },
+  "raw_artifact_manifest": {
+    "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/artifact-manifest.json",
+    "sha256": "49456d2bdfdae0a9b8dc4f364cede84977d4ea980f4113a96b8b9b92b5b9ab72",
+    "file_count": 969
+  },
+  "limitations": [
+    "Transient small-band integration inputs establish representations/transforms/MPI/restart behavior; they do not validate downstream HIT decay or the Comte-Bellot--Corrsin experiment.",
+    "Only straight-sided axis-aligned box fixtures were numerically exercised. The generic precision fix covers XML vertices; native curved-edge/face serialization remains unchanged.",
+    "HDF5 is disabled in this authoritative build; checkpoint validation here uses native XML serial and parallel fields.",
+    "Restart reconstructs the inlet phase and realization but reinitializes native IMEX multistep history; evolved fields are checked by bounds and timestep refinement, not bitwise equality."
+  ],
+  "FFTW_dependency": {
+    "development_package": [
+      {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/dependencies/libfftw3-dev_3.3.8-2ubuntu8_amd64.deb",
+        "sha256": "176bf4e4544f06659718aa8c007ff8110fad4ae5c61deae5dd14020dc65dbe24"
+      }
+    ],
+    "header": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/dependencies/fftw3-dev/usr/include/fftw3.h",
+      "sha256": "886f1ab57edd26b2c6d356881bea8b991b4e624f813bf8f288fc86a920edad5c"
+    },
+    "runtime": {
+      "path": "/usr/lib/x86_64-linux-gnu/libfftw3.so.3.5.8",
+      "sha256": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d"
+    },
+    "runtime_package_version": "3.3.8-2ubuntu8",
+    "preparation": "apt-get download libfftw3-dev; dpkg-deb --extract into isolated experiment storage; no system package changes"
+  },
+  "MPI_runtime": "mpirun (Open MPI) 4.1.2",
+  "build_and_test_commands": [
+    [
+      "cmake",
+      "--build",
+      "/home/jay/build/nektar-v2026-mpi",
+      "--target",
+      "IncNavierStokesSolver",
+      "HITBoundaryUnitTests",
+      "HITBoundaryProbe",
+      "--parallel",
+      "32"
+    ],
+    [
+      "cmake",
+      "--install",
+      "/home/jay/build/nektar-v2026-mpi"
+    ],
+    [
+      "ctest",
+      "--test-dir",
+      "/home/jay/build/nektar-v2026-mpi",
+      "-R",
+      "^(HITCoreUnitTests|HITBoundaryUnitTests|HITRestartUnitTests)$",
+      "--parallel",
+      "1",
+      "--output-on-failure"
+    ]
+  ],
+  "phase_commands": [
+    [
+      "python3",
+      "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/run_m4-initial.py",
+      "base"
+    ],
+    [
+      "python3",
+      "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/run_m4-initial.py",
+      "refine"
+    ],
+    [
+      "python3",
+      "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/run_m4.py",
+      "restart"
+    ],
+    [
+      "python3",
+      "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/run_guards.py"
+    ],
+    [
+      "python3",
+      "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/run_restart_guards.py"
+    ],
+    [
+      "python3",
+      "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-4/6f8040b/run_native_norms.py"
+    ]
+  ],
+  "source_sha256": {
+    "library/SpatialDomains/MeshGraphIOXml.cpp": "d8b90a0aaebd4f001161f9d4b0c4d643289abce1e2b7efd6ee3c42db1e241e67",
+    "library/SolverUtils/Filters/FilterCheckpoint.cpp": "50f915ec87b653a18ecba354e5f1585d5446ad42a2909343979709f668741783",
+    "library/SolverUtils/EquationSystem.h": "3bd15c44765b57309c85ab8fbe6b84e13ae7efa6d8c2d8b21011c5a057153910",
+    "solvers/IncNavierStokesSolver/BoundaryConditions/HITInflow.cpp": "85dc8b64119f5de43803fa0dd0dedadc411cc637ac062337c485533cea31e7a9",
+    "solvers/IncNavierStokesSolver/BoundaryConditions/HITInflow.h": "c6f05b105883cd9b2eb8ae176578accb7a630531325abb006d3120f44d83ea46",
+    "solvers/IncNavierStokesSolver/BoundaryConditions/HITInflowConfig.cpp": "55756962101f0da2cb144689f2bbbe1b19c81540a4d22937fb18e69020dc0f35",
+    "solvers/IncNavierStokesSolver/BoundaryConditions/HITInflowConfig.h": "49712b587cf909a37bcf6eb0e693205b288c42061f57d273c9dcf09f5be371fe",
+    "solvers/IncNavierStokesSolver/BoundaryConditions/HITInflowGeometry.cpp": "ec9efd36b38d7899779f3757bfc35abbd667188a75af0d4b32e660b704ba1ca0",
+    "solvers/IncNavierStokesSolver/BoundaryConditions/HITInflowGeometry.h": "5dfa9e51236b6525e331e6d3706d1694db81e2b5c9cf08ea5a88a844f9880384",
+    "solvers/IncNavierStokesSolver/BoundaryConditions/HITInflowRestart.cpp": "e782da1641b9d9b15c556eff8e81ff71996999cf7038544338227dd05644ce20",
+    "solvers/IncNavierStokesSolver/BoundaryConditions/HITInflowRestart.h": "6ec035b3eace8b3132f1750e6131ab2f55470fafa36057fab9ca7947db2aea33",
+    "library/UnitTests/SolverUtils/HITFieldCompare.cpp": "c2256cdb400b3495c841e62758ddf7ce4ba5acc4885fa93ed221384d27d8b045",
+    "library/UnitTests/SolverUtils/HITBoundaryProbe.cpp": "8ee36412dac63e886222eed0f16ffa30cc506eb8eceeacbd41037fabb04135ec",
+    "library/UnitTests/SolverUtils/TestHITRestart.cpp": "debb00f6732e7cbaa5b2d0a90191c7a7471463815d87e839774fc62b2afa6d2b"
+  }
+}
