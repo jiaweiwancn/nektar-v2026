@@ -31,7 +31,7 @@ remains clean at `812a2c8`; the optional analyzer was copied into external run
 storage with its source hash, without replacing running solver libraries.
 
 All M6 work uses at most **64 CPUs**, following the user's stricter limit.
-Builds use 32 jobs and never overlap solvers. OpenMP and OpenBLAS use one thread
+M6 rebuilds use 32 jobs after its native jobs finish. OpenMP and OpenBLAS use one thread
 per MPI rank. The initial allocation was two long cases of 28 ranks each
 (`npz=2`) plus one short case of four ranks (`npz=4`): 60 MPI ranks. After a
 matched decomposition timing/field check, the long pair was restarted from
@@ -46,6 +46,12 @@ After both short queues completed, the remaining long pair uses 48 MPI ranks.
 The separate fine-recording control used eight ranks, bringing the maximum
 simultaneous solver allocation to 60 ranks. A saved process/thread affinity
 audit verifies the 64-CPU union, with one OpenMP/OpenBLAS thread per rank.
+At 11:28 UTC a separate short build was observed with two compiler processes
+while the 24-rank degree-10 case ran. It ended before the follow-up inspection.
+The source stayed clean at `812a2c8`; a read-only audit of all 12 mapped Nektar/
+bundled-dependency libraries confirmed matching inodes and pre-launch mtimes.
+The solver installation was not replaced. Its receipt is
+`812a2c8/concurrent-build-library-audit.json`.
 
 ## Feasible physical scope
 
@@ -54,6 +60,9 @@ The upstream-only specification uses mean speed 12.7 m/s, molecular viscosity
 interpolation (`LogLinear`), `K4`/Gaussian extensions, and `Preserve`
 normalization. The synthesis periods are `(32,0.6,0.6) m`; the cutoff/taper
 pair is `(100,80) rad/m` in the current long pilots.
+The experiment's clock uses approach speed `U0=10 m/s`; its downstream
+contraction gives measurement speed 12.7 m/s. The theta-42 to theta-98/171 ages
+are 0.28448/0.65532 s, giving the selected offsets 3.612896/8.322564 m.
 
 | Quantity | Cutoff 100, taper 80 | Cutoff 200, taper 160 |
 | --- | ---: | ---: |
@@ -304,7 +313,7 @@ analytical expectation differs from both the actual seeded record and sampling
 intervals. Avoiding recurrence does not by itself establish low-frequency
 convergence.
 
-## Full-distance work still required
+## Full-distance pilots and remaining qualification
 
 The current 9 m pilots use degrees 9 and 10, h=0.1 m, 32 Fourier slots,
 `dt=2.5e-5 s`, both dealiasing switches, and an absolute 0.8--0.95 s record.
@@ -325,6 +334,39 @@ molecular strain dissipation, separate x-y/z SVV work, divergence and
 instantaneous energy about prescribed Ubar. That energy is explicitly labelled
 and cannot be substituted for temporal-central TKE. Direction-labelled z
 spectra and correlations are computed separately from immutable histories.
+
+The degree-9 pilot is complete with 301 samples over the entire declared
+0.8--0.95 s window. Its temporal-central K is 0.02454259 m2/s2 at the inlet,
+0.02303583 at x=3.612896 m and 0.01598203 at x=8.322564 m. On 24 ranks with
+`npz=8`, measured solver wall time is 16,369.50 s and the sampled process-tree
+RSS peak is 10,853,880 KiB. RSS is sampled every two seconds and sums process
+resident sets, including shared pages; it is not a unique-memory or exact-peak
+measurement. Recorded OS thread counts include MPI helper threads; all threads
+of each long rank are pinned to one physical core, with OMP/OpenBLAS set to one.
+
+The degree-9 long record is not qualified at 2% sampling precision. Across
+stations, eight-block component interval half-widths reach 6.56%, 7.20% and
+4.84%, with K reaching 3.36%; four/sixteen-block maximum K half-widths are
+5.71%/3.06%. The final-half versus full-window K estimates differ by up to
+5.43%. These variations include finite-window centering effects and do not
+isolate a startup transient. Few correlated blocks cannot establish confidence
+coverage or stationary far-field statistics.
+
+All three late degree-9 native profiles are complete at 0.85, 0.90 and 0.95 s.
+Volume-mean molecular work is approximately 0.004756--0.004762 m2/s3, x-y SVV
+work 0.009171--0.009237, and z SVV work 0.0004760--0.0004810. Molecular slab peaks
+occur at x=6.35--6.95 m; x-y/z SVV peaks occur at 5.45--6.35/4.65--5.25 m.
+Spatial development therefore remains evident beyond the first comparison
+station. A statistically qualified equilibrium/adjustment length is not
+established. Stable volume-mean work over these three snapshots does not
+establish an equilibrated inlet reference plane.
+
+At the final degree-9 station, modes with kz>100 rad/m contain about
+14.92%/13.94%/5.94% of u/v/w variance and 52.22%/50.57%/38.15% of their
+z-derivative moments. The last active mode m=15 contains less than `1e-5` of
+each component variance, with strong SVV rolloff at m=14--15. That rolloff
+does not bound the model effect of moving the Fourier/SVV cutoff. The small
+near-field Fourier sensitivity cannot be transferred to this far-field tail.
 
 The first six native long-domain profiles are complete at t=0.1, 0.2 and 0.3 s
 for both degrees, each with all 90 x columns and checkpoint-partition hashes
