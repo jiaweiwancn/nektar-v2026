@@ -1,5 +1,24 @@
 # Neutral ABL RANS kernel and wall-layer tests
 
+Start with the [runnable user guide](../../Examples/NeutralABL/README.md) for
+model selection, complete sessions, boundary signs, output and restart.
+The [Milestone 7 handoff](../../../../docs/plans/neutral-abl-rans-awf-milestone-7.md)
+records the delivery revision and checks. The sections below retain the
+development studies and their original commands.
+
+| Entry point | Scope |
+| --- | --- |
+| `validate_m7.py --build ... --output ...` | Public generator/restart workflows, eight CTests, MPI continuation and documentation links |
+| `run_m6.sh BUILD RUN [JOBS]` | Complete preservation/robustness study; failed controls are recorded explicitly |
+| `validate_m3.py`, `validate_m4.py`, `validate_m5.py` | Standard transport, original CLS/AWF, corrected CLS/AWF acceptance |
+| `validate_m1.py`, `validate_m2.py` | Strip prototype and independent kernel/oracle checks |
+
+Use separate Linux run directories and at most 16 project workers. The CTest
+fixtures are copied into the build's `rans-smoke` directory, keeping generated
+fields, checkpoints and sidecars out of the source checkout. Eight smoke/kernel
+tests do not replace the longer studies. Degree 4 is the accepted long-run
+configuration; the degree 5 full-3D failure remains a documented limitation.
+
 Milestone 5 adds `RANSWallModel=AWFEquilibrium` for CLS. Fixed weighting
 isolates the dissipation correction; switched weighting uses seven independent
 resolved indicators and explicitly supplied `RANSAWFOn`/`RANSAWFOff`

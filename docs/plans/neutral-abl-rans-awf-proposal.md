@@ -22,11 +22,11 @@ original integrated row without inventing those additional inner equations.
 | Origin skill | academic-research-suite, experiment-agent |
 | Origin mode | plan |
 | Origin date | 2026-10-29 |
-| Version label | neutral_abl_rans_proposal_v7 |
-| Verification status | Milestones 1–6 CLOSED; Milestone 6 closed on 2026-10-30 with five-flow degree-four preservation, perturbation, MPI and full-history restart evidence; the higher-degree 3D counterexample is documented; Milestone 7 pending |
+| Version label | neutral_abl_rans_proposal_v8 |
+| Verification status | Milestones 1–7 CLOSED; Milestone 7 closed on 2026-10-30 with a fresh Linux build, eight CTests, 15 public-workflow cases, six standard-library benchmark preparations and rendered documentation; higher-degree 3D and terrain/physics limits remain explicit |
 | Mac source baseline | `6522fc9c74edab0e445aade16f7facea3f5987a3` |
 | New project branch | `codex/neutral-abl-rans-awf` |
-| Linux source observed | `812a2c84946d1fdad2b042c265e3e4ed32914138`, clean, on `codex/hit-inflow-generator` |
+| Linux source at proposal baseline | `812a2c84946d1fdad2b042c265e3e4ed32914138`, clean, on `codex/hit-inflow-generator`; later milestones use their recorded isolated revisions |
 | Linux build configuration observed | Release; MPI, regression tests, and unit tests enabled |
 
 The branch includes the existing HIT work. Milestone 1 has parent revision
@@ -73,6 +73,15 @@ recorded with source/binary hashes. An additional degree-five 3D experiment
 develops a growing mode and fails the target; it remains an explicit robustness
 limit, rather than another preservation pass. Eight CTests and all standard,
 original and corrected regression cohorts pass on the final solver.
+
+[Milestone 7](neutral-abl-rans-awf-milestone-7.md) delivers the
+[consolidated user handoff](../../solvers/IncNavierStokesSolver/Examples/NeutralABL/README.md),
+public case/restart preparation, user/developer documentation and fresh Linux
+delivery evidence. Checkpoint, relocated-history, cold-start and repartitioned
+continuation workflows pass complete-field checks. Smoke inputs are staged in
+the build directory, with no generated solver output in the source checkout.
+All 127 recorded numerical C++/header sources remain identical to M6. The
+delivery preserves that measured baseline and its higher-degree counterexample.
 
 ## Findings at the proposal baseline
 
@@ -363,7 +372,9 @@ general variable coefficients can couple Fourier modes.
 | --- | --- |
 | `library/SolverUtils/Turbulence/` | Pure standard and CLS closure kernels, AWF kernels, and neutral-reference construction, separated from the existing HIT code. |
 | `solvers/IncNavierStokesSolver/EquationSystems/RANSVelocityCorrectionScheme.*` | Active scalar transport, variable diffusion and source assembly, coupled updates, pressure convention, and residual inspection. |
-| Coupled weak pressure implementation in `RANSVelocityCorrectionScheme.*` | Actual normal-velocity trace and full RANS momentum enter the pressure iteration. General open-outflow support remains outside the initial configuration. |
+| Coupled weak pressure implementation in `RANSVelocityCorrectionScheme.*` | Actual normal-velocity trace and full RANS momentum enter the pressure iteration. Flat x+ total-traction outlets are available; general curved/backflow or prescribed-pressure outlets remain outside the validated configuration. |
+| `RANSMatrixFree.*`, `RANSHistory.*` | Current weak operator with bounded native preconditioners; complete checked IMEX solution/derivative continuation and MPI repartitioning. |
+| `Examples/NeutralABL/` | Public case and continuation preparation with a consolidated user handoff. |
 | Solver-local RANS wall-layer classes and boundary adapters | Sampling, geometry, constraints, weak fluxes, layer source replacement, MPI communication, and original versus corrected wall policy. |
 | RANS extra field output and solver-local stage/wall CSVs | Modeled covariance, eddy viscosity, production, Yap, wall traction, switch, cutoff, admissibility and balance diagnostics; distinct from existing resolved-fluctuation filters. |
 | `library/UnitTests/SolverUtils/` and `solvers/IncNavierStokesSolver/Tests/RANS/` | Algebraic tests, boundary/residual probes, small solver fixtures, and reference comparisons. |
@@ -379,7 +390,7 @@ validated together. Incompatible closure/wall combinations are rejected.
 standard k–epsilon is a separate derivation. The user guide and milestone
 specifications give accepted XML rather than these initial design concepts.
 
-Output and restart must preserve both transported turbulence fields, the
+Output and full-history restart preserve both transported turbulence fields, the
 pressure convention, model constants, wall geometry, and any additional layer
 state. Recompute derived fields consistently. Modelled RANS stresses and
 covariance of unsteady resolved velocities must have distinct output names.
@@ -503,11 +514,11 @@ exact retention of analytical samples.
 | 4 CLS and original AWF integration | CLOSED. Full cubic stress and Yap pass independent unsteady/3D controls and spatial refinement. Conservative original-AWF strip coupling passes point/mean/traction recovery, inventory budgets, nonuniform normal velocity, serial/MPI and invalid-state checks; the original dissipation mismatch remains measurable. See the Milestone 4 specification and its 27-case Linux evidence. |
 | 5 Corrected AWF integration | CLOSED. Current configured reference, matching anchor, one integrated source, algebraic EP/EH and the compact switch pass 34 native Linux cases, including assembled residual refinement, independent forcing/sensors, exact original-form recovery, strict preflight/fallback, MPI and 3D sensor refinement. All original/standard/kernel regressions pass. See the Milestone 5 specification and evidence. |
 | 6 Preservation and robustness study | CLOSED. Five-flow degree-four standard/fixed/switched profiles meet the 0.1% target in 2D/full 3D. h/p/dt and physical-H studies, perturbation decay, numerical-column copies, MPI and complete IMEX continuation are recorded. Original/inconsistent controls and a degree-five 3D counterexample retain their measured failures. See the Milestone 6 report and closure evidence. |
-| 7 Documentation and delivery | PENDING. Consolidate reproducible fixtures, commands, tested revisions, limitations, and user configuration for delivery. Terrain work begins from this measured baseline. |
+| 7 Documentation and delivery | CLOSED. Consolidated user/configuration and developer guides, public case and continuation helpers, complete commands and final source/binary evidence are delivered. A fresh Linux build passes eight CTests and 15 workflow cases; six standard-library preparations match M6, and both manuals compile and pass RANS-page visual review. Known numerical and application limits remain explicit. |
 
-Milestones 1 and 2 can begin with small column and kernel prototypes. Avoid
-expanding to terrain, thermal AWF, rotating/stratified ABL, or a complete low
-Reynolds number CLS model before the flat neutral problem is resolved. The
+Milestones 1 and 2 began with small column and kernel prototypes. Terrain,
+thermal AWF, rotating/stratified ABL and complete low-Re CLS extensions require
+new implementation and validation beyond this flat neutral baseline. The
 AWF paper's dune validation uses a differential length correction; it is not
 direct evidence for the note's retained algebraic Yap variant.
 
@@ -516,25 +527,18 @@ direct evidence for the note's retained algebraic Yap variant.
 Use the Mac checkout for implementation and Git review. Before any Linux build,
 record the branch, HEAD, status, and relevant file hashes in both checkouts.
 Transfer only the intended branch commits or a reviewed patch; preserve
-uncommitted work and confirm the resulting revision and diff. The observed
-Linux checkout is several commits behind the Mac baseline, so it must not be
-treated as already synchronized. Both environments have a GitHub SSH push URL.
+uncommitted work and confirm the resulting revision and diff. Each milestone
+records its isolated worktree rather than treating the unrelated primary
+checkout as already synchronized. Both environments have a GitHub SSH push URL.
 
-Compile and run on Linux using the existing installation. Example commands for
-the implementation stages are:
-
-```bash
-source /home/jay/.local/opt/nektar-v2026-mpi/env.sh
-export OMP_NUM_THREADS=1
-export OPENBLAS_NUM_THREADS=1
-cmake --build /home/jay/build/nektar-v2026-mpi --parallel 8
-cmake --install /home/jay/build/nektar-v2026-mpi
-ctest --test-dir /home/jay/build/nektar-v2026-mpi -N
-```
+Compile and run on Linux using the isolated external-build recipe in the
+[user handoff](../../solvers/IncNavierStokesSolver/Examples/NeutralABL/README.md).
+It builds the production solver source list against the existing installation
+without replacing the shared build or binaries used by other experiments.
 
 The project has a hard limit of 16 simultaneous Linux CPU workers, as directed
-on 29 October 2026. Use the eight-worker build only when that allocation is
-available within the project and server budgets. Run focused
+on 29 October 2026. The delivered recipe uses four build workers and one
+numerical thread per MPI rank. Run focused
 new unit tests, new solver regressions, and related legacy scalar, pressure,
 wall, and HIT tests. Select explicit CTest concurrency according to each
 test's ranks and threads, initially one test at a time. Start solver pilots
@@ -553,7 +557,11 @@ summarized results belong in the repository.
 
 ## Source references
 
-- [Supplied CLS and equilibrium AWF note](../literature/cls_neutral_abl_equilibrium_awf_note.tex), revised 26 October 2026. Sections 2–4 define the closure and reference; sections 5–9 define the wall operator and implementation; section 11 states its limits.
-- Craft, Launder, and Suga (1996), [local transcription](../literature/Development%20and%20application%20of%20a%20cubic%20eddy-viscosity%20model%20of%20turbulence.md), [DOI](https://doi.org/10.1016/0142-727X(95)00079-6). Constitutive relation, coefficients, transport, and algebraic Yap correction.
-- Suga, Craft, and Iacovides (2006), [local transcription](../literature/An%20analytical%20wall-function%20for%20turbulent%20flows%20and%20heat%20transfer%20over%20rough%20walls.md), [DOI](https://doi.org/10.1016/j.ijheatfluidflow.2006.03.011). Sections 2.1–2.2 and Tables 1–2 define the original momentum, production, dissipation, and roughness treatment.
-- Richards and Norris (2011), [local transcription](../literature/Appropriate%20boundary%20conditions%20for%20computational%20wind%20engineering%20models%20revisited.md), [DOI](https://doi.org/10.1016/j.jweia.2010.12.008). Section 2.1 gives the standard-model reference and boundary conditions; section 3 gives the empty-domain test; section 5 addresses production discretization.
+- Supplied `cls_neutral_abl_equilibrium_awf_note.tex`, revised 26 October 2026. Sections 2–4 define the closure/reference; sections 5–9 define the wall operator; section 11 states its limits. The tracked [Milestone 1](neutral-abl-rans-awf-milestone-1.md), [Milestone 2](neutral-abl-rans-awf-milestone-2.md) and [Milestone 5](neutral-abl-rans-awf-milestone-5.md) specifications preserve the implemented contracts.
+- Craft, Launder, and Suga (1996), [Development and application of a cubic eddy-viscosity model of turbulence](https://doi.org/10.1016/0142-727X(95)00079-6). Constitutive relation, coefficients, transport, and algebraic Yap correction.
+- Suga, Craft, and Iacovides (2006), [An analytical wall-function for turbulent flows and heat transfer over rough walls](https://doi.org/10.1016/j.ijheatfluidflow.2006.03.011). Sections 2.1–2.2 and Tables 1–2 define original momentum, production, dissipation and roughness treatment.
+- Richards and Norris (2011), [Appropriate boundary conditions for computational wind engineering models revisited](https://doi.org/10.1016/j.jweia.2010.12.008). Standard-model reference and boundary conditions, empty-domain test and production discretization.
+
+The local paper transcriptions/PDFs and supplied note remain optional working
+copies under `docs/literature/`; they are not needed to generate or run the
+delivered examples and are not included in the Git delivery.

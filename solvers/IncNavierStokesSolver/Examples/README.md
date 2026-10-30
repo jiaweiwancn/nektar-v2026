@@ -1,6 +1,13 @@
 Examples
 ========
-This folder has brief examples for using the IncNavierStokesSolver for 2D and 3D flow cases. The examples are soft linked from the `solvers/IncNavierStokesSolver/Tests` folder, and should not be modified here in order to keep the testing pipeline working.
+This folder has brief examples for using the IncNavierStokesSolver for 2D and 3D flow cases. The legacy case files are soft linked from the `solvers/IncNavierStokesSolver/Tests` folder, and should not be modified here in order to keep the testing pipeline working. The NeutralABL example supplies preparation scripts that write new cases into a separate run directory.
+
+Neutral atmospheric boundary layer with URANS
+---------
+Standard k–epsilon and high-Re CLS with original or equilibrium-corrected rough-wall
+analytical wall functions. Includes 2D/full-3D generation, checkpoints, full-history
+continuation, configuration and measured limits. Start with
+[NeutralABL](NeutralABL/README.md).
 
 Laminar Channel Flow 2D
 ----------

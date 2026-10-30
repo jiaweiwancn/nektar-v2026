@@ -230,3 +230,120 @@ The most common ones are:
     At this moment velocity and pressure variable fields are created.
     \item Need to add the information on where the time integration scheme is initialized.
 \end{itemize}
+
+\section{Neutral-ABL RANS extension}
+\label{sec:neutral-abl-rans-development}
+
+\code{RANSVelocityCorrectionScheme} is an opt-in equation-system registration
+built with \code{IncNavierStokesSolver}. It derives from the weak-pressure VCS
+infrastructure and advances velocity, $k$ and transported dissipation with
+constant-step native IMEX1/2. Standard $k$--$\epsilon$ and the high-Re cubic
+Craft--Launder--Suga closure share this transport path. The existing laminar,
+DNS and LES selections remain separate. Runnable configuration and continuation
+commands are in the source directory
+\path{solvers/IncNavierStokesSolver/Examples/NeutralABL}.
+
+\subsection{Source ownership and physical conventions}
+
+\begin{itemize}
+\item \path{library/SolverUtils/Turbulence/RANSModels.*} implements pure closure
+evaluation, complete covariance, consistent production, Yap and configured
+neutral-reference roots.
+\item \path{library/SolverUtils/Turbulence/AnalyticalWallFunction.*} implements
+the original wall integrals, corrected capped dissipation, admissibility and
+independent departure indicators. It has no mesh or time-integration state.
+\item \code{RANSVelocityCorrectionScheme.*} owns field ordering, variable
+diffusion, nonlinear stages, weak pressure coupling, the flat traction outlet,
+reference monitoring and output.
+\item \code{RANSAnalyticalWallStrip.*} owns flat-interface geometry, P/N
+sampling, conservative strip elimination, dynamic traces, MPI ownership and
+wall budgets. It uses the pure wall kernels rather than duplicating them.
+\item \code{RANSMatrixFree.*} supplies the current weak Helmholtz action with
+native static-condensation preconditioners. \code{RANSHistory.*} wraps the
+native IMEX history and publishes/restores checked element-indexed payloads.
+\end{itemize}
+
+Velocity and turbulence scalars use matching continuous expansions; pressure
+may use the tested degree $p-2$ continuous space but must share the same ordered
+physical quadrature grid. Full 2D maps mesh $(x,y)$ to physical $(x,z)$; full 3D
+uses physical $(x,y,z)$. Covariance names retain physical axes. Saved pressure
+is $\Pi=p_{\mathrm{mechanical}}/\rho+2k/3$. The stress entering momentum is
+\[
+ T=\nu_{\mathrm{eff}}(\nabla U+\nabla U^T)-R_{\mathrm{nonlinear}}.
+\]
+Both resolved-diffusion modes retain the high-Re dissipation convention;
+adding molecular diffusion does not add a low-Re CLS dissipation split.
+
+\subsection{Implicit stage and strip contract}
+
+The native IMEX scheme supplies the explicit predictor and inertia coefficient
+$\alpha$. Each coupled stage reevaluates \code{Closure}, current gain/loss and
+diffusion, the log wall or \code{UpdateWall}, and \code{UpdateOutflow}.
+\code{SolveField} applies the scalar Helmholtz solves, including cross-stress
+loads. \code{CorrectPressure} then uses the complete current normal-velocity
+trace and weak divergence. Iteration stops only when state change, pressure
+increment and weak continuity meet their configured tolerances. Positive
+states are checked collectively; the implementation does not apply a floor.
+
+For CLS/AWF, the CG mesh begins at H above the physical wall. The separate
+control-volume strip retains its momentum and $k$ inventories, integrated
+production/dissipation and normal mass balance. P is its representative point;
+N is sampled above the interface. The algebraic P/H dissipation values and
+Robin velocity/$k$ rows come from that same elimination. Do not replace this
+with a tangential off-wall traction alone or add a second resolved inner source.
+The corrected policy changes the specified dissipation distribution and uses
+one common weight for its integrated and algebraic values. It does not subtract
+an analytical equilibrium residual or reset the solution.
+
+N ownership is selected deterministically by global element ID and MPI rank.
+The ownership search selects the element above N and the corresponding wall
+patch at shared tangential vertices; evaluation remains at the exact physical
+sample. Ranks without wall faces participate in the collective sampling.
+
+\subsection{Linear solve, outlet and continuation}
+
+The optional matrix-free action uses native transforms, derivatives and weak
+inner products for current variable diffusion and mass, plus the same audited
+Robin strip action. Native matrices freeze coefficients only as preconditioners,
+bounded to the two IMEX2 inertia values. Normalize each preconditioner RHS before
+the native solve to avoid successive-RHS magnitude smoothing discarding small
+residuals. Global dot products use unique MPI ownership and signed assembly.
+
+At the supported flat $x+$ outlet, XML supplies $(T-\Pi I)n$ and the solver
+adds the current $\Pi n$ to the scalar Helmholtz natural load. The pressure
+iteration retains the full continuity test space; traction fixes its constant.
+An outlet Robin impedance belongs only to the approximate pressure inverse,
+not to a physical pressure boundary equation. All-prescribed-normal-velocity
+domains instead retain their zero-mean pressure gauge.
+
+Full continuation restores solution and explicit derivative histories at their
+native quadrature points, primary coefficients including pressure, canonical
+time labels and the completed-step offset. This avoids another Euler startup
+or projection of derivative history. Payloads are checked against configuration,
+field state, element coordinates, basis/points and complete element coverage.
+Repartitioning maps by global element ID. Fresh sidecar directories preserve
+histories referenced by backup fields; retain the field and referenced sidecar
+together. Boundary and forcing expressions are not fingerprinted: callers must
+keep them consistent. The validated scheduling is constant-step IMEX1/2 with
+step-based checkpoints.
+
+\subsection{Evidence required for extensions}
+
+\code{RANSFieldAudit} checks complete field directories, compares primary and
+projected derived fields, and optionally samples profiles. Passive reference
+CSV norms differ from the optional assembled free-coefficient stage audit.
+Wall conservation requires the \code{budget\_available} flag: the natural-flux
+inventory does not recover inlet Dirichlet reactions. Weak continuity alone
+does not establish pointwise incompressibility or stability.
+
+The tracked milestone specifications and \path{Tests/RANS} cover independent
+tensors/wall quadrature, unsteady manufactured solutions, assembled residuals,
+original-form recovery, switch sensors, MPI ownership and history continuation.
+The degree 4 flat neutral cases meet the measured five-flow engineering target;
+an additional degree 5 four-rank 3D case develops a growing mode. Preserve this
+counterexample when changing spaces, quadrature, pressure coupling or solvers.
+The cause has not been isolated between the numerical method and closure.
+Full-3D long reference/perturbation data are span independent; separate short
+manufactured tests exercise all components. General 3D disturbance stability,
+terrain geometry, curved/backflow outlets, Homogeneous1D and thermal/stratified
+or low-Re extensions require new contracts and evidence before application.

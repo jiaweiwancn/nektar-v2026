@@ -17,6 +17,11 @@ Detailed information on compiling, installing and using the software is
 available in the User Guide. This document is available as a pre-compiled PDF
 from the downloads section of the project website.
 
+The [neutral-ABL URANS example](solvers/IncNavierStokesSolver/Examples/NeutralABL/README.md)
+documents the standard and cubic CLS turbulence models, original/corrected
+analytical wall functions, runnable cases, full-history restart and measured
+validation limits on this development branch.
+
 
 Tutorials
 ---------

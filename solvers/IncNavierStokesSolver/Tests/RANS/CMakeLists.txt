@@ -58,24 +58,28 @@ endif()
 enable_testing()
 if(RANS_BUILD_SOLVER)
     file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke)
+    foreach(rans_fixture StandardRANS_MMS CLS_MMS AWFOriginal AWFEquilibrium ABLPreservation ABLPreservation3D)
+        configure_file("${CMAKE_CURRENT_LIST_DIR}/${rans_fixture}.xml"
+            "${CMAKE_CURRENT_BINARY_DIR}/rans-smoke/${rans_fixture}.xml" COPYONLY)
+    endforeach()
     add_test(NAME RANSStandardTransportSmoke COMMAND IncNavierStokesSolver
-        ${CMAKE_CURRENT_LIST_DIR}/StandardRANS_MMS.xml)
+        ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke/StandardRANS_MMS.xml)
     set_tests_properties(RANSStandardTransportSmoke PROPERTIES
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke
         PROCESSORS 1 TIMEOUT 120 ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
     add_test(NAME RANSCLSTransportSmoke COMMAND IncNavierStokesSolver
-        ${CMAKE_CURRENT_LIST_DIR}/CLS_MMS.xml)
+        ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke/CLS_MMS.xml)
     add_test(NAME RANSAWFOriginalSmoke COMMAND IncNavierStokesSolver
-        ${CMAKE_CURRENT_LIST_DIR}/AWFOriginal.xml)
+        ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke/AWFOriginal.xml)
     add_test(NAME RANSAWFEquilibriumSmoke COMMAND IncNavierStokesSolver
-        ${CMAKE_CURRENT_LIST_DIR}/AWFEquilibrium.xml)
+        ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke/AWFEquilibrium.xml)
     set_tests_properties(RANSCLSTransportSmoke RANSAWFOriginalSmoke RANSAWFEquilibriumSmoke PROPERTIES
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke
         PROCESSORS 1 TIMEOUT 120 ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
     add_test(NAME RANSABLPreservationSmoke COMMAND IncNavierStokesSolver
-        ${CMAKE_CURRENT_LIST_DIR}/ABLPreservation.xml)
+        ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke/ABLPreservation.xml)
     add_test(NAME RANSABL3DPerturbationSmoke COMMAND IncNavierStokesSolver
-        ${CMAKE_CURRENT_LIST_DIR}/ABLPreservation3D.xml)
+        ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke/ABLPreservation3D.xml)
     set_tests_properties(RANSABLPreservationSmoke RANSABL3DPerturbationSmoke PROPERTIES
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke
         PROCESSORS 1 TIMEOUT 300 ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")

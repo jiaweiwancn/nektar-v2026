@@ -134,26 +134,30 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
         ADD_NEKTAR_EXECUTABLE(RANSFieldAudit COMPONENT tests DEPENDS MultiRegions
             SOURCES ${CMAKE_SOURCE_DIR}/library/UnitTests/SolverUtils/RANSFieldAudit.cpp)
         FILE(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke)
+        FOREACH(rans_fixture StandardRANS_MMS CLS_MMS AWFOriginal AWFEquilibrium ABLPreservation ABLPreservation3D)
+            CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/Tests/RANS/${rans_fixture}.xml"
+                "${CMAKE_CURRENT_BINARY_DIR}/rans-smoke/${rans_fixture}.xml" COPYONLY)
+        ENDFOREACH()
         ADD_TEST(NAME RANSStandardTransportSmoke COMMAND IncNavierStokesSolver
-            ${CMAKE_CURRENT_SOURCE_DIR}/Tests/RANS/StandardRANS_MMS.xml)
+            ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke/StandardRANS_MMS.xml)
         SET_TESTS_PROPERTIES(RANSStandardTransportSmoke PROPERTIES
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke
             PROCESSORS 1 TIMEOUT 120
             ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
         ADD_TEST(NAME RANSCLSTransportSmoke COMMAND IncNavierStokesSolver
-            ${CMAKE_CURRENT_SOURCE_DIR}/Tests/RANS/CLS_MMS.xml)
+            ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke/CLS_MMS.xml)
         ADD_TEST(NAME RANSAWFOriginalSmoke COMMAND IncNavierStokesSolver
-            ${CMAKE_CURRENT_SOURCE_DIR}/Tests/RANS/AWFOriginal.xml)
+            ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke/AWFOriginal.xml)
         ADD_TEST(NAME RANSAWFEquilibriumSmoke COMMAND IncNavierStokesSolver
-            ${CMAKE_CURRENT_SOURCE_DIR}/Tests/RANS/AWFEquilibrium.xml)
+            ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke/AWFEquilibrium.xml)
         SET_TESTS_PROPERTIES(RANSCLSTransportSmoke RANSAWFOriginalSmoke RANSAWFEquilibriumSmoke PROPERTIES
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke
             PROCESSORS 1 TIMEOUT 120
             ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
         ADD_TEST(NAME RANSABLPreservationSmoke COMMAND IncNavierStokesSolver
-            ${CMAKE_CURRENT_SOURCE_DIR}/Tests/RANS/ABLPreservation.xml)
+            ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke/ABLPreservation.xml)
         ADD_TEST(NAME RANSABL3DPerturbationSmoke COMMAND IncNavierStokesSolver
-            ${CMAKE_CURRENT_SOURCE_DIR}/Tests/RANS/ABLPreservation3D.xml)
+            ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke/ABLPreservation3D.xml)
         SET_TESTS_PROPERTIES(RANSABLPreservationSmoke RANSABL3DPerturbationSmoke PROPERTIES
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke
             PROCESSORS 1 TIMEOUT 300

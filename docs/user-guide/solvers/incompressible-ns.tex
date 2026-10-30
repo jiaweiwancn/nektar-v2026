@@ -143,8 +143,14 @@ Select it using
 <I PROPERTY="Projection" VALUE="Galerkin" />
 \end{lstlisting}
 The initial implementation supports full 2D and 3D continuous expansions and
-constant-step IMEX of order one or two. Use variables
-\inltt{u,v,k,eps,p} in 2D or \inltt{u,v,w,k,eps,p} in 3D. The saved pressure
+constant-step IMEX of order one or two. Use the following variable order:
+\begin{center}
+\begin{tabular}{ll}
+2D & \texttt{u, v, k, eps, p} \\
+3D & \texttt{u, v, w, k, eps, p}
+\end{tabular}
+\end{center}
+The saved pressure
 is $\pi=p_{\mathrm{mechanical}}/\rho+2k/3$, with zero volume mean when normal
 velocity is prescribed on all boundaries. The tested
 mixed approximation has velocity/scalar degree $p$ and continuous pressure
@@ -158,7 +164,8 @@ physical viscosity in both modes. The transport parameters are
 0.09, 1.44, 1.92, 1 and 1.3. Do not use the legacy
 \inltt{DiffusionCoefficient} function for this path.
 
-Nonperiodic boundaries prescribe normal velocity and use a pressure Neumann
+Except at the flat traction outlet described below, nonperiodic boundaries
+prescribe normal velocity and use a pressure Neumann
 entry tagged \inltt{RANSPressure}. This marker selects the coupled normal
 momentum treatment. A flat lower standoff boundary can use tangential
 Neumann entries tagged \inltt{RANSLogLaw}, zero normal Dirichlet velocity,
@@ -172,8 +179,9 @@ implicit stage. Nonfinite or nonpositive $k$ and epsilon fail collectively;
 \inltt{RANSMinimumK} and \inltt{RANSMinimumEpsilon} can set stricter rejection
 thresholds. No floor is applied. Stage diagnostics are written to
 \inltt{<session>.rans.csv}. BDF2 requires an appropriate timestep for positivity.
-SVV, GJP, homogeneous expansions, substepping and open pressure-outflow
-conditions are outside the initial supported configuration.
+SVV, GJP, homogeneous expansions, substepping and prescribed-pressure outlets
+are outside the supported configuration. The flat total-traction outlet below
+is available with a free coupled pressure multiplier.
 
 A complete manufactured example, \inltt{StandardRANS\_MMS.xml}, is supplied in
 \path{solvers/IncNavierStokesSolver/Tests/RANS}.
@@ -184,8 +192,8 @@ neutral-ABL control tests.
 \label{CLSRANSScheme}
 
 The same solver supports the high Reynolds number cubic Craft--Launder--Suga
-closure. Select \inltt{TurbulenceModel=CLSHighRe} and use
-\inltt{u,v,k,eps\_tilde,p} in 2D or \inltt{u,v,w,k,eps\_tilde,p} in 3D.
+closure. Select \inltt{TurbulenceModel=CLSHighRe} and use the same variable
+order as above, replacing \inltt{eps} by \inltt{eps\_tilde} in 2D and 3D.
 The full quadratic/cubic covariance, variable $C(q)$, consistent production
 and algebraic Yap source are updated in each implicit stage. In 2D, mesh
 $x,y$ represent physical $x,z$ and solver $v$ is wall-normal velocity.
@@ -256,18 +264,18 @@ The default \inltt{RANSAWFWeight=Switched} requires explicit parameters
 The compact switch has exact plateaus at one and zero. Its seven independent
 indicators sense matching velocity, the P/N log increment, $k_N$,
 $\varepsilon_N$, pressure minus body acceleration, convection, and normal
-velocity. Parameters \inltt{RANSAWFWeightU}, \inltt{RANSAWFWeightDeltaU},
-\inltt{RANSAWFWeightK}, \inltt{RANSAWFWeightEpsilon},
-\inltt{RANSAWFWeightPressure}, \inltt{RANSAWFWeightConvection} and
-\inltt{RANSAWFWeightNormal} default to one and must be nonnegative, with at
-least one positive value. \inltt{RANSAWFDirectionX/Y} specify a fixed nonzero
+velocity. The seven weight parameters have prefix \inltt{RANSAWFWeight}
+and suffixes \inltt{U}, \inltt{DeltaU}, \inltt{K}, \inltt{Epsilon},
+\inltt{Pressure}, \inltt{Convection} and \inltt{Normal}. Each defaults to
+one and must be nonnegative, with at least one positive value.
+\inltt{RANSAWFDirectionX/Y} specify a fixed nonzero
 incoming horizontal direction, default $(1,0)$. Direction Y must vanish in
 2D. The thresholds and weights require application-specific validation.
 
 The correction requires $z_c\leq P$ and a high Reynolds number wall regime.
 The configurable gate \inltt{RANSAWFMinimumRe}, default 100, applies to
-$\sqrt{K_P}H/\nu$. \inltt{RANSAWFFailurePolicy=UseOriginal}, default,
-reports an original-form fallback outside these conditions.
+$\sqrt{K_P}H/\nu$. The \inltt{RANSAWFFailurePolicy} setting defaults to
+\inltt{UseOriginal}, which reports an original-form fallback outside these conditions.
 \inltt{RequirePreservation} rejects an inadmissible requested reference,
 including a collective initial preflight. The cutoff is never clipped.
 The actual matching anchor determines aerodynamic roughness; an additional
@@ -283,7 +291,7 @@ RANS test directory. The accompanying specification records measured
 refinement and recovery tests; finite polynomial degree does not exactly
 represent the analytical logarithm and reciprocal-height profiles.
 
-\paragraph{Linear solution, diagnostics and restart.}
+\subsubsection{RANS linear solution, diagnostics and restart}
 \inltt{RANSLinearSolver=MatrixFree} optionally applies the current variable
 weak diffusion and mass operators, with cached native static-condensation
 preconditioners. The default is \inltt{Native}. This option does not freeze the
@@ -294,7 +302,7 @@ step and writes \inltt{.rans-errors.csv}; these functions do not alter evolution
 
 A flat streamwise $x+$ outlet can tag every velocity Neumann entry
 \inltt{RANSOutflow}. Its value is total traction $(T-\pi I)n$, where
-$T=\nu_{\rm eff}(\nabla U+\nabla U^T)-R_{\rm nonlinear}$; the solver adds the
+$T=\nu_{\mathrm{eff}}(\nabla U+\nabla U^T)-R_{\mathrm{nonlinear}}$; the solver adds the
 current $\pi n$ to the scalar Helmholtz flux. Use zero normal scalar gradients
 and retain the \inltt{RANSPressure} marker. The prescribed traction fixes the
 pressure constant, so this outlet does not remove the volume mean of $\pi$.
@@ -302,7 +310,9 @@ Backflow and curved outlets have not been validated.
 
 RANS checkpoints and final fields reference a \inltt{.rans-<step>} directory
 with checksummed element-indexed IMEX histories. Retain it together with the
-field file. \inltt{RANSRestartMode=History} requires full history;
+field file.
+
+Set \inltt{RANSRestartMode} to \inltt{History} to require full history.
 \inltt{Auto}, the default, restores it when present and uses native IMEX
 startup for legacy fields without history metadata. \inltt{Cold} explicitly
 requests startup. \inltt{RANSHistoryPath} can locate moved payloads. Full
@@ -313,6 +323,41 @@ expressions must be kept consistent by the caller. MPI repartitioning is
 supported. Checkpoint intervals must be specified in steps for this
 constant-step implementation. The RANS test directory contains the preservation
 and restart study generator and validator.
+
+\subsubsection{Neutral-ABL examples and validated scope}
+The source directory
+\path{solvers/IncNavierStokesSolver/Examples/NeutralABL}
+contains a complete configuration guide, \inltt{generate.py} and
+\inltt{restart.py}. The generator prepares standard, original CLS/AWF,
+fixed-correction and switched-correction sessions in full 2D or 3D using the
+verified study generator. It requires Python 3.9 or newer and the source tree,
+without third-party Python packages. For example, from a separate run directory:
+\begin{lstlisting}[style=BashInputStyle]
+python3 /path/to/NeutralABL/generate.py neutral.xml \
+  --model cls_switched --steps 4 --checkpoint 2
+IncNavierStokesSolver neutral.xml
+\end{lstlisting}
+Run the solver with the case directory as its working directory. The short
+example checks startup; replace the step count by \inltt{--flow-times 5}
+in a fresh case to request the longer analytical comparison. To continue,
+give \inltt{restart.py} the original XML, complete field, new XML and
+\inltt{--steps 4}. This prepares four additional steps with full history
+required. Use complete MPI
+field directories and keep their history sidecars. The helper retains the
+model, grid and timestep, removes a final-time override, and follows the field's
+history metadata unless a relocated directory is explicitly supplied.
+
+The accepted flat neutral benchmark uses degree 4 velocity/scalars, degree 2
+continuous pressure, eight GLL points per direction, 12 geometric vertical
+layers and \inltt{HighRe} diffusion. At those settings, standard and corrected
+CLS cases meet a 0.1 percent drift target in 2D and full 3D over five flows.
+The original AWF drifts. A degree 5 four-rank 3D experiment develops a growing
+mode and fails that target; tighter linear precision is not a demonstrated
+general remedy. Weak divergence alone is not sufficient to assess that mode.
+The 3D reference and small-perturbation profiles are span independent; these
+results do not establish general 3D disturbance stability. There is no terrain,
+thermal, stratified, low-Re CLS or backflow validation in this delivery.
+The tracked Milestone 6 report records the limits and source/binary evidence.
 
 \subsubsection{Implicit Velocity Correction Scheme}
 \label{VCSImplicitScheme}
@@ -1546,7 +1591,7 @@ The positive periods define the synthesis lattice; all three counts must be
 even and at least four. Zero and Nyquist modes are excluded. \inltt{KMAX} is
 in radians per metre and must lie strictly below every synthesis Nyquist
 wavenumber. A cosine energy taper starts at \inltt{TAPERSTART}. Also require
-$U_{\rm bar}\,\mathtt{KMAX}\,\Delta t<\pi$.
+$U_{\mathrm{bar}}\,\mathtt{KMAX}\,\Delta t<\pi$.
 \inltt{TargetRMS} fixes the expected total fluctuating kinetic energy to
 $3\,\mathtt{RMS}^2/2$, allowing each random realization's energy to fluctuate.
 A finite synthesis lattice can depart from exact isotropy.
@@ -1576,7 +1621,7 @@ to a shell spectrum before using this input. \inltt{LogLinear} interpolation,
 synthesis settings and actual solver time determine the realization, so
 repeated boundary evaluations do not advance random state.
 \inltt{TIMEORIGIN} fixes its phase origin; \inltt{RECORDDURATION} must cover
-the declared run. The frozen record repeats after $L_X/U_{\rm bar}$;
+the declared run. The frozen record repeats after $L_X/U_{\mathrm{bar}}$;
 \inltt{REPEAT="Error"} requires the record to be shorter than this period.
 \inltt{Allow} explicitly permits reuse. Startup reports the settings, spectrum
 SHA256 digest, mode memory and expected and realized kinetic energy.
