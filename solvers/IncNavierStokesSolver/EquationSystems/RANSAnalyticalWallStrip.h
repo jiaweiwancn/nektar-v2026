@@ -29,6 +29,7 @@ public:
         int dimension, NekDouble wallOrigin,
         const SolverUtils::RANSNeutralReference &reference);
     void CheckInitialState(const Fields &state) const;
+    std::string RestartSignature() const;
     void Update(const Fields &state, const Fields &predictor,
                 const Gradients &gradient, const Fields &pressureForce,
                 const Fields &convection, const Fields &bodyForce, NekDouble alpha);

@@ -145,7 +145,8 @@ Select it using
 The initial implementation supports full 2D and 3D continuous expansions and
 constant-step IMEX of order one or two. Use variables
 \inltt{u,v,k,eps,p} in 2D or \inltt{u,v,w,k,eps,p} in 3D. The saved pressure
-is $\pi=p_{\mathrm{mechanical}}/\rho+2k/3$, with zero volume mean. The tested
+is $\pi=p_{\mathrm{mechanical}}/\rho+2k/3$, with zero volume mean when normal
+velocity is prescribed on all boundaries. The tested
 mixed approximation has velocity/scalar degree $p$ and continuous pressure
 degree $p-2$, with identical physical quadrature points for every field.
 
@@ -281,6 +282,37 @@ basis. These coefficient norms differ from physical $L^2$ error norms.
 RANS test directory. The accompanying specification records measured
 refinement and recovery tests; finite polynomial degree does not exactly
 represent the analytical logarithm and reciprocal-height profiles.
+
+\paragraph{Linear solution, diagnostics and restart.}
+\inltt{RANSLinearSolver=MatrixFree} optionally applies the current variable
+weak diffusion and mass operators, with cached native static-condensation
+preconditioners. The default is \inltt{Native}. This option does not freeze the
+turbulence coefficients or wall data. Both models output derived viscosity,
+production, dissipation and Reynolds stresses. \inltt{RANSReferenceMonitor=1}
+compares fields against supplied \inltt{ExactSolution} functions after each
+step and writes \inltt{.rans-errors.csv}; these functions do not alter evolution.
+
+A flat streamwise $x+$ outlet can tag every velocity Neumann entry
+\inltt{RANSOutflow}. Its value is total traction $(T-\pi I)n$, where
+$T=\nu_{\rm eff}(\nabla U+\nabla U^T)-R_{\rm nonlinear}$; the solver adds the
+current $\pi n$ to the scalar Helmholtz flux. Use zero normal scalar gradients
+and retain the \inltt{RANSPressure} marker. The prescribed traction fixes the
+pressure constant, so this outlet does not remove the volume mean of $\pi$.
+Backflow and curved outlets have not been validated.
+
+RANS checkpoints and final fields reference a \inltt{.rans-<step>} directory
+with checksummed element-indexed IMEX histories. Retain it together with the
+field file. \inltt{RANSRestartMode=History} requires full history;
+\inltt{Auto}, the default, restores it when present and uses native IMEX
+startup for legacy fields without history metadata. \inltt{Cold} explicitly
+requests startup. \inltt{RANSHistoryPath} can locate moved payloads. Full
+continuation requires the same mesh, basis, quadrature, timestep, IMEX order,
+model, wall parameters, boundaries and forcing. The implementation checks the
+stored configuration and payload geometry/state; boundary and forcing
+expressions must be kept consistent by the caller. MPI repartitioning is
+supported. Checkpoint intervals must be specified in steps for this
+constant-step implementation. The RANS test directory contains the preservation
+and restart study generator and validator.
 
 \subsubsection{Implicit Velocity Correction Scheme}
 \label{VCSImplicitScheme}

@@ -1,0 +1,405 @@
+<?xml version='1.0' encoding='utf-8'?>
+<NEKTAR>
+  <EXPANSIONS>
+    <E COMPOSITE="C[0]" NUMMODES="5,5,5" BASISTYPE="Modified_A,Modified_A,Modified_A" POINTSTYPE="GaussLobattoLegendre,GaussLobattoLegendre,GaussLobattoLegendre" NUMPOINTS="8,8,8" FIELDS="u,v,w,k,eps_tilde" />
+    <E COMPOSITE="C[0]" NUMMODES="3,3,3" BASISTYPE="Modified_A,Modified_A,Modified_A" POINTSTYPE="GaussLobattoLegendre,GaussLobattoLegendre,GaussLobattoLegendre" NUMPOINTS="8,8,8" FIELDS="p" />
+  </EXPANSIONS>
+  <CONDITIONS>
+    <SOLVERINFO>
+      <I PROPERTY="SolverType" VALUE="RANSVelocityCorrectionScheme" />
+      <I PROPERTY="EQTYPE" VALUE="UnsteadyNavierStokes" />
+      <I PROPERTY="Projection" VALUE="Galerkin" />
+      <I PROPERTY="TurbulenceModel" VALUE="CLSHighRe" />
+      <I PROPERTY="RANSResolvedDiffusion" VALUE="HighRe" />
+      <I PROPERTY="GlobalSysSoln" VALUE="IterativeStaticCond" />
+      <I PROPERTY="RANSWallModel" VALUE="AWFEquilibrium" />
+      <I PROPERTY="RANSAWFWeight" VALUE="Switched" />
+      <I PROPERTY="RANSAWFFailurePolicy" VALUE="RequirePreservation" />
+      <I PROPERTY="RANSLinearSolver" VALUE="MatrixFree" />
+    </SOLVERINFO>
+    <TIMEINTEGRATIONSCHEME>
+      <METHOD>IMEX</METHOD>
+      <ORDER>2</ORDER>
+    </TIMEINTEGRATIONSCHEME>
+    <PARAMETERS>
+      <P>TimeStep = 0.050000000000000003</P>
+      <P>NumSteps = 2</P>
+      <P>IO_InfoSteps = 1</P>
+      <P>Kinvis = 1.5e-05</P>
+      <P>ResolvedNu = 0</P>
+      <P>IterativeSolverTolerance = 1e-13</P>
+      <P>RANSNonlinearTolerance = 1e-08</P>
+      <P>RANSMaxIterations = 2000</P>
+      <P>Ustar = 0.4</P>
+      <P>Kappa = 0.440553905186659</P>
+      <P>Z0 = 0.02</P>
+      <P>Qstar = 3.190675081624288</P>
+      <P>MatchingVelocity = 5.780254367996082</P>
+      <P>H = 2.0</P>
+      <P>Z = 30.0</P>
+      <P>L = 300.0</P>
+      <P>Span = 20.0</P>
+      <P>Uref = 7.241540166157099</P>
+      <P>RANSPressureTolerance = 1e-08</P>
+      <P>RANSStageAudit = 0</P>
+      <P>RANSReferenceMonitor = 1</P>
+      <P>IO_CheckSteps = 0</P>
+      <P>RANSStripHeight = 2.0</P>
+      <P>RANSStripPointP = 1.0</P>
+      <P>RANSStripPointN = 4.0</P>
+      <P>RANSRoughnessHeight = 0.1</P>
+      <P>RANSAWFFixedWeight = 1</P>
+      <P>RANSAWFOn = 0.02</P>
+      <P>RANSAWFOff = 0.1</P>
+      <P>RANSAWFMinimumRe = 100</P>
+      <P>RANSAWFPointDiagnostics = 0</P>
+    </PARAMETERS>
+    <VARIABLES>
+      <V ID="0">u</V>
+      <V ID="1">v</V>
+      <V ID="2">w</V>
+      <V ID="3">k</V>
+      <V ID="4">eps_tilde</V>
+      <V ID="5">p</V>
+    </VARIABLES>
+    <BOUNDARYREGIONS>
+      <B ID="0">C[1]</B>
+      <B ID="1">C[2]</B>
+      <B ID="2">C[3]</B>
+      <B ID="3">C[4]</B>
+      <B ID="4">C[5]</B>
+      <B ID="5">C[6]</B>
+    </BOUNDARYREGIONS>
+    <BOUNDARYCONDITIONS>
+      <REGION REF="0">
+        <R VAR="u" USERDEFINEDTYPE="AWFEquilibrium" VALUE="0" PRIMCOEFF="0" />
+        <R VAR="v" USERDEFINEDTYPE="AWFEquilibrium" VALUE="0" PRIMCOEFF="0" />
+        <D VAR="w" VALUE="0" />
+        <R VAR="k" USERDEFINEDTYPE="AWFEquilibrium" VALUE="0" PRIMCOEFF="0" />
+        <D VAR="eps_tilde" VALUE="Ustar^3/(Kappa*z)" />
+        <N VAR="p" USERDEFINEDTYPE="RANSPressure" VALUE="0" />
+      </REGION>
+      <REGION REF="1">
+        <N VAR="u" USERDEFINEDTYPE="RANSOutflow" VALUE="(-0.253333333333333333*Qstar*Ustar^2)" />
+        <N VAR="v" USERDEFINEDTYPE="RANSOutflow" VALUE="0" />
+        <N VAR="w" USERDEFINEDTYPE="RANSOutflow" VALUE="Ustar^2" />
+        <N VAR="k" VALUE="0" />
+        <N VAR="eps_tilde" VALUE="0" />
+        <N VAR="p" USERDEFINEDTYPE="RANSPressure" VALUE="0" />
+      </REGION>
+      <REGION REF="2">
+        <N VAR="u" VALUE="Ustar^2" />
+        <N VAR="v" VALUE="0" />
+        <D VAR="w" VALUE="0" />
+        <N VAR="k" VALUE="0" />
+        <N VAR="eps_tilde" VALUE="-Ustar^4/(1.3*Z)" />
+        <N VAR="p" USERDEFINEDTYPE="RANSPressure" VALUE="0" />
+      </REGION>
+      <REGION REF="3">
+        <D VAR="u" VALUE="MatchingVelocity+Ustar/Kappa*log(z/H)" />
+        <D VAR="v" VALUE="0" />
+        <D VAR="w" VALUE="0" />
+        <D VAR="k" VALUE="Qstar*Ustar^2" />
+        <D VAR="eps_tilde" VALUE="Ustar^3/(Kappa*z)" />
+        <N VAR="p" USERDEFINEDTYPE="RANSPressure" VALUE="0" />
+      </REGION>
+      <REGION REF="4">
+        <P VAR="u" VALUE="[5]" />
+        <P VAR="v" VALUE="[5]" />
+        <P VAR="w" VALUE="[5]" />
+        <P VAR="k" VALUE="[5]" />
+        <P VAR="eps_tilde" VALUE="[5]" />
+        <P VAR="p" VALUE="[5]" />
+      </REGION>
+      <REGION REF="5">
+        <P VAR="u" VALUE="[4]" />
+        <P VAR="v" VALUE="[4]" />
+        <P VAR="w" VALUE="[4]" />
+        <P VAR="k" VALUE="[4]" />
+        <P VAR="eps_tilde" VALUE="[4]" />
+        <P VAR="p" VALUE="[4]" />
+      </REGION>
+    </BOUNDARYCONDITIONS>
+    <FUNCTION NAME="InitialConditions">
+      <E VAR="u" VALUE="(MatchingVelocity+Ustar/Kappa*log(z/H))+(0.01/(1496023.4030724512))*Ustar*(16*x^2*(L-x)^2/L^4)*(2*(z-H)*(z-2*H)*(Z-z)*((z-2*H)*(Z-z)+(z-H)*(Z-z)-(z-H)*(z-2*H)))" />
+      <E VAR="v" VALUE="0" />
+      <E VAR="w" VALUE="-(0.01/(1496023.4030724512))*Ustar*(32*x*(L-x)*(L-2*x)/L^4)*(((z-H)*(z-2*H)*(Z-z))^2)" />
+      <E VAR="k" VALUE="(Qstar*Ustar^2)*(1+(0.01/(8450702.6692833062))*(16*x^2*(L-x)^2/L^4)*(((z-H)*(z-2*H)*(Z-z))^2))" />
+      <E VAR="eps_tilde" VALUE="Ustar^3/(Kappa*z)" />
+      <E VAR="p" VALUE="0" />
+    </FUNCTION>
+    <FUNCTION NAME="ExactSolution">
+      <E VAR="u" VALUE="MatchingVelocity+Ustar/Kappa*log(z/H)" />
+      <E VAR="v" VALUE="0" />
+      <E VAR="w" VALUE="0" />
+      <E VAR="k" VALUE="Qstar*Ustar^2" />
+      <E VAR="eps_tilde" VALUE="Ustar^3/(Kappa*z)" />
+      <E VAR="p" VALUE="0" />
+      <E VAR="rans_nut" VALUE="Kappa*Ustar*z" />
+      <E VAR="rans_P" VALUE="Ustar^3/(Kappa*z)" />
+      <E VAR="rans_eps_total" VALUE="Ustar^3/(Kappa*z)" />
+      <E VAR="rans_Yap" VALUE="(0.003637748895393522)*(Ustar^3/(Kappa*z))^2/(Qstar*Ustar^2)" />
+      <E VAR="rans_R_xx" VALUE=".92*Qstar*Ustar^2" />
+      <E VAR="rans_R_yy" VALUE=".56*Qstar*Ustar^2" />
+      <E VAR="rans_R_zz" VALUE=".52*Qstar*Ustar^2" />
+      <E VAR="rans_R_xy" VALUE="0" />
+      <E VAR="rans_R_xz" VALUE="-Ustar^2" />
+      <E VAR="rans_R_yz" VALUE="0" />
+      <E VAR="rans_quadratic_norm" VALUE="(0.31155523854794459)*Qstar*Ustar^2" />
+      <E VAR="rans_cubic_norm" VALUE="0" />
+    </FUNCTION>
+  </CONDITIONS>
+  <FILTERS>
+    <FILTER TYPE="HistoryPoints">
+      <PARAM NAME="OutputFrequency">1</PARAM>
+      <PARAM NAME="Points">75.0 10.0 2.1
+150.0 10.0 4.0
+285.0 10.0 10</PARAM>
+    </FILTER>
+  </FILTERS>
+  <GEOMETRY DIM="3" SPACE="3">
+    <VERTEX>
+      <V ID="0">0 0 2</V>
+      <V ID="1">300 0 2</V>
+      <V ID="2">0 20 2</V>
+      <V ID="3">300 20 2</V>
+      <V ID="4">0 0 2.5063262377232696</V>
+      <V ID="5">300 0 2.5063262377232696</V>
+      <V ID="6">0 20 2.5063262377232696</V>
+      <V ID="7">300 20 2.5063262377232696</V>
+      <V ID="8">0 0 3.1408356049500394</V>
+      <V ID="9">300 0 3.1408356049500394</V>
+      <V ID="10">0 20 3.1408356049500394</V>
+      <V ID="11">300 20 3.1408356049500394</V>
+      <V ID="12">0 0 3.9359793425308607</V>
+      <V ID="13">300 0 3.9359793425308607</V>
+      <V ID="14">0 20 3.9359793425308607</V>
+      <V ID="15">300 20 3.9359793425308607</V>
+      <V ID="16">0 0 4.9324241486609397</V>
+      <V ID="17">300 0 4.9324241486609397</V>
+      <V ID="18">0 20 4.9324241486609397</V>
+      <V ID="19">300 20 4.9324241486609397</V>
+      <V ID="20">0 0 6.1811320296843881</V>
+      <V ID="21">300 0 6.1811320296843881</V>
+      <V ID="22">0 20 6.1811320296843881</V>
+      <V ID="23">300 20 6.1811320296843881</V>
+      <V ID="24">0 0 7.745966692414834</V>
+      <V ID="25">300 0 7.745966692414834</V>
+      <V ID="26">0 20 7.745966692414834</V>
+      <V ID="27">300 20 7.745966692414834</V>
+      <V ID="28">0 0 9.7069597788649151</V>
+      <V ID="29">300 0 9.7069597788649151</V>
+      <V ID="30">0 20 9.7069597788649151</V>
+      <V ID="31">300 20 9.7069597788649151</V>
+      <V ID="32">0 0 12.164403991146798</V>
+      <V ID="33">300 0 12.164403991146798</V>
+      <V ID="34">0 20 12.164403991146798</V>
+      <V ID="35">300 20 12.164403991146798</V>
+      <V ID="36">0 0 15.243982444638442</V>
+      <V ID="37">300 0 15.243982444638442</V>
+      <V ID="38">0 20 15.243982444638442</V>
+      <V ID="39">300 20 15.243982444638442</V>
+      <V ID="40">0 0 19.103196584195121</V>
+      <V ID="41">300 0 19.103196584195121</V>
+      <V ID="42">0 20 19.103196584195121</V>
+      <V ID="43">300 20 19.103196584195121</V>
+      <V ID="44">0 0 23.939421411676879</V>
+      <V ID="45">300 0 23.939421411676879</V>
+      <V ID="46">0 20 23.939421411676879</V>
+      <V ID="47">300 20 23.939421411676879</V>
+      <V ID="48">0 0 30</V>
+      <V ID="49">300 0 30</V>
+      <V ID="50">0 20 30</V>
+      <V ID="51">300 20 30</V>
+    </VERTEX>
+    <EDGE>
+      <E ID="0">3 2</E>
+      <E ID="1">2 0</E>
+      <E ID="2">0 1</E>
+      <E ID="3">1 3</E>
+      <E ID="4">2 6</E>
+      <E ID="5">7 6</E>
+      <E ID="6">3 7</E>
+      <E ID="7">0 4</E>
+      <E ID="8">6 4</E>
+      <E ID="9">4 5</E>
+      <E ID="10">1 5</E>
+      <E ID="11">5 7</E>
+      <E ID="12">6 10</E>
+      <E ID="13">11 10</E>
+      <E ID="14">7 11</E>
+      <E ID="15">4 8</E>
+      <E ID="16">10 8</E>
+      <E ID="17">8 9</E>
+      <E ID="18">5 9</E>
+      <E ID="19">9 11</E>
+      <E ID="20">10 14</E>
+      <E ID="21">15 14</E>
+      <E ID="22">11 15</E>
+      <E ID="23">8 12</E>
+      <E ID="24">14 12</E>
+      <E ID="25">12 13</E>
+      <E ID="26">9 13</E>
+      <E ID="27">13 15</E>
+      <E ID="28">14 18</E>
+      <E ID="29">19 18</E>
+      <E ID="30">15 19</E>
+      <E ID="31">12 16</E>
+      <E ID="32">18 16</E>
+      <E ID="33">16 17</E>
+      <E ID="34">13 17</E>
+      <E ID="35">17 19</E>
+      <E ID="36">18 22</E>
+      <E ID="37">23 22</E>
+      <E ID="38">19 23</E>
+      <E ID="39">16 20</E>
+      <E ID="40">22 20</E>
+      <E ID="41">20 21</E>
+      <E ID="42">17 21</E>
+      <E ID="43">21 23</E>
+      <E ID="44">22 26</E>
+      <E ID="45">27 26</E>
+      <E ID="46">23 27</E>
+      <E ID="47">20 24</E>
+      <E ID="48">26 24</E>
+      <E ID="49">24 25</E>
+      <E ID="50">21 25</E>
+      <E ID="51">25 27</E>
+      <E ID="52">26 30</E>
+      <E ID="53">31 30</E>
+      <E ID="54">27 31</E>
+      <E ID="55">24 28</E>
+      <E ID="56">30 28</E>
+      <E ID="57">28 29</E>
+      <E ID="58">25 29</E>
+      <E ID="59">29 31</E>
+      <E ID="60">30 34</E>
+      <E ID="61">35 34</E>
+      <E ID="62">31 35</E>
+      <E ID="63">28 32</E>
+      <E ID="64">34 32</E>
+      <E ID="65">32 33</E>
+      <E ID="66">29 33</E>
+      <E ID="67">33 35</E>
+      <E ID="68">34 38</E>
+      <E ID="69">39 38</E>
+      <E ID="70">35 39</E>
+      <E ID="71">32 36</E>
+      <E ID="72">38 36</E>
+      <E ID="73">36 37</E>
+      <E ID="74">33 37</E>
+      <E ID="75">37 39</E>
+      <E ID="76">38 42</E>
+      <E ID="77">43 42</E>
+      <E ID="78">39 43</E>
+      <E ID="79">36 40</E>
+      <E ID="80">42 40</E>
+      <E ID="81">40 41</E>
+      <E ID="82">37 41</E>
+      <E ID="83">41 43</E>
+      <E ID="84">42 46</E>
+      <E ID="85">47 46</E>
+      <E ID="86">43 47</E>
+      <E ID="87">40 44</E>
+      <E ID="88">46 44</E>
+      <E ID="89">44 45</E>
+      <E ID="90">41 45</E>
+      <E ID="91">45 47</E>
+      <E ID="92">46 50</E>
+      <E ID="93">51 50</E>
+      <E ID="94">47 51</E>
+      <E ID="95">44 48</E>
+      <E ID="96">50 48</E>
+      <E ID="97">48 49</E>
+      <E ID="98">45 49</E>
+      <E ID="99">49 51</E>
+    </EDGE>
+    <FACE>
+      <Q ID="0">0 1 2 3</Q>
+      <Q ID="1">0 4 5 6</Q>
+      <Q ID="2">1 7 8 4</Q>
+      <Q ID="3">2 7 9 10</Q>
+      <Q ID="4">3 10 11 6</Q>
+      <Q ID="5">5 8 9 11</Q>
+      <Q ID="6">5 12 13 14</Q>
+      <Q ID="7">8 15 16 12</Q>
+      <Q ID="8">9 15 17 18</Q>
+      <Q ID="9">11 18 19 14</Q>
+      <Q ID="10">13 16 17 19</Q>
+      <Q ID="11">13 20 21 22</Q>
+      <Q ID="12">16 23 24 20</Q>
+      <Q ID="13">17 23 25 26</Q>
+      <Q ID="14">19 26 27 22</Q>
+      <Q ID="15">21 24 25 27</Q>
+      <Q ID="16">21 28 29 30</Q>
+      <Q ID="17">24 31 32 28</Q>
+      <Q ID="18">25 31 33 34</Q>
+      <Q ID="19">27 34 35 30</Q>
+      <Q ID="20">29 32 33 35</Q>
+      <Q ID="21">29 36 37 38</Q>
+      <Q ID="22">32 39 40 36</Q>
+      <Q ID="23">33 39 41 42</Q>
+      <Q ID="24">35 42 43 38</Q>
+      <Q ID="25">37 40 41 43</Q>
+      <Q ID="26">37 44 45 46</Q>
+      <Q ID="27">40 47 48 44</Q>
+      <Q ID="28">41 47 49 50</Q>
+      <Q ID="29">43 50 51 46</Q>
+      <Q ID="30">45 48 49 51</Q>
+      <Q ID="31">45 52 53 54</Q>
+      <Q ID="32">48 55 56 52</Q>
+      <Q ID="33">49 55 57 58</Q>
+      <Q ID="34">51 58 59 54</Q>
+      <Q ID="35">53 56 57 59</Q>
+      <Q ID="36">53 60 61 62</Q>
+      <Q ID="37">56 63 64 60</Q>
+      <Q ID="38">57 63 65 66</Q>
+      <Q ID="39">59 66 67 62</Q>
+      <Q ID="40">61 64 65 67</Q>
+      <Q ID="41">61 68 69 70</Q>
+      <Q ID="42">64 71 72 68</Q>
+      <Q ID="43">65 71 73 74</Q>
+      <Q ID="44">67 74 75 70</Q>
+      <Q ID="45">69 72 73 75</Q>
+      <Q ID="46">69 76 77 78</Q>
+      <Q ID="47">72 79 80 76</Q>
+      <Q ID="48">73 79 81 82</Q>
+      <Q ID="49">75 82 83 78</Q>
+      <Q ID="50">77 80 81 83</Q>
+      <Q ID="51">77 84 85 86</Q>
+      <Q ID="52">80 87 88 84</Q>
+      <Q ID="53">81 87 89 90</Q>
+      <Q ID="54">83 90 91 86</Q>
+      <Q ID="55">85 88 89 91</Q>
+      <Q ID="56">85 92 93 94</Q>
+      <Q ID="57">88 95 96 92</Q>
+      <Q ID="58">89 95 97 98</Q>
+      <Q ID="59">91 98 99 94</Q>
+      <Q ID="60">93 96 97 99</Q>
+    </FACE>
+    <ELEMENT>
+      <H ID="0">0 1 2 3 4 5</H>
+      <H ID="1">5 6 7 8 9 10</H>
+      <H ID="2">10 11 12 13 14 15</H>
+      <H ID="3">15 16 17 18 19 20</H>
+      <H ID="4">20 21 22 23 24 25</H>
+      <H ID="5">25 26 27 28 29 30</H>
+      <H ID="6">30 31 32 33 34 35</H>
+      <H ID="7">35 36 37 38 39 40</H>
+      <H ID="8">40 41 42 43 44 45</H>
+      <H ID="9">45 46 47 48 49 50</H>
+      <H ID="10">50 51 52 53 54 55</H>
+      <H ID="11">55 56 57 58 59 60</H>
+    </ELEMENT>
+    <COMPOSITE>
+      <C ID="0">H[0-11]</C>
+      <C ID="1">F[0]</C>
+      <C ID="2">F[4,9,14,19,24,29,34,39,44,49,54,59]</C>
+      <C ID="3">F[60]</C>
+      <C ID="4">F[2,7,12,17,22,27,32,37,42,47,52,57]</C>
+      <C ID="5">F[3,8,13,18,23,28,33,38,43,48,53,58]</C>
+      <C ID="6">F[1,6,11,16,21,26,31,36,41,46,51,56]</C>
+    </COMPOSITE>
+    <DOMAIN>C[0]</DOMAIN>
+  </GEOMETRY>
+</NEKTAR>

@@ -11,11 +11,38 @@
 #include <cmath>
 #include <iomanip>
 #include <limits>
+#include <filesystem>
+#include <sstream>
 
 namespace Nektar
 {
 using namespace SolverUtils;
 using MultiRegions::DirCartesianMap;
+namespace
+{
+// A positive outlet impedance belongs only to the approximate pressure
+// inverse. It retains the constant pressure mode needed to correct net outlet
+// flux. The actual multiplier and continuity have no added boundary equation.
+class RANSOutletPressureInverse : public MultiRegions::ContField
+{
+public:
+    RANSOutletPressureInverse(const LibUtilities::SessionReaderSharedPtr &session,
+        const SpatialDomains::MeshGraphSharedPtr &graph, const std::vector<int> &outlets,
+        NekDouble impedance)
+        : ContField(session,graph,"p",true,false)
+    {
+        std::ostringstream coefficient; coefficient << std::setprecision(17) << impedance;
+        for (int b : outlets)
+        {
+            m_bndConditions[b] = std::make_shared<SpatialDomains::RobinBoundaryCondition>(session,"0",coefficient.str());
+            Vmath::Zero(m_bndCondExpansions[b]->GetNcoeffs(),m_bndCondExpansions[b]->UpdateCoeffs(),1);
+        }
+        m_locToGloMap = MemoryManager<MultiRegions::AssemblyMapCG>::AllocateSharedPtr(
+            m_session,m_ncoeffs,*this,m_bndCondExpansions,m_bndConditions,false,"p",
+            m_periodicVerts,m_periodicEdges,m_periodicFaces);
+    }
+};
+}
 std::string RANSVelocityCorrectionScheme::className =
     GetEquationSystemFactory().RegisterCreatorFunction(
         "RANSVelocityCorrectionScheme", RANSVelocityCorrectionScheme::create);
@@ -176,7 +203,20 @@ void RANSVelocityCorrectionScheme::v_InitObject(bool declareField)
         valid &= pbc->GetBoundaryConditionType() == SpatialDomains::eNeumann &&
                  pbc->GetUserDefined() == "RANSPressure";
         const auto tag = m_fields[0]->GetBndConditions()[b]->GetUserDefined();
-        if (tag == "AWFOriginal" || tag == "AWFEquilibrium")
+        if (tag == "RANSOutflow")
+        {
+            m_outflows.push_back(b);
+            Fields normals;
+            m_fields[0]->GetBoundaryNormals(b, normals);
+            for (int q = 0; q < normals[0].size(); ++q)
+                valid &= std::abs(normals[0][q] - 1) < 1e-10;
+            for (int i = 0; i < dim; ++i)
+                valid &= m_fields[i]->GetBndConditions()[b]->GetBoundaryConditionType() == SpatialDomains::eNeumann &&
+                         m_fields[i]->GetBndConditions()[b]->GetUserDefined() == tag;
+            for (int i = dim; i < m_nConvectiveFields; ++i)
+                valid &= m_fields[i]->GetBndConditions()[b]->GetBoundaryConditionType() == SpatialDomains::eNeumann;
+        }
+        else if (tag == "AWFOriginal" || tag == "AWFEquilibrium")
         {
             valid &= wallModel == tag;
             for (int i = 0; i < dim - 1; ++i)
@@ -213,6 +253,9 @@ void RANSVelocityCorrectionScheme::v_InitObject(bool declareField)
         }
     }
     RequireEverywhere(valid, "pressure boundaries need RANSPressure and prescribed normal velocity; log walls need tangential Neumann, normal Dirichlet, k Neumann, eps Dirichlet");
+    int outflow = m_outflows.empty() ? 0 : 1;
+    m_session->GetComm()->AllReduce(outflow, LibUtilities::ReduceMax);
+    m_hasOutflow = outflow;
     m_wallModel = wallModel;
     if (wallModel != "None")
     {
@@ -227,6 +270,44 @@ void RANSVelocityCorrectionScheme::v_InitObject(bool declareField)
     // that vertex: a mass operator is nonsingular without any pin.
     m_pressureMass = MemoryManager<MultiRegions::ContField>::AllocateSharedPtr(
         m_session, m_fields[0]->GetGraph(), "p", true, false);
+    m_pressurePoisson = m_pressure;
+    std::string linear;
+    m_session->LoadSolverInfo("RANSLinearSolver", linear, "Native");
+    ASSERTL0(linear == "Native" || linear == "MatrixFree", "RANSLinearSolver must be Native or MatrixFree");
+    if (linear == "MatrixFree")
+    {
+        double tolerance;
+        m_session->LoadParameter("IterativeSolverTolerance", tolerance, 1e-13);
+        RANSMatrixFree::RobinOperator robin;
+        if (m_wallStrip) robin = [this](int f, const Fields &v, Array<OneD, NekDouble> &r) {
+            m_wallStrip->AddRobinAuditResidual(f, v, r);
+        };
+        bool supported = true;
+        for (int f = 0; f < m_nConvectiveFields; ++f)
+            for (const auto &bc : m_fields[f]->GetBndConditions())
+                if (bc->GetBoundaryConditionType() == SpatialDomains::eRobin)
+                    supported &= m_wallStrip && bc->GetUserDefined() == m_wallModel;
+        RequireEverywhere(supported, "matrix-free Robin conditions require the analytical strip");
+        m_matrixFree = std::make_shared<RANSMatrixFree>(m_fields, dim, tolerance, robin);
+    }
+    m_historyScheme = std::make_shared<RANSIMEX>(m_intScheme->GetOrder());
+    m_intScheme = m_historyScheme;
+    ASSERTL0(m_checktime == 0, "RANS constant-step history requires checkpoint intervals in steps");
+}
+
+std::string RANSVelocityCorrectionScheme::RestartSignature() const
+{
+    std::ostringstream s;
+    s << std::setprecision(17) << "RANS-1:" << static_cast<int>(m_model) << ':'
+      << m_parameters.cMu << ':' << m_parameters.cEpsilon1 << ':' << m_parameters.cEpsilon2
+      << ':' << m_parameters.sigmaK << ':' << m_parameters.sigmaEpsilon << ':'
+      << m_parameters.yapCoefficient << ':' << m_parameters.yapLength << ':'
+      << m_kinvis << ':' << m_resolvedNu << ':' << m_wallOrigin << ':' << m_z0
+      << ':' << m_heightShift << ':' << m_minimumK << ':' << m_minimumEpsilon
+      << ':' << m_hasOutflow << ":pi=p/rho+2k/3";
+    for (const auto &name : m_session->GetVariables()) s << ':' << name;
+    if (m_wallStrip) s << ':' << m_wallStrip->RestartSignature();
+    return s.str();
 }
 
 void RANSVelocityCorrectionScheme::CheckState(const Fields &state) const
@@ -249,9 +330,62 @@ void RANSVelocityCorrectionScheme::CheckState(const Fields &state) const
         std::to_string(minK) + ", min eps=" + std::to_string(minE) + "; no floor is applied");
 }
 
+void RANSVelocityCorrectionScheme::v_SetInitialConditions(NekDouble time, bool dump, int domain)
+{
+    EquationSystem::v_SetInitialConditions(time, dump, domain);
+    // Bind history to the imported field before VCS reapplies its startup
+    // Dirichlet values. The dynamic AWF EH value is restored from history.
+    m_importedCoefficients = Fields(m_fields.size());
+    for (int f = 0; f < m_fields.size(); ++f)
+    {
+        m_importedCoefficients[f] = Array<OneD, NekDouble>(m_fields[f]->GetNcoeffs());
+        Vmath::Vcopy(m_fields[f]->GetNcoeffs(),m_fields[f]->GetCoeffs(),1,m_importedCoefficients[f],1);
+    }
+}
+
 void RANSVelocityCorrectionScheme::v_DoInitialise(bool dump)
 {
+    std::string mode, input;
+    m_session->LoadSolverInfo("RANSRestartMode", mode, "Auto");
+    ASSERTL0(mode == "Auto" || mode == "History" || mode == "Cold",
+             "RANSRestartMode must be Auto, History or Cold");
+    int fileVariables = 0;
+    for (const auto &name : m_session->GetVariables())
+        if (m_session->DefinesFunction("InitialConditions", name) &&
+            m_session->GetFunctionType("InitialConditions", name) == LibUtilities::eFunctionTypeFile)
+        {
+            const auto file = m_session->GetFunctionFilename("InitialConditions", name);
+            ASSERTL0(input.empty() || input == file, "RANS restart fields must use one common file");
+            input = file; ++fileVariables;
+        }
+    LibUtilities::FieldMetaDataMap stored;
+    if (fileVariables)
+    {
+        auto path = std::filesystem::path(input);
+        if (std::filesystem::is_directory(path)) path /= "Info.xml";
+        auto reader = LibUtilities::FieldIO::CreateForFile(m_session, path.string());
+        reader->ImportFieldMetaData(path.string(), stored);
+        if (stored.count("RANSConfiguration"))
+            ASSERTL0(stored.at("RANSConfiguration") == RestartSignature(),
+                     "RANS restart model/configuration mismatch");
+    }
+    const bool restore = mode != "Cold" && stored.count("RANSHistoryFile");
+    ASSERTL0(mode != "History" || restore, "RANS history restart requires history metadata");
+    ASSERTL0(!restore || (fileVariables == m_fields.size() && stored.count("Time") &&
+             stored.count("RANSConfiguration")), "RANS history restart requires all primary fields and metadata");
     VCSWeakPressure::v_DoInitialise(dump);
+    if (restore)
+    {
+        std::string path;
+        m_session->LoadSolverInfo("RANSHistoryPath", path, stored.at("RANSHistoryFile"));
+        m_historyStepOffset = RANSHistory::Read(path, m_fields, m_importedCoefficients, *m_historyScheme,
+            RestartSignature(), m_time, m_timestep);
+    }
+    else if (fileVariables && m_session->GetComm()->GetRank() == 0)
+        std::cout << "RANS cold restart: native IMEX startup; no saved multistep history restored\n";
+    m_fieldMetaDataMap.erase("RANSHistoryFile");
+    m_importedCoefficients = Fields();
+    m_fieldMetaDataMap["RANSConfiguration"] = RestartSignature();
     Fields initial(m_nConvectiveFields);
     for (int i = 0; i < initial.size(); ++i)
         initial[i] = m_fields[i]->UpdatePhys();
@@ -261,6 +395,10 @@ void RANSVelocityCorrectionScheme::v_DoInitialise(bool dump)
     m_session->LoadParameter("RANSStageAudit", auditStage, 0);
     ASSERTL0(auditStage == 0 || auditStage == 1, "RANSStageAudit must be 0 or 1");
     m_auditStage = auditStage;
+    int monitor = 0;
+    m_session->LoadParameter("RANSReferenceMonitor", monitor, 0);
+    ASSERTL0(monitor == 0 || monitor == 1, "RANSReferenceMonitor must be 0 or 1");
+    m_monitorReference = monitor;
     m_fieldMetaDataMap["RANSModel"] = m_model == RANSModel::CLSHighRe ? "CLSHighRe" : "StandardKEpsilon";
     m_fieldMetaDataMap["RANSDissipation"] = "high-Re: eps_total=eps_transport; molecular mode adds diffusion only";
     m_fieldMetaDataMap["RANSPhysicalFrame"] = m_velocity.size() == 2 ? "mesh(x,y)=physical(x,z)" : "physical(x,y,z)";
@@ -269,6 +407,13 @@ void RANSVelocityCorrectionScheme::v_DoInitialise(bool dump)
     m_fieldMetaDataMap["RANSResolvedNu"] = std::to_string(m_resolvedNu);
     if (m_session->GetComm()->GetRank() == 0)
     {
+        if (m_monitorReference)
+        {
+            m_referenceDiagnostics.open(m_session->GetSessionName() + ".rans-errors.csv");
+            ASSERTL0(m_referenceDiagnostics.good(), "Cannot open RANS reference monitor");
+            m_referenceDiagnostics << std::setprecision(17)
+                << "time,field,l2_error,reference_l2,normalized_l2,pointwise_relative_linf,first_layer_relative_l2,upper_layer_relative_l2\n";
+        }
         if (m_auditStage)
         {
             m_residualDiagnostics.open(m_session->GetSessionName() + ".rans-residual.csv");
@@ -277,8 +422,9 @@ void RANSVelocityCorrectionScheme::v_DoInitialise(bool dump)
         }
         m_diagnostics.open(m_session->GetSessionName() + ".rans.csv");
         ASSERTL0(m_diagnostics.good(), "Cannot open RANS diagnostics");
-        m_diagnostics << "time,iterations,change,pressure_correction,divergence_l2,weak_divergence_l2,min_k,min_eps,min_nut,max_nut,live_global_systems,guard_activations\n" << std::setprecision(17);
+        m_diagnostics << "time,iterations,change,pressure_correction,divergence_l2,weak_divergence_l2,min_k,min_eps,min_nut,max_nut,live_global_systems,guard_activations,matrix_free_iterations\n" << std::setprecision(17);
     }
+    if (m_monitorReference) MonitorReference();
 }
 
 void RANSVelocityCorrectionScheme::v_GenerateSummary(SummaryList &summary)
@@ -307,7 +453,6 @@ void RANSVelocityCorrectionScheme::v_ExtraFldOutput(
     std::vector<Array<OneD, NekDouble>> &coefficients,
     std::vector<std::string> &variables)
 {
-    if (m_model != RANSModel::CLSHighRe) return;
     const int dim = m_velocity.size(), nq = m_fields[0]->GetTotPoints();
     Gradients gradient(dim);
     Fields state(m_nConvectiveFields);
@@ -357,7 +502,7 @@ void RANSVelocityCorrectionScheme::v_ExtraFldOutput(
         }
     }
     catch (const std::exception &) { valid = false; }
-    RequireEverywhere(valid, "cannot output an inadmissible CLS state");
+    RequireEverywhere(valid, "cannot output an inadmissible RANS state");
     for (int i = 0; i < names.size(); ++i)
     {
         Array<OneD, NekDouble> data(m_fields[0]->GetNcoeffs());
@@ -487,6 +632,116 @@ void RANSVelocityCorrectionScheme::UpdateWall(
     m_wallStrip->Update(state, predictor, gradient, pressureForce, convection, body, alpha);
 }
 
+void RANSVelocityCorrectionScheme::UpdateOutflow(
+    const Array<OneD, NekDouble> &pressure, NekDouble time)
+{
+    const int dim = m_velocity.size();
+    for (int b : m_outflows)
+    {
+        Array<OneD, NekDouble> trace;
+        m_pressure->ExtractPhysToBnd(b, pressure, trace);
+        auto boundary = m_fields[0]->GetBndCondExpansions()[b];
+        Array<OneD, NekDouble> x(trace.size()), y(trace.size()), z(trace.size()), values(trace.size());
+        boundary->GetCoords(x, y, z);
+        Fields normal;
+        m_fields[0]->GetBoundaryNormals(b, normal);
+        // XML prescribes total traction (T - pi I)n. Native Helmholtz
+        // expects Tn, so the CURRENT pi trace completes its Neumann load.
+        // All pressure test functions remain free: continuity determines
+        // the outlet flux and the traction determines the pressure gauge.
+        for (int i = 0; i < dim; ++i)
+        {
+            const auto bc = m_fields[i]->GetBndConditions()[b];
+            bc->GetEquation()->Evaluate(x, y, z, time, values);
+            Vmath::Vvtvp(trace.size(), trace, 1, normal[i], 1, values, 1, values, 1);
+            boundary = m_fields[i]->GetBndCondExpansions()[b];
+            boundary->IProductWRTBase(values, boundary->UpdateCoeffs());
+        }
+    }
+}
+
+void RANSVelocityCorrectionScheme::MonitorReference()
+{
+    const int nq = m_fields[0]->GetTotPoints();
+    std::vector<std::string> names = m_session->GetVariables();
+    Fields values(names.size());
+    for (int f = 0; f < values.size(); ++f)
+    {
+        values[f] = Array<OneD, NekDouble>(nq);
+        m_fields[f]->BwdTrans(m_fields[f]->GetCoeffs(), values[f]);
+    }
+    std::vector<Array<OneD, NekDouble>> extra;
+    std::vector<std::string> extraNames;
+    v_ExtraFldOutput(extra, extraNames);
+    const int primary = values.size();
+    Fields all(primary + extra.size());
+    for (int i = 0; i < primary; ++i) all[i] = values[i];
+    for (int i = 0; i < extra.size(); ++i)
+    {
+        all[primary+i] = Array<OneD, NekDouble>(nq);
+        m_fields[0]->BwdTrans(extra[i], all[primary+i]);
+        names.push_back(extraNames[i]);
+    }
+    Array<OneD, NekDouble> x(nq, 0.0), y(nq, 0.0), z(nq, 0.0), reference(nq), error(nq), work(nq), ones(nq, 1.0);
+    m_fields[0]->GetCoords(x, y, z);
+    double star = 1, nextHeight = 4;
+    m_session->LoadParameter("Ustar", star, 1.0);
+    m_session->LoadParameter("RANSStripPointN", nextHeight, 4.0);
+    const double volume = m_fields[0]->Integral(ones);
+    std::array<double, 2> layerVolume;
+    for (int layer = 0; layer < 2; ++layer)
+    {
+        for (int q = 0; q < nq; ++q) work[q] = ((m_wallDistance[q] <= nextHeight) == (layer == 0)) ? 1.0 : 0.0;
+        layerVolume[layer] = m_fields[0]->Integral(work);
+    }
+    ASSERTL0(std::isfinite(star) && star > 0, "Reference monitor requires positive Ustar");
+    for (int f = 0; f < all.size(); ++f)
+    {
+        if (!m_session->DefinesFunction("ExactSolution", names[f])) continue;
+        m_session->GetFunction("ExactSolution", names[f])->Evaluate(x, y, z, m_time, reference);
+        Vmath::Vsub(nq, all[f], 1, reference, 1, error, 1);
+        const double norm = m_fields[0]->L2(reference), err = m_fields[0]->L2(error);
+        const double fallback = f < m_velocity.size() ? star : star*star;
+        double relativeMax = 0;
+        for (int q = 0; q < nq; ++q)
+            relativeMax = std::max(relativeMax, std::abs(error[q]) /
+                (std::abs(reference[q]) > 1e-30 ? std::abs(reference[q]) : fallback));
+        relativeMax = Maximum(relativeMax);
+        std::array<double, 2> layerError, layerReference;
+        for (int layer = 0; layer < 2; ++layer)
+        {
+            for (int q = 0; q < nq; ++q)
+                work[q] = ((m_wallDistance[q] <= nextHeight) == (layer == 0)) ? error[q]*error[q] : 0.0;
+            layerError[layer] = std::sqrt(std::max(0.0, m_fields[0]->Integral(work)));
+            for (int q = 0; q < nq; ++q)
+                work[q] = ((m_wallDistance[q] <= nextHeight) == (layer == 0)) ? reference[q]*reference[q] : 0.0;
+            layerReference[layer] = std::sqrt(std::max(0.0, m_fields[0]->Integral(work)));
+        }
+        if (m_referenceDiagnostics.is_open())
+            m_referenceDiagnostics << m_time << ',' << names[f] << ',' << err << ',' << norm << ','
+                << err / (norm > 1e-30 ? norm : fallback*std::sqrt(volume)) << ',' << relativeMax << ','
+                << layerError[0]/(layerReference[0] > 1e-30 ? layerReference[0] : fallback*std::sqrt(std::max(layerVolume[0], 1e-30))) << ','
+                << layerError[1]/(layerReference[1] > 1e-30 ? layerReference[1] : fallback*std::sqrt(std::max(layerVolume[1], 1e-30))) << '\n' << std::flush;
+    }
+}
+
+bool RANSVelocityCorrectionScheme::v_PostIntegrate(int step)
+{
+    const bool stop = VelocityCorrectionScheme::v_PostIntegrate(step);
+    if (m_monitorReference) MonitorReference();
+    if ((m_checksteps && !((step+1)%m_checksteps)) || stop ||
+        step+1 == m_steps || (m_fintime > 0 && m_time >= m_fintime-1e-12))
+    {
+        const auto completed = m_historyStepOffset + step + 1;
+        const auto directory = std::filesystem::absolute(m_session->GetSessionName() +
+            ".rans-" + std::to_string(completed)).string();
+        const auto published = RANSHistory::Write(directory, m_fields, *m_historyScheme,
+            RestartSignature(), completed, m_time, m_timestep);
+        m_fieldMetaDataMap["RANSHistoryFile"] = published;
+    }
+    return stop;
+}
+
 void RANSVelocityCorrectionScheme::AuditStage(
     const Fields &state, const Fields &predictor, const Fields &diffusion,
     const Fields &gain, const Fields &loss,
@@ -586,8 +841,13 @@ void RANSVelocityCorrectionScheme::AuditStage(
 void RANSVelocityCorrectionScheme::SolveField(
     int field, const Array<OneD, NekDouble> &rhs,
     const Array<OneD, NekDouble> &diffusion,
-    const Array<OneD, NekDouble> &mass, Array<OneD, NekDouble> &output)
+    const Array<OneD, NekDouble> &mass, Array<OneD, NekDouble> &output, NekDouble alpha)
 {
+    if (m_matrixFree)
+    {
+        m_linearIterations += m_matrixFree->Solve(field, rhs, diffusion, mass, alpha, output);
+        return;
+    }
     StdRegions::VarCoeffMap coefficients;
     for (auto type : {StdRegions::eVarCoeffD00, StdRegions::eVarCoeffD11})
         coefficients[type] = diffusion;
@@ -612,6 +872,18 @@ NekDouble RANSVelocityCorrectionScheme::CorrectPressure(
     const int nq = m_fields[0]->GetTotPoints(), nc = m_pressure->GetNcoeffs();
     const int dim = m_velocity.size();
     Array<OneD, NekDouble> rhs(nc), weak(nc), increment(nq), div(nq, 0.0), tmp(nq), projection(nc, 0.0);
+    if (m_hasOutflow && m_pressureInverseAlpha != alpha)
+    {
+        Array<OneD, NekDouble> one(nq,1.0);
+        const NekDouble meanMu = m_pressureMass->Integral(mu)/m_pressureMass->Integral(one);
+        ASSERTL0(std::isfinite(meanMu) && meanMu > 0,"Invalid pressure inverse viscosity");
+        // Resolving the velocity boundary layer gives an outlet pressure
+        // impedance O(sqrt(alpha/mu)). Freeze it only in this preconditioner
+        // for each IMEX inertia value; all physical coefficients stay current.
+        m_pressurePoisson = std::make_shared<RANSOutletPressureInverse>(
+            m_session,m_fields[0]->GetGraph(),m_outflows,std::sqrt(alpha/meanMu));
+        m_pressureInverseAlpha = alpha;
+    }
     m_pressure->IProductWRTDerivBase(velocity, rhs);
     Vmath::Smul(nc, -1.0, rhs, 1, weak, 1);
     Vmath::Smul(nc, -alpha, rhs, 1, rhs, 1);
@@ -639,13 +911,20 @@ NekDouble RANSVelocityCorrectionScheme::CorrectPressure(
     }
     StdRegions::ConstFactorMap factors;
     factors[StdRegions::eFactorLambda] = 0;
-    // The pure-Neumann assembly map pins a vertex using the supplied initial
-    // coefficients. An increment has a homogeneous pin, not the old pi value.
-    Vmath::Zero(nc, m_pressure->UpdateCoeffs(), 1);
-    m_pressure->HelmSolve(rhs, m_pressure->UpdateCoeffs(), factors,
+    if (m_hasOutflow)
+        for (int b = 0; b < m_pressurePoisson->GetBndCondExpansions().size(); ++b)
+        {
+            if (m_pressurePoisson->GetBndConditions()[b]->GetBoundaryConditionType() == SpatialDomains::ePeriodic) continue;
+            auto to = m_pressurePoisson->GetBndCondExpansions()[b];
+            Vmath::Vcopy(to->GetNcoeffs(),m_pressure->GetBndCondExpansions()[b]->GetCoeffs(),1,to->UpdateCoeffs(),1);
+        }
+    // Homogeneous initial guess. Neither preconditioner prescribes the final
+    // pressure multiplier at an open outlet.
+    Vmath::Zero(nc, m_pressurePoisson->UpdateCoeffs(), 1);
+    m_pressurePoisson->HelmSolve(rhs, m_pressurePoisson->UpdateCoeffs(), factors,
         StdRegions::NullVarCoeffMap, StdRegions::NullVarFactorsMap,
         NullNekDouble1DArray, false);
-    m_pressure->BwdTrans(m_pressure->GetCoeffs(), increment);
+    m_pressurePoisson->BwdTrans(m_pressurePoisson->GetCoeffs(), increment);
     for (int i = 0; i < dim; ++i)
     {
         m_fields[i]->PhysDeriv(DirCartesianMap[i], velocity[i], tmp);
@@ -666,7 +945,7 @@ NekDouble RANSVelocityCorrectionScheme::CorrectPressure(
     m_pressureMass->BwdTrans(projection, tmp);
     Vmath::Vsub(nq, increment, 1, tmp, 1, increment, 1);
     Array<OneD, NekDouble> ones(nq, 1.0);
-    const double mean = m_pressure->Integral(increment) / m_pressure->Integral(ones);
+    const double mean = m_hasOutflow ? 0.0 : m_pressure->Integral(increment) / m_pressure->Integral(ones);
     NekDouble change = 0;
     for (int q = 0; q < nq; ++q)
     {
@@ -685,6 +964,7 @@ void RANSVelocityCorrectionScheme::v_SolveUnsteadyStokesSystem(
     const int nf = m_nConvectiveFields, nq = m_fields[0]->GetTotPoints();
     const int nc = m_fields[0]->GetNcoeffs(), dim = m_velocity.size();
     const double alpha = 1.0 / lambda;
+    m_linearIterations = 0;
     Fields state(nf), next(nf), diffusion(nf), gain(nf), loss(nf), predictor(nf);
     Gradients gradient(dim);
     for (int i = 0; i < nf; ++i)
@@ -705,7 +985,7 @@ void RANSVelocityCorrectionScheme::v_SolveUnsteadyStokesSystem(
     Array<OneD, NekDouble> pressure(nq), rhs(nc), cross(nc), tmp(nq), mass(nq), gradP(nq);
     m_pressure->BwdTrans(m_pressure->GetCoeffs(), pressure);
     Array<OneD, NekDouble> ones(nq, 1.0);
-    const double pressureMean = m_pressure->Integral(pressure) / m_pressure->Integral(ones);
+    const double pressureMean = m_hasOutflow ? 0.0 : m_pressure->Integral(pressure) / m_pressure->Integral(ones);
     for (int q = 0; q < nq; ++q) pressure[q] -= pressureMean;
     SetBoundaryConditions(time);
     double change = 0, correction = 0, div = 0, weakDiv = 0;
@@ -715,6 +995,7 @@ void RANSVelocityCorrectionScheme::v_SolveUnsteadyStokesSystem(
         Closure(state, gradient, diffusion, gain, loss);
         UpdateLogWall(state);
         UpdateWall(state, predictor, gradient, pressure, time, alpha);
+        UpdateOutflow(pressure, time);
         if (m_auditStage && iteration == 0)
             AuditStage(state, predictor, diffusion, gain, loss, pressure, time, alpha, 0);
         for (int i = 0; i < nf; ++i)
@@ -742,7 +1023,7 @@ void RANSVelocityCorrectionScheme::v_SolveUnsteadyStokesSystem(
                 m_fields[i]->IProductWRTDerivBase(flux, cross);
                 Vmath::Vadd(nc, cross, 1, rhs, 1, rhs, 1);
             }
-            SolveField(i, rhs, diffusion[i], mass, next[i]);
+            SolveField(i, rhs, diffusion[i], mass, next[i], alpha);
             if (m_session->DefinesParameter("RANSDebug") && m_session->GetComm()->GetRank() == 0)
             {
                 std::cout << "RANS iteration " << iteration << " field " << i
@@ -789,6 +1070,7 @@ void RANSVelocityCorrectionScheme::v_SolveUnsteadyStokesSystem(
     {
         Closure(next, gradient, diffusion, gain, loss);
         UpdateWall(next, predictor, gradient, pressure, time, alpha);
+        UpdateOutflow(pressure, time);
         AuditStage(next, predictor, diffusion, gain, loss, pressure, time, alpha, 1);
     }
     if (m_wallStrip)
@@ -819,6 +1101,6 @@ void RANSVelocityCorrectionScheme::v_SolveUnsteadyStokesSystem(
     if (m_diagnostics.is_open())
         m_diagnostics << time << ',' << iteration + 1 << ',' << change << ',' << correction
                       << ',' << div << ',' << weakDiv << ',' << minK << ',' << minE << ',' << minNu << ','
-                      << maxNu << ',' << live << ",0\n" << std::flush;
+                      << maxNu << ',' << live << ",0," << m_linearIterations << '\n' << std::flush;
 }
 } // namespace Nektar

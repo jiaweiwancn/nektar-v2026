@@ -50,6 +50,8 @@ if(RANS_BUILD_SOLVER)
         set_source_files_properties(
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSVelocityCorrectionScheme.cpp
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSAnalyticalWallStrip.cpp
+            ${RANS_SOLVER_ROOT}/./EquationSystems/RANSMatrixFree.cpp
+            ${RANS_SOLVER_ROOT}/./EquationSystems/RANSHistory.cpp
             PROPERTIES COMPILE_OPTIONS "-Wall;-Wextra;-Wpedantic;-Wno-sign-compare;-Werror")
     endif()
 endif()
@@ -70,6 +72,13 @@ if(RANS_BUILD_SOLVER)
     set_tests_properties(RANSCLSTransportSmoke RANSAWFOriginalSmoke RANSAWFEquilibriumSmoke PROPERTIES
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke
         PROCESSORS 1 TIMEOUT 120 ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
+    add_test(NAME RANSABLPreservationSmoke COMMAND IncNavierStokesSolver
+        ${CMAKE_CURRENT_LIST_DIR}/ABLPreservation.xml)
+    add_test(NAME RANSABL3DPerturbationSmoke COMMAND IncNavierStokesSolver
+        ${CMAKE_CURRENT_LIST_DIR}/ABLPreservation3D.xml)
+    set_tests_properties(RANSABLPreservationSmoke RANSABL3DPerturbationSmoke PROPERTIES
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke
+        PROCESSORS 1 TIMEOUT 300 ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
 endif()
 add_test(NAME RANSWallLayerPrototype COMMAND RANSWallLayerProbe
     --output ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-layer.json)

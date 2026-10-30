@@ -12,6 +12,7 @@
 #include <iostream>
 #include <limits>
 #include <set>
+#include <fstream>
 
 using namespace Nektar;
 using Fields = Array<OneD, MultiRegions::ExpListSharedPtr>;
@@ -58,9 +59,9 @@ Values Import(const LibUtilities::SessionReaderSharedPtr &session,
 
 int main(int argc, char **argv)
 {
-    if (argc != 4)
+    if (argc != 4 && argc != 5)
     {
-        std::cerr << "Usage: RANSFieldAudit session.xml first.fld second.fld\n";
+        std::cerr << "Usage: RANSFieldAudit session.xml first.fld second.fld [profiles.csv]\n";
         return 2;
     }
     try
@@ -113,7 +114,48 @@ int main(int argc, char **argv)
                       << ",\"difference_linf\":" << differenceMax << ",\"min\":" << minimum
                       << ",\"max\":" << maximum << '}';
         }
-        std::cout << "}}\n";
+        std::cout << '}';
+        if (firstMeta.count("RANSHistoryFile"))
+            std::cout << ",\"history_directory\":" << std::quoted(firstMeta.at("RANSHistoryFile"));
+        std::cout << "}\n";
+        if (argc == 5)
+        {
+            std::ofstream csv(argv[4]);
+            ASSERTL0(csv.good(), "Cannot open profile output");
+            csv << std::setprecision(17) << "x,height,field,value,reference\n";
+            double length, height, top, span;
+            session->LoadParameter("L", length); session->LoadParameter("H", height);
+            session->LoadParameter("Z", top); session->LoadParameter("Span", span, 1.0);
+            const int dim = fields[0]->GetCoordim(0);
+            std::vector<double> heights;
+            for (int j = 0; j <= 64; ++j)
+                heights.push_back(j == 64 ? top : height*std::pow(top/height,j/64.0));
+            // Common physical samples also permit comparison when H changes.
+            for (double value : {4.0,8.0,10.0,16.0,20.0,25.0,30.0})
+                if (value >= height && value <= top) heights.push_back(value);
+            std::sort(heights.begin(),heights.end());
+            heights.erase(std::unique(heights.begin(),heights.end(),[](double a,double b) {
+                return std::abs(a-b)<1e-10;
+            }),heights.end());
+            for (double station : {.25, .5, .75, .95})
+                for (double altitude : heights)
+                {
+                    Array<OneD, NekDouble> point(dim), local(dim);
+                    point[0] = station*length; point[1] = dim == 2 ? altitude : span*.5;
+                    if (dim == 3) point[2] = altitude;
+                    const int e = fields[0]->GetExpIndex(point, local, 1e-8);
+                    ASSERTL0(e >= 0, "Profile point outside mesh");
+                    Array<OneD, NekDouble> px(1,point[0]), py(1,point[1]), pz(1,dim == 3 ? point[2] : 0.0), value(1);
+                    for (int f = 0; f < fields.size(); ++f)
+                    {
+                        session->GetFunction("ExactSolution",names[f])->Evaluate(px,py,pz,time,value);
+                        csv << point[0] << ',' << altitude << ',' << names[f] << ','
+                            // GetExpIndex already returned element-local coordinates.
+                            << fields[f]->GetExp(e)->StdPhysEvaluate(local,first[f]+fields[f]->GetPhys_Offset(e))
+                            << ',' << value[0] << '\n';
+                    }
+                }
+        }
         session->Finalise();
         return 0;
     }

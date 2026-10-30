@@ -24,8 +24,8 @@ the exact session and both solver/audit executable fingerprints match.
 All numerical threads are one and cases run sequentially, using at most
 four MPI ranks. Raw point CSVs and case receipts remain under the Linux run
 directory; the compact validation manifest records their hashes and summaries.
-No default switch thresholds imply terrain calibration. Full inlet/outlet,
-restart and longer preservation studies remain Milestone 6.
+No default switch thresholds imply terrain calibration. Milestone 6 supplies
+the inlet/outlet, restart and longer preservation studies described below.
 
 Milestone 4 adds `TurbulenceModel=CLSHighRe` with primary dissipation
 `eps_tilde`, the full cubic covariance and algebraic Yap source. The optional
@@ -161,5 +161,82 @@ Keep historical Milestone 1 reports unchanged when running this regression.
 A successful kernel/column result establishes the specified local model
 contracts and column convergence. Milestone 3 adds standard-model unsteady
 transport, Milestone 4 adds CLS and the original AWF, and Milestone 5 adds the
-corrected-AWF coupling. The full analytical inlet/outlet preservation study
-remains a later milestone.
+corrected-AWF coupling. Milestone 6 supplies the full analytical inlet/outlet
+preservation study.
+
+Milestone 6 adds `generate_m6.py` and `validate_m6.py` for full 2D/3D neutral
+profiles, total-traction outlets, five-flow-through comparisons, h/p/dt and
+physical-H studies, perturbations and complete IMEX history restart. The
+optional `RANSLinearSolver=MatrixFree` keeps native static-condensation systems
+as preconditioners and applies the current weak operator. `Native` is the
+default. `RANSReferenceMonitor=1` records independent analytical errors without
+changing the solution. `RANSFieldAudit session.xml a.fld b.fld profiles.csv`
+adds common-height streamwise profiles. Derived viscosity, production,
+dissipation and Reynolds stresses are available for both closures.
+
+A full RANS restart retains its native field file/directory and the referenced
+`.rans-<completed-step>` history directory. `RANSRestartMode=History` requires
+complete history; `Auto` restores it when present and uses native startup for
+legacy fields; `Cold` explicitly requests startup. `RANSHistoryPath` relocates
+stored payloads. Mesh, quadrature, timestep, model, wall parameters, IMEX order,
+boundaries and forcing must stay consistent. MPI repartitioning is supported.
+Use step-based checkpoint intervals. The M6 specification distinguishes cold
+startup from a continuation and analytical accuracy from numerical stationarity.
+
+After the external build above with `-DRANS_BUILD_SOLVER=ON`, run separately:
+
+```bash
+taskset -c 112-127 python3 solvers/IncNavierStokesSolver/Tests/RANS/validate_m6.py \
+  --build "$RANS_RUN/build" --output "$RANS_RUN/verification" --suite pilots
+taskset -c 112-127 python3 solvers/IncNavierStokesSolver/Tests/RANS/validate_m6.py \
+  --build "$RANS_RUN/build" --output "$RANS_RUN/verification" --suite restart
+taskset -c 112-127 python3 solvers/IncNavierStokesSolver/Tests/RANS/validate_m6.py \
+  --build "$RANS_RUN/build" --output "$RANS_RUN/study" --suite study --jobs 2
+```
+
+The study records numerical failures and engineering-target failures explicitly;
+its `recorded` status means the requested comparisons were collected, not that
+every wall policy preserves the reference. Inspect individual cases and the
+[Milestone 6 report](../../../../docs/plans/neutral-abl-rans-awf-milestone-6.md).
+
+`ABLPreservation.xml` and `ABLPreservation3D.xml` are small outlet/checkpoint
+and 3D perturbation smoke fixtures. The production and external builds register them as
+`RANSABLPreservationSmoke` and `RANSABL3DPerturbationSmoke`. Generation of the
+neutral fixtures requires only the Python standard library; the closed-form
+original-AWF matching integral agrees with the independently recorded Linux
+quadrature anchors at H=1, 2 and 4 m to less than 1e-12 m/s. The larger
+manufactured/oracle suites still require SymPy/SciPy; plotting uses NumPy and
+Matplotlib. The `columns` suite takes `--study-output` to distinguish a
+stationary numerical-column copy from the analytical comparison.
+
+`verify_outflow_m6.py --build ... --output ...` compares complete native and
+matrix-free outlet fields for both models in 2D and four-rank 3D. After all
+final phases finish, `collect_m6.py --run ... --output ...` checks the closure
+gates and writes compact source/binary hashes, environment and result evidence.
+The `robust` suite records the degree-five 3D refinement experiment, including
+numerical or profile-target failures; those are not preservation passes. Its optional
+`--extended-perturbation` flag repeats the already-tested five-flow 3D
+perturbation at a smaller timestep; manufactured solutions supply the
+independent temporal-order test.
+The recorded degree-five four-rank case fails the target and is a documented
+robustness limit; the five-flow acceptance resolution is degree four.
+`--suite robust --record-existing-failure` reduces an already stopped trial
+without rerunning it. It requires native failure evidence or a threshold-stop
+receipt bound to the exact fixture and executable hashes.
+
+For a complete fresh reproduction, activate the installed MPI environment,
+build the current source externally with `RANS_BUILD_SOLVER=ON`, and run
+`taskset -c 112-127 bash run_m6.sh BUILD_DIRECTORY RUN_DIRECTORY 2` from this
+directory on Linux. Choose a separate run directory under the large-volume
+run root. This sequential wrapper uses at most eight study ranks by default
+and writes the status markers expected by the evidence collector. The
+recorded milestone run overlapped independent phases within 16 total workers;
+the wrapper provides the same numerical checks without that overlap.
+
+`refresh_m6_audits.py --run ... --build ...` supports an audit-only rebuild
+without repeating unchanged solver runs. It requires the solver hash to stay
+identical, reruns the saved-field audits and comparisons, and requires identical
+time and complete-field JSON values. It refreshes optional profile CSVs and
+retains the original reports with an explicit provenance receipt. The M6 run
+used this after correcting local-coordinate profile interpolation. A fresh
+reproduction with the corrected sampler needs no refresh step.

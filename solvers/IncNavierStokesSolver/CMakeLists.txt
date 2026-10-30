@@ -18,6 +18,8 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
         ./EquationSystems/VelocityCorrectionSchemeWeakPressure.cpp
         ./EquationSystems/RANSVelocityCorrectionScheme.cpp
         ./EquationSystems/RANSAnalyticalWallStrip.cpp
+        ./EquationSystems/RANSMatrixFree.cpp
+        ./EquationSystems/RANSHistory.cpp
         ./EquationSystems/SmoothedProfileMethod.cpp
         ./EquationSystems/VCSMapping.cpp
         ./EquationSystems/Extrapolate.cpp
@@ -75,6 +77,8 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
             EquationSystems/VelocityCorrectionSchemeWeakPressure.h
             EquationSystems/RANSVelocityCorrectionScheme.h
             EquationSystems/RANSAnalyticalWallStrip.h
+            EquationSystems/RANSMatrixFree.h
+            EquationSystems/RANSHistory.h
             EquationSystems/WeakPressureExtrapolate.h
             Filters/FilterAeroForcesSPM.h
             Filters/FilterMovingBody.h
@@ -145,6 +149,14 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
         SET_TESTS_PROPERTIES(RANSCLSTransportSmoke RANSAWFOriginalSmoke RANSAWFEquilibriumSmoke PROPERTIES
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke
             PROCESSORS 1 TIMEOUT 120
+            ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
+        ADD_TEST(NAME RANSABLPreservationSmoke COMMAND IncNavierStokesSolver
+            ${CMAKE_CURRENT_SOURCE_DIR}/Tests/RANS/ABLPreservation.xml)
+        ADD_TEST(NAME RANSABL3DPerturbationSmoke COMMAND IncNavierStokesSolver
+            ${CMAKE_CURRENT_SOURCE_DIR}/Tests/RANS/ABLPreservation3D.xml)
+        SET_TESTS_PROPERTIES(RANSABLPreservationSmoke RANSABL3DPerturbationSmoke PROPERTIES
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke
+            PROCESSORS 1 TIMEOUT 300
             ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
         SET(HIT_TEST_DIR ${CMAKE_SOURCE_DIR}/library/UnitTests/SolverUtils)
         SET(HIT_TEST_BOUNDARY_SOURCES

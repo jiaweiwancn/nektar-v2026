@@ -22,8 +22,8 @@ original integrated row without inventing those additional inner equations.
 | Origin skill | academic-research-suite, experiment-agent |
 | Origin mode | plan |
 | Origin date | 2026-10-29 |
-| Version label | neutral_abl_rans_proposal_v6 |
-| Verification status | Milestones 1–5 CLOSED; Milestone 5 closed on 2026-10-30 with Linux corrected-AWF assembly, switch, recovery and 3D refinement evidence; full preservation study pending |
+| Version label | neutral_abl_rans_proposal_v7 |
+| Verification status | Milestones 1–6 CLOSED; Milestone 6 closed on 2026-10-30 with five-flow degree-four preservation, perturbation, MPI and full-history restart evidence; the higher-degree 3D counterexample is documented; Milestone 7 pending |
 | Mac source baseline | `6522fc9c74edab0e445aade16f7facea3f5987a3` |
 | New project branch | `codex/neutral-abl-rans-awf` |
 | Linux source observed | `812a2c84946d1fdad2b042c265e3e4ed32914138`, clean, on `codex/hit-inflow-generator` |
@@ -62,8 +62,17 @@ wall/volume budgets, source/point consistency, exact baseline recovery,
 cutoff/regime handling and serial/MPI fields. The coarse 3D reference leaves
 the switch plateau because of representation error; degree refinement restores
 the plateau with unchanged thresholds. The original-AWF, standard-model and
-kernel regressions also pass. The full inlet/outlet, restart and longer
-preservation study remains Milestone 6.
+kernel regressions also pass.
+
+[Milestone 6](neutral-abl-rans-awf-milestone-6.md) completes the inlet/outlet,
+restart and longer preservation study. Standard and both corrected CLS policies
+meet the 0.1% target over five flows at degree four in 2D and full 3D; the
+original AWF leaves that reference. Spatial/temporal, physical-H, perturbation,
+numerical-column copy and repartitioned IMEX1/2 continuation results are
+recorded with source/binary hashes. An additional degree-five 3D experiment
+develops a growing mode and fails the target; it remains an explicit robustness
+limit, rather than another preservation pass. Eight CTests and all standard,
+original and corrected regression cohorts pass on the final solver.
 
 ## Findings at the proposal baseline
 
@@ -338,8 +347,8 @@ The adapter must satisfy the following contracts before it becomes the default:
 The strip avoids an inner polynomial trial/test space. Its assembly contracts
 are verified by the column prototype. Milestone 4 adds multidimensional
 tangential transport, strip continuity coupled to pressure and nonlinear
-boundary solves; Milestone 5 adds the corrected policy and switch. Restart
-verification remains Milestone 6. A conventional off-wall traction boundary
+boundary solves; Milestone 5 adds the corrected policy and switch. Milestone 6
+verifies full-history restart. A conventional off-wall traction boundary
 alone would omit the integrated source and strip inventory.
 
 For the initial deliverable, restrict the wall geometry to flat, aligned
@@ -493,8 +502,8 @@ exact retention of analytical samples.
 | 3 Standard model URANS transport | CLOSED. Variable symmetric stress, implicit losses and coupled weak pressure pass unsteady manufactured, decay, 3D, quadrature, gauge and MPI tests. The compatible standard ABL control refines spatially and remains within 0.1% for one nominal periodic flow-through; native kernel and legacy VCS regressions pass. See the Milestone 3 specification. |
 | 4 CLS and original AWF integration | CLOSED. Full cubic stress and Yap pass independent unsteady/3D controls and spatial refinement. Conservative original-AWF strip coupling passes point/mean/traction recovery, inventory budgets, nonuniform normal velocity, serial/MPI and invalid-state checks; the original dissipation mismatch remains measurable. See the Milestone 4 specification and its 27-case Linux evidence. |
 | 5 Corrected AWF integration | CLOSED. Current configured reference, matching anchor, one integrated source, algebraic EP/EH and the compact switch pass 34 native Linux cases, including assembled residual refinement, independent forcing/sensors, exact original-form recovery, strict preflight/fallback, MPI and 3D sensor refinement. All original/standard/kernel regressions pass. See the Milestone 5 specification and evidence. |
-| 6 Preservation and robustness study | 2D and full-3D empty-domain comparisons, h/p/dt studies, fixed-H versus varying-H studies, perturbations, MPI, and restart results are recorded. |
-| 7 Documentation and delivery | Reproducible fixtures, commands, tested revisions, limitations, and user configuration are complete. Terrain work begins from this measured baseline. |
+| 6 Preservation and robustness study | CLOSED. Five-flow degree-four standard/fixed/switched profiles meet the 0.1% target in 2D/full 3D. h/p/dt and physical-H studies, perturbation decay, numerical-column copies, MPI and complete IMEX continuation are recorded. Original/inconsistent controls and a degree-five 3D counterexample retain their measured failures. See the Milestone 6 report and closure evidence. |
+| 7 Documentation and delivery | PENDING. Consolidate reproducible fixtures, commands, tested revisions, limitations, and user configuration for delivery. Terrain work begins from this measured baseline. |
 
 Milestones 1 and 2 can begin with small column and kernel prototypes. Avoid
 expanding to terrain, thermal AWF, rotating/stratified ABL, or a complete low

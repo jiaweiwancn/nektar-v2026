@@ -14,6 +14,27 @@
 
 namespace Nektar
 {
+std::string RANSAnalyticalWallStrip::RestartSignature() const
+{
+    std::ostringstream s;
+    s << std::setprecision(17) << m_wallModel << ':' << m_geometry.height << ':'
+      << m_geometry.pointP << ':' << m_geometry.pointN << ':' << m_awfGeometry.molecularNu
+      << ':' << m_awfGeometry.roughness << ':' << m_parameters.cMu << ':'
+      << m_parameters.cLength << ':' << m_parameters.smoothIntercept << ':'
+      << m_minimumK << ':' << m_minimumEpsilon;
+    if (m_equilibrium)
+    {
+        s << ':' << m_switched << ':' << m_fixedWeight << ':' << m_minimumRe
+          << ':' << static_cast<int>(m_failurePolicy);
+        if (m_switched)
+        {
+            s << ':' << m_switch.on << ':' << m_switch.off;
+            for (auto v : m_switch.weights) s << ':' << v;
+            for (auto v : m_switch.incomingDirection) s << ':' << v;
+        }
+    }
+    return s.str();
+}
 using namespace SolverUtils;
 using MultiRegions::DirCartesianMap;
 
