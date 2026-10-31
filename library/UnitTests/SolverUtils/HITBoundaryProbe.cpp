@@ -24,6 +24,9 @@ int main(int argc, char *argv[])
         auto fields = HITTestTools::Fields(session, graph);
         auto configuration = HITInflowConfig::Load(session);
         ASSERTL0(configuration, "HITBoundaryProbe requires HITINFLOW");
+        int directLimit = -1;
+        session->LoadParameter("HITProbeDirectSamples", directLimit, -1);
+        ASSERTL0(directLimit >= -1, "HITProbeDirectSamples must be -1 or nonnegative");
         SolverUtils::HITGenerator reference(configuration->generator,
                                             *configuration->spectrum);
         const auto identity = HITInflowRestart::Describe(*configuration, reference);
@@ -37,7 +40,7 @@ int main(int argc, char *argv[])
             << "time,x,y,z,u,v,w,projected_u,projected_v,projected_w\n";
         Array<OneD, NekDouble> maximum(3, 0.0), nonzero(3, 0.0);
         NekDouble rawError = 0.0;
-        int points = 0, bad = 0, repeat = 1;
+        int points = 0, directPoints = 0, bad = 0, repeat = 1;
         std::vector<std::vector<NekDouble>> previous;
         const auto &config = configuration->generator;
         const std::vector<NekDouble> fractions{0.0, 0.5, 1.0, 0.5, 0.0};
@@ -91,8 +94,16 @@ int main(int argc, char *argv[])
                 }
                 for (int point = 0; point < count; ++point)
                 {
-                    const auto expected = reference.Evaluate(
-                        {x[point], y[point], z[point]}, time);
+                    const bool checkDirect = directLimit < 0 ||
+                        (directLimit > 0 && point % std::max(1, count / directLimit) == 0 &&
+                         point / std::max(1, count / directLimit) < directLimit);
+                    SolverUtils::HITVector expected{};
+                    if (checkDirect)
+                    {
+                        expected = reference.Evaluate(
+                            {x[point], y[point], z[point]}, time).velocity;
+                        ++directPoints;
+                    }
                     csv << time << ',' << x[point] << ',' << y[point] << ',' << z[point];
                     for (int component = 0; component < 3; ++component)
                     {
@@ -100,11 +111,13 @@ int main(int argc, char *argv[])
                                              ->GetPhys()[point];
                         bad |= !std::isfinite(raw) ||
                                !std::isfinite(projected[component][point]);
-                        rawError = std::max(rawError,
-                            std::abs(raw - expected.velocity[component]));
+                        if (checkDirect)
+                        {
+                            rawError = std::max(rawError,
+                                std::abs(raw - expected[component]));
+                        }
                         maximum[component] = std::max(maximum[component],
-                            std::abs(projected[component][point] -
-                                     expected.velocity[component]));
+                            std::abs(projected[component][point] - raw));
                         csv << ',' << raw;
                     }
                     for (int component = 0; component < 3; ++component)
@@ -128,6 +141,7 @@ int main(int argc, char *argv[])
         bad |= !csv;
         comm->AllReduce(bad, LibUtilities::ReduceMax);
         comm->AllReduce(points, LibUtilities::ReduceSum);
+        comm->AllReduce(directPoints, LibUtilities::ReduceSum);
         comm->AllReduce(repeat, LibUtilities::ReduceMin);
         comm->AllReduce(rawError, LibUtilities::ReduceMax);
         comm->AllReduce(maximum, LibUtilities::ReduceMax);
@@ -139,6 +153,9 @@ int main(int argc, char *argv[])
             output << std::setprecision(17)
                    << "{\n\"ranks\":" << comm->GetSize()
                    << ",\n\"points\":" << points
+                   << ",\n\"direct_reference_samples\":" << directPoints
+                   << ",\n\"direct_reference_limit_per_boundary_rank_time\":" << directLimit
+                   << ",\n\"projection_error_reference\":\"unprojected native boundary physical values at all sampled points\""
                    << ",\n\"raw_max_error\":" << rawError
                    << ",\n\"projection_max_error\":[" << maximum[0] << ','
                    << maximum[1] << ',' << maximum[2]

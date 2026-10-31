@@ -154,15 +154,25 @@ BOOST_AUTO_TEST_CASE(PlaneNonplanarAndCacheLimitUseReference)
     const HITPlaneEvaluator grouped(generator, points);
     BOOST_REQUIRE(grouped.IsGrouped());
     const HITPlaneEvaluator tooSmall(generator, points, grouped.CacheBytes() - 1);
-    BOOST_CHECK(!tooSmall.IsGrouped());
-    BOOST_CHECK_EQUAL(tooSmall.CacheBytes(), 0U);
-    BOOST_CHECK_EQUAL(tooSmall.Method(), "ReferenceCacheLimit");
-    Compare(generator, tooSmall, points, 0.2, true);
+    BOOST_CHECK_LE(tooSmall.CacheBytes(), grouped.CacheBytes() - 1);
+    if (tooSmall.IsGrouped())
+    {
+        BOOST_CHECK_EQUAL(tooSmall.Method(), "GroupedSeparable");
+        Compare(generator, tooSmall, points, 0.2);
+    }
+    else
+    {
+        BOOST_CHECK_EQUAL(tooSmall.CacheBytes(), 0U);
+        BOOST_CHECK_EQUAL(tooSmall.Method(), "ReferenceCacheLimit");
+        Compare(generator, tooSmall, points, 0.2, true);
+    }
     const HITPlaneEvaluator exactBudget(generator, points, grouped.CacheBytes());
     BOOST_CHECK(exactBudget.IsGrouped());
     Compare(generator, exactBudget, points, 0.2);
     const HITPlaneEvaluator noCache(generator, points, 0);
     BOOST_CHECK(!noCache.IsGrouped());
+    BOOST_CHECK_EQUAL(noCache.CacheBytes(), 0U);
+    BOOST_CHECK_EQUAL(noCache.Method(), "ReferenceCacheLimit");
     Compare(generator, noCache, points, 0.2, true);
 
     points.back()[0] += 0.01;
@@ -172,6 +182,127 @@ BOOST_AUTO_TEST_CASE(PlaneNonplanarAndCacheLimitUseReference)
     BOOST_CHECK_EQUAL(nonplanar.CacheBytes(), 0U);
     Compare(generator, nonplanar, points, 0.0, true);
     Compare(generator, nonplanar, points, 0.2, true);
+}
+
+BOOST_AUTO_TEST_CASE(PlaneDenseLookupAvoidsPerModeCachePayload)
+{
+    auto config = Configuration();
+    config.lengths[0] *= 100.0;
+    config.counts[0] = 1024;
+    const HITGenerator generator(config, HITSpectrum::VonKarman(0.8, 1.0));
+    const auto allPoints = Points();
+    const std::vector<HITVector> points{
+        allPoints.front(), allPoints[17], allPoints.back()};
+    const std::size_t budget = 64U * 1024U;
+    // The previous cache needed at least three size_t indices for every mode,
+    // before its mode pointer, phase tables, or per-call workspace. That lower
+    // bound alone exceeds this budget for an elongated synthetic volume.
+    BOOST_REQUIRE_GT(generator.GetModes().size() * 3 * sizeof(std::size_t),
+                     budget);
+    const HITPlaneEvaluator plane(generator, points, budget);
+    BOOST_REQUIRE(plane.IsGrouped());
+    BOOST_CHECK_EQUAL(plane.Method(), "GroupedTransverse");
+    BOOST_CHECK_LE(plane.CacheBytes(), budget);
+    const auto first = Compare(generator, plane, points, 0.0);
+    Compare(generator, plane, points, config.recordDuration);
+    BOOST_CHECK(Compare(generator, plane, points, 0.0) == first);
+    BOOST_CHECK(first.front() == first.back());
+
+    // The lookup payload remains part of the same strict cache budget.
+    const HITPlaneEvaluator tooSmall(generator, points, plane.CacheBytes() - 1);
+    BOOST_CHECK_LE(tooSmall.CacheBytes(), plane.CacheBytes() - 1);
+    if (tooSmall.IsGrouped())
+    {
+        BOOST_CHECK_EQUAL(tooSmall.Method(), "GroupedSeparable");
+        Compare(generator, tooSmall, points, 0.2);
+    }
+    else
+    {
+        BOOST_CHECK_EQUAL(tooSmall.Method(), "ReferenceCacheLimit");
+        Compare(generator, tooSmall, points, 0.2, true);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(PlaneSeparableCacheSupportsArbitraryPairsAndDuplicates)
+{
+    const std::array<std::array<std::size_t, 2>, 2> grids{{
+        {32, 8}, {8, 32}}};
+    for (const auto &grid : grids)
+    {
+        BOOST_TEST_CONTEXT("grid=" << grid[0] << "x" << grid[1])
+        {
+            const auto config = Configuration();
+            const HITGenerator generator(config,
+                HITSpectrum::VonKarman(0.8, 1.0));
+            std::vector<HITVector> points;
+            for (std::size_t y = 0; y < grid[0]; ++y)
+            {
+                for (std::size_t z = 0; z < grid[1]; ++z)
+                {
+                    // Deliberately omit pairs: the API does not require a
+                    // Cartesian-product grid, nor distinct point coordinates.
+                    if ((y + z) % 3)
+                    {
+                        points.push_back({0.21, -0.43 + 0.037 * y,
+                                          0.67 + 0.081 * z});
+                    }
+                }
+            }
+            points.push_back(points.front());
+            const HITPlaneEvaluator full(generator, points);
+            BOOST_REQUIRE(full.IsGrouped());
+            BOOST_REQUIRE_EQUAL(full.Method(), "GroupedTransverse");
+            const std::size_t budget = 32U * 1024U;
+            BOOST_REQUIRE_GT(full.CacheBytes(), budget);
+            const HITPlaneEvaluator plane(generator, points, budget);
+            BOOST_REQUIRE(plane.IsGrouped());
+            BOOST_CHECK_EQUAL(plane.Method(), "GroupedSeparable");
+            BOOST_CHECK_LE(plane.CacheBytes(), budget);
+            const auto first = Compare(generator, plane, points, 0.0);
+            const auto middle = Compare(generator, plane, points, 0.2);
+            Compare(generator, plane, points, config.recordDuration);
+            BOOST_CHECK(Compare(generator, plane, points, 0.2) == middle);
+            BOOST_CHECK(Compare(generator, plane, points, 0.0) == first);
+            BOOST_CHECK(first.front() == first.back());
+
+            const HITPlaneEvaluator tooSmall(
+                generator, points, plane.CacheBytes() - 1);
+            BOOST_CHECK(!tooSmall.IsGrouped());
+            BOOST_CHECK_EQUAL(tooSmall.Method(), "ReferenceCacheLimit");
+            BOOST_CHECK_EQUAL(tooSmall.CacheBytes(), 0U);
+            Compare(generator, tooSmall, points, 0.2, true);
+            std::vector<HITVector> values;
+            BOOST_CHECK_THROW(plane.Evaluate(config.recordDuration + 0.01,
+                                             values), std::invalid_argument);
+        }
+    }
+}
+
+BOOST_AUTO_TEST_CASE(PlaneSparseOccupiedIndicesUseCompactPhaseOrder)
+{
+    auto config = Configuration();
+    config.lengths = {100.0 * twoPi, 0.1, 0.1};
+    config.counts = {1024, 4, 4};
+    std::istringstream input(
+        "# NEKTAR_HIT_SPECTRUM_V1 KIND=Shell3D K_UNITS=rad/m E_UNITS=m3/s2\n"
+        "2 0.2\n3 0.1\n");
+    const auto spectrum = HITSpectrum::ReadTable(
+        input, HITInterpolation::Linear, HITLowWavenumber::Zero,
+        HITHighWavenumber::Zero);
+    const HITGenerator generator(config, spectrum);
+    BOOST_REQUIRE(!generator.GetModes().empty());
+    BOOST_REQUIRE_GT(generator.GetModes().front().index[0], 0);
+    for (const auto &mode : generator.GetModes())
+    {
+        BOOST_REQUIRE_EQUAL(mode.index[1], 0);
+        BOOST_REQUIRE_EQUAL(mode.index[2], 0);
+    }
+    const auto points = Points();
+    const HITPlaneEvaluator plane(generator, points);
+    BOOST_REQUIRE(plane.IsGrouped());
+    Compare(generator, plane, points, 0.0);
+    Compare(generator, plane, points, 0.2);
+    Compare(generator, plane, points, config.recordDuration);
 }
 
 BOOST_AUTO_TEST_CASE(PlaneSharesRecordValidationWithLargeTimeOrigin)

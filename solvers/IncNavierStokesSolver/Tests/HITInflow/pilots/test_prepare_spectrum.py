@@ -100,6 +100,18 @@ class PrepareSpectrum(unittest.TestCase):
             with self.subTest(options=options):
                 self.create(f"invalid-{index}", options, expect_success=False)
 
+    def test_spacetime_footprint_rejected_before_writing(self):
+        error = self.create("overlapping-box", ["--synthesis-length", ".62"], expect_success=False)
+        self.assertIn("complete space-time footprint", error)
+        self.assertFalse((self.root / "overlapping-box").exists())
+
+    def test_stress_output_can_be_disabled_explicitly(self):
+        _, root, manifest = self.create("no-stresses", ["--no-stresses"])
+        self.assertIsNone(root.find("./FILTERS/FILTER[@TYPE='ReynoldsStresses']"))
+        self.assertFalse(manifest["time"]["stress_output_enabled"])
+        self.assertEqual(manifest["time"]["stress_periodic_snapshot_times_s"], [])
+        self.assertIsNone(manifest["time"]["stress_final_snapshot_s"])
+
 
 if __name__ == "__main__":
     unittest.main()

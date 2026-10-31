@@ -153,6 +153,8 @@ def prepare(args):
     synthetic_duration = args.duration + 2 * args.dt
     if synthetic_duration >= args.synthesis_length / U:
         raise ValueError("REPEAT=Error requires duration + 2*dt < synthesis-length / 12.7")
+    if args.length + U * synthetic_duration >= args.synthesis_length:
+        raise ValueError("complete space-time footprint length + 12.7*(duration + 2*dt) must be below synthesis-length")
     taper = 0.8 * args.cutoff if args.taper is None else args.taper
     if not math.isfinite(taper) or not 0 <= taper < args.cutoff:
         raise ValueError("taper is an absolute wavenumber and must satisfy 0<=taper<cutoff")
@@ -304,11 +306,12 @@ def prepare(args):
         sub(history, "PARAM", value, NAME=key)
     sub(history, "PARAM", "\n" + "\n".join(" ".join(map(number, p["xyz"])) for p in probes) + "\n",
         NAME="Points")
-    stresses = sub(filters, "FILTER", TYPE="ReynoldsStresses")
-    for key, value in (("OutputFile", "native"), ("OutputFrequency", stress_every),
-                       ("SampleFrequency", args.sample_every),
-                       ("OutputStartTime", number(args.record_start)), ("MovingAverage", "False")):
-        sub(stresses, "PARAM", value, NAME=key)
+    if not args.no_stresses:
+        stresses = sub(filters, "FILTER", TYPE="ReynoldsStresses")
+        for key, value in (("OutputFile", "native"), ("OutputFrequency", stress_every),
+                           ("SampleFrequency", args.sample_every),
+                           ("OutputStartTime", number(args.record_start)), ("MovingAverage", "False")):
+            sub(stresses, "PARAM", value, NAME=key)
     ET.indent(root, space="    ")
     case = output / "pilot.xml"
     case.write_text(ET.tostring(root, encoding="unicode", xml_declaration=True) + "\n", encoding="utf-8")
@@ -370,6 +373,14 @@ def prepare(args):
                         "Time-based checkpoints disabled; step checkpoints are optional. Native final solver field and cumulative stress fields remain enabled"],
         "sha256": {"prepare.py": digest(Path(__file__)), "pilot.xml": digest(case)},
     }
+    manifest["synthesis"]["complete_space_time_footprint_m"] = args.length + U * synthetic_duration
+    manifest["time"]["stress_output_enabled"] = not args.no_stresses
+    if args.no_stresses:
+        manifest["time"]["stress_first_sample_s"] = None
+        manifest["time"]["stress_periodic_snapshot_times_s"] = []
+        manifest["time"]["stress_final_snapshot_s"] = None
+        manifest["time"]["stress_snapshot_note"] = "Full-field cumulative stress output explicitly disabled"
+        manifest["limitations"][-1] = "Step checkpoints optional; final solver field enabled; cumulative stress output explicitly disabled"
     if spectrum_kind == "cbc":
         manifest["sha256"][SPECTRUM.name] = digest(output / SPECTRUM.name)
     else:
@@ -415,6 +426,8 @@ def main():
     parser.add_argument("--record-start", type=float, default=0.0)
     parser.add_argument("--sample-every", type=int, default=1)
     parser.add_argument("--checkpoint-every", type=int, default=0)
+    parser.add_argument("--no-stresses", action="store_true",
+                        help="Omit full-field cumulative stress output for timing/spectral pilots")
     parser.add_argument("--seed", type=int, default=20261028)
     parser.add_argument("--taper", type=float, help="Absolute taper-start wavenumber, rad/m (CBC default 0.8*cutoff; required for von-karman)")
     parser.add_argument("--synthesis-length", type=float, default=32.0)

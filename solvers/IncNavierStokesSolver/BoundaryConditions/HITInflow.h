@@ -57,6 +57,9 @@ private:
     std::shared_ptr<const SolverUtils::HITGenerator> m_generator;
     std::unique_ptr<SolverUtils::HITPlaneEvaluator> m_evaluator;
     std::vector<SolverUtils::HITVector> m_velocities;
+    int m_reportEvaluator = 0;
+    int m_requireAccelerated = 0;
+    int m_rank = 0;
 };
 } // namespace Nektar
 

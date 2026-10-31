@@ -7,6 +7,7 @@
 #include <IncNavierStokesSolver/BoundaryConditions/HITInflow.h>
 #include <algorithm>
 #include <cmath>
+#include <iostream>
 #include <stdexcept>
 
 namespace Nektar
@@ -35,6 +36,9 @@ void HITInflow::v_Initialise(
     const LibUtilities::SessionReaderSharedPtr &session)
 {
     IncBaseCondition::v_Initialise(session);
+    session->LoadParameter("HITReportEvaluator", m_reportEvaluator, 0);
+    session->LoadParameter("HITRequireAccelerated", m_requireAccelerated, 0);
+    m_rank = session->GetComm()->GetRank();
     m_coords = Array<OneD, Array<OneD, NekDouble>>(3);
     for (int component = 0; component < 3; ++component)
     {
@@ -92,6 +96,15 @@ void HITInflow::Configure(
     }
     m_evaluator = std::make_unique<SolverUtils::HITPlaneEvaluator>(
         *m_generator, points);
+    ASSERTL0(!m_requireAccelerated || m_evaluator->IsGrouped(),
+             "HITRequireAccelerated: bounded plane acceleration is unavailable");
+    if (m_reportEvaluator)
+    {
+        std::cout << "HIT_EVALUATOR rank " << m_rank << " points " << m_npoints
+                  << " method " << m_evaluator->Method() << " cache_bytes "
+                  << m_evaluator->CacheBytes() << " modes "
+                  << m_generator->GetModes().size() << std::endl;
+    }
 }
 
 void HITInflow::v_UpdatePrescribedVelocity(NekDouble time)
