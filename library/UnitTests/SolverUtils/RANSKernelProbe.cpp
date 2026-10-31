@@ -342,6 +342,46 @@ void SwitchTests(const EquilibriumWallFunction &ep,std::ostream &out,
           disabled.values.meanDissipation==baseline.meanDissipation,"Wall-regime fallback failed");
     Reject([&]{ep.EvaluateFixedWeight(base.matchingVelocity,{0,0},1,AWFFailurePolicy::RequirePreservation,false);});
 }
+void LinearizationTests()
+{
+    RANSTensor base{},a{},b{};
+    base[0][2]=4; a[0][0]=.2; a[2][0]=.13;
+    b[0][2]=-.3; b[1][2]=.11; b[2][0]=-.08;
+    auto flatten=[](const RANSClosureValues &v) {
+        std::vector<double> result{v.cMu,v.eddyViscosity,v.production,v.kSource,v.epsilonSource};
+        for (const auto &row:v.reynoldsStress) for (double value:row) result.push_back(value);
+        return result;
+    };
+    for (bool strain : {false,true})
+    {
+        const auto physical=flatten(EvaluateRANSClosure(RANSModel::CLSHighRe,.31,2.1,base,.017));
+        const auto selected=flatten(EvaluateRANSClosureLinearization(RANSModel::CLSHighRe,.31,2.1,base,.017,{},0,strain));
+        for (int i=0;i<physical.size();++i) Near(physical[i],selected[i]);
+        auto derivative=[&](const RANSTensor &direction) {
+            auto plus=base,minus=base;
+            const double step=1e-5;
+            for (int i=0;i<3;++i) for (int j=0;j<3;++j)
+            { plus[i][j]+=step*direction[i][j];minus[i][j]-=step*direction[i][j]; }
+            auto p=flatten(EvaluateRANSClosureLinearization(RANSModel::CLSHighRe,.31,2.1,plus,.017,{},0,strain));
+            const auto m=flatten(EvaluateRANSClosureLinearization(RANSModel::CLSHighRe,.31,2.1,minus,.017,{},0,strain));
+            for (int i=0;i<p.size();++i) p[i]=(p[i]-m[i])/(2*step);
+            return p;
+        };
+        auto sum=a;
+        for (int i=0;i<3;++i) for (int j=0;j<3;++j) sum[i][j]+=b[i][j];
+        const auto da=derivative(a),db=derivative(b),ds=derivative(sum);
+        for (int i=0;i<ds.size();++i) Near(ds[i],da[i]+db[i],2e-8);
+    }
+    for (double sign : {-1.,1.})
+    {
+        auto g=base;g[2][0]=sign;
+        const auto physical=EvaluateRANSClosure(RANSModel::CLSHighRe,.31,2.1,g,.017);
+        const auto expected=flatten(physical);
+        const auto selected=flatten(EvaluateRANSClosureLinearization(RANSModel::CLSHighRe,.31,2.1,g,.017,{},0,
+            physical.strainInvariant>=physical.rotationInvariant));
+        for (int i=0;i<expected.size();++i) Near(expected[i],selected[i]);
+    }
+}
 } // namespace
 
 int main(int argc,char *argv[])
@@ -354,7 +394,7 @@ int main(int argc,char *argv[])
         const auto standard=RANSNeutralReference::Standard(),cls=RANSNeutralReference::CLS();
         Near(cls.Q(),3.190675081624288); Near(cls.Kappa(),.440553905186659);
         Near(standard.Kappa(),std::sqrt(.48*1.3*.3));
-        ReferenceTests(standard); ReferenceTests(cls);
+        ReferenceTests(standard); ReferenceTests(cls); LinearizationTests();
         const auto shifted=standard.StandardShifted(0,.4,.02);
         Check(shifted.velocity==0 && shifted.epsilon>0,"Shifted standard profile failed");
         Reject([&]{cls.StandardShifted(1,.4,.02);});

@@ -105,9 +105,9 @@ std::array<double, 7> CLSCubicCoefficients(double cmu)
             Cast(-5.0L*square),Cast(5.0L*square)};
 }
 
-RANSClosureValues EvaluateRANSClosure(
+static RANSClosureValues EvaluateRANSClosureSelected(
     RANSModel model, double k, double epsilon, const RANSTensor &gradient,
-    double distance, const RANSParameters &p, double nu)
+    double distance, const RANSParameters &p, double nu, int branch)
 {
     p.Validate();
     Positive(k, "RANS k must be finite and positive");
@@ -133,7 +133,7 @@ RANSClosureValues EvaluateRANSClosure(
         }
     }
     const Real strain=std::sqrt(ss/2.0L),rotation=std::sqrt(oo/2.0L);
-    const Real cmu=model==RANSModel::CLSHighRe ? Coefficient(std::max(strain,rotation)) : p.cMu;
+    const Real cmu=model==RANSModel::CLSHighRe ? Coefficient(branch == 1 ? strain : branch == 2 ? rotation : std::max(strain,rotation)) : p.cMu;
     const Real nut=cmu*k*time;
     RANSClosureValues result{};
     result.cMu=Cast(cmu); result.eddyViscosity=Cast(nut);
@@ -182,6 +182,20 @@ RANSClosureValues EvaluateRANSClosure(
     result.kDiffusion=Cast(nu+nut/p.sigmaK);
     result.epsilonDiffusion=Cast(nu+nut/p.sigmaEpsilon);
     return result;
+}
+
+RANSClosureValues EvaluateRANSClosure(
+    RANSModel model,double k,double epsilon,const RANSTensor &gradient,
+    double distance,const RANSParameters &p,double nu)
+{
+    return EvaluateRANSClosureSelected(model,k,epsilon,gradient,distance,p,nu,0);
+}
+
+RANSClosureValues EvaluateRANSClosureLinearization(
+    RANSModel model,double k,double epsilon,const RANSTensor &gradient,
+    double distance,const RANSParameters &p,double nu,bool strainBranch)
+{
+    return EvaluateRANSClosureSelected(model,k,epsilon,gradient,distance,p,nu,strainBranch ? 1 : 2);
 }
 
 double RANSTotalDissipation(double k,double modified,double nu,const RANSVector &grad)

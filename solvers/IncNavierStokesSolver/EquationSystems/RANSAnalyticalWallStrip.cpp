@@ -33,6 +33,8 @@ std::string RANSAnalyticalWallStrip::RestartSignature() const
             for (auto v : m_switch.incomingDirection) s << ':' << v;
         }
     }
+    if (m_spatial.enabled) s << ":spatial:" << m_spatial.begin << ':' << m_spatial.end;
+    s << RANSWallPropertySignature(m_session);
     return s.str();
 }
 using namespace SolverUtils;
@@ -55,10 +57,12 @@ RANSAnalyticalWallStrip::RANSAnalyticalWallStrip(
 {
     m_session->LoadSolverInfo("RANSWallModel", m_wallModel, "AWFOriginal");
     m_equilibrium = m_wallModel == "AWFEquilibrium";
+    m_spatial = ReadRANSWallTransition(m_session,ReadRANSWallGeometry(m_session,wallOrigin));
+    RANSWallPropertySignature(m_session); // validate stationary expressions
     m_failurePolicy = AWFFailurePolicy::UseOriginal;
     if (m_equilibrium)
     {
-        ASSERTL0(!m_session->DefinesParameter("RANSZ0"),
+        ASSERTL0(!m_session->DefinesParameter("RANSZ0") && !m_session->DefinesFunction("RANSWallProperties","z0"),
             "AWFEquilibrium derives aerodynamic roughness from its actual matching anchor; do not prescribe RANSZ0");
         std::string weightMode, failure;
         m_session->LoadSolverInfo("RANSAWFWeight", weightMode, "Switched");
@@ -124,6 +128,35 @@ RANSAnalyticalWallStrip::RANSAnalyticalWallStrip(
             m_localPoints += count;
         }
     Require(valid, "the analytical wall must occupy the flat lower interface at wallOrigin+H");
+    m_wallX = Array<OneD,NekDouble>(m_localPoints);
+    m_roughness = Array<OneD,NekDouble>(m_localPoints,m_awfGeometry.roughness);
+    m_mask = Array<OneD,NekDouble>(m_localPoints,1.0);
+    for (int j = 0; j < m_boundaries.size(); ++j)
+    {
+        auto boundary = fields[0]->GetBndCondExpansions()[m_boundaries[j]];
+        const int count = boundary->GetTotPoints(), offset = m_offsets[j];
+        Array<OneD,NekDouble> x(count,0.0),y(count,0.0),z(count,0.0),property(count);
+        boundary->GetCoords(x,y,z);
+        for (int q = 0; q < count; ++q)
+        {
+            m_wallX[offset+q] = x[q]; m_mask[offset+q] = m_spatial.Weight(x[q]);
+            if (m_dim == 2) y[q] = wallOrigin; else z[q] = wallOrigin;
+        }
+        if (m_session->DefinesFunction("RANSWallProperties","roughness"))
+        {
+            m_session->GetFunction("RANSWallProperties","roughness")->Evaluate(x,y,z,0,property);
+            Vmath::Vcopy(count,property.data(),1,m_roughness.data()+offset,1);
+        }
+    }
+    try
+    {
+        for (double roughness : m_roughness)
+        {
+            auto g = m_awfGeometry; g.roughness = roughness; g.Validate();
+        }
+    }
+    catch (const std::exception &) { valid = false; }
+    Require(valid,"invalid spatial AWF roughness");
     auto comm = m_session->GetComm();
     Array<OneD, int> localCount(1, m_localPoints), counts, offsets(comm->GetSize());
     comm->AllGather(localCount, counts);
@@ -218,7 +251,7 @@ RANSAnalyticalWallStrip::RANSAnalyticalWallStrip(
         m_pointDiagnostics.open(m_session->GetSessionName() + ".awf-points-r" + std::to_string(comm->GetRank()) + ".csv");
         ASSERTL0(m_pointDiagnostics.good(), "Cannot open AWF point diagnostics");
         m_pointDiagnostics << std::setprecision(17)
-            << "time,phase,point,kP,uH,vH,uP,vP,uN,vN,kN,epsN,wP,pressure_x,pressure_y,convection_x,convection_y,forcing_x,forcing_y,traction_x,traction_y,production,dissipation,epsP,epsH,original_dissipation,original_epsP,original_epsH,reference_u,reference_A,reference_P0,lambda,minimum_lambda,cutoff,log_z0,wall_Re,admissible,requested_chi,chi,departure,reason,r_U,r_DeltaU,r_K,r_Epsilon,r_Pressure,r_Convection,r_Normal\n";
+            << "time,phase,point,kP,uH,vH,uP,vP,uN,vN,kN,epsN,wP,pressure_x,pressure_y,convection_x,convection_y,forcing_x,forcing_y,traction_x,traction_y,production,dissipation,epsP,epsH,original_dissipation,original_epsP,original_epsH,reference_u,reference_A,reference_P0,lambda,minimum_lambda,cutoff,log_z0,wall_Re,admissible,requested_chi,chi,departure,reason,r_U,r_DeltaU,r_K,r_Epsilon,r_Pressure,r_Convection,r_Normal,x,mask,roughness\n";
     }
     if (comm->GetRank() == 0)
     {
@@ -287,8 +320,10 @@ void RANSAnalyticalWallStrip::CheckInitialState(const Fields &state) const
     {
         for (int q = 0; q < m_localPoints; ++q)
         {
+            if (m_mask[q] == 0) continue;
             const double k = m_geometry.EliminateKP(h[m_dim][q], n[m_dim][q]);
-            EquilibriumWallFunction wall(m_awfGeometry, k, m_reference, m_parameters);
+            auto g = m_awfGeometry; g.roughness = m_roughness[q];
+            EquilibriumWallFunction wall(g, k, m_reference, m_parameters);
             valid &= wall.Reference().admissible && std::sqrt(k) * m_geometry.height /
                 m_awfGeometry.molecularNu >= m_minimumRe;
         }
@@ -344,6 +379,7 @@ void RANSAnalyticalWallStrip::WritePointDiagnostics(NekDouble time, int phase)
         m_pointDiagnostics << ',' << r.admissible << ',' << p.selected.requestedWeight << ','
             << p.selected.weight << ',' << p.selected.departure << ',' << static_cast<int>(p.selected.reason);
         for (double x : p.selected.sensors) m_pointDiagnostics << ',' << x;
+        m_pointDiagnostics << ',' << m_wallX[q] << ',' << m_mask[q] << ',' << m_roughness[q];
         m_pointDiagnostics << '\n';
     }
     m_pointDiagnostics << std::flush;
@@ -381,7 +417,8 @@ void RANSAnalyticalWallStrip::Update(const Fields &state, const Fields &predicto
         {
             m_kP[q] = m_geometry.EliminateKP(h[m_dim][q], n[m_dim][q]);
             if (!(m_kP[q] > m_minimumK)) throw std::invalid_argument("strip KP guard");
-            AnalyticalWallFunction wall(m_awfGeometry, m_kP[q], m_parameters);
+            auto geometry = m_awfGeometry; geometry.roughness = m_roughness[q];
+            AnalyticalWallFunction wall(geometry, m_kP[q], m_parameters);
             auto &point = m_points[q];
             point = PointData{};
             auto &sample = point.samples;
@@ -405,14 +442,19 @@ void RANSAnalyticalWallStrip::Update(const Fields &state, const Fields &predicto
             point.original = wall.Evaluate(velocity, forcing);
             point.selected.values = point.original;
             point.selected.reason = AWFFallbackReason::SwitchInactive;
-            if (m_equilibrium)
+            if (m_equilibrium && m_mask[q] > 0)
             {
-                EquilibriumWallFunction corrected(m_awfGeometry, m_kP[q], m_reference, m_parameters);
+                EquilibriumWallFunction corrected(geometry, m_kP[q], m_reference, m_parameters);
                 point.reference = corrected.Reference();
                 point.wallRe = std::sqrt(m_kP[q]) * m_geometry.height / m_awfGeometry.molecularNu;
                 const bool highRe = point.wallRe >= m_minimumRe;
-                point.selected = m_switched ? corrected.Evaluate(sample, m_switch, m_failurePolicy, highRe) :
-                    corrected.EvaluateFixedWeight(velocity, forcing, m_fixedWeight, m_failurePolicy, highRe);
+                if (m_switched)
+                {
+                    const auto sensed = corrected.Evaluate(sample,m_switch,AWFFailurePolicy::UseOriginal,highRe);
+                    point.selected = corrected.EvaluateFixedWeight(velocity,forcing,m_mask[q]*sensed.requestedWeight,m_failurePolicy,highRe);
+                    point.selected.departure = sensed.departure; point.selected.sensors = sensed.sensors;
+                }
+                else point.selected = corrected.EvaluateFixedWeight(velocity,forcing,m_mask[q]*m_fixedWeight,m_failurePolicy,highRe);
             }
             const auto &values = point.selected.values;
             if (!(values.dissipationP > m_minimumEpsilon)) throw std::invalid_argument("strip EP guard");

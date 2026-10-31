@@ -18,6 +18,7 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
         ./EquationSystems/VelocityCorrectionSchemeWeakPressure.cpp
         ./EquationSystems/RANSVelocityCorrectionScheme.cpp
         ./EquationSystems/RANSAnalyticalWallStrip.cpp
+        ./EquationSystems/RANSTerrainWall.cpp
         ./EquationSystems/RANSMatrixFree.cpp
         ./EquationSystems/RANSHistory.cpp
         ./EquationSystems/SmoothedProfileMethod.cpp

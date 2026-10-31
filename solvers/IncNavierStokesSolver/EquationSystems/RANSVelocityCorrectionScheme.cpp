@@ -5,9 +5,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include <IncNavierStokesSolver/EquationSystems/RANSVelocityCorrectionScheme.h>
 #include <LibUtilities/Communication/Comm.h>
+#include <LibUtilities/LinearAlgebra/NekLinSysIter.h>
 #include <MultiRegions/ContField.h>
 #include <SolverUtils/Forcing/ForcingBody.h>
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <iomanip>
 #include <limits>
@@ -20,6 +22,27 @@ using namespace SolverUtils;
 using MultiRegions::DirCartesianMap;
 namespace
 {
+struct RANSLinearAction
+{
+    LibUtilities::NekSysOperators::FunctorType1 action;
+    void Apply(LibUtilities::NekSysOperators::InArrayType &input,
+               LibUtilities::NekSysOperators::OutArrayType &output,const bool &flag)
+    { action(input,output,flag); }
+};
+struct RANSFlagGuard
+{
+    bool &flag,old;
+    RANSFlagGuard(bool &value,bool active) : flag(value),old(value) { flag = active; }
+    ~RANSFlagGuard() { flag = old; }
+};
+struct RANSTrialGuard
+{
+    bool &flag;
+    RANSWallBoundary *wall;
+    RANSTrialGuard(bool &value,RANSWallBoundary *boundary,bool trial) : flag(value),wall(boundary)
+    { flag = trial; if (wall) wall->SetTrialMode(trial); }
+    ~RANSTrialGuard() { flag = false; if (wall) wall->SetTrialMode(false); }
+};
 // A positive outlet impedance belongs only to the approximate pressure
 // inverse. It retains the constant pressure mode needed to correct net outlet
 // flux. The actual multiplier and continuity have no added boundary equation.
@@ -68,6 +91,7 @@ void RANSVelocityCorrectionScheme::RequireEverywhere(
 {
     int bad = valid ? 0 : 1;
     m_session->GetComm()->AllReduce(bad, LibUtilities::ReduceMax);
+    if (bad && m_nonlinearTrial) throw std::runtime_error("RANS nonlinear trial: "+message);
     ASSERTL0(!bad, "RANS: " + message);
 }
 
@@ -150,15 +174,19 @@ void RANSVelocityCorrectionScheme::v_InitObject(bool declareField)
                                         RANSNeutralReference::Standard(m_parameters));
     m_session->LoadParameter("RANSWallOrigin", m_wallOrigin, 0.0);
     ASSERTL0(std::isfinite(m_wallOrigin), "RANSWallOrigin must be finite");
+    m_wallGeometry = ReadRANSWallGeometry(m_session,m_wallOrigin);
+    m_terrainWall = m_wallGeometry.terrain != RANSTerrain::Flat;
     m_wallDistance = Array<OneD, NekDouble>(nq);
     bool positiveDistance = true;
     for (int q = 0; q < nq; ++q)
     {
-        m_wallDistance[q] = (dim == 2 ? y[q] : z[q]) - m_wallOrigin;
+        m_wallDistance[q] = m_terrainWall ?
+            m_wallGeometry.Closest(x[q],dim == 2 ? y[q] : z[q]).distance :
+            (dim == 2 ? y[q] : z[q]) - m_wallOrigin;
         positiveDistance &= m_wallDistance[q] > 0;
     }
     if (m_model == RANSModel::CLSHighRe)
-        RequireEverywhere(positiveDistance, "CLS requires positive geometric distance above the flat physical wall");
+        RequireEverywhere(positiveDistance, "CLS requires positive geometric distance above the physical wall");
     m_nonlinearStress = Gradients(dim);
     for (int i = 0; i < dim; ++i)
     {
@@ -169,9 +197,21 @@ void RANSVelocityCorrectionScheme::v_InitObject(bool declareField)
     m_session->LoadParameter("RANSNonlinearTolerance", m_tolerance, 1e-9);
     m_session->LoadParameter("RANSPressureTolerance", m_pressureTolerance, m_tolerance);
     const bool cls = m_model == RANSModel::CLSHighRe;
-    m_session->LoadParameter("RANSMaxIterations", m_maxIterations, cls ? 800 : 200);
-    m_session->LoadParameter("RANSPressureRelaxation", m_pressureRelaxation, cls ? .25 : .8);
-    m_session->LoadParameter("RANSPicardRelaxation", m_relaxation, cls ? .1 : .5);
+    m_session->LoadParameter("RANSMaxIterations", m_maxIterations, m_terrainWall ? 4000 : (cls ? 800 : 200));
+    m_session->LoadParameter("RANSPressureRelaxation", m_pressureRelaxation, m_terrainWall ? .1 : (cls ? .25 : .8));
+    m_session->LoadParameter("RANSPicardRelaxation", m_relaxation, m_terrainWall ? .1 : (cls ? .1 : .5));
+    std::string nonlinearSolver;
+    m_session->LoadSolverInfo("RANSNonlinearSolver",nonlinearSolver,m_terrainWall ? "NewtonKrylov" : "Picard");
+    ASSERTL0(nonlinearSolver == "Picard" || nonlinearSolver == "NewtonKrylov",
+             "RANSNonlinearSolver must be Picard or NewtonKrylov");
+    m_useNewton = nonlinearSolver == "NewtonKrylov";
+    m_session->LoadParameter("RANSNewtonDifferenceStep",m_newtonDifference,cls ? 1e-6 : 1e-7);
+    ASSERTL0(std::isfinite(m_newtonDifference) && m_newtonDifference > 0 && m_newtonDifference < .01,
+             "RANSNewtonDifferenceStep must be finite and in (0,0.01)");
+    m_session->LoadParameter("RANSNewtonKrylovDimension",m_newtonKrylovDimension,240);
+    ASSERTL0(m_newtonKrylovDimension >= 20 && m_newtonKrylovDimension <= 512,
+             "RANSNewtonKrylovDimension must be 20..512");
+    ASSERTL0(!m_useNewton || m_terrainWall,"NewtonKrylov is supported on the terrain path");
     m_session->LoadParameter("RANSMinimumK", m_minimumK, 0.0);
     m_session->LoadParameter("RANSMinimumEpsilon", m_minimumEpsilon, 0.0);
     m_session->LoadParameter("RANSZ0", m_z0, .02);
@@ -192,7 +232,7 @@ void RANSVelocityCorrectionScheme::v_InitObject(bool declareField)
              "CLS uses geometric wall distance without a roughness height shift");
     ASSERTL0(wallModel == "None" || m_heightShift == 0,
              "The analytical wall strip uses geometric height without RANSHeightShift");
-    bool valid = true;
+    bool valid = true, terrainBoundary = false;
     for (int b = 0; b < m_pressure->GetBndConditions().size(); ++b)
     {
         // Pressure is a Lagrange multiplier. These markers select the coupled
@@ -219,10 +259,11 @@ void RANSVelocityCorrectionScheme::v_InitObject(bool declareField)
         else if (tag == "AWFOriginal" || tag == "AWFEquilibrium")
         {
             valid &= wallModel == tag;
-            for (int i = 0; i < dim - 1; ++i)
+            terrainBoundary = true;
+            for (int i = 0; i < dim - (m_terrainWall ? 0 : 1); ++i)
                 valid &= m_fields[i]->GetBndConditions()[b]->GetBoundaryConditionType() == SpatialDomains::eRobin &&
                          m_fields[i]->GetBndConditions()[b]->GetUserDefined() == tag;
-            valid &= m_fields[dim - 1]->GetBndConditions()[b]->GetBoundaryConditionType() == SpatialDomains::eDirichlet &&
+            valid &= (m_terrainWall || m_fields[dim - 1]->GetBndConditions()[b]->GetBoundaryConditionType() == SpatialDomains::eDirichlet) &&
                      m_fields[m_k]->GetBndConditions()[b]->GetBoundaryConditionType() == SpatialDomains::eRobin &&
                      m_fields[m_k]->GetBndConditions()[b]->GetUserDefined() == tag &&
                      m_fields[m_epsilon]->GetBndConditions()[b]->GetBoundaryConditionType() == SpatialDomains::eDirichlet;
@@ -230,13 +271,14 @@ void RANSVelocityCorrectionScheme::v_InitObject(bool declareField)
         else if (tag == "RANSLogLaw")
         {
             valid &= m_model == RANSModel::StandardKEpsilon && wallModel == "None";
-            for (int i = 0; i < dim - 1; ++i)
+            terrainBoundary = true;
+            for (int i = 0; i < dim - (m_terrainWall ? 0 : 1); ++i)
             {
                 valid &= m_fields[i]->GetBndConditions()[b]->GetBoundaryConditionType() ==
-                             SpatialDomains::eNeumann &&
+                             (m_terrainWall ? SpatialDomains::eRobin : SpatialDomains::eNeumann) &&
                          m_fields[i]->GetBndConditions()[b]->GetUserDefined() == tag;
             }
-            valid &= m_fields[dim - 1]->GetBndConditions()[b]->GetBoundaryConditionType() == SpatialDomains::eDirichlet &&
+            valid &= (m_terrainWall || m_fields[dim - 1]->GetBndConditions()[b]->GetBoundaryConditionType() == SpatialDomains::eDirichlet) &&
                      m_fields[m_k]->GetBndConditions()[b]->GetBoundaryConditionType() == SpatialDomains::eNeumann &&
                      m_fields[m_epsilon]->GetBndConditions()[b]->GetBoundaryConditionType() == SpatialDomains::eDirichlet;
         }
@@ -253,16 +295,30 @@ void RANSVelocityCorrectionScheme::v_InitObject(bool declareField)
         }
     }
     RequireEverywhere(valid, "pressure boundaries need RANSPressure and prescribed normal velocity; log walls need tangential Neumann, normal Dirichlet, k Neumann, eps Dirichlet");
+    if (m_terrainWall)
+    {
+        bool sameVelocityMaps = true;
+        for (int b = 0; b < m_fields[0]->GetBndConditions().size(); ++b)
+            for (int i = 1; i < dim; ++i)
+                sameVelocityMaps &= m_fields[i]->GetBndConditions()[b]->GetBoundaryConditionType() ==
+                                    m_fields[0]->GetBndConditions()[b]->GetBoundaryConditionType();
+        RequireEverywhere(sameVelocityMaps,"terrain vector solve needs the same Cartesian velocity boundary type on each region");
+    }
     int outflow = m_outflows.empty() ? 0 : 1;
     m_session->GetComm()->AllReduce(outflow, LibUtilities::ReduceMax);
     m_hasOutflow = outflow;
-    m_wallModel = wallModel;
-    if (wallModel != "None")
+    m_wallModel = m_terrainWall && wallModel == "None" ? "RANSLogLaw" : wallModel;
+    int hasTerrainBoundary = terrainBoundary ? 1 : 0;
+    m_session->GetComm()->AllReduce(hasTerrainBoundary,LibUtilities::ReduceMax);
+    RequireEverywhere(!m_terrainWall || hasTerrainBoundary,"terrain geometry requires a supported tagged wall");
+    if (wallModel != "None" || m_terrainWall)
     {
         for (const auto &force : m_forcing)
             ASSERTL0(std::dynamic_pointer_cast<ForcingBody>(force),
                 "The initial AWF adapter supports Body/Field forcing only, since its current forcing is evaluated within the implicit iteration");
-        m_wallStrip = std::make_shared<RANSAnalyticalWallStrip>(
+        if (m_terrainWall)
+            m_wallStrip = std::make_shared<RANSTerrainWall>(m_session,m_fields,dim,m_wallGeometry,*m_reference);
+        else m_wallStrip = std::make_shared<RANSAnalyticalWallStrip>(
             m_session, m_fields, dim, m_wallOrigin, *m_reference);
     }
     // Pressure's Poisson map has an artificial pinned vertex. Mass inverses
@@ -274,6 +330,7 @@ void RANSVelocityCorrectionScheme::v_InitObject(bool declareField)
     std::string linear;
     m_session->LoadSolverInfo("RANSLinearSolver", linear, "Native");
     ASSERTL0(linear == "Native" || linear == "MatrixFree", "RANSLinearSolver must be Native or MatrixFree");
+    ASSERTL0(!m_terrainWall || linear == "MatrixFree","terrain wall geometry requires RANSLinearSolver=MatrixFree");
     if (linear == "MatrixFree")
     {
         double tolerance;
@@ -307,6 +364,7 @@ std::string RANSVelocityCorrectionScheme::RestartSignature() const
       << ':' << m_hasOutflow << ":pi=p/rho+2k/3";
     for (const auto &name : m_session->GetVariables()) s << ':' << name;
     if (m_wallStrip) s << ':' << m_wallStrip->RestartSignature();
+    if (m_terrainWall) s << ":Newton=" << m_useNewton << ":difference=" << m_newtonDifference << ":Krylov=" << m_newtonKrylovDimension;
     return s.str();
 }
 
@@ -422,7 +480,7 @@ void RANSVelocityCorrectionScheme::v_DoInitialise(bool dump)
         }
         m_diagnostics.open(m_session->GetSessionName() + ".rans.csv");
         ASSERTL0(m_diagnostics.good(), "Cannot open RANS diagnostics");
-        m_diagnostics << "time,iterations,change,pressure_correction,divergence_l2,weak_divergence_l2,min_k,min_eps,min_nut,max_nut,live_global_systems,guard_activations,matrix_free_iterations\n" << std::setprecision(17);
+        m_diagnostics << "time,iterations,change,pressure_correction,divergence_l2,weak_divergence_l2,min_k,min_eps,min_nut,max_nut,live_global_systems,guard_activations,matrix_free_iterations,newton_linear_iterations,newton_backtracks\n" << std::setprecision(17);
     }
     if (m_monitorReference) MonitorReference();
 }
@@ -435,7 +493,7 @@ void RANSVelocityCorrectionScheme::v_GenerateSummary(SummaryList &summary)
     AddSummaryItem(summary, "RANS resolved molecular viscosity", m_resolvedNu);
     AddSummaryItem(summary, "RANS neutral kappa", m_reference->Kappa());
     AddSummaryItem(summary, "RANS wall model", m_wallModel);
-    AddSummaryItem(summary, "RANS implicit stage", "nonlinear Picard + pressure defect iteration");
+    AddSummaryItem(summary, "RANS implicit stage", m_useNewton ? "Newton-Krylov coupled stage" : "nonlinear Picard + pressure defect iteration");
     AddSummaryItem(summary, "RANS pressure correction tolerance", m_pressureTolerance);
 }
 
@@ -461,6 +519,7 @@ void RANSVelocityCorrectionScheme::v_ExtraFldOutput(
         state[i] = Array<OneD, NekDouble>(nq);
         m_fields[i]->BwdTrans(m_fields[i]->GetCoeffs(), state[i]);
     }
+    CheckState(state);
     for (int i = 0; i < dim; ++i)
     {
         gradient[i] = Fields(dim);
@@ -476,6 +535,7 @@ void RANSVelocityCorrectionScheme::v_ExtraFldOutput(
     Fields values(names.size());
     for (auto &value : values) value = Array<OneD, NekDouble>(nq);
     bool valid = true;
+    std::string outputError;
     try
     {
         for (int q = 0; q < nq; ++q)
@@ -501,8 +561,8 @@ void RANSVelocityCorrectionScheme::v_ExtraFldOutput(
             values[10][q] = std::sqrt(quadratic); values[11][q] = std::sqrt(cubic);
         }
     }
-    catch (const std::exception &) { valid = false; }
-    RequireEverywhere(valid, "cannot output an inadmissible RANS state");
+    catch (const std::exception &error) { valid = false; outputError = error.what(); }
+    RequireEverywhere(valid, "cannot output an inadmissible RANS state: "+outputError);
     for (int i = 0; i < names.size(); ++i)
     {
         Array<OneD, NekDouble> data(m_fields[0]->GetNcoeffs());
@@ -524,6 +584,7 @@ void RANSVelocityCorrectionScheme::v_EvaluateAdvection_SetPressureBCs(
 
 void RANSVelocityCorrectionScheme::UpdateLogWall(const Fields &state)
 {
+    if (m_terrainWall) return; // vector terrain adapter supplies this wall policy
     const int dim = m_velocity.size();
     bool valid = true;
     for (int b = 0; b < m_fields[0]->GetBndConditions().size(); ++b)
@@ -579,6 +640,7 @@ void RANSVelocityCorrectionScheme::Closure(
     for (int i = 0; i < dim; ++i)
         for (int j = 0; j < dim; ++j)
             m_fields[i]->PhysDeriv(DirCartesianMap[j], state[i], gradient[i][j]);
+    if (m_cmuBranches.size() != nq) m_cmuBranches.resize(nq);
     bool valid = true;
     try
     {
@@ -588,8 +650,10 @@ void RANSVelocityCorrectionScheme::Closure(
         const auto axis = [dim](int i) { return dim == 2 && i == 1 ? 2 : i; };
         for (int i = 0; i < dim; ++i)
             for (int j = 0; j < dim; ++j) g[axis(i)][axis(j)] = gradient[i][j][q];
-        const auto v = EvaluateRANSClosure(m_model,
-            state[m_k][q], state[m_epsilon][q], g, m_wallDistance[q], m_parameters, m_resolvedNu);
+        const auto v = m_freezeCmuBranch ? EvaluateRANSClosureLinearization(m_model,
+            state[m_k][q],state[m_epsilon][q],g,m_wallDistance[q],m_parameters,m_resolvedNu,m_cmuBranches[q]) :
+            EvaluateRANSClosure(m_model,state[m_k][q],state[m_epsilon][q],g,m_wallDistance[q],m_parameters,m_resolvedNu);
+        if (!m_freezeCmuBranch) m_cmuBranches[q] = v.strainInvariant >= v.rotationInvariant;
         for (int i = 0; i < dim; ++i)
             for (int j = 0; j < dim; ++j)
                 m_nonlinearStress[i][j][q] = v.quadraticStress[axis(i)][axis(j)] + v.cubicStress[axis(i)][axis(j)];
@@ -901,30 +965,76 @@ NekDouble RANSVelocityCorrectionScheme::CorrectPressure(
         boundary->NormVectorIProductWRTBase(trace, boundary->UpdateCoeffs());
     }
     m_pressure->ImposeNeumannConditions(weak);
-    for (int b = 0; b < m_pressure->GetBndCondExpansions().size(); ++b)
+    // Assemble before normalizing: local volume/boundary terms can be
+    // large even when their assembled divergence is tiny. Redistribute the
+    // complete RHS so native solver tolerance has no earlier-RHS dependence.
+    auto normalizedLoad = [&](const MultiRegions::ExpListSharedPtr &field,
+                              const Array<OneD,NekDouble> &load,Array<OneD,NekDouble> &distributed) {
+        const auto map = std::dynamic_pointer_cast<MultiRegions::ContField>(field)->GetLocalToGlobalMap();
+        Array<OneD,NekDouble> global(map->GetNumGlobalCoeffs()),counts(global.size()),local(nc);
+        map->Assemble(load,global);
+        for (int i = 0; i < nc; ++i) local[i] = map->GetLocalToGlobalSign(i);
+        map->Assemble(local,counts);
+        double norm = 0;
+        for (int i = map->GetNumGlobalDirBndCoeffs(); i < global.size(); ++i)
+            if (map->GetGlobalToUniversalMapUnique(i) > 0) norm += global[i]*global[i];
+        m_session->GetComm()->AllReduce(norm,LibUtilities::ReduceSum);norm = std::sqrt(norm);
+        map->GlobalToLocal(global,distributed);
+        for (int i = 0; i < nc; ++i) distributed[i] /= counts[map->GetLocalToGlobalMap(i)]*(norm > 0 ? norm : 1);
+        return norm;
+    };
+    if (m_useNewton)
     {
-        if (m_pressure->GetBndConditions()[b]->GetBoundaryConditionType() == SpatialDomains::ePeriodic)
-            continue;
-        auto boundary = m_pressure->GetBndCondExpansions()[b];
-        Vmath::Smul(boundary->GetNcoeffs(), -alpha, boundary->GetCoeffs(), 1,
-                     boundary->UpdateCoeffs(), 1);
-    }
-    StdRegions::ConstFactorMap factors;
-    factors[StdRegions::eFactorLambda] = 0;
-    if (m_hasOutflow)
+        const double norm = normalizedLoad(m_pressurePoisson,weak,rhs);
+        std::vector<std::pair<MultiRegions::ExpListSharedPtr,Array<OneD,NekDouble>>> saved;
         for (int b = 0; b < m_pressurePoisson->GetBndCondExpansions().size(); ++b)
         {
             if (m_pressurePoisson->GetBndConditions()[b]->GetBoundaryConditionType() == SpatialDomains::ePeriodic) continue;
-            auto to = m_pressurePoisson->GetBndCondExpansions()[b];
-            Vmath::Vcopy(to->GetNcoeffs(),m_pressure->GetBndCondExpansions()[b]->GetCoeffs(),1,to->UpdateCoeffs(),1);
+            auto boundary = m_pressurePoisson->GetBndCondExpansions()[b];
+            Array<OneD,NekDouble> copy(boundary->GetNcoeffs());
+            Vmath::Vcopy(copy.size(),boundary->GetCoeffs(),1,copy,1);saved.emplace_back(boundary,copy);
+            Vmath::Zero(copy.size(),boundary->UpdateCoeffs(),1);
         }
-    // Homogeneous initial guess. Neither preconditioner prescribes the final
-    // pressure multiplier at an open outlet.
-    Vmath::Zero(nc, m_pressurePoisson->UpdateCoeffs(), 1);
-    m_pressurePoisson->HelmSolve(rhs, m_pressurePoisson->UpdateCoeffs(), factors,
-        StdRegions::NullVarCoeffMap, StdRegions::NullVarFactorsMap,
-        NullNekDouble1DArray, false);
-    m_pressurePoisson->BwdTrans(m_pressurePoisson->GetCoeffs(), increment);
+        Vmath::Zero(nc,m_pressurePoisson->UpdateCoeffs(),1);
+        Vmath::Zero(nq,increment,1);
+        if (norm > 0)
+        {
+            StdRegions::ConstFactorMap factors;factors[StdRegions::eFactorLambda] = 0;
+            m_pressurePoisson->HelmSolve(rhs,m_pressurePoisson->UpdateCoeffs(),factors,
+                StdRegions::NullVarCoeffMap,StdRegions::NullVarFactorsMap,NullNekDouble1DArray,false);
+            m_pressurePoisson->BwdTrans(m_pressurePoisson->GetCoeffs(),increment);
+            Vmath::Smul(nq,alpha*norm,increment,1,increment,1);
+        }
+        for (const auto &entry : saved)
+            Vmath::Vcopy(entry.second.size(),entry.second,1,entry.first->UpdateCoeffs(),1);
+    }
+    else
+    {
+        for (int b = 0; b < m_pressure->GetBndCondExpansions().size(); ++b)
+        {
+            if (m_pressure->GetBndConditions()[b]->GetBoundaryConditionType() == SpatialDomains::ePeriodic)
+                continue;
+            auto boundary = m_pressure->GetBndCondExpansions()[b];
+            Vmath::Smul(boundary->GetNcoeffs(), -alpha, boundary->GetCoeffs(), 1,
+                         boundary->UpdateCoeffs(), 1);
+        }
+        StdRegions::ConstFactorMap factors;
+        factors[StdRegions::eFactorLambda] = 0;
+        if (m_hasOutflow)
+            for (int b = 0; b < m_pressurePoisson->GetBndCondExpansions().size(); ++b)
+            {
+                if (m_pressurePoisson->GetBndConditions()[b]->GetBoundaryConditionType() == SpatialDomains::ePeriodic) continue;
+                auto to = m_pressurePoisson->GetBndCondExpansions()[b];
+                Vmath::Vcopy(to->GetNcoeffs(),m_pressure->GetBndCondExpansions()[b]->GetCoeffs(),1,to->UpdateCoeffs(),1);
+            }
+        // Homogeneous initial guess. Neither preconditioner prescribes the final
+        // pressure multiplier at an open outlet.
+        Vmath::Zero(nc, m_pressurePoisson->UpdateCoeffs(), 1);
+        m_pressurePoisson->HelmSolve(rhs, m_pressurePoisson->UpdateCoeffs(), factors,
+            StdRegions::NullVarCoeffMap, StdRegions::NullVarFactorsMap,
+            NullNekDouble1DArray, false);
+        m_pressurePoisson->BwdTrans(m_pressurePoisson->GetCoeffs(), increment);
+    }
     for (int i = 0; i < dim; ++i)
     {
         m_fields[i]->PhysDeriv(DirCartesianMap[i], velocity[i], tmp);
@@ -937,12 +1047,41 @@ NekDouble RANSVelocityCorrectionScheme::CorrectPressure(
     // Apply the viscous preconditioner to the SAME assembled weak divergence,
     // rather than a differently weighted strong divergence. This distinction
     // matters for variable mu and a mixed velocity/pressure approximation.
-    m_pressureMass->MultiplyByInvMassMatrix(weak, projection);
-    m_pressureMass->BwdTrans(projection, tmp);
+    if (m_useNewton)
+    {
+        const double norm = normalizedLoad(m_pressureMass,weak,rhs);
+        Vmath::Zero(nc,projection,1);
+        if (norm > 0) m_pressureMass->MultiplyByInvMassMatrix(rhs,projection);
+        m_pressureMass->BwdTrans(projection,tmp);
+        Vmath::Smul(nq,norm,tmp,1,tmp,1);
+    }
+    else
+    {
+        m_pressureMass->MultiplyByInvMassMatrix(weak, projection);
+        m_pressureMass->BwdTrans(projection, tmp);
+    }
     weakDivergence = m_pressureMass->L2(tmp);
+    if (!m_nonlinearTrial && m_session->DefinesParameter("RANSDebug"))
+    {
+        const double compatibility = m_pressureMass->Integral(tmp);
+        if (m_session->GetComm()->GetRank() == 0)
+            std::cout << "RANS pressure net flux " << compatibility << std::endl;
+    }
     Vmath::Vmul(nq, mu, 1, tmp, 1, tmp, 1);
-    m_pressureMass->FwdTrans(tmp, projection);
-    m_pressureMass->BwdTrans(projection, tmp);
+    double projectionScale = 1;
+    if (m_useNewton)
+    {
+        projectionScale = 0;
+        for (double value : tmp) projectionScale = std::max(projectionScale,std::abs(value));
+        projectionScale = Maximum(projectionScale);
+        if (projectionScale > 0) Vmath::Smul(nq,1/projectionScale,tmp,1,tmp,1);
+    }
+    if (projectionScale > 0)
+    {
+        m_pressureMass->FwdTrans(tmp, projection);
+        m_pressureMass->BwdTrans(projection, tmp);
+        if (m_useNewton) Vmath::Smul(nq,projectionScale,tmp,1,tmp,1);
+    }
     Vmath::Vsub(nq, increment, 1, tmp, 1, increment, 1);
     Array<OneD, NekDouble> ones(nq, 1.0);
     const double mean = m_hasOutflow ? 0.0 : m_pressure->Integral(increment) / m_pressure->Integral(ones);
@@ -983,20 +1122,109 @@ void RANSVelocityCorrectionScheme::v_SolveUnsteadyStokesSystem(
         for (int j = 0; j < dim; ++j) gradient[i][j] = Array<OneD, NekDouble>(nq);
     }
     Array<OneD, NekDouble> pressure(nq), rhs(nc), cross(nc), tmp(nq), mass(nq), gradP(nq);
+    Fields velocityRhs(dim);
+    for (auto &v : velocityRhs) v = Array<OneD,NekDouble>(nc);
     m_pressure->BwdTrans(m_pressure->GetCoeffs(), pressure);
     Array<OneD, NekDouble> ones(nq, 1.0);
     const double pressureMean = m_hasOutflow ? 0.0 : m_pressure->Integral(pressure) / m_pressure->Integral(ones);
     for (int q = 0; q < nq; ++q) pressure[q] -= pressureMean;
     SetBoundaryConditions(time);
-    double change = 0, correction = 0, div = 0, weakDiv = 0;
-    int iteration = 0;
-    for (; iteration < m_maxIterations; ++iteration)
+    Array<OneD,NekDouble> volumeMetric(nq),wallMetric;
+    std::vector<double> iterationMetric,iterationScales(nf+2,1.0),differenceScales(nf+2,1.0);
+    if (m_useNewton)
     {
+        for (int e = 0; e < m_fields[0]->GetExpSize(); ++e)
+        {
+            auto expansion = m_fields[0]->GetExp(e);
+            Array<OneD,NekDouble> one(expansion->GetTotPoints(),1.0),out = volumeMetric+m_fields[0]->GetPhys_Offset(e);
+            expansion->MultiplyByQuadratureMetric(one,out);
+        }
+        wallMetric = m_wallStrip->IterationMetric();
+        iterationMetric.resize((nf+1)*nq+wallMetric.size());
+        double maximumK = 0;
+        for (double value : state[m_k]) maximumK = std::max(maximumK,value);
+        maximumK = Maximum(maximumK);
+        double velocityScale = std::sqrt(maximumK);
+        for (int q = 0; q < nq; ++q)
+        {
+            double speed = 0;
+            for (int i = 0; i < dim; ++i) speed = std::hypot(speed,state[i][q]);
+            velocityScale = std::max(velocityScale,speed);
+        }
+        velocityScale = Maximum(velocityScale);
+        for (int i = 0; i < nf; ++i)
+        {
+            double scale = 0;
+            for (double value : state[i]) scale = std::max(scale,std::abs(value));
+            scale = Maximum(scale);
+            if (i < dim) scale = velocityScale;
+            iterationScales[i] = differenceScales[i] = scale;
+            for (int q = 0; q < nq; ++q) iterationMetric[i*nq+q] = volumeMetric[q]/(scale*scale);
+        }
+        const double volume = m_fields[0]->Integral(ones);
+        double wallVolume = 0,height;
+        for (double value : wallMetric) wallVolume += value;
+        m_session->GetComm()->AllReduce(wallVolume,LibUtilities::ReduceSum);
+        m_session->LoadParameter("RANSStripHeight",height,2);
+        const double length = volume*height/wallVolume;
+        Closure(state,gradient,diffusion,gain,loss);
+        const double viscosity = m_fields[0]->Integral(diffusion[0])/volume;
+        // The implicit velocity/pressure blocks balance at the unsteady
+        // inertia scale, rather than the mean-flow dynamic pressure U^2.
+        const double pressureScale = velocityScale*(alpha*length+viscosity/length)*
+            std::sqrt(m_pressureRelaxation/m_relaxation);
+        iterationScales[nf] = pressureScale;
+        differenceScales[nf] = velocityScale*velocityScale;
+        for (double value : pressure) differenceScales[nf] = std::max(differenceScales[nf],std::abs(value));
+        differenceScales[nf] = Maximum(differenceScales[nf]);
+        iterationScales[nf+1] = differenceScales[nf+1] = maximumK;
+        for (int q = 0; q < nq; ++q) iterationMetric[nf*nq+q] = volumeMetric[q]/(pressureScale*pressureScale);
+        for (int q = 0; q < wallMetric.size(); ++q) iterationMetric[(nf+1)*nq+q] = wallMetric[q]/(maximumK*maximumK);
+
+    }
+    auto pack = [&]() {
+        const auto wall = m_wallStrip->IterationState();
+        std::vector<double> result((nf+1)*nq+wall.size());
+        for (int i = 0; i < nf; ++i) for (int q = 0; q < nq; ++q) result[i*nq+q] = state[i][q];
+        for (int q = 0; q < nq; ++q) result[nf*nq+q] = pressure[q];
+        for (int q = 0; q < wall.size(); ++q) result[(nf+1)*nq+q] = wall[q];
+        return result;
+    };
+    auto dotIteration = [&](const std::vector<double> &a,const std::vector<double> &b) {
+        double sum = 0;
+        for (int i = 0; i < a.size(); ++i) sum += iterationMetric[i]*a[i]*b[i];
+        m_session->GetComm()->AllReduce(sum,LibUtilities::ReduceSum);
+        return sum;
+    };
+    auto unpack = [&](const std::vector<double> &values) {
+        for (int i = 0; i < nf; ++i) for (int q = 0; q < nq; ++q) state[i][q] = values[i*nq+q];
+        for (int q = 0; q < nq; ++q) pressure[q] = values[nf*nq+q];
+        // The pressure iteration lives in the native continuous P-2 space.
+        // Extend F to redundant quadrature values by projecting its input;
+        // otherwise off-space pressure modes are a spurious Newton nullspace.
+        m_pressure->FwdTransLocalElmt(pressure,m_pressure->UpdateCoeffs());
+        m_pressure->AvgAssemble(); m_pressure->GlobalToLocal();
+        m_pressure->BwdTrans(m_pressure->GetCoeffs(),pressure);
+        if (!m_hasOutflow)
+        {
+            const double mean = m_pressure->Integral(pressure)/m_pressure->Integral(ones);
+            for (int q = 0; q < nq; ++q) pressure[q] -= mean;
+        }
+        Array<OneD,NekDouble> wall(wallMetric.size());
+        for (int q = 0; q < wall.size(); ++q) wall[q] = values[(nf+1)*nq+q];
+        m_wallStrip->SetIterationState(wall);
+    };
+    double change = 0, correction = 0, div = 0, weakDiv = 0;
+    double globalPressureScale = 1;
+    int iteration = 0;
+    int newtonLinearIterations = 0,newtonBacktracks = 0;
+    auto iterationMap = [&](bool report) {
+        RANSTrialGuard trial(m_nonlinearTrial,m_wallStrip.get(),!report);
         Closure(state, gradient, diffusion, gain, loss);
         UpdateLogWall(state);
         UpdateWall(state, predictor, gradient, pressure, time, alpha);
         UpdateOutflow(pressure, time);
-        if (m_auditStage && iteration == 0)
+        if (report && m_auditStage && iteration == 0)
             AuditStage(state, predictor, diffusion, gain, loss, pressure, time, alpha, 0);
         for (int i = 0; i < nf; ++i)
         {
@@ -1023,8 +1251,13 @@ void RANSVelocityCorrectionScheme::v_SolveUnsteadyStokesSystem(
                 m_fields[i]->IProductWRTDerivBase(flux, cross);
                 Vmath::Vadd(nc, cross, 1, rhs, 1, rhs, 1);
             }
-            SolveField(i, rhs, diffusion[i], mass, next[i], alpha);
-            if (m_session->DefinesParameter("RANSDebug") && m_session->GetComm()->GetRank() == 0)
+            if (m_terrainWall && i < dim)
+            {
+                Vmath::Vcopy(nc,rhs,1,velocityRhs[i],1);
+                if (i == dim-1) m_linearIterations += m_matrixFree->SolveVelocity(velocityRhs,diffusion,alpha,next);
+            }
+            else SolveField(i, rhs, diffusion[i], mass, next[i], alpha);
+            if (report && (!m_terrainWall || i >= dim-1) && m_session->DefinesParameter("RANSDebug") && m_session->GetComm()->GetRank() == 0)
             {
                 std::cout << "RANS iteration " << iteration << " field " << i
                           << " input " << *std::min_element(input[i].begin(), input[i].end())
@@ -1037,9 +1270,10 @@ void RANSVelocityCorrectionScheme::v_SolveUnsteadyStokesSystem(
         Fields velocity(dim);
         for (int i = 0; i < dim; ++i) velocity[i] = next[i];
         correction = CorrectPressure(velocity, diffusion[0], pressure, alpha, div, weakDiv);
-        if (m_session->DefinesParameter("RANSDebug") && m_session->GetComm()->GetRank() == 0)
+        if (report && m_session->DefinesParameter("RANSDebug") && m_session->GetComm()->GetRank() == 0)
             std::cout << "RANS pressure " << iteration << " correction " << correction
-                      << " divergence " << div << " weak " << weakDiv << " range ["
+                      << " divergence " << div << " weak " << weakDiv
+                      << " wall_constraint " << (m_wallStrip ? m_wallStrip->ConstraintResidual() : 0) << " range ["
                       << *std::min_element(pressure.begin(), pressure.end()) << ','
                       << *std::max_element(pressure.begin(), pressure.end()) << ']' << std::endl;
         change = 0;
@@ -1058,10 +1292,175 @@ void RANSVelocityCorrectionScheme::v_SolveUnsteadyStokesSystem(
         }
         double pressureScale = 1;
         for (double p : pressure) pressureScale = std::max(pressureScale, std::abs(p));
-        if (change < m_tolerance && correction / Maximum(pressureScale) < m_pressureTolerance && weakDiv < m_tolerance)
+        globalPressureScale = Maximum(pressureScale);
+    };
+    auto converged = [&]() {
+        return change < m_tolerance && correction/globalPressureScale < m_pressureTolerance &&
+            weakDiv < m_tolerance && (!m_wallStrip || m_wallStrip->ConstraintResidual() < m_tolerance);
+    };
+    int maximumIterations = m_maxIterations;
+    if (m_useNewton) m_session->LoadParameter("RANSNewtonMaxIterations",maximumIterations,60);
+    for (; iteration < maximumIterations; ++iteration)
+    {
+        if (m_useNewton && iteration == 1)
+        {
+            // Balance the primal/reaction off-diagonal blocks of x-F(x).
+            // This scaling changes only the Krylov/line-search norm; all
+            // physical state, continuity and wall criteria stay independent.
+            const double scale = iterationScales[0]*m_wallStrip->IterationReactionScale()/std::sqrt(m_relaxation);
+            RequireEverywhere(std::isfinite(scale) && scale > 0,"invalid Newton reaction scale");
+            iterationScales[nf+1] = differenceScales[nf+1] = scale;
+            for (int q = 0; q < wallMetric.size(); ++q) iterationMetric[(nf+1)*nq+q] = wallMetric[q]/(scale*scale);
+        }
+        const auto oldIteration = (m_useNewton) && iteration > 0 ? pack() : std::vector<double>{};
+        iterationMap(true);
+        if (change < m_tolerance && correction / globalPressureScale < m_pressureTolerance && weakDiv < m_tolerance &&
+            (!m_wallStrip || m_wallStrip->ConstraintResidual() < m_tolerance))
             break;
+        if (m_useNewton && iteration > 0)
+        {
+            // Newton solves x-F(x)=0, where F is one preconditioned Picard /
+            // pressure / wall-reaction sweep. Native GMRES handles the full
+            // nonsymmetric derivative coupling, including normal N samples.
+            const auto mapped = pack();
+            std::vector<double> residual(oldIteration.size());
+            for (int i = 0; i < residual.size(); ++i) residual[i] = oldIteration[i]-mapped[i];
+            const double norm2 = dotIteration(residual,residual);
+            if (!(norm2 > 0) || !std::isfinite(norm2))
+            {
+                unpack(mapped); continue;
+            }
+            const int size = residual.size();
+            Array<OneD,NekDouble> linearRhs(size),linearStep(size,0.0);
+            for (int i = 0; i < size; ++i) linearRhs[i] = -std::sqrt(iterationMetric[i])*residual[i];
+            unpack(oldIteration);
+            Closure(state,gradient,diffusion,gain,loss);
+            const auto baseBranches = m_cmuBranches;
+            RANSLinearAction jacobian;
+            jacobian.action = [&](LibUtilities::NekSysOperators::InArrayType &v,
+                                  LibUtilities::NekSysOperators::OutArrayType &result,const bool &central) {
+                double vn = 0;
+                for (double value : v) vn += value*value;
+                m_session->GetComm()->AllReduce(vn,LibUtilities::ReduceSum);
+                if (vn == 0) { Vmath::Zero(size,result,1); return; }
+                std::vector<double> direction(size),candidate(size);
+                for (int i = 0; i < size; ++i) direction[i] = v[i]/std::sqrt(iterationMetric[i]);
+                // Bound the *physical* perturbation, independent of tiny
+                // GLL quadrature weights and mesh refinement. An L2-only
+                // difference step can perturb a fine-grid vertex by O(1).
+                double scaledMaximum = 0;
+                for (int q = 0; q < nq; ++q)
+                {
+                    double velocity = 0;
+                    for (int f = 0; f < dim; ++f) velocity = std::hypot(velocity,direction[f*nq+q]);
+                    scaledMaximum = std::max(scaledMaximum,velocity/differenceScales[0]);
+                    for (int f = dim; f <= nf; ++f)
+                        scaledMaximum = std::max(scaledMaximum,std::abs(direction[f*nq+q])/differenceScales[f]);
+                }
+                for (int q = 0; q < wallMetric.size(); ++q)
+                    scaledMaximum = std::max(scaledMaximum,std::abs(direction[(nf+1)*nq+q])/differenceScales[nf+1]);
+                double step = m_newtonDifference/Maximum(scaledMaximum);
+                for (int q = 0; q < nq; ++q)
+                    for (int f : {m_k,m_epsilon})
+                    {
+                        const int i = f*nq+q;
+                        const double minimum = f == m_k ? m_minimumK : m_minimumEpsilon;
+                        if (direction[i] < 0 || (central && direction[i] != 0))
+                            step = std::min(step,.05*(oldIteration[i]-minimum)/std::abs(direction[i]));
+                    }
+                m_session->GetComm()->AllReduce(step,LibUtilities::ReduceMin);
+                bool valid = false;
+                std::vector<double> plus;
+                for (int attempt = 0; attempt < 8 && !valid; ++attempt)
+                {
+                    for (int i = 0; i < size; ++i) candidate[i] = oldIteration[i]+step*direction[i];
+                    try
+                    {
+                        m_cmuBranches = baseBranches;
+                        RANSFlagGuard branch(m_freezeCmuBranch,m_model == RANSModel::CLSHighRe);
+                        unpack(candidate); iterationMap(false); plus = pack();
+                        if (central)
+                        {
+                            for (int i = 0; i < size; ++i) candidate[i] = oldIteration[i]-step*direction[i];
+                            unpack(candidate); iterationMap(false);
+                        }
+                        valid = true;
+                    }
+                    catch (const std::exception &) { step *= .1; }
+                }
+                RequireEverywhere(valid,"no admissible finite-difference Newton direction");
+                const auto value = pack();
+                for (int i = 0; i < size; ++i)
+                    result[i] = std::sqrt(iterationMetric[i])*(central ?
+                        direction[i]-(plus[i]-value[i])/(2*step) :
+                        (candidate[i]-value[i]-residual[i])/step);
+            };
+            LibUtilities::NekSysOperators operators;
+            operators.DefineNekSysLhsEval(&RANSLinearAction::Apply,&jacobian);
+            LibUtilities::NekSysKey key;
+            key.m_NekLinSysMaxIterations = m_newtonKrylovDimension;
+            key.m_LinSysMaxStorage = m_newtonKrylovDimension;
+            key.m_KrylovMaxHessMatBand = 0;
+            key.m_NekLinSysTolerance = .01;
+            // Freeze the active CLS max-invariant branch only for Jacobian
+            // probes. Centered differences then approximate one linear
+            // generalized Jacobian; physical/line-search residuals use max.
+            key.m_GMRESCentralDifference = m_model == RANSModel::CLSHighRe;
+            key.m_NekLinSysLeftPrecon = false;
+            key.m_NekLinSysRightPrecon = false;
+            auto linear = LibUtilities::GetNekLinSysIterFactory().CreateInstance(
+                "GMRES",m_session,m_session->GetComm(),size,key);
+            linear->SetSysOperators(operators); linear->SetFlagWarnings(false);
+            linear->SetRhsMagnitude(norm2);
+            const int linearIterations = linear->SolveSystem(size,linearRhs,linearStep,0);
+            newtonLinearIterations += linearIterations;
+            if (m_session->DefinesParameter("RANSDebug"))
+            {
+                Array<OneD,NekDouble> actual(size);
+                jacobian.Apply(linearStep,actual,key.m_GMRESCentralDifference);
+                double error = 0;
+                for (int i = 0; i < size; ++i) error += (actual[i]-linearRhs[i])*(actual[i]-linearRhs[i]);
+                m_session->GetComm()->AllReduce(error,LibUtilities::ReduceSum);
+                if (m_session->GetComm()->GetRank() == 0)
+                    std::cout << "RANS Newton " << iteration << " GMRES " << linearIterations
+                              << " relative residual " << std::sqrt(error/norm2) << std::endl;
+            }
+            std::vector<double> direction(size),candidate(size);
+            for (int i = 0; i < size; ++i) direction[i] = linearStep[i]/std::sqrt(iterationMetric[i]);
+            double step = 1;
+            for (int q = 0; q < nq; ++q)
+                for (int f : {m_k,m_epsilon})
+                {
+                    const int i = f*nq+q;
+                    const double minimum = f == m_k ? m_minimumK : m_minimumEpsilon;
+                    if (direction[i] < 0) step = std::min(step,.95*(oldIteration[i]-minimum)/(-direction[i]));
+                }
+            for (double value : direction) if (!std::isfinite(value)) step = 0;
+            m_session->GetComm()->AllReduce(step,LibUtilities::ReduceMin);
+            bool accepted = false;
+            for (int attempt = 0; attempt < 20 && step > 0 && !accepted; ++attempt)
+            {
+                for (int i = 0; i < size; ++i) candidate[i] = oldIteration[i]+step*direction[i];
+                try
+                {
+                    unpack(candidate); iterationMap(false);
+                    const auto value = pack();
+                    std::vector<double> nextResidual(size);
+                    for (int i = 0; i < size; ++i) nextResidual[i] = candidate[i]-value[i];
+                    const double nextNorm2 = dotIteration(nextResidual,nextResidual);
+                    accepted = std::isfinite(nextNorm2) &&
+                        (nextNorm2 < (1-1e-4*step)*norm2 || converged());
+                }
+                catch (const std::exception &) { accepted = false; }
+                if (!accepted) { step *= .5; ++newtonBacktracks; }
+            }
+            RequireEverywhere(accepted,"coupled Newton line search failed");
+            if (converged()) break;
+            unpack(candidate);
+        }
+
     }
-    RequireEverywhere(iteration < m_maxIterations, "coupled implicit stage failed to converge");
+    RequireEverywhere(iteration < maximumIterations, "coupled implicit stage failed to converge");
     // Return the actual Helmholtz solutions. They have the prescribed traces
     // and correspond to the last fixed-point residual, with no profile reset.
     for (int i = 0; i < nf; ++i)
@@ -1072,6 +1471,11 @@ void RANSVelocityCorrectionScheme::v_SolveUnsteadyStokesSystem(
         UpdateWall(next, predictor, gradient, pressure, time, alpha);
         UpdateOutflow(pressure, time);
         AuditStage(next, predictor, diffusion, gain, loss, pressure, time, alpha, 1);
+    }
+    else if (m_terrainWall)
+    {
+        Closure(next,gradient,diffusion,gain,loss);
+        UpdateWall(next,predictor,gradient,pressure,time,alpha);
     }
     if (m_wallStrip)
     {
@@ -1101,6 +1505,7 @@ void RANSVelocityCorrectionScheme::v_SolveUnsteadyStokesSystem(
     if (m_diagnostics.is_open())
         m_diagnostics << time << ',' << iteration + 1 << ',' << change << ',' << correction
                       << ',' << div << ',' << weakDiv << ',' << minK << ',' << minE << ',' << minNu << ','
-                      << maxNu << ',' << live << ",0," << m_linearIterations << '\n' << std::flush;
+                      << maxNu << ',' << live << ",0," << m_linearIterations
+                      << ',' << newtonLinearIterations << ',' << newtonBacktracks << '\n' << std::flush;
 }
 } // namespace Nektar

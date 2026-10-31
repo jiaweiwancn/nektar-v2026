@@ -7,6 +7,8 @@
 #define NEKTAR_RANS_ANALYTICAL_WALL_STRIP_H
 
 #include <MultiRegions/ExpList.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallBoundary.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallSession.h>
 #include <SolverUtils/Turbulence/AnalyticalWallFunction.h>
 #include <SolverUtils/Turbulence/RANSWallStrip.h>
 #include <fstream>
@@ -18,7 +20,7 @@ namespace Nektar
  * are applied to the complete IMEX predictor as well as the current iterate.
  * Collective N sampling includes ranks with no local wall faces.
  */
-class RANSAnalyticalWallStrip
+class RANSAnalyticalWallStrip : public RANSWallBoundary
 {
 public:
     using Fields = Array<OneD, Array<OneD, NekDouble>>;
@@ -56,6 +58,8 @@ private:
     SolverUtils::AWFParameters m_parameters;
     SolverUtils::RANSNeutralReference m_reference;
     SolverUtils::AWFSwitchParameters m_switch;
+    SolverUtils::AWFSpatialTransition m_spatial;
+    Array<OneD,NekDouble> m_wallX, m_roughness, m_mask;
     SolverUtils::AWFFailurePolicy m_failurePolicy;
     std::string m_wallModel;
     bool m_equilibrium = false, m_switched = false, m_writePoints = false;

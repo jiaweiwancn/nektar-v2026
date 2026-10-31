@@ -49,6 +49,15 @@ SOLVER_UTILS_EXPORT RANSClosureValues EvaluateRANSClosure(
     double wallDistance, const RANSParameters &parameters = {},
     double resolvedNu = 0.0);
 
+/** Generalized-Jacobian probe only: choose the active max(strain,rotation)
+ * branch at the base iterate, while differentiating that branch's invariant.
+ * The physical residual and all reported stresses use EvaluateRANSClosure.
+ */
+SOLVER_UTILS_EXPORT RANSClosureValues EvaluateRANSClosureLinearization(
+    RANSModel model, double k, double epsilon, const RANSTensor &gradient,
+    double wallDistance, const RANSParameters &parameters, double resolvedNu,
+    bool strainBranch);
+
 // Explicit conversion for a caller choosing the finite-molecular split. It
 // does not turn the high-Re evaluator into the full low-Re CLS model.
 SOLVER_UTILS_EXPORT double RANSTotalDissipation(

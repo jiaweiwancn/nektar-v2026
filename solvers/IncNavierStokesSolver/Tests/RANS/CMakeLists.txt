@@ -32,6 +32,39 @@ target_link_libraries(RANSKernelProbe RANSKernels)
 target_link_libraries(RANSWallGeometryProbe RANSKernels)
 option(RANS_BUILD_SOLVER "Build the complete incompressible solver in isolation" OFF)
 if(RANS_BUILD_SOLVER)
+    # Build the source SpatialDomains library in isolation too: terrain normals
+    # depend on full-precision XML curve partitioning, which older installations
+    # round. Use the production base list and installed dependency configuration.
+    file(READ ${RANS_SOURCE_ROOT}/library/SpatialDomains/CMakeLists.txt rans_spatial_cmake)
+    string(REGEX MATCH "SET\\(SPATIAL_DOMAINS_SOURCES[^)]*" rans_spatial_block "${rans_spatial_cmake}")
+    string(REGEX MATCHALL "[A-Za-z0-9_/]+\\.cpp" rans_spatial_sources "${rans_spatial_block}")
+    if(NEKTAR_USE_HDF5)
+        list(APPEND rans_spatial_sources MeshGraphIOHDF5.cpp)
+    endif()
+    if(NEKTAR_USE_SCOTCH)
+        list(APPEND rans_spatial_sources MeshPartitionScotch.cpp)
+        if(NEKTAR_USE_MPI)
+            list(APPEND rans_spatial_sources MeshPartitionPtScotch.cpp)
+        endif()
+    endif()
+    if(NEKTAR_USE_METIS)
+        list(APPEND rans_spatial_sources MeshPartitionMetis.cpp)
+    endif()
+    list(TRANSFORM rans_spatial_sources PREPEND "${RANS_SOURCE_ROOT}/library/SpatialDomains/")
+    add_library(RANSSpatialDomains SHARED ${rans_spatial_sources})
+    target_compile_definitions(RANSSpatialDomains PRIVATE SPATIAL_DOMAINS_EXPORTS)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        # Match the production flags for existing Geometry sources.
+        target_compile_options(RANSSpatialDomains PRIVATE -Wno-narrowing)
+    endif()
+    set_target_properties(RANSSpatialDomains PROPERTIES OUTPUT_NAME SpatialDomains
+        VERSION ${NEKTAR++_VERSION} SOVERSION ${NEKTAR++_VERSION}
+        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/geometry-lib)
+    # Imported SpatialDomains exposes its partitioner dependencies. Retain those
+    # while replacing only that library, rather than loading two copies.
+    get_target_property(rans_spatial_dependencies SpatialDomains INTERFACE_LINK_LIBRARIES)
+    target_link_libraries(RANSSpatialDomains StdRegions ${rans_spatial_dependencies}
+        ${NEKTAR++_TP_LIBRARIES})
     set(RANS_SOLVER_ROOT ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver)
     # Use the production source list so registrations and legacy paths match
     # the normal executable. No shared installation is overwritten.
@@ -44,16 +77,21 @@ if(RANS_BUILD_SOLVER)
     endforeach()
     add_executable(IncNavierStokesSolver ${rans_absolute_sources})
     target_include_directories(IncNavierStokesSolver PRIVATE ${RANS_SOURCE_ROOT}/solvers)
-    target_link_libraries(IncNavierStokesSolver RANSKernels
+    target_link_libraries(IncNavierStokesSolver RANSKernels RANSSpatialDomains
         ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
     add_executable(RANSFieldAudit ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSFieldAudit.cpp)
-    target_link_libraries(RANSFieldAudit ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
+    target_link_libraries(RANSFieldAudit RANSSpatialDomains ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
+    add_executable(RANSWallFieldAudit ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSWallFieldAudit.cpp)
+    target_link_libraries(RANSWallFieldAudit RANSKernels RANSSpatialDomains ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
     if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         target_compile_options(RANSFieldAudit PRIVATE
+            -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror)
+        target_compile_options(RANSWallFieldAudit PRIVATE
             -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror)
         set_source_files_properties(
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSVelocityCorrectionScheme.cpp
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSAnalyticalWallStrip.cpp
+            ${RANS_SOLVER_ROOT}/./EquationSystems/RANSTerrainWall.cpp
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSMatrixFree.cpp
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSHistory.cpp
             PROPERTIES COMPILE_OPTIONS "-Wall;-Wextra;-Wpedantic;-Wno-sign-compare;-Werror")
@@ -102,3 +140,8 @@ add_test(NAME RANSWallGeometryUnitTests COMMAND RANSWallGeometryProbe
     ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-geometry.json)
 set_tests_properties(RANSWallGeometryUnitTests PROPERTIES
     PROCESSORS 1 TIMEOUT 120 ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
+if(RANS_BUILD_SOLVER)
+    get_property(rans_all_tests DIRECTORY PROPERTY TESTS)
+    set_property(TEST ${rans_all_tests} APPEND PROPERTY ENVIRONMENT
+        "LD_LIBRARY_PATH=${CMAKE_CURRENT_BINARY_DIR}/geometry-lib:$ENV{LD_LIBRARY_PATH}")
+endif()

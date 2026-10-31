@@ -5,7 +5,7 @@
 - Origin Skill: academic-research-suite / experiment-agent
 - Origin Mode: implementation plan and deterministic validation
 - Origin Date: 2026-10-31
-- Verification Status: WG1 VERIFIED; WG2--WG4 in progress
+- Verification Status: WG1--WG2 VERIFIED; WG3--WG4 pending
 - Version Label: hill_wall_geometry_v1
 
 ## Objective and scope
@@ -57,8 +57,8 @@ the full curved RANS equations. The equilibrium correction is intended for the
 flat approach region; the spatial gate must be zero over the hill and wake.
 
 Terrain velocity boundaries require a vector tangential condition and a normal
-constraint. Use an augmented boundary multiplier with a lower-order trace space
-for the normal constraint, converged with the coupled implicit stage; the
+constraint. Use an augmented boundary multiplier with the assembled continuous
+free velocity trace space for the normal constraint, converged with the coupled implicit stage; the
 augmentation is a preconditioning parameter, not a permitted finite-penetration
 wall law. Retain Cartesian velocity unknowns and verify normal constraint,
 boundary traction and refinement independently. The terrain path initially
@@ -78,7 +78,7 @@ All new physics/configuration must enter restart compatibility checks.
 | Milestone | Deliverable | Required evidence | Status |
 |---|---|---|---|
 | WG1 | Geometry, metric/source integration and spatial-ramp primitives | Linux kernel tests: closest points/normals, rotations, curvature/Jacobian, invalid geometry, endpoint/derivative limits and independent quadrature; existing kernel tests pass | CLOSED |
-| WG2 | Terrain solver adapter, CLS distance and compatible standard log wall | Actual Linux solves: flat reduction, inclined-plane covariance, curved-wall refinement/normal constraint, source/interface budgets and both closure/wall families; positivity and coupled residual checks | PLANNED |
+| WG2 | Terrain solver adapter, CLS distance and compatible standard log wall | Actual Linux solves: flat reduction, inclined-plane covariance, curved-wall refinement/normal constraint, source/interface budgets and both closure/wall families; positivity and coupled residual checks | CLOSED |
 | WG3 | Spatial transition/property integration and reproducible workflows | Prescribed-mask receipts; inactive-correction/original recovery; spatially varying properties; 1/2/4-rank agreement including remote samples; history restart and mismatch rejection; empty-floor transition controls | PLANNED |
 | WG4 | Hill-enabling pilot, regression and delivery | Paper-shaped terrain pilot for standard log wall and original/corrected AWF with both closures; four upstream ramp lengths with paired flat controls; relevant legacy regression; documented errors, limits and reproducible commands | PLANNED |
 
@@ -86,10 +86,12 @@ Commit and push after each completed milestone. A gate is closed only when its
 evidence exists; failed attempts and any scientific limitations stay visible.
 Initial tolerances: kernel relative errors <=5e-10; converged stage and projected
 normal constraint <=1e-7 in the verification cases; serial/MPI/restart field
-differences <=1e-6 relative to max(1, field magnitude). Curved-wall pointwise
-normal error must decrease under refinement; weak enforcement alone is not
-evidence of pointwise impermeability. Record measured orders rather than assume
-them. Pilot runs are numerical functionality checks, not accuracy acceptance
+differences <=1e-6 relative to max(1, field magnitude). Smooth curved-wall
+pointwise normal error must decrease under refinement; weak enforcement alone
+is not evidence of pointwise satisfaction. For the compact C1 hill, require
+decreasing global strong L2 normal error and record its global maximum and both
+one-sided foot targets, as justified below. Record measured orders rather than
+assume them. Pilot runs are numerical functionality checks, not accuracy acceptance
 against experimental data. Threshold changes require an evidence-based reason
 in this record.
 
@@ -153,3 +155,185 @@ python3 "$RANS_RUN/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_wall
 Retained development attempts: two CMake discovery failures before using the
 documented package directory, and one C++ mixed-auto-declaration compile error,
 corrected before the successful run. These supplied no numerical results.
+
+## WG2 development and verification decisions
+
+The terrain adapter now uses physical normal rays, metric strip measures and
+weighted sources, a Cartesian vector Robin operator, and an assembled continuous
+velocity-trace multiplier. Its conservative constraint and adjoint use the
+orthogonal trace projection as defined below, including constant-test
+conservation at prescribed-velocity corners. Measure the unprojected normal
+error and the actual integrated normal/mass defect independently. The original
+auxiliary AWF remains locally parallel, as specified above.
+
+Several failed development attempts are retained under the Linux run root's
+`wg2` directory:
+
+- Separately lagging Cartesian Robin cross terms failed rotated AWF cases.
+  A simultaneous SPD velocity-block solve fixes this coordinate dependence.
+- A pressure-order normal trace left high velocity-normal modes uncontrolled.
+  Two-mesh normal errors did not decrease, and a 3D inclined case lost positivity.
+  A facewise full-order trace instead imposed conflicting endpoint constraints.
+  The assembled continuous free velocity trace removes both problems.
+- Native curved-element inverse coordinates needed Newton polishing for exact
+  physical N samples. XML partitioning also rounded curved edges/faces to eight
+  decimal digits, changing MPI normals by up to 3.5e-6. Curved geometry now uses
+  the same full-precision serialization as vertices. An isolated source
+  SpatialDomains library verifies the fix without changing the shared install.
+- The new surface-integral diagnostic initially reduced an already collective
+  ExpList integral again. Local element integration followed by one collective
+  fixes the MPI volume accounting, including ranks without a wall.
+- A zero initial normal reaction perturbed the CLS normal stress and could send
+  the nonlinear iteration to a different branch. Initialize the reaction with
+  minus the current resolved normal stress. This is an iteration warm start,
+  not a reset to an analytical profile.
+- Derivative-based transpiration made the coupled iteration difficult.
+  Multisecant acceleration and a surface filter did not resolve its refinement
+  failure. Neither experimental iteration option is delivered. The retained
+  terrain stage uses a positivity-constrained Newton--Krylov iteration with
+  native GMRES. A fixed active CLS invariant branch defines each generalized
+  Jacobian; physical residuals retain max(strain,rotation). Kernel checks verify
+  active-branch agreement and directional-derivative additivity. Redundant
+  pressure/reaction values are projected to their native CG spaces to avoid
+  spurious off-space null modes.
+- Cache a Cholesky factor of the exact trace mass for up to 1,024 trace modes;
+  retain the iterative projection for larger systems or `RANSNormalDirectLimit=0`.
+  Runtime idempotence/self-adjoint projection audits verify the same operator.
+
+Three refinement levels are required. Earlier development fixtures refined
+the streamwise mesh and H--N layers but kept the outer pressure mesh fixed;
+these are not a whole-domain h-convergence test. They exhibited nonmonotonic
+strong flux/normal errors and are retained as failed development evidence.
+The accepted study must refine every resolved normal layer as well as every
+streamwise column. Keep the C1 hill-foot curvature jumps and global maxima
+visible, together with global L2/regular-region errors; do not replace a failed
+maximum by a weak norm.
+
+The original-CLS plane test at dt=0.002 s met the 1e-6 primary-field comparison
+but its derivative-sensitive outputs differed by up to 1.39e-5. Tightening the
+nonlinear target to 1e-10, with linear targets 1e-14 and 1e-15, did not converge
+in 4,000 iterations (last weak divergence about 7.8e-9). Resolve its rapid
+unbalanced original-AWF dissipation transient using the hill pilot timestep
+dt=0.0002 s: the observed complete-field rotation difference is then at most
+2.34e-9. **The 1e-6 complete-field gate is retained.** Other plane tests retain
+dt=0.002 s. The two-step tests exercise IMEX2 startup and continuation.
+
+Curved verification targets nonlinear/pressure iteration at 1e-8 and independently
+requires assembled free-row residuals, weak divergence, projected normal error
+and physical mass defects below 1e-7. This uses the originally declared gates;
+the earlier 1e-9 iteration target was unnecessarily tighter and caused prolonged
+stagnation. All failed/overly tight attempts remain available. The final accepted
+case receipts and measured refinement orders will be recorded at WG2 closure.
+
+The volume-gradient reconstruction of curved strip continuity failed an early
+maximum-normal refinement gate (finest error 0.0320 m/s). An impermeable variant
+was investigated but is **not the requested model and is not delivered**.
+Integrated strip continuity remains required. Differentiate the pulled-back
+scalar strip flux in the native surface space, rather than applying a continuous
+chain rule to separately interpolated volume gradients and rotating frames.
+For streamwise/normal/span coordinates, retain
+J(H) W_H + H d_s(U_P) + V(H) d_span(U_span,P) = 0,
+and the corresponding expression at P. Constant scalar flux has exactly zero
+surface derivative even on a curved mesh; face contributions telescope under
+integration. The physical/weak normal errors and strip side/interface flux
+budget remain independent acceptance gates.
+
+A compatible synthetic initial streamfunction is G(normal distance) through N,
+blended to the roof-compatible G(e) by 2N. Thus its H/N tangential log traces
+are initially independent of wall foot; zero initial transpiration follows
+from continuity, without constraining subsequent normal velocity. Numerical
+verification is rerun with this initial condition and conservative reconstruction.
+
+Prescribed inlet/wall corners require a conservative dual trace. Let P denote
+the orthogonal L2 projector onto the native free scalar velocity trace V_f,
+u=P1, a=1-u and c=(1,u)=(u,u)>0. Define
+
+```
+C f = P f + u (a,f)/c,          C* v = v + a (u,v)/c, v in V_f.
+```
+
+C is an idempotent map into V_f and preserves the integral of every f; its
+adjoint lifts the test space to include the constant. Enforce
+C(U_normal-W_H)=0. Use C*lambda for the normal reaction and beta C*C for
+augmentation, with the same beta C*C W_H on the right-hand side. This retains
+an SPD velocity block and makes augmentation vanish at the converged constraint.
+In particular, integrated interface normal flux balances the strip side flux
+also at prescribed-velocity corners. Runtime audits check P's orthogonality,
+C's idempotence/integral preservation, the adjoint identity and symmetry of
+C*C. Independent GLL/endpoint quadrature checks the H/P reconstruction and
+actual interface-plus-side-flux defect from saved accepted wall data.
+
+The periodic Newton state also needs an explicit zero-mean pressure gauge;
+projection into P-2 alone leaves its constant null mode. Outflow cases retain
+the pressure level determined by total traction. Difference probes are bounded
+in physical field scales, not solely by a volume L2 norm that can hide a large
+fine-grid vertex perturbation. Full native GMRES storage is bounded by
+RANSNewtonKrylovDimension (default 240, allowed 20--512); difference-step and
+Krylov-dimension controls enter restart compatibility. Failed pre-gauge and
+pre-conservative-corner solves, including 3D CLS line-search failures, are
+retained in the Linux development directories. They are not accepted results.
+
+The original unconditional maximum-normal refinement gate needs a regularity
+qualification. At a compact C1 hill foot, the two one-sided differentiated strip
+fluxes give different targets, while the resolved CG velocity has one continuous
+trace. If the target jump is delta, every continuous trace has maximum error at
+least |delta|/2 there. The saved corner audit reports both targets, this lower
+bound, the actual trace jump and the measured maximum at every refinement;
+the failed global maximum is retained, not called a convergence pass. Add a
+smooth periodic cosine hill, with matching one-sided curvature across the
+periodic seam, to require decreasing global maximum **and** strong L2 normal
+errors. Preliminary AWF maximum errors on this smooth problem decrease
+2.29e-3, 1.11e-3, 2.38e-4 m/s, whereas the compact-foot maximum grows. The C1
+case must still pass decreasing global strong L2 normal and interface-flux
+errors, coupled/free-row tolerances and independent physical flux budgets.
+This is an explicit geometry-regularity qualification, not a relaxed nonlinear
+or conservation tolerance. Maximum-norm convergence at the compact feet is a
+recorded limitation of this continuous-trace discretization.
+
+The AWF startup verification uses dt=2e-5 s after the dt=2e-4 CLS case failed
+to converge; all three AWF meshes use the same timestep. The compatible log
+wall retains dt=2e-4 s, resolving its rapid wall-flux transient more effectively.
+Different wall policies are not compared as an equal-time convergence pair.
+The source guard for terrain-wall presence is global: partitions with no wall
+faces are valid participants in pressure, trace projection and N sampling.
+
+## WG2 closure (2026-10-31)
+
+Closed with integrated AWF strip continuity retained. All 47 Linux cases pass:
+21 flat/rotated/legacy/full-3D cases, 13 compact C1-hill cases and 13 smooth
+periodic curved-wall cases. All ten CTests pass. The 32-file tested source
+manifest matches the Mac checkout; source baseline is `cfb870a` plus those
+manifest changes. Compact evidence: `hill-wall-geometry-evidence/wg2.json`.
+
+Maximum weak divergence is 6.53e-9, conservative normal constraint 7.46e-9,
+assembled free-row residual 2.68e-9, interface normal-integral defect 1.02e-11
+and resolved mass defect 2.19e-10. Complete-field rotation/flat-reduction
+agreement is at most 2.71e-7; augmentation, trace-backend and CLS difference-step
+comparisons are below 7.0e-9. Independent GLL/strip-side quadrature verifies
+nonzero AWF transpiration and actual interface-plus-side-flux conservation.
+
+| Normal-condition error (m/s) | h | h/2 | h/4 | Last measured order |
+|---|---:|---:|---:|---:|
+| Smooth periodic standard AWF, global maximum | 2.295e-3 | 1.114e-3 | 2.375e-4 | 2.23 |
+| Compact standard log wall, global maximum | 2.594e-4 | 1.126e-4 | 3.903e-5 | 1.53 |
+| Compact standard AWF, global strong L2 | 1.116e-4 | 9.739e-5 | 7.503e-5 | 0.38 |
+| Compact standard AWF, global maximum (limitation) | 2.303e-3 | 3.232e-3 | 4.804e-3 | -0.57 |
+
+The C1 AWF maximum is **not converged**. Corner receipts show the one-sided
+target jump and its half-jump lower bound for every continuous velocity trace.
+The regularity-qualified gates and their rationale above are part of this
+closure. Both tangential and k strong flux errors decrease on both geometries.
+This establishes the stated numerical adapter contracts, not a mesh/time-
+converged prediction of the experiment.
+
+The final commands use `validate_terrain.py --build BUILD --suite SUITE
+--output RUN --jobs JOBS`: `planes` at `wg2/wallless-planes` (one case at a
+time), `curved` at `wg2/final-c1` (two), and `periodic-curved` at
+`wg2/final-smooth` (one). The evidence records every exact command, CPU lease,
+MPI rank/thread setting and binary/fixture hash. Four compiler workers and at
+most sixteen total project workers were used; all OMP/BLAS threads were one.
+The isolated geometry library was selected through `LD_LIBRARY_PATH`.
+The last smooth cases were moved off CPU64, an SMT sibling used by the separate
+HIT study; unfinished logs are retained in `wg2/final-smooth-reallocated` and
+accepted earlier cases retain their actual allocations. The primary Linux
+checkout and shared installation were left untouched.

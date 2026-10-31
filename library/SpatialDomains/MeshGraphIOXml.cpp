@@ -2841,7 +2841,8 @@ void WriteCurvedEdge(CurveUniquePtr &curve, TiXmlElement *curveTag,
 {
     TiXmlElement *c = new TiXmlElement("E");
     std::stringstream s;
-    s.precision(8);
+    // Keep curved geometry invariant under XML partitioning, just as vertices.
+    s.precision(std::numeric_limits<NekDouble>::max_digits10 - 1);
 
     for (int j = 0; j < curve->m_points.size(); ++j)
     {
@@ -2862,7 +2863,7 @@ void WriteCurvedFace(CurveUniquePtr &curve, TiXmlElement *curveTag,
 {
     TiXmlElement *c = new TiXmlElement("F");
     std::stringstream s;
-    s.precision(8);
+    s.precision(std::numeric_limits<NekDouble>::max_digits10 - 1);
 
     for (int j = 0; j < curve->m_points.size(); ++j)
     {

@@ -9,6 +9,7 @@
 #include <IncNavierStokesSolver/EquationSystems/VelocityCorrectionSchemeWeakPressure.h>
 #include <SolverUtils/Turbulence/RANSModels.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSAnalyticalWallStrip.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSTerrainWall.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSMatrixFree.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSHistory.h>
 #include <fstream>
@@ -92,7 +93,9 @@ private:
     SolverUtils::RANSModel m_model;
     Array<OneD, NekDouble> m_wallDistance;
     Gradients m_nonlinearStress;
-    std::shared_ptr<RANSAnalyticalWallStrip> m_wallStrip;
+    std::shared_ptr<RANSWallBoundary> m_wallStrip;
+    SolverUtils::RANSWallGeometry m_wallGeometry;
+    bool m_terrainWall = false;
     std::shared_ptr<RANSMatrixFree> m_matrixFree;
     std::shared_ptr<RANSIMEX> m_historyScheme;
     size_t m_historyStepOffset = 0;
@@ -104,6 +107,11 @@ private:
     MultiRegions::ExpListSharedPtr m_pressurePoisson;
     NekDouble m_pressureInverseAlpha = 0;
     int m_k, m_epsilon, m_maxIterations;
+    bool m_useNewton = false;
+    NekDouble m_newtonDifference = 1e-6;
+    int m_newtonKrylovDimension = 240;
+    bool m_nonlinearTrial = false, m_freezeCmuBranch = false;
+    std::vector<int> m_cmuBranches;
     NekDouble m_resolvedNu, m_tolerance, m_pressureTolerance, m_pressureRelaxation, m_relaxation;
     NekDouble m_minimumK, m_minimumEpsilon, m_z0, m_heightShift;
     bool m_auditStage = false;

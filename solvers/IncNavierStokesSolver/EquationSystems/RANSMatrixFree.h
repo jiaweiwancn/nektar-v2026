@@ -24,6 +24,8 @@ public:
               const Array<OneD, NekDouble> &diffusion,
               const Array<OneD, NekDouble> &mass, NekDouble alpha,
               Array<OneD, NekDouble> &output);
+    int SolveVelocity(const Fields &rhs, const Fields &diffusion, NekDouble alpha,
+                      Fields &output);
 private:
     struct Preconditioner
     {
