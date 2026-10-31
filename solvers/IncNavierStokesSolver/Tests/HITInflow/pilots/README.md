@@ -30,14 +30,17 @@ The synthesis box has periods `(synthesis-length,width,width)`. The default
 `--synthesis-counts auto` chooses even sizes with cutoff strictly below each
 Nyquist wavenumber; an explicit `NX,NY,NZ` must meet the same constraint. The
 solver z grid must also meet strict Nyquist. `--taper` is an absolute taper-start
-wavenumber; default is `0.8*cutoff`. `REPEAT=Error` requires
-`duration+2*dt<synthesis-length/12.7`. The declared synthetic record reserves
+wavenumber; default is `0.8*cutoff`. In addition to `REPEAT=Error`, preparation
+requires the complete footprint `length+12.7*(duration+2*dt)<synthesis-length`.
+The declared synthetic record reserves
 two timesteps beyond the job end to cover accumulated clock roundoff; sampling
 uses the actual absolute solver time. Counts, seed, periods, spectrum, cutoff and taper
 must stay fixed during solver resolution/time-step refinement. The continuum
 mode count in the manifest is a cost estimate, not a discrete retained-mode
 count. The inlet groups the retained Fourier sum by transverse wavenumber and
 caches spatial phases; the reference direct sum remains available for checks.
+Wide planes can use bounded separable y/z phase tables within the same64MiB
+auxiliary-cache cap, rather than allocating one index record per retained mode.
 
 The CBC experimental inlet uses only the committed upstream shell spectrum.
 Its interpolation/extensions are `LogLinear`, `K4`, `Gaussian`, with `Preserve`
@@ -99,6 +102,8 @@ resolve every solver transverse mode; refine it independently for statistics.
 Step checkpoints are disabled by default; `--checkpoint-every STEPS` enables
 them for postprocessing. Time-based checkpoints remain disabled. The native
 final solver field and cumulative Reynolds stress fields are retained.
+Pass `--no-stresses` to omit cumulative full-field stress output explicitly;
+the manifest records this choice and the final solver field remains enabled.
 
 Native `ReynoldsStresses` uses `OutputStartTime=record-start`, nonmoving central
 moments and `SampleFrequency=sample-every`. Its fixed output frequency is the
@@ -270,3 +275,74 @@ Reproduction means matching scientific arrays, statistics and plotted data.
 New provenance has new timestamps, paths and command lines; SVG serialization
 can also differ. Preserve each original result and its hash rather than
 expecting a new output file's complete byte stream to match.
+
+
+## CBC100 gated follow-up
+
+The [100rad/m protocol](../../../../../docs/plans/hit-inflow-band100-protocol.md)
+defines a short1m CBC pilot and the gates before any full-distance calculation.
+It uses a600/480 radial input band, not a100rad/m radial cutoff. Its10m synthetic
+period and fixed(2548,154,154) counts also support a matched800/640 comparison.
+One case at a time shares the hard64-worker server budget with other jobs.
+
+`run_band100.py` executes on Linux with an activated Nektar environment. It
+requires a clean checkout on `codex/hit-inflow-generator`, exact full source
+revision, explicit ranks/CPUs and a fresh output directory on the external disk.
+For example, after native build/unit validation:
+
+```bash
+source /home/jay/.local/opt/nektar-v2026-mpi/env.sh
+hit_source=/media/jay/新加卷/nektar-v2026
+hit_pilots=$hit_source/solvers/IncNavierStokesSolver/Tests/HITInflow/pilots
+hit_revision=$(git -C "$hit_source" rev-parse HEAD)
+hit_cpus=$(python3 -c 'print(",".join(map(str, range(48))))')
+python3 "$hit_pilots/run_band100.py" --stage preflight \
+  --run-root /media/jay/新加卷/nektar-v2026-runs/hit-inflow/band100/preflight-01 \
+  --source-revision "$hit_revision" --ranks 48 --npz 16 --cpus "$hit_cpus"
+```
+
+The preflight runs a bounded2x2-point native generator benchmark, an inlet-projection diagnostic
+and160 solver steps. It saves exact commands, executable/library hashes, per-rank
+singleton CPU affinities and atomic running/failed/completed receipts. A failed
+job is not retried. MPI ranks have one OpenMP/BLAS thread and share the selected
+CPU pool with their bounded controller.
+
+After a completed preflight passes its12h forecast/180GiB sampled-memory gate,
+run a separate fresh study using the same revision, binaries and allocation:
+
+```bash
+python3 "$hit_pilots/run_band100.py" --stage study \
+  --run-root /media/jay/新加卷/nektar-v2026-runs/hit-inflow/band100/study-01 \
+  --preflight /media/jay/新加卷/nektar-v2026-runs/hit-inflow/band100/preflight-01 \
+  --source-revision "$hit_revision" --ranks 48 --npz 16 --cpus "$hit_cpus" \
+  --cases base,dt
+```
+
+Every selected case receives its own fresh timing smoke before its0.6s recording.
+Controls `z,bandwidth,svv,h` can be selected in order; `bandwidth` needs the
+common192-slot `z` reference. Separate studies can use `--reference-study` with
+a matching completed study. A budget rejection stops the remaining expensive
+recipe and preserves the evidence. Full-distance production is never automatic.
+
+Read progress without launching work:
+
+```bash
+python3 "$hit_pilots/run_band100.py" --status \
+  /media/jay/新加卷/nektar-v2026-runs/hit-inflow/band100/study-01
+```
+
+The source helper `../check_band100_status.sh RUN_ROOT` runs this read-only
+status command locally on Linux or through Tailscale SSH from the Mac.
+`analyze_band100.py --manifest CASE/manifest.json --output FRESH_ANALYSIS_DIR`
+uses sparse physical probes without a full transverse-grid requirement. It
+reports all component temporal spectra, fixed10--100rad/m band powers, endpoint
+values, sampling diagnostics and optional matched-control changes. Raw station42
+Table2a is an upstream descriptive overlay only. Neither a short-pilot completion
+nor a passed timing gate establishes downstream physical validation.
+
+The pilot sets optional session parameters `HITReportEvaluator=1` and
+`HITRequireAccelerated=1` to report cache methods and reject direct fallback.
+`HITProbeDirectSamples=1` bounds direct references per boundary/rank/time in the
+native diagnostic; projection errors compare raw/projected values at every
+sampled boundary point. These execution/diagnostic controls do not alter the
+realization identity or restore omitted energy.

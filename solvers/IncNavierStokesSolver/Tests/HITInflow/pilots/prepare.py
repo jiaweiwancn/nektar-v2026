@@ -191,7 +191,7 @@ def prepare(args):
     # arbitrary list of output times. Bound that I/O explicitly.
     stress_every = start_step if start_step else steps + 1
     periodic_stress_steps = list(range(stress_every, steps + 1, stress_every))
-    if len(periodic_stress_steps) > 16:
+    if not args.no_stresses and len(periodic_stress_steps) > 16:
         raise ValueError("native stress snapshot schedule exceeds 16 writes; increase record-start")
     initial = None
     initial_hashes = {}
