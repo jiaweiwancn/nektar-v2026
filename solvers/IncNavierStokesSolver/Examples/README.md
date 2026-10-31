@@ -9,6 +9,12 @@ analytical wall functions. Includes 2D/full-3D generation, checkpoints, full-his
 continuation, configuration and measured limits. Start with
 [NeutralABL](NeutralABL/README.md).
 
+Terrain walls and upstream AWF transition
+---------
+Normal-coordinate plane/cosine-hill walls, integrated strip continuity and a
+prescribed upstream transition to original AWF. Includes paired transition-width
+pilots and numerical verification. Start with [TerrainHill](TerrainHill/README.md).
+
 Laminar Channel Flow 2D
 ----------
 Flow through a 2D channel at Reynolds number 1 with fixed boundary conditions. Folder: `ChannelFlow2D`

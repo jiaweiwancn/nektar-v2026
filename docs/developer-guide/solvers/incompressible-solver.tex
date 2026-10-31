@@ -262,6 +262,14 @@ reference monitoring and output.
 \item \code{RANSAnalyticalWallStrip.*} owns flat-interface geometry, P/N
 sampling, conservative strip elimination, dynamic traces, MPI ownership and
 wall budgets. It uses the pure wall kernels rather than duplicating them.
+\item \code{RANSTerrainWall.*} implements normal-coordinate geometry,
+physical N sampling, metric strip inventories and integrated strip continuity.
+\code{RANSWallBoundary.h} is the common flat/terrain contract.
+The terrain normal constraint uses a conservative dual of the assembled free
+CG trace; its adjoint reaction and $\beta C^*C$ augmentation keep the velocity
+block symmetric positive definite. Newton--Krylov solves the coupled stage;
+physical CLS residuals retain the original maximum invariant, while Jacobian
+probes select its active generalized derivative.
 \item \code{RANSMatrixFree.*} supplies the current weak Helmholtz action with
 native static-condensation preconditioners. \code{RANSHistory.*} wraps the
 native IMEX history and publishes/restores checked element-indexed payloads.
@@ -348,6 +356,10 @@ an additional degree 5 four-rank CLS 3D case develops a growing mode. Preserve t
 counterexample when changing spaces, quadrature, pressure coupling or solvers.
 The cause has not been isolated between the numerical method and closure.
 Full-3D long reference/perturbation data are span independent; separate short
-manufactured tests exercise all components. General 3D disturbance stability,
-terrain geometry, curved/backflow outlets, Homogeneous1D and thermal/stratified
+manufactured tests exercise all components. The terrain extension adds smooth
+and compact C1 curved-wall verification, explicit corner-maximum limitations,
+spatial properties and transition-width pilots; see
+\path{docs/plans/hill-wall-geometry-transition.md}.
+General 3D disturbance stability,
+curved/backflow outlets, Homogeneous1D and thermal/stratified
 or low-Re extensions require new contracts and evidence before application.

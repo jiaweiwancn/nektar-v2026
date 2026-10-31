@@ -270,3 +270,17 @@ time and complete-field JSON values. It refreshes optional profile CSVs and
 retains the original reports with an explicit provenance receipt. The M6 run
 used this after correcting local-coordinate profile interpolation. A fresh
 reproduction with the corrected sampler needs no refresh step.
+
+The [TerrainHill example](../../Examples/TerrainHill/README.md) documents
+`generate_terrain.py`, `terrain_initial.py` and `validate_terrain.py`.
+Its `planes`, `periodic-curved`, `curved`, `transitions`, `preservation` and `pilot` suites
+exercise vector wall coupling, smooth/C1 geometry, integrated strip continuity,
+spatial properties, 1/2/4-rank sampling, history restart and paired width controls.
+The full-hex CLS pilot uses eight ranks. `pilot-2d --publish-to FULL_PILOT`
+can run on four other CPUs and publish completed cache aliases without replacing
+existing cases; account for both runners within this project's 16-worker limit.
+The external build supplies a full-precision source SpatialDomains library;
+select `BUILD/geometry-lib` first in `LD_LIBRARY_PATH`. Use fresh run directories
+under the Linux large volume and bounded CPU affinity. `record_terrain.py`
+collects passed suites, source/binary hashes, MPI/thread settings and CTest
+receipts. C1-foot maximum-error limitations remain explicit in those receipts.

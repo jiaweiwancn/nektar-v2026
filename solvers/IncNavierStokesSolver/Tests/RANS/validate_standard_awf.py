@@ -252,7 +252,7 @@ def main():
     if args.suite in ('checks', 'all'):
         verification = True
         raw = execute(['ctest', '--test-dir', build, '--parallel', '1', '--output-on-failure'], output, 'ctest', timeout=900)
-        require('100% tests passed' in raw and 'out of 9' in raw, 'Expected nine CTests')
+        require('100% tests passed' in raw and 'out of 10' in raw, 'Expected ten CTests, including terrain geometry')
         raw = execute([build/'RANSKernelProbe', '--output', output/'kernels.json'], output, 'kernels', timeout=120)
         kernel = json.loads((output/'kernels.json').read_text())
         import validate_m2 as independent
@@ -270,9 +270,17 @@ def main():
         compare('fixed_switched', fixed, switched)
         run('switched_3d', dimension=3, ranks=4, point_audit=True)
         run('configured', model='standard_fixed', dt=.025, steps=4, modify=configured, point_audit=True)
-        original = run('original', model='standard_original', dt=.001, steps=2, point_audit=True)
+        def recovery_precision(root):
+            parameter(root, 'RANSPressureTolerance', 1e-9)
+            # Pressure-only recovery errors need a tighter fixed point than
+            # the profile checks. The diagnostic converged at iteration 4166;
+            # retain a finite allowance without weakening the comparison gate.
+            parameter(root, 'RANSMaxIterations', 6000)
+        original = run('original', model='standard_original', dt=.001, steps=2,
+                       modify=recovery_precision, point_audit=True)
         def zero(root):
             info(root, 'RANSAWFWeight', 'Fixed'); parameter(root, 'RANSAWFFixedWeight', 0)
+            recovery_precision(root)
         disabled = run('zero_weight', dt=.001, steps=2, modify=zero, point_audit=True)
         compare('original_recovery', original, disabled)
         def depart(root):

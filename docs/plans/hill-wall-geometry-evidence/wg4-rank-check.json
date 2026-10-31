@@ -1,0 +1,91 @@
+{
+  "status": "PASS",
+  "comparison": "CLS full-hex first physical timestep, four/eight MPI ranks",
+  "physical_time": 2e-05,
+  "physical_points": 86016,
+  "maximum_coordinate_difference": 0.0,
+  "maximum_scaled_field_difference": 1.4021941599059792e-09,
+  "tolerance": 1e-06,
+  "fields": {
+    "u": 3.35518175936085e-12,
+    "v": 5.372973057764395e-13,
+    "w": 1.4290936632743314e-11,
+    "k": 8.289369191061269e-12,
+    "eps_tilde": 6.80684403678849e-11,
+    "p": 1.4021941599059792e-09,
+    "rans_nut": 6.224132320653553e-11,
+    "rans_P": 8.313435351903647e-10,
+    "rans_Yap": 8.207753268353708e-10,
+    "rans_eps_total": 6.89205029611473e-11,
+    "rans_R_xx": 3.999201525495266e-10,
+    "rans_R_yy": 4.039088230545218e-10,
+    "rans_R_zz": 1.0140084882870326e-09,
+    "rans_R_xy": 7.589729674083025e-11,
+    "rans_R_xz": 1.2928604853357228e-09,
+    "rans_R_yz": 1.1000134928531563e-10,
+    "rans_quadratic_norm": 3.4132044413048845e-10,
+    "rans_cubic_norm": 7.19065085252879e-10
+  },
+  "commands": [
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hill-wall-geometry-transition/wg4/cls-3d-four-rank-timeout/neutral.xml",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hill-wall-geometry-transition/wg4/cls-3d-four-rank-timeout/neutral_1.chk",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hill-wall-geometry-transition/wg4/rank4-to8-first-step/four.csv"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hill-wall-geometry-transition/wg4/rank4-to8-first-step",
+      "timeout_seconds": 180
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hill-wall-geometry-transition/wg4/pilot-v2/cls_3d_hill/neutral.xml",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hill-wall-geometry-transition/wg4/pilot-v2/cls_3d_hill/neutral_1.chk",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hill-wall-geometry-transition/wg4/rank4-to8-first-step/eight.csv"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hill-wall-geometry-transition/wg4/rank4-to8-first-step",
+      "timeout_seconds": 180
+    }
+  ],
+  "python_comparison": "from validate_terrain import compare; compare(first_csv, second_csv, dimension=3)",
+  "binary_sha256": {
+    "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+    "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+    "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+  },
+  "source_sha256": {
+    "solvers/IncNavierStokesSolver/Tests/RANS/validate_terrain.py": "497809bf8d8fb2b20ddb52c1c26603c02be06d48b0472be2736da44a937ce421",
+    "library/UnitTests/SolverUtils/RANSWallFieldAudit.cpp": "e20cba51092e25faadb91610f5d34ac97b02d4c65ce6322d875f4492c6314934"
+  },
+  "artifacts_sha256": {
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hill-wall-geometry-transition/wg4/cls-3d-four-rank-timeout/neutral_1.chk/Info.xml": "8fd8ddc733055f2a00831020d6efe1d1ba941945ddf282208c3f77c5cc20ded5",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hill-wall-geometry-transition/wg4/cls-3d-four-rank-timeout/neutral_1.chk/P0000000.fld": "a010c7e26f2e34f92e757b42b624a962222532c462a49a929158db9bc3ce8b1e",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hill-wall-geometry-transition/wg4/cls-3d-four-rank-timeout/neutral_1.chk/P0000001.fld": "19c95ce798363fb7969f29dfa4fd2d5b6252c91df30ca6aca9202435cbf689c7",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hill-wall-geometry-transition/wg4/cls-3d-four-rank-timeout/neutral_1.chk/P0000002.fld": "c7c413cb6755fc498455c29dee6095e6ba695a7d0175fa522942d346fd5ca7cc",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hill-wall-geometry-transition/wg4/cls-3d-four-rank-timeout/neutral_1.chk/P0000003.fld": "a03996f63fa7386fac39681aab39fdfa88827dd27aa44d9b278dd1c15fba0ce9",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hill-wall-geometry-transition/wg4/cls-3d-four-rank-timeout/neutral.xml": "1b63fb117250df94a5113b46535159c7f579dc273d9ce7a44c014f96c5b836c7",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hill-wall-geometry-transition/wg4/rank4-to8-first-step/four.csv": "62ce65b8cf937ad95862f2782cd30dbcb79f75d03f7fedf2d9286cce17ffbe80",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hill-wall-geometry-transition/wg4/pilot-v2/cls_3d_hill/neutral_1.chk/Info.xml": "c4208745529872831001a37b32c187a36b68a125217791396bd1cdf3c1493125",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hill-wall-geometry-transition/wg4/pilot-v2/cls_3d_hill/neutral_1.chk/P0000000.fld": "fc840584dc6f2386fab207f2ce068d56f1ce2a7a1362e10df4022ef2e74c2e27",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hill-wall-geometry-transition/wg4/pilot-v2/cls_3d_hill/neutral_1.chk/P0000001.fld": "895668c3257193eb83c90973cb1931a118dd1cc6b11a3d9ce13b497e6246dad7",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hill-wall-geometry-transition/wg4/pilot-v2/cls_3d_hill/neutral_1.chk/P0000002.fld": "112a5e2b7dd97190c608d1dc8b433b115ec0bd11063b29360f7ea3ff84a70279",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hill-wall-geometry-transition/wg4/pilot-v2/cls_3d_hill/neutral_1.chk/P0000003.fld": "80e4e8fbe0b1bba197dc28f2eee5f4c113e3d95e4ba136b75469ca77a0eef0fe",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hill-wall-geometry-transition/wg4/pilot-v2/cls_3d_hill/neutral_1.chk/P0000004.fld": "fb7fbb9d76f5ed12ab7d42a557fcde01b7d6a5c73d01cca21294c51eaf7e056b",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hill-wall-geometry-transition/wg4/pilot-v2/cls_3d_hill/neutral_1.chk/P0000005.fld": "e17a904b7b8e67f5236a4162961210796b936adea3bdde70735d2f8b542eb937",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hill-wall-geometry-transition/wg4/pilot-v2/cls_3d_hill/neutral_1.chk/P0000006.fld": "ee489424c4c6e5f49eb9448b9a0920664261375fe140e1273b6e5ef010adab21",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hill-wall-geometry-transition/wg4/pilot-v2/cls_3d_hill/neutral_1.chk/P0000007.fld": "b01a457640c9734d30430df6b09a42bf9e029e68ebcc086db38164039c1f3344",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hill-wall-geometry-transition/wg4/pilot-v2/cls_3d_hill/neutral.xml": "1b63fb117250df94a5113b46535159c7f579dc273d9ce7a44c014f96c5b836c7",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hill-wall-geometry-transition/wg4/rank4-to8-first-step/eight.csv": "0a90afc3ac662ff5393deef76258daa2bdf6b714fba34622c7046ce00f0fc05f"
+  },
+  "cpu_affinity": [
+    13
+  ],
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1"
+  },
+  "four_rank_attempt_note": "First timestep converged; the full two-step attempt hit its runtime guard during step two and is retained separately"
+}

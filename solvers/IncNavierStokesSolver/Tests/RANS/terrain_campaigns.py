@@ -276,7 +276,7 @@ def transition_campaign(run,cases,comparisons,output,workers,compare):
             modify=modify,expected_rejection=message)
 
 
-def pilot_campaign(run,cases,comparisons,output,workers,compare):
+def pilot_campaign(run,cases,comparisons,output,workers,compare,include_3d=True):
     jobs = [('log_hill',dict(kind='hill',model='standard',dt=2e-5,steps=2,ranks=4))]
     for closure in ('standard','cls'):
         jobs.append((closure+'_original_hill',dict(kind='hill',model=closure+'_original',dt=2e-5,steps=2,ranks=4)))
@@ -285,7 +285,9 @@ def pilot_campaign(run,cases,comparisons,output,workers,compare):
                 name = closure+'_width'+str(width)+('_floor' if empty else '_hill')
                 jobs.append((name,dict(kind='hill',model=closure+'_fixed',dt=2e-5,steps=2,ranks=4,width_ratio=width,empty=empty)))
         jobs.append((closure+'_molecular_hill',dict(kind='hill',model=closure+'_fixed',dt=2e-5,steps=2,ranks=4,diffusion='Molecular')))
-        jobs.append((closure+'_3d_hill',dict(kind='hill',model=closure+'_fixed',dt=2e-5,steps=2,ranks=4,dimension=3)))
+        if include_3d:
+            jobs.append((closure+'_3d_hill',dict(kind='hill',model=closure+'_fixed',dt=2e-5,steps=2,
+                        ranks=8 if closure == 'cls' else 4,dimension=3)))
     jobs.sort(key=lambda job:job[1].get('dimension',2)!=3)
     parallel(run,jobs,workers)
     for closure in ('standard','cls'):

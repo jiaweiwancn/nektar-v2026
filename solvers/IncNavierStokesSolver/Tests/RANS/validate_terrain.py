@@ -109,17 +109,19 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--build',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True)
-    p.add_argument('--suite',choices=('planes','curved','periodic-curved','transitions','pilot','preservation'),default='planes')
+    p.add_argument('--suite',choices=('planes','curved','periodic-curved','transitions','pilot','pilot-2d','preservation'),default='planes')
     p.add_argument('--jobs',type=int,default=2)
+    p.add_argument('--publish-to',type=Path,help='Publish completed pilot-2d cases as immutable cache aliases for a concurrent full pilot')
     args = p.parse_args()
     if not sys.platform.startswith('linux') or not 1 <= args.jobs <= 2:
-        raise RuntimeError('Use Linux and at most two concurrent cases (at most four ranks each)')
+        raise RuntimeError('Use Linux and at most two concurrent cases (at most eight ranks each)')
     cpus = sorted(os.sched_getaffinity(0))[:16]
     os.sched_setaffinity(0,cpus)
     cpu_leases = Queue()
     group_size = len(cpus)//args.jobs
-    if group_size < 4:
-        raise RuntimeError('Each case needs an available allocation for up to four ranks')
+    required = 8 if args.suite == 'pilot' else 4
+    if group_size < required:
+        raise RuntimeError('Each case needs at least '+str(required)+' available CPUs; reduce --jobs or increase the allocation')
     for j in range(args.jobs):
         cpu_leases.put(cpus[j*group_size:(j+1)*group_size])
     build, output = args.build.resolve(), args.output.resolve()
@@ -131,13 +133,18 @@ def main():
     if output.is_relative_to(source):
         raise RuntimeError('Store runs outside the source checkout')
     output.mkdir(parents=True,exist_ok=True)
+    if args.publish_to:
+        args.publish_to = args.publish_to.resolve()
+        if args.suite != 'pilot-2d' or args.publish_to.is_relative_to(source) or args.publish_to == output:
+            raise RuntimeError('Publish pilot-2d cases to a distinct run directory outside the source checkout')
+        args.publish_to.mkdir(parents=True,exist_ok=True)
     binaries = {name:digest(build/name) for name in ('IncNavierStokesSolver','RANSWallFieldAudit')}
     binaries['libSpatialDomains.so'] = digest(geometry_library)
     cases, comparisons = {}, {}
     lock = threading.Lock()
 
     def run_case(name, kind='plane', ranks=1, modify=None, expected_rejection=None, cpu_ids=None, **options):
-        if ranks not in (1,2,4):
+        if ranks not in (1,2,4,8) or len(cpu_ids) < ranks:
             raise RuntimeError('Unsupported rank allocation')
         directory = output/name; directory.mkdir(exist_ok=True)
         session = directory/'neutral.xml'
@@ -180,7 +187,12 @@ def main():
                 receipt.write_text(json.dumps(record,indent=2)+'\n')
                 raise
         record['fixture_sha256'] = digest(session)
-        timeout = 1800 if options.get('model','').startswith('cls') or options.get('dimension',2) == 3 or (kind == 'hill' and options.get('refinement',1) >= 4) else 600
+        # Full-hex hill stages are substantially more expensive, especially
+        # with centered CLS Jacobian probes. Runtime limits do not alter the
+        # independently checked physical convergence criteria.
+        timeout = 7200 if kind == 'hill' and options.get('dimension',2) == 3 else (
+            1800 if options.get('model','').startswith('cls') or options.get('dimension',2) == 3
+            or (kind == 'hill' and options.get('refinement',1) >= 4) else 600)
         record['timeout_seconds'] = timeout
         started = time.monotonic()
         with (directory/'solver.log').open('w') as log:
@@ -247,7 +259,15 @@ def main():
             options['periodic'] = args.suite == 'periodic-curved'
         allocation = cpu_leases.get()
         try:
-            return run_case(name,cpu_ids=allocation,**options)
+            record = run_case(name,cpu_ids=allocation,**options)
+            if args.publish_to:
+                try:
+                    # Atomic, no replacement: never overwrite a case already
+                    # started by the other runner. Original paths stay valid.
+                    (args.publish_to/name).symlink_to(output/name,target_is_directory=True)
+                except FileExistsError:
+                    pass
+            return record
         finally:
             cpu_leases.put(allocation)
 
@@ -337,13 +357,13 @@ def main():
     if args.suite == 'transitions':
         from terrain_campaigns import transition_campaign
         transition_campaign(run,cases,comparisons,output,args.jobs,compare)
-    if args.suite == 'pilot':
+    if args.suite in ('pilot','pilot-2d'):
         from terrain_campaigns import pilot_campaign
-        pilot_campaign(run,cases,comparisons,output,args.jobs,compare)
+        pilot_campaign(run,cases,comparisons,output,args.jobs,compare,include_3d=args.suite == 'pilot')
     if args.suite == 'preservation':
         # Five flow-through clocks on a periodic flat domain test stationarity
         # of the new terrain adapter; the inlet/outlet benchmark is separate.
-        for model in ('standard','standard_fixed','cls_fixed'):
+        for model in ('standard','standard_fixed','cls_fixed','standard_switched','cls_switched'):
             q = 3.190675081624288 if model.startswith('cls') else 10/3
             kappa = .440553905186659 if model.startswith('cls') else math.sqrt(.48*1.3/q)
             matching = .3/kappa*math.log(.008/.0002) if model == 'standard' else .09*original_j0(q*.09,.008,.002,1.5e-5)
@@ -365,6 +385,14 @@ def main():
                 periodic_streamwise=True,normalized_linf=errors,engineering_target=1e-3)
             if max(errors.values()) > 1e-3:
                 raise RuntimeError('Terrain-plane neutral preservation exceeded 0.1 percent: '+model+': '+str(errors))
+            if model != 'standard' and not all(row['chi_min'] == row['chi_max'] == 1
+                    for row in rows(output/model/'neutral.terrain-wall.csv')):
+                raise RuntimeError('Terrain reference left the correction plateau: '+model)
+        for closure in ('standard','cls'):
+            errors = compare(output/(closure+'_fixed')/'field.csv',output/(closure+'_switched')/'field.csv')
+            comparisons[closure+'_five_flow_fixed_switched'] = errors
+            if max(errors.values()) > 1e-6:
+                raise RuntimeError('Fixed/switched terrain reference fields disagree: '+closure)
     for name,record in cases.items():
         if not record.get('expected_rejection') and (output/name/'neutral.terrain-wall.csv').exists():
             comparisons[name+'_continuity'] = audit_continuity(output/name)

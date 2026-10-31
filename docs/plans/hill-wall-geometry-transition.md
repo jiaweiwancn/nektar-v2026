@@ -5,7 +5,7 @@
 - Origin Skill: academic-research-suite / experiment-agent
 - Origin Mode: implementation plan and deterministic validation
 - Origin Date: 2026-10-31
-- Verification Status: WG1--WG3 VERIFIED; WG4 in verification
+- Verification Status: WG1--WG4 VERIFIED within the stated numerical scope and limits
 - Version Label: hill_wall_geometry_v1
 
 ## Objective and scope
@@ -83,7 +83,7 @@ regression cases and rejects the new spatial configuration.
 | WG1 | Geometry, metric/source integration and spatial-ramp primitives | Linux kernel tests: closest points/normals, rotations, curvature/Jacobian, invalid geometry, endpoint/derivative limits and independent quadrature; existing kernel tests pass | CLOSED |
 | WG2 | Terrain solver adapter, CLS distance and compatible standard log wall | Actual Linux solves: flat reduction, inclined-plane covariance, curved-wall refinement/normal constraint, source/interface budgets and both closure/wall families; positivity and coupled residual checks | CLOSED |
 | WG3 | Spatial transition/property integration and reproducible workflows | Prescribed-mask receipts; inactive-correction/original recovery; spatially varying properties; 1/2/4-rank agreement including remote samples; history restart and mismatch rejection; empty-floor transition controls | CLOSED |
-| WG4 | Hill-enabling pilot, regression and delivery | Paper-shaped terrain pilot for standard log wall and original/corrected AWF with both closures; four upstream ramp lengths with paired flat controls; relevant legacy regression; documented errors, limits and reproducible commands | IN PROGRESS |
+| WG4 | Hill-enabling pilot, regression and delivery | Paper-shaped terrain pilot for standard log wall and original/corrected AWF with both closures; four upstream ramp lengths with paired flat controls; relevant legacy regression; documented errors, limits and reproducible commands | CLOSED |
 
 Commit and push after each completed milestone. A gate is closed only when its
 evidence exists; failed attempts and any scientific limitations stay visible.
@@ -418,3 +418,203 @@ initial-field formula errors are below 2.4e-15, geometric reconstruction error
 below 3.52e-13 m, and scaled projected span variation below 6.46e-11. The 2D
 projection is unchanged. All ten final-solver smoke/kernel CTests pass; WG4
 retains the broader legacy recovery/precision regression as a separate gate.
+
+## WG4 verification decisions
+
+Keep the legacy original/zero-weight comparison at its existing 1e-7 absolute
+complete-field gate. The initial pair differed only in pressure (1.187e-7);
+velocity/turbulence differences were below 2.3e-12. Tightening pressure to
+1e-9 hit the old 4,000-iteration limit. A retained debug diagnostic converged
+at iteration 4,166, with weak divergence 3.75e-13 and pressure increment
+5.92e-10. Both comparison cases therefore use a bounded 6,000-iteration
+allowance and the tighter pressure target. No production equation, pressure
+comparison gate or physical residual tolerance is weakened. Earlier results
+remain in `wg4/legacy-pressure-attempt`, `wg4/legacy-pressure-4000-limit`
+and `wg4/legacy-pressure-diagnostic`.
+
+Five additional periodic 2D Plane controls advance five flow-through clocks
+with the new terrain adapter, rather than relying only on legacy flat-wall
+preservation. Standard/log and fixed/switched corrected AWF with both closures
+all pass the declared 0.1% target. At degree 4, twelve normal layers, forty steps
+and four single-threaded MPI ranks, the largest final pointwise relative
+errors across these controls are U=4.53e-8, k=3.16e-8 and epsilon=6.74e-7;
+maximum normal velocity/u_tau is 5.12e-8. All four AWF cases retain chi=1 at
+every accepted step. Fixed/switched complete-field differences are at most
+2.67e-7 scaled, below the 1e-6 gate. These are periodic stationarity
+checks. Earlier inlet/outlet and refinement results remain separate; no claim
+of an exact finite-polynomial logarithm or reciprocal-height profile is made.
+
+The public TerrainHill driver and independent initial-field preparation pass
+for the paired width-2 CLS hill/empty-floor example. Their receipts are in
+`wg4/public-workflow/evidence.json`. Final collection additionally checks the
+number of completed physical steps and saved-field times and binds the broader
+legacy checks to the same executable hashes. The private Linux checkout is
+advanced to the pushed WG3 revision with a mixed reset, preserving its working
+files and a pre-update patch. The primary HIT checkout and shared install
+remain untouched.
+
+The broader legacy gate passes all twenty cases and six complete-field
+comparisons. Fixed/switched, original/zero-weight, switch-off/original and
+fallback/original controls are bitwise equal. The largest 2D/3D restart
+difference is 1.70e-11 absolute; maximum weak divergence is 7.06e-9. All ten
+CTests, independent kernel/quadrature checks and three CLS p-refinement
+regressions pass. The latter are explicitly the short M5 regression subset,
+not a repeat of its full acceptance campaign.
+
+The four-rank full-hex CLS hill attempt reaches its 1,800-second runtime guard
+during the second timestep. Its first step converged in 1,370.93 s, seven
+nonlinear iterations and 179 centered-Jacobian GMRES iterations; minimum k and
+epsilon remain positive, weak divergence is 2.97e-11 and pressure correction
+7.44e-9. Retain this attempt in `wg4/cls-3d-four-rank-timeout`. The final CLS
+pilot uses eight single-threaded ranks on CPUs 1--8 and a 7,200-second guard.
+The numerical problem, physical convergence criteria and field gates remain
+the same. A saved first-step four/eight-rank comparison supplements the earlier
+1/2/4-rank tests: all eighteen primary/derived fields at 86,016 physical points
+agree to 1.41e-9 scaled, with identical coordinates. Receipt:
+`hill-wall-geometry-evidence/wg4-rank-check.json`. This accepts the converged
+first step of the retained four-rank attempt, not its incomplete second step.
+Other pilot cases use at most four ranks, and the combined
+project allocation remains below sixteen workers.
+
+The 2D pilots run concurrently on CPUs 9--12, with the eight-rank CLS case on
+1--8 (twelve project MPI workers total). `--suite pilot-2d --publish-to` publishes
+only completed per-case data as atomic symlinks into the full campaign. It never
+replaces an existing destination, so another runner's active case stays intact.
+The original paths stay valid and the full campaign checks fixture/binary hashes
+and reapplies independent oracles when consuming these caches. The shard's
+outputs remain in `wg4/pilot-2d-shard`, alongside its command/log receipts.
+
+The added switched-weight preservation harness initially selected the wrong
+case list and attempted a comparison before generating those cases. This was
+a harness failure, with no accepted additional result. Its source and traceback
+are retained as `wg4/preservation-missing-case-attempt.py` and
+`wg4/preservation-all-weights.log`. The corrected suite passes five cases and
+twelve comparisons in `wg4/preservation-all-weights-v2.log`.
+
+![Normal-condition refinement](hill-wall-geometry-figures/normal-refinement.png)
+
+The interface-area-normalized strong L2 error decreases for both wall policies.
+The smooth-periodic maximum also decreases. The compact C1 AWF maximum grows
+under refinement; its one-sided corner-target incompatibility remains an
+explicit limitation. Compare refinement within each policy: the log-wall and
+AWF data use different timesteps, as labelled, and do not form a cross-policy
+accuracy comparison.
+
+All twenty-one 2D hill/empty-floor pilots and thirty-nine independent comparisons
+pass. Their maximum weak divergence is 4.32e-9, projected-normal error 4.28e-10
+and integrated normal defect 3.51e-13. The independent continuity oracle sees
+nonzero transpiration up to 0.006285 m/s. Original/corrected AWF with both
+closures, compatible standard log wall and both resolved-molecular variants
+remain positive and converge over two physical steps.
+
+The startup width response at t=4e-5 s is measured below (width 8 minus width 1).
+All cases keep the same mesh, u_tau=0.3 m/s and downstream ramp endpoint -0.20 m.
+The epsilon column is the complete-domain relative maximum difference, with
+the width-1 maximum as denominator; the transported CLS variable is eps_tilde.
+
+| Closure | Terrain | Delta(traction/density)/u_tau^2 | Relative maximum epsilon difference |
+|---|---|---:|---:|
+| Standard | Hill | 7.73e-7 | 0.02421 |
+| Standard | Empty floor | 9.72e-7 | 0.02886 |
+| CLS | Hill | 1.52e-6 | 0.01492 |
+| CLS | Empty floor | 1.82e-6 | 0.01762 |
+
+At width 1 the incident auxiliary traction/density is -0.001815 (standard)
+and -0.003042 (CLS) m^2/s^2 on the hill, versus about 0.0899 on the paired
+floors. No sampled flat-wake point has negative traction at this early time.
+These signed startup auxiliary outputs do not establish stationary separation.
+The floor controls show comparable transition-induced changes; these data
+cannot select an optimal width or replace developed-flow, mesh/timestep/H and
+placement studies. Finite resolved viscosity is exercised as a functionality
+option, not as exact preservation of the inviscid analytical reference.
+
+![Upstream masks and startup width response](hill-wall-geometry-figures/transition-widths.png)
+
+## WG4 closure (2026-11-01)
+
+All remaining wall-geometry/transition milestones are closed. Curved-wall AWF
+retains integrated strip continuity, including its spanwise flux contribution.
+Only the compatible log-wall policy uses zero interface-normal velocity.
+
+The final Linux acceptance comprises 23 hill/width pilots and 41 independent
+comparisons, five five-clock neutral controls and 12 comparisons, 20 legacy
+cases and six complete-field comparisons, three short CLS p-refinement
+regressions, independent kernel/quadrature checks and all ten CTests. The full
+pilot reuses all 21 completed 2D shard cases after checking their fixture and
+binary fingerprints, then reapplies every independent oracle. The 3D CLS case
+completes both timesteps on eight ranks; the standard 3D case uses four.
+
+Compact receipt: `hill-wall-geometry-evidence/wg4.json`. Its 49 source hashes
+match the Mac checkout. All 401,664 saved physical points across the 28 new
+pilot/reference cases have finite primary/derived fields and the expected
+physical time; minimum saved k is 0.28421869 and epsilon is 0.20428828.
+The tested production source is `0e16b8b6a6ccc9c48b2eb224ab97f74fba7c9131`;
+WG4 changes its validation/delivery files, with no further production C++ edit.
+
+Across all hill pilots, maximum weak divergence is 4.32e-9, projected-normal
+error 4.28e-10, integrated normal defect 3.51e-13, resolved mass defect 1.27e-10
+and geometric volume relative error 2.89e-12. Projection audits are below
+3.07e-15. These are discrete conservation/convergence checks; the C1-foot
+pointwise maximum limitation described above remains explicit.
+
+The eight-rank CLS solve took 3,296.49 seconds. Its seven-iteration stages end
+at weak divergence 3.69e-11 and 1.20e-11, with positive turbulence fields and
+no positivity guard activation or Newton backtracking. At the requested 1e-14
+native inverse tolerance, 452 internal CG applications reached their 5,001
+iteration cap; their largest reported relative residual is 3.12e-11. Thus not
+every internal native inverse attains 1e-14. The physical convergence gates,
+matrix-free true-residual checks and complete-field MPI comparison still pass.
+These tight native inverse applications remain a performance limitation;
+the elapsed time is not an isolated throughput benchmark while the separate
+48-rank HIT study runs on the same server. No physical acceptance gate was
+relaxed to accept this case.
+
+Linux used the isolated Release build and full-precision source geometry
+library described above, OMP/BLAS threads one, and at most 16 project workers
+(the concurrent pilot allocation is eight plus four ranks). The primary Linux
+checkout is clean at `f4b70ba` at final inspection and was left to the separate
+HIT project; its source and shared installation were not changed by this work.
+All heavy fields, histories, meshes and failed attempts remain under the Linux
+run root. The compact figures were generated there with Matplotlib and visually
+checked on the Mac.
+
+Reproduce the final pilot/reference/regression collection with available CPU
+allocations (run the two pilot commands in separate shells for concurrent use):
+
+Complete both pilot runners before starting the preservation/legacy commands
+on CPUs 9--12. The public example describes fresh-output generation.
+
+```bash
+source /home/jay/.local/opt/nektar-v2026-mpi/env.sh
+RANS_RUN=/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition
+RANS_TEST="$RANS_RUN/source/solvers/IncNavierStokesSolver/Tests/RANS"
+export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 BLIS_NUM_THREADS=1
+export TMPDIR="$RANS_RUN/tmp"
+export LD_LIBRARY_PATH="$RANS_RUN/build/geometry-lib:${LD_LIBRARY_PATH:-}"
+taskset -c 1-8 python3 "$RANS_TEST/validate_terrain.py" --build "$RANS_RUN/build" \
+  --output "$RANS_RUN/wg4/pilot-v2" --suite pilot --jobs 1
+taskset -c 9-12 python3 "$RANS_TEST/validate_terrain.py" --build "$RANS_RUN/build" \
+  --output "$RANS_RUN/wg4/pilot-2d-shard" --suite pilot-2d --jobs 1 \
+  --publish-to "$RANS_RUN/wg4/pilot-v2"
+taskset -c 9-12 python3 "$RANS_TEST/validate_terrain.py" --build "$RANS_RUN/build" \
+  --output "$RANS_RUN/wg4/preservation" --suite preservation --jobs 1
+taskset -c 9-12 python3 "$RANS_TEST/validate_standard_awf.py" --build "$RANS_RUN/build" \
+  --output "$RANS_RUN/wg4/legacy-v2" --suite checks --jobs 1
+taskset -c 13 python3 "$RANS_TEST/record_terrain.py" --build "$RANS_RUN/build" \
+  --suite "$RANS_RUN/wg4/pilot-v2/evidence.json" \
+  --suite "$RANS_RUN/wg4/preservation/evidence.json" \
+  --legacy "$RANS_RUN/wg4/legacy-v2/validation-checks.json" \
+  --workflow "$RANS_RUN/wg4/public-workflow/evidence.json" \
+  --ctest "$RANS_RUN/wg4/legacy-v2/ctest.log" --output "$RANS_RUN/wg4/final-evidence.json"
+taskset -c 13 python3 "$RANS_TEST/plot_terrain.py" \
+  --wg2 "$RANS_RUN/source/docs/plans/hill-wall-geometry-evidence/wg2.json" \
+  --wg4 "$RANS_RUN/wg4/final-evidence.json" --output "$RANS_RUN/wg4/figures"
+```
+
+Existing accepted directories are cached and rechecked. Use fresh output paths
+for an independent rerun and retain failed/stale directories. The public
+TerrainHill example gives fresh generation/preparation commands. This closes
+the enabling implementation and numerical-verification scope, not the calibrated
+Cao--Tamura reproduction. Measured inlet/roughness/displacement fitting,
+facility boundaries, developed-flow width/placement and mesh/timestep/H studies,
+long-time stability and statistical averaging remain experiment work.

@@ -308,6 +308,57 @@ RANS test directory. The accompanying specification records measured
 refinement and recovery tests; finite polynomial degree does not exactly
 represent the analytical logarithm and reciprocal-height profiles.
 
+\subsubsection{Terrain walls and an upstream AWF transition}
+
+\inltt{RANSWallGeometry=Plane} or \inltt{CosineHill} selects the terrain
+adapter; the default \inltt{Flat} retains the original constant-wall adapter.
+Spatial ramps/properties require \inltt{Plane} even for horizontal ground;
+they are rejected on the legacy flat path.
+The cosine-squared graph uses \inltt{RANSWallOrigin},
+\inltt{RANSTerrainCentre}, \inltt{RANSTerrainHeight} and
+\inltt{RANSTerrainHalfLength}; a plane uses \inltt{RANSTerrainSlope}.
+Full 2D quadrilaterals and a full 3D spanwise hexahedral extrusion are supported.
+The lower CG boundary must be the physical normal offset $H$, with $0<P<H<N$.
+CLS uses closest physical-wall distance. The adapter rejects ambiguous rays,
+folded offsets and excessive strip curvature.
+
+Use \inltt{RANSLinearSolver=MatrixFree} and Robin conditions on all Cartesian
+wall velocity components, tagged \inltt{AWFOriginal}, \inltt{AWFEquilibrium}
+or \inltt{RANSLogLaw}. The compatible log law requires standard k--epsilon.
+AWF $k$ is Robin; log-wall $k$ is zero Neumann. Dissipation is Dirichlet and
+pressure retains \inltt{RANSPressure}. The velocity block is solved together,
+with a conservative trace multiplier for its normal condition. Terrain stages
+default to \inltt{RANSNonlinearSolver=NewtonKrylov}; the flat default is Picard.
+
+With signed curvature $c$, $J(\eta)=1-c\eta$ and
+$V(H)=H-cH^2/2$, AWF retains integrated strip continuity,
+\[
+ J(H)W_H=-H\partial_s U_P-V(H)\partial_{\rm span}U_{{\rm span},P}.
+\]
+The normal interface velocity is solved from this relation. The log wall uses
+zero normal velocity. Strip inventory/source integrals use the physical metric;
+the auxiliary AWF remains locally parallel, omitting tangential diffusion and
+normal-stress gradients inside the strip.
+
+\inltt{RANSAWFSpatialWeight=Ramp} uses the bounded C2 mask
+$1-10r^3+15r^4-6r^5$, where $r$ is the clipped fraction between
+\inltt{RANSAWFTransitionStart} and \inltt{RANSAWFTransitionEnd}.
+The end must be strictly upstream of the compact hill foot. Multiply the fixed
+or sensor weight by this mask before selecting mean dissipation and both P/H
+values. Zero mask recovers original AWF and bypasses corrected-reference checks.
+Stationary \inltt{RANSWallProperties} expressions supply \inltt{roughness}
+for AWF or \inltt{z0} for the log wall at the physical wall foot. Align jumps
+with element boundaries; shared endpoints use one-sided interior queries.
+Geometry, properties, mask and iteration controls enter restart compatibility.
+
+\path{solvers/IncNavierStokesSolver/Examples/TerrainHill} supplies generation,
+initial-field preparation, verification and paired transition-width pilots.
+These short runs are not a calibrated experimental reproduction. At compact
+C1 feet, the differentiated strip flux has two one-sided targets while CG
+velocity is continuous: maximum-normal-error convergence is not claimed there.
+Receipts retain those maxima and corner jumps, require decreasing global strong
+L2 error, and separately test maximum-norm convergence on a smooth curved wall.
+
 \subsubsection{RANS linear solution, diagnostics and restart}
 \inltt{RANSLinearSolver=MatrixFree} optionally applies the current variable
 weak diffusion and mass operators, with cached native static-condensation
@@ -372,8 +423,9 @@ The original CLS/AWF drifts. A degree 5 four-rank CLS 3D experiment develops a g
 mode and fails that target; tighter linear precision is not a demonstrated
 general remedy. Weak divergence alone is not sufficient to assess that mode.
 The 3D reference and small-perturbation profiles are span independent; these
-results do not establish general 3D disturbance stability. There is no terrain,
-thermal, stratified, low-Re CLS or backflow validation in this delivery.
+results do not establish general 3D disturbance stability. Thermal, stratified,
+low-Re CLS and backflow validation remain outside this delivery; the terrain
+extension has separate short numerical pilots and the limits described above.
 The tracked Milestone 6 report records the limits and source/binary evidence.
 The standard-AWF extension's derivation, configured-reference and convergence
 checks are recorded in

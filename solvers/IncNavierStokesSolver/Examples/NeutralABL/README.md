@@ -17,6 +17,11 @@ The original CLS/AWF drifts. A degree 5, four-rank CLS 3D trial develops a growi
 and fails the target even with tighter linear solves. Higher degree is not a
 demonstrated remedy. The validated flat-domain scope does not include terrain,
 thermal/stratified flow, curved/backflow outlets or Homogeneous1D.
+The separate [terrain-wall extension](../TerrainHill/README.md) adds a plane,
+compact hill and spanwise extrusion with physical normal-coordinate sampling,
+integrated AWF strip continuity and a prescribed upstream correction ramp.
+Its short pilots and C1-foot limitations are documented separately from the
+five-flow flat-domain preservation benchmark.
 
 ## Build and run a short case
 

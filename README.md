@@ -21,6 +21,9 @@ The [neutral-ABL URANS example](solvers/IncNavierStokesSolver/Examples/NeutralAB
 documents the standard and cubic CLS turbulence models, original/corrected
 analytical wall functions, runnable cases, full-history restart and measured
 validation limits on this development branch.
+The [terrain-wall example](solvers/IncNavierStokesSolver/Examples/TerrainHill/README.md)
+adds physical normal-coordinate wall strips, integrated strip continuity and
+an upstream transition to original AWF, with paired hill/empty-floor pilots.
 
 
 Tutorials
