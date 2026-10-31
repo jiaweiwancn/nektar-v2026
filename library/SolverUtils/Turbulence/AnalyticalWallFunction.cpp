@@ -230,11 +230,10 @@ AWFVector AnalyticalWallFunction::VelocityGradient(double z,const AWFVector &u,c
     return {Cast((traction[0]+f[0]*height)/D),Cast((traction[1]+f[1]*height)/D)};
 }
 
-CLSEquilibriumWallFunction::CLSEquilibriumWallFunction(
+EquilibriumWallFunction::EquilibriumWallFunction(
     const AWFGeometry &geometry,double k,const RANSNeutralReference &model,const AWFParameters &p)
     : m_original(geometry,k,p),m_model(model),m_reference{}
 {
-    if (model.Model()!=RANSModel::CLSHighRe) { throw std::invalid_argument("Equilibrium AWF requires the CLS reference"); }
     auto &r=m_reference;
     r.frictionVelocity=std::sqrt(k/model.Q()); r.traction=k/model.Q();
     r.matchingVelocity=Cast(static_cast<Real>(r.traction)*m_original.Integrals().j0);
@@ -282,7 +281,7 @@ double AWFEquilibriumWeight(double departure,double on,double off)
     return Cast(u*u*u*(1.0L+3.0L*s+6.0L*s*s));
 }
 
-EquilibriumAWFValues CLSEquilibriumWallFunction::EvaluateFixedWeight(
+EquilibriumAWFValues EquilibriumWallFunction::EvaluateFixedWeight(
     const AWFVector &u,const AWFVector &f,double weight,AWFFailurePolicy policy,bool highRe) const
 {
     Finite(weight,"Nonfinite equilibrium weight");
@@ -314,7 +313,7 @@ EquilibriumAWFValues CLSEquilibriumWallFunction::EvaluateFixedWeight(
     return result;
 }
 
-double CLSEquilibriumWallFunction::Dissipation(double z,double weight) const
+double EquilibriumWallFunction::Dissipation(double z,double weight) const
 {
     const double original=m_original.OriginalDissipation(z);
     Finite(weight,"Nonfinite dissipation blend weight");
@@ -325,7 +324,7 @@ double CLSEquilibriumWallFunction::Dissipation(double z,double weight) const
     return Cast((1.0L-weight)*original+weight*corrected);
 }
 
-EquilibriumAWFValues CLSEquilibriumWallFunction::Evaluate(
+EquilibriumAWFValues EquilibriumWallFunction::Evaluate(
     const AWFIndependentSamples &sample,const AWFSwitchParameters &p,AWFFailurePolicy policy,bool highRe) const
 {
     p.Validate(); Check(sample.matchingVelocity); Check(sample.velocityP); Check(sample.velocityN);

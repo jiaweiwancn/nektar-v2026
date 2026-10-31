@@ -386,8 +386,9 @@ molecular-term mode. The standard neutral log wall uses the `RANSLogLaw`
 boundary tag with `RANSWallModel=None`. Geometry, physical frame, h or z0,
 matching rule, guards, switch parameters and reference parameters must be
 validated together. Incompatible closure/wall combinations are rejected.
-`AWFEquilibrium` is reserved for CLS; extending its constants and proof to
-standard k–epsilon is a separate derivation. The user guide and milestone
+The [standard k–epsilon AWF extension](standard-kepsilon-equilibrium-awf.md)
+derives the standard constants and preservation proof and enables both wall
+policies with that closure. The user guide and milestone
 specifications give accepted XML rather than these initial design concepts.
 
 Output and full-history restart preserve both transported turbulence fields, the

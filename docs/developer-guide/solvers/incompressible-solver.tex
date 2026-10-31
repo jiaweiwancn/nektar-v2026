@@ -252,6 +252,10 @@ neutral-reference roots.
 \item \path{library/SolverUtils/Turbulence/AnalyticalWallFunction.*} implements
 the original wall integrals, corrected capped dissipation, admissibility and
 independent departure indicators. It has no mesh or time-integration state.
+\code{EquilibriumWallFunction} accepts the configured standard or CLS neutral
+reference; the old CLS-specific type names remain source aliases. Standard
+uses $q=C_\mu^{-1/2}$ and
+$\kappa^2=(C_{\epsilon2}-C_{\epsilon1})\sigma_\epsilon/q$, without Yap.
 \item \code{RANSVelocityCorrectionScheme.*} owns field ordering, variable
 diffusion, nonlinear stages, weak pressure coupling, the flat traction outlet,
 reference monitoring and output.
@@ -285,7 +289,7 @@ trace and weak divergence. Iteration stops only when state change, pressure
 increment and weak continuity meet their configured tolerances. Positive
 states are checked collectively; the implementation does not apply a floor.
 
-For CLS/AWF, the CG mesh begins at H above the physical wall. The separate
+For standard or CLS with AWF, the CG mesh begins at H above the physical wall. The separate
 control-volume strip retains its momentum and $k$ inventories, integrated
 production/dissipation and normal mass balance. P is its representative point;
 N is sampled above the interface. The algebraic P/H dissipation values and
@@ -340,7 +344,7 @@ The tracked milestone specifications and \path{Tests/RANS} cover independent
 tensors/wall quadrature, unsteady manufactured solutions, assembled residuals,
 original-form recovery, switch sensors, MPI ownership and history continuation.
 The degree 4 flat neutral cases meet the measured five-flow engineering target;
-an additional degree 5 four-rank 3D case develops a growing mode. Preserve this
+an additional degree 5 four-rank CLS 3D case develops a growing mode. Preserve this
 counterexample when changing spaces, quadrature, pressure coupling or solvers.
 The cause has not been isolated between the numerical method and closure.
 Full-3D long reference/perturbation data are span independent; separate short

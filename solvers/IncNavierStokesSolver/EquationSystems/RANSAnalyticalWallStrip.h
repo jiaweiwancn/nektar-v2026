@@ -64,7 +64,7 @@ private:
     {
         SolverUtils::AWFIndependentSamples samples{};
         SolverUtils::EquilibriumAWFValues selected{};
-        SolverUtils::CLSEquilibriumAWFReference reference{};
+        SolverUtils::EquilibriumAWFReference reference{};
         SolverUtils::AWFValues original{};
         double wallRe = 0;
     };

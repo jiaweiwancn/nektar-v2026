@@ -58,7 +58,7 @@ endif()
 enable_testing()
 if(RANS_BUILD_SOLVER)
     file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke)
-    foreach(rans_fixture StandardRANS_MMS CLS_MMS AWFOriginal AWFEquilibrium ABLPreservation ABLPreservation3D)
+    foreach(rans_fixture StandardRANS_MMS CLS_MMS AWFOriginal AWFEquilibrium StandardAWFEquilibrium ABLPreservation ABLPreservation3D)
         configure_file("${CMAKE_CURRENT_LIST_DIR}/${rans_fixture}.xml"
             "${CMAKE_CURRENT_BINARY_DIR}/rans-smoke/${rans_fixture}.xml" COPYONLY)
     endforeach()
@@ -73,7 +73,9 @@ if(RANS_BUILD_SOLVER)
         ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke/AWFOriginal.xml)
     add_test(NAME RANSAWFEquilibriumSmoke COMMAND IncNavierStokesSolver
         ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke/AWFEquilibrium.xml)
-    set_tests_properties(RANSCLSTransportSmoke RANSAWFOriginalSmoke RANSAWFEquilibriumSmoke PROPERTIES
+    add_test(NAME RANSStandardAWFEquilibriumSmoke COMMAND IncNavierStokesSolver
+        ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke/StandardAWFEquilibrium.xml)
+    set_tests_properties(RANSCLSTransportSmoke RANSAWFOriginalSmoke RANSAWFEquilibriumSmoke RANSStandardAWFEquilibriumSmoke PROPERTIES
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke
         PROCESSORS 1 TIMEOUT 120 ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
     add_test(NAME RANSABLPreservationSmoke COMMAND IncNavierStokesSolver

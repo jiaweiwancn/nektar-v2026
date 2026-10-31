@@ -134,7 +134,7 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
         ADD_NEKTAR_EXECUTABLE(RANSFieldAudit COMPONENT tests DEPENDS MultiRegions
             SOURCES ${CMAKE_SOURCE_DIR}/library/UnitTests/SolverUtils/RANSFieldAudit.cpp)
         FILE(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke)
-        FOREACH(rans_fixture StandardRANS_MMS CLS_MMS AWFOriginal AWFEquilibrium ABLPreservation ABLPreservation3D)
+        FOREACH(rans_fixture StandardRANS_MMS CLS_MMS AWFOriginal AWFEquilibrium StandardAWFEquilibrium ABLPreservation ABLPreservation3D)
             CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/Tests/RANS/${rans_fixture}.xml"
                 "${CMAKE_CURRENT_BINARY_DIR}/rans-smoke/${rans_fixture}.xml" COPYONLY)
         ENDFOREACH()
@@ -150,7 +150,9 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
             ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke/AWFOriginal.xml)
         ADD_TEST(NAME RANSAWFEquilibriumSmoke COMMAND IncNavierStokesSolver
             ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke/AWFEquilibrium.xml)
-        SET_TESTS_PROPERTIES(RANSCLSTransportSmoke RANSAWFOriginalSmoke RANSAWFEquilibriumSmoke PROPERTIES
+        ADD_TEST(NAME RANSStandardAWFEquilibriumSmoke COMMAND IncNavierStokesSolver
+            ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke/StandardAWFEquilibrium.xml)
+        SET_TESTS_PROPERTIES(RANSCLSTransportSmoke RANSAWFOriginalSmoke RANSAWFEquilibriumSmoke RANSStandardAWFEquilibriumSmoke PROPERTIES
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke
             PROCESSORS 1 TIMEOUT 120
             ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")

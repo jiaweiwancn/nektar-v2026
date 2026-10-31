@@ -24,7 +24,8 @@ def positive(value):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('session', type=Path)
-    parser.add_argument('--model', choices=('standard', 'cls_original', 'cls_fixed', 'cls_switched'), default='cls_switched')
+    parser.add_argument('--model', choices=('standard', 'standard_original', 'standard_fixed', 'standard_switched',
+                                          'cls_original', 'cls_fixed', 'cls_switched'), default='cls_switched')
     parser.add_argument('--dimension', type=int, choices=(2, 3), default=2)
     parser.add_argument('--degree', type=int, default=4)
     parser.add_argument('--layers', type=int, default=12)
@@ -36,7 +37,8 @@ def main():
     parser.add_argument('--backend', choices=('matrixfree', 'native'), default='matrixfree')
     parser.add_argument('--boundary', choices=('outflow', 'periodic'), default='outflow')
     parser.add_argument('--height', type=positive, default=2.)
-    parser.add_argument('--roughness', type=float, default=.1, help='CLS equivalent sand-grain height; standard uses z0=0.02 m')
+    parser.add_argument('--roughness', type=float, default=.1,
+                        help='AWF equivalent sand-grain height; standard log-law choice uses z0=0.02 m')
     parser.add_argument('--perturbation', type=float, default=0.)
     parser.add_argument('--linear-tolerance', type=positive, default=1e-13)
     args = parser.parse_args()

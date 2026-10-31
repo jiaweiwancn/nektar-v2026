@@ -240,22 +240,39 @@ Additional saved fields \inltt{rans\_nut}, \inltt{rans\_P},
 components and quadratic/cubic norms are polynomial projections of current
 model evaluations. Wall inventories, constraints, flux budgets and MPI sample
 ownership are reported in \inltt{<session>.awf.csv}.
-The original AWF intentionally retains its dissipation mismatch on the
-analytical CLS reference.
+The original AWF retains its dissipation mismatch on the analytical reference.
+It is also available with \inltt{StandardKEpsilon}, using \inltt{eps} for
+transported dissipation and the same strip boundary types.
 
 Complete small examples \inltt{CLS\_MMS.xml} and \inltt{AWFOriginal.xml}
 are supplied in \path{solvers/IncNavierStokesSolver/Tests/RANS}.
 
 \subsubsection{Equilibrium-preserving analytical wall function}
 
-Select \inltt{RANSWallModel=AWFEquilibrium} with \inltt{CLSHighRe}, and
+Select \inltt{RANSWallModel=AWFEquilibrium} with either \inltt{CLSHighRe}
+or \inltt{StandardKEpsilon}, and
 replace the tangential velocity/$k$ Robin tags by \inltt{AWFEquilibrium}.
 All other wall-strip geometry, variable ordering and boundary types remain
 as above. At each current positive strip $K_P$, the policy constructs the
-configured CLS zero-forcing reference and its finite capped auxiliary
+configured closure's zero-forcing reference and its finite capped auxiliary
 dissipation. It blends the strip mean and the P/H dissipation values with
 one common weight. Original AWF traction and production still use the actual
 current velocity and forcing. No reference residual is subtracted.
+
+For standard k--epsilon the compatible constants are
+\begin{equation*}
+q_s=C_\mu^{-1/2},\qquad
+\kappa_s=\sqrt{(C_{\epsilon2}-C_{\epsilon1})\sigma_\epsilon/q_s}.
+\end{equation*}
+There is no Yap term. With $u_*^2=K_P/q_s$, the original AWF momentum
+integral fixes $U(H)$. Its zero-forcing mean production $P_0$ and
+$A=u_*^3/\kappa_s$ determine the capped dissipation cutoff
+$z_c=H\exp(1-HP_0/A)$. Correction requires $0<z_c\le P$ and the
+declared high-Re wall regime. The same distribution supplies its mean,
+$\epsilon(P)$ and $\epsilon(H)$. All AWF choices require zero
+\inltt{RANSHeightShift}; corrected AWF derives aerodynamic roughness and
+rejects an independent \inltt{RANSZ0}. The standard log-law boundary
+remains available with \inltt{RANSWallModel=None}.
 
 \inltt{RANSAWFWeight=Fixed} uses \inltt{RANSAWFFixedWeight}, default one,
 in $[0,1]$. Weight zero exactly recovers the original wall operator.
@@ -328,8 +345,8 @@ and restart study generator and validator.
 The source directory
 \path{solvers/IncNavierStokesSolver/Examples/NeutralABL}
 contains a complete configuration guide, \inltt{generate.py} and
-\inltt{restart.py}. The generator prepares standard, original CLS/AWF,
-fixed-correction and switched-correction sessions in full 2D or 3D using the
+\inltt{restart.py}. The generator prepares the standard log-law control and
+original/fixed/switched AWF sessions for either closure in full 2D or 3D using the
 verified study generator. It requires Python 3.9 or newer and the source tree,
 without third-party Python packages. For example, from a separate run directory:
 \begin{lstlisting}[style=BashInputStyle]
@@ -351,13 +368,16 @@ The accepted flat neutral benchmark uses degree 4 velocity/scalars, degree 2
 continuous pressure, eight GLL points per direction, 12 geometric vertical
 layers and \inltt{HighRe} diffusion. At those settings, standard and corrected
 CLS cases meet a 0.1 percent drift target in 2D and full 3D over five flows.
-The original AWF drifts. A degree 5 four-rank 3D experiment develops a growing
+The original CLS/AWF drifts. A degree 5 four-rank CLS 3D experiment develops a growing
 mode and fails that target; tighter linear precision is not a demonstrated
 general remedy. Weak divergence alone is not sufficient to assess that mode.
 The 3D reference and small-perturbation profiles are span independent; these
 results do not establish general 3D disturbance stability. There is no terrain,
 thermal, stratified, low-Re CLS or backflow validation in this delivery.
 The tracked Milestone 6 report records the limits and source/binary evidence.
+The standard-AWF extension's derivation, configured-reference and convergence
+checks are recorded in
+\path{docs/plans/standard-kepsilon-equilibrium-awf.md}.
 
 \subsubsection{Implicit Velocity Correction Scheme}
 \label{VCSImplicitScheme}

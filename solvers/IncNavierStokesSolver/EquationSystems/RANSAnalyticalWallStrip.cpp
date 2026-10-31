@@ -288,7 +288,7 @@ void RANSAnalyticalWallStrip::CheckInitialState(const Fields &state) const
         for (int q = 0; q < m_localPoints; ++q)
         {
             const double k = m_geometry.EliminateKP(h[m_dim][q], n[m_dim][q]);
-            CLSEquilibriumWallFunction wall(m_awfGeometry, k, m_reference, m_parameters);
+            EquilibriumWallFunction wall(m_awfGeometry, k, m_reference, m_parameters);
             valid &= wall.Reference().admissible && std::sqrt(k) * m_geometry.height /
                 m_awfGeometry.molecularNu >= m_minimumRe;
         }
@@ -407,7 +407,7 @@ void RANSAnalyticalWallStrip::Update(const Fields &state, const Fields &predicto
             point.selected.reason = AWFFallbackReason::SwitchInactive;
             if (m_equilibrium)
             {
-                CLSEquilibriumWallFunction corrected(m_awfGeometry, m_kP[q], m_reference, m_parameters);
+                EquilibriumWallFunction corrected(m_awfGeometry, m_kP[q], m_reference, m_parameters);
                 point.reference = corrected.Reference();
                 point.wallRe = std::sqrt(m_kP[q]) * m_geometry.height / m_awfGeometry.molecularNu;
                 const bool highRe = point.wallRe >= m_minimumRe;

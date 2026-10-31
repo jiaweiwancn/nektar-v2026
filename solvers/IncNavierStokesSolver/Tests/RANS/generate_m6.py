@@ -80,7 +80,8 @@ def generate_abl(path, model="cls_switched", dimension=2, degree=4, layers=12,
                  height=2., top=30., roughness=.1, boundary="periodic", diffusion="HighRe",
                  backend="static", perturbation=0., tolerance=1e-9, checkpoint=0,
                  monitor=False, wrong_top=False, wrong_kappa=False):
-    if model not in ("standard","cls_original","cls_fixed","cls_switched"):
+    if model not in ("standard","standard_original","standard_fixed","standard_switched",
+                     "cls_original","cls_fixed","cls_switched"):
         raise ValueError("Unknown neutral-ABL model")
     if dimension not in (2,3) or degree<3 or layers<1 or nx<1 or ny<1:
         raise ValueError("Use full 2D/3D, degree >=3 and positive mesh counts")
@@ -88,17 +89,18 @@ def generate_abl(path, model="cls_switched", dimension=2, degree=4, layers=12,
         raise ValueError("Require positive dimensions/timestep and 0 < H < N=2H < Z")
     if backend not in ("static","full","matrixfree") or boundary not in ("periodic","matched","outflow"):
         raise ValueError("Unknown linear backend or streamwise boundary")
-    standard=model=="standard";q=10/3 if standard else 3.190675081624288
+    standard=model.startswith("standard");log_wall=model=="standard"
+    q=10/3 if standard else 3.190675081624288
     kappa=math.sqrt(.48*1.3/q) if standard else .440553905186659
-    star=kappa*10/math.log(10/.02) if standard else .4
+    star=kappa*10/math.log(10/.02) if log_wall else .4
     k=q*star**2;nu=1.5e-5
-    matching=star/kappa*math.log(height/.02) if standard else star**2*original_j0(k,height,roughness,nu)
+    matching=star/kappa*math.log(height/.02) if log_wall else star**2*original_j0(k,height,roughness,nu)
     uref=matching+star/kappa*math.log(10/height)
     if flow_times is not None:steps=math.ceil(flow_times*length/uref/dt)
     generate(path,kind="decay",dt=dt,steps=steps,order=2,modes=degree+1,points=degree+4,diffusion=diffusion,tolerance=tolerance)
     tree=ET.parse(path);root=tree.getroot();c=root.find("CONDITIONS")
     names=["u","v"]+(["w"] if dimension==3 else [])+["k","eps" if standard else "eps_tilde","p"]
-    wall="None" if standard else ("AWFOriginal" if model=="cls_original" else "AWFEquilibrium")
+    wall="None" if log_wall else ("AWFOriginal" if model.endswith("_original") else "AWFEquilibrium")
     info(root,"TurbulenceModel","StandardKEpsilon" if standard else "CLSHighRe");info(root,"RANSWallModel",wall)
     info(root,"GlobalSysSoln","IterativeStaticCond")
     parameters={"Kinvis":nu,"ResolvedNu":0 if diffusion=="HighRe" else nu,"Ustar":star,"Qstar":q,
@@ -109,7 +111,7 @@ def generate_abl(path, model="cls_switched", dimension=2, degree=4, layers=12,
         "RANSStripPointN":2*height,"RANSRoughnessHeight":roughness,"RANSAWFFixedWeight":1,
         "RANSAWFOn":.02,"RANSAWFOff":.1,"RANSAWFMinimumRe":100,"RANSAWFPointDiagnostics":0}
     for name,value in parameters.items():parameter(root,name,value)
-    info(root,"RANSAWFWeight","Fixed" if model=="cls_fixed" else "Switched");info(root,"RANSAWFFailurePolicy","RequirePreservation")
+    info(root,"RANSAWFWeight","Fixed" if model.endswith("_fixed") else "Switched");info(root,"RANSAWFFailurePolicy","RequirePreservation")
     variables=c.find("VARIABLES");variables.clear()
     for i,name in enumerate(names):element(variables,"V",name,ID=i)
     root.remove(root.find("GEOMETRY"));xs=[length*i/nx for i in range(nx+1)]
@@ -146,7 +148,7 @@ def generate_abl(path, model="cls_switched", dimension=2, degree=4, layers=12,
                     element(region,"N",VAR=name,USERDEFINEDTYPE="RANSOutflow",VALUE=traction)
                 else:element(region,"N",VAR=name,VALUE="0")
             elif b==0:
-                if standard:
+                if log_wall:
                     if i<dimension-1:element(region,"N",VAR=name,USERDEFINEDTYPE="RANSLogLaw",VALUE="0")
                     elif i==dimension-1:element(region,"D",VAR=name,VALUE="0")
                     elif name=="k":element(region,"N",VAR=name,VALUE="0")

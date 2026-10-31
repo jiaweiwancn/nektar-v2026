@@ -190,8 +190,8 @@ void RANSVelocityCorrectionScheme::v_InitObject(bool declareField)
              "RANSWallModel supports None, AWFOriginal or AWFEquilibrium");
     ASSERTL0(m_model != RANSModel::CLSHighRe || m_heightShift == 0,
              "CLS uses geometric wall distance without a roughness height shift");
-    ASSERTL0(wallModel == "None" || m_model == RANSModel::CLSHighRe,
-             "The analytical wall strip requires CLSHighRe");
+    ASSERTL0(wallModel == "None" || m_heightShift == 0,
+             "The analytical wall strip uses geometric height without RANSHeightShift");
     bool valid = true;
     for (int b = 0; b < m_pressure->GetBndConditions().size(); ++b)
     {
@@ -229,7 +229,7 @@ void RANSVelocityCorrectionScheme::v_InitObject(bool declareField)
         }
         else if (tag == "RANSLogLaw")
         {
-            valid &= m_model == RANSModel::StandardKEpsilon;
+            valid &= m_model == RANSModel::StandardKEpsilon && wallModel == "None";
             for (int i = 0; i < dim - 1; ++i)
             {
                 valid &= m_fields[i]->GetBndConditions()[b]->GetBoundaryConditionType() ==

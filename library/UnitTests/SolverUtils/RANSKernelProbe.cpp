@@ -172,7 +172,7 @@ struct WallCase
 };
 void WriteWall(std::ostream &out,const WallCase &c,const RANSNeutralReference &model)
 {
-    const CLSEquilibriumWallFunction ep(c.geometry,c.k,model,c.parameters);
+    const EquilibriumWallFunction ep(c.geometry,c.k,model,c.parameters);
     const auto &wall=ep.Original(); const auto &reference=ep.Reference();
     const auto v=wall.Evaluate(c.velocity,c.forcing);
     const auto j=wall.Integrals();
@@ -204,7 +204,10 @@ void WriteWall(std::ostream &out,const WallCase &c,const RANSNeutralReference &m
         Near(balance,0,3e-12,power);
     }
 
-    out << "{\"name\":\"" << c.name << "\",\"geometry\":";
+    out << "{\"name\":\"" << c.name << "\",\"q\":" << model.Q()
+        << ",\"kappa\":" << model.Kappa() << ",\"model_parameters\":";
+    Parameters(out,model.Parameters());
+    out << ",\"geometry\":";
     Array(out,std::array<double,4>{c.geometry.molecularNu,c.geometry.height,c.geometry.roughness,c.geometry.pointP});
     out << ",\"k\":" << c.k << ",\"parameters\":";
     Array(out,std::array<double,3>{c.parameters.cMu,c.parameters.cLength,c.parameters.smoothIntercept});
@@ -286,10 +289,10 @@ void ReferenceTests(const RANSNeutralReference &model)
     }
     Reject([&]{model.AtHeight(0,u,H,U);});
 }
-void SwitchTests(const CLSEquilibriumWallFunction &ep,std::ostream &out)
+void SwitchTests(const EquilibriumWallFunction &ep,std::ostream &out,
+                 const RANSNeutralReference &model=RANSNeutralReference::CLS())
 {
     const auto &r=ep.Reference(); const auto &wall=ep.Original();
-    const auto model=RANSNeutralReference::CLS();
     AWFSwitchParameters parameters{.05,.2,{1,1,1,1,1,1,1},{1,0}};
     const auto atP=model.AtHeight(wall.Geometry().pointP,r.frictionVelocity,wall.Geometry().height,r.matchingVelocity);
     const auto atN=model.AtHeight(4,r.frictionVelocity,wall.Geometry().height,r.matchingVelocity);
@@ -444,7 +447,7 @@ int main(int argc,char *argv[])
         Reject([&]{AnalyticalWallFunction({1e-5,1,0,.5},-1);});
         Reject([&]{note.Original().Velocity(-1,{1,0},{0,0});});
         Reject([&]{note.EvaluateFixedWeight({1,0},{0,0},1.01);});
-        Reject([&]{CLSEquilibriumWallFunction(geometries[0].geometry,1,standard);});
+        Reject([&]{EquilibriumWallFunction({1.5e-5,2,.1,2},1,standard);});
         Reject([&]{AWFEquilibriumWeight(.1,.2,.1);});
 
         std::ofstream out(path); out << std::setprecision(17);
@@ -453,6 +456,41 @@ int main(int argc,char *argv[])
         out << "],\"walls\":[\n";
         for (int i=0;i<walls.size();++i) { if (i) { out << ",\n"; } WriteWall(out,walls[i],cls); }
         out << "],\"switch_cases\":"; SwitchTests(note,out);
+        // The standard closure has a different Q and Kappa, including when
+        // its configured bulk constants differ from the wall-kernel constants.
+        // Independent Gauss integration in WriteWall verifies both families.
+        out << ",\"standard_walls\":[";
+        int standardCases=0;
+        for (const auto &model : {standard,RANSNeutralReference::Standard(custom)})
+        {
+            ReferenceTests(model);
+            for (const auto &g : geometries)
+            {
+                const double energy=g.name=="note" ? model.Q()*.16 : g.k;
+                const EquilibriumWallFunction ep(g.geometry,energy,model,g.p);
+                for (const auto &forcing : {AWFVector{0,0},AWFVector{.03,-.02}})
+                {
+                    if (standardCases++) out << ',';
+                    WriteWall(out,{g.name,g.geometry,energy,g.p,
+                                   {ep.Reference().matchingVelocity,0},forcing},model);
+                }
+            }
+            const EquilibriumWallFunction ep(geometries[0].geometry,model.Q()*.16,model);
+            auto boundary=geometries[0].geometry;
+            boundary.pointP=ep.Reference().cutoff;
+            Check(EquilibriumWallFunction(boundary,model.Q()*.16,model).Reference().admissible,
+                  "Standard cutoff equality rejected");
+            boundary.pointP=std::nextafter(boundary.pointP,0.0);
+            const EquilibriumWallFunction invalid(boundary,model.Q()*.16,model);
+            Check(!invalid.Reference().admissible,"Standard cutoff silently clipped");
+            Reject([&]{invalid.EvaluateFixedWeight({1,0},{0,0},1,AWFFailurePolicy::RequirePreservation);});
+        }
+        out << "],\"standard_switch_cases\":";
+        SwitchTests(EquilibriumWallFunction(geometries[0].geometry,standard.Q()*.16,standard),out,standard);
+        out << ",\"configured_standard_switch_cases\":";
+        const auto configuredStandard=RANSNeutralReference::Standard(custom);
+        SwitchTests(EquilibriumWallFunction(geometries[0].geometry,configuredStandard.Q()*.16,configuredStandard),
+                    out,configuredStandard);
         out << ",\"references\":[";
         RANSParameters noYap;noYap.yapCoefficient=0;
         const std::vector<RANSNeutralReference> references{standard,cls,RANSNeutralReference::Standard(custom),
@@ -466,6 +504,7 @@ int main(int argc,char *argv[])
         }
         out << "],\"summary\":{\"native_checks\":" << checks << ",\"rejected_inputs\":" << invalidChecks
             << ",\"bulk_cases\":" << bulk.size() << ",\"wall_cases\":" << walls.size()
+            << ",\"standard_wall_cases\":" << standardCases
             << ",\"maximum_tensor_symmetry_error\":" << maximumTensorSymmetry
             << ",\"maximum_tensor_trace_error\":" << maximumTensorTrace
             << ",\"maximum_frame_error\":" << maximumFrameError

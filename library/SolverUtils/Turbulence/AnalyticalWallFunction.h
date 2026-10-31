@@ -81,7 +81,7 @@ enum class AWFFallbackReason
 };
 enum class AWFFailurePolicy { UseOriginal, RequirePreservation };
 
-struct CLSEquilibriumAWFReference
+struct EquilibriumAWFReference
 {
     double frictionVelocity, traction, matchingVelocity, numerator;
     double production, lambda, minimumLambda, cutoff, logAerodynamicRoughness;
@@ -113,19 +113,21 @@ struct EquilibriumAWFValues
 SOLVER_UTILS_EXPORT double AWFEquilibriumWeight(double departure,
                                                double on, double off);
 
-/** Dissipation-only correction from the note. EP and EH are values of the same
+/** Dissipation-only correction for a compatible standard/CLS neutral reference.
+ * The closure-specific Q and Kappa are supplied by modelReference. EP and EH
+ * are values of the same
  * auxiliary distribution as its mean. Momentum, reconstruction, and production
  * always come from Original(). P0 uses current K and ZERO forcing, irrespective
  * of the current flow. An inadmissible cutoff is never clipped.
  */
-class SOLVER_UTILS_EXPORT CLSEquilibriumWallFunction
+class SOLVER_UTILS_EXPORT EquilibriumWallFunction
 {
 public:
-    CLSEquilibriumWallFunction(const AWFGeometry &geometry, double kP,
+    EquilibriumWallFunction(const AWFGeometry &geometry, double kP,
         const RANSNeutralReference &modelReference,
         const AWFParameters &parameters = {});
     const AnalyticalWallFunction &Original() const { return m_original; }
-    const CLSEquilibriumAWFReference &Reference() const { return m_reference; }
+    const EquilibriumAWFReference &Reference() const { return m_reference; }
     EquilibriumAWFValues EvaluateFixedWeight(
         const AWFVector &matchingVelocity, const AWFVector &forcing, double weight,
         AWFFailurePolicy policy = AWFFailurePolicy::UseOriginal,
@@ -139,7 +141,10 @@ public:
 private:
     AnalyticalWallFunction m_original;
     RANSNeutralReference m_model;
-    CLSEquilibriumAWFReference m_reference;
+    EquilibriumAWFReference m_reference;
 };
+// Source compatibility with the original CLS-only API on this branch.
+using CLSEquilibriumAWFReference = EquilibriumAWFReference;
+using CLSEquilibriumWallFunction = EquilibriumWallFunction;
 } // namespace Nektar::SolverUtils
 #endif

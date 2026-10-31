@@ -8,6 +8,7 @@ development studies and their original commands.
 
 | Entry point | Scope |
 | --- | --- |
+| `validate_standard_awf.py --build ... --output ... --jobs 2` | Standard-model AWF kernel/coupling checks, five-flow preservation and h/p/dt refinement; see the [derivation and evidence](../../../../docs/plans/standard-kepsilon-equilibrium-awf.md) |
 | `validate_m7.py --build ... --output ...` | Public generator/restart workflows, eight CTests, MPI continuation and documentation links |
 | `run_m6.sh BUILD RUN [JOBS]` | Complete preservation/robustness study; failed controls are recorded explicitly |
 | `validate_m3.py`, `validate_m4.py`, `validate_m5.py` | Standard transport, original CLS/AWF, corrected CLS/AWF acceptance |
@@ -15,9 +16,19 @@ development studies and their original commands.
 
 Use separate Linux run directories and at most 16 project workers. The CTest
 fixtures are copied into the build's `rans-smoke` directory, keeping generated
-fields, checkpoints and sidecars out of the source checkout. Eight smoke/kernel
+fields, checkpoints and sidecars out of the source checkout. Nine smoke/kernel
 tests do not replace the longer studies. Degree 4 is the accepted long-run
 configuration; the degree 5 full-3D failure remains a documented limitation.
+
+The standard-model extension adds `StandardAWFEquilibrium.xml` and its
+`RANSStandardAWFEquilibriumSmoke` test. The original M1--M7 scripts retain
+their historical scope and hashes. Use `validate_standard_awf.py` for the
+extended implementation. `--suite checks` runs short kernel, coupling,
+fallback and continuation tests; `--suite study` runs the long preservation
+and convergence cases; the default runs both. `plot_standard_awf.py` renders
+the native CSV measurements, and `collect_standard_awf.py` collects compact
+reports, source/executable hashes and retained attempts. Use separate output directories
+for concurrent suites and keep their combined allocation within 16 workers.
 
 Milestone 5 adds `RANSWallModel=AWFEquilibrium` for CLS. Fixed weighting
 isolates the dissipation correction; switched weighting uses seven independent

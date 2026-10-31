@@ -2,16 +2,18 @@
 
 This example prepares complete, self-contained XML sessions for standard
 k–epsilon and the high Reynolds number Craft–Launder–Suga (CLS) cubic model.
-CLS can use the original rough-wall analytical wall function (AWF), its fixed
+Both closures can use the original rough-wall analytical wall function (AWF), its fixed
 equilibrium correction, or the correction with active departure sensors.
 The preparation scripts use the same fixture generator as the verified study.
 They need Python 3.9 or newer and the tracked source tree; no literature files,
 NumPy or SciPy are required to prepare an example.
 
-The accepted benchmark uses degree 4 in full 2D or 3D. Standard and corrected
-CLS profiles remained below the 0.1% engineering drift target for five flows
+The accepted benchmark uses degree 4 in full 2D or 3D. The standard log-law
+control and corrected CLS profiles remained below the 0.1% engineering drift target for five flows
 in [Milestone 6](../../../../docs/plans/neutral-abl-rans-awf-milestone-6.md).
-The original AWF drifts. A degree 5, four-rank 3D trial develops a growing mode
+The [standard-AWF extension](../../../../docs/plans/standard-kepsilon-equilibrium-awf.md)
+adds fixed/switched standard-model AWF preservation and 2D refinement evidence.
+The original CLS/AWF drifts. A degree 5, four-rank CLS 3D trial develops a growing mode
 and fails the target even with tighter linear solves. Higher degree is not a
 demonstrated remedy. The validated flat-domain scope does not include terrain,
 thermal/stratified flow, curved/backflow outlets or Homogeneous1D.
@@ -64,14 +66,37 @@ running multiple cases. Keep numerical-library threads at one per rank.
 
 ## Select the closure and wall policy
 
-Pass `--model` to `generate.py`; all four policies are available in 2D and 3D.
+Pass `--model` to `generate.py`; all seven choices are available in 2D and 3D.
 
 | Example choice | `TurbulenceModel` | `RANSWallModel` | Lower boundary |
 | --- | --- | --- | --- |
 | `standard` | `StandardKEpsilon` | `None` | Tangential `RANSLogLaw`, normal Dirichlet, zero k flux, prescribed epsilon |
+| `standard_original` | `StandardKEpsilon` | `AWFOriginal` | Conservative original AWF strip |
+| `standard_fixed` | `StandardKEpsilon` | `AWFEquilibrium` | Standard-model corrected strip with fixed chi=1 |
+| `standard_switched` | `StandardKEpsilon` | `AWFEquilibrium` | Standard-model corrected strip with seven active sensors |
 | `cls_original` | `CLSHighRe` | `AWFOriginal` | Conservative original AWF strip |
 | `cls_fixed` | `CLSHighRe` | `AWFEquilibrium` | Corrected strip with fixed chi=1 |
 | `cls_switched` | `CLSHighRe` | `AWFEquilibrium` | Corrected strip with seven active sensors |
+
+The standard AWF uses the configured standard closure's
+q=1/sqrt(Cmu) and kappa=sqrt((Cepsilon2-Cepsilon1)*sigmaEpsilon/q).
+There is no Yap contribution or cubic stress. The original wall momentum and
+production are retained; one capped dissipation distribution supplies the
+mean k sink and both P/H epsilon values. Its admissibility check is the same
+budget condition used by CLS, evaluated with the standard constants.
+See the [standard-AWF derivation and validation](../../../../docs/plans/standard-kepsilon-equilibrium-awf.md).
+For example:
+
+```bash
+python3 "$RANS_EXAMPLE/generate.py" "$RANS_RUN/standard-awf/neutral.xml" \
+  --model standard_switched --flow-times 5
+```
+
+This generates the AWF-matched analytical reference. Its default U(10) is
+approximately 7.141675 m/s, with effective z0 approximately 0.004417 m.
+The matching anchor determines z0 from physical sand-grain h, H and current K;
+the `standard` log-law control's independently chosen z0=0.02 m is a different
+reference. Specifying an independent `RANSZ0` with `AWFEquilibrium` is rejected.
 
 The solver selection is explicit:
 
@@ -101,9 +126,9 @@ and `--boundary outflow|periodic` options support controlled experiments.
 `--backend native` selects the default native linear solver instead of the
 matrix-free backend used in the preservation study.
 
-The standard reference has U(10 m)=10 m/s and aerodynamic z0=0.02 m, with
-u* derived from the configured model kappa. CLS uses u*=0.4 m/s and the
-independent original-AWF integral to fix U(H); it does not add a separately
+The `standard` log-law reference has U(10 m)=10 m/s and aerodynamic z0=0.02 m,
+with u* derived from the configured model kappa. All AWF choices use u*=0.4 m/s
+and the independent original-AWF integral to fix U(H); they do not add a separately
 chosen log-law offset. Its equivalent sand-grain roughness h=0.1 m is not z0.
 The default strip locations are P=1 m, H=2 m and N=4 m. H is the start of the
 resolved CG domain; no slip is enforced by the auxiliary wall solution below
@@ -131,10 +156,10 @@ expressions do not update themselves from the closure parameters.
 | `RANSPicardRelaxation` | 0.5 standard; 0.1 CLS | Defaults |
 | `RANSPressureRelaxation` | 0.8 standard; 0.25 CLS | Defaults |
 | `RANSMinimumK/Epsilon` | Zero rejection thresholds; no floor is applied | Defaults |
-| `RANSZ0`, `RANSHeightShift` | Standard log wall: 0.02, 0 | Defaults; no independent z0 with corrected CLS |
+| `RANSZ0`, `RANSHeightShift` | Standard log wall: 0.02, 0 | No independent z0 with corrected AWF; every AWF requires zero height shift |
 | `RANSWallOrigin` | Physical wall coordinate, default 0 | 0 |
 | `RANSStripPointP/Height/PointN` | Require 0<P<H<N; default 1,2,4 | Defaults |
-| `RANSRoughnessHeight` | CLS equivalent sand-grain h, default 0.1 | `--roughness` |
+| `RANSRoughnessHeight` | AWF equivalent sand-grain h, default 0.1 | `--roughness` |
 | `RANSAWFCmu/CLength/SmoothIntercept` | Original AWF kernel: 0.09,2.55,10.7 | Defaults |
 | `RANSAWFWeight` | `Switched` or `Fixed` | Chosen by `--model` |
 | `RANSAWFFixedWeight` | Fixed chi in [0,1], default 1; zero recovers original | 1 |
@@ -148,6 +173,13 @@ expressions do not update themselves from the closure parameters.
 
 `RANSCmu` is the standard-model eddy-viscosity constant. CLS evaluates its
 variable coefficient; `RANSAWFCmu` is a separate wall-kernel parameter.
+For small-step AWF transients, use `--linear-tolerance 1e-15` and verify
+coupled-stage convergence. At dt=0.001 s an original standard-AWF control
+reached the iteration limit with 1e-13 but completed with 1e-15. The five-flow
+degree 4 reference cases use 1e-13. A smaller timestep alone does not remove
+linear-solver error from the pressure iteration.
+The stronger 50% epsilon departure also reaches the iteration limit at
+dt=0.001 s with 1e-15; switch-off recovery is validated at dt=0.025 s.
 
 The correction requires its cap zc<=P and an admissible high-Re wall regime;
 it never clips an inadmissible cutoff. Fixed chi=0 recovers the original AWF.
@@ -159,7 +191,7 @@ it does not implement a low-Re CLS model or its dissipation split.
 
 ## Boundary data and flux signs
 
-For CLS at the lower interface, tangential velocity and k need Robin tags
+For either closure with AWF at the lower interface, tangential velocity and k need Robin tags
 matching the selected wall policy. Normal velocity and transported dissipation
 need Dirichlet entries; the coupled strip determines their current traces.
 Use a positive initial dissipation value. Every nonperiodic pressure entry
@@ -196,7 +228,8 @@ mpirun --bind-to none --map-by slot -np 4 \
 
 Use `--flow-times 5 --dt 0.5` and omit `--steps` in a new directory for the long
 comparison. Omit `--perturbation` for the unperturbed analytical case. This is
-300 steps for standard and 415 for CLS. With `--perturbation 0.01`, a smooth streamfunction velocity perturbation
+300 steps for `standard`, 421 for the standard AWF choices, and 415 for CLS.
+With `--perturbation 0.01`, a smooth streamfunction velocity perturbation
 and a k perturbation are added to the initial state; the reference stays
 unperturbed. These full-3D reference/perturbation data are span independent.
 Independent manufactured regressions exercise all three velocity components;
@@ -251,7 +284,7 @@ and shortened final steps are outside the validated continuation protocol.
 | --- | --- |
 | `.fld`, `.chk` | Primary fields and projected modeled viscosity, production, dissipation, six stresses and quadratic/cubic norms |
 | `.rans.csv` | Stage iterations, state/pressure changes, strong/weak divergence, extrema, guards, cache and Krylov counts |
-| `.awf.csv` | CLS strip inventories, traction, production/dissipation, switch, admissibility and MPI ownership |
+| `.awf.csv` | Standard/CLS strip inventories, traction, production/dissipation, switch, admissibility and MPI ownership |
 | `.rans-errors.csv` | Initial and per-step independent reference errors; diagnostics do not reset the solution |
 | `.awf-points-r*.csv` | Optional per-rank inputs/sensors with `RANSAWFPointDiagnostics=1` |
 | `.rans-residual.csv` | Optional assembled stage-coefficient residuals with `RANSStageAudit=1` |
