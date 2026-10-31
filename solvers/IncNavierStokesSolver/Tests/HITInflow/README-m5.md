@@ -1,9 +1,11 @@
 # Milestone 5 focused HIT regressions
 
-The solver's CTest registration contains eleven focused HIT regressions when
-MPI and FFTW are enabled. Eight were added in M5; the three mean/manufactured
-regressions from M3/M4 remain. All use native executables and standard Tester
-metrics. Running the tests does not require Python or optional unit-test builds.
+M5 delivered eleven focused HIT regressions when MPI and FFTW are enabled:
+eight added in M5 and three mean/manufactured regressions from M3/M4. M6 added
+three further checks, so the current configuration has fourteen solver entries.
+The table below records the M5 subset; the current execution workflow is in
+[the test/data guide](README.md). All use native executables and standard Tester
+metrics. Running these solver tests does not require Python or optional unit-test builds.
 The fixture generators use only the Python standard library.
 
 | Test suffix after `IncNavierStokesSolver_` | Behavior checked |

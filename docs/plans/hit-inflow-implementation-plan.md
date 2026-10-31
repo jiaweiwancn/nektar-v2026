@@ -20,9 +20,9 @@ periodic transverse boundaries, and the nonlinear velocity-correction solver.
 | Origin skill | academic-research-suite, experiment-agent |
 | Origin mode | plan |
 | Origin date | 2026-10-28 |
-| Version label | hit_inflow_plan_v8 |
-| Verification status | Inlet/core, MPI/backends, restart and regressions VERIFIED on Linux; limited-band SVV comparisons ANALYZED; full-band physical validation and 2% precision not established |
-| Milestone status | Milestones 1-3 CLOSED on 2026-10-28; Milestones 4-6 CLOSED on 2026-10-29; Milestone 7 CLOSED as a descriptive comparison on 2026-10-31; Milestone 8 pending |
+| Version label | hit_inflow_plan_v9 |
+| Verification status | Inlet/core, MPI/backends, restart, examples, documentation and comparison reproduction VERIFIED on Linux; limited-band SVV comparisons ANALYZED; full-band physical validation and 2% precision not established |
+| Milestone status | All eight implementation milestones CLOSED: 1-3 on 2026-10-28; 4-6 on 2026-10-29; 7 as a descriptive comparison and 8 as documentation/reproducibility delivery on 2026-10-31 |
 | Source baseline | `a3b7efc8fef7e075390f0f59457dfdac30f0b6ed` |
 | Project branch | `codex/hit-inflow-generator` |
 
@@ -43,6 +43,12 @@ fidelity and far-field sampling qualification remain unestablished.
 both prescribed spectrum families decay too slowly, and all 32 case/station
 combinations fail the predeclared 2% sampling screen. This is a completed
 descriptive comparison with unresolved physical-validation requirements.
+[Milestone 8 documentation and reproducibility delivery](hit-inflow-milestone-8.md)
+is complete: standalone full-3D/Homogeneous1D examples, a compiled configuration
+guide, source/regression instructions and a bounded comparison driver have been
+checked on Linux. Four regenerated analysis/work payloads and all five figures'
+scientific data match M7 exactly. This closes the implementation sequence while
+retaining the numerical and physical limitations above.
 
 ## Scope and intended behavior
 
@@ -715,7 +721,16 @@ is a result to explain, not a reason to prescribe the desired decay.
 
 ### Milestone 8 Deliver documentation and reproducible examples
 
-**Status: PENDING.**
+**Status: CLOSED — DOCUMENTATION AND REPRODUCIBILITY, 2026-10-31.**
+The [M8 handover](hit-inflow-milestone-8.md) and
+[validation receipt](hit-inflow-milestone-8-validation.json) record five passing
+serial/MPI/backend example configurations, 13 Python tests, 18 configured
+native CTest entries, byte-exact source preparation, matching upstream-fit parameters and exact
+scientific-payload reproduction of all four M7 cases and five figure datasets.
+The full user guide compiles, and the edited HIT pages pass rendered QA.
+The conditional narrow-band validation extension remains deferred because the
+full-band M7 results do not justify it. Full-band physical validation and 2%
+precision remain unestablished.
 
 Provide a small runnable example for each supported expansion, configuration
 reference, source data preparation, analysis commands, and a report containing
@@ -731,7 +746,8 @@ the experimental comparison from the documented Linux environment.
 
 Make source and Git changes in `/Users/jay/Documents/nektar-v2026`. Use the
 Linux checkout `/media/jay/新加卷/nektar-v2026` for compilation, solver execution,
-and numerical or performance conclusions, connecting with `ssh linux-usb`.
+and numerical or performance conclusions. Current validation uses Tailscale
+through `ssh jay@100.105.247.110`; `ssh linux-usb` is currently unavailable.
 
 Before synchronization, inspect `git status`, branch, and `git rev-parse HEAD`
 on both machines. Commit intended changes on the project branch, fetch that

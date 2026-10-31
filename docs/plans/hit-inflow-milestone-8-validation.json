@@ -1,0 +1,2242 @@
+{
+  "schema": "NEKTAR_HIT_M8_VALIDATION_V1",
+  "milestone": 8,
+  "status": "CLOSED_DOCUMENTATION_REPRODUCIBILITY",
+  "closure_date": "2026-10-31",
+  "branch": "codex/hit-inflow-generator",
+  "verification_status": "VERIFIED for documented examples, configured small regressions and deterministic cached-data reproduction; no full-band physical-validation claim",
+  "native_build_revision": "29f467b6428ce5efc58d97d4cb481fbda0e432b1",
+  "tested_code_revision": "2e25b26b427bb63b77e630269798a34c770a4594",
+  "tested_full3D_fixture_revision": "6f6c0f2e32666f5636aecdb9aa2c9c9f0a089f5a",
+  "tested_documentation_revision": "4825defc36259ff2016d840a8995dba11bbd31b2",
+  "native_Cpp_changed": false,
+  "native_rebuild_required": false,
+  "authoritative_host": "jay-Super-Server Linux",
+  "transport": "ssh jay@100.105.247.110",
+  "run_root": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2",
+  "environment": {
+    "Python": "3.10.12",
+    "NumPy": "1.21.5",
+    "Matplotlib": "3.5.1",
+    "SciPy": "1.8.0",
+    "native_installation": "/home/jay/.local/opt/nektar-v2026-mpi",
+    "native_build_directory": "/home/jay/build/nektar-v2026-mpi",
+    "MPI_enabled": true,
+    "FFTW_enabled": true,
+    "NEKTAR_BUILD_TESTS": true,
+    "NEKTAR_BUILD_UNIT_TESTS": true
+  },
+  "workers": {
+    "server_hard_limit": 64,
+    "max_concurrent_regression_MPI_ranks": 8,
+    "max_concurrent_example_MPI_ranks": 2,
+    "sequential_reproduction_workers": 1,
+    "source_preparation_workers": 1,
+    "documentation_workers": 1,
+    "maximum_planned_concurrent_compute_allocation": 13,
+    "bounded_controllers_share_headroom": true,
+    "OMP_NUM_THREADS": 1,
+    "OPENBLAS_NUM_THREADS": 1,
+    "MKL_NUM_THREADS": 1
+  },
+  "examples": {
+    "status": "passed",
+    "source_revision": "2e25b26b427bb63b77e630269798a34c770a4594",
+    "native_build_expected": "29f467b6428ce5efc58d97d4cb481fbda0e432b1",
+    "started_utc": "2026-10-31T01:39:48.686767+00:00",
+    "worker_allocation": {
+      "MPI_ranks_at_most": 2,
+      "CPU_set": [
+        48,
+        49
+      ],
+      "OMP_NUM_THREADS": 1,
+      "OPENBLAS_NUM_THREADS": 1,
+      "server_hard_limit": 64
+    },
+    "cases": [
+      {
+        "id": "full3d-serial",
+        "fixture": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Examples/HITInflow3D/HITInflow3D.xml",
+        "original_fixture_sha256": "01678fec32ff7109381a6a4b04667720bed932a3ca93132a23da0485bbdad5c0",
+        "executed_session_sha256": "01678fec32ff7109381a6a4b04667720bed932a3ca93132a23da0485bbdad5c0",
+        "ranks": 1,
+        "npz": 1,
+        "backend": "3D",
+        "solver": {
+          "command": [
+            "taskset",
+            "-c",
+            "48",
+            "IncNavierStokesSolver",
+            "HITInflow3D.xml"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 15.092663887015078,
+          "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-02/full3d-serial/solver.log",
+          "log_sha256": "04807778331978d25019733138f2d1ff61a2476bbb62bf175b533352603e9e8f"
+        },
+        "history": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-02/full3d-serial/history.his",
+          "frames": 21,
+          "probes": 12,
+          "first_last_times_s": [
+            0.0,
+            0.02000000000000001
+          ],
+          "sha256": "bcf37a9387541ad2ca0348de62cc64d184bbd5d96dca9d9f1eb8fb80aebfc2b6",
+          "finite_u_v_w_p": true
+        },
+        "final_field_metadata": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-02/full3d-serial/HITInflow3D.fld",
+          "sha256": "75c4fc4a6988141de39d36cff549220485c5156ab28bf432e67f898e76c29203",
+          "time_s": 0.02000000000000001,
+          "HIT_identity_sha256": "94e209ef76eab45bfdc233abe78af5f368f1b500a8ce5a93c30d8fef2f5f9c38",
+          "build": "29f467b6428ce5efc58d97d4cb481fbda0e432b1"
+        },
+        "checkpoint_metadata": [
+          {
+            "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-02/full3d-serial/HITInflow3D_0.chk",
+            "sha256": "4a74c350814dc38f4c96e48892625222b97b7f4cbd957de9a049ac2132439b73",
+            "time_s": 0.0,
+            "HIT_identity_sha256": null,
+            "build": null,
+            "verified_HIT_restart": false,
+            "note": "Initial checkpoint precedes HIT metadata setup; do not use as a verified HIT restart"
+          },
+          {
+            "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-02/full3d-serial/HITInflow3D_1.chk",
+            "sha256": "804ef8a9433c8c3cf648fcaa66d1b3ba745a8eeead2be89a9f502c0c2ad88c87",
+            "time_s": 0.010000000000000002,
+            "HIT_identity_sha256": "94e209ef76eab45bfdc233abe78af5f368f1b500a8ce5a93c30d8fef2f5f9c38",
+            "build": "29f467b6428ce5efc58d97d4cb481fbda0e432b1"
+          },
+          {
+            "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-02/full3d-serial/HITInflow3D_2.chk",
+            "sha256": "855a35a907056bee42fb29b32aaafeda374ad00f78418a599e7a232028802ecb",
+            "time_s": 0.02000000000000001,
+            "HIT_identity_sha256": "94e209ef76eab45bfdc233abe78af5f368f1b500a8ce5a93c30d8fef2f5f9c38",
+            "build": "29f467b6428ce5efc58d97d4cb481fbda0e432b1"
+          }
+        ],
+        "diagnostics": {
+          "command": [
+            "taskset",
+            "-c",
+            "48",
+            "HITFlowDiagnostics",
+            "HITInflow3D.xml",
+            "HITInflow3D.fld"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 0.8160843010118697,
+          "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-02/full3d-serial/diagnostics.log",
+          "log_sha256": "e4adee4f0190eb91015822f1cc8476309b9f51a49e2ea75ec6515506dc9175a9"
+        },
+        "flow": {
+          "volume": 39.47841760435736,
+          "velocity_l2": 6.292723327103347,
+          "reference_length": 3.4050219214767528,
+          "gradient_l2": 1.0589765592204912,
+          "viscosity": 0.01,
+          "instantaneous_resolved_strain_dissipation": 0.00028538334381783016,
+          "instantaneous_svv_work_xy": 0,
+          "instantaneous_svv_work_z": 0,
+          "divergence_rms": 0.0003952677901204465,
+          "divergence_fixed_cbc_reference": 4.2731652985994216e-05,
+          "divergence_l2": 0.0024835407712861315,
+          "divergence_integral": 3.5947171170119108e-06,
+          "relative_divergence": 0.0013438554866519524,
+          "inlet_flux": -39.478166151284256,
+          "outlet_flux": 39.478169746001385,
+          "relative_flux_imbalance": 9.105582440107746e-08,
+          "gauss_relative_residual": 2.8866471671456613e-16
+        },
+        "fixture_revision": "6f6c0f2e32666f5636aecdb9aa2c9c9f0a089f5a"
+      },
+      {
+        "id": "full3d-mpi2",
+        "fixture": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Examples/HITInflow3D/HITInflow3D.xml",
+        "original_fixture_sha256": "01678fec32ff7109381a6a4b04667720bed932a3ca93132a23da0485bbdad5c0",
+        "executed_session_sha256": "01678fec32ff7109381a6a4b04667720bed932a3ca93132a23da0485bbdad5c0",
+        "ranks": 2,
+        "npz": 1,
+        "backend": "3D",
+        "solver": {
+          "command": [
+            "taskset",
+            "-c",
+            "48,49",
+            "mpirun",
+            "--bind-to",
+            "none",
+            "-n",
+            "2",
+            "IncNavierStokesSolver",
+            "HITInflow3D.xml"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 20.363767949020257,
+          "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-02/full3d-mpi2/solver.log",
+          "log_sha256": "04976bdffa962971b4ea2328279ddc4b48892ac781d918a277804c08fd7d7b01"
+        },
+        "history": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-02/full3d-mpi2/history.his",
+          "frames": 21,
+          "probes": 12,
+          "first_last_times_s": [
+            0.0,
+            0.02000000000000001
+          ],
+          "sha256": "40c49577393a3ae55b87892f494ddbc083f4d2c98f9a9cda8529599d17f37b5f",
+          "finite_u_v_w_p": true
+        },
+        "final_field_metadata": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-02/full3d-mpi2/HITInflow3D.fld/Info.xml",
+          "sha256": "75daaf727518e36293917c6817f1a3f4379062fb6bb425ec645353740a99b784",
+          "time_s": 0.02000000000000001,
+          "HIT_identity_sha256": "94e209ef76eab45bfdc233abe78af5f368f1b500a8ce5a93c30d8fef2f5f9c38",
+          "build": "29f467b6428ce5efc58d97d4cb481fbda0e432b1"
+        },
+        "checkpoint_metadata": [
+          {
+            "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-02/full3d-mpi2/HITInflow3D_0.chk/Info.xml",
+            "sha256": "a613907d0f7d94ad93f8de0193d9e55c96ef3aed0993c7a3ae7a329b8309c4b1",
+            "time_s": 0.0,
+            "HIT_identity_sha256": null,
+            "build": null,
+            "verified_HIT_restart": false,
+            "note": "Initial checkpoint precedes HIT metadata setup; do not use as a verified HIT restart"
+          },
+          {
+            "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-02/full3d-mpi2/HITInflow3D_1.chk/Info.xml",
+            "sha256": "e421be90b663986ca1034de8f0bdfb12a58978de6c7f50805ab65e83a74474c9",
+            "time_s": 0.010000000000000002,
+            "HIT_identity_sha256": "94e209ef76eab45bfdc233abe78af5f368f1b500a8ce5a93c30d8fef2f5f9c38",
+            "build": "29f467b6428ce5efc58d97d4cb481fbda0e432b1"
+          },
+          {
+            "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-02/full3d-mpi2/HITInflow3D_2.chk/Info.xml",
+            "sha256": "849296e432a044ab9e1e8d03b13ba860375d045676b4dc5472c647858205e378",
+            "time_s": 0.02000000000000001,
+            "HIT_identity_sha256": "94e209ef76eab45bfdc233abe78af5f368f1b500a8ce5a93c30d8fef2f5f9c38",
+            "build": "29f467b6428ce5efc58d97d4cb481fbda0e432b1"
+          }
+        ],
+        "diagnostics": {
+          "command": [
+            "taskset",
+            "-c",
+            "48",
+            "HITFlowDiagnostics",
+            "HITInflow3D.xml",
+            "HITInflow3D.fld"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 0.8164024540164974,
+          "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-02/full3d-mpi2/diagnostics.log",
+          "log_sha256": "1acdc80f81a8a70867ab854238907312e4b02274ec0bf71eb1a7daa39b032225"
+        },
+        "flow": {
+          "volume": 39.47841760435736,
+          "velocity_l2": 6.2927233271033245,
+          "reference_length": 3.4050219214767528,
+          "gradient_l2": 1.0589765592180878,
+          "viscosity": 0.01,
+          "instantaneous_resolved_strain_dissipation": 0.00028538334381681877,
+          "instantaneous_svv_work_xy": 0,
+          "instantaneous_svv_work_z": 0,
+          "divergence_rms": 0.000395267789544629,
+          "divergence_fixed_cbc_reference": 4.273165292374368e-05,
+          "divergence_l2": 0.0024835407676681636,
+          "divergence_integral": 3.5947186732766036e-06,
+          "relative_divergence": 0.0013438554846942577,
+          "inlet_flux": -39.478166151284256,
+          "outlet_flux": 39.478169746002955,
+          "relative_flux_imbalance": 9.105586417747683e-08,
+          "gauss_relative_residual": 6.441714159006419e-16
+        },
+        "fixture_revision": "6f6c0f2e32666f5636aecdb9aa2c9c9f0a089f5a"
+      },
+      {
+        "id": "h1d-serial",
+        "fixture": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Examples/HITInflowQuasi3D/HITInflowQuasi3D.xml",
+        "original_fixture_sha256": "0714a34fc127a4bae13c46cfb2446ccf8893f60493ebdc00c5627a504cfd5056",
+        "executed_session_sha256": "0714a34fc127a4bae13c46cfb2446ccf8893f60493ebdc00c5627a504cfd5056",
+        "ranks": 1,
+        "npz": 1,
+        "backend": "Matrix",
+        "solver": {
+          "command": [
+            "taskset",
+            "-c",
+            "48",
+            "IncNavierStokesSolver",
+            "HITInflowQuasi3D.xml"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 3.8321794949879404,
+          "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-03/h1d-serial/solver.log",
+          "log_sha256": "be82e0212aa0ecb654af01fb7966c692b52b6fe499354c543f313be46f6e1b0d"
+        },
+        "history": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-03/h1d-serial/history.his",
+          "frames": 21,
+          "probes": 12,
+          "first_last_times_s": [
+            0.0,
+            0.02000000000000001
+          ],
+          "sha256": "5e8ea19c3ab726c63dee723b2f27ae8f6113e2f417d4ca291bfcba61b89fe13b",
+          "finite_u_v_w_p": true
+        },
+        "final_field_metadata": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-03/h1d-serial/HITInflowQuasi3D.fld",
+          "sha256": "8da71e6ffaad2138467481f77083a5935a434b147bcad1d8dcb61db36975087c",
+          "time_s": 0.02000000000000001,
+          "HIT_identity_sha256": "64378640a976162fee8ec0854eba5de9bfd547025421608532e37eb8a8f596c6",
+          "build": "29f467b6428ce5efc58d97d4cb481fbda0e432b1"
+        },
+        "checkpoint_metadata": [
+          {
+            "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-03/h1d-serial/HITInflowQuasi3D_0.chk",
+            "sha256": "759dfa597a211adc4b88c59e8f3b5d6ad66915fa18758346c10211ee71353dcc",
+            "time_s": 0.0,
+            "HIT_identity_sha256": null,
+            "build": null,
+            "verified_HIT_restart": false,
+            "note": "Initial checkpoint precedes HIT metadata setup; do not use as a verified HIT restart"
+          },
+          {
+            "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-03/h1d-serial/HITInflowQuasi3D_1.chk",
+            "sha256": "e6fbcc8f8ff89474cf4d5482e5691fee84ea9b5632be367547ef8f15437ba723",
+            "time_s": 0.010000000000000002,
+            "HIT_identity_sha256": "64378640a976162fee8ec0854eba5de9bfd547025421608532e37eb8a8f596c6",
+            "build": "29f467b6428ce5efc58d97d4cb481fbda0e432b1"
+          },
+          {
+            "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-03/h1d-serial/HITInflowQuasi3D_2.chk",
+            "sha256": "251d5b85171cb0dca23cd6125099db9733e165378942c9509ffd00619b6bdc22",
+            "time_s": 0.02000000000000001,
+            "HIT_identity_sha256": "64378640a976162fee8ec0854eba5de9bfd547025421608532e37eb8a8f596c6",
+            "build": "29f467b6428ce5efc58d97d4cb481fbda0e432b1"
+          }
+        ],
+        "diagnostics": {
+          "command": [
+            "taskset",
+            "-c",
+            "48",
+            "HITFlowDiagnostics",
+            "HITInflowQuasi3D.xml",
+            "HITInflowQuasi3D.fld"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 0.7183751499978825,
+          "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-03/h1d-serial/diagnostics.log",
+          "log_sha256": "2efabc305e68e3114c8656a6294563cd393ebda16ac0164f196f91300e02f267"
+        },
+        "flow": {
+          "volume": 39.47841760435743,
+          "velocity_l2": 6.29202926150375,
+          "reference_length": 3.4050219214767545,
+          "gradient_l2": 1.0498430871204358,
+          "viscosity": 0.01,
+          "instantaneous_resolved_strain_dissipation": 0.0002835091356643085,
+          "instantaneous_svv_work_xy": 0,
+          "instantaneous_svv_work_z": 0,
+          "divergence_rms": 0.0004271442685894644,
+          "divergence_fixed_cbc_reference": 4.6177758766428576e-05,
+          "divergence_l2": 0.0026838265924472933,
+          "divergence_integral": 4.144836540586249e-06,
+          "relative_divergence": 0.0014523912717057613,
+          "inlet_flux": -39.47841760435742,
+          "outlet_flux": 39.47842174919398,
+          "relative_flux_imbalance": 1.0498993103677473e-07,
+          "gauss_relative_residual": 4.741649386655986e-16
+        }
+      },
+      {
+        "id": "h1d-mpi2",
+        "fixture": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Examples/HITInflowQuasi3D/HITInflowQuasi3D.xml",
+        "original_fixture_sha256": "0714a34fc127a4bae13c46cfb2446ccf8893f60493ebdc00c5627a504cfd5056",
+        "executed_session_sha256": "0714a34fc127a4bae13c46cfb2446ccf8893f60493ebdc00c5627a504cfd5056",
+        "ranks": 2,
+        "npz": 2,
+        "backend": "Matrix",
+        "solver": {
+          "command": [
+            "taskset",
+            "-c",
+            "48,49",
+            "mpirun",
+            "--bind-to",
+            "none",
+            "-n",
+            "2",
+            "IncNavierStokesSolver",
+            "--npz",
+            "2",
+            "HITInflowQuasi3D.xml"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 3.9292120059835725,
+          "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-03/h1d-mpi2/solver.log",
+          "log_sha256": "573b455a727713a8501cfcfe3b22af9ee4033b53f7a1e19971912d4b1653b62c"
+        },
+        "history": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-03/h1d-mpi2/history.his",
+          "frames": 21,
+          "probes": 12,
+          "first_last_times_s": [
+            0.0,
+            0.02000000000000001
+          ],
+          "sha256": "9750e51306d3311936f477593283158a482321c65c96dd114e4685120e4e5329",
+          "finite_u_v_w_p": true
+        },
+        "final_field_metadata": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-03/h1d-mpi2/HITInflowQuasi3D.fld/Info.xml",
+          "sha256": "caed35b11e0d24824ab593d42e0e1155a4ff28ba62a42260eba637a7730b5cec",
+          "time_s": 0.02000000000000001,
+          "HIT_identity_sha256": "64378640a976162fee8ec0854eba5de9bfd547025421608532e37eb8a8f596c6",
+          "build": "29f467b6428ce5efc58d97d4cb481fbda0e432b1"
+        },
+        "checkpoint_metadata": [
+          {
+            "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-03/h1d-mpi2/HITInflowQuasi3D_0.chk/Info.xml",
+            "sha256": "8c6655b9624ddc220b09b11329e681e4d00a7c33b311cf2d9399893f7097abe7",
+            "time_s": 0.0,
+            "HIT_identity_sha256": null,
+            "build": null,
+            "verified_HIT_restart": false,
+            "note": "Initial checkpoint precedes HIT metadata setup; do not use as a verified HIT restart"
+          },
+          {
+            "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-03/h1d-mpi2/HITInflowQuasi3D_1.chk/Info.xml",
+            "sha256": "54c8be413a5e1ba9fba8feef3f5de80dfc0ede5ce1c9cf6ddf8007ee49374647",
+            "time_s": 0.010000000000000002,
+            "HIT_identity_sha256": "64378640a976162fee8ec0854eba5de9bfd547025421608532e37eb8a8f596c6",
+            "build": "29f467b6428ce5efc58d97d4cb481fbda0e432b1"
+          },
+          {
+            "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-03/h1d-mpi2/HITInflowQuasi3D_2.chk/Info.xml",
+            "sha256": "0130a5090d5c685557b59570d5fc23f1161b13afff599021aac596a89a4ad1ab",
+            "time_s": 0.02000000000000001,
+            "HIT_identity_sha256": "64378640a976162fee8ec0854eba5de9bfd547025421608532e37eb8a8f596c6",
+            "build": "29f467b6428ce5efc58d97d4cb481fbda0e432b1"
+          }
+        ],
+        "diagnostics": {
+          "command": [
+            "taskset",
+            "-c",
+            "48",
+            "HITFlowDiagnostics",
+            "HITInflowQuasi3D.xml",
+            "HITInflowQuasi3D.fld"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 0.7168703639763407,
+          "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-03/h1d-mpi2/diagnostics.log",
+          "log_sha256": "2efabc305e68e3114c8656a6294563cd393ebda16ac0164f196f91300e02f267"
+        },
+        "flow": {
+          "volume": 39.47841760435743,
+          "velocity_l2": 6.29202926150375,
+          "reference_length": 3.4050219214767545,
+          "gradient_l2": 1.0498430871204358,
+          "viscosity": 0.01,
+          "instantaneous_resolved_strain_dissipation": 0.0002835091356643085,
+          "instantaneous_svv_work_xy": 0,
+          "instantaneous_svv_work_z": 0,
+          "divergence_rms": 0.0004271442685894644,
+          "divergence_fixed_cbc_reference": 4.6177758766428576e-05,
+          "divergence_l2": 0.0026838265924472933,
+          "divergence_integral": 4.144836540586249e-06,
+          "relative_divergence": 0.0014523912717057613,
+          "inlet_flux": -39.47841760435742,
+          "outlet_flux": 39.47842174919398,
+          "relative_flux_imbalance": 1.0498993103677473e-07,
+          "gauss_relative_residual": 4.741649386655986e-16
+        }
+      },
+      {
+        "id": "h1d-fftw-mpi2",
+        "fixture": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Examples/HITInflowQuasi3D/HITInflowQuasi3D.xml",
+        "original_fixture_sha256": "0714a34fc127a4bae13c46cfb2446ccf8893f60493ebdc00c5627a504cfd5056",
+        "executed_session_sha256": "341d4dea9bd3c66dc8d5c624da7322c5110985455e217a557b0c46e6ac08b1c3",
+        "ranks": 2,
+        "npz": 2,
+        "backend": "FFTW",
+        "solver": {
+          "command": [
+            "taskset",
+            "-c",
+            "48,49",
+            "mpirun",
+            "--bind-to",
+            "none",
+            "-n",
+            "2",
+            "IncNavierStokesSolver",
+            "--npz",
+            "2",
+            "HITInflowQuasi3D.xml"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 4.230392579018371,
+          "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-03/h1d-fftw-mpi2/solver.log",
+          "log_sha256": "ef1515148a415c5876c32c61d5193c7e7dce3bc2272c9341b97896fa578eed2e"
+        },
+        "history": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-03/h1d-fftw-mpi2/history.his",
+          "frames": 21,
+          "probes": 12,
+          "first_last_times_s": [
+            0.0,
+            0.02000000000000001
+          ],
+          "sha256": "9c61828da64d23c26b45a1d017a86d09c5c1c26fa388c2df7ffb82f07151a842",
+          "finite_u_v_w_p": true
+        },
+        "final_field_metadata": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-03/h1d-fftw-mpi2/HITInflowQuasi3D.fld/Info.xml",
+          "sha256": "0166d48f0aa8ed0f9adff1afde38cfbb6e5292cb85da1f871e4d2d2635bef091",
+          "time_s": 0.02000000000000001,
+          "HIT_identity_sha256": "64378640a976162fee8ec0854eba5de9bfd547025421608532e37eb8a8f596c6",
+          "build": "29f467b6428ce5efc58d97d4cb481fbda0e432b1"
+        },
+        "checkpoint_metadata": [
+          {
+            "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-03/h1d-fftw-mpi2/HITInflowQuasi3D_0.chk/Info.xml",
+            "sha256": "af78f437c18ba3e3e055d6f3427a1c5c9488548ccbb8b506a34892e5510e58db",
+            "time_s": 0.0,
+            "HIT_identity_sha256": null,
+            "build": null,
+            "verified_HIT_restart": false,
+            "note": "Initial checkpoint precedes HIT metadata setup; do not use as a verified HIT restart"
+          },
+          {
+            "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-03/h1d-fftw-mpi2/HITInflowQuasi3D_1.chk/Info.xml",
+            "sha256": "6018257c062593a55ee980463078e693e70771056f61c2529308563250a1e40e",
+            "time_s": 0.010000000000000002,
+            "HIT_identity_sha256": "64378640a976162fee8ec0854eba5de9bfd547025421608532e37eb8a8f596c6",
+            "build": "29f467b6428ce5efc58d97d4cb481fbda0e432b1"
+          },
+          {
+            "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-03/h1d-fftw-mpi2/HITInflowQuasi3D_2.chk/Info.xml",
+            "sha256": "8f4d564f1c85dc652e470fd1bfdc913871bdaf58732d5a2db40800005bda9d9f",
+            "time_s": 0.02000000000000001,
+            "HIT_identity_sha256": "64378640a976162fee8ec0854eba5de9bfd547025421608532e37eb8a8f596c6",
+            "build": "29f467b6428ce5efc58d97d4cb481fbda0e432b1"
+          }
+        ],
+        "diagnostics": {
+          "command": [
+            "taskset",
+            "-c",
+            "48",
+            "HITFlowDiagnostics",
+            "HITInflowQuasi3D.xml",
+            "HITInflowQuasi3D.fld"
+          ],
+          "exit_code": 0,
+          "wall_seconds": 0.7679062959796283,
+          "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-03/h1d-fftw-mpi2/diagnostics.log",
+          "log_sha256": "01ba27106ac3f8e590c7f70dd7e619d6caf096f83e09b3c9a8084d41c244bd88"
+        },
+        "flow": {
+          "volume": 39.47841760435743,
+          "velocity_l2": 6.292029261503747,
+          "reference_length": 3.4050219214767545,
+          "gradient_l2": 1.0498430871206015,
+          "viscosity": 0.01,
+          "instantaneous_resolved_strain_dissipation": 0.0002835091356644092,
+          "instantaneous_svv_work_xy": 0,
+          "instantaneous_svv_work_z": 0,
+          "divergence_rms": 0.00042714426861473616,
+          "divergence_fixed_cbc_reference": 4.617775876916067e-05,
+          "divergence_l2": 0.002683826592606081,
+          "divergence_integral": 4.144836295842916e-06,
+          "relative_divergence": 0.0014523912717916922,
+          "inlet_flux": -39.47841760435743,
+          "outlet_flux": 39.478421749193735,
+          "relative_flux_imbalance": 1.0498992455740258e-07,
+          "gauss_relative_residual": 1.9421320541630943e-16
+        }
+      }
+    ],
+    "reused_completed_full3D_evidence": {
+      "receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-02/receipt.json",
+      "sha256": "cda1fe4e6b4cfe6a1e94f3d1217c9d9f6e960aacf4231f99044e308eb31b2b95",
+      "reason": "Preserve successful full3D serial/MPI checks; only H1D homogeneous-dealiasing configuration changed"
+    },
+    "consistency_checks": [
+      {
+        "reference": "full3d-serial",
+        "case": "full3d-mpi2",
+        "quantity": "u/v/w physical probe histories",
+        "maximum_absolute_difference_m_s": 1.3780153233777792e-11,
+        "acceptance_m_s": 1e-09
+      },
+      {
+        "reference": "h1d-serial",
+        "case": "h1d-mpi2",
+        "quantity": "u/v/w physical probe histories",
+        "maximum_absolute_difference_m_s": 2.220446049250313e-16,
+        "acceptance_m_s": 1e-09
+      },
+      {
+        "reference": "h1d-serial",
+        "case": "h1d-fftw-mpi2",
+        "quantity": "u/v/w physical probe histories",
+        "maximum_absolute_difference_m_s": 1.1415148340465642e-12,
+        "acceptance_m_s": 1e-09
+      }
+    ],
+    "finished_utc": "2026-10-31T01:40:02.905778+00:00"
+  },
+  "small_regression_and_input_checks": {
+    "status": "passed",
+    "source_revision": "2e25b26b427bb63b77e630269798a34c770a4594",
+    "native_build_revision": "29f467b6428ce5efc58d97d4cb481fbda0e432b1",
+    "started_utc": "2026-10-31T01:38:28.971107+00:00",
+    "steps": [
+      {
+        "name": "reproduction-unit-tests",
+        "command": [
+          "taskset",
+          "-c",
+          "51",
+          "python3",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/test_reproduce_m7.py"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01",
+        "exit_code": 0,
+        "wall_seconds": 1.3169441689969972,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/reproduction-unit-tests.log",
+        "log_sha256": "f72a258e9ab9d7cce16f6583ba348188fb37e49407e7e91e80025f94177b2536"
+      },
+      {
+        "name": "preparation-unit-tests",
+        "command": [
+          "taskset",
+          "-c",
+          "51",
+          "python3",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/test_prepare_spectrum.py"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01",
+        "exit_code": 0,
+        "wall_seconds": 0.9669785589794628,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/preparation-unit-tests.log",
+        "log_sha256": "09119b3143e05c4310ffeefd767e86e0e1805e50c96008caefafa93e9d51949e"
+      },
+      {
+        "name": "source-regeneration",
+        "command": [
+          "taskset",
+          "-c",
+          "51",
+          "python3",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/prepare_cbc1971.py",
+          "--output-dir",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/source-data"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01",
+        "exit_code": 0,
+        "wall_seconds": 0.11491452498012222,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/source-regeneration.log",
+        "log_sha256": "8e65ba9b6882b8dbcdeca9e07117bf815ab10039c6819d8fead63de02d9e0d70"
+      },
+      {
+        "name": "source-exact-check",
+        "command": [
+          "taskset",
+          "-c",
+          "51",
+          "python3",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/prepare_cbc1971.py",
+          "--check",
+          "--output-dir",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/source-data"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01",
+        "exit_code": 0,
+        "wall_seconds": 0.06455177298630588,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/source-exact-check.log",
+        "log_sha256": "f61443cd4ba2402b922e1e52b768e3f6b17ecc5923463511d4d511cf708842f0"
+      },
+      {
+        "name": "interface-contract",
+        "command": [
+          "taskset",
+          "-c",
+          "51",
+          "python3",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/check_contract.py"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01",
+        "exit_code": 0,
+        "wall_seconds": 0.0645061589893885,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/interface-contract.log",
+        "log_sha256": "1de63d594860805882219d27e44c8b46a7582ff3ac4140e9a4f83bc4b19bdd3b"
+      },
+      {
+        "name": "upstream-fit",
+        "command": [
+          "taskset",
+          "-c",
+          "51",
+          "python3",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/fit_m7_upstream.py",
+          "--output",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/upstream-fit.json"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01",
+        "exit_code": 0,
+        "wall_seconds": 0.26503939600661397,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/upstream-fit.log",
+        "log_sha256": "f3a14a78c0aa055f003fa638e2ad262a7ba682ca0faea32aac501adfadd4e6d5"
+      },
+      {
+        "name": "IncNavierStokesSolver_HITInflowMeanOnly3D",
+        "command": [
+          "taskset",
+          "-c",
+          "0-7",
+          "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflowMeanOnly3D.tst"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/IncNavierStokesSolver_HITInflowMeanOnly3D",
+        "exit_code": 0,
+        "wall_seconds": 1.3677455709839705,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/IncNavierStokesSolver_HITInflowMeanOnly3D/IncNavierStokesSolver_HITInflowMeanOnly3D.log",
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "IncNavierStokesSolver_HITInflowManufactured3D",
+        "command": [
+          "taskset",
+          "-c",
+          "0-7",
+          "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflowManufactured3D.tst"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/IncNavierStokesSolver_HITInflowManufactured3D",
+        "exit_code": 0,
+        "wall_seconds": 51.28426336200209,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/IncNavierStokesSolver_HITInflowManufactured3D/IncNavierStokesSolver_HITInflowManufactured3D.log",
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "IncNavierStokesSolver_HITInflowHomogeneous1DMean",
+        "command": [
+          "taskset",
+          "-c",
+          "0-7",
+          "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflowHomogeneous1DMean.tst"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/IncNavierStokesSolver_HITInflowHomogeneous1DMean",
+        "exit_code": 0,
+        "wall_seconds": 0.866670149989659,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/IncNavierStokesSolver_HITInflowHomogeneous1DMean/IncNavierStokesSolver_HITInflowHomogeneous1DMean.log",
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "IncNavierStokesSolver_HITInflow_m5_single_mode",
+        "command": [
+          "taskset",
+          "-c",
+          "0-7",
+          "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow_m5_single_mode.tst"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/IncNavierStokesSolver_HITInflow_m5_single_mode",
+        "exit_code": 0,
+        "wall_seconds": 3.5229229260003194,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/IncNavierStokesSolver_HITInflow_m5_single_mode/IncNavierStokesSolver_HITInflow_m5_single_mode.log",
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "IncNavierStokesSolver_HITInflowSVVFourierPair",
+        "command": [
+          "taskset",
+          "-c",
+          "0-7",
+          "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflowSVVFourierPair.tst"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/IncNavierStokesSolver_HITInflowSVVFourierPair",
+        "exit_code": 0,
+        "wall_seconds": 0.8166792560077738,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/IncNavierStokesSolver_HITInflowSVVFourierPair/IncNavierStokesSolver_HITInflowSVVFourierPair.log",
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "IncNavierStokesSolver_HITInflowFieldCompareAbsoluteNorm",
+        "command": [
+          "taskset",
+          "-c",
+          "0-7",
+          "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflowFieldCompareAbsoluteNorm.tst"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/IncNavierStokesSolver_HITInflowFieldCompareAbsoluteNorm",
+        "exit_code": 0,
+        "wall_seconds": 2.2198518800141755,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/IncNavierStokesSolver_HITInflowFieldCompareAbsoluteNorm/IncNavierStokesSolver_HITInflowFieldCompareAbsoluteNorm.log",
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "IncNavierStokesSolver_HITInflowSeededH1D",
+        "command": [
+          "taskset",
+          "-c",
+          "0-7",
+          "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflowSeededH1D.tst"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/IncNavierStokesSolver_HITInflowSeededH1D",
+        "exit_code": 0,
+        "wall_seconds": 0.9170247919973917,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/IncNavierStokesSolver_HITInflowSeededH1D/IncNavierStokesSolver_HITInflowSeededH1D.log",
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "IncNavierStokesSolver_HITInflowTabulatedH1D",
+        "command": [
+          "taskset",
+          "-c",
+          "0-7",
+          "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflowTabulatedH1D.tst"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/IncNavierStokesSolver_HITInflowTabulatedH1D",
+        "exit_code": 0,
+        "wall_seconds": 0.9167767320177518,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/IncNavierStokesSolver_HITInflowTabulatedH1D/IncNavierStokesSolver_HITInflowTabulatedH1D.log",
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "IncNavierStokesSolver_HITInflowRestartH1D",
+        "command": [
+          "taskset",
+          "-c",
+          "0-7",
+          "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflowRestartH1D.tst"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/IncNavierStokesSolver_HITInflowRestartH1D",
+        "exit_code": 0,
+        "wall_seconds": 3.272387668985175,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/IncNavierStokesSolver_HITInflowRestartH1D/IncNavierStokesSolver_HITInflowRestartH1D.log",
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "IncNavierStokesSolver_HITInflowProjectionH1D",
+        "command": [
+          "taskset",
+          "-c",
+          "0-7",
+          "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflowProjectionH1D.tst"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/IncNavierStokesSolver_HITInflowProjectionH1D",
+        "exit_code": 0,
+        "wall_seconds": 0.7668336759961676,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/IncNavierStokesSolver_HITInflowProjectionH1D/IncNavierStokesSolver_HITInflowProjectionH1D.log",
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "IncNavierStokesSolver_HITInflowDivergenceFlux3D",
+        "command": [
+          "taskset",
+          "-c",
+          "0-7",
+          "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflowDivergenceFlux3D.tst"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/IncNavierStokesSolver_HITInflowDivergenceFlux3D",
+        "exit_code": 0,
+        "wall_seconds": 52.333516479993705,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/IncNavierStokesSolver_HITInflowDivergenceFlux3D/IncNavierStokesSolver_HITInflowDivergenceFlux3D.log",
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "IncNavierStokesSolver_HITInflowProjectionH1D_FFTW",
+        "command": [
+          "taskset",
+          "-c",
+          "0-7",
+          "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflowProjectionH1D_FFTW.tst"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/IncNavierStokesSolver_HITInflowProjectionH1D_FFTW",
+        "exit_code": 0,
+        "wall_seconds": 0.7664018250070512,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/IncNavierStokesSolver_HITInflowProjectionH1D_FFTW/IncNavierStokesSolver_HITInflowProjectionH1D_FFTW.log",
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "IncNavierStokesSolver_HITInflowInitialFieldMPI",
+        "command": [
+          "taskset",
+          "-c",
+          "0-7",
+          "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflowInitialFieldMPI.tst"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/IncNavierStokesSolver_HITInflowInitialFieldMPI",
+        "exit_code": 0,
+        "wall_seconds": 2.1196589839819353,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/IncNavierStokesSolver_HITInflowInitialFieldMPI/IncNavierStokesSolver_HITInflowInitialFieldMPI.log",
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "IncNavierStokesSolver_HITInflowMPIH1D",
+        "command": [
+          "taskset",
+          "-c",
+          "0-7",
+          "/home/jay/build/nektar-v2026-mpi/tests/Tester",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflowMPIH1D.tst"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/IncNavierStokesSolver_HITInflowMPIH1D",
+        "exit_code": 0,
+        "wall_seconds": 2.4202987430035137,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/IncNavierStokesSolver_HITInflowMPIH1D/IncNavierStokesSolver_HITInflowMPIH1D.log",
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "HITCoreUnitTests",
+        "command": [
+          "taskset",
+          "-c",
+          "0-7",
+          "/home/jay/build/nektar-v2026-mpi/library/UnitTests/SolverUtils/SolverUtilsUnitTests",
+          "--run_test=HITCore",
+          "--detect_memory_leaks=0"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/HITCoreUnitTests",
+        "exit_code": 0,
+        "wall_seconds": 0.16509853201569058,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/HITCoreUnitTests/HITCoreUnitTests.log",
+        "log_sha256": "c430763cc6e98131db4fedffcbc64298554a4b33a17a2b6eaf376e06e5bfc82d"
+      },
+      {
+        "name": "HITBoundaryUnitTests",
+        "command": [
+          "taskset",
+          "-c",
+          "0-7",
+          "/home/jay/build/nektar-v2026-mpi/library/UnitTests/SolverUtils/HITBoundaryUnitTests",
+          "--run_test=HITBoundary",
+          "--detect_memory_leaks=0"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/HITBoundaryUnitTests",
+        "exit_code": 0,
+        "wall_seconds": 61.80685046999133,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/HITBoundaryUnitTests/HITBoundaryUnitTests.log",
+        "log_sha256": "397edb63d2e61341b2d849cecd810520bbe488f6722a5e62a2fc71c936bb1657"
+      },
+      {
+        "name": "HITRestartUnitTests",
+        "command": [
+          "taskset",
+          "-c",
+          "0-7",
+          "/home/jay/build/nektar-v2026-mpi/library/UnitTests/SolverUtils/HITBoundaryUnitTests",
+          "--run_test=HITRestart",
+          "--detect_memory_leaks=0"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/HITRestartUnitTests",
+        "exit_code": 0,
+        "wall_seconds": 0.06486167100956663,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/HITRestartUnitTests/HITRestartUnitTests.log",
+        "log_sha256": "998443792aeb0493fde0f579398273af1145e2be990c276b22c30cd622fde871"
+      },
+      {
+        "name": "HITSVVWorkUnitTests",
+        "command": [
+          "taskset",
+          "-c",
+          "0-7",
+          "/home/jay/build/nektar-v2026-mpi/library/UnitTests/SolverUtils/HITBoundaryUnitTests",
+          "--run_test=HITSVVWork",
+          "--detect_memory_leaks=0"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/HITSVVWorkUnitTests",
+        "exit_code": 0,
+        "wall_seconds": 1.969390376994852,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/HITSVVWorkUnitTests/HITSVVWorkUnitTests.log",
+        "log_sha256": "92b703a42aed813bc25aac345abb1687756539f484f5f34f764ca44ac4fbef76"
+      }
+    ],
+    "max_native_test_allocation": 8,
+    "thread_environment": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "data_products": {
+      "cbc1971-manifest.json": {
+        "sha256": "6eac80b5db4308d3b58b750a0fe61c62653fd7715e183ddab2bfbaa3b40b88b1",
+        "bytes": 2807
+      },
+      "cbc1971_stations.dat": {
+        "sha256": "208432677fcc2f57fd2ecf7c37cea3140bbd11bf9efd94a8131d533e94e4f836",
+        "bytes": 872
+      },
+      "cbc1971_theta171_longitudinal_1d.dat": {
+        "sha256": "b64397819cd2ab721b782c224b113fa5a61a1fe84eb1dcff4a1d10970eb0345d",
+        "bytes": 1058
+      },
+      "cbc1971_theta171_spectrum_3d.dat": {
+        "sha256": "41cff79a5a8a13267a2db216a7918074f8d4193e38dcd248c4ddae7a9085fe5e",
+        "bytes": 902
+      },
+      "cbc1971_theta42_longitudinal_1d.dat": {
+        "sha256": "5784745af9d6d3c63065c6880777ad0ce75dde47a2e27373c734344a60e4a4da",
+        "bytes": 1053
+      },
+      "cbc1971_theta42_spectrum_3d.dat": {
+        "sha256": "ca5551dc1872df7442cebbb6d82eac657307e394fa0726cbd7fce56939f20181",
+        "bytes": 937
+      },
+      "cbc1971_theta98_longitudinal_1d.dat": {
+        "sha256": "897581af236e50361ea9fda01e15e06994b7d036973e1f8245e578c6eb1912b7",
+        "bytes": 1055
+      },
+      "cbc1971_theta98_spectrum_3d.dat": {
+        "sha256": "736d3a31bdbd6bf482f0f0210cbe6bb29c5eeafb95d93da784cb6e4eb82139cf",
+        "bytes": 937
+      }
+    },
+    "upstream_fit_scientific_payload_matches_M7": true,
+    "registered_tests_passed": 18,
+    "Python_tests_passed": 13,
+    "finished_utc": "2026-10-31T01:41:39.421293+00:00"
+  },
+  "experimental_comparison_reproduction": {
+    "schema": "NEKTAR_HIT_M7_REPRODUCTION_V1",
+    "status": "completed",
+    "started_utc": "2026-10-31T01:38:25.530671+00:00",
+    "command": [
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/reproduce_m7.py",
+      "--run-root",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab",
+      "--output",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01",
+      "--cpu",
+      "50",
+      "--source-root",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026"
+    ],
+    "python": "3.10.12 (main, Aug 31 2026, 10:18:17) [GCC 11.4.0]",
+    "source_root": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026",
+    "run_root": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab",
+    "output": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01",
+    "cpu_affinity": [
+      50
+    ],
+    "thread_environment": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "NUMEXPR_MAX_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "max_concurrent_helpers": 1,
+    "server_worker_limit": 64,
+    "cache_mode": "reuse immutable retained NPZ caches",
+    "verified_small_inputs": {
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/analyze_m7.py": {
+        "sha256": "d81c405243fff9a3677d63dd3aadfe44269a9f79389eeae03c31f1f333842d3e",
+        "bytes": 43395
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/analyze_history.py": {
+        "sha256": "1bced68762eb6a859ba867f1af7162fc09cf1c83daa80da1b058561595de9d01",
+        "bytes": 25326
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/collect_m7_work.py": {
+        "sha256": "4a79b6cd8abf480890fcb3768f096041b7a7821b69eff67e465c168014beb8a1",
+        "bytes": 21418
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/plot_m7.py": {
+        "sha256": "f2f6affb8b248ad5002894009a3dec1477099a068f4607d4c389ff9b9cf60744",
+        "bytes": 36502
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/reproduce_m7.py": {
+        "sha256": "88ed504ed944d6d337dbb6e89af7f4e9426efddc2cbb105b74d9cab01d964690",
+        "bytes": 19202
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/cbc1971-source.json": {
+        "sha256": "031df95c54eb05fb5cc94c81dd5a35bb687890f4336a3f3f80bdfe42c52f3590",
+        "bytes": 4394
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/cbc1971_full_band_correlation.json": {
+        "sha256": "4d08ecfee39e4de53f163103290e524905a514bdc07a918d2d7f84841007b9e1",
+        "bytes": 3562
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/cbc-production/study.receipt.json": {
+        "sha256": "5b9ad14e2a07c7ab165298d24e02471d3b8b747f2c41fca23784a71478370a2b",
+        "bytes": 6851
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/vk-production/study.receipt.json": {
+        "sha256": "aeb24b3a819b2d11aad956b4e162fe22d83da403f4e42444af923cb0677189c2",
+        "bytes": 6861
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/cbc-production/cbc-seed-20261028/manifest.json": {
+        "sha256": "4dfccddc96c287b00c0cc8137569a45fc6477f9d02b7ed8be2a4db21e8bdea19",
+        "bytes": 3064030
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/cbc-production/cbc-seed-20261028/pilot.xml": {
+        "sha256": "026c23c703c586bfd0a1d49a238b2339337dd617e0cb62b9b60bfd49fb7c15a0",
+        "bytes": 868882
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/cbc-production/cbc-seed-20261028/run.receipt.json": {
+        "sha256": "2ef662dd19b1947a035427afa643e59237ffe6e48a23eff076b91bbbecb93f50",
+        "bytes": 2088
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/cbc-seed-20261028/native-profiles/receipt.json": {
+        "sha256": "1b585b95e048d659642c3e8500d7ee5fb22340ff6d97ce956b007499b3766c50",
+        "bytes": 29103
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/cbc-production/cbc-seed-20261028/cbc1971_theta42_spectrum_3d.dat": {
+        "sha256": "ca5551dc1872df7442cebbb6d82eac657307e394fa0726cbd7fce56939f20181",
+        "bytes": 937
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/cbc-seed-20261028/native-profiles/checkpoint-026/pilot.flow.json": {
+        "sha256": "1fc145c4bd79c13ce2c9b2bf6224b9f35c30faa27c8d0375069bce93c62308ed",
+        "bytes": 701
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/cbc-seed-20261028/native-profiles/checkpoint-026/pilot.slabs.csv": {
+        "sha256": "5683fa07a4f38f2d1a4a137ac6791acc5ebb81a7b4597a46f15f9c35f8df23d3",
+        "bytes": 21562
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/cbc-production/cbc-seed-20261028/pilot_26.chk/Info.xml": {
+        "sha256": "ee7bcf13064f8300d05bbb3940fba5fc2040512b2a8066630ed37fe4e0f0490d",
+        "bytes": 5170
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/cbc-seed-20261028/native-profiles/checkpoint-029/pilot.flow.json": {
+        "sha256": "8b255d997e32032ed963eb534754663073bc5775beecf8dc9e45c3666c247396",
+        "bytes": 701
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/cbc-seed-20261028/native-profiles/checkpoint-029/pilot.slabs.csv": {
+        "sha256": "8434a2ad60ae81df679e746e6501c36f3f9c4b39095d3c9639d3a5cc571e2523",
+        "bytes": 21587
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/cbc-production/cbc-seed-20261028/pilot_29.chk/Info.xml": {
+        "sha256": "7d5f86b3756b1caa103ed4602765981074825f459802042b43db9bab86c1fe21",
+        "bytes": 5170
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/cbc-seed-20261028/native-profiles/checkpoint-032/pilot.flow.json": {
+        "sha256": "6877dce1f9c9d530ae9869c2fa39817b28e74995df54e95619a1c3bf1f1efbd2",
+        "bytes": 701
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/cbc-seed-20261028/native-profiles/checkpoint-032/pilot.slabs.csv": {
+        "sha256": "5962bba5fc93a3d1293e6df40c611b74b342a56c05a8d1392e9227a3fcb529c3",
+        "bytes": 21569
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/cbc-production/cbc-seed-20261028/pilot_32.chk/Info.xml": {
+        "sha256": "d54d940f858d95c9bfc567ded6d9aa0f39b6e7dcc77492f9fa60347b6d6f7e57",
+        "bytes": 5170
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/cbc-seed-20261028/history.npz.json": {
+        "sha256": "8093d912ef8d2b12e524fd0a391d92d90e1e9217b6677b2d177f0d278018717f",
+        "bytes": 1232
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/cbc-production/cbc-seed-4315228324/manifest.json": {
+        "sha256": "258f555de92547c99a0e9889b5e4db10d013f8a12a7c2d0a42b9c58a441bb4c4",
+        "bytes": 3064040
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/cbc-production/cbc-seed-4315228324/pilot.xml": {
+        "sha256": "0ee29e3af0e4887a09766a459866362dd30afb7df4b02b8e2e5488921dd7d2ed",
+        "bytes": 868884
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/cbc-production/cbc-seed-4315228324/run.receipt.json": {
+        "sha256": "66dc1e12ee22faa77f727710ad0a478add533d224aea150e8bc386830b1c943b",
+        "bytes": 2090
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/cbc-seed-4315228324/native-profiles/receipt.json": {
+        "sha256": "da9e29fd2e3b17c97b8de11d6163545bc729032e3fbfce172161d6fa013199e8",
+        "bytes": 29281
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/cbc-production/cbc-seed-4315228324/cbc1971_theta42_spectrum_3d.dat": {
+        "sha256": "ca5551dc1872df7442cebbb6d82eac657307e394fa0726cbd7fce56939f20181",
+        "bytes": 937
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/cbc-seed-4315228324/native-profiles/checkpoint-026/pilot.flow.json": {
+        "sha256": "dfd19270400d821ced7fa99dbdb18ccc72e6a04ce4dc1ccec3c37bca920be943",
+        "bytes": 700
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/cbc-seed-4315228324/native-profiles/checkpoint-026/pilot.slabs.csv": {
+        "sha256": "527d37b47483f0cd3ed7102e54a008dd817e57a3f994ae8065e0c376d5a24162",
+        "bytes": 21587
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/cbc-production/cbc-seed-4315228324/pilot_26.chk/Info.xml": {
+        "sha256": "3e4eeec95e96addedb2dee1d108a8741e7f27817d657ef795626bc36f99ebb58",
+        "bytes": 5172
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/cbc-seed-4315228324/native-profiles/checkpoint-029/pilot.flow.json": {
+        "sha256": "906795f0669bebec10dfdb0461a1a11fe2f5544a7c6e26c503a78533dbcc333e",
+        "bytes": 700
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/cbc-seed-4315228324/native-profiles/checkpoint-029/pilot.slabs.csv": {
+        "sha256": "425e182abacc961469f46c065fd8c5b8bcf0ba30d14ff7b415d6bca6ab9eb3a4",
+        "bytes": 21575
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/cbc-production/cbc-seed-4315228324/pilot_29.chk/Info.xml": {
+        "sha256": "30390bc60296e345f206d9aadb3d21d5d2380c89f5dd51c8d62cb3c19e3454f4",
+        "bytes": 5172
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/cbc-seed-4315228324/native-profiles/checkpoint-032/pilot.flow.json": {
+        "sha256": "d99249e0b4c55d106c32c231c4208478dac2ea4ee790968611ddb787e4c9bf35",
+        "bytes": 700
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/cbc-seed-4315228324/native-profiles/checkpoint-032/pilot.slabs.csv": {
+        "sha256": "4c5bbe4d5a9d50839e5c8dbaba84332b10f86fd9074958f2125d2823bfea8c60",
+        "bytes": 21605
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/cbc-production/cbc-seed-4315228324/pilot_32.chk/Info.xml": {
+        "sha256": "8c6274ed330931e8a72a6eea80bd8592ee96dde54012910089e111355e94bd8a",
+        "bytes": 5172
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/cbc-seed-4315228324/history.npz.json": {
+        "sha256": "9c5f6ad3da11ff07e70a9f41ee9ee5a5a59da5f7ae219eaf42fdcab95db2ccea",
+        "bytes": 1234
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/vk-production/vk-seed-20261028/manifest.json": {
+        "sha256": "470b80ccf26199a495172d15599c197d40d1382a5554932498b5ed779250d901",
+        "bytes": 3065240
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/vk-production/vk-seed-20261028/pilot.xml": {
+        "sha256": "7d101a7abc39fdc803d01ab4aef7acef7d68480a8c57fb026aa76993e50146fd",
+        "bytes": 868854
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/vk-production/vk-seed-20261028/run.receipt.json": {
+        "sha256": "4986acced3ca74181d249889643f9eb8fcc1b0c2ac6cf5eff90c578de7a87041",
+        "bytes": 2104
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/vk-seed-20261028/native-profiles/receipt.json": {
+        "sha256": "10f663733a15f73193ea46c84ea46802a6b093c86029c3fd80e6586611430d4f",
+        "bytes": 28663
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/vk-seed-20261028/native-profiles/checkpoint-026/pilot.flow.json": {
+        "sha256": "263006e457bfa88968b4629bb0eb00db0015a0741cb559c9b8548f6cb9aedd11",
+        "bytes": 697
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/vk-seed-20261028/native-profiles/checkpoint-026/pilot.slabs.csv": {
+        "sha256": "30beaf48c3b986934e247cc719bd1c3ee1fd470d53508ecf985385fa70d6e645",
+        "bytes": 21584
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/vk-production/vk-seed-20261028/pilot_26.chk/Info.xml": {
+        "sha256": "b5fcad0a82420cb74c5927d8739640ae3dce6635b377e4909f4264f06cbfef82",
+        "bytes": 4688
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/vk-seed-20261028/native-profiles/checkpoint-029/pilot.flow.json": {
+        "sha256": "e5acee747ad457b3d078dbf4a18ba58a4609a65f7fda2c549541885c06edd55d",
+        "bytes": 700
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/vk-seed-20261028/native-profiles/checkpoint-029/pilot.slabs.csv": {
+        "sha256": "edbb65ae5f0b87cef8b7b51ac905151f5a083a3ffa9da25463fa37cdc59c09ba",
+        "bytes": 21613
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/vk-production/vk-seed-20261028/pilot_29.chk/Info.xml": {
+        "sha256": "0204cbe1c61b8836d7f3c349dc710ceaa4ff4ba2c904a19a28615293a6054e46",
+        "bytes": 4688
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/vk-seed-20261028/native-profiles/checkpoint-032/pilot.flow.json": {
+        "sha256": "77ccd82380dacd2dfdc285e35967d7ca097da2d17ba18b4dccc9013d9ece8ae0",
+        "bytes": 699
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/vk-seed-20261028/native-profiles/checkpoint-032/pilot.slabs.csv": {
+        "sha256": "598f66bfb633109a38b8d207f43accfa04963ae720922577861c57cf39085d04",
+        "bytes": 21588
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/vk-production/vk-seed-20261028/pilot_32.chk/Info.xml": {
+        "sha256": "7ac380be0caf6f65bacb5580d70c8b4762e4bc9a653571d84ba5d2080a65c2c6",
+        "bytes": 4688
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/vk-seed-20261028/history.npz.json": {
+        "sha256": "a893a8f6b09979c57ea4725a48220205aca0881a139d5032c28a31b95ff43133",
+        "bytes": 1230
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/vk-production/vk-seed-4315228324/manifest.json": {
+        "sha256": "59137c3b12b21016dbeaaab27fe256d1d5ca7ea3821b8aa8bf1e8b7826b8d177",
+        "bytes": 3065250
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/vk-production/vk-seed-4315228324/pilot.xml": {
+        "sha256": "b2f94dd1190ac7c390d6d3058aaf15ff51f272879c04c1a475345d3a1349caa2",
+        "bytes": 868856
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/vk-production/vk-seed-4315228324/run.receipt.json": {
+        "sha256": "bb31508076349a8b678fcab9600d8c3d9a49d39b24c6fc51350171ca14ae5157",
+        "bytes": 2105
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/vk-seed-4315228324/native-profiles/receipt.json": {
+        "sha256": "512a1bf1c81cce0e665bd85d1495a6ecd236f719fcfdc181d08452d64337ce35",
+        "bytes": 28847
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/vk-seed-4315228324/native-profiles/checkpoint-026/pilot.flow.json": {
+        "sha256": "8d5e9d5f2604d9d7328be4d10696008f945e9edc495c3164a7c8d044494e64fc",
+        "bytes": 702
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/vk-seed-4315228324/native-profiles/checkpoint-026/pilot.slabs.csv": {
+        "sha256": "5445cb8c28f55a531f7ca0003ed1a6cec26ae5e22931053038dce99418290015",
+        "bytes": 21588
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/vk-production/vk-seed-4315228324/pilot_26.chk/Info.xml": {
+        "sha256": "1ba86cbbe6de369a0dd2191939529fc93ff2ad82277a06843b47734b582fa921",
+        "bytes": 4690
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/vk-seed-4315228324/native-profiles/checkpoint-029/pilot.flow.json": {
+        "sha256": "39e3a3a3b4ca44b4271e626dba4e95577bc7e8e65680c9d8afe32371b2beb0a6",
+        "bytes": 699
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/vk-seed-4315228324/native-profiles/checkpoint-029/pilot.slabs.csv": {
+        "sha256": "d2cf916cf8f5c647f3bc68066d5a6b78dd4cc0e0055f03f61666ad3093b09a26",
+        "bytes": 21608
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/vk-production/vk-seed-4315228324/pilot_29.chk/Info.xml": {
+        "sha256": "4abc136c348de3fa4b22fd198357e7e63e3407b16ad8abd26e6c03fc9cf88893",
+        "bytes": 4690
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/vk-seed-4315228324/native-profiles/checkpoint-032/pilot.flow.json": {
+        "sha256": "d665b5a9bcf3549cf008523d0075a0e8e1ade33f42b15ef60fee69afdc0fb99d",
+        "bytes": 701
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/vk-seed-4315228324/native-profiles/checkpoint-032/pilot.slabs.csv": {
+        "sha256": "a5e59948c8259ca1388adf9d5d02f766baa5449a0bb0bd36136657a6fb82815e",
+        "bytes": 21609
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/vk-production/vk-seed-4315228324/pilot_32.chk/Info.xml": {
+        "sha256": "40bb5b1ec93c1719951ca702ca47d97b47e60e75c7c49f901b9f2768f9be4717",
+        "bytes": 4690
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/vk-seed-4315228324/history.npz.json": {
+        "sha256": "98cb8baa188f5839cad4beac65926339fdb05d4c0b2ea5600eb3cefc783e1587",
+        "bytes": 1232
+      }
+    },
+    "large_inputs": {
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/cbc-seed-20261028/history.npz": {
+        "identity": {
+          "bytes": 1258713588,
+          "mtime_ns": 1793339235872021900,
+          "device": 2050,
+          "inode": 5421802
+        },
+        "declared_sha256": "9e5394c126b250e48e0f432109ca58697e08b754da7a223c4a0a53d46a0dc05c"
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/cbc-seed-4315228324/history.npz": {
+        "identity": {
+          "bytes": 1258713596,
+          "mtime_ns": 1793338795977962500,
+          "device": 2050,
+          "inode": 5420469
+        },
+        "declared_sha256": "f9aba4025e97cc1193657de4f1a1e0abb3361b1a611d37cea8d13ab9bf54ecfb"
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/vk-seed-20261028/history.npz": {
+        "identity": {
+          "bytes": 1258713580,
+          "mtime_ns": 1793386577961345600,
+          "device": 2050,
+          "inode": 5423506
+        },
+        "declared_sha256": "96cd6f83f94d62fe0014dd7d72385abeaa731286b866aa2f22a61944da5397b7"
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/vk-seed-4315228324/history.npz": {
+        "identity": {
+          "bytes": 1258713588,
+          "mtime_ns": 1793386513567498000,
+          "device": 2050,
+          "inode": 5423515
+        },
+        "declared_sha256": "7936c070f4d42ce8a9f22ebdca7224f6d088aeea3ad50bf3bfc5a38cb0c35459"
+      }
+    },
+    "large_input_hash_scope": "Driver checks file identity/size across the run. Unchanged analyzer verifies reused NPZ hashes; rebuilding validates and hashes raw history before/after cache creation. No field partitions are reread.",
+    "cases": [
+      {
+        "id": "cbc-seed-20261028",
+        "family": "cbc1971",
+        "seed": 20261028,
+        "directory": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/cbc-production/cbc-seed-20261028",
+        "manifest": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/cbc-production/cbc-seed-20261028/manifest.json",
+        "history": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/cbc-production/cbc-seed-20261028/native.his",
+        "cache": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/cbc-seed-20261028/history.npz",
+        "native": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/cbc-seed-20261028/native-profiles/receipt.json"
+      },
+      {
+        "id": "cbc-seed-4315228324",
+        "family": "cbc1971",
+        "seed": 4315228324,
+        "directory": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/cbc-production/cbc-seed-4315228324",
+        "manifest": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/cbc-production/cbc-seed-4315228324/manifest.json",
+        "history": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/cbc-production/cbc-seed-4315228324/native.his",
+        "cache": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/cbc-seed-4315228324/history.npz",
+        "native": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/cbc-seed-4315228324/native-profiles/receipt.json"
+      },
+      {
+        "id": "vk-seed-20261028",
+        "family": "von-karman",
+        "seed": 20261028,
+        "directory": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/vk-production/vk-seed-20261028",
+        "manifest": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/vk-production/vk-seed-20261028/manifest.json",
+        "history": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/vk-production/vk-seed-20261028/native.his",
+        "cache": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/vk-seed-20261028/history.npz",
+        "native": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/vk-seed-20261028/native-profiles/receipt.json"
+      },
+      {
+        "id": "vk-seed-4315228324",
+        "family": "von-karman",
+        "seed": 4315228324,
+        "directory": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/vk-production/vk-seed-4315228324",
+        "manifest": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/vk-production/vk-seed-4315228324/manifest.json",
+        "history": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/vk-production/vk-seed-4315228324/native.his",
+        "cache": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/vk-seed-4315228324/history.npz",
+        "native": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/vk-seed-4315228324/native-profiles/receipt.json"
+      }
+    ],
+    "steps": [
+      {
+        "name": "cbc-seed-20261028-analysis",
+        "status": "completed",
+        "command": [
+          "/usr/bin/python3",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/analyze_m7.py",
+          "--manifest",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/cbc-production/cbc-seed-20261028/manifest.json",
+          "--cache",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/cbc-seed-20261028/history.npz",
+          "--output",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/cbc-seed-20261028/analysis.json",
+          "--source-root",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026",
+          "--case-family",
+          "cbc1971",
+          "--case-id",
+          "cbc-seed-20261028",
+          "--start",
+          "0.8",
+          "--end",
+          "1.6",
+          "--probe-batch",
+          "256",
+          "--welch-segment-samples",
+          "512",
+          "--acf-max-lag-s",
+          "0.1",
+          "--reference-x",
+          "0",
+          "--forced-inlet-x",
+          "0",
+          "--experimental-source",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/cbc1971-source.json",
+          "--correlation-source",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/cbc1971_full_band_correlation.json"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01",
+        "command_sha256": "37ad1a00a0929c58f335ea107dc693f0c8f69474478edd9734ba5c5df28cde1a",
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/logs/01-cbc-seed-20261028-analysis.log",
+        "started_utc": "2026-10-31T01:38:25.570624+00:00",
+        "exit_code": 0,
+        "wall_seconds": 26.671025269984966,
+        "finished_utc": "2026-10-31T01:38:52.276301+00:00",
+        "log_fingerprint": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "outputs": {
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/cbc-seed-20261028/analysis.json": {
+            "sha256": "5c51a34f214eb32db07dc40e2451152eb296584fbbb3197773ac2bbe71df4b52",
+            "bytes": 1662154
+          }
+        }
+      },
+      {
+        "name": "cbc-seed-20261028-work",
+        "status": "completed",
+        "command": [
+          "/usr/bin/python3",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/collect_m7_work.py",
+          "--analysis",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/cbc-seed-20261028/analysis.json",
+          "--profiles-receipts",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/cbc-seed-20261028/native-profiles/receipt.json",
+          "--source-root",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026",
+          "--output",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/cbc-seed-20261028/work.json"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01",
+        "command_sha256": "3cfd72e559feff9a1a7534d4fba36ec9ddaf1698ad5b1161ca778cc783ddd37d",
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/logs/02-cbc-seed-20261028-work.log",
+        "started_utc": "2026-10-31T01:38:52.368917+00:00",
+        "exit_code": 0,
+        "wall_seconds": 0.135662715008948,
+        "finished_utc": "2026-10-31T01:38:52.540546+00:00",
+        "log_fingerprint": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "outputs": {
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/cbc-seed-20261028/work.json": {
+            "sha256": "2294484566de9afee1495209aabc334afc2c53ad266ffff4b23189bf61080abc",
+            "bytes": 174076
+          }
+        }
+      },
+      {
+        "name": "cbc-seed-4315228324-analysis",
+        "status": "completed",
+        "command": [
+          "/usr/bin/python3",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/analyze_m7.py",
+          "--manifest",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/cbc-production/cbc-seed-4315228324/manifest.json",
+          "--cache",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/cbc-seed-4315228324/history.npz",
+          "--output",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/cbc-seed-4315228324/analysis.json",
+          "--source-root",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026",
+          "--case-family",
+          "cbc1971",
+          "--case-id",
+          "cbc-seed-4315228324",
+          "--start",
+          "0.8",
+          "--end",
+          "1.6",
+          "--probe-batch",
+          "256",
+          "--welch-segment-samples",
+          "512",
+          "--acf-max-lag-s",
+          "0.1",
+          "--reference-x",
+          "0",
+          "--forced-inlet-x",
+          "0",
+          "--experimental-source",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/cbc1971-source.json",
+          "--correlation-source",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/cbc1971_full_band_correlation.json"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01",
+        "command_sha256": "a6017c6926bcca81dd11ded7fd5d9a7587104ed898a1cb9321a18bffa75b96b0",
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/logs/03-cbc-seed-4315228324-analysis.log",
+        "started_utc": "2026-10-31T01:38:52.620914+00:00",
+        "exit_code": 0,
+        "wall_seconds": 26.487563638977008,
+        "finished_utc": "2026-10-31T01:39:19.142312+00:00",
+        "log_fingerprint": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "outputs": {
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/cbc-seed-4315228324/analysis.json": {
+            "sha256": "e3646772f347f9eda1efd2cb0cd47f5f6053304b54b589d62107b26c5767855a",
+            "bytes": 1661527
+          }
+        }
+      },
+      {
+        "name": "cbc-seed-4315228324-work",
+        "status": "completed",
+        "command": [
+          "/usr/bin/python3",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/collect_m7_work.py",
+          "--analysis",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/cbc-seed-4315228324/analysis.json",
+          "--profiles-receipts",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/cbc-seed-4315228324/native-profiles/receipt.json",
+          "--source-root",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026",
+          "--output",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/cbc-seed-4315228324/work.json"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01",
+        "command_sha256": "0ac464835c7a992761be0c6bb536b2f853d3d34d91353a6ad1b4ed3d50537e71",
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/logs/04-cbc-seed-4315228324-work.log",
+        "started_utc": "2026-10-31T01:39:19.243899+00:00",
+        "exit_code": 0,
+        "wall_seconds": 0.14947161602322012,
+        "finished_utc": "2026-10-31T01:39:19.436365+00:00",
+        "log_fingerprint": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "outputs": {
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/cbc-seed-4315228324/work.json": {
+            "sha256": "1bbb5c5fcdc4f5b322ad53ab6df53f981bf45f175c1557c1c0a0ea02125edd18",
+            "bytes": 174271
+          }
+        }
+      },
+      {
+        "name": "vk-seed-20261028-analysis",
+        "status": "completed",
+        "command": [
+          "/usr/bin/python3",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/analyze_m7.py",
+          "--manifest",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/vk-production/vk-seed-20261028/manifest.json",
+          "--cache",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/vk-seed-20261028/history.npz",
+          "--output",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/vk-seed-20261028/analysis.json",
+          "--source-root",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026",
+          "--case-family",
+          "von-karman",
+          "--case-id",
+          "vk-seed-20261028",
+          "--start",
+          "0.8",
+          "--end",
+          "1.6",
+          "--probe-batch",
+          "256",
+          "--welch-segment-samples",
+          "512",
+          "--acf-max-lag-s",
+          "0.1",
+          "--reference-x",
+          "0",
+          "--forced-inlet-x",
+          "0",
+          "--experimental-source",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/cbc1971-source.json",
+          "--correlation-source",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/cbc1971_full_band_correlation.json"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01",
+        "command_sha256": "923bdee9f17012c074ac420bb83e9f2ed219b200c96205fd68dbef0788873a31",
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/logs/05-vk-seed-20261028-analysis.log",
+        "started_utc": "2026-10-31T01:39:19.511671+00:00",
+        "exit_code": 0,
+        "wall_seconds": 26.2181062210002,
+        "finished_utc": "2026-10-31T01:39:45.762855+00:00",
+        "log_fingerprint": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "outputs": {
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/vk-seed-20261028/analysis.json": {
+            "sha256": "4cf9f5de60cc53253792c25d014d7e05eb22137ca1484891e2797f9aafbbca8b",
+            "bytes": 1663150
+          }
+        }
+      },
+      {
+        "name": "vk-seed-20261028-work",
+        "status": "completed",
+        "command": [
+          "/usr/bin/python3",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/collect_m7_work.py",
+          "--analysis",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/vk-seed-20261028/analysis.json",
+          "--profiles-receipts",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/vk-seed-20261028/native-profiles/receipt.json",
+          "--source-root",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026",
+          "--output",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/vk-seed-20261028/work.json"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01",
+        "command_sha256": "f5ff2e59238050a74a1598c3fb09ef26d5162bbec36ec38e0ccad7d81f279808",
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/logs/06-vk-seed-20261028-work.log",
+        "started_utc": "2026-10-31T01:39:45.851024+00:00",
+        "exit_code": 0,
+        "wall_seconds": 0.1346154899802059,
+        "finished_utc": "2026-10-31T01:39:46.020356+00:00",
+        "log_fingerprint": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "outputs": {
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/vk-seed-20261028/work.json": {
+            "sha256": "98965b2b959ec4072b86d1bbca218136ac8d10f823e6d900a789d66c9f646307",
+            "bytes": 173658
+          }
+        }
+      },
+      {
+        "name": "vk-seed-4315228324-analysis",
+        "status": "completed",
+        "command": [
+          "/usr/bin/python3",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/analyze_m7.py",
+          "--manifest",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/vk-production/vk-seed-4315228324/manifest.json",
+          "--cache",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/vk-seed-4315228324/history.npz",
+          "--output",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/vk-seed-4315228324/analysis.json",
+          "--source-root",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026",
+          "--case-family",
+          "von-karman",
+          "--case-id",
+          "vk-seed-4315228324",
+          "--start",
+          "0.8",
+          "--end",
+          "1.6",
+          "--probe-batch",
+          "256",
+          "--welch-segment-samples",
+          "512",
+          "--acf-max-lag-s",
+          "0.1",
+          "--reference-x",
+          "0",
+          "--forced-inlet-x",
+          "0",
+          "--experimental-source",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/cbc1971-source.json",
+          "--correlation-source",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/cbc1971_full_band_correlation.json"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01",
+        "command_sha256": "bd162140e833cb96b3a8ed111b023ab2403843390b32ecbafba5f23993681f02",
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/logs/07-vk-seed-4315228324-analysis.log",
+        "started_utc": "2026-10-31T01:39:46.108478+00:00",
+        "exit_code": 0,
+        "wall_seconds": 26.212693795998348,
+        "finished_utc": "2026-10-31T01:40:12.365110+00:00",
+        "log_fingerprint": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "outputs": {
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/vk-seed-4315228324/analysis.json": {
+            "sha256": "fb29380a3944e792ebf4ca61871b94431ef55ce0223917bfae8ad4de207b6475",
+            "bytes": 1662737
+          }
+        }
+      },
+      {
+        "name": "vk-seed-4315228324-work",
+        "status": "completed",
+        "command": [
+          "/usr/bin/python3",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/collect_m7_work.py",
+          "--analysis",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/vk-seed-4315228324/analysis.json",
+          "--profiles-receipts",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/vk-seed-4315228324/native-profiles/receipt.json",
+          "--source-root",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026",
+          "--output",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/vk-seed-4315228324/work.json"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01",
+        "command_sha256": "f89665ec9859d0bafa1885bdf29c0150a2440fccf8a901ef97ca92189cdad24c",
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/logs/08-vk-seed-4315228324-work.log",
+        "started_utc": "2026-10-31T01:40:12.449970+00:00",
+        "exit_code": 0,
+        "wall_seconds": 0.13596946198958904,
+        "finished_utc": "2026-10-31T01:40:12.613163+00:00",
+        "log_fingerprint": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "outputs": {
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/vk-seed-4315228324/work.json": {
+            "sha256": "08faf0970f64ba46b77b7a7d8c520f9a768f599d1b31460cc8959d9cc6592732",
+            "bytes": 173878
+          }
+        }
+      },
+      {
+        "name": "figures",
+        "status": "completed",
+        "command": [
+          "/usr/bin/python3",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/plot_m7.py",
+          "--analysis",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/cbc-seed-20261028/analysis.json",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/cbc-seed-4315228324/analysis.json",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/vk-seed-20261028/analysis.json",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/vk-seed-4315228324/analysis.json",
+          "--native",
+          "cbc-seed-20261028=/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/cbc-seed-20261028/native-profiles/receipt.json",
+          "--native",
+          "cbc-seed-4315228324=/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/cbc-seed-4315228324/native-profiles/receipt.json",
+          "--native",
+          "vk-seed-20261028=/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/vk-seed-20261028/native-profiles/receipt.json",
+          "--native",
+          "vk-seed-4315228324=/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/vk-seed-4315228324/native-profiles/receipt.json",
+          "--experimental-source",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/cbc1971-source.json",
+          "--correlation-source",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/cbc1971_full_band_correlation.json",
+          "--source-root",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026",
+          "--output",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/figures"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01",
+        "command_sha256": "599e81160370fbf9b522910a68bc39990d74cdd2ae97492d49f26af1d068063c",
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/logs/09-figures.log",
+        "started_utc": "2026-10-31T01:40:12.692759+00:00",
+        "exit_code": 0,
+        "wall_seconds": 9.30153834799421,
+        "finished_utc": "2026-10-31T01:40:22.028696+00:00",
+        "log_fingerprint": {
+          "sha256": "bdc7be165d4153d2b752abe2d3d2d00746d4bbcdfbafa7cec2ba4a9ba8c9b9b6",
+          "bytes": 142
+        },
+        "outputs": {
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/figures/m7-decay.png": {
+            "sha256": "3733f9d98e533a615dd7589ff98c71a73cc921f30f1086b09151394ea5fd890f",
+            "bytes": 365088
+          },
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/figures/m7-decay.svg": {
+            "sha256": "022e32ef0240df169693c0463ef03b1ebc6b4cca84452127f4ca87650933475c",
+            "bytes": 77106
+          },
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/figures/m7-longitudinal-spectra.png": {
+            "sha256": "523a2020f7e04f54ff5e3216fc5be83e291a7d03013135d6abab12521ca8fa08",
+            "bytes": 236174
+          },
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/figures/m7-longitudinal-spectra.svg": {
+            "sha256": "86df669513683740a6a2cba8dd4d076bf4bff31b4700c7f456c3ec5c43b4f9a8",
+            "bytes": 96332
+          },
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/figures/m7-delayed-correlations.png": {
+            "sha256": "6d97f85d062fe32f7bf1643fec93f1eb7d0634c1f6d33a58b3ab7e0c5af288a5",
+            "bytes": 384023
+          },
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/figures/m7-delayed-correlations.svg": {
+            "sha256": "178a97bab0d29614e569db1d0eb746460540fcbccce26d314968f5b8faac7b82",
+            "bytes": 82478
+          },
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/figures/m7-sampling-qualification.png": {
+            "sha256": "fa4c318331a48405d9d131233ad02ba3fe11f8975a77ad65c0b05ffc9a6761e4",
+            "bytes": 648948
+          },
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/figures/m7-sampling-qualification.svg": {
+            "sha256": "5ad8c48d180227e0a6f964fc70542d706dea26c8a7abccd8a298a311240c2fee",
+            "bytes": 124341
+          },
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/figures/m7-native-work.png": {
+            "sha256": "9a090354d5d674e0b4306542323abf3fa7d46ec4ff067b1c0c7a36db33ec80c0",
+            "bytes": 348482
+          },
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/figures/m7-native-work.svg": {
+            "sha256": "6702b49fbdeb58e4d46a70d00d35a9851f8bcc0d20d4bad4c7211c02c9541a7f",
+            "bytes": 133642
+          },
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/figures/provenance.json": {
+            "sha256": "cdb12a9ce19dd0849f5ea964e58e8d227db72be616d6360e4754ec31b39c1b5a",
+            "bytes": 701173
+          }
+        }
+      }
+    ],
+    "claim_limits": "Reproduction of retained M7 evidence only; no new CFD, profiling, fitting, ensemble independence or full-band validation claim.",
+    "finished_utc": "2026-10-31T01:40:22.090549+00:00"
+  },
+  "scientific_payload_comparison": {
+    "status": "passed",
+    "method": "Exact decoded JSON scientific-payload equality; provenance/commands/timestamps excluded",
+    "cases": [
+      {
+        "case": "cbc-seed-20261028",
+        "analysis_keys_compared": [
+          "case_family",
+          "case_id",
+          "physics",
+          "synthesis",
+          "manifest_seed",
+          "window",
+          "statistics",
+          "longitudinal_spectra",
+          "temporal_autocorrelations",
+          "periodic_z_correlations",
+          "assumption_based_temporal_surrogates",
+          "Table2a_Table4_comparisons",
+          "mean_convection_delayed_pairs",
+          "published_Table5_selected_grid"
+        ],
+        "analysis_mismatched_keys": [],
+        "work_keys_compared": [
+          "case_id",
+          "case_family",
+          "manifest_seed",
+          "statistics_window",
+          "kinvis_m2_s",
+          "prescribed_mean_speed_m_s",
+          "snapshot_times_s",
+          "snapshots",
+          "slab_profiles_three_snapshot_ranges",
+          "stations",
+          "adjacent_sampled_station_decay_intervals",
+          "published_Table4_matched_station_decay_intervals",
+          "definitions",
+          "closure_tolerances",
+          "claim_limits"
+        ],
+        "work_mismatched_keys": [],
+        "failed_sampling_screens": 8,
+        "files": {
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/cbc-seed-20261028/analysis.json": "2bdd0a5f5df96e0ddc4ccb1b88e019245ff7aaa2a5588e86e6c858b58398c5fe",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/cbc-seed-20261028/analysis.json": "5c51a34f214eb32db07dc40e2451152eb296584fbbb3197773ac2bbe71df4b52",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/cbc-seed-20261028/work.json": "8a33fc5878af4d371299eacae380a90a5a6a0b917ccdfcd69d50580a2cdbd89d",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/cbc-seed-20261028/work.json": "2294484566de9afee1495209aabc334afc2c53ad266ffff4b23189bf61080abc"
+        }
+      },
+      {
+        "case": "cbc-seed-4315228324",
+        "analysis_keys_compared": [
+          "case_family",
+          "case_id",
+          "physics",
+          "synthesis",
+          "manifest_seed",
+          "window",
+          "statistics",
+          "longitudinal_spectra",
+          "temporal_autocorrelations",
+          "periodic_z_correlations",
+          "assumption_based_temporal_surrogates",
+          "Table2a_Table4_comparisons",
+          "mean_convection_delayed_pairs",
+          "published_Table5_selected_grid"
+        ],
+        "analysis_mismatched_keys": [],
+        "work_keys_compared": [
+          "case_id",
+          "case_family",
+          "manifest_seed",
+          "statistics_window",
+          "kinvis_m2_s",
+          "prescribed_mean_speed_m_s",
+          "snapshot_times_s",
+          "snapshots",
+          "slab_profiles_three_snapshot_ranges",
+          "stations",
+          "adjacent_sampled_station_decay_intervals",
+          "published_Table4_matched_station_decay_intervals",
+          "definitions",
+          "closure_tolerances",
+          "claim_limits"
+        ],
+        "work_mismatched_keys": [],
+        "failed_sampling_screens": 8,
+        "files": {
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/cbc-seed-4315228324/analysis.json": "a7cf42c1c7250d22bd0148d58660f7c3d84f20dfb382c9539df7357da98497df",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/cbc-seed-4315228324/analysis.json": "e3646772f347f9eda1efd2cb0cd47f5f6053304b54b589d62107b26c5767855a",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/cbc-seed-4315228324/work.json": "7ae3ed4a7605c47ba7d5093b2e93cd4b413bd1a107e4471d3ba8fea819a20918",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/cbc-seed-4315228324/work.json": "1bbb5c5fcdc4f5b322ad53ab6df53f981bf45f175c1557c1c0a0ea02125edd18"
+        }
+      },
+      {
+        "case": "vk-seed-20261028",
+        "analysis_keys_compared": [
+          "case_family",
+          "case_id",
+          "physics",
+          "synthesis",
+          "manifest_seed",
+          "window",
+          "statistics",
+          "longitudinal_spectra",
+          "temporal_autocorrelations",
+          "periodic_z_correlations",
+          "assumption_based_temporal_surrogates",
+          "Table2a_Table4_comparisons",
+          "mean_convection_delayed_pairs",
+          "published_Table5_selected_grid"
+        ],
+        "analysis_mismatched_keys": [],
+        "work_keys_compared": [
+          "case_id",
+          "case_family",
+          "manifest_seed",
+          "statistics_window",
+          "kinvis_m2_s",
+          "prescribed_mean_speed_m_s",
+          "snapshot_times_s",
+          "snapshots",
+          "slab_profiles_three_snapshot_ranges",
+          "stations",
+          "adjacent_sampled_station_decay_intervals",
+          "published_Table4_matched_station_decay_intervals",
+          "definitions",
+          "closure_tolerances",
+          "claim_limits"
+        ],
+        "work_mismatched_keys": [],
+        "failed_sampling_screens": 8,
+        "files": {
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/vk-seed-20261028/analysis.json": "635daa4c7ca82d6cef8a8b2f6cf833f76d40cb11250fe8013c8ab61cd7d12109",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/vk-seed-20261028/analysis.json": "4cf9f5de60cc53253792c25d014d7e05eb22137ca1484891e2797f9aafbbca8b",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/vk-seed-20261028/work.json": "0713562ead34a731039f6b05e699ca9d7d82db87679b2a4637ec2906058f1ec1",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/vk-seed-20261028/work.json": "98965b2b959ec4072b86d1bbca218136ac8d10f823e6d900a789d66c9f646307"
+        }
+      },
+      {
+        "case": "vk-seed-4315228324",
+        "analysis_keys_compared": [
+          "case_family",
+          "case_id",
+          "physics",
+          "synthesis",
+          "manifest_seed",
+          "window",
+          "statistics",
+          "longitudinal_spectra",
+          "temporal_autocorrelations",
+          "periodic_z_correlations",
+          "assumption_based_temporal_surrogates",
+          "Table2a_Table4_comparisons",
+          "mean_convection_delayed_pairs",
+          "published_Table5_selected_grid"
+        ],
+        "analysis_mismatched_keys": [],
+        "work_keys_compared": [
+          "case_id",
+          "case_family",
+          "manifest_seed",
+          "statistics_window",
+          "kinvis_m2_s",
+          "prescribed_mean_speed_m_s",
+          "snapshot_times_s",
+          "snapshots",
+          "slab_profiles_three_snapshot_ranges",
+          "stations",
+          "adjacent_sampled_station_decay_intervals",
+          "published_Table4_matched_station_decay_intervals",
+          "definitions",
+          "closure_tolerances",
+          "claim_limits"
+        ],
+        "work_mismatched_keys": [],
+        "failed_sampling_screens": 8,
+        "files": {
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/vk-seed-4315228324/analysis.json": "17e3e214009678465fa78c52a20d68ba584f477763381c040a01cad814aa6d22",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/vk-seed-4315228324/analysis.json": "fb29380a3944e792ebf4ca61871b94431ef55ce0223917bfae8ad4de207b6475",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/postprocessing-da607a9/vk-seed-4315228324/work.json": "5ab6959b3c8ff36eb5f05f0f4a0fa1a9e2954c45850f1225fb673d285a5930eb",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/vk-seed-4315228324/work.json": "08faf0970f64ba46b77b7a7d8c520f9a768f599d1b31460cc8959d9cc6592732"
+        }
+      }
+    ],
+    "created_utc": "2026-10-31T01:41:51.267997+00:00",
+    "cpu_affinity": [
+      51
+    ],
+    "figure_plotted_data_exact_match": true,
+    "figure_plotted_data_mismatched_keys": [],
+    "figure_input_provenance": {
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-7/97014ab/production-figures-da607a9/provenance.json": "fa9cbec5e125ef96ba64c6020fd1f86555eb6149666d1f7247d44bfa4cdabb50",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/figures/provenance.json": "cdb12a9ce19dd0849f5ea964e58e8d227db72be616d6360e4754ec31b39c1b5a"
+    },
+    "ten_new_figure_hashes_match_reproduction_provenance": true
+  },
+  "user_guide": {
+    "command": [
+      "taskset",
+      "-c",
+      "52",
+      "latexmk",
+      "-pdf",
+      "-interaction=nonstopmode",
+      "-halt-on-error",
+      "-outdir=/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/user-guide-full-02",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/docs/user-guide/user-guide.tex"
+    ],
+    "exit_code": 0,
+    "wall_seconds": 59.698630842991406,
+    "source_revision": "4825defc36259ff2016d840a8995dba11bbd31b2",
+    "source_chapter_sha256": "ae207a21b945c788dab9536d69558c5c0e4ebe12019a030bc36f36506e181dfe",
+    "cpu_affinity": [
+      52
+    ],
+    "log_sha256": "21125342330186d5dc1706768d3c4c59a99cd4c899cbb6ec962f0014d8c9732a",
+    "finished_utc": "2026-10-31T01:46:43.879224+00:00",
+    "pdf_exists": true,
+    "pdf_sha256": "cd57d7c99b2a0c7b431c53e0f5924ba40429d14b5a8f701a861ff3f08de950d2",
+    "HIT_PDF_pages": [
+      248,
+      249,
+      250,
+      251,
+      252,
+      253
+    ],
+    "spectrum_header_on_single_line": true,
+    "QA_images": {
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/guide-page-QA-final/hit-248.png": {
+        "sha256": "553e878c62c797b6f37074af11a80b776e1996e961873ffb2e445bb5314f0a53",
+        "bytes": 273984
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/guide-page-QA-final/hit-249.png": {
+        "sha256": "350cf5098a1d2a6c3f265a3b6c277ffa1225fbe8eb756ef943297d44e0be4daa",
+        "bytes": 300683
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/guide-page-QA-final/hit-250.png": {
+        "sha256": "e56cc8e8cf9dda91832180282eae1dd3def649856123ccce7118a4c3a5906849",
+        "bytes": 255026
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/guide-page-QA-final/hit-251.png": {
+        "sha256": "99abf01edbcba10972a5b85cc09510ea0e236ba5c5ebd9b2045a3368a4f7b482",
+        "bytes": 298502
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/guide-page-QA-final/hit-252.png": {
+        "sha256": "071a228c55c1bc2d655a32a4a7d4f26a6b7f3bc1cdc058ae6ee05f471d09e44d",
+        "bytes": 358809
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/guide-page-QA-final/hit-253.png": {
+        "sha256": "ebeffca042bdaf1792c4269b0e0afd02e09d2396b9b46ffa9857db9d4ff3102e",
+        "bytes": 258941
+      }
+    },
+    "full_PDF_pages": 337,
+    "visual_QA": "Passed all six edited pages248-253; first four final PNGs identical to reviewed images; last two re-rendered and visually inspected after header formatting correction."
+  },
+  "published_source_files": {
+    "README.md": {
+      "sha256": "f6a353df5225f3a9fd9e36954737ca324b3171a8fe60ee1406ceca4db7de9a49",
+      "bytes": 2827
+    },
+    "docs/user-guide/solvers/incompressible-ns.tex": {
+      "sha256": "ae207a21b945c788dab9536d69558c5c0e4ebe12019a030bc36f36506e181dfe",
+      "bytes": 161993
+    },
+    "solvers/IncNavierStokesSolver/Examples/README.md": {
+      "sha256": "c5548a3dee7a19efd3591b01bb9647d4ae52df5908efaf27f4140dc337e02650",
+      "bytes": 2384
+    },
+    "solvers/IncNavierStokesSolver/Examples/HITInflow3D/README.md": {
+      "sha256": "a5fc84fcd66b0ea529e9c9193397c290199184adeae818a8fe7f1ff8fae44204",
+      "bytes": 3600
+    },
+    "solvers/IncNavierStokesSolver/Examples/HITInflow3D/HITInflow3D.xml": {
+      "sha256": "01678fec32ff7109381a6a4b04667720bed932a3ca93132a23da0485bbdad5c0",
+      "bytes": 8395
+    },
+    "solvers/IncNavierStokesSolver/Examples/HITInflowQuasi3D/README.md": {
+      "sha256": "15b94e525dfaaaefc63787a67ab70429d67abc49be7726532e9bdfe789eb8be5",
+      "bytes": 4287
+    },
+    "solvers/IncNavierStokesSolver/Examples/HITInflowQuasi3D/HITInflowQuasi3D.xml": {
+      "sha256": "0714a34fc127a4bae13c46cfb2446ccf8893f60493ebdc00c5627a504cfd5056",
+      "bytes": 5849
+    },
+    "solvers/IncNavierStokesSolver/Examples/HITInflowQuasi3D/shell-spectrum.dat": {
+      "sha256": "865d81ad44ef51a83bde04bbbb2134125c0508ef918d643f7884e7895072b191",
+      "bytes": 236
+    },
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/README.md": {
+      "sha256": "4cf5ed69cd22545e04894d3e145d89437bb56e083356fbb8fc2d4f8637ac409a",
+      "bytes": 8519
+    },
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/README.md": {
+      "sha256": "699d3061c82bfef2c96a6f1b05e88fc3d5544905d1839dcb61f803590458c1a5",
+      "bytes": 17249
+    },
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/reproduce_m7.py": {
+      "sha256": "88ed504ed944d6d337dbb6e89af7f4e9426efddc2cbb105b74d9cab01d964690",
+      "bytes": 19202
+    },
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/test_reproduce_m7.py": {
+      "sha256": "1d800bde11c4f41b58326bff2640037c81982c10abc8e79a30d7fed495bd6b6c",
+      "bytes": 11789
+    },
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/prepare.py": {
+      "sha256": "6ebcf6d7c1cb34fe6d7b06deafaef8a480e2813a950a30a5703f534a9f742a99",
+      "bytes": 26119
+    },
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/test_prepare_spectrum.py": {
+      "sha256": "331d8307a89fa0d2fce00035eefbeaaf9dd32e13ec34e81a1431c80d93423428",
+      "bytes": 5913
+    },
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/README-m3.md": {
+      "sha256": "d22f6dacb4a2ae17303e67dcabe6971350b4351aeb784693c997ec2fa078b11d",
+      "bytes": 7502
+    },
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/README-m4.md": {
+      "sha256": "9ca342c683e1c31ad56510cc4987da45f3f125f65d955b8f0aab84bb5be68dfb",
+      "bytes": 6202
+    },
+    "solvers/IncNavierStokesSolver/Tests/HITInflow/README-m5.md": {
+      "sha256": "64071c8ecb94fea17a83c8ca3d8992be75fd659a00722888dd5fc026b6161e95",
+      "bytes": 5180
+    }
+  },
+  "Linux_evidence_files": {
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/receipt.json": {
+      "sha256": "616790ff044901c28bd226ddd407d5147f0d0abbcedbcaedb2bde66f2dccd782",
+      "bytes": 20589
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/checks-01/ctest-commands.json": {
+      "sha256": "172f652b7b5862d196afc34c9c321374f8f731a59734cfac6ba523e8b03d380f",
+      "bytes": 7990
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-03/receipt.json": {
+      "sha256": "0a4597103e4f5a2190913ea076336b3335f3d5ae347be6b8ada1ad05f633f211",
+      "bytes": 25033
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduced-m7-01/receipt.json": {
+      "sha256": "136f0fe3a9f26c925a121d05294c3e62743362020a1fd356b60430c9c2075b16",
+      "bytes": 47377
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/reproduction-comparison.json": {
+      "sha256": "c361ff426cfaa2d7a974f0ee5bc24ef8244f8183e85c451e9030c253d16217b6",
+      "bytes": 8710
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/user-guide-full-02/receipt.json": {
+      "sha256": "2f03e90ce7be229151394a851b4dd225245cccda6c063515cf57fe16be7a353d",
+      "bytes": 2364
+    }
+  },
+  "large_data_policy": "Raw histories, NPZ caches, native fields, temporary data, full user-guide PDF and logs remain in Linux run storage; no large raw datasets added to Git.",
+  "rebuild_cache_mode": {
+    "command_path_tested": true,
+    "raw_history_replay_executed_in_M8": false,
+    "underlying_reader_previously_used_for_all_M7_production_caches": true,
+    "default_cached_mode_fully_executed": true
+  },
+  "corrections_and_preserved_attempts": [
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-01",
+      "issue": "Checker initially required HIT identity on the legacy t=0 checkpoint; native solver completed successfully. Initial pre-setup checkpoint exception documented; evolved/final fields verified."
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-8/6f6c0f2/examples-02",
+      "issue": "Native Matrix+homogeneousDEALIASING rejected. Matrix public example corrected to spectral/hp dealiasing only, and prepare.py now rejects the invalid combination before output."
+    }
+  ],
+  "narrow_band_validation": "DEFERRED: full-band M7 results do not justify that conditional extension",
+  "remaining_scientific_limits": {
+    "full_band_physical_validation_established": false,
+    "two_percent_sampling_precision_established": false,
+    "M7_failed_sampling_station_screens": 32,
+    "M6_maximum_degree_refinement_change_percent": 4.153984442416414,
+    "upstream_only_development_reference_case_still_required_for_quantitative_validation": true
+  },
+  "statistical_interpretation": "M7 inference and 11-type interpretation scan unchanged; M8 checks deterministic reproducibility, without new inferential testing or improved physical agreement.",
+  "report": "docs/plans/hit-inflow-milestone-8.md",
+  "closure_artifact_checks": {
+    "strict_finite_JSON": true,
+    "all_five_example_fixture_hashes_match_final_XML": true,
+    "source_guide_hash_matches_compiled_PDF_receipt": true,
+    "all_six_final_page_render_hashes_verified": true,
+    "Markdown_links_and_tables_checked": true,
+    "small_file_whitespace_check": true
+  }
+}
