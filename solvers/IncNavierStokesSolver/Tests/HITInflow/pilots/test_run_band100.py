@@ -182,6 +182,108 @@ class Band100Controller(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "receipt changed"):
             runner.check_preflight(self.root, bindings, allocated)
 
+    def affinity_record(self):
+        return {"rank": 1, "pid": 42, "process_start_ticks": "123", "cpu_affinity": [1],
+                "thread_environment": {"OMP_NUM_THREADS": "1", "OPENBLAS_NUM_THREADS": "1", "MKL_NUM_THREADS": "1"}}
+
+    def test_startup_movement_within_pool_then_strict_ready_affinity(self):
+        audit = runner.AffinityAudit([0, 1], 2)
+        with patch.object(runner, "process_start_ticks", return_value="123"), \
+                patch.object(runner, "task_ids", return_value=[42, 43]), \
+                patch.object(runner, "task_start_ticks", return_value="thread-start"), \
+                patch.object(runner.os, "sched_getaffinity", side_effect=[{0}, {0}, {1}, {1}]):
+            audit.check_record(self.affinity_record())
+            self.assertEqual(audit.startup_nonassigned_observations, 2)
+            audit.observe_log("HIT_EVALUATOR rank 0 points 0 method EmptyPlane\n"
+                              "HIT_EVALUATOR rank 1 points 10 method GroupedSeparable\n")
+            audit.check_record(self.affinity_record())
+            audit.observe_log("Steps: 8 Time: .0001 CPU Time: .1s", completed=True)
+        summary = audit.snapshot()
+        self.assertEqual(summary["ready_ranks"], [0, 1])
+        self.assertEqual(summary["startup_thread_checks"], 2)
+        self.assertEqual(summary["strict_thread_checks"], 2)
+        self.assertEqual(summary["main_thread_checks"], 2)
+        self.assertEqual(summary["helper_thread_checks"], 2)
+        self.assertEqual(summary["affinity_change_witnesses"][-1]["phase"], "ready")
+        self.assertEqual(summary["affinity_change_witnesses"][-1]["observed_mask"], [1])
+        self.assertIn("Not established", summary["native_initialization_cause"])
+
+    def test_startup_pool_escape_is_immediately_rejected(self):
+        audit = runner.AffinityAudit([0, 1], 2)
+        with patch.object(runner, "process_start_ticks", return_value="123"), \
+                patch.object(runner, "task_ids", return_value=[42]), \
+                patch.object(runner, "task_start_ticks", return_value="thread-start"), \
+                patch.object(runner.os, "sched_getaffinity", return_value={2}):
+            with self.assertRaisesRegex(ValueError, "escaped CPU pool") as error:
+                audit.check_record(self.affinity_record())
+        self.assertIn("observed mask [2]", str(error.exception))
+        self.assertIn("expected mask [1]", str(error.exception))
+
+    def test_ready_main_movement_inside_pool_is_rejected(self):
+        audit = runner.AffinityAudit([0, 1], 2)
+        audit.observe_log("HIT_EVALUATOR rank 1 points 10 method GroupedTransverse")
+        with patch.object(runner, "process_start_ticks", return_value="123"), \
+                patch.object(runner, "task_ids", return_value=[42]), \
+                patch.object(runner, "task_start_ticks", return_value="thread-start"), \
+                patch.object(runner.os, "sched_getaffinity", return_value={0}):
+            with self.assertRaisesRegex(ValueError, "ready MPI affinity changed") as error:
+                audit.check_record(self.affinity_record())
+        self.assertIn("observed mask [0]", str(error.exception))
+        self.assertIn("expected mask [1]", str(error.exception))
+
+    def test_ready_helper_thread_movement_is_rejected(self):
+        audit = runner.AffinityAudit([0, 1], 2)
+        audit.observe_log("HIT_EVALUATOR rank 1 points 10 method GroupedSeparable")
+        with patch.object(runner, "process_start_ticks", return_value="123"), \
+                patch.object(runner, "task_ids", return_value=[42, 43]), \
+                patch.object(runner, "task_start_ticks", return_value="thread-start"), \
+                patch.object(runner.os, "sched_getaffinity", side_effect=[{1}, {0}]):
+            with self.assertRaisesRegex(ValueError, "TID 43"):
+                audit.check_record(self.affinity_record())
+        self.assertEqual(audit.helper_thread_checks, 1)
+
+    def test_readiness_is_required_by_first_solver_step_and_success(self):
+        audit = runner.AffinityAudit([0, 1], 2)
+        audit.observe_log("HIT_EVALUATOR rank 0 points 0 method EmptyPlane")
+        with self.assertRaisesRegex(ValueError, "first observed solver step"):
+            audit.observe_log("Steps: 8 Time: .0001 CPU Time: .1s")
+        with self.assertRaisesRegex(ValueError, "successful completion"):
+            audit.observe_log("native projection complete", completed=True)
+        audit.observe_log("HIT_EVALUATOR rank 1 points 10 method GroupedSeparable")
+        audit.observe_log("Steps: 8 Time: .0001 CPU Time: .1s")
+        audit.observe_log("native projection complete", completed=True)
+
+    def test_live_pid_reuse_is_rejected_before_reading_affinity(self):
+        audit = runner.AffinityAudit([0, 1], 2)
+        with patch.object(runner, "process_start_ticks", return_value="124"), \
+                patch.object(runner.os, "sched_getaffinity") as affinity:
+            with self.assertRaisesRegex(ValueError, "PID identity changed"):
+                audit.check_record(self.affinity_record())
+            affinity.assert_not_called()
+
+    def test_startup_change_witnesses_are_bounded(self):
+        audit = runner.AffinityAudit([0, 1], 2)
+        with patch.object(runner, "process_start_ticks", return_value="123"), \
+                patch.object(runner, "task_ids", return_value=[42]), \
+                patch.object(runner, "task_start_ticks", return_value="thread-start"), \
+                patch.object(runner.os, "sched_getaffinity", side_effect=[{i % 2} for i in range(100)]):
+            for _ in range(100):
+                audit.check_record(self.affinity_record())
+        summary = audit.snapshot()
+        self.assertEqual(len(summary["affinity_change_witnesses"]), 64)
+        self.assertGreater(summary["omitted_change_witnesses"], 0)
+        self.assertEqual(summary["thread_affinity_checks"], 100)
+
+    def test_standalone_binding_validation_remains_strict(self):
+        record = self.affinity_record()
+        (self.root / "rank-001.json").write_text(json.dumps(record))
+        with patch.object(runner, "process_start_ticks", return_value="123"), \
+                patch.object(runner, "task_ids", return_value=[42]), \
+                patch.object(runner, "task_start_ticks", return_value="thread-start"), \
+                patch.object(runner.os, "sched_getaffinity", return_value={0}):
+            with self.assertRaisesRegex(ValueError, "ready MPI affinity changed"):
+                runner.validate_bindings(self.root, [0, 1], 2, live=True)
+
 
 if __name__ == "__main__":
     unittest.main()

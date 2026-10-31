@@ -306,6 +306,10 @@ and160 solver steps. It saves exact commands, executable/library hashes, per-ran
 singleton CPU affinities and atomic running/failed/completed receipts. A failed
 job is not retried. MPI ranks have one OpenMP/BLAS thread and share the selected
 CPU pool with their bounded controller.
+The controller audits all native main/helper threads. It records temporary
+in-pool startup binding changes; after each `HIT_EVALUATOR` readiness marker it
+requires that rank's assigned singleton CPU. All ranks must be ready before
+solver steps, and any CPU-pool escape fails immediately.
 
 After a completed preflight passes its12h forecast/180GiB sampled-memory gate,
 run a separate fresh study using the same revision, binaries and allocation:

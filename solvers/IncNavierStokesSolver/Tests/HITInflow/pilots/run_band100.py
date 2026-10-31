@@ -33,6 +33,7 @@ SAMPLE_DT, DURATION, RECORD_START = .00025, .6, .2
 COUNTS, SEED = "2548,154,154", "20261028"
 FLOAT = r"[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?"
 STEP = re.compile(r"\bSteps:\s*(\d+)\s+Time:\s*(" + FLOAT + r").*?CPU Time:\s*(" + FLOAT + r")s")
+READY = re.compile(r"HIT_EVALUATOR\s+rank\s+(\d+)\s+points\s+\d+\s+method\s+(\S+)")
 BAD_LOG = re.compile(r"Exceeded maxIt|failed to converge|(?<![A-Za-z])[+-]?nan(?=$|[\s,;\]])|[:=]\s*[+-]?inf(?:inity)?(?=$|[\s,;\]])", re.I)
 
 
@@ -218,6 +219,122 @@ def process_start_ticks(pid):
     return Path(f"/proc/{pid}/stat").read_text().rsplit(")", 1)[1].split()[19]
 
 
+def task_ids(pid):
+    return sorted(int(path.name) for path in Path(f"/proc/{pid}/task").iterdir())
+
+
+def task_start_ticks(pid, tid):
+    return Path(f"/proc/{pid}/task/{tid}/stat").read_text().rsplit(")", 1)[1].split()[19]
+
+
+class AffinityAudit:
+    """Sample native initialization within the pool, then strict rank pinning.
+
+    Some native initialization temporarily changes affinity. This is permitted
+    only within the explicitly allocated pool and before the corresponding
+    rank's HIT_EVALUATOR marker. No cause is inferred from that observation.
+    """
+    def __init__(self, cpus, ranks):
+        self.cpus, self.ranks = list(cpus), ranks
+        self.ready_ranks = set()
+        self.process_checks = self.thread_checks = 0
+        self.startup_thread_checks = self.strict_thread_checks = 0
+        self.main_thread_checks = self.helper_thread_checks = 0
+        self.exited_process_observations = self.disappeared_thread_observations = 0
+        self.startup_nonassigned_observations = self.startup_mask_changes = 0
+        self.strict_checks_by_rank = [0] * ranks
+        self.witness_limit, self.last_mask_limit = 64, 512
+        self.witnesses, self.last_masks = [], {}
+        self.omitted_witnesses = 0
+
+    def observe_log(self, text, completed=False):
+        for match in READY.finditer(text):
+            rank = int(match.group(1))
+            require(0 <= rank < self.ranks, f"unexpected native readiness rank {rank}")
+            self.ready_ranks.add(rank)
+        if STEP.search(text) or completed:
+            missing = sorted(set(range(self.ranks)) - self.ready_ranks)
+            require(not missing, f"native readiness missing for ranks {missing} before " +
+                    ("successful completion" if completed else "the first observed solver step"))
+
+    def check_record(self, record):
+        rank, pid = record["rank"], record["pid"]
+        expected, pool = {self.cpus[rank]}, set(self.cpus)
+        try:
+            observed_start = process_start_ticks(pid)
+            require(observed_start == record["process_start_ticks"],
+                    f"MPI PID identity changed for rank {rank}, PID {pid}: "
+                    f"observed start {observed_start}, expected {record['process_start_ticks']}")
+            threads = task_ids(pid)
+        except (FileNotFoundError, ProcessLookupError):
+            self.exited_process_observations += 1
+            return
+        self.process_checks += 1
+        for tid in threads:
+            try:
+                first_start = task_start_ticks(pid, tid)
+                mask = set(os.sched_getaffinity(tid))
+                # An exiting/reused TID must still belong to this process and
+                # have the same start time before its mask is interpreted.
+                final_start = task_start_ticks(pid, tid)
+            except (FileNotFoundError, ProcessLookupError):
+                self.disappeared_thread_observations += 1
+                continue
+            require(first_start == final_start,
+                    f"MPI thread identity changed for rank {rank}, PID {pid}, TID {tid}")
+            self.thread_checks += 1
+            strict = rank in self.ready_ranks
+            if strict:
+                self.strict_thread_checks += 1
+                self.strict_checks_by_rank[rank] += 1
+            else:
+                self.startup_thread_checks += 1
+                self.startup_nonassigned_observations += mask != expected
+            self.main_thread_checks += tid == pid
+            self.helper_thread_checks += tid != pid
+            phase = "ready" if strict else "native_initialization"
+            key, current = (rank, tid, first_start), tuple(sorted(mask))
+            previous = self.last_masks.get(key)
+            changed = previous is not None and previous != current
+            if changed and not strict:
+                self.startup_mask_changes += 1
+            if changed or (previous is None and mask != expected):
+                witness = {"rank": rank, "pid": pid, "tid": tid, "phase": phase,
+                           "previous_mask": list(previous) if previous is not None else None,
+                           "observed_mask": list(current), "expected_mask": sorted(expected),
+                           "observed_utc": utc()}
+                if len(self.witnesses) < self.witness_limit:
+                    self.witnesses.append(witness)
+                else:
+                    self.omitted_witnesses += 1
+            if key in self.last_masks or len(self.last_masks) < self.last_mask_limit:
+                self.last_masks[key] = current
+            require(mask and mask <= pool,
+                    f"MPI affinity escaped CPU pool for rank {rank}, PID {pid}, TID {tid}, "
+                    f"phase {phase}: observed mask {sorted(mask)}, expected mask {sorted(expected)}, "
+                    f"allowed pool {self.cpus}")
+            if strict:
+                require(mask == expected,
+                        f"ready MPI affinity changed for rank {rank}, PID {pid}, TID {tid}: "
+                        f"observed mask {sorted(mask)}, expected mask {sorted(expected)}")
+
+    def snapshot(self):
+        return {"scope": "Sampled main/helper thread affinities; not a continuous scheduler audit",
+                "policy": "CPU-pool containment in every phase; exact assigned singleton after each rank's HIT_EVALUATOR marker",
+                "native_initialization_cause": "Not established; no hwloc root-cause claim",
+                "ready_ranks": sorted(self.ready_ranks), "expected_rank_count": self.ranks,
+                "process_identity_checks": self.process_checks, "thread_affinity_checks": self.thread_checks,
+                "main_thread_checks": self.main_thread_checks, "helper_thread_checks": self.helper_thread_checks,
+                "startup_thread_checks": self.startup_thread_checks, "strict_thread_checks": self.strict_thread_checks,
+                "strict_thread_checks_by_rank": self.strict_checks_by_rank,
+                "startup_nonassigned_thread_observations": self.startup_nonassigned_observations,
+                "startup_mask_changes": self.startup_mask_changes,
+                "exited_process_observations": self.exited_process_observations,
+                "disappeared_thread_observations": self.disappeared_thread_observations,
+                "affinity_change_witnesses": self.witnesses, "witness_limit": self.witness_limit,
+                "omitted_change_witnesses": self.omitted_witnesses}
+
+
 def owned_native_alive(record):
     try:
         if process_start_ticks(record["pid"]) != record["process_start_ticks"]:
@@ -261,7 +378,12 @@ def cleanup_owned_ranks(directory):
     return actions
 
 
-def validate_bindings(directory, cpus, ranks, live=False):
+def validate_bindings(directory, cpus, ranks, live=False, audit=None):
+    if live and audit is None:
+        # Standalone callers retain strict validation. Only a command's explicit
+        # readiness audit enables the bounded native-initialization phase.
+        audit = AffinityAudit(cpus, ranks)
+        audit.ready_ranks.update(range(ranks))
     records = []
     for path in sorted(directory.glob("rank-*.json")):
         value = json.loads(path.read_text())
@@ -269,10 +391,7 @@ def validate_bindings(directory, cpus, ranks, live=False):
         require(0 <= rank < ranks and value["cpu_affinity"] == [cpus[rank]], "MPI binding receipt mismatch")
         require(all(v == "1" for v in value["thread_environment"].values()), "MPI threaded library allocation is not1")
         if live:
-            try:
-                require(os.sched_getaffinity(value["pid"]) == {cpus[rank]}, "live MPI process affinity changed")
-            except ProcessLookupError:
-                pass
+            audit.check_record(value)
         records.append(value)
     if not live:
         require([v["rank"] for v in records] == list(range(ranks)), "MPI binding receipts are incomplete")
@@ -319,6 +438,7 @@ class Controller:
         self.update(current={"directory": str(directory), "command": stem, "log": str(log), "total_steps": steps})
         start, process, failure = time.monotonic(), None, None
         binding_dir = directory / f"{stem}.bindings"
+        affinity_audit = AffinityAudit(cpus, self.config["allocation"]["ranks"]) if mpi else None
         if mpi:
             binding_dir.mkdir()
         try:
@@ -332,7 +452,9 @@ class Controller:
                     result["peak_sampled_tree_rss_kib"] = max(result["peak_sampled_tree_rss_kib"], rss)
                     result["peak_sampled_tree_threads"] = max(result["peak_sampled_tree_threads"], threads)
                     if mpi:
-                        validate_bindings(binding_dir, cpus, self.config["allocation"]["ranks"], live=True)
+                        affinity_audit.observe_log(tail(log))
+                        validate_bindings(binding_dir, cpus, self.config["allocation"]["ranks"], live=True, audit=affinity_audit)
+                        result["affinity_audit"] = affinity_audit.snapshot()
                     require(time.monotonic() - start <= timeout, f"hard timeout after {timeout}s")
                     current = dict(self.progress["current"])
                     current.update(log_progress(tail(log)) or {})
@@ -345,6 +467,7 @@ class Controller:
             problem = BAD_LOG.search(text)
             require(problem is None, f"{stem} has a native failure/nonfinite marker: {problem.group(0) if problem else ''}")
             if mpi:
+                affinity_audit.observe_log(text, completed=True)
                 result["rank_bindings"] = validate_bindings(binding_dir, cpus, self.config["allocation"]["ranks"])
             if steps is not None:
                 last = log_progress(text)
@@ -372,6 +495,8 @@ class Controller:
                           exit_code=process.returncode if process is not None else None)
         finally:
             result.update(finished_utc=utc(), wall_seconds=time.monotonic()-start)
+            if mpi:
+                result["affinity_audit"] = affinity_audit.snapshot()
             if log.exists():
                 result.update(log_sha256=sha(log), log_bytes=log.stat().st_size)
             atomic_json(receipt_path, result)

@@ -59,7 +59,14 @@ run. It does not claim full-band DNS, independent probes, or experimental fideli
    continuum projected spectra and retained K/epsilon without renormalization.
    Cache/direct agreement is not a constrained boundary-projection check.
 3. **Timing smoke:** fresh mean-initial case of160 steps, with individual MPI ranks
-   pinned to distinct assigned CPUs. Record initialization/steady step cost,
+   pinned to distinct assigned CPUs for numerical work. Native initialization
+   was observed to move a main thread briefly to CPU0 and restore it. Audit all
+   main/helper thread masks against the explicit CPU pool throughout startup;
+   once a rank reports `HIT_EVALUATOR`, require its assigned singleton CPU on
+   every thread. All ranks must report readiness before solver steps. Retain
+   startup-affinity witnesses instead of misclassifying an in-pool initialization
+   probe as a permanent binding failure. CPU-pool escapes are always failures.
+   Record initialization/steady step cost,
    sampled RSS, warnings, final native finiteness, evaluator method and hashes.
    A hard timeout bounds every child job; failed jobs are retained and not retried
    unchanged. No broad-case silent direct evaluation is permitted.
