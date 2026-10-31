@@ -20,9 +20,9 @@ periodic transverse boundaries, and the nonlinear velocity-correction solver.
 | Origin skill | academic-research-suite, experiment-agent |
 | Origin mode | plan |
 | Origin date | 2026-10-28 |
-| Version label | hit_inflow_plan_v7 |
-| Verification status | Inlet/core, MPI/backends, restart and regressions VERIFIED on Linux; limited-band SVV configuration/error budget frozen; downstream physical validation pending |
-| Milestone status | Milestones 1-3 CLOSED on 2026-10-28; Milestones 4-6 CLOSED on 2026-10-29; Milestone 7 in progress; Milestone 8 pending |
+| Version label | hit_inflow_plan_v8 |
+| Verification status | Inlet/core, MPI/backends, restart and regressions VERIFIED on Linux; limited-band SVV comparisons ANALYZED; full-band physical validation and 2% precision not established |
+| Milestone status | Milestones 1-3 CLOSED on 2026-10-28; Milestones 4-6 CLOSED on 2026-10-29; Milestone 7 CLOSED as a descriptive comparison on 2026-10-31; Milestone 8 pending |
 | Source baseline | `a3b7efc8fef7e075390f0f59457dfdac30f0b6ed` |
 | Project branch | `codex/hit-inflow-generator` |
 
@@ -38,8 +38,11 @@ are also complete. [Milestone 5 focused regression coverage](hit-inflow-mileston
 is complete. [Milestone 6 pilots and error budget](hit-inflow-milestone-6.md)
 are complete, with a frozen limited-band SVV recipe. The full-distance 2%
 refinement target failed (4.154% maximum variance change); full-spectrum CBC
-fidelity and far-field sampling qualification remain unestablished. Downstream
-experimental comparison remains scheduled work.
+fidelity and far-field sampling qualification remain unestablished.
+[Milestone 7's downstream comparison](hit-inflow-milestone-7.md) is complete:
+both prescribed spectrum families decay too slowly, and all 32 case/station
+combinations fail the predeclared 2% sampling screen. This is a completed
+descriptive comparison with unresolved physical-validation requirements.
 
 ## Scope and intended behavior
 
@@ -678,18 +681,25 @@ and define the result as a limited validation rather than claiming full DNS.
 
 ### Milestone 7 Compare downstream decay with experiment
 
-**Status: IN PROGRESS.** The [M7 report](hit-inflow-milestone-7.md) and
-[predeclared protocol](hit-inflow-milestone-7-protocol.md) track the CBC and
-von Karman production pairs. The frozen M6 recipe is a limited-band SVV follow-up.
-Apply its predeclared sampling/adjustment qualification before precision claims.
-Full-band experimental comparisons must retain the inlet's excluded scales and
-unquantified far-field effects; numerical-test success is not physical fidelity.
+**Status: CLOSED — DESCRIPTIVE LIMITED-BAND COMPARISON, 2026-10-31.**
+The [M7 report](hit-inflow-milestone-7.md),
+[validation receipt](hit-inflow-milestone-7-validation.json) and
+[predeclared protocol](hit-inflow-milestone-7-protocol.md) record four completed
+1.6 s runs: CBC and upstream-only von Karman inputs, each with two disjoint
+counter streams. Five production PNG/SVG figure pairs and all station/window,
+block, spectral, correlation, scale and native molecular/SVV diagnostics are
+saved. Both families decay too slowly and retain too much delayed correlation.
+All 32 case/station sampling screens fail. Independence, full-band fidelity,
+2% precision and a bounded upstream adjustment region are not established.
+The upstream-only development/reference-plane alternative remains a prerequisite
+for quantitative physical validation; it was not executed in this milestone.
 
 Run the experimental-spectrum case first, then the von Karman alternative using
 the same upstream constraints. Sample the reference plane and downstream
 stations, compare Table 2 spectra and Table 4 quantities, and evaluate the
-full-band convection-delayed correlation. Use more than one independent seed
-or demonstrate convergence with independent statistical blocks.
+full-band convection-delayed correlation. A precision-qualified interpretation
+requires independent realizations or convergence with independent statistical
+blocks. The completed two-stream study does not establish that qualification.
 
 Report discrepancies with numerical and sampling uncertainty. The experiment's
 residual anisotropy, finite frequency response, inferred integral scales, and
@@ -704,6 +714,8 @@ and remaining discrepancies are saved reproducibly. An unfavorable comparison
 is a result to explain, not a reason to prescribe the desired decay.
 
 ### Milestone 8 Deliver documentation and reproducible examples
+
+**Status: PENDING.**
 
 Provide a small runnable example for each supported expansion, configuration
 reference, source data preparation, analysis commands, and a report containing

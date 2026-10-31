@@ -1,7 +1,10 @@
 # HIT inflow Milestone 7 comparison protocol
 
-Status: IN PROGRESS. This protocol records the execution and analysis choices
-before examining the new production runs against downstream experimental values.
+Status: COMPLETED, 2026-10-31. The [M7 report](hit-inflow-milestone-7.md) and
+[validation receipt](hit-inflow-milestone-7-validation.json) close the prescribed
+work as a descriptive limited-band comparison; full-band validation and 2%
+precision are not established. The choices below remain the predeclared record,
+written before examining the new production runs against downstream values.
 It continues the [implementation plan](hit-inflow-implementation-plan.md) and
 retains the [M6 qualification rules](hit-inflow-milestone-6-qualification.md).
 
