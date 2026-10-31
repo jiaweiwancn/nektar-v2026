@@ -65,3 +65,15 @@ using `ccmake`. To install the compiled libraries, solvers and header files, on
 UNIX-based systems run:
 
     make install
+
+HIT inflow extension
+--------------------
+This branch implements three-component homogeneous isotropic turbulence inflow
+for full 3D and Homogeneous1D velocity-correction calculations. Start with the
+[HIT guide and test/data index](solvers/IncNavierStokesSolver/Tests/HITInflow/README.md),
+the [full 3D example](solvers/IncNavierStokesSolver/Examples/HITInflow3D/README.md),
+or the [Quasi-3D example](solvers/IncNavierStokesSolver/Examples/HITInflowQuasi3D/README.md).
+The [comparison tools](solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/README.md)
+regenerate the retained experimental comparison. Its
+[report](docs/plans/hit-inflow-milestone-7.md) documents a limited-band SVV result;
+full-band physical validation and 2% precision are not established.

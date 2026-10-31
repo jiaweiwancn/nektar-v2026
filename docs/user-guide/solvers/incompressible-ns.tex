@@ -1447,7 +1447,7 @@ For \inltt{TYPE="Tabulated"}, specify all tail/interpolation policies:
 \inltt{FILE} is relative to the solver's working directory. Rank zero reads
 and hashes its actual bytes, including comments and line endings, and
 broadcasts them. Its first nonblank line must equal
-\begin{lstlisting}
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize,columns=fullflexible,breaklines=false,numbers=none]
 # NEKTAR_HIT_SPECTRUM_V1 KIND=Shell3D K_UNITS=rad/m E_UNITS=m3/s2
 \end{lstlisting}
 Provide at least two rows of exactly two decimal numbers: strictly increasing
