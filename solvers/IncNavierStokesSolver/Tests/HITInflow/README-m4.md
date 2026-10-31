@@ -61,7 +61,7 @@ mpirun -np 4 IncNavierStokesSolver --npz 2 m4-h1d-von-karman.xml < /dev/null > h
 Run these commands in separate output directories if preserving field files or
 partition XML is necessary: repeated runs with the same session stem otherwise
 reuse output names. Check the actual worker allocation before concurrent runs;
-the repository's combined Linux limit is 72 workers.
+the repository's combined Linux limit is 64 workers.
 
 For a restart comparison, run the uninterrupted baseline and the segment, then
 the restart from the same directory. The segment uses legacy

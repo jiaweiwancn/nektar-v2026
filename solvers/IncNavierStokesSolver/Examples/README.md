@@ -1,6 +1,6 @@
 Examples
 ========
-This folder has brief examples for using the IncNavierStokesSolver for 2D and 3D flow cases. The examples are soft linked from the `solvers/IncNavierStokesSolver/Tests` folder, and should not be modified here in order to keep the testing pipeline working.
+This folder has brief examples for using the IncNavierStokesSolver for 2D and 3D flow cases. The existing laminar examples link to regression inputs and should be copied before editing. The standalone HIT examples below include their own complete sessions.
 
 Laminar Channel Flow 2D
 ----------
@@ -29,3 +29,12 @@ Solving the 2D Kovasznay flow at Reynolds number Re=40. Folder: `KovasznayFlow2D
 2D Transient Growth Analysis of a flow past a Backward-Facing Step
 --------------
 Perform a transient growth stability analysis. This will help in understanding the effects of separation caused by abrupt changes in geometry for a flow past a Backward-Facing Step at Re = 500. Folder: `BackwardFacingStep_TG`.
+
+Homogeneous isotropic turbulence inflow
+---------
+The complete [HITInflow3D](HITInflow3D/README.md) example uses a full 3D mesh and
+a von Karman spectrum. [HITInflowQuasi3D](HITInflowQuasi3D/README.md) uses
+Homogeneous1D with matrix/FFTW transforms and a tabulated toy shell spectrum.
+Both include bounded execution commands, pressure/periodic boundary settings
+and probe output. These small demonstrations are separate from the qualified
+[experimental comparison report](../../../docs/plans/hit-inflow-milestone-7.md).

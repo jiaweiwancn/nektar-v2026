@@ -126,7 +126,7 @@ python3 "$hit_fixture_dir/check_m3_cases.py" --json temporal-result.json tempora
 ```
 
 Record the tested source revision, build command, solver commands, MPI ranks,
-thread settings, and any concurrent work against the 72-worker server cap.
+thread settings, and any concurrent work against the 64-worker server cap.
 For tabulated input, launch from the generated input directory so the relative
 spectrum path resolves there. The scripts leave the original Milestone 1 data
 and manifest unchanged.

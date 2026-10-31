@@ -64,10 +64,11 @@ session options before their trailing field-file arguments.
 For the authoritative Linux environment, activate the installed environment and
 set `OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1`. Use `ctest -N` to inspect named
 registrations. Run with explicit bounded concurrency; an eight-rank test must
-be included in the combined 72-worker limit. The M5 validation exports the
+be included in the combined 64-worker limit. The M5 validation exports the
 registered Tester commands to separate working directories below the Linux run
 root, preserving their arguments while keeping generated fields/logs outside
 the checkout and home build tree. The closure report/receipt record that exact
 runner and the selected legacy inflow, outflow, Homogeneous1D, transform and
 moving-frame tests. These regressions establish numerical behavior on small
-inputs; production HIT decay remains in later milestones.
+inputs. The completed limited-band production comparison and its limitations
+are recorded in [Milestone 7](../../../../docs/plans/hit-inflow-milestone-7.md).
