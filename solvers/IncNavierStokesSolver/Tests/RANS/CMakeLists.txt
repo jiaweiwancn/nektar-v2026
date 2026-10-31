@@ -11,14 +11,17 @@ include_directories(${RANS_SOURCE_ROOT}/library)
 include_directories(SYSTEM ${NEKTAR++_INCLUDE_DIRS} ${NEKTAR++_TP_INCLUDE_DIRS})
 add_library(RANSKernels STATIC
     ${RANS_SOURCE_ROOT}/library/SolverUtils/Turbulence/RANSModels.cpp
-    ${RANS_SOURCE_ROOT}/library/SolverUtils/Turbulence/AnalyticalWallFunction.cpp)
+    ${RANS_SOURCE_ROOT}/library/SolverUtils/Turbulence/AnalyticalWallFunction.cpp
+    ${RANS_SOURCE_ROOT}/library/SolverUtils/Turbulence/RANSWallGeometry.cpp)
 target_compile_definitions(RANSKernels PRIVATE SOLVER_UTILS_EXPORTS)
 add_executable(RANSWallLayerProbe
     ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSWallLayerProbe.cpp)
 add_executable(RANSKernelProbe
     ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSKernelProbe.cpp)
+add_executable(RANSWallGeometryProbe
+    ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSWallGeometryProbe.cpp)
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    foreach(rans_target RANSKernels RANSWallLayerProbe RANSKernelProbe)
+    foreach(rans_target RANSKernels RANSWallLayerProbe RANSKernelProbe RANSWallGeometryProbe)
         target_compile_options(${rans_target} PRIVATE
             -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror)
     endforeach()
@@ -26,6 +29,7 @@ endif()
 target_link_libraries(RANSWallLayerProbe
     RANSKernels ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
 target_link_libraries(RANSKernelProbe RANSKernels)
+target_link_libraries(RANSWallGeometryProbe RANSKernels)
 option(RANS_BUILD_SOLVER "Build the complete incompressible solver in isolation" OFF)
 if(RANS_BUILD_SOLVER)
     set(RANS_SOLVER_ROOT ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver)
@@ -93,4 +97,8 @@ set_tests_properties(RANSWallLayerPrototype PROPERTIES
 add_test(NAME RANSKernelUnitTests COMMAND RANSKernelProbe
     --output ${CMAKE_CURRENT_BINARY_DIR}/rans-kernels.json)
 set_tests_properties(RANSKernelUnitTests PROPERTIES
+    PROCESSORS 1 TIMEOUT 120 ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
+add_test(NAME RANSWallGeometryUnitTests COMMAND RANSWallGeometryProbe
+    ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-geometry.json)
+set_tests_properties(RANSWallGeometryUnitTests PROPERTIES
     PROCESSORS 1 TIMEOUT 120 ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")

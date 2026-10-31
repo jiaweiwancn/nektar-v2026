@@ -8,6 +8,7 @@ SET(SOLVER_UTILS_SOURCES
   Turbulence/HITPlaneEvaluator.cpp
   Turbulence/RANSModels.cpp
   Turbulence/AnalyticalWallFunction.cpp
+  Turbulence/RANSWallGeometry.cpp
   AdvectionSystem.cpp
   ALEHelper.cpp
   Advection/Advection.cpp
@@ -74,6 +75,7 @@ SET(SOLVER_UTILS_HEADERS
   Turbulence/RANSWallStrip.h
   Turbulence/RANSModels.h
   Turbulence/AnalyticalWallFunction.h
+  Turbulence/RANSWallGeometry.h
   AdvectionSystem.h
   ALEHelper.h
   Advection/Advection.h

@@ -5,7 +5,7 @@
 - Origin Skill: academic-research-suite / experiment-agent
 - Origin Mode: implementation plan and deterministic validation
 - Origin Date: 2026-10-31
-- Verification Status: UNVERIFIED (plan; results appended as milestones close)
+- Verification Status: WG1 VERIFIED; WG2--WG4 in progress
 - Version Label: hill_wall_geometry_v1
 
 ## Objective and scope
@@ -77,7 +77,7 @@ All new physics/configuration must enter restart compatibility checks.
 
 | Milestone | Deliverable | Required evidence | Status |
 |---|---|---|---|
-| WG1 | Geometry, metric/source integration and spatial-ramp primitives | Linux kernel tests: closest points/normals, rotations, curvature/Jacobian, invalid geometry, endpoint/derivative limits and independent quadrature; existing kernel tests pass | PLANNED |
+| WG1 | Geometry, metric/source integration and spatial-ramp primitives | Linux kernel tests: closest points/normals, rotations, curvature/Jacobian, invalid geometry, endpoint/derivative limits and independent quadrature; existing kernel tests pass | CLOSED |
 | WG2 | Terrain solver adapter, CLS distance and compatible standard log wall | Actual Linux solves: flat reduction, inclined-plane covariance, curved-wall refinement/normal constraint, source/interface budgets and both closure/wall families; positivity and coupled residual checks | PLANNED |
 | WG3 | Spatial transition/property integration and reproducible workflows | Prescribed-mask receipts; inactive-correction/original recovery; spatially varying properties; 1/2/4-rank agreement including remote samples; history restart and mismatch rejection; empty-floor transition controls | PLANNED |
 | WG4 | Hill-enabling pilot, regression and delivery | Paper-shaped terrain pilot for standard log wall and original/corrected AWF with both closures; four upstream ramp lengths with paired flat controls; relevant legacy regression; documented errors, limits and reproducible commands | PLANNED |
@@ -114,3 +114,42 @@ and detailed logs on the Linux large volume. Keep only small reproducible case
 generators, regression fixtures and compact evidence in Git. Final delivery
 includes public preparation commands, configuration/restart documentation and a
 report separating numerical verification from experimental validation.
+
+## WG1 closure (2026-10-31)
+
+Implemented physical plane/compact-hill geometry, whole-hill closest-point
+search, signed wall distance, orthonormal frames, normal-ray/curvature guards,
+exact metric volume/interface measures, metric-weighted AWF source integration
+and a bounded C2 spatial mask. Zero mask recovers all original wall outputs,
+including when corrected-reference high-Re checks would otherwise reject.
+
+Linux: three CTests pass, including the two existing kernel/strip tests.
+The geometry probe performs 3,759 checks and five invalid-input rejections.
+Independent SciPy quadrature checks 54 smooth/rough, standard/CLS,
+negative/zero/positive-curvature and partially/fully corrected combinations;
+maximum relative source/shear integration error is 5.76e-16.
+Compact receipt: `hill-wall-geometry-evidence/wg1.json`.
+
+Tested source is plan commit `0fb850f` plus the WG1 changes. Geometry .cpp SHA256:
+`c081dd17008e475394ab9bd010f6b94b26c513b523e211f739861706095de67c`;
+probe .cpp SHA256:
+`9576db509a3f16e264cf89309d7f1f11fa5e3c7fa0bc8bc4529f0bf756414dbd`.
+Full evidence is in the Linux run root's `wg1` directory. Configure/build/test:
+
+```bash
+source /home/jay/.local/opt/nektar-v2026-mpi/env.sh
+export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 BLIS_NUM_THREADS=1
+RANS_RUN=/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition
+export TMPDIR="$RANS_RUN/tmp"
+cmake -S "$RANS_RUN/source/solvers/IncNavierStokesSolver/Tests/RANS" \
+  -B "$RANS_RUN/build" -DCMAKE_BUILD_TYPE=Release -DRANS_BUILD_SOLVER=OFF \
+  -DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake
+cmake --build "$RANS_RUN/build" --parallel 8
+ctest --test-dir "$RANS_RUN/build" --output-on-failure -j 1
+python3 "$RANS_RUN/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_wall_geometry.py" \
+  --probe "$RANS_RUN/build/RANSWallGeometryProbe" --output "$RANS_RUN/wg1/quadrature"
+```
+
+Retained development attempts: two CMake discovery failures before using the
+documented package directory, and one C++ mixed-auto-declaration compile error,
+corrected before the successful run. These supplied no numerical results.
