@@ -1280,32 +1280,41 @@ of the form
 \subsubsection{Homogeneous isotropic turbulence inlet}
 \label{sec:hit-inflow}
 
-The \inltt{HITInflow} condition prescribes all three components of a frozen
+The \inltt{HITInflow} condition prescribes a frozen, three-component
 homogeneous isotropic turbulence realization convected by a constant positive
-x velocity. Fourier coefficients use the transverse Batchelor tensor with
-either a von Karman shell energy spectrum or a tabulated three-dimensional
-shell spectrum. Every continuous Fourier mode is divergence-free. Projection
-onto the boundary expansion introduces spatial approximation error, so mesh
-and timestep convergence and the resulting solver divergence must still be
-checked.
+x velocity. It uses the transverse Batchelor tensor with a von Karman or
+tabulated three-dimensional shell spectrum $E(k)$, where
+$\int_0^\infty E(k)\,dk=\langle u_i'u_i'\rangle/2$.
+Each continuous Fourier mode is divergence-free. Boundary projection and the
+solver introduce discretization error; analytical solenoidality does not imply
+machine-precision pointwise divergence in the evolved solution.
 
-The inlet supports full three-dimensional continuous expansions and
-multiple-mode \inltt{Homogeneous1D} Fourier expansions, with
-\inltt{VelocityCorrectionScheme}, \inltt{UnsteadyNavierStokes},
-nonlinear advection, \inltt{Standard} extrapolation and fixed-step, order-two
-\inltt{IMEX} with an empty variant. The variables must be \inltt{u,v,w,p} in
-that order. Single/half modes, Homogeneous2D, homogeneous strips, other
-integrators, moving frames and flow-rate control are rejected.
-Ordinary \inltt{Body} forcing is permitted,
-including for manufactured solutions.
+Use \inltt{SolverType=VelocityCorrectionScheme},
+\inltt{EQTYPE=UnsteadyNavierStokes} and exactly the ordered variables
+\inltt{u,v,w,p}. The supported choices are \inltt{Projection=Continuous},
+\inltt{EvolutionOperator=Nonlinear}, \inltt{Extrapolation=Standard} and
+\inltt{Driver=Standard}; these four values are also the defaults when omitted.
+Specify the time integrator explicitly:
+\begin{lstlisting}[style=XMLStyle]
+<TIMEINTEGRATIONSCHEME>
+    <METHOD>IMEX</METHOD>
+    <ORDER>2</ORDER>
+</TIMEINTEGRATIONSCHEME>
+\end{lstlisting}
+The variant must be empty and no free integration parameters are accepted.
+Set a positive \inltt{TimeStep} and positive integral \inltt{NumSteps}.
+Adaptive stepping and flow-rate controllers are unsupported: \inltt{FinTime},
+\inltt{CFL}, \inltt{CFLEnd}, \inltt{IO\_CheckTime} and \inltt{Flowrate} must
+be zero, and \inltt{CFLGrowth} and \inltt{TimeIncrementFactor} must be one
+(these are the checks' defaults for absent parameters). Moving geometry,
+ALE/mappings, moving frames, parallel-in-time integration and forcing other
+than ordinary \inltt{Body} momentum forcing are rejected.
 
-Use a rectangular domain with one boundary region on each side. The inlet is
-the x-minimum plane with outward normal $(-1,0,0)$; the x-maximum side is an
-open outlet. Both y faces and both z faces must form reciprocal periodic pairs
-for all four variables, with periods matching \inltt{LY} and \inltt{LZ}.
-The synthetic streamwise period \inltt{LX} need not equal the open domain's
-streamwise length. For example, on inlet region 7:
-
+Full 3D uses a rectangular box with one boundary region on each of its six
+sides. The HIT inlet is the x-minimum plane, with outward normal $(-1,0,0)$;
+the x-maximum plane is an open outlet. Both y faces and both z faces must form
+reciprocal, nonrotated periodic pairs for all four variables, with widths
+equal to the synthesis \inltt{LY} and \inltt{LZ}. For inlet region 7:
 \begin{lstlisting}[style=XMLStyle]
 <REGION REF="7">
     <D VAR="u" USERDEFINEDTYPE="HITInflow" VALUE="Ubar" />
@@ -1314,34 +1323,50 @@ streamwise length. For example, on inlet region 7:
     <N VAR="p" USERDEFINEDTYPE="H" VALUE="0" />
 </REGION>
 \end{lstlisting}
+\inltt{Ubar} is a positive constant session parameter in m/s. The three
+velocity expressions must be constant: u defines the convection/mean speed,
+and v and w must be zero. The generator replaces their trace with mean plus
+fluctuations. Pressure must use \inltt{N/H} with zero \inltt{VALUE}; this
+zero is a placeholder for the computed high-order condition, which consumes
+the prescribed normal-velocity history. The outlet accepts Neumann velocity
+and Dirichlet pressure; the standard \inltt{HOutflow} implementation, including
+its documented Robin form, is supported. Walls and symmetry sides are not
+supported lateral conditions for this version.
 
-For Homogeneous1D, use a rectangular xy mesh with four boundary regions,
-periodic y conditions for all four variables, and Fourier periodicity in z:
+For quasi-3D, use a rectangular 2D xy mesh with four side regions, periodic y
+conditions for all variables and implicit Fourier periodicity in z:
 \begin{lstlisting}[style=XMLStyle]
 <I PROPERTY="HOMOGENEOUS" VALUE="1D" />
 <I PROPERTY="USEFFT" VALUE="FFTW" />
 \end{lstlisting}
-\inltt{USEFFT} is optional; omit it for matrix transforms. FFTW requires
-\inltt{NEKTAR\_USE\_FFTW=ON}. Set a positive \inltt{LZ} parameter equal to
-the synthesis \inltt{LZ}, and even \inltt{HomModesZ} of at least four. The
-cutoff must also lie below $\pi\,\mathtt{HomModesZ}/L_Z$. The synthesis
-\inltt{NZ} defines the random lattice independently of \inltt{HomModesZ},
-which may be increased to refine the solver's representation of the same
-retained modes. MPI homogeneous
-partitioning uses \inltt{--npz}; the Fourier plane count divided by
-\inltt{npz} must be even. The inlet fills all physical planes using their
-global coordinates, then applies the existing constrained transform once.
+Omit \inltt{USEFFT}, or set it to \inltt{Matrix}, for matrix transforms.
 
-Here \inltt{Ubar} is a positive constant session parameter. The three velocity
-expressions must be constant; the inlet overwrites the trace with mean plus
-fluctuations. The pressure \inltt{H} condition consumes the prescribed
-normal-velocity history. Its XML zero is a placeholder for the computed
-high-order condition. The standard \inltt{HOutflow} velocity-Neumann and
-pressure-Dirichlet conditions can be used at the outlet.
+\inltt{FFTW} requires \inltt{NEKTAR\_USE\_FFTW=ON}. Both paths support the
+inlet. Use a full multiple-mode Fourier basis, even \inltt{HomModesZ} of at
+least four and matching physical planes; single/half modes, Homogeneous2D and
+\inltt{HomoStrip} are rejected. The positive session parameter \inltt{LZ}
+must equal the synthesis \inltt{LZ}. MPI partitioning uses \inltt{--npz};
+\inltt{HomModesZ} must be divisible by \inltt{npz} and the quotient must be
+even; \inltt{npz} must divide the total MPI rank count. This decomposition may
+change without changing the realization.
 
-Add a case-sensitive \inltt{HITINFLOW} block directly below \inltt{NEKTAR},
-alongside \inltt{CONDITIONS}. This example specifies SI units:
+Nonlinear dealiasing is configured separately from the inlet:
+\begin{lstlisting}[style=XMLStyle]
+<I PROPERTY="SPECTRALHPDEALIASING" VALUE="True" />
+<I PROPERTY="DEALIASING" VALUE="True" />
+\end{lstlisting}
+The first switch applies to spectral/hp products; the second applies to the
+homogeneous Fourier direction and is used only for quasi-3D. The core solver
+requires \inltt{USEFFT=FFTW} for \inltt{DEALIASING=True}. Matrix transforms
+support \inltt{SPECTRALHPDEALIASING=True} with \inltt{DEALIASING=False}.
+Both switches default to false and are not required by the HIT parser. Enable
+and assess the appropriate switches for nonlinear turbulence; neither
+dealiasing nor the inlet cutoff replaces resolution/timestep checks on the
+downstream cascade.
 
+Add exactly one case-sensitive \inltt{HITINFLOW} block directly below
+\inltt{NEKTAR}, alongside \inltt{CONDITIONS}. It contains exactly one
+\inltt{REGION}, whose \inltt{REF} matches the sole HIT boundary region:
 \begin{lstlisting}[style=XMLStyle]
 <HITINFLOW VERSION="1" UNITS="SI">
     <REGION REF="7">
@@ -1355,78 +1380,139 @@ alongside \inltt{CONDITIONS}. This example specifies SI units:
     </REGION>
 </HITINFLOW>
 \end{lstlisting}
+Every attribute shown is required for that spectrum/normalization choice;
+there are no omitted-attribute defaults inside \inltt{HITINFLOW}.
+Unknown, duplicate, empty or inapplicable attributes/children are rejected.
+Numeric attributes accept finite constant expressions and session parameters,
+with case-sensitive parameter spelling, but not x/y/z/t or random functions.
+\inltt{SEED} instead requires literal unsigned decimal digits.
 
-The positive periods define the synthesis lattice; all three counts must be
-even and at least four. Zero and Nyquist modes are excluded. \inltt{KMAX} is
-in radians per metre and must lie strictly below every synthesis Nyquist
-wavenumber. A cosine energy taper starts at \inltt{TAPERSTART}. Also require
-$U_{\rm bar}\,\mathtt{KMAX}\,\Delta t<\pi$.
-\inltt{TargetRMS} fixes the expected total fluctuating kinetic energy to
-$3\,\mathtt{RMS}^2/2$, allowing each random realization's energy to fluctuate.
-A finite synthesis lattice can depart from exact isotropy.
-\inltt{RMS="0"} gives the exact mean-only limit.
-Alternatively, use \inltt{NORMALIZATION="Preserve" AMPLITUDE="..."} with
-the von Karman spectrum to preserve its specified amplitude.
+\begin{center}
+\begin{tabularx}{0.99\textwidth}{lX}
+\toprule
+\textbf{Element / attributes} & \textbf{Meaning and validation} \\
+\midrule
+\inltt{VERSION, UNITS} & Exactly \inltt{1, SI}; no automatic unit conversion. \\
+\inltt{REGION: REF} & Existing global boundary-region ID in $0,\ldots,\mathtt{INT\_MAX}$. \\
+\inltt{ORIGIN: X, Y, Z} & Phase origin in m. X must equal the upstream mesh boundary; Y/Z are finite phase offsets. \\
+\inltt{SYNTHESIS: LX, LY, LZ} & Finite positive periods in m. LY/LZ match the transverse domain; LX is independent of the open domain length. \\
+\inltt{NX, NY, NZ} & Even synthesis counts, at least four. They define the random lattice, not the spectral/hp mesh or \inltt{HomModesZ}. \\
+\inltt{SEED} & Integer from $0$ to $2^{64}-1$; no expression or sign. \\
+\inltt{TIMEORIGIN} & Finite phase epoch in s; velocity phases use the actual solver time minus this value. \\
+\inltt{RECORDDURATION} & Positive duration in s defining the valid interval from \inltt{TIMEORIGIN} to its sum with this duration. \\
+\inltt{REPEAT} & Exactly \inltt{Error} or \inltt{Allow}; the latter permits periodic reuse, not evaluation outside the declared interval. \\
+\inltt{CUTOFF: KMAX, TAPERSTART} & Angular wavenumbers in rad/m, with $0\leq k_{\mathrm{taper}}<k_{\max}$. \\
+\bottomrule
+\end{tabularx}
+\end{center}
 
-For measured shell spectra, replace the spectrum element by:
+Modes with $k\geq k_{\max}$, the zero wavevector and the synthesis Nyquist
+planes are excluded. Individual wavevector components may be zero. Between
+$k_{\mathrm{taper}}$ and $k_{\max}$, the energy is multiplied by
+\[
+ W(k)=\cos^2\!\left[\frac{\pi}{2}
+             \frac{k-k_{\mathrm{taper}}}{k_{\max}-k_{\mathrm{taper}}}\right];
+\]
+below the taper it is unchanged. Require the strict synthesis bounds
+$k_{\max}<\pi N_d/L_d$ for each direction, and
+$\overline{U}k_{\max}\Delta t<\pi$ for the timestep. Quasi-3D additionally
+requires $k_{\max}<\pi\,\mathtt{HomModesZ}/L_Z$. Synthesis counts and solver
+resolution can therefore be refined separately while retaining the same
+represented random modes. Arithmetic/counter overflow and unrepresentable
+spectral or normalization values are rejected.
+
+For \inltt{TYPE="VonKarman"}, \inltt{LENGTH} is a positive shape parameter
+$L$ in m, not the longitudinal integral scale. The implemented shell spectrum is
+\[
+ E(k)=A L^{5/3}\frac{(Lk)^4}{[1+(Lk)^2]^{17/6}}.
+\]
+With \inltt{NORMALIZATION="Preserve"}, also supply nonnegative
+\inltt{AMPLITUDE} $A$ in $\mathrm{m}^{4/3}\mathrm{s}^{-2}$ and omit
+\inltt{RMS}. Zero amplitude gives mean-only flow. With
+\inltt{NORMALIZATION="TargetRMS"}, supply nonnegative \inltt{RMS} in m/s
+and omit \inltt{AMPLITUDE}; \inltt{LENGTH} is still required. This rescales
+the retained finite-lattice expected kinetic energy to $3\,\mathtt{RMS}^2/2$,
+not each realization or each component separately. A positive target requires
+represented spectral energy; \inltt{RMS="0"} gives the exact mean-only limit.
+Finite-lattice component variances can depart from isotropy. At positive
+amplitude, the uncut von Karman tail has divergent molecular dissipation; a finite cutoff
+does not reconstruct an experimental dissipation range.
+
+For \inltt{TYPE="Tabulated"}, specify all tail/interpolation policies:
 \begin{lstlisting}[style=XMLStyle]
 <SPECTRUM TYPE="Tabulated" FILE="shell-spectrum.dat"
-          INTERPOLATION="Linear" LOW="K4" HIGH="Gaussian"
+          INTERPOLATION="LogLinear" LOW="K4" HIGH="Gaussian"
           NORMALIZATION="Preserve" />
 \end{lstlisting}
-The file is relative to the solver's working directory. Its first nonblank
-line must be
+\inltt{FILE} is relative to the solver's working directory. Rank zero reads
+and hashes its actual bytes, including comments and line endings, and
+broadcasts them. Its first nonblank line must equal
 \begin{lstlisting}
 # NEKTAR_HIT_SPECTRUM_V1 KIND=Shell3D K_UNITS=rad/m E_UNITS=m3/s2
 \end{lstlisting}
-Subsequent rows contain strictly increasing positive wavenumbers and
-nonnegative energies. A one-dimensional measured spectrum must be converted
-to a shell spectrum before using this input. \inltt{LogLinear} interpolation,
-\inltt{LOW="Zero"} and \inltt{HIGH="Zero"} are also available. Tabulated
-\inltt{TargetRMS} requires \inltt{RMS}, while \inltt{Preserve} accepts neither
-\inltt{RMS} nor \inltt{AMPLITUDE}.
+Provide at least two rows of exactly two decimal numbers: strictly increasing
+positive $k$ in rad/m and nonnegative $E$ in m$^3$/s$^2$; subsequent blank and
+comment lines are allowed. These are shell energies, not a one-dimensional
+longitudinal spectrum. \inltt{INTERPOLATION="Linear"} interpolates E against
+k; \inltt{LogLinear} interpolates log(E) against log(k) and requires every E
+to be positive. \inltt{LOW="Zero"} sets E to zero below the first row;
+\inltt{K4} continues it as $E_1(k/k_1)^4$. \inltt{HIGH="Zero"} truncates
+above the final row; \inltt{Gaussian} fits
+$E_n\exp[-\beta(k^2-k_n^2)]$ through the last two rows and requires a
+strictly decreasing positive final pair. Extensions are applied before the
+common cutoff/taper. \inltt{Preserve} accepts neither \inltt{RMS} nor
+\inltt{AMPLITUDE}. \inltt{TargetRMS} requires \inltt{RMS} and forbids
+\inltt{AMPLITUDE}, with the same finite-lattice normalization as above.
 
-\inltt{SEED} is an unsigned decimal 64-bit integer. The seed, resolved
-synthesis settings and actual solver time determine the realization, so
-repeated boundary evaluations do not advance random state.
-Different seeds alone do not establish independent realizations. Version 1
-mixes the counter $\mathrm{SEED}+6m+q$ modulo $2^{64}$, where $m$ is the lattice
-mode ID and $q=0,\ldots,5$, so adjacent seeds reuse counter inputs. For ensemble
-studies, select and record disjoint enclosing input-counter ranges
-$[s,s+6N_XN_YN_Z-1]$ for the synthesis lattice, accounting for possible modulo
-wrap. This avoids direct counter reuse without proving statistical independence.
-\inltt{TIMEORIGIN} fixes its phase origin; \inltt{RECORDDURATION} must cover
-the declared run. The frozen record repeats after $L_X/U_{\rm bar}$;
-\inltt{REPEAT="Error"} requires the record to be shorter than this period.
-\inltt{Allow} explicitly permits reuse. Startup reports the settings, spectrum
-SHA256 digest, mode memory and expected and realized kinetic energy.
-The generator retains a direct Fourier sum as its reference. Planar inlet
-evaluation groups transverse modes and caches spatial phases within a 64 MiB
-payload limit per plane, preserving coefficients and absolute time. Unsupported,
-cache-limited or extreme-range cases use the direct reference fallback. Measure
-mode storage and evaluation cost before attempting large production records.
+All actual job times, including restored start time and requested final time,
+must lie in the declared record interval, and
+\inltt{NumSteps*TimeStep} must not exceed \inltt{RECORDDURATION}.
+The frozen realization repeats after $L_X/\overline{U}$;
+\inltt{REPEAT="Error"} requires \inltt{RECORDDURATION} to be strictly
+shorter than this period. Include startup and integration/checkpoint padding
+when declaring a run; avoiding repetition alone does not establish adequate
+low-frequency statistics. Boundary evaluation is a deterministic function of
+the resolved settings and absolute time; repeated calls do not advance a
+random state. Startup reports mode memory, spectrum identity, and expected
+and realized K. Measure storage/evaluation cost before selecting a large lattice.
 
-Checkpoints and final field output store the generator identity, numerical
-environment and reconstructed coefficient digest. Restart all of
-\inltt{u,v,w,p} from one common field file or parallel field directory.
-Missing or realization-changing metadata is rejected before the initial inlet
-trace is supplied. The actual restored time and complete requested job must
-fit the declared record. The \inltt{--set-start-time} option may only restate
-the stored checkpoint time;
-a different value is rejected to preserve the inlet phase. Record duration,
-repeat policy, output frequency,
-timestep and MPI decomposition may change provided their independent validity
-checks pass; they do not reseed or reset the phase. The native IMEX integrator
-reinitializes its multistep history, so an evolved restart is compared within
-numerical error rather than required to match an uninterrupted flow bitwise.
-Both the \inltt{Checkpoint} filter and legacy step checkpoints preserve this
-metadata. Checkpoints written before this metadata was introduced cannot be
-used as verified HIT restarts.
+Different seeds do not establish independent realizations. Version 1 mixes
+counter words $s+6m+q$ modulo $2^{64}$, with mode ID $m$ and $q=0,\ldots,5$.
+Adjacent seeds reuse inputs. For ensemble work record disjoint enclosing
+ranges $[s,s+6N_XN_YN_Z-1]$, accounting for modulo wrap; this avoids direct
+counter reuse without proving statistical independence.
 
-Small full-three-dimensional examples and reproducible manufactured tests are
-in \inltt{solvers/IncNavierStokesSolver/Tests/HITInflow/README-m3.md}.
-Homogeneous1D, MPI and restart inputs are described in \inltt{README-m4.md}
-in the same directory.
+Checkpoint and final fields store the generator identity, numerical environment
+and coefficient digest. Restart all \inltt{u,v,w,p} from one common field file
+or MPI field directory. Missing/mismatched realization metadata is rejected;
+table byte changes also change identity. Preserve \inltt{TIMEORIGIN} and all
+realization-defining settings. \inltt{--set-start-time} may only restate the
+stored time. Record duration, repeat policy, output frequency, timestep and
+MPI decomposition may change if their own validity/record bounds pass; they
+do not reset phase. IMEX multistep history is reinitialized, so an evolved
+restart is checked within numerical error rather than bitwise against an
+uninterrupted flow. Both the \inltt{Checkpoint} filter and legacy step
+checkpoints preserve metadata once it is initialized. An initial legacy
+$t=0$ checkpoint may be written before HIT identity metadata is set up. If
+those entries are absent, do not use that file as a verified HIT restart;
+choose an evolved checkpoint containing all four fields and complete identity
+metadata. Older fields without the metadata are also not verified HIT restarts.
+
+Runnable examples and the comparison reproduction entry point are:
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+solvers/IncNavierStokesSolver/Examples/HITInflow3D/
+solvers/IncNavierStokesSolver/Examples/HITInflowQuasi3D/
+solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/reproduce_m7.py
+\end{lstlisting}
+Follow its usage with fresh output directories outside the source checkout.
+The M7 case is a limited-band, SVV-assisted descriptive comparison: all 32
+case/station sampling screens failed, and the M6 degree change reached 4.154\%,
+above the 2\% target. Full-band physical validation is not established.
+An upstream-only calibrated development/reference case is needed before a
+quantitative validation claim. The conditional narrow-band extension remains
+deferred because these full-band results do not justify it. The results and
+limitations are recorded in \inltt{docs/plans/hit-inflow-milestone-7.md}.
+
 
 \subsubsection{Womersley Boundary Condition}
 

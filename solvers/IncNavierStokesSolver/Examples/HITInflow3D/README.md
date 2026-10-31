@@ -64,3 +64,8 @@ The [Quasi-3D example](../HITInflowQuasi3D/README.md) uses a tabulated toy shell
 spectrum with a Fourier direction. Both use the same synthesis conventions.
 The [M7 report](../../../../docs/plans/hit-inflow-milestone-7.md) records the
 limited-band experimental comparison and its failed precision criteria.
+
+An initial legacy `_0.chk` at t=0 can precede HIT metadata setup and cannot be
+used as a verified HIT restart when identity metadata is absent. The evolved
+checkpoints at t=0.01/0.02 s contain the identity; retain all four fields and
+check the stored time before restarting.

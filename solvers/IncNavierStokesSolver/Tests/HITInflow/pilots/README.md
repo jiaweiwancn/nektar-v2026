@@ -1,7 +1,8 @@
-# Limited-band CBC inflow pilot tools
+# Limited-band HIT inflow pilot and comparison tools
 
 `prepare.py` writes one complete native affine quadrilateral session, an upstream
-CBC1971 theta=42 spectrum copy and `manifest.json`. It does not run Nektar++.
+CBC1971 theta=42 spectrum copy (or explicit von Karman parameters) and
+`manifest.json`. It does not run Nektar++.
 Use the Linux environment and run storage specified in the repository's
 `AGENTS.md` for simulations and performance measurements. Run the solver from the
 generated case directory so the relative spectrum filename resolves correctly.
@@ -38,9 +39,10 @@ mode count in the manifest is a cost estimate, not a discrete retained-mode
 count. The inlet groups the retained Fourier sum by transverse wavenumber and
 caches spatial phases; the reference direct sum remains available for checks.
 
-The only experimental input is the committed upstream shell spectrum. Its
-interpolation/extensions are `LogLinear`, `K4`, `Gaussian`, with `Preserve`
-normalization. Mean velocity is 12.7 m/s and molecular viscosity 1.5e-5 m2/s.
+The CBC experimental inlet uses only the committed upstream shell spectrum.
+Its interpolation/extensions are `LogLinear`, `K4`, `Gaussian`, with `Preserve`
+normalization. The von Karman option also uses Preserve normalization with the
+explicit upstream-only shape length and amplitude. Mean velocity is 12.7 m/s and molecular viscosity 1.5e-5 m2/s.
 The finite cutoff/taper changes retained energy and dissipation. No downstream
 data are loaded or used for tuning. A coarse limited-band run is not full DNS
 of the CBC experiment and needs a documented numerical/model error budget.
@@ -56,7 +58,10 @@ The inlet sets all three velocities with `HITInflow` and pressure with `H`;
 the outlet uses native `HOutflow`. `--buffer` validates the distance from the
 last requested station to the outlet and records it; it adds no sponge force.
 `--dealias` enables both homogeneous and spectral/hp dealiasing. `--backend
-Matrix` omits `USEFFT`, selecting the native matrix path.
+Matrix` omits `USEFFT`, selecting the native matrix path. Native homogeneous
+dealiasing requires FFTW, so `--backend Matrix --dealias` is rejected before
+creating a case. Spectral/hp dealiasing alone is available in the solver for
+matrix transforms, as demonstrated by the public Quasi-3D example.
 
 SVV is disabled by default. `--svv dg` explicitly selects the spectral/hp
 `DGKernel` and a separate homogeneous `ExpKernel`; no blanket SVV property is
@@ -184,3 +189,84 @@ identity/window, slab hashes and slab/global work closure. It plots temporal
 TKE and discrete z mode energy separately from native molecular/SVV work and
 fixed-reference divergence. Snapshot ranges are descriptive, not confidence
 intervals. Run beside `plot_m6.py`, which provides shared validation helpers.
+
+## Completed M7 models and reproducible comparison
+
+The frozen production files are
+[the CBC study](../../../../../docs/plans/hit-inflow-milestone-6-production-study.json)
+and [the von Karman study](../../../../../docs/plans/hit-inflow-milestone-7-von-karman-study.json).
+The [M7 protocol](../../../../../docs/plans/hit-inflow-milestone-7-protocol.md)
+predeclares the windows, blocks, spectra and fixed-delay correlations. The
+[report](../../../../../docs/plans/hit-inflow-milestone-7.md) gives all native,
+MPI, thread and SVV settings and the qualified experimental comparison. Both
+models decay too slowly; all 32 sampling screens fail the 2% threshold. M8
+packages reproducibility of that result; it does not establish full-band
+physical validation. Narrow-band validation remains deferred.
+
+`prepare.py --spectrum von-karman --vk-length L --vk-amplitude A` selects the
+analytic alternative. CBC remains the default. Both retain `Preserve`
+normalization and the explicit energy cutoff/taper. To reproduce the upstream
+fit (only theta=42 RMS and Lf) and numeric source preparation in fresh run
+storage:
+
+```bash
+hit_src=/media/jay/新加卷/nektar-v2026
+hit_test="$hit_src/solvers/IncNavierStokesSolver/Tests/HITInflow"
+hit_work=/media/jay/新加卷/nektar-v2026-runs/hit-inflow/source-preparation-$(date -u +%Y%m%dT%H%M%SZ)
+mkdir -p "$hit_work"
+export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1
+python3 "$hit_test/prepare_cbc1971.py" --output-dir "$hit_work/cbc1971"
+python3 "$hit_test/prepare_cbc1971.py" --check --output-dir "$hit_work/cbc1971"
+python3 "$hit_test/check_contract.py"
+python3 "$hit_test/pilots/fit_m7_upstream.py" --output "$hit_work/von-karman-fit.json"
+```
+
+Preparation/checks require only the Python standard library; the continuum fit
+also uses SciPy. Analysis uses NumPy, and plotting uses Matplotlib with a
+headless backend. The tested Linux versions are Python 3.10.12, NumPy 1.21.5,
+Matplotlib 3.5.1 and SciPy 1.8.0. No PDF or downloaded data is needed: checked
+source numbers, SI fixtures and the exact Table-5 transcription are committed.
+The longitudinal Table-2 files remain downstream/reference data and cannot be
+passed to the shell-spectrum inlet loader.
+
+To regenerate **all four analyses, native-work joins and five PNG/SVG pairs**
+from the existing authoritative archive, choose a fresh output directory outside
+the source tree and outside the entire M7 archive:
+
+```bash
+hit_src=/media/jay/新加卷/nektar-v2026
+hit_base=/media/jay/新加卷/nektar-v2026-runs/hit-inflow/milestone-7/97014ab
+hit_result=/media/jay/新加卷/nektar-v2026-runs/hit-inflow/m7-reproduction-$(date -u +%Y%m%dT%H%M%SZ)
+export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1
+python3 "$hit_src/solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/reproduce_m7.py" \
+  --run-root "$hit_base" --output "$hit_result" --cpu 50 --source-root "$hit_src"
+```
+
+CPU 50 must be available and in the inherited Linux affinity; change `--cpu`
+if another allocation is required. The driver and its helpers use one CPU,
+process the cases sequentially, and share the server's 64-worker limit with
+other jobs. No solver or new native profile run is started. Default input is
+four immutable `history.npz` caches and the already hashed three-snapshot native
+profiles under `postprocessing-da607a9`. The original archive uses absolute
+manifest/receipt paths; arbitrary relocation is not supported.
+
+The output contains `<case-id>/analysis.json`, `<case-id>/work.json`,
+`figures/` with five PNG/SVG pairs and `provenance.json`, `logs/`, and an atomic
+`receipt.json` listing exact commands, environment, input/output hashes and
+completed/failed steps. Failed attempts remain for inspection and are not
+retried. Existing output paths are rejected before writing. Helpers verify
+retained NPZ hashes; the driver checks large-file identities and bound small
+inputs across the run.
+
+Add `--rebuild-cache` to re-read the four native ASCII histories and build fresh
+caches under the new output instead. This requires reading about 27.6 GB of
+histories and storing about 5 GB of new caches, plus working memory. Keep that
+output in Linux run storage. It still reuses the original late native profile
+receipts; it does not regenerate the CFD fields. Without either the caches or
+native histories and the native profiles, the four-run comparison cannot be
+reconstructed solely from its compact committed report.
+
+Reproduction means matching scientific arrays, statistics and plotted data.
+New provenance has new timestamps, paths and command lines; SVG serialization
+can also differ. Preserve each original result and its hash rather than
+expecting a new output file's complete byte stream to match.

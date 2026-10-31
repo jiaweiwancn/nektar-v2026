@@ -79,6 +79,14 @@ class PrepareSpectrum(unittest.TestCase):
         self.assertEqual(root.find("./HITINFLOW/REGION/SPECTRUM").get("AMPLITUDE"), "0")
         self.assertEqual(manifest["physics"]["vk_amplitude"], 0)
 
+    def test_matrix_dealiasing_fails_before_creating_an_invalid_session(self):
+        error = self.create("invalid-matrix", ["--backend", "Matrix", "--dealias"], expect_success=False)
+        self.assertIn("homogeneous dealiasing requires --backend FFTW", error)
+        self.assertFalse((self.root / "invalid-matrix").exists())
+        _, root, _ = self.create("matrix", ["--backend", "Matrix"])
+        self.assertIsNone(root.find("./CONDITIONS/SOLVERINFO/I[@PROPERTY='USEFFT']"))
+        self.assertIsNone(root.find("./CONDITIONS/SOLVERINFO/I[@PROPERTY='DEALIASING']"))
+
     def test_invalid_or_unused_spectrum_options_fail_before_writing(self):
         vk = ["--spectrum", "von-karman", "--taper", "80"]
         cases = [["--vk-length", ".03"], ["--vk-amplitude", "1"],

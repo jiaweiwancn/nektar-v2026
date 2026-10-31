@@ -117,6 +117,8 @@ def add_function(conditions, name, values):
 
 
 def prepare(args):
+    if args.backend == "Matrix" and args.dealias:
+        raise ValueError("homogeneous dealiasing requires --backend FFTW; omit --dealias for Matrix")
     spectrum_kind = args.spectrum
     if spectrum_kind == "von-karman":
         if args.vk_length is None or args.vk_amplitude is None:

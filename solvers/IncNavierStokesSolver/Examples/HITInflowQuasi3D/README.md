@@ -12,7 +12,8 @@ no experimental values. The lattice (4,4,4), seed 20261028 and 1.55/1.5 rad/m
 cutoff/taper retain a very small mode set. Ubar=1 m/s, nu=0.01 m2/s,
 dt=0.001 s and 20 steps make this a configuration demonstration. It starts from
 the mean flow. No statistical, DNS or experimental validation follows from this
-short run. Both dealiasing switches are enabled; SVV is off.
+short run. Spectral/hp dealiasing is enabled; homogeneous dealiasing and SVV
+are off in the default matrix-transform session.
 
 ## Run in a fresh directory
 
@@ -41,7 +42,9 @@ is separate from `HomModesZ`. Keep total concurrent Linux workers at or below
 To use FFTW, add `<I PROPERTY="USEFFT" VALUE="FFTW" />` in `SOLVERINFO` in a
 fresh copy and use an installation built with `NEKTAR_USE_FFTW=ON`. Matrix and
 FFTW paths use the same mode/time realization; their native transform roundoff
-can differ.
+can differ. Native homogeneous dealiasing (`DEALIASING=True`) additionally
+requires `USEFFT=FFTW`; enabling it changes the numerical configuration and
+should be checked separately.
 
 The solver should finish 20 steps at t=0.02 s. Outputs include
 `HITInflowQuasi3D.fld`, checkpoints, an `.opt` file and `history.his` with 12
@@ -70,3 +73,8 @@ The [pilot guide](../../Tests/HITInflow/pilots/README.md) documents production
 settings and regeneration of the existing M7 comparisons. M7's full-band
 agreement and 2% precision were not established; narrow-band validation remains
 deferred.
+
+An initial legacy `_0.chk` at t=0 can precede HIT metadata setup and cannot be
+used as a verified HIT restart when identity metadata is absent. The evolved
+checkpoints at t=0.01/0.02 s contain the identity; retain all four fields and
+check the stored time before restarting.

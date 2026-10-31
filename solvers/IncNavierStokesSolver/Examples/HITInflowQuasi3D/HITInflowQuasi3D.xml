@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
 <NEKTAR>
-    <!-- Small standalone HIT configuration example; not the CBC decay benchmark. -->
     <GEOMETRY DIM="2" SPACE="2">
         <VERTEX>
             <V ID="0">0 0 0</V>
@@ -56,7 +55,6 @@
             <I PROPERTY="GlobalSysSoln" VALUE="IterativeStaticCond" />
             <I PROPERTY="HOMOGENEOUS" VALUE="1D" />
             <I PROPERTY="SPECTRALHPDEALIASING" VALUE="True" />
-            <I PROPERTY="DEALIASING" VALUE="True" />
         </SOLVERINFO>
         <TIMEINTEGRATIONSCHEME>
             <METHOD>IMEX</METHOD>
