@@ -7,14 +7,39 @@
 #include <LibUtilities/BasicUtils/SessionReader.h>
 #include <SolverUtils/Turbulence/RANSWallGeometry.h>
 #include <iomanip>
+#include <MultiRegions/ExpList.h>
+#include <algorithm>
+#include <cmath>
+#include <limits>
 #include <regex>
 #include <sstream>
 
 namespace Nektar
 {
+inline void ShiftRANSWallPropertyQueries(const MultiRegions::ExpListSharedPtr &boundary,
+    Array<OneD,NekDouble> &x,Array<OneD,NekDouble> &span)
+{
+    for (int e = 0; e < boundary->GetExpSize(); ++e)
+    {
+        const int start = boundary->GetPhys_Offset(e),count = boundary->GetExp(e)->GetTotPoints();
+        for (auto *coordinate : {&x,&span})
+        {
+            double low = (*coordinate)[start],high = low;
+            for (int q = start; q < start+count; ++q)
+            { low = std::min(low,(*coordinate)[q]); high = std::max(high,(*coordinate)[q]); }
+            const double tolerance = 128*std::numeric_limits<double>::epsilon()*std::max({1.,std::abs(low),std::abs(high)});
+            for (int q = start; q < start+count; ++q)
+                if (std::abs((*coordinate)[q]-low) <= tolerance || std::abs((*coordinate)[q]-high) <= tolerance)
+                    (*coordinate)[q] += 1e-8*(.5*(low+high)-(*coordinate)[q]);
+        }
+    }
+}
+
 inline std::string RANSWallPropertySignature(const LibUtilities::SessionReaderSharedPtr &session)
 {
     std::ostringstream s; s << std::setprecision(17);
+    if (session->DefinesFunction("RANSWallProperties","roughness") || session->DefinesFunction("RANSWallProperties","z0"))
+        s << ":one-sided-properties-v1";
     for (const std::string name : {"roughness","z0"})
         if (session->DefinesFunction("RANSWallProperties",name))
         {

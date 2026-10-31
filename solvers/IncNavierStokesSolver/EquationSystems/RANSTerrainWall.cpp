@@ -143,6 +143,8 @@ RANSTerrainWall::RANSTerrainWall(const LibUtilities::SessionReaderSharedPtr &ses
              "Invalid terrain wall constraint parameters");
     m_parameters.Validate();
     RANSWallPropertySignature(session);
+    ASSERTL0(!m_log || !session->DefinesFunction("RANSWallProperties","roughness"),"The compatible log wall uses z0, not AWF roughness");
+    ASSERTL0(m_log || !session->DefinesFunction("RANSWallProperties","z0"),"AWF uses roughness and derives its matching anchor; independent z0 is not supported");
     m_failurePolicy = AWFFailurePolicy::UseOriginal;
     if (m_equilibrium)
     {
@@ -182,6 +184,8 @@ RANSTerrainWall::RANSTerrainWall(const LibUtilities::SessionReaderSharedPtr &ses
     m_roughness = Array<OneD,NekDouble>(m_localPoints,m_awf.roughness);
     m_logRoughness = Array<OneD,NekDouble>(m_localPoints,m_z0);
     m_mask = Array<OneD,NekDouble>(m_localPoints,1);
+    m_propertyX = Array<OneD,NekDouble>(m_localPoints);
+    m_propertySpan = Array<OneD,NekDouble>(m_localPoints);
     m_frames.resize(m_localPoints); m_points.resize(m_localPoints);
     Fields localCoordinates(m_dim), localShift(m_dim);
     for (auto &c : localCoordinates) c = Array<OneD,NekDouble>(m_localPoints);
@@ -235,11 +239,23 @@ RANSTerrainWall::RANSTerrainWall(const LibUtilities::SessionReaderSharedPtr &ses
                     if (geometry.terrain == RANSTerrain::CosineHill &&
                         std::abs(std::abs(m_x[q]-geometry.centre)-geometry.hillHalfLength) < 1e-10 &&
                         std::abs(.5*(low+high)-geometry.centre) < geometry.hillHalfLength)
+                    {
                         m_frames[q].curvature = geometry.hillHeight*std::pow(std::acos(-1.0)/geometry.hillHalfLength,2)/2;
+                        geometry.CheckStrip(m_frames[q],m_strip.height,m_strip.pointN,m_maximumCurvature);
+                    }
                     for (int d = 0; d < m_dim; ++d)
                         localShift[d][q] = 1e-8*(.5*(low+high)-m_x[q])*Component(m_frames[q].tangent,d);
                     if (m_dim == 3) localShift[1][q] = 1e-8*(.5*(spanLow+spanHigh)-m_span[q]);
                 }
+            }
+            Array<OneD,NekDouble> propertySpan(count,0.0);
+            if (m_dim == 3) Vmath::Vcopy(count,y,1,propertySpan,1);
+            ShiftRANSWallPropertyQueries(boundary,px,propertySpan);
+            for (int k = 0; k < count; ++k)
+            {
+                m_propertyX[offset+k] = px[k]; m_propertySpan[offset+k] = propertySpan[k];
+                const double height = geometry.At(px[k]).z;
+                py[k] = m_dim == 2 ? height : propertySpan[k]; pz[k] = m_dim == 2 ? 0 : height;
             }
             if (session->DefinesFunction("RANSWallProperties","roughness"))
             {
@@ -330,7 +346,16 @@ RANSTerrainWall::RANSTerrainWall(const LibUtilities::SessionReaderSharedPtr &ses
     comm->AllReduce(owners,LibUtilities::ReduceMin);
     for (int q = 0; q < m_globalPoints; ++q)
         if (m_sampleElements[q] >= 0 && owners[q] != comm->GetRank()) m_sampleElements[q] = -1;
-    for (int q = 0; q < m_localPoints; ++q) m_remoteSamples += owners[m_globalOffset+q] != comm->GetRank();
+    m_sampleOwners.resize(m_localPoints);m_sampleGeometry.resize(m_localPoints);
+    for (int value : counts) m_wallRanks += value > 0;
+    for (int q = 0; q < m_localPoints; ++q)
+    {
+        const int owner = owners[m_globalOffset+q];
+        m_sampleOwners[q] = owner;m_sampleGeometry[q] = ids[m_globalOffset+q];
+        m_remoteSamples += owner != comm->GetRank();
+        m_remoteWithoutWall += owner != comm->GetRank() && counts[owner] == 0;
+    }
+    comm->AllReduce(m_remoteWithoutWall,LibUtilities::ReduceSum);
     comm->AllReduce(m_remoteSamples,LibUtilities::ReduceSum);
     for (auto *a : {&m_multiplier,&m_normalTarget,&m_normalError,&m_projectedError,&m_velocityMass})
         *a = Array<OneD,NekDouble>(m_localPoints,0.0);
@@ -412,14 +437,14 @@ RANSTerrainWall::RANSTerrainWall(const LibUtilities::SessionReaderSharedPtr &ses
     if (comm->GetRank() == 0)
     {
         m_diagnostics.open(session->GetSessionName()+".terrain-wall.csv");
-        m_diagnostics << "time,normal_projected_max,normal_pointwise_max,epsilon_projection_max,wall_points,remote_samples,chi_min,chi_max,min_kP,min_epsH,area,physical_wall_area,N_inverse_residual,projection_audit,resolved_volume,unresolved_volume,normal_integral_defect,resolved_mass_defect,tangent_flux_residual_l2,k_flux_residual_l2,normal_l2,normal_away_feet_max\n" << std::setprecision(17);
+        m_diagnostics << "time,normal_projected_max,normal_pointwise_max,epsilon_projection_max,wall_points,remote_samples,chi_min,chi_max,min_kP,min_epsH,area,physical_wall_area,N_inverse_residual,projection_audit,resolved_volume,unresolved_volume,normal_integral_defect,resolved_mass_defect,tangent_flux_residual_l2,k_flux_residual_l2,normal_l2,normal_away_feet_max,wall_ranks,remote_N_without_wall_samples\n" << std::setprecision(17);
     }
     int write = 0; session->LoadParameter("RANSAWFPointDiagnostics",write,0);
     ASSERTL0(write == 0 || write == 1,"RANSAWFPointDiagnostics must be 0 or 1");
     if (write)
     {
         m_pointDiagnostics.open(session->GetSessionName()+".terrain-points-r"+std::to_string(comm->GetRank())+".csv");
-        m_pointDiagnostics << "time,phase,point,x,span,curvature,JH,V,H,P,N,roughness,z0,mask,kP,uH,uP,uN,kN,epsilonN,forcing_x,forcing_span,traction_x,traction_span,production,dissipation,epsP,epsH,chi,requested_chi,departure,reason,wall_re,cutoff,normal_target,normal_error,normal_projected_error,multiplier,tangent_source,k_source,spanH,spanP,spanN,pressure_t,pressure_span,convection_t,convection_span,wP,r_U,r_DeltaU,r_K,r_Epsilon,r_Pressure,r_Convection,r_Normal,sensors_evaluated,resolved_shear,tangent_flux_residual,k_flux_residual\n" << std::setprecision(17);
+        m_pointDiagnostics << "time,phase,point,x,span,curvature,JH,V,H,P,N,roughness,z0,mask,kP,uH,uP,uN,kN,epsilonN,forcing_x,forcing_span,traction_x,traction_span,production,dissipation,epsP,epsH,chi,requested_chi,departure,reason,wall_re,cutoff,normal_target,normal_error,normal_projected_error,multiplier,tangent_source,k_source,spanH,spanP,spanN,pressure_t,pressure_span,convection_t,convection_span,wP,r_U,r_DeltaU,r_K,r_Epsilon,r_Pressure,r_Convection,r_Normal,sensors_evaluated,resolved_shear,tangent_flux_residual,k_flux_residual,property_x,property_span,sample_owner,sample_element\n" << std::setprecision(17);
     }
 }
 
@@ -703,7 +728,7 @@ void RANSTerrainWall::CheckInitialState(const Fields &state) const
 
 std::string RANSTerrainWall::RestartSignature() const
 {
-    std::ostringstream s; s << std::setprecision(17) << "TerrainWall-10:conservative-dual-surface-continuity:" << m_wallModel << ':'
+    std::ostringstream s; s << std::setprecision(17) << "TerrainWall-11:one-sided-properties-conservative-continuity:" << m_wallModel << ':'
         << static_cast<int>(m_terrain.terrain) << ':' << m_terrain.origin << ':' << m_terrain.centre << ':'
         << m_terrain.slope << ':' << m_terrain.hillHeight << ':' << m_terrain.hillHalfLength << ':'
         << m_strip.height << ':' << m_strip.pointP << ':' << m_strip.pointN << ':' << m_awf.roughness << ':'
@@ -828,6 +853,16 @@ void RANSTerrainWall::Update(const Fields &state, const Fields &predictor, const
             p.kP = m_log ? h[m_dim][q] : m_strip.EliminateKP(h[m_dim][q],n[m_dim][q]);
             if (!(p.kP > m_minimumK)) throw std::invalid_argument("nonpositive terrain KP");
             beta[q] = m_augmentation*(alpha*V/J+std::sqrt(p.kP));
+            auto &sample = p.sample;
+            sample.matchingVelocity = th;sample.heightN = m_strip.pointN;
+            sample.kN = n[m_dim][q];sample.epsilonN = n[m_dim+1][q];
+            sample.normalVelocityP = m_log ? 0 : -(m_strip.pointP*m_streamDivergence[q]+
+                frame.Volume(m_strip.pointP)*m_spanDivergence[q])/frame.Jacobian(m_strip.pointP);
+            for (int i = 0; i < 2; ++i)
+            {
+                sample.velocityP[i] = m_log ? th[i] : m_strip.EliminateVelocityP(th[i],tn[i]);
+                sample.velocityN[i] = tn[i];
+            }
             if (m_log)
             {
                 const auto tau = m_reference.StandardLogWallTraction(p.kP,th,m_strip.height,m_logRoughness[q],m_shift);
@@ -840,11 +875,6 @@ void RANSTerrainWall::Update(const Fields &state, const Fields &predictor, const
             }
             auto g = m_awf; g.roughness = m_roughness[q];
             const AnalyticalWallFunction wall(g,p.kP,m_parameters);
-            auto &sample = p.sample;
-            sample.matchingVelocity = th; sample.heightN = m_strip.pointN;
-            sample.kN = n[m_dim][q]; sample.epsilonN = n[m_dim+1][q];
-            sample.normalVelocityP = -(m_strip.pointP*m_streamDivergence[q]+
-                frame.Volume(m_strip.pointP)*m_spanDivergence[q])/frame.Jacobian(m_strip.pointP);
             const auto pressureH = Tangent(Vector(ph,q),q), pressureN = Tangent(Vector(pn,q),q);
             const auto bodyH = Tangent(Vector(fh,q),q), bodyN = Tangent(Vector(fn,q),q);
             const auto advH = Tangent(Vector(ah,q),q), advN = Tangent(Vector(an,q),q);
@@ -1003,7 +1033,8 @@ void RANSTerrainWall::WritePointDiagnostics(NekDouble time, int phase)
             << ',' << s.convectionForcing[0] << ',' << s.convectionForcing[1] << ',' << s.normalVelocityP;
         for (double value : p.selected.sensors) m_pointDiagnostics << ',' << value;
         m_pointDiagnostics << ',' << (m_equilibrium && m_switched && m_mask[q] > 0)
-            << ',' << p.resolvedShear << ',' << p.tangentFluxResidual << ',' << p.kFluxResidual << '\n';
+            << ',' << p.resolvedShear << ',' << p.tangentFluxResidual << ',' << p.kFluxResidual
+            << ',' << m_propertyX[q] << ',' << m_propertySpan[q] << ',' << m_sampleOwners[q] << ',' << m_sampleGeometry[q] << '\n';
     }
     m_pointDiagnostics << std::flush;
 }
@@ -1085,6 +1116,7 @@ void RANSTerrainWall::WriteDiagnostics(NekDouble time, const Fields &state, cons
             << ',' << m_remoteSamples << ',' << chiMin << ',' << chiMax << ',' << kMin << ',' << eMin
             << ',' << area << ',' << physical << ',' << m_samplingResidual << ',' << m_projectionAudit
             << ',' << m_resolvedVolume << ',' << m_unresolvedVolume << ',' << normalDefect << ',' << mass
-            << ',' << tangentResidual << ',' << kResidual << ',' << normalL2 << ',' << regularPointwise << '\n' << std::flush;
+            << ',' << tangentResidual << ',' << kResidual << ',' << normalL2 << ',' << regularPointwise
+            << ',' << m_wallRanks << ',' << m_remoteWithoutWall << '\n' << std::flush;
 }
 }

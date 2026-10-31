@@ -60,7 +60,8 @@ private:
     LibUtilities::SessionReaderSharedPtr m_session;
     Array<OneD, MultiRegions::ExpListSharedPtr> m_fields;
     int m_dim, m_localPoints = 0, m_globalPoints = 0, m_globalOffset = 0;
-    int m_remoteSamples = 0;
+    int m_remoteSamples = 0,m_wallRanks = 0,m_remoteWithoutWall = 0;
+    std::vector<int> m_sampleOwners,m_sampleGeometry;
     NekDouble m_samplingResidual = 0;
     NekDouble m_projectionAudit = 0;
     NekDouble m_resolvedVolume = 0, m_unresolvedVolume = 0;
@@ -92,6 +93,7 @@ private:
     std::vector<Array<OneD, NekDouble>> m_sampleCoordinates;
     std::vector<SolverUtils::RANSWallFrame> m_frames;
     Array<OneD, NekDouble> m_x, m_span, m_roughness, m_logRoughness, m_mask;
+    Array<OneD,NekDouble> m_propertyX,m_propertySpan;
     Array<OneD, NekDouble> m_multiplier, m_normalTarget, m_normalError, m_projectedError;
     Array<OneD,NekDouble> m_streamDivergence,m_spanDivergence;
     Fields m_diagonal, m_rhs;

@@ -40,7 +40,7 @@ def audit(path,root):
         h,hp,_ = surface(x);gap=top-h
         e=z-h*((top-z)/gap)**2
         return e,speed(e)*(-hp*(top-z)**2*(top+h)/gap**3),speed(e)*(1+2*h*(top-z)/gap**2)
-    mismatch = normal = reconstruction = 0.;min_k=min_eps=float('inf')
+    mismatch = normal = reconstruction = 0.;min_k=min_eps=float('inf');span_ranges={}
     for row in csv.DictReader(Path(path).open()):
         name = row.pop('field');row={k:float(v) for k,v in row.items()}
         x,z,foot,eta = row['x'],row['y' if dim==2 else 'z'],row['foot_x'],row['distance']
@@ -58,13 +58,23 @@ def audit(path,root):
         if not math.isfinite(row['input']) or not math.isfinite(row['projected']): raise RuntimeError('Nonfinite terrain initial field')
         if name=='k': min_k=min(min_k,row['projected'])
         if name in ('eps','eps_tilde'): min_eps=min(min_eps,row['projected'])
+        if dim==3:
+            key=(name,round(x,11),round(z,11))
+            low,high,raw_low,raw_high=span_ranges.get(key,(row['projected'],row['projected'],row['input'],row['input']))
+            span_ranges[key]=(min(low,row['projected']),max(high,row['projected']),
+                              min(raw_low,row['input']),max(raw_high,row['input']))
         if chi>0:
             reconstruction=max(reconstruction,abs(x-foot-eta*nx),abs(z-h-eta*nz))
             if abs(eta-H)<1e-9: normal=max(normal,abs(gz*nx-gx*nz))
-    if mismatch>5e-10 or reconstruction>1e-8 or normal>1e-8 or min_k<=0 or min_eps<=0:
-        raise RuntimeError(f'Terrain initial audit failed: mismatch={mismatch}, reconstruction={reconstruction}, normal={normal}, min_k={min_k}, min_eps={min_eps}')
+    span_variation=max((high-low for low,high,_,_ in span_ranges.values()),default=0.)
+    span_scaled=max(((high-low)/max(1.,abs(low),abs(high)) for low,high,_,_ in span_ranges.values()),default=0.)
+    raw_span_scaled=max(((high-low)/max(1.,abs(low),abs(high)) for _,_,low,high in span_ranges.values()),default=0.)
+    if mismatch>5e-10 or reconstruction>1e-8 or normal>1e-8 or min_k<=0 or min_eps<=0 or max(span_scaled,raw_span_scaled)>5e-10:
+        raise RuntimeError(f'Terrain initial audit failed: mismatch={mismatch}, reconstruction={reconstruction}, normal={normal}, min_k={min_k}, min_eps={min_eps}, span_variation={span_variation}')
     return dict(maximum_relative_mismatch=mismatch,normal_velocity_raw_max=normal,
-                normal_coordinate_reconstruction_max=reconstruction,min_projected_k=min_k,min_projected_epsilon=min_eps)
+                normal_coordinate_reconstruction_max=reconstruction,min_projected_k=min_k,min_projected_epsilon=min_eps,
+                maximum_projected_span_variation=span_variation,maximum_scaled_projected_span_variation=span_scaled,
+                maximum_scaled_input_span_variation=raw_span_scaled)
 
 
 if __name__=='__main__':

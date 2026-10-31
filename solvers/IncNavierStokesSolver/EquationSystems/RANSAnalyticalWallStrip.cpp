@@ -58,6 +58,9 @@ RANSAnalyticalWallStrip::RANSAnalyticalWallStrip(
     m_session->LoadSolverInfo("RANSWallModel", m_wallModel, "AWFOriginal");
     m_equilibrium = m_wallModel == "AWFEquilibrium";
     m_spatial = ReadRANSWallTransition(m_session,ReadRANSWallGeometry(m_session,wallOrigin));
+    ASSERTL0(!m_spatial.enabled && !m_session->DefinesFunction("RANSWallProperties","roughness") &&
+                 !m_session->DefinesFunction("RANSWallProperties","z0"),
+             "Spatial AWF transitions/properties require RANSWallGeometry=Plane or CosineHill");
     RANSWallPropertySignature(m_session); // validate stationary expressions
     m_failurePolicy = AWFFailurePolicy::UseOriginal;
     if (m_equilibrium)

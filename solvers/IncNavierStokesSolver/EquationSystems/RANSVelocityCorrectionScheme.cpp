@@ -226,6 +226,8 @@ void RANSVelocityCorrectionScheme::v_InitObject(bool declareField)
                  std::isfinite(m_heightShift) && m_heightShift >= 0,
              "Invalid RANS iteration, positivity or wall parameters");
     m_session->LoadSolverInfo("RANSWallModel", wallModel, "None");
+    ASSERTL0(m_terrainWall || wallModel != "None" || (!m_session->DefinesFunction("RANSWallProperties","z0") && !m_session->DefinesFunction("RANSWallProperties","roughness")),
+             "Select RANSWallGeometry=Plane for spatial log-wall properties");
     ASSERTL0(wallModel == "None" || wallModel == "AWFOriginal" || wallModel == "AWFEquilibrium",
              "RANSWallModel supports None, AWFOriginal or AWFEquilibrium");
     ASSERTL0(m_model != RANSModel::CLSHighRe || m_heightShift == 0,

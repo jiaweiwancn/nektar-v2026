@@ -22,6 +22,7 @@ THREADS = {name:'1' for name in ('OMP_NUM_THREADS','OPENBLAS_NUM_THREADS','MKL_N
 os.environ.update(THREADS)
 from generate_terrain import plane, hill
 from generate_m4 import parameter, info
+from generate_m6 import original_j0
 from terrain_initial import prepare as prepare_initial
 from terrain_continuity import audit as audit_continuity
 
@@ -108,11 +109,9 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--build',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True)
-    p.add_argument('--suite',choices=('planes','curved','periodic-curved','transitions','pilot','all'),default='planes')
+    p.add_argument('--suite',choices=('planes','curved','periodic-curved','transitions','pilot','preservation'),default='planes')
     p.add_argument('--jobs',type=int,default=2)
     args = p.parse_args()
-    if args.suite not in ('planes','curved','periodic-curved'):
-        raise NotImplementedError('Transition and campaign suites are not yet available in this development revision')
     if not sys.platform.startswith('linux') or not 1 <= args.jobs <= 2:
         raise RuntimeError('Use Linux and at most two concurrent cases (at most four ranks each)')
     cpus = sorted(os.sched_getaffinity(0))[:16]
@@ -170,9 +169,18 @@ def main():
                    ['mpirun','--bind-to','none','-np',str(ranks),str(build/'IncNavierStokesSolver'),'neutral.xml'])
         record['cpus'] = cpu_ids[:ranks]
         if kind != 'plane' and not expected_rejection:
-            record['initial_audit'] = prepare_initial(session,build,cpu_ids[0])
+            try:
+                record['initial_audit'] = prepare_initial(session,build,cpu_ids[0])
+            except Exception as error:
+                preparation_command = ['taskset','-c',str(cpu_ids[0]),str(build/'RANSWallFieldAudit'),
+                    str(session),'--terrain-initial',str(directory/'initial.fld')]
+                record.update(passed=False,failure_phase='initial preparation',
+                    command=list(getattr(error,'cmd',preparation_command)),
+                    exit_code=getattr(error,'returncode',124 if isinstance(error,subprocess.TimeoutExpired) else 1),error=str(error))
+                receipt.write_text(json.dumps(record,indent=2)+'\n')
+                raise
         record['fixture_sha256'] = digest(session)
-        timeout = 1800 if options.get('model','').startswith('cls') or (kind == 'hill' and options.get('refinement',1) >= 4) else 600
+        timeout = 1800 if options.get('model','').startswith('cls') or options.get('dimension',2) == 3 or (kind == 'hill' and options.get('refinement',1) >= 4) else 600
         record['timeout_seconds'] = timeout
         started = time.monotonic()
         with (directory/'solver.log').open('w') as log:
@@ -204,6 +212,8 @@ def main():
                 record['normal_away_feet_max'] = max(r['normal_away_feet_max'] for r in data)
                 record['epsilon_projection_max'] = max(r['epsilon_projection_max'] for r in data)
                 record['remote_samples'] = max(r['remote_samples'] for r in data)
+                record['wall_ranks'] = max(r.get('wall_ranks',0) for r in data)
+                record['remote_without_wall_samples'] = max(r.get('remote_N_without_wall_samples',0) for r in data)
                 record['projection_audit'] = max(r['projection_audit'] for r in data)
                 record['N_inverse_residual'] = max(r['N_inverse_residual'] for r in data)
                 record['tangent_flux_residual_l2'] = max(r['tangent_flux_residual_l2'] for r in data)
@@ -241,7 +251,7 @@ def main():
         finally:
             cpu_leases.put(allocation)
 
-    if args.suite in ('planes','all'):
+    if args.suite == 'planes':
         models = ('standard','standard_original','standard_fixed','standard_switched','cls_original','cls_fixed','cls_switched')
         jobs = []
         for model in models:
@@ -324,6 +334,37 @@ def main():
             comparisons[control] = errors
             if max(errors.values()) > 1e-6:
                 raise RuntimeError('Converged iteration-control agreement failed: '+control+': '+str(errors))
+    if args.suite == 'transitions':
+        from terrain_campaigns import transition_campaign
+        transition_campaign(run,cases,comparisons,output,args.jobs,compare)
+    if args.suite == 'pilot':
+        from terrain_campaigns import pilot_campaign
+        pilot_campaign(run,cases,comparisons,output,args.jobs,compare)
+    if args.suite == 'preservation':
+        # Five flow-through clocks on a periodic flat domain test stationarity
+        # of the new terrain adapter; the inlet/outlet benchmark is separate.
+        for model in ('standard','standard_fixed','cls_fixed'):
+            q = 3.190675081624288 if model.startswith('cls') else 10/3
+            kappa = .440553905186659 if model.startswith('cls') else math.sqrt(.48*1.3/q)
+            matching = .3/kappa*math.log(.008/.0002) if model == 'standard' else .09*original_j0(q*.09,.008,.002,1.5e-5)
+            duration = 5*.4/(matching+.3/kappa*math.log(10))
+            def settings(root):
+                parameter(root,'IO_CheckSteps',40)
+            run(model,model=model,nx=1,layers=12,dt=duration/40,steps=40,ranks=4,modify=settings)
+            root = ET.parse(output/model/'neutral.xml').getroot()
+            params = {p.text.split('=',1)[0].strip():float(p.text.split('=',1)[1]) for p in root.findall('CONDITIONS/PARAMETERS/P')}
+            errors = dict(u=0.,v=0.,k=0.,epsilon=0.)
+            for row in rows(output/model/'field.csv'):
+                z = row['y'];star = params['Ustar'];kap = params['Kappa']
+                expected = dict(u=params['MatchingVelocity']+star/kap*math.log(z/params['H']),
+                    v=0.,k=params['Qstar']*star**2,epsilon=star**3/(kap*z))
+                for name,value in expected.items():
+                    actual = row[('eps_tilde' if model.startswith('cls') else 'eps') if name == 'epsilon' else name]
+                    errors[name] = max(errors[name],abs(actual-value)/(star if name == 'v' else abs(value)))
+            comparisons[model+'_five_flow_reference'] = dict(duration=duration,flow_clocks=5,
+                periodic_streamwise=True,normalized_linf=errors,engineering_target=1e-3)
+            if max(errors.values()) > 1e-3:
+                raise RuntimeError('Terrain-plane neutral preservation exceeded 0.1 percent: '+model+': '+str(errors))
     for name,record in cases.items():
         if not record.get('expected_rejection') and (output/name/'neutral.terrain-wall.csv').exists():
             comparisons[name+'_continuity'] = audit_continuity(output/name)
@@ -331,6 +372,10 @@ def main():
         for model in ('standard_fixed','cls_fixed'):
             if comparisons[model+'_curved_continuity' if model == 'cls_fixed' else model+'_h1_continuity']['maximum_transpiration'] < 1e-6:
                 raise RuntimeError('Curved AWF did not exercise nonzero transpiration: '+model)
+    if args.suite == 'transitions':
+        for model in ('standard','cls'):
+            if comparisons[model+'_span_continuity_continuity']['maximum_span_flux_divergence'] < 1e-6:
+                raise RuntimeError('Independent audit did not exercise spanwise strip-flux divergence: '+model)
     evidence = dict(status='PASS',suite=args.suite,cases=cases,comparisons=comparisons,binaries=binaries,
                     source_revision=subprocess.check_output(['git','-C',str(source),'rev-parse','HEAD'],text=True).strip())
     (output/'evidence.json').write_text(json.dumps(evidence,indent=2)+'\n')

@@ -49,7 +49,7 @@ def audit(directory):
     for row in all_points: groups.setdefault((row['time'],int(row['point'])//face_size),[]).append(row)
     log=info.get('RANSWallModel','None')=='None'
     errors=dict(target=0.,normalP=0.,target_flux_plus_side_flux=0.,actual_flux_plus_side_flux=0.,geometry=0.)
-    budgets={};maximum_transpiration=0.
+    budgets={};maximum_transpiration=maximum_span_divergence=0.
     centre,half=params.get('RANSTerrainCentre',0.),params.get('RANSTerrainHalfLength',.1)
     amplitude=params.get('RANSTerrainHeight',0.) if info.get('RANSWallGeometry')=='CosineHill' else 0.
     for (time,_),points in groups.items():
@@ -77,6 +77,7 @@ def audit(directory):
                 V=lambda z:z-curvature*z*z/2
                 ds=sum(D[i][k]*point(k,j)['uP'] for k in range(count))/(dx*arc)
                 dz=sum(D[j][k]*point(i,k)['spanP'] for k in range(count))/dy if dim==3 else 0.
+                maximum_span_divergence=max(maximum_span_divergence,abs(dz))
                 target=0. if log else -(H*ds+V(H)*dz)/JH
                 normalP=0. if log else -(P*ds+V(P)*dz)/JP
                 errors['target']=max(errors['target'],abs(target-r['normal_target']))
@@ -103,4 +104,5 @@ def audit(directory):
     # tolerance while keeping the physical flux defect at the declared 1e-7.
     if max(errors['target'],errors['normalP'])>5e-8 or errors['geometry']>1e-8 or errors['target_flux_plus_side_flux']>5e-9 or errors['actual_flux_plus_side_flux']>1e-7:
         raise RuntimeError('Independent curved strip-continuity audit failed: '+str(errors))
-    return dict(errors=errors,maximum_transpiration=maximum_transpiration,budgets=budgets)
+    return dict(errors=errors,maximum_transpiration=maximum_transpiration,
+                maximum_span_flux_divergence=maximum_span_divergence,budgets=budgets)

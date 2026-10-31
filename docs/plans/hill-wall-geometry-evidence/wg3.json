@@ -1,0 +1,4349 @@
+{
+  "status": "PASS",
+  "timestamp_utc": "2026-10-31T16:50:42.814770+00:00",
+  "source_revision": "c4e6785b95c396065ed7d1991cf88cceeeac9101",
+  "working_tree": "M library/UnitTests/SolverUtils/RANSWallFieldAudit.cpp\n M solvers/IncNavierStokesSolver/EquationSystems/RANSAnalyticalWallStrip.cpp\n M solvers/IncNavierStokesSolver/EquationSystems/RANSTerrainWall.cpp\n M solvers/IncNavierStokesSolver/EquationSystems/RANSTerrainWall.h\n M solvers/IncNavierStokesSolver/EquationSystems/RANSVelocityCorrectionScheme.cpp\n M solvers/IncNavierStokesSolver/EquationSystems/RANSWallSession.h\n M solvers/IncNavierStokesSolver/Tests/RANS/terrain_continuity.py\n M solvers/IncNavierStokesSolver/Tests/RANS/terrain_initial.py\n M solvers/IncNavierStokesSolver/Tests/RANS/validate_standard_awf.py\n M solvers/IncNavierStokesSolver/Tests/RANS/validate_terrain.py\n?? solvers/IncNavierStokesSolver/Tests/RANS/__pycache__/\n?? solvers/IncNavierStokesSolver/Tests/RANS/terrain_campaigns.py",
+  "source_sha256": {
+    "library/SolverUtils/CMakeLists.txt": "22977739012d28206ab7776d53597edbb7f791377f97772a7c3a7bcb2608d0bd",
+    "library/SolverUtils/Turbulence/AnalyticalWallFunction.cpp": "5baf29819fed6b81ad1b042bc09258a3e0779d15de13076b688bf32f80ddcf7e",
+    "library/SolverUtils/Turbulence/AnalyticalWallFunction.h": "fcadc9f92cb1747b91f48e3a50db1ed8fcf10338d0a6c4aae5f0551a663a7154",
+    "library/SolverUtils/Turbulence/RANSModels.cpp": "86a7154ba3cb27e4d3319aa42d156a228fd1b180f35f9b217159822ec9d66b05",
+    "library/SolverUtils/Turbulence/RANSModels.h": "00a284f6dbcb2617ed86370530b34fde9b008492250d31941c380b14833d16f3",
+    "library/SolverUtils/Turbulence/RANSWallGeometry.cpp": "c081dd17008e475394ab9bd010f6b94b26c513b523e211f739861706095de67c",
+    "library/SolverUtils/Turbulence/RANSWallGeometry.h": "6974a36e134e1f850f3c46b538dea4fc5b51b07f18df7ceebbef3f44a4a1d99d",
+    "library/SolverUtils/Turbulence/RANSWallStrip.h": "6b2763823817c41dc73549c36e8aeed412280c052008cf99e69b901293073654",
+    "library/SpatialDomains/MeshGraphIOXml.cpp": "35fb67b74144ed26ab234f83c3c94284e95d2a25ff697dfde953d9d7a4fe96d8",
+    "library/UnitTests/SolverUtils/RANSKernelProbe.cpp": "3de09ae6640b85df5adcdf2ab4a10c0a2f693356e58c854c068a23c42fabb8e6",
+    "library/UnitTests/SolverUtils/RANSWallFieldAudit.cpp": "e20cba51092e25faadb91610f5d34ac97b02d4c65ce6322d875f4492c6314934",
+    "library/UnitTests/SolverUtils/RANSWallGeometryProbe.cpp": "9576db509a3f16e264cf89309d7f1f11fa5e3c7fa0bc8bc4529f0bf756414dbd",
+    "library/UnitTests/SolverUtils/RANSWallLayerProbe.cpp": "581de4395368834e19ef1f8dd8135736043c1e13b0063b9e3aba35733c53f18f",
+    "solvers/IncNavierStokesSolver/CMakeLists.txt": "17a1fe6f47355a6c1b8577cb1491cb2521a255201cb15576719053e23466ab16",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSAnalyticalWallStrip.cpp": "a178cb081d4285e1b03a33291fbf36c4d1ff20c20a22a73c5b800f66c47aa5d2",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSAnalyticalWallStrip.h": "00e60235c2196b251997b297c27c3f9c74a5cbd8669c3a328e5e8a17a9a81a48",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSHistory.cpp": "40c32ea14e673846b959472fa027f69a9ae309c2a47f9c46a5cd40fa41483788",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSHistory.h": "cfa46740fbda3ed4cab6c96796ac1291cb9b34972612ed03898aa1b59e402500",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSMatrixFree.cpp": "33901465d0d2e45a92b39d760517b6d41bb0d72fecbda91ecb032ce1e9af50f2",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSMatrixFree.h": "366b36c818c0b2c6c6eac1b0fb7122c7138d4d84aa2e8f7e191d885a30bf366a",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSTerrainWall.cpp": "201f314954ec9e876bb87e7cc6e5acf6a813f38892d3ed6f2419e677c937239c",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSTerrainWall.h": "7b1f8a3fd2f1425aba377f02f1f06c618a0d7f988f2c8685939480b34e900b00",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSVelocityCorrectionScheme.cpp": "948365de9a0ea05993bfae3f97e2edbb8bdc985eb4fff5f4630b8ad2c97d90c7",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSVelocityCorrectionScheme.h": "f9221ed4318fbee4bd5c5ffa591531b80d4c2e7a686550d15fd9957b13247320",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSWallBoundary.h": "384fbfd0e6e66d827621c875c7a9cd6ae620d648a5626ab39a9ce67e41f79651",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSWallSession.h": "1bdbbf01b21b09481066019bcb8a4d594d2f6d4ef312069883b8584cc4763455",
+    "solvers/IncNavierStokesSolver/Tests/RANS/CMakeLists.txt": "c3f7c2242b61749d1c6b6d438946aca056c9c61a3edfcb57f6d1822392589249",
+    "solvers/IncNavierStokesSolver/Tests/RANS/generate_terrain.py": "08f616e6571f2542f86a96f0c9df01138be30496ee69b4b2b4826e29a61ca3fd",
+    "solvers/IncNavierStokesSolver/Tests/RANS/record_terrain.py": "0874dafa06ac7c26a38f8944a8a370ef26aaf6f6e54eacd6d25677a8f27c340f",
+    "solvers/IncNavierStokesSolver/Tests/RANS/terrain_campaigns.py": "49a0160ac45eaedd8e57740fcae87ecaceeb7879478d831b0337e358b577f2f1",
+    "solvers/IncNavierStokesSolver/Tests/RANS/terrain_continuity.py": "27329053cf3a2b490cfc3b563f3ec4428da190bcd0acef5b4bb1a10d156c1c1e",
+    "solvers/IncNavierStokesSolver/Tests/RANS/terrain_initial.py": "bf165cb524ee0e1665280ad7b4ef7ded1176d67a33d3281ad2bab13d0997a6d0",
+    "solvers/IncNavierStokesSolver/Tests/RANS/validate_terrain.py": "3aa1c7f5a21cc80b64cbe22c72817571a50e07517a6d1687661b7d4781b2e80c"
+  },
+  "binary_sha256": {
+    "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+    "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+    "geometry-lib/libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+  },
+  "environment": {
+    "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.35",
+    "python": "3.10.12 (main, Aug 31 2026, 10:18:17) [GCC 11.4.0]",
+    "geometry_library_resolution": [
+      "libSpatialDomains.so.5.9.0 => /media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/geometry-lib/libSpatialDomains.so.5.9.0 (0x00007555d8d3e000)"
+    ],
+    "compiler": "c++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0",
+    "cmake": "cmake version 3.22.1",
+    "mpi": "mpirun (Open MPI) 4.1.2",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1"
+    }
+  },
+  "suites": {
+    "transitions": {
+      "status": "PASS",
+      "suite": "transitions",
+      "cases": {
+        "standard_fixed_floor": {
+          "preparation": {
+            "kind": "paired-floor",
+            "model": "standard_fixed",
+            "degree": 4,
+            "layers": 6,
+            "refinement": 1,
+            "dt": 0.0002,
+            "steps": 1,
+            "amplitude": 0.0,
+            "width_ratio": 2.0,
+            "dimension": 2,
+            "height": 0.008,
+            "length": 1.6,
+            "periodic": false
+          },
+          "ranks": 4,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "dc6be69d06033826ebb977bcd37e472351d650dcf26d2caa31c8f03dcc704790",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5,
+            6,
+            7,
+            8
+          ],
+          "initial_audit": {
+            "command": [
+              "taskset",
+              "-c",
+              "5",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_fixed_floor/neutral.xml",
+              "--terrain-initial",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_fixed_floor/initial.fld"
+            ],
+            "field_sha256": "03ff05798bd15fb55c9c23b073f5bd9ef5b5daf952ffb91d7474ed4aa9dd34f7",
+            "maximum_relative_mismatch": 4.3019379451302537e-16,
+            "normal_velocity_raw_max": 0.0,
+            "normal_coordinate_reconstruction_max": 0.0,
+            "min_projected_k": 0.2999999999999999,
+            "min_projected_epsilon": 0.2080125735844593,
+            "maximum_projected_span_variation": 0.0,
+            "maximum_scaled_projected_span_variation": 0.0,
+            "maximum_scaled_input_span_variation": 0.0
+          },
+          "fixture_sha256": "d1439ba820e37d181fafa02bf619d31aabb80e56d6a0e03bbc6a6beeeee8c80d",
+          "timeout_seconds": 600,
+          "command": [
+            "taskset",
+            "-c",
+            "5,6,7,8",
+            "mpirun",
+            "--bind-to",
+            "none",
+            "-np",
+            "4",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 0,
+          "timeout_expired": false,
+          "elapsed": 8.335619303019485,
+          "passed": true,
+          "audit_command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_fixed_floor/neutral.xml",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_fixed_floor/neutral.fld",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_fixed_floor/field.csv"
+          ],
+          "completed_stages": 1,
+          "maximum_weak_divergence": 1.0840195933289413e-11,
+          "normal_projected_max": 5.301423833745038e-12,
+          "normal_pointwise_max": 8.690637995903816e-08,
+          "normal_l2": 5.375768452026645e-09,
+          "normal_away_feet_max": 8.690637995903816e-08,
+          "epsilon_projection_max": 0.00013365997465797363,
+          "remote_samples": 0.0,
+          "wall_ranks": 4.0,
+          "remote_without_wall_samples": 0.0,
+          "projection_audit": 4.718459520125879e-16,
+          "N_inverse_residual": 4.440892098500626e-16,
+          "tangent_flux_residual_l2": 0.0013914466992292023,
+          "k_flux_residual_l2": 0.002373036459844616,
+          "normal_integral_defect": 3.2267886232308366e-15,
+          "resolved_mass_defect": 7.942398922639708e-14,
+          "volume_relative_error": 6.2450045135165055e-15,
+          "maximum_free_stage_residual": 1.2444942299415873e-11
+        },
+        "standard_switched_floor": {
+          "preparation": {
+            "kind": "paired-floor",
+            "model": "standard_switched",
+            "degree": 4,
+            "layers": 6,
+            "refinement": 1,
+            "dt": 0.0002,
+            "steps": 1,
+            "amplitude": 0.0,
+            "width_ratio": 2.0,
+            "dimension": 2,
+            "height": 0.008,
+            "length": 1.6,
+            "periodic": false
+          },
+          "ranks": 4,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "7501f1d4cf0e9e09adb9bd77c3870fec67f282eadeb3d4bcf48c881815cc423b",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5,
+            6,
+            7,
+            8
+          ],
+          "initial_audit": {
+            "command": [
+              "taskset",
+              "-c",
+              "5",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_switched_floor/neutral.xml",
+              "--terrain-initial",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_switched_floor/initial.fld"
+            ],
+            "field_sha256": "2a7987aee8969f9b89c9db425698a73d092ca4cff1aa34f870faa9eb7e5738ca",
+            "maximum_relative_mismatch": 4.3019379451302537e-16,
+            "normal_velocity_raw_max": 0.0,
+            "normal_coordinate_reconstruction_max": 0.0,
+            "min_projected_k": 0.2999999999999999,
+            "min_projected_epsilon": 0.2080125735844593,
+            "maximum_projected_span_variation": 0.0,
+            "maximum_scaled_projected_span_variation": 0.0,
+            "maximum_scaled_input_span_variation": 0.0
+          },
+          "fixture_sha256": "2c018d3ade8d23e7f9f0a844391b22647ce426c40945c0f4b5d43a8d5d1b7399",
+          "timeout_seconds": 600,
+          "command": [
+            "taskset",
+            "-c",
+            "5,6,7,8",
+            "mpirun",
+            "--bind-to",
+            "none",
+            "-np",
+            "4",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 0,
+          "timeout_expired": false,
+          "elapsed": 7.9833389870182145,
+          "passed": true,
+          "audit_command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_switched_floor/neutral.xml",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_switched_floor/neutral.fld",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_switched_floor/field.csv"
+          ],
+          "completed_stages": 1,
+          "maximum_weak_divergence": 1.0840195933289413e-11,
+          "normal_projected_max": 5.301423833745038e-12,
+          "normal_pointwise_max": 8.690637995903816e-08,
+          "normal_l2": 5.375768452026645e-09,
+          "normal_away_feet_max": 8.690637995903816e-08,
+          "epsilon_projection_max": 0.00013365997465797363,
+          "remote_samples": 0.0,
+          "wall_ranks": 4.0,
+          "remote_without_wall_samples": 0.0,
+          "projection_audit": 4.718459520125879e-16,
+          "N_inverse_residual": 4.440892098500626e-16,
+          "tangent_flux_residual_l2": 0.0013914466992292023,
+          "k_flux_residual_l2": 0.002373036459844616,
+          "normal_integral_defect": 3.2267886232308366e-15,
+          "resolved_mass_defect": 7.942398922639708e-14,
+          "volume_relative_error": 6.2450045135165055e-15,
+          "maximum_free_stage_residual": 1.2444942299415873e-11
+        },
+        "standard_zero_hill": {
+          "preparation": {
+            "kind": "hill",
+            "model": "standard_fixed",
+            "degree": 4,
+            "layers": 6,
+            "refinement": 1,
+            "dt": 0.0002,
+            "steps": 1,
+            "amplitude": 0.04,
+            "width_ratio": 2.0,
+            "dimension": 2,
+            "height": 0.008,
+            "length": 1.6,
+            "periodic": false
+          },
+          "ranks": 4,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "f8cbbe97984d34a89d4260f104fefb84c92ce759b80f8a19f235a9f7f04edbc6",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5,
+            6,
+            7,
+            8
+          ],
+          "initial_audit": {
+            "command": [
+              "taskset",
+              "-c",
+              "5",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_zero_hill/neutral.xml",
+              "--terrain-initial",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_zero_hill/initial.fld"
+            ],
+            "field_sha256": "2bba2ebddd64b8021c8d8d6fa5438a78ec1e9eee7bfc191808aa8cee1a955049",
+            "maximum_relative_mismatch": 1.6653345369377348e-15,
+            "normal_velocity_raw_max": 2.220446049250313e-16,
+            "normal_coordinate_reconstruction_max": 1.3877787807814457e-17,
+            "min_projected_k": 0.2999999999999999,
+            "min_projected_epsilon": 0.20801257358445932,
+            "maximum_projected_span_variation": 0.0,
+            "maximum_scaled_projected_span_variation": 0.0,
+            "maximum_scaled_input_span_variation": 0.0
+          },
+          "fixture_sha256": "2fee398aa9899ee6003db0fed95c4c1c82793e93ca2df12eef4b094692291718",
+          "timeout_seconds": 600,
+          "command": [
+            "taskset",
+            "-c",
+            "5,6,7,8",
+            "mpirun",
+            "--bind-to",
+            "none",
+            "-np",
+            "4",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 0,
+          "timeout_expired": false,
+          "elapsed": 15.195403518999228,
+          "passed": true,
+          "audit_command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_zero_hill/neutral.xml",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_zero_hill/neutral.fld",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_zero_hill/field.csv"
+          ],
+          "completed_stages": 1,
+          "maximum_weak_divergence": 2.5875446380447725e-10,
+          "normal_projected_max": 5.011620901870313e-11,
+          "normal_pointwise_max": 0.0023027827098758328,
+          "normal_l2": 0.00011163494049635053,
+          "normal_away_feet_max": 0.0023027827098758328,
+          "epsilon_projection_max": 0.2542719833057481,
+          "remote_samples": 0.0,
+          "wall_ranks": 4.0,
+          "remote_without_wall_samples": 0.0,
+          "projection_audit": 6.414436228821691e-16,
+          "N_inverse_residual": 4.440892098500626e-16,
+          "tangent_flux_residual_l2": 0.01354017673874945,
+          "k_flux_residual_l2": 0.05794439538207307,
+          "normal_integral_defect": 3.5074605327824605e-13,
+          "resolved_mass_defect": 1.2057657444112385e-11,
+          "volume_relative_error": 6.787287818611776e-14,
+          "maximum_free_stage_residual": 3.1571117649523954e-10
+        },
+        "standard_original_hill": {
+          "preparation": {
+            "kind": "hill",
+            "model": "standard_original",
+            "degree": 4,
+            "layers": 6,
+            "refinement": 1,
+            "dt": 0.0002,
+            "steps": 1,
+            "amplitude": 0.04,
+            "width_ratio": 2.0,
+            "dimension": 2,
+            "height": 0.008,
+            "length": 1.6,
+            "periodic": false
+          },
+          "ranks": 4,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "1d77c4780c180973949a6525a5f2eebcf967243f413d780f5ab704a2bb640c33",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5,
+            6,
+            7,
+            8
+          ],
+          "initial_audit": {
+            "command": [
+              "taskset",
+              "-c",
+              "5",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_original_hill/neutral.xml",
+              "--terrain-initial",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_original_hill/initial.fld"
+            ],
+            "field_sha256": "9d7856d6132bf9f0a95c3b2d8d1bf5d276c69b965e2feabc028d80982d70c41a",
+            "maximum_relative_mismatch": 1.6653345369377348e-15,
+            "normal_velocity_raw_max": 2.220446049250313e-16,
+            "normal_coordinate_reconstruction_max": 1.3877787807814457e-17,
+            "min_projected_k": 0.2999999999999999,
+            "min_projected_epsilon": 0.20801257358445932,
+            "maximum_projected_span_variation": 0.0,
+            "maximum_scaled_projected_span_variation": 0.0,
+            "maximum_scaled_input_span_variation": 0.0
+          },
+          "fixture_sha256": "21e2941e5ea034f0f286fa32d970cb268abd7fc31b4546e1b4ab968ded77d078",
+          "timeout_seconds": 600,
+          "command": [
+            "taskset",
+            "-c",
+            "5,6,7,8",
+            "mpirun",
+            "--bind-to",
+            "none",
+            "-np",
+            "4",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 0,
+          "timeout_expired": false,
+          "elapsed": 16.000443655007984,
+          "passed": true,
+          "audit_command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_original_hill/neutral.xml",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_original_hill/neutral.fld",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_original_hill/field.csv"
+          ],
+          "completed_stages": 1,
+          "maximum_weak_divergence": 2.676020663291217e-10,
+          "normal_projected_max": 3.7339314997893736e-11,
+          "normal_pointwise_max": 0.0023027826483317027,
+          "normal_l2": 0.00011163493991523745,
+          "normal_away_feet_max": 0.0023027826483317027,
+          "epsilon_projection_max": 0.2542719833057481,
+          "remote_samples": 0.0,
+          "wall_ranks": 4.0,
+          "remote_without_wall_samples": 0.0,
+          "projection_audit": 6.414436228821691e-16,
+          "N_inverse_residual": 4.440892098500626e-16,
+          "tangent_flux_residual_l2": 0.01354017669457823,
+          "k_flux_residual_l2": 0.0579443955776691,
+          "normal_integral_defect": 2.2023357945061641e-13,
+          "resolved_mass_defect": 1.2770227576948661e-11,
+          "volume_relative_error": 6.787287818611776e-14,
+          "maximum_free_stage_residual": 2.139869189607169e-10
+        },
+        "standard_smooth_property": {
+          "preparation": {
+            "kind": "hill",
+            "model": "standard_fixed",
+            "degree": 4,
+            "layers": 6,
+            "refinement": 1,
+            "dt": 0.0002,
+            "steps": 1,
+            "amplitude": 0.04,
+            "width_ratio": 2.0,
+            "dimension": 2,
+            "height": 0.008,
+            "length": 1.6,
+            "periodic": false
+          },
+          "ranks": 4,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "ac3a6fae0fc7be1e279cd3525fb341a09f5c899adc10a8e300fc2644228aaef6",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5,
+            6,
+            7,
+            8
+          ],
+          "initial_audit": {
+            "command": [
+              "taskset",
+              "-c",
+              "5",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_smooth_property/neutral.xml",
+              "--terrain-initial",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_smooth_property/initial.fld"
+            ],
+            "field_sha256": "e844c9871ed0d883feeb029860d5a8403fc02886fef381074b5f8f019990bc39",
+            "maximum_relative_mismatch": 1.6653345369377348e-15,
+            "normal_velocity_raw_max": 2.220446049250313e-16,
+            "normal_coordinate_reconstruction_max": 1.3877787807814457e-17,
+            "min_projected_k": 0.2999999999999999,
+            "min_projected_epsilon": 0.20801257358445932,
+            "maximum_projected_span_variation": 0.0,
+            "maximum_scaled_projected_span_variation": 0.0,
+            "maximum_scaled_input_span_variation": 0.0
+          },
+          "fixture_sha256": "2caabe728130886d0819fc6d0fbc8388b7fd1413c7174fd9ff47ee75b274964b",
+          "timeout_seconds": 600,
+          "command": [
+            "taskset",
+            "-c",
+            "5,6,7,8",
+            "mpirun",
+            "--bind-to",
+            "none",
+            "-np",
+            "4",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 0,
+          "timeout_expired": false,
+          "elapsed": 15.196927893004613,
+          "passed": true,
+          "audit_command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_smooth_property/neutral.xml",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_smooth_property/neutral.fld",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_smooth_property/field.csv"
+          ],
+          "completed_stages": 1,
+          "maximum_weak_divergence": 3.82472127945471e-10,
+          "normal_projected_max": 4.145793120987294e-11,
+          "normal_pointwise_max": 0.0023064985708451035,
+          "normal_l2": 0.00011212939936948823,
+          "normal_away_feet_max": 0.0023064985708451035,
+          "epsilon_projection_max": 0.00013352337679428672,
+          "remote_samples": 0.0,
+          "wall_ranks": 4.0,
+          "remote_without_wall_samples": 0.0,
+          "projection_audit": 6.414436228821691e-16,
+          "N_inverse_residual": 4.440892098500626e-16,
+          "tangent_flux_residual_l2": 0.013616454278669463,
+          "k_flux_residual_l2": 0.04633195054291334,
+          "normal_integral_defect": 1.7440269639969284e-13,
+          "resolved_mass_defect": 1.6950364902505082e-11,
+          "volume_relative_error": 6.787287818611776e-14,
+          "maximum_free_stage_residual": 2.216245948177062e-10
+        },
+        "standard_step_property": {
+          "preparation": {
+            "kind": "hill",
+            "model": "standard_original",
+            "degree": 4,
+            "layers": 6,
+            "refinement": 1,
+            "dt": 0.0002,
+            "steps": 1,
+            "amplitude": 0.04,
+            "width_ratio": 2.0,
+            "dimension": 2,
+            "height": 0.008,
+            "length": 1.6,
+            "periodic": false
+          },
+          "ranks": 4,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "9568fa17afcac16a3311e73fade5d55c5625ee39103b118156967d542e23e48b",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5,
+            6,
+            7,
+            8
+          ],
+          "initial_audit": {
+            "command": [
+              "taskset",
+              "-c",
+              "5",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_step_property/neutral.xml",
+              "--terrain-initial",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_step_property/initial.fld"
+            ],
+            "field_sha256": "d524f6da1b32dfeaac7972a8647b2a3b6f0f3811c8778505e126a6e0e255a840",
+            "maximum_relative_mismatch": 1.6653345369377348e-15,
+            "normal_velocity_raw_max": 2.220446049250313e-16,
+            "normal_coordinate_reconstruction_max": 1.3877787807814457e-17,
+            "min_projected_k": 0.2999999999999999,
+            "min_projected_epsilon": 0.20801257358445932,
+            "maximum_projected_span_variation": 0.0,
+            "maximum_scaled_projected_span_variation": 0.0,
+            "maximum_scaled_input_span_variation": 0.0
+          },
+          "fixture_sha256": "f716cc2709ee8711e422b7d435cd5a40599eba0c9d1dcea138ecaf25a2fe47c5",
+          "timeout_seconds": 600,
+          "command": [
+            "taskset",
+            "-c",
+            "5,6,7,8",
+            "mpirun",
+            "--bind-to",
+            "none",
+            "-np",
+            "4",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 0,
+          "timeout_expired": false,
+          "elapsed": 15.248761622002348,
+          "passed": true,
+          "audit_command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_step_property/neutral.xml",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_step_property/neutral.fld",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_step_property/field.csv"
+          ],
+          "completed_stages": 1,
+          "maximum_weak_divergence": 3.909610089244805e-10,
+          "normal_projected_max": 2.4591666014324113e-11,
+          "normal_pointwise_max": 0.0023026436470485233,
+          "normal_l2": 0.00011242941670854278,
+          "normal_away_feet_max": 0.0023026436470485233,
+          "epsilon_projection_max": 0.2542719833057481,
+          "remote_samples": 0.0,
+          "wall_ranks": 4.0,
+          "remote_without_wall_samples": 0.0,
+          "projection_audit": 6.414436228821691e-16,
+          "N_inverse_residual": 4.440892098500626e-16,
+          "tangent_flux_residual_l2": 0.013512415428193798,
+          "k_flux_residual_l2": 0.06289747267056006,
+          "normal_integral_defect": 5.909765030146722e-14,
+          "resolved_mass_defect": 1.489994213690134e-11,
+          "volume_relative_error": 6.787287818611776e-14,
+          "maximum_free_stage_residual": 1.54837881085821e-10
+        },
+        "standard_mpi1": {
+          "preparation": {
+            "kind": "plane",
+            "model": "standard_fixed",
+            "angle": 0.0,
+            "height": 0.008,
+            "roughness": 0.002,
+            "dimension": 2,
+            "degree": 4,
+            "layers": 8,
+            "nx": 1,
+            "dt": 0.002,
+            "steps": 2,
+            "legacy": false,
+            "boundary": "periodic"
+          },
+          "ranks": 1,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "80933ffe9706dbf95587efa6af3d66bb2d1ecd4df422e4de05dc15e4a71ac615",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5
+          ],
+          "fixture_sha256": "80933ffe9706dbf95587efa6af3d66bb2d1ecd4df422e4de05dc15e4a71ac615",
+          "timeout_seconds": 600,
+          "command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 0,
+          "timeout_expired": false,
+          "elapsed": 2.873628009983804,
+          "passed": true,
+          "audit_command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_mpi1/neutral.xml",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_mpi1/neutral.fld",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_mpi1/field.csv"
+          ],
+          "completed_stages": 2,
+          "maximum_weak_divergence": 9.476459501584827e-12,
+          "normal_projected_max": 3.0965475077960625e-12,
+          "normal_pointwise_max": 3.1162816254714807e-12,
+          "normal_l2": 2.0165939785601533e-12,
+          "normal_away_feet_max": 3.1162816254714807e-12,
+          "epsilon_projection_max": 6.235190141978819e-11,
+          "remote_samples": 0.0,
+          "wall_ranks": 1.0,
+          "remote_without_wall_samples": 0.0,
+          "projection_audit": 1.9716122305521605e-15,
+          "N_inverse_residual": 5.551115123125783e-17,
+          "tangent_flux_residual_l2": 8.188886708969196e-06,
+          "k_flux_residual_l2": 1.9573145114826262e-07,
+          "normal_integral_defect": 9.186447081877204e-15,
+          "resolved_mass_defect": 9.13703087154965e-15,
+          "maximum_free_stage_residual": 1.527653670422661e-11
+        },
+        "standard_mpi2": {
+          "preparation": {
+            "kind": "plane",
+            "model": "standard_fixed",
+            "angle": 0.0,
+            "height": 0.008,
+            "roughness": 0.002,
+            "dimension": 2,
+            "degree": 4,
+            "layers": 8,
+            "nx": 1,
+            "dt": 0.002,
+            "steps": 2,
+            "legacy": false,
+            "boundary": "periodic"
+          },
+          "ranks": 2,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "80933ffe9706dbf95587efa6af3d66bb2d1ecd4df422e4de05dc15e4a71ac615",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5,
+            6
+          ],
+          "fixture_sha256": "80933ffe9706dbf95587efa6af3d66bb2d1ecd4df422e4de05dc15e4a71ac615",
+          "timeout_seconds": 600,
+          "command": [
+            "taskset",
+            "-c",
+            "5,6",
+            "mpirun",
+            "--bind-to",
+            "none",
+            "-np",
+            "2",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 0,
+          "timeout_expired": false,
+          "elapsed": 3.575297600997146,
+          "passed": true,
+          "audit_command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_mpi2/neutral.xml",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_mpi2/neutral.fld",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_mpi2/field.csv"
+          ],
+          "completed_stages": 2,
+          "maximum_weak_divergence": 9.036470269139767e-12,
+          "normal_projected_max": 2.9490484175285417e-12,
+          "normal_pointwise_max": 2.970296580150583e-12,
+          "normal_l2": 1.7943513471471024e-12,
+          "normal_away_feet_max": 2.970296580150583e-12,
+          "epsilon_projection_max": 6.268052743507724e-11,
+          "remote_samples": 0.0,
+          "wall_ranks": 1.0,
+          "remote_without_wall_samples": 0.0,
+          "projection_audit": 1.9716122305521605e-15,
+          "N_inverse_residual": 5.551115123125783e-17,
+          "tangent_flux_residual_l2": 8.188886691215188e-06,
+          "k_flux_residual_l2": 1.9573145260762614e-07,
+          "normal_integral_defect": 7.274638099068942e-15,
+          "resolved_mass_defect": 7.208804003479594e-15,
+          "maximum_free_stage_residual": 1.5283385446486973e-11
+        },
+        "standard_mpi4": {
+          "preparation": {
+            "kind": "plane",
+            "model": "standard_fixed",
+            "angle": 0.0,
+            "height": 0.008,
+            "roughness": 0.002,
+            "dimension": 2,
+            "degree": 4,
+            "layers": 8,
+            "nx": 1,
+            "dt": 0.002,
+            "steps": 2,
+            "legacy": false,
+            "boundary": "periodic"
+          },
+          "ranks": 4,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "80933ffe9706dbf95587efa6af3d66bb2d1ecd4df422e4de05dc15e4a71ac615",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5,
+            6,
+            7,
+            8
+          ],
+          "fixture_sha256": "80933ffe9706dbf95587efa6af3d66bb2d1ecd4df422e4de05dc15e4a71ac615",
+          "timeout_seconds": 600,
+          "command": [
+            "taskset",
+            "-c",
+            "5,6,7,8",
+            "mpirun",
+            "--bind-to",
+            "none",
+            "-np",
+            "4",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 0,
+          "timeout_expired": false,
+          "elapsed": 4.9849224900244735,
+          "passed": true,
+          "audit_command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_mpi4/neutral.xml",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_mpi4/neutral.fld",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_mpi4/field.csv"
+          ],
+          "completed_stages": 2,
+          "maximum_weak_divergence": 9.070650640225683e-12,
+          "normal_projected_max": 4.390184379244673e-12,
+          "normal_pointwise_max": 4.39593182070333e-12,
+          "normal_l2": 2.5682732654795904e-12,
+          "normal_away_feet_max": 4.39593182070333e-12,
+          "epsilon_projection_max": 6.17266238123193e-11,
+          "remote_samples": 8.0,
+          "wall_ranks": 1.0,
+          "remote_without_wall_samples": 8.0,
+          "projection_audit": 1.9716122305521605e-15,
+          "N_inverse_residual": 5.551115123125783e-17,
+          "tangent_flux_residual_l2": 8.18888669248925e-06,
+          "k_flux_residual_l2": 1.9573144560165205e-07,
+          "normal_integral_defect": 1.8443832914436365e-14,
+          "resolved_mass_defect": 1.8367473397190382e-14,
+          "maximum_free_stage_residual": 1.5249994860807713e-11
+        },
+        "standard_smooth_wall": {
+          "preparation": {
+            "kind": "plane",
+            "model": "standard_original",
+            "angle": 0.0,
+            "height": 0.008,
+            "roughness": 0.002,
+            "dimension": 2,
+            "degree": 4,
+            "layers": 6,
+            "nx": 1,
+            "dt": 0.0002,
+            "steps": 1,
+            "legacy": false,
+            "boundary": "periodic"
+          },
+          "ranks": 1,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "29e604233b54abb6298e52f0bd8bbefb2db97c2f9865ce84fa5ce3537bdd4894",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5
+          ],
+          "fixture_sha256": "29e604233b54abb6298e52f0bd8bbefb2db97c2f9865ce84fa5ce3537bdd4894",
+          "timeout_seconds": 600,
+          "command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 0,
+          "timeout_expired": false,
+          "elapsed": 3.0737078379897866,
+          "passed": true,
+          "audit_command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_smooth_wall/neutral.xml",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_smooth_wall/neutral.fld",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_smooth_wall/field.csv"
+          ],
+          "completed_stages": 1,
+          "maximum_weak_divergence": 5.912678750220582e-10,
+          "normal_projected_max": 3.0941039514952047e-11,
+          "normal_pointwise_max": 3.0942020053335425e-11,
+          "normal_l2": 1.9755971053500493e-11,
+          "normal_away_feet_max": 3.0942020053335425e-11,
+          "epsilon_projection_max": 1.6868195729102808e-10,
+          "remote_samples": 0.0,
+          "wall_ranks": 1.0,
+          "remote_without_wall_samples": 0.0,
+          "projection_audit": 1.9716122305521605e-15,
+          "N_inverse_residual": 5.551115123125783e-17,
+          "tangent_flux_residual_l2": 0.00040240535386061837,
+          "k_flux_residual_l2": 0.0017243913848682198,
+          "normal_integral_defect": 2.7250473600565653e-13,
+          "resolved_mass_defect": 2.7259057579405515e-13,
+          "maximum_free_stage_residual": 1.0174447831521015e-10
+        },
+        "cls_fixed_floor": {
+          "preparation": {
+            "kind": "paired-floor",
+            "model": "cls_fixed",
+            "degree": 4,
+            "layers": 6,
+            "refinement": 1,
+            "dt": 0.0002,
+            "steps": 1,
+            "amplitude": 0.0,
+            "width_ratio": 2.0,
+            "dimension": 2,
+            "height": 0.008,
+            "length": 1.6,
+            "periodic": false
+          },
+          "ranks": 4,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "85750500ac46e52b296e0aa9ed2b4b82d798660b12cd23b7508951d4699d6c61",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5,
+            6,
+            7,
+            8
+          ],
+          "initial_audit": {
+            "command": [
+              "taskset",
+              "-c",
+              "5",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_fixed_floor/neutral.xml",
+              "--terrain-initial",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_fixed_floor/initial.fld"
+            ],
+            "field_sha256": "7a7e9fda90bd38829545ec367950816a1a44a7c90f0f2623621553b44fb192bf",
+            "maximum_relative_mismatch": 4.380364741297227e-16,
+            "normal_velocity_raw_max": 0.0,
+            "normal_coordinate_reconstruction_max": 0.0,
+            "min_projected_k": 0.2871607573461855,
+            "min_projected_epsilon": 0.20428828104898317,
+            "maximum_projected_span_variation": 0.0,
+            "maximum_scaled_projected_span_variation": 0.0,
+            "maximum_scaled_input_span_variation": 0.0
+          },
+          "fixture_sha256": "d7699ad3615499a8da519eea0205abe506e81a1c03c62a7fe8bc6bdfb4b9a0b2",
+          "timeout_seconds": 1800,
+          "command": [
+            "taskset",
+            "-c",
+            "5,6,7,8",
+            "mpirun",
+            "--bind-to",
+            "none",
+            "-np",
+            "4",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 0,
+          "timeout_expired": false,
+          "elapsed": 11.440003436000552,
+          "passed": true,
+          "audit_command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_fixed_floor/neutral.xml",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_fixed_floor/neutral.fld",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_fixed_floor/field.csv"
+          ],
+          "completed_stages": 1,
+          "maximum_weak_divergence": 6.14045728546691e-10,
+          "normal_projected_max": 7.980477489637735e-11,
+          "normal_pointwise_max": 3.102595041306239e-08,
+          "normal_l2": 2.5844431706001304e-09,
+          "normal_away_feet_max": 3.102595041306239e-08,
+          "epsilon_projection_max": 6.175676393915808e-05,
+          "remote_samples": 0.0,
+          "wall_ranks": 4.0,
+          "remote_without_wall_samples": 0.0,
+          "projection_audit": 4.718459520125879e-16,
+          "N_inverse_residual": 4.440892098500626e-16,
+          "tangent_flux_residual_l2": 5.930341127516409e-05,
+          "k_flux_residual_l2": 0.001992632126334731,
+          "normal_integral_defect": 1.7067182169549783e-13,
+          "resolved_mass_defect": 2.2907672696619538e-11,
+          "volume_relative_error": 6.2450045135165055e-15,
+          "maximum_free_stage_residual": 1.8054822117308438e-10
+        },
+        "cls_switched_floor": {
+          "preparation": {
+            "kind": "paired-floor",
+            "model": "cls_switched",
+            "degree": 4,
+            "layers": 6,
+            "refinement": 1,
+            "dt": 0.0002,
+            "steps": 1,
+            "amplitude": 0.0,
+            "width_ratio": 2.0,
+            "dimension": 2,
+            "height": 0.008,
+            "length": 1.6,
+            "periodic": false
+          },
+          "ranks": 4,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "50b8d1640ace6d1c3610cd9c46bd4aa8ec7b5ee9ceb758fa21a654e72f2c0bd2",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5,
+            6,
+            7,
+            8
+          ],
+          "initial_audit": {
+            "command": [
+              "taskset",
+              "-c",
+              "5",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_switched_floor/neutral.xml",
+              "--terrain-initial",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_switched_floor/initial.fld"
+            ],
+            "field_sha256": "127c3d0c8f90020e058882b567e1568e5327edd316617b39be89ce121f3006d5",
+            "maximum_relative_mismatch": 4.380364741297227e-16,
+            "normal_velocity_raw_max": 0.0,
+            "normal_coordinate_reconstruction_max": 0.0,
+            "min_projected_k": 0.2871607573461855,
+            "min_projected_epsilon": 0.20428828104898317,
+            "maximum_projected_span_variation": 0.0,
+            "maximum_scaled_projected_span_variation": 0.0,
+            "maximum_scaled_input_span_variation": 0.0
+          },
+          "fixture_sha256": "725270a2acb1698c489b22293a27f577b67795ba0cfd41b16b66a9b02fdbae14",
+          "timeout_seconds": 1800,
+          "command": [
+            "taskset",
+            "-c",
+            "5,6,7,8",
+            "mpirun",
+            "--bind-to",
+            "none",
+            "-np",
+            "4",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 0,
+          "timeout_expired": false,
+          "elapsed": 11.437421442009509,
+          "passed": true,
+          "audit_command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_switched_floor/neutral.xml",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_switched_floor/neutral.fld",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_switched_floor/field.csv"
+          ],
+          "completed_stages": 1,
+          "maximum_weak_divergence": 6.14045728546691e-10,
+          "normal_projected_max": 7.980477489637735e-11,
+          "normal_pointwise_max": 3.102595041306239e-08,
+          "normal_l2": 2.5844431706001304e-09,
+          "normal_away_feet_max": 3.102595041306239e-08,
+          "epsilon_projection_max": 6.175676393915808e-05,
+          "remote_samples": 0.0,
+          "wall_ranks": 4.0,
+          "remote_without_wall_samples": 0.0,
+          "projection_audit": 4.718459520125879e-16,
+          "N_inverse_residual": 4.440892098500626e-16,
+          "tangent_flux_residual_l2": 5.930341127516409e-05,
+          "k_flux_residual_l2": 0.001992632126334731,
+          "normal_integral_defect": 1.7067182169549783e-13,
+          "resolved_mass_defect": 2.2907672696619538e-11,
+          "volume_relative_error": 6.2450045135165055e-15,
+          "maximum_free_stage_residual": 1.8054822117308438e-10
+        },
+        "cls_zero_hill": {
+          "preparation": {
+            "kind": "hill",
+            "model": "cls_fixed",
+            "degree": 4,
+            "layers": 6,
+            "refinement": 1,
+            "dt": 0.0002,
+            "steps": 1,
+            "amplitude": 0.04,
+            "width_ratio": 2.0,
+            "dimension": 2,
+            "height": 0.008,
+            "length": 1.6,
+            "periodic": false
+          },
+          "ranks": 4,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "03a5c882bfd65deb886ad001eeb160803811ec3dc9e02a154d37be4ad58c2de9",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5,
+            6,
+            7,
+            8
+          ],
+          "initial_audit": {
+            "command": [
+              "taskset",
+              "-c",
+              "5",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_zero_hill/neutral.xml",
+              "--terrain-initial",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_zero_hill/initial.fld"
+            ],
+            "field_sha256": "577d617d68b1a442de2bf69881c0b8aaa4f4237c97decf408dbeb2ae36775a98",
+            "maximum_relative_mismatch": 1.5543122344752192e-15,
+            "normal_velocity_raw_max": 2.220446049250313e-16,
+            "normal_coordinate_reconstruction_max": 1.3877787807814457e-17,
+            "min_projected_k": 0.2871607573461855,
+            "min_projected_epsilon": 0.20428828104898317,
+            "maximum_projected_span_variation": 0.0,
+            "maximum_scaled_projected_span_variation": 0.0,
+            "maximum_scaled_input_span_variation": 0.0
+          },
+          "fixture_sha256": "628a97f1799943063d0797641a03ccc6914fc1854e2411a4b488af7901e15670",
+          "timeout_seconds": 1800,
+          "command": [
+            "taskset",
+            "-c",
+            "5,6,7,8",
+            "mpirun",
+            "--bind-to",
+            "none",
+            "-np",
+            "4",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 0,
+          "timeout_expired": false,
+          "elapsed": 41.190655849000905,
+          "passed": true,
+          "audit_command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_zero_hill/neutral.xml",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_zero_hill/neutral.fld",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_zero_hill/field.csv"
+          ],
+          "completed_stages": 1,
+          "maximum_weak_divergence": 1.464579133586217e-10,
+          "normal_projected_max": 3.895846409432959e-11,
+          "normal_pointwise_max": 0.002350209306834615,
+          "normal_l2": 0.00011409104507961699,
+          "normal_away_feet_max": 0.002350209306834615,
+          "epsilon_projection_max": 0.11757849502734175,
+          "remote_samples": 0.0,
+          "wall_ranks": 4.0,
+          "remote_without_wall_samples": 0.0,
+          "projection_audit": 6.414436228821691e-16,
+          "N_inverse_residual": 4.440892098500626e-16,
+          "tangent_flux_residual_l2": 0.01213158365068712,
+          "k_flux_residual_l2": 0.05668560731756479,
+          "normal_integral_defect": 2.2757661522003177e-14,
+          "resolved_mass_defect": 3.3356437729135935e-12,
+          "volume_relative_error": 6.787287818611776e-14,
+          "maximum_free_stage_residual": 6.546606458554891e-11
+        },
+        "cls_original_hill": {
+          "preparation": {
+            "kind": "hill",
+            "model": "cls_original",
+            "degree": 4,
+            "layers": 6,
+            "refinement": 1,
+            "dt": 0.0002,
+            "steps": 1,
+            "amplitude": 0.04,
+            "width_ratio": 2.0,
+            "dimension": 2,
+            "height": 0.008,
+            "length": 1.6,
+            "periodic": false
+          },
+          "ranks": 4,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "a808f494cf4a7d2d75562d61678c8a6a54f576fdced5b7b56e5f77e0b2fdc20a",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5,
+            6,
+            7,
+            8
+          ],
+          "initial_audit": {
+            "command": [
+              "taskset",
+              "-c",
+              "5",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_original_hill/neutral.xml",
+              "--terrain-initial",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_original_hill/initial.fld"
+            ],
+            "field_sha256": "35e1cba0103097e78a9abd4c4c1b65e7a8b7f356358fdb12a1f3f7e56565d749",
+            "maximum_relative_mismatch": 1.5543122344752192e-15,
+            "normal_velocity_raw_max": 2.220446049250313e-16,
+            "normal_coordinate_reconstruction_max": 1.3877787807814457e-17,
+            "min_projected_k": 0.2871607573461855,
+            "min_projected_epsilon": 0.20428828104898317,
+            "maximum_projected_span_variation": 0.0,
+            "maximum_scaled_projected_span_variation": 0.0,
+            "maximum_scaled_input_span_variation": 0.0
+          },
+          "fixture_sha256": "cb5ca2f3453bbe9f5f4822f98a4e08a6ec147494a63d542f18462adf1a5eff8b",
+          "timeout_seconds": 1800,
+          "command": [
+            "taskset",
+            "-c",
+            "5,6,7,8",
+            "mpirun",
+            "--bind-to",
+            "none",
+            "-np",
+            "4",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 0,
+          "timeout_expired": false,
+          "elapsed": 39.61043998398236,
+          "passed": true,
+          "audit_command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_original_hill/neutral.xml",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_original_hill/neutral.fld",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_original_hill/field.csv"
+          ],
+          "completed_stages": 1,
+          "maximum_weak_divergence": 1.464579133586217e-10,
+          "normal_projected_max": 3.895846409432959e-11,
+          "normal_pointwise_max": 0.002350209306834615,
+          "normal_l2": 0.00011409104507961699,
+          "normal_away_feet_max": 0.002350209306834615,
+          "epsilon_projection_max": 0.11757849502734175,
+          "remote_samples": 0.0,
+          "wall_ranks": 4.0,
+          "remote_without_wall_samples": 0.0,
+          "projection_audit": 6.414436228821691e-16,
+          "N_inverse_residual": 4.440892098500626e-16,
+          "tangent_flux_residual_l2": 0.01213158365068712,
+          "k_flux_residual_l2": 0.05668560731756479,
+          "normal_integral_defect": 2.2757661522003177e-14,
+          "resolved_mass_defect": 3.3356437729135935e-12,
+          "volume_relative_error": 6.787287818611776e-14,
+          "maximum_free_stage_residual": 6.546606458554891e-11
+        },
+        "cls_smooth_property": {
+          "preparation": {
+            "kind": "hill",
+            "model": "cls_fixed",
+            "degree": 4,
+            "layers": 6,
+            "refinement": 1,
+            "dt": 0.0002,
+            "steps": 1,
+            "amplitude": 0.04,
+            "width_ratio": 2.0,
+            "dimension": 2,
+            "height": 0.008,
+            "length": 1.6,
+            "periodic": false
+          },
+          "ranks": 4,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "afc9a8042afe0ed29f83739817b8361a03a327db574c3e8e00272d4f73d3f79b",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5,
+            6,
+            7,
+            8
+          ],
+          "initial_audit": {
+            "command": [
+              "taskset",
+              "-c",
+              "5",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_smooth_property/neutral.xml",
+              "--terrain-initial",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_smooth_property/initial.fld"
+            ],
+            "field_sha256": "d8d5a2070055356e1f62a49225c458197f81376b1c28c1a2773bba251aebd798",
+            "maximum_relative_mismatch": 1.5543122344752192e-15,
+            "normal_velocity_raw_max": 2.220446049250313e-16,
+            "normal_coordinate_reconstruction_max": 1.3877787807814457e-17,
+            "min_projected_k": 0.2871607573461855,
+            "min_projected_epsilon": 0.20428828104898317,
+            "maximum_projected_span_variation": 0.0,
+            "maximum_scaled_projected_span_variation": 0.0,
+            "maximum_scaled_input_span_variation": 0.0
+          },
+          "fixture_sha256": "f703a5d5e55c8194275f8ae7a3e10fe03dc673bc249af296ddc09abffdb9dc2c",
+          "timeout_seconds": 1800,
+          "command": [
+            "taskset",
+            "-c",
+            "5,6,7,8",
+            "mpirun",
+            "--bind-to",
+            "none",
+            "-np",
+            "4",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 0,
+          "timeout_expired": false,
+          "elapsed": 40.45689487099298,
+          "passed": true,
+          "audit_command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_smooth_property/neutral.xml",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_smooth_property/neutral.fld",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_smooth_property/field.csv"
+          ],
+          "completed_stages": 1,
+          "maximum_weak_divergence": 1.680687719132679e-10,
+          "normal_projected_max": 1.8192219486987075e-11,
+          "normal_pointwise_max": 0.0023541634658853644,
+          "normal_l2": 0.00011449305411896811,
+          "normal_away_feet_max": 0.0023541634658853644,
+          "epsilon_projection_max": 6.167792424083274e-05,
+          "remote_samples": 0.0,
+          "wall_ranks": 4.0,
+          "remote_without_wall_samples": 0.0,
+          "projection_audit": 6.414436228821691e-16,
+          "N_inverse_residual": 4.440892098500626e-16,
+          "tangent_flux_residual_l2": 0.012230375927620434,
+          "k_flux_residual_l2": 0.045646316661017816,
+          "normal_integral_defect": 5.709332407343413e-16,
+          "resolved_mass_defect": 5.7628425143875506e-12,
+          "volume_relative_error": 6.787287818611776e-14,
+          "maximum_free_stage_residual": 6.093979375663236e-11
+        },
+        "cls_step_property": {
+          "preparation": {
+            "kind": "hill",
+            "model": "cls_original",
+            "degree": 4,
+            "layers": 6,
+            "refinement": 1,
+            "dt": 0.0002,
+            "steps": 1,
+            "amplitude": 0.04,
+            "width_ratio": 2.0,
+            "dimension": 2,
+            "height": 0.008,
+            "length": 1.6,
+            "periodic": false
+          },
+          "ranks": 4,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "b1a8c878f63cb8e621d47431eec6d6631b1d8b3c1f986e63427be1bd1edbb8e1",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5,
+            6,
+            7,
+            8
+          ],
+          "initial_audit": {
+            "command": [
+              "taskset",
+              "-c",
+              "5",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_step_property/neutral.xml",
+              "--terrain-initial",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_step_property/initial.fld"
+            ],
+            "field_sha256": "0f8fa4bf0b1c43d8f8cfa0837396125296ecd89c97cb3748c3f7e8130a3cf2c6",
+            "maximum_relative_mismatch": 1.5543122344752192e-15,
+            "normal_velocity_raw_max": 2.220446049250313e-16,
+            "normal_coordinate_reconstruction_max": 1.3877787807814457e-17,
+            "min_projected_k": 0.2871607573461855,
+            "min_projected_epsilon": 0.20428828104898317,
+            "maximum_projected_span_variation": 0.0,
+            "maximum_scaled_projected_span_variation": 0.0,
+            "maximum_scaled_input_span_variation": 0.0
+          },
+          "fixture_sha256": "d9160766ed38288df6c8131a3777e6f716bc33d02016978c78edae67b6148d56",
+          "timeout_seconds": 1800,
+          "command": [
+            "taskset",
+            "-c",
+            "5,6,7,8",
+            "mpirun",
+            "--bind-to",
+            "none",
+            "-np",
+            "4",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 0,
+          "timeout_expired": false,
+          "elapsed": 39.99975426500896,
+          "passed": true,
+          "audit_command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_step_property/neutral.xml",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_step_property/neutral.fld",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_step_property/field.csv"
+          ],
+          "completed_stages": 1,
+          "maximum_weak_divergence": 2.7880381793878504e-10,
+          "normal_projected_max": 6.006062195597875e-11,
+          "normal_pointwise_max": 0.002350053284148692,
+          "normal_l2": 0.00011524678258046971,
+          "normal_away_feet_max": 0.002350053284148692,
+          "epsilon_projection_max": 0.11757849502734175,
+          "remote_samples": 0.0,
+          "wall_ranks": 4.0,
+          "remote_without_wall_samples": 0.0,
+          "projection_audit": 6.414436228821691e-16,
+          "N_inverse_residual": 4.440892098500626e-16,
+          "tangent_flux_residual_l2": 0.012085695223204093,
+          "k_flux_residual_l2": 0.06482636926833531,
+          "normal_integral_defect": 1.8318974250264254e-15,
+          "resolved_mass_defect": 6.8643415062318025e-12,
+          "volume_relative_error": 6.787287818611776e-14,
+          "maximum_free_stage_residual": 1.116668470117822e-10
+        },
+        "cls_mpi1": {
+          "preparation": {
+            "kind": "plane",
+            "model": "cls_fixed",
+            "angle": 0.0,
+            "height": 0.008,
+            "roughness": 0.002,
+            "dimension": 2,
+            "degree": 4,
+            "layers": 8,
+            "nx": 1,
+            "dt": 0.002,
+            "steps": 2,
+            "legacy": false,
+            "boundary": "periodic"
+          },
+          "ranks": 1,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "dec2efa286ad07afea22ba93479491d0a6e302cd8c612073848c97bd5e31a150",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5
+          ],
+          "fixture_sha256": "dec2efa286ad07afea22ba93479491d0a6e302cd8c612073848c97bd5e31a150",
+          "timeout_seconds": 1800,
+          "command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 0,
+          "timeout_expired": false,
+          "elapsed": 3.6735136620118283,
+          "passed": true,
+          "audit_command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_mpi1/neutral.xml",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_mpi1/neutral.fld",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_mpi1/field.csv"
+          ],
+          "completed_stages": 2,
+          "maximum_weak_divergence": 4.952801265357345e-10,
+          "normal_projected_max": 3.368980176014334e-12,
+          "normal_pointwise_max": 3.4659888213973756e-12,
+          "normal_l2": 1.7415895105357146e-12,
+          "normal_away_feet_max": 3.4659888213973756e-12,
+          "epsilon_projection_max": 1.0081713242016122e-11,
+          "remote_samples": 0.0,
+          "wall_ranks": 1.0,
+          "remote_without_wall_samples": 0.0,
+          "projection_audit": 1.9716122305521605e-15,
+          "N_inverse_residual": 5.551115123125783e-17,
+          "tangent_flux_residual_l2": 1.5926864686694509e-06,
+          "k_flux_residual_l2": 1.1897178760160872e-07,
+          "normal_integral_defect": 1.2458117443357465e-13,
+          "resolved_mass_defect": 1.2452444711908634e-13,
+          "maximum_free_stage_residual": 4.0128978266226806e-11
+        },
+        "cls_mpi2": {
+          "preparation": {
+            "kind": "plane",
+            "model": "cls_fixed",
+            "angle": 0.0,
+            "height": 0.008,
+            "roughness": 0.002,
+            "dimension": 2,
+            "degree": 4,
+            "layers": 8,
+            "nx": 1,
+            "dt": 0.002,
+            "steps": 2,
+            "legacy": false,
+            "boundary": "periodic"
+          },
+          "ranks": 2,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "dec2efa286ad07afea22ba93479491d0a6e302cd8c612073848c97bd5e31a150",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5,
+            6
+          ],
+          "fixture_sha256": "dec2efa286ad07afea22ba93479491d0a6e302cd8c612073848c97bd5e31a150",
+          "timeout_seconds": 1800,
+          "command": [
+            "taskset",
+            "-c",
+            "5,6",
+            "mpirun",
+            "--bind-to",
+            "none",
+            "-np",
+            "2",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 0,
+          "timeout_expired": false,
+          "elapsed": 3.323411738994764,
+          "passed": true,
+          "audit_command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_mpi2/neutral.xml",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_mpi2/neutral.fld",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_mpi2/field.csv"
+          ],
+          "completed_stages": 2,
+          "maximum_weak_divergence": 4.956196040938603e-10,
+          "normal_projected_max": 3.365136175424334e-12,
+          "normal_pointwise_max": 3.4571779124778923e-12,
+          "normal_l2": 1.7411245403645363e-12,
+          "normal_away_feet_max": 3.4571779124778923e-12,
+          "epsilon_projection_max": 1.0028422536834114e-11,
+          "remote_samples": 0.0,
+          "wall_ranks": 1.0,
+          "remote_without_wall_samples": 0.0,
+          "projection_audit": 1.9716122305521605e-15,
+          "N_inverse_residual": 5.551115123125783e-17,
+          "tangent_flux_residual_l2": 1.5926864606470506e-06,
+          "k_flux_residual_l2": 1.1897178610203796e-07,
+          "normal_integral_defect": 1.2458783941767006e-13,
+          "resolved_mass_defect": 1.2452650787150975e-13,
+          "maximum_free_stage_residual": 4.008303039440537e-11
+        },
+        "cls_mpi4": {
+          "preparation": {
+            "kind": "plane",
+            "model": "cls_fixed",
+            "angle": 0.0,
+            "height": 0.008,
+            "roughness": 0.002,
+            "dimension": 2,
+            "degree": 4,
+            "layers": 8,
+            "nx": 1,
+            "dt": 0.002,
+            "steps": 2,
+            "legacy": false,
+            "boundary": "periodic"
+          },
+          "ranks": 4,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "dec2efa286ad07afea22ba93479491d0a6e302cd8c612073848c97bd5e31a150",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5,
+            6,
+            7,
+            8
+          ],
+          "fixture_sha256": "dec2efa286ad07afea22ba93479491d0a6e302cd8c612073848c97bd5e31a150",
+          "timeout_seconds": 1800,
+          "command": [
+            "taskset",
+            "-c",
+            "5,6,7,8",
+            "mpirun",
+            "--bind-to",
+            "none",
+            "-np",
+            "4",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 0,
+          "timeout_expired": false,
+          "elapsed": 5.629420437995577,
+          "passed": true,
+          "audit_command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_mpi4/neutral.xml",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_mpi4/neutral.fld",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_mpi4/field.csv"
+          ],
+          "completed_stages": 2,
+          "maximum_weak_divergence": 4.957974796681574e-10,
+          "normal_projected_max": 3.3643542012731427e-12,
+          "normal_pointwise_max": 3.4572279954536783e-12,
+          "normal_l2": 1.7413022190326592e-12,
+          "normal_away_feet_max": 3.4572279954536783e-12,
+          "epsilon_projection_max": 1.0040857034709916e-11,
+          "remote_samples": 8.0,
+          "wall_ranks": 1.0,
+          "remote_without_wall_samples": 8.0,
+          "projection_audit": 1.9716122305521605e-15,
+          "N_inverse_residual": 5.551115123125783e-17,
+          "tangent_flux_residual_l2": 1.5926864779989794e-06,
+          "k_flux_residual_l2": 1.1897178698440404e-07,
+          "normal_integral_defect": 1.2479436092028096e-13,
+          "resolved_mass_defect": 1.2473129252949557e-13,
+          "maximum_free_stage_residual": 4.006045043939901e-11
+        },
+        "cls_smooth_wall": {
+          "preparation": {
+            "kind": "plane",
+            "model": "cls_original",
+            "angle": 0.0,
+            "height": 0.008,
+            "roughness": 0.002,
+            "dimension": 2,
+            "degree": 4,
+            "layers": 6,
+            "nx": 1,
+            "dt": 0.0002,
+            "steps": 1,
+            "legacy": false,
+            "boundary": "periodic"
+          },
+          "ranks": 1,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "4b3b7680f2e4b6f49494dfa3623582d85f61c2c5d7180d6c89d9d37f7b966cf8",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5
+          ],
+          "fixture_sha256": "4b3b7680f2e4b6f49494dfa3623582d85f61c2c5d7180d6c89d9d37f7b966cf8",
+          "timeout_seconds": 1800,
+          "command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 0,
+          "timeout_expired": false,
+          "elapsed": 3.17256681600702,
+          "passed": true,
+          "audit_command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_smooth_wall/neutral.xml",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_smooth_wall/neutral.fld",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_smooth_wall/field.csv"
+          ],
+          "completed_stages": 1,
+          "maximum_weak_divergence": 5.717966427384926e-11,
+          "normal_projected_max": 3.223947516128417e-13,
+          "normal_pointwise_max": 3.9861682064674297e-13,
+          "normal_l2": 1.9810510294167686e-13,
+          "normal_away_feet_max": 3.9861682064674297e-13,
+          "epsilon_projection_max": 2.0747847884194925e-12,
+          "remote_samples": 0.0,
+          "wall_ranks": 1.0,
+          "remote_without_wall_samples": 0.0,
+          "projection_audit": 1.9716122305521605e-15,
+          "N_inverse_residual": 5.551115123125783e-17,
+          "tangent_flux_residual_l2": 0.00011355087955054121,
+          "k_flux_residual_l2": 0.0015276839841819928,
+          "normal_integral_defect": 1.0868639622980606e-14,
+          "resolved_mass_defect": 1.0930905037839668e-14,
+          "maximum_free_stage_residual": 2.7309167641411146e-12
+        },
+        "standard_span_continuity": {
+          "preparation": {
+            "kind": "plane",
+            "model": "standard_fixed",
+            "angle": 0.0,
+            "height": 0.008,
+            "roughness": 0.002,
+            "dimension": 3,
+            "degree": 4,
+            "layers": 6,
+            "nx": 1,
+            "dt": 0.0002,
+            "steps": 2,
+            "legacy": false,
+            "boundary": "periodic"
+          },
+          "ranks": 4,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "ea695080f4a139b0a4e9f1edd198e8ba9c19c2fd6313a26b1f8141c18ddf8a87",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5,
+            6,
+            7,
+            8
+          ],
+          "fixture_sha256": "ea695080f4a139b0a4e9f1edd198e8ba9c19c2fd6313a26b1f8141c18ddf8a87",
+          "timeout_seconds": 1800,
+          "command": [
+            "taskset",
+            "-c",
+            "5,6,7,8",
+            "mpirun",
+            "--bind-to",
+            "none",
+            "-np",
+            "4",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 0,
+          "timeout_expired": false,
+          "elapsed": 20.20869655898423,
+          "passed": true,
+          "audit_command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_span_continuity/neutral.xml",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_span_continuity/neutral.fld",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_span_continuity/field.csv"
+          ],
+          "completed_stages": 2,
+          "maximum_weak_divergence": 2.548116129774019e-10,
+          "normal_projected_max": 5.096419058006986e-10,
+          "normal_pointwise_max": 6.128490217219031e-05,
+          "normal_l2": 1.937991043905597e-05,
+          "normal_away_feet_max": 6.128490217219031e-05,
+          "epsilon_projection_max": 2.1852519793696956e-09,
+          "remote_samples": 64.0,
+          "wall_ranks": 1.0,
+          "remote_without_wall_samples": 64.0,
+          "projection_audit": 5.6457882350903294e-15,
+          "N_inverse_residual": 1.6653345369377348e-16,
+          "tangent_flux_residual_l2": 2.7406831001883044e-05,
+          "k_flux_residual_l2": 1.0015493049594185e-06,
+          "normal_integral_defect": 9.474427241347337e-16,
+          "resolved_mass_defect": 9.492302225599623e-16,
+          "maximum_free_stage_residual": 1.476691412140326e-10
+        },
+        "cls_span_continuity": {
+          "preparation": {
+            "kind": "plane",
+            "model": "cls_fixed",
+            "angle": 0.0,
+            "height": 0.008,
+            "roughness": 0.002,
+            "dimension": 3,
+            "degree": 4,
+            "layers": 6,
+            "nx": 1,
+            "dt": 0.0002,
+            "steps": 2,
+            "legacy": false,
+            "boundary": "periodic"
+          },
+          "ranks": 4,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "a059b78064ee3795c651157e9d2c0db6f3190f60a798cf6b285b67c8763d21d9",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5,
+            6,
+            7,
+            8
+          ],
+          "fixture_sha256": "a059b78064ee3795c651157e9d2c0db6f3190f60a798cf6b285b67c8763d21d9",
+          "timeout_seconds": 1800,
+          "command": [
+            "taskset",
+            "-c",
+            "5,6,7,8",
+            "mpirun",
+            "--bind-to",
+            "none",
+            "-np",
+            "4",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 0,
+          "timeout_expired": false,
+          "elapsed": 31.279908160009654,
+          "passed": true,
+          "audit_command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_span_continuity/neutral.xml",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_span_continuity/neutral.fld",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_span_continuity/field.csv"
+          ],
+          "completed_stages": 2,
+          "maximum_weak_divergence": 5.659479855841345e-10,
+          "normal_projected_max": 7.608202963893351e-11,
+          "normal_pointwise_max": 5.712171260565258e-05,
+          "normal_l2": 1.806344678537047e-05,
+          "normal_away_feet_max": 5.712171260565258e-05,
+          "epsilon_projection_max": 2.6111557360763982e-11,
+          "remote_samples": 64.0,
+          "wall_ranks": 1.0,
+          "remote_without_wall_samples": 64.0,
+          "projection_audit": 5.6457882350903294e-15,
+          "N_inverse_residual": 1.6653345369377348e-16,
+          "tangent_flux_residual_l2": 5.545075982970459e-06,
+          "k_flux_residual_l2": 5.693242895694568e-07,
+          "normal_integral_defect": 2.829665469401357e-14,
+          "resolved_mass_defect": 2.829471531742035e-14,
+          "maximum_free_stage_residual": 4.633338370708732e-12
+        },
+        "log_smooth_property": {
+          "preparation": {
+            "kind": "hill",
+            "model": "standard",
+            "degree": 4,
+            "layers": 6,
+            "refinement": 1,
+            "dt": 0.0002,
+            "steps": 1,
+            "amplitude": 0.04,
+            "width_ratio": 2.0,
+            "dimension": 2,
+            "height": 0.008,
+            "length": 1.6,
+            "periodic": false
+          },
+          "ranks": 4,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "4b0a9a2d6e8069979f9d5df883b3e768bb427f480fe0b2bf397c220ef8c1f6b2",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5,
+            6,
+            7,
+            8
+          ],
+          "initial_audit": {
+            "command": [
+              "taskset",
+              "-c",
+              "5",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/log_smooth_property/neutral.xml",
+              "--terrain-initial",
+              "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/log_smooth_property/initial.fld"
+            ],
+            "field_sha256": "b4300489a70b16af10d9ef1ffbc852046d3fd802bae5f33a5aff028251ffd28f",
+            "maximum_relative_mismatch": 1.5543122344752192e-15,
+            "normal_velocity_raw_max": 2.220446049250313e-16,
+            "normal_coordinate_reconstruction_max": 1.3877787807814457e-17,
+            "min_projected_k": 0.2999999999999999,
+            "min_projected_epsilon": 0.20801257358445932,
+            "maximum_projected_span_variation": 0.0,
+            "maximum_scaled_projected_span_variation": 0.0,
+            "maximum_scaled_input_span_variation": 0.0
+          },
+          "fixture_sha256": "eff6d187c3f24a9373b339f8485f100f27f7f38ddd46f766680d633843595a11",
+          "timeout_seconds": 600,
+          "command": [
+            "taskset",
+            "-c",
+            "5,6,7,8",
+            "mpirun",
+            "--bind-to",
+            "none",
+            "-np",
+            "4",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 0,
+          "timeout_expired": false,
+          "elapsed": 5.632630901003722,
+          "passed": true,
+          "audit_command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/log_smooth_property/neutral.xml",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/log_smooth_property/neutral.fld",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/log_smooth_property/field.csv"
+          ],
+          "completed_stages": 1,
+          "maximum_weak_divergence": 1.0429073055024872e-10,
+          "normal_projected_max": 8.393907596718324e-13,
+          "normal_pointwise_max": 5.35569631119337e-05,
+          "normal_l2": 5.685336405528596e-06,
+          "normal_away_feet_max": 5.35569631119337e-05,
+          "epsilon_projection_max": 2.1563869534446667e-07,
+          "remote_samples": 0.0,
+          "wall_ranks": 4.0,
+          "remote_without_wall_samples": 0.0,
+          "projection_audit": 6.414436228821691e-16,
+          "N_inverse_residual": 4.440892098500626e-16,
+          "tangent_flux_residual_l2": 0.01344670102828762,
+          "k_flux_residual_l2": 0.000335246958274016,
+          "normal_integral_defect": 1.6416925718673627e-15,
+          "resolved_mass_defect": 4.661823807165051e-12,
+          "volume_relative_error": 6.787287818611776e-14,
+          "maximum_free_stage_residual": 6.814316939139322e-12
+        },
+        "standard_legacy_property": {
+          "preparation": {
+            "kind": "plane",
+            "model": "standard_original",
+            "angle": 0.0,
+            "height": 0.008,
+            "roughness": 0.002,
+            "dimension": 2,
+            "degree": 4,
+            "layers": 8,
+            "nx": 4,
+            "dt": 0.0002,
+            "steps": 1,
+            "legacy": true,
+            "boundary": "periodic"
+          },
+          "ranks": 1,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "aa996c68b9124fd816016c94253e7b0daab2a65860eb79756ca6e2661e3ea609",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5
+          ],
+          "fixture_sha256": "aa996c68b9124fd816016c94253e7b0daab2a65860eb79756ca6e2661e3ea609",
+          "timeout_seconds": 600,
+          "command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 1,
+          "timeout_expired": false,
+          "elapsed": 3.4226392339915037,
+          "passed": true,
+          "expected_rejection": "Spatial AWF transitions/properties require RANSWallGeometry=Plane"
+        },
+        "cls_legacy_property": {
+          "preparation": {
+            "kind": "plane",
+            "model": "cls_original",
+            "angle": 0.0,
+            "height": 0.008,
+            "roughness": 0.002,
+            "dimension": 2,
+            "degree": 4,
+            "layers": 8,
+            "nx": 4,
+            "dt": 0.0002,
+            "steps": 1,
+            "legacy": true,
+            "boundary": "periodic"
+          },
+          "ranks": 1,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "05c492ae0de7b544af224d903c230eeb111b829863195cd1300bc6c2dd094c03",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5
+          ],
+          "fixture_sha256": "05c492ae0de7b544af224d903c230eeb111b829863195cd1300bc6c2dd094c03",
+          "timeout_seconds": 1800,
+          "command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 1,
+          "timeout_expired": false,
+          "elapsed": 3.5237415970186703,
+          "passed": true,
+          "expected_rejection": "Spatial AWF transitions/properties require RANSWallGeometry=Plane"
+        },
+        "legacy_ramp": {
+          "preparation": {
+            "kind": "plane",
+            "model": "standard_fixed",
+            "angle": 0.0,
+            "height": 0.008,
+            "roughness": 0.002,
+            "dimension": 2,
+            "degree": 4,
+            "layers": 8,
+            "nx": 4,
+            "dt": 0.002,
+            "steps": 1,
+            "legacy": true,
+            "boundary": "periodic"
+          },
+          "ranks": 1,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "6fa79063efd53152a2691da91a92a53af4fdfbdf63dbab5184b5b55c9fe94675",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5
+          ],
+          "fixture_sha256": "6fa79063efd53152a2691da91a92a53af4fdfbdf63dbab5184b5b55c9fe94675",
+          "timeout_seconds": 600,
+          "command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 1,
+          "timeout_expired": false,
+          "elapsed": 3.6242352809931617,
+          "passed": true,
+          "expected_rejection": "Spatial AWF transitions/properties require RANSWallGeometry=Plane"
+        },
+        "standard_history_full": {
+          "preparation": {
+            "kind": "plane",
+            "model": "standard_fixed",
+            "angle": 0.0,
+            "height": 0.008,
+            "roughness": 0.002,
+            "dimension": 2,
+            "degree": 4,
+            "layers": 6,
+            "nx": 1,
+            "dt": 0.0002,
+            "steps": 4,
+            "legacy": false,
+            "boundary": "matched"
+          },
+          "ranks": 1,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "95044139ad3246d7d5acd319ff40042311969c14e3d5417bb2a372a6eb9540a9",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5
+          ],
+          "fixture_sha256": "95044139ad3246d7d5acd319ff40042311969c14e3d5417bb2a372a6eb9540a9",
+          "timeout_seconds": 600,
+          "command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 0,
+          "timeout_expired": false,
+          "elapsed": 3.4721491030068137,
+          "passed": true,
+          "audit_command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_history_full/neutral.xml",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_history_full/neutral.fld",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_history_full/field.csv"
+          ],
+          "completed_stages": 4,
+          "maximum_weak_divergence": 2.8156126283508745e-10,
+          "normal_projected_max": 1.9014284111664974e-12,
+          "normal_pointwise_max": 2.713640715398924e-05,
+          "normal_l2": 7.240949007240692e-06,
+          "normal_away_feet_max": 2.713640715398924e-05,
+          "epsilon_projection_max": 0.2542719833057481,
+          "remote_samples": 0.0,
+          "wall_ranks": 1.0,
+          "remote_without_wall_samples": 0.0,
+          "projection_audit": 3.2494390618082605e-17,
+          "N_inverse_residual": 5.551115123125783e-17,
+          "tangent_flux_residual_l2": 0.00039256920415026977,
+          "k_flux_residual_l2": 0.024353226602287063,
+          "normal_integral_defect": 8.247816793571725e-14,
+          "resolved_mass_defect": 8.238712553097278e-14,
+          "maximum_free_stage_residual": 4.44087937361179e-12
+        },
+        "standard_history_prefix": {
+          "preparation": {
+            "kind": "plane",
+            "model": "standard_fixed",
+            "angle": 0.0,
+            "height": 0.008,
+            "roughness": 0.002,
+            "dimension": 2,
+            "degree": 4,
+            "layers": 6,
+            "nx": 1,
+            "dt": 0.0002,
+            "steps": 2,
+            "legacy": false,
+            "boundary": "matched"
+          },
+          "ranks": 1,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "67ba4923fc1b6556732e7c766d7139d3ddde8403b4f6fea539cf28f334123d41",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5
+          ],
+          "fixture_sha256": "67ba4923fc1b6556732e7c766d7139d3ddde8403b4f6fea539cf28f334123d41",
+          "timeout_seconds": 600,
+          "command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 0,
+          "timeout_expired": false,
+          "elapsed": 3.2726915479870513,
+          "passed": true,
+          "audit_command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_history_prefix/neutral.xml",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_history_prefix/neutral.fld",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_history_prefix/field.csv"
+          ],
+          "completed_stages": 2,
+          "maximum_weak_divergence": 2.8156126283508745e-10,
+          "normal_projected_max": 1.9014284111664974e-12,
+          "normal_pointwise_max": 7.551757249188996e-06,
+          "normal_l2": 2.362135700253254e-06,
+          "normal_away_feet_max": 7.551757249188996e-06,
+          "epsilon_projection_max": 0.2542719833057481,
+          "remote_samples": 0.0,
+          "wall_ranks": 1.0,
+          "remote_without_wall_samples": 0.0,
+          "projection_audit": 3.2494390618082605e-17,
+          "N_inverse_residual": 5.551115123125783e-17,
+          "tangent_flux_residual_l2": 0.00019423692175349347,
+          "k_flux_residual_l2": 0.0236128632090204,
+          "normal_integral_defect": 8.247816793571725e-14,
+          "resolved_mass_defect": 8.238712553097278e-14,
+          "maximum_free_stage_residual": 4.44087937361179e-12
+        },
+        "standard_history_resume": {
+          "preparation": {
+            "kind": "plane",
+            "model": "standard_fixed",
+            "angle": 0.0,
+            "height": 0.008,
+            "roughness": 0.002,
+            "dimension": 2,
+            "degree": 4,
+            "layers": 6,
+            "nx": 1,
+            "dt": 0.0002,
+            "steps": 2,
+            "legacy": false,
+            "boundary": "matched"
+          },
+          "ranks": 4,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "bd0db6477fd219a05aa4717ba5406c6eae7f83fcd85a64ee245159df7d32ecf3",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5,
+            6,
+            7,
+            8
+          ],
+          "fixture_sha256": "bd0db6477fd219a05aa4717ba5406c6eae7f83fcd85a64ee245159df7d32ecf3",
+          "timeout_seconds": 600,
+          "command": [
+            "taskset",
+            "-c",
+            "5,6,7,8",
+            "mpirun",
+            "--bind-to",
+            "none",
+            "-np",
+            "4",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 0,
+          "timeout_expired": false,
+          "elapsed": 3.9285304869990796,
+          "passed": true,
+          "audit_command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_history_resume/neutral.xml",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_history_resume/neutral.fld",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/standard_history_resume/field.csv"
+          ],
+          "completed_stages": 2,
+          "maximum_weak_divergence": 8.688223429897995e-11,
+          "normal_projected_max": 6.309680022312342e-13,
+          "normal_pointwise_max": 2.7136407093451e-05,
+          "normal_l2": 7.240948999132517e-06,
+          "normal_away_feet_max": 2.7136407093451e-05,
+          "epsilon_projection_max": 0.2542719833057481,
+          "remote_samples": 8.0,
+          "wall_ranks": 1.0,
+          "remote_without_wall_samples": 8.0,
+          "projection_audit": 3.2494390618082605e-17,
+          "N_inverse_residual": 5.551115123125783e-17,
+          "tangent_flux_residual_l2": 0.00039256920133008173,
+          "k_flux_residual_l2": 0.024353226601971315,
+          "normal_integral_defect": 2.563839025448252e-14,
+          "resolved_mass_defect": 2.5547507889154917e-14,
+          "maximum_free_stage_residual": 1.8568849507588256e-12
+        },
+        "standard_history_bad_mask": {
+          "preparation": {
+            "kind": "plane",
+            "model": "standard_fixed",
+            "angle": 0.0,
+            "height": 0.008,
+            "roughness": 0.002,
+            "dimension": 2,
+            "degree": 4,
+            "layers": 6,
+            "nx": 1,
+            "dt": 0.0002,
+            "steps": 1,
+            "legacy": false,
+            "boundary": "matched"
+          },
+          "ranks": 1,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "48774ce4b8d9bed5353151e809327fc2fc1e458695c942d8ff9f8bfbe107b667",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5
+          ],
+          "fixture_sha256": "48774ce4b8d9bed5353151e809327fc2fc1e458695c942d8ff9f8bfbe107b667",
+          "timeout_seconds": 600,
+          "command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 1,
+          "timeout_expired": false,
+          "elapsed": 3.0225395869929343,
+          "passed": true,
+          "expected_rejection": "model/configuration"
+        },
+        "standard_history_bad_property": {
+          "preparation": {
+            "kind": "plane",
+            "model": "standard_fixed",
+            "angle": 0.0,
+            "height": 0.008,
+            "roughness": 0.002,
+            "dimension": 2,
+            "degree": 4,
+            "layers": 6,
+            "nx": 1,
+            "dt": 0.0002,
+            "steps": 1,
+            "legacy": false,
+            "boundary": "matched"
+          },
+          "ranks": 1,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "293f61f8aafd66fd1eb13e714bb0fc13896c17ddcddd5233882307957bf7207e",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5
+          ],
+          "fixture_sha256": "293f61f8aafd66fd1eb13e714bb0fc13896c17ddcddd5233882307957bf7207e",
+          "timeout_seconds": 600,
+          "command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 1,
+          "timeout_expired": false,
+          "elapsed": 2.8223787840106525,
+          "passed": true,
+          "expected_rejection": "model/configuration"
+        },
+        "standard_history_bad_normal": {
+          "preparation": {
+            "kind": "plane",
+            "model": "standard_fixed",
+            "angle": 0.0,
+            "height": 0.008,
+            "roughness": 0.002,
+            "dimension": 2,
+            "degree": 4,
+            "layers": 6,
+            "nx": 1,
+            "dt": 0.0002,
+            "steps": 1,
+            "legacy": false,
+            "boundary": "matched"
+          },
+          "ranks": 1,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "3d252489c72f511bb3e1b558f7c69d03011850eb11826ba18d571eb2cc45446a",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5
+          ],
+          "fixture_sha256": "3d252489c72f511bb3e1b558f7c69d03011850eb11826ba18d571eb2cc45446a",
+          "timeout_seconds": 600,
+          "command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 1,
+          "timeout_expired": false,
+          "elapsed": 3.022524988016812,
+          "passed": true,
+          "expected_rejection": "model/configuration"
+        },
+        "standard_history_bad_coordinates": {
+          "preparation": {
+            "kind": "plane",
+            "model": "standard_fixed",
+            "angle": 0.0,
+            "height": 0.008,
+            "roughness": 0.002,
+            "dimension": 2,
+            "degree": 4,
+            "layers": 6,
+            "nx": 1,
+            "dt": 0.0002,
+            "steps": 1,
+            "legacy": false,
+            "boundary": "matched"
+          },
+          "ranks": 1,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "0e0869f730a74d322c45c57dc0075a26fd4502aa05447dbc7922a804fedd6fb3",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5
+          ],
+          "fixture_sha256": "0e0869f730a74d322c45c57dc0075a26fd4502aa05447dbc7922a804fedd6fb3",
+          "timeout_seconds": 600,
+          "command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 1,
+          "timeout_expired": false,
+          "elapsed": 2.972292701015249,
+          "passed": true,
+          "expected_rejection": "element coordinates/order mismatch"
+        },
+        "cls_history_full": {
+          "preparation": {
+            "kind": "plane",
+            "model": "cls_fixed",
+            "angle": 0.0,
+            "height": 0.008,
+            "roughness": 0.002,
+            "dimension": 2,
+            "degree": 4,
+            "layers": 6,
+            "nx": 1,
+            "dt": 0.0002,
+            "steps": 4,
+            "legacy": false,
+            "boundary": "matched"
+          },
+          "ranks": 1,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "7d090ec05b1d2c181cfc7497eff2841f5d19c76a34b5396f52f55e64d5338dc2",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5
+          ],
+          "fixture_sha256": "7d090ec05b1d2c181cfc7497eff2841f5d19c76a34b5396f52f55e64d5338dc2",
+          "timeout_seconds": 1800,
+          "command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 0,
+          "timeout_expired": false,
+          "elapsed": 4.275437404983677,
+          "passed": true,
+          "audit_command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_history_full/neutral.xml",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_history_full/neutral.fld",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_history_full/field.csv"
+          ],
+          "completed_stages": 4,
+          "maximum_weak_divergence": 3.065237509041171e-11,
+          "normal_projected_max": 1.1552334041183712e-13,
+          "normal_pointwise_max": 1.0027503053606779e-05,
+          "normal_l2": 2.345255136080293e-06,
+          "normal_away_feet_max": 1.0027503053606779e-05,
+          "epsilon_projection_max": 0.11757849502734175,
+          "remote_samples": 0.0,
+          "wall_ranks": 1.0,
+          "remote_without_wall_samples": 0.0,
+          "projection_audit": 3.2494390618082605e-17,
+          "N_inverse_residual": 5.551115123125783e-17,
+          "tangent_flux_residual_l2": 0.0003400824454791136,
+          "k_flux_residual_l2": 0.01911025142294053,
+          "normal_integral_defect": 1.8241954391403368e-14,
+          "resolved_mass_defect": 1.8300535719431067e-14,
+          "maximum_free_stage_residual": 8.409115261577498e-13
+        },
+        "cls_history_prefix": {
+          "preparation": {
+            "kind": "plane",
+            "model": "cls_fixed",
+            "angle": 0.0,
+            "height": 0.008,
+            "roughness": 0.002,
+            "dimension": 2,
+            "degree": 4,
+            "layers": 6,
+            "nx": 1,
+            "dt": 0.0002,
+            "steps": 2,
+            "legacy": false,
+            "boundary": "matched"
+          },
+          "ranks": 1,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "18491be3d274c2beb900ab924eb589591578a87cc8c4172e2fd0700a69b01252",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5
+          ],
+          "fixture_sha256": "18491be3d274c2beb900ab924eb589591578a87cc8c4172e2fd0700a69b01252",
+          "timeout_seconds": 1800,
+          "command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 0,
+          "timeout_expired": false,
+          "elapsed": 3.42310682599782,
+          "passed": true,
+          "audit_command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_history_prefix/neutral.xml",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_history_prefix/neutral.fld",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_history_prefix/field.csv"
+          ],
+          "completed_stages": 2,
+          "maximum_weak_divergence": 3.065237509041171e-11,
+          "normal_projected_max": 1.0902682669645997e-13,
+          "normal_pointwise_max": 3.414479950833993e-06,
+          "normal_l2": 7.625134216727329e-07,
+          "normal_away_feet_max": 3.414479950833993e-06,
+          "epsilon_projection_max": 0.11757849502734175,
+          "remote_samples": 0.0,
+          "wall_ranks": 1.0,
+          "remote_without_wall_samples": 0.0,
+          "projection_audit": 3.2494390618082605e-17,
+          "N_inverse_residual": 5.551115123125783e-17,
+          "tangent_flux_residual_l2": 0.00018424206970079886,
+          "k_flux_residual_l2": 0.018530005008611024,
+          "normal_integral_defect": 1.8241954391403368e-14,
+          "resolved_mass_defect": 1.8300535719431067e-14,
+          "maximum_free_stage_residual": 8.409115261577498e-13
+        },
+        "cls_history_resume": {
+          "preparation": {
+            "kind": "plane",
+            "model": "cls_fixed",
+            "angle": 0.0,
+            "height": 0.008,
+            "roughness": 0.002,
+            "dimension": 2,
+            "degree": 4,
+            "layers": 6,
+            "nx": 1,
+            "dt": 0.0002,
+            "steps": 2,
+            "legacy": false,
+            "boundary": "matched"
+          },
+          "ranks": 4,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "7104c279d58e6c2d22c6a175545a8bd9e6a9dda3f4cccce02106998b7af221fe",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5,
+            6,
+            7,
+            8
+          ],
+          "fixture_sha256": "7104c279d58e6c2d22c6a175545a8bd9e6a9dda3f4cccce02106998b7af221fe",
+          "timeout_seconds": 1800,
+          "command": [
+            "taskset",
+            "-c",
+            "5,6,7,8",
+            "mpirun",
+            "--bind-to",
+            "none",
+            "-np",
+            "4",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 0,
+          "timeout_expired": false,
+          "elapsed": 6.035464966989821,
+          "passed": true,
+          "audit_command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/RANSWallFieldAudit",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_history_resume/neutral.xml",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_history_resume/neutral.fld",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg3/final-v2/cls_history_resume/field.csv"
+          ],
+          "completed_stages": 2,
+          "maximum_weak_divergence": 2.4007931394072573e-11,
+          "normal_projected_max": 1.2947428031431706e-13,
+          "normal_pointwise_max": 1.0027503203957622e-05,
+          "normal_l2": 2.3452551887219595e-06,
+          "normal_away_feet_max": 1.0027503203957622e-05,
+          "epsilon_projection_max": 0.11757849502734175,
+          "remote_samples": 8.0,
+          "wall_ranks": 1.0,
+          "remote_without_wall_samples": 8.0,
+          "projection_audit": 3.2494390618082605e-17,
+          "N_inverse_residual": 5.551115123125783e-17,
+          "tangent_flux_residual_l2": 0.0003400824463020638,
+          "k_flux_residual_l2": 0.019110251423073387,
+          "normal_integral_defect": 3.0987688462094185e-14,
+          "resolved_mass_defect": 3.103988289700179e-14,
+          "maximum_free_stage_residual": 4.2379701496185875e-13
+        },
+        "cls_history_bad_mask": {
+          "preparation": {
+            "kind": "plane",
+            "model": "cls_fixed",
+            "angle": 0.0,
+            "height": 0.008,
+            "roughness": 0.002,
+            "dimension": 2,
+            "degree": 4,
+            "layers": 6,
+            "nx": 1,
+            "dt": 0.0002,
+            "steps": 1,
+            "legacy": false,
+            "boundary": "matched"
+          },
+          "ranks": 1,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "cc212841b2db92d0e96447ca7b9c24ef40426d5ad2793a069fdc68d6019ea271",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5
+          ],
+          "fixture_sha256": "cc212841b2db92d0e96447ca7b9c24ef40426d5ad2793a069fdc68d6019ea271",
+          "timeout_seconds": 1800,
+          "command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 1,
+          "timeout_expired": false,
+          "elapsed": 2.9224063680157997,
+          "passed": true,
+          "expected_rejection": "model/configuration"
+        },
+        "cls_history_bad_property": {
+          "preparation": {
+            "kind": "plane",
+            "model": "cls_fixed",
+            "angle": 0.0,
+            "height": 0.008,
+            "roughness": 0.002,
+            "dimension": 2,
+            "degree": 4,
+            "layers": 6,
+            "nx": 1,
+            "dt": 0.0002,
+            "steps": 1,
+            "legacy": false,
+            "boundary": "matched"
+          },
+          "ranks": 1,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "d84b148488e9717afb98342ccd50d6c4df6e1a0ab1e6c7c61e95e8fcf3e28ac5",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5
+          ],
+          "fixture_sha256": "d84b148488e9717afb98342ccd50d6c4df6e1a0ab1e6c7c61e95e8fcf3e28ac5",
+          "timeout_seconds": 1800,
+          "command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 1,
+          "timeout_expired": false,
+          "elapsed": 2.9224541790026706,
+          "passed": true,
+          "expected_rejection": "model/configuration"
+        },
+        "cls_history_bad_normal": {
+          "preparation": {
+            "kind": "plane",
+            "model": "cls_fixed",
+            "angle": 0.0,
+            "height": 0.008,
+            "roughness": 0.002,
+            "dimension": 2,
+            "degree": 4,
+            "layers": 6,
+            "nx": 1,
+            "dt": 0.0002,
+            "steps": 1,
+            "legacy": false,
+            "boundary": "matched"
+          },
+          "ranks": 1,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "ebbf385d3996bc00aa3b0be04e6bd7583012ef5dd4ebefbb08e263ab0117c3ff",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5
+          ],
+          "fixture_sha256": "ebbf385d3996bc00aa3b0be04e6bd7583012ef5dd4ebefbb08e263ab0117c3ff",
+          "timeout_seconds": 1800,
+          "command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 1,
+          "timeout_expired": false,
+          "elapsed": 2.872374761995161,
+          "passed": true,
+          "expected_rejection": "model/configuration"
+        },
+        "cls_history_bad_coordinates": {
+          "preparation": {
+            "kind": "plane",
+            "model": "cls_fixed",
+            "angle": 0.0,
+            "height": 0.008,
+            "roughness": 0.002,
+            "dimension": 2,
+            "degree": 4,
+            "layers": 6,
+            "nx": 1,
+            "dt": 0.0002,
+            "steps": 1,
+            "legacy": false,
+            "boundary": "matched"
+          },
+          "ranks": 1,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "623819cbdf77214184bd5aa0a129480bec91a316e13f2db5525c7eb1cfdf9c45",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5
+          ],
+          "fixture_sha256": "623819cbdf77214184bd5aa0a129480bec91a316e13f2db5525c7eb1cfdf9c45",
+          "timeout_seconds": 1800,
+          "command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 1,
+          "timeout_expired": false,
+          "elapsed": 3.3231759810005315,
+          "passed": true,
+          "expected_rejection": "element coordinates/order mismatch"
+        },
+        "bad_ramp": {
+          "preparation": {
+            "kind": "plane",
+            "model": "standard_fixed",
+            "angle": 0.0,
+            "height": 0.008,
+            "roughness": 0.002,
+            "dimension": 2,
+            "degree": 4,
+            "layers": 8,
+            "nx": 4,
+            "dt": 0.002,
+            "steps": 1,
+            "legacy": false,
+            "boundary": "periodic"
+          },
+          "ranks": 1,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "42e062c528ab27de0d012f5738510d954ac4f435e6047d3521feed955ece07f0",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5
+          ],
+          "fixture_sha256": "42e062c528ab27de0d012f5738510d954ac4f435e6047d3521feed955ece07f0",
+          "timeout_seconds": 600,
+          "command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": -6,
+          "timeout_expired": false,
+          "elapsed": 3.6236463569803163,
+          "passed": true,
+          "expected_rejection": "finite begin < end"
+        },
+        "over_hill": {
+          "preparation": {
+            "kind": "hill",
+            "model": "standard_fixed",
+            "degree": 4,
+            "layers": 6,
+            "refinement": 1,
+            "dt": 0.0002,
+            "steps": 1,
+            "amplitude": 0.04,
+            "width_ratio": 2.0,
+            "dimension": 2,
+            "height": 0.008,
+            "length": 1.6,
+            "periodic": false
+          },
+          "ranks": 1,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "4001910b1995dbe5f82578cfef7239d6dc9b04098cbd83dad56a258782fe9d3d",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5
+          ],
+          "fixture_sha256": "4001910b1995dbe5f82578cfef7239d6dc9b04098cbd83dad56a258782fe9d3d",
+          "timeout_seconds": 600,
+          "command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 1,
+          "timeout_expired": false,
+          "elapsed": 4.225072784000076,
+          "passed": true,
+          "expected_rejection": "strictly upstream"
+        },
+        "thin_layer_limit": {
+          "preparation": {
+            "kind": "hill",
+            "model": "standard_fixed",
+            "degree": 4,
+            "layers": 6,
+            "refinement": 1,
+            "dt": 0.0002,
+            "steps": 1,
+            "amplitude": 0.04,
+            "width_ratio": 2.0,
+            "dimension": 2,
+            "height": 0.008,
+            "length": 1.6,
+            "periodic": false
+          },
+          "ranks": 1,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "de96d53d745beff12b9848886561c2247308cef3208e2f61957627f52f4bc7aa",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5
+          ],
+          "fixture_sha256": "de96d53d745beff12b9848886561c2247308cef3208e2f61957627f52f4bc7aa",
+          "timeout_seconds": 600,
+          "command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 1,
+          "timeout_expired": false,
+          "elapsed": 4.224923902977025,
+          "passed": true,
+          "expected_rejection": "interface must be a physical normal offset"
+        },
+        "native_backend": {
+          "preparation": {
+            "kind": "plane",
+            "model": "standard_fixed",
+            "angle": 0.0,
+            "height": 0.008,
+            "roughness": 0.002,
+            "dimension": 2,
+            "degree": 4,
+            "layers": 8,
+            "nx": 4,
+            "dt": 0.002,
+            "steps": 1,
+            "legacy": false,
+            "boundary": "periodic"
+          },
+          "ranks": 1,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "d72351eb1d9ba1f6dc15913e94b6c63bc111cac49ff5aa956c20912e269c68bb",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5
+          ],
+          "fixture_sha256": "d72351eb1d9ba1f6dc15913e94b6c63bc111cac49ff5aa956c20912e269c68bb",
+          "timeout_seconds": 600,
+          "command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 1,
+          "timeout_expired": false,
+          "elapsed": 3.5238155940023717,
+          "passed": true,
+          "expected_rejection": "requires RANSLinearSolver=MatrixFree"
+        },
+        "active_bad_re": {
+          "preparation": {
+            "kind": "plane",
+            "model": "standard_fixed",
+            "angle": 0.0,
+            "height": 0.008,
+            "roughness": 0.002,
+            "dimension": 2,
+            "degree": 4,
+            "layers": 8,
+            "nx": 4,
+            "dt": 0.002,
+            "steps": 1,
+            "legacy": false,
+            "boundary": "periodic"
+          },
+          "ranks": 1,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "136274b460895923465db1bde0b3ebe7d5f8e16a0926c106a23a987ed8ec417c",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5
+          ],
+          "fixture_sha256": "136274b460895923465db1bde0b3ebe7d5f8e16a0926c106a23a987ed8ec417c",
+          "timeout_seconds": 600,
+          "command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 1,
+          "timeout_expired": false,
+          "elapsed": 3.623675787006505,
+          "passed": true,
+          "expected_rejection": "fails cutoff/high-Re preflight"
+        },
+        "moving_property": {
+          "preparation": {
+            "kind": "plane",
+            "model": "standard_fixed",
+            "angle": 0.0,
+            "height": 0.008,
+            "roughness": 0.002,
+            "dimension": 2,
+            "degree": 4,
+            "layers": 8,
+            "nx": 4,
+            "dt": 0.002,
+            "steps": 1,
+            "legacy": false,
+            "boundary": "periodic"
+          },
+          "ranks": 1,
+          "threads": {
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "BLIS_NUM_THREADS": "1"
+          },
+          "generator_fixture_sha256": "c17c8769cabfa8ac376b43cf2bbced8c6d716c78310ffbae416f2c5b962ce289",
+          "binaries": {
+            "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+            "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+            "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+          },
+          "cpus": [
+            5
+          ],
+          "fixture_sha256": "c17c8769cabfa8ac376b43cf2bbced8c6d716c78310ffbae416f2c5b962ce289",
+          "timeout_seconds": 600,
+          "command": [
+            "taskset",
+            "-c",
+            "5",
+            "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build/IncNavierStokesSolver",
+            "neutral.xml"
+          ],
+          "exit_code": 1,
+          "timeout_expired": false,
+          "elapsed": 3.7239994859846774,
+          "passed": true,
+          "expected_rejection": "independent of time"
+        }
+      },
+      "comparisons": {
+        "standard_fixed_floor_oracle": {
+          "errors": {
+            "mask": 6.794152913880414e-16,
+            "departure": 0.0,
+            "requested_chi": 6.794152913880414e-16,
+            "epsilonP": 2.2732646195352985e-16,
+            "epsilonH": 2.2732646195352985e-16,
+            "meanDissipation": 5.453926988938213e-16,
+            "roughness": 0.0
+          },
+          "active_points": 87,
+          "ramp_points": 14,
+          "inactive_points": 137
+        },
+        "standard_switched_floor_oracle": {
+          "errors": {
+            "mask": 6.794152913880414e-16,
+            "departure": 4.336808689942018e-19,
+            "requested_chi": 6.794152913880414e-16,
+            "epsilonP": 2.2732646195352985e-16,
+            "epsilonH": 2.2732646195352985e-16,
+            "meanDissipation": 5.453926988938213e-16,
+            "roughness": 0.0
+          },
+          "active_points": 87,
+          "ramp_points": 14,
+          "inactive_points": 137
+        },
+        "standard_zero_is_original": {
+          "u": 4.62395954709891e-12,
+          "v": 7.411630955687304e-12,
+          "k": 1.7990942069445737e-11,
+          "eps": 1.195613633244087e-10,
+          "p": 1.743159580270933e-09,
+          "rans_nut": 3.447827960634253e-14,
+          "rans_P": 3.0880657390662222e-12,
+          "rans_Yap": 0.0,
+          "rans_eps_total": 1.1953373728300036e-10,
+          "rans_R_xx": 3.401275520215476e-11,
+          "rans_R_yy": 1.199879084978761e-11,
+          "rans_R_zz": 5.2318837151277066e-11,
+          "rans_R_xy": 0.0,
+          "rans_R_xz": 2.7131740051857184e-11,
+          "rans_R_yz": 0.0,
+          "rans_quadratic_norm": 0.0,
+          "rans_cubic_norm": 0.0
+        },
+        "standard_zero_policy_oracle": {
+          "errors": {
+            "mask": 0.0,
+            "departure": 0.0,
+            "requested_chi": 0.0,
+            "epsilonP": 2.2085514008892426e-16,
+            "epsilonH": 2.2085514008892426e-16,
+            "meanDissipation": 3.2929491504204276e-16,
+            "roughness": 0.0
+          },
+          "active_points": 0,
+          "ramp_points": 0,
+          "inactive_points": 224
+        },
+        "standard_mpi2": {
+          "u": 1.679058981577618e-14,
+          "v": 5.943638370291946e-13,
+          "k": 1.8485213360008856e-14,
+          "eps": 9.803529561440153e-14,
+          "p": 5.946459115192911e-13,
+          "rans_nut": 1.887379141862766e-15,
+          "rans_P": 1.586783242548968e-11,
+          "rans_Yap": 0.0,
+          "rans_eps_total": 1.5974857113473675e-13,
+          "rans_R_xx": 4.6129766673175254e-14,
+          "rans_R_yy": 4.629630012686903e-14,
+          "rans_R_zz": 1.2581047315052274e-12,
+          "rans_R_xy": 0.0,
+          "rans_R_xz": 1.2473355681663634e-13,
+          "rans_R_yz": 0.0,
+          "rans_quadratic_norm": 0.0,
+          "rans_cubic_norm": 0.0
+        },
+        "standard_mpi4": {
+          "u": 6.204798420427636e-14,
+          "v": 3.214835255154995e-12,
+          "k": 1.0147438445073931e-13,
+          "eps": 5.588353436416756e-13,
+          "p": 4.3042211024465234e-12,
+          "rans_nut": 1.4311468676808659e-15,
+          "rans_P": 9.110855803831478e-11,
+          "rans_Yap": 0.0,
+          "rans_eps_total": 6.512913947902312e-13,
+          "rans_R_xx": 8.903988657493755e-14,
+          "rans_R_yy": 6.861178292183467e-14,
+          "rans_R_zz": 7.206901742051741e-12,
+          "rans_R_xy": 0.0,
+          "rans_R_xz": 2.6152691123826344e-13,
+          "rans_R_yz": 0.0,
+          "rans_quadratic_norm": 0.0,
+          "rans_cubic_norm": 0.0
+        },
+        "standard_independent_remote_N": {
+          "uN": 7.643248162960021e-16,
+          "kN": 1.1102230246251565e-16,
+          "epsilonN": 7.970387725590159e-16
+        },
+        "standard_smooth_property": {
+          "errors": {
+            "mask": 6.794152913880414e-16,
+            "departure": 0.0,
+            "requested_chi": 6.794152913880414e-16,
+            "epsilonP": 2.207763375846171e-16,
+            "epsilonH": 2.207763375846171e-16,
+            "meanDissipation": 5.018946859280076e-16,
+            "roughness": 0.0
+          },
+          "active_points": 87,
+          "ramp_points": 14,
+          "inactive_points": 137
+        },
+        "standard_step_property": {
+          "errors": {
+            "mask": 0.0,
+            "departure": 0.0,
+            "requested_chi": 0.0,
+            "epsilonP": 2.2095036472785818e-16,
+            "epsilonH": 2.2095036472785818e-16,
+            "meanDissipation": 3.3557537783086184e-16,
+            "roughness": 0.0
+          },
+          "active_points": 0,
+          "ramp_points": 0,
+          "inactive_points": 0
+        },
+        "standard_one_sided_foot_properties": {
+          "shared_node_properties": [
+            0.001,
+            0.002
+          ],
+          "maximum_value_error": 0.0
+        },
+        "cls_fixed_floor_oracle": {
+          "errors": {
+            "mask": 6.794152913880414e-16,
+            "departure": 0.0,
+            "requested_chi": 6.794152913880414e-16,
+            "epsilonP": 1.2753232721366154e-15,
+            "epsilonH": 1.2753232721366154e-15,
+            "meanDissipation": 6.713932398001756e-16,
+            "roughness": 0.0
+          },
+          "active_points": 87,
+          "ramp_points": 14,
+          "inactive_points": 137
+        },
+        "cls_switched_floor_oracle": {
+          "errors": {
+            "mask": 6.794152913880414e-16,
+            "departure": 8.673617379884035e-19,
+            "requested_chi": 6.794152913880414e-16,
+            "epsilonP": 1.2753232721366154e-15,
+            "epsilonH": 1.2753232721366154e-15,
+            "meanDissipation": 6.713932398001756e-16,
+            "roughness": 0.0
+          },
+          "active_points": 87,
+          "ramp_points": 14,
+          "inactive_points": 137
+        },
+        "cls_zero_is_original": {
+          "u": 0.0,
+          "v": 0.0,
+          "k": 0.0,
+          "eps_tilde": 0.0,
+          "p": 0.0,
+          "rans_nut": 0.0,
+          "rans_P": 0.0,
+          "rans_Yap": 0.0,
+          "rans_eps_total": 0.0,
+          "rans_R_xx": 0.0,
+          "rans_R_yy": 0.0,
+          "rans_R_zz": 0.0,
+          "rans_R_xy": 0.0,
+          "rans_R_xz": 0.0,
+          "rans_R_yz": 0.0,
+          "rans_quadratic_norm": 0.0,
+          "rans_cubic_norm": 0.0
+        },
+        "cls_zero_policy_oracle": {
+          "errors": {
+            "mask": 0.0,
+            "departure": 0.0,
+            "requested_chi": 0.0,
+            "epsilonP": 2.3576289785622136e-16,
+            "epsilonH": 2.3576289785622136e-16,
+            "meanDissipation": 3.8974106280250647e-16,
+            "roughness": 0.0
+          },
+          "active_points": 0,
+          "ramp_points": 0,
+          "inactive_points": 224
+        },
+        "cls_mpi2": {
+          "u": 2.933269604608002e-14,
+          "v": 9.911760005109084e-15,
+          "k": 4.829470157119431e-15,
+          "eps_tilde": 4.081014038233558e-14,
+          "p": 1.6336773327494747e-13,
+          "rans_nut": 3.4127214942891726e-14,
+          "rans_P": 2.2110818346511166e-12,
+          "rans_Yap": 5.502820421554588e-12,
+          "rans_eps_total": 1.1153225865853324e-13,
+          "rans_R_xx": 4.1638914538566496e-13,
+          "rans_R_yy": 2.0516921495072893e-13,
+          "rans_R_zz": 2.414457522803559e-13,
+          "rans_R_xy": 0.0,
+          "rans_R_xz": 1.1689260670522117e-13,
+          "rans_R_yz": 0.0,
+          "rans_quadratic_norm": 5.702244232352882e-13,
+          "rans_cubic_norm": 3.2229863874046837e-13
+        },
+        "cls_mpi4": {
+          "u": 2.1280583405979627e-14,
+          "v": 8.322845770807825e-15,
+          "k": 3.941291737419306e-15,
+          "eps_tilde": 3.211479797132658e-14,
+          "p": 2.503025786515663e-13,
+          "rans_nut": 3.8403308311174555e-14,
+          "rans_P": 1.7677987126273493e-12,
+          "rans_Yap": 2.9760638398101946e-12,
+          "rans_eps_total": 1.0330066784277871e-13,
+          "rans_R_xx": 3.6942671144402084e-13,
+          "rans_R_yy": 2.1499468871866156e-13,
+          "rans_R_zz": 2.2096213747602178e-13,
+          "rans_R_xy": 0.0,
+          "rans_R_xz": 1.1428358259735205e-13,
+          "rans_R_yz": 0.0,
+          "rans_quadratic_norm": 6.409456299039107e-13,
+          "rans_cubic_norm": 3.8815485787670873e-13
+        },
+        "cls_independent_remote_N": {
+          "uN": 7.533756943878502e-16,
+          "kN": 1.1102230246251565e-16,
+          "epsilonN": 4.637537412436566e-16
+        },
+        "cls_smooth_property": {
+          "errors": {
+            "mask": 6.794152913880414e-16,
+            "departure": 0.0,
+            "requested_chi": 6.794152913880414e-16,
+            "epsilonP": 1.2753162812223294e-15,
+            "epsilonH": 1.2753162812223294e-15,
+            "meanDissipation": 6.713928345755461e-16,
+            "roughness": 0.0
+          },
+          "active_points": 87,
+          "ramp_points": 14,
+          "inactive_points": 137
+        },
+        "cls_step_property": {
+          "errors": {
+            "mask": 0.0,
+            "departure": 0.0,
+            "requested_chi": 0.0,
+            "epsilonP": 2.3572965409170324e-16,
+            "epsilonH": 2.3572965409170324e-16,
+            "meanDissipation": 1.899520131924517e-16,
+            "roughness": 0.0
+          },
+          "active_points": 0,
+          "ramp_points": 0,
+          "inactive_points": 0
+        },
+        "cls_one_sided_foot_properties": {
+          "shared_node_properties": [
+            0.001,
+            0.002
+          ],
+          "maximum_value_error": 0.0
+        },
+        "log_smooth_property": {
+          "errors": {
+            "mask": 0.0,
+            "departure": 0.0,
+            "requested_chi": 0.0,
+            "epsilonP": 0.0,
+            "epsilonH": 0.0,
+            "meanDissipation": 0.0,
+            "roughness": 0.0
+          },
+          "active_points": 0,
+          "ramp_points": 0,
+          "inactive_points": 0
+        },
+        "standard_history_restart": {
+          "u": 2.3159434228656805e-14,
+          "v": 1.3741489589043246e-12,
+          "k": 9.869882688917642e-14,
+          "eps": 1.666941805852604e-13,
+          "p": 8.793683576452382e-11,
+          "rans_nut": 1.1934897514720433e-15,
+          "rans_P": 1.172660152713325e-10,
+          "rans_Yap": 0.0,
+          "rans_eps_total": 2.368332620337012e-13,
+          "rans_R_xx": 6.125655538369301e-14,
+          "rans_R_yy": 9.112155474610972e-14,
+          "rans_R_zz": 1.0713291365149757e-11,
+          "rans_R_xy": 0.0,
+          "rans_R_xz": 2.927935671692694e-13,
+          "rans_R_yz": 0.0,
+          "rans_quadratic_norm": 0.0,
+          "rans_cubic_norm": 0.0
+        },
+        "cls_history_restart": {
+          "u": 5.1188430354923963e-14,
+          "v": 3.389002953933123e-13,
+          "k": 1.149080830487037e-14,
+          "eps_tilde": 6.395413726217804e-14,
+          "p": 5.860111614713892e-11,
+          "rans_nut": 1.3128387266192476e-14,
+          "rans_P": 2.4748624025571625e-11,
+          "rans_Yap": 2.576420553976239e-12,
+          "rans_eps_total": 1.0570358310602162e-13,
+          "rans_R_xx": 7.42705896783491e-12,
+          "rans_R_yy": 2.2440382885235977e-13,
+          "rans_R_zz": 1.1264045252090682e-11,
+          "rans_R_xy": 0.0,
+          "rans_R_xz": 9.682532553512146e-14,
+          "rans_R_yz": 0.0,
+          "rans_quadratic_norm": 6.071393388040747e-13,
+          "rans_cubic_norm": 8.857981642835296e-12
+        },
+        "standard_fixed_floor_continuity": {
+          "errors": {
+            "target": 1.3642420469034302e-14,
+            "normalP": 6.821210234517151e-15,
+            "target_flux_plus_side_flux": 1.0576588399837393e-16,
+            "actual_flux_plus_side_flux": 3.121022715192526e-15,
+            "geometry": 0.0
+          },
+          "maximum_transpiration": 5.94349082571882e-07,
+          "maximum_span_flux_divergence": 0.0,
+          "budgets": {
+            "2e-05": {
+              "target_flux": 2.576546139547116e-08,
+              "actual_flux": 2.576546462225976e-08,
+              "side_flux": -2.5765461501237045e-08
+            }
+          }
+        },
+        "standard_switched_floor_continuity": {
+          "errors": {
+            "target": 1.3642420469034302e-14,
+            "normalP": 6.821210234517151e-15,
+            "target_flux_plus_side_flux": 1.0576588399837393e-16,
+            "actual_flux_plus_side_flux": 3.121022715192526e-15,
+            "geometry": 0.0
+          },
+          "maximum_transpiration": 5.94349082571882e-07,
+          "maximum_span_flux_divergence": 0.0,
+          "budgets": {
+            "2e-05": {
+              "target_flux": 2.576546139547116e-08,
+              "actual_flux": 2.576546462225976e-08,
+              "side_flux": -2.5765461501237045e-08
+            }
+          }
+        },
+        "standard_zero_hill_continuity": {
+          "errors": {
+            "target": 1.3962025546127022e-11,
+            "normalP": 7.491875392631742e-12,
+            "target_flux_plus_side_flux": 1.5884396617586828e-15,
+            "actual_flux_plus_side_flux": 3.5002288800390466e-13,
+            "geometry": 2.220446049250313e-16
+          },
+          "maximum_transpiration": 0.0035556415461881546,
+          "maximum_span_flux_divergence": 0.0,
+          "budgets": {
+            "2e-05": {
+              "target_flux": 2.5904995947833462e-08,
+              "actual_flux": 2.5904644336505797e-08,
+              "side_flux": -2.59049943593938e-08
+            }
+          }
+        },
+        "standard_original_hill_continuity": {
+          "errors": {
+            "target": 1.396202597980789e-11,
+            "normalP": 7.491875392631742e-12,
+            "target_flux_plus_side_flux": 1.598397414173829e-15,
+            "actual_flux_plus_side_flux": 2.1950047495932305e-13,
+            "geometry": 2.220446049250313e-16
+          },
+          "maximum_transpiration": 0.003555641531963477,
+          "maximum_span_flux_divergence": 0.0,
+          "budgets": {
+            "2e-05": {
+              "target_flux": 2.590498445054861e-08,
+              "actual_flux": 2.5904763351676238e-08,
+              "side_flux": -2.5904982852151197e-08
+            }
+          }
+        },
+        "standard_smooth_property_continuity": {
+          "errors": {
+            "target": 1.4031175093326409e-11,
+            "normalP": 7.528980260421148e-12,
+            "target_flux_plus_side_flux": 1.6982375582436077e-15,
+            "actual_flux_plus_side_flux": 1.7357952685872197e-13,
+            "geometry": 2.220446049250313e-16
+          },
+          "maximum_transpiration": 0.0035732414067206034,
+          "maximum_span_flux_divergence": 0.0,
+          "budgets": {
+            "2e-05": {
+              "target_flux": 1.4745891774485233e-07,
+              "actual_flux": 1.4745874246708792e-07,
+              "side_flux": -1.4745891604661477e-07
+            }
+          }
+        },
+        "standard_step_property_continuity": {
+          "errors": {
+            "target": 1.3960165488879905e-11,
+            "normalP": 7.490877276111751e-12,
+            "target_flux_plus_side_flux": 1.5986770872476555e-15,
+            "actual_flux_plus_side_flux": 5.839386744052112e-14,
+            "geometry": 2.220446049250313e-16
+          },
+          "maximum_transpiration": 0.003555168033579162,
+          "maximum_span_flux_divergence": 0.0,
+          "budgets": {
+            "2e-05": {
+              "target_flux": 2.6151864574290857e-08,
+              "actual_flux": 2.615180458174633e-08,
+              "side_flux": -2.615186297561377e-08
+            }
+          }
+        },
+        "standard_mpi1_continuity": {
+          "errors": {
+            "target": 7.371880883511024e-16,
+            "normalP": 3.685940441755512e-16,
+            "target_flux_plus_side_flux": 8.344442445541029e-19,
+            "actual_flux_plus_side_flux": 9.18561263763258e-15,
+            "geometry": 0.0
+          },
+          "maximum_transpiration": 4.354205884737894e-13,
+          "maximum_span_flux_divergence": 0.0,
+          "budgets": {
+            "0.002": {
+              "target_flux": 8.042796546317177e-19,
+              "actual_flux": -7.214822269783703e-15,
+              "side_flux": 0.0
+            },
+            "0.004": {
+              "target_flux": -8.344442445541029e-19,
+              "actual_flux": 9.18561263763258e-15,
+              "side_flux": 0.0
+            }
+          }
+        },
+        "standard_mpi2_continuity": {
+          "errors": {
+            "target": 7.194245199570971e-16,
+            "normalP": 3.5971225997854857e-16,
+            "target_flux_plus_side_flux": 1.0588872638792233e-17,
+            "actual_flux_plus_side_flux": 7.270462287795074e-15,
+            "geometry": 0.0
+          },
+          "maximum_transpiration": 4.46505055151647e-13,
+          "maximum_span_flux_divergence": 0.0,
+          "budgets": {
+            "0.002": {
+              "target_flux": -1.0588872638792233e-17,
+              "actual_flux": -5.825051910398234e-15,
+              "side_flux": 0.0
+            },
+            "0.004": {
+              "target_flux": -4.175811273739749e-18,
+              "actual_flux": 7.270462287795074e-15,
+              "side_flux": 0.0
+            }
+          }
+        },
+        "standard_mpi4_continuity": {
+          "errors": {
+            "target": 5.950795411990854e-16,
+            "normalP": 2.975397705995427e-16,
+            "target_flux_plus_side_flux": 5.957611399541639e-18,
+            "actual_flux_plus_side_flux": 1.8437875303036776e-14,
+            "geometry": 0.0
+          },
+          "maximum_transpiration": 2.5551116777933203e-13,
+          "maximum_span_flux_divergence": 0.0,
+          "budgets": {
+            "0.002": {
+              "target_flux": -2.716056511875288e-18,
+              "actual_flux": -1.4582440111557635e-14,
+              "side_flux": 0.0
+            },
+            "0.004": {
+              "target_flux": -5.957611399541639e-18,
+              "actual_flux": 1.8437875303036776e-14,
+              "side_flux": 0.0
+            }
+          }
+        },
+        "standard_smooth_wall_continuity": {
+          "errors": {
+            "target": 5.684341886080933e-16,
+            "normalP": 2.8421709430404664e-16,
+            "target_flux_plus_side_flux": 4.541342659093943e-19,
+            "actual_flux_plus_side_flux": 2.725042818713899e-13,
+            "geometry": 0.0
+          },
+          "maximum_transpiration": 1.9589663224905962e-13,
+          "maximum_span_flux_divergence": 0.0,
+          "budgets": {
+            "0.0002": {
+              "target_flux": 4.541342659093943e-19,
+              "actual_flux": -2.725042818713899e-13,
+              "side_flux": 0.0
+            }
+          }
+        },
+        "cls_fixed_floor_continuity": {
+          "errors": {
+            "target": 1.4068746110583679e-14,
+            "normalP": 7.034373055291839e-15,
+            "target_flux_plus_side_flux": 1.0811279309235327e-16,
+            "actual_flux_plus_side_flux": 1.705637085596619e-13,
+            "geometry": 0.0
+          },
+          "maximum_transpiration": 1.1532874943928745e-07,
+          "maximum_span_flux_divergence": 0.0,
+          "budgets": {
+            "2e-05": {
+              "target_flux": -3.880151042889132e-09,
+              "actual_flux": -3.879980371067779e-09,
+              "side_flux": 3.880150934776339e-09
+            }
+          }
+        },
+        "cls_switched_floor_continuity": {
+          "errors": {
+            "target": 1.4068746110583679e-14,
+            "normalP": 7.034373055291839e-15,
+            "target_flux_plus_side_flux": 1.0811279309235327e-16,
+            "actual_flux_plus_side_flux": 1.705637085596619e-13,
+            "geometry": 0.0
+          },
+          "maximum_transpiration": 1.1532874943928745e-07,
+          "maximum_span_flux_divergence": 0.0,
+          "budgets": {
+            "2e-05": {
+              "target_flux": -3.880151042889132e-09,
+              "actual_flux": -3.879980371067779e-09,
+              "side_flux": 3.880150934776339e-09
+            }
+          }
+        },
+        "cls_zero_hill_continuity": {
+          "errors": {
+            "target": 1.947982573857754e-11,
+            "normalP": 8.904954464789006e-12,
+            "target_flux_plus_side_flux": 1.3941038959174906e-15,
+            "actual_flux_plus_side_flux": 2.2257888671430263e-14,
+            "geometry": 2.220446049250313e-16
+          },
+          "maximum_transpiration": 0.003610205815637346,
+          "maximum_span_flux_divergence": 0.0,
+          "budgets": {
+            "2e-05": {
+              "target_flux": -3.598501317715557e-09,
+              "actual_flux": -3.5985249697081245e-09,
+              "side_flux": 3.598502711819453e-09
+            }
+          }
+        },
+        "cls_original_hill_continuity": {
+          "errors": {
+            "target": 1.947982573857754e-11,
+            "normalP": 8.904954464789006e-12,
+            "target_flux_plus_side_flux": 1.3941038959174906e-15,
+            "actual_flux_plus_side_flux": 2.2257888671430263e-14,
+            "geometry": 2.220446049250313e-16
+          },
+          "maximum_transpiration": 0.003610205815637346,
+          "maximum_span_flux_divergence": 0.0,
+          "budgets": {
+            "2e-05": {
+              "target_flux": -3.598501317715557e-09,
+              "actual_flux": -3.5985249697081245e-09,
+              "side_flux": 3.598502711819453e-09
+            }
+          }
+        },
+        "cls_smooth_property_continuity": {
+          "errors": {
+            "target": 1.9540139905432907e-11,
+            "normalP": 8.932526376556615e-12,
+            "target_flux_plus_side_flux": 1.4708981371304e-15,
+            "actual_flux_plus_side_flux": 3.901619043510519e-18,
+            "geometry": 2.220446049250313e-16
+          },
+          "maximum_transpiration": 0.003619195279032159,
+          "maximum_span_flux_divergence": 0.0,
+          "budgets": {
+            "2e-05": {
+              "target_flux": 1.1564182380760107e-07,
+              "actual_flux": 1.1564182233280131e-07,
+              "side_flux": -1.1564182233670293e-07
+            }
+          }
+        },
+        "cls_step_property_continuity": {
+          "errors": {
+            "target": 1.9416711728031943e-11,
+            "normalP": 8.87610254393656e-12,
+            "target_flux_plus_side_flux": 1.3634498124338463e-15,
+            "actual_flux_plus_side_flux": 2.268189718103708e-15,
+            "geometry": 2.220446049250313e-16
+          },
+          "maximum_transpiration": 0.003597507003243361,
+          "maximum_span_flux_divergence": 0.0,
+          "budgets": {
+            "2e-05": {
+              "target_flux": -3.349089834688477e-09,
+              "actual_flux": -3.3490889299485713e-09,
+              "side_flux": 3.3490911981382894e-09
+            }
+          }
+        },
+        "cls_mpi1_continuity": {
+          "errors": {
+            "target": 7.371880883511024e-16,
+            "normalP": 3.685940441755512e-16,
+            "target_flux_plus_side_flux": 1.731558206719034e-18,
+            "actual_flux_plus_side_flux": 1.2458290599178134e-13,
+            "geometry": 0.0
+          },
+          "maximum_transpiration": 3.041122909053229e-13,
+          "maximum_span_flux_divergence": 0.0,
+          "budgets": {
+            "0.002": {
+              "target_flux": -1.804499247646126e-19,
+              "actual_flux": 5.868420335916425e-14,
+              "side_flux": 0.0
+            },
+            "0.004": {
+              "target_flux": 1.731558206719034e-18,
+              "actual_flux": 1.2458290599178134e-13,
+              "side_flux": 0.0
+            }
+          }
+        },
+        "cls_mpi2_continuity": {
+          "errors": {
+            "target": 8.526512829121525e-16,
+            "normalP": 4.2632564145607627e-16,
+            "target_flux_plus_side_flux": 5.353899376437271e-18,
+            "actual_flux_plus_side_flux": 1.245824855182936e-13,
+            "geometry": 0.0
+          },
+          "maximum_transpiration": 2.9899638320785015e-13,
+          "maximum_span_flux_divergence": 0.0,
+          "budgets": {
+            "0.002": {
+              "target_flux": -2.7370867765856115e-18,
+              "actual_flux": 5.895587815531064e-14,
+              "side_flux": 0.0
+            },
+            "0.004": {
+              "target_flux": -5.353899376437271e-18,
+              "actual_flux": 1.245824855182936e-13,
+              "side_flux": 0.0
+            }
+          }
+        },
+        "cls_mpi4_continuity": {
+          "errors": {
+            "target": 7.016609515631045e-16,
+            "normalP": 3.5083047578155224e-16,
+            "target_flux_plus_side_flux": 8.058233971909234e-18,
+            "actual_flux_plus_side_flux": 1.2478630268630903e-13,
+            "geometry": 0.0
+          },
+          "maximum_transpiration": 3.0013325158506633e-13,
+          "maximum_span_flux_divergence": 0.0,
+          "budgets": {
+            "0.002": {
+              "target_flux": -7.200487445726478e-18,
+              "actual_flux": 5.90774994868043e-14,
+              "side_flux": 0.0
+            },
+            "0.004": {
+              "target_flux": -8.058233971909234e-18,
+              "actual_flux": 1.2478630268630903e-13,
+              "side_flux": 0.0
+            }
+          }
+        },
+        "cls_smooth_wall_continuity": {
+          "errors": {
+            "target": 8.526512829121273e-16,
+            "normalP": 4.2632564145606365e-16,
+            "target_flux_plus_side_flux": 7.473309493051552e-18,
+            "actual_flux_plus_side_flux": 1.0876112932473651e-14,
+            "geometry": 0.0
+          },
+          "maximum_transpiration": 8.86757334228605e-14,
+          "maximum_span_flux_divergence": 0.0,
+          "budgets": {
+            "0.0002": {
+              "target_flux": -7.473309493051552e-18,
+              "actual_flux": -1.0876112932473651e-14,
+              "side_flux": 0.0
+            }
+          }
+        },
+        "standard_span_continuity_continuity": {
+          "errors": {
+            "target": 8.527317849234273e-16,
+            "normalP": 4.2636589246171364e-16,
+            "target_flux_plus_side_flux": 1.3930171294851062e-19,
+            "actual_flux_plus_side_flux": 9.475436523051795e-16,
+            "geometry": 0.0
+          },
+          "maximum_transpiration": 0.00016159370692486348,
+          "maximum_span_flux_divergence": 0.020199213201023598,
+          "budgets": {
+            "0.0002": {
+              "target_flux": 1.0082778489986763e-19,
+              "actual_flux": 9.475436523051795e-16,
+              "side_flux": 0.0
+            },
+            "0.0004": {
+              "target_flux": 1.3930171294851062e-19,
+              "actual_flux": 7.65525180785962e-16,
+              "side_flux": 0.0
+            }
+          }
+        },
+        "cls_span_continuity_continuity": {
+          "errors": {
+            "target": 1.1367859778510514e-15,
+            "normalP": 5.683929889255257e-16,
+            "target_flux_plus_side_flux": 1.799264087838018e-19,
+            "actual_flux_plus_side_flux": 2.829647472167745e-14,
+            "geometry": 0.0
+          },
+          "maximum_transpiration": 0.00016659228268135315,
+          "maximum_span_flux_divergence": 0.020824035314657905,
+          "budgets": {
+            "0.0002": {
+              "target_flux": 2.3809814905910115e-19,
+              "actual_flux": -2.8296416549937175e-14,
+              "side_flux": -5.817174027529934e-20
+            },
+            "0.0004": {
+              "target_flux": 1.9847004556200526e-19,
+              "actual_flux": 1.6096786552348605e-16,
+              "side_flux": -3.8781160183532893e-20
+            }
+          }
+        },
+        "log_smooth_property_continuity": {
+          "errors": {
+            "target": 0.0,
+            "normalP": 0.0,
+            "target_flux_plus_side_flux": 0.0,
+            "actual_flux_plus_side_flux": 1.5238342125127983e-15,
+            "geometry": 2.220446049250313e-16
+          },
+          "maximum_transpiration": 0.0,
+          "maximum_span_flux_divergence": 0.0,
+          "budgets": {
+            "2e-05": {
+              "target_flux": 0.0,
+              "actual_flux": 1.5238342125127983e-15,
+              "side_flux": 0.0
+            }
+          }
+        },
+        "standard_history_full_continuity": {
+          "errors": {
+            "target": 7.19424045618651e-16,
+            "normalP": 3.597120228093255e-16,
+            "target_flux_plus_side_flux": 5.645595269175116e-18,
+            "actual_flux_plus_side_flux": 8.247252233383063e-14,
+            "geometry": 0.0
+          },
+          "maximum_transpiration": 2.713640715398924e-05,
+          "maximum_span_flux_divergence": 0.0,
+          "budgets": {
+            "0.0002": {
+              "target_flux": 5.012545767226387e-18,
+              "actual_flux": 8.248318047486703e-14,
+              "side_flux": -1.0658141036401503e-17
+            },
+            "0.0004": {
+              "target_flux": 1.014810321770676e-17,
+              "actual_flux": 6.834742144421988e-14,
+              "side_flux": -1.0658141036401503e-17
+            },
+            "0.0006000000000000001": {
+              "target_flux": 1.0819509177303801e-17,
+              "actual_flux": 1.916926983773684e-14,
+              "side_flux": -1.0658141036401503e-17
+            },
+            "0.0008": {
+              "target_flux": 6.288981405346765e-18,
+              "actual_flux": 1.2956151676033293e-14,
+              "side_flux": -1.0658141036401503e-17
+            }
+          }
+        },
+        "standard_history_prefix_continuity": {
+          "errors": {
+            "target": 7.19424045618651e-16,
+            "normalP": 3.597120228093255e-16,
+            "target_flux_plus_side_flux": 5.645595269175116e-18,
+            "actual_flux_plus_side_flux": 8.247252233383063e-14,
+            "geometry": 0.0
+          },
+          "maximum_transpiration": 7.551757249188996e-06,
+          "maximum_span_flux_divergence": 0.0,
+          "budgets": {
+            "0.0002": {
+              "target_flux": 5.012545767226387e-18,
+              "actual_flux": 8.248318047486703e-14,
+              "side_flux": -1.0658141036401503e-17
+            },
+            "0.0004": {
+              "target_flux": 1.014810321770676e-17,
+              "actual_flux": 6.834742144421988e-14,
+              "side_flux": -1.0658141036401503e-17
+            }
+          }
+        },
+        "standard_history_resume_continuity": {
+          "errors": {
+            "target": 6.661338147750939e-16,
+            "normalP": 3.3306690738754696e-16,
+            "target_flux_plus_side_flux": 8.004853527807717e-18,
+            "actual_flux_plus_side_flux": 2.5634590415142943e-14,
+            "geometry": 0.0
+          },
+          "maximum_transpiration": 2.7136407093451e-05,
+          "maximum_span_flux_divergence": 0.0,
+          "budgets": {
+            "0.0006000000000000001": {
+              "target_flux": 6.858174311011854e-18,
+              "actual_flux": 2.5645248556179345e-14,
+              "side_flux": -1.0658141036401503e-17
+            },
+            "0.0008": {
+              "target_flux": 1.866299456420922e-17,
+              "actual_flux": 4.571607251933592e-15,
+              "side_flux": -1.0658141036401503e-17
+            }
+          }
+        },
+        "cls_history_full_continuity": {
+          "errors": {
+            "target": 1.1368689870798823e-15,
+            "normalP": 5.684344935399412e-16,
+            "target_flux_plus_side_flux": 1.5601248392570742e-17,
+            "actual_flux_plus_side_flux": 1.8246596904541013e-14,
+            "geometry": 0.0
+          },
+          "maximum_transpiration": 1.0027503053606779e-05,
+          "maximum_span_flux_divergence": 0.0,
+          "budgets": {
+            "0.0002": {
+              "target_flux": -2.8579586472074638e-18,
+              "actual_flux": 3.623171294659142e-15,
+              "side_flux": 0.0
+            },
+            "0.0004": {
+              "target_flux": -4.642554496676318e-18,
+              "actual_flux": -1.8246596904541013e-14,
+              "side_flux": 0.0
+            },
+            "0.0006000000000000001": {
+              "target_flux": -5.7623849925057065e-18,
+              "actual_flux": -1.733975041552362e-14,
+              "side_flux": 0.0
+            },
+            "0.0008": {
+              "target_flux": -1.5601248392570742e-17,
+              "actual_flux": -1.7139703608204134e-14,
+              "side_flux": 0.0
+            }
+          }
+        },
+        "cls_history_prefix_continuity": {
+          "errors": {
+            "target": 1.1368685635634087e-15,
+            "normalP": 5.684342817817043e-16,
+            "target_flux_plus_side_flux": 4.642554496676318e-18,
+            "actual_flux_plus_side_flux": 1.8246596904541013e-14,
+            "geometry": 0.0
+          },
+          "maximum_transpiration": 3.414479950833993e-06,
+          "maximum_span_flux_divergence": 0.0,
+          "budgets": {
+            "0.0002": {
+              "target_flux": -2.8579586472074638e-18,
+              "actual_flux": 3.623171294659142e-15,
+              "side_flux": 0.0
+            },
+            "0.0004": {
+              "target_flux": -4.642554496676318e-18,
+              "actual_flux": -1.8246596904541013e-14,
+              "side_flux": 0.0
+            }
+          }
+        },
+        "cls_history_resume_continuity": {
+          "errors": {
+            "target": 1.136868140046935e-15,
+            "normalP": 5.684340700234675e-16,
+            "target_flux_plus_side_flux": 9.608053539383139e-18,
+            "actual_flux_plus_side_flux": 3.099729644118731e-14,
+            "geometry": 0.0
+          },
+          "maximum_transpiration": 1.0027503203957622e-05,
+          "maximum_span_flux_divergence": 0.0,
+          "budgets": {
+            "0.0006000000000000001": {
+              "target_flux": -9.608053539383139e-18,
+              "actual_flux": -3.099729644118731e-14,
+              "side_flux": 0.0
+            },
+            "0.0008": {
+              "target_flux": -2.950758385768563e-18,
+              "actual_flux": -5.665092331457658e-16,
+              "side_flux": 0.0
+            }
+          }
+        }
+      },
+      "binaries": {
+        "IncNavierStokesSolver": "4378e768fad0fbd4af1d1d4036c0c5fac1f273cac110ebb9fce574db331d2b13",
+        "RANSWallFieldAudit": "f12015ee306fc06999b6c796855b90ac8834f66cc470d3ad8fd83576f4131e07",
+        "libSpatialDomains.so": "5dc8c7e131d9f44d7effcf7f1f132288a6493906d35267263923bed7f93ad2fb"
+      },
+      "source_revision": "c4e6785b95c396065ed7d1991cf88cceeeac9101"
+    }
+  },
+  "ctest": {
+    "path": "/media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/wg4/legacy-v2/ctest.log",
+    "sha256": "7adf1557ec1615bc3517af29a05771e0f304af171150f9d74135f397101abc80",
+    "text": "Internal ctest changing into directory: /media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build\nTest project /media/jay/新加卷/nektar-v2026-runs/hill-wall-geometry-transition/build\n      Start  1: RANSStandardTransportSmoke\n 1/10 Test  #1: RANSStandardTransportSmoke ........   Passed    6.99 sec\n      Start  2: RANSCLSTransportSmoke\n 2/10 Test  #2: RANSCLSTransportSmoke .............   Passed   24.49 sec\n      Start  3: RANSAWFOriginalSmoke\n 3/10 Test  #3: RANSAWFOriginalSmoke ..............   Passed   16.54 sec\n      Start  4: RANSAWFEquilibriumSmoke\n 4/10 Test  #4: RANSAWFEquilibriumSmoke ...........   Passed   14.16 sec\n      Start  5: RANSStandardAWFEquilibriumSmoke\n 5/10 Test  #5: RANSStandardAWFEquilibriumSmoke ...   Passed    1.45 sec\n      Start  6: RANSABLPreservationSmoke\n 6/10 Test  #6: RANSABLPreservationSmoke ..........   Passed    5.21 sec\n      Start  7: RANSABL3DPerturbationSmoke\n 7/10 Test  #7: RANSABL3DPerturbationSmoke ........   Passed  221.03 sec\n      Start  8: RANSWallLayerPrototype\n 8/10 Test  #8: RANSWallLayerPrototype ............   Passed    0.07 sec\n      Start  9: RANSKernelUnitTests\n 9/10 Test  #9: RANSKernelUnitTests ...............   Passed    0.03 sec\n      Start 10: RANSWallGeometryUnitTests\n10/10 Test #10: RANSWallGeometryUnitTests .........   Passed    0.02 sec\n\n100% tests passed, 0 tests failed out of 10\n\nTotal Test time (real) = 290.00 sec\n"
+  }
+}

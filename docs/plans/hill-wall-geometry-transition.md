@@ -5,7 +5,7 @@
 - Origin Skill: academic-research-suite / experiment-agent
 - Origin Mode: implementation plan and deterministic validation
 - Origin Date: 2026-10-31
-- Verification Status: WG1--WG2 VERIFIED; WG3--WG4 pending
+- Verification Status: WG1--WG3 VERIFIED; WG4 in verification
 - Version Label: hill_wall_geometry_v1
 
 ## Objective and scope
@@ -72,6 +72,9 @@ Zero w must bypass corrected-reference admissibility checks and exactly select
 original AWF. Ramp coordinates refer to the physical wall foot. Optional
 stationary wall-property expressions provide spatial roughness and log-wall z0.
 All new physics/configuration must enter restart compatibility checks.
+Use the terrain adapter (`Plane`, including horizontal ground, or `CosineHill`)
+for spatial ramps/properties. The legacy `Flat` adapter retains constant-wall
+regression cases and rejects the new spatial configuration.
 
 ## Milestones and acceptance gates
 
@@ -79,8 +82,8 @@ All new physics/configuration must enter restart compatibility checks.
 |---|---|---|---|
 | WG1 | Geometry, metric/source integration and spatial-ramp primitives | Linux kernel tests: closest points/normals, rotations, curvature/Jacobian, invalid geometry, endpoint/derivative limits and independent quadrature; existing kernel tests pass | CLOSED |
 | WG2 | Terrain solver adapter, CLS distance and compatible standard log wall | Actual Linux solves: flat reduction, inclined-plane covariance, curved-wall refinement/normal constraint, source/interface budgets and both closure/wall families; positivity and coupled residual checks | CLOSED |
-| WG3 | Spatial transition/property integration and reproducible workflows | Prescribed-mask receipts; inactive-correction/original recovery; spatially varying properties; 1/2/4-rank agreement including remote samples; history restart and mismatch rejection; empty-floor transition controls | PLANNED |
-| WG4 | Hill-enabling pilot, regression and delivery | Paper-shaped terrain pilot for standard log wall and original/corrected AWF with both closures; four upstream ramp lengths with paired flat controls; relevant legacy regression; documented errors, limits and reproducible commands | PLANNED |
+| WG3 | Spatial transition/property integration and reproducible workflows | Prescribed-mask receipts; inactive-correction/original recovery; spatially varying properties; 1/2/4-rank agreement including remote samples; history restart and mismatch rejection; empty-floor transition controls | CLOSED |
+| WG4 | Hill-enabling pilot, regression and delivery | Paper-shaped terrain pilot for standard log wall and original/corrected AWF with both closures; four upstream ramp lengths with paired flat controls; relevant legacy regression; documented errors, limits and reproducible commands | IN PROGRESS |
 
 Commit and push after each completed milestone. A gate is closed only when its
 evidence exists; failed attempts and any scientific limitations stay visible.
@@ -337,3 +340,81 @@ The last smooth cases were moved off CPU64, an SMT sibling used by the separate
 HIT study; unfinished logs are retained in `wg2/final-smooth-reallocated` and
 accepted earlier cases retain their actual allocations. The primary Linux
 checkout and shared installation were left untouched.
+
+## WG3 verification decisions
+
+Spatial features use the conservative terrain adapter, including `Plane` for
+horizontal ground. An attempted roughness step on the legacy `Flat` adapter
+stagnated after 4,000 iterations at weak divergence 7.72e-5 (standard) and
+7.49e-5 (CLS), despite vanishing pressure correction. Its reconstructed normal
+Dirichlet data lack the conservative dual-trace coupling needed for this case.
+Do not accept this result or relax the divergence gate. Such new spatial
+configurations now fail early with an explicit instruction to select `Plane`
+or `CosineHill`; existing constant-wall legacy cases retain their original path.
+The supported terrain roughness-step cases pass. Failed logs/source are kept
+under `wg3/final` and `wg3/pre-scope-guard-source.zip`.
+
+The full-3D initial writer exposed an undefined native HexExp
+`FwdTransBndConstrained` method. Its replacement uses local reference-quad
+face traces and the reference tensor interior mass block, with consistent increasing tensor-edge ordering and a check that span-independent
+input stays span independent. Initialization remains a synthetic
+streamfunction, with no reset during physical time advancement. The first
+failed 3D preparation is retained under `wg4/pilot`; final receipts also record
+preparation failures explicitly. New verification runs use fresh directories.
+
+The 3D preparation diagnostic also caught reversed upper/left-edge ordering in
+the native reference-quad constrained transform: an H vertex of 3.0055 m/s was
+overwritten by its N value of 3.4861 m/s. The preparation utility uses explicit
+increasing tensor-edge order, checks shared face/edge coefficients and retains
+the 2D native path. It checks raw and projected span invariance at the existing
+5e-10 relative numerical tolerance, reporting both. Curved-coordinate roundoff
+of 3.52e-13 m gives absolute epsilon differences around 3e-10; an initially
+chosen dimensionful 1e-10 span threshold was inappropriate across quantities
+with different units. No physical solve or conservation gate was relaxed.
+
+A supplementary 1e-12 complete-field zero-mask check was stricter than the
+preregistered 1e-6 field gate and the 1e-8 nonlinear solve target. Standard-model
+pressure differed by 1.75e-9 normalized (all other fields <=1.20e-10); CLS was
+bitwise equal. The accepted comparison uses the declared 1e-6 field gate, with
+separate 5e-10 algebraic mask/dissipation oracles at the actual accepted state.
+The legacy regression retains its stricter 1e-7 absolute field gate: a pressure
+only 1.187e-7 difference prompted tightening both recovery solves to 1e-9
+pressure tolerance, with the failed fields/logs retained for review.
+
+## WG3 closure (2026-11-01)
+
+All 46 cases and 52 comparisons pass: 29 positive cases and 17 deliberate
+configuration/history rejections. The source manifest in
+`hill-wall-geometry-evidence/wg3.json` matches the Mac checkout. Linux source
+baseline is `c4e6785` plus the recorded WG3 changes. The final run is
+`wg3/final-v2`, with all OMP/BLAS threads one and four-rank cases on CPUs 5--8;
+combined project validation stayed below sixteen workers.
+
+Independent mask, requested/effective blend and metric dissipation/P/H oracles
+meet 5e-10. Zero spatial mask bypasses a deliberately invalid high-Re threshold
+and recovers original AWF: the standard complete-field difference is 1.75e-9
+normalized and CLS is bitwise equal. Smooth properties and both one-sided
+roughness values at the C1 foot are verified. New spatial configurations on
+the legacy flat adapter are explicitly rejected as described above.
+
+Both models agree across 1/2/4 ranks to at most 9.12e-11 normalized. Each
+four-rank column has one wall-owning rank and eight N queries owned by a rank
+with no wall faces; independent saved-field interpolation differs by at most
+8.0e-16. Full-3D nonzero spanwise strip-flux divergence is independently
+verified (maxima 0.02020 and 0.02083 1/s). Integrated strip continuity, including
+its span contribution and actual side/interface flux budget, remains enforced.
+
+Serial-prefix/four-rank full-history continuations agree with uninterrupted
+runs to 1.18e-10 (standard) and 5.87e-11 (CLS). Changed mask, referenced roughness
+parameter, normal augmentation and element coordinates are rejected for both.
+The early metadata guard says `model/configuration mismatch`, while the payload
+guard additionally names order; the checker accepts the common configuration
+phrase and still requires a nonzero exit. The earlier diagnostic-text-only
+failure is retained under `wg3/rejection-message-attempt`.
+
+The full-3D initial utility now produces conforming polynomial traces without
+the undefined HexExp method or reversed reference-quad edge values. Independent
+initial-field formula errors are below 2.4e-15, geometric reconstruction error
+below 3.52e-13 m, and scaled projected span variation below 6.46e-11. The 2D
+projection is unchanged. All ten final-solver smoke/kernel CTests pass; WG4
+retains the broader legacy recovery/precision regression as a separate gate.

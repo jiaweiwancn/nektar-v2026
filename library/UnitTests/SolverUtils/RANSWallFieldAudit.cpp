@@ -6,6 +6,9 @@
 #include <MultiRegions/ContField.h>
 #include <SpatialDomains/MeshGraphIO.h>
 #include <SolverUtils/Turbulence/RANSWallGeometry.h>
+#include <LocalRegions/HexExp.h>
+#include <StdRegions/StdQuadExp.h>
+#include <StdRegions/StdSegExp.h>
 #include <cmath>
 #include <algorithm>
 #include <fstream>
@@ -15,6 +18,114 @@
 #include <set>
 
 using namespace Nektar;
+namespace
+{
+void ProjectReferenceFace(const std::shared_ptr<StdRegions::StdQuadExp> &face,
+    const Array<OneD,NekDouble> &input,Array<OneD,NekDouble> &coefficients)
+{
+    const int nx = face->GetNumPoints(0),ny = face->GetNumPoints(1),nc = face->GetNcoeffs();
+    Vmath::Zero(nc,coefficients,1);
+    for (int edge = 0; edge < 4; ++edge)
+    {
+        auto segment = MemoryManager<StdRegions::StdSegExp>::AllocateSharedPtr(face->GetBasis(edge%2)->GetBasisKey());
+        Array<OneD,NekDouble> values(segment->GetTotPoints()),trace(segment->GetNcoeffs());
+        for (int q = 0; q < values.size(); ++q)
+        {
+            // TraceCoeffMap uses increasing tensor coordinates also on the
+            // upper/left edges, as in LocalRegions::QuadExp. The native
+            // StdQuadExp constrained transform instead reverses these edges.
+            const int index = edge == 0 ? q : edge == 1 ? nx-1+nx*q :
+                              edge == 2 ? nx*(ny-1)+q : nx*q;
+            values[q] = input[index];
+        }
+        segment->FwdTransBndConstrained(values,trace);
+        Array<OneD,unsigned int> map;Array<OneD,int> sign;
+        face->GetTraceToElementMap(edge,map,sign);
+        for (int q = 0; q < trace.size(); ++q) coefficients[map[q]] = sign[q]*trace[q];
+    }
+    Array<OneD,unsigned int> interior;face->GetInteriorMap(interior);
+    if (interior.size())
+    {
+        Array<OneD,NekDouble> residual(face->GetTotPoints()),load(nc);
+        face->BwdTrans(coefficients,residual);
+        Vmath::Vsub(residual.size(),input,1,residual,1,residual,1);
+        face->IProductWRTBase(residual,load);
+        StdRegions::StdMatrixKey key(StdRegions::eMass,face->DetShapeType(),*face);
+        const auto inverse = face->GetStdStaticCondMatrix(key)->GetBlock(1,1);
+        for (int i = 0; i < interior.size(); ++i)
+        {
+            double value = 0;
+            for (int j = 0; j < interior.size(); ++j) value += (*inverse)(i,j)*load[interior[j]];
+            coefficients[interior[i]] = value;
+        }
+    }
+}
+
+void ProjectTerrainInitial(const MultiRegions::ContFieldSharedPtr &field,
+                          const Array<OneD,NekDouble> &raw,int dimension)
+{
+    if (dimension == 2)
+    {
+        field->FwdTransBndConstrained(raw,field->UpdateCoeffs());
+        return;
+    }
+    // HexExp has no FwdTransBndConstrained implementation. Constrain all
+    // local face traces with native reference-quad projections, then solve
+    // the reference interior mass block. Local tensor coordinates avoid any
+    // global-face orientation ambiguity and preserve span-independent input.
+    for (int e = 0; e < field->GetExpSize(); ++e)
+    {
+        auto hex = std::dynamic_pointer_cast<LocalRegions::HexExp>(field->GetExp(e));
+        ASSERTL0(hex,"Terrain initial preparation requires quadrilaterals/hexahedra");
+        const int nc = hex->GetNcoeffs(),np = hex->GetTotPoints();
+        auto reference = MemoryManager<StdRegions::StdHexExp>::AllocateSharedPtr(
+            hex->GetBasis(0)->GetBasisKey(),hex->GetBasis(1)->GetBasisKey(),hex->GetBasis(2)->GetBasisKey());
+        Array<OneD,NekDouble> coefficients = field->UpdateCoeffs()+field->GetCoeff_Offset(e);
+        Array<OneD,NekDouble> input = raw+field->GetPhys_Offset(e);
+        Vmath::Zero(nc,coefficients,1);
+        std::vector<int> seen(nc,0);
+        for (int face = 0; face < hex->GetNtraces(); ++face)
+        {
+            auto first = hex->GetTraceBasisKey(face,0),second = hex->GetTraceBasisKey(face,1);
+            auto surface = MemoryManager<StdRegions::StdQuadExp>::AllocateSharedPtr(first,second);
+            Array<OneD,NekDouble> values(surface->GetTotPoints()),trace(surface->GetNcoeffs());
+            Array<OneD,int> physicalMap;hex->GetTracePhysMap(face,physicalMap);
+            ASSERTL0(physicalMap.size() == values.size(),"Initial face quadrature mismatch");
+            for (int j = 0; j < values.size(); ++j) values[j] = input[physicalMap[j]];
+            ProjectReferenceFace(surface,values,trace);
+            Array<OneD,unsigned int> map;Array<OneD,int> sign;
+            hex->GetTraceToElementMap(face,map,sign,StdRegions::eDir1FwdDir1_Dir2FwdDir2);
+            for (int j = 0; j < trace.size(); ++j)
+            {
+                const double value = sign[j]*trace[j];
+                if (seen[map[j]])
+                    ASSERTL0(std::abs(coefficients[map[j]]-value) <= 1e-10*std::max(1.,std::abs(value)),
+                             "Inconsistent initial face/edge traces: element "+std::to_string(e)+
+                             " face "+std::to_string(face)+" previous "+std::to_string(seen[map[j]]-1)+
+                             " mode "+std::to_string(map[j])+" old "+std::to_string(coefficients[map[j]])+
+                             " new "+std::to_string(value));
+                coefficients[map[j]] = value;seen[map[j]] = face+1;
+            }
+        }
+        Array<OneD,unsigned int> interior;hex->GetInteriorMap(interior);
+        if (interior.size())
+        {
+            Array<OneD,NekDouble> residual(np),load(nc);
+            hex->BwdTrans(coefficients,residual);
+            Vmath::Vsub(np,input,1,residual,1,residual,1);
+            reference->IProductWRTBase(residual,load);
+            StdRegions::StdMatrixKey key(StdRegions::eMass,reference->DetShapeType(),*reference);
+            const auto inverse = reference->GetStdStaticCondMatrix(key)->GetBlock(1,1);
+            for (int i = 0; i < interior.size(); ++i)
+            {
+                double value = 0;
+                for (int j = 0; j < interior.size(); ++j) value += (*inverse)(i,j)*load[interior[j]];
+                coefficients[interior[i]] = value;
+            }
+        }
+    }
+}
+}
 int main(int argc, char **argv)
 {
     if (argc != 4) { std::cerr << "Usage: RANSWallFieldAudit session.xml field.fld output.csv (or --initial output.csv / --terrain-initial output.fld)\n"; return 2; }
@@ -85,7 +196,7 @@ int main(int argc, char **argv)
                         name == "k" ? qstar*star*star :
                         (name == "eps" || name == "eps_tilde") ? star*star*star/kap*(chi/eta+(1-chi)/b[0]) : 0;
                 }
-                field->FwdTransBndConstrained(raw,field->UpdateCoeffs());
+                ProjectTerrainInitial(field,raw,dim);
                 field->AvgAssemble();field->GlobalToLocal();field->BwdTrans(field->GetCoeffs(),projected);
                 for (int q = 0; q < nq; ++q)
                     out << name << ',' << x[q] << ',' << y[q] << ',' << z[q] << ',' << raw[q] << ',' << projected[q]
