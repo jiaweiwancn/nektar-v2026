@@ -62,10 +62,13 @@ run. It does not claim full-band DNS, independent probes, or experimental fideli
    pinned to distinct assigned CPUs for numerical work. Native initialization
    was observed to move a main thread briefly to CPU0 and restore it. Audit all
    main/helper thread masks against the explicit CPU pool throughout startup;
-   once a rank reports `HIT_EVALUATOR`, require its assigned singleton CPU on
+   once a rank reports `HIT_NATIVE_READY`, require its assigned singleton CPU on
    every thread. All ranks must report readiness before solver steps. Retain
    startup-affinity witnesses instead of misclassifying an in-pool initialization
    probe as a permanent binding failure. CPU-pool escapes are always failures.
+   Inlet-owning ranks additionally report `HIT_EVALUATOR`; ranks without inlet
+   faces still report global readiness. Do not infer all-rank readiness from the
+   subset of evaluator objects.
    Record initialization/steady step cost,
    sampled RSS, warnings, final native finiteness, evaluator method and hashes.
    A hard timeout bounds every child job; failed jobs are retained and not retried
@@ -94,6 +97,14 @@ run. It does not claim full-band DNS, independent probes, or experimental fideli
    89.8308% of the uncut model's F11(100),800/64095.0493%;600 is not expected to
    pass a strict5% endpoint bandwidth test. Input interpolation and missing
    dissipation remain explicit model errors even when the target band agrees.
+   Before a costly CFD recording, a boundary-only temporal diagnostic may compare
+   the unprojected and constrained-projected values at identical native points
+   over0.2--0.6s (1601samples). Bound CSV output to16points per local inlet and
+   reuse the fixed10--100rad/m bands. The broad600-band maximum point error is
+   not itself a100-band error. If the proposedh=0.05 trace fails the5% band-power
+   projection screen, inspect an h=0.025 boundary-only control before deciding
+   whether any full CFD case is justified. Report all components and endpoint
+   changes separately; no exact-plane or experimental-fidelity claim follows.
 8. **Full-distance decision:** no new9m production case is launched until native
    numerical, sampling, startup, bandwidth, projection and resource evidence
    justify it. A developed upstream reference and outlet/span sensitivity are

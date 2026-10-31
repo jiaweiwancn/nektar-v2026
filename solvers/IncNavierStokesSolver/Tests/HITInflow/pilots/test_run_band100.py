@@ -194,8 +194,7 @@ class Band100Controller(unittest.TestCase):
                 patch.object(runner.os, "sched_getaffinity", side_effect=[{0}, {0}, {1}, {1}]):
             audit.check_record(self.affinity_record())
             self.assertEqual(audit.startup_nonassigned_observations, 2)
-            audit.observe_log("HIT_EVALUATOR rank 0 points 0 method EmptyPlane\n"
-                              "HIT_EVALUATOR rank 1 points 10 method GroupedSeparable\n")
+            audit.observe_log("HIT_NATIVE_READY rank 0\nHIT_NATIVE_READY rank 1\n")
             audit.check_record(self.affinity_record())
             audit.observe_log("Steps: 8 Time: .0001 CPU Time: .1s", completed=True)
         summary = audit.snapshot()
@@ -221,7 +220,7 @@ class Band100Controller(unittest.TestCase):
 
     def test_ready_main_movement_inside_pool_is_rejected(self):
         audit = runner.AffinityAudit([0, 1], 2)
-        audit.observe_log("HIT_EVALUATOR rank 1 points 10 method GroupedTransverse")
+        audit.observe_log("HIT_NATIVE_READY rank 1")
         with patch.object(runner, "process_start_ticks", return_value="123"), \
                 patch.object(runner, "task_ids", return_value=[42]), \
                 patch.object(runner, "task_start_ticks", return_value="thread-start"), \
@@ -233,7 +232,7 @@ class Band100Controller(unittest.TestCase):
 
     def test_ready_helper_thread_movement_is_rejected(self):
         audit = runner.AffinityAudit([0, 1], 2)
-        audit.observe_log("HIT_EVALUATOR rank 1 points 10 method GroupedSeparable")
+        audit.observe_log("HIT_NATIVE_READY rank 1")
         with patch.object(runner, "process_start_ticks", return_value="123"), \
                 patch.object(runner, "task_ids", return_value=[42, 43]), \
                 patch.object(runner, "task_start_ticks", return_value="thread-start"), \
@@ -244,12 +243,12 @@ class Band100Controller(unittest.TestCase):
 
     def test_readiness_is_required_by_first_solver_step_and_success(self):
         audit = runner.AffinityAudit([0, 1], 2)
-        audit.observe_log("HIT_EVALUATOR rank 0 points 0 method EmptyPlane")
+        audit.observe_log("HIT_NATIVE_READY rank 0")
         with self.assertRaisesRegex(ValueError, "first observed solver step"):
             audit.observe_log("Steps: 8 Time: .0001 CPU Time: .1s")
         with self.assertRaisesRegex(ValueError, "successful completion"):
             audit.observe_log("native projection complete", completed=True)
-        audit.observe_log("HIT_EVALUATOR rank 1 points 10 method GroupedSeparable")
+        audit.observe_log("HIT_NATIVE_READY rank 1")
         audit.observe_log("Steps: 8 Time: .0001 CPU Time: .1s")
         audit.observe_log("native projection complete", completed=True)
 
@@ -283,6 +282,38 @@ class Band100Controller(unittest.TestCase):
                 patch.object(runner.os, "sched_getaffinity", return_value={0}):
             with self.assertRaisesRegex(ValueError, "ready MPI affinity changed"):
                 runner.validate_bindings(self.root, [0, 1], 2, live=True)
+
+    def test_noninlet_ranks_use_global_native_ready_marker(self):
+        audit = runner.AffinityAudit([0, 1], 2)
+        audit.observe_log("HIT_EVALUATOR rank 0 points 20 method GroupedSeparable")
+        self.assertEqual(audit.ready_ranks, set())
+        audit.observe_log("HIT_NATIVE_READY rank 0\nHIT_NATIVE_READY rank 1\n")
+        audit.observe_log("Steps: 8 Time: .0001 CPU Time: .1s", completed=True)
+        # Rank1 has no evaluator report but still enters strict CPU validation.
+        with patch.object(runner, "process_start_ticks", return_value="123"), \
+                patch.object(runner, "task_ids", return_value=[42]), \
+                patch.object(runner, "task_start_ticks", return_value="thread-start"), \
+                patch.object(runner.os, "sched_getaffinity", return_value={0}):
+            with self.assertRaisesRegex(ValueError, "ready MPI affinity changed"):
+                audit.check_record(self.affinity_record())
+
+    def test_evaluator_reports_allow_only_inlet_owner_subset(self):
+        text = ("HIT_NATIVE_READY rank 0\n"
+                "HIT_EVALUATOR rank 16 points 1152 method GroupedSeparable cache_bytes 1200000 modes 6500000\n"
+                "HIT_EVALUATOR rank 32 points 1152 method GroupedTransverse cache_bytes 1200000 modes 6500000\n")
+        reports = runner.evaluator_reports(text, 48)
+        self.assertEqual([r["rank"] for r in reports], [16, 32])
+        self.assertEqual([r["method"] for r in reports], ["GroupedSeparable", "GroupedTransverse"])
+        invalid = [
+            "HIT_NATIVE_READY rank 0",
+            "HIT_EVALUATOR rank 0 points 0 method EmptyPlane",
+            "HIT_EVALUATOR rank 48 points 10 method GroupedSeparable",
+            "HIT_EVALUATOR rank 0 points 10 method ReferenceCacheLimit",
+            "HIT_EVALUATOR rank 0 points 10 method GroupedSeparable\n"
+            "HIT_EVALUATOR rank 0 points 10 method GroupedSeparable"]
+        for value in invalid:
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                runner.evaluator_reports(value, 48)
 
 
 if __name__ == "__main__":

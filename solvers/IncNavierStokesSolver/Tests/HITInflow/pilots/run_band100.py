@@ -33,7 +33,8 @@ SAMPLE_DT, DURATION, RECORD_START = .00025, .6, .2
 COUNTS, SEED = "2548,154,154", "20261028"
 FLOAT = r"[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?"
 STEP = re.compile(r"\bSteps:\s*(\d+)\s+Time:\s*(" + FLOAT + r").*?CPU Time:\s*(" + FLOAT + r")s")
-READY = re.compile(r"HIT_EVALUATOR\s+rank\s+(\d+)\s+points\s+\d+\s+method\s+(\S+)")
+READY = re.compile(r"HIT_NATIVE_READY\s+rank\s+(\d+)\b")
+EVALUATOR = re.compile(r"HIT_EVALUATOR\s+rank\s+(\d+)\s+points\s+(\d+)\s+method\s+(\S+)")
 BAD_LOG = re.compile(r"Exceeded maxIt|failed to converge|(?<![A-Za-z])[+-]?nan(?=$|[\s,;\]])|[:=]\s*[+-]?inf(?:inity)?(?=$|[\s,;\]])", re.I)
 
 
@@ -232,7 +233,7 @@ class AffinityAudit:
 
     Some native initialization temporarily changes affinity. This is permitted
     only within the explicitly allocated pool and before the corresponding
-    rank's HIT_EVALUATOR marker. No cause is inferred from that observation.
+    rank's HIT_NATIVE_READY marker. No cause is inferred from that observation.
     """
     def __init__(self, cpus, ranks):
         self.cpus, self.ranks = list(cpus), ranks
@@ -320,7 +321,7 @@ class AffinityAudit:
 
     def snapshot(self):
         return {"scope": "Sampled main/helper thread affinities; not a continuous scheduler audit",
-                "policy": "CPU-pool containment in every phase; exact assigned singleton after each rank's HIT_EVALUATOR marker",
+                "policy": "CPU-pool containment in every phase; exact assigned singleton after each rank's HIT_NATIVE_READY marker",
                 "native_initialization_cause": "Not established; no hwloc root-cause claim",
                 "ready_ranks": sorted(self.ready_ranks), "expected_rank_count": self.ranks,
                 "process_identity_checks": self.process_checks, "thread_affinity_checks": self.thread_checks,
@@ -396,6 +397,26 @@ def validate_bindings(directory, cpus, ranks, live=False, audit=None):
     if not live:
         require([v["rank"] for v in records] == list(range(ranks)), "MPI binding receipts are incomplete")
     return records
+
+
+def evaluator_reports(text, ranks):
+    """Validate reports from local inlet owners, independently of MPI readiness.
+
+    Ranks without a local inlet need no evaluator object and emit no report.
+    Their native initialization is instead witnessed by HIT_NATIVE_READY.
+    """
+    reports = [{"rank": int(m.group(1)), "points": int(m.group(2)), "method": m.group(3)}
+               for m in EVALUATOR.finditer(text)]
+    require(reports, "native accelerated-evaluator reports are missing")
+    seen = [r["rank"] for r in reports]
+    require(len(seen) == len(set(seen)) and all(0 <= rank < ranks for rank in seen),
+            "native evaluator reports have duplicate or out-of-range ranks")
+    methods = {"GroupedTransverse", "GroupedSeparable", "EmptyPlane", "MeanOnly"}
+    require(all(r["method"] in methods for r in reports),
+            "native evaluator report shows unavailable acceleration/direct fallback")
+    require(any(r["points"] > 0 and r["method"] in {"GroupedTransverse", "GroupedSeparable"}
+                for r in reports), "no nonempty accelerated inlet evaluator was reported")
+    return sorted(reports, key=lambda r:r["rank"])
 
 
 class Controller:
@@ -554,12 +575,11 @@ class Controller:
         args = ["--npz", str(self.config["allocation"]["npz"]), "--use-scotch", "pilot.xml"]
         result = self.execute(self.native_command("solver", directory, "solver", args), directory,
                               "solver", timeout, mpi=True, steps=steps)
-        methods = re.findall(r"HIT_EVALUATOR\s+rank\s+\d+\s+points\s+\d+\s+method\s+(\S+)",
-                             (directory / "solver.log").read_text(errors="replace"))
-        require(len(methods) == self.config["allocation"]["ranks"] and
-                all(m.startswith("Grouped") or m in ("EmptyPlane", "MeanOnly") for m in methods),
-                "native accelerated-evaluator reports are missing or show direct fallback")
-        result["evaluator_methods"] = sorted(set(methods))
+        reports = evaluator_reports((directory / "solver.log").read_text(errors="replace"),
+                                    self.config["allocation"]["ranks"])
+        result["evaluator_reports"] = reports
+        result["evaluator_methods"] = sorted({r["method"] for r in reports})
+        result["nonempty_inlet_evaluator_ranks"] = [r["rank"] for r in reports if r["points"] > 0]
         atomic_json(directory / "solver.receipt.json", result)
         self.receipt["commands"][-1]["sha256"] = sha(directory / "solver.receipt.json")
         atomic_json(self.root / "receipt.json", self.receipt)
@@ -644,6 +664,8 @@ def preflight(controller):
     arguments = ["--npz", str(controller.config["allocation"]["npz"]), "--use-scotch", "pilot.xml"]
     controller.execute(controller.native_command("probe", directory, "projection", arguments), directory,
                        "projection", 3600, mpi=True)
+    projection_evaluators = evaluator_reports((directory / "projection.log").read_text(errors="replace"),
+                                              controller.config["allocation"]["ranks"])
     projection = json.loads((directory / "pilot.probe.json").read_text())
     require(projection["direct_reference_samples"] > 0 and projection["raw_max_error"] <= 1e-9,
             "native boundary direct-reference samples failed")
@@ -652,7 +674,8 @@ def preflight(controller):
     history = finite_smoke_history(directory, manifest)
     gate = timing_gate((directory / "solver.log").read_text(), solve, case_knobs("base"))
     controller.finish("COMPLETED", budget_gate=gate, native_benchmark=native,
-                      boundary_projection=projection, smoke_history=history,
+                      boundary_projection=projection, boundary_evaluator_reports=projection_evaluators,
+                      smoke_history=history,
                       study_eligible=gate["passed"],
                       interpretation="Preflight completed; no downstream physical or precision-qualified spectral result")
 

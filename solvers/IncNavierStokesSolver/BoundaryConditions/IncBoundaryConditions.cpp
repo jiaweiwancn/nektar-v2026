@@ -226,6 +226,15 @@ void IncBoundaryConditions::Initialize(
     if (m_hitConfiguration)
     {
         AgreeOnHITError(pSession->GetComm(), hitError);
+        int report = 0;
+        pSession->LoadParameter("HITReportEvaluator", report, 0);
+        if (report)
+        {
+            // Ranks without local inlet faces do not construct an evaluator.
+            // They still participate in all-rank setup and resource auditing.
+            std::cout << "HIT_NATIVE_READY rank "
+                      << pSession->GetComm()->GetRank() << std::endl;
+        }
     }
 }
 

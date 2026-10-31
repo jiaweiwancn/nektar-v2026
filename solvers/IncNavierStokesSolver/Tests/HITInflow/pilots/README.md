@@ -307,9 +307,11 @@ singleton CPU affinities and atomic running/failed/completed receipts. A failed
 job is not retried. MPI ranks have one OpenMP/BLAS thread and share the selected
 CPU pool with their bounded controller.
 The controller audits all native main/helper threads. It records temporary
-in-pool startup binding changes; after each `HIT_EVALUATOR` readiness marker it
+in-pool startup binding changes; after each `HIT_NATIVE_READY` readiness marker it
 requires that rank's assigned singleton CPU. All ranks must be ready before
 solver steps, and any CPU-pool escape fails immediately.
+The global marker includes ranks without local inlet faces. `HIT_EVALUATOR`
+reports only the inlet-owning subset and its cache methods.
 
 After a completed preflight passes its12h forecast/180GiB sampled-memory gate,
 run a separate fresh study using the same revision, binaries and allocation:
@@ -350,3 +352,23 @@ The pilot sets optional session parameters `HITReportEvaluator=1` and
 native diagnostic; projection errors compare raw/projected values at every
 sampled boundary point. These execution/diagnostic controls do not alter the
 realization identity or restore omitted energy.
+
+For a boundary-only temporal projection check, use a full-duration prepared
+session and set `HITProbeTemporalSamples=1601`, `HITProbeSampleStart=0.2`,
+`HITProbeSampleDt=0.00025`, `HITProbeOutputPoints=16` and
+`HITProbeDirectSamples=0`. Run `HITBoundaryProbe` with the same MPI allocation
+and save its native receipt. Direct evaluation is skipped only after the
+separate direct/cache preflight has passed. The probe checks finiteness and
+projection maxima at all native points, exports a fixed dispersed subset, and
+checks a repeated time separately from the uniform CSV grid. With a session
+named `projection-temporal.xml`, analyze the fresh export with:
+
+```bash
+python3 "$hit_pilots/analyze_projection_band100.py" \
+  --case /path/to/projection-case --stem projection-temporal \
+  --output /path/to/fresh-projection-analysis
+```
+
+Inspect all four physical-band power changes before starting a CFD recording.
+The 5% projection screen describes the exported probes; it does not establish
+spatial convergence, experimental agreement or independent samples.
