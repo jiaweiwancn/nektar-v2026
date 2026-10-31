@@ -1,0 +1,911 @@
+{
+  "allocation": {
+    "concurrency": "One native MPI command at a time; controller shares the explicitly assigned CPU pool",
+    "cpus": [
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      0
+    ],
+    "external_jobs": "The caller must account for other server jobs within the same64-worker ceiling",
+    "hard_server_worker_limit": 64,
+    "npz": 16,
+    "ranks": 48,
+    "thread_environment": {
+      "BLIS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    }
+  },
+  "branch": "codex/hit-inflow-generator",
+  "budget_gate": {
+    "forecast_duration_s": 0.6,
+    "forecast_steps": 24000,
+    "forecast_wall_seconds": 19531.58981631499,
+    "maximum_forecast_hours": 12,
+    "maximum_sampled_memory_gib": 180,
+    "one_off_wall_overhead_seconds": 100.79981631498973,
+    "passed": true,
+    "sampled_peak_tree_rss_gib": 136.34662246704102,
+    "scope": "Short mean-initial smoke; no guarantee of developed-flow runtime or peak memory",
+    "steady_chunk_rates_seconds_per_step": [
+      0.80312125,
+      0.80287375,
+      0.80061125,
+      0.80961625,
+      0.8074375,
+      0.79808,
+      0.79986125,
+      0.79985,
+      0.79909125,
+      0.8004575
+    ],
+    "steady_rate_estimator": "maximum native info-chunk seconds/step in the second half of the160-step smoke",
+    "steady_seconds_per_step": 0.80961625
+  },
+  "collected_utc": "2026-10-31T13:25:31.761374+00:00",
+  "helper_source_revision": "f4b70baec10016dd098005bc5a5507b87e4a57bf",
+  "interpretation": "Launched sequential short-pilot study; no completed numerical refinement or experimental-fidelity claim. Original12h budget rejection retained in separate evidence. Higher-bandwidth, SVV, sampling and full-distance gates remain open.",
+  "native_benchmark": {
+    "batch_repetitions": 20,
+    "batch_seconds": 0.061091322299999994,
+    "batch_total_seconds": 1.221826446,
+    "cache_bytes": 1555456,
+    "check_points": 4,
+    "check_times": 4,
+    "check_variance_abs_error": [
+      8.012340790841677e-14,
+      2.6575963651964685e-15,
+      4.676814491233472e-15
+    ],
+    "check_variance_batch": [
+      0.033381013708673905,
+      0.03860386693965765,
+      0.0414362930935636
+    ],
+    "check_variance_reference": [
+      0.03338101370875403,
+      0.03860386693966031,
+      0.041436293093558924
+    ],
+    "configuration_seconds": 1.969144671,
+    "constructor_seconds": 6.195747392,
+    "expected_covariance_diagonal": [
+      0.044334215875671754,
+      0.044339508999817846,
+      0.044339508999817846
+    ],
+    "expected_dissipation": 0.08602557714922963,
+    "expected_kinetic_energy": 0.06650661693765371,
+    "finite_window_expectation": {
+      "covariance_reconstruction_relative_error": [
+        2.2926751192704144e-18,
+        6.441648007769401e-17,
+        6.090146455744025e-17
+      ],
+      "ensemble_covariance": [
+        0.044334215875671754,
+        0.044339508999817846,
+        0.044339508999817846
+      ],
+      "expected_kx0_covariance": [
+        0.00024404662887439745,
+        0.00012202331443719872,
+        0.00012202331443719872
+      ],
+      "expected_kx0_covariance_fraction": [
+        0.005504701595688245,
+        0.002752022230054465,
+        0.002752022230054465
+      ],
+      "interpretation": "Continuous uniform-time single-point ensemble expectation of central variance; not the actual seeded record and not a sampling confidence interval",
+      "relative_bias_definition": "(window variance - ensemble covariance) / ensemble covariance",
+      "windows": [
+        {
+          "relative_bias": [
+            -0.04244651076667124,
+            -0.021668148046504736,
+            -0.021668148046504732
+          ],
+          "variance": [
+            0.042452383104173125,
+            0.043378753954500464,
+            0.043378753954500464
+          ],
+          "window_seconds": 0.1
+        },
+        {
+          "relative_bias": [
+            -0.028497124952167937,
+            -0.014445673301111446,
+            -0.01444567330111144
+          ],
+          "variance": [
+            0.043070818186206346,
+            0.04369899493847479,
+            0.04369899493847479
+          ],
+          "window_seconds": 0.15
+        },
+        {
+          "relative_bias": [
+            -0.01434829751911395,
+            -0.007223000081674559,
+            -0.007223000081674556
+          ],
+          "variance": [
+            0.04369809535601099,
+            0.044019244722690754,
+            0.044019244722690754
+          ],
+          "window_seconds": 0.3
+        },
+        {
+          "relative_bias": [
+            -0.012310753497355097,
+            -0.006191161056885578,
+            -0.00619116105688557
+          ],
+          "variance": [
+            0.04378842827252783,
+            0.04406499595841675,
+            0.04406499595841675
+          ],
+          "window_seconds": 0.35
+        },
+        {
+          "relative_bias": [
+            -0.010779923566770286,
+            -0.005417279095850111,
+            -0.005417279095850109
+          ],
+          "variance": [
+            0.04385629641713932,
+            0.04409930950459288,
+            0.04409930950459288
+          ],
+          "window_seconds": 0.4
+        },
+        {
+          "relative_bias": [
+            -0.006173699310735468,
+            -0.0030956115136818495,
+            -0.0030956115136818456
+          ],
+          "variance": [
+            0.04406050975767812,
+            0.04420225110524701,
+            0.04420225110524701
+          ],
+          "window_seconds": 0.7
+        },
+        {
+          "relative_bias": [
+            -0.00576325828958876,
+            -0.002889237825849552,
+            -0.0028892378258495465
+          ],
+          "variance": [
+            0.04407870633851387,
+            0.04421140161323598,
+            0.04421140161323598
+          ],
+          "window_seconds": 0.75
+        },
+        {
+          "relative_bias": [
+            -0.00557462973987284,
+            -0.002794011938755126,
+            -0.002794011938755126
+          ],
+          "variance": [
+            0.04408706903735729,
+            0.044215623882313815,
+            0.044215623882313815
+          ],
+          "window_seconds": 0.8
+        },
+        {
+          "relative_bias": [
+            -0.005542493402951945,
+            -0.0027726608328635144,
+            -0.0027726608328635088
+          ],
+          "variance": [
+            0.044088493776655795,
+            0.04421657057986565,
+            0.04421657057986565
+          ],
+          "window_seconds": 1.6
+        }
+      ]
+    },
+    "max_abs_error": 3.1672442446506466e-12,
+    "max_abs_error_by_component": [
+      3.1672442446506466e-12,
+      5.3262949606391885e-14,
+      5.972999872483342e-14
+    ],
+    "method": "GroupedTransverse",
+    "mode_bytes": 577756960,
+    "modes": 6565420,
+    "plane_constructor_seconds": 0.43336972,
+    "points": 4,
+    "points_y": 2,
+    "points_z": 2,
+    "realized_covariance_diagonal": [
+      0.04459937693748547,
+      0.04445789537082983,
+      0.044361135698445395
+    ],
+    "realized_dissipation": 0.08604353985444652,
+    "realized_kinetic_energy": 0.06670920400338035,
+    "reference_seconds_per_point": 0.45324443425,
+    "viscosity": 1.5e-05
+  },
+  "native_build_revision": "1946f8ea1d6e5a8844ce308def5004994a40557b",
+  "native_reuse_verification": {
+    "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/band100/f4b70ba/native-reuse.json",
+    "sha256": "b74afc8e26b86c2c84302eef3b374bc25150ae54556eda8a79de4c82c4340d73"
+  },
+  "preflight_commands": [
+    {
+      "receipt": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/band100/f4b70ba/preflight-01/smoke/prepare.receipt.json",
+      "sha256": "558fe2f85dbc0755823540b0d433ac9d9a6782ff2a66625961939e6201177355",
+      "status": "COMPLETED"
+    },
+    {
+      "receipt": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/band100/f4b70ba/preflight-01/smoke/benchmark.receipt.json",
+      "sha256": "f436b7b3f646f392ef8c6edb50f152bae8d08981586c66e761469c4ddaf98297",
+      "status": "COMPLETED"
+    },
+    {
+      "receipt": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/band100/f4b70ba/preflight-01/smoke/projection.receipt.json",
+      "sha256": "7dbe1dc5363671a2607aaf7ef2c15546d9979468ab9a35a25543c004c076d0fd",
+      "status": "COMPLETED"
+    },
+    {
+      "receipt": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/band100/f4b70ba/preflight-01/smoke/solver.receipt.json",
+      "sha256": "e1a575e55a6fe758b512d60bb418de253c4991de241d4cfc9c78318e8d4efe8c",
+      "status": "COMPLETED"
+    }
+  ],
+  "preflight_receipt": {
+    "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/band100/f4b70ba/preflight-01/receipt.json",
+    "sha256": "dc2f7adca9fc30d13a874b0dc11acfd1512fe3ecf9c60f0054b0ec37fbdc4d6d"
+  },
+  "preflight_status": "COMPLETED",
+  "projection_command": {
+    "affinity_audit": {
+      "affinity_change_witnesses": [],
+      "disappeared_thread_observations": 0,
+      "exited_process_observations": 0,
+      "expected_rank_count": 48,
+      "helper_thread_checks": 5184,
+      "main_thread_checks": 2592,
+      "native_initialization_cause": "Not established; no hwloc root-cause claim",
+      "omitted_change_witnesses": 0,
+      "policy": "CPU-pool containment in every phase; exact assigned singleton after each rank's HIT_NATIVE_READY marker",
+      "process_identity_checks": 2592,
+      "ready_ranks": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47
+      ],
+      "scope": "Sampled main/helper thread affinities; not a continuous scheduler audit",
+      "startup_mask_changes": 0,
+      "startup_nonassigned_thread_observations": 0,
+      "startup_thread_checks": 7488,
+      "strict_thread_checks": 288,
+      "strict_thread_checks_by_rank": [
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6
+      ],
+      "thread_affinity_checks": 7776,
+      "witness_limit": 64
+    },
+    "command": [
+      "taskset",
+      "-c",
+      "16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,0",
+      "mpirun",
+      "--host",
+      "localhost:48",
+      "--bind-to",
+      "none",
+      "-n",
+      "48",
+      "/usr/bin/python3",
+      "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/run_band100.py",
+      "rank",
+      "--cpus",
+      "16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,0",
+      "--binding-dir",
+      "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/band100/f4b70ba/preflight-01/smoke/projection.bindings",
+      "--binary",
+      "/home/jay/.local/opt/nektar-v2026-mpi/bin/HITBoundaryProbe",
+      "--",
+      "--npz",
+      "16",
+      "--use-scotch",
+      "pilot.xml"
+    ],
+    "log_sha256": "4fb4606016462cac1982e5801454e4745e05cfb1afecb0b74cec9777ee4c906a",
+    "peak_sampled_tree_rss_kib": 141717376,
+    "receipt": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/band100/f4b70ba/preflight-01/smoke/projection.receipt.json",
+      "sha256": "7dbe1dc5363671a2607aaf7ef2c15546d9979468ab9a35a25543c004c076d0fd"
+    },
+    "status": "COMPLETED",
+    "wall_seconds": 118.65679856800125
+  },
+  "python_checks": {
+    "passed_test_count": 45,
+    "receipt": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/band100/f4b70ba/checks-01/receipt.json",
+      "sha256": "2df085f1637ca411acbae02d7295db1d538becf1ed56c7327f8dce9fc06b89be"
+    },
+    "result": {
+      "command": [
+        "taskset",
+        "-c",
+        "16",
+        "python3",
+        "-m",
+        "unittest",
+        "test_prepare_spectrum.py",
+        "test_analyze_band100.py",
+        "test_run_band100.py",
+        "test_analyze_projection_band100.py"
+      ],
+      "exit_code": 0,
+      "log_sha256": "00ca1c01bd2f9621101fe4a3a85172a88f73d2aa1640ce2199e581b25b33fd71",
+      "single_cpu": 16,
+      "source_revision": "f4b70baec10016dd098005bc5a5507b87e4a57bf",
+      "wall_seconds": 2.2181301990058273
+    }
+  },
+  "queue_launch": {
+    "command": [
+      "python3",
+      "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/band100/f4b70ba/queue.py"
+    ],
+    "full_distance_production": false,
+    "native_build_revision": "1946f8ea1d6e5a8844ce308def5004994a40557b",
+    "npz": 16,
+    "numerical_threads_per_rank": 1,
+    "pid": 304969,
+    "rank_cpus": "16-63",
+    "ranks": 48,
+    "recipe": "economical",
+    "source_revision": "f4b70baec10016dd098005bc5a5507b87e4a57bf",
+    "stages": [
+      "preflight",
+      "conditional study:base,dt,x"
+    ],
+    "started_utc": "2026-10-31T13:16:26.923655+00:00",
+    "startup_allowed_and_controller_cpu": 0
+  },
+  "queue_snapshot": {
+    "current": "study",
+    "observed_external_numerical_workers": 4,
+    "recipe": "economical",
+    "source_revision": "f4b70baec10016dd098005bc5a5507b87e4a57bf",
+    "stages": [
+      {
+        "command": [
+          "/usr/bin/python3",
+          "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/run_band100.py",
+          "--source-revision",
+          "f4b70baec10016dd098005bc5a5507b87e4a57bf",
+          "--recipe",
+          "economical",
+          "--ranks",
+          "48",
+          "--npz",
+          "16",
+          "--cpus",
+          "16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,0",
+          "--stage",
+          "preflight",
+          "--run-root",
+          "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/band100/f4b70ba/preflight-01"
+        ],
+        "exit_code": 0,
+        "name": "preflight"
+      }
+    ],
+    "started_utc": "2026-10-31T13:16:26.949520+00:00",
+    "status": "RUNNING"
+  },
+  "recipe": "economical",
+  "recordings_completed_at_collection": [],
+  "schema": "NEKTAR_HIT_BAND100_ECONOMICAL_HANDOVER_V1",
+  "smoke_history": {
+    "complete_finite_frames": 9,
+    "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/band100/f4b70ba/preflight-01/smoke/native.his",
+    "sha256": "cd7e01ea6d51740d620c1692930a33d2d71ffdf3bf8916048450c694b80687ea"
+  },
+  "solver_command": {
+    "affinity_audit": {
+      "affinity_change_witnesses": [],
+      "disappeared_thread_observations": 0,
+      "exited_process_observations": 0,
+      "expected_rank_count": 48,
+      "helper_thread_checks": 10176,
+      "main_thread_checks": 5088,
+      "native_initialization_cause": "Not established; no hwloc root-cause claim",
+      "omitted_change_witnesses": 0,
+      "policy": "CPU-pool containment in every phase; exact assigned singleton after each rank's HIT_NATIVE_READY marker",
+      "process_identity_checks": 5088,
+      "ready_ranks": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47
+      ],
+      "scope": "Sampled main/helper thread affinities; not a continuous scheduler audit",
+      "startup_mask_changes": 0,
+      "startup_nonassigned_thread_observations": 0,
+      "startup_thread_checks": 864,
+      "strict_thread_checks": 14400,
+      "strict_thread_checks_by_rank": [
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300
+      ],
+      "thread_affinity_checks": 15264,
+      "witness_limit": 64
+    },
+    "command": [
+      "taskset",
+      "-c",
+      "16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,0",
+      "mpirun",
+      "--host",
+      "localhost:48",
+      "--bind-to",
+      "none",
+      "-n",
+      "48",
+      "/usr/bin/python3",
+      "/media/jay/新加卷/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/run_band100.py",
+      "rank",
+      "--cpus",
+      "16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,0",
+      "--binding-dir",
+      "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/band100/f4b70ba/preflight-01/smoke/solver.bindings",
+      "--binary",
+      "/home/jay/.local/opt/nektar-v2026-mpi/bin/IncNavierStokesSolver",
+      "--",
+      "--npz",
+      "16",
+      "--use-scotch",
+      "pilot.xml"
+    ],
+    "log_sha256": "896b1b9ed7ebe000db4d4b404a27d58242e5158b52a6f4f686e98eb8bcb6f8bc",
+    "peak_sampled_tree_rss_kib": 142969796,
+    "receipt": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/band100/f4b70ba/preflight-01/smoke/solver.receipt.json",
+      "sha256": "e1a575e55a6fe758b512d60bb418de253c4991de241d4cfc9c78318e8d4efe8c"
+    },
+    "status": "COMPLETED",
+    "wall_seconds": 233.7525763149897
+  },
+  "source_binary_bindings": {
+    "executables": {
+      "benchmark": {
+        "bytes": 617696,
+        "native_library_sha256": {
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482"
+        },
+        "path": "/home/jay/.local/opt/nektar-v2026-mpi/bin/HITInflowBenchmark",
+        "sha256": "8a24b185510299d0a074f1a387254cd5ee42b610ee68e6eff36efe6873ba5ac3"
+      },
+      "probe": {
+        "bytes": 666824,
+        "native_library_sha256": {
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482"
+        },
+        "path": "/home/jay/.local/opt/nektar-v2026-mpi/bin/HITBoundaryProbe",
+        "sha256": "e96344b310345a1f4155972518be39cb372efe2ad4e1c073c62b6c7521b01a87"
+      },
+      "solver": {
+        "bytes": 2784136,
+        "native_library_sha256": {
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+          "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482"
+        },
+        "path": "/home/jay/.local/opt/nektar-v2026-mpi/bin/IncNavierStokesSolver",
+        "sha256": "7f88e62de8644ab280544be1583cc8d50d37e9806503170d070043a46c347a5a"
+      }
+    },
+    "source": {
+      "branch": "codex/hit-inflow-generator",
+      "checkout": "/media/jay/新加卷/nektar-v2026",
+      "files_sha256": {
+        "docs/plans/hit-inflow-band100-protocol.md": "8ec42cd99bee41ed9fe60c92db4ddcf5632334ed903e56fc9720ee245ba05fcd",
+        "solvers/IncNavierStokesSolver/Tests/HITInflow/cbc1971-source.json": "031df95c54eb05fb5cc94c81dd5a35bb687890f4336a3f3f80bdfe42c52f3590",
+        "solvers/IncNavierStokesSolver/Tests/HITInflow/cbc1971_theta42_spectrum_3d.dat": "ca5551dc1872df7442cebbb6d82eac657307e394fa0726cbd7fce56939f20181",
+        "solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/analyze_band100.py": "258ef120946e9b85d4cad58b64b80ad4576769172cbc1bc8332f3c51a5cd738f",
+        "solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/analyze_history.py": "1bced68762eb6a859ba867f1af7162fc09cf1c83daa80da1b058561595de9d01",
+        "solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/analyze_m7.py": "d81c405243fff9a3677d63dd3aadfe44269a9f79389eeae03c31f1f333842d3e",
+        "solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/prepare.py": "66f0d012d11b6fae7a1e3f7f03a2a4a333241104dc80b6527e05015c446795ee",
+        "solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/run_band100.py": "9bdcdfb9f982bb73977753ab19979d54f43a219d49c709ba5aa0cbac087f6900"
+      },
+      "revision": "f4b70baec10016dd098005bc5a5507b87e4a57bf"
+    }
+  },
+  "static_boundary_projection": {
+    "csv_export_limit_per_boundary_rank_time": -1,
+    "csv_exported_points_per_rank": [
+      384,
+      768,
+      0,
+      384,
+      768,
+      0,
+      384,
+      768,
+      0,
+      384,
+      768,
+      0,
+      384,
+      768,
+      0,
+      384,
+      768,
+      0,
+      384,
+      768,
+      0,
+      384,
+      768,
+      0,
+      384,
+      768,
+      0,
+      384,
+      768,
+      0,
+      384,
+      768,
+      0,
+      384,
+      768,
+      0,
+      384,
+      768,
+      0,
+      384,
+      768,
+      0,
+      384,
+      768,
+      0,
+      384,
+      768,
+      0
+    ],
+    "csv_exported_points_per_time": 18432,
+    "csv_exported_rows": 92160,
+    "csv_point_selection": "all native points",
+    "csv_scope": "sampled native point traces; not an exact plane-average statistic",
+    "direct_reference_limit_per_boundary_rank_time": 1,
+    "direct_reference_samples": 160,
+    "generator_modes": 6565420,
+    "identity_sha256": "34be026d60ef0c24e67d8249288685e59f29ce8e30bfbcac829544b7d4912794",
+    "modes_sha256": "26e021b1f057ed2209166e904afc7a0912cefb3e9111bfb66b16b19a2ee8c21a",
+    "native_points_per_time": 18432,
+    "nonzero_z_coeff_energy": [
+      37.31005276453686,
+      21.820160140186204,
+      35.04480625878228
+    ],
+    "points": 92160,
+    "projection_error_reference": "unprojected native boundary physical values at all sampled points",
+    "projection_error_scope": "all native inlet points at every evaluation call including repeat; not restricted to CSV selection",
+    "projection_max_error": [
+      0.06704510195988789,
+      0.03341379087132346,
+      0.07442816870326924
+    ],
+    "ranks": 48,
+    "raw_error_evaluated": true,
+    "raw_max_error": 3.652189661806915e-12,
+    "repeat_check_performed": true,
+    "repeat_identical": true,
+    "temporal_samples": 0,
+    "time_grid": {
+      "csv_excludes_repeat_check": false,
+      "end_s": 0.00405,
+      "evaluation_calls": 5,
+      "mode": "legacy_fractions",
+      "regular_samples": 5,
+      "repeat_time_s": 0.002025,
+      "sample_dt_s": null,
+      "start_s": 0
+    }
+  },
+  "study_snapshot": {
+    "commands": [],
+    "completed_cases": [],
+    "current": {
+      "command": "solver",
+      "directory": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/band100/f4b70ba/study-01/cases/base/smoke",
+      "last_info_chunk_seconds": 6.29842,
+      "log": "/media/jay/新加卷/nektar-v2026-runs/hit-inflow/band100/f4b70ba/study-01/cases/base/smoke/solver.log",
+      "simulated_time_s": 0.0012,
+      "step": 48,
+      "total_steps": 160
+    },
+    "recipe": "economical",
+    "schema": "NEKTAR_HIT_BAND100_RUN_V1",
+    "source_revision": "f4b70baec10016dd098005bc5a5507b87e4a57bf",
+    "stage": "study",
+    "started_utc": "2026-10-31T13:22:57.316285+00:00",
+    "status": "RUNNING",
+    "updated_utc": "2026-10-31T13:25:29.822630+00:00"
+  }
+}
