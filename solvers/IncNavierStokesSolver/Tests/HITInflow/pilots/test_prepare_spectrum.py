@@ -112,6 +112,29 @@ class PrepareSpectrum(unittest.TestCase):
         self.assertEqual(manifest["time"]["stress_periodic_snapshot_times_s"], [])
         self.assertIsNone(manifest["time"]["stress_final_snapshot_s"])
 
+    def test_axis_spacings_keep_span_and_inlet_unchanged(self):
+        _, root, manifest = self.create("stretched", ["--hx", ".6", "--hy", ".15"])
+        mesh = manifest["mesh"]
+        self.assertEqual((mesh["nx"], mesh["ny"], mesh["quadrilaterals"]), (1, 4, 4))
+        self.assertEqual((mesh["hx_m"], mesh["hy_m"], mesh["period_y_m"], mesh["period_z_m"]),
+                         (.6, .15, .6, .6))
+        self.assertEqual(len(root.findall("./GEOMETRY/ELEMENT/Q")), 4)
+        coords = [list(map(float, node.text.split())) for node in root.findall("./GEOMETRY/VERTEX/V")]
+        self.assertEqual(sorted(set(p[0] for p in coords)), [0, .6])
+        self.assertEqual(len(set(p[1] for p in coords)), 5)
+        self.assertEqual(root.find("./HITINFLOW/REGION/CUTOFF").attrib,
+                         {"KMAX": "100", "TAPERSTART": "80"})
+        self.assertEqual(manifest["knobs"]["hx"], .6)
+        self.assertEqual(manifest["knobs"]["hy"], .15)
+
+    def test_invalid_axis_spacings_fail_before_writing(self):
+        for axis in ("hx", "hy"):
+            for value in ("0", "-1", "nan", "inf"):
+                with self.subTest(axis=axis, value=value):
+                    name = f"invalid-{axis}-{value}"
+                    self.create(name, ["--" + axis, value], expect_success=False)
+                    self.assertFalse((self.root / name).exists())
+
 
 if __name__ == "__main__":
     unittest.main()

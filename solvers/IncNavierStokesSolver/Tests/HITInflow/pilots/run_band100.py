@@ -27,7 +27,8 @@ import xml.etree.ElementTree as ET
 HERE = Path(__file__).resolve().parent
 SOURCE = HERE.parents[4]
 SCHEMA = "NEKTAR_HIT_BAND100_RUN_V1"
-CASE_ORDER = ("base", "dt", "z", "bandwidth", "svv", "h")
+CASE_ORDER = ("base", "dt", "x", "z", "bandwidth", "svv", "h")
+RECIPES = ("original", "economical")
 U, WIDTH = 12.7, .6
 SAMPLE_DT, DURATION, RECORD_START = .00025, .6, .2
 COUNTS, SEED = "2548,154,154", "20261028"
@@ -97,11 +98,17 @@ def allocation(cpus, ranks, npz, allowed):
             "external_jobs": "The caller must account for other server jobs within the same64-worker ceiling"}
 
 
-def case_knobs(name):
+def case_knobs(name, recipe="original"):
     require(name in CASE_ORDER, "unknown case")
-    knobs = {"h": .05, "nz": 128, "dt": 12.5e-6, "cutoff": 600, "taper": 480, "svv": 1.0}
+    require(recipe in RECIPES, "unknown recipe")
+    knobs = {"h": .05, "hx": .05, "hy": .05, "nz": 128, "dt": 12.5e-6,
+             "cutoff": 600, "taper": 480, "svv": 1.0}
+    if recipe == "economical":
+        knobs.update(h=.1, hx=.1, dt=25e-6)
     if name == "dt":
         knobs["dt"] /= 2
+    elif name == "x":
+        knobs["hx"] /= 2
     elif name == "z":
         knobs["nz"] = 192
     elif name == "bandwidth":
@@ -109,7 +116,9 @@ def case_knobs(name):
     elif name == "svv":
         knobs["svv"] = .5
     elif name == "h":
-        knobs["h"] = .025
+        knobs["hx"] /= 2
+        knobs["hy"] /= 2
+    knobs["h"] = max(knobs["hx"], knobs["hy"])
     return knobs
 
 
@@ -423,6 +432,7 @@ class Controller:
     def __init__(self, root, bindings, config):
         self.root, self.bindings, self.config = Path(root), bindings, config
         self.progress = {"schema": SCHEMA, "stage": config["stage"], "status": "RUNNING",
+                         "recipe": config.get("recipe", "original"),
                          "started_utc": utc(), "source_revision": bindings["source"]["revision"],
                          "current": None, "completed_cases": [], "commands": []}
         self.receipt = {"schema": SCHEMA, "status": "RUNNING", "started_utc": utc(),
@@ -535,14 +545,15 @@ class Controller:
                 "--binary", self.bindings["executables"][binary_name]["path"], "--"] + list(args)
 
     def prepare(self, directory, name, smoke):
-        knobs = case_knobs(name)
+        knobs = case_knobs(name, self.config.get("recipe", "original"))
         duration = 160 * knobs["dt"] if smoke else DURATION
         record = duration / 2 if smoke else RECORD_START
         every = 20 if smoke else round(SAMPLE_DT / knobs["dt"])
         # For the half-dt smoke, retain160steps but use an exact eight-frame clock.
         directory.mkdir(parents=True)
         command = [sys.executable, str(HERE / "prepare.py"), "--output", str(directory), "--length", "1", "--width", ".6",
-                   "--h", str(knobs["h"]), "--modes", "11", "--hom-modes", str(knobs["nz"]), "--dt", str(knobs["dt"]),
+                   "--h", str(knobs["h"]), "--hx", str(knobs["hx"]), "--hy", str(knobs["hy"]),
+                   "--modes", "11", "--hom-modes", str(knobs["nz"]), "--dt", str(knobs["dt"]),
                    "--duration", str(duration), "--record-start", str(record), "--sample-every", str(every),
                    "--cutoff", str(knobs["cutoff"]), "--taper", str(knobs["taper"]), "--synthesis-length", "10",
                    "--synthesis-counts", COUNTS, "--seed", SEED, "--buffer", ".25", "--stations", "0,.15,.45,.75",
@@ -566,6 +577,7 @@ class Controller:
         manifest = json.loads(manifest_path.read_text())
         manifest["sha256"]["pilot.xml"] = sha(session)
         manifest["band100_controller"] = {"case": name, "smoke": smoke, "mean_only_initialization": True,
+                                           "recipe": self.config.get("recipe", "original"),
                                            "require_accelerated": True, "probe_direct_samples_per_rank_boundary_time": 1,
                                            "controller_sha256": sha(__file__)}
         atomic_json(manifest_path, manifest)
@@ -631,7 +643,7 @@ def finite_smoke_history(directory, manifest):
     return {"path": str(path), "sha256": sha(path), "complete_finite_frames": count}
 
 
-def check_preflight(path, bindings, allocation_):
+def check_preflight(path, bindings, allocation_, recipe="original"):
     path = Path(path).resolve()
     receipt_path = path / "receipt.json"
     receipt = json.loads(receipt_path.read_text())
@@ -639,6 +651,7 @@ def check_preflight(path, bindings, allocation_):
             and receipt["configuration"]["stage"] == "preflight", "preflight is not completed")
     require(receipt["bindings"] == bindings, "preflight source/executable bindings differ from this study")
     require(receipt["configuration"]["allocation"] == allocation_, "preflight allocation differs from this study")
+    require(receipt["configuration"].get("recipe", "original") == recipe, "preflight recipe differs from this study")
     require(receipt["budget_gate"]["passed"], "preflight did not pass the declared wall/memory budget")
     for record in receipt["commands"]:
         require(sha(record["receipt"]) == record["sha256"] and record["status"] == "COMPLETED", "preflight command receipt changed or failed")
@@ -672,7 +685,8 @@ def preflight(controller):
     require(all(math.isfinite(v) for v in projection["projection_max_error"]), "nonfinite boundary projection error")
     solve = controller.solver(directory, steps, 3600)
     history = finite_smoke_history(directory, manifest)
-    gate = timing_gate((directory / "solver.log").read_text(), solve, case_knobs("base"))
+    gate = timing_gate((directory / "solver.log").read_text(), solve,
+                       case_knobs("base", controller.config.get("recipe", "original")))
     controller.finish("COMPLETED", budget_gate=gate, native_benchmark=native,
                       boundary_projection=projection, boundary_evaluator_reports=projection_evaluators,
                       smoke_history=history,
@@ -689,6 +703,8 @@ def previous_analysis(controller, name, reference_study):
         receipt = json.loads((previous / "receipt.json").read_text())
         require(receipt["schema"] == SCHEMA and receipt["status"] == "COMPLETED" and
                 receipt["bindings"] == controller.bindings, "reference study is incomplete or has different source/executables")
+        require(receipt["configuration"].get("recipe", "original") == controller.config.get("recipe", "original"),
+                "reference study has a different recipe")
         result = previous / "analysis" / name / "analysis.json"
         require(result.is_file() and name in receipt["cases"], "reference study lacks required matched analysis")
         require(sha(result) == receipt["cases"][name]["analysis_sha256"], "reference analysis hash mismatch")
@@ -705,7 +721,8 @@ def study(controller, cases, reference_study):
         manifest, steps = controller.prepare(smoke, name, smoke=True)
         smoke_result = controller.solver(smoke, steps, 3600)
         finite_smoke_history(smoke, manifest)
-        gate = timing_gate((smoke / "solver.log").read_text(), smoke_result, case_knobs(name))
+        gate = timing_gate((smoke / "solver.log").read_text(), smoke_result,
+                           case_knobs(name, controller.config.get("recipe", "original")))
         if not gate["passed"]:
             controller.finish("BUDGET_REJECTED", rejected_case=name, budget_gate=gate,
                               interpretation="A fresh smoke rejected this recipe; no full recording was launched or retried")
@@ -737,7 +754,7 @@ def study(controller, cases, reference_study):
 def status(root):
     root = Path(root).expanduser().resolve()
     progress = json.loads((root / "progress.json").read_text())
-    print(f"{utc()} — CBC100 {progress['stage']}: {progress['status']}")
+    print(f"{utc()} — CBC100 {progress['stage']} ({progress.get('recipe', 'original')}): {progress['status']}")
     print("Completed cases: " + (", ".join(progress["completed_cases"]) or "none"))
     current = progress.get("current")
     if current:
@@ -762,6 +779,8 @@ def main(arguments=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--status", type=Path, help="Read status only; do not launch any command")
     parser.add_argument("--stage", choices=("preflight", "study"))
+    parser.add_argument("--recipe", choices=RECIPES, default="original",
+                        help="original isotropic mesh or economical streamwise mesh/time pilot")
     parser.add_argument("--run-root", type=Path)
     parser.add_argument("--source-revision")
     parser.add_argument("--ranks", type=int, default=48, help="MPI ranks, maximum48 (default48)")
@@ -769,7 +788,7 @@ def main(arguments=None):
     parser.add_argument("--cpus")
     parser.add_argument("--preflight", type=Path)
     parser.add_argument("--reference-study", type=Path)
-    parser.add_argument("--cases", default="base,dt", help="Sequential subset of base,dt,z,bandwidth,svv,h")
+    parser.add_argument("--cases", default="base,dt", help="Sequential subset of base,dt,x,z,bandwidth,svv,h")
     parser.add_argument("--solver", default="IncNavierStokesSolver")
     parser.add_argument("--benchmark", default="HITInflowBenchmark")
     parser.add_argument("--boundary-probe", default="HITBoundaryProbe")
@@ -791,10 +810,11 @@ def main(arguments=None):
         "solver": executable_binding(args.solver), "benchmark": executable_binding(args.benchmark),
         "probe": executable_binding(args.boundary_probe)}}
     configuration = {"stage": args.stage, "allocation": allocated, "controller_command": [sys.executable, str(Path(__file__).resolve())] + arguments,
-                     "host": os.uname().nodename, "python": sys.version, "mean_only_initialization": True}
+                     "host": os.uname().nodename, "python": sys.version, "mean_only_initialization": True,
+                     "recipe": args.recipe}
     if args.stage == "study":
         require(args.preflight is not None, "study requires --preflight from a completed matching preflight")
-        configuration["preflight"] = check_preflight(args.preflight, bindings, allocated)
+        configuration["preflight"] = check_preflight(args.preflight, bindings, allocated, args.recipe)
         cases = args.cases.split(",")
         require(cases and len(cases) == len(set(cases)) and all(c in CASE_ORDER for c in cases), "--cases needs unique known case names")
         configuration["cases"] = cases

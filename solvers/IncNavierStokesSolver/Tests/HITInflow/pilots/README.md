@@ -19,7 +19,8 @@ python3 prepare.py --output /path/to/new/run-directory \
 ```
 
 All lengths are metres, times seconds, velocities m/s, and cutoff/taper
-wavenumbers rad/m. `--h` is the maximum affine element side length; actual
+wavenumbers rad/m. `--h` is the default maximum affine element side length;
+`--hx` and `--hy` independently override it on either axis. Actual
 `hx`, `hy` follow integer element counts and are recorded. `--modes` is the
 spectral/hp expansion size, so polynomial degree is `modes-1`. `--hom-modes`
 is the even full real Fourier packing size, including DC and the reserved
@@ -325,10 +326,21 @@ python3 "$hit_pilots/run_band100.py" --stage study \
 ```
 
 Every selected case receives its own fresh timing smoke before its0.6s recording.
-Controls `z,bandwidth,svv,h` can be selected in order; `bandwidth` needs the
+Controls `x,z,bandwidth,svv,h` can be selected in order; `x` halves only streamwise
+element spacing, and `bandwidth` needs the
 common192-slot `z` reference. Separate studies can use `--reference-study` with
 a matching completed study. A budget rejection stops the remaining expensive
 recipe and preserves the evidence. Full-distance production is never automatic.
+
+`--recipe original` preserves the original0.05m isotropic mesh/12.5us design.
+Its completed native smoke forecast15.604h, so the12h gate held the recording.
+The paired boundary-only test changed10--100rad/m band power by at most0.219%.
+The separate `--recipe economical` keeps that inlet-plane resolution and tests
+`hx=0.1m`, `hy=0.05m`, degree10 and25us. It requires a new preflight and matching
+`--recipe economical` on the study command; original/economical preflights and
+reference studies cannot be mixed. Its first study selects `--cases base,dt,x`.
+Mesh and timestep savings are hypotheses until their native smoke and numerical
+controls are inspected. The same12h/180GiB gates apply to every case.
 
 Read progress without launching work:
 

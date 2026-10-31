@@ -134,6 +134,10 @@ def prepare(args):
         raise ValueError("spectrum must be cbc or von-karman")
     for label in ("length", "width", "h", "dt", "duration", "cutoff", "synthesis_length"):
         finite_positive(getattr(args, label), label)
+    spacings = [getattr(args, axis, None) for axis in ("hx", "hy")]
+    for axis, spacing in zip(("hx", "hy"), spacings):
+        if spacing is not None:
+            finite_positive(spacing, axis)
     finite_positive(args.record_start, "record-start", zero=True)
     finite_positive(args.buffer, "buffer", zero=True)
     if args.modes < 4 or args.hom_modes < 4 or args.hom_modes % 2:
@@ -210,7 +214,9 @@ def prepare(args):
     targets = ("pilot.xml", "manifest.json") + ((SPECTRUM.name,) if spectrum_kind == "cbc" else ())
     if any((output / name).exists() for name in targets):
         raise ValueError("output already contains pilot inputs; use a new directory")
-    nx, ny = max(1, math.ceil(args.length / args.h)), max(1, math.ceil(args.width / args.h))
+    requested_hx, requested_hy = [args.h if spacing is None else spacing for spacing in spacings]
+    nx = max(1, math.ceil(args.length / requested_hx))
+    ny = max(1, math.ceil(args.width / requested_hy))
     root = ET.Element("NEKTAR")
     root.append(ET.Comment(" Generated limited-band physical pilot; not a validated DNS benchmark. "))
     geometry(root, args.length, args.width, nx, ny)
@@ -421,6 +427,8 @@ def main():
     parser.add_argument("--vk-amplitude", type=float, help="Preserved native von Karman A (m^(4/3)/s2); required for von-karman, nonnegative")
     for flag in ("length", "width", "h", "dt", "duration", "cutoff"):
         parser.add_argument("--" + flag, type=float, required=True)
+    parser.add_argument("--hx", type=float, help="Override --h in the streamwise direction only")
+    parser.add_argument("--hy", type=float, help="Override --h in the transverse mesh direction only")
     parser.add_argument("--modes", type=int, required=True, help="Spectral/hp expansion modes; polynomial degree=modes-1")
     parser.add_argument("--hom-modes", type=int, required=True, help="Even full Fourier packing size")
     parser.add_argument("--record-start", type=float, default=0.0)

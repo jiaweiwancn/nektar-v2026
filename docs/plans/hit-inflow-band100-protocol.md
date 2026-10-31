@@ -18,7 +18,7 @@ run. It does not claim full-band DNS, independent probes, or experimental fideli
 | Resource ceiling | 64 total workers; one MPI case at a time; OMP/BLAS/MKL=1 |
 | Heavy-data root | `/media/jay/新加卷/nektar-v2026-runs/hit-inflow/band100/` |
 
-## Frozen pilot definition
+## Original pilot definition
 
 - Mean velocity 12.7 m/s; molecular viscosity 1.5e-5 m2/s, as M7.
 - Nonlinear incompressible velocity correction, IMEX2; both dealiasing switches;
@@ -110,6 +110,38 @@ run. It does not claim full-band DNS, independent probes, or experimental fideli
    justify it. A developed upstream reference and outlet/span sensitivity are
    still needed. If a gate fails, deliver the diagnostic outcome and next bounded
    remedy; do not label the proposal or M7 physically validated.
+
+## Economical design iteration after the original budget rejection
+
+The original `h=0.05`, `dt=12.5us` recipe remains available as
+`--recipe original`. On revision `1946f8e`, its completed 48-rank smoke forecast
+15.604h for0.6s, with140.656GiB sampled peak RSS. The12h gate rejected its CFD
+recording. A separate1601-frame boundary-only diagnostic on the same revision
+passed the5% screen: the largest absolute integrated-band power change was
+0.218922% across all three components and all four10--100rad/m bands. This
+supports retaining the existing inlet-plane resolution for the next cost test;
+it does not qualify downstream CFD or the600/480 physical input bandwidth.
+The longitudinal endpoint changed by+0.5485% at100rad/m. The
+[compact original evidence](hit-inflow-band100-original-evidence.json) binds
+the Linux inputs, native binaries, commands, tests and results; the
+[projection figure](hit-inflow-band100-figures/inlet-projection.png) shows the
+paired spectra. Native CSVs and fields remain in external Linux run storage.
+
+The separate `--recipe economical` therefore tests `hx=0.1m`, `hy=0.05m`,
+degree10,128 Fourier slots and `dt=25us`. It keeps the domain, tangential
+boundary approximation, spectrum, realization, SVV coefficients, sampling clock
+and record duration. The number of quadrilaterals decreases from240 to120 and
+the full-case step count from48000 to24000. These changes motivate a fresh
+measurement; they do not establish a factor-four runtime reduction or spatial
+accuracy. Native h/p scaling and the streamwise approximation change, so this
+is an explicitly new design, not a passed original recipe.
+
+The same direct/native projection,160-step smoke,12h/180GiB budget gates and16h
+hard timeout apply. Case `dt` halves only the timestep; new case `x` halves
+only `hx` while keeping `hy`, Fourier resolution and timestep fixed. The first
+economical study is `base,dt,x`, sequentially, with a new smoke before each
+recording. The source/binary/allocation/recipe must match its completed preflight.
+Higher Fourier bandwidth, SVV, sampling and full-distance gates remain open.
 
 ## Evidence and operation
 

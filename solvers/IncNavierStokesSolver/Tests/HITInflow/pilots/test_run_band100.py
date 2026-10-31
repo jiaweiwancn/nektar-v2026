@@ -60,6 +60,30 @@ class Band100Controller(unittest.TestCase):
         self.assertEqual(runner.COUNTS, "2548,154,154")
         self.assertEqual(runner.case_knobs("dt")["dt"] * 2, runner.case_knobs("base")["dt"])
 
+    def test_economical_recipe_preserves_inlet_and_separates_x_and_dt_controls(self):
+        original = runner.case_knobs("base")
+        coarse = runner.case_knobs("base", "economical")
+        self.assertEqual({k:v for k,v in original.items() if k not in ("h", "hx", "dt")},
+                         {k:v for k,v in coarse.items() if k not in ("h", "hx", "dt")})
+        self.assertEqual((coarse["hx"], coarse["hy"], coarse["dt"]), (.1, .05, 25e-6))
+        refined_x = runner.case_knobs("x", "economical")
+        self.assertEqual(refined_x["dt"], coarse["dt"])
+        self.assertEqual(refined_x["hy"], coarse["hy"])
+        self.assertEqual(refined_x["hx"], coarse["hx"]/2)
+        self.assertEqual(runner.case_knobs("dt", "economical")["dt"], coarse["dt"]/2)
+        with self.assertRaises(ValueError):
+            runner.case_knobs("base", "unrecorded")
+
+    def test_preflight_rejects_recipe_mixing(self):
+        bindings = {"source": {"revision": "a"*40}, "executables": {}}
+        allocated = {"ranks": 48}
+        receipt = {"schema": runner.SCHEMA, "status": "COMPLETED", "bindings": bindings,
+                   "configuration": {"stage": "preflight", "allocation": allocated, "recipe": "original"},
+                   "budget_gate": {"passed": True}}
+        (self.root / "receipt.json").write_text(json.dumps(receipt))
+        with self.assertRaisesRegex(ValueError, "recipe differs"):
+            runner.check_preflight(self.root, bindings, allocated, "economical")
+
     def test_norm_labels_are_not_nonfinite_results(self):
         self.assertIsNone(runner.BAD_LOG.search("L inf error (variable u) : 0.123\n"))
         for text in ("L inf error (variable u) : inf\n", "Time: nan CPU Time: 1s\n",
