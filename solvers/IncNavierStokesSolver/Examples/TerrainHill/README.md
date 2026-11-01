@@ -1,5 +1,92 @@
 # Terrain walls and an upstream AWF transition
 
+## Cao–Tamura experimental preparation (CV2)
+
+`cao_tamura.py` is the parameterized experimental entry point. The two
+`cao-tamura-*-trial.json` files are **unfitted candidates**, not calibrated
+boundary layers. They use the frozen CV1 flat data, a finite-depth inlet, a
+0.8 m roof and primary `Molecular` diffusion. The rough trial's ks=6 mm is
+an assumption to calibrate; it is not the measured cube height or displacement.
+The [reference/observation decision](../../../../docs/plans/cao-tamura-cv2-reference-observations.md)
+derives why a shifted finite-nu CLS log profile is not an exact equilibrium.
+Physical wall distance and integrated AWF strip continuity are retained.
+
+On Linux, after building the external RANS Release targets below, for example:
+
+```bash
+source /home/jay/.local/opt/nektar-v2026-mpi/env.sh
+export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 BLIS_NUM_THREADS=1
+export CV_RUN=/media/jay/新加卷/nektar-v2026-runs/cao-tamura-calibrated-validation
+export CV_BUILD="$CV_RUN/build"
+export LD_LIBRARY_PATH="$CV_BUILD/geometry-lib:$LD_LIBRARY_PATH"
+export TMPDIR="$CV_RUN/tmp"
+export CV_TOOL="$CV_RUN/source/solvers/IncNavierStokesSolver/Examples/TerrainHill/cao_tamura.py"
+python3 "$CV_TOOL" generate --config cao-tamura-smooth-trial.json --output "$CV_RUN/cases/S-trial"
+taskset -c 1 python3 "$CV_TOOL" prepare "$CV_RUN/cases/S-trial/case.xml" --build "$CV_BUILD"
+python3 "$CV_TOOL" probes --surface S --scope flat --output "$CV_RUN/cases/S-trial/points.csv"
+python3 "$CV_TOOL" run "$CV_RUN/cases/S-trial/case.xml" --build "$CV_BUILD" --ranks 2 --cpus 1,2
+python3 "$CV_TOOL" observe "$CV_RUN/cases/S-trial/case.xml" "$CV_RUN/cases/S-trial/case_1.chk" "$CV_RUN/cases/S-trial/points.csv" --build "$CV_BUILD" --cpus 1 --output "$CV_RUN/cases/S-trial/points-1.csv"
+python3 "$CV_TOOL" observe "$CV_RUN/cases/S-trial/case.xml" "$CV_RUN/cases/S-trial/case_2.chk" "$CV_RUN/cases/S-trial/points.csv" --build "$CV_BUILD" --cpus 1 --output "$CV_RUN/cases/S-trial/points-2.csv"
+python3 "$CV_TOOL" statistics "$CV_RUN/cases/S-trial/points-1.csv" "$CV_RUN/cases/S-trial/points-2.csv" --output "$CV_RUN/cases/S-trial/statistics.csv"
+python3 "$CV_TOOL" calibrate "$CV_RUN/cases/S-trial/statistics.csv" --manifest "$CV_RUN/cases/S-trial/manifest.json" --output "$CV_RUN/cases/S-trial/candidate-objective.json"
+```
+
+Use available, explicitly allocated CPUs and keep the combined project total
+at most 16. `prepare` needs SciPy for an independent quadrature audit. All
+native binary runs write commands/logs/exit receipts. The manifest binds the
+data snapshot, inlet coefficients, geometry, viscosity, wall and scaling
+assumptions; run receipts add solver and geometry-library hashes. The default
+U_H=1 is an analysis scale preserving reported Re_H, not a measured airspeed.
+`assumed_nu` optionally declares a physical dimensionalization.
+
+`calibrate` evaluates the three **flat-only candidate objectives**; CV3 must
+search candidates, develop the precursor, check scalar constraints and freeze
+an accepted calibration. Two steps and their statistics here only exercise
+the workflow. For hill candidates set `geometry` to `hill`, prepare them and
+generate `--scope hill` probes. After CV3 freezes a versioned calibration,
+use `compare` with the same arguments as `calibrate`. Provisional manifests
+cannot expose reserved or hill scores; the frozen manifest must declare
+`calibration_complete: true` and its `calibration_version`.
+`--flat-statistics` with `--flat-manifest` supplies the identical paired
+floor's `--scope reference` probes, at x=0 and matching vertical heights, for
+speedup and turbulence ratios. `--scope local-reference` additionally exports
+floor drift data at the hill stations. Crest speedup uses the included exact
+yprime/Hh=0.25 point. `--scope dividing` generates three near-ground wake
+traverses; `--tail-heights 0.002,0.004,0.006` changes their declared heights.
+Pass their statistics through `--dividing-statistics` to `compare` for the
+two-tail ground extrapolation and three-tail sensitivity of x_R. Missing or
+ambiguous recoveries stay unavailable. Check height/grid/sampling dependence
+before experimental use. Unknown delta75, unscaled dimensional amplitudes and
+wall-shear-zero diagnostics without a separate native traction average remain
+explicit limitations.
+
+Supported model keys are `standard` (compatible log), `standard_original`,
+`standard_fixed`, `standard_switched`, `cls_original`, `cls_fixed` and
+`cls_switched`. The JSON controls H/P/N, roughness, domain, span, whole-domain
+refinement, polynomial degree, timestep, outer turbulence assumptions, and
+upstream ramp width/endpoint. `ramp_width_h` values 1,2,4,8 with
+`ramp_end=-0.2` leave the mesh identical. Smooth ks is fixed zero. Models and
+AWF constants stay canonical. The initial finite-depth profile is not expected
+to be preserved exactly; developing/calibrating its floor precursor is CV3.
+
+The native observer samples physical coordinates with native polynomial
+interpolation on quad/full-hex meshes. Below H it returns auxiliary velocity
+and CV continuity diagnostics for AWF, keeping k/epsilon/full stress blank.
+Log-wall sub-interface probes, exact C1 feet and unsupported auxiliary forcing
+have explicit unavailable statuses. Statistics use mean model stress plus
+resolved covariance; negative diagonals are reported, never clipped. Missing
+coverage prevents a complete-range score. Old checkpoints without observation
+configuration metadata must be regenerated with the producing case unchanged.
+
+The experimental inlet expressions and their referenced parameters, including
+observational displacement, enter the full-history signature. Use the existing
+`NeutralABL/restart.py` helper for continuation; changing a timestep or inlet
+cannot reuse incompatible history. The exact producing XML/mesh and manifest
+are required for native observation. The wrapper copies XML into a separate
+postprocessing directory so partitions and solver diagnostics remain intact.
+
+## Numerical verification pilots
+
 This example extends the [neutral-ABL URANS example](../NeutralABL/README.md)
 to a plane, a two-dimensional cosine-squared hill, and its spanwise extrusion.
 Standard k–epsilon and high-Re CLS support original and equilibrium-preserving

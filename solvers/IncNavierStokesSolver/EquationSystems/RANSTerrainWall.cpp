@@ -25,7 +25,12 @@ bool RefineCoordinates(SpatialDomains::Geometry *geometry,
     const Array<OneD,NekDouble> &point, Array<OneD,NekDouble> &local,
     double &residual, double insideTolerance)
 {
+    Vmath::Zero(local.size(),local,1);
     geometry->GetLocCoords(point,local);
+    // Native inverse seeds can be nonfinite on nearly affine curved quads.
+    // Restart from the element centre; never mistake NaN residuals for zero.
+    if (std::any_of(local.begin(),local.end(),[](double v){return !std::isfinite(v);}))
+        Vmath::Zero(local.size(),local,1);
     const int dim = point.size();
     for (int iteration = 0; iteration < 20; ++iteration)
     {
@@ -33,6 +38,7 @@ bool RefineCoordinates(SpatialDomains::Geometry *geometry,
         for (int i = 0; i < dim; ++i)
         {
             a[i][dim] = point[i]-geometry->GetCoord(i,local);
+            if (!std::isfinite(a[i][dim])) return false;
             residual = std::max(residual,std::abs(a[i][dim]));
         }
         if (residual < 2e-13)
@@ -100,7 +106,7 @@ RANSVector RANSTerrainWall::Cartesian(const AWFVector &v, int q) const
 
 RANSTerrainWall::RANSTerrainWall(const LibUtilities::SessionReaderSharedPtr &session,
     const Array<OneD, MultiRegions::ExpListSharedPtr> &fields, int dimension,
-    const RANSWallGeometry &geometry, const RANSNeutralReference &reference)
+    const RANSWallGeometry &geometry, const RANSNeutralReference &reference, bool observationOnly)
     : m_session(session), m_fields(fields), m_dim(dimension), m_terrain(geometry),m_reference(reference)
 {
     bool supportedElements = true;
@@ -434,14 +440,14 @@ RANSTerrainWall::RANSTerrainWall(const LibUtilities::SessionReaderSharedPtr &ses
     m_unresolvedVolume = SurfaceIntegral(work);
     Array<OneD,NekDouble> volumeOne(m_fields[0]->GetTotPoints(),1.0);
     m_resolvedVolume = m_fields[0]->Integral(volumeOne);
-    if (comm->GetRank() == 0)
+    if (!observationOnly && comm->GetRank() == 0)
     {
         m_diagnostics.open(session->GetSessionName()+".terrain-wall.csv");
         m_diagnostics << "time,normal_projected_max,normal_pointwise_max,epsilon_projection_max,wall_points,remote_samples,chi_min,chi_max,min_kP,min_epsH,area,physical_wall_area,N_inverse_residual,projection_audit,resolved_volume,unresolved_volume,normal_integral_defect,resolved_mass_defect,tangent_flux_residual_l2,k_flux_residual_l2,normal_l2,normal_away_feet_max,wall_ranks,remote_N_without_wall_samples\n" << std::setprecision(17);
     }
     int write = 0; session->LoadParameter("RANSAWFPointDiagnostics",write,0);
     ASSERTL0(write == 0 || write == 1,"RANSAWFPointDiagnostics must be 0 or 1");
-    if (write)
+    if (write && !observationOnly)
     {
         m_pointDiagnostics.open(session->GetSessionName()+".terrain-points-r"+std::to_string(comm->GetRank())+".csv");
         m_pointDiagnostics << "time,phase,point,x,span,curvature,JH,V,H,P,N,roughness,z0,mask,kP,uH,uP,uN,kN,epsilonN,forcing_x,forcing_span,traction_x,traction_span,production,dissipation,epsP,epsH,chi,requested_chi,departure,reason,wall_re,cutoff,normal_target,normal_error,normal_projected_error,multiplier,tangent_source,k_source,spanH,spanP,spanN,pressure_t,pressure_span,convection_t,convection_span,wP,r_U,r_DeltaU,r_K,r_Epsilon,r_Pressure,r_Convection,r_Normal,sensors_evaluated,resolved_shear,tangent_flux_residual,k_flux_residual,property_x,property_span,sample_owner,sample_element\n" << std::setprecision(17);
@@ -480,6 +486,40 @@ RANSTerrainWall::Fields RANSTerrainWall::SampleN(const Fields &v) const
         Vmath::Vcopy(m_localPoints,all+m_globalOffset,1,result[f],1);
     }
     return result;
+}
+RANSTerrainWall::Fields RANSTerrainWall::ObserveAuxiliary(
+    const std::vector<RANSPhysicalPointSampler::Coordinate> &points,
+    Array<OneD,int> &geometryIDs) const
+{
+    std::vector<LocalRegions::ExpansionSharedPtr> expansions;
+    std::vector<int> offsets;
+    for (int j = 0; j < m_boundaries.size(); ++j)
+    {
+        auto boundary = m_fields[0]->GetBndCondExpansions()[m_boundaries[j]];
+        for (int e = 0; e < boundary->GetExpSize(); ++e)
+        {
+            expansions.push_back(boundary->GetExp(e));
+            offsets.push_back(m_offsets[j]+boundary->GetPhys_Offset(e));
+        }
+    }
+    RANSPhysicalPointSampler sampler(expansions,offsets,m_session->GetComm(),points,m_dim);
+    Fields values(12);
+    for (auto &value : values) value = Array<OneD,NekDouble>(m_localPoints,0.);
+    for (int q = 0; q < m_localPoints; ++q)
+    {
+        const auto &p = m_points[q];values[0][q] = p.kP;
+        for (int i = 0; i < 2; ++i)
+        {
+            values[1+i][q] = p.sample.pressureForcing[i]+p.sample.convectionForcing[i];
+            values[6+i][q] = p.sample.velocityP[i];
+        }
+        values[3][q] = m_streamDivergence[q];values[4][q] = m_spanDivergence[q];
+        values[5][q] = m_roughness[q];values[8][q] = m_normalTarget[q];
+        values[9][q] = p.selected.weight;values[10][q] = p.cutoff;values[11][q] = p.epsH;
+    }
+    geometryIDs = Array<OneD,int>(points.size());
+    for (int q = 0; q < points.size(); ++q) geometryIDs[q] = sampler.Geometry(q);
+    return sampler.Sample(values);
 }
 void RANSTerrainWall::SetBoundary(int field, const Array<OneD,NekDouble> &values, bool dirichlet)
 {
@@ -835,10 +875,13 @@ void RANSTerrainWall::Update(const Fields &state, const Fields &predictor, const
     std::vector<AWFVector> tangentRhs(m_localPoints);
     Array<OneD,NekDouble> tangentMass(m_localPoints), kMass(m_localPoints), kRhs(m_localPoints);
     bool valid = true;
+    std::string failure;
+    int currentPoint=-1;
     try
     {
         for (int q = 0; q < m_localPoints; ++q)
         {
+            currentPoint=q;
             auto &p = m_points[q]; p = Point{};
             const auto &frame = m_frames[q]; const auto &normal = frame.normal;
             const double J = frame.Jacobian(m_strip.height), V = frame.Volume(m_strip.height);
@@ -924,8 +967,18 @@ void RANSTerrainWall::Update(const Fields &state, const Fields &predictor, const
             p.tangentSource = J*tangentRhs[q][0]; p.kSource = J*kRhs[q];
         }
     }
-    catch (const std::exception &) { valid = false; }
-    Require(valid,"nonpositive eliminated state or invalid AWF/metric reference; no floors or cutoff clipping");
+    catch (const std::exception &error)
+    {
+        valid = false;
+        std::ostringstream details;
+        details << "; rank=" << m_session->GetComm()->GetRank() << " point=" << currentPoint
+                << " reason=" << error.what();
+        if (currentPoint>=0)
+            details << " x=" << m_x[currentPoint] << " kH=" << h[m_dim][currentPoint]
+                    << " kN=" << n[m_dim][currentPoint] << " KP=" << m_points[currentPoint].kP;
+        failure=details.str();
+    }
+    Require(valid,"nonpositive eliminated state or invalid AWF/metric reference; no floors or cutoff clipping"+failure);
     m_projectedError = ProjectConstraint(m_normalError);
     const auto projectedTarget = AdjointConstraint(ProjectConstraint(m_normalTarget));
     // Augment with C* C and load the reaction through C*. This preserves

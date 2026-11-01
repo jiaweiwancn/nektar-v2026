@@ -252,7 +252,8 @@ def main():
     if args.suite in ('checks', 'all'):
         verification = True
         raw = execute(['ctest', '--test-dir', build, '--parallel', '1', '--output-on-failure'], output, 'ctest', timeout=900)
-        require('100% tests passed' in raw and 'out of 10' in raw, 'Expected ten CTests, including terrain geometry')
+        require('100% tests passed' in raw and 'out of 11' in raw,
+                'Expected eleven CTests, including terrain geometry and native observation kernels')
         raw = execute([build/'RANSKernelProbe', '--output', output/'kernels.json'], output, 'kernels', timeout=120)
         kernel = json.loads((output/'kernels.json').read_text())
         import validate_m2 as independent

@@ -5,8 +5,8 @@
 - Origin Skill: academic-research-suite / experiment-agent
 - Origin Mode: plan / computational experiment
 - Origin Date: 2026-11-01
-- Verification Status: CV1 source/data audit VERIFIED within its recorded limits; CV2–CV8 PLANNED
-- Version Label: cao_tamura_calibrated_validation_v1_cv1
+- Verification Status: CV1 source/data and CV2 implementation/readiness VERIFIED within recorded limits; CV3–CV8 PLANNED
+- Version Label: cao_tamura_calibrated_validation_v1_cv2
 
 ## Objective, branch and starting evidence
 
@@ -443,7 +443,7 @@ closure requires trustworthy evidence, not universal agreement with experiment.
 
 ## Milestones and closure evidence
 
-CV1 is **CLOSED**; CV2–CV8 remain **PLANNED**. Maintain closure notes and compact
+CV1–CV2 are **CLOSED**; CV3–CV8 remain **PLANNED**. Maintain closure notes and compact
 receipts under `docs/plans/cao-tamura-validation-evidence/` as they are produced;
 store large simulation outputs only in the Linux run root. CV1's data/evidence
 paths now exist; later milestone outputs remain planned. Each closure records
@@ -455,7 +455,7 @@ physics, calibration, observation-operator or numerical change.
 | Milestone | Dependencies | Deliverables and closure gate | Status |
 |---|---|---|---|
 | CV1 — Source and data freeze | Planning commit | PDF/figure/page audit, geometry/units/station tables, independently checked digitized curves and uncertainty/provenance, calibration/holdout split, dimensional/Re consistency, unresolved facility/mixed-surface details explicitly recorded. Freeze versioned data and score definitions before fitting. | CLOSED |
-| CV2 — Wall/reference and probe readiness | CV1 | Parameterized experimental generator; smooth-anchor checks; displaced-reference derivation/decision; any necessary declared implementation; native physical-point interpolation and below-hm reconstruction with frame/rank/continuity tests. Canonical d=0, finite-nu, original recovery, curved continuity, history and legacy checks pass on Linux. Record unsupported observables rather than manufacture them. | PLANNED |
+| CV2 — Wall/reference and probe readiness | CV1 | Parameterized experimental generator; smooth-anchor checks; displaced-reference derivation/decision; any necessary declared implementation; native physical-point interpolation and below-hm reconstruction with frame/rank/continuity tests. Canonical d=0, finite-nu, original recovery, curved continuity, history and legacy checks pass on Linux. Record unsupported observables rather than manufacture them. | CLOSED |
 | CV3 — Separate S/R calibration | CV1–CV2 | Developed empty-floor precursors; fixed-coefficient calibration and flat-data cross-checks; shared-parameter and any conditional fits distinguished; parameter/variance/displacement uncertainty and incident residuals published. Freeze S/R manifests without using held-out hill scores. | PLANNED |
 | CV4 — Numerical and long-time readiness | CV2–CV3 | Profiled solver and bounded runtime estimate; three-level h and dt evidence plus p/hm/domain sensitivities; inlet/outlet preservation convergence; perturbed 3D stability checks; demonstrated stationarity/statistical procedure, mass/strip budgets and MPI/history equivalence. No large production matrix until throughput and observable error are defensible. | PLANNED |
 | CV5 — Developed transition study | CV3–CV4 | Fixed-mask 32-case hill/floor matrix, original/log baselines, upstream-only width and separate placement study, incident diagnostics, switched subset and selected resolved-viscosity sensitivities. Quantify numerical/sampling significance and select/freeze width by approach-flow/plateau rules, retaining every width and any non-plateau result. | PLANNED |
@@ -616,3 +616,103 @@ Local PDF renders and development-attempt diagnostics are outside the checkout
 under `/tmp/nektar-cv1`; the source-bound auditor reproduces them. The Git
 delivery contains derived numerical tables and compact evidence, not the PDF
 or its page images.
+
+## CV2 closure (2026-11-01)
+
+CV2 is **CLOSED** as implementation and numerical/observation readiness.
+The [reference and observation decision](cao-tamura-cv2-reference-observations.md)
+contains the displaced-reference derivation, inlet assumptions, operator
+definitions and limits. The [Linux receipt](cao-tamura-validation-evidence/cv2.json)
+binds source/report/binary hashes and commands. CV1's sealed data are unchanged.
+No developed precursor was calibrated, no experimental hill score was inspected,
+and stationarity, convergence and experimental accuracy remain CV3–CV8 work.
+
+The canonical models and physical Yap distance are retained. A displaced
+constant-k profile has unforced momentum residual
+`-nu*u_tau/(kappa*(eta-d)^2)`; its epsilon residual additionally contains
+`2*nu*A/(eta-d)^3` and the CLS physical-distance Yap difference. Thus a pure
+shifted finite-nu log law is not an exact reference, and displaced CLS generally
+also fails equilibrium with zero resolved nu. There is no new displaced closure
+variant. The experimental route uses a finite-depth inlet and computed floor
+precursor, with d observational and `RANSHeightShift=0`.
+
+Delivered implementation:
+
+- `Examples/TerrainHill/cao_tamura.py` provides generate/prepare/probes/run/
+  observe/statistics/calibrate/compare commands and provisional S/R JSONs.
+  Configuration covers model/wall, molecular policy, H/P/N, ks, fetch/domain,
+  mesh/order/span, timestep, outer turbulence assumptions and upstream mask.
+  Identical meshes are retained across the four mask widths. The trial rough
+  ks=6 mm is unfitted. The nominal inlet U_H=1 dimensionalization fixes input
+  Re_H; CV3 must verify the developed incident U(Hh) and actual Re_H as well.
+- Native initial preparation evaluates the actual named inlet and its
+  streamfunction primitive, checks positive Jacobians and independently audits
+  velocity/scalars, positivity and span invariance. Positive geometric outer
+  turbulence blends and adequate outer mesh layers avoid projection undershoot.
+- `RANSObservationAudit` interpolates quad/full-hex native fields at laboratory
+  physical points, including deterministic MPI traces and curved boundaries.
+  Read-only AWF reconstruction retains the original auxiliary momentum profile
+  and integrated strip-continuity normal flow. U_P and U_A(P) are distinguished;
+  H value mismatch is reported. Nonfinite native inverse seeds/residuals are
+  handled explicitly, fixing a failure exposed by the new floor geometry.
+- Physical reference probes, speedup, covariance ratios and two-/three-tail
+  ground-extrapolated x_R operators are available. Independent synthetic
+  fixtures test these methods and reject incorrect vertical reference heights.
+  Comparison requires a completed, versioned CV3 calibration before accessing
+  reserved or hill scores. Flat-only candidate objectives are runnable now.
+- Statistics use physical-time weights and mean model stress plus resolved
+  covariance. Native configuration/probe/binary receipts bind their inputs,
+  including compatible history segments. Prepared/zero-time/manufactured and
+  unbound data cannot enter experimental statistics. Actual experimental inlet
+  expressions/parameters and observational d enter history compatibility;
+  legacy sessions retain their previous signature.
+
+Authoritative Linux checks used base `ba3e005cde9d6d7dd7ab0f86e0ab31f0b69d4482`
+plus the source contents identified by the receipt. The isolated source/build
+and every heavy output are under
+`/media/jay/新加卷/nektar-v2026-runs/cao-tamura-calibrated-validation`.
+Tailscale SSH `jay@100.105.247.110` was used. The primary Linux HIT checkout,
+shared build and installation were preserved. Compilation used at most 12
+workers, native tests 1/2/4 MPI ranks, and all OpenMP/BLAS threads were one;
+the combined project allocation never exceeded 16 workers.
+
+| Gate | Linux result |
+|---|---|
+| Registered regression tests | All 11 CTests pass; the final added shear check also passes its targeted CTest. |
+| Reference/reconstruction kernels | 975 checks, including 32 d/nu/model/height residual cases; auxiliary H shear-flux error <=8.52e-13. Finite-difference bulk residual checks use their declared 2e-8 scaled tolerance. |
+| Smooth anchors | Both closures use ks=0 anchors recomputed from J0; largest three-step normalized reference error <6.8e-9. |
+| Canonical neutral controls | Five models/wall modes, five flow clocks each: U error <=4.51e-8 and epsilon error <=6.74e-7; correction stays on its reference plateau. |
+| Native points/frame/MPI | 2D/3D, horizontal/inclined polynomial/vector/tensor probes: error <1.93e-12; independent auxiliary quadrature <1.91e-12; curved rank difference <1.43e-14. Outside and unsupported probes are explicit. |
+| Generator/preparer | 19 case definitions, 15 positive native preparations including a full-hex rough hill, identical width meshes and invalid-input checks. Full-hex input audit <2.92e-13, scaled span variation <3.73e-11. |
+| Finite-nu and recovery | Both closures' Molecular controls converge with positive fields; zero-weight EP recovers original AWF within 1e-6. Exact finite-nu pure-log preservation is not claimed. |
+| Curved continuity | Nonzero transpiration about 3.65e-3 in the verification units; projected normal <=1.80e-10, weak divergence <=5.83e-10, actual normal-plus-side flux defect <9.68e-14. |
+| Experimental workflow/history | S/standard-EP and R/CLS-EP two-step Molecular floor solves; no guard activations, weak divergence <1.10e-10, mass defect <1.77e-11. Two-to-one-rank history differences <8.78e-7 over primary/derived fields; eight changed-input continuations rejected. Cross-history statistics pass. |
+| Legacy acceptance | 20 standard-AWF cases, independent wall/kernel checks and three high-order CLS pilot cases pass, including original recovery, budgets and 1-to-4/4-to-2 rank history. |
+| Observation/statistics oracles | Time/covariance error <1.74e-18; negative diagonals/missing coverage retained; speedup and ground extrapolation exact on independent fixtures; wrong height and pre-freeze score access rejected. |
+
+The C1-foot limitation remains. In these short curved verification cases the
+largest target jump is 2.771e-3, with half-jump bound 1.386e-3 and measured
+maximum normal error 1.787e-3. These are raw verification units, not calibrated
+experimental errors. Earlier strong-L2/refinement evidence is retained; this
+milestone does not claim new maximum-norm convergence at the feet. Exact-foot
+sub-interface probes are unavailable. Auxiliary momentum-gradient continuity
+is also not imposed: the checked ODE shear identity and HighRe reference
+traction must not be confused with exact gradient matching of the outer model.
+
+Below-hm k/epsilon/full Reynolds tensors remain unavailable, as do log-wall
+sub-interface values and auxiliary reconstruction for unsupported body forcing
+or dealiasing. Current flat stress/rms objectives therefore report incomplete
+height coverage rather than a complete-range score. Unknown experimental
+delta75, unscaled dimensional amplitudes, separately averaged wall-shear zeros,
+facility effects and actual tail/grid/sampling uncertainty retain their stated
+conditions. The new seed fits only allowed Fig. 3a data; inferred turbulence
+and the source displacement assumptions are not new measurements.
+
+Development failures are retained in the run root: initial compiler/test-driver
+errors; curved-segment inverse initialization; coarse outer projection
+undershoot; incorrectly supplying observational z0 as an AWF policy parameter;
+nonfinite terrain inverse seeds; and stale expected test counts/rejection text.
+Final suites use `controls-e`, `probes-f`, `generator-c`, `workflow-e`,
+`utilities-d`, `preservation-final` and `legacy-final-b`, with full logs/fields
+outside Git. The unchanged solver binaries were reused while final independent
+postprocessing and the targeted interface-shear kernel check were added.

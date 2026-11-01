@@ -194,4 +194,17 @@ AWFMetricValues IntegrateAWFMetric(const AnalyticalWallFunction &wall,
         {H*base.traction[0]+.5*forcing[0]*length*length,
          H*base.traction[1]+.5*forcing[1]*length*length}};
 }
+
+RANSVector ReconstructAWFVelocity(const AnalyticalWallFunction &wall,
+    const RANSWallFrame &frame, double eta, const AWFVector &matchingVelocity,
+    const AWFVector &forcing, double streamDerivative, double spanDerivative)
+{
+    Require(std::isfinite(eta) && eta >= 0 && eta <= wall.Geometry().height &&
+            std::isfinite(streamDerivative) && std::isfinite(spanDerivative) &&
+            frame.Jacobian(eta) > .1, "Invalid AWF observation coordinate/continuity");
+    const auto u = wall.Velocity(eta,matchingVelocity,forcing);
+    const double normal = -(eta*streamDerivative+frame.Volume(eta)*spanDerivative)/frame.Jacobian(eta);
+    return {u[0]*frame.tangent[0]+normal*frame.normal[0],u[1],
+            u[0]*frame.tangent[2]+normal*frame.normal[2]};
+}
 }

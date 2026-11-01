@@ -367,6 +367,7 @@ std::string RANSVelocityCorrectionScheme::RestartSignature() const
     for (const auto &name : m_session->GetVariables()) s << ':' << name;
     if (m_wallStrip) s << ':' << m_wallStrip->RestartSignature();
     if (m_terrainWall) s << ":Newton=" << m_useNewton << ":difference=" << m_newtonDifference << ":Krylov=" << m_newtonKrylovDimension;
+    s << RANSExperimentalInletSignature(m_session);
     return s.str();
 }
 
@@ -513,6 +514,8 @@ void RANSVelocityCorrectionScheme::v_ExtraFldOutput(
     std::vector<Array<OneD, NekDouble>> &coefficients,
     std::vector<std::string> &variables)
 {
+    m_fieldMetaDataMap["RANSObservationConfiguration"] = RANSObservationConfiguration(m_session);
+    m_fieldMetaDataMap.erase("RANSInitializationOnly");
     const int dim = m_velocity.size(), nq = m_fields[0]->GetTotPoints();
     Gradients gradient(dim);
     Fields state(m_nConvectiveFields);

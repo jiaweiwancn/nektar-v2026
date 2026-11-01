@@ -359,6 +359,29 @@ velocity is continuous: maximum-normal-error convergence is not claimed there.
 Receipts retain those maxima and corner jumps, require decreasing global strong
 L2 error, and separately test maximum-norm convergence on a smooth curved wall.
 
+The example's \inltt{cao\_tamura.py} additionally prepares versioned finite-depth
+experimental candidates and flat-only calibration objectives. These candidates
+are not developed/calibrated inflows. Observational displacement is separate
+from physical wall distance; no displaced CLS/Yap variant is enabled. Resolved
+\inltt{Molecular} diffusion generally prevents exact pure-log equilibrium.
+An experimental \inltt{RANSExperimentalSignature} binds the actual expressions
+in \inltt{RANSExperimentalInlet}, their referenced parameters and
+\inltt{RANSExperiment*} inputs to history compatibility. Region 3 prescribes
+the same inlet expressions. Existing sessions need no new option.
+
+The external RANS build supplies \inltt{RANSObservationAudit} for read-only
+native physical-point interpolation on quad/full-hex meshes. Its CSV points
+are \inltt{id,x,span,z} in laboratory axes; 2D span is zero. New checkpoints
+carry \inltt{RANSObservationConfiguration} metadata, checked against the
+producing session. Below $H$, AWF auxiliary velocity uses the existing momentum
+profile and integrated continuity. The observer distinguishes the CV state
+$U_P$ from auxiliary $U_A(P)$ and reports the limiting normal mismatch at $H$.
+No full sub-interface Reynolds tensor or $k$/epsilon profile is fabricated;
+log-wall and exact C1-foot sub-interface queries are explicitly unavailable.
+The Python workflow combines mean model stress and resolved velocity covariance
+for statistics, preserves missing coverage and rejects initialization-only
+fields. See the example README for commands and remaining observable limits.
+
 \subsubsection{RANS linear solution, diagnostics and restart}
 \inltt{RANSLinearSolver=MatrixFree} optionally applies the current variable
 weak diffusion and mass operators, with cached native static-condensation

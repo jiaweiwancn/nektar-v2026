@@ -98,7 +98,7 @@ def plane(path, model='standard_fixed', angle=0., degree=4, layers=8, nx=4,
                 degree=degree,layers=layers,nx=nx,dt=dt,steps=steps,legacy=legacy,boundary=boundary)
 
 
-def terrain_mesh(root, xs, etas, amplitude, half_length=.1, top=.3, dimension=2, span=.032, normal_n=.016):
+def terrain_mesh(root, xs, etas, amplitude, half_length=.1, top=.3, dimension=2, span=.032, normal_n=.016, span_layers=1):
     """Normal columns through N, then a linear blend to a flat outer roof.
 
     Edge/face geometry interpolation is independent of solution degree. The
@@ -109,7 +109,9 @@ def terrain_mesh(root, xs, etas, amplitude, half_length=.1, top=.3, dimension=2,
     if dimension == 2:
         mesh(root,xs,etas)
     else:
-        structured_hex(root,xs,[0.,span],etas)
+        if span_layers < 1:
+            raise ValueError('Use positive span layers')
+        structured_hex(root,xs,[span*j/span_layers for j in range(span_layers+1)],etas)
     geometry = root.find('GEOMETRY')
     seeds = {int(v.attrib['ID']): tuple(map(float,v.text.split())) for v in geometry.find('VERTEX')}
     def mapping(seed):

@@ -284,3 +284,24 @@ select `BUILD/geometry-lib` first in `LD_LIBRARY_PATH`. Use fresh run directorie
 under the Linux large volume and bounded CPU affinity. `record_terrain.py`
 collects passed suites, source/binary hashes, MPI/thread settings and CTest
 receipts. C1-foot maximum-error limitations remain explicit in those receipts.
+
+CV2 adds `RANSObservationKernelProbe`/`RANSObservationKernels`, native
+`RANSObservationAudit`, `cao_tamura_experiment.py` and
+`validate_cao_tamura.py`. The public entry point and trial JSONs are in
+`Examples/TerrainHill`. Build all external targets with `RANS_BUILD_SOLVER=ON`.
+On Linux, run each suite in a fresh large-volume directory, for example:
+
+```bash
+taskset -c 1-4 python3 validate_cao_tamura.py --build "$CV_BUILD" --output "$CV_RUN/verification/probes" --cpus 1,2,3,4 --suite probes
+```
+
+Other suites are `controls`, `generator`, `workflow` and `utilities`. They cover smooth
+anchors, finite viscosity, original recovery, curved continuity, 2D/3D native
+probes and independent auxiliary quadrature, generation/preparation of S/R
+candidates, physical-time stress statistics and experimental-input history.
+Set all BLAS/OpenMP threads to one and account for concurrent jobs within the
+16-worker project cap. Full checkpoints/logs remain outside Git. These suites
+verify functionality, not a developed experimental calibration or stationarity.
+`record_cao_tamura.py --help` collects these suites together with the canonical
+five-clock preservation suite, legacy regressions and eleven CTests. It checks
+the tested binaries/library before writing the compact CV2 evidence receipt.

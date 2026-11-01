@@ -57,5 +57,15 @@ SOLVER_UTILS_EXPORT AWFMetricValues IntegrateAWFMetric(
     const AnalyticalWallFunction &wall, const AWFVector &velocity,
     const AWFVector &forcing, double curvature, double weight = 0,
     double correctedNumerator = 0, double correctedCutoff = 0);
+
+/** Observation of the existing locally parallel auxiliary momentum profile.
+ * Normal velocity uses the SAME uniform strip-inventory continuity as the
+ * solver, not the integral of the eta-dependent auxiliary tangential profile.
+ * This supplies velocity, not sub-interface Reynolds stresses or resolved k.
+ */
+SOLVER_UTILS_EXPORT RANSVector ReconstructAWFVelocity(
+    const AnalyticalWallFunction &wall, const RANSWallFrame &frame,
+    double eta, const AWFVector &matchingVelocity, const AWFVector &forcing,
+    double streamDerivative, double spanDerivative);
 }
 #endif

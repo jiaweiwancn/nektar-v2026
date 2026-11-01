@@ -20,8 +20,10 @@ add_executable(RANSKernelProbe
     ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSKernelProbe.cpp)
 add_executable(RANSWallGeometryProbe
     ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSWallGeometryProbe.cpp)
+add_executable(RANSObservationKernelProbe
+    ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSObservationKernelProbe.cpp)
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    foreach(rans_target RANSKernels RANSWallLayerProbe RANSKernelProbe RANSWallGeometryProbe)
+    foreach(rans_target RANSKernels RANSWallLayerProbe RANSKernelProbe RANSWallGeometryProbe RANSObservationKernelProbe)
         target_compile_options(${rans_target} PRIVATE
             -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror)
     endforeach()
@@ -30,6 +32,7 @@ target_link_libraries(RANSWallLayerProbe
     RANSKernels ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
 target_link_libraries(RANSKernelProbe RANSKernels)
 target_link_libraries(RANSWallGeometryProbe RANSKernels)
+target_link_libraries(RANSObservationKernelProbe RANSKernels)
 option(RANS_BUILD_SOLVER "Build the complete incompressible solver in isolation" OFF)
 if(RANS_BUILD_SOLVER)
     # Build the source SpatialDomains library in isolation too: terrain normals
@@ -82,11 +85,20 @@ if(RANS_BUILD_SOLVER)
     add_executable(RANSFieldAudit ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSFieldAudit.cpp)
     target_link_libraries(RANSFieldAudit RANSSpatialDomains ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
     add_executable(RANSWallFieldAudit ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSWallFieldAudit.cpp)
+    target_include_directories(RANSWallFieldAudit PRIVATE ${RANS_SOURCE_ROOT}/solvers)
     target_link_libraries(RANSWallFieldAudit RANSKernels RANSSpatialDomains ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
+    add_executable(RANSObservationAudit
+        ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSObservationAudit.cpp
+        ${RANS_SOLVER_ROOT}/EquationSystems/RANSTerrainWall.cpp)
+    target_include_directories(RANSObservationAudit PRIVATE ${RANS_SOURCE_ROOT}/solvers)
+    target_link_libraries(RANSObservationAudit RANSKernels RANSSpatialDomains
+        ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
     if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         target_compile_options(RANSFieldAudit PRIVATE
             -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror)
         target_compile_options(RANSWallFieldAudit PRIVATE
+            -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror)
+        target_compile_options(RANSObservationAudit PRIVATE
             -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror)
         set_source_files_properties(
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSVelocityCorrectionScheme.cpp
@@ -139,6 +151,10 @@ set_tests_properties(RANSKernelUnitTests PROPERTIES
 add_test(NAME RANSWallGeometryUnitTests COMMAND RANSWallGeometryProbe
     ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-geometry.json)
 set_tests_properties(RANSWallGeometryUnitTests PROPERTIES
+    PROCESSORS 1 TIMEOUT 120 ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
+add_test(NAME RANSObservationKernels COMMAND RANSObservationKernelProbe
+    ${CMAKE_CURRENT_BINARY_DIR}/rans-observation-kernels.json)
+set_tests_properties(RANSObservationKernels PROPERTIES
     PROCESSORS 1 TIMEOUT 120 ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
 if(RANS_BUILD_SOLVER)
     get_property(rans_all_tests DIRECTORY PROPERTY TESTS)

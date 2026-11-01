@@ -24,6 +24,10 @@ validation limits on this development branch.
 The [terrain-wall example](solvers/IncNavierStokesSolver/Examples/TerrainHill/README.md)
 adds physical normal-coordinate wall strips, integrated strip continuity and
 an upstream transition to original AWF, with paired hill/empty-floor pilots.
+Its Cao–Tamura entry point supplies versioned experimental candidates, native
+physical probes and flat-only calibration objectives; developed calibration
+and experimental accuracy remain separate milestones in the
+[calibrated-validation plan](docs/plans/cao-tamura-calibrated-validation.md).
 
 
 Tutorials

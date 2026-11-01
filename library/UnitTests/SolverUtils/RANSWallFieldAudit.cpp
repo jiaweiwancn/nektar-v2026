@@ -6,6 +6,7 @@
 #include <MultiRegions/ContField.h>
 #include <SpatialDomains/MeshGraphIO.h>
 #include <SolverUtils/Turbulence/RANSWallGeometry.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallSession.h>
 #include <LocalRegions/HexExp.h>
 #include <StdRegions/StdQuadExp.h>
 #include <StdRegions/StdSegExp.h>
@@ -16,6 +17,7 @@
 #include <iostream>
 #include <limits>
 #include <set>
+#include <functional>
 
 using namespace Nektar;
 namespace
@@ -136,8 +138,11 @@ int main(int argc, char **argv)
         ASSERTL0(session->GetComm()->GetSize() == 1,"Import all partitions with one audit process");
         auto graph = SpatialDomains::MeshGraphIO::Read(session);
         auto field = MemoryManager<MultiRegions::ContField>::AllocateSharedPtr(session,graph,session->GetVariable(0),true,false);
-        if (std::string(argv[2]) == "--terrain-initial")
+        if (std::string(argv[2]) == "--terrain-initial" || std::string(argv[2]) == "--experimental-initial")
         {
+            const bool experimental=std::string(argv[2])=="--experimental-initial";
+            ASSERTL0(experimental==session->DefinesSolverInfo("RANSExperimentalSignature"),
+                     "Use --experimental-initial for experimental profiles; legacy log preparation is separate");
             SolverUtils::RANSWallGeometry terrain;
             std::string kind; session->LoadSolverInfo("RANSWallGeometry",kind,"Plane");
             terrain.terrain = kind == "CosineHill" ? SolverUtils::RANSTerrain::CosineHill : SolverUtils::RANSTerrain::Plane;
@@ -153,12 +158,54 @@ int main(int argc, char **argv)
             session->LoadParameter("Ustar",star); session->LoadParameter("Kappa",kap);
             session->LoadParameter("MatchingVelocity",matching);session->LoadParameter("Qstar",qstar);session->LoadParameter("Z",top);
             const int dim = graph->GetMeshDimension(),nq = field->GetTotPoints();
+            double jacMin=std::numeric_limits<double>::max(),jacMax=0.;
+            for (int e=0;e<field->GetExpSize();++e)
+                for (double j : field->GetExp(e)->GetGeomFactors()->GetJac())
+                {
+                    ASSERTL0(std::isfinite(j) && j>0,"Initial geometry requires finite positive Jacobians");
+                    jacMin=std::min(jacMin,j);jacMax=std::max(jacMax,j);
+                }
+            std::ofstream geometryReport(std::string(argv[3])+".geometry.json");
+            geometryReport << std::setprecision(17) << "{\"jacobian_min\":" << jacMin
+                           << ",\"jacobian_max\":" << jacMax << "}\n";
+            ASSERTL0(geometryReport.good(),"Cannot write initial geometry audit");
             Array<OneD,NekDouble> x(nq,0.0),y(nq,0.0),z(nq,0.0),raw(nq),projected(nq);
             field->GetCoords(x,y,z);
             std::vector<SolverUtils::RANSWallFrame> frames;
             for (int q = 0; q < nq; ++q) frames.push_back(terrain.Closest(x[q],dim == 2 ? y[q] : z[q]));
+            auto evaluate = [&](const std::string &name,double eta) {
+                auto f=session->GetFunction("RANSExperimentalInlet",name);
+                return dim==2 ? f->Evaluate(0.,eta,0.,0.) : f->Evaluate(0.,0.,eta,0.);
+            };
             auto primitive = [&](double eta) { return matching*eta+star/kap*eta*(std::log(eta/H)-1); };
-            auto speed = [&](double eta) { return matching+star/kap*std::log(eta/H); };
+            auto speed = [&](double eta) { return experimental ? evaluate("u",eta) : matching+star/kap*std::log(eta/H); };
+            auto difference = [&](double a,double b) {
+                if (!experimental) return primitive(a)-primitive(b);
+                // Only used in the N..2N initial streamfunction blending band.
+                // Independent Gauss integration of the actual inlet expression
+                // avoids inventing a logarithmic primitive for measured data.
+                constexpr double gx[8]={.09501250983763744,.2816035507792589,.4580167776572274,.6178762444026438,
+                    .755404408355003,.8656312023878318,.9445750230732326,.9894009349916499};
+                constexpr double gw[8]={.1894506104550685,.1826034150449236,.1691565193950025,.1495959888165767,
+                    .1246289712555339,.0951585116824928,.0622535239386479,.027152459411754095};
+                if (a==b) return 0.;
+                const double low=std::min(a,b),high=std::max(a,b);double sum=0.;
+                ASSERTL0(low>0,"Nonpositive experimental initial-profile coordinate");
+                std::vector<double> cuts{low,high};
+                for (double c=low*1.4;c<high;c*=1.4) cuts.push_back(c);
+                for (const std::string key : {"RANSExperimentBlendBegin","RANSExperimentBlendEnd"})
+                {
+                    double c;session->LoadParameter(key,c);
+                    if (c>low && c<high) cuts.push_back(c);
+                }
+                std::sort(cuts.begin(),cuts.end());
+                for (int i=1;i<cuts.size();++i)
+                {
+                    const double mid=.5*(cuts[i]+cuts[i-1]),half=.5*(cuts[i]-cuts[i-1]);
+                    for (int j=0;j<8;++j) sum+=half*gw[j]*(speed(mid-half*gx[j])+speed(mid+half*gx[j]));
+                }
+                return a>b ? sum : -sum;
+            };
             // Blend G(normal distance) through N into the smooth roof-compatible
             // streamfunction G(e), e=z-h(x)*((top-z)/(top-h(x)))^2, by 2N.
             // Near H/N the tangential log profile is independent of wall foot,
@@ -188,13 +235,15 @@ int main(int argc, char **argv)
                     const double chi = 1-10*r*r*r+15*std::pow(r,4)-6*std::pow(r,5);
                     const double derivative = -30*r*r*(1-r)*(1-r)/N;
                     const auto b = base(x[q],vertical);
-                    const double a = chi*speed(eta)+derivative*(primitive(eta)-primitive(b[0]));
+                    const double a = chi*speed(eta)+(derivative==0 ? 0 : derivative*difference(eta,b[0]));
                     const double gx = (1-chi)*b[1]+a*f.normal[0];
                     const double gz = (1-chi)*b[2]+a*f.normal[2];
-                    raw[q] = name == "u" ? gz :
-                        name == (dim == 2 ? "v" : "w") ? -gx :
-                        name == "k" ? qstar*star*star :
-                        (name == "eps" || name == "eps_tilde") ? star*star*star/kap*(chi/eta+(1-chi)/b[0]) : 0;
+                    if (name=="u") raw[q]=gz;
+                    else if (name==(dim==2 ? "v" : "w")) raw[q]=-gx;
+                    else if (experimental && (name=="k" || name=="eps" || name=="eps_tilde" || name=="p"))
+                        raw[q]=chi*evaluate(name,eta)+(1-chi)*evaluate(name,b[0]);
+                    else raw[q]=name=="k" ? qstar*star*star :
+                        (name=="eps" || name=="eps_tilde") ? star*star*star/kap*(chi/eta+(1-chi)/b[0]) : 0.;
                 }
                 ProjectTerrainInitial(field,raw,dim);
                 field->AvgAssemble();field->GlobalToLocal();field->BwdTrans(field->GetCoeffs(),projected);
@@ -208,6 +257,11 @@ int main(int argc, char **argv)
                 }
             }
             LibUtilities::FieldMetaDataMap metadata{{"Time","0"},{"ChkFileNum","0"}};
+            if (experimental)
+            {
+                metadata["RANSObservationConfiguration"]=RANSObservationConfiguration(session);
+                metadata["RANSInitializationOnly"]="1";
+            }
             LibUtilities::FieldIO::CreateDefault(session)->Write(argv[3],definitions,data,metadata,false);
             session->Finalise();return 0;
         }

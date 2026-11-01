@@ -7,6 +7,7 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallBoundary.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSession.h>
 #include <SolverUtils/Turbulence/RANSWallStrip.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSPhysicalPointSampler.h>
 #include <fstream>
 
 namespace Nektar
@@ -23,7 +24,7 @@ public:
     RANSTerrainWall(const LibUtilities::SessionReaderSharedPtr &session,
         const Array<OneD, MultiRegions::ExpListSharedPtr> &fields, int dimension,
         const SolverUtils::RANSWallGeometry &geometry,
-        const SolverUtils::RANSNeutralReference &reference);
+        const SolverUtils::RANSNeutralReference &reference, bool observationOnly = false);
     void CheckInitialState(const Fields &) const override;
     std::string RestartSignature() const override;
     void Update(const Fields &, const Fields &, const Gradients &,
@@ -38,6 +39,11 @@ public:
     Array<OneD,NekDouble> IterationMetric() const override;
     NekDouble IterationReactionScale() const override { return m_beta*std::sqrt(m_normalRelaxation); }
     void SetTrialMode(bool value) override { m_trialMode = value; }
+    // Current strip state at physical matching points, native boundary
+    // polynomials. Order: KP,F_t,F_span,d_s UP,d_span VP,ks,UP,VP,W_target,
+    // chi,cutoff,epsilon_H. Auxiliary U(P) is distinct from the CV state UP.
+    Fields ObserveAuxiliary(const std::vector<RANSPhysicalPointSampler::Coordinate> &,
+                            Array<OneD,int> &geometryIDs) const;
 
 private:
     void UpdateContinuity(const Fields &,const Fields &);

@@ -270,6 +270,18 @@ CG trace; its adjoint reaction and $\beta C^*C$ augmentation keep the velocity
 block symmetric positive definite. Newton--Krylov solves the coupled stage;
 physical CLS residuals retain the original maximum invariant, while Jacobian
 probes select its active generalized derivative.
+\item \code{RANSPhysicalPointSampler.h} provides deterministic native
+quad/hex and embedded segment/quad interpolation, with full ambient-coordinate
+inverse residuals. Curved segments use a Newton seed at the element centre;
+nonfinite native seeds/residuals are handled explicitly. Terrain N sampling
+uses the same finite-seed discipline. The external
+\code{RANSObservationAudit} reads native checkpoints and calls the read-only
+terrain observation hook, without opening solver diagnostics. Below $H$,
+\code{ReconstructAWFVelocity} combines the existing auxiliary momentum
+profile with the CV strip-continuity normal component. It does not define a
+new sub-interface covariance tensor. See the CV2 reference/observation note
+and \code{validate\_cao\_tamura.py} for independent quadrature, frame,
+MPI, missing-coverage and history tests.
 \item \code{RANSMatrixFree.*} supplies the current weak Helmholtz action with
 native static-condensation preconditioners. \code{RANSHistory.*} wraps the
 native IMEX history and publishes/restores checked element-indexed payloads.

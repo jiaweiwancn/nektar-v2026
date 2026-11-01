@@ -13,9 +13,79 @@
 #include <limits>
 #include <regex>
 #include <sstream>
+#include <cstdint>
+#include <cctype>
 
 namespace Nektar
 {
+inline std::string RANSStableFingerprint(const std::string &text)
+{
+    std::uint64_t hash = 14695981039346656037ULL;
+    for (unsigned char c : text) { hash ^= c;hash *= 1099511628211ULL; }
+    std::ostringstream out;out << std::hex << std::setw(16) << std::setfill('0') << hash;
+    return out.str();
+}
+
+// Optional experimental inlet binding. Legacy sessions retain their original
+// restart signatures. InitialConditions/file paths and NumSteps are excluded
+// so full-history continuation remains possible. Inlet expressions and their
+// referenced parameters are bound at runtime, not trusted from a filename.
+inline std::string RANSExperimentalInletSignature(const LibUtilities::SessionReaderSharedPtr &session)
+{
+    if (!session->DefinesSolverInfo("RANSExperimentalSignature")) return "";
+    std::ostringstream out;out << std::setprecision(17) << session->GetSolverInfo("RANSExperimentalSignature");
+    for (const auto &name : session->GetVariables())
+        if (name != "p")
+        {
+            ASSERTL0(session->DefinesFunction("RANSExperimentalInlet",name) &&
+                     session->GetFunctionType("RANSExperimentalInlet",name) == LibUtilities::eFunctionTypeExpression,
+                     "Experimental cases require named analytical inlet expressions");
+            const auto expression = session->GetFunction("RANSExperimentalInlet",name)->GetExpression();
+            out << ':' << name << '=' << expression;
+            for (const auto &p : session->GetParameters())
+                if (std::regex_search(expression,std::regex("\\b"+p.first+"\\b",std::regex::icase)))
+                    out << ':' << p.first << '=' << p.second;
+        }
+    for (const auto &p : session->GetParameters())
+    {
+        std::string key=p.first;std::transform(key.begin(),key.end(),key.begin(),[](unsigned char c){return std::toupper(c);});
+        if (key.find("RANSEXPERIMENT") == 0) out << ':' << p.first << '=' << p.second;
+    }
+    // Region 3 is the documented inlet of the experimental generator. Some
+    // MPI partitions have no inlet region; the named expressions remain global.
+    auto root=session->GetElement("NEKTAR/CONDITIONS/BOUNDARYCONDITIONS");
+    auto compact=[](std::string value) {
+        value.erase(std::remove_if(value.begin(),value.end(),[](unsigned char c){return std::isspace(c);}),value.end());
+        return value;
+    };
+    for (auto region=root->FirstChildElement("REGION");region;region=region->NextSiblingElement("REGION"))
+        if (std::string(region->Attribute("REF")) == "3")
+            for (auto bc=region->FirstChildElement("D");bc;bc=bc->NextSiblingElement("D"))
+            {
+                const std::string variable=bc->Attribute("VAR");
+                if (variable != "p")
+                    ASSERTL0(compact(bc->Attribute("VALUE")) == compact(session->GetFunction("RANSExperimentalInlet",variable)->GetExpression()),
+                             "Experimental inlet boundary differs from its bound profile");
+            }
+    return ":experimental-inlet-v1="+RANSStableFingerprint(out.str());
+}
+
+inline std::string RANSObservationConfiguration(const LibUtilities::SessionReaderSharedPtr &session)
+{
+    std::ostringstream out;out << std::setprecision(17) << "native-wall-observation-v1";
+    for (const auto &name : session->GetVariables()) out << ':' << name;
+    for (const auto &p : session->GetParameters())
+    {
+        std::string key=p.first;std::transform(key.begin(),key.end(),key.begin(),[](unsigned char c){return std::toupper(c);});
+        if (key.find("RANS") == 0 || key == "KINVIS") out << ':' << p.first << '=' << p.second;
+    }
+    for (const std::string key : {"TurbulenceModel","RANSWallModel","RANSWallGeometry","RANSResolvedDiffusion",
+        "RANSAWFWeight","RANSAWFSpatialWeight","RANSAWFFailurePolicy","AdvectionType","SpectralHPDealiasing"})
+        if (session->DefinesSolverInfo(key)) out << ':' << key << '=' << session->GetSolverInfo(key);
+    out << RANSExperimentalInletSignature(session);
+    return "native-wall-observation-v1:"+RANSStableFingerprint(out.str());
+}
+
 inline void ShiftRANSWallPropertyQueries(const MultiRegions::ExpListSharedPtr &boundary,
     Array<OneD,NekDouble> &x,Array<OneD,NekDouble> &span)
 {
