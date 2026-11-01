@@ -10,7 +10,7 @@ import xml.etree.ElementTree as ET
 import unittest
 
 sys.dont_write_bytecode=True
-from cao_tamura_experiment import config, reference, inlet_values, frozen_data, mean_derivative, mean_ratio, generate, environment
+from cao_tamura_experiment import config, reference, inlet_values, frozen_data, mean_derivative, mean_ratio, generate, environment, wall_epsilon_expression
 from cao_tamura_calibration import design, freeze, probes, thickness, select
 
 
@@ -46,7 +46,7 @@ class CalibrationGuards(unittest.TestCase):
                 tree=ET.parse(folder/'case.xml')
                 entry=next(n for n in tree.getroot().find("CONDITIONS/BOUNDARYCONDITIONS/REGION[@REF='0']")
                            if n.attrib['VAR'] in ('eps','eps_tilde'))
-                self.assertEqual(entry.attrib['VALUE'],'EpsilonWall')
+                self.assertEqual(entry.attrib['VALUE'],wall_epsilon_expression(m['config']))
                 c=m['config'];r=m['reference']
                 self.assertAlmostEqual(inlet_values(c['hm'],c,r)['epsilon'],r['wall_epsilon_near'],places=13)
 

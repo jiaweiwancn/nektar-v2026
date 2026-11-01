@@ -80,7 +80,7 @@ inline std::string RANSObservationConfiguration(const LibUtilities::SessionReade
         if (key.find("RANS") == 0 || key == "KINVIS") out << ':' << p.first << '=' << p.second;
     }
     for (const std::string key : {"TurbulenceModel","RANSWallModel","RANSWallGeometry","RANSResolvedDiffusion",
-        "RANSAWFWeight","RANSAWFSpatialWeight","RANSAWFFailurePolicy","AdvectionType","SpectralHPDealiasing"})
+        "RANSAWFWeight","RANSAWFSpatialWeight","RANSAWFFailurePolicy","AdvectionType","SpectralHPDealiasing","RANSNewtonMap","RANSNewtonScalarScaling"})
         if (session->DefinesSolverInfo(key)) out << ':' << key << '=' << session->GetSolverInfo(key);
     out << RANSExperimentalInletSignature(session);
     return "native-wall-observation-v1:"+RANSStableFingerprint(out.str());

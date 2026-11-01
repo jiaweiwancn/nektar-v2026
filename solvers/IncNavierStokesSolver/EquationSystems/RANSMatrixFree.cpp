@@ -28,7 +28,8 @@ RANSMatrixFree::~RANSMatrixFree()
 
 int RANSMatrixFree::Solve(int f, const Array<OneD, NekDouble> &rhs,
     const Array<OneD, NekDouble> &diffusion, const Array<OneD, NekDouble> &mass,
-    NekDouble alpha, Array<OneD, NekDouble> &output)
+    NekDouble alpha, Array<OneD, NekDouble> &output,
+    const Array<OneD, NekDouble> *newtonTrial)
 {
     auto field = std::dynamic_pointer_cast<MultiRegions::ContField>(m_fields[f]);
     const auto map = field->GetLocalToGlobalMap();
@@ -66,6 +67,12 @@ int RANSMatrixFree::Solve(int f, const Array<OneD, NekDouble> &rhs,
     Vmath::Smul(nc, -1.0, rhs, 1, local, 1);
     field->ImposeNeumannConditions(local); field->ImposeRobinConditions(local);
     map->Assemble(local, b);
+    if (newtonTrial)
+    {
+        ASSERTL0(newtonTrial->size() == nq,"Invalid Newton trial grid");
+        field->FwdTransLocalElmt(*newtonTrial,field->UpdateCoeffs());
+        field->AvgAssemble();field->GlobalToLocal();
+    }
     field->ImposeDirichletConditions(field->UpdateCoeffs());
     map->LocalToGlobal(field->GetCoeffs(), x, true);
     bool hasRobin = false;
@@ -134,50 +141,67 @@ int RANSMatrixFree::Solve(int f, const Array<OneD, NekDouble> &rhs,
     int iteration = 0;
     try
     {
-        // Scale by the assembled effective RHS, including Dirichlet lifting.
-        // A dimensionful max(1,||b||) creates an accuracy floor on small 3D
-        // domains and makes finite-difference Newton probes inconsistent.
-        Array<OneD,NekDouble> lifting(ng,0.0),effective(ng,0.0);
-        for (int i = 0; i < nd; ++i) lifting[i] = x[i];
-        apply(lifting,ax);
-        for (int i = nd; i < ng; ++i) effective[i] = b[i]-ax[i];
-        const double norm = std::sqrt(dot(effective,effective));
-        const double roundoff = 32*std::numeric_limits<double>::epsilon()*
-            (std::sqrt(dot(b,b))+std::sqrt(dot(ax,ax)));
-        const double target = std::max(m_tolerance*norm,roundoff);
-        if (norm == 0) Vmath::Vcopy(ng,lifting,1,x,1);
-        apply(x, ax);
-        for (int i = 0; i < ng; ++i) r[i] = i < nd ? 0 : b[i] - ax[i];
-        double rz = 0;
-        bool restart = true;
-        for (; iteration < 1000; ++iteration)
+        if (newtonTrial)
         {
-            if (std::sqrt(dot(r, r)) <= target)
+            // Precondition the *current residual*, rather than solving a
+            // large absolute RHS to roundoff inside every Jacobian probe.
+            // The correction vanishes iff the current free-row residual does.
+            apply(x,ax);
+            for (int i = 0; i < ng; ++i) r[i] = i < nd ? 0 : b[i]-ax[i];
+            if (dot(r,r) > 0)
             {
-                apply(x, ax);
-                for (int i = nd; i < ng; ++i) r[i] = b[i] - ax[i];
-                if (std::sqrt(dot(r, r)) <= 5*target) break;
-                restart = true;
+                precondition();
+                for (int i = nd; i < ng; ++i) x[i] += z[i];
             }
-            precondition();
-            const double next = dot(r, z);
-            ASSERTL0(std::isfinite(next) && next > 0, "RANS matrix-free preconditioner is not positive definite");
-            const double beta = restart ? 0.0 : next/rz;
-            for (int i = 0; i < ng; ++i) p[i] = i < nd ? 0 : (restart ? z[i] : z[i] + beta*p[i]);
-            rz = next; restart = false;
-            apply(p, ap);
-            const double curvature = dot(p, ap);
-            ASSERTL0(std::isfinite(curvature) && curvature > 0, "RANS matrix-free Helmholtz operator is not positive definite");
-            const double step = rz/curvature;
-            for (int i = nd; i < ng; ++i) { x[i] += step*p[i]; r[i] -= step*ap[i]; }
-            if (iteration % 20 == 19)
-            {
-                apply(x, ax);
-                for (int i = nd; i < ng; ++i) r[i] = b[i] - ax[i];
-                restart = true;
-            }
+            iteration = 1;
         }
-        ASSERTL0(iteration < 1000, "RANS matrix-free CG failed to converge");
+        else
+        {
+            // Scale by the assembled effective RHS, including Dirichlet lifting.
+            // A dimensionful max(1,||b||) creates an accuracy floor on small 3D
+            // domains and makes finite-difference Newton probes inconsistent.
+            Array<OneD,NekDouble> lifting(ng,0.0),effective(ng,0.0);
+            for (int i = 0; i < nd; ++i) lifting[i] = x[i];
+            apply(lifting,ax);
+            for (int i = nd; i < ng; ++i) effective[i] = b[i]-ax[i];
+            const double norm = std::sqrt(dot(effective,effective));
+            const double roundoff = 32*std::numeric_limits<double>::epsilon()*
+                (std::sqrt(dot(b,b))+std::sqrt(dot(ax,ax)));
+            const double target = std::max(m_tolerance*norm,roundoff);
+            if (norm == 0) Vmath::Vcopy(ng,lifting,1,x,1);
+            apply(x, ax);
+            for (int i = 0; i < ng; ++i) r[i] = i < nd ? 0 : b[i] - ax[i];
+            double rz = 0;
+            bool restart = true;
+            for (; iteration < 1000; ++iteration)
+            {
+                if (std::sqrt(dot(r, r)) <= target)
+                {
+                    apply(x, ax);
+                    for (int i = nd; i < ng; ++i) r[i] = b[i] - ax[i];
+                    if (std::sqrt(dot(r, r)) <= 5*target) break;
+                    restart = true;
+                }
+                precondition();
+                const double next = dot(r, z);
+                ASSERTL0(std::isfinite(next) && next > 0, "RANS matrix-free preconditioner is not positive definite");
+                const double beta = restart ? 0.0 : next/rz;
+                for (int i = 0; i < ng; ++i) p[i] = i < nd ? 0 : (restart ? z[i] : z[i] + beta*p[i]);
+                rz = next; restart = false;
+                apply(p, ap);
+                const double curvature = dot(p, ap);
+                ASSERTL0(std::isfinite(curvature) && curvature > 0, "RANS matrix-free Helmholtz operator is not positive definite");
+                const double step = rz/curvature;
+                for (int i = nd; i < ng; ++i) { x[i] += step*p[i]; r[i] -= step*ap[i]; }
+                if (iteration % 20 == 19)
+                {
+                    apply(x, ax);
+                    for (int i = nd; i < ng; ++i) r[i] = b[i] - ax[i];
+                    restart = true;
+                }
+            }
+            ASSERTL0(iteration < 1000, "RANS matrix-free CG failed to converge");
+        }
         map->GlobalToLocal(x, field->UpdateCoeffs());
         field->BwdTrans(field->GetCoeffs(), output);
     }
@@ -187,7 +211,7 @@ int RANSMatrixFree::Solve(int f, const Array<OneD, NekDouble> &rhs,
 }
 
 int RANSMatrixFree::SolveVelocity(const Fields &rhs, const Fields &diffusion,
-    NekDouble alpha, Fields &output)
+    NekDouble alpha, Fields &output, const Fields *newtonTrial)
 {
     // Terrain walls couple Cartesian components through Pt and n*n^T. Solve
     // that SPD block implicitly: lagging its off-diagonals is coordinate
@@ -250,6 +274,13 @@ int RANSMatrixFree::SolveVelocity(const Fields &rhs, const Fields &diffusion,
         Vmath::Smul(nc,-1.0,rhs[f],1,local,1);
         fields[f]->ImposeNeumannConditions(local); fields[f]->ImposeRobinConditions(local);
         map->Assemble(local,b[f]);
+        if (newtonTrial)
+        {
+            ASSERTL0(newtonTrial->size() >= m_dim && (*newtonTrial)[f].size() == nq,
+                     "Invalid vector Newton trial grid");
+            fields[f]->FwdTransLocalElmt((*newtonTrial)[f],fields[f]->UpdateCoeffs());
+            fields[f]->AvgAssemble();fields[f]->GlobalToLocal();
+        }
         fields[f]->ImposeDirichletConditions(fields[f]->UpdateCoeffs());
         map->LocalToGlobal(fields[f]->GetCoeffs(),x[f],true);
         for (int boundary = 0; boundary < fields[f]->GetBndConditions().size(); ++boundary)
@@ -320,53 +351,69 @@ int RANSMatrixFree::SolveVelocity(const Fields &rhs, const Fields &diffusion,
     int iteration = 0;
     try
     {
-        auto lifting = arrays(ng),effective = arrays(ng);
-        for (int f = 0; f < m_dim; ++f)
-            for (int i = 0; i < ng; ++i) lifting[f][i] = i < nd ? x[f][i] : 0;
-        apply(lifting,ax);
-        for (int f = 0; f < m_dim; ++f)
-            for (int i = 0; i < ng; ++i) effective[f][i] = i < nd ? 0 : b[f][i]-ax[f][i];
-        const double norm = std::sqrt(dot(effective,effective));
-        const double roundoff = 32*std::numeric_limits<double>::epsilon()*
-            (std::sqrt(dot(b,b))+std::sqrt(dot(ax,ax)));
-        const double target = std::max(m_tolerance*norm,roundoff);
-        if (norm == 0)
-            for (int f = 0; f < m_dim; ++f) Vmath::Vcopy(ng,lifting[f],1,x[f],1);
-        apply(x,ax);
-        for (int f = 0; f < m_dim; ++f)
-            for (int i = 0; i < ng; ++i) r[f][i] = i < nd ? 0 : b[f][i]-ax[f][i];
-        double rz = 0; bool restart = true;
-        for (; iteration < 2000; ++iteration)
+        if (newtonTrial)
         {
-            if (std::sqrt(dot(r,r)) <= target)
-            {
-                apply(x,ax);
-                for (int f = 0; f < m_dim; ++f)
-                    for (int i = nd; i < ng; ++i) r[f][i] = b[f][i]-ax[f][i];
-                if (std::sqrt(dot(r,r)) <= 5*target) break;
-                restart = true;
-            }
-            precondition();
-            const double next = dot(r,z);
-            ASSERTL0(std::isfinite(next) && next > 0,"Terrain vector preconditioner is not positive definite");
-            const double beta = restart ? 0 : next/rz;
+            apply(x,ax);
             for (int f = 0; f < m_dim; ++f)
-                for (int i = 0; i < ng; ++i) p[f][i] = i < nd ? 0 : (restart ? z[f][i] : z[f][i]+beta*p[f][i]);
-            rz = next; restart = false; apply(p,ap);
-            const double curvature = dot(p,ap);
-            ASSERTL0(std::isfinite(curvature) && curvature > 0,"Terrain vector operator is not positive definite");
-            const double step = rz/curvature;
-            for (int f = 0; f < m_dim; ++f)
-                for (int i = nd; i < ng; ++i) { x[f][i] += step*p[f][i]; r[f][i] -= step*ap[f][i]; }
-            if (iteration%20 == 19)
+                for (int i = 0; i < ng; ++i) r[f][i] = i < nd ? 0 : b[f][i]-ax[f][i];
+            if (dot(r,r) > 0)
             {
-                apply(x,ax);
+                precondition();
                 for (int f = 0; f < m_dim; ++f)
-                    for (int i = nd; i < ng; ++i) r[f][i] = b[f][i]-ax[f][i];
-                restart = true;
+                    for (int i = nd; i < ng; ++i) x[f][i] += z[f][i];
             }
+            iteration = 1;
         }
-        ASSERTL0(iteration < 2000,"Terrain vector Krylov solve failed to converge");
+        else
+        {
+            auto lifting = arrays(ng),effective = arrays(ng);
+            for (int f = 0; f < m_dim; ++f)
+                for (int i = 0; i < ng; ++i) lifting[f][i] = i < nd ? x[f][i] : 0;
+            apply(lifting,ax);
+            for (int f = 0; f < m_dim; ++f)
+                for (int i = 0; i < ng; ++i) effective[f][i] = i < nd ? 0 : b[f][i]-ax[f][i];
+            const double norm = std::sqrt(dot(effective,effective));
+            const double roundoff = 32*std::numeric_limits<double>::epsilon()*
+                (std::sqrt(dot(b,b))+std::sqrt(dot(ax,ax)));
+            const double target = std::max(m_tolerance*norm,roundoff);
+            if (norm == 0)
+                for (int f = 0; f < m_dim; ++f) Vmath::Vcopy(ng,lifting[f],1,x[f],1);
+            apply(x,ax);
+            for (int f = 0; f < m_dim; ++f)
+                for (int i = 0; i < ng; ++i) r[f][i] = i < nd ? 0 : b[f][i]-ax[f][i];
+            double rz = 0; bool restart = true;
+            for (; iteration < 2000; ++iteration)
+            {
+                if (std::sqrt(dot(r,r)) <= target)
+                {
+                    apply(x,ax);
+                    for (int f = 0; f < m_dim; ++f)
+                        for (int i = nd; i < ng; ++i) r[f][i] = b[f][i]-ax[f][i];
+                    if (std::sqrt(dot(r,r)) <= 5*target) break;
+                    restart = true;
+                }
+                precondition();
+                const double next = dot(r,z);
+                ASSERTL0(std::isfinite(next) && next > 0,"Terrain vector preconditioner is not positive definite");
+                const double beta = restart ? 0 : next/rz;
+                for (int f = 0; f < m_dim; ++f)
+                    for (int i = 0; i < ng; ++i) p[f][i] = i < nd ? 0 : (restart ? z[f][i] : z[f][i]+beta*p[f][i]);
+                rz = next; restart = false; apply(p,ap);
+                const double curvature = dot(p,ap);
+                ASSERTL0(std::isfinite(curvature) && curvature > 0,"Terrain vector operator is not positive definite");
+                const double step = rz/curvature;
+                for (int f = 0; f < m_dim; ++f)
+                    for (int i = nd; i < ng; ++i) { x[f][i] += step*p[f][i]; r[f][i] -= step*ap[f][i]; }
+                if (iteration%20 == 19)
+                {
+                    apply(x,ax);
+                    for (int f = 0; f < m_dim; ++f)
+                        for (int i = nd; i < ng; ++i) r[f][i] = b[f][i]-ax[f][i];
+                    restart = true;
+                }
+            }
+            ASSERTL0(iteration < 2000,"Terrain vector Krylov solve failed to converge");
+        }
         for (int f = 0; f < m_dim; ++f)
         {
             map->GlobalToLocal(x[f],fields[f]->UpdateCoeffs());

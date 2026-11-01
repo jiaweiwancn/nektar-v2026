@@ -16,6 +16,7 @@ from cao_tamura_experiment import (ROOT, DATA, THREADS, allocation, compare, con
     environment, execute, frozen_data, generate, observe, prepare, records, run,
     sha, statistics, write_csv, write_json)
 from generate_m4 import info, parameter
+from generate_m3 import element
 from cao_tamura_cv3_budgets import flat_momentum_budget
 from terrain_continuity import audit as strip_continuity
 
@@ -277,7 +278,8 @@ def assess(case, fields, directory, build, cpus):
     return state
 
 
-def develop(value, directory, build, ranks, cpus, timeout=7200, max_extensions=10, numerics=None):
+def develop(value, directory, build, ranks, cpus, timeout=7200, max_extensions=10, numerics=None,
+            probe_builder=None, stage_auditor=None, score=True,initial_unforced_flow_times=3,checkpoint_interval=None):
     """Native fixed-step 3TF + 1TF extensions; never accepts short/failing runs."""
     environment(build); allocation(ranks,cpus); directory=Path(directory).resolve(); directory.mkdir(parents=True,exist_ok=False)
     value=config(value)
@@ -285,13 +287,18 @@ def develop(value, directory, build, ranks, cpus, timeout=7200, max_extensions=1
         raise ValueError('CV3 provisional calibration uses explicitly declared 2D empty floors')
     if value['inlet_reference_q'] is None or value['inlet_reference_kappa'] is None:
         raise ValueError('Declare common physical inlet reference Q/kappa independently of the closure')
+    if initial_unforced_flow_times not in (1,3):raise ValueError('Initial unforced leg is one or three flow times')
+    if checkpoint_interval is not None and (type(checkpoint_interval) is not int or checkpoint_interval<1):
+        raise ValueError('Checkpoint interval must be a positive step count')
     numerics=numerics or {}
-    allowed={'GlobalSysSoln','RANSNonlinearSolver','RANSNewtonDifferenceStep','RANSNewtonKrylovDimension',
-             'IterativeSolverTolerance','RANSMatrixFreeTolerance','RANSNormalAugmentation','RANSPressureRelaxation','RANSPicardRelaxation','RANSGradDiv'}
+    allowed={'GlobalSysSoln','RANSNonlinearSolver','RANSNewtonMap','RANSNewtonScalarScaling','RANSNewtonDifferenceStep','RANSNewtonKrylovDimension','RANSNewtonMaxIterations',
+             'IterativeSolverTolerance','RANSMatrixFreeTolerance','RANSNormalAugmentation','RANSPressureRelaxation','RANSPicardRelaxation','RANSGradDiv','PressureInverseTolerance','RANSNonlinearTolerance','RANSPressureTolerance'}
     if set(numerics)-allowed: raise ValueError('Unsupported undeclared numerical controls')
-    probes(value['surface'],directory/'points.csv')
+    (probe_builder or probes)(value['surface'],directory/'points.csv')
     state=dict(version=VERSION,status='developing',config=value,numerics=numerics,stages=[],
-               cv1_snapshot_sha256=sha(DATA/'snapshot.json'),complete=False)
+               cv1_snapshot_sha256=sha(DATA/'snapshot.json'),complete=False,
+               purpose='calibration' if score else 'feasibility_only',initial_unforced_flow_times=initial_unforced_flow_times,
+               checkpoint_interval=checkpoint_interval)
     write_json(directory/'development.json',state)
     previous=None; stable=0
     for index in range(max_extensions+1):
@@ -299,27 +306,36 @@ def develop(value, directory, build, ranks, cpus, timeout=7200, max_extensions=1
         if previous is None:
             # Reference units are resolved by generate before physical duration is selected.
             folder.rmdir(); m=generate(value,folder); tf=(value['xmax']-value['xmin'])/m['reference']['Uinf']
-            count=math.ceil((value['startup_flow_times']+3)*tf/value['dt'])
+            count=math.ceil((value['startup_flow_times']+initial_unforced_flow_times)*tf/value['dt'])
             tree=ET.parse(folder/'case.xml')
             for key,val in numerics.items():
-                (info if key in ('RANSNonlinearSolver','GlobalSysSoln') else parameter)(tree.getroot(),key,val)
+                if key=='PressureInverseTolerance':
+                    group=tree.getroot().find('CONDITIONS/GLOBALSYSSOLNINFO')
+                    if group is None:group=element(tree.getroot().find('CONDITIONS'),'GLOBALSYSSOLNINFO')
+                    field=element(group,'V',VAR='p')
+                    element(field,'I',PROPERTY='IterativeSolverTolerance',VALUE=str(val))
+                else:(info if key in ('RANSNonlinearSolver','GlobalSysSoln','RANSNewtonMap','RANSNewtonScalarScaling') else parameter)(tree.getroot(),key,val)
             parameter(tree.getroot(),'RANSStageAudit',1)
-            parameter(tree.getroot(),'NumSteps',count); parameter(tree.getroot(),'IO_CheckSteps',count)
+            parameter(tree.getroot(),'NumSteps',count); parameter(tree.getroot(),'IO_CheckSteps',min(count,checkpoint_interval or count))
             tree.write(folder/'case.xml',encoding='utf-8',xml_declaration=True)
-            m['config'].update(steps=count,checkpoint=count)
+            m['config'].update(steps=count,checkpoint=min(count,checkpoint_interval or count))
             m.update(case_sha256=sha(folder/'case.xml'),numerics=numerics)
             write_json(folder/'manifest.json',m); prepare(folder/'case.xml',build)
         else:
-            count=math.ceil(tf/value['dt'])
+            duration=2 if index==1 and initial_unforced_flow_times==1 else 1
+            count=math.ceil(duration*tf/value['dt'])
             restart=ROOT/'solvers/IncNavierStokesSolver/Examples/NeutralABL/restart.py'
             histories=[p for p in previous.glob('case.rans-*') if p.is_dir()]
-            if len(histories)!=1: raise ValueError('Expected one complete final history directory')
+            if not histories: raise ValueError('Missing full IMEX history')
+            history_option=['--history-path',histories[0]] if len(histories)==1 else []
+            # With frequent checkpoints, native field metadata identifies the
+            # exact final history. Never guess by directory name or mtime.
             execute([sys.executable,restart,previous/'case.xml',previous/'case.fld',folder/'case.xml',
-                '--steps',count,'--history-path',histories[0]],folder,'restart')
-            tree=ET.parse(folder/'case.xml'); parameter(tree.getroot(),'IO_CheckSteps',count)
+                '--steps',count,*history_option],folder,'restart')
+            tree=ET.parse(folder/'case.xml'); parameter(tree.getroot(),'IO_CheckSteps',min(count,checkpoint_interval or count))
             tree.write(folder/'case.xml',encoding='utf-8',xml_declaration=True)
             m=json.loads((previous/'manifest.json').read_text());m['case_sha256']=sha(folder/'case.xml')
-            m['config'].update(steps=count,checkpoint=count)
+            m['config'].update(steps=count,checkpoint=min(count,checkpoint_interval or count))
             write_json(folder/'manifest.json',m)
         case=folder/'case.xml'
         try:
@@ -332,23 +348,29 @@ def develop(value, directory, build, ranks, cpus, timeout=7200, max_extensions=1
             raise ValueError('Native positivity/continuity gate failed')
         residual=records(case.with_suffix('.rans-residual.csv'))
         free=max(float(r['free_coefficient_l2']) for r in residual if r['phase']=='1')
-        if free>1e-7:raise ValueError('Native full weak stage residual failed')
+        if not math.isfinite(free) or free>1e-7:raise ValueError('Native full weak stage residual failed')
         observe(case,folder/'case.fld',directory/'points.csv',folder/'incident.csv',build,1,cpus.split(',')[0])
         execute(allocation(1,cpus.split(',')[0])+[Path(build)/'RANSWallFieldAudit',case,folder/'case.fld',folder/'full.csv'],folder,'full')
         wall=wall_summary(case);write_json(folder/'wall.json',wall)
         item=dict(index=index,elapsed_flow_times=stage['final_time']/tf,run=receipt,wall={k:v for k,v in wall.items() if k!='samples'})
+        item['unforced_elapsed_flow_times']=item['elapsed_flow_times']-value['startup_flow_times']
         item.update(maximum_free_residual=free,strip_continuity=strip_continuity(folder,'case'),
                     strip_momentum=flat_momentum_budget(case))
+        if stage_auditor:item['route_audit']=stage_auditor(case)
         if previous:
             prior=json.loads((previous/'wall.json').read_text())
             item['drift']=drift(previous/'incident.csv',folder/'incident.csv',m['reference'],previous/'full.csv',folder/'full.csv',prior,wall)
-            stable=stable+1 if item['drift']['accepted'] else 0
+            # Only one-TF extensions following at least three unforced TF
+            # qualify for the two successive development drift checks.
+            prior_flow=state['stages'][-1]['elapsed_flow_times']-value['startup_flow_times']
+            stable=stable+1 if item['drift']['accepted'] and prior_flow>=3.-1e-10 else 0
         state['stages'].append(item);write_json(directory/'development.json',state)
         if stable>=2:
             inputs=[directory/f'stage-{j:02d}'/'incident.csv' for j in range(index-2,index+1)]
             statistics(inputs,directory/'statistics.csv')
-            for d in ([.0025,.0035,.0045] if value['surface']=='R' else [0.]):
-                write_json(directory/f'objective-d{d:.4f}.json',objective(directory/'statistics.csv',folder/'manifest.json',wall,d))
+            if score:
+                for d in ([.0025,.0035,.0045] if value['surface']=='R' else [0.]):
+                    write_json(directory/f'objective-d{d:.4f}.json',objective(directory/'statistics.csv',folder/'manifest.json',wall,d))
             state.update(status='developed_provisional_2D',complete=True,final_stage=str(folder),
                 statistics_sha256=sha(directory/'statistics.csv'),stationarity='steady drift check; CV4 full stationarity/3D/convergence pending')
             write_json(directory/'development.json',state)

@@ -1,0 +1,43 @@
+{
+  "command": [
+    "taskset",
+    "-c",
+    "76",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/build-r1-pointwise-scalars/RANSObservationAudit",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/development-ramp8-standard-fd-accuracy/R-standard_fixed/stage-04/incident-native/sample.xml",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/development-ramp8-standard-fd-accuracy/R-standard_fixed/stage-04/case.fld",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/development-ramp8-standard-fd-accuracy/R-standard_fixed/points.csv",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/development-ramp8-standard-fd-accuracy/R-standard_fixed/stage-04/incident.csv"
+  ],
+  "exit_code": 0,
+  "timeout": false,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1"
+  },
+  "wall_time_seconds": 4.732523204991594,
+  "case_sha256": "d5a811dd4a82011bbb0668bc521c8367cb4786da3b68e24149e29997eb5d83d5",
+  "field_sha256": null,
+  "wall_route": {
+    "version": "cao-tamura-wall-route-v1",
+    "kind": "EPTransition",
+    "wall_model": "AWFEquilibrium",
+    "weight_mode": "Fixed",
+    "fixed_weight": 1.0,
+    "failure_policy": "UseOriginal",
+    "begin": -0.28,
+    "end": -0.2
+  },
+  "points_sha256": "10e63c2fbc17521bcb8ac683cc7be03679d02585cd141a811e0fac556517c945",
+  "output_sha256": "6f24730f05cc277b17dbf4f259a63fe3ebeac29cee560fc1cfeaa7195cb63fde",
+  "observer_sha256": "27d9421cef35af8217521ee245bf6f3f075426e9c75b623987eef5b78c8c2e6b",
+  "geometry_sha256": "0f5fcae1a6c02d8301046a77fe4d800d6e222d829c4271d746896750844cc04d",
+  "observation_configuration": "native-wall-observation-v1:3cdf7971912556a8",
+  "experimental_fingerprint": "a21ebe0751c64303fbf20e5ffed4b0a51ad63eeab66834596d8cfe5507f061f7",
+  "manifest_sha256": "739d96d4d871a09e18d965530050c57840edfdd59a66e0c8a0183d9c7fb431db",
+  "ranks": 1,
+  "cpus": "76",
+  "startup_end_time": 0.0
+}

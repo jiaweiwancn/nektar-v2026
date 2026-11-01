@@ -1,0 +1,170 @@
+<?xml version='1.0' encoding='utf-8'?>
+<NEKTAR>
+  <EXPANSIONS>
+    <E COMPOSITE="C[0]" NUMMODES="4,4" BASISTYPE="Modified_A,Modified_A" POINTSTYPE="GaussLobattoLegendre,GaussLobattoLegendre" NUMPOINTS="7,7" FIELDS="u,v,k,eps" />
+    <E COMPOSITE="C[0]" NUMMODES="2,2" BASISTYPE="Modified_A,Modified_A" POINTSTYPE="GaussLobattoLegendre,GaussLobattoLegendre" NUMPOINTS="7,7" FIELDS="p" />
+  </EXPANSIONS>
+  <CONDITIONS>
+    <SOLVERINFO>
+      <I PROPERTY="SolverType" VALUE="RANSVelocityCorrectionScheme" />
+      <I PROPERTY="EQTYPE" VALUE="UnsteadyNavierStokes" />
+      <I PROPERTY="Projection" VALUE="Galerkin" />
+      <I PROPERTY="TurbulenceModel" VALUE="StandardKEpsilon" />
+      <I PROPERTY="RANSResolvedDiffusion" VALUE="Molecular" />
+      <I PROPERTY="GlobalSysSoln" VALUE="IterativeStaticCond" />
+      <I PROPERTY="RANSWallModel" VALUE="AWFEquilibrium" />
+      <I PROPERTY="RANSAWFWeight" VALUE="Fixed" />
+      <I PROPERTY="RANSAWFFailurePolicy" VALUE="RequirePreservation" />
+      <I PROPERTY="RANSLinearSolver" VALUE="MatrixFree" />
+      <I PROPERTY="RANSWallGeometry" VALUE="Plane" />
+      <I PROPERTY="RANSNewtonMap" VALUE="PreconditionedResidual" />
+    </SOLVERINFO>
+    <TIMEINTEGRATIONSCHEME>
+      <METHOD>IMEX</METHOD>
+      <ORDER>2</ORDER>
+    </TIMEINTEGRATIONSCHEME>
+    <PARAMETERS>
+      <P>TimeStep = 0.002</P>
+      <P>NumSteps = 2</P>
+      <P>IO_InfoSteps = 1</P>
+      <P>Kinvis = 1.5e-05</P>
+      <P>ResolvedNu = 1.5e-05</P>
+      <P>IterativeSolverTolerance = 1e-14</P>
+      <P>RANSNonlinearTolerance = 1e-09</P>
+      <P>RANSMaxIterations = 4000</P>
+      <P>Ustar = 0.3</P>
+      <P>Kappa = 0.43266615305567874</P>
+      <P>Z0 = 0.02</P>
+      <P>Qstar = 3.3333333333333335</P>
+      <P>MatchingVelocity = 3.00551764338959</P>
+      <P>H = 0.008</P>
+      <P>Z = 0.08</P>
+      <P>L = 0.4</P>
+      <P>Span = 0.032</P>
+      <P>Uref = 4.602073147025946</P>
+      <P>RANSPressureTolerance = 1e-09</P>
+      <P>RANSStageAudit = 1</P>
+      <P>RANSReferenceMonitor = 0</P>
+      <P>IO_CheckSteps = 1</P>
+      <P>RANSStripHeight = 0.008</P>
+      <P>RANSStripPointP = 0.004</P>
+      <P>RANSStripPointN = 0.016</P>
+      <P>RANSRoughnessHeight = 0.002</P>
+      <P>RANSAWFFixedWeight = 1</P>
+      <P>RANSAWFOn = 0.02</P>
+      <P>RANSAWFOff = 0.1</P>
+      <P>RANSAWFMinimumRe = 100</P>
+      <P>RANSAWFPointDiagnostics = 1</P>
+    <P>RANSNormalAugmentation = 2.0</P><P>RANSNormalRelaxation = 0.5</P><P>RANSPicardRelaxation = 0.1</P><P>RANSPressureRelaxation = 0.1</P><P>RANSTerrainSlope = 0.0</P><P>RANSNewtonDifferenceStep = 0.0001</P></PARAMETERS>
+    <VARIABLES>
+      <V ID="0">u</V>
+      <V ID="1">v</V>
+      <V ID="2">k</V>
+      <V ID="3">eps</V>
+      <V ID="4">p</V>
+    </VARIABLES>
+    <BOUNDARYREGIONS>
+      <B ID="0">C[1]</B>
+      <B ID="1">C[2]</B>
+      <B ID="2">C[3]</B>
+      <B ID="3">C[4]</B>
+    </BOUNDARYREGIONS>
+    <BOUNDARYCONDITIONS><REGION REF="0"><R VAR="u" VALUE="0" PRIMCOEFF="0" USERDEFINEDTYPE="AWFEquilibrium" /><R VAR="v" VALUE="0" PRIMCOEFF="0" USERDEFINEDTYPE="AWFEquilibrium" /><R VAR="k" VALUE="0" USERDEFINEDTYPE="AWFEquilibrium" PRIMCOEFF="0" /><D VAR="eps" VALUE="Ustar^3/(Kappa*(1*y-(0)*x))" /><N VAR="p" VALUE="0" USERDEFINEDTYPE="RANSPressure" /></REGION><REGION REF="1"><P VAR="u" VALUE="[3]" /><P VAR="v" VALUE="[3]" /><P VAR="k" VALUE="[3]" /><P VAR="eps" VALUE="[3]" /><P VAR="p" VALUE="[3]" /></REGION><REGION REF="2"><D VAR="u" VALUE="1*(MatchingVelocity+Ustar/Kappa*log((1*y-(0)*x)/H))" /><D VAR="v" VALUE="0*(MatchingVelocity+Ustar/Kappa*log((1*y-(0)*x)/H))" /><D VAR="k" VALUE="Qstar*Ustar^2" /><D VAR="eps" VALUE="Ustar^3/(Kappa*(1*y-(0)*x))" /><N VAR="p" VALUE="0" USERDEFINEDTYPE="RANSPressure" /></REGION><REGION REF="3"><P VAR="u" VALUE="[1]" /><P VAR="v" VALUE="[1]" /><P VAR="k" VALUE="[1]" /><P VAR="eps" VALUE="[1]" /><P VAR="p" VALUE="[1]" /></REGION></BOUNDARYCONDITIONS><FUNCTION NAME="InitialConditions">
+      <E VAR="u" VALUE="1*(MatchingVelocity+Ustar/Kappa*log((1*y-(0)*x)/H))" />
+      <E VAR="v" VALUE="0*(MatchingVelocity+Ustar/Kappa*log((1*y-(0)*x)/H))" />
+      <E VAR="k" VALUE="Qstar*Ustar^2" />
+      <E VAR="eps" VALUE="Ustar^3/(Kappa*(1*y-(0)*x))" />
+      <E VAR="p" VALUE="0" />
+    </FUNCTION>
+    <FUNCTION NAME="ExactSolution">
+      <E VAR="u" VALUE="1*(MatchingVelocity+Ustar/Kappa*log((1*y-(0)*x)/H))" />
+      <E VAR="v" VALUE="0*(MatchingVelocity+Ustar/Kappa*log((1*y-(0)*x)/H))" />
+      <E VAR="k" VALUE="Qstar*Ustar^2" />
+      <E VAR="eps" VALUE="Ustar^3/(Kappa*(1*y-(0)*x))" />
+      <E VAR="p" VALUE="0" />
+      <E VAR="rans_nut" VALUE="Kappa*Ustar*(1*y-(0)*x)" />
+      <E VAR="rans_P" VALUE="Ustar^3/(Kappa*(1*y-(0)*x))" />
+      <E VAR="rans_eps_total" VALUE="Ustar^3/(Kappa*(1*y-(0)*x))" />
+      <E VAR="rans_Yap" VALUE="0" />
+      <E VAR="rans_R_xx" VALUE="(2/3)*Qstar*Ustar^2" />
+      <E VAR="rans_R_yy" VALUE="(2/3)*Qstar*Ustar^2" />
+      <E VAR="rans_R_zz" VALUE="(2/3)*Qstar*Ustar^2" />
+      <E VAR="rans_R_xy" VALUE="0" />
+      <E VAR="rans_R_xz" VALUE="-Ustar^2" />
+      <E VAR="rans_R_yz" VALUE="0" />
+      <E VAR="rans_quadratic_norm" VALUE="0" />
+      <E VAR="rans_cubic_norm" VALUE="0" />
+    </FUNCTION>
+  </CONDITIONS>
+  <GEOMETRY DIM="2" SPACE="2">
+    <VERTEX>
+      <V ID="0">0 0.0080000000000000002 0</V>
+      <V ID="1">0.20000000000000001 0.0080000000000000002 0</V>
+      <V ID="2">0.40000000000000002 0.0080000000000000002 0</V>
+      <V ID="3">0 0.012679145539688909 0</V>
+      <V ID="4">0.20000000000000001 0.012679145539688909 0</V>
+      <V ID="5">0.40000000000000002 0.012679145539688909 0</V>
+      <V ID="6">0 0.020095091452076642 0</V>
+      <V ID="7">0.20000000000000001 0.020095091452076642 0</V>
+      <V ID="8">0.40000000000000002 0.020095091452076642 0</V>
+      <V ID="9">0 0.03184857364427978 0</V>
+      <V ID="10">0.20000000000000001 0.03184857364427978 0</V>
+      <V ID="11">0.40000000000000002 0.03184857364427978 0</V>
+      <V ID="12">0 0.05047658755841547 0</V>
+      <V ID="13">0.20000000000000001 0.05047658755841547 0</V>
+      <V ID="14">0.40000000000000002 0.05047658755841547 0</V>
+      <V ID="15">0 0.080000000000000002 0</V>
+      <V ID="16">0.20000000000000001 0.080000000000000002 0</V>
+      <V ID="17">0.40000000000000002 0.080000000000000002 0</V>
+    </VERTEX>
+    <EDGE>
+      <E ID="0">0 1</E>
+      <E ID="1">1 4</E>
+      <E ID="2">4 3</E>
+      <E ID="3">3 0</E>
+      <E ID="4">1 2</E>
+      <E ID="5">2 5</E>
+      <E ID="6">5 4</E>
+      <E ID="7">4 7</E>
+      <E ID="8">7 6</E>
+      <E ID="9">6 3</E>
+      <E ID="10">5 8</E>
+      <E ID="11">8 7</E>
+      <E ID="12">7 10</E>
+      <E ID="13">10 9</E>
+      <E ID="14">9 6</E>
+      <E ID="15">8 11</E>
+      <E ID="16">11 10</E>
+      <E ID="17">10 13</E>
+      <E ID="18">13 12</E>
+      <E ID="19">12 9</E>
+      <E ID="20">11 14</E>
+      <E ID="21">14 13</E>
+      <E ID="22">13 16</E>
+      <E ID="23">16 15</E>
+      <E ID="24">15 12</E>
+      <E ID="25">14 17</E>
+      <E ID="26">17 16</E>
+    </EDGE>
+    <ELEMENT>
+      <Q ID="0">0 1 2 3</Q>
+      <Q ID="1">4 5 6 1</Q>
+      <Q ID="2">2 7 8 9</Q>
+      <Q ID="3">6 10 11 7</Q>
+      <Q ID="4">8 12 13 14</Q>
+      <Q ID="5">11 15 16 12</Q>
+      <Q ID="6">13 17 18 19</Q>
+      <Q ID="7">16 20 21 17</Q>
+      <Q ID="8">18 22 23 24</Q>
+      <Q ID="9">21 25 26 22</Q>
+    </ELEMENT>
+    <COMPOSITE>
+      <C ID="0">Q[0-9]</C>
+      <C ID="1">E[0,4]</C>
+      <C ID="2">E[5,10,15,20,25]</C>
+      <C ID="3">E[23,26]</C>
+      <C ID="4">E[3,9,14,19,24]</C>
+    </COMPOSITE>
+    <DOMAIN>C[0]</DOMAIN>
+  </GEOMETRY>
+</NEKTAR>

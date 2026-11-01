@@ -221,6 +221,20 @@ void RANSVelocityCorrectionScheme::v_InitObject(bool declareField)
     ASSERTL0(nonlinearSolver == "Picard" || nonlinearSolver == "NewtonKrylov",
              "RANSNonlinearSolver must be Picard or NewtonKrylov");
     m_useNewton = nonlinearSolver == "NewtonKrylov";
+    std::string newtonMap;
+    m_session->LoadSolverInfo("RANSNewtonMap",newtonMap,"CurrentSolve");
+    ASSERTL0(newtonMap == "CurrentSolve" || newtonMap == "PreconditionedResidual",
+             "RANSNewtonMap must be CurrentSolve or PreconditionedResidual");
+    m_preconditionedNewton = newtonMap == "PreconditionedResidual";
+    ASSERTL0(!m_preconditionedNewton || (m_useNewton && m_terrainWall),
+             "PreconditionedResidual requires terrain NewtonKrylov");
+    std::string scalarScaling;
+    m_session->LoadSolverInfo("RANSNewtonScalarScaling",scalarScaling,"FieldMaximum");
+    ASSERTL0(scalarScaling == "FieldMaximum" || scalarScaling == "Pointwise",
+             "RANSNewtonScalarScaling must be FieldMaximum or Pointwise");
+    m_pointwiseNewtonScalars = scalarScaling == "Pointwise";
+    ASSERTL0(!m_pointwiseNewtonScalars || m_useNewton,
+             "Pointwise scalar scaling requires NewtonKrylov");
     m_session->LoadParameter("RANSNewtonDifferenceStep",m_newtonDifference,cls ? 1e-6 : 1e-7);
     ASSERTL0(std::isfinite(m_newtonDifference) && m_newtonDifference > 0 && m_newtonDifference < .01,
              "RANSNewtonDifferenceStep must be finite and in (0,0.01)");
@@ -388,6 +402,8 @@ std::string RANSVelocityCorrectionScheme::RestartSignature() const
     for (const auto &name : m_session->GetVariables()) s << ':' << name;
     if (m_wallStrip) s << ':' << m_wallStrip->RestartSignature();
     if (m_terrainWall) s << ":Newton=" << m_useNewton << ":difference=" << m_newtonDifference << ":Krylov=" << m_newtonKrylovDimension;
+    if (m_preconditionedNewton) s << ":NewtonMap=PreconditionedResidual";
+    if (m_pointwiseNewtonScalars) s << ":NewtonScalarScaling=Pointwise";
     if (m_session->DefinesParameter("RANSMatrixFreeTolerance"))
         s << ":currentOperatorTolerance=" << m_session->GetParameter("RANSMatrixFreeTolerance");
     if (m_startupDuration > 0) s << ":startupDuration=" << m_startupDuration;
@@ -532,6 +548,10 @@ void RANSVelocityCorrectionScheme::v_GenerateSummary(SummaryList &summary)
     AddSummaryItem(summary, "RANS neutral kappa", m_reference->Kappa());
     AddSummaryItem(summary, "RANS wall model", m_wallModel);
     AddSummaryItem(summary, "RANS implicit stage", m_useNewton ? "Newton-Krylov coupled stage" : "nonlinear Picard + pressure defect iteration");
+    if (m_useNewton) AddSummaryItem(summary,"RANS Newton map",m_preconditionedNewton ?
+        "current residual with frozen-inverse sweeps" : "current Helmholtz solves");
+    if (m_useNewton) AddSummaryItem(summary,"RANS Newton scalar scaling",m_pointwiseNewtonScalars ?
+        "positive stage-incoming values at each point" : "field maxima");
     AddSummaryItem(summary, "RANS pressure correction tolerance", m_pressureTolerance);
     AddSummaryItem(summary, "RANS advection treatment", m_implicitAdvection ? "implicit nonlinear stage" : "explicit IMEX history");
 }
@@ -992,11 +1012,12 @@ void RANSVelocityCorrectionScheme::AuditStage(
 void RANSVelocityCorrectionScheme::SolveField(
     int field, const Array<OneD, NekDouble> &rhs,
     const Array<OneD, NekDouble> &diffusion,
-    const Array<OneD, NekDouble> &mass, Array<OneD, NekDouble> &output, NekDouble alpha)
+    const Array<OneD, NekDouble> &mass, Array<OneD, NekDouble> &output, NekDouble alpha,
+    const Array<OneD, NekDouble> *newtonTrial)
 {
     if (m_matrixFree)
     {
-        m_linearIterations += m_matrixFree->Solve(field, rhs, diffusion, mass, alpha, output);
+        m_linearIterations += m_matrixFree->Solve(field, rhs, diffusion, mass, alpha, output,newtonTrial);
         return;
     }
     StdRegions::VarCoeffMap coefficients;
@@ -1226,6 +1247,7 @@ void RANSVelocityCorrectionScheme::v_SolveUnsteadyStokesSystem(
     SetBoundaryConditions(time);
     Array<OneD,NekDouble> volumeMetric(nq),wallMetric;
     std::vector<double> iterationMetric,iterationScales(nf+2,1.0),differenceScales(nf+2,1.0);
+    Fields localScales(nf);
     if (m_useNewton)
     {
         for (int e = 0; e < m_fields[0]->GetExpSize(); ++e)
@@ -1247,6 +1269,7 @@ void RANSVelocityCorrectionScheme::v_SolveUnsteadyStokesSystem(
             velocityScale = std::max(velocityScale,speed);
         }
         velocityScale = Maximum(velocityScale);
+        bool validScales = true;
         for (int i = 0; i < nf; ++i)
         {
             double scale = 0;
@@ -1254,8 +1277,20 @@ void RANSVelocityCorrectionScheme::v_SolveUnsteadyStokesSystem(
             scale = Maximum(scale);
             if (i < dim) scale = velocityScale;
             iterationScales[i] = differenceScales[i] = scale;
-            for (int q = 0; q < nq; ++q) iterationMetric[i*nq+q] = volumeMetric[q]/(scale*scale);
+            localScales[i] = Array<OneD,NekDouble>(nq);
+            for (int q = 0; q < nq; ++q)
+            {
+                // Freeze scaling for this physical stage, not the closure or
+                // its state. Relative probes must resolve tiny positive outer
+                // scalars as well as the much larger near-wall values.
+                const double local = m_pointwiseNewtonScalars && i >= dim ? state[i][q] : scale;
+                localScales[i][q] = local;
+                iterationMetric[i*nq+q] = volumeMetric[q]/(local*local);
+                validScales &= std::isfinite(local) && local > 0 &&
+                    std::isfinite(iterationMetric[i*nq+q]) && iterationMetric[i*nq+q] > 0;
+            }
         }
+        RequireEverywhere(validScales,"invalid Newton scalar/volume scaling");
         const double volume = m_fields[0]->Integral(ones);
         double wallVolume = 0,height;
         for (double value : wallMetric) wallVolume += value;
@@ -1363,9 +1398,11 @@ void RANSVelocityCorrectionScheme::v_SolveUnsteadyStokesSystem(
             if (m_terrainWall && i < dim)
             {
                 Vmath::Vcopy(nc,rhs,1,velocityRhs[i],1);
-                if (i == dim-1) m_linearIterations += m_matrixFree->SolveVelocity(velocityRhs,diffusion,alpha,next);
+                if (i == dim-1) m_linearIterations += m_matrixFree->SolveVelocity(
+                    velocityRhs,diffusion,alpha,next,m_preconditionedNewton ? &state : nullptr);
             }
-            else SolveField(i, rhs, diffusion[i], mass, next[i], alpha);
+            else SolveField(i, rhs, diffusion[i], mass, next[i], alpha,
+                            m_preconditionedNewton ? &state[i] : nullptr);
             if (report && (!m_terrainWall || i >= dim-1) && m_session->DefinesParameter("RANSDebug") && m_session->GetComm()->GetRank() == 0)
             {
                 std::cout << "RANS iteration " << iteration << " field " << i
@@ -1480,7 +1517,8 @@ void RANSVelocityCorrectionScheme::v_SolveUnsteadyStokesSystem(
                     for (int f = 0; f < dim; ++f) velocity = std::hypot(velocity,direction[f*nq+q]);
                     scaledMaximum = std::max(scaledMaximum,velocity/differenceScales[0]);
                     for (int f = dim; f <= nf; ++f)
-                        scaledMaximum = std::max(scaledMaximum,std::abs(direction[f*nq+q])/differenceScales[f]);
+                        scaledMaximum = std::max(scaledMaximum,std::abs(direction[f*nq+q])/
+                            (f < nf ? localScales[f][q] : differenceScales[f]));
                 }
                 for (int q = 0; q < wallMetric.size(); ++q)
                     scaledMaximum = std::max(scaledMaximum,std::abs(direction[(nf+1)*nq+q])/differenceScales[nf+1]);

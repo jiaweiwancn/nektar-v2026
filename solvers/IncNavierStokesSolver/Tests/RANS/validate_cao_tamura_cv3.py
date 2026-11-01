@@ -10,7 +10,7 @@ import xml.etree.ElementTree as ET
 
 sys.dont_write_bytecode=True
 from cao_tamura_experiment import (ROOT, MODELS, THREADS, allocation, environment,
-    execute, generate, prepare, records, run, sha, write_json)
+    execute, generate, prepare, records, run, sha, write_json,wall_epsilon)
 from generate_m4 import info, parameter
 from validate_terrain import compare
 from cao_tamura_cv3_budgets import flat_momentum_budget
@@ -45,7 +45,7 @@ def main():
             preparations[surface+'-'+model]={k:receipt[k] for k in ('maximum_relative_input_error','minimum_projected','raw_interface_normal_max')}
             rows=records(folder/'initial.fld.csv')
             epsilon=[r for r in rows if r['field'] in ('eps','eps_tilde') and abs(float(r['distance'])-.011)<1e-10]
-            require(epsilon and max(abs(float(r['input'])-m['reference']['wall_epsilon_near']) for r in epsilon)<5e-10,
+            require(epsilon and max(abs(float(r['input'])-wall_epsilon(m['config'],m['reference'],float(r['foot_x']))) for r in epsilon)<5e-10,
                     'Native epsilon initializer differs from the policy trace')
     results['native_inlet_all_primary_policies']=preparations
     print('native inlet expressions PASS',flush=True)

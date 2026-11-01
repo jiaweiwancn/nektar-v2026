@@ -15,6 +15,7 @@ from pathlib import Path
 import shutil
 import subprocess
 import sys
+import time
 import xml.etree.ElementTree as ET
 
 sys.dont_write_bytecode = True
@@ -24,10 +25,11 @@ from generate_m4 import info, parameter
 from generate_m6 import original_j0
 from validate_terrain import bounded_solver
 from cao_tamura_observables import speedup, reattachment
+from cao_tamura_routes import envelope, resolve_route, route_metadata
 
 ROOT = Path(__file__).resolve().parents[4]
 DATA = ROOT/'docs/plans/cao-tamura-validation-data'
-VERSION = 'cao-tamura-workflow-v2'
+VERSION = 'cao-tamura-workflow-v3'
 THREADS = {k: '1' for k in ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS', 'BLIS_NUM_THREADS')}
 MODELS = ('standard', 'standard_original', 'standard_fixed', 'standard_switched',
           'cls_original', 'cls_fixed', 'cls_switched')
@@ -41,7 +43,7 @@ DEFAULTS = dict(surface='S', geometry='floor', model='standard_fixed',
                 velocity_scaling='inlet_fit', z0=None,
                 inlet_reference_q=None,inlet_reference_kappa=None,outer_blend='Geometric',mean_outer_cap=False,pressure_degree=None,time_order=2,epsilon_profile='NeutralLog',startup_flow_times=0.,
                 inlet_wall_collar=False,k_profile='NeutralConstant',variance_factor=1.,outer_blend_cells=10,
-                advection='Explicit',quadrature_points=None)
+                advection='Explicit',quadrature_points=None,wall_route=None)
 
 
 def sha(path):
@@ -196,6 +198,7 @@ def config(value):
     c = {**DEFAULTS, **value}
     if c['surface'] not in ('S', 'R') or c['geometry'] not in ('floor', 'hill') or c['model'] not in MODELS:
         raise ValueError('Unsupported surface, geometry or model/wall combination')
+    c['wall_route']=resolve_route(c['model'],c['wall_route'])
     if c['diffusion'] not in ('Molecular', 'HighRe') or c['dimension'] not in (2, 3):
         raise ValueError('Unsupported diffusion or dimension')
     if c['failure_policy'] not in ('UseOriginal', 'RequirePreservation'):
@@ -340,15 +343,35 @@ def epsilon_seed(eta,c,r,scale=None):
     return math.hypot(scale*k*r['Uinf']*mean_derivative(eta,c,r['coefficients'])/r['inlet_q'],outer)
 
 
-def inlet_values(eta,c,r):
+def wall_epsilon(c,r,x=None):
+    """Initial wall trace of the actual spatially blended AWF policy."""
+    if resolve_route(c['model'],c.get('wall_route'))!='EPTransition':
+        return r['wall_epsilon_near']
+    x=c['xmin'] if x is None else x
+    w=envelope(x,c['ramp_end']-.04*c['ramp_width_h'],c['ramp_end'])
+    original=r['k_near']**1.5/(2.55*c['hm'])
+    return original+w*(r['wall_epsilon_near']-original)
+
+
+def wall_epsilon_expression(c):
+    if resolve_route(c['model'],c.get('wall_route'))!='EPTransition':return 'EpsilonWall'
+    a=c['ramp_end']-.04*c['ramp_width_h'];width=.04*c['ramp_width_h']
+    t=f'((x-({a:.17g}))/({width:.17g}))'
+    positive=f'(({t}+abs({t}))/2)'
+    clip=f'(({positive}+1-abs({positive}-1))/2)'
+    w=f'(1-10*{clip}^3+15*{clip}^4-6*{clip}^5)'
+    return f'(EpsilonOriginalH+{w}*(EpsilonWall-EpsilonOriginalH))'
+
+
+def inlet_values(eta,c,r,x=None):
     delta=c['inlet_delta'];w=blend((eta-.8*delta)/(.4*delta))
     collar=blend((eta-c['hm'])/(c['point_n']-c['hm']))
     k=inlet_k(eta,c,r);epsilon=epsilon_seed(eta,c,r)
     if c['epsilon_profile']=='ShearLength':
-        inner=epsilon_seed(eta,c,r,1.)*r['wall_epsilon_near']/r['epsilon_unit_near']
+        inner=epsilon_seed(eta,c,r,1.)*wall_epsilon(c,r,x)/r['epsilon_unit_near']
         epsilon=math.exp(collar*math.log(inner)+(1-collar)*math.log(epsilon))
     else:
-        epsilon+=collar*(r['wall_epsilon_near']-r['epsilon_inlet_near'])
+        epsilon+=collar*(wall_epsilon(c,r,x)-r['epsilon_inlet_near'])
         if epsilon<=0:raise ValueError('Inferred epsilon collar is nonpositive')
         if c['epsilon_profile']=='NeutralLog':
             epsilon=(w*epsilon+(1-w)*r['epsilon_outer'] if c['outer_blend']=='Arithmetic' else
@@ -413,6 +436,7 @@ def expressions(c, r):
         eps=f'(({c["epsilon_scale"]:.17g})*Ustar^3/(InletKappa*{z})+{collar}*(EpsilonWall-EpsilonInletH))'
         eps=(f'exp({w}*log({eps})+(1-{w})*log(EpsilonOuter))' if c['outer_blend']=='Geometric' else
              f'({w}*{eps}+(1-{w})*EpsilonOuter)')
+    eps=eps.replace('EpsilonWall',wall_epsilon_expression(c))
     return dict(u=f'Uinf*{mean}',v='0',w='0',k=k,eps=eps,p=f'2/3*{k}')
 
 
@@ -446,16 +470,17 @@ def generate(value, output):
     terrain_mesh(root, xs, refine(etas), .04 if c['geometry'] == 'hill' else 0.,
                  top=.8, dimension=c['dimension'], span=c['span'],
                  normal_n=c['point_n'], span_layers=c['span_layers'])
-    ep = c['model'].endswith(('_fixed', '_switched'))
     info(root, 'RANSWallGeometry', 'CosineHill' if c['geometry'] == 'hill' else 'Plane')
     info(root, 'RANSAWFFailurePolicy', c['failure_policy'])
-    info(root, 'RANSAWFSpatialWeight', 'Ramp' if ep else 'None')
+    info(root, 'RANSAWFSpatialWeight', 'Ramp' if c['wall_route']=='EPTransition' else 'None')
+    info(root, 'RANSExperimentalRoute',c['wall_route'])
     info(root, 'AdvectionType', 'Convective'); info(root, 'SpectralHPDealiasing', 'False')
     info(root, 'RANSAdvectionTreatment', c['advection'])
     for key, val in dict(H=c['hm'], Z=.8, L=c['xmax']-c['xmin'], Ustar=r['ustar'],
             Qstar=r['q'], Kappa=r['kappa'],InletQ=r['inlet_q'],InletKappa=r['inlet_kappa'], Uinf=r['Uinf'], Uref=r['Uinf'],
             MatchingVelocity=inlet_values(c['hm'], c, r)['u'], Knear=r['k_near'],
             Kouter=r['k_outer'], EpsilonOuter=r['epsilon_outer'], EpsilonInletH=r['epsilon_inlet_near'], EpsilonUnitH=r['epsilon_unit_near'], OuterLength=c['outer_length'], EpsilonWall=r['wall_epsilon_near'],
+            EpsilonOriginalH=r['k_near']**1.5/(2.55*c['hm']),
             Kinvis=r['nu'], ResolvedNu=r['nu'] if c['diffusion']=='Molecular' else 0.,
             Span=c['span'], RANSRoughnessHeight=c['ks'], RANSHeightShift=0.,
             RANSStripHeight=c['hm'], RANSStripPointP=c['point_p'], RANSStripPointN=c['point_n'],
@@ -490,7 +515,7 @@ def generate(value, output):
             # including the actual K amplitude and the selected wall policy.
             for entry in region:
                 if entry.attrib.get('VAR') in ('eps','eps_tilde'):
-                    entry.set('VALUE','EpsilonWall')
+                    entry.set('VALUE',wall_epsilon_expression(c))
             continue
         if b >= 4:
             continue
@@ -511,6 +536,7 @@ def generate(value, output):
     info(root, 'RANSExperimentalSignature', fingerprint)
     tree.write(path, encoding='utf-8', xml_declaration=True)
     receipt = dict(version=VERSION, status='provisional_unfitted', config=c, reference=r,
+                   wall_route=route_metadata(path),
                    physics_fingerprint=fingerprint, case_sha256=sha(path),
                    cv1_version=frozen['version'], cv1_snapshot_sha256=sha(DATA/'snapshot.json'),
                    inference=dict(epsilon=c['epsilon_profile']+' prescribed inference; transported epsilon is unmodified and unmeasured',
@@ -537,9 +563,11 @@ def environment(build):
 
 def execute(command, directory, label, timeout=600):
     directory = Path(directory); command = list(map(str, command))
+    started=time.monotonic()
     with (directory/(label+'.log')).open('w') as log:
         code, expired = bounded_solver(command, directory, log, timeout)
-    result = dict(command=command, exit_code=code, timeout=expired, threads=THREADS)
+    result = dict(command=command, exit_code=code, timeout=expired, threads=THREADS,
+                  wall_time_seconds=time.monotonic()-started)
     write_json(directory/(label+'.json'), result)
     if code:
         raise RuntimeError('Command failed; see '+str(directory/(label+'.log')))
@@ -567,12 +595,12 @@ def prepare(case, build):
     c, ref = manifest['config'], manifest['reference']
     mismatch = normal = 0.; minimum = {'k': math.inf, 'epsilon': math.inf}
     span_values = {}; expected_cache = {}
-    def expected_values(x, z, eta, nx, nz):
+    def expected_values(x, z, eta, nx, nz, foot_x):
         amp = .04 if c['geometry'] == 'hill' else 0.
         a = math.pi*x/.1
         h, hp = (amp/2*(1+math.cos(a)), -amp*math.pi/.2*math.sin(a)) if abs(x) < .1 else (0., 0.)
         e = z-h*((.8-z)/(.8-h))**2
-        b = inlet_values(e, c, ref); v = inlet_values(eta, c, ref)
+        b = inlet_values(e, c, ref,foot_x); v = inlet_values(eta, c, ref,foot_x)
         t = max(0., min(1., (eta-c['point_n'])/c['point_n']))
         chi = blend(t); derivative = -30*t*t*(1-t)**2/c['point_n']
         integral = quad(lambda s: inlet_values(s, c, ref)['u'], e, eta,
@@ -594,9 +622,10 @@ def prepare(case, build):
     for row in input_rows():
         name = row['field']; x = float(row['x']); z = float(row['y' if c['dimension'] == 2 else 'z'])
         eta = float(row['distance']); nx, nz = float(row['normal_x']), float(row['normal_z'])
-        key = tuple(round(v, 14) for v in (x, z, eta, nx, nz))
+        foot_x=float(row['foot_x'])
+        key = tuple(round(v, 14) for v in (x, z, eta, nx, nz,foot_x))
         if key not in expected_cache:
-            expected_cache[key] = expected_values(x, z, eta, nx, nz)
+            expected_cache[key] = expected_values(x, z, eta, nx, nz,foot_x)
         expected, defect = expected_cache[key]; expected = expected[name]
         normal = max(normal, defect)
         raw, projected = float(row['input']), float(row['projected'])
@@ -665,6 +694,8 @@ def probes(surface, scope, output, tail_heights=None):
 def run(case, build, ranks, cpus, timeout=1800):
     case = Path(case).resolve(); build = environment(build)
     manifest = json.loads((case.parent/'manifest.json').read_text())
+    if manifest.get('wall_route',route_metadata(case))!=route_metadata(case):
+        raise ValueError('Wall route differs from its producing manifest')
     if manifest['preparation_required'] or sha(case) != manifest['case_sha256']:
         raise ValueError('Prepare the unmodified case before running')
     solver_hash = sha(build/'IncNavierStokesSolver')
@@ -732,6 +763,7 @@ def observe(case, field, points, output, build, ranks=1, cpus='1'):
     native = json.loads(Path(str(output)+'.native.json').read_text())
     fingerprint = ET.parse(case).getroot().find("CONDITIONS/SOLVERINFO/I[@PROPERTY='RANSExperimentalSignature']")
     result.update(case_sha256=sha(case), field_sha256=sha(field) if field.is_file() else None,
+                  wall_route=route_metadata(case),
                   points_sha256=sha(points), output_sha256=sha(output),
                   observer_sha256=sha(build/'RANSObservationAudit'),
                   geometry_sha256=sha(build/'geometry-lib/libSpatialDomains.so'),
@@ -756,6 +788,8 @@ def statistics(inputs, output, verification=False):
         for key in ('observation_configuration','experimental_fingerprint','points_sha256','observer_sha256','geometry_sha256'):
             if len({r[key] for r in provenance}) != 1:
                 raise ValueError('Inconsistent observation provenance: '+key)
+        if len({json.dumps(r.get('wall_route'),sort_keys=True) for r in provenance})!=1:
+            raise ValueError('Inconsistent observation provenance: wall_route')
         if not provenance[0]['experimental_fingerprint']:
             raise ValueError('Experimental statistics require a bound experimental case')
     snapshots = [records(p) for p in inputs]
@@ -804,7 +838,8 @@ def statistics(inputs, output, verification=False):
                    negative_diagonal_count=sum(float(r[k]) < 0 for r in result for k in ('R_xx','R_yy','R_zz') if r[k] != ''))
     if not verification:
         receipt.update(experimental_fingerprint=provenance[0]['experimental_fingerprint'],
-                       observation_configuration=provenance[0]['observation_configuration'])
+                       observation_configuration=provenance[0]['observation_configuration'],
+                       wall_route=provenance[0].get('wall_route'))
     write_json(str(output)+'.json', receipt)
     return receipt
 

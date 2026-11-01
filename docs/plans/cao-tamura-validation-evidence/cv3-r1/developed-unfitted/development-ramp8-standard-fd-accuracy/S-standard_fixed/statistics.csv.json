@@ -1,0 +1,28 @@
+{
+  "version": "cao-tamura-workflow-v3",
+  "verification_only": false,
+  "time_begin": 5.2499999999999325,
+  "time_end": 8.749999999999858,
+  "samples": 3,
+  "weighting": "trapezoidal physical time; total R=mean(R_model)+covariance(U_resolved)",
+  "stationarity": "not assessed; CV4 must establish a stationary window",
+  "input_sha256": {
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/development-ramp8-standard-fd-accuracy/S-standard_fixed/stage-01/incident.csv": "cc7c05026369b158ff802afff4b80e08f7d35f4c489ad606edebedf97261397e",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/development-ramp8-standard-fd-accuracy/S-standard_fixed/stage-02/incident.csv": "d1cdf32249f56009de03561dd9a0fecd46cee4dcaf8cf8aeba72496ac392e6a1",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/development-ramp8-standard-fd-accuracy/S-standard_fixed/stage-03/incident.csv": "71412898bbc9ab339a85757af52b8618b5af9d91ee21a0d33e78870264431489"
+  },
+  "output_sha256": "a8f92ceeeafa03a2a9625224d3120a0b64ab18fc297c7bad055a5262ab86d958",
+  "negative_diagonal_count": 0,
+  "experimental_fingerprint": "e6c562a9ce75890d592b505ceddc3acf8499376b96152c49e5764d14e509c63d",
+  "observation_configuration": "native-wall-observation-v1:64556835acea058d",
+  "wall_route": {
+    "version": "cao-tamura-wall-route-v1",
+    "kind": "EPTransition",
+    "wall_model": "AWFEquilibrium",
+    "weight_mode": "Fixed",
+    "fixed_weight": 1.0,
+    "failure_policy": "UseOriginal",
+    "begin": -0.28,
+    "end": -0.2
+  }
+}

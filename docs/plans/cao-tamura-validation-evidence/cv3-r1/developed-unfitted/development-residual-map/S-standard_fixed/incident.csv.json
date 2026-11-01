@@ -1,0 +1,43 @@
+{
+  "command": [
+    "taskset",
+    "-c",
+    "5",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/build-r1-residual-map/RANSObservationAudit",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/development-residual-map/S-standard_fixed/stage-06/incident-native/sample.xml",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/development-residual-map/S-standard_fixed/stage-06/case.fld",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/development-residual-map/S-standard_fixed/points.csv",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/development-residual-map/S-standard_fixed/stage-06/incident.csv"
+  ],
+  "exit_code": 0,
+  "timeout": false,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1"
+  },
+  "wall_time_seconds": 5.232556406990625,
+  "case_sha256": "bbd0f50563223fae6843f7d6a52959afc3ce5a6c2e2f01bc99ba39d402e6da19",
+  "field_sha256": null,
+  "wall_route": {
+    "version": "cao-tamura-wall-route-v1",
+    "kind": "EPTransition",
+    "wall_model": "AWFEquilibrium",
+    "weight_mode": "Fixed",
+    "fixed_weight": 1.0,
+    "failure_policy": "UseOriginal",
+    "begin": -0.28,
+    "end": -0.2
+  },
+  "points_sha256": "9e960f33c258c603f015fa83b6e6115b18afb4e9ecd9752c0aea1808ccd1a5bf",
+  "output_sha256": "b31ce435d1cf888ae0a1cc7327a55778b1dc98b6bd9aab3efe42a14116efa2e5",
+  "observer_sha256": "10735d99433676ebd8ffc0db01f9e96278705fd5868cce0a95ff8554932810c1",
+  "geometry_sha256": "0f5fcae1a6c02d8301046a77fe4d800d6e222d829c4271d746896750844cc04d",
+  "observation_configuration": "native-wall-observation-v1:8d3d413d45f74334",
+  "experimental_fingerprint": "5d9616362a27d9adf481f897b0f7e2d4649c24abee86653424ecf94f4db558fd",
+  "manifest_sha256": "9a3c874f81e17f23cbf304070d11e5e481cd5c04b64f45d8ffed2f083fa8aae1",
+  "ranks": 1,
+  "cpus": "5",
+  "startup_end_time": 0.0
+}

@@ -4,9 +4,11 @@
 
 The [user-approved CV3 protocol v2](../../../../docs/plans/cao-tamura-cv3-calibration-protocol.md)
 prioritizes the actual composite floor treatment: EP-AWF upstream, an upstream
-transition, then original AWF. The next task is **CV3-R1**, current-solver CLS
+transition, then original AWF. **CV3-R1** is in progress: current-solver CLS
 reference recovery and four composite-floor feasibility cases (S/R x both
 closures). Uniform-original success is no longer a prerequisite for this route.
+Its [execution record](../../../../docs/plans/cao-tamura-cv3-r1-reference-feasibility.md)
+distinguishes passing reference/short-run controls from developed-floor gates.
 **CV3 is still open:** no primary S/R freeze exists, and reserved scores stay locked.
 
 The [v1 bounded attempt](../../../../docs/plans/cao-tamura-cv3-calibration-attempt.md)
@@ -242,6 +244,21 @@ remains `Picard`. `RANSNewtonKrylovDimension` defaults to 240 (20–512);
 k–epsilon. Pressure and reaction scales balance the implicit inertia blocks;
 physical residual tolerances remain separate. `RANSNormalDirectLimit=0`
 selects the iterative trace projection instead of cached Cholesky factors.
+`RANSNewtonMap=CurrentSolve` remains the default. The optional
+`PreconditionedResidual` map applies one cached inverse to each current weak
+block residual, including current wall and grad-div terms, instead of fully
+solving every inner Helmholtz problem during a Newton probe. Its fixed points
+are the same discrete equations; accepted physical residual and positivity
+checks still apply. The mode is bound to history and observation provenance.
+`RANSNewtonScalarScaling=Pointwise` optionally uses positive stage-incoming
+k and epsilon at each quadrature point for scalar Newton weighting and
+finite-difference normalization. The scales stay fixed within that stage;
+the transported variables, equations and physical acceptance checks are
+retained. `FieldMaximum` remains the default. Restart and observation
+provenance bind the selected scaling.
+The [R1 derivation and controls](../../../../docs/plans/cao-tamura-cv3-r1-newton-map.md)
+describe its validation scope. Matrix-free iteration counts in this mode count
+Richardson sweeps; measured runtime is the performance comparison.
 The converged problem is independent of augmentation. The velocity block is
 solved together; separately lagging its Cartesian cross terms breaks rotation
 covariance. The legacy flat adapter remains the default (`RANSWallGeometry=Flat`) for

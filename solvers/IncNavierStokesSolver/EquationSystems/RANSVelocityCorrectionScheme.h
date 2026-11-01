@@ -80,7 +80,8 @@ private:
     void SolveField(int field, const Array<OneD, NekDouble> &rhs,
                     const Array<OneD, NekDouble> &diffusion,
                     const Array<OneD, NekDouble> &mass,
-                    Array<OneD, NekDouble> &output, NekDouble alpha);
+                    Array<OneD, NekDouble> &output, NekDouble alpha,
+                    const Array<OneD, NekDouble> *newtonTrial = nullptr);
     NekDouble CorrectPressure(const Fields &velocity,
                               const Array<OneD, NekDouble> &mu,
                               Array<OneD, NekDouble> &pressure,
@@ -108,6 +109,8 @@ private:
     NekDouble m_pressureInverseAlpha = 0;
     int m_k, m_epsilon, m_maxIterations;
     bool m_useNewton = false;
+    bool m_preconditionedNewton = false;
+    bool m_pointwiseNewtonScalars = false;
     NekDouble m_newtonDifference = 1e-6;
     int m_newtonKrylovDimension = 240;
     bool m_nonlinearTrial = false, m_freezeCmuBranch = false;

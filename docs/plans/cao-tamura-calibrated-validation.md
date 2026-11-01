@@ -5,7 +5,7 @@
 - Origin Skill: academic-research-suite / experiment-agent
 - Origin Mode: plan / computational experiment
 - Origin Date: 2026-11-01
-- Verification Status: CV1 source/data and CV2 implementation/readiness VERIFIED within recorded limits; CV3 IN PROGRESS under user-approved EP-transition-first sequence; revised-route execution pending; CV4–CV8 PLANNED
+- Verification Status: CV1 source/data and CV2 implementation/readiness VERIFIED within recorded limits; CV3 IN PROGRESS under user-approved EP-transition-first sequence; R1 reference checks pass and developed-floor assessment is running; CV4–CV8 PLANNED
 - Version Label: cao_tamura_calibrated_validation_v2_ep_transition_first
 
 ## Objective, branch and starting evidence
@@ -480,7 +480,7 @@ physics, calibration, observation-operator or numerical change.
 |---|---|---|---|
 | CV1 — Source and data freeze | Planning commit | PDF/figure/page audit, geometry/units/station tables, independently checked digitized curves and uncertainty/provenance, calibration/holdout split, dimensional/Re consistency, unresolved facility/mixed-surface details explicitly recorded. Freeze versioned data and score definitions before fitting. | CLOSED |
 | CV2 — Wall/reference and probe readiness | CV1 | Parameterized experimental generator; smooth-anchor checks; displaced-reference derivation/decision; any necessary declared implementation; native physical-point interpolation and below-hm reconstruction with frame/rank/continuity tests. Canonical d=0, finite-nu, original recovery, curved continuity, history and legacy checks pass on Linux. Record unsupported observables rather than manufacture them. | CLOSED |
-| CV3 — Separate S/R calibration | CV1–CV2 | R1: current-solver EP reference recovery and four developed primary composite-floor cases (S/R x standard/CLS). R2: fixed-coefficient common/conditional fits, uncertainty and incident residuals, with four validated policy-specific S/R manifests. R3: reserved flat crosschecks after freeze. Original/log transfers have separate statuses; all-original success is not a primary freeze prerequisite. No hill scores enter selection. | IN PROGRESS; R1 NEXT |
+| CV3 — Separate S/R calibration | CV1–CV2 | R1: current-solver EP reference recovery and four developed primary composite-floor cases (S/R x standard/CLS). R2: fixed-coefficient common/conditional fits, uncertainty and incident residuals, with four validated policy-specific S/R manifests. R3: reserved flat crosschecks after freeze. Original/log transfers have separate statuses; all-original success is not a primary freeze prerequisite. No hill scores enter selection. | IN PROGRESS; [R1 execution](cao-tamura-cv3-r1-reference-feasibility.md) |
 | CV4 — Numerical and long-time readiness | CV2–CV3 | Profiled solver and bounded runtime estimate; three-level h and dt evidence plus p/hm/domain sensitivities; inlet/outlet preservation convergence; perturbed 3D stability checks; demonstrated stationarity/statistical procedure, mass/strip budgets and MPI/history equivalence. No large production matrix until throughput and observable error are defensible. | PLANNED |
 | CV5 — Developed transition study | Primary CV3 freeze and CV4 readiness | Fixed-mask 32-case primary hill/floor matrix, upstream-only width and separate placement study, incident diagnostics, switched subset and selected resolved-viscosity sensitivities. Original/log baselines proceed separately where valid. Quantify numerical/sampling significance and select/freeze width by approach-flow/plateau rules, retaining every width and any non-plateau result. | PLANNED |
 | CV6 — Locked SS/RR validation | CV1–CV5 for primary EP cases; each baseline's own readiness | Four primary standard/CLS x S/R EP-transition hill cases, reusing identical CV5 cases; original/log and switched comparisons where valid. Report all ten requested case slots with successful/failed/unexecuted statuses. Held-out profiles/S/x_R/stress require each case's verified observation operator, calibration provenance and uncertainty. No hill-driven retuning or inherited baseline-validation claim. | PLANNED |
@@ -492,8 +492,9 @@ completed original-first 32-case bounded design: 13 developed standard cases
 and no eligible CLS case, including the later numerical controls. Those results
 remain intact. They do not execute or reject the revised composite-first route.
 Primary S/R calibration manifests and reserved-flat crosschecks remain
-unfinished. The current next task is CV3-R1 in the v2 protocol; the sequence
-change supplies no new numerical evidence and does not close CV3.
+unfinished. [CV3-R1 execution](cao-tamura-cv3-r1-reference-feasibility.md) records
+the v2 reference, implementation and composite-floor feasibility checks;
+those checks do not close the remaining R2/R3 calibration and crosscheck work.
 
 CV2 may conclude that exact displaced equilibrium is unavailable for a
 canonical model; CV3 may expose irreducible flat-data misfit. Those findings

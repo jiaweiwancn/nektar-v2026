@@ -1,0 +1,872 @@
+{
+  "status": "COMPLETE",
+  "scope": "Local frozen constitutive tangents; not a developed case or global instability attribution",
+  "producer_sha256": "3fd74b72b4cd102c9871d391c78fddc1f9e9c4986a14f7e9ff95e6046b1e1b84",
+  "cases": {
+    "R-initial": {
+      "folder": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/development-ramp8-pointwise-scalars/R-cls_fixed/stage-00",
+      "field": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/development-ramp8-pointwise-scalars/R-cls_fixed/stage-00/case_0.chk",
+        "files": {
+          "Info.xml": "d2011040fa0d77b9ee501400d8cf645930e5471d5e3e9d612b401d439f8a9eac",
+          "P0000000.fld": "073bd3d3b138b17fae00d38239a5cc12620270e392cf445a78785183bb8580a5",
+          "P0000001.fld": "2d5283607a1c7e3397089fae5b9b688c3b1e4e0c9086c6e83aa6109bf22a4d4a",
+          "P0000002.fld": "4445bd8ae0839d9e9de7d1ac51b8f1c8eedc9d73ccc601473ea8ecd2da30c88a",
+          "P0000003.fld": "ad2abedc4d9aca15bdcd332176d568790698c7c8401fa0e2c6099b2037dcf71e"
+        }
+      },
+      "stage_csv_sha256": "5dbde7efc09cce0566c4d1fe452023bd5900fe2da152ed95c8298954a8097c49",
+      "manifest_sha256": "10d936cec56db0552cbe817a1533e000a78f61a7254b62ac0146eafd972032d2",
+      "time": [
+        0.0
+      ],
+      "resolved_nu": 3.8095238095238094e-06,
+      "physical_molecular_nu": 3.8095238095238094e-06,
+      "run_start_sha256": "8a8979a752c2980b896c9386e7ec822d3055d7676a99ae7e3dc1489672d4fc05",
+      "gradient_checks": {
+        "polynomial_error": 8.881784197001252e-15,
+        "p4_reconstruction_error": 2.6012459953268596e-14,
+        "independent_gradient_error": 2.184111428163517e-11,
+        "elements": 187,
+        "samples": 2290
+      },
+      "results": {
+        "standard_control_error": 3.097986782891352e-10,
+        "standard/actual": {
+          "model": "standard",
+          "variant": "actual",
+          "samples": 1145,
+          "robust_negative": 0,
+          "minimum": 2.0848820220273846e-05,
+          "worst": {
+            "id": "124:28:actual",
+            "eta": 0.2309077318242874,
+            "k": 3.5456417503959025e-05,
+            "epsilon": 6.640190771662213e-06,
+            "element": 124,
+            "point": 28,
+            "x": -0.2539535039104872,
+            "z": 0.2309077318242874,
+            "variant": "actual",
+            "g00": 1.124407809466103e-11,
+            "g01": 0.0,
+            "g02": -0.6098920114910926,
+            "g10": 0.0,
+            "g11": 0.0,
+            "g12": 0.0,
+            "g20": 0.0,
+            "g21": 0.0,
+            "g22": 0.0,
+            "result": {
+              "id": "124:28:actual",
+              "eta": "0.23090773182428739",
+              "k": "3.5456417503959025e-05",
+              "epsilon": "6.640190771662213e-06",
+              "c_mu": "0.089999999999999997",
+              "eddy_viscosity": "1.7039296413321531e-05",
+              "momentum_diffusion": "2.084882022284534e-05",
+              "divergence": "1.1244078094661031e-11",
+              "min_transverse_tangent_h1e5": "2.0848820222637508e-05",
+              "min_transverse_tangent_h1e6": "2.0848820220273846e-05",
+              "angle_rad": "0.17453292519943295",
+              "side": "1"
+            }
+          }
+        },
+        "standard/tracefree": {
+          "model": "standard",
+          "variant": "tracefree",
+          "samples": 1145,
+          "robust_negative": 0,
+          "minimum": 2.0848820220273846e-05,
+          "worst": {
+            "id": "124:28:tracefree",
+            "eta": 0.2309077318242874,
+            "k": 3.5456417503959025e-05,
+            "epsilon": 6.640190771662213e-06,
+            "element": 124,
+            "point": 28,
+            "x": -0.2539535039104872,
+            "z": 0.2309077318242874,
+            "variant": "tracefree",
+            "g00": 5.622039047330515e-12,
+            "g01": 0.0,
+            "g02": -0.6098920114910926,
+            "g10": 0.0,
+            "g11": 0.0,
+            "g12": 0.0,
+            "g20": 0.0,
+            "g21": 0.0,
+            "g22": -5.622039047330515e-12,
+            "result": {
+              "id": "124:28:tracefree",
+              "eta": "0.23090773182428739",
+              "k": "3.5456417503959025e-05",
+              "epsilon": "6.640190771662213e-06",
+              "c_mu": "0.089999999999999997",
+              "eddy_viscosity": "1.7039296413321531e-05",
+              "momentum_diffusion": "2.084882022284534e-05",
+              "divergence": "0",
+              "min_transverse_tangent_h1e5": "2.0848820222637508e-05",
+              "min_transverse_tangent_h1e6": "2.0848820220273846e-05",
+              "angle_rad": "0.17453292519943295",
+              "side": "1"
+            }
+          }
+        },
+        "cls/actual": {
+          "model": "cls",
+          "variant": "actual",
+          "samples": 1145,
+          "robust_negative": 470,
+          "minimum": -4.1092701795170106e-05,
+          "worst": {
+            "id": "16:27:actual",
+            "eta": 0.02503667988913134,
+            "k": 0.023024251998081877,
+            "epsilon": 0.07177078571321442,
+            "element": 16,
+            "point": 27,
+            "x": -0.2360464960895095,
+            "z": 0.02503667988913134,
+            "variant": "actual",
+            "g00": 5.009176975028833e-12,
+            "g01": 0.0,
+            "g02": 9.844298907346781,
+            "g10": 0.0,
+            "g11": 0.0,
+            "g12": 0.0,
+            "g20": 0.0,
+            "g21": 0.0,
+            "g22": 0.0,
+            "result": {
+              "id": "16:27:actual",
+              "eta": "0.025036679889131341",
+              "k": "0.023024251998081877",
+              "epsilon": "0.071770785713214422",
+              "c_mu": "0.099041919238540638",
+              "eddy_viscosity": "0.0007315472914487856",
+              "momentum_diffusion": "0.00073535681525830937",
+              "divergence": "5.0091769750288331e-12",
+              "min_transverse_tangent_h1e5": "-4.1093108350619568e-05",
+              "min_transverse_tangent_h1e6": "-4.1092701795170106e-05",
+              "angle_rad": "1.1519173063162575",
+              "side": "-1"
+            }
+          }
+        },
+        "cls/tracefree": {
+          "model": "cls",
+          "variant": "tracefree",
+          "samples": 1145,
+          "robust_negative": 470,
+          "minimum": -4.109270181145699e-05,
+          "worst": {
+            "id": "14:28:tracefree",
+            "eta": 0.025036679889131542,
+            "k": 0.023024251998083882,
+            "epsilon": 0.07177078571322126,
+            "element": 14,
+            "point": 28,
+            "x": -0.2539535039104868,
+            "z": 0.025036679889131542,
+            "variant": "tracefree",
+            "g00": -6.0014900167847816e-12,
+            "g01": 0.0,
+            "g02": 9.844298907366522,
+            "g10": 0.0,
+            "g11": 0.0,
+            "g12": 0.0,
+            "g20": 0.0,
+            "g21": 0.0,
+            "g22": 6.0014900167847816e-12,
+            "result": {
+              "id": "14:28:tracefree",
+              "eta": "0.025036679889131542",
+              "k": "0.023024251998083882",
+              "epsilon": "0.071770785713221263",
+              "c_mu": "0.099041919238383389",
+              "eddy_viscosity": "0.00073154729144768178",
+              "momentum_diffusion": "0.00073535681525720555",
+              "divergence": "0",
+              "min_transverse_tangent_h1e5": "-4.109310835282619e-05",
+              "min_transverse_tangent_h1e6": "-4.1092701811456991e-05",
+              "angle_rad": "1.1519173063162575",
+              "side": "-1"
+            }
+          }
+        }
+      },
+      "source_sha256": {
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/development-ramp8-pointwise-scalars/R-cls_fixed/stage-00/case.xml": "88a2a98c58fa5c58bc42926ed82884aef6d814c3b4677a7d7bf68e0c3c34d4a6",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/constitutive-tangent-diagnostic-v2/R-initial/full.csv": "4973c03be889c47634fc6d9f75a076706c2051ecbca46d99003925fe5ccd203a",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/constitutive-tangent-diagnostic-v2/R-initial/samples.csv": "ffc284764fa305972aca1c28c7da34a4b5cbf76ec6b5b3104f14f7b2c0d618f8",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/constitutive-tangent-diagnostic-v2/R-initial/input.csv": "02386d731d599a065eb35b4bdf8800cc29d02cda43433b4d9ec295d462f55f72",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/constitutive-tangent-diagnostic-v2/R-initial/standard.csv": "4745f377ddf95db648756a01107187d70451b440736b3bdbc0efb1321b21a298",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/constitutive-tangent-diagnostic-v2/R-initial/cls.csv": "825a3dff6b3e8553c8d8683cfb344c05222741b8340fa26174b698441ff73b5a"
+      }
+    },
+    "R-last-accepted": {
+      "folder": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/development-ramp8-pointwise-scalars/R-cls_fixed/stage-00",
+      "field": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/development-ramp8-pointwise-scalars/R-cls_fixed/stage-00/case_68.chk",
+        "files": {
+          "Info.xml": "f5ac5cd8d4460df7106078bc09bacf8c59cfdeab5e717ad52b28ef5b22e82e9b",
+          "P0000000.fld": "579aaee249f9e4dba2c9f388b374fdb5c559f38f7bba7b3695fe56716e8782d9",
+          "P0000001.fld": "81b29d22cb1dda9c93c1fdfaef9753ef6795a12f017c523dd1246d498d9d9cdf",
+          "P0000002.fld": "319fbb678ce0eba8c2d8a2e4092093ac459df38e5b08a7ad6ebf2a985151a2cf",
+          "P0000003.fld": "9ec29b25dff4f9cfb26265d1785f5639466169512b04ee76d02022e3ed6eba5d"
+        }
+      },
+      "stage_csv_sha256": "5dbde7efc09cce0566c4d1fe452023bd5900fe2da152ed95c8298954a8097c49",
+      "manifest_sha256": "10d936cec56db0552cbe817a1533e000a78f61a7254b62ac0146eafd972032d2",
+      "time": [
+        0.6800000000000004
+      ],
+      "resolved_nu": 3.8095238095238094e-06,
+      "physical_molecular_nu": 3.8095238095238094e-06,
+      "run_start_sha256": "8a8979a752c2980b896c9386e7ec822d3055d7676a99ae7e3dc1489672d4fc05",
+      "gradient_checks": {
+        "polynomial_error": 8.881784197001252e-15,
+        "p4_reconstruction_error": 5.008354841962159e-13,
+        "independent_gradient_error": 1.9239086886113643e-11,
+        "elements": 187,
+        "samples": 2290
+      },
+      "results": {
+        "standard_control_error": 6.505631489809955e-10,
+        "standard/actual": {
+          "model": "standard",
+          "variant": "actual",
+          "samples": 1145,
+          "robust_negative": 0,
+          "minimum": 2.084882022027447e-05,
+          "worst": {
+            "id": "121:24:actual",
+            "eta": 0.2309077318242905,
+            "k": 3.5456417503959235e-05,
+            "epsilon": 6.640190771660993e-06,
+            "element": 121,
+            "point": 24,
+            "x": -1.0,
+            "z": 0.2309077318242905,
+            "variant": "actual",
+            "g00": 0.0006283874120736679,
+            "g01": 0.0,
+            "g02": -0.6098920114800768,
+            "g10": 0.0,
+            "g11": 0.0,
+            "g12": 0.0,
+            "g20": 0.024144916818207216,
+            "g21": 0.0,
+            "g22": 0.0,
+            "result": {
+              "id": "121:24:actual",
+              "eta": "0.2309077318242905",
+              "k": "3.5456417503959235e-05",
+              "epsilon": "6.6401907716609932e-06",
+              "c_mu": "0.089999999999999997",
+              "eddy_viscosity": "1.7039296413324862e-05",
+              "momentum_diffusion": "2.084882022284867e-05",
+              "divergence": "0.00062838741207366794",
+              "min_transverse_tangent_h1e5": "2.0848820222631752e-05",
+              "min_transverse_tangent_h1e6": "2.0848820220274469e-05",
+              "angle_rad": "0.17453292519943295",
+              "side": "1"
+            }
+          }
+        },
+        "standard/tracefree": {
+          "model": "standard",
+          "variant": "tracefree",
+          "samples": 1145,
+          "robust_negative": 0,
+          "minimum": 2.0848820220274137e-05,
+          "worst": {
+            "id": "121:24:tracefree",
+            "eta": 0.2309077318242905,
+            "k": 3.5456417503959235e-05,
+            "epsilon": 6.640190771660993e-06,
+            "element": 121,
+            "point": 24,
+            "x": -1.0,
+            "z": 0.2309077318242905,
+            "variant": "tracefree",
+            "g00": 0.00031419370603683397,
+            "g01": 0.0,
+            "g02": -0.6098920114800768,
+            "g10": 0.0,
+            "g11": 0.0,
+            "g12": 0.0,
+            "g20": 0.024144916818207216,
+            "g21": 0.0,
+            "g22": -0.00031419370603683397,
+            "result": {
+              "id": "121:24:tracefree",
+              "eta": "0.2309077318242905",
+              "k": "3.5456417503959235e-05",
+              "epsilon": "6.6401907716609932e-06",
+              "c_mu": "0.089999999999999997",
+              "eddy_viscosity": "1.7039296413324862e-05",
+              "momentum_diffusion": "2.084882022284867e-05",
+              "divergence": "0",
+              "min_transverse_tangent_h1e5": "2.0848820222631769e-05",
+              "min_transverse_tangent_h1e6": "2.0848820220274137e-05",
+              "angle_rad": "0.17453292519943295",
+              "side": "1"
+            }
+          }
+        },
+        "cls/actual": {
+          "model": "cls",
+          "variant": "actual",
+          "samples": 1145,
+          "robust_negative": 492,
+          "minimum": -0.0006265182261123605,
+          "worst": {
+            "id": "2:61:actual",
+            "eta": 0.02200000000000029,
+            "k": 0.020208765831345163,
+            "epsilon": 0.05501514197439074,
+            "element": 2,
+            "point": 61,
+            "x": -0.26204149909283864,
+            "z": 0.02200000000000029,
+            "variant": "actual",
+            "g00": 0.8755369674664352,
+            "g01": 0.0,
+            "g02": 14.582507076264788,
+            "g10": 0.0,
+            "g11": 0.0,
+            "g12": 0.0,
+            "g20": -0.39935451509772135,
+            "g21": 0.0,
+            "g22": 1.8786688693892566,
+            "result": {
+              "id": "2:61:actual",
+              "eta": "0.02200000000000029",
+              "k": "0.020208765831345163",
+              "epsilon": "0.055015141974390738",
+              "c_mu": "0.054361700820687364",
+              "eddy_viscosity": "0.00040354352299211595",
+              "momentum_diffusion": "0.00040735304680163977",
+              "divergence": "2.7542058368556916",
+              "min_transverse_tangent_h1e5": "-0.00062652641531066983",
+              "min_transverse_tangent_h1e6": "-0.00062651822611236045",
+              "angle_rad": "2.1118483949131388",
+              "side": "1"
+            }
+          }
+        },
+        "cls/tracefree": {
+          "model": "cls",
+          "variant": "tracefree",
+          "samples": 1145,
+          "robust_negative": 485,
+          "minimum": -0.0005458568333660621,
+          "worst": {
+            "id": "19:4:tracefree",
+            "eta": 0.02200000000000002,
+            "k": 0.020709467147897252,
+            "epsilon": 0.052540313608362504,
+            "element": 19,
+            "point": 4,
+            "x": -0.20395350391048633,
+            "z": 0.02200000000000002,
+            "variant": "tracefree",
+            "g00": 5.30951494686054,
+            "g01": 0.0,
+            "g02": -2.5072282676135615,
+            "g10": 0.0,
+            "g11": 0.0,
+            "g12": 0.0,
+            "g20": 0.8130970486442004,
+            "g21": 0.0,
+            "g22": -5.30951494686054,
+            "result": {
+              "id": "19:4:tracefree",
+              "eta": "0.02200000000000002",
+              "k": "0.020709467147897252",
+              "epsilon": "0.052540313608362504",
+              "c_mu": "0.073984501363767385",
+              "eddy_viscosity": "0.00060392907694930035",
+              "momentum_diffusion": "0.00060773860075882412",
+              "divergence": "0",
+              "min_transverse_tangent_h1e5": "-0.00054585824723093329",
+              "min_transverse_tangent_h1e6": "-0.00054585683336606208",
+              "angle_rad": "2.3300145514124297",
+              "side": "1"
+            }
+          }
+        }
+      },
+      "source_sha256": {
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/development-ramp8-pointwise-scalars/R-cls_fixed/stage-00/case.xml": "88a2a98c58fa5c58bc42926ed82884aef6d814c3b4677a7d7bf68e0c3c34d4a6",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/constitutive-tangent-diagnostic-v2/R-last-accepted/full.csv": "a3910124d03fba7ac50dda0adcf7edc60c96f1f3460d3447afbeb7bbc6e2b402",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/constitutive-tangent-diagnostic-v2/R-last-accepted/samples.csv": "e88bf17ca1374767b7ad8416546737b8de0a855b242812bf38b37e63c152e8e6",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/constitutive-tangent-diagnostic-v2/R-last-accepted/input.csv": "dcbb06368c3fe544808b4c11231a41808ad1da89f9d2e66eebac8ed8008a815c",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/constitutive-tangent-diagnostic-v2/R-last-accepted/standard.csv": "42e9631b191c26b599a58ed142562e9db196dce3ecea295ae8d5f71f049587ec",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/constitutive-tangent-diagnostic-v2/R-last-accepted/cls.csv": "c89bfde3ffd08bbf904cf891becb09628b6fd6d65a38e77a4a21e456b6ee96ac"
+      }
+    },
+    "S-initial": {
+      "folder": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/development-ramp8-pointwise-scalars/S-cls_fixed/stage-00",
+      "field": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/development-ramp8-pointwise-scalars/S-cls_fixed/stage-00/case_0.chk",
+        "files": {
+          "Info.xml": "fe0cf20252fdecd9ec733b036b43b4c86c42e45076417c80253021b4cfd22df8",
+          "P0000000.fld": "5d17b1684d06a4bb7527f2cd2e003263ad91fabf2beaee5fc604dc4f87685199",
+          "P0000001.fld": "5a6515583eff281e5f1187dac4e6921f5abe78524d317bae135ff9050c0f45d3",
+          "P0000002.fld": "0833386ea342c68eef6d443ebcb27d2dd78397c69cbe4229b8094cac36af72cc",
+          "P0000003.fld": "4917277d44da62116b998e1a3c72e4e77d930df879ea5a78afd06dfdaeededcc"
+        }
+      },
+      "stage_csv_sha256": "9ee4ffdfdabeef831fb7e565bd37203be1210f0484fb8a3c0dbc6d29bad89550",
+      "manifest_sha256": "7238802624c84f64149c202eb13043fc19213c5b8bba95c439c18b274a960afa",
+      "time": [
+        0.0
+      ],
+      "resolved_nu": 3.3333333333333333e-06,
+      "physical_molecular_nu": 3.3333333333333333e-06,
+      "run_start_sha256": "7315981764e0d50a98c00c202e2ffe5930d15f2123d436e7497a0fb704131751",
+      "gradient_checks": {
+        "polynomial_error": 8.881784197001252e-15,
+        "p4_reconstruction_error": 2.4986142217020592e-14,
+        "independent_gradient_error": 1.690615118396782e-11,
+        "elements": 187,
+        "samples": 2290
+      },
+      "results": {
+        "standard_control_error": 3.0399278559163483e-10,
+        "standard/actual": {
+          "model": "standard",
+          "variant": "actual",
+          "samples": 1145,
+          "robust_negative": 0,
+          "minimum": 1.5481588631782005e-05,
+          "worst": {
+            "id": "129:28:actual",
+            "eta": 0.2309077318242874,
+            "k": 2.405004490840073e-05,
+            "epsilon": 4.285094288858433e-06,
+            "element": 129,
+            "point": 28,
+            "x": -0.20395350391048492,
+            "z": 0.2309077318242874,
+            "variant": "actual",
+            "g00": -1.4996518536277744e-11,
+            "g01": 0.0,
+            "g02": -0.5836498397358528,
+            "g10": 0.0,
+            "g11": 0.0,
+            "g12": 0.0,
+            "g20": 0.0,
+            "g21": 0.0,
+            "g22": 0.0,
+            "result": {
+              "id": "129:28:actual",
+              "eta": "0.23090773182428739",
+              "k": "2.405004490840073e-05",
+              "epsilon": "4.2850942888584326e-06",
+              "c_mu": "0.089999999999999997",
+              "eddy_viscosity": "1.2148255300705721e-05",
+              "momentum_diffusion": "1.5481588634039054e-05",
+              "divergence": "-1.4996518536277744e-11",
+              "min_transverse_tangent_h1e5": "1.5481588633829274e-05",
+              "min_transverse_tangent_h1e6": "1.5481588631782005e-05",
+              "angle_rad": "0.061086523819801536",
+              "side": "1"
+            }
+          }
+        },
+        "standard/tracefree": {
+          "model": "standard",
+          "variant": "tracefree",
+          "samples": 1145,
+          "robust_negative": 0,
+          "minimum": 1.5481588631782005e-05,
+          "worst": {
+            "id": "129:28:tracefree",
+            "eta": 0.2309077318242874,
+            "k": 2.405004490840073e-05,
+            "epsilon": 4.285094288858433e-06,
+            "element": 129,
+            "point": 28,
+            "x": -0.20395350391048492,
+            "z": 0.2309077318242874,
+            "variant": "tracefree",
+            "g00": -7.498259268138872e-12,
+            "g01": 0.0,
+            "g02": -0.5836498397358528,
+            "g10": 0.0,
+            "g11": 0.0,
+            "g12": 0.0,
+            "g20": 0.0,
+            "g21": 0.0,
+            "g22": 7.498259268138872e-12,
+            "result": {
+              "id": "129:28:tracefree",
+              "eta": "0.23090773182428739",
+              "k": "2.405004490840073e-05",
+              "epsilon": "4.2850942888584326e-06",
+              "c_mu": "0.089999999999999997",
+              "eddy_viscosity": "1.2148255300705721e-05",
+              "momentum_diffusion": "1.5481588634039054e-05",
+              "divergence": "0",
+              "min_transverse_tangent_h1e5": "1.5481588633829274e-05",
+              "min_transverse_tangent_h1e6": "1.5481588631782005e-05",
+              "angle_rad": "0.061086523819801536",
+              "side": "1"
+            }
+          }
+        },
+        "cls/actual": {
+          "model": "cls",
+          "variant": "actual",
+          "samples": 1145,
+          "robust_negative": 499,
+          "minimum": -2.01822431345091e-05,
+          "worst": {
+            "id": "0:40:actual",
+            "eta": 0.01975435099788228,
+            "k": 0.00616886051241053,
+            "epsilon": 0.010006712244185218,
+            "element": 0,
+            "point": 40,
+            "x": -0.9999999999999999,
+            "z": 0.01975435099788228,
+            "variant": "actual",
+            "g00": -8.711152869029771e-13,
+            "g01": 0.0,
+            "g02": 5.132513262525205,
+            "g10": 0.0,
+            "g11": 0.0,
+            "g12": 0.0,
+            "g20": 0.0,
+            "g21": 0.0,
+            "g22": 0.0,
+            "result": {
+              "id": "0:40:actual",
+              "eta": "0.019754350997882281",
+              "k": "0.0061688605124105298",
+              "epsilon": "0.010006712244185218",
+              "c_mu": "0.098892880293565993",
+              "eddy_viscosity": "0.00037608283790028515",
+              "momentum_diffusion": "0.00037941617123361847",
+              "divergence": "-8.7111528690297708e-13",
+              "min_transverse_tangent_h1e5": "-2.0182436016308173e-05",
+              "min_transverse_tangent_h1e6": "-2.0182243134509099e-05",
+              "angle_rad": "1.1519173063162575",
+              "side": "-1"
+            }
+          }
+        },
+        "cls/tracefree": {
+          "model": "cls",
+          "variant": "tracefree",
+          "samples": 1145,
+          "robust_negative": 499,
+          "minimum": -2.01822431345091e-05,
+          "worst": {
+            "id": "0:40:tracefree",
+            "eta": 0.01975435099788228,
+            "k": 0.00616886051241053,
+            "epsilon": 0.010006712244185218,
+            "element": 0,
+            "point": 40,
+            "x": -0.9999999999999999,
+            "z": 0.01975435099788228,
+            "variant": "tracefree",
+            "g00": -4.3555764345148854e-13,
+            "g01": 0.0,
+            "g02": 5.132513262525205,
+            "g10": 0.0,
+            "g11": 0.0,
+            "g12": 0.0,
+            "g20": 0.0,
+            "g21": 0.0,
+            "g22": 4.3555764345148854e-13,
+            "result": {
+              "id": "0:40:tracefree",
+              "eta": "0.019754350997882281",
+              "k": "0.0061688605124105298",
+              "epsilon": "0.010006712244185218",
+              "c_mu": "0.098892880293565993",
+              "eddy_viscosity": "0.00037608283790028515",
+              "momentum_diffusion": "0.00037941617123361847",
+              "divergence": "0",
+              "min_transverse_tangent_h1e5": "-2.0182436012696289e-05",
+              "min_transverse_tangent_h1e6": "-2.0182243134509099e-05",
+              "angle_rad": "1.1519173063162575",
+              "side": "-1"
+            }
+          }
+        }
+      },
+      "source_sha256": {
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/development-ramp8-pointwise-scalars/S-cls_fixed/stage-00/case.xml": "09f506bb53bdfab06a66ee2d29aa9687ec170e1a04eb9aff57b19180ec7163b2",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/constitutive-tangent-diagnostic-v2/S-initial/full.csv": "6296be554bd0e25c62a2cb39a44ba589bbd52db46b4e220702139d6064c48df9",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/constitutive-tangent-diagnostic-v2/S-initial/samples.csv": "0be774a89d03e8f97281de7a6620ba3b5d06ae9d522e30147633c05a1869412f",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/constitutive-tangent-diagnostic-v2/S-initial/input.csv": "077dd0e02330cbb598d6e373d4e53a098e286ef6c0b4a2611c4ee11def983e06",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/constitutive-tangent-diagnostic-v2/S-initial/standard.csv": "9953441774fe5c6835cdb5c951d44f977e380120e2db90a5f7d52226a5451fa9",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/constitutive-tangent-diagnostic-v2/S-initial/cls.csv": "663627ff5e41180dfd6cffdf206e3171016e6b6dca0dec2077a672ae97f1f0aa"
+      }
+    },
+    "S-first-flow": {
+      "folder": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/development-ramp8-pointwise-scalars/S-cls_fixed/stage-00",
+      "field": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/development-ramp8-pointwise-scalars/S-cls_fixed/stage-00/case.fld",
+        "files": {
+          "Info.xml": "99b879108198c50ded578f5c21d6bfa9c0a10cfe6d045f09d4dd56891060449e",
+          "P0000000.fld": "f51d45208a1ddb81407df4a53dc90f6c54d81165d1549e44d30c2f06f3c8b2b5",
+          "P0000001.fld": "789345a62c007119da6da19db7b4c5e7c5874e345b13870ae0a1626e486ec19b",
+          "P0000002.fld": "d999fd073369ff4dc29365964207db3747778db7140289b12aec413dc2cca589",
+          "P0000003.fld": "57d71ebfbee8f381dd03313f0780c8c61f46a3528b2f873c4e32152ba6561252"
+        }
+      },
+      "stage_csv_sha256": "9ee4ffdfdabeef831fb7e565bd37203be1210f0484fb8a3c0dbc6d29bad89550",
+      "manifest_sha256": "7238802624c84f64149c202eb13043fc19213c5b8bba95c439c18b274a960afa",
+      "time": [
+        1.7500000000000013
+      ],
+      "resolved_nu": 3.3333333333333333e-06,
+      "physical_molecular_nu": 3.3333333333333333e-06,
+      "run_start_sha256": "7315981764e0d50a98c00c202e2ffe5930d15f2123d436e7497a0fb704131751",
+      "gradient_checks": {
+        "polynomial_error": 8.881784197001252e-15,
+        "p4_reconstruction_error": 2.5694968946581467e-14,
+        "independent_gradient_error": 1.9188265993480558e-11,
+        "elements": 187,
+        "samples": 2290
+      },
+      "results": {
+        "standard_control_error": 4.1868697508364957e-10,
+        "standard/actual": {
+          "model": "standard",
+          "variant": "actual",
+          "samples": 1145,
+          "robust_negative": 0,
+          "minimum": 1.548158863185638e-05,
+          "worst": {
+            "id": "121:24:actual",
+            "eta": 0.2309077318242905,
+            "k": 2.4050044908401215e-05,
+            "epsilon": 4.285094288857845e-06,
+            "element": 121,
+            "point": 24,
+            "x": -1.0,
+            "z": 0.2309077318242905,
+            "variant": "actual",
+            "g00": 0.007022585672901394,
+            "g01": 0.0,
+            "g02": -0.5836498397405883,
+            "g10": 0.0,
+            "g11": 0.0,
+            "g12": 0.0,
+            "g20": 0.011922944441628688,
+            "g21": 0.0,
+            "g22": 0.0,
+            "result": {
+              "id": "121:24:actual",
+              "eta": "0.2309077318242905",
+              "k": "2.4050044908401215e-05",
+              "epsilon": "4.2850942888578448e-06",
+              "c_mu": "0.089999999999999997",
+              "eddy_viscosity": "1.2148255300707878e-05",
+              "momentum_diffusion": "1.5481588634041212e-05",
+              "divergence": "0.0070225856729013939",
+              "min_transverse_tangent_h1e5": "1.5481588633860655e-05",
+              "min_transverse_tangent_h1e6": "1.5481588631856378e-05",
+              "angle_rad": "1.5358897417550099",
+              "side": "1"
+            }
+          }
+        },
+        "standard/tracefree": {
+          "model": "standard",
+          "variant": "tracefree",
+          "samples": 1145,
+          "robust_negative": 0,
+          "minimum": 1.548158863185571e-05,
+          "worst": {
+            "id": "121:24:tracefree",
+            "eta": 0.2309077318242905,
+            "k": 2.4050044908401215e-05,
+            "epsilon": 4.285094288857845e-06,
+            "element": 121,
+            "point": 24,
+            "x": -1.0,
+            "z": 0.2309077318242905,
+            "variant": "tracefree",
+            "g00": 0.003511292836450697,
+            "g01": 0.0,
+            "g02": -0.5836498397405883,
+            "g10": 0.0,
+            "g11": 0.0,
+            "g12": 0.0,
+            "g20": 0.011922944441628688,
+            "g21": 0.0,
+            "g22": -0.003511292836450697,
+            "result": {
+              "id": "121:24:tracefree",
+              "eta": "0.2309077318242905",
+              "k": "2.4050044908401215e-05",
+              "epsilon": "4.2850942888578448e-06",
+              "c_mu": "0.089999999999999997",
+              "eddy_viscosity": "1.2148255300707878e-05",
+              "momentum_diffusion": "1.5481588634041212e-05",
+              "divergence": "0",
+              "min_transverse_tangent_h1e5": "1.5481588633860492e-05",
+              "min_transverse_tangent_h1e6": "1.5481588631855711e-05",
+              "angle_rad": "1.5358897417550099",
+              "side": "1"
+            }
+          }
+        },
+        "cls/actual": {
+          "model": "cls",
+          "variant": "actual",
+          "samples": 1145,
+          "robust_negative": 335,
+          "minimum": -0.0001509580498377258,
+          "worst": {
+            "id": "8:1:actual",
+            "eta": 0.011000000000000298,
+            "k": 0.007307119317685864,
+            "epsilon": 0.023573263842601583,
+            "element": 8,
+            "point": 1,
+            "x": -0.20935870074254914,
+            "z": 0.011000000000000298,
+            "variant": "actual",
+            "g00": 0.06900689775428075,
+            "g01": 0.0,
+            "g02": 11.570139111922705,
+            "g10": 0.0,
+            "g11": 0.0,
+            "g12": 0.0,
+            "g20": 4.22314427790939,
+            "g21": 0.0,
+            "g22": -0.1664832097430467,
+            "result": {
+              "id": "8:1:actual",
+              "eta": "0.011000000000000298",
+              "k": "0.0073071193176858637",
+              "epsilon": "0.023573263842601583",
+              "c_mu": "0.062606247332775936",
+              "eddy_viscosity": "0.00014180461122456384",
+              "momentum_diffusion": "0.00014513794455789719",
+              "divergence": "-0.097476311988765954",
+              "min_transverse_tangent_h1e5": "-0.00015095835089357282",
+              "min_transverse_tangent_h1e6": "-0.0001509580498377258",
+              "angle_rad": "1.5184364492350666",
+              "side": "1"
+            }
+          }
+        },
+        "cls/tracefree": {
+          "model": "cls",
+          "variant": "tracefree",
+          "samples": 1145,
+          "robust_negative": 331,
+          "minimum": -0.00015093160550986218,
+          "worst": {
+            "id": "8:1:tracefree",
+            "eta": 0.011000000000000298,
+            "k": 0.007307119317685864,
+            "epsilon": 0.023573263842601583,
+            "element": 8,
+            "point": 1,
+            "x": -0.20935870074254914,
+            "z": 0.011000000000000298,
+            "variant": "tracefree",
+            "g00": 0.11774505374866373,
+            "g01": 0.0,
+            "g02": 11.570139111922705,
+            "g10": 0.0,
+            "g11": 0.0,
+            "g12": 0.0,
+            "g20": 4.22314427790939,
+            "g21": 0.0,
+            "g22": -0.11774505374866373,
+            "result": {
+              "id": "8:1:tracefree",
+              "eta": "0.011000000000000298",
+              "k": "0.0073071193176858637",
+              "epsilon": "0.023573263842601583",
+              "c_mu": "0.062607662362380814",
+              "eddy_viscosity": "0.00014180781629964084",
+              "momentum_diffusion": "0.0001451411496329742",
+              "divergence": "0",
+              "min_transverse_tangent_h1e5": "-0.00015093190624420225",
+              "min_transverse_tangent_h1e6": "-0.00015093160550986218",
+              "angle_rad": "1.5184364492350666",
+              "side": "1"
+            }
+          }
+        }
+      },
+      "source_sha256": {
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/development-ramp8-pointwise-scalars/S-cls_fixed/stage-00/case.xml": "09f506bb53bdfab06a66ee2d29aa9687ec170e1a04eb9aff57b19180ec7163b2",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/constitutive-tangent-diagnostic-v2/S-first-flow/full.csv": "77a700d240652385d1525f0d8db4021dc520cefd809867b14d839f1d1747d4a9",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/constitutive-tangent-diagnostic-v2/S-first-flow/samples.csv": "7c70d7bf9e25c7a6e1b3f9e64e60d8389e9eec8d301d9205be8234466bc2b1d5",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/constitutive-tangent-diagnostic-v2/S-first-flow/input.csv": "116fdc3a8a872757a1fec305b278e4c9774575277c7804ee7b6515baf3ac0170",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/constitutive-tangent-diagnostic-v2/S-first-flow/standard.csv": "a1360a7b63a124e2d980c9a90b6acc3d2e474d665891f2d6fa55f4a86782a531",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/constitutive-tangent-diagnostic-v2/S-first-flow/cls.csv": "67b7bcc9876bb60362b745874766d8854656271937748ed55d3b0766414cfc3d"
+      }
+    }
+  },
+  "extra_sources": {
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/source/solvers/IncNavierStokesSolver/Tests/RANS/r1_general_stress_tangent.cpp": "e08992eb8db2363156f2f73e112865c1289f9313a268f33e178c2d086a19abfa",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/source/library/SolverUtils/Turbulence/RANSModels.cpp": "86a7154ba3cb27e4d3319aa42d156a228fd1b180f35f9b217159822ec9d66b05",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/source/library/SolverUtils/Turbulence/RANSModels.h": "00a284f6dbcb2617ed86370530b34fde9b008492250d31941c380b14833d16f3"
+  },
+  "kernel": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/build/libRANSKernels.a",
+    "sha256": "8eb5b00e6e691b36070f9ccb73daa8b65ab41338bf9dbef9f0af523e5c12af7d"
+  },
+  "legacy": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/build/RANSStressTangentAudit",
+    "sha256": "8838886faeddae217663c24fdfaa579e4dffb8c82bdabd37a97353ae9d69863f"
+  },
+  "binaries": {
+    "IncNavierStokesSolver": "c9c640b86a5c4c414762e27c2cce57802f4b2be2e7263b81f68e3e17c575dfbb",
+    "RANSWallFieldAudit": "68cc487797b74981e175a5c66717960aa9ebf45b95e4bdb3eb7d979218d364f6"
+  },
+  "sampling": "four interior GLL points per element plus H/N/inlet traces, including one-sided copies; counts are not volume fractions",
+  "compile": {
+    "command": [
+      "c++",
+      "-std=c++17",
+      "-O3",
+      "-DNDEBUG",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-I/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/source/library",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/source/solvers/IncNavierStokesSolver/Tests/RANS/r1_general_stress_tangent.cpp",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/build/libRANSKernels.a",
+      "-o",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/constitutive-tangent-diagnostic-v2/general-tangent"
+    ],
+    "exit_code": 0,
+    "timeout": false,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1"
+    },
+    "wall_time_seconds": 0.7166240430087782
+  },
+  "diagnostic_sha256": "46cb5077d1d3d981dc0c40e9f4811eb9e579b2ea2cf57f2a42c51ebf04b7813c",
+  "controls": {
+    "status": "PASS",
+    "parallel_relative_error": 0.0,
+    "compatible_reference_q_kappa": "3.1906750816242875,0.44055390518665871"
+  },
+  "compact_artifacts": {
+    "summary.csv": "1c28307b209713a03e623add79385b3c882e57ef9899b5619b527045674a4f88"
+  }
+}

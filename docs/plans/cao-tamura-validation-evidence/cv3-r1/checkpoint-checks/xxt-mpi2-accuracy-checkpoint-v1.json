@@ -1,0 +1,64 @@
+{
+  "status": "PASS",
+  "scope": "Matched physical checkpoint only; no development or calibration claim",
+  "producer_sha256": "683757a7a07dbe0dd4380676fae47b3080bca9bfcf7ec591064435e55fd4d33f",
+  "cases": {
+    "baseline": {
+      "field": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/development-ramp8-cls-fd-accuracy/R-cls_fixed/stage-00/case_3.chk",
+        "files": {
+          "Info.xml": "fab30a01b20bee86372bda778c9d6785d7abd8429e8fdcbdfb80833663138ff7",
+          "P0000000.fld": "8caeb6391aaff58e6db522f9fdc1d3482901a2c4a7bae8ede88d44b888cfd818",
+          "P0000001.fld": "09f345da92ae9c1a2d9060850251a3785f612721ecb12a189f1951fb54578d27",
+          "P0000002.fld": "4935fd6f706004ab2c1d2f789d8f4f93e5153cf8a64b353f03aadc1502005c66",
+          "P0000003.fld": "ea27e2eae88bd5c1305d87545b67e8dccbfcb67ba9ae2eaee857c47646609b8e"
+        }
+      },
+      "case_sha256": "989df40f8fd41ca920b08eb8ea41dd5f012e626f29c2550b0aab4a9c094e237c",
+      "run_start_sha256": "8634cf1e1e1d271197806b241166499424262e538ce645b16090b82465d30629",
+      "manifest_sha256": "8a3daf62700c38165fe0122bd3efd80ed424c878a8494edd0e513edfa1e08d4f",
+      "time": 0.03,
+      "full_csv_sha256": "4f0d798cd8bdac30f6c3f021d55898aa0feaf21c9da741b441035fb6f29e7217"
+    },
+    "candidate": {
+      "field": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/pilot-ramp8-cls-xxt-mpi2-accuracy/R-cls_fixed/case.fld",
+        "files": {
+          "Info.xml": "4d6a0b895fd628d6ad6c7351f96785887d399471a4ba0e166e3109cd203163eb",
+          "P0000000.fld": "caa590d15ec17fb0bd23a4236f8a3239d2c7805b3e0d5302a035f6dc63deb93f",
+          "P0000001.fld": "96ce74eccc7a36750bcece139ed83e3fba47ecce02e941c86a0f991197959e4b"
+        }
+      },
+      "case_sha256": "057ac34b67039a5885e1d0436d625e54d8f34d029e4326a6bc21d9bab3acb94b",
+      "run_start_sha256": "9372a1ccb849511be53156d2eff063ec8ea4398ecfe455103c20ae1f0b84e123",
+      "manifest_sha256": "78b60768fcf0dbb65d7e069548c79c8c0f0cfdbfa4a582f6ff8198b20833a825",
+      "time": 0.03,
+      "full_csv_sha256": "3d7f3d3b939cf5f1c66f6460121afb4442db989e7c78765610706f959dc8b731"
+    }
+  },
+  "time": 0.03,
+  "binaries": {
+    "IncNavierStokesSolver": "c9c640b86a5c4c414762e27c2cce57802f4b2be2e7263b81f68e3e17c575dfbb",
+    "RANSWallFieldAudit": "68cc487797b74981e175a5c66717960aa9ebf45b95e4bdb3eb7d979218d364f6",
+    "RANSObservationAudit": "27d9421cef35af8217521ee245bf6f3f075426e9c75b623987eef5b78c8c2e6b"
+  },
+  "scaled_field_errors": {
+    "u": 6.433162450281401e-10,
+    "v": 1.4018250441743055e-09,
+    "k": 1.8091545622711536e-11,
+    "eps_tilde": 2.1244396519737307e-10,
+    "p": 4.0409632064142276e-10,
+    "rans_nut": 5.2210774278190625e-11,
+    "rans_P": 5.7982162612879584e-08,
+    "rans_Yap": 3.3566539825446995e-10,
+    "rans_eps_total": 2.1244093983963097e-10,
+    "rans_R_xx": 1.0772020810068117e-09,
+    "rans_R_yy": 1.1958608547857352e-09,
+    "rans_R_zz": 1.6465277127841738e-09,
+    "rans_R_xy": 0.0,
+    "rans_R_xz": 3.268873912873338e-09,
+    "rans_R_yz": 0.0,
+    "rans_quadratic_norm": 1.156605082541784e-09,
+    "rans_cubic_norm": 3.2400865719811947e-09
+  }
+}

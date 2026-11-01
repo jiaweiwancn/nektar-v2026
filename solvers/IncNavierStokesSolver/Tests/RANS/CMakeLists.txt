@@ -115,7 +115,7 @@ endif()
 enable_testing()
 if(RANS_BUILD_SOLVER)
     file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke)
-    foreach(rans_fixture StandardRANS_MMS CLS_MMS AWFOriginal AWFEquilibrium StandardAWFEquilibrium ABLPreservation ABLPreservation3D)
+    foreach(rans_fixture StandardRANS_MMS CLS_MMS AWFOriginal AWFEquilibrium StandardAWFEquilibrium ABLPreservation ABLPreservation3D StandardResidualMap CLSResidualMap)
         configure_file("${CMAKE_CURRENT_LIST_DIR}/${rans_fixture}.xml"
             "${CMAKE_CURRENT_BINARY_DIR}/rans-smoke/${rans_fixture}.xml" COPYONLY)
     endforeach()
@@ -142,6 +142,13 @@ if(RANS_BUILD_SOLVER)
     set_tests_properties(RANSABLPreservationSmoke RANSABL3DPerturbationSmoke PROPERTIES
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke
         PROCESSORS 1 TIMEOUT 300 ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
+    add_test(NAME RANSStandardResidualMapSmoke COMMAND IncNavierStokesSolver
+        ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke/StandardResidualMap.xml)
+    add_test(NAME RANSCLSResidualMapSmoke COMMAND IncNavierStokesSolver
+        ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke/CLSResidualMap.xml)
+    set_tests_properties(RANSStandardResidualMapSmoke RANSCLSResidualMapSmoke PROPERTIES
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke
+        PROCESSORS 1 TIMEOUT 180 ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
 endif()
 add_test(NAME RANSWallLayerPrototype COMMAND RANSWallLayerProbe
     --output ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-layer.json)
@@ -164,6 +171,10 @@ if(Python3_Interpreter_FOUND)
     add_test(NAME RANSCaoTamuraCalibrationGuards COMMAND ${Python3_EXECUTABLE}
         ${CMAKE_CURRENT_LIST_DIR}/validate_cao_tamura_calibration.py)
     set_tests_properties(RANSCaoTamuraCalibrationGuards PROPERTIES
+        PROCESSORS 1 TIMEOUT 60 ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
+    add_test(NAME RANSCaoTamuraRouteGuards COMMAND ${Python3_EXECUTABLE}
+        ${CMAKE_CURRENT_LIST_DIR}/validate_cao_tamura_routes.py)
+    set_tests_properties(RANSCaoTamuraRouteGuards PROPERTIES
         PROCESSORS 1 TIMEOUT 60 ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
     add_test(NAME RANSStressTangentOracle COMMAND ${Python3_EXECUTABLE}
         ${CMAKE_CURRENT_LIST_DIR}/validate_rans_stress_tangent.py

@@ -1,0 +1,57 @@
+{
+  "status": "FAIL",
+  "scope": "Local frozen constitutive tangents; not a developed case or global instability attribution",
+  "producer_sha256": "dba0edf0204d90f5c3781c16d51b5fc0f4ed7214ecbb827220f7aae6b401fddc",
+  "cases": {},
+  "extra_sources": {
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/source/solvers/IncNavierStokesSolver/Tests/RANS/r1_general_stress_tangent.cpp": "e08992eb8db2363156f2f73e112865c1289f9313a268f33e178c2d086a19abfa",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/source/library/SolverUtils/Turbulence/RANSModels.cpp": "86a7154ba3cb27e4d3319aa42d156a228fd1b180f35f9b217159822ec9d66b05",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/source/library/SolverUtils/Turbulence/RANSModels.h": "00a284f6dbcb2617ed86370530b34fde9b008492250d31941c380b14833d16f3"
+  },
+  "kernel": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/build/libRANSKernels.a",
+    "sha256": "8eb5b00e6e691b36070f9ccb73daa8b65ab41338bf9dbef9f0af523e5c12af7d"
+  },
+  "legacy": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/build/RANSStressTangentAudit",
+    "sha256": "8838886faeddae217663c24fdfaa579e4dffb8c82bdabd37a97353ae9d69863f"
+  },
+  "binaries": {
+    "IncNavierStokesSolver": "c9c640b86a5c4c414762e27c2cce57802f4b2be2e7263b81f68e3e17c575dfbb",
+    "RANSWallFieldAudit": "68cc487797b74981e175a5c66717960aa9ebf45b95e4bdb3eb7d979218d364f6"
+  },
+  "sampling": "four interior GLL points per element plus H/N/inlet traces, including one-sided copies; counts are not volume fractions",
+  "compile": {
+    "command": [
+      "c++",
+      "-std=c++17",
+      "-O3",
+      "-DNDEBUG",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-I/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/source/library",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/source/solvers/IncNavierStokesSolver/Tests/RANS/r1_general_stress_tangent.cpp",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/build/libRANSKernels.a",
+      "-o",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/constitutive-tangent-diagnostic-v1/general-tangent"
+    ],
+    "exit_code": 0,
+    "timeout": false,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1"
+    },
+    "wall_time_seconds": 0.7676493799663149
+  },
+  "diagnostic_sha256": "46cb5077d1d3d981dc0c40e9f4811eb9e579b2ea2cf57f2a42c51ebf04b7813c",
+  "controls": {
+    "status": "PASS",
+    "parallel_relative_error": 0.0,
+    "compatible_reference_q_kappa": "3.1906750816242875,0.44055390518665871"
+  },
+  "error": "ValueError(\"dict contains fields not in fieldnames: 'point', 'element', 'variant', 'z', 'x'\")"
+}

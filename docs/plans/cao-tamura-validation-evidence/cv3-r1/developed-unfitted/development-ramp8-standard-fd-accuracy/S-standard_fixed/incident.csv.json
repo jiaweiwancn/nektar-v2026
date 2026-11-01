@@ -1,0 +1,43 @@
+{
+  "command": [
+    "taskset",
+    "-c",
+    "73",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/build-r1-pointwise-scalars/RANSObservationAudit",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/development-ramp8-standard-fd-accuracy/S-standard_fixed/stage-03/incident-native/sample.xml",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/development-ramp8-standard-fd-accuracy/S-standard_fixed/stage-03/case.fld",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/development-ramp8-standard-fd-accuracy/S-standard_fixed/points.csv",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/development-ramp8-standard-fd-accuracy/S-standard_fixed/stage-03/incident.csv"
+  ],
+  "exit_code": 0,
+  "timeout": false,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1"
+  },
+  "wall_time_seconds": 4.873698057956062,
+  "case_sha256": "cab32c32d07d5015c2abe887c953f15a916aa5798478eb884b5b8a098e28589a",
+  "field_sha256": null,
+  "wall_route": {
+    "version": "cao-tamura-wall-route-v1",
+    "kind": "EPTransition",
+    "wall_model": "AWFEquilibrium",
+    "weight_mode": "Fixed",
+    "fixed_weight": 1.0,
+    "failure_policy": "UseOriginal",
+    "begin": -0.28,
+    "end": -0.2
+  },
+  "points_sha256": "9e960f33c258c603f015fa83b6e6115b18afb4e9ecd9752c0aea1808ccd1a5bf",
+  "output_sha256": "71412898bbc9ab339a85757af52b8618b5af9d91ee21a0d33e78870264431489",
+  "observer_sha256": "27d9421cef35af8217521ee245bf6f3f075426e9c75b623987eef5b78c8c2e6b",
+  "geometry_sha256": "0f5fcae1a6c02d8301046a77fe4d800d6e222d829c4271d746896750844cc04d",
+  "observation_configuration": "native-wall-observation-v1:64556835acea058d",
+  "experimental_fingerprint": "e6c562a9ce75890d592b505ceddc3acf8499376b96152c49e5764d14e509c63d",
+  "manifest_sha256": "1d159904297184d330adf43d3f3c2a01f5c22310576aef575ca05dfbb1eed8d7",
+  "ranks": 1,
+  "cpus": "73",
+  "startup_end_time": 0.0
+}

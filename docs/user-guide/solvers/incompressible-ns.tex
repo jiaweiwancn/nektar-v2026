@@ -394,6 +394,22 @@ step and writes \inltt{.rans-errors.csv}; these functions do not alter evolution
 \inltt{RANSMatrixFreeTolerance} optionally sets the stopping tolerance of the
 current operator independently of \inltt{IterativeSolverTolerance}, which also
 controls its cached native inverse. Its default is the latter value.
+For terrain Newton--Krylov stages, the optional solver information
+\inltt{RANSNewtonMap=PreconditionedResidual} replaces each inner current-system
+solve by one cached-inverse correction of the current weak residual,
+$F(x)=x+P^{-1}(b(x)-A(x)x)$, with the current Dirichlet trace imposed.
+Its fixed points satisfy the same discrete equations. All closure, wall,
+advection and grad-div terms in the residual remain current. The default is
+\inltt{CurrentSolve}; the map is included in restart and observation provenance.
+\inltt{RANSNewtonScalarScaling=Pointwise} optionally weights scalar Newton
+residuals and finite-difference probes by the positive incoming $k$ and
+$\epsilon$ values at each quadrature point, frozen for one physical stage.
+This changes the numerical norm, not the transported variables or equations.
+The default is \inltt{FieldMaximum}. History and observation provenance bind
+the selected scaling; all physical acceptance criteria remain independent.
+In the residual-map mode, the matrix-free iteration diagnostic counts
+Richardson sweeps, and the native inverse tolerance controls the correction;
+independent stage-residual and continuity checks remain necessary.
 \inltt{RANSAdvectionTreatment=Implicit} moves convection of every transported
 field into the nonlinear stage; external forcing retains its explicit IMEX
 history. The AWF strip uses the same current convection in its inertial

@@ -173,9 +173,9 @@ int main(int argc, char **argv)
             field->GetCoords(x,y,z);
             std::vector<SolverUtils::RANSWallFrame> frames;
             for (int q = 0; q < nq; ++q) frames.push_back(terrain.Closest(x[q],dim == 2 ? y[q] : z[q]));
-            auto evaluate = [&](const std::string &name,double eta) {
+            auto evaluate = [&](const std::string &name,double eta,double footX=0.) {
                 auto f=session->GetFunction("RANSExperimentalInlet",name);
-                return dim==2 ? f->Evaluate(0.,eta,0.,0.) : f->Evaluate(0.,0.,eta,0.);
+                return dim==2 ? f->Evaluate(footX,eta,0.,0.) : f->Evaluate(footX,0.,eta,0.);
             };
             auto primitive = [&](double eta) { return matching*eta+star/kap*eta*(std::log(eta/H)-1); };
             auto speed = [&](double eta) { return experimental ? evaluate("u",eta) : matching+star/kap*std::log(eta/H); };
@@ -241,7 +241,10 @@ int main(int argc, char **argv)
                     if (name=="u") raw[q]=gz;
                     else if (name==(dim==2 ? "v" : "w")) raw[q]=-gx;
                     else if (experimental && (name=="k" || name=="eps" || name=="eps_tilde" || name=="p"))
-                        raw[q]=chi*evaluate(name,eta)+(1-chi)*evaluate(name,b[0]);
+                        // Scalar wall collars follow the physical wall-foot
+                        // mask. Velocity remains the height-only solenoidal
+                        // streamfunction constructed above.
+                        raw[q]=chi*evaluate(name,eta,f.x)+(1-chi)*evaluate(name,b[0],f.x);
                     else raw[q]=name=="k" ? qstar*star*star :
                         (name=="eps" || name=="eps_tilde") ? star*star*star/kap*(chi/eta+(1-chi)/b[0]) : 0.;
                 }

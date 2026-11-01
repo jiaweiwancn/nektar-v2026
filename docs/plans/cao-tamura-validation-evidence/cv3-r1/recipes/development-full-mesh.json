@@ -1,0 +1,18 @@
+{
+  "config": {
+    "dt": 0.01,
+    "steps": 1,
+    "checkpoint": 5
+  },
+  "numerics": {
+    "GlobalSysSoln": "IterativeMultiLevelStaticCond",
+    "RANSMatrixFreeTolerance": 5e-14,
+    "RANSNewtonDifferenceStep": 0.0001,
+    "RANSPicardRelaxation": 0.1,
+    "RANSPressureRelaxation": 0.1,
+    "RANSNormalAugmentation": 2.0,
+    "RANSNewtonMap": "PreconditionedResidual",
+    "RANSNonlinearTolerance": 1e-09,
+    "RANSPressureTolerance": 1e-09
+  }
+}

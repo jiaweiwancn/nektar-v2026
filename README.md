@@ -29,8 +29,9 @@ physical probes and flat-only calibration objectives; developed calibration
 and experimental accuracy remain separate milestones in the
 [calibrated-validation plan](docs/plans/cao-tamura-calibrated-validation.md).
 Its [active CV3 protocol](docs/plans/cao-tamura-cv3-calibration-protocol.md)
-now prioritizes the matched EP-AWF/transition/original-AWF floor route; the next
-task is reference recovery and composite-floor feasibility (CV3-R1).
+now prioritizes the matched EP-AWF/transition/original-AWF floor route.
+[CV3-R1 execution](docs/plans/cao-tamura-cv3-r1-reference-feasibility.md) records
+reference recovery and the ongoing developed-floor feasibility assessment.
 
 
 Tutorials

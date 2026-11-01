@@ -1,0 +1,36 @@
+{
+  "config": {
+    "x_columns": [
+      -1.0,
+      -0.28,
+      -0.27,
+      -0.26,
+      -0.25,
+      -0.24000000000000002,
+      -0.23000000000000004,
+      -0.22000000000000003,
+      -0.21000000000000002,
+      -0.2,
+      0.0,
+      1.2
+    ],
+    "dt": 0.01,
+    "steps": 3,
+    "checkpoint": 3
+  },
+  "numerics": {
+    "GlobalSysSoln": "XxtMultiLevelStaticCond",
+    "RANSMatrixFreeTolerance": 5e-14,
+    "RANSNewtonDifferenceStep": 1e-06,
+    "RANSPicardRelaxation": 0.1,
+    "RANSPressureRelaxation": 0.1,
+    "RANSNormalAugmentation": 2.0,
+    "RANSNewtonMap": "PreconditionedResidual",
+    "RANSNonlinearTolerance": 1e-09,
+    "RANSPressureTolerance": 1e-09,
+    "RANSNewtonKrylovDimension": 512,
+    "RANSNewtonMaxIterations": 200,
+    "RANSNewtonScalarScaling": "Pointwise",
+    "IterativeSolverTolerance": 1e-13
+  }
+}

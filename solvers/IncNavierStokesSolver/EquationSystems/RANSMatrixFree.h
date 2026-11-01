@@ -24,9 +24,13 @@ public:
     int Solve(int field, const Array<OneD, NekDouble> &rhs,
               const Array<OneD, NekDouble> &diffusion,
               const Array<OneD, NekDouble> &mass, NekDouble alpha,
-              Array<OneD, NekDouble> &output);
+              Array<OneD, NekDouble> &output,
+              const Array<OneD, NekDouble> *newtonTrial = nullptr);
     int SolveVelocity(const Fields &rhs, const Fields &diffusion, NekDouble alpha,
-                      Fields &output);
+                      Fields &output, const Fields *newtonTrial = nullptr);
+    // A supplied Newton trial selects one frozen-inverse residual sweep,
+    // x + P^{-1}(b-A(x)x), with current A and exact Dirichlet lifting.
+    // Its fixed points satisfy the same weak equations as the full CG solve.
 private:
     struct Preconditioner
     {
