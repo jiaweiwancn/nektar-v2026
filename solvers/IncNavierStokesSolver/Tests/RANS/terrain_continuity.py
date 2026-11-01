@@ -34,15 +34,15 @@ def gll(n):
     return nodes,weights,matrix
 
 
-def audit(directory):
-    directory=Path(directory);root=ET.parse(directory/'neutral.xml').getroot()
+def audit(directory, stem='neutral'):
+    directory=Path(directory);root=ET.parse(directory/(stem+'.xml')).getroot()
     params={p.text.split('=',1)[0].strip():float(p.text.split('=',1)[1]) for p in root.findall('CONDITIONS/PARAMETERS/P')}
     info={p.attrib['PROPERTY']:p.attrib['VALUE'] for p in root.findall('CONDITIONS/SOLVERINFO/I')}
     dim=int(root.find('GEOMETRY').attrib['DIM'])
     count=int(root.find('EXPANSIONS/E').attrib['NUMPOINTS'].split(',')[0])
     _,weights,D=gll(count);face_size=count**(dim-1)
     all_points=[]
-    for path in directory.glob('neutral.terrain-points-r*.csv'):
+    for path in directory.glob(stem+'.terrain-points-r*.csv'):
         all_points += [{k:float(v) for k,v in r.items()} for r in csv.DictReader(path.open()) if float(r['phase'])==1]
     if not all_points: raise RuntimeError('No accepted wall points for continuity audit')
     groups={}

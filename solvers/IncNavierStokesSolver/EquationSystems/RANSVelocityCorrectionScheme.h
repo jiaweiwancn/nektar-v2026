@@ -62,7 +62,7 @@ protected:
 private:
     using Fields = Array<OneD, Array<OneD, NekDouble>>;
     using Gradients = Array<OneD, Fields>;
-    void CheckState(const Fields &state) const;
+    bool CheckState(const Fields &state, bool requirePositive = true) const;
     void UpdateLogWall(const Fields &state);
     void UpdateOutflow(const Array<OneD, NekDouble> &pressure, NekDouble time);
     void MonitorReference();
@@ -76,7 +76,7 @@ private:
                     const Array<OneD, NekDouble> &pressure,
                     NekDouble time, NekDouble alpha, int phase);
     void Closure(const Fields &state, Gradients &gradient, Fields &diffusion,
-                 Fields &gain, Fields &loss);
+                 Fields &gain, Fields &loss, NekDouble time);
     void SolveField(int field, const Array<OneD, NekDouble> &rhs,
                     const Array<OneD, NekDouble> &diffusion,
                     const Array<OneD, NekDouble> &mass,
@@ -114,6 +114,13 @@ private:
     std::vector<int> m_cmuBranches;
     NekDouble m_resolvedNu, m_tolerance, m_pressureTolerance, m_pressureRelaxation, m_relaxation;
     NekDouble m_minimumK, m_minimumEpsilon, m_z0, m_heightShift;
+    NekDouble m_gradDiv = 0;
+    bool m_implicitAdvection = false;
+    // Optional discrete continuation for an experimental flat precursor.
+    // It adds a fading initial weak residual; no field is reset or clipped.
+    NekDouble m_startupDuration = 0;
+    Fields m_startupLoad;
+    NekDouble StartupWeight(NekDouble time) const;
     bool m_auditStage = false;
     bool m_monitorReference = false, m_hasOutflow = false;
     std::vector<int> m_outflows;

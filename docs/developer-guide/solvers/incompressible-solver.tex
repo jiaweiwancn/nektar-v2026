@@ -333,6 +333,24 @@ bounded to the two IMEX2 inertia values. Normalize each preconditioner RHS befor
 the native solve to avoid successive-RHS magnitude smoothing discarding small
 residuals. Global dot products use unique MPI ownership and signed assembly.
 
+The independent \inltt{RANSMatrixFreeTolerance} separates current-operator
+accuracy from native preconditioner accuracy. Optional constant grad-div adds
+$\gamma\int(\nabla\cdot U)(\nabla\cdot v)$, with $\gamma\ge0$, to the vector
+operator and its independent audit. The native diagonal preconditioner includes
+the corresponding directional diffusion; the pressure inverse uses
+$\mu+\gamma$. Its energy contribution is $\gamma\|\nabla\cdot U\|^2$.
+
+With \inltt{RANSAdvectionTreatment=Implicit}, the explicit GLM derivative
+contains external forcing only. Every transported field's negative convection
+is evaluated at the current nonlinear state and added to its gain. The strip
+predictor additionally receives this current negative convection divided by
+the implicit inertia coefficient, including the $k$ inventory. Its auxiliary
+AWF forcing still evaluates physical current convection. The optional startup
+load is a fading initial native weak residual; it is disabled by default and
+excluded from experimental statistics. It is not checkpointed, so only
+post-startup history continuation is supported. The partition, positive
+grad-div coefficient and nonzero startup duration enter restart signatures.
+
 At the supported flat $x+$ outlet, XML supplies $(T-\Pi I)n$ and the solver
 adds the current $\Pi n$ to the scalar Helmholtz natural load. The pressure
 iteration retains the full continuity test space; traction fixes its constant.

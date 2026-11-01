@@ -391,6 +391,35 @@ production, dissipation and Reynolds stresses. \inltt{RANSReferenceMonitor=1}
 compares fields against supplied \inltt{ExactSolution} functions after each
 step and writes \inltt{.rans-errors.csv}; these functions do not alter evolution.
 
+\inltt{RANSMatrixFreeTolerance} optionally sets the stopping tolerance of the
+current operator independently of \inltt{IterativeSolverTolerance}, which also
+controls its cached native inverse. Its default is the latter value.
+\inltt{RANSAdvectionTreatment=Implicit} moves convection of every transported
+field into the nonlinear stage; external forcing retains its explicit IMEX
+history. The AWF strip uses the same current convection in its inertial
+predictor. The default is \inltt{Explicit}; both partitions use constant-step
+IMEX1/2 and are distinguished by full-history restart signatures.
+
+On the terrain vector path, nonnegative \inltt{RANSGradDiv} adds
+$\gamma(\nabla\cdot U,\nabla\cdot v)$ to the momentum weak form. It has viscosity
+units, defaults to zero and vanishes for an incompressible continuum solution.
+Its full component coupling is implicit and included in stage audits. A small
+weak divergence does not establish convergence of strong divergence or wall
+fluxes; assess its finite-mesh effect before experimental predictions.
+
+Newton requires positive $k$/epsilon at closure inputs and accepted timesteps.
+Its finite linear preconditioner image can contain signed scalar entries;
+\inltt{nonpositive\_linear\_images} records these separately from physical
+guard activations. They are not accepted fields, and no floor is applied.
+
+\inltt{RANSStartupDuration} is an optional temporary weak-load continuation,
+restricted to an experimental plane without external forcing. It caches the
+initial free-equation residual and fades its load to exactly zero at the
+specified time. Exact initial holding also requires compatible Dirichlet data.
+The default is zero. Its warmup is not experimental time; restart during the
+warmup is unsupported. Use unforced development and statistical windows after
+it ends, and verify duration sensitivity if enabling it.
+
 A flat streamwise $x+$ outlet can tag every velocity Neumann entry
 \inltt{RANSOutflow}. Its value is total traction $(T-\pi I)n$, where
 $T=\nu_{\mathrm{eff}}(\nabla U+\nabla U^T)-R_{\mathrm{nonlinear}}$; the solver adds the

@@ -5,8 +5,8 @@
 - Origin Skill: academic-research-suite / experiment-agent
 - Origin Mode: plan / computational experiment
 - Origin Date: 2026-11-01
-- Verification Status: CV1 source/data and CV2 implementation/readiness VERIFIED within recorded limits; CV3–CV8 PLANNED
-- Version Label: cao_tamura_calibrated_validation_v1_cv2
+- Verification Status: CV1 source/data and CV2 implementation/readiness VERIFIED within recorded limits; CV3 IN PROGRESS; CV4–CV8 PLANNED
+- Version Label: cao_tamura_calibrated_validation_v1_cv3_attempt1
 
 ## Objective, branch and starting evidence
 
@@ -443,7 +443,7 @@ closure requires trustworthy evidence, not universal agreement with experiment.
 
 ## Milestones and closure evidence
 
-CV1–CV2 are **CLOSED**; CV3–CV8 remain **PLANNED**. Maintain closure notes and compact
+CV1–CV2 are **CLOSED**; CV3 is **IN PROGRESS**; CV4–CV8 remain **PLANNED**. Maintain closure notes and compact
 receipts under `docs/plans/cao-tamura-validation-evidence/` as they are produced;
 store large simulation outputs only in the Linux run root. CV1's data/evidence
 paths now exist; later milestone outputs remain planned. Each closure records
@@ -456,12 +456,20 @@ physics, calibration, observation-operator or numerical change.
 |---|---|---|---|
 | CV1 — Source and data freeze | Planning commit | PDF/figure/page audit, geometry/units/station tables, independently checked digitized curves and uncertainty/provenance, calibration/holdout split, dimensional/Re consistency, unresolved facility/mixed-surface details explicitly recorded. Freeze versioned data and score definitions before fitting. | CLOSED |
 | CV2 — Wall/reference and probe readiness | CV1 | Parameterized experimental generator; smooth-anchor checks; displaced-reference derivation/decision; any necessary declared implementation; native physical-point interpolation and below-hm reconstruction with frame/rank/continuity tests. Canonical d=0, finite-nu, original recovery, curved continuity, history and legacy checks pass on Linux. Record unsupported observables rather than manufacture them. | CLOSED |
-| CV3 — Separate S/R calibration | CV1–CV2 | Developed empty-floor precursors; fixed-coefficient calibration and flat-data cross-checks; shared-parameter and any conditional fits distinguished; parameter/variance/displacement uncertainty and incident residuals published. Freeze S/R manifests without using held-out hill scores. | PLANNED |
+| CV3 — Separate S/R calibration | CV1–CV2 | Developed empty-floor precursors; fixed-coefficient calibration and flat-data cross-checks; shared-parameter and any conditional fits distinguished; parameter/variance/displacement uncertainty and incident residuals published. Freeze S/R manifests without using held-out hill scores. | IN PROGRESS |
 | CV4 — Numerical and long-time readiness | CV2–CV3 | Profiled solver and bounded runtime estimate; three-level h and dt evidence plus p/hm/domain sensitivities; inlet/outlet preservation convergence; perturbed 3D stability checks; demonstrated stationarity/statistical procedure, mass/strip budgets and MPI/history equivalence. No large production matrix until throughput and observable error are defensible. | PLANNED |
 | CV5 — Developed transition study | CV3–CV4 | Fixed-mask 32-case hill/floor matrix, original/log baselines, upstream-only width and separate placement study, incident diagnostics, switched subset and selected resolved-viscosity sensitivities. Quantify numerical/sampling significance and select/freeze width by approach-flow/plateau rules, retaining every width and any non-plateau result. | PLANNED |
 | CV6 — Locked SS/RR validation | CV1–CV5 | Ten primary model/wall/surface combinations, reusing identical CV5 cases; switched comparisons where admissible; held-out profiles/S/x_R/stress with the verified observation operator and complete uncertainty. Report canonical-model failures as results; no hill-driven retuning. | PLANNED |
 | CV7 — Mixed surfaces and 3D checks | CV4–CV6 | RS/SR crest comparisons with audited material coverage, selected span/domain/3D checks for S/R and both closures, total-stress statistics and limitations. Bound or explicitly leave unresolved end-plate, homogenization and 2D effects; no unsupported mixed-wake or broadband/intermittency claim. | PLANNED |
 | CV8 — Reproducible assessment | CV1–CV7 | Final observable-level accuracy/uncertainty tables, common-calibration versus conditional-fit interpretation, width/placement recommendation or unresolved range, convergence figures, case/data/build hashes, executable reproduction commands and restart instructions. All outcomes and failed attempts retained; working tree reviewed, milestone committed and pushed. | PLANNED |
+
+The [CV3 attempt record](cao-tamura-cv3-calibration-attempt.md) reports the
+completed 32-case bounded design: 13 developed standard cases and no eligible
+CLS case. Smaller-step, quadrature, stabilization and spatial controls did
+not supply a developed CLS precursor. Shared S/R calibration manifests,
+wall-policy transfers and reserved-flat crosschecks therefore remain
+unfinished. The implementation and negative numerical results are retained;
+this is not CV3 closure or an experimental-validation result.
 
 CV2 may conclude that exact displaced equilibrium is unavailable for a
 canonical model; CV3 may expose irreducible flat-data misfit. Those findings

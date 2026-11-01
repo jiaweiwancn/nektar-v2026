@@ -12,10 +12,12 @@ namespace Nektar
 {
 RANSMatrixFree::RANSMatrixFree(
     const Array<OneD, MultiRegions::ExpListSharedPtr> &fields,
-    int dimension, NekDouble tolerance, RobinOperator robin)
-    : m_fields(fields), m_dim(dimension), m_tolerance(tolerance), m_robin(std::move(robin))
+    int dimension, NekDouble tolerance, RobinOperator robin, NekDouble gradDiv)
+    : m_fields(fields), m_dim(dimension), m_tolerance(tolerance),
+      m_gradDiv(gradDiv), m_robin(std::move(robin))
 {
     ASSERTL0(std::isfinite(tolerance) && tolerance > 0, "Invalid RANS Krylov tolerance");
+    ASSERTL0(std::isfinite(gradDiv) && gradDiv >= 0, "Invalid RANS grad-div coefficient");
 }
 
 RANSMatrixFree::~RANSMatrixFree()
@@ -218,10 +220,12 @@ int RANSMatrixFree::SolveVelocity(const Fields &rhs, const Fields &diffusion,
             auto p = std::make_unique<Preconditioner>(); p->field = f; p->alpha = alpha;
             p->diffusion = Array<OneD,NekDouble>(nq); p->mass = Array<OneD,NekDouble>(nq,alpha);
             Vmath::Vcopy(nq,diffusion[f],1,p->diffusion,1);
+            p->directional = Array<OneD,NekDouble>(nq);
+            Vmath::Sadd(nq,m_gradDiv,p->diffusion,1,p->directional,1);
             StdRegions::VarCoeffMap coefficients;
-            coefficients[StdRegions::eVarCoeffD00] = p->diffusion;
-            coefficients[StdRegions::eVarCoeffD11] = p->diffusion;
-            if (m_dim == 3) coefficients[StdRegions::eVarCoeffD22] = p->diffusion;
+            coefficients[StdRegions::eVarCoeffD00] = f == 0 ? p->directional : p->diffusion;
+            coefficients[StdRegions::eVarCoeffD11] = f == 1 ? p->directional : p->diffusion;
+            if (m_dim == 3) coefficients[StdRegions::eVarCoeffD22] = f == 2 ? p->directional : p->diffusion;
             coefficients[StdRegions::eVarCoeffMass] = p->mass;
             StdRegions::ConstFactorMap factors; factors[StdRegions::eFactorLambda] = 1;
             p->key = std::make_unique<MultiRegions::GlobalLinSysKey>(StdRegions::eHelmholtz,other,factors,coefficients);
@@ -236,6 +240,7 @@ int RANSMatrixFree::SolveVelocity(const Fields &rhs, const Fields &diffusion,
     };
     auto b = arrays(ng), x = arrays(ng), ax = arrays(ng), r = arrays(ng), z = arrays(ng), p = arrays(ng), ap = arrays(ng);
     auto physical = arrays(nq);
+    Array<OneD,NekDouble> divergence(nq),derivative(nq);
     Array<OneD,NekDouble> local(nc), applied(nc), coefficients(nc), counts(ng), countLocal(nc);
     for (int i = 0; i < nc; ++i) countLocal[i] = map->GetLocalToGlobalSign(i);
     map->Assemble(countLocal,counts);
@@ -272,6 +277,15 @@ int RANSMatrixFree::SolveVelocity(const Fields &rhs, const Fields &diffusion,
         {
             map->GlobalToLocal(v[f],local); fields[f]->BwdTrans(local,physical[f]);
         }
+        if (m_gradDiv > 0)
+        {
+            Vmath::Zero(nq,divergence,1);
+            for (int f = 0; f < m_dim; ++f)
+            {
+                fields[f]->PhysDeriv(MultiRegions::DirCartesianMap[f],physical[f],derivative);
+                Vmath::Vadd(nq,derivative,1,divergence,1,divergence,1);
+            }
+        }
         for (int f = 0; f < m_dim; ++f)
         {
             Fields flux(m_dim);
@@ -280,6 +294,8 @@ int RANSMatrixFree::SolveVelocity(const Fields &rhs, const Fields &diffusion,
                 flux[d] = Array<OneD,NekDouble>(nq);
                 fields[f]->PhysDeriv(MultiRegions::DirCartesianMap[d],physical[f],flux[d]);
                 Vmath::Vmul(nq,diffusion[f],1,flux[d],1,flux[d],1);
+                if (m_gradDiv > 0 && d == f)
+                    Vmath::Svtvp(nq,m_gradDiv,divergence,1,flux[d],1,flux[d],1);
             }
             fields[f]->IProductWRTDerivBase(flux,applied);
             fields[f]->IProductWRTBase(physical[f],coefficients);

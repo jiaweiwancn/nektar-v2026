@@ -18,7 +18,8 @@ public:
     using Fields = Array<OneD, Array<OneD, NekDouble>>;
     using RobinOperator = std::function<void(int, const Fields &, Array<OneD, NekDouble> &)>;
     RANSMatrixFree(const Array<OneD, MultiRegions::ExpListSharedPtr> &fields,
-                   int dimension, NekDouble tolerance, RobinOperator robin);
+                   int dimension, NekDouble tolerance, RobinOperator robin,
+                   NekDouble gradDiv = 0);
     ~RANSMatrixFree();
     int Solve(int field, const Array<OneD, NekDouble> &rhs,
               const Array<OneD, NekDouble> &diffusion,
@@ -31,12 +32,12 @@ private:
     {
         int field;
         NekDouble alpha;
-        Array<OneD, NekDouble> diffusion, mass;
+        Array<OneD, NekDouble> diffusion, directional, mass;
         std::unique_ptr<MultiRegions::GlobalLinSysKey> key;
     };
     Array<OneD, MultiRegions::ExpListSharedPtr> m_fields;
     int m_dim;
-    NekDouble m_tolerance;
+    NekDouble m_tolerance, m_gradDiv;
     RobinOperator m_robin;
     std::vector<std::unique_ptr<Preconditioner>> m_preconditioners;
 };

@@ -9,6 +9,7 @@ import csv
 import hashlib
 import json
 import math
+from functools import lru_cache
 import os
 from pathlib import Path
 import shutil
@@ -26,7 +27,7 @@ from cao_tamura_observables import speedup, reattachment
 
 ROOT = Path(__file__).resolve().parents[4]
 DATA = ROOT/'docs/plans/cao-tamura-validation-data'
-VERSION = 'cao-tamura-workflow-v1'
+VERSION = 'cao-tamura-workflow-v2'
 THREADS = {k: '1' for k in ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS', 'BLIS_NUM_THREADS')}
 MODELS = ('standard', 'standard_original', 'standard_fixed', 'standard_switched',
           'cls_original', 'cls_fixed', 'cls_switched')
@@ -35,7 +36,12 @@ DEFAULTS = dict(surface='S', geometry='floor', model='standard_fixed',
                 layers=10, span=.16, span_layers=2, hm=.011, point_p=.0055,
                 point_n=.022, ks=0., xmin=-1., xmax=1.2, ramp_end=-.2,
                 ramp_width_h=2., dt=1e-5, steps=2, checkpoint=1,
-                outer_length=.025, outer_intensity=.003, failure_policy='UseOriginal')
+                outer_length=.025, outer_intensity=.003, failure_policy='UseOriginal',
+                inlet_delta=.25, k_scale=1., epsilon_scale=1., x_columns=None,
+                velocity_scaling='inlet_fit', z0=None,
+                inlet_reference_q=None,inlet_reference_kappa=None,outer_blend='Geometric',mean_outer_cap=False,pressure_degree=None,time_order=2,epsilon_profile='NeutralLog',startup_flow_times=0.,
+                inlet_wall_collar=False,k_profile='NeutralConstant',variance_factor=1.,outer_blend_cells=10,
+                advection='Explicit',quadrature_points=None)
 
 
 def sha(path):
@@ -100,10 +106,87 @@ def blend(r):
     return 1-10*r**3+15*r**4-6*r**5
 
 
-def mean_ratio(eta, c, coeff):
-    l = math.log(eta/c['hm'])
-    w = blend((eta-.2)/.1)
-    return w*sum(a*l**i for i, a in enumerate(coeff))+(1-w)
+@lru_cache(maxsize=32)
+def rms_fit(surface,hm,point_n):
+    """Allowed Fig.3c only; no reserved vertical variance enters inferred k."""
+    points=[p for p in records(DATA/'profiles.csv') if p['series_id']=='f3c_'+surface
+            and float(p['weight'])>0 and float(p['value'])>0 and .04*float(p['y_over_H'])>=point_n]
+    x=[.04*float(p['y_over_H'])/.25 for p in points]
+    y=[math.log(float(p['value'])) for p in points];w=[float(p['weight']) for p in points]
+    coeff=solve_linear([[sum(t*z**(i+j) for z,t in zip(x,w)) for j in range(4)] for i in range(4)],
+                       [sum(t*v*z**i for z,v,t in zip(x,y,w)) for i in range(4)])
+    return coeff,points
+
+
+def inlet_reference(c):
+    standard=c['model'].startswith('standard')
+    return (c['inlet_reference_q'] or (10/3 if standard else 3.190675081624288),
+            c['inlet_reference_kappa'] or (math.sqrt(.48*1.3/(10/3)) if standard else .440553905186659))
+
+
+def near_k_over_star2(c):
+    if c['k_profile']=='NeutralConstant':return c['k_scale']*inlet_reference(c)[0]
+    coeff,_=rms_fit(c['surface'],c['hm'],c['point_n'])
+    l=c['point_n']/c['inlet_delta']
+    return c['k_scale']*c['variance_factor']*math.exp(2*sum(a*l**i for i,a in enumerate(coeff)))
+
+
+def collar_data(c,coeff):
+    """Exact primitive of a convex blend of canonical and measured shear."""
+    q,kap=inlet_reference(c);ratio=c['point_n']/c['hm']
+    a=(.033 if c['surface']=='S' else .051)*math.sqrt(near_k_over_star2(c)/q)/kap
+    b=[1.]+[0.]*5
+    for power,value in ((3,-10.),(4,15.),(5,-6.)):
+        for j in range(power+1):b[j]+=value*math.comb(power,j)*(-1.)**(power-j)/(ratio-1)**power
+    l=math.log(.25/c['inlet_delta'])
+    d=[a-coeff[1]-2*coeff[2]*l-3*coeff[3]*l*l,-2*coeff[2]-6*coeff[3]*l,-3*coeff[3]]
+    return a,b,d
+
+
+def collar_primitive(x,b,d):
+    l=math.log(x)
+    value=b[0]*(d[0]*l+d[1]*l*l/2+d[2]*l**3/3)
+    for m in range(1,6):
+        value+=b[m]*x**m/m*(d[0]+d[1]*(l-1/m)+d[2]*(l*l-2*l/m+2/m**2))
+    return value
+
+
+def mean_raw(eta, c, coeff):
+    delta=c['inlet_delta'];l = math.log(eta*.25/(delta*c['hm']))
+    w = blend((eta-.8*delta)/(.4*delta))
+    value=sum(a*l**i for i,a in enumerate(coeff))
+    if c['mean_outer_cap']:
+        t=max(0.,min(1.,(value-.98)/.04))
+        value=.98+.04*(t-t**3+.5*t**4)+min(value-.98,0.)
+    return w*value+(1-w)
+
+
+def mean_raw_derivative(eta,c,coeff):
+    delta=c['inlet_delta'];l=math.log(eta*.25/(delta*c['hm']))
+    value=sum(a*l**i for i,a in enumerate(coeff))
+    derivative=sum(i*a*l**(i-1)/eta for i,a in enumerate(coeff) if i)
+    if c['mean_outer_cap']:
+        t=max(0.,min(1.,(value-.98)/.04))
+        derivative*=1-3*t*t+2*t**3
+        value=.98+.04*(t-t**3+.5*t**4)+min(value-.98,0.)
+    t=max(0.,min(1.,(eta-.8*delta)/(.4*delta)))
+    return blend(t)*derivative-30*t*t*(1-t)**2/(.4*delta)*(value-1)
+
+
+def mean_ratio(eta,c,coeff):
+    value=mean_raw(eta,c,coeff)
+    if c['inlet_wall_collar'] and eta<c['point_n']:
+        _,b,d=collar_data(c,coeff)
+        value+=collar_primitive(max(1.,eta/c['hm']),b,d)-collar_primitive(c['point_n']/c['hm'],b,d)
+    return value
+
+
+def mean_derivative(eta,c,coeff):
+    derivative=mean_raw_derivative(eta,c,coeff)
+    if c['inlet_wall_collar'] and eta<c['point_n']:
+        a,_,_=collar_data(c,coeff);w=blend((eta-c['hm'])/(c['point_n']-c['hm']))
+        derivative=w*a/eta+(1-w)*derivative
+    return derivative
 
 
 def config(value):
@@ -117,9 +200,35 @@ def config(value):
         raise ValueError('Unsupported diffusion or dimension')
     if c['failure_policy'] not in ('UseOriginal', 'RequirePreservation'):
         raise ValueError('Unsupported AWF failure policy')
-    for name in ('degree', 'refinement', 'layers', 'span_layers', 'steps', 'checkpoint'):
+    if not 0<=c['startup_flow_times']<=10:
+        raise ValueError('Use 0..10 flow-through times for startup continuation')
+    if c['startup_flow_times'] and c['geometry']!='floor':
+        raise ValueError('Startup continuation is for empty floors; set startup_flow_times=0 for a hill')
+    if c['k_profile'] not in ('NeutralConstant','MeasuredRms') or not 0<c['variance_factor']<=3:
+        raise ValueError('Unsupported inferred variance profile or factor')
+    if type(c['inlet_wall_collar']) is not bool:
+        raise ValueError('inlet_wall_collar must be a boolean')
+    if c['inlet_wall_collar'] and not (1.5<=c['point_n']/c['hm']<=3 and c['point_n']<.8*c['inlet_delta']):
+        raise ValueError('Wall-compatible collar requires 1.5<=N/H<=3 below the outer blend')
+    if c['epsilon_profile'] not in ('NeutralLog','LocalShear','ShearLength'):
+        raise ValueError('Unsupported inferred inlet dissipation profile')
+    if c['advection'] not in ('Explicit','Implicit'):
+        raise ValueError('Unsupported RANS advection partition')
+    if type(c['mean_outer_cap']) is not bool:
+        raise ValueError('mean_outer_cap must be a boolean')
+    if c['outer_blend'] not in ('Geometric','Arithmetic'):
+        raise ValueError('Unsupported outer turbulence interpolation')
+    if c['velocity_scaling'] not in ('inlet_fit','incident_ReH'):
+        raise ValueError('Unsupported velocity dimensionalization')
+    for name in ('degree', 'refinement', 'layers', 'span_layers', 'steps', 'checkpoint','outer_blend_cells'):
         if type(c[name]) is not int or c[name] < 1:
             raise ValueError(name+' must be a positive integer')
+    if type(c['time_order']) is not int or c['time_order'] not in (1,2):
+        raise ValueError('time_order must be 1 or 2')
+    if c['pressure_degree'] is not None and (type(c['pressure_degree']) is not int or not 1<=c['pressure_degree']<c['degree']):
+        raise ValueError('Require 1<=pressure_degree<velocity degree')
+    if c['quadrature_points'] is not None and (type(c['quadrature_points']) is not int or c['quadrature_points']<c['degree']+2):
+        raise ValueError('Require at least degree+2 quadrature points')
     if c['degree'] < 3 or c['layers'] < 5:
         raise ValueError('Use degree >=3 and at least five outer layers')
     for name, v in c.items():
@@ -138,6 +247,17 @@ def config(value):
         raise ValueError('The complete transition must lie upstream of the hill foot')
     if min(c['dt'], c['outer_length'], c['outer_intensity'], c['span']) <= 0:
         raise ValueError('Time, length and intensity parameters must be positive')
+    if not .08<=c['inlet_delta']<=.45 or not 0<c['k_scale']<=5 or not 0<c['epsilon_scale']<=10:
+        raise ValueError('Inlet thickness/variance/length parameters are outside declared admissible bounds')
+    if c['x_columns'] is not None:
+        x=c['x_columns']
+        if c['geometry']!='floor' or not isinstance(x,list) or len(x)<3 or not all(isinstance(a,(int,float)) and math.isfinite(a) for a in x) or x!=sorted(set(x)) or x[0]!=c['xmin'] or x[-1]!=c['xmax'] or 0. not in x:
+            raise ValueError('Explicit floor x_columns must increase from xmin to xmax and contain x=0')
+    if c['z0'] is not None and not 0<c['z0']<c['hm']:
+        raise ValueError('Require 0<z0<hm')
+    for key in ('inlet_reference_q','inlet_reference_kappa'):
+        if c[key] is not None and (not isinstance(c[key],(int,float)) or not math.isfinite(c[key]) or c[key]<=0):
+            raise ValueError(key+' must be positive')
     if 'assumed_nu' in c and c['assumed_nu'] <= 0:
         raise ValueError('assumed_nu must be positive')
     return c
@@ -148,19 +268,34 @@ def reference(c):
     q = 10/3 if standard else 3.190675081624288
     kap = math.sqrt(.48*1.3/q) if standard else .440553905186659
     coeff, points = profile_fit(c['surface'], c['hm'])
+    if c['inlet_wall_collar'] and c['mean_outer_cap'] and any(
+            mean_raw(c['hm']+(c['point_n']-c['hm'])*i/32,
+                     {**c,'mean_outer_cap':False},coeff)>=.98 for i in range(33)):
+        raise ValueError('The exact shear collar requires an inactive mean cap below N')
     re_h = 12000 if c['surface'] == 'S' else 10500
     uh = re_h*c['assumed_nu']/.04 if 'assumed_nu' in c else 1.
-    uinf = uh/mean_ratio(.04, c, coeff)
+    if c['velocity_scaling']=='incident_ReH':
+        pts=sorted((.04*float(p['y_over_H']),float(p['value'])) for p in points)
+        a,b=next((a,b) for a,b in zip(pts,pts[1:]) if a[0]<=.04<=b[0])
+        ratio=a[1]+(.04-a[0])*(b[1]-a[1])/(b[0]-a[0])
+    else:ratio=mean_ratio(.04,c,coeff)
+    uinf = uh/ratio
     star = uinf*(.033 if c['surface'] == 'S' else .051)
     k_outer = 1.5*(c['outer_intensity']*uinf)**2
-    result = dict(q=q, kappa=kap, coefficients=coeff, U_H=uh, Uinf=uinf,
-                  ustar=star, nu=.04*uh/re_h, re_h=re_h, k_near=q*star**2,
+    inlet_q=c['inlet_reference_q'] if c['inlet_reference_q'] is not None else q
+    inlet_kappa=c['inlet_reference_kappa'] if c['inlet_reference_kappa'] is not None else kap
+    result = dict(q=q, kappa=kap,inlet_q=inlet_q,inlet_kappa=inlet_kappa, coefficients=coeff, U_H=uh, Uinf=uinf,
+                  ustar=star, nu=.04*uh/re_h, re_h=re_h, k_near=near_k_over_star2(c)*star**2,
                   k_outer=k_outer, epsilon_outer=.09**.75*k_outer**1.5/c['outer_length'],
                   displacement=0. if c['surface'] == 'S' else .0035,
-                  z0=4e-6 if c['surface'] == 'S' else .0002,
+                  z0=c['z0'] if c['z0'] is not None else 4e-6 if c['surface'] == 'S' else .0002,
                   fit_series='f3a_'+c['surface'], fit_points=len(points))
     if min(mean_ratio(c['hm']*(.8/c['hm'])**(i/200), c, coeff) for i in range(201)) <= 0:
         raise ValueError('Fitted inlet mean is nonpositive')
+    result['rms_coefficients'],rms_points=(rms_fit(c['surface'],c['hm'],c['point_n']) if c['k_profile']=='MeasuredRms' else ([],[]))
+    result['rms_fit_points']=len(rms_points)
+    result['epsilon_inlet_near']=epsilon_seed(c['hm'],c,result)
+    result['epsilon_unit_near']=epsilon_seed(c['hm'],c,result,1.)
     H = c['hm']; nu = result['nu']; K = result['k_near']
     j0 = original_j0(K, H, c['ks'], nu)
     beta = .09*2.55*math.sqrt(K)
@@ -175,9 +310,9 @@ def reference(c):
     else:
         d0 = nu-beta*zv
         l = (math.log(dh/d0)-nu/d0+nu/dh)/beta
-    A = star**3/kap
-    lam = star**4*l/A
-    result.update(original_anchor=star**2*j0, ep_lambda=lam,
+    anchor_star=math.sqrt(K/q);A = anchor_star**3/kap
+    lam = anchor_star**4*l/A
+    result.update(original_anchor=anchor_star**2*j0, ep_lambda=lam,
                   ep_cutoff=H*math.exp(1-lam), wall_re=math.sqrt(K)*H/nu,
                   wall_epsilon_near=K**1.5/(2.55*H))
     if c['model'] == 'standard' or c['model'].endswith(('_fixed', '_switched')):
@@ -185,15 +320,41 @@ def reference(c):
     return result
 
 
-def inlet_values(eta, c, r):
-    w = blend((eta-.2)/.1)
-    collar = blend((eta-c['hm'])/(c['point_n']-c['hm']))
-    epsilon = r['ustar']**3/(r['kappa']*eta)
-    if c['model'].endswith('_original'):
-        epsilon += collar*(r['wall_epsilon_near']-r['ustar']**3/(r['kappa']*c['hm']))
-    k = math.exp(w*math.log(r['k_near'])+(1-w)*math.log(r['k_outer']))
-    return dict(u=r['Uinf']*mean_ratio(eta, c, r['coefficients']), v=0., w=0., k=k,
-                epsilon=math.exp(w*math.log(epsilon)+(1-w)*math.log(r['epsilon_outer'])), p=2*k/3)
+def inlet_k(eta,c,r):
+    delta=c['inlet_delta'];w=blend((eta-.8*delta)/(.4*delta))
+    seed=r['k_near']
+    if c['k_profile']=='MeasuredRms':
+        l=max(c['point_n'],min(1.2*delta,eta))/delta
+        raw=c['k_scale']*c['variance_factor']*r['ustar']**2*math.exp(2*sum(a*l**i for i,a in enumerate(r['rms_coefficients'])))
+        b=blend((eta-c['point_n'])/c['point_n'])
+        seed=math.exp(b*math.log(seed)+(1-b)*math.log(raw))
+    return (w*seed+(1-w)*r['k_outer'] if c['outer_blend']=='Arithmetic' else
+            math.exp(w*math.log(seed)+(1-w)*math.log(r['k_outer'])))
+
+
+def epsilon_seed(eta,c,r,scale=None):
+    scale=c['epsilon_scale'] if scale is None else scale
+    if c['epsilon_profile']=='NeutralLog':return scale*r['ustar']**3/(r['inlet_kappa']*eta)
+    k=inlet_k(eta,c,r)
+    outer=(.09**.75*k**1.5/c['outer_length'] if c['epsilon_profile']=='ShearLength' else r['epsilon_outer'])
+    return math.hypot(scale*k*r['Uinf']*mean_derivative(eta,c,r['coefficients'])/r['inlet_q'],outer)
+
+
+def inlet_values(eta,c,r):
+    delta=c['inlet_delta'];w=blend((eta-.8*delta)/(.4*delta))
+    collar=blend((eta-c['hm'])/(c['point_n']-c['hm']))
+    k=inlet_k(eta,c,r);epsilon=epsilon_seed(eta,c,r)
+    if c['epsilon_profile']=='ShearLength':
+        inner=epsilon_seed(eta,c,r,1.)*r['wall_epsilon_near']/r['epsilon_unit_near']
+        epsilon=math.exp(collar*math.log(inner)+(1-collar)*math.log(epsilon))
+    else:
+        epsilon+=collar*(r['wall_epsilon_near']-r['epsilon_inlet_near'])
+        if epsilon<=0:raise ValueError('Inferred epsilon collar is nonpositive')
+        if c['epsilon_profile']=='NeutralLog':
+            epsilon=(w*epsilon+(1-w)*r['epsilon_outer'] if c['outer_blend']=='Arithmetic' else
+                     math.exp(w*math.log(epsilon)+(1-w)*math.log(r['epsilon_outer'])))
+    if epsilon<=0:raise ValueError('Inferred epsilon profile is nonpositive')
+    return dict(u=r['Uinf']*mean_ratio(eta,c,r['coefficients']),v=0.,w=0.,k=k,epsilon=epsilon,p=2*k/3)
 
 
 def expressions(c, r):
@@ -203,15 +364,56 @@ def expressions(c, r):
         positive = f'(({t}+abs({t}))/2)'
         clip = f'(({positive}+1-abs({positive}-1))/2)'
         return f'(1-10*{clip}^3+15*{clip}^4-6*{clip}^5)'
-    w = smooth(.2, .3)
-    l = f'log({z}/H)'
+    delta=c['inlet_delta'];w = smooth(.8*delta,1.2*delta)
+    l = f'log({z}*0.25/({delta:.17g}*H))'
     poly = '('+'+'.join(f'({a:.17g})*({l})^{i}' for i, a in enumerate(r['coefficients']))+')'
-    k = f'exp({w}*log(Knear)+(1-{w})*log(Kouter))'
-    eps = f'Ustar^3/(Kappa*{z})'
-    if c['model'].endswith('_original'):
-        eps = f'({eps}+{smooth(c["hm"], c["point_n"])}*(EpsilonWall-Ustar^3/(Kappa*H)))'
-    return dict(u=f'Uinf*({w}*{poly}+(1-{w}))', v='0', w='0', k=k,
-                eps=f'exp({w}*log({eps})+(1-{w})*log(EpsilonOuter))', p=f'2/3*{k}')
+    derivative='('+'+'.join(f'({i*a:.17g})*({l})^{i-1}/{z}' for i,a in enumerate(r['coefficients']) if i)+')'
+    if c['mean_outer_cap']:
+        t=f'(({poly}-.98)/.04)'
+        positive=f'(({t}+abs({t}))/2)'
+        t=f'(({positive}+1-abs({positive}-1))/2)'
+        below=f'(({poly}-.98-abs({poly}-.98))/2)'
+        derivative=f'({derivative}*(1-3*{t}^2+2*{t}^3))'
+        poly=f'(.98+.04*({t}-{t}^3+.5*{t}^4)+{below})'
+    def clip(value,lower,upper):
+        positive=f'((({value})-({lower:.17g})+abs(({value})-({lower:.17g})))/2+({lower:.17g}))'
+        return f'(({positive}+({upper:.17g})-abs({positive}-({upper:.17g})))/2)'
+    t=clip(f'({z}-({.8*delta:.17g}))/({.4*delta:.17g})',0.,1.)
+    gradient=f'({w}*{derivative}-30*{t}^2*(1-{t})^2/({.4*delta:.17g})*({poly}-1))'
+    mean=f'({w}*{poly}+(1-{w}))'
+    collar=smooth(c['hm'],c['point_n'])
+    if c['inlet_wall_collar']:
+        aa,bb,dd=collar_data(c,r['coefficients']);ratio=c['point_n']/c['hm']
+        x=clip(f'{z}/H',1.,ratio);lx=f'log({x})'
+        terms=[f'({bb[0]:.17g})*(({dd[0]:.17g})*{lx}+({dd[1]/2:.17g})*{lx}^2+({dd[2]/3:.17g})*{lx}^3)']
+        for m in range(1,6):
+            terms.append(f'({bb[m]/m:.17g})*{x}^{m}*(({dd[0]:.17g})+({dd[1]:.17g})*({lx}-({1/m:.17g}))+({dd[2]:.17g})*({lx}^2-({2/m:.17g})*{lx}+({2/m**2:.17g})))')
+        mean=f'({mean}+('+ '+'.join(terms)+f')-({collar_primitive(ratio,bb,dd):.17g}))'
+        gradient=f'({collar}*({aa:.17g})/{z}+(1-{collar})*{gradient})'
+    seed='Knear'
+    if c['k_profile']=='MeasuredRms':
+        eta=clip(z,c['point_n'],1.2*delta)
+        lr=f'({eta}/({delta:.17g}))'
+        pk='('+'+'.join(f'({v:.17g})*({lr})^{i}' for i,v in enumerate(r['rms_coefficients']))+')'
+        raw=f'(({c["k_scale"]*c["variance_factor"]*r["ustar"]**2:.17g})*exp(2*{pk}))'
+        wk=smooth(c['point_n'],2*c['point_n'])
+        seed=f'exp({wk}*log(Knear)+(1-{wk})*log({raw}))'
+    k=(f'exp({w}*log({seed})+(1-{w})*log(Kouter))' if c['outer_blend']=='Geometric' else
+       f'({w}*{seed}+(1-{w})*Kouter)')
+    if c['epsilon_profile'] in ('LocalShear','ShearLength'):
+        outer=f'((0.09)^0.75*{k}^1.5/OuterLength)' if c['epsilon_profile']=='ShearLength' else 'EpsilonOuter'
+        def shear_seed(scale):
+            return f'sqrt((({scale:.17g})*{k}*Uinf*{gradient}/InletQ)^2+{outer}^2)'
+        base=shear_seed(c['epsilon_scale'])
+        if c['epsilon_profile']=='ShearLength':
+            inner=f'({shear_seed(1.)}*EpsilonWall/EpsilonUnitH)'
+            eps=f'exp({collar}*log({inner})+(1-{collar})*log({base}))'
+        else:eps=f'({base}+{collar}*(EpsilonWall-EpsilonInletH))'
+    else:
+        eps=f'(({c["epsilon_scale"]:.17g})*Ustar^3/(InletKappa*{z})+{collar}*(EpsilonWall-EpsilonInletH))'
+        eps=(f'exp({w}*log({eps})+(1-{w})*log(EpsilonOuter))' if c['outer_blend']=='Geometric' else
+             f'({w}*{eps}+(1-{w})*EpsilonOuter)')
+    return dict(u=f'Uinf*{mean}',v='0',w='0',k=k,eps=eps,p=f'2/3*{k}')
 
 
 def generate(value, output):
@@ -223,6 +425,12 @@ def generate(value, output):
     plane(path, model=c['model'], degree=c['degree'], layers=4, nx=2,
           dt=c['dt'], steps=c['steps'], dimension=c['dimension'], height=c['hm'], diffusion=c['diffusion'])
     tree = ET.parse(path); root = tree.getroot(); conditions = root.find('CONDITIONS')
+    root.find('CONDITIONS/TIMEINTEGRATIONSCHEME/ORDER').text=str(c['time_order'])
+    if c['pressure_degree'] is not None:
+        root.find("EXPANSIONS/E[@FIELDS='p']").set('NUMMODES',','.join([str(c['pressure_degree']+1)]*c['dimension']))
+    if c['quadrature_points'] is not None:
+        for e in root.findall('EXPANSIONS/E'):
+            e.set('NUMPOINTS',','.join([str(c['quadrature_points'])]*c['dimension']))
     # Every width uses the same complete mesh and feet. Refine the whole domain.
     xs = sorted(set([c['xmin'], c['xmax']]+[x for x in
         (-.8, -.68, -.56, -.52, -.48, -.44, -.40, -.36, -.32, -.28, -.24, -.20,
@@ -231,8 +439,9 @@ def generate(value, output):
     def refine(values):
         n = c['refinement']
         return [a+(b-a)*i/n for a,b in zip(values, values[1:]) for i in range(n)]+[values[-1]]
-    xs = refine(xs)
-    etas = sorted(set([c['hm'], c['point_n'], .2, .3, .8]+[.2+i*.01 for i in range(1,10)]+
+    xs = refine(c['x_columns'] if c['x_columns'] is not None else xs)
+    begin,end=.8*c['inlet_delta'],1.2*c['inlet_delta']
+    etas = sorted(set([c['hm'], c['point_n'], begin, end, .8]+[begin+i*(end-begin)/c['outer_blend_cells'] for i in range(1,c['outer_blend_cells'])]+
                      [c['point_n']*(.8/c['point_n'])**(i/c['layers']) for i in range(c['layers']+1)]))
     terrain_mesh(root, xs, refine(etas), .04 if c['geometry'] == 'hill' else 0.,
                  top=.8, dimension=c['dimension'], span=c['span'],
@@ -242,10 +451,11 @@ def generate(value, output):
     info(root, 'RANSAWFFailurePolicy', c['failure_policy'])
     info(root, 'RANSAWFSpatialWeight', 'Ramp' if ep else 'None')
     info(root, 'AdvectionType', 'Convective'); info(root, 'SpectralHPDealiasing', 'False')
+    info(root, 'RANSAdvectionTreatment', c['advection'])
     for key, val in dict(H=c['hm'], Z=.8, L=c['xmax']-c['xmin'], Ustar=r['ustar'],
-            Qstar=r['q'], Kappa=r['kappa'], Uinf=r['Uinf'], Uref=r['Uinf'],
+            Qstar=r['q'], Kappa=r['kappa'],InletQ=r['inlet_q'],InletKappa=r['inlet_kappa'], Uinf=r['Uinf'], Uref=r['Uinf'],
             MatchingVelocity=inlet_values(c['hm'], c, r)['u'], Knear=r['k_near'],
-            Kouter=r['k_outer'], EpsilonOuter=r['epsilon_outer'], EpsilonWall=r['wall_epsilon_near'],
+            Kouter=r['k_outer'], EpsilonOuter=r['epsilon_outer'], EpsilonInletH=r['epsilon_inlet_near'], EpsilonUnitH=r['epsilon_unit_near'], OuterLength=c['outer_length'], EpsilonWall=r['wall_epsilon_near'],
             Kinvis=r['nu'], ResolvedNu=r['nu'] if c['diffusion']=='Molecular' else 0.,
             Span=c['span'], RANSRoughnessHeight=c['ks'], RANSHeightShift=0.,
             RANSStripHeight=c['hm'], RANSStripPointP=c['point_p'], RANSStripPointN=c['point_n'],
@@ -253,8 +463,9 @@ def generate(value, output):
             RANSTerrainSlope=0., RANSAWFTransitionStart=c['ramp_end']-.04*c['ramp_width_h'],
             RANSAWFTransitionEnd=c['ramp_end'], RANSExperimentDisplacement=r['displacement'],
             RANSExperimentZ0=r['z0'],
-            RANSExperimentBlendBegin=.2, RANSExperimentBlendEnd=.3,
+            RANSExperimentBlendBegin=begin, RANSExperimentBlendEnd=end,
             RANSReferenceMonitor=0, RANSStageAudit=0, RANSAWFPointDiagnostics=1,
+            RANSStartupDuration=c['startup_flow_times']*(c['xmax']-c['xmin'])/r['Uinf'],
             RANSWallGeometryTolerance=1e-7, RANSNonlinearTolerance=1e-8,
             RANSPressureTolerance=1e-8, IO_CheckSteps=c['checkpoint'],
             TimeStep=c['dt'], NumSteps=c['steps']).items():
@@ -273,7 +484,15 @@ def generate(value, output):
             element(group, 'E', VAR=name, VALUE=values[name])
     for region in root.findall('CONDITIONS/BOUNDARYCONDITIONS/REGION'):
         b = int(region.attrib['REF'])
-        if b == 0 or b >= 4:
+        if b == 0:
+            # VCS reapplies Dirichlet data before the first implicit wall
+            # update. The startup trace must match the prepared inlet collar,
+            # including the actual K amplitude and the selected wall policy.
+            for entry in region:
+                if entry.attrib.get('VAR') in ('eps','eps_tilde'):
+                    entry.set('VALUE','EpsilonWall')
+            continue
+        if b >= 4:
             continue
         region.clear(); region.attrib['REF'] = str(b)
         for name in names:
@@ -294,8 +513,9 @@ def generate(value, output):
     receipt = dict(version=VERSION, status='provisional_unfitted', config=c, reference=r,
                    physics_fingerprint=fingerprint, case_sha256=sha(path),
                    cv1_version=frozen['version'], cv1_snapshot_sha256=sha(DATA/'snapshot.json'),
-                   inference=dict(epsilon='canonical high-Re transported epsilon; inferred, not measured',
-                                  k='Q*u_tau^2 near wall; outer isotropy assumption; no reserved vertical-rms fit',
+                   inference=dict(epsilon=c['epsilon_profile']+' prescribed inference; transported epsilon is unmodified and unmeasured',
+                                  k=('variance_factor*sigma_u_fit^2, with common k_scale and a constant N..H collar; unmeasured span variance'
+                                     if c['k_profile']=='MeasuredRms' else 'Q*u_tau^2 near wall; outer isotropy assumption; no reserved vertical-rms fit'),
                                   scale='assumed physical viscosity' if 'assumed_nu' in c else 'analysis units U_H=1; Re_H fixed; absolute airspeed unknown',
                                   displacement='observational only; physical Yap distance and wall origin unchanged'),
                    roof='0.8m Dirichlet free stream with nonzero inferred turbulence; facility/domain sensitivity pending CV4',
@@ -310,7 +530,8 @@ def environment(build):
     library = build/'geometry-lib/libSpatialDomains.so'
     if not library.exists():
         raise ValueError('Private full-precision SpatialDomains library required')
-    os.environ['LD_LIBRARY_PATH'] = str(library.parent)+':'+os.environ.get('LD_LIBRARY_PATH', '')
+    os.environ['LD_LIBRARY_PATH'] = ':'.join(dict.fromkeys(
+        [str(library.parent)]+[p for p in os.environ.get('LD_LIBRARY_PATH','').split(':') if p]))
     return build
 
 
@@ -446,14 +667,30 @@ def run(case, build, ranks, cpus, timeout=1800):
     manifest = json.loads((case.parent/'manifest.json').read_text())
     if manifest['preparation_required'] or sha(case) != manifest['case_sha256']:
         raise ValueError('Prepare the unmodified case before running')
+    solver_hash = sha(build/'IncNavierStokesSolver')
+    geometry_hash = sha(build/'geometry-lib/libSpatialDomains.so')
     command = allocation(ranks, cpus)+[build/'IncNavierStokesSolver', case.name, '--use-scotch']
-    result = execute(command, case.parent, 'run', timeout)
-    result.update(ranks=ranks, cpus=cpus, case_sha256=sha(case),
-                  solver_sha256=sha(build/'IncNavierStokesSolver'),
-                  geometry_sha256=sha(build/'geometry-lib/libSpatialDomains.so'),
-                  physics_fingerprint=manifest['physics_fingerprint'], cv1_snapshot_sha256=sha(DATA/'snapshot.json'))
+    provenance=dict(ranks=ranks, cpus=cpus, case_sha256=sha(case),
+        solver_sha256=solver_hash, geometry_sha256=geometry_hash,
+        physics_fingerprint=manifest['physics_fingerprint'], cv1_snapshot_sha256=sha(DATA/'snapshot.json'))
+    write_json(case.parent/'run-start.json',dict(command=list(map(str,command)),**provenance))
+    try:
+        result = execute(command, case.parent, 'run', timeout)
+    except RuntimeError:
+        result=json.loads((case.parent/'run.json').read_text());result.update(provenance,complete=False)
+        result['binaries_unchanged_during_run']=(solver_hash==sha(build/'IncNavierStokesSolver') and geometry_hash==sha(build/'geometry-lib/libSpatialDomains.so'))
+        try:result['partial_stages']=stage_metrics(case)
+        except (ValueError,FileNotFoundError):pass
+        write_json(case.parent/'run.json',result)
+        raise
+    result.update(provenance,complete=True)
     result['stages'] = stage_metrics(case)
+    result['binaries_unchanged_during_run'] = (
+        solver_hash == sha(build/'IncNavierStokesSolver') and
+        geometry_hash == sha(build/'geometry-lib/libSpatialDomains.so'))
     write_json(case.parent/'run.json', result)
+    if not result['binaries_unchanged_during_run']:
+        raise RuntimeError('Validation binaries changed during the run; retain the run as unaccepted')
     return result
 
 
@@ -468,6 +705,10 @@ def stage_metrics(case):
                 minimum_k=min(float(r['min_k']) for r in stages),
                 minimum_epsilon=min(float(r['min_eps']) for r in stages),
                 maximum_guard_activations=max(float(r['guard_activations']) for r in stages),
+                maximum_nonpositive_linear_images=max(float(r.get('nonpositive_linear_images',0)) for r in stages),
+                maximum_startup_weight=max(float(r.get('startup_weight',0)) for r in stages),
+                final_startup_weight=float(stages[-1].get('startup_weight',0)),
+                last_forced_stage_time=max((float(r['time']) for r in stages if float(r.get('startup_weight',0))>0),default=0.),
                 maximum_projected_normal=max(float(r['normal_projected_max']) for r in wall),
                 maximum_strong_normal=max(float(r['normal_pointwise_max']) for r in wall),
                 maximum_normal_integral_defect=max(abs(float(r['normal_integral_defect'])) for r in wall),
@@ -497,6 +738,11 @@ def observe(case, field, points, output, build, ranks=1, cpus='1'):
                   observation_configuration=native['configuration'],
                   experimental_fingerprint=fingerprint.attrib['VALUE'] if fingerprint is not None else None,
                   manifest_sha256=sha(manifest_path) if manifest_path.exists() else None, ranks=ranks, cpus=cpus)
+    # Bind exclusion of temporary startup forcing to the producing XML, not
+    # merely an optional description in a sidecar manifest.
+    duration=[n.text.split('=',1)[1].strip() for n in ET.parse(case).getroot().findall('CONDITIONS/PARAMETERS/P')
+              if n.text.split('=',1)[0].strip()=='RANSStartupDuration']
+    result['startup_end_time']=float(duration[0]) if duration else 0.
     write_json(str(output)+'.json', result)
     return result
 
@@ -519,6 +765,9 @@ def statistics(inputs, output, verification=False):
         raise ValueError('Supply at least two distinct physical times')
     if not verification and times[0] <= 0:
         raise ValueError('Experimental statistics exclude zero-time/startup fields')
+    if not verification and any(t<r.get('startup_end_time',0.) for t,r in
+            zip([float(records(p)[0]['time']) for p in inputs],provenance)):
+        raise ValueError('Experimental statistics exclude the forced startup continuation')
     ids = [r['id'] for r in snapshots[0]]
     for s in snapshots:
         if [r['id'] for r in s] != ids or len({r['time'] for r in s}) != 1:
@@ -576,7 +825,7 @@ def compare(stats, manifest_path, output, calibration=False, flat_stats=None, fl
         if flat_manifest is None:
             raise ValueError('Matched-flat statistics require --flat-manifest')
         fm=json.loads(Path(flat_manifest).read_text());fr=json.loads(Path(str(flat_stats)+'.json').read_text())
-        transfer=lambda c:{k:v for k,v in c.items() if k not in ('geometry','steps','checkpoint')}
+        transfer=lambda c:{k:v for k,v in c.items() if k not in ('geometry','steps','checkpoint','startup_flow_times')}
         if fm['config']['geometry']!='floor' or transfer(fm['config'])!=transfer(manifest['config']) or fm['reference']!=ref:
             raise ValueError('Flat reference must transfer the identical surface/inlet/model/wall configuration')
         if fr.get('output_sha256')!=sha(flat_stats) or fr.get('experimental_fingerprint')!=fm['physics_fingerprint']:

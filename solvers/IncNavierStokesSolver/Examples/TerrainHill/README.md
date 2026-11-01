@@ -1,5 +1,17 @@
 # Terrain walls and an upstream AWF transition
 
+## CV3 calibration status
+
+The [bounded calibration attempt](../../../../docs/plans/cao-tamura-cv3-calibration-attempt.md)
+contains developed standard-only precursors, the full declared design and
+retained CLS numerical failures. **CV3 is still open:** there is no shared
+S/R calibration freeze, and reserved flat/hill scores remain locked.
+`Tests/RANS/cao_tamura_calibration.py` provides native physical-time development,
+five-family objectives, independent strip inventories, selection and guarded
+freeze commands. `cao_tamura_campaign.py` runs the declared design with an
+explicit maximum of 15 case CPUs plus one controller. Use a new run directory
+after changing its recipe, source hashes or binary; never overwrite an attempt.
+
 ## Cao–Tamura experimental preparation (CV2)
 
 `cao_tamura.py` is the parameterized experimental entry point. The two

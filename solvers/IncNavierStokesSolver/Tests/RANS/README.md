@@ -13,6 +13,20 @@ development studies and their original commands.
 | `run_m6.sh BUILD RUN [JOBS]` | Complete preservation/robustness study; failed controls are recorded explicitly |
 | `validate_m3.py`, `validate_m4.py`, `validate_m5.py` | Standard transport, original CLS/AWF, corrected CLS/AWF acceptance |
 | `validate_m1.py`, `validate_m2.py` | Strip prototype and independent kernel/oracle checks |
+| `cao_tamura_calibration.py`, `cao_tamura_campaign.py` | Bounded empty-floor design, native development/selection and guarded freeze; CV3 remains open |
+| `validate_cao_tamura_cv3.py`, `validate_rans_implicit_advection.py` | Native experimental inlet/startup/history checks and independent manufactured transport order |
+| `validate_rans_stress_tangent.py --audit ...` | Full native transverse stress tangents versus an independent parallel-shear formula, including both CLS max-invariant sides |
+| `record_cao_tamura_cv3.py` | Read-only incomplete-attempt evidence, conditional standard profiles and local tangent figures |
+
+The [CV3 attempt record](../../../../docs/plans/cao-tamura-cv3-calibration-attempt.md)
+retains the full design and numerical rejections. Successful short solves or
+conditional standard-only fits cannot unlock reserved flat or hill scores.
+The external test build registers the calibration guards and stress-tangent
+oracle in addition to the existing kernel/solver checks. Figures require
+Matplotlib; native preparation requires SciPy and manufactured generators
+require SymPy. Symbolic fixture construction is serialized because SymPy's
+global assumption caches are not thread-safe; native solver processes can
+still run concurrently within an explicit project allocation.
 
 Use separate Linux run directories and at most 16 project workers. The CTest
 fixtures are copied into the build's `rans-smoke` directory, keeping generated

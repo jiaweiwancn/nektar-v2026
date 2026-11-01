@@ -22,8 +22,10 @@ add_executable(RANSWallGeometryProbe
     ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSWallGeometryProbe.cpp)
 add_executable(RANSObservationKernelProbe
     ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSObservationKernelProbe.cpp)
+add_executable(RANSStressTangentAudit
+    ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSStressTangentAudit.cpp)
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    foreach(rans_target RANSKernels RANSWallLayerProbe RANSKernelProbe RANSWallGeometryProbe RANSObservationKernelProbe)
+    foreach(rans_target RANSKernels RANSWallLayerProbe RANSKernelProbe RANSWallGeometryProbe RANSObservationKernelProbe RANSStressTangentAudit)
         target_compile_options(${rans_target} PRIVATE
             -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror)
     endforeach()
@@ -33,6 +35,7 @@ target_link_libraries(RANSWallLayerProbe
 target_link_libraries(RANSKernelProbe RANSKernels)
 target_link_libraries(RANSWallGeometryProbe RANSKernels)
 target_link_libraries(RANSObservationKernelProbe RANSKernels)
+target_link_libraries(RANSStressTangentAudit RANSKernels)
 option(RANS_BUILD_SOLVER "Build the complete incompressible solver in isolation" OFF)
 if(RANS_BUILD_SOLVER)
     # Build the source SpatialDomains library in isolation too: terrain normals
@@ -156,6 +159,18 @@ add_test(NAME RANSObservationKernels COMMAND RANSObservationKernelProbe
     ${CMAKE_CURRENT_BINARY_DIR}/rans-observation-kernels.json)
 set_tests_properties(RANSObservationKernels PROPERTIES
     PROCESSORS 1 TIMEOUT 120 ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
+find_package(Python3 QUIET COMPONENTS Interpreter)
+if(Python3_Interpreter_FOUND)
+    add_test(NAME RANSCaoTamuraCalibrationGuards COMMAND ${Python3_EXECUTABLE}
+        ${CMAKE_CURRENT_LIST_DIR}/validate_cao_tamura_calibration.py)
+    set_tests_properties(RANSCaoTamuraCalibrationGuards PROPERTIES
+        PROCESSORS 1 TIMEOUT 60 ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
+    add_test(NAME RANSStressTangentOracle COMMAND ${Python3_EXECUTABLE}
+        ${CMAKE_CURRENT_LIST_DIR}/validate_rans_stress_tangent.py
+        --audit $<TARGET_FILE:RANSStressTangentAudit>)
+    set_tests_properties(RANSStressTangentOracle PROPERTIES
+        PROCESSORS 1 TIMEOUT 120 ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
+endif()
 if(RANS_BUILD_SOLVER)
     get_property(rans_all_tests DIRECTORY PROPERTY TESTS)
     set_property(TEST ${rans_all_tests} APPEND PROPERTY ENVIRONMENT
