@@ -1,0 +1,78 @@
+{
+  "cases": [
+    {
+      "F100": {
+        "k1_rad_m": 100.0,
+        "raw_Table2a_F11_m3_s2": 0.00011399999999999999,
+        "retained_percent_of_uncut_model": 89.83082659125625,
+        "signed_percent_difference_from_raw_measurement": -4.173484819388795,
+        "tapered_model": {
+          "absolute_quadrature_error_estimate": 1.2128323601634159e-18,
+          "value_m3_s2": 0.00010924222730589677
+        },
+        "uncut_model": {
+          "absolute_quadrature_error_estimate": 6.08001191202296e-16,
+          "value_m3_s2": 0.00012160884125330972
+        }
+      },
+      "continuum_input_model": {
+        "K_m2_s2": 0.06651877850822355,
+        "Lf_m": 0.027538839262962193,
+        "epsilon_absolute_quadrature_error_estimate_m2_s3": 9.55081779228927e-16,
+        "epsilon_m2_s3": 0.08602611890087491,
+        "isotropic_component_urms_m_s": 0.2105845491455052,
+        "lambda_m": 0.01076967499240944
+      },
+      "cutoff_rad_m": 600,
+      "retained_K_percent_of_uncut_model": 86.64412564579514,
+      "retained_epsilon_percent_of_uncut_model": 21.184889917018857,
+      "taper_start_rad_m": 480
+    },
+    {
+      "F100": {
+        "k1_rad_m": 100.0,
+        "raw_Table2a_F11_m3_s2": 0.00011399999999999999,
+        "retained_percent_of_uncut_model": 95.04931595280264,
+        "signed_percent_difference_from_raw_measurement": 1.3933085521057764,
+        "tapered_model": {
+          "absolute_quadrature_error_estimate": 1.2832887169511649e-18,
+          "value_m3_s2": 0.00011558837174940057
+        },
+        "uncut_model": {
+          "absolute_quadrature_error_estimate": 6.08001191202296e-16,
+          "value_m3_s2": 0.00012160884125330972
+        }
+      },
+      "continuum_input_model": {
+        "K_m2_s2": 0.07052420504710896,
+        "Lf_m": 0.026192730841845622,
+        "epsilon_absolute_quadrature_error_estimate_m2_s3": 1.4717828068564602e-15,
+        "epsilon_m2_s3": 0.13256641001058111,
+        "isotropic_component_urms_m_s": 0.21683204721182855,
+        "lambda_m": 0.008933013319382144
+      },
+      "cutoff_rad_m": 800,
+      "retained_K_percent_of_uncut_model": 91.861399445513,
+      "retained_epsilon_percent_of_uncut_model": 32.645954957058805,
+      "taper_start_rad_m": 640
+    }
+  ],
+  "schema": "NEKTAR_HIT_BAND100_INPUT_REVIEW_CONTEXT_V1",
+  "scope": "Continuum spectrum model; neither CFD nor an experimentally exact uncut spectrum. No retained-band renormalization.",
+  "source_budget_path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/band100/608b2d3/checks-01/input-budget.json",
+  "source_budget_sha256": "7c9b3b675e49b0b0f9f989493f82771d5afbf18c6cdf8cba3138e2a89a5d72ac",
+  "source_files_still_match": {
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/cbc1971-source.json": true,
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/cbc1971_theta42_spectrum_3d.dat": true,
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/input_band100.py": true,
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026/solvers/IncNavierStokesSolver/Tests/HITInflow/pilots/spectrum_budget.py": true
+  },
+  "uncut_model": {
+    "K_m2_s2": 0.07677240437528925,
+    "Lf_m": 0.024247968550464034,
+    "epsilon_absolute_quadrature_error_estimate_m2_s3": 1.1252323268629035e-14,
+    "epsilon_m2_s3": 0.4060730040979157,
+    "isotropic_component_urms_m_s": 0.22623351413276394,
+    "lambda_m": 0.005325325292811479
+  }
+}

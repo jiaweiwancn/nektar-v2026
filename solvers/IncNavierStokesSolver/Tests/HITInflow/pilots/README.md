@@ -384,3 +384,25 @@ python3 "$hit_pilots/analyze_projection_band100.py" \
 Inspect all four physical-band power changes before starting a CFD recording.
 The 5% projection screen describes the exported probes; it does not establish
 spatial convergence, experimental agreement or independent samples.
+
+`review_band100.py` reviews the completed `base,dt,x` study without rerunning
+CFD. It verifies command/input/log/cache hashes, reproduces the original moments
+and spectra exactly, partitions temporal power, and adds explicitly separate
+window and nested-probe sensitivity diagnostics plus PNG/SVG comparisons.
+Use a fresh output directory outside the source and original study:
+
+```bash
+export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 NUMEXPR_NUM_THREADS=1
+export PYTHONDONTWRITEBYTECODE=1
+python3 "$hit_pilots/review_band100.py" \
+  --study /media/jay/新加卷/nektar-v2026-runs/hit-inflow/band100/f4b70ba/study-01 \
+  --output /media/jay/新加卷/nektar-v2026-runs/hit-inflow/band100/f4b70ba/review-fresh \
+  --source-root "$hit_source" --cpu 63
+```
+
+CPU63 must be available and share the64-worker server limit with other jobs.
+The recorded helpers/protocol must retain their original hashes. The
+[completed CBC100 review](../../../../../docs/plans/hit-inflow-band100-review.md)
+holds full-distance production: the limited spectral screens pass, but the
+energy/refinement and sampling gates are not closed. Nested8/16/32 probe grids
+cannot establish convergence to an unrecorded64/128 grid.

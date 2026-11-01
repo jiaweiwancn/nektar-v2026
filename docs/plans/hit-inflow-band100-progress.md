@@ -1,7 +1,11 @@
-# CBC100 follow-up: implementation and running pilot
+# CBC100 follow-up: completed pilot and review
 
-Status: **ECONOMICAL STUDY RUNNING**, 2026-10-31. Numerical and experimental
-qualification remain open. Work stays on `codex/hit-inflow-generator`.
+Status: **STUDY COMPLETED; FULL-DISTANCE PRODUCTION HELD**, reviewed2026-11-02.
+All three records and analyses completed. The [completed review](hit-inflow-band100-review.md)
+finds encouraging10--100rad/m spectral agreement, a19.1% full-variance
+refinement sensitivity and unqualified downstream sampling precision.
+Work stays on `codex/hit-inflow-generator`. The implementation/launch account
+below preserves the2026-10-31 handover and its original snapshot.
 
 ## Material Passport
 
@@ -80,7 +84,7 @@ quadrature nor an independent-probe uncertainty estimate. The600/480 input
 retains89.8308% of the uncut model F11(100); that input-bandwidth limitation is
 separate from the small boundary-projection change.
 
-## Running work and progress
+## Archived running-study handover,2026-10-31
 
 The completed economical preflight is `preflight-01`. The detached queue
 (`queue.py`, launch PID304969) has entered `study-01`, selecting `base,dt,x`
@@ -125,9 +129,9 @@ remain outside the source checkout on the Linux disk. The two initial resource-
 audit failures and the operator-interrupted contended allocation are preserved
 and excluded from numerical conclusions.
 
-After the records finish, review their paired timestep/streamwise sensitivity
-and sampling screens before selecting Fourier/bandwidth/SVV controls. No new
-full-distance run has been launched. Upstream input-bandwidth accuracy,
+The records have finished and their [review](hit-inflow-band100-review.md) is
+complete. Further SVV/Fourier/bandwidth and sampling controls are recommended
+before production. No new full-distance run has been launched. Upstream input-bandwidth accuracy,
 downstream numerical/stabilization error, statistical precision, spatial
 development and the experimental comparison remain separate open gates. The
 earlier M7/M8 conclusions have not been replaced by a physical-validation pass.
