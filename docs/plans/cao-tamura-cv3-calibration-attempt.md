@@ -1,4 +1,4 @@
-# CV3 bounded calibration attempt: development gate unmet
+# CV3 v1 bounded calibration attempt: development gate unmet
 
 ## Material Passport
 
@@ -8,14 +8,21 @@
 - Verification Status: implementation checks pass; CV3 remains INCOMPLETE
 - Version Label: cao-tamura-cv3-attempt-v1
 
+This is the historical **original-first** attempt. The later user-approved
+[protocol v2](cao-tamura-cv3-calibration-protocol.md) makes the composite
+EP-AWF/transition/original-AWF route primary. Its first task is CV3-R1;
+execution of that route remains pending. Numerical evidence below is unchanged.
+
 ## Outcome
 
 **CV3 is not closed.** The declared 32-case empty-floor design concluded with
 13 developed standard k–epsilon cases and no eligible high-Re CLS case.
 There is no shared S/R parameter selection, versioned calibration freeze or
 developed ten-case wall-policy transfer. Reserved Fig.3d and hill scores were
-not used. The [plan's closure gate](cao-tamura-calibrated-validation.md) remains
-unchanged; completing software or accepting short positive runs does not meet it.
+not used. The [original-first v1 closure gate](cao-tamura-cv3-calibration-protocol-v1.md)
+was not met; completing software or accepting short positive runs did not meet
+it. The later sequence amendment does not convert these runs into a successful
+primary composite calibration.
 
 The [machine-readable record](cao-tamura-validation-evidence/cv3-attempt/attempt.json),
 [complete design table](cao-tamura-validation-evidence/cv3-attempt/design.csv) and
@@ -23,7 +30,7 @@ The [machine-readable record](cao-tamura-validation-evidence/cv3-attempt/attempt
 retain successful and rejected attempts. Large native meshes, fields, complete
 history, point diagnostics, command receipts and logs remain under
 `/media/jay/新加卷/nektar-v2026-runs/cao-tamura-calibrated-validation` on Linux.
-The [protocol and its amendments](cao-tamura-cv3-calibration-protocol.md) record
+The [v1 protocol and its amendments](cao-tamura-cv3-calibration-protocol-v1.md) record
 the design, fixed objective scales, development criteria and numerical controls.
 
 This result demonstrates failure of the tested numerical recipes to supply
@@ -277,12 +284,18 @@ and `cao_tamura_calibration.py --help` expose design/develop/select/assess/freez
 entry points. Use a fresh campaign directory after any recipe/binary/source
 change; preserve original cases and their producing XML for native observation.
 
-## Remaining gate
+## Current next task after the sequence amendment
 
-Establish a numerically admissible, unforced developed CLS precursor for both
-surfaces before completing a common search. Then develop and audit all ten
-wall-policy transfers, publish common/conditional sensitivity and residuals,
-freeze versioned S/R manifests, and perform the reserved flat crosschecks.
-Any remedy must distinguish a solver/discretization correction from a new
-physical regularization or closure variant. No such variant is silently
-introduced here. CV4–CV8 retain their dependencies and remain planned.
+The v1 all-original precursor/five-policy freeze dependency has been superseded
+by the user-approved [v2 sequence](cao-tamura-cv3-calibration-protocol.md).
+Next is CV3-R1: recover the known CLS EP-AWF reference on the current solver,
+then establish valid developed composite-floor cases for S/R and both closures.
+Primary calibration/freeze and reserved flat crosschecks follow that feasibility
+gate. Uniform-original and log comparisons retain separate validity/status
+records and cannot inherit primary EP validation. The v1 implementation's
+original-first selector/freezer still needs adaptation before v2 calibration.
+
+Canonical physics, integrated strip continuity, accepted-state positivity and
+physical residual requirements are retained. The new ordering supplies no new
+solver evidence; all failures and conditional standard-only fits in this
+record remain as measured.

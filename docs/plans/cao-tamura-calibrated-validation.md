@@ -5,8 +5,8 @@
 - Origin Skill: academic-research-suite / experiment-agent
 - Origin Mode: plan / computational experiment
 - Origin Date: 2026-11-01
-- Verification Status: CV1 source/data and CV2 implementation/readiness VERIFIED within recorded limits; CV3 IN PROGRESS; CV4–CV8 PLANNED
-- Version Label: cao_tamura_calibrated_validation_v1_cv3_attempt1
+- Verification Status: CV1 source/data and CV2 implementation/readiness VERIFIED within recorded limits; CV3 IN PROGRESS under user-approved EP-transition-first sequence; revised-route execution pending; CV4–CV8 PLANNED
+- Version Label: cao_tamura_calibrated_validation_v2_ep_transition_first
 
 ## Objective, branch and starting evidence
 
@@ -118,18 +118,25 @@ if the paper is insufficient, declare the ambiguity and bracket it.
 ## Models, walls and physical compatibility
 
 Keep the canonical model coefficients and CLS physical closest-wall distance.
-Use these five primary combinations for BOTH SS and RR (ten hill cases before
-width and numerical variants):
+The primary route for BOTH SS and RR is EP-AWF upstream, a transition before
+the hill, and original AWF downstream. Uniform-original-AWF and compatible-log
+comparisons remain separately tracked. Successful all-original calibration is
+not a prerequisite for primary EP calibration or its hill study. Retain the
+ten requested model/wall/surface case slots with explicit validity/status:
 
 | Closure | Compatible neutral log law | Original AWF | EP-AWF with fixed correction times spatial mask |
 |---|---|---|---|
-| Standard k–epsilon | Primary baseline | Primary baseline | Primary transition study |
-| High-Re CLS | Not supported by this log policy | Primary baseline | Primary transition study |
+| Standard k–epsilon | Separate requested baseline | Separate requested baseline | Primary transition study |
+| High-Re CLS | Not supported by this log policy | Separate requested baseline | Primary transition study |
 
 Flow-switched EP-AWF is a secondary comparison for both closures and both
-surfaces after fixed-mask behaviour is understood. Within a closure, transfer
-the same calibrated inlet and physical surface parameters between original
-and EP-AWF; record any approach-flow mismatch rather than hide it by retuning.
+surfaces after fixed-mask behaviour is understood. Calibrate the primary
+composite route first. Within a closure, transfer the same calibrated inlet
+and physical surface parameters to original/log comparisons; record any
+approach-flow mismatch rather than hide it by retuning. Each comparison needs
+its own valid native evolution and observation evidence; it does not inherit
+the primary route's calibration-complete status. Record failed/unexecuted
+baselines explicitly while the validated primary EP study advances.
 The log wall uses the corresponding calibrated positive z0, not AWF ks.
 First report a common-surface-parameter comparison across closures. If distinct
 closure-conditioned best fits are also useful, label them separately and
@@ -272,9 +279,12 @@ full measured broadband spectrum or unresolved reverse-flow probability.
 
 ## Calibration, domain and case design
 
-Calibrate separate **S** and **R** empty-floor boundary layers at the location
-where the hill would be placed. Use a finite-depth profile with a smooth outer
-blend, positive k/epsilon and the measured low outer turbulence, not zero
+Calibrate separate **S** and **R** empty-floor boundary layers with the actual
+EP-AWF -> upstream transition -> original-AWF treatment, at the location where
+the hill would be placed. The matched floor retains the hill case's inlet,
+surface, boundary conditions and exact correction mask. Use a finite-depth
+profile with a smooth outer blend, positive k/epsilon and the measured low
+outer turbulence, not zero
 turbulence at the roof. Fit a small identifiable set: inlet profile/fetch,
 rough AWF ks (smooth ks fixed zero), and bounded turbulence length/profile
 parameters. Use the flat shear stress to constrain u_tau independently of
@@ -290,9 +300,21 @@ identifiability and residuals. Initial engineering goals are U-profile error
 are planning targets, not established experimental confidence intervals.
 If the canonical closure cannot meet all flat-flow quantities, preserve the
 misfit and propagate it to hill interpretation. Do not compensate with a hill
-fit. Freeze a versioned calibration manifest before inspecting validation
-scores; later justified calibration revisions get a new version and rerun
+fit. Freeze a versioned, policy-specific primary calibration manifest before
+inspecting validation scores; later justified calibration revisions get a new version and rerun
 affected cases, with earlier scores retained.
+
+The user-approved [CV3 protocol v2](cao-tamura-cv3-calibration-protocol.md)
+supersedes the [original-first v1 protocol](cao-tamura-cv3-calibration-protocol-v1.md).
+The immediate task is **CV3-R1: reference recovery and composite-floor
+feasibility**. Repeat the accepted CLS EP-AWF reference on the current solver,
+then establish four valid unfitted composite precursors (S/R x standard/CLS)
+before a new parameter search. Use the provisional width 2Hh=0.080 m and
+endpoint xb=-0.200 m, so xa=-0.280 m; record this mask in the primary calibration
+anchor. CV5 still determines width/placement sensitivity. Freeze the validated
+primary policies and mark baseline transfers separately; uniform-original
+success is not a freeze prerequisite. The v1 original-first campaign/selector/
+freezer remain legacy tools until adapted/versioned for this sequence.
 
 Start with a central-plane 2D URANS campaign. Match the finite-depth inflow
 and 0.8 m facility ceiling in the primary geometry; assess roof boundary
@@ -337,8 +359,10 @@ Material roughness changes in RS/SR are independent of this correction mask;
 align material jumps with wall elements and retain one-sided property traces.
 
 The fixed-mask width matrix is two closures × two inflows/surfaces × four
-widths × hill/empty-floor = **32 developed cases**, plus original-AWF and
-standard-log baselines. Cases reused by the final validation matrix keep one
+widths × hill/empty-floor = **32 developed primary cases**, with original-AWF
+and standard-log comparisons on separate tracks. Failed/unexecuted baselines
+do not certify those comparisons or prevent valid primary cases advancing.
+Cases reused by the final validation matrix keep one
 case ID and fingerprint; do not rerun or count them as independent evidence.
 Use flow-switched, molecular-policy, displacement, placement and 3D variants
 as explicitly selected sensitivities rather than a full uncontrolled Cartesian
@@ -456,20 +480,20 @@ physics, calibration, observation-operator or numerical change.
 |---|---|---|---|
 | CV1 — Source and data freeze | Planning commit | PDF/figure/page audit, geometry/units/station tables, independently checked digitized curves and uncertainty/provenance, calibration/holdout split, dimensional/Re consistency, unresolved facility/mixed-surface details explicitly recorded. Freeze versioned data and score definitions before fitting. | CLOSED |
 | CV2 — Wall/reference and probe readiness | CV1 | Parameterized experimental generator; smooth-anchor checks; displaced-reference derivation/decision; any necessary declared implementation; native physical-point interpolation and below-hm reconstruction with frame/rank/continuity tests. Canonical d=0, finite-nu, original recovery, curved continuity, history and legacy checks pass on Linux. Record unsupported observables rather than manufacture them. | CLOSED |
-| CV3 — Separate S/R calibration | CV1–CV2 | Developed empty-floor precursors; fixed-coefficient calibration and flat-data cross-checks; shared-parameter and any conditional fits distinguished; parameter/variance/displacement uncertainty and incident residuals published. Freeze S/R manifests without using held-out hill scores. | IN PROGRESS |
+| CV3 — Separate S/R calibration | CV1–CV2 | R1: current-solver EP reference recovery and four developed primary composite-floor cases (S/R x standard/CLS). R2: fixed-coefficient common/conditional fits, uncertainty and incident residuals, with four validated policy-specific S/R manifests. R3: reserved flat crosschecks after freeze. Original/log transfers have separate statuses; all-original success is not a primary freeze prerequisite. No hill scores enter selection. | IN PROGRESS; R1 NEXT |
 | CV4 — Numerical and long-time readiness | CV2–CV3 | Profiled solver and bounded runtime estimate; three-level h and dt evidence plus p/hm/domain sensitivities; inlet/outlet preservation convergence; perturbed 3D stability checks; demonstrated stationarity/statistical procedure, mass/strip budgets and MPI/history equivalence. No large production matrix until throughput and observable error are defensible. | PLANNED |
-| CV5 — Developed transition study | CV3–CV4 | Fixed-mask 32-case hill/floor matrix, original/log baselines, upstream-only width and separate placement study, incident diagnostics, switched subset and selected resolved-viscosity sensitivities. Quantify numerical/sampling significance and select/freeze width by approach-flow/plateau rules, retaining every width and any non-plateau result. | PLANNED |
-| CV6 — Locked SS/RR validation | CV1–CV5 | Ten primary model/wall/surface combinations, reusing identical CV5 cases; switched comparisons where admissible; held-out profiles/S/x_R/stress with the verified observation operator and complete uncertainty. Report canonical-model failures as results; no hill-driven retuning. | PLANNED |
+| CV5 — Developed transition study | Primary CV3 freeze and CV4 readiness | Fixed-mask 32-case primary hill/floor matrix, upstream-only width and separate placement study, incident diagnostics, switched subset and selected resolved-viscosity sensitivities. Original/log baselines proceed separately where valid. Quantify numerical/sampling significance and select/freeze width by approach-flow/plateau rules, retaining every width and any non-plateau result. | PLANNED |
+| CV6 — Locked SS/RR validation | CV1–CV5 for primary EP cases; each baseline's own readiness | Four primary standard/CLS x S/R EP-transition hill cases, reusing identical CV5 cases; original/log and switched comparisons where valid. Report all ten requested case slots with successful/failed/unexecuted statuses. Held-out profiles/S/x_R/stress require each case's verified observation operator, calibration provenance and uncertainty. No hill-driven retuning or inherited baseline-validation claim. | PLANNED |
 | CV7 — Mixed surfaces and 3D checks | CV4–CV6 | RS/SR crest comparisons with audited material coverage, selected span/domain/3D checks for S/R and both closures, total-stress statistics and limitations. Bound or explicitly leave unresolved end-plate, homogenization and 2D effects; no unsupported mixed-wake or broadband/intermittency claim. | PLANNED |
 | CV8 — Reproducible assessment | CV1–CV7 | Final observable-level accuracy/uncertainty tables, common-calibration versus conditional-fit interpretation, width/placement recommendation or unresolved range, convergence figures, case/data/build hashes, executable reproduction commands and restart instructions. All outcomes and failed attempts retained; working tree reviewed, milestone committed and pushed. | PLANNED |
 
-The [CV3 attempt record](cao-tamura-cv3-calibration-attempt.md) reports the
-completed 32-case bounded design: 13 developed standard cases and no eligible
-CLS case. Smaller-step, quadrature, stabilization and spatial controls did
-not supply a developed CLS precursor. Shared S/R calibration manifests,
-wall-policy transfers and reserved-flat crosschecks therefore remain
-unfinished. The implementation and negative numerical results are retained;
-this is not CV3 closure or an experimental-validation result.
+The [CV3 v1 attempt record](cao-tamura-cv3-calibration-attempt.md) reports the
+completed original-first 32-case bounded design: 13 developed standard cases
+and no eligible CLS case, including the later numerical controls. Those results
+remain intact. They do not execute or reject the revised composite-first route.
+Primary S/R calibration manifests and reserved-flat crosschecks remain
+unfinished. The current next task is CV3-R1 in the v2 protocol; the sequence
+change supplies no new numerical evidence and does not close CV3.
 
 CV2 may conclude that exact displaced equilibrium is unavailable for a
 canonical model; CV3 may expose irreducible flat-data misfit. Those findings

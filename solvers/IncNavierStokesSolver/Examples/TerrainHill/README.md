@@ -2,15 +2,22 @@
 
 ## CV3 calibration status
 
-The [bounded calibration attempt](../../../../docs/plans/cao-tamura-cv3-calibration-attempt.md)
-contains developed standard-only precursors, the full declared design and
-retained CLS numerical failures. **CV3 is still open:** there is no shared
-S/R calibration freeze, and reserved flat/hill scores remain locked.
-`Tests/RANS/cao_tamura_calibration.py` provides native physical-time development,
-five-family objectives, independent strip inventories, selection and guarded
-freeze commands. `cao_tamura_campaign.py` runs the declared design with an
-explicit maximum of 15 case CPUs plus one controller. Use a new run directory
-after changing its recipe, source hashes or binary; never overwrite an attempt.
+The [user-approved CV3 protocol v2](../../../../docs/plans/cao-tamura-cv3-calibration-protocol.md)
+prioritizes the actual composite floor treatment: EP-AWF upstream, an upstream
+transition, then original AWF. The next task is **CV3-R1**, current-solver CLS
+reference recovery and four composite-floor feasibility cases (S/R x both
+closures). Uniform-original success is no longer a prerequisite for this route.
+**CV3 is still open:** no primary S/R freeze exists, and reserved scores stay locked.
+
+The [v1 bounded attempt](../../../../docs/plans/cao-tamura-cv3-calibration-attempt.md)
+retains developed standard-only precursors and CLS numerical failures for the
+original-first route. The generic generation/development/audit operations can
+be reused with explicit composite configurations. However,
+`cao_tamura_campaign.py` and `cao_tamura_calibration.py select/freeze` still
+implement the **legacy v1 original-first** design/gates; adapt/version them
+before a primary v2 search or freeze. Each baseline needs its own validation
+status. Use new run directories and <=16 project workers; preserve all old
+case/source/binary hashes and never overwrite an attempt.
 
 ## Cao–Tamura experimental preparation (CV2)
 

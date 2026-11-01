@@ -13,13 +13,19 @@ development studies and their original commands.
 | `run_m6.sh BUILD RUN [JOBS]` | Complete preservation/robustness study; failed controls are recorded explicitly |
 | `validate_m3.py`, `validate_m4.py`, `validate_m5.py` | Standard transport, original CLS/AWF, corrected CLS/AWF acceptance |
 | `validate_m1.py`, `validate_m2.py` | Strip prototype and independent kernel/oracle checks |
-| `cao_tamura_calibration.py`, `cao_tamura_campaign.py` | Bounded empty-floor design, native development/selection and guarded freeze; CV3 remains open |
+| `cao_tamura_calibration.py`, `cao_tamura_campaign.py` | Native development/audits plus legacy v1 original-first design/selection/freeze; adapt the primary route before a v2 search |
 | `validate_cao_tamura_cv3.py`, `validate_rans_implicit_advection.py` | Native experimental inlet/startup/history checks and independent manufactured transport order |
 | `validate_rans_stress_tangent.py --audit ...` | Full native transverse stress tangents versus an independent parallel-shear formula, including both CLS max-invariant sides |
 | `record_cao_tamura_cv3.py` | Read-only incomplete-attempt evidence, conditional standard profiles and local tangent figures |
 
-The [CV3 attempt record](../../../../docs/plans/cao-tamura-cv3-calibration-attempt.md)
-retains the full design and numerical rejections. Successful short solves or
+The [CV3 v1 attempt record](../../../../docs/plans/cao-tamura-cv3-calibration-attempt.md)
+retains the full original-first design and numerical rejections. The active
+[protocol v2](../../../../docs/plans/cao-tamura-cv3-calibration-protocol.md)
+makes composite EP/transition/original floor calibration primary. Next is
+CV3-R1 reference recovery and four composite feasibility cases; its execution
+is pending. All-original success is not a primary EP prerequisite. The v1
+campaign/selector/freezer remain legacy until adapted, and do not implement
+the revised policy-specific freeze contract. Successful short solves or
 conditional standard-only fits cannot unlock reserved flat or hill scores.
 The external test build registers the calibration guards and stress-tangent
 oracle in addition to the existing kernel/solver checks. Figures require
