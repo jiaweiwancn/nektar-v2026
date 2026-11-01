@@ -1,0 +1,226 @@
+{
+  "data_version": "cao-tamura-2006-v1.1",
+  "frozen_for": "CV1",
+  "citation": {
+    "authors": [
+      "Shuyang Cao",
+      "Tetsuro Tamura"
+    ],
+    "title": "Experimental study on roughness effects on turbulent boundary layer flow over a two-dimensional steep hill",
+    "journal": "Journal of Wind Engineering and Industrial Aerodynamics",
+    "volume": 94,
+    "year": 2006,
+    "pages": "1-19",
+    "doi": "10.1016/j.jweia.2005.10.001",
+    "publisher_url": "https://www.sciencedirect.com/science/article/abs/pii/S0167610505001108"
+  },
+  "pdf": {
+    "relative_local_path": "docs/literature/Experimental study on roughness effects on turbulent boundary layer flow over a two-dimensional steep hill.pdf",
+    "sha256": "adffb5c1d740be791211d82ce35778a37a3315a6dc72c56c80b70cc6642a43df",
+    "bytes": 497768,
+    "pages": 19,
+    "page_numbering": "one-based PDF page = printed article page",
+    "size_pt": [
+      467.716,
+      680.315
+    ],
+    "source_pdf_committed": false
+  },
+  "origin": "Published vector figure symbols and reported numerical facts; no author-native measurements/time series supplied.",
+  "verification": {
+    "publisher_metadata_checked": "2026-11-01",
+    "publisher_doi_and_title_match": true,
+    "data_availability_scope": "Local paper and accessible publisher preview inspected; no native data files supplied/found there. This is not a claim that author data do not exist elsewhere. No author contact made.",
+    "independence": "Two parsing implementations plus a separate Poppler raster backend. Same analyst assigned axes/series; not two independent human readers or independent experiments."
+  },
+  "geometry": {
+    "Hh_m": 0.04,
+    "L_m": 0.1,
+    "crest_x_m": 0,
+    "feet_x_m": [
+      -0.1,
+      0.1
+    ],
+    "profile": "Hh*cos(pi*x/(2*L))**2 for abs(x)<L, else 0",
+    "continuity": "C1, curvature jumps at feet",
+    "test_section_m": {
+      "streamwise": 7,
+      "span": 1,
+      "vertical": 0.8
+    },
+    "hill_span_m": 0.8,
+    "crest_from_contraction_m": 5,
+    "common_generator_fetch_m": 1,
+    "primary_rough_cube_m": 0.005,
+    "roughness_W_m": 0.035,
+    "frontal_density": 0.041,
+    "reported_blockage": 0.05,
+    "full_section_frontal_area_ratio": 0.04,
+    "blockage_note": "The reported 5% equals Hh/ceiling height; full 1m section with 0.8m hill span gives 4%. End plates may define effective width, but dimensions are unspecified; do not assume that explanation as measured geometry."
+  },
+  "coordinates": {
+    "paper": [
+      "x: streamwise",
+      "y: global vertical",
+      "yprime=y-yh(x): local vertical above base surface, not normal distance"
+    ],
+    "solver_2d": [
+      "x",
+      "y: vertical"
+    ],
+    "solver_3d": [
+      "x: streamwise",
+      "y: span",
+      "z: vertical"
+    ],
+    "physical_Hh_used_m": 0.04,
+    "nominal_delta_used_m": 0.25,
+    "nominal_displacement_m": {
+      "S": 0,
+      "R": 0.0035
+    },
+    "delta75_m": null,
+    "delta75_note": "Figure 11 preserves y/delta75; the numerical reference depth at x/H=7.5 is not reported. CSV physical heights are deliberately empty for these points."
+  },
+  "cases": {
+    "S": "undisturbed smooth-floor reference",
+    "R": "undisturbed rough-floor reference",
+    "SS": "smooth inflow, smooth hill and floor",
+    "RR": "rough inflow, rough hill and floor",
+    "RS": "rough inflow, smooth hill (crest data only)",
+    "SR": "smooth inflow, rough hill (crest data only)"
+  },
+  "unknowns": [
+    {
+      "id": "dimensional_scale",
+      "source": "pp.3-8,13,15",
+      "finding": "No unambiguous experiment Uinf, air temperature or molecular nu is specified. The 1-8 m/s range describes probe calibration.",
+      "consequence": "Primary Reynolds-matched dimensionless validation; no dimensional U/rms scoring of Figs.9/12 without separately justified scale. Never infer scale by fitting the held-out hill."
+    },
+    {
+      "id": "end_plates",
+      "source": "p.3; Fig.1 p.4",
+      "finding": "End plates are mentioned, but height, streamwise extent, thickness and attachment/effective-section details are not specified. Roof/sidewall velocity profiles and BL conditions are not supplied.",
+      "consequence": "2D central-plane proxy and explicit roof/span/blockage sensitivities. Full facility equivalence is unestablished."
+    },
+    {
+      "id": "mixed_coverage",
+      "source": "pp.10-11, Fig.6(b)",
+      "finding": "Hill and upstream conditions are identified for RS/SR, but the downstream material coverage and exact junction layout are not specified.",
+      "consequence": "CV7 brackets hill-only patch with surroundings retained versus a change at the upstream foot persisting downstream. Freeze both scenarios before computing mixed-case scores."
+    },
+    {
+      "id": "unmeasured_turbulence",
+      "source": "Fig.3 pp.6-8",
+      "finding": "No spanwise variance, epsilon profile, full time series or integral scales; normal stresses cannot determine k uniquely.",
+      "consequence": "Treat k/epsilon as inferred, retain variance/length-scale uncertainty, and reserve vertical rms for flat-flow cross-check."
+    },
+    {
+      "id": "delta75",
+      "source": "Fig.11 p.15",
+      "finding": "delta75 is defined but its dimensional value and delta edge criterion are not given.",
+      "consequence": "Only the published y/delta75 coordinate is frozen. Shape comparisons using computed flat-floor delta75 need an explicit convention and thickness sensitivity."
+    },
+    {
+      "id": "experimental_uncertainty",
+      "source": "p.5 and whole article",
+      "finding": "No complete per-observable uncertainty budget or correlation data. Pitch-calibration deviation <±1.5% is not a measurement confidence interval.",
+      "consequence": "Keep extraction bounds separate; no formal 95% experimental-validation verdict from these data alone."
+    }
+  ],
+  "source_discrepancies": [
+    {
+      "id": "f8_station_labels",
+      "source": "Fig.8 p.13",
+      "literal": [
+        "2.53",
+        "3.0"
+      ],
+      "interpreted_x_over_H": [
+        2.5,
+        5.0
+      ],
+      "basis": "Uniform 1.25H station spacing, hill foot/crest geometry and corresponding Figs.4/10.",
+      "status": "inferred correction, not silently transcribed; F8 is a cross-check, not an independent primary velocity score"
+    },
+    {
+      "id": "traverse_extent",
+      "source": "p.13 text vs Figs.9/12",
+      "text_x_mm": [
+        150,
+        320
+      ],
+      "figure9_markers_x_over_H_approx": [
+        3.75,
+        8.75
+      ],
+      "figure12_markers_x_over_H_approx": [
+        3.75,
+        8.5
+      ],
+      "status": "Preserve digitized ranges and text separately; do not truncate or claim exact agreement."
+    },
+    {
+      "id": "table1_header",
+      "source": "Table1 p.8 and Fig.3(c,d) p.7",
+      "finding": "Table headers print sigma_tau, while surrounding text/figure normalization is u_tau.",
+      "treatment": "Transcribe Present-row values as sigma/u_tau with this contextual interpretation recorded; other papers in Table1 are not this experiment."
+    },
+    {
+      "id": "f10_axis",
+      "source": "Fig.10 p.14 vs Fig.5 p.9 and p.14 text",
+      "finding": "Crowded denominator typography is ambiguous; repeated profiles and text identify sigma_u/Uinf.",
+      "treatment": "Use sigma_u/Uinf, cross-checked numerically against Fig.5; retain figure identity."
+    },
+    {
+      "id": "f3e_scale",
+      "source": "Fig.3(a,e) p.7, u_tau ratios p.6",
+      "finding": "Replotting Fig.3(e) with reported u_tau gives up to ~0.050 smooth and ~0.044 rough U/Uinf difference from Fig.3(a).",
+      "treatment": "Unresolved source normalization/plot consistency; do not modify u_tau to force agreement. Fit Fig.3(a,b,c), reserve (d), and exclude (e) as a duplicate consistency check."
+    },
+    {
+      "id": "f3b_frame",
+      "source": "Fig.3(b) p.7",
+      "finding": "Frame bottom is not the ordinate zero implied by labelled 0.5 and 1 ticks.",
+      "treatment": "Use those labelled ticks as anchors, not the frame bottom."
+    }
+  ],
+  "excluded_source_content": {
+    "Raupach_markers_Fig3c": "Other-author comparison, not Cao-Tamura observations.",
+    "coloured_dividing_peak_guides_Figs8_10": "Derived guide lines, not additional independent measurements.",
+    "Fig9_intermittency_and_Figs13_14": "Inventoried as context, not primary URANS targets; no claim to broadband/intermittency validation.",
+    "other_literature": "No data merged from the separate Wind-Tunnel Experiments paper or later low-hill experiments."
+  },
+  "dimensional_convention": {
+    "status": "analysis choice for subsequent Reynolds-matched validation; not measured dimensional speeds",
+    "length_scale": "Hh",
+    "velocity_scale": "case-specific incident U_H",
+    "Hh_nondimensional": 1,
+    "U_H_nondimensional": 1,
+    "nu_nondimensional": {
+      "S": 8.333333333333333e-05,
+      "R": 9.523809523809524e-05
+    },
+    "z0_over_Hh": {
+      "S": 0.0001,
+      "R": 0.005
+    },
+    "rough_d_over_Hh": 0.0875,
+    "delta_over_Hh_nominal": 6.25,
+    "roof_over_Hh": 20,
+    "Uinf_over_U_H": "1/(U_H/Uinf) from Fig3a; updated consistently with the frozen calibration version",
+    "dimensional_m_per_s_scoring": "deferred until independent physical Uinf/nu information is justified; do not calibrate to hill data"
+  },
+  "revision_history": [
+    {
+      "version": "v1",
+      "status": "unreleased CV1 draft, retained locally",
+      "change": "Initial data freeze."
+    },
+    {
+      "version": "v1.1",
+      "status": "CV1 delivery",
+      "change": "Final review classified four Fig6a upstream/downstream speedup series as validation; only crest series duplicate Fig6b. No point values or extraction/accuracy bounds changed; no calibration or CFD existed."
+    }
+  ]
+}

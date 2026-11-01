@@ -1,0 +1,15 @@
+figure,pdf_page,panels,axes_and_units,role,extraction,qualification
+1,4,setup schematic,"x,y,yprime; dimensions mm",geometry audit,no numeric curve,End-plate dimensions absent
+2,5,staggered cubes,b=5mm; W=35mm; frontal density .041,geometry audit,no numeric curve,Do not replace ks by cube height
+3,7,"a,b,c,d,e","a:y(mm); b:y/delta; c,d:(y-d)/delta; e:log10(y-d in mm)","a,b,c calibration; d reserve; e duplicate cross-check",165 symbols,Exclude Raupach comparison marks; f3e discrepancy
+4,9,"a smooth,b rough",U/Uinf with offset bar 1; absolute y/H,primary mean validation,18 station series,"Station zero origins use ticks, not text 0 placement"
+5,9,"a smooth,b rough",sigma_u/Uinf with offset bar .2; absolute y/H,duplicate of Fig10,18 station series,Not independent observations
+6,11,"a upwind/crest/downwind,b four crest cases",S vs yprime/H,b primary crest + mixed; a foot validation / crest cross-check,10 series,Triangles use centroid rather than bbox centre
+7,12,"a rms ratio,b covariance ratio",same-height flat-reference ratios vs yprime/delta,secondary validation,4 series,No bubble stress dataset
+8,13,combined smooth/rough,U/Uinf with offset bar1; absolute y/H,wake cross-check + x_R method context,14 station series,Literal 2.53/3.0 labels; repeated drawing layer; coloured guides excluded
+9,13,mean U + intermittency,x/H; left U(m/s); right intermittency,mean traverse holdout; intermittency context,2 U series,Text/figure range mismatch; probe U=0 differs from ground x_R
+10,14,combined rms,sigma_u/Uinf with offset bar .2; absolute y/H,secondary rms validation,18 station series,Repeated drawing layer; coloured peak guides excluded
+11,15,wake covariance,-uv/Uinf^2 vs y/delta75 at x/H7.5,secondary conditional height-scale comparison,2 series,Numerical delta75 missing
+12,15,near-floor rms,"x/H; sigma_u(m/s), probes2mm/7mm",dimensional holdout,2 series,Absolute scale unknown; source figure extends beyond text traverse
+13,16,reverse intermittency,wake station profiles,context only,not digitized for scoring,URANS does not supply full unresolved reversal PDF
+14,17,spectra,frequency and power spectral density at yprime/H1,context only,not digitized for scoring,No claim to broadband spectral validation

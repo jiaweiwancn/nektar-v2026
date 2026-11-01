@@ -1,0 +1,4 @@
+# Preserve the generated CSV bytes used by snapshot.json (standard CRLF).
+# Treat the line-ending CR as such while keeping other whitespace checks.
+profiles.csv -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+reported_scalars.csv -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

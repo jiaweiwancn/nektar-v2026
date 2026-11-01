@@ -1,0 +1,40 @@
+id,case,quantity,value,unit,pdf_page,locator,status,role,experimental_uncertainty,note
+hill_height,common,Hh,0.04,m,3,Eq.1 / setup,reported,setup,not_reported,
+hill_half_length,common,L,0.1,m,3,Eq.1 / setup,reported,setup,not_reported,
+ceiling,common,ceiling_height,0.8,m,3,setup,reported,setup,not_reported,
+test_width,common,test_width,1,m,3,setup,reported,setup,not_reported,
+test_length,common,test_length,7,m,3,setup,reported,setup,not_reported,
+hill_span,common,hill_span,0.8,m,3,setup,reported,setup,not_reported,
+crest_fetch,common,crest_fetch,5,m,4,Fig.1 / text,reported,setup,not_reported,
+cube_height,common,geometric_cube_height,0.005,m,5,text / Fig.2,reported,setup,not_reported,
+cube_W,common,roughness_spacing_W,0.035,m,5,Fig.2,reported,setup,not_reported,
+rough_density,common,frontal_area_density,0.041,1,5,text / Fig.2,reported,setup,not_reported,
+blockage,common,reported_blockage,0.05,1,3,setup,reported,setup,not_reported,
+sampling_time,common,sampling_time,30,s,5,instrumentation,reported,setup,not_reported,
+sampling_frequency,common,sampling_frequency,1000,Hz,5,instrumentation,reported,setup,not_reported,
+delta_S,S,delta,0.25,m,6,Sec.3.1,reported_approximate,calibration,not_reported,
+utau_S,S,u_tau/Uinf,0.033,1,6,Sec.3.1 / Fig.3b,reported,calibration,not_reported,
+z0_S,S,aerodynamic_z0,4e-06,m,6,Sec.3.1 / Fig.3e,reported_fit,calibration,not_reported,
+ReH_S,S,U_H*Hh/nu,12000,1,8,Sec.3.2,reported_approximate,calibration,not_reported,
+IuH_S,S,sigma_u/U_H at y=Hh,0.0893,1,8,Sec.3.1 continuation,reported,calibration,not_reported,
+sigmau_near_S,S,near_surface_sigma_u/u_tau,2.35,1,8,Table1 Present row,reported,calibration,not_reported,Height not specified; contextual interpretation of sigma_tau header.
+sigmav_near_S,S,near_surface_sigma_vertical/u_tau,1.1,1,8,Table1 Present row,reported,flat_crosscheck,not_reported,Height not specified; not a pointwise Dirichlet condition.
+delta_R,R,delta,0.25,m,6,Sec.3.1,reported_approximate,calibration,not_reported,
+utau_R,R,u_tau/Uinf,0.051,1,6,Sec.3.1 / Fig.3b,reported,calibration,not_reported,
+z0_R,R,aerodynamic_z0,0.0002,m,6,Sec.3.1 / Fig.3e,reported_fit,calibration,not_reported,
+ReH_R,R,U_H*Hh/nu,10500,1,8,Sec.3.2,reported_approximate,calibration,not_reported,
+IuH_R,R,sigma_u/U_H at y=Hh,0.151,1,8,Sec.3.1 continuation,reported,calibration,not_reported,
+sigmau_near_R,R,near_surface_sigma_u/u_tau,2.15,1,8,Table1 Present row,reported,calibration,not_reported,Height not specified; contextual interpretation of sigma_tau header.
+sigmav_near_R,R,near_surface_sigma_vertical/u_tau,1.13,1,8,Table1 Present row,reported,flat_crosscheck,not_reported,Height not specified; not a pointwise Dirichlet condition.
+rough_displacement,R,displacement_d,0.0035,m,6,Sec.3.1: 0.7 h,author_assumed,calibration,not_reported,Not measured; geometric wall and CLS distance stay physical.
+smooth_displacement,S,displacement_d,0,m,6,Sec.3.1 bare-floor convention,inferred_reference,calibration,not_reported,No roughness elements; not an independently measured displacement.
+Res_rough,R,u_tau*z0/nu,3.97,1,6,Sec.3.1,reported,calibration,not_reported,
+outer_intensity,common,freestream_intensity,0.003,1,3,setup,reported_approximate,setup,not_reported,
+crest_S_SS,SS,"speedup at x/H=0,yprime/H=0.25",0.457,1,10,Sec.3.2.1 / Fig.6,reported,primary_validation,not_reported,
+crest_S_RR,RR,"speedup at x/H=0,yprime/H=0.25",0.875,1,10,Sec.3.2.1 / Fig.6,reported,primary_validation,not_reported,
+crest_S_RS,RS,"speedup at x/H=0,yprime/H=0.25",0.918,1,11,Sec.3.2.1 / Fig.6,reported,mixed_validation,not_reported,
+crest_S_SR,SR,"speedup at x/H=0,yprime/H=0.25",0.245,1,11,Sec.3.2.1 / Fig.6,reported,mixed_validation,not_reported,
+reattachment_SS,SS,x_R/Hh from crest,5.4,1,12,Sec.3.2.2 / Fig.8,reported,primary_validation,not_reported,Ground-extrapolated U=0 dividing points; not Fig.9 probe crossing or bubble length.
+probe_height_SS,SS,near_floor_probe_height,0.002,m,13,Fig.9 / Sec.3.2.2,reported,observation_definition,not_reported,
+reattachment_RR,RR,x_R/Hh from crest,6.5,1,12,Sec.3.2.2 / Fig.8,reported,primary_validation,not_reported,Ground-extrapolated U=0 dividing points; not Fig.9 probe crossing or bubble length.
+probe_height_RR,RR,near_floor_probe_height,0.007,m,13,Fig.9 / Sec.3.2.2,reported,observation_definition,not_reported,

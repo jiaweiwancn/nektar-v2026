@@ -1,0 +1,144 @@
+{
+  "version": "cao-tamura-2006-v1.1",
+  "frozen_before": "CV2 implementation, CV3 calibration and all hill predictions",
+  "data_roles": {
+    "calibration": [
+      "f3a_S",
+      "f3a_R",
+      "f3b_S",
+      "f3b_R",
+      "f3c_S",
+      "f3c_R",
+      "reported flat-floor scalar constraints"
+    ],
+    "reserved_flat_crosscheck": [
+      "f3d_S",
+      "f3d_R",
+      "Present-row vertical-rms ratios"
+    ],
+    "duplicate_crosschecks": [
+      "f3e (normalization inconsistency recorded)",
+      "f5a/f5b (same observations as f10)",
+      "f6a crest (same as f6b)",
+      "f8 (repeated wake U plus dividing-guide context)"
+    ]
+  },
+  "primary": [
+    {
+      "endpoint": "mean_velocity",
+      "series": [
+        "f4a_SS_*",
+        "f4b_RR_*"
+      ],
+      "value": "U/Uinf",
+      "height": "physical global y/H, convert yprime=y-yh(x) only for observation mapping",
+      "metric": "sqrt(sum(w_i*(prediction_i-value_i)^2)) per station",
+      "engineering_target": 0.05,
+      "weights": "Use fixed CSV weights on visible source points. An unsupported probe prevents a complete-range score; any conditional subset metric must retain the omitted-weight/height coverage and be labelled separately, not substituted silently.",
+      "required_reporting": "Every station, sign/bias, reverse flow, coverage and worst station; primary target not erased by a pooled mean."
+    },
+    {
+      "endpoint": "crest_speedup",
+      "scalar_ids": [
+        "crest_S_SS",
+        "crest_S_RR"
+      ],
+      "metric": "absolute predicted S minus reported scalar at x=0,yprime/H=0.25",
+      "engineering_target": 0.05,
+      "reference": "Same-surface flat reference at the paper reference station, same physical vertical yprime; not local normal distance or an x-local alternative."
+    },
+    {
+      "endpoint": "reattachment",
+      "scalar_ids": [
+        "reattachment_SS",
+        "reattachment_RR"
+      ],
+      "metric": "absolute difference in crest-referenced x_R/Hh",
+      "engineering_target": 0.5,
+      "observation": "Ground-extrapolated mean U=0 dividing points. Reproduce with the declared CV2 operator; last two tail points linear extrapolation and last-three-point sensitivity where source method is unspecified. Publish wall-shear and finite-probe zero crossings separately."
+    }
+  ],
+  "secondary": [
+    {
+      "endpoint": "longitudinal_rms",
+      "series": [
+        "f10_SS_*",
+        "f10_RR_*"
+      ],
+      "metric": "weighted RMSE divided by sqrt(sum(w_i*experimental_sigma_i^2)); also give RMSE/Uinf",
+      "engineering_target": 0.15,
+      "value": "sigma_u/Uinf",
+      "notes": "Do not count f5 as independent evidence; URANS total model+resolved covariance."
+    },
+    {
+      "endpoint": "speedup_profiles",
+      "series": [
+        "f6b_SS",
+        "f6b_RR"
+      ],
+      "metric": "profile error in S with frozen vertical-height weights"
+    },
+    {
+      "endpoint": "mixed_crest",
+      "series": [
+        "f6b_RS",
+        "f6b_SR"
+      ],
+      "scalar_ids": [
+        "crest_S_RS",
+        "crest_S_SR"
+      ],
+      "metric": "S error at yprime/H=.25 plus full crest profile",
+      "scope": "CV7, material coverage scenarios fixed before scores, no unreported mixed-case wake targets"
+    },
+    {
+      "endpoint": "crest_turbulence",
+      "series": [
+        "f7a_SS",
+        "f7a_RR",
+        "f7b_SS",
+        "f7b_RR"
+      ],
+      "metric": "normalized ratio profile bias and RMSE on yprime/delta",
+      "notes": "Use corresponding flat ratios at same vertical height; do not invent bubble Reynolds-stress data."
+    },
+    {
+      "endpoint": "wake_shear",
+      "series": [
+        "f11_SS",
+        "f11_RR"
+      ],
+      "metric": "profile of -R_x_vertical/Uinf^2 versus y/delta75",
+      "height_scale": "Experimental numerical delta75 not reported. A shape comparison using paired CFD flat-floor delta75 requires a declared edge criterion (.99Uinf with .95 sensitivity) and thickness reporting; physical-height validation remains conditional."
+    },
+    {
+      "endpoint": "near_floor",
+      "series": [
+        "f9_SS",
+        "f9_RR",
+        "f12_SS",
+        "f12_RR"
+      ],
+      "metric": "dimensionless x-position of Fig9 U=0 is supported; dimensional velocity/rms amplitudes are deferred pending independently justified scale",
+      "notes": "Do not infer Uinf by fitting these held-out curves. Preserve source height/extent discrepancies."
+    },
+    {
+      "endpoint": "foot_speedup_profiles",
+      "series": [
+        "f6a_SS_upwind",
+        "f6a_RR_upwind",
+        "f6a_SS_downwind",
+        "f6a_RR_downwind"
+      ],
+      "metric": "profile error in S at x/H=-2.5 or 2.5 with the frozen vertical-height weights",
+      "notes": "Additional validation curves, not duplicates of the Fig6b crest series; do not count derived quantities as independent experimental samples."
+    }
+  ],
+  "quality_policy": {
+    "legend_occluded": "Encoded point retained for provenance, weight zero in fitting and scoring.",
+    "duplicates": "Repeated source plots/drawing objects do not multiply observations or count as independent experiments.",
+    "unsupported_probe": "Keep the frozen dataset range; report unavailable/conditional coverage below hm or with unknown height scale, rather than renormalizing away failed locations silently.",
+    "parameters": "Canonical model constants fixed; calibration uses only flat data; width selected from approach-flow/plateau criteria, never best hill score."
+  },
+  "threshold_meaning": "Predeclared engineering targets, not software pass gates or statistical confidence statements. Report every model outcome; agreement is not a condition of milestone completion."
+}

@@ -1,0 +1,52 @@
+{
+  "version": "cao-tamura-2006-v1.1",
+  "confidence_statement": "Extraction envelopes are deterministic analysis bounds, not experimental standard deviations or 95% confidence intervals.",
+  "components": [
+    {
+      "name": "vector_digitization",
+      "bound": 0.5,
+      "unit": "PDF point on each published axis",
+      "basis": "Conservative combined symbol/tick-placement envelope, checked against the second parser and independent raster centres. CSV contains transformed per-axis bounds; logarithmic transformation is nonlinear.",
+      "limitations": "Does not include source normalization inconsistency or experimental error."
+    },
+    {
+      "name": "axis_semantics",
+      "bound": null,
+      "basis": "Manual PDF/figure-context audit and repeated-figure checks; assignment performed by one analyst. Source ambiguities are listed separately, not erased by subpixel centres."
+    },
+    {
+      "name": "delta_d_Hh",
+      "bound": null,
+      "basis": "Hh is reported; delta is about 0.25m; rough d is an author assumption. Converted heights using delta/d are nominal; source uncertainty is not quantified."
+    },
+    {
+      "name": "measurement_system",
+      "bound": null,
+      "basis": "Reported pitch-voltage deviation <±1.5% in 1-8m/s is a calibration property, not a complete velocity or stress uncertainty budget."
+    },
+    {
+      "name": "finite_sampling",
+      "bound": null,
+      "basis": "30 s at 1kHz, no raw series/autocorrelation. Do not infer 30000 independent samples or reconstruct confidence intervals from n alone."
+    },
+    {
+      "name": "dimensional_Reynolds",
+      "bound": null,
+      "basis": "Re_H values approximate; rough Re_s consistency differs ~1.8%. Absolute Uinf and nu are not separately reported."
+    },
+    {
+      "name": "facility_and_homogenization",
+      "bound": null,
+      "basis": "End plates/sidewall BL and local cube flow unresolved; ks is not the measured cube height."
+    },
+    {
+      "name": "CFD_numerical_and_sampling",
+      "bound": null,
+      "basis": "No CFD run in CV1; to be quantified by CV4 and each production case."
+    }
+  ],
+  "combination": "Keep each contribution separate; no root-sum-square without a justified independence model.",
+  "reattachment_resolution": "10mm traverse spacing corresponds to 0.25Hh; half-spacing 0.125Hh may be reported as a spatial resolution indicator, not as total x_R uncertainty. The paper uses an unspecified extrapolation.",
+  "source_inconsistency_policy": "Do not expand extraction error bars arbitrarily to absorb Fig.3(e) normalization mismatch. Flag it and retain the calibration priority/duplicate exclusion.",
+  "verdicts": "Engineering error assessment with named missing uncertainties; formal 95% experimental support is inconclusive where the missing budget matters."
+}

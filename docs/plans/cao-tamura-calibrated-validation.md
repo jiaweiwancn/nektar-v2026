@@ -5,8 +5,8 @@
 - Origin Skill: academic-research-suite / experiment-agent
 - Origin Mode: plan / computational experiment
 - Origin Date: 2026-11-01
-- Verification Status: UNVERIFIED — plan only; CV1–CV8 have not been executed
-- Version Label: cao_tamura_calibrated_validation_v1
+- Verification Status: CV1 source/data audit VERIFIED within its recorded limits; CV2–CV8 PLANNED
+- Version Label: cao_tamura_calibrated_validation_v1_cv1
 
 ## Objective, branch and starting evidence
 
@@ -20,7 +20,8 @@ AWF, together with numerical, calibration and sampling uncertainty.
 All implementation and subsequent experimental validation for this plan belong
 on **`codex/cao-tamura-calibrated-validation`**, starting at
 `c48d9fb14afeca6caa80cf5b3f8ce0a34a02d2d7`. Commit and push after each completed
-milestone. This planning commit does not close a numerical milestone.
+milestone. Initial planning commit `038bff7` recorded the design; the CV1
+source/data closure below is separate from numerical or experimental validation.
 
 The [terrain implementation record](hill-wall-geometry-transition.md),
 [WG4 evidence](hill-wall-geometry-evidence/wg4.json),
@@ -442,17 +443,18 @@ closure requires trustworthy evidence, not universal agreement with experiment.
 
 ## Milestones and closure evidence
 
-All milestones below are **PLANNED**. Maintain closure notes and compact
+CV1 is **CLOSED**; CV2–CV8 remain **PLANNED**. Maintain closure notes and compact
 receipts under `docs/plans/cao-tamura-validation-evidence/` as they are produced;
-store large outputs only in the Linux run root. These paths are planned, not
-existing evidence. Each closure records tested revision/source hashes, commands,
+store large simulation outputs only in the Linux run root. CV1's data/evidence
+paths now exist; later milestone outputs remain planned. Each closure records
+tested revision/source hashes, commands,
 case manifest, configuration, failures, outcome and limitations, then a commit
 and push on this branch. Reopen affected downstream assessments after any
 physics, calibration, observation-operator or numerical change.
 
 | Milestone | Dependencies | Deliverables and closure gate | Status |
 |---|---|---|---|
-| CV1 — Source and data freeze | Planning commit | PDF/figure/page audit, geometry/units/station tables, independently checked digitized curves and uncertainty/provenance, calibration/holdout split, dimensional/Re consistency, unresolved facility/mixed-surface details explicitly recorded. Freeze data v1 and score definitions before fitting. | PLANNED |
+| CV1 — Source and data freeze | Planning commit | PDF/figure/page audit, geometry/units/station tables, independently checked digitized curves and uncertainty/provenance, calibration/holdout split, dimensional/Re consistency, unresolved facility/mixed-surface details explicitly recorded. Freeze versioned data and score definitions before fitting. | CLOSED |
 | CV2 — Wall/reference and probe readiness | CV1 | Parameterized experimental generator; smooth-anchor checks; displaced-reference derivation/decision; any necessary declared implementation; native physical-point interpolation and below-hm reconstruction with frame/rank/continuity tests. Canonical d=0, finite-nu, original recovery, curved continuity, history and legacy checks pass on Linux. Record unsupported observables rather than manufacture them. | PLANNED |
 | CV3 — Separate S/R calibration | CV1–CV2 | Developed empty-floor precursors; fixed-coefficient calibration and flat-data cross-checks; shared-parameter and any conditional fits distinguished; parameter/variance/displacement uncertainty and incident residuals published. Freeze S/R manifests without using held-out hill scores. | PLANNED |
 | CV4 — Numerical and long-time readiness | CV2–CV3 | Profiled solver and bounded runtime estimate; three-level h and dt evidence plus p/hm/domain sensitivities; inlet/outlet preservation convergence; perturbed 3D stability checks; demonstrated stationarity/statistical procedure, mass/strip budgets and MPI/history equivalence. No large production matrix until throughput and observable error are defensible. | PLANNED |
@@ -539,3 +541,78 @@ failed/incomplete attempts. Resume from compatible history with a new receipt,
 not an unrecorded retry. A throughput failure is a reason to diagnose or reduce
 the declared campaign, never to count a short transient as experimental
 validation. This plan starts no builds or experimental runs.
+
+## CV1 closure (2026-11-01)
+
+CV1 is closed as a **source audit and data freeze**. No CFD case was fitted or
+run, and no experimental-accuracy claim is made. Implementation/reference,
+probe reconstruction, calibration and numerical-readiness work remain CV2–CV4.
+Integrated strip continuity and the 16-worker project limit remain unchanged.
+
+Delivered [frozen data v1.1](cao-tamura-validation-data/README.md), its
+[snapshot hashes](cao-tamura-validation-data/snapshot.json),
+[figure inventory](cao-tamura-validation-data/figure_inventory.csv),
+[score definitions](cao-tamura-validation-data/scores.json) and
+[CV1 receipt](cao-tamura-validation-evidence/cv1.json). The source PDF's
+19 pages and its identity/geometry/units were audited against rendered pages;
+publisher metadata confirms the DOI/title. The fourteen-figure inventory
+distinguishes calibration, validation, duplicate and context-only material.
+The dataset has 39 reported scalar facts and 1,151 digitized points across
+98 plotted series. Eighteen legend-occluded symbols are retained with zero
+weight; 1,133 points are marked visible. Repeated drawings and repeated plots
+do not count as independent measurements.
+
+Final review corrected the unpublished v1 draft's classification of four
+Fig. 6a upwind/downwind speed-up series: they are additional validation data;
+only its crest series duplicate Fig. 6b. The v1.1 revision retains all numerical
+values and bounds, records the role change and preserves the draft locally.
+
+Independent pdfplumber and pypdf parsing agrees on all selected symbol centres,
+shapes and fills. The separate Poppler raster check passes on 472 isolated
+symbols, maximum centre difference 0.179 PDF points against the fixed 0.5-point
+extraction bound. All seven plot-page overlays were visually inspected. This
+is independence of software backends, not of human readers or experiments.
+Fresh extraction reproduces all three numerical extraction products byte for
+byte. The audit checks coordinates, fixed height weights, source/recipe/snapshot
+hashes, calibration/holdout separation and reported scalar identifiers. Four
+negative checks reject a changed source PDF, altered frozen table, hill data
+introduced into calibration (even with an updated file hash), and overwrite of
+the sealed snapshot. Commands, versions, counts and hashes are in the receipt.
+
+The data audit changes several assumptions for subsequent work:
+
+- Figures 4/5/8/10 use global y/Hh; Figure 3c/d uses (y-d)/delta and Figure 7
+  uses yprime/delta. Fig. 11's numerical delta75 is absent, so its dimensional
+  height is not invented. The CSV/series metadata preserve these distinctions.
+- Fig. 3a gives U_H/Uinf about 0.79351 (S) and 0.68670 (R). Together with the
+  reported Re_H these imply Uinf/nu about 378067 and 382261 per metre; the
+  resulting rough Re_s=3.899 differs from the reported 3.97 by about 1.8%.
+  Absolute Uinf and nu are not separately specified. Freeze Reynolds-matched
+  dimensionless comparisons; dimensional Fig. 9/12 amplitudes remain conditional
+  on independently justified scale, with no hill-data scale fitting.
+- Fig. 3e, converted with the reported friction velocities, differs from the
+  repeated Fig. 3a profile by up to 0.05014/0.04351 Uinf (S/R). This unresolved
+  source normalization/plot discrepancy is explicit. Fit Fig. 3a/b/c, reserve
+  Fig. 3d, and keep Fig. 3e as a duplicate consistency check.
+- The supplied Fig. 8 labels `2.53` and `3.0` are qualified as inferred 2.5
+  and 5.0 stations using geometry and repeated profiles. Text/figure traverse
+  extents differ. Reported ground-extrapolated x_R is distinct from finite-
+  probe zero crossings. These discrepancies and the unspecified extrapolation
+  method enter observation/uncertainty decisions rather than silent corrections.
+- End-plate dimensions, roof/sidewall boundary-layer data, exact mixed-case
+  downstream roughness coverage and a full experimental uncertainty budget
+  remain unspecified. The recorded 5% blockage versus 4% full-section frontal
+  area ratio also needs a facility interpretation. CV4/CV7 must bound or declare
+  these limits. Spanwise variance and epsilon are not measured inlet data.
+
+CV1 checks ran as serial, lightweight source/data audits on macOS 14.6 arm64,
+Python 3.12.14 (plus the system-Python standard-library check), pdfplumber
+0.11.9, pypdf 6.10.0, Pillow 12.3.0 and Poppler 26.05.0. Tested base is
+`038bff7` plus the CV1 files identified by their receipt hashes. No compiler,
+MPI rank or Linux solver was used. Both Linux SSH endpoints timed out during
+readiness checks; Linux availability is not a gate for this paper/data-only
+milestone. No Linux build, solver, stability or performance result is inferred.
+Local PDF renders and development-attempt diagnostics are outside the checkout
+under `/tmp/nektar-cv1`; the source-bound auditor reproduces them. The Git
+delivery contains derived numerical tables and compact evidence, not the PDF
+or its page images.

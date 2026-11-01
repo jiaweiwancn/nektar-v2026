@@ -1,0 +1,465 @@
+{
+  "milestone": "CV1",
+  "status": "CLOSED",
+  "scope": "source/data audit and versioned scoring freeze; no CFD execution or experimental-accuracy conclusion",
+  "created_utc": "2026-11-01T02:35:35.254421+00:00",
+  "branch": "codex/cao-tamura-calibrated-validation",
+  "tested_base_revision": "038bff714452e0f6423cf7a809146f93d21567e6",
+  "tested_revision_note": "Base revision plus the exact CV1 working-tree files below. Production solver source is unchanged; receipt is committed with those files.",
+  "source_files_sha256": {
+    "docs/plans/cao-tamura-calibrated-validation.md": "2d20e0e30ad3ffe87cd3822de2d6fe624577024c03b5d66f4784afb110f38af2",
+    "solvers/IncNavierStokesSolver/Tests/RANS/cao_tamura_data.py": "544f596ce7975e4c3b7c04837a9c7a370ad4588b7c8416511fd235f4e293630e",
+    "docs/plans/cao-tamura-validation-data/README.md": "c1286f22350a0412a20d6a0b823277b538f06dc2d486380a3b9a8d26fa5d9528",
+    "docs/plans/cao-tamura-validation-data/extraction.json": "7e5e5fe15fb43c0e6c6c1102197f018ed7cdc758d45e630100977e9de9c370a3",
+    "docs/plans/cao-tamura-validation-data/figure_inventory.csv": "a241dbceefd1563407208af3b090dfa67284e19bdd12c02ff45852e27b565120",
+    "docs/plans/cao-tamura-validation-data/profiles.csv": "f696657990c1d207a303777f17dd574049239143e6fa2c286f0d87650fd614f2",
+    "docs/plans/cao-tamura-validation-data/reported_scalars.csv": "d746b30d04bb2b5556adc7b1609dd898c57a3c6660b61f636dbe6ed5e2fd3641",
+    "docs/plans/cao-tamura-validation-data/scores.json": "a681bad718a6a72d6543abcad73d91b183d5d955db6933348b866ef35da1afe9",
+    "docs/plans/cao-tamura-validation-data/series.json": "8cef4a13b83c7e9f6afcaecbf7ecc58d861ee54e31df29fa7e8584924e320905",
+    "docs/plans/cao-tamura-validation-data/snapshot.json": "2432937f6ab1b7dd41351e56e3cd4ce31a24e8cc2f63449404af2c3a688b7429",
+    "docs/plans/cao-tamura-validation-data/source_manifest.json": "8c0cab03d1fe4c1301386539d584a20754d9a0641feaf98e3fdd2f2079e778f8",
+    "docs/plans/cao-tamura-validation-data/uncertainty.json": "b87ba465738bc0665702fd31eebccbe811149acbcc43913e2bde8209719e28ad",
+    "docs/plans/cao-tamura-validation-data/.gitattributes": "5bacfbe367e2e068c23f125340bed3040388f692274987dc7cc5c60a408d321b"
+  },
+  "data_version": "cao-tamura-2006-v1.1",
+  "snapshot_sha256": "2432937f6ab1b7dd41351e56e3cd4ce31a24e8cc2f63449404af2c3a688b7429",
+  "source_pdf_sha256": "adffb5c1d740be791211d82ce35778a37a3315a6dc72c56c80b70cc6642a43df",
+  "source_audit": {
+    "pdf_pages": 19,
+    "figures_inventoried": 14,
+    "reported_scalar_facts": 39,
+    "source_status": "reported/approximate/author-assumed/inferred statuses preserved per scalar",
+    "publisher_url": "https://www.sciencedirect.com/science/article/abs/pii/S0167610505001108",
+    "publisher_checked_utc_date": "2026-11-01",
+    "publisher_scope": "identity/DOI and accessible preview; no claim of an exhaustive search for author-native data",
+    "no_author_contact": true
+  },
+  "acceptance_gates": [
+    {
+      "gate": "PDF/figure/page/units/geometry/stations",
+      "status": "PASS",
+      "evidence": "source_manifest.json, figure_inventory.csv, reported_scalars.csv, series.json and profiles.csv"
+    },
+    {
+      "gate": "Independently checked digitized curves",
+      "status": "PASS",
+      "evidence": "1151 symbols checked by two parsers; 472 isolated circles checked using Poppler; all seven plot-page overlays inspected"
+    },
+    {
+      "gate": "Calibration/holdout split and scores frozen",
+      "status": "PASS",
+      "evidence": "scores.json, fixed CSV weights, snapshot.json; Fig3d reserved, all hill data held out"
+    },
+    {
+      "gate": "Dimensional/Reynolds consistency",
+      "status": "PASS_WITH_RECORDED_LIMITS",
+      "evidence": "U_H definition retained; approximate Re values differ by about 1.8% in rough Re_s; absolute Uinf and nu not invented"
+    },
+    {
+      "gate": "Uncertainty/provenance and unresolved facility/mixed coverage",
+      "status": "PASS_WITH_RECORDED_LIMITS",
+      "evidence": "source_manifest.json and uncertainty.json; unknowns remain explicit, not solved by the freeze"
+    },
+    {
+      "gate": "Re-extraction, integrity and negative controls",
+      "status": "PASS",
+      "evidence": "three products byte-identical; standard-library validation and four rejection controls pass"
+    }
+  ],
+  "data_check": {
+    "status": "PASS",
+    "data_version": "cao-tamura-2006-v1.1",
+    "series": 98,
+    "points": 1151,
+    "quality": {
+      "visible": 1133,
+      "legend_occluded": 18
+    },
+    "roles": {
+      "calibration": 6,
+      "flat_crosscheck": 2,
+      "duplicate_crosscheck": 22,
+      "validation": 50,
+      "wake_mean_crosscheck": 14,
+      "dimensional_holdout": 4
+    },
+    "checks": [
+      "source binding",
+      "series/count integrity",
+      "finite values",
+      "positive extraction envelopes",
+      "vertical/physical-height transform",
+      "normalised per-series height weights",
+      "canonical extraction recipe",
+      "frozen snapshot file hashes",
+      "calibration/holdout separation",
+      "figure inventory and scalar identifiers"
+    ],
+    "source_consistency": {
+      "scope": "data/source consistency only; no CFD comparison",
+      "duplicate_figure_checks": [
+        {
+          "first": "f4a_SS",
+          "second": "f8_SS",
+          "points": 69,
+          "maximum_absolute_difference": 0.010361528863302882,
+          "comparison_bound": 0.04
+        },
+        {
+          "first": "f4b_RR",
+          "second": "f8_RR",
+          "points": 56,
+          "maximum_absolute_difference": 0.007602813708456502,
+          "comparison_bound": 0.04
+        },
+        {
+          "first": "f5a_SS",
+          "second": "f10_SS",
+          "points": 102,
+          "maximum_absolute_difference": 0.001841791199999998,
+          "comparison_bound": 0.013
+        },
+        {
+          "first": "f5b_RR",
+          "second": "f10_RR",
+          "points": 81,
+          "maximum_absolute_difference": 0.001057010700440425,
+          "comparison_bound": 0.013
+        }
+      ],
+      "Reynolds_consistency": {
+        "inflows": [
+          {
+            "case": "S",
+            "U_H_over_Uinf": 0.7935109159403773,
+            "Uinf_over_nu_per_m_from_Re_H": 378066.6326996583,
+            "Uinf_m_per_s_IF_nu_1p5em5": 5.670999490494874,
+            "f3e_vs_f3a_max_U_over_Uinf_difference": 0.05014327228739135,
+            "f3e_role": "duplicate cross-check, excluded from calibration"
+          },
+          {
+            "case": "R",
+            "U_H_over_Uinf": 0.6867027876284083,
+            "Uinf_over_nu_per_m_from_Re_H": 382261.44516839384,
+            "Uinf_m_per_s_IF_nu_1p5em5": 5.733921677525908,
+            "f3e_vs_f3a_max_U_over_Uinf_difference": 0.043503130629989895,
+            "f3e_role": "duplicate cross-check, excluded from calibration"
+          }
+        ],
+        "rough_Uinf_over_nu_per_m_from_Re_s": 389215.6862745098,
+        "rough_Re_s_from_Re_H": 3.899066740717617,
+        "interpretation": "About 1.8% rough Re_s discrepancy; approximate source values, no unique absolute pair (Uinf, nu)"
+      },
+      "text_vs_crest_markers": [
+        {
+          "case": "SS",
+          "reported": 0.457,
+          "digitized": 0.4565189827,
+          "digitized_yprime_over_H": 0.254774146
+        },
+        {
+          "case": "RR",
+          "reported": 0.875,
+          "digitized": 0.8739080529,
+          "digitized_yprime_over_H": 0.254774146
+        },
+        {
+          "case": "RS",
+          "reported": 0.918,
+          "digitized": 0.9176693561,
+          "digitized_yprime_over_H": 0.2499794412
+        },
+        {
+          "case": "SR",
+          "reported": 0.245,
+          "digitized": 0.2451255837,
+          "digitized_yprime_over_H": 0.2499794412
+        }
+      ],
+      "traverse_ranges": {
+        "f9_SS": [
+          3.751219209,
+          8.747649781
+        ],
+        "f9_RR": [
+          3.751219209,
+          8.747649781
+        ],
+        "f12_SS": [
+          3.749134239,
+          8.500852276
+        ],
+        "f12_RR": [
+          3.749134239,
+          8.500852276
+        ]
+      }
+    },
+    "independent_parser": {
+      "method": "pypdf paint-operator/CTM interpreter vs pdfplumber symbols",
+      "points": 1151,
+      "maximum_centre_difference_pdf_pt": 4.714053636825983e-08,
+      "points_by_page": {
+        "7": 165,
+        "9": 409,
+        "14": 204,
+        "11": 103,
+        "12": 36,
+        "13": 167,
+        "15": 67
+      },
+      "status": "PASS"
+    },
+    "raster": {
+      "method": "Poppler 300 dpi / opposite outer-ink edge midpoints on isolated circles",
+      "status": "PASS",
+      "checked_points": 472,
+      "checked_by_page": {
+        "7": 64,
+        "9": 234,
+        "11": 4,
+        "12": 24,
+        "13": 89,
+        "14": 2,
+        "15": 55
+      },
+      "skipped": {
+        "crowded": 601,
+        "triangle_or_legend": 78
+      },
+      "maximum_centre_difference_pdf_pt": 0.1788963494900867,
+      "minimum_edge_pairs": 8,
+      "point_receipt_sha256": "dc3c952fcdf9064e0a1ff88ef9da6e4347c90f9575ed43162225e910fae23cbe",
+      "image_sha256": {
+        "p07.png": "17dcbe96a5486749e29d55f1b3dea9543716bbda23a4cb3e78d1e72d0d5e38d1",
+        "p09.png": "bac4fe2f3504b79a198ebcfe9b23e65f5e8c8d63afe6c4f3c345e5ab1bdc0cfa",
+        "p14.png": "f2325b738ac80e5e244a54216baefac3ae88d3b6fb591dae72c78c320b34861b",
+        "p11.png": "0e61a3c61f498755b31f10b33272c193c3660dd2fd2be57434b7a3f55bdc1738",
+        "p12.png": "b82d290b32d466c9ea9d0590c2cfd85d4ca229c2f8b25eb6abad6e119ef69642",
+        "p13.png": "f7a3a698c279e807da1f657ea1718e183ee34c738398b66fdb8ea3adc5a4ad48",
+        "p15.png": "86ac5b200cd05521432d1df481431b46cc222aef485255e8846d0fa418d37085"
+      },
+      "overlays": "All selected symbols overlaid; legends magenta; S solid red / R open blue"
+    }
+  },
+  "fresh_extraction": {
+    "status": "PASS",
+    "products": [
+      {
+        "file": "profiles.csv",
+        "bytes": 225576,
+        "sha256": "f696657990c1d207a303777f17dd574049239143e6fa2c286f0d87650fd614f2",
+        "result": "byte-identical independent extraction run"
+      },
+      {
+        "file": "series.json",
+        "bytes": 36927,
+        "sha256": "8cef4a13b83c7e9f6afcaecbf7ecc58d861ee54e31df29fa7e8584924e320905",
+        "result": "byte-identical independent extraction run"
+      },
+      {
+        "file": "extraction.json",
+        "bytes": 19060,
+        "sha256": "7e5e5fe15fb43c0e6c6c1102197f018ed7cdc758d45e630100977e9de9c370a3",
+        "result": "byte-identical independent extraction run"
+      }
+    ],
+    "unrounded_vector_parser_maximum_pdf_pt": 0.0,
+    "note": "The 4.72e-8 point difference when reading the serialized CSV is its decimal round-off; unrounded parser centres agree exactly."
+  },
+  "standard_library_check": {
+    "status": "PASS",
+    "python": "/Library/Developer/CommandLineTools/usr/bin/python3\n3.9.6 (default, Nov 11 2024, 03:15:38) \n[Clang 16.0.0 (clang-1600.0.26.6)]",
+    "report_sha256": "fa7984cea7ed7d944165ace99a07ad88cee46c93f2b326b830c8e5111546449c"
+  },
+  "negative_controls": [
+    {
+      "case": "changed-source",
+      "argv": [
+        "/Users/jay/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/Users/jay/Documents/nektar-v2026/solvers/IncNavierStokesSolver/Tests/RANS/cao_tamura_data.py",
+        "--data",
+        "/tmp/nektar-cv1/negative-v1p1/unused-extraction",
+        "--pdf",
+        "/tmp/nektar-cv1/negative-v1p1/changed.pdf",
+        "--extract"
+      ],
+      "exit_code": 1,
+      "expected_failure_fragment": "Source PDF fingerprint changed",
+      "status": "PASS_expected_rejection"
+    },
+    {
+      "case": "changed-frozen-data",
+      "argv": [
+        "/Users/jay/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/Users/jay/Documents/nektar-v2026/solvers/IncNavierStokesSolver/Tests/RANS/cao_tamura_data.py",
+        "--data",
+        "/tmp/nektar-cv1/negative-v1p1/changed-table"
+      ],
+      "exit_code": 1,
+      "expected_failure_fragment": "Frozen data changed: profiles.csv",
+      "status": "PASS_expected_rejection"
+    },
+    {
+      "case": "hill-in-calibration",
+      "argv": [
+        "/Users/jay/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/Users/jay/Documents/nektar-v2026/solvers/IncNavierStokesSolver/Tests/RANS/cao_tamura_data.py",
+        "--data",
+        "/tmp/nektar-cv1/negative-v1p1/leaked-hill"
+      ],
+      "exit_code": 1,
+      "expected_failure_fragment": "assert set(s[\"id\"] for s in series",
+      "status": "PASS_expected_rejection"
+    },
+    {
+      "case": "overwrite-sealed",
+      "argv": [
+        "/Users/jay/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/Users/jay/Documents/nektar-v2026/solvers/IncNavierStokesSolver/Tests/RANS/cao_tamura_data.py",
+        "--data",
+        "/Users/jay/Documents/nektar-v2026/docs/plans/cao-tamura-validation-data",
+        "--pdf",
+        "/Users/jay/Documents/nektar-v2026/docs/literature/Experimental study on roughness effects on turbulent boundary layer flow over a two-dimensional steep hill.pdf",
+        "--extract"
+      ],
+      "exit_code": 1,
+      "expected_failure_fragment": "Extract to a fresh directory; data are frozen",
+      "status": "PASS_expected_rejection"
+    }
+  ],
+  "visual_review": {
+    "pages": [
+      7,
+      9,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "overlays": {
+      "7": {
+        "sha256": "70fa5679131b6c89b58faa6bc3b60befca6318cb7807d237b30edec75ba492a3",
+        "visual_review": "inspected source page and all-symbol overlay",
+        "path": "/tmp/nektar-cv1/v1p1-raster/overlay-07.png"
+      },
+      "9": {
+        "sha256": "0d34b796bb73d49d950a7bfb28be3ce7d2abc33b3d9d24171e80ac4de80f097c",
+        "visual_review": "inspected source page and all-symbol overlay",
+        "path": "/tmp/nektar-cv1/v1p1-raster/overlay-09.png"
+      },
+      "11": {
+        "sha256": "91ef132d992b3b35ce654d810518e27e74785194330d1e66d6ab224b579b9992",
+        "visual_review": "inspected source page and all-symbol overlay",
+        "path": "/tmp/nektar-cv1/v1p1-raster/overlay-11.png"
+      },
+      "12": {
+        "sha256": "31255d21ad50af95598490200b9cc2ea862061c9c74f1ab0a38fc15e9649373d",
+        "visual_review": "inspected source page and all-symbol overlay",
+        "path": "/tmp/nektar-cv1/v1p1-raster/overlay-12.png"
+      },
+      "13": {
+        "sha256": "175b76be05bcfb77dcf355894cc6f49acf4e9860ef99cdc28dcc4870304b521f",
+        "visual_review": "inspected source page and all-symbol overlay",
+        "path": "/tmp/nektar-cv1/v1p1-raster/overlay-13.png"
+      },
+      "14": {
+        "sha256": "4a7ffff56ad3dc0c91d330bd937e10c92cb78c548b9f8bdc45bc50015318f467",
+        "visual_review": "inspected source page and all-symbol overlay",
+        "path": "/tmp/nektar-cv1/v1p1-raster/overlay-14.png"
+      },
+      "15": {
+        "sha256": "b3eb96be8fcde4537307f75e12cd43c8e8c958b7f1de45a465c924757320ef98",
+        "visual_review": "inspected source page and all-symbol overlay",
+        "path": "/tmp/nektar-cv1/v1p1-raster/overlay-15.png"
+      }
+    },
+    "reused_after_revision": "Overlay bytes identical; only role fields changed in v1.1"
+  },
+  "compact_raster_points": {
+    "path": "docs/plans/cao-tamura-validation-evidence/cv1-raster-points.csv",
+    "rows": 472,
+    "sha256": "9c8ad56ce31d395375710e4304b5b18e2bc3676de15e980143aed38e3488bf10"
+  },
+  "environment": {
+    "os": "macOS-14.6-arm64-arm-64bit",
+    "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+    "python_executable": "/Users/jay/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "libraries": {
+      "pdfplumber": "0.11.9",
+      "pypdf": "6.10.0",
+      "Pillow": "12.3.0"
+    },
+    "poppler": "26.05.0",
+    "MPI_ranks": 0,
+    "Linux_workers": 0,
+    "type": "lightweight serial source/data audit on Mac; no compiler/solver/performance result"
+  },
+  "commands": [
+    [
+      "/Users/jay/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "solvers/IncNavierStokesSolver/Tests/RANS/cao_tamura_data.py",
+      "--data",
+      "docs/plans/cao-tamura-validation-data",
+      "--seal",
+      "--pdf",
+      "docs/literature/Experimental study on roughness effects on turbulent boundary layer flow over a two-dimensional steep hill.pdf",
+      "--raster",
+      "/tmp/nektar-cv1/v1p1-raster",
+      "--report",
+      "/tmp/nektar-cv1/v1p1-acceptance.json"
+    ],
+    [
+      "python3",
+      "solvers/IncNavierStokesSolver/Tests/RANS/cao_tamura_data.py",
+      "--data",
+      "docs/plans/cao-tamura-validation-data",
+      "--report",
+      "/tmp/nektar-cv1/stdlib-v1p1.json"
+    ],
+    [
+      "/Users/jay/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "solvers/IncNavierStokesSolver/Tests/RANS/cao_tamura_data.py",
+      "--data",
+      "/tmp/nektar-cv1/v1p1-fresh",
+      "--pdf",
+      "docs/literature/Experimental study on roughness effects on turbulent boundary layer flow over a two-dimensional steep hill.pdf",
+      "--extract",
+      "--report",
+      "/tmp/nektar-cv1/v1p1-fresh-check.json"
+    ]
+  ],
+  "commands_note": "--seal is the recorded one-time freeze command and must not be rerun on sealed data. The data README gives ordinary source-check/reconstruction commands. Negative-control argv are recorded above; fixtures are copies under /tmp.",
+  "retained_development_findings": [
+    {
+      "stage": "initial extraction",
+      "finding": "Flat-reference x=0 was initially treated as the hill crest in a derived-height conversion. The below-floor assertion caught it; corrected the geometry context for S/R. Source coordinates/values were not changed."
+    },
+    {
+      "stage": "raster attempt 1",
+      "finding": "Ring-contrast matching gave two offsets above the 0.5pt bound due to nearby derived guide symbols/connecting strokes. Replaced with all-symbol crowding exclusion and opposite-edge centres. Raw attempt retained locally."
+    },
+    {
+      "stage": "raster attempt 2",
+      "finding": "A later outer-edge crossing belonged to another series connecting stroke. Selecting the first symbol outer crossing fixes it; no extraction tolerance or source value was changed."
+    },
+    {
+      "stage": "final data-role review",
+      "finding": "Four Fig6a foot-speedup series are additional validation curves, not crest duplicates. Unreleased v1 draft preserved under /tmp/nektar-cv1/draft-v1-frozen; final v1.1 freezes corrected roles. All 1151 numerical rows and acceptance bounds unchanged."
+    },
+    {
+      "stage": "negative-control harness",
+      "finding": "First harness expected a traceback fragment on the next line of a multi-line assertion; rejection itself worked. Corrected the harness match and reran all four controls."
+    }
+  ],
+  "raw_artifact_root": "/tmp/nektar-cv1",
+  "raw_retention_note": "Local temporary renders, overlays and attempt receipts are outside the checkout and reproducible from the source PDF; only derived tables/compact receipts are committed.",
+  "Linux_access": {
+    "linux-usb": "SSH connect timed out at 192.168.77.2",
+    "tailscale": "SSH connect timed out at 100.105.247.110",
+    "consequence": "No Linux source/build/run state was modified; Linux not needed for this paper/data-only milestone. CV2 solver checks still require Linux."
+  },
+  "next_milestones": "CV2-CV8 remain planned. Carry integrated strip continuity and the 16-worker project limit forward.",
+  "delivery_line_endings": "profiles.csv and reported_scalars.csv retain their generated CRLF bytes with scoped -text attributes; cr-at-eol distinguishes those line endings from trailing whitespace. Other whitespace checks remain enabled. The nine frozen data/definition hashes are unchanged."
+}
