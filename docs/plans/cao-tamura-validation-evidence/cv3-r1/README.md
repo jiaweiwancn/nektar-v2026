@@ -5,6 +5,10 @@ the results and limitations. The [protocol](../../cao-tamura-cv3-calibration-pro
 defines the gates. The generated `evidence.json` records the exit decision;
 short, failed or deliberately retired controls cannot close R1.
 
+The final native assessment remains **OPEN**: both standard centres develop,
+while the tested CLS composite cases reject before development. All runs are
+concluded or explicitly retired; no calibration or reserved score is unlocked.
+
 `record_cao_tamura_r1.py` exports reference receipts, source/binary bindings,
 native diagnostics, checkpoint comparisons, exact producer versions and the
 historical compiled-source snapshots needed to reproduce earlier controls.
@@ -19,6 +23,10 @@ on Linux. Artifact hashes and producing paths are retained in the receipts.
 Run the exporter there with the immutable build, reference, guard, history,
 matched-field and Release CTest paths recorded in its command receipt.
 Supplying `--developments` requires all four qualifying native cases.
+The additional [source integration receipt](code-source-integration-v1.json) and
+[manifest](code-integration-manifest-v1.json) verify 28 functional files against
+code commit `99e4e6c`. Native receipts keep their actual pre-commit parent and
+source hashes. These Git integration receipts accompany the native export.
 The [terrain example](../../../../solvers/IncNavierStokesSolver/Examples/TerrainHill/README.md)
 contains the isolated Release build recipe against the existing MPI installation.
 

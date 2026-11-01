@@ -5,7 +5,7 @@
 - Origin Skill: academic-research-suite / experiment-agent
 - Origin Mode: computational experiment plan amendment
 - Origin Date: 2026-11-01
-- Verification Status: R1 reference/native checks pass; developed composite-floor assessment IN PROGRESS; CV3 remains IN PROGRESS
+- Verification Status: R1 reference/native and standard checks pass; CLS developed-floor gates unmet; R1 OPEN and CV3 IN PROGRESS
 - Version Label: cao-tamura-cv3-protocol-v2
 - Supersedes: [original-first protocol v1](cao-tamura-cv3-calibration-protocol-v1.md), preserved byte-for-byte from commit `476ee5b`
 
@@ -35,7 +35,7 @@ failed baseline as a successful simulation.
 
 | Task | Deliverable / gate | Dependency | Status |
 |---|---|---|---|
-| CV3-R1 — Reference recovery and composite-floor feasibility | Reproduce the documented CLS EP-AWF reference on the current solver; establish valid developed composite-floor candidates for S/R and both closures, with audited active correction, transition and original section | CV1–CV2 and delivered CV3 fixes | IN PROGRESS; [execution record](cao-tamura-cv3-r1-reference-feasibility.md) |
+| CV3-R1 — Reference recovery and composite-floor feasibility | Reproduce the documented CLS EP-AWF reference on the current solver; establish valid developed composite-floor candidates for S/R and both closures, with audited active correction, transition and original section | CV1–CV2 and delivered CV3 fixes | OPEN: reference/standard checks pass; CLS development gates unmet; [execution record](cao-tamura-cv3-r1-reference-feasibility.md) |
 | CV3-R2 — Primary composite calibration and freeze | Route-aware bounded common-parameter search, uncertainty/residual assessment and versioned primary S/R manifests | CV3-R1 | PLANNED |
 | CV3-R3 — Reserved flat crosschecks | Score reserved Fig.3d only for the frozen, validated primary policies; record unsupported observations | CV3-R2 freeze | PLANNED |
 | Baseline / transfer track | Original-AWF and compatible-log comparisons with transferred physical inputs; successful, failed and unexecuted cases distinguished | Primary parameters available for transfers; diagnostic originals can run independently | SEPARATE; NOT A PRIMARY EP GATE |
@@ -644,6 +644,44 @@ rough fields. Select checkpoints from native output logs and verify their
 native times. Retain v2 and write this extension to fresh v3 output. This is a
 constitutive comparison, not a new physical search point, a global stability
 proof or a change to any running trajectory.
+
+At the first completed accurate smooth-CLS flow-through, compare its immutable
+t=1.75 field with the earlier refined smooth-CLS first-flow field using the
+existing time-bound complete-field comparator and 1e-6 primary/derived gate.
+Write a fresh `smooth-first-flow-accuracy-checkpoint-v1` receipt before using
+the result, with one postprocessing worker on CPU 64 within the sixteen-worker
+budget. This checks accumulated numerical agreement at the same physical
+point and time; it introduces no new trajectory, fit score or development pass.
+
+The accurate refined rough CLS corner rejects the t=1.07 line search after
+accepting through t=1.06, before its first flow-through. The declared rough
+bracket therefore supplies no qualifying common pair. Retain the rejection
+and all accepted-prefix audits. Its unselected standard counterpart may be
+retired after the current three-flow-through stage passes its independent
+audits; retain any earlier native rejection under its own status. Record
+process ownership, private output path, binary, CPU allocation, last accepted
+state and explicit retirement reason before stopping the owned MPI launcher.
+That retirement is not a numerical failure or a developed result. Continue
+the accurate smooth CLS assessment to its declared native outcome. R1 remains
+open, with canonical equations, strip continuity and all gates retained.
+
+If the accurate smooth trajectory reaches the earlier coarse-accuracy last
+accepted time t=3.14, compare those immutable native checkpoints with the same
+time/source-bound comparator and 1e-6 gate, in fresh
+`smooth-last-accuracy-checkpoint-v1` output. The comparison time is fixed by
+the already recorded baseline endpoint, before examining field differences.
+Use one worker on CPU 64. This tests late numerical agreement, not developed
+feasibility or a new physical parameter point; retain either comparison outcome.
+
+The endpoint comparison passes. The accurate smooth trajectory subsequently
+exhausts its 200-iteration nonlinear limit at t=3.15 after t=3.14, matching the
+coarse-accuracy endpoint. Both new rough/smooth CLS failures have native exit
+one and no timeout. The unselected rough standard counterpart is retired after
+its passed physical/coverage/strip audit at 3.011757 flows, with a partial
+extension retained through t=4.81; its one-to-three-flow drift fails and it is
+not developed. All R1 runs have now ended or been explicitly retired. R1 remains
+open because the four required developed cases are not available; no selection,
+freeze or reserved score is unlocked.
 
 ## R2/R3 calibration and freeze contract
 

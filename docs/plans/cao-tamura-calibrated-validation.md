@@ -5,7 +5,7 @@
 - Origin Skill: academic-research-suite / experiment-agent
 - Origin Mode: plan / computational experiment
 - Origin Date: 2026-11-01
-- Verification Status: CV1 source/data and CV2 implementation/readiness VERIFIED within recorded limits; CV3 IN PROGRESS under user-approved EP-transition-first sequence; R1 reference checks pass and developed-floor assessment is running; CV4–CV8 PLANNED
+- Verification Status: CV1 source/data and CV2 implementation/readiness VERIFIED within recorded limits; CV3 IN PROGRESS under user-approved EP-transition-first sequence; R1 reference/standard controls pass but CLS composite-floor gates remain unmet; CV4–CV8 PLANNED
 - Version Label: cao_tamura_calibrated_validation_v2_ep_transition_first
 
 ## Objective, branch and starting evidence

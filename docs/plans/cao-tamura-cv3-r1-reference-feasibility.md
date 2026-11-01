@@ -5,11 +5,11 @@
 - Origin Skill: academic-research-suite / experiment-agent
 - Origin Mode: native computational verification and feasibility
 - Origin Date: 2026-11-01
-- Verification Status: reference/native checks pass; both standard centres developed; CLS feasibility assessment IN PROGRESS
+- Verification Status: reference/native checks and standard centres pass; CLS developed-floor gates unmet; CV3-R1 OPEN
 - Version Label: cao-tamura-cv3-r1-v1
 
-**CV3-R1 remains open while the four developed composite precursors are being
-assessed.** Passing short runs does not close this task. CV3-R2 selection,
+**CV3-R1 remains open: the declared CLS probes supply no developed candidate
+on either surface.** All runs have ended or been explicitly retired. CV3-R2 selection,
 freezing and reserved flat/hill scores remain locked. The acceptance contract
 is [protocol v2](cao-tamura-cv3-calibration-protocol.md).
 
@@ -22,8 +22,9 @@ eight-element ramp (187 quadrilaterals, 17 actual normal elements):
 | R standard centre | Developed at t=9.11 s, about 6.03 flow-throughs; two successive drift passes | Valid individual feasibility control |
 | S CLS centre, centered 1e-4/native inverse 1e-8 | Accepts through t=3.14; next stage exhausts its nonlinear limit | Not developed |
 | R CLS centre, centered 1e-6/native inverse 1e-13 | Accepts through t=.68; next line search rejects, reproducing the coarser-accuracy rejection | Not developed |
-| S CLS centre, centered 1e-6/native inverse 1e-13 | Fresh assessment running | No development claim yet |
-| R lower-k/upper-epsilon corner, accurate standard/CLS | Fresh matched assessments running, k_scale=.75/epsilon_scale=2 | No common developed pair yet |
+| S CLS centre, centered 1e-6/native inverse 1e-13 | First-flow audit passes; continuation exhausts 200 Newton iterations at t=3.15 after t=3.14 | Not developed |
+| R CLS lower-k/upper-epsilon corner, accurate recipe | Rejects t=1.07 after accepting through t=1.06 | No common developed rough pair |
+| R standard lower-k/upper-epsilon corner, accurate recipe | Deliberately retired after its passed 3.01176-flow audit; last accepted prefix t=4.81 | Unselected; not a developed result or numerical failure |
 
 The standard cases use forward 1e-7 probes and native inverse target 1e-13.
 All listed cases retain dt=.01, common physical inputs per surface, canonical
@@ -38,9 +39,15 @@ close R1 by themselves.
 The current numerical solver reproduces the documented degree-four CLS
 inlet/outlet benchmark for 415 unforced steps, dt=0.5 s, t=207.5 s (5.00873
 flow-throughs). It uses the benchmark's canonical CLS Q/kappa, H/P/N=2/1/4 m,
-compatible outer fluxes and prescribed outlet traction. These physical data
+a 300 m streamwise domain with one element, compatible outer fluxes and
+prescribed outlet traction. These physical data
 are distinct from the experimental measured-profile inlet and Plane-wall
 composite route. No field resets or reference-residual forcing are used.
+This recovery uses the documented legacy `Flat` adapter. The earlier
+[WG4 record](hill-wall-geometry-transition.md) also contains five-flow-through
+periodic `Plane` preservation controls; their boundary data, numerical recipe
+and producing binary have separate receipts. Those controls and this recovery
+do not execute the measured-inlet composite-floor case assessed below.
 
 | Control | Outcome | Quantitative check |
 |---|---|---|
@@ -157,15 +164,15 @@ marked as stopped, and cannot count as developed solutions. The numerical and
 unmeasured-input feasibility brackets were recorded before their native
 probes; none used fit scores or reserved observations.
 
-The staged primary recipe uses p4 velocity/scalars, p2 pressure, eight GLL
+The initial compact staged recipe used p4 velocity/scalars, p2 pressure, eight GLL
 points, twelve normal layers, three outer blend cells, four 20 mm ramp
 elements and compact streamwise nodes [-1,-.28,-.26,-.24,-.22,-.2,0,1.2] m.
 The twelve-layer generator input plus inserted strip/blend endpoints yields
 17 actual normal elements (119 quads on the seven-column compact mesh).
-It uses Molecular diffusion, implicit current convection, dt=.01, fixed EP,
+It used Molecular diffusion, implicit current convection, dt=.01, fixed EP,
 Newton--Krylov with PreconditionedResidual, grad-div=.01, normal augmentation 2 and Picard-map/pressure
 relaxation .1. Native inverse and pressure inverse targets are 1e-8 and 1e-13.
-It starts unforced and retains full history every five steps. Stages cover
+It started unforced and retained full history every five steps. Stages cover
 one flow-through, continuation to three, and one-flow-through extensions;
 two drift passes after three unforced flows are mandatory. All free/weak,
 projected-normal and mass gates remain 1e-7, with independent strip inventories.
@@ -253,12 +260,12 @@ after its first audit; neither retirement is a numerical failure or a developed
 case. The two current-binary compact CLS rejections do not supply a common
 developed pair. No fit score is used to choose these controls.
 
-The remaining matched numerical comparison is fresh S/R standard/CLS centre
-development with the eight-element ramp and pointwise scaling. It retains the
+A subsequent matched numerical comparison used fresh S/R standard/CLS centre
+development with the eight-element ramp and pointwise scaling. It retained the
 same physical data, canonical coefficients, dt=.01 and 512-vector/200-iteration
-capacity. Four ranks per CLS and three per standard case use 14 workers total.
+capacity. Four ranks per CLS and three per standard case used 14 workers total.
 The prior long eight-element runs used field-maximum scaling, so their outcomes
-do not execute this combination. All four are assessed by the same unforced
+did not execute this combination. All four were assessed by the same unforced
 duration, independent equation/strip, exact correction-coverage and drift gates.
 
 With the original common 1e-4 probe, refined pointwise standard rejects after
@@ -272,8 +279,8 @@ relax that gate. It does not identify all prior CLS failures.
 The standard model uses forward differences; CLS uses centered differences.
 Restoring the standard default 1e-7 probe and tightening the cached native
 inverse to 1e-13 accepts that first stage, with recomputed action residuals
-.00854--.01614. Fresh standard dt=.01 assessments use those accuracy settings;
-the two CLS trajectories retain their centered 1e-4 probe and 1e-8 inverse.
+.00854--.01614. Fresh standard dt=.01 assessments used those accuracy settings;
+the two initial CLS trajectories retained their centered 1e-4 probe and 1e-8 inverse.
 The standard/cubic equations and all physical acceptance gates are retained.
 Both refined standard centre trajectories subsequently meet the declared
 development gates, as recorded above. This does not establish spatial/temporal
@@ -299,6 +306,11 @@ A matched 1e-13 native-inverse replay accepts the same first two steps but its
 t=.71 action residual also grows above one at capacity. Both diagnostics are
 explicitly retired with verified MPI ownership and native-prefix receipts;
 their termination is not recorded as a numerical or physical failure.
+Their last logged unaccepted sweeps have weak divergence .0840805/.0838198
+and wall-constraint errors .000252103/.000235415 (original/tight inverse).
+These are far above the 1e-7 physical gate, rather than near-gate accepted
+states rejected only by an unnecessarily tight stopping target. They are
+iteration diagnostics, distinct from the small weak errors of accepted fields.
 
 A further rough assessment starts fresh, with the same physical centre and
 mesh but the CLS default centered probe 1e-6 and native inverse target 1e-13.
@@ -313,7 +325,55 @@ Both native field times are .03; producing case, binary, geometry, manifest,
 complete-field and native observation hashes are bound. This comparison does
 not reclassify the baseline's later rejection or establish developed flow.
 
-Two serial backend pilots on that same refined accuracy case also pass their
+The accurate smooth CLS assessment also passes its first 175-step leg to
+t=1.75 (1.002449 flow-throughs, 5407.72 s measured runtime). Its maximum
+free-row residual is 1.32e-10, maximum weak divergence 9.82e-10 and maximum
+projected normal error 2.36e-10, with positive k/epsilon, zero guards, exact
+correction coverage and passing independent strip identities. Maximum strong
+normal mismatch is .0191272 U_H, retained as a resolution diagnostic.
+Its time-bound complete-field comparison with the earlier coarse-accuracy
+smooth first-flow state passes: maximum primary scaled difference 7.69e-11
+and derived difference 6.38e-10, below 1e-6. Tightening the probe/inverse does
+not materially change this accepted prefix.
+
+The accurate smooth continuation subsequently exhausts its 200-iteration
+nonlinear limit at t=3.15 after accepting through t=3.14, reproducing the
+coarse-accuracy endpoint (3467.44 s for the continuation, exit one, no timeout).
+Across 314 accepted steps, k/epsilon remain positive, guards remain zero and
+maximum weak divergence is 9.96e-10. The final leg's maximum free residual is
+1.29e-10, its coverage passes, and its independent strip continuity and
+momentum inventory errors are below 6.32e-12 and 2.53e-15. Maximum strong
+divergence is .0442369 and the pointwise strip-flux residual is .277359 in
+native units. These are separate resolution diagnostics. The preregistered
+t=3.14 complete-field comparison also passes: maximum primary scaled difference
+4.47e-8 and derived difference 2.24e-7. The two accuracy recipes therefore
+reach essentially the same last accepted state and reject the next stage;
+tighter probes/inverses alone do not rescue this smooth centre.
+
+The refined accurate rough corner also rejects its t=1.07 line search after
+106 accepted steps through t=1.06 (5710.62 s, exit one, no timeout), compared
+with the earlier compact/coarser-accuracy rejection at t=1.09 after t=1.08.
+Its accepted prefix retains positive k/epsilon, zero guards, full correction
+coverage, maximum free residual 1.18e-10 and weak divergence 9.47e-10.
+Independent strip-continuity errors are below 1.76e-12 and the momentum
+inventory identity error is 2.27e-15. Strong divergence reaches .0584733;
+the pointwise strip-flux residual reaches .0915285 in native units. These
+nonzero strong diagnostics are published separately from the weak/identity
+checks; a pointwise-zero strip residual is not a gate of this formulation.
+The refinement/accuracy combination does not rescue this physical point or
+establish spatial convergence. The unselected standard counterpart is
+deliberately retired after its passed 3.011757-flow audit, with an accepted
+partial extension retained through t=4.81. Its exact controller ancestry,
+binary, case, working directories and three CPU/rank bindings are checked
+before signalling its owned MPI launcher; no owned standard rank remains.
+The one-to-three-flow drift fails (relative k=.39299, epsilon=.62115), and
+the required two post-three-flow extensions are not completed. The passed
+three-flow audit refers to physical/coverage/strip checks. This is a
+retirement, not a numerical failure or a developed case. Its
+completed centre remains a separate valid unfitted standard control. No new
+physical search point or fit score is introduced after this rejection.
+
+Two serial backend pilots on the refined accurate rough centre also pass their
 independent free/continuity/positivity, strip-budget and coverage audits. Their
 t=.03 field comparisons have maximum scaled differences 5.86e-8 (direct) and
 6.44e-8 (XXT), below 1e-6. The native integration timer uses a steady clock:
@@ -330,10 +390,10 @@ concurrent loads differ; neither serial pilot demonstrates a wall-time gain
 over the existing four-rank case. They do not establish parallel XXT scaling
 or developed feasibility. The separate two-rank XXT comparison also passes
 the independent audits and field gate (maximum scaled difference 5.80e-8).
-It uses the two CPUs released by the periodic monitor while the four
-trajectories continue, retaining the sixteen-worker project limit. No tested
+It used the two CPUs released by the periodic monitor while the four
+trajectories continued, retaining the sixteen-worker project limit. No tested
 alternative allocation is faster than the existing four-rank iterative case;
-the current long trajectories are retained.
+these pilots did not replace the long-run iterative recipe.
 
 A separate replay of the original CurrentSolve full history at t=.45 accepts
 .46--.48 and also exhausts its nonlinear limit at .49 (988.21 s, no timeout).
@@ -392,7 +452,9 @@ At frozen positive k/epsilon and gradient G, the probe evaluates the
 directional transverse coefficient of
 `T(G)=nu_eff*(G+G^T)-R_NL(G)` in directions `a tensor n`, with a.n=0.
 It includes resolved molecular nu, 361 in-plane angles and both directional
-signs. A reported robust negative requires both relative widths 1e-5/1e-6
+signs. These are canonical one-sided constitutive probes, rather than the
+branch-frozen action used in the CLS Newton linearization. A reported robust
+negative requires both relative widths 1e-5/1e-6
 to give values below -1e-12 and to agree within 2%. Actual gradients and a
 separately labelled frozen trace-free projection are evaluated; the latter
 does not project or modify the native solution.
@@ -421,8 +483,9 @@ does not contradict the passing preservation or selected perturbation test.
 Those tests do not establish stability to every spatial mode. These frozen
 local results identify a constitutive concern; they do not prove the cause
 of a global nonlinear rejection, physical nonexistence or developed feasibility.
-The accurate smooth and matched rough-corner trajectories therefore retain
-their original development and independent physical gates.
+The accurate smooth and matched rough-corner trajectories were assessed by
+their original development and independent physical gates; the local probes
+do not turn their rejected stages into qualifying data.
 
 ## Further numerical hypothesis, not an established cause
 
@@ -456,7 +519,14 @@ the experimental route or remove the need for CV4 convergence evidence.
 ## Reproduction and scope
 
 Source parent is `f04f7f751ef5ee5b1c1309bb9f0e8bf82f30c879` plus the
-recorded R1 changes. Use the private Linux source/build under
+recorded R1 changes. The ten compiled source files were checked byte-for-byte
+against the immutable `c9c6` build receipt and committed in
+`99e4e6cd8ec7177f9cfdbd2d24c80f561b0755f6`. Native receipts retain their actual
+pre-commit parent and source hashes; this does not relabel their recorded
+revision. The accompanying source-integration receipt additionally verifies
+that all 28 functional files in its manifest match that code commit on both
+Mac and Linux. No CFD code changed after that commit. Use the private Linux
+source/build under
 `/media/jay/新加卷/nektar-v2026-runs/cao-tamura-calibrated-validation`,
 leaving the unrelated main checkout/build/installation intact. Native runs
 and large artifacts are under `calibration/cv3/ep-transition-v2/r1/`.

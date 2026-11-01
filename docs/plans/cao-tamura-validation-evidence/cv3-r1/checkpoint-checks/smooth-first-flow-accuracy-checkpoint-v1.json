@@ -1,0 +1,66 @@
+{
+  "status": "PASS",
+  "scope": "Matched physical checkpoint only; no development or calibration claim",
+  "producer_sha256": "683757a7a07dbe0dd4380676fae47b3080bca9bfcf7ec591064435e55fd4d33f",
+  "cases": {
+    "baseline": {
+      "field": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/development-ramp8-pointwise-scalars/S-cls_fixed/stage-00/case.fld",
+        "files": {
+          "Info.xml": "99b879108198c50ded578f5c21d6bfa9c0a10cfe6d045f09d4dd56891060449e",
+          "P0000000.fld": "f51d45208a1ddb81407df4a53dc90f6c54d81165d1549e44d30c2f06f3c8b2b5",
+          "P0000001.fld": "789345a62c007119da6da19db7b4c5e7c5874e345b13870ae0a1626e486ec19b",
+          "P0000002.fld": "d999fd073369ff4dc29365964207db3747778db7140289b12aec413dc2cca589",
+          "P0000003.fld": "57d71ebfbee8f381dd03313f0780c8c61f46a3528b2f873c4e32152ba6561252"
+        }
+      },
+      "case_sha256": "09f506bb53bdfab06a66ee2d29aa9687ec170e1a04eb9aff57b19180ec7163b2",
+      "run_start_sha256": "7315981764e0d50a98c00c202e2ffe5930d15f2123d436e7497a0fb704131751",
+      "manifest_sha256": "7238802624c84f64149c202eb13043fc19213c5b8bba95c439c18b274a960afa",
+      "time": 1.75,
+      "full_csv_sha256": "77a700d240652385d1525f0d8db4021dc520cefd809867b14d839f1d1747d4a9"
+    },
+    "candidate": {
+      "field": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cao-tamura-calibrated-validation/calibration/cv3/ep-transition-v2/r1/development-ramp8-cls-fd-accuracy/S-cls_fixed/stage-00/case.fld",
+        "files": {
+          "Info.xml": "81cd7ade0610fcfd589488c4da2dadecda51d3ae4199058f31bf942c9a9b2f6e",
+          "P0000000.fld": "ec8378f71b188515373a6e62ee2511f1c7485e08dfcdb84f0479c913bef55db9",
+          "P0000001.fld": "62ec76187013f2e7d2bffb02dee8ea8edadffb2017b88292305858c343df4800",
+          "P0000002.fld": "76a2cacc0432250f5669797fb5834f997b17a1abb80d483eff4c3752a79a09b8",
+          "P0000003.fld": "69739e309591350c50c05eb6fa2ff20b4ce9a518595f8c1d76b1b9d895ec36e5"
+        }
+      },
+      "case_sha256": "1f41c5273dc9262960d88b5044d783fb61dde8bf9e0b33efd8c362555719e5cd",
+      "run_start_sha256": "7875b0c5f6e0724b542c6e7fdee3d21d246a8f61b4731d540f9ec904ce21672d",
+      "manifest_sha256": "08398f95ccfaee18903b541b6f128c00a82dc4c6e07b31564ab34d3b36ef5f16",
+      "time": 1.75,
+      "full_csv_sha256": "3600af1ad8d946278a117af53f9653931dd86761f4960d6ed6e281faf8c9d5a8"
+    }
+  },
+  "time": 1.75,
+  "binaries": {
+    "IncNavierStokesSolver": "c9c640b86a5c4c414762e27c2cce57802f4b2be2e7263b81f68e3e17c575dfbb",
+    "RANSWallFieldAudit": "68cc487797b74981e175a5c66717960aa9ebf45b95e4bdb3eb7d979218d364f6",
+    "RANSObservationAudit": "27d9421cef35af8217521ee245bf6f3f075426e9c75b623987eef5b78c8c2e6b"
+  },
+  "scaled_field_errors": {
+    "u": 9.972768449439445e-12,
+    "v": 6.695394434187707e-11,
+    "k": 9.039236373298287e-13,
+    "eps_tilde": 6.447665318320972e-12,
+    "p": 7.682635083661182e-11,
+    "rans_nut": 3.4078071744700345e-11,
+    "rans_P": 6.370418322628607e-10,
+    "rans_Yap": 1.2381370885147791e-12,
+    "rans_eps_total": 6.449861478241559e-12,
+    "rans_R_xx": 3.205544987436304e-11,
+    "rans_R_yy": 7.992096025775941e-11,
+    "rans_R_zz": 8.38059283428394e-11,
+    "rans_R_xy": 0.0,
+    "rans_R_xz": 3.6599254356339816e-10,
+    "rans_R_yz": 0.0,
+    "rans_quadratic_norm": 8.8160260341974e-12,
+    "rans_cubic_norm": 3.5382792691973355e-10
+  }
+}

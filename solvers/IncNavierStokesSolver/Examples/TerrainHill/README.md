@@ -4,11 +4,11 @@
 
 The [user-approved CV3 protocol v2](../../../../docs/plans/cao-tamura-cv3-calibration-protocol.md)
 prioritizes the actual composite floor treatment: EP-AWF upstream, an upstream
-transition, then original AWF. **CV3-R1** is in progress: current-solver CLS
-reference recovery and four composite-floor feasibility cases (S/R x both
-closures). Uniform-original success is no longer a prerequisite for this route.
+transition, then original AWF. **CV3-R1 remains open:** current-solver reference
+controls and both standard centres pass, while CLS composite-floor cases reject
+before development. Uniform-original success is no longer a prerequisite for this route.
 Its [execution record](../../../../docs/plans/cao-tamura-cv3-r1-reference-feasibility.md)
-distinguishes passing reference/short-run controls from developed-floor gates.
+distinguishes passing reference/standard controls, CLS rejections and retirements.
 **CV3 is still open:** no primary S/R freeze exists, and reserved scores stay locked.
 
 The [v1 bounded attempt](../../../../docs/plans/cao-tamura-cv3-calibration-attempt.md)
