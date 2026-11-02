@@ -165,6 +165,10 @@ def _evolution(root, steps, order, dt, time, condensed, restart, checkpoint):
     set_parameter(root, "NumSteps", int(steps))
     set_parameter(root, "TimeStep", repr(float(dt)))
     set_parameter(root, "Time", repr(float(time)))
+    # M3's inherited fixture tolerance is a coefficient-residual tolerance.
+    # M4 stops on the frozen scaled physical mass-dual norms instead.
+    set_parameter(root, "RANSWallNonlinearTolerance", "2e-12")
+    set_parameter(root, "RANSWallMaxIterations", 20)
     conditions = root.find("CONDITIONS")
     for node in list(conditions.findall("TIMEINTEGRATIONSCHEME")):
         conditions.remove(node)
