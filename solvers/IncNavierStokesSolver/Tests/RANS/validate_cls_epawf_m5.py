@@ -28,6 +28,7 @@ from validate_cls_epawf_m2 import Profiles
 from validate_cls_epawf_m4 import Space, Runner as FlatRunner
 from validate_cls_epawf_m5_geometry import geometry
 from cls_epawf_m5_cases import mapped_session, plane_reference, configure_map
+from cls_epawf_m5_boundary_oracle import boundary_projection
 from cls_epawf_m3_cases import write, set_parameter, set_info
 
 checks=0
@@ -404,6 +405,7 @@ def qualify(run,sections):
         raw=run.wall('operator-'+family,family,dimension)
         independent=residual_oracle(raw)
         independent['interface']=interface_oracle(raw)
+        independent['boundary_projection']=boundary_projection(raw,spaces(raw),geometry,near,require)
         if family=='plane':
             independent['higher_outer_order_diagnostic']=residual_oracle(raw,outer_order=16,verify=False)
             gap=[];field=spaces(raw)[0];state=raw['lifted_state'];axes=(0,2) if dimension==2 else (0,1,2)
@@ -411,7 +413,7 @@ def qualify(run,sections):
                 points,w=field.quadrature(field.by_id[e['geometry']],20);G=np.zeros((len(points),3,3))
                 for b,axis in enumerate(axes):G[:,axis]=physical_rows(field,state,raw['offsets'][b],points,e['geometry'])[4]
                 gap.extend(np.einsum('qab,qba->q',G,G))
-            independent['invariant_max_switch']=dict(trace_G_squared_range=[float(min(gap)),float(max(gap))],sign_change=min(gap)<0<max(gap))
+            independent['invariant_max_switch']=dict(trace_G_squared_range=[float(min(gap)),float(max(gap))],sign_change=bool(min(gap)<0<max(gap)))
         for mass in raw['physical_masses']:
             near(mass['values'],spaces(raw)[mass['block']].mass(),'independent_physical_mass',tolerance=1e-10)
         path=run.output/('operator-'+family)/'probe.json'
@@ -422,22 +424,26 @@ def qualify(run,sections):
     # The same global chart polynomials lie exactly in both native spaces.
     # Change the actual lateral patch subdivision and compare identical weak
     # tests, without confusing spatial refinement with coefficient equality.
-    first=run.wall('partition-one','circle',invariant=True)
-    second=run.wall('partition-two','circle',split=2,invariant=True)
-    first_fields,second_fields=spaces(first),spaces(second)
-    moments=[]
-    for block,(a,b) in enumerate(zip(first_fields,second_fields)):
-        for test,name in [(lambda p:1.,'one'),(lambda p:p[0],'q1'),(lambda p:p[2],'rho')]:
-            ca=np.linalg.solve(a.mass(),sum_load(a,test));cb=np.linalg.solve(b.mass(),sum_load(b,test))
-            ra=np.asarray(first['raw_residual'])[first['offsets'][block]:first['offsets'][block+1]]
-            rb=np.asarray(second['raw_residual'])[second['offsets'][block]:second['offsets'][block+1]]
-            near(ca@ra,cb@rb,'lateral_patch_partition_'+str(block)+'_'+name,tolerance=1e-10)
-            moments.append(dict(block=block,test=name,one_patch=float(ca@ra),two_patches=float(cb@rb)))
-        for point in ([.17,0.,.37],[.61,0.,1.7],[.83,0.,2.9]):
-            if not any(np.all(np.asarray(point)>=e['lower']) and np.all(np.asarray(point)<=e['upper']) for e in a.elements):continue
-            va,ga=a.evaluate(first['lifted_state'],first['offsets'][block],point);vb,gb=b.evaluate(second['lifted_state'],second['offsets'][block],point)
-            near([va,*ga],[vb,*gb],'partition_identical_physical_field',tolerance=1e-10)
-    sections['patch_partition']=dict(identical_global_polynomials=True,actual_lateral_patch_counts=[1,2],weak_moments=moments)
+    partition_levels=[]
+    for order in (12,24,48):
+        first=run.wall('partition-one-q'+str(order),'circle',invariant=True,quadrature=order)
+        second=run.wall('partition-two-q'+str(order),'circle',split=2,invariant=True,quadrature=order)
+        first_fields,second_fields=spaces(first),spaces(second);moments=[];maximum=0.
+        for block,(a,b) in enumerate(zip(first_fields,second_fields)):
+            for test,name in [(lambda p:1.,'one'),(lambda p:p[0],'q1'),(lambda p:p[2],'rho')]:
+                ca=np.linalg.solve(a.mass(),sum_load(a,test));cb=np.linalg.solve(b.mass(),sum_load(b,test))
+                ra=np.asarray(first['raw_residual'])[first['offsets'][block]:first['offsets'][block+1]]
+                rb=np.asarray(second['raw_residual'])[second['offsets'][block]:second['offsets'][block+1]]
+                value=float(ca@ra);other=float(cb@rb);error=abs(value-other)/max(1.,abs(other));maximum=max(maximum,error)
+                moments.append(dict(block=block,test=name,one_patch=value,two_patches=other,error=error))
+                if order==48:near(value,other,'lateral_patch_partition_'+str(block)+'_'+name,tolerance=1e-10)
+            for point in ([.17,0.,.37],[.61,0.,1.7],[.83,0.,2.9]):
+                if not any(np.all(np.asarray(point)>=e['lower']) and np.all(np.asarray(point)<=e['upper']) for e in a.elements):continue
+                va,ga=a.evaluate(first['lifted_state'],first['offsets'][block],point);vb,gb=b.evaluate(second['lifted_state'],second['offsets'][block],point)
+                near([va,*ga],[vb,*gb],'partition_identical_physical_field',tolerance=1e-10)
+        partition_levels.append(dict(outer_order=order,maximum_weak_moment_difference=maximum,moments=moments))
+    require(partition_levels[-1]['maximum_weak_moment_difference']<1e-10,'lateral partition loads did not converge')
+    sections['patch_partition']=dict(identical_global_polynomials=True,actual_lateral_patch_counts=[1,2],quadrature_refinement=partition_levels)
     # Rotation covariance of the entire projected target and actual IMEX map.
     # The plane is an isolated, constant-H neutral verification case (eta=1).
     sections['planar_reference']=[]
