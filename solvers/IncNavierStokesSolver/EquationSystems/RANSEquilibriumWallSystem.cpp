@@ -156,7 +156,8 @@ void RANSEquilibriumWallSystem::v_Output()
     {
         auto native=component==2?m_layout->innerPressure:m_layout->innerVelocity;
         const int block=component==0?Layout::U:component==1?Layout::W:Layout::InnerPressure;
-        auto values=native->Project([&](double x,double r){return m_layout->Field(static_cast<Layout::Block>(block)).Point(x,r,-1).Value(m_state,m_layout->offset[block]);});
+        auto values=native->Project([&](double x,double r){return m_layout->Field(static_cast<Layout::Block>(block)).Point(
+            x,r,std::abs(r-m_layout->Height())<1e-12?-1:0).Value(m_state,m_layout->offset[block]);});
         native->Store(values);auto field=std::static_pointer_cast<MultiRegions::ExpList>(native->Field());
         std::vector<Array<OneD,NekDouble>> coefficients{field->UpdateCoeffs()};
         std::vector<std::string> variables{component==0?"u_w":component==1?"v_w":"pi_w"};
