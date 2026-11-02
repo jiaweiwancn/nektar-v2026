@@ -131,7 +131,26 @@ if(RANS_BUILD_SOLVER)
     endif()
 endif()
 enable_testing()
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-native)
+configure_file(${CMAKE_CURRENT_LIST_DIR}/EquilibriumWallFlat.xml
+    ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-native/case.xml COPYONLY)
+add_test(NAME RANSEquilibriumPatchNative COMMAND RANSEquilibriumPatchProbe
+    ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-native/case.xml
+    ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-native/patch.json)
+set_tests_properties(RANSEquilibriumPatchNative PROPERTIES
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-native
+    PROCESSORS 1 TIMEOUT 300
+    ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
 if(RANS_BUILD_SOLVER)
+    file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-stage)
+    configure_file(${CMAKE_CURRENT_LIST_DIR}/EquilibriumWallFlat.xml
+        ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-stage/case.xml COPYONLY)
+    add_test(NAME RANSEquilibriumWallStageSmoke COMMAND IncNavierStokesSolver
+        ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-stage/case.xml)
+    set_tests_properties(RANSEquilibriumWallStageSmoke PROPERTIES
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-stage
+        PROCESSORS 1 TIMEOUT 300
+        ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
     file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke)
     foreach(rans_fixture StandardRANS_MMS CLS_MMS AWFOriginal AWFEquilibrium StandardAWFEquilibrium ABLPreservation ABLPreservation3D StandardResidualMap CLSResidualMap)
         configure_file("${CMAKE_CURRENT_LIST_DIR}/${rans_fixture}.xml"
@@ -207,6 +226,19 @@ if(Python3_Interpreter_FOUND)
                 TIMEOUT 240 ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
         else()
             message(STATUS "CLS EP-AWF M1/M2 oracles require NumPy and SciPy")
+        endif()
+        if(RANS_BUILD_SOLVER)
+            execute_process(COMMAND ${Python3_EXECUTABLE} -c "import numpy, scipy, sympy"
+                RESULT_VARIABLE rans_m3_dependencies OUTPUT_QUIET ERROR_QUIET)
+            if(rans_m3_dependencies EQUAL 0)
+                add_test(NAME RANSCLSEPAWFM3Oracle COMMAND ${Python3_EXECUTABLE}
+                    ${CMAKE_CURRENT_LIST_DIR}/validate_cls_epawf_m3.py
+                    --build $<TARGET_FILE_DIR:RANSEquilibriumPatchProbe>)
+                set_tests_properties(RANSCLSEPAWFM3Oracle PROPERTIES PROCESSORS 1
+                    TIMEOUT 1800 ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
+            else()
+                message(STATUS "CLS EP-AWF M3 oracle requires NumPy, SciPy and SymPy")
+            endif()
         endif()
     endif()
     add_test(NAME RANSCaoTamuraCalibrationGuards COMMAND ${Python3_EXECUTABLE}

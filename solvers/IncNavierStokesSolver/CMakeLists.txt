@@ -150,6 +150,29 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
             --output ${CMAKE_CURRENT_BINARY_DIR}/rans-equilibrium-profiles.json)
         SET_TESTS_PROPERTIES(RANSEquilibriumProfilesNative PROPERTIES PROCESSORS 1 TIMEOUT 180
             ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
+        ADD_NEKTAR_EXECUTABLE(RANSEquilibriumPatchProbe COMPONENT tests DEPENDS SolverUtils
+            SOURCES ${CMAKE_SOURCE_DIR}/library/UnitTests/SolverUtils/RANSEquilibriumPatchProbe.cpp
+                EquationSystems/RANSWallFieldLayout.cpp
+                EquationSystems/RANSWallPatch.cpp
+                EquationSystems/RANSWallInterface.cpp)
+        TARGET_INCLUDE_DIRECTORIES(RANSEquilibriumPatchProbe PRIVATE ${CMAKE_SOURCE_DIR}/solvers)
+        TARGET_COMPILE_DEFINITIONS(RANSEquilibriumPatchProbe PRIVATE ENABLE_NEKTAR_EXCEPTIONS)
+        FOREACH(rans_wall_case native stage)
+            FILE(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-${rans_wall_case})
+            CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Tests/RANS/EquilibriumWallFlat.xml
+                ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-${rans_wall_case}/case.xml COPYONLY)
+        ENDFOREACH()
+        ADD_TEST(NAME RANSEquilibriumPatchNative COMMAND RANSEquilibriumPatchProbe
+            ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-native/case.xml
+            ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-native/patch.json)
+        SET_TESTS_PROPERTIES(RANSEquilibriumPatchNative PROPERTIES PROCESSORS 1 TIMEOUT 300
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-native
+            ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
+        ADD_TEST(NAME RANSEquilibriumWallStageSmoke COMMAND IncNavierStokesSolver
+            ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-stage/case.xml)
+        SET_TESTS_PROPERTIES(RANSEquilibriumWallStageSmoke PROPERTIES PROCESSORS 1 TIMEOUT 300
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-stage
+            ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
         FIND_PACKAGE(Python3 QUIET COMPONENTS Interpreter)
         IF(Python3_Interpreter_FOUND AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
             EXECUTE_PROCESS(COMMAND ${Python3_EXECUTABLE} -c "import numpy, scipy"
@@ -168,6 +191,17 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
                     TIMEOUT 240 ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
             ELSE()
                 MESSAGE(STATUS "CLS EP-AWF M1/M2 oracles require NumPy and SciPy")
+            ENDIF()
+            EXECUTE_PROCESS(COMMAND ${Python3_EXECUTABLE} -c "import numpy, scipy, sympy"
+                RESULT_VARIABLE RANS_M3_DEPENDENCIES OUTPUT_QUIET ERROR_QUIET)
+            IF(RANS_M3_DEPENDENCIES EQUAL 0)
+                ADD_TEST(NAME RANSCLSEPAWFM3Oracle COMMAND ${Python3_EXECUTABLE}
+                    ${CMAKE_CURRENT_SOURCE_DIR}/Tests/RANS/validate_cls_epawf_m3.py
+                    --build $<TARGET_FILE_DIR:RANSEquilibriumPatchProbe>)
+                SET_TESTS_PROPERTIES(RANSCLSEPAWFM3Oracle PROPERTIES PROCESSORS 1
+                    TIMEOUT 1800 ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
+            ELSE()
+                MESSAGE(STATUS "CLS EP-AWF M3 oracle requires NumPy, SciPy and SymPy")
             ENDIF()
         ENDIF()
         ADD_NEKTAR_EXECUTABLE(RANSFieldAudit COMPONENT tests DEPENDS MultiRegions

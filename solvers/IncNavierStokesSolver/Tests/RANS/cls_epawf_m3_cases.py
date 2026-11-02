@@ -106,7 +106,10 @@ def evolving_session(template, destination, degree=6, time=.3, mode="Solve", con
     W = sp.Rational(1, 100)+sp.Rational(1, 200)*sp.cos(t)
     u = -W*x*sp.diff(gate, r)+U*sp.diff(primitive, r)
     w = W*gate
-    ki = K0+(sp.Rational(1, 25)+sp.sin(t)/100)*r**2*(r-rK)**2*(r-H)**2/H**6
+    # The side traces are exactly K0 at every p. This keeps the independently
+    # projected outer epsilon corner compatible with its sampled-K trace even
+    # in the deliberately unresolved p=4 audit.
+    ki = K0+4*x*(1-x)*(sp.Rational(1, 25)+sp.sin(t)/100)*r**2*(r-rK)**2*(r-H)**2/H**6
     ko = K0+(sp.Rational(1, 50)+sp.cos(t)/200)*(r-H)**2/(Z-H)**2
     eo = E0+(sp.Rational(3, 1000)+sp.sin(t)/1000)*(r-H)**2/(Z-H)**2
     px, pzi, pzo = sp.Rational(1, 50)*(1+sp.sin(t)/10), sp.Rational(3, 100)*sp.cos(t), sp.sin(t)/25
@@ -121,7 +124,8 @@ def evolving_session(template, destination, degree=6, time=.3, mode="Solve", con
     bi_u = sp.diff(u, t)+u*sp.diff(u, x)+w*sp.diff(u, r)+sp.diff(pi, x)-sp.diff(D*sp.diff(u, r), r)+below*sp.diff(U, t)
     bi_w = sp.diff(w, t)+w*sp.diff(w, r)+sp.diff(pi, r)-D*sp.diff(w, r, 2)-2*slope*sp.diff(w, r)
     bo_u, bo_w = sp.diff(U, t)+sp.diff(po, x), sp.diff(W, t)+sp.diff(po, r)
-    source_ki = sp.diff(ki, t)+w*sp.diff(ki, r)-sp.diff(D*sp.diff(ki, r), r)-production+p0
+    source_ki = (sp.diff(ki, t)+u*sp.diff(ki, x)+w*sp.diff(ki, r)
+                 -D*sp.diff(ki, x, 2)-sp.diff(D*sp.diff(ki, r), r)-production+p0)
     cmu0 = sp.Rational(3, 10)*(1-sp.exp(-sp.Rational(9, 25)))
     nto = cmu0*ko**2/eo
     source_ko = sp.diff(ko, t)+W*sp.diff(ko, r)-sp.diff(nto*sp.diff(ko, r), r)+eo

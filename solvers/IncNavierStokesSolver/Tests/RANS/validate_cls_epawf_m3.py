@@ -406,7 +406,7 @@ def manufactured_values(x, r, time, parameters, derivative=False):
     s, so = r/H, (r-H)/(Z-H)
     gate, dg = 6*s*s-8*s**3+3*s**4, (12*s-24*s*s+12*s**3)/H
     a = 2*s-s*s
-    g = r*r*(r-rK)**2*(r-H)**2/H**6
+    g = 4*x*(1-x)*r*r*(r-rK)**2*(r-H)**2/H**6
     if derivative:
         ui, wi = -Wt*x*dg+Ut*a, Wt*gate
         ki, ko, eo = .01*math.cos(time)*g, -.005*math.sin(time)*so*so, .001*math.cos(time)*so*so
@@ -431,7 +431,7 @@ def check_evolving(report, metadata, expected_solved):
     H, K = parameters[1], parameters[5]
     degree = metadata["layout"][0]["mesh"][0]["degree"]
     z, weights = np.polynomial.legendre.leggauss(14)
-    L2, rateL2 = np.zeros(6), np.zeros(4)
+    L2, rateL2, inner_rate_squared = np.zeros(6), np.zeros(4), np.zeros(3)
     source_rate_error = 0.
     for block, space in enumerate(spaces):
         for e in space.elements:
@@ -447,12 +447,19 @@ def check_evolving(report, metadata, expected_solved):
                 rate = report["alpha"]*(p@(state[offsets[block]+ids]-history[offsets[block]+ids]))
                 expected = np.array([manufactured_values(x, r, time, parameters, True)[block] for x, r in zip(X, R)])
                 rateL2[block] += np.sum(W*expected**2)
+                if block < 3 and d <= H:
+                    inner_rate_squared[block] += np.sum(W*expected**2)
                 source_rate_error = max(source_rate_error, float(np.sqrt(np.sum(W*(rate-expected)**2))))
     L2, rateL2 = np.sqrt(L2), np.sqrt(rateL2)
     if degree >= 6:
         require(max(report["residual_norms"]) < 1e-9, "Resolved evolving manufactured stage has a nonzero physical block residual")
         require(max(L2) < 1e-8 and source_rate_error < 1e-8, "Manufactured state/storage failed to converge")
-    require(rateL2[0]+rateL2[1] > 1e-4 and rateL2[2] > 1e-7, "Manufactured inner storage vanished")
+    inner_rate = np.sqrt(inner_rate_squared)
+    require(inner_rate[0]+inner_rate[1] > 1e-4 and inner_rate[2] > 1e-7, "Manufactured inner storage vanished")
+    if degree >= 6:
+        samples = np.array(report["forcing_samples"])
+        near(samples[:, 1], np.full(3, K), "evolving_physical_sampled_K")
+        near(samples[:, 2], np.full(3, -.03*math.cos(time)), "evolving_outer_one_sided_forcing")
     v, ks, es, pw, po = spaces[0], spaces[2], spaces[3], spaces[4], spaces[5]
     trace, no_slip, k_ground, traction, k_flux, epsilon = [], [], [], [], [], []
     for x in (.13, .47, .91):
@@ -489,9 +496,34 @@ def check_evolving(report, metadata, expected_solved):
                             ("epsilon", epsilon), ("ground_velocity", no_slip), ("ground_k_flux", k_ground)):
             near(value, np.zeros(3), "evolving_interface_"+name, tolerance=1e-8)
     near(trace, np.zeros(3), "one_shared_velocity_k_trace")
+    # Independently integrate regional mass budgets using physical traces and
+    # volume derivatives. The nonzero shared normal flow crosses H only once.
+    mass_budgets = []
+    for lower, upper in ((0., H), (H, 4.)):
+        divergence = 0.
+        for e in v.elements:
+            a, b, c, d = e["bounds"]
+            if c < lower or d > upper:
+                continue
+            X, R = np.meshgrid(a+(z+1)*(b-a)/2, c+(z+1)*(d-c)/2)
+            ids, _, dx, dr = v.rows(e, X.ravel(), R.ravel())
+            div = dx@state[offsets[0]+ids]+dr@state[offsets[1]+ids]
+            divergence += float(np.dot(np.outer(weights, weights).ravel(), div))*(b-a)*(d-c)/4
+        radial = lower+(z+1)*(upper-lower)/2
+        side = sum(wt*(v.evaluate(state, offsets[0], 1., r)[0]
+                       -v.evaluate(state, offsets[0], 0., r)[0])
+                   for r, wt in zip(radial, weights))*(upper-lower)/2
+        normal = sum(wt*(v.evaluate(state, offsets[1], (x+1)/2, upper, -1)[0]
+                         -v.evaluate(state, offsets[1], (x+1)/2, lower, 1)[0])
+                     for x, wt in zip(z, weights))/2
+        near([divergence, side+normal], np.zeros(2), "evolving_regional_mass_budget")
+        mass_budgets.append({"normal_interval": [lower, upper], "volume_divergence": divergence,
+                             "side_mass_flux": side, "normal_mass_flux": normal,
+                             "net_boundary_mass_flux": side+normal})
     return {"degree": degree, "time": time, "alpha": report["alpha"], "solved": report["solved"],
             "iterations": report["iterations"], "physical_block_residual_norms": report["residual_norms"],
             "field_L2_errors": L2.tolist(), "storage_rate_L2": rateL2.tolist(),
+            "inner_storage_rate_L2": inner_rate.tolist(), "regional_mass_budgets": mass_budgets,
             "storage_rate_L2_error": source_rate_error, "shared_trace_max": max(trace),
             "traction_jump_max": max(traction), "k_diffusive_flux_jump_max": max(k_flux),
             "epsilon_trace_error_max": max(epsilon), "ground_velocity_max": max(no_slip),
@@ -676,7 +708,17 @@ def main():
         sources += ["library/UnitTests/SolverUtils/RANSEquilibriumPatchProbe.cpp",
                     "solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m3.py",
                     "solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m3_cases.py",
-                    "solvers/IncNavierStokesSolver/Tests/RANS/EquilibriumWallFlat.xml"]
+                    "solvers/IncNavierStokesSolver/Tests/RANS/EquilibriumWallFlat.xml",
+                    "solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m1.py",
+                    "solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m2.py",
+                    "solvers/IncNavierStokesSolver/Tests/RANS/CMakeLists.txt",
+                    "solvers/IncNavierStokesSolver/CMakeLists.txt",
+                    "solvers/IncNavierStokesSolver/EquationSystems/IncNavierStokes.h",
+                    "docs/literature/cls_neutral_abl_equilibrium_awf_note_revised.tex",
+                    "docs/plans/cls-epawf-revised-contract-v1.json"]
+        sources += ["library/SolverUtils/Turbulence/"+name+extension
+                    for name in ("RANSModels", "AnalyticalWallFunction", "EquilibriumAWFProfiles")
+                    for extension in (".h", ".cpp")]
         report["source_sha256"] = {name: digest(root/name) for name in sources}
         report["artifacts_sha256"] = {p.name: digest(p) for p in output.iterdir() if p.is_file()}
         (output/"validation.json").write_text(json.dumps(report, indent=2, allow_nan=False)+"\n")
