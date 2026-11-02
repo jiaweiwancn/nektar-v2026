@@ -158,6 +158,9 @@ def _evolution(root, steps, order, dt, time, condensed, restart, checkpoint):
     if not math.isfinite(dt) or dt <= 0 or not math.isfinite(time):
         raise ValueError("dt must be positive and dt/time must be finite")
     set_info(root, "SolverType", "RANSEquilibriumWallEvolution")
+    # The world session must pass Nektar's parallel preflight. The evolution
+    # backend creates its own serial native CG session with DirectFull maps.
+    set_info(root, "GlobalSysSoln", "IterativeStaticCond")
     set_info(root, "RANSWallCondense", "True" if condensed else "False")
     set_info(root, "RANSWallRestart", "None" if restart is None else str(restart))
     set_info(root, "RANSWallCheckpoint", "None" if checkpoint is None else str(checkpoint))

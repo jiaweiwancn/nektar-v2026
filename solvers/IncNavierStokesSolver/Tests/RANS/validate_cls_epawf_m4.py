@@ -515,7 +515,7 @@ class Runner:
         directory=self.output/name
         directory.mkdir(exist_ok=True)
         cmd=([str(self.build/binary)]+list(map(str,arguments)))
-        if ranks>1:cmd=['mpirun','--bind-to','core','--map-by','core','-np',str(ranks),*cmd]
+        if ranks>1:cmd=['mpirun','--report-bindings','--bind-to','core','--map-by','core','-np',str(ranks),*cmd]
         start=time.monotonic()
         try:
             with (directory/'run.log').open('w') as log:
@@ -591,6 +591,16 @@ def qualification(run, section):
         near(base['fixed_defect'],anchored['fixed_defect'],'fixed_global_anchor_loads')
         require(max(abs(v) for v in anchored['defect_integrals'])>1e-10,'Budget fixture has no retained constant test')
         require(abs(anchored['anchor_energy_work'])>1e-10,'Budget fixture has no retained energy work')
+    if section in ('all','unanchored-time'):
+        baseline=[]
+        for dt,steps in ((.01,1),(.01,3),(.005,6)):
+            raw=run.evolution(f'unanchored-dt{dt}-n{steps}',eta=0,order=1,dt=dt,steps=steps,xknots=[0,150,300])
+            near(raw['anchor_energy_work'],0.,'unanchored_zero_anchor_work')
+            near(raw['raw_reference_norms'],raw['corrected_reference_norms'],'unanchored_original_operator')
+            require(max(row[2] for row in raw['step_audits'])>1e-8,'Unanchored target was silently held fixed')
+            baseline.append(dict(order=1,dt=dt,steps=steps,time=raw['time'],final_scaled_field_drift=raw['step_audits'][-1][4:],
+                                 max_stage_residual=max(row[4] for row in raw['stage_audits']),anchor_energy_work=raw['anchor_energy_work']))
+        report['unanchored_native_time_maps']=baseline
     if section in ('all','stationary'):
         cases=[];baseline=None
         for order in (1,2):
@@ -672,7 +682,7 @@ def qualification(run, section):
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--build',required=True,type=Path);p.add_argument('--output',type=Path)
-    p.add_argument('--section',choices=('all','spatial','reference','stationary','evolving'),default='all')
+    p.add_argument('--section',choices=('all','spatial','reference','unanchored-time','stationary','evolving'),default='all')
     args=p.parse_args()
     require(platform.system()=='Linux','Native numerical qualification requires Linux')
     source=Path(__file__).resolve().parents[4]

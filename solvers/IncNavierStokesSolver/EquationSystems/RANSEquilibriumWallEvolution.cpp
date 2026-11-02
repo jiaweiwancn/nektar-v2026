@@ -61,12 +61,34 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
     {
         (void)declareFields;EquationSystem::v_InitObject(false);
         char program[]="nektar-wall-evolution";char *arguments[]{program,nullptr};
-        auto filenames=m_session->GetFilenames();auto serial=LibUtilities::CommSerial::create(1,arguments);
+        // MeshGraphIO replaces GetFilenames() by each rank's partition. The
+        // positional command-line inputs retain the complete original mesh.
+        auto filenames=m_session->DefinesCmdLineArgument("input-file")?
+            m_session->GetCmdLineArgument<std::vector<std::string>>("input-file"):m_session->GetFilenames();
+        auto serial=LibUtilities::CommSerial::create(1,arguments);
         auto original=LibUtilities::SessionReader::CreateInstance(1,arguments,filenames,serial);original->InitSession();
+        Require(!original->GetElement("NEKTAR/GEOMETRY")->Attribute("PARTITION"),
+                "evolution requires the original unpartitioned XML input, not a partition directory");
         // Every collective rank uses the same global native CG numbering. Its
         // own source clone also keeps optimiser sidecars outside other ranks.
         const std::string nativeFile=m_sessionName+"-m4-native-rank"+std::to_string(m_session->GetComm()->GetRank())+".xml";
         TiXmlDocument document(original->GetDocument());auto root=document.FirstChildElement("NEKTAR");
+        // Preserve effective world parameters, including command-line overrides,
+        // in the full-mesh function interpreter. Keep their original case.
+        if(auto parameters=root->FirstChildElement("CONDITIONS")->FirstChildElement("PARAMETERS"))
+            for(auto item=parameters->FirstChildElement("P");item;item=item->NextSiblingElement("P"))
+            {
+                const std::string text=item->GetText()?item->GetText():"";const auto equals=text.find('=');
+                if(equals==std::string::npos)continue;
+                auto name=text.substr(0,equals);const auto first=name.find_first_not_of(" \t\r\n"),last=name.find_last_not_of(" \t\r\n");
+                if(first==std::string::npos)continue;
+                name=name.substr(first,last-first+1);
+                if(m_session->DefinesParameter(name))
+                {
+                    std::ostringstream value;value<<std::setprecision(17)<<name<<" = "<<m_session->GetParameter(name);
+                    item->Clear();item->LinkEndChild(new TiXmlText(value.str()));
+                }
+            }
         if(auto collection=root->FirstChildElement("COLLECTIONS"))root->RemoveChild(collection);
         auto collection=new TiXmlElement("COLLECTIONS");collection->SetAttribute("DEFAULT","NoCollection");root->LinkEndChild(collection);
         auto solverInfo=root->FirstChildElement("CONDITIONS")->FirstChildElement("SOLVERINFO");
