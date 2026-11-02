@@ -86,7 +86,27 @@ void Generic(std::ostream &out,const LibUtilities::SessionReaderSharedPtr &seria
         Vector derivative(rp.size());for(int i=0;i<rp.size();++i)derivative[i]=(rp[i]-rm[i])/(2*h);
         out<<"{\"column\":"<<column<<",\"derivative\":";Write(out,derivative);out<<'}';
     }
-    out<<"]}";
+    out<<"],\"body_partition\":{";
+    auto prescribed=data;
+    for(int a=0;a<d;++a)
+    {
+        prescribed.innerBody[a]=[a](const RANSWallCoordinate &p,double t){return std::sin((61.+a)*p[2])+.2*std::cos(7*p[0]+3*p[1]+t);};
+        prescribed.outerBody[a]=[a](const RANSWallCoordinate &p,double t){return .1*std::cos((43.+a)*p[2]+5*p[0]+p[1]+t);};
+    }
+    auto implicit=prescribed;for(auto *bodies:{&implicit.innerBody,&implicit.outerBody})for(auto &body:*bodies)body=[](const RANSWallCoordinate&,double){return 0.;};
+    const auto full=patch.Residual(state,history,5.3,.2,prescribed,false),part=patch.Residual(state,history,5.3,.2,implicit,false);
+    Vector difference(full.size());for(int i=0;i<full.size();++i)difference[i]=full[i]-part[i];
+    const auto derivative=patch.ExplicitBody(state,.2,prescribed);auto changed=state;
+    RANSWallCoordinate sample{(patch.lower[0]+patch.upper[0])/2,d==3?(patch.lower[1]+patch.upper[1])/2:0.,parameters.geometry.sampleHeight};
+    const auto sampling=patch.fields[patch.K()]->Point(sample);bool changedK=false;
+    for(int j=0;j<sampling.ids.size();++j)
+        if(!constraints.count(patch.offset[patch.K()]+sampling.ids[j]) && std::abs(sampling.phi[j])>1e-4)
+        {changed[patch.offset[patch.K()]+sampling.ids[j]]+=.03*K/sampling.phi[j];changedK=true;break;}
+    Require(changedK,"no free physical sampled-K mode for body partition control");
+    const auto other=patch.ExplicitBody(changed,.2,prescribed);
+    out<<"\"full_minus_implicit\":";Write(out,difference);out<<",\"explicit_derivative\":";Write(out,derivative);
+    out<<",\"different_K_derivative\":";Write(out,other);
+    out<<",\"sampled_K_pair\":";Write(out,{patch.SampleK(state,sample),patch.SampleK(changed,sample)});out<<"}}";
 }
 }
 int main(int argc,char **argv)

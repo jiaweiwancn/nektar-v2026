@@ -74,7 +74,7 @@ public:
     std::vector<int> CondensableVelocity(const std::map<int,double> &constraints) const;
     double SampleK(const Vector &state,const RANSWallCoordinate &point) const;
     std::array<double,2> Forcing(const Vector &state,const RANSWallCoordinate &point,double time,
-        const RANSWallEvolutionData &data) const;
+        const RANSWallEvolutionData &data,bool includeBody=true) const;
     std::string Signature() const;
 private:
     struct VolumePoint { RANSWallGlobalPoint v,p,e; double weight; };
@@ -86,6 +86,7 @@ private:
         std::vector<VolumePoint> points;
     };
     std::map<int,double> ExternalConstraints(double time,const RANSWallEvolutionData &data) const;
+    Vector OwnedBodyLoad(double time,const RANSWallEvolutionData &data) const;
     std::shared_ptr<SolverUtils::EquilibriumAWFProfiles> Profile(double k) const;
     void Refresh(const Vector &state) const;
     void Broadcast(Vector &value) const;

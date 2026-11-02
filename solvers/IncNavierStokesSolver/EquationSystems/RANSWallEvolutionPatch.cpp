@@ -166,7 +166,7 @@ double RANSWallEvolutionPatch::SampleK(const Vector &s,const RANSWallCoordinate 
     Require(k>0 && std::isfinite(k),"invalid physical sampled K");return k;
 }
 std::array<double,2> RANSWallEvolutionPatch::Forcing(const Vector &s,const RANSWallCoordinate &point,double time,
-    const RANSWallEvolutionData &data) const
+    const RANSWallEvolutionData &data,bool includeBody) const
 {
     auto p=point;p[2]=m_parameters.geometry.height;
     const auto v=fields[0]->Point(p,1),pressure=fields[OuterPressure()]->Point(p,1),k=fields[K()]->Point(p,1);
@@ -175,7 +175,7 @@ std::array<double,2> RANSWallEvolutionPatch::Forcing(const Vector &s,const RANSW
     for(int a=0;a<m_dimension-1;++a)
     {
         const int aa=PhysicalAxis(a);const double ua=v.Value(s,offset[a]);const auto ga=v.Gradient(s,offset[a]);
-        force[a]=gp[aa]-2*gk[aa]/3-data.outerBody[a](p,time);
+        force[a]=gp[aa]-2*gk[aa]/3-(includeBody?data.outerBody[a](p,time):0.);
         for(int b=0;b<m_dimension-1;++b)
         {
             const int bb=PhysicalAxis(b);const auto gb=v.Gradient(s,offset[b]);
@@ -311,13 +311,12 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Residual(const Vector &st
                 se=c.epsilonSource+data.outerEpsilonSource(q.v.coordinate,time);
                 for(int a=0;a<3;++a)for(int b=0;b<3;++b)stress[a][b]=-c.reynoldsStress[a][b]+(a==b?2*k/3-pi:0);
             }
-            const auto &body=inner?data.innerBody:data.outerBody;
             for(int a=0;a<m_dimension;++a)
             {
                 const int aa=PhysicalAxis(a);std::array<double,3> flux{};
                 for(int b=0;b<3;++b)flux[b]=stress[aa][b]-u[aa]*u[b];
                 const double rough=inner && a<m_dimension-1 && q.v.coordinate[2]<=m_parameters.geometry.roughness?force[a]:0;
-                Add(r,offset[a],q.v,-body[a](q.v.coordinate,time)-rough,flux,q.weight);
+                Add(r,offset[a],q.v,-rough,flux,q.weight);
             }
             std::array<double,3> kflux{};for(int b=0;b<3;++b)kflux[b]=dk*gk[b]-u[b]*k;
             Add(r,offset[K()],q.v,-sk,kflux,q.weight);
@@ -331,10 +330,12 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Residual(const Vector &st
         };
         for(const auto &ray:m_rays)
         {
-            const auto force=Forcing(s,ray.coordinate,time,data);
+            const auto force=Forcing(s,ray.coordinate,time,data,false);
             for(const auto &q:ray.points)evaluate(q,true,ray.profile.get(),force);
         }
         for(const auto &q:m_outer)evaluate(q,false,nullptr,{});
+        const auto body=OwnedBodyLoad(time,data);
+        for(int i=0;i<Size();++i)r[i]-=body[i];
     }
     catch(const std::exception &){bad=1;}
     m_comm->AllReduce(bad,LibUtilities::ReduceMax);Require(!bad,"inadmissible evolution volume/sampler state on a collective rank");
@@ -467,7 +468,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Solve(Vector s,const Vect
     }
     throw std::runtime_error("unreachable evolution solve");
 }
-RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::ExplicitBody(const Vector &s,double time,const RANSWallEvolutionData &data) const
+RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::OwnedBodyLoad(double time,const RANSWallEvolutionData &data) const
 {
     Vector load(Size());
     auto add=[&](const VolumePoint &q,bool inner)
@@ -477,11 +478,19 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::ExplicitBody(const Vector
         {
             double body=(inner?data.innerBody:data.outerBody)[a](q.v.coordinate,time);
             if(inner && a<m_dimension-1 && q.v.coordinate[2]<=m_parameters.geometry.roughness)body-=data.outerBody[a](H,time);
-            Add(load,offset[a],q.v,body,{},q.weight);
+            Require(std::isfinite(body),"nonfinite prescribed body force");
+            if(body!=0.)Add(load,offset[a],q.v,body,{},q.weight);
         }
     };
     for(const auto &q:m_bodyInner)add(q,true);
     for(const auto &q:m_outer)add(q,false);
+    return load;
+}
+RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::ExplicitBody(const Vector &s,double time,const RANSWallEvolutionData &data) const
+{
+    Vector load(Size());int bad=0;
+    try{load=OwnedBodyLoad(time,data);}catch(const std::exception &){bad=1;}
+    m_comm->AllReduce(bad,LibUtilities::ReduceMax);Require(!bad,"inadmissible prescribed body load on a collective rank");
     m_comm->AllReduce(load,LibUtilities::ReduceSum);Vector result(DifferentialSize());
     const auto constraints=Constraints(s,time,data);Norms(load,constraints);
     for(int b=0;b<m_dimension;++b)

@@ -192,6 +192,14 @@ def check_native_spatial(raw):
         for control in case['constraint_columns']:
             unit=np.zeros(len(case['state']));unit[control['column']]=1.
             near(control['derivative'],unit,'lifted_constraint_Jacobian_columns',tolerance=1e-9)
+        body=case['body_partition'];derivative=np.asarray(body['explicit_derivative'])
+        near(derivative,body['different_K_derivative'],'prescribed_body_is_state_independent')
+        require(abs(body['sampled_K_pair'][1]-body['sampled_K_pair'][0])>1e-3*raw['parameters'][5],'Body control did not move the physical K sampler')
+        difference=np.asarray(body['full_minus_implicit']);expected=np.zeros_like(difference)
+        for b in range(raw['dimension']):
+            start=raw['offsets'][b];expected[start:start+f[b].size]=-f[b].mass()@derivative[start:start+f[b].size]
+        for row,_ in case['constraints']:expected[int(row)]=0.
+        near(difference,expected,'exact_discrete_IMEX_body_partition',tolerance=1e-10)
     if raw['dimension'] == 2:
         layout = []
         for b in (0, 0, 0, 2, 3, 4, 5):
@@ -613,6 +621,21 @@ def qualification(run, section):
         long=run.evolution('stationary-one-turnover',eta=1,steps=100,dt=.05,condensed=True,xknots=[0,150,300])
         require(max(row[2] for row in long['step_audits'])<=1e-9,'One-turnover native timestep drifts')
         report['stationary_time_maps']=cases;report['one_turnover']=dict(steps=long['steps'],time=long['time'],max_drift=max(row[2] for row in long['step_audits']))
+        def neutral_body(template,destination,**kwargs):
+            xml=neutral_session(template,destination,**kwargs);root=ET.parse(xml).getroot()
+            for name,expressions in (('BodyForceInner',('0.01*cos(0.03*x)+0.004*sin(31*y)','0.002*cos(7*y)')),
+                                     ('BodyForceOuter',('0.005*sin(0.02*x)+0.003*cos(17*y)','0.001*sin(3*y)'))):
+                node=ET.SubElement(root.find('CONDITIONS'),'FUNCTION',{'NAME':name})
+                for variable,expression in zip(('u','v'),expressions):ET.SubElement(node,'E',{'VAR':variable,'VALUE':expression})
+            return write(root,xml)
+        body_cases=[]
+        for order in (1,2):
+            body=run.evolution('stationary-prescribed-body-o'+str(order),generator=neutral_body,eta=1,steps=6,order=order,dt=.05,xknots=[0,150,300])
+            require(max(row[2] for row in body['step_audits'])<=1e-9,'Explicit prescribed force breaks the anchored stationary map')
+            require(max(row[1] for row in body['explicit_audits'])>1e-8,'Stationary force case has no actual explicit derivative history')
+            body_cases.append(dict(order=order,max_drift=max(row[2] for row in body['step_audits']),
+                                   explicit_derivative_maximum=max(row[1] for row in body['explicit_audits']),**check_reference(body,dual=True)))
+        report['stationary_nonzero_explicit_body']=body_cases
         variants=[]
         for d,direction in ((3,(1.,0.)),(3,(.6,.8))):
             label='3D-straight' if direction[1]==0 else '3D-rotated'
