@@ -132,6 +132,24 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
         SET_TESTS_PROPERTIES(RANSKernelUnitTests PROPERTIES
             PROCESSORS 1 TIMEOUT 120
             ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
+        ADD_NEKTAR_EXECUTABLE(RANSConstitutiveProbe COMPONENT tests DEPENDS SolverUtils
+            SOURCES ${CMAKE_SOURCE_DIR}/library/UnitTests/SolverUtils/RANSConstitutiveProbe.cpp)
+        TARGET_COMPILE_DEFINITIONS(RANSConstitutiveProbe PRIVATE ENABLE_NEKTAR_EXCEPTIONS)
+        FIND_PACKAGE(Python3 QUIET COMPONENTS Interpreter)
+        IF(Python3_Interpreter_FOUND AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
+            EXECUTE_PROCESS(COMMAND ${Python3_EXECUTABLE} -c "import numpy, scipy"
+                RESULT_VARIABLE RANS_M1_DEPENDENCIES OUTPUT_QUIET ERROR_QUIET)
+            IF(RANS_M1_DEPENDENCIES EQUAL 0)
+                ADD_TEST(NAME RANSCLSEPAWFM1Oracle COMMAND ${Python3_EXECUTABLE}
+                    ${CMAKE_CURRENT_SOURCE_DIR}/Tests/RANS/validate_cls_epawf_m1.py
+                    --kernel-probe $<TARGET_FILE:RANSKernelProbe>
+                    --constitutive-probe $<TARGET_FILE:RANSConstitutiveProbe>)
+                SET_TESTS_PROPERTIES(RANSCLSEPAWFM1Oracle PROPERTIES PROCESSORS 1
+                    TIMEOUT 120 ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
+            ELSE()
+                MESSAGE(STATUS "CLS EP-AWF M1 oracle requires NumPy and SciPy")
+            ENDIF()
+        ENDIF()
         ADD_NEKTAR_EXECUTABLE(RANSFieldAudit COMPONENT tests DEPENDS MultiRegions
             SOURCES ${CMAKE_SOURCE_DIR}/library/UnitTests/SolverUtils/RANSFieldAudit.cpp)
         FILE(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-smoke)

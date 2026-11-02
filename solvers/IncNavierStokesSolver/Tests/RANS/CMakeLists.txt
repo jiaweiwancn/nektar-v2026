@@ -24,8 +24,10 @@ add_executable(RANSObservationKernelProbe
     ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSObservationKernelProbe.cpp)
 add_executable(RANSStressTangentAudit
     ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSStressTangentAudit.cpp)
+add_executable(RANSConstitutiveProbe
+    ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSConstitutiveProbe.cpp)
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    foreach(rans_target RANSKernels RANSWallLayerProbe RANSKernelProbe RANSWallGeometryProbe RANSObservationKernelProbe RANSStressTangentAudit)
+    foreach(rans_target RANSKernels RANSWallLayerProbe RANSKernelProbe RANSWallGeometryProbe RANSObservationKernelProbe RANSStressTangentAudit RANSConstitutiveProbe)
         target_compile_options(${rans_target} PRIVATE
             -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror)
     endforeach()
@@ -36,6 +38,7 @@ target_link_libraries(RANSKernelProbe RANSKernels)
 target_link_libraries(RANSWallGeometryProbe RANSKernels)
 target_link_libraries(RANSObservationKernelProbe RANSKernels)
 target_link_libraries(RANSStressTangentAudit RANSKernels)
+target_link_libraries(RANSConstitutiveProbe RANSKernels)
 option(RANS_BUILD_SOLVER "Build the complete incompressible solver in isolation" OFF)
 if(RANS_BUILD_SOLVER)
     # Build the source SpatialDomains library in isolation too: terrain normals
@@ -168,6 +171,20 @@ set_tests_properties(RANSObservationKernels PROPERTIES
     PROCESSORS 1 TIMEOUT 120 ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
 find_package(Python3 QUIET COMPONENTS Interpreter)
 if(Python3_Interpreter_FOUND)
+    if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+        execute_process(COMMAND ${Python3_EXECUTABLE} -c "import numpy, scipy"
+            RESULT_VARIABLE rans_m1_dependencies OUTPUT_QUIET ERROR_QUIET)
+        if(rans_m1_dependencies EQUAL 0)
+            add_test(NAME RANSCLSEPAWFM1Oracle COMMAND ${Python3_EXECUTABLE}
+                ${CMAKE_CURRENT_LIST_DIR}/validate_cls_epawf_m1.py
+                --kernel-probe $<TARGET_FILE:RANSKernelProbe>
+                --constitutive-probe $<TARGET_FILE:RANSConstitutiveProbe>)
+            set_tests_properties(RANSCLSEPAWFM1Oracle PROPERTIES PROCESSORS 1
+                TIMEOUT 120 ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
+        else()
+            message(STATUS "CLS EP-AWF M1 oracle requires NumPy and SciPy")
+        endif()
+    endif()
     add_test(NAME RANSCaoTamuraCalibrationGuards COMMAND ${Python3_EXECUTABLE}
         ${CMAKE_CURRENT_LIST_DIR}/validate_cao_tamura_calibration.py)
     set_tests_properties(RANSCaoTamuraCalibrationGuards PROPERTIES
