@@ -69,7 +69,9 @@
     </FUNCTION>
     <FUNCTION NAME="ScalarSourceOuter">
       <E VAR="k" VALUE="E0"/>
-      <E VAR="eps_tilde" VALUE="1.92*E0^2/K0-0.83*E0^2/K0*max(YapScale/y-1,0)*(YapScale/y)^2"/>
+      <!-- Equivalent positive part avoids the 5.9 interpreter's mixed
+           expression/literal argument bug in max(a,0). The C++ law is unchanged. -->
+      <E VAR="eps_tilde" VALUE="1.92*E0^2/K0-0.83*E0^2/K0*((YapScale/y-1)+fabs(YapScale/y-1))/2*(YapScale/y)^2"/>
     </FUNCTION>
   </CONDITIONS>
   <GEOMETRY DIM="2" SPACE="2">
