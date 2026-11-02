@@ -1,6 +1,6 @@
 **CLS and EP-AWF revised formulation implementation and validation plan**
 
-Status: Approved by the user on 2 November 2026; M0, M1, M2 and M3 closed.
+Status: Approved by the user on 2 November 2026; M0, M1, M2, M3 and M4 closed.
 Implementation branch: codex/cls-epawf-revised, based on
 6415398d856323c3116e646eaf7c882c66617602.
 
@@ -10,8 +10,9 @@ Implementation branch: codex/cls-epawf-revised, based on
 - Origin Mode: plan.
 - Origin Date: 2026-11-02.
 - Verification Status: M0 contract/baseline audit, M1 kernel identities/
-  constitutive counterexamples, M2 profiles/dual loads and M3 native flat
-  spatial stage/condensation VERIFIED on Linux;
+  constitutive counterexamples, M2 profiles/dual loads, M3 native flat
+  spatial stage/condensation and M4 constrained reference/native IMEX/MPI/restart
+  VERIFIED on Linux;
   later milestones UNVERIFIED. Original stability/positivity gates fail as specified.
 - Version Label: cls-epawf-revised-plan-v1.
 
@@ -35,7 +36,12 @@ The [M3 closure report](/Users/jay/Documents/nektar-v2026/docs/plans/cls-epawf-r
 records native subdomain CG fields, coupled pressure and conservative
 transport/storage, analytical AWF refinement, and full/Schur stage comparisons.
 All 22 Linux tests and 8,085 independent qualification checks pass at 8444254.
-M4 and later implementation milestones remain open.
+The [M4 closure report](/Users/jay/Documents/nektar-v2026/docs/plans/cls-epawf-revised-m4.md)
+records constrained physical L2 targets, eta=0 defects/refinement, fixed free-load
+anchor budgets, native IMEX1/2 startup/history, full 3D horizontal rotation,
+MPI 1/2/4 and full-history restart. The M4 qualification and other 25 registered
+regressions pass at 722d55c; original physical failures remain unchanged.
+M5 and later implementation milestones remain open.
 
 The [M0 contract and baseline record](/Users/jay/Documents/nektar-v2026/docs/plans/cls-epawf-revised-m0.md)
 and [contract v1](/Users/jay/Documents/nektar-v2026/docs/plans/cls-epawf-revised-contract-v1.json)
@@ -232,7 +238,7 @@ the outer equation determines its flux.
    directional actions at identical states and pressure gauges. Deliver a
    native flat wall-element solver and small reproducible fixtures.
 
-5. **M4 — Verify the constrained flat reference and actual timestep.**
+5. **M4 — Verify the constrained flat reference and actual timestep (closed).**
    Construct the declared finite-dimensional composite target, with exact
    matching trace and constant k, and recompute dependent fields from it.
    Check divergence, gauge, ground values, interface constraints and all
@@ -442,7 +448,7 @@ unlock a failed model qualification or the existing Cao–Tamura score gates.
 
 The user approved the branch/base, the faithful revised-note model and the
 M0–M7/M9 implementation/verification sequence, and requested execution and
-closure of M0, M1, M2 and M3. This includes recording the
+closure of M0, M1, M2, M3 and M4. This includes recording the
 original CLS and sampled-K failures as validation findings. A robust-model
 extension and the conditional physical-validation campaign in M8 require
 a concrete, separately identified resolution of those failures; the removed

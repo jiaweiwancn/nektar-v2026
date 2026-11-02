@@ -47,8 +47,11 @@ subdomain fields, coupled pressure/transport, analytical AWF refinement and
 full/condensed nonlinear stage verification, with 22 passing Linux tests.
 The [revised wall-stage guide](solvers/IncNavierStokesSolver/Examples/RevisedEquilibriumWall/README.md)
 documents its runnable session and current serial affine-mesh scope.
-Native time integration is M4 work; the original stability and positivity
-failures remain recorded physical gates.
+[M4 constrained reference and native evolution](docs/plans/cls-epawf-revised-m4.md)
+adds native IMEX1/2 startup/history, fixed free-load anchoring, full 3D flat
+reference/rotation, MPI 1/2/4 and full-history restart. The complete M4
+qualification and 25 other registered Linux regressions pass. The original
+stability and positivity failures remain recorded physical gates.
 
 
 Tutorials

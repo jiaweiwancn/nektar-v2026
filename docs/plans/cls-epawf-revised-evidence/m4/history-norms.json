@@ -1,0 +1,1236 @@
+{
+  "schema": 1,
+  "status": "passed",
+  "source_commit": "722d55c5d3c2055b9c0c4e878931350b92d47350",
+  "comparison_count": 13,
+  "checks": 216,
+  "tolerance": 1e-08,
+  "norm": "Physical mass by field; value slots use field scale; native dt*RHS slots use dt*field scale/(H/u_star)",
+  "maximum_scaled_history_error": 2.904294302199113e-15,
+  "comparisons": [
+    {
+      "first": "evolving-condensed",
+      "second": "evolving-o2-dt0.1",
+      "maximum_scaled_error": 2.5015638140645805e-17,
+      "native_slot_errors": [
+        {
+          "block": 0,
+          "slot": 0,
+          "scaled_physical_mass_error": 6.942216725540003e-18
+        },
+        {
+          "block": 0,
+          "slot": 1,
+          "scaled_physical_mass_error": 7.537372549425715e-18
+        },
+        {
+          "block": 0,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 0,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 1,
+          "slot": 0,
+          "scaled_physical_mass_error": 5.7117543116614185e-18
+        },
+        {
+          "block": 1,
+          "slot": 1,
+          "scaled_physical_mass_error": 6.6391802206917336e-18
+        },
+        {
+          "block": 1,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 1,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 2,
+          "slot": 0,
+          "scaled_physical_mass_error": 1.9219425377394148e-17
+        },
+        {
+          "block": 2,
+          "slot": 1,
+          "scaled_physical_mass_error": 2.5015638140645805e-17
+        },
+        {
+          "block": 2,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 2,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 0,
+          "scaled_physical_mass_error": 5.005062071796808e-18
+        },
+        {
+          "block": 3,
+          "slot": 1,
+          "scaled_physical_mass_error": 6.258387550659376e-18
+        },
+        {
+          "block": 3,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        }
+      ],
+      "sha256": [
+        "789ea5413bc067b22a04dcdfb2e0371f0ef4ff3e38b5290fce126c3e46dc819d",
+        "3caf42faa042049a69f6533b5143435231bd3b44a591b9b411619a16847fb193"
+      ]
+    },
+    {
+      "first": "evolving-mpi2",
+      "second": "evolving-o2-dt0.1",
+      "maximum_scaled_error": 2.904294302199113e-15,
+      "native_slot_errors": [
+        {
+          "block": 0,
+          "slot": 0,
+          "scaled_physical_mass_error": 1.7384208047254506e-17
+        },
+        {
+          "block": 0,
+          "slot": 1,
+          "scaled_physical_mass_error": 1.970915618901048e-17
+        },
+        {
+          "block": 0,
+          "slot": 2,
+          "scaled_physical_mass_error": 1.005771340189051e-15
+        },
+        {
+          "block": 0,
+          "slot": 3,
+          "scaled_physical_mass_error": 1.6775973681216943e-15
+        },
+        {
+          "block": 1,
+          "slot": 0,
+          "scaled_physical_mass_error": 1.6484001146874635e-17
+        },
+        {
+          "block": 1,
+          "slot": 1,
+          "scaled_physical_mass_error": 2.2527221083305898e-17
+        },
+        {
+          "block": 1,
+          "slot": 2,
+          "scaled_physical_mass_error": 1.3988635559683707e-15
+        },
+        {
+          "block": 1,
+          "slot": 3,
+          "scaled_physical_mass_error": 2.904294302199113e-15
+        },
+        {
+          "block": 2,
+          "slot": 0,
+          "scaled_physical_mass_error": 5.2340551430774314e-17
+        },
+        {
+          "block": 2,
+          "slot": 1,
+          "scaled_physical_mass_error": 5.615658661776676e-17
+        },
+        {
+          "block": 2,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 2,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 0,
+          "scaled_physical_mass_error": 6.4038687172351165e-18
+        },
+        {
+          "block": 3,
+          "slot": 1,
+          "scaled_physical_mass_error": 1.0937669134298743e-17
+        },
+        {
+          "block": 3,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        }
+      ],
+      "sha256": [
+        "a393e8b3b44bb70d02614a10743b8c43999910cd21de8f78f1265f58199d04e1",
+        "3caf42faa042049a69f6533b5143435231bd3b44a591b9b411619a16847fb193"
+      ]
+    },
+    {
+      "first": "evolving-mpi4",
+      "second": "evolving-o2-dt0.1",
+      "maximum_scaled_error": 2.904294302199113e-15,
+      "native_slot_errors": [
+        {
+          "block": 0,
+          "slot": 0,
+          "scaled_physical_mass_error": 1.7384208047254506e-17
+        },
+        {
+          "block": 0,
+          "slot": 1,
+          "scaled_physical_mass_error": 1.970915618901048e-17
+        },
+        {
+          "block": 0,
+          "slot": 2,
+          "scaled_physical_mass_error": 1.005771340189051e-15
+        },
+        {
+          "block": 0,
+          "slot": 3,
+          "scaled_physical_mass_error": 1.6775973681216943e-15
+        },
+        {
+          "block": 1,
+          "slot": 0,
+          "scaled_physical_mass_error": 1.6484001146874635e-17
+        },
+        {
+          "block": 1,
+          "slot": 1,
+          "scaled_physical_mass_error": 2.2527221083305898e-17
+        },
+        {
+          "block": 1,
+          "slot": 2,
+          "scaled_physical_mass_error": 1.3988635559683707e-15
+        },
+        {
+          "block": 1,
+          "slot": 3,
+          "scaled_physical_mass_error": 2.904294302199113e-15
+        },
+        {
+          "block": 2,
+          "slot": 0,
+          "scaled_physical_mass_error": 5.2340551430774314e-17
+        },
+        {
+          "block": 2,
+          "slot": 1,
+          "scaled_physical_mass_error": 5.615658661776676e-17
+        },
+        {
+          "block": 2,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 2,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 0,
+          "scaled_physical_mass_error": 6.4038687172351165e-18
+        },
+        {
+          "block": 3,
+          "slot": 1,
+          "scaled_physical_mass_error": 1.0937669134298743e-17
+        },
+        {
+          "block": 3,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        }
+      ],
+      "sha256": [
+        "9c356c2e605000b1f6e85b1fb6bddcca20f9fc34c9ad5ea3cb5482505223115d",
+        "3caf42faa042049a69f6533b5143435231bd3b44a591b9b411619a16847fb193"
+      ]
+    },
+    {
+      "first": "stationary-restart-mpi4",
+      "second": "stationary-o2-dt0.05",
+      "maximum_scaled_error": 0.0,
+      "native_slot_errors": [
+        {
+          "block": 0,
+          "slot": 0,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 0,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 0,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 0,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 1,
+          "slot": 0,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 1,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 1,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 1,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 2,
+          "slot": 0,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 2,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 2,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 2,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 0,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        }
+      ],
+      "sha256": [
+        "8b02d146e6ab32fcf7c5a0868d0d42bb9432383cc6f516ff9b00147adb9f7350",
+        "c003991a2a47dc444b4c35aaf679c815c6856799af9a192b78810e98526ec4c4"
+      ]
+    },
+    {
+      "first": "3D-straight-mpi2",
+      "second": "3D-straight",
+      "maximum_scaled_error": 0.0,
+      "native_slot_errors": [
+        {
+          "block": 0,
+          "slot": 0,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 0,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 0,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 0,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 1,
+          "slot": 0,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 1,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 1,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 1,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 2,
+          "slot": 0,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 2,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 2,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 2,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 0,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 4,
+          "slot": 0,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 4,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 4,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 4,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        }
+      ],
+      "sha256": [
+        "5e3933c40b00daa39397c547fd2b1b21e0b7be17aec2ccad5c91aa64e6625674",
+        "493b89deb0d2071d620d065494ebcc586047db62d9fc84e1a1d536a60be0f13a"
+      ]
+    },
+    {
+      "first": "3D-straight-mpi4",
+      "second": "3D-straight",
+      "maximum_scaled_error": 0.0,
+      "native_slot_errors": [
+        {
+          "block": 0,
+          "slot": 0,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 0,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 0,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 0,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 1,
+          "slot": 0,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 1,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 1,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 1,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 2,
+          "slot": 0,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 2,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 2,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 2,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 0,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 4,
+          "slot": 0,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 4,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 4,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 4,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        }
+      ],
+      "sha256": [
+        "d6286623250b2dd0a080c649a750e128fa3d04daa51b996fe6eaaaeb12600d5d",
+        "493b89deb0d2071d620d065494ebcc586047db62d9fc84e1a1d536a60be0f13a"
+      ]
+    },
+    {
+      "first": "3D-rotated-mpi2",
+      "second": "3D-rotated",
+      "maximum_scaled_error": 0.0,
+      "native_slot_errors": [
+        {
+          "block": 0,
+          "slot": 0,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 0,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 0,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 0,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 1,
+          "slot": 0,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 1,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 1,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 1,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 2,
+          "slot": 0,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 2,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 2,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 2,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 0,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 4,
+          "slot": 0,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 4,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 4,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 4,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        }
+      ],
+      "sha256": [
+        "9be8efdf00557b1ed55807d8ca672a7559201940317579a515f80a55725c0533",
+        "6347b156188fe58365f0c99054d75c5903e2255b4b12a83ebe09b476aa956316"
+      ]
+    },
+    {
+      "first": "3D-rotated-mpi4",
+      "second": "3D-rotated",
+      "maximum_scaled_error": 0.0,
+      "native_slot_errors": [
+        {
+          "block": 0,
+          "slot": 0,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 0,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 0,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 0,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 1,
+          "slot": 0,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 1,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 1,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 1,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 2,
+          "slot": 0,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 2,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 2,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 2,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 0,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 4,
+          "slot": 0,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 4,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 4,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 4,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        }
+      ],
+      "sha256": [
+        "e762d9b70b10b4a1f7a08aaa498c8f5455c459ba0dc581d9c23db5adfd1d166f",
+        "6347b156188fe58365f0c99054d75c5903e2255b4b12a83ebe09b476aa956316"
+      ]
+    },
+    {
+      "first": "evolving-o1-restart1",
+      "second": "evolving-o1-dt0.1",
+      "maximum_scaled_error": 1.274950572502398e-15,
+      "native_slot_errors": [
+        {
+          "block": 0,
+          "slot": 0,
+          "scaled_physical_mass_error": 1.04653435505735e-16
+        },
+        {
+          "block": 0,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 1,
+          "slot": 0,
+          "scaled_physical_mass_error": 1.2362122835411518e-16
+        },
+        {
+          "block": 1,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 2,
+          "slot": 0,
+          "scaled_physical_mass_error": 1.0199305730507595e-15
+        },
+        {
+          "block": 2,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 0,
+          "scaled_physical_mass_error": 1.274950572502398e-15
+        },
+        {
+          "block": 3,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        }
+      ],
+      "sha256": [
+        "bd7605b33d0d1185c3eef0278674d43a092465f6b45c30bb6ff8fad42cff7bdd",
+        "e80f649f52656c736e7dd088ebc210db4a9dd95eb3321f21eb6125f52ec40b0b"
+      ]
+    },
+    {
+      "first": "evolving-o2-restart0",
+      "second": "evolving-o2-dt0.1",
+      "maximum_scaled_error": 0.0,
+      "native_slot_errors": [
+        {
+          "block": 0,
+          "slot": 0,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 0,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 0,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 0,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 1,
+          "slot": 0,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 1,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 1,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 1,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 2,
+          "slot": 0,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 2,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 2,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 2,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 0,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        }
+      ],
+      "sha256": [
+        "3caf42faa042049a69f6533b5143435231bd3b44a591b9b411619a16847fb193",
+        "3caf42faa042049a69f6533b5143435231bd3b44a591b9b411619a16847fb193"
+      ]
+    },
+    {
+      "first": "evolving-o2-restart1",
+      "second": "evolving-o2-dt0.1",
+      "maximum_scaled_error": 2.904294302199113e-15,
+      "native_slot_errors": [
+        {
+          "block": 0,
+          "slot": 0,
+          "scaled_physical_mass_error": 1.7440838004824424e-17
+        },
+        {
+          "block": 0,
+          "slot": 1,
+          "scaled_physical_mass_error": 1.8867317033973275e-17
+        },
+        {
+          "block": 0,
+          "slot": 2,
+          "scaled_physical_mass_error": 1.005771340189051e-15
+        },
+        {
+          "block": 0,
+          "slot": 3,
+          "scaled_physical_mass_error": 1.6775973681216943e-15
+        },
+        {
+          "block": 1,
+          "slot": 0,
+          "scaled_physical_mass_error": 1.3569304701545486e-17
+        },
+        {
+          "block": 1,
+          "slot": 1,
+          "scaled_physical_mass_error": 2.0558886193688633e-17
+        },
+        {
+          "block": 1,
+          "slot": 2,
+          "scaled_physical_mass_error": 1.3988635559683707e-15
+        },
+        {
+          "block": 1,
+          "slot": 3,
+          "scaled_physical_mass_error": 2.904294302199113e-15
+        },
+        {
+          "block": 2,
+          "slot": 0,
+          "scaled_physical_mass_error": 5.0346353744306425e-17
+        },
+        {
+          "block": 2,
+          "slot": 1,
+          "scaled_physical_mass_error": 4.247040262744412e-17
+        },
+        {
+          "block": 2,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 2,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 0,
+          "scaled_physical_mass_error": 5.904829594475206e-18
+        },
+        {
+          "block": 3,
+          "slot": 1,
+          "scaled_physical_mass_error": 7.954473759055689e-18
+        },
+        {
+          "block": 3,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        }
+      ],
+      "sha256": [
+        "53123f07b7867b45f2272d90b84896577fc5bb69b397c53ddc36efc54f758e8b",
+        "3caf42faa042049a69f6533b5143435231bd3b44a591b9b411619a16847fb193"
+      ]
+    },
+    {
+      "first": "evolving-o2-restart2",
+      "second": "evolving-o2-dt0.1",
+      "maximum_scaled_error": 2.5217709253695247e-15,
+      "native_slot_errors": [
+        {
+          "block": 0,
+          "slot": 0,
+          "scaled_physical_mass_error": 3.3221919367602605e-17
+        },
+        {
+          "block": 0,
+          "slot": 1,
+          "scaled_physical_mass_error": 5.93456150714041e-17
+        },
+        {
+          "block": 0,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 0,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 1,
+          "slot": 0,
+          "scaled_physical_mass_error": 3.8491847646118996e-17
+        },
+        {
+          "block": 1,
+          "slot": 1,
+          "scaled_physical_mass_error": 1.5010221420868296e-16
+        },
+        {
+          "block": 1,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 1,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 2,
+          "slot": 0,
+          "scaled_physical_mass_error": 1.858487657016837e-15
+        },
+        {
+          "block": 2,
+          "slot": 1,
+          "scaled_physical_mass_error": 2.5217709253695247e-15
+        },
+        {
+          "block": 2,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 2,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 0,
+          "scaled_physical_mass_error": 2.3828271088878835e-15
+        },
+        {
+          "block": 3,
+          "slot": 1,
+          "scaled_physical_mass_error": 2.166869109851911e-15
+        },
+        {
+          "block": 3,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        }
+      ],
+      "sha256": [
+        "9ebed09aa689c0cd259892d35f7e67872dd52dd80f704a115ce449b4c9ca7f80",
+        "3caf42faa042049a69f6533b5143435231bd3b44a591b9b411619a16847fb193"
+      ]
+    },
+    {
+      "first": "evolving-o2-restart3",
+      "second": "evolving-o2-dt0.1",
+      "maximum_scaled_error": 1.3988635559683707e-15,
+      "native_slot_errors": [
+        {
+          "block": 0,
+          "slot": 0,
+          "scaled_physical_mass_error": 1.4411824517032687e-17
+        },
+        {
+          "block": 0,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 0,
+          "slot": 2,
+          "scaled_physical_mass_error": 1.005771340189051e-15
+        },
+        {
+          "block": 0,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 1,
+          "slot": 0,
+          "scaled_physical_mass_error": 9.467094476393929e-18
+        },
+        {
+          "block": 1,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 1,
+          "slot": 2,
+          "scaled_physical_mass_error": 1.3988635559683707e-15
+        },
+        {
+          "block": 1,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 2,
+          "slot": 0,
+          "scaled_physical_mass_error": 4.5537981606064895e-17
+        },
+        {
+          "block": 2,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 2,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 2,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 0,
+          "scaled_physical_mass_error": 4.882277637070658e-17
+        },
+        {
+          "block": 3,
+          "slot": 1,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 2,
+          "scaled_physical_mass_error": 0.0
+        },
+        {
+          "block": 3,
+          "slot": 3,
+          "scaled_physical_mass_error": 0.0
+        }
+      ],
+      "sha256": [
+        "280c000f6135f474c9ab9c2bca5cb6eeff7639d39f11f6214ec6da4b46faed41",
+        "3caf42faa042049a69f6533b5143435231bd3b44a591b9b411619a16847fb193"
+      ]
+    }
+  ],
+  "runner_sha256": "6aca06a1b825d8d9121ca66c99b3e008f36f4708475fd8c70b3fd9148b23a4e2"
+}

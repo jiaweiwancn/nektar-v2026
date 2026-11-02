@@ -1,0 +1,82 @@
+{
+  "schema": 1,
+  "source_commit": "722d55c5d3c2055b9c0c4e878931350b92d47350",
+  "source_status": "",
+  "main_commit": "f4b70baec10016dd098005bc5a5507b87e4a57bf",
+  "main_status": "",
+  "started_utc": "2026-11-02T13:35:58.255738+00:00",
+  "compiler_workers": 16,
+  "test_workers": 1,
+  "mpi_ranks": [
+    1,
+    2,
+    4
+  ],
+  "maximum_concurrent_test_ranks": 4,
+  "thread_environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1"
+  },
+  "connection": "tailscale:100.105.247.110",
+  "runner_sha256": "4c9c2fe0e06b8484dc5cce7d01cb3acd9e2991b87e61a004773c52fd3be43bc3",
+  "commands": [
+    {
+      "command": [
+        "cmake",
+        "-S",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/source/solvers/IncNavierStokesSolver/Tests/RANS",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build",
+        "-DRANS_BUILD_SOLVER=ON",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake"
+      ],
+      "exit_code": 0,
+      "seconds": 0.6154405070010398,
+      "timeout_seconds": 180,
+      "log_sha256": "160d1a7c7fb95b145b15d49330289c16738a8f794298138a36f49782b5ecf0c6"
+    },
+    {
+      "command": [
+        "cmake",
+        "--build",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build",
+        "--parallel",
+        "16"
+      ],
+      "exit_code": 0,
+      "seconds": 0.6657610649999697,
+      "timeout_seconds": 900,
+      "log_sha256": "16b14c5175577ca928c8969b24110f172e8c2a1d0923352a2eb38120c25d541f"
+    },
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "ctest",
+        "--test-dir",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build",
+        "--parallel",
+        "1",
+        "--output-on-failure",
+        "-E",
+        "^RANSCLSEPAWFM4Oracle$"
+      ],
+      "exit_code": 0,
+      "seconds": 724.2918145750009,
+      "timeout_seconds": 10800,
+      "log_sha256": "b471a91cc6a8f2a29bd5caf5131c03188c7adbdf616210b45661942a3b51eea4"
+    }
+  ],
+  "status": "passed",
+  "finished_utc": "2026-11-02T13:48:03.880658+00:00",
+  "qualification_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m4-attempt-012/oracle/validation.json",
+  "qualification_execution": "complete registered M4 oracle already passed at the identical source/binary; remaining 25 CTests run without duplicate M4 solve",
+  "source_end_commit": "722d55c5d3c2055b9c0c4e878931350b92d47350",
+  "source_end_status": "",
+  "main_end_commit": "f4b70baec10016dd098005bc5a5507b87e4a57bf",
+  "main_end_status": ""
+}

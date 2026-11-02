@@ -373,7 +373,7 @@ def radial_projection(raw, block, profile):
             expected=float((phi@solution[ids])[0])*direction
             actual,_=field.evaluate(np.asarray(raw['fixed_reference']),raw['offsets'][block],[x,y,r])
             samples.append([r,actual,expected])
-    near(np.asarray(samples)[:,1],np.asarray(samples)[:,2],'constrained_physical_L2_projection',scale=us if velocity else us**3/(kappa*H),tolerance=1e-9)
+    near(np.asarray(samples)[:,1],np.asarray(samples)[:,2],'constrained_physical_L2_projection',scale=us if velocity else us**3/(kappa*H),tolerance=1e-10)
     return dict(radial_unknowns=n,constraints=len(C),max_sample_difference=float(np.max(np.abs(np.asarray(samples)[:,1]-np.asarray(samples)[:,2]))))
 
 
@@ -419,7 +419,7 @@ def check_reference(raw, projection=False, dual=False):
     gauge=0.;max_div=0.;Uerror=Eerror=0.
     for b in (d+2,d+3):
         gauge += float((f[b].mass()@f[b].constant())@s[o[b]:o[b]+f[b].size])/f[0].volume
-    near(gauge,0.,'physical_global_pressure_gauge',scale=us*us,tolerance=1e-9)
+    near(gauge,0.,'physical_global_pressure_gauge',scale=us*us,tolerance=1e-10)
     axes=(0,2) if d==2 else (0,1,2)
     for b,field in enumerate(f):
         for e in field.elements:
@@ -430,7 +430,7 @@ def check_reference(raw, projection=False, dual=False):
                 horizontal=j%n**(d-1)
                 if all((horizontal//n**i)%n<2 for i in range(d-1)):
                     expected[j]=local[radial*n**(d-1)]
-            near(local,expected,'native_exact_horizontal_invariance',tolerance=1e-9)
+            near(local,expected,'native_exact_horizontal_invariance',tolerance=1e-10)
     for e in f[0].elements:
         p=[(e['lower'][a]+e['upper'][a])/2 for a in range(3)]
         G=np.zeros((3,3))
@@ -445,24 +445,24 @@ def check_reference(raw, projection=False, dual=False):
         for b,a in enumerate(axes):
             ui,Gi[a]=f[b].evaluate(s,o[b],p,-1);uo,Go[a]=f[b].evaluate(s,o[b],p,1)
             expected=raw['direction'][b]*float(profile.UH) if b<d-1 else 0.
-            near([ui,uo],[expected,expected],'shared_matching_velocity_trace',scale=us,tolerance=1e-9)
+            near([ui,uo],[expected,expected],'shared_matching_velocity_trace',scale=us,tolerance=1e-10)
         ki,gki=f[d].evaluate(s,o[d],p,-1);ko,gko=f[d].evaluate(s,o[d],p,1)
         E,_=f[d+1].evaluate(s,o[d+1],p,1)
         pi,_=f[d+2].evaluate(s,o[d+2],p,-1);po,_=f[d+3].evaluate(s,o[d+3],p,1)
         closure=indexed(Go,ko,E,'physical');R=closure['stress'].real
         stress_i=float(nu+profile.a*max(H-profile.zv,0))*(Gi+Gi.T)-pi*np.eye(3)
         stress_o=-R+(2*ko/3-po)*np.eye(3)
-        near(stress_i[:,2],stress_o[:,2],'full_matching_traction',scale=us*us,tolerance=1e-9)
-        near(pi-po,R[2,2]-2*K/3,'required_relative_pressure_offset',scale=us*us,tolerance=1e-9)
-        near(pi-po,-11*K/75,'CLS_reference_pressure_jump',scale=us*us,tolerance=1e-9)
-        near([ki,ko,E],[K,K,us**3/(kappa*H)],'matching_k_and_dependent_epsilon',scale=K,tolerance=1e-9)
-        near(gki,np.zeros(3),'zero_inner_k_flux',tolerance=1e-9);near(gko,np.zeros(3),'zero_outer_k_flux',tolerance=1e-9)
+        near(stress_i[:,2],stress_o[:,2],'full_matching_traction',scale=us*us,tolerance=1e-10)
+        near(pi-po,R[2,2]-2*K/3,'required_relative_pressure_offset',scale=us*us,tolerance=1e-10)
+        near(pi-po,-11*K/75,'CLS_reference_pressure_jump',scale=us*us,tolerance=1e-10)
+        near([ki,ko,E],[K,K,us**3/(kappa*H)],'matching_k_and_dependent_epsilon',scale=K,tolerance=1e-10)
+        near(gki,np.zeros(3),'zero_inner_k_flux',tolerance=1e-10);near(gko,np.zeros(3),'zero_outer_k_flux',tolerance=1e-10)
         for b in range(d):
             ground,_=f[b].evaluate(s,o[b],[p[0],p[1],0.])
-            near(ground,0.,'strong_ground_no_slip',scale=us,tolerance=1e-9)
+            near(ground,0.,'strong_ground_no_slip',scale=us,tolerance=1e-10)
         top=[p[0],p[1],Z];Et,gEt=f[d+1].evaluate(s,o[d+1],top,-1)
         nt=us*kappa*Z
-        near([Et,nt*gEt[2]/1.3],[us**3/(kappa*Z),-us**4/(1.3*Z)],'compatible_top_epsilon_trace_and_flux',scale=us**3/(kappa*H),tolerance=1e-9)
+        near([Et,nt*gEt[2]/1.3],[us**3/(kappa*Z),-us**4/(1.3*Z)],'compatible_top_epsilon_trace_and_flux',scale=us**3/(kappa*H),tolerance=1e-10)
     # Physical profile errors use a separate high-order rule, including graded
     # panels near the molecular AWF scale. They measure projection, not drift.
     for e in f[0].elements:
@@ -508,7 +508,27 @@ def history_difference(a,b,name):
     near(a['native_history'],b['native_history'],name+'_all_native_slots',tolerance=1e-8)
     near(a['fixed_reference'],b['fixed_reference'],name+'_stored_reference',tolerance=1e-10)
     near(a['fixed_defect'],b['fixed_defect'],name+'_stored_free_defect',tolerance=1e-10)
+    native_history_difference(a,b,name)
     return state_difference(a,b,name,tolerance=1e-8)
+
+
+def native_history_difference(a,b,name,tolerance=1e-8):
+    """Physical field norms; native derivative slots contain dt times RHS."""
+    d,us,H=a['dimension'],a['ustar'],a['parameters'][1]
+    K,kappa=a['parameters'][5],a['parameters'][7]
+    field_scales=[us]*d+[K,us**3/(kappa*H)]
+    result=[]
+    for field,scale,offset in zip(spaces(a)[:d+2],field_scales,a['offsets']):
+        mass=field.mass()
+        for slot,(first,second) in enumerate(zip(a['native_history'],b['native_history'])):
+            delta=np.asarray(first)[offset:offset+field.size]-np.asarray(second)[offset:offset+field.size]
+            stored_scale=scale if slot<a['order'] else scale*a['dt']/(H/us)
+            error=math.sqrt(max(0.,float(delta@mass@delta)))/(stored_scale*math.sqrt(field.volume))
+            require(error<=tolerance,f'{name} native history slot {slot}: {error}')
+            result.append(error)
+    errors[name+'_physical_native_history']=max(result)
+    return result
+
 
 class Runner:
     def __init__(self, build, output):
@@ -734,6 +754,9 @@ def main():
             native=run.output/'native-time';native.mkdir()
             run.command('native-time','RANSEquilibriumTimeProbe',['--output',native/'time.json','--checkpoint-root',native/'history'])
             result['native_time_probe']=json.loads((native/'time.json').read_text())
+        result['source_end_commit']=subprocess.check_output(['git','-C',str(source),'rev-parse','HEAD'],text=True).strip()
+        result['source_end_status']=subprocess.check_output(['git','-C',str(source),'status','--porcelain'],text=True).strip()
+        require(result['source_end_commit']==revision and not result['source_end_status'],'Source changed during qualification')
         result['verification_status']='passed';result['milestone_closure']=args.section=='all'
     except Exception as error:
         result['verification_status']='failed';result['failure']=str(error)
@@ -743,7 +766,6 @@ def main():
         result['source_end_commit']=subprocess.check_output(['git','-C',str(source),'rev-parse','HEAD'],text=True).strip()
         result['source_end_status']=subprocess.check_output(['git','-C',str(source),'status','--porcelain'],text=True).strip()
         (run.output/'validation.json').write_text(json.dumps(result,indent=2)+'\n')
-    require(result['source_end_commit']==revision and not result['source_end_status'],'Source changed during qualification')
     print(f'CLS EP-AWF M4: {checks} checks; report {run.output/"validation.json"}',flush=True)
 
 if __name__=='__main__':main()
