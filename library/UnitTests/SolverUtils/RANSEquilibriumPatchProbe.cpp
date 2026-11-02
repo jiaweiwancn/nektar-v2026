@@ -152,6 +152,18 @@ int main(int argc,char **argv)
             parameters.geometry.tailStart,k,parameters.model.Q(),parameters.model.Kappa()});
         out<<",\"generic_cases\":[";int generic=0;
         for(double chi:{0.,.37,1.}){if(generic++)out<<',';GenericCase(out,layoutPtr,parameters,chi);}out<<']';
+        if(session->DefinesFunction("ScalarSourceOuter","eps_tilde"))
+        {
+            out<<",\"fixture_source_probes\":[";
+            for(int j=0;j<3;++j)
+            {
+                if(j)out<<',';
+                const double x=(layout.Left()+layout.Right())/2,r=H+(j+1)*(layout.Top()-H)/4;
+                Write(out,{x,r,session->GetFunction("ScalarSourceOuter","k")->Evaluate(x,r),
+                    session->GetFunction("ScalarSourceOuter","eps_tilde")->Evaluate(x,r)});
+            }
+            out<<']';
+        }
         out<<"}\n";
         Require(static_cast<bool>(out),"cannot write layout report");
         std::cout<<"Native multiregion layout verified: "<<layout.Size()<<" stage unknowns.\n";

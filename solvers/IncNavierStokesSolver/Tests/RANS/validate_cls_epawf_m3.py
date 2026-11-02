@@ -133,6 +133,19 @@ def check_pressure(raw):
     near(pressure["metrics"][2], -11*k/75, "mechanical_reference_pressure_jump", k)
     near(pressure["metrics"][:2], [0, 0], "pressure_probe_velocity_and_mean")
     near(pressure["metrics"][3], 0, "full_normal_traction_matching", k)
+    z, w = np.polynomial.legendre.leggauss(16)
+    H = raw["parameters"][1]
+    for side, record in enumerate((raw["layout"][1], raw["layout"][2])):
+        space = Space(record)
+        expected = np.zeros(space.size)
+        for e in space.elements:
+            a, b, c, d = e["bounds"]
+            if not (abs((c if side else d)-H) < 1e-12):
+                continue
+            X, R = a+(z+1)*(b-a)/2, np.full_like(z, H)
+            ids, p, _, _ = space.rows(e, X, R)
+            np.add.at(expected, ids, p.T@(w*(b-a)/2*(.17+.03*X)*(1 if side == 0 else -1)))
+        near(raw["shared_loads"][side], expected, "physical_common_flux_load_"+str(side))
     near(raw["merged_shared_load"], np.zeros(raw["layout"][0]["global_coefficients"]), "opposite_common_flux_dual_loads")
     return {"pressure_rows": B.shape[0], "pressure_rank": rank,
             "pressure_singular_values": singular.tolist(), "interface_rows": C.shape[0],
