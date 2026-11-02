@@ -278,7 +278,7 @@ int main(int argc,char **argv)
             Require(mapping.kind==RANSWallNormalMap::Kind::Cylinder && mapping.heightSlopeX==0 && mapping.heightSlopeY==0 && mapping.heightAmplitude==0,
                     "partition invariant probe requires a constant-H cylinder");
             for(int a=0;a<d;++a)functions[a]=[Z,d,a](const Vec &q,double){
-                const double envelope=.02*q[0]*(1-q[0])*(d==3?q[1]*(1-q[1]):1.)*q[2]*(Z-q[2]);
+                const double envelope=.02*q[0]*(1-q[0])*(d==3?q[1]*(1-q[1]):1.)*q[2]*(Z-q[2])*(Z-q[2]);
                 return (a==0?1.:(a==d-1?-.3:.4))*envelope;};
             functions[d]=[K](const Vec&,double){return K;};
             functions[d+1]=[K,H](const Vec &q,double){return std::pow(K,1.5)/(2.55*H)+.01*(q[2]-H);};

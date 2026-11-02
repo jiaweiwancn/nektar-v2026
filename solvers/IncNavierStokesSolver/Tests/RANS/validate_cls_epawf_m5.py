@@ -96,7 +96,7 @@ def forcing(raw,state,point,fields=None,include_body=True):
     return P@value
 
 
-def residual_oracle(raw,normal_order=24,tangential_order=None):
+def residual_oracle(raw,normal_order=24,tangential_order=None,outer_order=None,verify=True):
     """Complete all-field conservative weak operator, including unmasked rows."""
     f=spaces(raw);d=raw['dimension'];off=raw['offsets'];mapping=raw['map_parameters']
     nu,H,rough,rK,rm,K0,qstar,kappa=raw['parameters']
@@ -104,6 +104,7 @@ def residual_oracle(raw,normal_order=24,tangential_order=None):
     axes=(0,2) if d==2 else (0,1,2);result=np.zeros(len(state));parts=np.zeros((2,len(state)))
     roughness=np.zeros(5);energy=np.zeros(9)
     tangential_order=tangential_order or raw.get('quadrature_orders',[12,16])[0]
+    outer_order=outer_order or raw.get('quadrature_orders',[12,16])[0]
     def add(region,block,ids,p,g,w,source,flux):
         np.add.at(parts[region],off[block]+ids,p.T@(w*source)+np.einsum('qai,qa,q->i',g,flux,w))
     def integrate(eid,points,w,inner,profile=None,force=None):
@@ -174,7 +175,7 @@ def residual_oracle(raw,normal_order=24,tangential_order=None):
                 w=wh*wn*(hi-lo)/2*metric['baseArea']*np.asarray(profile.jacobian(r),dtype=float)
                 integrate(eid,points,w,True,profile,FA)
     for e in f[d+3].elements:
-        points,w=f[d+3].quadrature(e,max(16,tangential_order))
+        points,w=f[d+3].quadrature(e,outer_order)
         integrate(e['geometry'],points,w,False)
     # Physical consistent mass, separate regional pressure means, one gauge.
     for b in range(d+2):
@@ -191,15 +192,21 @@ def residual_oracle(raw,normal_order=24,tangential_order=None):
     for b in range(d):energy[0]+=state[off[b]:off[b+1]]@result[off[b]:off[b+1]]
     energy[0]+=f[d].constant()@result[off[d]:off[d+1]]
     energy[6]=sum(energy[1:5]);energy[7]=energy[0]-energy[6]
+    block_errors=[]
     for b in range(d+4):
-        near(np.asarray(raw['raw_residual'])[off[b]:off[b+1]],result[off[b]:off[b+1]],'mapped_residual_block_'+str(b),tolerance=2e-10)
-    near(raw['raw_residual'][-1],result[-1],'mapped_pressure_gauge')
-    near(raw['roughness_budget'],roughness,'roughness_force_and_work',tolerance=2e-10)
-    near(raw['energy_budget'],energy,'resolved_plus_k_energy_budget',tolerance=2e-10)
-    require(abs(energy[7])<1e-10*max(1.,abs(energy[0])),'independent energy identity')
-    for sample in raw['forcing_samples']:
-        near(sample['force'],forcing(raw,state,sample['chart'],f),'rotating_frame_forcing',tolerance=1e-10)
-    return dict(dimension=d,maximum_error=max(errors.values(),default=0.),roughness_budget=roughness.tolist(),energy_budget=energy.tolist())
+        actual=np.asarray(raw['raw_residual'])[off[b]:off[b+1]];expected=result[off[b]:off[b+1]]
+        block_errors.append(float(np.max(np.abs(actual-expected),initial=0.)))
+        if verify:near(actual,expected,'mapped_residual_block_'+str(b),tolerance=2e-10)
+    if verify:
+        near(raw['raw_residual'][-1],result[-1],'mapped_pressure_gauge')
+        near(raw['roughness_budget'],roughness,'roughness_force_and_work',tolerance=2e-10)
+        near(raw['energy_budget'],energy,'resolved_plus_k_energy_budget',tolerance=2e-10)
+        require(abs(energy[7])<1e-10*max(1.,abs(energy[0])),'independent energy identity')
+        for sample in raw['forcing_samples']:
+            near(sample['force'],forcing(raw,state,sample['chart'],f),'rotating_frame_forcing',tolerance=1e-10)
+    return dict(dimension=d,maximum_block_absolute_errors=block_errors,roughness_budget=roughness.tolist(),energy_budget=energy.tolist(),
+                independent_quadrature_orders=[tangential_order,normal_order,outer_order],
+                comparison='same declared finite outer Gauss rule, independently reconstructed; higher-order inner quadrature')
 
 
 def dependent_epsilon(raw,state,chart,fields=None):
@@ -345,7 +352,7 @@ def stage_budgets(raw):
 def mms_error(raw,swirl=False,stationary=False):
     fields=spaces(raw);d=raw['dimension'];off=raw['offsets'];s=np.asarray(raw['state']);t=raw['time'];mp=raw['map_parameters']
     K0=raw['parameters'][5];K=K0 if stationary else K0*(1+math.sin(t)/50);A=K**1.5/2.55
-    H0=raw['parameters'][1];norms=np.zeros(d+4);volumes=np.zeros(d+4);normal=0.;strongdiv=0.;pressure_mean=0.
+    H0=raw['parameters'][1];norms=np.zeros(d+4);volumes=np.zeros(d+4);normal=0.;strongdiv=0.;normal_max=0.;divergence_max=0.;pressure_mean=0.
     for b in (d+2,d+3):
         for e in fields[b].elements:
             p,w=fields[b].quadrature(e,20);_,_,_,value,_=physical_rows(fields[b],s,off[b],p,e['geometry'])
@@ -355,6 +362,13 @@ def mms_error(raw,swirl=False,stationary=False):
     for b in range(d+4):
         for e in fields[b].elements:
             p,w=fields[b].quadrature(e,20);_,_,_,value,gradient=physical_rows(fields[b],s,off[b],p,e['geometry']);g=geometry(mp,p)
+            if b==0:
+                U=np.zeros((len(p),3));G=np.zeros((len(p),3,3))
+                for component,axis in enumerate((0,2) if d==2 else (0,1,2)):
+                    _,_,_,v,dv=physical_rows(fields[0],s,off[component],p,e['geometry']);U[:,axis]=v;G[:,axis]=dv
+                un=np.einsum('qa,qa->q',U,g['normal']);divergence=np.trace(G,axis1=1,axis2=2)
+                normal+=np.sum(w*un**2);strongdiv+=np.sum(w*divergence**2)
+                normal_max=max(normal_max,float(np.max(np.abs(un))));divergence_max=max(divergence_max,float(np.max(np.abs(divergence))))
             if b<d:
                 target=np.zeros(len(p))
                 if swirl and e['upper'][2]<=H0+1e-12:
@@ -365,7 +379,7 @@ def mms_error(raw,swirl=False,stationary=False):
             else:target=(0*p[:,0] if int(mp[0])==4 else .002*g['point'][:,2])+pressure_mean
             norms[b]+=np.sum(w*(value-target)**2);volumes[b]+=np.sum(w)
     norms=np.sqrt(norms/volumes)
-    return dict(field_rms=norms.tolist(),velocity_rms=float(np.linalg.norm(norms[:d])),k_rms=float(norms[d]),epsilon_rms=float(norms[d+1]),pressure_rms=float(np.linalg.norm(norms[d+2:])),pressure_gauge_offset=float(pressure_mean))
+    return dict(field_rms=norms.tolist(),velocity_rms=float(np.linalg.norm(norms[:d])),k_rms=float(norms[d]),epsilon_rms=float(norms[d+1]),pressure_rms=float(np.linalg.norm(norms[d+2:])),pressure_gauge_offset=float(pressure_mean),normal_velocity_rms=math.sqrt(normal/volumes[0]),normal_velocity_sample_max=normal_max,strong_divergence_rms=math.sqrt(strongdiv/volumes[0]),strong_divergence_sample_max=divergence_max)
 
 class Runner(FlatRunner):
     def curved(self,name,**kwargs):return self.evolution(name,generator=mapped_session,**kwargs)
@@ -390,6 +404,14 @@ def qualify(run,sections):
         raw=run.wall('operator-'+family,family,dimension)
         independent=residual_oracle(raw)
         independent['interface']=interface_oracle(raw)
+        if family=='plane':
+            independent['higher_outer_order_diagnostic']=residual_oracle(raw,outer_order=16,verify=False)
+            gap=[];field=spaces(raw)[0];state=raw['lifted_state'];axes=(0,2) if dimension==2 else (0,1,2)
+            for e in spaces(raw)[dimension+3].elements:
+                points,w=field.quadrature(field.by_id[e['geometry']],20);G=np.zeros((len(points),3,3))
+                for b,axis in enumerate(axes):G[:,axis]=physical_rows(field,state,raw['offsets'][b],points,e['geometry'])[4]
+                gap.extend(np.einsum('qab,qba->q',G,G))
+            independent['invariant_max_switch']=dict(trace_G_squared_range=[float(min(gap)),float(max(gap))],sign_change=min(gap)<0<max(gap))
         for mass in raw['physical_masses']:
             near(mass['values'],spaces(raw)[mass['block']].mass(),'independent_physical_mass',tolerance=1e-10)
         path=run.output/('operator-'+family)/'probe.json'
@@ -453,7 +475,14 @@ def qualify(run,sections):
         # genuine piecewise geometry, including its curvature jump.
         require(records[-1]['error']['epsilon_rms']<records[0]['error']['epsilon_rms']*.6,'outer epsilon p refinement did not converge: '+family)
         require(records[-1]['error']['velocity_rms']<1e-3,'manufactured velocity error too large: '+family)
+        if family!='feet':
+            require(records[-1]['error']['pressure_rms']<max(records[0]['error']['pressure_rms']*.8,1e-7),'normal-momentum pressure p refinement failed: '+family)
+            require(records[-1]['error']['strong_divergence_rms']<max(records[0]['error']['strong_divergence_rms']*.8,1e-8),'strong-divergence p diagnostic failed to improve: '+family)
         sections['manufactured'].append(dict(family=family,dimension=dimension,swirl=swirl,sequence=records))
+    quad=run.curved('variable-mms-quadrature',family='variable',degree=5,steps=1,order=2,dt=.005,stationary=True,quadrature=16)
+    stage_budgets(quad)
+    qerror=native_history_difference(curved_cases['variable'],quad,'smooth_mms_quadrature_12_to_16',tolerance=1e-8)
+    sections['smooth_quadrature_refinement']=dict(outer_orders=[12,16],maximum_scaled_physical_state_and_history_change=qerror)
     # Actual stage solver, ownership and history comparisons at one identical
     # discretization. These compare full coupled state and native IMEX history.
     options=dict(family='variable',dimension=2,degree=4,steps=3,order=2,dt=.02,quadrature=12)

@@ -171,6 +171,7 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
     {
         (void)dump;m_state=m_neutral?m_patch->NeutralReference(m_ustar,m_direction):m_patch->Project(Functions("InitialConditions"),m_time);
         if(m_neutral)m_data.fixedBoundary=m_patch->FixedReferenceBoundary(m_state);
+        else if(m_patch->Mapped())m_state=m_patch->Lift(m_state,m_time,m_data);
         m_patch->SetReference(m_state,m_data,m_time,m_eta);m_initial=m_state;
         m_rawNorms=m_patch->Norms(m_patch->Residual(m_state,m_state,0,m_time,m_data,false),m_patch->Constraints(m_state,m_time,m_data),m_ustar);
         m_correctedNorms=m_patch->Norms(m_patch->Residual(m_state,m_state,0,m_time,m_data),m_patch->Constraints(m_state,m_time,m_data),m_ustar);

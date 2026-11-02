@@ -688,7 +688,8 @@ void RANSWallEvolutionPatch::SetReference(const Vector &ref,const RANSWallEvolut
 {
     Require(eta==0 || eta==1,"only fixed global eta=0 or eta=1 is supported");
     const auto raw=Residual(ref,ref,0,time,data,false);const auto norms=Norms(raw,Constraints(ref,time,data));
-    if(!Mapped() || eta!=0)for(int b=InnerPressure();b<norms.size();++b)Require(norms[b]<1e-9,"reference violates an algebraic constraint");
+    for(int b=InnerPressure();b<norms.size();++b)
+        if(!(Mapped() && eta==0 && b<Gauge()))Require(norms[b]<1e-9,"reference violates an algebraic constraint");
     m_reference=ref;m_referenceLoads=Residual(ref,ref,0,time,data,false,false);m_defect=m_referenceLoads;
     m_referenceConstraints=Constraints(ref,time,data);
     for(int i=DifferentialSize();i<Size();++i)m_defect[i]=0;
