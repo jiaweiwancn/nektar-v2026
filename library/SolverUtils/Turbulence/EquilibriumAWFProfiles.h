@@ -50,6 +50,9 @@ struct AWFProfileOptions
     double requestedWeight = 1, minimumReynolds = 100;
     int quadratureOrder = 16;
     AWFFailurePolicy failurePolicy = AWFFailurePolicy::RequirePreservation;
+    // Additional physical mesh interfaces: the cutoff and every source load
+    // must integrate over these same panels when the wall spans elements.
+    std::vector<double> physicalBreakpoints;
 };
 
 struct AWFProfileQuadraturePoint

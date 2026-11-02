@@ -162,9 +162,9 @@ std::vector<RANSWallPoint> RANSWallNativeField::Quadrature(int order) const
     }
     return result;
 }
-DenseMatrix RANSWallNativeField::Mass() const
+RANSWallAlgebra::DenseMatrix RANSWallNativeField::Mass() const
 {
-    DenseMatrix result(Size(),Vector(Size()));
+    RANSWallAlgebra::DenseMatrix result(Size(),Vector(Size()));
     for (const auto &q : Quadrature())
         for (int i=0;i<q.ids.size();++i) for(int j=0;j<q.ids.size();++j)
             result[q.ids[i]][q.ids[j]] += q.weight*q.phi[i]*q.phi[j];

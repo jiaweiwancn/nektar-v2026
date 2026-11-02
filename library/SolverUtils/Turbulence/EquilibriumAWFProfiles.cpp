@@ -115,6 +115,12 @@ EquilibriumAWFProfiles::EquilibriumAWFProfiles(const AWFProfileGeometry &geometr
     if (options.failurePolicy != AWFFailurePolicy::UseOriginal &&
         options.failurePolicy != AWFFailurePolicy::RequirePreservation)
         throw std::invalid_argument("Unknown EP-AWF failure policy");
+    for (double r : options.physicalBreakpoints)
+    {
+        Finite(r);
+        if (!(r >= 0 && r <= geometry.height))
+            throw std::invalid_argument("EP-AWF physical breakpoint outside wall layer");
+    }
     GaussRule();
     auto &ref = m_reference;
     ref.requestedWeight = options.requestedWeight;
@@ -258,6 +264,8 @@ std::vector<AWFProfileQuadraturePoint> EquilibriumAWFProfiles::MakeQuadrature(
     CheckHeight(upper);
     if (upper == 0) return {};
     std::vector<double> breaks{0, upper};
+    for (double r : m_options.physicalBreakpoints)
+        if (r > 0 && r < upper) breaks.push_back(r);
     for (double r : {m_geometry.roughness, m_original.ViscosityInterceptHeight(),
                      m_original.DissipationCutoff(), m_geometry.tailStart, cutoff})
         if (r > 0 && r < upper) breaks.push_back(r);
