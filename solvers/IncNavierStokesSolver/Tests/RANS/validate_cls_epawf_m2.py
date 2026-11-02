@@ -330,6 +330,22 @@ def controls(raw):
         expected = spatial*gate(sensor*sensor, .02**2, .1**2)*(1-gate(margin, .05, .1))*(1-gate(reynolds, 100, 200))
         near(actual, expected, "independent_C2_gate", 1, 1e-13)
     require(raw["cancelled_forcing_weight"] == 0, "Independent forcing sensors cancelled")
+    range_control = raw["range_controls"]
+    extreme = copy.deepcopy(raw["cases"][0])
+    extreme["chi"] = 1
+    extreme["geometry"][0] = range_control["subnormal_nu"]
+    extreme["geometry"][2] = 0
+    p = Profiles(extreme)
+    near(range_control["cutoff"], p.rc, "representable_subnormal_cutoff", float(p.rc))
+    near(range_control["cap"], p.A/p.rc, "representable_subnormal_cap", float(p.A/p.rc))
+    near(range_control["production_budget"], p.Pj, "subnormal_production_budget", float(p.Pj))
+    near(range_control["budget_residual"], 0, "subnormal_metric_budget", float(p.Pj))
+    require(0 < range_control["cutoff"] < sys.float_info.min, "No subnormal-range control")
+    extreme["geometry"][0] = range_control["overflow_nu"]
+    overflowing = Profiles(extreme)
+    require(overflowing.A/overflowing.rc > sys.float_info.max, "Overflow control is representable")
+    require(range_control["overflow_weight"] == 0 and range_control["overflow_reason"] == 4,
+            "Unrepresentable cap did not explicitly fall back")
     c = raw["positivity_counterexample"]
     require(c["sampled_k"] > 0 and c["r0"] != c["rK"], "No distinct positive K sampler")
     require([c[k] for k in ("analytic_value", "analytic_first", "analytic_second", "wall_derivative")] == [0, 0, 0, 0],
@@ -345,6 +361,7 @@ def controls(raw):
     require(c["rhs"] < 0 and c["local_euler_value"] < 0 and not c["full_timestep"],
             "Expected local positivity failure was hidden or overclaimed")
     return {"native_rejected_inputs": raw["summary"]["rejected_inputs"],
+            "floating_point_range": range_control,
             "inactive_cutoff_iterations": raw["fallbacks"][2],
             "cancelling_pressure_convection_weight": raw["cancelled_forcing_weight"],
             "physical_inner_k_positivity_gate": "failed_as_specified",

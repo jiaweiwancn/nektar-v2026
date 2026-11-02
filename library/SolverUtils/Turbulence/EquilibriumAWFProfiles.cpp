@@ -147,7 +147,20 @@ EquilibriumAWFProfiles::EquilibriumAWFProfiles(const AWFProfileGeometry &geometr
           {
             // A bracket in log(r_c) preserves strictly positive trial cutoffs.
             const double upper = std::log(geometry.tailStart);
-            const double lowerLimit = std::log(std::numeric_limits<double>::min());
+            // Subnormal cutoffs can be valid. Bound the search by a
+            // representable positive cutoff AND finite A/r_c, rather than
+            // the smallest normal number. Correct log/exp rounding upward
+            // at this numerical range boundary before evaluating a trial.
+            const long double maximum = std::numeric_limits<double>::max();
+            double smallest = Cast(std::max(
+                static_cast<long double>(std::numeric_limits<double>::denorm_min()),
+                static_cast<long double>(ref.numerator)/maximum));
+            if (static_cast<long double>(ref.numerator)/smallest > maximum)
+                smallest = std::nextafter(smallest, std::numeric_limits<double>::infinity());
+            double lowerLimit = std::log(smallest);
+            while (std::exp(lowerLimit) == 0 ||
+                   static_cast<long double>(ref.numerator)/std::exp(lowerLimit) > maximum)
+                lowerLimit = std::nextafter(lowerLimit, std::numeric_limits<double>::infinity());
             double low = upper, high = upper, span = 1;
             double residual = BudgetDifference(std::exp(low));
             while (residual < 0 && low > lowerLimit)

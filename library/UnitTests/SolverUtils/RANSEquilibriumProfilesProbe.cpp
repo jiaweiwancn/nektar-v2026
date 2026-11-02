@@ -11,6 +11,7 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <limits>
 #include <stdexcept>
 
 using namespace Nektar;
@@ -254,6 +255,26 @@ void Controls(std::ostream &out, double k)
           "Cancelling pressure and convection hid departures");
     out << "],\"cancelled_forcing_weight\":"
         << EquilibriumAWFProfileWeight(1, cancelled, 1, 1000);
+    // A representable subnormal cutoff must remain active. A smaller
+    // molecular viscosity requires an overflowing cap and must fail openly.
+    auto extreme = base; extreme.roughness = 0; extreme.molecularNu = 1e-289;
+    EquilibriumAWFProfiles subnormal(extreme, k, model);
+    const auto &sub = subnormal.Reference();
+    Check(sub.cutoff > 0 && sub.cutoff < std::numeric_limits<double>::min() &&
+          sub.weight == 1 && std::isfinite(subnormal.Dissipation(0)),
+          "Representable subnormal cutoff rejected");
+    Near(sub.budgetResidual, 0, sub.productionBudget);
+    extreme.molecularNu = 1e-290;
+    Reject([&] { EquilibriumAWFProfiles overflow(extreme, k, model); });
+    EquilibriumAWFProfiles overflow(extreme, k, model, {}, fallback);
+    Check(overflow.Reference().weight == 0 &&
+          overflow.Reference().reason == AWFFallbackReason::UnrepresentableCutoff,
+          "Overflowing cap was hidden or cutoff clipped");
+    out << ",\"range_controls\":{\"subnormal_nu\":1e-289,\"cutoff\":" << sub.cutoff
+        << ",\"cap\":" << subnormal.Dissipation(0) << ",\"production_budget\":" << sub.productionBudget
+        << ",\"budget_residual\":" << sub.budgetResidual
+        << ",\"overflow_nu\":1e-290,\"overflow_weight\":" << overflow.Reference().weight
+        << ",\"overflow_reason\":" << static_cast<int>(overflow.Reference().reason) << '}';
     // A degree-five nonnegative polynomial with k'(0)=0 and a quartic zero
     // at r0 in the viscous sublayer, away from the physical K sample.
     auto g = base; g.roughness = 0;
