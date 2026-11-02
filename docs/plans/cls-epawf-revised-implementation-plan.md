@@ -1,6 +1,6 @@
 **CLS and EP-AWF revised formulation implementation and validation plan**
 
-Status: Approved by the user on 2 November 2026; M1 closed.
+Status: Approved by the user on 2 November 2026; M1 closed, M0 audit in progress.
 Implementation branch: codex/cls-epawf-revised, based on
 6415398d856323c3116e646eaf7c882c66617602.
 
@@ -24,6 +24,11 @@ The [M1 closure report](/Users/jay/Documents/nektar-v2026/docs/plans/cls-epawf-r
 records the exact tested revision, independent errors, documented negative
 constitutive directions and passing 17-test Linux suite. M2 and later
 implementation milestones remain open.
+
+The [M0 contract and baseline record](/Users/jay/Documents/nektar-v2026/docs/plans/cls-epawf-revised-m0.md)
+and [contract v1](/Users/jay/Documents/nektar-v2026/docs/plans/cls-epawf-revised-contract-v1.json)
+freeze the model/discretization choices and map all revised-note equations
+to implementation and verification ownership.
 
 The revised note retains two demonstrated limitations: adverse incremental
 momentum diffusion and failure of general inner-k positivity. A faithful

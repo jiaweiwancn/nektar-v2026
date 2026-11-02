@@ -1,0 +1,1337 @@
+{
+  "schema": 1,
+  "contract_id": "cls-epawf-revised-highre-original-v1",
+  "approval_date": "2026-11-02",
+  "implementation_branch": "codex/cls-epawf-revised",
+  "base_commit": "6415398d856323c3116e646eaf7c882c66617602",
+  "note": {
+    "path": "docs/literature/cls_neutral_abl_equilibrium_awf_note_revised.tex",
+    "sha256": "d35e437c2f2f8b25a46f7a3f285c6f1ad8b48d7b554aa1d161315f59eeb6de0f"
+  },
+  "comparison_note": {
+    "path": "docs/literature/cls_neutral_abl_equilibrium_awf_note.tex",
+    "sha256": "8b7f67035e553318a2b0896c9e31dd74d94bf0cc4864013ea209a48eddf98819",
+    "bytes": 266864,
+    "authority": "comparison_only_mac_source_not_part_of_linux_solver"
+  },
+  "reference_branches": [
+    {
+      "branch": "codex/neutral-abl-rans-awf",
+      "commit": "cba0df5d985ad863d438c48dd2e094769874e1b6"
+    },
+    {
+      "branch": "codex/hill-wall-geometry-transition",
+      "commit": "c48d9fb14afeca6caa80cf5b3f8ce0a34a02d2d7"
+    },
+    {
+      "branch": "codex/cao-tamura-calibrated-validation",
+      "commit": "6415398d856323c3116e646eaf7c882c66617602"
+    }
+  ],
+  "framework": {
+    "actual_version": "5.9.0",
+    "note_interface_documentation_version": "5.10.0",
+    "compatibility_gate": "M3 native field creation and assembly; no assumed 5.10 API availability",
+    "baseline_solver": "RANSVelocityCorrectionScheme",
+    "target_solver": {
+      "name": "RANSEquilibriumWallSystem",
+      "availability": "planned"
+    }
+  },
+  "model": {
+    "name": "CLSHighRe_original",
+    "tensor_convention": "G_ij=dU_i/dx_j; S=G+G^T; Omega=G-G^T; no half factor; physical x,y,z",
+    "cubic_coefficients": [
+      -0.1,
+      0.1,
+      0.26,
+      "-10*C(q)^2",
+      0,
+      "-5*C(q)^2",
+      "5*C(q)^2"
+    ],
+    "invariant": "q=max((k/epsilon)*sqrt(S:S/2),(k/epsilon)*sqrt(Omega:Omega/2))",
+    "Cq": "0.3/(1+0.35*q^(3/2))*(1-exp(-0.36*exp(0.75*q)))",
+    "transport": {
+      "sigma_k": 1,
+      "sigma_epsilon": 1.3,
+      "C_epsilon1": 1.44,
+      "C_epsilon2": 1.92,
+      "yap_coefficient": 0.83,
+      "yap_length": 2.5
+    },
+    "outer_molecular_diffusion": false,
+    "outer_low_re_damping": false,
+    "outer_low_re_E": false,
+    "outer_dissipation_split": false,
+    "outer_epsilon_convention": "total epsilon identified with eps_tilde in the declared high-Re approximation",
+    "production": "-R:G using the same complete stress as momentum and traction; retain actual discrete divergence contribution",
+    "constitutive_retuning": false,
+    "production_clipping": false,
+    "turbulence_floors": false,
+    "awf": {
+      "Cmu_w": 0.09,
+      "C_length_w": 2.55,
+      "smooth_intercept": 10.7,
+      "alpha": 0.2295,
+      "epsilon_cutoff_star": 5.1,
+      "physical_molecular_viscosity_retained": true,
+      "negative_virtual_intercept_retained": true
+    }
+  },
+  "fields": {
+    "physical_axes": ["x", "y", "z"],
+    "two_dimensional_aliases": "mesh (x,y) and solver (u,v) represent physical (x,z) and (U,W); retain all three modeled stress components",
+    "outer": [
+      "velocity",
+      "pressure",
+      "epsilon"
+    ],
+    "full_domain": [
+      "k"
+    ],
+    "inner_stage": [
+      "velocity",
+      "pressure"
+    ],
+    "inner_epsilon": "dependent E_EP only; no independent PDE row",
+    "inner_k": "transported polynomial field",
+    "shared_traces": [
+      "velocity",
+      "k"
+    ],
+    "pressure_continuous_across_model_interface": false,
+    "condensation": "retain full inner momentum storage and histories; eliminate only after uncondensed residual verification; retain relative pressure modes"
+  },
+  "pressure": {
+    "variable": "pi=p_mechanical/rho+2*k/3",
+    "units": "kinematic m^2/s^2",
+    "flat_reference_mechanical_jump": "(p_w-p_o)/rho=-11*K0/75",
+    "closed_domain_gauge": "one zero volume mean for pi across both regions with physical volume measures",
+    "open_traction_domain_gauge": "pressure level fixed by physical traction; do not impose a second mean condition",
+    "body_force": "use mechanical pressure and body force consistently in the one-sided outer sampler; hydrostatic contributions cancel"
+  },
+  "discretization": {
+    "velocity_degree": 4,
+    "k_degree": 4,
+    "outer_epsilon_degree": 4,
+    "pressure_degree": 2,
+    "basis": "Modified_A",
+    "velocity_scalar_NUMMODES": 5,
+    "pressure_NUMMODES": 3,
+    "standard_points": "GaussLobattoLegendre",
+    "standard_points_per_direction": 8,
+    "subdomains": "matching interface meshes first; separate CG subdomain spaces with common velocity/k traces",
+    "pressure_pairing_gate": "M3 nullspace, interface constraint rank and manufactured convergence; p/p-2 is a starting choice",
+    "reference_projection": "constrained physical L2 projection preserving constant k, matching velocity, dependent epsilon trace and all algebraic constraints",
+    "weak_load": "B_Q^T*W_J*s_Q; coefficient conversion requires the constrained mass solve",
+    "wall_quadrature": {
+      "rule": "positive split GaussLegendre",
+      "initial_points_per_panel": 16,
+      "refinement_points_per_panel": 32,
+      "breakpoints": [
+        "h",
+        "z_v if positive",
+        "z_epsilon_A",
+        "r_c"
+      ],
+      "geometric_subdivision": "resolve the molecular-to-turbulent length nu/(alpha*sqrt(K)) and reciprocal/log tails",
+      "cutoff_budget": "use the same positive metric quadrature for discrete cutoff and redistribution; verify independently"
+    },
+    "filters": false,
+    "SVV": false,
+    "gradient_trace_projection": false
+  },
+  "reference_fixture": {
+    "purpose": "illustrative neutral flat verification, not a calibrated or validated wall-patch session",
+    "nu": 0.000015,
+    "u_star": 0.4,
+    "H": 2,
+    "h": 0.1,
+    "r_K": 1,
+    "r_m": 1,
+    "r_a": 3,
+    "r_b": 4,
+    "Z": 30,
+    "L": 300,
+    "span": 20,
+    "incoming_direction": [
+      1,
+      0,
+      0
+    ],
+    "body_acceleration": [
+      0,
+      0,
+      0
+    ],
+    "k_sampler": "physical_point_evaluation",
+    "wall_domain": "0<r<H",
+    "outer_domain": "H<r<Z",
+    "flat_metric_J": 1,
+    "k0": "q_star*u_star^2",
+    "outer_epsilon": "u_star^3/(kappa_c*r)",
+    "outer_velocity": "t0*J0(H)+(u_star/kappa_c)*log(r/H)",
+    "matching_anchor": "t0=K/q_star; U_H0=t0*J0(H); aerodynamic z0 is output",
+    "parameters_fixed_under_refinement": [
+      "H",
+      "h",
+      "r_K",
+      "r_m",
+      "r_a",
+      "r_b",
+      "transition endpoints"
+    ]
+  },
+  "wall_operator": {
+    "epsilon": "E_EP=(1-chi)*E_A+chi*E_c",
+    "counterfactual_production": "p_A0=nu_t_A*(t0/D_A)^2 at ZERO forcing and current sampled K",
+    "source": "S_k=P_A-(1-chi)*E_A-chi*p_A0",
+    "assembly_form": "simplified_net_source_once",
+    "redistribution": "C_k=chi*(E_c-p_A0); metric integral zero and zero endpoint fluxes",
+    "inner_k_diffusivity": "nu+nu_t_A/sigma_k",
+    "outer_k_diffusivity": "nu_t_CLS/sigma_k",
+    "outer_epsilon_diffusivity": "nu_t_CLS/sigma_epsilon",
+    "epsilon_interface": "one projected Dirichlet value E_EP(H); outer PDE determines flux; no extra prescribed epsilon flux",
+    "inner_stress": "T_w=-pi_w*I+(nu+nu_t_A)*S_w",
+    "inner_production": "P_A=-R_A:grad(U_w)=nu_t_A*S_w:S_w/2-(2*k/3)*div(U_w); isotropic stress uses local transported k, viscosity uses sampled K",
+    "roughness_force": "b+(1-1_{r>h})*F_A with note's one-sided conservative outer sampler",
+    "momentum_interface": "one complete traction and one shared conservative momentum flux, not wall shear alone",
+    "mass_interface": "m_H=J_H*(w_H-v_H dot grad_Gamma H), using actual matching normal and area",
+    "k_interface": "common trace and common advective/diffusive flux; opposite weighted loads",
+    "flat_traction": "T_H=t_A+F*(H-h); preserve signed t_A and explicit scalar-kernel forcing response"
+  },
+  "transition": {
+    "chi": "G_sp*G_adm*G_st",
+    "constant_along_normal_ray": true,
+    "spatial_mask": "physical C2 upstream fade ending on exactly flat terrain before hill; zero through hill/wake/outlet; no reactivation",
+    "sensor_reference": "same evaluated stored projected inlet reference, with reference pressure/convection evaluated by actual operators",
+    "state_sensor_weights": {
+      "U": 1,
+      "DeltaU": 1,
+      "Normal": 1,
+      "K": 1,
+      "Epsilon": 1,
+      "Pressure": 1,
+      "Convection": 1
+    },
+    "illustrative_thresholds": {
+      "d_on": 0.02,
+      "d_off": 0.1,
+      "m_off": 0.05,
+      "m_on": 0.1,
+      "R_off": 100,
+      "R_on": 200,
+      "qualification": "starter diagnostic choices; no universal calibration"
+    },
+    "trace_support": "baseline projection plus equilibrium-correction projection zero on baseline faces; preserve reference and provide transition buffer",
+    "full_derivatives": "include K, cutoff, chi, trace lifting, pressure, conservative transfer and condensation; include (E_c-E_A)*grad chi",
+    "terrain_case_required_inputs": [
+      "physical mask coordinate",
+      "ordered upstream-flat endpoints",
+      "trace support buffer",
+      "geometry certificate"
+    ]
+  },
+  "admissibility": {
+    "positive_fields": [
+      "outer k",
+      "outer epsilon",
+      "sampled K"
+    ],
+    "physical_parameters": "nu>0, H>0, 0<=h<H, 0<r_K,r_m<=H, r_a,r_b>H",
+    "normal_geometry": "all 1+r*kappa_i>=a_min>0, J>0, global normal-map injectivity, valid actual element and interface geometry",
+    "initial_a_min": 0.1,
+    "correction": "P_J>=B_J with cutoff r_c<=r_m; smooth positive margins and high-Re gates",
+    "inactive_correction": "evaluate adapted baseline directly without solving an inadmissible cutoff",
+    "invalid_baseline": "reject and report invalid state; chi=0 cannot repair nonpositive turbulence or folded geometry",
+    "cutoff_clipping": false,
+    "positivity_claim": "checks cover actual evaluation sets; no general inner-k nonnegative-cone invariance; no everywhere-polynomial bound is assumed"
+  },
+  "time": {
+    "family": "native IMEX, empty variant, constant step",
+    "orders": [
+      1,
+      2
+    ],
+    "startup": "native order-1 startup before order 2",
+    "tableau_source": "library/LibUtilities/TimeIntegration/IMEXTimeIntegrationSchemes.h",
+    "implicit_partition": [
+      "state-dependent conservative advection",
+      "stress and scalar diffusion",
+      "turbulence reactions",
+      "roughness force and wall samplers",
+      "common fluxes, pressure constraints and patch solve"
+    ],
+    "explicit_partition": [
+      "prescribed state-independent body forcing"
+    ],
+    "reference_dt": 0.05,
+    "history": "full inner/outer state and native explicit derivative histories, stage times, pressure/gauge and interface state; multiregion schema required",
+    "nonlinear_solution": "converge the physical coupled residual using admissible trial states and a declared one-sided/semismooth tangent; solver splits do not alter the model",
+    "reference_gate": "all constrained residual blocks and complete stationary timestep separately verified in M4"
+  },
+  "anchor": {
+    "default_eta": 0,
+    "terrain_eta": 0,
+    "flat_verification_eta": 1,
+    "allowed_scope": "fixed global scalar and stored target, free differential loads only; separate stage derivation and budget accounting",
+    "modifies_algebraic_constraints": false,
+    "spatial_eta_allowed": false,
+    "reset_solution": false
+  },
+  "norms": {
+    "time_scale": "H/u_star",
+    "field_scales": {
+      "velocity": "u_star",
+      "k": "K0",
+      "epsilon": "u_star^3/(kappa_c*H)",
+      "pressure": "u_star^2"
+    },
+    "state": "physical mass norm / (field_scale*sqrt(domain volume))",
+    "differential_residual": "sqrt(r_free^T*M_free^-1*r_free) / (field_scale/time_scale*sqrt(domain volume)); separately audit removed rows",
+    "divergence": "dual mass norm / (u_star/H*sqrt(volume))",
+    "interface": "physical surface norm / (matching physical field or flux scale*sqrt(area))",
+    "reference_residual_and_time_map_tolerance": 1e-9,
+    "coupled_constraint_tolerance": 1e-9,
+    "isolated_interface_identity_tolerance": 1e-10
+  },
+  "known_limits": {
+    "constitutive_stability": "failed_as_specified; M1 verifies original negative principal diffusion",
+    "inner_k_positivity": "not generally invariant; native counterexample belongs to M2",
+    "robust_terrain_qualification": "conditional M8, requires a separately identified approved remedy; removed supplement is not selected"
+  },
+  "baseline": {
+    "receipt": "docs/plans/cls-epawf-revised-evidence/m1/baseline-receipt.json",
+    "expected_tests": 16,
+    "linux_source": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/baseline-source",
+    "linux_build": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/baseline-build",
+    "linux_logs": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/baseline",
+    "reuse_reason": "exact base build and suite already passed during M1; M0 adds source/environment/contract provenance, not new numerical behavior"
+  },
+  "resources": {
+    "linux_worker_cap": 72,
+    "recorded_compiler_workers": 16,
+    "recorded_test_concurrency": 1,
+    "recorded_mpi_ranks": 1,
+    "OMP_NUM_THREADS": 1,
+    "OPENBLAS_NUM_THREADS": 1,
+    "MKL_NUM_THREADS": 1,
+    "BLIS_NUM_THREADS": 1
+  },
+  "components": {
+    "closure": {
+      "availability": "existing",
+      "paths": [
+        "library/SolverUtils/Turbulence/RANSModels.h",
+        "library/SolverUtils/Turbulence/RANSModels.cpp"
+      ]
+    },
+    "scalar_awf": {
+      "availability": "existing",
+      "paths": [
+        "library/SolverUtils/Turbulence/AnalyticalWallFunction.h",
+        "library/SolverUtils/Turbulence/AnalyticalWallFunction.cpp"
+      ]
+    },
+    "profiles": {
+      "availability": "planned",
+      "paths": [
+        "library/SolverUtils/Turbulence/EquilibriumAWFProfiles.h",
+        "library/SolverUtils/Turbulence/EquilibriumAWFProfiles.cpp"
+      ]
+    },
+    "geometry": {
+      "availability": "planned",
+      "paths": [
+        "library/SolverUtils/Turbulence/RANSNormalTubeGeometry.h",
+        "library/SolverUtils/Turbulence/RANSNormalTubeGeometry.cpp"
+      ]
+    },
+    "system": {
+      "availability": "planned",
+      "paths": [
+        "solvers/IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallSystem.h",
+        "solvers/IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallSystem.cpp"
+      ]
+    },
+    "layout": {
+      "availability": "planned",
+      "paths": [
+        "solvers/IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.h"
+      ]
+    },
+    "patch": {
+      "availability": "planned",
+      "paths": [
+        "solvers/IncNavierStokesSolver/EquationSystems/RANSWallPatch.h",
+        "solvers/IncNavierStokesSolver/EquationSystems/RANSWallPatch.cpp"
+      ]
+    },
+    "interface": {
+      "availability": "planned",
+      "paths": [
+        "solvers/IncNavierStokesSolver/EquationSystems/RANSWallInterface.h",
+        "solvers/IncNavierStokesSolver/EquationSystems/RANSWallInterface.cpp"
+      ]
+    },
+    "reference": {
+      "availability": "planned",
+      "paths": [
+        "solvers/IncNavierStokesSolver/EquationSystems/RANSCompositeReference.h"
+      ]
+    },
+    "transition": {
+      "availability": "planned",
+      "paths": [
+        "library/SolverUtils/Turbulence/EquilibriumAWFTransition.h"
+      ]
+    },
+    "history": {
+      "availability": "planned",
+      "paths": [
+        "solvers/IncNavierStokesSolver/EquationSystems/RANSBlockHistory.h",
+        "solvers/IncNavierStokesSolver/EquationSystems/RANSBlockHistory.cpp"
+      ]
+    }
+  },
+  "verification": {
+    "M0.ContractSourcePins": {
+      "availability": "executable_contract_check",
+      "entry_point": "solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m0.py"
+    },
+    "RANSCLSEPAWFM1Oracle": {
+      "availability": "registered_linux_test",
+      "entry_point": "solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m1.py",
+      "evidence": "docs/plans/cls-epawf-revised-evidence/m1/verification.json"
+    },
+    "M3.outer_normal_pressure": {
+      "availability": "planned",
+      "milestone": "M3"
+    },
+    "M2.scalar_ep_provenance": {
+      "availability": "planned",
+      "milestone": "M2"
+    },
+    "M6.scalar_forcing_response": {
+      "availability": "planned",
+      "milestone": "M6"
+    },
+    "M3.compatible_outer_boundary": {
+      "availability": "planned",
+      "milestone": "M3"
+    },
+    "M4.assembled_equilibrium": {
+      "availability": "planned",
+      "milestone": "M4"
+    },
+    "M7.matching_height_dependence": {
+      "availability": "planned",
+      "milestone": "M7"
+    },
+    "M3.physical_domains_and_sampler": {
+      "availability": "planned",
+      "milestone": "M3"
+    },
+    "M3.strong_no_slip_comparison": {
+      "availability": "planned",
+      "milestone": "M3"
+    },
+    "M3.flat_analytical_momentum": {
+      "availability": "planned",
+      "milestone": "M3"
+    },
+    "M3.developing_flat_mass_pressure_forcing": {
+      "availability": "planned",
+      "milestone": "M3"
+    },
+    "M2.hp_source_and_moments": {
+      "availability": "planned",
+      "milestone": "M2"
+    },
+    "M3.retained_inner_k": {
+      "availability": "planned",
+      "milestone": "M3"
+    },
+    "M3.dependent_dissipation": {
+      "availability": "planned",
+      "milestone": "M3"
+    },
+    "M4.projected_composite_target": {
+      "availability": "planned",
+      "milestone": "M4"
+    },
+    "M2.physical_weak_load": {
+      "availability": "planned",
+      "milestone": "M2"
+    },
+    "M5.normal_geometry": {
+      "availability": "planned",
+      "milestone": "M5"
+    },
+    "M5.curved_continuity": {
+      "availability": "planned",
+      "milestone": "M5"
+    },
+    "M5.curved_momentum_and_roughness_force": {
+      "availability": "planned",
+      "milestone": "M5"
+    },
+    "M5.tangential_and_normal_momentum": {
+      "availability": "planned",
+      "milestone": "M5"
+    },
+    "M5.shared_momentum_and_pressure": {
+      "availability": "planned",
+      "milestone": "M5"
+    },
+    "M5.curved_scalar_transport": {
+      "availability": "planned",
+      "milestone": "M5"
+    },
+    "M2.metric_cutoff_and_redistribution": {
+      "availability": "planned",
+      "milestone": "M2"
+    },
+    "M5.shared_k_flux": {
+      "availability": "planned",
+      "milestone": "M5"
+    },
+    "M5.dissipation_constraint_reactions": {
+      "availability": "planned",
+      "milestone": "M5"
+    },
+    "M5.discrete_metric_identity": {
+      "availability": "planned",
+      "milestone": "M5"
+    },
+    "M6.transition_and_adapted_baseline": {
+      "availability": "planned",
+      "milestone": "M6"
+    },
+    "M2.dual_source_loads": {
+      "availability": "planned",
+      "milestone": "M2"
+    },
+    "M4.constrained_discrete_anchor": {
+      "availability": "planned",
+      "milestone": "M4"
+    },
+    "M4.stationary_time_map": {
+      "availability": "planned",
+      "milestone": "M4"
+    },
+    "M3.reference_normal_traction_example": {
+      "availability": "planned",
+      "milestone": "M3"
+    },
+    "M2.sampled_k_positivity_failure": {
+      "availability": "planned",
+      "milestone": "M2"
+    },
+    "M7.full_energy_accounting": {
+      "availability": "planned",
+      "milestone": "M7"
+    },
+    "M5.curved_manufactured_examples": {
+      "availability": "planned",
+      "milestone": "M5"
+    }
+  },
+  "equation_matrix": [
+    {
+      "id": "notation",
+      "equations": [
+        "eq:coordinates",
+        "eq:epssplit",
+        "eq:reference-notation",
+        "eq:parallel"
+      ],
+      "component": "reference",
+      "status": "reference_only",
+      "delivery_milestone": "M0",
+      "verification_ids": [
+        "M0.ContractSourcePins"
+      ]
+    },
+    {
+      "id": "cls_tensor",
+      "equations": [
+        "eq:SO",
+        "eq:cubic",
+        "eq:coeffs",
+        "eq:invariants",
+        "eq:C"
+      ],
+      "component": "closure",
+      "status": "kernel_verified",
+      "delivery_milestone": "M1",
+      "verification_ids": [
+        "RANSCLSEPAWFM1Oracle"
+      ]
+    },
+    {
+      "id": "low_re_damping",
+      "equations": [
+        "eq:damping"
+      ],
+      "component": "reference",
+      "status": "excluded_finite_re",
+      "delivery_milestone": "M0",
+      "verification_ids": [
+        "M0.ContractSourcePins"
+      ]
+    },
+    {
+      "id": "cls_transport_high_re_limit",
+      "equations": [
+        "eq:kfull",
+        "eq:efull",
+        "eq:production-definition"
+      ],
+      "component": "closure",
+      "status": "kernel_verified_high_re_limit",
+      "delivery_milestone": "M1",
+      "verification_ids": [
+        "RANSCLSEPAWFM1Oracle"
+      ]
+    },
+    {
+      "id": "low_re_extra_source",
+      "equations": [
+        "eq:E"
+      ],
+      "component": "reference",
+      "status": "excluded_finite_re",
+      "delivery_milestone": "M0",
+      "verification_ids": [
+        "M0.ContractSourcePins"
+      ]
+    },
+    {
+      "id": "yap",
+      "equations": [
+        "eq:Yap"
+      ],
+      "component": "closure",
+      "status": "kernel_verified",
+      "delivery_milestone": "M1",
+      "verification_ids": [
+        "RANSCLSEPAWFM1Oracle"
+      ]
+    },
+    {
+      "id": "neutral_reference",
+      "equations": [
+        "eq:shear-matrices",
+        "eq:qshear",
+        "eq:shearstress",
+        "eq:momentum",
+        "eq:constantstress",
+        "eq:localeq",
+        "eq:qroot",
+        "eq:qnumber",
+        "eq:epsref",
+        "eq:Gnutref",
+        "eq:rstar",
+        "eq:epsdiff",
+        "eq:kappaeq",
+        "eq:kappanum",
+        "eq:Yapnum",
+        "eq:reference",
+        "eq:Rref"
+      ],
+      "component": "closure",
+      "status": "kernel_verified",
+      "delivery_milestone": "M1",
+      "verification_ids": [
+        "RANSCLSEPAWFM1Oracle"
+      ]
+    },
+    {
+      "id": "outer_normal_pressure",
+      "equations": [
+        "eq:pressure"
+      ],
+      "component": "interface",
+      "status": "planned",
+      "delivery_milestone": "M3",
+      "verification_ids": [
+        "M3.outer_normal_pressure"
+      ]
+    },
+    {
+      "id": "most_comparison",
+      "equations": [
+        "eq:MOSTratio"
+      ],
+      "component": "reference",
+      "status": "reference_only",
+      "delivery_milestone": "M0",
+      "verification_ids": [
+        "M0.ContractSourcePins"
+      ]
+    },
+    {
+      "id": "scalar_awf",
+      "equations": [
+        "eq:DA",
+        "eq:AWFconstants",
+        "eq:awf_length_ansatz",
+        "eq:awf_dimensional_viscosity",
+        "eq:brough",
+        "eq:awf_cutoff_continuity",
+        "eq:F",
+        "eq:AWFode",
+        "eq:J01",
+        "eq:tA",
+        "eq:UA",
+        "eq:PA",
+        "eq:epsA",
+        "eq:epsAmean"
+      ],
+      "component": "scalar_awf",
+      "status": "kernel_verified",
+      "delivery_milestone": "M1",
+      "verification_ids": [
+        "RANSCLSEPAWFM1Oracle"
+      ]
+    },
+    {
+      "id": "fv_auxiliary_comparison",
+      "equations": [
+        "eq:twovelocities"
+      ],
+      "component": "reference",
+      "status": "legacy_reference_only",
+      "delivery_milestone": "M0",
+      "verification_ids": [
+        "M0.ContractSourcePins"
+      ]
+    },
+    {
+      "id": "matching_anchor",
+      "equations": [
+        "eq:anchor",
+        "eq:anchoredprofile"
+      ],
+      "component": "scalar_awf",
+      "status": "kernel_verified",
+      "delivery_milestone": "M1",
+      "verification_ids": [
+        "RANSCLSEPAWFM1Oracle"
+      ]
+    },
+    {
+      "id": "fv_interpolation_comparison",
+      "equations": [
+        "eq:discreteanchor",
+        "eq:CU"
+      ],
+      "component": "reference",
+      "status": "legacy_reference_only",
+      "delivery_milestone": "M0",
+      "verification_ids": [
+        "M0.ContractSourcePins"
+      ]
+    },
+    {
+      "id": "zero_forcing_budget",
+      "equations": [
+        "eq:P0",
+        "eq:J2",
+        "eq:kbudget",
+        "eq:clc"
+      ],
+      "component": "scalar_awf",
+      "status": "kernel_verified",
+      "delivery_milestone": "M1",
+      "verification_ids": [
+        "RANSCLSEPAWFM1Oracle"
+      ]
+    },
+    {
+      "id": "scalar_ep_provenance",
+      "equations": [
+        "eq:epsC",
+        "eq:epsCmean",
+        "eq:cutoff",
+        "eq:gate",
+        "eq:UPpositive",
+        "eq:blend",
+        "eq:meanblend",
+        "eq:pointblend"
+      ],
+      "component": "scalar_awf",
+      "status": "scalar_kernel_verified_hp_extension_planned",
+      "delivery_milestone": "M2",
+      "verification_ids": [
+        "M2.scalar_ep_provenance"
+      ]
+    },
+    {
+      "id": "reference_energy",
+      "equations": [
+        "eq:energy",
+        "eq:cutoffroughness"
+      ],
+      "component": "scalar_awf",
+      "status": "kernel_verified",
+      "delivery_milestone": "M1",
+      "verification_ids": [
+        "RANSCLSEPAWFM1Oracle"
+      ]
+    },
+    {
+      "id": "scalar_forcing_response",
+      "equations": [
+        "eq:retained",
+        "eq:pressureresponse",
+        "eq:Lj",
+        "eq:Ppoly",
+        "eq:Sblend",
+        "eq:Sderivative"
+      ],
+      "component": "scalar_awf",
+      "status": "kernel_verified_full_state_derivatives_planned",
+      "delivery_milestone": "M6",
+      "verification_ids": [
+        "M6.scalar_forcing_response"
+      ]
+    },
+    {
+      "id": "fv_switch_comparison",
+      "equations": [
+        "eq:switch",
+        "eq:sensors"
+      ],
+      "component": "reference",
+      "status": "legacy_reference_only",
+      "delivery_milestone": "M0",
+      "verification_ids": [
+        "M0.ContractSourcePins"
+      ]
+    },
+    {
+      "id": "compatible_outer_boundary",
+      "equations": [
+        "eq:topflux"
+      ],
+      "component": "system",
+      "status": "planned",
+      "delivery_milestone": "M3",
+      "verification_ids": [
+        "M3.compatible_outer_boundary"
+      ]
+    },
+    {
+      "id": "vector_awf",
+      "equations": [
+        "eq:3d"
+      ],
+      "component": "scalar_awf",
+      "status": "kernel_verified",
+      "delivery_milestone": "M1",
+      "verification_ids": [
+        "RANSCLSEPAWFM1Oracle"
+      ]
+    },
+    {
+      "id": "assembled_equilibrium",
+      "equations": [
+        "eq:discretecriterion"
+      ],
+      "component": "reference",
+      "status": "planned",
+      "delivery_milestone": "M4",
+      "verification_ids": [
+        "M4.assembled_equilibrium"
+      ]
+    },
+    {
+      "id": "matching_height_dependence",
+      "equations": [
+        "eq:z0mesh"
+      ],
+      "component": "reference",
+      "status": "reference_only",
+      "delivery_milestone": "M7",
+      "verification_ids": [
+        "M7.matching_height_dependence"
+      ]
+    },
+    {
+      "id": "physical_domains_and_sampler",
+      "equations": [
+        "eq:hp-domains",
+        "eq:hp-gate",
+        "eq:K-functional"
+      ],
+      "component": "layout",
+      "status": "planned",
+      "delivery_milestone": "M3",
+      "verification_ids": [
+        "M3.physical_domains_and_sampler"
+      ]
+    },
+    {
+      "id": "strong_no_slip_comparison",
+      "equations": [
+        "eq:dirichlet-traction-zero"
+      ],
+      "component": "patch",
+      "status": "planned",
+      "delivery_milestone": "M3",
+      "verification_ids": [
+        "M3.strong_no_slip_comparison"
+      ]
+    },
+    {
+      "id": "flat_analytical_momentum",
+      "equations": [
+        "eq:hp-wall-traction",
+        "eq:hp-reconstruction",
+        "eq:hp-interface-stress",
+        "eq:hp-traction-load",
+        "eq:hp-response"
+      ],
+      "component": "patch",
+      "status": "scalar_reduction_verified_patch_planned",
+      "delivery_milestone": "M3",
+      "verification_ids": [
+        "M3.flat_analytical_momentum"
+      ]
+    },
+    {
+      "id": "developing_flat_mass_pressure_forcing",
+      "equations": [
+        "eq:hp-transpiration",
+        "eq:hp-pressure-continuous",
+        "eq:hp-forcing-sampler"
+      ],
+      "component": "patch",
+      "status": "planned",
+      "delivery_milestone": "M3",
+      "verification_ids": [
+        "M3.developing_flat_mass_pressure_forcing"
+      ]
+    },
+    {
+      "id": "hp_source_and_moments",
+      "equations": [
+        "eq:pA0",
+        "eq:hp-mean-insufficient",
+        "eq:Ckhp",
+        "eq:Ck-zero-mean",
+        "eq:hp-ksource",
+        "eq:PA-local",
+        "eq:hp-allmode",
+        "eq:hp-red-flux",
+        "eq:hp-source-response"
+      ],
+      "component": "profiles",
+      "status": "planned",
+      "delivery_milestone": "M2",
+      "verification_ids": [
+        "M2.hp_source_and_moments"
+      ]
+    },
+    {
+      "id": "retained_inner_k",
+      "equations": [
+        "eq:hp-kdiff",
+        "eq:hp-kweak"
+      ],
+      "component": "layout",
+      "status": "planned",
+      "delivery_milestone": "M3",
+      "verification_ids": [
+        "M3.retained_inner_k"
+      ]
+    },
+    {
+      "id": "dependent_dissipation",
+      "equations": [
+        "eq:hp-epsilon-trace"
+      ],
+      "component": "interface",
+      "status": "planned",
+      "delivery_milestone": "M3",
+      "verification_ids": [
+        "M3.dependent_dissipation"
+      ]
+    },
+    {
+      "id": "finite_re_dissipation_conversion",
+      "equations": [
+        "eq:hp-epsilon-split"
+      ],
+      "component": "reference",
+      "status": "excluded_finite_re",
+      "delivery_milestone": "M0",
+      "verification_ids": [
+        "M0.ContractSourcePins"
+      ]
+    },
+    {
+      "id": "projected_composite_target",
+      "equations": [
+        "eq:composite-hp",
+        "eq:hp-reference-flux",
+        "eq:hp-discrete-target",
+        "eq:hp-sensor"
+      ],
+      "component": "reference",
+      "status": "planned",
+      "delivery_milestone": "M4",
+      "verification_ids": [
+        "M4.projected_composite_target"
+      ]
+    },
+    {
+      "id": "physical_weak_load",
+      "equations": [
+        "eq:hp-load"
+      ],
+      "component": "profiles",
+      "status": "planned",
+      "delivery_milestone": "M2",
+      "verification_ids": [
+        "M2.physical_weak_load"
+      ]
+    },
+    {
+      "id": "normal_geometry",
+      "equations": [
+        "eq:curve-map",
+        "eq:curve-grad",
+        "eq:curve-interface-geometry"
+      ],
+      "component": "geometry",
+      "status": "planned",
+      "delivery_milestone": "M5",
+      "verification_ids": [
+        "M5.normal_geometry"
+      ]
+    },
+    {
+      "id": "curved_continuity",
+      "equations": [
+        "eq:curve-continuity",
+        "eq:curve-w",
+        "eq:curve-massflux"
+      ],
+      "component": "interface",
+      "status": "planned",
+      "delivery_milestone": "M5",
+      "verification_ids": [
+        "M5.curved_continuity"
+      ]
+    },
+    {
+      "id": "curved_momentum_and_roughness_force",
+      "equations": [
+        "eq:curve-momentum",
+        "eq:curve-inner-stress",
+        "eq:curve-outer-stress",
+        "eq:curve-rough-force"
+      ],
+      "component": "patch",
+      "status": "planned",
+      "delivery_milestone": "M5",
+      "verification_ids": [
+        "M5.curved_momentum_and_roughness_force"
+      ]
+    },
+    {
+      "id": "tangential_and_normal_momentum",
+      "equations": [
+        "eq:curve-shear",
+        "eq:curve-tangent",
+        "eq:curve-normal-acceleration",
+        "eq:curve-normal",
+        "eq:curve-normal-general"
+      ],
+      "component": "patch",
+      "status": "planned",
+      "delivery_milestone": "M5",
+      "verification_ids": [
+        "M5.tangential_and_normal_momentum"
+      ]
+    },
+    {
+      "id": "shared_momentum_and_pressure",
+      "equations": [
+        "eq:curve-integrated-momentum",
+        "eq:curve-momentum-interface",
+        "eq:curve-momentum-weak",
+        "eq:curve-pressure-jump",
+        "eq:curve-reference-pressure-jump",
+        "eq:curve-pressure-step"
+      ],
+      "component": "interface",
+      "status": "planned",
+      "delivery_milestone": "M5",
+      "verification_ids": [
+        "M5.shared_momentum_and_pressure"
+      ]
+    },
+    {
+      "id": "curved_scalar_transport",
+      "equations": [
+        "eq:curve-scalar",
+        "eq:curve-ksource",
+        "eq:curve-outer-scalars"
+      ],
+      "component": "layout",
+      "status": "planned",
+      "delivery_milestone": "M5",
+      "verification_ids": [
+        "M5.curved_scalar_transport"
+      ]
+    },
+    {
+      "id": "metric_cutoff_and_redistribution",
+      "equations": [
+        "eq:metric-cutoff",
+        "eq:metric-gate",
+        "eq:curve-redistribution"
+      ],
+      "component": "profiles",
+      "status": "planned",
+      "delivery_milestone": "M2",
+      "verification_ids": [
+        "M2.metric_cutoff_and_redistribution"
+      ]
+    },
+    {
+      "id": "shared_k_flux",
+      "equations": [
+        "eq:curve-k-interface"
+      ],
+      "component": "interface",
+      "status": "planned",
+      "delivery_milestone": "M5",
+      "verification_ids": [
+        "M5.shared_k_flux"
+      ]
+    },
+    {
+      "id": "dissipation_constraint_reactions",
+      "equations": [
+        "eq:curve-epsilon-reaction"
+      ],
+      "component": "interface",
+      "status": "planned",
+      "delivery_milestone": "M5",
+      "verification_ids": [
+        "M5.dissipation_constraint_reactions"
+      ]
+    },
+    {
+      "id": "discrete_metric_identity",
+      "equations": [
+        "eq:curve-metric-identity"
+      ],
+      "component": "geometry",
+      "status": "planned",
+      "delivery_milestone": "M5",
+      "verification_ids": [
+        "M5.discrete_metric_identity"
+      ]
+    },
+    {
+      "id": "transition_and_adapted_baseline",
+      "equations": [
+        "eq:transition-polynomial",
+        "eq:transition-spatial",
+        "eq:transition-gate",
+        "eq:transition-sensors",
+        "eq:transition-state",
+        "eq:transition-admissibility",
+        "eq:transition-chi",
+        "eq:transition-conservation",
+        "eq:transition-full-budget",
+        "eq:transition-derivatives",
+        "eq:transition-eta-budget"
+      ],
+      "component": "transition",
+      "status": "planned",
+      "delivery_milestone": "M6",
+      "verification_ids": [
+        "M6.transition_and_adapted_baseline"
+      ]
+    },
+    {
+      "id": "dual_source_loads",
+      "equations": [
+        "eq:hp-load-matrix"
+      ],
+      "component": "profiles",
+      "status": "planned",
+      "delivery_milestone": "M2",
+      "verification_ids": [
+        "M2.dual_source_loads"
+      ]
+    },
+    {
+      "id": "scalar_robin_comparison",
+      "equations": [
+        "eq:nektar-robin-convention",
+        "eq:hp-robin-scalar"
+      ],
+      "component": "reference",
+      "status": "limited_comparison_only",
+      "delivery_milestone": "M0",
+      "verification_ids": [
+        "M0.ContractSourcePins"
+      ]
+    },
+    {
+      "id": "constrained_discrete_anchor",
+      "equations": [
+        "eq:hp-constraints",
+        "eq:hp-defect-correction"
+      ],
+      "component": "reference",
+      "status": "planned",
+      "delivery_milestone": "M4",
+      "verification_ids": [
+        "M4.constrained_discrete_anchor"
+      ]
+    },
+    {
+      "id": "stationary_time_map",
+      "equations": [
+        "eq:hp-time-fixedpoint"
+      ],
+      "component": "history",
+      "status": "planned",
+      "delivery_milestone": "M4",
+      "verification_ids": [
+        "M4.stationary_time_map"
+      ]
+    },
+    {
+      "id": "original_constitutive_failure",
+      "equations": [
+        "eq:stability-realizable",
+        "eq:stability-symbol",
+        "eq:stability-c4",
+        "eq:stability-negative-diffusion",
+        "eq:stability-transverse-block",
+        "eq:stability-transverse-pde",
+        "eq:stability-transverse-energy"
+      ],
+      "component": "closure",
+      "status": "known_failure_verified",
+      "delivery_milestone": "M1",
+      "verification_ids": [
+        "RANSCLSEPAWFM1Oracle"
+      ]
+    },
+    {
+      "id": "reference_normal_traction_example",
+      "equations": [
+        "eq:stability-pressure-example"
+      ],
+      "component": "interface",
+      "status": "planned",
+      "delivery_milestone": "M3",
+      "verification_ids": [
+        "M3.reference_normal_traction_example"
+      ]
+    },
+    {
+      "id": "sampled_k_positivity_failure",
+      "equations": [
+        "eq:stability-k-cone"
+      ],
+      "component": "profiles",
+      "status": "known_mathematical_failure_native_check_planned",
+      "delivery_milestone": "M2",
+      "verification_ids": [
+        "M2.sampled_k_positivity_failure"
+      ]
+    },
+    {
+      "id": "full_energy_accounting",
+      "equations": [
+        "eq:stability-total-energy"
+      ],
+      "component": "system",
+      "status": "planned",
+      "delivery_milestone": "M7",
+      "verification_ids": [
+        "M7.full_energy_accounting"
+      ]
+    },
+    {
+      "id": "illustrative_reference_inputs",
+      "equations": [
+        "eq:exampleinputs"
+      ],
+      "component": "scalar_awf",
+      "status": "kernel_verified",
+      "delivery_milestone": "M1",
+      "verification_ids": [
+        "RANSCLSEPAWFM1Oracle"
+      ]
+    },
+    {
+      "id": "curved_manufactured_examples",
+      "equations": [
+        "eq:curve-test-field",
+        "eq:curve-test-mass",
+        "eq:curve-test-pressure"
+      ],
+      "component": "geometry",
+      "status": "planned",
+      "delivery_milestone": "M5",
+      "verification_ids": [
+        "M5.curved_manufactured_examples"
+      ]
+    },
+    {
+      "id": "constitutive_failure_examples",
+      "equations": [
+        "eq:stability-test-block",
+        "eq:stability-inplane-direction"
+      ],
+      "component": "closure",
+      "status": "known_failure_verified",
+      "delivery_milestone": "M1",
+      "verification_ids": [
+        "RANSCLSEPAWFM1Oracle"
+      ]
+    },
+    {
+      "id": "finite_re_reference_comparison",
+      "equations": [
+        "eq:Rtref",
+        "eq:finiteRestress"
+      ],
+      "component": "reference",
+      "status": "excluded_finite_re",
+      "delivery_milestone": "M0",
+      "verification_ids": [
+        "M0.ContractSourcePins"
+      ]
+    },
+    {
+      "id": "closed_awf_integrals",
+      "equations": [
+        "eq:segments",
+        "eq:Jclosed",
+        "eq:J1closed",
+        "eq:Pprimitive"
+      ],
+      "component": "scalar_awf",
+      "status": "kernel_verified",
+      "delivery_milestone": "M1",
+      "verification_ids": [
+        "RANSCLSEPAWFM1Oracle"
+      ]
+    }
+  ]
+}
