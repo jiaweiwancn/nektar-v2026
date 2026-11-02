@@ -40,6 +40,9 @@ model/discretization contract, equation mapping and exact-base provenance.
 [M1 kernel verification](docs/plans/cls-epawf-revised-m1.md) reproduces its
 reference identities and constitutive failures on Linux; the coupled patch
 implementation and stability qualification remain later milestones.
+[M2 spectral profiles and loads](docs/plans/cls-epawf-revised-m2.md) adds
+metric-balanced cutoffs, all-mode source/flux checks and the specified inner-k
+positivity counterexample, with 19 passing Linux tests.
 
 
 Tutorials

@@ -1,0 +1,77 @@
+{
+  "source_commit": "acdacc022d64c72772b46f70a836d51d3f9f874e",
+  "source_status": "",
+  "main_commit": "f4b70baec10016dd098005bc5a5507b87e4a57bf",
+  "main_status": "",
+  "started_utc": "2026-11-02T06:08:10.034938+00:00",
+  "compiler_workers": 16,
+  "test_workers": 1,
+  "mpi_ranks": 1,
+  "thread_environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1"
+  },
+  "commands": [
+    {
+      "command": [
+        "cmake",
+        "--build",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build",
+        "--target",
+        "RANSEquilibriumProfilesProbe",
+        "--parallel",
+        "16"
+      ],
+      "exit_code": 0,
+      "seconds": 4.674692197993863,
+      "log_sha256": "8d74db4d1483b372892deda868b1871aa55622dd0aa56c9d11ed079a58513f6c"
+    },
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "python3",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m2.py",
+        "--probe",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/RANSEquilibriumProfilesProbe",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m2-attempt-005/oracle"
+      ],
+      "exit_code": 0,
+      "seconds": 1.7691535680205561,
+      "log_sha256": "ea51611f7fbc80b2d52348bad0669d96416659a35de0bc160bd65bedc819e472"
+    },
+    {
+      "command": [
+        "cmake",
+        "--build",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build",
+        "--parallel",
+        "16"
+      ],
+      "exit_code": 0,
+      "seconds": 0.7666850829846226,
+      "log_sha256": "6933cf1aa8ebf19e9c8ef1ae1c4136941ec0de8286d207007ba7ba0d1aa3afcf"
+    },
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "ctest",
+        "--test-dir",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build",
+        "--parallel",
+        "1",
+        "--output-on-failure"
+      ],
+      "exit_code": 0,
+      "seconds": 109.17763367795851,
+      "log_sha256": "e169cb3a4f6294f3ff24e829768f213fbf5aa5406026a4a3215bef230b1b0180"
+    }
+  ],
+  "status": "passed"
+}

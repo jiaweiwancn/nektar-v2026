@@ -10,6 +10,7 @@ development studies and their original commands.
 | --- | --- |
 | `validate_cls_epawf_m0.py --output FRESH_DIRECTORY` | Linux source-bound contract and retained exact-base provenance audit; inventories baseline tests without a new numerical solve |
 | `validate_cls_epawf_m1.py --kernel-probe BUILD/RANSKernelProbe --constitutive-probe BUILD/RANSConstitutiveProbe --output FRESH_DIRECTORY` | Revised-note M1: independent original CLS/AWF tensors, quadrature, both invariant-branch tangents and documented adverse diffusion; Linux only, NumPy/SciPy required |
+| `validate_cls_epawf_m2.py --probe BUILD/RANSEquilibriumProfilesProbe --output FRESH_DIRECTORY` | Revised-note M2: native spectral ray loads versus analytic metric budgets/fluxes and independent quadrature, all-mode forcing identities and the specified sampled-K positivity failure; Linux only, NumPy/SciPy required |
 | `validate_standard_awf.py --build ... --output ... --jobs 2` | Standard-model AWF kernel/coupling checks, five-flow preservation and h/p/dt refinement; see the [derivation and evidence](../../../../docs/plans/standard-kepsilon-equilibrium-awf.md) |
 | `validate_m7.py --build ... --output ...` | Public generator/restart workflows, eight CTests, MPI continuation and documentation links |
 | `run_m6.sh BUILD RUN [JOBS]` | Complete preservation/robustness study; failed controls are recorded explicitly |

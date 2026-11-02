@@ -1,0 +1,336 @@
+{
+  "schema": 1,
+  "current_attempt": "m2-attempt-005",
+  "attempts": [
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m2-attempt-001",
+      "receipt_sha256": "86cb4ab55043d5b36285547b19ca733a11fb660dbdf40d4cab845f4c3ae9e76b",
+      "receipt": {
+        "schema": 1,
+        "source_commit": "130d3545decb7925a94843b2d2a8d3af5a399850",
+        "started_utc": "2026-11-02T05:52:42.656119+00:00",
+        "compiler_workers": 16,
+        "test_workers": 1,
+        "mpi_ranks": 1,
+        "thread_environment": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1"
+        },
+        "commands": [
+          {
+            "command": [
+              "cmake",
+              "-S",
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/source/solvers/IncNavierStokesSolver/Tests/RANS",
+              "-B",
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build",
+              "-DRANS_BUILD_SOLVER=ON",
+              "-DCMAKE_BUILD_TYPE=Release",
+              "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake"
+            ],
+            "exit_code": 0,
+            "seconds": 0.2645202809944749,
+            "log_sha256": "924a144e7fce19f3abbb4ae6dc849792b191bc46508d2cfde99ae804ba1136ac"
+          },
+          {
+            "command": [
+              "cmake",
+              "--build",
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build",
+              "--target",
+              "RANSEquilibriumProfilesProbe",
+              "--parallel",
+              "16"
+            ],
+            "exit_code": 2,
+            "seconds": 4.373981767974328,
+            "log_sha256": "7640f94d9b45f7c3e03b5c3eb0e598a308b72ee1a129604c0320dba7aa3a11f0"
+          }
+        ],
+        "status": "failed"
+      }
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m2-attempt-002",
+      "receipt_sha256": "bdccccd524e241f3a8cf06ee7bd3cbd775628f330b487308db5f9d83f20257c2",
+      "receipt": {
+        "source_commit": "ad6398ba3edb64c2979f529932acc16c2ab79495",
+        "started_utc": "2026-11-02T05:57:24.391742+00:00",
+        "compiler_workers": 16,
+        "test_workers": 1,
+        "mpi_ranks": 1,
+        "thread_environment": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1"
+        },
+        "commands": [
+          {
+            "command": [
+              "cmake",
+              "--build",
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build",
+              "--target",
+              "RANSEquilibriumProfilesProbe",
+              "--parallel",
+              "16"
+            ],
+            "exit_code": 0,
+            "seconds": 3.6722867260104977,
+            "log_sha256": "36fd57a75a3e9c94b23d2c6e2365f0d0299936351fb4c6c1417baf4eeb685327"
+          },
+          {
+            "command": [
+              "taskset",
+              "-c",
+              "0",
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/RANSEquilibriumProfilesProbe",
+              "--output",
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m2-attempt-002/profiles.json"
+            ],
+            "exit_code": 0,
+            "seconds": 0.6162993250181898,
+            "log_sha256": "ca8d14c126b88f39ad1103785accf921858a04d86059c92c38ff43ec6742a819"
+          }
+        ],
+        "status": "passed"
+      }
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m2-attempt-003",
+      "receipt_sha256": "3d7622529299f834742b91eae35a53df26719b4a9204421f7f43e2c6cc6180ec",
+      "receipt": {
+        "source_commit": "f5e5a612585e44e3a03421d71a3b8c9692af6fe4",
+        "started_utc": "2026-11-02T05:59:44.175135+00:00",
+        "compiler_workers": 16,
+        "test_workers": 1,
+        "mpi_ranks": 1,
+        "thread_environment": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1"
+        },
+        "commands": [
+          {
+            "command": [
+              "cmake",
+              "-S",
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/source/solvers/IncNavierStokesSolver/Tests/RANS",
+              "-B",
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build",
+              "-DRANS_BUILD_SOLVER=ON",
+              "-DCMAKE_BUILD_TYPE=Release",
+              "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake"
+            ],
+            "exit_code": 0,
+            "seconds": 0.26443305698921904,
+            "log_sha256": "924a144e7fce19f3abbb4ae6dc849792b191bc46508d2cfde99ae804ba1136ac"
+          },
+          {
+            "command": [
+              "cmake",
+              "--build",
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build",
+              "--target",
+              "RANSEquilibriumProfilesProbe",
+              "--parallel",
+              "16"
+            ],
+            "exit_code": 0,
+            "seconds": 3.723044392943848,
+            "log_sha256": "36fd57a75a3e9c94b23d2c6e2365f0d0299936351fb4c6c1417baf4eeb685327"
+          },
+          {
+            "command": [
+              "taskset",
+              "-c",
+              "0",
+              "python3",
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m2.py",
+              "--probe",
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/RANSEquilibriumProfilesProbe",
+              "--output",
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m2-attempt-003/oracle"
+            ],
+            "exit_code": 1,
+            "seconds": 1.0169337169500068,
+            "log_sha256": "d3c460466f306f5fd4cfbd4bb8d89991cd0b6701d4c07e4246ddd179d7f23e81"
+          }
+        ],
+        "status": "failed"
+      },
+      "oracle_status": "failed",
+      "oracle_error": "native_legendre_control: scaled error 0.023961233627221103 > 1e-10"
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m2-attempt-004",
+      "receipt_sha256": "d9ceae0472116139ca79ba15db74f596e3196a3c9a307394e69404d1c6753086",
+      "receipt": {
+        "source_commit": "42c340310e3804fc264702d76820f7742fdc3390",
+        "source_status": "",
+        "main_commit": "f4b70baec10016dd098005bc5a5507b87e4a57bf",
+        "main_status": "",
+        "started_utc": "2026-11-02T06:01:08.543461+00:00",
+        "compiler_workers": 16,
+        "test_workers": 1,
+        "mpi_ranks": 1,
+        "thread_environment": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1"
+        },
+        "commands": [
+          {
+            "command": [
+              "cmake",
+              "--build",
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build",
+              "--target",
+              "RANSEquilibriumProfilesProbe",
+              "--parallel",
+              "16"
+            ],
+            "exit_code": 0,
+            "seconds": 3.723672116000671,
+            "log_sha256": "8be09b518a2ce9253b2ca979de37126e287fdd97df9125e2e12eb163f1932d29"
+          },
+          {
+            "command": [
+              "taskset",
+              "-c",
+              "0",
+              "python3",
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m2.py",
+              "--probe",
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/RANSEquilibriumProfilesProbe",
+              "--output",
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m2-attempt-004/oracle"
+            ],
+            "exit_code": 0,
+            "seconds": 1.6182763969991356,
+            "log_sha256": "242d1f2b53eaa2871c66642db5eb59eb56d5d0f823dd29a77be859697565984c"
+          },
+          {
+            "command": [
+              "cmake",
+              "--build",
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build",
+              "--parallel",
+              "16"
+            ],
+            "exit_code": 0,
+            "seconds": 1.0174314600299112,
+            "log_sha256": "87453f9ce93d16e3fd9190f2cac7cf2119702a8cd221e55f3b24bc008248e3ef"
+          },
+          {
+            "command": [
+              "taskset",
+              "-c",
+              "0",
+              "ctest",
+              "--test-dir",
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build",
+              "--parallel",
+              "1",
+              "--output-on-failure"
+            ],
+            "exit_code": 0,
+            "seconds": 108.29527003795374,
+            "log_sha256": "01e7b5e42d0aa0ce34bbe87446154f6bd64ffb2f2131ea9950b29414a73834de"
+          }
+        ],
+        "status": "passed"
+      },
+      "oracle_status": "passed",
+      "oracle_error": null
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m2-attempt-005",
+      "receipt_sha256": "bc039de1458f435426b558463352ed577fee3efabf302e7335de6c66e7f1a37f",
+      "receipt": {
+        "source_commit": "acdacc022d64c72772b46f70a836d51d3f9f874e",
+        "source_status": "",
+        "main_commit": "f4b70baec10016dd098005bc5a5507b87e4a57bf",
+        "main_status": "",
+        "started_utc": "2026-11-02T06:08:10.034938+00:00",
+        "compiler_workers": 16,
+        "test_workers": 1,
+        "mpi_ranks": 1,
+        "thread_environment": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1"
+        },
+        "commands": [
+          {
+            "command": [
+              "cmake",
+              "--build",
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build",
+              "--target",
+              "RANSEquilibriumProfilesProbe",
+              "--parallel",
+              "16"
+            ],
+            "exit_code": 0,
+            "seconds": 4.674692197993863,
+            "log_sha256": "8d74db4d1483b372892deda868b1871aa55622dd0aa56c9d11ed079a58513f6c"
+          },
+          {
+            "command": [
+              "taskset",
+              "-c",
+              "0",
+              "python3",
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m2.py",
+              "--probe",
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/RANSEquilibriumProfilesProbe",
+              "--output",
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m2-attempt-005/oracle"
+            ],
+            "exit_code": 0,
+            "seconds": 1.7691535680205561,
+            "log_sha256": "ea51611f7fbc80b2d52348bad0669d96416659a35de0bc160bd65bedc819e472"
+          },
+          {
+            "command": [
+              "cmake",
+              "--build",
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build",
+              "--parallel",
+              "16"
+            ],
+            "exit_code": 0,
+            "seconds": 0.7666850829846226,
+            "log_sha256": "6933cf1aa8ebf19e9c8ef1ae1c4136941ec0de8286d207007ba7ba0d1aa3afcf"
+          },
+          {
+            "command": [
+              "taskset",
+              "-c",
+              "0",
+              "ctest",
+              "--test-dir",
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build",
+              "--parallel",
+              "1",
+              "--output-on-failure"
+            ],
+            "exit_code": 0,
+            "seconds": 109.17763367795851,
+            "log_sha256": "e169cb3a4f6294f3ff24e829768f213fbf5aa5406026a4a3215bef230b1b0180"
+          }
+        ],
+        "status": "passed"
+      },
+      "oracle_status": "passed",
+      "oracle_error": null
+    }
+  ]
+}

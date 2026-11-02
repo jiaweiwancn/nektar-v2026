@@ -1,6 +1,6 @@
 **CLS and EP-AWF revised formulation implementation and validation plan**
 
-Status: Approved by the user on 2 November 2026; M0 and M1 closed.
+Status: Approved by the user on 2 November 2026; M0, M1 and M2 closed.
 Implementation branch: codex/cls-epawf-revised, based on
 6415398d856323c3116e646eaf7c882c66617602.
 
@@ -9,8 +9,9 @@ Implementation branch: codex/cls-epawf-revised, based on
 - Origin Skill: academic-research-suite / experiment-agent.
 - Origin Mode: plan.
 - Origin Date: 2026-11-02.
-- Verification Status: M0 contract/baseline audit and M1 kernel identities/
-  constitutive counterexamples VERIFIED on Linux; later milestones UNVERIFIED.
+- Verification Status: M0 contract/baseline audit, M1 kernel identities/
+  constitutive counterexamples and M2 profiles/dual loads VERIFIED on Linux;
+  later milestones UNVERIFIED. Original stability/positivity gates fail as specified.
 - Version Label: cls-epawf-revised-plan-v1.
 
 The objective is a native implementation of the high-Re CLS model and the
@@ -22,8 +23,12 @@ supply reference kernels, solver components and experimental infrastructure.
 
 The [M1 closure report](/Users/jay/Documents/nektar-v2026/docs/plans/cls-epawf-revised-m1.md)
 records the exact tested revision, independent errors, documented negative
-constitutive directions and passing 17-test Linux suite. M2 and later
-implementation milestones remain open.
+constitutive directions and passing 17-test Linux suite.
+
+The [M2 closure report](/Users/jay/Documents/nektar-v2026/docs/plans/cls-epawf-revised-m2.md)
+records native spectral profiles/dual loads, independent metric cutoff and
+redistribution checks, the sampled-K positivity counterexample and a passing
+19-test Linux suite at acdacc0. M3 and later implementation milestones remain open.
 
 The [M0 contract and baseline record](/Users/jay/Documents/nektar-v2026/docs/plans/cls-epawf-revised-m0.md)
 and [contract v1](/Users/jay/Documents/nektar-v2026/docs/plans/cls-epawf-revised-contract-v1.json)
@@ -194,7 +199,7 @@ the outer equation determines its flux.
    nearby smooth 2D adverse direction. These tests pass by reproducing the
    counterexamples while recording the physical stability gate as failed.
 
-3. **M2 — Implement the spectral/hp wall profiles and source loads.**
+3. **M2 — Implement the spectral/hp wall profiles and source loads (closed).**
    Separate r_K and r_m from the historical P/N interpolation. Implement
    E_c, the monotone cutoff/admissibility test, chi and the simplified S_k.
    Add a bracketed metric cutoff solve and split physical quadrature at
@@ -430,7 +435,7 @@ unlock a failed model qualification or the existing Cao–Tamura score gates.
 
 The user approved the branch/base, the faithful revised-note model and the
 M0–M7/M9 implementation/verification sequence, and requested execution and
-closure of M1. This includes recording the
+closure of M0, M1 and M2. This includes recording the
 original CLS and sampled-K failures as validation findings. A robust-model
 extension and the conditional physical-validation campaign in M8 require
 a concrete, separately identified resolution of those failures; the removed
