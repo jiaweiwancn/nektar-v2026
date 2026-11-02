@@ -36,6 +36,7 @@ private:
     void UpdateFields();
     void WriteReport() const;
     void Checkpoint();
+    void WriteMappedField(const std::string &name,const std::shared_ptr<RANSWallGlobalField> &field,const Vector &values) const;
     std::string PhysicsSignature() const;
     LibUtilities::SessionReaderSharedPtr m_serialSession;
     std::shared_ptr<RANSWallEvolutionPatch> m_patch;
@@ -48,6 +49,8 @@ private:
     int m_maximumIterations=20,m_order=2;
     bool m_condensed=false,m_neutral=true;
     std::string m_restart,m_checkpointBase,m_lastCheckpoint,m_signature;
+    bool m_chartFunctions=false;
+    Vector m_roughnessBudget,m_energyBudget;
     static std::string solverTypeLookupId;
 };
 }

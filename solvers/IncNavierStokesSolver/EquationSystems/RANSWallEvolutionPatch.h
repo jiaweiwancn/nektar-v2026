@@ -7,9 +7,11 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallPatch.h>
 #include <LibUtilities/Communication/Comm.h>
+#include <SolverUtils/Turbulence/RANSWallNormalMap.h>
 
 namespace Nektar
 {
+SolverUtils::RANSWallNormalMap LoadRANSWallNormalMap(const LibUtilities::SessionReaderSharedPtr &session,int dimension,double height);
 using RANSWallEvolutionFunction=std::function<double(const RANSWallCoordinate&,double)>;
 struct RANSWallEvolutionData
 {
@@ -33,7 +35,8 @@ public:
     using WallMatrix=RANSWallAlgebra::DenseMatrix;
     RANSWallEvolutionPatch(const LibUtilities::SessionReaderSharedPtr &serialSession,
         const SpatialDomains::MeshGraphSharedPtr &graph,
-        const LibUtilities::CommSharedPtr &collective,const RANSWallPatchParameters &parameters);
+        const LibUtilities::CommSharedPtr &collective,const RANSWallPatchParameters &parameters,
+        const SolverUtils::RANSWallNormalMap &mapping=SolverUtils::RANSWallNormalMap{});
     int Dimension() const { return m_dimension; }
     int K() const { return m_dimension; }
     int Epsilon() const { return m_dimension+1; }
@@ -45,6 +48,17 @@ public:
     int PhysicalAxis(int a) const { return m_dimension==2 && a==1?2:a; }
     const RANSWallPatchParameters &Parameters() const { return m_parameters; }
     const LibUtilities::CommSharedPtr &Comm() const { return m_comm; }
+    const SolverUtils::RANSWallNormalMap &Mapping() const { return m_mapping; }
+    bool Mapped() const { return !m_mapping.Identity(); }
+    int Owner(int geometry) const { return (geometry+m_ownershipShift)%m_comm->GetSize(); }
+    RANSWallCoordinate Physical(const RANSWallCoordinate &chart) const;
+    RANSWallGlobalPoint Point(int block,const RANSWallCoordinate &chart,int side=0) const;
+    std::vector<RANSWallGlobalPoint> Quadrature(int block,int order=0) const;
+    struct FacePoint { RANSWallGlobalPoint test;SolverUtils::RANSVector area;double weight; };
+    std::vector<FacePoint> Surface(int block,int axis,double position,int side,int order=0) const;
+    double Distance(const RANSWallCoordinate &chart) const;
+    double DependentEpsilon(const Vector &state,const RANSWallCoordinate &chart) const;
+    double BoundaryFluxCorrection() const { return m_boundaryCorrection; }
     std::vector<std::shared_ptr<RANSWallGlobalField>> fields;
     std::shared_ptr<RANSWallGlobalField> innerVelocity,outerVelocity;
     std::vector<int> offset,size;
@@ -55,7 +69,7 @@ public:
     std::map<int,double> Constraints(const Vector &state,double time,const RANSWallEvolutionData &data) const;
     Vector Lift(const Vector &state,double time,const RANSWallEvolutionData &data) const;
     Vector Residual(const Vector &state,const Vector &history,double alpha,double time,
-        const RANSWallEvolutionData &data,bool anchored=true,bool imposeConstraints=true) const;
+        const RANSWallEvolutionData &data,bool anchored=true,bool imposeConstraints=true,int region=-1) const;
     Vector Solve(Vector state,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data,
         bool condensed,int &iterations,double tolerance=2e-12,int maximumIterations=20) const;
     Vector Norms(const Vector &residual,const std::map<int,double> &constraints,double ustar=.4) const;
@@ -75,6 +89,10 @@ public:
     double SampleK(const Vector &state,const RANSWallCoordinate &point) const;
     std::array<double,2> Forcing(const Vector &state,const RANSWallCoordinate &point,double time,
         const RANSWallEvolutionData &data,bool includeBody=true) const;
+    std::array<double,3> CartesianForcing(const Vector &state,const RANSWallCoordinate &point,double time,
+        const RANSWallEvolutionData &data,bool includeBody=true) const;
+    Vector RoughnessBudget(const Vector &state,double time,const RANSWallEvolutionData &data) const;
+    Vector EnergyBudget(const Vector &state,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data) const;
     std::string Signature() const;
 private:
     struct VolumePoint { RANSWallGlobalPoint v,p,e; double weight; };
@@ -86,16 +104,25 @@ private:
         std::vector<VolumePoint> points;
     };
     std::map<int,double> ExternalConstraints(double time,const RANSWallEvolutionData &data) const;
-    Vector OwnedBodyLoad(double time,const RANSWallEvolutionData &data) const;
-    std::shared_ptr<SolverUtils::EquilibriumAWFProfiles> Profile(double k) const;
+    Vector OwnedBodyLoad(double time,const RANSWallEvolutionData &data,int region=-1) const;
+    std::shared_ptr<SolverUtils::EquilibriumAWFProfiles> Profile(double k,const RANSWallCoordinate &chart={}) const;
+    RANSWallGlobalPoint Transform(RANSWallGlobalPoint point) const;
+    WallMatrix PhysicalMass(int block,int region=-1) const;
+    Vector PhysicalProject(int block,const RANSWallEvolutionFunction &function,double time) const;
     void Refresh(const Vector &state) const;
     void Broadcast(Vector &value) const;
     struct SolverCache;
     int m_dimension;
     LibUtilities::CommSharedPtr m_comm;
     RANSWallPatchParameters m_parameters;
+    SolverUtils::RANSWallNormalMap m_mapping;
+    int m_ownershipShift=0;
     SolverUtils::AWFProfileOptions m_options;
     std::vector<WallMatrix> m_mass;
+    mutable std::array<WallMatrix,2> m_regionalMass;
+    mutable Vector m_boundaryFlux;
+    mutable double m_boundaryCorrection=0;
+    Vector m_volumes;
     std::vector<Vector> m_constants;
     std::array<Vector,2> m_pressureMean;
     mutable std::vector<Ray> m_rays;

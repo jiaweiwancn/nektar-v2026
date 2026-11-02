@@ -39,7 +39,8 @@ RANSWallEvolutionFunction RANSEquilibriumWallEvolution::Function(const std::stri
     if(!m_serialSession->DefinesFunction(name,variable))return [](const RANSWallCoordinate&,double){return 0.;};
     Require(m_serialSession->GetFunctionType(name,variable)==LibUtilities::eFunctionTypeExpression,"evolution requires analytic session functions");
     const auto equation=m_serialSession->GetFunction(name,variable);const bool two=m_patch->Dimension()==2;
-    return [equation,two](const RANSWallCoordinate &p,double t){return equation->Evaluate(p[0],two?p[2]:p[1],two?0:p[2],t);};
+    return [equation,two,patch=m_patch,chart=m_chartFunctions](const RANSWallCoordinate &q,double t){
+        const auto p=chart?q:patch->Physical(q);return equation->Evaluate(p[0],two?p[2]:p[1],two?0:p[2],t);};
 }
 std::vector<RANSWallEvolutionFunction> RANSEquilibriumWallEvolution::Functions(const std::string &name,bool required) const
 {
@@ -116,14 +117,17 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         std::string model;m_session->LoadSolverInfo("TurbulenceModel",model,"CLSHighRe");
         Require(model=="CLSHighRe" || model=="StandardKEpsilon","invalid evolution turbulence model");
         if(model=="StandardKEpsilon")parameters.model=SolverUtils::RANSNeutralReference::Standard();
-        m_patch=std::make_shared<RANSWallEvolutionPatch>(m_serialSession,graph,m_session->GetComm(),parameters);
+        m_patch=std::make_shared<RANSWallEvolutionPatch>(m_serialSession,graph,m_session->GetComm(),parameters,
+            LoadRANSWallNormalMap(m_session,dim,parameters.geometry.height));
+        std::string coordinates;m_session->LoadSolverInfo("RANSWallFunctionCoordinates",coordinates,"Physical");
+        Require(coordinates=="Physical" || coordinates=="Chart","unknown wall function coordinate convention");m_chartFunctions=coordinates=="Chart";
         std::string mode,condensation;m_session->LoadSolverInfo("RANSWallReference",mode,"Neutral");
         Require(mode=="Neutral" || mode=="Functions","RANSWallReference must be Neutral or Functions");m_neutral=mode=="Neutral";
         m_session->LoadSolverInfo("RANSWallCondense",condensation,"False");Require(condensation=="True" || condensation=="False","invalid condensation selector");m_condensed=condensation=="True";
         m_session->LoadParameter("RANSWallEta",m_eta,0.);m_session->LoadParameter("RANSWallFrictionVelocity",m_ustar,.4);
         m_session->LoadParameter("RANSWallDirectionX",m_direction[0],1.);m_session->LoadParameter("RANSWallDirectionY",m_direction[1],0.);
         m_session->LoadParameter("RANSWallNonlinearTolerance",m_tolerance,2e-12);m_session->LoadParameter("RANSWallMaxIterations",m_maximumIterations,20);
-        Require(m_eta==0 || (m_neutral && m_eta==1),"eta=1 is restricted to isolated flat neutral verification");
+        Require(m_eta==0 || (m_neutral && m_eta==1 && m_patch->Mapping().PlanarConstantHeight()),"eta=1 is restricted to isolated flat neutral verification");
         Require(m_session->DefinesTimeIntScheme(),"evolution requires an explicit native IMEX time-integration declaration");
         const auto scheme=m_session->GetTimeIntScheme();
         Require(scheme.method=="IMEX" && scheme.variant.empty() && (scheme.order==1 || scheme.order==2),"evolution supports native IMEX orders 1/2, empty variant");m_order=scheme.order;
@@ -152,9 +156,9 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
 }
 std::string RANSEquilibriumWallEvolution::PhysicsSignature() const
 {
-    std::ostringstream s;s<<std::setprecision(17)<<m_patch->Signature()<<":eta="<<m_eta<<":neutral="<<m_neutral<<":us="<<m_ustar<<":direction="<<m_direction[0]<<','<<m_direction[1];
+    std::ostringstream s;s<<std::setprecision(17)<<m_patch->Signature()<<":eta="<<m_eta<<":neutral="<<m_neutral<<":us="<<m_ustar<<":direction="<<m_direction[0]<<','<<m_direction[1]<<":chart_functions="<<m_chartFunctions;
     for(const auto &[name,value]:m_serialSession->GetParameters())
-        if(name!="NUMSTEPS" && name!="IO_CHECKSTEPS" && name!="IO_INFOSTEPS" && name!="IO_TIMER_LEVEL")s<<'|'<<name<<'='<<value;
+        if(name!="NUMSTEPS" && name!="IO_CHECKSTEPS" && name!="IO_INFOSTEPS" && name!="IO_TIMER_LEVEL" && name!="RANSWALLOWNERSHIPSHIFT")s<<'|'<<name<<'='<<value;
     const std::vector<std::string> names{"InitialConditionsInner","InitialConditionsOuter","BoundaryValuesInner","BoundaryValuesOuter",
         "BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter","ExactSolutionInner","ExactSolutionOuter"};
     for(const auto &name:names)for(const auto &variable:m_session->GetVariables())if(m_serialSession->DefinesFunction(name,variable))
@@ -219,6 +223,12 @@ void RANSEquilibriumWallEvolution::v_DoSolve()
             if(m_checksteps>0 && m_integrator->Steps()%m_checksteps==0 && m_checkpointBase!="None")Checkpoint();
         }
         if(m_checkpointBase!="None")Checkpoint();
+        if(m_patch->Mapped())
+        {
+            m_roughnessBudget=m_patch->RoughnessBudget(m_state,m_time,m_data);
+            const auto history=m_lastHistory.empty()?m_state:m_lastHistory;
+            m_energyBudget=m_patch->EnergyBudget(m_state,history,m_stageAlpha,m_time,m_implicitData);
+        }
         UpdateFields();
     }
     catch(const std::exception &error){std::cerr<<"EP-AWF native timestep: "<<error.what()<<std::endl;throw;}
@@ -281,7 +291,9 @@ void RANSEquilibriumWallEvolution::v_Output()
         native->Store(values);auto field=native->Field();auto definitions=field->GetFieldDefinitions();std::vector<std::vector<NekDouble>> data(definitions.size());
         for(int j=0;j<definitions.size();++j){definitions[j]->m_fields.push_back(name);field->AppendFieldData(definitions[j],data[j],field->UpdateCoeffs());}
         LibUtilities::FieldMetaDataMap meta;meta["Time"]=std::to_string(m_time);meta["PressureConvention"]="pi=p/rho+2k/3";
-        io->Write(m_sessionName+"-"+name+".fld",definitions,data,meta,false);
+        if(m_patch->Mapped()){meta["CoordinateRepresentation"]="normal chart; physical geometry in VTU";meta["PhysicalMap"]=m_patch->Mapping().Signature();}
+        io->Write(m_sessionName+"-"+name+(m_patch->Mapped()?".chart.fld":".fld"),definitions,data,meta,false);
+        if(m_patch->Mapped())WriteMappedField(name,native,values);
     };
     for(int b=0;b<m_patch->Gauge();++b)
     {
@@ -295,6 +307,34 @@ void RANSEquilibriumWallEvolution::v_Output()
         save(m_session->GetVariable(b)+"_w",m_patch->innerVelocity,values);
     }
     WriteReport();
+}
+void RANSEquilibriumWallEvolution::WriteMappedField(const std::string &name,const std::shared_ptr<RANSWallGlobalField> &field,const Vector &values) const
+{
+    field->Store(values);const auto native=field->Field();std::ofstream out(m_sessionName+"-"+name+".vtu");out<<std::setprecision(17);
+    const int dimension=m_patch->Dimension(),points=native->GetTotPoints();int cells=0;
+    for(int e=0;e<native->GetExpSize();++e){const auto exp=native->GetExp(e);int count=1;for(int a=0;a<dimension;++a)count*=exp->GetNumPoints(a)-1;cells+=count;}
+    out<<"<VTKFile type=\"UnstructuredGrid\" version=\"0.1\" byte_order=\"LittleEndian\"><UnstructuredGrid><Piece NumberOfPoints=\""<<points<<"\" NumberOfCells=\""<<cells<<"\"><Points><DataArray type=\"Float64\" NumberOfComponents=\"3\" format=\"ascii\">\n";
+    Array<OneD,NekDouble> x(points),y(points),z(points);native->GetCoords(x,y,z);
+    for(int j=0;j<points;++j){const auto p=m_patch->Physical({x[j],dimension==3?y[j]:0.,dimension==3?z[j]:y[j]});out<<p[0]<<' '<<p[1]<<' '<<p[2]<<'\n';}
+    out<<"</DataArray></Points><PointData Scalars=\""<<name<<"\"><DataArray type=\"Float64\" Name=\""<<name<<"\" format=\"ascii\">\n";
+    for(int j=0;j<points;++j)out<<native->GetPhys()[j]<<'\n';
+    out<<"</DataArray></PointData><Cells><DataArray type=\"Int32\" Name=\"connectivity\" format=\"ascii\">\n";
+    for(int e=0;e<native->GetExpSize();++e)
+    {
+        const auto exp=native->GetExp(e);const int nx=exp->GetNumPoints(0),ny=exp->GetNumPoints(1),nz=dimension==3?exp->GetNumPoints(2):1,start=native->GetPhys_Offset(e);
+        for(int k=0;k<(dimension==3?nz-1:1);++k)for(int j=0;j<ny-1;++j)for(int i=0;i<nx-1;++i)
+        {
+            const int a=start+i+nx*j+nx*ny*k;out<<a<<' '<<a+1<<' '<<a+1+nx<<' '<<a+nx;
+            if(dimension==3)out<<' '<<a+nx*ny<<' '<<a+nx*ny+1<<' '<<a+nx*ny+1+nx<<' '<<a+nx*ny+nx;
+            out<<'\n';
+        }
+    }
+    out<<"</DataArray><DataArray type=\"Int32\" Name=\"offsets\" format=\"ascii\">";
+    for(int j=1;j<=cells;++j)out<<j*(dimension==3?8:4)<<' ';
+    out<<"</DataArray><DataArray type=\"UInt8\" Name=\"types\" format=\"ascii\">";
+    for(int j=0;j<cells;++j)out<<(dimension==3?12:9)<<' ';
+    out<<"</DataArray></Cells></Piece></UnstructuredGrid></VTKFile>\n";
+    Require(static_cast<bool>(out),"cannot write physical mapped VTU field");
 }
 void RANSEquilibriumWallEvolution::WriteReport() const
 {
@@ -311,7 +351,7 @@ void RANSEquilibriumWallEvolution::WriteReport() const
     out<<",\"ustar\":"<<m_ustar<<",\"direction\":";Write(out,{m_direction[0],m_direction[1]});
     out<<",\"cell_ownership\":[";int ownerCount=0;
     for(const auto &e:m_patch->fields[0]->Elements())
-    {if(ownerCount++)out<<',';Write(out,{static_cast<double>(e.geometry),static_cast<double>(e.geometry%m_session->GetComm()->GetSize())});}out<<']';
+    {if(ownerCount++)out<<',';Write(out,{static_cast<double>(e.geometry),static_cast<double>(m_patch->Owner(e.geometry))});}out<<']';
     out<<",\"offsets\":[";for(int b=0;b<m_patch->offset.size();++b){if(b)out<<',';out<<m_patch->offset[b];}out<<']';
     out<<",\"state\":";Write(out,m_state);out<<",\"initial\":";Write(out,m_initial);
     out<<",\"fixed_reference\":";Write(out,m_patch->Reference());out<<",\"fixed_defect\":";Write(out,m_patch->Defect());
@@ -324,6 +364,13 @@ void RANSEquilibriumWallEvolution::WriteReport() const
     out<<",\"stage_audits\":";WriteRows(out,m_stageAudits);out<<",\"step_audits\":";WriteRows(out,m_stepAudits);out<<",\"explicit_audits\":";WriteRows(out,m_explicitAudits);
     out<<",\"native_history\":";WriteRows(out,snapshot.history);out<<",\"native_history_times\":";Write(out,snapshot.times);
     out<<",\"last_stage_history\":";Write(out,m_lastHistory);out<<",\"last_stage_time\":"<<m_stageTime<<",\"last_stage_alpha\":"<<m_stageAlpha;
+    const auto &mapping=m_patch->Mapping();
+    out<<",\"mapped\":"<<(m_patch->Mapped()?"true":"false")<<",\"function_coordinates\":"<<Quoted(m_chartFunctions?"Chart":"Physical")
+       <<",\"geometry_signature\":"<<Quoted(mapping.Signature())<<",\"map_parameters\":";
+    Write(out,{static_cast<double>(mapping.kind),static_cast<double>(mapping.dimension),mapping.height,mapping.heightSlopeX,mapping.heightSlopeY,
+        mapping.heightAmplitude,mapping.heightWaveX,mapping.heightWaveY,mapping.slopeX,mapping.slopeY,mapping.radius,mapping.amplitude,mapping.lengthX,mapping.lengthY});
+    out<<",\"boundary_flux_correction\":"<<m_patch->BoundaryFluxCorrection()<<",\"roughness_budget\":";Write(out,m_roughnessBudget);
+    out<<",\"energy_budget\":";Write(out,m_energyBudget);
     out<<",\"fields\":[";
     for(int b=0;b<m_patch->Gauge();++b)
     {

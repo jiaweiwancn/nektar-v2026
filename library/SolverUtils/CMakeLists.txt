@@ -10,6 +10,7 @@ SET(SOLVER_UTILS_SOURCES
   Turbulence/AnalyticalWallFunction.cpp
   Turbulence/EquilibriumAWFProfiles.cpp
   Turbulence/RANSWallGeometry.cpp
+  Turbulence/RANSWallNormalMap.cpp
   AdvectionSystem.cpp
   ALEHelper.cpp
   Advection/Advection.cpp
@@ -78,6 +79,7 @@ SET(SOLVER_UTILS_HEADERS
   Turbulence/AnalyticalWallFunction.h
   Turbulence/EquilibriumAWFProfiles.h
   Turbulence/RANSWallGeometry.h
+  Turbulence/RANSWallNormalMap.h
   AdvectionSystem.h
   ALEHelper.h
   Advection/Advection.h
