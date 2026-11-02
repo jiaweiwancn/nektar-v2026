@@ -87,20 +87,36 @@ void RANSEquilibriumWallSystem::v_InitObject(bool declareFields)
 }
 void RANSEquilibriumWallSystem::v_DoInitialise(bool dump)
 {
+    try
+    {
     (void)dump;m_state=m_patch->Project(Functions("InitialConditions",true),m_time);
     m_history=m_state;
     if(m_session->DefinesFunction("StageHistoryInner") || m_session->DefinesFunction("StageHistoryOuter"))
         m_history=m_patch->Project(Functions("StageHistory",true),m_time);
     UpdateFields();
+    }
+    catch(const std::exception &error)
+    {
+        std::cerr<<"EP-AWF stage initialisation: "<<error.what()<<std::endl;
+        throw;
+    }
 }
 void RANSEquilibriumWallSystem::v_DoSolve()
 {
+    try
+    {
     if(!m_auditOnly)m_state=m_patch->Solve(m_state,m_history,m_alpha,m_time,m_data,m_condensed,m_iterations,m_tolerance,m_maximumIterations);
     m_residual=m_patch->Residual(m_state,m_history,m_alpha,m_time,m_data);
     m_norms=m_patch->ResidualNorms(m_residual,m_patch->Constraints(m_state,m_time,m_data));UpdateFields();
     std::cout<<(m_auditOnly?"EP-AWF flat residual audit, ":"EP-AWF flat stage converged, ")
              <<m_iterations<<" Newton iterations; max physical block dual norm "
              <<Maximum(m_norms)<<std::endl;
+    }
+    catch(const std::exception &error)
+    {
+        std::cerr<<"EP-AWF stage residual/solve: "<<error.what()<<std::endl;
+        throw;
+    }
 }
 void RANSEquilibriumWallSystem::UpdateFields()
 {
