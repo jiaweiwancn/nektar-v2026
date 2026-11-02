@@ -24,6 +24,19 @@ void WriteMatrix(std::ostream &out,const RANSWallAlgebra::DenseMatrix &m)
     for(int i=0;i<m.size();++i){if(i)out<<',';Write(out,m[i]);}
     out<<']';
 }
+void FixtureSources(std::ostream &out,const LibUtilities::SessionReaderSharedPtr &session,double left,double right,double H,double Z)
+{
+    if(!session->DefinesFunction("ScalarSourceOuter","eps_tilde"))return;
+    out<<",\"fixture_source_probes\":[";
+    for(int j=0;j<3;++j)
+    {
+        if(j)out<<',';
+        const double x=(left+right)/2,r=H+(j+1)*(Z-H)/4;
+        Write(out,{x,r,session->GetFunction("ScalarSourceOuter","k")->Evaluate(x,r),
+            session->GetFunction("ScalarSourceOuter","eps_tilde")->Evaluate(x,r)});
+    }
+    out<<']';
+}
 void GenericCase(std::ostream &out,const std::shared_ptr<RANSWallFieldLayout> &layout,RANSWallPatchParameters parameters,double chi)
 {
     parameters.chi=chi;RANSWallPatch patch(layout,parameters);
@@ -61,6 +74,23 @@ void GenericCase(std::ostream &out,const std::shared_ptr<RANSWallFieldLayout> &l
         if(count++)out<<',';
         const double x=layout->Left()+fraction*(layout->Right()-layout->Left());
         Write(out,{x,patch.SampleK(lifted,x),patch.Forcing(lifted,x,.2,data)});
+    }
+    out<<']';
+    auto potential=f;
+    potential[0]=potential[1]=[](double,double,double){return 0.;};
+    potential[5]=[K,rK=parameters.geometry.sampleHeight](double x,double r,double){
+        return .31*x-.47*r+2./3*(K+.02*x-.02*(r-rK));};
+    potential[4]=[](double x,double r,double){return 2*x+.1*r;};
+    auto potentialData=data;potentialData.outerBody[0]=[](double,double,double){return .31;};
+    potentialData.outerBody[1]=[](double,double,double){return -.47;};
+    const auto potentialState=patch.Project(potential,.2);
+    out<<",\"potential_cancellation\":[";int potentialCount=0;
+    for(double fraction:{.13,.47,.91})
+    {
+        if(potentialCount++)out<<',';
+        const double x=layout->Left()+fraction*(layout->Right()-layout->Left());
+        const double value=patch.Forcing(potentialState,x,.2,potentialData);
+        Require(std::abs(value)<1e-10,"outer pressure/body-force potential did not cancel");Write(out,{x,value});
     }
     out<<']';
     if(chi==.37)
@@ -118,8 +148,10 @@ int main(int argc,char **argv)
 {
     try
     {
-        Require(argc==3 || (argc==4 && std::string(argv[3])=="parallel"),"Use SESSION.xml REPORT.json [parallel]");
-        const bool parallelOnly=argc==4;
+        Require(argc==3 || argc==4,"Use SESSION.xml REPORT.json [parallel|layout|sources]");
+        const std::string mode=argc==4?argv[3]:"all";
+        Require(mode=="all" || mode=="parallel" || mode=="layout" || mode=="sources","unknown native probe mode");
+        const bool parallelOnly=mode=="parallel",layoutOnly=mode=="layout" || mode=="sources",skipLayoutChecks=parallelOnly || layoutOnly;
         const std::string output=argv[2];
         auto session=LibUtilities::SessionReader::CreateInstance(2,argv);
         auto graph=SpatialDomains::MeshGraphIO::Read(session);
@@ -133,9 +165,9 @@ int main(int argc,char **argv)
         {
             if(count++)out<<',';
             auto f=[](double x,double r){return 1+.2*x+.03*r*r;};
-            const auto coefficients=parallelOnly?Vector(field->Size()):field->Project(f);
-            auto native=parallelOnly?Vector(field->Size()):field->NativeLoad(f);Vector direct(field->Size());
-            if(!parallelOnly)
+            const auto coefficients=skipLayoutChecks?Vector(field->Size()):field->Project(f);
+            auto native=skipLayoutChecks?Vector(field->Size()):field->NativeLoad(f);Vector direct(field->Size());
+            if(!skipLayoutChecks)
             {
                 for(const auto &q:field->Quadrature())for(int j=0;j<q.ids.size();++j)
                     direct[q.ids[j]]+=q.weight*q.phi[j]*f(q.x,q.r);
@@ -143,7 +175,7 @@ int main(int argc,char **argv)
             }
             const auto &e=field->Elements()[0];const auto q=field->Point(e.left+.37*(e.right-e.left),e.bottom+.41*(e.top-e.bottom));
             const auto g=q.Gradient(coefficients);
-            if(!parallelOnly)Require(std::abs(q.Value(coefficients)-f(q.x,q.r))<1e-10 &&
+            if(!skipLayoutChecks)Require(std::abs(q.Value(coefficients)-f(q.x,q.r))<1e-10 &&
                 std::abs(g[0]-.2)<1e-10 && std::abs(g[1]-.06*q.r)<1e-10,"native physical polynomial/derivative");
             field->Store(coefficients);
             out<<"{\"elements\":"<<field->Elements().size()<<",\"global_coefficients\":"<<field->Size()
@@ -173,8 +205,18 @@ int main(int argc,char **argv)
         session->LoadParameter("RANSWallRoughness",parameters.geometry.roughness,.1);
         session->LoadParameter("RANSWallSampleHeight",parameters.geometry.sampleHeight,1.);
         session->LoadParameter("RANSWallTailStart",parameters.geometry.tailStart,1.);
-        RANSWallPatch patch(layoutPtr,parameters,!parallelOnly);
+        session->LoadParameter("RANSWallNormalOrder",parameters.normalOrder,16);
+        session->LoadParameter("RANSWallTangentialOrder",parameters.tangentialOrder,8);
         const double k=parameters.model.Q()*.16;
+        if(layoutOnly)
+        {
+            out<<",\"layout_only\":true,\"parameters\":";
+            Write(out,{parameters.geometry.molecularNu,H,parameters.geometry.roughness,parameters.geometry.sampleHeight,
+                parameters.geometry.tailStart,k,parameters.model.Q(),parameters.model.Kappa()});
+            if(mode=="sources")FixtureSources(out,session,layout.Left(),layout.Right(),H,layout.Top());
+            out<<"}\n";Require(static_cast<bool>(out),"cannot write native layout metadata");session->Finalise();return 0;
+        }
+        RANSWallPatch patch(layoutPtr,parameters,!parallelOnly);
         SolverUtils::EquilibriumAWFProfiles profile(parameters.geometry,k,parameters.model);
         const double ep=profile.Dissipation(H);
         out<<",\"parallel_only\":"<<(parallelOnly?"true":"false")<<",\"parallel_cases\":[";
@@ -217,23 +259,41 @@ int main(int argc,char **argv)
         out<<",\"system\":";WriteMatrix(out,pressure.system);out<<",\"rhs\":";Write(out,pressure.rhs);
         out<<",\"solution\":";Write(out,pressure.solution);out<<",\"metrics\":";
         Write(out,{pressure.velocityMaximum,pressure.globalMean,pressure.pressureJump,pressure.tractionMismatch});out<<'}';
+        const auto topReference=parameters.model.AtHeight(layout.Top(),std::sqrt(k/parameters.model.Q()),H,profile.Reference().matchingVelocity);
+        out<<",\"top_reference\":";
+        Write(out,{layout.Top(),topReference.velocity,topReference.k,topReference.epsilon,topReference.eddyViscosity,
+            topReference.velocityGradient,topReference.epsilonGradient,topReference.epsilonGradientFlux});
+        out<<",\"top_reference_trace_samples\":[";int topCount=0;
+        for(const auto &item:std::vector<std::pair<std::shared_ptr<RANSWallNativeField>,double>>{
+            {layout.velocity,topReference.velocity},{layout.k,topReference.k},{layout.epsilon,topReference.epsilon}})
+        {
+            Vector trace(item.first->Size());
+            const auto values=item.first->Boundary([&](double,double){return item.second;},
+                [&](int edge,const RANSWallNativeField::Element &e){return edge==2 && std::abs(e.top-layout.Top())<1e-11;});
+            for(auto [id,value]:values)trace[id]=value;
+            if(topCount++)out<<',';
+            Vector samples;
+            for(double fraction:{.13,.47,.91})samples.push_back(item.first->Point(layout.Left()+fraction*(layout.Right()-layout.Left()),layout.Top(),-1).Value(trace));
+            Write(out,samples);
+        }
+        out<<']';
+        Vector ineffectiveGroundLoad(layout.velocity->Size());
+        const auto noSlip=layout.velocity->Boundary([](double,double){return 0.;},
+            [](int edge,const RANSWallNativeField::Element &e){return edge==0 && std::abs(e.bottom)<1e-11;});
+        for(const auto &p:interface.Points())
+        {
+            const auto ground=layout.velocity->Point(p.x,0,1);
+            for(int j=0;j<ground.ids.size();++j)if(!noSlip.count(ground.ids[j]))
+                ineffectiveGroundLoad[ground.ids[j]]+=p.weight*ground.phi[j]*profile.Reference().traction;
+        }
+        out<<",\"strong_Dirichlet_ground_load_control\":";Write(out,ineffectiveGroundLoad);
+        Require(Maximum(ineffectiveGroundLoad)<1e-14,"no-slip free tests have a nonzero ground trace");
         out<<",\"parameters\":";
         Write(out,{parameters.geometry.molecularNu,H,parameters.geometry.roughness,parameters.geometry.sampleHeight,
             parameters.geometry.tailStart,k,parameters.model.Q(),parameters.model.Kappa()});
         out<<",\"generic_cases\":[";int generic=0;
         for(double chi:{0.,.37,1.}){if(generic++)out<<',';GenericCase(out,layoutPtr,parameters,chi);}out<<']';
-        if(session->DefinesFunction("ScalarSourceOuter","eps_tilde"))
-        {
-            out<<",\"fixture_source_probes\":[";
-            for(int j=0;j<3;++j)
-            {
-                if(j)out<<',';
-                const double x=(layout.Left()+layout.Right())/2,r=H+(j+1)*(layout.Top()-H)/4;
-                Write(out,{x,r,session->GetFunction("ScalarSourceOuter","k")->Evaluate(x,r),
-                    session->GetFunction("ScalarSourceOuter","eps_tilde")->Evaluate(x,r)});
-            }
-            out<<']';
-        }
+        FixtureSources(out,session,layout.Left(),layout.Right(),H,layout.Top());
         out<<"}\n";
         Require(static_cast<bool>(out),"cannot write layout report");
         std::cout<<"Native multiregion layout verified: "<<layout.Size()<<" stage unknowns.\n";

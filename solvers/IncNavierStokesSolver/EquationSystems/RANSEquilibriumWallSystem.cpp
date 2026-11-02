@@ -153,6 +153,15 @@ void RANSEquilibriumWallSystem::v_Output()
     report<<",\"history\":";write(report,m_history);report<<",\"residual\":";write(report,m_residual);
     report<<",\"residual_norms\":";write(report,m_norms);
     report<<",\"history_as_state_residual\":";write(report,m_patch->Residual(m_history,m_history,m_alpha,m_time,m_data));
+    report<<",\"forcing_samples\":[";
+    int sampled=0;
+    for(double fraction:{.13,.47,.91})
+    {
+        if(sampled++)report<<',';
+        const double x=m_layout->Left()+fraction*(m_layout->Right()-m_layout->Left());
+        write(report,{x,m_patch->SampleK(m_state,x),m_patch->Forcing(m_state,x,m_time,m_data)});
+    }
+    report<<']';
     report<<",\"source_probes\":[";
     for(int j=0;j<3;++j)
     {

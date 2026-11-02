@@ -9,6 +9,7 @@ import argparse
 from datetime import datetime, timezone
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import platform
@@ -17,6 +18,8 @@ import subprocess
 import sys
 import tempfile
 import time
+import re
+import xml.etree.ElementTree as ET
 
 sys.dont_write_bytecode = True
 THREADS = {k: "1" for k in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS", "BLIS_NUM_THREADS")}
@@ -26,6 +29,7 @@ import scipy
 from scipy.special import eval_jacobi
 from validate_cls_epawf_m2 import Profiles
 from validate_cls_epawf_m1 import indexed
+from cls_epawf_m3_cases import parallel_session, evolving_session, set_info, set_parameter
 
 checks = 0
 errors = {}
@@ -147,10 +151,134 @@ def check_pressure(raw):
             np.add.at(expected, ids, p.T@(w*(b-a)/2*(.17+.03*X)*(1 if side == 0 else -1)))
         near(raw["shared_loads"][side], expected, "physical_common_flux_load_"+str(side))
     near(raw["merged_shared_load"], np.zeros(raw["layout"][0]["global_coefficients"]), "opposite_common_flux_dual_loads")
+    near(raw["strong_Dirichlet_ground_load_control"], np.zeros(raw["layout"][0]["global_coefficients"]), "strong_no_slip_ground_load_control")
+    Z, UZ, KZ, EZ, nt, dU, dE, gradient_flux = raw["top_reference"]
+    us = math.sqrt(k/raw["parameters"][6])
+    near([nt*dU, dE, gradient_flux], [us**2, -us**3/(raw["parameters"][7]*Z**2), -us**4/(1.3*Z)], "compatible_top_reference_flux_factors")
+    for sampled, expected in zip(raw["top_reference_trace_samples"], (UZ, KZ, EZ)):
+        near(sampled, [expected]*3, "native_compatible_top_Dirichlet_values")
     return {"pressure_rows": B.shape[0], "pressure_rank": rank,
             "pressure_singular_values": singular.tolist(), "interface_rows": C.shape[0],
             "interface_rank": C.shape[0], "augmented_rows": len(rhs),
             "metrics": pressure["metrics"]}
+
+
+def check_condensation(raw):
+    case = next(c for c in raw["generic_cases"] if "condensation" in c)
+    c = case["condensation"]
+    J, r = np.array(c["jacobian"]), np.array(case["residual"])
+    I, R = np.array(c["inner"], dtype=int), np.array(c["retained"], dtype=int)
+    require(len(set(I) & set(R)) == 0 and sorted(np.r_[I, R]) == list(range(len(r))), "Invalid condensation partition")
+    require(np.all(I < raw["offsets"][2]), "Pressure or inner k was silently condensed")
+    require(all(i in R for i in range(raw["offsets"][4], len(r))), "Relative pressure/gauge modes were discarded")
+    ii, ir, ri, rr = J[np.ix_(I, I)], J[np.ix_(I, R)], J[np.ix_(R, I)], J[np.ix_(R, R)]
+    S = rr-ri@np.linalg.solve(ii, ir)
+    rhs = r[R]-ri@np.linalg.solve(ii, r[I])
+    near(c["schur"], S, "independent_Schur_matrix")
+    near(c["reduced_residual"], rhs, "independent_condensed_residual")
+    expected = np.linalg.solve(J, -r)
+    near(c["full_step"], expected, "independent_full_Newton_step")
+    near(c["condensed_step"], expected, "condensed_recovered_Newton_step")
+    direction, lifted = np.array(c["retained_direction"]), np.array(c["lifted_direction"])
+    near(lifted[R], direction, "retained_action_injection")
+    near(lifted[I], -np.linalg.solve(ii, ir@direction), "implicit_inner_velocity_action")
+    action = J@lifted
+    near(c["full_action"], action, "uncondensed_directional_action")
+    near(action[I], np.zeros(len(I)), "eliminated_directional_residual")
+    near(c["reduced_action"], action[R], "condensed_directional_action")
+    differences = []
+    for sample in c["finite_difference_actions"]:
+        error = float(np.max(np.abs(np.array(sample["action"])-action)))/max(1., float(np.max(np.abs(action))))
+        differences.append({"step": sample["step"], "scaled_error": error})
+    require(differences[-1]["scaled_error"] < 1e-6 and
+            differences[-1]["scaled_error"] < .1*differences[0]["scaled_error"]+1e-8,
+            "Physical residual action lacks finite-difference convergence")
+    return {"full_rows": len(r), "eliminated_velocity_rows": len(I), "retained_rows": len(R),
+            "all_pressure_modes_retained": True, "physical_action_difference_sequence": differences,
+            "condition_number": float(np.linalg.cond(J))}
+
+
+def wall_integrals(profile, r):
+    r = np.asarray(r)
+    lo = max(0., float(profile.zv))
+    z = np.minimum(r, lo)
+    a, d, nu, h = map(float, (profile.a, profile.d, profile.nu, profile.h))
+    j0 = z/nu+np.where(r > z, np.log1p(a*(r-z)/(d+a*z))/a, 0.)
+    lower = np.maximum(z, h)
+    span = np.maximum(0, r-lower)
+    j1 = np.maximum(z-h, 0)**2/(2*nu)+span/a-(d+a*h)/a**2*np.log1p(a*span/(d+a*lower))
+    return j0, j1
+
+
+def check_parallel(raw):
+    field = Space(raw["layout"][1])
+    nu, H, h, rK, rm, K, q, kappa = raw["parameters"]
+    profile = Profiles({"geometry": [nu, H, h, rK, rm], "metric": [0, 0], "k": K, "q": q, "kappa": kappa, "chi": 1})
+    intervals = sorted({(e["bounds"][2], e["bounds"][3], e["degree"]) for e in field.elements})
+    # Independent one-dimensional finite-element assembly. No native restriction
+    # or native radial matrix is reused in this solve.
+    mapping, local = {}, []
+    for lower, upper, degree in intervals:
+        ids = []
+        for j in range(degree+1):
+            key = (lower, lower, 0) if j == 0 else (upper, upper, 0) if j == 1 else (lower, upper, j)
+            if key not in mapping:
+                mapping[key] = len(mapping)
+            ids.append(mapping[key])
+        local.append(ids)
+    n = len(mapping)
+    A, unit_force = np.zeros((n, n)), np.zeros(n)
+    z, w = np.polynomial.legendre.leggauss(48)
+    for (lower, upper, degree), ids in zip(intervals, local):
+        cuts = sorted({lower, upper, *[b for b in (h, float(profile.zv)) if lower < b < upper]})
+        for a, b in zip(cuts[:-1], cuts[1:]):
+            r = a+(z+1)*(b-a)/2
+            p, dp = basis(degree, 2*(r-lower)/(upper-lower)-1)
+            dp *= 2/(upper-lower)
+            W = w*(b-a)/2
+            viscosity = nu+float(profile.a)*np.maximum(r-float(profile.zv), 0)
+            A[np.ix_(ids, ids)] += dp.T@((W*viscosity)[:, None]*dp)
+            unit_force[ids] += p.T@(W*(r > h))
+    ground, top = mapping[(0., 0., 0)], mapping[(H, H, 0)]
+    free = [i for i in range(n) if i not in (ground, top)]
+    summaries = []
+    for case in raw["parallel_cases"]:
+        metric = case["metrics"]
+        UH, F = metric[:2]
+        coefficients = np.zeros(n)
+        coefficients[top] = UH
+        coefficients[free] = np.linalg.solve(A[np.ix_(free, free)], -F*unit_force[free]-A[free, top]*UH)
+        reactions = A@coefficients+F*unit_force
+        near(metric[2:4], [-reactions[ground], reactions[top]], "independent_parallel_weak_traction", K/q)
+        traction = UH/float(profile.J0)-F*float(profile.J1/profile.J0)
+        near(metric[4:6], [traction, traction+F*(H-h)], "parallel_analytical_forcing_response", K/q)
+        samples = np.array(case["samples"])
+        expected, derivative = [], []
+        for r in samples[:, 0]:
+            pos = next(i for i, (a, b, _) in enumerate(intervals) if a-1e-13 <= r <= b+1e-13)
+            a, b, degree = intervals[pos]
+            p, dp = basis(degree, [2*(r-a)/(b-a)-1])
+            expected.append(float(p@coefficients[local[pos]]))
+            derivative.append(float(dp@coefficients[local[pos]])*2/(b-a))
+        near(samples[:, 1], expected, "native_parallel_field", abs(UH))
+        near(samples[:, 2], derivative, "native_parallel_physical_derivative", abs(UH)/H)
+        j0, j1 = wall_integrals(profile, samples[:, 0])
+        near(samples[:, 3], traction*j0+F*j1, "parallel_original_profile", abs(UH))
+        native = np.array(case["coefficients"])
+        for x in (.13, .47, .91):
+            for r in samples[::10, 0]:
+                value, gradient = field.evaluate(native, 0, x, r)
+                near(value, expected[int(round(r/H*100))], "native_constant_tangential_restriction", abs(UH))
+                near(gradient[0], 0, "native_parallel_tangential_derivative", abs(UH))
+        near(metric[8:10], [0, 0], "parallel_ground_and_matching_constraints", abs(UH))
+        near(metric[12], 0, "parallel_weak_energy_budget", abs(UH*traction)+1)
+        summaries.append({"forcing": F, "radial_unknowns": case["radial_unknowns"],
+                          "velocity_RMS_error": metric[6], "gradient_RMS_error": metric[7],
+                          "weak_traction_error": max(abs(metric[2]-metric[4]), abs(metric[3]-metric[5])),
+                          "weak_ground_traction": metric[2], "weak_matching_traction": metric[3],
+                          "point_ground_traction": metric[10], "point_matching_traction": metric[11],
+                          "energy_residual": metric[12]})
+    return summaries
 
 
 def residual_oracle(raw, case):
@@ -170,6 +298,8 @@ def residual_oracle(raw, case):
         uH = (.1+.03*x)*H
         near(sampled, K0+.02*x, "fixed_physical_K_sampler", K0)
         near(forcing, 2*uH*.03*H+.04-2*.02/3-(.04*x+.01*H), "one_sided_outer_conservative_forcing")
+    for _, value in case["potential_cancellation"]:
+        near(value, 0, "mechanical_pressure_and_body_potential_cancellation")
     def point_fields(space, e, x, r, block):
         ids, p, dx, dr = space.rows(e, x, r)
         coefficients = s[offsets[block]+ids]
@@ -267,6 +397,234 @@ def residual_oracle(raw, case):
     return {"chi": chi, "unknowns": len(result), "max_residual": float(np.max(np.abs(result)))}
 
 
+def manufactured_values(x, r, time, parameters, derivative=False):
+    _, H, _, rK, _, K, q, kappa = parameters
+    Z = 4.
+    E = (K/q)**1.5/(kappa*H)
+    U, W = .2+.03*math.sin(time), .01+.005*math.cos(time)
+    Ut, Wt = .03*math.cos(time), -.005*math.sin(time)
+    s, so = r/H, (r-H)/(Z-H)
+    gate, dg = 6*s*s-8*s**3+3*s**4, (12*s-24*s*s+12*s**3)/H
+    a = 2*s-s*s
+    g = r*r*(r-rK)**2*(r-H)**2/H**6
+    if derivative:
+        ui, wi = -Wt*x*dg+Ut*a, Wt*gate
+        ki, ko, eo = .01*math.cos(time)*g, -.005*math.sin(time)*so*so, .001*math.cos(time)*so*so
+        return np.array([ui if r <= H else Ut, wi if r <= H else Wt,
+                         ki if r <= H else ko, eo if r >= H else 0., 0., 0.])
+    ui, wi = -W*x*dg+U*a, W*gate
+    ki, ko = K+(.04+.01*math.sin(time))*g, K+(.02+.005*math.cos(time))*so*so
+    eo = E+(.003+.001*math.sin(time))*so*so
+    px, pzi, pzo = .02*(1+.1*math.sin(time)), .03*math.cos(time), .04*math.sin(time)
+    mean = (pzi*H**3+pzo*(Z-H)**3)/(3*Z)
+    pi, po = px*(x-.5)+pzi*(r-H)**2-mean, px*(x-.5)+pzo*(r-H)**2-mean
+    return np.array([ui if r <= H else U, wi if r <= H else W,
+                     ki if r <= H else ko, eo if r >= H else 0., pi, po])
+
+
+def check_evolving(report, metadata, expected_solved):
+    require(report["solved"] == expected_solved and not report["native_time_map"], "Stage solve/audit was confused with a native timestep")
+    spaces = [Space(metadata["layout"][i]) for i in (0, 0, 3, 4, 5, 6)]
+    offsets = metadata["offsets"]
+    state, history = np.array(report["state"]), np.array(report["history"])
+    parameters, time = metadata["parameters"], report["time"]
+    H, K = parameters[1], parameters[5]
+    degree = metadata["layout"][0]["mesh"][0]["degree"]
+    z, weights = np.polynomial.legendre.leggauss(14)
+    L2, rateL2 = np.zeros(6), np.zeros(4)
+    source_rate_error = 0.
+    for block, space in enumerate(spaces):
+        for e in space.elements:
+            a, b, c, d = e["bounds"]
+            X, R = np.meshgrid(a+(z+1)*(b-a)/2, c+(z+1)*(d-c)/2)
+            X, R = X.ravel(), R.ravel()
+            W = np.outer(weights, weights).ravel()*(b-a)*(d-c)/4
+            ids, p, _, _ = space.rows(e, X, R)
+            numerical = p@state[offsets[block]+ids]
+            exact = np.array([manufactured_values(x, r, time, parameters)[block] for x, r in zip(X, R)])
+            L2[block] += np.sum(W*(numerical-exact)**2)
+            if block < 4:
+                rate = report["alpha"]*(p@(state[offsets[block]+ids]-history[offsets[block]+ids]))
+                expected = np.array([manufactured_values(x, r, time, parameters, True)[block] for x, r in zip(X, R)])
+                rateL2[block] += np.sum(W*expected**2)
+                source_rate_error = max(source_rate_error, float(np.sqrt(np.sum(W*(rate-expected)**2))))
+    L2, rateL2 = np.sqrt(L2), np.sqrt(rateL2)
+    if degree >= 6:
+        require(max(report["residual_norms"]) < 1e-9, "Resolved evolving manufactured stage has a nonzero physical block residual")
+        require(max(L2) < 1e-8 and source_rate_error < 1e-8, "Manufactured state/storage failed to converge")
+    require(rateL2[0]+rateL2[1] > 1e-4 and rateL2[2] > 1e-7, "Manufactured inner storage vanished")
+    v, ks, es, pw, po = spaces[0], spaces[2], spaces[3], spaces[4], spaces[5]
+    trace, no_slip, k_ground, traction, k_flux, epsilon = [], [], [], [], [], []
+    for x in (.13, .47, .91):
+        uw, guw = v.evaluate(state, offsets[0], x, H, -1)
+        ww, gww = v.evaluate(state, offsets[1], x, H, -1)
+        uo, guo = v.evaluate(state, offsets[0], x, H, 1)
+        wo, gwo = v.evaluate(state, offsets[1], x, H, 1)
+        kw, gkw = ks.evaluate(state, offsets[2], x, H, -1)
+        ko, gko = ks.evaluate(state, offsets[2], x, H, 1)
+        eo, _ = es.evaluate(state, offsets[3], x, H, 1)
+        pi, _ = pw.evaluate(state, offsets[4], x, H, -1)
+        pressure_o, _ = po.evaluate(state, offsets[5], x, H, 1)
+        sampled, _ = ks.evaluate(state, offsets[2], x, parameters[3])
+        profile = Profiles({"geometry": parameters[:5], "metric": [0, 0], "k": sampled,
+                            "q": parameters[6], "kappa": parameters[7], "chi": 1})
+        d = parameters[0]+float(profile.a)*max(H-float(profile.zv), 0)
+        G = np.array([[guo[0], 0, guo[1]], [0, 0, 0], [gwo[0], 0, gwo[1]]])
+        closure = indexed(G, ko, eo, "physical")
+        R = closure["stress"].real
+        tw = np.array([d*(guw[1]+gww[0]), -pi+2*d*gww[1]])
+        to = np.array([-R[0, 2], -pressure_o+2*ko/3-R[2, 2]])
+        trace.append(max(abs(uw-uo), abs(ww-wo), abs(kw-ko)))
+        traction.append(float(np.max(np.abs(tw-to))))
+        k_flux.append(abs(d*gkw[1]-closure["nut"].real*gko[1]))
+        epsilon.append(abs(eo-float(profile.A/H)))
+        u0, _ = v.evaluate(state, offsets[0], x, 0, 1)
+        w0, _ = v.evaluate(state, offsets[1], x, 0, 1)
+        _, g0 = ks.evaluate(state, offsets[2], x, 0, 1)
+        no_slip.append(max(abs(u0), abs(w0)))
+        k_ground.append(abs((parameters[0]+float(profile.a)*max(-float(profile.zv), 0))*g0[1]))
+        near(ww, .01+.005*math.cos(time), "manufactured_shared_nonzero_normal_velocity")
+    if degree >= 6:
+        for name, value in (("trace", trace), ("traction", traction), ("k_flux", k_flux),
+                            ("epsilon", epsilon), ("ground_velocity", no_slip), ("ground_k_flux", k_ground)):
+            near(value, np.zeros(3), "evolving_interface_"+name, tolerance=1e-8)
+    near(trace, np.zeros(3), "one_shared_velocity_k_trace")
+    return {"degree": degree, "time": time, "alpha": report["alpha"], "solved": report["solved"],
+            "iterations": report["iterations"], "physical_block_residual_norms": report["residual_norms"],
+            "field_L2_errors": L2.tolist(), "storage_rate_L2": rateL2.tolist(),
+            "storage_rate_L2_error": source_rate_error, "shared_trace_max": max(trace),
+            "traction_jump_max": max(traction), "k_diffusive_flux_jump_max": max(k_flux),
+            "epsilon_trace_error_max": max(epsilon), "ground_velocity_max": max(no_slip),
+            "ground_k_flux_max": max(k_ground)}
+
+
+def qualify_cases(build, output, template, report, base):
+    def run(command, directory, name, expected_failure=False, timeout=900):
+        directory.mkdir(parents=True, exist_ok=True)
+        start = time.monotonic()
+        result = subprocess.run(list(map(str, command)), cwd=directory, capture_output=True, text=True, timeout=timeout)
+        log = directory/(name+".log")
+        log.write_text(result.stdout+result.stderr)
+        report["commands"].append({"command": list(map(str, command)), "exit_code": result.returncode,
+                                   "expected_failure": expected_failure, "seconds": time.monotonic()-start,
+                                   "log_sha256": digest(log), "binary_sha256": digest(command[0])})
+        require((result.returncode != 0) == expected_failure, f"Unexpected {name} exit; see {log}")
+        return result
+    probe, solver = build/"RANSEquilibriumPatchProbe", build/"IncNavierStokesSolver"
+    def solve_session(session, name, metadata, evolving=False):
+        print("M3 running "+name, flush=True)
+        result = run([solver, session], session.parent, name)
+        data = json.loads(session.with_suffix(".patch.json").read_text())
+        if evolving:
+            summary = check_evolving(data, metadata, True)
+        else:
+            require(data["solved"] and data["iterations"] > 0 and not data["native_time_map"], "No actual nonlinear stage solve")
+            require(max(data["residual_norms"]) < 1e-9, "Stage physical residual exceeds target")
+            near(data["history_as_state_residual"], np.zeros(len(data["state"])), "stationary_manufactured_target_residual")
+            parsed = [float(v) for v in re.findall(r"L (?:2|inf) error \(variable [^)]+\) : ([^\n]+)", result.stdout)]
+            require(len(parsed) == 10 and max(parsed) < 1e-9, "Manufactured native output fields missed the exact state")
+            summary = {"iterations": data["iterations"], "physical_block_residual_norms": data["residual_norms"], "field_errors": parsed}
+        return data, summary
+    stationary = []
+    for condensed in (False, True):
+        name = "stationary-condensed" if condensed else "stationary-full"
+        session = output/name/"case.xml"
+        root = ET.parse(template).getroot()
+        set_info(root, "RANSWallCondense", "True" if condensed else "False")
+        session.parent.mkdir()
+        ET.ElementTree(root).write(session)
+        data, summary = solve_session(session, name, base)
+        stationary.append(data)
+        report[name] = summary
+    near(stationary[0]["state"], stationary[1]["state"], "stationary_full_condensed_state")
+    # The native source readback must reproduce the independently specified
+    # target. The old max(a,0) expression is a deliberately failing API control.
+    K, q, kappa, H = base["parameters"][5], base["parameters"][6], base["parameters"][7], base["parameters"][1]
+    E0 = (K/q)**1.5/(kappa*H)
+    near(np.array(base["fixture_source_probes"])[:, 2:], [[E0, 1.92*E0*E0/K]]*3, "native_source_expression_readback")
+    bad = output/"literal-function-control"/"case.xml"
+    bad.parent.mkdir()
+    root = ET.parse(template).getroot()
+    root.find("CONDITIONS/FUNCTION[@NAME='ScalarSourceOuter']/E[@VAR='eps_tilde']").set(
+        "VALUE", "1.92*E0^2/K0-0.83*E0^2/K0*max(YapScale/y-1,0)*(YapScale/y)^2")
+    ET.ElementTree(root).write(bad)
+    run([probe, bad, bad.parent/"sources.json", "sources"], bad.parent, "literal-control")
+    bad_values = json.loads((bad.parent/"sources.json").read_text())["fixture_source_probes"]
+    require(np.max(np.abs(np.array(bad_values)[:, 3]-1.92*E0*E0/K)) > 1e-4, "Expected 5.9 literal-argument incompatibility was not reproduced")
+    report["source_expression_control"] = {"original_max_literal": "failed_as_observed_on_5.9",
+                                            "equivalent_unary_positive_part": "passed", "legacy_readback": bad_values}
+    invalid = output/"invalid-matching-height"/"case.xml"
+    invalid.parent.mkdir()
+    root = ET.parse(template).getroot()
+    set_parameter(root, "RANSWallHeight", 1.9)
+    ET.ElementTree(root).write(invalid)
+    result = run([probe, invalid, invalid.parent/"invalid.json", "layout"], invalid.parent, "invalid-H", True)
+    require("element crosses ground or matching height" in result.stderr, "Wrong invalid-geometry rejection")
+    model = Profiles({"geometry": base["parameters"][:5], "metric": [0, 0], "k": K, "q": q, "kappa": kappa, "chi": 1})
+    ell = float(model.nu/model.a-model.zv)
+    def knots(factor):
+        result = {0., H, base["parameters"][2]}
+        r = 0.
+        while True:
+            r = (r+ell)*factor-ell
+            if r >= H:
+                break
+            result.add(r)
+        return sorted(result)
+    p_results = []
+    for degree in (4, 6, 8):
+        name = f"parallel-p{degree}"
+        session = parallel_session(template, output/name/"case.xml", degree, knots(1.4))
+        print("M3 running "+name, flush=True)
+        run([probe, session, session.parent/"parallel.json", "parallel"], session.parent, name)
+        raw = json.loads((session.parent/"parallel.json").read_text())
+        p_results.append({"degree": degree, "inner_elements": len(knots(1.4))-1, "cases": check_parallel(raw)})
+    for j in range(3):
+        e4, e6, e8 = (p["cases"][j]["velocity_RMS_error"] for p in p_results)
+        require(e6 < .1*e4+1e-12 and e8 < .1*e6+1e-12 and e8 < 1e-9, "Native parallel p refinement failed")
+        require(p_results[-1]["cases"][j]["weak_traction_error"] < 1e-10, "Refined AWF traction mismatch")
+    report["parallel_p_refinement"] = p_results
+    h_results = []
+    coarse = knots(2.5)
+    for level in (1, 2, 4):
+        grid = sorted({a+(b-a)*j/level for a, b in zip(coarse[:-1], coarse[1:]) for j in range(level+1)})
+        name = f"parallel-h{level}"
+        session = parallel_session(template, output/name/"case.xml", 4, grid)
+        run([probe, session, session.parent/"parallel.json", "parallel"], session.parent, name)
+        raw = json.loads((session.parent/"parallel.json").read_text())
+        h_results.append({"subdivision": level, "inner_elements": len(grid)-1, "cases": check_parallel(raw)})
+    for j in range(3):
+        e = [r["cases"][j]["velocity_RMS_error"] for r in h_results]
+        rates = [math.log(e[i]/e[i+1], 2) for i in range(2)]
+        require(min(rates) > 3.5, "Native parallel h refinement has insufficient consistency")
+        h_results[-1]["cases"][j]["h_rates"] = rates
+    report["parallel_h_refinement"] = h_results
+    metadata_by_degree, audits = {}, []
+    specifications = [(4, .3, 5.), (6, .3, 5.), (8, .3, 5.), (6, 0., 5.), (6, .9, 5.), (6, .3, 2.)]
+    for degree, at_time, alpha in specifications:
+        name = f"evolving-audit-p{degree}-t{at_time}-a{alpha}"
+        session = evolving_session(template, output/name/"case.xml", degree, at_time, "Residual", alpha=alpha, perturb=False)
+        if degree not in metadata_by_degree:
+            run([probe, session, session.parent/"layout.json", "layout"], session.parent, "layout")
+            metadata_by_degree[degree] = json.loads((session.parent/"layout.json").read_text())
+        print("M3 running "+name, flush=True)
+        run([solver, session], session.parent, name)
+        data = json.loads(session.with_suffix(".patch.json").read_text())
+        audits.append(check_evolving(data, metadata_by_degree[degree], False))
+    coarse_error = max(audits[0]["physical_block_residual_norms"])
+    require(coarse_error > 1e-8 and max(audits[1]["physical_block_residual_norms"]) < .01*coarse_error,
+            "Manufactured finite-space defect did not refine away")
+    report["evolving_manufactured_audits"] = audits
+    solutions = []
+    for condensed in (False, True):
+        name = "evolving-condensed" if condensed else "evolving-full"
+        session = evolving_session(template, output/name/"case.xml", 6, .3, "Solve", condensed)
+        data, summary = solve_session(session, name, metadata_by_degree[6], True)
+        solutions.append(data)
+        report[name] = summary
+    near(solutions[0]["state"], solutions[1]["state"], "evolving_full_condensed_state")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--build", type=Path, required=True)
@@ -297,9 +655,13 @@ def main():
         report["layout"] = check_layout(raw)
         report["pressure_and_interface"] = check_pressure(raw)
         report["residual_cases"] = [residual_oracle(raw, c) for c in raw["generic_cases"]]
-        require(args.suite == "residuals", "Full M3 qualification is not implemented yet; residuals is a development pilot")
+        report["condensation"] = check_condensation(raw)
+        report["coarse_parallel_reduction"] = check_parallel(raw)
+        if args.suite == "all":
+            qualify_cases(args.build.resolve(), output,
+                          root/"solvers/IncNavierStokesSolver/Tests/RANS/EquilibriumWallFlat.xml", report, raw)
         report["verification_status"] = "passed"
-        report["milestone_closure"] = False
+        report["milestone_closure"] = args.suite == "all"
     except Exception as error:
         report["verification_status"] = "failed"
         report["error"] = str(error)
@@ -313,6 +675,7 @@ def main():
         sources = ["solvers/IncNavierStokesSolver/EquationSystems/"+name for name in names]
         sources += ["library/UnitTests/SolverUtils/RANSEquilibriumPatchProbe.cpp",
                     "solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m3.py",
+                    "solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m3_cases.py",
                     "solvers/IncNavierStokesSolver/Tests/RANS/EquilibriumWallFlat.xml"]
         report["source_sha256"] = {name: digest(root/name) for name in sources}
         report["artifacts_sha256"] = {p.name: digest(p) for p in output.iterdir() if p.is_file()}
