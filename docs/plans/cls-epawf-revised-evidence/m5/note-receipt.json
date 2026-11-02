@@ -1,0 +1,91 @@
+{
+  "schema": 1,
+  "source_commit": "e6bb342afaafeb05cf1ef9c195e1ab0d74263055",
+  "source_status": "",
+  "main_commit": "f4b70baec10016dd098005bc5a5507b87e4a57bf",
+  "main_status": "",
+  "started_utc": "2026-11-02T15:41:27.319989+00:00",
+  "compiler_workers": 16,
+  "test_workers": 1,
+  "mpi_ranks": [
+    1,
+    2,
+    4
+  ],
+  "maximum_concurrent_test_ranks": 4,
+  "thread_environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1"
+  },
+  "connection": "tailscale:100.105.247.110",
+  "runner_sha256": "3435e583583046a0ae0430584dbb7d55518ae87e3b28fdfa6d73cbe94664675f",
+  "commands": [
+    {
+      "command": [
+        "cmake",
+        "-S",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/source/solvers/IncNavierStokesSolver/Tests/RANS",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build",
+        "-DRANS_BUILD_SOLVER=ON",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake"
+      ],
+      "exit_code": 0,
+      "seconds": 0.6154039630018815,
+      "timeout_seconds": 180,
+      "log_sha256": "35960d42a4165d7d5039422359fd0a475e607ab16336ef9d74b98750043df411"
+    },
+    {
+      "command": [
+        "cmake",
+        "--build",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build",
+        "--parallel",
+        "16"
+      ],
+      "exit_code": 0,
+      "seconds": 0.9667288330019801,
+      "timeout_seconds": 900,
+      "log_sha256": "e9fcb549501f8fc61177da63990774e87d9ac7b66828e363fd8e7754379e0b8d"
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/RANSEquilibriumProfilesProbe",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-006/profiles.json"
+      ],
+      "exit_code": 0,
+      "seconds": 0.7665542809991166,
+      "timeout_seconds": 180,
+      "log_sha256": "fb9c4666e66656a618387842f28cd913d2c61eb970da7ba325a9b712a78efa6b"
+    },
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "python3",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m5_note.py",
+        "--probe",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/RANSCurvedNoteProbe",
+        "--profiles",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-006/profiles.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-006/note"
+      ],
+      "exit_code": 0,
+      "seconds": 0.26542023599904496,
+      "timeout_seconds": 180,
+      "log_sha256": "76fdd41d2785075e3d174dd76a5e0130dd3e2b51d80bf9b7746f37d78ea5ba8f"
+    }
+  ],
+  "status": "passed",
+  "finished_utc": "2026-11-02T15:41:29.978714+00:00",
+  "source_end_commit": "e6bb342afaafeb05cf1ef9c195e1ab0d74263055",
+  "source_end_status": "",
+  "main_end_commit": "f4b70baec10016dd098005bc5a5507b87e4a57bf",
+  "main_end_status": ""
+}

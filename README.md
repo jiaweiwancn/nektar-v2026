@@ -52,6 +52,12 @@ adds native IMEX1/2 startup/history, fixed free-load anchoring, full 3D flat
 reference/rotation, MPI 1/2/4 and full-history restart. The complete M4
 qualification and 25 other registered Linux regressions pass. The original
 stability and positivity failures remain recorded physical gates.
+[M5 conservative curved patch](docs/plans/cls-epawf-revised-m5.md)
+adds certified analytic normal maps, variable-height interfaces, full Cartesian
+momentum/scalar coupling, conservative flux and energy audits, native curved
+manufactured cases, MPI ownership and restart checks. All 28 registered tests
+are covered by passing Linux qualification, note checks and regression/replay
+receipts. The original physical failure gates remain unchanged.
 
 
 Tutorials

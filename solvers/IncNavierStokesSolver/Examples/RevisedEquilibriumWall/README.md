@@ -1,4 +1,4 @@
-# Revised CLS/EP-AWF native flat wall stage and evolution
+# Revised CLS/EP-AWF native wall stage and mapped evolution
 
 
 `SolverType=RANSEquilibriumWallEvolution` selects the M4 time-dependent
@@ -10,7 +10,7 @@ spatial checks.
 | Selector | Operation | Qualified mesh and execution |
 | --- | --- | --- |
 | `RANSEquilibriumWallSystem` | One supplied nonlinear stage; `NumSteps=0` | Serial 2D affine quadrilaterals, M3 |
-| `RANSEquilibriumWallEvolution` | Native IMEX1/2 with native startup and full-history restart | Flat affine quads or hexahedra; serial and MPI 2/4, M4 |
+| `RANSEquilibriumWallEvolution` | Native IMEX1/2 with native startup and full-history restart | Affine charts or analytic mapped quads/hexahedra; serial and MPI 2/4, M4/M5 |
 
 M4 uses globally numbered native CG coefficients replicated on each rank.
 Physical cells own their volume/source quadrature through `geometry ID % ranks`;
@@ -255,3 +255,102 @@ ctest --test-dir "$CLS_EP_RUN/build" --parallel 1 --output-on-failure \
 The original CLS adverse-diffusion and inner-k positivity findings remain
 failed physical gates. A converged flat stage does not qualify long-time
 stability or terrain accuracy.
+
+## M5 analytic normal-coordinate geometry
+
+`RANSEquilibriumWallEvolution` also supports analytic mapped quads/hexahedra.
+The XML mesh represents an affine computational chart `(q1,q2,rho)`; in 2D
+its native `(x,y)` means `(q1,rho)`. Physical positions are
+`X(q)+rho*H(q)/H0*n(q)` and the matching chart is `rho=H0`.
+Velocity components remain Cartesian. All physical gradients, volume masses,
+pressure means and oriented face fluxes use this map, including the outer tube.
+This path supports the analytic maps below; arbitrary Cartesian curved XML
+imports use a different geometry representation.
+
+| Selection | Physical base wall |
+| --- | --- |
+| `RANSWallMap=Flat` (default) | Horizontal wall |
+| `RANSWallMap=Plane` | Graph `z=SlopeX*q1+SlopeY*q2` |
+| `RANSWallMap=Cylinder` | Outward circular cylinder of `Radius`, extruded in q2 |
+| `RANSWallMap=Gaussian` | Smooth graph `Amplitude*exp(-(q1/LengthX)^2-(q2/LengthY)^2)`; omit q2 in 2D |
+| `RANSWallMap=CosineHill` | C1 graph `Amplitude/2*(1+cos(PI*q1/LengthX))` inside the feet, zero outside |
+
+Map parameter names have the `RANSWallMap` prefix: for example
+`RANSWallMapRadius=12` and `RANSWallMapAmplitude=.025`.
+`H(q)=RANSWallHeight+HeightSlopeX*q1+HeightSlopeY*q2+
+HeightAmplitude*sin(HeightWaveX*q1)*cos(HeightWaveY*q2)` uses the same prefix
+for its height coefficients. Roughness, sample height r_K and tail start r_m
+are physical normal distances. Each must fit below the certified minimum H.
+The complete inner and outer normal tube must pass the positive-stretch and
+injectivity certificate. A cosine foot at q1=±LengthX requires an explicit
+native element/patch face; an element crossing it is rejected.
+
+`RANSWallFunctionCoordinates=Physical` is the default for analytic initial,
+boundary, body and source functions. It passes actual physical `(x,z)` in 2D
+and `(x,y,z)` in 3D. `Chart` passes `(q1,rho)` or `(q1,q2,rho)` and is useful
+for the supplied strong manufactured cases. In both conventions, vector
+function values specify Cartesian components, including the Cartesian
+vertical component of a tangent force on an inclined surface.
+
+Use `RANSWallChi=0` and `RANSWallEta=0` for curved or variable-H M5 cases.
+Nonplanar chi and curved anchoring are rejected. The isolated constant-H
+inclined-plane reference can use chi=eta=1 for rotation/fixed-point checks.
+M5 supplies geometry and conservative coupling; it does not select a spatial
+transition or implement M6 sensors.
+
+Generate a small circular manufactured run on Linux, outside the source tree:
+
+```bash
+source /home/jay/.local/opt/nektar-v2026-mpi/env.sh
+export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 BLIS_NUM_THREADS=1
+mkdir -p /media/jay/新加卷/nektar-v2026-runs/m5-circle-example
+cd /media/jay/新加卷/nektar-v2026-runs/m5-circle-example
+python3 - <<'PY'
+import sys
+from pathlib import Path
+source=Path('/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/source')
+sys.path.insert(0,str(source/'solvers/IncNavierStokesSolver/Tests/RANS'))
+from cls_epawf_m5_cases import mapped_session
+mapped_session(source/'solvers/IncNavierStokesSolver/Tests/RANS/EquilibriumWallFlat.xml',
+               Path('case.xml'),family='circle',degree=5,swirl=True,
+               steps=2,order=2,dt=.005)
+PY
+/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver case.xml
+```
+
+`family='variable'` generates a smooth variable-H graph; `surface3d` with
+`dimension=3` exercises both principal curvatures and both height derivatives.
+`feet` supplies the explicit C1 joins. These are verification data with strong
+manufactured sources, rather than physical terrain-flow validation cases.
+
+Mapped initial function data are lifted onto prescribed and dependent traces
+before starting native histories. The physical surface-L2 boundary projection
+makes prescribed velocities have zero net mass flux while retaining side,
+edge and corner traces. Its reported `boundary_flux_correction` is the RMS
+top-surface velocity change; it does not add a volume mass source. Accepted
+stages retain the original weak continuity rows and negligible gauge multiplier.
+`RANSWallOwnershipShift` reassigns physical cells by
+`(geometry ID+shift)%ranks` for partition/restart checks and is excluded from
+the physics signature.
+
+Mapped output uses `.chart.fld` with explicit coordinate/map metadata, together
+with per-field `.vtu` files containing actual Cartesian points. Load the VTU
+files for physical visualization. The JSON adds map parameters, roughness
+force/work, the complete resolved-plus-k stage energy budget, full unmasked
+final-stage loads, both regional stage loads and the associated constraints.
+The energy budget uses the native combined stage history, which already
+contains the explicit prescribed-body contribution.
+
+The [M5 report](/Users/jay/Documents/nektar-v2026/docs/plans/cls-epawf-revised-m5.md)
+records geometry certificates, metric identities, normal traction and epsilon
+constraint reactions, fixed-geometry refinement, partition/MPI and restart
+evidence. The original model's stability and general inner-k positivity
+limitations remain in force.
+
+
+`roughness_budget` stores integrated Cartesian Fx,Fy,Fz, integrated U·F and
+maximum |n·F|. `energy_budget` stores the unmasked velocity-plus-constant-k weak
+test, stage storage, stress work minus k sources, convective work, prescribed
+and roughness-force work, a reserved zero, their direct sum, weak-minus-direct
+closure, and stored integral of |U|²/2+k. The energy audit includes essential
+row reactions and does not assert unconditional physical decay.

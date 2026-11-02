@@ -1,6 +1,6 @@
 **CLS and EP-AWF revised formulation implementation and validation plan**
 
-Status: Approved by the user on 2 November 2026; M0, M1, M2, M3 and M4 closed.
+Status: Approved by the user on 2 November 2026; M0, M1, M2, M3, M4 and M5 closed.
 Implementation branch: codex/cls-epawf-revised, based on
 6415398d856323c3116e646eaf7c882c66617602.
 
@@ -12,8 +12,8 @@ Implementation branch: codex/cls-epawf-revised, based on
 - Verification Status: M0 contract/baseline audit, M1 kernel identities/
   constitutive counterexamples, M2 profiles/dual loads, M3 native flat
   spatial stage/condensation and M4 constrained reference/native IMEX/MPI/restart
-  VERIFIED on Linux;
-  later milestones UNVERIFIED. Original stability/positivity gates fail as specified.
+  and M5 conservative mapped geometry/equations/native stages VERIFIED on Linux;
+  M6 and later milestones UNVERIFIED. Original stability/positivity gates fail as specified.
 - Version Label: cls-epawf-revised-plan-v1.
 
 The objective is a native implementation of the high-Re CLS model and the
@@ -41,7 +41,13 @@ records constrained physical L2 targets, eta=0 defects/refinement, fixed free-lo
 anchor budgets, native IMEX1/2 startup/history, full 3D horizontal rotation,
 MPI 1/2/4 and full-history restart. The M4 qualification and other 25 registered
 regressions pass at 722d55c; original physical failures remain unchanged.
-M5 and later implementation milestones remain open.
+The [M5 closure report](/Users/jay/Documents/nektar-v2026/docs/plans/cls-epawf-revised-m5.md)
+records normal-map certificates, variable-H fluxes, full Cartesian/normal
+momentum, scalar and epsilon-reaction budgets, actual native metric identities,
+physical h/p refinement, patch/MPI ownership and complete-history restart.
+The complete main qualification, exact-note checks and all 26 other regressions
+pass with source-bound replay of the corrected cached-session probe.
+M6 and later implementation milestones remain open.
 
 The [M0 contract and baseline record](/Users/jay/Documents/nektar-v2026/docs/plans/cls-epawf-revised-m0.md)
 and [contract v1](/Users/jay/Documents/nektar-v2026/docs/plans/cls-epawf-revised-contract-v1.json)

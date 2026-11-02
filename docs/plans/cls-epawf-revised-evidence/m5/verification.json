@@ -1,0 +1,3769 @@
+{
+  "schema": 1,
+  "milestone": "M5",
+  "source_commit": "42b8ba83897cca1202b91032a97492c7d463c503",
+  "started_utc": "2026-11-02T15:13:09.160890+00:00",
+  "python": "3.10.12 (main, Aug 31 2026, 10:18:17) [GCC 11.4.0]",
+  "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.35",
+  "numpy": "1.21.5",
+  "scipy": "1.8.0",
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1"
+  },
+  "frozen_contract_sha256": "4e7bd75022409b8dc2ef31cc73425779b646a97535760b31eeea4ec49087de8a",
+  "sections": {
+    "geometry": {
+      "geometry": {
+        "success": true,
+        "checks": 4608,
+        "errors": {
+          "analytic_point": 5.4196939160743314e-17,
+          "analytic_normal": 5.204170427930421e-18,
+          "analytic_tangent1": 1.1102230246251565e-16,
+          "analytic_tangent2": 2.220446049250313e-16,
+          "analytic_B": 2.7755575615628914e-17,
+          "analytic_Br": 6.938893903907228e-17,
+          "analytic_jacobian": 2.198537175976844e-16,
+          "analytic_inverse": 6.661338147750939e-16,
+          "analytic_determinant": 4.1293453288318244e-16,
+          "analytic_baseArea": 2.2202301696757488e-16,
+          "analytic_r": 0.0,
+          "analytic_H": 0.0,
+          "analytic_scale": 0.0,
+          "analytic_J": 4.0291446605206184e-16,
+          "principal_curvatures": 3.469446951953614e-17,
+          "inverse_roundtrip": 3.497202527569243e-15,
+          "face_cofactor": 6.58074973629655e-16,
+          "fd_map_jacobian": 5.311251438655518e-10,
+          "fd_inverse_jacobian": 1.8015915426161655e-09,
+          "fd_physical_normal_gradient": 1.4170233843908797e-10,
+          "independent_fd_piola": 3.3306690738754696e-11,
+          "fd_piola_identity": 2.2403953692240464e-10,
+          "matching_area": 4.135431435349741e-16,
+          "matching_normal": 2.220446049250313e-16,
+          "matching_mass_flux": 1.6653345369377348e-16,
+          "variable_height_mass_identity": 1.6653345369377348e-16,
+          "old_graph_curvature_sign": 2.7755575615628914e-17,
+          "C1_lateral_cofactor": 0.0,
+          "C1_position": 0.0,
+          "C1_normal": 0.0,
+          "C1_shared_area": 1.1102230246251565e-16
+        },
+        "cases": 13,
+        "rejections": 26,
+        "certificates": {
+          "flat_2": {
+            "minimum_height": 2.0,
+            "maximum_normal_distance": 4.0,
+            "graph_hessian_bound": 0.0,
+            "normal_stretch_lower_bound": 1.0
+          },
+          "tilted_plane_2": {
+            "minimum_height": 2.0,
+            "maximum_normal_distance": 4.0,
+            "graph_hessian_bound": 0.0,
+            "normal_stretch_lower_bound": 1.0
+          },
+          "outward_circle_2": {
+            "minimum_height": 2.0,
+            "maximum_normal_distance": 4.0,
+            "graph_hessian_bound": 0.0,
+            "normal_stretch_lower_bound": 1.0
+          },
+          "variable_height_circle_2": {
+            "minimum_height": 1.888,
+            "maximum_normal_distance": 4.224,
+            "graph_hessian_bound": 0.0,
+            "normal_stretch_lower_bound": 1.0
+          },
+          "gaussian_2": {
+            "minimum_height": 2.0,
+            "maximum_normal_distance": 4.0,
+            "graph_hessian_bound": 0.02777777777777778,
+            "normal_stretch_lower_bound": 0.8888888888888888
+          },
+          "cosine_explicit_feet_2": {
+            "minimum_height": 2.0,
+            "maximum_normal_distance": 4.0,
+            "graph_hessian_bound": 0.09869604401089359,
+            "normal_stretch_lower_bound": 0.6052158239564256
+          },
+          "flat_3": {
+            "minimum_height": 2.0,
+            "maximum_normal_distance": 4.0,
+            "graph_hessian_bound": 0.0,
+            "normal_stretch_lower_bound": 1.0
+          },
+          "tilted_plane_3": {
+            "minimum_height": 2.0,
+            "maximum_normal_distance": 4.0,
+            "graph_hessian_bound": 0.0,
+            "normal_stretch_lower_bound": 1.0
+          },
+          "outward_circle_3": {
+            "minimum_height": 2.0,
+            "maximum_normal_distance": 4.0,
+            "graph_hessian_bound": 0.0,
+            "normal_stretch_lower_bound": 1.0
+          },
+          "variable_height_circle_3": {
+            "minimum_height": 1.8699999999999999,
+            "maximum_normal_distance": 4.26,
+            "graph_hessian_bound": 0.0,
+            "normal_stretch_lower_bound": 1.0
+          },
+          "gaussian_3": {
+            "minimum_height": 2.0,
+            "maximum_normal_distance": 4.0,
+            "graph_hessian_bound": 0.04938271604938271,
+            "normal_stretch_lower_bound": 0.8024691358024691
+          },
+          "variable_height_gaussian_3": {
+            "minimum_height": 1.861,
+            "maximum_normal_distance": 4.2780000000000005,
+            "graph_hessian_bound": 0.04938271604938271,
+            "normal_stretch_lower_bound": 0.7887407407407407
+          },
+          "cosine_explicit_feet_3": {
+            "minimum_height": 2.0,
+            "maximum_normal_distance": 4.0,
+            "graph_hessian_bound": 0.09869604401089359,
+            "normal_stretch_lower_bound": 0.6052158239564256
+          }
+        },
+        "circle_normal_balance": {
+          "normal_acceleration": -0.0016572985781990524,
+          "fd_errors": [
+            1.3422318811961986e-12,
+            3.3580538523481085e-13,
+            8.241107449236118e-14
+          ],
+          "pressure_gradient": 0.0052545454583600125,
+          "expected_pressure_gradient": 0.005254545454545455,
+          "pressure_error": 3.81455717707313e-12
+        },
+        "qualification": "analytic geometry and finite-difference diagnostics; no CFD stability claim"
+      },
+      "walls": []
+    },
+    "weak_operators": [
+      {
+        "dimension": 2,
+        "maximum_block_absolute_errors": [
+          1.942890293094024e-16,
+          3.3306690738754696e-16,
+          1.6653345369377348e-15,
+          4.9439619065339e-17,
+          6.938893903907228e-17,
+          3.469446951953614e-17
+        ],
+        "roughness_budget": [
+          0.0015957893007292532,
+          0.0,
+          0.0003989473251823135,
+          9.471481413916841e-06,
+          1.734723475976807e-18
+        ],
+        "energy_budget": [
+          2.10854507802971,
+          0.5947490452556249,
+          1.5638586465474733,
+          -0.007190474296548803,
+          -0.04287213947683973,
+          0.0,
+          2.1085450780297097,
+          4.440892098500626e-16,
+          2.239594677685604
+        ],
+        "independent_quadrature_orders": [
+          12,
+          24,
+          12
+        ],
+        "comparison": "same declared finite outer Gauss rule, independently reconstructed; higher-order inner quadrature",
+        "interface": {
+          "integrals": [
+            1.0307764064044151,
+            0.002499999999999997,
+            0.0012929366993163804,
+            0.0006999999999999995,
+            0.0,
+            0.00023333333333333325,
+            0.03351880514664975,
+            0.0,
+            0.06347579100422639,
+            0.08291676390078055,
+            0.0,
+            -0.0024277136977953503,
+            0.05345105822682899,
+            -0.02246549739508211,
+            0.008138010027079371,
+            0.009722204414283557,
+            -0.0030490944800946017,
+            0.00019293170932051788,
+            -0.00324202618941512,
+            0.0024999999999999966
+          ],
+          "epsilon_diagnostic_reactions": [
+            0.08624016997264074,
+            0.029624111689121917
+          ],
+          "normal_traction": [
+            0.05345105822682899,
+            -0.02246549739508211
+          ],
+          "generic_state_is_not_traction_balanced": true
+        },
+        "boundary_projection": {
+          "quadrature_order": 20,
+          "exterior_faces": 10,
+          "exterior_quadrature_points": 200,
+          "top_interior_modes": 2,
+          "cartesian_components": [
+            0,
+            2
+          ],
+          "top_area": 1.030776406404415,
+          "flux_before": 0.2237046667054218,
+          "flux_after": 3.469446951953614e-16,
+          "flux_constraint_denominator": 0.858980338670345,
+          "physical_surface_rms": 0.23773941935892848,
+          "predicted_surface_rms": 0.23773941935892892,
+          "maximum_top_coefficient_error": 1.9984014443252818e-15,
+          "maximum_other_coefficient_change": 2.842851437016263e-16,
+          "maximum_stationarity_residual": 7.632783294297951e-17,
+          "mechanism": "prescribed top velocity changed by a physical surface-L2 minimum-norm projection",
+          "changed_only_top_interior_velocity": true,
+          "flux_change_accounted_for_by_boundary_coefficients": true,
+          "scope": "boundary compatibility audit; not a claim of pointwise incompressibility or a manufactured volume mass source"
+        },
+        "higher_outer_order_diagnostic": {
+          "dimension": 2,
+          "maximum_block_absolute_errors": [
+            1.0044550077414893e-05,
+            2.9782201073080827e-05,
+            4.26934079417185e-06,
+            8.695382252218997e-07,
+            6.938893903907228e-17,
+            2.42861286636753e-17
+          ],
+          "roughness_budget": [
+            0.0015957893007292532,
+            0.0,
+            0.0003989473251823135,
+            9.471481413916841e-06,
+            1.734723475976807e-18
+          ],
+          "energy_budget": [
+            2.1085450780297106,
+            0.5947490452556249,
+            1.5638586465474733,
+            -0.007190474296548807,
+            -0.042872139476839724,
+            0.0,
+            2.1085450780297097,
+            8.881784197001252e-16,
+            2.239594677685603
+          ],
+          "independent_quadrature_orders": [
+            12,
+            24,
+            16
+          ],
+          "comparison": "same declared finite outer Gauss rule, independently reconstructed; higher-order inner quadrature"
+        },
+        "invariant_max_switch": {
+          "trace_G_squared_range": [
+            -0.24780162400667752,
+            0.31191121396324745
+          ],
+          "sign_change": true
+        },
+        "family": "plane",
+        "geometry_audit": {
+          "geometry": {
+            "success": true,
+            "checks": 4608,
+            "errors": {
+              "analytic_point": 5.4196939160743314e-17,
+              "analytic_normal": 5.204170427930421e-18,
+              "analytic_tangent1": 1.1102230246251565e-16,
+              "analytic_tangent2": 2.220446049250313e-16,
+              "analytic_B": 2.7755575615628914e-17,
+              "analytic_Br": 6.938893903907228e-17,
+              "analytic_jacobian": 2.198537175976844e-16,
+              "analytic_inverse": 6.661338147750939e-16,
+              "analytic_determinant": 4.1293453288318244e-16,
+              "analytic_baseArea": 2.2202301696757488e-16,
+              "analytic_r": 0.0,
+              "analytic_H": 0.0,
+              "analytic_scale": 0.0,
+              "analytic_J": 4.0291446605206184e-16,
+              "principal_curvatures": 3.469446951953614e-17,
+              "inverse_roundtrip": 3.497202527569243e-15,
+              "face_cofactor": 6.58074973629655e-16,
+              "fd_map_jacobian": 5.311251438655518e-10,
+              "fd_inverse_jacobian": 1.8015915426161655e-09,
+              "fd_physical_normal_gradient": 1.4170233843908797e-10,
+              "independent_fd_piola": 3.3306690738754696e-11,
+              "fd_piola_identity": 2.2403953692240464e-10,
+              "matching_area": 4.135431435349741e-16,
+              "matching_normal": 2.220446049250313e-16,
+              "matching_mass_flux": 1.6653345369377348e-16,
+              "variable_height_mass_identity": 1.6653345369377348e-16,
+              "old_graph_curvature_sign": 2.7755575615628914e-17,
+              "C1_lateral_cofactor": 0.0,
+              "C1_position": 0.0,
+              "C1_normal": 0.0,
+              "C1_shared_area": 1.1102230246251565e-16
+            },
+            "cases": 13,
+            "rejections": 26,
+            "certificates": {
+              "flat_2": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "tilted_plane_2": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "outward_circle_2": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "variable_height_circle_2": {
+                "minimum_height": 1.888,
+                "maximum_normal_distance": 4.224,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "gaussian_2": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.02777777777777778,
+                "normal_stretch_lower_bound": 0.8888888888888888
+              },
+              "cosine_explicit_feet_2": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.09869604401089359,
+                "normal_stretch_lower_bound": 0.6052158239564256
+              },
+              "flat_3": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "tilted_plane_3": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "outward_circle_3": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "variable_height_circle_3": {
+                "minimum_height": 1.8699999999999999,
+                "maximum_normal_distance": 4.26,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "gaussian_3": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.04938271604938271,
+                "normal_stretch_lower_bound": 0.8024691358024691
+              },
+              "variable_height_gaussian_3": {
+                "minimum_height": 1.861,
+                "maximum_normal_distance": 4.2780000000000005,
+                "graph_hessian_bound": 0.04938271604938271,
+                "normal_stretch_lower_bound": 0.7887407407407407
+              },
+              "cosine_explicit_feet_3": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.09869604401089359,
+                "normal_stretch_lower_bound": 0.6052158239564256
+              }
+            },
+            "circle_normal_balance": {
+              "normal_acceleration": -0.0016572985781990524,
+              "fd_errors": [
+                1.3422318811961986e-12,
+                3.3580538523481085e-13,
+                8.241107449236118e-14
+              ],
+              "pressure_gradient": 0.0052545454583600125,
+              "expected_pressure_gradient": 0.005254545454545455,
+              "pressure_error": 3.81455717707313e-12
+            },
+            "qualification": "analytic geometry and finite-difference diagnostics; no CFD stability claim"
+          },
+          "walls": [
+            {
+              "success": true,
+              "checks": 127,
+              "errors": {
+                "regional_raw_residual_sum": 2.7755575615628914e-17,
+                "reported_all_mode_metric_max": 0.0,
+                "reported_seam_max": 0.0,
+                "equal_opposite_seam_load": 1.6653345369377348e-16,
+                "constant_flux_divergence_theorem": 5.633514488234681e-16,
+                "shared_advective_interface_loads": 0.0
+              },
+              "qualification": "actual native weak loads at reported finite quadrature orders"
+            }
+          ]
+        }
+      },
+      {
+        "dimension": 2,
+        "maximum_block_absolute_errors": [
+          1.6653345369377348e-16,
+          5.273559366969494e-16,
+          2.4424906541753444e-15,
+          4.85722573273506e-17,
+          4.85722573273506e-17,
+          1.0408340855860843e-16
+        ],
+        "roughness_budget": [
+          0.00036893942548566166,
+          0.0,
+          1.0872877159010493e-05,
+          1.6944125218732647e-06,
+          6.0173220572945496e-18
+        ],
+        "energy_budget": [
+          2.103394283787693,
+          0.6205269115074394,
+          1.5468625438004886,
+          -0.018901304868205154,
+          -0.04509386665202992,
+          0.0,
+          2.1033942837876936,
+          -4.440892098500626e-16,
+          2.5163520992147235
+        ],
+        "independent_quadrature_orders": [
+          12,
+          24,
+          12
+        ],
+        "comparison": "same declared finite outer Gauss rule, independently reconstructed; higher-order inner quadrature",
+        "interface": {
+          "integrals": [
+            1.1666666666666665,
+            0.08156520448119793,
+            0.040943390208487224,
+            0.01911805236701412,
+            0.0,
+            0.005132615826430939,
+            0.06226518884446198,
+            0.0,
+            0.09124004902800312,
+            0.09394755995612501,
+            0.0,
+            0.017963305949108478,
+            0.09387568227410722,
+            0.02204580965333097,
+            0.048690869519007,
+            0.05049024661251865,
+            0.002359605286804206,
+            0.006031473298247688,
+            -0.0036718680114434825,
+            0.08156520448119792
+          ],
+          "epsilon_diagnostic_reactions": [
+            0.08489327621271499,
+            0.028299173694741823
+          ],
+          "normal_traction": [
+            0.09387568227410722,
+            0.02204580965333097
+          ],
+          "generic_state_is_not_traction_balanced": true
+        },
+        "boundary_projection": {
+          "quadrature_order": 20,
+          "exterior_faces": 10,
+          "exterior_quadrature_points": 200,
+          "top_interior_modes": 2,
+          "cartesian_components": [
+            0,
+            2
+          ],
+          "top_area": 1.3333333333333337,
+          "flux_before": 0.3473884438247229,
+          "flux_after": 2.220446049250313e-16,
+          "flux_constraint_denominator": 1.111265355560499,
+          "physical_surface_rms": 0.28538892219081946,
+          "predicted_surface_rms": 0.28538892219081957,
+          "maximum_top_coefficient_error": 6.661338147750939e-16,
+          "maximum_other_coefficient_change": 1.663965502114086e-16,
+          "maximum_stationarity_residual": 2.7755575615628914e-17,
+          "mechanism": "prescribed top velocity changed by a physical surface-L2 minimum-norm projection",
+          "changed_only_top_interior_velocity": true,
+          "flux_change_accounted_for_by_boundary_coefficients": true,
+          "scope": "boundary compatibility audit; not a claim of pointwise incompressibility or a manufactured volume mass source"
+        },
+        "family": "circle",
+        "geometry_audit": {
+          "geometry": {
+            "success": true,
+            "checks": 4608,
+            "errors": {
+              "analytic_point": 5.4196939160743314e-17,
+              "analytic_normal": 5.204170427930421e-18,
+              "analytic_tangent1": 1.1102230246251565e-16,
+              "analytic_tangent2": 2.220446049250313e-16,
+              "analytic_B": 2.7755575615628914e-17,
+              "analytic_Br": 6.938893903907228e-17,
+              "analytic_jacobian": 2.198537175976844e-16,
+              "analytic_inverse": 6.661338147750939e-16,
+              "analytic_determinant": 4.1293453288318244e-16,
+              "analytic_baseArea": 2.2202301696757488e-16,
+              "analytic_r": 0.0,
+              "analytic_H": 0.0,
+              "analytic_scale": 0.0,
+              "analytic_J": 4.0291446605206184e-16,
+              "principal_curvatures": 3.469446951953614e-17,
+              "inverse_roundtrip": 3.497202527569243e-15,
+              "face_cofactor": 6.58074973629655e-16,
+              "fd_map_jacobian": 5.311251438655518e-10,
+              "fd_inverse_jacobian": 1.8015915426161655e-09,
+              "fd_physical_normal_gradient": 1.4170233843908797e-10,
+              "independent_fd_piola": 3.3306690738754696e-11,
+              "fd_piola_identity": 2.2403953692240464e-10,
+              "matching_area": 4.135431435349741e-16,
+              "matching_normal": 2.220446049250313e-16,
+              "matching_mass_flux": 1.6653345369377348e-16,
+              "variable_height_mass_identity": 1.6653345369377348e-16,
+              "old_graph_curvature_sign": 2.7755575615628914e-17,
+              "C1_lateral_cofactor": 0.0,
+              "C1_position": 0.0,
+              "C1_normal": 0.0,
+              "C1_shared_area": 1.1102230246251565e-16
+            },
+            "cases": 13,
+            "rejections": 26,
+            "certificates": {
+              "flat_2": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "tilted_plane_2": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "outward_circle_2": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "variable_height_circle_2": {
+                "minimum_height": 1.888,
+                "maximum_normal_distance": 4.224,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "gaussian_2": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.02777777777777778,
+                "normal_stretch_lower_bound": 0.8888888888888888
+              },
+              "cosine_explicit_feet_2": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.09869604401089359,
+                "normal_stretch_lower_bound": 0.6052158239564256
+              },
+              "flat_3": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "tilted_plane_3": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "outward_circle_3": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "variable_height_circle_3": {
+                "minimum_height": 1.8699999999999999,
+                "maximum_normal_distance": 4.26,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "gaussian_3": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.04938271604938271,
+                "normal_stretch_lower_bound": 0.8024691358024691
+              },
+              "variable_height_gaussian_3": {
+                "minimum_height": 1.861,
+                "maximum_normal_distance": 4.2780000000000005,
+                "graph_hessian_bound": 0.04938271604938271,
+                "normal_stretch_lower_bound": 0.7887407407407407
+              },
+              "cosine_explicit_feet_3": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.09869604401089359,
+                "normal_stretch_lower_bound": 0.6052158239564256
+              }
+            },
+            "circle_normal_balance": {
+              "normal_acceleration": -0.0016572985781990524,
+              "fd_errors": [
+                1.3422318811961986e-12,
+                3.3580538523481085e-13,
+                8.241107449236118e-14
+              ],
+              "pressure_gradient": 0.0052545454583600125,
+              "expected_pressure_gradient": 0.005254545454545455,
+              "pressure_error": 3.81455717707313e-12
+            },
+            "qualification": "analytic geometry and finite-difference diagnostics; no CFD stability claim"
+          },
+          "walls": [
+            {
+              "success": true,
+              "checks": 127,
+              "errors": {
+                "regional_raw_residual_sum": 4.163336342344337e-17,
+                "reported_all_mode_metric_max": 0.0,
+                "reported_seam_max": 0.0,
+                "equal_opposite_seam_load": 1.907653722488245e-16,
+                "constant_flux_divergence_theorem": 9.141992718397773e-16,
+                "shared_advective_interface_loads": 0.0
+              },
+              "qualification": "actual native weak loads at reported finite quadrature orders"
+            }
+          ]
+        }
+      },
+      {
+        "dimension": 2,
+        "maximum_block_absolute_errors": [
+          1.474514954580286e-16,
+          6.38378239159465e-16,
+          1.3322676295501878e-15,
+          4.336808689942018e-17,
+          5.204170427930421e-17,
+          6.591949208711867e-17
+        ],
+        "roughness_budget": [
+          0.0012899882644550743,
+          0.0,
+          -4.449377307658238e-06,
+          7.006254725389903e-06,
+          1.8465318250143747e-17
+        ],
+        "energy_budget": [
+          2.1249266512241456,
+          0.643949629819214,
+          1.5286113861244013,
+          -0.011518348490460347,
+          -0.03611601622900897,
+          0.0,
+          2.124926651224146,
+          -4.440892098500626e-16,
+          2.206750787618059
+        ],
+        "independent_quadrature_orders": [
+          12,
+          24,
+          12
+        ],
+        "comparison": "same declared finite outer Gauss rule, independently reconstructed; higher-order inner quadrature",
+        "interface": {
+          "integrals": [
+            1.0194888646929823,
+            0.062459082710924874,
+            0.031331974975304246,
+            0.014577699793861209,
+            0.0,
+            0.0038889521428878164,
+            0.052697095974705795,
+            0.0,
+            0.07312685392423722,
+            0.08723831988763951,
+            0.0,
+            0.009713684433681325,
+            0.07342630664582638,
+            0.010214276100218824,
+            0.03810192271637037,
+            0.039708028257653086,
+            0.001392688796359135,
+            0.004614247895032192,
+            -0.0032215590986730555,
+            0.062459082710924874
+          ],
+          "epsilon_diagnostic_reactions": [
+            0.08519315714058912,
+            0.028876531219268628
+          ],
+          "normal_traction": [
+            0.07342630664582638,
+            0.010214276100218824
+          ],
+          "generic_state_is_not_traction_balanced": true
+        },
+        "boundary_projection": {
+          "quadrature_order": 20,
+          "exterior_faces": 10,
+          "exterior_quadrature_points": 200,
+          "top_interior_modes": 2,
+          "cartesian_components": [
+            0,
+            2
+          ],
+          "top_area": 1.0389582692441233,
+          "flux_before": 0.32320238831919124,
+          "flux_after": 5.273559366969494e-16,
+          "flux_constraint_denominator": 0.8662085346411555,
+          "physical_surface_rms": 0.34069383907983564,
+          "predicted_surface_rms": 0.34069383907983614,
+          "maximum_top_coefficient_error": 2.886579864025407e-15,
+          "maximum_other_coefficient_change": 1.9290637101243688e-16,
+          "maximum_stationarity_residual": 9.71445146547012e-17,
+          "mechanism": "prescribed top velocity changed by a physical surface-L2 minimum-norm projection",
+          "changed_only_top_interior_velocity": true,
+          "flux_change_accounted_for_by_boundary_coefficients": true,
+          "scope": "boundary compatibility audit; not a claim of pointwise incompressibility or a manufactured volume mass source"
+        },
+        "family": "smooth",
+        "geometry_audit": {
+          "geometry": {
+            "success": true,
+            "checks": 4608,
+            "errors": {
+              "analytic_point": 5.4196939160743314e-17,
+              "analytic_normal": 5.204170427930421e-18,
+              "analytic_tangent1": 1.1102230246251565e-16,
+              "analytic_tangent2": 2.220446049250313e-16,
+              "analytic_B": 2.7755575615628914e-17,
+              "analytic_Br": 6.938893903907228e-17,
+              "analytic_jacobian": 2.198537175976844e-16,
+              "analytic_inverse": 6.661338147750939e-16,
+              "analytic_determinant": 4.1293453288318244e-16,
+              "analytic_baseArea": 2.2202301696757488e-16,
+              "analytic_r": 0.0,
+              "analytic_H": 0.0,
+              "analytic_scale": 0.0,
+              "analytic_J": 4.0291446605206184e-16,
+              "principal_curvatures": 3.469446951953614e-17,
+              "inverse_roundtrip": 3.497202527569243e-15,
+              "face_cofactor": 6.58074973629655e-16,
+              "fd_map_jacobian": 5.311251438655518e-10,
+              "fd_inverse_jacobian": 1.8015915426161655e-09,
+              "fd_physical_normal_gradient": 1.4170233843908797e-10,
+              "independent_fd_piola": 3.3306690738754696e-11,
+              "fd_piola_identity": 2.2403953692240464e-10,
+              "matching_area": 4.135431435349741e-16,
+              "matching_normal": 2.220446049250313e-16,
+              "matching_mass_flux": 1.6653345369377348e-16,
+              "variable_height_mass_identity": 1.6653345369377348e-16,
+              "old_graph_curvature_sign": 2.7755575615628914e-17,
+              "C1_lateral_cofactor": 0.0,
+              "C1_position": 0.0,
+              "C1_normal": 0.0,
+              "C1_shared_area": 1.1102230246251565e-16
+            },
+            "cases": 13,
+            "rejections": 26,
+            "certificates": {
+              "flat_2": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "tilted_plane_2": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "outward_circle_2": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "variable_height_circle_2": {
+                "minimum_height": 1.888,
+                "maximum_normal_distance": 4.224,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "gaussian_2": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.02777777777777778,
+                "normal_stretch_lower_bound": 0.8888888888888888
+              },
+              "cosine_explicit_feet_2": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.09869604401089359,
+                "normal_stretch_lower_bound": 0.6052158239564256
+              },
+              "flat_3": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "tilted_plane_3": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "outward_circle_3": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "variable_height_circle_3": {
+                "minimum_height": 1.8699999999999999,
+                "maximum_normal_distance": 4.26,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "gaussian_3": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.04938271604938271,
+                "normal_stretch_lower_bound": 0.8024691358024691
+              },
+              "variable_height_gaussian_3": {
+                "minimum_height": 1.861,
+                "maximum_normal_distance": 4.2780000000000005,
+                "graph_hessian_bound": 0.04938271604938271,
+                "normal_stretch_lower_bound": 0.7887407407407407
+              },
+              "cosine_explicit_feet_3": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.09869604401089359,
+                "normal_stretch_lower_bound": 0.6052158239564256
+              }
+            },
+            "circle_normal_balance": {
+              "normal_acceleration": -0.0016572985781990524,
+              "fd_errors": [
+                1.3422318811961986e-12,
+                3.3580538523481085e-13,
+                8.241107449236118e-14
+              ],
+              "pressure_gradient": 0.0052545454583600125,
+              "expected_pressure_gradient": 0.005254545454545455,
+              "pressure_error": 3.81455717707313e-12
+            },
+            "qualification": "analytic geometry and finite-difference diagnostics; no CFD stability claim"
+          },
+          "walls": [
+            {
+              "success": true,
+              "checks": 127,
+              "errors": {
+                "regional_raw_residual_sum": 5.551115123125783e-17,
+                "reported_all_mode_metric_max": 0.0,
+                "reported_seam_max": 0.0,
+                "equal_opposite_seam_load": 9.50167678911984e-17,
+                "constant_flux_divergence_theorem": 9.208942202548753e-16,
+                "shared_advective_interface_loads": 0.0
+              },
+              "qualification": "actual native weak loads at reported finite quadrature orders"
+            }
+          ]
+        }
+      },
+      {
+        "dimension": 2,
+        "maximum_block_absolute_errors": [
+          2.220446049250313e-16,
+          3.0531133177191805e-16,
+          2.55351295663786e-15,
+          5.551115123125783e-17,
+          6.591949208711867e-17,
+          1.0581813203458523e-16
+        ],
+        "roughness_budget": [
+          0.0005741480157557235,
+          0.0,
+          -5.84933161576543e-07,
+          2.909019451868135e-06,
+          1.8309464187848956e-17
+        ],
+        "energy_budget": [
+          2.154336911293519,
+          0.6742423510776405,
+          1.528513973211824,
+          -0.008632566203856811,
+          -0.039786846792088694,
+          0.0,
+          2.154336911293519,
+          0.0,
+          2.2547898354055267
+        ],
+        "independent_quadrature_orders": [
+          12,
+          24,
+          12
+        ],
+        "comparison": "same declared finite outer Gauss rule, independently reconstructed; higher-order inner quadrature",
+        "interface": {
+          "integrals": [
+            1.0218137554648128,
+            0.04788209147688467,
+            0.02403932159355217,
+            0.011234734421598242,
+            0.0,
+            0.003020827743222925,
+            0.046549348157124595,
+            0.0,
+            0.06998600127316008,
+            0.08374421311525514,
+            0.0,
+            0.0036103928938741032,
+            0.06724609820839308,
+            -0.0011153340874099278,
+            0.03126380583991573,
+            0.03294510418099533,
+            0.0002950973198360461,
+            0.003477247840223161,
+            -0.0031821505203871153,
+            0.062478028345226526
+          ],
+          "epsilon_diagnostic_reactions": [
+            0.08364379122901627,
+            0.02802287509899446
+          ],
+          "normal_traction": [
+            0.06724609820839308,
+            -0.0011153340874099278
+          ],
+          "generic_state_is_not_traction_balanced": true
+        },
+        "boundary_projection": {
+          "quadrature_order": 20,
+          "exterior_faces": 10,
+          "exterior_quadrature_points": 200,
+          "top_interior_modes": 2,
+          "cartesian_components": [
+            0,
+            2
+          ],
+          "top_area": 1.0474939455190801,
+          "flux_before": 0.298074895670317,
+          "flux_after": 2.498001805406602e-16,
+          "flux_constraint_denominator": 0.8734573425991597,
+          "physical_surface_rms": 0.3116224874468302,
+          "predicted_surface_rms": 0.31162248744683047,
+          "maximum_top_coefficient_error": 1.5543122344752192e-15,
+          "maximum_other_coefficient_change": 1.5491960323942805e-16,
+          "maximum_stationarity_residual": 4.85722573273506e-17,
+          "mechanism": "prescribed top velocity changed by a physical surface-L2 minimum-norm projection",
+          "changed_only_top_interior_velocity": true,
+          "flux_change_accounted_for_by_boundary_coefficients": true,
+          "scope": "boundary compatibility audit; not a claim of pointwise incompressibility or a manufactured volume mass source"
+        },
+        "family": "variable",
+        "geometry_audit": {
+          "geometry": {
+            "success": true,
+            "checks": 4608,
+            "errors": {
+              "analytic_point": 5.4196939160743314e-17,
+              "analytic_normal": 5.204170427930421e-18,
+              "analytic_tangent1": 1.1102230246251565e-16,
+              "analytic_tangent2": 2.220446049250313e-16,
+              "analytic_B": 2.7755575615628914e-17,
+              "analytic_Br": 6.938893903907228e-17,
+              "analytic_jacobian": 2.198537175976844e-16,
+              "analytic_inverse": 6.661338147750939e-16,
+              "analytic_determinant": 4.1293453288318244e-16,
+              "analytic_baseArea": 2.2202301696757488e-16,
+              "analytic_r": 0.0,
+              "analytic_H": 0.0,
+              "analytic_scale": 0.0,
+              "analytic_J": 4.0291446605206184e-16,
+              "principal_curvatures": 3.469446951953614e-17,
+              "inverse_roundtrip": 3.497202527569243e-15,
+              "face_cofactor": 6.58074973629655e-16,
+              "fd_map_jacobian": 5.311251438655518e-10,
+              "fd_inverse_jacobian": 1.8015915426161655e-09,
+              "fd_physical_normal_gradient": 1.4170233843908797e-10,
+              "independent_fd_piola": 3.3306690738754696e-11,
+              "fd_piola_identity": 2.2403953692240464e-10,
+              "matching_area": 4.135431435349741e-16,
+              "matching_normal": 2.220446049250313e-16,
+              "matching_mass_flux": 1.6653345369377348e-16,
+              "variable_height_mass_identity": 1.6653345369377348e-16,
+              "old_graph_curvature_sign": 2.7755575615628914e-17,
+              "C1_lateral_cofactor": 0.0,
+              "C1_position": 0.0,
+              "C1_normal": 0.0,
+              "C1_shared_area": 1.1102230246251565e-16
+            },
+            "cases": 13,
+            "rejections": 26,
+            "certificates": {
+              "flat_2": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "tilted_plane_2": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "outward_circle_2": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "variable_height_circle_2": {
+                "minimum_height": 1.888,
+                "maximum_normal_distance": 4.224,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "gaussian_2": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.02777777777777778,
+                "normal_stretch_lower_bound": 0.8888888888888888
+              },
+              "cosine_explicit_feet_2": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.09869604401089359,
+                "normal_stretch_lower_bound": 0.6052158239564256
+              },
+              "flat_3": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "tilted_plane_3": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "outward_circle_3": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "variable_height_circle_3": {
+                "minimum_height": 1.8699999999999999,
+                "maximum_normal_distance": 4.26,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "gaussian_3": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.04938271604938271,
+                "normal_stretch_lower_bound": 0.8024691358024691
+              },
+              "variable_height_gaussian_3": {
+                "minimum_height": 1.861,
+                "maximum_normal_distance": 4.2780000000000005,
+                "graph_hessian_bound": 0.04938271604938271,
+                "normal_stretch_lower_bound": 0.7887407407407407
+              },
+              "cosine_explicit_feet_3": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.09869604401089359,
+                "normal_stretch_lower_bound": 0.6052158239564256
+              }
+            },
+            "circle_normal_balance": {
+              "normal_acceleration": -0.0016572985781990524,
+              "fd_errors": [
+                1.3422318811961986e-12,
+                3.3580538523481085e-13,
+                8.241107449236118e-14
+              ],
+              "pressure_gradient": 0.0052545454583600125,
+              "expected_pressure_gradient": 0.005254545454545455,
+              "pressure_error": 3.81455717707313e-12
+            },
+            "qualification": "analytic geometry and finite-difference diagnostics; no CFD stability claim"
+          },
+          "walls": [
+            {
+              "success": true,
+              "checks": 127,
+              "errors": {
+                "regional_raw_residual_sum": 5.551115123125783e-17,
+                "reported_all_mode_metric_max": 0.0,
+                "reported_seam_max": 0.0,
+                "equal_opposite_seam_load": 1.0928757898653885e-16,
+                "constant_flux_divergence_theorem": 1.127244998733179e-15,
+                "shared_advective_interface_loads": 0.0
+              },
+              "qualification": "actual native weak loads at reported finite quadrature orders"
+            }
+          ]
+        }
+      },
+      {
+        "dimension": 3,
+        "maximum_block_absolute_errors": [
+          6.314393452555578e-16,
+          5.898059818321144e-16,
+          8.465450562766819e-16,
+          3.1086244689504383e-15,
+          1.0061396160665481e-16,
+          1.5265566588595902e-16,
+          1.249000902703301e-16
+        ],
+        "roughness_budget": [
+          0.001648603365924819,
+          0.002950632824581912,
+          -2.478698718716398e-05,
+          1.6141759995740294e-05,
+          2.0572736222912447e-17
+        ],
+        "energy_budget": [
+          2.366820576683045,
+          0.8620410647782419,
+          1.5550673428707795,
+          -0.009345618008538597,
+          -0.0409422129574379,
+          0.0,
+          2.366820576683045,
+          0.0,
+          2.4021163929459117
+        ],
+        "independent_quadrature_orders": [
+          12,
+          24,
+          12
+        ],
+        "comparison": "same declared finite outer Gauss rule, independently reconstructed; higher-order inner quadrature",
+        "interface": {
+          "integrals": [
+            1.0418228896101935,
+            0.07660053710965513,
+            0.039669433096621985,
+            0.019517926589341813,
+            0.0065839271304116214,
+            0.006420153823066474,
+            0.05417529591992258,
+            0.03026893679542951,
+            0.07808991759732067,
+            0.0991954536458628,
+            0.05562446374712877,
+            0.012431920185933566,
+            0.0769935030886309,
+            0.010576106347376825,
+            0.0467569300055384,
+            0.0485405252122582,
+            0.002489973822940157,
+            0.005883685631357369,
+            -0.0033937118084172153,
+            0.08500733865180554
+          ],
+          "epsilon_diagnostic_reactions": [
+            0.08792973416174227,
+            0.02991545111922322
+          ],
+          "normal_traction": [
+            0.0769935030886309,
+            0.010576106347376825
+          ],
+          "generic_state_is_not_traction_balanced": true
+        },
+        "boundary_projection": {
+          "quadrature_order": 20,
+          "exterior_faces": 18,
+          "exterior_quadrature_points": 7200,
+          "top_interior_modes": 4,
+          "cartesian_components": [
+            0,
+            1,
+            2
+          ],
+          "top_area": 1.086541359312714,
+          "flux_before": 0.358138062810219,
+          "flux_after": 2.220446049250313e-16,
+          "flux_constraint_denominator": 0.7557798513532487,
+          "physical_surface_rms": 0.39521160987400744,
+          "predicted_surface_rms": 0.39521160987400766,
+          "maximum_top_coefficient_error": 7.105427357601002e-15,
+          "maximum_other_coefficient_change": 2.0756703207809486e-15,
+          "maximum_stationarity_residual": 6.938893903907228e-18,
+          "mechanism": "prescribed top velocity changed by a physical surface-L2 minimum-norm projection",
+          "changed_only_top_interior_velocity": true,
+          "flux_change_accounted_for_by_boundary_coefficients": true,
+          "scope": "boundary compatibility audit; not a claim of pointwise incompressibility or a manufactured volume mass source"
+        },
+        "family": "surface3d",
+        "geometry_audit": {
+          "geometry": {
+            "success": true,
+            "checks": 4608,
+            "errors": {
+              "analytic_point": 5.4196939160743314e-17,
+              "analytic_normal": 5.204170427930421e-18,
+              "analytic_tangent1": 1.1102230246251565e-16,
+              "analytic_tangent2": 2.220446049250313e-16,
+              "analytic_B": 2.7755575615628914e-17,
+              "analytic_Br": 6.938893903907228e-17,
+              "analytic_jacobian": 2.198537175976844e-16,
+              "analytic_inverse": 6.661338147750939e-16,
+              "analytic_determinant": 4.1293453288318244e-16,
+              "analytic_baseArea": 2.2202301696757488e-16,
+              "analytic_r": 0.0,
+              "analytic_H": 0.0,
+              "analytic_scale": 0.0,
+              "analytic_J": 4.0291446605206184e-16,
+              "principal_curvatures": 3.469446951953614e-17,
+              "inverse_roundtrip": 3.497202527569243e-15,
+              "face_cofactor": 6.58074973629655e-16,
+              "fd_map_jacobian": 5.311251438655518e-10,
+              "fd_inverse_jacobian": 1.8015915426161655e-09,
+              "fd_physical_normal_gradient": 1.4170233843908797e-10,
+              "independent_fd_piola": 3.3306690738754696e-11,
+              "fd_piola_identity": 2.2403953692240464e-10,
+              "matching_area": 4.135431435349741e-16,
+              "matching_normal": 2.220446049250313e-16,
+              "matching_mass_flux": 1.6653345369377348e-16,
+              "variable_height_mass_identity": 1.6653345369377348e-16,
+              "old_graph_curvature_sign": 2.7755575615628914e-17,
+              "C1_lateral_cofactor": 0.0,
+              "C1_position": 0.0,
+              "C1_normal": 0.0,
+              "C1_shared_area": 1.1102230246251565e-16
+            },
+            "cases": 13,
+            "rejections": 26,
+            "certificates": {
+              "flat_2": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "tilted_plane_2": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "outward_circle_2": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "variable_height_circle_2": {
+                "minimum_height": 1.888,
+                "maximum_normal_distance": 4.224,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "gaussian_2": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.02777777777777778,
+                "normal_stretch_lower_bound": 0.8888888888888888
+              },
+              "cosine_explicit_feet_2": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.09869604401089359,
+                "normal_stretch_lower_bound": 0.6052158239564256
+              },
+              "flat_3": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "tilted_plane_3": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "outward_circle_3": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "variable_height_circle_3": {
+                "minimum_height": 1.8699999999999999,
+                "maximum_normal_distance": 4.26,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "gaussian_3": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.04938271604938271,
+                "normal_stretch_lower_bound": 0.8024691358024691
+              },
+              "variable_height_gaussian_3": {
+                "minimum_height": 1.861,
+                "maximum_normal_distance": 4.2780000000000005,
+                "graph_hessian_bound": 0.04938271604938271,
+                "normal_stretch_lower_bound": 0.7887407407407407
+              },
+              "cosine_explicit_feet_3": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.09869604401089359,
+                "normal_stretch_lower_bound": 0.6052158239564256
+              }
+            },
+            "circle_normal_balance": {
+              "normal_acceleration": -0.0016572985781990524,
+              "fd_errors": [
+                1.3422318811961986e-12,
+                3.3580538523481085e-13,
+                8.241107449236118e-14
+              ],
+              "pressure_gradient": 0.0052545454583600125,
+              "expected_pressure_gradient": 0.005254545454545455,
+              "pressure_error": 3.81455717707313e-12
+            },
+            "qualification": "analytic geometry and finite-difference diagnostics; no CFD stability claim"
+          },
+          "walls": [
+            {
+              "success": true,
+              "checks": 147,
+              "errors": {
+                "regional_raw_residual_sum": 1.1796119636642288e-16,
+                "reported_all_mode_metric_max": 0.0,
+                "reported_seam_max": 0.0,
+                "equal_opposite_seam_load": 3.458333879685638e-16,
+                "constant_flux_divergence_theorem": 2.812059599391868e-15,
+                "shared_advective_interface_loads": 0.0
+              },
+              "qualification": "actual native weak loads at reported finite quadrature orders"
+            }
+          ]
+        }
+      },
+      {
+        "dimension": 2,
+        "maximum_block_absolute_errors": [
+          3.677613769070831e-16,
+          9.992007221626409e-16,
+          2.6645352591003757e-15,
+          8.326672684688674e-17,
+          1.942890293094024e-16,
+          5.551115123125783e-17
+        ],
+        "roughness_budget": [
+          0.009431454733855404,
+          0.0,
+          6.431276028856827e-05,
+          3.624846690021543e-05,
+          1.9813794702172594e-17
+        ],
+        "energy_budget": [
+          6.150856494003465,
+          1.769503155588737,
+          4.470677304727811,
+          -0.029691113738725385,
+          -0.059632852574362225,
+          0.0,
+          6.1508564940034605,
+          4.440892098500626e-15,
+          6.281856733546757
+        ],
+        "independent_quadrature_orders": [
+          12,
+          24,
+          12
+        ],
+        "comparison": "same declared finite outer Gauss rule, independently reconstructed; higher-order inner quadrature",
+        "interface": {
+          "integrals": [
+            3.0004933889365666,
+            0.12114081522664613,
+            0.06123261596841654,
+            0.029664389218747887,
+            0.0,
+            0.00846978339134495,
+            0.13874662755239223,
+            0.0,
+            0.1746297682677881,
+            0.2278632587747464,
+            0.0,
+            0.05012346371811832,
+            0.17487645183124506,
+            0.05056758597918515,
+            0.08096317860088888,
+            0.0854464212339247,
+            -0.00026452792561898806,
+            0.009048474030092112,
+            -0.009313001955711104,
+            0.12114081522664612
+          ],
+          "epsilon_diagnostic_reactions": [
+            0.07893187934302863,
+            0.08173935056545008,
+            0.08499527116461347,
+            0.08823139073130327,
+            0.028068456004447063,
+            0.028870139192435397,
+            0.028583000643253142,
+            0.029289613643933014
+          ],
+          "normal_traction": [
+            0.17487645183124506,
+            0.05056758597918515
+          ],
+          "generic_state_is_not_traction_balanced": true
+        },
+        "boundary_projection": {
+          "quadrature_order": 20,
+          "exterior_faces": 16,
+          "exterior_quadrature_points": 320,
+          "top_interior_modes": 11,
+          "cartesian_components": [
+            0,
+            2
+          ],
+          "top_area": 3.0004933889365657,
+          "flux_before": 0.9621632609065847,
+          "flux_after": 2.220446049250313e-16,
+          "flux_constraint_denominator": 2.935685698779772,
+          "physical_surface_rms": 0.32418853671311476,
+          "predicted_surface_rms": 0.32418853671311487,
+          "maximum_top_coefficient_error": 2.3314683517128287e-15,
+          "maximum_other_coefficient_change": 2.271348870980391e-16,
+          "maximum_stationarity_residual": 2.220446049250313e-16,
+          "mechanism": "prescribed top velocity changed by a physical surface-L2 minimum-norm projection",
+          "changed_only_top_interior_velocity": true,
+          "flux_change_accounted_for_by_boundary_coefficients": true,
+          "scope": "boundary compatibility audit; not a claim of pointwise incompressibility or a manufactured volume mass source"
+        },
+        "family": "feet",
+        "geometry_audit": {
+          "geometry": {
+            "success": true,
+            "checks": 4608,
+            "errors": {
+              "analytic_point": 5.4196939160743314e-17,
+              "analytic_normal": 5.204170427930421e-18,
+              "analytic_tangent1": 1.1102230246251565e-16,
+              "analytic_tangent2": 2.220446049250313e-16,
+              "analytic_B": 2.7755575615628914e-17,
+              "analytic_Br": 6.938893903907228e-17,
+              "analytic_jacobian": 2.198537175976844e-16,
+              "analytic_inverse": 6.661338147750939e-16,
+              "analytic_determinant": 4.1293453288318244e-16,
+              "analytic_baseArea": 2.2202301696757488e-16,
+              "analytic_r": 0.0,
+              "analytic_H": 0.0,
+              "analytic_scale": 0.0,
+              "analytic_J": 4.0291446605206184e-16,
+              "principal_curvatures": 3.469446951953614e-17,
+              "inverse_roundtrip": 3.497202527569243e-15,
+              "face_cofactor": 6.58074973629655e-16,
+              "fd_map_jacobian": 5.311251438655518e-10,
+              "fd_inverse_jacobian": 1.8015915426161655e-09,
+              "fd_physical_normal_gradient": 1.4170233843908797e-10,
+              "independent_fd_piola": 3.3306690738754696e-11,
+              "fd_piola_identity": 2.2403953692240464e-10,
+              "matching_area": 4.135431435349741e-16,
+              "matching_normal": 2.220446049250313e-16,
+              "matching_mass_flux": 1.6653345369377348e-16,
+              "variable_height_mass_identity": 1.6653345369377348e-16,
+              "old_graph_curvature_sign": 2.7755575615628914e-17,
+              "C1_lateral_cofactor": 0.0,
+              "C1_position": 0.0,
+              "C1_normal": 0.0,
+              "C1_shared_area": 1.1102230246251565e-16
+            },
+            "cases": 13,
+            "rejections": 26,
+            "certificates": {
+              "flat_2": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "tilted_plane_2": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "outward_circle_2": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "variable_height_circle_2": {
+                "minimum_height": 1.888,
+                "maximum_normal_distance": 4.224,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "gaussian_2": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.02777777777777778,
+                "normal_stretch_lower_bound": 0.8888888888888888
+              },
+              "cosine_explicit_feet_2": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.09869604401089359,
+                "normal_stretch_lower_bound": 0.6052158239564256
+              },
+              "flat_3": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "tilted_plane_3": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "outward_circle_3": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "variable_height_circle_3": {
+                "minimum_height": 1.8699999999999999,
+                "maximum_normal_distance": 4.26,
+                "graph_hessian_bound": 0.0,
+                "normal_stretch_lower_bound": 1.0
+              },
+              "gaussian_3": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.04938271604938271,
+                "normal_stretch_lower_bound": 0.8024691358024691
+              },
+              "variable_height_gaussian_3": {
+                "minimum_height": 1.861,
+                "maximum_normal_distance": 4.2780000000000005,
+                "graph_hessian_bound": 0.04938271604938271,
+                "normal_stretch_lower_bound": 0.7887407407407407
+              },
+              "cosine_explicit_feet_3": {
+                "minimum_height": 2.0,
+                "maximum_normal_distance": 4.0,
+                "graph_hessian_bound": 0.09869604401089359,
+                "normal_stretch_lower_bound": 0.6052158239564256
+              }
+            },
+            "circle_normal_balance": {
+              "normal_acceleration": -0.0016572985781990524,
+              "fd_errors": [
+                1.3422318811961986e-12,
+                3.3580538523481085e-13,
+                8.241107449236118e-14
+              ],
+              "pressure_gradient": 0.0052545454583600125,
+              "expected_pressure_gradient": 0.005254545454545455,
+              "pressure_error": 3.81455717707313e-12
+            },
+            "qualification": "analytic geometry and finite-difference diagnostics; no CFD stability claim"
+          },
+          "walls": [
+            {
+              "success": true,
+              "checks": 127,
+              "errors": {
+                "regional_raw_residual_sum": 5.462968185291613e-17,
+                "reported_all_mode_metric_max": 0.0,
+                "reported_seam_max": 0.0,
+                "equal_opposite_seam_load": 2.9018683719719837e-16,
+                "constant_flux_divergence_theorem": 1.3487475025719675e-15,
+                "shared_advective_interface_loads": 0.0
+              },
+              "qualification": "actual native weak loads at reported finite quadrature orders"
+            }
+          ]
+        }
+      }
+    ],
+    "patch_partition": {
+      "identical_global_polynomials": true,
+      "actual_lateral_patch_counts": [
+        1,
+        2
+      ],
+      "quadrature_refinement": [
+        {
+          "outer_order": 12,
+          "maximum_weak_moment_difference": 6.121531754832432e-07,
+          "moments": [
+            {
+              "block": 0,
+              "test": "one",
+              "one_patch": -0.15555048396101767,
+              "two_patches": -0.1555504839610182,
+              "error": 5.273559366969494e-16
+            },
+            {
+              "block": 0,
+              "test": "q1",
+              "one_patch": -0.06415033954843181,
+              "two_patches": -0.06415081209835065,
+              "error": 4.7254991883405317e-07
+            },
+            {
+              "block": 0,
+              "test": "rho",
+              "one_patch": -0.4233552747391993,
+              "two_patches": -0.42335466258602383,
+              "error": 6.121531754832432e-07
+            },
+            {
+              "block": 1,
+              "test": "one",
+              "one_patch": -0.10334402809054963,
+              "two_patches": -0.10334402809054952,
+              "error": 1.1102230246251565e-16
+            },
+            {
+              "block": 1,
+              "test": "q1",
+              "one_patch": -0.059101526920584485,
+              "two_patches": -0.05910096707226465,
+              "error": 5.598483198351878e-07
+            },
+            {
+              "block": 1,
+              "test": "rho",
+              "one_patch": -0.29457763684518723,
+              "two_patches": -0.29457799759224174,
+              "error": 3.60747054506394e-07
+            },
+            {
+              "block": 2,
+              "test": "one",
+              "one_patch": 1.8372991197315176,
+              "two_patches": 1.8372991023239726,
+              "error": 9.47452972628519e-09
+            },
+            {
+              "block": 2,
+              "test": "q1",
+              "one_patch": 0.8536767144953792,
+              "two_patches": 0.8536767070418978,
+              "error": 7.453481387642569e-09
+            },
+            {
+              "block": 2,
+              "test": "rho",
+              "one_patch": 0.9949527312339084,
+              "two_patches": 0.9949526939812909,
+              "error": 3.725261743525721e-08
+            },
+            {
+              "block": 3,
+              "test": "one",
+              "one_patch": -0.017625271679778207,
+              "two_patches": -0.017625275260344807,
+              "error": 3.5805666001587078e-09
+            },
+            {
+              "block": 3,
+              "test": "q1",
+              "one_patch": -0.014275010897641958,
+              "two_patches": -0.014275012428402125,
+              "error": 1.5307601661934678e-09
+            },
+            {
+              "block": 3,
+              "test": "rho",
+              "one_patch": -0.04790626467303324,
+              "two_patches": -0.04790645077130898,
+              "error": 1.860982757409535e-07
+            },
+            {
+              "block": 4,
+              "test": "one",
+              "one_patch": -0.008027917519189949,
+              "two_patches": -0.008027917519189983,
+              "error": 3.469446951953614e-17
+            },
+            {
+              "block": 4,
+              "test": "q1",
+              "one_patch": -0.05333164323590991,
+              "two_patches": -0.05333164323590994,
+              "error": 3.469446951953614e-17
+            },
+            {
+              "block": 4,
+              "test": "rho",
+              "one_patch": -0.0022172343624430046,
+              "two_patches": -0.002217234362443036,
+              "error": 3.122502256758253e-17
+            },
+            {
+              "block": 5,
+              "test": "one",
+              "one_patch": 0.008027917519189878,
+              "two_patches": 0.008027917519189888,
+              "error": 1.0408340855860843e-17
+            },
+            {
+              "block": 5,
+              "test": "q1",
+              "one_patch": -0.018593891653995397,
+              "two_patches": -0.0185938916539954,
+              "error": 3.469446951953614e-18
+            },
+            {
+              "block": 5,
+              "test": "rho",
+              "one_patch": 0.023013363555011115,
+              "two_patches": 0.023013363555011063,
+              "error": 5.204170427930421e-17
+            }
+          ]
+        },
+        {
+          "outer_order": 24,
+          "maximum_weak_moment_difference": 1.1488277870674857e-08,
+          "moments": [
+            {
+              "block": 0,
+              "test": "one",
+              "one_patch": -0.1555504839610182,
+              "two_patches": -0.1555504839610183,
+              "error": 1.1102230246251565e-16
+            },
+            {
+              "block": 0,
+              "test": "q1",
+              "one_patch": -0.06415080061634401,
+              "two_patches": -0.06415081210462188,
+              "error": 1.1488277870674857e-08
+            },
+            {
+              "block": 0,
+              "test": "rho",
+              "one_patch": -0.4233546692564452,
+              "two_patches": -0.4233546625814147,
+              "error": 6.675030528313641e-09
+            },
+            {
+              "block": 1,
+              "test": "one",
+              "one_patch": -0.10334402809054988,
+              "two_patches": -0.10334402809054938,
+              "error": 4.996003610813204e-16
+            },
+            {
+              "block": 1,
+              "test": "q1",
+              "one_patch": -0.05910097339727801,
+              "two_patches": -0.05910096706689186,
+              "error": 6.330386152775258e-09
+            },
+            {
+              "block": 1,
+              "test": "rho",
+              "one_patch": -0.2945779943279319,
+              "two_patches": -0.2945779975951536,
+              "error": 3.2672216598861326e-09
+            },
+            {
+              "block": 2,
+              "test": "one",
+              "one_patch": 1.8372991023932759,
+              "two_patches": 1.8372991023239054,
+              "error": 3.775678617004728e-11
+            },
+            {
+              "block": 2,
+              "test": "q1",
+              "one_patch": 0.8536767070661508,
+              "two_patches": 0.853676707041874,
+              "error": 2.4276802790268448e-11
+            },
+            {
+              "block": 2,
+              "test": "rho",
+              "one_patch": 0.9949526941248285,
+              "two_patches": 0.9949526939811999,
+              "error": 1.4362855349503434e-10
+            },
+            {
+              "block": 3,
+              "test": "one",
+              "one_patch": -0.017625339361963494,
+              "two_patches": -0.017625339376095568,
+              "error": 1.4132073983263993e-11
+            },
+            {
+              "block": 3,
+              "test": "q1",
+              "one_patch": -0.014275044481343183,
+              "two_patches": -0.014275044486275186,
+              "error": 4.932002722890516e-12
+            },
+            {
+              "block": 3,
+              "test": "rho",
+              "one_patch": -0.047906579510266736,
+              "two_patches": -0.04790658114035261,
+              "error": 1.6300858718398814e-09
+            },
+            {
+              "block": 4,
+              "test": "one",
+              "one_patch": -0.00802791751919002,
+              "two_patches": -0.008027917519189862,
+              "error": 1.5785983631388945e-16
+            },
+            {
+              "block": 4,
+              "test": "q1",
+              "one_patch": -0.053331643235909984,
+              "two_patches": -0.05333164323590998,
+              "error": 6.938893903907228e-18
+            },
+            {
+              "block": 4,
+              "test": "rho",
+              "one_patch": -0.002217234362443008,
+              "two_patches": -0.0022172343624428624,
+              "error": 1.457167719820518e-16
+            },
+            {
+              "block": 5,
+              "test": "one",
+              "one_patch": 0.008027917519189874,
+              "two_patches": 0.008027917519189895,
+              "error": 2.0816681711721685e-17
+            },
+            {
+              "block": 5,
+              "test": "q1",
+              "one_patch": -0.01859389165399544,
+              "two_patches": -0.01859389165399542,
+              "error": 1.734723475976807e-17
+            },
+            {
+              "block": 5,
+              "test": "rho",
+              "one_patch": 0.023013363555011105,
+              "two_patches": 0.02301336355501109,
+              "error": 1.3877787807814457e-17
+            }
+          ]
+        },
+        {
+          "outer_order": 48,
+          "maximum_weak_moment_difference": 1.4498624523184844e-11,
+          "moments": [
+            {
+              "block": 0,
+              "test": "one",
+              "one_patch": -0.1555504839610179,
+              "two_patches": -0.15555048396101837,
+              "error": 4.718447854656915e-16
+            },
+            {
+              "block": 0,
+              "test": "q1",
+              "one_patch": -0.06415081209012555,
+              "two_patches": -0.06415081210462417,
+              "error": 1.4498624523184844e-11
+            },
+            {
+              "block": 0,
+              "test": "rho",
+              "one_patch": -0.42335466258022664,
+              "two_patches": -0.4233546625814933,
+              "error": 1.266653448794841e-12
+            },
+            {
+              "block": 1,
+              "test": "one",
+              "one_patch": -0.10334402809054967,
+              "two_patches": -0.10334402809054917,
+              "error": 4.996003610813204e-16
+            },
+            {
+              "block": 1,
+              "test": "q1",
+              "one_patch": -0.05910096706637677,
+              "two_patches": -0.05910096706695251,
+              "error": 5.757408438888945e-13
+            },
+            {
+              "block": 1,
+              "test": "rho",
+              "one_patch": -0.29457799759707676,
+              "two_patches": -0.2945779975951087,
+              "error": 1.9680368446017837e-12
+            },
+            {
+              "block": 2,
+              "test": "one",
+              "one_patch": 1.837299102323881,
+              "two_patches": 1.8372991023239054,
+              "error": 1.3293919596901579e-14
+            },
+            {
+              "block": 2,
+              "test": "q1",
+              "one_patch": 0.8536767070418576,
+              "two_patches": 0.8536767070418749,
+              "error": 1.7319479184152442e-14
+            },
+            {
+              "block": 2,
+              "test": "rho",
+              "one_patch": 0.994952693981142,
+              "two_patches": 0.9949526939812008,
+              "error": 5.88418203051333e-14
+            },
+            {
+              "block": 3,
+              "test": "one",
+              "one_patch": -0.017625332554206143,
+              "two_patches": -0.017625332554200554,
+              "error": 5.5892790395972725e-15
+            },
+            {
+              "block": 3,
+              "test": "q1",
+              "one_patch": -0.014275041075331507,
+              "two_patches": -0.014275041075327689,
+              "error": 3.8181263706249524e-15
+            },
+            {
+              "block": 3,
+              "test": "rho",
+              "one_patch": -0.047906567287258645,
+              "two_patches": -0.04790656728576473,
+              "error": 1.4939161019356106e-12
+            },
+            {
+              "block": 4,
+              "test": "one",
+              "one_patch": -0.008027917519189836,
+              "two_patches": -0.008027917519190051,
+              "error": 2.1510571102112408e-16
+            },
+            {
+              "block": 4,
+              "test": "q1",
+              "one_patch": -0.053331643235910026,
+              "two_patches": -0.05333164323591001,
+              "error": 1.3877787807814457e-17
+            },
+            {
+              "block": 4,
+              "test": "rho",
+              "one_patch": -0.002217234362442779,
+              "two_patches": -0.0022172343624430567,
+              "error": 2.7755575615628914e-16
+            },
+            {
+              "block": 5,
+              "test": "one",
+              "one_patch": 0.008027917519189853,
+              "two_patches": 0.008027917519189921,
+              "error": 6.765421556309548e-17
+            },
+            {
+              "block": 5,
+              "test": "q1",
+              "one_patch": -0.018593891653995404,
+              "two_patches": -0.018593891653995397,
+              "error": 6.938893903907228e-18
+            },
+            {
+              "block": 5,
+              "test": "rho",
+              "one_patch": 0.023013363555011077,
+              "two_patches": 0.023013363555011115,
+              "error": 3.8163916471489756e-17
+            }
+          ]
+        }
+      ]
+    },
+    "planar_reference": [
+      {
+        "dimension": 2,
+        "order": 1,
+        "maximum_drift": 0,
+        "eta": 1,
+        "chi": 1
+      },
+      {
+        "dimension": 2,
+        "order": 2,
+        "maximum_drift": 0,
+        "eta": 1,
+        "chi": 1
+      },
+      {
+        "dimension": 3,
+        "order": 2,
+        "maximum_drift": 0,
+        "eta": 1,
+        "chi": 1
+      }
+    ],
+    "manufactured": [
+      {
+        "family": "circle",
+        "dimension": 2,
+        "swirl": true,
+        "sequence": [
+          {
+            "degree": 3,
+            "error": {
+              "field_rms": [
+                9.940615698152416e-05,
+                4.7929872695900025e-06,
+                1.2325380706136906e-07,
+                6.160889607515805e-05,
+                3.867794455317636e-05,
+                8.696759959864069e-06
+              ],
+              "velocity_rms": 9.952163972122785e-05,
+              "k_rms": 1.2325380706136906e-07,
+              "epsilon_rms": 6.160889607515805e-05,
+              "pressure_rms": 3.964362532183553e-05,
+              "pressure_gauge_offset": -0.0041578596517620955,
+              "normal_velocity_rms": 2.2655567829515324e-07,
+              "normal_velocity_sample_max": 9.091862822426632e-07,
+              "strong_divergence_rms": 4.799141323874446e-06,
+              "strong_divergence_sample_max": 3.165592737411056e-05
+            },
+            "interface": {
+              "0": {
+                "free_rows": 2,
+                "inner_reaction_max": 6.986709371740161e-05,
+                "sum_max": 1.1926223897340549e-18
+              },
+              "1": {
+                "free_rows": 2,
+                "inner_reaction_max": 4.001066619034859e-05,
+                "sum_max": 2.137911158869854e-18
+              },
+              "2": {
+                "free_rows": 2,
+                "inner_reaction_max": 1.954409108665539e-07,
+                "sum_max": 1.3010426069826053e-18
+              }
+            },
+            "boundary_surface_rms_correction": 6.47248276899125e-18
+          },
+          {
+            "degree": 5,
+            "error": {
+              "field_rms": [
+                1.296080272519843e-08,
+                8.096275136930284e-09,
+                3.570830484637636e-08,
+                1.3698881398041967e-06,
+                8.046129781788811e-07,
+                3.604926161161957e-07
+              ],
+              "velocity_rms": 1.5281756390362548e-08,
+              "k_rms": 3.570830484637636e-08,
+              "epsilon_rms": 1.3698881398041967e-06,
+              "pressure_rms": 8.816784963512422e-07,
+              "pressure_gauge_offset": -0.004157859651762096,
+              "normal_velocity_rms": 8.0824632923639e-09,
+              "normal_velocity_sample_max": 3.0710599718646037e-08,
+              "strong_divergence_rms": 3.036527453057783e-08,
+              "strong_divergence_sample_max": 4.0124975521639556e-07
+            },
+            "interface": {
+              "0": {
+                "free_rows": 4,
+                "inner_reaction_max": 2.4129930925103293e-05,
+                "sum_max": 4.834705244249936e-19
+              },
+              "1": {
+                "free_rows": 4,
+                "inner_reaction_max": 3.740983559002978e-05,
+                "sum_max": 1.1011428314305904e-18
+              },
+              "2": {
+                "free_rows": 4,
+                "inner_reaction_max": 2.3346123956572915e-09,
+                "sum_max": 6.505213034913027e-19
+              }
+            },
+            "boundary_surface_rms_correction": 6.617249904783701e-18
+          },
+          {
+            "degree": 6,
+            "error": {
+              "field_rms": [
+                1.2861082025455424e-08,
+                8.259278419685081e-09,
+                3.5634817957757775e-08,
+                2.1059155573653087e-07,
+                8.157094528262585e-07,
+                3.559124393580347e-07
+              ],
+              "velocity_rms": 1.5284734570131347e-08,
+              "k_rms": 3.5634817957757775e-08,
+              "epsilon_rms": 2.1059155573653087e-07,
+              "pressure_rms": 8.899750423016933e-07,
+              "pressure_gauge_offset": -0.0041578596517620955,
+              "normal_velocity_rms": 8.250462489033517e-09,
+              "normal_velocity_sample_max": 3.674456790648661e-08,
+              "strong_divergence_rms": 2.547390345893777e-08,
+              "strong_divergence_sample_max": 3.5258649156051647e-07
+            },
+            "interface": {
+              "0": {
+                "free_rows": 5,
+                "inner_reaction_max": 1.7196745680694197e-05,
+                "sum_max": 4.336808689942018e-19
+              },
+              "1": {
+                "free_rows": 5,
+                "inner_reaction_max": 3.711383047538678e-05,
+                "sum_max": 1.2502206301473473e-18
+              },
+              "2": {
+                "free_rows": 5,
+                "inner_reaction_max": 5.164772391538616e-10,
+                "sum_max": 8.673617379884035e-19
+              }
+            },
+            "boundary_surface_rms_correction": 3.766756708031288e-18
+          }
+        ]
+      },
+      {
+        "family": "variable",
+        "dimension": 2,
+        "swirl": false,
+        "sequence": [
+          {
+            "degree": 3,
+            "error": {
+              "field_rms": [
+                7.250824147332002e-08,
+                1.1142203793455913e-09,
+                1.0165536544026486e-07,
+                6.0054251146060726e-05,
+                1.802225469197663e-06,
+                3.6104218231891012e-06
+              ],
+              "velocity_rms": 7.25168019744875e-08,
+              "k_rms": 1.0165536544026486e-07,
+              "epsilon_rms": 6.0054251146060726e-05,
+              "pressure_rms": 4.03524006512436e-06,
+              "pressure_gauge_offset": -0.004140557351508067,
+              "normal_velocity_rms": 9.970357830255834e-10,
+              "normal_velocity_sample_max": 3.0578998612155222e-09,
+              "strong_divergence_rms": 4.5818941692464695e-07,
+              "strong_divergence_sample_max": 1.6191569817836586e-06
+            },
+            "interface": {
+              "0": {
+                "free_rows": 2,
+                "inner_reaction_max": 2.9082161725411327e-07,
+                "sum_max": 4.90855592933867e-19
+              },
+              "1": {
+                "free_rows": 2,
+                "inner_reaction_max": 4.546745310864559e-06,
+                "sum_max": 5.921819092491627e-19
+              },
+              "2": {
+                "free_rows": 2,
+                "inner_reaction_max": 8.949617315195762e-08,
+                "sum_max": 2.1286996755684635e-19
+              }
+            },
+            "boundary_surface_rms_correction": 0
+          },
+          {
+            "degree": 4,
+            "error": {
+              "field_rms": [
+                8.25909763179313e-09,
+                6.175114172756425e-10,
+                1.2886573104386202e-08,
+                8.858034497460424e-06,
+                1.4214570454872466e-07,
+                4.264518653219091e-07
+              ],
+              "velocity_rms": 8.282150327176912e-09,
+              "k_rms": 1.2886573104386202e-08,
+              "epsilon_rms": 8.858034497460424e-06,
+              "pressure_rms": 4.4951818067592e-07,
+              "pressure_gauge_offset": -0.004140557351508067,
+              "normal_velocity_rms": 6.11295624265755e-10,
+              "normal_velocity_sample_max": 1.1658980966403545e-09,
+              "strong_divergence_rms": 7.651845235608153e-08,
+              "strong_divergence_sample_max": 3.5211061354587504e-07
+            },
+            "interface": {
+              "0": {
+                "free_rows": 3,
+                "inner_reaction_max": 2.816087722426628e-07,
+                "sum_max": 2.0010140082632468e-19
+              },
+              "1": {
+                "free_rows": 3,
+                "inner_reaction_max": 4.31927413327234e-06,
+                "sum_max": 1.342547221398066e-19
+              },
+              "2": {
+                "free_rows": 3,
+                "inner_reaction_max": 1.1846422689207003e-08,
+                "sum_max": 2.3439817017915145e-20
+              }
+            },
+            "boundary_surface_rms_correction": 0
+          },
+          {
+            "degree": 5,
+            "error": {
+              "field_rms": [
+                8.758673390476694e-10,
+                3.6935595958729375e-11,
+                1.6081062195731585e-09,
+                1.3410135098639818e-06,
+                1.710256784099979e-08,
+                3.439941946172429e-08
+              ],
+              "velocity_rms": 8.766457858561071e-10,
+              "k_rms": 1.6081062195731585e-09,
+              "epsilon_rms": 1.3410135098639818e-06,
+              "pressure_rms": 3.8416375233221266e-08,
+              "pressure_gauge_offset": -0.004140557351508067,
+              "normal_velocity_rms": 3.576137435689845e-11,
+              "normal_velocity_sample_max": 9.321259075049116e-11,
+              "strong_divergence_rms": 1.0619972661403026e-08,
+              "strong_divergence_sample_max": 4.4916593428960854e-08
+            },
+            "interface": {
+              "0": {
+                "free_rows": 4,
+                "inner_reaction_max": 2.82012160724505e-07,
+                "sum_max": 3.5212416931892346e-19
+              },
+              "1": {
+                "free_rows": 4,
+                "inner_reaction_max": 4.3085614031262846e-06,
+                "sum_max": 4.336808689942018e-19
+              },
+              "2": {
+                "free_rows": 4,
+                "inner_reaction_max": 1.5966737562630375e-09,
+                "sum_max": 2.1705637710459124e-19
+              }
+            },
+            "boundary_surface_rms_correction": 0
+          }
+        ]
+      },
+      {
+        "family": "surface3d",
+        "dimension": 3,
+        "swirl": false,
+        "sequence": [
+          {
+            "degree": 3,
+            "error": {
+              "field_rms": [
+                4.753772738888782e-08,
+                4.341872530558516e-08,
+                9.219670853213103e-10,
+                9.315519133688772e-08,
+                6.072548794396214e-05,
+                1.95134182299755e-06,
+                3.4523575442433677e-06
+              ],
+              "velocity_rms": 6.438844038931593e-08,
+              "k_rms": 9.315519133688772e-08,
+              "epsilon_rms": 6.072548794396214e-05,
+              "pressure_rms": 3.9656660882471555e-06,
+              "pressure_gauge_offset": -0.00412263614316905,
+              "normal_velocity_rms": 6.994892993132675e-10,
+              "normal_velocity_sample_max": 3.01916896343874e-09,
+              "strong_divergence_rms": 4.3855572025982197e-07,
+              "strong_divergence_sample_max": 1.4239355433822828e-06
+            },
+            "interface": {
+              "0": {
+                "free_rows": 4,
+                "inner_reaction_max": 5.635498326752972e-08,
+                "sum_max": 1.8482937197191127e-20
+              },
+              "1": {
+                "free_rows": 4,
+                "inner_reaction_max": 4.378189927007515e-08,
+                "sum_max": 9.317362419797304e-21
+              },
+              "2": {
+                "free_rows": 4,
+                "inner_reaction_max": 1.5499736243811483e-06,
+                "sum_max": 7.006550660569166e-20
+              },
+              "3": {
+                "free_rows": 4,
+                "inner_reaction_max": 1.5294897446404815e-08,
+                "sum_max": 2.4383216506531873e-20
+              }
+            },
+            "boundary_surface_rms_correction": 0
+          },
+          {
+            "degree": 4,
+            "error": {
+              "field_rms": [
+                4.883028743626266e-09,
+                4.718177307690881e-09,
+                4.109060872385838e-10,
+                1.2254077277112065e-08,
+                8.937394732673752e-06,
+                1.739345092125682e-07,
+                3.420971428142884e-07
+              ],
+              "velocity_rms": 6.802500321971268e-09,
+              "k_rms": 1.2254077277112065e-08,
+              "epsilon_rms": 8.937394732673752e-06,
+              "pressure_rms": 3.837755445787506e-07,
+              "pressure_gauge_offset": -0.004122636143169049,
+              "normal_velocity_rms": 4.0242247113458986e-10,
+              "normal_velocity_sample_max": 1.21869672095645e-09,
+              "strong_divergence_rms": 6.321929037708198e-08,
+              "strong_divergence_sample_max": 2.8722461266174354e-07
+            },
+            "interface": {
+              "0": {
+                "free_rows": 9,
+                "inner_reaction_max": 5.483724970776922e-08,
+                "sum_max": 2.85558709454188e-20
+              },
+              "1": {
+                "free_rows": 9,
+                "inner_reaction_max": 4.252655042283251e-08,
+                "sum_max": 6.411146055653496e-20
+              },
+              "2": {
+                "free_rows": 9,
+                "inner_reaction_max": 1.4973336147629643e-06,
+                "sum_max": 2.1006417091906648e-19
+              },
+              "3": {
+                "free_rows": 9,
+                "inner_reaction_max": 1.9921544973768082e-09,
+                "sum_max": 1.5947744425001854e-18
+              }
+            },
+            "boundary_surface_rms_correction": 0
+          }
+        ]
+      },
+      {
+        "family": "feet",
+        "dimension": 2,
+        "swirl": false,
+        "sequence": [
+          {
+            "degree": 3,
+            "error": {
+              "field_rms": [
+                4.734378368095505e-12,
+                1.1754289541585725e-12,
+                1.5750529773157735e-07,
+                6.669381114278293e-05,
+                2.141033882492597e-10,
+                4.860754630145772e-12
+              ],
+              "velocity_rms": 4.878111495093668e-12,
+              "k_rms": 1.5750529773157735e-07,
+              "epsilon_rms": 6.669381114278293e-05,
+              "pressure_rms": 2.14158557604845e-10,
+              "pressure_gauge_offset": -2.98161421948715e-26,
+              "normal_velocity_rms": 1.1726984966213357e-12,
+              "normal_velocity_sample_max": 7.608883107046676e-12,
+              "strong_divergence_rms": 5.3916550155265994e-11,
+              "strong_divergence_sample_max": 7.89652786367724e-10
+            },
+            "interface": {
+              "0": {
+                "free_rows": 11,
+                "inner_reaction_max": 4.915866335660507e-12,
+                "sum_max": 1.1091503678906942e-19
+              },
+              "1": {
+                "free_rows": 11,
+                "inner_reaction_max": 7.190108293437518e-12,
+                "sum_max": 2.1848743914619276e-18
+              },
+              "2": {
+                "free_rows": 11,
+                "inner_reaction_max": 3.681691957163107e-07,
+                "sum_max": 1.0072137067832258e-15
+              }
+            },
+            "boundary_surface_rms_correction": 0
+          },
+          {
+            "degree": 4,
+            "error": {
+              "field_rms": [
+                1.1822515915737492e-12,
+                3.9714462205014757e-13,
+                2.8210105113590926e-08,
+                1.1177195908977187e-05,
+                4.318403489415553e-11,
+                4.831058595314073e-13
+              ],
+              "velocity_rms": 1.247173875849722e-12,
+              "k_rms": 2.8210105113590926e-08,
+              "epsilon_rms": 1.1177195908977187e-05,
+              "pressure_rms": 4.3186737096140474e-11,
+              "pressure_gauge_offset": -1.0104172340869264e-26,
+              "normal_velocity_rms": 3.9633030304317355e-13,
+              "normal_velocity_sample_max": 3.582041876076043e-12,
+              "strong_divergence_rms": 1.9676391474268516e-11,
+              "strong_divergence_sample_max": 3.7636664289540205e-10
+            },
+            "interface": {
+              "0": {
+                "free_rows": 15,
+                "inner_reaction_max": 3.697990243990094e-13,
+                "sum_max": 2.8606447501441776e-19
+              },
+              "1": {
+                "free_rows": 15,
+                "inner_reaction_max": 1.3950317941343377e-12,
+                "sum_max": 6.386511530125423e-18
+              },
+              "2": {
+                "free_rows": 15,
+                "inner_reaction_max": 4.757636622102784e-09,
+                "sum_max": 2.422215300549583e-15
+              }
+            },
+            "boundary_surface_rms_correction": 0
+          },
+          {
+            "degree": 5,
+            "error": {
+              "field_rms": [
+                2.6066829554444895e-13,
+                1.515166036538943e-13,
+                4.901683777279058e-09,
+                1.8687487001714546e-06,
+                1.4619509753572238e-11,
+                1.7972254256340784e-13
+              ],
+              "velocity_rms": 3.0150496096226924e-13,
+              "k_rms": 4.901683777279058e-09,
+              "epsilon_rms": 1.8687487001714546e-06,
+              "pressure_rms": 1.4620614406621196e-11,
+              "pressure_gauge_offset": -2.3049354421419867e-27,
+              "normal_velocity_rms": 1.5141438013705432e-13,
+              "normal_velocity_sample_max": 1.8487931612826895e-12,
+              "strong_divergence_rms": 2.7534097983499366e-12,
+              "strong_divergence_sample_max": 6.867137858081505e-11
+            },
+            "interface": {
+              "0": {
+                "free_rows": 19,
+                "inner_reaction_max": 4.8987115584728186e-14,
+                "sum_max": 2.70092250980535e-19
+              },
+              "1": {
+                "free_rows": 19,
+                "inner_reaction_max": 5.136710632273634e-13,
+                "sum_max": 3.876799689765619e-18
+              },
+              "2": {
+                "free_rows": 19,
+                "inner_reaction_max": 5.819645722164308e-09,
+                "sum_max": 4.56822567637811e-15
+              }
+            },
+            "boundary_surface_rms_correction": 0
+          }
+        ]
+      }
+    ],
+    "smooth_quadrature_refinement": {
+      "outer_orders": [
+        12,
+        16
+      ],
+      "maximum_scaled_physical_state_and_history_change": 2.6754041998074516e-12
+    },
+    "ownership": [
+      {
+        "ranks": 2,
+        "shift": 1,
+        "full_history_equal": true
+      },
+      {
+        "ranks": 4,
+        "shift": 1,
+        "full_history_equal": true
+      }
+    ],
+    "restart": {
+      "changed_ranks": 4,
+      "changed_ownership_shift": 2,
+      "complete_native_history_equal": true
+    },
+    "h_refinement": {
+      "coarse": {
+        "field_rms": [
+          7.250824147332002e-08,
+          1.1142203793455913e-09,
+          1.0165536544026486e-07,
+          6.0054251146060726e-05,
+          1.802225469197663e-06,
+          3.6104218231891012e-06
+        ],
+        "velocity_rms": 7.25168019744875e-08,
+        "k_rms": 1.0165536544026486e-07,
+        "epsilon_rms": 6.0054251146060726e-05,
+        "pressure_rms": 4.03524006512436e-06,
+        "pressure_gauge_offset": -0.004140557351508067,
+        "normal_velocity_rms": 9.970357830255834e-10,
+        "normal_velocity_sample_max": 3.0578998612155222e-09,
+        "strong_divergence_rms": 4.5818941692464695e-07,
+        "strong_divergence_sample_max": 1.6191569817836586e-06
+      },
+      "refined": {
+        "field_rms": [
+          2.641157203174852e-08,
+          9.655704668631916e-10,
+          6.0075442321379125e-09,
+          4.807595059436472e-06,
+          4.5409925253754326e-07,
+          9.65540803259532e-07
+        ],
+        "velocity_rms": 2.6429216097242063e-08,
+        "k_rms": 6.0075442321379125e-09,
+        "epsilon_rms": 4.807595059436472e-06,
+        "pressure_rms": 1.0669935210272918e-06,
+        "pressure_gauge_offset": -0.004140557351508069,
+        "normal_velocity_rms": 9.527181221239164e-10,
+        "normal_velocity_sample_max": 4.5034431054024296e-09,
+        "strong_divergence_rms": 3.280364301002432e-07,
+        "strong_divergence_sample_max": 1.3696309912417924e-06
+      },
+      "physical_heights_unchanged": true
+    },
+    "rejections": [
+      "curved-anchor",
+      "curved-chi",
+      "folded-between-nodes",
+      "unsplit-c1-foot"
+    ]
+  },
+  "commands": [
+    {
+      "name": "geometry",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/RANSCurvedGeometryProbe",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/geometry/geometry.json"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 0.010413506999611855,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/geometry/run.log",
+      "log_sha256": "150b8dcc0af87f921e4169bb29cb8fe37bf43e63a1eab8d3731581a27ad7eee9",
+      "expected_failure": false
+    },
+    {
+      "name": "geometry-oracle",
+      "command": [
+        "/usr/bin/python3",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m5_geometry.py",
+        "--geometry-report",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/geometry/geometry.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/geometry-check.json"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 0.5176327709996258,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/geometry-oracle/run.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expected_failure": false
+    },
+    {
+      "name": "operator-plane",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/RANSCurvedWallProbe",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/operator-plane/case.xml",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/operator-plane/probe.json"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 2.974590582001838,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/operator-plane/run.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expected_failure": false
+    },
+    {
+      "name": "wall-audit-plane",
+      "command": [
+        "/usr/bin/python3",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m5_geometry.py",
+        "--geometry-report",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/geometry/geometry.json",
+        "--wall-report",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/operator-plane/probe.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/operator-plane/geometry-check.json"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 0.5177437759994064,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/wall-audit-plane/run.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expected_failure": false
+    },
+    {
+      "name": "operator-circle",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/RANSCurvedWallProbe",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/operator-circle/case.xml",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/operator-circle/probe.json"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 2.8772678320019622,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/operator-circle/run.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expected_failure": false
+    },
+    {
+      "name": "wall-audit-circle",
+      "command": [
+        "/usr/bin/python3",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m5_geometry.py",
+        "--geometry-report",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/geometry/geometry.json",
+        "--wall-report",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/operator-circle/probe.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/operator-circle/geometry-check.json"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 0.5180176569992909,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/wall-audit-circle/run.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expected_failure": false
+    },
+    {
+      "name": "operator-smooth",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/RANSCurvedWallProbe",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/operator-smooth/case.xml",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/operator-smooth/probe.json"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 2.975321908001206,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/operator-smooth/run.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expected_failure": false
+    },
+    {
+      "name": "wall-audit-smooth",
+      "command": [
+        "/usr/bin/python3",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m5_geometry.py",
+        "--geometry-report",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/geometry/geometry.json",
+        "--wall-report",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/operator-smooth/probe.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/operator-smooth/geometry-check.json"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 0.5173884629984968,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/wall-audit-smooth/run.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expected_failure": false
+    },
+    {
+      "name": "operator-variable",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/RANSCurvedWallProbe",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/operator-variable/case.xml",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/operator-variable/probe.json"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 2.9809470170002896,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/operator-variable/run.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expected_failure": false
+    },
+    {
+      "name": "wall-audit-variable",
+      "command": [
+        "/usr/bin/python3",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m5_geometry.py",
+        "--geometry-report",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/geometry/geometry.json",
+        "--wall-report",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/operator-variable/probe.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/operator-variable/geometry-check.json"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 0.5176497559987183,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/wall-audit-variable/run.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expected_failure": false
+    },
+    {
+      "name": "operator-surface3d",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/RANSCurvedWallProbe",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/operator-surface3d/case.xml",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/operator-surface3d/probe.json"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 12.449678717999632,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/operator-surface3d/run.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expected_failure": false
+    },
+    {
+      "name": "wall-audit-surface3d",
+      "command": [
+        "/usr/bin/python3",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m5_geometry.py",
+        "--geometry-report",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/geometry/geometry.json",
+        "--wall-report",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/operator-surface3d/probe.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/operator-surface3d/geometry-check.json"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 0.5179862420009158,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/wall-audit-surface3d/run.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expected_failure": false
+    },
+    {
+      "name": "operator-feet",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/RANSCurvedWallProbe",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/operator-feet/case.xml",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/operator-feet/probe.json"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 3.9297416299996257,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/operator-feet/run.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expected_failure": false
+    },
+    {
+      "name": "wall-audit-feet",
+      "command": [
+        "/usr/bin/python3",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m5_geometry.py",
+        "--geometry-report",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/geometry/geometry.json",
+        "--wall-report",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/operator-feet/probe.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/operator-feet/geometry-check.json"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 0.5179163220018381,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/wall-audit-feet/run.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expected_failure": false
+    },
+    {
+      "name": "partition-one-q12",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/RANSCurvedWallProbe",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/partition-one-q12/case.xml",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/partition-one-q12/probe.json"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 3.0284289160008484,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/partition-one-q12/run.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expected_failure": false
+    },
+    {
+      "name": "partition-two-q12",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/RANSCurvedWallProbe",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/partition-two-q12/case.xml",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/partition-two-q12/probe.json"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 3.380685729000106,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/partition-two-q12/run.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expected_failure": false
+    },
+    {
+      "name": "partition-one-q24",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/RANSCurvedWallProbe",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/partition-one-q24/case.xml",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/partition-one-q24/probe.json"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 3.0288644219981506,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/partition-one-q24/run.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expected_failure": false
+    },
+    {
+      "name": "partition-two-q24",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/RANSCurvedWallProbe",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/partition-two-q24/case.xml",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/partition-two-q24/probe.json"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 3.4312017209995247,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/partition-two-q24/run.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expected_failure": false
+    },
+    {
+      "name": "partition-one-q48",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/RANSCurvedWallProbe",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/partition-one-q48/case.xml",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/partition-one-q48/probe.json"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 3.381305639999482,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/partition-one-q48/run.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expected_failure": false
+    },
+    {
+      "name": "partition-two-q48",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/RANSCurvedWallProbe",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/partition-two-q48/case.xml",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/partition-two-q48/probe.json"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 4.037382564998552,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/partition-two-q48/run.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expected_failure": false
+    },
+    {
+      "name": "flat-reference-d2-o1",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/flat-reference-d2-o1/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 3.025603134999983,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/flat-reference-d2-o1/run.log",
+      "log_sha256": "98569fbe2ac45c14168b45f1c440037d11d5d4fa7fc61e0d86fa58b6cc3c31b2",
+      "expected_failure": false
+    },
+    {
+      "name": "plane-reference-d2-o1",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/plane-reference-d2-o1/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 3.3267717609996907,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/plane-reference-d2-o1/run.log",
+      "log_sha256": "8cd619899862db55e0526bc578d6871b91085f71b9834ec007c5002c03e2c543",
+      "expected_failure": false
+    },
+    {
+      "name": "flat-reference-d2-o2",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/flat-reference-d2-o2/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 3.081097788999614,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/flat-reference-d2-o2/run.log",
+      "log_sha256": "768c2572848c1fc4e6a3e7bc0918c2489c16bb3509baadbd3764b7568270cef5",
+      "expected_failure": false
+    },
+    {
+      "name": "plane-reference-d2-o2",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/plane-reference-d2-o2/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 3.230615766999108,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/plane-reference-d2-o2/run.log",
+      "log_sha256": "52307b707bcd30bc5b7f84ba3fd06481097e0d648b4cf2f55115ad10e7170a1c",
+      "expected_failure": false
+    },
+    {
+      "name": "flat-reference-d3-o2",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/flat-reference-d3-o2/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 12.644205609001801,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/flat-reference-d3-o2/run.log",
+      "log_sha256": "ac814bd5c112d52da850c262ddd875fae74509ff73660cb02415ccadaee32e7c",
+      "expected_failure": false
+    },
+    {
+      "name": "plane-reference-d3-o2",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/plane-reference-d3-o2/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 14.952952134000952,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/plane-reference-d3-o2/run.log",
+      "log_sha256": "6958568e4ae1041d2e73ff2f5c7cb37480accfc454e7529c7129bc8778f15c27",
+      "expected_failure": false
+    },
+    {
+      "name": "mms-circle-p3",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/mms-circle-p3/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 6.436427983000613,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/mms-circle-p3/run.log",
+      "log_sha256": "d8ae6ea38e0b2fc16469a2a55579e51937455edddb88a8c4f4e61ac48b553c24",
+      "expected_failure": false
+    },
+    {
+      "name": "mms-circle-p5",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/mms-circle-p5/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 18.05958228199961,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/mms-circle-p5/run.log",
+      "log_sha256": "c39406c9d4c390bf2ee6b89658285a950365380da36914c584436151a2dfc5da",
+      "expected_failure": false
+    },
+    {
+      "name": "mms-circle-p6",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/mms-circle-p6/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 30.339476097000443,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/mms-circle-p6/run.log",
+      "log_sha256": "e4547d1805953c4c5bbaed8e6aa89d8efab36d00dbeaf9b1a067dd748cccc6ac",
+      "expected_failure": false
+    },
+    {
+      "name": "mms-variable-p3",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/mms-variable-p3/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 5.682177155002137,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/mms-variable-p3/run.log",
+      "log_sha256": "b950bcda6db930cac9f3ed7f08011c4a530e2f579b36b10b8c091e93c84b0e07",
+      "expected_failure": false
+    },
+    {
+      "name": "mms-variable-p4",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/mms-variable-p4/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 9.788098357999843,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/mms-variable-p4/run.log",
+      "log_sha256": "a021b7219f2c34bd5b0039dd62eba7438eff686e72c62f29b0121e1dc0c75b16",
+      "expected_failure": false
+    },
+    {
+      "name": "mms-variable-p5",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/mms-variable-p5/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 17.05356641400067,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/mms-variable-p5/run.log",
+      "log_sha256": "754430fa9db95534520916af8a4fd8227854ddd1dd0090fcb2b4a779fd09c018",
+      "expected_failure": false
+    },
+    {
+      "name": "mms-surface3d-p3",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/mms-surface3d-p3/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 111.03667216499889,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/mms-surface3d-p3/run.log",
+      "log_sha256": "9c32b6bc933764eefab1f682288441adfa0959eedd259a2d3c41d80a10187c0b",
+      "expected_failure": false
+    },
+    {
+      "name": "mms-surface3d-p4",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/mms-surface3d-p4/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 526.5852064249993,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/mms-surface3d-p4/run.log",
+      "log_sha256": "a8e8762a2e600806383a7715b2a17e635f0d65d397ab55ed493ffc8ea6b19401",
+      "expected_failure": false
+    },
+    {
+      "name": "mms-feet-p3",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/mms-feet-p3/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 43.26910044900069,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/mms-feet-p3/run.log",
+      "log_sha256": "b1bf92d4ef1a1b037c8f9a68942bcea26d1bdc0cd3e0759a0bf4c9f20a6fc963",
+      "expected_failure": false
+    },
+    {
+      "name": "mms-feet-p4",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/mms-feet-p4/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 104.59605568999905,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/mms-feet-p4/run.log",
+      "log_sha256": "1a1dabdb7ddece6e8c0280d60411db83b9a970de221ec61776c0d349ef8d0119",
+      "expected_failure": false
+    },
+    {
+      "name": "mms-feet-p5",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/mms-feet-p5/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 220.44394657799785,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/mms-feet-p5/run.log",
+      "log_sha256": "b4e1aa5ac883040c1c98d81e8c05521b72c6caeefa88a66641fe454e5b23bb4c",
+      "expected_failure": false
+    },
+    {
+      "name": "variable-mms-quadrature",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/variable-mms-quadrature/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 22.119709594000597,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/variable-mms-quadrature/run.log",
+      "log_sha256": "d0f7360c7ca409579e2b2449c0756d56eab74448a7495ac80f453495dc604ad8",
+      "expected_failure": false
+    },
+    {
+      "name": "curved-evolving",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/curved-evolving/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 17.199168529998133,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/curved-evolving/run.log",
+      "log_sha256": "5cf839cfa1825f5d88871345555e6014907cb5bbe5b2bf59ccdd445740420956",
+      "expected_failure": false
+    },
+    {
+      "name": "curved-condensed",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/curved-condensed/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 17.304752371997893,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/curved-condensed/run.log",
+      "log_sha256": "441b56563a5eb5bbab81b38649c0ccea7438cd8965031150ea4be5a6105fdec1",
+      "expected_failure": false
+    },
+    {
+      "name": "curved-mpi2",
+      "command": [
+        "mpirun",
+        "--report-bindings",
+        "--bind-to",
+        "core",
+        "--map-by",
+        "core",
+        "-np",
+        "2",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/curved-mpi2/case.xml"
+      ],
+      "ranks": 2,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 15.613874137001403,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/curved-mpi2/run.log",
+      "log_sha256": "d6ce57eaef6762b238ad5440a4f72e02100e85df321033365c224a3e62d249f8",
+      "expected_failure": false
+    },
+    {
+      "name": "curved-mpi4",
+      "command": [
+        "mpirun",
+        "--report-bindings",
+        "--bind-to",
+        "core",
+        "--map-by",
+        "core",
+        "-np",
+        "4",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/curved-mpi4/case.xml"
+      ],
+      "ranks": 4,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 15.463249632000952,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/curved-mpi4/run.log",
+      "log_sha256": "f3a7c8a08081e4117118ccbf9ce750af0ca730ae7e92c30b522a77659af4fd1a",
+      "expected_failure": false
+    },
+    {
+      "name": "curved-save",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/curved-save/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 10.148112744001992,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/curved-save/run.log",
+      "log_sha256": "31de1ab639019e709fc284b7fd8dd2848b982ab7040b6b113d59758e5590149d",
+      "expected_failure": false
+    },
+    {
+      "name": "curved-restart",
+      "command": [
+        "mpirun",
+        "--report-bindings",
+        "--bind-to",
+        "core",
+        "--map-by",
+        "core",
+        "-np",
+        "4",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/curved-restart/case.xml"
+      ],
+      "ranks": 4,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 9.796561176997784,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/curved-restart/run.log",
+      "log_sha256": "786d62f6982193db707a227d10dbb62beae260d78855ca99e7390acd8306c621",
+      "expected_failure": false
+    },
+    {
+      "name": "variable-href",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/variable-href/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 29.58907882100175,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/variable-href/run.log",
+      "log_sha256": "2c1866ec1346b258ad585a17209082aba81fc267cc7d64aeeb571cf473b0a575",
+      "expected_failure": false
+    },
+    {
+      "name": "curved-anchor",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/curved-anchor/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 1,
+      "seconds": 2.8281443570012925,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/curved-anchor/run.log",
+      "log_sha256": "07558e1f4e35b7fe78e48f8b08096aed0ecfbaa22ba1998a283606e77b6a6ca0",
+      "expected_failure": true
+    },
+    {
+      "name": "curved-chi",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/curved-chi/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 1,
+      "seconds": 2.8371090250002453,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/curved-chi/run.log",
+      "log_sha256": "0130a9ab836b23f195e966b9f6a5444d62667b48f7a729d7216f261b811e9d5d",
+      "expected_failure": true
+    },
+    {
+      "name": "folded-between-nodes",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/folded-between-nodes/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": -6,
+      "seconds": 2.8799420680006733,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/folded-between-nodes/run.log",
+      "log_sha256": "f1f28a55887a3f281d734645b3a4f6e7cac542b2a49945fcc123676692aa2c06",
+      "expected_failure": true
+    },
+    {
+      "name": "unsplit-c1-foot",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/unsplit-c1-foot/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 1,
+      "seconds": 2.87732434499776,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m5-attempt-005/oracle/unsplit-c1-foot/run.log",
+      "log_sha256": "ad69793b2b76402d962d9387af95d204acb14940cb2186582d21485aad67f64c",
+      "expected_failure": true
+    }
+  ],
+  "verification_status": "passed",
+  "milestone_closure": true,
+  "scope": "analytic normal-coordinate maps on native CG charts; replicated dense reference backend; eta=chi=0 on curved cases",
+  "frozen_sources": {
+    "docs/plans/cls-epawf-revised-contract-v1.json": "4e7bd75022409b8dc2ef31cc73425779b646a97535760b31eeea4ec49087de8a",
+    "docs/literature/cls_neutral_abl_equilibrium_awf_note_revised.tex": "d35e437c2f2f8b25a46f7a3f285c6f1ad8b48d7b554aa1d161315f59eeb6de0f",
+    "library/SolverUtils/Turbulence/RANSModels.cpp": "86a7154ba3cb27e4d3319aa42d156a228fd1b180f35f9b217159822ec9d66b05",
+    "library/SolverUtils/Turbulence/AnalyticalWallFunction.cpp": "5baf29819fed6b81ad1b042bc09258a3e0779d15de13076b688bf32f80ddcf7e"
+  },
+  "checks": 4352,
+  "maximum_errors": {
+    "mapped_residual_block_0": 6.314393452555578e-16,
+    "mapped_residual_block_1": 6.555561822349933e-16,
+    "mapped_residual_block_2": 2.55351295663786e-15,
+    "mapped_residual_block_3": 3.1086244689504383e-15,
+    "mapped_residual_block_4": 1.942890293094024e-16,
+    "mapped_residual_block_5": 1.5265566588595902e-16,
+    "mapped_pressure_gauge": 3.0357660829594124e-17,
+    "roughness_force_and_work": 3.2959746043559335e-17,
+    "resolved_plus_k_energy_budget": 1.022354011521932e-13,
+    "rotating_frame_forcing": 2.5673907444456745e-16,
+    "variable_height_relative_matching_mass": 5.551115123125783e-17,
+    "independent_interface_area": 4.1906715261520983e-16,
+    "independent_interface_N_H": 2.220446049250313e-16,
+    "independent_interface_normal": 2.710505431213761e-20,
+    "independent_interface_U": 1.1102230246251565e-16,
+    "independent_interface_G_inner": 1.5681900222830336e-15,
+    "independent_interface_G_outer": 3.1363800445660672e-15,
+    "independent_interface_traction_inner_area": 6.245004513516506e-16,
+    "independent_interface_traction_outer_area": 4.088743232877334e-15,
+    "independent_interface_shared_advective_momentum": 1.214306433183765e-17,
+    "independent_interface_k": 1.1102230246251565e-16,
+    "independent_interface_sampled_k": 1.1102230246251565e-16,
+    "independent_interface_epsilon": 1.3877787807814457e-17,
+    "independent_interface_dependent_epsilon": 2.7755575615628914e-17,
+    "independent_interface_physical_r": 0.0,
+    "independent_interface_J": 4.2329049597335884e-16,
+    "independent_interface_base_area": 2.2204387917648754e-16,
+    "independent_interface_m_H": 2.7755575615628914e-17,
+    "independent_interface_m_H_formula": 2.7755575615628914e-17,
+    "independent_interface_m_H_naive": 2.7755575615628914e-17,
+    "independent_interface_shared_advective_mass": 2.7755575615628914e-17,
+    "independent_interface_shared_advective_k": 1.3877787807814457e-17,
+    "independent_interface_k_flux_inner": 1.3530843112619095e-16,
+    "independent_interface_k_flux_outer": 6.661338147750939e-16,
+    "independent_interface_epsilon_flux_outer": 8.977193988179977e-17,
+    "independent_interface_epsilon_inner_advective_flux": 3.469446951953614e-18,
+    "independent_interface_epsilon_flux_reaction": 8.977193988179977e-17,
+    "independent_integrated_matching_budgets": 5.431506674568823e-15,
+    "inner_algebraic_epsilon": 1.1102230246251565e-16,
+    "inner_history_epsilon": 1.1102230246251565e-16,
+    "inner_epsilon_analytic_gradient_vs_fd": 4.5003767379370174e-10,
+    "inner_epsilon_diagnostic_reaction": 1.1998194104911875e-11,
+    "physical_surface_L2_top_correction": 2.3314683517128287e-15,
+    "boundary_projection_unchanged_other_velocity_modes": 2.0756703207809486e-15,
+    "boundary_projection_zero_net_flux": 5.273559366969494e-16,
+    "boundary_projection_accounts_for_flux_change": 5.551115123125783e-16,
+    "boundary_projection_surface_L2_stationarity": 2.220446049250313e-16,
+    "boundary_projection_minimum_surface_RMS": 4.996003610813204e-16,
+    "boundary_projection_reported_surface_RMS": 8.326672684688674e-17,
+    "independent_physical_mass": 1.4988010832439613e-15,
+    "mapped_residual_block_6": 1.249000902703301e-16,
+    "partition_identical_physical_field": 1.6653345369377348e-16,
+    "lateral_patch_partition_0_one": 4.718447854656915e-16,
+    "lateral_patch_partition_0_q1": 1.4498624523184844e-11,
+    "lateral_patch_partition_0_rho": 1.266653448794841e-12,
+    "lateral_patch_partition_1_one": 4.996003610813204e-16,
+    "lateral_patch_partition_1_q1": 5.757408438888945e-13,
+    "lateral_patch_partition_1_rho": 1.9680368446017837e-12,
+    "lateral_patch_partition_2_one": 1.3293919596901579e-14,
+    "lateral_patch_partition_2_q1": 1.7319479184152442e-14,
+    "lateral_patch_partition_2_rho": 5.88418203051333e-14,
+    "lateral_patch_partition_3_one": 5.5892790395972725e-15,
+    "lateral_patch_partition_3_q1": 3.8181263706249524e-15,
+    "lateral_patch_partition_3_rho": 1.4939161019356106e-12,
+    "lateral_patch_partition_4_one": 2.1510571102112408e-16,
+    "lateral_patch_partition_4_q1": 1.3877787807814457e-17,
+    "lateral_patch_partition_4_rho": 2.7755575615628914e-16,
+    "lateral_patch_partition_5_one": 6.765421556309548e-17,
+    "lateral_patch_partition_5_q1": 6.938893903907228e-18,
+    "lateral_patch_partition_5_rho": 3.8163916471489756e-17,
+    "planar_rotated_initial_0": 1.7854350202880002e-16,
+    "planar_rotated_initial_1": 0.0,
+    "planar_scalars_pressure_initial": 1.3877787807814457e-17,
+    "planar_rotated_state_0": 1.7854350202880002e-16,
+    "planar_rotated_state_1": 0.0,
+    "planar_scalars_pressure_state": 1.3877787807814457e-17,
+    "planar_rotated_initial_2": 1.7854350202880002e-16,
+    "planar_rotated_state_2": 1.7854350202880002e-16,
+    "regional_conservative_stage_sum": 1.0408340855860843e-17,
+    "shared_stage_trace_0": 3.0357660829594124e-18,
+    "shared_stage_trace_1": 6.386511533356597e-18,
+    "shared_stage_trace_2": 4.568225749997184e-15,
+    "curved_no_anchor_work": 0.0,
+    "native_energy_budget_closure": 8.38772512546087e-15,
+    "shared_stage_trace_3": 1.5947119903639377e-18,
+    "smooth_mms_quadrature_12_to_16_geometry": 0.0,
+    "smooth_mms_quadrature_12_to_16_history_times": 0.0,
+    "smooth_mms_quadrature_12_to_16_time": 0.0,
+    "smooth_mms_quadrature_12_to_16_gauge": 3.680516742830518e-23,
+    "smooth_mms_quadrature_12_to_16_fixed_reference": 0.0,
+    "smooth_mms_quadrature_12_to_16_fixed_defect": 7.31469859980232e-18,
+    "smooth_mms_quadrature_12_to_16": 2.6754041998074516e-12,
+    "curved_full_vs_condensed_geometry": 0.0,
+    "curved_full_vs_condensed_history_times": 0.0,
+    "curved_full_vs_condensed_time": 0.0,
+    "curved_full_vs_condensed_gauge": 3.692140331713211e-23,
+    "curved_full_vs_condensed_fixed_reference": 0.0,
+    "curved_full_vs_condensed_fixed_defect": 0.0,
+    "curved_full_vs_condensed": 1.790316314980289e-17,
+    "curved_mpi2_geometry": 0.0,
+    "curved_mpi2_history_times": 0.0,
+    "curved_mpi2_time": 0.0,
+    "curved_mpi2_gauge": 3.794860043751501e-23,
+    "curved_mpi2_fixed_reference": 0.0,
+    "curved_mpi2_fixed_defect": 2.918875536238319e-18,
+    "curved_mpi2": 5.565486732711141e-17,
+    "curved_mpi4_geometry": 0.0,
+    "curved_mpi4_history_times": 0.0,
+    "curved_mpi4_time": 0.0,
+    "curved_mpi4_gauge": 3.794860043751501e-23,
+    "curved_mpi4_fixed_reference": 0.0,
+    "curved_mpi4_fixed_defect": 2.918875536238319e-18,
+    "curved_mpi4": 5.565486732711141e-17,
+    "curved_restart_changed_ownership_geometry": 0.0,
+    "curved_restart_changed_ownership_history_times": 0.0,
+    "curved_restart_changed_ownership_time": 0.0,
+    "curved_restart_changed_ownership_gauge": 2.552733232144867e-23,
+    "curved_restart_changed_ownership_fixed_reference": 0.0,
+    "curved_restart_changed_ownership_fixed_defect": 0.0,
+    "curved_restart_changed_ownership": 5.565486732711141e-17
+  },
+  "finished_utc": "2026-11-02T15:36:06.851416+00:00"
+}
