@@ -43,8 +43,16 @@ add_executable(RANSEquilibriumTimeProbe
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSHistory.cpp)
 target_include_directories(RANSEquilibriumTimeProbe PRIVATE ${RANS_SOURCE_ROOT}/solvers)
 target_link_libraries(RANSEquilibriumTimeProbe RANSKernels ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
+add_executable(RANSEquilibriumEvolutionProbe
+    ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSEquilibriumEvolutionProbe.cpp
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.cpp
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallPatch.cpp
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.cpp
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp)
+target_include_directories(RANSEquilibriumEvolutionProbe PRIVATE ${RANS_SOURCE_ROOT}/solvers)
+target_link_libraries(RANSEquilibriumEvolutionProbe RANSKernels ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    foreach(rans_target RANSKernels RANSWallLayerProbe RANSKernelProbe RANSWallGeometryProbe RANSObservationKernelProbe RANSStressTangentAudit RANSConstitutiveProbe RANSEquilibriumProfilesProbe RANSEquilibriumPatchProbe RANSEquilibriumTimeProbe)
+    foreach(rans_target RANSKernels RANSWallLayerProbe RANSKernelProbe RANSWallGeometryProbe RANSObservationKernelProbe RANSStressTangentAudit RANSConstitutiveProbe RANSEquilibriumProfilesProbe RANSEquilibriumPatchProbe RANSEquilibriumTimeProbe RANSEquilibriumEvolutionProbe)
         target_compile_options(${rans_target} PRIVATE
             -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror)
     endforeach()

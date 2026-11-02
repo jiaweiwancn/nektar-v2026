@@ -113,7 +113,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     fields.push_back(std::make_shared<RANSWallGlobalField>(session,pressure,outer,m_dimension));
     offset.resize(Gauge()+1);size.resize(Gauge()+1);
     for(int b=0;b<Gauge();++b){size[b]=fields[b]->Size();offset[b+1]=offset[b]+size[b];}
-    size[Gauge()]=1;Require(Size()<=3000,"replicated dense evolution backend is limited to 3000 unknowns");
+    size[Gauge()]=1;
     Require(fields[K()]->Size()==velocity->Size(),"different velocity/k polynomial spaces are not supported");
     for(int b=0;b<Gauge();++b)
     {
@@ -405,6 +405,7 @@ std::vector<int> RANSWallEvolutionPatch::CondensableVelocity(const std::map<int,
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Solve(Vector s,const Vector &history,double alpha,double time,
     const RANSWallEvolutionData &data,bool condensed,int &iterations,double tolerance,int maximumIterations) const
 {
+    Require(Size()<=3000,"replicated dense evolution solve is limited to 3000 unknowns; larger meshes permit reference audits only");
     bool refreshed=false;double previous=1e100;
     for(iterations=0;iterations<=maximumIterations;++iterations)
     {

@@ -309,6 +309,8 @@ CheckpointResult Checkpoints(const Trial &baseline,const std::filesystem::path &
     Reject("snapshot_current_slot_mismatch",[&]{engine->Restore(inconsistent);});
     auto missingAnchor=saved;missingAnchor.fixedDefect.clear();
     Reject("checkpoint_missing_fixed_anchor",[&]{Engine::WriteCheckpoint((directory/"invalid-anchor").string(),missingAnchor);});
+    auto mismatch=saved;mismatch.coupledState[0]+=.1;
+    Reject("checkpoint_coupled_history_mismatch",[&]{Engine::WriteCheckpoint((directory/"invalid-coupled").string(),mismatch);});
     Check(ReadBytes(payload)==original,"bad controls modified the positive checkpoint payload");
     return result;
 }

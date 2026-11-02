@@ -81,6 +81,9 @@ void Validate(const Checkpoint &saved)
     Require(!saved.signature.empty(), "empty checkpoint signature");
     Require(saved.coupledState.size() >= saved.integration.state.size(),
             "checkpoint coupled shape mismatch");
+    Require(std::equal(saved.integration.state.begin(), saved.integration.state.end(),
+                       saved.coupledState.begin()),
+            "checkpoint coupled differential state differs from native history");
     Finite(saved.coupledState, "checkpoint coupled state");
     Finite(saved.fixedReference, "fixed reference");
     Finite(saved.fixedDefect, "fixed reference defect");

@@ -69,6 +69,12 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         TiXmlDocument document(original->GetDocument());auto root=document.FirstChildElement("NEKTAR");
         if(auto collection=root->FirstChildElement("COLLECTIONS"))root->RemoveChild(collection);
         auto collection=new TiXmlElement("COLLECTIONS");collection->SetAttribute("DEFAULT","NoCollection");root->LinkEndChild(collection);
+        auto solverInfo=root->FirstChildElement("CONDITIONS")->FirstChildElement("SOLVERINFO");
+        TiXmlElement *global=nullptr;
+        for(auto item=solverInfo->FirstChildElement("I");item;item=item->NextSiblingElement("I"))
+            if(item->Attribute("PROPERTY") && std::string(item->Attribute("PROPERTY"))=="GlobalSysSoln")global=item;
+        if(!global){global=new TiXmlElement("I");global->SetAttribute("PROPERTY","GlobalSysSoln");solverInfo->LinkEndChild(global);}
+        global->SetAttribute("VALUE","DirectFull");
         Require(document.SaveFile(nativeFile),"cannot write rank-local native session clone");
         filenames={nativeFile};m_serialSession=LibUtilities::SessionReader::CreateInstance(1,arguments,filenames,serial);m_serialSession->InitSession();
         m_serialSession->SetSolverInfo("GlobalSysSoln","DirectFull");
@@ -106,6 +112,13 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         m_data.innerKSource=Function("ScalarSourceInner","k");m_data.outerKSource=Function("ScalarSourceOuter","k");m_data.outerEpsilonSource=Function("ScalarSourceOuter","eps_tilde");
         if(!m_neutral)
         {
+            for(int b=0;b<dim;++b)
+            {
+                Function("BoundaryValuesInner",expected[b],true);
+                Function("BoundaryValuesOuter",expected[b],true);
+            }
+            Function("BoundaryValuesInner","k",true);Function("BoundaryValuesOuter","k",true);
+            Function("BoundaryValuesOuter","eps_tilde",true);
             const auto boundary=Functions("BoundaryValues",false);
             for(int b=0;b<m_patch->InnerPressure();++b)m_data.boundary[b]=boundary[b];
         }
@@ -270,6 +283,13 @@ void RANSEquilibriumWallEvolution::WriteReport() const
        <<",\"time\":"<<m_time<<",\"dt\":"<<m_timestep<<",\"steps\":"<<snapshot.steps<<",\"order\":"<<m_order
        <<",\"chi\":"<<m_patch->Parameters().chi<<",\"eta\":"<<m_eta<<",\"neutral_reference\":"<<(m_neutral?"true":"false")
        <<",\"condensed\":"<<(m_condensed?"true":"false")<<",\"checkpoint\":"<<Quoted(m_lastCheckpoint)<<",\"signature\":"<<Quoted(m_signature);
+    const auto &p=m_patch->Parameters();
+    out<<",\"parameters\":";Write(out,{p.geometry.molecularNu,p.geometry.height,p.geometry.roughness,p.geometry.sampleHeight,
+        p.geometry.tailStart,p.model.Q()*m_ustar*m_ustar,p.model.Q(),p.model.Kappa()});
+    out<<",\"ustar\":"<<m_ustar<<",\"direction\":";Write(out,{m_direction[0],m_direction[1]});
+    out<<",\"cell_ownership\":[";int ownerCount=0;
+    for(const auto &e:m_patch->fields[0]->Elements())
+    {if(ownerCount++)out<<',';Write(out,{static_cast<double>(e.geometry),static_cast<double>(e.geometry%m_session->GetComm()->GetSize())});}out<<']';
     out<<",\"offsets\":[";for(int b=0;b<m_patch->offset.size();++b){if(b)out<<',';out<<m_patch->offset[b];}out<<']';
     out<<",\"state\":";Write(out,m_state);out<<",\"initial\":";Write(out,m_initial);
     out<<",\"fixed_reference\":";Write(out,m_patch->Reference());out<<",\"fixed_defect\":";Write(out,m_patch->Defect());
