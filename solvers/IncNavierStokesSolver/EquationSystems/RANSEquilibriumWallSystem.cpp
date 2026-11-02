@@ -3,6 +3,7 @@
 // Copyright (c) 2026 Nektar++ contributors.
 ///////////////////////////////////////////////////////////////////////////////
 #include <IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallSystem.h>
+#include <IncNavierStokesSolver/EquationSystems/IncNavierStokes.h>
 #include <fstream>
 #include <iomanip>
 
@@ -12,6 +13,8 @@ using namespace RANSWallAlgebra;
 using Layout=RANSWallFieldLayout;
 std::string RANSEquilibriumWallSystem::className=SolverUtils::GetEquationSystemFactory().RegisterCreatorFunction(
     "RANSEquilibriumWallSystem",RANSEquilibriumWallSystem::create);
+std::string RANSEquilibriumWallSystem::solverTypeLookupId=LibUtilities::SessionReader::RegisterEnumValue(
+    "SolverType","RANSEquilibriumWallSystem",eRANSEquilibriumWallSystem);
 RANSWallTimeFunction RANSEquilibriumWallSystem::Function(const std::string &name,const std::string &variable,bool required) const
 {
     Require(!required || m_session->DefinesFunction(name,variable),"missing "+name+"/"+variable);

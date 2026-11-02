@@ -63,6 +63,7 @@ enum SolverType
     eVCSImplicit,
     eImplicit,
     eRANSVelocityCorrectionScheme,
+    eRANSEquilibriumWallSystem,
 };
 
 enum EquationType

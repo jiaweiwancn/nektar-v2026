@@ -42,6 +42,7 @@ private:
     double m_alpha=0,m_tolerance=2e-12;
     int m_iterations=0,m_maximumIterations=15;
     bool m_condensed=false;
+    static std::string solverTypeLookupId;
 };
 }
 #endif

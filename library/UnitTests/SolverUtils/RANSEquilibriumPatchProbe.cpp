@@ -23,6 +23,46 @@ void WriteMatrix(std::ostream &out,const RANSWallAlgebra::DenseMatrix &m)
     for(int i=0;i<m.size();++i){if(i)out<<',';Write(out,m[i]);}
     out<<']';
 }
+void GenericCase(std::ostream &out,const std::shared_ptr<RANSWallFieldLayout> &layout,RANSWallPatchParameters parameters,double chi)
+{
+    parameters.chi=chi;RANSWallPatch patch(layout,parameters);
+    const double K=parameters.model.Q()*.16,H=parameters.geometry.height;
+    SolverUtils::AWFProfileOptions options;options.requestedWeight=chi;
+    SolverUtils::EquilibriumAWFProfiles profile(parameters.geometry,K,parameters.model,{},options);
+    const double ep=profile.Dissipation(H),Z=layout->Top();
+    RANSWallPatchData data;std::array<RANSWallTimeFunction,6> f;
+    f[0]=[](double x,double r,double){return (.1+.03*x)*r;};
+    f[1]=[Z](double x,double r,double){return .02*r+.01*x*r*(Z-r);};
+    f[2]=[K,rK=parameters.geometry.sampleHeight](double,double r,double){return K+.01*(r-rK);};
+    f[3]=[ep](double,double,double){return ep;};
+    f[4]=[](double x,double r,double){return -.01*x+.02*r;};
+    f[5]=[](double x,double r,double){return .04*x+.05*r;};
+    for(int b=0;b<4;++b)data.boundary[b]=f[b];
+    data.innerBody[0]=[](double x,double,double){return .01+.02*x;};
+    data.innerBody[1]=[](double,double r,double){return -.02+.03*r;};
+    data.outerBody[0]=[](double x,double r,double){return .04*x+.01*r;};
+    data.outerBody[1]=[](double,double r,double){return -.03+.02*r;};
+    data.innerKSource=[](double x,double r,double){return .03+.01*x+.02*r;};
+    data.outerKSource=[](double x,double r,double){return -.02+.01*x+.03*r;};
+    data.outerEpsilonSource=[](double x,double r,double){return .01*(1+x+r);};
+    auto state=patch.Project(f,.2),history=state;
+    for(int j=0;j<layout->offset[layout->InnerPressure];++j)history[j]*=.97;
+    const auto residual=patch.Residual(state,history,5.3,.2,data);
+    const auto constraints=patch.Constraints(state,.2,data);
+    auto lifted=state;for(auto [row,value]:constraints)lifted[row]=value;
+    out<<"{\"chi\":"<<chi<<",\"alpha\":5.3,\"time\":0.2,\"state\":";Write(out,state);
+    out<<",\"lifted_state\":";Write(out,lifted);out<<",\"history\":";Write(out,history);
+    out<<",\"residual\":";Write(out,residual);out<<",\"constraints\":[";
+    int count=0;for(auto [row,value]:constraints){if(count++)out<<',';Write(out,{static_cast<double>(row),value});}
+    out<<"],\"forcing_samples\":[";count=0;
+    for(double fraction:{.13,.47,.91})
+    {
+        if(count++)out<<',';
+        const double x=layout->Left()+fraction*(layout->Right()-layout->Left());
+        Write(out,{x,patch.SampleK(lifted,x),patch.Forcing(lifted,x,.2,data)});
+    }
+    out<<"]}";
+}
 int main(int argc,char **argv)
 {
     try
@@ -106,6 +146,11 @@ int main(int argc,char **argv)
         out<<",\"system\":";WriteMatrix(out,pressure.system);out<<",\"rhs\":";Write(out,pressure.rhs);
         out<<",\"solution\":";Write(out,pressure.solution);out<<",\"metrics\":";
         Write(out,{pressure.velocityMaximum,pressure.globalMean,pressure.pressureJump,pressure.tractionMismatch});out<<'}';
+        out<<",\"parameters\":";
+        Write(out,{parameters.geometry.molecularNu,H,parameters.geometry.roughness,parameters.geometry.sampleHeight,
+            parameters.geometry.tailStart,k,parameters.model.Q(),parameters.model.Kappa()});
+        out<<",\"generic_cases\":[";int generic=0;
+        for(double chi:{0.,.37,1.}){if(generic++)out<<',';GenericCase(out,layoutPtr,parameters,chi);}out<<']';
         out<<"}\n";
         Require(static_cast<bool>(out),"cannot write layout report");
         std::cout<<"Native multiregion layout verified: "<<layout.Size()<<" stage unknowns.\n";
