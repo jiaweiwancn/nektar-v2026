@@ -252,7 +252,8 @@ int main(int argc,char **argv)
         Require(argc==3,"usage: RANSCurvedWallProbe SESSION.xml REPORT.json");
         auto world=LibUtilities::SessionReader::CreateInstance(2,argv);world->InitSession();
         char program[]="curved-wall-probe";char *args[]{program,nullptr};
-        auto serial=LibUtilities::SessionReader::CreateInstance(1,args,world->GetFilenames(),LibUtilities::CommSerial::create(1,args));serial->InitSession();
+        auto filenames=world->GetFilenames();
+        auto serial=LibUtilities::SessionReader::CreateInstance(1,args,filenames,LibUtilities::CommSerial::create(1,args));serial->InitSession();
         serial->SetSolverInfo("GlobalSysSoln","DirectFull");const auto graph=SpatialDomains::MeshGraphIO::Read(serial);const int d=graph->GetMeshDimension();
         RANSWallPatchParameters parameters;parameters.chi=0;
         serial->LoadParameter("RANSWallHeight",parameters.geometry.height,2.);serial->LoadParameter("RANSWallRoughness",parameters.geometry.roughness,.1);

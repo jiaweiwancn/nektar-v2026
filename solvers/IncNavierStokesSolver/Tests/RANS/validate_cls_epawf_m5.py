@@ -387,6 +387,13 @@ def main():
                 frozen_contract_sha256=digest(root/'docs/plans/cls-epawf-revised-contract-v1.json'),sections={},commands=[],verification_status='failed',milestone_closure=False,
                 scope='analytic normal-coordinate maps on native CG charts; replicated dense reference backend; eta=chi=0 on curved cases')
     try:
+        frozen={
+            'docs/plans/cls-epawf-revised-contract-v1.json':'4e7bd75022409b8dc2ef31cc73425779b646a97535760b31eeea4ec49087de8a',
+            'docs/literature/cls_neutral_abl_equilibrium_awf_note_revised.tex':'d35e437c2f2f8b25a46f7a3f285c6f1ad8b48d7b554aa1d161315f59eeb6de0f',
+            'library/SolverUtils/Turbulence/RANSModels.cpp':'86a7154ba3cb27e4d3319aa42d156a228fd1b180f35f9b217159822ec9d66b05',
+            'library/SolverUtils/Turbulence/AnalyticalWallFunction.cpp':'5baf29819fed6b81ad1b042bc09258a3e0779d15de13076b688bf32f80ddcf7e'}
+        report['frozen_sources']={name:digest(root/name) for name in frozen}
+        for name,expected in frozen.items():require(report['frozen_sources'][name]==expected,'frozen source changed: '+name)
         qualify(run,report['sections'])
         report.update(verification_status='passed',milestone_closure=True)
     except Exception as exc:
