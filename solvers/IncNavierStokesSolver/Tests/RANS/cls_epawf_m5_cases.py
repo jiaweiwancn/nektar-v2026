@@ -40,6 +40,7 @@ def expressions(family, dimension, stationary=False, swirl=False):
     import sympy as sp
     from sympy.printing.str import StrPrinter
     class Printer(StrPrinter):
+        def _print_Pi(self,e): return 'PI'
         def _print_Pow(self, e):
             a,b=e.as_base_exp(); return '('+self._print(a)+')^('+self._print(b)+')'
         def _print_Abs(self,e): return 'fabs('+self._print(e.args[0])+')'

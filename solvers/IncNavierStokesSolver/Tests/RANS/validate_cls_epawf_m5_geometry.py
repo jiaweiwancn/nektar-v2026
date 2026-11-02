@@ -304,13 +304,13 @@ def validate_wall(report):
             audit.near(field['maximum'], np.max(np.abs(weak), initial=0.), 'reported_all_mode_metric_max', 1e-12)
             audit.near(field['seam_maximum'], np.max(np.abs(seam), initial=0.), 'reported_seam_max', 1e-12)
     for first, last in zip(levels[0]['fields'], levels[-1]['fields']):
-        audit.require(last['maximum'] < 2e-8 and last['maximum'] <= max(2e-8, 1.25*first['maximum']), 'weak Piola quadrature did not converge')
-        audit.near(last['seam_load'], np.zeros_like(last['seam_load']), 'equal_opposite_seam_load', 2e-9)
-        audit.near(last['constant_flux_boundary'], np.zeros(3), 'constant_flux_divergence_theorem', 2e-8)
+        audit.require(last['maximum'] < 1e-10 and last['maximum'] <= max(1e-10, 1.25*first['maximum']), 'weak Piola quadrature did not converge')
+        audit.near(last['seam_load'], np.zeros_like(last['seam_load']), 'equal_opposite_seam_load', 1e-10)
+        audit.near(last['constant_flux_boundary'], np.zeros(3), 'constant_flux_divergence_theorem', 1e-10)
     ranks = data['ranks']; owners = data['cell_ownership']
     audit.require(len({entry[0] for entry in owners}) == len(owners) and all(0 <= entry[1] < ranks for entry in owners), 'invalid cell ownership')
     shared = data['interface']['shared_advective_seam_load']
-    audit.near(shared, np.zeros_like(shared), 'shared_advective_interface_loads', 2e-9)
+    audit.near(shared, np.zeros_like(shared), 'shared_advective_interface_loads', 1e-10)
     return dict(success=True, checks=audit.checks, errors=audit.errors,
                 qualification='actual native weak loads at reported finite quadrature orders')
 

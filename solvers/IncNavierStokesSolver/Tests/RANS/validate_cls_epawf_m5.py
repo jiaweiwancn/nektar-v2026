@@ -202,6 +202,99 @@ def residual_oracle(raw,normal_order=24,tangential_order=None):
     return dict(dimension=d,maximum_error=max(errors.values(),default=0.),roughness_budget=roughness.tolist(),energy_budget=energy.tolist())
 
 
+def dependent_epsilon(raw,state,chart,fields=None):
+    fields=fields or spaces(raw);d=raw['dimension'];off=raw['offsets'];p=np.asarray(chart,dtype=float)
+    m=geometry(raw['map_parameters'],p);r=m['distance'];nu,H,rough,rK,rm,*rest=raw['parameters']
+    sample=np.array([p[0],p[1],rK/m['scale']]);sm=geometry(raw['map_parameters'],sample)
+    _,_,_,K,gK=physical_rows(fields[d],state,off[d],[sample]);K=float(K[0])
+    # Differentiate the fixed-physical-r sampler before following the H trace.
+    chart_gradient=gK[0]@sm['jacobian'];hg=m['height_gradient']
+    sampled_gradient=np.array([chart_gradient[0]-chart_gradient[2]*sample[2]*hg[0]/m['height'],chart_gradient[1]-chart_gradient[2]*sample[2]*hg[1]/m['height'],0.])
+    ze=5.1*nu/math.sqrt(K)
+    if r>ze:
+        value=K**1.5/(2.55*r)
+        r_gradient=np.array([p[2]*hg[0]/H,p[2]*hg[1]/H,m['scale']])
+        gradient=1.5*math.sqrt(K)/(2.55*r)*sampled_gradient-K**1.5/(2.55*r*r)*r_gradient
+    else:
+        value=K*K/(2.55*5.1*nu);gradient=2*K/(2.55*5.1*nu)*sampled_gradient
+    return value,gradient@m['inverse'],K
+
+
+def interface_oracle(raw):
+    d=raw['dimension'];off=raw['offsets'];state=raw['lifted_state'];f=spaces(raw);mapping=raw['map_parameters']
+    nu,H,rough,rK,rm,K0,qstar,kappa=raw['parameters'];axes=(0,2) if d==2 else (0,1,2)
+    def evaluate(q):
+        metric=geometry(mapping,q);area=metric['matching_area'];norm=float(np.linalg.norm(area));N=area/norm
+        U=np.zeros(3);Ui=np.zeros(3);Gi=np.zeros((3,3));Go=np.zeros((3,3))
+        for b,axis in enumerate(axes):
+            _,_,_,value,gradient=physical_rows(f[0],state,off[b],[q],side=-1);Ui[axis]=value[0];Gi[axis]=gradient[0]
+            _,_,_,value,gradient=physical_rows(f[0],state,off[b],[q],side=1);U[axis]=value[0];Go[axis]=gradient[0]
+        _,_,_,k,gki=physical_rows(f[d],state,off[d],[q],side=-1)
+        _,_,_,_,gko=physical_rows(f[d],state,off[d],[q],side=1)
+        _,_,_,e,ge=physical_rows(f[d+1],state,off[d+1],[q],side=1)
+        _,_,_,pi,_=physical_rows(f[d+2],state,off[d+2],[q],side=-1)
+        _,_,_,po,_=physical_rows(f[d+3],state,off[d+3],[q],side=1)
+        k,e,pi,po=map(lambda a:float(a[0]),(k,e,pi,po))
+        Ew,gEw,K=dependent_epsilon(raw,state,q,f)
+        profile=Profiles(dict(geometry=[nu,metric['height'],rough,rK,rm],metric=[metric['kappa1'],metric['kappa2']],k=K,q=qstar,kappa=kappa,chi=0))
+        nt=float(profile.a)*max(metric['height']-float(profile.zv),0.)
+        closure=indexed(Go,k,e,'physical');nto=float(closure['nut'].real)
+        Ti=(nu+nt)*(Gi+Gi.T)-pi*np.eye(3)
+        To=-closure['stress'].real+(2*k/3-po)*np.eye(3)
+        tractionI=Ti@area;tractionO=To@area;mass=U@area
+        ki=(U*k-(nu+nt)*gki[0])@area;ko=(U*k-nto*gko[0])@area
+        eo=(U*e-nto/1.3*ge[0])@area;ei=(U*Ew)@area
+        base=metric['base_tangents'];gradH=base@np.linalg.solve(base.T@base,metric['height_gradient'])
+        w=U@metric['normal'];ut=U-w*metric['normal'];v=np.linalg.solve(np.eye(3)+metric['height']*metric['B'],ut)
+        m=mass/metric['baseArea'];formula=metric['J']*(w-v@gradH);naive=metric['J']*w
+        near(m,formula,'variable_height_relative_matching_mass')
+        record=dict(area=area,N_H=N,normal=metric['normal'],U=U,G_inner=Gi,G_outer=Go,traction_inner_area=tractionI,traction_outer_area=tractionO,
+                    shared_advective_momentum=U*mass,k=k,sampled_k=K,epsilon=e,dependent_epsilon=Ew,physical_r=metric['distance'],J=metric['J'],base_area=metric['baseArea'],
+                    m_H=m,m_H_formula=formula,m_H_naive=naive,shared_advective_mass=mass,shared_advective_k=k*mass,k_flux_inner=ki,k_flux_outer=ko,
+                    epsilon_flux_outer=eo,epsilon_inner_advective_flux=ei,epsilon_flux_reaction=eo-ei)
+        integral=np.array([norm,mass,k*mass,*(U*mass),*tractionI,*tractionO,tractionI@N,tractionO@N,ki,ko,eo,ei,eo-ei,metric['baseArea']*naive])
+        return record,integral
+    for sample in raw['interface']['samples']:
+        result,_=evaluate(sample['chart'])
+        for name,value in result.items():near(sample[name],value,'independent_interface_'+name,tolerance=1e-10)
+    z,w=np.polynomial.legendre.leggauss(raw['interface']['quadrature_order']);total=np.zeros(20)
+    for elem in f[d+2].elements:
+        if abs(elem['upper'][2]-H)>1e-12:continue
+        for index in itertools.product(range(len(z)),repeat=d-1):
+            q=np.array([elem['lower'][0]+(z[index[0]]+1)*(elem['upper'][0]-elem['lower'][0])/2,0.,H])
+            weight=w[index[0]]*(elem['upper'][0]-elem['lower'][0])/2
+            if d==3:
+                q[1]=elem['lower'][1]+(z[index[1]]+1)*(elem['upper'][1]-elem['lower'][1])/2
+                weight*=w[index[1]]*(elem['upper'][1]-elem['lower'][1])/2
+            total+=weight*evaluate(q)[1]
+    near(raw['interface']['integrals'],total,'independent_integrated_matching_budgets',tolerance=1e-10)
+    require(abs(total[18])>1e-6,'epsilon constraint reaction was silently omitted')
+    if np.any(np.abs(np.asarray(mapping)[3:6])>0):require(abs(total[1]-total[19])>1e-5,'variable-H naive mass omission control inactive')
+    diagnostic=[]
+    for sample in raw['inner_epsilon_diagnostic']:
+        q=np.asarray(sample['chart']);value,gradient,K=dependent_epsilon(raw,state,q,f)
+        old=dependent_epsilon(raw,raw['history'],q,f)[0]
+        U=np.zeros(3);G=np.zeros((3,3))
+        for b,axis in enumerate(axes):
+            _,_,_,v,g=physical_rows(f[0],state,off[b],[q]);U[axis]=v[0];G[axis]=g[0]
+        reaction=raw['alpha']*(value-old)+value*np.trace(G)+U@gradient
+        near(sample['epsilon'],value,'inner_algebraic_epsilon')
+        near(sample['history_epsilon'],old,'inner_history_epsilon')
+        near(sample['gradient'],gradient,'inner_epsilon_analytic_gradient_vs_fd',tolerance=2e-7)
+        near(sample['reaction'],reaction,'inner_epsilon_diagnostic_reaction',tolerance=2e-7)
+        diagnostic.append(reaction)
+    require(max(map(abs,diagnostic))>1e-5,'diagnostic epsilon residual was forced to zero')
+    return dict(integrals=total.tolist(),epsilon_diagnostic_reactions=diagnostic,normal_traction=[float(total[12]),float(total[13])],generic_state_is_not_traction_balanced=True)
+
+
+def sum_load(field,function):
+    result=np.zeros(field.size)
+    for e in field.elements:
+        points,w=field.quadrature(e);ids,p,g=field.rows(e,points)
+        np.add.at(result,ids,p.T@(w*np.array([function(q) for q in points])))
+    return result
+
+
 def native_history_difference(a,b,name,tolerance=1e-8):
     """Compare every native history slot and the full coupled physical state."""
     require(a['dimension']==b['dimension'] and a['order']==b['order'],'different compared history shapes')
@@ -276,9 +369,11 @@ def mms_error(raw,swirl=False,stationary=False):
 
 class Runner(FlatRunner):
     def curved(self,name,**kwargs):return self.evolution(name,generator=mapped_session,**kwargs)
-    def wall(self,name,family,dimension=2,degree=3,split=1,ranks=1,ownership_shift=0,quadrature=12):
+    def wall(self,name,family,dimension=2,degree=3,split=1,ranks=1,ownership_shift=0,quadrature=12,invariant=False):
         directory=self.output/name;directory.mkdir()
         xml=mapped_session(self.template,directory/'case.xml',family=family,dimension=dimension,degree=degree,split=split,ownership_shift=ownership_shift,quadrature=quadrature)
+        if invariant:
+            tree=ET.parse(xml);set_parameter(tree.getroot(),'RANSWallProbeInvariant',1);write(tree.getroot(),xml)
         report=directory/'probe.json';self.command(name,'RANSCurvedWallProbe',[xml,report],ranks=ranks)
         return json.loads(report.read_text())
 
@@ -294,11 +389,33 @@ def qualify(run,sections):
     for family,dimension in [('plane',2),('circle',2),('smooth',2),('variable',2),('surface3d',3),('feet',2)]:
         raw=run.wall('operator-'+family,family,dimension)
         independent=residual_oracle(raw)
+        independent['interface']=interface_oracle(raw)
+        for mass in raw['physical_masses']:
+            near(mass['values'],spaces(raw)[mass['block']].mass(),'independent_physical_mass',tolerance=1e-10)
         path=run.output/('operator-'+family)/'probe.json'
         audit=run.output/('operator-'+family)/'geometry-check.json'
         run.command('wall-audit-'+family,sys.executable,[str(Path(__file__).with_name('validate_cls_epawf_m5_geometry.py')),'--geometry-report',report,'--wall-report',path,'--output',audit])
         independent.update(family=family,geometry_audit=json.loads(audit.read_text()))
         sections['weak_operators'].append(independent)
+    # The same global chart polynomials lie exactly in both native spaces.
+    # Change the actual lateral patch subdivision and compare identical weak
+    # tests, without confusing spatial refinement with coefficient equality.
+    first=run.wall('partition-one','circle',invariant=True)
+    second=run.wall('partition-two','circle',split=2,invariant=True)
+    first_fields,second_fields=spaces(first),spaces(second)
+    moments=[]
+    for block,(a,b) in enumerate(zip(first_fields,second_fields)):
+        for test,name in [(lambda p:1.,'one'),(lambda p:p[0],'q1'),(lambda p:p[2],'rho')]:
+            ca=np.linalg.solve(a.mass(),sum_load(a,test));cb=np.linalg.solve(b.mass(),sum_load(b,test))
+            ra=np.asarray(first['raw_residual'])[first['offsets'][block]:first['offsets'][block+1]]
+            rb=np.asarray(second['raw_residual'])[second['offsets'][block]:second['offsets'][block+1]]
+            near(ca@ra,cb@rb,'lateral_patch_partition_'+str(block)+'_'+name,tolerance=1e-10)
+            moments.append(dict(block=block,test=name,one_patch=float(ca@ra),two_patches=float(cb@rb)))
+        for point in ([.17,0.,.37],[.61,0.,1.7],[.83,0.,2.9]):
+            if not any(np.all(np.asarray(point)>=e['lower']) and np.all(np.asarray(point)<=e['upper']) for e in a.elements):continue
+            va,ga=a.evaluate(first['lifted_state'],first['offsets'][block],point);vb,gb=b.evaluate(second['lifted_state'],second['offsets'][block],point)
+            near([va,*ga],[vb,*gb],'partition_identical_physical_field',tolerance=1e-10)
+    sections['patch_partition']=dict(identical_global_polynomials=True,actual_lateral_patch_counts=[1,2],weak_moments=moments)
     # Rotation covariance of the entire projected target and actual IMEX map.
     # The plane is an isolated, constant-H neutral verification case (eta=1).
     sections['planar_reference']=[]

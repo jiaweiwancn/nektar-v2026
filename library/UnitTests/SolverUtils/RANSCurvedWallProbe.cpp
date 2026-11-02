@@ -272,6 +272,17 @@ int main(int argc,char **argv)
             return std::pow(sampled,1.5)/(2.55*g.height)+.01*(p[2]-H);});
         functions.push_back([](const Vec &p,double){return -.01*p[0]+.015*p[1]+.02*p[2];});
         functions.push_back([](const Vec &p,double){return .04*p[0]+.03*p[1]+.05*p[2];});
+        int invariant=0;serial->LoadParameter("RANSWallProbeInvariant",invariant,0);
+        if(invariant)
+        {
+            Require(mapping.kind==RANSWallNormalMap::Kind::Cylinder && mapping.heightSlopeX==0 && mapping.heightSlopeY==0 && mapping.heightAmplitude==0,
+                    "partition invariant probe requires a constant-H cylinder");
+            for(int a=0;a<d;++a)functions[a]=[Z,d,a](const Vec &q,double){
+                const double envelope=.02*q[0]*(1-q[0])*(d==3?q[1]*(1-q[1]):1.)*q[2]*(Z-q[2]);
+                return (a==0?1.:(a==d-1?-.3:.4))*envelope;};
+            functions[d]=[K](const Vec&,double){return K;};
+            functions[d+1]=[K,H](const Vec &q,double){return std::pow(K,1.5)/(2.55*H)+.01*(q[2]-H);};
+        }
         RANSWallEvolutionData data(d);for(int b=0;b<patch.InnerPressure();++b)data.boundary[b]=functions[b];
         data.innerBody[0]=[](const Vec &p,double){return .01+.02*p[0];};data.outerBody[0]=[](const Vec &p,double){return .04*p[0]+.01*p[2];};
         if(d==3){data.innerBody[1]=[](const Vec &p,double){return .015-.01*p[1]+.02*p[2];};data.outerBody[1]=[](const Vec &p,double){return .02*p[1]-.01*p[2];};}
@@ -286,7 +297,7 @@ int main(int argc,char **argv)
         Require(Max(delta)<2e-10*std::max(1.,Max(raw)),"regional raw residuals do not sum");
         const auto roughness=patch.RoughnessBudget(state,time,data),energy=patch.EnergyBudget(state,history,alpha,time,data);
         std::ostringstream out;out<<std::setprecision(17)<<"{\"schema\":1,\"dimension\":"<<d<<",\"ranks\":"<<world->GetComm()->GetSize()
-            <<",\"chi\":0,\"eta\":0,\"time\":"<<time<<",\"alpha\":"<<alpha<<",\"function_coordinates\":\"Chart\",\"parameters\":";
+            <<",\"chi\":0,\"eta\":0,\"invariant_partition_fixture\":"<<(invariant?"true":"false")<<",\"time\":"<<time<<",\"alpha\":"<<alpha<<",\"function_coordinates\":\"Chart\",\"parameters\":";
         Write(out,Vector{parameters.geometry.molecularNu,H,parameters.geometry.roughness,parameters.geometry.sampleHeight,parameters.geometry.tailStart,K,parameters.model.Q(),parameters.model.Kappa()});
         out<<",\"map_parameters\":";Write(out,MapParameters(mapping));out<<",\"quadrature_orders\":";Write(out,Vector{static_cast<double>(parameters.tangentialOrder),static_cast<double>(parameters.normalOrder)});
         out<<",\"lower\":";Write(out,patch.lower);out<<",\"upper\":";Write(out,patch.upper);out<<",\"offsets\":[";
