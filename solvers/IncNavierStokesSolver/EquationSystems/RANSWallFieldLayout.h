@@ -15,10 +15,10 @@ namespace Nektar
 namespace RANSWallAlgebra
 {
 using Vector = std::vector<double>;
-using Matrix = std::vector<Vector>;
+using DenseMatrix = std::vector<Vector>;
 using Function = std::function<double(double, double)>;
-Vector Solve(const Matrix &matrix, const Vector &rhs);
-Vector Multiply(const Matrix &matrix, const Vector &value);
+Vector Solve(const DenseMatrix &matrix, const Vector &rhs);
+Vector Multiply(const DenseMatrix &matrix, const Vector &value);
 double Maximum(const Vector &value);
 void Require(bool valid, const std::string &message);
 }
@@ -46,7 +46,7 @@ public:
     {
         double left, right, bottom, top;
         int geometry, degree;
-        std::vector<RANSWallAlgebra::Vector> derivativeX, derivativeR;
+        std::vector<Array<OneD,NekDouble>> derivativeX, derivativeR;
     };
     RANSWallNativeField(const LibUtilities::SessionReaderSharedPtr &session,
         const MultiRegions::ExpListSharedPtr &full, const std::vector<unsigned int> &elements);
@@ -56,7 +56,7 @@ public:
     RANSWallPoint Point(double x, double r, int side = 0) const;
     RANSWallPoint ElementPoint(int element, double x, double r) const;
     std::vector<RANSWallPoint> Quadrature(int order = 0) const;
-    RANSWallAlgebra::Matrix Mass() const;
+    RANSWallAlgebra::DenseMatrix Mass() const;
     RANSWallAlgebra::Vector Project(const RANSWallAlgebra::Function &function) const;
     std::map<int, double> Boundary(const RANSWallAlgebra::Function &function,
         const std::function<bool(int, const Element &)> &select) const;

@@ -38,7 +38,7 @@ int main(int argc,char **argv)
             for(const auto &q:field->Quadrature())for(int j=0;j<q.ids.size();++j)
                 direct[q.ids[j]]+=q.weight*q.phi[j]*f(q.x,q.r);
             for(int i=0;i<direct.size();++i)Require(std::abs(native[i]-direct[i])<1e-11,"native CG dual assembly");
-            const auto &e=field->Elements()[0];const auto q=field->Point(.37*(e.left+e.right),e.bottom+.41*(e.top-e.bottom));
+            const auto &e=field->Elements()[0];const auto q=field->Point(e.left+.37*(e.right-e.left),e.bottom+.41*(e.top-e.bottom));
             const auto g=q.Gradient(coefficients);
             Require(std::abs(q.Value(coefficients)-f(q.x,q.r))<1e-10 &&
                 std::abs(g[0]-.2)<1e-10 && std::abs(g[1]-.06*q.r)<1e-10,"native physical polynomial/derivative");

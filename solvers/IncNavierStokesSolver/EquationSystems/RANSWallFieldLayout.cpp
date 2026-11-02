@@ -18,7 +18,7 @@ namespace RANSWallAlgebra
 {
 void Require(bool valid, const std::string &message)
 { if (!valid) throw std::runtime_error("EP-AWF patch: "+message); }
-Vector Solve(const Matrix &matrix, const Vector &rhs)
+Vector Solve(const DenseMatrix &matrix, const Vector &rhs)
 {
     const int n = rhs.size();
     Require(matrix.size() == rhs.size() && n > 0, "invalid dense system");
@@ -35,7 +35,7 @@ Vector Solve(const Matrix &matrix, const Vector &rhs)
         [](double x) { return std::isfinite(x); }), "invalid dense solution");
     return solution;
 }
-Vector Multiply(const Matrix &matrix, const Vector &value)
+Vector Multiply(const DenseMatrix &matrix, const Vector &value)
 {
     Vector result(matrix.size());
     for (std::size_t i = 0; i < matrix.size(); ++i)
@@ -81,6 +81,8 @@ RANSWallNativeField::RANSWallNativeField(const LibUtilities::SessionReaderShared
         const auto exp = m_field->GetExp(e); const auto geom = exp->GetGeom();
         Require(geom->GetShapeType() == LibUtilities::eQuadrilateral && geom->GetCoordim() == 2,
                 "M3 supports physical 2D quadrilaterals only");
+        Require(exp->GetGeomFactors()->GetGtype()==SpatialDomains::eRegular,
+                "M3 requires affine geometry; curved patches belong to M5");
         const auto box = geom->GetBoundingBox();
         Element el{box[0], box[3], box[1], box[4], geom->GetGlobalID(),
                    static_cast<int>(exp->GetBasisNumModes(0))-1, {}, {}};
@@ -100,7 +102,7 @@ RANSWallNativeField::RANSWallNativeField(const LibUtilities::SessionReaderShared
         for (int i = 0; i < exp->GetNcoeffs(); ++i)
         {
             coef[i] = 1; exp->BwdTrans(coef,values); exp->PhysDeriv(0,values,dx); exp->PhysDeriv(1,values,dr);
-            el.derivativeX.emplace_back(dx.begin(),dx.end()); el.derivativeR.emplace_back(dr.begin(),dr.end());
+            el.derivativeX.emplace_back(dx.size(),dx.data()); el.derivativeR.emplace_back(dr.size(),dr.data());
             coef[i] = 0;
         }
         m_elements.push_back(std::move(el));
@@ -123,10 +125,8 @@ RANSWallPoint RANSWallNativeField::ElementPoint(int element, double x, double r)
         const double sign = map->GetLocalToGlobalSign(pos);
         row.ids.push_back(map->GetLocalToGlobalMap(pos));
         row.phi.push_back(sign*exp->PhysEvaluateBasis(local,i));
-        Array<OneD,const NekDouble> dx(el.derivativeX[i].size(),el.derivativeX[i].data(),eWrapper),
-            dr(el.derivativeR[i].size(),el.derivativeR[i].data(),eWrapper);
-        row.dx.push_back(sign*exp->StdPhysEvaluate(local,dx));
-        row.dr.push_back(sign*exp->StdPhysEvaluate(local,dr));
+        row.dx.push_back(sign*exp->StdPhysEvaluate(local,el.derivativeX[i]));
+        row.dr.push_back(sign*exp->StdPhysEvaluate(local,el.derivativeR[i]));
     }
     return row;
 }
@@ -162,9 +162,9 @@ std::vector<RANSWallPoint> RANSWallNativeField::Quadrature(int order) const
     }
     return result;
 }
-Matrix RANSWallNativeField::Mass() const
+DenseMatrix RANSWallNativeField::Mass() const
 {
-    Matrix result(Size(),Vector(Size()));
+    DenseMatrix result(Size(),Vector(Size()));
     for (const auto &q : Quadrature())
         for (int i=0;i<q.ids.size();++i) for(int j=0;j<q.ids.size();++j)
             result[q.ids[i]][q.ids[j]] += q.weight*q.phi[i]*q.phi[j];
