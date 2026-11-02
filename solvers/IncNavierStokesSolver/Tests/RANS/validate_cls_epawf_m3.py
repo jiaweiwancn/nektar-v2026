@@ -117,6 +117,17 @@ def check_layout(raw):
             ids, p, _, _ = space.rows(e, X, R)
             np.add.at(expected, ids, p.T@(W*(1+.2*X+.03*R*R)))
         near(record["native_load"], expected, "native_subdomain_CG_assembly")
+        defect = np.zeros(space.size)
+        coefficients = np.array(record["nonpolynomial_projection"])
+        z, w = np.polynomial.legendre.leggauss(24)
+        for e in space.elements:
+            a, b, c, d = e["bounds"]
+            X, R = np.meshgrid(a+(z+1)*(b-a)/2, c+(z+1)*(d-c)/2)
+            X, R = X.ravel(), R.ravel()
+            W = np.outer(w, w).ravel()*(b-a)*(d-c)/4
+            ids, p, _, _ = space.rows(e, X, R)
+            np.add.at(defect, ids, p.T@(W*(p@coefficients[ids]-np.sin(.4*X+.2*R)-.01*R**3)))
+        near(defect, np.zeros(space.size), "physical_L2_projection_all_mode_defect")
         summaries.append({k: record[k] for k in ("elements", "global_coefficients", "local_coefficients")})
     require(summaries[0]["elements"] == summaries[3]["elements"], "Full-domain k space differs")
     require(summaries[4]["elements"] == summaries[2]["elements"], "Epsilon is not outer-only")
@@ -422,6 +433,22 @@ def manufactured_values(x, r, time, parameters, derivative=False):
                      ki if r <= H else ko, eo if r >= H else 0., pi, po])
 
 
+def scaled_residual_norms(report, metadata):
+    parameters = metadata["parameters"]
+    H, K, q, kappa = parameters[1], parameters[5], parameters[6], parameters[7]
+    us, scales = math.sqrt(K/q), []
+    time_scale = H/us
+    for i, field_scale in zip((0, 0, 3, 4), (us, us, K, us**3/(kappa*H))):
+        volume = sum((e["bounds"][1]-e["bounds"][0])*(e["bounds"][3]-e["bounds"][2])
+                     for e in metadata["layout"][i]["mesh"])
+        scales.append(field_scale/time_scale*math.sqrt(volume))
+    for i in (5, 6):
+        volume = sum((e["bounds"][1]-e["bounds"][0])*(e["bounds"][3]-e["bounds"][2])
+                     for e in metadata["layout"][i]["mesh"])
+        scales.append(us/H*math.sqrt(volume))
+    return (np.array(report["residual_norms"][:6])/scales).tolist()
+
+
 def check_evolving(report, metadata, expected_solved):
     require(report["solved"] == expected_solved and not report["native_time_map"], "Stage solve/audit was confused with a native timestep")
     spaces = [Space(metadata["layout"][i]) for i in (0, 0, 3, 4, 5, 6)]
@@ -451,8 +478,9 @@ def check_evolving(report, metadata, expected_solved):
                     inner_rate_squared[block] += np.sum(W*expected**2)
                 source_rate_error = max(source_rate_error, float(np.sqrt(np.sum(W*(rate-expected)**2))))
     L2, rateL2 = np.sqrt(L2), np.sqrt(rateL2)
+    scaled = scaled_residual_norms(report, metadata)
     if degree >= 6:
-        require(max(report["residual_norms"]) < 1e-9, "Resolved evolving manufactured stage has a nonzero physical block residual")
+        require(max(scaled) < 1e-9, "Resolved evolving manufactured stage exceeds the frozen scaled residual tolerance")
         require(max(L2) < 1e-8 and source_rate_error < 1e-8, "Manufactured state/storage failed to converge")
     inner_rate = np.sqrt(inner_rate_squared)
     require(inner_rate[0]+inner_rate[1] > 1e-4 and inner_rate[2] > 1e-7, "Manufactured inner storage vanished")
@@ -461,6 +489,16 @@ def check_evolving(report, metadata, expected_solved):
         near(samples[:, 1], np.full(3, K), "evolving_physical_sampled_K")
         near(samples[:, 2], np.full(3, -.03*math.cos(time)), "evolving_outer_one_sided_forcing")
     v, ks, es, pw, po = spaces[0], spaces[2], spaces[3], spaces[4], spaces[5]
+    active_yap_points, inactive_yap_points = 0, 0
+    normal_points = np.polynomial.legendre.leggauss(max(8, degree+3))[0]
+    for e in es.elements:
+        _, _, lower, upper = e["bounds"]
+        for r in lower+(normal_points+1)*(upper-lower)/2:
+            exact = manufactured_values(.5, r, time, parameters)
+            active = exact[2]**1.5/(2.5*exact[3]*r) > 1
+            active_yap_points += int(active)
+            inactive_yap_points += int(not active)
+    require(active_yap_points > 0 and inactive_yap_points > 0, "Manufactured case missed a Yap branch")
     trace, no_slip, k_ground, traction, k_flux, epsilon = [], [], [], [], [], []
     for x in (.13, .47, .91):
         uw, guw = v.evaluate(state, offsets[0], x, H, -1)
@@ -522,6 +560,8 @@ def check_evolving(report, metadata, expected_solved):
                              "net_boundary_mass_flux": side+normal})
     return {"degree": degree, "time": time, "alpha": report["alpha"], "solved": report["solved"],
             "iterations": report["iterations"], "physical_block_residual_norms": report["residual_norms"],
+            "scaled_block_residual_norms": scaled, "active_yap_normal_points": active_yap_points,
+            "inactive_yap_normal_points": inactive_yap_points,
             "field_L2_errors": L2.tolist(), "storage_rate_L2": rateL2.tolist(),
             "inner_storage_rate_L2": inner_rate.tolist(), "regional_mass_budgets": mass_budgets,
             "storage_rate_L2_error": source_rate_error, "shared_trace_max": max(trace),
@@ -551,11 +591,13 @@ def qualify_cases(build, output, template, report, base):
             summary = check_evolving(data, metadata, True)
         else:
             require(data["solved"] and data["iterations"] > 0 and not data["native_time_map"], "No actual nonlinear stage solve")
-            require(max(data["residual_norms"]) < 1e-9, "Stage physical residual exceeds target")
+            scaled = scaled_residual_norms(data, metadata)
+            require(max(scaled) < 1e-9, "Stage scaled physical residual exceeds target")
             near(data["history_as_state_residual"], np.zeros(len(data["state"])), "stationary_manufactured_target_residual")
             parsed = [float(v) for v in re.findall(r"L (?:2|inf) error \(variable [^)]+\) : ([^\n]+)", result.stdout)]
             require(len(parsed) == 10 and max(parsed) < 1e-9, "Manufactured native output fields missed the exact state")
-            summary = {"iterations": data["iterations"], "physical_block_residual_norms": data["residual_norms"], "field_errors": parsed}
+            summary = {"iterations": data["iterations"], "physical_block_residual_norms": data["residual_norms"],
+                       "scaled_block_residual_norms": scaled, "field_errors": parsed}
         return data, summary
     stationary = []
     for condensed in (False, True):
@@ -643,8 +685,8 @@ def qualify_cases(build, output, template, report, base):
         run([solver, session], session.parent, name)
         data = json.loads(session.with_suffix(".patch.json").read_text())
         audits.append(check_evolving(data, metadata_by_degree[degree], False))
-    coarse_error = max(audits[0]["physical_block_residual_norms"])
-    require(coarse_error > 1e-8 and max(audits[1]["physical_block_residual_norms"]) < .01*coarse_error,
+    coarse_error = max(audits[0]["scaled_block_residual_norms"])
+    require(coarse_error > 1e-8 and max(audits[1]["scaled_block_residual_norms"]) < .01*coarse_error,
             "Manufactured finite-space defect did not refine away")
     report["evolving_manufactured_audits"] = audits
     solutions = []

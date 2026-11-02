@@ -196,7 +196,13 @@ int main(int argc,char **argv)
                 {if(j)out<<',';out<<map->GetLocalToGlobalSign(field->Field()->GetCoeff_Offset(e)+j);}
                 out<<"]}";
             }
-            out<<"]}";
+            out<<']';
+            if(!skipLayoutChecks)
+            {
+                out<<",\"nonpolynomial_projection\":";
+                Write(out,field->Project([](double x,double r){return std::sin(.4*x+.2*r)+.01*r*r*r;}));
+            }
+            out<<'}';
         }
         out<<"],\"stage_unknowns\":"<<layout.Size()<<",\"offsets\":[";
         for(int b=0;b<layout.Blocks;++b){if(b)out<<',';out<<layout.offset[b];}out<<']';

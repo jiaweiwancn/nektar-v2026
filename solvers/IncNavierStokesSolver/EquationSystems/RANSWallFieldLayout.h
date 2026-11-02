@@ -31,6 +31,8 @@ struct RANSWallPoint
     int element = -1, geometry = -1;
     std::vector<int> ids;
     RANSWallAlgebra::Vector phi, dx, dr;
+    std::array<int,4> vertexPositions{};
+    std::array<double,4> vertexSigns{};
     double Value(const RANSWallAlgebra::Vector &field, int offset = 0) const;
     std::array<double, 2> Gradient(const RANSWallAlgebra::Vector &field, int offset = 0) const;
 };

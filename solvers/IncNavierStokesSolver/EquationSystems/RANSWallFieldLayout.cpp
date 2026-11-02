@@ -74,15 +74,28 @@ std::array<double,6> PhysicalBounds(SpatialDomains::Geometry *geom)
 
 double RANSWallPoint::Value(const Vector &field, int offset) const
 {
-    long double result = 0;
-    for (std::size_t j = 0; j < ids.size(); ++j) result += (long double)phi[j]*field.at(offset+ids[j]);
+    // Evaluate about a native constant. This preserves the partition of unity
+    // without cancellation of O(1) values on thin elements.
+    const double constant=field.at(offset+ids[vertexPositions[0]])*vertexSigns[0];
+    long double result = constant;
+    for (std::size_t j = 0; j < ids.size(); ++j)
+    {
+        double coefficient=field.at(offset+ids[j]);
+        for(int v=0;v<4;++v)if(j==vertexPositions[v])coefficient-=constant*vertexSigns[v];
+        result += (long double)phi[j]*coefficient;
+    }
     return result;
 }
 std::array<double, 2> RANSWallPoint::Gradient(const Vector &field, int offset) const
 {
     long double x = 0, r = 0;
+    const double constant=field.at(offset+ids[vertexPositions[0]])*vertexSigns[0];
     for (std::size_t j = 0; j < ids.size(); ++j)
-    { x += (long double)dx[j]*field.at(offset+ids[j]); r += (long double)dr[j]*field.at(offset+ids[j]); }
+    {
+        double coefficient=field.at(offset+ids[j]);
+        for(int v=0;v<4;++v)if(j==vertexPositions[v])coefficient-=constant*vertexSigns[v];
+        x += (long double)dx[j]*coefficient; r += (long double)dr[j]*coefficient;
+    }
     return {static_cast<double>(x), static_cast<double>(r)};
 }
 
@@ -135,6 +148,11 @@ RANSWallPoint RANSWallNativeField::ElementPoint(int element, double x, double r)
     Array<OneD,NekDouble> local(2); local[0] = 2*(x-el.left)/(el.right-el.left)-1;
     local[1] = 2*(r-el.bottom)/(el.top-el.bottom)-1;
     RANSWallPoint row; row.x=x; row.r=r; row.element=element; row.geometry=el.geometry;
+    for(int v=0;v<4;++v)
+    {
+        row.vertexPositions[v]=exp->GetVertexMap(v);
+        row.vertexSigns[v]=map->GetLocalToGlobalSign(m_field->GetCoeff_Offset(element)+row.vertexPositions[v]);
+    }
     for (int i = 0; i < exp->GetNcoeffs(); ++i)
     {
         const int pos = m_field->GetCoeff_Offset(element)+i;
@@ -188,12 +206,11 @@ RANSWallAlgebra::DenseMatrix RANSWallNativeField::Mass() const
 }
 Vector RANSWallNativeField::Project(const Function &f) const
 {
-    Vector rhs(Size());bool first=true,constant=true;double value=0;
-    for (const auto &q : Quadrature())
+    const auto quadrature=Quadrature();bool first=true,constant=true;double value=0;
+    for (const auto &q : quadrature)
     {
         const double sampled=f(q.x,q.r);Require(std::isfinite(sampled),"nonfinite projection data");
         if(first){value=sampled;first=false;}else if(sampled!=value)constant=false;
-        for (int j=0;j<q.ids.size();++j)rhs[q.ids[j]] += q.weight*q.phi[j]*sampled;
     }
     if(constant)
     {
@@ -205,7 +222,37 @@ Vector RANSWallNativeField::Project(const Function &f) const
         }
         return result;
     }
-    return Solve(Mass(),rhs);
+    // A local native transform supplies a good seed. Solve the physical L2
+    // defect, rather than forming a large background load and inverting its
+    // rounded mass matrix. The correction retains the same global L2 problem.
+    Vector result(Size()),count(Size());const auto map=m_field->GetLocalToGlobalMap();
+    for(int e=0;e<m_field->GetExpSize();++e)
+    {
+        const auto exp=m_field->GetExp(e);const int nq=exp->GetTotPoints();
+        Array<OneD,NekDouble> x(nq),r(nq),z(nq),values(nq),coeff(exp->GetNcoeffs());
+        exp->GetCoords(x,r,z);
+        for(int q=0;q<nq;++q)values[q]=f(x[q],r[q]);
+        exp->FwdTrans(values,coeff);
+        for(int j=0;j<coeff.size();++j)
+        {
+            const int pos=m_field->GetCoeff_Offset(e)+j,id=map->GetLocalToGlobalMap(pos);
+            result[id]+=map->GetLocalToGlobalSign(pos)*coeff[j];count[id]+=1;
+        }
+    }
+    for(int j=0;j<result.size();++j){Require(count[j]>0,"unmapped projection coefficient");result[j]/=count[j];}
+    const auto mass=Mass();
+    for(int iteration=0;iteration<3;++iteration)
+    {
+        std::vector<long double> load(Size(),0);
+        for(const auto &q:quadrature)
+        {
+            const double defect=f(q.x,q.r)-q.Value(result);
+            for(int j=0;j<q.ids.size();++j)load[q.ids[j]]+=(long double)q.weight*q.phi[j]*defect;
+        }
+        Vector rhs(load.begin(),load.end());const auto correction=Solve(mass,rhs);
+        for(int j=0;j<result.size();++j)result[j]+=correction[j];
+    }
+    return result;
 }
 std::map<int,double> RANSWallNativeField::Boundary(const Function &f,
     const std::function<bool(int,const Element &)> &select) const
