@@ -62,13 +62,64 @@ void GenericCase(std::ostream &out,const std::shared_ptr<RANSWallFieldLayout> &l
         const double x=layout->Left()+fraction*(layout->Right()-layout->Left());
         Write(out,{x,patch.SampleK(lifted,x),patch.Forcing(lifted,x,.2,data)});
     }
-    out<<"]}";
+    out<<']';
+    if(chi==.37)
+    {
+        const auto jacobian=patch.Jacobian(state,history,5.3,.2,data);
+        const auto inner=patch.CondensableVelocity(constraints);
+        RANSWallCondensation reduction(jacobian,residual,inner);
+        auto rhs=residual;for(double &x:rhs)x=-x;
+        const auto full=RANSWallAlgebra::Solve(jacobian,rhs),condensed=reduction.Solve();
+        Vector difference(full.size());for(int i=0;i<full.size();++i)difference[i]=full[i]-condensed[i];
+        Require(Maximum(difference)<1e-9*std::max(1.,Maximum(full)),"full/Schur Newton step mismatch");
+        Vector zero(state.size());RANSWallCondensation action(jacobian,zero,inner);
+        Vector direction(action.Retained().size());
+        for(int j=0;j<direction.size();++j)
+            if(!constraints.count(action.Retained()[j]) && action.Retained()[j]!=layout->offset[layout->Gauge])
+                direction[j]=std::sin(.7*(j+1))/std::sqrt(direction.size());
+        double mean=0;
+        for(int j=0;j<direction.size();++j)
+            for(int b=0;b<2;++b)
+            {
+                const int index=action.Retained()[j]-layout->offset[layout->InnerPressure+b];
+                if(index>=0 && index<patch.PressureMeanLoads()[b].size())mean+=patch.PressureMeanLoads()[b][index]*direction[j];
+            }
+        for(int b=0;b<2;++b)
+        {
+            const auto constant=layout->Field(static_cast<RANSWallFieldLayout::Block>(layout->InnerPressure+b)).Project([](double,double){return 1.;});
+            for(int j=0;j<direction.size();++j)
+            {
+                const int index=action.Retained()[j]-layout->offset[layout->InnerPressure+b];
+                if(index>=0 && index<constant.size())direction[j]-=mean*constant[index];
+            }
+        }
+        const auto lift=action.Recover(direction),fullAction=Multiply(jacobian,lift),reducedAction=Multiply(action.Matrix(),direction);
+        out<<",\"condensation\":{\"jacobian\":";WriteMatrix(out,jacobian);
+        out<<",\"inner\":[";for(int j=0;j<inner.size();++j){if(j)out<<',';out<<inner[j];}out<<']';
+        out<<",\"retained\":[";for(int j=0;j<action.Retained().size();++j){if(j)out<<',';out<<action.Retained()[j];}out<<']';
+        out<<",\"schur\":";WriteMatrix(out,reduction.Matrix());out<<",\"reduced_residual\":";Write(out,reduction.Residual());
+        out<<",\"full_step\":";Write(out,full);out<<",\"condensed_step\":";Write(out,condensed);
+        out<<",\"retained_direction\":";Write(out,direction);out<<",\"lifted_direction\":";Write(out,lift);
+        out<<",\"full_action\":";Write(out,fullAction);out<<",\"reduced_action\":";Write(out,reducedAction);
+        out<<",\"finite_difference_actions\":[";int count=0;
+        for(double h:{1e-3,3e-4,1e-4})
+        {
+            if(count++)out<<',';
+            auto plus=state,minus=state;for(int j=0;j<state.size();++j){plus[j]+=h*lift[j];minus[j]-=h*lift[j];}
+            const auto a=patch.Residual(plus,history,5.3,.2,data),b=patch.Residual(minus,history,5.3,.2,data);
+            Vector value(a.size());for(int j=0;j<value.size();++j)value[j]=(a[j]-b[j])/(2*h);
+            out<<"{\"step\":"<<h<<",\"action\":";Write(out,value);out<<'}';
+        }
+        out<<"]}";
+    }
+    out<<'}';
 }
 int main(int argc,char **argv)
 {
     try
     {
-        Require(argc==3,"Use SESSION.xml REPORT.json");
+        Require(argc==3 || (argc==4 && std::string(argv[3])=="parallel"),"Use SESSION.xml REPORT.json [parallel]");
+        const bool parallelOnly=argc==4;
         const std::string output=argv[2];
         auto session=LibUtilities::SessionReader::CreateInstance(2,argv);
         auto graph=SpatialDomains::MeshGraphIO::Read(session);
@@ -82,14 +133,17 @@ int main(int argc,char **argv)
         {
             if(count++)out<<',';
             auto f=[](double x,double r){return 1+.2*x+.03*r*r;};
-            const auto coefficients=field->Project(f);
-            auto native=field->NativeLoad(f);Vector direct(field->Size());
-            for(const auto &q:field->Quadrature())for(int j=0;j<q.ids.size();++j)
-                direct[q.ids[j]]+=q.weight*q.phi[j]*f(q.x,q.r);
-            for(int i=0;i<direct.size();++i)Require(std::abs(native[i]-direct[i])<1e-11,"native CG dual assembly");
+            const auto coefficients=parallelOnly?Vector(field->Size()):field->Project(f);
+            auto native=parallelOnly?Vector(field->Size()):field->NativeLoad(f);Vector direct(field->Size());
+            if(!parallelOnly)
+            {
+                for(const auto &q:field->Quadrature())for(int j=0;j<q.ids.size();++j)
+                    direct[q.ids[j]]+=q.weight*q.phi[j]*f(q.x,q.r);
+                for(int i=0;i<direct.size();++i)Require(std::abs(native[i]-direct[i])<1e-11,"native CG dual assembly");
+            }
             const auto &e=field->Elements()[0];const auto q=field->Point(e.left+.37*(e.right-e.left),e.bottom+.41*(e.top-e.bottom));
             const auto g=q.Gradient(coefficients);
-            Require(std::abs(q.Value(coefficients)-f(q.x,q.r))<1e-10 &&
+            if(!parallelOnly)Require(std::abs(q.Value(coefficients)-f(q.x,q.r))<1e-10 &&
                 std::abs(g[0]-.2)<1e-10 && std::abs(g[1]-.06*q.r)<1e-10,"native physical polynomial/derivative");
             field->Store(coefficients);
             out<<"{\"elements\":"<<field->Elements().size()<<",\"global_coefficients\":"<<field->Size()
@@ -119,10 +173,26 @@ int main(int argc,char **argv)
         session->LoadParameter("RANSWallRoughness",parameters.geometry.roughness,.1);
         session->LoadParameter("RANSWallSampleHeight",parameters.geometry.sampleHeight,1.);
         session->LoadParameter("RANSWallTailStart",parameters.geometry.tailStart,1.);
-        RANSWallPatch patch(layoutPtr,parameters);
+        RANSWallPatch patch(layoutPtr,parameters,!parallelOnly);
         const double k=parameters.model.Q()*.16;
         SolverUtils::EquilibriumAWFProfiles profile(parameters.geometry,k,parameters.model);
         const double ep=profile.Dissipation(H);
+        out<<",\"parallel_only\":"<<(parallelOnly?"true":"false")<<",\"parallel_cases\":[";
+        int parallelCount=0;
+        for(double force:{-.02,0.,.03})
+        {
+            if(parallelCount++)out<<',';
+            const auto reduction=patch.ParallelReduction(k,profile.Reference().matchingVelocity,force);
+            out<<"{\"radial_unknowns\":"<<reduction.radialUnknowns<<",\"metrics\":";Write(out,reduction.metrics);
+            out<<",\"coefficients\":";Write(out,reduction.coefficients);out<<",\"samples\":";WriteMatrix(out,reduction.samples);out<<'}';
+        }
+        out<<']';
+        if(parallelOnly)
+        {
+            out<<",\"parameters\":";Write(out,{parameters.geometry.molecularNu,H,parameters.geometry.roughness,
+                parameters.geometry.sampleHeight,parameters.geometry.tailStart,k,parameters.model.Q(),parameters.model.Kappa()});
+            out<<"}\n";Require(static_cast<bool>(out),"cannot write parallel report");session->Finalise();return 0;
+        }
         RANSWallPatchData data;
         data.boundary[0]=[](double,double r,double){return .1*r;};
         data.boundary[2]=[&](double,double,double){return k;};

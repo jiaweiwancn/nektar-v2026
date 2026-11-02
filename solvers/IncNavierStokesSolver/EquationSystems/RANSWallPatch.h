@@ -40,7 +40,8 @@ public:
     using Vector = RANSWallAlgebra::Vector;
     using WallMatrix = RANSWallAlgebra::DenseMatrix;
     using Layout = RANSWallFieldLayout;
-    RANSWallPatch(std::shared_ptr<Layout> layout, const RANSWallPatchParameters &parameters);
+    RANSWallPatch(std::shared_ptr<Layout> layout, const RANSWallPatchParameters &parameters,
+                 bool prepareMixedStage=true);
     const std::shared_ptr<Layout> &Fields() const { return m_layout; }
     const RANSWallPatchParameters &Parameters() const { return m_parameters; }
     Vector Project(const std::array<RANSWallTimeFunction,6> &functions, double time) const;
@@ -58,6 +59,15 @@ public:
     std::vector<int> CondensableVelocity(const std::map<int,double> &constraints) const;
     const std::array<Vector,2> &PressureMeanLoads() const { return m_pressureMean; }
     void Store(const Vector &state) const;
+    struct ParallelResult
+    {
+        Vector coefficients,metrics;
+        WallMatrix samples;
+        int radialUnknowns=0;
+    };
+    // Exact parallel/quasi-steady reduction only, with K and U_H fixed.
+    // Native 2D CG functions are restricted to constant tangential modes.
+    ParallelResult ParallelReduction(double sampledK,double matchingVelocity,double forcing) const;
 private:
     struct Point { RANSWallPoint v,k,p,e; double weight; };
     struct Ray { double x,weight,k = -1; std::shared_ptr<SolverUtils::EquilibriumAWFProfiles> profile;
@@ -73,6 +83,7 @@ private:
     std::vector<Point> m_outer;
     std::array<Vector,2> m_pressureMean;
     std::array<WallMatrix,6> m_mass;
+    bool m_stagePrepared;
 };
 
 /** Exact algebraic Schur reduction of a verified uncondensed Newton matrix.

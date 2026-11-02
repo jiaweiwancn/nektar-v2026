@@ -60,6 +60,8 @@ void RANSEquilibriumWallSystem::v_InitObject(bool declareFields)
     m_session->LoadParameter("RANSWallMaxIterations",m_maximumIterations,15);
     std::string condensation;m_session->LoadSolverInfo("RANSWallCondense",condensation,"False");
     Require(condensation=="True" || condensation=="False","RANSWallCondense must be True or False");m_condensed=condensation=="True";
+    std::string mode;m_session->LoadSolverInfo("RANSWallStageMode",mode,"Solve");
+    Require(mode=="Solve" || mode=="Residual","RANSWallStageMode must be Solve or Residual");m_auditOnly=mode=="Residual";
     Require(m_steps==0,"M3 accepts a single supplied stage; native NumSteps/time integration belongs to M4");
     m_layout=std::make_shared<Layout>(m_session,m_graph,parameters.geometry.height);
     m_patch=std::make_shared<RANSWallPatch>(m_layout,parameters);
@@ -93,10 +95,11 @@ void RANSEquilibriumWallSystem::v_DoInitialise(bool dump)
 }
 void RANSEquilibriumWallSystem::v_DoSolve()
 {
-    m_state=m_patch->Solve(m_state,m_history,m_alpha,m_time,m_data,m_condensed,m_iterations,m_tolerance,m_maximumIterations);
+    if(!m_auditOnly)m_state=m_patch->Solve(m_state,m_history,m_alpha,m_time,m_data,m_condensed,m_iterations,m_tolerance,m_maximumIterations);
     m_residual=m_patch->Residual(m_state,m_history,m_alpha,m_time,m_data);
     m_norms=m_patch->ResidualNorms(m_residual,m_patch->Constraints(m_state,m_time,m_data));UpdateFields();
-    std::cout<<"EP-AWF flat stage converged in "<<m_iterations<<" Newton iterations; max physical block dual norm "
+    std::cout<<(m_auditOnly?"EP-AWF flat residual audit, ":"EP-AWF flat stage converged, ")
+             <<m_iterations<<" Newton iterations; max physical block dual norm "
              <<Maximum(m_norms)<<std::endl;
 }
 void RANSEquilibriumWallSystem::UpdateFields()
@@ -146,7 +149,7 @@ void RANSEquilibriumWallSystem::v_Output()
     auto write=[](std::ostream &out,const Vector &v){out<<'[';for(int i=0;i<v.size();++i){if(i)out<<',';out<<v[i];}out<<']';};
     std::ofstream report(m_sessionName+".patch.json");report<<std::setprecision(17);
     report<<"{\"schema\":1,\"time\":"<<m_time<<",\"alpha\":"<<m_alpha<<",\"condensed\":"<<(m_condensed?"true":"false")
-          <<",\"iterations\":"<<m_iterations<<",\"native_time_map\":false,\"state\":";write(report,m_state);
+          <<",\"solved\":"<<(m_auditOnly?"false":"true")<<",\"iterations\":"<<m_iterations<<",\"native_time_map\":false,\"state\":";write(report,m_state);
     report<<",\"history\":";write(report,m_history);report<<",\"residual\":";write(report,m_residual);
     report<<",\"residual_norms\":";write(report,m_norms);
     report<<",\"history_as_state_residual\":";write(report,m_patch->Residual(m_history,m_history,m_alpha,m_time,m_data));

@@ -286,7 +286,6 @@ RANSWallFieldLayout::RANSWallFieldLayout(const LibUtilities::SessionReaderShared
     outerPressure=std::make_shared<RANSWallNativeField>(session,pressure,outer);
     for(int b=0;b<Gauge;++b) size[b]=Field(static_cast<Block>(b)).Size();
     size[Gauge]=1; for(int b=1;b<Blocks;++b)offset[b]=offset[b-1]+size[b-1];
-    Require(Size()<=3000,"M3 dense verification backend is limited to 3000 unknowns");
 }
 const RANSWallNativeField &RANSWallFieldLayout::Field(Block b) const
 {

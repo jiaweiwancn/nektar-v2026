@@ -8,6 +8,7 @@
 #include <cmath>
 #include <numeric>
 #include <set>
+#include <tuple>
 
 namespace Nektar
 {
@@ -29,8 +30,8 @@ RANSWallPatchData::RANSWallPatchData()
     innerBody.fill(zero);outerBody.fill(zero);boundary.fill(zero);
     innerKSource=outerKSource=outerEpsilonSource=zero;
 }
-RANSWallPatch::RANSWallPatch(std::shared_ptr<Layout> layout,const RANSWallPatchParameters &parameters)
-    : m_layout(std::move(layout)),m_parameters(parameters)
+RANSWallPatch::RANSWallPatch(std::shared_ptr<Layout> layout,const RANSWallPatchParameters &parameters,bool prepareMixedStage)
+    : m_layout(std::move(layout)),m_parameters(parameters),m_stagePrepared(prepareMixedStage)
 {
     parameters.geometry.Validate();
     Require(Equal(parameters.geometry.height,m_layout->Height()),"layout/profile H mismatch");
@@ -42,6 +43,8 @@ RANSWallPatch::RANSWallPatch(std::shared_ptr<Layout> layout,const RANSWallPatchP
         columns.emplace(e.left,e.right);m_options.physicalBreakpoints.push_back(e.bottom);
         m_options.physicalBreakpoints.push_back(e.top);
     }
+    if(!prepareMixedStage)return;
+    Require(m_layout->Size()<=3000,"M3 dense mixed-stage backend is limited to 3000 unknowns");
     auto rule=LibUtilities::PointsManager()[LibUtilities::PointsKey(parameters.tangentialOrder,LibUtilities::eGaussGaussLegendre)];
     const auto x=rule->GetZ(),w=rule->GetW();
     for(const auto &column:columns)for(int i=0;i<x.size();++i)
@@ -126,6 +129,7 @@ std::map<int,double> RANSWallPatch::Constraints(const Vector &state,double time,
 
 Vector RANSWallPatch::Residual(const Vector &state,const Vector &history,double alpha,double time,const RANSWallPatchData &data) const
 {
+    Require(m_stagePrepared,"parallel-only helper has no mixed-stage operator");
     Require(alpha>=0 && (alpha==0 || history.size()==state.size()),"stage history/storage mismatch");
     const auto &l=*m_layout;std::map<int,double> constraints;
     const auto s=Lift(state,time,data,constraints);Vector residual(l.Size());
@@ -272,6 +276,93 @@ void RANSWallPatch::Store(const Vector &s) const
     const auto &l=*m_layout;
     for(const auto &sub:{l.innerVelocity,l.outerVelocity})
         sub->Store(sub->Project([&](double x,double r){return l.velocity->Point(x,r).Value(s,l.offset[Layout::U]);}));
+}
+RANSWallPatch::ParallelResult RANSWallPatch::ParallelReduction(double sampledK,double matchingVelocity,double forcing) const
+{
+    const auto &field=*m_layout->innerVelocity;
+    const auto map=field.Field()->GetLocalToGlobalMap();
+    using Key=std::tuple<double,double,int>;
+    std::map<Key,int> radial;
+    std::vector<std::tuple<int,int,double>> assignments;
+    for(int e=0;e<field.Elements().size();++e)
+    {
+        const auto &el=field.Elements()[e];const int modes=el.degree+1;
+        for(int j=0;j<modes;++j)
+        {
+            Key key=j==0?Key{el.bottom,el.bottom,0}:j==1?Key{el.top,el.top,0}:Key{el.bottom,el.top,j};
+            if(!radial.count(key))radial[key]=radial.size();
+            for(int i=0;i<2;++i)
+            {
+                const int pos=field.Field()->GetCoeff_Offset(e)+i+modes*j;
+                assignments.emplace_back(map->GetLocalToGlobalMap(pos),radial[key],map->GetLocalToGlobalSign(pos));
+            }
+        }
+    }
+    const int n=radial.size();WallMatrix injection(field.Size(),Vector(n));
+    Require(n<=2000,"parallel reduction is limited to 2000 native radial unknowns");
+    for(auto [global,normal,sign]:assignments)
+    {
+        Require(injection[global][normal]==0 || injection[global][normal]==sign,"incompatible parallel native trace restriction");
+        injection[global][normal]=sign;
+    }
+    auto normal=[&](const RANSWallPoint &q,const Vector &row)
+    {
+        Vector result(n);
+        for(int j=0;j<q.ids.size();++j)for(int i=0;i<n;++i)result[i]+=row[j]*injection[q.ids[j]][i];
+        return result;
+    };
+    const double x=(m_layout->Left()+m_layout->Right())/2,H=m_layout->Height();
+    const auto profile=Profile(sampledK);WallMatrix matrix(n,Vector(n));Vector force(n);
+    for(const auto &q:profile->Quadrature())
+    {
+        const auto point=field.Point(x,q.r);const auto p=normal(point,point.phi),d=normal(point,point.dr);
+        const double viscosity=profile->Original().TotalViscosity(q.r);
+        for(int i=0;i<n;++i)
+        {
+            force[i]+=q.weight*p[i]*(q.r>m_parameters.geometry.roughness?forcing:0);
+            for(int j=0;j<n;++j)matrix[i][j]+=q.weight*viscosity*d[i]*d[j];
+        }
+    }
+    Require(radial.count(Key{0,0,0}) && radial.count(Key{H,H,0}),"parallel layer endpoints missing");
+    const int ground=radial[Key{0,0,0}],top=radial[Key{H,H,0}];
+    std::vector<int> free;for(int i=0;i<n;++i)if(i!=ground && i!=top)free.push_back(i);
+    WallMatrix a(free.size(),Vector(free.size()));Vector rhs(free.size());
+    for(int i=0;i<free.size();++i)
+    {
+        rhs[i]=-force[free[i]]-matrix[free[i]][top]*matchingVelocity;
+        for(int j=0;j<free.size();++j)a[i][j]=matrix[free[i]][free[j]];
+    }
+    const auto solution=RANSWallAlgebra::Solve(a,rhs);Vector coefficients(n);coefficients[top]=matchingVelocity;
+    for(int i=0;i<free.size();++i)coefficients[free[i]]=solution[i];
+    auto reactions=Multiply(matrix,coefficients);for(int i=0;i<n;++i)reactions[i]+=force[i];
+    ParallelResult result;result.radialUnknowns=n;result.coefficients=Multiply(injection,coefficients);
+    const auto original=profile->Original().Evaluate({matchingVelocity,0},{forcing,0});
+    const double t=original.traction[0],T=t+forcing*(H-m_parameters.geometry.roughness);
+    long double velocityError=0,gradientError=0,power=0,forcingWork=0;
+    for(const auto &q:profile->Quadrature())
+    {
+        const auto point=field.Point(x,q.r);const double value=point.Value(result.coefficients),derivative=point.Gradient(result.coefficients)[1];
+        const double exact=profile->Original().Velocity(q.r,{matchingVelocity,0},{forcing,0})[0],
+            exactD=profile->Original().VelocityGradient(q.r,{matchingVelocity,0},{forcing,0})[0];
+        velocityError+=q.weight*(long double)(value-exact)*(value-exact);
+        gradientError+=q.weight*(long double)(derivative-exactD)*(derivative-exactD);
+        power+=q.weight*(long double)profile->Original().TotalViscosity(q.r)*derivative*derivative;
+        if(q.r>m_parameters.geometry.roughness)forcingWork+=q.weight*(long double)forcing*value;
+    }
+    for(int j=0;j<=100;++j)
+    {
+        const double r=H*j/100.;const auto point=field.Point(x,r);
+        result.samples.push_back({r,point.Value(result.coefficients),point.Gradient(result.coefficients)[1],
+            profile->Original().Velocity(r,{matchingVelocity,0},{forcing,0})[0]});
+    }
+    const auto topPoint=field.Point(x,H,-1),groundPoint=field.Point(x,0,1);
+    result.metrics={matchingVelocity,forcing,-reactions[ground],reactions[top],t,T,
+        static_cast<double>(std::sqrt(velocityError/H)),static_cast<double>(std::sqrt(gradientError/H)),
+        groundPoint.Value(result.coefficients),topPoint.Value(result.coefficients)-matchingVelocity,
+        profile->Original().TotalViscosity(0)*groundPoint.Gradient(result.coefficients)[1],
+        profile->Original().TotalViscosity(H)*topPoint.Gradient(result.coefficients)[1],
+        static_cast<double>(power-matchingVelocity*reactions[top]+forcingWork)};
+    return result;
 }
 RANSWallCondensation::RANSWallCondensation(const WallMatrix &j,const Vector &r,const std::vector<int> &inner):m_inner(inner)
 {
