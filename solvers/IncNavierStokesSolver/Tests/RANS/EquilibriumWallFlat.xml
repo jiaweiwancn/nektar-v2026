@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<NEKTAR>
+  <EXPANSIONS>
+    <E COMPOSITE="C[0]" NUMMODES="5,5" BASISTYPE="Modified_A,Modified_A"
+       POINTSTYPE="GaussLobattoLegendre,GaussLobattoLegendre" NUMPOINTS="8,8" FIELDS="u,v,k,eps_tilde"/>
+    <E COMPOSITE="C[0]" NUMMODES="3,3" BASISTYPE="Modified_A,Modified_A"
+       POINTSTYPE="GaussLobattoLegendre,GaussLobattoLegendre" NUMPOINTS="8,8" FIELDS="p"/>
+  </EXPANSIONS>
+  <CONDITIONS>
+    <SOLVERINFO>
+      <I PROPERTY="EQTYPE" VALUE="UnsteadyNavierStokes"/>
+      <I PROPERTY="SolverType" VALUE="RANSEquilibriumWallSystem"/>
+      <I PROPERTY="Projection" VALUE="Galerkin"/>
+      <I PROPERTY="GlobalSysSoln" VALUE="DirectFull"/>
+    </SOLVERINFO>
+    <PARAMETERS>
+      <P>RANSWallHeight = 2</P>
+      <P>RANSWallRoughness = 0.1</P>
+      <P>RANSWallSampleHeight = 1</P>
+      <P>RANSWallTailStart = 1</P>
+      <P>Kinvis = 0.000015</P>
+    </PARAMETERS>
+    <VARIABLES>
+      <V ID="0">u</V><V ID="1">v</V><V ID="2">k</V><V ID="3">eps_tilde</V><V ID="4">p</V>
+    </VARIABLES>
+  </CONDITIONS>
+  <GEOMETRY DIM="2" SPACE="2">
+    <VERTEX>
+      <V ID="0">0 0 0</V><V ID="1">1 0 0</V><V ID="2">0 2 0</V>
+      <V ID="3">1 2 0</V><V ID="4">0 4 0</V><V ID="5">1 4 0</V>
+    </VERTEX>
+    <EDGE>
+      <E ID="0">0 1</E><E ID="1">1 3</E><E ID="2">3 2</E><E ID="3">2 0</E>
+      <E ID="4">3 5</E><E ID="5">5 4</E><E ID="6">4 2</E>
+    </EDGE>
+    <ELEMENT><Q ID="0">0 1 2 3</Q><Q ID="1">2 4 5 6</Q></ELEMENT>
+    <COMPOSITE><C ID="0">Q[0-1]</C></COMPOSITE>
+    <DOMAIN>C[0]</DOMAIN>
+  </GEOMETRY>
+</NEKTAR>

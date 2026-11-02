@@ -21,6 +21,7 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
         ./EquationSystems/RANSTerrainWall.cpp
         ./EquationSystems/RANSMatrixFree.cpp
         ./EquationSystems/RANSHistory.cpp
+        ./EquationSystems/RANSWallFieldLayout.cpp
         ./EquationSystems/SmoothedProfileMethod.cpp
         ./EquationSystems/VCSMapping.cpp
         ./EquationSystems/Extrapolate.cpp
