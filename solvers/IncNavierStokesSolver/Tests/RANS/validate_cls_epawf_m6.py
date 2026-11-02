@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 import platform
 import sys
+import uuid
 import xml.etree.ElementTree as ET
 sys.dont_write_bytecode=True
 THREADS={k:'1' for k in ('OMP_NUM_THREADS','OPENBLAS_NUM_THREADS','MKL_NUM_THREADS','BLIS_NUM_THREADS')}
@@ -37,6 +38,39 @@ def near(a,b,name,scale=1.,tolerance=1e-10):
     require(error<=tolerance,f'{name}: {error} > {tolerance}')
     return error
 def digest(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+def expression_audit(run,family):
+    name='expressions-'+family;directory=run.output/name;directory.mkdir()
+    xml=transition_session(run.template,directory/'case.xml',family=family,steps=0)
+    run.command(name,'RANSWallExpressionProbe',[xml,directory/'samples.json'])
+    raw=json.loads((directory/'samples.json').read_text());qstar=3.1906750816242875;kappa=.4405539051866587
+    K=qstar*.16*(1+.02*math.sin(.3));kd=qstar*.16*.02*math.cos(.3);nu=1.5e-5
+    A=K**1.5/2.55;delta=(K/qstar)**1.5/kappa-A;offset=arc_offset() if family=='feet' else 0.
+    xx=.1*math.sqrt(K)/(70*nu);m=max(.5-.4*xx**.7,1-.79*xx**(-.28));zv=10.7*nu*(1-xx**m)/math.sqrt(K)
+    maximum=0.
+    for sample in raw['samples']:
+        x,r,_=sample['point'];s=min(1,max(0,(x-offset+3)/.75))
+        chi=1-10*s**3+15*s**4-6*s**5;first=-30*s*s*(1-s)**2/.75;second=-60*s*(1-s)*(1-2*s)/.75**2
+        B=A+delta*chi;nt=.2295*math.sqrt(K)*max(0,r-zv)
+        p0=(K/qstar)**2*nt/(nu+nt)**2;ea=A/max(r,5.1*nu/math.sqrt(K))
+        for entry in sample['values']:
+            key=entry['name']
+            if key.endswith('/k'):
+                expected=kd+(1-chi)*ea+chi*p0 if key.startswith('ScalarSourceInner') else kd+B/r if key.startswith('ScalarSourceOuter') else K
+            elif key.startswith('InitialConditionsOuter'):expected=B/r
+            else:
+                E=B/r;cmu=.3*(1-math.exp(-.36));trBr=0.
+                if family=='feet' and abs(x)<1:
+                    fx=-.02*math.pi/2*math.sin(math.pi*x);fxx=-.02*math.pi**2/2*math.cos(math.pi*x)
+                    curvature=-fxx/(1+fx*fx)**1.5;trBr=curvature/(1+r*curvature)
+                logBxx=delta*second/B-(delta*first/B)**2
+                diffusion=cmu*K*K/1.3*(1/r**2-trBr/r+logBxx)
+                ratio=K**1.5/(2.5*E*r);yap=.83*E*E/K*max(ratio-1,0)*ratio**2
+                expected=1.5*kd/K*E-diffusion+1.92*E*E/K-yap
+            error=near(entry['value'],expected,'native_prescribed_expression_'+key,tolerance=1e-10)
+            maximum=max(maximum,error)
+    return {'family':family,'samples':len(raw['samples']),'maximum_scaled_error':maximum,
+            'meaning':'actual installed Nektar interpreter values versus independent strong source formulas'}
 
 class Runner(NativeRunner):
     def probe(self,name,**kwargs):
@@ -110,6 +144,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--build',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True);p.add_argument('--mode',choices=['all','probes','smoke'],default='all')
     args=p.parse_args();require(platform.system()=='Linux','native numerical qualification belongs on Linux')
+    if args.output.exists():args.output=args.output/('replay-'+uuid.uuid4().hex[:12])
     run=Runner(args.build,args.output);sections={};source=Path(__file__).resolve().parents[4]
     summary={'schema':1,'milestone':'M6','started_utc':datetime.now(timezone.utc).isoformat(),
              'source_root':str(source),'thread_environment':THREADS,'status':'running','sections':sections}
@@ -124,6 +159,7 @@ def main():
                 raw=run.probe(f'operator-{family}-d{dimension}',family=family,dimension=dimension,quadrature=8)
                 sections['operators'].append(verify(raw,near,require,directional=dimension==2));save()
         if args.mode in ('all','smoke'):
+            sections['prescribed_expressions']=[expression_audit(run,family) for family in ('flat','feet')];save()
             sections['manufactured']=[];cases={}
             for family,degrees in [('flat',(3,4,5)),('feet',(3,4))]:
                 records=[]
@@ -160,6 +196,41 @@ def main():
             # Actual native startup IMEX1 on the same newly coupled operator.
             one=run.evolution('imex1-transition',generator=transition_session,family='flat',degree=3,steps=2,order=1,dt=.0025)
             sections['imex1']={'error':manufactured_error(one),'stage':stage_audit(one)};save()
+            # Fixed mesh/model/mask and common final physical time. Compare
+            # actual complete coefficients to the finest native IMEX2 map;
+            # this cancels spatial MMS error rather than fitting its floor.
+            sections['temporal']=[];temporal=[]
+            for dt in (.02,.01,.005,.0025):
+                raw=run.evolution('temporal-'+str(dt),generator=transition_session,family='flat',degree=3,
+                                  steps=round(.04/dt),dt=dt,order=2)
+                stage_audit(raw);temporal.append(raw)
+            fine=temporal[-1];fields=spaces(fine);off=fine['offsets'];temporal_errors=[]
+            for raw in temporal[:-1]:
+                square=0.
+                for block in (raw['dimension'],raw['dimension']+1):
+                    field=fields[block];delta=np.asarray(raw['state'][off[block]:off[block+1]])-fine['state'][off[block]:off[block+1]]
+                    scale=fine['parameters'][5] if block==raw['dimension'] else .4**3/(fine['parameters'][7]*2)
+                    square+=float(delta@field.mass()@delta)/field.volume/scale**2
+                error=math.sqrt(max(0.,square));temporal_errors.append(error)
+                sections['temporal'].append({'dt':raw['dt'],'scaled_scalar_mass_difference_to_dt_0025':error})
+            require(temporal_errors[0]>temporal_errors[1]>temporal_errors[2]>0,'native transition temporal differences did not decrease')
+            require(temporal_errors[0]/temporal_errors[1]>2.8 and temporal_errors[1]/temporal_errors[2]>2.8,'native transition IMEX2 did not show its expected temporal order')
+            save()
+            sections['rejections']=[]
+            invalid=[('anchor',None,'RANSWallEta',1),('sensor-at-H',None,'RANSWallSensorDistanceA',2),
+                     ('zero-buffer',None,'RANSWallBaselineStart',-2.25),('crossed-plateau',None,'RANSWallTransitionStart',-3.1),
+                     ('crossed-baseline',None,'RANSWallBaselineStart',-1.9),('zero-weight',None,'RANSWallSensorWeightPressure',0),
+                     ('unsafe-Re',None,'RANSWallSensorReynoldsOff',20),('outside-reference',None,'RANSWallSensorReynoldsOn',1e9),
+                     ('backward',None,'RANSWallDirectionX',-1),('no-flat-fetch','RANSWallMap','Gaussian',None),
+                     ('hill-support',None,'RANSWallTransitionEnd',-.5)]
+            for label,info,key,value in invalid:
+                name='reject-'+label;directory=run.output/name;directory.mkdir()
+                xml=transition_session(run.template,directory/'case.xml',family='feet',steps=0)
+                root=ET.parse(xml).getroot()
+                if info:set_info(root,info,key)
+                else:set_parameter(root,key,value)
+                write(root,xml);run.command(name,'IncNavierStokesSolver',[xml],expect_failure=True,timeout=120)
+                sections['rejections'].append(label);save()
         summary.update(status='passed',finished_utc=datetime.now(timezone.utc).isoformat());save()
         print(json.dumps({'status':summary['status'],'checks':checks,'commands':len(run.commands)}),flush=True)
     except Exception as error:
