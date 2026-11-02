@@ -23,6 +23,8 @@ int main(int argc,char **argv)
             for(const auto &name:{"InitialConditionsInner","InitialConditionsOuter","ScalarSourceInner","ScalarSourceOuter"})
                 for(const auto &var:{"k","eps_tilde"})if(session->DefinesFunction(name,var))
                 {
+                    const bool outer=std::string(name).find("Outer")!=std::string::npos;
+                    if((outer && r<2) || (!outer && r>2))continue;
                     if(entry++){out<<',';}
                     const auto equation=session->GetFunction(name,var);
                     out<<"{\"name\":\""<<name<<"/"<<var<<"\",\"value\":"
