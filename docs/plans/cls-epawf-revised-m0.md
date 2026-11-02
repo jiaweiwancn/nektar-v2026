@@ -1,6 +1,7 @@
 **M0 contract and baseline for the revised CLS and EP-AWF project**
 
-Status: contract v1 frozen; closure audit pending. The implementation branch
+M0 is closed on 2 November 2026. Contract v1 is frozen and its Linux audit
+passed at e56ceaf28c305e7e202127e7d05118ce825bf9e5. The implementation branch
 is codex/cls-epawf-revised, based on
 6415398d856323c3116e646eaf7c882c66617602. Branch setup and the exact-base
 Linux regression run were completed during M1. M0 adds the complete
@@ -11,8 +12,8 @@ machine-readable contract, equation mapping and baseline provenance audit.
 - Origin Skill: academic-research-suite / experiment-agent.
 - Origin Mode: implementation contract and reproducibility audit.
 - Origin Date: 2026-11-02.
-- Verification Status: contract frozen; native baseline already passed;
-  M0 closure audit pending.
+- Verification Status: VERIFIED for contract/source coverage and retained
+  exact-base provenance; later native wall-element implementation remains open.
 - Version Label: cls-epawf-revised-m0-v1.
 
 The normative artifact is
@@ -209,6 +210,29 @@ scheme and actual toolchain. Fingerprints captured at M0 audit
 are labelled separately from the earlier numerical execution.
 It also verifies that the tested M1 sources and common runtime
 dependencies still match their committed evidence.
+
+The completed audit is recorded in
+[audit.json](/Users/jay/Documents/nektar-v2026/docs/plans/cls-epawf-revised-evidence/m0/audit.json),
+with the exact command, exit status and report/log hashes in
+[execution-receipt.json](/Users/jay/Documents/nektar-v2026/docs/plans/cls-epawf-revised-evidence/m0/execution-receipt.json).
+It passed 183 structural/provenance checks in 1.05 s on CPU 0, with no new
+compilation or numerical solve. The manifest records the retained baseline
+source tree 820e2d159be8c44ce80812971c035746f74c3492, nine native binary
+fingerprints and 37 resolved library fingerprints. All 36 shared installed/
+system dependencies still match the M1 record. Existing M1 tested-source
+hashes match, and the unrelated primary checkout remains clean at
+f4b70baec10016dd098005bc5a5507b87e4a57bf.
+
+The starter reference has cutoff-budget margin 2.7492338210309715 and
+Re_K=95266.45794797626, within the selected unit admissibility plateaus.
+This checks admission of the illustrative reference only. It does not
+calibrate thresholds or validate the future native wall element.
+
+Every M0 deliverable is now recorded: approved branch/base, both note pins,
+reference tips, model/pressure/field/time/admission contract, full equation
+mapping and exact-base numerical evidence. The following closure commit
+changes documentation and receipts only, preserving the audited contract
+and checker. M1 remains closed and M2 is the next open implementation milestone.
 
 The actual framework is 5.9.0, Release with MPI enabled. The note
 discusses 5.10.0 interfaces; native availability for the new

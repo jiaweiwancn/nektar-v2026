@@ -35,6 +35,8 @@ reference recovery, developed standard precursors and unresolved CLS feasibility
 
 The [revised CLS and EP-AWF implementation plan](docs/plans/cls-epawf-revised-implementation-plan.md)
 defines the new spectral/hp wall-element project.
+[M0 contract and baseline](docs/plans/cls-epawf-revised-m0.md) freezes its
+model/discretization contract, equation mapping and exact-base provenance.
 [M1 kernel verification](docs/plans/cls-epawf-revised-m1.md) reproduces its
 reference identities and constitutive failures on Linux; the coupled patch
 implementation and stability qualification remain later milestones.

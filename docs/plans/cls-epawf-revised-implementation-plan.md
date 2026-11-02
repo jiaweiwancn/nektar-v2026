@@ -1,6 +1,6 @@
 **CLS and EP-AWF revised formulation implementation and validation plan**
 
-Status: Approved by the user on 2 November 2026; M1 closed, M0 audit in progress.
+Status: Approved by the user on 2 November 2026; M0 and M1 closed.
 Implementation branch: codex/cls-epawf-revised, based on
 6415398d856323c3116e646eaf7c882c66617602.
 
@@ -9,8 +9,8 @@ Implementation branch: codex/cls-epawf-revised, based on
 - Origin Skill: academic-research-suite / experiment-agent.
 - Origin Mode: plan.
 - Origin Date: 2026-11-02.
-- Verification Status: M1 kernel identities and constitutive counterexamples
-  VERIFIED on Linux; later implementation and numerical milestones UNVERIFIED.
+- Verification Status: M0 contract/baseline audit and M1 kernel identities/
+  constitutive counterexamples VERIFIED on Linux; later milestones UNVERIFIED.
 - Version Label: cls-epawf-revised-plan-v1.
 
 The objective is a native implementation of the high-Re CLS model and the
@@ -28,7 +28,8 @@ implementation milestones remain open.
 The [M0 contract and baseline record](/Users/jay/Documents/nektar-v2026/docs/plans/cls-epawf-revised-m0.md)
 and [contract v1](/Users/jay/Documents/nektar-v2026/docs/plans/cls-epawf-revised-contract-v1.json)
 freeze the model/discretization choices and map all revised-note equations
-to implementation and verification ownership.
+to implementation and verification ownership. Its Linux audit passed and
+reused the verified exact-base 16-test run without a new numerical solve.
 
 The revised note retains two demonstrated limitations: adverse incremental
 momentum diffusion and failure of general inner-k positivity. A faithful
@@ -169,7 +170,7 @@ the outer equation determines its flux.
 
 **4. Milestones and completion evidence**
 
-1. **M0 — Freeze the contract and establish the working branch.**
+1. **M0 — Freeze the contract and establish the working branch (closed).**
    After approval, create codex/cls-epawf-revised from the inspected latest
    reference tip, preserving all existing local files. Record note hashes,
    branch tips, compiler/library configuration, pressure convention, field
