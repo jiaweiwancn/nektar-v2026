@@ -4,7 +4,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include <IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.h>
 #include <LibUtilities/Foundations/ManagerAccess.h>
-#include <StdRegions/StdQuadExp.h>
 #include <StdRegions/StdSegExp.h>
 #include <algorithm>
 #include <cmath>
@@ -336,7 +335,7 @@ std::map<int,double> RANSWallGlobalField::Boundary(
         const auto &element=m_elements[e];const int modes=element.degree+1,n=std::max(8,modes+2);
         const LibUtilities::BasisKey key(LibUtilities::eModified_A,modes,
             LibUtilities::PointsKey(n,LibUtilities::eGaussLobattoLegendre));
-        StdRegions::StdSegExp segment(key);StdRegions::StdQuadExp face(key,key);
+        StdRegions::StdSegExp segment(key);
         const auto z=segment.GetBasis(0)->GetZ();
         for(int fixed=0;fixed<m_dimension;++fixed)for(int side=0;side<2;++side)
         {
@@ -356,7 +355,27 @@ std::map<int,double> RANSWallGlobalField::Boundary(
                 values[q]=Sample(function,coordinate);
             }
             if(m_dimension==2)segment.FwdTransBndConstrained(values,coefficients);
-            else face.FwdTransBndConstrained(values,coefficients);
+            else
+            {
+                // The native StdQuadExp constrained transform reverses the
+                // top/left physical edges although its trace map uses increasing
+                // tensor order. Two commuting native segment projections give
+                // consistent edges/corners and the same interior-bubble L2
+                // equations on this affine tensor face.
+                Array<OneD,NekDouble> temporary(modes*n),physical(n),modal(modes);
+                for(int row=0;row<n;++row)
+                {
+                    for(int i=0;i<n;++i)physical[i]=values[i+n*row];
+                    segment.FwdTransBndConstrained(physical,modal);
+                    for(int i=0;i<modes;++i)temporary[i+modes*row]=modal[i];
+                }
+                for(int i=0;i<modes;++i)
+                {
+                    for(int row=0;row<n;++row)physical[row]=temporary[i+modes*row];
+                    segment.FwdTransBndConstrained(physical,modal);
+                    for(int j=0;j<modes;++j)coefficients[i+modes*j]=modal[j];
+                }
+            }
             for(int j=0;j<nc;++j)
             {
                 const std::array<int,2> index{j%modes,j/modes};std::array<int,3> tensor{};tensor[fixed]=side;
