@@ -193,7 +193,12 @@ void WriteCase(std::ostream &out, const Case &c, int order, double chi)
     {
         StdRegions::StdSegExp seg(Basis(6, LibUtilities::eOrtho_A));
         const auto b = EvaluateBasis(seg, p);
-        out << ",\"legendre_mean_only\":"; Vector(out, p.RayLoads(b.phi, meanOnly));
+        auto loads = p.RayLoads(b.phi, meanOnly);
+        out << ",\"orthonormal_mean_only\":"; Vector(out, loads);
+        // Native Ortho_A is sqrt((2*j+1)/2)*L_j; the note tabulates L_j.
+        for (std::size_t j = 0; j < loads.size(); ++j)
+            loads[j] /= std::sqrt((2*j+1)/2.0);
+        out << ",\"legendre_mean_only\":"; Vector(out, loads);
     }
     out << '}';
 }

@@ -199,6 +199,10 @@ def check_case(case):
         near(ref[i], target, "reference_"+str(i), max(abs(float(target)), 1e-16))
     near(ref[10], 0, "metric_budget", scale)
     require((ref[11] > 0) == (p.chi > 0), "Inactive branch solved a cutoff")
+    require(p.cap_primitive(p.H, p.A, p.rc/2) > p.Pj,
+            "Metric cutoff budget did not decrease from its left bracket")
+    require(p.cap_primitive(p.H, p.A, min(2*p.rc, p.rm)) < p.Pj,
+            "Metric cutoff budget did not decrease toward its admissible tail")
     q = np.asarray(case["quadrature"], dtype=LD)
     require(q.shape[1] == 3 and np.all(q[:, 1:] > 0), "Bad physical quadrature")
     require(np.all((q[:, 0] > 0) & (q[:, 0] < p.H)), "Quadrature outside physical ray")
@@ -264,7 +268,10 @@ def check_case(case):
     if "legendre_mean_only" in case:
         x = np.asarray(2*r/p.H-1, dtype=float)
         moments = [float(np.sum(W*eval_legendre(i, x)*(values[0]-values[2]))) for i in range(7)]
+        near(case["orthonormal_mean_only"], [moments[i]*math.sqrt((2*i+1)/2) for i in range(7)],
+             "native_orthonormal_control", scale)
         near(case["legendre_mean_only"], moments, "native_legendre_control", scale)
+        checked_modes += 7
         note = [0, .0173551439079, -.0220336637626, .0220527999939,
                 -.0197059614435, .0160477076949, -.0116765463336]
         near(moments, note, "published_mean_only_control", 1, 2e-12)
