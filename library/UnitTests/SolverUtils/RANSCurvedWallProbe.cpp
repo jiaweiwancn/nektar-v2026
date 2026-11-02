@@ -268,6 +268,8 @@ void TransitionAudit(std::ostream &o,const RANSWallEvolutionPatch &p,const Vecto
         RANSWallEvolutionData zero(p.Dimension());const auto input=p.TransitionInput(s,q,time,data);
         const auto v=p.Transition(s,q,time,data),rv=p.Transition(p.TransitionReference(),q,time,zero);
         const auto profile=p.StateProfile(s,q,time,data);const auto &pr=profile->Reference();
+        Require(std::abs(p.DependentEpsilon(s,q,time,data)-profile->Dissipation(parameters.geometry.height))<1e-14,
+            "state-aware dependent epsilon evaluation differs");
         o<<"{\"chart\":";Write(o,q);o<<",\"input\":";Write(o,Vector{input.coordinate,input.budgetMargin,input.reynolds});
         o<<",\"gates\":";Write(o,Vector{v.chi,v.spatial,v.state,v.admissibility,v.marginGate,v.reynoldsGate,v.d2});
         o<<",\"reference_d2\":"<<rv.d2<<",\"reference_state\":"<<rv.state<<",\"sensors\":[";

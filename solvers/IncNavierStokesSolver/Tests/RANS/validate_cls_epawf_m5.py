@@ -148,7 +148,6 @@ def residual_oracle(raw,normal_order=24,tangential_order=None,outer_order=None,v
         energy[2]+=np.sum(w*(np.einsum('qab,qab->q',G,stress)-sk))
         energy[3]-=np.sum(w*np.einsum('qab,qa,qb->q',G,U,U))
         energy[4]-=np.sum(w*np.sum(U*body,axis=1))
-        energy[8]+=np.sum(w*(.5*np.sum(U*U,axis=1)+K))
     # Independent normal panels use factor three, and split at every actual
     # native element/ray breakpoint. Chart geometry is not an integration input.
     zt,wt=np.polynomial.legendre.leggauss(tangential_order)
@@ -186,6 +185,9 @@ def residual_oracle(raw,normal_order=24,tangential_order=None,outer_order=None,v
         result[off[b]:off[b+1]]+=value
         if b<d:energy[1]+=state[off[b]:off[b+1]]@value
         if b==d:energy[1]+=f[b].constant()@value
+        if b<=d:
+            current=state[off[b]:off[b+1]];test=current*.5 if b<d else f[b].constant()
+            energy[8]+=test@f[b].mass()@current
     volume=f[0].volume
     for region,b in enumerate((d+2,d+3)):
         load=f[b].mass()@f[b].constant()/volume

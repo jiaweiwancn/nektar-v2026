@@ -63,6 +63,8 @@ public:
     std::vector<FacePoint> Surface(int block,int axis,double position,int side,int order=0) const;
     double Distance(const RANSWallCoordinate &chart) const;
     double DependentEpsilon(const Vector &state,const RANSWallCoordinate &chart) const;
+    double DependentEpsilon(const Vector &state,const RANSWallCoordinate &chart,double time,
+        const RANSWallEvolutionData &data) const;
     bool TransitionEnabled() const { return m_transitionEnabled; }
     const SolverUtils::AWFTransitionControls &TransitionControls() const { return m_transition; }
     const Vector &TransitionReference() const { return m_transitionReference; }

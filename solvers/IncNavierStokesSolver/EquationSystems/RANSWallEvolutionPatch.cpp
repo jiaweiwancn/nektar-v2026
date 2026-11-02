@@ -126,7 +126,10 @@ std::vector<RANSWallEvolutionPatch::FacePoint> RANSWallEvolutionPatch::Surface(i
     return result;
 }
 double RANSWallEvolutionPatch::DependentEpsilon(const Vector &s,const RANSWallCoordinate &p) const
-{return Profile(SampleK(s,p),p)->Dissipation(Distance(p));}
+{
+    Require(!m_transitionEnabled,"transition dissipation evaluation requires its current time and forcing data");
+    return Profile(SampleK(s,p),p)->Dissipation(Distance(p));
+}
 RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::PhysicalMass(int block,int region) const
 {
     if(!Mapped() && region<0)return fields[block]->Mass();
@@ -789,11 +792,9 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::EnergyBudget(const Vector
     for(int i=0;i<size[K()];++i)result[0]+=m_constants[K()][i]*raw[offset[K()]+i];
     auto integrate=[&](const VolumePoint &q,bool inner,const EquilibriumAWFProfiles *profile,const RANSVector &force)
     {
-        RANSTensor G{},stress{};RANSVector u{};double speed=0;
-        for(int a=0;a<m_dimension;++a){const int aa=PhysicalAxis(a);u[aa]=q.v.Value(s,offset[a]);G[aa]=q.v.Gradient(s,offset[a]);speed+=u[aa]*u[aa];
-            result[1]+=q.weight*alpha*u[aa]*(u[aa]-q.v.Value(history,offset[a]));}
+        RANSTensor G{},stress{};RANSVector u{};
+        for(int a=0;a<m_dimension;++a){const int aa=PhysicalAxis(a);u[aa]=q.v.Value(s,offset[a]);G[aa]=q.v.Gradient(s,offset[a]);}
         const double k=q.v.Value(s,offset[K()]),pi=q.p.Value(s,offset[inner?InnerPressure():OuterPressure()]);double sk;
-        result[1]+=q.weight*alpha*(k-q.v.Value(history,offset[K()]));result[8]+=q.weight*(.5*speed+k);
         if(inner)
         {
             const double nt=profile->Original().EddyViscosity(Distance(q.v.coordinate));double production=0;
@@ -815,6 +816,20 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::EnergyBudget(const Vector
     for(const auto &q:m_outer)integrate(q,false,nullptr,{});
     const auto body=OwnedBodyLoad(time,data);for(int a=0;a<m_dimension;++a)for(int j=0;j<size[a];++j)result[4]-=s[offset[a]+j]*body[offset[a]+j];
     for(int i=1;i<result.size();++i){double v=result[i];m_comm->AllReduce(v,LibUtilities::ReduceSum);result[i]=v;}
+    // Storage is the actual physical mass operator used by the stage, not
+    // the possibly lower-order constitutive quadrature. These replicated
+    // global matrices are contracted after the owned-volume reductions.
+    for(int b=0;b<=K();++b)
+    {
+        Vector current(size[b]),delta(size[b]);
+        for(int i=0;i<size[b];++i){current[i]=s[offset[b]+i];delta[i]=current[i]-history[offset[b]+i];}
+        const auto change=Multiply(m_mass[b],delta),stored=Multiply(m_mass[b],current);
+        for(int i=0;i<size[b];++i)
+        {
+            const double test=b==K()?m_constants[b][i]:current[i];
+            result[1]+=alpha*test*change[i];result[8]+=(b==K()?1.:.5)*test*stored[i];
+        }
+    }
     result[6]=result[1]+result[2]+result[3]+result[4];result[7]=result[0]-result[6];return result;
 }
 std::string RANSWallEvolutionPatch::Signature() const

@@ -19,6 +19,9 @@ double Dot(const RANSVector &a,const RANSVector &b)
 
 double RANSWallEvolutionPatch::WallCoordinate(const RANSWallCoordinate &p) const
 {return EquilibriumAWFWallCoordinate(m_mapping,p);}
+double RANSWallEvolutionPatch::DependentEpsilon(const Vector &s,const RANSWallCoordinate &p,
+    double time,const RANSWallEvolutionData &data) const
+{return StateProfile(s,p,time,data)->Dissipation(Distance(p));}
 
 void RANSWallEvolutionPatch::InitialiseTransition(const LibUtilities::SessionReaderSharedPtr &session)
 {

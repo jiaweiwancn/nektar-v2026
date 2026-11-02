@@ -389,6 +389,7 @@ void RANSEquilibriumWallEvolution::WriteReport() const
     out<<",\"upstream_transition\":"<<(m_patch->TransitionEnabled()?"true":"false");
     if(m_patch->TransitionEnabled())
     {
+        out<<",\"epsilon_corner_policy\":\"dependent matching trace has priority over side-function corner values\"";
         const auto &t=m_patch->TransitionControls();const auto &c=t.state;const auto distances=m_patch->TransitionDistances();
         out<<",\"transition_controls\":";Write(out,{t.start,t.end,distances[0],distances[1],distances[2],
             c.on,c.off,c.marginOff,c.marginOn,c.reynoldsOff,c.reynoldsOn});
