@@ -22,6 +22,8 @@ add_executable(RANSKernelProbe
     ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSKernelProbe.cpp)
 add_executable(RANSWallGeometryProbe
     ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSWallGeometryProbe.cpp)
+add_executable(RANSCurvedNoteProbe
+    ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSCurvedNoteProbe.cpp)
 add_executable(RANSCurvedGeometryProbe
     ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSCurvedGeometryProbe.cpp)
 add_executable(RANSObservationKernelProbe
@@ -63,7 +65,7 @@ add_executable(RANSCurvedWallProbe
 target_include_directories(RANSCurvedWallProbe PRIVATE ${RANS_SOURCE_ROOT}/solvers)
 target_link_libraries(RANSCurvedWallProbe RANSKernels ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    foreach(rans_target RANSKernels RANSWallLayerProbe RANSKernelProbe RANSWallGeometryProbe RANSCurvedGeometryProbe RANSObservationKernelProbe RANSStressTangentAudit RANSConstitutiveProbe RANSEquilibriumProfilesProbe RANSEquilibriumPatchProbe RANSEquilibriumTimeProbe RANSEquilibriumEvolutionProbe RANSCurvedWallProbe)
+    foreach(rans_target RANSKernels RANSWallLayerProbe RANSKernelProbe RANSWallGeometryProbe RANSCurvedGeometryProbe RANSCurvedNoteProbe RANSObservationKernelProbe RANSStressTangentAudit RANSConstitutiveProbe RANSEquilibriumProfilesProbe RANSEquilibriumPatchProbe RANSEquilibriumTimeProbe RANSEquilibriumEvolutionProbe RANSCurvedWallProbe)
         target_compile_options(${rans_target} PRIVATE
             -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror)
     endforeach()
@@ -73,6 +75,7 @@ target_link_libraries(RANSWallLayerProbe
 target_link_libraries(RANSKernelProbe RANSKernels)
 target_link_libraries(RANSWallGeometryProbe RANSKernels)
 target_link_libraries(RANSCurvedGeometryProbe RANSKernels)
+target_link_libraries(RANSCurvedNoteProbe RANSKernels)
 target_link_libraries(RANSObservationKernelProbe RANSKernels)
 target_link_libraries(RANSStressTangentAudit RANSKernels)
 target_link_libraries(RANSConstitutiveProbe RANSKernels)
@@ -284,6 +287,15 @@ if(Python3_Interpreter_FOUND)
             execute_process(COMMAND ${Python3_EXECUTABLE} -c "import numpy, scipy, sympy"
                 RESULT_VARIABLE rans_m3_dependencies OUTPUT_QUIET ERROR_QUIET)
             if(rans_m3_dependencies EQUAL 0)
+                add_test(NAME RANSCLSEPAWFM5NoteOracle COMMAND ${Python3_EXECUTABLE}
+                    ${CMAKE_CURRENT_LIST_DIR}/validate_cls_epawf_m5_note.py
+                    --probe $<TARGET_FILE:RANSCurvedNoteProbe>
+                    --profiles ${CMAKE_CURRENT_BINARY_DIR}/rans-equilibrium-profiles.json
+                    --output ${CMAKE_CURRENT_BINARY_DIR}/cls-epawf-m5-note)
+                set_tests_properties(RANSEquilibriumProfilesNative PROPERTIES FIXTURES_SETUP RANSProfilesForM5)
+                set_tests_properties(RANSCLSEPAWFM5NoteOracle PROPERTIES PROCESSORS 1 TIMEOUT 180
+                    FIXTURES_REQUIRED RANSProfilesForM5
+                    ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
                 add_test(NAME RANSCLSEPAWFM5Oracle COMMAND ${Python3_EXECUTABLE}
                     ${CMAKE_CURRENT_LIST_DIR}/validate_cls_epawf_m5.py
                     --build $<TARGET_FILE_DIR:RANSCurvedWallProbe>)
