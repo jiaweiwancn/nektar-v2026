@@ -1,0 +1,83 @@
+{
+  "schema": 1,
+  "source_commit": "e5ab5984f00dbbb84c26c0271d353fa98d99ff6a",
+  "source_status": "",
+  "thread_environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1"
+  },
+  "compiler_workers": 16,
+  "test_workers": 1,
+  "mpi_ranks": 1,
+  "started_utc": "2026-11-02T04:01:02.385441+00:00",
+  "host": "jay-Super-Server",
+  "compiler": "c++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0",
+  "cmake": "cmake version 3.22.1",
+  "mpi": "mpirun (Open MPI) 4.1.2",
+  "commands": [
+    {
+      "command": [
+        "cmake",
+        "-S",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/source/solvers/IncNavierStokesSolver/Tests/RANS",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build",
+        "-DRANS_BUILD_SOLVER=ON",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake"
+      ],
+      "exit_code": 0,
+      "seconds": 0.5164814270101488,
+      "log_sha256": "ca44ea2f81195622323480c3b79c5ea4d279678072b1d084c18a3044b5bc6d23"
+    },
+    {
+      "command": [
+        "cmake",
+        "--build",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build",
+        "--parallel",
+        "16"
+      ],
+      "exit_code": 0,
+      "seconds": 35.54912025498925,
+      "log_sha256": "b09da8386910fc80027870faeb46fc2c004be645094707f12ad53dfa7704d5fb"
+    },
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "python3",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m1.py",
+        "--kernel-probe",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/RANSKernelProbe",
+        "--constitutive-probe",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/RANSConstitutiveProbe",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m1-attempt-001/verification"
+      ],
+      "exit_code": 0,
+      "seconds": 1.5682424429687671,
+      "log_sha256": "07d968ea9f6bc612d9ce70748bc470739be088176e04d2a5a8d836ee1897b96d"
+    },
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "ctest",
+        "--test-dir",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build",
+        "--parallel",
+        "1",
+        "--output-on-failure"
+      ],
+      "exit_code": 0,
+      "seconds": 132.92846681998344,
+      "log_sha256": "29e7303fdeb05575410ef5f0791f15a38ac62ac339c3a143e51a8aed44322aa8"
+    }
+  ],
+  "status": "passed"
+}

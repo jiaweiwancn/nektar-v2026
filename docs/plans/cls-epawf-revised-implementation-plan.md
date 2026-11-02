@@ -1,6 +1,6 @@
 **CLS and EP-AWF revised formulation implementation and validation plan**
 
-Status: Approved by the user on 2 November 2026; M1 in progress.
+Status: Approved by the user on 2 November 2026; M1 closed.
 Implementation branch: codex/cls-epawf-revised, based on
 6415398d856323c3116e646eaf7c882c66617602.
 
@@ -9,8 +9,8 @@ Implementation branch: codex/cls-epawf-revised, based on
 - Origin Skill: academic-research-suite / experiment-agent.
 - Origin Mode: plan.
 - Origin Date: 2026-11-02.
-- Verification Status: repository and note inspection complete; proposed native
-  implementation and numerical results UNVERIFIED.
+- Verification Status: M1 kernel identities and constitutive counterexamples
+  VERIFIED on Linux; later implementation and numerical milestones UNVERIFIED.
 - Version Label: cls-epawf-revised-plan-v1.
 
 The objective is a native implementation of the high-Re CLS model and the
@@ -19,6 +19,11 @@ of its equations, assembly, interface coupling and time integration. The
 principal work is a wall element with transported inner k, dependent inner
 dissipation and a coupled inner velocity/pressure patch. The existing branches
 supply reference kernels, solver components and experimental infrastructure.
+
+The [M1 closure report](/Users/jay/Documents/nektar-v2026/docs/plans/cls-epawf-revised-m1.md)
+records the exact tested revision, independent errors, documented negative
+constitutive directions and passing 17-test Linux suite. M2 and later
+implementation milestones remain open.
 
 The revised note retains two demonstrated limitations: adverse incremental
 momentum diffusion and failure of general inner-k positivity. A faithful
@@ -170,7 +175,7 @@ the outer equation determines its flux.
    that build as a comparison. Deliver the executable specification and
    baseline manifest.
 
-2. **M1 — Verify the original CLS and scalar AWF independently.**
+2. **M1 — Verify the original CLS and scalar AWF independently (closed).**
    Check the complete 3-by-3 tensor, rotation/sign conventions, production,
    Yap source and geometric distance, including 2D mean flow with all three
    modeled stress components. Reproduce q*=3.190675081624288,

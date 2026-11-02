@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "source_commit": "6415398d856323c3116e646eaf7c882c66617602",
+  "source_status": "",
+  "thread_environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1"
+  },
+  "compiler_workers": 16,
+  "test_workers": 1,
+  "mpi_ranks": 1,
+  "started_utc": "2026-11-02T03:55:30.782925+00:00",
+  "host": "jay-Super-Server",
+  "commands": [
+    {
+      "command": [
+        "cmake",
+        "-S",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/baseline-source/solvers/IncNavierStokesSolver/Tests/RANS",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/baseline-build",
+        "-DRANS_BUILD_SOLVER=ON",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake"
+      ],
+      "exit_code": 0,
+      "seconds": 0.41533051402075216,
+      "log_sha256": "1fa86305d49f869484d8d8b09828dff43eb8648372587a815f65991a8e086ee8"
+    },
+    {
+      "command": [
+        "cmake",
+        "--build",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/baseline-build",
+        "--parallel",
+        "16"
+      ],
+      "exit_code": 0,
+      "seconds": 36.57063675997779,
+      "log_sha256": "0cad183f63dc67799d2436a8f90cb8e48be673d0d22a983e70d7996add2abbe5"
+    },
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "ctest",
+        "--test-dir",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/baseline-build",
+        "--parallel",
+        "1",
+        "--output-on-failure"
+      ],
+      "exit_code": 0,
+      "seconds": 130.92855125997448,
+      "log_sha256": "2b897aa035404dc9bc8045e677710f676a0f70c46c61321bb351788d28ec74e3"
+    }
+  ],
+  "status": "passed"
+}

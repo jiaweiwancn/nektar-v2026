@@ -1,0 +1,877 @@
+{
+  "schema": 1,
+  "milestone": "cls_epawf_revised_m1",
+  "verification_status": "passed",
+  "utc": "2026-11-02T04:01:38.658768+00:00",
+  "host": "jay-Super-Server",
+  "python": "3.10.12",
+  "numpy": "1.21.5",
+  "scipy": "1.8.0",
+  "cpu_affinity": [
+    0
+  ],
+  "mpi_ranks": 1,
+  "thread_environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "commands": [
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/RANSKernelProbe",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m1-attempt-001/verification/kernels.json"
+      ],
+      "exit_code": 0,
+      "seconds": 0.014482594036962837,
+      "binary_sha256": "d522b7cfb928b6e2f2a4a936e0ee5cc9228f91161c5019e3f9943ad3f82b359e"
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/RANSConstitutiveProbe",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m1-attempt-001/verification/constitutive.json"
+      ],
+      "exit_code": 0,
+      "seconds": 0.005972176033537835,
+      "binary_sha256": "ebd764afae6932eaf90b1c189228d012471272bfb4de1fcb6bd54eaa6d525460"
+    }
+  ],
+  "reference": {
+    "q": 3.1906750816242875,
+    "Cmu": 0.09822789532821127,
+    "kappa": 0.4405539051866587,
+    "yap_ratio": 1.0043449900879187,
+    "yap_function": 0.003637748895392772,
+    "covariance_eigenvalues": [
+      0.3482098773121975,
+      0.56,
+      1.0917901226878026
+    ],
+    "heights": [
+      0.1,
+      1,
+      2,
+      10,
+      100
+    ]
+  },
+  "constitutive": {
+    "physical_stability_gate": "failed_as_specified",
+    "transverse_flux_block": [
+      [
+        -0.9645579065642057,
+        -1.148643029384739
+      ],
+      [
+        1.148643029384739,
+        0.999999999999996
+      ]
+    ],
+    "cases": [
+      {
+        "name": "transverse_x",
+        "branch": "physical",
+        "gradient": [
+          [
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        "principal_form": -0.9645579065642249,
+        "native_forms": [
+          -0.9645559191928263,
+          -0.9645578866904981,
+          -0.9645579063654883,
+          -0.964557906562238,
+          -0.9645579065642057
+        ],
+        "steps": [
+          0.001,
+          0.0001,
+          1e-05,
+          1e-06,
+          1e-07
+        ],
+        "minimum_action_error": 1.9206858326015208e-14,
+        "production_derivative": -0.0,
+        "reference_covariance_minimum": 1.1110245787154787
+      },
+      {
+        "name": "transverse_z",
+        "branch": "physical",
+        "gradient": [
+          [
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        "principal_form": 1.0,
+        "native_forms": [
+          0.9999995938894818,
+          0.9999999959388942,
+          0.999999999959389,
+          0.9999999999995939,
+          0.999999999999996
+        ],
+        "steps": [
+          0.001,
+          0.0001,
+          1e-05,
+          1e-06,
+          1e-07
+        ],
+        "minimum_action_error": 4.6629367034256575e-15,
+        "production_derivative": -0.0,
+        "reference_covariance_minimum": 1.1110245787154787
+      },
+      {
+        "name": "transverse_x",
+        "branch": "strain",
+        "gradient": [
+          [
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        "principal_form": -0.9645579065642249,
+        "native_forms": [
+          -0.9645559191928263,
+          -0.9645578866904981,
+          -0.9645579063654883,
+          -0.964557906562238,
+          -0.9645579065642057
+        ],
+        "steps": [
+          0.001,
+          0.0001,
+          1e-05,
+          1e-06,
+          1e-07
+        ],
+        "minimum_action_error": 1.9206858326015208e-14,
+        "production_derivative": -0.0,
+        "reference_covariance_minimum": 1.1110245787154787
+      },
+      {
+        "name": "transverse_z",
+        "branch": "strain",
+        "gradient": [
+          [
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        "principal_form": 1.0,
+        "native_forms": [
+          0.9999995938894818,
+          0.9999999959388942,
+          0.999999999959389,
+          0.9999999999995939,
+          0.999999999999996
+        ],
+        "steps": [
+          0.001,
+          0.0001,
+          1e-05,
+          1e-06,
+          1e-07
+        ],
+        "minimum_action_error": 4.6629367034256575e-15,
+        "production_derivative": -0.0,
+        "reference_covariance_minimum": 1.1110245787154787
+      },
+      {
+        "name": "reference_inplane",
+        "branch": "strain",
+        "gradient": [
+          [
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        "principal_form": -0.025978454472591617,
+        "native_forms": [
+          -0.02597732595881075,
+          -0.025978443187992167,
+          -0.025978454355501085,
+          -0.025978454528810202,
+          -0.025978455007996754
+        ],
+        "steps": [
+          0.001,
+          0.0001,
+          1e-05,
+          1e-06,
+          1e-07
+        ],
+        "minimum_action_error": 8.065487167030483e-11,
+        "production_derivative": 0.08891756135420335,
+        "reference_covariance_minimum": 1.1110245787154787
+      },
+      {
+        "name": "transverse_x",
+        "branch": "rotation",
+        "gradient": [
+          [
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        "principal_form": -0.9645579065642249,
+        "native_forms": [
+          -0.9645559191928263,
+          -0.9645578866904981,
+          -0.9645579063654883,
+          -0.964557906562238,
+          -0.9645579065642057
+        ],
+        "steps": [
+          0.001,
+          0.0001,
+          1e-05,
+          1e-06,
+          1e-07
+        ],
+        "minimum_action_error": 1.9206858326015208e-14,
+        "production_derivative": -0.0,
+        "reference_covariance_minimum": 1.1110245787154787
+      },
+      {
+        "name": "transverse_z",
+        "branch": "rotation",
+        "gradient": [
+          [
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        "principal_form": 1.0,
+        "native_forms": [
+          0.9999995938894818,
+          0.9999999959388942,
+          0.999999999959389,
+          0.9999999999995939,
+          0.999999999999996
+        ],
+        "steps": [
+          0.001,
+          0.0001,
+          1e-05,
+          1e-06,
+          1e-07
+        ],
+        "minimum_action_error": 4.6629367034256575e-15,
+        "production_derivative": -0.0,
+        "reference_covariance_minimum": 1.1110245787154787
+      },
+      {
+        "name": "reference_inplane",
+        "branch": "rotation",
+        "gradient": [
+          [
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        "principal_form": -0.05298998091898077,
+        "native_forms": [
+          -0.05298879274485849,
+          -0.05298996903754999,
+          -0.05298998080199124,
+          -0.05298998092558363,
+          -0.0529899812314992
+        ],
+        "steps": [
+          0.001,
+          0.0001,
+          1e-05,
+          1e-06,
+          1e-07
+        ],
+        "minimum_action_error": 2.6805852676448083e-11,
+        "production_derivative": 0.4178671440840443,
+        "reference_covariance_minimum": 1.1110245787154787
+      },
+      {
+        "name": "nearby_smooth_inplane",
+        "branch": "physical",
+        "gradient": [
+          [
+            0.0001,
+            0.0,
+            1.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            -0.0001
+          ]
+        ],
+        "principal_form": -0.025967577900340294,
+        "native_forms": [
+          -0.025967569347279784,
+          -0.02596769547009381,
+          -0.02596739918561919
+        ],
+        "steps": [
+          3e-09,
+          1e-09,
+          3e-10
+        ],
+        "minimum_action_error": 3.255072517083235e-08,
+        "production_derivative": 0.08841087310059333,
+        "reference_covariance_minimum": 1.1110245341200125
+      },
+      {
+        "name": "rotation_limit",
+        "branch": "physical",
+        "gradient": [
+          [
+            0.0,
+            0.0,
+            1.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            -0.001,
+            0.0,
+            0.0
+          ]
+        ],
+        "principal_form": -0.05087539623740309,
+        "native_forms": [
+          -0.050875396118712224,
+          -0.05087539620753989,
+          -0.050875396241145926
+        ],
+        "steps": [
+          1e-05,
+          3e-06,
+          1e-06
+        ],
+        "minimum_action_error": 3.281130922516695e-11,
+        "production_derivative": 0.41330079896308053,
+        "reference_covariance_minimum": 1.1167557758761346
+      },
+      {
+        "name": "strain_limit",
+        "branch": "physical",
+        "gradient": [
+          [
+            0.0,
+            0.0,
+            1.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.001,
+            0.0,
+            0.0
+          ]
+        ],
+        "principal_form": -0.024109986819649404,
+        "native_forms": [
+          -0.02410998670487674,
+          -0.024109986821845675,
+          -0.024109986851589493
+        ],
+        "steps": [
+          1e-05,
+          3e-06,
+          1e-06
+        ],
+        "minimum_action_error": 3.288058714190356e-11,
+        "production_derivative": 0.08732421073045514,
+        "reference_covariance_minimum": 1.1069326683133125
+      },
+      {
+        "name": "rotation_limit",
+        "branch": "physical",
+        "gradient": [
+          [
+            0.0,
+            0.0,
+            1.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            -1e-05,
+            0.0,
+            0.0
+          ]
+        ],
+        "principal_form": -0.05296883421410031,
+        "native_forms": [
+          -0.05296883434127447,
+          -0.052968835420930366,
+          -0.05296882578303164
+        ],
+        "steps": [
+          1.0000000000000001e-07,
+          3.0000000000000004e-08,
+          1e-08
+        ],
+        "minimum_action_error": 7.48254465332554e-10,
+        "production_derivative": 0.41782143530931526,
+        "reference_covariance_minimum": 1.1110820394278018
+      },
+      {
+        "name": "strain_limit",
+        "branch": "physical",
+        "gradient": [
+          [
+            0.0,
+            0.0,
+            1.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            1e-05,
+            0.0,
+            0.0
+          ]
+        ],
+        "principal_form": -0.025959667503408973,
+        "native_forms": [
+          -0.025959667288578042,
+          -0.02595966572414274,
+          -0.025959667983774304
+        ],
+        "steps": [
+          1.0000000000000001e-07,
+          3.0000000000000004e-08,
+          1e-08
+        ],
+        "minimum_action_error": 8.755222102863058e-10,
+        "production_derivative": 0.08890153384452246,
+        "reference_covariance_minimum": 1.1109836227016678
+      },
+      {
+        "name": "general_3d",
+        "branch": "physical",
+        "gradient": [
+          [
+            0.1,
+            0.4,
+            0.8
+          ],
+          [
+            -0.2,
+            -0.3,
+            0.5
+          ],
+          [
+            0.3,
+            -0.6,
+            0.2
+          ]
+        ],
+        "principal_form": 0.05426234994291563,
+        "native_forms": [
+          0.05426234974138607,
+          0.054262349940815024,
+          0.05426234994159426,
+          0.054262349941550984,
+          0.054262350009640574
+        ],
+        "steps": [
+          0.001,
+          0.0001,
+          1e-05,
+          1e-06,
+          1e-07
+        ],
+        "minimum_action_error": 1.750816505663444e-12,
+        "production_derivative": -0.13365788730987546,
+        "reference_covariance_minimum": 0.2913373130028749
+      },
+      {
+        "name": "two_dimensional_three_stresses",
+        "branch": "physical",
+        "gradient": [
+          [
+            0.2,
+            0.0,
+            1.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.1,
+            0.0,
+            -0.2
+          ]
+        ],
+        "principal_form": 0.0629695642867049,
+        "native_forms": [
+          0.06296956099677567,
+          0.06296956425383698,
+          0.06296956428594241,
+          0.06296956429341725,
+          0.06296956435041891
+        ],
+        "steps": [
+          0.001,
+          0.0001,
+          1e-05,
+          1e-06,
+          1e-07
+        ],
+        "minimum_action_error": 8.349640423510607e-13,
+        "production_derivative": -0.13303257970045596,
+        "reference_covariance_minimum": 0.3327613354740274
+      },
+      {
+        "name": "transverse_molecular_control",
+        "branch": "physical",
+        "gradient": [
+          [
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        "principal_form": -0.9395579065642249,
+        "native_forms": [
+          -0.9395559191928263,
+          -0.9395578866904981,
+          -0.9395579063654884,
+          -0.9395579065622381,
+          -0.9395579065642057
+        ],
+        "steps": [
+          0.001,
+          0.0001,
+          1e-05,
+          1e-06,
+          1e-07
+        ],
+        "minimum_action_error": 1.9206858326015208e-14,
+        "production_derivative": -0.0,
+        "reference_covariance_minimum": 1.1110245787154787
+      },
+      {
+        "name": "same_state_double_wall_distance",
+        "branch": "physical",
+        "gradient": [
+          [
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        "principal_form": -0.9645579065642249,
+        "native_forms": [
+          -0.9645559191928263,
+          -0.9645578866904981,
+          -0.9645579063654883,
+          -0.964557906562238,
+          -0.9645579065642057
+        ],
+        "steps": [
+          0.001,
+          0.0001,
+          1e-05,
+          1e-06,
+          1e-07
+        ],
+        "minimum_action_error": 1.9206858326015208e-14,
+        "production_derivative": -0.0,
+        "reference_covariance_minimum": 1.1110245787154787
+      }
+    ],
+    "scope": "frozen positive k/epsilon; specified local directions, not an all-state certificate"
+  },
+  "awf": {
+    "wall_cases": 108,
+    "signed_reversal_cases": 15,
+    "maximum_reference_energy_relative_error": 2.1738905623866739e-16,
+    "wall_forcing_slope_m": -0.268331641404983,
+    "interface_forcing_slope_m": 1.631668358595017,
+    "production_polynomial": [
+      18.011430038989744,
+      0.013359487145681914,
+      3.6887042037644053
+    ],
+    "negative_virtual_intercept_verified": true,
+    "note_reference": {
+      "ustar": 0.4,
+      "traction": 0.16,
+      "U_H": 5.780254367996081,
+      "A": 0.14527166652372264,
+      "P0": 0.46109260899813753,
+      "lambda": 6.34800467333858,
+      "minimum_lambda": 1.6931471805599454,
+      "cutoff": 0.009515269139914385,
+      "log_z0": -5.673136906422342,
+      "admissible": true
+    }
+  },
+  "oracle_rejection_controls": [
+    "incorrect_native_stress",
+    "incorrect_wall_traction_sign"
+  ],
+  "native_kernel_summary": {
+    "native_checks": 19192,
+    "rejected_inputs": 30,
+    "bulk_cases": 78,
+    "wall_cases": 60,
+    "standard_wall_cases": 48,
+    "maximum_tensor_symmetry_error": 0,
+    "maximum_tensor_trace_error": 3.610481380894818e-16,
+    "maximum_frame_error": 4.700110539891013e-16,
+    "maximum_production_quadrature_relative_error": 1.1940821049274815e-12,
+    "maximum_reference_energy_relative_error": 1.5607006414698025e-16
+  },
+  "independent_oracle_errors": {
+    "reference_q": 1.3918346384050758e-16,
+    "reference_kappa": 1.166772275112644e-15,
+    "reference_cMu": 1.412815347559292e-16,
+    "tensor_stress": 1.7483827159451283e-16,
+    "tensor_quadratic": 1.889946582185474e-16,
+    "tensor_cubic": 1.8936978675325919e-16,
+    "bulk_cMu": 2.2132123073891937e-16,
+    "bulk_nut": 1.926413037131714e-16,
+    "bulk_strain": 0.0,
+    "bulk_rotation": 0.0,
+    "bulk_divergence": 0.0,
+    "bulk_production": 2.058319040085816e-16,
+    "bulk_k_source": 3.676129406696578e-14,
+    "bulk_epsilon_production": 2.0167094978323032e-16,
+    "bulk_epsilon_destruction": 0.0,
+    "bulk_yap": 3.442504925913687e-15,
+    "bulk_epsilon_source": 8.064141025366708e-16,
+    "diffusion": 1.8476596871332872e-16,
+    "wall_intercept": 1.3475017190684778e-16,
+    "wall_viscosity_intercept": 1.6419971634773995e-16,
+    "wall_dissipation_cutoff": 1.3541086941092693e-16,
+    "wall_j0": 1.281187566456053e-16,
+    "wall_j1": 1.9410882081686996e-16,
+    "wall_j2": 1.538655392482989e-16,
+    "wall_positive_weight": 8.550834658594972e-16,
+    "wall_traction": 2.0723508633684297e-16,
+    "wall_production": 8.834040973611932e-16,
+    "wall_original_mean": 2.677934590709311e-16,
+    "wall_original_P": 2.0018678848218127e-16,
+    "wall_original_H": 2.0018678848218127e-16,
+    "wall_nut": 1.7961008847283215e-16,
+    "wall_total_viscosity": 2.199523872249077e-16,
+    "wall_gradient": 3.9851813403014877e-16,
+    "wall_reconstruction": 4.0855347705599686e-16,
+    "wall_original_profile": 3.118705294014034e-16,
+    "equilibrium_ustar": 0.0,
+    "equilibrium_traction": 0.0,
+    "equilibrium_U_H": 2.179296557566891e-16,
+    "equilibrium_A": 2.0671227757313174e-16,
+    "equilibrium_P0": 8.834040973611932e-16,
+    "equilibrium_lambda": 8.50469428398855e-16,
+    "equilibrium_minimum_lambda": 1.2660974741648738e-16,
+    "equilibrium_cutoff": 1.8230944920938015e-15,
+    "equilibrium_log_z0": 2.1143161939448972e-16,
+    "equilibrium_mean": 2.677934590709311e-16,
+    "equilibrium_P": 2.8064189419483646e-16,
+    "equilibrium_H": 2.8064189419483646e-16,
+    "equilibrium_profile_integral": 2.0664774087951234e-16
+  },
+  "additional_scaled_errors": {
+    "q_star": 1.3918346384050756e-16,
+    "Cmu_star": 2.7755575615628914e-17,
+    "kappa_c": 2.7755575615628914e-16,
+    "covariance_eigenvalues": 1.117198718548572e-11,
+    "kappa_yap_balance": 5.551115123125783e-17,
+    "native_indexed_stress": 2.7836692768101517e-16,
+    "native_indexed_quadratic": 1.3918346384050758e-16,
+    "native_indexed_cubic": 1.9255897133899303e-16,
+    "native_indexed_cMu": 4.550094363217855e-17,
+    "native_indexed_nut": 2.016049362503806e-16,
+    "native_indexed_strain": 2.78366911118183e-16,
+    "native_indexed_rotation": 2.82155068947571e-16,
+    "native_indexed_production": 3.1316279364114206e-16,
+    "native_total_flux": 2.7836692768101517e-16,
+    "native_geometric_yap": 2.5667752086641083e-16,
+    "native_k_source": 1.0360093859185238e-15,
+    "native_epsilon_source": 6.146986851187229e-16,
+    "constant_reference_k": 1.1102230246251565e-16,
+    "reference_epsilon": 1.5284784035211142e-16,
+    "reference_velocity": 1.9199886700482118e-16,
+    "reference_full_stress": 1.0873708112539655e-16,
+    "reference_production": 1.910598004401393e-16,
+    "reference_k_balance": 9.935482786559979e-17,
+    "reference_epsilon_balance": 2.5178058142462897e-16,
+    "reference_epsilon_gradient": 1.2227827228168918e-16,
+    "reference_epsilon_flux": 0.0,
+    "distance_independent_stress": 0.0,
+    "unit_rank_one_direction": 0.0,
+    "incompressible_direction": 0.0,
+    "probe_direction": 0.0,
+    "transverse_flux_block": 1.7301277796840877e-14,
+    "transverse_production_derivative": 0.0,
+    "nearby_smooth_inplane_form": 3.4029376538846634e-13,
+    "molecular_tangent_shift": 6.661338147750939e-16,
+    "reference_wall_energy": 2.1738905623866739e-16,
+    "finite_wall_forcing_slope": 1.6653345369377348e-16,
+    "finite_interface_forcing_slope": 1.3608439714809914e-16,
+    "finite_production_polynomial": 2.8240083251790045e-16
+  },
+  "checks": 5000,
+  "scope": "original high-Re CLS and scalar AWF only; no wall-patch assembly, native time-map, positivity or terrain qualification",
+  "source_commit": "e5ab5984f00dbbb84c26c0271d353fa98d99ff6a",
+  "source_status": [],
+  "source_sha256": {
+    "docs/literature/cls_neutral_abl_equilibrium_awf_note_revised.tex": "d35e437c2f2f8b25a46f7a3f285c6f1ad8b48d7b554aa1d161315f59eeb6de0f",
+    "library/UnitTests/SolverUtils/RANSKernelProbe.cpp": "3de09ae6640b85df5adcdf2ab4a10c0a2f693356e58c854c068a23c42fabb8e6",
+    "library/UnitTests/SolverUtils/RANSConstitutiveProbe.cpp": "56f9dd93da59f3771b22f59edc857abc90874728f0df9d6ab5bfa811b8139229",
+    "solvers/IncNavierStokesSolver/CMakeLists.txt": "8e7e1e2c37915d796893943ef698649fad0417e5068ea7f65b97cb0d361d6410",
+    "library/SolverUtils/Turbulence/RANSModels.h": "00a284f6dbcb2617ed86370530b34fde9b008492250d31941c380b14833d16f3",
+    "library/SolverUtils/Turbulence/RANSModels.cpp": "86a7154ba3cb27e4d3319aa42d156a228fd1b180f35f9b217159822ec9d66b05",
+    "library/SolverUtils/Turbulence/AnalyticalWallFunction.h": "fcadc9f92cb1747b91f48e3a50db1ed8fcf10338d0a6c4aae5f0551a663a7154",
+    "library/SolverUtils/Turbulence/AnalyticalWallFunction.cpp": "5baf29819fed6b81ad1b042bc09258a3e0779d15de13076b688bf32f80ddcf7e",
+    "library/SolverUtils/Turbulence/RANSWallStrip.h": "6b2763823817c41dc73549c36e8aeed412280c052008cf99e69b901293073654",
+    "solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m1.py": "ad91787c6356831bd4b75e145592c9ea952a45f0e5dbdcff6015f51ce992964a",
+    "solvers/IncNavierStokesSolver/Tests/RANS/validate_m2.py": "3fc9950bbd49f77206cffcfb838167dde97ae1d835270880f917bc2fadfdc6d1",
+    "solvers/IncNavierStokesSolver/Tests/RANS/validate_m1.py": "7f4ed7254691ab2046555883ee8abb5795c048b422b0137b3cef80095bde0c75",
+    "solvers/IncNavierStokesSolver/Tests/RANS/CMakeLists.txt": "518018419d0cc2e965c36e1e34fb5d4ee455a3727dfa046bb3aecb4338bacdbe"
+  },
+  "artifacts_sha256": {
+    "constitutive.json": "5b96b4351271e4d0404e675abf02d774b9919b801e14c568e5221f2349fc630b",
+    "constitutive.log": "11be962fbb36a1935a7bbd3c43734db28291653fb4e6b89a09c524904e8779b1",
+    "kernels.json": "16866fd83768b64194adb1554a8377f969eadcdc5519f0452d84586d6186ceab",
+    "kernels.log": "f7e7ce36f3d4a38c41435b878acb35da18d0edaa87b219e1e11d409874fd4619"
+  }
+}

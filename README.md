@@ -33,6 +33,12 @@ now prioritizes the matched EP-AWF/transition/original-AWF floor route.
 [CV3-R1 execution](docs/plans/cao-tamura-cv3-r1-reference-feasibility.md) records
 reference recovery, developed standard precursors and unresolved CLS feasibility.
 
+The [revised CLS and EP-AWF implementation plan](docs/plans/cls-epawf-revised-implementation-plan.md)
+defines the new spectral/hp wall-element project.
+[M1 kernel verification](docs/plans/cls-epawf-revised-m1.md) reproduces its
+reference identities and constitutive failures on Linux; the coupled patch
+implementation and stability qualification remain later milestones.
+
 
 Tutorials
 ---------
