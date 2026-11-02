@@ -134,10 +134,11 @@ Vector RANSWallPatch::Residual(const Vector &state,const Vector &history,double 
         const double k=SampleK(s,ray.x);
         if(k!=ray.k)
         {
-            ray.k=k;ray.profile=Profile(k);ray.points.clear();
-            for(const auto &q:ray.profile->Quadrature())
-                ray.points.push_back({l.velocity->Point(ray.x,q.r),l.k->Point(ray.x,q.r),
+            auto profile=Profile(k);std::vector<Point> points;
+            for(const auto &q:profile->Quadrature())
+                points.push_back({l.velocity->Point(ray.x,q.r),l.k->Point(ray.x,q.r),
                     l.innerPressure->Point(ray.x,q.r),{},ray.weight*q.weight*q.jacobian});
+            ray.k=k;ray.profile=std::move(profile);ray.points=std::move(points);
         }
     }
     auto evaluate=[&](const Point &q,bool inner,const EquilibriumAWFProfiles *profile,double forcing)
@@ -146,7 +147,8 @@ Vector RANSWallPatch::Residual(const Vector &state,const Vector &history,double 
             op=l.offset[inner?Layout::InnerPressure:Layout::OuterPressure];
         const double u=q.v.Value(s,ou),w=q.v.Value(s,ow),k=q.k.Value(s,ok),pi=q.p.Value(s,op);
         const auto gu=q.v.Gradient(s,ou),gw=q.v.Gradient(s,ow),gk=q.k.Gradient(s,ok);
-        Require(k>=0 && std::isfinite(k),"invalid transported inner/outer k");
+        Require(k>=0 && std::isfinite(k),"invalid transported k="+std::to_string(k)+
+            " at x="+std::to_string(q.v.x)+", r="+std::to_string(q.v.r));
         RANSTensor gradient{};gradient[0][0]=gu[0];gradient[0][2]=gu[1];gradient[2][0]=gw[0];gradient[2][2]=gw[1];
         RANSTensor stress{};double dk,sk,de=0,se=0,ep=0;
         if(inner)

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <NEKTAR>
+  <!-- M3 manufactured flat mixed stage. Prescribed scalar sources maintain
+       constant positive turbulence at zero velocity; this is not an ABL run. -->
   <EXPANSIONS>
     <E COMPOSITE="C[0]" NUMMODES="5,5" BASISTYPE="Modified_A,Modified_A"
        POINTSTYPE="GaussLobattoLegendre,GaussLobattoLegendre" NUMPOINTS="8,8" FIELDS="u,v,k,eps_tilde"/>
@@ -19,10 +21,56 @@
       <P>RANSWallSampleHeight = 1</P>
       <P>RANSWallTailStart = 1</P>
       <P>Kinvis = 0.000015</P>
+      <P>RANSWallStageAlpha = 5</P>
+      <P>RANSWallNonlinearTolerance = 1e-13</P>
+      <P>Qstar = 3.1906750816242875</P>
+      <P>Kappa = 0.4405539051866587</P>
+      <P>K0 = Qstar*0.16</P>
+      <P>E0 = (K0/Qstar)^1.5/(Kappa*RANSWallHeight)</P>
+      <P>Slope = 0.09*2.55*sqrt(K0)</P>
+      <P>RoughX = RANSWallRoughness*sqrt(K0)/(70*Kinvis)</P>
+      <P>RoughM = max(0.5-0.4*RoughX^0.7,1-0.79*RoughX^(-0.28))</P>
+      <P>Zv = Kinvis*10.7*(1-RoughX^RoughM)/sqrt(K0)</P>
+      <P>YapScale = K0^1.5/(2.5*E0)</P>
     </PARAMETERS>
     <VARIABLES>
       <V ID="0">u</V><V ID="1">v</V><V ID="2">k</V><V ID="3">eps_tilde</V><V ID="4">p</V>
     </VARIABLES>
+    <FUNCTION NAME="BoundaryValuesInner">
+      <E VAR="u,v" VALUE="0"/><E VAR="k" VALUE="K0"/>
+    </FUNCTION>
+    <FUNCTION NAME="BoundaryValuesOuter">
+      <E VAR="u,v" VALUE="0"/><E VAR="k" VALUE="K0"/><E VAR="eps_tilde" VALUE="E0"/>
+    </FUNCTION>
+    <FUNCTION NAME="InitialConditionsInner">
+      <E VAR="u" VALUE="0.0001*x^2*(1-x)^2*2*y*(4-y)*(4-2*y)"/>
+      <E VAR="v" VALUE="-0.0001*2*x*(1-x)*(1-2*x)*y^2*(4-y)^2"/>
+      <E VAR="k" VALUE="K0"/><E VAR="p" VALUE="0"/>
+    </FUNCTION>
+    <FUNCTION NAME="InitialConditionsOuter">
+      <E VAR="u" VALUE="0.0001*x^2*(1-x)^2*2*y*(4-y)*(4-2*y)"/>
+      <E VAR="v" VALUE="-0.0001*2*x*(1-x)*(1-2*x)*y^2*(4-y)^2"/>
+      <E VAR="k" VALUE="K0"/><E VAR="eps_tilde" VALUE="E0"/><E VAR="p" VALUE="0"/>
+    </FUNCTION>
+    <FUNCTION NAME="StageHistoryInner">
+      <E VAR="u,v,p" VALUE="0"/><E VAR="k" VALUE="K0"/>
+    </FUNCTION>
+    <FUNCTION NAME="StageHistoryOuter">
+      <E VAR="u,v,p" VALUE="0"/><E VAR="k" VALUE="K0"/><E VAR="eps_tilde" VALUE="E0"/>
+    </FUNCTION>
+    <FUNCTION NAME="ExactSolutionInner">
+      <E VAR="u,v,p" VALUE="0"/><E VAR="k" VALUE="K0"/>
+    </FUNCTION>
+    <FUNCTION NAME="ExactSolutionOuter">
+      <E VAR="u,v,p" VALUE="0"/><E VAR="k" VALUE="K0"/><E VAR="eps_tilde" VALUE="E0"/>
+    </FUNCTION>
+    <FUNCTION NAME="ScalarSourceInner">
+      <E VAR="k" VALUE="Slope*(y-Zv)*(K0/Qstar)^2/(Kinvis+Slope*(y-Zv))^2"/>
+    </FUNCTION>
+    <FUNCTION NAME="ScalarSourceOuter">
+      <E VAR="k" VALUE="E0"/>
+      <E VAR="eps_tilde" VALUE="1.92*E0^2/K0-0.83*E0^2/K0*max(YapScale/y-1,0)*(YapScale/y)^2"/>
+    </FUNCTION>
   </CONDITIONS>
   <GEOMETRY DIM="2" SPACE="2">
     <VERTEX>

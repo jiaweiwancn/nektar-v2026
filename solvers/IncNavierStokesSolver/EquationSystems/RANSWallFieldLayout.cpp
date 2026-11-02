@@ -188,9 +188,23 @@ RANSWallAlgebra::DenseMatrix RANSWallNativeField::Mass() const
 }
 Vector RANSWallNativeField::Project(const Function &f) const
 {
-    Vector rhs(Size());
-    for (const auto &q : Quadrature()) for (int j=0;j<q.ids.size();++j)
-        rhs[q.ids[j]] += q.weight*q.phi[j]*f(q.x,q.r);
+    Vector rhs(Size());bool first=true,constant=true;double value=0;
+    for (const auto &q : Quadrature())
+    {
+        const double sampled=f(q.x,q.r);Require(std::isfinite(sampled),"nonfinite projection data");
+        if(first){value=sampled;first=false;}else if(sampled!=value)constant=false;
+        for (int j=0;j<q.ids.size();++j)rhs[q.ids[j]] += q.weight*q.phi[j]*sampled;
+    }
+    if(constant)
+    {
+        Vector result(Size());const auto map=m_field->GetLocalToGlobalMap();
+        for(int e=0;e<m_field->GetExpSize();++e)for(int v=0;v<4;++v)
+        {
+            const int pos=m_field->GetCoeff_Offset(e)+m_field->GetExp(e)->GetVertexMap(v);
+            result[map->GetLocalToGlobalMap(pos)]=value*map->GetLocalToGlobalSign(pos);
+        }
+        return result;
+    }
     return Solve(Mass(),rhs);
 }
 std::map<int,double> RANSWallNativeField::Boundary(const Function &f,

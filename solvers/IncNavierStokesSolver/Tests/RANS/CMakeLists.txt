@@ -123,6 +123,10 @@ if(RANS_BUILD_SOLVER)
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSTerrainWall.cpp
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSMatrixFree.cpp
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSHistory.cpp
+            ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallFieldLayout.cpp
+            ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallPatch.cpp
+            ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallInterface.cpp
+            ${RANS_SOLVER_ROOT}/./EquationSystems/RANSEquilibriumWallSystem.cpp
             PROPERTIES COMPILE_OPTIONS "-Wall;-Wextra;-Wpedantic;-Wno-sign-compare;-Werror")
     endif()
 endif()
