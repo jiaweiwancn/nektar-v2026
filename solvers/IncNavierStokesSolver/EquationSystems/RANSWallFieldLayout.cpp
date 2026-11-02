@@ -55,6 +55,22 @@ double Maximum(const Vector &value)
 }
 }
 using namespace RANSWallAlgebra;
+namespace
+{
+std::array<double,6> PhysicalBounds(SpatialDomains::Geometry *geom)
+{
+    std::array<double,6> box{};
+    geom->GetVertex(0)->GetCoords(box[0],box[1],box[2]);
+    for(int d=0;d<3;++d)box[d+3]=box[d];
+    for(int v=1;v<geom->GetNumVerts();++v)
+    {
+        double x,y,z;geom->GetVertex(v)->GetCoords(x,y,z);
+        const std::array<double,3> point{x,y,z};
+        for(int d=0;d<3;++d){box[d]=std::min(box[d],point[d]);box[d+3]=std::max(box[d+3],point[d]);}
+    }
+    return box;
+}
+}
 
 double RANSWallPoint::Value(const Vector &field, int offset) const
 {
@@ -83,7 +99,7 @@ RANSWallNativeField::RANSWallNativeField(const LibUtilities::SessionReaderShared
                 "M3 supports physical 2D quadrilaterals only");
         Require(exp->GetGeomFactors()->GetGtype()==SpatialDomains::eRegular,
                 "M3 requires affine geometry; curved patches belong to M5");
-        const auto box = geom->GetBoundingBox();
+        const auto box = PhysicalBounds(geom);
         Element el{box[0], box[3], box[1], box[4], geom->GetGlobalID(),
                    static_cast<int>(exp->GetBasisNumModes(0))-1, {}, {}};
         Require(el.degree >= 2 && exp->GetBasisNumModes(1) == el.degree+1 &&
@@ -241,7 +257,7 @@ RANSWallFieldLayout::RANSWallFieldLayout(const LibUtilities::SessionReaderShared
     m_left=std::numeric_limits<double>::infinity();m_right=-m_left;m_top=0;
     for(int e=0;e<full->GetExpSize();++e)
     {
-        const auto box=full->GetExp(e)->GetGeom()->GetBoundingBox();all.push_back(e);
+        const auto box=PhysicalBounds(full->GetExp(e)->GetGeom());all.push_back(e);
         m_left=std::min(m_left,box[0]);m_right=std::max(m_right,box[3]);m_top=std::max(m_top,box[4]);
         Require(box[1]>=-1e-12 && !(box[1]<height-1e-12 && box[4]>height+1e-12),"element crosses ground or matching height");
         if(box[4]<=height+1e-12) inner.push_back(e); else outer.push_back(e);
