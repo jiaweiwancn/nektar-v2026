@@ -45,6 +45,7 @@ def transition_session(template,destination,family='flat',degree=3,dimension=2,
         'RANSWallTransitionEnd':-2.25,'RANSWallBaselineStart':-2.,
         'RANSWallSensorDistanceA':2.5,'RANSWallSensorDistanceB':3.5,
         'RANSWallSensorOn':1. if probe else 100.,'RANSWallSensorOff':30. if probe else 200.,
+        'RANSWallExpressionDimension':dimension,
         'RANSWallMapAmplitude':.02,'RANSWallMapLengthX':1.}
     for name,value in parameters.items():set_parameter(root,name,repr(value))
     conditions=root.find('CONDITIONS')
@@ -60,7 +61,11 @@ def expressions(dimension,offset,active=True,stationary=False,model='CLSHighRe')
     r='y' if dimension==2 else 'z'
     k='K0' if stationary else '(K0*(1+0.02*sin(t)))'
     kd='0' if stationary else '(0.02*K0*cos(t))'
-    q=f'min(1,max(0,((x-({offset:.17g}))+3)/0.75))'
+    # The installed interpreter omits loading a constant operand of a binary
+    # function when only its other operand is variable. Explicit zero*t keeps
+    # both operands dynamic, without changing the prescribed mathematics.
+    # The expression probe independently verifies the actual evaluated values.
+    q=f'min((1+0*t),max((0*t),((x-({offset:.17g}))+3)/0.75))'
     chi=f'(1-10*({q})^3+15*({q})^4-6*({q})^5)' if active else '0'
     first=f'(-30*({q})^2*(1-({q}))^2/0.75)' if active else '0'
     second=f'(-60*({q})*(1-({q}))*(1-2*({q}))/(0.75^2))' if active else '0'
@@ -74,9 +79,9 @@ def expressions(dimension,offset,active=True,stationary=False,model='CLSHighRe')
     roughx=f'(RANSWallRoughness*sqrt({k})/(70*Kinvis))'
     roughm=f'max(0.5-0.4*({roughx})^0.7,1-0.79*({roughx})^(-0.28))'
     zv=f'(10.7*Kinvis*(1-({roughx})^({roughm}))/sqrt({k}))'
-    nt=f'(0.2295*sqrt({k})*max(0,({r})-({zv})))'
+    nt=f'(0.2295*sqrt({k})*max((0*t),({r})-({zv})))'
     p0=f'((({k})/Qstar)^2*({nt})/(Kinvis+({nt}))^2)'
-    ea=f'(({original})/max(({r}),({ze})))'
+    ea=f'(({original})/max(({r}),(({ze})+0*t)))'
     logBxx=f'(({delta})*({second})/({B})-(({delta})*({first})/({B}))^2)'
     if offset:
         fx='(-0.02*PI/2*sin(PI*x))';fxx='(-0.02*PI^2/2*cos(PI*x))'
@@ -86,7 +91,7 @@ def expressions(dimension,offset,active=True,stationary=False,model='CLSHighRe')
     cmu='(0.3*(1-exp(-0.36)))' if model=='CLSHighRe' else '0.09'
     diffusion=f'(({cmu})*({k})^2/1.3*(1/({r})^2-({trBr})/({r})+({logBxx})))'
     ratio=f'(({k})^1.5/(2.5*({E})*({r})))'
-    yap=f'(0.83*({E})^2/({k})*max(({ratio})-1,0)*({ratio})^2)' if model=='CLSHighRe' else '0'
+    yap=f'(0.83*({E})^2/({k})*max(({ratio})-1,(0*t))*({ratio})^2)' if model=='CLSHighRe' else '0'
     source_e=f'(({Ed})-({diffusion})+1.92*({E})^2/({k})-({yap}))'
     source_i=f'(({kd})+(1-({chi}))*({ea})+({chi})*({p0}))'
     source_o=f'(({kd})+({E}))'

@@ -43,6 +43,9 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 endif()
 add_executable(RANSWallExpressionProbe ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSWallExpressionProbe.cpp)
 target_link_libraries(RANSWallExpressionProbe ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(RANSWallExpressionProbe PRIVATE -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror)
+endif()
 add_executable(RANSEquilibriumPatchProbe
     ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSEquilibriumPatchProbe.cpp
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.cpp
@@ -299,6 +302,18 @@ if(Python3_Interpreter_FOUND)
             execute_process(COMMAND ${Python3_EXECUTABLE} -c "import numpy, scipy, sympy"
                 RESULT_VARIABLE rans_m3_dependencies OUTPUT_QUIET ERROR_QUIET)
             if(rans_m3_dependencies EQUAL 0)
+                add_test(NAME RANSCLSEPAWFM6KernelOracle COMMAND ${Python3_EXECUTABLE}
+                    ${CMAKE_CURRENT_LIST_DIR}/validate_cls_epawf_m6_kernel.py
+                    --probe $<TARGET_FILE:RANSEquilibriumTransitionProbe>
+                    --output ${CMAKE_CURRENT_BINARY_DIR}/cls-epawf-m6-kernel)
+                set_tests_properties(RANSCLSEPAWFM6KernelOracle PROPERTIES PROCESSORS 1 TIMEOUT 1800
+                    ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
+                add_test(NAME RANSCLSEPAWFM6Oracle COMMAND ${Python3_EXECUTABLE}
+                    ${CMAKE_CURRENT_LIST_DIR}/validate_cls_epawf_m6.py
+                    --build $<TARGET_FILE_DIR:RANSCurvedWallProbe>
+                    --output ${CMAKE_CURRENT_BINARY_DIR}/cls-epawf-m6)
+                set_tests_properties(RANSCLSEPAWFM6Oracle PROPERTIES PROCESSORS 4 TIMEOUT 14400
+                    ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
                 add_test(NAME RANSCLSEPAWFM5NoteOracle COMMAND ${Python3_EXECUTABLE}
                     ${CMAKE_CURRENT_LIST_DIR}/validate_cls_epawf_m5_note.py
                     --probe $<TARGET_FILE:RANSCurvedNoteProbe>
