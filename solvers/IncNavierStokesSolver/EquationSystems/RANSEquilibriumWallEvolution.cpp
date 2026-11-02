@@ -21,7 +21,7 @@ namespace
 {
 void Write(std::ostream &out,const Vector &v)
 {out<<'[';for(int i=0;i<v.size();++i){if(i)out<<',';out<<v[i];}out<<']';}
-void Matrix(std::ostream &out,const std::vector<Vector> &v)
+void WriteRows(std::ostream &out,const std::vector<Vector> &v)
 {out<<'[';for(int i=0;i<v.size();++i){if(i)out<<',';Write(out,v[i]);}out<<']';}
 std::string Quoted(const std::string &value)
 {
@@ -183,7 +183,8 @@ void RANSEquilibriumWallEvolution::v_DoSolve()
             if(m_session->GetComm()->GetRank()==0)std::cout<<"EP-AWF IMEX"<<m_order<<" step "<<m_integrator->Steps()<<" time "<<m_time<<" stage scaled residual "<<m_stageAudits.back()[4]<<std::endl;
             if(m_checksteps>0 && m_integrator->Steps()%m_checksteps==0 && m_checkpointBase!="None")Checkpoint();
         }
-        if(m_checkpointBase!="None")Checkpoint();UpdateFields();
+        if(m_checkpointBase!="None")Checkpoint();
+        UpdateFields();
     }
     catch(const std::exception &error){std::cerr<<"EP-AWF native timestep: "<<error.what()<<std::endl;throw;}
 }
@@ -243,7 +244,7 @@ void RANSEquilibriumWallEvolution::v_Output()
     auto save=[&](const std::string &name,const std::shared_ptr<RANSWallGlobalField> &native,const Vector &values)
     {
         native->Store(values);auto field=native->Field();auto definitions=field->GetFieldDefinitions();std::vector<std::vector<NekDouble>> data(definitions.size());
-        for(int j=0;j<definitions.size();++j){definitions[j]->m_fields.push_back(name);field->AppendFieldData(definitions[j],data[j],field->GetCoeffs());}
+        for(int j=0;j<definitions.size();++j){definitions[j]->m_fields.push_back(name);field->AppendFieldData(definitions[j],data[j],field->UpdateCoeffs());}
         LibUtilities::FieldMetaDataMap meta;meta["Time"]=std::to_string(m_time);meta["PressureConvention"]="pi=p/rho+2k/3";
         io->Write(m_sessionName+"-"+name+".fld",definitions,data,meta,false);
     };
@@ -274,17 +275,19 @@ void RANSEquilibriumWallEvolution::WriteReport() const
     out<<",\"fixed_reference\":";Write(out,m_patch->Reference());out<<",\"fixed_defect\":";Write(out,m_patch->Defect());
     out<<",\"raw_reference_norms\":";Write(out,m_rawNorms);out<<",\"corrected_reference_norms\":";Write(out,m_correctedNorms);
     out<<",\"defect_integrals\":";Write(out,m_patch->DefectIntegrals());out<<",\"anchor_energy_work\":"<<m_patch->AnchorEnergyWork(m_state);
-    out<<",\"stage_audits\":";Matrix(out,m_stageAudits);out<<",\"step_audits\":";Matrix(out,m_stepAudits);out<<",\"explicit_audits\":";Matrix(out,m_explicitAudits);
-    out<<",\"native_history\":";Matrix(out,snapshot.history);out<<",\"native_history_times\":";Write(out,snapshot.times);
+    out<<",\"stage_audits\":";WriteRows(out,m_stageAudits);out<<",\"step_audits\":";WriteRows(out,m_stepAudits);out<<",\"explicit_audits\":";WriteRows(out,m_explicitAudits);
+    out<<",\"native_history\":";WriteRows(out,snapshot.history);out<<",\"native_history_times\":";Write(out,snapshot.times);
     out<<",\"last_stage_history\":";Write(out,m_lastHistory);out<<",\"last_stage_time\":"<<m_stageTime<<",\"last_stage_alpha\":"<<m_stageAlpha;
     out<<",\"fields\":[";
     for(int b=0;b<m_patch->Gauge();++b)
     {
-        if(b)out<<',';const auto &field=m_patch->fields[b];const auto map=field->Field()->GetLocalToGlobalMap();
+        if(b)out<<',';
+        const auto &field=m_patch->fields[b];const auto map=field->Field()->GetLocalToGlobalMap();
         out<<"{\"size\":"<<field->Size()<<",\"mesh\":[";
         for(int e=0;e<field->Elements().size();++e)
         {
-            if(e)out<<',';const auto &el=field->Elements()[e];out<<"{\"geometry\":"<<el.geometry<<",\"degree\":"<<el.degree<<",\"lower\":";
+            if(e)out<<',';
+            const auto &el=field->Elements()[e];out<<"{\"geometry\":"<<el.geometry<<",\"degree\":"<<el.degree<<",\"lower\":";
             Write(out,Vector(el.lower.begin(),el.lower.end()));out<<",\"upper\":";Write(out,Vector(el.upper.begin(),el.upper.end()));out<<",\"ids\":[";
             const int nc=field->Field()->GetExp(e)->GetNcoeffs(),o=field->Field()->GetCoeff_Offset(e);
             for(int j=0;j<nc;++j){if(j)out<<',';out<<map->GetLocalToGlobalMap(o+j);}out<<"],\"sign\":[";

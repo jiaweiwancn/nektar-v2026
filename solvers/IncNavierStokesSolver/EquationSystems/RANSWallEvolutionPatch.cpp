@@ -33,7 +33,8 @@ public:
     }
     Vector Apply(Vector rhs) const
     {
-        int info;Lapack::Dgetrs('N',n,1,lu.data(),n,pivots.data(),rhs.data(),n,info);
+        auto pivot=pivots;
+        int info;Lapack::Dgetrs('N',n,1,lu.data(),n,pivot.data(),rhs.data(),n,info);
         Require(info==0,"failed evolution factor solve");Maximum(rhs);return rhs;
     }
 private:
@@ -55,7 +56,8 @@ double Volume(const RANSWallGlobalField &field)
     for(const auto &e:field.Elements())
     {
         double v=(e.upper[0]-e.lower[0])*(e.upper[2]-e.lower[2]);
-        if(field.Dimension()==3)v*=e.upper[1]-e.lower[1];volume+=v;
+        if(field.Dimension()==3)v*=e.upper[1]-e.lower[1];
+        volume+=v;
     }
     return volume;
 }
@@ -255,7 +257,8 @@ std::map<int,double> RANSWallEvolutionPatch::ExternalConstraints(double time,con
 std::map<int,double> RANSWallEvolutionPatch::FixedReferenceBoundary(const Vector &ref) const
 {
     RANSWallEvolutionData zero(m_dimension);auto result=ExternalConstraints(0,zero);
-    for(auto &[row,value]:result)value=ref[row];return result;
+    for(auto &[row,value]:result)value=ref[row];
+    return result;
 }
 std::map<int,double> RANSWallEvolutionPatch::Constraints(const Vector &state,double time,const RANSWallEvolutionData &data) const
 {
@@ -418,16 +421,28 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Solve(Vector s,const Vect
                 for(int i=0;i<Size();++i)jac[i][j]=(a[i]-b[i])/(2*h);
             }
             m_solver->jacobian=std::move(jac);m_solver->alpha=alpha;
-            if(m_comm->GetRank()==0)m_solver->factor=std::make_shared<Factor>(m_solver->jacobian);
-            else m_solver->factor=std::make_shared<Factor>(WallMatrix{{1.}});
+            int bad=0;
+            if(m_comm->GetRank()==0)
+            {
+                try{m_solver->factor=std::make_shared<Factor>(m_solver->jacobian);}
+                catch(const std::exception &){bad=1;}
+            }
+            m_comm->Bcast(bad,0);Require(!bad,"collective stage factorisation failed");
+            if(m_comm->GetRank()!=0)m_solver->factor=std::make_shared<Factor>(WallMatrix{{1.}});
             refreshed=true;
         }
         Vector step(Size());
+        int bad=0;
         if(m_comm->GetRank()==0)
         {
-            if(condensed)step=RANSWallCondensation(m_solver->jacobian,r,CondensableVelocity(constraints)).Solve();
-            else{auto rhs=r;for(double &v:rhs)v=-v;step=m_solver->factor->Apply(std::move(rhs));}
+            try
+            {
+                if(condensed)step=RANSWallCondensation(m_solver->jacobian,r,CondensableVelocity(constraints)).Solve();
+                else{auto rhs=r;for(double &v:rhs)v=-v;step=m_solver->factor->Apply(std::move(rhs));}
+            }
+            catch(const std::exception &){bad=1;}
         }
+        m_comm->Bcast(bad,0);Require(!bad,"collective Newton/Schur solve failed");
         Broadcast(step);bool accepted=false;
         for(double fraction=1;fraction>=1./1048576;fraction/=2)
         {
@@ -457,7 +472,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::ExplicitBody(const Vector
             Add(load,offset[a],q.v,body,{},q.weight);
         }
     };
-    for(const auto &q:m_bodyInner)add(q,true);for(const auto &q:m_outer)add(q,false);
+    for(const auto &q:m_bodyInner)add(q,true);
+    for(const auto &q:m_outer)add(q,false);
     m_comm->AllReduce(load,LibUtilities::ReduceSum);Vector result(DifferentialSize());
     const auto constraints=Constraints(s,time,data);Norms(load,constraints);
     for(int b=0;b<m_dimension;++b)
@@ -495,7 +511,8 @@ double RANSWallEvolutionPatch::AnchorEnergyWork(const Vector &s) const
 {
     double work=0;if(m_defect.empty())return work;
     for(int b=0;b<m_dimension;++b)for(int i=0;i<size[b];++i)work+=s[offset[b]+i]*m_defect[offset[b]+i];
-    for(int i=0;i<size[K()];++i)work+=m_constants[K()][i]*m_defect[offset[K()]+i];return m_eta*work;
+    for(int i=0;i<size[K()];++i)work+=m_constants[K()][i]*m_defect[offset[K()]+i];
+    return m_eta*work;
 }
 std::string RANSWallEvolutionPatch::Signature() const
 {
