@@ -64,6 +64,7 @@ enum SolverType
     eImplicit,
     eRANSVelocityCorrectionScheme,
     eRANSEquilibriumWallSystem,
+    eRANSEquilibriumWallEvolution,
 };
 
 enum EquationType

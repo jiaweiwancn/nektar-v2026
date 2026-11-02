@@ -25,6 +25,10 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
         ./EquationSystems/RANSWallPatch.cpp
         ./EquationSystems/RANSWallInterface.cpp
         ./EquationSystems/RANSEquilibriumWallSystem.cpp
+        ./EquationSystems/RANSWallGlobalField.cpp
+        ./EquationSystems/RANSWallEvolutionPatch.cpp
+        ./EquationSystems/RANSWallTimeIntegration.cpp
+        ./EquationSystems/RANSEquilibriumWallEvolution.cpp
         ./EquationSystems/SmoothedProfileMethod.cpp
         ./EquationSystems/VCSMapping.cpp
         ./EquationSystems/Extrapolate.cpp
@@ -88,6 +92,10 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
             EquationSystems/RANSWallFieldLayout.h
             EquationSystems/RANSWallPatch.h
             EquationSystems/RANSWallInterface.h
+            EquationSystems/RANSWallGlobalField.h
+            EquationSystems/RANSWallEvolutionPatch.h
+            EquationSystems/RANSWallTimeIntegration.h
+            EquationSystems/RANSEquilibriumWallEvolution.h
             EquationSystems/WeakPressureExtrapolate.h
             Filters/FilterAeroForcesSPM.h
             Filters/FilterMovingBody.h

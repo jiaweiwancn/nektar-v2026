@@ -127,6 +127,10 @@ if(RANS_BUILD_SOLVER)
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallPatch.cpp
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallInterface.cpp
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSEquilibriumWallSystem.cpp
+            ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallGlobalField.cpp
+            ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallEvolutionPatch.cpp
+            ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallTimeIntegration.cpp
+            ${RANS_SOLVER_ROOT}/./EquationSystems/RANSEquilibriumWallEvolution.cpp
             PROPERTIES COMPILE_OPTIONS "-Wall;-Wextra;-Wpedantic;-Wno-sign-compare;-Werror")
     endif()
 endif()
