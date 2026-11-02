@@ -135,6 +135,13 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
         ADD_NEKTAR_EXECUTABLE(RANSConstitutiveProbe COMPONENT tests DEPENDS SolverUtils
             SOURCES ${CMAKE_SOURCE_DIR}/library/UnitTests/SolverUtils/RANSConstitutiveProbe.cpp)
         TARGET_COMPILE_DEFINITIONS(RANSConstitutiveProbe PRIVATE ENABLE_NEKTAR_EXCEPTIONS)
+        ADD_NEKTAR_EXECUTABLE(RANSEquilibriumProfilesProbe COMPONENT tests DEPENDS SolverUtils
+            SOURCES ${CMAKE_SOURCE_DIR}/library/UnitTests/SolverUtils/RANSEquilibriumProfilesProbe.cpp)
+        TARGET_COMPILE_DEFINITIONS(RANSEquilibriumProfilesProbe PRIVATE ENABLE_NEKTAR_EXCEPTIONS)
+        ADD_TEST(NAME RANSEquilibriumProfilesNative COMMAND RANSEquilibriumProfilesProbe
+            --output ${CMAKE_CURRENT_BINARY_DIR}/rans-equilibrium-profiles.json)
+        SET_TESTS_PROPERTIES(RANSEquilibriumProfilesNative PROPERTIES PROCESSORS 1 TIMEOUT 180
+            ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
         FIND_PACKAGE(Python3 QUIET COMPONENTS Interpreter)
         IF(Python3_Interpreter_FOUND AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
             EXECUTE_PROCESS(COMMAND ${Python3_EXECUTABLE} -c "import numpy, scipy"

@@ -12,6 +12,7 @@ include_directories(SYSTEM ${NEKTAR++_INCLUDE_DIRS} ${NEKTAR++_TP_INCLUDE_DIRS})
 add_library(RANSKernels STATIC
     ${RANS_SOURCE_ROOT}/library/SolverUtils/Turbulence/RANSModels.cpp
     ${RANS_SOURCE_ROOT}/library/SolverUtils/Turbulence/AnalyticalWallFunction.cpp
+    ${RANS_SOURCE_ROOT}/library/SolverUtils/Turbulence/EquilibriumAWFProfiles.cpp
     ${RANS_SOURCE_ROOT}/library/SolverUtils/Turbulence/RANSWallGeometry.cpp)
 target_compile_definitions(RANSKernels PRIVATE SOLVER_UTILS_EXPORTS)
 add_executable(RANSWallLayerProbe
@@ -26,8 +27,10 @@ add_executable(RANSStressTangentAudit
     ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSStressTangentAudit.cpp)
 add_executable(RANSConstitutiveProbe
     ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSConstitutiveProbe.cpp)
+add_executable(RANSEquilibriumProfilesProbe
+    ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSEquilibriumProfilesProbe.cpp)
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    foreach(rans_target RANSKernels RANSWallLayerProbe RANSKernelProbe RANSWallGeometryProbe RANSObservationKernelProbe RANSStressTangentAudit RANSConstitutiveProbe)
+    foreach(rans_target RANSKernels RANSWallLayerProbe RANSKernelProbe RANSWallGeometryProbe RANSObservationKernelProbe RANSStressTangentAudit RANSConstitutiveProbe RANSEquilibriumProfilesProbe)
         target_compile_options(${rans_target} PRIVATE
             -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror)
     endforeach()
@@ -39,6 +42,7 @@ target_link_libraries(RANSWallGeometryProbe RANSKernels)
 target_link_libraries(RANSObservationKernelProbe RANSKernels)
 target_link_libraries(RANSStressTangentAudit RANSKernels)
 target_link_libraries(RANSConstitutiveProbe RANSKernels)
+target_link_libraries(RANSEquilibriumProfilesProbe RANSKernels ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
 option(RANS_BUILD_SOLVER "Build the complete incompressible solver in isolation" OFF)
 if(RANS_BUILD_SOLVER)
     # Build the source SpatialDomains library in isolation too: terrain normals
@@ -170,6 +174,10 @@ add_test(NAME RANSObservationKernels COMMAND RANSObservationKernelProbe
 set_tests_properties(RANSObservationKernels PROPERTIES
     PROCESSORS 1 TIMEOUT 120 ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
 find_package(Python3 QUIET COMPONENTS Interpreter)
+add_test(NAME RANSEquilibriumProfilesNative COMMAND RANSEquilibriumProfilesProbe
+    --output ${CMAKE_CURRENT_BINARY_DIR}/rans-equilibrium-profiles.json)
+set_tests_properties(RANSEquilibriumProfilesNative PROPERTIES
+    PROCESSORS 1 TIMEOUT 180 ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
 if(Python3_Interpreter_FOUND)
     if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
         execute_process(COMMAND ${Python3_EXECUTABLE} -c "import numpy, scipy"
