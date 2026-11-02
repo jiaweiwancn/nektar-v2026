@@ -366,7 +366,10 @@ std::map<int,double> RANSWallGlobalField::Boundary(
                 const double value=map->GetLocalToGlobalSign(pos)*coefficients[j];
                 const auto found=result.find(id);
                 Require(found==result.end() || std::abs(found->second-value)<1e-9*std::max(1.,std::abs(value)),
-                        "inconsistent edge/corner boundary data");
+                        "inconsistent edge/corner boundary data, geometry="+std::to_string(element.geometry)+
+                        ", axis="+std::to_string(m_axes[fixed])+", side="+std::to_string(side)+
+                        ", global="+std::to_string(id)+", previous="+(found==result.end()?std::string("unset"):std::to_string(found->second))+
+                        ", current="+std::to_string(value));
                 result[id]=value;
             }
         }
