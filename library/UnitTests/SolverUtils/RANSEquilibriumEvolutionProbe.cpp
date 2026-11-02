@@ -114,7 +114,10 @@ int main(int argc,char **argv)
                 const Vector fast{row.Value(values),gradient[0],gradient[1],gradient[2]};
                 for(int a=0;a<4;++a)Require(std::abs(native[a]-fast[a])<1e-10*std::max(1.,std::abs(native[a])),"fast/native tensor evaluation differs");
                 if(count++)bytes<<',';
-                Vector record(p.begin(),p.end());record.insert(record.end(),fast.begin(),fast.end());record.insert(record.end(),native.begin(),native.end());Write(bytes,record);
+                Vector record(11);
+                std::copy(p.begin(),p.end(),record.begin());
+                std::copy(fast.begin(),fast.end(),record.begin()+3);
+                std::copy(native.begin(),native.end(),record.begin()+7);Write(bytes,record);
             }
             bytes<<"]}";
         }
