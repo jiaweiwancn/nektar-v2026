@@ -46,7 +46,8 @@ void Point(std::ostream &out, const AWFProfileValues &v)
 }
 LibUtilities::BasisKey Basis(int degree, LibUtilities::BasisType type = LibUtilities::eModified_A)
 {
-    return {type, degree+1, {std::max(12, degree+3), LibUtilities::eGaussLobattoLegendre}};
+    return {type, static_cast<std::size_t>(degree+1),
+        {static_cast<std::size_t>(std::max(12, degree+3)), LibUtilities::eGaussLobattoLegendre}};
 }
 struct NativeBasis
 {
