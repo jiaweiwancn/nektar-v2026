@@ -74,6 +74,18 @@ void Generic(std::ostream &out,const LibUtilities::SessionReaderSharedPtr &seria
         RANSWallCoordinate p{patch.lower[0]+x*(patch.upper[0]-patch.lower[0]),d==3?.37*(patch.upper[1]-patch.lower[1])+patch.lower[1]:0.,H};
         const auto force=patch.Forcing(lifted,p,.2,data);if(count++)out<<',';Write(out,{p[0],p[1],patch.SampleK(lifted,p),force[0],force[1]});
     }
+    out<<"],\"constraint_columns\":[";count=0;
+    for(int block=0;block<patch.InnerPressure();++block)
+    {
+        const auto found=constraints.lower_bound(patch.offset[block]);
+        Require(found!=constraints.end() && found->first<patch.offset[block]+patch.size[block],"missing constrained column control");
+        const int column=found->first;const double h=2e-6;auto plus=state,minus=state;
+        plus[column]+=h;minus[column]-=h;
+        const auto rp=patch.Residual(plus,history,5.3,.2,data,false),rm=patch.Residual(minus,history,5.3,.2,data,false);
+        if(count++)out<<',';
+        Vector derivative(rp.size());for(int i=0;i<rp.size();++i)derivative[i]=(rp[i]-rm[i])/(2*h);
+        out<<"{\"column\":"<<column<<",\"derivative\":";Write(out,derivative);out<<'}';
+    }
     out<<"]}";
 }
 }

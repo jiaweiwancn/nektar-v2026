@@ -66,6 +66,8 @@ public:
         const RANSWallEvolutionData &data,double time);
     const Vector &Reference() const { return m_reference; }
     const Vector &Defect() const { return m_defect; }
+    const Vector &RawReferenceLoads() const { return m_referenceLoads; }
+    const std::map<int,double> &ReferenceConstraints() const { return m_referenceConstraints; }
     double Eta() const { return m_eta; }
     Vector DefectIntegrals() const;
     double AnchorEnergyWork(const Vector &state) const;
@@ -98,7 +100,8 @@ private:
     mutable std::vector<Ray> m_rays;
     std::vector<VolumePoint> m_outer,m_bodyInner;
     std::vector<int> m_boundaryTopology;
-    Vector m_reference,m_defect;
+    Vector m_reference,m_defect,m_referenceLoads;
+    std::map<int,double> m_referenceConstraints;
     double m_eta=0;
     mutable std::shared_ptr<SolverCache> m_solver;
 };

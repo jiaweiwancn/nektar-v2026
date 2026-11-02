@@ -150,6 +150,19 @@ if(RANS_BUILD_SOLVER)
     endif()
 endif()
 enable_testing()
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-evolution-native)
+configure_file(${CMAKE_CURRENT_LIST_DIR}/EquilibriumWallFlat.xml
+    ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-evolution-native/case.xml COPYONLY)
+add_test(NAME RANSEquilibriumTimeNative COMMAND RANSEquilibriumTimeProbe
+    --output ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-time.json
+    --checkpoint-root ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-time-history)
+add_test(NAME RANSEquilibriumEvolutionNative COMMAND RANSEquilibriumEvolutionProbe
+    ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-evolution-native/case.xml
+    ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-evolution-native/probe.json)
+set_tests_properties(RANSEquilibriumTimeNative RANSEquilibriumEvolutionNative PROPERTIES
+    PROCESSORS 1 TIMEOUT 300
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-evolution-native
+    ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-native)
 configure_file(${CMAKE_CURRENT_LIST_DIR}/EquilibriumWallFlat.xml
     ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-native/case.xml COPYONLY)
@@ -161,6 +174,15 @@ set_tests_properties(RANSEquilibriumPatchNative PROPERTIES
     PROCESSORS 1 TIMEOUT 300
     ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
 if(RANS_BUILD_SOLVER)
+    file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-evolution)
+    configure_file(${CMAKE_CURRENT_LIST_DIR}/EquilibriumWallEvolution.xml
+        ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-evolution/case.xml COPYONLY)
+    add_test(NAME RANSEquilibriumWallEvolutionSmoke COMMAND IncNavierStokesSolver
+        ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-evolution/case.xml)
+    set_tests_properties(RANSEquilibriumWallEvolutionSmoke PROPERTIES
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-evolution
+        PROCESSORS 1 TIMEOUT 300
+        ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
     file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-stage)
     configure_file(${CMAKE_CURRENT_LIST_DIR}/EquilibriumWallFlat.xml
         ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-stage/case.xml COPYONLY)
@@ -250,6 +272,11 @@ if(Python3_Interpreter_FOUND)
             execute_process(COMMAND ${Python3_EXECUTABLE} -c "import numpy, scipy, sympy"
                 RESULT_VARIABLE rans_m3_dependencies OUTPUT_QUIET ERROR_QUIET)
             if(rans_m3_dependencies EQUAL 0)
+                add_test(NAME RANSCLSEPAWFM4Oracle COMMAND ${Python3_EXECUTABLE}
+                    ${CMAKE_CURRENT_LIST_DIR}/validate_cls_epawf_m4.py
+                    --build $<TARGET_FILE_DIR:RANSEquilibriumEvolutionProbe>)
+                set_tests_properties(RANSCLSEPAWFM4Oracle PROPERTIES PROCESSORS 4
+                    TIMEOUT 7200 ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
                 add_test(NAME RANSCLSEPAWFM3Oracle COMMAND ${Python3_EXECUTABLE}
                     ${CMAKE_CURRENT_LIST_DIR}/validate_cls_epawf_m3.py
                     --build $<TARGET_FILE_DIR:RANSEquilibriumPatchProbe>)

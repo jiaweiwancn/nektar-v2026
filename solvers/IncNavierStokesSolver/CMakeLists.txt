@@ -165,6 +165,43 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
                 EquationSystems/RANSWallInterface.cpp)
         TARGET_INCLUDE_DIRECTORIES(RANSEquilibriumPatchProbe PRIVATE ${CMAKE_SOURCE_DIR}/solvers)
         TARGET_COMPILE_DEFINITIONS(RANSEquilibriumPatchProbe PRIVATE ENABLE_NEKTAR_EXCEPTIONS)
+        ADD_NEKTAR_EXECUTABLE(RANSEquilibriumTimeProbe COMPONENT tests DEPENDS SolverUtils
+            SOURCES ${CMAKE_SOURCE_DIR}/library/UnitTests/SolverUtils/RANSEquilibriumTimeProbe.cpp
+                EquationSystems/RANSWallFieldLayout.cpp
+                EquationSystems/RANSWallTimeIntegration.cpp
+                EquationSystems/RANSHistory.cpp)
+        ADD_NEKTAR_EXECUTABLE(RANSEquilibriumEvolutionProbe COMPONENT tests DEPENDS SolverUtils
+            SOURCES ${CMAKE_SOURCE_DIR}/library/UnitTests/SolverUtils/RANSEquilibriumEvolutionProbe.cpp
+                EquationSystems/RANSWallFieldLayout.cpp
+                EquationSystems/RANSWallPatch.cpp
+                EquationSystems/RANSWallGlobalField.cpp
+                EquationSystems/RANSWallEvolutionPatch.cpp)
+        FOREACH(rans_m4_target RANSEquilibriumTimeProbe RANSEquilibriumEvolutionProbe)
+            TARGET_INCLUDE_DIRECTORIES(${rans_m4_target} PRIVATE ${CMAKE_SOURCE_DIR}/solvers)
+            TARGET_COMPILE_DEFINITIONS(${rans_m4_target} PRIVATE ENABLE_NEKTAR_EXCEPTIONS)
+        ENDFOREACH()
+        FILE(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-evolution-native)
+        CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Tests/RANS/EquilibriumWallFlat.xml
+            ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-evolution-native/case.xml COPYONLY)
+        ADD_TEST(NAME RANSEquilibriumTimeNative COMMAND RANSEquilibriumTimeProbe
+            --output ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-time.json
+            --checkpoint-root ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-time-history)
+        ADD_TEST(NAME RANSEquilibriumEvolutionNative COMMAND RANSEquilibriumEvolutionProbe
+            ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-evolution-native/case.xml
+            ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-evolution-native/probe.json)
+        SET_TESTS_PROPERTIES(RANSEquilibriumTimeNative RANSEquilibriumEvolutionNative PROPERTIES
+            PROCESSORS 1 TIMEOUT 300
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-evolution-native
+            ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
+        FILE(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-evolution)
+        CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Tests/RANS/EquilibriumWallEvolution.xml
+            ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-evolution/case.xml COPYONLY)
+        ADD_TEST(NAME RANSEquilibriumWallEvolutionSmoke COMMAND IncNavierStokesSolver
+            ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-evolution/case.xml)
+        SET_TESTS_PROPERTIES(RANSEquilibriumWallEvolutionSmoke PROPERTIES
+            PROCESSORS 1 TIMEOUT 300
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-evolution
+            ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
         FOREACH(rans_wall_case native stage)
             FILE(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/rans-wall-${rans_wall_case})
             CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Tests/RANS/EquilibriumWallFlat.xml
@@ -203,6 +240,11 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
             EXECUTE_PROCESS(COMMAND ${Python3_EXECUTABLE} -c "import numpy, scipy, sympy"
                 RESULT_VARIABLE RANS_M3_DEPENDENCIES OUTPUT_QUIET ERROR_QUIET)
             IF(RANS_M3_DEPENDENCIES EQUAL 0)
+                ADD_TEST(NAME RANSCLSEPAWFM4Oracle COMMAND ${Python3_EXECUTABLE}
+                    ${CMAKE_CURRENT_SOURCE_DIR}/Tests/RANS/validate_cls_epawf_m4.py
+                    --build $<TARGET_FILE_DIR:RANSEquilibriumEvolutionProbe>)
+                SET_TESTS_PROPERTIES(RANSCLSEPAWFM4Oracle PROPERTIES PROCESSORS 4
+                    TIMEOUT 7200 ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
                 ADD_TEST(NAME RANSCLSEPAWFM3Oracle COMMAND ${Python3_EXECUTABLE}
                     ${CMAKE_CURRENT_SOURCE_DIR}/Tests/RANS/validate_cls_epawf_m3.py
                     --build $<TARGET_FILE_DIR:RANSEquilibriumPatchProbe>)

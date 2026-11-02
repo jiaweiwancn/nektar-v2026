@@ -293,6 +293,10 @@ void RANSEquilibriumWallEvolution::WriteReport() const
     out<<",\"offsets\":[";for(int b=0;b<m_patch->offset.size();++b){if(b)out<<',';out<<m_patch->offset[b];}out<<']';
     out<<",\"state\":";Write(out,m_state);out<<",\"initial\":";Write(out,m_initial);
     out<<",\"fixed_reference\":";Write(out,m_patch->Reference());out<<",\"fixed_defect\":";Write(out,m_patch->Defect());
+    out<<",\"raw_reference_loads\":";Write(out,m_patch->RawReferenceLoads());
+    out<<",\"reference_constraints\":[";int constraintCount=0;
+    for(auto [row,value]:m_patch->ReferenceConstraints())
+    {if(constraintCount++)out<<',';Write(out,{static_cast<double>(row),value});}out<<']';
     out<<",\"raw_reference_norms\":";Write(out,m_rawNorms);out<<",\"corrected_reference_norms\":";Write(out,m_correctedNorms);
     out<<",\"defect_integrals\":";Write(out,m_patch->DefectIntegrals());out<<",\"anchor_energy_work\":"<<m_patch->AnchorEnergyWork(m_state);
     out<<",\"stage_audits\":";WriteRows(out,m_stageAudits);out<<",\"step_audits\":";WriteRows(out,m_stepAudits);out<<",\"explicit_audits\":";WriteRows(out,m_explicitAudits);

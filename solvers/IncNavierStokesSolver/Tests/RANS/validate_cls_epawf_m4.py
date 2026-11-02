@@ -188,6 +188,10 @@ def check_native_spatial(raw):
     # The common constant pressure is the only null vector, across both regions.
     pressure_constant = np.r_[f[-2].constant(), f[-1].constant()]
     near(pressure_constant@B, np.zeros(B.shape[1]), 'one_common_pressure_nullspace')
+    for case in raw['generic_cases']:
+        for control in case['constraint_columns']:
+            unit=np.zeros(len(case['state']));unit[control['column']]=1.
+            near(control['derivative'],unit,'lifted_constraint_Jacobian_columns',tolerance=1e-9)
     if raw['dimension'] == 2:
         layout = []
         for b in (0, 0, 0, 2, 3, 4, 5):
@@ -372,11 +376,22 @@ def check_reference(raw, projection=False, dual=False):
     near(s[o[d]:o[d]+f[d].size],K*f[d].constant(),'exact_constant_k')
     near(s[o[d-1]:o[d-1]+f[d-1].size],np.zeros(f[d-1].size),'exact_zero_normal_velocity')
     near(defect[o[d+2]:],np.zeros(len(defect)-o[d+2]),'anchor_excludes_all_algebraic_rows')
+    exported_constraints={int(row):value for row,value in raw['reference_constraints']}
+    raw_load=np.asarray(raw['raw_reference_loads'])
+    removed=[]
     integrals=[];work=0.;independent_norms=[]
     for b,field in enumerate(f):
         c=field.constant();load=defect[o[b]:o[b]+field.size]
         boundary=constrained(raw,field,b)
+        require({o[b]+i for i in boundary}=={i for i in exported_constraints if o[b]<=i<o[b]+field.size},'Native/independent essential row sets differ')
         if boundary:near(load[sorted(boundary)],np.zeros(len(boundary)),'anchor_excludes_essential_and_dependent_rows')
+        if b<d+2:
+            mask=np.asarray([i for i in range(field.size) if i not in boundary],dtype=int)
+            near(load[mask],raw_load[o[b]+mask],'only_fixed_free_differential_loads_are_stored')
+            boundary_load=np.asarray([raw_load[o[b]+i] for i in sorted(boundary)])
+            removed.append(dict(block=b,row_count=len(boundary),maximum_raw_load=float(np.max(np.abs(boundary_load),initial=0.)),
+                                constant_test_load=float(sum(field.constant()[i]*raw_load[o[b]+i] for i in boundary)),
+                                raw_load_sha256=hashlib.sha256(boundary_load.tobytes()).hexdigest()))
         if b<d+2:integrals.append(float(c@load))
         if b<d:work += float(np.asarray(raw['state'])[o[b]:o[b]+field.size]@load)
         if b==d:work += float(c@load)
@@ -398,6 +413,16 @@ def check_reference(raw, projection=False, dual=False):
         gauge += float((f[b].mass()@f[b].constant())@s[o[b]:o[b]+f[b].size])/f[0].volume
     near(gauge,0.,'physical_global_pressure_gauge',scale=us*us,tolerance=1e-9)
     axes=(0,2) if d==2 else (0,1,2)
+    for b,field in enumerate(f):
+        for e in field.elements:
+            n=e['degree']+1;local=s[o[b]+np.asarray(e['ids'])]*np.asarray(e['sign'])
+            expected=np.zeros_like(local)
+            for j in range(n**d):
+                radial=j//n**(d-1)
+                horizontal=j%n**(d-1)
+                if all((horizontal//n**i)%n<2 for i in range(d-1)):
+                    expected[j]=local[radial*n**(d-1)]
+            near(local,expected,'native_exact_horizontal_invariance',tolerance=1e-9)
     for e in f[0].elements:
         p=[(e['lower'][a]+e['upper'][a])/2 for a in range(3)]
         G=np.zeros((3,3))
@@ -451,7 +476,7 @@ def check_reference(raw, projection=False, dual=False):
                 ee=f[d+1].by_id[e['geometry']];ids,ep,_=f[d+1].rows(ee,points)
                 Eerror+=area_fraction*float(np.dot(w*(b-a)/2,(ep@s[o[d+1]+ids]-us**3/(kappa*r))**2))
     result=dict(raw_norms=raw['raw_reference_norms'],corrected_norms=raw['corrected_reference_norms'],defect_integrals=integrals,anchor_energy_work=raw['anchor_energy_work'],
-                velocity_profile_RMS=math.sqrt(Uerror/Z),epsilon_profile_RMS=math.sqrt(Eerror/(Z-H)),maximum_divergence=max_div,unknowns=len(s))
+                velocity_profile_RMS=math.sqrt(Uerror/Z),epsilon_profile_RMS=math.sqrt(Eerror/(Z-H)),maximum_divergence=max_div,unknowns=len(s),removed_row_audit=removed)
     if projection:
         result['independent_velocity_projection']=radial_projection(raw,0,profile)
         result['independent_epsilon_projection']=radial_projection(raw,d+1,profile)
@@ -621,13 +646,12 @@ def qualification(run, section):
             mpi.append(dict(ranks=ranks,state_difference=history_difference(raw,base,'evolving_mpi'+str(ranks)),iterations=[r[3] for r in raw['stage_audits']]))
         report['evolving_MPI']=mpi
         restarts=[]
-        for order in (1,2):
-            for split in (0,1,2,3):
-                saved=run.evolution(f'evolving-o{order}-save{split}',generator=evolving_session,order=order,steps=split,dt=.1,
-                                    checkpoint=run.output/f'evolving-history-o{order}-{split}')
-                ranks=4 if split in (1,3) else 1
-                resumed=run.evolution(f'evolving-o{order}-restart{split}',generator=evolving_session,order=order,steps=4-split,dt=.1,restart=saved['checkpoint'],ranks=ranks)
-                restarts.append(dict(order=order,split=split,restart_ranks=ranks,state_difference=history_difference(resumed,baselines[(order,.1)],f'evolving_o{order}_restart{split}')))
+        for order,split,save_ranks,ranks in ((1,1,1,1),(2,0,1,1),(2,1,1,4),(2,2,4,1),(2,3,1,4)):
+            saved=run.evolution(f'evolving-o{order}-save{split}',generator=evolving_session,order=order,steps=split,dt=.1,ranks=save_ranks,
+                                checkpoint=run.output/f'evolving-history-o{order}-{split}')
+            resumed=run.evolution(f'evolving-o{order}-restart{split}',generator=evolving_session,order=order,steps=4-split,dt=.1,restart=saved['checkpoint'],ranks=ranks)
+            restarts.append(dict(order=order,split=split,save_ranks=save_ranks,restart_ranks=ranks,
+                                 state_difference=history_difference(resumed,baselines[(order,.1)],f'evolving_o{order}_restart{split}')))
         report['full_history_restarts']=restarts
         # Source/time/eta compatibility are exercised at the coupled system in
         # addition to corruption/shape/order controls in the native time probe.

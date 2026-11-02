@@ -7,6 +7,7 @@
 #include <LibUtilities/LinearAlgebra/Lapack.hpp>
 #include <algorithm>
 #include <cmath>
+#include <iostream>
 #include <iomanip>
 #include <numeric>
 #include <set>
@@ -414,9 +415,15 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Solve(Vector s,const Vect
         Require(iterations<maximumIterations,"evolution stage nonlinear iteration limit, scaled residual="+std::to_string(error));
         if(!m_solver->factor || !Same(alpha,m_solver->alpha) || (error>previous*.8 && !refreshed))
         {
+            if(m_comm->GetRank()==0)std::cout<<"EP-AWF stage Jacobian at time "<<time<<", alpha "<<alpha<<", scaled residual "<<error<<std::endl;
             WallMatrix jac(Size(),Vector(Size()));
             for(int j=0;j<Size();++j)
             {
+                // Lifted essential/dependent columns have no physical-load
+                // variation. Their only nonzero entry is their constraint row.
+                // Dependence of the epsilon trace on free k columns is still
+                // differentiated below through the full coupled residual.
+                if(constraints.count(j)){jac[j][j]=1.;continue;}
                 auto plus=s,minus=s;const double h=2e-6*std::max(1.,std::abs(s[j]));plus[j]+=h;minus[j]-=h;
                 const auto a=Residual(plus,history,alpha,time,data),b=Residual(minus,history,alpha,time,data);
                 for(int i=0;i<Size();++i)jac[i][j]=(a[i]-b[i])/(2*h);
@@ -490,7 +497,8 @@ void RANSWallEvolutionPatch::SetReference(const Vector &ref,const RANSWallEvolut
     Require(eta==0 || eta==1,"only fixed global eta=0 or eta=1 is supported");
     const auto raw=Residual(ref,ref,0,time,data,false);const auto norms=Norms(raw,Constraints(ref,time,data));
     for(int b=InnerPressure();b<norms.size();++b)Require(norms[b]<1e-9,"reference violates an algebraic constraint");
-    m_reference=ref;m_defect=Residual(ref,ref,0,time,data,false,false);
+    m_reference=ref;m_referenceLoads=Residual(ref,ref,0,time,data,false,false);m_defect=m_referenceLoads;
+    m_referenceConstraints=Constraints(ref,time,data);
     for(int i=DifferentialSize();i<Size();++i)m_defect[i]=0;
     for(auto [row,value]:Constraints(ref,time,data)){(void)value;m_defect[row]=0;}
     m_eta=eta;
