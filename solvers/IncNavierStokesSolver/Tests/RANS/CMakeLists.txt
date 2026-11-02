@@ -189,8 +189,13 @@ if(Python3_Interpreter_FOUND)
                 --constitutive-probe $<TARGET_FILE:RANSConstitutiveProbe>)
             set_tests_properties(RANSCLSEPAWFM1Oracle PROPERTIES PROCESSORS 1
                 TIMEOUT 120 ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
+            add_test(NAME RANSCLSEPAWFM2Oracle COMMAND ${Python3_EXECUTABLE}
+                ${CMAKE_CURRENT_LIST_DIR}/validate_cls_epawf_m2.py
+                --probe $<TARGET_FILE:RANSEquilibriumProfilesProbe>)
+            set_tests_properties(RANSCLSEPAWFM2Oracle PROPERTIES PROCESSORS 1
+                TIMEOUT 240 ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
         else()
-            message(STATUS "CLS EP-AWF M1 oracle requires NumPy and SciPy")
+            message(STATUS "CLS EP-AWF M1/M2 oracles require NumPy and SciPy")
         endif()
     endif()
     add_test(NAME RANSCaoTamuraCalibrationGuards COMMAND ${Python3_EXECUTABLE}

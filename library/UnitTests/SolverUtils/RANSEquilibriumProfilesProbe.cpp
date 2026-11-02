@@ -167,6 +167,7 @@ void WriteCase(std::ostream &out, const Case &c, int order, double chi)
             << ",\"source\":"; Vector(out, loads);
         out << ",\"forced_a\":"; Vector(out, p.SourceLoads(b.phi, u, fa));
         out << ",\"forced_b\":"; Vector(out, p.SourceLoads(b.phi, u, fb));
+        out << ",\"forced_scalar\":"; Vector(out, p.SourceLoads(b.phi, u, {.03, 0}));
         out << ",\"mean_only\":"; Vector(out, old);
         out << ",\"redistribution\":"; Vector(out, red);
         out << ",\"flux_action\":"; Vector(out, fl);
