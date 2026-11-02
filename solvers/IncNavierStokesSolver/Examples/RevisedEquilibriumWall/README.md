@@ -10,8 +10,9 @@ coordinates `(x,y)` represent physical `(x,z)` and variables `(u,v)` represent
 This M3 backend solves one supplied nonlinear stage in serial on affine,
 axis-aligned, canonically ordered quadrilaterals. The mesh must have a complete
 element boundary at the constant matching height H. Polynomial bases are
-Modified_A, with equal degrees in both directions and degree at least two;
-the supplied fixtures use velocity/scalar degree p and pressure degree p−2.
+Modified_A, with equal degrees in both directions and each field's degree at
+least two. The supplied fixtures use velocity/scalar degree p and pressure
+degree p−2, with p at least four.
 The dense coupled backend accepts at most 3,000 unknowns. Unsupported meshes
 and MPI partitions are rejected. Native IMEX stepping, restart, three-dimensional
 fields and curved geometry belong to subsequent milestones.
@@ -87,6 +88,8 @@ outer u,v,eps_tilde,p; full k; and inner u_w,v_w,pi_w. Both pressure outputs
 use `pi=p_mechanical/rho+2k/3`. The `.patch.json` file retains the complete
 stage state/history, residual blocks, physical mass-dual norms, constraint defects,
 sampled K and forcing. Inner histories remain present when condensation is on.
+The independent validator also reports residuals, state errors and storage
+errors with the physical scales frozen in the M0 contract.
 
 To generate an evolving manufactured case, import `evolving_session` from
 [cls_epawf_m3_cases.py](../../Tests/RANS/cls_epawf_m3_cases.py) and call it with

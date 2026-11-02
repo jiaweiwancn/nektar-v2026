@@ -459,7 +459,7 @@ def check_evolving(report, metadata, expected_solved):
     degree = metadata["layout"][0]["mesh"][0]["degree"]
     z, weights = np.polynomial.legendre.leggauss(14)
     L2, rateL2, inner_rate_squared = np.zeros(6), np.zeros(4), np.zeros(3)
-    source_rate_error = 0.
+    rate_error_squared = np.zeros(4)
     for block, space in enumerate(spaces):
         for e in space.elements:
             a, b, c, d = e["bounds"]
@@ -476,12 +476,21 @@ def check_evolving(report, metadata, expected_solved):
                 rateL2[block] += np.sum(W*expected**2)
                 if block < 3 and d <= H:
                     inner_rate_squared[block] += np.sum(W*expected**2)
-                source_rate_error = max(source_rate_error, float(np.sqrt(np.sum(W*(rate-expected)**2))))
+                rate_error_squared[block] += np.sum(W*(rate-expected)**2)
     L2, rateL2 = np.sqrt(L2), np.sqrt(rateL2)
     scaled = scaled_residual_norms(report, metadata)
+    us, epsilon_scale = math.sqrt(K/parameters[6]), (K/parameters[6])**1.5/(parameters[7]*H)
+    field_scales = [us, us, K, epsilon_scale, us*us, us*us]
+    volumes = [sum((e["bounds"][1]-e["bounds"][0])*(e["bounds"][3]-e["bounds"][2])
+                   for e in space.elements) for space in spaces]
+    state_scales = np.array(field_scales)*np.sqrt(volumes)
+    scaled_L2 = L2/state_scales
+    scaled_rate_error = np.sqrt(rate_error_squared)/(state_scales[:4]*us/H)
+    source_rate_error = float(max(np.sqrt(rate_error_squared)))
     if degree >= 6:
         require(max(scaled) < 1e-9, "Resolved evolving manufactured stage exceeds the frozen scaled residual tolerance")
-        require(max(L2) < 1e-8 and source_rate_error < 1e-8, "Manufactured state/storage failed to converge")
+        require(max(scaled_L2) < 1e-9 and max(scaled_rate_error) < 1e-9, "Manufactured state/storage failed to converge in physical mass norms")
+    near(report["residual_norms"][6], 0., "one_global_pressure_gauge", us*us, 1e-9)
     inner_rate = np.sqrt(inner_rate_squared)
     require(inner_rate[0]+inner_rate[1] > 1e-4 and inner_rate[2] > 1e-7, "Manufactured inner storage vanished")
     if degree >= 6:
@@ -500,7 +509,7 @@ def check_evolving(report, metadata, expected_solved):
             inactive_yap_points += int(not active)
     require(active_yap_points > 0 and inactive_yap_points > 0, "Manufactured case missed a Yap branch")
     trace, no_slip, k_ground, traction, k_flux, epsilon = [], [], [], [], [], []
-    for x in (.13, .47, .91):
+    for x in (z+1)/2:
         uw, guw = v.evaluate(state, offsets[0], x, H, -1)
         ww, gww = v.evaluate(state, offsets[1], x, H, -1)
         uo, guo = v.evaluate(state, offsets[0], x, H, 1)
@@ -530,10 +539,13 @@ def check_evolving(report, metadata, expected_solved):
         k_ground.append(abs((parameters[0]+float(profile.a)*max(-float(profile.zv), 0))*g0[1]))
         near(ww, .01+.005*math.cos(time), "manufactured_shared_nonzero_normal_velocity")
     if degree >= 6:
-        for name, value in (("trace", trace), ("traction", traction), ("k_flux", k_flux),
-                            ("epsilon", epsilon), ("ground_velocity", no_slip), ("ground_k_flux", k_ground)):
-            near(value, np.zeros(3), "evolving_interface_"+name, tolerance=1e-8)
-    near(trace, np.zeros(3), "one_shared_velocity_k_trace")
+        for name, value, scale in (("trace", trace, min(us, K)), ("traction", traction, us*us),
+                                   ("k_flux", k_flux, K*us), ("epsilon", epsilon, epsilon_scale),
+                                   ("ground_velocity", no_slip, us), ("ground_k_flux", k_ground, K*us)):
+            # A maximum over the full interface Gauss rule bounds its physical
+            # surface norm (unit area in this fixture), with frozen field scales.
+            near(value, np.zeros(len(value)), "evolving_interface_"+name, scale, 1e-9)
+    near(trace, np.zeros(len(trace)), "one_shared_velocity_k_trace")
     # Independently integrate regional mass budgets using physical traces and
     # volume derivatives. The nonzero shared normal flow crosses H only once.
     mass_budgets = []
@@ -563,6 +575,7 @@ def check_evolving(report, metadata, expected_solved):
             "scaled_block_residual_norms": scaled, "active_yap_normal_points": active_yap_points,
             "inactive_yap_normal_points": inactive_yap_points,
             "field_L2_errors": L2.tolist(), "storage_rate_L2": rateL2.tolist(),
+            "scaled_field_L2_errors": scaled_L2.tolist(), "scaled_storage_rate_L2_errors": scaled_rate_error.tolist(),
             "inner_storage_rate_L2": inner_rate.tolist(), "regional_mass_budgets": mass_budgets,
             "storage_rate_L2_error": source_rate_error, "shared_trace_max": max(trace),
             "traction_jump_max": max(traction), "k_diffusive_flux_jump_max": max(k_flux),
