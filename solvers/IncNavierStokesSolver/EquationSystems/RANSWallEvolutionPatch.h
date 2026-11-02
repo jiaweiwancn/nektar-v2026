@@ -22,7 +22,7 @@ struct RANSWallEvolutionData
     explicit RANSWallEvolutionData(int dimension);
 };
 
-/** Flat 2D/3D native CG stage with globally ordered replicated coefficients.
+/** Analytically mapped 2D/3D native CG stage with globally ordered replicated coefficients.
  * Physical cell quadrature is owned once across the supplied communicator;
  * residuals are collectively assembled and one root solves the dense stage.
  * This bounded reference backend is deliberately distinct from a scalable
@@ -120,7 +120,8 @@ private:
     SolverUtils::AWFProfileOptions m_options;
     std::vector<WallMatrix> m_mass;
     mutable std::array<WallMatrix,2> m_regionalMass;
-    mutable Vector m_boundaryFlux;
+    mutable Vector m_boundaryFlux,m_boundaryDirection;
+    mutable double m_boundaryCost=0;
     mutable double m_boundaryCorrection=0;
     Vector m_volumes;
     std::vector<Vector> m_constants;

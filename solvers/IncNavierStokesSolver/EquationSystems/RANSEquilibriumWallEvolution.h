@@ -50,7 +50,9 @@ private:
     bool m_condensed=false,m_neutral=true;
     std::string m_restart,m_checkpointBase,m_lastCheckpoint,m_signature;
     bool m_chartFunctions=false;
-    Vector m_roughnessBudget,m_energyBudget;
+    Vector m_roughnessBudget,m_energyBudget,m_finalStageLoads;
+    std::vector<Vector> m_regionalStageLoads;
+    std::map<int,double> m_finalStageConstraints;
     static std::string solverTypeLookupId;
 };
 }

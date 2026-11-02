@@ -192,6 +192,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     }
     Require(!inner.empty() && !outer.empty() && Same(lower[2],0),"incomplete wall/outer physical domains");
     m_mapping.Validate(lower,upper,.1);
+    Require(m_mapping.PlanarConstantHeight() || parameters.chi==0,"M5 curved/variable-H runs require chi=0; transition sensors are a later milestone");
     for(const auto &point:std::vector<RANSWallCoordinate>{lower,upper,{lower[0],upper[1],0},{upper[0],lower[1],0}})
     {
         const double minH=m_mapping.At(point).height-std::abs(m_mapping.heightAmplitude)*2;
@@ -384,14 +385,40 @@ std::map<int,double> RANSWallEvolutionPatch::ExternalConstraints(double time,con
                     for(int a=0;a<m_dimension;++a)for(int j=0;j<face.test.ids.size();++j)
                         m_boundaryFlux[offset[a]+face.test.ids[j]]+=face.weight*face.area[PhysicalAxis(a)]*face.test.phi[j];
         }
+        if(m_boundaryDirection.empty())
+        {
+            // Physical surface-L2 projection subject to the one exact net-flux
+            // constraint. Fix edge/corner and side traces; distribute the
+            // correction over all Cartesian top-face interior modes.
+            const auto excluded=fields[0]->Boundary([](const RANSWallCoordinate&){return 0.;},
+                [&](int axis,int side,const RANSWallGlobalField::Element &e){return axis!=2?Same(side?e.upper[axis]:e.lower[axis],side?upper[axis]:lower[axis]):!side && Same(e.lower[2],0);});
+            const auto top=fields[0]->Boundary([](const RANSWallCoordinate&){return 0.;},
+                [&](int axis,int side,const RANSWallGlobalField::Element &e){return axis==2 && side && Same(e.upper[2],upper[2]);});
+            std::vector<int> ids;std::map<int,int> index;
+            for(auto [id,value]:top)if(!excluded.count(id)){(void)value;index[id]=ids.size();ids.push_back(id);}
+            Require(!ids.empty(),"no top interior modes for conservative boundary projection");
+            WallMatrix mass(ids.size(),Vector(ids.size()));double area=0;
+            for(const auto &face:Surface(0,2,upper[2],1))
+            {
+                const double measure=face.weight*std::hypot(face.area[0],face.area[1],face.area[2]);area+=measure;
+                for(int i=0;i<face.test.ids.size();++i)if(index.count(face.test.ids[i]))
+                    for(int j=0;j<face.test.ids.size();++j)if(index.count(face.test.ids[j]))
+                        mass[index.at(face.test.ids[i])][index.at(face.test.ids[j])]+=measure*face.test.phi[i]*face.test.phi[j];
+            }
+            Factor factor(mass);m_boundaryDirection.assign(DifferentialSize(),0.);double denominator=0;
+            for(int a=0;a<m_dimension;++a)
+            {
+                Vector load;for(int id:ids)load.push_back(m_boundaryFlux[offset[a]+id]);
+                const auto direction=factor.Apply(load);
+                for(int j=0;j<ids.size();++j){m_boundaryDirection[offset[a]+ids[j]]=direction[j];denominator+=load[j]*direction[j];}
+            }
+            Require(denominator>0 && area>0,"singular conservative boundary flux constraint");
+            for(double &v:m_boundaryDirection)v/=denominator;
+            m_boundaryCost=1/std::sqrt(denominator*area);
+        }
         double flux=0;for(auto [row,value]:result)if(row<offset[K()])flux+=m_boundaryFlux[row]*value;
-        const auto excluded=fields[0]->Boundary([](const RANSWallCoordinate&){return 0.;},
-            [&](int axis,int side,const RANSWallGlobalField::Element &e){return axis!=2?Same(side?e.upper[axis]:e.lower[axis],side?upper[axis]:lower[axis]):!side && Same(e.lower[2],0);});
-        int chosen=-1;double largest=0;const int normalBlock=m_dimension-1;
-        for(auto [row,value]:result)if(row>=offset[normalBlock] && row<offset[normalBlock]+size[normalBlock] && !excluded.count(row-offset[normalBlock]) && std::abs(m_boundaryFlux[row])>largest)
-        {(void)value;chosen=row;largest=std::abs(m_boundaryFlux[row]);}
-        Require(chosen>=0,"no top face interior mode for conservative boundary projection");
-        m_boundaryCorrection=-flux/m_boundaryFlux[chosen];result[chosen]+=m_boundaryCorrection;
+        m_boundaryCorrection=std::abs(flux)*m_boundaryCost;
+        for(auto &[row,value]:result)if(row<offset[K()])value-=flux*m_boundaryDirection[row];
     }
     return result;
 }

@@ -54,8 +54,16 @@ add_executable(RANSEquilibriumEvolutionProbe
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp)
 target_include_directories(RANSEquilibriumEvolutionProbe PRIVATE ${RANS_SOURCE_ROOT}/solvers)
 target_link_libraries(RANSEquilibriumEvolutionProbe RANSKernels ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
+add_executable(RANSCurvedWallProbe
+    ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSCurvedWallProbe.cpp
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.cpp
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallPatch.cpp
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.cpp
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp)
+target_include_directories(RANSCurvedWallProbe PRIVATE ${RANS_SOURCE_ROOT}/solvers)
+target_link_libraries(RANSCurvedWallProbe RANSKernels ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    foreach(rans_target RANSKernels RANSWallLayerProbe RANSKernelProbe RANSWallGeometryProbe RANSCurvedGeometryProbe RANSObservationKernelProbe RANSStressTangentAudit RANSConstitutiveProbe RANSEquilibriumProfilesProbe RANSEquilibriumPatchProbe RANSEquilibriumTimeProbe RANSEquilibriumEvolutionProbe)
+    foreach(rans_target RANSKernels RANSWallLayerProbe RANSKernelProbe RANSWallGeometryProbe RANSCurvedGeometryProbe RANSObservationKernelProbe RANSStressTangentAudit RANSConstitutiveProbe RANSEquilibriumProfilesProbe RANSEquilibriumPatchProbe RANSEquilibriumTimeProbe RANSEquilibriumEvolutionProbe RANSCurvedWallProbe)
         target_compile_options(${rans_target} PRIVATE
             -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror)
     endforeach()
@@ -276,6 +284,11 @@ if(Python3_Interpreter_FOUND)
             execute_process(COMMAND ${Python3_EXECUTABLE} -c "import numpy, scipy, sympy"
                 RESULT_VARIABLE rans_m3_dependencies OUTPUT_QUIET ERROR_QUIET)
             if(rans_m3_dependencies EQUAL 0)
+                add_test(NAME RANSCLSEPAWFM5Oracle COMMAND ${Python3_EXECUTABLE}
+                    ${CMAKE_CURRENT_LIST_DIR}/validate_cls_epawf_m5.py
+                    --build $<TARGET_FILE_DIR:RANSCurvedWallProbe>)
+                set_tests_properties(RANSCLSEPAWFM5Oracle PROPERTIES PROCESSORS 4
+                    TIMEOUT 10800 ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
                 add_test(NAME RANSCLSEPAWFM4Oracle COMMAND ${Python3_EXECUTABLE}
                     ${CMAKE_CURRENT_LIST_DIR}/validate_cls_epawf_m4.py
                     --build $<TARGET_FILE_DIR:RANSEquilibriumEvolutionProbe>)

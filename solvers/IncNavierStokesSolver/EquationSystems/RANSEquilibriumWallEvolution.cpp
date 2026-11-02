@@ -228,6 +228,13 @@ void RANSEquilibriumWallEvolution::v_DoSolve()
             m_roughnessBudget=m_patch->RoughnessBudget(m_state,m_time,m_data);
             const auto history=m_lastHistory.empty()?m_state:m_lastHistory;
             m_energyBudget=m_patch->EnergyBudget(m_state,history,m_stageAlpha,m_time,m_implicitData);
+            if(!m_lastHistory.empty())
+            {
+                m_finalStageLoads=m_patch->Residual(m_state,history,m_stageAlpha,m_stageTime,m_implicitData,false,false);
+                for(int region=0;region<2;++region)m_regionalStageLoads.push_back(
+                    m_patch->Residual(m_state,history,m_stageAlpha,m_stageTime,m_implicitData,false,false,region));
+                m_finalStageConstraints=m_patch->Constraints(m_state,m_stageTime,m_implicitData);
+            }
         }
         UpdateFields();
     }
@@ -266,7 +273,7 @@ void RANSEquilibriumWallEvolution::UpdateFields()
 }
 void RANSEquilibriumWallEvolution::v_GenerateSummary(SolverUtils::SummaryList &summary)
 {
-    SolverUtils::AddSummaryItem(summary,"Wall evolution","native IMEX, flat multiregion CG");
+    SolverUtils::AddSummaryItem(summary,"Wall evolution","native IMEX, mapped multiregion CG");
     SolverUtils::AddSummaryItem(summary,"Physical dimension",m_patch->Dimension());SolverUtils::AddSummaryItem(summary,"Global unknowns",m_patch->Size());
     SolverUtils::AddSummaryItem(summary,"MPI backend","replicated global coefficients, owned-cell collective assembly");
     SolverUtils::AddSummaryItem(summary,"Correction weights","chi="+std::to_string(m_patch->Parameters().chi)+", eta="+std::to_string(m_eta));
@@ -371,6 +378,10 @@ void RANSEquilibriumWallEvolution::WriteReport() const
         mapping.heightAmplitude,mapping.heightWaveX,mapping.heightWaveY,mapping.slopeX,mapping.slopeY,mapping.radius,mapping.amplitude,mapping.lengthX,mapping.lengthY});
     out<<",\"boundary_flux_correction\":"<<m_patch->BoundaryFluxCorrection()<<",\"roughness_budget\":";Write(out,m_roughnessBudget);
     out<<",\"energy_budget\":";Write(out,m_energyBudget);
+    out<<",\"final_stage_loads\":";Write(out,m_finalStageLoads);
+    out<<",\"regional_stage_loads\":";WriteRows(out,m_regionalStageLoads);
+    out<<",\"final_stage_constraints\":[";constraintCount=0;
+    for(auto [row,value]:m_finalStageConstraints){if(constraintCount++)out<<',';Write(out,{static_cast<double>(row),value});}out<<']';
     out<<",\"fields\":[";
     for(int b=0;b<m_patch->Gauge();++b)
     {
