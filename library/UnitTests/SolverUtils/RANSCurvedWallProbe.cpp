@@ -252,7 +252,9 @@ int main(int argc,char **argv)
         Require(argc==3,"usage: RANSCurvedWallProbe SESSION.xml REPORT.json");
         auto world=LibUtilities::SessionReader::CreateInstance(2,argv);world->InitSession();
         char program[]="curved-wall-probe";char *args[]{program,nullptr};
-        auto filenames=world->GetFilenames();
+        std::vector<std::string> filenames{argv[1]};
+        // SessionReader prepends optimiser sidecars to GetFilenames(). Keep
+        // the original XML as the clone's first input on repeated runs.
         auto serial=LibUtilities::SessionReader::CreateInstance(1,args,filenames,LibUtilities::CommSerial::create(1,args));serial->InitSession();
         serial->SetSolverInfo("GlobalSysSoln","DirectFull");const auto graph=SpatialDomains::MeshGraphIO::Read(serial);const int d=graph->GetMeshDimension();
         RANSWallPatchParameters parameters;parameters.chi=0;
