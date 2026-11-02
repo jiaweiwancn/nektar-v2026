@@ -282,6 +282,12 @@ void TransitionAudit(std::ostream &o,const RANSWallEvolutionPatch &p,const Vecto
         o<<",\"budgets\":";Write(o,Vector{correction,budget,expected,profile->RedistributionFlux(0),profile->RedistributionFlux(parameters.geometry.height)});
         const auto parts=p.ForcingParts(s,q,time,data);o<<",\"forcing_parts\":[";Write(o,parts[0]);o<<',';Write(o,parts[1]);o<<"]}";
     }o<<']';
+    auto low=s;const auto constant=p.fields[p.K()]->Project([](const Vec&){return 1.;});
+    for(int i=0;i<p.size[p.K()];++i)low[p.offset[p.K()]+i]=1e-10*constant[i];
+    const Vec inactive{(p.lower[0]-3.)/2,p.Dimension()==3?.37:0.,parameters.geometry.sampleHeight};
+    const auto fallback=p.StateProfile(low,inactive,time,data);
+    o<<",\"inactive_low_K\":";Write(o,Vector{fallback->K(),fallback->Reference().weight,fallback->Reference().cutoff,
+        static_cast<double>(fallback->Reference().cutoffIterations),fallback->Reference().margin,fallback->Reference().reynolds});
     // Equal-input recovery uses two instances of this same curved CG patch.
     // Both chi and eta are zero; this is not a different upstream trajectory.
     parameters.chi=0;serial->SetSolverInfo("RANSWallTransition","Fixed");
@@ -319,7 +325,8 @@ void TransitionAudit(std::ostream &o,const RANSWallEvolutionPatch &p,const Vecto
             if(essential.count(row) && block!=p.Epsilon())continue;
             direction[row]=(block==p.Epsilon()?.001:.01)*std::sin(.71*(i+1));
         }
-        if(emitted++)o<<',';o<<"{\"block\":"<<block<<",\"vector\":";Write(o,direction);o<<",\"actions\":[";int level=0;
+        if(emitted++){o<<',';}
+        o<<"{\"block\":"<<block<<",\"vector\":";Write(o,direction);o<<",\"actions\":[";int level=0;
         for(double h:{8e-4,4e-4,2e-4,1e-4,5e-5,2e-6})
         {if(level++)o<<',';o<<"{\"step\":"<<h<<",\"value\":";Write(o,p.DirectionalAction(s,direction,history,alpha,time,data,h));o<<'}';}
         o<<"]}";

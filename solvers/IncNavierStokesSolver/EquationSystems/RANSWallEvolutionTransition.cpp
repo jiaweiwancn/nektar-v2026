@@ -35,6 +35,7 @@ void RANSWallEvolutionPatch::InitialiseTransition(const LibUtilities::SessionRea
     const std::array<std::string,7> names{"Velocity","Increment","Normal","K","Epsilon","Pressure","Convection"};
     for(int j=0;j<7;++j)session->LoadParameter("RANSWallSensorWeight"+names[j],c.weights[j],1.);
     m_transition.Validate();
+    Require(c.reynoldsOff>=m_options.minimumReynolds,"the smooth Reynolds gate must stay inside the declared high-Re branch");
     ValidateEquilibriumAWFTransitionSupport(m_mapping,m_transition);
     Require(m_mapping.heightSlopeX==0 && m_mapping.heightSlopeY==0 && m_mapping.heightAmplitude==0,
         "the flat upstream reference requires constant physical H; use the adapted baseline otherwise");

@@ -400,7 +400,8 @@ void RANSEquilibriumWallEvolution::WriteReport() const
         out<<",\"transition_samples\":[";int count=0;
         for(const auto &q:m_patch->Surface(0,2,p.geometry.height,1,8))
         {
-            if(count++)out<<',';const auto input=m_patch->TransitionInput(m_state,q.test.coordinate,m_time,m_data);
+            if(count++){out<<',';}
+            const auto input=m_patch->TransitionInput(m_state,q.test.coordinate,m_time,m_data);
             const auto v=m_patch->Transition(m_state,q.test.coordinate,m_time,m_data);
             out<<"{\"chart\":";Write(out,Vector(q.test.coordinate.begin(),q.test.coordinate.end()));
             out<<",\"gates\":";Write(out,{v.chi,v.spatial,v.state,v.admissibility,v.marginGate,v.reynoldsGate,v.d2});
