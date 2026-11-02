@@ -128,6 +128,7 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         m_session->LoadParameter("RANSWallDirectionX",m_direction[0],1.);m_session->LoadParameter("RANSWallDirectionY",m_direction[1],0.);
         m_session->LoadParameter("RANSWallNonlinearTolerance",m_tolerance,2e-12);m_session->LoadParameter("RANSWallMaxIterations",m_maximumIterations,20);
         Require(m_eta==0 || (m_neutral && m_eta==1 && m_patch->Mapping().PlanarConstantHeight()),"eta=1 is restricted to isolated flat neutral verification");
+        Require(!m_patch->TransitionEnabled() || m_eta==0,"every upstream transition/terrain run requires eta=0");
         Require(m_session->DefinesTimeIntScheme(),"evolution requires an explicit native IMEX time-integration declaration");
         const auto scheme=m_session->GetTimeIntScheme();
         Require(scheme.method=="IMEX" && scheme.variant.empty() && (scheme.order==1 || scheme.order==2),"evolution supports native IMEX orders 1/2, empty variant");m_order=scheme.order;
@@ -171,11 +172,13 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
     {
         (void)dump;m_state=m_neutral?m_patch->NeutralReference(m_ustar,m_direction):m_patch->Project(Functions("InitialConditions"),m_time);
         if(m_neutral)m_data.fixedBoundary=m_patch->FixedReferenceBoundary(m_state);
-        else if(m_patch->Mapped())m_state=m_patch->Lift(m_state,m_time,m_data);
+        else if(m_patch->Mapped() || m_patch->TransitionEnabled())m_state=m_patch->Lift(m_state,m_time,m_data);
+        if(m_neutral && m_patch->TransitionEnabled())m_state=m_patch->Lift(m_state,m_time,m_data);
         m_patch->SetReference(m_state,m_data,m_time,m_eta);m_initial=m_state;
         m_rawNorms=m_patch->Norms(m_patch->Residual(m_state,m_state,0,m_time,m_data,false),m_patch->Constraints(m_state,m_time,m_data),m_ustar);
         m_correctedNorms=m_patch->Norms(m_patch->Residual(m_state,m_state,0,m_time,m_data),m_patch->Constraints(m_state,m_time,m_data),m_ustar);
         m_implicitData=m_data;
+        if(m_patch->TransitionEnabled())m_implicitData.sensorBody=m_data.outerBody;
         for(auto *body:{&m_implicitData.innerBody,&m_implicitData.outerBody})for(auto &f:*body)f=[](const RANSWallCoordinate&,double){return 0.;};
         m_signature=PhysicsSignature();
         m_integrator=std::make_unique<RANSWallTimeIntegration>(m_order,m_timestep,
@@ -224,7 +227,7 @@ void RANSEquilibriumWallEvolution::v_DoSolve()
             if(m_checksteps>0 && m_integrator->Steps()%m_checksteps==0 && m_checkpointBase!="None")Checkpoint();
         }
         if(m_checkpointBase!="None")Checkpoint();
-        if(m_patch->Mapped())
+        if(m_patch->Mapped() || m_patch->TransitionEnabled())
         {
             m_roughnessBudget=m_patch->RoughnessBudget(m_state,m_time,m_data);
             const auto history=m_lastHistory.empty()?m_state:m_lastHistory;
@@ -383,6 +386,31 @@ void RANSEquilibriumWallEvolution::WriteReport() const
     out<<",\"regional_stage_loads\":";WriteRows(out,m_regionalStageLoads);
     out<<",\"final_stage_constraints\":[";constraintCount=0;
     for(auto [row,value]:m_finalStageConstraints){if(constraintCount++)out<<',';Write(out,{static_cast<double>(row),value});}out<<']';
+    out<<",\"upstream_transition\":"<<(m_patch->TransitionEnabled()?"true":"false");
+    if(m_patch->TransitionEnabled())
+    {
+        const auto &t=m_patch->TransitionControls();const auto &c=t.state;const auto distances=m_patch->TransitionDistances();
+        out<<",\"transition_controls\":";Write(out,{t.start,t.end,distances[0],distances[1],distances[2],
+            c.on,c.off,c.marginOff,c.marginOn,c.reynoldsOff,c.reynoldsOn});
+        out<<",\"transition_weights\":";Write(out,Vector(c.weights.begin(),c.weights.end()));
+        out<<",\"transition_reference\":";Write(out,m_patch->TransitionReference());
+        const auto trace=m_patch->DissipationTrace(m_state,m_time,m_data);out<<",\"transition_trace\":[";
+        for(int part=0;part<2;++part){if(part)out<<',';out<<'[';int count=0;
+            for(auto [id,value]:trace[part]){if(count++)out<<',';Write(out,{static_cast<double>(id),value});}out<<']';}out<<']';
+        out<<",\"transition_samples\":[";int count=0;
+        for(const auto &q:m_patch->Surface(0,2,p.geometry.height,1,8))
+        {
+            if(count++)out<<',';const auto input=m_patch->TransitionInput(m_state,q.test.coordinate,m_time,m_data);
+            const auto v=m_patch->Transition(m_state,q.test.coordinate,m_time,m_data);
+            out<<"{\"chart\":";Write(out,Vector(q.test.coordinate.begin(),q.test.coordinate.end()));
+            out<<",\"gates\":";Write(out,{v.chi,v.spatial,v.state,v.admissibility,v.marginGate,v.reynoldsGate,v.d2});
+            out<<",\"input\":";Write(out,{input.coordinate,input.budgetMargin,input.reynolds});
+            const auto &s=input.sensors;out<<",\"sensors\":[";Write(out,Vector(s.velocity.begin(),s.velocity.end()));out<<',';
+            Write(out,Vector(s.velocityDifference.begin(),s.velocityDifference.end()));out<<',';Write(out,{s.normal});out<<',';
+            Write(out,{s.k});out<<',';Write(out,{s.epsilon});out<<',';Write(out,Vector(s.pressure.begin(),s.pressure.end()));out<<',';
+            Write(out,Vector(s.convection.begin(),s.convection.end()));out<<"]}";
+        }out<<']';
+    }
     out<<",\"fields\":[";
     for(int b=0;b<m_patch->Gauge();++b)
     {

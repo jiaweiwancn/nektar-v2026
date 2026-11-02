@@ -103,6 +103,10 @@ public:
     AWFProfileValues Evaluate(double r, const AWFVector &velocity, const AWFVector &forcing) const;
     double Dissipation(double r) const;
     double RedistributionFlux(double r) const; // includes chi, normal component in physical coordinates
+    // Reuse an already qualified cutoff when only the ray-constant weight
+    // changes. A zero weight is constructed separately from the baseline,
+    // whose quadrature must not require or retain an inadmissible cutoff.
+    EquilibriumAWFProfiles Reweighted(double weight) const;
     std::vector<double> RayLoads(const std::vector<std::vector<double>> &basis,
                                  const std::vector<double> &samples) const;
     std::vector<double> SourceLoads(const std::vector<std::vector<double>> &basis,

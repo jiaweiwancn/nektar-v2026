@@ -27,6 +27,7 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
         ./EquationSystems/RANSEquilibriumWallSystem.cpp
         ./EquationSystems/RANSWallGlobalField.cpp
         ./EquationSystems/RANSWallEvolutionPatch.cpp
+        ./EquationSystems/RANSWallEvolutionTransition.cpp
         ./EquationSystems/RANSWallTimeIntegration.cpp
         ./EquationSystems/RANSEquilibriumWallEvolution.cpp
         ./EquationSystems/SmoothedProfileMethod.cpp
@@ -175,7 +176,8 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
                 EquationSystems/RANSWallFieldLayout.cpp
                 EquationSystems/RANSWallPatch.cpp
                 EquationSystems/RANSWallGlobalField.cpp
-                EquationSystems/RANSWallEvolutionPatch.cpp)
+                EquationSystems/RANSWallEvolutionPatch.cpp
+                EquationSystems/RANSWallEvolutionTransition.cpp)
         FOREACH(rans_m4_target RANSEquilibriumTimeProbe RANSEquilibriumEvolutionProbe)
             TARGET_INCLUDE_DIRECTORIES(${rans_m4_target} PRIVATE ${CMAKE_SOURCE_DIR}/solvers)
             TARGET_COMPILE_DEFINITIONS(${rans_m4_target} PRIVATE ENABLE_NEKTAR_EXCEPTIONS)

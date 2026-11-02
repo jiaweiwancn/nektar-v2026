@@ -224,6 +224,17 @@ void EquilibriumAWFProfiles::CheckHeight(double r) const
     if (!(r >= 0 && r <= m_geometry.height))
         throw std::invalid_argument("EP-AWF evaluation outside [0,H]");
 }
+EquilibriumAWFProfiles EquilibriumAWFProfiles::Reweighted(double weight) const
+{
+    Finite(weight);
+    if (!(weight>0 && weight<=1 && m_reference.weight>0))
+        throw std::invalid_argument("Reweighting requires an admissible active cutoff and 0<chi<=1");
+    auto result=*this;
+    result.m_options.requestedWeight=weight;
+    result.m_reference.requestedWeight=weight;
+    result.m_reference.weight=weight;
+    return result;
+}
 void EquilibriumAWFProfiles::GaussRule()
 {
     const int n = m_options.quadratureOrder;

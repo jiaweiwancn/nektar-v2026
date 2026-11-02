@@ -245,6 +245,87 @@ void InnerEpsilonReaction(std::ostream &o,const RANSWallEvolutionPatch &p,const 
     }o<<']';
 }
 }
+namespace
+{
+void TransitionAudit(std::ostream &o,const RANSWallEvolutionPatch &p,const Vector &s,const Vector &history,
+    double time,double alpha,const RANSWallEvolutionData &data,const LibUtilities::SessionReaderSharedPtr &serial,
+    const SpatialDomains::MeshGraphSharedPtr &graph,const LibUtilities::CommSharedPtr &comm,RANSWallPatchParameters parameters)
+{
+    const auto &c=p.TransitionControls();const auto &t=c.state;const auto distances=p.TransitionDistances();
+    o<<"{\"controls\":";Write(o,Vector{c.start,c.end,distances[0],distances[1],distances[2],
+        t.on,t.off,t.marginOff,t.marginOn,t.reynoldsOff,t.reynoldsOn});
+    o<<",\"weights\":";Write(o,Vector(t.weights.begin(),t.weights.end()));
+    o<<",\"reference\":";Write(o,p.TransitionReference());
+    const auto trace=p.DissipationTrace(s,time,data);o<<",\"trace\":[";
+    for(int part=0;part<2;++part){if(part)o<<',';o<<'[';int count=0;
+        for(auto [id,value]:trace[part]){if(count++)o<<',';Write(o,Vector{static_cast<double>(id),value});}o<<']';}o<<']';
+    o<<",\"samples\":[";int count=0;
+    for(const auto &e:p.outerVelocity->Elements())if(Same(e.lower[2],parameters.geometry.height))
+        for(double fraction:{.137,.481,.863})
+    {
+        const Vec q{e.lower[0]+fraction*(e.upper[0]-e.lower[0]),p.Dimension()==3?e.lower[1]+.37*(e.upper[1]-e.lower[1]):0.,parameters.geometry.height};
+        if(count++){o<<',';}
+        RANSWallEvolutionData zero(p.Dimension());const auto input=p.TransitionInput(s,q,time,data);
+        const auto v=p.Transition(s,q,time,data),rv=p.Transition(p.TransitionReference(),q,time,zero);
+        const auto profile=p.StateProfile(s,q,time,data);const auto &pr=profile->Reference();
+        o<<"{\"chart\":";Write(o,q);o<<",\"input\":";Write(o,Vector{input.coordinate,input.budgetMargin,input.reynolds});
+        o<<",\"gates\":";Write(o,Vector{v.chi,v.spatial,v.state,v.admissibility,v.marginGate,v.reynoldsGate,v.d2});
+        o<<",\"reference_d2\":"<<rv.d2<<",\"reference_state\":"<<rv.state<<",\"sensors\":[";
+        const auto &a=input.sensors;Write(o,a.velocity);o<<',';Write(o,a.velocityDifference);o<<',';Write(o,Vector{a.normal,a.k,a.epsilon});o<<',';
+        Write(o,a.pressure);o<<',';Write(o,a.convection);o<<"],\"profile\":";
+        Write(o,Vector{profile->K(),pr.cutoff,static_cast<double>(pr.cutoffIterations),pr.weight,profile->Dissipation(0),profile->Dissipation(parameters.geometry.height)});
+        double correction=0,budget=0,expected=0;
+        for(const auto &z:profile->Quadrature())
+        {const auto value=profile->AtProduction(z.r,0);const auto old=profile->Original().OriginalDissipation(z.r);
+            correction+=z.weight*z.jacobian*value.redistribution;budget+=z.weight*z.jacobian*(value.kSource+old);
+            expected+=z.weight*z.jacobian*pr.weight*(old-value.referenceProduction);}
+        o<<",\"budgets\":";Write(o,Vector{correction,budget,expected,profile->RedistributionFlux(0),profile->RedistributionFlux(parameters.geometry.height)});
+        const auto parts=p.ForcingParts(s,q,time,data);o<<",\"forcing_parts\":[";Write(o,parts[0]);o<<',';Write(o,parts[1]);o<<"]}";
+    }o<<']';
+    // Equal-input recovery uses two instances of this same curved CG patch.
+    // Both chi and eta are zero; this is not a different upstream trajectory.
+    parameters.chi=0;serial->SetSolverInfo("RANSWallTransition","Fixed");
+    RANSWallEvolutionPatch baseline(serial,graph,comm,parameters,p.Mapping());
+    serial->SetSolverInfo("RANSWallTransition","Upstream");
+    RANSWallEvolutionPatch disabled(serial,graph,comm,parameters,p.Mapping());
+    // The generic independent outer data are original-AWF values at corners.
+    auto common=s;const double K0=parameters.model.Q()*.16;
+    std::vector<RANSWallEvolutionFunction> original;
+    for(int b=0;b<p.Gauge();++b)original.push_back([&,b](const Vec &q,double){
+        if(b==p.Epsilon()){
+            const double K=K0+.02*q[0]+.03*q[1];return std::pow(K,1.5)/(2.55*parameters.geometry.height)+.01*(q[2]-parameters.geometry.height);}
+        return p.fields[b]->Point(q).Value(s,p.offset[b]);});
+    auto baselineData=data;baselineData.boundary[p.Epsilon()]=original[p.Epsilon()];
+    common=baseline.Project(original,time);common=baseline.Lift(common,time,baselineData);
+    const auto a=baseline.Residual(common,history,alpha,time,baselineData,false,false),b=disabled.Residual(common,history,alpha,time,baselineData,false,false);
+    Vector delta(a.size());for(int i=0;i<static_cast<int>(a.size());++i)delta[i]=a[i]-b[i];
+    o<<",\"equal_input_baseline\":{\"maximum\":"<<Max(delta)<<",\"state\":";Write(o,common);
+    o<<",\"fixed_operator\":";Write(o,a);o<<",\"disabled_transition_operator\":";Write(o,b);
+    const auto ba=baseline.Constraints(common,time,baselineData),bb=disabled.Constraints(common,time,baselineData);
+    double traceError=0;Require(ba.size()==bb.size(),"baseline constraint size differs");
+    for(auto [row,value]:ba)traceError=std::max(traceError,std::abs(value-bb.at(row)));
+    o<<",\"constraint_maximum\":"<<traceError<<'}';
+    // Full coupled actions include K/cutoff, every sensor and implicit trace
+    // columns. The independent Python oracle also reconstructs weak loads.
+    o<<",\"directions\":[";
+    const auto essential=p.Constraints(s,time,data);int emitted=0;
+    for(int block=0;block<=p.OuterPressure();++block)
+    {
+        if(block==p.InnerPressure())continue;
+        Vector direction(s.size());
+        for(int i=0;i<p.size[block];++i)
+        {
+            const int row=p.offset[block]+i;
+            if(essential.count(row) && block!=p.Epsilon())continue;
+            direction[row]=(block==p.Epsilon()?.001:.01)*std::sin(.71*(i+1));
+        }
+        if(emitted++)o<<',';o<<"{\"block\":"<<block<<",\"vector\":";Write(o,direction);o<<",\"actions\":[";int level=0;
+        for(double h:{8e-4,4e-4,2e-4,1e-4,5e-5,2e-6})
+        {if(level++)o<<',';o<<"{\"step\":"<<h<<",\"value\":";Write(o,p.DirectionalAction(s,direction,history,alpha,time,data,h));o<<'}';}
+        o<<"]}";
+    }o<<"]}";
+}
+}
 int main(int argc,char **argv)
 {
     try
@@ -258,6 +339,7 @@ int main(int argc,char **argv)
         auto serial=LibUtilities::SessionReader::CreateInstance(1,args,filenames,LibUtilities::CommSerial::create(1,args));serial->InitSession();
         serial->SetSolverInfo("GlobalSysSoln","DirectFull");const auto graph=SpatialDomains::MeshGraphIO::Read(serial);const int d=graph->GetMeshDimension();
         RANSWallPatchParameters parameters;parameters.chi=0;
+        serial->LoadParameter("RANSWallChi",parameters.chi,0.);
         serial->LoadParameter("RANSWallHeight",parameters.geometry.height,2.);serial->LoadParameter("RANSWallRoughness",parameters.geometry.roughness,.1);
         serial->LoadParameter("Kinvis",parameters.geometry.molecularNu,1.5e-5);serial->LoadParameter("RANSWallSampleHeight",parameters.geometry.sampleHeight,1.);
         serial->LoadParameter("RANSWallTailStart",parameters.geometry.tailStart,1.);serial->LoadParameter("RANSWallTangentialOrder",parameters.tangentialOrder,12);
@@ -294,12 +376,13 @@ int main(int argc,char **argv)
         data.outerEpsilonSource=[](const Vec &p,double){return .01*(1+p[0]+p[1]+p[2]);};
         const auto state=patch.Project(functions,time);auto history=state;for(int i=0;i<patch.DifferentialSize();++i)history[i]*=.97;
         const auto constraints=patch.Constraints(state,time,data);const auto lifted=patch.Lift(state,time,data);
-        const auto raw=patch.Residual(state,history,alpha,time,data,false,false),inner=patch.Residual(state,history,alpha,time,data,false,false,0),outer=patch.Residual(state,history,alpha,time,data,false,false,1);
+        const auto operatorState=patch.TransitionEnabled()?lifted:state;
+        const auto raw=patch.Residual(operatorState,history,alpha,time,data,false,false),inner=patch.Residual(operatorState,history,alpha,time,data,false,false,0),outer=patch.Residual(operatorState,history,alpha,time,data,false,false,1);
         Vector delta(raw.size());for(int i=0;i<static_cast<int>(raw.size());++i)delta[i]=inner[i]+outer[i]-raw[i];
         Require(Max(delta)<2e-10*std::max(1.,Max(raw)),"regional raw residuals do not sum");
-        const auto roughness=patch.RoughnessBudget(state,time,data),energy=patch.EnergyBudget(state,history,alpha,time,data);
+        const auto roughness=patch.RoughnessBudget(operatorState,time,data),energy=patch.EnergyBudget(operatorState,history,alpha,time,data);
         std::ostringstream out;out<<std::setprecision(17)<<"{\"schema\":1,\"dimension\":"<<d<<",\"ranks\":"<<world->GetComm()->GetSize()
-            <<",\"chi\":0,\"eta\":0,\"invariant_partition_fixture\":"<<(invariant?"true":"false")<<",\"time\":"<<time<<",\"alpha\":"<<alpha<<",\"function_coordinates\":\"Chart\",\"parameters\":";
+            <<",\"chi\":"<<parameters.chi<<",\"eta\":0,\"invariant_partition_fixture\":"<<(invariant?"true":"false")<<",\"time\":"<<time<<",\"alpha\":"<<alpha<<",\"function_coordinates\":\"Chart\",\"parameters\":";
         Write(out,Vector{parameters.geometry.molecularNu,H,parameters.geometry.roughness,parameters.geometry.sampleHeight,parameters.geometry.tailStart,K,parameters.model.Q(),parameters.model.Kappa()});
         out<<",\"map_parameters\":";Write(out,MapParameters(mapping));out<<",\"quadrature_orders\":";Write(out,Vector{static_cast<double>(parameters.tangentialOrder),static_cast<double>(parameters.normalOrder)});
         out<<",\"lower\":";Write(out,patch.lower);out<<",\"upper\":";Write(out,patch.upper);out<<",\"offsets\":[";
@@ -319,8 +402,9 @@ int main(int argc,char **argv)
             out<<"{\"chart\":";Write(out,q);out<<",\"force\":";Write(out,patch.CartesianForcing(lifted,q,time,data));out<<",\"sampled_k\":"<<patch.SampleK(lifted,q)<<'}';
         }
         out<<"],\"bounded_quadrature\":";BoundedQuadrature(out,patch);out<<",\"physical_masses\":";Masses(out,patch);
-        out<<",\"weak_metric\":";WeakMetric(out,patch);out<<",\"interface\":";Interface(out,patch,lifted);
-        out<<",\"inner_epsilon_diagnostic\":";InnerEpsilonReaction(out,patch,lifted,history,alpha);
+        out<<",\"weak_metric\":";WeakMetric(out,patch);
+        if(patch.TransitionEnabled()){out<<",\"transition\":";TransitionAudit(out,patch,lifted,history,time,alpha,data,serial,graph,world->GetComm(),parameters);}
+        else{out<<",\"interface\":";Interface(out,patch,lifted);out<<",\"inner_epsilon_diagnostic\":";InnerEpsilonReaction(out,patch,lifted,history,alpha);}
         out<<",\"data_definitions\":{\"coordinates\":\"q1,q2,rho; fixed physical rK uses rhoK=rK/scale\",\"u\":\"(.1+.03*q1+.02*q2)*rho\",\"v_3D\":\".04*rho+.01*q1*q2*rho\",\"w\":\".02*rho+.01*(q1+q2)*rho*(Z-rho)\",\"k\":\"K0+.02*q1+.03*q2-.02*(rho-rK)\",\"epsilon_seed\":\"(K0+.02*q1+.03*q2-.02*(rK/scale-rK))^1.5/(2.55*H(q))+.01*(rho-H0)\",\"pi_inner\":\"-.01*q1+.015*q2+.02*rho\",\"pi_outer\":\".04*q1+.03*q2+.05*rho\",\"body_inner_x\":\".01+.02*q1\",\"body_inner_y_3D\":\".015-.01*q2+.02*rho\",\"body_inner_z\":\"-.02+.03*rho\",\"body_outer_x\":\".04*q1+.01*rho\",\"body_outer_y_3D\":\".02*q2-.01*rho\",\"body_outer_z\":\"-.03+.02*rho\",\"source_inner_k\":\".03+.01*q1+.04*q2+.02*rho\",\"source_outer_k\":\"-.02+.01*q1+.02*q2+.03*rho\",\"source_outer_epsilon\":\".01*(1+q1+q2+rho)\",\"epsilon_diagnostic\":\"inner flux=U*Ew, source=0, reaction=alpha*(Ew-Ew_history)+div(U*Ew); no inner epsilon PDE\"}}\n";
         if(world->GetComm()->GetRank()==0){std::ofstream file(argv[2]);file<<out.str();Require(static_cast<bool>(file),"cannot write curved wall probe JSON");}
         world->Finalise();return 0;

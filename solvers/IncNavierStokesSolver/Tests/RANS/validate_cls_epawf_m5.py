@@ -97,7 +97,7 @@ def forcing(raw,state,point,fields=None,include_body=True):
     return P@value
 
 
-def residual_oracle(raw,normal_order=24,tangential_order=None,outer_order=None,verify=True):
+def residual_oracle(raw,normal_order=24,tangential_order=None,outer_order=None,verify=True,weight_function=None,return_loads=False):
     """Complete all-field conservative weak operator, including unmasked rows."""
     f=spaces(raw);d=raw['dimension'];off=raw['offsets'];mapping=raw['map_parameters']
     nu,H,rough,rK,rm,K0,qstar,kappa=raw['parameters']
@@ -124,7 +124,8 @@ def residual_oracle(raw,normal_order=24,tangential_order=None,outer_order=None,v
             production=-np.sum(reynolds*G,axis=(1,2));stress=(nu+nt)[:,None,None]*S-pressure[:,None,None]*np.eye(3)
             ea=float(profile.k)**1.5/(2.55*np.maximum(r,float(profile.ze)))
             p0=np.asarray(profile.fields(r)[1],dtype=float)
-            sk=production-(1-chi)*ea-chi*p0+.03+.01*x+.04*y+.02*rho
+            local_chi=float(profile.chi)
+            sk=production-(1-local_chi)*ea-local_chi*p0+.03+.01*x+.04*y+.02*rho
             dk=nu+nt
             below=r<=rough
             body+=below[:,None]*force
@@ -159,7 +160,8 @@ def residual_oracle(raw,normal_order=24,tangential_order=None,outer_order=None,v
             if d==3:y=y0+(zt[index[1]]+1)*(y1-y0)/2;wh*=wt[index[1]]*(y1-y0)/2
             chart=np.array([x,y,0.]);metric=geometry(mapping,chart);scale=metric['scale'];height=metric['height']
             sampled=f[d].evaluate(state,off[d],[x,y,rK/scale])[0]
-            profile=Profiles(dict(geometry=[nu,height,rough,rK,rm],metric=[metric['kappa1'],metric['kappa2']],k=sampled,q=qstar,kappa=kappa,chi=chi))
+            local_chi=chi if weight_function is None else weight_function(chart,state,f)
+            profile=Profiles(dict(geometry=[nu,height,rough,rK,rm],metric=[metric['kappa1'],metric['kappa2']],k=sampled,q=qstar,kappa=kappa,chi=local_chi))
             FA=forcing(raw,state,[x,y,H],f)
             breaks={0.,float(height),rough,float(profile.rc),float(profile.ze)}
             if profile.zv>0:breaks.add(float(profile.zv))
@@ -205,9 +207,11 @@ def residual_oracle(raw,normal_order=24,tangential_order=None,outer_order=None,v
         require(abs(energy[7])<1e-10*max(1.,abs(energy[0])),'independent energy identity')
         for sample in raw['forcing_samples']:
             near(sample['force'],forcing(raw,state,sample['chart'],f),'rotating_frame_forcing',tolerance=1e-10)
-    return dict(dimension=d,maximum_block_absolute_errors=block_errors,roughness_budget=roughness.tolist(),energy_budget=energy.tolist(),
+    receipt=dict(dimension=d,maximum_block_absolute_errors=block_errors,roughness_budget=roughness.tolist(),energy_budget=energy.tolist(),
                 independent_quadrature_orders=[tangential_order,normal_order,outer_order],
                 comparison='same declared finite outer Gauss rule, independently reconstructed; higher-order inner quadrature')
+    if return_loads:receipt['residual']=result.tolist()
+    return receipt
 
 
 def dependent_epsilon(raw,state,chart,fields=None):

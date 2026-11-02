@@ -8,6 +8,8 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallPatch.h>
 #include <LibUtilities/Communication/Comm.h>
 #include <SolverUtils/Turbulence/RANSWallNormalMap.h>
+#include <SolverUtils/Turbulence/EquilibriumAWFTransition.h>
+#include <set>
 
 namespace Nektar
 {
@@ -16,6 +18,9 @@ using RANSWallEvolutionFunction=std::function<double(const RANSWallCoordinate&,d
 struct RANSWallEvolutionData
 {
     std::vector<RANSWallEvolutionFunction> innerBody,outerBody,boundary;
+    // Sensors retain the physical body force when an IMEX stage moves its
+    // prescribed load to the explicit side. Empty means use outerBody.
+    std::vector<RANSWallEvolutionFunction> sensorBody;
     RANSWallEvolutionFunction innerKSource,outerKSource,outerEpsilonSource;
     // Optional fixed native external traces, e.g. the stored neutral target.
     std::map<int,double> fixedBoundary;
@@ -58,6 +63,25 @@ public:
     std::vector<FacePoint> Surface(int block,int axis,double position,int side,int order=0) const;
     double Distance(const RANSWallCoordinate &chart) const;
     double DependentEpsilon(const Vector &state,const RANSWallCoordinate &chart) const;
+    bool TransitionEnabled() const { return m_transitionEnabled; }
+    const SolverUtils::AWFTransitionControls &TransitionControls() const { return m_transition; }
+    const Vector &TransitionReference() const { return m_transitionReference; }
+    std::array<double,3> TransitionDistances() const { return {m_sensorA,m_sensorB,m_baselineStart}; }
+    double WallCoordinate(const RANSWallCoordinate &chart) const;
+    SolverUtils::AWFTransitionInput TransitionInput(const Vector &state,const RANSWallCoordinate &chart,
+        double time,const RANSWallEvolutionData &data) const;
+    SolverUtils::AWFTransitionValues Transition(const Vector &state,const RANSWallCoordinate &chart,
+        double time,const RANSWallEvolutionData &data) const;
+    std::shared_ptr<SolverUtils::EquilibriumAWFProfiles> StateProfile(const Vector &state,
+        const RANSWallCoordinate &chart,double time,const RANSWallEvolutionData &data) const;
+    // Baseline and correction are projected separately. The second map is
+    // constrained to zero on every designated baseline face and shared mode.
+    std::array<std::map<int,double>,2> DissipationTrace(const Vector &state,double time,
+        const RANSWallEvolutionData &data) const;
+    std::array<SolverUtils::RANSVector,2> ForcingParts(const Vector &state,
+        const RANSWallCoordinate &chart,double time,const RANSWallEvolutionData &data) const;
+    Vector DirectionalAction(const Vector &state,const Vector &direction,const Vector &history,
+        double alpha,double time,const RANSWallEvolutionData &data,double step=2e-6) const;
     double BoundaryFluxCorrection() const { return m_boundaryCorrection; }
     std::vector<std::shared_ptr<RANSWallGlobalField>> fields;
     std::shared_ptr<RANSWallGlobalField> innerVelocity,outerVelocity;
@@ -98,18 +122,21 @@ private:
     struct VolumePoint { RANSWallGlobalPoint v,p,e; double weight; };
     struct Ray
     {
-        RANSWallCoordinate coordinate;double weight,cachedK=-1;
+        RANSWallCoordinate coordinate;double weight,cachedK=-1,cachedWeight=-1;
         RANSWallGlobalPoint sample,outerV,outerP,outerK;
         std::shared_ptr<SolverUtils::EquilibriumAWFProfiles> profile;
         std::vector<VolumePoint> points;
     };
     std::map<int,double> ExternalConstraints(double time,const RANSWallEvolutionData &data) const;
     Vector OwnedBodyLoad(double time,const RANSWallEvolutionData &data,int region=-1) const;
-    std::shared_ptr<SolverUtils::EquilibriumAWFProfiles> Profile(double k,const RANSWallCoordinate &chart={}) const;
+    std::shared_ptr<SolverUtils::EquilibriumAWFProfiles> Profile(double k,const RANSWallCoordinate &chart={},double weight=-1) const;
     RANSWallGlobalPoint Transform(RANSWallGlobalPoint point) const;
     WallMatrix PhysicalMass(int block,int region=-1) const;
     Vector PhysicalProject(int block,const RANSWallEvolutionFunction &function,double time) const;
-    void Refresh(const Vector &state) const;
+    void Refresh(const Vector &state,double time=0,const RANSWallEvolutionData *data=nullptr) const;
+    Vector ExternalLift(const Vector &state,double time,const RANSWallEvolutionData &data) const;
+    void InitialiseTransition(const LibUtilities::SessionReaderSharedPtr &session);
+    Vector FlatReference(double ustar,const std::array<double,2> &direction) const;
     void Broadcast(Vector &value) const;
     struct SolverCache;
     int m_dimension;
@@ -118,6 +145,13 @@ private:
     SolverUtils::RANSWallNormalMap m_mapping;
     int m_ownershipShift=0;
     SolverUtils::AWFProfileOptions m_options;
+    bool m_transitionEnabled=false,m_transitionReady=false;
+    SolverUtils::AWFTransitionControls m_transition;
+    double m_sensorA=2.5,m_sensorB=3.5,m_baselineStart=-1.25;
+    Vector m_transitionReference;
+    std::set<int> m_traceIds,m_baselineTraceIds;
+    using ProfilePair=std::array<std::shared_ptr<SolverUtils::EquilibriumAWFProfiles>,2>;
+    mutable std::map<std::array<double,3>,ProfilePair> m_profileCache;
     std::vector<WallMatrix> m_mass;
     mutable std::array<WallMatrix,2> m_regionalMass;
     mutable Vector m_boundaryFlux,m_boundaryDirection;
