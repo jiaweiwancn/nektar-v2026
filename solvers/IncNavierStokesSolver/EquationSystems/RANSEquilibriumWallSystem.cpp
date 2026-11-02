@@ -148,6 +148,16 @@ void RANSEquilibriumWallSystem::v_Output()
     report<<"{\"schema\":1,\"time\":"<<m_time<<",\"alpha\":"<<m_alpha<<",\"condensed\":"<<(m_condensed?"true":"false")
           <<",\"iterations\":"<<m_iterations<<",\"native_time_map\":false,\"state\":";write(report,m_state);
     report<<",\"history\":";write(report,m_history);report<<",\"residual\":";write(report,m_residual);
-    report<<",\"residual_norms\":";write(report,m_norms);report<<"}\n";Require(static_cast<bool>(report),"cannot write wall-stage report");
+    report<<",\"residual_norms\":";write(report,m_norms);
+    report<<",\"history_as_state_residual\":";write(report,m_patch->Residual(m_history,m_history,m_alpha,m_time,m_data));
+    report<<",\"source_probes\":[";
+    for(int j=0;j<3;++j)
+    {
+        if(j)report<<',';
+        const double x=(m_layout->Left()+m_layout->Right())/2,
+            r=m_layout->Height()+(j+1)*(m_layout->Top()-m_layout->Height())/4;
+        write(report,{x,r,m_data.outerKSource(x,r,m_time),m_data.outerEpsilonSource(x,r,m_time)});
+    }
+    report<<"]}\n";Require(static_cast<bool>(report),"cannot write wall-stage report");
 }
 }

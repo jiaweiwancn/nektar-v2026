@@ -6,6 +6,7 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallInterface.h>
 #include <SpatialDomains/MeshGraphIO.h>
 #include <fstream>
+#include <cmath>
 #include <iomanip>
 #include <iostream>
 
@@ -27,14 +28,14 @@ void GenericCase(std::ostream &out,const std::shared_ptr<RANSWallFieldLayout> &l
 {
     parameters.chi=chi;RANSWallPatch patch(layout,parameters);
     const double K=parameters.model.Q()*.16,H=parameters.geometry.height;
-    SolverUtils::AWFProfileOptions options;options.requestedWeight=chi;
-    SolverUtils::EquilibriumAWFProfiles profile(parameters.geometry,K,parameters.model,{},options);
-    const double ep=profile.Dissipation(H),Z=layout->Top();
+    const double Z=layout->Top();
     RANSWallPatchData data;std::array<RANSWallTimeFunction,6> f;
     f[0]=[](double x,double r,double){return (.1+.03*x)*r;};
     f[1]=[Z](double x,double r,double){return .02*r+.01*x*r*(Z-r);};
-    f[2]=[K,rK=parameters.geometry.sampleHeight](double,double r,double){return K+.01*(r-rK);};
-    f[3]=[ep](double,double,double){return ep;};
+    f[2]=[K,rK=parameters.geometry.sampleHeight](double x,double r,double){return K+.02*x+.01*(r-rK);};
+    f[3]=[K,H,chi,q=parameters.model.Q(),kappa=parameters.model.Kappa()](double x,double,double){
+        const double sampled=K+.02*x;
+        return (1-chi)*std::pow(sampled,1.5)/(2.55*H)+chi*std::pow(sampled/q,1.5)/(kappa*H);};
     f[4]=[](double x,double r,double){return -.01*x+.02*r;};
     f[5]=[](double x,double r,double){return .04*x+.05*r;};
     for(int b=0;b<4;++b)data.boundary[b]=f[b];
