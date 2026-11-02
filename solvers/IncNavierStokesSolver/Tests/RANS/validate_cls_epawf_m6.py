@@ -19,7 +19,7 @@ sys.dont_write_bytecode=True
 THREADS={k:'1' for k in ('OMP_NUM_THREADS','OPENBLAS_NUM_THREADS','MKL_NUM_THREADS','BLIS_NUM_THREADS')}
 os.environ.update(THREADS)
 import numpy as np
-from validate_cls_epawf_m4 import Runner as NativeRunner, state_difference
+from validate_cls_epawf_m4 import Runner as NativeRunner
 from validate_cls_epawf_m5 import spaces
 from cls_epawf_m6_cases import transition_session,arc_offset
 from cls_epawf_m3_cases import write,set_info,set_parameter
@@ -38,6 +38,17 @@ def near(a,b,name,scale=1.,tolerance=1e-10):
     require(error<=tolerance,f'{name}: {error} > {tolerance}')
     return error
 def digest(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+def state_difference(a,b,name,tolerance=1e-8):
+    require(a['dimension']==b['dimension'] and a['offsets']==b['offsets'],'incompatible physical comparison spaces')
+    off=a['offsets'];d=a['dimension'];values=[]
+    for block,field in enumerate(spaces(a)):
+        delta=np.asarray(a['state'][off[block]:off[block+1]])-b['state'][off[block]:off[block+1]]
+        scale=.4 if block<d else a['parameters'][5] if block==d else .4**3/(a['parameters'][7]*2) if block==d+1 else .16
+        value=math.sqrt(max(0.,float(delta@field.mass()@delta)))/math.sqrt(field.volume)/scale
+        require(value<tolerance,f'{name} physical block {block}: {value}');values.append(value)
+    near(a['state'][-1],b['state'][-1],name+'_gauge',tolerance=tolerance)
+    errors[name]=max(values);return values
 
 def expression_audit(run,family):
     name='expressions-'+family;directory=run.output/name;directory.mkdir()
@@ -196,6 +207,10 @@ def main():
             # Actual native startup IMEX1 on the same newly coupled operator.
             one=run.evolution('imex1-transition',generator=transition_session,family='flat',degree=3,steps=2,order=1,dt=.0025)
             sections['imex1']={'error':manufactured_error(one),'stage':stage_audit(one)};save()
+            control=run.evolution('standard-kepsilon-transition',generator=transition_session,family='flat',degree=3,
+                                  steps=2,dt=.0025,model='StandardKEpsilon')
+            sections['standard_control']={'error':manufactured_error(control),'stage':stage_audit(control),
+                                           'Q':control['parameters'][6],'kappa':control['parameters'][7]};save()
             # Fixed mesh/model/mask and common final physical time. Compare
             # actual complete coefficients to the finest native IMEX2 map;
             # this cancels spatial MMS error rather than fitting its floor.

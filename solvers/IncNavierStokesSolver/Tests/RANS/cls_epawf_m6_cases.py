@@ -47,6 +47,9 @@ def transition_session(template,destination,family='flat',degree=3,dimension=2,
         'RANSWallSensorOn':1. if probe else 100.,'RANSWallSensorOff':30. if probe else 200.,
         'RANSWallExpressionDimension':dimension,
         'RANSWallMapAmplitude':.02,'RANSWallMapLengthX':1.}
+    if model=='StandardKEpsilon':
+        parameters['Qstar']=1/math.sqrt(.09)
+        parameters['Kappa']=math.sqrt(.48*1.3/parameters['Qstar'])
     for name,value in parameters.items():set_parameter(root,name,repr(value))
     conditions=root.find('CONDITIONS')
     for node in list(conditions.findall('FUNCTION')):conditions.remove(node)
