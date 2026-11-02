@@ -712,18 +712,17 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::OwnedBodyLoad(double time
             if(body!=0.)Add(load,offset[a],q.v,body,{},q.weight);
         }
     };
-    if(region!=1)
-    {
-        if(m_transitionEnabled){for(const auto &ray:m_rays)for(const auto &q:ray.points)add(q,true);}
-        else for(const auto &q:m_bodyInner)add(q,true);
-    }
+    // Prescribed IMEX body loads use one fixed physical quadrature, including
+    // with transition sensors. Otherwise K-dependent panels would change the
+    // explicit load between the accepted state and the implicit stage.
+    if(region!=1)for(const auto &q:m_bodyInner)add(q,true);
     if(region!=0)for(const auto &q:m_outer)add(q,false);
     return load;
 }
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::ExplicitBody(const Vector &s,double time,const RANSWallEvolutionData &data) const
 {
     Vector load(Size());int bad=0;
-    try{if(m_transitionEnabled)Refresh(s,time,&data);load=OwnedBodyLoad(time,data);}catch(const std::exception &){bad=1;}
+    try{load=OwnedBodyLoad(time,data);}catch(const std::exception &){bad=1;}
     m_comm->AllReduce(bad,LibUtilities::ReduceMax);Require(!bad,"inadmissible prescribed body load on a collective rank");
     m_comm->AllReduce(load,LibUtilities::ReduceSum);Vector result(DifferentialSize());
     const auto constraints=Constraints(s,time,data);Norms(load,constraints);

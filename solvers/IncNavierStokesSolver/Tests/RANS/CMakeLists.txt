@@ -41,6 +41,8 @@ target_link_libraries(RANSEquilibriumTransitionProbe RANSKernels)
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     target_compile_options(RANSEquilibriumTransitionProbe PRIVATE -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror)
 endif()
+add_executable(RANSWallExpressionProbe ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSWallExpressionProbe.cpp)
+target_link_libraries(RANSWallExpressionProbe ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
 add_executable(RANSEquilibriumPatchProbe
     ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSEquilibriumPatchProbe.cpp
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.cpp
