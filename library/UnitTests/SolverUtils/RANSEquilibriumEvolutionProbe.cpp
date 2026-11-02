@@ -141,7 +141,10 @@ int main(int argc,char **argv)
             }
         }
         bytes<<"],\"pressure_divergence\":";Rows(bytes,B);bytes<<",\"free_velocity\":[";
-        for(int i=0;i<free.size();++i){if(i)bytes<<',';bytes<<free[i];}bytes<<"],\"generic_cases\":[";
+        for(int i=0;i<free.size();++i){if(i)bytes<<',';bytes<<free[i];}bytes<<']';
+        if(world->GetComm()->GetRank()==0)
+        {std::ofstream layout(std::string(argv[2])+".layout.json");layout<<bytes.str()<<"}\n";}
+        bytes<<",\"generic_cases\":[";
         int count=0;for(double chi:{0.,.37,1.}){if(count++)bytes<<',';Generic(bytes,serial,graph,world->GetComm(),parameters,chi);}bytes<<"]}\n";
         if(world->GetComm()->GetRank()==0){std::ofstream output(argv[2]);output<<bytes.str();Require(static_cast<bool>(output),"cannot write evolution probe report");}
         world->Finalise();return 0;
