@@ -23,6 +23,7 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
         ./EquationSystems/RANSHistory.cpp
         ./EquationSystems/RANSWallFieldLayout.cpp
         ./EquationSystems/RANSWallPatch.cpp
+        ./EquationSystems/RANSWallInterface.cpp
         ./EquationSystems/SmoothedProfileMethod.cpp
         ./EquationSystems/VCSMapping.cpp
         ./EquationSystems/Extrapolate.cpp

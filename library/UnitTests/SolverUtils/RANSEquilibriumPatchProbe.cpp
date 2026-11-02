@@ -3,6 +3,7 @@
 // Copyright (c) 2026 Nektar++ contributors.
 ///////////////////////////////////////////////////////////////////////////////
 #include <IncNavierStokesSolver/EquationSystems/RANSWallPatch.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallInterface.h>
 #include <SpatialDomains/MeshGraphIO.h>
 #include <fstream>
 #include <iomanip>
@@ -15,6 +16,12 @@ void Write(std::ostream &out,const Vector &v)
     out << '[';
     for(int i=0;i<v.size();++i) { if(i)out<<',';out<<v[i]; }
     out << ']';
+}
+void WriteMatrix(std::ostream &out,const RANSWallAlgebra::DenseMatrix &m)
+{
+    out<<'[';
+    for(int i=0;i<m.size();++i){if(i)out<<',';Write(out,m[i]);}
+    out<<']';
 }
 int main(int argc,char **argv)
 {
@@ -51,7 +58,8 @@ int main(int argc,char **argv)
             const auto map=field->Field()->GetLocalToGlobalMap();
             for(int e=0;e<field->Elements().size();++e)
             {
-                if(e)out<<',';const auto &el=field->Elements()[e];
+                if(e)out<<',';
+                const auto &el=field->Elements()[e];
                 out<<"{\"degree\":"<<el.degree<<",\"geometry\":"<<el.geometry<<",\"bounds\":";
                 Write(out,{el.left,el.right,el.bottom,el.top});out<<",\"ids\":[";
                 for(int j=0;j<field->Field()->GetExp(e)->GetNcoeffs();++j)
@@ -85,6 +93,19 @@ int main(int argc,char **argv)
         const auto residual=patch.Residual(state,state,5,0,data);
         out<<",\"state\":";Write(out,state);out<<",\"residual\":";Write(out,residual);
         out<<",\"residual_norms\":";Write(out,patch.ResidualNorms(residual,patch.Constraints(state,0,data)));
+        RANSWallInterface interface(layout);
+        out<<",\"trace_constraint\":";WriteMatrix(out,interface.TraceConstraint());
+        const auto loads=interface.Loads([](double x,double){return .17+.03*x;});
+        out<<",\"shared_loads\":[";Write(out,loads[0]);out<<',';Write(out,loads[1]);out<<']';
+        const auto merged=interface.Merge(loads);Require(Maximum(merged)<1e-13,"opposite common-flux dual loads");
+        out<<",\"merged_shared_load\":";Write(out,merged);
+        const auto pressure=interface.ReferencePressure(parameters.model,k);
+        Require(pressure.velocityMaximum<1e-11 && std::abs(pressure.globalMean)<1e-12 &&
+            pressure.tractionMismatch<1e-11,"native pressure/gauge/full-traction coupling");
+        out<<",\"pressure\":{\"divergence_matrix\":";WriteMatrix(out,pressure.divergence);
+        out<<",\"system\":";WriteMatrix(out,pressure.system);out<<",\"rhs\":";Write(out,pressure.rhs);
+        out<<",\"solution\":";Write(out,pressure.solution);out<<",\"metrics\":";
+        Write(out,{pressure.velocityMaximum,pressure.globalMean,pressure.pressureJump,pressure.tractionMismatch});out<<'}';
         out<<"}\n";
         Require(static_cast<bool>(out),"cannot write layout report");
         std::cout<<"Native multiregion layout verified: "<<layout.Size()<<" stage unknowns.\n";

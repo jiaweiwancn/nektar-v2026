@@ -305,7 +305,8 @@ Vector RANSWallCondensation::Recover(const Vector &retainedStep) const
     auto rhs=Multiply(m_ir,retainedStep);for(int i=0;i<rhs.size();++i)rhs[i]=-rhs[i]-m_innerResidual[i];
     const auto inner=RANSWallAlgebra::Solve(m_ii,rhs);Vector full(m_inner.size()+m_retained.size());
     for(int i=0;i<m_inner.size();++i)full[m_inner[i]]=inner[i];
-    for(int i=0;i<m_retained.size();++i)full[m_retained[i]]=retainedStep[i];return full;
+    for(int i=0;i<m_retained.size();++i)full[m_retained[i]]=retainedStep[i];
+    return full;
 }
 Vector RANSWallCondensation::Solve() const
 {
