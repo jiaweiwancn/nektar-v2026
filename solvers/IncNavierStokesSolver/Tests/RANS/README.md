@@ -11,6 +11,7 @@ development studies and their original commands.
 | `validate_cls_epawf_m0.py --output FRESH_DIRECTORY` | Linux source-bound contract and retained exact-base provenance audit; inventories baseline tests without a new numerical solve |
 | `validate_cls_epawf_m1.py --kernel-probe BUILD/RANSKernelProbe --constitutive-probe BUILD/RANSConstitutiveProbe --output FRESH_DIRECTORY` | Revised-note M1: independent original CLS/AWF tensors, quadrature, both invariant-branch tangents and documented adverse diffusion; Linux only, NumPy/SciPy required |
 | `validate_cls_epawf_m2.py --probe BUILD/RANSEquilibriumProfilesProbe --output FRESH_DIRECTORY` | Revised-note M2: native spectral ray loads versus analytic metric budgets/fluxes and independent quadrature, all-mode forcing identities and the specified sampled-K positivity failure; Linux only, NumPy/SciPy required |
+| `validate_cls_epawf_m3.py --build BUILD --output FRESH_DIRECTORY` | Revised-note M3: native multiregion CG layout, pressure/interface rank, independent full transport residuals, steady AWF h/p refinement, evolving manufactured stages and full/Schur comparisons; Linux only, NumPy/SciPy/SymPy required |
 | `validate_standard_awf.py --build ... --output ... --jobs 2` | Standard-model AWF kernel/coupling checks, five-flow preservation and h/p/dt refinement; see the [derivation and evidence](../../../../docs/plans/standard-kepsilon-equilibrium-awf.md) |
 | `validate_m7.py --build ... --output ...` | Public generator/restart workflows, eight CTests, MPI continuation and documentation links |
 | `run_m6.sh BUILD RUN [JOBS]` | Complete preservation/robustness study; failed controls are recorded explicitly |
@@ -20,6 +21,15 @@ development studies and their original commands.
 | `validate_cao_tamura_cv3.py`, `validate_rans_implicit_advection.py` | Native experimental inlet/startup/history checks and independent manufactured transport order |
 | `validate_rans_stress_tangent.py --audit ...` | Full native transverse stress tangents versus an independent parallel-shear formula, including both CLS max-invariant sides |
 | `record_cao_tamura_cv3.py` | Read-only incomplete-attempt evidence, conditional standard profiles and local tangent figures |
+
+The [revised wall-stage guide](../../Examples/RevisedEquilibriumWall/README.md)
+documents `RANSEquilibriumWallSystem`, its single-stage session functions,
+separate native field outputs and serial affine-mesh scope. The M3 native,
+stage-smoke and complete independent-oracle tests are registered in both the
+production and external CMake builds. The oracle checks the frozen physical
+norm scales and retains raw fields, rejected controls and refinement data in
+its Linux output directory. `--suite residuals` is a shorter diagnostic and
+cannot close M3. Native IMEX stepping and full-history restart are M4 work.
 
 The [CV3 v1 attempt record](../../../../docs/plans/cao-tamura-cv3-calibration-attempt.md)
 retains the full original-first design and numerical rejections. The active

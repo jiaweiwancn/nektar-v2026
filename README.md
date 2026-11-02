@@ -38,11 +38,17 @@ defines the new spectral/hp wall-element project.
 [M0 contract and baseline](docs/plans/cls-epawf-revised-m0.md) freezes its
 model/discretization contract, equation mapping and exact-base provenance.
 [M1 kernel verification](docs/plans/cls-epawf-revised-m1.md) reproduces its
-reference identities and constitutive failures on Linux; the coupled patch
-implementation and stability qualification remain later milestones.
+reference identities and constitutive failures on Linux.
 [M2 spectral profiles and loads](docs/plans/cls-epawf-revised-m2.md) adds
 metric-balanced cutoffs, all-mode source/flux checks and the specified inner-k
 positivity counterexample, with 19 passing Linux tests.
+[M3 native flat wall stage](docs/plans/cls-epawf-revised-m3.md) adds actual
+subdomain fields, coupled pressure/transport, analytical AWF refinement and
+full/condensed nonlinear stage verification, with 22 passing Linux tests.
+The [revised wall-stage guide](solvers/IncNavierStokesSolver/Examples/RevisedEquilibriumWall/README.md)
+documents its runnable session and current serial affine-mesh scope.
+Native time integration is M4 work; the original stability and positivity
+failures remain recorded physical gates.
 
 
 Tutorials

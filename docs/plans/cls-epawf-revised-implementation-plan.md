@@ -1,6 +1,6 @@
 **CLS and EP-AWF revised formulation implementation and validation plan**
 
-Status: Approved by the user on 2 November 2026; M0, M1 and M2 closed.
+Status: Approved by the user on 2 November 2026; M0, M1, M2 and M3 closed.
 Implementation branch: codex/cls-epawf-revised, based on
 6415398d856323c3116e646eaf7c882c66617602.
 
@@ -10,7 +10,8 @@ Implementation branch: codex/cls-epawf-revised, based on
 - Origin Mode: plan.
 - Origin Date: 2026-11-02.
 - Verification Status: M0 contract/baseline audit, M1 kernel identities/
-  constitutive counterexamples and M2 profiles/dual loads VERIFIED on Linux;
+  constitutive counterexamples, M2 profiles/dual loads and M3 native flat
+  spatial stage/condensation VERIFIED on Linux;
   later milestones UNVERIFIED. Original stability/positivity gates fail as specified.
 - Version Label: cls-epawf-revised-plan-v1.
 
@@ -28,7 +29,13 @@ constitutive directions and passing 17-test Linux suite.
 The [M2 closure report](/Users/jay/Documents/nektar-v2026/docs/plans/cls-epawf-revised-m2.md)
 records native spectral profiles/dual loads, independent metric cutoff and
 redistribution checks, the sampled-K positivity counterexample and a passing
-19-test Linux suite at acdacc0. M3 and later implementation milestones remain open.
+19-test Linux suite at acdacc0.
+
+The [M3 closure report](/Users/jay/Documents/nektar-v2026/docs/plans/cls-epawf-revised-m3.md)
+records native subdomain CG fields, coupled pressure and conservative
+transport/storage, analytical AWF refinement, and full/Schur stage comparisons.
+All 22 Linux tests and 8,085 independent qualification checks pass at 8444254.
+M4 and later implementation milestones remain open.
 
 The [M0 contract and baseline record](/Users/jay/Documents/nektar-v2026/docs/plans/cls-epawf-revised-m0.md)
 and [contract v1](/Users/jay/Documents/nektar-v2026/docs/plans/cls-epawf-revised-contract-v1.json)
@@ -211,7 +218,7 @@ the outer equation determines its flux.
    the smooth inner-k local-zero counterexample away from r_K; record its
    loss of positivity without changing the source law.
 
-4. **M3 — Build the final field layout and an uncondensed flat patch.**
+4. **M3 — Build the final field layout and an uncondensed flat patch (closed).**
    First demonstrate native creation, evaluation and assembly of the
    subdomain spaces with full-domain k and outer-only dissipation. Establish
    the pressure nullspace and interface constraint rank. Implement ground
@@ -435,7 +442,7 @@ unlock a failed model qualification or the existing Cao–Tamura score gates.
 
 The user approved the branch/base, the faithful revised-note model and the
 M0–M7/M9 implementation/verification sequence, and requested execution and
-closure of M0, M1 and M2. This includes recording the
+closure of M0, M1, M2 and M3. This includes recording the
 original CLS and sampled-K failures as validation findings. A robust-model
 extension and the conditional physical-validation campaign in M8 require
 a concrete, separately identified resolution of those failures; the removed
