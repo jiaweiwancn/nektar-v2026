@@ -35,6 +35,12 @@ add_executable(RANSConstitutiveProbe
     ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSConstitutiveProbe.cpp)
 add_executable(RANSEquilibriumProfilesProbe
     ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSEquilibriumProfilesProbe.cpp)
+add_executable(RANSEquilibriumTransitionProbe
+    ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSEquilibriumTransitionProbe.cpp)
+target_link_libraries(RANSEquilibriumTransitionProbe RANSKernels)
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(RANSEquilibriumTransitionProbe PRIVATE -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror)
+endif()
 add_executable(RANSEquilibriumPatchProbe
     ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSEquilibriumPatchProbe.cpp
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.cpp
