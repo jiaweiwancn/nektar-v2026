@@ -4,7 +4,9 @@
 No solver, scientific library, operator reconstruction, Git mutation or remote
 command is invoked. Missing evidence stays pending. --final requires both
 original-target stage records and report-bound independent analyses, but never
-infers that a conditional frozen-scalar run occurred.
+infers that a conditional frozen-scalar run occurred. --bounded-final instead
+finalizes a source-bound terminal observation; it never supplies complete-stage
+readiness, convergence or physical qualification from an incomplete record.
 """
 import argparse
 from datetime import datetime, timezone
@@ -257,17 +259,115 @@ def stage_family(evidence, summary_path, paths, label, runtime):
     return result
 
 
+def stage_assessment(evidence, path, runtime):
+    """Import the strict assessor's terminal evidence without rerunning it."""
+    if path is None:
+        return dict(supplied=False, bounded_evidence_ready=False, cases=[]), []
+    start = len(evidence.issues)
+    wrapper = evidence.add('strict_stage_assessment', path, required=True)
+    if not isinstance(wrapper, dict):
+        return dict(supplied=True, bounded_evidence_ready=False, cases=[]), ['Terminal stage assessment unavailable']
+    data = wrapper.get('assessment', {})
+    pinned = lambda value: (isinstance(value, dict) and bool(value.get('path')) and
+        isinstance(value.get('sha256'), str) and len(value['sha256']) == 64 and
+        all(char in '0123456789abcdef' for char in value['sha256']))
+    if not all(pinned(value) for value in [wrapper.get('assessor')]+[
+            data.get(key) for key in ('original_receipt', 'preflight', 'original', 'stage_plan')]):
+        evidence.issues.append(dict(kind='strict_stage_required_reference_hash_missing'))
+    evidence.reference('strict_stage_assessor', wrapper.get('assessor'), required=True)
+    receipt = evidence.reference('strict_stage_original_receipt', data.get('original_receipt'), required=True)
+    for key in ('preflight', 'original', 'stage_plan'):
+        evidence.reference('strict_stage_'+key, data.get(key), required=True)
+    # The strict assessor deliberately uses UTF-8, ensure_ascii=False hashes.
+    # Keep the existing analyzer/runtime canonical encoding above unchanged.
+    unicode_hash = lambda value: hashlib.sha256(json.dumps(value, sort_keys=True,
+        ensure_ascii=False, separators=(',', ':'), allow_nan=False).encode()).hexdigest()
+    descriptor = data.get('runtime', {})
+    runtime_ok = (isinstance(runtime, dict) and all(key in runtime for key in RUNTIME_SECTIONS) and
+        descriptor.get('source_commit') == PRODUCER and
+        descriptor.get('source_root') == runtime.get('source_root') and
+        descriptor.get('build_root') == runtime.get('build_root') and
+        all(descriptor.get('sections', {}).get(key) == unicode_hash(runtime[key]) for key in RUNTIME_SECTIONS))
+    solver_key = 'build/IncNavierStokesSolver'
+    runtime_ok = bool(runtime_ok and descriptor.get('solver', {}).get('sha256') ==
+        runtime.get('runtime_artifacts', {}).get(solver_key))
+    if not (wrapper.get('success') is True and wrapper.get('failures') == [] and
+            wrapper.get('native_calls') == 0 and data.get('source_commit') == PRODUCER and
+            data.get('mode') == 'matched' and data.get('family_status') in ('completed', 'incomplete', 'failed') and
+            isinstance(receipt, dict) and receipt.get('status') == data.get('family_status') and
+            receipt.get('source_commit') == PRODUCER and receipt.get('finished_utc') and runtime_ok):
+        evidence.issues.append(dict(kind='strict_stage_assessment_binding_or_terminal_scope_failed'))
+    rows, unknowns = [], []
+    for case in data.get('cases', []):
+        law = case.get('inner_stress')
+        if (case.get('target_attempted') is not True or 'converged_target_evidence' not in case or
+                type(case.get('converged_target_evidence')) not in (bool, type(None)) or
+                not isinstance(case.get('issues'), list) or case.get('issues')):
+            evidence.issues.append(dict(kind='strict_stage_case_attempt_or_status_unresolved',
+                inner_stress=law, issues=case.get('issues')))
+        for key in ('xml', 'log'):
+            if not pinned(case.get(key)):
+                evidence.issues.append(dict(kind='strict_stage_case_reference_hash_missing', inner_stress=law, reference=key))
+            evidence.reference('strict_stage_'+str(law)+'_'+key, case.get(key), required=True)
+        trace = case.get('trace_evidence', {})
+        row = pick(case, ('inner_stress', 'preflight_h0_sha256', 'unknowns', 'evidence_status',
+            'target_start_observed_in_log', 'complete_target_solve_record', 'target_attempted',
+            'converged_target_evidence', 'full_coupled_convergence_evidence', 'scalar_solve_convergence_evidence',
+            'wall_cap_stop_observed', 'wall_cap_interpretation', 'native_postqualification_report_available',
+            'native_history_report_available', 'native_history_unchanged_verified', 'issues'))
+        row.update(native_command=case.get('native_command'), log_evidence=case.get('log_evidence'),
+            final_report_evidence=case.get('final_report_evidence'),
+            complete_prefix=pick(trace, ('complete_prefix_bytes', 'complete_prefix_sha256',
+                'complete_records', 'unpublished_tail')),
+            retained_native_pins=pick(case, ('report', 'trace', 'matrices')),
+            independent_complete_target_analysis_supplied_by_assessment=False)
+        if case.get('complete_target_solve_record') is not True:
+            unknowns.append(str(law)+': complete original-target solve record unavailable')
+        if case.get('converged_target_evidence') is None:
+            unknowns.append(str(law)+': original-target convergence status unavailable')
+        if case.get('native_postqualification_report_available') is not True:
+            unknowns.append(str(law)+': original-target physical/accounting postqualification report unavailable')
+        if case.get('native_history_unchanged_verified') is None:
+            unknowns.append(str(law)+': final native-history equality not verified from a report')
+        rows.append(row)
+    if (len(rows) != 2 or {row.get('inner_stress') for row in rows} != {'Linear', 'SaturatedR2'} or
+            len({row.get('preflight_h0_sha256') for row in rows}) != 1 or
+            any(not row.get('preflight_h0_sha256') for row in rows)):
+        evidence.issues.append(dict(kind='strict_stage_matched_family_or_history_identity_failed'))
+    ready = len(evidence.issues) == start
+    positive = any(row.get('converged_target_evidence') is True for row in rows)
+    incomplete = any(row.get('complete_target_solve_record') is not True for row in rows)
+    outcome = ('pending terminal source-bound stage assessment' if not ready else
+        'positive target-convergence evidence retained; qualification remains separate' if positive else
+        'bounded target attempts observed; completion unavailable' if incomplete else
+        'completed bounded target solve records report no convergence'
+            if rows and all(row.get('converged_target_evidence') is False for row in rows) else
+        'bounded target observations recorded; convergence/qualification remains pending')
+    return dict(supplied=True, bounded_evidence_ready=ready, bounded_task_outcome=outcome,
+        source_commit=data.get('source_commit'), family_status=data.get('family_status'),
+        original_receipt=data.get('original_receipt'), runtime_binding_passed=runtime_ok,
+        bound_file_count=len(data.get('bound_files', {})),
+        bound_file_inventory_sha256=unicode_hash(data.get('bound_files', {})),
+        bound_file_policy='Pins are cryptographically bound by the strict assessment; huge matrices/traces are not rehashed here',
+        conditional_frozen_scalar_allowed=data.get('conditional_frozen_scalar_allowed'),
+        fallback_execution_inferred=False, cases=rows), unknowns
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--root', type=Path, required=True, help='Linux m8-r2 experiment root')
     parser.add_argument('--documents', type=Path, required=True, help='Frozen/current m8-r2 evidence document directory')
     parser.add_argument('--stage-summary', type=Path)
     parser.add_argument('--stage-analysis', type=Path, action='append', default=[])
+    parser.add_argument('--stage-assessment', type=Path)
     parser.add_argument('--scalar-summary', type=Path)
     parser.add_argument('--scalar-analysis', type=Path, action='append', default=[])
     parser.add_argument('--retained-attempt', type=Path, action='append', default=[])
     parser.add_argument('--extra', action='append', default=[], metavar='ROLE=PATH')
-    parser.add_argument('--final', action='store_true')
+    closure = parser.add_mutually_exclusive_group()
+    closure.add_argument('--final', action='store_true')
+    closure.add_argument('--bounded-final', action='store_true',
+        help='Finalize a strict bounded observation, without complete-stage or physical qualification')
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
     if args.output.exists():
@@ -325,6 +425,7 @@ def main():
         e.add('extra_'+name, path, required=True)
     matched = stage_family(e, args.stage_summary, args.stage_analysis, 'matched', runtime)
     scalar = stage_family(e, args.scalar_summary, args.scalar_analysis, 'scalar', runtime)
+    assessed, remaining_unknowns = stage_assessment(e, args.stage_assessment, runtime)
     contract = e.data.get(str((docs/'candidate-contract-v2.json').resolve()), {})
     if contract.get('reviewed_source') != REVIEWED:
         e.issues.append(dict(kind='reviewed_baseline_disagrees_with_frozen_contract'))
@@ -348,6 +449,11 @@ def main():
     if args.final and not final_ready:
         e.issues.append(dict(kind='final_original_target_evidence_incomplete',
             reason='Both matched alpha400 records and report-bound final independent analyses are required'))
+    if args.bounded_final and not assessed.get('bounded_evidence_ready'):
+        e.issues.append(dict(kind='bounded_terminal_observation_incomplete',
+            reason='A source-bound terminal matched assessment with both actual target attempts and no issues is required'))
+    if not final_ready:
+        remaining_unknowns.append('Complete original-target independent residual/action/accounting qualification is not established')
     for path, item in e.files.items():
         if item.get('available') and item.get('sha256') != digest(path):
             e.issues.append(dict(kind='evidence_changed_during_curation', path=path))
@@ -359,13 +465,18 @@ def main():
         historical_preservation_from_build=pick(raw['build'] or {}, ('preserved_sources', 'preserved_images',
             'preserved_sources_unchanged', 'preserved_images_unchanged')),
         final_requested=args.final, final_stage_evidence_ready=final_ready,
+        bounded_final_requested=args.bounded_final,
+        bounded_task_evidence_ready=assessed.get('bounded_evidence_ready') is True and not bool(e.issues),
+        bounded_task_outcome=assessed.get('bounded_task_outcome', 'terminal stage assessment not supplied'),
+        stage_assessment=assessed, remaining_unknowns=remaining_unknowns,
         ledger_integrity_passed=not bool(e.issues), issues=e.issues,
         evidence_roles=e.roles, evidence_files=list(e.files.values()),
         retained_receipt_inventory_count=len(attempts), matched_stage_gate_table=matched,
         prior_gate_overview=gate_overview,
         frozen_scalar_diagnostic=scalar, fallback_inferred=False,
         M8_closed=False, physical_trajectory_qualification=False,
-        main_stage_result='pending complete final target records/analyses' if not final_ready else
+        main_stage_result=('See bounded_task_outcome; complete-stage readiness remains false'
+            if assessed.get('bounded_evidence_ready') else 'pending complete final target records/analyses') if not final_ready else
             'See matched stage gate table; native convergence, action accuracy and physical applicability remain separate',
         still_open=['genuine curved MMS', 'active-cap curved/variable-H verification',
             'fully discrete positivity', 'long-time/refinement qualification', 'scalability', 'paired terrain'],
