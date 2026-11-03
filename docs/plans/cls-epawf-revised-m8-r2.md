@@ -52,6 +52,8 @@ history, forcing and tolerance `2e-12`. Auxiliary mass coefficients are
 advance history. After an auxiliary failure, remaining auxiliaries are
 skipped and the target is still attempted once. The maximum is 12 Newton
 updates per level. No additional alpha search is authorized.
+Each native case has an external 14,400-second wall limit. A wall-limit exit
+does not supply a nonlinear terminal classification or a missing target vector.
 
 Two short native runs are conditional on a new-law target passing every
 required gate. Otherwise, if both targets remain unresolved, at most one
@@ -152,9 +154,32 @@ the polynomial weak-continuity/gauge block. Its direct residual error is
 contains 500 checks and no native calls. This verifies the independent field
 map and affine block; current stage Jacobians still require their own checks.
 
-The matched actual startup-stage searches are now running from this common
-admissible initialization. The terminal root status and independent path/
-action checks will determine the final R2 recommendation.
+The matched actual startup-stage searches use this common admissible
+initialization. Linear has reached its external wall limit; SaturatedR2 is
+still running. The Linear target alpha400 was observed in the actual log,
+with rounded residuals `62.5985,15.4194,13.1962,13.185,13.1849`, before
+interruption during its next Jacobian. No completed target record or final
+case report was published. Its target convergence, final scalar state and
+physical/accounting gates remain unavailable, rather than false.
+
+The completed Linear alpha3200 auxiliary search stagnated at
+`5.334240445678192e-12`, above the unchanged `2e-12` coupled tolerance.
+A focused independent terminal replay gives `6.091598802446764e-12` and
+also fails that tolerance. Its finite scalar inventory, covariance and fixed
+outer-box checks pass: the minimum dimensionless scalar margin is `.675284`,
+covariance minima are `.0746028/.176920`, and the maximum normalized outer
+gradient departure is `.000532163`. Lambda and b are one, with no active
+limiter/cap source volume. These physical-range observations do not turn an
+auxiliary residual minimizer into a converged stage or a physical time sample.
+
+The full auxiliary-path audit finished but failed five moving-ray lookup
+checks. A separately bound terminal diagnosis found a one-ULP radius
+difference crossing a 12-decimal key boundary. The [association correction](cls-epawf-revised-evidence/m8-r2/ray-coordinate-association.md)
+preserves the original coordinate/weight tolerances and adds a stricter raw
+coordinate safeguard when keys differ. Eight focused Linux fixtures and the
+217-second terminal-only replay pass. The original failed full-path audit
+remains failed and has not been rerun. The producing C++ and binary are
+unchanged; this analyzer indexing issue is not a cause of native stagnation.
 
 The retained first auxiliary Jacobian exposes a separate numerical action
 failure: its outer-k direction differs from an independently assembled
