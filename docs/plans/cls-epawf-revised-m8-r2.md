@@ -156,6 +156,20 @@ The matched actual startup-stage searches are now running from this common
 admissible initialization. The terminal root status and independent path/
 action checks will determine the final R2 recommendation.
 
+The retained first auxiliary Jacobian exposes a separate numerical action
+failure: its outer-k direction differs from an independently assembled
+analytic reference by `7.15997e-7`, above the unchanged absolute `1e-7`
+gate. The largest contribution lies in outer momentum load rows, with a
+smaller roughness-force contribution. Pressure/gauge and affine continuity
+checks pass. Two complex steps and both invariant branches agree within
+`8.40e-15`; finer whole-residual differences also show increasing subtraction
+error. The [initial-action diagnosis](cls-epawf-revised-evidence/m8-r2/initial-j0-action-diagnosis.md)
+preserves the original failed gate, independent controls and exact source/
+matrix hashes. This initial numerical derivative defect is separate from
+constitutive feasibility and does not establish the cause of nonlinear
+stagnation. The bounded native comparison remains diagnostic; physical
+qualification requires all independent action gates.
+
 ## Decision gates still open
 
 The terminal R2 decision must distinguish constitutive feasibility, native

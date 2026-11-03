@@ -75,7 +75,7 @@ def rle(values):
 
 def branch_difference(base, endpoint):
     result = {}
-    for name in ('outer_max', 'inner_saturation', 'source_limiter'):
+    for name in ('outer_max', 'outer_yap', 'inner_saturation', 'source_limiter'):
         a, b = base.get(name), endpoint.get(name)
         if a is None or b is None:
             result[name] = dict(available=False)
@@ -83,7 +83,7 @@ def branch_difference(base, endpoint):
         result[name] = dict(available=True, identical=a['pattern_sha256'] == b['pattern_sha256'],
             same_length=a['count'] == b['count'], base_minimum_switch_distance=a['minimum_switch_distance'],
             endpoint_minimum_switch_distance=b['minimum_switch_distance'],
-            interpretation='Fixed outer points' if name == 'outer_max' else
+            interpretation='Fixed outer points' if name in ('outer_max', 'outer_yap') else
                 'Literal actual source-ray ordering; moving normal coordinates need not represent identical physical points')
     return result
 
@@ -432,13 +432,14 @@ class Analyzer:
 
     def branch_context(self, state, source_rays):
         """Independent switch data, not constitutive stability conclusions."""
-        patterns = dict(outer_max=[], inner_saturation=[], source_limiter=[])
+        patterns = dict(outer_max=[], outer_yap=[], inner_saturation=[], source_limiter=[])
         distance = {name:math.inf for name in patterns}
         uncertain = 0
+        yap_uncertain, yap_nonfinite, yap_range = 0, 0, [math.inf, -math.inf]
         for group in self.static:
             if group['name'] != 'source_volume_outer' or group['block'] != self.d:
                 continue
-            G, k, epsilon, _ = local_values(self.raw, self.fields, state, group['geometry'], group['points'])
+            G, k, epsilon, radial = local_values(self.raw, self.fields, state, group['geometry'], group['points'])
             S, O = G+G.transpose(0, 2, 1), G-G.transpose(0, 2, 1)
             qs = k/epsilon*np.sqrt(np.sum(S*S, axis=(1, 2))/2)
             qo = k/epsilon*np.sqrt(np.sum(O*O, axis=(1, 2))/2)
@@ -446,6 +447,20 @@ class Analyzer:
             patterns['outer_max'].extend('S' if value >= 0 else 'O' for value in gap)
             distance['outer_max'] = min(distance['outer_max'], float(np.min(np.abs(gap))))
             uncertain += int(np.count_nonzero(np.abs(gap) <= 64*np.finfo(float).eps*np.maximum(1., np.maximum(qs, qo))))
+            # The original CLS epsilon-source switch uses physical r and the
+            # unchanged Yap length 2.5. This only records its actual branch;
+            # it neither changes the source nor adds an acceptance condition.
+            with np.errstate(over='ignore', invalid='ignore', divide='ignore'):
+                yap_ratio = k**1.5/(2.5*epsilon*radial)
+            finite = np.isfinite(yap_ratio)
+            patterns['outer_yap'].extend('?' if not valid else 'A' if ratio > 1 else 'I' if ratio < 1 else 'T'
+                for ratio, valid in zip(yap_ratio, finite))
+            yap_nonfinite += int(np.count_nonzero(~finite))
+            if np.any(finite):
+                ratio = yap_ratio[finite]
+                distance['outer_yap'] = min(distance['outer_yap'], float(np.min(np.abs(ratio-1))))
+                yap_range = [min(yap_range[0], float(np.min(ratio))), max(yap_range[1], float(np.max(ratio)))]
+                yap_uncertain += int(np.count_nonzero(np.abs(ratio-1) <= 64*np.finfo(float).eps*np.maximum(1., np.abs(ratio))))
         for ray in source_rays:
             profile = ray['profile']; k = np.asarray(ray['local_k'])
             _, G = _velocity(self.fields, state, self.offsets, self.d, ray['points'])
@@ -464,8 +479,14 @@ class Analyzer:
         for name, pattern in patterns.items():
             text = ''.join(pattern)
             result[name] = dict(count=len(pattern), population=dict(Counter(pattern)), lossless_RLE=rle(pattern),
-                pattern_sha256=hashlib.sha256(text.encode()).hexdigest(), minimum_switch_distance=distance[name])
+                pattern_sha256=hashlib.sha256(text.encode()).hexdigest(),
+                minimum_switch_distance=None if name == 'outer_yap' and not math.isfinite(distance[name]) else distance[name])
         result['outer_max']['binary64_tie_uncertainty_count'] = uncertain
+        result['outer_yap'].update(binary64_tie_uncertainty_count=yap_uncertain,
+            nonfinite_ratio_count=yap_nonfinite, ratio_range=yap_range if math.isfinite(yap_range[0]) else None,
+            threshold=1., definition='k^(3/2)/(2.5*epsilon*physical_r)', diagnostic_only=True,
+            pattern_legend=dict(A='active ratio>1', I='inactive ratio<1', T='exact knot ratio=1',
+                **{'?':'nonfinite diagnostic ratio; no scalar-field value changed'}))
         result['interpretation'] = 'Actual finite evaluation signatures and switch distances; a matching endpoint signature is not a proof that no switch occurs between endpoints'
         return result
 

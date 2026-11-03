@@ -29,7 +29,10 @@ SUMMARY_KEYS = ('schema', 'milestone', 'status', 'success', 'analysis_success',
     'analysis_source_commit', 'source_clean_start', 'source_clean_end', 'clean',
     'runtime_unchanged', 'full_runtime_source_inputs_unchanged', 'input_hashes_unchanged',
     'mode', 'suite', 'native_calls', 'operator_reconstructions', 'trajectory_calls',
-    'weak_residual_calls', 'current_action_gate_passed', 'exact_affine_weak_continuity_gate_passed')
+    'weak_residual_calls', 'current_action_gate_passed', 'exact_affine_weak_continuity_gate_passed',
+    'initial_derivative_gates_passed', 'analytic_controls_met', 'fixed_absolute_gate_met',
+    'localization_classification', 'stored_J_minus_analytic', 'stored_J_roughness_support_error',
+    'stored_J_outer_support_error')
 
 
 def digest(path):
