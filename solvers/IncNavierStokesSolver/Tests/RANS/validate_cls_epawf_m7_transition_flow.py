@@ -52,6 +52,8 @@ def plan(mode):
                   state_on=.02, state_off=.1, eta=0., chi='prescribed Upstream product'),
         reference='Neutral native constrained projection; identical frozen reference and ordinary essential data in each pair',
         forcing='none: all pre-existing FUNCTION blocks removed; only InitialPerturbation functions added',
+        nonlinear_solver=dict(maximum_iterations=80,tolerance=2e-12,coupled_acceptance=1e-9,
+            rationale='iteration budget extended after preserved 35-iteration stop; physical operator and stopping tolerance unchanged'),
         pulse=dict(amplitude=AMPLITUDE, center=CENTER, nominal_width=WIDTH,
             definition='psi=A*us*sigma*f(x)*sin(pi*z/4)^2; u=partial_z psi,w=-partial_x psi; k/epsilon localized differential fields',
             envelope='essential-boundary polynomial bubble times Gaussian with first log-derivative cancelled at center; f(center)=1,fprime(center)=0',
@@ -98,7 +100,7 @@ def session(template, destination, amplitude, dt, steps):
     set_info(root, 'RANSWallReference', 'Neutral')
     for name, value in {'RANSWallDiagnostics': 1, 'RANSWallEta': 0, 'RANSWallChi': 1,
                         'RANSWallSensorOn': .02, 'RANSWallSensorOff': .1,
-                        'RANSWallMaxIterations': 35}.items():
+                        'RANSWallMaxIterations': 80}.items():
         set_parameter(root, name, value)
     denominator = (CENTER-XMIN)**2*(XMAX-CENTER)**2
     beta = 2/(CENTER-XMIN)-2/(XMAX-CENTER)
