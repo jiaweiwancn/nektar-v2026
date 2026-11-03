@@ -9,6 +9,7 @@
 #include <LibUtilities/BasicUtils/FieldIO.h>
 #include <SpatialDomains/MeshGraphIO.h>
 #include <algorithm>
+#include <chrono>
 #include <cmath>
 #include <filesystem>
 #include <fstream>
@@ -199,7 +200,9 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
             m_state=m_patch->Lift(m_state,m_time,m_data);
         if(m_neutral && m_patch->TransitionEnabled())m_state=m_patch->Lift(m_state,m_time,m_data);
         m_patch->SetReference(m_state,m_data,m_time,m_eta);m_initial=m_state;
+        const auto residualStart=std::chrono::steady_clock::now();
         m_rawNorms=m_patch->Norms(m_patch->Residual(m_state,m_state,0,m_time,m_data,false),m_patch->Constraints(m_state,m_time,m_data),m_ustar);
+        const double rawResidualSeconds=std::chrono::duration<double>(std::chrono::steady_clock::now()-residualStart).count();
         m_correctedNorms=m_patch->Norms(m_patch->Residual(m_state,m_state,0,m_time,m_data),m_patch->Constraints(m_state,m_time,m_data),m_ustar);
         m_implicitData=m_data;
         if(m_patch->TransitionEnabled())m_implicitData.sensorBody=m_data.outerBody;
@@ -231,7 +234,10 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
         m_historyReady=true;
         if(m_patch->NonlinearPolicyName()=="ScalarFeasibleR2")
         {
+            const auto domainStart=std::chrono::steady_clock::now();
             const auto domain=m_patch->ScalarDomain(m_state,m_time,m_data,true);
+            m_initialEvaluationSeconds={rawResidualSeconds,
+                std::chrono::duration<double>(std::chrono::steady_clock::now()-domainStart).count()};
             m_initialScalarDomain=RANSWallEvolutionPatch::ScalarDomainJSON(domain,true);
             Require(domain.admissible,"initial R2 scalar inventory is outside its evaluation domain: "+domain.failure);
         }
@@ -579,6 +585,10 @@ void RANSEquilibriumWallEvolution::WriteReport() const
     out<<",\"inner_stress_model\":"<<Quoted(m_patch->InnerStressName())
        <<",\"nonlinear_policy\":"<<Quoted(m_patch->NonlinearPolicyName());
     if(!m_initialScalarDomain.empty())out<<",\"initial_scalar_domain\":"<<m_initialScalarDomain;
+    if(!m_initialEvaluationSeconds.empty())
+        out<<",\"initial_evaluation_seconds\":"<<RANSWallSolveJson::Object({
+            {"unanchored_residual_constraints_norms",RANSWallSolveJson::Number(m_initialEvaluationSeconds[0])},
+            {"scalar_domain",RANSWallSolveJson::Number(m_initialEvaluationSeconds[1])}});
     if(m_stageTest!="Off")
         out<<",\"stage_test\":"<<Quoted(m_stageTest)<<",\"stage_test_target_time\":"<<m_time+m_timestep
            <<",\"stage_test_native_history_advanced\":false,\"stage_test_target_converged\":"<<(m_targetConverged?"true":"false")

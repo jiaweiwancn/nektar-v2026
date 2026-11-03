@@ -61,6 +61,7 @@ private:
     std::string m_rangeGuardName="Off",m_stageTest="Off",m_initialScalarDomain;
     std::vector<std::string> m_stageTestLevels;
     std::string m_stageTestInitialHistory;
+    Vector m_initialEvaluationSeconds;
     bool m_targetConverged=false,m_targetPhysical=false;
     struct PhysicalRangeEvent
     {

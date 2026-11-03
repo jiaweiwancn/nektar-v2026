@@ -311,6 +311,7 @@ class Inventory:
                 yield from self.ray_sets('normalization_trace_'+('baseline' if baseline else 'current'),
                     chart, baseline=baseline)
         for x in sorted(anchors):
+            yield from self.grouped('complete_physical_matching_transfer', [[x, 0., self.H]], inner=False)
             yield from self.grouped('complete_physical_sample_K', [[x, 0., self.raw['parameters'][3]]])
             for index, distance in enumerate(self.raw['transition_controls'][2:4]):
                 yield from self.grouped('complete_physical_sensor_transfer_'+str(index),
@@ -498,11 +499,11 @@ def native_domain_audit(raw, fields, state, domain, trace, audit, inventory):
     audit.near(effective, state, 'R2_initial_external_lift_identity', 2e-10)
     trace_ids = np.asarray([offsets[d+1]+int(row[0]) for row in trace['projected_target_coefficients']], int)
     audit.near(native_target[trace_ids], target[trace_ids], 'R2_native_independent_projected_trace_state', 2e-10)
-    groups, counts, margins = {}, {}, []
+    groups, counts, margins, projected_ratios = {}, {}, [], []
     for row in observations:
         counts[row['inventory']] = counts.get(row['inventory'], 0)+1
         groups.setdefault((int(row['block']), int(row['geometry']), bool(row['dependent_trace'])), []).append(row)
-    maximum_value_error = 0.
+    maximum_value_error, projected_covariance = 0., math.inf
     for (block, identity, dependent), rows in groups.items():
         points = np.asarray([row['coordinate'] for row in rows], float)
         coefficients = target if dependent else effective
@@ -514,6 +515,13 @@ def native_domain_audit(raw, fields, state, domain, trace, audit, inventory):
         audit.near(native_scales, expected_scale, 'R2_native_scalar_observation_scales', 2e-12)
         maximum_value_error = max(maximum_value_error, float(np.max(np.abs(values-native_values))))
         margins.extend((values/expected_scale).tolist())
+        if dependent:
+            projected_ratios.extend((values/expected_scale).tolist())
+            G = _velocity(fields, effective, offsets, d, points, identity)[1]
+            k = physical_rows(fields[d], effective, offsets[d], points, identity)[3]
+            tensors = np.asarray([selected_stress(raw, g, kval, epsilon, point)[0]
+                for g, kval, epsilon, point in zip(G, k, values, points)])
+            projected_covariance = min(projected_covariance, float(np.min(np.linalg.eigvalsh(tensors)[:, 0])))
         audit.require(all(value > 0 if row['strict'] else value >= 0 for value, row in zip(values, rows)),
             'An exported native scalar observation is inadmissible')
     audit.require(counts == domain['inventory_counts'], 'Native ScalarDomain count/list mismatch')
@@ -543,6 +551,9 @@ def native_domain_audit(raw, fields, state, domain, trace, audit, inventory):
     return dict(available=True, complete_crosscheck=True, counts=counts,
         observations=len(observations), maximum_value_error=maximum_value_error,
         minimum_dimensionless_margin=min(margins), minimum_lambda=domain['minimum_lambda'],
+        projected_trace_over_epsilon0=[min(projected_ratios), max(projected_ratios)],
+        projected_trace_fixed_box_margin=min(min(projected_ratios)-.98, 1.02-max(projected_ratios)),
+        projected_trace_covariance_minimum=projected_covariance,
         effective_state_float64_LE_sha256=vector_sha(effective),
         trace_target_state_float64_LE_sha256=vector_sha(native_target),
         independent_dynamic_ray_coordinates_and_weights=ray_comparison,
@@ -619,7 +630,11 @@ def verify(raw, session, native_domain=None, ranges_only=False):
         finite_ranges=ranges, independent_trace=trace, independent_source_energy=direct,
         independent_total_traction=traction.tolist(), native_scalar_domain=domain_result,
         old_r8_over3_one_sided_derivative_witness=original_derivative_witness(raw, fields, state),
-        finite_observed_joint_preflight=ranges['finite_joint_preflight_passed'],
+        finite_observed_joint_preflight=(ranges['finite_joint_preflight_passed'] and
+            domain_result.get('projected_trace_fixed_box_margin', -math.inf) >= 0 and
+            domain_result.get('projected_trace_covariance_minimum', -math.inf) >= 0),
+        stricter_implementation_sampled_K_box_margin=min(ranges['sampled_K_over_K0'][0]-.99,
+            1.01-ranges['sampled_K_over_K0'][1]),
         native_inventory_independently_crosschecked=domain_result['complete_crosscheck'],
         rigorous_discrete_or_trajectory_qualification=False,
         scope='Bounded finite representation/native implementation audit; no source/model/certificate/field replacement')

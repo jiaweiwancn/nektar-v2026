@@ -582,3 +582,38 @@ coupled conservation, complete unforced durations and independent refinement.
 The modified-invariant A/B candidates have runnable mathematical screens in
 `cls_epawf_m8_invariant_screen.py`; they were rejected before production
 adoption after certified within-range constitutive counterexamples.
+
+## Restricted inner-stress and solver prototype (M8-R2)
+
+The [R2 report](../../../../docs/plans/cls-epawf-revised-m8-r2.md) separates
+operator verification, an actual implicit-stage root, and physical
+qualification. The [versioned contract](../../../../docs/plans/cls-epawf-revised-evidence/m8-r2/candidate-contract-v2.md)
+keeps the original outer law and fixed R1 box. M8 remains open.
+
+| Solver information | Meaning |
+|---|---|
+| `RANSWallInnerStress=Linear` | Default original inner stress. Existing Original, CubicScaled and Regularized identities are retained. |
+| `RANSWallInnerStress=SaturatedR2` | Research radial inner stress with rho=.8, local k-dependent saturation, unchanged auxiliary viscosity and scalar diffusivities. Its checkpoint signature includes `M8-R2:InnerStress:SaturatedR2:v1:rho=0.8`. |
+| `RANSWallNonlinearPolicy=Legacy` | Default original Jacobian/reuse/globalization policy. |
+| `RANSWallNonlinearPolicy=ScalarFeasibleR2` | Opt-in serial flat 2D Upstream+Capped full dense solve; checks complete declared scalar inventories before residuals and updates, using fresh current Jacobians. No field floor or repair. |
+| `RANSWallFeasibleFile` | Fresh JSONL path for feasible-policy state, residual, constraints, branch and line-search evidence; Jacobian binary files are written alongside it. Never reuse an existing output path. |
+| `RANSWallStageTest=Off` | Default native evolution mode. |
+| `RANSWallStageTest=MatchedR2` | Frozen unforced IMEX2 startup comparison at dt=.0025, alpha levels3200/1600/800/400, at most12 Newton updates per level, unchanged tolerance2e-12. Native history is not advanced. |
+| `RANSWallStageTest=FrozenScalarR2` | One conditional scalar-stage localization at alpha400 with fixed velocity/pressure; its root is not a coupled RANS root. |
+| `RANSWallPhysicalRangeGuard=R2LocalV1` | Separate accepted-state finite covariance/outer-box/trace guard, with the stricter sampled-K restriction declared in the operational addendum. A scalar-feasible Newton iterate is not thereby a qualified physical state. |
+
+Saturation replaces the actual tensor `nuA*S` by `F=t*S/||S||F` in the
+momentum stress, actual production (including `-(2k/3)*div(U)`), traction,
+energy and covariance. It preserves the continuous analytical reference on
+an open inactive neighborhood. Its polynomial projection can activate the
+law and need not be an exact discrete equilibrium. Negative inner k remains
+invalid; at k=0 the selected research law has R=F=0. Positivity on the
+declared finite sets is not a theorem of positivity throughout an element.
+
+The legacy M3 wall-system entry point rejects SaturatedR2 explicitly. The
+3000-unknown guard remains. Genuine curved MMS for an adopted law, active-cap
+curved/variable-H coupling, fully discrete admissibility, long-time
+perturbation/refinement, scalable feasibility and paired floor/hill physical
+validation are separate open gates. Use the bounded frozen generators and
+producing-runtime receipts in the R2 report, rather than changing physical
+coefficients or the applicability box to fit a result.

@@ -1,0 +1,60 @@
+{
+  "schema": 2,
+  "milestone": "M8-R2",
+  "kind": "additive operational restriction and diagnostic semantics",
+  "immutable_contract_and_v1_policy_modified": false,
+  "physical_coefficients_residual_box_fields_tolerances_modified": false,
+  "stricter_R2LocalV1_implementation_guard": {
+    "sampled_K_over_K0": [0.99, 1.01],
+    "scope": "complete physical sampled-K inventory",
+    "relation_to_mathematics": "narrower operational restriction; the fixed R1 outer box and its proof remain unchanged",
+    "mathematical_sampled_K_requirement": "positive",
+    "bounded_inner_kernel_control_K_over_K0": [0.5, 1.5],
+    "finite_covariance_comparison_tolerance_over_K0": 1e-10,
+    "required_independent_covariance_output": "actual minimum and strict sign, separately from tolerance"
+  },
+  "static_ScalarDomain_review": {
+    "supported_scope": "serial full solve, flat 2D Upstream+Capped",
+    "fixed_k_and_outer_epsilon": ["source", "mass", "prescribed load", "interface", "native GLL", "declared dense", "all physical matching transfers", "all physical sensor transfers", "exact dependent-trace GLL evaluation nodes"],
+    "outer_epsilon_at_outer_members_only": true,
+    "sampled_K": "all associated x anchors",
+    "dynamic_rays": ["current volume normalization", "baseline dependent-trace normalization", "current dependent-trace normalization"],
+    "k_checked_before": ["normalization", "dependent trace"],
+    "actual_outer_epsilon_and_projected_trace_target_both_checked": true,
+    "trace_target_substituted_into_coupled_residual": false,
+    "fixed_auxiliary_history_and_physical_time": true,
+    "native_Advance_or_accepted_history_advance": false,
+    "finite_sets_are_polynomial_everywhere_proof": false
+  },
+  "extra_constitutive_diagnostic_rays": {
+    "origin": "Audit with constitutive reconstruction calls DependentEpsilon/WallNormalization at additional inner reconstruction anchors",
+    "already_in_residual_domain_inventory": false,
+    "independent_preflight": "explicit additional diagnostic ray superset",
+    "post_convergence_failure": "preserve root/residual/scalar-domain record; save diagnostic exception; mark unqualified",
+    "implementation_owner": "root producing epoch; verified separately",
+    "field_or_box_repair": false
+  },
+  "initial_representation": {
+    "first_mesh": "outer6",
+    "laws": ["SaturatedR2", "Linear"],
+    "source_quadratures": [[8, 16], [12, 24]],
+    "steps": 0,
+    "cross_law_initial_state_identity": "measured",
+    "sensor_chi_profile_change": "record actual common-anchor values; fixed sensor/transition definitions unchanged",
+    "R1_history_identity_assumed": false
+  },
+  "cost_measurement": {
+    "zero_step_total_initialization_wall_time": true,
+    "native_ScalarDomain_and_residual_separate_timing": "record if exported; otherwise unavailable, not inferred from total startup",
+    "fresh_J_timing": "first actual auxiliary level within bounded stage family; no extra Jacobian probe",
+    "current_iterate_action_threshold": "native recorded; independently enforced in numerical analysis, not a native hard stop",
+    "old_volume_dense_estimates_include_full_domain_screening": false
+  },
+  "execution_gate": "root authorization after operator/action gates and next clean source/build/runtime pins",
+  "worker": 49,
+  "maximum_workers": 1,
+  "numerical_threads": 1,
+  "validation_lock": "shared through entire preflight",
+  "provenance": "exact before/after source, runtime, commands/environment, tools, inputs and outputs",
+  "historical_evidence_preserved": true
+}
