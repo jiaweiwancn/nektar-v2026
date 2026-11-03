@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "source_commit": "dea75dab62fb59f5264868f3d2033d13e0b4ef57",
+  "compiled_physics_commit": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+  "compiled_source_differences": [],
+  "unchanged_runtime_images": 99,
+  "thread_environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1"
+  },
+  "maximum_allocated_ranks": 2,
+  "connection": "tailscale:100.105.247.110",
+  "started_utc": "2026-11-03T04:10:10.815861+00:00",
+  "command": [
+    "taskset",
+    "-c",
+    "24-27",
+    "python3",
+    "-B",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-audit-source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m7.py",
+    "--build",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build",
+    "--output",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-native-final-001/qualification"
+  ],
+  "runner_sha256": "9396a001283d08444f721a668efef7f3511cd43ce60a48af129a4c44f73912e2",
+  "status": "passed",
+  "exit_code": 0,
+  "seconds": 1668.4127637399997,
+  "finished_utc": "2026-11-03T04:37:59.228916+00:00",
+  "source_clean_end": true,
+  "log_sha256": "3e1c3da1753cf780c45d0a069379c7576865eddac17064fb993bdc1d6229598e"
+}

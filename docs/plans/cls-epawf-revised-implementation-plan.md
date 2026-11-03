@@ -1,6 +1,6 @@
 **CLS and EP-AWF revised formulation implementation and validation plan**
 
-Status: Approved by the user on 2 November 2026; M0, M1, M2, M3, M4, M5 and M6 closed.
+Status: Approved by the user on 2 November 2026; M0, M1, M2, M3, M4, M5, M6 and M7 closed.
 Implementation branch: codex/cls-epawf-revised, based on
 6415398d856323c3116e646eaf7c882c66617602.
 
@@ -14,8 +14,10 @@ Implementation branch: codex/cls-epawf-revised, based on
   spatial stage/condensation and M4 constrained reference/native IMEX/MPI/restart
   and M5 conservative mapped geometry/equations/native stages VERIFIED on Linux;
   M6 prescribed upstream transition, independent sensors/derivatives, baseline
-  recovery and trace support VERIFIED on Linux; M7 and later milestones
-  UNVERIFIED. Original stability/positivity gates fail as specified.
+  recovery and trace support VERIFIED on Linux; M7 admissibility, perturbation,
+  full energy accounting and original-law failure diagnosis VERIFIED on Linux.
+  Conditional M8 is not adopted; M9 remains UNVERIFIED. Original physical
+  stability/positivity gates remain failed as specified.
 - Version Label: cls-epawf-revised-plan-v1.
 
 The objective is a native implementation of the high-Re CLS model and the
@@ -54,7 +56,16 @@ records the prescribed physical C2 mask, seven independent sensors, smooth
 admissibility gates, implicit trace derivatives and constrained baseline trace
 support. Main qualification, kernel/orientation checks, native operator replay
 and all 28 earlier regressions cover 31 registered tests. Physical failure
-gates remain unchanged. M7 and later implementation milestones remain open.
+gates remain unchanged.
+The [M7 closure report](/Users/jay/Documents/nektar-v2026/docs/plans/cls-epawf-revised-m7.md)
+records accepted-state and actual transfer-point admissibility, native
+velocity/k/epsilon perturbations, independent dt/p/mesh and H studies,
+pressure/flux/covariance/energy audits, MPI and perturbed history restart.
+The original three-component transverse growth is reproduced and converges
+under refinement; unforced transition passage remains unqualified. All 33
+registered gates are covered by source-bound Linux verification. M7 is closed
+as the required faithful-model diagnosis. M8 requires an approved remedy and
+M9 remains open.
 
 The [M0 contract and baseline record](/Users/jay/Documents/nektar-v2026/docs/plans/cls-epawf-revised-m0.md)
 and [contract v1](/Users/jay/Documents/nektar-v2026/docs/plans/cls-epawf-revised-contract-v1.json)
@@ -297,7 +308,7 @@ the outer equation determines its flux.
    traces and fluxes; a solution from a different upstream history is a
    separate comparison. Keep eta=0 for every terrain/transition run.
 
-8. **M7 — Characterize admissibility and perturbation behavior.**
+8. **M7 — Characterize admissibility and perturbation behavior (closed).**
    Check accepted states at source/volume quadrature, interfaces, physical
    samplers and reconstruction locations. Distinguish sampled positivity
    from any claim about the minimum of the polynomial everywhere.
@@ -461,7 +472,7 @@ unlock a failed model qualification or the existing Cao–Tamura score gates.
 
 The user approved the branch/base, the faithful revised-note model and the
 M0–M7/M9 implementation/verification sequence, and requested execution and
-closure of M0, M1, M2, M3, M4, M5 and M6. This includes recording the
+closure of M0, M1, M2, M3, M4, M5, M6 and M7. This includes recording the
 original CLS and sampled-K failures as validation findings. A robust-model
 extension and the conditional physical-validation campaign in M8 require
 a concrete, separately identified resolution of those failures; the removed

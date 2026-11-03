@@ -1,0 +1,111 @@
+{
+  "schema": 1,
+  "source_commit": "dea75dab62fb59f5264868f3d2033d13e0b4ef57",
+  "script_sha256": "0876e0068c17c30524f377227f24f0969b1a60d5e57e6269b485691aaf2e7a72",
+  "status": "passed",
+  "result": {
+    "success": true,
+    "expected_rejection": true,
+    "sole_failed_admissibility_set": "reconstruction_dense",
+    "native_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-dense-guard-003/dense-only-reject/case.evolution.json",
+    "native_report_sha256": "d51469a24a1f3bef99320dd249ff5344465cf80be29ab1753c352846ebad20a6",
+    "xml": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-dense-guard-003/dense-only-reject/case.xml",
+    "xml_sha256": "99b6c8a1db59bffe3227d6d14ab18152ba65714aef829fc221afbee47ca3a5d9",
+    "positive_other_sets": {
+      "source_volume_inner": [
+        2432,
+        0.016689168077964403,
+        0.07161613644652963,
+        -0.17766638608267377,
+        0,
+        0
+      ],
+      "source_volume_outer": [
+        128,
+        0.5105080130598861,
+        0.018340328353671356,
+        0.17595318762782092,
+        -1.346436661918929,
+        0
+      ],
+      "physical_sample_K": [
+        8,
+        0.5105080130598861,
+        0.14304202987727813,
+        0.09346266537183806,
+        0,
+        0
+      ],
+      "prescribed_source_inner": [
+        2432,
+        0.016689168077964403,
+        0,
+        0,
+        0,
+        0
+      ],
+      "mass_volume": [
+        320,
+        0.03609951043261903,
+        0.018340328353671356,
+        0,
+        0,
+        0
+      ],
+      "interface_inner": [
+        8,
+        0.5105080130598861,
+        0.07152101493863906,
+        0.18034597388215992,
+        0,
+        0
+      ],
+      "interface_outer": [
+        8,
+        0.5105080130598861,
+        0.07152101493863906,
+        0.17776393259447368,
+        -0.345250726709724,
+        0
+      ],
+      "reconstruction_native": [
+        320,
+        0.021875252420128662,
+        0.018158958315465334,
+        0,
+        0,
+        0
+      ]
+    },
+    "dense": [
+      405,
+      -0.0005105080130597406,
+      0.01815895831546533,
+      0,
+      0,
+      1
+    ],
+    "failure": "accepted-stage candidate failed sampled admissibility; see state_audits"
+  },
+  "commands": [
+    {
+      "name": "dense-only-reject",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-dense-guard-003/dense-only-reject/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 1,
+      "seconds": 2.1277962209996986,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-dense-guard-003/dense-only-reject/run.log",
+      "log_sha256": "051a0c8d3b49c7bcbc0c8539b9a1f173b92a0ee5a1b38505490868b1db3fc302",
+      "expected_failure": true
+    }
+  ]
+}

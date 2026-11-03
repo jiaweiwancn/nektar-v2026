@@ -1,0 +1,457 @@
+{
+  "schema": 1,
+  "source_commit": "dea75dab62fb59f5264868f3d2033d13e0b4ef57",
+  "started_utc": "2026-11-03T04:04:31.236875+00:00",
+  "script_sha256": "9ec240c0fecf8b4424dc3418e67a4de5f23bd7c00e014fceaff3271a0c2ff2f7",
+  "cases": [
+    {
+      "name": "flat-joint",
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-attempt-004/native/joint/case.evolution.json",
+      "sha256": "476a3060396eeefc2cfa6366c16fe71c034108fc3c8e4e7e72647a7722cafdff",
+      "native_audit": {
+        "time": 0.01,
+        "eta": 1,
+        "chi": 1,
+        "states": 5,
+        "min_k": 0.5104739326210589,
+        "min_outer_epsilon": 0.018340451339184643,
+        "min_covariance": 0.17421097001426833,
+        "min_yx_tangent": -1.3463638599910188,
+        "maximum_stage_residual": 3.1247299773003747e-13,
+        "maximum_energy_closure": 1.51415718331147e-13,
+        "maximum_free_energy_balance": 3.98337068836394e-16,
+        "maximum_strong_divergence": 0.00038355148500209354,
+        "maximum_normal_traction_jump": 0.0026462504055110303,
+        "independent_dense_min_k": 0.5104739326210589,
+        "independent_transfer_samples": {
+          "count": 80,
+          "min_k": 0.5105080130598861,
+          "min_epsilon": 0.07263583326186132,
+          "rule": "actual trace/boundary GLL tangential points and physical rK/rA/rB and H samples"
+        },
+        "cumulative_energy_accounting_defect": -4.567457523307893e-15,
+        "final_energy": [
+          9.01641889861111,
+          0.0073873158700016,
+          9.009918781433951,
+          3.4278317955935256e-06,
+          -0.0008906265247683193,
+          0.0,
+          9.016418898610981,
+          1.2967404927621828e-13,
+          1258.1846661971272,
+          9.016443637035902,
+          -2.4738424790867388e-05,
+          -4.699779248499431e-16
+        ],
+        "final_wall_sources": [
+          12.40127012168415,
+          7.3787287894176945,
+          2.3901575705621847e-16,
+          8.020307797767458,
+          0.018897405739142396
+        ],
+        "final_interface": [
+          8,
+          -0.6000769535420616,
+          0.000260584300768605,
+          0.0003517601036572564,
+          0.0008484546139131965,
+          4.854796006789886e-06,
+          -2.0848191337359545e-16,
+          0.0007374250069232777
+        ],
+        "velocity_perturbation_energy": [
+          3.0616300034307613e-06,
+          2.944491153366412e-06
+        ],
+        "velocity_energy_gain": 0.9617397105681982,
+        "turnover_time": 5.0,
+        "flow_through_time": 1.209997362384301,
+        "flow_time_convention": "domain length / fixed-reference streamwise velocity at outer midheight",
+        "duration": 0.01,
+        "turnover_units": 0.002,
+        "flow_through_units": 0.008264480825226751
+      },
+      "independent_energy": {
+        "schema": 1,
+        "checks": 29,
+        "errors": {
+          "actual_physical_mass_storage_and_energy": 5.421469873666578e-16,
+          "actual_unmasked_weak_energy_work": 1.4973031012923866e-14,
+          "independent_fixed_anchor_work": 3.3881317890172014e-21,
+          "essential_reaction_and_anchor_accounting": 1.5761042408830407e-14,
+          "indexed_outer_stress_production_cancellation": 1.3877787807814457e-17,
+          "independent_outer_covariance_eigenvalue": 3.3306690738754696e-16,
+          "independent_direct_energy_components": 7.774948609278459e-15,
+          "independent_direct_energy_equals_actual_weak_work": 2.2853573651305373e-14,
+          "independent_complete_energy_identity": 8.47158333625975e-15,
+          "independent_zero_net_redistribution": 9.324138683375338e-17,
+          "independent_total_matching_traction_and_k_flux": 2.2204460492503136e-16
+        },
+        "scope": "full Fixed original-CLS neutral-data direct energy and matching-traction audit",
+        "dimension": 2,
+        "mapped": false,
+        "eta": 1,
+        "chi": 1,
+        "stage_time": 0.01,
+        "alpha": 600.0,
+        "storage": 0.007387315870001603,
+        "stored_resolved_plus_k": 1258.1846661971265,
+        "unmasked_weak_work": 9.016418898611246,
+        "essential_boundary_reaction_work": 9.016443637035895,
+        "fixed_anchor_work": -2.473842479086739e-05,
+        "free_row_balance": 1.4163857261530188e-13,
+        "unmasked_load_source": "actual final unmasked stage loads",
+        "direct_volume_components_reconstructed": true,
+        "direct": {
+          "stress_work_minus_k_source": 9.00991878143394,
+          "resolved_advection": 3.427831865645181e-06,
+          "roughness_force_work": -0.0008906265247688385,
+          "volumes": [
+            16.0,
+            47.999999999999986
+          ],
+          "original_dissipation_integral": 12.40127012168408,
+          "blended_dissipation_integral": 7.37872878941769,
+          "redistribution_integral": 9.324138683375338e-17,
+          "outer_covariance_minimum_on_declared_Gauss_rule": 0.1742350800744079,
+          "quadrature": [
+            8,
+            32,
+            8
+          ]
+        },
+        "independently_reconstructed_total": 9.01641889861104,
+        "independent_interface": [
+          7.999999999999998,
+          -0.6000769535420613,
+          0.00026058430076861277,
+          0.0003517601036573817,
+          0.00084845461391337,
+          4.854796006785256e-06,
+          -2.0840059821065904e-16,
+          0.0007374250069235261
+        ],
+        "interpretation": "stage storage uses the actual BDF/IMEX history contract; not a new finite-difference definition of total-energy change",
+        "success": true
+      }
+    },
+    {
+      "name": "unforced-control",
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-pilot-001/preflight-control/case.evolution.json",
+      "sha256": "9b7be98d420f13a2589ee6976b61550bc5b8683f6fc1d79c7ad8b913e89b8f90",
+      "native_audit": {
+        "time": 0.005,
+        "eta": 0,
+        "chi": 1,
+        "states": 2,
+        "min_k": 0.4688571770771179,
+        "min_outer_epsilon": 0.03665642702920845,
+        "min_covariance": 0.12830331552651203,
+        "min_yx_tangent": -0.6736897842473756,
+        "maximum_stage_residual": 8.187817913798666e-13,
+        "maximum_energy_closure": 7.369751443386951e-14,
+        "maximum_free_energy_balance": 1.257273403088817e-13,
+        "maximum_strong_divergence": 0.008195008699461543,
+        "maximum_normal_traction_jump": 0.1378646938359112,
+        "independent_dense_min_k": 0.4688571770771179,
+        "independent_transfer_samples": {
+          "count": 320,
+          "min_k": 0.5102464326426369,
+          "min_epsilon": 0.04106455261812734,
+          "rule": "actual trace/boundary GLL tangential points and physical rK/rA/rB and H samples"
+        },
+        "cumulative_energy_accounting_defect": -1.1679546219056646e-15,
+        "final_energy": [
+          10.229138296938341,
+          0.12210724246471664,
+          10.108244189969632,
+          -6.845754049856915e-06,
+          -0.0012062897421552643,
+          0.0,
+          10.229138296938142,
+          1.9895196601282805e-13,
+          388.37503307671545,
+          10.229138296939627,
+          0.0,
+          -1.2860823517257813e-12
+        ],
+        "final_wall_sources": [
+          9.504398479458194,
+          9.504398479458194,
+          0,
+          10.670023150015703,
+          0.0037451653418213425
+        ],
+        "final_interface": [
+          6.000000000000001,
+          -0.44338431918085125,
+          0.034740606945168125,
+          0.03599169912067028,
+          0.1378646938359112,
+          0.03269683896969529,
+          -5.777399974984769e-15,
+          0.004766390463379542
+        ],
+        "velocity_perturbation_energy": [
+          0.0,
+          2.4391529426477655e-05
+        ],
+        "velocity_energy_gain": null,
+        "turnover_time": 5.0,
+        "flow_through_time": 0.9753446080015812,
+        "flow_time_convention": "domain length / fixed-reference streamwise velocity at outer midheight",
+        "duration": 0.005,
+        "turnover_units": 0.001,
+        "flow_through_units": 0.0051263932347405715
+      },
+      "independent_energy": {
+        "schema": 1,
+        "checks": 213,
+        "errors": {
+          "actual_physical_mass_storage_and_energy": 1.0245353025745577e-15,
+          "actual_unmasked_weak_energy_work": 1.04193928432775e-15,
+          "independent_fixed_anchor_work": 0.0,
+          "essential_reaction_and_anchor_accounting": 6.946261895517457e-16,
+          "indexed_outer_stress_production_cancellation": 1.3877787807814457e-17,
+          "independent_outer_covariance_eigenvalue": 2.220446049250313e-16,
+          "independent_unforced_transition_gates": 9.08875300109489e-14,
+          "independent_unforced_transition_inputs": 1.5260479372173968e-16,
+          "initial_unforced_physical_mass": 1.4636240697564725e-16,
+          "initial_mixed_chi_direct_energy_components": 4.3447000206964914e-14,
+          "initial_mixed_chi_direct_equals_captured_weak_work": 1.1280632876011009e-13,
+          "initial_mixed_chi_wall_source_budgets": 2.101219150370525e-15,
+          "independent_direct_energy_components": 3.9107686371663836e-14,
+          "independent_direct_energy_equals_actual_weak_work": 8.33551427462193e-15,
+          "independent_complete_energy_identity": 2.77850475820731e-14,
+          "independent_zero_net_redistribution": 0.0,
+          "independent_total_matching_traction_and_k_flux": 4.082382580132086e-16
+        },
+        "scope": "full unforced Upstream original-CLS direct energy, independent sensors/chi and matching-traction audit",
+        "dimension": 2,
+        "mapped": false,
+        "eta": 0,
+        "chi": 1,
+        "stage_time": 0.005,
+        "alpha": 200.0,
+        "storage": 0.12210724246469606,
+        "stored_resolved_plus_k": 388.37503307671506,
+        "unmasked_weak_work": 10.22913829693833,
+        "essential_boundary_reaction_work": 10.22913829693962,
+        "fixed_anchor_work": 0.0,
+        "free_row_balance": -1.2896350654045818e-12,
+        "unmasked_load_source": "actual final unmasked stage loads",
+        "initial_unforced_direct": {
+          "stress_work_minus_k_source": 9.038755511528525,
+          "resolved_advection": 0.0,
+          "roughness_force_work": 0.0,
+          "volumes": [
+            11.999999999999995,
+            11.999999999999996
+          ],
+          "original_dissipation_integral": 9.299327597484119,
+          "blended_dissipation_integral": 8.436167051707091,
+          "redistribution_integral": 4.644959276153132e-17,
+          "outer_covariance_minimum_on_declared_Gauss_rule": 0.17627120218788256,
+          "quadrature": [
+            8,
+            32,
+            8
+          ]
+        },
+        "direct_volume_components_reconstructed": true,
+        "direct": {
+          "stress_work_minus_k_source": 10.108244189969529,
+          "resolved_advection": -6.845753654546871e-06,
+          "roughness_force_work": -0.0012062897421556088,
+          "volumes": [
+            11.999999999999996,
+            11.999999999999996
+          ],
+          "original_dissipation_integral": 9.50439847945822,
+          "blended_dissipation_integral": 9.50439847945822,
+          "redistribution_integral": 0.0,
+          "outer_covariance_minimum_on_declared_Gauss_rule": 0.1342512530829268,
+          "quadrature": [
+            8,
+            32,
+            8
+          ]
+        },
+        "independently_reconstructed_total": 10.229138296938416,
+        "independent_interface": [
+          6.0,
+          -0.4433843191808512,
+          0.03474060694516811,
+          0.03599169912066783,
+          0.13786469383591135,
+          0.03269683896969522,
+          -5.777386422457613e-15,
+          0.004766390463379413
+        ],
+        "interpretation": "stage storage uses the actual BDF/IMEX history contract; not a new finite-difference definition of total-energy change",
+        "success": true
+      }
+    },
+    {
+      "name": "unforced-pulse",
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-pilot-001/preflight-pulse/case.evolution.json",
+      "sha256": "33a39bdf84714a2a9dfc3077b5b0654622875ad603612d05b6bcd951146a9074",
+      "native_audit": {
+        "time": 0.005,
+        "eta": 0,
+        "chi": 1,
+        "states": 2,
+        "min_k": 0.4688571706579144,
+        "min_outer_epsilon": 0.03665635927509474,
+        "min_covariance": 0.1322352496584017,
+        "min_yx_tangent": -0.6736904962195728,
+        "maximum_stage_residual": 9.75715293649266e-13,
+        "maximum_energy_closure": 8.312177989555895e-14,
+        "maximum_free_energy_balance": 6.122038385988986e-14,
+        "maximum_strong_divergence": 0.008221974915391827,
+        "maximum_normal_traction_jump": 0.1394278940976203,
+        "independent_dense_min_k": 0.46885717065791443,
+        "independent_transfer_samples": {
+          "count": 320,
+          "min_k": 0.5102464491795375,
+          "min_epsilon": 0.0410633819841452,
+          "rule": "actual trace/boundary GLL tangential points and physical rK/rA/rB and H samples"
+        },
+        "cumulative_energy_accounting_defect": -6.439293542825908e-16,
+        "final_energy": [
+          10.213552546483708,
+          0.10639782109708373,
+          10.10910058263334,
+          -0.0005280478158059664,
+          -0.0014178094314033745,
+          0.0,
+          10.213552546483214,
+          4.938272013532696e-13,
+          388.3754967571155,
+          10.213552546484333,
+          0.0,
+          -6.252776074688882e-13
+        ],
+        "final_wall_sources": [
+          9.505155360311473,
+          9.505155360311473,
+          0,
+          10.670348327287737,
+          0.003745190577036949
+        ],
+        "final_interface": [
+          6.000000000000001,
+          -0.4411093557047891,
+          0.03504051910110833,
+          0.03620375566221969,
+          0.1394278940976203,
+          0.032700522669973406,
+          -5.778008144640898e-15,
+          0.002805076233367226
+        ],
+        "velocity_perturbation_energy": [
+          7.645770169366341e-08,
+          2.4340907756927614e-05
+        ],
+        "velocity_energy_gain": 318.3578268472189,
+        "turnover_time": 5.0,
+        "flow_through_time": 0.9753446080015812,
+        "flow_time_convention": "domain length / fixed-reference streamwise velocity at outer midheight",
+        "duration": 0.005,
+        "turnover_units": 0.001,
+        "flow_through_units": 0.0051263932347405715
+      },
+      "independent_energy": {
+        "schema": 1,
+        "checks": 213,
+        "errors": {
+          "actual_physical_mass_storage_and_energy": 1.4636201134068216e-16,
+          "actual_unmasked_weak_energy_work": 3.3045093560735894e-15,
+          "independent_fixed_anchor_work": 0.0,
+          "essential_reaction_and_anchor_accounting": 8.348234162711785e-15,
+          "indexed_outer_stress_production_cancellation": 1.3877787807814457e-17,
+          "independent_outer_covariance_eigenvalue": 1.8041124150158794e-15,
+          "independent_unforced_transition_gates": 1.2305174352050927e-13,
+          "independent_unforced_transition_inputs": 1.526020351471052e-16,
+          "initial_unforced_physical_mass": 2.927244052491633e-16,
+          "initial_mixed_chi_direct_energy_components": 4.382250580209993e-14,
+          "initial_mixed_chi_direct_equals_captured_weak_work": 1.2379839558912532e-13,
+          "initial_mixed_chi_wall_source_budgets": 1.0696273451154607e-14,
+          "independent_direct_energy_components": 3.8349722946444266e-14,
+          "independent_direct_energy_equals_actual_weak_work": 2.0522742316667977e-14,
+          "independent_complete_energy_identity": 3.1131956565114984e-14,
+          "independent_zero_net_redistribution": 0.0,
+          "independent_total_matching_traction_and_k_flux": 3.770132354456261e-16
+        },
+        "scope": "full unforced Upstream original-CLS direct energy, independent sensors/chi and matching-traction audit",
+        "dimension": 2,
+        "mapped": false,
+        "eta": 0,
+        "chi": 1,
+        "stage_time": 0.005,
+        "alpha": 200.0,
+        "storage": 0.1063978210970693,
+        "stored_resolved_plus_k": 388.37549675711557,
+        "unmasked_weak_work": 10.213552546483742,
+        "essential_boundary_reaction_work": 10.213552546484282,
+        "fixed_anchor_work": 0.0,
+        "free_row_balance": -5.400124791776761e-13,
+        "unmasked_load_source": "actual final unmasked stage loads",
+        "initial_unforced_direct": {
+          "stress_work_minus_k_source": 9.03927108178116,
+          "resolved_advection": 0.00046488165051741256,
+          "roughness_force_work": -1.9195877446308104e-18,
+          "volumes": [
+            11.999999999999993,
+            11.999999999999996
+          ],
+          "original_dissipation_integral": 9.300059825571878,
+          "blended_dissipation_integral": 8.436588847095928,
+          "redistribution_integral": -1.3029060794665648e-17,
+          "outer_covariance_minimum_on_declared_Gauss_rule": 0.17421590969719863,
+          "quadrature": [
+            8,
+            32,
+            8
+          ]
+        },
+        "direct_volume_components_reconstructed": true,
+        "direct": {
+          "stress_work_minus_k_source": 10.109100582633285,
+          "resolved_advection": -0.0005280478154182852,
+          "roughness_force_work": -0.0014178094314035972,
+          "volumes": [
+            11.999999999999988,
+            11.999999999999996
+          ],
+          "original_dissipation_integral": 9.50515536031144,
+          "blended_dissipation_integral": 9.50515536031144,
+          "redistribution_integral": 0.0,
+          "outer_covariance_minimum_on_declared_Gauss_rule": 0.1383210285423621,
+          "quadrature": [
+            8,
+            32,
+            8
+          ]
+        },
+        "independently_reconstructed_total": 10.213552546483532,
+        "independent_interface": [
+          6.0,
+          -0.44110935570478915,
+          0.03504051910110844,
+          0.03620375566221743,
+          0.13942789409762013,
+          0.032700522669973336,
+          -5.777669331461996e-15,
+          0.002805076233367243
+        ],
+        "interpretation": "stage storage uses the actual BDF/IMEX history contract; not a new finite-difference definition of total-energy change",
+        "success": true
+      }
+    }
+  ],
+  "status": "passed",
+  "finished_utc": "2026-11-03T04:04:35.126107+00:00"
+}

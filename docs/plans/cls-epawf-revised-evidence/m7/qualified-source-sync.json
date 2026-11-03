@@ -1,0 +1,79 @@
+{
+  "schema": 1,
+  "source_before": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+  "source_after": "dea75dab62fb59f5264868f3d2033d13e0b4ef57",
+  "main_commit": "f4b70baec10016dd098005bc5a5507b87e4a57bf",
+  "started_utc": "2026-11-03T04:39:36.656937+00:00",
+  "connection": "tailscale:100.105.247.110",
+  "compiler_workers": 16,
+  "numerical_threads": 1,
+  "commands": [
+    {
+      "name": "configure",
+      "argv": [
+        "cmake",
+        "-S",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/source/solvers/IncNavierStokesSolver/Tests/RANS",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build",
+        "-DRANS_BUILD_SOLVER=ON",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake"
+      ],
+      "exit_code": 0,
+      "seconds": 0.6657991900001434,
+      "log_sha256": "d4d7cf3979a67e65fd2d6bf70cb694a35c2c3d0c84e0eaaf7ab4ad18e19f07d0"
+    },
+    {
+      "name": "incremental-build",
+      "argv": [
+        "cmake",
+        "--build",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build",
+        "--parallel",
+        "16"
+      ],
+      "exit_code": 0,
+      "seconds": 0.7160376040001211,
+      "log_sha256": "2628f2702bc2f7544dc7540e06dd84e3d061ff131f25759102fd79d37d5690eb"
+    },
+    {
+      "name": "fingerprint",
+      "argv": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/transfers/fingerprint-runtime.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-qualified-sync/qualified-runtime-fingerprint.json"
+      ],
+      "exit_code": 0,
+      "seconds": 1.9693589509997764,
+      "log_sha256": "3b8e35f9ef30276513daec571fcde4e4e7d19d4b770a1aa7fb6d171f56098770"
+    }
+  ],
+  "runner_sha256": "1beed8270874d7901ce071738dc614cee3a1a350048ae3bc5775f55e8270f9e5",
+  "changed_paths": [
+    "solvers/IncNavierStokesSolver/Examples/RevisedEquilibriumWall/README.md",
+    "solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m7_dense_guard.py",
+    "solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m7_energy_oracle.py",
+    "solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m7.py",
+    "solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m7_transition_diagnosis.py",
+    "solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m7_transition_flow.py",
+    "solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m7_transverse.py"
+  ],
+  "status": "passed",
+  "unchanged_runtime_images": 99,
+  "identical_campaign_runtime_context": true,
+  "compared_runtime_fields": [
+    "runtime_artifacts",
+    "runtime_bindings",
+    "runtime_environment",
+    "python_packages",
+    "tool_images"
+  ],
+  "main_preserved": true,
+  "source_clean": true,
+  "finished_utc": "2026-11-03T04:39:40.809796+00:00"
+}

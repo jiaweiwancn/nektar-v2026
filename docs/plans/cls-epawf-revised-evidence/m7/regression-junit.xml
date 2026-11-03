@@ -1,0 +1,497 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="(empty)"
+	tests="31"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname=""
+	time="4129"
+	timestamp="2026-11-03T11:18:54"
+	>
+	<testcase name="RANSEquilibriumTimeNative" classname="RANSEquilibriumTimeNative" time="0.0314148" status="run">
+		<system-out>Native wall IMEX verified: 6813 checks, 24 rejected controls.
+</system-out>
+	</testcase>
+	<testcase name="RANSEquilibriumEvolutionNative" classname="RANSEquilibriumEvolutionNative" time="2.03506" status="run">
+		<system-out></system-out>
+	</testcase>
+	<testcase name="RANSEquilibriumPatchNative" classname="RANSEquilibriumPatchNative" time="9.06174" status="run">
+		<system-out>Native multiregion layout verified: 179 stage unknowns.
+</system-out>
+	</testcase>
+	<testcase name="RANSEquilibriumWallEvolutionSmoke" classname="RANSEquilibriumWallEvolutionSmoke" time="1.50764" status="run">
+		<system-out>=======================================================================
+	      Wall evolution: native IMEX, mapped multiregion CG
+	  Physical dimension: 2
+	     Global unknowns: 515
+	         MPI backend: replicated global coefficients, owned-cell collective assembly
+	  Correction weights: chi=1.000000, eta=1.000000
+=======================================================================
+EP-AWF IMEX2 step 1 time 0.05 stage scaled residual 5.71671e-17
+EP-AWF IMEX2 step 2 time 0.1 stage scaled residual 7.47075e-15
+EP-AWF IMEX2 step 3 time 0.15 stage scaled residual 7.47075e-15
+Writing: "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/build/rans-wall-evolution/case-u.fld" (0s, XML)
+Writing: "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/build/rans-wall-evolution/case-v.fld" (0s, XML)
+Writing: "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/build/rans-wall-evolution/case-k.fld" (0s, XML)
+Writing: "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/build/rans-wall-evolution/case-...
+The rest of the test output was removed since it exceeds the threshold of 1024 bytes.
+</system-out>
+	</testcase>
+	<testcase name="RANSEquilibriumWallStageSmoke" classname="RANSEquilibriumWallStageSmoke" time="25.9577" status="run">
+		<system-out>=======================================================================
+	    Wall formulation: revised EP-AWF native flat mixed stage
+	      Stage unknowns: 179
+	        Condensation: uncondensed
+	            Pressure: pi=p/rho+2k/3, separate subdomain spaces, one volume mean
+=======================================================================
+EP-AWF flat stage converged, 3 Newton iterations; max physical block dual norm 3.30087e-15
+renaming "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/build/rans-wall-stage/case-u.fld" -&gt; "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/build/rans-wall-stagecase-u.bak5.fld"
+Writing: "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/build/rans-wall-stage/case-u.fld" (0.000890275s, XML)
+renaming "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/build/rans-wall-stage/case-v.fld" -&gt; "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/build/rans-wall-stagecase-v.bak5.fld"
+Writing: "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revi...
+The rest of the test output was removed since it exceeds the threshold of 1024 bytes.
+</system-out>
+	</testcase>
+	<testcase name="RANSStandardTransportSmoke" classname="RANSStandardTransportSmoke" time="2.56587" status="run">
+		<system-out>renaming "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/build/rans-smoke/StandardRANS_MMS.his" -&gt; "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/build/rans-smokeStandardRANS_MMS.bak8.his"
+=======================================================================
+	        EquationType: UnsteadyNavierStokes
+	        Session Name: /media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/build/rans-smoke/StandardRANS_MMS
+	        Spatial Dim.: 2
+	  Max SEM Exp. Order: 7
+	      Expansion Dim.: 2
+	     Projection Type: Continuous Galerkin
+	 Advect. advancement: explicit
+	Diffuse. advancement: implicit
+	           Time Step: 0.025
+	        No. of Steps: 2
+	 Checkpoints (steps): 0
+	    Integration Type: IMEX
+	    Splitting Scheme: Velocity correction (weak press. form)
+	          RANS model: Standard k-epsilon, full symmetric stress
+	RANS resolved molecular viscosity: 0.025
+	  RANS neutral kappa: 0.432666
+	     RANS wall model: None
+	 RANS implicit stage: nonlinear Picard + pressure defect iteratio...
+The rest of the test output was removed since it exceeds the threshold of 1024 bytes.
+</system-out>
+	</testcase>
+	<testcase name="RANSCLSTransportSmoke" classname="RANSCLSTransportSmoke" time="7.51768" status="run">
+		<system-out>renaming "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/build/rans-smoke/CLS_MMS.his" -&gt; "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/build/rans-smokeCLS_MMS.bak8.his"
+=======================================================================
+	        EquationType: UnsteadyNavierStokes
+	        Session Name: /media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/build/rans-smoke/CLS_MMS
+	        Spatial Dim.: 2
+	  Max SEM Exp. Order: 5
+	      Expansion Dim.: 2
+	     Projection Type: Continuous Galerkin
+	 Advect. advancement: explicit
+	Diffuse. advancement: implicit
+	           Time Step: 0.025
+	        No. of Steps: 2
+	 Checkpoints (steps): 0
+	    Integration Type: IMEX
+	    Splitting Scheme: Velocity correction (weak press. form)
+	          RANS model: High-Re CLS, full cubic stress and algebraic Yap
+	RANS resolved molecular viscosity: 0
+	  RANS neutral kappa: 0.440554
+	     RANS wall model: None
+	 RANS implicit stage: nonlinear Picard + pressure defect iteration
+	RANS pressure correct...
+The rest of the test output was removed since it exceeds the threshold of 1024 bytes.
+</system-out>
+	</testcase>
+	<testcase name="RANSAWFOriginalSmoke" classname="RANSAWFOriginalSmoke" time="5.80229" status="run">
+		<system-out>renaming "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/build/rans-smoke/AWFOriginal.his" -&gt; "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/build/rans-smokeAWFOriginal.bak8.his"
+=======================================================================
+	        EquationType: UnsteadyNavierStokes
+	        Session Name: /media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/build/rans-smoke/AWFOriginal
+	        Spatial Dim.: 2
+	  Max SEM Exp. Order: 5
+	      Expansion Dim.: 2
+	     Projection Type: Continuous Galerkin
+	 Advect. advancement: explicit
+	Diffuse. advancement: implicit
+	           Time Step: 0.025
+	        No. of Steps: 2
+	 Checkpoints (steps): 0
+	    Integration Type: IMEX
+	    Splitting Scheme: Velocity correction (weak press. form)
+	          RANS model: High-Re CLS, full cubic stress and algebraic Yap
+	RANS resolved molecular viscosity: 0
+	  RANS neutral kappa: 0.440554
+	     RANS wall model: AWFOriginal
+	 RANS implicit stage: nonlinear Picard + pressure defect iteration
+	RA...
+The rest of the test output was removed since it exceeds the threshold of 1024 bytes.
+</system-out>
+	</testcase>
+	<testcase name="RANSAWFEquilibriumSmoke" classname="RANSAWFEquilibriumSmoke" time="4.99835" status="run">
+		<system-out>renaming "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/build/rans-smoke/AWFEquilibrium.his" -&gt; "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/build/rans-smokeAWFEquilibrium.bak8.his"
+=======================================================================
+	        EquationType: UnsteadyNavierStokes
+	        Session Name: /media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/build/rans-smoke/AWFEquilibrium
+	        Spatial Dim.: 2
+	  Max SEM Exp. Order: 5
+	      Expansion Dim.: 2
+	     Projection Type: Continuous Galerkin
+	 Advect. advancement: explicit
+	Diffuse. advancement: implicit
+	           Time Step: 0.025
+	        No. of Steps: 2
+	 Checkpoints (steps): 0
+	    Integration Type: IMEX
+	    Splitting Scheme: Velocity correction (weak press. form)
+	          RANS model: High-Re CLS, full cubic stress and algebraic Yap
+	RANS resolved molecular viscosity: 0
+	  RANS neutral kappa: 0.440554
+	     RANS wall model: AWFEquilibrium
+	 RANS implicit stage: nonlinear Picard + pressure defect i...
+The rest of the test output was removed since it exceeds the threshold of 1024 bytes.
+</system-out>
+	</testcase>
+	<testcase name="RANSStandardAWFEquilibriumSmoke" classname="RANSStandardAWFEquilibriumSmoke" time="0.866135" status="run">
+		<system-out>
+[NON-XML-CHAR-0x1B][36mWarning : [NON-XML-CHAR-0x1B][0mLevel 0 assertion violation
+The IO_CheckSteps parameter is now deprecated.
+Please use the 'Checkpoint' filter instead
+
+renaming "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/build/rans-smoke/StandardAWFEquilibrium.his" -&gt; "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/build/rans-smokeStandardAWFEquilibrium.bak8.his"
+=======================================================================
+	        EquationType: UnsteadyNavierStokes
+	        Session Name: /media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/build/rans-smoke/StandardAWFEquilibrium
+	        Spatial Dim.: 2
+	  Max SEM Exp. Order: 5
+	      Expansion Dim.: 2
+	     Projection Type: Continuous Galerkin
+	 Advect. advancement: explicit
+	Diffuse. advancement: implicit
+	           Time Step: 0.5
+	        No. of Steps: 2
+	 Checkpoints (steps): 0
+	    Integration Type: IMEX
+	    Splitting Scheme: Velocity correction (weak press. form)
+	          RANS model: Standard k-epsilon, full symmetric stress
+	RANS resolve...
+The rest of the test output was removed since it exceeds the threshold of 1024 bytes.
+</system-out>
+	</testcase>
+	<testcase name="RANSABLPreservationSmoke" classname="RANSABLPreservationSmoke" time="2.40146" status="run">
+		<system-out>
+[NON-XML-CHAR-0x1B][36mWarning : [NON-XML-CHAR-0x1B][0mLevel 0 assertion violation
+The IO_CheckSteps parameter is now deprecated.
+Please use the 'Checkpoint' filter instead
+
+renaming "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/build/rans-smoke/ABLPreservation.his" -&gt; "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/build/rans-smokeABLPreservation.bak8.his"
+=======================================================================
+	        EquationType: UnsteadyNavierStokes
+	        Session Name: /media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/build/rans-smoke/ABLPreservation
+	        Spatial Dim.: 2
+	  Max SEM Exp. Order: 5
+	      Expansion Dim.: 2
+	     Projection Type: Continuous Galerkin
+	 Advect. advancement: explicit
+	Diffuse. advancement: implicit
+	           Time Step: 0.05
+	        No. of Steps: 2
+	 Checkpoints (steps): 1
+	    Integration Type: IMEX
+	    Splitting Scheme: Velocity correction (weak press. form)
+	          RANS model: High-Re CLS, full cubic stress and algebraic Yap
+	RANS resolved molecular v...
+The rest of the test output was removed since it exceeds the threshold of 1024 bytes.
+</system-out>
+	</testcase>
+	<testcase name="RANSABL3DPerturbationSmoke" classname="RANSABL3DPerturbationSmoke" time="82.4469" status="run">
+		<system-out>
+[NON-XML-CHAR-0x1B][36mWarning : [NON-XML-CHAR-0x1B][0mLevel 0 assertion violation
+The IO_CheckSteps parameter is now deprecated.
+Please use the 'Checkpoint' filter instead
+
+renaming "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/build/rans-smoke/ABLPreservation3D.his" -&gt; "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/build/rans-smokeABLPreservation3D.bak8.his"
+=======================================================================
+	        EquationType: UnsteadyNavierStokes
+	        Session Name: /media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/build/rans-smoke/ABLPreservation3D
+	        Spatial Dim.: 3
+	  Max SEM Exp. Order: 5
+	      Expansion Dim.: 3
+	     Projection Type: Continuous Galerkin
+	 Advect. advancement: explicit
+	Diffuse. advancement: implicit
+	           Time Step: 0.05
+	        No. of Steps: 2
+	 Checkpoints (steps): 0
+	    Integration Type: IMEX
+	    Splitting Scheme: Velocity correction (weak press. form)
+	          RANS model: High-Re CLS, full cubic stress and algebraic Yap
+	RANS resolved molec...
+The rest of the test output was removed since it exceeds the threshold of 1024 bytes.
+</system-out>
+	</testcase>
+	<testcase name="RANSStandardResidualMapSmoke" classname="RANSStandardResidualMapSmoke" time="0.776084" status="run">
+		<system-out>
+[NON-XML-CHAR-0x1B][36mWarning : [NON-XML-CHAR-0x1B][0mLevel 0 assertion violation
+The IO_CheckSteps parameter is now deprecated.
+Please use the 'Checkpoint' filter instead
+
+=======================================================================
+	        EquationType: UnsteadyNavierStokes
+	        Session Name: /media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/build/rans-smoke/StandardResidualMap
+	        Spatial Dim.: 2
+	  Max SEM Exp. Order: 4
+	      Expansion Dim.: 2
+	     Projection Type: Continuous Galerkin
+	 Advect. advancement: explicit
+	Diffuse. advancement: implicit
+	           Time Step: 0.002
+	        No. of Steps: 2
+	 Checkpoints (steps): 1
+	    Integration Type: IMEX
+	    Splitting Scheme: Velocity correction (weak press. form)
+	          RANS model: Standard k-epsilon, full symmetric stress
+	RANS resolved molecular viscosity: 1.5e-05
+	  RANS neutral kappa: 0.432666
+	     RANS wall model: AWFEquilibrium
+	 RANS implicit stage: Newton-Krylov coupled stage
+	     RANS Newton map: current residual with frozen-inverse sweeps
+	RAN...
+The rest of the test output was removed since it exceeds the threshold of 1024 bytes.
+</system-out>
+	</testcase>
+	<testcase name="RANSCLSResidualMapSmoke" classname="RANSCLSResidualMapSmoke" time="1.00096" status="run">
+		<system-out>
+[NON-XML-CHAR-0x1B][36mWarning : [NON-XML-CHAR-0x1B][0mLevel 0 assertion violation
+The IO_CheckSteps parameter is now deprecated.
+Please use the 'Checkpoint' filter instead
+
+=======================================================================
+	        EquationType: UnsteadyNavierStokes
+	        Session Name: /media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/build/rans-smoke/CLSResidualMap
+	        Spatial Dim.: 2
+	  Max SEM Exp. Order: 4
+	      Expansion Dim.: 2
+	     Projection Type: Continuous Galerkin
+	 Advect. advancement: explicit
+	Diffuse. advancement: implicit
+	           Time Step: 0.002
+	        No. of Steps: 2
+	 Checkpoints (steps): 1
+	    Integration Type: IMEX
+	    Splitting Scheme: Velocity correction (weak press. form)
+	          RANS model: High-Re CLS, full cubic stress and algebraic Yap
+	RANS resolved molecular viscosity: 1.5e-05
+	  RANS neutral kappa: 0.440554
+	     RANS wall model: AWFEquilibrium
+	 RANS implicit stage: Newton-Krylov coupled stage
+	     RANS Newton map: current residual with frozen-inverse sweeps
+	R...
+The rest of the test output was removed since it exceeds the threshold of 1024 bytes.
+</system-out>
+	</testcase>
+	<testcase name="RANSWallLayerPrototype" classname="RANSWallLayerPrototype" time="0.0317856" status="run">
+		<system-out>RANS wall-layer prototype passed: ranks=1 p14 residuals U=1.01099823099e-10 k=2.13521008376e-11 eps=3.32067673204e-09 normal=2.99857410849e-10; source mean=-2.88775554576e-16 linear moment=0.00867757195397
+</system-out>
+	</testcase>
+	<testcase name="RANSKernelUnitTests" classname="RANSKernelUnitTests" time="0.0161509" status="run">
+		<system-out>RANS kernel checks passed: 19192 checks, 78 tensor cases, 60 wall cases
+</system-out>
+	</testcase>
+	<testcase name="RANSWallGeometryUnitTests" classname="RANSWallGeometryUnitTests" time="0.0104919" status="run">
+		<system-out>Geometry checks: 3759, rejected inputs: 5
+</system-out>
+	</testcase>
+	<testcase name="RANSObservationKernels" classname="RANSObservationKernels" time="0.00394274" status="run">
+		<system-out>976 observation/reference checks passed
+</system-out>
+	</testcase>
+	<testcase name="RANSEquilibriumProfilesNative" classname="RANSEquilibriumProfilesNative" time="0.83129" status="run">
+		<system-out>M2 native profiles: 62 cases, 71414 checks; original inner-k positivity gate fails as specified.
+</system-out>
+	</testcase>
+	<testcase name="RANSCLSEPAWFM1Oracle" classname="RANSCLSEPAWFM1Oracle" time="1.54113" status="run">
+		<system-out>M1 running kernels
+M1 running constitutive
+{
+  "verification_status": "passed",
+  "physical_stability_gate": "failed_as_specified",
+  "checks": 5000,
+  "report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/cls-epawf-m1-14ns86ch/validation.json"
+}
+</system-out>
+	</testcase>
+	<testcase name="RANSCLSEPAWFM2Oracle" classname="RANSCLSEPAWFM2Oracle" time="1.75045" status="run">
+		<system-out>{
+  "verification_status": "passed",
+  "checks": 21202,
+  "physical_inner_k_positivity_gate": "failed_as_specified",
+  "report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/cls-epawf-m2-kgyhw118/validation.json"
+}
+</system-out>
+	</testcase>
+	<testcase name="RANSCLSEPAWFM6KernelOracle" classname="RANSCLSEPAWFM6KernelOracle" time="1.36344" status="run">
+		<system-out>{"success": true, "checks": 1654, "failures": [], "report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/cls-epawf-m6-kernel/validation.json"}
+</system-out>
+	</testcase>
+	<testcase name="RANSCLSEPAWFM6Oracle" classname="RANSCLSEPAWFM6Oracle" time="3567.41" status="run">
+		<system-out>operator-flat-d2: passed (7.93s)
+operator-feet-d2: passed (8.69s)
+operator-flat-d3: passed (108.62s)
+expressions-flat: passed (0.67s)
+expressions-feet: passed (0.67s)
+mms-flat-p3: passed (118.76s)
+mms-flat-p4: passed (257.10s)
+mms-flat-p5: passed (492.06s)
+mms-feet-p3: passed (124.37s)
+mms-feet-p4: passed (269.44s)
+mms-flat-h2: passed (947.42s)
+condensed-feet: passed (118.71s)
+mpi-feet-2: passed (75.05s)
+mpi-feet-4: passed (55.20s)
+restart-first: passed (61.87s)
+restart-last: passed (29.54s)
+imex1-transition: passed (58.91s)
+standard-kepsilon-transition: passed (110.64s)
+temporal-0.02: passed (114.40s)
+temporal-0.01: passed (115.10s)
+temporal-0.005: passed (119.57s)
+temporal-0.0025: passed (128.19s)
+reject-anchor: rejected as required (2.42s)
+reject-sensor-at-H: rejected as required (3.47s)
+reject-zero-buffer: rejected as required (3.42s)
+reject-crossed-plateau: rejected as required (2.37s)
+reject-crossed-baseline: rejected as required (2.37s)
+reject-zero-weight: rejected as required (3.27s)
+reject-unsafe-Re:...
+The rest of the test output was removed since it exceeds the threshold of 1024 bytes.
+</system-out>
+	</testcase>
+	<testcase name="RANSCLSEPAWFM6OrientationOracle" classname="RANSCLSEPAWFM6OrientationOracle" time="50.3293" status="run">
+		<system-out>git-start-revision: exit 0
+git-start-status: exit 0
+tilted-positive-parameter-negative-physical: exit 1
+tilted-negative-parameter-positive-physical: exit 0
+tilted-q1-tangent: exit 0
+tilted-positive-parameter-positive-physical: exit 0
+flat-positive: exit 0
+flat-negative: exit 1
+git-end-revision: exit 0
+git-end-status: exit 0
+{"success": true, "checks": 73, "constructors": 6, "operator_replays": 0, "failures": []}
+</system-out>
+	</testcase>
+	<testcase name="RANSCLSEPAWFM5NoteOracle" classname="RANSCLSEPAWFM5NoteOracle" time="0.28761" status="run">
+		<system-out>{"success": true, "checks": 454}
+</system-out>
+	</testcase>
+	<testcase name="RANSCLSEPAWFM5Oracle" classname="RANSCLSEPAWFM5Oracle" time="1439.88" status="run">
+		<system-out>geometry: passed (0.01s)
+geometry-oracle: passed (0.57s)
+operator-plane: passed (3.17s)
+wall-audit-plane: passed (0.52s)
+operator-circle: passed (3.07s)
+wall-audit-circle: passed (0.52s)
+operator-smooth: passed (3.22s)
+wall-audit-smooth: passed (0.52s)
+operator-variable: passed (3.58s)
+wall-audit-variable: passed (0.52s)
+operator-surface3d: passed (12.15s)
+wall-audit-surface3d: passed (0.57s)
+operator-feet: passed (3.72s)
+wall-audit-feet: passed (0.52s)
+partition-one-q12: passed (2.92s)
+partition-two-q12: passed (3.27s)
+partition-one-q24: passed (3.52s)
+partition-two-q24: passed (3.52s)
+partition-one-q48: passed (3.77s)
+partition-two-q48: passed (4.07s)
+flat-reference-d2-o1: passed (3.42s)
+plane-reference-d2-o1: passed (3.52s)
+flat-reference-d2-o2: passed (3.07s)
+plane-reference-d2-o2: passed (2.87s)
+flat-reference-d3-o2: passed (14.49s)
+plane-reference-d3-o2: passed (16.00s)
+mms-circle-p3: passed (6.48s)
+mms-circle-p5: passed (18.55s)
+mms-circle-p6: passed (31.38s)
+mms-variable-p3: passed (5.88s)
+mms-variabl...
+The rest of the test output was removed since it exceeds the threshold of 1024 bytes.
+</system-out>
+	</testcase>
+	<testcase name="RANSCLSEPAWFM4Oracle" classname="RANSCLSEPAWFM4Oracle" time="2422.66" status="run">
+		<system-out>spatial-2: passed (4.48s)
+spatial-3: passed (40.29s)
+unanchored-coarse: passed (3.52s)
+unanchored-p3: passed (3.82s)
+unanchored-p5: passed (4.43s)
+unanchored-p7: passed (5.23s)
+unanchored-h0: passed (3.72s)
+unanchored-h1: passed (4.33s)
+unanchored-h2: passed (4.42s)
+anchored-spatial: passed (3.42s)
+unanchored-dt0.01-n1: passed (29.52s)
+unanchored-dt0.01-n3: passed (31.27s)
+unanchored-dt0.005-n6: passed (34.43s)
+stationary-o1-dt0.1: passed (5.18s)
+stationary-o1-dt0.05: passed (6.43s)
+stationary-o1-dt0.025: passed (9.08s)
+stationary-o2-dt0.1: passed (4.98s)
+stationary-o2-dt0.05: passed (6.08s)
+stationary-o2-dt0.025: passed (8.93s)
+stationary-one-turnover: passed (16.95s)
+stationary-prescribed-body-o1: passed (4.32s)
+stationary-prescribed-body-o2: passed (4.57s)
+3D-straight: passed (17.90s)
+3D-straight-mpi2: passed (84.23s)
+3D-straight-mpi4: passed (115.23s)
+3D-rotated: passed (17.10s)
+3D-rotated-mpi2: passed (72.80s)
+3D-rotated-mpi4: passed (94.31s)
+stationary-save: passed (4.12s)
+stationary-restart-mpi4: passe...
+The rest of the test output was removed since it exceeds the threshold of 1024 bytes.
+</system-out>
+	</testcase>
+	<testcase name="RANSCLSEPAWFM3Oracle" classname="RANSCLSEPAWFM3Oracle" time="562.276" status="run">
+		<system-out>M3 running stationary-full
+M3 running stationary-condensed
+M3 running parallel-p4
+M3 running parallel-p6
+M3 running parallel-p8
+M3 running evolving-audit-p4-t0.3-a5.0
+M3 running evolving-audit-p6-t0.3-a5.0
+M3 running evolving-audit-p8-t0.3-a5.0
+M3 running evolving-audit-p6-t0.0-a5.0
+M3 running evolving-audit-p6-t0.9-a5.0
+M3 running evolving-audit-p6-t0.3-a2.0
+M3 running evolving-full
+M3 running evolving-condensed
+{
+  "verification_status": "passed",
+  "checks": 8085,
+  "milestone_closure": true,
+  "report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/cls-epawf-m3-soaw6694/validation.json"
+}
+</system-out>
+	</testcase>
+	<testcase name="RANSCaoTamuraCalibrationGuards" classname="RANSCaoTamuraCalibrationGuards" time="0.82761" status="run">
+		<system-out>........
+----------------------------------------------------------------------
+Ran 8 tests in 0.722s
+
+OK
+</system-out>
+	</testcase>
+	<testcase name="RANSCaoTamuraRouteGuards" classname="RANSCaoTamuraRouteGuards" time="0.392003" status="run">
+		<system-out>...
+----------------------------------------------------------------------
+Ran 3 tests in 0.295s
+
+OK
+</system-out>
+	</testcase>
+	<testcase name="RANSStressTangentOracle" classname="RANSStressTangentOracle" time="0.0839298" status="run">
+		<system-out>Transverse stress tangent oracle PASS: {'standard': 2.3545202541870784e-10, 'cls': 6.117441155502534e-07}
+</system-out>
+	</testcase>
+</testsuite>

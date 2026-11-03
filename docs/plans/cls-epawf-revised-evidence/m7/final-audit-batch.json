@@ -1,0 +1,109 @@
+{
+  "schema": 1,
+  "source_commit": "dea75dab62fb59f5264868f3d2033d13e0b4ef57",
+  "connection": "tailscale:100.105.247.110",
+  "started_utc": "2026-11-03T04:04:12.841584+00:00",
+  "runner_sha256": "b5c605363b0c8e0709f6eb7bb349d073f7de3902d074793110fd90ebb19a88e2",
+  "commands": [
+    {
+      "name": "native-replay",
+      "argv": [
+        "taskset",
+        "-c",
+        "24",
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-audit-source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m7.py",
+        "--build",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-replay-003",
+        "--replay",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-attempt-004/native"
+      ],
+      "exit_code": 0,
+      "seconds": 8.433986289999666,
+      "log_sha256": "012f4414be4abd9deb1979e8ecc61fee02e47637c22dfd32ffa80aeb6787c753"
+    },
+    {
+      "name": "dense-guard",
+      "argv": [
+        "taskset",
+        "-c",
+        "24",
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-audit-source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m7_dense_guard.py",
+        "--build",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-dense-guard-003"
+      ],
+      "exit_code": 0,
+      "seconds": 2.3702551780006615,
+      "log_sha256": "add524cf46ea0ea9273f0807f144bfe6efc9cb31a68330d879dcba4d10b8c11a"
+    },
+    {
+      "name": "transverse",
+      "argv": [
+        "taskset",
+        "-c",
+        "24",
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-audit-source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m7_transverse.py",
+        "--build",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-strict-transverse-002"
+      ],
+      "exit_code": 0,
+      "seconds": 7.332132608000393,
+      "log_sha256": "b8709b89bf055476b64ba2a317052bc4d948af3187d0bd085e993bcb55575fc7"
+    },
+    {
+      "name": "active-energy",
+      "argv": [
+        "taskset",
+        "-c",
+        "24",
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/transfers/cls_epawf_m7_energy_replay_last.py"
+      ],
+      "exit_code": 0,
+      "seconds": 4.174801201999799,
+      "log_sha256": "540c9904a09f7202697ab251ebf626716d551cce0536502cfd785ac66e32490a"
+    },
+    {
+      "name": "flow-replay",
+      "argv": [
+        "taskset",
+        "-c",
+        "24",
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-audit-source/docs/plans/cls-epawf-revised-evidence/m7/replay-flow-diagnosis.py",
+        "--source",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-audit-source",
+        "--input",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/validation.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-replay-001"
+      ],
+      "exit_code": 0,
+      "seconds": 9.186748436000016,
+      "log_sha256": "526910f9c80d81d5b10b6a5c7e6296b6dc34ec2e0cd31badda0964e233b12c56"
+    }
+  ],
+  "allocated_workers": 1,
+  "thread_environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1"
+  },
+  "status": "passed",
+  "finished_utc": "2026-11-03T04:04:44.366571+00:00",
+  "source_clean_end": true
+}

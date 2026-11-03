@@ -1,0 +1,1641 @@
+{
+  "schema": 1,
+  "milestone": "M7",
+  "status": "diagnosis_collected",
+  "success": true,
+  "passage_qualified": false,
+  "started_utc": "2026-11-03T03:53:50.253065+00:00",
+  "cases": [
+    {
+      "name": "coarse-control",
+      "reused": true,
+      "exit_code": 1,
+      "amplitude": 0.0,
+      "dt": 0.005,
+      "requested_steps": 60,
+      "xml": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-attempt-002/control-dt-0p005/case.xml",
+        "sha256": "840435c432504e67611c325306c4cb7547541dfa05e2810f49817bacbe1d0b0f",
+        "dt": 0.005,
+        "amplitude": 0.0,
+        "maximum_iterations": 80,
+        "nonlinear_tolerance": 2e-12,
+        "function_names": [
+          "InitialPerturbationInner",
+          "InitialPerturbationOuter"
+        ]
+      },
+      "native_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-attempt-002/control-dt-0p005/case.evolution.json",
+      "native_report_sha256": "00d5d1e79b71c6b404a184379825264b396db6e1897291c3e9cc964d3f02381a",
+      "original_command": {
+        "name": "control-dt-0p005",
+        "argv": [
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-attempt-002/control-dt-0p005/case.xml"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-attempt-002/control-dt-0p005",
+        "exit_code": 1,
+        "ranks": 1,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1"
+        },
+        "seconds": 120.76043086500022,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-attempt-002/control-dt-0p005.log",
+        "log_sha256": "b4ab6265ce985def84015f3378b67a5236f7cc402586ece7b7f638b17d120fbc"
+      },
+      "original_case": {
+        "name": "control-dt-0p005",
+        "amplitude": 0.0,
+        "dt": 0.005,
+        "requested_steps": 60,
+        "xml": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-attempt-002/control-dt-0p005/case.xml",
+        "xml_sha256": "840435c432504e67611c325306c4cb7547541dfa05e2810f49817bacbe1d0b0f",
+        "status": "stopped",
+        "native_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-attempt-002/control-dt-0p005/case.evolution.json",
+        "native_report_sha256": "00d5d1e79b71c6b404a184379825264b396db6e1897291c3e9cc964d3f02381a",
+        "exit_code": 1,
+        "seconds": 120.76043086500022,
+        "observation": {
+          "classification": "unqualified_numerical_solver_or_initialization_failure",
+          "explicit_invalid_samples": [],
+          "native_failure": "EP-AWF patch: evolution stage rejected every admissible Newton trial",
+          "exit_code": 1,
+          "accepted_states": 12,
+          "last_accepted_time": 0.05499999999999999,
+          "last_reported_time": 0.05499999999999999,
+          "rejected_state_present": false,
+          "pulse_passage_established": false,
+          "limitation": "Newton nonconvergence alone is not a positivity proof or a continuum-instability proof"
+        }
+      },
+      "trajectory_completed": false,
+      "native_failure": "EP-AWF patch: evolution stage rejected every admissible Newton trial",
+      "observation": {
+        "classification": "unqualified_numerical_solver_or_initialization_failure",
+        "explicit_invalid_samples": [],
+        "native_failure": "EP-AWF patch: evolution stage rejected every admissible Newton trial",
+        "exit_code": 1,
+        "accepted_states": 12,
+        "last_accepted_time": 0.05499999999999999,
+        "last_reported_time": 0.05499999999999999,
+        "rejected_state_present": false,
+        "pulse_passage_established": false,
+        "limitation": "Newton nonconvergence alone is not a positivity proof or a continuum-instability proof"
+      },
+      "accepted_prefix": {
+        "time": 0.05499999999999999,
+        "eta": 0,
+        "chi": 1,
+        "states": 12,
+        "min_k": 0.0007428683132584968,
+        "min_outer_epsilon": 0.03665642702920845,
+        "min_covariance": -0.13777896395635175,
+        "min_yx_tangent": -0.7360678423275553,
+        "maximum_stage_residual": 1.8256226721581697e-12,
+        "maximum_energy_closure": 1.9460693393731643e-13,
+        "maximum_free_energy_balance": 3.7002636635700285e-13,
+        "maximum_strong_divergence": 0.18605977217369407,
+        "maximum_normal_traction_jump": 0.43553924758499896,
+        "independent_dense_min_k": 0.0007428683132584546,
+        "independent_transfer_samples": {
+          "count": 1920,
+          "min_k": 0.5098395408889618,
+          "min_epsilon": 0.04106455261812734,
+          "rule": "actual trace/boundary GLL tangential points and physical rK/rA/rB and H samples"
+        },
+        "cumulative_energy_accounting_defect": -2.76401124210679e-14,
+        "final_energy": [
+          11.183260361923786,
+          -1.2384941503107798,
+          12.432341212893776,
+          0.0019130787299501658,
+          -0.012499779389116289,
+          0.0,
+          11.18326036192383,
+          -4.440892098500626e-14,
+          388.3480619779842,
+          11.183260361923605,
+          0.0,
+          1.8118839761882555e-13
+        ],
+        "final_wall_sources": [
+          11.809043166547374,
+          11.809043166547374,
+          0,
+          11.364712149116112,
+          0.003745001423190005
+        ],
+        "final_interface": [
+          6.000000000000001,
+          -0.24238015117204967,
+          0.09090112662127386,
+          0.15390454861740366,
+          0.43553924758499896,
+          0.3524449532567301,
+          -5.780125727009033e-15,
+          -0.021155501576529893
+        ],
+        "velocity_perturbation_energy": [
+          0.0,
+          0.0024971438346774854
+        ],
+        "velocity_energy_gain": null,
+        "turnover_time": 5.0,
+        "flow_through_time": 0.9753446080015812,
+        "flow_time_convention": "domain length / fixed-reference streamwise velocity at outer midheight",
+        "duration": 0.05499999999999999,
+        "turnover_units": 0.011,
+        "flow_through_units": 0.056390325582146274,
+        "scope": "only the actual accepted prefix; failed trajectory not promoted",
+        "native_failure_preserved_in_original": "EP-AWF patch: evolution stage rejected every admissible Newton trial",
+        "accepted_prefix_states": 12,
+        "accepted_prefix_last_time": 0.05499999999999999,
+        "additional_audit_checks": 2147
+      },
+      "independent_last_accepted_energy": {
+        "verified": true,
+        "scope": "last accepted actual history, physical mass and independent direct-volume components",
+        "time": 0.05499999999999999,
+        "alpha": 300.0,
+        "storage": -1.2384941503107776,
+        "stored_energy": 388.3480619779841,
+        "direct": {
+          "stress_work_minus_k_source": 12.432341212893881,
+          "resolved_advection": 0.0019130787303150987,
+          "roughness_force_work": -0.012499779389116065,
+          "volumes": [
+            12.000000000000002,
+            11.999999999999996
+          ],
+          "original_dissipation_integral": 11.80904316654734,
+          "blended_dissipation_integral": 11.809043166547339,
+          "redistribution_integral": 0.0,
+          "outer_covariance_minimum_on_declared_Gauss_rule": -0.13777896395634548,
+          "quadrature": [
+            8,
+            32,
+            8
+          ]
+        },
+        "independently_reconstructed_total": 11.183260361924301,
+        "native_captured_unmasked_work": 11.183260361923786,
+        "direct_to_native_scalar_defect": -5.151434834260726e-13,
+        "coefficient_load_contraction_reconstructed": false,
+        "essential_reaction_reconstructed": false,
+        "limitation": "failed report may omit final unmasked coefficient loads; native captured work/reaction are not fabricated as independent data",
+        "independent_internal_checks": 10,
+        "independent_internal_errors": {
+          "indexed_outer_stress_production_cancellation": 4.163336342344337e-17
+        }
+      },
+      "observation_verified": true,
+      "status": "verified_stop"
+    },
+    {
+      "name": "coarse-pulse",
+      "reused": false,
+      "amplitude": 0.001,
+      "dt": 0.005,
+      "requested_steps": 60,
+      "xml": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/coarse-pulse/case.xml",
+        "sha256": "37781af5a951d8871bdac3e82104fb51af9a354eb821173f5bfe72c8c1ec311f",
+        "dt": 0.005,
+        "amplitude": 0.001,
+        "maximum_iterations": 80,
+        "nonlinear_tolerance": 2e-12,
+        "function_names": [
+          "InitialPerturbationInner",
+          "InitialPerturbationOuter"
+        ]
+      },
+      "status": "verified_stop",
+      "exit_code": 1,
+      "command": {
+        "name": "coarse-pulse",
+        "argv": [
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/coarse-pulse/case.xml"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/coarse-pulse",
+        "exit_code": 1,
+        "ranks": 1,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1"
+        },
+        "seconds": 121.91790451799989,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/coarse-pulse.log",
+        "log_sha256": "70a16cfa35fc95690ccdfc7c2982269258255e6ef5474eedd6ad33dc5f233665"
+      },
+      "native_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/coarse-pulse/case.evolution.json",
+      "native_report_sha256": "b5795c113435458f703afe59e810d63e768f1af3403db6ad39dbe8656df189bf",
+      "trajectory_completed": false,
+      "native_failure": "EP-AWF patch: evolution stage rejected every admissible Newton trial",
+      "observation": {
+        "classification": "unqualified_numerical_solver_or_initialization_failure",
+        "explicit_invalid_samples": [],
+        "native_failure": "EP-AWF patch: evolution stage rejected every admissible Newton trial",
+        "exit_code": 1,
+        "accepted_states": 12,
+        "last_accepted_time": 0.05499999999999999,
+        "last_reported_time": 0.05499999999999999,
+        "rejected_state_present": false,
+        "pulse_passage_established": false,
+        "limitation": "Newton nonconvergence alone is not a positivity proof or a continuum-instability proof"
+      },
+      "accepted_prefix": {
+        "time": 0.05499999999999999,
+        "eta": 0,
+        "chi": 1,
+        "states": 12,
+        "min_k": 0.0007427999382560044,
+        "min_outer_epsilon": 0.03665635927509474,
+        "min_covariance": -0.13769740091716817,
+        "min_yx_tangent": -0.7397438042609291,
+        "maximum_stage_residual": 1.995250038805217e-12,
+        "maximum_energy_closure": 2.030528794621924e-13,
+        "maximum_free_energy_balance": 3.9588085225664374e-13,
+        "maximum_strong_divergence": 0.18582115671456564,
+        "maximum_normal_traction_jump": 0.4319502229241323,
+        "independent_dense_min_k": 0.0007427999382559614,
+        "independent_transfer_samples": {
+          "count": 1920,
+          "min_k": 0.5098395563811506,
+          "min_epsilon": 0.0410633819841452,
+          "rule": "actual trace/boundary GLL tangential points and physical rK/rA/rB and H samples"
+        },
+        "cumulative_energy_accounting_defect": -2.7187141427020836e-14,
+        "final_energy": [
+          11.180746477007077,
+          -1.241858505386997,
+          12.433436888844378,
+          0.0013943285009076654,
+          -0.012226234950522054,
+          0.0,
+          11.180746477007768,
+          -6.910028105266974e-13,
+          388.3485018521792,
+          11.180746477009475,
+          0.0,
+          -2.398081733190338e-12
+        ],
+        "final_wall_sources": [
+          11.810051356525348,
+          11.810051356525348,
+          0,
+          11.365076946100316,
+          0.0037450271172316694
+        ],
+        "final_interface": [
+          6.000000000000001,
+          -0.24316526507913244,
+          0.09055201929329718,
+          0.15369994307711646,
+          0.4319502229241323,
+          0.35247232909067605,
+          -5.769961331641982e-15,
+          -0.020063785567557675
+        ],
+        "velocity_perturbation_energy": [
+          7.645770169366341e-08,
+          0.002491577751848481
+        ],
+        "velocity_energy_gain": 32587.662153791574,
+        "turnover_time": 5.0,
+        "flow_through_time": 0.9753446080015812,
+        "flow_time_convention": "domain length / fixed-reference streamwise velocity at outer midheight",
+        "duration": 0.05499999999999999,
+        "turnover_units": 0.011,
+        "flow_through_units": 0.056390325582146274,
+        "scope": "only the actual accepted prefix; failed trajectory not promoted",
+        "native_failure_preserved_in_original": "EP-AWF patch: evolution stage rejected every admissible Newton trial",
+        "accepted_prefix_states": 12,
+        "accepted_prefix_last_time": 0.05499999999999999,
+        "additional_audit_checks": 2147
+      },
+      "independent_last_accepted_energy": {
+        "verified": true,
+        "scope": "last accepted actual history, physical mass and independent direct-volume components",
+        "time": 0.05499999999999999,
+        "alpha": 300.0,
+        "storage": -1.2418585053870084,
+        "stored_energy": 388.34850185217897,
+        "direct": {
+          "stress_work_minus_k_source": 12.433436888844424,
+          "resolved_advection": 0.0013943285012845696,
+          "roughness_force_work": -0.012226234950521612,
+          "volumes": [
+            12.000000000000004,
+            11.999999999999996
+          ],
+          "original_dissipation_integral": 11.8100513565253,
+          "blended_dissipation_integral": 11.810051356525296,
+          "redistribution_integral": 0.0,
+          "outer_covariance_minimum_on_declared_Gauss_rule": -0.1376974009171602,
+          "quadrature": [
+            8,
+            32,
+            8
+          ]
+        },
+        "independently_reconstructed_total": 11.180746477008178,
+        "native_captured_unmasked_work": 11.180746477007077,
+        "direct_to_native_scalar_defect": -1.1013412404281553e-12,
+        "coefficient_load_contraction_reconstructed": false,
+        "essential_reaction_reconstructed": false,
+        "limitation": "failed report may omit final unmasked coefficient loads; native captured work/reaction are not fabricated as independent data",
+        "independent_internal_checks": 10,
+        "independent_internal_errors": {
+          "indexed_outer_stress_production_cancellation": 4.85722573273506e-17
+        }
+      },
+      "observation_verified": true
+    },
+    {
+      "name": "fine-control",
+      "reused": false,
+      "amplitude": 0.0,
+      "dt": 0.0025,
+      "requested_steps": 120,
+      "xml": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/fine-control/case.xml",
+        "sha256": "9ae79f7ec4d89f24d9164694f9742608c8177af6fed02a9e82dc92ee1f105eda",
+        "dt": 0.0025,
+        "amplitude": 0.0,
+        "maximum_iterations": 80,
+        "nonlinear_tolerance": 2e-12,
+        "function_names": [
+          "InitialPerturbationInner",
+          "InitialPerturbationOuter"
+        ]
+      },
+      "status": "verified_stop",
+      "exit_code": 1,
+      "command": {
+        "name": "fine-control",
+        "argv": [
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/fine-control/case.xml"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/fine-control",
+        "exit_code": 1,
+        "ranks": 1,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1"
+        },
+        "seconds": 117.05253608900011,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/fine-control.log",
+        "log_sha256": "c695c973c17cdf58ed5b48fc576c4f127a10472b54520e1d969387cd1c049cf4"
+      },
+      "native_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/fine-control/case.evolution.json",
+      "native_report_sha256": "f77639601a8834a28309a659650e4aa93107c1eab5743ec81c4419612dfff6e8",
+      "trajectory_completed": false,
+      "native_failure": "EP-AWF patch: evolution stage rejected every admissible Newton trial",
+      "observation": {
+        "classification": "unqualified_numerical_solver_or_initialization_failure",
+        "explicit_invalid_samples": [],
+        "native_failure": "EP-AWF patch: evolution stage rejected every admissible Newton trial",
+        "exit_code": 1,
+        "accepted_states": 23,
+        "last_accepted_time": 0.055000000000000014,
+        "last_reported_time": 0.055000000000000014,
+        "rejected_state_present": false,
+        "pulse_passage_established": false,
+        "limitation": "Newton nonconvergence alone is not a positivity proof or a continuum-instability proof"
+      },
+      "accepted_prefix": {
+        "time": 0.055000000000000014,
+        "eta": 0,
+        "chi": 1,
+        "states": 23,
+        "min_k": 0.001409091173641765,
+        "min_outer_epsilon": 0.03665642702920845,
+        "min_covariance": -0.1523340645474745,
+        "min_yx_tangent": -0.7593061101411624,
+        "maximum_stage_residual": 1.9302662163855297e-12,
+        "maximum_energy_closure": 2.2381726568073822e-13,
+        "maximum_free_energy_balance": 9.460026516394638e-13,
+        "maximum_strong_divergence": 0.17582505171445886,
+        "maximum_normal_traction_jump": 0.377230851211394,
+        "independent_dense_min_k": 0.0014090911736417133,
+        "independent_transfer_samples": {
+          "count": 3680,
+          "min_k": 0.5097990095176397,
+          "min_epsilon": 0.04106455261812734,
+          "rule": "actual trace/boundary GLL tangential points and physical rK/rA/rB and H samples"
+        },
+        "cumulative_energy_accounting_defect": -3.083533428593909e-14,
+        "final_energy": [
+          11.18350548284424,
+          -1.240787323267469,
+          12.430778797428388,
+          0.0019203373310667695,
+          -0.008406328646165268,
+          0.0,
+          11.18350548284582,
+          -1.580957587066223e-12,
+          388.34833630371446,
+          11.183505482843074,
+          0.0,
+          1.1652900866465643e-12
+        ],
+        "final_wall_sources": [
+          11.807512470926193,
+          11.807512470926193,
+          0,
+          11.364371280160164,
+          0.003745047530543252
+        ],
+        "final_interface": [
+          6.000000000000001,
+          -0.2595109177437924,
+          0.0827637686744776,
+          0.14890667322058798,
+          0.377230851211394,
+          0.3526668754217006,
+          -5.7829175476031836e-15,
+          -0.007059832657695355
+        ],
+        "velocity_perturbation_energy": [
+          0.0,
+          0.0024685100246478447
+        ],
+        "velocity_energy_gain": null,
+        "turnover_time": 5.0,
+        "flow_through_time": 0.9753446080015812,
+        "flow_time_convention": "domain length / fixed-reference streamwise velocity at outer midheight",
+        "duration": 0.055000000000000014,
+        "turnover_units": 0.011000000000000003,
+        "flow_through_units": 0.056390325582146295,
+        "scope": "only the actual accepted prefix; failed trajectory not promoted",
+        "native_failure_preserved_in_original": "EP-AWF patch: evolution stage rejected every admissible Newton trial",
+        "accepted_prefix_states": 23,
+        "accepted_prefix_last_time": 0.055000000000000014,
+        "additional_audit_checks": 4116
+      },
+      "independent_last_accepted_energy": {
+        "verified": true,
+        "scope": "last accepted actual history, physical mass and independent direct-volume components",
+        "time": 0.055000000000000014,
+        "alpha": 600.0,
+        "storage": -1.2407873232674844,
+        "stored_energy": 388.34833630371463,
+        "direct": {
+          "stress_work_minus_k_source": 12.430778797428317,
+          "resolved_advection": 0.0019203373314379824,
+          "roughness_force_work": -0.008406328646165293,
+          "volumes": [
+            12.0,
+            11.999999999999996
+          ],
+          "original_dissipation_integral": 11.807512470926126,
+          "blended_dissipation_integral": 11.807512470926124,
+          "redistribution_integral": 0.0,
+          "outer_covariance_minimum_on_declared_Gauss_rule": -0.1523340645474616,
+          "quadrature": [
+            8,
+            32,
+            8
+          ]
+        },
+        "independently_reconstructed_total": 11.183505482846105,
+        "native_captured_unmasked_work": 11.18350548284424,
+        "direct_to_native_scalar_defect": -1.865174681370263e-12,
+        "coefficient_load_contraction_reconstructed": false,
+        "essential_reaction_reconstructed": false,
+        "limitation": "failed report may omit final unmasked coefficient loads; native captured work/reaction are not fabricated as independent data",
+        "independent_internal_checks": 10,
+        "independent_internal_errors": {
+          "indexed_outer_stress_production_cancellation": 2.7755575615628914e-17
+        }
+      },
+      "observation_verified": true
+    },
+    {
+      "name": "fine-pulse",
+      "reused": false,
+      "amplitude": 0.001,
+      "dt": 0.0025,
+      "requested_steps": 120,
+      "xml": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/fine-pulse/case.xml",
+        "sha256": "c1bc613fd2fa464b9e7c480793e972c821b12d54a23460fa8c6ced63bcfc56fb",
+        "dt": 0.0025,
+        "amplitude": 0.001,
+        "maximum_iterations": 80,
+        "nonlinear_tolerance": 2e-12,
+        "function_names": [
+          "InitialPerturbationInner",
+          "InitialPerturbationOuter"
+        ]
+      },
+      "status": "verified_stop",
+      "exit_code": 1,
+      "command": {
+        "name": "fine-pulse",
+        "argv": [
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/fine-pulse/case.xml"
+        ],
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/fine-pulse",
+        "exit_code": 1,
+        "ranks": 1,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1"
+        },
+        "seconds": 118.76182750600037,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/fine-pulse.log",
+        "log_sha256": "e4946aef4df6c093a267416b8786b02165343bd112859a38d06791c5ae196ba9"
+      },
+      "native_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/fine-pulse/case.evolution.json",
+      "native_report_sha256": "4a04f6eb9a99df0c4b09e8fbea7a4cc0911be1f1bfda079a5b844d83bba48daa",
+      "trajectory_completed": false,
+      "native_failure": "EP-AWF patch: evolution stage rejected every admissible Newton trial",
+      "observation": {
+        "classification": "unqualified_numerical_solver_or_initialization_failure",
+        "explicit_invalid_samples": [],
+        "native_failure": "EP-AWF patch: evolution stage rejected every admissible Newton trial",
+        "exit_code": 1,
+        "accepted_states": 23,
+        "last_accepted_time": 0.055000000000000014,
+        "last_reported_time": 0.055000000000000014,
+        "rejected_state_present": false,
+        "pulse_passage_established": false,
+        "limitation": "Newton nonconvergence alone is not a positivity proof or a continuum-instability proof"
+      },
+      "accepted_prefix": {
+        "time": 0.055000000000000014,
+        "eta": 0,
+        "chi": 1,
+        "states": 23,
+        "min_k": 0.0014090170154378912,
+        "min_outer_epsilon": 0.03665635927509474,
+        "min_covariance": -0.15917676470413614,
+        "min_yx_tangent": -0.769831133086232,
+        "maximum_stage_residual": 1.9914341596840895e-12,
+        "maximum_energy_closure": 1.920662382766166e-13,
+        "maximum_free_energy_balance": 7.027172893958955e-13,
+        "maximum_strong_divergence": 0.1745727826117038,
+        "maximum_normal_traction_jump": 0.3702908725905243,
+        "independent_dense_min_k": 0.00140901701543783,
+        "independent_transfer_samples": {
+          "count": 3680,
+          "min_k": 0.5097990210454856,
+          "min_epsilon": 0.0410633819841452,
+          "rule": "actual trace/boundary GLL tangential points and physical rK/rA/rB and H samples"
+        },
+        "cumulative_energy_accounting_defect": -4.305888978706208e-14,
+        "final_energy": [
+          11.182322577701074,
+          -1.2430257316854845,
+          12.43187599889296,
+          0.0013957263150997437,
+          -0.007923415820350036,
+          0.0,
+          11.182322577702223,
+          -1.149302875091962e-12,
+          388.34879884961674,
+          11.182322577703394,
+          0.0,
+          -2.319922032256727e-12
+        ],
+        "final_wall_sources": [
+          11.808522231303641,
+          11.808522231303641,
+          0,
+          11.364735469017983,
+          0.003745071655445606
+        ],
+        "final_interface": [
+          6.000000000000001,
+          -0.2615768258047423,
+          0.08191119053674323,
+          0.14841612890826064,
+          0.3702908725905243,
+          0.35269577179911277,
+          -5.778228373207184e-15,
+          -0.004670526326512454
+        ],
+        "velocity_perturbation_energy": [
+          7.645770169366341e-08,
+          0.002461269713864928
+        ],
+        "velocity_energy_gain": 32191.259472149562,
+        "turnover_time": 5.0,
+        "flow_through_time": 0.9753446080015812,
+        "flow_time_convention": "domain length / fixed-reference streamwise velocity at outer midheight",
+        "duration": 0.055000000000000014,
+        "turnover_units": 0.011000000000000003,
+        "flow_through_units": 0.056390325582146295,
+        "scope": "only the actual accepted prefix; failed trajectory not promoted",
+        "native_failure_preserved_in_original": "EP-AWF patch: evolution stage rejected every admissible Newton trial",
+        "accepted_prefix_states": 23,
+        "accepted_prefix_last_time": 0.055000000000000014,
+        "additional_audit_checks": 4116
+      },
+      "independent_last_accepted_energy": {
+        "verified": true,
+        "scope": "last accepted actual history, physical mass and independent direct-volume components",
+        "time": 0.055000000000000014,
+        "alpha": 600.0,
+        "storage": -1.2430257316855013,
+        "stored_energy": 388.34879884961657,
+        "direct": {
+          "stress_work_minus_k_source": 12.431875998893007,
+          "resolved_advection": 0.001395726315487067,
+          "roughness_force_work": -0.007923415820350211,
+          "volumes": [
+            12.000000000000007,
+            11.999999999999996
+          ],
+          "original_dissipation_integral": 11.808522231303549,
+          "blended_dissipation_integral": 11.808522231303549,
+          "redistribution_integral": 0.0,
+          "outer_covariance_minimum_on_declared_Gauss_rule": -0.15917676470412834,
+          "quadrature": [
+            8,
+            32,
+            8
+          ]
+        },
+        "independently_reconstructed_total": 11.182322577702642,
+        "native_captured_unmasked_work": 11.182322577701074,
+        "direct_to_native_scalar_defect": -1.5685230891904212e-12,
+        "coefficient_load_contraction_reconstructed": false,
+        "essential_reaction_reconstructed": false,
+        "limitation": "failed report may omit final unmasked coefficient loads; native captured work/reaction are not fabricated as independent data",
+        "independent_internal_checks": 10,
+        "independent_internal_errors": {
+          "indexed_outer_stress_production_cancellation": 4.163336342344337e-17
+        }
+      },
+      "observation_verified": true
+    }
+  ],
+  "commands": [
+    {
+      "name": "git-start-revision",
+      "argv": [
+        "git",
+        "-c",
+        "gc.auto=0",
+        "-C",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-audit-source",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-audit-source",
+      "exit_code": 0,
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "seconds": 0.0026362110002082773,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/git-start-revision.log",
+      "log_sha256": "6280c0f6a9cf2b435abd90b3ff9c8c853c91e8e4f90b289a4781af9db9278cf2"
+    },
+    {
+      "name": "git-start-status",
+      "argv": [
+        "git",
+        "-c",
+        "gc.auto=0",
+        "-C",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-audit-source",
+        "status",
+        "--porcelain=v1",
+        "--untracked-files=all"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-audit-source",
+      "exit_code": 0,
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "seconds": 0.06657212599975537,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/git-start-status.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "git-physics-revision",
+      "argv": [
+        "git",
+        "-c",
+        "gc.auto=0",
+        "-C",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-audit-source",
+        "rev-parse",
+        "bf202be"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-audit-source",
+      "exit_code": 0,
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "seconds": 0.0025312739999208134,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/git-physics-revision.log",
+      "log_sha256": "3440035803d820ae5941bd9f5b8e2551897d5d6113263fe4ef0fd633224736b1"
+    },
+    {
+      "name": "git-physics-diff",
+      "argv": [
+        "git",
+        "-c",
+        "gc.auto=0",
+        "-C",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-audit-source",
+        "diff",
+        "--name-only",
+        "bf202be",
+        "--",
+        "library",
+        "solvers/IncNavierStokesSolver"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-audit-source",
+      "exit_code": 0,
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "seconds": 0.01828478900006303,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/git-physics-diff.log",
+      "log_sha256": "508f71d2c2f3d04bf4963b335ec5c83d66585e77db3ce9ef1591e211d036c8f3"
+    },
+    {
+      "name": "coarse-pulse",
+      "argv": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/coarse-pulse/case.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/coarse-pulse",
+      "exit_code": 1,
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "seconds": 121.91790451799989,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/coarse-pulse.log",
+      "log_sha256": "70a16cfa35fc95690ccdfc7c2982269258255e6ef5474eedd6ad33dc5f233665"
+    },
+    {
+      "name": "fine-control",
+      "argv": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/fine-control/case.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/fine-control",
+      "exit_code": 1,
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "seconds": 117.05253608900011,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/fine-control.log",
+      "log_sha256": "c695c973c17cdf58ed5b48fc576c4f127a10472b54520e1d969387cd1c049cf4"
+    },
+    {
+      "name": "fine-pulse",
+      "argv": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/fine-pulse/case.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/fine-pulse",
+      "exit_code": 1,
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "seconds": 118.76182750600037,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/fine-pulse.log",
+      "log_sha256": "e4946aef4df6c093a267416b8786b02165343bd112859a38d06791c5ae196ba9"
+    },
+    {
+      "name": "git-end-revision",
+      "argv": [
+        "git",
+        "-c",
+        "gc.auto=0",
+        "-C",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-audit-source",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-audit-source",
+      "exit_code": 0,
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "seconds": 0.002578845999778423,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/git-end-revision.log",
+      "log_sha256": "6280c0f6a9cf2b435abd90b3ff9c8c853c91e8e4f90b289a4781af9db9278cf2"
+    },
+    {
+      "name": "git-end-status",
+      "argv": [
+        "git",
+        "-c",
+        "gc.auto=0",
+        "-C",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-audit-source",
+        "status",
+        "--porcelain=v1",
+        "--untracked-files=all"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-audit-source",
+      "exit_code": 0,
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "seconds": 0.03960946699953638,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/git-end-status.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "failures": [],
+  "pairs": {
+    "0.005": {
+      "matching_velocity": 5.780254367996082,
+      "nominal_travel_at_T_03": 1.7340763103988246,
+      "duration": 0.05499999999999999,
+      "physical_centroid_drift": 0.2641656710413547,
+      "passage_established": false,
+      "observations": [
+        {
+          "time": 0.0,
+          "physical_centroid": -3.5536645862925895,
+          "scaled_squared_norm": 3.0473146082729954e-06,
+          "region_fractions": {
+            "upstream": 0.9982381043062737,
+            "mask": 0.001635458667011079,
+            "downstream": 0.000126437026715333,
+            "baseline": 3.89169603488385e-05
+          },
+          "physical_velocity_perturbation_energy": 7.645770169366351e-08,
+          "resolved_plus_k_energy_difference": 0.0005422488229100964
+        },
+        {
+          "time": 0.005,
+          "physical_centroid": -3.509014028361398,
+          "scaled_squared_norm": 2.6832547490310597e-06,
+          "region_fractions": {
+            "upstream": 0.9920614175938772,
+            "mask": 0.006454091674214834,
+            "downstream": 0.0014844907319079667,
+            "baseline": 0.0007373041065888244
+          },
+          "physical_velocity_perturbation_energy": 5.475767171973954e-08,
+          "resolved_plus_k_energy_difference": 0.00046368040005972944
+        },
+        {
+          "time": 0.01,
+          "physical_centroid": -3.4753720009955873,
+          "scaled_squared_norm": 2.4995100625913207e-06,
+          "region_fractions": {
+            "upstream": 0.9848986430257369,
+            "mask": 0.012924833438798416,
+            "downstream": 0.0021765235354644715,
+            "baseline": 0.001079957704899237
+          },
+          "physical_velocity_perturbation_energy": 4.579647760383856e-08,
+          "resolved_plus_k_energy_difference": 0.0004639795290586335
+        },
+        {
+          "time": 0.015,
+          "physical_centroid": -3.437170439531659,
+          "scaled_squared_norm": 2.442538735385638e-06,
+          "region_fractions": {
+            "upstream": 0.9714109566861796,
+            "mask": 0.024446214659694238,
+            "downstream": 0.004142828654126275,
+            "baseline": 0.0023060181617249225
+          },
+          "physical_velocity_perturbation_energy": 4.5999517344963865e-08,
+          "resolved_plus_k_energy_difference": 0.0004646102087804138
+        },
+        {
+          "time": 0.02,
+          "physical_centroid": -3.392429108432137,
+          "scaled_squared_norm": 2.6149644089883862e-06,
+          "region_fractions": {
+            "upstream": 0.9438857608610575,
+            "mask": 0.04646575765582968,
+            "downstream": 0.009648481483112958,
+            "baseline": 0.005850488212228867
+          },
+          "physical_velocity_perturbation_energy": 6.386842546387147e-08,
+          "resolved_plus_k_energy_difference": 0.00046688192628607794
+        },
+        {
+          "time": 0.025,
+          "physical_centroid": -3.346787771704604,
+          "scaled_squared_norm": 3.3434322554412367e-06,
+          "region_fractions": {
+            "upstream": 0.8988655238424261,
+            "mask": 0.08101076539746402,
+            "downstream": 0.020123710760109707,
+            "baseline": 0.012385070548273652
+          },
+          "physical_velocity_perturbation_energy": 1.2571372068735215e-07,
+          "resolved_plus_k_energy_difference": 0.00047123854267283605
+        },
+        {
+          "time": 0.030000000000000002,
+          "physical_centroid": -3.330040498876708,
+          "scaled_squared_norm": 4.902101639039058e-06,
+          "region_fractions": {
+            "upstream": 0.8692822428457382,
+            "mask": 0.10273781709382092,
+            "downstream": 0.027979940060440883,
+            "baseline": 0.016964175982757967
+          },
+          "physical_velocity_perturbation_energy": 2.536342649539885e-07,
+          "resolved_plus_k_energy_difference": 0.00047477462749156985
+        },
+        {
+          "time": 0.035,
+          "physical_centroid": -3.358375376317538,
+          "scaled_squared_norm": 6.497015161935804e-06,
+          "region_fractions": {
+            "upstream": 0.8880626540276579,
+            "mask": 0.08633546721472624,
+            "downstream": 0.025601878757615465,
+            "baseline": 0.015545531155801588
+          },
+          "physical_velocity_perturbation_energy": 3.842085154957201e-07,
+          "resolved_plus_k_energy_difference": 0.00047343071435079764
+        },
+        {
+          "time": 0.04,
+          "physical_centroid": -3.397927066834726,
+          "scaled_squared_norm": 7.420618980489096e-06,
+          "region_fractions": {
+            "upstream": 0.9293898775889334,
+            "mask": 0.05229244154247482,
+            "downstream": 0.018317680868591715,
+            "baseline": 0.01204705539910223
+          },
+          "physical_velocity_perturbation_energy": 4.6069161124985577e-07,
+          "resolved_plus_k_energy_difference": 0.00046884640647704146
+        },
+        {
+          "time": 0.045,
+          "physical_centroid": -3.4038903582196025,
+          "scaled_squared_norm": 8.045078282393144e-06,
+          "region_fractions": {
+            "upstream": 0.9469103048975179,
+            "mask": 0.039194620995105435,
+            "downstream": 0.013895074107376454,
+            "baseline": 0.01059821506811613
+          },
+          "physical_velocity_perturbation_energy": 5.126912219812067e-07,
+          "resolved_plus_k_energy_difference": 0.00046297795341843084
+        },
+        {
+          "time": 0.049999999999999996,
+          "physical_centroid": -3.364768807032134,
+          "scaled_squared_norm": 8.640452909514053e-06,
+          "region_fractions": {
+            "upstream": 0.9210714565297341,
+            "mask": 0.0643118232352864,
+            "downstream": 0.014616720234979562,
+            "baseline": 0.011364075833486522
+          },
+          "physical_velocity_perturbation_energy": 5.617484642618002e-07,
+          "resolved_plus_k_energy_difference": 0.00045401513659726334
+        },
+        {
+          "time": 0.05499999999999999,
+          "physical_centroid": -3.289498915251235,
+          "scaled_squared_norm": 9.189543473460414e-06,
+          "region_fractions": {
+            "upstream": 0.854631554581762,
+            "mask": 0.1239132936456719,
+            "downstream": 0.021455151772566156,
+            "baseline": 0.013767140827290488
+          },
+          "physical_velocity_perturbation_energy": 6.065669134337279e-07,
+          "resolved_plus_k_energy_difference": 0.0004398741950240037
+        }
+      ],
+      "norm": "integral [(deltaU/us)^2+(deltaK/K0)^2+(deltaEpsilon/EH)^2] with outer-only epsilon",
+      "interpretation": "paired coupled perturbation-norm redistribution; not Lagrangian parcel tracking",
+      "scope": "common accepted epochs only",
+      "requested_final_time": 0.3,
+      "common_last_time": 0.05499999999999999,
+      "full_passage_not_asserted": true
+    },
+    "0.0025": {
+      "matching_velocity": 5.780254367996082,
+      "nominal_travel_at_T_03": 1.7340763103988246,
+      "duration": 0.055000000000000014,
+      "physical_centroid_drift": 0.16815723052898557,
+      "passage_established": false,
+      "observations": [
+        {
+          "time": 0.0,
+          "physical_centroid": -3.5536645862925895,
+          "scaled_squared_norm": 3.0473146082729954e-06,
+          "region_fractions": {
+            "upstream": 0.9982381043062737,
+            "mask": 0.001635458667011079,
+            "downstream": 0.000126437026715333,
+            "baseline": 3.89169603488385e-05
+          },
+          "physical_velocity_perturbation_energy": 7.645770169366351e-08,
+          "resolved_plus_k_energy_difference": 0.0005422488229100964
+        },
+        {
+          "time": 0.0025,
+          "physical_centroid": -3.522565431147854,
+          "scaled_squared_norm": 2.8180390058612884e-06,
+          "region_fractions": {
+            "upstream": 0.9936458501233364,
+            "mask": 0.0050317179670413105,
+            "downstream": 0.001322431909622272,
+            "baseline": 0.000676699271718811
+          },
+          "physical_velocity_perturbation_energy": 6.181493959109129e-08,
+          "resolved_plus_k_energy_difference": 0.00046371914896781163
+        },
+        {
+          "time": 0.005,
+          "physical_centroid": -3.5071509455274392,
+          "scaled_squared_norm": 2.675857210224288e-06,
+          "region_fractions": {
+            "upstream": 0.9914862227272424,
+            "mask": 0.0070579219934482525,
+            "downstream": 0.0014558552793095074,
+            "baseline": 0.0006871812611305289
+          },
+          "physical_velocity_perturbation_energy": 5.360722404173865e-08,
+          "resolved_plus_k_energy_difference": 0.0004641388112531786
+        },
+        {
+          "time": 0.0075,
+          "physical_centroid": -3.4908696762934444,
+          "scaled_squared_norm": 2.5701453805822183e-06,
+          "region_fractions": {
+            "upstream": 0.9885040139942558,
+            "mask": 0.00984458222464836,
+            "downstream": 0.0016514037810959955,
+            "baseline": 0.0007502879211348297
+          },
+          "physical_velocity_perturbation_energy": 4.802886757388777e-08,
+          "resolved_plus_k_energy_difference": 0.00046405342703792485
+        },
+        {
+          "time": 0.01,
+          "physical_centroid": -3.474143497094476,
+          "scaled_squared_norm": 2.489913252195225e-06,
+          "region_fractions": {
+            "upstream": 0.9849159944744883,
+            "mask": 0.013146725222213974,
+            "downstream": 0.0019372803032975845,
+            "baseline": 0.000880353926792332
+          },
+          "physical_velocity_perturbation_energy": 4.427036580077298e-08,
+          "resolved_plus_k_energy_difference": 0.00046371321872129556
+        },
+        {
+          "time": 0.0125,
+          "physical_centroid": -3.456971785306609,
+          "scaled_squared_norm": 2.4307799431334766e-06,
+          "region_fractions": {
+            "upstream": 0.9805338852930598,
+            "mask": 0.01709396545787809,
+            "downstream": 0.0023721492490621815,
+            "baseline": 0.0011122455327067058
+          },
+          "physical_velocity_perturbation_energy": 4.201545776407271e-08,
+          "resolved_plus_k_energy_difference": 0.0004633418425896707
+        },
+        {
+          "time": 0.015000000000000001,
+          "physical_centroid": -3.4392609450723954,
+          "scaled_squared_norm": 2.3931423660150727e-06,
+          "region_fractions": {
+            "upstream": 0.9749841255976406,
+            "mask": 0.021957687035140738,
+            "downstream": 0.0030581873672185958,
+            "baseline": 0.0015156455470500786
+          },
+          "physical_velocity_perturbation_energy": 4.131525758630991e-08,
+          "resolved_plus_k_energy_difference": 0.0004631171003097734
+        },
+        {
+          "time": 0.0175,
+          "physical_centroid": -3.42086349981803,
+          "scaled_squared_norm": 2.3821993370850627e-06,
+          "region_fractions": {
+            "upstream": 0.9676863001722071,
+            "mask": 0.028147253697170135,
+            "downstream": 0.004166446130622684,
+            "baseline": 0.0022094065546134196
+          },
+          "physical_velocity_perturbation_energy": 4.260052709871368e-08,
+          "resolved_plus_k_energy_difference": 0.00046318723349259017
+        },
+        {
+          "time": 0.02,
+          "physical_centroid": -3.4015792166606755,
+          "scaled_squared_norm": 2.409940669299922e-06,
+          "region_fractions": {
+            "upstream": 0.9577796600252894,
+            "mask": 0.03625802850635187,
+            "downstream": 0.005962311468359133,
+            "baseline": 0.003372170623290822
+          },
+          "physical_velocity_perturbation_energy": 4.6842671649965586e-08,
+          "resolved_plus_k_energy_difference": 0.0004636904971562217
+        },
+        {
+          "time": 0.0225,
+          "physical_centroid": -3.381234418006634,
+          "scaled_squared_norm": 2.4994872410840123e-06,
+          "region_fractions": {
+            "upstream": 0.9441229269784218,
+            "mask": 0.04706463062265855,
+            "downstream": 0.008812442398919552,
+            "baseline": 0.005236584529673715
+          },
+          "physical_velocity_perturbation_energy": 5.590370122430779e-08,
+          "resolved_plus_k_energy_difference": 0.0004647708055358635
+        },
+        {
+          "time": 0.024999999999999998,
+          "physical_centroid": -3.359926596347279,
+          "scaled_squared_norm": 2.6919424507129354e-06,
+          "region_fractions": {
+            "upstream": 0.9255919585014383,
+            "mask": 0.0612993365120551,
+            "downstream": 0.01310870498650669,
+            "baseline": 0.008025918842827766
+          },
+          "physical_velocity_perturbation_energy": 7.308587180551918e-08,
+          "resolved_plus_k_energy_difference": 0.0004665590419676846
+        },
+        {
+          "time": 0.027499999999999997,
+          "physical_centroid": -3.338668156177989,
+          "scaled_squared_norm": 3.0563827409199732e-06,
+          "region_fractions": {
+            "upstream": 0.9021191016983026,
+            "mask": 0.07893593884586937,
+            "downstream": 0.01894495945582814,
+            "baseline": 0.011741824071651034
+          },
+          "physical_velocity_perturbation_energy": 1.0392974914945114e-07,
+          "resolved_plus_k_energy_difference": 0.0004691458653951486
+        },
+        {
+          "time": 0.029999999999999995,
+          "physical_centroid": -3.31992139703667,
+          "scaled_squared_norm": 3.698552178895851e-06,
+          "region_fractions": {
+            "upstream": 0.876093917328589,
+            "mask": 0.09823238229938422,
+            "downstream": 0.02567370037202684,
+            "baseline": 0.015903388811050124
+          },
+          "physical_velocity_perturbation_energy": 1.569113553520349e-07,
+          "resolved_plus_k_energy_difference": 0.0004725110940739796
+        },
+        {
+          "time": 0.032499999999999994,
+          "physical_centroid": -3.307362873912236,
+          "scaled_squared_norm": 4.747961968526501e-06,
+          "region_fractions": {
+            "upstream": 0.8527998898332233,
+            "mask": 0.11543118759861834,
+            "downstream": 0.031768922568158296,
+            "baseline": 0.019512874814277718
+          },
+          "physical_velocity_perturbation_energy": 2.424085925618914e-07,
+          "resolved_plus_k_energy_difference": 0.00047634959020115275
+        },
+        {
+          "time": 0.034999999999999996,
+          "physical_centroid": -3.304429541996887,
+          "scaled_squared_norm": 6.289937419106005e-06,
+          "region_fractions": {
+            "upstream": 0.8383049026837731,
+            "mask": 0.1261425817358735,
+            "downstream": 0.035552515580353224,
+            "baseline": 0.021567711146064573
+          },
+          "physical_velocity_perturbation_energy": 3.672667113742844e-07,
+          "resolved_plus_k_energy_difference": 0.00047992940579888455
+        },
+        {
+          "time": 0.0375,
+          "physical_centroid": -3.313395391845826,
+          "scaled_squared_norm": 8.221581089614923e-06,
+          "region_fractions": {
+            "upstream": 0.837035587995865,
+            "mask": 0.12694782048734435,
+            "downstream": 0.03601659151679097,
+            "baseline": 0.021583493886045996
+          },
+          "physical_velocity_perturbation_energy": 5.232559224220437e-07,
+          "resolved_plus_k_energy_difference": 0.0004820842546564563
+        },
+        {
+          "time": 0.04,
+          "physical_centroid": -3.334603621232718,
+          "scaled_squared_norm": 1.0155127952846855e-05,
+          "region_fractions": {
+            "upstream": 0.8505821244746227,
+            "mask": 0.11622242157898886,
+            "downstream": 0.03319545394638886,
+            "baseline": 0.01978969509636204
+          },
+          "physical_velocity_perturbation_energy": 6.793468526213384e-07,
+          "resolved_plus_k_energy_difference": 0.0004819622191689632
+        },
+        {
+          "time": 0.0425,
+          "physical_centroid": -3.3647114173360997,
+          "scaled_squared_norm": 1.1653263516293926e-05,
+          "region_fractions": {
+            "upstream": 0.8765613802720464,
+            "mask": 0.0953354151985655,
+            "downstream": 0.028103204529388328,
+            "baseline": 0.01699566068859181
+          },
+          "physical_velocity_perturbation_energy": 8.005353394301723e-07,
+          "resolved_plus_k_energy_difference": 0.0004797958191602447
+        },
+        {
+          "time": 0.045000000000000005,
+          "physical_centroid": -3.395704385517922,
+          "scaled_squared_norm": 1.2605803925959772e-05,
+          "region_fractions": {
+            "upstream": 0.9079418360950504,
+            "mask": 0.06960205143991816,
+            "downstream": 0.0224561124650316,
+            "baseline": 0.014288753341648933
+          },
+          "physical_velocity_perturbation_energy": 8.77958407496221e-07,
+          "resolved_plus_k_energy_difference": 0.00047675740830754876
+        },
+        {
+          "time": 0.04750000000000001,
+          "physical_centroid": -3.417370371161209,
+          "scaled_squared_norm": 1.3221925583496916e-05,
+          "region_fractions": {
+            "upstream": 0.9347413489452489,
+            "mask": 0.04729744525411926,
+            "downstream": 0.017961205800632214,
+            "baseline": 0.01252012443449137
+          },
+          "physical_velocity_perturbation_energy": 9.283001509950082e-07,
+          "resolved_plus_k_energy_difference": 0.00047377387750202615
+        },
+        {
+          "time": 0.05000000000000001,
+          "physical_centroid": -3.4228664660094985,
+          "scaled_squared_norm": 1.3735226503544314e-05,
+          "region_fractions": {
+            "upstream": 0.9488615998056273,
+            "mask": 0.03569249815012022,
+            "downstream": 0.01544590204425255,
+            "baseline": 0.011886557658118127
+          },
+          "physical_velocity_perturbation_energy": 9.70223242011948e-07,
+          "resolved_plus_k_energy_difference": 0.00047087343131124726
+        },
+        {
+          "time": 0.05250000000000001,
+          "physical_centroid": -3.4113242890659037,
+          "scaled_squared_norm": 1.4248283063638646e-05,
+          "region_fractions": {
+            "upstream": 0.9473115752523282,
+            "mask": 0.03787974026298323,
+            "downstream": 0.014808684484688438,
+            "baseline": 0.01208595726263345
+          },
+          "physical_velocity_perturbation_energy": 1.011923961978578e-06,
+          "resolved_plus_k_energy_difference": 0.0004674141720784064
+        },
+        {
+          "time": 0.055000000000000014,
+          "physical_centroid": -3.385507355763604,
+          "scaled_squared_norm": 1.4769053885362332e-05,
+          "region_fractions": {
+            "upstream": 0.9309980361417951,
+            "mask": 0.053348166238625754,
+            "downstream": 0.01565379761957936,
+            "baseline": 0.012748716000201577
+          },
+          "physical_velocity_perturbation_energy": 1.0540426573495479e-06,
+          "resolved_plus_k_energy_difference": 0.00046254590228045345
+        }
+      ],
+      "norm": "integral [(deltaU/us)^2+(deltaK/K0)^2+(deltaEpsilon/EH)^2] with outer-only epsilon",
+      "interpretation": "paired coupled perturbation-norm redistribution; not Lagrangian parcel tracking",
+      "scope": "common accepted epochs only",
+      "requested_final_time": 0.3,
+      "common_last_time": 0.055000000000000014,
+      "full_passage_not_asserted": true
+    },
+    "time_comparison": {
+      "scope": "actual common accepted epochs only; no temporal-order or requested-T convergence claim",
+      "observations": [
+        {
+          "time": 0.0,
+          "paired_field_relative_difference": 0.0,
+          "centroid_difference": 0.0
+        },
+        {
+          "time": 0.005,
+          "paired_field_relative_difference": 0.024384183460973808,
+          "centroid_difference": 0.0018630828339589733
+        },
+        {
+          "time": 0.01,
+          "paired_field_relative_difference": 0.03629899204991535,
+          "centroid_difference": 0.0012285039011112886
+        },
+        {
+          "time": 0.015,
+          "paired_field_relative_difference": 0.06975303753048638,
+          "centroid_difference": 0.0020905055407363093
+        },
+        {
+          "time": 0.02,
+          "paired_field_relative_difference": 0.13749443256492913,
+          "centroid_difference": 0.009150108228538567
+        },
+        {
+          "time": 0.025,
+          "paired_field_relative_difference": 0.2254820222299919,
+          "centroid_difference": 0.013138824642674685
+        },
+        {
+          "time": 0.030000000000000002,
+          "paired_field_relative_difference": 0.22343203637198392,
+          "centroid_difference": 0.010119101840037725
+        },
+        {
+          "time": 0.035,
+          "paired_field_relative_difference": 0.15673768642659625,
+          "centroid_difference": 0.05394583432065092
+        },
+        {
+          "time": 0.04,
+          "paired_field_relative_difference": 0.30360237092269765,
+          "centroid_difference": 0.06332344560200776
+        },
+        {
+          "time": 0.045,
+          "paired_field_relative_difference": 0.3665578410805973,
+          "centroid_difference": 0.008185972701680644
+        },
+        {
+          "time": 0.049999999999999996,
+          "paired_field_relative_difference": 0.3579072379541453,
+          "centroid_difference": 0.0580976589773643
+        },
+        {
+          "time": 0.05499999999999999,
+          "paired_field_relative_difference": 0.3463626444363594,
+          "centroid_difference": 0.09600844051236912
+        }
+      ]
+    }
+  },
+  "collection_errors": [],
+  "physical_stability_gate": "failed_as_specified",
+  "experiment_plan_sha256": "be6a962682dcaef64ca4edbb28c023cdf638e06e44ef705967ef4966a3452e5d",
+  "environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "TMPDIR": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/tmp",
+    "LD_LIBRARY_PATH": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/geometry-lib:/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/geometry-lib:",
+    "cpu_affinity": [
+      24
+    ]
+  },
+  "checks": 435,
+  "errors": {
+    "locked_xml_RANSWALLMAXITERATIONS": 0.0,
+    "locked_xml_RANSWALLNONLINEARTOLERANCE": 0.0,
+    "locked_xml_RANSWALLDIAGNOSTICS": 0.0,
+    "locked_xml_RANSWALLETA": 0.0,
+    "locked_xml_RANSWALLCHI": 0.0,
+    "locked_xml_RANSWALLSENSORON": 0.0,
+    "locked_xml_RANSWALLSENSOROFF": 0.0,
+    "locked_xml_RANSWALLTRANSITIONSTART": 0.0,
+    "locked_xml_RANSWALLTRANSITIONEND": 0.0,
+    "locked_xml_RANSWALLBASELINESTART": 0.0,
+    "locked_xml_RANSWALLSENSORDISTANCEA": 0.0,
+    "locked_xml_RANSWALLSENSORDISTANCEB": 0.0,
+    "locked_xml_RANSWALLHEIGHT": 0.0,
+    "locked_xml_TIMESTEP": 0.0,
+    "locked_xml_NUMSTEPS": 0.0,
+    "coarse-control_report_state_is_last_accepted": 0.0,
+    "coarse-control_report_time_is_last_accepted": 0.0,
+    "coarse-control_actual_last_accepted_stage_epoch": 0.0,
+    "coarse-control_last_accepted_direct_energy": 1.2121460322048752e-15,
+    "coarse-pulse_report_state_is_last_accepted": 0.0,
+    "coarse-pulse_report_time_is_last_accepted": 0.0,
+    "coarse-pulse_actual_last_accepted_stage_epoch": 0.0,
+    "coarse-pulse_last_accepted_direct_energy": 1.0566242123875868e-15,
+    "fine-control_report_state_is_last_accepted": 0.0,
+    "fine-control_report_time_is_last_accepted": 0.0,
+    "fine-control_actual_last_accepted_stage_epoch": 0.0,
+    "fine-control_last_accepted_direct_energy": 9.558759273598638e-16,
+    "fine-pulse_report_state_is_last_accepted": 0.0,
+    "fine-pulse_report_time_is_last_accepted": 0.0,
+    "fine-pulse_actual_last_accepted_stage_epoch": 0.0,
+    "fine-pulse_last_accepted_direct_energy": 1.0794940407702848e-15,
+    "common_same_dt_prefix_epochs": 0.0,
+    "identical_paired_fixed_reference": 0.0,
+    "paired_physical_times": 0.0,
+    "physical_partition_norm_sum": 4.440892098500626e-16
+  },
+  "source_commit": "f470444e39ae42a46a6759b793602fbcb2ff6fe6",
+  "source_clean_start": true,
+  "compiled_physics_revision": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+  "program": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+    "sha256": "f0ca681cf95f4d7dd1185147b6753ba032fed52f5ea9ac811ca9dc2b636633d0",
+    "sha256_end": "f0ca681cf95f4d7dd1185147b6753ba032fed52f5ea9ac811ca9dc2b636633d0"
+  },
+  "strict_transverse_evidence": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-strict-transverse-001/validation.json",
+    "sha256": "da896af749b5313b163e0a2aa70e1e0faa1d8c98cdc2aedd7f9ce13c5627f72f",
+    "checks": 101736,
+    "source_commit": "0a2c671f4906659fbe592ea64352f3117d3aaa1c",
+    "physical_stability_gate": "failed_as_specified",
+    "relationship": "separate definitive original-law failure witness; not inferred from these nonlinear stops"
+  },
+  "previous_attempt": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-attempt-002/validation.json",
+    "sha256": "0981d94d202b94d831912d139624a5701d3dbe18185fdd092fab4dacb277d6aa",
+    "source_commit": "f91d83db6aec3aafeb46b8e43d589dc27f61a2f1",
+    "failures": [
+      {
+        "case": "control-dt-0p005",
+        "classification": "unqualified_numerical_solver_or_initialization_failure",
+        "explicit_invalid_samples": [],
+        "native_failure": "EP-AWF patch: evolution stage rejected every admissible Newton trial",
+        "exit_code": 1,
+        "accepted_states": 12,
+        "last_accepted_time": 0.05499999999999999,
+        "last_reported_time": 0.05499999999999999,
+        "rejected_state_present": false,
+        "pulse_passage_established": false,
+        "limitation": "Newton nonconvergence alone is not a positivity proof or a continuum-instability proof"
+      },
+      {
+        "classification": "incomplete_or_failed_qualification",
+        "error": "Unforced control stopped before completion; no paired passage claim"
+      }
+    ],
+    "success": false,
+    "program": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+      "sha256": "f0ca681cf95f4d7dd1185147b6753ba032fed52f5ea9ac811ca9dc2b636633d0",
+      "sha256_end": "f0ca681cf95f4d7dd1185147b6753ba032fed52f5ea9ac811ca9dc2b636633d0"
+    }
+  },
+  "all_trajectories_completed": false,
+  "passage_not_qualified_reason": "At least one requested trajectory stopped or could not be verified; common prefixes are not completed passage",
+  "source_commit_end": "f470444e39ae42a46a6759b793602fbcb2ff6fe6",
+  "source_clean_end": true,
+  "verification_status": "observations_verified",
+  "finished_utc": "2026-11-03T03:59:56.901031+00:00",
+  "interpretation": "collection success is not trajectory success; no positivity proof is inferred from a solver stop",
+  "replay_schema": 1,
+  "audit_source_commit": "dea75dab62fb59f5264868f3d2033d13e0b4ef57",
+  "audit_source_clean": true,
+  "original_diagnosis_path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/validation.json",
+  "original_diagnosis_sha256": "c8a96d14256493b2bdf62dec08ac42369e80e403a30b17645d937cc8510b1015",
+  "replay_script_sha256": "6c0753a346aba66557688f51d374b458599048190d1ee1daec411427606fcac5",
+  "started_replay_utc": "2026-11-03T04:04:35.438534+00:00",
+  "replay_status": "passed",
+  "replay_checks": 233,
+  "replay_errors": {
+    "coarse-control_report_state_is_last_accepted": 0.0,
+    "coarse-control_report_time_is_last_accepted": 0.0,
+    "coarse-control_actual_last_accepted_stage_epoch": 0.0,
+    "coarse-control_last_accepted_direct_energy": 1.2121460322048752e-15,
+    "coarse-control_independent_outer_covariance_eigenvalue": 6.2727600891321345e-15,
+    "coarse-pulse_report_state_is_last_accepted": 0.0,
+    "coarse-pulse_report_time_is_last_accepted": 0.0,
+    "coarse-pulse_actual_last_accepted_stage_epoch": 0.0,
+    "coarse-pulse_last_accepted_direct_energy": 1.0566242123875868e-15,
+    "coarse-pulse_independent_outer_covariance_eigenvalue": 7.965850201685498e-15,
+    "fine-control_report_state_is_last_accepted": 0.0,
+    "fine-control_report_time_is_last_accepted": 0.0,
+    "fine-control_actual_last_accepted_stage_epoch": 0.0,
+    "fine-control_last_accepted_direct_energy": 9.558759273598638e-16,
+    "fine-control_independent_outer_covariance_eigenvalue": 1.2906342661267445e-14,
+    "fine-pulse_report_state_is_last_accepted": 0.0,
+    "fine-pulse_report_time_is_last_accepted": 0.0,
+    "fine-pulse_actual_last_accepted_stage_epoch": 0.0,
+    "fine-pulse_last_accepted_direct_energy": 1.0794940407702848e-15,
+    "fine-pulse_independent_outer_covariance_eigenvalue": 7.799316747991725e-15,
+    "common_same_dt_prefix_epochs": 0.0,
+    "identical_paired_fixed_reference": 0.0,
+    "paired_physical_times": 0.0,
+    "physical_partition_norm_sum": 4.440892098500626e-16
+  },
+  "artifact_pins": [
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-attempt-002/control-dt-0p005/case.evolution.json",
+      "sha256": "00d5d1e79b71c6b404a184379825264b396db6e1897291c3e9cc964d3f02381a"
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-attempt-002/control-dt-0p005/case.xml",
+      "sha256": "840435c432504e67611c325306c4cb7547541dfa05e2810f49817bacbe1d0b0f"
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-attempt-002/control-dt-0p005.log",
+      "sha256": "b4ab6265ce985def84015f3378b67a5236f7cc402586ece7b7f638b17d120fbc"
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/coarse-pulse/case.evolution.json",
+      "sha256": "b5795c113435458f703afe59e810d63e768f1af3403db6ad39dbe8656df189bf"
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/coarse-pulse/case.xml",
+      "sha256": "37781af5a951d8871bdac3e82104fb51af9a354eb821173f5bfe72c8c1ec311f"
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/coarse-pulse.log",
+      "sha256": "70a16cfa35fc95690ccdfc7c2982269258255e6ef5474eedd6ad33dc5f233665"
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/fine-control/case.evolution.json",
+      "sha256": "f77639601a8834a28309a659650e4aa93107c1eab5743ec81c4419612dfff6e8"
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/fine-control/case.xml",
+      "sha256": "9ae79f7ec4d89f24d9164694f9742608c8177af6fed02a9e82dc92ee1f105eda"
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/fine-control.log",
+      "sha256": "c695c973c17cdf58ed5b48fc576c4f127a10472b54520e1d969387cd1c049cf4"
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/fine-pulse/case.evolution.json",
+      "sha256": "4a04f6eb9a99df0c4b09e8fbea7a4cc0911be1f1bfda079a5b844d83bba48daa"
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/fine-pulse/case.xml",
+      "sha256": "c1bc613fd2fa464b9e7c480793e972c821b12d54a23460fa8c6ced63bcfc56fb"
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-flow-diagnosis-001/fine-pulse.log",
+      "sha256": "e4946aef4df6c093a267416b8786b02165343bd112859a38d06791c5ae196ba9"
+    }
+  ],
+  "scope": "original solver execution/source provenance retained; independent current covariance, energy and accepted-prefix audit only",
+  "finished_replay_utc": "2026-11-03T04:04:44.288541+00:00"
+}

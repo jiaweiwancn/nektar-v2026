@@ -1,0 +1,421 @@
+{
+  "schema": 1,
+  "milestone": "M7",
+  "status": "verified",
+  "started_utc": "2026-11-03T04:40:49.509353+00:00",
+  "collector_sha256": "7b859f77afb05ea6c38c52d3ac4ab746bfc21534dd2336e72d18a6cc81353349",
+  "connection": "tailscale:100.105.247.110",
+  "verification_scope": "faithful-model implementation and diagnosis; robust model qualification failed",
+  "source_commits": {
+    "compiled_physics": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+    "native": "dea75dab62fb59f5264868f3d2033d13e0b4ef57",
+    "audits": "dea75dab62fb59f5264868f3d2033d13e0b4ef57",
+    "operator_checkout": "dea75dab62fb59f5264868f3d2033d13e0b4ef57",
+    "user_linux": "f4b70baec10016dd098005bc5a5507b87e4a57bf"
+  },
+  "registered_test_coverage": [
+    {
+      "name": "RANSABL3DPerturbationSmoke",
+      "source_commit": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+      "evidence": "m7-regression-001/ctest.xml"
+    },
+    {
+      "name": "RANSABLPreservationSmoke",
+      "source_commit": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+      "evidence": "m7-regression-001/ctest.xml"
+    },
+    {
+      "name": "RANSAWFEquilibriumSmoke",
+      "source_commit": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+      "evidence": "m7-regression-001/ctest.xml"
+    },
+    {
+      "name": "RANSAWFOriginalSmoke",
+      "source_commit": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+      "evidence": "m7-regression-001/ctest.xml"
+    },
+    {
+      "name": "RANSCLSEPAWFM1Oracle",
+      "source_commit": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+      "evidence": "m7-regression-001/ctest.xml"
+    },
+    {
+      "name": "RANSCLSEPAWFM2Oracle",
+      "source_commit": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+      "evidence": "m7-regression-001/ctest.xml"
+    },
+    {
+      "name": "RANSCLSEPAWFM3Oracle",
+      "source_commit": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+      "evidence": "m7-regression-001/ctest.xml"
+    },
+    {
+      "name": "RANSCLSEPAWFM4Oracle",
+      "source_commit": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+      "evidence": "m7-regression-001/ctest.xml"
+    },
+    {
+      "name": "RANSCLSEPAWFM5NoteOracle",
+      "source_commit": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+      "evidence": "m7-regression-001/ctest.xml"
+    },
+    {
+      "name": "RANSCLSEPAWFM5Oracle",
+      "source_commit": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+      "evidence": "m7-regression-001/ctest.xml"
+    },
+    {
+      "name": "RANSCLSEPAWFM6KernelOracle",
+      "source_commit": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+      "evidence": "m7-regression-001/ctest.xml"
+    },
+    {
+      "name": "RANSCLSEPAWFM6Oracle",
+      "source_commit": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+      "evidence": "m7-regression-001/ctest.xml"
+    },
+    {
+      "name": "RANSCLSEPAWFM6OrientationOracle",
+      "source_commit": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+      "evidence": "m7-regression-001/ctest.xml"
+    },
+    {
+      "name": "RANSCLSResidualMapSmoke",
+      "source_commit": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+      "evidence": "m7-regression-001/ctest.xml"
+    },
+    {
+      "name": "RANSCLSTransportSmoke",
+      "source_commit": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+      "evidence": "m7-regression-001/ctest.xml"
+    },
+    {
+      "name": "RANSCaoTamuraCalibrationGuards",
+      "source_commit": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+      "evidence": "m7-regression-001/ctest.xml"
+    },
+    {
+      "name": "RANSCaoTamuraRouteGuards",
+      "source_commit": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+      "evidence": "m7-regression-001/ctest.xml"
+    },
+    {
+      "name": "RANSEquilibriumEvolutionNative",
+      "source_commit": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+      "evidence": "m7-regression-001/ctest.xml"
+    },
+    {
+      "name": "RANSEquilibriumPatchNative",
+      "source_commit": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+      "evidence": "m7-regression-001/ctest.xml"
+    },
+    {
+      "name": "RANSEquilibriumProfilesNative",
+      "source_commit": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+      "evidence": "m7-regression-001/ctest.xml"
+    },
+    {
+      "name": "RANSEquilibriumTimeNative",
+      "source_commit": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+      "evidence": "m7-regression-001/ctest.xml"
+    },
+    {
+      "name": "RANSEquilibriumWallEvolutionSmoke",
+      "source_commit": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+      "evidence": "m7-regression-001/ctest.xml"
+    },
+    {
+      "name": "RANSEquilibriumWallStageSmoke",
+      "source_commit": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+      "evidence": "m7-regression-001/ctest.xml"
+    },
+    {
+      "name": "RANSKernelUnitTests",
+      "source_commit": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+      "evidence": "m7-regression-001/ctest.xml"
+    },
+    {
+      "name": "RANSObservationKernels",
+      "source_commit": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+      "evidence": "m7-regression-001/ctest.xml"
+    },
+    {
+      "name": "RANSStandardAWFEquilibriumSmoke",
+      "source_commit": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+      "evidence": "m7-regression-001/ctest.xml"
+    },
+    {
+      "name": "RANSStandardResidualMapSmoke",
+      "source_commit": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+      "evidence": "m7-regression-001/ctest.xml"
+    },
+    {
+      "name": "RANSStandardTransportSmoke",
+      "source_commit": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+      "evidence": "m7-regression-001/ctest.xml"
+    },
+    {
+      "name": "RANSStressTangentOracle",
+      "source_commit": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+      "evidence": "m7-regression-001/ctest.xml"
+    },
+    {
+      "name": "RANSWallGeometryUnitTests",
+      "source_commit": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+      "evidence": "m7-regression-001/ctest.xml"
+    },
+    {
+      "name": "RANSWallLayerPrototype",
+      "source_commit": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+      "evidence": "m7-regression-001/ctest.xml"
+    },
+    {
+      "name": "RANSCLSEPAWFM7NativeOracle",
+      "source_commit": "dea75dab62fb59f5264868f3d2033d13e0b4ef57",
+      "compiled_physics_commit": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+      "evidence": "m7-native-final-001/qualification/receipt.json"
+    },
+    {
+      "name": "RANSCLSEPAWFM7TransverseOracle",
+      "source_commit": "dea75dab62fb59f5264868f3d2033d13e0b4ef57",
+      "compiled_physics_commit": "bf202be017bab7aceeedf9a48d86bcfeeca0580f",
+      "evidence": "m7-strict-transverse-002/validation.json"
+    }
+  ],
+  "registered_test_count": 33,
+  "native_checks": 5849,
+  "native_cases": [
+    {
+      "name": "control-unanchored",
+      "states": 5,
+      "stage_residual": 1.7546436241035e-12,
+      "report_sha256": "99b37687f893bcc66e6cb5efab4746964b1ae1800eaef363471801604b1f8cd6"
+    },
+    {
+      "name": "epsilon",
+      "states": 5,
+      "stage_residual": 2.1684999836722217e-13,
+      "report_sha256": "9857495de9d13d33e98914774eb31e96fa9ffaecb11e35096a918513bbc9b11b"
+    },
+    {
+      "name": "five-flow-control",
+      "states": 26,
+      "stage_residual": 5.4878429482594015e-14,
+      "report_sha256": "241165938f51150dc04b18d17fa128d3af7a9a763a1d94e636e5a131f2ba573f"
+    },
+    {
+      "name": "five-flow-control-initial",
+      "states": 1,
+      "stage_residual": 0.0,
+      "report_sha256": "df1db564c64c71656ead926a26be97fbf43b6091b625afdcbaf4f0e4550fa6ce"
+    },
+    {
+      "name": "height-1.5",
+      "states": 1,
+      "stage_residual": 0.0,
+      "report_sha256": "bf9e6cec9e8a7e593cf66e105ffeb1fe99695737836dd72d4500217640848715"
+    },
+    {
+      "name": "height-2.0",
+      "states": 1,
+      "stage_residual": 0.0,
+      "report_sha256": "df1db564c64c71656ead926a26be97fbf43b6091b625afdcbaf4f0e4550fa6ce"
+    },
+    {
+      "name": "height-2.5",
+      "states": 1,
+      "stage_residual": 0.0,
+      "report_sha256": "c12366556238b899d1274eddeb7716352027ea6656ccd1982ed6ea2ac6aa6047"
+    },
+    {
+      "name": "interface",
+      "states": 5,
+      "stage_residual": 2.2132468059581324e-13,
+      "report_sha256": "b689f2e351010d78ff14df73d913313b029d6078c1ea63ffb1f7e0ff5e2a1f6c"
+    },
+    {
+      "name": "joint",
+      "states": 5,
+      "stage_residual": 3.1247299773003747e-13,
+      "report_sha256": "476a3060396eeefc2cfa6366c16fe71c034108fc3c8e4e7e72647a7722cafdff"
+    },
+    {
+      "name": "joint-3d",
+      "states": 2,
+      "stage_residual": 6.563974946758868e-14,
+      "report_sha256": "a1f11f60ebd1c6ca8d9149ea7808f7d603cb5c529bd477b7be285f5dc7d644e2"
+    },
+    {
+      "name": "joint-checkpoint",
+      "states": 3,
+      "stage_residual": 3.1247299773003747e-13,
+      "report_sha256": "11f8dddc35ef68acd7f86ae9134e1ad91c00818393b4cfe11c8e4e0b290fca01"
+    },
+    {
+      "name": "joint-dt2",
+      "states": 9,
+      "stage_residual": 5.308190939024948e-13,
+      "report_sha256": "4989693041839fa8b065f06ae70801e2ddfad147d9cc8be621519b1f7ee2725d"
+    },
+    {
+      "name": "joint-dt4",
+      "states": 17,
+      "stage_residual": 1.3353159840535474e-12,
+      "report_sha256": "c4d3fc3f7055873199fc212195b4d99d26e7d12a0107bc28b4ac121ba8813a48"
+    },
+    {
+      "name": "joint-h2",
+      "states": 5,
+      "stage_residual": 1.343363087391312e-12,
+      "report_sha256": "f9686341cba9dbe86d4203df1844ea7b3eb5d11ac5a7dd64bcbda1e9b68f98c6"
+    },
+    {
+      "name": "joint-large",
+      "states": 5,
+      "stage_residual": 4.60969689170658e-13,
+      "report_sha256": "c833b4cfad39a4335bed9397cc405cfcb45cca7622147e758a18c55ce3d0ad73"
+    },
+    {
+      "name": "joint-mpi2",
+      "states": 5,
+      "stage_residual": 1.1805204478257332e-13,
+      "report_sha256": "2ed0c3973b561097814bd5f47d50a9054ce1d4ee4d567d4cd7a81cd44358d4c2"
+    },
+    {
+      "name": "joint-p4",
+      "states": 5,
+      "stage_residual": 3.567958009551379e-13,
+      "report_sha256": "fac87550da6befabe83fedd2624e69fd7b467925e00b486db189a59214793e53"
+    },
+    {
+      "name": "joint-restart",
+      "states": 3,
+      "stage_residual": 1.9473016286587514e-13,
+      "report_sha256": "6fc5ccee39417f75010fd17110b51ae8a73619c59a371c7ee2ad7ccf39d3c864"
+    },
+    {
+      "name": "joint-small",
+      "states": 5,
+      "stage_residual": 1.6022930826834222e-13,
+      "report_sha256": "59e5648306c70c0a13cce33df215ce2de404e71a1c193b5bc2fd07876043cfdb"
+    },
+    {
+      "name": "joint-unanchored",
+      "states": 5,
+      "stage_residual": 1.731951573889561e-12,
+      "report_sha256": "dfdf8681cd5c983640d64fa8b109fcc8ca0ceb5b6a128ec2cc53cce6b8a4b4fc"
+    },
+    {
+      "name": "joint-wave2",
+      "states": 5,
+      "stage_residual": 3.235192173747471e-13,
+      "report_sha256": "67018b61bf96c97a467ca2b3415405edc750a13a63c3402585a8548d184f53dd"
+    },
+    {
+      "name": "k",
+      "states": 5,
+      "stage_residual": 1.4096218212834556e-13,
+      "report_sha256": "13d9ddb627edfefb7fe895e1124fc5cf0ea376d7fac70d4692d9b78aeb5afa56"
+    },
+    {
+      "name": "transition-control",
+      "states": 3,
+      "stage_residual": 3.0432356338415015e-13,
+      "report_sha256": "e4c61c82c59008f1f32fb5eb0de2f3810d76cdc7837c1aeaa4571542605ce4c3"
+    },
+    {
+      "name": "transition-crossing",
+      "states": 3,
+      "stage_residual": 8.921349869576688e-13,
+      "report_sha256": "2b02633d509747e9f9f4f97b4a9b56ffc34fc8661e94066a9fd49e0840885626"
+    },
+    {
+      "name": "velocity",
+      "states": 5,
+      "stage_residual": 1.8798623950776949e-13,
+      "report_sha256": "8f939323e8778101f2ad0f960f5494df715663d23c133b8973d2e3650c8f2426"
+    }
+  ],
+  "initial_rejections": [
+    "dense-only-reject",
+    "invalid-sampler-reject",
+    "node-alias-reject"
+  ],
+  "audited_native_states": 135,
+  "maximum_stage_residual": 1.7546436241035e-12,
+  "transverse_checks": 101736,
+  "independent_replay_checks": 9852,
+  "unchanged_runtime_images": 99,
+  "identical_campaign_runtime_context": true,
+  "frozen_inputs": {
+    "docs/literature/cls_neutral_abl_equilibrium_awf_note_revised.tex": "d35e437c2f2f8b25a46f7a3f285c6f1ad8b48d7b554aa1d161315f59eeb6de0f",
+    "docs/plans/cls-epawf-revised-contract-v1.json": "4e7bd75022409b8dc2ef31cc73425779b646a97535760b31eeea4ec49087de8a",
+    "library/SolverUtils/Turbulence/RANSModels.cpp": "86a7154ba3cb27e4d3319aa42d156a228fd1b180f35f9b217159822ec9d66b05",
+    "library/SolverUtils/Turbulence/AnalyticalWallFunction.cpp": "5baf29819fed6b81ad1b042bc09258a3e0779d15de13076b688bf32f80ddcf7e"
+  },
+  "equation_owners": {
+    "M7.matching_height_dependence": {
+      "status": "verified_reference_only",
+      "evidence": "m7-native-final-001/qualification/receipt.json",
+      "key": "results.matching_height_study"
+    },
+    "M7.full_energy_accounting": {
+      "status": "verified_accounting_identity_not_stability_bound",
+      "evidence": [
+        "m7-native-final-001/qualification/receipt.json",
+        "m7-energy-preflight-003/receipt.json",
+        "m7-flow-replay-001/validation.json"
+      ]
+    }
+  },
+  "stopped_flow_observations": [
+    {
+      "name": "coarse-control",
+      "last_time": 0.05499999999999999,
+      "minimum_outer_covariance": -0.13777896395634548,
+      "min_k": 0.0007428683132584968,
+      "classification": "unqualified_numerical_solver_or_initialization_failure"
+    },
+    {
+      "name": "coarse-pulse",
+      "last_time": 0.05499999999999999,
+      "minimum_outer_covariance": -0.1376974009171602,
+      "min_k": 0.0007427999382560044,
+      "classification": "unqualified_numerical_solver_or_initialization_failure"
+    },
+    {
+      "name": "fine-control",
+      "last_time": 0.055000000000000014,
+      "minimum_outer_covariance": -0.1523340645474616,
+      "min_k": 0.001409091173641765,
+      "classification": "unqualified_numerical_solver_or_initialization_failure"
+    },
+    {
+      "name": "fine-pulse",
+      "last_time": 0.055000000000000014,
+      "minimum_outer_covariance": -0.15917676470412834,
+      "min_k": 0.0014090170154378912,
+      "classification": "unqualified_numerical_solver_or_initialization_failure"
+    }
+  ],
+  "physical_gates": {
+    "original_CLS_stability": "failed_as_specified",
+    "inner_k_positivity": "not_generally_invariant_M2",
+    "unforced_transition_passage": "not_qualified",
+    "robust_M8_variant": "not_adopted"
+  },
+  "worker_allocation": {
+    "compiler_jobs": 16,
+    "ctest_reserved_ranks": 12,
+    "maximum_overlapping_numerical_ranks": 15,
+    "numerical_threads": 1,
+    "hard_limit": 72
+  },
+  "artifact_index": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m7-integration-001/artifact-index.json",
+    "sha256": "20a22ea1101979f39a0c027b0c85ff4e9d12ef516d9646fe5b3ee2f428a5dd28",
+    "files": 994
+  },
+  "checks": 241,
+  "finished_utc": "2026-11-03T04:40:50.198600+00:00"
+}

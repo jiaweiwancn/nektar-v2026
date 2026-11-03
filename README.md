@@ -62,8 +62,15 @@ receipts. The original physical failure gates remain unchanged.
 adds a physical C2 one-way mask, independent state/admissibility gates, coupled
 trace derivatives and constrained baseline-face support. Linux qualification,
 orientation/operator replay and earlier regressions cover 31 registered tests,
-including MPI 1/2/4 and full-history restart. M7 remains open; original model
-stability and positivity limitations are unchanged.
+including MPI 1/2/4 and full-history restart.
+[M7 admissibility and perturbation diagnosis](docs/plans/cls-epawf-revised-m7.md)
+adds accepted-state/transfer audits, independent energy/covariance accounting,
+native perturbations, dt/p/mesh and matching-height studies, MPI and perturbed
+restart. All 33 registered gates are covered by passing source-bound Linux
+verification. The original three-component CLS transverse mode grows under
+refinement despite positive sampled covariance, so robust-model qualification
+remains failed. M7 is closed as a faithful-model diagnosis; no M8 remedy is
+adopted and M9 remains open.
 
 
 Tutorials
