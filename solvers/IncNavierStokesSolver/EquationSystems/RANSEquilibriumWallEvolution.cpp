@@ -405,6 +405,7 @@ void RANSEquilibriumWallEvolution::WriteReport() const
     const auto &p=m_patch->Parameters();
     out<<",\"parameters\":";Write(out,{p.geometry.molecularNu,p.geometry.height,p.geometry.roughness,p.geometry.sampleHeight,
         p.geometry.tailStart,p.model.Q()*m_ustar*m_ustar,p.model.Q(),p.model.Kappa()});
+    out<<",\"quadrature_orders\":";Write(out,{static_cast<double>(p.tangentialOrder),static_cast<double>(p.normalOrder)});
     out<<",\"ustar\":"<<m_ustar<<",\"direction\":";Write(out,{m_direction[0],m_direction[1]});
     out<<",\"cell_ownership\":[";int ownerCount=0;
     for(const auto &e:m_patch->fields[0]->Elements())

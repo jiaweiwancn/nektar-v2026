@@ -162,6 +162,147 @@ def inner(left, right):
     return sum((a*b for a, b in zip(left.flat, right.flat)), Iv(0))
 
 
+class Polynomial:
+    """Exact rational multivariate polynomial, combining cancellations first."""
+    def __init__(self, value=0, variable=None):
+        if isinstance(value, Polynomial):
+            self.terms = value.terms.copy()
+        elif variable is not None:
+            power = [0]*9
+            power[variable] = 1
+            self.terms = {tuple(power): F(1)}
+        else:
+            self.terms = {} if value == 0 else {(0,)*9: F(value)}
+
+    def __add__(self, value):
+        if isinstance(value, np.ndarray):
+            return NotImplemented
+        value, result = Polynomial(value), Polynomial(self)
+        for power, coefficient in value.terms.items():
+            result.terms[power] = result.terms.get(power, F(0))+coefficient
+            if result.terms[power] == 0:
+                del result.terms[power]
+        return result
+    __radd__ = __add__
+
+    def __neg__(self):
+        result = Polynomial()
+        result.terms = {power: -coefficient for power, coefficient in self.terms.items()}
+        return result
+
+    def __sub__(self, value):
+        return self+-Polynomial(value)
+
+    def __rsub__(self, value):
+        return Polynomial(value)+-self
+
+    def __mul__(self, value):
+        if isinstance(value, np.ndarray):
+            return NotImplemented
+        value, result = Polynomial(value), Polynomial()
+        for left, a in self.terms.items():
+            for right, b in value.terms.items():
+                power = tuple(x+y for x, y in zip(left, right))
+                result.terms[power] = result.terms.get(power, F(0))+a*b
+        result.terms = {power: coefficient for power, coefficient in result.terms.items() if coefficient}
+        return result
+    __rmul__ = __mul__
+
+    def derivative(self, variable):
+        result = Polynomial()
+        for power, coefficient in self.terms.items():
+            if power[variable]:
+                child = list(power)
+                child[variable] -= 1
+                result.terms[tuple(child)] = coefficient*power[variable]
+        return result
+
+    def shifted(self, variable, center):
+        """Exact univariate translation; used on the nonzero shear coordinate."""
+        result = Polynomial()
+        center = F(center)
+        for power, coefficient in self.terms.items():
+            order = power[variable]
+            for child_order in range(order+1):
+                child = list(power)
+                child[variable] = child_order
+                child = tuple(child)
+                result.terms[child] = result.terms.get(child, F(0))+coefficient*math.comb(order, child_order)*center**(order-child_order)
+        result.terms = {power: coefficient for power, coefficient in result.terms.items() if coefficient}
+        return result
+
+    def evaluate(self, values):
+        result = Iv(0)
+        for power, coefficient in self.terms.items():
+            term = Iv(coefficient)
+            for variable, order in enumerate(power):
+                if order == 1:
+                    term *= values[variable]
+                elif order == 2:
+                    term *= values[variable].square()
+                elif order == 3:
+                    term *= values[variable].square()*values[variable]
+                elif order:
+                    raise ValueError('Unexpected polynomial degree')
+            result += term
+        return result
+
+
+_POLYNOMIAL_TENSORS = None
+
+
+def polynomial_tensors():
+    global _POLYNOMIAL_TENSORS
+    if _POLYNOMIAL_TENSORS is not None:
+        return _POLYNOMIAL_TENSORS
+    a = np.array([Polynomial(variable=i) for i in range(9)], dtype=object).reshape(3, 3)
+    s, o = a+a.T, a-a.T
+    ss, oo = sum((v*v for v in s.flat), Polynomial()), sum((v*v for v in o.flat), Polynomial())
+    identity = np.eye(3, dtype=int)
+    q = (s@s-identity*ss*F(1, 3))*F(-1, 10)+(o@s-s@o)*F(1, 10)+(o@o.T-identity*oo*F(1, 3))*F(13, 50)
+    b = (s@s@o-o@s@s)*(-10)+s*((oo-ss)*5)
+    _POLYNOMIAL_TENSORS = s, o, ss, oo, q, b
+    return _POLYNOMIAL_TENSORS
+
+
+def expanded_interval_tangent(gradient, ratio, T, beta, branch):
+    """Same exact tangent, with polynomial cancellation before interval arithmetic.
+
+    A dimensionless B=(k/epsilon)A is formed; tangent = (k^2/epsilon)*L(B).
+    This grouping keeps scalar ratio subdivision inexpensive and avoids
+    independently bounding canceling matrix products in the cubic polynomial.
+    """
+    s_poly, o_poly, ss_poly, oo_poly, q_poly, b_poly = polynomial_tensors()
+    b_gradient = gradient*ratio
+    center = (b_gradient[0, 2].lo+b_gradient[0, 2].hi)/2
+    flat = list(b_gradient.flat)
+    flat[2] = flat[2]-Iv(center)
+    def evaluate(poly):
+        return poly.shifted(2, center).evaluate(flat)
+    def evaluate_array(array):
+        return np.array([evaluate(poly) for poly in array.flat], dtype=object).reshape(array.shape)
+    s, o = evaluate_array(s_poly), evaluate_array(o_poly)
+    # A norm is evaluated as a sum of nonnegative squares instead of a
+    # monomial expansion whose independent intervals can become negative.
+    invariant = (squared_norm(s if branch == 'strain' else o)/2).sqrt()
+    if invariant.lo <= 0:
+        raise ValueError('Finite-box branch includes zero; use analytic fallback')
+    c, cp = cmu_interval(invariant), cmu_derivative_interval(invariant)
+    q_value, b_value = evaluate_array(q_poly), evaluate_array(b_poly)
+    norm_poly = ss_poly if branch == 'strain' else oo_poly
+    linear = np.empty((9, 9), dtype=object)
+    for column in range(9):
+        ds = np.array([Iv(int((i == column//3 and j == column%3)+(i == column%3 and j == column//3)))
+                       for i in range(3) for j in range(3)], dtype=object).reshape(3, 3)
+        dq = evaluate(norm_poly.derivative(column))/(4*invariant)
+        dquad = np.array([evaluate(poly.derivative(column)) for poly in q_poly.flat], dtype=object).reshape(3, 3)
+        dcubic = np.array([evaluate(poly.derivative(column)) for poly in b_poly.flat], dtype=object).reshape(3, 3)
+        result = (ds*c+s*(cp*dq)-dquad*c-q_value*(cp*dq)
+                  -(dcubic*(c*c*c)+b_value*(3*c*c*cp*dq))*beta)*T
+        linear[:, column] = result.ravel()
+    return linear, invariant
+
+
 def null_forms():
     forms, names = [], []
     for i in range(3):
@@ -295,13 +436,13 @@ def gershgorin_lower(matrix):
         ROUND_FLOOR) for i in range(len(matrix)))
 
 
-def best_null_lower(symmetric, beta, branch, iterations=28):
+def best_null_lower(symmetric, beta, branch, iterations=28, weight_scale=1):
     """A certified lower bound; bisection is only a search for an LDL witness."""
     forms, _, basis = null_forms()
     margin, weights = REFERENCE_WEIGHTS[F(beta)]
     augmented = symmetric.copy()
     for coefficient, form in zip(weights[branch], forms):
-        augmented += form*F(coefficient, 100)
+        augmented += form*(F(coefficient, 100)*F(weight_scale))
     projected, metric = basis.T@augmented@basis, basis.T@basis
     def proof(value):
         return interval_ldl(projected-metric*Iv(value))
@@ -324,7 +465,7 @@ def best_null_lower(symmetric, beta, branch, iterations=28):
     pivots = proof(low)
     if pivots is None:
         raise RuntimeError('Lost selected interval proof')
-    return low, dict(bound_over_nut0=str(low), minor_weights=[str(F(c, 100)) for c in weights[branch]],
+    return low, dict(bound_over_nut0=str(low), minor_weights=[str(F(c, 100)*F(weight_scale)) for c in weights[branch]],
                      LDL_pivot_intervals=[value.pair() for value in pivots],
                      note='Null forms vanish on every rank-one gradient; trace-free restriction enforces incompressibility.')
 
@@ -345,11 +486,13 @@ def interval_stress(gradient, k, epsilon, beta, gamma=0, reference_strain=None, 
     return result
 
 
-def finite_box_certificate(beta, radius, k_radius, epsilon_radius, target='0.1'):
+def finite_box_certificate(beta, radius, k_radius, epsilon_radius, target='0.1', ratio_splits=8):
     beta, radius = F(beta), F(radius)
     kr, er = F(k_radius), F(epsilon_radius)
     if not (0 <= radius < 1 and 0 <= kr < 1 and 0 <= er < 1):
         raise ValueError('Box radii must be nonnegative and below one')
+    if int(ratio_splits) < 1:
+        raise ValueError('At least one scalar-ratio subdivision is required')
     a0 = np.zeros((3, 3), dtype=int)
     a0[0, 2] = 1
     gradient = np.empty((3, 3), dtype=object)
@@ -362,18 +505,39 @@ def finite_box_certificate(beta, radius, k_radius, epsilon_radius, target='0.1')
                   G0='u_star/(kappa*r)', K0='Qstar*u_star^2',
                   epsilon0='u_star^3/(kappa*r)', nut0='u_star^2/G0',
                   branch_scope='both complete formal max-invariant branches, hence every active branch and tie convex combination',
-                  branches={})
+                  branches={}, bound_interpretation='The selected gamma is sufficient for this conservative bound; it is not necessary, minimal, or a proof that a smaller gamma fails.',
+                  ratio_splits=int(ratio_splits), gradient_entry_radius_float=float(radius))
     lower_bounds = []
     for branch in ('strain', 'rotation'):
-        linear, q = interval_tangent(gradient, k, epsilon, Iv(beta), branch)
-        symmetric = (linear+linear.T)*F(1, 2)
-        full_bound = gershgorin_lower(symmetric)
-        null_bound, null_proof = best_null_lower(symmetric, beta, branch)
-        selected = max(full_bound, null_bound)
+        ratio = k/epsilon
+        leaves = []
+        for index in range(int(ratio_splits)):
+            width = (Iv(ratio.hi)-Iv(ratio.lo))/ratio_splits
+            left = Iv(ratio.lo)+width*index
+            right = Iv(ratio.lo)+width*(index+1)
+            local_ratio = Iv(left.lo, right.hi)
+            # Both simple products enclose k^2/epsilon on this ratio slice;
+            # their intersection preserves correlations at no extra dimension.
+            first, second = k*local_ratio, epsilon*local_ratio.square()
+            local_T = Iv(max(first.lo, second.lo), min(first.hi, second.hi))
+            linear, q = expanded_interval_tangent(gradient, local_ratio, local_T, Iv(beta), branch)
+            symmetric = (linear+linear.T)*F(1, 2)
+            full_bound = gershgorin_lower(symmetric)
+            center_q = Iv((q.lo+q.hi)/2)
+            nt = cmu_interval(center_q)*Iv((local_T.lo+local_T.hi)/2)
+            weight_scale = (nt.lo+nt.hi)/2
+            null_bound, null_proof = best_null_lower(symmetric, beta, branch, weight_scale=weight_scale)
+            selected = max(full_bound, null_bound)
+            leaves.append(dict(ratio=local_ratio.pair(), T=local_T.pair(), q=q.pair(),
+                full_symmetric_gershgorin_lower=str(full_bound), null_form_proof=null_proof,
+                selected_rank_one_lower=str(selected),
+                tangent_intervals=[[entry.pair() for entry in row] for row in linear]))
+        selected = min(Decimal(leaf['selected_rank_one_lower']) for leaf in leaves)
         lower_bounds.append(selected)
-        result['branches'][branch] = dict(q=q.pair(), full_symmetric_gershgorin_lower=str(full_bound),
-            null_form_proof=null_proof, selected_rank_one_lower=str(selected),
-            tangent_intervals=[[entry.pair() for entry in row] for row in linear])
+        result['branches'][branch] = dict(selected_rank_one_lower=str(selected), ratio_leaves=leaves,
+            tangent_intervals=[[[str(min(Decimal(leaf['tangent_intervals'][i][j][0]) for leaf in leaves)),
+                                str(max(Decimal(leaf['tangent_intervals'][i][j][1]) for leaf in leaves))]
+                               for j in range(9)] for i in range(9)])
     bound = min(lower_bounds)
     required = max(Decimal(0), rd(lambda: Decimal(str(target))-bound, ROUND_CEILING))
     result.update(certified_lower_over_nut0=str(bound), target_over_nut0=str(target),
@@ -390,7 +554,7 @@ def finite_box_certificate(beta, radius, k_radius, epsilon_radius, target='0.1')
         normalized_gradient=[[entry.pair() for entry in row] for row in shear],
         k_over_k0=1, epsilon_over_epsilon0=1, unit_direction='(e_x+e_z)/sqrt(2)',
         variance_interval=variance.pair(), certified_negative=variance.hi < 0,
-        implication='A negative upper endpoint rejects covariance realizability for this gamma on this state set; a positive value is not an all-state covariance certificate.')
+        implication='A negative upper endpoint rejects this sufficient-gamma choice on this state set; it proves neither impossibility of a smaller successful gamma nor an all-state covariance result.')
     return result
 
 
@@ -436,6 +600,7 @@ def analytic_envelope_certificate(q_max='8', t_max='20', t_min='0', beta=F(2, 5)
                           delta_q_abs_over_t='1 for unit incompressible rank-one H'),
         negative_norm_constant=negative.pair(), certified_lower=str(lower),
         target=str(target), required_gamma=str(gamma),
+        bound_interpretation='This gamma is sufficient for a conservative analytic bound, not necessary or minimal. Failure of this overdiffusive choice does not rule out another qualified gamma.',
         scope='Sufficient momentum principal-part condition only; large gamma can destroy covariance and physical accuracy.')
 
 
@@ -474,6 +639,7 @@ def main():
     parser.add_argument('--target', default='.1')
     parser.add_argument('--q-max', default='8')
     parser.add_argument('--T-max', default='20')
+    parser.add_argument('--ratio-splits', type=int, default=8)
     args = parser.parse_args()
     report = dict(schema=1, kind='M8 constitutive mathematical certificates',
                   source_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
@@ -491,7 +657,7 @@ def main():
             if args.boxes:
                 for radius in args.radii.split(','):
                     report['finite_boxes'].append(finite_box_certificate(
-                        beta, radius, args.k_radius, args.epsilon_radius, args.target))
+                        beta, radius, args.k_radius, args.epsilon_radius, args.target, args.ratio_splits))
             report['analytic_envelopes'].append(analytic_envelope_certificate(
                 args.q_max, args.T_max, beta=beta, target=args.target))
         report['floating_shear_checks'] = floating_checks()
