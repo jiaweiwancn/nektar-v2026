@@ -1,0 +1,58 @@
+{
+  "schema": 1,
+  "source_commit": "1ee3a8454c857c807bcb6911024186afb9d22721",
+  "input": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/inner-verification-001/results/linear-active-chi0/native.json",
+  "input_sha256": "53aa147b31005454217b0fc997b32b4366d03c5da94e92ec72e20979b4f1a10e",
+  "numerical_workers": 1,
+  "cpu_affinity": [
+    50
+  ],
+  "native_or_solver_execution": false,
+  "scope": "Two fixed fixture-normalization checks; production coefficients and hard guards unchanged; no envelope or physical qualification",
+  "results": [
+    {
+      "name": "original_cubic_rK1",
+      "normal_knots": [
+        0.0,
+        2.0,
+        4.0
+      ],
+      "sample_height": 1,
+      "height": 2,
+      "theta": 0.2,
+      "delta": 0.1,
+      "source_points": 304,
+      "minimum_local_k": 0.0005105080130598862,
+      "b": 0.1486821878953737,
+      "m": 0.1486821878953737,
+      "lambda": 1.0,
+      "normalization_cap_active": false,
+      "budgetE": 1.5498879329140207,
+      "budgetD": 1.5498879329140207
+    },
+    {
+      "name": "existing_pressure_peak_contract",
+      "normal_knots": [
+        0.0,
+        0.97,
+        1.0,
+        1.03,
+        1.97,
+        2.0,
+        4.0
+      ],
+      "sample_height": 1,
+      "height": 2,
+      "theta": 0.2,
+      "delta": 0.1,
+      "source_points": 352,
+      "minimum_local_k": 0.005105080130598865,
+      "b": 0.055398332988673735,
+      "m": 0.1,
+      "lambda": 0.5539833298867373,
+      "normalization_cap_active": true,
+      "budgetE": 1.5498879329140207,
+      "budgetD": 1.5498879329140207
+    }
+  ]
+}

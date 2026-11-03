@@ -52,17 +52,45 @@ The focused verification sources cover the compiled kernel versus independent
 indexed and frozen-R1 formulas, all nine gradient directions, mixed local-k
 and viscosity actions, full production/traction and zero inputs. Eight fixed
 flat native fixtures evaluate actual unanchored alpha=0 weak loads: active
-Linear/R2, chi=0/1, inactive identity, and one separately labelled capped
-chi=0 case, plus Linear/R2 exact-local-zero covariance countertests. The zero
+Linear/R2, chi=0/1, inactive identity, one legal depleted-but-uncapped chi=0
+case, plus Linear/R2 exact-local-zero covariance countertests. The zero
 fixture analytically prescribes the represented zero ground trace before any
 operator evaluation; it is not a post-step scalar repair and takes no outward
 central k perturbation. `Audit[inner_zero_covariance]` reports the number of
 exact-zero inner evaluations and their minimum/maximum covariance, after
-actually evaluating the selected kernel. The cap fixture uses rK=H=2 solely for operator verification;
-it is not a changed physical E/F control. Compatible external EPS corner
+actually evaluating the selected kernel. The originally proposed cap fixture
+used rK=H=2 and was rejected by the existing strict sample-height guard before
+operator evaluation. Its failed XML and log are retained. The corrected
+cubic-depletion fixture keeps the physical rK=1 and H=2: an independent Linux
+calculation gives b=0.1486821878953737 and lambda=1, so it is explicitly
+uncapped. Compatible external EPS corner
 data are fixed once, while interior lambda*Epre(H) modes remain dependent and
 are rebuilt at every perturbed state. Two mixed direction levels capture
 actual Lift/constraints/residual actions. Their independent all-row audits
 do not replace the stricter pressure/chi action test or the actual implicit
 stage result. All active fixtures are explicitly outside physical outer-box
 qualification. Genuine curved MMS and the remaining M8 gates stay open.
+
+The already executed pressure-active fixture at the same producing binary
+epoch separately exercises the cap at legal rK=1. Analysis-only replay checks
+its complete constrained residual against independent unforced alpha=0 weak
+loads plus the exact time-mass term, the complete normalization rays and
+budgets, and the actual baseline-plus-correction projected lambda*Epre(H)
+trace. This is a chi-active capped test, not a cap-active chi=0 test. The
+chi=0 depleted control independently checks the unchanged budget mechanism
+with selected actual production. Algebraically the pre-E/pre-D
+normalization and dependent trace do not contain P; replacing P by the same
+selected stress contraction in the k equation retains their cancellation.
+No extra native call, CPP change, hard-guard relaxation or model-coefficient
+retuning is introduced to activate a cap.
+
+The first B verifier attempt compared diagnostics from distinct states. The
+native probe preserves `Audit(state)` on its supplied projected state, while
+its physical weak loads, EnergyBudget and Interface evaluate the lifted state.
+The corrected postprocessor retains both inputs: supplied-state diagnostics
+are checked against that same projected state, and actual lifted-state
+interface traction is checked independently at its own order-12 rule and
+reported samples. No production stress or Audit result is changed to make
+these comparisons agree. Exact retained-report reanalysis and execution of
+missing fixed fixtures are separate modes, with original failures and
+producing probe/source hashes preserved.

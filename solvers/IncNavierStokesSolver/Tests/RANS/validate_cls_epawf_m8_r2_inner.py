@@ -3,9 +3,10 @@
 
 The eight fixed native fixtures are operator evaluations, never trajectories or
 qualified physical controls.  Both inactive identity and active full weak
-loads are reconstructed independently.  The capped fixture has rK=H solely
-to exercise the source/trace mechanism, and is excluded from stage/control
-qualification.  All numerical execution belongs on Linux, one worker.
+loads are reconstructed independently. The legal rK=1 cubic-depletion case
+is uncapped. A separately retained, pressure-active cap fixture supplies an
+additional all-row weak/mass/trace check without a new native call. Neither
+fixture is a qualified physical control. Numerical execution is Linux-only.
 
 With --reuse-run alone this performs read-only reanalysis, leaving missing
 fixtures unperformed. --continue-missing separately authorizes execution of
@@ -37,6 +38,7 @@ from cls_epawf_m8_r1_kernel import inner_value as r1_value
 from cls_epawf_m7_energy_oracle import Audit, _fields, _horizontal, _sample, _velocity
 from cls_epawf_m8_native_oracle import ray_source, selected_stress
 from cls_epawf_m8_r2_preflight import weak_loads, selected_direct, selected_interface
+from cls_epawf_m6_operator_oracle import _segment_projection
 
 
 def stamp():
@@ -246,8 +248,9 @@ def native(raw, audit):
         else:
             audit.require(observed['inner_stress'][0] > 0, 'ACTIVE native fixture did not exercise saturation')
     if raw['inner_stress_fixture'] == 3:
-        audit.require(observed['robust_source'][5] > 0 and observed['robust_source'][6] < 1,
-                      'Declared capped native fixture did not exercise the normalization cap')
+        audit.require(raw['parameters'][3] == 1 and observed['robust_source'][4] > 0
+                      and observed['robust_source'][5] == 0 and observed['robust_source'][6] == 1,
+                      'Legal depleted chi=0 fixture must limit locally but remain uncapped')
     if raw['inner_stress_fixture'] == 4:
         zero = observed['inner_zero_covariance']
         audit.require(zero[0] > 0, 'The actual covariance diagnostic skipped exact inner k=0')
@@ -278,6 +281,128 @@ def native(raw, audit):
         qualification='Operator verification only; these active states are outside the fixed outer box. No stage/trajectory or qualified physical solution is claimed.')
 
 
+def retained_pressure_cap(directory, producing_source, audit):
+    """Independently check the already executed, same-epoch capped operator.
+
+    This consumes exact existing native files only. The capped case has active
+    state-dependent chi; it is explicitly distinct from the uncapped chi=0
+    CurvedWallProbe fixture and does not establish a cap-active chi=0 test.
+    """
+    directory = directory.resolve()
+    validation_path, receipt_path = directory/'validation.json', directory.parent/'receipt.json'
+    validation, receipt = (json.loads(path.read_text()) for path in (validation_path, receipt_path))
+    audit.require(validation['success'] and validation['source_commit'] == producing_source,
+                  'Retained pressure-cap verification is not passed at the producing binary epoch')
+    audit.require(receipt['suite'] == 'pressure' and receipt['status'] == 'passed'
+                  and receipt['runtime_unchanged'] and receipt['source_clean_start'] and receipt['source_clean_end']
+                  and receipt['source_commit'] == receipt['source_commit_end'] == producing_source,
+                  'Retained pressure-cap wrapper lacks a clean unchanged producing epoch')
+    pin_paths = [directory.parent/'runtime-before.json', directory.parent/'runtime-after.json']
+    before, after = (json.loads(path.read_text()) for path in pin_paths)
+    for pin in (before, after):
+        audit.require(pin['success'] and pin['clean'] and pin['source_commit'] == producing_source,
+                      'Retained pressure-cap runtime fingerprint failed')
+    for key in ('source_inputs', 'runtime_artifacts', 'runtime_bindings', 'runtime_environment',
+                'python_packages', 'tool_images'):
+        audit.require(before[key] == after[key], 'Retained pressure-cap runtime changed: '+key)
+    program = Path(validation['program']['path'])
+    audit.require(sha(program) == validation['program']['sha256'], 'Retained pressure-cap program bytes changed')
+    raw_path = directory/'pressure-active/probe.json'
+    command = next(row for row in validation['commands']
+                   if Path(row['command'][-1]).resolve() == raw_path)
+    audit.require(command['exit_code'] == 0 and command['report_sha256'] == sha(raw_path),
+                  'Retained pressure-cap native report bytes changed')
+    raw = json.loads(raw_path.read_text())
+    audit.require(raw['fixture'] == 'pressure_sensor_and_capped_trace_active'
+                  and raw['inner_stress_model'] == 'SaturatedR2' and raw['operator_verification_only']
+                  and not raw['physical_qualification'] and raw['parameters'][1:5] == [2, .1, 1, 1]
+                  and raw['robust_parameters'] == [.4, 0, .2, .1, 0, 1, 1],
+                  'Retained pressure-cap fixture differs from the fixed legal contract')
+    fields, state, history = _fields(raw), np.asarray(raw['state']), np.asarray(raw['history'])
+    expected, metadata = weak_loads(raw, fields, state)
+    mass = np.zeros(len(state))
+    for block in range(raw['dimension']+2):
+        ids = raw['offsets'][block]+np.arange(fields[block].size)
+        mass[ids] = raw['alpha']*fields[block].mass()@(state[ids]-history[ids])
+    expected = constrained(raw, expected+mass, state, raw['constraints'])
+    residual_error = audit.near(raw['base_residual'], expected,
+        'retained_cap_actual_complete_weak_mass_constraints', 3e-10)
+
+    rays = {}
+
+    def ray(chart, baseline=False):
+        key = (float(chart[0]), bool(baseline))
+        if key not in rays:
+            view = dict(raw, upstream_transition=False, chi=0.) if baseline else raw
+            rays[key] = ray_source(view, fields, state, chart)
+        return rays[key]
+
+    cap_count, interior_chi_count, ray_records = 0, 0, []
+    H, d, offsets = raw['parameters'][1], raw['dimension'], raw['offsets']
+    for sample in raw['samples']:
+        value = ray(np.asarray(sample['chart']))
+        profile, measure = value['profile'], value['measure']
+        pre = float(np.asarray(profile.fields([H]), float)[2, 0])
+        audit.near([sample['K'], sample['b'], sample['m'], sample['lambda']],
+            [float(profile.k), value['b'], value['m'], value['lam']], 'retained_cap_full_ray_normalization', 3e-10)
+        audit.near([sample['pre_trace'], sample['actual_trace']],
+            [pre, value['lam']*pre], 'retained_cap_actual_lambda_Epre_trace', 3e-10)
+        pre_e, pre_d = float(measure@value['pre_e']), float(measure@value['pre_d'])
+        e, destruction = float(measure@value['e']), float(measure@value['destruction'])
+        audit.near([pre_e, e, float(measure@value['redistribution'])],
+            [pre_d, destruction, 0.], 'retained_cap_pre_and_actual_budget_cancellation', 3e-10)
+        cap_count += int(value['b'] < raw['robust_parameters'][3] and 0 < value['lam'] < 1)
+        interior_chi_count += int(0 < float(profile.chi) < 1)
+        ray_records.append(dict(chart=sample['chart'], chi=float(profile.chi), b=value['b'],
+            lambda_value=value['lam'], pre_E_budget=pre_e, pre_D_budget=pre_d,
+            actual_E_budget=e, actual_D_budget=destruction))
+    audit.require(cap_count > 0 and interior_chi_count > 0,
+                  'Retained pressure fixture must exercise both attenuation and interior chi')
+
+    # Native projection is baseline(chi=0) plus the current-minus-baseline
+    # correction; downstream baseline-face correction modes are constrained.
+    tables, baseline_ids = [{}, {}], set()
+    for element in fields[d+1].elements:
+        if abs(element['lower'][2]-H) > 1e-11:
+            continue
+        nodes, transform = _segment_projection(element['degree'])
+        xs = element['lower'][0]+(nodes+1)*(element['upper'][0]-element['lower'][0])/2
+        data = []
+        for x in xs:
+            chart = np.array([x, 0., H])
+            base, current = ray(chart, True), ray(chart)
+            eb = base['lam']*float(np.asarray(base['profile'].fields([H]), float)[2, 0])
+            ec = current['lam']*float(np.asarray(current['profile'].fields([H]), float)[2, 0])
+            data.append([eb, ec-eb])
+        data = np.asarray(data).T
+        count = element['degree']+1
+        for part, table in enumerate(tables):
+            for index, sign, coefficient in zip(element['ids'][:count], element['sign'][:count], transform@data[part]):
+                index, coefficient = int(index), float(sign*coefficient)
+                if index in table:
+                    audit.near(table[index], coefficient, 'retained_cap_shared_projected_trace_mode', 3e-10)
+                table[index] = coefficient
+        if element['lower'][0] >= raw['transition_controls'][4]-1e-11:
+            baseline_ids.update(map(int, element['ids'][:count]))
+    constraints = {int(row): value for row, value in raw['constraints']}
+    for index in baseline_ids:
+        tables[1][index] = 0.
+    rows = sorted(tables[0])
+    projected = [tables[0][i]+tables[1][i] for i in rows]
+    audit.near([constraints[offsets[d+1]+i] for i in rows], projected,
+               'retained_cap_actual_projected_constraint_trace', 3e-10)
+    audit.near(state[offsets[d+1]+np.asarray(rows, int)], projected,
+               'retained_cap_actual_lifted_projected_trace', 3e-10)
+    files = [validation_path, receipt_path, *pin_paths, raw_path,
+             directory/'pressure-active/case.xml', directory/'pressure-active/run.log']
+    return dict(producing_source_commit=producing_source, native_calls=0,
+        input_files={str(path): dict(bytes=path.stat().st_size, sha256=sha(path)) for path in files},
+        pressure_probe_sha256=sha(program), base_residual_error=residual_error, alpha=raw['alpha'],
+        weak=metadata, capped_rays=cap_count, interior_chi_rays=interior_chi_count,
+        matching_trace_rows=len(rows), rays=ray_records,
+        scope='Analysis of retained same-binary pressure-active capped operator, exact time mass and projected trace. Distinct from the legal uncapped chi=0 depletion fixture; no cap-active chi=0 native claim or solver trajectory.')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--kernel-probe', required=True, type=Path)
@@ -290,6 +415,8 @@ def main():
                         help='Execute only missing fixed fixtures with the identical retained probe binaries')
     parser.add_argument('--producing-source-commit', default='',
                         help='Actual compiled probe source epoch, distinct from the current Python postprocessor epoch')
+    parser.add_argument('--capped-pressure-run', required=True, type=Path,
+                        help='Passed same-producing-epoch pressure-suite results; retained cap full residual/trace analysis only')
     args = parser.parse_args()
     if platform.system() != 'Linux':
         raise SystemExit('Run numerical verification only on the authoritative Linux host')
@@ -347,7 +474,7 @@ def main():
                  ('saturated-active-chi1', 'SaturatedR2', 1, 1, 1),
                  ('linear-inactive-chi0', 'Linear', 2, 0, 1),
                  ('saturated-inactive-chi0', 'SaturatedR2', 2, 0, 1),
-                 ('saturated-capped-chi0', 'SaturatedR2', 3, 0, 2),
+                 ('saturated-depleted-chi0', 'SaturatedR2', 3, 0, 1),
                  ('linear-zero-local-k', 'Linear', 4, 0, 1),
                  ('saturated-zero-local-k', 'SaturatedR2', 4, 0, 1)]
         raw_cases = {}
@@ -387,6 +514,8 @@ def main():
         for name, raw in raw_cases.items():
             audit.require(('M8-R2:InnerStress:SaturatedR2:v1:rho=0.8' in raw['physical_signature']) ==
                           (raw['inner_stress_model'] == 'SaturatedR2'), 'Selector/checkpoint identity '+name)
+        report['retained_pressure_cap'] = retained_pressure_cap(
+            args.capped_pressure_run, args.producing_source_commit, audit)
         report['available_input_reanalysis_success'] = True
         report['verification_complete'] = not report['unperformed_fixtures']
         report['success'] = report['verification_complete']

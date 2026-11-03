@@ -8,7 +8,7 @@ nonlinear failure, an inaccurate action and a physical-range failure remain
 different results. Numerical invocation belongs to the Linux environment.
 """
 import argparse
-from collections import Counter, defaultdict
+from collections import Counter, defaultdict, OrderedDict
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -35,6 +35,7 @@ from cls_epawf_m7_energy_oracle import _horizontal, _mass, _profile, _velocity, 
 from cls_epawf_m8_state_coverage import gll, local_values, tensor_points
 from cls_epawf_m8_r2_oracle import selected_inner
 from cls_epawf_m8_native_oracle import normal_rule, selected_stress
+from validate_cls_epawf_m8_r2_pressure import PressureOracle
 
 ACTION_TOLERANCE = 1e-7
 LEVELS = [3200., 1600., 800., 400.]
@@ -62,6 +63,31 @@ def vector_hash(vector):
     return hashlib.sha256(np.asarray(vector, dtype='<f8').tobytes()).hexdigest()
 
 
+def rle(values):
+    result = []
+    for value in values:
+        if result and result[-1][0] == value:
+            result[-1][1] += 1
+        else:
+            result.append([value, 1])
+    return result
+
+
+def branch_difference(base, endpoint):
+    result = {}
+    for name in ('outer_max', 'inner_saturation', 'source_limiter'):
+        a, b = base.get(name), endpoint.get(name)
+        if a is None or b is None:
+            result[name] = dict(available=False)
+            continue
+        result[name] = dict(available=True, identical=a['pattern_sha256'] == b['pattern_sha256'],
+            same_length=a['count'] == b['count'], base_minimum_switch_distance=a['minimum_switch_distance'],
+            endpoint_minimum_switch_distance=b['minimum_switch_distance'],
+            interpretation='Fixed outer points' if name == 'outer_max' else
+                'Literal actual source-ray ordering; moving normal coordinates need not represent identical physical points')
+    return result
+
+
 def save(path, payload):
     temporary = path.with_suffix(path.suffix+'.tmp')
     temporary.write_text(json.dumps(payload, indent=2, sort_keys=True, allow_nan=False)+'\n')
@@ -78,6 +104,8 @@ class Analyzer:
         self.audit = Audit(raw, self.source)
         self.audit.gauge_variable_scale = raw['ustar']/raw['parameters'][1]
         self.fields, self.offsets = self.audit.fields, raw['offsets']
+        self.constants = [field.constant() for field in self.fields]
+        self.row_cache, self.row_cache_bytes = OrderedDict(), 0
         self.d, self.H, self.K0, self.E0 = self.audit.d, self.audit.H, self.audit.K0, self.audit.E0
         self.size = len(raw['state'])
         self.trace_ids = self.fields[self.d+1].boundary(
@@ -109,9 +137,20 @@ class Analyzer:
     def values(self, state, block, identity, points):
         """Centered long-double values, with independent Jacobi basis rows."""
         field = self.fields[block]
-        ids, phi, _ = field.rows(field.by_id[int(identity)], np.atleast_2d(points))
+        points = np.atleast_2d(points)
+        key = (int(block), int(identity), points.tobytes())
+        if key not in self.row_cache:
+            ids, phi, _ = field.rows(field.by_id[int(identity)], points)
+            self.row_cache[key] = (ids, phi)
+            self.row_cache_bytes += len(key[2])+ids.nbytes+phi.nbytes
+            while self.row_cache_bytes > 128*1024*1024 and len(self.row_cache) > 1:
+                old_key, (old_ids, old_phi) = self.row_cache.popitem(last=False)
+                self.row_cache_bytes -= len(old_key[2])+old_ids.nbytes+old_phi.nbytes
+        else:
+            self.row_cache.move_to_end(key)
+        ids, phi = self.row_cache[key]
         coefficients = np.asarray(state)[self.offsets[block]+ids].astype(np.longdouble)
-        constant = field.constant()[ids].astype(np.longdouble)
+        constant = self.constants[block][ids].astype(np.longdouble)
         pivot = next((i for i, value in enumerate(constant) if value != 0), None)
         self.audit.require(pivot is not None, 'Native tensor restriction lacks its constant')
         centre = coefficients[pivot]/constant[pivot]
@@ -227,9 +266,12 @@ class Analyzer:
             differing_literal_multiplicities=sum(actual_keys[key] != expected_keys[key] for key in actual_keys),
             coordinate_comparison_rounding_digits=12,
             interpretation='Rounding identifies geometric locations only; actual call coordinates and values are retained without rounding')
-        self.static = [dict(name=row['inventory'], geometry=int(row['geometry']),
-            points=np.asarray([row['coordinate']], float), block=int(row['block']), strict=bool(row['strict']),
-            side=int(row['side']), dependent=False, weights=np.zeros(1)) for row in actual]
+        groups = defaultdict(list)
+        for row in actual:
+            groups[(row['inventory'], int(row['geometry']), int(row['block']), int(row['side']), bool(row['strict']))].append(row)
+        self.static = [dict(name=name, geometry=identity, points=np.asarray([row['coordinate'] for row in rows]),
+            block=block, strict=strict, side=side, dependent=False, weights=np.zeros(len(rows)))
+            for (name, identity, block, side, strict), rows in groups.items()]
         source = sorted({(float(row['coordinate'][0]), float(row['coordinate'][1])) for row in observations
             if row['inventory'] == 'volume_normalization_ray'})
         horizontal = list(_horizontal(self.fields, self.d, self.H, int(self.raw['quadrature_orders'][0])))
@@ -334,6 +376,7 @@ class Analyzer:
             cutoff_range=[float(min(float(ray['profile'].rc) if ray['profile'].chi > 0 else 0. for ray in normalized)),
                 float(max(float(ray['profile'].rc) if ray['profile'].chi > 0 else 0. for ray in normalized))],
             independent_trace=trace, profile_branch_pattern=''.join(branch),
+            independent_branch_context=self.branch_context(effective, normalized[:len(self.source_anchors)]),
             effective_state_float64_LE_sha256=vector_hash(effective), trace_target_state_float64_LE_sha256=vector_hash(target))
         if native is not None:
             self.audit.require(bool(native['admissible']), 'Native rejected an independently admissible scalar state')
@@ -367,6 +410,8 @@ class Analyzer:
             scope='Common actual residual-evaluation inventory; additional diagnostic reconstruction rays are separate')
         if native is not None:
             result['native_phase'] = native['phase']; result['native_failure'] = native['failure']
+            result['native_limiting_inventory'] = native.get('limiting_inventory')
+            result['native_limiting_point'] = native.get('limiting_point')
             if admitted:
                 self.audit.require(counts == Counter(native['inventory_counts']), 'Common scalar inventory counts differ')
                 self.audit.near(result['minimum_dimensionless_margin'], native['minimum_dimensionless_margin'],
@@ -379,6 +424,45 @@ class Analyzer:
                 self.audit.require(False, 'Native admitted an independently invalid scalar state')
         if records and admitted:
             result['minimum_points'] = sorted(records, key=lambda row: row['value']/row['scale'])[:4]
+        return result
+
+    def branch_context(self, state, source_rays):
+        """Independent switch data, not constitutive stability conclusions."""
+        patterns = dict(outer_max=[], inner_saturation=[], source_limiter=[])
+        distance = {name:math.inf for name in patterns}
+        uncertain = 0
+        for group in self.static:
+            if group['name'] != 'source_volume_outer' or group['block'] != self.d:
+                continue
+            G, k, epsilon, _ = local_values(self.raw, self.fields, state, group['geometry'], group['points'])
+            S, O = G+G.transpose(0, 2, 1), G-G.transpose(0, 2, 1)
+            qs = k/epsilon*np.sqrt(np.sum(S*S, axis=(1, 2))/2)
+            qo = k/epsilon*np.sqrt(np.sum(O*O, axis=(1, 2))/2)
+            gap = qs-qo
+            patterns['outer_max'].extend('S' if value >= 0 else 'O' for value in gap)
+            distance['outer_max'] = min(distance['outer_max'], float(np.min(np.abs(gap))))
+            uncertain += int(np.count_nonzero(np.abs(gap) <= 64*np.finfo(float).eps*np.maximum(1., np.maximum(qs, qo))))
+        for ray in source_rays:
+            profile = ray['profile']; k = np.asarray(ray['local_k'])
+            _, G = _velocity(self.fields, state, self.offsets, self.d, ray['points'])
+            S = G+G.transpose(0, 2, 1)
+            viscosity = float(profile.a)*np.maximum(ray['r']-float(profile.zv), 0.)
+            a = viscosity*np.sqrt(np.sum(S*S, axis=(1, 2)))
+            c = 2*k/3
+            gap = (a-.8*c)/self.K0
+            patterns['inner_saturation'].extend('Z' if kval == 0 else 'A' if value > 0 else 'I'
+                for kval, value in zip(k, gap))
+            distance['inner_saturation'] = min(distance['inner_saturation'], float(np.min(np.abs(gap))))
+            ratio = k/(self.raw['robust_parameters'][2]*float(profile.k))
+            patterns['source_limiter'].extend('Z' if value == 0 else 'L' if value < 1 else 'P' for value in ratio)
+            distance['source_limiter'] = min(distance['source_limiter'], float(np.min(np.minimum(np.abs(ratio), np.abs(ratio-1)))))
+        result = {}
+        for name, pattern in patterns.items():
+            text = ''.join(pattern)
+            result[name] = dict(count=len(pattern), population=dict(Counter(pattern)), lossless_RLE=rle(pattern),
+                pattern_sha256=hashlib.sha256(text.encode()).hexdigest(), minimum_switch_distance=distance[name])
+        result['outer_max']['binary64_tie_uncertainty_count'] = uncertain
+        result['interpretation'] = 'Actual finite evaluation signatures and switch distances; a matching endpoint signature is not a proof that no switch occurs between endpoints'
         return result
 
     def observations(self, observations, effective, target):
@@ -453,7 +537,90 @@ class Analyzer:
         result[:2] = np.sqrt(result[:2])
         return result
 
-    def physical(self, state, history, alpha, native=None, unmasked=None, constraints=None):
+    def restricted_ranges(self, state, native_domain, native_audit=None):
+        """Independent physical qualification on the actual common inventory.
+
+        The dependent target and retained actual epsilon-H state both enter
+        this inventory, with their own native call identities. The broader E
+        reconstruction audit is reported separately and never substituted.
+        """
+        observations = native_domain.get('observations', [])
+        self.audit.require(bool(observations), 'Restricted physical audit lacks its common-inventory coordinates')
+        effective, target, _, _, _ = self.projected(state)
+        groups = defaultdict(list)
+        for row in observations:
+            if int(row['block']) == self.d or row['dependent_trace']:
+                groups[(int(row['geometry']), int(row['side']), bool(row['dependent_trace']))].append(row)
+        outer = np.array([0., math.inf, -math.inf, math.inf, -math.inf, math.inf, -math.inf])
+        covariance = [math.inf, math.inf]
+        worst = [None, None]
+        profiles = {}
+        flow, normal = np.asarray(self.raw['robust_reference_flow']), np.asarray(self.raw['robust_reference_normal'])
+        for (identity, side, dependent), rows in groups.items():
+            points = np.asarray([row['coordinate'] for row in rows])
+            _, G = _velocity(self.fields, effective, self.offsets, self.d, points, identity)
+            k, _ = self.values(effective, self.d, identity, points)
+            for index, point in enumerate(points):
+                inner = bool(point[2] < self.H-1e-11 or abs(point[2]-self.H) < 1e-11 and side < 0)
+                if inner:
+                    key = (float(point[0]), float(point[1]))
+                    if key not in profiles:
+                        baseline = dict(self.raw, upstream_transition=False, chi=0.)
+                        profiles[key] = _profile(baseline, self.fields, effective, point)[0]
+                    profile = profiles[key]
+                    viscosity = float(profile.a)*max(float(point[2])-float(profile.zv), 0.)
+                    law = selected_inner(self.raw, G[index], float(k[index]), viscosity)
+                    stress = np.asarray(law['stress']).real
+                    value = float(np.linalg.eigvalsh(stress)[0])
+                    if value < covariance[0]:
+                        covariance[0] = value
+                        worst[0] = dict(chart=point.tolist(), geometry=identity, side=side,
+                            k=float(k[index]), sampled_K=float(profile.k), nu_A=viscosity,
+                            a=float(np.asarray(law['a']).real), c=float(np.asarray(law['c']).real),
+                            G=G[index].tolist(), S=(G[index]+G[index].T).tolist(),
+                            covariance_minimum=value, inventory=rows[index]['inventory'])
+                    continue
+                epsilon_state = target if dependent else effective
+                epsilon = self.fields[self.d+1].evaluate(epsilon_state, self.offsets[self.d+1], point,
+                    1 if abs(point[2]-self.H) < 1e-11 else 0)[0]
+                self.audit.require(k[index] > 0 and epsilon > 0, 'Common physical audit exited the scalar domain')
+                stress, _ = selected_stress(self.raw, G[index], float(k[index]), epsilon, point)
+                value = float(np.linalg.eigvalsh(stress)[0])
+                if value < covariance[1]:
+                    covariance[1] = value
+                    worst[1] = dict(chart=point.tolist(), geometry=identity, side=side, dependent_trace=dependent,
+                        k=float(k[index]), epsilon=float(epsilon), G=G[index].tolist(),
+                        covariance_minimum=value, inventory=rows[index]['inventory'])
+                gradient_reference = self.audit.us/(self.audit.kappa*point[2])
+                epsilon_reference = self.audit.us**3/(self.audit.kappa*point[2])
+                outer[0] = max(outer[0], float(np.max(np.abs(G[index]/gradient_reference-np.outer(flow, normal)))))
+                kr, er = float(k[index]/self.K0), float(epsilon/epsilon_reference)
+                outer[1:5] = [min(outer[1], kr), max(outer[2], kr), min(outer[3], er), max(outer[4], er)]
+        sampled = [row for row in observations if row['inventory'] == 'physical_sampled_K']
+        samples = []
+        for row in sampled:
+            value, _ = self.values(effective, self.d, int(row['geometry']), [row['coordinate']])
+            samples.append(float(value[0]/self.K0))
+        outer[5], outer[6] = min(samples), max(samples)
+        box = bool(outer[0] <= .001 and outer[1] >= .99 and outer[2] <= 1.01 and
+            outer[3] >= .98 and outer[4] <= 1.02 and outer[5] >= .99 and outer[6] <= 1.01)
+        covariance_guard = bool(min(covariance) >= -1e-10*self.K0)
+        independent_domain = self.domain(state, native_domain)
+        qualified = bool(box and covariance_guard and independent_domain['minimum_lambda'] >= .5)
+        if native_audit:
+            self.audit.near(native_audit['r2_outer_range'], outer, 'independent_common_inventory_fixed_outer_range', 3e-10)
+            self.audit.near(native_audit['r2_covariance'], covariance, 'independent_common_inventory_selected_covariance', 3e-10)
+            self.audit.require(bool(native_audit['r2_qualified'][0]) == qualified,
+                'Native restricted qualification disagrees with independent common-inventory gates')
+        return dict(outer_range=outer.tolist(), covariance_minima=covariance, worst_points=worst,
+            fixed_outer_box_covered=box, strict_covariance_nonnegative=bool(min(covariance) >= 0),
+            declared_native_covariance_roundoff_guard=covariance_guard,
+            covariance_guard_absolute_tolerance=1e-10*self.K0,
+            minimum_lambda=independent_domain['minimum_lambda'], qualified_on_common_inventory=qualified,
+            rigorous_or_polynomial_everywhere_qualification=False,
+            scope='Actual common scalar inventory including both retained epsilon-H and independently projected target; one-sided geometry gradients preserved')
+
+    def physical(self, state, history, alpha, native=None, unmasked=None, constraints=None, native_domain=None):
         effective = self.external_lift(state)
         inventory = Inventory(self.raw, self.fields, effective, self.session)
         direct = selected_direct(self.raw, self.fields, effective, self.audit)
@@ -488,6 +655,10 @@ class Analyzer:
                     'resolved_advection', 'roughness_force_work', 'prescribed_body_work', 'direct_sum',
                     'direct_remainder', 'stored_energy', 'essential_reaction', 'anchor_work', 'free_weak_work')]
                 self.audit.near(native['energy'], expected, 'independent_stage_complete_energy_and_reaction', 3e-10)
+            for key, independent in (('source_volume_inner', 'inner_covariance_minimum'),
+                    ('source_volume_outer', 'outer_covariance_minimum')):
+                if key in native:
+                    self.audit.near(native[key][3], direct[independent], 'independent_stage_'+key+'_covariance', 3e-10)
         try:
             ranges = finite_ranges(self.raw, self.fields, effective, self.session, inventory)
         except Exception as error:
@@ -498,7 +669,9 @@ class Analyzer:
             tangential_traction_RMS=float(math.sqrt(max(0., interface[3]**2-interface[2]**2))),
             strong_continuity=continuity.tolist(), physical_ranges=ranges,
             pressure_jump_is_not_a_pressure_continuity_condition=True,
-            constraints_and_projected_trace_are_separate_from_physical_covariance=True)
+            constraints_and_projected_trace_are_separate_from_physical_covariance=True,
+            common_inventory_physical_qualification=self.restricted_ranges(state, native_domain, native)
+                if native_domain and native_domain.get('observations') else None)
 
     def state(self, state, history, alpha, native_residual, entries, domain, full=False, native_audit=None):
         key = (vector_hash(state), vector_hash(history), float(alpha))
@@ -564,6 +737,8 @@ class Analyzer:
                     base_to_endpoint_branch_pattern_changed=bool(side['domain'].get('profile_branch_pattern', '') !=
                         item.get('_base_branches', '')),
                     exception_type=side.get('exception_type'), exception_message=side.get('exception_message'))
+                result['independent_branch_comparison'] = branch_difference(item.get('_base_independent_branches', {}),
+                    scalar.get('independent_branch_context', {}))
                 if side['evaluated']:
                     self.audit.require(scalar['admissible'], 'Directional residual evaluated outside independent scalar domain')
                     c = self.constraints(endpoint, side.get('constraints'))
@@ -600,7 +775,6 @@ class Analyzer:
         self.gates.append(gate)
         analytic_pressure = None
         if item['kind'] == 'pressure_and_gauge' and not scalar_only:
-            from validate_cls_epawf_m8_r2_pressure import PressureOracle
             view = dict(self.raw, state=np.asarray(state).tolist(), constraints=[[i, v] for i, v in sorted(constraints.items())])
             oracle = PressureOracle(view, self.external_lift(state))
             exact_affine = oracle.affine(direction)
@@ -633,6 +807,56 @@ class Analyzer:
                 limiting = dict(point, independent_directional_change=delta)
         return maximum, limiting
 
+    def column_controls(self, columns, state, constraints, scalar_only):
+        self.audit.require([column['column'] for column in columns] == list(range(self.size)),
+            'Current Jacobian column provenance is incomplete')
+        scales = self.audit.scales()
+        stencils, rejected, one_sided = Counter(), Counter(), []
+        for column in columns:
+            index, stencil = int(column['column']), column['stencil']
+            block = next((b for b, field in enumerate(self.fields)
+                if self.offsets[b] <= index < self.offsets[b]+field.size), len(self.fields))
+            stencils[stencil] += 1
+            if scalar_only and block not in (self.d, self.d+1):
+                self.audit.require(stencil == 'frozen_scalar_diagnostic_not_a_coupled_column',
+                    'Frozen diagnostic column was mislabelled as a coupled derivative')
+                continue
+            if block >= self.d+2:
+                self.audit.require(stencil == 'exact_affine_and_full_nonlinear_pressure_action',
+                    'A pressure/gauge column replaced or omitted its full analytic action')
+                continue
+            if index in constraints and index not in self.trace_rows:
+                self.audit.require(stencil == 'lifted_constraint_identity', 'External fixed column is not the lift identity')
+                continue
+            self.audit.require(stencil in ('scaled_central', 'admissible_one_sided_first_order',
+                'admissible_one_sided_second_order'), 'Unknown scalar-feasible finite-difference stencil')
+            initial = 2e-6*max(float(scales[index]), abs(float(state[index])))
+            self.audit.require(any(abs(column['step']-initial*shrink) <= 2e-13*initial
+                for shrink in (1., .25, .0625, .015625, .00390625)),
+                'Column derivative step differs from its fixed dimensionless shrink ladder')
+            probes = column['probes']
+            self.audit.require(1 <= len(probes) <= 5, 'Missing or excessive column feasibility probes')
+            self.audit.near([probe['step']/initial for probe in probes],
+                [1., .25, .0625, .015625, .00390625][:len(probes)], 'fixed_column_shrink_ladder', 2e-13)
+            for probe in probes:
+                for name in ('plus', 'minus'):
+                    domain = probe[name+'_domain']
+                    self.audit.require(not probe[name+'_evaluated'] or domain['admissible'],
+                        'Column residual evaluated after its scalar-domain rejection')
+                    if not probe[name+'_evaluated']:
+                        rejected[domain['phase']+': '+domain['failure']] += 1
+            if stencil == 'scaled_central':
+                self.audit.require(probes[-1]['plus_evaluated'] and probes[-1]['minus_evaluated'],
+                    'Central column has no two feasible residual evaluations')
+                self.audit.near(column['step'], probes[-1]['step'], 'selected_central_column_step', 2e-13*initial)
+            else:
+                self.audit.require(column['side'] in (-1, 1), 'One-sided column has no declared admissible side')
+                one_sided.append(dict(column=index, stencil=stencil, side=column['side'], step=column['step'],
+                    probes=probes))
+        return dict(stencils=dict(stencils), rejected_probe_classifications=dict(rejected),
+            one_sided_columns=one_sided,
+            scope='All column topology, dimensions, steps and declared pre-residual checks inspected; current five-family matrix actions are independently checked separately')
+
     def iteration(self, record, history, alpha, scalar_only):
         state, residual, step = (np.asarray(record[key], float) for key in ('state', 'residual', 'step'))
         current = self.state(state, history, alpha, residual, record.get('constraints'), record['domain'], full=True)
@@ -651,6 +875,13 @@ class Analyzer:
         self.audit.require(max(linear_norms) < 1e-8*max(1., error), 'Current dense linear solve exceeds its fixed residual guard')
         maximum, limiting = self.fraction_bound(state, step, matrix, record['domain'])
         self.audit.near(maximum, record['fixed_location_maximum_fraction'], 'independent_fraction_to_boundary_prediction', 2e-10)
+        self.audit.require(bool(record['boundary_limited']) == bool(maximum < 1), 'Fraction-limit classification disagrees with actual bounds')
+        if maximum < 1:
+            possible = [point for point in record['domain']['observations'] if point['inventory'] == record['limiting_inventory']
+                and np.max(np.abs(np.asarray(point['coordinate'])-record['limiting_point'])) < 2e-11]
+            self.audit.require(bool(possible), 'Native fraction-limiting point is absent from the actual scalar inventory')
+            self.audit.require(any(abs(point['value']-record['limiting_value']) < 2e-10 for point in possible),
+                'Native fraction-limiting scalar value differs from its actual observation')
         fraction = .995*maximum if maximum < 1 else 1.
         trials, accepted = [], None
         for index, trial in enumerate(record['trials']):
@@ -692,12 +923,11 @@ class Analyzer:
         self.audit.require(bool(accepted is not None) == bool(record['accepted']), 'Accepted trial/iteration flags disagree')
         self.audit.near(record['accepted_fraction'], trials[-1]['fraction'] if accepted is not None else 0.,
             'actual_accepted_fraction', 2e-10)
-        columns = Counter(column['stencil'] for column in record['columns'])
-        self.audit.require([column['column'] for column in record['columns']] == list(range(self.size)),
-            'Current Jacobian column provenance is incomplete')
+        columns = self.column_controls(record['columns'], state, constraints, scalar_only)
         actions = []
         for item in record['current_directional_checks']:
-            item = dict(item, _base_branches=record['domain'].get('profile_branch_pattern', ''), _full_residual=residual)
+            item = dict(item, _base_branches=record['domain'].get('profile_branch_pattern', ''), _full_residual=residual,
+                _base_independent_branches=current['scalar_domain'].get('independent_branch_context', {}))
             actions.append(self.attempt('current action '+item['kind'], lambda item=item:
                 self.action(item, matrix, state, history, alpha, constraints, scalar_only)))
         return dict(iteration=record['iteration'], state=current, accepted=bool(record['accepted']),
@@ -705,7 +935,7 @@ class Analyzer:
             linear_residual_float64_LE_sha256=vector_hash(linear),
             fraction_to_boundary=dict(maximum=maximum, limiting_point=limiting,
                 fixed_location_prediction_is_not_an_admissibility_proof=True),
-            current_column_stencils=dict(columns), column_metadata_sha256=canonical(record['columns']),
+            current_column_controls=columns, column_metadata_sha256=canonical(record['columns']),
             actions=actions, trials=trials,
             next_accepted_state_float64_LE_sha256=vector_hash(accepted) if accepted is not None else None)
 
@@ -800,7 +1030,7 @@ class Analyzer:
             if level.get('audit') and level.get('residual'):
                 weak, unmasked, constraints = self.weak(state, history, alpha, level['residual'], level.get('constraints'))
                 record['post_solve_physical'] = self.attempt('native postqualification audit '+str(alpha), lambda:
-                    self.physical(state, history, alpha, level['audit'], unmasked, constraints))
+                    self.physical(state, history, alpha, level['audit'], unmasked, constraints, level['scalar_domain']))
             result.append(dict(alpha=alpha, attempted=True, native_converged=bool(level['converged']),
                 native_true_coupled_residual_converged=bool(level['true_coupled_residual_converged']),
                 native_physical_range_passed=bool(level['physical_range_passed']),
@@ -869,6 +1099,9 @@ def main():
         source_clean_start=not bool(git(source, 'status', '--porcelain')), numerical_threads=THREADS,
         byteorder=sys.byteorder, python=sys.version, cpu_affinity=sorted(os.sched_getaffinity(0)),
         inputs={str(path):dict(bytes=path.stat().st_size, sha256=sha(path)) for path in inputs}, failures=[])
+    receipt['imported_source_files_start'] = {str(Path(module.__file__).resolve()):sha(module.__file__)
+        for module in list(sys.modules.values()) if getattr(module, '__file__', None)
+        and str(Path(module.__file__).resolve()).startswith(str(source))}
     save(args.output/'analysis-receipt.json', receipt)
     started = time.monotonic()
     try:
@@ -878,6 +1111,17 @@ def main():
         if not pin['success'] or not pin['clean']:
             raise ValueError('Producing runtime fingerprint failed or source was dirty')
         receipt['producing_source_commit'] = pin['source_commit']
+        producing_source = Path(pin['source_root'])
+        if git(producing_source, 'rev-parse', 'HEAD') != pin['source_commit'] or git(producing_source, 'status', '--porcelain'):
+            raise ValueError('Retained producing source no longer matches its clean runtime pin')
+        solver_keys = [key for key in pin['runtime_artifacts'] if Path(key).name == 'IncNavierStokesSolver']
+        if len(solver_keys) != 1:
+            raise ValueError('Producing runtime has no unique native evolution image')
+        solver_key = solver_keys[0]
+        solver = Path(pin['runtime_resolved_paths'][solver_key])
+        if sha(solver) != pin['runtime_artifacts'][solver_key]:
+            raise ValueError('Retained producing solver changed after the runtime pin')
+        receipt['producing_solver'] = dict(path=str(solver), sha256=sha(solver), bytes=solver.stat().st_size)
         receipt['producing_runtime_sections'] = {key:canonical(pin[key]) for key in
             ('runtime_artifacts', 'runtime_bindings', 'runtime_environment', 'python_packages', 'tool_images', 'source_inputs')}
         raw = json.loads(args.report.read_text()); solves = read_jsonl(args.trace)
@@ -901,6 +1145,10 @@ def main():
     receipt['imported_source_files'] = {str(Path(module.__file__).resolve()):sha(module.__file__)
         for module in list(sys.modules.values()) if getattr(module, '__file__', None)
         and str(Path(module.__file__).resolve()).startswith(str(source))}
+    for path, expected in receipt['imported_source_files_start'].items():
+        if receipt['imported_source_files'].get(path) != expected:
+            receipt['success'] = False
+            receipt['failures'].append(dict(type='ProvenanceError', message='Imported analysis source changed: '+path))
     receipt['finished_utc'] = stamp(); receipt['seconds'] = time.monotonic()-started
     save(args.output/'analysis-receipt.json', receipt)
     print(json.dumps(dict(success=receipt['success'], output=str(args.output/'validation.json'))))
