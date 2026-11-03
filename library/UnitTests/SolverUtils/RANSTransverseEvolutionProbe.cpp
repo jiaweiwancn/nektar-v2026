@@ -171,7 +171,8 @@ struct Operator
         const int n=space.free.size();mass=real=imaginary=Matrix(n,Vector(n));Vector rhs(n);
         for(const auto &q:space.points)
         {
-            const auto tangent=At(model,q.z,matching,1e-6,eta),base=model.AtHeight(q.z,ustar,height,matching);
+            const auto tangent=At(model,q.z,matching,1e-6,eta);
+            const auto base=model.AtHeight(q.z,ustar,height,matching);
             covarianceMinimum=std::min(covarianceMinimum,tangent.covarianceMinimum);
             productionDerivative=std::max(productionDerivative,tangent.productionDerivative);
             nuDerivative=std::max(nuDerivative,tangent.nuDerivative);kDerivative=std::max(kDerivative,tangent.kDerivative);
@@ -269,7 +270,8 @@ void Trial(std::ostream &out,const RANSNeutralReference &model,const Operator &o
             <<",\"stage_time\":"<<stageTime<<",\"lambda\":"<<stageLambda<<",\"stage_residual\":"<<stageError<<",\"stage_history\":";
         Write(out,stageHistory);out<<",\"state\":";Write(out,final);out<<'}';
     }
-    const auto after=op.Covariance(model,final),snapshot=engine.Capture();
+    const auto after=op.Covariance(model,final);
+    const auto snapshot=engine.Capture();
     out<<"],\"final_covariance\":";Write(out,Vector{after[0],after[1]});
     out<<",\"native_history\":";Write(out,snapshot.history);out<<",\"native_history_times\":";Write(out,snapshot.times);
     out<<",\"gain\":"<<op.Energy(final)/op.Energy(initial)<<'}';
