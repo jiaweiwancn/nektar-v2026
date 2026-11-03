@@ -1395,20 +1395,45 @@ def verify_auxiliary(preflight, record, preflight_session, stage_session, source
         qualification='Interim auxiliary-record implementation/finite-set diagnosis only. No final target result, no full-case native-history claim and no root-absence inference.')
 
 
-def verify(raw, solves, session, source, matrix_root=None):
-    """Importable analysis of retained data; no solver/subprocess is invoked."""
+def verify(raw, solves, session, source, matrix_root=None, reuse_solves=None):
+    """Analyze retained data; reuse_solves is the strict metadata loader output."""
     analyzer = Analyzer(raw, session, source, matrix_root)
     protocol = analyzer.protocol(solves)
     initial = analyzer.attempt('initial actual common scalar domain', lambda:
         analyzer.domain(raw['initial'], raw['initial_scalar_domain'], retain=True))
-    results = [analyzer.attempt('solve '+str(index), lambda record=record: analyzer.solve(record))
-        for index, record in enumerate(solves)]
+    reuse_solves = reuse_solves or {}
+    analyzer.audit.require(set(reuse_solves).issubset(range(len(solves))), 'Unused/incompatible explicit solve reuse')
+    results, reused, reused_errors = [], [], {}
+    for index, record in enumerate(solves):
+        if index not in reuse_solves:
+            results.append(analyzer.attempt('solve '+str(index), lambda record=record: analyzer.solve(record)))
+            continue
+        bundle = reuse_solves[index]; previous = bundle['result']
+        results.append(dict(previous['solved_record'], reused_analysis=bundle['provenance']))
+        analyzer.gates.extend(previous['current_action_gates'])
+        analyzer.continuity_gates.extend(previous['exact_affine_weak_continuity_gates'])
+        for path, item in previous['dense_matrix_files'].items():
+            analyzer.audit.require(path not in analyzer.matrix_files or analyzer.matrix_files[path] == item,
+                'Conflicting reused matrix identity')
+            analyzer.matrix_files[path] = item
+        for name, error in previous['errors'].items():
+            reused_errors[name] = max(reused_errors.get(name, 0.), error)
+        reused.append(bundle['provenance'])
+    # These are always recomputed from the actual final report, including
+    # postqualification audits of every actual attempted stage level. No
+    # cached state is inserted into Analyzer.state_cache.
     levels = analyzer.levels(solves)
     gates = analyzer.gates
     action_passed = bool(gates) and all(gate['available'] and gate['gate_met'] for gate in gates)
+    errors = dict(analyzer.audit.errors)
+    for name, error in reused_errors.items():
+        errors[name] = max(errors.get(name, 0.), error)
     return dict(schema=1, milestone='M8-R2 independent stage/path analysis',
         success=not bool(analyzer.failures), analysis_success=not bool(analyzer.failures),
-        checks=analyzer.audit.checks, errors=analyzer.audit.errors, failures=analyzer.failures,
+        checks=analyzer.audit.checks, errors=errors, failures=analyzer.failures,
+        reused_solve_analyses=reused,
+        check_count_definition='checks counts fresh verification only; each reused provenance records its original check count, including its shared initial checks, without adding them again',
+        full_final_case_protocol_and_postqualification_recomputed=True,
         protocol=protocol, initial_scalar_domain=initial, solves=results, stage_levels=levels,
         independent_common_static_coverage=analyzer.static_coverage,
         exact_affine_weak_continuity_assembly=getattr(analyzer, 'continuity_metadata', None),
@@ -1433,6 +1458,8 @@ def main():
     parser.add_argument('--source', type=Path, default=Path(__file__).resolve().parents[4])
     parser.add_argument('--expected-commit')
     parser.add_argument('--matrix-root', type=Path)
+    parser.add_argument('--reuse-solve-analysis', type=Path, action='append', default=[],
+        help='Explicit sealed auxiliary-analysis directory/manifest; incompatible or missing reuse is an error')
     args = parser.parse_args()
     if platform.system() != 'Linux':
         raise SystemExit('Scientific retained-stage analysis must run on Linux')
@@ -1470,7 +1497,25 @@ def main():
         receipt['producing_runtime_sections'] = {key:canonical(pin[key]) for key in
             ('runtime_artifacts', 'runtime_bindings', 'runtime_environment', 'python_packages', 'tool_images', 'source_inputs')}
         raw = json.loads(args.report.read_text()); solves = read_jsonl(args.trace)
-        result = verify(raw, solves, args.session, source, args.matrix_root)
+        matrix_root = args.matrix_root or args.trace.parent
+        reuse_solves = {}
+        if args.reuse_solve_analysis:
+            from cls_epawf_m8_r2_reuse import context, load_reuse
+            from cls_epawf_m8_r2_cases import normalized_physics
+            current_imports = {str(Path(module.__file__).resolve()):sha(module.__file__)
+                for module in list(sys.modules.values()) if getattr(module, '__file__', None)
+                and str(Path(module.__file__).resolve()).startswith(str(source))}
+            receipt['imported_source_files_start'].update(current_imports)
+            current = context(args.trace, solves, raw, args.session, source, pin, current_imports,
+                canonical(normalized_physics(ET.parse(args.session).getroot())), matrix_root)
+            reuse_solves = load_reuse(args.reuse_solve_analysis, current)
+            receipt['explicit_reuse'] = [bundle['provenance'] for _, bundle in sorted(reuse_solves.items())]
+            for bundle in reuse_solves.values():
+                provenance = bundle['provenance']
+                receipt['inputs'].update(bundle['verified_files'])
+                for name, item in (('manifest', 'manifest_file'), ('result', 'result_file'), ('receipt', 'receipt_file')):
+                    receipt['inputs'][provenance[name]] = provenance[item]
+        result = verify(raw, solves, args.session, source, matrix_root, reuse_solves)
         for path, item in result['dense_matrix_files'].items():
             receipt['inputs'][path] = item
         receipt['analysis_success'] = result['analysis_success']; receipt['success'] = result['analysis_success']
