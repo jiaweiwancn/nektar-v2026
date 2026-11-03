@@ -1,0 +1,137 @@
+{
+  "schema": 1,
+  "milestone": "M8",
+  "frozen_before_native_execution": true,
+  "experiment": "explicit variant, reduced linearized Fourier/native-CG reference-local transverse decay",
+  "physical_components": 3,
+  "perturbation": "delta U=(0,v(x,z,t),0), partial_y=0, delta k=delta epsilon=0",
+  "support": {
+    "H": 2.0,
+    "z": [
+      4.0,
+      12.0
+    ],
+    "boundary": "homogeneous Dirichlet at both band endpoints, zero extension outside band",
+    "qualification": "compact H1 native envelope strictly above H; smooth target, not an evolving whole-domain support claim"
+  },
+  "initial_envelope": "exp(4-1/(s*(1-s))) for 0<s=(z-4)/8<1, zero otherwise; constrained physical L2 projection",
+  "meshes": [
+    {
+      "degree": 3,
+      "cells": 2
+    },
+    {
+      "degree": 5,
+      "cells": 2
+    },
+    {
+      "degree": 7,
+      "cells": 2
+    },
+    {
+      "degree": 3,
+      "cells": 4
+    },
+    {
+      "degree": 3,
+      "cells": 8
+    },
+    {
+      "degree": 7,
+      "cells": 8
+    }
+  ],
+  "xi": [
+    1.0,
+    2.0,
+    4.0
+  ],
+  "wavelengths": [
+    6.283185307179586,
+    3.141592653589793,
+    1.5707963267948966
+  ],
+  "amplitudes": [
+    1e-05,
+    0.0001,
+    0.001
+  ],
+  "native_spatial_time_step": 0.00015625,
+  "final_time": 0.05,
+  "temporal": {
+    "mesh": {
+      "degree": 7,
+      "cells": 8
+    },
+    "xi": 4.0,
+    "amplitudes": [
+      0.0001
+    ],
+    "orders": [
+      1,
+      2
+    ],
+    "steps": [
+      0.0025,
+      0.00125,
+      0.000625
+    ],
+    "reference": "independent matrix exponential"
+  },
+  "spatial_reference": {
+    "degree": 9,
+    "cells": 16,
+    "quadrature": 64,
+    "interpretation": "same fine BDF2 step for actual native field comparisons; separate exact semidiscrete exponential control"
+  },
+  "partition": "all original tensor diffusion and base advection implicit; explicit derivative identically zero",
+  "acceptance": {
+    "mass_and_native_rows": 2e-12,
+    "original_tangent": 1e-10,
+    "complete_weak_matrix": 1e-10,
+    "projected_initial_finite_rule": 1e-10,
+    "native_time_recurrence": 5e-11,
+    "covariance_sample_identity": 1e-10,
+    "minimum_covariance": "strictly positive at all sampled initial/final points/phases",
+    "turbulence_linear_forcing": 1e-10,
+    "spatial_fine_to_coarse_error_ratio": 0.5,
+    "time_error_reduction_minimum": {
+      "IMEX1": 1.6,
+      "IMEX2": 3.0
+    },
+    "amplitude_scaled_gain": 1e-10,
+    "restricted_chi_eta_operator_identity": 1e-12,
+    "decaying_energy": "0<gain<1 at every native trial and independently refined weak PDE reference; negative instantaneous energy rate",
+    "positive_reference_transverse_diffusion": true
+  },
+  "excluded": [
+    "nonlinear 3D trajectory",
+    "uniform or global constitutive stability",
+    "certified off-reference envelope",
+    "whole-patch chi/eta equivalence",
+    "outer molecular diffusion",
+    "filter/SVV",
+    "positivity floors",
+    "new inner epsilon PDE"
+  ],
+  "variants": [
+    {
+      "beta": 0.4,
+      "gamma_scale": 0.0
+    },
+    {
+      "beta": 0.45,
+      "gamma_scale": 0.0
+    },
+    {
+      "beta": 0.4,
+      "gamma_scale": 0.25
+    }
+  ],
+  "stress": "R_beta_gamma=R_original+(beta-1)*R_cubic-gamma*(S-Sref); common beta and fixed physical gamma",
+  "prescribed_gamma": "GammaScale*kappa_c*u_star*z; independent of evolving k,epsilon,gradient",
+  "prescribed_reference_strain": "Sref_xz=Sref_zx=u_star/(kappa_c*z), all other entries zero",
+  "independent_operator": "full indexed stress complex-step tangent; both mixed derivatives retained before independent cancellation",
+  "original_control": "source-bound M7 receipt is retained as a separate original-law growth witness; no duplicate original campaign",
+  "qualification_scope": "reference-local reduced transverse mode only; not a global ellipticity or coupled stability certificate"
+}

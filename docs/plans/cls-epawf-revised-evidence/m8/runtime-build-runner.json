@@ -1,0 +1,85 @@
+{
+  "schema": 1,
+  "status": "passed",
+  "source_commit": "aa854f4c5b05451a81a4e1dd60eaaca98eb547e4",
+  "main_commit": "f4b70baec10016dd098005bc5a5507b87e4a57bf",
+  "connection": "tailscale:100.105.247.110",
+  "compiler_workers": 16,
+  "numerical_threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1"
+  },
+  "mode": "build",
+  "commands": [
+    {
+      "name": "configure",
+      "command": [
+        "cmake",
+        "-S",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/source/solvers/IncNavierStokesSolver/Tests/RANS",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build",
+        "-DRANS_BUILD_SOLVER=ON",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake"
+      ],
+      "exit_code": 0,
+      "seconds": 0.6654252240005007,
+      "timeout_seconds": 240,
+      "log_sha256": "242ef90f0b4e39a306033663bb0f10c0c05ea1062a606666af64625b5445c77f"
+    },
+    {
+      "name": "build",
+      "command": [
+        "cmake",
+        "--build",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build",
+        "--parallel",
+        "16"
+      ],
+      "exit_code": 0,
+      "seconds": 0.7163611760006461,
+      "timeout_seconds": 1800,
+      "log_sha256": "2af5b740a2515bf74d6ad5cb093ba2b1cc15dc72943d3c5371725335debdf187"
+    },
+    {
+      "name": "fingerprint-before",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/source/docs/plans/cls-epawf-revised-evidence/m7/fingerprint-runtime.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build-002/runtime-before.json"
+      ],
+      "exit_code": 0,
+      "seconds": 1.5684404029998404,
+      "timeout_seconds": 240,
+      "log_sha256": "74320bcacdb4fc2e2b5cd9f202175f6321e75e7b4362fd17ea9e1e0572dbc88e"
+    }
+  ],
+  "maximum_test_ranks": 1,
+  "runner_sha256": "d20ac616abd64537d6c7961e8cf5b7b98655b0b87d03168308a3303a2e64e858",
+  "started_utc": "2026-11-03T05:16:30.206490+00:00",
+  "runtime_unchanged": true,
+  "runtime_after_command": [
+    "python3",
+    "-B",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/source/docs/plans/cls-epawf-revised-evidence/m7/fingerprint-runtime.py",
+    "--root",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8",
+    "--output",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build-002/runtime-after.json",
+    "--compare",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build-002/runtime-before.json"
+  ],
+  "exit_code": 0,
+  "finished_utc": "2026-11-03T05:16:34.726977+00:00",
+  "source_end_commit": "aa854f4c5b05451a81a4e1dd60eaaca98eb547e4",
+  "source_end_status": "",
+  "main_end_commit": "f4b70baec10016dd098005bc5a5507b87e4a57bf",
+  "main_end_status": ""
+}

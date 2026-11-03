@@ -160,6 +160,8 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
 std::string RANSEquilibriumWallEvolution::PhysicsSignature() const
 {
     std::ostringstream s;s<<std::setprecision(17)<<m_patch->Signature()<<":eta="<<m_eta<<":neutral="<<m_neutral<<":us="<<m_ustar<<":direction="<<m_direction[0]<<','<<m_direction[1]<<":chart_functions="<<m_chartFunctions;
+    if(!m_neutral && m_patch->CappedDestruction() && !m_patch->Mapped() && !m_patch->TransitionEnabled())
+        s<<":capped_initial_trace=1";
     for(const auto &[name,value]:m_serialSession->GetParameters())
         if(name!="NUMSTEPS" && name!="IO_CHECKSTEPS" && name!="IO_INFOSTEPS" && name!="IO_TIMER_LEVEL" && name!="RANSWALLOWNERSHIPSHIFT")s<<'|'<<name<<'='<<value;
     const std::vector<std::string> names{"InitialConditionsInner","InitialConditionsOuter","InitialPerturbationInner","InitialPerturbationOuter","BoundaryValuesInner","BoundaryValuesOuter",
@@ -174,7 +176,8 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
     {
         (void)dump;m_state=m_neutral?m_patch->NeutralReference(m_ustar,m_direction):m_patch->Project(Functions("InitialConditions"),m_time);
         if(m_neutral)m_data.fixedBoundary=m_patch->FixedReferenceBoundary(m_state);
-        else if(m_patch->Mapped() || m_patch->TransitionEnabled())m_state=m_patch->Lift(m_state,m_time,m_data);
+        else if(m_patch->Mapped() || m_patch->TransitionEnabled() || m_patch->CappedDestruction())
+            m_state=m_patch->Lift(m_state,m_time,m_data);
         if(m_neutral && m_patch->TransitionEnabled())m_state=m_patch->Lift(m_state,m_time,m_data);
         m_patch->SetReference(m_state,m_data,m_time,m_eta);m_initial=m_state;
         m_rawNorms=m_patch->Norms(m_patch->Residual(m_state,m_state,0,m_time,m_data,false),m_patch->Constraints(m_state,m_time,m_data),m_ustar);

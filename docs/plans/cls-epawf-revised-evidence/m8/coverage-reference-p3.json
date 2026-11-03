@@ -1,0 +1,1529 @@
+{
+  "schema": 1,
+  "started_utc": "2026-11-03T05:22:33.961998+00:00",
+  "inputs": {
+    "native": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/campaign-001/regularized-native/reference/case.evolution.json",
+      "sha256": "fbd681f4dfce292d617171ce65c6d01c7c80c2ea73180610bc8265c6844fcdcf"
+    },
+    "certificate": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/certificate-joint-001/certificate.json",
+      "sha256": "f26e81c5469aaf557fb4ae61618fb8051940d8544804a5ae09297c9647416059"
+    },
+    "session": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/campaign-001/regularized-native/reference/case.xml",
+      "sha256": "2eaae954a39db7bf84a56bc1e36c462e4a9fb5398de6dde1af9b53750499bc5e"
+    }
+  },
+  "driver_sha256": "630167223ce82e9af9270a3de45ad0c58de7e8039443cd7c5478da1ad3b17130",
+  "numerical_threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1"
+  },
+  "status": "outside_certificate",
+  "finite_coverage_pass": false,
+  "model_variant": "Regularized",
+  "robust_parameters": [
+    0.4,
+    0,
+    0.2,
+    0.1,
+    0,
+    1,
+    1
+  ],
+  "accepted_records": 2,
+  "accepted_trajectory_complete": true,
+  "state_scope": "Every supplied accepted record, including its initial state; a failed trajectory remains incomplete",
+  "normalization": "A*=Qincoming^T grad(U) Qincoming/G0; k/K0; epsilon/epsilon0; G0=us/(kappa*r),K0=Qstar*us^2,epsilon0=us^3/(kappa*r)",
+  "incoming_basis": [
+    [
+      1,
+      0,
+      0
+    ],
+    [
+      0,
+      1,
+      0
+    ],
+    [
+      0,
+      0,
+      1
+    ]
+  ],
+  "per_set_evaluations": {
+    "source_volume_outer": 256,
+    "mass_volume_outer": 256,
+    "reconstruction_native_outer": 256,
+    "reconstruction_dense_outer": 324,
+    "interface_outer": 16,
+    "trace_transfer_outer": 16
+  },
+  "extrema": {
+    "gradient_entry_deviation": 0.0642009880560146,
+    "k_over_K0": [
+      0.9999999999999998,
+      1.0000000000000002
+    ],
+    "epsilon_over_epsilon0": [
+      0.9948329762281062,
+      1.0025027655746166
+    ],
+    "gamma_over_nut0": [
+      1.0,
+      1.0
+    ]
+  },
+  "native_sampling_complete": true,
+  "native_GLL_metadata_issue": null,
+  "native_count_checks": [
+    {
+      "state": 0,
+      "locations": "source_volume_outer",
+      "expected": 128,
+      "native": 128,
+      "equal": true
+    },
+    {
+      "state": 0,
+      "locations": "interface_outer",
+      "expected": 8,
+      "native": 8,
+      "equal": true
+    },
+    {
+      "state": 0,
+      "locations": "reconstruction_dense_all_regions",
+      "expected": 405,
+      "native": 405,
+      "equal": true
+    },
+    {
+      "state": 0,
+      "locations": "reconstruction_native_all_regions",
+      "expected": 320,
+      "native": 320,
+      "equal": true
+    },
+    {
+      "state": 1,
+      "locations": "source_volume_outer",
+      "expected": 128,
+      "native": 128,
+      "equal": true
+    },
+    {
+      "state": 1,
+      "locations": "interface_outer",
+      "expected": 8,
+      "native": 8,
+      "equal": true
+    },
+    {
+      "state": 1,
+      "locations": "reconstruction_dense_all_regions",
+      "expected": 405,
+      "native": 405,
+      "equal": true
+    },
+    {
+      "state": 1,
+      "locations": "reconstruction_native_all_regions",
+      "expected": 320,
+      "native": 320,
+      "equal": true
+    }
+  ],
+  "certificate_boxes": [
+    {
+      "certificate_box_index": 0,
+      "beta": 0.4,
+      "center": [
+        [
+          0.0,
+          0.0,
+          1.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "radius": 0.001,
+      "k_range": [
+        0.99,
+        1.01
+      ],
+      "epsilon_range": [
+        0.99,
+        1.01
+      ],
+      "required_gamma_over_nut0": 0.6374675261974335,
+      "target_over_nut0": 0.1,
+      "fixed_gamma_candidates": [
+        {
+          "gamma_over_nut0": 1.0,
+          "certificate_joint_gate": true,
+          "certificate_momentum_target_met": true,
+          "certificate_covariance_positive": true,
+          "actual_gamma_exact_match": true,
+          "note": "Covariance proof is for this fixed Gamma; a larger Gamma is not automatically covered"
+        },
+        {
+          "gamma_over_nut0": 3.0,
+          "certificate_joint_gate": true,
+          "certificate_momentum_target_met": true,
+          "certificate_covariance_positive": true,
+          "actual_gamma_exact_match": false,
+          "note": "Covariance proof is for this fixed Gamma; a larger Gamma is not automatically covered"
+        }
+      ],
+      "sample_count": 1124,
+      "violation_count": 990,
+      "violations_by_set": {
+        "source_volume_outer": 256,
+        "mass_volume_outer": 256,
+        "reconstruction_native_outer": 208,
+        "reconstruction_dense_outer": 270,
+        "interface_outer": 0,
+        "trace_transfer_outer": 0
+      },
+      "examples": [
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            0.1588405740098553,
+            0.0,
+            2.0397101435024636
+          ],
+          "gradient_entry_deviation": 0.0019354722601081509,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0019354722601082
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 1.000708775830563
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            0.1588405740098553,
+            0.0,
+            2.203333522586373
+          ],
+          "gradient_entry_deviation": 0.006448784286849474,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0064487842868495
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 1.001955264694518
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            0.1588405740098553,
+            0.0,
+            2.474467590083671
+          ],
+          "gradient_entry_deviation": 0.004637406305825875,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0046374063058259
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 0.9999999999999998,
+          "epsilon_over_epsilon0": 1.0006592955887252
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            0.1588405740098553,
+            0.0,
+            2.8165653575043503
+          ],
+          "gradient_entry_deviation": 0.005513670612132704,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              0.9944863293878673
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0000000000000002,
+          "epsilon_over_epsilon0": 0.9984582525049179
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            0.1588405740098553,
+            0.0,
+            3.1834346424956497
+          ],
+          "gradient_entry_deviation": 0.012593185674396157,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              0.9874068143256038
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0000000000000002,
+          "epsilon_over_epsilon0": 0.9993316943573448
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            0.1588405740098553,
+            0.0,
+            3.525532409916329
+          ],
+          "gradient_entry_deviation": 0.002086547139554251,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              0.9979134528604457
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 0.9999999999999998,
+          "epsilon_over_epsilon0": 1.0018520968231144
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            0.1588405740098553,
+            0.0,
+            3.796666477413627
+          ],
+          "gradient_entry_deviation": 0.026636298010147774,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0266362980101478
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 1.000829114483337
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            0.1588405740098553,
+            0.0,
+            3.9602898564975364
+          ],
+          "gradient_entry_deviation": 0.05563529872321138,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0556352987232114
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.9965149646103463
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            0.8133340903454931,
+            0.0,
+            2.0397101435024636
+          ],
+          "gradient_entry_deviation": 0.001935472260108817,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0019354722601088
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 1.000708775830563
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            0.8133340903454931,
+            0.0,
+            2.203333522586373
+          ],
+          "gradient_entry_deviation": 0.00644878428685014,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0064487842868501
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 1.001955264694518
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            0.8133340903454931,
+            0.0,
+            2.474467590083671
+          ],
+          "gradient_entry_deviation": 0.004637406305826763,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0046374063058268
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 1.0006592955887252
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            0.8133340903454931,
+            0.0,
+            2.8165653575043503
+          ],
+          "gradient_entry_deviation": 0.005513670612131483,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              0.9944863293878685
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.9984582525049179
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            0.8133340903454931,
+            0.0,
+            3.1834346424956497
+          ],
+          "gradient_entry_deviation": 0.012593185674395269,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              0.9874068143256047
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.9993316943573448
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            0.8133340903454931,
+            0.0,
+            3.525532409916329
+          ],
+          "gradient_entry_deviation": 0.002086547139552919,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              0.9979134528604471
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 1.0018520968231144
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            0.8133340903454931,
+            0.0,
+            3.796666477413627
+          ],
+          "gradient_entry_deviation": 0.026636298010149106,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.026636298010149
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 1.0008291144833368
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            0.8133340903454931,
+            0.0,
+            3.9602898564975364
+          ],
+          "gradient_entry_deviation": 0.05563529872321271,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0556352987232127
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.9965149646103463
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            1.897870360334684,
+            0.0,
+            2.0397101435024636
+          ],
+          "gradient_entry_deviation": 0.0019354722601079288,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.001935472260108
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 1.000708775830563
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            1.897870360334684,
+            0.0,
+            2.203333522586373
+          ],
+          "gradient_entry_deviation": 0.006448784286849252,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0064487842868493
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 1.001955264694518
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            1.897870360334684,
+            0.0,
+            2.474467590083671
+          ],
+          "gradient_entry_deviation": 0.004637406305825653,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0046374063058257
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 0.9999999999999998,
+          "epsilon_over_epsilon0": 1.0006592955887252
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            1.897870360334684,
+            0.0,
+            2.8165653575043503
+          ],
+          "gradient_entry_deviation": 0.005513670612132704,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              0.9944863293878673
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.998458252504918
+        }
+      ],
+      "finite_state_box_covered": false,
+      "finite_fraction_inside": 0.11921708185053381,
+      "momentum_gamma_condition_met": true,
+      "matching_joint_certificate": true,
+      "all_declared_finite_sets_covered_by_joint_certificate": false
+    },
+    {
+      "certificate_box_index": 1,
+      "beta": 0.4,
+      "center": [
+        [
+          0.0,
+          0.0,
+          1.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "radius": 0.01,
+      "k_range": [
+        0.99,
+        1.01
+      ],
+      "epsilon_range": [
+        0.99,
+        1.01
+      ],
+      "required_gamma_over_nut0": 2.8813869507610796,
+      "target_over_nut0": 0.1,
+      "fixed_gamma_candidates": [
+        {
+          "gamma_over_nut0": 1.0,
+          "certificate_joint_gate": false,
+          "certificate_momentum_target_met": false,
+          "certificate_covariance_positive": true,
+          "actual_gamma_exact_match": true,
+          "note": "Covariance proof is for this fixed Gamma; a larger Gamma is not automatically covered"
+        },
+        {
+          "gamma_over_nut0": 3.0,
+          "certificate_joint_gate": true,
+          "certificate_momentum_target_met": true,
+          "certificate_covariance_positive": true,
+          "actual_gamma_exact_match": false,
+          "note": "Covariance proof is for this fixed Gamma; a larger Gamma is not automatically covered"
+        }
+      ],
+      "sample_count": 1124,
+      "violation_count": 330,
+      "violations_by_set": {
+        "source_volume_outer": 80,
+        "mass_volume_outer": 80,
+        "reconstruction_native_outer": 80,
+        "reconstruction_dense_outer": 90,
+        "interface_outer": 0,
+        "trace_transfer_outer": 0
+      },
+      "examples": [
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            0.1588405740098553,
+            0.0,
+            3.1834346424956497
+          ],
+          "gradient_entry_deviation": 0.012593185674396157,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              0.9874068143256038
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0000000000000002,
+          "epsilon_over_epsilon0": 0.9993316943573448
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            0.1588405740098553,
+            0.0,
+            3.796666477413627
+          ],
+          "gradient_entry_deviation": 0.026636298010147774,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0266362980101478
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 1.000829114483337
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            0.1588405740098553,
+            0.0,
+            3.9602898564975364
+          ],
+          "gradient_entry_deviation": 0.05563529872321138,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0556352987232114
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.9965149646103463
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            0.8133340903454931,
+            0.0,
+            3.1834346424956497
+          ],
+          "gradient_entry_deviation": 0.012593185674395269,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              0.9874068143256047
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.9993316943573448
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            0.8133340903454931,
+            0.0,
+            3.796666477413627
+          ],
+          "gradient_entry_deviation": 0.026636298010149106,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.026636298010149
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 1.0008291144833368
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            0.8133340903454931,
+            0.0,
+            3.9602898564975364
+          ],
+          "gradient_entry_deviation": 0.05563529872321271,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0556352987232127
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.9965149646103463
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            1.897870360334684,
+            0.0,
+            3.1834346424956497
+          ],
+          "gradient_entry_deviation": 0.0125931856743966,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              0.9874068143256034
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.9993316943573448
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            1.897870360334684,
+            0.0,
+            3.796666477413627
+          ],
+          "gradient_entry_deviation": 0.026636298010147552,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0266362980101476
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 1.0008291144833368
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            1.897870360334684,
+            0.0,
+            3.9602898564975364
+          ],
+          "gradient_entry_deviation": 0.05563529872321138,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0556352987232114
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.9965149646103463
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            3.266261430017401,
+            0.0,
+            3.1834346424956497
+          ],
+          "gradient_entry_deviation": 0.012593185674396379,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              0.9874068143256036
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.9993316943573448
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            3.266261430017401,
+            0.0,
+            3.796666477413627
+          ],
+          "gradient_entry_deviation": 0.026636298010147552,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0266362980101476
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 0.9999999999999998,
+          "epsilon_over_epsilon0": 1.000829114483337
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            3.266261430017401,
+            0.0,
+            3.9602898564975364
+          ],
+          "gradient_entry_deviation": 0.05563529872321138,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0556352987232114
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.9965149646103463
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            4.733738569982599,
+            0.0,
+            3.1834346424956497
+          ],
+          "gradient_entry_deviation": 0.012593185674396379,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              0.9874068143256036
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.9993316943573448
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            4.733738569982599,
+            0.0,
+            3.796666477413627
+          ],
+          "gradient_entry_deviation": 0.026636298010147552,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0266362980101476
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 1.000829114483337
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            4.733738569982599,
+            0.0,
+            3.9602898564975364
+          ],
+          "gradient_entry_deviation": 0.05563529872321138,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0556352987232114
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.9965149646103463
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            6.102129639665316,
+            0.0,
+            3.1834346424956497
+          ],
+          "gradient_entry_deviation": 0.0125931856743966,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              0.9874068143256034
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.9993316943573448
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            6.102129639665316,
+            0.0,
+            3.796666477413627
+          ],
+          "gradient_entry_deviation": 0.026636298010147552,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0266362980101476
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 1.0008291144833368
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            6.102129639665316,
+            0.0,
+            3.9602898564975364
+          ],
+          "gradient_entry_deviation": 0.05563529872321138,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0556352987232114
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.9965149646103463
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            7.186665909654507,
+            0.0,
+            3.1834346424956497
+          ],
+          "gradient_entry_deviation": 0.012593185674395269,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              0.9874068143256047
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.9993316943573448
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            7.186665909654507,
+            0.0,
+            3.796666477413627
+          ],
+          "gradient_entry_deviation": 0.026636298010149106,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.026636298010149
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 1.0008291144833368
+        }
+      ],
+      "finite_state_box_covered": false,
+      "finite_fraction_inside": 0.7064056939501779,
+      "momentum_gamma_condition_met": false,
+      "matching_joint_certificate": false,
+      "all_declared_finite_sets_covered_by_joint_certificate": false
+    }
+  ],
+  "inner_scope": "Inner stress and source admissibility require separate gates; this is an outer constitutive certificate",
+  "mms_scope": "Manufactured states may intentionally lie outside the neutral reference box; successful equation verification does not extend this certificate",
+  "excluded_claims": [
+    "polynomial-everywhere state coverage",
+    "PDE state-envelope invariance",
+    "outer k/epsilon positivity theorem",
+    "coupled-mode/long-time stability",
+    "physical terrain qualification"
+  ],
+  "limitations": "Double-precision coefficient reconstruction is a finite numerical audit. The outward-rounded interval certificate supplies the separate declared mathematical bound.",
+  "audit_completed": true,
+  "finished_utc": "2026-11-03T05:22:34.012860+00:00"
+}

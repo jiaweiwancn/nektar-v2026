@@ -1,0 +1,53 @@
+{
+  "schema": 1,
+  "source_commit": "11aa94c0e3d54f6b460db4b4cb17fac473b06149",
+  "commands": [
+    {
+      "name": "reference",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/certificate-source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_state_coverage.py",
+        "--native",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/campaign-001/regularized-native/reference/case.evolution.json",
+        "--certificate",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/certificate-joint-001/certificate.json",
+        "--session",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/campaign-001/regularized-native/reference/case.xml",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/coverage-001/reference.json"
+      ],
+      "exit_code": 0,
+      "seconds": 0.3177508150001813,
+      "log_sha256": "7099dd17fbffa7719bfd3943032cae6180c6deb66ab584eab9382b27e7e89ca5"
+    },
+    {
+      "name": "joint",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/certificate-source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_state_coverage.py",
+        "--native",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/campaign-001/regularized-native/joint/case.evolution.json",
+        "--certificate",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/certificate-joint-001/certificate.json",
+        "--session",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/campaign-001/regularized-native/joint/case.xml",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/coverage-001/joint.json"
+      ],
+      "exit_code": 0,
+      "seconds": 0.31751939399873663,
+      "log_sha256": "7099dd17fbffa7719bfd3943032cae6180c6deb66ab584eab9382b27e7e89ca5"
+    }
+  ],
+  "cpu_affinity": [
+    50
+  ],
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1"
+  }
+}

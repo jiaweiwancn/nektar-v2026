@@ -1,0 +1,78 @@
+{
+  "source_commit": "11aa94c0e3d54f6b460db4b4cb17fac473b06149",
+  "compiled_physics_commit": "aa854f4c5b05451a81a4e1dd60eaaca98eb547e4",
+  "script_sha256": "4d9192f10d38b81021b7bbfd969528c0f8115f4cafd406f069ca6f3173fa2360",
+  "validator_sha256": "fe372af029e98a2d1df0e83b052ee4b0562bf2507091e9d29ee458d90cf9df2a",
+  "probe_sha256": "6344f3c92170b3a7aa8c3d67c3e0d4d9660be76d88f2b8788ce59b25b5a1d81b",
+  "threads": 1,
+  "cpu_affinity": [
+    48
+  ],
+  "started_utc": "2026-11-03T05:22:07.905105+00:00",
+  "status": "passed",
+  "commands": [
+    {
+      "name": "joint",
+      "argv": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/certificate-source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_certificate.py",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/proof-correlated-001/joint/certificate.json",
+        "--boxes",
+        "--radii",
+        ".001,.01",
+        "--k-radius",
+        ".01",
+        "--epsilon-radius",
+        ".01",
+        "--ratio-splits",
+        "16"
+      ],
+      "exit_code": 0,
+      "seconds": 28.6130983009989,
+      "log_sha256": "ec0e397fb1faa8507a9cd758aab4eb2b09d076d209bbe111ffa80ef60d67bbb2"
+    },
+    {
+      "name": "wide",
+      "argv": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/certificate-source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_certificate.py",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/proof-correlated-001/wide/certificate.json",
+        "--boxes",
+        "--radii",
+        ".25",
+        "--k-radius",
+        ".5",
+        "--epsilon-radius",
+        ".5",
+        "--ratio-splits",
+        "16"
+      ],
+      "exit_code": 0,
+      "seconds": 17.444051348000357,
+      "log_sha256": "183560b11faf79e9a0b0cb2352b3af36a5a8b44aeaf6ca93b2723ac59a4af8a0"
+    },
+    {
+      "name": "kernel-replay",
+      "argv": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/certificate-source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m8_kernel.py",
+        "--probe",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/RANSRobustVariantProbe",
+        "--report",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/kernel-independent-001/kernel.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/proof-correlated-001/kernel-replay",
+        "--envelopes"
+      ],
+      "exit_code": 0,
+      "seconds": 33.02327052799956,
+      "log_sha256": "bbe6ca5e1868bfc2fdc751692fb493a308399ef2ac9de16178765d8cf787aaa2"
+    }
+  ],
+  "finished_utc": "2026-11-03T05:23:27.005183+00:00"
+}

@@ -1,0 +1,78 @@
+{
+  "schema": 1,
+  "milestone": "M8",
+  "frozen_before_numerical_execution": true,
+  "purpose": "necessary fixed-GammaScale compatibility on one declared broad constitutive box",
+  "beta": [
+    "2/5",
+    "9/20"
+  ],
+  "normalized_gradient_center": [
+    [
+      0,
+      0,
+      1
+    ],
+    [
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0
+    ]
+  ],
+  "normalized_gradient_entry_radius": "1/4",
+  "trace_free": true,
+  "k_over_k0": [
+    "1/2",
+    "3/2"
+  ],
+  "epsilon_over_epsilon0": [
+    "1/2",
+    "3/2"
+  ],
+  "normalization": "A*=A/G0; k*=Qstar*(k/K0); epsilon*=epsilon/epsilon0; nu_t0=u_star^2/G0=1 in these units",
+  "gamma": "fixed GammaScale=gamma/nu_t0; Sref*=ex tensor ez+ez tensor ex, independent of the state",
+  "principal_target_over_nut0": "0",
+  "necessary_conditions": [
+    "GammaScale >= target-D_beta(H)/(|a|^2*|xi|^2), H=a tensor xi, a dot xi=0",
+    "GammaScale <= v^T R_beta v / v^T(S-Sref)v when the denominator is positive"
+  ],
+  "candidate_search": {
+    "seed": 823147,
+    "random_states": 384,
+    "propagation_grid": "primitive integer vectors with components -2..2, sign duplicates removed",
+    "covariance_vectors": "positive generalized-Rayleigh direction when base stress is SPD; finite integer controls otherwise",
+    "minimum_search_Rayleigh_gamma_coefficient": "1/64 times |v|^2, a search conditioning choice only; proof checks the exact positive coefficient",
+    "differential_evolution": {
+      "workers": 1,
+      "population_multiplier": 8,
+      "max_iterations": 90,
+      "polish": false
+    },
+    "local_refinement": {
+      "method": "Powell",
+      "max_iterations": 120
+    },
+    "rational_denominators": [
+      1024,
+      4096
+    ],
+    "retained_candidates_per_condition": 2,
+    "interpretation": "search only; sampled extrema are not mathematical certificates"
+  },
+  "proof": "outward Decimal interval stress and complete active-branch tangent at finite rational witnesses; exact rational rank-one and trace tests",
+  "success_meaning": "screen observations and proofs reproduced; an inconclusive screen is not a feasibility certificate",
+  "infeasibility_scope": "only this declared state box, fixed nonnegative scalar GammaScale and prescribed Sref, separately for each fixed beta",
+  "excluded": [
+    "scan-as-proof",
+    "global model impossibility",
+    "invariance of the state box",
+    "adaptive gamma",
+    "changed C(q)",
+    "coupled PDE or terrain qualification"
+  ]
+}

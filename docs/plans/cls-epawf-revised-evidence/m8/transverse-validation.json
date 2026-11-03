@@ -1,0 +1,2998 @@
+{
+  "schema": 1,
+  "milestone": "M8",
+  "success": true,
+  "verification_status": "passed",
+  "started_utc": "2026-11-03T05:13:18.605260+00:00",
+  "commands": [
+    {
+      "name": "git-start-revision",
+      "argv": [
+        "git",
+        "-c",
+        "gc.auto=0",
+        "-C",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/source",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/source",
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 0.002531860998715274,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/transverse-001/git-start-revision.log",
+      "log_sha256": "83881958d6c95b9335540044e91e6d39e5ac2711ae90a0b562f3d0db19dc320a"
+    },
+    {
+      "name": "git-start-status",
+      "argv": [
+        "git",
+        "-c",
+        "gc.auto=0",
+        "-C",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/source",
+        "status",
+        "--porcelain=v1",
+        "--untracked-files=all"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/source",
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 0.03435481900123705,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/transverse-001/git-start-status.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "variant-1-native",
+      "argv": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/RANSTransverseEvolutionProbe",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/transverse-001/variant-1-native.json",
+        "--beta",
+        "0.4",
+        "--gamma-scale",
+        "0.0"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/transverse-001",
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 1.268744125000012,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/transverse-001/variant-1-native.log",
+      "log_sha256": "97e58d82642c302ad815f66ac119d76dc53874c15e4dfb6df9ce9a1a66826e83"
+    },
+    {
+      "name": "variant-2-native",
+      "argv": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/RANSTransverseEvolutionProbe",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/transverse-001/variant-2-native.json",
+        "--beta",
+        "0.45",
+        "--gamma-scale",
+        "0.0"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/transverse-001",
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 1.2683177460003208,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/transverse-001/variant-2-native.log",
+      "log_sha256": "97e58d82642c302ad815f66ac119d76dc53874c15e4dfb6df9ce9a1a66826e83"
+    },
+    {
+      "name": "variant-3-native",
+      "argv": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/RANSTransverseEvolutionProbe",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/transverse-001/variant-3-native.json",
+        "--beta",
+        "0.4",
+        "--gamma-scale",
+        "0.25"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/transverse-001",
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 1.2688241010000638,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/transverse-001/variant-3-native.log",
+      "log_sha256": "97e58d82642c302ad815f66ac119d76dc53874c15e4dfb6df9ce9a1a66826e83"
+    },
+    {
+      "name": "git-end-revision",
+      "argv": [
+        "git",
+        "-c",
+        "gc.auto=0",
+        "-C",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/source",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/source",
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 0.002560200000516488,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/transverse-001/git-end-revision.log",
+      "log_sha256": "83881958d6c95b9335540044e91e6d39e5ac2711ae90a0b562f3d0db19dc320a"
+    },
+    {
+      "name": "git-end-status",
+      "argv": [
+        "git",
+        "-c",
+        "gc.auto=0",
+        "-C",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/source",
+        "status",
+        "--porcelain=v1",
+        "--untracked-files=all"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/source",
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 0.03437851600028807,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/transverse-001/git-end-status.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "failures": [],
+  "variants": [
+    {
+      "native_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/transverse-001/variant-1-native.json",
+      "native_report_sha256": "bfccede3d416f6e66e6740e093151278567d6be77bc42d984d1ac1be9f6eed8c",
+      "sections": {
+        "beta": 0.4,
+        "gamma_scale": 0.0,
+        "qualification": "reference_local_reduced_transverse_decay",
+        "global_or_coupled_stability": "not_qualified",
+        "constitutive": [
+          {
+            "z": 4,
+            "relative_step": 0.001,
+            "tangent_error": 3.885912758794241e-07,
+            "diagonal_ratios": [
+              0.21417683737430998,
+              1.0
+            ]
+          },
+          {
+            "z": 4,
+            "relative_step": 0.0001,
+            "tangent_error": 3.88591592237475e-09,
+            "diagonal_ratios": [
+              0.21417683737430998,
+              1.0
+            ]
+          },
+          {
+            "z": 4,
+            "relative_step": 1e-05,
+            "tangent_error": 3.8859027107207567e-11,
+            "diagonal_ratios": [
+              0.21417683737430998,
+              1.0
+            ]
+          },
+          {
+            "z": 4,
+            "relative_step": 1e-06,
+            "tangent_error": 3.88411525165111e-13,
+            "diagonal_ratios": [
+              0.21417683737430998,
+              1.0
+            ]
+          },
+          {
+            "z": 8,
+            "relative_step": 0.001,
+            "tangent_error": 4.799421877550446e-07,
+            "diagonal_ratios": [
+              0.21417683737430998,
+              1.0
+            ]
+          },
+          {
+            "z": 8,
+            "relative_step": 0.0001,
+            "tangent_error": 4.799425784832582e-09,
+            "diagonal_ratios": [
+              0.21417683737430998,
+              1.0
+            ]
+          },
+          {
+            "z": 8,
+            "relative_step": 1e-05,
+            "tangent_error": 4.7994094673532284e-11,
+            "diagonal_ratios": [
+              0.21417683737430998,
+              1.0
+            ]
+          },
+          {
+            "z": 8,
+            "relative_step": 1e-06,
+            "tangent_error": 4.797201808381813e-13,
+            "diagonal_ratios": [
+              0.21417683737430998,
+              1.0
+            ]
+          },
+          {
+            "z": 12,
+            "relative_step": 0.001,
+            "tangent_error": 4.799421878236056e-07,
+            "diagonal_ratios": [
+              0.2141768373743099,
+              1.0
+            ]
+          },
+          {
+            "z": 12,
+            "relative_step": 0.0001,
+            "tangent_error": 4.799425876247034e-09,
+            "diagonal_ratios": [
+              0.2141768373743099,
+              1.0
+            ]
+          },
+          {
+            "z": 12,
+            "relative_step": 1e-05,
+            "tangent_error": 4.7994163234369916e-11,
+            "diagonal_ratios": [
+              0.2141768373743099,
+              1.0
+            ]
+          },
+          {
+            "z": 12,
+            "relative_step": 1e-06,
+            "tangent_error": 4.798344489008841e-13,
+            "diagonal_ratios": [
+              0.2141768373743099,
+              1.0
+            ]
+          }
+        ],
+        "trials": [
+          {
+            "operator": "p3-n2-xi1",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.9245527555276873,
+            "relative_error_to_semidiscrete_exponential": 8.35577058018001e-07,
+            "initial_covariance_minimum": 0.17776359014959586,
+            "final_covariance_minimum": 0.1777636565163599,
+            "wavelength": 6.283185307179586,
+            "flow_time": 0.8926326391340886,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.05601408441495399,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p3-n2-xi2",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.844623518616198,
+            "relative_error_to_semidiscrete_exponential": 3.2254844581550744e-06,
+            "initial_covariance_minimum": 0.17776256283041333,
+            "final_covariance_minimum": 0.17776287218016548,
+            "wavelength": 3.141592653589793,
+            "flow_time": 0.4463163195670443,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.11202816882990797,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p3-n2-xi4",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.5888847642469034,
+            "relative_error_to_semidiscrete_exponential": 1.1657644317839527e-05,
+            "initial_covariance_minimum": 0.17775845378555602,
+            "final_covariance_minimum": 0.17776107632037336,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p5-n2-xi1",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.925296115726964,
+            "relative_error_to_semidiscrete_exponential": 8.349842457517492e-07,
+            "initial_covariance_minimum": 0.17776361940446078,
+            "final_covariance_minimum": 0.17776366791360346,
+            "wavelength": 6.283185307179586,
+            "flow_time": 0.8926326391340886,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.05601408441495399,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p5-n2-xi2",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.8452847297728429,
+            "relative_error_to_semidiscrete_exponential": 3.226571298689458e-06,
+            "initial_covariance_minimum": 0.17776267984734456,
+            "final_covariance_minimum": 0.17776292054364998,
+            "wavelength": 3.141592653589793,
+            "flow_time": 0.4463163195670443,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.11202816882990797,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p5-n2-xi4",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.5892694139631462,
+            "relative_error_to_semidiscrete_exponential": 1.1663890933469525e-05,
+            "initial_covariance_minimum": 0.1777589218128293,
+            "final_covariance_minimum": 0.17776122686996965,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n2-xi1",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.9253322282503883,
+            "relative_error_to_semidiscrete_exponential": 8.348777139080356e-07,
+            "initial_covariance_minimum": 0.1777636191978577,
+            "final_covariance_minimum": 0.17776367008126806,
+            "wavelength": 6.283185307179586,
+            "flow_time": 0.8926326391340886,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.05601408441495399,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n2-xi2",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.8453169233615153,
+            "relative_error_to_semidiscrete_exponential": 3.2266024642577655e-06,
+            "initial_covariance_minimum": 0.17776267902094903,
+            "final_covariance_minimum": 0.17776292747557296,
+            "wavelength": 3.141592653589793,
+            "flow_time": 0.4463163195670443,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.11202816882990797,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n2-xi4",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.5892890514259148,
+            "relative_error_to_semidiscrete_exponential": 1.1664136118469907e-05,
+            "initial_covariance_minimum": 0.1777589185075201,
+            "final_covariance_minimum": 0.17776124193740472,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p3-n4-xi1",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.925301927915663,
+            "relative_error_to_semidiscrete_exponential": 8.349081518322186e-07,
+            "initial_covariance_minimum": 0.17776361866549142,
+            "final_covariance_minimum": 0.17776366849306466,
+            "wavelength": 6.283185307179586,
+            "flow_time": 0.8926326391340886,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.05601408441495399,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p3-n4-xi2",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.8452891117830658,
+            "relative_error_to_semidiscrete_exponential": 3.2265661180931697e-06,
+            "initial_covariance_minimum": 0.17776267689152797,
+            "final_covariance_minimum": 0.17776292268897848,
+            "wavelength": 3.141592653589793,
+            "flow_time": 0.4463163195670443,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.11202816882990797,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p3-n4-xi4",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.5892688104548833,
+            "relative_error_to_semidiscrete_exponential": 1.1663945994572907e-05,
+            "initial_covariance_minimum": 0.17775890999054042,
+            "final_covariance_minimum": 0.17776123056579962,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p3-n8-xi1",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.9253306168947836,
+            "relative_error_to_semidiscrete_exponential": 8.348780908851815e-07,
+            "initial_covariance_minimum": 0.17776361973666152,
+            "final_covariance_minimum": 0.1777636698333451,
+            "wavelength": 6.283185307179586,
+            "flow_time": 0.8926326391340886,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.05601408441495399,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p3-n8-xi2",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.8453154755038397,
+            "relative_error_to_semidiscrete_exponential": 3.2266001476102923e-06,
+            "initial_covariance_minimum": 0.17776268117612049,
+            "final_covariance_minimum": 0.1777629264428511,
+            "wavelength": 3.141592653589793,
+            "flow_time": 0.4463163195670443,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.11202816882990797,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p3-n8-xi4",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.5892881222158571,
+            "relative_error_to_semidiscrete_exponential": 1.16641261163791e-05,
+            "initial_covariance_minimum": 0.17775892712749414,
+            "final_covariance_minimum": 0.1777612389091599,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n8-xi1",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.9253323180462043,
+            "relative_error_to_semidiscrete_exponential": 8.348761771790546e-07,
+            "initial_covariance_minimum": 0.17776361978406902,
+            "final_covariance_minimum": 0.17776366983816527,
+            "wavelength": 6.283185307179586,
+            "flow_time": 0.8926326391340886,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.05601408441495399,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n8-xi2",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.8453170307424843,
+            "relative_error_to_semidiscrete_exponential": 3.2266021007709636e-06,
+            "initial_covariance_minimum": 0.17776268136574597,
+            "final_covariance_minimum": 0.17776292670194213,
+            "wavelength": 3.141592653589793,
+            "flow_time": 0.4463163195670443,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.11202816882990797,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n8-xi4",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.5892892140774831,
+            "relative_error_to_semidiscrete_exponential": 1.1664136222437936e-05,
+            "initial_covariance_minimum": 0.17775892788593378,
+            "final_covariance_minimum": 0.17776123956779855,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n8-xi4",
+            "order": 1,
+            "dt": 0.0025,
+            "amplitude": 0.0001,
+            "gain": 0.5401651265593852,
+            "relative_error_to_semidiscrete_exponential": 0.03598380557976145,
+            "initial_covariance_minimum": 0.17775892788593378,
+            "final_covariance_minimum": 0.17776148659561844,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n8-xi4",
+            "order": 1,
+            "dt": 0.00125,
+            "amplitude": 0.0001,
+            "gain": 0.5638229616199297,
+            "relative_error_to_semidiscrete_exponential": 0.018282216085096347,
+            "initial_covariance_minimum": 0.17775892788593378,
+            "final_covariance_minimum": 0.1777613670363513,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n8-xi4",
+            "order": 1,
+            "dt": 0.000625,
+            "amplitude": 0.0001,
+            "gain": 0.5763286486476533,
+            "relative_error_to_semidiscrete_exponential": 0.009213784590386246,
+            "initial_covariance_minimum": 0.17775892788593378,
+            "final_covariance_minimum": 0.17776130429250359,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n8-xi4",
+            "order": 2,
+            "dt": 0.0025,
+            "amplitude": 0.0001,
+            "gain": 0.5865823823185816,
+            "relative_error_to_semidiscrete_exponential": 0.0029941213413765514,
+            "initial_covariance_minimum": 0.17775892788593378,
+            "final_covariance_minimum": 0.17776125514323002,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n8-xi4",
+            "order": 2,
+            "dt": 0.00125,
+            "amplitude": 0.0001,
+            "gain": 0.5886411484295893,
+            "relative_error_to_semidiscrete_exponential": 0.0007488821359709833,
+            "initial_covariance_minimum": 0.17775892788593378,
+            "final_covariance_minimum": 0.177761243329,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n8-xi4",
+            "order": 2,
+            "dt": 0.000625,
+            "amplitude": 0.0001,
+            "gain": 0.5891376220342905,
+            "relative_error_to_semidiscrete_exponential": 0.0001869563141518844,
+            "initial_covariance_minimum": 0.17775892788593378,
+            "final_covariance_minimum": 0.17776124045166364,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n8-xi4",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 1e-05,
+            "gain": 0.5892892140775167,
+            "relative_error_to_semidiscrete_exponential": 1.1664136202330314e-05,
+            "initial_covariance_minimum": 0.1777638825446669,
+            "final_covariance_minimum": 0.17776390566341874,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n8-xi4",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.001,
+            "gain": 0.5892892140775327,
+            "relative_error_to_semidiscrete_exponential": 1.1664136190072681e-05,
+            "initial_covariance_minimum": 0.17726616064032363,
+            "final_covariance_minimum": 0.17749541710041167,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          }
+        ],
+        "spatial": [
+          {
+            "xi": 1.0,
+            "reference": {
+              "degree": 9,
+              "cells": 16,
+              "dt": 0.00015625
+            },
+            "reference_gain": 0.9253323180437778,
+            "records": [
+              {
+                "degree": 3,
+                "cells": 2,
+                "actual_native_relative_field_error": 0.05356462565713036,
+                "independent_semidiscrete_spatial_error": 0.05356460016645832,
+                "actual_native_energy_gain": 0.9245527555276869
+              },
+              {
+                "degree": 5,
+                "cells": 2,
+                "actual_native_relative_field_error": 0.006363655207646291,
+                "independent_semidiscrete_spatial_error": 0.0063636505398859235,
+                "actual_native_energy_gain": 0.9252961157269641
+              },
+              {
+                "degree": 7,
+                "cells": 2,
+                "actual_native_relative_field_error": 0.0006895005978096318,
+                "independent_semidiscrete_spatial_error": 0.0006894987728168092,
+                "actual_native_energy_gain": 0.9253322282503884
+              },
+              {
+                "degree": 3,
+                "cells": 4,
+                "actual_native_relative_field_error": 0.00322225792898701,
+                "independent_semidiscrete_spatial_error": 0.003222257462823966,
+                "actual_native_energy_gain": 0.9253019279156628
+              },
+              {
+                "degree": 3,
+                "cells": 8,
+                "actual_native_relative_field_error": 0.0004321700765255067,
+                "independent_semidiscrete_spatial_error": 0.00043216926733283956,
+                "actual_native_energy_gain": 0.9253306168947836
+              },
+              {
+                "degree": 7,
+                "cells": 8,
+                "actual_native_relative_field_error": 9.141586707168318e-08,
+                "independent_semidiscrete_spatial_error": 9.141363660178117e-08,
+                "actual_native_energy_gain": 0.9253323180462042
+              }
+            ]
+          },
+          {
+            "xi": 2.0,
+            "reference": {
+              "degree": 9,
+              "cells": 16,
+              "dt": 0.00015625
+            },
+            "reference_gain": 0.8453170307404367,
+            "records": [
+              {
+                "degree": 3,
+                "cells": 2,
+                "actual_native_relative_field_error": 0.05360799921542088,
+                "independent_semidiscrete_spatial_error": 0.05360794519331553,
+                "actual_native_energy_gain": 0.8446235186161974
+              },
+              {
+                "degree": 5,
+                "cells": 2,
+                "actual_native_relative_field_error": 0.006364348349482824,
+                "independent_semidiscrete_spatial_error": 0.0063643380012456535,
+                "actual_native_energy_gain": 0.845284729772843
+              },
+              {
+                "degree": 7,
+                "cells": 2,
+                "actual_native_relative_field_error": 0.000697409225386539,
+                "independent_semidiscrete_spatial_error": 0.0006974061656677328,
+                "actual_native_energy_gain": 0.8453169233615154
+              },
+              {
+                "degree": 3,
+                "cells": 4,
+                "actual_native_relative_field_error": 0.0032485179515617723,
+                "independent_semidiscrete_spatial_error": 0.0032485168462376072,
+                "actual_native_energy_gain": 0.8452891117830656
+              },
+              {
+                "degree": 3,
+                "cells": 8,
+                "actual_native_relative_field_error": 0.00043419131902277787,
+                "independent_semidiscrete_spatial_error": 0.0004341899396630656,
+                "actual_native_energy_gain": 0.8453154755038397
+              },
+              {
+                "degree": 7,
+                "cells": 8,
+                "actual_native_relative_field_error": 9.290578488516705e-08,
+                "independent_semidiscrete_spatial_error": 9.29032639923779e-08,
+                "actual_native_energy_gain": 0.8453170307424842
+              }
+            ]
+          },
+          {
+            "xi": 4.0,
+            "reference": {
+              "degree": 9,
+              "cells": 16,
+              "dt": 0.00015625
+            },
+            "reference_gain": 0.5892892140766134,
+            "records": [
+              {
+                "degree": 3,
+                "cells": 2,
+                "actual_native_relative_field_error": 0.0537471030231288,
+                "independent_semidiscrete_spatial_error": 0.053746945300102475,
+                "actual_native_energy_gain": 0.5888847642469031
+              },
+              {
+                "degree": 5,
+                "cells": 2,
+                "actual_native_relative_field_error": 0.006361994894843329,
+                "independent_semidiscrete_spatial_error": 0.006361962023037059,
+                "actual_native_energy_gain": 0.5892694139631462
+              },
+              {
+                "degree": 7,
+                "cells": 2,
+                "actual_native_relative_field_error": 0.0007335674395288359,
+                "independent_semidiscrete_spatial_error": 0.0007335600110753821,
+                "actual_native_energy_gain": 0.5892890514259149
+              },
+              {
+                "degree": 3,
+                "cells": 4,
+                "actual_native_relative_field_error": 0.0033886772442560413,
+                "independent_semidiscrete_spatial_error": 0.0033886781687143797,
+                "actual_native_energy_gain": 0.5892688104548832
+              },
+              {
+                "degree": 3,
+                "cells": 8,
+                "actual_native_relative_field_error": 0.00044344110668859994,
+                "independent_semidiscrete_spatial_error": 0.00044343776124698844,
+                "actual_native_energy_gain": 0.5892881222158571
+              },
+              {
+                "degree": 7,
+                "cells": 8,
+                "actual_native_relative_field_error": 9.958672882541718e-08,
+                "independent_semidiscrete_spatial_error": 9.958311159481109e-08,
+                "actual_native_energy_gain": 0.5892892140774831
+              }
+            ]
+          }
+        ],
+        "temporal": [
+          {
+            "order": 1,
+            "records": [
+              {
+                "operator": "p7-n8-xi4",
+                "order": 1,
+                "dt": 0.0025,
+                "amplitude": 0.0001,
+                "gain": 0.5401651265593852,
+                "relative_error_to_semidiscrete_exponential": 0.03598380557976145,
+                "initial_covariance_minimum": 0.17775892788593378,
+                "final_covariance_minimum": 0.17776148659561844,
+                "wavelength": 1.5707963267948966,
+                "flow_time": 0.22315815978352216,
+                "turnover_time": 5.0,
+                "duration_in_flow_times": 0.22405633765981595,
+                "duration_in_turnover_times": 0.01
+              },
+              {
+                "operator": "p7-n8-xi4",
+                "order": 1,
+                "dt": 0.00125,
+                "amplitude": 0.0001,
+                "gain": 0.5638229616199297,
+                "relative_error_to_semidiscrete_exponential": 0.018282216085096347,
+                "initial_covariance_minimum": 0.17775892788593378,
+                "final_covariance_minimum": 0.1777613670363513,
+                "wavelength": 1.5707963267948966,
+                "flow_time": 0.22315815978352216,
+                "turnover_time": 5.0,
+                "duration_in_flow_times": 0.22405633765981595,
+                "duration_in_turnover_times": 0.01
+              },
+              {
+                "operator": "p7-n8-xi4",
+                "order": 1,
+                "dt": 0.000625,
+                "amplitude": 0.0001,
+                "gain": 0.5763286486476533,
+                "relative_error_to_semidiscrete_exponential": 0.009213784590386246,
+                "initial_covariance_minimum": 0.17775892788593378,
+                "final_covariance_minimum": 0.17776130429250359,
+                "wavelength": 1.5707963267948966,
+                "flow_time": 0.22315815978352216,
+                "turnover_time": 5.0,
+                "duration_in_flow_times": 0.22405633765981595,
+                "duration_in_turnover_times": 0.01
+              }
+            ],
+            "actual_error_reduction": [
+              1.9682409075722187,
+              1.9842243874652976
+            ]
+          },
+          {
+            "order": 2,
+            "records": [
+              {
+                "operator": "p7-n8-xi4",
+                "order": 2,
+                "dt": 0.0025,
+                "amplitude": 0.0001,
+                "gain": 0.5865823823185816,
+                "relative_error_to_semidiscrete_exponential": 0.0029941213413765514,
+                "initial_covariance_minimum": 0.17775892788593378,
+                "final_covariance_minimum": 0.17776125514323002,
+                "wavelength": 1.5707963267948966,
+                "flow_time": 0.22315815978352216,
+                "turnover_time": 5.0,
+                "duration_in_flow_times": 0.22405633765981595,
+                "duration_in_turnover_times": 0.01
+              },
+              {
+                "operator": "p7-n8-xi4",
+                "order": 2,
+                "dt": 0.00125,
+                "amplitude": 0.0001,
+                "gain": 0.5886411484295893,
+                "relative_error_to_semidiscrete_exponential": 0.0007488821359709833,
+                "initial_covariance_minimum": 0.17775892788593378,
+                "final_covariance_minimum": 0.177761243329,
+                "wavelength": 1.5707963267948966,
+                "flow_time": 0.22315815978352216,
+                "turnover_time": 5.0,
+                "duration_in_flow_times": 0.22405633765981595,
+                "duration_in_turnover_times": 0.01
+              },
+              {
+                "operator": "p7-n8-xi4",
+                "order": 2,
+                "dt": 0.000625,
+                "amplitude": 0.0001,
+                "gain": 0.5891376220342905,
+                "relative_error_to_semidiscrete_exponential": 0.0001869563141518844,
+                "initial_covariance_minimum": 0.17775892788593378,
+                "final_covariance_minimum": 0.17776124045166364,
+                "wavelength": 1.5707963267948966,
+                "flow_time": 0.22315815978352216,
+                "turnover_time": 5.0,
+                "duration_in_flow_times": 0.22405633765981595,
+                "duration_in_turnover_times": 0.01
+              }
+            ],
+            "actual_error_reduction": [
+              3.998120929262711,
+              4.005653081941844
+            ]
+          }
+        ],
+        "initial_projection_control": [
+          {
+            "id": "p3-n2-xi1",
+            "relative_error": 3.6004960800137854e-11
+          },
+          {
+            "id": "p3-n2-xi2",
+            "relative_error": 3.6004960800137854e-11
+          },
+          {
+            "id": "p3-n2-xi4",
+            "relative_error": 3.6004960800137854e-11
+          },
+          {
+            "id": "p5-n2-xi1",
+            "relative_error": 1.120958989178959e-10
+          },
+          {
+            "id": "p5-n2-xi2",
+            "relative_error": 1.120958989178959e-10
+          },
+          {
+            "id": "p5-n2-xi4",
+            "relative_error": 1.120958989178959e-10
+          },
+          {
+            "id": "p7-n2-xi1",
+            "relative_error": 1.4076044227369395e-10
+          },
+          {
+            "id": "p7-n2-xi2",
+            "relative_error": 1.4076044227369395e-10
+          },
+          {
+            "id": "p7-n2-xi4",
+            "relative_error": 1.4076044227369395e-10
+          },
+          {
+            "id": "p3-n4-xi1",
+            "relative_error": 1.9849764837143232e-14
+          },
+          {
+            "id": "p3-n4-xi2",
+            "relative_error": 1.9849764837143232e-14
+          },
+          {
+            "id": "p3-n4-xi4",
+            "relative_error": 1.9849764837143232e-14
+          },
+          {
+            "id": "p3-n8-xi1",
+            "relative_error": 7.811806817882378e-16
+          },
+          {
+            "id": "p3-n8-xi2",
+            "relative_error": 7.811806817882378e-16
+          },
+          {
+            "id": "p3-n8-xi4",
+            "relative_error": 7.811806817882378e-16
+          },
+          {
+            "id": "p7-n8-xi1",
+            "relative_error": 1.706187241755941e-15
+          },
+          {
+            "id": "p7-n8-xi2",
+            "relative_error": 1.706187241755941e-15
+          },
+          {
+            "id": "p7-n8-xi4",
+            "relative_error": 1.706187241755941e-15
+          }
+        ],
+        "amplitude": {
+          "values": [
+            1e-05,
+            0.0001,
+            0.001
+          ],
+          "energy_gains": [
+            0.5892892140775167,
+            0.5892892140774831,
+            0.5892892140775327
+          ]
+        },
+        "restricted_controls": [
+          {
+            "chi": 0,
+            "eta": 0,
+            "matching_velocity": 5.780254367996082,
+            "maximum_operator_difference": 0
+          },
+          {
+            "chi": 0,
+            "eta": 1,
+            "matching_velocity": 5.780254367996082,
+            "maximum_operator_difference": 0
+          },
+          {
+            "chi": 0.5,
+            "eta": 0,
+            "matching_velocity": 5.780254367996082,
+            "maximum_operator_difference": 0
+          },
+          {
+            "chi": 0.5,
+            "eta": 1,
+            "matching_velocity": 5.780254367996082,
+            "maximum_operator_difference": 0
+          },
+          {
+            "chi": 1,
+            "eta": 0,
+            "matching_velocity": 5.780254367996082,
+            "maximum_operator_difference": 0
+          },
+          {
+            "chi": 1,
+            "eta": 1,
+            "matching_velocity": 5.780254367996082,
+            "maximum_operator_difference": 0
+          }
+        ],
+        "control_scope": "equal-input restricted outer tangent; chi uses original AWF momentum matching, eta subtracts fixed base stress; not a nonlinear whole-patch identity",
+        "covariance_scope": "selected nonlinear stress sampled at native volume GL points and four phases at initial/final epochs; no continuum minimum claim"
+      }
+    },
+    {
+      "native_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/transverse-001/variant-2-native.json",
+      "native_report_sha256": "8d4822f6627babd19cd3cfb6ea0afd9aed530f2b5acc0900c3083917af31b4b1",
+      "sections": {
+        "beta": 0.45,
+        "gamma_scale": 0.0,
+        "qualification": "reference_local_reduced_transverse_decay",
+        "global_or_coupled_stability": "not_qualified",
+        "constitutive": [
+          {
+            "z": 4,
+            "relative_step": 0.001,
+            "tangent_error": 4.7294790025964595e-07,
+            "diagonal_ratios": [
+              0.11594894204609887,
+              1.0
+            ]
+          },
+          {
+            "z": 4,
+            "relative_step": 0.0001,
+            "tangent_error": 4.72948258334327e-09,
+            "diagonal_ratios": [
+              0.11594894204609887,
+              1.0
+            ]
+          },
+          {
+            "z": 4,
+            "relative_step": 1e-05,
+            "tangent_error": 4.729459879282416e-11,
+            "diagonal_ratios": [
+              0.11594894204609887,
+              1.0
+            ]
+          },
+          {
+            "z": 4,
+            "relative_step": 1e-06,
+            "tangent_error": 4.726774527341604e-13,
+            "diagonal_ratios": [
+              0.11594894204609887,
+              1.0
+            ]
+          },
+          {
+            "z": 8,
+            "relative_step": 0.001,
+            "tangent_error": 5.841295572863068e-07,
+            "diagonal_ratios": [
+              0.11594894204609887,
+              1.0
+            ]
+          },
+          {
+            "z": 8,
+            "relative_step": 0.0001,
+            "tangent_error": 5.841299995379899e-09,
+            "diagonal_ratios": [
+              0.11594894204609887,
+              1.0
+            ]
+          },
+          {
+            "z": 8,
+            "relative_step": 1e-05,
+            "tangent_error": 5.841271953997312e-11,
+            "diagonal_ratios": [
+              0.11594894204609887,
+              1.0
+            ]
+          },
+          {
+            "z": 8,
+            "relative_step": 1e-06,
+            "tangent_error": 5.837955323477368e-13,
+            "diagonal_ratios": [
+              0.11594894204609887,
+              1.0
+            ]
+          },
+          {
+            "z": 12,
+            "relative_step": 0.001,
+            "tangent_error": 5.84129557343441e-07,
+            "diagonal_ratios": [
+              0.11594894204609879,
+              1.0
+            ]
+          },
+          {
+            "z": 12,
+            "relative_step": 0.0001,
+            "tangent_error": 5.841300063940738e-09,
+            "diagonal_ratios": [
+              0.11594894204609879,
+              1.0
+            ]
+          },
+          {
+            "z": 12,
+            "relative_step": 1e-05,
+            "tangent_error": 5.841278238740762e-11,
+            "diagonal_ratios": [
+              0.11594894204609879,
+              1.0
+            ]
+          },
+          {
+            "z": 12,
+            "relative_step": 1e-06,
+            "tangent_error": 5.838755199916288e-13,
+            "diagonal_ratios": [
+              0.11594894204609879,
+              1.0
+            ]
+          }
+        ],
+        "trials": [
+          {
+            "operator": "p3-n2-xi1",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.9374285453436524,
+            "relative_error_to_semidiscrete_exponential": 8.404953773203187e-07,
+            "initial_covariance_minimum": 0.17776359982384346,
+            "final_covariance_minimum": 0.17776365952910989,
+            "wavelength": 6.283185307179586,
+            "flow_time": 0.8926326391340886,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.05601408441495399,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p3-n2-xi2",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.8926234900669453,
+            "relative_error_to_semidiscrete_exponential": 3.3276346059094396e-06,
+            "initial_covariance_minimum": 0.17776260152587195,
+            "final_covariance_minimum": 0.17776284332883713,
+            "wavelength": 3.141592653589793,
+            "flow_time": 0.4463163195670443,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.11202816882990797,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p3-n2-xi4",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.7340385542273584,
+            "relative_error_to_semidiscrete_exponential": 1.319486449695138e-05,
+            "initial_covariance_minimum": 0.17775860854288433,
+            "final_covariance_minimum": 0.1777604646791836,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p5-n2-xi1",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.9381850070900104,
+            "relative_error_to_semidiscrete_exponential": 8.399463249174146e-07,
+            "initial_covariance_minimum": 0.17776362825225026,
+            "final_covariance_minimum": 0.17776367058585646,
+            "wavelength": 6.283185307179586,
+            "flow_time": 0.8926326391340886,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.05601408441495399,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p5-n2-xi2",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.8933346525903036,
+            "relative_error_to_semidiscrete_exponential": 3.3288614493789852e-06,
+            "initial_covariance_minimum": 0.1777627152372211,
+            "final_covariance_minimum": 0.17776289226970496,
+            "wavelength": 3.141592653589793,
+            "flow_time": 0.4463163195670443,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.11202816882990797,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p5-n2-xi4",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.7345835991941272,
+            "relative_error_to_semidiscrete_exponential": 1.3202447485751722e-05,
+            "initial_covariance_minimum": 0.1777590633518371,
+            "final_covariance_minimum": 0.17776063307078488,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n2-xi1",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.9382217531680108,
+            "relative_error_to_semidiscrete_exponential": 8.398390106537012e-07,
+            "initial_covariance_minimum": 0.17776362805148366,
+            "final_covariance_minimum": 0.17776367275634727,
+            "wavelength": 6.283185307179586,
+            "flow_time": 0.8926326391340886,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.05601408441495399,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n2-xi2",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.8933692162389442,
+            "relative_error_to_semidiscrete_exponential": 3.328892521502674e-06,
+            "initial_covariance_minimum": 0.17776271443417024,
+            "final_covariance_minimum": 0.1777628993532746,
+            "wavelength": 3.141592653589793,
+            "flow_time": 0.4463163195670443,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.11202816882990797,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n2-xi4",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.7346104046773806,
+            "relative_error_to_semidiscrete_exponential": 1.3202729958314427e-05,
+            "initial_covariance_minimum": 0.17775906013987974,
+            "final_covariance_minimum": 0.17776065601897634,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p3-n4-xi1",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.9381910433048577,
+            "relative_error_to_semidiscrete_exponential": 8.398684750206887e-07,
+            "initial_covariance_minimum": 0.17776362753415698,
+            "final_covariance_minimum": 0.17776367116206254,
+            "wavelength": 6.283185307179586,
+            "flow_time": 0.8926326391340886,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.05601408441495399,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p3-n4-xi2",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.8933399064931214,
+            "relative_error_to_semidiscrete_exponential": 3.3288520127142415e-06,
+            "initial_covariance_minimum": 0.17776271236490285,
+            "final_covariance_minimum": 0.177762894576142,
+            "wavelength": 3.141592653589793,
+            "flow_time": 0.4463163195670443,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.11202816882990797,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p3-n4-xi4",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.7345859008806257,
+            "relative_error_to_semidiscrete_exponential": 1.3202507301414013e-05,
+            "initial_covariance_minimum": 0.17775905186344498,
+            "final_covariance_minimum": 0.1777606389265783,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p3-n8-xi1",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.938220115488897,
+            "relative_error_to_semidiscrete_exponential": 8.398394663086554e-07,
+            "initial_covariance_minimum": 0.1777636285750663,
+            "final_covariance_minimum": 0.17776367234071194,
+            "wavelength": 6.283185307179586,
+            "flow_time": 0.8926326391340886,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.05601408441495399,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p3-n8-xi2",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.8933676704869049,
+            "relative_error_to_semidiscrete_exponential": 3.328890001882727e-06,
+            "initial_covariance_minimum": 0.17776271652846057,
+            "final_covariance_minimum": 0.17776289855590044,
+            "wavelength": 3.141592653589793,
+            "flow_time": 0.4463163195670443,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.11202816882990797,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p3-n8-xi4",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.7346091829057567,
+            "relative_error_to_semidiscrete_exponential": 1.3202717926707299e-05,
+            "initial_covariance_minimum": 0.17775906851639994,
+            "final_covariance_minimum": 0.1777606505853365,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n8-xi1",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.9382218402628031,
+            "relative_error_to_semidiscrete_exponential": 8.39837537091924e-07,
+            "initial_covariance_minimum": 0.1777636286211344,
+            "final_covariance_minimum": 0.1777636723519893,
+            "wavelength": 6.283185307179586,
+            "flow_time": 0.8926326391340886,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.05601408441495399,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n8-xi2",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.8933693135389017,
+            "relative_error_to_semidiscrete_exponential": 3.3288920137277056e-06,
+            "initial_covariance_minimum": 0.17776271671272936,
+            "final_covariance_minimum": 0.1777628988218901,
+            "wavelength": 3.141592653589793,
+            "flow_time": 0.4463163195670443,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.11202816882990797,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n8-xi4",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.7346105379972002,
+            "relative_error_to_semidiscrete_exponential": 1.3202729454555445e-05,
+            "initial_covariance_minimum": 0.17775906925341897,
+            "final_covariance_minimum": 0.1777606514119567,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n8-xi4",
+            "order": 1,
+            "dt": 0.0025,
+            "amplitude": 0.0001,
+            "gain": 0.6711348099434473,
+            "relative_error_to_semidiscrete_exponential": 0.039350255490379606,
+            "initial_covariance_minimum": 0.17775906925341897,
+            "final_covariance_minimum": 0.1777609529704689,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n8-xi4",
+            "order": 1,
+            "dt": 0.00125,
+            "amplitude": 0.0001,
+            "gain": 0.701862437826713,
+            "relative_error_to_semidiscrete_exponential": 0.019965765226728067,
+            "initial_covariance_minimum": 0.17775906925341897,
+            "final_covariance_minimum": 0.17776080641635367,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n8-xi4",
+            "order": 1,
+            "dt": 0.000625,
+            "amplitude": 0.0001,
+            "gain": 0.7179869087094173,
+            "relative_error_to_semidiscrete_exponential": 0.010054981872547162,
+            "initial_covariance_minimum": 0.17775906925341897,
+            "final_covariance_minimum": 0.17776072994901598,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n8-xi4",
+            "order": 2,
+            "dt": 0.0025,
+            "amplitude": 0.0001,
+            "gain": 0.730423191240016,
+            "relative_error_to_semidiscrete_exponential": 0.0033761516332709795,
+            "initial_covariance_minimum": 0.17775906925341897,
+            "final_covariance_minimum": 0.1777606735541509,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n8-xi4",
+            "order": 2,
+            "dt": 0.00125,
+            "amplitude": 0.0001,
+            "gain": 0.7335949475895246,
+            "relative_error_to_semidiscrete_exponential": 0.0008461570674724568,
+            "initial_covariance_minimum": 0.17775906925341897,
+            "final_covariance_minimum": 0.17776065681495806,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n8-xi4",
+            "order": 2,
+            "dt": 0.000625,
+            "amplitude": 0.0001,
+            "gain": 0.7343714729583528,
+            "relative_error_to_semidiscrete_exponential": 0.00021145676282248213,
+            "initial_covariance_minimum": 0.17775906925341897,
+            "final_covariance_minimum": 0.17776065268789631,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n8-xi4",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 1e-05,
+            "gain": 0.7346105379971856,
+            "relative_error_to_semidiscrete_exponential": 1.320272946588814e-05,
+            "initial_covariance_minimum": 0.1777638839586117,
+            "final_covariance_minimum": 0.1777638997815309,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n8-xi4",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.001,
+            "gain": 0.7346105379972243,
+            "relative_error_to_semidiscrete_exponential": 1.320272943988532e-05,
+            "initial_covariance_minimum": 0.17728003134094136,
+            "final_covariance_minimum": 0.1774369281905013,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          }
+        ],
+        "spatial": [
+          {
+            "xi": 1.0,
+            "reference": {
+              "degree": 9,
+              "cells": 16,
+              "dt": 0.00015625
+            },
+            "reference_gain": 0.9382218402603364,
+            "records": [
+              {
+                "degree": 3,
+                "cells": 2,
+                "actual_native_relative_field_error": 0.05356041140779609,
+                "independent_semidiscrete_spatial_error": 0.05356038644171012,
+                "actual_native_energy_gain": 0.9374285453436518
+              },
+              {
+                "degree": 5,
+                "cells": 2,
+                "actual_native_relative_field_error": 0.006364031527335801,
+                "independent_semidiscrete_spatial_error": 0.006364027004930712,
+                "actual_native_energy_gain": 0.9381850070900105
+              },
+              {
+                "degree": 7,
+                "cells": 2,
+                "actual_native_relative_field_error": 0.000688440805095898,
+                "independent_semidiscrete_spatial_error": 0.000688439006433273,
+                "actual_native_energy_gain": 0.938221753168011
+              },
+              {
+                "degree": 3,
+                "cells": 4,
+                "actual_native_relative_field_error": 0.0032191136367009008,
+                "independent_semidiscrete_spatial_error": 0.0032191131917956506,
+                "actual_native_energy_gain": 0.9381910433048576
+              },
+              {
+                "degree": 3,
+                "cells": 8,
+                "actual_native_relative_field_error": 0.0004318910742243204,
+                "independent_semidiscrete_spatial_error": 0.0004318902723360127,
+                "actual_native_energy_gain": 0.938220115488897
+              },
+              {
+                "degree": 7,
+                "cells": 8,
+                "actual_native_relative_field_error": 9.12038856603306e-08,
+                "independent_semidiscrete_spatial_error": 9.120167183365165e-08,
+                "actual_native_energy_gain": 0.938221840262803
+              }
+            ]
+          },
+          {
+            "xi": 2.0,
+            "reference": {
+              "degree": 9,
+              "cells": 16,
+              "dt": 0.00015625
+            },
+            "reference_gain": 0.8933693135368348,
+            "records": [
+              {
+                "degree": 3,
+                "cells": 2,
+                "actual_native_relative_field_error": 0.053592835245299564,
+                "independent_semidiscrete_spatial_error": 0.05359278291737049,
+                "actual_native_energy_gain": 0.8926234900669449
+              },
+              {
+                "degree": 5,
+                "cells": 2,
+                "actual_native_relative_field_error": 0.006366130120330972,
+                "independent_semidiscrete_spatial_error": 0.006366120339872091,
+                "actual_native_energy_gain": 0.8933346525903038
+              },
+              {
+                "degree": 7,
+                "cells": 2,
+                "actual_native_relative_field_error": 0.0006929687276040101,
+                "independent_semidiscrete_spatial_error": 0.000692965759235005,
+                "actual_native_energy_gain": 0.8933692162389443
+              },
+              {
+                "degree": 3,
+                "cells": 4,
+                "actual_native_relative_field_error": 0.0032342224111530657,
+                "independent_semidiscrete_spatial_error": 0.0032342212866100398,
+                "actual_native_energy_gain": 0.8933399064931213
+              },
+              {
+                "degree": 3,
+                "cells": 8,
+                "actual_native_relative_field_error": 0.00043301938299714163,
+                "independent_semidiscrete_spatial_error": 0.00043301802302823277,
+                "actual_native_energy_gain": 0.8933676704869049
+              },
+              {
+                "degree": 7,
+                "cells": 8,
+                "actual_native_relative_field_error": 9.202420416738618e-08,
+                "independent_semidiscrete_spatial_error": 9.202174908265812e-08,
+                "actual_native_energy_gain": 0.8933693135389015
+              }
+            ]
+          },
+          {
+            "xi": 4.0,
+            "reference": {
+              "degree": 9,
+              "cells": 16,
+              "dt": 0.00015625
+            },
+            "reference_gain": 0.7346105379963391,
+            "records": [
+              {
+                "degree": 3,
+                "cells": 2,
+                "actual_native_relative_field_error": 0.05371298022557048,
+                "independent_semidiscrete_spatial_error": 0.05371282538885347,
+                "actual_native_energy_gain": 0.7340385542273581
+              },
+              {
+                "degree": 5,
+                "cells": 2,
+                "actual_native_relative_field_error": 0.006373256310149551,
+                "independent_semidiscrete_spatial_error": 0.006373225848411734,
+                "actual_native_energy_gain": 0.7345835991941273
+              },
+              {
+                "degree": 7,
+                "cells": 2,
+                "actual_native_relative_field_error": 0.0007124297362330176,
+                "independent_semidiscrete_spatial_error": 0.0007124223559200004,
+                "actual_native_energy_gain": 0.7346104046773807
+              },
+              {
+                "degree": 3,
+                "cells": 4,
+                "actual_native_relative_field_error": 0.0033051599779551554,
+                "independent_semidiscrete_spatial_error": 0.0033051582688200516,
+                "actual_native_energy_gain": 0.7345859008806256
+              },
+              {
+                "degree": 3,
+                "cells": 8,
+                "actual_native_relative_field_error": 0.0004378828875084486,
+                "independent_semidiscrete_spatial_error": 0.000437879445464181,
+                "actual_native_energy_gain": 0.7346091829057567
+              },
+              {
+                "degree": 7,
+                "cells": 8,
+                "actual_native_relative_field_error": 9.552162180852082e-08,
+                "independent_semidiscrete_spatial_error": 9.551823757086876e-08,
+                "actual_native_energy_gain": 0.7346105379972001
+              }
+            ]
+          }
+        ],
+        "temporal": [
+          {
+            "order": 1,
+            "records": [
+              {
+                "operator": "p7-n8-xi4",
+                "order": 1,
+                "dt": 0.0025,
+                "amplitude": 0.0001,
+                "gain": 0.6711348099434473,
+                "relative_error_to_semidiscrete_exponential": 0.039350255490379606,
+                "initial_covariance_minimum": 0.17775906925341897,
+                "final_covariance_minimum": 0.1777609529704689,
+                "wavelength": 1.5707963267948966,
+                "flow_time": 0.22315815978352216,
+                "turnover_time": 5.0,
+                "duration_in_flow_times": 0.22405633765981595,
+                "duration_in_turnover_times": 0.01
+              },
+              {
+                "operator": "p7-n8-xi4",
+                "order": 1,
+                "dt": 0.00125,
+                "amplitude": 0.0001,
+                "gain": 0.701862437826713,
+                "relative_error_to_semidiscrete_exponential": 0.019965765226728067,
+                "initial_covariance_minimum": 0.17775906925341897,
+                "final_covariance_minimum": 0.17776080641635367,
+                "wavelength": 1.5707963267948966,
+                "flow_time": 0.22315815978352216,
+                "turnover_time": 5.0,
+                "duration_in_flow_times": 0.22405633765981595,
+                "duration_in_turnover_times": 0.01
+              },
+              {
+                "operator": "p7-n8-xi4",
+                "order": 1,
+                "dt": 0.000625,
+                "amplitude": 0.0001,
+                "gain": 0.7179869087094173,
+                "relative_error_to_semidiscrete_exponential": 0.010054981872547162,
+                "initial_covariance_minimum": 0.17775906925341897,
+                "final_covariance_minimum": 0.17776072994901598,
+                "wavelength": 1.5707963267948966,
+                "flow_time": 0.22315815978352216,
+                "turnover_time": 5.0,
+                "duration_in_flow_times": 0.22405633765981595,
+                "duration_in_turnover_times": 0.01
+              }
+            ],
+            "actual_error_reduction": [
+              1.9708864170005176,
+              1.9856589976795525
+            ]
+          },
+          {
+            "order": 2,
+            "records": [
+              {
+                "operator": "p7-n8-xi4",
+                "order": 2,
+                "dt": 0.0025,
+                "amplitude": 0.0001,
+                "gain": 0.730423191240016,
+                "relative_error_to_semidiscrete_exponential": 0.0033761516332709795,
+                "initial_covariance_minimum": 0.17775906925341897,
+                "final_covariance_minimum": 0.1777606735541509,
+                "wavelength": 1.5707963267948966,
+                "flow_time": 0.22315815978352216,
+                "turnover_time": 5.0,
+                "duration_in_flow_times": 0.22405633765981595,
+                "duration_in_turnover_times": 0.01
+              },
+              {
+                "operator": "p7-n8-xi4",
+                "order": 2,
+                "dt": 0.00125,
+                "amplitude": 0.0001,
+                "gain": 0.7335949475895246,
+                "relative_error_to_semidiscrete_exponential": 0.0008461570674724568,
+                "initial_covariance_minimum": 0.17775906925341897,
+                "final_covariance_minimum": 0.17776065681495806,
+                "wavelength": 1.5707963267948966,
+                "flow_time": 0.22315815978352216,
+                "turnover_time": 5.0,
+                "duration_in_flow_times": 0.22405633765981595,
+                "duration_in_turnover_times": 0.01
+              },
+              {
+                "operator": "p7-n8-xi4",
+                "order": 2,
+                "dt": 0.000625,
+                "amplitude": 0.0001,
+                "gain": 0.7343714729583528,
+                "relative_error_to_semidiscrete_exponential": 0.00021145676282248213,
+                "initial_covariance_minimum": 0.17775906925341897,
+                "final_covariance_minimum": 0.17776065268789631,
+                "wavelength": 1.5707963267948966,
+                "flow_time": 0.22315815978352216,
+                "turnover_time": 5.0,
+                "duration_in_flow_times": 0.22405633765981595,
+                "duration_in_turnover_times": 0.01
+              }
+            ],
+            "actual_error_reduction": [
+              3.9899821948610934,
+              4.001560679252455
+            ]
+          }
+        ],
+        "initial_projection_control": [
+          {
+            "id": "p3-n2-xi1",
+            "relative_error": 3.6004960800137854e-11
+          },
+          {
+            "id": "p3-n2-xi2",
+            "relative_error": 3.6004960800137854e-11
+          },
+          {
+            "id": "p3-n2-xi4",
+            "relative_error": 3.6004960800137854e-11
+          },
+          {
+            "id": "p5-n2-xi1",
+            "relative_error": 1.120958989178959e-10
+          },
+          {
+            "id": "p5-n2-xi2",
+            "relative_error": 1.120958989178959e-10
+          },
+          {
+            "id": "p5-n2-xi4",
+            "relative_error": 1.120958989178959e-10
+          },
+          {
+            "id": "p7-n2-xi1",
+            "relative_error": 1.4076044227369395e-10
+          },
+          {
+            "id": "p7-n2-xi2",
+            "relative_error": 1.4076044227369395e-10
+          },
+          {
+            "id": "p7-n2-xi4",
+            "relative_error": 1.4076044227369395e-10
+          },
+          {
+            "id": "p3-n4-xi1",
+            "relative_error": 1.9849764837143232e-14
+          },
+          {
+            "id": "p3-n4-xi2",
+            "relative_error": 1.9849764837143232e-14
+          },
+          {
+            "id": "p3-n4-xi4",
+            "relative_error": 1.9849764837143232e-14
+          },
+          {
+            "id": "p3-n8-xi1",
+            "relative_error": 7.811806817882378e-16
+          },
+          {
+            "id": "p3-n8-xi2",
+            "relative_error": 7.811806817882378e-16
+          },
+          {
+            "id": "p3-n8-xi4",
+            "relative_error": 7.811806817882378e-16
+          },
+          {
+            "id": "p7-n8-xi1",
+            "relative_error": 1.706187241755941e-15
+          },
+          {
+            "id": "p7-n8-xi2",
+            "relative_error": 1.706187241755941e-15
+          },
+          {
+            "id": "p7-n8-xi4",
+            "relative_error": 1.706187241755941e-15
+          }
+        ],
+        "amplitude": {
+          "values": [
+            1e-05,
+            0.0001,
+            0.001
+          ],
+          "energy_gains": [
+            0.7346105379971856,
+            0.7346105379972002,
+            0.7346105379972243
+          ]
+        },
+        "restricted_controls": [
+          {
+            "chi": 0,
+            "eta": 0,
+            "matching_velocity": 5.780254367996082,
+            "maximum_operator_difference": 0
+          },
+          {
+            "chi": 0,
+            "eta": 1,
+            "matching_velocity": 5.780254367996082,
+            "maximum_operator_difference": 0
+          },
+          {
+            "chi": 0.5,
+            "eta": 0,
+            "matching_velocity": 5.780254367996082,
+            "maximum_operator_difference": 0
+          },
+          {
+            "chi": 0.5,
+            "eta": 1,
+            "matching_velocity": 5.780254367996082,
+            "maximum_operator_difference": 0
+          },
+          {
+            "chi": 1,
+            "eta": 0,
+            "matching_velocity": 5.780254367996082,
+            "maximum_operator_difference": 0
+          },
+          {
+            "chi": 1,
+            "eta": 1,
+            "matching_velocity": 5.780254367996082,
+            "maximum_operator_difference": 0
+          }
+        ],
+        "control_scope": "equal-input restricted outer tangent; chi uses original AWF momentum matching, eta subtracts fixed base stress; not a nonlinear whole-patch identity",
+        "covariance_scope": "selected nonlinear stress sampled at native volume GL points and four phases at initial/final epochs; no continuum minimum claim"
+      }
+    },
+    {
+      "native_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/transverse-001/variant-3-native.json",
+      "native_report_sha256": "110aeae24f150a3cbf03769ea9320182e17bc049b37b9130c866ad53050c9aa1",
+      "sections": {
+        "beta": 0.4,
+        "gamma_scale": 0.25,
+        "qualification": "reference_local_reduced_transverse_decay",
+        "global_or_coupled_stability": "not_qualified",
+        "constitutive": [
+          {
+            "z": 4,
+            "relative_step": 0.001,
+            "tangent_error": 3.885912758794241e-07,
+            "diagonal_ratios": [
+              0.4641768373743099,
+              1.2499999999999998
+            ]
+          },
+          {
+            "z": 4,
+            "relative_step": 0.0001,
+            "tangent_error": 3.88591592237475e-09,
+            "diagonal_ratios": [
+              0.4641768373743099,
+              1.2499999999999998
+            ]
+          },
+          {
+            "z": 4,
+            "relative_step": 1e-05,
+            "tangent_error": 3.8859027107207567e-11,
+            "diagonal_ratios": [
+              0.4641768373743099,
+              1.2499999999999998
+            ]
+          },
+          {
+            "z": 4,
+            "relative_step": 1e-06,
+            "tangent_error": 3.8835601401387976e-13,
+            "diagonal_ratios": [
+              0.4641768373743099,
+              1.2499999999999998
+            ]
+          },
+          {
+            "z": 8,
+            "relative_step": 0.001,
+            "tangent_error": 4.4102579877799683e-07,
+            "diagonal_ratios": [
+              0.4641768373743099,
+              1.2499999999999998
+            ]
+          },
+          {
+            "z": 8,
+            "relative_step": 0.0001,
+            "tangent_error": 4.41026157823788e-09,
+            "diagonal_ratios": [
+              0.4641768373743099,
+              1.2499999999999998
+            ]
+          },
+          {
+            "z": 8,
+            "relative_step": 1e-05,
+            "tangent_error": 4.410246583870746e-11,
+            "diagonal_ratios": [
+              0.4641768373743099,
+              1.2499999999999998
+            ]
+          },
+          {
+            "z": 8,
+            "relative_step": 1e-06,
+            "tangent_error": 4.407587918773944e-13,
+            "diagonal_ratios": [
+              0.4641768373743099,
+              1.2499999999999998
+            ]
+          },
+          {
+            "z": 12,
+            "relative_step": 0.001,
+            "tangent_error": 4.410257987989972e-07,
+            "diagonal_ratios": [
+              0.4641768373743099,
+              1.2500000000000002
+            ]
+          },
+          {
+            "z": 12,
+            "relative_step": 0.0001,
+            "tangent_error": 4.410261620238907e-09,
+            "diagonal_ratios": [
+              0.4641768373743099,
+              1.2500000000000002
+            ]
+          },
+          {
+            "z": 12,
+            "relative_step": 1e-05,
+            "tangent_error": 4.410246583870745e-11,
+            "diagonal_ratios": [
+              0.4641768373743099,
+              1.2500000000000002
+            ]
+          },
+          {
+            "z": 12,
+            "relative_step": 1e-06,
+            "tangent_error": 4.408847949625508e-13,
+            "diagonal_ratios": [
+              0.4641768373743099,
+              1.2500000000000002
+            ]
+          }
+        ],
+        "trials": [
+          {
+            "operator": "p3-n2-xi1",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.8825467945685433,
+            "relative_error_to_semidiscrete_exponential": 8.276257437179123e-07,
+            "initial_covariance_minimum": 0.17776353182234178,
+            "final_covariance_minimum": 0.17776362608647187,
+            "wavelength": 6.283185307179586,
+            "flow_time": 0.8926326391340886,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.05601408441495399,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p3-n2-xi2",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.7256819370666057,
+            "relative_error_to_semidiscrete_exponential": 3.0087281695701193e-06,
+            "initial_covariance_minimum": 0.17776232952656126,
+            "final_covariance_minimum": 0.17776288526293652,
+            "wavelength": 3.141592653589793,
+            "flow_time": 0.4463163195670443,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.11202816882990797,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p3-n2-xi4",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.33330882549873697,
+            "relative_error_to_semidiscrete_exponential": 8.877855281357916e-06,
+            "initial_covariance_minimum": 0.1777575206527632,
+            "final_covariance_minimum": 0.17776209251022,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p5-n2-xi1",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.8833467115346203,
+            "relative_error_to_semidiscrete_exponential": 8.263324784993399e-07,
+            "initial_covariance_minimum": 0.17776356606005328,
+            "final_covariance_minimum": 0.17776363571704534,
+            "wavelength": 6.283185307179586,
+            "flow_time": 0.8926326391340886,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.05601408441495399,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p5-n2-xi2",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.7262931018211223,
+            "relative_error_to_semidiscrete_exponential": 3.009407726108395e-06,
+            "initial_covariance_minimum": 0.17776246647403413,
+            "final_covariance_minimum": 0.17776292846938777,
+            "wavelength": 3.141592653589793,
+            "flow_time": 0.4463163195670443,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.11202816882990797,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p5-n2-xi4",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.33343575997760055,
+            "relative_error_to_semidiscrete_exponential": 8.882092333290764e-06,
+            "initial_covariance_minimum": 0.17775806838869143,
+            "final_covariance_minimum": 0.17776218247613956,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n2-xi1",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.8833790332171462,
+            "relative_error_to_semidiscrete_exponential": 8.262602580012587e-07,
+            "initial_covariance_minimum": 0.17776356581826036,
+            "final_covariance_minimum": 0.1777636383530113,
+            "wavelength": 6.283185307179586,
+            "flow_time": 0.8926326391340886,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.05601408441495399,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n2-xi2",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.7263179659228907,
+            "relative_error_to_semidiscrete_exponential": 3.009453692372198e-06,
+            "initial_covariance_minimum": 0.17776246550688515,
+            "final_covariance_minimum": 0.17776293528601633,
+            "wavelength": 3.141592653589793,
+            "flow_time": 0.4463163195670443,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.11202816882990797,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n2-xi4",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.3334425615464706,
+            "relative_error_to_semidiscrete_exponential": 8.882263706256436e-06,
+            "initial_covariance_minimum": 0.1777580645204599,
+            "final_covariance_minimum": 0.17776219357734355,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p3-n4-xi1",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.8833460092157864,
+            "relative_error_to_semidiscrete_exponential": 8.263003061657957e-07,
+            "initial_covariance_minimum": 0.17776356519521858,
+            "final_covariance_minimum": 0.1777636363973112,
+            "wavelength": 6.283185307179586,
+            "flow_time": 0.8926326391340886,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.05601408441495399,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p3-n4-xi2",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.7262903466451383,
+            "relative_error_to_semidiscrete_exponential": 3.0094198261196655e-06,
+            "initial_covariance_minimum": 0.17776246301477672,
+            "final_covariance_minimum": 0.17776292990604797,
+            "wavelength": 3.141592653589793,
+            "flow_time": 0.4463163195670443,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.11202816882990797,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p3-n4-xi4",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.33342768232812037,
+            "relative_error_to_semidiscrete_exponential": 8.882103194230163e-06,
+            "initial_covariance_minimum": 0.17775805455296598,
+            "final_covariance_minimum": 0.17776218904032143,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p3-n8-xi1",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.8833773451845234,
+            "relative_error_to_semidiscrete_exponential": 8.262593862090255e-07,
+            "initial_covariance_minimum": 0.17776356644883629,
+            "final_covariance_minimum": 0.17776363774045786,
+            "wavelength": 6.283185307179586,
+            "flow_time": 0.8926326391340886,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.05601408441495399,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p3-n8-xi2",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.7263166140570421,
+            "relative_error_to_semidiscrete_exponential": 3.009451572145554e-06,
+            "initial_covariance_minimum": 0.17776246802912993,
+            "final_covariance_minimum": 0.17776293340576915,
+            "wavelength": 3.141592653589793,
+            "flow_time": 0.4463163195670443,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.11202816882990797,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p3-n8-xi4",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.3334420396554613,
+            "relative_error_to_semidiscrete_exponential": 8.8822569182161e-06,
+            "initial_covariance_minimum": 0.17775807460848927,
+            "final_covariance_minimum": 0.1777621913296585,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n8-xi1",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.8833789956796432,
+            "relative_error_to_semidiscrete_exponential": 8.262589975064578e-07,
+            "initial_covariance_minimum": 0.1777635665043184,
+            "final_covariance_minimum": 0.17776363776423235,
+            "wavelength": 6.283185307179586,
+            "flow_time": 0.8926326391340886,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.05601408441495399,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n8-xi2",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.7263179771607878,
+            "relative_error_to_semidiscrete_exponential": 3.0094537880581613e-06,
+            "initial_covariance_minimum": 0.1777624682510528,
+            "final_covariance_minimum": 0.17776293365360424,
+            "wavelength": 3.141592653589793,
+            "flow_time": 0.4463163195670443,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.11202816882990797,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n8-xi4",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.0001,
+            "gain": 0.33344268576141894,
+            "relative_error_to_semidiscrete_exponential": 8.882264636802505e-06,
+            "initial_covariance_minimum": 0.17775807549609776,
+            "final_covariance_minimum": 0.177762191861699,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n8-xi4",
+            "order": 1,
+            "dt": 0.0025,
+            "amplitude": 0.0001,
+            "gain": 0.3099204244291288,
+            "relative_error_to_semidiscrete_exponential": 0.03009467534388963,
+            "initial_covariance_minimum": 0.17775807549609776,
+            "final_covariance_minimum": 0.17776234183880765,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n8-xi4",
+            "order": 1,
+            "dt": 0.00125,
+            "amplitude": 0.0001,
+            "gain": 0.3210825984813496,
+            "relative_error_to_semidiscrete_exponential": 0.015332565180060783,
+            "initial_covariance_minimum": 0.17775807549609776,
+            "final_covariance_minimum": 0.17776226973285197,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n8-xi4",
+            "order": 1,
+            "dt": 0.000625,
+            "amplitude": 0.0001,
+            "gain": 0.32710685904421105,
+            "relative_error_to_semidiscrete_exponential": 0.0077389275652504155,
+            "initial_covariance_minimum": 0.17775807549609776,
+            "final_covariance_minimum": 0.17776223154538662,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n8-xi4",
+            "order": 2,
+            "dt": 0.0025,
+            "amplitude": 0.0001,
+            "gain": 0.33296110018570185,
+            "relative_error_to_semidiscrete_exponential": 0.002303445792611188,
+            "initial_covariance_minimum": 0.17775807549609776,
+            "final_covariance_minimum": 0.17776219678495497,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n8-xi4",
+            "order": 2,
+            "dt": 0.00125,
+            "amplitude": 0.0001,
+            "gain": 0.3333403149623719,
+            "relative_error_to_semidiscrete_exponential": 0.0005729593631280228,
+            "initial_covariance_minimum": 0.17775807549609776,
+            "final_covariance_minimum": 0.17776219298456958,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n8-xi4",
+            "order": 2,
+            "dt": 0.000625,
+            "amplitude": 0.0001,
+            "gain": 0.33342018612056185,
+            "relative_error_to_semidiscrete_exponential": 0.000142650614454817,
+            "initial_covariance_minimum": 0.17775807549609776,
+            "final_covariance_minimum": 0.1777621921185217,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n8-xi4",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 1e-05,
+            "gain": 0.33344268576141795,
+            "relative_error_to_semidiscrete_exponential": 8.882264641440107e-06,
+            "initial_covariance_minimum": 0.17776387401985858,
+            "final_covariance_minimum": 0.1777639151868273,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          },
+          {
+            "operator": "p7-n8-xi4",
+            "order": 2,
+            "dt": 0.00015625,
+            "amplitude": 0.001,
+            "gain": 0.33344268576141456,
+            "relative_error_to_semidiscrete_exponential": 8.882264638764127e-06,
+            "initial_covariance_minimum": 0.17718181704374403,
+            "final_covariance_minimum": 0.17759017980628158,
+            "wavelength": 1.5707963267948966,
+            "flow_time": 0.22315815978352216,
+            "turnover_time": 5.0,
+            "duration_in_flow_times": 0.22405633765981595,
+            "duration_in_turnover_times": 0.01
+          }
+        ],
+        "spatial": [
+          {
+            "xi": 1.0,
+            "reference": {
+              "degree": 9,
+              "cells": 16,
+              "dt": 0.00015625
+            },
+            "reference_gain": 0.8833789956774374,
+            "records": [
+              {
+                "degree": 3,
+                "cells": 2,
+                "actual_native_relative_field_error": 0.05165559336928948,
+                "independent_semidiscrete_spatial_error": 0.05165556274179667,
+                "actual_native_energy_gain": 0.8825467945685428
+              },
+              {
+                "degree": 5,
+                "cells": 2,
+                "actual_native_relative_field_error": 0.005994173838533969,
+                "independent_semidiscrete_spatial_error": 0.005994166741678386,
+                "actual_native_energy_gain": 0.8833467115346204
+              },
+              {
+                "degree": 7,
+                "cells": 2,
+                "actual_native_relative_field_error": 0.0006204138411184603,
+                "independent_semidiscrete_spatial_error": 0.0006204115471470926,
+                "actual_native_energy_gain": 0.8833790332171464
+              },
+              {
+                "degree": 3,
+                "cells": 4,
+                "actual_native_relative_field_error": 0.0031941306220051673,
+                "independent_semidiscrete_spatial_error": 0.0031941295906979666,
+                "actual_native_energy_gain": 0.8833460092157863
+              },
+              {
+                "degree": 3,
+                "cells": 8,
+                "actual_native_relative_field_error": 0.00039694988258184464,
+                "independent_semidiscrete_spatial_error": 0.0003969490540713239,
+                "actual_native_energy_gain": 0.8833773451845234
+              },
+              {
+                "degree": 7,
+                "cells": 8,
+                "actual_native_relative_field_error": 7.872843445892356e-08,
+                "independent_semidiscrete_spatial_error": 7.872635320332181e-08,
+                "actual_native_energy_gain": 0.883378995679643
+              }
+            ]
+          },
+          {
+            "xi": 2.0,
+            "reference": {
+              "degree": 9,
+              "cells": 16,
+              "dt": 0.00015625
+            },
+            "reference_gain": 0.7263179771591144,
+            "records": [
+              {
+                "degree": 3,
+                "cells": 2,
+                "actual_native_relative_field_error": 0.0517192231096379,
+                "independent_semidiscrete_spatial_error": 0.05171915811088373,
+                "actual_native_energy_gain": 0.7256819370666052
+              },
+              {
+                "degree": 5,
+                "cells": 2,
+                "actual_native_relative_field_error": 0.0059846886527287506,
+                "independent_semidiscrete_spatial_error": 0.005984673798717629,
+                "actual_native_energy_gain": 0.7262931018211224
+              },
+              {
+                "degree": 7,
+                "cells": 2,
+                "actual_native_relative_field_error": 0.0006344260737905741,
+                "independent_semidiscrete_spatial_error": 0.0006344223256118562,
+                "actual_native_energy_gain": 0.7263179659228908
+              },
+              {
+                "degree": 3,
+                "cells": 4,
+                "actual_native_relative_field_error": 0.0032587197980013913,
+                "independent_semidiscrete_spatial_error": 0.0032587182277879706,
+                "actual_native_energy_gain": 0.7262903466451381
+              },
+              {
+                "degree": 3,
+                "cells": 8,
+                "actual_native_relative_field_error": 0.0004014001288825376,
+                "independent_semidiscrete_spatial_error": 0.00040139870070399875,
+                "actual_native_energy_gain": 0.7263166140570421
+              },
+              {
+                "degree": 7,
+                "cells": 8,
+                "actual_native_relative_field_error": 8.152756131172922e-08,
+                "independent_semidiscrete_spatial_error": 8.152505766359988e-08,
+                "actual_native_energy_gain": 0.7263179771607877
+              }
+            ]
+          },
+          {
+            "xi": 4.0,
+            "reference": {
+              "degree": 9,
+              "cells": 16,
+              "dt": 0.00015625
+            },
+            "reference_gain": 0.3334426857609432,
+            "records": [
+              {
+                "degree": 3,
+                "cells": 2,
+                "actual_native_relative_field_error": 0.05179777592815852,
+                "independent_semidiscrete_spatial_error": 0.05179758588484311,
+                "actual_native_energy_gain": 0.3333088254987368
+              },
+              {
+                "degree": 5,
+                "cells": 2,
+                "actual_native_relative_field_error": 0.005918844573728998,
+                "independent_semidiscrete_spatial_error": 0.005918797635230288,
+                "actual_native_energy_gain": 0.3334357599776006
+              },
+              {
+                "degree": 7,
+                "cells": 2,
+                "actual_native_relative_field_error": 0.0007089510759757758,
+                "independent_semidiscrete_spatial_error": 0.000708943085685467,
+                "actual_native_energy_gain": 0.3334425615464707
+              },
+              {
+                "degree": 3,
+                "cells": 4,
+                "actual_native_relative_field_error": 0.003660262100912557,
+                "independent_semidiscrete_spatial_error": 0.0036602723278206916,
+                "actual_native_energy_gain": 0.3334276823281203
+              },
+              {
+                "degree": 3,
+                "cells": 8,
+                "actual_native_relative_field_error": 0.00042353953549387403,
+                "independent_semidiscrete_spatial_error": 0.00042353647900180184,
+                "actual_native_energy_gain": 0.3334420396554613
+              },
+              {
+                "degree": 7,
+                "cells": 8,
+                "actual_native_relative_field_error": 9.498876340177815e-08,
+                "independent_semidiscrete_spatial_error": 9.49846272418774e-08,
+                "actual_native_energy_gain": 0.3334426857614189
+              }
+            ]
+          }
+        ],
+        "temporal": [
+          {
+            "order": 1,
+            "records": [
+              {
+                "operator": "p7-n8-xi4",
+                "order": 1,
+                "dt": 0.0025,
+                "amplitude": 0.0001,
+                "gain": 0.3099204244291288,
+                "relative_error_to_semidiscrete_exponential": 0.03009467534388963,
+                "initial_covariance_minimum": 0.17775807549609776,
+                "final_covariance_minimum": 0.17776234183880765,
+                "wavelength": 1.5707963267948966,
+                "flow_time": 0.22315815978352216,
+                "turnover_time": 5.0,
+                "duration_in_flow_times": 0.22405633765981595,
+                "duration_in_turnover_times": 0.01
+              },
+              {
+                "operator": "p7-n8-xi4",
+                "order": 1,
+                "dt": 0.00125,
+                "amplitude": 0.0001,
+                "gain": 0.3210825984813496,
+                "relative_error_to_semidiscrete_exponential": 0.015332565180060783,
+                "initial_covariance_minimum": 0.17775807549609776,
+                "final_covariance_minimum": 0.17776226973285197,
+                "wavelength": 1.5707963267948966,
+                "flow_time": 0.22315815978352216,
+                "turnover_time": 5.0,
+                "duration_in_flow_times": 0.22405633765981595,
+                "duration_in_turnover_times": 0.01
+              },
+              {
+                "operator": "p7-n8-xi4",
+                "order": 1,
+                "dt": 0.000625,
+                "amplitude": 0.0001,
+                "gain": 0.32710685904421105,
+                "relative_error_to_semidiscrete_exponential": 0.0077389275652504155,
+                "initial_covariance_minimum": 0.17775807549609776,
+                "final_covariance_minimum": 0.17776223154538662,
+                "wavelength": 1.5707963267948966,
+                "flow_time": 0.22315815978352216,
+                "turnover_time": 5.0,
+                "duration_in_flow_times": 0.22405633765981595,
+                "duration_in_turnover_times": 0.01
+              }
+            ],
+            "actual_error_reduction": [
+              1.9627945481051152,
+              1.9812260873079581
+            ]
+          },
+          {
+            "order": 2,
+            "records": [
+              {
+                "operator": "p7-n8-xi4",
+                "order": 2,
+                "dt": 0.0025,
+                "amplitude": 0.0001,
+                "gain": 0.33296110018570185,
+                "relative_error_to_semidiscrete_exponential": 0.002303445792611188,
+                "initial_covariance_minimum": 0.17775807549609776,
+                "final_covariance_minimum": 0.17776219678495497,
+                "wavelength": 1.5707963267948966,
+                "flow_time": 0.22315815978352216,
+                "turnover_time": 5.0,
+                "duration_in_flow_times": 0.22405633765981595,
+                "duration_in_turnover_times": 0.01
+              },
+              {
+                "operator": "p7-n8-xi4",
+                "order": 2,
+                "dt": 0.00125,
+                "amplitude": 0.0001,
+                "gain": 0.3333403149623719,
+                "relative_error_to_semidiscrete_exponential": 0.0005729593631280228,
+                "initial_covariance_minimum": 0.17775807549609776,
+                "final_covariance_minimum": 0.17776219298456958,
+                "wavelength": 1.5707963267948966,
+                "flow_time": 0.22315815978352216,
+                "turnover_time": 5.0,
+                "duration_in_flow_times": 0.22405633765981595,
+                "duration_in_turnover_times": 0.01
+              },
+              {
+                "operator": "p7-n8-xi4",
+                "order": 2,
+                "dt": 0.000625,
+                "amplitude": 0.0001,
+                "gain": 0.33342018612056185,
+                "relative_error_to_semidiscrete_exponential": 0.000142650614454817,
+                "initial_covariance_minimum": 0.17775807549609776,
+                "final_covariance_minimum": 0.1777621921185217,
+                "wavelength": 1.5707963267948966,
+                "flow_time": 0.22315815978352216,
+                "turnover_time": 5.0,
+                "duration_in_flow_times": 0.22405633765981595,
+                "duration_in_turnover_times": 0.01
+              }
+            ],
+            "actual_error_reduction": [
+              4.020260320096214,
+              4.0165222233199795
+            ]
+          }
+        ],
+        "initial_projection_control": [
+          {
+            "id": "p3-n2-xi1",
+            "relative_error": 3.6004960800137854e-11
+          },
+          {
+            "id": "p3-n2-xi2",
+            "relative_error": 3.6004960800137854e-11
+          },
+          {
+            "id": "p3-n2-xi4",
+            "relative_error": 3.6004960800137854e-11
+          },
+          {
+            "id": "p5-n2-xi1",
+            "relative_error": 1.120958989178959e-10
+          },
+          {
+            "id": "p5-n2-xi2",
+            "relative_error": 1.120958989178959e-10
+          },
+          {
+            "id": "p5-n2-xi4",
+            "relative_error": 1.120958989178959e-10
+          },
+          {
+            "id": "p7-n2-xi1",
+            "relative_error": 1.4076044227369395e-10
+          },
+          {
+            "id": "p7-n2-xi2",
+            "relative_error": 1.4076044227369395e-10
+          },
+          {
+            "id": "p7-n2-xi4",
+            "relative_error": 1.4076044227369395e-10
+          },
+          {
+            "id": "p3-n4-xi1",
+            "relative_error": 1.9849764837143232e-14
+          },
+          {
+            "id": "p3-n4-xi2",
+            "relative_error": 1.9849764837143232e-14
+          },
+          {
+            "id": "p3-n4-xi4",
+            "relative_error": 1.9849764837143232e-14
+          },
+          {
+            "id": "p3-n8-xi1",
+            "relative_error": 7.811806817882378e-16
+          },
+          {
+            "id": "p3-n8-xi2",
+            "relative_error": 7.811806817882378e-16
+          },
+          {
+            "id": "p3-n8-xi4",
+            "relative_error": 7.811806817882378e-16
+          },
+          {
+            "id": "p7-n8-xi1",
+            "relative_error": 1.706187241755941e-15
+          },
+          {
+            "id": "p7-n8-xi2",
+            "relative_error": 1.706187241755941e-15
+          },
+          {
+            "id": "p7-n8-xi4",
+            "relative_error": 1.706187241755941e-15
+          }
+        ],
+        "amplitude": {
+          "values": [
+            1e-05,
+            0.0001,
+            0.001
+          ],
+          "energy_gains": [
+            0.33344268576141795,
+            0.33344268576141894,
+            0.33344268576141456
+          ]
+        },
+        "restricted_controls": [
+          {
+            "chi": 0,
+            "eta": 0,
+            "matching_velocity": 5.780254367996082,
+            "maximum_operator_difference": 0
+          },
+          {
+            "chi": 0,
+            "eta": 1,
+            "matching_velocity": 5.780254367996082,
+            "maximum_operator_difference": 0
+          },
+          {
+            "chi": 0.5,
+            "eta": 0,
+            "matching_velocity": 5.780254367996082,
+            "maximum_operator_difference": 0
+          },
+          {
+            "chi": 0.5,
+            "eta": 1,
+            "matching_velocity": 5.780254367996082,
+            "maximum_operator_difference": 0
+          },
+          {
+            "chi": 1,
+            "eta": 0,
+            "matching_velocity": 5.780254367996082,
+            "maximum_operator_difference": 0
+          },
+          {
+            "chi": 1,
+            "eta": 1,
+            "matching_velocity": 5.780254367996082,
+            "maximum_operator_difference": 0
+          }
+        ],
+        "control_scope": "equal-input restricted outer tangent; chi uses original AWF momentum matching, eta subtracts fixed base stress; not a nonlinear whole-patch identity",
+        "covariance_scope": "selected nonlinear stress sampled at native volume GL points and four phases at initial/final epochs; no continuum minimum claim"
+      }
+    }
+  ],
+  "experiment_plan": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/transverse-001/experiment-plan.json",
+  "experiment_plan_sha256": "d40e6330c7cdfc1f4765e904b731085825fac18041d5d582ffc54348f5297c56",
+  "physical_stability_gate": "reference_local_transverse_decay_verified",
+  "global_or_coupled_stability": "not_qualified",
+  "versions": {
+    "numpy": "1.21.5",
+    "scipy": "1.8.0"
+  },
+  "script_sha256": "16b20808cb8f18dc020f4484aadddbd83d83d655a6bd4ef31e7487e603443375",
+  "environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "TMPDIR": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/tmp",
+    "LD_LIBRARY_PATH": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/geometry-lib:/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/geometry-lib:",
+    "cpu_affinity": [
+      26
+    ]
+  },
+  "checks": 305254,
+  "errors": {
+    "explicit_selected_variant": 0.0,
+    "independent_unchanged_reference_inputs": 3.700743415417188e-17,
+    "full_indexed_selected_transverse_block": 3.085237692971011e-16,
+    "native_selected_transverse_tangent": 5.84129557343441e-07,
+    "reference_stress_preserved": 0.0,
+    "reference_production_preserved": 3.469446951953614e-18,
+    "original_diffusion_coefficient_retained": 1.5750385644560976e-16,
+    "reference_covariance": 1.3877787807814457e-16,
+    "compiled_zero_linear_turbulence_forcing": 0.0,
+    "indexed_zero_linear_turbulence_forcing": 0.0,
+    "native_physical_mass": 6.661338147750941e-16,
+    "complete_real_selected_weak_operator": 5.220524659406243e-12,
+    "complete_imaginary_selected_weak_operator": 1.2340510842227315e-14,
+    "independent_mixed_derivative_cancellation": 5.85634806606563e-16,
+    "native_finite_rule_initial_projection": 1.940114735532461e-14,
+    "all_compiled_zero_turbulence_forcing": 0.0,
+    "native_Modified_A_basis": 6.262351748276274e-16,
+    "native_Modified_A_derivative": 4.220800375544866e-13,
+    "native_initial_amplitude": 1.940128965685975e-14,
+    "native_time": 3.8163916471489756e-16,
+    "native_stage_epoch": 3.8163916471489756e-16,
+    "native_IMEX_lambda": 2.168404344971009e-19,
+    "complete_native_stage_history": 2.009907539880784e-12,
+    "complete_native_IMEX_recurrence": 2.0062483575486456e-12,
+    "native_physical_energy": 1.3469809094813503e-12,
+    "native_complete_energy_identity": 4.793708694367717e-12,
+    "finite_initial_covariance": 2.498001805406602e-16,
+    "finite_final_covariance": 2.220446049250313e-16,
+    "all_native_history_slots": 2.002792463123848e-12,
+    "all_native_history_epochs": 3.8163916471489756e-16,
+    "actual_native_energy_gain": 4.440892098500626e-16,
+    "linear_amplitude_energy_gain": 4.951594689828198e-14,
+    "original_AWF_matching_retained": 0.0,
+    "restricted_outer_chi_eta_identity": 0.0
+  },
+  "source_commit": "07363199e68a6cf3b6a8cc20fe0a4eae67c2d311",
+  "source_clean_start": true,
+  "frozen_inputs": {
+    "docs/literature/cls_neutral_abl_equilibrium_awf_note_revised.tex": "d35e437c2f2f8b25a46f7a3f285c6f1ad8b48d7b554aa1d161315f59eeb6de0f",
+    "docs/plans/cls-epawf-revised-contract-v1.json": "4e7bd75022409b8dc2ef31cc73425779b646a97535760b31eeea4ec49087de8a",
+    "library/SolverUtils/Turbulence/RANSModels.cpp": "86a7154ba3cb27e4d3319aa42d156a228fd1b180f35f9b217159822ec9d66b05",
+    "library/SolverUtils/Turbulence/AnalyticalWallFunction.cpp": "5baf29819fed6b81ad1b042bc09258a3e0779d15de13076b688bf32f80ddcf7e"
+  },
+  "original_control": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/source/docs/plans/cls-epawf-revised-evidence/m7/transverse-validation.json",
+    "sha256": "5ef3760a756cecf6db759661958379c72bde5ec89a7ff59a5703b7fabf4a36d4",
+    "source_commit": "dea75dab62fb59f5264868f3d2033d13e0b4ef57",
+    "checks": 101736,
+    "physical_stability_gate": "failed_as_specified",
+    "scope": "reused original M7 witness, not a newly rerun legacy suite"
+  },
+  "program": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/RANSTransverseEvolutionProbe",
+    "sha256": "2a9fc320e9ef8710d00b04607f73d4a72d3587c2a40c6b5c4983a6495e3e91e5",
+    "sha256_end": "2a9fc320e9ef8710d00b04607f73d4a72d3587c2a40c6b5c4983a6495e3e91e5"
+  },
+  "source_commit_end": "07363199e68a6cf3b6a8cc20fe0a4eae67c2d311",
+  "source_clean_end": true,
+  "finished_utc": "2026-11-03T05:13:52.022784+00:00"
+}

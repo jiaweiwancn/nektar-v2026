@@ -1,0 +1,241 @@
+{
+  "schema": 1,
+  "status": "finite_coverage_verified",
+  "finite_coverage_pass": true,
+  "model_variant": "Regularized",
+  "robust_parameters": [
+    0.4,
+    0,
+    0.2,
+    0.1,
+    0,
+    1,
+    1
+  ],
+  "accepted_records": 1,
+  "accepted_trajectory_complete": true,
+  "state_scope": "Every supplied accepted record, including its initial state; a failed trajectory remains incomplete",
+  "normalization": "A*=Qincoming^T grad(U) Qincoming/G0; k/K0; epsilon/epsilon0; G0=us/(kappa*r),K0=Qstar*us^2,epsilon0=us^3/(kappa*r)",
+  "incoming_basis": [
+    [
+      1,
+      0,
+      0
+    ],
+    [
+      0,
+      1,
+      0
+    ],
+    [
+      0,
+      0,
+      1
+    ]
+  ],
+  "per_set_evaluations": {
+    "source_volume_outer": 128,
+    "mass_volume_outer": 200,
+    "reconstruction_native_outer": 200,
+    "reconstruction_dense_outer": 578,
+    "interface_outer": 8,
+    "trace_transfer_outer": 10
+  },
+  "extrema": {
+    "gradient_entry_deviation": 0.00010243324964909206,
+    "k_over_K0": [
+      0.9999999999999998,
+      1.0000000000000002
+    ],
+    "epsilon_over_epsilon0": [
+      0.9999952053657274,
+      1.0000019986260453
+    ],
+    "gamma_over_nut0": [
+      1.0,
+      1.0
+    ]
+  },
+  "native_sampling_complete": true,
+  "native_GLL_metadata_issue": null,
+  "native_count_checks": [
+    {
+      "state": 0,
+      "locations": "source_volume_outer",
+      "expected": 128,
+      "native": 128,
+      "equal": true
+    },
+    {
+      "state": 0,
+      "locations": "interface_outer",
+      "expected": 8,
+      "native": 8,
+      "equal": true
+    },
+    {
+      "state": 0,
+      "locations": "reconstruction_dense_all_regions",
+      "expected": 1445,
+      "native": 1445,
+      "equal": true
+    },
+    {
+      "state": 0,
+      "locations": "reconstruction_native_all_regions",
+      "expected": 500,
+      "native": 500,
+      "equal": true
+    }
+  ],
+  "certificate_boxes": [
+    {
+      "certificate_box_index": 0,
+      "beta": 0.4,
+      "center": [
+        [
+          0.0,
+          0.0,
+          1.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "radius": 0.001,
+      "k_range": [
+        0.99,
+        1.01
+      ],
+      "epsilon_range": [
+        0.99,
+        1.01
+      ],
+      "required_gamma_over_nut0": 0.6374675261974335,
+      "target_over_nut0": 0.1,
+      "fixed_gamma_candidates": [
+        {
+          "gamma_over_nut0": 1.0,
+          "certificate_joint_gate": true,
+          "certificate_momentum_target_met": true,
+          "certificate_covariance_positive": true,
+          "actual_gamma_exact_match": true,
+          "note": "Covariance proof is for this fixed Gamma; a larger Gamma is not automatically covered"
+        },
+        {
+          "gamma_over_nut0": 3.0,
+          "certificate_joint_gate": true,
+          "certificate_momentum_target_met": true,
+          "certificate_covariance_positive": true,
+          "actual_gamma_exact_match": false,
+          "note": "Covariance proof is for this fixed Gamma; a larger Gamma is not automatically covered"
+        }
+      ],
+      "sample_count": 1124,
+      "violation_count": 0,
+      "violations_by_set": {
+        "source_volume_outer": 0,
+        "mass_volume_outer": 0,
+        "reconstruction_native_outer": 0,
+        "reconstruction_dense_outer": 0,
+        "interface_outer": 0,
+        "trace_transfer_outer": 0
+      },
+      "examples": [],
+      "finite_state_box_covered": true,
+      "finite_fraction_inside": 1.0,
+      "momentum_gamma_condition_met": true,
+      "matching_joint_certificate": true,
+      "all_declared_finite_sets_covered_by_joint_certificate": true
+    },
+    {
+      "certificate_box_index": 1,
+      "beta": 0.4,
+      "center": [
+        [
+          0.0,
+          0.0,
+          1.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "radius": 0.01,
+      "k_range": [
+        0.99,
+        1.01
+      ],
+      "epsilon_range": [
+        0.99,
+        1.01
+      ],
+      "required_gamma_over_nut0": 2.8813869507610796,
+      "target_over_nut0": 0.1,
+      "fixed_gamma_candidates": [
+        {
+          "gamma_over_nut0": 1.0,
+          "certificate_joint_gate": false,
+          "certificate_momentum_target_met": false,
+          "certificate_covariance_positive": true,
+          "actual_gamma_exact_match": true,
+          "note": "Covariance proof is for this fixed Gamma; a larger Gamma is not automatically covered"
+        },
+        {
+          "gamma_over_nut0": 3.0,
+          "certificate_joint_gate": true,
+          "certificate_momentum_target_met": true,
+          "certificate_covariance_positive": true,
+          "actual_gamma_exact_match": false,
+          "note": "Covariance proof is for this fixed Gamma; a larger Gamma is not automatically covered"
+        }
+      ],
+      "sample_count": 1124,
+      "violation_count": 0,
+      "violations_by_set": {
+        "source_volume_outer": 0,
+        "mass_volume_outer": 0,
+        "reconstruction_native_outer": 0,
+        "reconstruction_dense_outer": 0,
+        "interface_outer": 0,
+        "trace_transfer_outer": 0
+      },
+      "examples": [],
+      "finite_state_box_covered": true,
+      "finite_fraction_inside": 1.0,
+      "momentum_gamma_condition_met": false,
+      "matching_joint_certificate": false,
+      "all_declared_finite_sets_covered_by_joint_certificate": false
+    }
+  ],
+  "inner_scope": "Inner stress and source admissibility require separate gates; this is an outer constitutive certificate",
+  "mms_scope": "Manufactured states may intentionally lie outside the neutral reference box; successful equation verification does not extend this certificate",
+  "excluded_claims": [
+    "polynomial-everywhere state coverage",
+    "PDE state-envelope invariance",
+    "outer k/epsilon positivity theorem",
+    "coupled-mode/long-time stability",
+    "physical terrain qualification"
+  ],
+  "limitations": "Double-precision coefficient reconstruction is a finite numerical audit. The outward-rounded interval certificate supplies the separate declared mathematical bound.",
+  "inputs": {
+    "native_sha256": "2cc4f425f1c18d83e9c5bc1017f6c82df8ed77ac9667f852cce09278dd612145",
+    "session_sha256": "5bbffa2d362ebbceb86016d21698dd7ebebe4ac2d37c2c79c8d864dc19d43929",
+    "certificate_sha256": "f26e81c5469aaf557fb4ae61618fb8051940d8544804a5ae09297c9647416059"
+  },
+  "driver_sha256": "630167223ce82e9af9270a3de45ad0c58de7e8039443cd7c5478da1ad3b17130"
+}

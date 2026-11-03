@@ -1,0 +1,93 @@
+{
+  "schema": 1,
+  "milestone": "M8",
+  "research_screen_only": true,
+  "frozen_before_numerical_execution": true,
+  "production_adoption": false,
+  "candidates": [
+    "A",
+    "B"
+  ],
+  "beta0": [
+    "2/5",
+    "9/20"
+  ],
+  "gamma": 0,
+  "qc": "33/10",
+  "C_original": "0.3/(1+0.35*q^(3/2))*(1-exp(-0.36*exp(0.75*q)))",
+  "alpha": "-qc*C_original_prime(qc)/C_original(qc)",
+  "candidate_A": "C=C_original below qc, Cc*(q/qc)^(-alpha) above; beta=beta0",
+  "candidate_B": "same C; beta=beta0 below qc, beta0*(qc*Cc/(q*Ctail))^2 above",
+  "derivative_policy": "differentiate the entire C(q) and beta(q); no frozen adaptive coefficient",
+  "join_policy": "C continuation is C1; B beta is continuous with potentially distinct one-sided derivatives; certify strictly active sides only",
+  "normalized_gradient_center": [
+    [
+      0,
+      0,
+      1
+    ],
+    [
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0
+    ]
+  ],
+  "gradient_entry_radius": "1/4",
+  "exact_trace_free": true,
+  "k_over_k0": [
+    "1/2",
+    "3/2"
+  ],
+  "epsilon_over_epsilon0": [
+    "1/2",
+    "3/2"
+  ],
+  "normalization": "A*=A/G0; k*=Qstar*(k/K0); epsilon*=epsilon/epsilon0; stress in u_star^2, principal form in nu_t0 units",
+  "unchanged_components": [
+    "inner capped k repair",
+    "outer transport constants",
+    "invariant definition max(strain,rotation)",
+    "original C below qc"
+  ],
+  "search": {
+    "seed": 830219,
+    "random_states": 384,
+    "propagation_grid": "primitive integer directions -2..2; incompressible acoustic minimum over the perpendicular plane",
+    "differential_evolution": {
+      "population_multiplier": 8,
+      "max_iterations": 90,
+      "workers": 1,
+      "polish": false
+    },
+    "local_refinement": {
+      "method": "Powell",
+      "max_iterations": 120
+    },
+    "retained_nominees_per_gate": 2,
+    "rational_denominators": [
+      1024,
+      4096
+    ],
+    "rational_side_preservation": "at most 8 inward A20 grid steps and 8 scalar-ratio grid steps preserve the nominated smooth invariant/tail sides",
+    "explicit_controls": [
+      "A02=1,A20=1/4096,k/K0=5/4,epsilon/epsilon0=1/2,H=ey tensor ex",
+      "A02=5/4,k/K0=3/2,epsilon/epsilon0=1/2,v=(1,0,5)"
+    ]
+  },
+  "proof": "directed interval full tangent or stress at exact rational trace-free admissible states and rational incompressible rank-one directions",
+  "counterexample_gate": "principal/norm has negative upper endpoint, or covariance Rayleigh quotient has negative upper endpoint",
+  "absence_interpretation": "inconclusive, never a qualification of this box or a production model",
+  "excluded": [
+    "sample scans as proof",
+    "production adoption",
+    "global model impossibility",
+    "state-box invariance",
+    "coupled PDE stability",
+    "terrain accuracy"
+  ]
+}

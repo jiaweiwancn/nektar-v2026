@@ -1,0 +1,862 @@
+{
+  "schema": 1,
+  "status": "outside_certificate",
+  "finite_coverage_pass": false,
+  "model_variant": "Regularized",
+  "robust_parameters": [
+    0.4,
+    0,
+    0.2,
+    0.1,
+    0,
+    1,
+    1
+  ],
+  "accepted_records": 1,
+  "accepted_trajectory_complete": true,
+  "state_scope": "Every supplied accepted record, including its initial state; a failed trajectory remains incomplete",
+  "normalization": "A*=Qincoming^T grad(U) Qincoming/G0; k/K0; epsilon/epsilon0; G0=us/(kappa*r),K0=Qstar*us^2,epsilon0=us^3/(kappa*r)",
+  "incoming_basis": [
+    [
+      1,
+      0,
+      0
+    ],
+    [
+      0,
+      1,
+      0
+    ],
+    [
+      0,
+      0,
+      1
+    ]
+  ],
+  "per_set_evaluations": {
+    "source_volume_outer": 128,
+    "mass_volume_outer": 128,
+    "reconstruction_native_outer": 128,
+    "reconstruction_dense_outer": 338,
+    "interface_outer": 8,
+    "trace_transfer_outer": 8
+  },
+  "extrema": {
+    "gradient_entry_deviation": 0.0026483517498481213,
+    "k_over_K0": [
+      0.9999999999999998,
+      1.0000000000000002
+    ],
+    "epsilon_over_epsilon0": [
+      0.99984532072427,
+      1.0000671580746834
+    ],
+    "gamma_over_nut0": [
+      1.0,
+      1.0
+    ]
+  },
+  "native_sampling_complete": true,
+  "native_GLL_metadata_issue": null,
+  "native_count_checks": [
+    {
+      "state": 0,
+      "locations": "source_volume_outer",
+      "expected": 128,
+      "native": 128,
+      "equal": true
+    },
+    {
+      "state": 0,
+      "locations": "interface_outer",
+      "expected": 8,
+      "native": 8,
+      "equal": true
+    },
+    {
+      "state": 0,
+      "locations": "reconstruction_dense_all_regions",
+      "expected": 845,
+      "native": 845,
+      "equal": true
+    },
+    {
+      "state": 0,
+      "locations": "reconstruction_native_all_regions",
+      "expected": 320,
+      "native": 320,
+      "equal": true
+    }
+  ],
+  "certificate_boxes": [
+    {
+      "certificate_box_index": 0,
+      "beta": 0.4,
+      "center": [
+        [
+          0.0,
+          0.0,
+          1.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "radius": 0.001,
+      "k_range": [
+        0.99,
+        1.01
+      ],
+      "epsilon_range": [
+        0.99,
+        1.01
+      ],
+      "required_gamma_over_nut0": 0.6374675261974335,
+      "target_over_nut0": 0.1,
+      "fixed_gamma_candidates": [
+        {
+          "gamma_over_nut0": 1.0,
+          "certificate_joint_gate": true,
+          "certificate_momentum_target_met": true,
+          "certificate_covariance_positive": true,
+          "actual_gamma_exact_match": true,
+          "note": "Covariance proof is for this fixed Gamma; a larger Gamma is not automatically covered"
+        },
+        {
+          "gamma_over_nut0": 3.0,
+          "certificate_joint_gate": true,
+          "certificate_momentum_target_met": true,
+          "certificate_covariance_positive": true,
+          "actual_gamma_exact_match": false,
+          "note": "Covariance proof is for this fixed Gamma; a larger Gamma is not automatically covered"
+        }
+      ],
+      "sample_count": 738,
+      "violation_count": 58,
+      "violations_by_set": {
+        "source_volume_outer": 8,
+        "mass_volume_outer": 8,
+        "reconstruction_native_outer": 16,
+        "reconstruction_dense_outer": 26,
+        "interface_outer": 0,
+        "trace_transfer_outer": 0
+      },
+      "examples": [
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            0.1588405740098553,
+            0.0,
+            3.9602898564975364
+          ],
+          "gradient_entry_deviation": 0.0018185325195723134,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0018185325195723
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.9999487224523572
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            0.8133340903454931,
+            0.0,
+            3.9602898564975364
+          ],
+          "gradient_entry_deviation": 0.0018185325195718693,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0018185325195719
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.9999487224523574
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            1.897870360334684,
+            0.0,
+            3.9602898564975364
+          ],
+          "gradient_entry_deviation": 0.0018185325195723134,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0018185325195723
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.9999487224523572
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            3.266261430017401,
+            0.0,
+            3.9602898564975364
+          ],
+          "gradient_entry_deviation": 0.0018185325195720914,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.001818532519572
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.9999487224523572
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            4.733738569982599,
+            0.0,
+            3.9602898564975364
+          ],
+          "gradient_entry_deviation": 0.0018185325195720914,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.001818532519572
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.9999487224523572
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            6.102129639665316,
+            0.0,
+            3.9602898564975364
+          ],
+          "gradient_entry_deviation": 0.0018185325195723134,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0018185325195723
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.9999487224523572
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            7.186665909654507,
+            0.0,
+            3.9602898564975364
+          ],
+          "gradient_entry_deviation": 0.0018185325195718693,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0018185325195719
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.9999487224523574
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "source_volume_outer",
+          "geometry": 3,
+          "chart": [
+            7.841159425990145,
+            0.0,
+            3.9602898564975364
+          ],
+          "gradient_entry_deviation": 0.0018185325195723134,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0018185325195723
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.9999487224523572
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "mass_volume_outer",
+          "geometry": 3,
+          "chart": [
+            0.1588405740098553,
+            0.0,
+            3.9602898564975364
+          ],
+          "gradient_entry_deviation": 0.0018185325195723134,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0018185325195723
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.9999487224523572
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "mass_volume_outer",
+          "geometry": 3,
+          "chart": [
+            0.8133340903454931,
+            0.0,
+            3.9602898564975364
+          ],
+          "gradient_entry_deviation": 0.0018185325195718693,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0018185325195719
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.9999487224523574
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "mass_volume_outer",
+          "geometry": 3,
+          "chart": [
+            1.897870360334684,
+            0.0,
+            3.9602898564975364
+          ],
+          "gradient_entry_deviation": 0.0018185325195723134,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0018185325195723
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.9999487224523572
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "mass_volume_outer",
+          "geometry": 3,
+          "chart": [
+            3.266261430017401,
+            0.0,
+            3.9602898564975364
+          ],
+          "gradient_entry_deviation": 0.0018185325195720914,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.001818532519572
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.9999487224523572
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "mass_volume_outer",
+          "geometry": 3,
+          "chart": [
+            4.733738569982599,
+            0.0,
+            3.9602898564975364
+          ],
+          "gradient_entry_deviation": 0.0018185325195720914,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.001818532519572
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.9999487224523572
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "mass_volume_outer",
+          "geometry": 3,
+          "chart": [
+            6.102129639665316,
+            0.0,
+            3.9602898564975364
+          ],
+          "gradient_entry_deviation": 0.0018185325195723134,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0018185325195723
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.9999487224523572
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "mass_volume_outer",
+          "geometry": 3,
+          "chart": [
+            7.186665909654507,
+            0.0,
+            3.9602898564975364
+          ],
+          "gradient_entry_deviation": 0.0018185325195718693,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0018185325195719
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.9999487224523574
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "mass_volume_outer",
+          "geometry": 3,
+          "chart": [
+            7.841159425990145,
+            0.0,
+            3.9602898564975364
+          ],
+          "gradient_entry_deviation": 0.0018185325195723134,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0018185325195723
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.9999487224523572
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "reconstruction_native_outer",
+          "geometry": 3,
+          "chart": [
+            0.0,
+            0.0,
+            4.0
+          ],
+          "gradient_entry_deviation": 0.002648351749846789,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0026483517498468
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.99984532072427
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "reconstruction_native_outer",
+          "geometry": 3,
+          "chart": [
+            0.5130394059615746,
+            0.0,
+            4.0
+          ],
+          "gradient_entry_deviation": 0.002648351749846567,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0026483517498466
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.99984532072427
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "reconstruction_native_outer",
+          "geometry": 3,
+          "chart": [
+            1.6331992742674344,
+            0.0,
+            4.0
+          ],
+          "gradient_entry_deviation": 0.0026483517498481213,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.0026483517498481
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0,
+          "epsilon_over_epsilon0": 0.99984532072427
+        },
+        {
+          "state": 0,
+          "time": 0,
+          "locations": "reconstruction_native_outer",
+          "geometry": 3,
+          "chart": [
+            3.162803128390085,
+            0.0,
+            4.0
+          ],
+          "gradient_entry_deviation": 0.002648351749847011,
+          "normalized_gradient": [
+            [
+              0.0,
+              0.0,
+              1.002648351749847
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "k_over_K0": 1.0000000000000002,
+          "epsilon_over_epsilon0": 0.99984532072427
+        }
+      ],
+      "finite_state_box_covered": false,
+      "finite_fraction_inside": 0.9214092140921409,
+      "momentum_gamma_condition_met": true,
+      "matching_joint_certificate": true,
+      "all_declared_finite_sets_covered_by_joint_certificate": false
+    },
+    {
+      "certificate_box_index": 1,
+      "beta": 0.4,
+      "center": [
+        [
+          0.0,
+          0.0,
+          1.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "radius": 0.01,
+      "k_range": [
+        0.99,
+        1.01
+      ],
+      "epsilon_range": [
+        0.99,
+        1.01
+      ],
+      "required_gamma_over_nut0": 2.8813869507610796,
+      "target_over_nut0": 0.1,
+      "fixed_gamma_candidates": [
+        {
+          "gamma_over_nut0": 1.0,
+          "certificate_joint_gate": false,
+          "certificate_momentum_target_met": false,
+          "certificate_covariance_positive": true,
+          "actual_gamma_exact_match": true,
+          "note": "Covariance proof is for this fixed Gamma; a larger Gamma is not automatically covered"
+        },
+        {
+          "gamma_over_nut0": 3.0,
+          "certificate_joint_gate": true,
+          "certificate_momentum_target_met": true,
+          "certificate_covariance_positive": true,
+          "actual_gamma_exact_match": false,
+          "note": "Covariance proof is for this fixed Gamma; a larger Gamma is not automatically covered"
+        }
+      ],
+      "sample_count": 738,
+      "violation_count": 0,
+      "violations_by_set": {
+        "source_volume_outer": 0,
+        "mass_volume_outer": 0,
+        "reconstruction_native_outer": 0,
+        "reconstruction_dense_outer": 0,
+        "interface_outer": 0,
+        "trace_transfer_outer": 0
+      },
+      "examples": [],
+      "finite_state_box_covered": true,
+      "finite_fraction_inside": 1.0,
+      "momentum_gamma_condition_met": false,
+      "matching_joint_certificate": false,
+      "all_declared_finite_sets_covered_by_joint_certificate": false
+    }
+  ],
+  "inner_scope": "Inner stress and source admissibility require separate gates; this is an outer constitutive certificate",
+  "mms_scope": "Manufactured states may intentionally lie outside the neutral reference box; successful equation verification does not extend this certificate",
+  "excluded_claims": [
+    "polynomial-everywhere state coverage",
+    "PDE state-envelope invariance",
+    "outer k/epsilon positivity theorem",
+    "coupled-mode/long-time stability",
+    "physical terrain qualification"
+  ],
+  "limitations": "Double-precision coefficient reconstruction is a finite numerical audit. The outward-rounded interval certificate supplies the separate declared mathematical bound.",
+  "inputs": {
+    "native_sha256": "312ee1d0f122c250975311e3c5b577d89a359a15483de63481dbfca2dbf7d9d8",
+    "session_sha256": "10ab8c7d0759b3d5e2ed7f94c01137a00e60acd74df31553020ede1106969d10",
+    "certificate_sha256": "f26e81c5469aaf557fb4ae61618fb8051940d8544804a5ae09297c9647416059"
+  },
+  "driver_sha256": "630167223ce82e9af9270a3de45ad0c58de7e8039443cd7c5478da1ad3b17130"
+}

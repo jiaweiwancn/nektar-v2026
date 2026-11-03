@@ -1,0 +1,75 @@
+{
+  "schema": 1,
+  "checks": 50,
+  "errors": {
+    "m8_actual_physical_mass_storage_and_energy": 7.22882983175389e-16,
+    "zero_step_reference_load_fallback": 1.9715742494618465e-18,
+    "m8_actual_unmasked_weak_energy_work": 3.115167854014633e-14,
+    "m8_fixed_anchor_energy_work": 0.0,
+    "m8_essential_reaction_anchor_accounting": 5.382536861683801e-14,
+    "repaired_inner_stress_production_cancellation": 2.451374945183087e-16,
+    "selected_outer_stress_production_cancellation": 0.0,
+    "independent_m8_repaired_ray_source_budget": 3.3283759667993485e-16,
+    "independent_m8_wall_source_budget": 4.5844781462629594e-15,
+    "independent_m8_constitutive_work": 5.544354691784673e-16,
+    "independent_m8_inner_covariance": 3.175237850427948e-14,
+    "independent_m8_outer_covariance": 4.440892098500626e-16,
+    "independent_m8_direct_energy_components": 5.914875672180155e-16,
+    "independent_m8_complete_energy_identity": 7.98508215744321e-14,
+    "independent_m8_total_traction_k_flux": 1.855244844723632e-15
+  },
+  "model_variant": "Regularized",
+  "physical_mass_storage": 0.0,
+  "stored_resolved_plus_k": 1258.1492758036923,
+  "unmasked_work": 9.009606986780405,
+  "reaction_work": 9.00960698677992,
+  "anchor_work": 0.0,
+  "direct_volume_components_reconstructed": true,
+  "scope": "independent selected indexed stress, physical source normalization, full direct energy and interface account",
+  "direct": {
+    "stress_work_minus_k_source": 9.009606986779685,
+    "resolved_advection": 0.0,
+    "roughness_force_work": 0.0,
+    "robust_source": [
+      7.377481743970201,
+      7.377481743970201,
+      7.3774817439702005,
+      2.17057274931598e-16,
+      0.0,
+      0.0,
+      1.0,
+      56.0385815777856
+    ],
+    "wall_sources": [
+      12.39910346331217,
+      7.377481743970201,
+      2.17057274931598e-16,
+      7.390950223722502,
+      0.021010951129384843
+    ],
+    "constitutive_modification": [
+      1.6257158808849525e-10,
+      1.6257158464403577e-10,
+      3.4444594800096123e-18
+    ],
+    "inner_covariance_minimum": 0.08069398416214385,
+    "outer_covariance_minimum": 0.17775441625438443,
+    "volumes": [
+      15.999999999999995,
+      47.999999999999986
+    ],
+    "quadrature": "independently computed Legendre/Jacobi rows on declared finite native source panels"
+  },
+  "independently_reconstructed_total": 9.009606986779685,
+  "independent_interface": [
+    7.999999999999998,
+    -0.5989960686569331,
+    2.5472031753182242e-14,
+    1.7318796400147458e-13,
+    2.556288514199423e-14,
+    0.0,
+    0.0,
+    2.037759666710396e-13
+  ],
+  "success": true
+}

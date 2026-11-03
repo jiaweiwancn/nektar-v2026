@@ -512,5 +512,73 @@ Fourier/native-CG transverse refinement experiment. Both paths require the
 isolated build and thread environment above, and store generated data outside
 the source checkout. The transverse experiment uses the unchanged compiled
 outer CLS law strictly above the wall layer. Its documented growing mode
-leaves the original stability gate failed. These tests do not implement the
-conditional robust-model changes in M8.
+leaves the original stability gate failed. The M8 selections below have their
+own implementation checks and separate physical qualification gates.
+
+## Explicit research variants (M8)
+
+The `RANSEquilibriumWallEvolution` backend supports two additional research
+stress selections. Their kernel/source verification, local certificates and
+failed broader constitutive gates are recorded in
+[the M8 report](../../../../../docs/plans/cls-epawf-revised-m8.md).
+No selection is qualified for unrestricted robust terrain prediction.
+
+| Solver information / parameter | Meaning |
+|---|---|
+| `RANSWallVariant=Original` | Default original stress; beta must be one, prescribed regularization zero. |
+| `RANSWallVariant=CubicScaled` | One constant beta multiplies c4, c6 and c7 together; original C(q), transport constants and Yap source retained. |
+| `RANSWallVariant=Regularized` | Same scaled stress minus prescribed gamma(x)*(S-Sref). |
+| `RANSWallCubicBeta` | Default .4 for either selected variant; .45 is the declared sensitivity case. |
+| `RANSWallRegularizationGamma` | Uniform prescribed viscosity, with physical viscosity units; default zero. |
+| `RANSWallRegularizationScale` | Dimensionless coefficient in gamma(x)=GammaUniform+GammaScale*kappa*u_star*r; default zero. |
+| `RANSWallDestruction=Original/Capped` | Default Original for Original stress and Capped for either new variant; explicit ablations are separately identified in the signature. |
+| `RANSWallPositivityTheta`, `RANSWallPositivityDelta` | Capped-source parameters in (0,1), default .2 and .1. |
+| `RANSWallDestructionSmoothing=Linear/C2` | Default piecewise-linear local limiter; optional quintic local limiter. The normalization cap remains semismooth. |
+
+`Sref` uses the fixed incoming flow and normal frame and the analytical shear
+u_star/(kappa*r), extended in that Cartesian frame over the domain. Both gamma
+coefficients and that extension are independent of the evolving state. The
+same selected Reynolds stress supplies momentum, production in both turbulence
+equations, and interface traction. Scalar turbulent diffusivities retain the
+declared CLS values. The separate eta is zero throughout physical transition
+and terrain runs.
+
+The capped source uses positive metric ray quadrature and the actual local
+k/K. It redistributes destruction away from depleted points, leaves the source
+unchanged on its all-ray inactive plateau, and caps its normalization. Severe
+depletion attenuates the total loss and consistently changes the dependent
+dissipation and its outer trace. This same source law is the selected chi=0
+baseline. A zero-k reaction property does not establish positivity of the
+coupled high-order CG/IMEX discretization or covariance realizability.
+
+With diagnostics enabled, `robust_source` contains physical integrals of
+pre-repair dissipation, current dissipation, destruction and redistribution,
+followed by limiter-active volume, normalization-capped volume, minimum lambda
+and maximum reaction rate. `constitutive_modification` records the change in
+mean weak stress work and turbulence production, then their cancelling
+difference in the total-energy residual. `robust_parameters` contains
+`[beta,GammaUniform,theta,delta,smoothFlag,GammaScale,cappedFlag]`; the prescribed
+incoming flow/normal and actual quadrature orders are exported separately.
+Every model choice is included in complete-history restart signatures.
+Flat function-defined states with the capped source lift their dependent
+epsilon trace before reference capture and initial history/audit. Their
+signature includes `capped_initial_trace=1`; experimental checkpoints from
+before that startup correction are rejected. Neutral and already lifted
+mapped/transition initialization keep their previous signature semantics.
+
+For a bounded native verification case on Linux, activate the environment and
+thread settings above, prepend the M8 build's `geometry-lib` to
+`LD_LIBRARY_PATH`, and use a fresh directory outside the source checkout:
+
+```bash
+python3 -B /media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_cases.py case.xml --variant Regularized --beta .4 --gamma-scale 1 --steps 1
+/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8/build/IncNavierStokesSolver case.xml
+```
+
+The generator's flat case uses the isolated reference-verification setup.
+Its success is an implementation result. Physical campaigns additionally need
+source-bound constitutive bounds, actual state coverage, admissibility,
+coupled conservation, complete unforced durations and independent refinement.
+The modified-invariant A/B candidates have runnable mathematical screens in
+`cls_epawf_m8_invariant_screen.py`; they were rejected before production
+adoption after certified within-range constitutive counterexamples.

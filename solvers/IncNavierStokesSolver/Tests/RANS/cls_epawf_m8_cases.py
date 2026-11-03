@@ -147,6 +147,10 @@ if __name__ == '__main__':
     p.add_argument('--variant', choices=VARIANTS, default='CubicScaled')
     p.add_argument('--beta', type=float, default=.4)
     p.add_argument('--gamma', type=float, default=0.)
+    p.add_argument('--gamma-scale', type=float, default=0.)
+    p.add_argument('--theta', type=float, default=DEFAULT_THETA)
+    p.add_argument('--delta', type=float, default=DEFAULT_DELTA)
+    p.add_argument('--smooth', action='store_true')
     p.add_argument('--steps', type=int, default=1)
     p.add_argument('--family', choices=('flat', 'depletion', 'flow'), default='flat')
     a = p.parse_args()
@@ -154,4 +158,5 @@ if __name__ == '__main__':
                  'flow': flow_session}[a.family]
     generator(Path(__file__).with_name('EquilibriumWallEvolution.xml'),
               a.destination, variant=a.variant, beta=a.beta, gamma=a.gamma,
+              gamma_scale=a.gamma_scale, theta=a.theta, delta=a.delta, smooth=a.smooth,
               steps=a.steps)

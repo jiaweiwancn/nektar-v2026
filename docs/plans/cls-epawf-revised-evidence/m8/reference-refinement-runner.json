@@ -1,0 +1,136 @@
+{
+  "schema": 1,
+  "started_utc": "2026-11-03T05:24:36.439257+00:00",
+  "source_commit": "aa854f4c5b05451a81a4e1dd60eaaca98eb547e4",
+  "source_clean": true,
+  "program": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/IncNavierStokesSolver",
+    "sha256": "2fa72f138fc65da2b04be52735f1e767185375b0b9900b4fb66f1364da2be2ea"
+  },
+  "certificate": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/certificate-joint-001/certificate.json",
+    "sha256": "f26e81c5469aaf557fb4ae61618fb8051940d8544804a5ae09297c9647416059"
+  },
+  "coverage_driver_sha256": "630167223ce82e9af9270a3de45ad0c58de7e8039443cd7c5478da1ad3b17130",
+  "generator_sha256": "82b96b11169efdad828048074bdddf3ebe1218e1547a8e2d0a51d671b2f9db54",
+  "energy_driver_sha256": "80ec891203275919d992a8c47c4fef6f070dfffd858afffed08b2d76b0901df9",
+  "cpu_affinity": [
+    50
+  ],
+  "thread_environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1"
+  },
+  "LD_LIBRARY_PATH": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/geometry-lib:",
+  "cases": [
+    {
+      "degree": 5,
+      "steps": 0,
+      "xml": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/reference-refinement-001/p5/case.xml",
+      "xml_sha256": "10ab8c7d0759b3d5e2ed7f94c01137a00e60acd74df31553020ede1106969d10",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/reference-refinement-001/p5/case.xml"
+      ],
+      "timeout_seconds": 900,
+      "exit_code": 0,
+      "seconds": 12.340972728999986,
+      "log_sha256": "1c574b1d7bef5a3d806f56c1a0e9036620e83e001752e00bc0967e8f47835277",
+      "native_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/reference-refinement-001/p5/case.evolution.json",
+      "native_sha256": "312ee1d0f122c250975311e3c5b577d89a359a15483de63481dbfca2dbf7d9d8",
+      "native_failure": "",
+      "time": 0,
+      "physical_gates": {
+        "covariance_pass": false,
+        "covariance_minima": {
+          "source_volume_inner": -0.01985385572360629,
+          "source_volume_outer": 0.17741027457243963,
+          "physical_sample_K": 0.14176108536287801,
+          "interface_inner": 0.18034597388215984,
+          "interface_outer": 0.17776393259446693
+        },
+        "finite_sample_turbulence_positive": true,
+        "minimum_k": 0.5105080130598861,
+        "minimum_outer_epsilon": 0.0183409576332878,
+        "minimum_yx_tangent": 0.42792827792821886,
+        "scope": "Native finite constitutive evaluation sets; no unsampled polynomial or all-direction/state-envelope theorem"
+      },
+      "independent_energy_success": true,
+      "independent_energy_checks": 50,
+      "coverage_status": "outside_certificate",
+      "finite_coverage_pass": false,
+      "coverage_extrema": {
+        "gradient_entry_deviation": 0.0026483517498481213,
+        "k_over_K0": [
+          0.9999999999999998,
+          1.0000000000000002
+        ],
+        "epsilon_over_epsilon0": [
+          0.99984532072427,
+          1.0000671580746834
+        ],
+        "gamma_over_nut0": [
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "degree": 7,
+      "steps": 0,
+      "xml": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/reference-refinement-001/p7/case.xml",
+      "xml_sha256": "5bbffa2d362ebbceb86016d21698dd7ebebe4ac2d37c2c79c8d864dc19d43929",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/reference-refinement-001/p7/case.xml"
+      ],
+      "timeout_seconds": 900,
+      "exit_code": 0,
+      "seconds": 10.795832170999347,
+      "log_sha256": "79b2b4941fa80cb50c3b649e0c759c8a984a9966789cd82f9664a9dd95c7b08e",
+      "native_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/reference-refinement-001/p7/case.evolution.json",
+      "native_sha256": "2cc4f425f1c18d83e9c5bc1017f6c82df8ed77ac9667f852cce09278dd612145",
+      "native_failure": "",
+      "time": 0,
+      "physical_gates": {
+        "covariance_pass": true,
+        "covariance_minima": {
+          "source_volume_inner": 0.0806939841621756,
+          "source_volume_outer": 0.17775441625438398,
+          "physical_sample_K": 0.16555256129232876,
+          "interface_inner": 0.18034597388203763,
+          "interface_outer": 0.17776393259453127
+        },
+        "finite_sample_turbulence_positive": true,
+        "minimum_k": 0.5105080130598861,
+        "minimum_outer_epsilon": 0.01834103286735382,
+        "minimum_yx_tangent": 0.4279282779282739,
+        "scope": "Native finite constitutive evaluation sets; no unsampled polynomial or all-direction/state-envelope theorem"
+      },
+      "independent_energy_success": true,
+      "independent_energy_checks": 50,
+      "coverage_status": "finite_coverage_verified",
+      "finite_coverage_pass": true,
+      "coverage_extrema": {
+        "gradient_entry_deviation": 0.00010243324964909206,
+        "k_over_K0": [
+          0.9999999999999998,
+          1.0000000000000002
+        ],
+        "epsilon_over_epsilon0": [
+          0.9999952053657274,
+          1.0000019986260453
+        ],
+        "gamma_over_nut0": [
+          1.0,
+          1.0
+        ]
+      }
+    }
+  ],
+  "scope": "Zero-step initialization/projection observations only; no CFD stepping or robust qualification",
+  "finished_utc": "2026-11-03T05:25:05.425685+00:00",
+  "source_and_program_unchanged": true
+}

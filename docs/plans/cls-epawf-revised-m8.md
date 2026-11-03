@@ -137,3 +137,11 @@ after that exception. The corrected driver will preserve the original
 attempt and replay only successful, hash-bound cases, with every independent
 audit repeated; missing checkpoint/restart cases run afresh. Neither this
 receipt bug nor an incomplete trajectory is a constitutive diagnosis.
+
+The focused capped-normalization fixture also identifies a required startup
+dependency: a flat Functions reference with the selected capped source must
+lift its dependent epsilon trace before freezing the reference or auditing
+the initial state. Initialization now applies that lift on the capped branch,
+as the mapped/transition branches already did. A fresh solver epoch is required
+to verify this behavior; a dummy initial perturbation is not used to initialize the
+boundary. Original and neutral-reference branch behavior is retained.

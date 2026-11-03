@@ -1,0 +1,260 @@
+{
+  "schema": 1,
+  "kind": "M8 figure data extracted from completed JSON receipts",
+  "analysis_only": true,
+  "source_files": [
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/transverse-001/validation.json",
+      "sha256": "71b37968cce8a348458ca4ea0203362bde5346ada0e80e89b8057776c14f74b5",
+      "bytes": 113689,
+      "source_commit": "07363199e68a6cf3b6a8cc20fe0a4eae67c2d311"
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/transverse-001/experiment-plan.json",
+      "sha256": "d40e6330c7cdfc1f4765e904b731085825fac18041d5d582ffc54348f5297c56",
+      "bytes": 3852,
+      "source_commit": null
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/source/docs/plans/cls-epawf-revised-evidence/m7/transverse-validation.json",
+      "sha256": "5ef3760a756cecf6db759661958379c72bde5ec89a7ff59a5703b7fabf4a36d4",
+      "bytes": 56993,
+      "source_commit": "dea75dab62fb59f5264868f3d2033d13e0b4ef57"
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/gamma-feasibility-001/validation.json",
+      "sha256": "eac5f4cd645063eec15368609ab2e96d1eaa384a96928d0d5818b4c5ff22eadf",
+      "bytes": 54540,
+      "source_commit": "2a93b04b3c35fc0f184c02e72f42fa1ea1066c22"
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/coverage-001/reference.json",
+      "sha256": "d42096f32c721d92fcc95b1ada5be6887f27fef49ff3af55ab3e8e19be69f43f",
+      "bytes": 36329,
+      "source_commit": null
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/campaign-001/regularized-native/reference/case.evolution.json",
+      "sha256": "fbd681f4dfce292d617171ce65c6d01c7c80c2ea73180610bc8265c6844fcdcf",
+      "bytes": 48400,
+      "source_commit": null
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/reference-refinement-001/receipt.json",
+      "sha256": "f314740337c7ced00e03f79605f9f67cb3c97493f7065a0d8bd9efa8a3512bd7",
+      "bytes": 5770,
+      "source_commit": "aa854f4c5b05451a81a4e1dd60eaaca98eb547e4"
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/reference-refinement-001/p5/case.evolution.json",
+      "sha256": "312ee1d0f122c250975311e3c5b577d89a359a15483de63481dbfca2dbf7d9d8",
+      "bytes": 54888,
+      "source_commit": null
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/reference-refinement-001/p5/state-coverage.json",
+      "sha256": "9ebfe7e8c520a42d75b719ff48f587e49489e6e7f3877386cff424a4406b51e6",
+      "bytes": 20724,
+      "source_commit": null
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/reference-refinement-001/p7/case.evolution.json",
+      "sha256": "2cc4f425f1c18d83e9c5bc1017f6c82df8ed77ac9667f852cce09278dd612145",
+      "bytes": 92424,
+      "source_commit": null
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/reference-refinement-001/p7/state-coverage.json",
+      "sha256": "42eb319798d15ebc8dcbf691f51bbf0ff61d5ba96694163fe25b72c6a460b732",
+      "bytes": 6603,
+      "source_commit": null
+    }
+  ],
+  "source_commits": {
+    "original_transverse": "dea75dab62fb59f5264868f3d2033d13e0b4ef57",
+    "modified_transverse": "07363199e68a6cf3b6a8cc20fe0a4eae67c2d311",
+    "fixed_gamma_feasibility": "2a93b04b3c35fc0f184c02e72f42fa1ea1066c22",
+    "reference_projection": "aa854f4c5b05451a81a4e1dd60eaaca98eb547e4"
+  },
+  "transverse": {
+    "final_time": 0.05,
+    "dt": 0.00015625,
+    "operator": "p7-n8-xi4",
+    "amplitude": 0.0001,
+    "order": 2,
+    "trials": [
+      {
+        "label": "Original CLS",
+        "beta": 1.0,
+        "gamma_scale": 0.0,
+        "trial": {
+          "operator": "p7-n8-xi4",
+          "order": 2,
+          "dt": 0.00015625,
+          "amplitude": 0.0001,
+          "gain": 8.621848996214,
+          "relative_error_to_semidiscrete_exponential": 0.0001076108201498019,
+          "initial_covariance_minimum": 0.17775973255729235,
+          "final_covariance_minimum": 0.17772821663657573,
+          "wavelength": 1.5707963267948966,
+          "flow_time": 0.22315815978352216,
+          "turnover_time": 5.0,
+          "duration_in_flow_times": 0.22405633765981595,
+          "duration_in_turnover_times": 0.01
+        },
+        "source_commit": "dea75dab62fb59f5264868f3d2033d13e0b4ef57",
+        "report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/source/docs/plans/cls-epawf-revised-evidence/m7/transverse-validation.json",
+        "scope": "Reused original M7 reduced-mode witness, not a new solver execution"
+      },
+      {
+        "beta": 0.4,
+        "gamma_scale": 0.0,
+        "trial": {
+          "operator": "p7-n8-xi4",
+          "order": 2,
+          "dt": 0.00015625,
+          "amplitude": 0.0001,
+          "gain": 0.5892892140774831,
+          "relative_error_to_semidiscrete_exponential": 1.1664136222437936e-05,
+          "initial_covariance_minimum": 0.17775892788593378,
+          "final_covariance_minimum": 0.17776123956779855,
+          "wavelength": 1.5707963267948966,
+          "flow_time": 0.22315815978352216,
+          "turnover_time": 5.0,
+          "duration_in_flow_times": 0.22405633765981595,
+          "duration_in_turnover_times": 0.01
+        },
+        "source_commit": "07363199e68a6cf3b6a8cc20fe0a4eae67c2d311",
+        "native_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/transverse-001/variant-1-native.json",
+        "native_report_sha256": "bfccede3d416f6e66e6740e093151278567d6be77bc42d984d1ac1be9f6eed8c",
+        "scope": "reference_local_reduced_transverse_decay"
+      },
+      {
+        "beta": 0.45,
+        "gamma_scale": 0.0,
+        "trial": {
+          "operator": "p7-n8-xi4",
+          "order": 2,
+          "dt": 0.00015625,
+          "amplitude": 0.0001,
+          "gain": 0.7346105379972002,
+          "relative_error_to_semidiscrete_exponential": 1.3202729454555445e-05,
+          "initial_covariance_minimum": 0.17775906925341897,
+          "final_covariance_minimum": 0.1777606514119567,
+          "wavelength": 1.5707963267948966,
+          "flow_time": 0.22315815978352216,
+          "turnover_time": 5.0,
+          "duration_in_flow_times": 0.22405633765981595,
+          "duration_in_turnover_times": 0.01
+        },
+        "source_commit": "07363199e68a6cf3b6a8cc20fe0a4eae67c2d311",
+        "native_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/transverse-001/variant-2-native.json",
+        "native_report_sha256": "8d4822f6627babd19cd3cfb6ea0afd9aed530f2b5acc0900c3083917af31b4b1",
+        "scope": "reference_local_reduced_transverse_decay"
+      },
+      {
+        "beta": 0.4,
+        "gamma_scale": 0.25,
+        "trial": {
+          "operator": "p7-n8-xi4",
+          "order": 2,
+          "dt": 0.00015625,
+          "amplitude": 0.0001,
+          "gain": 0.33344268576141894,
+          "relative_error_to_semidiscrete_exponential": 8.882264636802505e-06,
+          "initial_covariance_minimum": 0.17775807549609776,
+          "final_covariance_minimum": 0.177762191861699,
+          "wavelength": 1.5707963267948966,
+          "flow_time": 0.22315815978352216,
+          "turnover_time": 5.0,
+          "duration_in_flow_times": 0.22405633765981595,
+          "duration_in_turnover_times": 0.01
+        },
+        "source_commit": "07363199e68a6cf3b6a8cc20fe0a4eae67c2d311",
+        "native_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/transverse-001/variant-3-native.json",
+        "native_report_sha256": "110aeae24f150a3cbf03769ea9320182e17bc049b37b9130c866ad53050c9aa1",
+        "scope": "reference_local_reduced_transverse_decay"
+      }
+    ],
+    "scope": "Reduced Fourier/native-CG transverse subsystem at the neutral reference; no nonlinear terrain trajectory"
+  },
+  "necessary_gamma": {
+    "constraints": [
+      {
+        "beta": "2/5",
+        "necessary_lower": "2.44640920758313399083233744287421509559131385318278728198459",
+        "necessary_upper": "0.177525831861587326880484440413243383104664714638705935767093",
+        "selected_principal_witness": 0,
+        "selected_covariance_witness": 2,
+        "scope": "The two interval-certified necessary GammaScale constraints have empty intersection; no fixed nonnegative scalar GammaScale satisfies both properties at every state in this box"
+      },
+      {
+        "beta": "9/20",
+        "necessary_lower": "2.27794509320358966101284189882417470727012577062882377717907",
+        "necessary_upper": "0.156117116286741020667997779309354794793773642521050429596373",
+        "selected_principal_witness": 4,
+        "selected_covariance_witness": 6,
+        "scope": "The two interval-certified necessary GammaScale constraints have empty intersection; no fixed nonnegative scalar GammaScale satisfies both properties at every state in this box"
+      }
+    ],
+    "box": {
+      "gradient_entry_radius": ".25",
+      "k_over_K0": [
+        ".5",
+        "1.5"
+      ],
+      "epsilon_over_epsilon0": [
+        ".5",
+        "1.5"
+      ]
+    },
+    "scope": "Two interval-certified necessary inequalities conflict. No plotted segment is asserted to be sufficient."
+  },
+  "initial_projection": {
+    "records": [
+      {
+        "degree": 3,
+        "time": 0.0,
+        "gradient_error": 0.0642009880560146,
+        "inner_covariance": -0.17766634905178802,
+        "coverage_status": "outside_certificate",
+        "finite_coverage_pass": false,
+        "native": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/campaign-001/regularized-native/reference/case.evolution.json",
+        "source_evolution_steps": 1,
+        "initial_and_control_coefficients_exactly_identical": true
+      },
+      {
+        "degree": 5,
+        "time": 0.0,
+        "gradient_error": 0.0026483517498481213,
+        "inner_covariance": -0.01985385572360629,
+        "coverage_status": "outside_certificate",
+        "finite_coverage_pass": false,
+        "native": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/reference-refinement-001/p5/case.evolution.json",
+        "native_sha256": "312ee1d0f122c250975311e3c5b577d89a359a15483de63481dbfca2dbf7d9d8",
+        "source_evolution_steps": 0
+      },
+      {
+        "degree": 7,
+        "time": 0.0,
+        "gradient_error": 0.00010243324964909206,
+        "inner_covariance": 0.0806939841621756,
+        "coverage_status": "finite_coverage_verified",
+        "finite_coverage_pass": true,
+        "native": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/reference-refinement-001/p7/case.evolution.json",
+        "native_sha256": "2cc4f425f1c18d83e9c5bc1017f6c82df8ed77ac9667f852cce09278dd612145",
+        "source_evolution_steps": 0
+      }
+    ],
+    "robust_parameters": [
+      0.4,
+      0,
+      0.2,
+      0.1,
+      0,
+      1,
+      1
+    ],
+    "scope": "Initial time only; covariance at native source quadrature and outer certificate coverage on declared finite evaluation sets; no evolved trajectory qualification"
+  }
+}
