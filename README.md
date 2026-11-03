@@ -79,6 +79,12 @@ increment. The screened invariant alternatives also fail. M8 remains open
 at robust qualification; conditional physical terrain validation and M9
 remain open.
 
+The [M8-R2 native prototype report](docs/plans/cls-epawf-revised-m8-r2.md)
+records the restricted inner saturation, scalar-feasible nonlinear policy,
+native operator checks and bounded matched implicit-stage comparison. M8
+remains open; kernel feasibility, a stage root and physical qualification
+are separate gates.
+
 
 Tutorials
 ---------

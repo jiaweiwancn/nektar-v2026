@@ -83,3 +83,14 @@ historical runtime section hashes. The native reports remain in
 The R1-B2 nonlinear trace is unchanged, SHA-256
 `2df975858f4d506b62030cdf4ea899fff5dd31740ea54289c166a10b156c4475`.
 Its failing state was never used as a physical warm start.
+
+The pressure suite was subsequently repeated at the actual producing solver
+epoch `9f20b3053c303e8805f5183f668a8ec468d9656b`, with the same 260/360
+independent fixture checks and the unchanged `1e-7` physical action gate.
+That current-runtime result passes, with unchanged before/after fingerprints;
+it is distinct from the historical analysis-only replay above. Its report is
+`m8-r2/epoch-002/pressure-verification-001/results/validation.json`,
+174,042 bytes, SHA256
+`eb8e184f496c22bbec5713af6f82eeb4437011e20d6afdf02d9026e541d8c50a`.
+The [inner evidence ledger](inner-verification-result.json) also binds this
+separate pressure result. It does not certify nonpressure Jacobian columns.
