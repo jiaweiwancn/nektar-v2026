@@ -5,7 +5,7 @@ import math
 import xml.etree.ElementTree as ET
 from cls_epawf_m3_cases import set_info, set_parameter, write
 from cls_epawf_m4_cases import neutral_session, tensor_mesh
-from cls_epawf_m6_cases import transition_session
+from cls_epawf_m6_cases import transition_session, arc_offset
 
 
 def perturbation_session(template, destination, kind='joint', amplitude=.001,
@@ -17,7 +17,8 @@ def perturbation_session(template, destination, kind='joint', amplitude=.001,
                            steps=steps, dt=dt, order=order, refine=refine,
                            quadrature=8, normal_order=16)
         root = ET.parse(destination).getroot()
-        x = '(x+4)/6'; z = 'y'; L = 6.; Z = 4.
+        shift=arc_offset();L=6.-shift
+        x = f'(x+{4.-shift})/{L}'; z = 'y'; Z = 4.
     else:
         neutral_session(template, destination, degree=degree, dimension=dimension,
                         inner_knots=[0., .1, 1., height], outer_knots=[height, 4., 8.],
@@ -35,7 +36,7 @@ def perturbation_session(template, destination, kind='joint', amplitude=.001,
     set_parameter(root, 'RANSWallMaxIterations', 35)
     # All factors vanish on the ordinary essential boundaries. The stream
     # function pair is divergence-free before spatial projection.
-    bx = f'(sin(PI*({x})))^2'
+    bx = f'(sin({wave}*PI*({x})))^2'
     bz = f'(sin(PI*{z}/{Z}))^2'
     osc = f'sin({2*wave}*PI*({x}))'
     scalar = f'({bx})*({bz})'
@@ -48,7 +49,7 @@ def perturbation_session(template, destination, kind='joint', amplitude=.001,
         values = {v:'0' for v in variables+['k','eps_tilde','p']}
         if kind in ('velocity','joint','interface','transition'):
             values['u'] = f'{amplitude*.4}*({bx})*sin(2*PI*{z}/{Z})'
-            values[variables[-1]] = f'{-amplitude*.4*Z/L}*({osc})*({bz})'
+            values[variables[-1]] = f'{-amplitude*.4*wave*Z/L}*({osc})*({bz})'
         if kind in ('k','joint','interface','transition'):
             values['k'] = f'{amplitude}*Qstar*0.16*({scalar})'
         if region == 'Outer' and kind in ('epsilon','joint','interface','transition'):

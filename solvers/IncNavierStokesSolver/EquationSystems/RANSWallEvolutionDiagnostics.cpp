@@ -46,7 +46,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
         auto &r=result[name];if(r.empty())r={0,sentinel,sentinel,sentinel,sentinel,0};
         ++r[0];const double k=v.Value(s,offset[K()]);r[1]=std::min(r[1],k);
         const double epsilon=inner?(constitutive?DependentEpsilon(s,v.coordinate,time,data):sentinel):
-            Point(Epsilon(),v.coordinate,1).Value(s,offset[Epsilon()]);
+            Point(Epsilon(),v.coordinate,std::abs(v.coordinate[2]-m_parameters.geometry.height)<1e-12?1:0).Value(s,offset[Epsilon()]);
         r[2]=std::min(r[2],epsilon);
         if(!std::isfinite(k) || k<0 || (!inner && !(k>0)) || !std::isfinite(epsilon) || !(epsilon>0))++r[5];
         if(constitutive && k>0 && epsilon>0 && std::isfinite(k) && std::isfinite(epsilon))
