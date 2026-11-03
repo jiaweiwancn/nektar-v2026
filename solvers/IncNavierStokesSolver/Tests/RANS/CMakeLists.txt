@@ -338,6 +338,13 @@ if(Python3_Interpreter_FOUND)
                     --output ${CMAKE_CURRENT_BINARY_DIR}/cls-epawf-m8-native)
                 set_tests_properties(RANSCLSEPAWFM8NativeOracle PROPERTIES PROCESSORS 2 TIMEOUT 21600
                     ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
+                add_test(NAME RANSCLSEPAWFM8RegularizedMMSOracle COMMAND ${Python3_EXECUTABLE}
+                    ${CMAKE_CURRENT_LIST_DIR}/validate_cls_epawf_m8.py
+                    --build $<TARGET_FILE_DIR:IncNavierStokesSolver> --mode mms
+                    --variant Regularized --gamma-scale 1
+                    --output ${CMAKE_CURRENT_BINARY_DIR}/cls-epawf-m8-regularized-mms)
+                set_tests_properties(RANSCLSEPAWFM8RegularizedMMSOracle PROPERTIES PROCESSORS 2 TIMEOUT 21600
+                    ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
                 add_test(NAME RANSCLSEPAWFM7NativeOracle COMMAND ${Python3_EXECUTABLE}
                     ${CMAKE_CURRENT_LIST_DIR}/validate_cls_epawf_m7.py
                     --build $<TARGET_FILE_DIR:IncNavierStokesSolver>)

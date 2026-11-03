@@ -13,7 +13,7 @@ p = argparse.ArgumentParser()
 p.add_argument('--bundle', required=True)
 p.add_argument('--ref', required=True)
 p.add_argument('--attempt', required=True)
-p.add_argument('--mode', choices=['build', 'kernel', 'pilot', 'native', 'transverse', 'regression'], default='build')
+p.add_argument('--mode', choices=['build', 'kernel', 'pilot', 'native', 'mms', 'flow-pilot', 'flow', 'transverse', 'regression'], default='build')
 p.add_argument('--gamma-scale', type=float, default=0)
 p.add_argument('--variant', choices=['CubicScaled','Regularized'], default='CubicScaled')
 p.add_argument('--beta', type=float, default=.4)
@@ -67,10 +67,11 @@ tests = source/'solvers/IncNavierStokesSolver/Tests/RANS'
 if a.mode == 'kernel':
     commands += [('kernel', ['python3', '-B', str(tests/'validate_cls_epawf_m8_kernel.py'),
         '--probe', str(build/'RANSRobustVariantProbe'), '--output', str(out/'qualification')], 3600)]
-elif a.mode in ('pilot', 'native'):
+elif a.mode in ('pilot', 'native', 'mms', 'flow-pilot', 'flow'):
     commands += [('native', ['python3', '-B', str(tests/'validate_cls_epawf_m8.py'),
         '--build', str(build), '--output', str(out/'qualification'), '--mode', a.mode,
-        '--gamma-scale', str(a.gamma_scale), '--variant', a.variant, '--beta', str(a.beta)], 21600)]
+        '--gamma-scale', str(a.gamma_scale), '--variant', a.variant, '--beta', str(a.beta)]
+        + (['--diagnostic'] if a.mode.startswith('flow') else []), 21600)]
 elif a.mode == 'transverse':
     commands += [('transverse', ['python3', '-B', str(tests/'validate_cls_epawf_m8_transverse.py'),
         '--build', str(build), '--output', str(out/'qualification'),

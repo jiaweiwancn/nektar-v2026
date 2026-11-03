@@ -486,7 +486,21 @@ def interval_stress(gradient, k, epsilon, beta, gamma=0, reference_strain=None, 
     return result
 
 
-def finite_box_certificate(beta, radius, k_radius, epsilon_radius, target='0.1', ratio_splits=8):
+def covariance_box_proof(gradient, k, epsilon, beta, gamma, reference_strain):
+    """Sufficient strict covariance positivity of every physical max-law state."""
+    stress = interval_stress(gradient, k, epsilon, beta, gamma, reference_strain)
+    symmetric = (stress+stress.T)*F(1, 2)
+    pivots = interval_ldl(symmetric)
+    return dict(gamma_over_nut0=str(gamma), certified_positive=pivots is not None,
+        stress_units='u_star^2 for k*=Qstar*k/K0 normalization',
+        LDL_pivot_intervals=[value.pair() for value in pivots] if pivots is not None else [],
+        stress_intervals=[[entry.pair() for entry in row] for row in symmetric],
+        scope='All constitutive states in this declared finite box, using the physical max(strain,rotation) coefficient; no PDE invariance or terrain-range claim.',
+        failure_interpretation='An interval LDL failure is inconclusive; only an explicit negative variance is a covariance counterexample.')
+
+
+def finite_box_certificate(beta, radius, k_radius, epsilon_radius, target='0.1', ratio_splits=8,
+                           covariance_gammas=('1', '3')):
     beta, radius = F(beta), F(radius)
     kr, er = F(k_radius), F(epsilon_radius)
     if not (0 <= radius < 1 and 0 <= kr < 1 and 0 <= er < 1):
@@ -543,11 +557,22 @@ def finite_box_certificate(beta, radius, k_radius, epsilon_radius, target='0.1',
     result.update(certified_lower_over_nut0=str(bound), target_over_nut0=str(target),
                   required_gamma_over_nut0=str(required),
                   qualified_property='frozen-k/epsilon incompressible momentum principal-form lower bound only')
+    result['fixed_gamma_candidates'] = []
+    reference = interval_array(a0+a0.T)
+    for gamma in covariance_gammas:
+        gamma = Decimal(str(gamma))
+        if gamma < 0:
+            raise ValueError('Prescribed gamma must be nonnegative')
+        covariance = covariance_box_proof(gradient, k, epsilon, Iv(beta), gamma, reference)
+        lower = rd(lambda: bound+gamma, ROUND_FLOOR)
+        covariance.update(certified_principal_lower_over_nut0=str(lower),
+                          momentum_target_met=lower >= Decimal(str(target)),
+                          joint_constitutive_gate=lower >= Decimal(str(target)) and covariance['certified_positive'])
+        result['fixed_gamma_candidates'].append(covariance)
     # A covariance witness in the same box, using a fixed rank-one test vector.
     # Negative upper endpoint is a rigorous counterexample, not an eigenvalue scan.
     shear = interval_array(a0)
     shear[0, 2] = Iv(1)+Iv(radius)
-    reference = interval_array(a0+a0.T)
     stress = interval_stress(shear, Iv(Q_LO, Q_HI), Iv(1), Iv(beta), required, reference)
     variance = (stress[0, 0]+2*stress[0, 2]+stress[2, 2])/2
     result['regularized_covariance_witness'] = dict(

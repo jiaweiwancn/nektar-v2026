@@ -29,6 +29,7 @@ from cls_epawf_m8_cases import (
     perturbation_session,
 )
 from cls_epawf_m8_native_oracle import verify as verify_energy
+from cls_epawf_m8_mms import flat_session as regularized_mms_session, verify as verify_regularized_mms
 from cls_epawf_m8_protocol import VERSION, contract, sha
 from validate_cls_epawf_m4 import spaces, state_difference, native_history_difference
 import validate_cls_epawf_m7 as m7
@@ -239,8 +240,51 @@ def native(run):
                         steps=2, dt=.005, time=0., full_energy=False) is None:
                 return False
     else:
-        run.receipt['regularized_mms'] = dict(status='required_separate_gate',
-            reason='Original zero-velocity manufactured forcing omits the persistent reference-strain stress')
+        flat = run.case('regularized-flat-mms', regularized_mms_session, steps=2,
+                        dt=.005, full_energy=False)
+        if flat is None:
+            return False
+        run.receipt['regularized_mms'] = verify_regularized_mms(flat)
+        run.audit.checks += run.receipt['regularized_mms']['checks']
+        run.receipt['regularized_curved_mms'] = dict(status='required_separate_gate',
+            reason='Flat nonzero-gamma MMS does not establish curved traction/body consistency')
+    run.save()
+    return True
+
+
+def mms(run):
+    matrix = [('flat', dict()), ('flat-p4', dict(degree=4)),
+              ('flat-h2', dict(refine=2)), ('flat-dt2', dict(dt=.0025, steps=4))]
+    answers = {}
+    for name, options in matrix:
+        raw = run.case(name, regularized_mms_session, full_energy=False,
+                       **dict(dict(steps=2, dt=.005), **options))
+        if raw is None:
+            return False
+        answers[name] = verify_regularized_mms(raw)
+        run.audit.checks += answers[name]['checks']
+    parallel = run.case('flat-mpi2', regularized_mms_session, ranks=2,
+                        steps=2, dt=.005, full_energy=False)
+    if parallel is None:
+        return False
+    answers['flat-mpi2'] = verify_regularized_mms(parallel)
+    run.audit.checks += answers['flat-mpi2']['checks']
+    run.receipt['mms_mpi_field_norms'] = state_difference(run.raws['flat'], parallel, 'M8 genuine flat MMS MPI parity')
+    first = run.case('flat-checkpoint', regularized_mms_session, steps=1, dt=.005,
+                     checkpoint=run.output/'mms-history', full_energy=False)
+    if first is None:
+        return False
+    resumed = run.case('flat-restart', regularized_mms_session, steps=1, dt=.005,
+                       restart=first['checkpoint'], full_energy=False)
+    if resumed is None:
+        return False
+    answers['flat-restart'] = verify_regularized_mms(resumed)
+    run.audit.checks += answers['flat-restart']['checks']
+    run.receipt['mms_restart_field_norms'] = state_difference(run.raws['flat'], resumed, 'M8 genuine flat MMS restart')
+    native_history_difference(run.raws['flat'], resumed, 'M8 genuine flat MMS complete histories')
+    run.receipt['regularized_mms'] = answers
+    run.receipt['regularized_curved_mms'] = dict(status='required_separate_gate',
+        reason='Flat all-field verification does not qualify the persistent regularization over curved terrain')
     run.save()
     return True
 
@@ -339,7 +383,7 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--build', type=Path, required=True)
     p.add_argument('--output', type=Path, required=True)
-    p.add_argument('--mode', choices=('protocol', 'pilot', 'native', 'flow-pilot', 'flow', 'terrain'), default='pilot')
+    p.add_argument('--mode', choices=('protocol', 'pilot', 'native', 'mms', 'flow-pilot', 'flow', 'terrain'), default='pilot')
     p.add_argument('--variant', choices=VARIANTS, default='CubicScaled')
     p.add_argument('--beta', type=float, default=.4)
     p.add_argument('--gamma', type=float, default=0.)
@@ -378,6 +422,8 @@ def main():
             success = pilot(run)
         elif args.mode == 'native':
             success = native(run)
+        elif args.mode == 'mms':
+            success = mms(run)
         elif args.mode in ('flow-pilot', 'flow'):
             if not args.diagnostic:
                 prerequisite(args.qualification, run)
