@@ -59,6 +59,12 @@ Two short native runs are conditional on a new-law target passing every
 required gate. Otherwise, if both targets remain unresolved, at most one
 frozen-velocity/pressure scalar-stage diagnostic is permitted. A failed
 search does not prove absence of an admissible root.
+That diagnostic freezes represented velocity and the native **reduced
+pressure** coefficients Pi. Mechanical pressure continues to satisfy
+`p/rho_f=Pi-2k/3`, so all k-dependent mechanical-pressure, sensor, source,
+normalization and projected-trace terms remain in its scalar residual.
+It solves a declared subsystem and supplies no coupled-stage or history
+advance.
 
 ## Retained unsuccessful attempts
 
