@@ -33,8 +33,8 @@ from cls_epawf_m8_r2_preflight import (Inventory, finite_ranges, selected_direct
     selected_interface, trace_audit, weak_loads)
 from cls_epawf_m7_energy_oracle import _horizontal, _mass, _profile, _velocity, _work
 from cls_epawf_m8_state_coverage import gll, local_values, tensor_points
-from cls_epawf_m8_r2_oracle import selected_inner
-from cls_epawf_m8_native_oracle import normal_rule, selected_stress
+from cls_epawf_m8_r2_oracle import selected_inner, selected_outer as selected_stress
+from cls_epawf_m8_native_oracle import normal_rule
 from validate_cls_epawf_m8_r2_pressure import PressureOracle
 
 ACTION_TOLERANCE = 1e-7

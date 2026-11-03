@@ -28,9 +28,9 @@ import numpy as np
 from cls_epawf_m8_r1_preflight import (weak_loads as linear_weak_loads,
     dual_norms, add, vector_sha, inner_values as linear_inner_values,
     inner_point_sets, eigen_example)
-from cls_epawf_m8_r2_oracle import selected_inner
-from cls_epawf_m8_native_oracle import (ray_source, normal_rule, selected_stress,
-    direct as linear_direct, interface as linear_interface)
+from cls_epawf_m8_r2_oracle import selected_inner, selected_outer as selected_stress, bind_outer_oracle
+from cls_epawf_m8_native_oracle import (ray_source, normal_rule,
+    direct as linear_direct)
 from cls_epawf_m7_energy_oracle import (Audit, _fields, _horizontal, _profile,
     _forcing, _sample, _velocity)
 from cls_epawf_m6_operator_oracle import _segment_projection, coordinate
@@ -40,6 +40,10 @@ from cls_epawf_m8_r2_cases import (RADIAL, cost, normalized_physics,
     REVIEWED_SOURCE, INNER_LAWS)
 from validate_cls_epawf_m5 import physical_rows
 from validate_cls_epawf_m2 import Profiles
+
+# R2-only coefficient evaluation; original source/evidence are unchanged.
+linear_weak_loads = bind_outer_oracle(linear_weak_loads)
+linear_direct = bind_outer_oracle(linear_direct)
 
 
 def sha(path):

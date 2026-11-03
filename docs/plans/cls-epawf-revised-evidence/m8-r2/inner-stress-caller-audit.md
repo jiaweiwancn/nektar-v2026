@@ -94,3 +94,24 @@ reported samples. No production stress or Audit result is changed to make
 these comparisons agree. Exact retained-report reanalysis and execution of
 missing fixed fixtures are separate modes, with original failures and
 producing probe/source hashes preserved.
+
+The first legal depleted fixture produced a native report, then exposed an
+overflow in the historical independent M1 nested complex exponential at its
+large outer q. A nonfinite error subsequently prevented that attempt's JSON
+serialization; its wrapper, log and native bytes remain preserved. R2 now
+uses a separately indexed outer oracle with the same dimensional polynomial
+tensors and actual q. For q>8 it rounds the factor
+`1-exp(-.36*exp(.75*q))` to 1. On the positive real axis, the omitted factor
+is below 1e-63 and its q derivative below 1.1e-61; hence the C value error is
+below 3e-64 and its q-derivative error below 4e-62. These are analytic omission
+bounds, separate from ordinary floating-point contraction error. Per-state
+tensor omission bounds are recorded for the actual finite oracle calls.
+The historical M1/R1/M8 oracle source is unchanged: R2 reuses its quadrature
+assembly through copied function globals with explicit R2 stress bindings.
+This changes no field, invariant, model parameter or production equation.
+The verifier now records nonfinite comparison diagnostics before computing
+an error and preserves any remaining invalid numeric serialization value as
+an explicit failed marker, so a second JSON error cannot hide the first
+scientific failure. A separately pinned additional-retained-run option
+reuses the successfully produced sixth native report rather than executing
+it again.

@@ -11,11 +11,13 @@ fixture is a qualified physical control. Numerical execution is Linux-only.
 With --reuse-run alone this performs read-only reanalysis, leaving missing
 fixtures unperformed. --continue-missing separately authorizes execution of
 only those fixed missing fixtures with the identical retained probe binaries.
+--reuse-extra-run additionally pins outputs left by a failed postprocessor.
 """
 import argparse
 from datetime import datetime, timezone
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import platform
@@ -33,10 +35,11 @@ import numpy as np
 
 from cls_epawf_m3_cases import set_info, set_parameter, write
 from cls_epawf_m4_cases import tensor_mesh
-from cls_epawf_m8_r2_oracle import indexed_inner, inner_mean
+from cls_epawf_m8_r2_oracle import (indexed_inner, inner_mean, indexed_outer,
+    selected_outer as selected_stress, outer_evaluation_statistics)
 from cls_epawf_m8_r1_kernel import inner_value as r1_value
 from cls_epawf_m7_energy_oracle import Audit, _fields, _horizontal, _sample, _velocity
-from cls_epawf_m8_native_oracle import ray_source, selected_stress
+from cls_epawf_m8_native_oracle import ray_source
 from cls_epawf_m8_r2_preflight import weak_loads, selected_direct, selected_interface
 from cls_epawf_m6_operator_oracle import _segment_projection
 
@@ -50,7 +53,31 @@ def sha(path):
 
 
 def save(path, value):
-    path.write_text(json.dumps(value, indent=2, allow_nan=False)+'\n')
+    # Never let a second JSON exception hide the scientific failure. Invalid
+    # values are explicit failed diagnostic markers, never replacement data.
+    invalid = []
+
+    def safe(item, location):
+        if isinstance(item, np.ndarray):
+            item = item.tolist()
+        if isinstance(item, np.generic):
+            item = item.item()
+        if isinstance(item, dict):
+            return {key: safe(entry, location+'/'+str(key)) for key, entry in item.items()}
+        if isinstance(item, (list, tuple)):
+            return [safe(entry, location+'/'+str(index)) for index, entry in enumerate(item)]
+        if (isinstance(item, float) and not math.isfinite(item)) or isinstance(item, complex):
+            invalid.append(dict(path=location, value=repr(item)))
+            return dict(invalid_numeric_diagnostic=repr(item))
+        return item
+
+    payload = safe(value, '')
+    if invalid:
+        value['success'] = value['available_input_reanalysis_success'] = value['verification_complete'] = False
+        value['failures'].append(dict(type='InvalidNumericDiagnostic', values=invalid))
+        payload.update(success=False, available_input_reanalysis_success=False, verification_complete=False,
+                       failures=safe(value['failures'], '/failures'), serialization_invalid_values=invalid)
+    path.write_text(json.dumps(payload, indent=2, allow_nan=False)+'\n')
 
 
 def reserve(path):
@@ -68,6 +95,7 @@ class Verification:
     def __init__(self):
         self.checks = 0
         self.errors = {}
+        self.invalid_values = []
 
     def require(self, condition, name):
         self.checks += 1
@@ -77,11 +105,20 @@ class Verification:
     def near(self, actual, expected, name, tolerance=2e-10):
         actual, expected = np.asarray(actual), np.asarray(expected)
         self.require(actual.shape == expected.shape, name+' shape')
+        if not np.all(np.isfinite(actual)) or not np.all(np.isfinite(expected)):
+            record = dict(name=name)
+            for label, values in (('actual', actual), ('expected', expected)):
+                indices = np.argwhere(~np.isfinite(values))
+                record[label] = dict(nonfinite_count=len(indices),
+                    first_entries=[dict(index=index.tolist(), value=repr(values[tuple(index)].item()))
+                                   for index in indices[:16]])
+            self.invalid_values.append(record)
+            self.require(False, 'Nonfinite comparison '+name+'; explicit invalid_values retained')
         # Component scaling prevents a large source or count from hiding a
         # pressure, covariance or small-field discrepancy.
         error = float(np.max(np.abs(actual-expected)/np.maximum(1., np.abs(expected)), initial=0.))
         self.errors[name] = max(error, self.errors.get(name, 0.))
-        self.require(np.all(np.isfinite(actual)) and error <= tolerance,
+        self.require(error <= tolerance,
                      name+': '+str(error)+' > '+str(tolerance))
         return error
 
@@ -403,6 +440,48 @@ def retained_pressure_cap(directory, producing_source, audit):
         scope='Analysis of retained same-binary pressure-active capped operator, exact time mass and projected trace. Distinct from the legal uncapped chi=0 depletion fixture; no cap-active chi=0 native claim or solver trajectory.')
 
 
+def extra_retained_run(directory, args, audit):
+    """Pin native bytes retained after a failed postprocessor serialization.
+
+    The failed result need not contain validation.json: its unchanged-runtime
+    wrapper is the producing provenance. Never overwrite or repair that run.
+    """
+    directory = directory.resolve()
+    receipt_path = directory.parent/'receipt.json'
+    receipt = json.loads(receipt_path.read_text())
+    audit.require(receipt['suite'] == 'inner' and receipt['status'] == 'failed'
+                  and receipt['runtime_unchanged'] and receipt['source_clean_start'] and receipt['source_clean_end']
+                  and receipt['source_commit'] == receipt['source_commit_end'] == args.producing_source_commit,
+                  'Additional retained native run lacks an unchanged failed producing wrapper')
+    pins = [directory.parent/'runtime-before.json', directory.parent/'runtime-after.json']
+    before, after = (json.loads(path.read_text()) for path in pins)
+    for pin in (before, after):
+        audit.require(pin['success'] and pin['clean'] and pin['source_commit'] == args.producing_source_commit,
+                      'Additional retained native runtime fingerprint failed')
+    for key in ('source_inputs', 'runtime_artifacts', 'runtime_bindings', 'runtime_environment',
+                'python_packages', 'tool_images'):
+        audit.require(before[key] == after[key], 'Additional retained runtime changed: '+key)
+    command = next(row for row in receipt['commands'] if row['name'] == 'suite')
+    argv = command['argv']
+    audit.require(command['exit_code'] != 0 and Path(argv[argv.index('--output')+1]).resolve() == directory
+                  and argv[argv.index('--producing-source-commit')+1] == args.producing_source_commit,
+                  'Additional retained wrapper does not identify this failed output and source')
+    for flag, program in (('--wall-probe', args.wall_probe), ('--kernel-probe', args.kernel_probe)):
+        path = program.resolve()
+        artifact = str(path.relative_to(Path(before['source_root']).parent))
+        audit.require(Path(argv[argv.index(flag)+1]).resolve() == path
+                      and before['runtime_artifacts'][artifact] == sha(path),
+                      'Additional retained native program differs from the producing runtime')
+    files = [receipt_path, *pins, directory.parent/'suite.log']
+    if (directory/'validation.json').exists():
+        files.append(directory/'validation.json')
+    return dict(results=str(directory), retained_status='failed', native_calls=0,
+        validation_json_present=(directory/'validation.json').exists(),
+        analysis_commit=receipt.get('analysis_commit'), producing_source_commit=args.producing_source_commit,
+        input_files={str(path): dict(bytes=path.stat().st_size, sha256=sha(path)) for path in files},
+        interpretation='Retained native outputs from a failed analysis attempt; original failure and logs remain unchanged')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--kernel-probe', required=True, type=Path)
@@ -411,6 +490,8 @@ def main():
     parser.add_argument('--output', required=True, type=Path)
     parser.add_argument('--reuse-run', type=Path,
                         help='Reanalyze exact retained kernel/native files; execute no probes unless --continue-missing is supplied')
+    parser.add_argument('--reuse-extra-run', action='append', default=[], type=Path,
+                        help='Additional failed unchanged-runtime results containing native outputs; preserve and hash their original wrappers')
     parser.add_argument('--continue-missing', action='store_true',
                         help='Execute only missing fixed fixtures with the identical retained probe binaries')
     parser.add_argument('--producing-source-commit', default='',
@@ -422,8 +503,10 @@ def main():
         raise SystemExit('Run numerical verification only on the authoritative Linux host')
     if args.continue_missing and args.reuse_run is None:
         raise SystemExit('--continue-missing requires the retained --reuse-run')
-    if args.reuse_run is not None and not args.producing_source_commit:
-        raise SystemExit('Retained replay requires explicit --producing-source-commit')
+    if not args.producing_source_commit:
+        raise SystemExit('Native/cap verification requires explicit --producing-source-commit')
+    if args.reuse_extra_run and args.reuse_run is None:
+        raise SystemExit('--reuse-extra-run requires the original --reuse-run')
     output = reserve(args.output)
     started = time.monotonic()
     report = dict(schema=1, phase='M8-R2 B compiled inner law and ACTIVE native weak operator',
@@ -467,6 +550,8 @@ def main():
             report['retained_original_success_field_present'] = 'success' in previous
             report['retained_original_failures'] = previous.get('failures', [])
             report['kernel_native_reexecution'] = False
+            report['extra_retained_runs'] = [extra_retained_run(path, args, audit)
+                                            for path in args.reuse_extra_run]
         report['kernel'] = kernel(json.loads(kernel_file.read_text()), audit)
         report['kernel_sha256'] = sha(kernel_file)
         fixed = [('linear-active-chi0', 'Linear', 1, 0, 1),
@@ -479,11 +564,17 @@ def main():
                  ('saturated-zero-local-k', 'SaturatedR2', 4, 0, 1)]
         raw_cases = {}
         for name, selector, fixture, chi, rK in fixed:
-            retained = args.reuse_run/name/'native.json' if args.reuse_run is not None else None
+            roots = ([args.reuse_run]+args.reuse_extra_run) if args.reuse_run is not None else []
+            available = [root/name/'native.json' for root in roots if (root/name/'native.json').exists()]
+            if len(available) > 1:
+                audit.require(len({sha(path) for path in available}) == 1,
+                              'Ambiguous differing retained native inputs for '+name)
+            retained = available[0] if available else None
             if retained is not None and retained.exists():
                 raw_path, xml = retained, retained.parent/'case.xml'
                 report['reused_inputs'][str(raw_path)] = sha(raw_path)
                 report['reused_inputs'][str(xml)] = sha(xml)
+                report['reused_inputs'][str(retained.parent/'run.log')] = sha(retained.parent/'run.log')
                 reexecuted = False
             elif args.reuse_run is not None and not args.continue_missing:
                 report['unperformed_fixtures'].append(name)
@@ -526,7 +617,9 @@ def main():
         report['verification_complete'] = False
         report['failures'].append(dict(type=type(error).__name__, message=str(error), traceback=traceback.format_exc()))
         print(traceback.format_exc(), file=sys.stderr)
-    report.update(checks=audit.checks, errors=audit.errors, finished_utc=stamp(), seconds=time.monotonic()-started)
+    report.update(checks=audit.checks, errors=audit.errors, invalid_values=audit.invalid_values,
+        independent_outer_evaluations=outer_evaluation_statistics(),
+        finished_utc=stamp(), seconds=time.monotonic()-started)
     changed = [path for path, value in report['imported_source_files'].items() if sha(path) != value]
     if changed:
         report['success'] = report['available_input_reanalysis_success'] = report['verification_complete'] = False

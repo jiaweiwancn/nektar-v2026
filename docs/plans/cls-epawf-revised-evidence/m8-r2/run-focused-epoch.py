@@ -17,6 +17,7 @@ p.add_argument('--attempt',required=True)
 p.add_argument('--analysis-source',type=Path)
 p.add_argument('--analysis-commit')
 p.add_argument('--reuse-inner-run',type=Path)
+p.add_argument('--reuse-extra-run',type=Path,action='append',default=[])
 p.add_argument('--capped-pressure-run',type=Path)
 a=p.parse_args()
 root=a.root.resolve();source,build=root/'source',root/'build'
@@ -42,6 +43,7 @@ if a.suite=='inner':
         '--wall-probe',str(build/'RANSCurvedWallProbe'),'--template',str(tests/'EquilibriumWallEvolution.xml'),
         '--producing-source-commit',a.expected_source,'--output',str(out/'results')]
     if a.reuse_inner_run:command+=['--reuse-run',str(a.reuse_inner_run),'--continue-missing']
+    for retained in a.reuse_extra_run:command+=['--reuse-extra-run',str(retained)]
     if a.capped_pressure_run:command+=['--capped-pressure-run',str(a.capped_pressure_run)]
 elif a.suite=='pressure':
     driver=tests/'validate_cls_epawf_m8_r2_pressure.py';cpu=48
