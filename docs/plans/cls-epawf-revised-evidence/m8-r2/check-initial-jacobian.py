@@ -58,6 +58,7 @@ def main():
             'log', 'matrix', 'runtime-pin', 'output'):
         parser.add_argument('--'+name, type=Path, required=True)
     parser.add_argument('--expected-commit', required=True)
+    parser.add_argument('--cpu', type=int, default=48, help='Explicitly allocated single Linux CPU (default:48)')
     args = parser.parse_args()
     if platform.system() != 'Linux':
         raise SystemExit('Retained J0 scientific verification belongs to Linux')
@@ -72,6 +73,7 @@ def main():
         source_commit=git(args.source, 'rev-parse', 'HEAD'),
         source_clean_start=not bool(git(args.source, 'status', '--porcelain')),
         cpu_affinity=sorted(os.sched_getaffinity(0)),
+        selected_cpu=args.cpu,
         numerical_threads={key:os.environ.get(key) for key in THREADS},
         inputs={str(path.resolve()):dict(bytes=path.stat().st_size, sha256=sha(path)) for path in files},
         solved_path_assessed=False, target_stage_status_assessed=False,
@@ -82,8 +84,8 @@ def main():
     try:
         if receipt['source_commit'] != args.expected_commit or not receipt['source_clean_start']:
             raise ValueError('Analysis source differs from its requested clean pin')
-        if receipt['cpu_affinity'] != [48] or any(receipt['numerical_threads'][key] != '1' for key in THREADS):
-            raise ValueError('Initial-J0 verification requires CPU48 and six numerical thread settings equal to one')
+        if args.cpu < 0 or receipt['cpu_affinity'] != [args.cpu] or any(receipt['numerical_threads'][key] != '1' for key in THREADS):
+            raise ValueError('Initial-J0 verification requires the explicitly allocated CPU and six numerical thread settings equal to one')
         log_bytes = args.log.read_bytes()
         expression = rb'EP-AWF ScalarFeasibleR2 fresh Jacobian iteration 0 alpha 3200(?:\.0*)? residual ([0-9eE+.-]+)[^\n]*\n'
         matches = list(re.finditer(expression, log_bytes))
