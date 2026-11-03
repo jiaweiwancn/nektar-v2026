@@ -171,6 +171,11 @@ covariance minima are `.0746028/.176920`, and the maximum normalized outer
 gradient departure is `.000532163`. Lambda and b are one, with no active
 limiter/cap source volume. These physical-range observations do not turn an
 auxiliary residual minimizer into a converged stage or a physical time sample.
+The [compact terminal record](cls-epawf-revised-evidence/m8-r2/terminal-linear-auxiliary-result.json)
+binds the independent reconstruction and actual producing source/runtime,
+including full traction, k flux, separate weak/strong continuity, constraints
+and energy/source accounting. These are independent terminal observations;
+the absent final case report supplies no native postqualification table.
 
 The full auxiliary-path audit finished but failed five moving-ray lookup
 checks. A separately bound terminal diagnosis found a one-ULP radius
