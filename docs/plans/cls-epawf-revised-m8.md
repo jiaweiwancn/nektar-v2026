@@ -81,3 +81,59 @@ k remains invalid; no field floor or post-step clipping is introduced.
 All attempts, including failed qualifications, are retained with source,
 commands, runtime/dependency fingerprints, allocation and exit status. M8
 does not inherit a successful physical gate merely from M7 verification.
+
+## Current observations (qualification still in progress)
+
+The first implementation is `3941b83`; the source-bound native campaign uses
+`aa854f4c5b05451a81a4e1dd60eaaca98eb547e4` in a separate `m8/source` and
+`m8/build`. M7's source/build/runtime evidence and the unrelated Linux main
+checkout are preserved. No revised-note or original CLS/AWF source is changed.
+
+- The compiled kernel probe passes 27,907 checks. Independent kernel/source
+  qualification passes 37,310 checks at `07363199`; its later stored-report
+  replay passes 37,309 (the skipped check is the fresh process exit check).
+- The reduced transverse experiment passes 305,254 independent checks. At
+  xi=4, p=7/eight radial cells and T=.05 s, the energy ratios are
+  .589289214077 for beta=.4, .734610537997 for beta=.45, and
+  .333442685761 for beta=.4/GammaScale=.25. This is reference-local reduced
+  dynamics; it does not qualify a nonlinear terrain trajectory.
+- A fresh directed-interval proof at `11aa94c0` certifies both covariance
+  positivity and an incompressible momentum principal lower bound for the
+  entire local box with gradient-entry radius .001 and k/epsilon ratios
+  [.99,1.01], using GammaScale=1 for both beta choices. GammaScale=3
+  jointly certifies radius .01 with those same turbulence bounds. These
+  finite boxes are not invariant regions of the coupled PDE.
+- The coarse p=3 native projection is outside that box before any step,
+  with max normalized gradient error .0642009881 and negative inner
+  sampled covariance. The zero-step p=5 error is .00264835 and still has
+  negative inner covariance. At p=7 the error is .00010243325, every
+  declared finite outer evaluation set fits the GammaScale=1 local box,
+  and inner/outer sampled covariance minima are +.08069398/+.17775442.
+  These are reference-projection observations, not a positive time map.
+- On the broader preregistered box (gradient-entry radius .25, k/epsilon
+  ratios [.5,1.5]), exact rational states/directions with outward interval
+  stress/tangent evaluation give contradictory *necessary* fixed-GammaScale
+  bounds. For beta=.4 they are GammaScale >=2.44640920758 and
+  GammaScale <=.177525831862; for beta=.45, >=2.27794509320 and
+  <=.156117116287. Thus neither fixed-scalar regularized variant can
+  provide both nonnegative principal diffusion and covariance positivity
+  at every state of this box. This is stronger than the earlier failure
+  of very conservative sufficient-gamma choices, and applies only to the
+  declared box/model family. Smaller regimes and changed invariant laws
+  remain separate questions.
+
+The approved modified-invariant alternative is therefore being screened
+mathematically before any new production operator is adopted. The concrete
+screen retains C(q) below qc=3.3, uses the earlier note's C1 power-law tail
+with alpha=-qc*C'(qc)/C(qc), and compares constant common beta with a tail
+beta(q) that holds beta(q)[q*C(q)]^2 fixed. All coefficient derivatives
+must enter the selected stress tangent. Repair of a simple-shear/transverse
+factor alone cannot qualify the full tensor.
+
+The first regularized flat manufactured cases pass their actual solver and
+independent field/traction checks. Their campaign then exposes a Python
+checkpoint-path serialization error; no checkpoint solve was attempted
+after that exception. The corrected driver will preserve the original
+attempt and replay only successful, hash-bound cases, with every independent
+audit repeated; missing checkpoint/restart cases run afresh. Neither this
+receipt bug nor an incomplete trajectory is a constitutive diagnosis.

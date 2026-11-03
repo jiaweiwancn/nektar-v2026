@@ -158,7 +158,7 @@ void Interface(std::ostream &o,const RANSWallEvolutionPatch &p,const Vector &s)
         const auto ki=vi.Gradient(s,p.offset[p.K()]),ko=vo.Gradient(s,p.offset[p.K()]),ge=ep.Gradient(s,p.offset[p.Epsilon()]);
         AnalyticalWallFunction awf({param.geometry.molecularNu,metric.height,param.geometry.roughness,param.geometry.sampleHeight},K);
         const double nt=awf.EddyViscosity(metric.height),D=param.geometry.molecularNu+nt;
-        const auto closure=EvaluateRANSClosure(param.model.Model(),k,e,Go,metric.distance,param.model.Parameters(),0);
+        const auto closure=p.OuterClosure(k,e,Go,q);
         for(int a=0;a<3;++a)for(int b=0;b<3;++b)
         {Ti[a][b]=D*(Gi[a][b]+Gi[b][a])-(a==b?pi.Value(s,p.offset[p.InnerPressure()]):0.);
          To[a][b]=-closure.reynoldsStress[a][b]+(a==b?2*k/3-po.Value(s,p.offset[p.OuterPressure()]):0.);}
@@ -268,7 +268,7 @@ void TransitionAudit(std::ostream &o,const RANSWallEvolutionPatch &p,const Vecto
         RANSWallEvolutionData zero(p.Dimension());const auto input=p.TransitionInput(s,q,time,data);
         const auto v=p.Transition(s,q,time,data),rv=p.Transition(p.TransitionReference(),q,time,zero);
         const auto profile=p.StateProfile(s,q,time,data);const auto &pr=profile->Reference();
-        Require(std::abs(p.DependentEpsilon(s,q,time,data)-profile->Dissipation(parameters.geometry.height))<1e-14,
+        Require(std::abs(p.DependentEpsilon(s,q,time,data)-p.WallDissipation(s,q,*profile))<1e-14,
             "state-aware dependent epsilon evaluation differs");
         o<<"{\"chart\":";Write(o,q);o<<",\"input\":";Write(o,Vector{input.coordinate,input.budgetMargin,input.reynolds});
         o<<",\"gates\":";Write(o,Vector{v.chi,v.spatial,v.state,v.admissibility,v.marginGate,v.reynoldsGate,v.d2});
@@ -414,6 +414,10 @@ int main(int argc,char **argv)
         std::ostringstream out;out<<std::setprecision(17)<<"{\"schema\":1,\"dimension\":"<<d<<",\"ranks\":"<<world->GetComm()->GetSize()
             <<",\"chi\":"<<parameters.chi<<",\"eta\":0,\"invariant_partition_fixture\":"<<(invariant?"true":"false")<<",\"time\":"<<time<<",\"alpha\":"<<alpha<<",\"function_coordinates\":\"Chart\",\"parameters\":";
         Write(out,Vector{parameters.geometry.molecularNu,H,parameters.geometry.roughness,parameters.geometry.sampleHeight,parameters.geometry.tailStart,K,parameters.model.Q(),parameters.model.Kappa()});
+        double ustar=0;serial->LoadParameter("RANSWallFrictionVelocity",ustar,.4);
+        out<<",\"model_variant\":\""<<patch.VariantName()<<"\",\"robust_parameters\":";Write(out,patch.RobustParameters());
+        out<<",\"ustar\":"<<ustar<<",\"robust_reference_flow\":";Write(out,patch.RobustReferenceFlow());
+        out<<",\"robust_reference_normal\":";Write(out,patch.RobustReferenceNormal());
         out<<",\"map_parameters\":";Write(out,MapParameters(mapping));out<<",\"quadrature_orders\":";Write(out,Vector{static_cast<double>(parameters.tangentialOrder),static_cast<double>(parameters.normalOrder)});
         out<<",\"lower\":";Write(out,patch.lower);out<<",\"upper\":";Write(out,patch.upper);out<<",\"offsets\":[";
         for(int b=0;b<=patch.Gauge();++b){if(b)out<<',';out<<patch.offset[b];}out<<"],\"sizes\":[";

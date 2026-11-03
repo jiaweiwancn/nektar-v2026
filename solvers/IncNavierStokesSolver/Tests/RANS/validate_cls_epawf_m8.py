@@ -14,6 +14,8 @@ import math
 import os
 from pathlib import Path
 import platform
+import re
+import shutil
 import subprocess
 import sys
 import time
@@ -83,8 +85,154 @@ class Runner:
         self.environment['LD_LIBRARY_PATH'] = str(self.build/'geometry-lib')+':'+self.environment.get('LD_LIBRARY_PATH', '')
         self.raws = {}
         self.audit = Audit()
+        self.reuse = {}
+        self.reuse_runtime_files = {}
         receipt['environment'] = dict(THREADS, TMPDIR=self.environment.get('TMPDIR'),
             LD_LIBRARY_PATH=self.environment['LD_LIBRARY_PATH'], cpu_affinity=sorted(os.sched_getaffinity(0)))
+        if args.reuse is not None:
+            self.prepare_reuse(args.reuse, args.reuse_runtime_pin)
+
+    def prepare_reuse(self, directory, runtime_pin):
+        """Reuse only a byte-identical solver/runtime and physical session.
+
+        Completed cases can survive a Python receipt/audit correction while
+        the solver cohort's original source identity remains visible.  The
+        independently executable curved probe is the only allowed changed
+        C/C++ source; its report is never reused as native solver evidence.
+        """
+        detail = dict(requested=str(directory), enabled=False,
+            rule='Verified exit-zero cases only; exact parameter/XML/native-report hashes; same solver, loader bindings and transitive runtime images; all independent audits rerun',
+            checkpoint_or_restart_reuse=False)
+        self.receipt['reuse_policy'] = detail
+        try:
+            prior_path = directory if directory.is_file() else directory/'validation.json'
+            prior = json.loads(prior_path.read_text())
+            if runtime_pin is None or not runtime_pin.is_file():
+                raise RuntimeError('--reuse requires an immutable --reuse-runtime-pin fingerprint')
+            pin = json.loads(runtime_pin.read_text())
+            if prior['parameters'] != parameters(self.args):
+                raise RuntimeError('Prior run selected different model parameters')
+            if pin['source_commit'] != prior['source_commit']:
+                raise RuntimeError('Runtime fingerprint does not belong to the producing source revision')
+            solver = self.build/'IncNavierStokesSolver'
+            if prior['program']['sha256'] != sha(solver) or pin['runtime_artifacts']['build/IncNavierStokesSolver'] != sha(solver):
+                raise RuntimeError('Producing native solver image differs from the current solver')
+            changed = subprocess.check_output(['git', '-C', str(SOURCE), 'diff', '--name-only',
+                prior['source_commit'], self.receipt['source_commit']], text=True).splitlines()
+            cpp = [name for name in changed if Path(name).suffix in
+                   ('.cpp', '.c', '.cc', '.cxx', '.h', '.hpp', '.hxx', '.inl')]
+            allowed = 'library/UnitTests/SolverUtils/RANSCurvedWallProbe.cpp'
+            if any(name != allowed for name in cpp):
+                raise RuntimeError('Native numerical C/C++ inputs differ from the producing source')
+            detail['changed_Cxx_inputs'] = cpp
+            detail['Cxx_scope'] = 'Native solver inputs unchanged; a separately executed curved probe may change metadata/its own diagnostics'
+
+            def bindings(path):
+                result = subprocess.run(['ldd', str(path)], env=self.environment, text=True,
+                    stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=30, check=False)
+                if 'not found' in result.stdout:
+                    raise RuntimeError('An active solver runtime dependency is unresolved')
+                static = 'statically linked' in result.stdout or 'not a dynamic executable' in result.stdout
+                if result.returncode and not static:
+                    raise RuntimeError('Could not resolve the active solver runtime')
+                found, virtual = {}, []
+                for line in result.stdout.splitlines():
+                    line = line.strip()
+                    if '=>' in line:
+                        soname, destination = (part.strip() for part in line.split('=>', 1))
+                        destination = re.sub(r'\s+\(0x[0-9a-fA-F]+\)\s*$', '', destination)
+                        if destination.startswith('/'):
+                            found[soname] = destination
+                    elif line.startswith('/'):
+                        destination = re.sub(r'\s+\(0x[0-9a-fA-F]+\)\s*$', '', line)
+                        found['ELF interpreter'] = destination
+                    elif line.startswith(('linux-vdso', 'linux-gate')):
+                        virtual.append(line.split()[0])
+                return dict(bindings=dict(sorted(found.items())), virtual=sorted(virtual), static=static)
+
+            images = [('build/IncNavierStokesSolver', solver)]
+            if any(row.get('requested_ranks', 1) > 1 and row.get('status') == 'verified' for row in prior['cases']):
+                pinned = pin['tool_images']['mpiexec']
+                aliases = []
+                for alias in ('mpirun', 'mpiexec'):
+                    launcher = shutil.which(alias)
+                    if launcher is None or sha(launcher) != pinned['sha256'] or str(Path(launcher).resolve()) != pinned['resolved']:
+                        raise RuntimeError('Actual MPI launcher alias differs from the producing pinned tool image: '+alias)
+                    self.reuse_runtime_files[str(Path(launcher))] = pinned['sha256']
+                    # Check loader bindings of the actual mpirun invocation
+                    # as well as the alias captured by the original pin.
+                    images.append(('tool/mpiexec', Path(launcher)))
+                    aliases.append(dict(name=alias, path=launcher,
+                                        resolved=str(Path(launcher).resolve()), sha256=pinned['sha256']))
+                detail['mpi_launcher_aliases'] = aliases
+            for key, image in images:
+                actual = bindings(image)
+                if actual != pin['runtime_bindings'][key]:
+                    raise RuntimeError('Active runtime loader bindings changed for '+key)
+                for destination in actual['bindings'].values():
+                    expected = pin['runtime_artifacts']['library/'+destination]
+                    if sha(destination) != expected:
+                        raise RuntimeError('Runtime library bytes changed: '+destination)
+                    self.reuse_runtime_files[destination] = expected
+            self.reuse = {row['name']: row for row in prior['cases']}
+            detail.update(enabled=True, original_source_commit=prior['source_commit'],
+                prior_receipt=dict(path=str(prior_path), sha256=sha(prior_path)),
+                runtime_pin=dict(path=str(runtime_pin), sha256=sha(runtime_pin)),
+                program_sha256=sha(solver), transitive_runtime_images=len(self.reuse_runtime_files))
+            old_environment = pin.get('runtime_environment', {})
+            current_environment = {key: self.environment.get(key) for key in old_environment}
+            detail['producing_runtime_environment'] = old_environment
+            detail['current_audit_environment'] = current_environment
+            detail['environment_differences'] = [key for key in old_environment if old_environment[key] != current_environment[key]]
+            detail['environment_interpretation'] = 'Original trajectory retains its recorded producing environment; current independent audits run anew under the fresh enclosing campaign fingerprint. Actual solver/launcher loader bindings and image bytes are verified directly.'
+            detail['producing_python_packages'] = pin.get('python_packages', {})
+            detail['audit_package_policy'] = 'Old independent audit results are not reused; installed numerical package code for new audits is pinned by the enclosing fresh campaign fingerprint.'
+        except Exception as error:
+            detail['reason_disabled'] = str(error)
+            self.reuse = {}
+
+    def replay(self, name, selected, xml, directory, record):
+        prior = self.reuse.get(name)
+        if prior is None:
+            return None
+        if selected.get('checkpoint') is not None or selected.get('restart') is not None:
+            record['reuse_ineligible'] = 'Checkpoint/restart cases must execute afresh'
+            return None
+        if prior.get('status') != 'verified' or prior.get('exit_code') != 0:
+            record['reuse_ineligible'] = 'Producing case was not a verified successful trajectory'
+            return None
+        if prior.get('parameters') != selected or prior.get('requested_ranks', 1) != record['requested_ranks']:
+            record['reuse_ineligible'] = 'Producing case parameters or rank count differ'
+            return None
+        if prior.get('parameters', {}).get('checkpoint') is not None or prior.get('parameters', {}).get('restart') is not None:
+            record['reuse_ineligible'] = 'Producing case used checkpoint/restart paths'
+            return None
+        try:
+            old_xml = Path(prior['xml'])
+            old_report = Path(prior['native_report'])
+            if sha(old_xml) != prior['xml_sha256'] or sha(xml) != prior['xml_sha256']:
+                raise RuntimeError('Regenerated physical XML is not byte-identical to the producing case')
+            if sha(old_report) != prior['native_report_sha256']:
+                raise RuntimeError('Producing native report hash changed')
+            raw = json.loads(old_report.read_text())
+            if raw.get('failure') or raw.get('rejected_state'):
+                raise RuntimeError('Producing native report contains a failed/rejected trajectory')
+            target = directory/'case.evolution.json'
+            shutil.copyfile(old_report, target)
+            if sha(target) != prior['native_report_sha256'] or sha(old_report) != prior['native_report_sha256']:
+                raise RuntimeError('Report bytes changed during replay copy')
+            record.update(execution_mode='source_bound_replay', replay_from=dict(
+                native_report=str(old_report), native_report_sha256=prior['native_report_sha256'],
+                xml=str(old_xml), xml_sha256=prior['xml_sha256'],
+                source_commit=self.receipt['reuse_policy']['original_source_commit'],
+                original_solver_seconds=prior.get('seconds'),
+                rule='Native solve reused; current independent audits rerun'))
+            self.receipt.setdefault('replays', []).append(dict(name=name, **record['replay_from']))
+            print(name+': source-bound native report replay (independent audits rerun)', flush=True)
+            return raw
+        except Exception as error:
+            record['reuse_ineligible'] = str(error)
+            return None
 
     def save(self):
         self.receipt['checks'] = self.audit.checks
@@ -122,16 +270,22 @@ class Runner:
     def case(self, name, generator=perturbation_session, ranks=1,
              source_mechanism=False, full_energy=True, **kwargs):
         directory = self.output/name; directory.mkdir()
-        selected = dict(parameters(self.args), **kwargs)
+        selected = {key: str(value) if isinstance(value, Path) else value
+                    for key, value in dict(parameters(self.args), **kwargs).items()}
         xml = generator(TEMPLATE, directory/'case.xml', **selected)
         record = dict(name=name, parameters=selected, requested_ranks=ranks,
                       xml=str(xml), xml_sha256=sha(xml), status='running',
                       source_mechanism_only=source_mechanism)
         self.receipt['cases'].append(record); self.save()
-        code, command = self.command(name, [self.build/'IncNavierStokesSolver', xml], directory,
-                                     ranks, self.args.timeout)
+        reused = self.replay(name, selected, xml, directory, record)
+        if reused is None:
+            record['execution_mode'] = 'fresh_native_solver'
+            code, command = self.command(name, [self.build/'IncNavierStokesSolver', xml], directory,
+                                         ranks, self.args.timeout)
+        else:
+            code, command = 0, dict(seconds=0.)
         path = directory/'case.evolution.json'
-        raw = {}
+        raw = reused or {}
         if path.is_file():
             record.update(native_report=str(path), native_report_sha256=sha(path))
             try:
@@ -393,6 +547,8 @@ def main():
     p.add_argument('--smooth', action='store_true')
     p.add_argument('--qualification', type=Path)
     p.add_argument('--terrain-sessions', type=Path)
+    p.add_argument('--reuse', type=Path, help='Replay verified successful cases from this immutable validation directory/receipt when physical inputs and solver runtime are identical')
+    p.add_argument('--reuse-runtime-pin', type=Path, help='Producing cohort full runtime fingerprint, required for --reuse')
     p.add_argument('--diagnostic', action='store_true', help='Allow unqualified flow observations, with no robust/physical promotion')
     p.add_argument('--timeout', type=float, default=3600.)
     args = p.parse_args()
@@ -451,6 +607,8 @@ def main():
     try:
         run.audit.require(provenance() == revision, 'M8 source revision changed during execution')
         run.audit.require(sha(solver) == receipt['program']['sha256'], 'M8 solver binary changed during execution')
+        for path, expected in run.reuse_runtime_files.items():
+            run.audit.require(sha(path) == expected, 'Reused native solver runtime changed during current audits: '+path)
         receipt['source_clean_end'] = True
     except Exception as error:
         receipt['implementation_verified'] = False
