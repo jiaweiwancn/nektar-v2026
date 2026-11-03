@@ -31,9 +31,11 @@ double MinimumEigenvalue(RANSTensor a)
 }
 }
 RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s,const Vector &history,
-    double alpha,double time,const RANSWallEvolutionData &data,double ustar) const
+    double alpha,double time,const RANSWallEvolutionData &data,double ustar,bool constitutiveReconstruction) const
 {
     Diagnostic result;const double sentinel=std::numeric_limits<double>::max();
+    Vector range{0,sentinel,-sentinel,sentinel,-sentinel,sentinel,-sentinel,0};
+    const double K0=m_parameters.model.Q()*ustar*ustar;
     bool admissible=true;Refresh(s,time,&data);
     for(const std::string name:{"source_volume_inner","source_volume_outer","physical_sample_K","physical_sample_outer",
         "prescribed_source_inner","mass_volume","interface_inner","interface_outer","reconstruction_dense","reconstruction_native"})
@@ -43,6 +45,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
     auto sample=[&](const std::string &name,const RANSWallGlobalPoint &v,bool inner,bool constitutive,bool owned)
     {
         if(!owned && m_comm->GetRank()!=0)return;
+        constitutive=constitutive || constitutiveReconstruction;
         auto &r=result[name];if(r.empty())r={0,sentinel,sentinel,sentinel,sentinel,0};
         ++r[0];const double k=v.Value(s,offset[K()]);r[1]=std::min(r[1],k);
         const double epsilon=inner?(constitutive?DependentEpsilon(s,v.coordinate,time,data):sentinel):
@@ -54,13 +57,26 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
             RANSTensor G{},covariance{};for(int a=0;a<m_dimension;++a)G[PhysicalAxis(a)]=v.Gradient(s,offset[a]);
             if(inner)
             {
-                const double nt=StateProfile(s,v.coordinate,time,data)->Original().EddyViscosity(Distance(v.coordinate));
+                const auto profile=StateProfile(s,v.coordinate,time,data);
+                const double nt=profile->Original().EddyViscosity(Distance(v.coordinate));
                 for(int a=0;a<3;++a)for(int b=0;b<3;++b)covariance[a][b]=(a==b?2*k/3:0)-nt*(G[a][b]+G[b][a]);
+                if(constitutiveReconstruction)
+                {range[5]=std::min(range[5],profile->K()/K0);range[6]=std::max(range[6],profile->K()/K0);}
             }
             else
             {
                 const auto c=OuterClosure(k,epsilon,G,v.coordinate);
                 covariance=c.reynoldsStress;
+                if(constitutiveReconstruction)
+                {
+                    const double g0=ustar/(m_parameters.model.Kappa()*Distance(v.coordinate));
+                    const double e0=ustar*ustar*ustar/(m_parameters.model.Kappa()*Distance(v.coordinate));
+                    for(int a=0;a<3;++a)for(int b=0;b<3;++b)
+                        range[0]=std::max(range[0],std::abs(G[a][b]/g0-m_referenceFlow[a]*m_referenceNormal[b]));
+                    range[1]=std::min(range[1],k/K0);range[2]=std::max(range[2],k/K0);
+                    range[3]=std::min(range[3],epsilon/e0);range[4]=std::max(range[4],epsilon/e0);
+                    range[7]=std::max(range[7],std::abs(G[0][0]+G[1][1]+G[2][2])/g0);
+                }
                 const double h=1e-5*std::max(1.,std::abs(G[0][2]));auto plus=G,minus=G;plus[1][0]+=h;minus[1][0]-=h;
                 const auto cp=OuterClosure(k,epsilon,plus,v.coordinate);
                 const auto cm=OuterClosure(k,epsilon,minus,v.coordinate);
@@ -96,7 +112,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
         const auto &el=fields[0]->Elements()[e];const auto exp=fields[0]->Field()->GetExp(e);
         for(int kind=0;kind<2;++kind)
         {
-            const int dense=2*el.degree+3;
+            const int dense=2*el.degree+(constitutiveReconstruction && el.upper[2]<=m_parameters.geometry.height?7:3);
             const std::array<int,3> counts{kind?dense:exp->GetNumPoints(0),
                 m_dimension==3?(kind?dense:exp->GetNumPoints(1)):1,
                 kind?dense:exp->GetNumPoints(m_dimension-1)};
@@ -124,6 +140,12 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
         for(int i=1;i<=4;++i)if(r[i]==sentinel)r[i]=0;
     }
     result["admissible"]={admissible?1.:0.};
+    if(constitutiveReconstruction)
+    {
+        for(int i:{0,2,4,6,7})m_comm->AllReduce(range[i],LibUtilities::ReduceMax);
+        for(int i:{1,3,5})m_comm->AllReduce(range[i],LibUtilities::ReduceMin);
+        result["outer_constitutive_range"]=range;
+    }
     if(!admissible)return result;
     Vector continuity(5);for(const auto &q:Quadrature(0))
     {

@@ -3,6 +3,7 @@
 // Copyright (c) 2026 Nektar++ contributors.
 ///////////////////////////////////////////////////////////////////////////////
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
 #include <cmath>
 
 namespace Nektar
@@ -80,7 +81,13 @@ RANSCappedDestructionValues RANSWallEvolutionPatch::WallNormalization(const Vect
     {
         auto point=p;point[2]=q.r/scale;
         const auto pre=profile.AtProduction(q.r,0);
-        input.k.push_back(Point(K(),point).Value(s,offset[K()]));
+        const double k=Point(K(),point).Value(s,offset[K()]);input.k.push_back(k);
+        if(m_solveDiagnostics && m_solveInvalidContext.empty() && (!std::isfinite(k) || k<0))
+            m_solveInvalidContext=RANSWallSolveJson::Object({
+                {"operation",RANSWallSolveJson::Quote("complete_ray_capped_normalization")},
+                {"chart",RANSWallSolveJson::Numbers(point)},{"local_k",RANSWallSolveJson::Number(k)},
+                {"sampled_K",RANSWallSolveJson::Number(profile.K())},
+                {"ray_chart",RANSWallSolveJson::Numbers(p)}});
         input.preE.push_back(pre.dissipation);
         input.preD.push_back(pre.dissipation-pre.redistribution);
         input.metricWeights.push_back(q.weight*q.jacobian);

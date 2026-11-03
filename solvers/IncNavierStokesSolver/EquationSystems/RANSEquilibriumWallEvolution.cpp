@@ -129,6 +129,17 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         m_session->LoadParameter("RANSWallNonlinearTolerance",m_tolerance,2e-12);m_session->LoadParameter("RANSWallMaxIterations",m_maximumIterations,20);
         int diagnostics=0;m_session->LoadParameter("RANSWallDiagnostics",diagnostics,0);
         Require(diagnostics==0 || diagnostics==1,"RANSWallDiagnostics must be 0 or 1");m_diagnostics=diagnostics;
+        std::string rangeGuard;m_session->LoadSolverInfo("RANSWallPhysicalRangeGuard",rangeGuard,"Off");
+        Require(rangeGuard=="Off" || rangeGuard=="R1LocalV1" || rangeGuard=="R1DiagnosticV1","unknown physical-range guard");
+        m_physicalRangeGuard=rangeGuard!="Off";m_diagnosticRangeContinuation=rangeGuard=="R1DiagnosticV1";
+        if(m_physicalRangeGuard)
+        {
+            const auto robust=m_patch->RobustParameters();
+            Require(m_diagnostics && m_eta==0 && m_session->GetComm()->GetSize()==1,
+                "R1 applicability guard requires serial unanchored state diagnostics");
+            Require(m_patch->VariantName()=="Regularized" && robust==Vector({.4,0,.2,.1,0,1,1}),
+                "R1 applicability guard is declared only for beta=.4 GammaScale=1 and the unchanged linear capped source");
+        }
         Require(m_eta==0 || (m_neutral && m_eta==1 && m_patch->Mapping().PlanarConstantHeight()),"eta=1 is restricted to isolated flat neutral verification");
         Require(!m_patch->TransitionEnabled() || m_eta==0,"every upstream transition/terrain run requires eta=0");
         Require(m_session->DefinesTimeIntScheme(),"evolution requires an explicit native IMEX time-integration declaration");
@@ -246,7 +257,53 @@ RANSEquilibriumWallEvolution::Vector RANSEquilibriumWallEvolution::Implicit(cons
 }
 void RANSEquilibriumWallEvolution::RecordAudit(const Vector &state,const Vector &history,double alpha,double time)
 {
-    auto audit=m_patch->Audit(state,history,alpha,time,alpha?m_implicitData:m_data,m_ustar);
+    RANSWallEvolutionPatch::Diagnostic audit;
+    try{audit=m_patch->Audit(state,history,alpha,time,alpha?m_implicitData:m_data,m_ustar,m_physicalRangeGuard);}
+    catch(const std::exception &error)
+    {
+        if(m_physicalRangeGuard)
+        {
+            m_rejectedState=state;
+            m_rangeEvents.push_back({time,alpha,state,history,{},
+                {std::string("range_audit_evaluation_failed:")+error.what()},true});
+            throw std::runtime_error("declared R1 physical-range audit failed; complete candidate/history saved");
+        }
+        throw;
+    }
+    if(m_physicalRangeGuard)
+    {
+        std::vector<std::string> reasons;bool finitePhysicalExit=false;
+        if(audit.at("admissible")[0]!=1)
+        {reasons.push_back("sampled_scalar_or_sampler_inadmissibility");finitePhysicalExit=true;}
+        const double K0=m_patch->Parameters().model.Q()*m_ustar*m_ustar;
+        for(const std::string name:{"source_volume_inner","source_volume_outer","physical_sample_K","physical_sample_outer",
+            "prescribed_source_inner","mass_volume","interface_inner","interface_outer","reconstruction_dense","reconstruction_native"})
+        {
+            const auto &row=audit.at(name);
+            if(row[0] && row[3]<-1e-10*K0)
+            {reasons.push_back("covariance:"+name);finitePhysicalExit=true;}
+        }
+        const auto &range=audit.at("outer_constitutive_range");
+        // This is the explicit R1 restricted research box, not a claim that
+        // the rejected wider M8 box has been repaired. No field is modified.
+        if(range[0]>.001)reasons.push_back("outer_gradient_box_exit");
+        if(range[1]<.99 || range[2]>1.01)reasons.push_back("outer_k_box_exit");
+        if(range[3]<.98 || range[4]>1.02)reasons.push_back("outer_epsilon_box_exit");
+        if(range[5]<.99 || range[6]>1.01)reasons.push_back("sampled_K_box_exit");
+        const auto repair=audit.find("robust_source");
+        if(repair!=audit.end() && repair->second[6]<.5)
+        {reasons.push_back("lambda_applicability_exit");finitePhysicalExit=true;}
+        if(!reasons.empty())
+        {
+            const bool stop=!m_diagnosticRangeContinuation || finitePhysicalExit;
+            if(m_rangeEvents.empty() || stop)m_rangeEvents.push_back({time,alpha,state,history,audit,reasons,stop});
+            if(stop)
+            {
+                m_rejectedState=state;
+                throw std::runtime_error("declared R1 physical-range exit; candidate saved before advancing native history");
+            }
+        }
+    }
     m_stateAudits.push_back(std::move(audit));m_auditTimes.push_back(time);
     if(m_stateAudits.back().at("admissible")[0]!=1)
     {m_rejectedState=state;throw std::runtime_error("accepted-stage candidate failed sampled admissibility; see state_audits");}
@@ -428,6 +485,28 @@ void RANSEquilibriumWallEvolution::WriteReport() const
         if(m_patch->SolveDiagnosticsEnabled())
             out<<",\"nonlinear_diagnostic_file\":"<<Quoted(m_patch->SolveDiagnosticFile())
                <<",\"nonlinear_diagnostic_written\":"<<(m_patch->SolveDiagnosticWritten()?"true":"false");
+        if(m_physicalRangeGuard)
+        {
+            out<<",\"physical_range_guard\":"<<Quoted(m_diagnosticRangeContinuation?"R1DiagnosticV1":"R1LocalV1")
+               <<",\"diagnostic_range_continuation\":"<<(m_diagnosticRangeContinuation?"true":"false")
+               <<",\"physical_range_inventory\":{\"source_samplers_interfaces_mass_body\":true,\"native_GLL\":true,"
+                 "\"inner_dense_points_per_axis\":\"2*p+7\",\"outer_dense_points_per_axis\":\"2*p+3\","
+                 "\"covariance_tolerance_over_K0\":1e-10,\"lambda_minimum\":0.5,"
+                 "\"restricted_gradient_radius\":0.001,\"restricted_k_ratio\":[0.99,1.01],\"restricted_epsilon_ratio\":[0.98,1.02]}"
+               <<",\"physical_range_events\":[";
+            for(int e=0;e<m_rangeEvents.size();++e)
+            {
+                if(e)out<<',';const auto &event=m_rangeEvents[e];
+                out<<"{\"time\":"<<event.time<<",\"alpha\":"<<event.alpha
+                   <<",\"stopped_before_history_advance\":"<<(event.stopped?"true":"false")<<",\"reasons\":[";
+                for(int i=0;i<event.reasons.size();++i){if(i)out<<',';out<<Quoted(event.reasons[i]);}
+                out<<"],\"state\":";Write(out,event.state);out<<",\"history\":";Write(out,event.history);
+                out<<",\"audit\":{";int count=0;
+                for(const auto &[name,value]:event.audit){if(count++)out<<',';out<<Quoted(name)<<':';Write(out,value);}
+                out<<"}}";
+            }
+            out<<']';
+        }
         out<<",\"diagnostics_schema\":1,\"failure\":"<<Quoted(m_failure)<<",\"rejected_state\":";Write(out,m_rejectedState);
         out<<",\"accepted_states\":";WriteRows(out,m_acceptedStates);out<<",\"audit_times\":";Write(out,m_auditTimes);
         out<<",\"state_audits\":[";

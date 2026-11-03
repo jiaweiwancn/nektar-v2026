@@ -55,6 +55,17 @@ private:
     std::vector<Vector> m_regionalStageLoads;
     std::map<int,double> m_finalStageConstraints;
     bool m_diagnostics=false,m_historyReady=false;
+    bool m_physicalRangeGuard=false,m_diagnosticRangeContinuation=false;
+    struct PhysicalRangeEvent
+    {
+        double time,alpha;
+        Vector state,history;
+        RANSWallEvolutionPatch::Diagnostic audit;
+        std::vector<std::string> reasons;
+        bool stopped;
+    };
+    // At most the first restricted-box exit and the first finite physical stop.
+    std::vector<PhysicalRangeEvent> m_rangeEvents;
     std::string m_failure;
     Vector m_rejectedState;
     std::vector<Vector> m_acceptedStates;

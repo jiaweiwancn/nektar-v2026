@@ -124,7 +124,7 @@ public:
      * Sampled admissibility is not a certificate over the entire polynomial. */
     using Diagnostic=std::map<std::string,Vector>;
     Diagnostic Audit(const Vector &state,const Vector &history,double alpha,double time,
-        const RANSWallEvolutionData &data,double ustar=.4) const;
+        const RANSWallEvolutionData &data,double ustar=.4,bool constitutiveReconstruction=false) const;
     const std::string &VariantName() const { return m_variantName; }
     bool CappedDestruction() const { return m_cappedDestruction; }
     bool SolveDiagnosticsEnabled() const { return m_solveDiagnostics; }
@@ -202,11 +202,12 @@ private:
     mutable std::shared_ptr<SolverCache> m_solver;
     // Opt-in, serial first-failure diagnostics. A counterfactual same-stage
     // fresh-Jacobian retry is recorded separately and never advances history.
-    bool m_solveDiagnostics=false,m_solveDiagnosticReplay=false;
+    bool m_solveDiagnostics=false,m_solveDiagnosticReplay=false,m_solveDiagnosticAdmissible=false;
     int m_solveDiagnosticIterations=12;
     std::string m_solveDiagnosticFile;
     mutable bool m_solveDiagnosticWritten=false;
     mutable std::string m_solveResidualException;
+    mutable std::string m_solveInvalidContext;
 };
 }
 #endif
