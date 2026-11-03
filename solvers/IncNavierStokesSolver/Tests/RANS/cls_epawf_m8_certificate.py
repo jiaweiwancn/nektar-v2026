@@ -144,7 +144,39 @@ def cmu_derivative_interval(q):
     a, da = Iv(F(7, 20))*q*q.sqrt(), Iv(F(21, 40))*q.sqrt()
     u = Iv(F(9, 25))*(Iv(F(3, 4))*q).exp()
     e = (-u).exp()
-    return -Iv(F(3, 10))*da/(1+a).square()*(1-e)+Iv(F(9, 40))*u*e/(1+a)
+    # h(u)=u*exp(-u) increases up to u=1 and decreases thereafter.
+    # Multiplying separate intervals for u and exp(-u) can overestimate the
+    # derivative by many orders of magnitude on broad q boxes. This exact
+    # univariate monotonicity enclosure retains their dependence.
+    at_lower = Iv(u.lo)*(-Iv(u.lo)).exp()
+    at_upper = Iv(u.hi)*(-Iv(u.hi)).exp()
+    h_lower, h_upper = min(at_lower.lo, at_upper.lo), max(at_lower.hi, at_upper.hi)
+    if u.lo <= 1 <= u.hi:
+        h_upper = max(h_upper, (-Iv(1)).exp().hi)
+    weighted_exp = Iv(h_lower, h_upper)
+    return -Iv(F(3, 10))*da/(1+a).square()*(1-e)+Iv(F(9, 40))*weighted_exp/(1+a)
+
+
+def coefficient_bounds_interval(q, maximum_width='.125', maximum_partitions=256):
+    """One-dimensional interval subdivision sharpens C and C' together.
+
+    Every subinterval is still evaluated with outward rounding. This is an
+    interval union, not point sampling and not an assumed derivative sign.
+    """
+    q = Iv(q)
+    width = q.hi-q.lo
+    count = min(maximum_partitions, max(1, math.ceil(float(width/Decimal(maximum_width)))))
+    c_lower, c_upper, cp_lower, cp_upper = None, None, None, None
+    for index in range(count):
+        left = Iv(q.lo)+(Iv(q.hi)-Iv(q.lo))*F(index, count)
+        right = Iv(q.lo)+(Iv(q.hi)-Iv(q.lo))*F(index+1, count)
+        part = Iv(left.lo, right.hi)
+        c, cp = cmu_interval(part), cmu_derivative_interval(part)
+        c_lower = c.lo if c_lower is None else min(c_lower, c.lo)
+        c_upper = c.hi if c_upper is None else max(c_upper, c.hi)
+        cp_lower = cp.lo if cp_lower is None else min(cp_lower, cp.lo)
+        cp_upper = cp.hi if cp_upper is None else max(cp_upper, cp.hi)
+    return Iv(c_lower, c_upper), Iv(cp_lower, cp_upper)
 
 
 def interval_array(values):
@@ -287,7 +319,7 @@ def expanded_interval_tangent(gradient, ratio, T, beta, branch):
     invariant = (squared_norm(s if branch == 'strain' else o)/2).sqrt()
     if invariant.lo <= 0:
         raise ValueError('Finite-box branch includes zero; use analytic fallback')
-    c, cp = cmu_interval(invariant), cmu_derivative_interval(invariant)
+    c, cp = coefficient_bounds_interval(invariant)
     q_value, b_value = evaluate_array(q_poly), evaluate_array(b_poly)
     norm_poly = ss_poly if branch == 'strain' else oo_poly
     linear = np.empty((9, 9), dtype=object)
@@ -653,6 +685,39 @@ def floating_checks():
                 interpretation='Independent floating checks; never substituted for interval envelopes.')
 
 
+def outside_envelope_control(beta=F(2, 5), gamma='1'):
+    """A positive-k covariance counterexample to unrestricted fixed-gamma use.
+
+    At fixed nonreference strain, the added stress is independent of k. As
+    k tends to zero the original CLS stress vanishes, leaving a nonzero
+    trace-free symmetric tensor. Such a tensor cannot be positive semidefinite.
+    This explicit finite positive-k state is outside the local M8 boxes.
+    k=.1, epsilon=.01 keeps q=5 and T=k^2/epsilon=1, avoiding reliance
+    on an epsilon-fixed low-turbulent-Reynolds-number limit as the witness.
+    """
+    a0 = np.zeros((3, 3), dtype=int)
+    a0[0, 2] = 1
+    reference = interval_array(a0+a0.T)
+    gradient = interval_array(a0)*F(1, 2)
+    k, epsilon = Iv('.1'), Iv('.01')
+    stress = interval_stress(gradient, k, epsilon, Iv(F(beta)), gamma, reference)
+    original = interval_stress(gradient, k, epsilon, Iv(F(beta)), 0, reference)
+    original_pivots = interval_ldl((original+original.T)*F(1, 2))
+    variance = (stress[0, 0]-2*stress[0, 2]+stress[2, 2])/2
+    production = -inner(stress, gradient)
+    if variance.hi >= 0 or original_pivots is None:
+        raise RuntimeError('Missing outside-envelope fixed-gamma covariance control')
+    return dict(beta=str(F(beta)), gamma_over_nut0=str(gamma),
+        normalized_gradient=[[entry.pair() for entry in row] for row in gradient],
+        k_star=k.pair(), epsilon_star=epsilon.pair(),
+        q=5, T='1', unregularized_covariance_certified_positive=True,
+        unregularized_covariance_pivots=[value.pair() for value in original_pivots],
+        unit_direction='(e_x-e_z)/sqrt(2)', variance_interval=variance.pair(),
+        production_interval=production.pair(), certified_negative_variance=True,
+        belongs_to_certified_local_box=False,
+        implication='Fixed positive gamma is not an all-positive-k covariance repair; positive turbulence lower bounds and declared state-range coverage remain essential. This control does not reject the separately certified local candidate.')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, required=True)
@@ -672,7 +737,7 @@ def main():
                   verified_property='frozen-k/epsilon incompressible rank-one momentum principal-part bounds',
                   excluded=['all-state covariance realizability', 'outer turbulence positivity',
                             'time-discrete positivity', 'coupled-mode stability', 'terrain accuracy'],
-                  reference=[], finite_boxes=[], analytic_envelopes=[])
+                  reference=[], finite_boxes=[], analytic_envelopes=[], outside_envelope_controls=[])
     betas = args.beta or ['2/5', '9/20']
     try:
         for value in betas:
@@ -685,6 +750,7 @@ def main():
                         beta, radius, args.k_radius, args.epsilon_radius, args.target, args.ratio_splits))
             report['analytic_envelopes'].append(analytic_envelope_certificate(
                 args.q_max, args.T_max, beta=beta, target=args.target))
+            report['outside_envelope_controls'].append(outside_envelope_control(beta))
         report['floating_shear_checks'] = floating_checks()
         report['status'] = 'certified_momentum_bounds_only'
     except Exception as error:
