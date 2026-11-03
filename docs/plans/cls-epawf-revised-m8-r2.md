@@ -76,6 +76,78 @@ to serialize a NumPy boolean in its Python report. This is not a scientific
 pass. A separate analysis-only replay checks the exact retained reports and
 all independent derivative gates, without silently rerunning native cases.
 
+The legal depleted operator fixture subsequently exposed an overflow in the
+historical Python oracle's nested exponential. R2 now uses an isolated stable
+indexed evaluation, preserving every historical module and the original
+production C(q). No q or field is clipped. The positive-real-axis omitted
+coefficient/tangent bounds are below `3e-64` and `4e-62`, respectively. Saved
+native outputs were reused. The exact-zero fixture also exposed conditioning
+of its diagnostic maximum a/c at local k about `1.2e-13`; its original
+coefficient-derived comparison remains **unresolved at 3e-10**. Independent
+actual-primitive/kernel, stress, covariance, weak-load and energy checks keep
+their original thresholds. The [inner result](cls-epawf-revised-evidence/m8-r2/inner-verification-result.md)
+records this limitation and all retained failures.
+
+## Completed operator and initial-state evidence
+
+Producing source `9f20b3053c303e8805f5183f668a8ec468d9656b` builds the
+complete Release solver and probes. The current branch's subsequent changes
+are independent helpers, their diagnoses and evidence; the producing C++
+source remains unchanged. Three focused Legacy regressions pass. The scoped
+inner replay completes 4366 checks over 38 compiled cases and eight native
+fixtures, with zero native reexecution in its final replay. At 21 exact-zero
+points the selected R2 covariance is exactly zero, while the matched Linear
+control remains negative. A retained cap-active fixture independently verifies
+the full weak residual, exact mass, constraints and projected matching trace.
+See the [hash-bound inner summary](cls-epawf-revised-evidence/m8-r2/inner-verification-result.json).
+
+The [pressure localization](cls-epawf-revised-evidence/m8-r2/pressure-action-origin.md)
+resolves the independent action discrepancy through exact affine assembly
+and complete analytic sensor/source/trace contributions. The absolute
+physical-norm action errors are at most `9.79e-11`, below the unchanged
+`1e-7` gate. Historical cached/fresh errors and finite-difference cancellation
+and truncation failures remain recorded. This is derivative evidence, not a
+claim that pressure differencing caused or repaired the old transition failure.
+
+The first outer6 native initialization succeeded, but its independent helper
+selected the inner geometry for one outer epsilon evaluation at H. The
+helper side selection was corrected; the original report was reused in place
+and the failed audit preserved. Three further initializations completed the
+four-case matrix. All four complete initial vectors are bitwise identical,
+SHA256 `f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca`.
+The 3540 independent checks and full runtime/source/input provenance pass.
+
+| Initial finite-set property | Linear | SaturatedR2 |
+|---|---:|---:|
+| Actual unknowns / source quadrature pairs | 2165 / 8,16 and 12,24 | same |
+| Maximum outer gradient departure (limit .001) | .000500194924459 | same |
+| Minimum outer k and epsilon box margins | .0100 / .0032524731 | same |
+| Minimum inner / outer covariance | .0772933168271 / .176807110004 | .110802957528 / .176807110004 |
+| Full inventory sampled K/K0 | about 1 | same |
+| Normalization lambda / limiter / cap | 1 / inactive / inactive | same |
+| Maximum whole-inventory inner a/c | 1.09303567 | same represented inputs |
+| Saturation-active source volume, base / high (inner volume12) | not selected | .04210427 / .04312037 |
+
+Outer6 covers the unchanged fixed outer certificate at both quadrature
+levels on the declared finite sets, including the actual and projected
+dependent trace. **Outer9 is not needed or run.** The stricter operational
+sampled-K guard has margin about .01. This is initial coverage, not
+stationarity or a positivity theorem. The projected field activates
+saturation although the continuous analytical reference is inactive.
+At base quadrature the selected inner stress changes integrated mean stress
+work and production equally by `-.0123957428841`, with zero exchange defect.
+The unanchored velocity/k norms remain nonzero: about `9.86324/62.59848`
+for Linear and `8.22728/62.60960` for R2. The [preflight notes](cls-epawf-revised-evidence/m8-r2/preflight-notes.md)
+and [machine table](cls-epawf-revised-evidence/m8-r2/preflight-002-summary.json)
+retain gradients, scalar/trace margins, exact quadratures, source accounting,
+quadrature sensitivity and costs. Native initial ScalarDomain calls take
+about .19s at base quadrature, with the raw residual/constraints/norms about
+.13s; these do not measure an entire Jacobian.
+
+The matched actual startup-stage searches are now running from this common
+admissible initialization. The terminal root status and independent path/
+action checks will determine the final R2 recommendation.
+
 ## Decision gates still open
 
 The terminal R2 decision must distinguish constitutive feasibility, native

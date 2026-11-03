@@ -117,6 +117,8 @@ class Analyzer:
         self.bind_actual_static_locations()
         self.matrix_root = Path(matrix_root).resolve() if matrix_root else None
         self.state_cache, self.matrix_files, self.gates = {}, {}, []
+        self._continuity, self._continuity_lifted, self._continuity_factors = None, None, None
+        self.continuity_gates = []
         self.failures = []
 
     def attempt(self, label, function):
@@ -199,7 +201,9 @@ class Analyzer:
                     locations.append(dict(name=kind, geometry=int(element['geometry']), points=np.asarray([point]),
                         block=self.d, strict=not inner, side=side, dependent=False, weights=np.zeros(1)))
                     if not inner:
-                        locations.append(dict(name=kind, geometry=int(element['geometry']), points=np.asarray([point]),
+                        epsilon_geometry = self.fields[self.d+1].element(point,
+                            1 if abs(point[2]-self.H) < 1e-11 else 0)['geometry']
+                        locations.append(dict(name=kind, geometry=int(epsilon_geometry), points=np.asarray([point]),
                             block=self.d+1, strict=True, side=side, dependent=False, weights=np.zeros(1)))
                     samplers.add((float(point[0]), float(point[1])))
         for chart, _ in _horizontal(self.fields, self.d, self.H, order):
@@ -496,6 +500,126 @@ class Analyzer:
                 result[row] = 0.
         return result
 
+    def affine_continuity_matrix(self):
+        """Exact polynomial weak-divergence and existing mean/gauge blocks.
+
+        This independent matrix is a comparison, never a replacement for the
+        native finite-difference Jacobian. Flat, canonical tensor geometry and
+        fixed external velocity values make this block affine in the raw
+        coefficients. No pressure sensor, source, roughness force or projected
+        epsilon target contributes to these rows.
+        """
+        if self._continuity is not None:
+            return self._continuity, self._continuity_lifted
+        pressure_fields = self.fields[self.d+2:self.d+4]
+        count = sum(field.size for field in pressure_fields)
+        matrix = np.zeros((count+1, self.size), np.longdouble)
+        cursor, degrees, native_adequate = 0, [], True
+        for block, pressure in enumerate(pressure_fields, self.d+2):
+            for element in pressure.elements:
+                velocity = self.fields[0].by_id[element['geometry']]
+                degree = velocity['degree']+element['degree']
+                order = max(8, (degree+2)//2)
+                native_adequate = native_adequate and all(2*int(n)-1 >= degree for n in self.raw['quadrature_orders'])
+                degrees.append(degree)
+                points, weights = self.fields[0].quadrature(velocity, order)
+                pi, phi, _ = pressure.rows(element, points)
+                vi, _, gradient = self.fields[0].rows(velocity, points)
+                for component, axis in enumerate((0, 2)):
+                    local = phi.astype(np.longdouble).T@(
+                        weights.astype(np.longdouble)[:, None]*gradient[:, axis].astype(np.longdouble))
+                    matrix[np.ix_(cursor+pi, self.offsets[component]+vi)] += local
+            mean = self.audit.mass[block]@self.constants[block]/self.fields[0].volume
+            local = np.arange(pressure.size)
+            matrix[cursor+local, -1] = mean
+            matrix[-1, self.offsets[block]+local] = mean
+            cursor += pressure.size
+        matrix = np.asarray(matrix, float)
+        lifted = matrix.copy()
+        for row in self.external:
+            if row < self.offsets[self.d]:
+                lifted[:, row] = 0.
+        self._continuity, self._continuity_lifted = matrix, lifted
+        self._continuity_factors = [np.linalg.cholesky(self.audit.mass[block]) for block in (self.d+2, self.d+3)]
+        self.continuity_metadata = dict(shape=list(matrix.shape),
+            matrix_float64_LE_sha256=vector_hash(matrix),
+            external_lifted_matrix_float64_LE_sha256=vector_hash(lifted),
+            polynomial_integrand_degree_maximum=max(degrees), independent_minimum_Gauss_order=8,
+            native_declared_rules_polynomially_adequate=bool(native_adequate),
+            gauge_means='Physical regional pressure mass times the exact constant, divided by total velocity volume',
+            scope='Separately assembled weak continuity/gauge rows; native nonpressure Jacobian columns remain finite differences')
+        self.audit.require(native_adequate, 'Native rule cannot integrate the affine weak-divergence polynomials exactly')
+        return matrix, lifted
+
+    def continuity_rows(self):
+        return np.r_[np.arange(self.offsets[self.d+2], self.offsets[self.d+4]), self.size-1].astype(int)
+
+    def continuity_error_norms(self, error):
+        """Pressure mass-dual and gauge norms, with batched column support."""
+        self.affine_continuity_matrix()
+        error = np.asarray(error, float)
+        vector = error.ndim == 1
+        if vector:
+            error = error[:, None]
+        values, cursor = [], 0
+        for index, block in enumerate((self.d+2, self.d+3)):
+            count = self.fields[block].size
+            inverse = np.linalg.solve(self._continuity_factors[index], error[cursor:cursor+count])
+            values.append(np.linalg.norm(inverse, axis=0)/((self.audit.us/self.H)*math.sqrt(self.fields[block].volume)))
+            cursor += count
+        values.append(np.abs(error[-1])/self.audit.us**2)
+        result = np.asarray(values)
+        return result[:, 0] if vector else result
+
+    def affine_continuity_values(self, state, residual):
+        matrix, _ = self.affine_continuity_matrix()
+        expected = matrix@self.external_lift(state)
+        actual = np.asarray(residual)[self.continuity_rows()]
+        self.audit.near(actual, expected, 'independent_exact_affine_weak_continuity_and_gauge_values', 2e-10)
+        norms = self.continuity_error_norms(actual-expected)
+        self.continuity_gates.append(dict(kind='actual_residual_value', maximum_absolute_physical_error=float(max(norms)),
+            gate_met=bool(max(norms) <= ACTION_TOLERANCE)))
+        return dict(exact_values=expected.tolist(), absolute_physical_errors=norms.tolist(),
+            maximum_absolute_physical_error=float(max(norms)),
+            fixed_1e_minus7_gate_met=bool(max(norms) <= ACTION_TOLERANCE),
+            mean_gauge_included=True, external_lifting_included=True)
+
+    def affine_continuity_columns(self, matrix, scalar_only):
+        _, expected = self.affine_continuity_matrix()
+        if scalar_only:
+            return dict(checked_as_coupled=False,
+                reason='Frozen-scalar diagnostic sets these native rows to an identity; it is not a coupled continuity Jacobian')
+        native = np.asarray(matrix[self.continuity_rows(), :])
+        dimensioned = (native-expected)*self.audit.scales()[None, :]
+        errors = self.continuity_error_norms(dimensioned)
+        maximum = np.max(errors, axis=0)
+        self.continuity_gates.append(dict(kind='current_J_columns', maximum_absolute_physical_error=float(max(maximum)),
+            gate_met=bool(max(maximum) <= ACTION_TOLERANCE)))
+        worst = np.argsort(maximum)[-12:][::-1]
+        velocity = np.arange(self.offsets[self.d])
+        return dict(checked_as_coupled=True, native_rows_are_finite_differences_for_nonpressure_columns=True,
+            dimensionless_column_scale='us, K0, E0, us^2, us/H by variable block',
+            maximum_absolute_physical_error=float(np.max(maximum)),
+            maximum_velocity_column_error=float(np.max(maximum[velocity])),
+            fixed_1e_minus7_gate_met=bool(np.max(maximum) <= ACTION_TOLERANCE),
+            all_column_absolute_physical_errors=maximum.tolist(),
+            worst_columns=[dict(column=int(index), physical_block_errors=errors[:, index].tolist(),
+                input_scale=float(self.audit.scales()[index]),
+                externally_fixed_velocity=bool(index in self.external and index < self.offsets[self.d])) for index in worst],
+            interpretation='The independent B/mean block is exact. Any native FD continuity-row discrepancy is retained, not replaced or called analytic.')
+
+    def affine_continuity_action(self, direction, action):
+        _, matrix = self.affine_continuity_matrix()
+        expected = matrix@direction
+        actual = np.asarray(action)[self.continuity_rows()]
+        errors = self.continuity_error_norms(actual-expected)
+        self.continuity_gates.append(dict(kind='current_J_direction', maximum_absolute_physical_error=float(max(errors)),
+            gate_met=bool(max(errors) <= ACTION_TOLERANCE)))
+        return dict(exact_action=expected.tolist(), absolute_physical_errors=errors.tolist(),
+            maximum_absolute_physical_error=float(max(errors)),
+            fixed_1e_minus7_gate_met=bool(max(errors) <= ACTION_TOLERANCE),
+            scope='Only weak-divergence and existing pressure/gauge mean rows; separate from pressure-gradient/roughness and nonlinear sensor/trace actions')
+
     def weak(self, state, history, alpha, native_residual, entries=None):
         effective = self.external_lift(state)
         constraints = self.constraints(state, entries)
@@ -511,6 +635,7 @@ class Analyzer:
             maximum_component_error=float(np.max(np.abs(full-np.asarray(native_residual)))),
             independent_difference_norm=difference, quadrature=details,
             raw_unmasked_load_float64_LE_sha256=vector_hash(unmasked),
+            exact_affine_weak_continuity=self.affine_continuity_values(state, native_residual),
             masked_true_residual_float64_LE_sha256=vector_hash(full)), unmasked, constraints
 
     def continuity(self, state):
@@ -789,6 +914,7 @@ class Analyzer:
             native_dense_product_checked=True, exact_physical_mass_checked=True,
             action_norm=action_norm, constraint_row_actions=action[sorted(constraints)].tolist(),
             matching_epsilon_row_actions=action[sorted(self.trace_rows)].tolist(), levels=levels, gate=gate,
+            independent_affine_weak_continuity=self.affine_continuity_action(direction, action),
             frozen_scalar_masked_rows_not_claimed_as_coupled=bool(scalar_only), independent_analytic_pressure=analytic_pressure)
 
     def fraction_bound(self, state, step, matrix, domain):
@@ -936,6 +1062,7 @@ class Analyzer:
             fraction_to_boundary=dict(maximum=maximum, limiting_point=limiting,
                 fixed_location_prediction_is_not_an_admissibility_proof=True),
             current_column_controls=columns, column_metadata_sha256=canonical(record['columns']),
+            independent_affine_weak_continuity_J_columns=self.affine_continuity_columns(matrix, scalar_only),
             actions=actions, trials=trials,
             next_accepted_state_float64_LE_sha256=vector_hash(accepted) if accepted is not None else None)
 
@@ -1070,6 +1197,10 @@ def verify(raw, solves, session, source, matrix_root=None):
         checks=analyzer.audit.checks, errors=analyzer.audit.errors, failures=analyzer.failures,
         protocol=protocol, initial_scalar_domain=initial, solves=results, stage_levels=levels,
         independent_common_static_coverage=analyzer.static_coverage,
+        exact_affine_weak_continuity_assembly=getattr(analyzer, 'continuity_metadata', None),
+        exact_affine_weak_continuity_gates=analyzer.continuity_gates,
+        exact_affine_weak_continuity_gate_passed=bool(analyzer.continuity_gates) and
+            all(gate['gate_met'] for gate in analyzer.continuity_gates),
         dense_matrix_files=analyzer.matrix_files, current_action_gates=gates,
         fixed_action_tolerance=ACTION_TOLERANCE, current_action_gate_passed=action_passed,
         target_converged=bool(raw['stage_test_target_converged']),
