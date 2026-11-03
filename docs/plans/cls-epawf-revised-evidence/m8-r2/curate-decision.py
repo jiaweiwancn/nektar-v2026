@@ -34,7 +34,8 @@ SUMMARY_KEYS = ('schema', 'milestone', 'status', 'success', 'analysis_success',
     'weak_residual_calls', 'current_action_gate_passed', 'exact_affine_weak_continuity_gate_passed',
     'initial_derivative_gates_passed', 'analytic_controls_met', 'fixed_absolute_gate_met',
     'localization_classification', 'stored_J_minus_analytic', 'stored_J_roughness_support_error',
-    'stored_J_outer_support_error')
+    'stored_J_outer_support_error', 'original_geometry_identity_gate',
+    'diagnosis_completed', 'original_failed_full_analysis_remains_failed')
 
 
 def digest(path):
