@@ -668,6 +668,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Solve(Vector s,const Vect
     const double E0=us*us*us/(m_parameters.model.Kappa()*m_parameters.geometry.height);
     for(int b=0;b<Gauge();++b)for(int i=0;i<size[b];++i)
         scales[offset[b]+i]=b<m_dimension?us:b==K()?K0:b==Epsilon()?E0:us*us;
+    // The gauge multiplier enters continuity and has inverse-time units.
+    scales[offset[Gauge()]]=us/m_parameters.geometry.height;
     auto constraintJSON=[&](const std::map<int,double> &constraints)
     {
         std::vector<std::string> entries;
