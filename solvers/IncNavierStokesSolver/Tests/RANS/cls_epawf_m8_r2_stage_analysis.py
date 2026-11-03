@@ -956,6 +956,7 @@ class Analyzer:
             result = loads.copy()
             for row, value in current.items():
                 result[row] = point[row]-value
+            self.audit.require(bool(np.all(np.isfinite(result))), 'Nonfinite independent outer-k endpoint residual')
             return result, current, trace, details
         base, _, _, _ = endpoint(np.asarray(state))
         action_norm = self.audit.norm_record(np.where(mask, action, 0.), constraints)
@@ -973,7 +974,6 @@ class Analyzer:
                 if domain['admissible']:
                     try:
                         residual, current, trace, details = endpoint(point)
-                        residuals[name] = residual
                         one_sided = sign*(residual-base)/h+mass-action
                         one_sided[~mask] = 0.
                         receipt.update(evaluated=True, spatial_residual=residual.tolist(),
@@ -981,11 +981,12 @@ class Analyzer:
                             constraints=[[int(row), float(value)] for row, value in sorted(current.items())],
                             independent_trace=trace, quadrature=details,
                             one_sided_J_error=self.audit.norm_record(one_sided, constraints))
+                        residuals[name] = residual
                     except Exception as error:
                         receipt['exception'] = dict(type=type(error).__name__, message=str(error))
                 sides[name] = receipt
             row = dict(step=h, **sides)
-            if len(residuals) == 2:
+            if all(sides[name]['evaluated'] for name in ('plus', 'minus')):
                 central = (residuals['plus']-residuals['minus'])/(2*h)+mass
                 difference = central-action; difference[~mask] = 0.
                 norm = self.audit.norm_record(difference, constraints)
@@ -1219,10 +1220,15 @@ class Analyzer:
         self.audit.require(raw['eta'] == 0 and raw['dt'] == .0025 and raw['steps'] == 0 and raw['time'] == 0.,
             'Restricted stage problem changed dt/anchor or advanced physical time')
         self.audit.require(raw['nonlinear_policy'] == 'ScalarFeasibleR2', 'Unexpected stage nonlinear policy')
-        self.audit.require(self.size <= 3000 and all(record['maximum_iterations'] <= 16 for record in solves),
+        self.audit.require(self.size <= 3000 and all(record['maximum_iterations'] <= 12 for record in solves),
             'Restricted dense/Newton capacity exceeded its declared bounds')
         self.audit.require(raw['robust_parameters'] == [.4, 0., .2, .1, 0., 1., 1.], 'Changed frozen model/source parameters')
         root = ET.parse(self.session).getroot()
+        from cls_epawf_m8_r2_cases import parameters
+        params = parameters(root)
+        self.audit.require(all(record['tolerance'] == float(params.get('RANSWALLNONLINEARTOLERANCE', '2e-12'))
+            and record['maximum_iterations'] == int(params.get('RANSWALLMAXITERATIONS', '20')) for record in solves),
+            'Restricted native tolerance/iteration cap differs from the actual XML/default')
         functions = {node.get('NAME', '') for node in root.findall('CONDITIONS/FUNCTION')}
         self.audit.require(not functions.intersection({'BodyForceInner', 'BodyForceOuter', 'ScalarSourceInner', 'ScalarSourceOuter'}),
             'Restricted stage contains manufactured/body/scalar forcing')
@@ -1321,6 +1327,12 @@ def verify_auxiliary(preflight, record, preflight_session, stage_session, source
     mode = info.get('RANSWALLSTAGETEST')
     if mode not in ('MatchedR2', 'FrozenScalarR2'):
         raise ValueError('Interim analysis requires the actual restricted-stage XML')
+    if bool(record.get('frozen_velocity_pressure_diagnostic')) != (mode == 'FrozenScalarR2'):
+        raise ValueError('Interim native record and actual stage XML disagree on the frozen-scalar mode')
+    if mode == 'FrozenScalarR2' and record['alpha'] != 400.:
+        raise ValueError('Frozen-scalar diagnosis is restricted to the original alpha=400 stage')
+    if info.get('RANSWALLNONLINEARPOLICY') != 'ScalarFeasibleR2' or preflight['nonlinear_policy'] != 'ScalarFeasibleR2':
+        raise ValueError('Interim stage/preflight did not select the required scalar-feasible policy')
     if float(params['TIMESTEP']) != .0025 or int(params['NUMSTEPS']) != 0:
         raise ValueError('Interim stage changed dt or requested physical advancement')
     if info['RANSWALLINNERSTRESS'] != preflight['inner_stress_model']:
@@ -1333,6 +1345,10 @@ def verify_auxiliary(preflight, record, preflight_session, stage_session, source
         raise ValueError('Actual stage h0 is not byte-equivalent to the represented preflight state')
     if record['alpha'] not in LEVELS or record['time'] != .0025 or record['maximum_iterations'] > 12:
         raise ValueError('Interim record changed the preregistered stage time/alpha/capacity')
+    if record['tolerance'] != float(params.get('RANSWALLNONLINEARTOLERANCE', '2e-12')):
+        raise ValueError('Interim native tolerance differs from the actual stage XML/default')
+    if record['maximum_iterations'] != int(params.get('RANSWALLMAXITERATIONS', '20')):
+        raise ValueError('Interim native iteration cap differs from the actual stage XML/default')
     if record['inner_stress_model'] != preflight['inner_stress_model'] or record['policy'] != 'ScalarFeasibleR2:v1':
         raise ValueError('Interim record has a different inner law or nonlinear policy')
     view = dict(preflight, stage_test_target_time=record['time'])
