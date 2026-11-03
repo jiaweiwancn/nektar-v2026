@@ -38,6 +38,10 @@ R1_X=[-4.,-3.,-2.,-1.,1.,2.]
 ACTIVE_X=[-4.,-3.9,-3.1,-3.,-2.,-1.,1.,2.]
 ACTIVE_R=[0.,.1,.97,1.,1.03,1.97,2.,2.1,2.5,3.5,4.]
 LEVELS=[2e-4,5e-5,1e-5,2e-6,5e-7]
+RETAINED_REPORTS={
+    'affine':'f14726aeca94ee69cf9616a5c09dc99fca87c989b72732dc31a5ff3e40f62760',
+    'pressure-active':'cf3a8844dff263b41d3ed39793c2300acd7d3b668610168fa4f26b8a450d33af',
+}
 
 
 def stamp():
@@ -255,13 +259,13 @@ def verify(raw):
             audit.require(np.max(np.abs(nonlinear[raw['offsets'][raw['dimension']+1]:raw['offsets'][raw['dimension']+2]]))>1e-6,
                           'Nonlinear projected epsilon trace derivative is inactive')
         levels=[]
-        scale=max(1.,max(audit.norms(complete,constraints)))
+        scale=float(max(1.,max(audit.norms(complete,constraints))))
         for level in case['levels']:
             action=(np.asarray(level['plus_residual'])-np.asarray(level['minus_residual']))/(2*level['step'])
             difference=audit.norm_record(action-complete,constraints)
             levels.append(dict(step=level['step'],full_residual_difference_error=difference,
                 relative_full_residual_difference_error=difference['maximum']/scale,
-                legacy_difference_fixed_threshold_met=difference['maximum']/scale<=1e-7,
+                legacy_difference_fixed_threshold_met=bool(difference['maximum']/scale<=1e-7),
                 affine_only_omission_error=audit.norm_record(nonlinear,constraints)))
         receipts.append(dict(kind=case['kind'],independent_action_error=error,
             nonlinear_source_and_trace_norm=audit.norm_record(nonlinear,constraints),pressure_records=records,levels=levels))
@@ -269,11 +273,62 @@ def verify(raw):
         scope='Exact affine and complete analytic pressure actions; full-residual finite-difference cancellation/branch errors retained without tolerance relaxation')
 
 
+def replay_inputs(directory,program):
+    """Pin the preserved failed serialization attempt; never run its programs.
+
+    These two hashes were recorded before this replay option was written.
+    The historical wrapper independently pinned the original producing runtime.
+    A new native result requires a new normal invocation, not this replay path.
+    """
+    directory=directory.resolve();parent=directory.parent
+    receipt_path=parent/'receipt.json'
+    receipt=json.loads(receipt_path.read_text())
+    before_path,after_path=parent/'runtime-before.json',parent/'runtime-after.json'
+    before,after=(json.loads(path.read_text()) for path in (before_path,after_path))
+    expected_source='1ee3a8454c857c807bcb6911024186afb9d22721'
+    if not (receipt['suite']=='pressure' and receipt['status']=='failed' and receipt['runtime_unchanged']
+            and receipt['source_clean_start'] and receipt['source_clean_end']
+            and receipt['source_commit']==receipt['source_commit_end']==expected_source):
+        raise ValueError('Replay is not the preserved pressure serialization-failure epoch')
+    if not (before['success'] and after['success'] and before['clean'] and after['clean']
+            and before['source_commit']==after['source_commit']==expected_source):
+        raise ValueError('Historical producing runtime pins are incomplete')
+    keys=('source_inputs','runtime_artifacts','runtime_bindings','runtime_environment','python_packages','tool_images')
+    for key in keys:
+        if before[key]!=after[key]:
+            raise ValueError('Historical producing runtime changed: '+key)
+    image=Path(before['build_root'])/program.relative_to(Path(before['build_root']))
+    relative=str(image.relative_to(Path(before['source_root']).parent))
+    if before['runtime_artifacts'].get(relative)!=sha(program):
+        raise ValueError('Replay program image differs from the producing runtime pin')
+    suite=next(command for command in receipt['commands'] if command['name']=='suite')
+    argv=suite['argv']
+    if suite['exit_code']!=1 or Path(argv[argv.index('--output')+1]).resolve()!=directory:
+        raise ValueError('Historical wrapper did not run these pressure results')
+    files={}
+    for name,expected in RETAINED_REPORTS.items():
+        report=directory/name/'probe.json'
+        if sha(report)!=expected:
+            raise ValueError('Retained native pressure output changed: '+name)
+        for basename in ('case.xml','probe.json','run.log'):
+            path=directory/name/basename
+            files[str(path)]=dict(bytes=path.stat().st_size,sha256=sha(path))
+    for path in (receipt_path,before_path,after_path,parent/'suite.log',directory/'preregistration.json'):
+        files[str(path)]=dict(bytes=path.stat().st_size,sha256=sha(path))
+    return dict(producing_source_commit=expected_source,
+        original_failed_driver_sha256=receipt['driver_sha256'],
+        original_failure='Explicit NumPy boolean was not JSON serializable; native reports preserved',
+        files=files,runtime_pin_sha256=sha(before_path),
+        runtime_section_sha256={key:canonical(before[key]) for key in keys},
+        native_calls=0),Path(argv[argv.index('--r1-trace')+1]) if '--r1-trace' in argv else None
+
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--build',required=True,type=Path)
     parser.add_argument('--output',type=Path)
     parser.add_argument('--r1-trace',type=Path)
+    parser.add_argument('--replay',type=Path,help='Analyze the exact byte-pinned pressure-verification-001/results; no native calls')
     args=parser.parse_args()
     if platform.system()!='Linux':
         raise SystemExit('Scientific pressure verification must run on Linux')
@@ -285,7 +340,8 @@ def main():
     report=dict(schema=1,milestone='M8-R2 C pressure actions',started_utc=stamp(),success=False,
         source_commit=subprocess.check_output(['git','-C',str(source),'rev-parse','HEAD'],text=True).strip(),
         source_clean_start=not bool(subprocess.check_output(['git','-C',str(source),'status','--porcelain'],text=True).strip()),
-        driver_sha256=sha(__file__),threads=THREADS,commands=[],cases={},failures=[],native_time_trajectories=0)
+        driver_sha256=sha(__file__),threads=THREADS,commands=[],cases={},failures=[],native_time_trajectories=0,
+        analysis_only_replay=bool(args.replay))
     preregistration=dict(scope='operator-only; no time integration or physical qualification',
         selector_quiet='Linear',selector_active='SaturatedR2',nonlinear_policy='Legacy',
         component_tolerance=1e-10,physical_action_tolerance=1e-7,steps=LEVELS,
@@ -301,8 +357,18 @@ def main():
         if program is None:
             raise ValueError('Missing native RANSPressureActionProbe')
         report['program']=dict(path=str(program),sha256=sha(program))
+        if args.replay:
+            report['replay'],historical_trace=replay_inputs(args.replay,program)
+            if args.r1_trace and args.r1_trace.resolve()!=historical_trace.resolve():
+                raise ValueError('Replay requested a different retained R1 trace')
+            args.r1_trace=historical_trace
         template=Path(__file__).with_name('EquilibriumWallEvolution.xml')
         for active,name in [(False,'affine'),(True,'pressure-active')]:
+            if args.replay:
+                path=args.replay/name/'probe.json'
+                report['cases'][name]=dict(verify(json.loads(path.read_text())),
+                    native_report_path=str(path),native_report_sha256=sha(path))
+                continue
             directory=output/name;directory.mkdir();xml=session(template,directory/'case.xml',active)
             command=[str(program),str(xml),str(directory/'probe.json')]
             started=time.monotonic()
@@ -317,7 +383,7 @@ def main():
         if args.r1_trace:
             old=json.loads(args.r1_trace.read_text());old_raw=json.loads(args.r1_trace.with_name('case.evolution.json').read_text())
             old_raw=dict(old_raw,state=old['state'],constraints=old['constraints'])
-            quiet=json.loads((output/'affine/probe.json').read_text())
+            quiet=json.loads(((args.replay or output)/'affine/probe.json').read_text())
             if quiet['offsets']!=old['offsets'] or quiet['fields']!=old_raw['fields']:
                 raise ValueError('Retained R1 pressure localization has different native maps')
             oracle=PressureOracle(old_raw,np.asarray(old['state']))
@@ -330,7 +396,7 @@ def main():
             oracle.audit.near(complete,independent,'retained_R1_exact_native_affine_plus_independent_nonlinear')
             direct_error=oracle.audit.norm_record(complete-independent,constraints)
             oracle.audit.require(direct_error['maximum']<=1e-7,'Retained R1 exact action fails fixed physical-norm threshold')
-            scale=max(1.,max(oracle.audit.norms(complete,constraints)))
+            scale=float(max(1.,max(oracle.audit.norms(complete,constraints))))
             for level in case['levels']:
                 action=(np.asarray(level['plus']['residual'])-np.asarray(level['minus']['residual']))/(2*level['step'])
                 difference=oracle.audit.norm_record(action-complete,constraints)
@@ -348,6 +414,10 @@ def main():
     report['finished_utc']=stamp()
     report['source_commit_end']=subprocess.check_output(['git','-C',str(source),'rev-parse','HEAD'],text=True).strip()
     report['source_clean_end']=not bool(subprocess.check_output(['git','-C',str(source),'status','--porcelain'],text=True).strip())
+    if report.get('replay'):
+        for path,expected in report['replay']['files'].items():
+            if sha(path)!=expected['sha256'] or Path(path).stat().st_size!=expected['bytes']:
+                report['success']=False;report['failures'].append(dict(type='ProvenanceError',message='Historical replay input changed: '+path))
     if not report['source_clean_end'] or report['source_commit_end']!=report['source_commit']:
         report['success']=False;report['failures'].append(dict(type='ProvenanceError',message='Source changed during pressure verification'))
     report['imported_source_files']={str(Path(module.__file__).resolve()):sha(module.__file__) for module in list(sys.modules.values())

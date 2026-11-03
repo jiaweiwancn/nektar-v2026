@@ -51,6 +51,12 @@ template<class Matrix> std::string Rows(const Matrix &values)
     std::vector<std::string> result;for(const auto &row:values)result.push_back(Numbers(row));
     return List(result);
 }
+template<class Map> std::string Constraints(const Map &values)
+{
+    std::vector<std::string> result;
+    for(const auto &[row,value]:values)result.push_back(Numbers(std::array<double,2>{double(row),value}));
+    return List(result);
+}
 inline std::string Object(const std::vector<std::pair<std::string,std::string>> &values)
 {
     std::ostringstream out;out<<'{';

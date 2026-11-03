@@ -341,6 +341,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasible(
     const double E0=us*us*us/(m_parameters.model.Kappa()*m_parameters.geometry.height);
     auto publish=[&](bool converged)
     {
+        const auto finalConstraints=domain.admissible?Constraints(s,time,data):std::map<int,double>{};
         Require(m_feasibleTraceStarted || !std::ifstream(m_feasibleTraceFile).good(),"refusing to overwrite an existing scalar-feasible trace");
         std::ofstream out(m_feasibleTraceFile,std::ios::app);Require(out.good(),"cannot open scalar-feasible trace");
         out<<J::Object({{"schema","1"},{"policy",J::Quote("ScalarFeasibleR2:v1")},
@@ -350,7 +351,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasible(
             {"frozen_velocity_pressure_diagnostic",J::Boolean(scalarOnly)},
             {"history_advanced","false"},{"residual_unchanged","true"},
             {"jacobian_rebuild_policy",J::Quote("fresh every Newton iteration; exact mass and complete analytic pressure actions")},
-            {"domain",ScalarDomainJSON(domain)},{"state",J::Numbers(s)},{"history",J::Numbers(history)},
+            {"domain",ScalarDomainJSON(domain,true)},{"state",J::Numbers(s)},{"history",J::Numbers(history)},
+            {"constraints",J::Constraints(finalConstraints)},
             {"residual",J::Numbers(finalResidual)},{"scaled_block_norms",J::Numbers(finalNorms)},
             {"iterations",J::List(records)}})<<'\n';out.close();Require(out.good(),"cannot finish scalar-feasible trace");
         m_feasibleTraceStarted=true;
@@ -430,7 +432,11 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasible(
                             {"domain",ScalarDomainJSON(checked)},{"evaluated",J::Boolean(checked.admissible)}};
                         if(checked.admissible)
                         {
-                            try{observation.push_back({"spatial_residual",J::Numbers(Residual(point,history,0,time,data))});}
+                            try
+                            {
+                                observation.push_back({"spatial_residual",J::Numbers(Residual(point,history,0,time,data))});
+                                observation.push_back({"constraints",J::Constraints(Constraints(point,time,data))});
+                            }
                             catch(const std::exception &errorValue)
                             {
                                 observation[1].second="false";
@@ -481,13 +487,16 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasible(
                 try
                 {
                     const auto next=Residual(trial,history,alpha,time,data);
-                    const auto nextNorms=Norms(next,Constraints(trial,time,data),us);
+                    const auto nextConstraints=Constraints(trial,time,data);
+                    const auto nextNorms=Norms(next,nextConstraints,us);
                     nextError=scalarOnly?std::max({nextNorms[K()],nextNorms[Epsilon()],nextNorms.back()}):Maximum(nextNorms);
                     const bool descent=nextError<(1.-1e-4*fraction)*error;
                     auto rechecked=ScalarDomain(trial,time,data,true);
                     const bool accept=descent && rechecked.admissible;
                     trials.push_back(J::Object({{"fraction",J::Number(fraction)},
                         {"classification",J::Quote(accept?"feasible_accepted_descent":"valid_non_descent_or_recheck_failure")},
+                        {"state",J::Numbers(trial)},{"residual",J::Numbers(next)},
+                        {"constraints",J::Constraints(nextConstraints)},
                         {"scaled_block_norms",J::Numbers(nextNorms)},{"domain",ScalarDomainJSON(rechecked)},
                         {"profile_branches_changed",J::Boolean(domain.profileBranches!=rechecked.profileBranches)}}));
                     if(accept){accepted=true;acceptedState=std::move(trial);acceptedDomain=std::move(rechecked);break;}
@@ -506,8 +515,9 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasible(
                 stepNorm=std::max(stepNorm,std::abs(step[offset[b]+i])/scale);
             }
             records.push_back(J::Object({{"iteration",J::Number(iterations)},{"state",J::Numbers(s)},
+                {"constraints",J::Constraints(constraints)},
                 {"residual",J::Numbers(r)},{"scaled_block_norms",J::Numbers(norms)},
-                {"domain",ScalarDomainJSON(domain)},{"step",J::Numbers(step)},
+                {"domain",ScalarDomainJSON(domain,true)},{"step",J::Numbers(step)},
                 {"dimensionless_step",J::Number(stepNorm)},{"linear_scaled_block_norms",J::Numbers(linearNorms)},
                 {"jacobian_binary_file",J::Quote(matrixFile)},
                 {"jacobian_binary_shape",J::Numbers(Vector{double(Size()),double(Size())})},

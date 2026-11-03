@@ -382,6 +382,10 @@ void RANSEquilibriumWallEvolution::RunRestrictedStageTest()
 {
     namespace J=RANSWallSolveJson;
     const Vector history=m_state;auto guess=history;bool skipAuxiliary=false;
+    const auto initialNative=m_integrator->Capture();
+    m_stageTestInitialHistory=J::Object({{"state",J::Numbers(m_state)},
+        {"time",J::Number(m_time)},{"steps",J::Number(initialNative.steps)},
+        {"history",J::Rows(initialNative.history)},{"times",J::Numbers(initialNative.times)}});
     const double targetTime=m_time+m_timestep;
     const std::vector<double> levels=m_stageTest=="FrozenScalarR2"?std::vector<double>{400.}:
         std::vector<double>{3200.,1600.,800.,400.};
@@ -413,14 +417,26 @@ void RANSEquilibriumWallEvolution::RunRestrictedStageTest()
         }
         const auto domain=m_patch->ScalarDomain(candidate,targetTime,m_implicitData,true);
         Vector residual,norms;RANSWallEvolutionPatch::Diagnostic audit;
+        std::map<int,double> constraints;std::string residualFailure,auditFailure;
         if(domain.admissible)
         {
-            residual=m_patch->Residual(candidate,history,alpha,targetTime,m_implicitData);
-            norms=m_patch->Norms(residual,m_patch->Constraints(candidate,targetTime,m_implicitData),m_ustar);
-            audit=m_patch->CompleteRestrictedAudit(candidate,history,alpha,targetTime,m_implicitData);
+            try
+            {
+                constraints=m_patch->Constraints(candidate,targetTime,m_implicitData);
+                residual=m_patch->Residual(candidate,history,alpha,targetTime,m_implicitData);
+                norms=m_patch->Norms(residual,constraints,m_ustar);
+            }
+            catch(const std::exception &error)
+            {residualFailure=std::string(J::ExceptionType(error))+": "+error.what();}
+            // Extra constitutive-reconstruction diagnostics can use more
+            // normalization anchors than the residual. Preserve an obtained
+            // coupled root even if this separate qualification audit fails.
+            try{audit=m_patch->CompleteRestrictedAudit(candidate,history,alpha,targetTime,m_implicitData);}
+            catch(const std::exception &error)
+            {auditFailure=std::string(J::ExceptionType(error))+": "+error.what();}
         }
-        const bool trueCoupled=converged && !norms.empty() && Maximum(norms)<m_tolerance;
-        const bool physical=trueCoupled && audit.at("r2_qualified")[0]==1;
+        const bool trueCoupled=converged && residualFailure.empty() && !norms.empty() && Maximum(norms)<m_tolerance;
+        const bool physical=trueCoupled && auditFailure.empty() && audit.count("r2_qualified") && audit.at("r2_qualified")[0]==1;
         std::vector<std::pair<std::string,std::string>> entries;
         for(const auto &[name,value]:audit)entries.push_back({name,J::Numbers(value)});
         m_stageTestLevels.push_back(J::Object({{"alpha",J::Number(alpha)},{"time",J::Number(targetTime)},
@@ -428,9 +444,11 @@ void RANSEquilibriumWallEvolution::RunRestrictedStageTest()
             {"true_coupled_residual_converged",J::Boolean(trueCoupled)},
             {"frozen_velocity_pressure_diagnostic",J::Boolean(m_stageTest=="FrozenScalarR2")},
             {"iterations",J::Number(iterations)},{"failure",J::Quote(failure)},
+            {"residual_verification_failure",J::Quote(residualFailure)},{"qualification_audit_failure",J::Quote(auditFailure)},
             {"state",J::Numbers(candidate)},{"history",J::Numbers(history)},
+            {"constraints",J::Constraints(constraints)},
             {"residual",J::Numbers(residual)},{"scaled_block_norms",J::Numbers(norms)},
-            {"scalar_domain",RANSWallEvolutionPatch::ScalarDomainJSON(domain)},
+            {"scalar_domain",RANSWallEvolutionPatch::ScalarDomainJSON(domain,true)},
             {"physical_range_passed",J::Boolean(physical)},{"audit",J::Object(entries)},
             {"native_history_advanced","false"}}));
         if(converged)guess=candidate;
@@ -565,6 +583,7 @@ void RANSEquilibriumWallEvolution::WriteReport() const
         out<<",\"stage_test\":"<<Quoted(m_stageTest)<<",\"stage_test_target_time\":"<<m_time+m_timestep
            <<",\"stage_test_native_history_advanced\":false,\"stage_test_target_converged\":"<<(m_targetConverged?"true":"false")
            <<",\"stage_test_target_physical_range\":"<<(m_targetPhysical?"true":"false")
+           <<",\"stage_test_initial_native_history\":"<<m_stageTestInitialHistory
            <<",\"stage_test_levels\":"<<RANSWallSolveJson::List(m_stageTestLevels);
     const auto &p=m_patch->Parameters();
     out<<",\"parameters\":";Write(out,{p.geometry.molecularNu,p.geometry.height,p.geometry.roughness,p.geometry.sampleHeight,
