@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Focused compiled R2 kernel and ACTIVE actual EvolutionPatch verification.
 
-The six fixed native fixtures are operator evaluations, never trajectories or
+The eight fixed native fixtures are operator evaluations, never trajectories or
 qualified physical controls.  Both inactive identity and active full weak
 loads are reconstructed independently.  The capped fixture has rK=H solely
 to exercise the source/trace mechanism, and is excluded from stage/control
@@ -139,7 +139,8 @@ def kernel(report, audit):
 
 def session(template, destination, selector, fixture, chi, rK):
     root = ET.parse(template).getroot()
-    tensor_mesh(root, [0., 2., 4.], 3, 2, 1., 1., points=8)
+    tensor_mesh(root, [0., 1., 2., 4.] if fixture == 4 else [0., 2., 4.],
+                3, 2, 1., 1., points=8)
     for key, value in {'RANSWallTransition': 'Fixed', 'RANSWallMap': 'Flat',
             'RANSWallVariant': 'Regularized', 'RANSWallDestruction': 'Capped',
             'RANSWallInnerStress': selector}.items():
@@ -162,7 +163,7 @@ def constrained(raw, values, input_state, constraints):
 
 
 def native(raw, audit):
-    audit.require(raw['inner_stress_fixture'] in (1, 2, 3) and raw['unforced_alpha0_fixture']
+    audit.require(raw['inner_stress_fixture'] in (1, 2, 3, 4) and raw['unforced_alpha0_fixture']
                   and raw['alpha'] == 0 and not raw['upstream_transition'], 'Not the declared verification-only native fixture')
     fields, state = _fields(raw), np.asarray(raw['lifted_state'])
     expected, metadata = weak_loads(raw, fields, state)
@@ -187,6 +188,16 @@ def native(raw, audit):
     if raw['inner_stress_fixture'] == 3:
         audit.require(observed['robust_source'][5] > 0 and observed['robust_source'][6] < 1,
                       'Declared capped native fixture did not exercise the normalization cap')
+    if raw['inner_stress_fixture'] == 4:
+        zero = observed['inner_zero_covariance']
+        audit.require(zero[0] > 0, 'The actual covariance diagnostic skipped exact inner k=0')
+        if raw['inner_stress_model'] == 'SaturatedR2':
+            audit.require(zero[1] == 0 and zero[2] == 0,
+                          'Selected R2 covariance is not exactly zero at native k=0')
+        else:
+            audit.require(zero[2] < 0, 'Linear zero-k negative covariance control was not observed')
+        audit.require(not raw['r2_coupled_action']['samples'] and 'skipped' in raw['r2_coupled_action'],
+                      'Zero-k fixture must not take an outward central dk perturbation')
     actions = []
     for sample in raw['r2_coupled_action']['samples']:
         calculated = {}
@@ -243,7 +254,9 @@ def main():
                  ('saturated-active-chi1', 'SaturatedR2', 1, 1, 1),
                  ('linear-inactive-chi0', 'Linear', 2, 0, 1),
                  ('saturated-inactive-chi0', 'SaturatedR2', 2, 0, 1),
-                 ('saturated-capped-chi0', 'SaturatedR2', 3, 0, 2)]
+                 ('saturated-capped-chi0', 'SaturatedR2', 3, 0, 2),
+                 ('linear-zero-local-k', 'Linear', 4, 0, 1),
+                 ('saturated-zero-local-k', 'SaturatedR2', 4, 0, 1)]
         raw_cases = {}
         for name, selector, fixture, chi, rK in fixed:
             directory = output/name;directory.mkdir()
@@ -258,6 +271,8 @@ def main():
                    raw_cases['saturated-inactive-chi0']['lifted_state'], 'same_actual_inactive_state', 0.)
         audit.near(raw_cases['linear-inactive-chi0']['raw_residual'],
                    raw_cases['saturated-inactive-chi0']['raw_residual'], 'inactive_native_operator_identity', 3e-13)
+        audit.near(raw_cases['linear-zero-local-k']['lifted_state'],
+                   raw_cases['saturated-zero-local-k']['lifted_state'], 'same_actual_zero_fixture_state', 0.)
         for name, raw in raw_cases.items():
             audit.require(('M8-R2:InnerStress:SaturatedR2:v1:rho=0.8' in raw['physical_signature']) ==
                           (raw['inner_stress_model'] == 'SaturatedR2'), 'Selector/checkpoint identity '+name)

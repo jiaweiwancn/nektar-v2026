@@ -259,6 +259,7 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::ScalarFeasibleJacobia
     WallMatrix jac(Size(),Vector(Size()));if(metadata)metadata->clear();
     for(int column=0;column<Size();++column)
     {
+        if(column%128==0)std::cout<<"EP-AWF ScalarFeasibleR2 Jacobian column "<<column<<" / "<<Size()<<std::endl;
         int block=0;while(block<Gauge() && column>=offset[block+1])++block;
         if(scalarOnly && (block<K() || block>Epsilon()))
         {
@@ -384,6 +385,67 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasible(
             for(int i=0;i<Size();++i)linear[i]+=scalarOnly && (i<offset[K()] || i>=offset[InnerPressure()])?0.:r[i];
             const auto linearNorms=Norms(linear,constraints,us);
             Require(Maximum(linearNorms)<1e-8*std::max(1.,error),"ScalarFeasibleR2 inaccurate linear solve");
+            std::vector<std::string> actions;
+            const auto spatialBase=Residual(s,history,0,time,data);
+            for(const std::string kind:{"velocity","free_k","epsilon_with_trace","pressure_and_gauge","joint"})
+            {
+                if(scalarOnly && kind!="free_k" && kind!="epsilon_with_trace")continue;
+                Vector direction(Size());
+                for(int b=0;b<=Gauge();++b)for(int i=0;i<size[b];++i)
+                {
+                    const int column=offset[b]+i;
+                    const bool selected=kind=="joint" || (kind=="velocity" && b<K()) ||
+                        (kind=="free_k" && b==K()) || (kind=="epsilon_with_trace" && b==Epsilon()) ||
+                        (kind=="pressure_and_gauge" && b>=InnerPressure());
+                    const double scale=b<m_dimension?us:b==K()?K0:b==Epsilon()?E0:b==Gauge()?us/m_parameters.geometry.height:us*us;
+                    if(selected && (!constraints.count(column) || (b==Epsilon() && m_traceIds.count(i))))
+                        direction[column]=scale*std::sin(1.317*(column+1));
+                }
+                if(kind=="free_k" || kind=="joint")
+                {
+                    const auto bubble=fields[K()]->Project([&](const RANSWallCoordinate &p)
+                    {
+                        if(p[2]>m_parameters.geometry.height)return 0.;
+                        const double x=(p[0]-lower[0])/(upper[0]-lower[0]),r=p[2]/m_parameters.geometry.height;
+                        return 16*K0*x*(1-x)*r*(1-r);
+                    });
+                    for(int i=0;i<size[K()];++i)direction[offset[K()]+i]=constraints.count(offset[K()]+i)?0.:bubble[i];
+                }
+                Vector massAction(Size());
+                for(int b=0;b<InnerPressure();++b)
+                {
+                    Vector part(direction.begin()+offset[b],direction.begin()+offset[b]+size[b]);
+                    const auto load=Multiply(m_mass[b],part);
+                    for(int i=0;i<size[b];++i)if(!constraints.count(offset[b]+i))massAction[offset[b]+i]=alpha*load[i];
+                }
+                std::vector<std::string> levels;
+                for(double h:{2e-5,2e-6,5e-7})
+                {
+                    std::vector<std::string> sides;
+                    for(int sign:{1,-1})
+                    {
+                        auto point=s;for(int i=0;i<Size();++i)point[i]+=sign*h*direction[i];
+                        const auto checked=ScalarDomain(point,time,data);
+                        std::vector<std::pair<std::string,std::string>> observation{
+                            {"domain",ScalarDomainJSON(checked)},{"evaluated",J::Boolean(checked.admissible)}};
+                        if(checked.admissible)
+                        {
+                            try{observation.push_back({"spatial_residual",J::Numbers(Residual(point,history,0,time,data))});}
+                            catch(const std::exception &errorValue)
+                            {
+                                observation[1].second="false";
+                                observation.push_back({"exception_type",J::Quote(J::ExceptionType(errorValue))});
+                                observation.push_back({"exception_message",J::Quote(errorValue.what())});
+                            }
+                        }
+                        sides.push_back(J::Object(observation));
+                    }
+                    levels.push_back(J::Object({{"step",J::Number(h)},{"plus",sides[0]},{"minus",sides[1]}}));
+                }
+                actions.push_back(J::Object({{"kind",J::Quote(kind)},{"direction",J::Numbers(direction)},
+                    {"jacobian_action",J::Numbers(Multiply(jac,direction))},{"exact_mass_action",J::Numbers(massAction)},
+                    {"spatial_base",J::Numbers(spatialBase)},{"levels",J::List(levels)}}));
+            }
             // External lifting is affine here. The retained matching EPS
             // coefficients stay independent; the target prediction below is
             // only an additional bound and is rebuilt nonlinearly per trial.
@@ -450,6 +512,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasible(
                 {"jacobian_binary_file",J::Quote(matrixFile)},
                 {"jacobian_binary_shape",J::Numbers(Vector{double(Size()),double(Size())})},
                 {"jacobian_binary_encoding",J::Quote("row-major native IEEE754 binary64; byte order in host receipt")},
+                {"current_directional_checks",J::List(actions)},
                 {"fixed_location_maximum_fraction",J::Number(maximum)},
                 {"boundary_limited",J::Boolean(limited)},{"limiting_inventory",J::Quote(limiting.inventory)},
                 {"limiting_point",J::Numbers(limiting.coordinate)},

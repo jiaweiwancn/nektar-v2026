@@ -377,7 +377,7 @@ int main(int argc,char **argv)
             world->Finalise();return 0;
         }
         int innerFixture=0;serial->LoadParameter("RANSWallProbeInnerStressFixture",innerFixture,0);
-        Require(innerFixture>=0 && innerFixture<=3,"unknown R2 inner-stress verification fixture");
+        Require(innerFixture>=0 && innerFixture<=4,"unknown R2 inner-stress verification fixture");
         if(innerFixture)Require(d==2 && mapping.Identity() && !patch.TransitionEnabled(),
             "R2 inner-stress verification fixture is explicitly flat 2D with Fixed chi");
         const double K=parameters.model.Q()*.16,H=parameters.geometry.height,Z=patch.upper[2],time=.2,alpha=innerFixture?0.:5.3;
@@ -409,6 +409,9 @@ int main(int argc,char **argv)
             if(innerFixture==3)
                 functions[d]=[K,rK=parameters.geometry.sampleHeight](const Vec &p,double)
                     {return K*(.001+.999*std::pow(p[2]/rK,3));};
+            if(innerFixture==4)
+                functions[d]=[K,rK=parameters.geometry.sampleHeight](const Vec &p,double)
+                    {return p[2]<rK?K*std::pow(p[2]/rK,2):K;};
         }
         RANSWallEvolutionData data(d);for(int b=0;b<patch.InnerPressure();++b)data.boundary[b]=functions[b];
         if(!innerFixture)
@@ -420,13 +423,28 @@ int main(int argc,char **argv)
         data.outerKSource=[](const Vec &p,double){return -.02+.01*p[0]+.02*p[1]+.03*p[2];};
         data.outerEpsilonSource=[](const Vec &p,double){return .01*(1+p[0]+p[1]+p[2]);};
         }
+        auto projectFixture=[&]()
+        {
+            auto result=patch.Project(functions,time);
+            if(innerFixture==4)
+            {
+                // Construct the declared verification polynomial with its
+                // exact prescribed zero ground trace. This is initial-data
+                // construction, not clipping or repair of an evolved state.
+                const auto ground=patch.fields[patch.K()]->Boundary([](const Vec&){return 0.;},
+                    [](int axis,int side,const RANSWallGlobalField::Element &e)
+                        {return axis==2 && side==0 && std::abs(e.lower[2])<1e-12;});
+                for(const auto &[id,value]:ground)result[patch.offset[patch.K()]+id]=value;
+            }
+            return result;
+        };
         if(innerFixture)
         {
             // Fixed-chi lateral Dirichlet EPS and the dependent matching
             // trace share corner modes. Choose compatible fixed corner data
             // once; interior matching modes still rebuild lambda*Epre(H)
             // from every perturbed current k field in Constraints/Lift.
-            const auto seed=patch.Project(functions,time);
+            const auto seed=projectFixture();
             auto endpoint=[&](double x)
             {
                 const Vec q{x,0,H};const auto p=patch.StateProfile(seed,q,time,data);
@@ -437,7 +455,7 @@ int main(int argc,char **argv)
                 {return left+(right-left)*(p[0]-x0)/length+.01*(p[2]-H);};
             data.boundary[patch.Epsilon()]=functions[patch.Epsilon()];
         }
-        const auto state=patch.Project(functions,time);auto history=state;for(int i=0;i<patch.DifferentialSize();++i)history[i]*=.97;
+        const auto state=projectFixture();auto history=state;for(int i=0;i<patch.DifferentialSize();++i)history[i]*=.97;
         const auto constraints=patch.Constraints(state,time,data);const auto lifted=patch.Lift(state,time,data);
         const auto operatorState=patch.TransitionEnabled()?lifted:state;
         const auto raw=patch.Residual(operatorState,history,alpha,time,data,false,false),inner=patch.Residual(operatorState,history,alpha,time,data,false,false,0),outer=patch.Residual(operatorState,history,alpha,time,data,false,false,1);
@@ -454,7 +472,8 @@ int main(int argc,char **argv)
         if(innerFixture)
             out<<",\"upstream_transition\":false,\"unforced_alpha0_fixture\":true"
                <<",\"inner_stress_fixture_definitions\":{\"u\":\""<<(innerFixture==2?".1*r":"6*r")
-               <<"\",\"k\":\""<<(innerFixture==3?"K0*(.001+.999*(r/rK)^3)":"base definition")
+               <<"\",\"k\":\""<<(innerFixture==3?"K0*(.001+.999*(r/rK)^3)":
+                    (innerFixture==4?"K0*(r/rK)^2 below rK, K0 above; exact prescribed zero ground trace":"base definition"))
                <<"\",\"epsilon_seed\":\"linear interpolation of fixed compatible endpoint lambda*Epre(H), plus .01*(r-H); interior matching modes remain dependent\""
                <<",\"all_prescribed_body_and_scalar_sources\":0,\"alpha\":0,\"qualification\":\"operator verification only; outer state box is not required or enlarged\"}";
         out<<",\"ustar\":"<<ustar<<",\"robust_reference_flow\":";Write(out,patch.RobustReferenceFlow());
@@ -483,6 +502,10 @@ int main(int argc,char **argv)
             const auto audit=patch.Audit(operatorState,history,alpha,time,data,ustar,true);
             out<<",\"constitutive_audit\":{";bool first=true;
             for(const auto &[name,value]:audit){if(!first)out<<',';first=false;out<<std::quoted(name)<<':';Write(out,value);}out<<'}';
+            if(innerFixture==4)
+                out<<",\"r2_coupled_action\":{\"skipped\":\"central local-k direction would leave the exact zero-k cone; kernel admissible one-sided origins are tested separately\",\"samples\":[]}";
+            else
+            {
             std::vector<F> changes(patch.Gauge(),[](const Vec&,double){return 0.;});
             changes[0]=[H](const Vec &p,double){return .002*p[2]*(H-p[2]);};
             changes[1]=[](const Vec &p,double){return .001*p[2];};
@@ -494,7 +517,8 @@ int main(int argc,char **argv)
             out<<",\"r2_coupled_action\":{\"direction\":";Write(out,direction);out<<",\"samples\":[";int sample=0;
             for(double step:{1e-4,1e-5})
             {
-                if(sample++)out<<',';auto plus=operatorState,minus=operatorState;
+                if(sample++)out<<',';
+                auto plus=operatorState,minus=operatorState;
                 for(int i=0;i<patch.Size();++i){plus[i]+=step*direction[i];minus[i]-=step*direction[i];}
                 const auto lp=patch.Lift(plus,time,data),lm=patch.Lift(minus,time,data);
                 out<<"{\"step\":"<<step<<",\"input_plus\":";Write(out,plus);out<<",\"input_minus\":";Write(out,minus);
@@ -509,6 +533,7 @@ int main(int argc,char **argv)
                 }
                 out<<",\"native_action\":";Write(out,patch.DirectionalAction(operatorState,direction,history,alpha,time,data,step));out<<'}';
             }out<<"]}";
+            }
         }
         if(patch.TransitionEnabled()){out<<",\"transition\":";TransitionAudit(out,patch,lifted,history,time,alpha,data,serial,graph,world->GetComm(),parameters);}
         else{out<<",\"interface\":";Interface(out,patch,lifted);out<<",\"inner_epsilon_diagnostic\":";InnerEpsilonReaction(out,patch,lifted,history,alpha);}

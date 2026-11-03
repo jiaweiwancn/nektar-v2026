@@ -35,6 +35,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
 {
     Diagnostic result;const double sentinel=std::numeric_limits<double>::max();
     Vector range{0,sentinel,-sentinel,sentinel,-sentinel,sentinel,-sentinel,0};
+    Vector zeroInnerCovariance{0,sentinel,-sentinel};
     const double K0=m_parameters.model.Q()*ustar*ustar;
     bool admissible=true;Refresh(s,time,&data);
     for(const std::string name:{"source_volume_inner","source_volume_outer","physical_sample_K","physical_sample_outer",
@@ -87,7 +88,14 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
                 const auto cm=OuterClosure(k,epsilon,minus,v.coordinate);
                 r[4]=std::min(r[4],-(cp.reynoldsStress[1][0]-cm.reynoldsStress[1][0])/(2*h));
             }
-            r[3]=std::min(r[3],MinimumEigenvalue(covariance));
+            const double minimum=MinimumEigenvalue(covariance);
+            r[3]=std::min(r[3],minimum);
+            if(inner && k==0)
+            {
+                ++zeroInnerCovariance[0];
+                zeroInnerCovariance[1]=std::min(zeroInnerCovariance[1],minimum);
+                zeroInnerCovariance[2]=std::max(zeroInnerCovariance[2],minimum);
+            }
         }
     };
     for(const auto &ray:m_rays)
@@ -150,6 +158,11 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
         for(int i:{0,2,4,6,7})m_comm->AllReduce(range[i],LibUtilities::ReduceMax);
         for(int i:{1,3,5})m_comm->AllReduce(range[i],LibUtilities::ReduceMin);
         result["outer_constitutive_range"]=range;
+        m_comm->AllReduce(zeroInnerCovariance[0],LibUtilities::ReduceSum);
+        m_comm->AllReduce(zeroInnerCovariance[1],LibUtilities::ReduceMin);
+        m_comm->AllReduce(zeroInnerCovariance[2],LibUtilities::ReduceMax);
+        if(!zeroInnerCovariance[0])zeroInnerCovariance[1]=zeroInnerCovariance[2]=0;
+        result["inner_zero_covariance"]=zeroInnerCovariance;
     }
     if(!admissible)return result;
     Vector continuity(5);for(const auto &q:Quadrature(0))

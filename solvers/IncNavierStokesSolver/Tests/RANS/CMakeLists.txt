@@ -220,6 +220,8 @@ if(RANS_BUILD_SOLVER)
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallEvolutionDiagnostics.cpp
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallEvolutionTransition.cpp
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallEvolutionRobust.cpp
+            ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallEvolutionActions.cpp
+            ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallEvolutionFeasible.cpp
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallTimeIntegration.cpp
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSEquilibriumWallEvolution.cpp
             PROPERTIES COMPILE_OPTIONS "-Wall;-Wextra;-Wpedantic;-Wno-sign-compare;-Werror")
