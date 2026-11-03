@@ -16,7 +16,7 @@ class ReuseMetadataTests(unittest.TestCase):
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory(prefix='rans-r2-reuse-metadata-')
         self.root = Path(self.temporary.name).resolve()
-        self.old, self.current, self.case, self.aux = (self.root/name for name in ('old', 'current', 'case', 'aux'))
+        self.old, self.current, self.case, self.aux = (self.root/name for name in ('old', 'current', 'case', 'auxiliary-analysis'))
         for path in (self.old, self.current, self.case, self.aux):
             path.mkdir()
         self.code = 'import math\nVALUE=1\nclass Analyzer:\n def value(self): return VALUE\ndef utility(): return 1\ndef verify(): return "old"\ndef main(): pass\n'
