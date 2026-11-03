@@ -476,6 +476,13 @@ ellipticity test. The reconstruction sets use actual native GLL points and
 `2*p+3` equispaced points per coordinate in every element. Neither finite set
 certifies the minimum of the polynomial everywhere.
 
+The independent M7 oracle additionally audits the actual boundary/trace GLL
+tangential sampler points at physical rK/rA/rB and H; these nonlocal locations
+need not belong to the source Gauss or reconstruction tensors. Its focused
+rejection control has positive values on every other admissibility set, with
+one negative dense-reconstruction k value. Covariance signs are recorded
+separately and are not silently made into a different closure domain.
+
 Additional entries retain these distinctions:
 
 | Entry | Meaning and order |

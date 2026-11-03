@@ -250,13 +250,15 @@ def campaign(run, mode):
     require(not rejected['initialization_complete'] and not rejected['accepted_states']
             and 'sampled K' in rejected['failure'],'invalid initial sampler must preserve original failure before history exists')
     results['invalid-sampler-reject']={'failure':rejected['failure'],'accepted_states':0}
+    from cls_epawf_m7_dense_guard import verify as verify_dense_guard
+    results['dense-only-reject']=verify_dense_guard(run)
     return results
 
 
 def replay(run, directory):
     """Add independent accounting to immutable, source-bound stored runs.
 
-    Reuse is allowed only across documentation or these two audit-driver
+    Reuse is allowed only across documentation or the declared M7 audit-driver
     changes. Every native numerical input and runtime executable is unchanged.
     No failed trajectory can be promoted by this postprocessing path.
     """
@@ -271,7 +273,9 @@ def replay(run, directory):
     allowed={'solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m7_energy_oracle.py',
              'solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m7.py',
              'solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m7_transition_flow.py',
-             'solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m7_transverse.py'}
+             'solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m7_transverse.py',
+             'solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m7_dense_guard.py',
+             'solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m7_transition_diagnosis.py'}
     for name in changed:
         require(name in allowed or name.endswith('.md') or name.startswith('docs/'),
                 'native numerical source changed across replay: '+name)

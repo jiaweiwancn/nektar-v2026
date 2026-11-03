@@ -294,6 +294,20 @@ def verify(raw):
                 independent=_diagnostic(view,state,fields,row['chart'],zero_body=True)
                 audit.near(row['gates'],independent['gates'],'independent_unforced_transition_gates')
                 audit.near(row['input'],independent['input'],'independent_unforced_transition_inputs')
+            # The initial mixed-chi state exercises the active correction as
+            # well as its baseline, before the physical transient changes it.
+            initial=np.asarray(raw['accepted_states'][0],float)
+            initial_direct=_direct(raw,fields,initial,audit)
+            initial_energy=np.asarray(raw['state_audits'][0]['energy'])
+            initial_storage,initial_stored=_mass(raw,fields,initial,initial,0.)
+            audit.near(initial_energy[[1,8]],[initial_storage,initial_stored],'initial_unforced_physical_mass')
+            terms=[initial_direct['stress_work_minus_k_source'],initial_direct['resolved_advection'],initial_direct['roughness_force_work']]
+            audit.near(initial_energy[[2,3,4]],terms,'initial_mixed_chi_direct_energy_components')
+            audit.near(initial_energy[0],sum(terms),'initial_mixed_chi_direct_equals_captured_weak_work')
+            audit.near(raw['state_audits'][0]['wall_sources'][:3],
+                [initial_direct['original_dissipation_integral'],initial_direct['blended_dissipation_integral'],initial_direct['redistribution_integral']],
+                'initial_mixed_chi_wall_source_budgets')
+            result['initial_unforced_direct']=initial_direct
         audit.near(energy[[2, 3, 4]], [direct['stress_work_minus_k_source'], direct['resolved_advection'],
                                       direct['roughness_force_work']], 'independent_direct_energy_components')
         total = storage+direct['stress_work_minus_k_source']+direct['resolved_advection']+direct['roughness_force_work']
