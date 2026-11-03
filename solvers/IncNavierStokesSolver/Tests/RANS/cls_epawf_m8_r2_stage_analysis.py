@@ -98,6 +98,38 @@ def git(source, *arguments):
     return subprocess.check_output(['git', '-c', 'gc.auto=0', '-C', str(source), *arguments], text=True).strip()
 
 
+def ray_coordinate_correspondence(native, independent, audit, point_key):
+    """Check already-sorted ray rows without using decimal bins as equality.
+
+    A changed rounded key requires the stricter absolute-coordinate safeguard
+    for every pair. Structural identities and the original coordinate/weight
+    comparisons remain mandatory. This changes no physical evaluation row.
+    """
+    audit.require(len(native) == len(independent), 'Native/independent complete common inventory lengths differ')
+    native_keys = [point_key(row) for row in native]
+    independent_keys = [point_key(row) for row in independent]
+    audit.require([key[:6] for key in native_keys] == [key[:6] for key in independent_keys],
+        'Native/independent moving-ray structural inventory differs')
+    rounded_equal = native_keys == independent_keys
+    native_coordinates = [row['coordinate'] for row in native]
+    independent_coordinates = [row['coordinate'] for row in independent]
+    maximum_raw_difference = float(np.max(np.abs(np.asarray(native_coordinates, float)-
+        np.asarray(independent_coordinates, float)), initial=0.))
+    if not rounded_equal:
+        audit.require(maximum_raw_difference <= 1e-13,
+            'Changed moving-ray rounded keys exceed the absolute-coordinate safeguard')
+    audit.near(native_coordinates, independent_coordinates,
+        'independent_complete_dynamic_ray_coordinates', 2e-11)
+    audit.near([row['weight'] for row in native], [row['weight'] for row in independent],
+        'independent_complete_dynamic_ray_weights', 2e-11)
+    return dict(version='v2', paired_rows=len(native), exact_structural_fields_equal=True,
+        old_rounded_key_equality=rounded_equal, maximum_raw_coordinate_difference=maximum_raw_difference,
+        original_coordinate_tolerance=2e-11, original_weight_tolerance=2e-11,
+        original_comparison='Audit.near componentwise abs(actual-expected)/max(1,abs(expected))',
+        additional_absolute_coordinate_safeguard_applicable=not rounded_equal,
+        additional_absolute_coordinate_safeguard=1e-13 if not rounded_equal else None)
+
+
 class Analyzer:
     def __init__(self, raw, session, source, matrix_root=None):
         self.raw, self.session, self.source = raw, Path(session), Path(source)
@@ -399,12 +431,7 @@ class Analyzer:
                 a = sorted(native['observations'], key=self.point_key)
                 b = sorted(records, key=self.point_key)
                 self.audit.require(len(a) == len(b), 'Native/independent complete common inventory lengths differ')
-                self.audit.require([self.point_key(row) for row in a] == [self.point_key(row) for row in b],
-                    'Native/independent moving-ray inventory geometry differs')
-                self.audit.near([row['coordinate'] for row in a], [row['coordinate'] for row in b],
-                    'independent_complete_dynamic_ray_coordinates', 2e-11)
-                self.audit.near([row['weight'] for row in a], [row['weight'] for row in b],
-                    'independent_complete_dynamic_ray_weights', 2e-11)
+                result['coordinate_correspondence'] = ray_coordinate_correspondence(a, b, self.audit, self.point_key)
         return result
 
     def domain_result(self, admitted, phase, records, counts, margins, minimum, native):

@@ -62,9 +62,11 @@ for row in receipt['cases']:
     native_command = next(item for item in receipt['commands'] if item['name'] == 'native-'+row['inner_stress'])
     item = dict(inner_stress=row['inner_stress'], xml=file(xml),
         native_seconds=row['native_seconds'], native_exit_code=row['native_exit_code'],
-        command=native_command, target_attempted=row.get('target_attempted', False),
-        target_true_coupled_convergence=row.get('target_converged', False),
-        target_native_physical_range_flag=row.get('target_physical_range', False),
+        command=native_command, target_attempted=row.get('target_attempted'),
+        target_true_coupled_convergence=row.get('target_converged'),
+        target_native_physical_range_flag=row.get('target_physical_range'),
+        target_case_report_available=bool(row.get('report_path')),
+        target_flags_origin='Final case-report receipt only; missing flags stay unknown. The strict stage assessment separately inspects actual logs and complete JSONL records.',
         note='Native range flag is separate from independent operator/action/accounting qualification',
         levels=[], nonlinear_solves=[], matrices=[])
     if row.get('report_path'):
