@@ -65,7 +65,8 @@ void Write(std::ostream &out,const Case &c,RANSWallInnerStressModel model)
        <<",\"directional_only\":"<<(action.directionalOnly?"true":"false")<<"},\"differences\":[";
     bool first=true;for(double h:{1e-3,1e-4,1e-5,1e-6})
     {
-        if(!first)out<<',';first=false;auto plus=c.G,minus=c.G;
+        if(!first)out<<',';
+        first=false;auto plus=c.G,minus=c.G;
         for(int i=0;i<3;++i)for(int j=0;j<3;++j){plus[i][j]+=h*c.H[i][j];minus[i][j]-=h*c.H[i][j];}
         out<<"{\"step\":"<<h<<",\"plus\":";Values(out,EvaluateRANSWallInnerStress(c.k+h*c.dk,c.nuA+h*c.dnuA,plus,model),nu,pi);
         if(!c.oneSided){out<<",\"minus\":";Values(out,EvaluateRANSWallInnerStress(c.k-h*c.dk,c.nuA-h*c.dnuA,minus,model),nu,pi);}
