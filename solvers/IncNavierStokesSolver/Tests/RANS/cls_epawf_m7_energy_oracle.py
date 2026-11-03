@@ -5,7 +5,8 @@ rows and physical mass matrices, dimensional AWF primitives and the indexed
 CLS tensor construct the direct answer. Native weak loads are used only for
 their explicitly labelled contraction/reaction audit, never to construct the
 independent volume components. Upstream cases receive a limited mass/work
-audit; their manufactured forcing is deliberately not guessed here.
+audit when manufactured forcing is present. Unforced neutral Upstream states
+also receive independent physical sensor/chi and direct-volume accounting.
 """
 import itertools
 import math
@@ -103,9 +104,17 @@ def _profile(raw, fields, state, chart):
     metric = geometry(raw['map_parameters'], chart)
     sample = np.array([chart[0], chart[1], rK/metric['scale']])
     K = _sample(fields, state, raw['offsets'], raw['dimension'], [sample])[3][0]
+    chi=raw['chi']
+    if raw.get('upstream_transition'):
+        # Independently reconstruct the seven physical sensor groups and
+        # analytic gates. This path is used only with proven zero forcing.
+        from cls_epawf_m6_operator_oracle import _diagnostic
+        view=dict(raw,transition=dict(controls=raw['transition_controls'],weights=raw['transition_weights'],
+                                     reference=raw['transition_reference']))
+        chi=float(_diagnostic(view,state,fields,chart,zero_body=True)['gates'][0])
     return Profiles(dict(geometry=[nu, metric['height'], rough, rK, rm],
                          metric=[metric['kappa1'], metric['kappa2']], k=K,
-                         q=qstar, kappa=kappa, chi=raw['chi'])), metric
+                         q=qstar, kappa=kappa, chi=chi)), metric
 
 
 def _forcing(raw, fields, state, point):
@@ -156,7 +165,8 @@ def _direct(raw, fields, state, audit):
             S, divergence = G+G.transpose(0, 2, 1), np.trace(G, axis1=1, axis2=2)
             EA = float(profile.k)**1.5/(2.55*np.maximum(r, float(profile.ze)))
             p0 = np.asarray(profile.fields(r)[1], float)
-            direct = nu*np.sum(S*S, axis=(1, 2))/2+(2*K/3-pressure)*divergence+(1-raw['chi'])*EA+raw['chi']*p0
+            chi=float(profile.chi)
+            direct = nu*np.sum(S*S, axis=(1, 2))/2+(2*K/3-pressure)*divergence+(1-chi)*EA+chi*p0
             stress_source += float(weights@direct)
             advection -= float(weights@np.einsum('qab,qa,qb->q', G, U, U))
             below = r <= rough
@@ -263,16 +273,27 @@ def verify(raw):
                   storage=storage, stored_resolved_plus_k=stored, unmasked_weak_work=unmasked,
                   essential_boundary_reaction_work=reaction, fixed_anchor_work=anchor,
                   free_row_balance=unmasked-reaction-anchor, unmasked_load_source=work_origin)
-    if raw.get('upstream_transition'):
+    unforced_transition=raw.get('upstream_transition') and raw.get('neutral_reference') and not any(
+        '|'+prefix+'/' in raw.get('signature','') for prefix in (
+            'BodyForceInner','BodyForceOuter','ScalarSourceInner','ScalarSourceOuter'))
+    if raw.get('upstream_transition') and not unforced_transition:
         result.update(scope='limited Upstream audit: actual mapped mass/storage and unmasked work/reaction/anchor only',
                       direct_volume_components_reconstructed=False,
                       limitation='manufactured transition body/scalar forcing not reconstructed by this flat-neutral oracle')
     else:
         audit.require(int(raw['map_parameters'][0]) in (0, 1) and
                       raw['map_parameters'][3] == raw['map_parameters'][4] == raw['map_parameters'][5] == 0,
-                      'Full energy oracle supports constant-H flat/plane Fixed geometry')
+                      'Full energy oracle supports constant-H flat/plane neutral-data geometry')
         audit.require(abs(raw['parameters'][6]-3.1906750816242875) < 1e-10, 'Full energy oracle requires original CLS')
         direct = _direct(raw, fields, state, audit)
+        if unforced_transition:
+            from cls_epawf_m6_operator_oracle import _diagnostic
+            view=dict(raw,transition=dict(controls=raw['transition_controls'],weights=raw['transition_weights'],
+                                         reference=raw['transition_reference']))
+            for row in raw['transition_samples']:
+                independent=_diagnostic(view,state,fields,row['chart'],zero_body=True)
+                audit.near(row['gates'],independent['gates'],'independent_unforced_transition_gates')
+                audit.near(row['input'],independent['input'],'independent_unforced_transition_inputs')
         audit.near(energy[[2, 3, 4]], [direct['stress_work_minus_k_source'], direct['resolved_advection'],
                                       direct['roughness_force_work']], 'independent_direct_energy_components')
         total = storage+direct['stress_work_minus_k_source']+direct['resolved_advection']+direct['roughness_force_work']
@@ -281,7 +302,8 @@ def verify(raw):
         audit.near(direct['redistribution_integral'], 0., 'independent_zero_net_redistribution')
         interface = _interface(raw, fields, state)
         audit.near(raw['state_audits'][-1]['interface'], interface, 'independent_total_matching_traction_and_k_flux')
-        result.update(scope='full Fixed original-CLS neutral-data direct energy and matching-traction audit',
+        result.update(scope=('full unforced Upstream original-CLS direct energy, independent sensors/chi and matching-traction audit'
+                             if unforced_transition else 'full Fixed original-CLS neutral-data direct energy and matching-traction audit'),
                       direct_volume_components_reconstructed=True, direct=direct,
                       independently_reconstructed_total=total, independent_interface=interface.tolist(),
                       interpretation='stage storage uses the actual BDF/IMEX history contract; not a new finite-difference definition of total-energy change')
