@@ -1,0 +1,1701 @@
+{
+  "schema": 1,
+  "milestone": "M6",
+  "started_utc": "2026-11-02T23:51:33.088939+00:00",
+  "source_root": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/source",
+  "thread_environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1"
+  },
+  "status": "passed",
+  "sections": {
+    "operators": [
+      {
+        "schema": 1,
+        "dimension": 2,
+        "active_samples": 5,
+        "inactive_samples": 10,
+        "reference_departure_maximum": 0.0,
+        "physical_samples": [
+          {
+            "sample": 0,
+            "coordinate": -3.863,
+            "chi": 0.8589073055076056,
+            "cutoff": 0.009473787254486488,
+            "d2": 255.24454401100624,
+            "full_k_budget_change": 0.4131964812488151
+          },
+          {
+            "sample": 1,
+            "coordinate": -3.519,
+            "chi": 0.8680492027066617,
+            "cutoff": 0.00947761467415693,
+            "d2": 248.47556078684704,
+            "full_k_budget_change": 0.4284046972655945
+          },
+          {
+            "sample": 2,
+            "coordinate": -3.137,
+            "chi": 0.8773514365543278,
+            "cutoff": 0.009481833450283004,
+            "d2": 241.3434971632363,
+            "full_k_budget_change": 0.44525231957621475
+          },
+          {
+            "sample": 3,
+            "coordinate": -2.863,
+            "chi": 0.8433458819745578,
+            "cutoff": 0.00948483927374693,
+            "d2": 236.46230127016395,
+            "full_k_budget_change": 0.43652191386339045
+          },
+          {
+            "sample": 4,
+            "coordinate": -2.519,
+            "chi": 0.2215909305201155,
+            "cutoff": 0.009488589311060783,
+            "d2": 230.5942550805706,
+            "full_k_budget_change": 0.11753367890008437
+          },
+          {
+            "sample": 5,
+            "coordinate": -2.137,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 6,
+            "coordinate": -1.863,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 7,
+            "coordinate": -1.5190000000000001,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 8,
+            "coordinate": -1.137,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 9,
+            "coordinate": -0.726,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 10,
+            "coordinate": -0.038000000000000034,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 11,
+            "coordinate": 0.726,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 12,
+            "coordinate": 1.137,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 13,
+            "coordinate": 1.4809999999999999,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 14,
+            "coordinate": 1.863,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          }
+        ],
+        "constrained_trace": {
+          "rows": 16,
+          "baseline_rows": 10,
+          "transform": "independent GLL sampled constrained Modified_A transform; exact interior GL mass; commuting tensor transforms",
+          "analytic_chi_projected": false,
+          "dependent_trace_is_unknown": true
+        },
+        "complete_weak": {
+          "dimension": 2,
+          "maximum_block_absolute_errors": [
+            4.996003610813204e-16,
+            6.661338147750939e-16,
+            6.217248937900877e-15,
+            9.020562075079397e-17,
+            2.0122792321330962e-16,
+            2.220446049250313e-16
+          ],
+          "roughness_budget": [
+            0.03807999999999996,
+            0.0,
+            0.0,
+            4.472000000000004e-05,
+            0.0
+          ],
+          "energy_budget": [
+            10.152994239351697,
+            1.963159057836528,
+            8.444231901515165,
+            -0.11955199999999999,
+            -0.13484471999999997,
+            0.0,
+            10.152994239351692,
+            5.329070518200751e-15,
+            11.819552313437265
+          ],
+          "independent_quadrature_orders": [
+            8,
+            24,
+            8
+          ],
+          "comparison": "same declared finite outer Gauss rule, independently reconstructed; higher-order inner quadrature"
+        },
+        "independent_inner_quadrature_control": {
+          "dimension": 2,
+          "maximum_block_absolute_errors": [
+            4.996003610813204e-16,
+            6.661338147750939e-16,
+            6.217248937900877e-15,
+            9.020562075079397e-17,
+            2.0816681711721685e-16,
+            2.220446049250313e-16
+          ],
+          "roughness_budget": [
+            0.038079999999999954,
+            0.0,
+            0.0,
+            4.4720000000000006e-05,
+            0.0
+          ],
+          "energy_budget": [
+            10.152994239351695,
+            1.963159057836528,
+            8.444231901515165,
+            -0.11955199999999999,
+            -0.13484471999999997,
+            0.0,
+            10.152994239351692,
+            3.552713678800501e-15,
+            11.819552313437265
+          ],
+          "independent_quadrature_orders": [
+            8,
+            16,
+            8
+          ],
+          "comparison": "same declared finite outer Gauss rule, independently reconstructed; higher-order inner quadrature"
+        },
+        "additional_weak_checks": 50,
+        "equal_input_baseline": {
+          "rows": 425,
+          "native_operator_maximum": 0,
+          "native_constraint_maximum": 0,
+          "independently_reconstructed": true
+        },
+        "directional": {
+          "independent_full_weak_actions": true,
+          "blocks": [
+            {
+              "block": 2,
+              "independent_steps": [
+                0.0002,
+                0.0001
+              ],
+              "same_step_native_errors": [
+                2.4424906541753444e-11,
+                3.108624468950438e-11
+              ],
+              "independent_step_drift": 8.326672684688674e-12,
+              "finest_native_step": 2e-06,
+              "independent_to_finest_error": 1.2545520178264269e-09,
+              "trace_omitted_chi_derivative_maximum": 1.1789807154638163e-05,
+              "complete_rows": 425,
+              "nonlinear_trace_rows": 16
+            },
+            {
+              "block": 3,
+              "independent_steps": [
+                0.0002,
+                0.0001
+              ],
+              "same_step_native_errors": [
+                4.440892098500626e-12,
+                2.220446049250313e-12
+              ],
+              "independent_step_drift": 1.1102230246251565e-12,
+              "finest_native_step": 2e-06,
+              "independent_to_finest_error": 7.105427357601002e-11,
+              "trace_omitted_chi_derivative_maximum": 3.3768837335787505e-09,
+              "complete_rows": 425,
+              "nonlinear_trace_rows": 16
+            },
+            {
+              "block": 5,
+              "independent_steps": [
+                0.0002,
+                0.0001
+              ],
+              "same_step_native_errors": [
+                8.326672684688674e-12,
+                2.220446049250313e-12
+              ],
+              "independent_step_drift": 1.1102230246251565e-12,
+              "finest_native_step": 2e-06,
+              "independent_to_finest_error": 6.439293542825908e-11,
+              "trace_omitted_chi_derivative_maximum": 2.2363126210870818e-06,
+              "complete_rows": 425,
+              "nonlinear_trace_rows": 16
+            }
+          ],
+          "interpretation": "central finite differences of independently reconstructed complete operators; reported finite-step drift"
+        }
+      },
+      {
+        "schema": 1,
+        "dimension": 2,
+        "active_samples": 5,
+        "inactive_samples": 10,
+        "reference_departure_maximum": 0.0,
+        "physical_samples": [
+          {
+            "sample": 0,
+            "coordinate": -3.863,
+            "chi": 0.8587580009599421,
+            "cutoff": 0.00947379000893229,
+            "d2": 255.35327277219213,
+            "full_k_budget_change": 0.4131322872763108
+          },
+          {
+            "sample": 1,
+            "coordinate": -3.519,
+            "chi": 0.867828626341032,
+            "cutoff": 0.009477617409276941,
+            "d2": 248.6415689777948,
+            "full_k_budget_change": 0.4283036251422997
+          },
+          {
+            "sample": 2,
+            "coordinate": -3.137,
+            "chi": 0.8772184077449712,
+            "cutoff": 0.009481836164129065,
+            "d2": 241.44737454682172,
+            "full_k_budget_change": 0.44519276399356805
+          },
+          {
+            "sample": 3,
+            "coordinate": -2.863,
+            "chi": 0.8432100583858883,
+            "cutoff": 0.009484841972460085,
+            "d2": 236.57636651131622,
+            "full_k_budget_change": 0.4364593155421089
+          },
+          {
+            "sample": 4,
+            "coordinate": -2.519,
+            "chi": 0.22156373737314228,
+            "cutoff": 0.0094885919909299,
+            "d2": 230.68481006144629,
+            "full_k_budget_change": 0.11752129882521818
+          },
+          {
+            "sample": 5,
+            "coordinate": -2.137,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 6,
+            "coordinate": -1.8630337971421547,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 7,
+            "coordinate": -1.519118660039244,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 8,
+            "coordinate": -1.137212897326128,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 9,
+            "coordinate": -0.7262179145125325,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 10,
+            "coordinate": -0.038000088830099,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 11,
+            "coordinate": 0.7262179145125325,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 12,
+            "coordinate": 1.1372466944682826,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 13,
+            "coordinate": 1.4812466944682825,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 14,
+            "coordinate": 1.8632466944682826,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          }
+        ],
+        "constrained_trace": {
+          "rows": 16,
+          "baseline_rows": 10,
+          "transform": "independent GLL sampled constrained Modified_A transform; exact interior GL mass; commuting tensor transforms",
+          "analytic_chi_projected": false,
+          "dependent_trace_is_unknown": true
+        },
+        "complete_weak": {
+          "dimension": 2,
+          "maximum_block_absolute_errors": [
+            3.2335245592207684e-15,
+            3.552713678800501e-15,
+            6.661338147750939e-15,
+            6.938893903907228e-17,
+            1.3183898417423734e-16,
+            6.938893903907228e-17
+          ],
+          "roughness_budget": [
+            0.03830745263855218,
+            0.0,
+            6.431350503951606e-05,
+            4.6042420606557616e-05,
+            1.7157499379583108e-17
+          ],
+          "energy_budget": [
+            11.547599186902286,
+            3.694137385762115,
+            7.944803963883249,
+            -0.02816974767256629,
+            -0.06317241507051322,
+            0.0,
+            11.547599186902286,
+            0.0,
+            11.938402840022688
+          ],
+          "independent_quadrature_orders": [
+            8,
+            24,
+            8
+          ],
+          "comparison": "same declared finite outer Gauss rule, independently reconstructed; higher-order inner quadrature"
+        },
+        "independent_inner_quadrature_control": {
+          "dimension": 2,
+          "maximum_block_absolute_errors": [
+            3.2335245592207684e-15,
+            3.552713678800501e-15,
+            6.661338147750939e-15,
+            6.938893903907228e-17,
+            1.3183898417423734e-16,
+            6.938893903907228e-17
+          ],
+          "roughness_budget": [
+            0.038307452638552175,
+            0.0,
+            6.431350503951606e-05,
+            4.60424206065576e-05,
+            1.7157499379583108e-17
+          ],
+          "energy_budget": [
+            11.547599186902284,
+            3.694137385762115,
+            7.944803963883248,
+            -0.02816974767256629,
+            -0.06317241507051322,
+            0.0,
+            11.547599186902286,
+            -1.7763568394002505e-15,
+            11.938402840022688
+          ],
+          "independent_quadrature_orders": [
+            8,
+            16,
+            8
+          ],
+          "comparison": "same declared finite outer Gauss rule, independently reconstructed; higher-order inner quadrature"
+        },
+        "additional_weak_checks": 50,
+        "equal_input_baseline": {
+          "rows": 425,
+          "native_operator_maximum": 0,
+          "native_constraint_maximum": 0,
+          "independently_reconstructed": true
+        },
+        "directional": {
+          "independent_full_weak_actions": true,
+          "blocks": [
+            {
+              "block": 2,
+              "independent_steps": [
+                0.0002,
+                0.0001
+              ],
+              "same_step_native_errors": [
+                2.9976021664879227e-11,
+                5.10702591327572e-11
+              ],
+              "independent_step_drift": 6.661338147750939e-12,
+              "finest_native_step": 2e-06,
+              "independent_to_finest_error": 1.176836406102666e-09,
+              "trace_omitted_chi_derivative_maximum": 1.1806446023198032e-05,
+              "complete_rows": 425,
+              "nonlinear_trace_rows": 16
+            },
+            {
+              "block": 3,
+              "independent_steps": [
+                0.0002,
+                0.0001
+              ],
+              "same_step_native_errors": [
+                3.885780586188048e-12,
+                2.220446049250313e-12
+              ],
+              "independent_step_drift": 1.6653345369377348e-12,
+              "finest_native_step": 2e-06,
+              "independent_to_finest_error": 1.1102230246251565e-10,
+              "trace_omitted_chi_derivative_maximum": 3.379872878968293e-09,
+              "complete_rows": 425,
+              "nonlinear_trace_rows": 16
+            },
+            {
+              "block": 5,
+              "independent_steps": [
+                0.0002,
+                0.0001
+              ],
+              "same_step_native_errors": [
+                6.938893903907228e-12,
+                6.106226635438361e-12
+              ],
+              "independent_step_drift": 1.3877787807814457e-12,
+              "finest_native_step": 2e-06,
+              "independent_to_finest_error": 1.0658141036401503e-10,
+              "trace_omitted_chi_derivative_maximum": 2.2375103565742613e-06,
+              "complete_rows": 425,
+              "nonlinear_trace_rows": 16
+            }
+          ],
+          "interpretation": "central finite differences of independently reconstructed complete operators; reported finite-step drift"
+        }
+      },
+      {
+        "schema": 1,
+        "dimension": 3,
+        "active_samples": 5,
+        "inactive_samples": 10,
+        "reference_departure_maximum": 0.0,
+        "physical_samples": [
+          {
+            "sample": 0,
+            "coordinate": -3.863,
+            "chi": 0.8692317905282031,
+            "cutoff": 0.009479949012548408,
+            "d2": 247.58316491659983,
+            "full_k_budget_change": 0.43567987737629316
+          },
+          {
+            "sample": 1,
+            "coordinate": -3.519,
+            "chi": 0.8776171011628102,
+            "cutoff": 0.009483733243045068,
+            "d2": 241.1358784228683,
+            "full_k_budget_change": 0.4509822263063305
+          },
+          {
+            "sample": 2,
+            "coordinate": -3.137,
+            "chi": 0.8861572771218256,
+            "cutoff": 0.009487904494557753,
+            "d2": 234.335024741274,
+            "full_k_budget_change": 0.46793986513554203
+          },
+          {
+            "sample": 3,
+            "coordinate": -2.863,
+            "chi": 0.8512732204705276,
+            "cutoff": 0.009490876522586818,
+            "d2": 229.6760955705542,
+            "full_k_budget_change": 0.45825629521355216
+          },
+          {
+            "sample": 4,
+            "coordinate": -2.519,
+            "chi": 0.22351277090499166,
+            "cutoff": 0.009494584487653678,
+            "d2": 224.07052233372934,
+            "full_k_budget_change": 0.12322484473616091
+          },
+          {
+            "sample": 5,
+            "coordinate": -2.137,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 6,
+            "coordinate": -1.863,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 7,
+            "coordinate": -1.5190000000000001,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 8,
+            "coordinate": -1.137,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 9,
+            "coordinate": -0.726,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 10,
+            "coordinate": -0.038000000000000034,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 11,
+            "coordinate": 0.726,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 12,
+            "coordinate": 1.137,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 13,
+            "coordinate": 1.4809999999999999,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 14,
+            "coordinate": 1.863,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          }
+        ],
+        "constrained_trace": {
+          "rows": 64,
+          "baseline_rows": 40,
+          "transform": "independent GLL sampled constrained Modified_A transform; exact interior GL mass; commuting tensor transforms",
+          "analytic_chi_projected": false,
+          "dependent_trace_is_unknown": true
+        },
+        "complete_weak": {
+          "dimension": 3,
+          "maximum_block_absolute_errors": [
+            5.898059818321144e-16,
+            6.522560269672795e-16,
+            9.71445146547012e-16,
+            8.43769498715119e-15,
+            6.938893903907228e-17,
+            6.938893903907228e-16,
+            1.942890293094024e-16
+          ],
+          "roughness_budget": [
+            0.04144000000000003,
+            0.014559999999999995,
+            0.0,
+            0.00011136000000000003,
+            0.0
+          ],
+          "energy_budget": [
+            10.141102146279824,
+            2.0806409778365347,
+            8.371480528443279,
+            -0.18540799999999993,
+            -0.12561135999999995,
+            0.0,
+            10.141102146279811,
+            1.2434497875801753e-14,
+            12.368992313437266
+          ],
+          "independent_quadrature_orders": [
+            8,
+            24,
+            8
+          ],
+          "comparison": "same declared finite outer Gauss rule, independently reconstructed; higher-order inner quadrature"
+        },
+        "independent_inner_quadrature_control": {
+          "dimension": 3,
+          "maximum_block_absolute_errors": [
+            5.898059818321144e-16,
+            6.661338147750939e-16,
+            9.71445146547012e-16,
+            8.215650382226158e-15,
+            6.938893903907228e-17,
+            6.938893903907228e-16,
+            1.942890293094024e-16
+          ],
+          "roughness_budget": [
+            0.04144000000000003,
+            0.014559999999999995,
+            0.0,
+            0.00011136,
+            0.0
+          ],
+          "energy_budget": [
+            10.141102146279824,
+            2.0806409778365347,
+            8.371480528443279,
+            -0.18540799999999993,
+            -0.12561135999999995,
+            0.0,
+            10.141102146279811,
+            1.2434497875801753e-14,
+            12.368992313437266
+          ],
+          "independent_quadrature_orders": [
+            8,
+            16,
+            8
+          ],
+          "comparison": "same declared finite outer Gauss rule, independently reconstructed; higher-order inner quadrature"
+        },
+        "additional_weak_checks": 54,
+        "equal_input_baseline": {
+          "rows": 2097,
+          "native_operator_maximum": 0,
+          "native_constraint_maximum": 0,
+          "independently_reconstructed": true
+        },
+        "directional": {
+          "independent_full_weak_actions": false,
+          "reason": "disabled by caller"
+        }
+      }
+    ],
+    "prescribed_expressions": [
+      {
+        "family": "flat",
+        "samples": 40,
+        "maximum_scaled_error": 3.469446951953614e-18,
+        "meaning": "actual installed Nektar interpreter values versus independent strong source formulas"
+      },
+      {
+        "family": "feet",
+        "samples": 40,
+        "maximum_scaled_error": 3.469446951953614e-18,
+        "meaning": "actual installed Nektar interpreter values versus independent strong source formulas"
+      }
+    ],
+    "manufactured": [
+      {
+        "family": "flat",
+        "degree": 3,
+        "refine": 1,
+        "error": {
+          "velocity": 1.3658769244687176e-11,
+          "k": 4.924333533932639e-07,
+          "epsilon": 0.00015751393206961525,
+          "pressure": 6.962866082263908e-10,
+          "trace_value_rms": 2.6606489478833956e-05,
+          "trace_gradient_rms": 0.00025702690489048566,
+          "omitted_grad_chi_rms": 0.0006337958756415795
+        },
+        "stage": {
+          "maximum_scaled_residual": 9.482032857505741e-14,
+          "unknowns": 425,
+          "boundary_surface_rms_correction": 0,
+          "energy_identity_error": 4.912791094074942e-16
+        }
+      },
+      {
+        "family": "flat",
+        "degree": 4,
+        "refine": 1,
+        "error": {
+          "velocity": 6.066665123548762e-12,
+          "k": 5.964365118718189e-08,
+          "epsilon": 2.0586828559337276e-05,
+          "pressure": 3.810273975899414e-10,
+          "trace_value_rms": 8.225157137544986e-06,
+          "trace_gradient_rms": 0.0001254874398626524,
+          "omitted_grad_chi_rms": 0.0006337958756415795
+        },
+        "stage": {
+          "maximum_scaled_residual": 9.946506223203994e-14,
+          "unknowns": 739,
+          "boundary_surface_rms_correction": 0,
+          "energy_identity_error": 3.492689536026272e-16
+        }
+      },
+      {
+        "family": "flat",
+        "degree": 5,
+        "refine": 1,
+        "error": {
+          "velocity": 4.078067516021746e-12,
+          "k": 2.91371650784588e-08,
+          "epsilon": 7.087714846557834e-06,
+          "pressure": 2.41316060649559e-10,
+          "trace_value_rms": 5.7003915474680895e-06,
+          "trace_gradient_rms": 0.00010035874786674912,
+          "omitted_grad_chi_rms": 0.0006337958756415795
+        },
+        "stage": {
+          "maximum_scaled_residual": 1.580813724668036e-13,
+          "unknowns": 1143,
+          "boundary_surface_rms_correction": 0,
+          "energy_identity_error": 6.243755139919305e-16
+        }
+      },
+      {
+        "family": "feet",
+        "degree": 3,
+        "refine": 1,
+        "error": {
+          "velocity": 1.3961405858779761e-11,
+          "k": 4.924780352545357e-07,
+          "epsilon": 0.00015752141986277339,
+          "pressure": 6.63254982788089e-10,
+          "trace_value_rms": 2.66070343179079e-05,
+          "trace_gradient_rms": 0.00025703219217835475,
+          "omitted_grad_chi_rms": 0.0006338089055380929
+        },
+        "stage": {
+          "maximum_scaled_residual": 1.1034880806753379e-13,
+          "unknowns": 425,
+          "boundary_surface_rms_correction": 0,
+          "energy_identity_error": 7.69946172790581e-16
+        }
+      },
+      {
+        "family": "feet",
+        "degree": 4,
+        "refine": 1,
+        "error": {
+          "velocity": 6.052330728089363e-12,
+          "k": 5.966893553951199e-08,
+          "epsilon": 2.0589063423425988e-05,
+          "pressure": 3.791343566257003e-10,
+          "trace_value_rms": 8.225326190289333e-06,
+          "trace_gradient_rms": 0.0001254900185726182,
+          "omitted_grad_chi_rms": 0.0006338089055380929
+        },
+        "stage": {
+          "maximum_scaled_residual": 1.5813003118617469e-13,
+          "unknowns": 739,
+          "boundary_surface_rms_correction": 0,
+          "energy_identity_error": 1.234414995351582e-16
+        }
+      }
+    ],
+    "h_refinement": {
+      "refine": 2,
+      "error": {
+        "velocity": 6.203496061703251e-12,
+        "k": 4.262935824157621e-08,
+        "epsilon": 1.2209833527076316e-05,
+        "pressure": 2.3981893231725523e-10,
+        "trace_value_rms": 2.8212152318687094e-06,
+        "trace_gradient_rms": 5.8104217025265365e-05,
+        "omitted_grad_chi_rms": 0.000633796135691954
+      }
+    },
+    "parallel_restart": [
+      {
+        "ranks": 2,
+        "stage": {
+          "maximum_scaled_residual": 1.100928962822598e-13,
+          "unknowns": 425,
+          "boundary_surface_rms_correction": 0,
+          "energy_identity_error": 5.045334809661295e-16
+        }
+      },
+      {
+        "ranks": 4,
+        "stage": {
+          "maximum_scaled_residual": 1.100177784107833e-13,
+          "unknowns": 425,
+          "boundary_surface_rms_correction": 0,
+          "energy_identity_error": 1.3677210405904638e-16
+        }
+      },
+      {
+        "restart_ranks": 4,
+        "all_history_slots": 4
+      }
+    ],
+    "imex1": {
+      "error": {
+        "velocity": 1.5283076257687776e-11,
+        "k": 4.96174442354668e-07,
+        "epsilon": 0.00015751368694973944,
+        "pressure": 7.077696709497698e-10,
+        "trace_value_rms": 2.6606642354972835e-05,
+        "trace_gradient_rms": 0.00025702690847075537,
+        "omitted_grad_chi_rms": 0.0006337958756415795
+      },
+      "stage": {
+        "maximum_scaled_residual": 4.3945744741139257e-13,
+        "unknowns": 425,
+        "boundary_surface_rms_correction": 0,
+        "energy_identity_error": 1.172564649543073e-16
+      }
+    },
+    "standard_control": {
+      "error": {
+        "velocity": 1.6759994947091485e-11,
+        "k": 5.516368967576186e-07,
+        "epsilon": 0.000177963875454452,
+        "pressure": 1.1635883666524475e-09,
+        "trace_value_rms": 5.754174232844529e-05,
+        "trace_gradient_rms": 0.0005558392097901463,
+        "omitted_grad_chi_rms": 0.0013706293338157126
+      },
+      "stage": {
+        "maximum_scaled_residual": 9.71690773198096e-14,
+        "unknowns": 425,
+        "boundary_surface_rms_correction": 0,
+        "energy_identity_error": 5.208778287163485e-16
+      },
+      "Q": 3.3333333333333335,
+      "kappa": 0.43266615305567874
+    },
+    "temporal": [
+      {
+        "dt": 0.02,
+        "scaled_scalar_mass_difference_to_dt_0025": 2.7048869625177274e-06
+      },
+      {
+        "dt": 0.01,
+        "scaled_scalar_mass_difference_to_dt_0025": 6.834220573722588e-07
+      },
+      {
+        "dt": 0.005,
+        "scaled_scalar_mass_difference_to_dt_0025": 1.3172239400506409e-07
+      }
+    ],
+    "rejections": [
+      "anchor",
+      "sensor-at-H",
+      "zero-buffer",
+      "crossed-plateau",
+      "crossed-baseline",
+      "zero-weight",
+      "unsafe-Re",
+      "outside-reference",
+      "backward",
+      "no-flat-fetch",
+      "hill-support"
+    ]
+  },
+  "checks": 2753,
+  "errors": {
+    "transition_physical_inputs": 1.6450985284379348e-16,
+    "independent_seven_transition_sensors": 2.3416259976493993e-16,
+    "independent_transition_gates": 2.53685394530146e-16,
+    "independent_separate_forcing": 9.020562075079397e-17,
+    "actual_projected_reference_departure": 0.0,
+    "actual_projected_reference_state": 0.0,
+    "actual_state_profile": 1.7771289453175145e-15,
+    "transition_full_and_redistribution_budgets": 4.440892098500626e-16,
+    "inadmissible_correction_valid_baseline": 1.6653345369377348e-16,
+    "independent_trace_projection_part_0": 6.764827574455286e-16,
+    "independent_trace_projection_part_1": 2.700578207139892e-16,
+    "implicit_trace_lift_fixed_point": 6.764827574455286e-16,
+    "designated_baseline_trace_support": 0.0,
+    "equal_input_adapted_baseline_operator": 0.0,
+    "equal_input_adapted_baseline_constraints": 0.0,
+    "independent_equal_input_baseline_all_rows": 6.954995239578454e-15,
+    "complete_transition_action_block_2_h_0.0002": 2.9976021664879227e-11,
+    "complete_transition_action_block_2_h_0.0001": 5.10702591327572e-11,
+    "complete_transition_action_block_2_fine": 1.2545520178264269e-09,
+    "implicit_trace_action_block_2": 3.823330541052883e-11,
+    "complete_transition_action_block_3_h_0.0002": 4.440892098500626e-12,
+    "complete_transition_action_block_3_h_0.0001": 2.220446049250313e-12,
+    "complete_transition_action_block_3_fine": 1.1102230246251565e-10,
+    "implicit_trace_action_block_3": 9.64091978992998e-12,
+    "complete_transition_action_block_5_h_0.0002": 8.326672684688674e-12,
+    "complete_transition_action_block_5_h_0.0001": 6.106226635438361e-12,
+    "complete_transition_action_block_5_fine": 1.0658141036401503e-10,
+    "implicit_trace_action_block_5": 8.337446943777749e-12,
+    "native_prescribed_expression_InitialConditionsInner/k": 0.0,
+    "native_prescribed_expression_ScalarSourceInner/k": 0.0,
+    "native_prescribed_expression_InitialConditionsOuter/k": 0.0,
+    "native_prescribed_expression_InitialConditionsOuter/eps_tilde": 0.0,
+    "native_prescribed_expression_ScalarSourceOuter/k": 0.0,
+    "native_prescribed_expression_ScalarSourceOuter/eps_tilde": 3.469446951953614e-18,
+    "no_downstream_reactivation": 0.0,
+    "regional_transition_stage_sum": 3.642919299551295e-17,
+    "M6_full_condensed_gauge": 2.219413996193668e-25,
+    "M6_full_condensed": 2.4559345077399556e-17,
+    "M6_MPI_2_gauge": 8.217707637582363e-26,
+    "M6_MPI_2": 5.619349062380289e-17,
+    "M6_MPI_history_2": 1.60726195807398e-16,
+    "M6_MPI_4_gauge": 1.117390193734554e-25,
+    "M6_MPI_4": 5.857242618992243e-17,
+    "M6_MPI_history_4": 1.5924092353438758e-16,
+    "M6_full_history_restart_gauge": 8.507293102168293e-27,
+    "M6_full_history_restart": 3.6538572786251636e-17,
+    "M6_complete_restart_history": 2.858566790393813e-16,
+    "M6_complete_restart_history_times": 0.0
+  },
+  "commands": [
+    {
+      "name": "operator-flat-d2",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/RANSCurvedWallProbe",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/operator-flat-d2/case.xml",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/operator-flat-d2/probe.json"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 7.2963728710019495,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/operator-flat-d2/run.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expected_failure": false
+    },
+    {
+      "name": "operator-feet-d2",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/RANSCurvedWallProbe",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/operator-feet-d2/case.xml",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/operator-feet-d2/probe.json"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 7.839823803995387,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/operator-feet-d2/run.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expected_failure": false
+    },
+    {
+      "name": "operator-flat-d3",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/RANSCurvedWallProbe",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/operator-flat-d3/case.xml",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/operator-flat-d3/probe.json"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 107.55545551999967,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/operator-flat-d3/run.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expected_failure": false
+    },
+    {
+      "name": "expressions-flat",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/RANSWallExpressionProbe",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/expressions-flat/case.xml",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/expressions-flat/samples.json"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 0.7227238819978083,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/expressions-flat/run.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expected_failure": false
+    },
+    {
+      "name": "expressions-feet",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/RANSWallExpressionProbe",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/expressions-feet/case.xml",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/expressions-feet/samples.json"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 0.7284527800002252,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/expressions-feet/run.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expected_failure": false
+    },
+    {
+      "name": "mms-flat-p3",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/mms-flat-p3/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 121.29457963300229,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/mms-flat-p3/run.log",
+      "log_sha256": "44f637a149b00468dacf5b51f95287f8f8345da88eff5c102ded39d9cd6e303f",
+      "expected_failure": false
+    },
+    {
+      "name": "mms-flat-p4",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/mms-flat-p4/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 263.8685150289966,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/mms-flat-p4/run.log",
+      "log_sha256": "534acb329eebb500f55a9fa92d8ad4bf8a4b3c331e3fe53ac06a5f0f05f4e61d",
+      "expected_failure": false
+    },
+    {
+      "name": "mms-flat-p5",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/mms-flat-p5/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 505.54269716800627,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/mms-flat-p5/run.log",
+      "log_sha256": "cb5f7fd1eea0bbf50e7c3d73c5cdc0a27dd871e895753230e371af96778f71d2",
+      "expected_failure": false
+    },
+    {
+      "name": "mms-feet-p3",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/mms-feet-p3/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 121.79435374199966,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/mms-feet-p3/run.log",
+      "log_sha256": "2cd04fecdc641b681750aba3dab75f2f48d3b4ffeb710a3f7088759f83466ad8",
+      "expected_failure": false
+    },
+    {
+      "name": "mms-feet-p4",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/mms-feet-p4/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 272.8340961130016,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/mms-feet-p4/run.log",
+      "log_sha256": "a8536b90f5478e3467f9027430ee49ad3cc458d30a845623bfeeb8dabdbde59d",
+      "expected_failure": false
+    },
+    {
+      "name": "mms-flat-h2",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/mms-flat-h2/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 1003.9291720379988,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/mms-flat-h2/run.log",
+      "log_sha256": "1dcb5eb5fa09da35b588bf6bcd5be33f3651213e6c420ca7622eb4066fc0f933",
+      "expected_failure": false
+    },
+    {
+      "name": "condensed-feet",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/condensed-feet/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 124.93793855400145,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/condensed-feet/run.log",
+      "log_sha256": "95d193782ee8e6e5292c59c9dbfaa67dc9826dcd7bb77f6b661515641210ee09",
+      "expected_failure": false
+    },
+    {
+      "name": "mpi-feet-2",
+      "command": [
+        "mpirun",
+        "--report-bindings",
+        "--bind-to",
+        "core",
+        "--map-by",
+        "core",
+        "-np",
+        "2",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/mpi-feet-2/case.xml"
+      ],
+      "ranks": 2,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 75.80580246799946,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/mpi-feet-2/run.log",
+      "log_sha256": "be453556d76e4465c347c3b620658a0ac899452b5b382983dff3defa4f1593fd",
+      "expected_failure": false
+    },
+    {
+      "name": "mpi-feet-4",
+      "command": [
+        "mpirun",
+        "--report-bindings",
+        "--bind-to",
+        "core",
+        "--map-by",
+        "core",
+        "-np",
+        "4",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/mpi-feet-4/case.xml"
+      ],
+      "ranks": 4,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 54.07113606399798,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/mpi-feet-4/run.log",
+      "log_sha256": "0b8db9d92ee486d5d19432821b3fb9140cf573811730de24c6fa140ba6e826e8",
+      "expected_failure": false
+    },
+    {
+      "name": "restart-first",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/restart-first/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 64.7097923179972,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/restart-first/run.log",
+      "log_sha256": "0debcd95759d9aa732d53403f0d4ea15df937723d6c7febef9307d7405a63873",
+      "expected_failure": false
+    },
+    {
+      "name": "restart-last",
+      "command": [
+        "mpirun",
+        "--report-bindings",
+        "--bind-to",
+        "core",
+        "--map-by",
+        "core",
+        "-np",
+        "4",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/restart-last/case.xml"
+      ],
+      "ranks": 4,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 29.185888842999702,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/restart-last/run.log",
+      "log_sha256": "b3b72454ee705cefcbc92e525fded31695118f9b9eb8969c37279fd6a0bc58b9",
+      "expected_failure": false
+    },
+    {
+      "name": "imex1-transition",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/imex1-transition/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 63.063461589001236,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/imex1-transition/run.log",
+      "log_sha256": "2b69bc73593b047cb1a567b3b9030aeb4af1124e23b21b9c636c0f0e63a9fbab",
+      "expected_failure": false
+    },
+    {
+      "name": "standard-kepsilon-transition",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/standard-kepsilon-transition/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 123.18691962600133,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/standard-kepsilon-transition/run.log",
+      "log_sha256": "fd170e474bc2868bac626675d4bd7954a22f341808616b0288ac9813d3eb3165",
+      "expected_failure": false
+    },
+    {
+      "name": "temporal-0.02",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/temporal-0.02/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 126.09956594300456,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/temporal-0.02/run.log",
+      "log_sha256": "6102ee6cbddd4881cdc742d13604f4a3df76314c593e409eb4d31be6d0bf0dbc",
+      "expected_failure": false
+    },
+    {
+      "name": "temporal-0.01",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/temporal-0.01/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 121.63878689899866,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/temporal-0.01/run.log",
+      "log_sha256": "d6d3aee37a99c99053a3faa5f24caf276ad680aa9deb968af6ab08ba2c21b427",
+      "expected_failure": false
+    },
+    {
+      "name": "temporal-0.005",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/temporal-0.005/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 123.79197489000217,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/temporal-0.005/run.log",
+      "log_sha256": "f0e5ec8826c84523a06fc82aa25d9bad87440123996f49ec89453650ffa05319",
+      "expected_failure": false
+    },
+    {
+      "name": "temporal-0.0025",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/temporal-0.0025/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 137.0330824039993,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/temporal-0.0025/run.log",
+      "log_sha256": "e571e9d40bf2334610671a4cd79ef64592b95988ed4179b63fbc0d500342f23e",
+      "expected_failure": false
+    },
+    {
+      "name": "reject-anchor",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/reject-anchor/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 1,
+      "seconds": 3.3296180719989934,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/reject-anchor/run.log",
+      "log_sha256": "07558e1f4e35b7fe78e48f8b08096aed0ecfbaa22ba1998a283606e77b6a6ca0",
+      "expected_failure": true
+    },
+    {
+      "name": "reject-sensor-at-H",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/reject-sensor-at-H/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 1,
+      "seconds": 3.328383161002421,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/reject-sensor-at-H/run.log",
+      "log_sha256": "1c169d6625d4dc4b57ddb67f4055a6f9f9ee719321dbfde844c715a893680586",
+      "expected_failure": true
+    },
+    {
+      "name": "reject-zero-buffer",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/reject-zero-buffer/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 1,
+      "seconds": 3.3852179989989963,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/reject-zero-buffer/run.log",
+      "log_sha256": "680b32fc7cc1e68410b71f98b090a0d6b5e33c14edca618542bf4a811709690b",
+      "expected_failure": true
+    },
+    {
+      "name": "reject-crossed-plateau",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/reject-crossed-plateau/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 1,
+      "seconds": 3.428565811002045,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/reject-crossed-plateau/run.log",
+      "log_sha256": "506c56a1a161bf20ddeaa26465570806291427a93052b10bc3def1607bbae497",
+      "expected_failure": true
+    },
+    {
+      "name": "reject-crossed-baseline",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/reject-crossed-baseline/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 1,
+      "seconds": 3.2772653179999907,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/reject-crossed-baseline/run.log",
+      "log_sha256": "45bb74f08283482a6b59cf41e63c6c7b166c69fc586641684ff4d31dfd2df3a3",
+      "expected_failure": true
+    },
+    {
+      "name": "reject-zero-weight",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/reject-zero-weight/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": -6,
+      "seconds": 3.384879032993922,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/reject-zero-weight/run.log",
+      "log_sha256": "3437963a82542f7dee9fe3be6f51bbbe22745b24c6d83e27cf96fbbb51e9092c",
+      "expected_failure": true
+    },
+    {
+      "name": "reject-unsafe-Re",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/reject-unsafe-Re/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 1,
+      "seconds": 3.381347085000016,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/reject-unsafe-Re/run.log",
+      "log_sha256": "cd44c89e25dda4316f2169b0142bb637fac315970e581167d8dd53becb5e5bc5",
+      "expected_failure": true
+    },
+    {
+      "name": "reject-outside-reference",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/reject-outside-reference/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 1,
+      "seconds": 3.478854845998285,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/reject-outside-reference/run.log",
+      "log_sha256": "85aed1b3d1ee3f37f024c23d2112ab74ac7106b9f1d7d5f739754240b056448b",
+      "expected_failure": true
+    },
+    {
+      "name": "reject-backward",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/reject-backward/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 1,
+      "seconds": 3.2815972530006547,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/reject-backward/run.log",
+      "log_sha256": "7dd31ad1efb8552f4c4b96fdb4f32ae6c08f4cba98b9008a8590c91f4045d5ac",
+      "expected_failure": true
+    },
+    {
+      "name": "reject-no-flat-fetch",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/reject-no-flat-fetch/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": -6,
+      "seconds": 3.4263745009957347,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/reject-no-flat-fetch/run.log",
+      "log_sha256": "95ab4e2bcc12b103b56a130e57ddf5b8eef04288960369dd005797387a5b0e5f",
+      "expected_failure": true
+    },
+    {
+      "name": "reject-hill-support",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/reject-hill-support/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": -6,
+      "seconds": 3.4277175690003787,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification/reject-hill-support/run.log",
+      "log_sha256": "fbeca0aa2aad5266e0aec2d6a89540362d5fc2c6a3336266bd1e7ef845836fc3",
+      "expected_failure": true
+    }
+  ],
+  "finished_utc": "2026-11-03T00:53:17.053275+00:00"
+}

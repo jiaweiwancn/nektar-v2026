@@ -1,0 +1,80 @@
+{
+  "schema": 1,
+  "source_commit": "8a80594a47eb34edbb76a2fe827a200227b3d34b",
+  "source_status": "",
+  "main_commit": "f4b70baec10016dd098005bc5a5507b87e4a57bf",
+  "main_status": "",
+  "started_utc": "2026-11-03T01:27:39.560570+00:00",
+  "compiler_workers": 16,
+  "test_workers": 1,
+  "mpi_ranks": [
+    1,
+    2,
+    4
+  ],
+  "maximum_concurrent_test_ranks": 4,
+  "thread_environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1"
+  },
+  "connection": "tailscale:100.105.247.110",
+  "runner_sha256": "ac5168bc4a307e144300b4838d244452e26ac9b76afac79194f2d3f11ff60d22",
+  "commands": [
+    {
+      "command": [
+        "cmake",
+        "-S",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/source/solvers/IncNavierStokesSolver/Tests/RANS",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build",
+        "-DRANS_BUILD_SOLVER=ON",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake"
+      ],
+      "exit_code": 0,
+      "seconds": 0.6657669010019163,
+      "timeout_seconds": 180,
+      "log_sha256": "5e423ff09921b51084f3a0a1aee06edf47115adddf2630ec7a439cf3760d845c"
+    },
+    {
+      "command": [
+        "cmake",
+        "--build",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build",
+        "--parallel",
+        "16"
+      ],
+      "exit_code": 0,
+      "seconds": 7.633660787003464,
+      "timeout_seconds": 900,
+      "log_sha256": "1cbb04b050cbd10f1a8302ba3a78c86c4702b259948b9c0a5f174c93ea2c16df"
+    },
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "python3",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m6_orientation.py",
+        "--build",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-guard-001/qualification",
+        "--qualification",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-attempt-007/qualification"
+      ],
+      "exit_code": 0,
+      "seconds": 173.69640244300535,
+      "timeout_seconds": 1800,
+      "log_sha256": "c79274482db32524e5624e3ebbb8d5caa98d0f31fbad8a71dd853789312586e8"
+    }
+  ],
+  "status": "passed",
+  "finished_utc": "2026-11-03T01:30:41.608033+00:00",
+  "source_end_commit": "8a80594a47eb34edbb76a2fe827a200227b3d34b",
+  "source_end_status": "",
+  "main_end_commit": "f4b70baec10016dd098005bc5a5507b87e4a57bf",
+  "main_end_status": ""
+}

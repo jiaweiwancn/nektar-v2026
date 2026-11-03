@@ -1,0 +1,311 @@
+{
+  "checks": 1654,
+  "commands": [
+    {
+      "argv": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/RANSEquilibriumTransitionProbe",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/cls-epawf-m6-kernel/native-transition.json"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/cls-epawf-m6-kernel",
+      "elapsed_seconds": 0.06752181499905419,
+      "exit_code": 0,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/cls-epawf-m6-kernel/native-transition.log",
+      "log_sha256": "7d4ed8cf223d2831992402189c2ae92d28d22e65dcbc9312efa0bbf0f80b2b06",
+      "ranks": 1,
+      "threads": 1
+    }
+  ],
+  "errors": {
+    "C2_exact_endpoint": 0.0,
+    "actual_blended_profile": 5.329070518200751e-15,
+    "actual_production_profile": 3.838172397969129e-15,
+    "affine_tangent_covector": 0.0,
+    "blend_first": 1.0408340855860843e-17,
+    "blend_second": 1.1102230246251565e-16,
+    "blend_value": 1.3877787807814457e-17,
+    "cancelling_forces": 0.0,
+    "coordinate_ray_constancy": 2.220446049250313e-16,
+    "equal_physical_formula": 0.0,
+    "equal_reference_indicators": 0.0,
+    "inadmissible_branch": 0.0,
+    "independent_sensor_off": 0.0,
+    "legacy_compatibility": 4.4305540613793874e-17,
+    "no_downstream_reactivation": 0.0,
+    "physical_sensor_first": 2.8520395921481795e-16,
+    "physical_sensor_second": 4.179663157525205e-16,
+    "physical_sensor_value": 1.1796119636642288e-16,
+    "profile_cutoff": 3.8163916471489756e-17,
+    "profile_margin": 5.650296846272313e-16,
+    "profile_margin_controls": 2.2601156455637398e-16,
+    "profile_minimum_budget": 5.551115123125783e-17,
+    "profile_production_budget": 3.3306690738754696e-16,
+    "profile_reynolds": 1.5273052964662958e-16,
+    "profile_reynolds_controls": 0.0,
+    "profile_transition_inputs": 5.650296846272313e-16,
+    "profile_transition_values": 1.2212453270876722e-15,
+    "projected_reference_plateau": 0.0,
+    "ray_redistribution_flux_endpoints": 1.3433665243230538e-17,
+    "ray_zero_net_redistribution": 1.3471979616740842e-17,
+    "safe_inactive_baseline": 2.7755575615628914e-17,
+    "safe_inactive_derivatives": 0.0,
+    "source_assembled_once": 4.163336342344337e-17,
+    "transition_first": 2.1371793224034263e-15,
+    "transition_second": 1.6653345369377348e-12,
+    "transition_value": 2.7755575615628914e-16,
+    "wall_coordinate": 2.220446049250313e-16,
+    "wall_coordinate_first": 0.0,
+    "wall_coordinate_gradient": 0.0,
+    "wall_coordinate_second": 1.734723475976807e-18
+  },
+  "failures": [],
+  "finished_utc": "2026-11-03T00:47:26.323821+00:00",
+  "native_checks": 433,
+  "native_rejections": 34,
+  "native_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/cls-epawf-m6-kernel/native-transition.json",
+  "native_report_sha256": "6b8d6149dd83dbd925dcbc0e9cb635dbc7529055217c5fbf9602e3c9d51b3c5e",
+  "schema": 1,
+  "sections": {
+    "blends": {
+      "cases": 1,
+      "derivative_omission_controls": [
+        {
+          "dissipation_missing_chi_derivative": -0.027430501522503183,
+          "k_source_missing_chi_derivative": -0.01828700101500212
+        }
+      ],
+      "inactive_undefined_corrected_profile_bypassed": true
+    },
+    "coordinates": {
+      "cases": 11,
+      "physical_policy": "prescribed geometry only; no flow direction; no downstream reactivation"
+    },
+    "physical": {
+      "cases": 41,
+      "geometric_normal_derivatives": "algebraic P=I-n*nT extension; geometric first variations are tangent",
+      "scalar_input_directions": 40
+    },
+    "profiles": {
+      "K_derivative_refinement": [
+        {
+          "first_error": 3.432197232611808e-06,
+          "h": 0.0005105080130598861,
+          "native_first": [
+            0.0005163291984159326,
+            113.38724209295944,
+            -6.577339371020965,
+            -119.944581463978,
+            0.6049054693198995,
+            -0.019388325568098826,
+            -0.6042937948880529,
+            0.21171691426196484,
+            -0.007339420576351841,
+            -0.19905633483837878
+          ],
+          "native_second": [
+            -0.0005118868111189566,
+            -40.7528963404735,
+            -22.30838329897493,
+            18.4445130478885,
+            0.6030810258262294,
+            -0.06470993415749599,
+            -0.6677909597657353,
+            0.21107835906048003,
+            -0.02454686244196625,
+            -0.23562522130983304
+          ],
+          "second_error": 2.695407841589546e-05
+        },
+        {
+          "first_error": 8.580517194172374e-07,
+          "h": 0.00025525400652994304,
+          "native_first": [
+            0.000516329171301322,
+            113.38708446981614,
+            -6.577356302107707,
+            -119.94444077193243,
+            0.6049054996842945,
+            -0.01938837575665389,
+            -0.604293875440904,
+            0.2117169248894786,
+            -0.00733943956102059,
+            -0.19905636445053063
+          ],
+          "native_second": [
+            -0.0005118866846515158,
+            -40.75331162142247,
+            -22.308425915999756,
+            18.444885906492633,
+            0.6030810268912182,
+            -0.06471005657631462,
+            -0.667791082292717,
+            0.21107835943322617,
+            -0.02454690891417462,
+            -0.23562526731735678
+          ],
+          "second_error": 6.739472960823209e-06
+        },
+        {
+          "first_error": 2.1451763500313136e-07,
+          "h": 0.00012762700326497152,
+          "native_first": [
+            0.000516329164355741,
+            113.38704506392942,
+            -6.5773605348643045,
+            -119.94440559882361,
+            0.6049055072752845,
+            -0.019388388303866886,
+            -0.6042938955791746,
+            0.21171692754641483,
+            -0.00733944430721812,
+            -0.1990563718538948
+          ],
+          "native_second": [
+            -0.0005118885483822223,
+            -40.75341489638536,
+            -22.30843625917268,
+            18.444979039352514,
+            0.6030810264652227,
+            -0.06471008792359949,
+            -0.6677911104084259,
+            0.21107835943322617,
+            -0.024546920823746644,
+            -0.23562527668925975
+          ],
+          "second_error": 1.6902559211113033e-06
+        }
+      ],
+      "analytic_K_first": [
+        0.0005163291623266165,
+        113.38703192869347,
+        -6.577361945824434,
+        -119.94439387451791,
+        0.6049055098057684,
+        -0.019388392486181044,
+        -0.6042939022919493,
+        0.21171692843201892,
+        -0.007339445889245602,
+        -0.19905637432126452
+      ],
+      "analytic_K_second": [
+        -0.0005118866926457743,
+        -40.75345036470786,
+        -22.308440148567616,
+        18.445010216140247,
+        0.6030810270411758,
+        -0.06471009741191673,
+        -0.6677911244530926,
+        0.21107835946441156,
+        -0.024546924431261743,
+        -0.2356252838956733
+      ],
+      "heights": [
+        0.002378817284978599,
+        0.7,
+        2
+      ],
+      "omitted_chi_trace_derivative": 0.0011799383497360222,
+      "omitted_cutoff_derivative": -0.8284483165005627,
+      "points": 7,
+      "scope": "local production profiles; native coupled trace/state Jacobian tested separately"
+    },
+    "rejections": {
+      "count": 34,
+      "names": [
+        "active_undefined_profile",
+        "affine_normal_covector",
+        "affine_zero_covector",
+        "negative_reynolds",
+        "no_flat_cylinder",
+        "no_flat_gaussian",
+        "nonfinite_interval",
+        "nonfinite_sensor",
+        "nonpositive_control_10",
+        "nonpositive_control_11",
+        "nonpositive_control_12",
+        "nonpositive_control_13",
+        "nonpositive_control_14",
+        "nonpositive_control_2",
+        "nonpositive_control_3",
+        "nonpositive_control_4",
+        "nonpositive_control_5",
+        "nonpositive_control_6",
+        "nonpositive_control_7",
+        "nonpositive_control_8",
+        "nonpositive_control_9",
+        "nonpositive_physical_33",
+        "nonpositive_physical_34",
+        "nonpositive_physical_35",
+        "nonpositive_physical_36",
+        "nonpositive_physical_37",
+        "nonpositive_physical_38",
+        "nonpositive_physical_39",
+        "nonunit_normal",
+        "transition_overlaps_hill",
+        "unordered_0",
+        "unordered_2",
+        "unordered_4",
+        "unordered_6"
+      ]
+    },
+    "transition": {
+      "cases": 79,
+      "control_directions": 15,
+      "endpoint_convergence": [
+        {
+          "endpoint": 0,
+          "first_ratio": 3.979975000157036,
+          "gate": 0,
+          "second_ratio": 1.984962406015038
+        },
+        {
+          "endpoint": 1,
+          "first_ratio": 3.9799750001570353,
+          "gate": 0,
+          "second_ratio": 1.984962406015038
+        },
+        {
+          "endpoint": 0,
+          "first_ratio": 4.09106540560337,
+          "gate": 1,
+          "second_ratio": 2.123653471261276
+        },
+        {
+          "endpoint": 1,
+          "first_ratio": 3.9751846573983007,
+          "gate": 1,
+          "second_ratio": 1.9789805264710207
+        },
+        {
+          "endpoint": 0,
+          "first_ratio": 3.9799750001570393,
+          "gate": 2,
+          "second_ratio": 1.9849624060150377
+        },
+        {
+          "endpoint": 1,
+          "first_ratio": 3.979975000157034,
+          "gate": 2,
+          "second_ratio": 1.9849624060150377
+        },
+        {
+          "endpoint": 0,
+          "first_ratio": 3.979975000157033,
+          "gate": 3,
+          "second_ratio": 1.9849624060150375
+        },
+        {
+          "endpoint": 1,
+          "first_ratio": 3.979975000157034,
+          "gate": 3,
+          "second_ratio": 1.9849624060150375
+        }
+      ],
+      "input_directions": 18,
+      "no_pressure_convection_cancellation": true
+    }
+  },
+  "started_utc": "2026-11-03T00:47:25.178793+00:00",
+  "success": true,
+  "verification_status": "passed"
+}

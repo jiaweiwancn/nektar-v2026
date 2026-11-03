@@ -354,3 +354,96 @@ test, stage storage, stress work minus k sources, convective work, prescribed
 and roughness-force work, a reserved zero, their direct sum, weak-minus-direct
 closure, and stored integral of |U|²/2+k. The energy audit includes essential
 row reactions and does not assert unconditional physical decay.
+
+### Prescribed upstream transition (M6)
+
+Select `RANSWallTransition=Upstream` to use the revised note's physical C2
+mask and independent state/admissibility gates. `RANSWallChi=1` enables the
+prescribed product; `RANSWallChi=0` disables it. The default `Fixed` selector
+retains the earlier isolated verification/baseline modes. Every upstream
+transition and terrain run requires `RANSWallEta=0`.
+
+The supported upstream geometry is a plane or the exactly flat fetch of the
+extruded cosine hill. A Gaussian or cylinder has no exactly flat fetch and
+requires the adapted baseline (`Fixed`, chi=eta=0). The current prescribed
+coordinate increases along positive q1. The actual mapped incoming flow must
+increase this coordinate; a direction coefficient's sign alone is insufficient
+on a doubly tilted 3D plane. The cosine reference follows its wall curve with
+direction Y=0.
+For the cosine, ell is signed physical wall arc length from the hill crest,
+so an upstream chart x and ell differ by a small constant. Positions are
+physical inputs and stay fixed under mesh/degree refinement.
+
+| Selection/parameter | Meaning/default |
+| --- | --- |
+| `RANSWallTransitionStart`, `RANSWallTransitionEnd` | ell_a=-3, ell_b=-2.25 |
+| `RANSWallBaselineStart` | designated baseline faces begin at ell=-2 |
+| `RANSWallSensorDistanceA`, `RANSWallSensorDistanceB` | independent outer samples r_a=2.5, r_b=3.5; require H<r_a<r_b<outer top |
+| `RANSWallSensorOn`, `RANSWallSensorOff` | departure norm thresholds .02, .1 (the gate takes d²) |
+| `RANSWallSensorMarginOff`, `RANSWallSensorMarginOn` | positive cutoff-budget margins .05, .1 |
+| `RANSWallSensorReynoldsOff`, `RANSWallSensorReynoldsOn` | wall Reynolds thresholds 100, 200 |
+| `RANSWallSensorWeightVelocity/Increment/Normal/K/Epsilon/Pressure/Convection` | seven strictly positive weights, default 1 each |
+
+These thresholds are declared controls, not universally validated values.
+The selected flat reference must lie on both unit admissibility plateaus.
+The smooth Reynolds gate must remain inside the declared high-Re regime.
+The matching height is constant on the current supported upstream reference.
+The transition start and designated baseline start must coincide with native
+matching-face boundaries; the spatial transition may end inside its buffer
+face. The entire buffer must finish before the incoming hill foot. No
+downstream reactivation is permitted.
+
+The stored reference is the actual constrained native flat projection at the
+configured friction velocity and direction, with zero prescribed body force.
+Current/reference sensors use identical physical sampling and discrete forcing
+operators. They retain both tangential velocity components, an independent
+outer velocity increment and normal velocity, outer k and epsilon, and
+separate pressure/body and convection forces. A newly applied physical body
+force contributes to the pressure/body sensor. The physical sensor body is
+retained when IMEX moves the prescribed body load to its explicit side; that
+load itself uses fixed physical quadrature.
+
+K, cutoff, sensors and chi are recomputed within the coupled residual and its
+directional actions. The independent outer epsilon sample also contains
+dependent matching-trace modes. Those modes remain coupled unknowns with
+nonlinear trace constraint rows; stage Newton differentiates them explicitly.
+There is no added inner epsilon PDE, epsilon flux condition, or spatial anchor.
+The time/data-aware `DependentEpsilon` overload supplies the current analytical
+inner field; its two-argument predecessor is restricted to Fixed mode.
+
+The trace is a separately projected baseline plus correction. Native
+endpoint/edge preserving face transforms (commuting transforms in 3D) project
+the physical dissipation change, and every designated baseline face/shared
+coefficient has exactly zero correction. Analytic chi is evaluated directly
+and is never projected. A polynomial correction can extend through the
+declared flat buffer. The dependent matching trace has priority at H/side
+corners: side epsilon function corner values must be compatible if those exact
+values are required. The JSON records this priority and both trace components.
+
+Generate the small verification case on Linux:
+
+```bash
+source /home/jay/.local/opt/nektar-v2026-mpi/env.sh
+export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 BLIS_NUM_THREADS=1
+python3 /media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m6_cases.py case.xml --family feet --degree 3 --steps 2
+/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver case.xml
+```
+
+Run it in a separate heavy-data directory under `/media/jay/新加卷`, with the
+same isolated `geometry-lib` path used by the qualification runner. This is a
+strong manufactured scalar problem with deliberately broad state thresholds
+to isolate the spatial transition. Its zero velocity is far from the neutral
+reference; those broad verification thresholds are not physical calibration.
+Its session expressions avoid an observed installed-interpreter issue with
+binary functions having only one variable operand. The expression probe checks
+the actual evaluated prescribed sources independently before qualification.
+
+The complete adapted baseline is the same curved patch at chi=eta=0, including
+storage, full-strain stress, roughness force, normal momentum, pressure/gauge,
+retained k transport and common interface coupling. Upstream with chi=0 retains
+the same implicit trace rows and corner priority. Its comparison with Fixed
+mode uses common compatible data satisfying the matching trace, or trace
+elimination; their off-constraint algebraic residual extensions differ.
+Equal-input identity does not equate solutions from different upstream histories. The
+original CLS stability and general inner-k positivity failures remain separate
+physical gates, and this short verification does not qualify long terrain flow.

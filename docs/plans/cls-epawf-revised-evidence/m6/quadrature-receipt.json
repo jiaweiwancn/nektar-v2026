@@ -1,0 +1,76 @@
+{
+  "schema": 1,
+  "started_utc": "2026-11-03T00:41:18.575221+00:00",
+  "source_commit": "2d5d175f98dffa543892e453569b57109d6d55c7",
+  "solver_sha256": "6dd66a5dd7768616c90b63eacb74d06dd20bbe1a690cbc0d360829429dda0970",
+  "script_sha256": "857564ce428d11b88d465cfa27ace5daad8e7c980e1a84a3f88996cc3faea377",
+  "status": "passed",
+  "ranks": 1,
+  "threads": 1,
+  "allocation": "one numerical worker on CPU 4, alongside at most four main qualification ranks; no compiler job",
+  "quadrature_orders": [
+    12,
+    24
+  ],
+  "fixed_degree": 3,
+  "fixed_mesh": true,
+  "baseline_error": {
+    "velocity": 1.3658769244687176e-11,
+    "k": 4.924333533932639e-07,
+    "epsilon": 0.00015751393206961525,
+    "pressure": 6.962866082263908e-10,
+    "trace_value_rms": 2.6606489478833956e-05,
+    "trace_gradient_rms": 0.00025702690489048566,
+    "omitted_grad_chi_rms": 0.0006337958756415795
+  },
+  "refined_error": {
+    "velocity": 1.3659056867582342e-11,
+    "k": 4.924478857381864e-07,
+    "epsilon": 0.00015752355704037895,
+    "pressure": 6.963433203205915e-10,
+    "trace_value_rms": 2.660648944300881e-05,
+    "trace_gradient_rms": 0.0002570269055289934,
+    "omitted_grad_chi_rms": 0.0006337958756415795
+  },
+  "physical_field_rms_differences": [
+    6.787736897039945e-15,
+    3.8606702391575306e-16,
+    5.6871604177686255e-11,
+    4.229916837391663e-08,
+    1.4004351765719916e-13,
+    8.139466201412267e-15
+  ],
+  "stage": {
+    "maximum_scaled_residual": 1.1457103277125161e-13,
+    "unknowns": 425,
+    "boundary_surface_rms_correction": 0,
+    "energy_identity_error": 9.142534819484016e-17
+  },
+  "epsilon_quadrature_change_over_spatial_error": 0.00026854239379423266,
+  "seconds": 272.87352049899346,
+  "finished_utc": "2026-11-03T00:45:51.448743+00:00",
+  "commands": [
+    {
+      "name": "q24",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-quadrature-001/q24/case.xml"
+      ],
+      "ranks": 1,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 271.6749527339998,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-quadrature-001/q24/run.log",
+      "log_sha256": "9b755149173ee989cc95552eb5adcf3efa5b2af053c43d96c0f4c3c5b370a9ca",
+      "expected_failure": false
+    }
+  ],
+  "source_end_commit": "2d5d175f98dffa543892e453569b57109d6d55c7",
+  "source_end_status": "",
+  "solver_end_sha256": "6dd66a5dd7768616c90b63eacb74d06dd20bbe1a690cbc0d360829429dda0970"
+}

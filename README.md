@@ -46,7 +46,7 @@ positivity counterexample, with 19 passing Linux tests.
 subdomain fields, coupled pressure/transport, analytical AWF refinement and
 full/condensed nonlinear stage verification, with 22 passing Linux tests.
 The [revised wall-stage guide](solvers/IncNavierStokesSolver/Examples/RevisedEquilibriumWall/README.md)
-documents its runnable session and current serial affine-mesh scope.
+documents its runnable sessions and bounded native CG backend.
 [M4 constrained reference and native evolution](docs/plans/cls-epawf-revised-m4.md)
 adds native IMEX1/2 startup/history, fixed free-load anchoring, full 3D flat
 reference/rotation, MPI 1/2/4 and full-history restart. The complete M4
@@ -58,6 +58,12 @@ momentum/scalar coupling, conservative flux and energy audits, native curved
 manufactured cases, MPI ownership and restart checks. All 28 registered tests
 are covered by passing Linux qualification, note checks and regression/replay
 receipts. The original physical failure gates remain unchanged.
+[M6 upstream transition and adapted baseline](docs/plans/cls-epawf-revised-m6.md)
+adds a physical C2 one-way mask, independent state/admissibility gates, coupled
+trace derivatives and constrained baseline-face support. Linux qualification,
+orientation/operator replay and earlier regressions cover 31 registered tests,
+including MPI 1/2/4 and full-history restart. M7 remains open; original model
+stability and positivity limitations are unchanged.
 
 
 Tutorials

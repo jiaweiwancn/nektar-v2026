@@ -1,6 +1,6 @@
 **CLS and EP-AWF revised formulation implementation and validation plan**
 
-Status: Approved by the user on 2 November 2026; M0, M1, M2, M3, M4 and M5 closed.
+Status: Approved by the user on 2 November 2026; M0, M1, M2, M3, M4, M5 and M6 closed.
 Implementation branch: codex/cls-epawf-revised, based on
 6415398d856323c3116e646eaf7c882c66617602.
 
@@ -13,7 +13,9 @@ Implementation branch: codex/cls-epawf-revised, based on
   constitutive counterexamples, M2 profiles/dual loads, M3 native flat
   spatial stage/condensation and M4 constrained reference/native IMEX/MPI/restart
   and M5 conservative mapped geometry/equations/native stages VERIFIED on Linux;
-  M6 and later milestones UNVERIFIED. Original stability/positivity gates fail as specified.
+  M6 prescribed upstream transition, independent sensors/derivatives, baseline
+  recovery and trace support VERIFIED on Linux; M7 and later milestones
+  UNVERIFIED. Original stability/positivity gates fail as specified.
 - Version Label: cls-epawf-revised-plan-v1.
 
 The objective is a native implementation of the high-Re CLS model and the
@@ -47,7 +49,12 @@ momentum, scalar and epsilon-reaction budgets, actual native metric identities,
 physical h/p refinement, patch/MPI ownership and complete-history restart.
 The complete main qualification, exact-note checks and all 26 other regressions
 pass with source-bound replay of the corrected cached-session probe.
-M6 and later implementation milestones remain open.
+The [M6 closure report](/Users/jay/Documents/nektar-v2026/docs/plans/cls-epawf-revised-m6.md)
+records the prescribed physical C2 mask, seven independent sensors, smooth
+admissibility gates, implicit trace derivatives and constrained baseline trace
+support. Main qualification, kernel/orientation checks, native operator replay
+and all 28 earlier regressions cover 31 registered tests. Physical failure
+gates remain unchanged. M7 and later implementation milestones remain open.
 
 The [M0 contract and baseline record](/Users/jay/Documents/nektar-v2026/docs/plans/cls-epawf-revised-m0.md)
 and [contract v1](/Users/jay/Documents/nektar-v2026/docs/plans/cls-epawf-revised-contract-v1.json)
@@ -454,7 +461,7 @@ unlock a failed model qualification or the existing Cao–Tamura score gates.
 
 The user approved the branch/base, the faithful revised-note model and the
 M0–M7/M9 implementation/verification sequence, and requested execution and
-closure of M0, M1, M2, M3 and M4. This includes recording the
+closure of M0, M1, M2, M3, M4, M5 and M6. This includes recording the
 original CLS and sampled-K failures as validation findings. A robust-model
 extension and the conditional physical-validation campaign in M8 require
 a concrete, separately identified resolution of those failures; the removed

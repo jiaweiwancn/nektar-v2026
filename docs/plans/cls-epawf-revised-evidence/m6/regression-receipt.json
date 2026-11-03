@@ -1,0 +1,83 @@
+{
+  "schema": 1,
+  "source_commit": "2d5d175f98dffa543892e453569b57109d6d55c7",
+  "source_status": "",
+  "main_commit": "f4b70baec10016dd098005bc5a5507b87e4a57bf",
+  "main_status": "",
+  "started_utc": "2026-11-03T00:53:17.336568+00:00",
+  "compiler_workers": 16,
+  "test_workers": 12,
+  "mpi_ranks": [
+    1,
+    2,
+    4
+  ],
+  "maximum_concurrent_test_ranks": 12,
+  "thread_environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1"
+  },
+  "connection": "tailscale:100.105.247.110",
+  "runner_sha256": "0ca49354cd0a683964903fcdffc9b70713dec9ea1744aeeec5e09667d2c7a383",
+  "commands": [
+    {
+      "command": [
+        "cmake",
+        "-S",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/source/solvers/IncNavierStokesSolver/Tests/RANS",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build",
+        "-DRANS_BUILD_SOLVER=ON",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake"
+      ],
+      "exit_code": 0,
+      "seconds": 0.6658777669945266,
+      "timeout_seconds": 180,
+      "log_sha256": "5e423ff09921b51084f3a0a1aee06edf47115adddf2630ec7a439cf3760d845c"
+    },
+    {
+      "command": [
+        "cmake",
+        "--build",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build",
+        "--parallel",
+        "16"
+      ],
+      "exit_code": 0,
+      "seconds": 0.6666656160014099,
+      "timeout_seconds": 900,
+      "log_sha256": "9400394b397fda08bf8e0bdc9f67533c7452b928f3a18bca4fdceacb69e2c931"
+    },
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "0-15",
+        "ctest",
+        "--test-dir",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/build",
+        "--parallel",
+        "12",
+        "--output-on-failure",
+        "--output-junit",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m6-regression-001/ctest.xml",
+        "-E",
+        "^RANSCLSEPAWFM6"
+      ],
+      "exit_code": 0,
+      "seconds": 2050.176635939999,
+      "timeout_seconds": 10800,
+      "log_sha256": "2fb3727d3205020740e2533cad9ac03188c3648dc19280e44114b1958a488a03"
+    }
+  ],
+  "test_cpu_affinity": "0-15; CTest PROCESSORS reservations bound combined MPI allocation to 12; all numerical threads one",
+  "status": "passed",
+  "finished_utc": "2026-11-03T01:27:28.895977+00:00",
+  "source_end_commit": "2d5d175f98dffa543892e453569b57109d6d55c7",
+  "source_end_status": "",
+  "main_end_commit": "f4b70baec10016dd098005bc5a5507b87e4a57bf",
+  "main_end_status": ""
+}
