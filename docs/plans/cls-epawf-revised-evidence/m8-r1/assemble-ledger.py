@@ -75,6 +75,7 @@ selected = ['archive-ledger.json', 'archive-curation-index.json', 'archive-point
     'archive-points-summary.json', 'nonlinear-b1-ledger.json', 'nonlinear-b2-ledger.json',
     'nonlinear-curation-index.json', 'preflight-summary.json', 'preflight-curation-index.json',
     'controls-ledger.json', 'controls-curation-index.json', 'controls-focused-guard-identities.json',
+    'controls-analysis-runtime.json', 'controls-notes.md',
     'runtime-summary.json', 'source-binding-receipt.json', 'focused-checks-receipt.json', 'kernel-summary.json',
     'kernel-curation-index.json', 'kernel-contract-preregistered.md', 'candidate-contract.md']
 result = dict(schema=1, milestone='M8-R1', status='completed_bounded_diagnosis', M8_status='OPEN',
