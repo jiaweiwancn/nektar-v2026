@@ -15,6 +15,8 @@ p.add_argument('--ref', required=True)
 p.add_argument('--attempt', required=True)
 p.add_argument('--mode', choices=['build', 'kernel', 'pilot', 'native', 'transverse', 'regression'], default='build')
 p.add_argument('--gamma-scale', type=float, default=0)
+p.add_argument('--variant', choices=['CubicScaled','Regularized'], default='CubicScaled')
+p.add_argument('--beta', type=float, default=.4)
 a = p.parse_args()
 root = Path('/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8')
 main = Path('/media/jay/新加卷/nektar-v2026')
@@ -48,6 +50,7 @@ env['LD_LIBRARY_PATH'] = str(build/'geometry-lib')+':'+env.get('LD_LIBRARY_PATH'
 receipt = dict(schema=1, status='running', source_commit=revision, main_commit=main_revision,
                connection='tailscale:100.105.247.110', compiler_workers=16,
                numerical_threads=threads, mode=a.mode, commands=[],
+               maximum_test_ranks=12 if a.mode=='regression' else 2 if a.mode=='native' else 1,
                runner_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
                started_utc=datetime.now(timezone.utc).isoformat())
 def save():
@@ -57,6 +60,9 @@ commands = [('configure', ['cmake', '-S', str(source/'solvers/IncNavierStokesSol
     '-B', str(build), '-DRANS_BUILD_SOLVER=ON', '-DCMAKE_BUILD_TYPE=Release',
     '-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake'], 240),
     ('build', ['cmake', '--build', str(build), '--parallel', '16'], 1800)]
+fingerprint=source/'docs/plans/cls-epawf-revised-evidence/m7/fingerprint-runtime.py'
+commands += [('fingerprint-before',['python3','-B',str(fingerprint),'--root',str(root),
+    '--output',str(out/'runtime-before.json')],240)]
 tests = source/'solvers/IncNavierStokesSolver/Tests/RANS'
 if a.mode == 'kernel':
     commands += [('kernel', ['python3', '-B', str(tests/'validate_cls_epawf_m8_kernel.py'),
@@ -64,7 +70,7 @@ if a.mode == 'kernel':
 elif a.mode in ('pilot', 'native'):
     commands += [('native', ['python3', '-B', str(tests/'validate_cls_epawf_m8.py'),
         '--build', str(build), '--output', str(out/'qualification'), '--mode', a.mode,
-        '--gamma-scale', str(a.gamma_scale)], 21600)]
+        '--gamma-scale', str(a.gamma_scale), '--variant', a.variant, '--beta', str(a.beta)], 21600)]
 elif a.mode == 'transverse':
     commands += [('transverse', ['python3', '-B', str(tests/'validate_cls_epawf_m8_transverse.py'),
         '--build', str(build), '--output', str(out/'qualification'),
@@ -90,6 +96,14 @@ for name, command, timeout in commands:
     print((out/(name+'.log')).read_text()[-2500:], flush=True)
     if code:
         break
+if (out/'runtime-before.json').is_file():
+    after_command=['python3','-B',str(fingerprint),'--root',str(root),'--output',str(out/'runtime-after.json'),
+        '--compare',str(out/'runtime-before.json')]
+    with (out/'fingerprint-after.log').open('w') as log:
+        after=subprocess.run(after_command,cwd=out,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=240)
+    receipt['runtime_unchanged']=after.returncode==0
+    receipt['runtime_after_command']=after_command
+    if after.returncode and code==0:code=after.returncode
 receipt.update(status='passed' if code == 0 else 'failed', exit_code=code,
     finished_utc=datetime.now(timezone.utc).isoformat(), source_end_commit=git(source, 'rev-parse', 'HEAD'),
     source_end_status=git(source, 'status', '--porcelain'), main_end_commit=git(main, 'rev-parse', 'HEAD'),
