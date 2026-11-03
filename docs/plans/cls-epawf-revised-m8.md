@@ -386,6 +386,19 @@ affinity, durations, solver/loader/tool hashes and before/after runtime pins
 are retained in runner receipts. Shared locks protect each producing build
 while its tests run.
 
+The evidence commit `2dece5dea943ce336ddf80f8de873ca2a843a033` was synchronized
+to `m8/initialization/source`. Its complete Linux fingerprint passes against
+the tested ed34052 build pin with all 3,920 numerical inputs and 100 runtime
+images, actual bindings, tools, packages and numerical environment identical.
+No rebuild is needed for that documentation/evidence-only commit. The
+Linux integrity audit verifies 104 indexed evidence copies and the 38-test
+registry/33-test earlier JUnit correspondence. The full fingerprint,
+integration result and runner receipt are committed in the
+[final source archive](cls-epawf-revised-evidence/m8/final-source-curation-index.json).
+Subsequent archival documentation changes retain this numerical source and
+runtime identity. Historical AA/M7 sources and the unrelated main checkout
+remain preserved.
+
 Representative commands (use fresh output directories for reproduction):
 
 ```bash

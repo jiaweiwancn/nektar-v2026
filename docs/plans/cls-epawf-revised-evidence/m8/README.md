@@ -338,3 +338,21 @@ remain separate records. The Original [completion recipe](complete-original-cont
 reuses only the successful hashed MMS solve and runs the missing Neutral
 control afresh. Historical runner files are retained as evidence of executed
 attempts; their existence does not label a failed attempt as passed.
+
+## Final source and integrity binding
+
+The [full final runtime fingerprint](final-runtime-fingerprint.json),
+[integration audit](final-integration.json), [synchronization receipt](final-sync-runner.json)
+and [exact-copy index](final-source-curation-index.json) bind evidence commit
+`2dece5dea943ce336ddf80f8de873ca2a843a033` to the corrected producing build.
+All 3,920 selected numerical inputs, 100 runtime images, actual loader
+bindings, numerical package/tool images and runtime environment match the
+ed34052 build pin exactly. The final commit changes documentation/evidence
+only. The integrity audit checks 104 indexed copy hashes and the registered
+38 tests against the 33-test earlier JUnit and named five new test families.
+Its passing result keeps `milestone_closed=false` and `candidate_qualified=false`.
+It executes no solver or constitutive calculation.
+
+The full fingerprint here retains its complete source manifest; the smaller
+campaign summaries above retain their explicitly declared omissions. The
+final archive's own exact-copy hashes are separate from the 104-copy count.
