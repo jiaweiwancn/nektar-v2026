@@ -154,6 +154,8 @@ def verify_state(raw,direction=0.,initial=False):
     audit.require(not raw.get('failure') and raw.get('diagnostics_schema')==1,'Missing successful native cap report')
     audit.require(raw['model_variant']=='CubicScaled' and raw['eta']==0 and raw['chi']==1 and
         not raw['upstream_transition'] and not raw['mapped'],'Wrong isolated native capped-source mode')
+    audit.require(':capped_initial_trace=1' in raw.get('signature',''),
+                  'Missing versioned dependent-trace initialization contract')
     audit.near(raw['robust_parameters'],[.4,0.,.2,.1,0.,0.,1.],'fixed_declared_model')
     audit.require(not any('|'+name+'/' in raw.get('signature','') for name in
         ('BodyForceInner','BodyForceOuter','ScalarSourceInner','ScalarSourceOuter','InitialPerturbationInner','InitialPerturbationOuter')),
