@@ -128,7 +128,7 @@ std::vector<RANSWallEvolutionPatch::FacePoint> RANSWallEvolutionPatch::Surface(i
 double RANSWallEvolutionPatch::DependentEpsilon(const Vector &s,const RANSWallCoordinate &p) const
 {
     Require(!m_transitionEnabled,"transition dissipation evaluation requires its current time and forcing data");
-    return Profile(SampleK(s,p),p)->Dissipation(Distance(p));
+    return WallDissipation(s,p,*Profile(SampleK(s,p),p));
 }
 RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::PhysicalMass(int block,int region) const
 {
@@ -266,6 +266,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         m_outer.push_back({Point(0,q.coordinate),Point(OuterPressure(),q.coordinate),
             Point(Epsilon(),q.coordinate),q.weight*(Mapped()?m_mapping.At(q.coordinate).determinant:1.)});
     m_solver=std::make_shared<SolverCache>();m_solver->free.resize(Gauge());m_solver->massFactors.resize(Gauge());
+    InitialiseRobust(session);
     Vector seed(Size());for(int i=0;i<size[K()];++i)seed[offset[K()]+i]=parameters.model.Q()*.16*m_constants[K()][i];
     Refresh(seed);for(const auto &ray:m_rays)for(const auto &q:ray.points)m_bodyInner.push_back(q);
     if(m_transitionEnabled)InitialiseTransition(session);
@@ -329,6 +330,7 @@ void RANSWallEvolutionPatch::Refresh(const Vector &s,double time,const RANSWallE
         const double k=ray.sample.Value(s,offset[K()]);
         auto profile=m_transitionReady && data?StateProfile(s,ray.coordinate,time,*data):Profile(k,ray.coordinate);
         const double weight=profile->Reference().weight;
+        if(m_cappedDestruction)ray.destruction=WallNormalization(s,ray.coordinate,*profile);
         if(k==ray.cachedK && weight==ray.cachedWeight)continue;
         if(k==ray.cachedK && (weight>0)==(ray.cachedWeight>0))
         {ray.profile=std::move(profile);ray.cachedWeight=weight;continue;}
@@ -468,7 +470,7 @@ std::map<int,double> RANSWallEvolutionPatch::Constraints(const Vector &state,dou
         return fixed;
     }
     auto fixed=ExternalConstraints(time,data);auto s=state;for(auto [row,value]:fixed)s[row]=value;
-    const auto ep=fields[Epsilon()]->Boundary([&](const RANSWallCoordinate &p){const auto profile=Profile(SampleK(s,p),p);return profile->Dissipation(m_mapping.At(p).height);},
+    const auto ep=fields[Epsilon()]->Boundary([&](const RANSWallCoordinate &p){const auto profile=Profile(SampleK(s,p),p);return WallDissipation(s,p,*profile);},
         [&](int axis,int side,const RANSWallGlobalField::Element &e){return axis==2 && side==0 && Same(e.lower[2],m_parameters.geometry.height);});
     for(auto [id,value]:ep)
     {
@@ -501,7 +503,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Residual(const Vector &st
     try
     {
         Refresh(s,time,&data);
-        auto evaluate=[&](const VolumePoint &q,bool inner,const EquilibriumAWFProfiles *profile,const std::array<double,3> &force)
+        auto evaluate=[&](const VolumePoint &q,bool inner,const EquilibriumAWFProfiles *profile,const std::array<double,3> &force,
+            const RANSCappedDestructionValues *normalization)
         {
             RANSTensor G{},stress{};std::array<double,3> u{};
             for(int a=0;a<m_dimension;++a){u[PhysicalAxis(a)]=q.v.Value(s,offset[a]);G[PhysicalAxis(a)]=q.v.Gradient(s,offset[a]);}
@@ -517,12 +520,12 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Residual(const Vector &st
                     stress[a][b]=(m_parameters.geometry.molecularNu+nt)*strain-(a==b?pi:0);
                 }
                 dk=m_parameters.geometry.molecularNu+nt/m_parameters.model.Parameters().sigmaK;
-                sk=profile->AtProduction(Distance(q.v.coordinate),production).kSource+data.innerKSource(q.v.coordinate,time);
+                sk=WallSource(s,q.v.coordinate,production,*profile,normalization).kSource+data.innerKSource(q.v.coordinate,time);
             }
             else
             {
                 epsilon=q.e.Value(s,offset[Epsilon()]);
-                const auto c=EvaluateRANSClosure(m_parameters.model.Model(),k,epsilon,G,Distance(q.v.coordinate),m_parameters.model.Parameters(),0);
+                const auto c=OuterClosure(k,epsilon,G,q.v.coordinate);
                 dk=c.kDiffusion;de=c.epsilonDiffusion;sk=c.kSource+data.outerKSource(q.v.coordinate,time);
                 se=c.epsilonSource+data.outerEpsilonSource(q.v.coordinate,time);
                 for(int a=0;a<3;++a)for(int b=0;b<3;++b)stress[a][b]=-c.reynoldsStress[a][b]+(a==b?2*k/3-pi:0);
@@ -547,9 +550,9 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Residual(const Vector &st
         if(region!=1)for(const auto &ray:m_rays)
         {
             const auto force=CartesianForcing(s,ray.coordinate,time,data,false);
-            for(const auto &q:ray.points)evaluate(q,true,ray.profile.get(),force);
+            for(const auto &q:ray.points)evaluate(q,true,ray.profile.get(),force,m_cappedDestruction?&ray.destruction:nullptr);
         }
-        if(region!=0)for(const auto &q:m_outer)evaluate(q,false,nullptr,{});
+        if(region!=0)for(const auto &q:m_outer)evaluate(q,false,nullptr,{},nullptr);
         const auto body=OwnedBodyLoad(time,data,region);
         for(int i=0;i<Size();++i)r[i]-=body[i];
     }
@@ -790,7 +793,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::EnergyBudget(const Vector
     const auto s=Lift(state,time,data);const auto raw=Residual(state,history,alpha,time,data,false,false);Vector result(9);
     for(int a=0;a<m_dimension;++a)for(int i=0;i<size[a];++i)result[0]+=s[offset[a]+i]*raw[offset[a]+i];
     for(int i=0;i<size[K()];++i)result[0]+=m_constants[K()][i]*raw[offset[K()]+i];
-    auto integrate=[&](const VolumePoint &q,bool inner,const EquilibriumAWFProfiles *profile,const RANSVector &force)
+    auto integrate=[&](const VolumePoint &q,bool inner,const EquilibriumAWFProfiles *profile,const RANSVector &force,
+        const RANSCappedDestructionValues *normalization)
     {
         RANSTensor G{},stress{};RANSVector u{};
         for(int a=0;a<m_dimension;++a){const int aa=PhysicalAxis(a);u[aa]=q.v.Value(s,offset[a]);G[aa]=q.v.Gradient(s,offset[a]);}
@@ -800,20 +804,20 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::EnergyBudget(const Vector
             const double nt=profile->Original().EddyViscosity(Distance(q.v.coordinate));double production=0;
             for(int a=0;a<3;++a)for(int b=0;b<3;++b){const double strain=G[a][b]+G[b][a];
                 production-=((a==b?2*k/3:0)-nt*strain)*G[a][b];stress[a][b]=(m_parameters.geometry.molecularNu+nt)*strain-(a==b?pi:0);}
-            sk=profile->AtProduction(Distance(q.v.coordinate),production).kSource+data.innerKSource(q.v.coordinate,time);
+            sk=WallSource(s,q.v.coordinate,production,*profile,normalization).kSource+data.innerKSource(q.v.coordinate,time);
             if(Distance(q.v.coordinate)<=m_parameters.geometry.roughness)for(int a=0;a<3;++a)result[4]-=q.weight*u[a]*force[a];
         }
         else
         {
-            const auto c=EvaluateRANSClosure(m_parameters.model.Model(),k,q.e.Value(s,offset[Epsilon()]),G,Distance(q.v.coordinate),m_parameters.model.Parameters(),0);
+            const auto c=OuterClosure(k,q.e.Value(s,offset[Epsilon()]),G,q.v.coordinate);
             sk=c.kSource+data.outerKSource(q.v.coordinate,time);
             for(int a=0;a<3;++a)for(int b=0;b<3;++b)stress[a][b]=-c.reynoldsStress[a][b]+(a==b?2*k/3-pi:0);
         }
         result[2]-=q.weight*sk;
         for(int a=0;a<3;++a)for(int b=0;b<3;++b){result[2]+=q.weight*G[a][b]*stress[a][b];result[3]-=q.weight*G[a][b]*u[a]*u[b];}
     };
-    for(const auto &ray:m_rays){const auto f=CartesianForcing(s,ray.coordinate,time,data,false);for(const auto &q:ray.points)integrate(q,true,ray.profile.get(),f);}
-    for(const auto &q:m_outer)integrate(q,false,nullptr,{});
+    for(const auto &ray:m_rays){const auto f=CartesianForcing(s,ray.coordinate,time,data,false);for(const auto &q:ray.points)integrate(q,true,ray.profile.get(),f,m_cappedDestruction?&ray.destruction:nullptr);}
+    for(const auto &q:m_outer)integrate(q,false,nullptr,{},nullptr);
     const auto body=OwnedBodyLoad(time,data);for(int a=0;a<m_dimension;++a)for(int j=0;j<size[a];++j)result[4]-=s[offset[a]+j]*body[offset[a]+j];
     for(int i=1;i<result.size();++i){double v=result[i];m_comm->AllReduce(v,LibUtilities::ReduceSum);result[i]=v;}
     // Storage is the actual physical mass operator used by the stage, not
@@ -849,6 +853,14 @@ std::string RANSWallEvolutionPatch::Signature() const
         }
     }
     if(Mapped())text<<':'<<m_mapping.Signature();
+    if(m_variantName!="Original" || m_cappedDestruction)
+    {
+        text<<":M8:"<<m_variantName;
+        for(double v:RobustParameters())text<<':'<<v;
+        for(double v:m_referenceFlow)text<<':'<<v;
+        for(double v:m_referenceNormal)text<<':'<<v;
+        text<<':'<<m_robustUstar<<":incoming-flat-strain-extension";
+    }
     if(m_transitionEnabled)
     {
         text<<":upstream:"<<m_transition.start<<':'<<m_transition.end<<':'<<m_sensorA<<':'<<m_sensorB<<':'<<m_baselineStart;

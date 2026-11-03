@@ -59,11 +59,11 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
             }
             else
             {
-                const auto c=EvaluateRANSClosure(m_parameters.model.Model(),k,epsilon,G,Distance(v.coordinate),m_parameters.model.Parameters(),0);
+                const auto c=OuterClosure(k,epsilon,G,v.coordinate);
                 covariance=c.reynoldsStress;
                 const double h=1e-5*std::max(1.,std::abs(G[0][2]));auto plus=G,minus=G;plus[1][0]+=h;minus[1][0]-=h;
-                const auto cp=EvaluateRANSClosure(m_parameters.model.Model(),k,epsilon,plus,Distance(v.coordinate),m_parameters.model.Parameters(),0);
-                const auto cm=EvaluateRANSClosure(m_parameters.model.Model(),k,epsilon,minus,Distance(v.coordinate),m_parameters.model.Parameters(),0);
+                const auto cp=OuterClosure(k,epsilon,plus,v.coordinate);
+                const auto cm=OuterClosure(k,epsilon,minus,v.coordinate);
                 r[4]=std::min(r[4],-(cp.reynoldsStress[1][0]-cm.reynoldsStress[1][0])/(2*h));
             }
             r[3]=std::min(r[3],MinimumEigenvalue(covariance));
@@ -145,7 +145,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
         const double k=Point(K(),p).Value(s,offset[K()]),eps=Point(Epsilon(),p,1).Value(s,offset[Epsilon()]);
         const double pi=Point(InnerPressure(),p).Value(s,offset[InnerPressure()]),po=Point(OuterPressure(),p).Value(s,offset[OuterPressure()]);
         const auto profile=StateProfile(s,p,time,data);const double nt=profile->Original().EddyViscosity(Distance(p));
-        const auto c=EvaluateRANSClosure(m_parameters.model.Model(),k,eps,go,Distance(p),m_parameters.model.Parameters(),0);
+        const auto c=OuterClosure(k,eps,go,p);
         RANSVector jump{};for(int a=0;a<3;++a)for(int b=0;b<3;++b)
             jump[a]+=((m_parameters.geometry.molecularNu+nt)*(gi[a][b]+gi[b][a])-(a==b?pi:0)+c.reynoldsStress[a][b]-(a==b?2*k/3-po:0))*n[b];
         double normal=0,norm=0;for(int a=0;a<3;++a){normal+=jump[a]*n[a];norm+=jump[a]*jump[a];}
@@ -167,18 +167,49 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
             if(constraints.count(row))balance[m_dimension+1+b]+=m_constants[b][i]*raw[row];}
     }
     result["momentum_k_load_and_boundary_reaction"]=balance;
-    Vector wall(5);for(const auto &ray:m_rays)for(const auto &q:ray.points)
+    Vector wall(5),repair(8);repair[6]=1;
+    for(const auto &ray:m_rays)for(const auto &q:ray.points)
     {
         RANSTensor G{};for(int a=0;a<m_dimension;++a)G[PhysicalAxis(a)]=q.v.Gradient(s,offset[a]);
         const double k=q.v.Value(s,offset[K()]),nt=ray.profile->Original().EddyViscosity(Distance(q.v.coordinate));
         double production=0,strain=0;for(int a=0;a<3;++a)for(int b=0;b<3;++b)
         {const double S=G[a][b]+G[b][a];production-=((a==b?2*k/3:0)-nt*S)*G[a][b];strain+=S*S;}
-        const auto values=ray.profile->AtProduction(Distance(q.v.coordinate),production);
+        const auto pre=ray.profile->AtProduction(Distance(q.v.coordinate),production);
+        const auto values=WallSource(s,q.v.coordinate,production,*ray.profile,m_cappedDestruction?&ray.destruction:nullptr);
         wall[0]+=q.weight*ray.profile->Original().OriginalDissipation(Distance(q.v.coordinate));wall[1]+=q.weight*values.dissipation;
         wall[2]+=q.weight*values.redistribution;wall[3]+=q.weight*production;
         wall[4]+=q.weight*m_parameters.geometry.molecularNu*strain/2;
+        repair[0]+=q.weight*pre.dissipation;repair[1]+=q.weight*values.dissipation;
+        repair[2]+=q.weight*(values.dissipation-values.redistribution);repair[3]+=q.weight*values.redistribution;
+        if(m_cappedDestruction)
+        {
+            const auto point=EvaluateRANSCappedDestructionPoint(k,ray.profile->K(),pre.dissipation,
+                pre.dissipation-pre.redistribution,ray.destruction.b,ray.destruction.m,m_destruction);
+            if(point.limiter<1)repair[4]+=q.weight;
+            if(ray.destruction.capped)repair[5]+=q.weight;
+            repair[6]=std::min(repair[6],ray.destruction.lambda);
+            repair[7]=std::max(repair[7],point.rate);
+        }
     }
     m_comm->AllReduce(wall,LibUtilities::ReduceSum);result["wall_sources"]=wall;
+    for(int i=0;i<6;++i)m_comm->AllReduce(repair[i],LibUtilities::ReduceSum);
+    m_comm->AllReduce(repair[6],LibUtilities::ReduceMin);m_comm->AllReduce(repair[7],LibUtilities::ReduceMax);
+    result["robust_source"]=repair;
+    Vector modification(3);
+    if(m_variantName!="Original")for(const auto &q:m_outer)
+    {
+        RANSTensor G{};for(int a=0;a<m_dimension;++a)G[PhysicalAxis(a)]=q.v.Gradient(s,offset[a]);
+        const double k=q.v.Value(s,offset[K()]),eps=q.e.Value(s,offset[Epsilon()]);
+        const auto original=EvaluateRANSClosure(m_parameters.model.Model(),k,eps,G,Distance(q.v.coordinate),m_parameters.model.Parameters(),0);
+        const auto changed=OuterClosure(k,eps,G,q.v.coordinate);
+        for(int a=0;a<3;++a)for(int b=0;b<3;++b)
+            modification[0]-=q.weight*(changed.reynoldsStress[a][b]-original.reynoldsStress[a][b])*G[a][b];
+        modification[1]+=q.weight*(changed.production-original.production);
+    }
+    m_comm->AllReduce(modification,LibUtilities::ReduceSum);
+    // Mean weak stress work equals production, and the k residual carries
+    // minus production. Their sum in total stored energy is zero.
+    modification[2]=modification[0]-modification[1];result["constitutive_modification"]=modification;
     auto energy=EnergyBudget(s,history,alpha,time,data);double reaction=0;
     for(int b=0;b<=K();++b)for(int i=0;i<size[b];++i)if(constraints.count(offset[b]+i))
         reaction+=(b==K()?m_constants[b][i]:s[offset[b]+i])*raw[offset[b]+i];

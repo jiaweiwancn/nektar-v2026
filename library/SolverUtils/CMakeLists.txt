@@ -7,6 +7,7 @@ SET(SOLVER_UTILS_SOURCES
   Turbulence/HITGenerator.cpp
   Turbulence/HITPlaneEvaluator.cpp
   Turbulence/RANSModels.cpp
+  Turbulence/RANSRobustVariant.cpp
   Turbulence/AnalyticalWallFunction.cpp
   Turbulence/EquilibriumAWFProfiles.cpp
   Turbulence/EquilibriumAWFTransition.cpp
@@ -77,6 +78,7 @@ SET(SOLVER_UTILS_HEADERS
   Turbulence/HITPlaneEvaluator.h
   Turbulence/RANSWallStrip.h
   Turbulence/RANSModels.h
+  Turbulence/RANSRobustVariant.h
   Turbulence/AnalyticalWallFunction.h
   Turbulence/EquilibriumAWFProfiles.h
   Turbulence/EquilibriumAWFTransition.h

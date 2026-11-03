@@ -9,6 +9,7 @@
 #include <LibUtilities/Communication/Comm.h>
 #include <SolverUtils/Turbulence/RANSWallNormalMap.h>
 #include <SolverUtils/Turbulence/EquilibriumAWFTransition.h>
+#include <SolverUtils/Turbulence/RANSRobustVariant.h>
 #include <set>
 
 namespace Nektar
@@ -124,6 +125,20 @@ public:
     using Diagnostic=std::map<std::string,Vector>;
     Diagnostic Audit(const Vector &state,const Vector &history,double alpha,double time,
         const RANSWallEvolutionData &data,double ustar=.4) const;
+    const std::string &VariantName() const { return m_variantName; }
+    bool CappedDestruction() const { return m_cappedDestruction; }
+    Vector RobustParameters() const;
+    const SolverUtils::RANSVector &RobustReferenceFlow() const { return m_referenceFlow; }
+    const SolverUtils::RANSVector &RobustReferenceNormal() const { return m_referenceNormal; }
+    SolverUtils::RANSClosureValues OuterClosure(double k,double epsilon,
+        const SolverUtils::RANSTensor &gradient,const RANSWallCoordinate &point) const;
+    SolverUtils::RANSCappedDestructionValues WallNormalization(const Vector &state,
+        const RANSWallCoordinate &point,const SolverUtils::EquilibriumAWFProfiles &profile) const;
+    SolverUtils::AWFProfileValues WallSource(const Vector &state,const RANSWallCoordinate &point,
+        double production,const SolverUtils::EquilibriumAWFProfiles &profile,
+        const SolverUtils::RANSCappedDestructionValues *normalization=nullptr) const;
+    double WallDissipation(const Vector &state,const RANSWallCoordinate &point,
+        const SolverUtils::EquilibriumAWFProfiles &profile) const;
     std::string Signature() const;
 private:
     struct VolumePoint { RANSWallGlobalPoint v,p,e; double weight; };
@@ -132,6 +147,7 @@ private:
         RANSWallCoordinate coordinate;double weight,cachedK=-1,cachedWeight=-1;
         RANSWallGlobalPoint sample,outerV,outerP,outerK;
         std::shared_ptr<SolverUtils::EquilibriumAWFProfiles> profile;
+        SolverUtils::RANSCappedDestructionValues destruction;
         std::vector<VolumePoint> points;
     };
     std::map<int,double> ExternalConstraints(double time,const RANSWallEvolutionData &data) const;
@@ -143,6 +159,7 @@ private:
     void Refresh(const Vector &state,double time=0,const RANSWallEvolutionData *data=nullptr) const;
     Vector ExternalLift(const Vector &state,double time,const RANSWallEvolutionData &data) const;
     void InitialiseTransition(const LibUtilities::SessionReaderSharedPtr &session);
+    void InitialiseRobust(const LibUtilities::SessionReaderSharedPtr &session);
     Vector FlatReference(double ustar,const std::array<double,2> &direction) const;
     void Broadcast(Vector &value) const;
     struct SolverCache;
@@ -152,6 +169,12 @@ private:
     SolverUtils::RANSWallNormalMap m_mapping;
     int m_ownershipShift=0;
     SolverUtils::AWFProfileOptions m_options;
+    std::string m_variantName="Original";
+    SolverUtils::RANSRobustVariant m_robust;
+    SolverUtils::RANSCappedDestructionControls m_destruction;
+    bool m_cappedDestruction=false;
+    double m_regularizationGamma=0,m_regularizationScale=0,m_robustUstar=.4;
+    SolverUtils::RANSVector m_referenceFlow{1,0,0},m_referenceNormal{0,0,1};
     bool m_transitionEnabled=false,m_transitionReady=false;
     SolverUtils::AWFTransitionControls m_transition;
     double m_sensorA=2.5,m_sensorB=3.5,m_baselineStart=-1.25;

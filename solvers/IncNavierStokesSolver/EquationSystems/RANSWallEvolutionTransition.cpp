@@ -21,7 +21,7 @@ double RANSWallEvolutionPatch::WallCoordinate(const RANSWallCoordinate &p) const
 {return EquilibriumAWFWallCoordinate(m_mapping,p);}
 double RANSWallEvolutionPatch::DependentEpsilon(const Vector &s,const RANSWallCoordinate &p,
     double time,const RANSWallEvolutionData &data) const
-{return StateProfile(s,p,time,data)->Dissipation(Distance(p));}
+{return WallDissipation(s,p,*StateProfile(s,p,time,data));}
 
 void RANSWallEvolutionPatch::InitialiseTransition(const LibUtilities::SessionReaderSharedPtr &session)
 {
@@ -178,11 +178,11 @@ std::array<std::map<int,double>,2> RANSWallEvolutionPatch::DissipationTrace(cons
         {return axis==2 && !side && Same(e.lower[2],m_parameters.geometry.height);};
     std::array<std::map<int,double>,2> trace;
     trace[0]=fields[Epsilon()]->Boundary([&](const RANSWallCoordinate &p)
-        {return Profile(SampleK(s,p),p,0)->Dissipation(m_mapping.At(p).height);},face);
+        {return WallDissipation(s,p,*Profile(SampleK(s,p),p,0));},face);
     trace[1]=fields[Epsilon()]->Boundary([&](const RANSWallCoordinate &p)
     {
         const auto baseline=Profile(SampleK(s,p),p,0),current=StateProfile(s,p,time,data);
-        return current->Dissipation(m_mapping.At(p).height)-baseline->Dissipation(m_mapping.At(p).height);
+        return WallDissipation(s,p,*current)-WallDissipation(s,p,*baseline);
     },face);
     // This is a local constrained native trace projection (endpoint/edge
     // preserving segment transforms, commuting tensor transforms in 3D).

@@ -4,6 +4,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include <IncNavierStokesSolver/EquationSystems/RANSWallTimeIntegration.h>
 #include <SolverUtils/Turbulence/EquilibriumAWFProfiles.h>
+#include <SolverUtils/Turbulence/RANSRobustVariant.h>
 #include <LibUtilities/LinearAlgebra/Lapack.hpp>
 #include <StdRegions/StdSegExp.h>
 #include <algorithm>
@@ -27,6 +28,15 @@ using Matrix=RANSWallAlgebra::DenseMatrix;
 using Engine=RANSWallTimeIntegration;
 constexpr double height=2,lower=4,upper=12,ustar=.4,finalTime=.05,spatialDt=.00015625;
 int checks=0;
+double selectedBeta=1,selectedGammaScale=0;
+RANSClosureValues Closure(double k,double epsilon,const RANSTensor &gradient,double z)
+{
+    RANSRobustVariant variant;variant.beta=selectedBeta;
+    const auto ref=RANSNeutralReference::CLS();
+    variant.gamma=selectedGammaScale*ref.Kappa()*ustar*z;
+    variant.referenceStrain[0][2]=variant.referenceStrain[2][0]=ustar/(ref.Kappa()*z);
+    return EvaluateRANSRobustClosure(RANSModel::CLSHighRe,k,epsilon,gradient,z,{},0,variant);
+}
 void Check(bool good,const std::string &message)
 {++checks;if(!good)throw std::runtime_error("Transverse probe: "+message);}
 void Write(std::ostream &out,const Vector &v)
@@ -84,15 +94,14 @@ struct Tangent
 Tangent At(const RANSNeutralReference &model,double z,double matching,double relativeStep=1e-6,double eta=0)
 {
     const auto r=model.AtHeight(z,ustar,height,matching);RANSTensor G{};G[0][2]=r.velocityGradient;
-    const auto base=EvaluateRANSClosure(RANSModel::CLSHighRe,r.k,r.epsilon,G,z);
+    const auto base=Closure(r.k,r.epsilon,G,z);
     Tangent result;result.nut=base.eddyViscosity;result.production=base.production;
     result.covarianceMinimum=MinimumEigenvalue(base.reynoldsStress);
     const double h=relativeStep*r.velocityGradient;
     for(int column=0;column<2;++column)
     {
         const int axis=column?2:0;auto plus=G,minus=G;plus[1][axis]+=h;minus[1][axis]-=h;
-        const auto a=EvaluateRANSClosure(RANSModel::CLSHighRe,r.k,r.epsilon,plus,z),
-            b=EvaluateRANSClosure(RANSModel::CLSHighRe,r.k,r.epsilon,minus,z);
+        const auto a=Closure(r.k,r.epsilon,plus,z),b=Closure(r.k,r.epsilon,minus,z);
         for(int row=0;row<2;++row)
         {
             const int direction=row?2:0;
@@ -212,7 +221,7 @@ struct Operator
             {
                 RANSTensor g{};g[0][2]=r.velocityGradient;
                 g[1][0]=-wave*(c*std::sin(phase)+s*std::cos(phase));g[1][2]=dc*std::cos(phase)-ds*std::sin(phase);
-                const auto closure=EvaluateRANSClosure(RANSModel::CLSHighRe,r.k,r.epsilon,g,q.z);
+                const auto closure=Closure(r.k,r.epsilon,g,q.z);
                 minimum=std::min(minimum,MinimumEigenvalue(closure.reynoldsStress));
                 velocity=std::max(velocity,std::abs(c*std::cos(phase)-s*std::sin(phase)));
             }
@@ -282,7 +291,15 @@ int main(int argc,char **argv)
 {
     try
     {
-        Check(argc==3 && std::string(argv[1])=="--output","use --output REPORT.json");
+        Check(argc>=3 && (argc-3)%2==0 && std::string(argv[1])=="--output","use --output REPORT.json [--beta VALUE] [--gamma-scale VALUE]");
+        for(int i=3;i<argc;i+=2)
+        {
+            const std::string option=argv[i];const double value=std::stod(argv[i+1]);
+            Check(std::isfinite(value) && value>=0,"invalid variant coefficient");
+            if(option=="--beta")selectedBeta=value;
+            else if(option=="--gamma-scale")selectedGammaScale=value;
+            else Check(false,"unknown variant option");
+        }
         const auto model=RANSNeutralReference::CLS();
         AWFProfileOptions options;options.quadratureOrder=32;
         const AWFProfileGeometry geometry{1.5e-5,height,.1,1.,1.};
@@ -290,12 +307,14 @@ int main(int argc,char **argv)
         const EquilibriumAWFProfiles profile(geometry,K,model,{},options);
         const double matching=profile.Reference().matchingVelocity;
         std::ofstream out(argv[2]);Check(static_cast<bool>(out),"cannot open report");out<<std::setprecision(17);
-        out<<"{\"schema\":1,\"experiment\":\"reduced linearized Fourier-x/native-CG-z transverse original CLS\",\"parameters\":";
+        out<<"{\"schema\":1,\"experiment\":\"reduced linearized Fourier-x/native-CG-z transverse "
+            <<(selectedBeta==1 && selectedGammaScale==0?"original CLS":"explicit M8 CLS variant")<<"\",\"variant\":";
+        Write(out,Vector{selectedBeta,selectedGammaScale});out<<",\"parameters\":";
         Write(out,Vector{height,lower,upper,ustar,K,model.Q(),model.Cmu(),model.Kappa(),matching,finalTime,spatialDt});
         out<<",\"support\":\"v=0 at band endpoints and identically zero outside [4,12], strictly above H=2; no wall/interface evolution\""
             <<",\"phase_convention\":\"real physical perturbation is Re((c+i*s)*exp(i*xi*x))*e_y\""
             <<",\"energy_convention\":\"one half integral of squared complex Fourier amplitude over z\""
-            <<",\"time_partition\":\"all advection and original tensor diffusion implicit; explicit callback zero\""
+            <<",\"time_partition\":\"all advection and selected tensor diffusion implicit; explicit callback zero\""
             <<",\"constitutive_samples\":[";
         int count=0;
         for(double z:{4.,8.,12.})for(double step:{1e-3,1e-4,1e-5,1e-6})

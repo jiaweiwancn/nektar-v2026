@@ -29,6 +29,7 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
         ./EquationSystems/RANSWallEvolutionPatch.cpp
         ./EquationSystems/RANSWallEvolutionDiagnostics.cpp
         ./EquationSystems/RANSWallEvolutionTransition.cpp
+        ./EquationSystems/RANSWallEvolutionRobust.cpp
         ./EquationSystems/RANSWallTimeIntegration.cpp
         ./EquationSystems/RANSEquilibriumWallEvolution.cpp
         ./EquationSystems/SmoothedProfileMethod.cpp
@@ -150,6 +151,9 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
         SET_TESTS_PROPERTIES(RANSKernelUnitTests PROPERTIES
             PROCESSORS 1 TIMEOUT 120
             ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
+        ADD_NEKTAR_EXECUTABLE(RANSRobustVariantProbe COMPONENT tests DEPENDS SolverUtils
+            SOURCES ${CMAKE_SOURCE_DIR}/library/UnitTests/SolverUtils/RANSRobustVariantProbe.cpp)
+        TARGET_COMPILE_DEFINITIONS(RANSRobustVariantProbe PRIVATE ENABLE_NEKTAR_EXCEPTIONS)
         ADD_NEKTAR_EXECUTABLE(RANSConstitutiveProbe COMPONENT tests DEPENDS SolverUtils
             SOURCES ${CMAKE_SOURCE_DIR}/library/UnitTests/SolverUtils/RANSConstitutiveProbe.cpp)
         TARGET_COMPILE_DEFINITIONS(RANSConstitutiveProbe PRIVATE ENABLE_NEKTAR_EXCEPTIONS)
@@ -183,7 +187,8 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
                 EquationSystems/RANSWallPatch.cpp
                 EquationSystems/RANSWallGlobalField.cpp
                 EquationSystems/RANSWallEvolutionPatch.cpp
-                EquationSystems/RANSWallEvolutionTransition.cpp)
+                EquationSystems/RANSWallEvolutionTransition.cpp
+                EquationSystems/RANSWallEvolutionRobust.cpp)
         FOREACH(rans_m4_target RANSEquilibriumTimeProbe RANSEquilibriumEvolutionProbe RANSTransverseEvolutionProbe)
             TARGET_INCLUDE_DIRECTORIES(${rans_m4_target} PRIVATE ${CMAKE_SOURCE_DIR}/solvers)
             TARGET_COMPILE_DEFINITIONS(${rans_m4_target} PRIVATE ENABLE_NEKTAR_EXCEPTIONS)

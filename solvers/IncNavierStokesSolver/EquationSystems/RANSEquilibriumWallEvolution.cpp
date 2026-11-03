@@ -442,6 +442,11 @@ void RANSEquilibriumWallEvolution::WriteReport() const
     out<<",\"final_stage_constraints\":[";constraintCount=0;
     for(auto [row,value]:m_finalStageConstraints){if(constraintCount++)out<<',';Write(out,{static_cast<double>(row),value});}out<<']';
     out<<",\"upstream_transition\":"<<(m_patch->TransitionEnabled()?"true":"false");
+    out<<",\"model_variant\":"<<Quoted(m_patch->VariantName())<<",\"robust_parameters\":";
+    Write(out,m_patch->RobustParameters());
+    const auto &robustFlow=m_patch->RobustReferenceFlow(),&robustNormal=m_patch->RobustReferenceNormal();
+    out<<",\"robust_reference_flow\":";Write(out,Vector(robustFlow.begin(),robustFlow.end()));
+    out<<",\"robust_reference_normal\":";Write(out,Vector(robustNormal.begin(),robustNormal.end()));
     if(m_patch->TransitionEnabled())
     {
         out<<",\"epsilon_corner_policy\":\"dependent matching trace has priority over side-function corner values\"";
