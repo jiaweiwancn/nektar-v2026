@@ -121,6 +121,36 @@ def completed_phases(receipt, result):
     return rows
 
 
+def phase_result_binding(name, saved, final):
+    """Permit only the wrapper's two-field final prefix enrichment.
+
+    provenance.record_snapshot aliases receipt.active_trace_prefix in the
+    producing wrapper. Its final provenance pass adds these fields after the
+    completed phase checkpoint has been written. Every other value, including
+    all state/history/residual hashes, must retain its canonical JSON binding.
+    """
+    if canonical(saved) == canonical(final):
+        return None
+    message = 'Phase/result binding mismatch: '+name
+    require(name == 'provenance_and_complete_record' and
+        isinstance(saved, dict) and isinstance(final, dict), message)
+    before, after = saved.get('record_snapshot'), final.get('record_snapshot')
+    fields = ('prefix_sha256_end', 'trace_bytes_end')
+    require(isinstance(before, dict) and isinstance(after, dict) and
+        set(after)-set(before) == set(fields) and not set(before)-set(after), message)
+    require(after['prefix_sha256_end'] == before['prefix_sha256'] and
+        type(after['trace_bytes_end']) is int and type(before['prefix_bytes']) is int and
+        after['trace_bytes_end'] >= before['prefix_bytes'] > 0, message)
+    expected = dict(saved, record_snapshot=dict(before, **{key: after[key] for key in fields}))
+    require(canonical(expected) == canonical(final), message)
+    return dict(phase=name, location='result.record_snapshot',
+        fields_added_after_completed_checkpoint={key: after[key] for key in fields},
+        reason='Wrapper shared prefix dictionary receives final provenance metadata after the phase checkpoint',
+        ending_prefix_hash_matches_starting_hash=True,
+        ending_trace_bytes_cover_frozen_prefix=True,
+        all_other_canonical_result_fields_unchanged=True)
+
+
 def command_options(receipt):
     argv = receipt['command_argv']
     require(isinstance(argv, list) and len(argv) > 1 and len(argv[1:]) % 2 == 0,
@@ -214,15 +244,18 @@ def curate(run):
     receipt, result = (load(item['path']) for item in (receipt_pin, result_pin))
     rows = completed_phases(receipt, result)
     phases = result['phases']
-    checkpoints = []
+    checkpoints, enrichments = [], []
     for index, row in enumerate(rows, 1):
         expected = run/('phase-'+str(index).zfill(2)+'-'+row['name']+'.json')
         require(Path(row['checkpoint']).resolve() == expected, 'Phase checkpoint changed location')
         pin = binder.bind(expected, row['completed_checkpoint'])
         data = load(expected)
         require(data.get('schema') == 1 and data.get('scope') == receipt['scope'] and
-            data.get('phase') == without(row, ('completed_checkpoint',)) and
-            data.get('result') == phases[row['name']], 'Phase/result binding mismatch: '+row['name'])
+            data.get('phase') == without(row, ('completed_checkpoint',)),
+            'Phase checkpoint metadata binding mismatch: '+row['name'])
+        enrichment = phase_result_binding(row['name'], data.get('result'), phases[row['name']])
+        if enrichment is not None:
+            enrichments.append(dict(enrichment, checkpoint=pin))
         checkpoints.append(dict(name=row['name'], seconds=row['seconds'], checkpoint=pin))
     driver, options = command_options(receipt)
     require(Path(options['--output']).resolve() == run, 'Recorded terminal output differs from --run')
@@ -315,6 +348,7 @@ def curate(run):
             runtime_sections=receipt['producing_runtime_sections'],
             runtime_sections_are_bound_producing_pin_not_new_runtime_capture=True),
         input_pins=list(inputs.values()), completed_phases=checkpoints,
+        checkpoint_final_enrichments=enrichments,
         selected_record=dict(record_index=receipt['record_index'], snapshot=prefix, prefix_check=prefix_check,
             input_binding=binding, selected_state_float64_LE_sha256=provenance['selected_state_float64_LE_sha256'],
             selected_history_float64_LE_sha256=provenance['selected_history_float64_LE_sha256'],
