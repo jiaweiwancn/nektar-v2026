@@ -95,3 +95,34 @@ The next analysis helper adds a diagnostic-only signature and distance for
 the original Yap switch `k^(3/2)/(2.5 epsilon r)=1` on the fixed actual outer
 quadrature points. It changes no source, constant, field or admission rule.
 M8 remains open.
+
+## Binding to the actual original target
+
+The retained first `alpha=400` target matrix independently confirms the same
+`7.15996593112029e-7` momentum action error. The producing control flow and
+the completed failed auxiliary record establish that the target starts from
+the original h0: a failed auxiliary candidate never replaces the guess.
+The log contains a unique target iteration-zero entry. This is a source and
+record binding; no unpublished target vector or completed target path is
+inferred.
+
+The independent analytic reference transfers with the exact scalar/velocity
+mass change, `A400=A3200-(7/8)*M3200`. The discrepancy in that mass-change
+control is `1.3472529138953944e-11`, below its `1e-10` control threshold.
+Pressure actions have zero target-minus-auxiliary difference; their analytic
+triangle bounds remain at most `1.84701e-14`. The continuity-column error
+remains `1.18284e-11`. These controls preserve the failed absolute outer-k
+action gate and establish no causal explanation of the target's convergence.
+
+The Linux check uses clean analysis source
+`8d03c9a84e2dc1de118a327c1e17a2e93a8b4766`, CPU49 and all six numerical
+thread settings equal to one: 72 checks, zero native calls and zero new
+residual endpoints. Producing C++/runtime remain the same 9f20 epoch.
+Target J0 SHA-256 is
+`ae6e804b43d90be64ce77c3e44dd532970d35f7a37c449984cb28e6bfaf127e6`.
+The authoritative files remain in `epoch-002/target-initial-jacobian-001`:
+
+- `validation.json`: 158,084 bytes, SHA-256
+  `29396c6623849f0257869e77624eafb6cae6637ab9c36f0709c1e90b98522d76`.
+- `receipt.json`: 37,490 bytes, SHA-256
+  `a33961cfc448cb8cd99059644a3ffbcf8d2550a5129bfd0e082936ddec236b4a`.
