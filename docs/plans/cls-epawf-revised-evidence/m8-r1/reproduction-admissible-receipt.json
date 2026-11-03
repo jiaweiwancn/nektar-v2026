@@ -1,0 +1,124 @@
+{
+  "schema": 1,
+  "status": "original_failure_reproduced",
+  "source_commit": "360cbb7ac728b575cdf9af21e6d0963a1d88acb9",
+  "source_clean_start": true,
+  "runner_sha256": "635cb2c090adc63345edf3fd2d3f22117c88a2e95cf4b5335424ac559ca81ac0",
+  "executable_sha256": "aa48843d03d22b7089b2b08f56d777640a1419a3e59296850523d3130206e336",
+  "XML_sha256": "83ead9e9b1aea1621a9c63a74b3b37954490fe153678f7220cc76c324e609444",
+  "old_XML_sha256": "c54b2522cca860081f23e041a649e0668740f5f4bd86b711e4cf8f1a3d3f6d7b",
+  "original_report_sha256": "6a934342924e9f730fe1b9cddf4391a8df82647acc5a1f7b4f078b5e62e6fc00",
+  "previous_reproduction_receipt_sha256": "25c3ae03edc812dfc3065b72e4b4a0b6798e122e2ed164402d94f5748a78d704",
+  "physical_semantics_unchanged": true,
+  "diagnostic_unqualified": true,
+  "physical_guard": "Off for exact numerical-failure reproduction; already physically/range-invalid at t0",
+  "diagnostic_solver_info": {
+    "RANSWallSolveDiagnostics": "Failure",
+    "RANSWallSolveDiagnosticReplay": "AdmissibleFresh",
+    "RANSWallSolveDiagnosticIterations": "12",
+    "RANSWallSolveDiagnosticFile": "case.nonlinear.json"
+  },
+  "ranks": 1,
+  "numerical_threads": 1,
+  "cpu": 0,
+  "commands": [
+    {
+      "name": "fingerprint-before",
+      "argv": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/source/docs/plans/cls-epawf-revised-evidence/m7/fingerprint-runtime.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/reproduction-001/runtime-before.json"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/reproduction-001",
+      "exit_code": 0,
+      "seconds": 1.567121957999916,
+      "log_sha256": "faa77608219b6d19fe964b16e0be2b249e854d291f043e02769708db91f43080",
+      "timeout": 240
+    },
+    {
+      "name": "solver",
+      "argv": [
+        "taskset",
+        "-c",
+        "0",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/reproduction-001/case/case.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/reproduction-001/case",
+      "exit_code": 1,
+      "seconds": 385.14941516100043,
+      "log_sha256": "ebd3f5c53b4170687a7aebcd887a5ad0ddaf69f169669da364a0858ef1eefa43",
+      "timeout": 3600
+    },
+    {
+      "name": "fingerprint-after",
+      "argv": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/source/docs/plans/cls-epawf-revised-evidence/m7/fingerprint-runtime.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/reproduction-001/runtime-after.json",
+        "--compare",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/reproduction-001/runtime-before.json"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/reproduction-001",
+      "exit_code": 0,
+      "seconds": 1.517266341999857,
+      "log_sha256": "985ebda46f70ca4b1a7ae3a0e5756e131f51122300dedc7ad86581919de1f375",
+      "timeout": 240
+    }
+  ],
+  "bounded_matrix_slots": [
+    3,
+    4
+  ],
+  "remaining_native_slots": [
+    5,
+    6
+  ],
+  "justification": "Original fresh central assembly was outside finite evaluation domain; independently scaled/admissible differences are required, without changing original line-search minimum or tolerances.",
+  "started_utc": "2026-11-03T11:01:34.180221+00:00",
+  "environment_changes_from_build": {
+    "NUMEXPR_NUM_THREADS": [
+      null,
+      "1"
+    ],
+    "VECLIB_MAXIMUM_THREADS": [
+      null,
+      "1"
+    ]
+  },
+  "solver_exit_code": 1,
+  "report_sha256": "c94d4f0a941ea428948377f509c038b96c54acf849811b7960a81c6eede7993d",
+  "trace_sha256": "2df975858f4d506b62030cdf4ea899fff5dd31740ea54289c166a10b156c4475",
+  "failed_stage_time": 0.05999999999999999,
+  "last_accepted_time": 0.05499999999999999,
+  "fresh_matrix_available": true,
+  "directional_ladder_available": true,
+  "diagnostic_retry": {
+    "terminal": "fresh_jacobian_valid_or_invalid_non_descent",
+    "converged": false,
+    "history_advanced": false,
+    "maximum_iterations": 12,
+    "scaled_block_norms": [
+      2.2923218415269924,
+      0.4480025824696538,
+      13.631634849504772,
+      1.1469859232845672,
+      5.6739680682581936e-14,
+      4.606325360958135e-14,
+      8.790762036489304e-15,
+      0.0016497432423096686
+    ]
+  },
+  "runtime_unchanged": true,
+  "source_clean_end": true,
+  "source_commit_end": "360cbb7ac728b575cdf9af21e6d0963a1d88acb9",
+  "finished_utc": "2026-11-03T11:08:02.529187+00:00"
+}

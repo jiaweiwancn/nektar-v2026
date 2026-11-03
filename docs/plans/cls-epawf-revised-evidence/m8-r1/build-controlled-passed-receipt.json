@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "status": "passed",
+  "source_commit": "360cbb7ac728b575cdf9af21e6d0963a1d88acb9",
+  "compiler_workers": 16,
+  "total_worker_bound": 19,
+  "hard_limit": 72,
+  "prior_attempt_preserved": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/build-001",
+  "reason": "Split an if/output and declaration to satisfy unchanged -Werror=misleading-indentation; no equations, tolerances or flags changed",
+  "runner_sha256": "8ccc58e0ff901a62c4c9d616ed4ebb253953444b769bbfe07a56ff11d6481a28",
+  "commands": [
+    {
+      "name": "build",
+      "argv": [
+        "taskset",
+        "-c",
+        "0-31",
+        "cmake",
+        "--build",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/build",
+        "--parallel",
+        "16"
+      ],
+      "exit_code": 0,
+      "seconds": 11.438830036000581,
+      "log_sha256": "dd0ae0da1a231a31ebf5ba22e592faeb02c8ad7f90b42bb2f336ba7703cbe3a2"
+    },
+    {
+      "name": "fingerprint",
+      "argv": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/source/docs/plans/cls-epawf-revised-evidence/m7/fingerprint-runtime.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/build-002/runtime-fingerprint.json"
+      ],
+      "exit_code": 0,
+      "seconds": 1.5681662719998712,
+      "log_sha256": "faa77608219b6d19fe964b16e0be2b249e854d291f043e02769708db91f43080"
+    }
+  ],
+  "started_utc": "2026-11-03T10:58:23.096867+00:00",
+  "first_R1_images_preserved": true,
+  "source_clean_end": true,
+  "finished_utc": "2026-11-03T10:58:36.392867+00:00"
+}

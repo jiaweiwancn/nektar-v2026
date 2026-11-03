@@ -1,0 +1,50 @@
+{
+  "schema": 1,
+  "phase": "M8-R1 D bounded kernel feasibility",
+  "frozen_before_screen": true,
+  "baseline": "ab5c3c6fee19761e8d88692e8e6c331e5889234e",
+  "production_adopted": false,
+  "trajectories": false,
+  "inner": {
+    "rho": "4/5",
+    "law": "c=2k/3;a=nuA*||S||F;t=a if a<=rho*c else c-(1-rho)*c*exp(-(a-rho*c)/((1-rho)*c));F=t*S/||S||F;R=cI-F",
+    "molecular_viscosity_retained": true,
+    "k_zero": "F=R=0; admissible one-sided limits, no full joint-origin Frechet Jacobian",
+    "cases": "fixed reference/3D/zero/join/roughness/positive-part controls and every exported archived inner minimum witness",
+    "difference_steps": [0.001, 0.0001, 0.00001, 0.000001],
+    "roughness_x_controls": [0.01, 0.1, 1, 10, 10000],
+    "sampled_K_ratio_controls": [0.5, 1, 1.5]
+  },
+  "outer": {
+    "choice": "a: explicitly restricted near-neutral applicability; original broad box remains failed",
+    "beta": "2/5",
+    "GammaUniform": "0",
+    "GammaScale": "1",
+    "gradient_entry_radius": "1/1000",
+    "k_over_K0": ["99/100", "101/100"],
+    "epsilon_over_epsilon0": ["49/50", "51/50"],
+    "principal_target_over_nut0": "1/10",
+    "ratio_partitions": 64,
+    "limiting_branches": ["strain", "rotation"],
+    "all_retained_witnesses": ["M1 constitutive", "M8 native kernel cases", "M8 fixed-gamma exact witnesses", "M8 invariant analytic controls", "M8 invariant exact screen", "M8 outside-envelope controls"],
+    "no_coefficient_or_box_search": true
+  },
+  "applicability": {
+    "lambda_lower": "1/2",
+    "sampled_K_positive": true,
+    "actual_dependent_trace_positive": true,
+    "actual_outer_epsilon_region_required": true,
+    "beyond_exit": "diagnostic/unqualified; original singular high-Re equations have no supplied continuation"
+  },
+  "numerical_allocation": {
+    "workers": 1,
+    "cpu": 50,
+    "OMP_NUM_THREADS": 1,
+    "OPENBLAS_NUM_THREADS": 1,
+    "MKL_NUM_THREADS": 1,
+    "BLIS_NUM_THREADS": 1,
+    "VECLIB_MAXIMUM_THREADS": 1,
+    "NUMEXPR_NUM_THREADS": 1
+  },
+  "exclusions": ["C++ adoption", "build", "solver trajectory", "field/stress clipping", "floors", "physical-input retuning", "relaxed tolerances", "broad box qualification", "state-set invariance", "fully discrete positivity", "terrain calibration"]
+}

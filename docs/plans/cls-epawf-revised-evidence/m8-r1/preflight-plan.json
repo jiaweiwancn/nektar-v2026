@@ -1,0 +1,419 @@
+{
+  "schema": 1,
+  "milestone": "M8-R1",
+  "phase": "C representation preflight",
+  "baseline_reviewed": "ab5c3c6fee19761e8d88692e8e6c331e5889234e",
+  "no_solver_invoked": true,
+  "original": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/flow-001/qualification/control-coarse/case.xml",
+    "sha256": "c54b2522cca860081f23e041a649e0668740f5f4bd86b711e4cf8f1a3d3f6d7b",
+    "mesh": {
+      "x": [
+        -4.0,
+        -3.0,
+        -2.0,
+        -1.0,
+        1.0,
+        2.0
+      ],
+      "radial": [
+        0.0,
+        2.0,
+        4.0
+      ],
+      "degree": 3,
+      "pressure_degree": 1,
+      "native_GLL_points": [
+        8,
+        8
+      ]
+    }
+  },
+  "physics": {
+    "parameters": {
+      "RANSWALLHEIGHT": "2.0",
+      "RANSWALLROUGHNESS": "0.1",
+      "RANSWALLSAMPLEHEIGHT": "1",
+      "RANSWALLTAILSTART": "1",
+      "KINVIS": "0.000015",
+      "RANSWALLSTAGEALPHA": "5",
+      "RANSWALLNONLINEARTOLERANCE": "2e-12",
+      "QSTAR": "3.1906750816242875",
+      "KAPPA": "0.4405539051866587",
+      "K0": "Qstar*0.16",
+      "E0": "(K0/Qstar)^1.5/(Kappa*RANSWallHeight)",
+      "SLOPE": "0.09*2.55*sqrt(K0)",
+      "ROUGHX": "RANSWallRoughness*sqrt(K0)/(70*Kinvis)",
+      "ROUGHM": "max(0.5-0.4*RoughX^0.7,1-0.79*RoughX^(-0.28))",
+      "ZV": "Kinvis*10.7*(1-RoughX^RoughM)/sqrt(K0)",
+      "YAPSCALE": "K0^1.5/(2.5*E0)",
+      "TIMESTEP": "0.005",
+      "TIME": "0.0",
+      "RANSWALLMAXITERATIONS": "80",
+      "RANSWALLETA": "0",
+      "RANSWALLCHI": "1",
+      "RANSWALLDIRECTIONX": "1.0",
+      "RANSWALLDIRECTIONY": "0.0",
+      "RANSWALLOWNERSHIPSHIFT": "0",
+      "RANSWALLTRANSITIONSTART": "-3.0",
+      "RANSWALLTRANSITIONEND": "-2.25",
+      "RANSWALLBASELINESTART": "-2.0",
+      "RANSWALLSENSORDISTANCEA": "2.5",
+      "RANSWALLSENSORDISTANCEB": "3.5",
+      "RANSWALLSENSORON": "0.02",
+      "RANSWALLSENSOROFF": "0.1",
+      "RANSWALLEXPRESSIONDIMENSION": "2",
+      "RANSWALLMAPAMPLITUDE": "0.02",
+      "RANSWALLMAPLENGTHX": "1.0",
+      "RANSWALLDIAGNOSTICS": "1",
+      "RANSWALLCUBICBETA": "0.4",
+      "RANSWALLREGULARIZATIONGAMMA": "0.0",
+      "RANSWALLREGULARIZATIONSCALE": "1.0",
+      "RANSWALLPOSITIVITYTHETA": "0.2",
+      "RANSWALLPOSITIVITYDELTA": "0.1"
+    },
+    "solver_info": {
+      "EQTYPE": "UnsteadyNavierStokes",
+      "SOLVERTYPE": "RANSEquilibriumWallEvolution",
+      "PROJECTION": "Galerkin",
+      "GLOBALSYSSOLN": "IterativeStaticCond",
+      "RANSWALLCONDENSE": "False",
+      "RANSWALLRESTART": "None",
+      "RANSWALLCHECKPOINT": "None",
+      "RANSWALLREFERENCE": "Neutral",
+      "RANSWALLMAP": "Flat",
+      "RANSWALLFUNCTIONCOORDINATES": "Chart",
+      "RANSWALLTRANSITION": "Upstream",
+      "TURBULENCEMODEL": "CLSHighRe",
+      "RANSWALLVARIANT": "Regularized",
+      "RANSWALLDESTRUCTION": "Capped",
+      "RANSWALLDESTRUCTIONSMOOTHING": "Linear"
+    },
+    "functions": [
+      {
+        "name": "InitialPerturbationInner",
+        "entries": [
+          {
+            "VAR": "u",
+            "VALUE": "(0)*(((x-(-4.0))^2*((2.0)-x)^2/(7.5625))*exp(-((x-(-3.5))/(0.3))^2-(3.6363636363636362)*(x-(-3.5))))*sin(2*PI*y/(4.0))"
+          },
+          {
+            "VAR": "v",
+            "VALUE": "(-0)*(((2*(x-(-4.0))*((2.0)-x)*((-2.0)-2*x)/(7.5625))-((x-(-4.0))^2*((2.0)-x)^2/(7.5625))*(2*(x-(-3.5))/(0.089999999999999997)+(3.6363636363636362)))*exp(-((x-(-3.5))/(0.3))^2-(3.6363636363636362)*(x-(-3.5))))*(sin(PI*y/(4.0)))^2"
+          },
+          {
+            "VAR": "k",
+            "VALUE": "(0)*Qstar*0.16*(((x-(-4.0))^2*((2.0)-x)^2/(7.5625))*exp(-((x-(-3.5))/(0.3))^2-(3.6363636363636362)*(x-(-3.5))))*(sin(PI*y/(4.0)))^2"
+          },
+          {
+            "VAR": "eps_tilde",
+            "VALUE": "0"
+          },
+          {
+            "VAR": "p",
+            "VALUE": "0"
+          }
+        ]
+      },
+      {
+        "name": "InitialPerturbationOuter",
+        "entries": [
+          {
+            "VAR": "u",
+            "VALUE": "(0)*(((x-(-4.0))^2*((2.0)-x)^2/(7.5625))*exp(-((x-(-3.5))/(0.3))^2-(3.6363636363636362)*(x-(-3.5))))*sin(2*PI*y/(4.0))"
+          },
+          {
+            "VAR": "v",
+            "VALUE": "(-0)*(((2*(x-(-4.0))*((2.0)-x)*((-2.0)-2*x)/(7.5625))-((x-(-4.0))^2*((2.0)-x)^2/(7.5625))*(2*(x-(-3.5))/(0.089999999999999997)+(3.6363636363636362)))*exp(-((x-(-3.5))/(0.3))^2-(3.6363636363636362)*(x-(-3.5))))*(sin(PI*y/(4.0)))^2"
+          },
+          {
+            "VAR": "k",
+            "VALUE": "(0)*Qstar*0.16*(((x-(-4.0))^2*((2.0)-x)^2/(7.5625))*exp(-((x-(-3.5))/(0.3))^2-(3.6363636363636362)*(x-(-3.5))))*(sin(PI*y/(4.0)))^2"
+          },
+          {
+            "VAR": "eps_tilde",
+            "VALUE": "(0)/Kappa*(((x-(-4.0))^2*((2.0)-x)^2/(7.5625))*exp(-((x-(-3.5))/(0.3))^2-(3.6363636363636362)*(x-(-3.5))))*(sin(PI*(y-(2.0))/(2.0)))^2"
+          },
+          {
+            "VAR": "p",
+            "VALUE": "0"
+          }
+        ]
+      }
+    ],
+    "time_integration": [
+      [
+        "METHOD",
+        "IMEX"
+      ],
+      [
+        "ORDER",
+        "2"
+      ]
+    ]
+  },
+  "cases": [
+    {
+      "name": "original-base",
+      "representation": "original",
+      "quadrature": "base",
+      "source_quadrature": [
+        8,
+        16
+      ],
+      "xml": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/preflight-001/cases/original-base/case.xml",
+      "xml_sha256": "dc508ad7163a325d55e22d82bb1e713c8af55251feca3ce0a9ccf370493d4a5c",
+      "cost": {
+        "dimension": 2,
+        "degree": 3,
+        "pressure_degree": 1,
+        "x": [
+          -4.0,
+          -3.0,
+          -2.0,
+          -1.0,
+          1.0,
+          2.0
+        ],
+        "radial": [
+          0.0,
+          2.0,
+          4.0
+        ],
+        "cells": 10,
+        "inner_cells": 5,
+        "outer_cells": 5,
+        "field_sizes": [
+          112,
+          112,
+          112,
+          64,
+          12,
+          12
+        ],
+        "gauge": 1,
+        "unknowns": 425,
+        "dense_guard": 3000,
+        "within_dense_guard": true,
+        "central_FD_residual_calls_per_full_Jacobian": 850,
+        "single_dense_matrix_bytes": 1445000,
+        "source_volume_outer_Gauss_points": 320,
+        "estimate_scope": "Exact tensor-space counts before native verification; assembly/factor scaling is indicative, not a measured timing",
+        "FD_volume_assembly_ratio_to_original": 1.0,
+        "dense_factor_work_ratio_to_original": 1.0
+      },
+      "steps": 0
+    },
+    {
+      "name": "original-high",
+      "representation": "original",
+      "quadrature": "high",
+      "source_quadrature": [
+        12,
+        24
+      ],
+      "xml": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/preflight-001/cases/original-high/case.xml",
+      "xml_sha256": "149190d15704a864576e793668626e110e169774b007ac2c6a9147f53f825e91",
+      "cost": {
+        "dimension": 2,
+        "degree": 3,
+        "pressure_degree": 1,
+        "x": [
+          -4.0,
+          -3.0,
+          -2.0,
+          -1.0,
+          1.0,
+          2.0
+        ],
+        "radial": [
+          0.0,
+          2.0,
+          4.0
+        ],
+        "cells": 10,
+        "inner_cells": 5,
+        "outer_cells": 5,
+        "field_sizes": [
+          112,
+          112,
+          112,
+          64,
+          12,
+          12
+        ],
+        "gauge": 1,
+        "unknowns": 425,
+        "dense_guard": 3000,
+        "within_dense_guard": true,
+        "central_FD_residual_calls_per_full_Jacobian": 850,
+        "single_dense_matrix_bytes": 1445000,
+        "source_volume_outer_Gauss_points": 320,
+        "estimate_scope": "Exact tensor-space counts before native verification; assembly/factor scaling is indicative, not a measured timing",
+        "FD_volume_assembly_ratio_to_original": 1.0,
+        "dense_factor_work_ratio_to_original": 1.0
+      },
+      "steps": 0
+    },
+    {
+      "name": "resolved-base",
+      "representation": "resolved",
+      "quadrature": "base",
+      "source_quadrature": [
+        8,
+        16
+      ],
+      "xml": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/preflight-001/cases/resolved-base/case.xml",
+      "xml_sha256": "faca24f780441bbe539f3d64b49762e15fd838f0b6a36880376dfe3a0f8ba837",
+      "cost": {
+        "dimension": 2,
+        "degree": 3,
+        "pressure_degree": 1,
+        "x": [
+          -4.0,
+          -3.0,
+          -2.0,
+          -1.0,
+          1.0,
+          2.0
+        ],
+        "radial": [
+          0.0,
+          0.01,
+          0.1,
+          0.25,
+          0.5,
+          1.0,
+          2.0,
+          2.6666666666666665,
+          3.3333333333333335,
+          4.0
+        ],
+        "cells": 45,
+        "inner_cells": 30,
+        "outer_cells": 15,
+        "field_sizes": [
+          448,
+          448,
+          448,
+          160,
+          42,
+          24
+        ],
+        "gauge": 1,
+        "unknowns": 1571,
+        "dense_guard": 3000,
+        "within_dense_guard": true,
+        "central_FD_residual_calls_per_full_Jacobian": 3142,
+        "single_dense_matrix_bytes": 19744328,
+        "source_volume_outer_Gauss_points": 960,
+        "estimate_scope": "Exact tensor-space counts before native verification; assembly/factor scaling is indicative, not a measured timing",
+        "FD_volume_assembly_ratio_to_original": 16.634117647058822,
+        "dense_factor_work_ratio_to_original": 50.508185284754724
+      },
+      "steps": 0
+    },
+    {
+      "name": "resolved-high",
+      "representation": "resolved",
+      "quadrature": "high",
+      "source_quadrature": [
+        12,
+        24
+      ],
+      "xml": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/preflight-001/cases/resolved-high/case.xml",
+      "xml_sha256": "11f26e39c851efe0b6206cb8cc7e52e915d74478b6a72e8a2360e836487b35af",
+      "cost": {
+        "dimension": 2,
+        "degree": 3,
+        "pressure_degree": 1,
+        "x": [
+          -4.0,
+          -3.0,
+          -2.0,
+          -1.0,
+          1.0,
+          2.0
+        ],
+        "radial": [
+          0.0,
+          0.01,
+          0.1,
+          0.25,
+          0.5,
+          1.0,
+          2.0,
+          2.6666666666666665,
+          3.3333333333333335,
+          4.0
+        ],
+        "cells": 45,
+        "inner_cells": 30,
+        "outer_cells": 15,
+        "field_sizes": [
+          448,
+          448,
+          448,
+          160,
+          42,
+          24
+        ],
+        "gauge": 1,
+        "unknowns": 1571,
+        "dense_guard": 3000,
+        "within_dense_guard": true,
+        "central_FD_residual_calls_per_full_Jacobian": 3142,
+        "single_dense_matrix_bytes": 19744328,
+        "source_volume_outer_Gauss_points": 960,
+        "estimate_scope": "Exact tensor-space counts before native verification; assembly/factor scaling is indicative, not a measured timing",
+        "FD_volume_assembly_ratio_to_original": 16.634117647058822,
+        "dense_factor_work_ratio_to_original": 50.508185284754724
+      },
+      "steps": 0
+    }
+  ],
+  "generator_sha256": "bef75f1e5ee9e0a42aad4f8d145391378c05d33331d5269e20b1e031aebd42f8",
+  "protocol": {
+    "native_initializations": 4,
+    "trajectories": 0,
+    "permitted_mesh_choices": [
+      "original",
+      "resolved"
+    ],
+    "native_quadrature_levels": {
+      "base": [
+        8,
+        16
+      ],
+      "high": [
+        12,
+        24
+      ]
+    },
+    "native_GLL_points": [
+      8,
+      8
+    ],
+    "quadrature_audits": [
+      [
+        8,
+        16,
+        8
+      ],
+      [
+        8,
+        24,
+        8
+      ],
+      [
+        12,
+        24,
+        12
+      ]
+    ],
+    "quadrature_interpretation": "Independent loads at the identical initial coefficients; no additional CFD time map",
+    "qualification_stop": "First declared physical-range exit; preserve state. Finite coverage alone is not a continuum or polynomial-everywhere certificate.",
+    "preserved": "Physical domain, H, h, samplers, transition, model/source parameters, eta, dt, tolerances and solver policy",
+    "authorization": "Solver calls await the parent phase-A archived-ledger gate"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "started_utc": "2026-11-03T09:01:18.106323+00:00",
+  "command": [
+    "timeout",
+    "1800",
+    "taskset",
+    "-c",
+    "48",
+    "python3",
+    "-B",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/cls_epawf_m8_r1_archive.py",
+    "--source",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-source",
+    "--archive",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/flow-001/qualification/control-coarse",
+    "--output",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-attempt-003"
+  ],
+  "driver_sha256": "0c2700ec408ae12d72bb1442eb978b9ce416be9fd86a85978534a06aa105274e",
+  "wrapper_sha256": "78cffca64cfa88ebc0bab1bf9ab943f13f311a400cb1bace9017e5aefcf3fb99",
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "worker_limit": 1,
+  "CPU": "48",
+  "solver_or_trajectory_launched": false,
+  "exit_code": 0,
+  "seconds": 165.76714547499978,
+  "finished_utc": "2026-11-03T09:04:03.873618+00:00",
+  "log_sha256": "74bf7aaa3d4a706fe6726c11c9d640b9de6ceb1e72aa6089062c4cca278fef93"
+}

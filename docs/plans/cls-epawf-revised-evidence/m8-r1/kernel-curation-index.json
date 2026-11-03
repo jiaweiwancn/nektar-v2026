@@ -1,0 +1,79 @@
+{
+  "schema": 1,
+  "phase": "M8-R1 D",
+  "numerical_re_evaluation": false,
+  "external_run_root": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/kernel-attempt-001",
+  "raw_inputs": {
+    "/private/tmp/m8-r1-kernel-outer.json": "12f5444deeeea890435dc6e1d121442e09d563e823ad225563ccd41aa701a704",
+    "/private/tmp/m8-r1-kernel-witnesses.json": "e066aee4d98838750646325440e704c62ea5b6d9263f3794eb228058e59021d8"
+  },
+  "canonical_raw_references": {
+    "file": "restricted-outer-interval-proof.json",
+    "sha256": "12f5444deeeea890435dc6e1d121442e09d563e823ad225563ccd41aa701a704",
+    "certified_principal_lower_over_nut0": "0.53345977306365966796875",
+    "covariance_certified_positive": true,
+    "joint_constitutive_gate": true,
+    "target": ".1",
+    "proof_failure_is_inconclusive": true,
+    "domain": "entry radius .001; k/K0 [.99,1.01]; epsilon/epsilon0 [.98,1.02]; both max branches; all incompressible rank-one directions",
+    "original_broad_domain_status": "FAILED, unchanged",
+    "retained_witnesses": {
+      "file": "retained-witnesses.json",
+      "sha256": "e066aee4d98838750646325440e704c62ea5b6d9263f3794eb228058e59021d8",
+      "family_counts": {
+        "M1_constitutive": 17,
+        "M8_native_kernel": 72,
+        "M8_fixed_gamma_exact": 16,
+        "M8_invariant_exact": 48,
+        "M8_invariant_analytic": 8,
+        "M8_outside_envelope": 2
+      },
+      "finite_negative_covariance_count": 37,
+      "outside_restricted_region_count": 94
+    }
+  },
+  "files": {
+    "kernel-validation.json": {
+      "sha256": "28cfef5e83af372a2aa3dcd3f27bc38991631421abe7f72b018e127f55000412",
+      "bytes": 652009
+    },
+    "kernel-summary.json": {
+      "sha256": "301f93ad85b65cd9ab06eaa45487bdd27390eecbcf2cef973e6550900922ece3",
+      "bytes": 14673
+    },
+    "kernel-outer-proof.json": {
+      "sha256": "97ff7fd834596231773f7a0a0719527f8319dcb970fceaef72136e00cc249046",
+      "bytes": 403514
+    },
+    "kernel-retained-witnesses.json": {
+      "sha256": "e066aee4d98838750646325440e704c62ea5b6d9263f3794eb228058e59021d8",
+      "bytes": 557547
+    },
+    "kernel-contract-preregistered.md": {
+      "sha256": "082a791fb086a08bd83285e68ae5e05923fdb688c7919410263bb894a6f22313",
+      "bytes": 12350
+    },
+    "kernel-plan.json": {
+      "sha256": "fdb75bce68563ebac786d4e4fc8109fc635183469d360ee0edfc94fec17b2da0",
+      "bytes": 2249
+    },
+    "kernel-runner.json": {
+      "sha256": "215a670da89203f2e14eacc21904722fda943423b534798c1602d1240912a367",
+      "bytes": 1773
+    },
+    "kernel-run.log": {
+      "sha256": "c4e598385e361a1c1a63d3d4ff479d09adb50632558e0a172d674236a2a720b0",
+      "bytes": 426
+    },
+    "kernel-curate.py": {
+      "sha256": "424082f069d82b81e68b56746d942a61e3a7eb87845633f4fd833ab3e33adf66",
+      "bytes": 6388
+    },
+    "candidate-contract.md": {
+      "sha256": "c635154db92a07be5bf27b5b50817340e9d6b5301d778c6a1099ac1d220c8879",
+      "bytes": 22602
+    }
+  },
+  "method": "Pure JSON field selection/re-encoding; all retained-witness bytes preserved exactly. Full interval matrices remain in the external Linux run directory.",
+  "scope": "Constitutive kernel feasibility with native coverage failure; no production adoption, solver trajectory, state invariance or broad-box qualification."
+}

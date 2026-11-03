@@ -1,0 +1,2077 @@
+{
+  "schema": 1,
+  "started_utc": "2026-11-03T09:13:37.206059+00:00",
+  "raw": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/preflight-001/cases/resolved-base/case.evolution.json",
+    "sha256": "5a7b3eb7fe706ef783f32d2d7b673e4bcdf638cd3652410bf407571529fde025",
+    "archived_failure": "",
+    "archived_time": 0
+  },
+  "session": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/preflight-001/cases/resolved-base/case.xml",
+    "sha256": "faca24f780441bbe539f3d64b49762e15fd838f0b6a36880376dfe3a0f8ba837"
+  },
+  "driver_sha256": "d046da906814eea9aafc5ca7e0da6b3598203cc2da23bb764ddc4bdb8ed3dd84",
+  "plan": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/preflight-001/cases/preflight-plan.json",
+    "sha256": "15831356c3d8d77d368ce0739883594a99e640afd0831001df44955a213d6e83"
+  },
+  "case_generator": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/preflight-tools-002/cls_epawf_m8_r1_cases.py",
+    "sha256": "af2bf498789f425170188c68cfde8d24d7fc97f983a4cd25b698c8324199e4de"
+  },
+  "numerical_threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "affinity": [
+    49
+  ],
+  "solver_invoked": false,
+  "imported_oracles": {
+    "cls_epawf_m8_state_coverage": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_state_coverage.py",
+      "sha256": "630167223ce82e9af9270a3de45ad0c58de7e8039443cd7c5478da1ad3b17130"
+    },
+    "cls_epawf_m8_native_oracle": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_native_oracle.py",
+      "sha256": "80ec891203275919d992a8c47c4fef6f070dfffd858afffed08b2d76b0901df9"
+    },
+    "cls_epawf_m7_energy_oracle": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m7_energy_oracle.py",
+      "sha256": "52a89bb646d4c08c13e08b7b4ba18b5df6f9d959cfe543cf383a82a722cba315"
+    },
+    "cls_epawf_m6_operator_oracle": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m6_operator_oracle.py",
+      "sha256": "e4ae09358e5a578e71783cb9619d1d83918771a7768bdac8315dc3f732acdece"
+    },
+    "validate_cls_epawf_m1": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m1.py",
+      "sha256": "ad91787c6356831bd4b75e145592c9ea952a45f0e5dbdcff6015f51ce992964a"
+    },
+    "validate_cls_epawf_m2": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m2.py",
+      "sha256": "26568aa79b41bc737a9247d9f2480d932a6674c8dad46e00f5fd8301a69ff18c"
+    },
+    "validate_cls_epawf_m4": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m4.py",
+      "sha256": "979635de780944daeb24add2af0caffa44553f5284432ab632e04fe811863a06"
+    },
+    "validate_cls_epawf_m5": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m5.py",
+      "sha256": "375d440060a31d426c3e65ed1cdc35415e95cedcc0e3b248d5f04be05b91f761"
+    },
+    "validate_cls_epawf_m5_geometry": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m5_geometry.py",
+      "sha256": "4dfceb445fa6f760200a2d66aef7140e039da4da41d40902f777a0b15ef888c1"
+    }
+  },
+  "oracle_source": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-source",
+    "commit": "ab5c3c6fee19761e8d88692e8e6c331e5889234e",
+    "clean": true
+  },
+  "actual_representation": "resolved",
+  "cost": {
+    "dimension": 2,
+    "degree": 3,
+    "pressure_degree": 1,
+    "x": [
+      -4.0,
+      -3.0,
+      -2.0,
+      -1.0,
+      1.0,
+      2.0
+    ],
+    "radial": [
+      0.0,
+      0.01,
+      0.1,
+      0.25,
+      0.5,
+      1.0,
+      2.0,
+      2.6666666666666665,
+      3.3333333333333335,
+      4.0
+    ],
+    "cells": 45,
+    "inner_cells": 30,
+    "outer_cells": 15,
+    "field_sizes": [
+      448,
+      448,
+      448,
+      160,
+      42,
+      24
+    ],
+    "gauge": 1,
+    "unknowns": 1571,
+    "dense_guard": 3000,
+    "within_dense_guard": true,
+    "central_FD_residual_calls_per_full_Jacobian": 3142,
+    "single_dense_matrix_bytes": 19744328,
+    "source_volume_outer_Gauss_points": 960,
+    "estimate_scope": "Exact tensor-space counts before native verification; assembly/factor scaling is indicative, not a measured timing"
+  },
+  "result": {
+    "schema": 1,
+    "state_selection": "First stored accepted t=0 state; original report failure/status retained in provenance",
+    "coefficient_float64_LE_sha256": "7f6985bf3fe5648d73f217f001c768a7aa5fc0e8b42d07bf31ca519338427bdb",
+    "fields": [
+      448,
+      448,
+      448,
+      160,
+      42,
+      24
+    ],
+    "unknowns": 1571,
+    "maximum_coefficient_difference_from_frozen_reference": 0.0,
+    "reference_identity_note": "Zero perturbation may still repeat the dependent-trace Lift after reference freezing. Actual accepted coefficients are used throughout; reference equality is measured, not assumed.",
+    "finite_ranges": {
+      "outer": {
+        "source_volume_outer": {
+          "count": 960,
+          "minimum_k": 0.510508013059886,
+          "minimum_epsilon": 0.036438490448658364,
+          "maximum_gradient_entry_deviation": 0.002918116878386723,
+          "k_over_K0": [
+            0.9999999999999998,
+            1.0000000000000002
+          ],
+          "epsilon_over_epsilon0": [
+            0.983588352096005,
+            1.0000651124890776
+          ],
+          "covariance_minimum": 0.17679714748144335,
+          "strain_invariant": [
+            3.186286369929955,
+            3.244339446697126
+          ],
+          "rotation_invariant": [
+            3.186286369929955,
+            3.244339446697126
+          ],
+          "physical_max_invariant": [
+            3.186286369929955,
+            3.244339446697126
+          ],
+          "worst_covariance": {
+            "chart": [
+              -2.1016667612931865,
+              0.0,
+              2.0677778408621243
+            ],
+            "covariance_minimum": 0.17679714748144335,
+            "eigenvector": [
+              0.4775567429181831,
+              -4.440892098500626e-16,
+              0.8786009089987193
+            ],
+            "k": 0.5105080130598861,
+            "gradient": [
+              [
+                0.0,
+                0.0,
+                0.43929108642564085
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "strain": [
+              [
+                0.0,
+                0.0,
+                0.43929108642564085
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.43929108642564085,
+                0.0,
+                0.0
+              ]
+            ],
+            "geometry": 31
+          }
+        },
+        "mass_volume_outer": {
+          "count": 960,
+          "minimum_k": 0.510508013059886,
+          "minimum_epsilon": 0.036438490448658364,
+          "maximum_gradient_entry_deviation": 0.002918116878386723,
+          "k_over_K0": [
+            0.9999999999999998,
+            1.0000000000000002
+          ],
+          "epsilon_over_epsilon0": [
+            0.983588352096005,
+            1.0000651124890776
+          ],
+          "covariance_minimum": 0.17679714748144335,
+          "strain_invariant": [
+            3.186286369929955,
+            3.244339446697126
+          ],
+          "rotation_invariant": [
+            3.186286369929955,
+            3.244339446697126
+          ],
+          "physical_max_invariant": [
+            3.186286369929955,
+            3.244339446697126
+          ],
+          "worst_covariance": {
+            "chart": [
+              -2.1016667612931865,
+              0.0,
+              2.0677778408621243
+            ],
+            "covariance_minimum": 0.17679714748144335,
+            "eigenvector": [
+              0.4775567429181831,
+              -4.440892098500626e-16,
+              0.8786009089987193
+            ],
+            "k": 0.5105080130598861,
+            "gradient": [
+              [
+                0.0,
+                0.0,
+                0.43929108642564085
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "strain": [
+              [
+                0.0,
+                0.0,
+                0.43929108642564085
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.43929108642564085,
+                0.0,
+                0.0
+              ]
+            ],
+            "geometry": 31
+          }
+        },
+        "reconstruction_native_outer": {
+          "count": 960,
+          "minimum_k": 0.510508013059886,
+          "minimum_epsilon": 0.03631791663093067,
+          "maximum_gradient_entry_deviation": 0.0034123386947804146,
+          "k_over_K0": [
+            0.9999999999999998,
+            1.0000000000000002
+          ],
+          "epsilon_over_epsilon0": [
+            0.9834528466780685,
+            1.0000578873066521
+          ],
+          "covariance_minimum": 0.1767968946393139,
+          "strain_invariant": [
+            3.1857318960216654,
+            3.2443600040432043
+          ],
+          "rotation_invariant": [
+            3.1857318960216654,
+            3.2443600040432043
+          ],
+          "physical_max_invariant": [
+            3.1857318960216654,
+            3.2443600040432043
+          ],
+          "worst_covariance": {
+            "chart": [
+              -2.2041499092834287,
+              0.0,
+              2.042753283830131
+            ],
+            "covariance_minimum": 0.1767968946393139,
+            "eigenvector": [
+              0.47748412881970415,
+              -0.0,
+              0.8786403739444757
+            ],
+            "k": 0.5105080130598861,
+            "gradient": [
+              [
+                0.0,
+                0.0,
+                0.4446262242175674
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "strain": [
+              [
+                0.0,
+                0.0,
+                0.4446262242175674
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.4446262242175674,
+                0.0,
+                0.0
+              ]
+            ],
+            "geometry": 31
+          }
+        },
+        "reconstruction_dense_outer": {
+          "count": 1215,
+          "minimum_k": 0.510508013059886,
+          "minimum_epsilon": 0.03631791663093067,
+          "maximum_gradient_entry_deviation": 0.0034123386947804146,
+          "k_over_K0": [
+            0.9999999999999998,
+            1.0000000000000002
+          ],
+          "epsilon_over_epsilon0": [
+            0.9832524731447201,
+            1.000065588376781
+          ],
+          "covariance_minimum": 0.17680247813361027,
+          "strain_invariant": [
+            3.1857318960216654,
+            3.2450211606588395
+          ],
+          "rotation_invariant": [
+            3.1857318960216654,
+            3.2450211606588395
+          ],
+          "physical_max_invariant": [
+            3.1857318960216654,
+            3.2450211606588395
+          ],
+          "worst_covariance": {
+            "chart": [
+              -2.125,
+              0.0,
+              2.0833333333333335
+            ],
+            "covariance_minimum": 0.17680247813361027,
+            "eigenvector": [
+              0.4775987732400493,
+              4.440892098500626e-16,
+              0.878578062439303
+            ],
+            "k": 0.5105080130598861,
+            "gradient": [
+              [
+                0.0,
+                0.0,
+                0.43602545144316707
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "strain": [
+              [
+                0.0,
+                0.0,
+                0.43602545144316707
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.43602545144316707,
+                0.0,
+                0.0
+              ]
+            ],
+            "geometry": 31
+          }
+        },
+        "interface_outer": {
+          "count": 40,
+          "minimum_k": 0.510508013059886,
+          "minimum_epsilon": 0.07142593254506191,
+          "maximum_gradient_entry_deviation": 1.4788170688007085e-13,
+          "k_over_K0": [
+            0.9999999999999998,
+            1.0
+          ],
+          "epsilon_over_epsilon0": [
+            0.9833429223226836,
+            1.0
+          ],
+          "covariance_minimum": 0.17681217846636238,
+          "strain_invariant": [
+            3.190675081624757,
+            3.244722679335806
+          ],
+          "rotation_invariant": [
+            3.190675081624757,
+            3.244722679335806
+          ],
+          "physical_max_invariant": [
+            3.190675081624757,
+            3.244722679335806
+          ],
+          "worst_covariance": {
+            "chart": [
+              -2.1016667612931865,
+              0.0,
+              2.0
+            ],
+            "covariance_minimum": 0.17681217846636238,
+            "eigenvector": [
+              0.4773018995051779,
+              -0.0,
+              0.8787393792978379
+            ],
+            "k": 0.5105080130598861,
+            "gradient": [
+              [
+                0.0,
+                0.0,
+                0.45397395788670036
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "strain": [
+              [
+                0.0,
+                0.0,
+                0.45397395788670036
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.45397395788670036,
+                0.0,
+                0.0
+              ]
+            ],
+            "geometry": 31
+          }
+        },
+        "trace_transfer_outer": {
+          "count": 40,
+          "minimum_k": 0.5105080130598861,
+          "minimum_epsilon": 0.07143391699221106,
+          "maximum_gradient_entry_deviation": 1.4765966227514582e-13,
+          "k_over_K0": [
+            1.0,
+            1.0000000000000002
+          ],
+          "epsilon_over_epsilon0": [
+            0.9834528466780685,
+            1.0
+          ],
+          "covariance_minimum": 0.17681833970879654,
+          "strain_invariant": [
+            3.190675081624753,
+            3.2443600040432043
+          ],
+          "rotation_invariant": [
+            3.190675081624753,
+            3.2443600040432043
+          ],
+          "physical_max_invariant": [
+            3.190675081624753,
+            3.2443600040432043
+          ],
+          "worst_covariance": {
+            "chart": [
+              -2.2041499092834287,
+              0.0,
+              2.0
+            ],
+            "covariance_minimum": 0.17681833970879654,
+            "eigenvector": [
+              0.4773243257174488,
+              -0.0,
+              0.878727197757292
+            ],
+            "k": 0.5105080130598861,
+            "gradient": [
+              [
+                0.0,
+                0.0,
+                0.4539739578867003
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "strain": [
+              [
+                0.0,
+                0.0,
+                0.4539739578867003
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.4539739578867003,
+                0.0,
+                0.0
+              ]
+            ],
+            "geometry": 31
+          }
+        },
+        "trace_transfer_sensor_0": {
+          "count": 40,
+          "minimum_k": 0.5105080130598861,
+          "minimum_epsilon": 0.05781065750560769,
+          "maximum_gradient_entry_deviation": 0.0004178346032917002,
+          "k_over_K0": [
+            1.0,
+            1.0
+          ],
+          "epsilon_over_epsilon0": [
+            0.9948715205274954,
+            1.0000425059405993
+          ],
+          "covariance_minimum": 0.17754725570638644,
+          "strain_invariant": [
+            3.1892063469517837,
+            3.2057826979269612
+          ],
+          "rotation_invariant": [
+            3.1892063469517837,
+            3.2057826979269612
+          ],
+          "physical_max_invariant": [
+            3.1892063469517837,
+            3.2057826979269612
+          ],
+          "worst_covariance": {
+            "chart": [
+              -2.2041499092834287,
+              0.0,
+              2.5
+            ],
+            "covariance_minimum": 0.17754725570638644,
+            "eigenvector": [
+              0.47963322661873,
+              4.440892098500626e-16,
+              0.8774690694966436
+            ],
+            "k": 0.5105080130598861,
+            "gradient": [
+              [
+                0.0,
+                0.0,
+                0.36302741748642886
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "strain": [
+              [
+                0.0,
+                0.0,
+                0.36302741748642886
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.36302741748642886,
+                0.0,
+                0.0
+              ]
+            ],
+            "geometry": 31
+          }
+        },
+        "trace_transfer_sensor_1": {
+          "count": 40,
+          "minimum_k": 0.5105080130598861,
+          "minimum_epsilon": 0.0415068279206315,
+          "maximum_gradient_entry_deviation": 0.0001068283933411962,
+          "k_over_K0": [
+            1.0,
+            1.0000000000000002
+          ],
+          "epsilon_over_epsilon0": [
+            1.0000153588001086,
+            1.0000153588001086
+          ],
+          "covariance_minimum": 0.17774419926876414,
+          "strain_invariant": [
+            3.1909669268937315,
+            3.1909669268937484
+          ],
+          "rotation_invariant": [
+            3.1909669268937315,
+            3.1909669268937484
+          ],
+          "physical_max_invariant": [
+            3.1909669268937315,
+            3.1909669268937484
+          ],
+          "worst_covariance": {
+            "chart": [
+              -4.0,
+              0.0,
+              3.5
+            ],
+            "covariance_minimum": 0.17774419926876414,
+            "eigenvector": [
+              0.48065994458645334,
+              -8.881784197001252e-16,
+              0.8769070747064065
+            ],
+            "k": 0.5105080130598862,
+            "gradient": [
+              [
+                0.0,
+                0.0,
+                0.25944140296867024
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "strain": [
+              [
+                0.0,
+                0.0,
+                0.25944140296867024
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.25944140296867024,
+                0.0,
+                0.0
+              ]
+            ],
+            "geometry": 40
+          }
+        },
+        "physical_outer_sensor_0": {
+          "count": 40,
+          "minimum_k": 0.510508013059886,
+          "minimum_epsilon": 0.05780866139382041,
+          "maximum_gradient_entry_deviation": 0.0004178346032917002,
+          "k_over_K0": [
+            0.9999999999999998,
+            1.0
+          ],
+          "epsilon_over_epsilon0": [
+            0.9948371691664378,
+            1.0000425059405993
+          ],
+          "covariance_minimum": 0.17754527530232025,
+          "strain_invariant": [
+            3.189206346951788,
+            3.2058933924228477
+          ],
+          "rotation_invariant": [
+            3.189206346951788,
+            3.2058933924228477
+          ],
+          "physical_max_invariant": [
+            3.189206346951788,
+            3.2058933924228477
+          ],
+          "worst_covariance": {
+            "chart": [
+              -2.1016667612931865,
+              0.0,
+              2.5
+            ],
+            "covariance_minimum": 0.17754527530232025,
+            "eigenvector": [
+              0.4796263425490227,
+              4.440892098500626e-16,
+              0.8774728323618046
+            ],
+            "k": 0.5105080130598861,
+            "gradient": [
+              [
+                0.0,
+                0.0,
+                0.36302741748642897
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "strain": [
+              [
+                0.0,
+                0.0,
+                0.36302741748642897
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.36302741748642897,
+                0.0,
+                0.0
+              ]
+            ],
+            "geometry": 31
+          }
+        },
+        "physical_outer_sensor_1": {
+          "count": 40,
+          "minimum_k": 0.5105080130598861,
+          "minimum_epsilon": 0.0415068279206315,
+          "maximum_gradient_entry_deviation": 0.00010682839333830962,
+          "k_over_K0": [
+            1.0,
+            1.0000000000000002
+          ],
+          "epsilon_over_epsilon0": [
+            1.0000153588001086,
+            1.0000153588001086
+          ],
+          "covariance_minimum": 0.1777441992687646,
+          "strain_invariant": [
+            3.1909669268937315,
+            3.190966926893739
+          ],
+          "rotation_invariant": [
+            3.1909669268937315,
+            3.190966926893739
+          ],
+          "physical_max_invariant": [
+            3.1909669268937315,
+            3.190966926893739
+          ],
+          "worst_covariance": {
+            "chart": [
+              -0.9602898564975362,
+              0.0,
+              3.5
+            ],
+            "covariance_minimum": 0.1777441992687646,
+            "eigenvector": [
+              0.48065994458645356,
+              -0.0,
+              0.8769070747064067
+            ],
+            "k": 0.5105080130598861,
+            "gradient": [
+              [
+                0.0,
+                0.0,
+                0.2594414029686695
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "strain": [
+              [
+                0.0,
+                0.0,
+                0.2594414029686695
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.2594414029686695,
+                0.0,
+                0.0
+              ]
+            ],
+            "geometry": 43
+          }
+        }
+      },
+      "inner": {
+        "mass_volume_inner": {
+          "count": 1920,
+          "minimum_k": 0.510508013059886,
+          "minimum_k_over_sampled_K": 0.9999999999999998,
+          "covariance_minimum": 0.08737301051903469,
+          "maximum_relative_AWF_gradient_error": 0.5906301287215828,
+          "maximum_r_R": 0.7432762808305265,
+          "worst_covariance": {
+            "chart": [
+              -3.8983332387068135,
+              0.0,
+              0.009801449282487681
+            ],
+            "covariance_minimum": 0.08737301051903469,
+            "eigenvector": [
+              0.7071067811865475,
+              -0.0,
+              0.7071067811865475
+            ],
+            "k": 0.510508013059886,
+            "gradient": [
+              [
+                0.0,
+                0.0,
+                102.3437160820461
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "strain": [
+              [
+                0.0,
+                0.0,
+                102.3437160820461
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                102.3437160820461,
+                0.0,
+                0.0
+              ]
+            ],
+            "sampled_K": 0.5105080130598861,
+            "k_over_sampled_K": 0.9999999999999998,
+            "nu_A": 0.002471726399414959,
+            "strain_largest_eigenvalue": 102.3437160820461,
+            "r_R": 0.7432762808305265,
+            "geometry": 0
+          }
+        },
+        "reconstruction_native_inner": {
+          "count": 1920,
+          "minimum_k": 0.510508013059886,
+          "minimum_k_over_sampled_K": 0.9999999999999996,
+          "covariance_minimum": 0.07729331682700048,
+          "maximum_relative_AWF_gradient_error": 0.653880816584234,
+          "maximum_r_R": 0.7728929374769671,
+          "worst_covariance": {
+            "chart": [
+              0.5917001814331424,
+              0.0,
+              0.01
+            ],
+            "covariance_minimum": 0.07729331682700048,
+            "eigenvector": [
+              0.7071067811865474,
+              -3.3306690738754696e-16,
+              0.7071067811865474
+            ],
+            "k": 0.5105080130598861,
+            "gradient": [
+              [
+                0.0,
+                0.0,
+                105.03814048137902
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "strain": [
+              [
+                0.0,
+                0.0,
+                105.03814048137902
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                105.03814048137902,
+                0.0,
+                0.0
+              ]
+            ],
+            "sampled_K": 0.5105080130598861,
+            "k_over_sampled_K": 1.0,
+            "nu_A": 0.0025042842280027706,
+            "strain_largest_eigenvalue": 105.03814048137902,
+            "r_R": 0.7728929374769671,
+            "geometry": 3
+          }
+        },
+        "reconstruction_dense_inner": {
+          "count": 5070,
+          "minimum_k": 0.510508013059886,
+          "minimum_k_over_sampled_K": 0.9999999999999998,
+          "covariance_minimum": 0.07729331682700048,
+          "maximum_relative_AWF_gradient_error": 0.653880816584234,
+          "maximum_r_R": 0.7728929374769671,
+          "worst_covariance": {
+            "chart": [
+              -3.75,
+              0.0,
+              0.01
+            ],
+            "covariance_minimum": 0.07729331682700048,
+            "eigenvector": [
+              0.7071067811865474,
+              -3.3306690738754696e-16,
+              0.7071067811865474
+            ],
+            "k": 0.5105080130598861,
+            "gradient": [
+              [
+                0.0,
+                0.0,
+                105.03814048137902
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "strain": [
+              [
+                0.0,
+                0.0,
+                105.03814048137902
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                105.03814048137902,
+                0.0,
+                0.0
+              ]
+            ],
+            "sampled_K": 0.5105080130598861,
+            "k_over_sampled_K": 1.0,
+            "nu_A": 0.0025042842280027706,
+            "strain_largest_eigenvalue": 105.03814048137902,
+            "r_R": 0.7728929374769671,
+            "geometry": 0
+          }
+        },
+        "source_volume_inner": {
+          "count": 14288,
+          "minimum_k": 0.510508013059886,
+          "minimum_k_over_sampled_K": 0.9999999999999998,
+          "covariance_minimum": 0.07742760739317871,
+          "maximum_relative_AWF_gradient_error": 0.6530381290656971,
+          "maximum_r_R": 0.7724983582654481,
+          "worst_covariance": {
+            "chart": [
+              -3.980144928248768,
+              0.0,
+              0.0099974311530512
+            ],
+            "covariance_minimum": 0.07742760739317871,
+            "eigenvector": [
+              0.7071067811865475,
+              -0.0,
+              0.7071067811865475
+            ],
+            "k": 0.5105080130598861,
+            "gradient": [
+              [
+                0.0,
+                0.0,
+                105.00217802886415
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "strain": [
+              [
+                0.0,
+                0.0,
+                105.00217802886415
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                105.00217802886415,
+                0.0,
+                0.0
+              ]
+            ],
+            "sampled_K": 0.5105080130598861,
+            "k_over_sampled_K": 1.0,
+            "nu_A": 0.0025038629951828883,
+            "strain_largest_eigenvalue": 105.00217802886415,
+            "r_R": 0.7724983582654481,
+            "geometry": 0
+          }
+        },
+        "physical_sample_K": {
+          "count": 40,
+          "minimum_k": 0.510508013059886,
+          "minimum_k_over_sampled_K": 1.0,
+          "covariance_minimum": 0.17434128549545103,
+          "maximum_relative_AWF_gradient_error": 0.03757809389369678,
+          "maximum_r_R": 0.4877417757348709,
+          "worst_covariance": {
+            "chart": [
+              -3.8983332387068135,
+              0.0,
+              1.0
+            ],
+            "covariance_minimum": 0.17434128549545103,
+            "eigenvector": [
+              0.7071067811865475,
+              -0.0,
+              0.7071067811865475
+            ],
+            "k": 0.5105080130598861,
+            "gradient": [
+              [
+                0.0,
+                0.0,
+                1.007009679012581
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "strain": [
+              [
+                0.0,
+                0.0,
+                1.007009679012581
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                1.007009679012581,
+                0.0,
+                0.0
+              ]
+            ],
+            "sampled_K": 0.5105080130598861,
+            "k_over_sampled_K": 1.0,
+            "nu_A": 0.16484190106352736,
+            "strain_largest_eigenvalue": 1.007009679012581,
+            "r_R": 0.4877417757348709,
+            "geometry": 20
+          }
+        },
+        "interface_inner": {
+          "count": 40,
+          "minimum_k": 0.510508013059886,
+          "minimum_k_over_sampled_K": 1.0,
+          "covariance_minimum": 0.1803459738821619,
+          "maximum_relative_AWF_gradient_error": 1.3234128324307538e-13,
+          "maximum_r_R": 0.4700985020748164,
+          "worst_covariance": {
+            "chart": [
+              -0.9602898564975362,
+              0.0,
+              2.0
+            ],
+            "covariance_minimum": 0.1803459738821619,
+            "eigenvector": [
+              0.7071067811865475,
+              -0.0,
+              0.7071067811865475
+            ],
+            "k": 0.5105080130598861,
+            "gradient": [
+              [
+                0.0,
+                0.0,
+                0.4865672589102688
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "strain": [
+              [
+                0.0,
+                0.0,
+                0.4865672589102688
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.4865672589102688,
+                0.0,
+                0.0
+              ]
+            ],
+            "sampled_K": 0.5105080130598861,
+            "k_over_sampled_K": 1.0,
+            "nu_A": 0.3288192918064815,
+            "strain_largest_eigenvalue": 0.4865672589102688,
+            "r_R": 0.4700985020748164,
+            "geometry": 28
+          }
+        }
+      },
+      "outer_maximum_gradient_entry_deviation": 0.0034123386947804146,
+      "outer_k_over_K0": [
+        0.9999999999999998,
+        1.0000000000000002
+      ],
+      "outer_epsilon_over_epsilon0": [
+        0.9832524731447201,
+        1.000065588376781
+      ],
+      "historical_radius001_kEPS99_101_covered": false,
+      "scope": "Finite source/mass/interface/transfer/sensor/native-GLL/dense outer sets and finite inner source/mass/K-sample/interface/native-GLL/dense sets; one-sided element gradients retained"
+    },
+    "independent_trace": {
+      "maximum_trace_coefficient_error": 3.8586755318759103e-16,
+      "relative_to_E0": 5.312358045050435e-15,
+      "matching_rows": 16,
+      "chi_zero_epsilon_ratio_range": [
+        0.9834528466780685,
+        0.9846519510665872
+      ],
+      "samples": [
+        {
+          "chart": [
+            -4.0,
+            0.0,
+            2.0
+          ],
+          "chi": 1.0,
+          "epsilon_over_epsilon0": 0.9999999999999998,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            -3.935870074254803,
+            0.0,
+            2.0
+          ],
+          "chi": 1.0,
+          "epsilon_over_epsilon0": 0.9999999999999997,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            -3.7958500907165713,
+            0.0,
+            2.0
+          ],
+          "chi": 1.0,
+          "epsilon_over_epsilon0": 0.9999999999999998,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            -3.6046496089512394,
+            0.0,
+            2.0
+          ],
+          "chi": 1.0,
+          "epsilon_over_epsilon0": 0.9999999999999998,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            -3.3953503910487606,
+            0.0,
+            2.0
+          ],
+          "chi": 1.0,
+          "epsilon_over_epsilon0": 0.9999999999999998,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            -3.2041499092834287,
+            0.0,
+            2.0
+          ],
+          "chi": 1.0,
+          "epsilon_over_epsilon0": 1.0,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            -3.064129925745197,
+            0.0,
+            2.0
+          ],
+          "chi": 1.0,
+          "epsilon_over_epsilon0": 0.9999999999999998,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            -3.0,
+            0.0,
+            2.0
+          ],
+          "chi": 1.0,
+          "epsilon_over_epsilon0": 0.9999999999999998,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            -3.0,
+            0.0,
+            2.0
+          ],
+          "chi": 1.0,
+          "epsilon_over_epsilon0": 0.9999999999999998,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            -2.935870074254803,
+            0.0,
+            2.0
+          ],
+          "chi": 0.9945227133289866,
+          "epsilon_over_epsilon0": 0.9994518489174293,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            -2.7958500907165713,
+            0.0,
+            2.0
+          ],
+          "chi": 0.8716998080534596,
+          "epsilon_over_epsilon0": 0.9969923553248335,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            -2.6046496089512394,
+            0.0,
+            2.0
+          ],
+          "chi": 0.4492238200992186,
+          "epsilon_over_epsilon0": 0.9919974972842212,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            -2.3953503910487606,
+            0.0,
+            2.0
+          ],
+          "chi": 0.05326938035821005,
+          "epsilon_over_epsilon0": 0.986465003277269,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            -2.2041499092834287,
+            0.0,
+            2.0
+          ],
+          "chi": 0.0,
+          "epsilon_over_epsilon0": 0.9834528466780685,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            -2.064129925745197,
+            0.0,
+            2.0
+          ],
+          "chi": 0.0,
+          "epsilon_over_epsilon0": 0.9836461328203777,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            -2.0,
+            0.0,
+            2.0
+          ],
+          "chi": 0.0,
+          "epsilon_over_epsilon0": 0.9846519510665871,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            -2.0,
+            0.0,
+            2.0
+          ],
+          "chi": 0.0,
+          "epsilon_over_epsilon0": 0.9846519510665871,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            -1.9358700742548032,
+            0.0,
+            2.0
+          ],
+          "chi": 0.0,
+          "epsilon_over_epsilon0": 0.9846519510665871,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            -1.7958500907165713,
+            0.0,
+            2.0
+          ],
+          "chi": 0.0,
+          "epsilon_over_epsilon0": 0.9846519510665871,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            -1.6046496089512394,
+            0.0,
+            2.0
+          ],
+          "chi": 0.0,
+          "epsilon_over_epsilon0": 0.9846519510665869,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            -1.3953503910487606,
+            0.0,
+            2.0
+          ],
+          "chi": 0.0,
+          "epsilon_over_epsilon0": 0.9846519510665871,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            -1.2041499092834287,
+            0.0,
+            2.0
+          ],
+          "chi": 0.0,
+          "epsilon_over_epsilon0": 0.9846519510665872,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            -1.0641299257451968,
+            0.0,
+            2.0
+          ],
+          "chi": 0.0,
+          "epsilon_over_epsilon0": 0.9846519510665871,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            -1.0,
+            0.0,
+            2.0
+          ],
+          "chi": 0.0,
+          "epsilon_over_epsilon0": 0.9846519510665871,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            -1.0,
+            0.0,
+            2.0
+          ],
+          "chi": 0.0,
+          "epsilon_over_epsilon0": 0.9846519510665871,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            -0.8717401485096066,
+            0.0,
+            2.0
+          ],
+          "chi": 0.0,
+          "epsilon_over_epsilon0": 0.9846519510665871,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            -0.5917001814331424,
+            0.0,
+            2.0
+          ],
+          "chi": 0.0,
+          "epsilon_over_epsilon0": 0.9846519510665869,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            -0.20929921790247885,
+            0.0,
+            2.0
+          ],
+          "chi": 0.0,
+          "epsilon_over_epsilon0": 0.9846519510665869,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            0.20929921790247885,
+            0.0,
+            2.0
+          ],
+          "chi": 0.0,
+          "epsilon_over_epsilon0": 0.9846519510665871,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            0.5917001814331424,
+            0.0,
+            2.0
+          ],
+          "chi": 0.0,
+          "epsilon_over_epsilon0": 0.9846519510665871,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            0.8717401485096066,
+            0.0,
+            2.0
+          ],
+          "chi": 0.0,
+          "epsilon_over_epsilon0": 0.9846519510665871,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            1.0,
+            0.0,
+            2.0
+          ],
+          "chi": 0.0,
+          "epsilon_over_epsilon0": 0.9846519510665871,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            1.0,
+            0.0,
+            2.0
+          ],
+          "chi": 0.0,
+          "epsilon_over_epsilon0": 0.9846519510665871,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            1.0641299257451968,
+            0.0,
+            2.0
+          ],
+          "chi": 0.0,
+          "epsilon_over_epsilon0": 0.9846519510665871,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            1.2041499092834287,
+            0.0,
+            2.0
+          ],
+          "chi": 0.0,
+          "epsilon_over_epsilon0": 0.9846519510665871,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            1.3953503910487606,
+            0.0,
+            2.0
+          ],
+          "chi": 0.0,
+          "epsilon_over_epsilon0": 0.9846519510665869,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            1.6046496089512394,
+            0.0,
+            2.0
+          ],
+          "chi": 0.0,
+          "epsilon_over_epsilon0": 0.9846519510665871,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            1.7958500907165713,
+            0.0,
+            2.0
+          ],
+          "chi": 0.0,
+          "epsilon_over_epsilon0": 0.9846519510665872,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            1.9358700742548032,
+            0.0,
+            2.0
+          ],
+          "chi": 0.0,
+          "epsilon_over_epsilon0": 0.9846519510665871,
+          "lambda_value": 1.0,
+          "b": 1.0
+        },
+        {
+          "chart": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "chi": 0.0,
+          "epsilon_over_epsilon0": 0.9846519510665871,
+          "lambda_value": 1.0,
+          "b": 1.0
+        }
+      ],
+      "source_plateau_verified": true,
+      "interpretation": "Actual dependent epsilon trace with unforced sensor groups and constrained baseline-face correction; no pressure-continuity condition"
+    },
+    "independent_source_energy": {
+      "stress_work_minus_k_source": 9.054832865459497,
+      "resolved_advection": 0.0,
+      "roughness_force_work": 0.0,
+      "robust_source": [
+        8.436167051707093,
+        8.436167051707093,
+        8.436167051707093,
+        4.224576824430823e-17,
+        0.0,
+        0.0,
+        1.0,
+        2616.983278533314
+      ],
+      "wall_sources": [
+        9.29932759748413,
+        8.436167051707093,
+        4.224576824430823e-17,
+        5.57828805470483,
+        0.016221182644271546
+      ],
+      "constitutive_modification": [
+        2.2832783647534575e-07,
+        2.283278364730251e-07,
+        2.3206585172399694e-18
+      ],
+      "inner_covariance_minimum": 0.07742760739317871,
+      "outer_covariance_minimum": 0.17679714748144337,
+      "volumes": [
+        11.999999999999996,
+        11.999999999999996
+      ],
+      "quadrature": "independently computed Legendre/Jacobi rows on declared finite native source panels"
+    },
+    "independent_interface": [
+      6.0,
+      -0.4492470514926997,
+      0.001196932199185695,
+      0.0012552526898827697,
+      0.0014910778002932834,
+      0.0,
+      0.0,
+      -0.00637176496383314
+    ],
+    "native_initial_audit": {
+      "admissible": [
+        1
+      ],
+      "constitutive_modification": [
+        2.2832783661769247e-07,
+        2.2832783661904044e-07,
+        -1.3479735262164139e-18
+      ],
+      "coupled_norms": [
+        9.863232903524946,
+        0.025531946615042826,
+        62.59847634964055,
+        0.11104441064784064,
+        5.054823058054794e-16,
+        1.2380122581968827e-16,
+        3.0831999280056526e-17,
+        0
+      ],
+      "energy": [
+        9.054832865458868,
+        0,
+        9.05483286545947,
+        -3.5733492653291586e-14,
+        0,
+        0,
+        9.054832865459435,
+        -5.666578317686799e-13,
+        382.5536961698257,
+        6.4615971543647275,
+        0,
+        2.593235711094141
+      ],
+      "interface": [
+        6.000000000000001,
+        -0.4492470514926998,
+        0.0011969321991857666,
+        0.0012552526898822493,
+        0.0014910778002932834,
+        0,
+        0,
+        -0.006371764963833532
+      ],
+      "interface_inner": [
+        40,
+        0.5105080130598861,
+        0.07152101493863906,
+        0.1803459738821588,
+        0,
+        0
+      ],
+      "interface_outer": [
+        40,
+        0.5105080130598861,
+        0.0714259325450619,
+        0.17681217846636232,
+        0.4265214788888191,
+        0
+      ],
+      "mass_volume": [
+        2880,
+        0.5105080130598861,
+        0.036438490448658364,
+        0,
+        0,
+        0
+      ],
+      "momentum_k_load_and_boundary_reaction": [
+        -9.947598300641403e-14,
+        1.8457457784393227e-15,
+        2.8558457624466342,
+        -0.06451971931409517,
+        0.00015221193401000754,
+        0.3061036181748267
+      ],
+      "physical_sample_K": [
+        40,
+        0.5105080130598861,
+        0.14304202987727813,
+        0.17434128549544844,
+        0,
+        0
+      ],
+      "physical_sample_outer": [
+        80,
+        0.5105080130598861,
+        0.04150682792063149,
+        0.17754527530232073,
+        0.5344254357012779,
+        0
+      ],
+      "prescribed_source_inner": [
+        14080,
+        0.5105080130598861,
+        0,
+        0,
+        0,
+        0
+      ],
+      "reconstruction_dense": [
+        3645,
+        0.5105080130598861,
+        0.03631791663093067,
+        0,
+        0,
+        0
+      ],
+      "reconstruction_native": [
+        2880,
+        0.5105080130598861,
+        0.03631791663093067,
+        0,
+        0,
+        0
+      ],
+      "robust_source": [
+        8.436167051707013,
+        8.436167051707013,
+        8.436167051707017,
+        -8.713692626201005e-18,
+        0,
+        0,
+        1,
+        2616.9832785333138
+      ],
+      "roughness": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "source_volume_inner": [
+        14288,
+        0.5105080130598861,
+        0.07161613644652963,
+        0.07742760739317589,
+        0,
+        0
+      ],
+      "source_volume_outer": [
+        960,
+        0.5105080130598861,
+        0.036438490448658364,
+        0.17679714748144382,
+        0.42934378415365515,
+        0
+      ],
+      "strong_continuity": [
+        3.358629193466396e-15,
+        8.512848006816481e-16,
+        1.0760302738948777e-15,
+        2.791002891933428e-16,
+        -3.497202527569243e-15
+      ],
+      "wall_sources": [
+        9.299327597484025,
+        8.436167051707013,
+        -8.713692626201005e-18,
+        5.578288054704835,
+        0.016221182644271543
+      ]
+    },
+    "initial_finite_admissibility": {
+      "positive_transported_k_and_outer_epsilon": true,
+      "inner_covariance_minimum": 0.07729331682700048,
+      "outer_covariance_minimum": 0.1767968946393139,
+      "passed": true,
+      "scope": "Strict finite covariance/positivity observations; no clipping or field floor, no continuum/polynomial-everywhere conclusion"
+    },
+    "rigorous_joint_constitutive_qualification": false,
+    "scope": "Bounded representation preflight, not a trajectory or physical terrain validation",
+    "raw_unanchored_residual": {
+      "native_block_norms": [
+        9.863232903524946,
+        0.025531946615042826,
+        62.59847634964055,
+        0.11104441064784064,
+        5.054823058054794e-16,
+        1.2380122581968827e-16,
+        3.0831999280056526e-17,
+        0
+      ],
+      "independent_block_norms": [
+        9.863232903524926,
+        0.025531946615043852,
+        62.598476349640535,
+        0.11104441064783604,
+        0.0,
+        0.0,
+        2.1684043449710086e-17,
+        0.0
+      ],
+      "maximum_complete_weak_load_error": 3.552713678800501e-14,
+      "complete_weak_load_float64_LE_sha256": "71fc5bdd6e79b6302faed172f540d1036e3b7d21d574d51de63844e2d8db66b2",
+      "gauge": 2.1684043449710086e-17,
+      "essential_and_trace": 0.0,
+      "block_names": [
+        "u",
+        "v",
+        "k",
+        "outer_epsilon",
+        "inner_pressure_divergence",
+        "outer_pressure_divergence",
+        "common_gauge",
+        "constraints"
+      ],
+      "quadrature": {
+        "orders": [
+          8,
+          16,
+          8
+        ],
+        "rays": 40,
+        "scope": "Complete independently reconstructed unforced alpha=0 weak loads"
+      }
+    },
+    "same_state_quadrature_sensitivity": [
+      {
+        "orders": [
+          8,
+          24,
+          8
+        ],
+        "maximum_weak_load_difference": 7.438494264988549e-15,
+        "block_norms": [
+          9.863232903524935,
+          0.02553194661504379,
+          62.59847634964054,
+          0.11104441064783604,
+          0.0,
+          0.0,
+          2.1684043449710086e-17,
+          0.0
+        ],
+        "free_load_difference_block_norms": [
+          6.746170953113768e-13,
+          9.121833330243592e-15,
+          6.86472929161962e-14,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "interpretation": "Independent integration change at identical coefficient state; no new native solver/time-map execution"
+      },
+      {
+        "orders": [
+          12,
+          24,
+          12
+        ],
+        "maximum_weak_load_difference": 6.13093943894194e-05,
+        "block_norms": [
+          9.863232903524937,
+          0.02553194661505117,
+          62.60062977801532,
+          0.11104441064783846,
+          0.0,
+          0.0,
+          2.1684043449710086e-17,
+          0.0
+        ],
+        "free_load_difference_block_norms": [
+          2.3174944997847745e-12,
+          2.294949938577029e-14,
+          0.008340359229501782,
+          1.0442058413075318e-13,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "interpretation": "Independent integration change at identical coefficient state; no new native solver/time-map execution"
+      }
+    ],
+    "implementation_audit_passed": true,
+    "independent_checks": 123,
+    "errors": {
+      "repaired_inner_stress_production_cancellation": 2.440448279696182e-16,
+      "selected_outer_stress_production_cancellation": 0.0,
+      "R1_initial_independent_source_budget": 1.7376777093559682e-16,
+      "R1_initial_inner_source_covariance": 2.8171909249863347e-15,
+      "R1_initial_outer_source_covariance": 4.440892098500626e-16,
+      "R1_initial_complete_traction_and_k_flux": 1.4802973661668753e-16,
+      "R1_independent_complete_unanchored_t0_weak_loads": 1.3066871467214156e-15,
+      "R1_independent_physical_block_dual_norms": 3.121469782149891e-16
+    }
+  },
+  "status": "passed",
+  "input_hashes_unchanged": true,
+  "finished_utc": "2026-11-03T09:15:02.483538+00:00"
+}

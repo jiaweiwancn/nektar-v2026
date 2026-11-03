@@ -1,0 +1,129 @@
+{
+  "schema": 1,
+  "status": "original_failure_reproduced",
+  "source_commit": "426d48cd44f9f4af017244f6be4c1a6f62d36c01",
+  "runner_sha256": "10ab498540d2cd0018df1a273a03dbe2a253ce005bf63ccec7bf7e403e2a9291",
+  "source_clean_start": true,
+  "old_XML_sha256": "c54b2522cca860081f23e041a649e0668740f5f4bd86b711e4cf8f1a3d3f6d7b",
+  "XML_sha256": "f3bbd93cc3a5ed6cdbb9d8486e09613cd88473d03df1975648cd385ba062ec14",
+  "original_report_sha256": "6a934342924e9f730fe1b9cddf4391a8df82647acc5a1f7b4f078b5e62e6fc00",
+  "complete_archive_ledger_sha256": "ed879358611e31a1d8f90fca30d447bf8f5dccf60c6fddb1d24840f7d5268a26",
+  "physical_session_semantics_unchanged": true,
+  "diagnostic_solver_info": {
+    "RANSWallSolveDiagnostics": "Failure",
+    "RANSWallSolveDiagnosticReplay": "Fresh",
+    "RANSWallSolveDiagnosticIterations": "12",
+    "RANSWallSolveDiagnosticFile": "case.nonlinear.json"
+  },
+  "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/build/IncNavierStokesSolver",
+  "executable_sha256": "40f6d2a37822b418ceb1e4d5e134574e3635a60ce52fc4e0229faadda9afe3c6",
+  "connection": "tailscale:100.105.247.110",
+  "ranks": 1,
+  "numerical_threads": 1,
+  "cpu": 0,
+  "diagnostic_unqualified": true,
+  "qualification": false,
+  "commands": [
+    {
+      "name": "fingerprint-before",
+      "argv": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/source/docs/plans/cls-epawf-revised-evidence/m7/fingerprint-runtime.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/reproduction-001/runtime-before.json"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/reproduction-001",
+      "exit_code": 0,
+      "seconds": 1.5173069219999888,
+      "timeout": 240,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/reproduction-001/fingerprint-before.log",
+      "log_sha256": "85f2d04cf95d9f6d1b8dbf27ddf45982d8543ce55110c31f6700f7a0491e87b9"
+    },
+    {
+      "name": "solver",
+      "argv": [
+        "taskset",
+        "-c",
+        "0",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/reproduction-001/case/case.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/reproduction-001/case",
+      "exit_code": 1,
+      "seconds": 333.11198750099993,
+      "timeout": 3600,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/reproduction-001/solver.log",
+      "log_sha256": "ebd3f5c53b4170687a7aebcd887a5ad0ddaf69f169669da364a0858ef1eefa43"
+    },
+    {
+      "name": "fingerprint-after",
+      "argv": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/source/docs/plans/cls-epawf-revised-evidence/m7/fingerprint-runtime.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/reproduction-001/runtime-after.json",
+        "--compare",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/reproduction-001/runtime-before.json"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/reproduction-001",
+      "exit_code": 0,
+      "seconds": 1.5178017120006189,
+      "timeout": 240,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/reproduction-001/fingerprint-after.log",
+      "log_sha256": "4a328772074a7e85fa9b721c61f64bcbb2e62396aeeffa87db96babcd1d5d16d"
+    }
+  ],
+  "run_budget": {
+    "maximum_native_evolution_and_same_stage_retries": 6,
+    "allocated_here": [
+      {
+        "slot": 1,
+        "kind": "original unforced control, unchanged solver policy, diagnostic from t0"
+      },
+      {
+        "slot": 2,
+        "kind": "counterfactual same failed stage; fresh Jacobian every iteration, max12, no history advancement"
+      }
+    ],
+    "remaining_slots": [
+      3,
+      4,
+      5,
+      6
+    ],
+    "reproduction_duration": "Original XML NumSteps and dt retained; expected failure at .060; hard wall timeout3600s"
+  },
+  "started_utc": "2026-11-03T09:12:42.031229+00:00",
+  "environment_changes_from_build": {
+    "NUMEXPR_NUM_THREADS": [
+      null,
+      "1"
+    ],
+    "VECLIB_MAXIMUM_THREADS": [
+      null,
+      "1"
+    ]
+  },
+  "solver_exit_code": 1,
+  "report_sha256": "c94d4f0a941ea428948377f509c038b96c54acf849811b7960a81c6eede7993d",
+  "trace_sha256": "172c5ff1a019c9e54f3b5e2b6953d908005d459358d60f581b33118813975a3e",
+  "original_failure": "EP-AWF patch: evolution stage rejected every admissible Newton trial",
+  "failed_stage_time": 0.05999999999999999,
+  "failed_stage_alpha": 300,
+  "last_accepted_time": 0.05499999999999999,
+  "accepted_state_count": 12,
+  "same_stage_diagnostic": {
+    "terminal": "diagnostic_evaluation_or_linear_failure",
+    "history_advanced": false
+  },
+  "runtime_unchanged": true,
+  "source_clean_end": true,
+  "source_commit_end": "426d48cd44f9f4af017244f6be4c1a6f62d36c01",
+  "finished_utc": "2026-11-03T09:18:18.265159+00:00"
+}

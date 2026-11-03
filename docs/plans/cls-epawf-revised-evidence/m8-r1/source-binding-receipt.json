@@ -1,0 +1,46 @@
+{
+  "schema": 1,
+  "status": "passed",
+  "runner_sha256": "06a54c7c718a852d4e5efecc800d8126a3cd06454d6573767e8ae3440b196abc",
+  "bundle_sha256": "0544cbdf45f241ca93002fdd83444afe65c1111ac2ea2c2168677c129d201f39",
+  "helper_source_commit": "f53bc61112f62be148083fdb5e4b427eeffeac5f",
+  "helper_source_clean": true,
+  "compiled_source_commit": "360cbb7ac728b575cdf9af21e6d0963a1d88acb9",
+  "compiled_source_clean": true,
+  "compiled_input_count": 1801,
+  "compiled_inputs_byte_identical": true,
+  "compiled_manifest_sha256": "d9fd38dfc3cc2189055865f0713237cc9b773e92ca2cad462025e7b779a4aecf",
+  "helpers": {
+    "solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_r1_archive.py": "0c2700ec408ae12d72bb1442eb978b9ce416be9fd86a85978534a06aa105274e",
+    "solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_r1_cases.py": "40e93cf65ba8dad611b48eceb243520b20dce970ae1f20ec04492edb8b9155ba",
+    "solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_r1_kernel.py": "43214f63aa5a96400a85dd8ded0416055ed87d668a051baf5cd125595e9fe293",
+    "solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_r1_nonlinear.py": "4d3fd89a201c9170123dc1cd0466b5878a87e8502dd67921651f3e7e7efb5928",
+    "solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_r1_points.py": "87fbb11cf86163035499bd55da355ad568a63854439b086745144c169e453501",
+    "solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_r1_preflight.py": "d046da906814eea9aafc5ca7e0da6b3598203cc2da23bb764ddc4bdb8ed3dd84"
+  },
+  "mathematical_residual_changed": false,
+  "qualification": "No new C++ law or production solver policy; final helpers differ from historical epoch by explicit new files.",
+  "all_input_manifest_identity_claimed": false,
+  "actual_runtime_pin": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/source-binding-001/runtime-final.json",
+    "sha256": "7a8bdcc5e2a5d0dbb2e00abeb005f1c918e1210dc893597d9a537180a1599be2"
+  },
+  "compared_runtime_pin": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/controls-001/runtime-before.json",
+    "sha256": "f42fca3e61e2fa520a61cab50693429f640b33692ab5389714df7cb4dc081242"
+  },
+  "runtime_command": [
+    "python3",
+    "-B",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/source/docs/plans/cls-epawf-revised-evidence/m7/fingerprint-runtime.py",
+    "--root",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled",
+    "--output",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/source-binding-001/runtime-final.json",
+    "--compare",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/controls-001/runtime-before.json"
+  ],
+  "runtime_log_sha256": "985ebda46f70ca4b1a7ae3a0e5756e131f51122300dedc7ad86581919de1f375",
+  "runtime_exit_code": 0,
+  "main_checkout_preserved": true
+}

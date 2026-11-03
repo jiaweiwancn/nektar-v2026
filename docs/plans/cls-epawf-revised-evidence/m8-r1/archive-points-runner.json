@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "source": "archive-only postprocessing; no new trajectory",
+  "runner_sha256": "abaa34010def31fe9f39b8998efb7776015f45754bf62ce36ee6a152ffdeeba8",
+  "driver_sha256": "87fbb11cf86163035499bd55da355ad568a63854439b086745144c169e453501",
+  "command": [
+    "taskset",
+    "-c",
+    "50",
+    "python3",
+    "-B",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/point-tools-001/cls_epawf_m8_r1_points.py",
+    "--source",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-source",
+    "--archive",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/flow-001/qualification/control-coarse",
+    "--ledger",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-attempt-003/archive-ledger.json",
+    "--reconstruction-driver",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/cls_epawf_m8_r1_archive.py",
+    "--output",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-points-001"
+  ],
+  "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-points-runner-001",
+  "exit_code": 0,
+  "seconds": 231.14577311799985,
+  "log_sha256": "ebc348af173045768d8c0a82e18c5747b3f9deeeb7e9418c8054621e561eebc9"
+}

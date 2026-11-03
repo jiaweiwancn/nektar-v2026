@@ -1,0 +1,1838 @@
+{
+  "schema": 1,
+  "milestone": "M8-R1",
+  "phase": "final controlled diagnostics",
+  "status": "analysis_passed_unsuccessful_controls_preserved",
+  "started_utc": "2026-11-03T11:39:12.153160+00:00",
+  "source_commit": "360cbb7ac728b575cdf9af21e6d0963a1d88acb9",
+  "numerical_threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "affinity": [
+    49
+  ],
+  "solver_sha256": "aa48843d03d22b7089b2b08f56d777640a1419a3e59296850523d3130206e336",
+  "producer_receipt": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/controls-001/receipt.json",
+    "sha256": "dcb85465c0f3d66f86a4a59d496a48b6b88b43ca35897e5d22ca388271ba0f81"
+  },
+  "producing_runtime": {
+    "before": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/controls-001/runtime-before.json",
+    "before_sha256": "f42fca3e61e2fa520a61cab50693429f640b33692ab5389714df7cb4dc081242",
+    "after": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/controls-001/runtime-after.json",
+    "after_sha256": "b646249fa123ba573290314222eb5bc65420d6b5da73e7ee8352e777e5dedc11",
+    "unchanged": true
+  },
+  "native_evolution_budget": {
+    "slots": [
+      5,
+      6
+    ],
+    "additional_allowed": 0,
+    "analyzer_solver_calls": 0
+  },
+  "qualification": "All continuation unqualified from t=0; frozen local region already exited",
+  "cases": [
+    {
+      "name": "resolved-dt005",
+      "dt": 0.005,
+      "stage_time": 0.005,
+      "alpha": 200,
+      "native_solver_seconds": 274.98776124600045,
+      "native_exit_code": 1,
+      "last_accepted_time": 0,
+      "accepted_states": 1,
+      "completed_steps": 0,
+      "classification": "Newton residual-domain/globalization failure before any converged audited stage; not a physical guard stop",
+      "failure": "EP-AWF patch: evolution stage rejected every admissible Newton trial",
+      "Newton_iterations": 9,
+      "classification_counts": {
+        "valid_non_descent": 0,
+        "accepted_descent": 8,
+        "unevaluable_residual_or_norm": 95
+      },
+      "invalid_normalization_ray_counts": {
+        "matching_trace_GLL_normalization_ray": 95
+      },
+      "initial_event": {
+        "time": 0,
+        "reasons": [
+          "outer_gradient_box_exit"
+        ],
+        "stopped": false,
+        "state_sha256": "7f6985bf3fe5648d73f217f001c768a7aa5fc0e8b42d07bf31ca519338427bdb",
+        "history_sha256": "7f6985bf3fe5648d73f217f001c768a7aa5fc0e8b42d07bf31ca519338427bdb"
+      },
+      "first_internal_negative_covariance": {
+        "kind": "first_negative_source_covariance_internal_Newton_iterate",
+        "iteration": 1,
+        "stage_time": 0.005,
+        "physical_stage_accepted": false,
+        "detail": {
+          "chart": [
+            1.5917173212478248,
+            0.0,
+            4.847726769134338e-07
+          ],
+          "geometry": 4,
+          "k": 0.22876217767524415,
+          "K": 0.5105237975282924,
+          "k_over_K": 0.4480930737857848,
+          "nu_A": 0.0008646043613197573,
+          "G": [
+            [
+              -2.441116873143107e-07,
+              0.0,
+              181.0386072563211
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              -1.1589621802158775e-09,
+              0.0,
+              0.00692644094349176
+            ]
+          ],
+          "S": [
+            [
+              -4.882233746286214e-07,
+              0.0,
+              181.03860725516213
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              181.03860725516213,
+              0.0,
+              0.01385288188698352
+            ]
+          ],
+          "maximum_strain_eigenvalue": 181.04553358450423,
+          "covariance_minimum": -0.004024639484462189,
+          "covariance_eigenvector": [
+            0.7070932538155225,
+            -0.0,
+            0.707120308298791
+          ],
+          "r_R": 1.026389673712861,
+          "transported_k_nonnegative": true,
+          "interpretation": "Independent pointwise original inner AWF tensor"
+        }
+      },
+      "first_internal_native_GLL_negative_k_iteration": 5,
+      "final_internal_native_GLL_k": {
+        "value": -6.973061743526027e-05,
+        "ordinary_dot": -6.97306174352319e-05,
+        "chart": [
+          1.6046496089512394,
+          0.0,
+          0.0
+        ],
+        "geometry": 4,
+        "arithmetic_roundoff_scale": 9.144873913832935e-15
+      },
+      "final_internal_source_observation": {
+        "status": "evaluated_source_quadrature",
+        "minimum_inner_k": 0.0007177967715640187,
+        "minimum_outer_k": 0.5105068103546342,
+        "minimum_outer_epsilon": 0.03643849223716748,
+        "minimum_inner_covariance": -0.1540275322014752,
+        "minimum_native_inner_k": -6.973061743531328e-05,
+        "minimum_native_outer_k": 0.5105065464700383,
+        "minimum_native_outer_epsilon": 0.03631791663093067,
+        "native_inner_k_point": [
+          1.6046496089512394,
+          0,
+          0,
+          -6.973061743531328e-05
+        ],
+        "native_finite_scalar_admissible": false,
+        "minimum_outer_covariance": 0.1769574841065786,
+        "minimum_inner_k_over_sampled_K": 0.001405970425488982,
+        "worst_inner_point": [
+          1.5917173212478248,
+          0,
+          4.847674729743294e-07,
+          0.0007177967715640187,
+          0.5105347584494008,
+          0.001405970425488982,
+          0.0008646144633357917,
+          178.69937403824358,
+          -0.1540275322014752,
+          322.8756442701648
+        ],
+        "worst_inner_gradient": [
+          [
+            -4.470234851136702e-07,
+            0,
+            178.68668958491693
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            -2.1205873529758443e-09,
+            0,
+            0.012684452222659506
+          ]
+        ],
+        "worst_inner_strain": [
+          [
+            -8.940469702273404e-07,
+            0,
+            178.68668958279633
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            178.68668958279633,
+            0,
+            0.025368904445319012
+          ]
+        ],
+        "minimum_b": 0.8166655580984876,
+        "minimum_lambda": 1,
+        "limiter_active_volume": 0.00125653932330935,
+        "normalization_capped_volume": 0,
+        "outer_normalized_gradient_entry_error": 0.0028477996709197484,
+        "outer_k_over_K0": [
+          0.9999976441011283,
+          1.0000166951282714
+        ],
+        "outer_epsilon_over_epsilon0": [
+          0.9836563043483849,
+          1.0000639982447057
+        ],
+        "minimum_invariant_branch_gap": 1.894159495918757e-09,
+        "minimum_limiter_knot_gap": 4.131925445269302e-05,
+        "minimum_normalization_knot_gap": 0.7166655580984876,
+        "outer_branch_pattern_summary": {
+          "characters": 960,
+          "sha256": "4e69dd38cc289a5afc0894b87af68ed94717f5f28807f4f8b34dc83a8ef8e34f",
+          "counts": {
+            "R": 520,
+            "S": 440
+          }
+        },
+        "limiter_branch_pattern_summary": {
+          "characters": 14288,
+          "sha256": "e4f695fd33ca245742ff8b9657160c8aba884f226b8fe3def7bf460bf0c8674b",
+          "counts": {
+            "L": 1320,
+            "P": 12968
+          }
+        },
+        "cap_branch_pattern_summary": {
+          "characters": 40,
+          "sha256": "1ff589df73263bcef22d9e1cbc2a885f61bea95f63f7cd6a0bffc20870a2f542",
+          "counts": {
+            "P": 40
+          }
+        }
+      },
+      "final_all_fractions_unevaluable": true,
+      "final_smallest_fraction": 9.5367431640625e-07,
+      "first_invalid_trial": {
+        "fraction": 1.0,
+        "classification": "unevaluable_residual_or_norm",
+        "exception_type": "std::invalid_argument",
+        "message": "Capped destruction requires finite nonnegative transported k",
+        "volume_exception": null,
+        "invalid_context": {
+          "native": {
+            "operation": "complete_ray_capped_normalization",
+            "chart": [
+              -2.6046496089512394,
+              0,
+              4.847698930453899e-07
+            ],
+            "local_k": -0.0005297920492908334,
+            "sampled_K": 0.5105296610729835,
+            "ray_chart": [
+              -2.6046496089512394,
+              0,
+              2
+            ]
+          },
+          "independently_evaluated": true,
+          "k": -0.0005297920492909802,
+          "ordinary_dot_k": -0.0005297920492909197,
+          "arithmetic_roundoff_scale": 1.7841637797667854e-14,
+          "magnitude_over_roundoff_scale": 29694137685.06338,
+          "actual_geometry": 1,
+          "interpretation": "Exact exported guard coordinate with independent Jacobi rows; arithmetic scale is not an interval certificate",
+          "sampled_K": 0.5105296610729835,
+          "current_inner": {
+            "k": -0.0005297920492909197,
+            "sampled_K": 0.5105296610729835,
+            "k_over_K": -0.0010377302039169523,
+            "nu_A": 0.0008646097654053615,
+            "G": [
+              [
+                -6.388113210303403e-08,
+                0.0,
+                174.3510648069739
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                -2.3552951490907623e-09,
+                0.0,
+                0.0033028457690766743
+              ]
+            ],
+            "S": [
+              [
+                -1.2776226420606806e-07,
+                0.0,
+                174.3510648046186
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                174.3510648046186,
+                0.0,
+                0.006605691538153349
+              ]
+            ],
+            "maximum_strain_eigenvalue": 174.35436761779172,
+            "strain_norm": 246.56964054936648,
+            "minimum_formal_covariance": -0.15110168358294637,
+            "r_R": null,
+            "formal_r_R": -426.81413137055205,
+            "transported_k_domain_valid": false,
+            "interpretation": "Inner tensor/ratio at negative k is formal algebra outside the physical model domain"
+          },
+          "same_point_initial": {
+            "k": 0.5105080130598861,
+            "sampled_K": 0.5105080130598861,
+            "k_over_K": 1.0,
+            "nu_A": 0.0008645898118754014,
+            "G": [
+              [
+                0.0,
+                0.0,
+                183.86768814113867
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "S": [
+              [
+                0.0,
+                0.0,
+                183.86768814113867
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                183.86768814113867,
+                0.0,
+                0.0
+              ]
+            ],
+            "maximum_strain_eigenvalue": 183.86768814113867,
+            "strain_norm": 260.028178251385,
+            "minimum_formal_covariance": 0.18136854547334536,
+            "r_R": 0.4670939314362841,
+            "formal_r_R": 0.4670939314362841,
+            "transported_k_domain_valid": true,
+            "interpretation": "Inner AWF covariance at the same physical coordinate"
+          },
+          "same_point_last_accepted": {
+            "k": 0.5105080130598861,
+            "sampled_K": 0.5105080130598861,
+            "k_over_K": 1.0,
+            "nu_A": 0.0008645898118754014,
+            "G": [
+              [
+                0.0,
+                0.0,
+                183.86768814113867
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "S": [
+              [
+                0.0,
+                0.0,
+                183.86768814113867
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                183.86768814113867,
+                0.0,
+                0.0
+              ]
+            ],
+            "maximum_strain_eigenvalue": 183.86768814113867,
+            "strain_norm": 260.028178251385,
+            "minimum_formal_covariance": 0.18136854547334536,
+            "r_R": 0.4670939314362841,
+            "formal_r_R": 0.4670939314362841,
+            "transported_k_domain_valid": true,
+            "interpretation": "Inner AWF covariance at the same physical coordinate"
+          }
+        },
+        "inference": "An exception alone is not proof of negative physical k or covariance",
+        "reconstructed_state_float64_LE_sha256": "0b2e04d2e3bba0a62c8c01efa11b6d118dcc8b760a926e0d3666eef8807e6a5a",
+        "state_hash_scope": "Reconstructed from exported base/fraction/step; native trial vector not separately exported",
+        "normalization_ray_family": "matching_trace_GLL_normalization_ray",
+        "base_at_same_guard_coordinate": {
+          "chart": [
+            -2.6046496089512394,
+            0.0,
+            4.847698930453899e-07
+          ],
+          "geometry": 1,
+          "k": 0.5105080130598861,
+          "K": 0.5105080130598861,
+          "k_over_K": 1.0,
+          "nu_A": 0.0008645898118754014,
+          "G": [
+            [
+              0.0,
+              0.0,
+              183.86768814113867
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "S": [
+            [
+              0.0,
+              0.0,
+              183.86768814113867
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              183.86768814113867,
+              0.0,
+              0.0
+            ]
+          ],
+          "maximum_strain_eigenvalue": 183.86768814113867,
+          "covariance_minimum": 0.18136854547334536,
+          "covariance_eigenvector": [
+            0.7071067811865475,
+            -0.0,
+            0.7071067811865475
+          ],
+          "r_R": 0.4670939314362841,
+          "transported_k_nonnegative": true,
+          "interpretation": "Independent pointwise original inner AWF tensor"
+        }
+      },
+      "last_invalid_trial": {
+        "fraction": 9.5367431640625e-07,
+        "classification": "unevaluable_residual_or_norm",
+        "exception_type": "std::invalid_argument",
+        "message": "Capped destruction requires finite nonnegative transported k",
+        "volume_exception": null,
+        "invalid_context": {
+          "native": {
+            "operation": "complete_ray_capped_normalization",
+            "chart": [
+              1.6046496089512394,
+              0,
+              4.847674682818284e-07
+            ],
+            "local_k": -1.64477336144496e-07,
+            "sampled_K": 0.5105347683332523,
+            "ray_chart": [
+              1.6046496089512394,
+              0,
+              2
+            ]
+          },
+          "independently_evaluated": true,
+          "k": -1.6447733613683799e-07,
+          "ordinary_dot_k": -1.6447733613977888e-07,
+          "arithmetic_roundoff_scale": 9.14544561202929e-15,
+          "magnitude_over_roundoff_scale": 17984616.946438983,
+          "actual_geometry": 4,
+          "interpretation": "Exact exported guard coordinate with independent Jacobi rows; arithmetic scale is not an interval certificate",
+          "sampled_K": 0.5105347683332524,
+          "current_inner": {
+            "k": -1.6447733613977888e-07,
+            "sampled_K": 0.5105347683332524,
+            "k_over_K": -3.2216676775364307e-07,
+            "nu_A": 0.0008646144724450943,
+            "G": [
+              [
+                -1.9416459939304e-07,
+                0.0,
+                178.67809637442616
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                -2.9503294935090723e-09,
+                0.0,
+                0.012616863538106508
+              ]
+            ],
+            "S": [
+              [
+                -3.8832919878608e-07,
+                0.0,
+                178.67809637147585
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                178.67809637147585,
+                0.0,
+                0.025233727076213016
+              ]
+            ],
+            "maximum_strain_eigenvalue": 178.69071348631567,
+            "strain_norm": 252.68898844747827,
+            "minimum_formal_covariance": -0.15449868662336574,
+            "r_R": null,
+            "formal_r_R": -1408995.7370221794,
+            "transported_k_domain_valid": false,
+            "interpretation": "Inner tensor/ratio at negative k is formal algebra outside the physical model domain"
+          },
+          "same_point_initial": {
+            "k": 0.5105080130598861,
+            "sampled_K": 0.5105080130598861,
+            "k_over_K": 1.0,
+            "nu_A": 0.000864589811477795,
+            "G": [
+              [
+                0.0,
+                0.0,
+                183.86768821332814
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "S": [
+              [
+                0.0,
+                0.0,
+                183.86768821332814
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                183.86768821332814,
+                0.0,
+                0.0
+              ]
+            ],
+            "maximum_strain_eigenvalue": 183.86768821332814,
+            "strain_norm": 260.02817835347633,
+            "minimum_formal_covariance": 0.18136854548403802,
+            "r_R": 0.4670939314048664,
+            "formal_r_R": 0.4670939314048664,
+            "transported_k_domain_valid": true,
+            "interpretation": "Inner AWF covariance at the same physical coordinate"
+          },
+          "same_point_last_accepted": {
+            "k": 0.5105080130598861,
+            "sampled_K": 0.5105080130598861,
+            "k_over_K": 1.0,
+            "nu_A": 0.000864589811477795,
+            "G": [
+              [
+                0.0,
+                0.0,
+                183.86768821332814
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "S": [
+              [
+                0.0,
+                0.0,
+                183.86768821332814
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                183.86768821332814,
+                0.0,
+                0.0
+              ]
+            ],
+            "maximum_strain_eigenvalue": 183.86768821332814,
+            "strain_norm": 260.02817835347633,
+            "minimum_formal_covariance": 0.18136854548403802,
+            "r_R": 0.4670939314048664,
+            "formal_r_R": 0.4670939314048664,
+            "transported_k_domain_valid": true,
+            "interpretation": "Inner AWF covariance at the same physical coordinate"
+          }
+        },
+        "inference": "An exception alone is not proof of negative physical k or covariance",
+        "reconstructed_state_float64_LE_sha256": "bb34e924c679c8a76a98d8db8097b6d5957f92a64341000c9d973b56630f749f",
+        "state_hash_scope": "Reconstructed from exported base/fraction/step; native trial vector not separately exported",
+        "normalization_ray_family": "matching_trace_GLL_normalization_ray",
+        "base_at_same_guard_coordinate": {
+          "chart": [
+            1.6046496089512394,
+            0.0,
+            4.847674682818284e-07
+          ],
+          "geometry": 4,
+          "k": 1.932170212159967e-07,
+          "K": 0.5105347683803386,
+          "k_over_K": 3.784600641969476e-07,
+          "nu_A": 0.0008646144724884941,
+          "G": [
+            [
+              -1.9416438071333784e-07,
+              0.0,
+              178.67810223423965
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              -2.9503262248278936e-09,
+              0.0,
+              0.012616849295227729
+            ]
+          ],
+          "S": [
+            [
+              -3.883287614266757e-07,
+              0.0,
+              178.67810223128933
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              178.67810223128933,
+              0.0,
+              0.025233698590455458
+            ]
+          ],
+          "maximum_strain_eigenvalue": 178.69071933188545,
+          "covariance_minimum": -0.1544984532223802,
+          "covariance_eigenvector": [
+            0.7070818151880385,
+            0.0,
+            0.7071317463036071
+          ],
+          "r_R": 1199417.4819180206,
+          "transported_k_nonnegative": true,
+          "interpretation": "Independent pointwise original inner AWF tensor"
+        }
+      },
+      "cached_Jacobian_builds": [
+        1
+      ],
+      "cached_Jacobian_decoded_float64_LE_sha256": "8fee153c433f28d713c01807d4375353061e473554c359febc565427533e1469",
+      "cached_Jacobian_state_sha256": "7f6985bf3fe5648d73f217f001c768a7aa5fc0e8b42d07bf31ca519338427bdb",
+      "cached_Jacobian_history_sha256": "7f6985bf3fe5648d73f217f001c768a7aa5fc0e8b42d07bf31ca519338427bdb",
+      "cached_Jacobian_time": 0.005,
+      "cached_Jacobian_iteration": 0,
+      "last_Jacobian_age": 8,
+      "final_scaled_residual": [
+        5.347427255103406,
+        0.013836210793624277,
+        26.830264010345267,
+        0.0602028236711428,
+        3.059731386506278e-14,
+        2.0775410315082776e-15,
+        7.873679464497073e-15,
+        0.0001658283455326892
+      ],
+      "initial_state_identical_to_refined_preflight": true,
+      "initial_history_values_identical_to_preflight": true,
+      "fresh_valid_dt_startup": true,
+      "checkpoint_exported": false,
+      "initial_raw_unanchored_residual": {
+        "native_block_norms": [
+          9.863232903524946,
+          0.025531946615042826,
+          62.59847634964055,
+          0.11104441064784064,
+          5.054823058054794e-16,
+          1.2380122581968827e-16,
+          3.0831999280056526e-17,
+          0
+        ],
+        "independent_block_norms": [
+          9.863232903524926,
+          0.025531946615043852,
+          62.598476349640535,
+          0.11104441064783604,
+          0.0,
+          0.0,
+          2.1684043449710086e-17,
+          0.0
+        ],
+        "maximum_complete_weak_load_error": 3.552713678800501e-14,
+        "complete_weak_load_float64_LE_sha256": "71fc5bdd6e79b6302faed172f540d1036e3b7d21d574d51de63844e2d8db66b2",
+        "gauge": 2.1684043449710086e-17,
+        "essential_and_trace": 0.0,
+        "block_names": [
+          "u",
+          "v",
+          "k",
+          "outer_epsilon",
+          "inner_pressure_divergence",
+          "outer_pressure_divergence",
+          "common_gauge",
+          "constraints"
+        ],
+        "quadrature": {
+          "orders": [
+            8,
+            16,
+            8
+          ],
+          "rays": 40,
+          "scope": "Complete independently reconstructed unforced alpha=0 weak loads"
+        }
+      },
+      "source_covariance_note": "Internal nonlinear iterates are not accepted stages. Source-ray observations do not replace the stronger finite guard inventory.",
+      "no_fresh_J_comparison_in_this_control": true,
+      "no_refresh_policy_causality_proved": true,
+      "initial_independent_preflight": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/preflight-completion-001/resolved-base-audit.json",
+        "sha256": "e02b65367d70f36e484599ea6938e9ef3543b04687ab8cb272ebe4e37705ee46"
+      },
+      "inputs": {
+        "XML": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/controls-001/cases/resolved-dt005/case.xml",
+          "sha256": "ea97ca871e6691949aebee896382b2bc1f01e3760481698639cd453957a854ad"
+        },
+        "report": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/controls-001/cases/resolved-dt005/case.evolution.json",
+          "sha256": "a9ced2d7ad07622cdefd3af6cd6bde6c4fe0a20ce6c808867432073e59bcf87b"
+        },
+        "trace": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/controls-001/cases/resolved-dt005/case.nonlinear.json",
+          "sha256": "b154c6866139ed9bdc933e39aa4f311bcdbc9198900fe66325acca279cd760cf",
+          "bytes": 8845159
+        }
+      },
+      "histories": {
+        "native_slot_sha256": [
+          "2e8d517483abe9657dc7981b19159d7014371b04e3e8aa65b25bd2e57940ce5c",
+          "12a42cfe372b164bdba3fcaf9084fc39b2032c8aec11bdf0c2acb46a6b614fb7",
+          "12a42cfe372b164bdba3fcaf9084fc39b2032c8aec11bdf0c2acb46a6b614fb7",
+          "12a42cfe372b164bdba3fcaf9084fc39b2032c8aec11bdf0c2acb46a6b614fb7"
+        ],
+        "native_times": [
+          0,
+          -0.005,
+          0.005,
+          0.005
+        ],
+        "failed_stage_history_sha256": "7f6985bf3fe5648d73f217f001c768a7aa5fc0e8b42d07bf31ca519338427bdb",
+        "failed_iterate_sha256": "6d643dde561b8651ea7380de9f9a1bbe2de8f158e205ca856a0bf6564cecee33"
+      },
+      "independent_checks": 5355,
+      "errors": {
+        "identical_initial_unanchored_raw_loads": 0.0,
+        "fresh_IMEX2_history_time_labels": 0.0,
+        "first_stage_time": 0.0,
+        "IMEX1_startup_alpha_inside_native_IMEX2": 0.0,
+        "fresh_startup_implicit_history": 0.0,
+        "actual_inverse_time_gauge_variable_scale": 0.0,
+        "iteration_true_mass_dual_norms": 6.620720685846841e-16,
+        "dimensionless_step": 0.0,
+        "independent_dense_linear_residual": 2.220446049250313e-16,
+        "independent_linear_mass_dual_norms": 7.825500179792437e-28,
+        "unchanged_backtracking_fractions": 0.0,
+        "independent_native_invalid_context_k": 3.2569433261464553e-16,
+        "independent_native_invalid_context_sampled_K": 1.1102230246251565e-16,
+        "trial_true_mass_dual_norms": 6.620720685846841e-16,
+        "trial_native_maximum": 0.0,
+        "actual_constraint_rows": 0.0,
+        "independent_minimum_native_inner_k": 5.3017486234541167e-17,
+        "independent_minimum_native_outer_k": 0.0,
+        "independent_minimum_native_outer_epsilon": 0.0,
+        "independent_internal_source_tensor": 1.0962431956553592e-14,
+        "independent_internal_G": 1.0962431956553592e-14,
+        "independent_internal_S": 1.0962431956553592e-14
+      },
+      "iteration_ledger": "controls-dt005-iterations.json"
+    },
+    {
+      "name": "resolved-dt0025",
+      "dt": 0.0025,
+      "stage_time": 0.0025,
+      "alpha": 400,
+      "native_solver_seconds": 275.7894456310005,
+      "native_exit_code": 1,
+      "last_accepted_time": 0,
+      "accepted_states": 1,
+      "completed_steps": 0,
+      "classification": "Newton residual-domain/globalization failure before any converged audited stage; not a physical guard stop",
+      "failure": "EP-AWF patch: evolution stage rejected every admissible Newton trial",
+      "Newton_iterations": 12,
+      "classification_counts": {
+        "valid_non_descent": 0,
+        "accepted_descent": 11,
+        "unevaluable_residual_or_norm": 117
+      },
+      "invalid_normalization_ray_counts": {
+        "matching_trace_GLL_normalization_ray": 117
+      },
+      "initial_event": {
+        "time": 0,
+        "reasons": [
+          "outer_gradient_box_exit"
+        ],
+        "stopped": false,
+        "state_sha256": "7f6985bf3fe5648d73f217f001c768a7aa5fc0e8b42d07bf31ca519338427bdb",
+        "history_sha256": "7f6985bf3fe5648d73f217f001c768a7aa5fc0e8b42d07bf31ca519338427bdb"
+      },
+      "first_internal_negative_covariance": {
+        "kind": "first_negative_source_covariance_internal_Newton_iterate",
+        "iteration": 1,
+        "stage_time": 0.0025,
+        "physical_stage_accepted": false,
+        "detail": {
+          "chart": [
+            1.5917173212478248,
+            0.0,
+            4.847728752818445e-07
+          ],
+          "geometry": 4,
+          "k": 0.1371206609940625,
+          "K": 0.5105233797170707,
+          "k_over_K": 0.26858840641158105,
+          "nu_A": 0.0008646039762465644,
+          "G": [
+            [
+              -4.829238222896627e-07,
+              0.0,
+              178.29972938841655
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              -3.346149464834344e-09,
+              0.0,
+              0.0082743380260603
+            ]
+          ],
+          "S": [
+            [
+              -9.658476445793254e-07,
+              0.0,
+              178.2997293850704
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              178.2997293850704,
+              0.0,
+              0.0165486760521206
+            ]
+          ],
+          "maximum_strain_eigenvalue": 178.30800343218823,
+          "covariance_minimum": -0.06275203476801433,
+          "covariance_eigenvector": [
+            0.7070903727211225,
+            -1.1102230246251565e-16,
+            0.7071231892712216
+          ],
+          "r_R": 1.6864614819505381,
+          "transported_k_nonnegative": true,
+          "interpretation": "Independent pointwise original inner AWF tensor"
+        }
+      },
+      "first_internal_native_GLL_negative_k_iteration": 7,
+      "final_internal_native_GLL_k": {
+        "value": -8.697248771798902e-05,
+        "ordinary_dot": -8.697248771796784e-05,
+        "chart": [
+          1.6046496089512394,
+          0.0,
+          0.0
+        ],
+        "geometry": 4,
+        "arithmetic_roundoff_scale": 9.08855009853505e-15
+      },
+      "final_internal_source_observation": {
+        "status": "evaluated_source_quadrature",
+        "minimum_inner_k": 0.0004676471824612818,
+        "minimum_outer_k": 0.5105068795730967,
+        "minimum_outer_epsilon": 0.03643849208416738,
+        "minimum_inner_covariance": -0.15185591434871448,
+        "minimum_native_inner_k": -8.697248771804258e-05,
+        "minimum_native_outer_k": 0.5105066029204027,
+        "minimum_native_outer_epsilon": 0.03631791663093067,
+        "native_inner_k_point": [
+          1.6046496089512394,
+          0,
+          0,
+          -8.697248771804258e-05
+        ],
+        "native_finite_scalar_admissible": false,
+        "minimum_outer_covariance": 0.17694987510543078,
+        "minimum_inner_k_over_sampled_K": 0.0009160119075622148,
+        "worst_inner_point": [
+          1.5917173212478248,
+          0,
+          4.847720006053999e-07,
+          0.0004676471824612818,
+          0.5105252219982954,
+          0.0009160119075622148,
+          0.0008646056741728774,
+          175.9966232960393,
+          -0.15185591434871448,
+          488.08487951155524
+        ],
+        "worst_inner_gradient": [
+          [
+            -6.836645016114403e-07,
+            0,
+            175.9849095372821
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            -4.73487803620736e-09,
+            0,
+            0.01171405725059656
+          ]
+        ],
+        "worst_inner_strain": [
+          [
+            -1.3673290032228805e-06,
+            0,
+            175.98490953254722
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            175.98490953254722,
+            0,
+            0.02342811450119312
+          ]
+        ],
+        "minimum_b": 0.8345971089611394,
+        "minimum_lambda": 1,
+        "limiter_active_volume": 0.0011613895888030175,
+        "normalization_capped_volume": 0,
+        "outer_normalized_gradient_entry_error": 0.0028434245637061206,
+        "outer_k_over_K0": [
+          0.9999977796885446,
+          1.0000115928680122
+        ],
+        "outer_epsilon_over_epsilon0": [
+          0.9836342940429871,
+          1.0000638917244784
+        ],
+        "minimum_invariant_branch_gap": 7.499756371487365e-10,
+        "minimum_limiter_knot_gap": 3.5746704411060426e-05,
+        "minimum_normalization_knot_gap": 0.7345971089611394,
+        "outer_branch_pattern_summary": {
+          "characters": 960,
+          "sha256": "23b56032d464932b538ccc529144cbb898f0d5e8027be2bcf552741508c04320",
+          "counts": {
+            "R": 538,
+            "S": 422
+          }
+        },
+        "limiter_branch_pattern_summary": {
+          "characters": 14288,
+          "sha256": "ad8717bda76291167d0dab8232657d195a39e97a850f9096b6780e5046fd12f3",
+          "counts": {
+            "L": 1311,
+            "P": 12977
+          }
+        },
+        "cap_branch_pattern_summary": {
+          "characters": 40,
+          "sha256": "1ff589df73263bcef22d9e1cbc2a885f61bea95f63f7cd6a0bffc20870a2f542",
+          "counts": {
+            "P": 40
+          }
+        }
+      },
+      "final_all_fractions_unevaluable": true,
+      "final_smallest_fraction": 9.5367431640625e-07,
+      "first_invalid_trial": {
+        "fraction": 1.0,
+        "classification": "unevaluable_residual_or_norm",
+        "exception_type": "std::invalid_argument",
+        "message": "Capped destruction requires finite nonnegative transported k",
+        "volume_exception": null,
+        "invalid_context": {
+          "native": {
+            "operation": "complete_ray_capped_normalization",
+            "chart": [
+              -2.3953503910487606,
+              0,
+              4.847695235135972e-07
+            ],
+            "local_k": -0.06201413887301972,
+            "sampled_K": 0.5105304394099194,
+            "ray_chart": [
+              -2.3953503910487606,
+              0,
+              2
+            ]
+          },
+          "independently_evaluated": true,
+          "k": -0.062014138873019875,
+          "ordinary_dot_k": -0.06201413887301986,
+          "arithmetic_roundoff_scale": 1.6124730554077196e-14,
+          "magnitude_over_roundoff_scale": 3845902333998.3423,
+          "actual_geometry": 1,
+          "interpretation": "Exact exported guard coordinate with independent Jacobi rows; arithmetic scale is not an interval certificate",
+          "sampled_K": 0.5105304394099194,
+          "current_inner": {
+            "k": -0.06201413887301986,
+            "sampled_K": 0.5105304394099194,
+            "k_over_K": -0.12147001253186189,
+            "nu_A": 0.0008646104827508076,
+            "G": [
+              [
+                -6.029774702003942e-07,
+                0.0,
+                174.31347903647276
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                2.6517868953574755e-09,
+                0.0,
+                0.0025779624892765802
+              ]
+            ],
+            "S": [
+              [
+                -1.2059549404007885e-06,
+                0.0,
+                174.31347903912453
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                174.31347903912453,
+                0.0,
+                0.0051559249785531605
+              ]
+            ],
+            "maximum_strain_eigenvalue": 174.3160564177083,
+            "strain_norm": 246.51648621548657,
+            "minimum_formal_covariance": -0.1920582489392117,
+            "r_R": null,
+            "formal_r_R": -3.6455111470418897,
+            "transported_k_domain_valid": false,
+            "interpretation": "Inner tensor/ratio at negative k is formal algebra outside the physical model domain"
+          },
+          "same_point_initial": {
+            "k": 0.5105080130598861,
+            "sampled_K": 0.5105080130598861,
+            "k_over_K": 1.0,
+            "nu_A": 0.0008645898118148066,
+            "G": [
+              [
+                0.0,
+                0.0,
+                183.86768815214026
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "S": [
+              [
+                0.0,
+                0.0,
+                183.86768815214026
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                183.86768815214026,
+                0.0,
+                0.0
+              ]
+            ],
+            "maximum_strain_eigenvalue": 183.86768815214026,
+            "strain_norm": 260.0281782669436,
+            "minimum_formal_covariance": 0.18136854547497494,
+            "r_R": 0.4670939314314961,
+            "formal_r_R": 0.4670939314314961,
+            "transported_k_domain_valid": true,
+            "interpretation": "Inner AWF covariance at the same physical coordinate"
+          },
+          "same_point_last_accepted": {
+            "k": 0.5105080130598861,
+            "sampled_K": 0.5105080130598861,
+            "k_over_K": 1.0,
+            "nu_A": 0.0008645898118148066,
+            "G": [
+              [
+                0.0,
+                0.0,
+                183.86768815214026
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "S": [
+              [
+                0.0,
+                0.0,
+                183.86768815214026
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                183.86768815214026,
+                0.0,
+                0.0
+              ]
+            ],
+            "maximum_strain_eigenvalue": 183.86768815214026,
+            "strain_norm": 260.0281782669436,
+            "minimum_formal_covariance": 0.18136854547497494,
+            "r_R": 0.4670939314314961,
+            "formal_r_R": 0.4670939314314961,
+            "transported_k_domain_valid": true,
+            "interpretation": "Inner AWF covariance at the same physical coordinate"
+          }
+        },
+        "inference": "An exception alone is not proof of negative physical k or covariance",
+        "reconstructed_state_float64_LE_sha256": "6256fd24d0bcb17594fdc219caf8806a22cd95a79756002777d16a9408130a5a",
+        "state_hash_scope": "Reconstructed from exported base/fraction/step; native trial vector not separately exported",
+        "normalization_ray_family": "matching_trace_GLL_normalization_ray",
+        "base_at_same_guard_coordinate": {
+          "chart": [
+            -2.3953503910487606,
+            0.0,
+            4.847695235135972e-07
+          ],
+          "geometry": 1,
+          "k": 0.5105080130598861,
+          "K": 0.5105080130598861,
+          "k_over_K": 1.0,
+          "nu_A": 0.0008645898118148066,
+          "G": [
+            [
+              0.0,
+              0.0,
+              183.86768815214026
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "S": [
+            [
+              0.0,
+              0.0,
+              183.86768815214026
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              183.86768815214026,
+              0.0,
+              0.0
+            ]
+          ],
+          "maximum_strain_eigenvalue": 183.86768815214026,
+          "covariance_minimum": 0.18136854547497494,
+          "covariance_eigenvector": [
+            0.7071067811865475,
+            -0.0,
+            0.7071067811865475
+          ],
+          "r_R": 0.4670939314314961,
+          "transported_k_nonnegative": true,
+          "interpretation": "Independent pointwise original inner AWF tensor"
+        }
+      },
+      "last_invalid_trial": {
+        "fraction": 9.5367431640625e-07,
+        "classification": "unevaluable_residual_or_norm",
+        "exception_type": "std::invalid_argument",
+        "message": "Capped destruction requires finite nonnegative transported k",
+        "volume_exception": null,
+        "invalid_context": {
+          "native": {
+            "operation": "complete_ray_capped_normalization",
+            "chart": [
+              1.6046496089512394,
+              0,
+              4.847720299249218e-07
+            ],
+            "local_k": -7.457606847641699e-08,
+            "sampled_K": 0.5105251602440932,
+            "ray_chart": [
+              1.6046496089512394,
+              0,
+              2
+            ]
+          },
+          "independently_evaluated": true,
+          "k": -7.45760684613942e-08,
+          "ordinary_dot_k": -7.45760684595087e-08,
+          "arithmetic_roundoff_scale": 9.089356299975662e-15,
+          "magnitude_over_roundoff_scale": 8204768.962747548,
+          "actual_geometry": 4,
+          "interpretation": "Exact exported guard coordinate with independent Jacobi rows; arithmetic scale is not an interval certificate",
+          "sampled_K": 0.5105251602440932,
+          "current_inner": {
+            "k": -7.45760684595087e-08,
+            "sampled_K": 0.5105251602440932,
+            "k_over_K": -1.460771657636859e-07,
+            "nu_A": 0.0008646056172575701,
+            "G": [
+              [
+                -2.9897052806602436e-07,
+                0.0,
+                175.97174634870203
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                -5.458929525951047e-09,
+                0.0,
+                0.011578101033211304
+              ]
+            ],
+            "S": [
+              [
+                -5.979410561320487e-07,
+                0.0,
+                175.9717463432431
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                175.9717463432431,
+                0.0,
+                0.023156202066422608
+              ]
+            ],
+            "maximum_strain_eigenvalue": 175.9833245262173,
+            "strain_norm": 248.86163135041744,
+            "minimum_formal_covariance": -0.15215622064640838,
+            "r_R": null,
+            "formal_r_R": -3060422.211952143,
+            "transported_k_domain_valid": false,
+            "interpretation": "Inner tensor/ratio at negative k is formal algebra outside the physical model domain"
+          },
+          "same_point_initial": {
+            "k": 0.5105080130598861,
+            "sampled_K": 0.5105080130598861,
+            "k_over_K": 1.0,
+            "nu_A": 0.0008645898122258013,
+            "G": [
+              [
+                0.0,
+                0.0,
+                183.86768807752003
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "S": [
+              [
+                0.0,
+                0.0,
+                183.86768807752003
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                183.86768807752003,
+                0.0,
+                0.0
+              ]
+            ],
+            "maximum_strain_eigenvalue": 183.86768807752003,
+            "strain_norm": 260.02817816141464,
+            "minimum_formal_covariance": 0.18136854546392217,
+            "r_R": 0.4670939314639718,
+            "formal_r_R": 0.4670939314639718,
+            "transported_k_domain_valid": true,
+            "interpretation": "Inner AWF covariance at the same physical coordinate"
+          },
+          "same_point_last_accepted": {
+            "k": 0.5105080130598861,
+            "sampled_K": 0.5105080130598861,
+            "k_over_K": 1.0,
+            "nu_A": 0.0008645898122258013,
+            "G": [
+              [
+                0.0,
+                0.0,
+                183.86768807752003
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "S": [
+              [
+                0.0,
+                0.0,
+                183.86768807752003
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                183.86768807752003,
+                0.0,
+                0.0
+              ]
+            ],
+            "maximum_strain_eigenvalue": 183.86768807752003,
+            "strain_norm": 260.02817816141464,
+            "minimum_formal_covariance": 0.18136854546392217,
+            "r_R": 0.4670939314639718,
+            "formal_r_R": 0.4670939314639718,
+            "transported_k_domain_valid": true,
+            "interpretation": "Inner AWF covariance at the same physical coordinate"
+          }
+        },
+        "inference": "An exception alone is not proof of negative physical k or covariance",
+        "reconstructed_state_float64_LE_sha256": "d90ac8e0ce98c2987d8a85f1f0458dc63c13bf197ae54c244e7197fd0a0b50ee",
+        "state_hash_scope": "Reconstructed from exported base/fraction/step; native trial vector not separately exported",
+        "normalization_ray_family": "matching_trace_GLL_normalization_ray",
+        "base_at_same_guard_coordinate": {
+          "chart": [
+            1.6046496089512394,
+            0.0,
+            4.847720299249218e-07
+          ],
+          "geometry": 4,
+          "k": 4.888127985713808e-09,
+          "K": 0.510525160267423,
+          "k_over_K": 9.574705354684795e-09,
+          "nu_A": 0.0008646056172790737,
+          "G": [
+            [
+              -2.989704105999831e-07,
+              0.0,
+              175.9717494559237
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              -5.458927391782577e-09,
+              0.0,
+              0.011578096477873051
+            ]
+          ],
+          "S": [
+            [
+              -5.979408211999662e-07,
+              0.0,
+              175.97174945046478
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              175.97174945046478,
+              0.0,
+              0.023156192955746103
+            ]
+          ],
+          "maximum_strain_eigenvalue": 175.9833276288835,
+          "covariance_minimum": -0.1521561703566443,
+          "covariance_eigenvector": [
+            0.7070835180871538,
+            0.0,
+            0.7071300435206339
+          ],
+          "r_R": 46691547.580206335,
+          "transported_k_nonnegative": true,
+          "interpretation": "Independent pointwise original inner AWF tensor"
+        }
+      },
+      "cached_Jacobian_builds": [
+        1
+      ],
+      "cached_Jacobian_decoded_float64_LE_sha256": "8d54006648c95a4b7235f9897209ecbd13b7efec7c6d306011f59e055e1e44e2",
+      "cached_Jacobian_state_sha256": "7f6985bf3fe5648d73f217f001c768a7aa5fc0e8b42d07bf31ca519338427bdb",
+      "cached_Jacobian_history_sha256": "7f6985bf3fe5648d73f217f001c768a7aa5fc0e8b42d07bf31ca519338427bdb",
+      "cached_Jacobian_time": 0.0025,
+      "cached_Jacobian_iteration": 0,
+      "last_Jacobian_age": 11,
+      "final_scaled_residual": [
+        2.8812602131549547,
+        0.007454383101250942,
+        11.326021655050907,
+        0.032437819411653315,
+        2.7407300315763988e-14,
+        1.6606608494845842e-15,
+        1.1897085963955e-14,
+        0.00010352094061221171
+      ],
+      "initial_state_identical_to_refined_preflight": true,
+      "initial_history_values_identical_to_preflight": true,
+      "fresh_valid_dt_startup": true,
+      "checkpoint_exported": false,
+      "initial_raw_unanchored_residual": {
+        "native_block_norms": [
+          9.863232903524946,
+          0.025531946615042826,
+          62.59847634964055,
+          0.11104441064784064,
+          5.054823058054794e-16,
+          1.2380122581968827e-16,
+          3.0831999280056526e-17,
+          0
+        ],
+        "independent_block_norms": [
+          9.863232903524926,
+          0.025531946615043852,
+          62.598476349640535,
+          0.11104441064783604,
+          0.0,
+          0.0,
+          2.1684043449710086e-17,
+          0.0
+        ],
+        "maximum_complete_weak_load_error": 3.552713678800501e-14,
+        "complete_weak_load_float64_LE_sha256": "71fc5bdd6e79b6302faed172f540d1036e3b7d21d574d51de63844e2d8db66b2",
+        "gauge": 2.1684043449710086e-17,
+        "essential_and_trace": 0.0,
+        "block_names": [
+          "u",
+          "v",
+          "k",
+          "outer_epsilon",
+          "inner_pressure_divergence",
+          "outer_pressure_divergence",
+          "common_gauge",
+          "constraints"
+        ],
+        "quadrature": {
+          "orders": [
+            8,
+            16,
+            8
+          ],
+          "rays": 40,
+          "scope": "Complete independently reconstructed unforced alpha=0 weak loads"
+        }
+      },
+      "source_covariance_note": "Internal nonlinear iterates are not accepted stages. Source-ray observations do not replace the stronger finite guard inventory.",
+      "no_fresh_J_comparison_in_this_control": true,
+      "no_refresh_policy_causality_proved": true,
+      "initial_independent_preflight": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/preflight-completion-001/resolved-base-audit.json",
+        "sha256": "e02b65367d70f36e484599ea6938e9ef3543b04687ab8cb272ebe4e37705ee46"
+      },
+      "inputs": {
+        "XML": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/controls-001/cases/resolved-dt0025/case.xml",
+          "sha256": "e131470462e22f65758ed13908e32447bf9bd8ad534e08e0275a0649c56896b6"
+        },
+        "report": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/controls-001/cases/resolved-dt0025/case.evolution.json",
+          "sha256": "ac38bc6e5e033f5b9d89497ccef1315f33ea72d72f7ba73ecda26922c170d681"
+        },
+        "trace": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/controls-001/cases/resolved-dt0025/case.nonlinear.json",
+          "sha256": "57c127ce4f7b409a2b6e28b826b19ed844580ceb8d8c8a44fc961c8d7f832317",
+          "bytes": 9544175
+        }
+      },
+      "histories": {
+        "native_slot_sha256": [
+          "2e8d517483abe9657dc7981b19159d7014371b04e3e8aa65b25bd2e57940ce5c",
+          "12a42cfe372b164bdba3fcaf9084fc39b2032c8aec11bdf0c2acb46a6b614fb7",
+          "12a42cfe372b164bdba3fcaf9084fc39b2032c8aec11bdf0c2acb46a6b614fb7",
+          "12a42cfe372b164bdba3fcaf9084fc39b2032c8aec11bdf0c2acb46a6b614fb7"
+        ],
+        "native_times": [
+          0,
+          -0.0025,
+          0.0025,
+          0.0025
+        ],
+        "failed_stage_history_sha256": "7f6985bf3fe5648d73f217f001c768a7aa5fc0e8b42d07bf31ca519338427bdb",
+        "failed_iterate_sha256": "7597883b24450e2f3b3af86425bf803a22f20f8b9432211f9e98b1b815cf123f"
+      },
+      "independent_checks": 7277,
+      "errors": {
+        "identical_initial_unanchored_raw_loads": 0.0,
+        "fresh_IMEX2_history_time_labels": 0.0,
+        "first_stage_time": 0.0,
+        "IMEX1_startup_alpha_inside_native_IMEX2": 0.0,
+        "fresh_startup_implicit_history": 0.0,
+        "actual_inverse_time_gauge_variable_scale": 0.0,
+        "iteration_true_mass_dual_norms": 1.0914762709453603e-15,
+        "dimensionless_step": 0.0,
+        "independent_dense_linear_residual": 1.1102230246251565e-16,
+        "independent_linear_mass_dual_norms": 1.3126645462877636e-27,
+        "unchanged_backtracking_fractions": 0.0,
+        "independent_native_invalid_context_k": 2.7755575615628914e-16,
+        "independent_native_invalid_context_sampled_K": 1.1102230246251565e-16,
+        "trial_true_mass_dual_norms": 1.0914762709453603e-15,
+        "trial_native_maximum": 0.0,
+        "actual_constraint_rows": 0.0,
+        "independent_minimum_native_inner_k": 5.3586692375096057e-17,
+        "independent_minimum_native_outer_k": 0.0,
+        "independent_minimum_native_outer_epsilon": 0.0,
+        "independent_internal_source_tensor": 1.0962431956553592e-14,
+        "independent_internal_G": 1.0962431956553592e-14,
+        "independent_internal_S": 1.0962431956553592e-14
+      },
+      "iteration_ledger": "controls-dt0025-iterations.json"
+    }
+  ],
+  "results": [
+    {
+      "name": "resolved-dt005",
+      "dt": 0.005,
+      "classification": "Newton residual-domain/globalization failure before any converged audited stage; not a physical guard stop",
+      "Newton_iterations": 9,
+      "classification_counts": {
+        "valid_non_descent": 0,
+        "accepted_descent": 8,
+        "unevaluable_residual_or_norm": 95
+      },
+      "invalid_normalization_ray_counts": {
+        "matching_trace_GLL_normalization_ray": 95
+      },
+      "first_internal_native_GLL_negative_k_iteration": 5,
+      "final_smallest_fraction": 9.5367431640625e-07
+    },
+    {
+      "name": "resolved-dt0025",
+      "dt": 0.0025,
+      "classification": "Newton residual-domain/globalization failure before any converged audited stage; not a physical guard stop",
+      "Newton_iterations": 12,
+      "classification_counts": {
+        "valid_non_descent": 0,
+        "accepted_descent": 11,
+        "unevaluable_residual_or_norm": 117
+      },
+      "invalid_normalization_ray_counts": {
+        "matching_trace_GLL_normalization_ray": 117
+      },
+      "first_internal_native_GLL_negative_k_iteration": 7,
+      "final_smallest_fraction": 9.5367431640625e-07
+    }
+  ],
+  "events": [
+    {
+      "case": "resolved-dt005",
+      "time": 0,
+      "type": "initial_local_box_exit",
+      "accepted_initial_state": true,
+      "physical_stop": false
+    },
+    {
+      "case": "resolved-dt005",
+      "time": 0.005,
+      "type": "first_stage_Newton_stop",
+      "completed_step": false,
+      "iterations": 9,
+      "physical_guard_stop": false
+    },
+    {
+      "case": "resolved-dt0025",
+      "time": 0,
+      "type": "initial_local_box_exit",
+      "accepted_initial_state": true,
+      "physical_stop": false
+    },
+    {
+      "case": "resolved-dt0025",
+      "time": 0.0025,
+      "type": "first_stage_Newton_stop",
+      "completed_step": false,
+      "iterations": 12,
+      "physical_guard_stop": false
+    }
+  ],
+  "failures": [],
+  "focused_guard_identity_ledger": "controls-focused-guard-identities.json",
+  "backend_exact_zero_k_caveat": {
+    "limitation": "Native Audit allows inner k=0 but evaluates covariance only for k>0. The linear inner tensor remains defined at k=0 for positive sampled K; the guard is not a complete exact-zero covariance guarantee.",
+    "observed_exact_zero_native_GLL_samples": 0,
+    "source_changed_after_run": false,
+    "no_field_floor_or_clipping": true,
+    "inference": "Negative internal native-GLL samples are directly observed; no converged physical candidate reached the guard."
+  },
+  "independent_checks": 12632,
+  "native_command_timings": [
+    {
+      "name": "fingerprint-before",
+      "argv": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/source/docs/plans/cls-epawf-revised-evidence/m7/fingerprint-runtime.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/controls-001/runtime-before.json"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/controls-001",
+      "exit_code": 0,
+      "seconds": 1.567037488999631,
+      "log_sha256": "faa77608219b6d19fe964b16e0be2b249e854d291f043e02769708db91f43080",
+      "timeout": 240
+    },
+    {
+      "name": "resolved-dt005",
+      "argv": [
+        "taskset",
+        "-c",
+        "0",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/controls-001/cases/resolved-dt005/case.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/controls-001/cases/resolved-dt005",
+      "exit_code": 1,
+      "seconds": 274.98776124600045,
+      "log_sha256": "0b304268f28dc1ffb3b748d343f64f56504d7e90f6c942e922a5f15a753b8c83",
+      "timeout": 3600
+    },
+    {
+      "name": "resolved-dt0025",
+      "argv": [
+        "taskset",
+        "-c",
+        "0",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/controls-001/cases/resolved-dt0025/case.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/controls-001/cases/resolved-dt0025",
+      "exit_code": 1,
+      "seconds": 275.7894456310005,
+      "log_sha256": "a7147233f12c6a4140ad5fa0495f9e1b2262f37b348344b097eb2c3ae096fb23",
+      "timeout": 3600
+    },
+    {
+      "name": "fingerprint-after",
+      "argv": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/source/docs/plans/cls-epawf-revised-evidence/m7/fingerprint-runtime.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/controls-001/runtime-after.json",
+        "--compare",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/controls-001/runtime-before.json"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/controls-001",
+      "exit_code": 0,
+      "seconds": 1.5677095649989496,
+      "log_sha256": "985ebda46f70ca4b1a7ae3a0e5756e131f51122300dedc7ad86581919de1f375",
+      "timeout": 240
+    }
+  ],
+  "analysis_runtime_unchanged": true,
+  "input_hashes_unchanged": true,
+  "frozen_tool_hashes_unchanged": true,
+  "frozen_tool_pins": {
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/control-analysis-tools-001/cls_epawf_m8_r1_cases.py": "40e93cf65ba8dad611b48eceb243520b20dce970ae1f20ec04492edb8b9155ba",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/control-analysis-tools-001/cls_epawf_m8_r1_control_analysis.py": "55cda3282311aa8c7899927cbbb33bb0da074ed4ce8a5737ac40551fc1da1932",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/control-analysis-tools-001/cls_epawf_m8_r1_nonlinear.py": "4d3fd89a201c9170123dc1cd0466b5878a87e8502dd67921651f3e7e7efb5928",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/control-analysis-tools-001/cls_epawf_m8_r1_preflight.py": "d046da906814eea9aafc5ca7e0da6b3598203cc2da23bb764ddc4bdb8ed3dd84"
+  },
+  "analysis_recipe_sha256": "55cda3282311aa8c7899927cbbb33bb0da074ed4ce8a5737ac40551fc1da1932",
+  "source_module_pins": {
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/control-analysis-tools-001/cls_epawf_m8_r1_control_analysis.py": "55cda3282311aa8c7899927cbbb33bb0da074ed4ce8a5737ac40551fc1da1932",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/control-analysis-tools-001/cls_epawf_m8_r1_nonlinear.py": "4d3fd89a201c9170123dc1cd0466b5878a87e8502dd67921651f3e7e7efb5928",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m3_cases.py": "064bce602d05811baaf49756210d7a51ed9a0465c6a8a0cb514a0c1ccabf0675",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m4_cases.py": "57ca6d5f92e1ff91f9d893665bdb0c0eb74d8e02eaed42f6d0ddce500d2534cb",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/control-analysis-tools-001/cls_epawf_m8_r1_cases.py": "40e93cf65ba8dad611b48eceb243520b20dce970ae1f20ec04492edb8b9155ba",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_m1.py": "7f4ed7254691ab2046555883ee8abb5795c048b422b0137b3cef80095bde0c75",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_m2.py": "3fc9950bbd49f77206cffcfb838167dde97ae1d835270880f917bc2fadfdc6d1",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m1.py": "ad91787c6356831bd4b75e145592c9ea952a45f0e5dbdcff6015f51ce992964a",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m2.py": "26568aa79b41bc737a9247d9f2480d932a6674c8dad46e00f5fd8301a69ff18c",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m3.py": "8d1951cf8018d154d4fa7a78c0bec690a66b2d6023ae442a0d2b1e41c572587f",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m4.py": "979635de780944daeb24add2af0caffa44553f5284432ab632e04fe811863a06",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m5_geometry.py": "4dfceb445fa6f760200a2d66aef7140e039da4da41d40902f777a0b15ef888c1",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_state_coverage.py": "630167223ce82e9af9270a3de45ad0c58de7e8039443cd7c5478da1ad3b17130",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m5_cases.py": "9f4ec3b94a93c4785762b78969f2ea95a03a352c646a75b8a5985bbbca250e02",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m5_boundary_oracle.py": "07580298953d001fdda9762a8660d79a18ef59d254803a5eee1a11eb1bdf0976",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m5.py": "375d440060a31d426c3e65ed1cdc35415e95cedcc0e3b248d5f04be05b91f761",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m7_energy_oracle.py": "52a89bb646d4c08c13e08b7b4ba18b5df6f9d959cfe543cf383a82a722cba315",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_native_oracle.py": "80ec891203275919d992a8c47c4fef6f070dfffd858afffed08b2d76b0901df9",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m6_cases.py": "6ef436c17496af9deee56f4c3e7d501a8b7289e99f9ce4945d8a52dbb99bab06",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m6_operator_oracle.py": "e4ae09358e5a578e71783cb9619d1d83918771a7768bdac8315dc3f732acdece",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/control-analysis-tools-001/cls_epawf_m8_r1_preflight.py": "d046da906814eea9aafc5ca7e0da6b3598203cc2da23bb764ddc4bdb8ed3dd84"
+  },
+  "finished_utc": "2026-11-03T11:39:17.296123+00:00"
+}

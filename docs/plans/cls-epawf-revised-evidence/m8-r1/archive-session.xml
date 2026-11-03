@@ -1,0 +1,163 @@
+<?xml version='1.0' encoding='utf-8'?>
+<NEKTAR>
+  <EXPANSIONS>
+    <E COMPOSITE="C[0]" NUMMODES="4,4" BASISTYPE="Modified_A,Modified_A" POINTSTYPE="GaussLobattoLegendre,GaussLobattoLegendre" NUMPOINTS="8,8" FIELDS="u,v,k,eps_tilde" />
+    <E COMPOSITE="C[0]" NUMMODES="2,2" BASISTYPE="Modified_A,Modified_A" POINTSTYPE="GaussLobattoLegendre,GaussLobattoLegendre" NUMPOINTS="8,8" FIELDS="p" />
+  </EXPANSIONS>
+  <CONDITIONS>
+    <SOLVERINFO>
+      <I PROPERTY="EQTYPE" VALUE="UnsteadyNavierStokes" />
+      <I PROPERTY="SolverType" VALUE="RANSEquilibriumWallEvolution" />
+      <I PROPERTY="Projection" VALUE="Galerkin" />
+      <I PROPERTY="GlobalSysSoln" VALUE="IterativeStaticCond" />
+      <I PROPERTY="RANSWallCondense" VALUE="False" />
+      <I PROPERTY="RANSWallRestart" VALUE="None" />
+      <I PROPERTY="RANSWallCheckpoint" VALUE="None" />
+      <I PROPERTY="RANSWallReference" VALUE="Neutral" />
+      <I PROPERTY="RANSWallMap" VALUE="Flat" />
+      <I PROPERTY="RANSWallFunctionCoordinates" VALUE="Chart" />
+      <I PROPERTY="RANSWallTransition" VALUE="Upstream" />
+      <I PROPERTY="TurbulenceModel" VALUE="CLSHighRe" />
+      <I PROPERTY="RANSWallVariant" VALUE="Regularized" />
+      <I PROPERTY="RANSWallDestruction" VALUE="Capped" />
+      <I PROPERTY="RANSWallDestructionSmoothing" VALUE="Linear" />
+    </SOLVERINFO>
+    <PARAMETERS>
+      <P>RANSWallHeight = 2.0</P>
+      <P>RANSWallRoughness = 0.1</P>
+      <P>RANSWallSampleHeight = 1</P>
+      <P>RANSWallTailStart = 1</P>
+      <P>Kinvis = 0.000015</P>
+      <P>RANSWallStageAlpha = 5</P>
+      <P>RANSWallNonlinearTolerance = 2e-12</P>
+      <P>Qstar = 3.1906750816242875</P>
+      <P>Kappa = 0.4405539051866587</P>
+      <P>K0 = Qstar*0.16</P>
+      <P>E0 = (K0/Qstar)^1.5/(Kappa*RANSWallHeight)</P>
+      <P>Slope = 0.09*2.55*sqrt(K0)</P>
+      <P>RoughX = RANSWallRoughness*sqrt(K0)/(70*Kinvis)</P>
+      <P>RoughM = max(0.5-0.4*RoughX^0.7,1-0.79*RoughX^(-0.28))</P>
+      <P>Zv = Kinvis*10.7*(1-RoughX^RoughM)/sqrt(K0)</P>
+      <P>YapScale = K0^1.5/(2.5*E0)</P>
+      <P>NumSteps = 60</P>
+      <P>TimeStep = 0.005</P>
+      <P>Time = 0.0</P>
+      <P>RANSWallMaxIterations = 80</P>
+      <P>RANSWallEta = 0</P>
+      <P>RANSWallChi = 1</P>
+      <P>RANSWallDirectionX = 1.0</P>
+      <P>RANSWallDirectionY = 0.0</P>
+      <P>RANSWallTangentialOrder = 8</P>
+      <P>RANSWallNormalOrder = 16</P>
+      <P>RANSWallOwnershipShift = 0</P>
+      <P>RANSWallTransitionStart = -3.0</P>
+      <P>RANSWallTransitionEnd = -2.25</P>
+      <P>RANSWallBaselineStart = -2.0</P>
+      <P>RANSWallSensorDistanceA = 2.5</P>
+      <P>RANSWallSensorDistanceB = 3.5</P>
+      <P>RANSWallSensorOn = 0.02</P>
+      <P>RANSWallSensorOff = 0.1</P>
+      <P>RANSWallExpressionDimension = 2</P>
+      <P>RANSWallMapAmplitude = 0.02</P>
+      <P>RANSWallMapLengthX = 1.0</P>
+      <P>RANSWallDiagnostics = 1</P>
+      <P>RANSWallCubicBeta = 0.4</P>
+      <P>RANSWallRegularizationGamma = 0.0</P>
+      <P>RANSWallRegularizationScale = 1.0</P>
+      <P>RANSWallPositivityTheta = 0.2</P>
+      <P>RANSWallPositivityDelta = 0.1</P>
+    </PARAMETERS>
+    <VARIABLES>
+      <V ID="0">u</V>
+      <V ID="1">v</V>
+      <V ID="2">k</V>
+      <V ID="3">eps_tilde</V>
+      <V ID="4">p</V>
+    </VARIABLES>
+    <FUNCTION NAME="InitialPerturbationInner">
+      <E VAR="u" VALUE="(0)*(((x-(-4.0))^2*((2.0)-x)^2/(7.5625))*exp(-((x-(-3.5))/(0.3))^2-(3.6363636363636362)*(x-(-3.5))))*sin(2*PI*y/(4.0))" />
+      <E VAR="v" VALUE="(-0)*(((2*(x-(-4.0))*((2.0)-x)*((-2.0)-2*x)/(7.5625))-((x-(-4.0))^2*((2.0)-x)^2/(7.5625))*(2*(x-(-3.5))/(0.089999999999999997)+(3.6363636363636362)))*exp(-((x-(-3.5))/(0.3))^2-(3.6363636363636362)*(x-(-3.5))))*(sin(PI*y/(4.0)))^2" />
+      <E VAR="k" VALUE="(0)*Qstar*0.16*(((x-(-4.0))^2*((2.0)-x)^2/(7.5625))*exp(-((x-(-3.5))/(0.3))^2-(3.6363636363636362)*(x-(-3.5))))*(sin(PI*y/(4.0)))^2" />
+      <E VAR="eps_tilde" VALUE="0" />
+      <E VAR="p" VALUE="0" />
+    </FUNCTION>
+    <FUNCTION NAME="InitialPerturbationOuter">
+      <E VAR="u" VALUE="(0)*(((x-(-4.0))^2*((2.0)-x)^2/(7.5625))*exp(-((x-(-3.5))/(0.3))^2-(3.6363636363636362)*(x-(-3.5))))*sin(2*PI*y/(4.0))" />
+      <E VAR="v" VALUE="(-0)*(((2*(x-(-4.0))*((2.0)-x)*((-2.0)-2*x)/(7.5625))-((x-(-4.0))^2*((2.0)-x)^2/(7.5625))*(2*(x-(-3.5))/(0.089999999999999997)+(3.6363636363636362)))*exp(-((x-(-3.5))/(0.3))^2-(3.6363636363636362)*(x-(-3.5))))*(sin(PI*y/(4.0)))^2" />
+      <E VAR="k" VALUE="(0)*Qstar*0.16*(((x-(-4.0))^2*((2.0)-x)^2/(7.5625))*exp(-((x-(-3.5))/(0.3))^2-(3.6363636363636362)*(x-(-3.5))))*(sin(PI*y/(4.0)))^2" />
+      <E VAR="eps_tilde" VALUE="(0)/Kappa*(((x-(-4.0))^2*((2.0)-x)^2/(7.5625))*exp(-((x-(-3.5))/(0.3))^2-(3.6363636363636362)*(x-(-3.5))))*(sin(PI*(y-(2.0))/(2.0)))^2" />
+      <E VAR="p" VALUE="0" />
+    </FUNCTION>
+    <TIMEINTEGRATIONSCHEME>
+      <METHOD>IMEX</METHOD>
+      <ORDER>2</ORDER>
+    </TIMEINTEGRATIONSCHEME>
+  </CONDITIONS>
+  <GEOMETRY DIM="2" SPACE="2">
+    <VERTEX>
+      <V ID="0">-4 0 0</V>
+      <V ID="1">-3 0 0</V>
+      <V ID="2">-2 0 0</V>
+      <V ID="3">-1 0 0</V>
+      <V ID="4">1 0 0</V>
+      <V ID="5">2 0 0</V>
+      <V ID="6">-4 2 0</V>
+      <V ID="7">-3 2 0</V>
+      <V ID="8">-2 2 0</V>
+      <V ID="9">-1 2 0</V>
+      <V ID="10">1 2 0</V>
+      <V ID="11">2 2 0</V>
+      <V ID="12">-4 4 0</V>
+      <V ID="13">-3 4 0</V>
+      <V ID="14">-2 4 0</V>
+      <V ID="15">-1 4 0</V>
+      <V ID="16">1 4 0</V>
+      <V ID="17">2 4 0</V>
+    </VERTEX>
+    <EDGE>
+      <E ID="0">0 1</E>
+      <E ID="1">1 7</E>
+      <E ID="2">7 6</E>
+      <E ID="3">6 0</E>
+      <E ID="4">1 2</E>
+      <E ID="5">2 8</E>
+      <E ID="6">8 7</E>
+      <E ID="7">2 3</E>
+      <E ID="8">3 9</E>
+      <E ID="9">9 8</E>
+      <E ID="10">3 4</E>
+      <E ID="11">4 10</E>
+      <E ID="12">10 9</E>
+      <E ID="13">4 5</E>
+      <E ID="14">5 11</E>
+      <E ID="15">11 10</E>
+      <E ID="16">7 13</E>
+      <E ID="17">13 12</E>
+      <E ID="18">12 6</E>
+      <E ID="19">8 14</E>
+      <E ID="20">14 13</E>
+      <E ID="21">9 15</E>
+      <E ID="22">15 14</E>
+      <E ID="23">10 16</E>
+      <E ID="24">16 15</E>
+      <E ID="25">11 17</E>
+      <E ID="26">17 16</E>
+    </EDGE>
+    <ELEMENT>
+      <Q ID="0">0 1 2 3</Q>
+      <Q ID="1">4 5 6 1</Q>
+      <Q ID="2">7 8 9 5</Q>
+      <Q ID="3">10 11 12 8</Q>
+      <Q ID="4">13 14 15 11</Q>
+      <Q ID="5">2 16 17 18</Q>
+      <Q ID="6">6 19 20 16</Q>
+      <Q ID="7">9 21 22 19</Q>
+      <Q ID="8">12 23 24 21</Q>
+      <Q ID="9">15 25 26 23</Q>
+    </ELEMENT>
+    <COMPOSITE>
+      <C ID="0">Q[0-9]</C>
+    </COMPOSITE>
+    <DOMAIN>C[0]</DOMAIN>
+  </GEOMETRY>
+</NEKTAR>

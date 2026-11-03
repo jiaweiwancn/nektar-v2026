@@ -1,0 +1,145 @@
+{
+  "schema": 1,
+  "status": "passed",
+  "source_commit": "360cbb7ac728b575cdf9af21e6d0963a1d88acb9",
+  "source_clean_start": true,
+  "runner_sha256": "942ac1e195ccc4d24e2de6901d8402d425f2d632be43723dfd357d0a72559559",
+  "ranks": 1,
+  "cpu": 1,
+  "numerical_threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "commands": [
+    {
+      "name": "fingerprint-before",
+      "argv": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/source/docs/plans/cls-epawf-revised-evidence/m7/fingerprint-runtime.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/focused-checks-001/runtime-before.json"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/focused-checks-001",
+      "exit_code": 0,
+      "seconds": 1.5675172830015072,
+      "log_sha256": "faa77608219b6d19fe964b16e0be2b249e854d291f043e02769708db91f43080",
+      "timeout": 300
+    },
+    {
+      "name": "native-probes",
+      "argv": [
+        "taskset",
+        "-c",
+        "1",
+        "ctest",
+        "--test-dir",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/build",
+        "-R",
+        "^RANSEquilibrium(Time|Evolution|Patch)Native$",
+        "--parallel",
+        "1",
+        "--output-on-failure"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/focused-checks-001",
+      "exit_code": 0,
+      "seconds": 14.446866402999149,
+      "log_sha256": "6d1ade9e2c7654c09bc3e0fbf624cf30e1f159cf2ede8e4db4af71888616a9f8",
+      "timeout": 900
+    },
+    {
+      "name": "original-physical-stop",
+      "argv": [
+        "taskset",
+        "-c",
+        "1",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/focused-checks-001/original-physical-stop/case.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/focused-checks-001/original-physical-stop",
+      "exit_code": 1,
+      "seconds": 10.53827028899832,
+      "log_sha256": "eca3fba6d2631fe4bef05c2db2a6eae8b822f746209a3b3543e91f90251a3f5c",
+      "timeout": 300
+    },
+    {
+      "name": "resolved-local-stop",
+      "argv": [
+        "taskset",
+        "-c",
+        "1",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/focused-checks-001/resolved-local-stop/case.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/focused-checks-001/resolved-local-stop",
+      "exit_code": 1,
+      "seconds": 16.551997410000695,
+      "log_sha256": "5b2ab3b86038cdadf349bed8dfcb72c434f5a52aea4c396f75f7ed986acc3b16",
+      "timeout": 300
+    },
+    {
+      "name": "fingerprint-after",
+      "argv": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/source/docs/plans/cls-epawf-revised-evidence/m7/fingerprint-runtime.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/focused-checks-001/runtime-after.json",
+        "--compare",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/focused-checks-001/runtime-before.json"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/focused-checks-001",
+      "exit_code": 0,
+      "seconds": 1.5679821569992782,
+      "log_sha256": "985ebda46f70ca4b1a7ae3a0e5756e131f51122300dedc7ad86581919de1f375",
+      "timeout": 300
+    }
+  ],
+  "zero_step_checks": [
+    {
+      "name": "original-physical-stop",
+      "guard": "R1DiagnosticV1",
+      "XML_sha256": "9db9386626b49a270a280932021bd77bb69b13ae58f9ba404408195bbbfaa60a",
+      "report_sha256": "b94f4948e339e41f3c121ac5ea9746bab6e418f8fc52a091323b169d3e6f74b2",
+      "exit_code": 1,
+      "state_unknowns": 425,
+      "time": 0,
+      "reasons": [
+        "covariance:source_volume_inner",
+        "covariance:prescribed_source_inner",
+        "covariance:mass_volume",
+        "covariance:reconstruction_dense",
+        "covariance:reconstruction_native",
+        "outer_gradient_box_exit"
+      ],
+      "stopped_before_history_advance": true
+    },
+    {
+      "name": "resolved-local-stop",
+      "guard": "R1LocalV1",
+      "XML_sha256": "43967777dc52589ac2acb2be489428a7b9f9f86dd3ddd78a0fb3415f56e04749",
+      "report_sha256": "e6783b2dcb8d9d6b935f1d571faa40a0d931b60bad155852a59b9ec8e8528d40",
+      "exit_code": 1,
+      "state_unknowns": 1571,
+      "time": 0,
+      "reasons": [
+        "outer_gradient_box_exit"
+      ],
+      "stopped_before_history_advance": true
+    }
+  ],
+  "additional_PDE_trajectories": 0,
+  "started_utc": "2026-11-03T11:17:52.818332+00:00",
+  "runtime_unchanged": true,
+  "source_clean_end": true,
+  "source_commit_end": "360cbb7ac728b575cdf9af21e6d0963a1d88acb9",
+  "finished_utc": "2026-11-03T11:18:37.547413+00:00"
+}

@@ -1,0 +1,876 @@
+{
+  "schema": 1,
+  "phase": "C",
+  "status": "implementation_audits_passed",
+  "generated_utc": "2026-11-03T09:23:34.192274+00:00",
+  "source": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-source",
+    "commit": "ab5c3c6fee19761e8d88692e8e6c331e5889234e",
+    "clean": true
+  },
+  "actual_build_source": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/source",
+    "commit": "ab5c3c6fee19761e8d88692e8e6c331e5889234e"
+  },
+  "solver": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/IncNavierStokesSolver",
+    "sha256": "71897ba6d378acf35f84ae832920ed17cc3c66db8b9f193211e46c5ab043f1e4"
+  },
+  "Cxx_source_equivalence": {
+    "passed": true,
+    "count": 1674
+  },
+  "scope": "Exactly four zero-step native initializations; no evolution, no field floors, stress clipping or physical/model retuning",
+  "runtime": {
+    "numerical_threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    },
+    "affinity": [
+      49
+    ],
+    "maximum_workers": 1
+  },
+  "mesh": {
+    "tangential": [
+      -4,
+      -3,
+      -2,
+      -1,
+      1,
+      2
+    ],
+    "original_radial": [
+      0,
+      2,
+      4
+    ],
+    "resolved_radial": [
+      0,
+      0.01,
+      0.1,
+      0.25,
+      0.5,
+      1,
+      2,
+      2.6666666666666665,
+      3.3333333333333335,
+      4
+    ],
+    "degree": 3,
+    "pressure_degree": 1,
+    "native_GLL_points": [
+      8,
+      8
+    ],
+    "dense_guard": 3000,
+    "preserved": true
+  },
+  "cases": [
+    {
+      "name": "original-base",
+      "unknowns": 425,
+      "source_quadrature": [
+        8,
+        16
+      ],
+      "native_initialization_seconds": 8.012405695999405,
+      "independent_checks": 103,
+      "finite_admissibility": {
+        "positive_transported_k_and_outer_epsilon": true,
+        "inner_covariance_minimum": -0.09773632278762462,
+        "outer_covariance_minimum": 0.1743308235761443,
+        "passed": false,
+        "scope": "Strict finite covariance/positivity observations; no clipping or field floor, no continuum/polynomial-everywhere conclusion"
+      },
+      "outer_gradient_entry_deviation": 0.018332328258716113,
+      "outer_k_over_K0": [
+        0.9999999999999998,
+        1.0000000000000002
+      ],
+      "outer_epsilon_over_epsilon0": [
+        0.9832524731447201,
+        1.0040812296598944
+      ],
+      "inner_maximum_relative_AWF_gradient_error": 1.738464428813866,
+      "inner_maximum_r_R": 1.2871737180043816,
+      "chi0_trace_epsilon_ratio": [
+        0.9834528466780685,
+        0.9846519510665872
+      ],
+      "source_layout": [
+        "preE",
+        "E",
+        "D",
+        "C",
+        "limiter_active_volume",
+        "cap_active_volume",
+        "minimum_lambda",
+        "maximum_rate"
+      ],
+      "source": [
+        8.436167051707093,
+        8.436167051707093,
+        8.436167051707093,
+        3.808175427560609e-17,
+        0.0,
+        0.0,
+        1.0,
+        2616.983278533314
+      ],
+      "trace_sample_b_range": [
+        1.0,
+        1.0
+      ],
+      "trace_error_over_E0": 5.312358045050435e-15,
+      "raw_unanchored_block_norms": [
+        3.718659680796706,
+        0.027247186042484824,
+        12.576295839782583,
+        0.13278964381777608,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "complete_weak_load_error": 1.1368683772161603e-13,
+      "interface": [
+        6.0,
+        -0.4492470514926997,
+        0.0011969321991781448,
+        0.0012552526898681774,
+        0.0014910778002846237,
+        0.0,
+        0.0,
+        -0.006371764963781926
+      ],
+      "same_state_quadrature_sensitivity": [
+        {
+          "orders": [
+            8,
+            24,
+            8
+          ],
+          "maximum_weak_load_difference": 9.43689570931383e-15,
+          "block_norms": [
+            3.718659680796765,
+            0.02724718604248445,
+            12.576295839782581,
+            0.13278964381777608,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "free_load_difference_block_norms": [
+            5.481219585259182e-13,
+            6.037118842812935e-15,
+            4.585500668704072e-14,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "interpretation": "Independent integration change at identical coefficient state; no new native solver/time-map execution"
+        },
+        {
+          "orders": [
+            12,
+            24,
+            12
+          ],
+          "maximum_weak_load_difference": 7.055953222680211e-05,
+          "block_norms": [
+            3.7186596811490498,
+            0.027247186169060196,
+            12.57651141839865,
+            0.13278964379829622,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "free_load_difference_block_norms": [
+            8.672824951272626e-10,
+            3.9649349184902617e-10,
+            0.0010142273705805373,
+            6.163049963355157e-11,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "interpretation": "Independent integration change at identical coefficient state; no new native solver/time-map execution"
+        }
+      ],
+      "initial_state_float64_LE_sha256": "e8e27fc61cdbf14842e0225c012ba4f76c77d23cfcfeecca76ec21023895ee09",
+      "native_history_slot_float64_LE_sha256": [
+        "081283b754863583ca9c2a6cd528f05411effe2b4dedb4ba1c7817ad5841d437",
+        "5a312281df4bd8dfbb4d4a94ad0bf44d01bb8cfced1206b90e21b4ca0568cdb1",
+        "5a312281df4bd8dfbb4d4a94ad0bf44d01bb8cfced1206b90e21b4ca0568cdb1",
+        "5a312281df4bd8dfbb4d4a94ad0bf44d01bb8cfced1206b90e21b4ca0568cdb1"
+      ],
+      "native_history_times": [
+        0,
+        -0.005,
+        0.005,
+        0.005
+      ],
+      "order": 2,
+      "dt": 0.005,
+      "report_sha256": "f2a0003df4d27eb3c6525792a0f44df2254a492c2912e6b133047064a40cb435",
+      "XML_sha256": "dc508ad7163a325d55e22d82bb1e713c8af55251feca3ce0a9ccf370493d4a5c",
+      "audit_sha256": "fb65d1aa26ad75b142be57e6c79ec19647672d1f2763b6403427f1eec0b8dc2f",
+      "historical_radius001_kEPS99_101_covered": false
+    },
+    {
+      "name": "original-high",
+      "unknowns": 425,
+      "source_quadrature": [
+        12,
+        24
+      ],
+      "native_initialization_seconds": 14.019599485000072,
+      "independent_checks": 143,
+      "finite_admissibility": {
+        "positive_transported_k_and_outer_epsilon": true,
+        "inner_covariance_minimum": -0.09774724747057292,
+        "outer_covariance_minimum": 0.1743224245709749,
+        "passed": false,
+        "scope": "Strict finite covariance/positivity observations; no clipping or field floor, no continuum/polynomial-everywhere conclusion"
+      },
+      "outer_gradient_entry_deviation": 0.018332328258716113,
+      "outer_k_over_K0": [
+        0.9999999999999998,
+        1.0000000000000002
+      ],
+      "outer_epsilon_over_epsilon0": [
+        0.9832524731447201,
+        1.0040812296598944
+      ],
+      "inner_maximum_relative_AWF_gradient_error": 1.7385297871756245,
+      "inner_maximum_r_R": 1.28720581745043,
+      "chi0_trace_epsilon_ratio": [
+        0.9834528466780685,
+        0.9846519510665872
+      ],
+      "source_layout": [
+        "preE",
+        "E",
+        "D",
+        "C",
+        "limiter_active_volume",
+        "cap_active_volume",
+        "minimum_lambda",
+        "maximum_rate"
+      ],
+      "source": [
+        8.436251134095697,
+        8.436251134095697,
+        8.436251134095697,
+        4.753789774985509e-17,
+        0.0,
+        0.0,
+        1.0,
+        2616.983278533314
+      ],
+      "trace_sample_b_range": [
+        1.0,
+        1.0
+      ],
+      "trace_error_over_E0": 5.312358045050435e-15,
+      "raw_unanchored_block_norms": [
+        3.7186596811490498,
+        0.027247186169060196,
+        12.57651141839865,
+        0.13278964379829622,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "complete_weak_load_error": 1.1654219256307385e-13,
+      "interface": [
+        6.0,
+        -0.4492470514926997,
+        0.0011969321991781448,
+        0.0012552526898681774,
+        0.0014910778002846237,
+        0.0,
+        0.0,
+        -0.006371764963781926
+      ],
+      "same_state_quadrature_sensitivity": [
+        {
+          "orders": [
+            8,
+            16,
+            8
+          ],
+          "maximum_weak_load_difference": 7.055953222680211e-05,
+          "block_norms": [
+            3.718659680796706,
+            0.027247186042484824,
+            12.576295839782583,
+            0.13278964381777608,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "free_load_difference_block_norms": [
+            8.672824951272626e-10,
+            3.9649349184902617e-10,
+            0.0010142273705805373,
+            6.163049963355157e-11,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "interpretation": "Independent integration change at identical coefficient state; no new native solver/time-map execution"
+        },
+        {
+          "orders": [
+            8,
+            24,
+            8
+          ],
+          "maximum_weak_load_difference": 7.055953222723232e-05,
+          "block_norms": [
+            3.718659680796765,
+            0.02724718604248445,
+            12.576295839782581,
+            0.13278964381777608,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "free_load_difference_block_norms": [
+            8.672600219145226e-10,
+            3.9649361910085477e-10,
+            0.0010142273705935005,
+            6.163049963355157e-11,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "interpretation": "Independent integration change at identical coefficient state; no new native solver/time-map execution"
+        }
+      ],
+      "initial_state_float64_LE_sha256": "e8e27fc61cdbf14842e0225c012ba4f76c77d23cfcfeecca76ec21023895ee09",
+      "native_history_slot_float64_LE_sha256": [
+        "081283b754863583ca9c2a6cd528f05411effe2b4dedb4ba1c7817ad5841d437",
+        "5a312281df4bd8dfbb4d4a94ad0bf44d01bb8cfced1206b90e21b4ca0568cdb1",
+        "5a312281df4bd8dfbb4d4a94ad0bf44d01bb8cfced1206b90e21b4ca0568cdb1",
+        "5a312281df4bd8dfbb4d4a94ad0bf44d01bb8cfced1206b90e21b4ca0568cdb1"
+      ],
+      "native_history_times": [
+        0,
+        -0.005,
+        0.005,
+        0.005
+      ],
+      "order": 2,
+      "dt": 0.005,
+      "report_sha256": "9fd973511a33c9acc1dbdf7f4d8058a164d5eba540098df9871f8501ef3f00bc",
+      "XML_sha256": "149190d15704a864576e793668626e110e169774b007ac2c6a9147f53f825e91",
+      "audit_sha256": "4dc8bd69608887b272b99b64991b72a76e7e06f8e51c0bc8d9131e9ed158ab2f",
+      "historical_radius001_kEPS99_101_covered": false
+    },
+    {
+      "name": "resolved-base",
+      "unknowns": 1571,
+      "source_quadrature": [
+        8,
+        16
+      ],
+      "native_initialization_seconds": 10.015269649999937,
+      "independent_checks": 123,
+      "finite_admissibility": {
+        "positive_transported_k_and_outer_epsilon": true,
+        "inner_covariance_minimum": 0.07729331682700048,
+        "outer_covariance_minimum": 0.1767968946393139,
+        "passed": true,
+        "scope": "Strict finite covariance/positivity observations; no clipping or field floor, no continuum/polynomial-everywhere conclusion"
+      },
+      "outer_gradient_entry_deviation": 0.0034123386947804146,
+      "outer_k_over_K0": [
+        0.9999999999999998,
+        1.0000000000000002
+      ],
+      "outer_epsilon_over_epsilon0": [
+        0.9832524731447201,
+        1.000065588376781
+      ],
+      "inner_maximum_relative_AWF_gradient_error": 0.653880816584234,
+      "inner_maximum_r_R": 0.7728929374769671,
+      "chi0_trace_epsilon_ratio": [
+        0.9834528466780685,
+        0.9846519510665872
+      ],
+      "source_layout": [
+        "preE",
+        "E",
+        "D",
+        "C",
+        "limiter_active_volume",
+        "cap_active_volume",
+        "minimum_lambda",
+        "maximum_rate"
+      ],
+      "source": [
+        8.436167051707093,
+        8.436167051707093,
+        8.436167051707093,
+        4.224576824430823e-17,
+        0.0,
+        0.0,
+        1.0,
+        2616.983278533314
+      ],
+      "trace_sample_b_range": [
+        1.0,
+        1.0
+      ],
+      "trace_error_over_E0": 5.312358045050435e-15,
+      "raw_unanchored_block_norms": [
+        9.863232903524926,
+        0.025531946615043852,
+        62.598476349640535,
+        0.11104441064783604,
+        0.0,
+        0.0,
+        2.1684043449710086e-17,
+        0.0
+      ],
+      "complete_weak_load_error": 3.552713678800501e-14,
+      "interface": [
+        6.0,
+        -0.4492470514926997,
+        0.001196932199185695,
+        0.0012552526898827697,
+        0.0014910778002932834,
+        0.0,
+        0.0,
+        -0.00637176496383314
+      ],
+      "same_state_quadrature_sensitivity": [
+        {
+          "orders": [
+            8,
+            24,
+            8
+          ],
+          "maximum_weak_load_difference": 7.438494264988549e-15,
+          "block_norms": [
+            9.863232903524935,
+            0.02553194661504379,
+            62.59847634964054,
+            0.11104441064783604,
+            0.0,
+            0.0,
+            2.1684043449710086e-17,
+            0.0
+          ],
+          "free_load_difference_block_norms": [
+            6.746170953113768e-13,
+            9.121833330243592e-15,
+            6.86472929161962e-14,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "interpretation": "Independent integration change at identical coefficient state; no new native solver/time-map execution"
+        },
+        {
+          "orders": [
+            12,
+            24,
+            12
+          ],
+          "maximum_weak_load_difference": 6.13093943894194e-05,
+          "block_norms": [
+            9.863232903524937,
+            0.02553194661505117,
+            62.60062977801532,
+            0.11104441064783846,
+            0.0,
+            0.0,
+            2.1684043449710086e-17,
+            0.0
+          ],
+          "free_load_difference_block_norms": [
+            2.3174944997847745e-12,
+            2.294949938577029e-14,
+            0.008340359229501782,
+            1.0442058413075318e-13,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "interpretation": "Independent integration change at identical coefficient state; no new native solver/time-map execution"
+        }
+      ],
+      "initial_state_float64_LE_sha256": "7f6985bf3fe5648d73f217f001c768a7aa5fc0e8b42d07bf31ca519338427bdb",
+      "native_history_slot_float64_LE_sha256": [
+        "2e8d517483abe9657dc7981b19159d7014371b04e3e8aa65b25bd2e57940ce5c",
+        "12a42cfe372b164bdba3fcaf9084fc39b2032c8aec11bdf0c2acb46a6b614fb7",
+        "12a42cfe372b164bdba3fcaf9084fc39b2032c8aec11bdf0c2acb46a6b614fb7",
+        "12a42cfe372b164bdba3fcaf9084fc39b2032c8aec11bdf0c2acb46a6b614fb7"
+      ],
+      "native_history_times": [
+        0,
+        -0.005,
+        0.005,
+        0.005
+      ],
+      "order": 2,
+      "dt": 0.005,
+      "report_sha256": "5a7b3eb7fe706ef783f32d2d7b673e4bcdf638cd3652410bf407571529fde025",
+      "XML_sha256": "faca24f780441bbe539f3d64b49762e15fd838f0b6a36880376dfe3a0f8ba837",
+      "audit_sha256": "e02b65367d70f36e484599ea6938e9ef3543b04687ab8cb272ebe4e37705ee46",
+      "historical_radius001_kEPS99_101_covered": false
+    },
+    {
+      "name": "resolved-high",
+      "unknowns": 1571,
+      "source_quadrature": [
+        12,
+        24
+      ],
+      "native_initialization_seconds": 20.02559540600032,
+      "independent_checks": 163,
+      "finite_admissibility": {
+        "positive_transported_k_and_outer_epsilon": true,
+        "inner_covariance_minimum": 0.07729331682700048,
+        "outer_covariance_minimum": 0.1767891060842592,
+        "passed": true,
+        "scope": "Strict finite covariance/positivity observations; no clipping or field floor, no continuum/polynomial-everywhere conclusion"
+      },
+      "outer_gradient_entry_deviation": 0.0034123386947804146,
+      "outer_k_over_K0": [
+        0.9999999999999998,
+        1.0000000000000002
+      ],
+      "outer_epsilon_over_epsilon0": [
+        0.9832524731447201,
+        1.0000658783917953
+      ],
+      "inner_maximum_relative_AWF_gradient_error": 0.653880816584234,
+      "inner_maximum_r_R": 0.7728929374769671,
+      "chi0_trace_epsilon_ratio": [
+        0.9834528466780685,
+        0.9846519510665872
+      ],
+      "source_layout": [
+        "preE",
+        "E",
+        "D",
+        "C",
+        "limiter_active_volume",
+        "cap_active_volume",
+        "minimum_lambda",
+        "maximum_rate"
+      ],
+      "source": [
+        8.436251134095697,
+        8.436251134095697,
+        8.436251134095697,
+        4.680351687586316e-17,
+        0.0,
+        0.0,
+        1.0,
+        2616.983278533314
+      ],
+      "trace_sample_b_range": [
+        1.0,
+        1.0
+      ],
+      "trace_error_over_E0": 5.312358045050435e-15,
+      "raw_unanchored_block_norms": [
+        9.863232903524937,
+        0.02553194661505117,
+        62.60062977801532,
+        0.11104441064783846,
+        0.0,
+        0.0,
+        2.1684043449710086e-17,
+        0.0
+      ],
+      "complete_weak_load_error": 4.30905582483182e-14,
+      "interface": [
+        6.0,
+        -0.4492470514926997,
+        0.001196932199185695,
+        0.0012552526898827697,
+        0.0014910778002932834,
+        0.0,
+        0.0,
+        -0.00637176496383314
+      ],
+      "same_state_quadrature_sensitivity": [
+        {
+          "orders": [
+            8,
+            16,
+            8
+          ],
+          "maximum_weak_load_difference": 6.13093943894194e-05,
+          "block_norms": [
+            9.863232903524926,
+            0.025531946615043852,
+            62.598476349640535,
+            0.11104441064783604,
+            0.0,
+            0.0,
+            2.1684043449710086e-17,
+            0.0
+          ],
+          "free_load_difference_block_norms": [
+            2.3174944997847745e-12,
+            2.294949938577029e-14,
+            0.008340359229501782,
+            1.0442058413075318e-13,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "interpretation": "Independent integration change at identical coefficient state; no new native solver/time-map execution"
+        },
+        {
+          "orders": [
+            8,
+            24,
+            8
+          ],
+          "maximum_weak_load_difference": 6.13093943894194e-05,
+          "block_norms": [
+            9.863232903524935,
+            0.02553194661504379,
+            62.59847634964054,
+            0.11104441064783604,
+            0.0,
+            0.0,
+            2.1684043449710086e-17,
+            0.0
+          ],
+          "free_load_difference_block_norms": [
+            2.4025326840746833e-12,
+            2.1085886236081577e-14,
+            0.008340359229501397,
+            1.0442058413075318e-13,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "interpretation": "Independent integration change at identical coefficient state; no new native solver/time-map execution"
+        }
+      ],
+      "initial_state_float64_LE_sha256": "7f6985bf3fe5648d73f217f001c768a7aa5fc0e8b42d07bf31ca519338427bdb",
+      "native_history_slot_float64_LE_sha256": [
+        "2e8d517483abe9657dc7981b19159d7014371b04e3e8aa65b25bd2e57940ce5c",
+        "12a42cfe372b164bdba3fcaf9084fc39b2032c8aec11bdf0c2acb46a6b614fb7",
+        "12a42cfe372b164bdba3fcaf9084fc39b2032c8aec11bdf0c2acb46a6b614fb7",
+        "12a42cfe372b164bdba3fcaf9084fc39b2032c8aec11bdf0c2acb46a6b614fb7"
+      ],
+      "native_history_times": [
+        0,
+        -0.005,
+        0.005,
+        0.005
+      ],
+      "order": 2,
+      "dt": 0.005,
+      "report_sha256": "7f35934c08a3a824258a1a19b736c81f5728d35eaac8fc7f2810d125cab2b36e",
+      "XML_sha256": "11f26e39c851efe0b6206cb8cc7e52e915d74478b6a72e8a2360e836487b35af",
+      "audit_sha256": "64b64bf605eaa5cc434ac0448798021482ff8ad244f3e2181fb7c412fdb5fb33",
+      "historical_radius001_kEPS99_101_covered": false
+    }
+  ],
+  "quadrature_comparisons": {
+    "original": {
+      "initial_coefficients_bitwise_identical": true,
+      "maximum_initial_coefficient_difference": 0,
+      "native_initial_raw_load_maximum_difference": 7.055953223338365e-05,
+      "native_initial_block_norm_differences": [
+        3.541216209157483e-10,
+        1.2658075629334853e-10,
+        0.00021557861605536743,
+        -1.9488605174089457e-11,
+        -2.9352151791021363e-15,
+        -2.3588194402821664e-16,
+        0.0,
+        0
+      ],
+      "interpretation": "Quadrature changes without changing space or physical inputs; observed integration sensitivity, no order or convergence claim"
+    },
+    "resolved": {
+      "initial_coefficients_bitwise_identical": true,
+      "maximum_initial_coefficient_difference": 0,
+      "native_initial_raw_load_maximum_difference": 6.130939438997451e-05,
+      "native_initial_block_norm_differences": [
+        2.4868995751603507e-14,
+        4.954370247389761e-15,
+        0.002153428374754185,
+        -6.467049118441537e-15,
+        -2.6488747929471463e-16,
+        -6.774074044867666e-17,
+        0.0,
+        0
+      ],
+      "interpretation": "Quadrature changes without changing space or physical inputs; observed integration sensitivity, no order or convergence claim"
+    }
+  },
+  "archived_initial_correspondence": {
+    "archived_report_sha256": "6a934342924e9f730fe1b9cddf4391a8df82647acc5a1f7b4f078b5e62e6fc00",
+    "new_report_sha256": "f2a0003df4d27eb3c6525792a0f44df2254a492c2912e6b133047064a40cb435",
+    "initial_coefficients_bitwise_identical": true,
+    "maximum_initial_coefficient_difference": 0,
+    "exact_physics_signature_preserved": true,
+    "native_history_interpretation": "Only t=0 coefficients are compared. No old evolving history or rejected trajectory is reused."
+  },
+  "outer_gradient_witnesses": {
+    "original-base": {
+      "set": "source_volume_outer",
+      "geometry": 8,
+      "chart": [
+        -0.9602898564975362,
+        0.0,
+        3.525532409916329
+      ],
+      "gradient": [
+        [
+          0.0,
+          0.0,
+          0.25281376339996464
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "normalized_gradient": [
+        [
+          0.0,
+          0.0,
+          0.9816676717412839
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "gradient_entry_deviation": 0.018332328258716113,
+      "k_over_K0": 0.9999999999999998,
+      "epsilon_over_epsilon0": 0.9903660526088743
+    },
+    "resolved-base": {
+      "set": "reconstruction_native_outer",
+      "geometry": 30,
+      "chart": [
+        -3.2041499092834287,
+        0.0,
+        2.6666666666666665
+      ],
+      "gradient": [
+        [
+          0.0,
+          0.0,
+          0.34164230309216437
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "normalized_gradient": [
+        [
+          0.0,
+          0.0,
+          1.0034123386947804
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "gradient_entry_deviation": 0.0034123386947804146,
+      "k_over_K0": 1.0,
+      "epsilon_over_epsilon0": 0.9999153823291248
+    }
+  },
+  "decision": {
+    "original": "The actual archived mesh has initial negative inner covariance with undepleted k; exact zero-step/archive coefficient correspondence is recorded separately.",
+    "resolved": "The one approved refinement yields independently positive finite inner/outer covariance, positive k/EPS and inactive source limiter/cap.",
+    "certified_coverage": "FAILED: resolved gradient-entry deviation 0.0034123386947804146 exceeds the already frozen radius .001 region; no mesh or box adjustment.",
+    "next_control": "Any parent-authorized resolved trajectory must be diagnostic/unqualified from t=0 and use fresh valid IMEX initialization.",
+    "excluded": [
+      "polynomial-everywhere admissibility",
+      "continuum invariant-region proof",
+      "adopted model qualification",
+      "physical terrain validation"
+    ]
+  },
+  "metadata_attempt": {
+    "preserved": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/preflight-001/runner.json",
+    "reason": "Tuple/list serialization mismatch in time-integration plan comparison; source/physics strings unchanged. Successful original/base native initialization retained and independently audited after the metadata-only fix; only three missing initializations executed thereafter."
+  },
+  "copied_input_hashes": {
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/preflight-001/runner.json": "b7e4533ce7a1eb959fd4c38b2dab72bb077830a33e2342f6307defe35c8bbc2d",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/preflight-completion-001/runner.json": "d0785ed09de3e2e1cc24dec6774a2625a67e625052d220112d5747f9520ad311",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/preflight-001/cases/preflight-plan.json": "15831356c3d8d77d368ce0739883594a99e640afd0831001df44955a213d6e83",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/preflight-tools-001/cls_epawf_m8_r1_cases.py": "bef75f1e5ee9e0a42aad4f8d145391378c05d33331d5269e20b1e031aebd42f8",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/preflight-tools-002/cls_epawf_m8_r1_cases.py": "af2bf498789f425170188c68cfde8d24d7fc97f983a4cd25b698c8324199e4de",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/preflight-tools-002/cls_epawf_m8_r1_preflight.py": "d046da906814eea9aafc5ca7e0da6b3598203cc2da23bb764ddc4bdb8ed3dd84",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/preflight-tools-001/m8-r1-run-preflight-001.py": "1879f178a5704a7a3ddf5e7f2ade4984df643a3a8fdc59045e92a95c724637fe",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/preflight-tools-002/m8-r1-run-preflight-completion-001.py": "e61aef401ebeb8bdd2864cbffc0c07af562032d76068ad9c0664aa5137b7364f",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/preflight-001/cases/original-base/preflight.json": "255c7a784ad0f53cb3f559a6f1d202b9d9ae1f6741c37feb7f78847dba92bdc4",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/preflight-curate-001.py": "5ff47eb987b162ec9c58954fb66355d74a9e98d84a2d5c2a741045ba4f3d6e2f",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/preflight-completion-001/original-base-audit.json": "fb65d1aa26ad75b142be57e6c79ec19647672d1f2763b6403427f1eec0b8dc2f",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/preflight-001/cases/original-base/case.xml": "dc508ad7163a325d55e22d82bb1e713c8af55251feca3ce0a9ccf370493d4a5c",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/preflight-completion-001/original-high-audit.json": "4dc8bd69608887b272b99b64991b72a76e7e06f8e51c0bc8d9131e9ed158ab2f",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/preflight-001/cases/original-high/case.xml": "149190d15704a864576e793668626e110e169774b007ac2c6a9147f53f825e91",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/preflight-completion-001/resolved-base-audit.json": "e02b65367d70f36e484599ea6938e9ef3543b04687ab8cb272ebe4e37705ee46",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/preflight-001/cases/resolved-base/case.xml": "faca24f780441bbe539f3d64b49762e15fd838f0b6a36880376dfe3a0f8ba837",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/preflight-completion-001/resolved-high-audit.json": "64b64bf605eaa5cc434ac0448798021482ff8ad244f3e2181fb7c412fdb5fb33",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/preflight-001/cases/resolved-high/case.xml": "11f26e39c851efe0b6206cb8cc7e52e915d74478b6a72e8a2360e836487b35af"
+  },
+  "curation_recipe_sha256": "5ff47eb987b162ec9c58954fb66355d74a9e98d84a2d5c2a741045ba4f3d6e2f"
+}

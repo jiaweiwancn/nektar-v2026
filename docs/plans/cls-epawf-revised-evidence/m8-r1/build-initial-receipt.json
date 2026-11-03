@@ -1,0 +1,71 @@
+{
+  "schema": 1,
+  "status": "passed",
+  "source_commit": "426d48cd44f9f4af017244f6be4c1a6f62d36c01",
+  "source_clean_start": true,
+  "compiler_workers": 16,
+  "maximum_concurrent_analysis_workers": 3,
+  "total_worker_bound": 19,
+  "hard_limit": 72,
+  "numerical_threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1"
+  },
+  "runner_sha256": "ba1adb984e547d8ee65ca0ddf18f19f30a932dbea79559e8cf6a16c822dbc879",
+  "bundle_sha256": "1f45cfbd6d82ade26dbbd3018185a78c70657473356e8017ffd51fa2b3d8437d",
+  "connection": "tailscale:100.105.247.110",
+  "commands": [
+    {
+      "name": "configure",
+      "argv": [
+        "cmake",
+        "-S",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/source/solvers/IncNavierStokesSolver/Tests/RANS",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/build",
+        "-DRANS_BUILD_SOLVER=ON",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake"
+      ],
+      "exit_code": 0,
+      "seconds": 0.9664160359998277,
+      "log_sha256": "40245e45e3c8732c7001d7e814f9ef320218921fc917a1f0ee093cab88cc6e13"
+    },
+    {
+      "name": "build",
+      "argv": [
+        "taskset",
+        "-c",
+        "0-31",
+        "cmake",
+        "--build",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/build",
+        "--parallel",
+        "16"
+      ],
+      "exit_code": 0,
+      "seconds": 57.04190369900016,
+      "log_sha256": "228f06c6e2a9f16feb8a5010f7351b046cb83444f2c534b319d8e7a342678a2c"
+    },
+    {
+      "name": "fingerprint",
+      "argv": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/source/docs/plans/cls-epawf-revised-evidence/m7/fingerprint-runtime.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/build-001/runtime-fingerprint.json"
+      ],
+      "exit_code": 0,
+      "seconds": 1.6682559400001082,
+      "log_sha256": "85f2d04cf95d9f6d1b8dbf27ddf45982d8543ce55110c31f6700f7a0491e87b9"
+    }
+  ],
+  "started_utc": "2026-11-03T09:03:30.244282+00:00",
+  "source_clean_end": true,
+  "finished_utc": "2026-11-03T09:04:29.962050+00:00"
+}

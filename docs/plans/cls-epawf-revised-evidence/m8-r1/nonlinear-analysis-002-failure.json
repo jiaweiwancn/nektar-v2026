@@ -1,0 +1,214 @@
+{
+  "accepted_prefix_equivalence": {
+    "all_fields_pressures_gauge": true,
+    "complete_native_history": true,
+    "epochs": [
+      {
+        "physical_state_difference": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "time": 0
+      },
+      {
+        "physical_state_difference": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "time": 0.005
+      },
+      {
+        "physical_state_difference": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "time": 0.01
+      },
+      {
+        "physical_state_difference": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "time": 0.015
+      },
+      {
+        "physical_state_difference": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "time": 0.02
+      },
+      {
+        "physical_state_difference": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "time": 0.025
+      },
+      {
+        "physical_state_difference": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "time": 0.030000000000000002
+      },
+      {
+        "physical_state_difference": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "time": 0.035
+      },
+      {
+        "physical_state_difference": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "time": 0.04
+      },
+      {
+        "physical_state_difference": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "time": 0.045
+      },
+      {
+        "physical_state_difference": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "time": 0.049999999999999996
+      },
+      {
+        "physical_state_difference": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "time": 0.05499999999999999
+      }
+    ],
+    "interpretation": "Instrumented failure reproduction preserves the archived accepted prefix; fresh-J retry does not advance it"
+  },
+  "checks": 40,
+  "driver_sha256": "f0a0a4e7d0821f4024f6f17f49ca05b085f46d1be65aee7caa1ce06564bf6ccf",
+  "errors": {
+    "archived_accepted_times": 0.0,
+    "diagnostic_native_layout": 0.0,
+    "independent_variable_scales": 0.03999999999999998,
+    "unchanged_complete_native_history": 0.0,
+    "unchanged_last_accepted_coefficients": 0.0,
+    "unchanged_native_history_times": 0.0
+  },
+  "failures": [
+    {
+      "message": "independent_variable_scales: componentwise scaled error 0.03999999999999998 > 1e-14",
+      "traceback": "Traceback (most recent call last):\n  File \"/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/cls_epawf_m8_r1_nonlinear.py\", line 591, in main\n    audit.near(trace['dimensionless_variable_scales'],audit.scales(),'independent_variable_scales',1e-14)\n  File \"/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/cls_epawf_m8_r1_nonlinear.py\", line 73, in near\n    self.require(error <= tolerance, f'{name}: componentwise scaled error {error} > {tolerance}')\n  File \"/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/cls_epawf_m8_r1_nonlinear.py\", line 66, in require\n    raise ValueError(message)\nValueError: independent_variable_scales: componentwise scaled error 0.03999999999999998 > 1e-14\n",
+      "type": "ValueError"
+    }
+  ],
+  "finished_utc": "2026-11-03T11:18:25.064291+00:00",
+  "inputs": {
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/reproduction-001/case/case.evolution.json": {
+      "bytes": 195603,
+      "sha256": "c94d4f0a941ea428948377f509c038b96c54acf849811b7960a81c6eede7993d"
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/reproduction-001/case/case.nonlinear.json": {
+      "bytes": 3799015,
+      "sha256": "2df975858f4d506b62030cdf4ea899fff5dd31740ea54289c166a10b156c4475"
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/reproduction-001/runtime-before.json": {
+      "bytes": 664897,
+      "sha256": "cd88b043567764403f4b05a9278b5861642aaf15bfb3bc2076fdeced34300a56"
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/flow-001/qualification/control-coarse/case.evolution.json": {
+      "bytes": 195517,
+      "sha256": "6a934342924e9f730fe1b9cddf4391a8df82647acc5a1f7b4f078b5e62e6fc00"
+    }
+  },
+  "milestone": "M8-R1",
+  "numerical_threads": {
+    "BLIS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "phase": "B nonlinear diagnostic analysis",
+  "producing_runtime": {
+    "build_root": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/build",
+    "full_pin_path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/reproduction-001/runtime-before.json",
+    "full_pin_sha256": "cd88b043567764403f4b05a9278b5861642aaf15bfb3bc2076fdeced34300a56",
+    "interpretation": "Actual instrumented producing runtime, distinct from archived AA and analysis-driver source",
+    "solver_sha256": "aa48843d03d22b7089b2b08f56d777640a1419a3e59296850523d3130206e336",
+    "source_commit": "360cbb7ac728b575cdf9af21e6d0963a1d88acb9",
+    "source_root": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/source"
+  },
+  "schema": 1,
+  "solver_launched": false,
+  "source_clean_start": true,
+  "source_commit": "360cbb7ac728b575cdf9af21e6d0963a1d88acb9",
+  "started_utc": "2026-11-03T11:18:24.823063+00:00",
+  "success": false
+}

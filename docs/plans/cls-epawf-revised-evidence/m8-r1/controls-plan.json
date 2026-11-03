@@ -1,0 +1,148 @@
+{
+  "schema": 1,
+  "milestone": "M8-R1",
+  "phase": "C diagnostic control preparation",
+  "baseline_reviewed": "ab5c3c6fee19761e8d88692e8e6c331e5889234e",
+  "original": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/flow-001/qualification/control-coarse/case.xml",
+    "sha256": "c54b2522cca860081f23e041a649e0668740f5f4bd86b711e4cf8f1a3d3f6d7b"
+  },
+  "generator_sha256": "40e93cf65ba8dad611b48eceb243520b20dce970ae1f20ec04492edb8b9155ba",
+  "no_solver_invoked": true,
+  "cases": [
+    {
+      "name": "resolved-dt005",
+      "xml": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/controls-001/cases/resolved-dt005/case.xml",
+      "xml_sha256": "ea97ca871e6691949aebee896382b2bc1f01e3760481698639cd453957a854ad",
+      "dt": 0.005,
+      "requested_steps": 12,
+      "maximum_time": 0.06,
+      "cost": {
+        "dimension": 2,
+        "degree": 3,
+        "pressure_degree": 1,
+        "x": [
+          -4.0,
+          -3.0,
+          -2.0,
+          -1.0,
+          1.0,
+          2.0
+        ],
+        "radial": [
+          0.0,
+          0.01,
+          0.1,
+          0.25,
+          0.5,
+          1.0,
+          2.0,
+          2.6666666666666665,
+          3.3333333333333335,
+          4.0
+        ],
+        "cells": 45,
+        "inner_cells": 30,
+        "outer_cells": 15,
+        "field_sizes": [
+          448,
+          448,
+          448,
+          160,
+          42,
+          24
+        ],
+        "gauge": 1,
+        "unknowns": 1571,
+        "dense_guard": 3000,
+        "within_dense_guard": true,
+        "central_FD_residual_calls_per_full_Jacobian": 3142,
+        "single_dense_matrix_bytes": 19744328,
+        "source_volume_outer_Gauss_points": 960,
+        "estimate_scope": "Exact tensor-space counts before native verification; assembly/factor scaling is indicative, not a measured timing"
+      },
+      "fresh_initialization": true,
+      "restart": "None",
+      "checkpoint": "None",
+      "interpretation": "Explicit diagnostic continuation; outside frozen local gradient region from t=0"
+    },
+    {
+      "name": "resolved-dt0025",
+      "xml": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/controls-001/cases/resolved-dt0025/case.xml",
+      "xml_sha256": "e131470462e22f65758ed13908e32447bf9bd8ad534e08e0275a0649c56896b6",
+      "dt": 0.0025,
+      "requested_steps": 24,
+      "maximum_time": 0.06,
+      "cost": {
+        "dimension": 2,
+        "degree": 3,
+        "pressure_degree": 1,
+        "x": [
+          -4.0,
+          -3.0,
+          -2.0,
+          -1.0,
+          1.0,
+          2.0
+        ],
+        "radial": [
+          0.0,
+          0.01,
+          0.1,
+          0.25,
+          0.5,
+          1.0,
+          2.0,
+          2.6666666666666665,
+          3.3333333333333335,
+          4.0
+        ],
+        "cells": 45,
+        "inner_cells": 30,
+        "outer_cells": 15,
+        "field_sizes": [
+          448,
+          448,
+          448,
+          160,
+          42,
+          24
+        ],
+        "gauge": 1,
+        "unknowns": 1571,
+        "dense_guard": 3000,
+        "within_dense_guard": true,
+        "central_FD_residual_calls_per_full_Jacobian": 3142,
+        "single_dense_matrix_bytes": 19744328,
+        "source_volume_outer_Gauss_points": 960,
+        "estimate_scope": "Exact tensor-space counts before native verification; assembly/factor scaling is indicative, not a measured timing"
+      },
+      "fresh_initialization": true,
+      "restart": "None",
+      "checkpoint": "None",
+      "interpretation": "Explicit diagnostic continuation; outside frozen local gradient region from t=0"
+    }
+  ],
+  "diagnostic_solver_info": {
+    "RANSWallPhysicalRangeGuard": "R1DiagnosticV1",
+    "RANSWallSolveDiagnostics": "Failure",
+    "RANSWallSolveDiagnosticReplay": "Off",
+    "RANSWallSolveDiagnosticFile": "case.nonlinear.json"
+  },
+  "qualification_from_t0": false,
+  "local_range_exit_expected_at_t0": true,
+  "frozen_region": {
+    "gradient_entry_radius": 0.001,
+    "k_over_K0": [
+      0.99,
+      1.01
+    ],
+    "epsilon_over_epsilon0": [
+      0.98,
+      1.02
+    ],
+    "minimum_lambda": 0.5
+  },
+  "rule": "Exactly two sequential root-launched controls; preserve first declared physical violation/state/history; no physical-input, mesh, region, tolerance or solver-policy retuning",
+  "authorization": "Preparation only. Root owns build pinning, native evolution allocation and execution."
+}

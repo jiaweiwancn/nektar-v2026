@@ -445,3 +445,15 @@ floor/hill validation and reserved scores. Those require a new model decision;
 altering the model or narrowing its claimed envelope is not inferred from a
 failed test. M9 remains open and can separately deliver the faithful research
 implementation with its documented failed physical gates.
+
+## Bounded M8-R1 follow-up
+
+The separately authorized [M8-R1 diagnosis](cls-epawf-revised-m8-r1.md)
+is complete. It reproduces the transition failure, separates the initial
+negative inner covariance from later scalar-domain Newton rejection, retains
+the unsuccessful fresh-Jacobian and two refined/dt controls, and proposes one
+explicitly restricted next research contract with kernel feasibility evidence.
+The [first-failure ledger](cls-epawf-revised-evidence/m8-r1/first-failure-ledger.json)
+binds the actual source/binaries and complete available histories. No earlier
+receipt, broad-box contradiction or model identity is replaced. No new
+constitutive law is adopted, and M8 and the later physical gates remain open.

@@ -1,0 +1,85 @@
+{
+  "schema": 1,
+  "started_utc": "2026-11-03T09:09:43.177855+00:00",
+  "raw": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/preflight-001/cases/original-base/case.evolution.json",
+    "sha256": "f2a0003df4d27eb3c6525792a0f44df2254a492c2912e6b133047064a40cb435",
+    "archived_failure": "",
+    "archived_time": 0
+  },
+  "session": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/preflight-001/cases/original-base/case.xml",
+    "sha256": "dc508ad7163a325d55e22d82bb1e713c8af55251feca3ce0a9ccf370493d4a5c"
+  },
+  "driver_sha256": "d046da906814eea9aafc5ca7e0da6b3598203cc2da23bb764ddc4bdb8ed3dd84",
+  "plan": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/preflight-001/cases/preflight-plan.json",
+    "sha256": "15831356c3d8d77d368ce0739883594a99e640afd0831001df44955a213d6e83"
+  },
+  "case_generator": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/preflight-tools-001/cls_epawf_m8_r1_cases.py",
+    "sha256": "bef75f1e5ee9e0a42aad4f8d145391378c05d33331d5269e20b1e031aebd42f8"
+  },
+  "numerical_threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "affinity": [
+    49
+  ],
+  "solver_invoked": false,
+  "imported_oracles": {
+    "cls_epawf_m8_state_coverage": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_state_coverage.py",
+      "sha256": "630167223ce82e9af9270a3de45ad0c58de7e8039443cd7c5478da1ad3b17130"
+    },
+    "cls_epawf_m8_native_oracle": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_native_oracle.py",
+      "sha256": "80ec891203275919d992a8c47c4fef6f070dfffd858afffed08b2d76b0901df9"
+    },
+    "cls_epawf_m7_energy_oracle": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m7_energy_oracle.py",
+      "sha256": "52a89bb646d4c08c13e08b7b4ba18b5df6f9d959cfe543cf383a82a722cba315"
+    },
+    "cls_epawf_m6_operator_oracle": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m6_operator_oracle.py",
+      "sha256": "e4ae09358e5a578e71783cb9619d1d83918771a7768bdac8315dc3f732acdece"
+    },
+    "validate_cls_epawf_m1": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m1.py",
+      "sha256": "ad91787c6356831bd4b75e145592c9ea952a45f0e5dbdcff6015f51ce992964a"
+    },
+    "validate_cls_epawf_m2": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m2.py",
+      "sha256": "26568aa79b41bc737a9247d9f2480d932a6674c8dad46e00f5fd8301a69ff18c"
+    },
+    "validate_cls_epawf_m4": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m4.py",
+      "sha256": "979635de780944daeb24add2af0caffa44553f5284432ab632e04fe811863a06"
+    },
+    "validate_cls_epawf_m5": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m5.py",
+      "sha256": "375d440060a31d426c3e65ed1cdc35415e95cedcc0e3b248d5f04be05b91f761"
+    },
+    "validate_cls_epawf_m5_geometry": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m5_geometry.py",
+      "sha256": "4dfceb445fa6f760200a2d66aef7140e039da4da41d40902f777a0b15ef888c1"
+    }
+  },
+  "oracle_source": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-source",
+    "commit": "ab5c3c6fee19761e8d88692e8e6c331e5889234e",
+    "clean": true
+  },
+  "status": "audit_failed",
+  "failure": {
+    "type": "ValueError",
+    "message": "Preflight changed an original physical/function/solver-policy input"
+  },
+  "input_hashes_unchanged": true,
+  "finished_utc": "2026-11-03T09:09:43.215437+00:00"
+}

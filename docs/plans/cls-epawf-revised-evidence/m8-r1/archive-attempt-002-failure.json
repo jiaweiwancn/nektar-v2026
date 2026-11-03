@@ -1,0 +1,334 @@
+{
+  "archive": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/flow-001/qualification/control-coarse",
+  "archive_limits": {
+    "checkpoint_exported": false,
+    "final_stage_loads_exported": false,
+    "inference": "No rejected trial vector, line-search trace or Jacobian age is archived; Newton cause is unresolved",
+    "rejected_newton_vector_exported": false
+  },
+  "archived_metadata": {
+    "dt": 0.005,
+    "failure": "EP-AWF patch: evolution stage rejected every admissible Newton trial",
+    "offsets": [
+      0,
+      112,
+      224,
+      336,
+      400,
+      412,
+      424
+    ],
+    "order": 2,
+    "parameters": [
+      1.5e-05,
+      2,
+      0.1,
+      1,
+      1,
+      0.5105080130598861,
+      3.1906750816242875,
+      0.4405539051866587
+    ],
+    "quadrature_orders": [
+      8,
+      16
+    ],
+    "ranks": 1,
+    "robust_parameters": [
+      0.4,
+      0,
+      0.2,
+      0.1,
+      0,
+      1,
+      1
+    ],
+    "steps": 11,
+    "time": 0.05499999999999999,
+    "transition_controls": [
+      -3,
+      -2.25,
+      2.5,
+      3.5,
+      -2,
+      0.02,
+      0.1,
+      0.05,
+      0.1,
+      100,
+      200
+    ]
+  },
+  "certified_ranges": {
+    "finite_boxes": [
+      {
+        "beta": "2/5",
+        "branch_scope": "both complete formal max-invariant branches, hence every active branch and tie convex combination",
+        "epsilon_over_epsilon0": [
+          "99/100",
+          "101/100"
+        ],
+        "gamma_candidates": [
+          {
+            "certified_positive": true,
+            "certified_principal_lower_over_nut0": "0.4712728106975555419921875",
+            "gamma_over_nut0": "1",
+            "joint_constitutive_gate": true
+          },
+          {
+            "certified_positive": true,
+            "certified_principal_lower_over_nut0": "2.4712728106975555419921875",
+            "gamma_over_nut0": "3",
+            "joint_constitutive_gate": true
+          }
+        ],
+        "gradient_entry_radius": "1/1000",
+        "k_over_k0": [
+          "99/100",
+          "101/100"
+        ],
+        "normalization": "A*=A/G0; k*=Qstar*k/K0; epsilon*=epsilon/epsilon0; tangent_phys=nut0*tangent_star",
+        "qualified_property": "frozen-k/epsilon incompressible momentum principal-form lower bound only"
+      },
+      {
+        "beta": "2/5",
+        "branch_scope": "both complete formal max-invariant branches, hence every active branch and tie convex combination",
+        "epsilon_over_epsilon0": [
+          "99/100",
+          "101/100"
+        ],
+        "gamma_candidates": [
+          {
+            "certified_positive": true,
+            "certified_principal_lower_over_nut0": "-1.452618761807680130004882812",
+            "gamma_over_nut0": "1",
+            "joint_constitutive_gate": false
+          },
+          {
+            "certified_positive": true,
+            "certified_principal_lower_over_nut0": "0.547381238192319869995117188",
+            "gamma_over_nut0": "3",
+            "joint_constitutive_gate": true
+          }
+        ],
+        "gradient_entry_radius": "1/100",
+        "k_over_k0": [
+          "99/100",
+          "101/100"
+        ],
+        "normalization": "A*=A/G0; k*=Qstar*k/K0; epsilon*=epsilon/epsilon0; tangent_phys=nut0*tangent_star",
+        "qualified_property": "frozen-k/epsilon incompressible momentum principal-form lower bound only"
+      },
+      {
+        "beta": "9/20",
+        "branch_scope": "both complete formal max-invariant branches, hence every active branch and tie convex combination",
+        "epsilon_over_epsilon0": [
+          "99/100",
+          "101/100"
+        ],
+        "gamma_candidates": [
+          {
+            "certified_positive": true,
+            "certified_principal_lower_over_nut0": "0.359364129975438117980957031",
+            "gamma_over_nut0": "1",
+            "joint_constitutive_gate": true
+          },
+          {
+            "certified_positive": true,
+            "certified_principal_lower_over_nut0": "2.359364129975438117980957031",
+            "gamma_over_nut0": "3",
+            "joint_constitutive_gate": true
+          }
+        ],
+        "gradient_entry_radius": "1/1000",
+        "k_over_k0": [
+          "99/100",
+          "101/100"
+        ],
+        "normalization": "A*=A/G0; k*=Qstar*k/K0; epsilon*=epsilon/epsilon0; tangent_phys=nut0*tangent_star",
+        "qualified_property": "frozen-k/epsilon incompressible momentum principal-form lower bound only"
+      },
+      {
+        "beta": "9/20",
+        "branch_scope": "both complete formal max-invariant branches, hence every active branch and tie convex combination",
+        "epsilon_over_epsilon0": [
+          "99/100",
+          "101/100"
+        ],
+        "gamma_candidates": [
+          {
+            "certified_positive": true,
+            "certified_principal_lower_over_nut0": "-1.747436595335602760314941406",
+            "gamma_over_nut0": "1",
+            "joint_constitutive_gate": false
+          },
+          {
+            "certified_positive": true,
+            "certified_principal_lower_over_nut0": "0.252563404664397239685058594",
+            "gamma_over_nut0": "3",
+            "joint_constitutive_gate": true
+          }
+        ],
+        "gradient_entry_radius": "1/100",
+        "k_over_k0": [
+          "99/100",
+          "101/100"
+        ],
+        "normalization": "A*=A/G0; k*=Qstar*k/K0; epsilon*=epsilon/epsilon0; tangent_phys=nut0*tangent_star",
+        "qualified_property": "frozen-k/epsilon incompressible momentum principal-form lower bound only"
+      }
+    ],
+    "interpretation": "Outer constitutive membership only; the radius .01 joint box requires GammaScale3, not this run's 1. Tracefree principal-form certificates do not assert strong discrete incompressibility or inner AWF realizability. The disproven broad box is not a certified admissible envelope.",
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-source/docs/plans/cls-epawf-revised-evidence/m8/proof-local-joint-11aa.json",
+    "sha256": "f98d73a310b203e2af2d71e768b2a742c8f793f06a9aa0deaa22b44836ffea52"
+  },
+  "checks": 29,
+  "completed_epoch_count": 1,
+  "driver_sha256": "35a785701986243e7e86fc376eb8233498e87711adecb4b6c6cbf34dcefd47b0",
+  "errors": {
+    "finite_set_interface_inner": 4.3298697960381104e-16,
+    "finite_set_interface_outer": 6.938893903907228e-18,
+    "finite_set_mass_volume": 1.7347234759768072e-19,
+    "finite_set_physical_sample_K": 5.204170427930421e-17,
+    "finite_set_physical_sample_outer": 1.8041124150158794e-17,
+    "finite_set_prescribed_source_inner": 9.130123557772669e-21,
+    "finite_set_reconstruction_dense": 6.853228547068867e-20,
+    "finite_set_reconstruction_native": 1.7347234759768072e-19,
+    "finite_set_source_volume_inner": 1.4586937378847666e-19,
+    "finite_set_source_volume_outer": 2.5153490401663702e-18,
+    "independent_boundary_reactions": 1.5276668818842154e-13,
+    "independent_complete_energy_accounting": 2.501878492279428e-15,
+    "independent_complete_weak_scaled_norms": 3.8852942014472655e-12,
+    "independent_constitutive_modification": 4.683753385137379e-17,
+    "independent_full_traction_kflux": 6.834810495348619e-16,
+    "independent_robust_source": 1.7376777093559684e-16,
+    "independent_strong_continuity": 3.356231447325107e-14,
+    "independent_wall_sources": 1.1986513924706646e-14,
+    "initial_archive_state": 0.0,
+    "last_accepted_archive_state": 0.0,
+    "last_accepted_time": 0.0,
+    "shared_trace_endpoints": 0.0
+  },
+  "failures": [
+    {
+      "message": "Object of type ndarray is not JSON serializable",
+      "traceback": "Traceback (most recent call last):\n  File \"/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/cls_epawf_m8_r1_archive.py\", line 565, in main\n    record = engine.state_record(state, history, alpha, time, native)\n  File \"/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/cls_epawf_m8_r1_archive.py\", line 482, in state_record\n    return dict(time=time, alpha=alpha, state_sha256=canonical(state), history_sha256=canonical(history),\n  File \"/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/cls_epawf_m8_r1_archive.py\", line 42, in canonical\n    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(',', ':'),\n  File \"/usr/lib/python3.10/json/__init__.py\", line 238, in dumps\n    **kw).encode(obj)\n  File \"/usr/lib/python3.10/json/encoder.py\", line 199, in encode\n    chunks = self.iterencode(o, _one_shot=True)\n  File \"/usr/lib/python3.10/json/encoder.py\", line 257, in iterencode\n    return _iterencode(o, 0)\n  File \"/usr/lib/python3.10/json/encoder.py\", line 179, in default\n    raise TypeError(f'Object of type {o.__class__.__name__} '\nTypeError: Object of type ndarray is not JSON serializable\n",
+      "type": "TypeError"
+    }
+  ],
+  "finished_utc": "2026-11-03T09:00:29.748105+00:00",
+  "history": {
+    "accepted_states": {
+      "canonical_sha256": "49b8098df8be37c1668894b10b3adefecb669d6e1d2a7c1d4b7ccf77bab423ad",
+      "entries": 12
+    },
+    "audit_times": {
+      "canonical_sha256": "cb9716ab428444868c8b6dcea2b4009111c68af4fa786bea04d0907e4cdc1ad9",
+      "entries": 12
+    },
+    "fixed_defect": {
+      "canonical_sha256": "33e16b10a64a9916f032ca772961ba02ebc10f8d946d3b6f9f43f9b096ca878e",
+      "entries": 425
+    },
+    "fixed_reference": {
+      "canonical_sha256": "2539b2e08258f3cc6c7f7531e8f87cd475e119fa7622b7070af78797d72e43dc",
+      "entries": 425
+    },
+    "initial": {
+      "canonical_sha256": "2539b2e08258f3cc6c7f7531e8f87cd475e119fa7622b7070af78797d72e43dc",
+      "entries": 425
+    },
+    "last_stage_history": {
+      "canonical_sha256": "6a9de4a138184414d44a9431990274921db8a269b5cec9bfa799166a8800e533",
+      "entries": 425
+    },
+    "native_history": {
+      "canonical_sha256": "d1626112ecb92200e44a1c5ab69a33d6f9c6cdd932be3837d7dcc45332602749",
+      "entries": 4
+    },
+    "native_history_times": {
+      "canonical_sha256": "773edb79171a0fceaca801d9bba2ddf7d078db4748a3a479c04ef409640de121",
+      "entries": 4
+    },
+    "raw_reference_loads": {
+      "canonical_sha256": "b2b6d1f5eed7ea798465c123ef327533bcfacf754d12e4bd133e8183cc7550a4",
+      "entries": 425
+    },
+    "state": {
+      "canonical_sha256": "e9fada45bcaaca6f8237bd80536fb1b06142cd915e7cd47b9ae9bdc4dd5a101f",
+      "entries": 425
+    },
+    "transition_reference": {
+      "canonical_sha256": "6287ac9c743e53350bbed18a00f65ff6ac14c05987a84c581bfcb00bf13e8856",
+      "entries": 425
+    }
+  },
+  "inputs": {
+    "case.evolution.json": {
+      "bytes": 195517,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/flow-001/qualification/control-coarse/case.evolution.json",
+      "sha256": "6a934342924e9f730fe1b9cddf4391a8df82647acc5a1f7b4f078b5e62e6fc00"
+    },
+    "case.xml": {
+      "bytes": 6601,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/flow-001/qualification/control-coarse/case.xml",
+      "sha256": "c54b2522cca860081f23e041a649e0668740f5f4bd86b711e4cf8f1a3d3f6d7b"
+    },
+    "run.log": {
+      "bytes": 1409,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/flow-001/qualification/control-coarse/run.log",
+      "sha256": "ebd3f5c53b4170687a7aebcd887a5ad0ddaf69f169669da364a0858ef1eefa43"
+    }
+  },
+  "milestone": "M8-R1",
+  "numerical_threads": {
+    "BLIS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "original_completed_states_sha256": "345ace7096059068b5ebb64e3278425785635f0ca009af133cb46e2b1e13c2eb",
+  "original_events_sha256": "a3b908859314facfb9b2d31309cf3d15bca04207199f37b50187bb1524341d20",
+  "phase": "A archived accepted prefix",
+  "producing_runtime": {
+    "actual_command": {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/flow-001/qualification/control-coarse/case.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/flow-001/qualification/control-coarse",
+      "exit_code": 1,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/flow-001/qualification/control-coarse/run.log",
+      "log_sha256": "ebd3f5c53b4170687a7aebcd887a5ad0ddaf69f169669da364a0858ef1eefa43",
+      "name": "control-coarse",
+      "numerical_threads": {
+        "BLIS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1"
+      },
+      "ranks": 1,
+      "seconds": 294.118775076,
+      "timeout_seconds": 3600.0
+    },
+    "interpretation": "Historical producing binary, distinct from the later capped Functions startup correction",
+    "program": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/IncNavierStokesSolver",
+      "sha256": "2fa72f138fc65da2b04be52735f1e767185375b0b9900b4fb66f1364da2be2ea"
+    },
+    "runtime_pin_path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/flow-001/runtime-before.json",
+    "runtime_pin_sha256": "898b9a9da2129a5c3c20a99e20ab23e0fe5b32588fb52270af82bacfb217eebd",
+    "source_commit": "aa854f4c5b05451a81a4e1dd60eaaca98eb547e4",
+    "validation_path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/flow-001/qualification/validation.json",
+    "validation_sha256": "3e3c85d48bae0908b4aef14865aec51d7bca48e9d0b30824ab12c6db5b7bc083"
+  },
+  "schema": 1,
+  "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-source",
+  "source_clean_start": true,
+  "source_commit": "ab5c3c6fee19761e8d88692e8e6c331e5889234e",
+  "started_utc": "2026-11-03T09:00:01.758687+00:00",
+  "success": false,
+  "trajectory_launched": false
+}

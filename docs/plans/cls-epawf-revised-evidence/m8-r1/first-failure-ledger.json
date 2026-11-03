@@ -1,0 +1,1843 @@
+{
+  "schema": 1,
+  "milestone": "M8-R1",
+  "status": "completed_bounded_diagnosis",
+  "M8_status": "OPEN",
+  "physical_model_qualified": false,
+  "production_constitutive_adoption": false,
+  "reviewed_baseline": "ab5c3c6fee19761e8d88692e8e6c331e5889234e",
+  "initial_HEAD_equal_reviewed_baseline": true,
+  "branch": "codex/cls-epawf-revised",
+  "compiled_source_epochs": [
+    {
+      "build_root": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/build",
+      "full_pin_path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/reproduction-001/runtime-before.json",
+      "full_pin_sha256": "c90216f94dc59034dfc7d03824d9615034f4daac22b9db009702c22de37a17f6",
+      "interpretation": "Actual instrumented producing runtime, distinct from archived AA and analysis-driver source",
+      "solver_sha256": "40f6d2a37822b418ceb1e4d5e134574e3635a60ce52fc4e0229faadda9afe3c6",
+      "source_commit": "426d48cd44f9f4af017244f6be4c1a6f62d36c01",
+      "source_root": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/source"
+    },
+    {
+      "build_root": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/build",
+      "full_pin_path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/reproduction-001/runtime-before.json",
+      "full_pin_sha256": "cd88b043567764403f4b05a9278b5861642aaf15bfb3bc2076fdeced34300a56",
+      "interpretation": "Actual instrumented producing runtime, distinct from archived AA and analysis-driver source",
+      "solver_sha256": "aa48843d03d22b7089b2b08f56d777640a1419a3e59296850523d3130206e336",
+      "source_commit": "360cbb7ac728b575cdf9af21e6d0963a1d88acb9",
+      "source_root": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/source"
+    }
+  ],
+  "committed_helper_source_binding": {
+    "schema": 1,
+    "status": "passed",
+    "runner_sha256": "06a54c7c718a852d4e5efecc800d8126a3cd06454d6573767e8ae3440b196abc",
+    "bundle_sha256": "0544cbdf45f241ca93002fdd83444afe65c1111ac2ea2c2168677c129d201f39",
+    "helper_source_commit": "f53bc61112f62be148083fdb5e4b427eeffeac5f",
+    "helper_source_clean": true,
+    "compiled_source_commit": "360cbb7ac728b575cdf9af21e6d0963a1d88acb9",
+    "compiled_source_clean": true,
+    "compiled_input_count": 1801,
+    "compiled_inputs_byte_identical": true,
+    "compiled_manifest_sha256": "d9fd38dfc3cc2189055865f0713237cc9b773e92ca2cad462025e7b779a4aecf",
+    "helpers": {
+      "solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_r1_archive.py": "0c2700ec408ae12d72bb1442eb978b9ce416be9fd86a85978534a06aa105274e",
+      "solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_r1_cases.py": "40e93cf65ba8dad611b48eceb243520b20dce970ae1f20ec04492edb8b9155ba",
+      "solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_r1_kernel.py": "43214f63aa5a96400a85dd8ded0416055ed87d668a051baf5cd125595e9fe293",
+      "solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_r1_nonlinear.py": "4d3fd89a201c9170123dc1cd0466b5878a87e8502dd67921651f3e7e7efb5928",
+      "solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_r1_points.py": "87fbb11cf86163035499bd55da355ad568a63854439b086745144c169e453501",
+      "solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_r1_preflight.py": "d046da906814eea9aafc5ca7e0da6b3598203cc2da23bb764ddc4bdb8ed3dd84"
+    },
+    "mathematical_residual_changed": false,
+    "qualification": "No new C++ law or production solver policy; final helpers differ from historical epoch by explicit new files.",
+    "all_input_manifest_identity_claimed": false,
+    "actual_runtime_pin": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/source-binding-001/runtime-final.json",
+      "sha256": "7a8bdcc5e2a5d0dbb2e00abeb005f1c918e1210dc893597d9a537180a1599be2"
+    },
+    "compared_runtime_pin": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/controls-001/runtime-before.json",
+      "sha256": "f42fca3e61e2fa520a61cab50693429f640b33692ab5389714df7cb4dc081242"
+    },
+    "runtime_command": [
+      "python3",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/source/docs/plans/cls-epawf-revised-evidence/m7/fingerprint-runtime.py",
+      "--root",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled",
+      "--output",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/source-binding-001/runtime-final.json",
+      "--compare",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/controls-001/runtime-before.json"
+    ],
+    "runtime_log_sha256": "985ebda46f70ca4b1a7ae3a0e5756e131f51122300dedc7ad86581919de1f375",
+    "runtime_exit_code": 0,
+    "main_checkout_preserved": true
+  },
+  "historical_producing_runtime": {
+    "actual_command": {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/flow-001/qualification/control-coarse/case.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/flow-001/qualification/control-coarse",
+      "exit_code": 1,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/flow-001/qualification/control-coarse/run.log",
+      "log_sha256": "ebd3f5c53b4170687a7aebcd887a5ad0ddaf69f169669da364a0858ef1eefa43",
+      "name": "control-coarse",
+      "numerical_threads": {
+        "BLIS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1"
+      },
+      "ranks": 1,
+      "seconds": 294.118775076,
+      "timeout_seconds": 3600.0
+    },
+    "interpretation": "Historical producing binary, distinct from the later capped Functions startup correction",
+    "program": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/IncNavierStokesSolver",
+      "sha256": "2fa72f138fc65da2b04be52735f1e767185375b0b9900b4fb66f1364da2be2ea"
+    },
+    "runtime_pin_path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/flow-001/runtime-before.json",
+    "runtime_pin_sha256": "898b9a9da2129a5c3c20a99e20ab23e0fe5b32588fb52270af82bacfb217eebd",
+    "source_commit": "aa854f4c5b05451a81a4e1dd60eaaca98eb547e4",
+    "validation_path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/flow-001/qualification/validation.json",
+    "validation_sha256": "3e3c85d48bae0908b4aef14865aec51d7bca48e9d0b30824ab12c6db5b7bc083"
+  },
+  "original_XML_log_results": {
+    "case.evolution.json": {
+      "bytes": 195517,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/flow-001/qualification/control-coarse/case.evolution.json",
+      "sha256": "6a934342924e9f730fe1b9cddf4391a8df82647acc5a1f7b4f078b5e62e6fc00"
+    },
+    "case.xml": {
+      "bytes": 6601,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/flow-001/qualification/control-coarse/case.xml",
+      "sha256": "c54b2522cca860081f23e041a649e0668740f5f4bd86b711e4cf8f1a3d3f6d7b"
+    },
+    "run.log": {
+      "bytes": 1409,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/flow-001/qualification/control-coarse/run.log",
+      "sha256": "ebd3f5c53b4170687a7aebcd887a5ad0ddaf69f169669da364a0858ef1eefa43"
+    }
+  },
+  "original_checkpoint_exported": false,
+  "original_rejected_Newton_vector_exported": false,
+  "complete_archived_history_hashes": {
+    "accepted_states": {
+      "canonical_sha256": "49b8098df8be37c1668894b10b3adefecb669d6e1d2a7c1d4b7ccf77bab423ad",
+      "entries": 12
+    },
+    "audit_times": {
+      "canonical_sha256": "cb9716ab428444868c8b6dcea2b4009111c68af4fa786bea04d0907e4cdc1ad9",
+      "entries": 12
+    },
+    "fixed_defect": {
+      "canonical_sha256": "33e16b10a64a9916f032ca772961ba02ebc10f8d946d3b6f9f43f9b096ca878e",
+      "entries": 425
+    },
+    "fixed_reference": {
+      "canonical_sha256": "2539b2e08258f3cc6c7f7531e8f87cd475e119fa7622b7070af78797d72e43dc",
+      "entries": 425
+    },
+    "initial": {
+      "canonical_sha256": "2539b2e08258f3cc6c7f7531e8f87cd475e119fa7622b7070af78797d72e43dc",
+      "entries": 425
+    },
+    "last_stage_history": {
+      "canonical_sha256": "6a9de4a138184414d44a9431990274921db8a269b5cec9bfa799166a8800e533",
+      "entries": 425
+    },
+    "native_history": {
+      "canonical_sha256": "d1626112ecb92200e44a1c5ab69a33d6f9c6cdd932be3837d7dcc45332602749",
+      "entries": 4
+    },
+    "native_history_times": {
+      "canonical_sha256": "773edb79171a0fceaca801d9bba2ddf7d078db4748a3a479c04ef409640de121",
+      "entries": 4
+    },
+    "raw_reference_loads": {
+      "canonical_sha256": "b2b6d1f5eed7ea798465c123ef327533bcfacf754d12e4bd133e8183cc7550a4",
+      "entries": 425
+    },
+    "state": {
+      "canonical_sha256": "e9fada45bcaaca6f8237bd80536fb1b06142cd915e7cd47b9ae9bdc4dd5a101f",
+      "entries": 425
+    },
+    "transition_reference": {
+      "canonical_sha256": "6287ac9c743e53350bbed18a00f65ff6ac14c05987a84c581bfcb00bf13e8856",
+      "entries": 425
+    }
+  },
+  "hash_encoding": "File references are SHA256 of exact bytes. Canonical vectors use each linked ledger declared encoding; no array is inferred from its norm.",
+  "source_runtime_receipt": "runtime-summary.json (100 runtime images and3921 numerical inputs per instrumented epoch, exact before/after matches)",
+  "archived_first_failure": {
+    "last_accepted_time": 0.055,
+    "first_failed_stage_time": 0.06,
+    "accepted_epoch_count": 12,
+    "first_inner_witness": {
+      "accepted_step": 0,
+      "detail": {
+        "G": [
+          [
+            0.0,
+            0.0,
+            5.191590612064875
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "S": [
+          [
+            0.0,
+            0.0,
+            5.191590612064875
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            5.191590612064875,
+            0.0,
+            0.0
+          ]
+        ],
+        "analytic_neutral_shear": 1.8959895843783414,
+        "b": 1.0,
+        "chi": 0.0,
+        "coordinate": [
+          -0.9602898564975362,
+          0.0,
+          0.5092722755356407
+        ],
+        "covariance": [
+          [
+            0.3403386753732574,
+            0.0,
+            -0.4380334453033321
+          ],
+          [
+            0.0,
+            0.3403386753732574,
+            0.0
+          ],
+          [
+            -0.4380334453033321,
+            0.0,
+            0.3403386753732574
+          ]
+        ],
+        "depletion_relative_K0": 1.0,
+        "eigenvalue": -0.0976947699300747,
+        "eigenvalues": [
+          -0.0976947699300747,
+          0.3403386753732574,
+          0.7783721206765895
+        ],
+        "eigenvector": [
+          0.7071067811865475,
+          -0.0,
+          0.7071067811865475
+        ],
+        "epsilon": 0.280875352436631,
+        "initial_k_at_same_point": 0.5105080130598861,
+        "initial_native_G": [
+          [
+            0.0,
+            0.0,
+            5.191590612064875
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "initial_native_strain_norm": 7.342017853870984,
+        "k": 0.5105080130598861,
+        "k_over_K": 1.0,
+        "lambda_value": 1.0,
+        "maximum_strain_eigenvalue": 5.191590612064875,
+        "nu_A": 0.08437364924063438,
+        "r_R": 1.2870516253344717,
+        "sampled_K": 0.5105080130598861,
+        "sampled_K_over_K0": 1.0,
+        "strain_norm": 7.342017853870984
+      },
+      "scope": "actual archived constitutive finite sets",
+      "set": "source_volume_inner",
+      "time": 0,
+      "type": "first_negative_inner_covariance"
+    },
+    "first_negative_outer_covariance": null,
+    "accepted_outer_covariance_scope": "finite sets only",
+    "accepted_epochs": [
+      {
+        "time": 0,
+        "accepted_step": 0,
+        "state_sha256": "2539b2e08258f3cc6c7f7531e8f87cd475e119fa7622b7070af78797d72e43dc",
+        "history_sha256": "2539b2e08258f3cc6c7f7531e8f87cd475e119fa7622b7070af78797d72e43dc",
+        "minimum_inner_k": 0.510508013059886,
+        "minimum_outer_k": 0.510508013059886,
+        "minimum_inner_covariance": -0.0976947699300747,
+        "minimum_outer_covariance": 0.17437951888031158,
+        "minimum_outer_epsilon": 0.03665642702920845,
+        "source_minimum_b": 1.0,
+        "trace_minimum_b": 1.0,
+        "minimum_lambda": 1.0,
+        "limiter_active_volume": 0,
+        "normalization_capped_volume": 0,
+        "robust_source": [
+          8.436167051707077,
+          8.436167051707077,
+          8.436167051707077,
+          2.6975352392089296e-18,
+          0,
+          0,
+          1,
+          2616.9832785333138
+        ],
+        "historical_range_membership": {
+          "0.001": {
+            "count": 440,
+            "epsilon_ratio": [
+              0.9833429223226836,
+              1.003851648978953
+            ],
+            "first_outside": {
+              "coordinate": [
+                -3.980144928248768,
+                0.0,
+                2.5
+              ],
+              "epsilon_over_epsilon0": 1.0027569820977873,
+              "gradient_entry_departure": 0.013800722662466347,
+              "k_over_K0": 1.0,
+              "normalized_divergence": 0.0,
+              "q": 3.22581518880552,
+              "q_rotation": 3.22581518880552,
+              "q_strain": 3.22581518880552,
+              "set": "physical_sample_outer"
+            },
+            "k_ratio": [
+              0.9999999999999998,
+              1.0000000000000002
+            ],
+            "maximum_gradient_departure": 0.018332328258716113,
+            "maximum_normalized_divergence": 0.0,
+            "maximum_q": 3.277270383336785,
+            "outside_count": 428
+          },
+          "0.01": {
+            "count": 440,
+            "epsilon_ratio": [
+              0.9833429223226836,
+              1.003851648978953
+            ],
+            "first_outside": {
+              "coordinate": [
+                -3.980144928248768,
+                0.0,
+                2.5
+              ],
+              "epsilon_over_epsilon0": 1.0027569820977873,
+              "gradient_entry_departure": 0.013800722662466347,
+              "k_over_K0": 1.0,
+              "normalized_divergence": 0.0,
+              "q": 3.22581518880552,
+              "q_rotation": 3.22581518880552,
+              "q_strain": 3.22581518880552,
+              "set": "physical_sample_outer"
+            },
+            "k_ratio": [
+              0.9999999999999998,
+              1.0000000000000002
+            ],
+            "maximum_gradient_departure": 0.018332328258716113,
+            "maximum_normalized_divergence": 0.0,
+            "maximum_q": 3.277270383336785,
+            "outside_count": 364
+          }
+        }
+      },
+      {
+        "time": 0.005,
+        "accepted_step": 1,
+        "state_sha256": "2fd468f9454750189c7e0bb13352d56d103ec8e0d868db4e1dd75ec048e89371",
+        "history_sha256": "76c2b33a2d7571f10e1b1d73708b39b5f734627c40ef5cf75ffb7944d1180cd8",
+        "minimum_inner_k": 0.468986003592121,
+        "minimum_outer_k": 0.5093540711802254,
+        "minimum_inner_covariance": -0.0977972539139656,
+        "minimum_outer_covariance": 0.14392769443300835,
+        "minimum_outer_epsilon": 0.03666334565926228,
+        "source_minimum_b": 1.0,
+        "trace_minimum_b": 1.0,
+        "minimum_lambda": 1.0,
+        "limiter_active_volume": 0,
+        "normalization_capped_volume": 0,
+        "robust_source": [
+          9.504415733054454,
+          9.504415733054454,
+          9.504415733054454,
+          0,
+          0,
+          0,
+          1,
+          2946.9886164803006
+        ],
+        "historical_range_membership": {
+          "0.001": {
+            "count": 440,
+            "epsilon_ratio": [
+              0.97972242349139,
+              1.0100173624691418
+            ],
+            "first_outside": {
+              "coordinate": [
+                -3.980144928248768,
+                0.0,
+                2.5
+              ],
+              "epsilon_over_epsilon0": 0.990065178332306,
+              "gradient_entry_departure": 0.012498133997729699,
+              "k_over_K0": 0.9999471585203749,
+              "normalized_divergence": -0.00523249705385367,
+              "q": 3.265676503349246,
+              "q_rotation": 3.265676503349246,
+              "q_strain": 3.2599903843215894,
+              "set": "physical_sample_outer"
+            },
+            "k_ratio": [
+              0.997739620436623,
+              1.014083346074176
+            ],
+            "maximum_gradient_departure": 0.06906839675653338,
+            "maximum_normalized_divergence": 0.06731105422325448,
+            "maximum_q": 3.3119077975537095,
+            "outside_count": 440
+          },
+          "0.01": {
+            "count": 440,
+            "epsilon_ratio": [
+              0.97972242349139,
+              1.0100173624691418
+            ],
+            "first_outside": {
+              "coordinate": [
+                -3.980144928248768,
+                0.0,
+                2.5
+              ],
+              "epsilon_over_epsilon0": 0.990065178332306,
+              "gradient_entry_departure": 0.012498133997729699,
+              "k_over_K0": 0.9999471585203749,
+              "normalized_divergence": -0.00523249705385367,
+              "q": 3.265676503349246,
+              "q_rotation": 3.265676503349246,
+              "q_strain": 3.2599903843215894,
+              "set": "physical_sample_outer"
+            },
+            "k_ratio": [
+              0.997739620436623,
+              1.014083346074176
+            ],
+            "maximum_gradient_departure": 0.06906839675653338,
+            "maximum_normalized_divergence": 0.06731105422325448,
+            "maximum_q": 3.3119077975537095,
+            "outside_count": 395
+          }
+        }
+      },
+      {
+        "time": 0.01,
+        "accepted_step": 2,
+        "state_sha256": "00ee13f769584fde9e373673f81489e8ed7373b540c00c79bcb1fd6ac45a94fc",
+        "history_sha256": "508c12ab7446675b863e7c659bccf26ecb558d21427f7ca8022442872fe8c8cc",
+        "minimum_inner_k": 0.42686584938539357,
+        "minimum_outer_k": 0.5082589383781527,
+        "minimum_inner_covariance": -0.09790922684945563,
+        "minimum_outer_covariance": 0.11536533772649607,
+        "minimum_outer_epsilon": 0.036670611048184004,
+        "source_minimum_b": 1.0,
+        "trace_minimum_b": 1.0,
+        "minimum_lambda": 1.0,
+        "limiter_active_volume": 0,
+        "normalization_capped_volume": 0,
+        "robust_source": [
+          9.713247079499217,
+          9.713247079499217,
+          9.713247079499217,
+          0,
+          0,
+          0,
+          1,
+          3349.6066756601285
+        ],
+        "historical_range_membership": {
+          "0.001": {
+            "count": 440,
+            "epsilon_ratio": [
+              0.974286367559269,
+              1.0360343112196617
+            ],
+            "first_outside": {
+              "coordinate": [
+                -3.980144928248768,
+                0.0,
+                2.5
+              ],
+              "epsilon_over_epsilon0": 0.9896870856636476,
+              "gradient_entry_departure": 0.011413427587226188,
+              "k_over_K0": 0.9999094931089305,
+              "normalized_divergence": -0.009172498648650782,
+              "q": 3.2656948876747927,
+              "q_rotation": 3.2656948876747927,
+              "q_strain": 3.255372429034075,
+              "set": "physical_sample_outer"
+            },
+            "k_ratio": [
+              0.9955944380417207,
+              1.0277902014336209
+            ],
+            "maximum_gradient_departure": 0.1372564709868879,
+            "maximum_normalized_divergence": 0.13370390412978816,
+            "maximum_q": 3.412409337285119,
+            "outside_count": 440
+          },
+          "0.01": {
+            "count": 440,
+            "epsilon_ratio": [
+              0.974286367559269,
+              1.0360343112196617
+            ],
+            "first_outside": {
+              "coordinate": [
+                -3.980144928248768,
+                0.0,
+                2.5
+              ],
+              "epsilon_over_epsilon0": 0.9896870856636476,
+              "gradient_entry_departure": 0.011413427587226188,
+              "k_over_K0": 0.9999094931089305,
+              "normalized_divergence": -0.009172498648650782,
+              "q": 3.2656948876747927,
+              "q_rotation": 3.2656948876747927,
+              "q_strain": 3.255372429034075,
+              "set": "physical_sample_outer"
+            },
+            "k_ratio": [
+              0.9955944380417207,
+              1.0277902014336209
+            ],
+            "maximum_gradient_departure": 0.1372564709868879,
+            "maximum_normalized_divergence": 0.13370390412978816,
+            "maximum_q": 3.412409337285119,
+            "outside_count": 340
+          }
+        }
+      },
+      {
+        "time": 0.015,
+        "accepted_step": 3,
+        "state_sha256": "78fe38e8310965729bb631fa719f48ed872d029b442ffe5591333ad313207303",
+        "history_sha256": "d059f0b995229a8854b6e8cb6478e513afad0cf50e752c6fca79a50eafb2054e",
+        "minimum_inner_k": 0.38393685609129785,
+        "minimum_outer_k": 0.5072420882180968,
+        "minimum_inner_covariance": -0.09803654421568969,
+        "minimum_outer_covariance": 0.09234775146453238,
+        "minimum_outer_epsilon": 0.03667740184674999,
+        "source_minimum_b": 1.0,
+        "trace_minimum_b": 1.0,
+        "minimum_lambda": 1.0,
+        "limiter_active_volume": 0,
+        "normalization_capped_volume": 0,
+        "robust_source": [
+          9.926566143429136,
+          9.926566143429136,
+          9.926566143429136,
+          0,
+          0,
+          0,
+          1,
+          3853.518755752879
+        ],
+        "historical_range_membership": {
+          "0.001": {
+            "count": 440,
+            "epsilon_ratio": [
+              0.9684881333588932,
+              1.0628541338104578
+            ],
+            "first_outside": {
+              "coordinate": [
+                -3.980144928248768,
+                0.0,
+                2.5
+              ],
+              "epsilon_over_epsilon0": 0.9893628193254649,
+              "gradient_entry_departure": 0.010575506489203246,
+              "k_over_K0": 0.9998887556162299,
+              "normalized_divergence": -0.011793727308881853,
+              "q": 3.265999212146038,
+              "q_rotation": 3.265999212146038,
+              "q_strain": 3.251801081459696,
+              "set": "physical_sample_outer"
+            },
+            "k_ratio": [
+              0.9936025982781073,
+              1.0409947900913337
+            ],
+            "maximum_gradient_departure": 0.20372941393568433,
+            "maximum_normalized_divergence": 0.1983531832423063,
+            "maximum_q": 3.536882516584381,
+            "outside_count": 439
+          },
+          "0.01": {
+            "count": 440,
+            "epsilon_ratio": [
+              0.9684881333588932,
+              1.0628541338104578
+            ],
+            "first_outside": {
+              "coordinate": [
+                -3.980144928248768,
+                0.0,
+                2.5
+              ],
+              "epsilon_over_epsilon0": 0.9893628193254649,
+              "gradient_entry_departure": 0.010575506489203246,
+              "k_over_K0": 0.9998887556162299,
+              "normalized_divergence": -0.011793727308881853,
+              "q": 3.265999212146038,
+              "q_rotation": 3.265999212146038,
+              "q_strain": 3.251801081459696,
+              "set": "physical_sample_outer"
+            },
+            "k_ratio": [
+              0.9936025982781073,
+              1.0409947900913337
+            ],
+            "maximum_gradient_departure": 0.20372941393568433,
+            "maximum_normalized_divergence": 0.1983531832423063,
+            "maximum_q": 3.536882516584381,
+            "outside_count": 367
+          }
+        }
+      },
+      {
+        "time": 0.02,
+        "accepted_step": 4,
+        "state_sha256": "e7acbe476fbbd060ca80d232f4ec6cedce47f281aaa7aaff00e64ddfe31d41b5",
+        "history_sha256": "8e53c81819efdc4ce4058f03927a55ae80f52cc50ced215b6f3627a2228bbebd",
+        "minimum_inner_k": 0.340116116483637,
+        "minimum_outer_k": 0.5063090513162396,
+        "minimum_inner_covariance": -0.0981836007077217,
+        "minimum_outer_covariance": 0.0743843722961301,
+        "minimum_outer_epsilon": 0.03668369615105002,
+        "source_minimum_b": 1.0,
+        "trace_minimum_b": 1.0,
+        "minimum_lambda": 1.0,
+        "limiter_active_volume": 0,
+        "normalization_capped_volume": 0,
+        "robust_source": [
+          10.14464826742159,
+          10.14464826742159,
+          10.14464826742159,
+          0,
+          0,
+          0,
+          1,
+          4502.116108814669
+        ],
+        "historical_range_membership": {
+          "0.001": {
+            "count": 440,
+            "epsilon_ratio": [
+              0.9626912080752645,
+              1.0905225686429345
+            ],
+            "first_outside": {
+              "coordinate": [
+                -3.980144928248768,
+                0.0,
+                2.5
+              ],
+              "epsilon_over_epsilon0": 0.9890912466424474,
+              "gradient_entry_departure": 0.011654167869286313,
+              "k_over_K0": 0.9998824424155532,
+              "normalized_divergence": -0.013397123481574963,
+              "q": 3.2665775987537273,
+              "q_rotation": 3.2665775987537273,
+              "q_strain": 3.2490520874755906,
+              "set": "physical_sample_outer"
+            },
+            "k_ratio": [
+              0.9917749346998909,
+              1.0536601537739874
+            ],
+            "maximum_gradient_departure": 0.26776810795605144,
+            "maximum_normalized_divergence": 0.260558681754361,
+            "maximum_q": 3.679023011234083,
+            "outside_count": 437
+          },
+          "0.01": {
+            "count": 440,
+            "epsilon_ratio": [
+              0.9626912080752645,
+              1.0905225686429345
+            ],
+            "first_outside": {
+              "coordinate": [
+                -3.980144928248768,
+                0.0,
+                2.5
+              ],
+              "epsilon_over_epsilon0": 0.9890912466424474,
+              "gradient_entry_departure": 0.011654167869286313,
+              "k_over_K0": 0.9998824424155532,
+              "normalized_divergence": -0.013397123481574963,
+              "q": 3.2665775987537273,
+              "q_rotation": 3.2665775987537273,
+              "q_strain": 3.2490520874755906,
+              "set": "physical_sample_outer"
+            },
+            "k_ratio": [
+              0.9917749346998909,
+              1.0536601537739874
+            ],
+            "maximum_gradient_departure": 0.26776810795605144,
+            "maximum_normalized_divergence": 0.260558681754361,
+            "maximum_q": 3.679023011234083,
+            "outside_count": 388
+          }
+        }
+      },
+      {
+        "time": 0.025,
+        "accepted_step": 5,
+        "state_sha256": "23c8f7aa31b5fae498f0b929072e0278b8030e9b8d75e607d558b0a27e822c99",
+        "history_sha256": "95595c0a60a6618ff4782331d11f5127c899bb667630c7a28b20ac539620901f",
+        "minimum_inner_k": 0.29536257126087884,
+        "minimum_outer_k": 0.5054600495948942,
+        "minimum_inner_covariance": -0.09835287085673694,
+        "minimum_outer_covariance": 0.06054174585081308,
+        "minimum_outer_epsilon": 0.03668950508367799,
+        "source_minimum_b": 1.0,
+        "trace_minimum_b": 1.0,
+        "minimum_lambda": 1.0,
+        "limiter_active_volume": 0,
+        "normalization_capped_volume": 0,
+        "robust_source": [
+          10.367608505920895,
+          10.367608505920895,
+          10.367608505920895,
+          0,
+          0,
+          0,
+          1,
+          5366.588593802007
+        ],
+        "historical_range_membership": {
+          "0.001": {
+            "count": 440,
+            "epsilon_ratio": [
+              0.9569041182144082,
+              1.1190484446024629
+            ],
+            "first_outside": {
+              "coordinate": [
+                -3.980144928248768,
+                0.0,
+                2.5
+              ],
+              "epsilon_over_epsilon0": 0.9888674788430334,
+              "gradient_entry_departure": 0.012194396237053337,
+              "k_over_K0": 0.9998871146096316,
+              "normalized_divergence": -0.014295825533933064,
+              "q": 3.2672900425789817,
+              "q_rotation": 3.2672900425789817,
+              "q_strain": 3.2469954721652927,
+              "set": "physical_sample_outer"
+            },
+            "k_ratio": [
+              0.9901118820158465,
+              1.065783122124754
+            ],
+            "maximum_gradient_departure": 0.328835389254052,
+            "maximum_normalized_divergence": 0.3197992200032478,
+            "maximum_q": 3.8325787951825117,
+            "outside_count": 440
+          },
+          "0.01": {
+            "count": 440,
+            "epsilon_ratio": [
+              0.9569041182144082,
+              1.1190484446024629
+            ],
+            "first_outside": {
+              "coordinate": [
+                -3.980144928248768,
+                0.0,
+                2.5
+              ],
+              "epsilon_over_epsilon0": 0.9888674788430334,
+              "gradient_entry_departure": 0.012194396237053337,
+              "k_over_K0": 0.9998871146096316,
+              "normalized_divergence": -0.014295825533933064,
+              "q": 3.2672900425789817,
+              "q_rotation": 3.2672900425789817,
+              "q_strain": 3.2469954721652927,
+              "set": "physical_sample_outer"
+            },
+            "k_ratio": [
+              0.9901118820158465,
+              1.065783122124754
+            ],
+            "maximum_gradient_departure": 0.328835389254052,
+            "maximum_normalized_divergence": 0.3197992200032478,
+            "maximum_q": 3.8325787951825117,
+            "outside_count": 421
+          }
+        }
+      },
+      {
+        "time": 0.030000000000000002,
+        "accepted_step": 6,
+        "state_sha256": "a86a1bc4e1f168e1c730d006cc3eda08f17ec979c3395b69b50ce0c52520728a",
+        "history_sha256": "e0de90d9fa243f536b9f0a5dd4de26e5ab492eeaf110f296524fa55c0e5ab90a",
+        "minimum_inner_k": 0.24964866896383664,
+        "minimum_outer_k": 0.5046930342290932,
+        "minimum_inner_covariance": -0.09854515022093843,
+        "minimum_outer_covariance": 0.049904336636881,
+        "minimum_outer_epsilon": 0.03669485031445692,
+        "source_minimum_b": 1.0,
+        "trace_minimum_b": 1.0,
+        "minimum_lambda": 1.0,
+        "limiter_active_volume": 0,
+        "normalization_capped_volume": 0,
+        "robust_source": [
+          10.595506531190503,
+          10.595506531190503,
+          10.595506531190503,
+          0,
+          0,
+          0,
+          1,
+          6573.550510416091
+        ],
+        "historical_range_membership": {
+          "0.001": {
+            "count": 440,
+            "epsilon_ratio": [
+              0.9511339015762523,
+              1.148427272499925
+            ],
+            "first_outside": {
+              "coordinate": [
+                -3.980144928248768,
+                0.0,
+                2.5
+              ],
+              "epsilon_over_epsilon0": 0.9886856653802719,
+              "gradient_entry_departure": 0.012302877004538857,
+              "k_over_K0": 0.9998995429351091,
+              "normalized_divergence": -0.014736029532239013,
+              "q": 3.2679495007435464,
+              "q_rotation": 3.2679495007435464,
+              "q_strain": 3.2455832469476906,
+              "set": "physical_sample_outer"
+            },
+            "k_ratio": [
+              0.988609426919787,
+              1.077374832483092
+            ],
+            "maximum_gradient_departure": 0.3865990252342916,
+            "maximum_normalized_divergence": 0.3757530049440598,
+            "maximum_q": 3.992112324444524,
+            "outside_count": 440
+          },
+          "0.01": {
+            "count": 440,
+            "epsilon_ratio": [
+              0.9511339015762523,
+              1.148427272499925
+            ],
+            "first_outside": {
+              "coordinate": [
+                -3.980144928248768,
+                0.0,
+                2.5
+              ],
+              "epsilon_over_epsilon0": 0.9886856653802719,
+              "gradient_entry_departure": 0.012302877004538857,
+              "k_over_K0": 0.9998995429351091,
+              "normalized_divergence": -0.014736029532239013,
+              "q": 3.2679495007435464,
+              "q_rotation": 3.2679495007435464,
+              "q_strain": 3.2455832469476906,
+              "set": "physical_sample_outer"
+            },
+            "k_ratio": [
+              0.988609426919787,
+              1.077374832483092
+            ],
+            "maximum_gradient_departure": 0.3865990252342916,
+            "maximum_normalized_divergence": 0.3757530049440598,
+            "maximum_q": 3.992112324444524,
+            "outside_count": 439
+          }
+        }
+      },
+      {
+        "time": 0.035,
+        "accepted_step": 7,
+        "state_sha256": "e7a4c74d274ad0532f66b17fd7c1090f542d8ec64bd2d3f86e554526f517aa60",
+        "history_sha256": "6c7272506da96e701a01e74866c7b3a9a4b15ebe940019f1714c712c7f80ab1e",
+        "minimum_inner_k": 0.20295109536624747,
+        "minimum_outer_k": 0.5040048445404489,
+        "minimum_inner_covariance": -0.09876004363204202,
+        "minimum_outer_covariance": 0.04170877585758746,
+        "minimum_outer_epsilon": 0.03669975627960454,
+        "source_minimum_b": 1.0,
+        "trace_minimum_b": 1.0,
+        "minimum_lambda": 1.0,
+        "limiter_active_volume": 0,
+        "normalization_capped_volume": 0,
+        "robust_source": [
+          10.828382722766323,
+          10.828382722766323,
+          10.828382722766323,
+          0,
+          0,
+          0,
+          1,
+          8372.594944171336
+        ],
+        "historical_range_membership": {
+          "0.001": {
+            "count": 440,
+            "epsilon_ratio": [
+              0.9453861050661228,
+              1.178649589138356
+            ],
+            "first_outside": {
+              "coordinate": [
+                -3.980144928248768,
+                0.0,
+                2.5
+              ],
+              "epsilon_over_epsilon0": 0.9885400060743587,
+              "gradient_entry_departure": 0.012155007821344408,
+              "k_over_K0": 0.9999170462706287,
+              "normalized_divergence": -0.014893647410516315,
+              "q": 3.2683843845399037,
+              "q_rotation": 3.2683843845399037,
+              "q_strain": 3.2447995887551047,
+              "set": "physical_sample_outer"
+            },
+            "k_ratio": [
+              0.98726137817023,
+              1.0884531907696922
+            ],
+            "maximum_gradient_departure": 0.44091871216312994,
+            "maximum_normalized_divergence": 0.4282852287837294,
+            "maximum_q": 4.153325179385773,
+            "outside_count": 440
+          },
+          "0.01": {
+            "count": 440,
+            "epsilon_ratio": [
+              0.9453861050661228,
+              1.178649589138356
+            ],
+            "first_outside": {
+              "coordinate": [
+                -3.980144928248768,
+                0.0,
+                2.5
+              ],
+              "epsilon_over_epsilon0": 0.9885400060743587,
+              "gradient_entry_departure": 0.012155007821344408,
+              "k_over_K0": 0.9999170462706287,
+              "normalized_divergence": -0.014893647410516315,
+              "q": 3.2683843845399037,
+              "q_rotation": 3.2683843845399037,
+              "q_strain": 3.2447995887551047,
+              "set": "physical_sample_outer"
+            },
+            "k_ratio": [
+              0.98726137817023,
+              1.0884531907696922
+            ],
+            "maximum_gradient_departure": 0.44091871216312994,
+            "maximum_normalized_divergence": 0.4282852287837294,
+            "maximum_q": 4.153325179385773,
+            "outside_count": 440
+          }
+        }
+      },
+      {
+        "time": 0.04,
+        "accepted_step": 8,
+        "state_sha256": "1dfd244433c5ced902700d567525cbd692132f28da5e03474b5cf300bc3dda10",
+        "history_sha256": "366e8ddb7983affdb49e7f03ed7c95c5669c09b21be2eecff59374a596504486",
+        "minimum_inner_k": 0.15524778870802242,
+        "minimum_outer_k": 0.5033917198673478,
+        "minimum_inner_covariance": -0.09899640064495402,
+        "minimum_outer_covariance": 0.035360597094889354,
+        "minimum_outer_epsilon": 0.03670424814191136,
+        "source_minimum_b": 1.0,
+        "trace_minimum_b": 1.0,
+        "minimum_lambda": 1.0,
+        "limiter_active_volume": 0,
+        "normalization_capped_volume": 0,
+        "robust_source": [
+          11.066270968921199,
+          11.066270968921199,
+          11.066270968921199,
+          0,
+          0,
+          0,
+          1,
+          11333.827499968436
+        ],
+        "historical_range_membership": {
+          "0.001": {
+            "count": 440,
+            "epsilon_ratio": [
+              0.939664864511769,
+              1.2097041391248713
+            ],
+            "first_outside": {
+              "coordinate": [
+                -3.980144928248768,
+                0.0,
+                2.5
+              ],
+              "epsilon_over_epsilon0": 0.9884250287192975,
+              "gradient_entry_departure": 0.011867240779817519,
+              "k_over_K0": 0.999937507011383,
+              "normalized_divergence": -0.014885165009000001,
+              "q": 3.268478355594898,
+              "q_rotation": 3.268478355594898,
+              "q_strain": 3.2446192630582598,
+              "set": "physical_sample_outer"
+            },
+            "k_ratio": [
+              0.9860603692586828,
+              1.0990394855344428
+            ],
+            "maximum_gradient_departure": 0.49181304849288154,
+            "maximum_normalized_divergence": 0.4774164291186323,
+            "maximum_q": 4.313085158712414,
+            "outside_count": 440
+          },
+          "0.01": {
+            "count": 440,
+            "epsilon_ratio": [
+              0.939664864511769,
+              1.2097041391248713
+            ],
+            "first_outside": {
+              "coordinate": [
+                -3.980144928248768,
+                0.0,
+                2.5
+              ],
+              "epsilon_over_epsilon0": 0.9884250287192975,
+              "gradient_entry_departure": 0.011867240779817519,
+              "k_over_K0": 0.999937507011383,
+              "normalized_divergence": -0.014885165009000001,
+              "q": 3.268478355594898,
+              "q_rotation": 3.268478355594898,
+              "q_strain": 3.2446192630582598,
+              "set": "physical_sample_outer"
+            },
+            "k_ratio": [
+              0.9860603692586828,
+              1.0990394855344428
+            ],
+            "maximum_gradient_departure": 0.49181304849288154,
+            "maximum_normalized_divergence": 0.4774164291186323,
+            "maximum_q": 4.313085158712414,
+            "outside_count": 440
+          }
+        }
+      },
+      {
+        "time": 0.045,
+        "accepted_step": 9,
+        "state_sha256": "329dbdcd37d9b5ae3d2c640930db0262b917a988b4ec7d7fa382e25033a2a3cb",
+        "history_sha256": "cfa555e4138780b27d5dd0baa9cab923b37617adf54d38031d5911e24276d40d",
+        "minimum_inner_k": 0.10674008009737143,
+        "minimum_outer_k": 0.5028557906792464,
+        "minimum_inner_covariance": -0.09925275303976677,
+        "minimum_outer_covariance": 0.030405944266554463,
+        "minimum_outer_epsilon": 0.03670835059653795,
+        "source_minimum_b": 0.9592637584302215,
+        "trace_minimum_b": 0.9514503961267046,
+        "minimum_lambda": 1.0,
+        "limiter_active_volume": 0.0012078190983352186,
+        "normalization_capped_volume": 0,
+        "robust_source": [
+          11.309091682963546,
+          11.309091682963546,
+          11.309091682963546,
+          1.6747535433112026e-17,
+          0.0012078190983352186,
+          0,
+          1,
+          15928.78422813065
+        ],
+        "historical_range_membership": {
+          "0.001": {
+            "count": 440,
+            "epsilon_ratio": [
+              0.934002870900577,
+              1.2414498042498892
+            ],
+            "first_outside": {
+              "coordinate": [
+                -3.980144928248768,
+                0.0,
+                2.5
+              ],
+              "epsilon_over_epsilon0": 0.9883357807289193,
+              "gradient_entry_departure": 0.011530657363778096,
+              "k_over_K0": 0.999959334585246,
+              "normalized_divergence": -0.014801813513557261,
+              "q": 3.2681222877953777,
+              "q_rotation": 3.2681222877953777,
+              "q_strain": 3.245048651133332,
+              "set": "physical_sample_outer"
+            },
+            "k_ratio": [
+              0.9850105734192617,
+              1.1090816749666945
+            ],
+            "maximum_gradient_departure": 0.5394143898088074,
+            "maximum_normalized_divergence": 0.5232786934669187,
+            "maximum_q": 4.469315530669857,
+            "outside_count": 440
+          },
+          "0.01": {
+            "count": 440,
+            "epsilon_ratio": [
+              0.934002870900577,
+              1.2414498042498892
+            ],
+            "first_outside": {
+              "coordinate": [
+                -3.980144928248768,
+                0.0,
+                2.5
+              ],
+              "epsilon_over_epsilon0": 0.9883357807289193,
+              "gradient_entry_departure": 0.011530657363778096,
+              "k_over_K0": 0.999959334585246,
+              "normalized_divergence": -0.014801813513557261,
+              "q": 3.2681222877953777,
+              "q_rotation": 3.2681222877953777,
+              "q_strain": 3.245048651133332,
+              "set": "physical_sample_outer"
+            },
+            "k_ratio": [
+              0.9850105734192617,
+              1.1090816749666945
+            ],
+            "maximum_gradient_departure": 0.5394143898088074,
+            "maximum_normalized_divergence": 0.5232786934669187,
+            "maximum_q": 4.469315530669857,
+            "outside_count": 440
+          }
+        }
+      },
+      {
+        "time": 0.049999999999999996,
+        "accepted_step": 10,
+        "state_sha256": "8712e13330bd1784c45242a6f1fcca102911eee3fbb7ce9f9228ab6074cb413f",
+        "history_sha256": "ff1df1a96dbddb9840a41a269acebf95bf34cf320488d5adf0ce0a83dbba2d7c",
+        "minimum_inner_k": 0.05934747545960705,
+        "minimum_outer_k": 0.5024454234169509,
+        "minimum_inner_covariance": -0.0995296244354778,
+        "minimum_outer_covariance": 0.026504625601964704,
+        "minimum_outer_epsilon": 0.036712017369629237,
+        "source_minimum_b": 0.7311130752785958,
+        "trace_minimum_b": 0.7201680871271643,
+        "minimum_lambda": 1.0,
+        "limiter_active_volume": 0.013621971346873986,
+        "normalization_capped_volume": 0,
+        "robust_source": [
+          11.555332335293137,
+          11.555332335293137,
+          11.555332335293032,
+          4.595661958622932e-17,
+          0.013621971346873986,
+          0,
+          1,
+          21251.789773129254
+        ],
+        "historical_range_membership": {
+          "0.001": {
+            "count": 440,
+            "epsilon_ratio": [
+              0.928663132054756,
+              1.2727364081934631
+            ],
+            "first_outside": {
+              "coordinate": [
+                -3.980144928248768,
+                0.0,
+                2.5
+              ],
+              "epsilon_over_epsilon0": 0.9882692170542482,
+              "gradient_entry_departure": 0.011199891349215396,
+              "k_over_K0": 0.9999819979574575,
+              "normalized_divergence": -0.014698846253229385,
+              "q": 3.267279294218223,
+              "q_rotation": 3.267279294218223,
+              "q_strain": 3.2460481343743823,
+              "set": "physical_sample_outer"
+            },
+            "k_ratio": [
+              0.9842067324377346,
+              1.1179659822354213
+            ],
+            "maximum_gradient_departure": 0.583922388217156,
+            "maximum_normalized_divergence": 0.5660706099051849,
+            "maximum_q": 4.621142505067864,
+            "outside_count": 440
+          },
+          "0.01": {
+            "count": 440,
+            "epsilon_ratio": [
+              0.928663132054756,
+              1.2727364081934631
+            ],
+            "first_outside": {
+              "coordinate": [
+                -3.980144928248768,
+                0.0,
+                2.5
+              ],
+              "epsilon_over_epsilon0": 0.9882692170542482,
+              "gradient_entry_departure": 0.011199891349215396,
+              "k_over_K0": 0.9999819979574575,
+              "normalized_divergence": -0.014698846253229385,
+              "q": 3.267279294218223,
+              "q_rotation": 3.267279294218223,
+              "q_strain": 3.2460481343743823,
+              "set": "physical_sample_outer"
+            },
+            "k_ratio": [
+              0.9842067324377346,
+              1.1179659822354213
+            ],
+            "maximum_gradient_departure": 0.583922388217156,
+            "maximum_normalized_divergence": 0.5660706099051849,
+            "maximum_q": 4.621142505067864,
+            "outside_count": 440
+          }
+        }
+      },
+      {
+        "time": 0.05499999999999999,
+        "accepted_step": 11,
+        "state_sha256": "e9fada45bcaaca6f8237bd80536fb1b06142cd915e7cd47b9ae9bdc4dd5a101f",
+        "history_sha256": "f82646e196b29d44b02f24c3b60c157321ea2561720401d0023fe3ad4ce594b9",
+        "minimum_inner_k": 0.01629424224774017,
+        "minimum_outer_k": 0.5022380616668152,
+        "minimum_inner_covariance": -0.09983101642016129,
+        "minimum_outer_covariance": 0.023406750706904983,
+        "minimum_outer_epsilon": 0.036715038313761834,
+        "source_minimum_b": 0.5056987677000203,
+        "trace_minimum_b": 0.4937805451331741,
+        "minimum_lambda": 1.0,
+        "limiter_active_volume": 0.09832745735721828,
+        "normalization_capped_volume": 0,
+        "robust_source": [
+          11.794538102467536,
+          11.794538102467536,
+          11.794538102467591,
+          2.1637287231021651e-16,
+          0.09832745735721828,
+          0,
+          1,
+          31191.446871317625
+        ],
+        "historical_range_membership": {
+          "0.001": {
+            "count": 440,
+            "epsilon_ratio": [
+              0.924084737068175,
+              1.3016112344709179
+            ],
+            "first_outside": {
+              "coordinate": [
+                -3.980144928248768,
+                0.0,
+                2.5
+              ],
+              "epsilon_over_epsilon0": 0.9882257870607241,
+              "gradient_entry_departure": 0.010901209446487928,
+              "k_over_K0": 1.000006558187096,
+              "normalized_divergence": -0.014603386922312611,
+              "q": 3.265969693830296,
+              "q_rotation": 3.265969693830296,
+              "q_strain": 3.2475338664820375,
+              "set": "physical_sample_outer"
+            },
+            "k_ratio": [
+              0.9838005453753752,
+              1.1247031463133823
+            ],
+            "maximum_gradient_departure": 0.6255731132552997,
+            "maximum_normalized_divergence": 0.6060267911125251,
+            "maximum_q": 4.7687664753918755,
+            "outside_count": 440
+          },
+          "0.01": {
+            "count": 440,
+            "epsilon_ratio": [
+              0.924084737068175,
+              1.3016112344709179
+            ],
+            "first_outside": {
+              "coordinate": [
+                -3.980144928248768,
+                0.0,
+                2.5
+              ],
+              "epsilon_over_epsilon0": 0.9882257870607241,
+              "gradient_entry_departure": 0.010901209446487928,
+              "k_over_K0": 1.000006558187096,
+              "normalized_divergence": -0.014603386922312611,
+              "q": 3.265969693830296,
+              "q_rotation": 3.265969693830296,
+              "q_strain": 3.2475338664820375,
+              "set": "physical_sample_outer"
+            },
+            "k_ratio": [
+              0.9838005453753752,
+              1.1247031463133823
+            ],
+            "maximum_gradient_departure": 0.6255731132552997,
+            "maximum_normalized_divergence": 0.6060267911125251,
+            "maximum_q": 4.7687664753918755,
+            "outside_count": 440
+          }
+        }
+      }
+    ],
+    "complete_point_export": {
+      "bytes": 42238882,
+      "format": "UTF-8 compact JSON objects, one per line; exact file-byte SHA256",
+      "identity": "(accepted_step,set,original_sample_call,original_point_index); duplicates in coordinates remain distinct original finite evaluation entries",
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-points-001/negative-inner-points.ndjson",
+      "records": 18180,
+      "sha256": "4259f6dd08247a6a9ffc3136d81751738a2dc71ed927928eca15a85ea3f21e5a"
+    }
+  },
+  "failing_iterate_receipts": {
+    "B1": {
+      "file": "nonlinear-b1-ledger.json",
+      "vectors": {
+        "cached_jacobian_history": "1903643a598db96a89ff4812d172c14e695253d4993b6767d57b67dbef63a392",
+        "cached_jacobian_state": "e6844f4417be5d4c0a48ddf380375c1c77379eafa3e7dd438a5ca597624d0676",
+        "constraints": "0e5dbdb81dd634914fd0204a699dedb1f7aef3f4a282d2d276d85a6ca733d821",
+        "history": "1903643a598db96a89ff4812d172c14e695253d4993b6767d57b67dbef63a392",
+        "residual": "91d2e9ac30f9a076461f0b5b30f039f754c92c7ed90fa91a97dbf74a508d4757",
+        "state": "8b9b9be6066f126a5ffa62c91fe082d80e987323d3f411ad25b978e1481bb200"
+      },
+      "raw_inputs": {
+        "case.evolution.json": {
+          "bytes": 195603,
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/reproduction-001/case/case.evolution.json",
+          "sha256": "c94d4f0a941ea428948377f509c038b96c54acf849811b7960a81c6eede7993d"
+        },
+        "case.nonlinear.json": {
+          "bytes": 1641285,
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/reproduction-001/case/case.nonlinear.json",
+          "sha256": "172c5ff1a019c9e54f3b5e2b6953d908005d459358d60f581b33118813975a3e"
+        },
+        "case.xml": {
+          "bytes": 6851,
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/reproduction-001/case/case.xml",
+          "sha256": "f3bbd93cc3a5ed6cdbb9d8486e09613cd88473d03df1975648cd385ba062ec14"
+        }
+      },
+      "dense_matrices": {
+        "cached_jacobian": {
+          "canonical_sha256": "4aaac74850860aead813a9bb3a63bc6f0debdeaa90426cf3b1050ad7492c52da",
+          "columns": 425,
+          "raw_trace_path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/reproduction-001/case/case.nonlinear.json",
+          "raw_trace_sha256": "172c5ff1a019c9e54f3b5e2b6953d908005d459358d60f581b33118813975a3e",
+          "rows": 425
+        },
+        "fresh_jacobian": null
+      }
+    },
+    "B2": {
+      "file": "nonlinear-b2-ledger.json",
+      "vectors": {
+        "cached_jacobian_history": "1903643a598db96a89ff4812d172c14e695253d4993b6767d57b67dbef63a392",
+        "cached_jacobian_state": "e6844f4417be5d4c0a48ddf380375c1c77379eafa3e7dd438a5ca597624d0676",
+        "constraints": "0e5dbdb81dd634914fd0204a699dedb1f7aef3f4a282d2d276d85a6ca733d821",
+        "history": "1903643a598db96a89ff4812d172c14e695253d4993b6767d57b67dbef63a392",
+        "residual": "91d2e9ac30f9a076461f0b5b30f039f754c92c7ed90fa91a97dbf74a508d4757",
+        "state": "8b9b9be6066f126a5ffa62c91fe082d80e987323d3f411ad25b978e1481bb200"
+      },
+      "raw_inputs": {
+        "case.evolution.json": {
+          "bytes": 195603,
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/reproduction-001/case/case.evolution.json",
+          "sha256": "c94d4f0a941ea428948377f509c038b96c54acf849811b7960a81c6eede7993d"
+        },
+        "case.nonlinear.json": {
+          "bytes": 3799015,
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/reproduction-001/case/case.nonlinear.json",
+          "sha256": "2df975858f4d506b62030cdf4ea899fff5dd31740ea54289c166a10b156c4475"
+        },
+        "case.xml": {
+          "bytes": 6861,
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/reproduction-001/case/case.xml",
+          "sha256": "83ead9e9b1aea1621a9c63a74b3b37954490fe153678f7220cc76c324e609444"
+        }
+      },
+      "dense_matrices": {
+        "cached_jacobian": {
+          "canonical_sha256": "4aaac74850860aead813a9bb3a63bc6f0debdeaa90426cf3b1050ad7492c52da",
+          "columns": 425,
+          "raw_trace_path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/reproduction-001/case/case.nonlinear.json",
+          "raw_trace_sha256": "2df975858f4d506b62030cdf4ea899fff5dd31740ea54289c166a10b156c4475",
+          "rows": 425
+        },
+        "fresh_jacobian": {
+          "canonical_sha256": "37a7156bc73e232c551ff7f3ade113df26f9a86b60bbc77ee5a0ffcd8529a1cb",
+          "columns": 425,
+          "raw_trace_path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/reproduction-001/case/case.nonlinear.json",
+          "raw_trace_sha256": "2df975858f4d506b62030cdf4ea899fff5dd31740ea54289c166a10b156c4475",
+          "rows": 425
+        }
+      }
+    }
+  },
+  "bounded_matrix": {
+    "used_slots": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "maximum": 6,
+    "additional_evolution_slots": 0,
+    "native_evolution_initializations": 4,
+    "same_stage_diagnostic_allocations": 2,
+    "zero_step_preflight_initializations": 4,
+    "zero_step_focused_guard_checks": 2,
+    "native_solver_cases_sequential": true,
+    "definition": "Six conservative allocations count both same-stage attempts, including the failed strict fresh assembly; preflight/guard zero-step calls and direct unit probes are identified separately."
+  },
+  "events": [
+    {
+      "category": "representation_error",
+      "time": 0,
+      "scope": "original accepted initialization",
+      "observation": "At the first inner witness k=K but represented Gxz=5.19159 versus analytic1.89599; original mesh425 unknowns.",
+      "evidence": "archive-ledger.json#/events/0/detail",
+      "causal_status": "Initial covariance loss explained by excessive represented shear, not local depletion."
+    },
+    {
+      "category": "inner_realizability_loss",
+      "time": 0,
+      "scope": "archived constitutive finite sets",
+      "detail": {
+        "G": [
+          [
+            0.0,
+            0.0,
+            5.191590612064875
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "S": [
+          [
+            0.0,
+            0.0,
+            5.191590612064875
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            5.191590612064875,
+            0.0,
+            0.0
+          ]
+        ],
+        "analytic_neutral_shear": 1.8959895843783414,
+        "b": 1.0,
+        "chi": 0.0,
+        "coordinate": [
+          -0.9602898564975362,
+          0.0,
+          0.5092722755356407
+        ],
+        "covariance": [
+          [
+            0.3403386753732574,
+            0.0,
+            -0.4380334453033321
+          ],
+          [
+            0.0,
+            0.3403386753732574,
+            0.0
+          ],
+          [
+            -0.4380334453033321,
+            0.0,
+            0.3403386753732574
+          ]
+        ],
+        "depletion_relative_K0": 1.0,
+        "eigenvalue": -0.0976947699300747,
+        "eigenvalues": [
+          -0.0976947699300747,
+          0.3403386753732574,
+          0.7783721206765895
+        ],
+        "eigenvector": [
+          0.7071067811865475,
+          -0.0,
+          0.7071067811865475
+        ],
+        "epsilon": 0.280875352436631,
+        "initial_k_at_same_point": 0.5105080130598861,
+        "initial_native_G": [
+          [
+            0.0,
+            0.0,
+            5.191590612064875
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "initial_native_strain_norm": 7.342017853870984,
+        "k": 0.5105080130598861,
+        "k_over_K": 1.0,
+        "lambda_value": 1.0,
+        "maximum_strain_eigenvalue": 5.191590612064875,
+        "nu_A": 0.08437364924063438,
+        "r_R": 1.2870516253344717,
+        "sampled_K": 0.5105080130598861,
+        "sampled_K_over_K0": 1.0,
+        "strain_norm": 7.342017853870984
+      },
+      "causal_status": "Already present before any time step; not repaired by capped destruction."
+    },
+    {
+      "category": "outer_constitutive_range_exit",
+      "time": 0,
+      "scope": "both historical local boxes and new restricted region",
+      "observation": "Initial maximum outer gradient departure .0183323283; improved representation .00341233869 still exceeds frozen .001.",
+      "evidence": [
+        "archive-ledger.json#/certified_ranges",
+        "preflight-summary.json",
+        "kernel-summary.json#/representation_coverage"
+      ],
+      "causal_status": "Coverage failure; not a proof of principal failure at these particular states."
+    },
+    {
+      "category": "source_limiter_activation",
+      "time": 0.045,
+      "scope": "archived accepted trajectory",
+      "observation": "First active source volume .001207819098335217; cap volume0/lambda1 throughout accepted prefix.",
+      "evidence": "archive-ledger.json#/states",
+      "causal_status": "No observed cap-induced trace attenuation."
+    },
+    {
+      "category": "pressure_interface_imbalance",
+      "time": 0.055,
+      "scope": "last accepted state",
+      "pressure": {
+        "common_pressure_mean": 3.469446951953614e-18,
+        "gauge_multiplier": -1.3235564089301422e-14,
+        "interpretation": "One common pressure gauge; mechanical pressures need not be continuous",
+        "scaled_gauge_residual": 2.1684043449710086e-17,
+        "scaled_pressure_rows": [
+          5.613298189371988e-15,
+          1.4384554789403866e-15
+        ]
+      },
+      "continuity": {
+        "strong": [
+          0.06660608929473016,
+          0.040606377741018974,
+          -5.955739373897373e-15,
+          5.237563854842975e-15,
+          0.0
+        ],
+        "weak_pressure_rows": [
+          5.613298189371988e-15,
+          1.4384554789403866e-15
+        ]
+      },
+      "interface": {
+        "interpretation": "Complete traction and diffusive k flux, not mechanical pressure matching",
+        "native_layout": [
+          6.0,
+          -0.3235864622870704,
+          0.055892124784486186,
+          0.16712765603240912,
+          0.27176865288554697,
+          0.34959046593753207,
+          -5.791862215526189e-15,
+          0.03309262796410579
+        ],
+        "point_records_summary": {
+          "canonical_sha256": "9c1de4d1def2771c98f684ea392e128d000624a73720b0d8e987bd390c0df881",
+          "count": 40
+        },
+        "tangential_rms": 0.15750467865419962
+      },
+      "constraints": {
+        "count": 148,
+        "scaled_maximum": 1.3278656130589678e-14,
+        "trace_rows": 16
+      },
+      "energy": {
+        "anchor": 0.0,
+        "boundary_reaction": 11.218304487408851,
+        "independent": [
+          11.218304487405481,
+          -1.198149306807972,
+          12.41759890538966,
+          0.0010955919590769914,
+          -0.002240703135477043,
+          0.0,
+          11.218304487405288,
+          1.9297063946766002e-13,
+          388.35073074870013,
+          11.218304487408851,
+          0.0,
+          -3.369748924342275e-12
+        ],
+        "native": [
+          11.21830448741549,
+          -1.1981493067965316,
+          12.417598905389713,
+          0.0010955919586716776,
+          -0.002240703135477301,
+          0,
+          11.218304487416376,
+          -8.86402062860725e-13,
+          388.35073074869985,
+          11.218304487413326,
+          0,
+          2.163602630389505e-12
+        ]
+      },
+      "causal_status": "Strong continuity and full traction/flux defects are nonzero despite small weak/gauge residuals; terminal causality unproved. No mechanical-pressure continuity imposed."
+    },
+    {
+      "category": "scalar_inadmissibility",
+      "time": 0.06,
+      "scope": "unaccepted Newton state, first recorded native-GLL violation at iteration8",
+      "observation": "Native inner k=-1.1713577454207364e-7 at iteration8, then -1.0074658877473182e-6 at terminal base; source GL k remains positive.",
+      "evidence": "nonlinear-b2-ledger.json#/original_policy/iterations",
+      "causal_status": "Internal state observation, never an accepted physical time stage."
+    },
+    {
+      "category": "Jacobian_globalization_failure",
+      "time": 0.06,
+      "scope": "original policy and same-stage fresh diagnostic",
+      "original_counts": {
+        "accepted_descent": 11,
+        "unevaluable_residual_or_norm": 131,
+        "valid_non_descent": 0
+      },
+      "fresh_counts": {
+        "accepted_descent": 0,
+        "unevaluable_residual_or_norm": 21,
+        "valid_non_descent": 0
+      },
+      "terminal": "fresh_jacobian_valid_or_invalid_non_descent",
+      "evidence": [
+        "nonlinear-b1-ledger.json",
+        "nonlinear-b2-ledger.json"
+      ],
+      "causal_status": "All21 terminal fractions fail actual complete-ray nonnegative-k evaluation. Fresh assembly/retry does not rescue; refresh-policy causality not established; no factor/solve failure."
+    },
+    {
+      "category": "unresolved_cause",
+      "time": 0.06,
+      "scope": "independent Jacobian action/solution existence",
+      "detail": [
+        {
+          "diagnostic_reporting_threshold": 1e-07,
+          "finest_relative_fresh_error": 2.581071327549022e-06,
+          "finest_step": 5e-07,
+          "interpretation": "Fixed diagnostic comparison threshold; any failure remains an observation, not a tolerance change or proof of a wrong smooth tangent at a switching state",
+          "kind": "pressure_and_gauge",
+          "threshold_met": false
+        }
+      ],
+      "observation": "Pressure/gauge directional accuracy discrepancy retained; existence of a physically admissible stage root and a positive time map unresolved."
+    },
+    {
+      "category": "bounded_spatial_dt_controls",
+      "scope": "independent fresh starts, dt.005 and.0025 on1571 unknowns",
+      "observation": "Both fail their first nonlinear stage; accepted physical time remains0. All continuation diagnostic from initial applicability exit.",
+      "evidence": "controls-ledger.json",
+      "causal_status": "No convergence-order, transition, long-time or terrain conclusion."
+    }
+  ],
+  "focused_regressions": "Three existing native unit probes and two zero-step guards passed; exact commands in focused-checks-receipt.json.",
+  "next_model": {
+    "choice": "a",
+    "contract": "candidate-contract.md",
+    "restricted_kernel_feasible": true,
+    "actual_initial_trajectory_coverage": false,
+    "original_broad_box_status": "FAILED unchanged",
+    "certified_outer_principal_lower_over_nut0": "0.53345977306365966796875",
+    "actual_dependent_trace": "lambda*Epre(H), includingchi0",
+    "lambda_to_zero": "Excluded by explicit applicability; no admissible singular high-Re continuation supplied.",
+    "necessary_native_changes": "Nonlinear inner AWF weak stress/source/trace and full traction operator; no production adoption in R1."
+  },
+  "unresolved": [
+    "Pressure/gauge derivative discrepancy",
+    "Existence of an admissible failed-stage root",
+    "Complete initial/trajectory coverage of the restricted region",
+    "Continuum and fully discrete scalar/turbulence admissibility",
+    "Exact-zero inner-k covariance coverage in the optional finite guard",
+    "lambda approaching zero outer continuation"
+  ],
+  "later_gates_open": [
+    "Genuine curved MMS for an adopted law",
+    "Active capped-source curved/variable-H coupling",
+    "Outer and fully discrete turbulence admissibility",
+    "Completed unforced perturbation/refinement and long-time qualification",
+    "Scalable feasibility beyond dense guard",
+    "Paired developed floor/hill and reserved physical scores"
+  ],
+  "components": {
+    "archive-ledger.json": {
+      "sha256": "befddbf7193107dfd4a101252c3479c291d5c08b4b9ecbd3acf82384366f07d1",
+      "bytes": 305421
+    },
+    "archive-curation-index.json": {
+      "sha256": "229e979ef46e76facc6b987d0b77963f35130ea94413d702274a53d649d887a8",
+      "bytes": 9964
+    },
+    "archive-points-index.json": {
+      "sha256": "4efdd659f4893dd14c8e62258e49679321db015f1670e30d5c1f2be7b5072525",
+      "bytes": 6003
+    },
+    "archive-points-summary.json": {
+      "sha256": "a1939ca765d186f8cc14d681c60fea3f4e39a99cdfa20f443b75cae54f92c2aa",
+      "bytes": 95988
+    },
+    "nonlinear-b1-ledger.json": {
+      "sha256": "a9c94809856a61d9867a4e719141d4f114880f7f44625dd5fa300d420f8ec99d",
+      "bytes": 252828
+    },
+    "nonlinear-b2-ledger.json": {
+      "sha256": "1a85a55d35df8985d034ae66faed85c24d0d107e786771d94f8b2932105c0025",
+      "bytes": 1025274
+    },
+    "nonlinear-curation-index.json": {
+      "sha256": "431ee649b214842195cb7ac560d30ef746229b80b967ec6c5d0ff1cedd3533e3",
+      "bytes": 8878
+    },
+    "preflight-summary.json": {
+      "sha256": "1555ce099dde624b5ed4cbf46a321431ffb3b66a85847d4094fe62ea4ad0e58f",
+      "bytes": 28836
+    },
+    "preflight-curation-index.json": {
+      "sha256": "e55b61b5fda907fc08bf34be0aa3cb2658f499e56e0859f6416ae24acbb241db",
+      "bytes": 6464
+    },
+    "controls-ledger.json": {
+      "sha256": "93fdc583128394b9314771d50672cefc21fd688a63c4af2844add63bf369c5c9",
+      "bytes": 65387
+    },
+    "controls-curation-index.json": {
+      "sha256": "2672a96f4671f8413801e3897c67b7523e6fbe6b10b7b98bc86e9a994c5c1ed2",
+      "bytes": 2319
+    },
+    "controls-focused-guard-identities.json": {
+      "sha256": "2850537259ef1a5586bb230e7eda2c4f77fcb68c23c79745f6a98cb4fe734055",
+      "bytes": 11475
+    },
+    "runtime-summary.json": {
+      "sha256": "7b5e94c42dd58f57507cfd7c74b266059c330a44b6f8aebd42896accf541582a",
+      "bytes": 197614
+    },
+    "source-binding-receipt.json": {
+      "sha256": "9fdb3808477bdb947b2ab2010f0aac6abce9a6dd737dbd2518625e5fd8384960",
+      "bytes": 2916
+    },
+    "focused-checks-receipt.json": {
+      "sha256": "06b9922005ef55d2f0ceda136ff1bfa0cfbcf5a8cbf2d807d977387d7148f2de",
+      "bytes": 5717
+    },
+    "kernel-summary.json": {
+      "sha256": "301f93ad85b65cd9ab06eaa45487bdd27390eecbcf2cef973e6550900922ece3",
+      "bytes": 14673
+    },
+    "kernel-curation-index.json": {
+      "sha256": "f9ecfbc90a63f18e3c3768f3a6ca5b0910f3bdb5a0c0a57a24a321e02febe26d",
+      "bytes": 3288
+    },
+    "kernel-contract-preregistered.md": {
+      "sha256": "082a791fb086a08bd83285e68ae5e05923fdb688c7919410263bb894a6f22313",
+      "bytes": 12350
+    },
+    "candidate-contract.md": {
+      "sha256": "c635154db92a07be5bf27b5b50817340e9d6b5301d778c6a1099ac1d220c8879",
+      "bytes": 22602
+    }
+  },
+  "assembler_sha256": "42899c65aa5da4afdcf6c6cb0bd05c51eba9fa161606bc8d0458bea705c42ad0",
+  "assembled_utc": "2026-11-03T11:43:11.420531+00:00",
+  "numerical_re_evaluation": false
+}

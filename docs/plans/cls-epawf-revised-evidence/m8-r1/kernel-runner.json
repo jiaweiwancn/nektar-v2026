@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "status": "passed",
+  "command": [
+    "taskset",
+    "-c",
+    "50",
+    "python3",
+    "-B",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/kernel-tools-001/cls_epawf_m8_r1_kernel.py",
+    "--archive-source",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-source",
+    "--runs",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised",
+    "--ledger",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-attempt-003/archive-ledger.json",
+    "--plan",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/kernel-tools-001/kernel-plan.json",
+    "--contract",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/kernel-tools-001/candidate-contract.md",
+    "--output",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/kernel-attempt-001"
+  ],
+  "input_hashes": {
+    "cls_epawf_m8_r1_kernel.py": "43214f63aa5a96400a85dd8ded0416055ed87d668a051baf5cd125595e9fe293",
+    "kernel-plan.json": "fdb75bce68563ebac786d4e4fc8109fc635183469d360ee0edfc94fec17b2da0",
+    "candidate-contract.md": "082a791fb086a08bd83285e68ae5e05923fdb688c7919410263bb894a6f22313"
+  },
+  "runner_sha256": "3979a50f4f737f5649e258f9473b3ee3072d72463554bf17e6e36b0f13283091",
+  "numerical_workers": 1,
+  "numerical_threads": 1,
+  "cpu": 50,
+  "production_adopted": false,
+  "trajectory_launched": false,
+  "connection": "tailscale:100.105.247.110",
+  "started_utc": "2026-11-03T09:24:16.557074+00:00",
+  "exit_code": 0,
+  "seconds": 58.55200553299983,
+  "log_sha256": "c4e598385e361a1c1a63d3d4ff479d09adb50632558e0a172d674236a2a720b0",
+  "finished_utc": "2026-11-03T09:25:15.109535+00:00"
+}

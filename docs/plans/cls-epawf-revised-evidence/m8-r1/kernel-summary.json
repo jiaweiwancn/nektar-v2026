@@ -1,0 +1,461 @@
+{
+  "schema": 1,
+  "phase": "M8-R1 D",
+  "baseline": "ab5c3c6fee19761e8d88692e8e6c331e5889234e",
+  "started_utc": "2026-11-03T09:24:16.699284+00:00",
+  "finished_utc": "2026-11-03T09:25:15.050664+00:00",
+  "seconds": 58.39501617099995,
+  "archive_source": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-source",
+  "archive_source_commit": "ab5c3c6fee19761e8d88692e8e6c331e5889234e",
+  "archive_source_commit_end": "ab5c3c6fee19761e8d88692e8e6c331e5889234e",
+  "archive_source_clean_start": true,
+  "archive_source_clean_end": true,
+  "command": [
+    "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r1/kernel-tools-001/cls_epawf_m8_r1_kernel.py",
+    "--archive-source",
+    "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-source",
+    "--runs",
+    "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised",
+    "--ledger",
+    "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-attempt-003/archive-ledger.json",
+    "--plan",
+    "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r1/kernel-tools-001/kernel-plan.json",
+    "--contract",
+    "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r1/kernel-tools-001/candidate-contract.md",
+    "--output",
+    "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r1/kernel-attempt-001"
+  ],
+  "driver_sha256": "43214f63aa5a96400a85dd8ded0416055ed87d668a051baf5cd125595e9fe293",
+  "cpu_affinity": [
+    50
+  ],
+  "thread_environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "numpy": "1.21.5",
+    "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.35"
+  },
+  "production_adopted": false,
+  "solver_or_build_execution": false,
+  "outer_proof": {
+    "file": "restricted-outer-interval-proof.json",
+    "sha256": "12f5444deeeea890435dc6e1d121442e09d563e823ad225563ccd41aa701a704",
+    "certified_principal_lower_over_nut0": "0.53345977306365966796875",
+    "covariance_certified_positive": true,
+    "joint_constitutive_gate": true,
+    "target": ".1",
+    "proof_failure_is_inconclusive": true,
+    "domain": "entry radius .001; k/K0 [.99,1.01]; epsilon/epsilon0 [.98,1.02]; both max branches; all incompressible rank-one directions",
+    "original_broad_domain_status": "FAILED, unchanged"
+  },
+  "retained_witnesses": {
+    "file": "retained-witnesses.json",
+    "sha256": "e066aee4d98838750646325440e704c62ea5b6d9263f3794eb228058e59021d8",
+    "family_counts": {
+      "M1_constitutive": 17,
+      "M8_native_kernel": 72,
+      "M8_fixed_gamma_exact": 16,
+      "M8_invariant_exact": 48,
+      "M8_invariant_analytic": 8,
+      "M8_outside_envelope": 2
+    },
+    "finite_negative_covariance_count": 37,
+    "outside_restricted_region_count": 94
+  },
+  "verification_success": true,
+  "restricted_constitutive_feasible": true,
+  "decision": "One restricted research contract has constitutive feasibility; actual representation coverage, nonlinear inner reconstruction and all full discrete/forward-invariance/terrain gates remain open.",
+  "lambda_guard": {
+    "lower": "1/2",
+    "actual_trace_and_outer_box_also_required": true,
+    "lambda_alone_sufficient": false,
+    "lambda_to_zero_high_Re_continuation": "unresolved outside applicability; no floor or clipping"
+  },
+  "checks_summary": {
+    "checks": 2670,
+    "failures": 0,
+    "source": "kernel-run.log final JSON line"
+  },
+  "inner_formal_interval_constants": {
+    "Qstar": [
+      "3.19067508162428",
+      "3.19067508162430"
+    ],
+    "open_reference_a_over_c": [
+      "0.664850004870983826498119657152194688135464417494678667320894",
+      "0.664850004870987993954772952780164787607499586529604475224952"
+    ],
+    "open_reference_margin": [
+      "0.135149995129012006045227047219835212392500413470395524775048",
+      "0.135149995129016173501880342847805311864535582505321332679106"
+    ],
+    "tracefree_covariance_factor": [
+      "0.183503419072273967267571975098036202678017506447776623855768",
+      "0.183503419072273967267571975098036202678017506447776623855771"
+    ]
+  },
+  "first_archived_inner_witness_candidate_value": {
+    "pointer": "/events/0/detail",
+    "original": {
+      "G": [
+        [
+          0.0,
+          0.0,
+          5.191590612064875
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "S": [
+        [
+          0.0,
+          0.0,
+          5.191590612064875
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          5.191590612064875,
+          0.0,
+          0.0
+        ]
+      ],
+      "analytic_neutral_shear": 1.8959895843783414,
+      "b": 1.0,
+      "chi": 0.0,
+      "coordinate": [
+        -0.9602898564975362,
+        0.0,
+        0.5092722755356407
+      ],
+      "covariance": [
+        [
+          0.3403386753732574,
+          0.0,
+          -0.4380334453033321
+        ],
+        [
+          0.0,
+          0.3403386753732574,
+          0.0
+        ],
+        [
+          -0.4380334453033321,
+          0.0,
+          0.3403386753732574
+        ]
+      ],
+      "depletion_relative_K0": 1.0,
+      "eigenvalue": -0.0976947699300747,
+      "eigenvalues": [
+        -0.0976947699300747,
+        0.3403386753732574,
+        0.7783721206765895
+      ],
+      "eigenvector": [
+        0.7071067811865475,
+        -0.0,
+        0.7071067811865475
+      ],
+      "epsilon": 0.280875352436631,
+      "initial_k_at_same_point": 0.5105080130598861,
+      "initial_native_G": [
+        [
+          0.0,
+          0.0,
+          5.191590612064875
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "initial_native_strain_norm": 7.342017853870984,
+      "k": 0.5105080130598861,
+      "k_over_K": 1.0,
+      "lambda_value": 1.0,
+      "maximum_strain_eigenvalue": 5.191590612064875,
+      "nu_A": 0.08437364924063438,
+      "r_R": 1.2870516253344717,
+      "sampled_K": 0.5105080130598861,
+      "sampled_K_over_K0": 1.0,
+      "strain_norm": 7.342017853870984
+    },
+    "old_min": -0.0976947699300747,
+    "new_min": 0.09997609032554167,
+    "new_eigenvalues": [
+      0.09997609032554167,
+      0.3403386753732574,
+      0.5807012604209731
+    ],
+    "branch": "active",
+    "a_over_c": 1.8201658640223455,
+    "new_stress": [
+      [
+        0.3403386753732574,
+        0.0,
+        -0.24036258504771574
+      ],
+      [
+        0.0,
+        0.3403386753732574,
+        0.0
+      ],
+      [
+        -0.24036258504771574,
+        0.0,
+        0.3403386753732574
+      ]
+    ]
+  },
+  "source_coupling_interpretation": "Algebraic cancellation and dependent-trace controls, including chi=0; no claim that capped destruction repairs the original covariance or keeps outer epsilon in the declared box.",
+  "preregistered_contract": {
+    "file": "kernel-contract-preregistered.md",
+    "sha256": "082a791fb086a08bd83285e68ae5e05923fdb688c7919410263bb894a6f22313"
+  },
+  "complete_validation": {
+    "file": "kernel-validation.json",
+    "sha256": "28cfef5e83af372a2aa3dcd3f27bc38991631421abe7f72b018e127f55000412"
+  },
+  "classification": "Kernel constitutive feasibility only; original and sole improved initial flow representations both fail gradient coverage. Original broad-box failures remain unchanged.",
+  "representation_coverage": {
+    "source_file": "preflight-summary.json",
+    "sha256": "1555ce099dde624b5ed4cbf46a321431ffb3b66a85847d4094fe62ea4ad0e58f",
+    "decision": {
+      "original": "The actual archived mesh has initial negative inner covariance with undepleted k; exact zero-step/archive coefficient correspondence is recorded separately.",
+      "resolved": "The one approved refinement yields independently positive finite inner/outer covariance, positive k/EPS and inactive source limiter/cap.",
+      "certified_coverage": "FAILED: resolved gradient-entry deviation 0.0034123386947804146 exceeds the already frozen radius .001 region; no mesh or box adjustment.",
+      "next_control": "Any parent-authorized resolved trajectory must be diagnostic/unqualified from t=0 and use fresh valid IMEX initialization.",
+      "excluded": [
+        "polynomial-everywhere admissibility",
+        "continuum invariant-region proof",
+        "adopted model qualification",
+        "physical terrain validation"
+      ]
+    },
+    "outer_gradient_witnesses": {
+      "original-base": {
+        "set": "source_volume_outer",
+        "geometry": 8,
+        "chart": [
+          -0.9602898564975362,
+          0.0,
+          3.525532409916329
+        ],
+        "gradient": [
+          [
+            0.0,
+            0.0,
+            0.25281376339996464
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "normalized_gradient": [
+          [
+            0.0,
+            0.0,
+            0.9816676717412839
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "gradient_entry_deviation": 0.018332328258716113,
+        "k_over_K0": 0.9999999999999998,
+        "epsilon_over_epsilon0": 0.9903660526088743
+      },
+      "resolved-base": {
+        "set": "reconstruction_native_outer",
+        "geometry": 30,
+        "chart": [
+          -3.2041499092834287,
+          0.0,
+          2.6666666666666665
+        ],
+        "gradient": [
+          [
+            0.0,
+            0.0,
+            0.34164230309216437
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "normalized_gradient": [
+          [
+            0.0,
+            0.0,
+            1.0034123386947804
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "gradient_entry_deviation": 0.0034123386947804146,
+        "k_over_K0": 1.0,
+        "epsilon_over_epsilon0": 0.9999153823291248
+      }
+    },
+    "original_and_improved_cases": [
+      {
+        "name": "original-base",
+        "unknowns": 425,
+        "finite_admissibility": {
+          "positive_transported_k_and_outer_epsilon": true,
+          "inner_covariance_minimum": -0.09773632278762462,
+          "outer_covariance_minimum": 0.1743308235761443,
+          "passed": false,
+          "scope": "Strict finite covariance/positivity observations; no clipping or field floor, no continuum/polynomial-everywhere conclusion"
+        },
+        "outer_gradient_entry_deviation": 0.018332328258716113,
+        "outer_k_over_K0": [
+          0.9999999999999998,
+          1.0000000000000002
+        ],
+        "outer_epsilon_over_epsilon0": [
+          0.9832524731447201,
+          1.0040812296598944
+        ],
+        "chi0_trace_epsilon_ratio": [
+          0.9834528466780685,
+          0.9846519510665872
+        ],
+        "initial_state_float64_LE_sha256": "e8e27fc61cdbf14842e0225c012ba4f76c77d23cfcfeecca76ec21023895ee09",
+        "audit_sha256": "fb65d1aa26ad75b142be57e6c79ec19647672d1f2763b6403427f1eec0b8dc2f"
+      },
+      {
+        "name": "original-high",
+        "unknowns": 425,
+        "finite_admissibility": {
+          "positive_transported_k_and_outer_epsilon": true,
+          "inner_covariance_minimum": -0.09774724747057292,
+          "outer_covariance_minimum": 0.1743224245709749,
+          "passed": false,
+          "scope": "Strict finite covariance/positivity observations; no clipping or field floor, no continuum/polynomial-everywhere conclusion"
+        },
+        "outer_gradient_entry_deviation": 0.018332328258716113,
+        "outer_k_over_K0": [
+          0.9999999999999998,
+          1.0000000000000002
+        ],
+        "outer_epsilon_over_epsilon0": [
+          0.9832524731447201,
+          1.0040812296598944
+        ],
+        "chi0_trace_epsilon_ratio": [
+          0.9834528466780685,
+          0.9846519510665872
+        ],
+        "initial_state_float64_LE_sha256": "e8e27fc61cdbf14842e0225c012ba4f76c77d23cfcfeecca76ec21023895ee09",
+        "audit_sha256": "4dc8bd69608887b272b99b64991b72a76e7e06f8e51c0bc8d9131e9ed158ab2f"
+      },
+      {
+        "name": "resolved-base",
+        "unknowns": 1571,
+        "finite_admissibility": {
+          "positive_transported_k_and_outer_epsilon": true,
+          "inner_covariance_minimum": 0.07729331682700048,
+          "outer_covariance_minimum": 0.1767968946393139,
+          "passed": true,
+          "scope": "Strict finite covariance/positivity observations; no clipping or field floor, no continuum/polynomial-everywhere conclusion"
+        },
+        "outer_gradient_entry_deviation": 0.0034123386947804146,
+        "outer_k_over_K0": [
+          0.9999999999999998,
+          1.0000000000000002
+        ],
+        "outer_epsilon_over_epsilon0": [
+          0.9832524731447201,
+          1.000065588376781
+        ],
+        "chi0_trace_epsilon_ratio": [
+          0.9834528466780685,
+          0.9846519510665872
+        ],
+        "initial_state_float64_LE_sha256": "7f6985bf3fe5648d73f217f001c768a7aa5fc0e8b42d07bf31ca519338427bdb",
+        "audit_sha256": "e02b65367d70f36e484599ea6938e9ef3543b04687ab8cb272ebe4e37705ee46"
+      },
+      {
+        "name": "resolved-high",
+        "unknowns": 1571,
+        "finite_admissibility": {
+          "positive_transported_k_and_outer_epsilon": true,
+          "inner_covariance_minimum": 0.07729331682700048,
+          "outer_covariance_minimum": 0.1767891060842592,
+          "passed": true,
+          "scope": "Strict finite covariance/positivity observations; no clipping or field floor, no continuum/polynomial-everywhere conclusion"
+        },
+        "outer_gradient_entry_deviation": 0.0034123386947804146,
+        "outer_k_over_K0": [
+          0.9999999999999998,
+          1.0000000000000002
+        ],
+        "outer_epsilon_over_epsilon0": [
+          0.9832524731447201,
+          1.0000658783917953
+        ],
+        "chi0_trace_epsilon_ratio": [
+          0.9834528466780685,
+          0.9846519510665872
+        ],
+        "initial_state_float64_LE_sha256": "7f6985bf3fe5648d73f217f001c768a7aa5fc0e8b42d07bf31ca519338427bdb",
+        "audit_sha256": "64b64bf605eaa5cc434ac0448798021482ff8ad244f3e2181fb7c412fdb5fb33"
+      }
+    ]
+  }
+}

@@ -1,0 +1,192 @@
+{
+  "schema": 1,
+  "phase": "M8-R1 A later all-offending-points supplement",
+  "curation_method": "Exact receipt bytes retained; metadata selection and SHA256 only, no new numerical evaluation.",
+  "source_commit": "ab5c3c6fee19761e8d88692e8e6c331e5889234e",
+  "source_clean_start": true,
+  "source_clean_end": true,
+  "helper": {
+    "repository_path": "solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_r1_points.py",
+    "sha256": "87fbb11cf86163035499bd55da355ad568a63854439b086745144c169e453501"
+  },
+  "original_phase_A": {
+    "driver_sha256": "0c2700ec408ae12d72bb1442eb978b9ce416be9fd86a85978534a06aa105274e",
+    "finished_utc": "2026-11-03T09:04:03.800222+00:00",
+    "historical_first_negative_inner_event": {
+      "accepted_step": 0,
+      "detail": {
+        "G": [
+          [
+            0.0,
+            0.0,
+            5.191590612064875
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "S": [
+          [
+            0.0,
+            0.0,
+            5.191590612064875
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            5.191590612064875,
+            0.0,
+            0.0
+          ]
+        ],
+        "analytic_neutral_shear": 1.8959895843783414,
+        "b": 1.0,
+        "chi": 0.0,
+        "coordinate": [
+          -0.9602898564975362,
+          0.0,
+          0.5092722755356407
+        ],
+        "covariance": [
+          [
+            0.3403386753732574,
+            0.0,
+            -0.4380334453033321
+          ],
+          [
+            0.0,
+            0.3403386753732574,
+            0.0
+          ],
+          [
+            -0.4380334453033321,
+            0.0,
+            0.3403386753732574
+          ]
+        ],
+        "depletion_relative_K0": 1.0,
+        "eigenvalue": -0.0976947699300747,
+        "eigenvalues": [
+          -0.0976947699300747,
+          0.3403386753732574,
+          0.7783721206765895
+        ],
+        "eigenvector": [
+          0.7071067811865475,
+          -0.0,
+          0.7071067811865475
+        ],
+        "epsilon": 0.280875352436631,
+        "initial_k_at_same_point": 0.5105080130598861,
+        "initial_native_G": [
+          [
+            0.0,
+            0.0,
+            5.191590612064875
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "initial_native_strain_norm": 7.342017853870984,
+        "k": 0.5105080130598861,
+        "k_over_K": 1.0,
+        "lambda_value": 1.0,
+        "maximum_strain_eigenvalue": 5.191590612064875,
+        "nu_A": 0.08437364924063438,
+        "r_R": 1.2870516253344717,
+        "sampled_K": 0.5105080130598861,
+        "sampled_K_over_K0": 1.0,
+        "strain_norm": 7.342017853870984
+      },
+      "scope": "actual archived constitutive finite sets",
+      "set": "source_volume_inner",
+      "time": 0,
+      "type": "first_negative_inner_covariance"
+    },
+    "ledger": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-attempt-003/archive-ledger.json",
+    "sha256": "ed879358611e31a1d8f90fca30d447bf8f5dccf60c6fddb1d24840f7d5268a26",
+    "source_commit": "ab5c3c6fee19761e8d88692e8e6c331e5889234e",
+    "success": true
+  },
+  "timing": {
+    "original_phase_A_finished_utc": "2026-11-03T09:04:03.800222+00:00",
+    "supplement_started_utc": "2026-11-03T11:26:02.869957+00:00",
+    "supplement_finished_utc": "2026-11-03T11:29:53.854686+00:00",
+    "historical_gate_rewritten": false,
+    "note": "This later archive-only export supplements the original completed phase-A gate; it does not claim to have been collected before the subsequent diagnostic trajectories or rewrite their timing."
+  },
+  "result": {
+    "success": true,
+    "completed_epoch_count": 12,
+    "checks": 612,
+    "failures": [],
+    "negative_entries_by_set": {
+      "interface_inner": 0,
+      "physical_sample_K": 0,
+      "source_volume_inner": 18180
+    },
+    "full_export": {
+      "bytes": 42238882,
+      "format": "UTF-8 compact JSON objects, one per line; exact file-byte SHA256",
+      "identity": "(accepted_step,set,original_sample_call,original_point_index); duplicates in coordinates remain distinct original finite evaluation entries",
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r1/archive-points-001/negative-inner-points.ndjson",
+      "records": 18180,
+      "sha256": "4259f6dd08247a6a9ffc3136d81751738a2dc71ed927928eca15a85ea3f21e5a"
+    }
+  },
+  "files": {
+    "archive-points-summary.json": {
+      "bytes": 95988,
+      "sha256": "a1939ca765d186f8cc14d681c60fea3f4e39a99cdfa20f443b75cae54f92c2aa"
+    },
+    "archive-points-runner.json": {
+      "bytes": 1326,
+      "sha256": "e59799b902b170fcd91ba5838f762469fd458f8b27417726c1f9a7f57bd0ce49"
+    },
+    "archive-points-run.log": {
+      "bytes": 2263,
+      "sha256": "ebc348af173045768d8c0a82e18c5747b3f9deeeb7e9418c8054621e561eebc9"
+    },
+    "run-archive-points.py": {
+      "bytes": 1704,
+      "sha256": "abaa34010def31fe9f39b8998efb7776015f45754bf62ce36ee6a152ffdeeba8"
+    },
+    "archive-points-notes.md": {
+      "bytes": 3958,
+      "sha256": "cf1d73b3e68fd584ba11b9103fc2b34c74f586b61f996b0c231d387216b4dd21"
+    }
+  },
+  "integrity": {
+    "helper_matches_actual_runner": true,
+    "log_matches_actual_runner": true,
+    "state_and_history_hashes_and_all_original_counts_checked": true,
+    "full_NDJSON_copied_to_Mac": false
+  },
+  "interpretation": {
+    "finite_observations_only": true,
+    "not_unique_geometric_point_count": true,
+    "not_negative_physical_volume": true,
+    "first_export_order_does_not_replace_original_first_event_minimum": true,
+    "initial_samepoint_at_later_rule_locations_is_not_the_original_t0_sample_population": true,
+    "new_trajectory_or_solver": false,
+    "physical_model_qualified": false
+  }
+}

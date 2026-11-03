@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "status": "failed",
+  "source_commit": "23cbbd5c25136d2a611db0ee5a01589e65f9781f",
+  "source_clean_start": true,
+  "compiler_workers": 16,
+  "maximum_concurrent_analysis_workers": 3,
+  "total_worker_bound": 19,
+  "hard_limit": 72,
+  "runner_sha256": "63c6d7d78495fbc089dc659f59bf1af2b00bfb53e4f0a42d09c10ac06a55686d",
+  "bundle_sha256": "ff069079414e2f541c61fe5e18809fac627ef99763d7d98bb98ef5b349442870",
+  "connection": "tailscale:100.105.247.110",
+  "preserved_first_R1_images": 100,
+  "commands": [
+    {
+      "name": "configure",
+      "argv": [
+        "cmake",
+        "-S",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/source/solvers/IncNavierStokesSolver/Tests/RANS",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/build",
+        "-DRANS_BUILD_SOLVER=ON",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake"
+      ],
+      "exit_code": 0,
+      "seconds": 0.8663833800001157,
+      "log_sha256": "c0358becfd7e3faf56010de1948fc00506dc7783349dd28fda8e771e57927844"
+    },
+    {
+      "name": "build",
+      "argv": [
+        "taskset",
+        "-c",
+        "0-31",
+        "cmake",
+        "--build",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/build",
+        "--parallel",
+        "16"
+      ],
+      "exit_code": 2,
+      "seconds": 53.53551020699979,
+      "log_sha256": "a5713c4643eb49a82fc8be2a7b7dd08a7e50fa7643ec30b9b448afee10a578ae"
+    }
+  ],
+  "started_utc": "2026-11-03T09:49:41.845479+00:00",
+  "first_R1_source_and_images_preserved": true,
+  "source_clean_end": true,
+  "finished_utc": "2026-11-03T09:50:37.043771+00:00"
+}
