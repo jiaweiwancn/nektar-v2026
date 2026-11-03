@@ -587,8 +587,14 @@ class Analyzer:
     def affine_continuity_columns(self, matrix, scalar_only):
         _, expected = self.affine_continuity_matrix()
         if scalar_only:
-            return dict(checked_as_coupled=False,
-                reason='Frozen-scalar diagnostic sets these native rows to an identity; it is not a coupled continuity Jacobian')
+            frozen = np.r_[np.arange(self.offsets[self.d]), np.arange(self.offsets[self.d+2], self.size)]
+            actual = np.asarray(matrix[frozen, :])
+            identity = np.zeros_like(actual)
+            identity[np.arange(len(frozen)), frozen] = 1.
+            self.audit.near(actual, identity, 'declared_frozen_velocity_pressure_gauge_identity_rows', 0.)
+            return dict(checked_as_coupled=False, declared_frozen_identities_checked=True,
+                frozen_rows=len(frozen), maximum_identity_error=float(np.max(np.abs(actual-identity))),
+                reason='Frozen-scalar diagnostic identity rows are verified as declared; no coupled continuity derivative claim')
         native = np.asarray(matrix[self.continuity_rows(), :])
         dimensioned = (native-expected)*self.audit.scales()[None, :]
         errors = self.continuity_error_norms(dimensioned)
@@ -608,9 +614,9 @@ class Analyzer:
                 externally_fixed_velocity=bool(index in self.external and index < self.offsets[self.d])) for index in worst],
             interpretation='The independent B/mean block is exact. Any native FD continuity-row discrepancy is retained, not replaced or called analytic.')
 
-    def affine_continuity_action(self, direction, action):
+    def affine_continuity_action(self, direction, action, scalar_only=False):
         _, matrix = self.affine_continuity_matrix()
-        expected = matrix@direction
+        expected = np.asarray(direction)[self.continuity_rows()] if scalar_only else matrix@direction
         actual = np.asarray(action)[self.continuity_rows()]
         errors = self.continuity_error_norms(actual-expected)
         self.continuity_gates.append(dict(kind='current_J_direction', maximum_absolute_physical_error=float(max(errors)),
@@ -618,7 +624,9 @@ class Analyzer:
         return dict(exact_action=expected.tolist(), absolute_physical_errors=errors.tolist(),
             maximum_absolute_physical_error=float(max(errors)),
             fixed_1e_minus7_gate_met=bool(max(errors) <= ACTION_TOLERANCE),
-            scope='Only weak-divergence and existing pressure/gauge mean rows; separate from pressure-gradient/roughness and nonlinear sensor/trace actions')
+            coupled_continuity_derivative_claim=not bool(scalar_only),
+            scope=('Declared frozen pressure/gauge identity rows only' if scalar_only else
+                'Only weak-divergence and existing pressure/gauge mean rows; separate from pressure-gradient/roughness and nonlinear sensor/trace actions'))
 
     def weak(self, state, history, alpha, native_residual, entries=None):
         effective = self.external_lift(state)
@@ -914,8 +922,111 @@ class Analyzer:
             native_dense_product_checked=True, exact_physical_mass_checked=True,
             action_norm=action_norm, constraint_row_actions=action[sorted(constraints)].tolist(),
             matching_epsilon_row_actions=action[sorted(self.trace_rows)].tolist(), levels=levels, gate=gate,
-            independent_affine_weak_continuity=self.affine_continuity_action(direction, action),
+            independent_affine_weak_continuity=self.affine_continuity_action(direction, action, scalar_only),
             frozen_scalar_masked_rows_not_claimed_as_coupled=bool(scalar_only), independent_analytic_pressure=analytic_pressure)
+
+    def independent_outer_k_action(self, matrix, state, history, alpha, constraints, scalar_only, base_domain):
+        """Additional outer-k evidence absent from the native inner bubble.
+
+        Free matching-height coefficients belong to both native regions; their
+        inner CG support is retained rather than forcibly discontinuous. Every
+        endpoint is independently screened and assembled, with no native call.
+        """
+        field, offset = self.fields[self.d], self.offsets[self.d]
+        outer_ids = {int(index) for element in field.elements if element['lower'][2] >= self.H-1e-11
+            for index in element['ids']}
+        selected = sorted(index for index in outer_ids if offset+index not in self.external)
+        self.audit.require(bool(selected), 'No free represented outer-k coefficient exists')
+        direction = np.zeros(self.size)
+        for index in selected:
+            direction[offset+index] = self.K0*math.sin(.917*(offset+index+1)+.271)
+        direction *= self.K0/float(np.max(np.abs(direction)))
+        matching = field.boundary(lambda axis, side, element:
+            axis == 2 and side == 0 and abs(element['lower'][2]-self.H) < 1e-11)
+        shared = sorted(set(selected).intersection(matching))
+        self.audit.require(bool(shared), 'Additional outer-k direction omitted the matching trace')
+        action = matrix@direction
+        mass = self.time_mass(direction, np.zeros(self.size), alpha, constraints)
+        mask = np.ones(self.size, bool)
+        if scalar_only:
+            mask[:self.offsets[self.d]] = False; mask[self.offsets[self.d+2]:] = False
+        def endpoint(point):
+            effective, _, current, trace, _ = self.projected(point)
+            loads, details = weak_loads(self.raw, self.fields, effective)
+            result = loads.copy()
+            for row, value in current.items():
+                result[row] = point[row]-value
+            return result, current, trace, details
+        base, _, _, _ = endpoint(np.asarray(state))
+        action_norm = self.audit.norm_record(np.where(mask, action, 0.), constraints)
+        scale = max(1., float(action_norm['maximum']))
+        levels, errors = [], []
+        for h in LADDER:
+            sides, residuals = {}, {}
+            for name, sign in (('plus', 1), ('minus', -1)):
+                point = np.asarray(state)+sign*h*direction
+                domain = self.domain(point)
+                receipt = dict(evaluated=False, endpoint_source='independent weak oracle; not a native recorded endpoint',
+                    state_float64_LE_sha256=vector_hash(point), scalar_domain=domain,
+                    branches=branch_difference(base_domain.get('independent_branch_context', {}),
+                        domain.get('independent_branch_context', {})))
+                if domain['admissible']:
+                    try:
+                        residual, current, trace, details = endpoint(point)
+                        residuals[name] = residual
+                        one_sided = sign*(residual-base)/h+mass-action
+                        one_sided[~mask] = 0.
+                        receipt.update(evaluated=True, spatial_residual=residual.tolist(),
+                            spatial_residual_float64_LE_sha256=vector_hash(residual),
+                            constraints=[[int(row), float(value)] for row, value in sorted(current.items())],
+                            independent_trace=trace, quadrature=details,
+                            one_sided_J_error=self.audit.norm_record(one_sided, constraints))
+                    except Exception as error:
+                        receipt['exception'] = dict(type=type(error).__name__, message=str(error))
+                sides[name] = receipt
+            row = dict(step=h, **sides)
+            if len(residuals) == 2:
+                central = (residuals['plus']-residuals['minus'])/(2*h)+mass
+                difference = central-action; difference[~mask] = 0.
+                norm = self.audit.norm_record(difference, constraints)
+                absolute = float(norm['maximum'])
+                amplitude = max(float(self.audit.norm_record(residuals[name], constraints)['maximum']) for name in residuals)
+                row.update(central_J_error=norm, relative_central_J_error=absolute/scale,
+                    fixed_1e_minus7_gate_met=bool(absolute <= ACTION_TOLERANCE),
+                    relative_1e_minus7_gate_met=bool(absolute/scale <= ACTION_TOLERANCE),
+                    arithmetic_subtraction_scale_proxy=float(64*np.finfo(float).eps*max(1., amplitude)/h),
+                    uncertainty='The subtraction scale is a proxy, not an error bound; branch changes and all absolute failures remain recorded')
+                errors.append((h, absolute, bool(absolute <= ACTION_TOLERANCE)))
+            levels.append(row)
+        transfers = dict(matching_H=[], physical_sensor_A=[], physical_sensor_B=[])
+        maximum_tangential_gradient = 0.
+        for chart, _ in self.source_anchors:
+            for name, radial in (('matching_H', self.H), ('physical_sensor_A', self.raw['transition_controls'][2]),
+                    ('physical_sensor_B', self.raw['transition_controls'][3])):
+                point = np.array([chart[0], chart[1], radial])
+                value, gradient = field.evaluate(direction, offset, point, 1 if radial == self.H else 0)
+                transfers[name].append(float(value/self.K0))
+                if name == 'matching_H':
+                    maximum_tangential_gradient = max(maximum_tangential_gradient, float(abs(gradient[0])))
+        finest = min(errors, default=None)
+        gate = dict(kind='outer_k_independent_oracle', available=finest is not None, threshold=ACTION_TOLERANCE,
+            finest_feasible_central_step=finest[0] if finest else None,
+            finest_absolute_physical_error=finest[1] if finest else None,
+            gate_met=bool(finest[2]) if finest else False,
+            scope='Independent weak-oracle differences of a fixed outer-support direction; no native probe or numerical search')
+        self.gates.append(gate)
+        return dict(kind=gate['kind'], direction=direction.tolist(), selected_outer_support_DOFs=selected,
+            selected_shared_matching_DOFs=shared,
+            matching_trace_has_unavoidable_inner_CG_support=True,
+            independent_endpoint_source=True, native_endpoint_calls=0,
+            exact_mass_action=mass.tolist(), action_norm=action_norm,
+            actual_current_J_action=action.tolist(), levels=levels, gate=gate,
+            outer_k_transfer_dimensionless_values=transfers,
+            maximum_matching_tangential_k_gradient=maximum_tangential_gradient,
+            maximum_mechanical_forcing_minus_two_thirds_grad_k_direction=2*maximum_tangential_gradient/3,
+            scalar_block_only_comparison=bool(scalar_only),
+            native_five_families_not_claimed_to_cover_this_direction=True,
+            independent_affine_weak_continuity=self.affine_continuity_action(direction, action, scalar_only))
 
     def fraction_bound(self, state, step, matrix, domain):
         actual = self.external_lift(np.asarray(state)+step)-self.external_lift(state)
@@ -1056,6 +1167,9 @@ class Analyzer:
                 _base_independent_branches=current['scalar_domain'].get('independent_branch_context', {}))
             actions.append(self.attempt('current action '+item['kind'], lambda item=item:
                 self.action(item, matrix, state, history, alpha, constraints, scalar_only)))
+        actions.append(self.attempt('independent outer-k current action', lambda:
+            self.independent_outer_k_action(matrix, state, history, alpha, constraints, scalar_only,
+                current['scalar_domain'])))
         return dict(iteration=record['iteration'], state=current, accepted=bool(record['accepted']),
             dimensionless_step=dimensionless, linear_physical_norms=linear_norms.tolist(),
             linear_residual_float64_LE_sha256=vector_hash(linear),
@@ -1179,6 +1293,69 @@ def read_jsonl(path):
     if not records:
         raise ValueError('Missing native scalar-feasible solve trace')
     return records
+
+
+def xml_structure(node):
+    if node is None:
+        return None
+    return [node.tag, sorted(node.attrib.items()), ' '.join((node.text or '').split()),
+        [xml_structure(child) for child in node]]
+
+
+def verify_auxiliary(preflight, record, preflight_session, stage_session, source, matrix_root=None):
+    """Analyze one completed native JSONL solve before the final case report.
+
+    The actual stage XML must reproduce the source-bound preflight geometry,
+    expansion definitions and protected physics, and its actual history must
+    equal the preflight h0 byte for byte. Native field descriptors are reused
+    from that preflight, not invented for an unfinished evolution report.
+    """
+    from cls_epawf_m8_r2_cases import normalized_physics, parameters, solver_info
+    before, stage = (ET.parse(path).getroot() for path in (preflight_session, stage_session))
+    if normalized_physics(before) != normalized_physics(stage):
+        raise ValueError('Interim stage XML changed protected preflight physics')
+    for name in ('GEOMETRY', 'EXPANSIONS'):
+        if xml_structure(before.find(name)) != xml_structure(stage.find(name)):
+            raise ValueError('Interim stage changed source-bound native '+name)
+    info, params = solver_info(stage), parameters(stage)
+    mode = info.get('RANSWALLSTAGETEST')
+    if mode not in ('MatchedR2', 'FrozenScalarR2'):
+        raise ValueError('Interim analysis requires the actual restricted-stage XML')
+    if float(params['TIMESTEP']) != .0025 or int(params['NUMSTEPS']) != 0:
+        raise ValueError('Interim stage changed dt or requested physical advancement')
+    if info['RANSWALLINNERSTRESS'] != preflight['inner_stress_model']:
+        raise ValueError('Interim preflight and stage selected different inner laws')
+    if list(map(int, (params['RANSWALLTANGENTIALORDER'], params['RANSWALLNORMALORDER']))) != preflight['quadrature_orders']:
+        raise ValueError('Interim preflight/stage quadrature differs')
+    if vector_hash(record['history']) != vector_hash(preflight['initial']):
+        raise ValueError('Actual stage h0 differs from the source-bound preflight initial coefficients')
+    if not np.array_equal(np.asarray(record['history']), np.asarray(preflight['initial'])):
+        raise ValueError('Actual stage h0 is not byte-equivalent to the represented preflight state')
+    if record['alpha'] not in LEVELS or record['time'] != .0025 or record['maximum_iterations'] > 12:
+        raise ValueError('Interim record changed the preregistered stage time/alpha/capacity')
+    if record['inner_stress_model'] != preflight['inner_stress_model'] or record['policy'] != 'ScalarFeasibleR2:v1':
+        raise ValueError('Interim record has a different inner law or nonlinear policy')
+    view = dict(preflight, stage_test_target_time=record['time'])
+    analyzer = Analyzer(view, stage_session, source, matrix_root)
+    initial = analyzer.attempt('source-bound initial common inventory', lambda:
+        analyzer.domain(view['initial'], view['initial_scalar_domain'], retain=True))
+    result = analyzer.attempt('completed native auxiliary solve', lambda: analyzer.solve(record))
+    return dict(schema=1, milestone='M8-R2 interim single-record analysis', success=not bool(analyzer.failures),
+        analysis_success=not bool(analyzer.failures), checks=analyzer.audit.checks,
+        errors=analyzer.audit.errors, failures=analyzer.failures, solved_record=result,
+        selected_alpha=record['alpha'], physical_stage_time=record['time'],
+        source_bound_h0_float64_LE_sha256=vector_hash(preflight['initial']),
+        native_field_descriptors_sha256=canonical(preflight['fields']),
+        protected_physics_sha256=canonical(normalized_physics(stage)),
+        native_field_map_binding='Byte-identical preflight descriptors reused after identical source-bound geometry/expansions and actual h0 checks; final report comparison remains required',
+        independent_common_static_coverage=analyzer.static_coverage, initial_scalar_domain=initial,
+        dense_matrix_files=analyzer.matrix_files, current_action_gates=analyzer.gates,
+        exact_affine_weak_continuity_assembly=getattr(analyzer, 'continuity_metadata', None),
+        exact_affine_weak_continuity_gates=analyzer.continuity_gates,
+        native_calls=0, only_one_completed_native_record_analyzed=True,
+        full_native_case_protocol_assessed=False, final_native_history_slots_assessed=False,
+        target_stage_status_assessed=False, physical_trajectory_qualification=False, M8_closed=False,
+        qualification='Interim auxiliary-record implementation/finite-set diagnosis only. No final target result, no full-case native-history claim and no root-absence inference.')
 
 
 def verify(raw, solves, session, source, matrix_root=None):

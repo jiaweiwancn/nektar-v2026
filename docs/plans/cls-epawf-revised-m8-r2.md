@@ -144,6 +144,14 @@ quadrature sensitivity and costs. Native initial ScalarDomain calls take
 about .19s at base quadrature, with the raw residual/constraints/norms about
 .13s; these do not measure an entire Jacobian.
 
+An independent adapter precheck matches all 40,627 native fixed-inventory
+scalar observations (39,826 unique descriptors) and independently assembles
+the polynomial weak-continuity/gauge block. Its direct residual error is
+`2.11e-15` in the physical norm, below the unchanged `1e-7` threshold. The
+[retained receipt](cls-epawf-revised-evidence/m8-r2/analyzer-static-result.json)
+contains 500 checks and no native calls. This verifies the independent field
+map and affine block; current stage Jacobians still require their own checks.
+
 The matched actual startup-stage searches are now running from this common
 admissible initialization. The terminal root status and independent path/
 action checks will determine the final R2 recommendation.
