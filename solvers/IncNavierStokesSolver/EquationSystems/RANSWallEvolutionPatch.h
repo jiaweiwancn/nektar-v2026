@@ -127,6 +127,9 @@ public:
         const RANSWallEvolutionData &data,double ustar=.4) const;
     const std::string &VariantName() const { return m_variantName; }
     bool CappedDestruction() const { return m_cappedDestruction; }
+    bool SolveDiagnosticsEnabled() const { return m_solveDiagnostics; }
+    bool SolveDiagnosticWritten() const { return m_solveDiagnosticWritten; }
+    const std::string &SolveDiagnosticFile() const { return m_solveDiagnosticFile; }
     Vector RobustParameters() const;
     const SolverUtils::RANSVector &RobustReferenceFlow() const { return m_referenceFlow; }
     const SolverUtils::RANSVector &RobustReferenceNormal() const { return m_referenceNormal; }
@@ -197,6 +200,13 @@ private:
     std::map<int,double> m_referenceConstraints;
     double m_eta=0;
     mutable std::shared_ptr<SolverCache> m_solver;
+    // Opt-in, serial first-failure diagnostics. A counterfactual same-stage
+    // fresh-Jacobian retry is recorded separately and never advances history.
+    bool m_solveDiagnostics=false,m_solveDiagnosticReplay=false;
+    int m_solveDiagnosticIterations=12;
+    std::string m_solveDiagnosticFile;
+    mutable bool m_solveDiagnosticWritten=false;
+    mutable std::string m_solveResidualException;
 };
 }
 #endif

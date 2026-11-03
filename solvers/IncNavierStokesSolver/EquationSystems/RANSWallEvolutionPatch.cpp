@@ -3,10 +3,12 @@
 // Copyright (c) 2026 Nektar++ contributors.
 ///////////////////////////////////////////////////////////////////////////////
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
 #include <LibUtilities/Foundations/ManagerAccess.h>
 #include <LibUtilities/LinearAlgebra/Lapack.hpp>
 #include <algorithm>
 #include <cmath>
+#include <fstream>
 #include <iostream>
 #include <iomanip>
 #include <numeric>
@@ -57,6 +59,9 @@ struct RANSWallEvolutionPatch::SolverCache
 {
     WallMatrix jacobian;std::shared_ptr<Factor> factor;
     double alpha=-1;
+    double buildTime=-1;
+    int builds=0,uses=0,buildIteration=-1;
+    Vector buildState,buildHistory;
     std::vector<std::vector<int>> free;
     std::vector<std::shared_ptr<Factor>> massFactors;
 };
@@ -172,6 +177,18 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     Require((m_dimension==2 || m_dimension==3) && session->GetComm()->GetSize()==1,
             "evolution requires a full serial native mesh on each collective rank");
     parameters.geometry.Validate();m_mapping.dimension=m_dimension;m_mapping.height=parameters.geometry.height;
+    std::string solveDiagnostics,solveReplay,solveIterations;
+    session->LoadSolverInfo("RANSWallSolveDiagnostics",solveDiagnostics,"Off");
+    session->LoadSolverInfo("RANSWallSolveDiagnosticReplay",solveReplay,"Off");
+    session->LoadSolverInfo("RANSWallSolveDiagnosticIterations",solveIterations,"12");
+    session->LoadSolverInfo("RANSWallSolveDiagnosticFile",m_solveDiagnosticFile,"case.nonlinear.json");
+    Require(solveDiagnostics=="Off" || solveDiagnostics=="Failure","unknown nonlinear diagnostic mode");
+    Require(solveReplay=="Off" || solveReplay=="Fresh","unknown same-stage diagnostic replay mode");
+    m_solveDiagnostics=solveDiagnostics=="Failure";m_solveDiagnosticReplay=solveReplay=="Fresh";
+    Require(!m_solveDiagnosticReplay || m_solveDiagnostics,"same-stage replay requires first-failure diagnostics");
+    m_solveDiagnosticIterations=std::stoi(solveIterations);
+    Require(m_solveDiagnosticIterations>0 && m_solveDiagnosticIterations<=20,"diagnostic same-stage retry is limited to 20 iterations");
+    Require(!m_solveDiagnostics || m_comm->GetSize()==1,"detailed first-failure diagnostics currently require one MPI rank");
     session->LoadParameter("RANSWallOwnershipShift",m_ownershipShift,0);Require(m_ownershipShift>=0,"negative ownership shift");
     auto full=MemoryManager<MultiRegions::ExpList>::AllocateSharedPtr(session,graph,true,"u");
     auto pressure=MemoryManager<MultiRegions::ExpList>::AllocateSharedPtr(session,graph,true,"p");
@@ -496,6 +513,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Lift(const Vector &state,
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Residual(const Vector &state,const Vector &history,double alpha,double time,
     const RANSWallEvolutionData &data,bool anchored,bool imposeConstraints,int region) const
 {
+    if(m_solveDiagnostics)m_solveResidualException.clear();
     Require(state.size()==static_cast<size_t>(Size()) && history.size()==state.size() && alpha>=0,"invalid evolution stage state/history");
     const auto constraints=Constraints(state,time,data);auto s=m_transitionEnabled?ExternalLift(state,time,data):state;
     if(!m_transitionEnabled)for(auto [row,value]:constraints)s[row]=value;
@@ -556,7 +574,13 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Residual(const Vector &st
         const auto body=OwnedBodyLoad(time,data,region);
         for(int i=0;i<Size();++i)r[i]-=body[i];
     }
-    catch(const std::exception &){bad=1;}
+    catch(const std::exception &error)
+    {
+        bad=1;
+        if(m_solveDiagnostics)m_solveResidualException=RANSWallSolveJson::Object({
+            {"type",RANSWallSolveJson::Quote(RANSWallSolveJson::ExceptionType(error))},
+            {"message",RANSWallSolveJson::Quote(error.what())}});
+    }
     m_comm->AllReduce(bad,LibUtilities::ReduceMax);Require(!bad,"inadmissible evolution volume/sampler state on a collective rank");
     m_comm->AllReduce(r,LibUtilities::ReduceSum);
     if(alpha)for(int b=0;b<InnerPressure();++b)
@@ -633,39 +657,195 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Solve(Vector s,const Vect
     const RANSWallEvolutionData &data,bool condensed,int &iterations,double tolerance,int maximumIterations) const
 {
     Require(Size()<=3000,"replicated dense evolution solve is limited to 3000 unknowns; larger meshes permit reference audits only");
+    namespace J=RANSWallSolveJson;
+    const bool recording=m_solveDiagnostics && !m_solveDiagnosticWritten;
+    std::vector<std::string> records;
+    std::string assemblyFailure="null";
+    const int entryBuilds=m_solver->builds,entryAge=m_solver->uses;
+    Vector scales(Size(),.16);
+    const double us=.4,K0=m_parameters.model.Q()*us*us;
+    const double E0=us*us*us/(m_parameters.model.Kappa()*m_parameters.geometry.height);
+    for(int b=0;b<Gauge();++b)for(int i=0;i<size[b];++i)
+        scales[offset[b]+i]=b<m_dimension?us:b==K()?K0:b==Epsilon()?E0:us*us;
+    auto constraintJSON=[&](const std::map<int,double> &constraints)
+    {
+        std::vector<std::string> entries;
+        for(auto [row,value]:constraints)entries.push_back(J::Numbers(Vector{double(row),value}));
+        return J::List(entries);
+    };
+    auto physical=[&](const Vector &state)
+    {
+        try
+        {
+            auto actual=m_transitionEnabled?ExternalLift(state,time,data):state;
+            if(!m_transitionEnabled)for(auto [row,value]:Constraints(state,time,data))actual[row]=value;
+            Refresh(actual,time,&data);
+            double ki=1e300,ko=1e300,eo=1e300,ci=1e300,co=1e300,kr=1e300;
+            double bmin=1,lmin=1,active=0,capped=0,limiterGap=1e300,capGap=1e300;
+            double gradientError=0,kRatioMin=1e300,kRatioMax=-1e300,epsRatioMin=1e300,epsRatioMax=-1e300;
+            double invariantGap=1e300;
+            Vector worst;RANSTensor worstG{},worstS{};
+            std::string branches,limiterBranches,capBranches;
+            for(const auto &ray:m_rays)
+            {
+                if(m_cappedDestruction)
+                {
+                    bmin=std::min(bmin,ray.destruction.b);lmin=std::min(lmin,ray.destruction.lambda);
+                    capGap=std::min(capGap,std::abs(ray.destruction.b-m_destruction.delta));
+                    capBranches.push_back(ray.destruction.b<m_destruction.delta?'C':'P');
+                }
+                for(const auto &q:ray.points)
+                {
+                    const double k=q.v.Value(actual,offset[K()]),K=ray.profile->K();
+                    const double nt=ray.profile->Original().EddyViscosity(Distance(q.v.coordinate));
+                    RANSTensor G{},S{};for(int a=0;a<m_dimension;++a)G[PhysicalAxis(a)]=q.v.Gradient(actual,offset[a]);
+                    for(int a=0;a<3;++a)for(int b=0;b<3;++b)S[a][b]=G[a][b]+G[b][a];
+                    const double largest=J::Eigenvalues(S)[2],cov=2*k/3-nt*largest;
+                    if(cov<ci)
+                    {
+                        ci=cov;worstG=G;worstS=S;
+                        worst={q.v.coordinate[0],q.v.coordinate[1],q.v.coordinate[2],k,K,k/K,nt,largest,cov,k>0?3*nt*largest/(2*k):1e300};
+                    }
+                    ki=std::min(ki,k);kr=std::min(kr,k/K);
+                    const double gap=k/K-m_destruction.theta;
+                    limiterGap=std::min(limiterGap,std::abs(gap));limiterBranches.push_back(gap<0?'L':'P');
+                    if(m_cappedDestruction && gap<0)active+=q.weight;
+                    if(m_cappedDestruction && ray.destruction.capped)capped+=q.weight;
+                }
+            }
+            for(const auto &q:m_outer)
+            {
+                const double k=q.v.Value(actual,offset[K()]),eps=q.e.Value(actual,offset[Epsilon()]);
+                RANSTensor G{};for(int a=0;a<m_dimension;++a)G[PhysicalAxis(a)]=q.v.Gradient(actual,offset[a]);
+                const auto c=OuterClosure(k,eps,G,q.v.coordinate);
+                ko=std::min(ko,k);eo=std::min(eo,eps);co=std::min(co,J::Eigenvalues(c.reynoldsStress)[0]);
+                const double gap=c.strainInvariant-c.rotationInvariant;
+                invariantGap=std::min(invariantGap,std::abs(gap));branches.push_back(gap>0?'S':gap<0?'R':'T');
+                const double g0=us/(m_parameters.model.Kappa()*Distance(q.v.coordinate));
+                for(int a=0;a<3;++a)for(int b=0;b<3;++b)
+                    gradientError=std::max(gradientError,std::abs(G[a][b]/g0-m_referenceFlow[a]*m_referenceNormal[b]));
+                const double e0=us*us*us/(m_parameters.model.Kappa()*Distance(q.v.coordinate));
+                kRatioMin=std::min(kRatioMin,k/K0);kRatioMax=std::max(kRatioMax,k/K0);
+                epsRatioMin=std::min(epsRatioMin,eps/e0);epsRatioMax=std::max(epsRatioMax,eps/e0);
+            }
+            return J::Object({{"status",J::Quote("evaluated_source_quadrature")},
+                {"minimum_inner_k",J::Number(ki)},{"minimum_outer_k",J::Number(ko)},
+                {"minimum_outer_epsilon",J::Number(eo)},{"minimum_inner_covariance",J::Number(ci)},
+                {"minimum_outer_covariance",J::Number(co)},{"minimum_inner_k_over_sampled_K",J::Number(kr)},
+                {"worst_inner_point",J::Numbers(worst)},{"worst_inner_gradient",J::Rows(worstG)},
+                {"worst_inner_strain",J::Rows(worstS)},{"minimum_b",J::Number(bmin)},
+                {"minimum_lambda",J::Number(lmin)},{"limiter_active_volume",J::Number(active)},
+                {"normalization_capped_volume",J::Number(capped)},
+                {"outer_normalized_gradient_entry_error",J::Number(gradientError)},
+                {"outer_k_over_K0",J::Numbers(Vector{kRatioMin,kRatioMax})},
+                {"outer_epsilon_over_epsilon0",J::Numbers(Vector{epsRatioMin,epsRatioMax})},
+                {"minimum_invariant_branch_gap",J::Number(invariantGap)},
+                {"minimum_limiter_knot_gap",J::Number(limiterGap)},
+                {"minimum_normalization_knot_gap",J::Number(capGap)},
+                {"outer_branch_pattern",J::Quote(branches)},
+                {"limiter_branch_pattern",J::Quote(limiterBranches)},
+                {"cap_branch_pattern",J::Quote(capBranches)}});
+        }
+        catch(const std::exception &error)
+        {return J::Object({{"status",J::Quote("diagnostic_evaluation_failed")},
+            {"type",J::Quote(J::ExceptionType(error))},{"message",J::Quote(error.what())}});}
+    };
+    auto assemble=[&](const Vector &state,const std::map<int,double> &constraints)
+    {
+        WallMatrix jac(Size(),Vector(Size()));
+        for(int j=0;j<Size();++j)
+        {
+            if(constraints.count(j) && !(m_transitionEnabled && j>=offset[Epsilon()] && j<offset[InnerPressure()] && m_traceIds.count(j-offset[Epsilon()])))
+            {jac[j][j]=1.;continue;}
+            auto plus=state,minus=state;const double h=2e-6*std::max(1.,std::abs(state[j]));plus[j]+=h;minus[j]-=h;
+            try
+            {
+                const auto a=Residual(plus,history,alpha,time,data),b=Residual(minus,history,alpha,time,data);
+                for(int i=0;i<Size();++i)jac[i][j]=(a[i]-b[i])/(2*h);
+            }
+            catch(const std::exception &error)
+            {
+                if(recording)assemblyFailure=J::Object({{"column",J::Number(j)},
+                    {"step",J::Number(h)},{"type",J::Quote(J::ExceptionType(error))},
+                    {"message",J::Quote(error.what())},
+                    {"volume_exception",m_solveResidualException.empty()?"null":m_solveResidualException}});
+                throw;
+            }
+        }
+        return jac;
+    };
+    struct Search { bool accepted=false;Vector state;std::string observations; };
+    auto search=[&](const Vector &state,const Vector &step,double error,bool detail)
+    {
+        Search result;std::vector<std::string> trials;
+        for(double fraction=1;fraction>=1./1048576;fraction/=2)
+        {
+            auto trial=state;for(int i=0;i<Size();++i)trial[i]+=fraction*step[i];
+            try
+            {
+                const auto next=Residual(trial,history,alpha,time,data);
+                const auto constraints=Constraints(trial,time,data);const auto norms=Norms(next,constraints);
+                const double nextError=Maximum(norms);const bool accepted=nextError<error;
+                if(detail)trials.push_back(J::Object({{"fraction",J::Number(fraction)},
+                    {"evaluation_succeeded","true"},{"classification",J::Quote(accepted?"accepted_descent":"valid_non_descent")},
+                    {"residual",J::Numbers(next)},{"scaled_block_norms",J::Numbers(norms)},
+                    {"maximum_scaled_residual",J::Number(nextError)},
+                    {"constraints",constraintJSON(constraints)},{"physical",physical(trial)}}));
+                if(accepted){result.accepted=true;result.state=std::move(trial);break;}
+            }
+            catch(const std::exception &error)
+            {
+                if(detail)trials.push_back(J::Object({{"fraction",J::Number(fraction)},
+                    {"evaluation_succeeded","false"},{"classification",J::Quote("invalid_residual_or_norm_evaluation")},
+                    {"type",J::Quote(J::ExceptionType(error))},{"message",J::Quote(error.what())},
+                    {"volume_exception",m_solveResidualException.empty()?"null":m_solveResidualException}}));
+            }
+        }
+        result.observations=J::List(trials);return result;
+    };
+    auto stepRecord=[&](const Vector &state,const Vector &r,const WallMatrix &jac,const Vector &step,
+                        const std::map<int,double> &constraints)
+    {
+        auto linear=Multiply(jac,step);double scaledStep=0;
+        for(int i=0;i<Size();++i){linear[i]+=r[i];scaledStep=std::max(scaledStep,std::abs(step[i])/scales[i]);}
+        return J::Object({{"linear_residual",J::Numbers(linear)},
+            {"linear_scaled_block_norms",J::Numbers(Norms(linear,constraints))},
+            {"maximum_dimensionless_step",J::Number(scaledStep)},
+            {"state",J::Numbers(state)},{"step",J::Numbers(step)}});
+    };
     bool refreshed=false;double previous=1e100;
+    try
+    {
     for(iterations=0;iterations<=maximumIterations;++iterations)
     {
         const auto r=Residual(s,history,alpha,time,data);const auto constraints=Constraints(s,time,data);
-        const double error=Maximum(Norms(r,constraints));if(error<tolerance)
+        const auto norms=Norms(r,constraints);const double error=Maximum(norms);
+        if(error<tolerance)
         {
             if(Mapped())Require(std::abs(s[offset[Gauge()]])/(.4/m_parameters.geometry.height*m_volumes[0])<1e-9,
                 "incompatible boundary flux: gauge reaction would create a mass source");
             return s;
         }
         Require(iterations<maximumIterations,"evolution stage nonlinear iteration limit, scaled residual="+std::to_string(error));
+        std::string reason="cached";
         if(!m_solver->factor || !Same(alpha,m_solver->alpha) || (error>previous*.8 && !refreshed))
         {
+            reason=!m_solver->factor?"no_factor":!Same(alpha,m_solver->alpha)?"changed_alpha":"slow_progress_first_refresh";
             if(m_comm->GetRank()==0)std::cout<<"EP-AWF stage Jacobian at time "<<time<<", alpha "<<alpha<<", scaled residual "<<error<<std::endl;
-            WallMatrix jac(Size(),Vector(Size()));
-            for(int j=0;j<Size();++j)
-            {
-                // Lifted essential/dependent columns have no physical-load
-                // variation. Their only nonzero entry is their constraint row.
-                // Dependence of the epsilon trace on free k columns is still
-                // differentiated below through the full coupled residual.
-                if(constraints.count(j) && !(m_transitionEnabled && j>=offset[Epsilon()] && j<offset[InnerPressure()] && m_traceIds.count(j-offset[Epsilon()])))
-                {jac[j][j]=1.;continue;}
-                auto plus=s,minus=s;const double h=2e-6*std::max(1.,std::abs(s[j]));plus[j]+=h;minus[j]-=h;
-                const auto a=Residual(plus,history,alpha,time,data),b=Residual(minus,history,alpha,time,data);
-                for(int i=0;i<Size();++i)jac[i][j]=(a[i]-b[i])/(2*h);
-            }
+            auto jac=assemble(s,constraints);
             m_solver->jacobian=std::move(jac);m_solver->alpha=alpha;
+            ++m_solver->builds;m_solver->uses=0;m_solver->buildTime=time;m_solver->buildIteration=iterations;
+            if(recording){m_solver->buildState=s;m_solver->buildHistory=history;}
             int bad=0;
             if(m_comm->GetRank()==0)
             {
                 try{m_solver->factor=std::make_shared<Factor>(m_solver->jacobian);}
-                catch(const std::exception &){bad=1;}
+                catch(const std::exception &error)
+                {
+                    bad=1;
+                    if(recording)assemblyFailure=J::Object({{"classification",J::Quote("linear_factorization_failure")},
+                        {"type",J::Quote(J::ExceptionType(error))},{"message",J::Quote(error.what())}});
+                }
             }
             m_comm->Bcast(bad,0);Require(!bad,"collective stage factorisation failed");
             if(m_comm->GetRank()!=0)m_solver->factor=std::make_shared<Factor>(WallMatrix{{1.}});
@@ -680,24 +860,158 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Solve(Vector s,const Vect
                 if(condensed)step=RANSWallCondensation(m_solver->jacobian,r,CondensableVelocity(constraints)).Solve();
                 else{auto rhs=r;for(double &v:rhs)v=-v;step=m_solver->factor->Apply(std::move(rhs));}
             }
-            catch(const std::exception &){bad=1;}
+            catch(const std::exception &error)
+            {
+                bad=1;
+                if(recording)assemblyFailure=J::Object({{"classification",J::Quote("linear_solve_failure")},
+                    {"type",J::Quote(J::ExceptionType(error))},{"message",J::Quote(error.what())}});
+            }
         }
         m_comm->Bcast(bad,0);Require(!bad,"collective Newton/Schur solve failed");
-        Broadcast(step);bool accepted=false;
-        for(double fraction=1;fraction>=1./1048576;fraction/=2)
-        {
-            auto trial=s;for(int i=0;i<Size();++i)trial[i]+=fraction*step[i];
-            try
-            {
-                const auto next=Residual(trial,history,alpha,time,data);
-                if(Maximum(Norms(next,Constraints(trial,time,data)))<error){s=std::move(trial);accepted=true;break;}
-            }
-            catch(const std::exception &){}
-        }
+        Broadcast(step);
+        auto searched=search(s,step,error,recording);const bool accepted=searched.accepted;
+        if(recording)records.push_back(J::Object({{"iteration",J::Number(iterations)},
+            {"jacobian_build",J::Number(m_solver->builds)},{"jacobian_age",J::Number(m_solver->uses)},
+            {"jacobian_build_time",J::Number(m_solver->buildTime)},{"rebuild_reason",J::Quote(reason)},
+            {"refreshed_flag",J::Boolean(refreshed)},{"state",J::Numbers(s)},
+            {"residual",J::Numbers(r)},{"scaled_block_norms",J::Numbers(norms)},
+            {"constraints",constraintJSON(constraints)},
+            {"linear_step",stepRecord(s,r,m_solver->jacobian,step,constraints)},
+            {"physical",physical(s)},{"trials",searched.observations},{"accepted",J::Boolean(accepted)}}));
+        ++m_solver->uses;
+        if(accepted)s=std::move(searched.state);
         if(!accepted && !refreshed){m_solver->factor.reset();previous=1e100;continue;}
         Require(accepted,"evolution stage rejected every admissible Newton trial");previous=error;
     }
     throw std::runtime_error("unreachable evolution solve");
+    }
+    catch(const std::exception &failure)
+    {
+        if(recording)
+        {
+            try
+            {
+                std::map<int,double> constraints;Vector base,baseNorms;
+                std::string baseException="null";bool baseSucceeded=false;
+                try
+                {
+                    constraints=Constraints(s,time,data);base=Residual(s,history,alpha,time,data);
+                    baseNorms=Norms(base,constraints);baseSucceeded=true;
+                }
+                catch(const std::exception &error)
+                {baseException=J::Object({{"type",J::Quote(J::ExceptionType(error))},
+                    {"message",J::Quote(error.what())},
+                    {"volume_exception",m_solveResidualException.empty()?"null":m_solveResidualException}});}
+                std::string freshJSON="null",actionsJSON="null",retryJSON="null";
+                if(m_solveDiagnosticReplay && baseSucceeded)
+                {
+                    auto candidate=s;std::vector<std::string> retry;
+                    try
+                    {
+                        const auto fresh=assemble(s,constraints);
+                        freshJSON=J::Rows(fresh);
+                        std::vector<std::string> directions;
+                        for(const std::string kind:{"velocity","free_k","epsilon_with_trace","pressure_and_gauge","joint"})
+                        {
+                            Vector direction(Size());
+                            for(int i=0;i<Size();++i)
+                            {
+                                int block=0;while(block<Gauge() && i>=offset[block+1])++block;
+                                const bool selected=kind=="joint" || (kind=="velocity" && block<m_dimension) ||
+                                    (kind=="free_k" && block==K()) || (kind=="epsilon_with_trace" && block==Epsilon()) ||
+                                    (kind=="pressure_and_gauge" && block>=InnerPressure());
+                                if(selected && (!constraints.count(i) || (m_transitionEnabled && block==Epsilon() && m_traceIds.count(i-offset[Epsilon()]))))
+                                    direction[i]=scales[i]*std::sin(1.317*(i+1));
+                            }
+                            std::vector<std::string> levels;
+                            for(double h:{2e-4,5e-5,1e-5,2e-6,5e-7})
+                            {
+                                std::vector<std::string> values;
+                                for(int sign:{1,-1})
+                                {
+                                    auto state=s;for(int i=0;i<Size();++i)state[i]+=sign*h*direction[i];
+                                    try
+                                    {
+                                        const auto r=Residual(state,history,alpha,time,data);
+                                        values.push_back(J::Object({{"evaluation_succeeded","true"},
+                                            {"residual",J::Numbers(r)},{"constraints",constraintJSON(Constraints(state,time,data))},
+                                            {"physical",physical(state)}}));
+                                    }
+                                    catch(const std::exception &error)
+                                    {values.push_back(J::Object({{"evaluation_succeeded","false"},
+                                        {"type",J::Quote(J::ExceptionType(error))},{"message",J::Quote(error.what())},
+                                        {"volume_exception",m_solveResidualException.empty()?"null":m_solveResidualException}}));}
+                                }
+                                levels.push_back(J::Object({{"step",J::Number(h)},{"plus",values[0]},{"minus",values[1]}}));
+                            }
+                            directions.push_back(J::Object({{"kind",J::Quote(kind)},{"direction",J::Numbers(direction)},
+                                {"cached_action",J::Numbers(Multiply(m_solver->jacobian,direction))},
+                                {"fresh_action",J::Numbers(Multiply(fresh,direction))},{"levels",J::List(levels)}}));
+                        }
+                        actionsJSON=J::List(directions);
+                        bool converged=false;std::string terminal="iteration_limit";
+                        for(int iteration=0;iteration<m_solveDiagnosticIterations;++iteration)
+                        {
+                            const auto r=Residual(candidate,history,alpha,time,data),cNorms=Norms(r,Constraints(candidate,time,data));
+                            const double error=Maximum(cNorms);
+                            if(error<tolerance){converged=true;terminal="converged_same_stage";break;}
+                            const auto c=Constraints(candidate,time,data);const auto jac=iteration==0?fresh:assemble(candidate,c);
+                            auto rhs=r;for(double &v:rhs)v=-v;const auto step=Factor(jac).Apply(std::move(rhs));
+                            auto searched=search(candidate,step,error,true);
+                            retry.push_back(J::Object({{"iteration",J::Number(iteration)},{"state",J::Numbers(candidate)},
+                                {"residual",J::Numbers(r)},{"scaled_block_norms",J::Numbers(cNorms)},
+                                {"constraints",constraintJSON(c)},{"linear_step",stepRecord(candidate,r,jac,step,c)},
+                                {"physical",physical(candidate)},{"trials",searched.observations},
+                                {"accepted",J::Boolean(searched.accepted)}}));
+                            if(!searched.accepted){terminal="fresh_jacobian_valid_or_invalid_non_descent";break;}
+                            candidate=std::move(searched.state);
+                        }
+                        const auto final=Residual(candidate,history,alpha,time,data);
+                        const auto finalNorms=Norms(final,Constraints(candidate,time,data));
+                        if(Maximum(finalNorms)<tolerance){converged=true;terminal="converged_same_stage";}
+                        retryJSON=J::Object({{"diagnostic_unqualified","true"},{"history_advanced","false"},
+                            {"maximum_iterations",J::Number(m_solveDiagnosticIterations)},
+                            {"converged",J::Boolean(converged)},{"terminal",J::Quote(terminal)},
+                            {"iterations",J::List(retry)},{"state",J::Numbers(candidate)},
+                            {"residual",J::Numbers(final)},{"scaled_block_norms",J::Numbers(finalNorms)},
+                            {"constraints",constraintJSON(Constraints(candidate,time,data))},{"physical",physical(candidate)}});
+                    }
+                    catch(const std::exception &error)
+                    {retryJSON=J::Object({{"diagnostic_unqualified","true"},{"history_advanced","false"},
+                        {"terminal",J::Quote("diagnostic_evaluation_or_linear_failure")},
+                        {"state",J::Numbers(candidate)},{"iterations",J::List(retry)},
+                        {"type",J::Quote(J::ExceptionType(error))},{"message",J::Quote(error.what())}});}
+                }
+                const auto record=J::Object({{"schema","1"},{"kind",J::Quote("first_failed_nonlinear_stage")},
+                    {"diagnostic_unqualified","true"},{"original_policy_unchanged","true"},
+                    {"failure_type",J::Quote(J::ExceptionType(failure))},{"failure",J::Quote(failure.what())},
+                    {"time",J::Number(time)},{"alpha",J::Number(alpha)},{"tolerance",J::Number(tolerance)},
+                    {"maximum_iterations",J::Number(maximumIterations)},{"condensed",J::Boolean(condensed)},
+                    {"state",J::Numbers(s)},{"history",J::Numbers(history)},
+                    {"constraints",constraintJSON(constraints)},{"residual",J::Numbers(base)},
+                    {"base_evaluation_succeeded",J::Boolean(baseSucceeded)},{"base_exception",baseException},
+                    {"scaled_block_norms",J::Numbers(baseNorms)},
+                    {"dimensionless_variable_scales",J::Numbers(scales)},{"offsets",J::Numbers(offset)},
+                    {"sizes",J::Numbers(size)},{"stage_entry_builds",J::Number(entryBuilds)},
+                    {"stage_entry_jacobian_age",J::Number(entryAge)},
+                    {"cached_jacobian",J::Rows(m_solver->jacobian)},
+                    {"cached_jacobian_state",J::Numbers(m_solver->buildState)},
+                    {"cached_jacobian_history",J::Numbers(m_solver->buildHistory)},
+                    {"cached_jacobian_time",J::Number(m_solver->buildTime)},
+                    {"cached_jacobian_iteration",J::Number(m_solver->buildIteration)},
+                    {"assembly_failure",assemblyFailure},{"iterations",J::List(records)},
+                    {"physical",physical(s)},{"fresh_jacobian",freshJSON},
+                    {"directional_checks",actionsJSON},{"fresh_jacobian_retry",retryJSON}});
+                Require(!std::ifstream(m_solveDiagnosticFile).good(),"refusing to overwrite an existing nonlinear diagnostic");
+                std::ofstream out(m_solveDiagnosticFile);Require(out.good(),"cannot open nonlinear diagnostic output");
+                out<<record<<'\n';out.close();Require(out.good(),"cannot finish nonlinear diagnostic output");
+                m_solveDiagnosticWritten=true;
+            }
+            catch(const std::exception &error)
+            {std::cerr<<"EP-AWF nonlinear diagnostic export: "<<error.what()<<std::endl;}
+        }
+        throw;
+    }
 }
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::OwnedBodyLoad(double time,const RANSWallEvolutionData &data,int region) const
 {

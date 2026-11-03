@@ -425,6 +425,9 @@ void RANSEquilibriumWallEvolution::WriteReport() const
     out<<",\"stage_audits\":";WriteRows(out,m_stageAudits);out<<",\"step_audits\":";WriteRows(out,m_stepAudits);out<<",\"explicit_audits\":";WriteRows(out,m_explicitAudits);
     if(m_diagnostics)
     {
+        if(m_patch->SolveDiagnosticsEnabled())
+            out<<",\"nonlinear_diagnostic_file\":"<<Quoted(m_patch->SolveDiagnosticFile())
+               <<",\"nonlinear_diagnostic_written\":"<<(m_patch->SolveDiagnosticWritten()?"true":"false");
         out<<",\"diagnostics_schema\":1,\"failure\":"<<Quoted(m_failure)<<",\"rejected_state\":";Write(out,m_rejectedState);
         out<<",\"accepted_states\":";WriteRows(out,m_acceptedStates);out<<",\"audit_times\":";Write(out,m_auditTimes);
         out<<",\"state_audits\":[";
