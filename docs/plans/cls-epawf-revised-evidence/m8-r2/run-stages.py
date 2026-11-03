@@ -3,6 +3,7 @@ import argparse
 from datetime import datetime, timezone
 import fcntl
 import hashlib
+import importlib.util
 import json
 import os
 from pathlib import Path
@@ -20,6 +21,8 @@ p.add_argument('--original',type=Path,required=True)
 p.add_argument('--representation',choices=('outer6','outer9'),required=True)
 p.add_argument('--mode',choices=('matched','frozen-scalar'),default='matched')
 p.add_argument('--matched-receipt',type=Path)
+p.add_argument('--matched-assessment',type=Path,
+    help='Strict metadata assessment of the original matched receipt; never permits a coupled retry')
 p.add_argument('--output',type=Path,required=True)
 a=p.parse_args()
 root=a.root.resolve();source,build=root/'source',root/'build';out=a.output.resolve()
@@ -42,11 +45,21 @@ assert preflight['matched_initial_state_identity_all_quadratures']
 initial={row['inner_stress']:row for row in preflight['cases'] if row['quadrature']=='base'}
 assert set(initial)=={'Linear','SaturatedR2'}
 assert initial['SaturatedR2']['finite_observed_joint_preflight']
-if a.mode=='frozen-scalar':
+matched_binding=None
+if a.mode=='matched':
+    if a.matched_receipt is not None or a.matched_assessment is not None:
+        raise ValueError('Matched runs cannot consume fallback/retry evidence')
+else:
     assert a.matched_receipt is not None
-    matched=json.loads(a.matched_receipt.read_text())
-    assert matched['mode']=='matched' and len(matched['cases'])==2
-    assert all(row.get('target_attempted') and not row.get('target_converged') for row in matched['cases'])
+    # Future conditional recipe only. Recheck the original logs, complete
+    # JSONL records, h0 and runtime instead of treating a missing final report
+    # as a failed target. Positive convergence evidence blocks this branch.
+    sys.dont_write_bytecode=True
+    spec=importlib.util.spec_from_file_location('r2_stage_evidence',Path(__file__).with_name('assess-stage-evidence.py'))
+    evidence=importlib.util.module_from_spec(spec);spec.loader.exec_module(evidence)
+    matched_binding=evidence.check_frozen_scalar(a.matched_assessment,a.matched_receipt,
+        expected_source=a.expected_source,preflight=a.preflight,original=a.original,
+        representation=a.representation,runtime_pin=root/'runtime-fingerprint.json')
 receipt=dict(schema=2,status='running',mode=a.mode,source_commit=a.expected_source,source_clean_start=True,
     runner_sha256=sha(__file__),preflight_path=str(a.preflight),preflight_sha256=sha(a.preflight),
     original_path=str(a.original),original_sha256=sha(a.original),representation=a.representation,
@@ -57,6 +70,7 @@ receipt=dict(schema=2,status='running',mode=a.mode,source_commit=a.expected_sour
     matrix_encoding=dict(dtype='IEEE754 binary64',byte_order=sys.byteorder,layout='row-major'),
     started_utc=datetime.now(timezone.utc).isoformat(),commands=[],cases=[])
 if a.matched_receipt:receipt['matched_receipt']=dict(path=str(a.matched_receipt),sha256=sha(a.matched_receipt))
+if matched_binding is not None:receipt['matched_evidence_gate']=matched_binding
 def save():(out/'receipt.json').write_text(json.dumps(receipt,indent=2,allow_nan=False)+'\n')
 def command(name,argv,cwd,timeout,cpu=0):
     log=out/(name+'.log');started=time.monotonic()
