@@ -1,0 +1,164 @@
+{
+  "schema": 1,
+  "milestone": "M8",
+  "status": "passed",
+  "started_utc": "2026-11-03T05:40:09.273476+00:00",
+  "driver_source_commit": "6284787bf4c436203f4404498ba3dfb68aa144ef",
+  "driver_source_clean_start": true,
+  "primary_source_commit": "aa854f4c5b05451a81a4e1dd60eaaca98eb547e4",
+  "primary_source_clean_start": true,
+  "connection": "tailscale:100.105.247.110",
+  "allocated_maximum_ranks": 2,
+  "numerical_threads": 1,
+  "cpu_affinity": [
+    40,
+    41,
+    42,
+    43
+  ],
+  "maximum_concurrent_server_workers": 38,
+  "lock": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/validation.lock",
+    "mode": "shared",
+    "held_through_entire_run": true
+  },
+  "commands": [
+    {
+      "name": "runtime-before",
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/source/docs/plans/cls-epawf-revised-evidence/m7/fingerprint-runtime.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/mms-completion-001-runner/runtime-before.json"
+      ],
+      "exit_code": 0,
+      "seconds": 1.5165319660009118,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/mms-completion-001-runner/runtime-before.log",
+      "log_sha256": "74320bcacdb4fc2e2b5cd9f202175f6321e75e7b4362fd17ea9e1e0572dbc88e"
+    },
+    {
+      "name": "mms-completion",
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m8.py",
+        "--build",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/mms-completion-001",
+        "--mode",
+        "mms",
+        "--variant",
+        "Regularized",
+        "--beta",
+        ".4",
+        "--gamma-scale",
+        "1",
+        "--reuse",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/campaign-001/regularized-mms",
+        "--reuse-runtime-pin",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/campaign-001/runtime-before.json"
+      ],
+      "exit_code": 0,
+      "seconds": 50.317395153999314,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/mms-completion-001-runner/mms-completion.log",
+      "log_sha256": "dbc38cef0211d043ec99be358e3a4c665b24ca901af738340eae9fd497e0464d"
+    },
+    {
+      "name": "runtime-after",
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/source/docs/plans/cls-epawf-revised-evidence/m7/fingerprint-runtime.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/mms-completion-001-runner/runtime-after.json",
+        "--compare",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/mms-completion-001-runner/runtime-before.json"
+      ],
+      "exit_code": 0,
+      "seconds": 1.5673099240011652,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/mms-completion-001-runner/runtime-after.log",
+      "log_sha256": "059bd23210aea99626b8e0c58c010e2a2c120d3020840c3210e0acf3f4244a93"
+    }
+  ],
+  "failures": [],
+  "physics_qualification_claimed": false,
+  "changed_Cxx_inputs": [
+    "library/UnitTests/SolverUtils/RANSCurvedWallProbe.cpp"
+  ],
+  "driver_sha256": "6491775e8c9d2f3cc5196cfd5a403ee4316149c4bfb6a3463663ec22dcbcc3a9",
+  "fingerprint_tool_sha256": "819454afd8d0c218d8ef7ce14fb79f144d97ffd36712512964fc39806d9cbbc4",
+  "driver_input_count": 4144,
+  "driver_inputs_before_sha256": "3aa2674a944624379fd5ead747d9dd603aec6852012a5a82da59d5169990e8b2",
+  "producing_runtime_pin_sha256": "53547b63be6f43286b7c22bf46dc80b85ad434855e0151b84451fdb9d92f6478",
+  "unchanged_runtime_images": 100,
+  "numeric_package_pins": {
+    "mpmath": {
+      "bytes": 1918069,
+      "files": 86,
+      "installed_code_sha256": "b53140f9623d3029f18eeb1ab696716f6d99c2c113c86d388b3b2924512d50fd",
+      "version": "0.0.0"
+    },
+    "numpy": {
+      "bytes": 17052691,
+      "files": 506,
+      "installed_code_sha256": "f5a8f2484d242b6344ac575c2223d3e10291a425e01029a73c2d25a6c6a8b20c",
+      "version": "1.21.5"
+    },
+    "scipy": {
+      "bytes": 45358076,
+      "files": 888,
+      "installed_code_sha256": "5229461bffd4d25959da5e10d9adda651063c7808cf6abb96ed214589aa7e871",
+      "version": "1.8.0"
+    },
+    "sympy": {
+      "bytes": 30271453,
+      "files": 1449,
+      "installed_code_sha256": "4d4b34772f337d063f799bfad8223a002c7524fbc6503ce30953e821e577b458",
+      "version": "1.9"
+    }
+  },
+  "environment_differences_from_producer": {
+    "NUMEXPR_NUM_THREADS": {
+      "producing": null,
+      "current": "1"
+    },
+    "VECLIB_MAXIMUM_THREADS": {
+      "producing": null,
+      "current": "1"
+    }
+  },
+  "reuse_preflight": {
+    "status": "passed",
+    "verified_successful_replays": 5,
+    "policy": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/mms-completion-001-runner/reuse-preflight/policy.json",
+    "policy_sha256": "28a3700fda478d0e75d001bee5d7cc52ab8c8055d3257de7f627c1bffa9aed5e",
+    "fresh_required": [
+      "flat-checkpoint",
+      "flat-restart"
+    ]
+  },
+  "qualification_receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/mms-completion-001/validation.json",
+  "qualification_sha256": "5fb1e90d5190fa7eee80e88bea1f5cbd48bbe4d45a99d5646db1c13f85872c1a",
+  "checks": 309,
+  "source_bound_replays": 5,
+  "fresh_native_cases": [
+    "flat-checkpoint",
+    "flat-restart"
+  ],
+  "runtime_unchanged": true,
+  "driver_inputs_after_sha256": "3aa2674a944624379fd5ead747d9dd603aec6852012a5a82da59d5169990e8b2",
+  "driver_inputs_unchanged": true,
+  "driver_source_commit_end": "6284787bf4c436203f4404498ba3dfb68aa144ef",
+  "driver_source_clean_end": true,
+  "primary_source_commit_end": "aa854f4c5b05451a81a4e1dd60eaaca98eb547e4",
+  "primary_source_clean_end": true,
+  "exit_code": 0,
+  "finished_utc": "2026-11-03T05:41:03.572239+00:00",
+  "seconds": 54.26225595100004
+}

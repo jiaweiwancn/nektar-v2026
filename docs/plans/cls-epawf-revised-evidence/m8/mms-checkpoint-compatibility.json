@@ -1,0 +1,712 @@
+{
+  "schema": 1,
+  "status": "passed",
+  "generated_utc": "2026-11-03T06:24:04.045898+00:00",
+  "scope": "Read-only exact signature, checkpoint checksum/hash and complete physical native-history audit",
+  "source_commit": "ed34052fe4dd967e963c22272a0ec0888cf35b70",
+  "solver": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/IncNavierStokesSolver",
+    "sha256": "71897ba6d378acf35f84ae832920ed17cc3c66db8b9f193211e46c5ab043f1e4"
+  },
+  "producer_receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-runner-002/receipt.json",
+  "producer_receipt_sha256": "e24deb7faa0f04e893ca0f8fdc0fc35374679dc83284e83a7a44720e002582cc",
+  "audit_recipe_sha256": "0f12a61b1d1189d789209981e2fcb4dc427dbb031b856b9cf9a1fcee1af3d251",
+  "norm_oracle_sha256": "979635de780944daeb24add2af0caffa44553f5284432ab632e04fe811863a06",
+  "command_hash_encoding": "UTF-8 JSON of {command: argv array, cwd: absolute path}; sort_keys=True, separators=(comma,colon), ensure_ascii=False",
+  "commands": [
+    {
+      "receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-runner-002/receipt.json",
+      "name": "fingerprint-before",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/transfers/fingerprint-runtime.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-runner-002/runtime-before.json"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-runner-002",
+      "command_and_cwd_canonical_json_sha256": "9a5c97e44f885d7a274a7dedc0397c4b3046f6d4cff684d1e62aa28741ebe643",
+      "exit_code": 0,
+      "log_sha256": "6f655a3648ddb7ef5edb2c794a9fa03a393a6f601bc0627627d888dc572b7502"
+    },
+    {
+      "receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-runner-002/receipt.json",
+      "name": "fresh-mms",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m8.py",
+        "--build",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build",
+        "--mode",
+        "mms",
+        "--variant",
+        "Regularized",
+        "--beta",
+        ".4",
+        "--gamma-scale",
+        "1",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-runner-002",
+      "command_and_cwd_canonical_json_sha256": "52d9783cf92f9011c5dc4fea61d372936c9ba0ffeb77d72d84be5f64f74a5e14",
+      "exit_code": 0,
+      "log_sha256": "9e242cf02d89c8bbe902b2ac95583c2bcca40c74b710228c96786dcde35c5c67"
+    },
+    {
+      "receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-runner-002/receipt.json",
+      "name": "reject-old-functions-capped",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/compatibility-002/old-functions-capped/case.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/compatibility-002/old-functions-capped",
+      "command_and_cwd_canonical_json_sha256": "1e30bcb4afd8128b59fbb23c10a0ca43fa16c4e818fedcffb3377ce2eba6fb50",
+      "exit_code": 1,
+      "log_sha256": "089e8794d1a5bf90d233bfc87b57081730630ddadcd1a6704d506681485dd2cd"
+    },
+    {
+      "receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-runner-002/receipt.json",
+      "name": "resume-old-neutral",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/compatibility-002/old-neutral-compatible/case.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/compatibility-002/old-neutral-compatible",
+      "command_and_cwd_canonical_json_sha256": "0053f88eee9215e7daced4f7db3b8ae995f382aaea4933c882a8fa7e7682a2ca",
+      "exit_code": 0,
+      "log_sha256": "07d3c7cee240d2a339c8d2855d22619cb6df257daf4b3faec36dbfc0b4c88d59"
+    },
+    {
+      "receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-runner-002/receipt.json",
+      "name": "fingerprint-after",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/transfers/fingerprint-runtime.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-runner-002/runtime-after.json",
+        "--compare",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-runner-002/runtime-before.json"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-runner-002",
+      "command_and_cwd_canonical_json_sha256": "ee32a8e71cedb6c959c9a5b808240179216ebe2f42d272425724fc1612095efb",
+      "exit_code": 0,
+      "log_sha256": "08bdb485e67e2f44868d97893f959d0028a78caf3752b92d9b32e7fab8a5ab1e"
+    },
+    {
+      "receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/validation.json",
+      "name": "flat",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/flat/case.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/flat",
+      "command_and_cwd_canonical_json_sha256": "ae2b04a44e436319bd612da8e96e6704ec6f2fcc9116ade8c1e0c7ad90d74275",
+      "exit_code": 0,
+      "log_sha256": "c03f330ba671a65e8d6a812291a3dcce28374e8a1202e7303544e86f0944f02c"
+    },
+    {
+      "receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/validation.json",
+      "name": "flat-p4",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/flat-p4/case.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/flat-p4",
+      "command_and_cwd_canonical_json_sha256": "51386c46c56db98a75771564e1145078ff2dc457330fa84fec5ed731d643e357",
+      "exit_code": 0,
+      "log_sha256": "66ec15a489489812a15fbed83feb82430a2834f203eb0ae93cf41a3477e4b890"
+    },
+    {
+      "receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/validation.json",
+      "name": "flat-h2",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/flat-h2/case.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/flat-h2",
+      "command_and_cwd_canonical_json_sha256": "ebacb905cc8913760a63404a6701ed127538f487257bf66fda443534fae374db",
+      "exit_code": 0,
+      "log_sha256": "4e8b24a6f7d905db737663dd3947055babc1a94b7e6627ae91ded246d3d3cb1d"
+    },
+    {
+      "receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/validation.json",
+      "name": "flat-dt2",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/flat-dt2/case.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/flat-dt2",
+      "command_and_cwd_canonical_json_sha256": "143356d9cf354be34abcaec9c520486b1926a6fbf95159a5f8fd4bd91064e532",
+      "exit_code": 0,
+      "log_sha256": "d6f2185f264ec2a674b27b063506e1bdcc804d59f6736a38c1bd18722f8813ef"
+    },
+    {
+      "receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/validation.json",
+      "name": "flat-mpi2",
+      "command": [
+        "mpirun",
+        "--report-bindings",
+        "--bind-to",
+        "core",
+        "--map-by",
+        "core",
+        "-np",
+        "2",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/flat-mpi2/case.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/flat-mpi2",
+      "command_and_cwd_canonical_json_sha256": "a19c2c34163892905b8195182802f93fe212fba1e069ff2faf59f556dcd7da1c",
+      "exit_code": 0,
+      "log_sha256": "2ec4dddf62764eb485777a248cf2fcf028b41810694413f879f1294f4a3d8e20"
+    },
+    {
+      "receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/validation.json",
+      "name": "flat-checkpoint",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/flat-checkpoint/case.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/flat-checkpoint",
+      "command_and_cwd_canonical_json_sha256": "6b98c5c933e55e5a70028ac842afdaf45cfcd343143ca936e939d17ed35c32f8",
+      "exit_code": 0,
+      "log_sha256": "59a733cf37950594225dd4d57f6cd0179716a84e6d4389025b57603b4c285690"
+    },
+    {
+      "receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/validation.json",
+      "name": "flat-restart",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/flat-restart/case.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/flat-restart",
+      "command_and_cwd_canonical_json_sha256": "6614be79485a47bbaeb12ec7c69fc91f94c1ef48373ebe2b20bcc8ca896d0796",
+      "exit_code": 0,
+      "log_sha256": "0e271f63db0883c079cca98e79dd8afc7abb8d87b8a66f1c306887a1e87bdc29"
+    }
+  ],
+  "actual_MPI_launcher_aliases": [
+    {
+      "name": "mpirun",
+      "path": "/usr/bin/mpirun",
+      "resolved": "/usr/bin/orterun",
+      "sha256": "aad9e80dbde91273d09490a5b6de513b02ef3d4bc8d709fedf3e822ee9e7bda8"
+    },
+    {
+      "name": "mpiexec",
+      "path": "/usr/bin/mpiexec",
+      "resolved": "/usr/bin/orterun",
+      "sha256": "aad9e80dbde91273d09490a5b6de513b02ef3d4bc8d709fedf3e822ee9e7bda8"
+    }
+  ],
+  "actual_MPI_launcher_and_pinned_loader_image_identical": true,
+  "pinned_MPI_loader_bindings": {
+    "bindings": {
+      "ELF interpreter": "/lib64/ld-linux-x86-64.so.2",
+      "libc.so.6": "/lib/x86_64-linux-gnu/libc.so.6",
+      "libevent_core-2.1.so.7": "/lib/x86_64-linux-gnu/libevent_core-2.1.so.7",
+      "libevent_pthreads-2.1.so.7": "/lib/x86_64-linux-gnu/libevent_pthreads-2.1.so.7",
+      "libhwloc.so.15": "/lib/x86_64-linux-gnu/libhwloc.so.15",
+      "libm.so.6": "/lib/x86_64-linux-gnu/libm.so.6",
+      "libopen-pal.so.40": "/lib/x86_64-linux-gnu/libopen-pal.so.40",
+      "libopen-rte.so.40": "/lib/x86_64-linux-gnu/libopen-rte.so.40",
+      "libudev.so.1": "/lib/x86_64-linux-gnu/libudev.so.1",
+      "libz.so.1": "/lib/x86_64-linux-gnu/libz.so.1"
+    },
+    "static": false,
+    "virtual": [
+      "linux-vdso.so.1"
+    ]
+  },
+  "build_pin_comparison": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build-002/runtime-fingerprint.json",
+    "sha256": "42e14ed5c43abbece959b4ee1c3aba70cdcd7e64670ecf1c4a62cb80f26c3da1",
+    "identical_fields": [
+      "source_inputs",
+      "runtime_artifacts",
+      "runtime_bindings",
+      "python_packages",
+      "tool_images"
+    ],
+    "full_runtime_environment_identical": false,
+    "runtime_environment_changes": {
+      "OMPI_MCA_hwloc_base_report_bindings": {
+        "build": null,
+        "qualification": "1"
+      }
+    }
+  },
+  "actual_solver_environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "TMPDIR": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/tmp",
+    "LD_LIBRARY_PATH": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/geometry-lib:/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/geometry-lib:",
+    "cpu_affinity": [
+      40,
+      41,
+      42,
+      43
+    ],
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "OMPI_MCA_hwloc_base_report_bindings": "1"
+  },
+  "fingerprint_LD_LIBRARY_PATH_normalization": {
+    "actual_solver": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/geometry-lib:/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/geometry-lib:",
+    "fingerprint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/geometry-lib",
+    "identical_duplicate_directories_and_empty_component_removed": true,
+    "empty_component_means_current_directory_search": true,
+    "actual_case_directory_loader_bindings_verified": [
+      {
+        "receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/validation.json",
+        "case": "flat",
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/flat",
+        "actual_LD_LIBRARY_PATH": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/geometry-lib:/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/geometry-lib:",
+        "actual_cwd_has_no_executable_or_shared_object_ELF": true,
+        "actual_VECLIB_MAXIMUM_THREADS": "1",
+        "binding_map_and_transitive_library_bytes_equal_frozen_pin": true,
+        "ldd_stdout_sha256": "d5867ab7fbfc5153d94f1e7e4c9a7d4430a26ba6756461216e74feb07ae4ad60"
+      },
+      {
+        "receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/validation.json",
+        "case": "flat-p4",
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/flat-p4",
+        "actual_LD_LIBRARY_PATH": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/geometry-lib:/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/geometry-lib:",
+        "actual_cwd_has_no_executable_or_shared_object_ELF": true,
+        "actual_VECLIB_MAXIMUM_THREADS": "1",
+        "binding_map_and_transitive_library_bytes_equal_frozen_pin": true,
+        "ldd_stdout_sha256": "532bd26198d8d59337de195d2919fb93dc3ea23a18460f61dcd12f9aca1b550c"
+      },
+      {
+        "receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/validation.json",
+        "case": "flat-h2",
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/flat-h2",
+        "actual_LD_LIBRARY_PATH": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/geometry-lib:/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/geometry-lib:",
+        "actual_cwd_has_no_executable_or_shared_object_ELF": true,
+        "actual_VECLIB_MAXIMUM_THREADS": "1",
+        "binding_map_and_transitive_library_bytes_equal_frozen_pin": true,
+        "ldd_stdout_sha256": "b1f62d6d8594b2a3dab2e05d4f19fbc2c294fc699e5f9418d13af6db210f80fe"
+      },
+      {
+        "receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/validation.json",
+        "case": "flat-dt2",
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/flat-dt2",
+        "actual_LD_LIBRARY_PATH": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/geometry-lib:/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/geometry-lib:",
+        "actual_cwd_has_no_executable_or_shared_object_ELF": true,
+        "actual_VECLIB_MAXIMUM_THREADS": "1",
+        "binding_map_and_transitive_library_bytes_equal_frozen_pin": true,
+        "ldd_stdout_sha256": "3cf1fcc1ce273bbe74ede62d906f314e79854a50e3c1a74c21e85794003375c4"
+      },
+      {
+        "receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/validation.json",
+        "case": "flat-mpi2",
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/flat-mpi2",
+        "actual_LD_LIBRARY_PATH": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/geometry-lib:/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/geometry-lib:",
+        "actual_cwd_has_no_executable_or_shared_object_ELF": true,
+        "actual_VECLIB_MAXIMUM_THREADS": "1",
+        "binding_map_and_transitive_library_bytes_equal_frozen_pin": true,
+        "ldd_stdout_sha256": "f05f596218cc46db1acd15493d81860543cf2898116bb0e08ce63c8b4d053fdc"
+      },
+      {
+        "receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/validation.json",
+        "case": "flat-checkpoint",
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/flat-checkpoint",
+        "actual_LD_LIBRARY_PATH": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/geometry-lib:/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/geometry-lib:",
+        "actual_cwd_has_no_executable_or_shared_object_ELF": true,
+        "actual_VECLIB_MAXIMUM_THREADS": "1",
+        "binding_map_and_transitive_library_bytes_equal_frozen_pin": true,
+        "ldd_stdout_sha256": "d02c810d311adaee9177f286f0297495390776213a503b144277bd49494098c5"
+      },
+      {
+        "receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/validation.json",
+        "case": "flat-restart",
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/flat-restart",
+        "actual_LD_LIBRARY_PATH": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/geometry-lib:/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/geometry-lib:",
+        "actual_cwd_has_no_executable_or_shared_object_ELF": true,
+        "actual_VECLIB_MAXIMUM_THREADS": "1",
+        "binding_map_and_transitive_library_bytes_equal_frozen_pin": true,
+        "ldd_stdout_sha256": "4090d79f930893500ba2f2413d4f9f6392268c9b7856a6e812ae111a9a3515f2"
+      },
+      {
+        "receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-runner-002/receipt.json",
+        "case": "reject-old-functions-capped",
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/compatibility-002/old-functions-capped",
+        "actual_LD_LIBRARY_PATH": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/geometry-lib:",
+        "actual_cwd_has_no_executable_or_shared_object_ELF": true,
+        "actual_VECLIB_MAXIMUM_THREADS": null,
+        "binding_map_and_transitive_library_bytes_equal_frozen_pin": true,
+        "ldd_stdout_sha256": "a16c044ba5207243805f81bc935ca126f763acded017d2ccac5773ef3aabd74a"
+      },
+      {
+        "receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-runner-002/receipt.json",
+        "case": "resume-old-neutral",
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/compatibility-002/old-neutral-compatible",
+        "actual_LD_LIBRARY_PATH": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/geometry-lib:",
+        "actual_cwd_has_no_executable_or_shared_object_ELF": true,
+        "actual_VECLIB_MAXIMUM_THREADS": null,
+        "binding_map_and_transitive_library_bytes_equal_frozen_pin": true,
+        "ldd_stdout_sha256": "6ddd1cf326a280170dcf8a8a15ec1a0e7929e40a0888265e50c1b3bc316b6e1f"
+      }
+    ]
+  },
+  "old_functions_checkpoint": {
+    "report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/mms-completion-001/flat-checkpoint/case.evolution.json",
+    "report_sha256": "b687d65fe75781e8488eb62f2a8f4fb99cac701f6f5da984c2e5c3987edcbe35",
+    "session": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/mms-completion-001/flat-checkpoint/case.xml",
+    "session_sha256": "0602ba320b968c034c20b8608b47b8c8ed406e30d8d7d3551d016bf69e4fe9f6",
+    "signature": "CLS-EPAWF-M4:replicated-CG:2:2:1.5e-05:0.10000000000000001:1:1:1:3.1906750816242875:12:16|40:0:3:0:1:0:0:0:0.10000000000000001:1:3:0:1:0:0:0.10000000000000001:2:2:3:0:1:0:0:2:4:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8|40:0:3:0:1:0:0:0:0.10000000000000001:1:3:0:1:0:0:0.10000000000000001:2:2:3:0:1:0:0:2:4:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8|40:0:3:0:1:0:0:0:0.10000000000000001:1:3:0:1:0:0:0.10000000000000001:2:2:3:0:1:0:0:2:4:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8|16:2:3:0:1:0:0:2:4:4:4:4:8:4:4:4:8|6:0:1:0:1:0:0:0:0.10000000000000001:1:1:0:1:0:0:0.10000000000000001:2:4:2:4:8:4:2:4:8:4:2:4:8:4:2:4:8|4:2:1:0:1:0:0:2:4:4:2:4:8:4:2:4:8:M8:Regularized:0.40000000000000002:0:0.20000000000000001:0.10000000000000001:0:1:1:1:0:0:-0:-0:1:0.40000000000000002:incoming-flat-strain-extension:eta=0:neutral=0:us=0.40000000000000002:direction=1,0:chart_functions=1|E0=0.072635833261861321|K0=0.51050801305988602|KAPPA=0.44055390518665871|KINVIS=1.5e-05|M8MMSCMU=0.098227895328211259|M8MMSDH=0.32883429180648149|M8MMSG=0.45397395788663325|M8MMSINNERCOEFFICIENT=0.24328362945516613|M8MMSJUMP=0.074874508582116625|M8MMSNUT=0.35244312414932699|M8MMSOUTERFORCEATH=0.080000000000000016|M8MMSPI=-0.037437254291058313|M8MMSPO=0.037437254291058313|M8MMSTOP=4|M8MMSTRACTION=0.16000000000000003|M8MMSUH=0.48656725891033226|M8MMSUSTAR=0.40000000000000002|QSTAR=3.1906750816242875|RANSWALLCHI=1|RANSWALLCUBICBETA=0.40000000000000002|RANSWALLDIAGNOSTICS=1|RANSWALLDIRECTIONX=1|RANSWALLDIRECTIONY=0|RANSWALLETA=0|RANSWALLEXPRESSIONDIMENSION=2|RANSWALLFRICTIONVELOCITY=0.40000000000000002|RANSWALLHEIGHT=2|RANSWALLMAXITERATIONS=80|RANSWALLNONLINEARTOLERANCE=2e-12|RANSWALLNORMALORDER=16|RANSWALLPOSITIVITYDELTA=0.10000000000000001|RANSWALLPOSITIVITYTHETA=0.20000000000000001|RANSWALLREGULARIZATIONGAMMA=0|RANSWALLREGULARIZATIONSCALE=1|RANSWALLROUGHNESS=0.10000000000000001|RANSWALLSAMPLEHEIGHT=1|RANSWALLSTAGEALPHA=5|RANSWALLTAILSTART=1|RANSWALLTANGENTIALORDER=12|ROUGHM=0.75765183473730391|ROUGHX=68.047469962840196|SLOPE=0.16397739074295414|TIME=0|TIMESTEP=0.0050000000000000001|YAPSCALE=2.0086899801758373|ZV=-0.0052721312167261433|InitialConditionsInner/u=(M8MMSInnerCoefficient*y^2/2)|InitialConditionsInner/v=0|InitialConditionsInner/k=K0|InitialConditionsInner/p=M8MMSPi|InitialConditionsOuter/u=(M8MMSUH+M8MMSG*(y-RANSWallHeight))|InitialConditionsOuter/v=0|InitialConditionsOuter/k=K0|InitialConditionsOuter/eps_tilde=E0|InitialConditionsOuter/p=M8MMSPo|BoundaryValuesInner/u=(M8MMSInnerCoefficient*y^2/2)|BoundaryValuesInner/v=0|BoundaryValuesInner/k=K0|BoundaryValuesOuter/u=(M8MMSUH+M8MMSG*(y-RANSWallHeight))|BoundaryValuesOuter/v=0|BoundaryValuesOuter/k=K0|BoundaryValuesOuter/eps_tilde=E0|BodyForceInner/u=(-M8MMSInnerCoefficient*((Kinvis+(Slope*max((0*t),(y-Zv))))+y*(Slope*(1+sign(y-Zv))/2))-((1-sign(y-RANSWallRoughness))/2)*M8MMSOuterForceAtH)|BodyForceInner/v=0|BodyForceOuter/u=(-(RANSWallRegularizationScale*Kappa*M8MMSUstar*M8MMSG+RANSWallRegularizationGamma*M8MMSUstar/(Kappa*y^2)))|BodyForceOuter/v=0|ScalarSourceInner/k=(((K0/Qstar)^2*(Slope*max((0*t),(y-Zv)))/(Kinvis+(Slope*max((0*t),(y-Zv))))^2)-((Slope*max((0*t),(y-Zv)))*(M8MMSInnerCoefficient*y)^2))|ScalarSourceOuter/k=(E0-((M8MMSNuT*M8MMSG+(RANSWallRegularizationGamma+RANSWallRegularizationScale*Kappa*M8MMSUstar*y)*(M8MMSG-M8MMSUstar/(Kappa*y)))*M8MMSG))|ScalarSourceOuter/eps_tilde=(-1.44*E0/K0*((M8MMSNuT*M8MMSG+(RANSWallRegularizationGamma+RANSWallRegularizationScale*Kappa*M8MMSUstar*y)*(M8MMSG-M8MMSUstar/(Kappa*y)))*M8MMSG)+1.92*E0^2/K0-(0.83*E0^2/K0*max(((K0^1.5/(2.5*E0*y))-1),(0*t))*(K0^1.5/(2.5*E0*y))^2))|ExactSolutionInner/u=(M8MMSInnerCoefficient*y^2/2)|ExactSolutionInner/v=0|ExactSolutionInner/k=K0|ExactSolutionInner/p=M8MMSPi|ExactSolutionOuter/u=(M8MMSUH+M8MMSG*(y-RANSWallHeight))|ExactSolutionOuter/v=0|ExactSolutionOuter/k=K0|ExactSolutionOuter/eps_tilde=E0|ExactSolutionOuter/p=M8MMSPo",
+    "signature_utf8_sha256": "6513b9cd17441828f6933b361de51d951d20f995466d7dd091b76df0ae9d3c6c",
+    "capped_initial_trace_marker_present": false,
+    "time": 0.005,
+    "order": 2,
+    "dt": 0.005,
+    "checkpoint_payload": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/mms-completion-001/mms-history/State.bin",
+    "checkpoint_payload_sha256": "61b61f8233314be57293cec2ba3c4c2b05daefc467b92b49b66bf83f3ec0f26d",
+    "checkpoint_payload_bytes": 13057,
+    "binary_signature_matches_report": true,
+    "independently_verified_FNV64_checksum": true,
+    "checkpoint_format": {
+      "magic": "0x4550415746544931",
+      "endian": "0x102030405060708",
+      "schema": 1,
+      "signature_bytes": 3897
+    }
+  },
+  "new_functions_checkpoint": {
+    "report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/flat-checkpoint/case.evolution.json",
+    "report_sha256": "0e49bf1e3f50629e02d51bedeb14a89c8bbf6e13099028a074b7ef2f076fc52a",
+    "session": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/flat-checkpoint/case.xml",
+    "session_sha256": "e0e77059e4f2856e30e69fcd93009bfa004d481472e2daae0e55ae4d6689ae24",
+    "signature": "CLS-EPAWF-M4:replicated-CG:2:2:1.5e-05:0.10000000000000001:1:1:1:3.1906750816242875:12:16|40:0:3:0:1:0:0:0:0.10000000000000001:1:3:0:1:0:0:0.10000000000000001:2:2:3:0:1:0:0:2:4:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8|40:0:3:0:1:0:0:0:0.10000000000000001:1:3:0:1:0:0:0.10000000000000001:2:2:3:0:1:0:0:2:4:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8|40:0:3:0:1:0:0:0:0.10000000000000001:1:3:0:1:0:0:0.10000000000000001:2:2:3:0:1:0:0:2:4:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8|16:2:3:0:1:0:0:2:4:4:4:4:8:4:4:4:8|6:0:1:0:1:0:0:0:0.10000000000000001:1:1:0:1:0:0:0.10000000000000001:2:4:2:4:8:4:2:4:8:4:2:4:8:4:2:4:8|4:2:1:0:1:0:0:2:4:4:2:4:8:4:2:4:8:M8:Regularized:0.40000000000000002:0:0.20000000000000001:0.10000000000000001:0:1:1:1:0:0:-0:-0:1:0.40000000000000002:incoming-flat-strain-extension:eta=0:neutral=0:us=0.40000000000000002:direction=1,0:chart_functions=1:capped_initial_trace=1|E0=0.072635833261861321|K0=0.51050801305988602|KAPPA=0.44055390518665871|KINVIS=1.5e-05|M8MMSCMU=0.098227895328211259|M8MMSDH=0.32883429180648149|M8MMSG=0.45397395788663325|M8MMSINNERCOEFFICIENT=0.24328362945516613|M8MMSJUMP=0.074874508582116625|M8MMSNUT=0.35244312414932699|M8MMSOUTERFORCEATH=0.080000000000000016|M8MMSPI=-0.037437254291058313|M8MMSPO=0.037437254291058313|M8MMSTOP=4|M8MMSTRACTION=0.16000000000000003|M8MMSUH=0.48656725891033226|M8MMSUSTAR=0.40000000000000002|QSTAR=3.1906750816242875|RANSWALLCHI=1|RANSWALLCUBICBETA=0.40000000000000002|RANSWALLDIAGNOSTICS=1|RANSWALLDIRECTIONX=1|RANSWALLDIRECTIONY=0|RANSWALLETA=0|RANSWALLEXPRESSIONDIMENSION=2|RANSWALLFRICTIONVELOCITY=0.40000000000000002|RANSWALLHEIGHT=2|RANSWALLMAXITERATIONS=80|RANSWALLNONLINEARTOLERANCE=2e-12|RANSWALLNORMALORDER=16|RANSWALLPOSITIVITYDELTA=0.10000000000000001|RANSWALLPOSITIVITYTHETA=0.20000000000000001|RANSWALLREGULARIZATIONGAMMA=0|RANSWALLREGULARIZATIONSCALE=1|RANSWALLROUGHNESS=0.10000000000000001|RANSWALLSAMPLEHEIGHT=1|RANSWALLSTAGEALPHA=5|RANSWALLTAILSTART=1|RANSWALLTANGENTIALORDER=12|ROUGHM=0.75765183473730391|ROUGHX=68.047469962840196|SLOPE=0.16397739074295414|TIME=0|TIMESTEP=0.0050000000000000001|YAPSCALE=2.0086899801758373|ZV=-0.0052721312167261433|InitialConditionsInner/u=(M8MMSInnerCoefficient*y^2/2)|InitialConditionsInner/v=0|InitialConditionsInner/k=K0|InitialConditionsInner/p=M8MMSPi|InitialConditionsOuter/u=(M8MMSUH+M8MMSG*(y-RANSWallHeight))|InitialConditionsOuter/v=0|InitialConditionsOuter/k=K0|InitialConditionsOuter/eps_tilde=E0|InitialConditionsOuter/p=M8MMSPo|BoundaryValuesInner/u=(M8MMSInnerCoefficient*y^2/2)|BoundaryValuesInner/v=0|BoundaryValuesInner/k=K0|BoundaryValuesOuter/u=(M8MMSUH+M8MMSG*(y-RANSWallHeight))|BoundaryValuesOuter/v=0|BoundaryValuesOuter/k=K0|BoundaryValuesOuter/eps_tilde=E0|BodyForceInner/u=(-M8MMSInnerCoefficient*((Kinvis+(Slope*max((0*t),(y-Zv))))+y*(Slope*(1+sign(y-Zv))/2))-((1-sign(y-RANSWallRoughness))/2)*M8MMSOuterForceAtH)|BodyForceInner/v=0|BodyForceOuter/u=(-(RANSWallRegularizationScale*Kappa*M8MMSUstar*M8MMSG+RANSWallRegularizationGamma*M8MMSUstar/(Kappa*y^2)))|BodyForceOuter/v=0|ScalarSourceInner/k=(((K0/Qstar)^2*(Slope*max((0*t),(y-Zv)))/(Kinvis+(Slope*max((0*t),(y-Zv))))^2)-((Slope*max((0*t),(y-Zv)))*(M8MMSInnerCoefficient*y)^2))|ScalarSourceOuter/k=(E0-((M8MMSNuT*M8MMSG+(RANSWallRegularizationGamma+RANSWallRegularizationScale*Kappa*M8MMSUstar*y)*(M8MMSG-M8MMSUstar/(Kappa*y)))*M8MMSG))|ScalarSourceOuter/eps_tilde=(-1.44*E0/K0*((M8MMSNuT*M8MMSG+(RANSWallRegularizationGamma+RANSWallRegularizationScale*Kappa*M8MMSUstar*y)*(M8MMSG-M8MMSUstar/(Kappa*y)))*M8MMSG)+1.92*E0^2/K0-(0.83*E0^2/K0*max(((K0^1.5/(2.5*E0*y))-1),(0*t))*(K0^1.5/(2.5*E0*y))^2))|ExactSolutionInner/u=(M8MMSInnerCoefficient*y^2/2)|ExactSolutionInner/v=0|ExactSolutionInner/k=K0|ExactSolutionInner/p=M8MMSPi|ExactSolutionOuter/u=(M8MMSUH+M8MMSG*(y-RANSWallHeight))|ExactSolutionOuter/v=0|ExactSolutionOuter/k=K0|ExactSolutionOuter/eps_tilde=E0|ExactSolutionOuter/p=M8MMSPo",
+    "signature_utf8_sha256": "a4245ce3f2afb5f4eb1ecaca181c20a97c9a68ae7aff01fe07608a021bfac5b5",
+    "capped_initial_trace_marker_present": true,
+    "time": 0.005,
+    "order": 2,
+    "dt": 0.005,
+    "checkpoint_payload": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/mms-history/State.bin",
+    "checkpoint_payload_sha256": "a2e2fd3fc0c58e281b76b0e4890f7d458b6bcf79d9f709dc772e2676784195a7",
+    "checkpoint_payload_bytes": 13080,
+    "binary_signature_matches_report": true,
+    "independently_verified_FNV64_checksum": true,
+    "checkpoint_format": {
+      "magic": "0x4550415746544931",
+      "endian": "0x102030405060708",
+      "schema": 1,
+      "signature_bytes": 3920
+    }
+  },
+  "new_functions_restart": {
+    "report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/flat-restart/case.evolution.json",
+    "report_sha256": "866f1903339b963316f5ea143cc3157d5c6437258f1280c3e24003624d38e508",
+    "session": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/flat-restart/case.xml",
+    "session_sha256": "16da7362c910a764b04ada4a7eb21d255b8591dfff532f2885c0b447c1087493",
+    "signature": "CLS-EPAWF-M4:replicated-CG:2:2:1.5e-05:0.10000000000000001:1:1:1:3.1906750816242875:12:16|40:0:3:0:1:0:0:0:0.10000000000000001:1:3:0:1:0:0:0.10000000000000001:2:2:3:0:1:0:0:2:4:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8|40:0:3:0:1:0:0:0:0.10000000000000001:1:3:0:1:0:0:0.10000000000000001:2:2:3:0:1:0:0:2:4:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8|40:0:3:0:1:0:0:0:0.10000000000000001:1:3:0:1:0:0:0.10000000000000001:2:2:3:0:1:0:0:2:4:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8|16:2:3:0:1:0:0:2:4:4:4:4:8:4:4:4:8|6:0:1:0:1:0:0:0:0.10000000000000001:1:1:0:1:0:0:0.10000000000000001:2:4:2:4:8:4:2:4:8:4:2:4:8:4:2:4:8|4:2:1:0:1:0:0:2:4:4:2:4:8:4:2:4:8:M8:Regularized:0.40000000000000002:0:0.20000000000000001:0.10000000000000001:0:1:1:1:0:0:-0:-0:1:0.40000000000000002:incoming-flat-strain-extension:eta=0:neutral=0:us=0.40000000000000002:direction=1,0:chart_functions=1:capped_initial_trace=1|E0=0.072635833261861321|K0=0.51050801305988602|KAPPA=0.44055390518665871|KINVIS=1.5e-05|M8MMSCMU=0.098227895328211259|M8MMSDH=0.32883429180648149|M8MMSG=0.45397395788663325|M8MMSINNERCOEFFICIENT=0.24328362945516613|M8MMSJUMP=0.074874508582116625|M8MMSNUT=0.35244312414932699|M8MMSOUTERFORCEATH=0.080000000000000016|M8MMSPI=-0.037437254291058313|M8MMSPO=0.037437254291058313|M8MMSTOP=4|M8MMSTRACTION=0.16000000000000003|M8MMSUH=0.48656725891033226|M8MMSUSTAR=0.40000000000000002|QSTAR=3.1906750816242875|RANSWALLCHI=1|RANSWALLCUBICBETA=0.40000000000000002|RANSWALLDIAGNOSTICS=1|RANSWALLDIRECTIONX=1|RANSWALLDIRECTIONY=0|RANSWALLETA=0|RANSWALLEXPRESSIONDIMENSION=2|RANSWALLFRICTIONVELOCITY=0.40000000000000002|RANSWALLHEIGHT=2|RANSWALLMAXITERATIONS=80|RANSWALLNONLINEARTOLERANCE=2e-12|RANSWALLNORMALORDER=16|RANSWALLPOSITIVITYDELTA=0.10000000000000001|RANSWALLPOSITIVITYTHETA=0.20000000000000001|RANSWALLREGULARIZATIONGAMMA=0|RANSWALLREGULARIZATIONSCALE=1|RANSWALLROUGHNESS=0.10000000000000001|RANSWALLSAMPLEHEIGHT=1|RANSWALLSTAGEALPHA=5|RANSWALLTAILSTART=1|RANSWALLTANGENTIALORDER=12|ROUGHM=0.75765183473730391|ROUGHX=68.047469962840196|SLOPE=0.16397739074295414|TIME=0|TIMESTEP=0.0050000000000000001|YAPSCALE=2.0086899801758373|ZV=-0.0052721312167261433|InitialConditionsInner/u=(M8MMSInnerCoefficient*y^2/2)|InitialConditionsInner/v=0|InitialConditionsInner/k=K0|InitialConditionsInner/p=M8MMSPi|InitialConditionsOuter/u=(M8MMSUH+M8MMSG*(y-RANSWallHeight))|InitialConditionsOuter/v=0|InitialConditionsOuter/k=K0|InitialConditionsOuter/eps_tilde=E0|InitialConditionsOuter/p=M8MMSPo|BoundaryValuesInner/u=(M8MMSInnerCoefficient*y^2/2)|BoundaryValuesInner/v=0|BoundaryValuesInner/k=K0|BoundaryValuesOuter/u=(M8MMSUH+M8MMSG*(y-RANSWallHeight))|BoundaryValuesOuter/v=0|BoundaryValuesOuter/k=K0|BoundaryValuesOuter/eps_tilde=E0|BodyForceInner/u=(-M8MMSInnerCoefficient*((Kinvis+(Slope*max((0*t),(y-Zv))))+y*(Slope*(1+sign(y-Zv))/2))-((1-sign(y-RANSWallRoughness))/2)*M8MMSOuterForceAtH)|BodyForceInner/v=0|BodyForceOuter/u=(-(RANSWallRegularizationScale*Kappa*M8MMSUstar*M8MMSG+RANSWallRegularizationGamma*M8MMSUstar/(Kappa*y^2)))|BodyForceOuter/v=0|ScalarSourceInner/k=(((K0/Qstar)^2*(Slope*max((0*t),(y-Zv)))/(Kinvis+(Slope*max((0*t),(y-Zv))))^2)-((Slope*max((0*t),(y-Zv)))*(M8MMSInnerCoefficient*y)^2))|ScalarSourceOuter/k=(E0-((M8MMSNuT*M8MMSG+(RANSWallRegularizationGamma+RANSWallRegularizationScale*Kappa*M8MMSUstar*y)*(M8MMSG-M8MMSUstar/(Kappa*y)))*M8MMSG))|ScalarSourceOuter/eps_tilde=(-1.44*E0/K0*((M8MMSNuT*M8MMSG+(RANSWallRegularizationGamma+RANSWallRegularizationScale*Kappa*M8MMSUstar*y)*(M8MMSG-M8MMSUstar/(Kappa*y)))*M8MMSG)+1.92*E0^2/K0-(0.83*E0^2/K0*max(((K0^1.5/(2.5*E0*y))-1),(0*t))*(K0^1.5/(2.5*E0*y))^2))|ExactSolutionInner/u=(M8MMSInnerCoefficient*y^2/2)|ExactSolutionInner/v=0|ExactSolutionInner/k=K0|ExactSolutionInner/p=M8MMSPi|ExactSolutionOuter/u=(M8MMSUH+M8MMSG*(y-RANSWallHeight))|ExactSolutionOuter/v=0|ExactSolutionOuter/k=K0|ExactSolutionOuter/eps_tilde=E0|ExactSolutionOuter/p=M8MMSPo",
+    "signature_utf8_sha256": "a4245ce3f2afb5f4eb1ecaca181c20a97c9a68ae7aff01fe07608a021bfac5b5",
+    "capped_initial_trace_marker_present": true,
+    "time": 0.01,
+    "order": 2,
+    "dt": 0.005
+  },
+  "stale_functions_control": {
+    "status": "expected_rejection_verified",
+    "report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/compatibility-002/old-functions-capped/case.evolution.json",
+    "report_sha256": "5f5c458f647da6c3b6cc6affd59452924cde62a1d759833c7433e4007b6525ef",
+    "XML_sha256": "3aa7f1a5a11b13b33ce69f2076e5c51d31cb4da238b9d0f15fd27f6a6a84e864",
+    "failure": "Wall IMEX: checkpoint signature mismatch",
+    "log_sha256": "089e8794d1a5bf90d233bfc87b57081730630ddadcd1a6704d506681485dd2cd",
+    "accepted_states": 0,
+    "initialization_complete": false,
+    "exact_signature_change_only_scoped_marker": true,
+    "interpretation": "Expected scoped checkpoint versioning rejection; not a physical robustness failure"
+  },
+  "old_neutral_checkpoint": {
+    "report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/native-completion-001/scaled-native/checkpoint/case.evolution.json",
+    "report_sha256": "b23d096197646b7a870df30715d0f037c26f45c8c2234470989e86001235a8b0",
+    "session": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/native-completion-001/scaled-native/checkpoint/case.xml",
+    "session_sha256": "19ebd194223200bcf53113e595fe9c367bd0f85ce052627712ccc5b96ef0ef20",
+    "signature": "CLS-EPAWF-M4:replicated-CG:2:2:1.5e-05:0.10000000000000001:1:1:1:3.1906750816242875:8:16|64:0:3:0:8:0:0:0:0.10000000000000001:1:3:0:8:0:0:0.10000000000000001:1:2:3:0:8:0:0:1:2:3:3:0:8:0:0:2:4:4:3:0:8:0:0:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8|64:0:3:0:8:0:0:0:0.10000000000000001:1:3:0:8:0:0:0.10000000000000001:1:2:3:0:8:0:0:1:2:3:3:0:8:0:0:2:4:4:3:0:8:0:0:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8|64:0:3:0:8:0:0:0:0.10000000000000001:1:3:0:8:0:0:0.10000000000000001:1:2:3:0:8:0:0:1:2:3:3:0:8:0:0:2:4:4:3:0:8:0:0:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8|28:3:3:0:8:0:0:2:4:4:3:0:8:0:0:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8|8:0:1:0:8:0:0:0:0.10000000000000001:1:1:0:8:0:0:0.10000000000000001:1:2:1:0:8:0:0:1:2:4:2:4:8:4:2:4:8:4:2:4:8:4:2:4:8:4:2:4:8:4:2:4:8|6:3:1:0:8:0:0:2:4:4:1:0:8:0:0:4:8:4:2:4:8:4:2:4:8:4:2:4:8:4:2:4:8:M8:CubicScaled:0.40000000000000002:0:0.20000000000000001:0.10000000000000001:0:0:1:1:0:0:-0:-0:1:0.40000000000000002:incoming-flat-strain-extension:eta=1:neutral=1:us=0.40000000000000002:direction=1,0:chart_functions=0|E0=0.072635833261861321|K0=0.51050801305988602|KAPPA=0.44055390518665871|KINVIS=1.5e-05|QSTAR=3.1906750816242875|RANSWALLCHI=1|RANSWALLCUBICBETA=0.40000000000000002|RANSWALLDIAGNOSTICS=1|RANSWALLDIRECTIONX=1|RANSWALLDIRECTIONY=0|RANSWALLETA=1|RANSWALLHEIGHT=2|RANSWALLMAXITERATIONS=80|RANSWALLNONLINEARTOLERANCE=2e-12|RANSWALLNORMALORDER=16|RANSWALLPOSITIVITYDELTA=0.10000000000000001|RANSWALLPOSITIVITYTHETA=0.20000000000000001|RANSWALLREGULARIZATIONGAMMA=0|RANSWALLREGULARIZATIONSCALE=0|RANSWALLROUGHNESS=0.10000000000000001|RANSWALLSAMPLEHEIGHT=1|RANSWALLSTAGEALPHA=5|RANSWALLTAILSTART=1|RANSWALLTANGENTIALORDER=8|ROUGHM=0.75765183473730391|ROUGHX=68.047469962840196|SLOPE=0.16397739074295414|TIME=0|TIMESTEP=0.0025000000000000001|YAPSCALE=2.0086899801758373|ZV=-0.0052721312167261433|InitialPerturbationInner/u=0.0004*((sin(1*PI*(x/8)))^2)*sin(2*PI*y/8.0)|InitialPerturbationInner/v=-0.0004*(sin(2*PI*(x/8)))*((sin(PI*y/8.0))^2)|InitialPerturbationInner/k=0.001*Qstar*0.16*(((sin(1*PI*(x/8)))^2)*((sin(PI*y/8.0))^2))|InitialPerturbationInner/eps_tilde=0|InitialPerturbationInner/p=0|InitialPerturbationOuter/u=0.0004*((sin(1*PI*(x/8)))^2)*sin(2*PI*y/8.0)|InitialPerturbationOuter/v=-0.0004*(sin(2*PI*(x/8)))*((sin(PI*y/8.0))^2)|InitialPerturbationOuter/k=0.001*Qstar*0.16*(((sin(1*PI*(x/8)))^2)*((sin(PI*y/8.0))^2))|InitialPerturbationOuter/eps_tilde=6.4e-05/(Kappa*2.0)*((sin(1*PI*(x/8)))^2)*(sin(PI*(y-2.0)/(8.0-2.0)))^2|InitialPerturbationOuter/p=0",
+    "signature_utf8_sha256": "0ff6fb649a7a4a50854c351ceac29389fc7e2de8a8988ae8f787c462cc7adde2",
+    "capped_initial_trace_marker_present": false,
+    "time": 0.005,
+    "order": 2,
+    "dt": 0.0025,
+    "checkpoint_payload": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/native-completion-001/scaled-native/history/State.bin",
+    "checkpoint_payload_sha256": "588d1342124e6d79ff7b3b34e958739108a1e40133cc645b0767a211202ccadf",
+    "checkpoint_payload_bytes": 17259,
+    "binary_signature_matches_report": true,
+    "independently_verified_FNV64_checksum": true,
+    "checkpoint_format": {
+      "magic": "0x4550415746544931",
+      "endian": "0x102030405060708",
+      "schema": 1,
+      "signature_bytes": 2627
+    }
+  },
+  "old_neutral_reference": {
+    "report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/native-completion-001/scaled-native/joint-four/case.evolution.json",
+    "report_sha256": "8d23089fe7e98c3f4ecf7f85f576a2a7be6e955cc50f51f2ce175981751e0899",
+    "session": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/native-completion-001/scaled-native/joint-four/case.xml",
+    "session_sha256": "eab601471e462a2bb55ef5ab2fcf64302f6e0b4f5aa9d372a5dc5f3a516abbb9",
+    "signature": "CLS-EPAWF-M4:replicated-CG:2:2:1.5e-05:0.10000000000000001:1:1:1:3.1906750816242875:8:16|64:0:3:0:8:0:0:0:0.10000000000000001:1:3:0:8:0:0:0.10000000000000001:1:2:3:0:8:0:0:1:2:3:3:0:8:0:0:2:4:4:3:0:8:0:0:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8|64:0:3:0:8:0:0:0:0.10000000000000001:1:3:0:8:0:0:0.10000000000000001:1:2:3:0:8:0:0:1:2:3:3:0:8:0:0:2:4:4:3:0:8:0:0:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8|64:0:3:0:8:0:0:0:0.10000000000000001:1:3:0:8:0:0:0.10000000000000001:1:2:3:0:8:0:0:1:2:3:3:0:8:0:0:2:4:4:3:0:8:0:0:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8|28:3:3:0:8:0:0:2:4:4:3:0:8:0:0:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8|8:0:1:0:8:0:0:0:0.10000000000000001:1:1:0:8:0:0:0.10000000000000001:1:2:1:0:8:0:0:1:2:4:2:4:8:4:2:4:8:4:2:4:8:4:2:4:8:4:2:4:8:4:2:4:8|6:3:1:0:8:0:0:2:4:4:1:0:8:0:0:4:8:4:2:4:8:4:2:4:8:4:2:4:8:4:2:4:8:M8:CubicScaled:0.40000000000000002:0:0.20000000000000001:0.10000000000000001:0:0:1:1:0:0:-0:-0:1:0.40000000000000002:incoming-flat-strain-extension:eta=1:neutral=1:us=0.40000000000000002:direction=1,0:chart_functions=0|E0=0.072635833261861321|K0=0.51050801305988602|KAPPA=0.44055390518665871|KINVIS=1.5e-05|QSTAR=3.1906750816242875|RANSWALLCHI=1|RANSWALLCUBICBETA=0.40000000000000002|RANSWALLDIAGNOSTICS=1|RANSWALLDIRECTIONX=1|RANSWALLDIRECTIONY=0|RANSWALLETA=1|RANSWALLHEIGHT=2|RANSWALLMAXITERATIONS=80|RANSWALLNONLINEARTOLERANCE=2e-12|RANSWALLNORMALORDER=16|RANSWALLPOSITIVITYDELTA=0.10000000000000001|RANSWALLPOSITIVITYTHETA=0.20000000000000001|RANSWALLREGULARIZATIONGAMMA=0|RANSWALLREGULARIZATIONSCALE=0|RANSWALLROUGHNESS=0.10000000000000001|RANSWALLSAMPLEHEIGHT=1|RANSWALLSTAGEALPHA=5|RANSWALLTAILSTART=1|RANSWALLTANGENTIALORDER=8|ROUGHM=0.75765183473730391|ROUGHX=68.047469962840196|SLOPE=0.16397739074295414|TIME=0|TIMESTEP=0.0025000000000000001|YAPSCALE=2.0086899801758373|ZV=-0.0052721312167261433|InitialPerturbationInner/u=0.0004*((sin(1*PI*(x/8)))^2)*sin(2*PI*y/8.0)|InitialPerturbationInner/v=-0.0004*(sin(2*PI*(x/8)))*((sin(PI*y/8.0))^2)|InitialPerturbationInner/k=0.001*Qstar*0.16*(((sin(1*PI*(x/8)))^2)*((sin(PI*y/8.0))^2))|InitialPerturbationInner/eps_tilde=0|InitialPerturbationInner/p=0|InitialPerturbationOuter/u=0.0004*((sin(1*PI*(x/8)))^2)*sin(2*PI*y/8.0)|InitialPerturbationOuter/v=-0.0004*(sin(2*PI*(x/8)))*((sin(PI*y/8.0))^2)|InitialPerturbationOuter/k=0.001*Qstar*0.16*(((sin(1*PI*(x/8)))^2)*((sin(PI*y/8.0))^2))|InitialPerturbationOuter/eps_tilde=6.4e-05/(Kappa*2.0)*((sin(1*PI*(x/8)))^2)*(sin(PI*(y-2.0)/(8.0-2.0)))^2|InitialPerturbationOuter/p=0",
+    "signature_utf8_sha256": "0ff6fb649a7a4a50854c351ceac29389fc7e2de8a8988ae8f787c462cc7adde2",
+    "capped_initial_trace_marker_present": false,
+    "time": 0.01,
+    "order": 2,
+    "dt": 0.0025
+  },
+  "new_neutral_restart": {
+    "report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/compatibility-002/old-neutral-compatible/case.evolution.json",
+    "report_sha256": "89c5708cd1a0389464f53300d07e319f2db5c6963307e6b08b09eb4c9d80e0ee",
+    "session": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/compatibility-002/old-neutral-compatible/case.xml",
+    "session_sha256": "216b630411f0388660a4f17de8cef09a1de8bb04eebc9a73785857cd4dabe870",
+    "signature": "CLS-EPAWF-M4:replicated-CG:2:2:1.5e-05:0.10000000000000001:1:1:1:3.1906750816242875:8:16|64:0:3:0:8:0:0:0:0.10000000000000001:1:3:0:8:0:0:0.10000000000000001:1:2:3:0:8:0:0:1:2:3:3:0:8:0:0:2:4:4:3:0:8:0:0:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8|64:0:3:0:8:0:0:0:0.10000000000000001:1:3:0:8:0:0:0.10000000000000001:1:2:3:0:8:0:0:1:2:3:3:0:8:0:0:2:4:4:3:0:8:0:0:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8|64:0:3:0:8:0:0:0:0.10000000000000001:1:3:0:8:0:0:0.10000000000000001:1:2:3:0:8:0:0:1:2:3:3:0:8:0:0:2:4:4:3:0:8:0:0:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8|28:3:3:0:8:0:0:2:4:4:3:0:8:0:0:4:8:4:4:4:8:4:4:4:8:4:4:4:8:4:4:4:8|8:0:1:0:8:0:0:0:0.10000000000000001:1:1:0:8:0:0:0.10000000000000001:1:2:1:0:8:0:0:1:2:4:2:4:8:4:2:4:8:4:2:4:8:4:2:4:8:4:2:4:8:4:2:4:8|6:3:1:0:8:0:0:2:4:4:1:0:8:0:0:4:8:4:2:4:8:4:2:4:8:4:2:4:8:4:2:4:8:M8:CubicScaled:0.40000000000000002:0:0.20000000000000001:0.10000000000000001:0:0:1:1:0:0:-0:-0:1:0.40000000000000002:incoming-flat-strain-extension:eta=1:neutral=1:us=0.40000000000000002:direction=1,0:chart_functions=0|E0=0.072635833261861321|K0=0.51050801305988602|KAPPA=0.44055390518665871|KINVIS=1.5e-05|QSTAR=3.1906750816242875|RANSWALLCHI=1|RANSWALLCUBICBETA=0.40000000000000002|RANSWALLDIAGNOSTICS=1|RANSWALLDIRECTIONX=1|RANSWALLDIRECTIONY=0|RANSWALLETA=1|RANSWALLHEIGHT=2|RANSWALLMAXITERATIONS=80|RANSWALLNONLINEARTOLERANCE=2e-12|RANSWALLNORMALORDER=16|RANSWALLPOSITIVITYDELTA=0.10000000000000001|RANSWALLPOSITIVITYTHETA=0.20000000000000001|RANSWALLREGULARIZATIONGAMMA=0|RANSWALLREGULARIZATIONSCALE=0|RANSWALLROUGHNESS=0.10000000000000001|RANSWALLSAMPLEHEIGHT=1|RANSWALLSTAGEALPHA=5|RANSWALLTAILSTART=1|RANSWALLTANGENTIALORDER=8|ROUGHM=0.75765183473730391|ROUGHX=68.047469962840196|SLOPE=0.16397739074295414|TIME=0|TIMESTEP=0.0025000000000000001|YAPSCALE=2.0086899801758373|ZV=-0.0052721312167261433|InitialPerturbationInner/u=0.0004*((sin(1*PI*(x/8)))^2)*sin(2*PI*y/8.0)|InitialPerturbationInner/v=-0.0004*(sin(2*PI*(x/8)))*((sin(PI*y/8.0))^2)|InitialPerturbationInner/k=0.001*Qstar*0.16*(((sin(1*PI*(x/8)))^2)*((sin(PI*y/8.0))^2))|InitialPerturbationInner/eps_tilde=0|InitialPerturbationInner/p=0|InitialPerturbationOuter/u=0.0004*((sin(1*PI*(x/8)))^2)*sin(2*PI*y/8.0)|InitialPerturbationOuter/v=-0.0004*(sin(2*PI*(x/8)))*((sin(PI*y/8.0))^2)|InitialPerturbationOuter/k=0.001*Qstar*0.16*(((sin(1*PI*(x/8)))^2)*((sin(PI*y/8.0))^2))|InitialPerturbationOuter/eps_tilde=6.4e-05/(Kappa*2.0)*((sin(1*PI*(x/8)))^2)*(sin(PI*(y-2.0)/(8.0-2.0)))^2|InitialPerturbationOuter/p=0",
+    "signature_utf8_sha256": "0ff6fb649a7a4a50854c351ceac29389fc7e2de8a8988ae8f787c462cc7adde2",
+    "capped_initial_trace_marker_present": false,
+    "time": 0.01,
+    "order": 2,
+    "dt": 0.0025
+  },
+  "unaffected_neutral_signature_exactly_preserved": true,
+  "fresh_MMS_checkpoint_analytic_verification": {
+    "schema": 1,
+    "success": true,
+    "checks": 18,
+    "errors": {
+      "m8_mms_exact_shared_tangential_traction": 0.0,
+      "m8_mms_exact_normal_pressure_offset": 0.0,
+      "m8_mms_native_normal_pressure_offset": 0.0,
+      "m8_mms_native_total_traction_and_zero_k_flux": 6.106226635438361e-16,
+      "m8_mms_inactive_repair_plateau": 0.0
+    },
+    "coefficients": {
+      "nu": 1.5e-05,
+      "H": 2,
+      "roughness": 0.1,
+      "K": 0.5105080130598861,
+      "q": 3.1906750816242875,
+      "kappa": 0.4405539051866587,
+      "us": 0.4,
+      "epsilon": 0.07263583326186134,
+      "g": 0.45397395788663325,
+      "nt": 0.35244312414932705,
+      "zv": -0.005272131216726143,
+      "slope": 0.16397739074295414,
+      "inner_coefficient": 0.24328362945516618,
+      "UH": 0.48656725891033237,
+      "traction": 0.16000000000000006,
+      "pressure_jump": 0.07487450858211664
+    },
+    "field_errors": [
+      3.5259261036349374e-16,
+      0.0,
+      2.1747416225079305e-16,
+      2.1560809603985413e-16,
+      5.593544610029182e-17,
+      5.622075861172369e-17
+    ],
+    "persistent_gamma": true,
+    "scope": "Actual nonzero-gamma flat operator; polynomial complete state, independently derived forcing, shared traction and dependent epsilon trace",
+    "curved_mms": "not established by this flat construction"
+  },
+  "fresh_MMS_complete_MPI": {
+    "field_mass_norms": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "maximum_field_mass_norm": 0.0,
+    "history_mass_norms": [
+      0.0,
+      0.0,
+      1.5654406786884672e-15,
+      1.5654406786884672e-15,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "maximum_history_mass_norm": 1.5654406786884672e-15,
+    "native_history_slots": 4,
+    "history_slot_vector_sizes": [
+      136,
+      136,
+      136,
+      136
+    ],
+    "field_and_history_tolerance": 1e-08,
+    "auxiliary": {
+      "native_history_times_maximum_absolute_difference": 0.0,
+      "fixed_reference_maximum_absolute_difference": 0.0,
+      "fixed_defect_maximum_absolute_difference": 3.469446951953614e-17
+    },
+    "all_shapes_checked": true
+  },
+  "fresh_MMS_complete_restart": {
+    "field_mass_norms": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "maximum_field_mass_norm": 0.0,
+    "history_mass_norms": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "maximum_history_mass_norm": 0.0,
+    "native_history_slots": 4,
+    "history_slot_vector_sizes": [
+      136,
+      136,
+      136,
+      136
+    ],
+    "field_and_history_tolerance": 1e-08,
+    "auxiliary": {
+      "native_history_times_maximum_absolute_difference": 0.0,
+      "fixed_reference_maximum_absolute_difference": 0.0,
+      "fixed_defect_maximum_absolute_difference": 0.0
+    },
+    "all_shapes_checked": true
+  },
+  "old_neutral_complete_restart": {
+    "field_mass_norms": [
+      2.622519236031836e-17,
+      4.115558377821722e-18,
+      3.970523754504668e-18,
+      3.0703163891033596e-17,
+      1.0086700556261831e-14,
+      3.4445894052795967e-15
+    ],
+    "maximum_field_mass_norm": 1.0086700556261831e-14,
+    "history_mass_norms": [
+      2.622519236031836e-17,
+      2.815990388445248e-17,
+      0.0,
+      0.0,
+      4.115558377821722e-18,
+      2.186672581531447e-18,
+      0.0,
+      0.0,
+      3.970523754504668e-18,
+      3.528046175096904e-18,
+      0.0,
+      0.0,
+      3.0703163891033596e-17,
+      1.988853975054793e-17,
+      0.0,
+      0.0
+    ],
+    "maximum_history_mass_norm": 3.0703163891033596e-17,
+    "native_history_slots": 4,
+    "history_slot_vector_sizes": [
+      220,
+      220,
+      220,
+      220
+    ],
+    "field_and_history_tolerance": 1e-08,
+    "auxiliary": {
+      "native_history_times_maximum_absolute_difference": 0.0,
+      "fixed_reference_maximum_absolute_difference": 0.0,
+      "fixed_defect_maximum_absolute_difference": 0.0
+    },
+    "all_shapes_checked": true
+  },
+  "source_and_runtime_fingerprint_before_sha256": "0203727db4786dc5d0896a815ceb7caa8f5f9ef9c27e37be8d906251b0c277b0",
+  "source_and_runtime_fingerprint_after_sha256": "987732efd81db4e20d4a5d6e17c8331f944341657d5671e4a6ee6cac7f1aba86",
+  "input_sha256": {
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/mms-completion-001/flat-checkpoint/case.evolution.json": "b687d65fe75781e8488eb62f2a8f4fb99cac701f6f5da984c2e5c3987edcbe35",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/mms-completion-001/flat-checkpoint/case.xml": "0602ba320b968c034c20b8608b47b8c8ed406e30d8d7d3551d016bf69e4fe9f6",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/mms-completion-001/mms-history/State.bin": "61b61f8233314be57293cec2ba3c4c2b05daefc467b92b49b66bf83f3ec0f26d",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/flat-checkpoint/case.evolution.json": "0e49bf1e3f50629e02d51bedeb14a89c8bbf6e13099028a074b7ef2f076fc52a",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/flat-checkpoint/case.xml": "e0e77059e4f2856e30e69fcd93009bfa004d481472e2daae0e55ae4d6689ae24",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/mms-history/State.bin": "a2e2fd3fc0c58e281b76b0e4890f7d458b6bcf79d9f709dc772e2676784195a7",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/flat-restart/case.evolution.json": "866f1903339b963316f5ea143cc3157d5c6437258f1280c3e24003624d38e508",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/flat-restart/case.xml": "16da7362c910a764b04ada4a7eb21d255b8591dfff532f2885c0b447c1087493",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/flat/case.evolution.json": "661e0dd6bccd7067e46f26e91dc7cd4e5d6a7efe840fcbfc003be534af520db9",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/flat/case.xml": "abd7f9dc113de3756966174b4e23b6d0ce5e303fa76afc14c21e04eb08ed6b10",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/flat-mpi2/case.evolution.json": "5cdafd46759722613190ba75be59c6ad6ac20fd339374337d7a07fb8ec923c82",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/flat-mpi2/case.xml": "abd7f9dc113de3756966174b4e23b6d0ce5e303fa76afc14c21e04eb08ed6b10",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/native-completion-001/scaled-native/checkpoint/case.evolution.json": "b23d096197646b7a870df30715d0f037c26f45c8c2234470989e86001235a8b0",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/native-completion-001/scaled-native/checkpoint/case.xml": "19ebd194223200bcf53113e595fe9c367bd0f85ce052627712ccc5b96ef0ef20",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/native-completion-001/scaled-native/history/State.bin": "588d1342124e6d79ff7b3b34e958739108a1e40133cc645b0767a211202ccadf",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/native-completion-001/scaled-native/joint-four/case.evolution.json": "8d23089fe7e98c3f4ecf7f85f576a2a7be6e955cc50f51f2ce175981751e0899",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/native-completion-001/scaled-native/joint-four/case.xml": "eab601471e462a2bb55ef5ab2fcf64302f6e0b4f5aa9d372a5dc5f3a516abbb9",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/compatibility-002/old-neutral-compatible/case.evolution.json": "89c5708cd1a0389464f53300d07e319f2db5c6963307e6b08b09eb4c9d80e0ee",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/compatibility-002/old-neutral-compatible/case.xml": "216b630411f0388660a4f17de8cef09a1de8bb04eebc9a73785857cd4dabe870",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/compatibility-002/old-functions-capped/case.evolution.json": "5f5c458f647da6c3b6cc6affd59452924cde62a1d759833c7433e4007b6525ef",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/compatibility-002/old-functions-capped/case.xml": "3aa7f1a5a11b13b33ce69f2076e5c51d31cb4da238b9d0f15fd27f6a6a84e864",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-runner-002/reject-old-functions-capped.log": "089e8794d1a5bf90d233bfc87b57081730630ddadcd1a6704d506681485dd2cd",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-002/validation.json": "fe262b9acecb7902b313aecb5385f88ffd8b66be80931bb3befcb9471e3a948a"
+  },
+  "readonly_audit_runtime": {
+    "before": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-runner-002/signature-audit-003-runtime-before.json",
+    "before_sha256": "9edcf337016a3ae8d3e1e54fb90b84205688fd74f66ebaa73b7bf874d4899141",
+    "after": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-runner-002/signature-audit-003-runtime-after.json",
+    "after_sha256": "211915a8afa9906f8a285b70e1902f032a03898ba540d8a860c6c17114725c34",
+    "identical_source_images_bindings_packages_tools_to_solver_cohort": true,
+    "full_environment_identical_to_outer_solver_fingerprint": false,
+    "environment_changes_from_outer_solver_fingerprint": {
+      "VECLIB_MAXIMUM_THREADS": {
+        "solver_outer": null,
+        "audit": "1"
+      }
+    },
+    "reason": "Independent selected-closure oracle sets VECLIB_MAXIMUM_THREADS=1 on import; initialized before this audit fingerprint. Original outer fingerprint retained unchanged.",
+    "identical_before_after": true,
+    "command": [
+      "python3",
+      "-B",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/audit-checkpoint-compatibility-signatures-003.py"
+    ],
+    "numerical_threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1"
+    },
+    "affinity": [
+      40,
+      41,
+      42,
+      43
+    ]
+  },
+  "all_input_hashes_rechecked_at_end": true
+}

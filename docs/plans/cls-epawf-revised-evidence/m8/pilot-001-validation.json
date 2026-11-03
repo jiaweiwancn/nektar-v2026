@@ -1,0 +1,84 @@
+{
+  "schema": 1,
+  "milestone": "M8",
+  "protocol_version": "cls-epawf-m8-robust-v1",
+  "mode": "pilot",
+  "source_commit": "bbcffe974a3dffaafda171cb62f9d607673eb82b",
+  "source_clean_start": true,
+  "parameters": {
+    "variant": "CubicScaled",
+    "beta": 0.4,
+    "gamma": 0.0,
+    "gamma_scale": 0.25,
+    "theta": 0.2,
+    "delta": 0.1,
+    "smooth": false
+  },
+  "program": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/IncNavierStokesSolver",
+    "sha256": "b9167435f98b91302322306cd7f15396f9d9c3c4fbb6c868e8059591d00d8fa5"
+  },
+  "preregistration": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/pilot-001/qualification/preregistration.json",
+    "sha256": "e35b5cd001986ddda324f66fdfec18fddc15b4ce326248bfdf4049473ce8793c"
+  },
+  "started_utc": "2026-11-03T05:07:01.180677+00:00",
+  "commands": [],
+  "cases": [],
+  "failures": [
+    {
+      "classification": "qualification_or_prerequisite_failure",
+      "error": "A persistent gamma stress requires Regularized selection"
+    }
+  ],
+  "implementation_verified": false,
+  "candidate_qualified": false,
+  "long_time_qualification": false,
+  "experimental_accuracy_claimed": false,
+  "connection": "tailscale:100.105.247.110",
+  "numerical_threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1"
+  },
+  "driver_sha256": "a64017bc07f99bc2787efefbf4cc3bdcb6af00738f23a46b1c0f3aab0d59ea21",
+  "environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "TMPDIR": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/tmp",
+    "LD_LIBRARY_PATH": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/geometry-lib:/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/geometry-lib:",
+    "cpu_affinity": [
+      112,
+      113,
+      114,
+      115,
+      116,
+      117,
+      118,
+      119,
+      120,
+      121,
+      122,
+      123,
+      124,
+      125,
+      126,
+      127
+    ]
+  },
+  "checks": 2,
+  "errors": {},
+  "finite_covariance_failures": [],
+  "qualification_status": "failed_or_stopped",
+  "remaining_gates": [
+    "certified admissible constitutive state envelope",
+    "outer turbulence positivity and high-order discrete admissibility",
+    "complete long-time perturbation/refinement qualification",
+    "qualified versioned native paired terrain observations and reserved scores"
+  ],
+  "source_clean_end": true,
+  "finished_utc": "2026-11-03T05:07:01.211024+00:00"
+}

@@ -1,0 +1,69 @@
+{
+  "schema": 1,
+  "kind": "M8 severe capped-source native mechanism archive",
+  "root": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8/initialization",
+  "generated_utc": "2026-11-03T06:20:54.489966+00:00",
+  "source_commit": "ed34052fe4dd967e963c22272a0ec0888cf35b70",
+  "files": [
+    {
+      "name": "capped-native-validation.json",
+      "original_path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8/initialization/capped-native-001/validation.json",
+      "original_sha256": "df639d8d5deda43cf292fe91139c581c92b80b4d22885cd137cf9e85016bb321",
+      "original_bytes": 107887,
+      "curated_sha256": "df639d8d5deda43cf292fe91139c581c92b80b4d22885cd137cf9e85016bb321",
+      "curated_bytes": 107887,
+      "transform": "byte-for-byte copy"
+    },
+    {
+      "name": "capped-native-preregistration.json",
+      "original_path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8/initialization/capped-native-001/preregistration.json",
+      "original_sha256": "6679e9f37a9ab022f8faef488fee764eaf5e989fe73ff3fac8012250525be9e0",
+      "original_bytes": 1930,
+      "curated_sha256": "6679e9f37a9ab022f8faef488fee764eaf5e989fe73ff3fac8012250525be9e0",
+      "curated_bytes": 1930,
+      "transform": "byte-for-byte copy"
+    },
+    {
+      "name": "capped-native-runner.json",
+      "original_path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8/initialization/capped-native-001-runner/receipt.json",
+      "original_sha256": "7295af193df9e9ccaf895e37c004789f4eef67e3a216ce9379824f8237f30eb4",
+      "original_bytes": 4761,
+      "curated_sha256": "7295af193df9e9ccaf895e37c004789f4eef67e3a216ce9379824f8237f30eb4",
+      "curated_bytes": 4761,
+      "transform": "byte-for-byte copy"
+    },
+    {
+      "name": "capped-native-runtime-before.json",
+      "original_path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8/initialization/capped-native-001-runner/runtime-before.json",
+      "original_sha256": "244aaa9d3c897ff0c98902a94a89aa388dac4d2d20e2bfaa7b0fad9242f577a5",
+      "original_bytes": 662547,
+      "curated_sha256": "e49e74d53f0c7d72b62896dd2299fdcd6c1729fb3da595a661ae50281a4de10c",
+      "curated_bytes": 80970,
+      "transform": "Omit only source_inputs, documentation_tools and raw ldd; retain explicit counts/canonical hashes and original file SHA"
+    },
+    {
+      "name": "capped-native-runtime-after.json",
+      "original_path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8/initialization/capped-native-001-runner/runtime-after.json",
+      "original_sha256": "43ef7281c40d29dfa5557ad37f87d2a334e6a6d152fa98240926e11650e23635",
+      "original_bytes": 662953,
+      "curated_sha256": "dd5ec69f1b092ebf54163df06a2728c32822d12586c87b3522897a6e2795f2cb",
+      "curated_bytes": 81366,
+      "transform": "Omit only source_inputs, documentation_tools and raw ldd; retain explicit counts/canonical hashes and original file SHA"
+    },
+    {
+      "name": "run-capped-native.sh",
+      "original_path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8/initialization/capped-native-001-runner/run-capped-native.sh",
+      "original_sha256": "becd67f8a5c074fc350274618d57b83b308bbc17020b04e704bdc7f058d9a9c3",
+      "original_bytes": 5603,
+      "curated_sha256": "becd67f8a5c074fc350274618d57b83b308bbc17020b04e704bdc7f058d9a9c3",
+      "curated_bytes": 5603,
+      "transform": "byte-for-byte copy",
+      "execution_origin": "Verbatim shell payload originally executed through ssh jay@100.105.247.110 bash -s; materialized in this Linux run directory after execution for archive. No claim that the archived file predated the run.",
+      "materialized_after_execution": true
+    }
+  ],
+  "native_fields_and_histories_retained_on_linux": true,
+  "native_results_root": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8/initialization/capped-native-001",
+  "policy": "Only compact validation/preregistration/runner receipts, exact executed shell payload and declared runtime summaries are copied; native fields, full state/history reports and logs remain authoritative on Linux",
+  "canonical_hash_encoding": "json.dumps(value,sort_keys=True,separators=(comma,colon)), UTF-8, ensure_ascii=True"
+}

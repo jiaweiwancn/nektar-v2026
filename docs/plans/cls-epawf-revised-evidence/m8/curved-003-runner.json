@@ -1,0 +1,354 @@
+{
+  "schema": 1,
+  "status": "passed",
+  "started_utc": "2026-11-03T05:51:57.993455+00:00",
+  "source_commit": "6284787bf4c436203f4404498ba3dfb68aa144ef",
+  "source_status": "",
+  "primary_source_commit": "aa854f4c5b05451a81a4e1dd60eaaca98eb547e4",
+  "primary_solver_sha256": "2fa72f138fc65da2b04be52735f1e767185375b0b9900b4fb66f1364da2be2ea",
+  "frozen_geometry": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/geometry-lib/libSpatialDomains.so.5.9.0",
+    "sha256": "6254b43a7dfbcd047267f580fbdcc175155fae63d3a15304b6b053d3884babbb"
+  },
+  "CPP_difference_from_native_cohort": [
+    "library/UnitTests/SolverUtils/RANSCurvedWallProbe.cpp"
+  ],
+  "environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "TMPDIR": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/tmp",
+    "LD_LIBRARY_PATH": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/geometry-lib:",
+    "PYTHONPATH": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/source/solvers/IncNavierStokesSolver/Tests/RANS"
+  },
+  "compiler_workers": 0,
+  "numerical_workers": 1,
+  "numerical_cpu": 50,
+  "commands": [
+    {
+      "name": "regularized-plane-rotated-probe",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/build/RANSCurvedWallProbe",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-003/regularized-plane-rotated/case.xml",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-003/regularized-plane-rotated/probe.json"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-003/regularized-plane-rotated",
+      "timeout_seconds": 900,
+      "pid": 29135,
+      "exit_code": 0,
+      "seconds": 2.0065218519994232,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-003/regularized-plane-rotated-probe.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "regularized-plane-rotated-operator",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_curved_operator.py",
+        "--raw",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-003/regularized-plane-rotated/probe.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-003/regularized-plane-rotated/operator-audit.json"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-003/regularized-plane-rotated",
+      "timeout_seconds": 2400,
+      "pid": 29142,
+      "exit_code": 0,
+      "seconds": 3.0080342069995822,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-003/regularized-plane-rotated-operator.log",
+      "log_sha256": "c6470e5f922e7fd6b8aea95a8e734886d495f4e48aaf6491d4b5459f94a747e0"
+    }
+  ],
+  "cases": [
+    {
+      "name": "regularized-plane-rotated",
+      "variant": "Regularized",
+      "family": "plane",
+      "dimension": 2,
+      "upstream": false,
+      "session": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-003/regularized-plane-rotated/case.xml",
+      "session_sha256": "ea43f1552da607d87cb494132c1183e72f985e6ab717c88b29ccf4f91834ce2c",
+      "status": "passed",
+      "native_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-003/regularized-plane-rotated/probe.json",
+      "native_report_sha256": "9b1e65ef3603b9b45209eaa6f522b77523e55d2956f2b1765bceb74e7fe007d5",
+      "selected_operator_audit": {
+        "started_utc": "2026-11-03T05:52:00.854313+00:00",
+        "input": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-003/regularized-plane-rotated/probe.json",
+          "sha256": "9b1e65ef3603b9b45209eaa6f522b77523e55d2956f2b1765bceb74e7fe007d5"
+        },
+        "driver_sha256": "d5d064d3abc344164cca2803fe2556bb6c6f10b19cd2723dc54bd929a0067fbf",
+        "numerical_threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1"
+        },
+        "schema": 1,
+        "success": true,
+        "checks": 8,
+        "errors": {
+          "m8_curved_selected_all_mode_weak_operator": 1.1102230246251565e-15,
+          "m8_curved_selected_total_energy_exchange": 4.263234819634044e-15,
+          "m8_curved_same_stress_production_exchange": 0.0
+        },
+        "model_variant": "Regularized",
+        "robust_parameters": [
+          0.4,
+          0,
+          0.2,
+          0.1,
+          0,
+          1,
+          1
+        ],
+        "dimension": 2,
+        "map_parameters": [
+          1,
+          2,
+          2,
+          0,
+          0,
+          0,
+          1,
+          1,
+          0.25,
+          0,
+          20,
+          0.02,
+          1,
+          1
+        ],
+        "complete_weak_blocks": [
+          {
+            "block": 0,
+            "maximum_absolute_error": 2.636779683484747e-16
+          },
+          {
+            "block": 1,
+            "maximum_absolute_error": 4.163336342344337e-16
+          },
+          {
+            "block": 2,
+            "maximum_absolute_error": 1.1102230246251565e-15
+          },
+          {
+            "block": 3,
+            "maximum_absolute_error": 6.245004513516506e-17
+          },
+          {
+            "block": 4,
+            "maximum_absolute_error": 1.734723475976807e-17
+          },
+          {
+            "block": 5,
+            "maximum_absolute_error": 3.122502256758253e-17
+          }
+        ],
+        "operator_increment": {
+          "source_plateau": {
+            "required": true,
+            "samples": 2432,
+            "minimum_k_over_K": 0.9609578977500786,
+            "theta": 0.2,
+            "source_repair_identically_inactive": true
+          },
+          "maximum_added_component": 0.23716504160606125,
+          "modified_stress_weak_work": 0.23812298400181828,
+          "production_increment": 0.23812298400181828,
+          "mean_plus_k_change": 0.0,
+          "original_energy": [
+            2.1085450780297097,
+            0.5947490452556249,
+            1.5638586465474726,
+            -0.007190474296548811,
+            -0.04287213947683973,
+            0.0,
+            2.108545078029709,
+            8.881784197001252e-16,
+            2.239594677685603
+          ]
+        },
+        "directional": {
+          "independent_full_weak_actions": false,
+          "reason": "Fixed-mode probe does not export coupled directional samples"
+        },
+        "state_scope": "Unsolved generic bounded coefficient state with independently verified inactive source-repair plateau",
+        "variable_matching_height": false,
+        "genuine_curved_gamma_mms": false,
+        "excluded": [
+          "exact curved gamma manufactured solution",
+          "admissible state-envelope coverage",
+          "positivity/covariance qualification",
+          "long-time or physical terrain validation"
+        ],
+        "finished_utc": "2026-11-03T05:52:03.210112+00:00"
+      }
+    }
+  ],
+  "scope": "Rotated incoming Plane normal/frame selected all-mode operator;  no genuine curved gamma MMS or robust/physical terrain qualification",
+  "runner_sha256": "e786a1a7fae57661bf6d7c0ae167c4bb3e84e7cc243a7e5890190cbb23335c22",
+  "CMake_input_sha256": "94fa2257b922a60aa0c4529631b00028fc86a3e7006a162d4478a720b40ee10c",
+  "build_reused_from": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/receipt.json",
+  "probe": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/build/RANSCurvedWallProbe",
+    "sha256": "c8dcf7f30840987f2c419d906df72ab574b27a33bfd697189dda623c820452c1"
+  },
+  "probe_loader_bindings": {
+    "libmpi_cxx.so.40": {
+      "path": "/lib/x86_64-linux-gnu/libmpi_cxx.so.40",
+      "sha256": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788"
+    },
+    "libmpi.so.40": {
+      "path": "/lib/x86_64-linux-gnu/libmpi.so.40",
+      "sha256": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982"
+    },
+    "libMultiRegions.so.5.9.0": {
+      "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0",
+      "sha256": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e"
+    },
+    "libLocalRegions.so.5.9.0": {
+      "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0",
+      "sha256": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc"
+    },
+    "libSpatialDomains.so.5.9.0": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/geometry-lib/libSpatialDomains.so.5.9.0",
+      "sha256": "6254b43a7dfbcd047267f580fbdcc175155fae63d3a15304b6b053d3884babbb"
+    },
+    "libStdRegions.so.5.9.0": {
+      "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0",
+      "sha256": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7"
+    },
+    "libLibUtilities.so.5.9.0": {
+      "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0",
+      "sha256": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b"
+    },
+    "liblapack.so.3": {
+      "path": "/lib/x86_64-linux-gnu/liblapack.so.3",
+      "sha256": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151"
+    },
+    "libstdc++.so.6": {
+      "path": "/lib/x86_64-linux-gnu/libstdc++.so.6",
+      "sha256": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128"
+    },
+    "libm.so.6": {
+      "path": "/lib/x86_64-linux-gnu/libm.so.6",
+      "sha256": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6"
+    },
+    "libgcc_s.so.1": {
+      "path": "/lib/x86_64-linux-gnu/libgcc_s.so.1",
+      "sha256": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a"
+    },
+    "libc.so.6": {
+      "path": "/lib/x86_64-linux-gnu/libc.so.6",
+      "sha256": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793"
+    },
+    "libopen-pal.so.40": {
+      "path": "/lib/x86_64-linux-gnu/libopen-pal.so.40",
+      "sha256": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1"
+    },
+    "libopen-rte.so.40": {
+      "path": "/lib/x86_64-linux-gnu/libopen-rte.so.40",
+      "sha256": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57"
+    },
+    "libhwloc.so.15": {
+      "path": "/lib/x86_64-linux-gnu/libhwloc.so.15",
+      "sha256": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54"
+    },
+    "libCollections.so.5.9.0": {
+      "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0",
+      "sha256": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88"
+    },
+    "libptscotch-6.1.so": {
+      "path": "/lib/x86_64-linux-gnu/libptscotch-6.1.so",
+      "sha256": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0"
+    },
+    "libblas.so.3": {
+      "path": "/lib/x86_64-linux-gnu/libblas.so.3",
+      "sha256": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd"
+    },
+    "libz.so.1": {
+      "path": "/lib/x86_64-linux-gnu/libz.so.1",
+      "sha256": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370"
+    },
+    "libfftw3.so.3": {
+      "path": "/lib/x86_64-linux-gnu/libfftw3.so.3",
+      "sha256": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d"
+    },
+    "libboost_iostreams.so.1.74.0": {
+      "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0",
+      "sha256": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e"
+    },
+    "libboost_program_options.so.1.74.0": {
+      "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0",
+      "sha256": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482"
+    },
+    "libopenblas.so.0": {
+      "path": "/lib/x86_64-linux-gnu/libopenblas.so.0",
+      "sha256": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9"
+    },
+    "libgfortran.so.5": {
+      "path": "/lib/x86_64-linux-gnu/libgfortran.so.5",
+      "sha256": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30"
+    },
+    "ELF interpreter": {
+      "path": "/lib64/ld-linux-x86-64.so.2",
+      "sha256": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01"
+    },
+    "libevent_core-2.1.so.7": {
+      "path": "/lib/x86_64-linux-gnu/libevent_core-2.1.so.7",
+      "sha256": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f"
+    },
+    "libevent_pthreads-2.1.so.7": {
+      "path": "/lib/x86_64-linux-gnu/libevent_pthreads-2.1.so.7",
+      "sha256": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537"
+    },
+    "libudev.so.1": {
+      "path": "/lib/x86_64-linux-gnu/libudev.so.1",
+      "sha256": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda"
+    },
+    "libMatrixFreeOps.so.5.9.0": {
+      "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0",
+      "sha256": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc"
+    },
+    "libptscotcherr-6.1.so": {
+      "path": "/lib/x86_64-linux-gnu/libptscotcherr-6.1.so",
+      "sha256": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e"
+    },
+    "libbz2.so.1.0": {
+      "path": "/lib/x86_64-linux-gnu/libbz2.so.1.0",
+      "sha256": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9"
+    },
+    "liblzma.so.5": {
+      "path": "/lib/x86_64-linux-gnu/liblzma.so.5",
+      "sha256": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037"
+    },
+    "libzstd.so.1": {
+      "path": "/lib/x86_64-linux-gnu/libzstd.so.1",
+      "sha256": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667"
+    },
+    "libquadmath.so.0": {
+      "path": "/lib/x86_64-linux-gnu/libquadmath.so.0",
+      "sha256": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c"
+    }
+  },
+  "frozen_case_matrix": [
+    [
+      "regularized-plane-rotated",
+      "Regularized",
+      "plane",
+      2,
+      false,
+      null
+    ]
+  ],
+  "legacy_audit_sha256": "f5904ae02a177e9cace9b90f8c7a931828b82343c28f542e54ebc841051546e1",
+  "source_clean_end": true,
+  "source_unchanged": true,
+  "primary_source_unchanged": true,
+  "primary_solver_unchanged": true,
+  "primary_geometry_unchanged": true,
+  "finished_utc": "2026-11-03T05:52:03.854416+00:00"
+}

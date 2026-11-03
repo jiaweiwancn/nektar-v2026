@@ -1,0 +1,76 @@
+{
+  "schema": 1,
+  "status": "failed",
+  "source_commit": "bbcffe974a3dffaafda171cb62f9d607673eb82b",
+  "main_commit": "f4b70baec10016dd098005bc5a5507b87e4a57bf",
+  "connection": "tailscale:100.105.247.110",
+  "compiler_workers": 16,
+  "numerical_threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1"
+  },
+  "mode": "pilot",
+  "commands": [
+    {
+      "name": "configure",
+      "command": [
+        "cmake",
+        "-S",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/source/solvers/IncNavierStokesSolver/Tests/RANS",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build",
+        "-DRANS_BUILD_SOLVER=ON",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake"
+      ],
+      "exit_code": 0,
+      "seconds": 0.6653223049997905,
+      "timeout_seconds": 240,
+      "log_sha256": "242ef90f0b4e39a306033663bb0f10c0c05ea1062a606666af64625b5445c77f"
+    },
+    {
+      "name": "build",
+      "command": [
+        "cmake",
+        "--build",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build",
+        "--parallel",
+        "16"
+      ],
+      "exit_code": 0,
+      "seconds": 0.7163665680000122,
+      "timeout_seconds": 1800,
+      "log_sha256": "8925c45cf4a6203cd36d335cfef2af569a35f61d72cd879b4c48ed976145fe72"
+    },
+    {
+      "name": "native",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m8.py",
+        "--build",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/pilot-001/qualification",
+        "--mode",
+        "pilot",
+        "--gamma-scale",
+        "0.25"
+      ],
+      "exit_code": 1,
+      "seconds": 0.36569739600054163,
+      "timeout_seconds": 21600,
+      "log_sha256": "c5e23218bc64522ac3568ae73f62dd7a24d9c708b0e72c05352860ea7718c435"
+    }
+  ],
+  "runner_sha256": "4d0014f2121d661a50670d3b47625049c97362a9a62f5f67858b615127b05063",
+  "started_utc": "2026-11-03T05:06:59.518232+00:00",
+  "exit_code": 1,
+  "finished_utc": "2026-11-03T05:07:01.267506+00:00",
+  "source_end_commit": "bbcffe974a3dffaafda171cb62f9d607673eb82b",
+  "source_end_status": "",
+  "main_end_commit": "f4b70baec10016dd098005bc5a5507b87e4a57bf",
+  "main_end_status": ""
+}

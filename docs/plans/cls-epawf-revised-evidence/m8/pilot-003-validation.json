@@ -1,0 +1,720 @@
+{
+  "schema": 1,
+  "milestone": "M8",
+  "protocol_version": "cls-epawf-m8-robust-v1",
+  "mode": "pilot",
+  "source_commit": "07363199e68a6cf3b6a8cc20fe0a4eae67c2d311",
+  "source_clean_start": true,
+  "parameters": {
+    "variant": "CubicScaled",
+    "beta": 0.4,
+    "gamma": 0.0,
+    "gamma_scale": 0.0,
+    "theta": 0.2,
+    "delta": 0.1,
+    "smooth": false
+  },
+  "program": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/IncNavierStokesSolver",
+    "sha256": "2fa72f138fc65da2b04be52735f1e767185375b0b9900b4fb66f1364da2be2ea"
+  },
+  "preregistration": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/pilot-003/qualification/preregistration.json",
+    "sha256": "6aca412ccdc26c96b432ffb31fc7b79995ce730b7338df9c5ff68f5aa851815c"
+  },
+  "started_utc": "2026-11-03T05:12:09.023001+00:00",
+  "commands": [
+    {
+      "name": "reference",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/pilot-003/qualification/reference/case.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/pilot-003/qualification/reference",
+      "ranks": 1,
+      "numerical_threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 16.548911272000623,
+      "timeout_seconds": 3600.0,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/pilot-003/qualification/reference/run.log",
+      "log_sha256": "5eb29b9bfad064997a8a65055db66e486cca26ff0d9fb83d9849fa41df316e8a"
+    },
+    {
+      "name": "joint",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/pilot-003/qualification/joint/case.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/pilot-003/qualification/joint",
+      "ranks": 1,
+      "numerical_threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 24.16030915200099,
+      "timeout_seconds": 3600.0,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/pilot-003/qualification/joint/run.log",
+      "log_sha256": "30f8ef5be36abd18e2550852c5dcfbf6371f7559a1897a112613d365fb2419a3"
+    },
+    {
+      "name": "depletion",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/pilot-003/qualification/depletion/case.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/pilot-003/qualification/depletion",
+      "ranks": 1,
+      "numerical_threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 24.660041271999944,
+      "timeout_seconds": 3600.0,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/pilot-003/qualification/depletion/run.log",
+      "log_sha256": "dc19a9ac3a63c9d83a0fe3550a6a6d0055a0147de52dbcbdcdc694e3b9e64b2f"
+    }
+  ],
+  "cases": [
+    {
+      "name": "reference",
+      "parameters": {
+        "variant": "CubicScaled",
+        "beta": 0.4,
+        "gamma": 0.0,
+        "gamma_scale": 0.0,
+        "theta": 0.2,
+        "delta": 0.1,
+        "smooth": false,
+        "kind": "none",
+        "eta": 1,
+        "steps": 1
+      },
+      "requested_ranks": 1,
+      "xml": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/pilot-003/qualification/reference/case.xml",
+      "xml_sha256": "d7214519d1d02f2021291a3b062dd9551dbbbbbac6e2318fba7f5bd7e98eda22",
+      "status": "verified",
+      "source_mechanism_only": false,
+      "native_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/pilot-003/qualification/reference/case.evolution.json",
+      "native_report_sha256": "d8033502a862e840b9aee15df905a1fb49bc7098bf248d1add138d688e800416",
+      "exit_code": 0,
+      "seconds": 16.548911272000623,
+      "native_audit": {
+        "time": 0.0025,
+        "eta": 1,
+        "chi": 1,
+        "states": 2,
+        "min_k": 0.5105080130598861,
+        "min_outer_epsilon": 0.018340404652154647,
+        "min_covariance": 0.1747101044240471,
+        "min_yx_tangent": 0.07548515377889156,
+        "maximum_stage_residual": 1.4960945284631973e-16,
+        "maximum_energy_closure": 5.876991030672556e-14,
+        "maximum_free_energy_balance": 0.0,
+        "maximum_strong_divergence": 1.2769574021303627e-15,
+        "maximum_normal_traction_jump": 4.6629367034256575e-15,
+        "independent_dense_min_k": 0.5105080130598861,
+        "independent_transfer_samples": {
+          "count": 32,
+          "min_k": 0.5105080130598861,
+          "min_epsilon": 0.07263583326186132,
+          "rule": "actual trace/boundary GLL tangential points and physical rK/rA/rB and H samples"
+        },
+        "cumulative_energy_accounting_defect": -1.3233858453531866e-15,
+        "final_energy": [
+          9.007234065502104,
+          0.0,
+          9.007234065502665,
+          -3.1210393881490637e-14,
+          0.0,
+          0.0,
+          9.007234065502633,
+          -5.293543381412746e-13,
+          1258.1783347653309,
+          9.007234065502104,
+          0.0,
+          0.0
+        ],
+        "final_wall_sources": [
+          12.399103463312226,
+          7.37748174397022,
+          2.4025242515920975e-17,
+          8.019188006664105,
+          0.018897232375445397
+        ],
+        "final_interface": [
+          8,
+          -0.5989960686569333,
+          4.6629367034256575e-15,
+          2.0965705924759556e-14,
+          4.6629367034256575e-15,
+          0,
+          0,
+          -3.7303493627405266e-14
+        ],
+        "velocity_perturbation_energy": [
+          0.0,
+          0.0
+        ],
+        "velocity_energy_gain": null,
+        "turnover_time": 5.0,
+        "flow_through_time": 1.209997362384301,
+        "flow_time_convention": "domain length / fixed-reference streamwise velocity at outer midheight",
+        "duration": 0.0025,
+        "turnover_units": 0.0005,
+        "flow_through_units": 0.0020661202063066877
+      },
+      "independent_energy": {
+        "schema": 1,
+        "checks": 48,
+        "errors": {
+          "m8_actual_physical_mass_storage_and_energy": 3.614331437135114e-16,
+          "m8_actual_unmasked_weak_energy_work": 9.071865349360969e-15,
+          "m8_fixed_anchor_energy_work": 0.0,
+          "m8_essential_reaction_anchor_accounting": 2.267966337340191e-14,
+          "repaired_inner_stress_production_cancellation": 2.4715318027488854e-16,
+          "selected_outer_stress_production_cancellation": 0.0,
+          "independent_m8_repaired_ray_source_budget": 3.3283759667993485e-16,
+          "independent_m8_wall_source_budget": 4.5844781462629594e-15,
+          "independent_m8_constitutive_work": 2.1391460819312566e-17,
+          "independent_m8_inner_covariance": 5.6066262743570405e-15,
+          "independent_m8_outer_covariance": 5.828670879282072e-16,
+          "independent_m8_direct_energy_components": 3.4650363979132253e-15,
+          "independent_m8_complete_energy_identity": 7.099720708195037e-14,
+          "independent_m8_total_traction_k_flux": 2.8467557313525133e-16
+        },
+        "model_variant": "CubicScaled",
+        "physical_mass_storage": 0.0,
+        "stored_resolved_plus_k": 1258.1783347653304,
+        "unmasked_work": 9.007234065502022,
+        "reaction_work": 9.007234065502226,
+        "anchor_work": 0.0,
+        "direct_volume_components_reconstructed": true,
+        "scope": "independent selected indexed stress, physical source normalization, full direct energy and interface account",
+        "direct": {
+          "stress_work_minus_k_source": 9.007234065502661,
+          "resolved_advection": 0.0,
+          "roughness_force_work": 0.0,
+          "robust_source": [
+            7.377481743970201,
+            7.377481743970201,
+            7.3774817439702005,
+            2.17057274931598e-16,
+            0.0,
+            0.0,
+            1.0,
+            56.0385815777856
+          ],
+          "wall_sources": [
+            12.39910346331217,
+            7.377481743970201,
+            2.17057274931598e-16,
+            8.019188006664102,
+            0.01889723237544539
+          ],
+          "constitutive_modification": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "inner_covariance_minimum": -0.1776663490517824,
+          "outer_covariance_minimum": 0.1747101044240477,
+          "volumes": [
+            15.999999999999995,
+            47.999999999999986
+          ],
+          "quadrature": "independently computed Legendre/Jacobi rows on declared finite native source panels"
+        },
+        "independently_reconstructed_total": 9.007234065502661,
+        "independent_interface": [
+          7.999999999999998,
+          -0.5989960686569331,
+          4.540611657440053e-15,
+          2.3243110509841566e-14,
+          4.6351811278100286e-15,
+          0.0,
+          0.0,
+          -3.631962968513719e-14
+        ],
+        "success": true
+      },
+      "physical_gates": {
+        "covariance_pass": false,
+        "covariance_minima": {
+          "source_volume_inner": -0.17766634905178802,
+          "source_volume_outer": 0.1747101044240471,
+          "physical_sample_K": 0.09346266537185738,
+          "interface_inner": 0.18034597388215975,
+          "interface_outer": 0.17776393259447362
+        },
+        "finite_sample_turbulence_positive": true,
+        "minimum_k": 0.5105080130598861,
+        "minimum_outer_epsilon": 0.018340404652154647,
+        "minimum_yx_tangent": 0.07548515377889156,
+        "scope": "Native finite constitutive evaluation sets; no unsampled polynomial or all-direction/state-envelope theorem"
+      }
+    },
+    {
+      "name": "joint",
+      "parameters": {
+        "variant": "CubicScaled",
+        "beta": 0.4,
+        "gamma": 0.0,
+        "gamma_scale": 0.0,
+        "theta": 0.2,
+        "delta": 0.1,
+        "smooth": false,
+        "kind": "joint",
+        "eta": 1,
+        "steps": 1
+      },
+      "requested_ranks": 1,
+      "xml": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/pilot-003/qualification/joint/case.xml",
+      "xml_sha256": "2c454465e9c51704d42b98736d34b7463af73762f0ffa9ca3e51952dd56f1cd7",
+      "status": "verified",
+      "source_mechanism_only": false,
+      "native_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/pilot-003/qualification/joint/case.evolution.json",
+      "native_report_sha256": "4c970dd2500a74792cf52e030c1bb1c4b5716df8ba44a337b1f033c797b15afb",
+      "exit_code": 0,
+      "seconds": 24.16030915200099,
+      "native_audit": {
+        "time": 0.0025,
+        "eta": 1,
+        "chi": 1,
+        "states": 2,
+        "min_k": 0.5104989416385588,
+        "min_outer_epsilon": 0.018340451339184643,
+        "min_covariance": 0.1745869254471534,
+        "min_yx_tangent": 0.07551396002421135,
+        "maximum_stage_residual": 6.51176916493833e-14,
+        "maximum_energy_closure": 1.2302538725804222e-13,
+        "maximum_free_energy_balance": 2.4178044836078764e-16,
+        "maximum_strong_divergence": 0.00038366337404578747,
+        "maximum_normal_traction_jump": 0.0023332738451852797,
+        "independent_dense_min_k": 0.5104989416385588,
+        "independent_transfer_samples": {
+          "count": 32,
+          "min_k": 0.5105080130598861,
+          "min_epsilon": 0.07263583326186132,
+          "rule": "actual trace/boundary GLL tangential points and physical rK/rA/rB and H samples"
+        },
+        "cumulative_energy_accounting_defect": -1.5321077739827161e-15,
+        "final_energy": [
+          10.057048975462097,
+          1.0669009371974094,
+          9.009905835111217,
+          1.011147487518039e-06,
+          -0.019758807993901426,
+          0.0,
+          10.057048975462214,
+          -1.1723955140041653e-13,
+          1258.1845977350893,
+          10.05707417938182,
+          -2.5203919725258693e-05,
+          2.431597810473654e-15
+        ],
+        "final_wall_sources": [
+          12.401246698115413,
+          7.378715307756161,
+          2.583026972651989e-16,
+          8.020298321651445,
+          0.018897379431719416
+        ],
+        "final_interface": [
+          8,
+          -0.6000659742369082,
+          0.001184565642234503,
+          0.0011925464352280858,
+          0.0023332738451852797,
+          5.10347606146312e-06,
+          -2.0845819645107233e-16,
+          0.0007430316970625062
+        ],
+        "velocity_perturbation_energy": [
+          3.0616300034307613e-06,
+          3.0081833112909647e-06
+        ],
+        "velocity_energy_gain": 0.982543059716587,
+        "turnover_time": 5.0,
+        "flow_through_time": 1.209997362384301,
+        "flow_time_convention": "domain length / fixed-reference streamwise velocity at outer midheight",
+        "duration": 0.0025,
+        "turnover_units": 0.0005,
+        "flow_through_units": 0.0020661202063066877
+      },
+      "independent_energy": {
+        "schema": 1,
+        "checks": 48,
+        "errors": {
+          "m8_actual_physical_mass_storage_and_energy": 0.0,
+          "m8_actual_unmasked_weak_energy_work": 2.4727925470265395e-15,
+          "m8_fixed_anchor_energy_work": 3.3881317890172014e-21,
+          "m8_essential_reaction_anchor_accounting": 6.711848664256258e-15,
+          "repaired_inner_stress_production_cancellation": 2.4714845701680397e-16,
+          "selected_outer_stress_production_cancellation": 1.3877787807814457e-17,
+          "independent_m8_repaired_ray_source_budget": 7.288859548609802e-16,
+          "independent_m8_wall_source_budget": 7.591729668801753e-15,
+          "independent_m8_constitutive_work": 3.7814938897220984e-17,
+          "independent_m8_inner_covariance": 5.9119376061289586e-15,
+          "independent_m8_outer_covariance": 2.220446049250313e-16,
+          "independent_m8_direct_energy_components": 2.7601837584905745e-15,
+          "independent_m8_complete_energy_identity": 1.8016059985478747e-14,
+          "independent_m8_total_traction_k_flux": 2.2204460492503136e-16
+        },
+        "model_variant": "CubicScaled",
+        "physical_mass_storage": 1.0669009371974094,
+        "stored_resolved_plus_k": 1258.1845977350893,
+        "unmasked_work": 10.057048975462072,
+        "reaction_work": 10.057074179381752,
+        "anchor_work": -2.5203919725258696e-05,
+        "direct_volume_components_reconstructed": true,
+        "scope": "independent selected indexed stress, physical source normalization, full direct energy and interface account",
+        "direct": {
+          "stress_work_minus_k_source": 9.009905835111242,
+          "resolved_advection": 1.0111475008713067e-06,
+          "roughness_force_work": -0.019758807993900878,
+          "robust_source": [
+            7.37871530775612,
+            7.37871530775612,
+            7.37871530775612,
+            -4.968356455414824e-17,
+            0.0,
+            0.0,
+            1.0,
+            56.05294907074761
+          ],
+          "wall_sources": [
+            12.401246698115507,
+            7.37871530775612,
+            -4.968356455414824e-17,
+            8.020298321651433,
+            0.018897379431719378
+          ],
+          "constitutive_modification": [
+            -9.19073501903365e-06,
+            -9.190735019046938e-06,
+            1.3288252876525464e-17
+          ],
+          "inner_covariance_minimum": -0.17767585842335248,
+          "outer_covariance_minimum": 0.17458692544715318,
+          "volumes": [
+            15.999999999999995,
+            47.999999999999986
+          ],
+          "quadrature": "independently computed Legendre/Jacobi rows on declared finite native source panels"
+        },
+        "independently_reconstructed_total": 10.057048975462253,
+        "independent_interface": [
+          7.999999999999998,
+          -0.6000659742369079,
+          0.001184565642234511,
+          0.0011925464352281563,
+          0.0023332738451852433,
+          5.103476061464784e-06,
+          -2.0845480831928331e-16,
+          0.0007430316970631613
+        ],
+        "success": true
+      },
+      "physical_gates": {
+        "covariance_pass": false,
+        "covariance_minima": {
+          "source_volume_inner": -0.1777125128939378,
+          "source_volume_outer": 0.1745869254471534,
+          "physical_sample_K": 0.09344478435068998,
+          "interface_inner": 0.1803844061079406,
+          "interface_outer": 0.17765345946854033
+        },
+        "finite_sample_turbulence_positive": true,
+        "minimum_k": 0.5104992277676339,
+        "minimum_outer_epsilon": 0.018340451339184643,
+        "minimum_yx_tangent": 0.07551396002421135,
+        "scope": "Native finite constitutive evaluation sets; no unsampled polynomial or all-direction/state-envelope theorem"
+      }
+    },
+    {
+      "name": "depletion",
+      "parameters": {
+        "variant": "CubicScaled",
+        "beta": 0.4,
+        "gamma": 0.0,
+        "gamma_scale": 0.0,
+        "theta": 0.2,
+        "delta": 0.1,
+        "smooth": false,
+        "eta": 1,
+        "steps": 1
+      },
+      "requested_ranks": 1,
+      "xml": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/pilot-003/qualification/depletion/case.xml",
+      "xml_sha256": "458cbafcfbecb9a3a51a973cb357d23ff8953d347ccf47630885a538fc3fba10",
+      "status": "verified",
+      "source_mechanism_only": true,
+      "native_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/pilot-003/qualification/depletion/case.evolution.json",
+      "native_report_sha256": "8db5d3814b8b45d87577239b86188c4fd80ca012c9d27d4f53b833da92f4abea",
+      "exit_code": 0,
+      "seconds": 24.660041271999944,
+      "native_audit": {
+        "time": 0.0025,
+        "eta": 1,
+        "chi": 1,
+        "states": 2,
+        "min_k": 0.025525400652994523,
+        "min_outer_epsilon": 0.018339085178917604,
+        "min_covariance": 0.16314414402929606,
+        "min_yx_tangent": 0.06984827967127123,
+        "maximum_stage_residual": 8.989932996582655e-14,
+        "maximum_energy_closure": 7.92820205624769e-14,
+        "maximum_free_energy_balance": 5.2246391151563947e-17,
+        "maximum_strong_divergence": 0.0002915657322928311,
+        "maximum_normal_traction_jump": 0.034447843463614736,
+        "independent_dense_min_k": 0.025525400652994523,
+        "independent_transfer_samples": {
+          "count": 32,
+          "min_k": 0.39435336841582663,
+          "min_epsilon": 0.049157069684212455,
+          "rule": "actual trace/boundary GLL tangential points and physical rK/rA/rB and H samples"
+        },
+        "cumulative_energy_accounting_defect": -1.4344081478157022e-15,
+        "final_energy": [
+          8.126371245692905,
+          0.9221962395009242,
+          7.21538499004023,
+          -4.7826088225767904e-05,
+          -0.011162157759447523,
+          0.0,
+          8.12637124569348,
+          -5.755396159656812e-13,
+          1256.456257319528,
+          8.123844239875964,
+          0.0025270058169400062,
+          4.2457357074532354e-16
+        ],
+        "final_wall_sources": [
+          9.527386729485988,
+          5.7162807709087495,
+          2.288378091620108e-16,
+          7.348288542754585,
+          0.018912485215640654
+        ],
+        "final_interface": [
+          8,
+          -0.8345744330110847,
+          0.012801524804653332,
+          0.018587902021977958,
+          0.02841592698597023,
+          0.00011617315705391146,
+          -2.0911702926535857e-16,
+          0.05234038403403374
+        ],
+        "velocity_perturbation_energy": [
+          0.0,
+          3.145099931682118e-07
+        ],
+        "velocity_energy_gain": null,
+        "turnover_time": 5.0,
+        "flow_through_time": 1.209997362384301,
+        "flow_time_convention": "domain length / fixed-reference streamwise velocity at outer midheight",
+        "duration": 0.0025,
+        "turnover_units": 0.0005,
+        "flow_through_units": 0.0020661202063066877
+      },
+      "independent_energy": {
+        "schema": 1,
+        "checks": 48,
+        "errors": {
+          "m8_actual_physical_mass_storage_and_energy": 6.185301817793182e-19,
+          "m8_actual_unmasked_weak_energy_work": 3.3663112968487575e-14,
+          "m8_fixed_anchor_energy_work": 0.0,
+          "m8_essential_reaction_anchor_accounting": 4.941707815296473e-14,
+          "repaired_inner_stress_production_cancellation": 2.819844992582723e-16,
+          "selected_outer_stress_production_cancellation": 1.3877787807814457e-17,
+          "independent_m8_repaired_ray_source_budget": 6.101282263823036e-16,
+          "independent_m8_wall_source_budget": 2.42381668424718e-15,
+          "independent_m8_constitutive_work": 5.413440505461437e-18,
+          "independent_m8_inner_covariance": 4.440892098500626e-15,
+          "independent_m8_outer_covariance": 5.551115123125783e-17,
+          "independent_m8_direct_energy_components": 7.036426294091203e-15,
+          "independent_m8_complete_energy_identity": 4.2406778674586444e-14,
+          "independent_m8_total_traction_k_flux": 2.2204460492503136e-16
+        },
+        "model_variant": "CubicScaled",
+        "physical_mass_storage": 0.9221962395009234,
+        "stored_resolved_plus_k": 1256.456257319528,
+        "unmasked_work": 8.126371245693178,
+        "reaction_work": 8.123844239875837,
+        "anchor_work": 0.0025270058169400062,
+        "direct_volume_components_reconstructed": true,
+        "scope": "independent selected indexed stress, physical source normalization, full direct energy and interface account",
+        "direct": {
+          "stress_work_minus_k_source": 7.215384990040222,
+          "resolved_advection": -4.782608817499738e-05,
+          "roughness_force_work": -0.011162157759447807,
+          "robust_source": [
+            5.7162807709087495,
+            5.7162807709087495,
+            5.7162807709087495,
+            -3.369158250998705e-17,
+            0.22247538496850938,
+            0.0,
+            1.0,
+            279.49904496890224
+          ],
+          "wall_sources": [
+            9.527386729485965,
+            5.7162807709087495,
+            -3.369158250998705e-17,
+            7.348288542754586,
+            0.018912485215640675
+          ],
+          "constitutive_modification": [
+            4.0781722880874024e-07,
+            4.078172287995169e-07,
+            9.223341762652076e-18
+          ],
+          "inner_covariance_minimum": -0.3938851350629362,
+          "outer_covariance_minimum": 0.163144144029296,
+          "volumes": [
+            15.999999999999996,
+            47.999999999999986
+          ],
+          "quadrature": "independently computed Legendre/Jacobi rows on declared finite native source panels"
+        },
+        "independently_reconstructed_total": 8.126371245693523,
+        "independent_interface": [
+          7.999999999999998,
+          -0.8345744330110845,
+          0.012801524804653333,
+          0.018587902021979442,
+          0.028415926985970258,
+          0.00011617315705391348,
+          -2.0911665868844414e-16,
+          0.052340384034034154
+        ],
+        "success": true
+      },
+      "physical_gates": {
+        "covariance_pass": false,
+        "covariance_minima": {
+          "source_volume_inner": -0.39388513506294065,
+          "source_volume_outer": 0.16314414402929606,
+          "physical_sample_K": 0.04553905323424645,
+          "interface_inner": 0.18177737674401573,
+          "interface_outer": 0.1631590255634627
+        },
+        "finite_sample_turbulence_positive": true,
+        "minimum_k": 0.04184448443790512,
+        "minimum_outer_epsilon": 0.018339085178917604,
+        "minimum_yx_tangent": 0.06984827967127123,
+        "scope": "Native finite constitutive evaluation sets; no unsampled polynomial or all-direction/state-envelope theorem"
+      },
+      "source_repair_verified": true,
+      "interpretation": "Source mechanism and accounting verified; covariance remains an independent recorded gate"
+    }
+  ],
+  "failures": [],
+  "implementation_verified": true,
+  "candidate_qualified": false,
+  "long_time_qualification": false,
+  "experimental_accuracy_claimed": false,
+  "connection": "tailscale:100.105.247.110",
+  "numerical_threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1"
+  },
+  "driver_sha256": "a64017bc07f99bc2787efefbf4cc3bdcb6af00738f23a46b1c0f3aab0d59ea21",
+  "environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "TMPDIR": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/tmp",
+    "LD_LIBRARY_PATH": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/geometry-lib:/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/geometry-lib:",
+    "cpu_affinity": [
+      112,
+      113,
+      114,
+      115,
+      116,
+      117,
+      118,
+      119,
+      120,
+      121,
+      122,
+      123,
+      124,
+      125,
+      126,
+      127
+    ]
+  },
+  "checks": 181,
+  "errors": {
+    "reference: explicit model parameters": 0.0,
+    "reference: complete differential native output": 0.0,
+    "joint: explicit model parameters": 0.0,
+    "joint: complete differential native output": 0.0,
+    "depletion: explicit model parameters": 0.0,
+    "depletion: complete differential native output": 0.0
+  },
+  "finite_covariance_failures": [
+    {
+      "case": "reference",
+      "gates": {
+        "covariance_pass": false,
+        "covariance_minima": {
+          "source_volume_inner": -0.17766634905178802,
+          "source_volume_outer": 0.1747101044240471,
+          "physical_sample_K": 0.09346266537185738,
+          "interface_inner": 0.18034597388215975,
+          "interface_outer": 0.17776393259447362
+        },
+        "finite_sample_turbulence_positive": true,
+        "minimum_k": 0.5105080130598861,
+        "minimum_outer_epsilon": 0.018340404652154647,
+        "minimum_yx_tangent": 0.07548515377889156,
+        "scope": "Native finite constitutive evaluation sets; no unsampled polynomial or all-direction/state-envelope theorem"
+      }
+    },
+    {
+      "case": "joint",
+      "gates": {
+        "covariance_pass": false,
+        "covariance_minima": {
+          "source_volume_inner": -0.1777125128939378,
+          "source_volume_outer": 0.1745869254471534,
+          "physical_sample_K": 0.09344478435068998,
+          "interface_inner": 0.1803844061079406,
+          "interface_outer": 0.17765345946854033
+        },
+        "finite_sample_turbulence_positive": true,
+        "minimum_k": 0.5104992277676339,
+        "minimum_outer_epsilon": 0.018340451339184643,
+        "minimum_yx_tangent": 0.07551396002421135,
+        "scope": "Native finite constitutive evaluation sets; no unsampled polynomial or all-direction/state-envelope theorem"
+      }
+    }
+  ],
+  "qualification_status": "implementation_verified_candidate_unqualified_finite_covariance_gate_failed",
+  "remaining_gates": [
+    "certified admissible constitutive state envelope",
+    "outer turbulence positivity and high-order discrete admissibility",
+    "complete long-time perturbation/refinement qualification",
+    "qualified versioned native paired terrain observations and reserved scores"
+  ],
+  "source_clean_end": true,
+  "finished_utc": "2026-11-03T05:13:20.457240+00:00"
+}

@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "classification": "nonnumerical MPI launcher affinity diagnostic",
+  "evidence_origin": "Exact command and observed output from this task tool transcript; saved after execution",
+  "command": [
+    "env",
+    "OMP_NUM_THREADS=1",
+    "OPENBLAS_NUM_THREADS=1",
+    "OMPI_MCA_hwloc_base_cpu_list=40-43",
+    "mpirun",
+    "--report-bindings",
+    "--bind-to",
+    "core",
+    "-np",
+    "2",
+    "python3",
+    "-c",
+    "import os; print(os.sched_getaffinity(0))"
+  ],
+  "explicit_environment_overrides": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "OMPI_MCA_hwloc_base_cpu_list": "40-43"
+  },
+  "inherited_environment_snapshot_captured": false,
+  "observed_stdout": [
+    "{40, 41, 42, 43}",
+    "{40, 41, 42, 43}"
+  ],
+  "observed_stderr": [
+    "[jay-Super-Server:34869] MCW rank 0 is not bound (or bound to all available processors)",
+    "[jay-Super-Server:34869] MCW rank 1 is not bound (or bound to all available processors)"
+  ],
+  "interpretation": "Two launcher-control processes imported only os and printed affinity. No model/solver or numerical experiment was executed. The proposed adapter was not created or executed; the final CFD matrix uses the unchanged driver after unsetting the conflicting CPU-list variable."
+}

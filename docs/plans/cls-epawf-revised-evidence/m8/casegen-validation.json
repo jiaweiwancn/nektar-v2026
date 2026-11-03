@@ -1,0 +1,114 @@
+{
+  "schema": 1,
+  "status": "passed",
+  "source_commit": "ed34052fe4dd967e963c22272a0ec0888cf35b70",
+  "source_clean_start": true,
+  "script_sha256": "d0f3c43567c725b04c13852379672b55274296648391ef6199f0ae6e54c289cf",
+  "commands": [
+    {
+      "argv": [
+        "taskset",
+        "-c",
+        "49",
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_cases.py",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/casegen-001/guide.xml",
+        "--variant",
+        "Regularized",
+        "--beta",
+        ".4",
+        "--gamma-scale",
+        "1",
+        "--steps",
+        "1"
+      ],
+      "exit_code": 0,
+      "xml_sha256": "0077128774847911d56da665f200da36a7605f629543f9683d675efc342a2104",
+      "asserted_solverinfo": {
+        "RANSWallVariant": "Regularized",
+        "RANSWallDestruction": "Capped",
+        "RANSWallDestructionSmoothing": "Linear"
+      },
+      "emitted_robust_parameters": {
+        "RANSWallCubicBeta": "0.4",
+        "RANSWallRegularizationGamma": "0.0",
+        "RANSWallRegularizationScale": "1.0",
+        "RANSWallPositivityTheta": "0.2",
+        "RANSWallPositivityDelta": "0.1"
+      }
+    },
+    {
+      "argv": [
+        "taskset",
+        "-c",
+        "49",
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_cases.py",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/casegen-001/explicit-controls.xml",
+        "--variant",
+        "CubicScaled",
+        "--beta",
+        ".45",
+        "--theta",
+        ".3",
+        "--delta",
+        ".2",
+        "--smooth",
+        "--steps",
+        "0"
+      ],
+      "exit_code": 0,
+      "xml_sha256": "11c86fde084f83749e72c2bfc959737cce67f67a00f8e3343ed6f3ea14d56e37",
+      "asserted_solverinfo": {
+        "RANSWallVariant": "CubicScaled",
+        "RANSWallDestruction": "Capped",
+        "RANSWallDestructionSmoothing": "C2"
+      },
+      "emitted_robust_parameters": {
+        "RANSWallCubicBeta": "0.45",
+        "RANSWallRegularizationGamma": "0.0",
+        "RANSWallRegularizationScale": "0.0",
+        "RANSWallPositivityTheta": "0.3",
+        "RANSWallPositivityDelta": "0.2"
+      }
+    },
+    {
+      "argv": [
+        "taskset",
+        "-c",
+        "49",
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_cases.py",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/casegen-001/original.xml",
+        "--variant",
+        "Original",
+        "--beta",
+        "1",
+        "--steps",
+        "0"
+      ],
+      "exit_code": 0,
+      "xml_sha256": "d0c809d82cd0d2e5d8ea56e4bb25723b34379911a47ef414749c89d5fb50e258",
+      "asserted_solverinfo": {
+        "RANSWallVariant": "Original",
+        "RANSWallDestruction": "Original"
+      },
+      "emitted_robust_parameters": {
+        "RANSWallCubicBeta": "1.0",
+        "RANSWallRegularizationGamma": "0.0",
+        "RANSWallRegularizationScale": "0.0",
+        "RANSWallPositivityTheta": "0.2",
+        "RANSWallPositivityDelta": "0.1"
+      }
+    }
+  ],
+  "scope": "CLI generation and emitted selectors only; no solver or new model qualification",
+  "started_utc": "2026-11-03T06:15:54.001935+00:00",
+  "source_clean_end": true,
+  "numerical_workers": 0,
+  "generator_workers": 1,
+  "finished_utc": "2026-11-03T06:15:54.772071+00:00"
+}

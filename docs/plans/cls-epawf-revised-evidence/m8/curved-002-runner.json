@@ -1,0 +1,1015 @@
+{
+  "schema": 1,
+  "status": "passed",
+  "started_utc": "2026-11-03T05:44:28.029344+00:00",
+  "source_commit": "6284787bf4c436203f4404498ba3dfb68aa144ef",
+  "source_status": "",
+  "primary_source_commit": "aa854f4c5b05451a81a4e1dd60eaaca98eb547e4",
+  "primary_solver_sha256": "2fa72f138fc65da2b04be52735f1e767185375b0b9900b4fb66f1364da2be2ea",
+  "frozen_geometry": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/geometry-lib/libSpatialDomains.so.5.9.0",
+    "sha256": "6254b43a7dfbcd047267f580fbdcc175155fae63d3a15304b6b053d3884babbb"
+  },
+  "CPP_difference_from_native_cohort": [
+    "library/UnitTests/SolverUtils/RANSCurvedWallProbe.cpp"
+  ],
+  "environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "TMPDIR": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/tmp",
+    "LD_LIBRARY_PATH": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/geometry-lib:",
+    "PYTHONPATH": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/source/solvers/IncNavierStokesSolver/Tests/RANS"
+  },
+  "compiler_workers": 0,
+  "numerical_workers": 1,
+  "numerical_cpu": 50,
+  "commands": [
+    {
+      "name": "original-transition-active-probe",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/build/RANSCurvedWallProbe",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-002/original-transition-active/case.xml",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-002/original-transition-active/probe.json"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-002/original-transition-active",
+      "timeout_seconds": 900,
+      "pid": 27636,
+      "exit_code": 0,
+      "seconds": 7.01162056099929,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-002/original-transition-active-probe.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "original-transition-active-operator",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_curved_operator.py",
+        "--raw",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-002/original-transition-active/probe.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-002/original-transition-active/operator-audit.json"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-002/original-transition-active",
+      "timeout_seconds": 2400,
+      "pid": 27654,
+      "exit_code": 0,
+      "seconds": 73.08154224099962,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-002/original-transition-active-operator.log",
+      "log_sha256": "c553e96babf97c4efe9bca5b9cb56590bc2746b08b459bb3d3b4923f8dd962e4"
+    },
+    {
+      "name": "original-transition-active-legacy",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-002/legacy-original-audit.py",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-002/original-transition-active/probe.json",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-002/original-transition-active/legacy-audit.json",
+        "m6"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-002/original-transition-active",
+      "timeout_seconds": 2400,
+      "pid": 28434,
+      "exit_code": 0,
+      "seconds": 56.06243385800008,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-002/original-transition-active-legacy.log",
+      "log_sha256": "31563efacf5fa3d14ee173d7e89f9762ac36e4f967271c24551b9c54f2b9fbbd"
+    },
+    {
+      "name": "regularized-transition-active-probe",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/build/RANSCurvedWallProbe",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-002/regularized-transition-active/case.xml",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-002/regularized-transition-active/probe.json"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-002/regularized-transition-active",
+      "timeout_seconds": 900,
+      "pid": 28643,
+      "exit_code": 0,
+      "seconds": 15.021214320999206,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-002/regularized-transition-active-probe.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "regularized-transition-active-operator",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_curved_operator.py",
+        "--raw",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-002/regularized-transition-active/probe.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-002/regularized-transition-active/operator-audit.json"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-002/regularized-transition-active",
+      "timeout_seconds": 2400,
+      "pid": 28667,
+      "exit_code": 0,
+      "seconds": 278.2983752710006,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-002/regularized-transition-active-operator.log",
+      "log_sha256": "caf3746c119761486ab0c54412404eea31d67bc75f26d66ded9da4073c7fbb92"
+    }
+  ],
+  "cases": [
+    {
+      "name": "original-transition-active",
+      "variant": "Original",
+      "family": "feet",
+      "dimension": 2,
+      "upstream": true,
+      "session": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-002/original-transition-active/case.xml",
+      "session_sha256": "62d09f5d824369ab1b6362d638f4f008aa62d2f9b4bef7ab857726a0e91561f1",
+      "status": "passed",
+      "native_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-002/original-transition-active/probe.json",
+      "native_report_sha256": "721a29ee88f334f1614f4d7af88c289911d2be4fc56ce3606e86f4459615b049",
+      "selected_operator_audit": {
+        "started_utc": "2026-11-03T05:44:35.634245+00:00",
+        "input": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-002/original-transition-active/probe.json",
+          "sha256": "721a29ee88f334f1614f4d7af88c289911d2be4fc56ce3606e86f4459615b049"
+        },
+        "driver_sha256": "d5d064d3abc344164cca2803fe2556bb6c6f10b19cd2723dc54bd929a0067fbf",
+        "numerical_threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1"
+        },
+        "schema": 1,
+        "success": true,
+        "checks": 43,
+        "errors": {
+          "m8_curved_selected_all_mode_weak_operator": 2.8609597169671074e-15,
+          "m8_curved_selected_total_energy_exchange": 3.719837701918414e-15,
+          "m8_curved_same_stress_production_exchange": 0.0,
+          "m8_curved_complete_action_block_0_h_0.0002": 1.7763568394002505e-11,
+          "m8_curved_complete_action_block_0_h_0.0001": 3.9968028886505635e-11,
+          "m8_curved_complete_action_block_1_h_0.0002": 2.1094237467877974e-11,
+          "m8_curved_complete_action_block_1_h_0.0001": 5.995204332975845e-11,
+          "m8_curved_complete_action_block_2_h_0.0002": 2.9976021664879227e-11,
+          "m8_curved_complete_action_block_2_h_0.0001": 5.10702591327572e-11,
+          "m8_curved_complete_action_block_3_h_0.0002": 3.885780586188048e-12,
+          "m8_curved_complete_action_block_3_h_0.0001": 2.220446049250313e-12,
+          "m8_curved_complete_action_block_5_h_0.0002": 6.938893903907228e-12,
+          "m8_curved_complete_action_block_5_h_0.0001": 6.106226635438361e-12
+        },
+        "model_variant": "Original",
+        "robust_parameters": [
+          1,
+          0,
+          0.2,
+          0.1,
+          0,
+          0,
+          0
+        ],
+        "dimension": 2,
+        "map_parameters": [
+          4,
+          2,
+          2,
+          0,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          20,
+          0.02,
+          1,
+          1
+        ],
+        "complete_weak_blocks": [
+          {
+            "block": 0,
+            "maximum_absolute_error": 3.2335245592207684e-15
+          },
+          {
+            "block": 1,
+            "maximum_absolute_error": 3.552713678800501e-15
+          },
+          {
+            "block": 2,
+            "maximum_absolute_error": 6.661338147750939e-15
+          },
+          {
+            "block": 3,
+            "maximum_absolute_error": 6.938893903907228e-17
+          },
+          {
+            "block": 4,
+            "maximum_absolute_error": 1.3183898417423734e-16
+          },
+          {
+            "block": 5,
+            "maximum_absolute_error": 6.938893903907228e-17
+          }
+        ],
+        "operator_increment": {
+          "source_plateau": {
+            "required": false,
+            "samples": 0,
+            "minimum_k_over_K": null
+          },
+          "maximum_added_component": 0.0,
+          "modified_stress_weak_work": 0.0,
+          "production_increment": 0.0,
+          "mean_plus_k_change": 0.0,
+          "original_energy": [
+            11.547599186902286,
+            3.694137385762115,
+            7.944803963883249,
+            -0.02816974767256629,
+            -0.06317241507051322,
+            0.0,
+            11.547599186902286,
+            0.0,
+            11.938402840022688
+          ]
+        },
+        "directional": {
+          "independent_full_weak_actions": true,
+          "blocks": [
+            {
+              "block": 0,
+              "levels": [
+                {
+                  "step": 0.0002,
+                  "maximum_native_error": 1.7763568394002505e-11,
+                  "plus_minimum_k_over_K": null,
+                  "minus_minimum_k_over_K": null
+                },
+                {
+                  "step": 0.0001,
+                  "maximum_native_error": 3.9968028886505635e-11,
+                  "plus_minimum_k_over_K": null,
+                  "minus_minimum_k_over_K": null
+                }
+              ],
+              "includes_velocity_stress_increment": true
+            },
+            {
+              "block": 1,
+              "levels": [
+                {
+                  "step": 0.0002,
+                  "maximum_native_error": 2.1094237467877974e-11,
+                  "plus_minimum_k_over_K": null,
+                  "minus_minimum_k_over_K": null
+                },
+                {
+                  "step": 0.0001,
+                  "maximum_native_error": 5.995204332975845e-11,
+                  "plus_minimum_k_over_K": null,
+                  "minus_minimum_k_over_K": null
+                }
+              ],
+              "includes_velocity_stress_increment": true
+            },
+            {
+              "block": 2,
+              "levels": [
+                {
+                  "step": 0.0002,
+                  "maximum_native_error": 2.9976021664879227e-11,
+                  "plus_minimum_k_over_K": null,
+                  "minus_minimum_k_over_K": null
+                },
+                {
+                  "step": 0.0001,
+                  "maximum_native_error": 5.10702591327572e-11,
+                  "plus_minimum_k_over_K": null,
+                  "minus_minimum_k_over_K": null
+                }
+              ],
+              "includes_velocity_stress_increment": false
+            },
+            {
+              "block": 3,
+              "levels": [
+                {
+                  "step": 0.0002,
+                  "maximum_native_error": 3.885780586188048e-12,
+                  "plus_minimum_k_over_K": null,
+                  "minus_minimum_k_over_K": null
+                },
+                {
+                  "step": 0.0001,
+                  "maximum_native_error": 2.220446049250313e-12,
+                  "plus_minimum_k_over_K": null,
+                  "minus_minimum_k_over_K": null
+                }
+              ],
+              "includes_velocity_stress_increment": false
+            },
+            {
+              "block": 5,
+              "levels": [
+                {
+                  "step": 0.0002,
+                  "maximum_native_error": 6.938893903907228e-12,
+                  "plus_minimum_k_over_K": null,
+                  "minus_minimum_k_over_K": null
+                },
+                {
+                  "step": 0.0001,
+                  "maximum_native_error": 6.106226635438361e-12,
+                  "plus_minimum_k_over_K": null,
+                  "minus_minimum_k_over_K": null
+                }
+              ],
+              "includes_velocity_stress_increment": false
+            }
+          ],
+          "scope": "Central differences of independently reconstructed selected all-field weak loads and nonlinear matching rows"
+        },
+        "state_scope": "Unsolved generic bounded coefficient state with independently verified inactive source-repair plateau",
+        "variable_matching_height": false,
+        "genuine_curved_gamma_mms": false,
+        "excluded": [
+          "exact curved gamma manufactured solution",
+          "admissible state-envelope coverage",
+          "positivity/covariance qualification",
+          "long-time or physical terrain validation"
+        ],
+        "finished_utc": "2026-11-03T05:45:47.868028+00:00"
+      },
+      "legacy_original_control": {
+        "schema": 1,
+        "dimension": 2,
+        "active_samples": 5,
+        "inactive_samples": 10,
+        "reference_departure_maximum": 0.0,
+        "physical_samples": [
+          {
+            "sample": 0,
+            "coordinate": -3.863,
+            "chi": 0.8587580009599421,
+            "cutoff": 0.00947379000893229,
+            "d2": 255.35327277219213,
+            "full_k_budget_change": 0.4131322872763108
+          },
+          {
+            "sample": 1,
+            "coordinate": -3.519,
+            "chi": 0.867828626341032,
+            "cutoff": 0.009477617409276941,
+            "d2": 248.6415689777948,
+            "full_k_budget_change": 0.4283036251422997
+          },
+          {
+            "sample": 2,
+            "coordinate": -3.137,
+            "chi": 0.8772184077449712,
+            "cutoff": 0.009481836164129065,
+            "d2": 241.44737454682172,
+            "full_k_budget_change": 0.44519276399356805
+          },
+          {
+            "sample": 3,
+            "coordinate": -2.863,
+            "chi": 0.8432100583858883,
+            "cutoff": 0.009484841972460085,
+            "d2": 236.57636651131622,
+            "full_k_budget_change": 0.4364593155421089
+          },
+          {
+            "sample": 4,
+            "coordinate": -2.519,
+            "chi": 0.22156373737314228,
+            "cutoff": 0.0094885919909299,
+            "d2": 230.68481006144629,
+            "full_k_budget_change": 0.11752129882521818
+          },
+          {
+            "sample": 5,
+            "coordinate": -2.137,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 6,
+            "coordinate": -1.8630337971421547,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 7,
+            "coordinate": -1.519118660039244,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 8,
+            "coordinate": -1.137212897326128,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 9,
+            "coordinate": -0.7262179145125325,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 10,
+            "coordinate": -0.038000088830099,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 11,
+            "coordinate": 0.7262179145125325,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 12,
+            "coordinate": 1.1372466944682826,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 13,
+            "coordinate": 1.4812466944682825,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          },
+          {
+            "sample": 14,
+            "coordinate": 1.8632466944682826,
+            "chi": 0.0,
+            "cutoff": 0.0,
+            "d2": 0.0,
+            "full_k_budget_change": 0.0
+          }
+        ],
+        "constrained_trace": {
+          "rows": 16,
+          "baseline_rows": 10,
+          "transform": "independent GLL sampled constrained Modified_A transform; exact interior GL mass; commuting tensor transforms",
+          "analytic_chi_projected": false,
+          "dependent_trace_is_unknown": true
+        },
+        "complete_weak": {
+          "dimension": 2,
+          "maximum_block_absolute_errors": [
+            3.2335245592207684e-15,
+            3.552713678800501e-15,
+            6.661338147750939e-15,
+            6.938893903907228e-17,
+            1.3183898417423734e-16,
+            6.938893903907228e-17
+          ],
+          "roughness_budget": [
+            0.03830745263855218,
+            0.0,
+            6.431350503951606e-05,
+            4.6042420606557616e-05,
+            1.7157499379583108e-17
+          ],
+          "energy_budget": [
+            11.547599186902286,
+            3.694137385762115,
+            7.944803963883249,
+            -0.02816974767256629,
+            -0.06317241507051322,
+            0.0,
+            11.547599186902286,
+            0.0,
+            11.938402840022688
+          ],
+          "independent_quadrature_orders": [
+            8,
+            24,
+            8
+          ],
+          "comparison": "same declared finite outer Gauss rule, independently reconstructed; higher-order inner quadrature"
+        },
+        "independent_inner_quadrature_control": {
+          "dimension": 2,
+          "maximum_block_absolute_errors": [
+            3.2335245592207684e-15,
+            3.552713678800501e-15,
+            6.661338147750939e-15,
+            6.938893903907228e-17,
+            1.3183898417423734e-16,
+            6.938893903907228e-17
+          ],
+          "roughness_budget": [
+            0.038307452638552175,
+            0.0,
+            6.431350503951606e-05,
+            4.60424206065576e-05,
+            1.7157499379583108e-17
+          ],
+          "energy_budget": [
+            11.547599186902284,
+            3.694137385762115,
+            7.944803963883248,
+            -0.02816974767256629,
+            -0.06317241507051322,
+            0.0,
+            11.547599186902286,
+            -1.7763568394002505e-15,
+            11.938402840022688
+          ],
+          "independent_quadrature_orders": [
+            8,
+            16,
+            8
+          ],
+          "comparison": "same declared finite outer Gauss rule, independently reconstructed; higher-order inner quadrature"
+        },
+        "additional_weak_checks": 50,
+        "equal_input_baseline": {
+          "rows": 425,
+          "native_operator_maximum": 0,
+          "native_constraint_maximum": 0,
+          "independently_reconstructed": true
+        },
+        "directional": {
+          "independent_full_weak_actions": true,
+          "blocks": [
+            {
+              "block": 2,
+              "independent_steps": [
+                0.0002,
+                0.0001
+              ],
+              "same_step_native_errors": [
+                2.9976021664879227e-11,
+                5.10702591327572e-11
+              ],
+              "independent_step_drift": 6.661338147750939e-12,
+              "finest_native_step": 2e-06,
+              "independent_to_finest_error": 1.176836406102666e-09,
+              "trace_omitted_chi_derivative_maximum": 1.1806446023198032e-05,
+              "complete_rows": 425,
+              "nonlinear_trace_rows": 16
+            },
+            {
+              "block": 3,
+              "independent_steps": [
+                0.0002,
+                0.0001
+              ],
+              "same_step_native_errors": [
+                3.885780586188048e-12,
+                2.220446049250313e-12
+              ],
+              "independent_step_drift": 1.6653345369377348e-12,
+              "finest_native_step": 2e-06,
+              "independent_to_finest_error": 1.1102230246251565e-10,
+              "trace_omitted_chi_derivative_maximum": 3.379872878968293e-09,
+              "complete_rows": 425,
+              "nonlinear_trace_rows": 16
+            },
+            {
+              "block": 5,
+              "independent_steps": [
+                0.0002,
+                0.0001
+              ],
+              "same_step_native_errors": [
+                6.938893903907228e-12,
+                6.106226635438361e-12
+              ],
+              "independent_step_drift": 1.3877787807814457e-12,
+              "finest_native_step": 2e-06,
+              "independent_to_finest_error": 1.0658141036401503e-10,
+              "trace_omitted_chi_derivative_maximum": 2.2375103565742613e-06,
+              "complete_rows": 425,
+              "nonlinear_trace_rows": 16
+            }
+          ],
+          "interpretation": "central finite differences of independently reconstructed complete operators; reported finite-step drift"
+        },
+        "success": true,
+        "legacy_control": "m6",
+        "weak_checks": 50,
+        "additional_checks": 320
+      }
+    },
+    {
+      "name": "regularized-transition-active",
+      "variant": "Regularized",
+      "family": "feet",
+      "dimension": 2,
+      "upstream": true,
+      "session": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-002/regularized-transition-active/case.xml",
+      "session_sha256": "5fe0d3efafc6ca54462684a3927711c600bb259f007e446af1137d719bcbbb06",
+      "status": "passed",
+      "native_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-002/regularized-transition-active/probe.json",
+      "native_report_sha256": "db3d1cdb0724bf63fb4187027d540ce4b243881170647f44fa19c6021fcf8f9b",
+      "selected_operator_audit": {
+        "started_utc": "2026-11-03T05:46:59.818103+00:00",
+        "input": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-002/regularized-transition-active/probe.json",
+          "sha256": "db3d1cdb0724bf63fb4187027d540ce4b243881170647f44fa19c6021fcf8f9b"
+        },
+        "driver_sha256": "d5d064d3abc344164cca2803fe2556bb6c6f10b19cd2723dc54bd929a0067fbf",
+        "numerical_threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1"
+        },
+        "schema": 1,
+        "success": true,
+        "checks": 43,
+        "errors": {
+          "m8_curved_selected_all_mode_weak_operator": 2.562693108679274e-15,
+          "m8_curved_selected_total_energy_exchange": 4.31501173422536e-15,
+          "m8_curved_same_stress_production_exchange": 0.0,
+          "m8_curved_complete_action_block_0_h_0.0002": 1.7763568394002505e-11,
+          "m8_curved_complete_action_block_0_h_0.0001": 3.9968028886505635e-11,
+          "m8_curved_complete_action_block_1_h_0.0002": 2.1094237467877974e-11,
+          "m8_curved_complete_action_block_1_h_0.0001": 5.995204332975845e-11,
+          "m8_curved_complete_action_block_2_h_0.0002": 2.9976021664879227e-11,
+          "m8_curved_complete_action_block_2_h_0.0001": 5.10702591327572e-11,
+          "m8_curved_complete_action_block_3_h_0.0002": 4.163336342344337e-12,
+          "m8_curved_complete_action_block_3_h_0.0001": 2.7755575615628914e-12,
+          "m8_curved_complete_action_block_5_h_0.0002": 6.661338147750939e-12,
+          "m8_curved_complete_action_block_5_h_0.0001": 6.106226635438361e-12
+        },
+        "model_variant": "Regularized",
+        "robust_parameters": [
+          0.4,
+          0,
+          0.2,
+          0.1,
+          0,
+          1,
+          1
+        ],
+        "dimension": 2,
+        "map_parameters": [
+          4,
+          2,
+          2,
+          0,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          20,
+          0.02,
+          1,
+          1
+        ],
+        "complete_weak_blocks": [
+          {
+            "block": 0,
+            "maximum_absolute_error": 3.1363800445660672e-15
+          },
+          {
+            "block": 1,
+            "maximum_absolute_error": 3.9968028886505635e-15
+          },
+          {
+            "block": 2,
+            "maximum_absolute_error": 6.661338147750939e-15
+          },
+          {
+            "block": 3,
+            "maximum_absolute_error": 5.551115123125783e-17
+          },
+          {
+            "block": 4,
+            "maximum_absolute_error": 1.3183898417423734e-16
+          },
+          {
+            "block": 5,
+            "maximum_absolute_error": 6.938893903907228e-17
+          }
+        ],
+        "operator_increment": {
+          "source_plateau": {
+            "required": true,
+            "samples": 12368,
+            "minimum_k_over_K": 0.9536772886494104,
+            "theta": 0.2,
+            "source_repair_identically_inactive": true
+          },
+          "maximum_added_component": 0.38671752276359317,
+          "modified_stress_weak_work": 0.7392325527959192,
+          "production_increment": 0.7392325527959192,
+          "mean_plus_k_change": 0.0,
+          "original_energy": [
+            11.547599186902286,
+            3.694137385762115,
+            7.944803963883249,
+            -0.02816974767256629,
+            -0.06317241507051322,
+            0.0,
+            11.547599186902286,
+            0.0,
+            11.938402840022688
+          ]
+        },
+        "directional": {
+          "independent_full_weak_actions": true,
+          "blocks": [
+            {
+              "block": 0,
+              "levels": [
+                {
+                  "step": 0.0002,
+                  "maximum_native_error": 1.7763568394002505e-11,
+                  "plus_minimum_k_over_K": 0.9536772886494104,
+                  "minus_minimum_k_over_K": 0.9536772886494104
+                },
+                {
+                  "step": 0.0001,
+                  "maximum_native_error": 3.9968028886505635e-11,
+                  "plus_minimum_k_over_K": 0.9536772886494104,
+                  "minus_minimum_k_over_K": 0.9536772886494104
+                }
+              ],
+              "includes_velocity_stress_increment": true
+            },
+            {
+              "block": 1,
+              "levels": [
+                {
+                  "step": 0.0002,
+                  "maximum_native_error": 2.1094237467877974e-11,
+                  "plus_minimum_k_over_K": 0.9536772886494104,
+                  "minus_minimum_k_over_K": 0.9536772886494104
+                },
+                {
+                  "step": 0.0001,
+                  "maximum_native_error": 5.995204332975845e-11,
+                  "plus_minimum_k_over_K": 0.9536772886494104,
+                  "minus_minimum_k_over_K": 0.9536772886494104
+                }
+              ],
+              "includes_velocity_stress_increment": true
+            },
+            {
+              "block": 2,
+              "levels": [
+                {
+                  "step": 0.0002,
+                  "maximum_native_error": 2.9976021664879227e-11,
+                  "plus_minimum_k_over_K": 0.9536772131826864,
+                  "minus_minimum_k_over_K": 0.9536773641161239
+                },
+                {
+                  "step": 0.0001,
+                  "maximum_native_error": 5.10702591327572e-11,
+                  "plus_minimum_k_over_K": 0.9536772509160496,
+                  "minus_minimum_k_over_K": 0.9536773263827687
+                }
+              ],
+              "includes_velocity_stress_increment": false
+            },
+            {
+              "block": 3,
+              "levels": [
+                {
+                  "step": 0.0002,
+                  "maximum_native_error": 4.163336342344337e-12,
+                  "plus_minimum_k_over_K": 0.9536772886494104,
+                  "minus_minimum_k_over_K": 0.9536772886494104
+                },
+                {
+                  "step": 0.0001,
+                  "maximum_native_error": 2.7755575615628914e-12,
+                  "plus_minimum_k_over_K": 0.9536772886494104,
+                  "minus_minimum_k_over_K": 0.9536772886494104
+                }
+              ],
+              "includes_velocity_stress_increment": false
+            },
+            {
+              "block": 5,
+              "levels": [
+                {
+                  "step": 0.0002,
+                  "maximum_native_error": 6.661338147750939e-12,
+                  "plus_minimum_k_over_K": 0.9536772886494104,
+                  "minus_minimum_k_over_K": 0.9536772886494104
+                },
+                {
+                  "step": 0.0001,
+                  "maximum_native_error": 6.106226635438361e-12,
+                  "plus_minimum_k_over_K": 0.9536772886494104,
+                  "minus_minimum_k_over_K": 0.9536772886494104
+                }
+              ],
+              "includes_velocity_stress_increment": false
+            }
+          ],
+          "scope": "Central differences of independently reconstructed selected all-field weak loads and nonlinear matching rows"
+        },
+        "state_scope": "Unsolved generic bounded coefficient state with independently verified inactive source-repair plateau",
+        "variable_matching_height": false,
+        "genuine_curved_gamma_mms": false,
+        "excluded": [
+          "exact curved gamma manufactured solution",
+          "admissible state-envelope coverage",
+          "positivity/covariance qualification",
+          "long-time or physical terrain validation"
+        ],
+        "finished_utc": "2026-11-03T05:51:37.094897+00:00"
+      }
+    }
+  ],
+  "scope": "Active-sensor1/30 selected all-mode curved operator and original control; broad100/200 immutable001 excluded from omission control;  no genuine curved gamma MMS or robust/physical terrain qualification",
+  "runner_sha256": "3c3a3c8cdec3196b76334e1ecdc2d571bb1a76bef6cc8dd5371e4df49498a07d",
+  "CMake_input_sha256": "94fa2257b922a60aa0c4529631b00028fc86a3e7006a162d4478a720b40ee10c",
+  "build_reused_from": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/receipt.json",
+  "probe": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/build/RANSCurvedWallProbe",
+    "sha256": "c8dcf7f30840987f2c419d906df72ab574b27a33bfd697189dda623c820452c1"
+  },
+  "probe_loader_bindings": {
+    "libmpi_cxx.so.40": {
+      "path": "/lib/x86_64-linux-gnu/libmpi_cxx.so.40",
+      "sha256": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788"
+    },
+    "libmpi.so.40": {
+      "path": "/lib/x86_64-linux-gnu/libmpi.so.40",
+      "sha256": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982"
+    },
+    "libMultiRegions.so.5.9.0": {
+      "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0",
+      "sha256": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e"
+    },
+    "libLocalRegions.so.5.9.0": {
+      "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0",
+      "sha256": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc"
+    },
+    "libSpatialDomains.so.5.9.0": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/geometry-lib/libSpatialDomains.so.5.9.0",
+      "sha256": "6254b43a7dfbcd047267f580fbdcc175155fae63d3a15304b6b053d3884babbb"
+    },
+    "libStdRegions.so.5.9.0": {
+      "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0",
+      "sha256": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7"
+    },
+    "libLibUtilities.so.5.9.0": {
+      "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0",
+      "sha256": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b"
+    },
+    "liblapack.so.3": {
+      "path": "/lib/x86_64-linux-gnu/liblapack.so.3",
+      "sha256": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151"
+    },
+    "libstdc++.so.6": {
+      "path": "/lib/x86_64-linux-gnu/libstdc++.so.6",
+      "sha256": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128"
+    },
+    "libm.so.6": {
+      "path": "/lib/x86_64-linux-gnu/libm.so.6",
+      "sha256": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6"
+    },
+    "libgcc_s.so.1": {
+      "path": "/lib/x86_64-linux-gnu/libgcc_s.so.1",
+      "sha256": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a"
+    },
+    "libc.so.6": {
+      "path": "/lib/x86_64-linux-gnu/libc.so.6",
+      "sha256": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793"
+    },
+    "libopen-pal.so.40": {
+      "path": "/lib/x86_64-linux-gnu/libopen-pal.so.40",
+      "sha256": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1"
+    },
+    "libopen-rte.so.40": {
+      "path": "/lib/x86_64-linux-gnu/libopen-rte.so.40",
+      "sha256": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57"
+    },
+    "libhwloc.so.15": {
+      "path": "/lib/x86_64-linux-gnu/libhwloc.so.15",
+      "sha256": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54"
+    },
+    "libCollections.so.5.9.0": {
+      "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0",
+      "sha256": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88"
+    },
+    "libptscotch-6.1.so": {
+      "path": "/lib/x86_64-linux-gnu/libptscotch-6.1.so",
+      "sha256": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0"
+    },
+    "libblas.so.3": {
+      "path": "/lib/x86_64-linux-gnu/libblas.so.3",
+      "sha256": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd"
+    },
+    "libz.so.1": {
+      "path": "/lib/x86_64-linux-gnu/libz.so.1",
+      "sha256": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370"
+    },
+    "libfftw3.so.3": {
+      "path": "/lib/x86_64-linux-gnu/libfftw3.so.3",
+      "sha256": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d"
+    },
+    "libboost_iostreams.so.1.74.0": {
+      "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0",
+      "sha256": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e"
+    },
+    "libboost_program_options.so.1.74.0": {
+      "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0",
+      "sha256": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482"
+    },
+    "libopenblas.so.0": {
+      "path": "/lib/x86_64-linux-gnu/libopenblas.so.0",
+      "sha256": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9"
+    },
+    "libgfortran.so.5": {
+      "path": "/lib/x86_64-linux-gnu/libgfortran.so.5",
+      "sha256": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30"
+    },
+    "ELF interpreter": {
+      "path": "/lib64/ld-linux-x86-64.so.2",
+      "sha256": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01"
+    },
+    "libevent_core-2.1.so.7": {
+      "path": "/lib/x86_64-linux-gnu/libevent_core-2.1.so.7",
+      "sha256": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f"
+    },
+    "libevent_pthreads-2.1.so.7": {
+      "path": "/lib/x86_64-linux-gnu/libevent_pthreads-2.1.so.7",
+      "sha256": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537"
+    },
+    "libudev.so.1": {
+      "path": "/lib/x86_64-linux-gnu/libudev.so.1",
+      "sha256": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda"
+    },
+    "libMatrixFreeOps.so.5.9.0": {
+      "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0",
+      "sha256": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc"
+    },
+    "libptscotcherr-6.1.so": {
+      "path": "/lib/x86_64-linux-gnu/libptscotcherr-6.1.so",
+      "sha256": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e"
+    },
+    "libbz2.so.1.0": {
+      "path": "/lib/x86_64-linux-gnu/libbz2.so.1.0",
+      "sha256": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9"
+    },
+    "liblzma.so.5": {
+      "path": "/lib/x86_64-linux-gnu/liblzma.so.5",
+      "sha256": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037"
+    },
+    "libzstd.so.1": {
+      "path": "/lib/x86_64-linux-gnu/libzstd.so.1",
+      "sha256": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667"
+    },
+    "libquadmath.so.0": {
+      "path": "/lib/x86_64-linux-gnu/libquadmath.so.0",
+      "sha256": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c"
+    }
+  },
+  "frozen_case_matrix": [
+    [
+      "original-transition-active",
+      "Original",
+      "feet",
+      2,
+      true,
+      "m6"
+    ],
+    [
+      "regularized-transition-active",
+      "Regularized",
+      "feet",
+      2,
+      true,
+      null
+    ]
+  ],
+  "legacy_audit_sha256": "f5904ae02a177e9cace9b90f8c7a931828b82343c28f542e54ebc841051546e1",
+  "source_clean_end": true,
+  "source_unchanged": true,
+  "primary_source_unchanged": true,
+  "primary_solver_unchanged": true,
+  "primary_geometry_unchanged": true,
+  "finished_utc": "2026-11-03T05:51:38.110450+00:00"
+}

@@ -1,0 +1,1541 @@
+{
+  "schema": 1,
+  "status": "failed",
+  "started_utc": "2026-11-03T05:36:27.659594+00:00",
+  "source_commit": "6284787bf4c436203f4404498ba3dfb68aa144ef",
+  "source_status": "",
+  "primary_source_commit": "aa854f4c5b05451a81a4e1dd60eaaca98eb547e4",
+  "primary_solver_sha256": "2fa72f138fc65da2b04be52735f1e767185375b0b9900b4fb66f1364da2be2ea",
+  "frozen_geometry": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/geometry-lib/libSpatialDomains.so.5.9.0",
+    "sha256": "6254b43a7dfbcd047267f580fbdcc175155fae63d3a15304b6b053d3884babbb"
+  },
+  "CPP_difference_from_native_cohort": [
+    "library/UnitTests/SolverUtils/RANSCurvedWallProbe.cpp"
+  ],
+  "environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "TMPDIR": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/tmp",
+    "LD_LIBRARY_PATH": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/geometry-lib:",
+    "PYTHONPATH": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/source/solvers/IncNavierStokesSolver/Tests/RANS"
+  },
+  "compiler_workers": 16,
+  "numerical_workers": 1,
+  "numerical_cpu": 50,
+  "commands": [
+    {
+      "name": "configure",
+      "command": [
+        "cmake",
+        "-S",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/source/solvers/IncNavierStokesSolver/Tests/RANS",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/build",
+        "-DRANS_BUILD_SOLVER=OFF",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001",
+      "timeout_seconds": 180,
+      "pid": 25376,
+      "exit_code": 0,
+      "seconds": 1.0021136140003364,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/configure.log",
+      "log_sha256": "ab32d93a7c48aa788f07e42a329502eb9034476855dd4ae6d45f13dbf16bec28"
+    },
+    {
+      "name": "build",
+      "command": [
+        "cmake",
+        "--build",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/build",
+        "--target",
+        "RANSCurvedWallProbe",
+        "--parallel",
+        "16"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001",
+      "timeout_seconds": 900,
+      "pid": 25409,
+      "exit_code": 0,
+      "seconds": 11.014123504999588,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/build.log",
+      "log_sha256": "b88b7038fc9dac0f69c6aa136a3c77e4d7cfe0fe94ee2357ebb6e40849a4d633"
+    },
+    {
+      "name": "original-variable-probe",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/build/RANSCurvedWallProbe",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/original-variable/case.xml",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/original-variable/probe.json"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/original-variable",
+      "timeout_seconds": 900,
+      "pid": 25521,
+      "exit_code": 0,
+      "seconds": 2.00711744200089,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/original-variable-probe.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "original-variable-operator",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_curved_operator.py",
+        "--raw",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/original-variable/probe.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/original-variable/operator-audit.json"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/original-variable",
+      "timeout_seconds": 2400,
+      "pid": 25528,
+      "exit_code": 0,
+      "seconds": 1.0059191700001975,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/original-variable-operator.log",
+      "log_sha256": "cea8fbd00add7ed5187be38f507668f2a99b57a0193469b9ace0835ed33758d8"
+    },
+    {
+      "name": "original-variable-legacy",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/legacy-original-audit.py",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/original-variable/probe.json",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/original-variable/legacy-audit.json",
+        "m5"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/original-variable",
+      "timeout_seconds": 2400,
+      "pid": 25529,
+      "exit_code": 0,
+      "seconds": 2.007321776000026,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/original-variable-legacy.log",
+      "log_sha256": "e45f4d68244034b57016c129de526726d51aff28f5af61b642ff118dfcdf4fdd"
+    },
+    {
+      "name": "scaled-variable-probe",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/build/RANSCurvedWallProbe",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/scaled-variable/case.xml",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/scaled-variable/probe.json"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/scaled-variable",
+      "timeout_seconds": 900,
+      "pid": 25530,
+      "exit_code": 0,
+      "seconds": 2.00755218499944,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/scaled-variable-probe.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "scaled-variable-operator",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_curved_operator.py",
+        "--raw",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/scaled-variable/probe.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/scaled-variable/operator-audit.json"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/scaled-variable",
+      "timeout_seconds": 2400,
+      "pid": 25537,
+      "exit_code": 0,
+      "seconds": 3.0076359060003597,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/scaled-variable-operator.log",
+      "log_sha256": "9ecd180d3022dc6d430987355062b0e0b7570bd4ba19e0d12da5efa006e7f0ac"
+    },
+    {
+      "name": "regularized-variable-probe",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/build/RANSCurvedWallProbe",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/regularized-variable/case.xml",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/regularized-variable/probe.json"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/regularized-variable",
+      "timeout_seconds": 900,
+      "pid": 25538,
+      "exit_code": 0,
+      "seconds": 2.0082177620006405,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/regularized-variable-probe.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "regularized-variable-operator",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_curved_operator.py",
+        "--raw",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/regularized-variable/probe.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/regularized-variable/operator-audit.json"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/regularized-variable",
+      "timeout_seconds": 2400,
+      "pid": 25547,
+      "exit_code": 0,
+      "seconds": 3.0093998339998507,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/regularized-variable-operator.log",
+      "log_sha256": "ba75f8d11123cd779ff5756c4d52d7e33c7c517f970a808e4d86c33c397c029c"
+    },
+    {
+      "name": "original-transition-probe",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/build/RANSCurvedWallProbe",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/original-transition/case.xml",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/original-transition/probe.json"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/original-transition",
+      "timeout_seconds": 900,
+      "pid": 25548,
+      "exit_code": 0,
+      "seconds": 7.01286881300075,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/original-transition-probe.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "original-transition-operator",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_curved_operator.py",
+        "--raw",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/original-transition/probe.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/original-transition/operator-audit.json"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/original-transition",
+      "timeout_seconds": 2400,
+      "pid": 25555,
+      "exit_code": 0,
+      "seconds": 73.08264517499993,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/original-transition-operator.log",
+      "log_sha256": "1b9c7794782e937f03433fe28cc7beb2d490b17b552710150814cf3afc97c096"
+    },
+    {
+      "name": "original-transition-legacy",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/legacy-original-audit.py",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/original-transition/probe.json",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/original-transition/legacy-audit.json",
+        "m6"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/original-transition",
+      "timeout_seconds": 2400,
+      "pid": 25675,
+      "exit_code": 1,
+      "seconds": 26.033838197001387,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/original-transition-legacy.log",
+      "log_sha256": "bdc0ffd9197fc4fa4b27484b94326ae8e5e421d6f77cdec332ee13cf5cc01b64"
+    },
+    {
+      "name": "regularized-transition-probe",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/build/RANSCurvedWallProbe",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/regularized-transition/case.xml",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/regularized-transition/probe.json"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/regularized-transition",
+      "timeout_seconds": 900,
+      "pid": 25806,
+      "exit_code": 0,
+      "seconds": 16.02338138199957,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/regularized-transition-probe.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "regularized-transition-operator",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_curved_operator.py",
+        "--raw",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/regularized-transition/probe.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/regularized-transition/operator-audit.json"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/regularized-transition",
+      "timeout_seconds": 2400,
+      "pid": 25814,
+      "exit_code": 0,
+      "seconds": 279.3082432299998,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/regularized-transition-operator.log",
+      "log_sha256": "bd37a059a46e4e559e2e7f3ff4d90ae1d6bf781e8dab0c0748f8cf37c11890cb"
+    },
+    {
+      "name": "regularized-surface3d-probe",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/build/RANSCurvedWallProbe",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/regularized-surface3d/case.xml",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/regularized-surface3d/probe.json"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/regularized-surface3d",
+      "timeout_seconds": 900,
+      "pid": 27285,
+      "exit_code": 0,
+      "seconds": 12.01861910000116,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/regularized-surface3d-probe.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "regularized-surface3d-operator",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_curved_operator.py",
+        "--raw",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/regularized-surface3d/probe.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/regularized-surface3d/operator-audit.json"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/regularized-surface3d",
+      "timeout_seconds": 2400,
+      "pid": 27293,
+      "exit_code": 0,
+      "seconds": 25.034219281000333,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/regularized-surface3d-operator.log",
+      "log_sha256": "ad908c497c79bd4d8421a9cbf177edd2a938290eccbb3362d4292c08fe4fab20"
+    }
+  ],
+  "cases": [
+    {
+      "name": "original-variable",
+      "variant": "Original",
+      "family": "variable",
+      "dimension": 2,
+      "upstream": false,
+      "session": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/original-variable/case.xml",
+      "session_sha256": "d354606f50dee7539a0f9101884d35464c8fe3d6a88cfd2b4d35a69ef6dc4ecc",
+      "status": "passed",
+      "native_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/original-variable/probe.json",
+      "native_report_sha256": "61d2b8ba621540f9883bf3c915a4b7eac4b74af7dbe22f10b6e696037d171d9c",
+      "selected_operator_audit": {
+        "started_utc": "2026-11-03T05:36:42.599173+00:00",
+        "input": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/original-variable/probe.json",
+          "sha256": "61d2b8ba621540f9883bf3c915a4b7eac4b74af7dbe22f10b6e696037d171d9c"
+        },
+        "driver_sha256": "d5d064d3abc344164cca2803fe2556bb6c6f10b19cd2723dc54bd929a0067fbf",
+        "numerical_threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1"
+        },
+        "schema": 1,
+        "success": true,
+        "checks": 8,
+        "errors": {
+          "m8_curved_selected_all_mode_weak_operator": 1.7763568394002505e-15,
+          "m8_curved_selected_total_energy_exchange": 3.5451666722027203e-15,
+          "m8_curved_same_stress_production_exchange": 0.0
+        },
+        "model_variant": "Original",
+        "robust_parameters": [
+          1,
+          0,
+          0.2,
+          0.1,
+          0,
+          0,
+          0
+        ],
+        "dimension": 2,
+        "map_parameters": [
+          3,
+          2,
+          2,
+          0.04,
+          0,
+          0.025,
+          1.3,
+          1,
+          0,
+          0,
+          20,
+          0.025,
+          2,
+          2
+        ],
+        "complete_weak_blocks": [
+          {
+            "block": 0,
+            "maximum_absolute_error": 2.636779683484747e-16
+          },
+          {
+            "block": 1,
+            "maximum_absolute_error": 3.3306690738754696e-16
+          },
+          {
+            "block": 2,
+            "maximum_absolute_error": 1.7763568394002505e-15
+          },
+          {
+            "block": 3,
+            "maximum_absolute_error": 2.7755575615628914e-17
+          },
+          {
+            "block": 4,
+            "maximum_absolute_error": 5.898059818321144e-17
+          },
+          {
+            "block": 5,
+            "maximum_absolute_error": 4.163336342344337e-17
+          }
+        ],
+        "operator_increment": {
+          "source_plateau": {
+            "required": false,
+            "samples": 0,
+            "minimum_k_over_K": null
+          },
+          "maximum_added_component": 0.0,
+          "modified_stress_weak_work": 0.0,
+          "production_increment": 0.0,
+          "mean_plus_k_change": 0.0,
+          "original_energy": [
+            2.154336911293518,
+            0.6742423510776405,
+            1.5285139732118234,
+            -0.008632566203858934,
+            -0.039786846792088666,
+            0.0,
+            2.154336911293516,
+            1.7763568394002505e-15,
+            2.254789835405526
+          ]
+        },
+        "directional": {
+          "independent_full_weak_actions": false,
+          "reason": "Fixed-mode probe does not export coupled directional samples"
+        },
+        "state_scope": "Unsolved generic bounded coefficient state with independently verified inactive source-repair plateau",
+        "variable_matching_height": true,
+        "genuine_curved_gamma_mms": false,
+        "excluded": [
+          "exact curved gamma manufactured solution",
+          "admissible state-envelope coverage",
+          "positivity/covariance qualification",
+          "long-time or physical terrain validation"
+        ],
+        "finished_utc": "2026-11-03T05:36:43.282184+00:00"
+      },
+      "legacy_original_control": {
+        "weak": {
+          "dimension": 2,
+          "maximum_block_absolute_errors": [
+            2.636779683484747e-16,
+            3.3306690738754696e-16,
+            1.7763568394002505e-15,
+            2.7755575615628914e-17,
+            5.898059818321144e-17,
+            4.163336342344337e-17
+          ],
+          "roughness_budget": [
+            0.0005741480157557254,
+            0.0,
+            -5.84933161576205e-07,
+            2.9090194518681486e-06,
+            8.429671891074797e-18
+          ],
+          "energy_budget": [
+            2.154336911293518,
+            0.6742423510776405,
+            1.5285139732118234,
+            -0.008632566203858934,
+            -0.039786846792088666,
+            0.0,
+            2.154336911293516,
+            1.7763568394002505e-15,
+            2.254789835405526
+          ],
+          "independent_quadrature_orders": [
+            8,
+            24,
+            8
+          ],
+          "comparison": "same declared finite outer Gauss rule, independently reconstructed; higher-order inner quadrature"
+        },
+        "interface": {
+          "integrals": [
+            1.0218137554648128,
+            0.04788209147688467,
+            0.02403932159355217,
+            0.011234734421598242,
+            0.0,
+            0.003020827743222925,
+            0.046549348157124595,
+            0.0,
+            0.06998600127316008,
+            0.08374421311525514,
+            0.0,
+            0.0036103928938741032,
+            0.06724609820839308,
+            -0.0011153340874099278,
+            0.03126380583991573,
+            0.03294510418099533,
+            0.0002950973198360461,
+            0.003477247840223161,
+            -0.0031821505203871153,
+            0.062478028345226526
+          ],
+          "epsilon_diagnostic_reactions": [
+            0.08364379122901627,
+            0.02802287509899446
+          ],
+          "normal_traction": [
+            0.06724609820839308,
+            -0.0011153340874099278
+          ],
+          "generic_state_is_not_traction_balanced": true
+        },
+        "success": true,
+        "legacy_control": "m5",
+        "weak_checks": 502,
+        "additional_checks": 0
+      }
+    },
+    {
+      "name": "scaled-variable",
+      "variant": "CubicScaled",
+      "family": "variable",
+      "dimension": 2,
+      "upstream": false,
+      "session": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/scaled-variable/case.xml",
+      "session_sha256": "8b5adc4d238e69c11b6db319bf53529f6a48983978d534078560b899143be299",
+      "status": "passed",
+      "native_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/scaled-variable/probe.json",
+      "native_report_sha256": "67682028108ea9e7ab42f5ed9294c6d219c767d45a6d24f676dd0cd0e5c43a3a",
+      "selected_operator_audit": {
+        "started_utc": "2026-11-03T05:36:47.627805+00:00",
+        "input": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/scaled-variable/probe.json",
+          "sha256": "67682028108ea9e7ab42f5ed9294c6d219c767d45a6d24f676dd0cd0e5c43a3a"
+        },
+        "driver_sha256": "d5d064d3abc344164cca2803fe2556bb6c6f10b19cd2723dc54bd929a0067fbf",
+        "numerical_threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1"
+        },
+        "schema": 1,
+        "success": true,
+        "checks": 8,
+        "errors": {
+          "m8_curved_selected_all_mode_weak_operator": 1.7763568394002505e-15,
+          "m8_curved_selected_total_energy_exchange": 2.9543055601689335e-15,
+          "m8_curved_same_stress_production_exchange": 0.0
+        },
+        "model_variant": "CubicScaled",
+        "robust_parameters": [
+          0.4,
+          0,
+          0.2,
+          0.1,
+          0,
+          0,
+          1
+        ],
+        "dimension": 2,
+        "map_parameters": [
+          3,
+          2,
+          2,
+          0.04,
+          0,
+          0.025,
+          1.3,
+          1,
+          0,
+          0,
+          20,
+          0.025,
+          2,
+          2
+        ],
+        "complete_weak_blocks": [
+          {
+            "block": 0,
+            "maximum_absolute_error": 2.636779683484747e-16
+          },
+          {
+            "block": 1,
+            "maximum_absolute_error": 4.440892098500626e-16
+          },
+          {
+            "block": 2,
+            "maximum_absolute_error": 1.7763568394002505e-15
+          },
+          {
+            "block": 3,
+            "maximum_absolute_error": 2.7755575615628914e-17
+          },
+          {
+            "block": 4,
+            "maximum_absolute_error": 5.898059818321144e-17
+          },
+          {
+            "block": 5,
+            "maximum_absolute_error": 4.163336342344337e-17
+          }
+        ],
+        "operator_increment": {
+          "source_plateau": {
+            "required": true,
+            "samples": 2560,
+            "minimum_k_over_K": 0.9609310719051437,
+            "theta": 0.2,
+            "source_repair_identically_inactive": true
+          },
+          "maximum_added_component": 0.039076424736766875,
+          "modified_stress_weak_work": -0.02809692647900117,
+          "production_increment": -0.02809692647900117,
+          "mean_plus_k_change": 0.0,
+          "original_energy": [
+            2.154336911293518,
+            0.6742423510776405,
+            1.5285139732118234,
+            -0.008632566203858934,
+            -0.039786846792088666,
+            0.0,
+            2.154336911293516,
+            1.7763568394002505e-15,
+            2.254789835405526
+          ]
+        },
+        "directional": {
+          "independent_full_weak_actions": false,
+          "reason": "Fixed-mode probe does not export coupled directional samples"
+        },
+        "state_scope": "Unsolved generic bounded coefficient state with independently verified inactive source-repair plateau",
+        "variable_matching_height": true,
+        "genuine_curved_gamma_mms": false,
+        "excluded": [
+          "exact curved gamma manufactured solution",
+          "admissible state-envelope coverage",
+          "positivity/covariance qualification",
+          "long-time or physical terrain validation"
+        ],
+        "finished_utc": "2026-11-03T05:36:50.130327+00:00"
+      }
+    },
+    {
+      "name": "regularized-variable",
+      "variant": "Regularized",
+      "family": "variable",
+      "dimension": 2,
+      "upstream": false,
+      "session": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/regularized-variable/case.xml",
+      "session_sha256": "4fb5f0f17a43fdab44fb6160a4e17f610453f120327c095b1861893621f5aa0a",
+      "status": "passed",
+      "native_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/regularized-variable/probe.json",
+      "native_report_sha256": "3c7905f9afe19bb4240c2e3cd44903b881ac6d90f910e1e8896b68cd8e6b180b",
+      "selected_operator_audit": {
+        "started_utc": "2026-11-03T05:36:52.657453+00:00",
+        "input": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/regularized-variable/probe.json",
+          "sha256": "3c7905f9afe19bb4240c2e3cd44903b881ac6d90f910e1e8896b68cd8e6b180b"
+        },
+        "driver_sha256": "d5d064d3abc344164cca2803fe2556bb6c6f10b19cd2723dc54bd929a0067fbf",
+        "numerical_threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1"
+        },
+        "schema": 1,
+        "success": true,
+        "checks": 8,
+        "errors": {
+          "m8_curved_selected_all_mode_weak_operator": 1.7763568394002505e-15,
+          "m8_curved_selected_total_energy_exchange": 3.939074080225245e-15,
+          "m8_curved_same_stress_production_exchange": 0.0
+        },
+        "model_variant": "Regularized",
+        "robust_parameters": [
+          0.4,
+          0,
+          0.2,
+          0.1,
+          0,
+          1,
+          1
+        ],
+        "dimension": 2,
+        "map_parameters": [
+          3,
+          2,
+          2,
+          0.04,
+          0,
+          0.025,
+          1.3,
+          1,
+          0,
+          0,
+          20,
+          0.025,
+          2,
+          2
+        ],
+        "complete_weak_blocks": [
+          {
+            "block": 0,
+            "maximum_absolute_error": 2.636779683484747e-16
+          },
+          {
+            "block": 1,
+            "maximum_absolute_error": 5.551115123125783e-16
+          },
+          {
+            "block": 2,
+            "maximum_absolute_error": 1.7763568394002505e-15
+          },
+          {
+            "block": 3,
+            "maximum_absolute_error": 5.551115123125783e-17
+          },
+          {
+            "block": 4,
+            "maximum_absolute_error": 5.898059818321144e-17
+          },
+          {
+            "block": 5,
+            "maximum_absolute_error": 4.163336342344337e-17
+          }
+        ],
+        "operator_increment": {
+          "source_plateau": {
+            "required": true,
+            "samples": 2560,
+            "minimum_k_over_K": 0.9609310719051437,
+            "theta": 0.2,
+            "source_repair_identically_inactive": true
+          },
+          "maximum_added_component": 0.24338241741485261,
+          "modified_stress_weak_work": 0.40763144109398886,
+          "production_increment": 0.40763144109398886,
+          "mean_plus_k_change": 0.0,
+          "original_energy": [
+            2.154336911293518,
+            0.6742423510776405,
+            1.5285139732118234,
+            -0.008632566203858934,
+            -0.039786846792088666,
+            0.0,
+            2.154336911293516,
+            1.7763568394002505e-15,
+            2.254789835405526
+          ]
+        },
+        "directional": {
+          "independent_full_weak_actions": false,
+          "reason": "Fixed-mode probe does not export coupled directional samples"
+        },
+        "state_scope": "Unsolved generic bounded coefficient state with independently verified inactive source-repair plateau",
+        "variable_matching_height": true,
+        "genuine_curved_gamma_mms": false,
+        "excluded": [
+          "exact curved gamma manufactured solution",
+          "admissible state-envelope coverage",
+          "positivity/covariance qualification",
+          "long-time or physical terrain validation"
+        ],
+        "finished_utc": "2026-11-03T05:36:55.219574+00:00"
+      }
+    },
+    {
+      "name": "original-transition",
+      "variant": "Original",
+      "family": "feet",
+      "dimension": 2,
+      "upstream": true,
+      "session": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/original-transition/case.xml",
+      "session_sha256": "e7cddd2c0ae31821b3dad0bf4d9bb4954c07b3c420344111a91ed3eb1d2ac7b4",
+      "status": "legacy_control_failed",
+      "native_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/original-transition/probe.json",
+      "native_report_sha256": "b4ab27c801a5ab123d60da6110dcd5399504cf1e94dd7d957a09d4fb31e3cce3",
+      "selected_operator_audit": {
+        "started_utc": "2026-11-03T05:37:02.699797+00:00",
+        "input": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/original-transition/probe.json",
+          "sha256": "b4ab27c801a5ab123d60da6110dcd5399504cf1e94dd7d957a09d4fb31e3cce3"
+        },
+        "driver_sha256": "d5d064d3abc344164cca2803fe2556bb6c6f10b19cd2723dc54bd929a0067fbf",
+        "numerical_threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1"
+        },
+        "schema": 1,
+        "success": true,
+        "checks": 43,
+        "errors": {
+          "m8_curved_selected_all_mode_weak_operator": 2.8609597169671074e-15,
+          "m8_curved_selected_total_energy_exchange": 2.8270766534579946e-15,
+          "m8_curved_same_stress_production_exchange": 0.0,
+          "m8_curved_complete_action_block_0_h_0.0002": 1.7763568394002505e-11,
+          "m8_curved_complete_action_block_0_h_0.0001": 3.9968028886505635e-11,
+          "m8_curved_complete_action_block_1_h_0.0002": 2.1094237467877974e-11,
+          "m8_curved_complete_action_block_1_h_0.0001": 5.995204332975845e-11,
+          "m8_curved_complete_action_block_2_h_0.0002": 2.9976021664879227e-11,
+          "m8_curved_complete_action_block_2_h_0.0001": 5.10702591327572e-11,
+          "m8_curved_complete_action_block_3_h_0.0002": 5.551115123125783e-13,
+          "m8_curved_complete_action_block_3_h_0.0001": 9.71445146547012e-13,
+          "m8_curved_complete_action_block_5_h_0.0002": 4.85722573273506e-13,
+          "m8_curved_complete_action_block_5_h_0.0001": 1.0408340855860843e-12
+        },
+        "model_variant": "Original",
+        "robust_parameters": [
+          1,
+          0,
+          0.2,
+          0.1,
+          0,
+          0,
+          0
+        ],
+        "dimension": 2,
+        "map_parameters": [
+          4,
+          2,
+          2,
+          0,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          20,
+          0.02,
+          1,
+          1
+        ],
+        "complete_weak_blocks": [
+          {
+            "block": 0,
+            "maximum_absolute_error": 3.2335245592207684e-15
+          },
+          {
+            "block": 1,
+            "maximum_absolute_error": 3.552713678800501e-15
+          },
+          {
+            "block": 2,
+            "maximum_absolute_error": 6.661338147750939e-15
+          },
+          {
+            "block": 3,
+            "maximum_absolute_error": 6.938893903907228e-17
+          },
+          {
+            "block": 4,
+            "maximum_absolute_error": 1.3183898417423734e-16
+          },
+          {
+            "block": 5,
+            "maximum_absolute_error": 6.938893903907228e-17
+          }
+        ],
+        "operator_increment": {
+          "source_plateau": {
+            "required": false,
+            "samples": 0,
+            "minimum_k_over_K": null
+          },
+          "maximum_added_component": 0.0,
+          "modified_stress_weak_work": 0.0,
+          "production_increment": 0.0,
+          "mean_plus_k_change": 0.0,
+          "original_energy": [
+            11.460196535525233,
+            3.694137385762115,
+            7.857401312506197,
+            -0.02816974767256629,
+            -0.06317241507051322,
+            0.0,
+            11.460196535525235,
+            -1.7763568394002505e-15,
+            11.938402840022688
+          ]
+        },
+        "directional": {
+          "independent_full_weak_actions": true,
+          "blocks": [
+            {
+              "block": 0,
+              "levels": [
+                {
+                  "step": 0.0002,
+                  "maximum_native_error": 1.7763568394002505e-11,
+                  "plus_minimum_k_over_K": null,
+                  "minus_minimum_k_over_K": null
+                },
+                {
+                  "step": 0.0001,
+                  "maximum_native_error": 3.9968028886505635e-11,
+                  "plus_minimum_k_over_K": null,
+                  "minus_minimum_k_over_K": null
+                }
+              ],
+              "includes_velocity_stress_increment": true
+            },
+            {
+              "block": 1,
+              "levels": [
+                {
+                  "step": 0.0002,
+                  "maximum_native_error": 2.1094237467877974e-11,
+                  "plus_minimum_k_over_K": null,
+                  "minus_minimum_k_over_K": null
+                },
+                {
+                  "step": 0.0001,
+                  "maximum_native_error": 5.995204332975845e-11,
+                  "plus_minimum_k_over_K": null,
+                  "minus_minimum_k_over_K": null
+                }
+              ],
+              "includes_velocity_stress_increment": true
+            },
+            {
+              "block": 2,
+              "levels": [
+                {
+                  "step": 0.0002,
+                  "maximum_native_error": 2.9976021664879227e-11,
+                  "plus_minimum_k_over_K": null,
+                  "minus_minimum_k_over_K": null
+                },
+                {
+                  "step": 0.0001,
+                  "maximum_native_error": 5.10702591327572e-11,
+                  "plus_minimum_k_over_K": null,
+                  "minus_minimum_k_over_K": null
+                }
+              ],
+              "includes_velocity_stress_increment": false
+            },
+            {
+              "block": 3,
+              "levels": [
+                {
+                  "step": 0.0002,
+                  "maximum_native_error": 5.551115123125783e-13,
+                  "plus_minimum_k_over_K": null,
+                  "minus_minimum_k_over_K": null
+                },
+                {
+                  "step": 0.0001,
+                  "maximum_native_error": 9.71445146547012e-13,
+                  "plus_minimum_k_over_K": null,
+                  "minus_minimum_k_over_K": null
+                }
+              ],
+              "includes_velocity_stress_increment": false
+            },
+            {
+              "block": 5,
+              "levels": [
+                {
+                  "step": 0.0002,
+                  "maximum_native_error": 4.85722573273506e-13,
+                  "plus_minimum_k_over_K": null,
+                  "minus_minimum_k_over_K": null
+                },
+                {
+                  "step": 0.0001,
+                  "maximum_native_error": 1.0408340855860843e-12,
+                  "plus_minimum_k_over_K": null,
+                  "minus_minimum_k_over_K": null
+                }
+              ],
+              "includes_velocity_stress_increment": false
+            }
+          ],
+          "scope": "Central differences of independently reconstructed selected all-field weak loads and nonlinear matching rows"
+        },
+        "state_scope": "Unsolved generic bounded coefficient state with independently verified inactive source-repair plateau",
+        "variable_matching_height": false,
+        "genuine_curved_gamma_mms": false,
+        "excluded": [
+          "exact curved gamma manufactured solution",
+          "admissible state-envelope coverage",
+          "positivity/covariance qualification",
+          "long-time or physical terrain validation"
+        ],
+        "finished_utc": "2026-11-03T05:38:15.077692+00:00"
+      }
+    },
+    {
+      "name": "regularized-transition",
+      "variant": "Regularized",
+      "family": "feet",
+      "dimension": 2,
+      "upstream": true,
+      "session": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/regularized-transition/case.xml",
+      "session_sha256": "011e93c306e436b25a5dd585f36d38e3e2a1ffad48693d68ce39575e0f2f9df9",
+      "status": "passed",
+      "native_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/regularized-transition/probe.json",
+      "native_report_sha256": "e0060b5ef101e6d9b1aa691b0179b35a83b64b24031f94eec8ef6f05d4a69504",
+      "selected_operator_audit": {
+        "started_utc": "2026-11-03T05:38:57.866837+00:00",
+        "input": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/regularized-transition/probe.json",
+          "sha256": "e0060b5ef101e6d9b1aa691b0179b35a83b64b24031f94eec8ef6f05d4a69504"
+        },
+        "driver_sha256": "d5d064d3abc344164cca2803fe2556bb6c6f10b19cd2723dc54bd929a0067fbf",
+        "numerical_threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1"
+        },
+        "schema": 1,
+        "success": true,
+        "checks": 43,
+        "errors": {
+          "m8_curved_selected_all_mode_weak_operator": 2.562693108679274e-15,
+          "m8_curved_selected_total_energy_exchange": 3.2734571776882043e-15,
+          "m8_curved_same_stress_production_exchange": 0.0,
+          "m8_curved_complete_action_block_0_h_0.0002": 1.7763568394002505e-11,
+          "m8_curved_complete_action_block_0_h_0.0001": 3.9968028886505635e-11,
+          "m8_curved_complete_action_block_1_h_0.0002": 2.1094237467877974e-11,
+          "m8_curved_complete_action_block_1_h_0.0001": 5.995204332975845e-11,
+          "m8_curved_complete_action_block_2_h_0.0002": 2.9976021664879227e-11,
+          "m8_curved_complete_action_block_2_h_0.0001": 5.10702591327572e-11,
+          "m8_curved_complete_action_block_3_h_0.0002": 1.1102230246251565e-12,
+          "m8_curved_complete_action_block_3_h_0.0001": 2.7755575615628914e-12,
+          "m8_curved_complete_action_block_5_h_0.0002": 9.71445146547012e-13,
+          "m8_curved_complete_action_block_5_h_0.0001": 1.6653345369377348e-12
+        },
+        "model_variant": "Regularized",
+        "robust_parameters": [
+          0.4,
+          0,
+          0.2,
+          0.1,
+          0,
+          1,
+          1
+        ],
+        "dimension": 2,
+        "map_parameters": [
+          4,
+          2,
+          2,
+          0,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          20,
+          0.02,
+          1,
+          1
+        ],
+        "complete_weak_blocks": [
+          {
+            "block": 0,
+            "maximum_absolute_error": 3.1363800445660672e-15
+          },
+          {
+            "block": 1,
+            "maximum_absolute_error": 3.9968028886505635e-15
+          },
+          {
+            "block": 2,
+            "maximum_absolute_error": 6.661338147750939e-15
+          },
+          {
+            "block": 3,
+            "maximum_absolute_error": 5.551115123125783e-17
+          },
+          {
+            "block": 4,
+            "maximum_absolute_error": 1.3183898417423734e-16
+          },
+          {
+            "block": 5,
+            "maximum_absolute_error": 6.938893903907228e-17
+          }
+        ],
+        "operator_increment": {
+          "source_plateau": {
+            "required": true,
+            "samples": 12368,
+            "minimum_k_over_K": 0.9536772886494104,
+            "theta": 0.2,
+            "source_repair_identically_inactive": true
+          },
+          "maximum_added_component": 0.38671752276359317,
+          "modified_stress_weak_work": 0.7392490486380835,
+          "production_increment": 0.7392490486380835,
+          "mean_plus_k_change": 0.0,
+          "original_energy": [
+            11.460196535525233,
+            3.694137385762115,
+            7.857401312506197,
+            -0.02816974767256629,
+            -0.06317241507051322,
+            0.0,
+            11.460196535525235,
+            -1.7763568394002505e-15,
+            11.938402840022688
+          ]
+        },
+        "directional": {
+          "independent_full_weak_actions": true,
+          "blocks": [
+            {
+              "block": 0,
+              "levels": [
+                {
+                  "step": 0.0002,
+                  "maximum_native_error": 1.7763568394002505e-11,
+                  "plus_minimum_k_over_K": 0.9536772886494104,
+                  "minus_minimum_k_over_K": 0.9536772886494104
+                },
+                {
+                  "step": 0.0001,
+                  "maximum_native_error": 3.9968028886505635e-11,
+                  "plus_minimum_k_over_K": 0.9536772886494104,
+                  "minus_minimum_k_over_K": 0.9536772886494104
+                }
+              ],
+              "includes_velocity_stress_increment": true
+            },
+            {
+              "block": 1,
+              "levels": [
+                {
+                  "step": 0.0002,
+                  "maximum_native_error": 2.1094237467877974e-11,
+                  "plus_minimum_k_over_K": 0.9536772886494104,
+                  "minus_minimum_k_over_K": 0.9536772886494104
+                },
+                {
+                  "step": 0.0001,
+                  "maximum_native_error": 5.995204332975845e-11,
+                  "plus_minimum_k_over_K": 0.9536772886494104,
+                  "minus_minimum_k_over_K": 0.9536772886494104
+                }
+              ],
+              "includes_velocity_stress_increment": true
+            },
+            {
+              "block": 2,
+              "levels": [
+                {
+                  "step": 0.0002,
+                  "maximum_native_error": 2.9976021664879227e-11,
+                  "plus_minimum_k_over_K": 0.9536772131826864,
+                  "minus_minimum_k_over_K": 0.9536773641161239
+                },
+                {
+                  "step": 0.0001,
+                  "maximum_native_error": 5.10702591327572e-11,
+                  "plus_minimum_k_over_K": 0.9536772509160496,
+                  "minus_minimum_k_over_K": 0.9536773263827687
+                }
+              ],
+              "includes_velocity_stress_increment": false
+            },
+            {
+              "block": 3,
+              "levels": [
+                {
+                  "step": 0.0002,
+                  "maximum_native_error": 1.1102230246251565e-12,
+                  "plus_minimum_k_over_K": 0.9536772886494104,
+                  "minus_minimum_k_over_K": 0.9536772886494104
+                },
+                {
+                  "step": 0.0001,
+                  "maximum_native_error": 2.7755575615628914e-12,
+                  "plus_minimum_k_over_K": 0.9536772886494104,
+                  "minus_minimum_k_over_K": 0.9536772886494104
+                }
+              ],
+              "includes_velocity_stress_increment": false
+            },
+            {
+              "block": 5,
+              "levels": [
+                {
+                  "step": 0.0002,
+                  "maximum_native_error": 9.71445146547012e-13,
+                  "plus_minimum_k_over_K": 0.9536772886494104,
+                  "minus_minimum_k_over_K": 0.9536772886494104
+                },
+                {
+                  "step": 0.0001,
+                  "maximum_native_error": 1.6653345369377348e-12,
+                  "plus_minimum_k_over_K": 0.9536772886494104,
+                  "minus_minimum_k_over_K": 0.9536772886494104
+                }
+              ],
+              "includes_velocity_stress_increment": false
+            }
+          ],
+          "scope": "Central differences of independently reconstructed selected all-field weak loads and nonlinear matching rows"
+        },
+        "state_scope": "Unsolved generic bounded coefficient state with independently verified inactive source-repair plateau",
+        "variable_matching_height": false,
+        "genuine_curved_gamma_mms": false,
+        "excluded": [
+          "exact curved gamma manufactured solution",
+          "admissible state-envelope coverage",
+          "positivity/covariance qualification",
+          "long-time or physical terrain validation"
+        ],
+        "finished_utc": "2026-11-03T05:43:36.152044+00:00"
+      }
+    },
+    {
+      "name": "regularized-surface3d",
+      "variant": "Regularized",
+      "family": "surface3d",
+      "dimension": 3,
+      "upstream": false,
+      "session": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/regularized-surface3d/case.xml",
+      "session_sha256": "e1e5d5e907ca473cfbb4aa305144f75083c13b3a95a00951fa3fe5379618ce3d",
+      "status": "passed",
+      "native_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/regularized-surface3d/probe.json",
+      "native_report_sha256": "c5ae9289a38d0b4df88d03678924ac165e9797f6a1db4bfa182c6610e182b0ba",
+      "selected_operator_audit": {
+        "started_utc": "2026-11-03T05:43:49.330006+00:00",
+        "input": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/regularized-surface3d/probe.json",
+          "sha256": "c5ae9289a38d0b4df88d03678924ac165e9797f6a1db4bfa182c6610e182b0ba"
+        },
+        "driver_sha256": "d5d064d3abc344164cca2803fe2556bb6c6f10b19cd2723dc54bd929a0067fbf",
+        "numerical_threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1"
+        },
+        "schema": 1,
+        "success": true,
+        "checks": 8,
+        "errors": {
+          "m8_curved_selected_all_mode_weak_operator": 2.7200464103316335e-15,
+          "m8_curved_selected_total_energy_exchange": 2.4126075678772555e-14,
+          "m8_curved_same_stress_production_exchange": 0.0
+        },
+        "model_variant": "Regularized",
+        "robust_parameters": [
+          0.4,
+          0,
+          0.2,
+          0.1,
+          0,
+          1,
+          1
+        ],
+        "dimension": 3,
+        "map_parameters": [
+          3,
+          3,
+          2,
+          0.025,
+          -0.015,
+          0.02,
+          1.3,
+          1.1,
+          0,
+          0,
+          20,
+          0.025,
+          2,
+          1.7
+        ],
+        "complete_weak_blocks": [
+          {
+            "block": 0,
+            "maximum_absolute_error": 4.0592529337857286e-16
+          },
+          {
+            "block": 1,
+            "maximum_absolute_error": 2.636779683484747e-16
+          },
+          {
+            "block": 2,
+            "maximum_absolute_error": 6.661338147750939e-16
+          },
+          {
+            "block": 3,
+            "maximum_absolute_error": 2.7200464103316335e-15
+          },
+          {
+            "block": 4,
+            "maximum_absolute_error": 8.326672684688674e-17
+          },
+          {
+            "block": 5,
+            "maximum_absolute_error": 1.700029006457271e-16
+          },
+          {
+            "block": 6,
+            "maximum_absolute_error": 5.551115123125783e-17
+          }
+        ],
+        "operator_increment": {
+          "source_plateau": {
+            "required": true,
+            "samples": 20480,
+            "minimum_k_over_K": 0.9609902358897575,
+            "theta": 0.2,
+            "source_repair_identically_inactive": true
+          },
+          "maximum_added_component": 0.2612502960708425,
+          "modified_stress_weak_work": 1.3260857921013052,
+          "production_increment": 1.3260857921013052,
+          "mean_plus_k_change": 0.0,
+          "original_energy": [
+            2.3668205766830663,
+            0.8620410647782419,
+            1.5550673428707777,
+            -0.009345618008516922,
+            -0.04094221295743786,
+            0.0,
+            2.366820576683065,
+            1.3322676295501878e-15,
+            2.40211639294591
+          ]
+        },
+        "directional": {
+          "independent_full_weak_actions": false,
+          "reason": "Fixed-mode probe does not export coupled directional samples"
+        },
+        "state_scope": "Unsolved generic bounded coefficient state with independently verified inactive source-repair plateau",
+        "variable_matching_height": true,
+        "genuine_curved_gamma_mms": false,
+        "excluded": [
+          "exact curved gamma manufactured solution",
+          "admissible state-envelope coverage",
+          "positivity/covariance qualification",
+          "long-time or physical terrain validation"
+        ],
+        "finished_utc": "2026-11-03T05:44:13.214017+00:00"
+      }
+    }
+  ],
+  "scope": "Selected all-mode curved operator and original controls; no genuine curved gamma MMS or robust/physical terrain qualification",
+  "runner_sha256": "7e3f4ffc7380aa5354a7642e571b8dec83414059e42dd41fe2324e33ed20191f",
+  "CMake_input_sha256": "94fa2257b922a60aa0c4529631b00028fc86a3e7006a162d4478a720b40ee10c",
+  "probe": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/build/RANSCurvedWallProbe",
+    "sha256": "c8dcf7f30840987f2c419d906df72ab574b27a33bfd697189dda623c820452c1"
+  },
+  "probe_loader_bindings": {
+    "libmpi_cxx.so.40": {
+      "path": "/lib/x86_64-linux-gnu/libmpi_cxx.so.40",
+      "sha256": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788"
+    },
+    "libmpi.so.40": {
+      "path": "/lib/x86_64-linux-gnu/libmpi.so.40",
+      "sha256": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982"
+    },
+    "libMultiRegions.so.5.9.0": {
+      "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0",
+      "sha256": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e"
+    },
+    "libLocalRegions.so.5.9.0": {
+      "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0",
+      "sha256": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc"
+    },
+    "libSpatialDomains.so.5.9.0": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/geometry-lib/libSpatialDomains.so.5.9.0",
+      "sha256": "6254b43a7dfbcd047267f580fbdcc175155fae63d3a15304b6b053d3884babbb"
+    },
+    "libStdRegions.so.5.9.0": {
+      "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0",
+      "sha256": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7"
+    },
+    "libLibUtilities.so.5.9.0": {
+      "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0",
+      "sha256": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b"
+    },
+    "liblapack.so.3": {
+      "path": "/lib/x86_64-linux-gnu/liblapack.so.3",
+      "sha256": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151"
+    },
+    "libstdc++.so.6": {
+      "path": "/lib/x86_64-linux-gnu/libstdc++.so.6",
+      "sha256": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128"
+    },
+    "libm.so.6": {
+      "path": "/lib/x86_64-linux-gnu/libm.so.6",
+      "sha256": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6"
+    },
+    "libgcc_s.so.1": {
+      "path": "/lib/x86_64-linux-gnu/libgcc_s.so.1",
+      "sha256": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a"
+    },
+    "libc.so.6": {
+      "path": "/lib/x86_64-linux-gnu/libc.so.6",
+      "sha256": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793"
+    },
+    "libopen-pal.so.40": {
+      "path": "/lib/x86_64-linux-gnu/libopen-pal.so.40",
+      "sha256": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1"
+    },
+    "libopen-rte.so.40": {
+      "path": "/lib/x86_64-linux-gnu/libopen-rte.so.40",
+      "sha256": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57"
+    },
+    "libhwloc.so.15": {
+      "path": "/lib/x86_64-linux-gnu/libhwloc.so.15",
+      "sha256": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54"
+    },
+    "libCollections.so.5.9.0": {
+      "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0",
+      "sha256": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88"
+    },
+    "libptscotch-6.1.so": {
+      "path": "/lib/x86_64-linux-gnu/libptscotch-6.1.so",
+      "sha256": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0"
+    },
+    "libblas.so.3": {
+      "path": "/lib/x86_64-linux-gnu/libblas.so.3",
+      "sha256": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd"
+    },
+    "libz.so.1": {
+      "path": "/lib/x86_64-linux-gnu/libz.so.1",
+      "sha256": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370"
+    },
+    "libfftw3.so.3": {
+      "path": "/lib/x86_64-linux-gnu/libfftw3.so.3",
+      "sha256": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d"
+    },
+    "libboost_iostreams.so.1.74.0": {
+      "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0",
+      "sha256": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e"
+    },
+    "libboost_program_options.so.1.74.0": {
+      "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0",
+      "sha256": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482"
+    },
+    "libopenblas.so.0": {
+      "path": "/lib/x86_64-linux-gnu/libopenblas.so.0",
+      "sha256": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9"
+    },
+    "libgfortran.so.5": {
+      "path": "/lib/x86_64-linux-gnu/libgfortran.so.5",
+      "sha256": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30"
+    },
+    "ELF interpreter": {
+      "path": "/lib64/ld-linux-x86-64.so.2",
+      "sha256": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01"
+    },
+    "libevent_core-2.1.so.7": {
+      "path": "/lib/x86_64-linux-gnu/libevent_core-2.1.so.7",
+      "sha256": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f"
+    },
+    "libevent_pthreads-2.1.so.7": {
+      "path": "/lib/x86_64-linux-gnu/libevent_pthreads-2.1.so.7",
+      "sha256": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537"
+    },
+    "libudev.so.1": {
+      "path": "/lib/x86_64-linux-gnu/libudev.so.1",
+      "sha256": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda"
+    },
+    "libMatrixFreeOps.so.5.9.0": {
+      "path": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0",
+      "sha256": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc"
+    },
+    "libptscotcherr-6.1.so": {
+      "path": "/lib/x86_64-linux-gnu/libptscotcherr-6.1.so",
+      "sha256": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e"
+    },
+    "libbz2.so.1.0": {
+      "path": "/lib/x86_64-linux-gnu/libbz2.so.1.0",
+      "sha256": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9"
+    },
+    "liblzma.so.5": {
+      "path": "/lib/x86_64-linux-gnu/liblzma.so.5",
+      "sha256": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037"
+    },
+    "libzstd.so.1": {
+      "path": "/lib/x86_64-linux-gnu/libzstd.so.1",
+      "sha256": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667"
+    },
+    "libquadmath.so.0": {
+      "path": "/lib/x86_64-linux-gnu/libquadmath.so.0",
+      "sha256": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c"
+    }
+  },
+  "frozen_case_matrix": [
+    [
+      "original-variable",
+      "Original",
+      "variable",
+      2,
+      false,
+      "m5"
+    ],
+    [
+      "scaled-variable",
+      "CubicScaled",
+      "variable",
+      2,
+      false,
+      null
+    ],
+    [
+      "regularized-variable",
+      "Regularized",
+      "variable",
+      2,
+      false,
+      null
+    ],
+    [
+      "original-transition",
+      "Original",
+      "feet",
+      2,
+      true,
+      "m6"
+    ],
+    [
+      "regularized-transition",
+      "Regularized",
+      "feet",
+      2,
+      true,
+      null
+    ],
+    [
+      "regularized-surface3d",
+      "Regularized",
+      "surface3d",
+      3,
+      false,
+      null
+    ]
+  ],
+  "legacy_audit_sha256": "f5904ae02a177e9cace9b90f8c7a931828b82343c28f542e54ebc841051546e1",
+  "source_clean_end": true,
+  "source_unchanged": true,
+  "primary_source_unchanged": true,
+  "primary_solver_unchanged": true,
+  "primary_geometry_unchanged": true,
+  "finished_utc": "2026-11-03T05:44:14.354272+00:00"
+}

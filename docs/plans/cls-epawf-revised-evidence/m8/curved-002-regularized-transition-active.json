@@ -1,0 +1,215 @@
+{
+  "started_utc": "2026-11-03T05:46:59.818103+00:00",
+  "input": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-002/regularized-transition-active/probe.json",
+    "sha256": "db3d1cdb0724bf63fb4187027d540ce4b243881170647f44fa19c6021fcf8f9b"
+  },
+  "driver_sha256": "d5d064d3abc344164cca2803fe2556bb6c6f10b19cd2723dc54bd929a0067fbf",
+  "numerical_threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1"
+  },
+  "schema": 1,
+  "success": true,
+  "checks": 43,
+  "errors": {
+    "m8_curved_selected_all_mode_weak_operator": 2.562693108679274e-15,
+    "m8_curved_selected_total_energy_exchange": 4.31501173422536e-15,
+    "m8_curved_same_stress_production_exchange": 0.0,
+    "m8_curved_complete_action_block_0_h_0.0002": 1.7763568394002505e-11,
+    "m8_curved_complete_action_block_0_h_0.0001": 3.9968028886505635e-11,
+    "m8_curved_complete_action_block_1_h_0.0002": 2.1094237467877974e-11,
+    "m8_curved_complete_action_block_1_h_0.0001": 5.995204332975845e-11,
+    "m8_curved_complete_action_block_2_h_0.0002": 2.9976021664879227e-11,
+    "m8_curved_complete_action_block_2_h_0.0001": 5.10702591327572e-11,
+    "m8_curved_complete_action_block_3_h_0.0002": 4.163336342344337e-12,
+    "m8_curved_complete_action_block_3_h_0.0001": 2.7755575615628914e-12,
+    "m8_curved_complete_action_block_5_h_0.0002": 6.661338147750939e-12,
+    "m8_curved_complete_action_block_5_h_0.0001": 6.106226635438361e-12
+  },
+  "model_variant": "Regularized",
+  "robust_parameters": [
+    0.4,
+    0,
+    0.2,
+    0.1,
+    0,
+    1,
+    1
+  ],
+  "dimension": 2,
+  "map_parameters": [
+    4,
+    2,
+    2,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    20,
+    0.02,
+    1,
+    1
+  ],
+  "complete_weak_blocks": [
+    {
+      "block": 0,
+      "maximum_absolute_error": 3.1363800445660672e-15
+    },
+    {
+      "block": 1,
+      "maximum_absolute_error": 3.9968028886505635e-15
+    },
+    {
+      "block": 2,
+      "maximum_absolute_error": 6.661338147750939e-15
+    },
+    {
+      "block": 3,
+      "maximum_absolute_error": 5.551115123125783e-17
+    },
+    {
+      "block": 4,
+      "maximum_absolute_error": 1.3183898417423734e-16
+    },
+    {
+      "block": 5,
+      "maximum_absolute_error": 6.938893903907228e-17
+    }
+  ],
+  "operator_increment": {
+    "source_plateau": {
+      "required": true,
+      "samples": 12368,
+      "minimum_k_over_K": 0.9536772886494104,
+      "theta": 0.2,
+      "source_repair_identically_inactive": true
+    },
+    "maximum_added_component": 0.38671752276359317,
+    "modified_stress_weak_work": 0.7392325527959192,
+    "production_increment": 0.7392325527959192,
+    "mean_plus_k_change": 0.0,
+    "original_energy": [
+      11.547599186902286,
+      3.694137385762115,
+      7.944803963883249,
+      -0.02816974767256629,
+      -0.06317241507051322,
+      0.0,
+      11.547599186902286,
+      0.0,
+      11.938402840022688
+    ]
+  },
+  "directional": {
+    "independent_full_weak_actions": true,
+    "blocks": [
+      {
+        "block": 0,
+        "levels": [
+          {
+            "step": 0.0002,
+            "maximum_native_error": 1.7763568394002505e-11,
+            "plus_minimum_k_over_K": 0.9536772886494104,
+            "minus_minimum_k_over_K": 0.9536772886494104
+          },
+          {
+            "step": 0.0001,
+            "maximum_native_error": 3.9968028886505635e-11,
+            "plus_minimum_k_over_K": 0.9536772886494104,
+            "minus_minimum_k_over_K": 0.9536772886494104
+          }
+        ],
+        "includes_velocity_stress_increment": true
+      },
+      {
+        "block": 1,
+        "levels": [
+          {
+            "step": 0.0002,
+            "maximum_native_error": 2.1094237467877974e-11,
+            "plus_minimum_k_over_K": 0.9536772886494104,
+            "minus_minimum_k_over_K": 0.9536772886494104
+          },
+          {
+            "step": 0.0001,
+            "maximum_native_error": 5.995204332975845e-11,
+            "plus_minimum_k_over_K": 0.9536772886494104,
+            "minus_minimum_k_over_K": 0.9536772886494104
+          }
+        ],
+        "includes_velocity_stress_increment": true
+      },
+      {
+        "block": 2,
+        "levels": [
+          {
+            "step": 0.0002,
+            "maximum_native_error": 2.9976021664879227e-11,
+            "plus_minimum_k_over_K": 0.9536772131826864,
+            "minus_minimum_k_over_K": 0.9536773641161239
+          },
+          {
+            "step": 0.0001,
+            "maximum_native_error": 5.10702591327572e-11,
+            "plus_minimum_k_over_K": 0.9536772509160496,
+            "minus_minimum_k_over_K": 0.9536773263827687
+          }
+        ],
+        "includes_velocity_stress_increment": false
+      },
+      {
+        "block": 3,
+        "levels": [
+          {
+            "step": 0.0002,
+            "maximum_native_error": 4.163336342344337e-12,
+            "plus_minimum_k_over_K": 0.9536772886494104,
+            "minus_minimum_k_over_K": 0.9536772886494104
+          },
+          {
+            "step": 0.0001,
+            "maximum_native_error": 2.7755575615628914e-12,
+            "plus_minimum_k_over_K": 0.9536772886494104,
+            "minus_minimum_k_over_K": 0.9536772886494104
+          }
+        ],
+        "includes_velocity_stress_increment": false
+      },
+      {
+        "block": 5,
+        "levels": [
+          {
+            "step": 0.0002,
+            "maximum_native_error": 6.661338147750939e-12,
+            "plus_minimum_k_over_K": 0.9536772886494104,
+            "minus_minimum_k_over_K": 0.9536772886494104
+          },
+          {
+            "step": 0.0001,
+            "maximum_native_error": 6.106226635438361e-12,
+            "plus_minimum_k_over_K": 0.9536772886494104,
+            "minus_minimum_k_over_K": 0.9536772886494104
+          }
+        ],
+        "includes_velocity_stress_increment": false
+      }
+    ],
+    "scope": "Central differences of independently reconstructed selected all-field weak loads and nonlinear matching rows"
+  },
+  "state_scope": "Unsolved generic bounded coefficient state with independently verified inactive source-repair plateau",
+  "variable_matching_height": false,
+  "genuine_curved_gamma_mms": false,
+  "excluded": [
+    "exact curved gamma manufactured solution",
+    "admissible state-envelope coverage",
+    "positivity/covariance qualification",
+    "long-time or physical terrain validation"
+  ],
+  "finished_utc": "2026-11-03T05:51:37.094897+00:00"
+}

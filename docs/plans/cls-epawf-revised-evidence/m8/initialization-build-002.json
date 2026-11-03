@@ -1,0 +1,40 @@
+{
+  "status": "passed",
+  "source_commit": "ed34052fe4dd967e963c22272a0ec0888cf35b70",
+  "compiler_workers": 16,
+  "reason": "Complete auxiliary probes required by the full runtime fingerprint after successful solver-only build",
+  "commands": [
+    {
+      "name": "complete-probes",
+      "command": [
+        "cmake",
+        "--build",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build",
+        "--parallel",
+        "16"
+      ],
+      "exit_code": 0,
+      "seconds": 20.216754717001095,
+      "timeout": 1800,
+      "log_sha256": "0643ce9b3f5bda5f5e851d5ed0a941ae2b11786c8c98f5e7fefae31d66e91729"
+    },
+    {
+      "name": "fingerprint",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/source/docs/plans/cls-epawf-revised-evidence/m7/fingerprint-runtime.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build-002/runtime-fingerprint.json"
+      ],
+      "exit_code": 0,
+      "seconds": 1.518120075999832,
+      "timeout": 240,
+      "log_sha256": "6f655a3648ddb7ef5edb2c794a9fa03a393a6f601bc0627627d888dc572b7502"
+    }
+  ],
+  "started_utc": "2026-11-03T06:02:28.060984+00:00",
+  "finished_utc": "2026-11-03T06:02:49.797415+00:00"
+}

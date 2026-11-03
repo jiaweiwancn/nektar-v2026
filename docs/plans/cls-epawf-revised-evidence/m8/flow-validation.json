@@ -1,0 +1,153 @@
+{
+  "schema": 1,
+  "milestone": "M8",
+  "protocol_version": "cls-epawf-m8-robust-v1",
+  "mode": "flow",
+  "source_commit": "aa854f4c5b05451a81a4e1dd60eaaca98eb547e4",
+  "source_clean_start": true,
+  "parameters": {
+    "variant": "Regularized",
+    "beta": 0.4,
+    "gamma": 0.0,
+    "gamma_scale": 1.0,
+    "theta": 0.2,
+    "delta": 0.1,
+    "smooth": false
+  },
+  "program": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/IncNavierStokesSolver",
+    "sha256": "2fa72f138fc65da2b04be52735f1e767185375b0b9900b4fb66f1364da2be2ea"
+  },
+  "preregistration": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/flow-001/qualification/preregistration.json",
+    "sha256": "c01b482ee861bf87017e043ab7d2e01ce0b22fafa74ae51f3518b6da8a0f8d08"
+  },
+  "started_utc": "2026-11-03T05:31:13.510060+00:00",
+  "commands": [
+    {
+      "name": "control-coarse",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/flow-001/qualification/control-coarse/case.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/flow-001/qualification/control-coarse",
+      "ranks": 1,
+      "numerical_threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 1,
+      "seconds": 294.118775076,
+      "timeout_seconds": 3600.0,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/flow-001/qualification/control-coarse/run.log",
+      "log_sha256": "ebd3f5c53b4170687a7aebcd887a5ad0ddaf69f169669da364a0858ef1eefa43"
+    }
+  ],
+  "cases": [
+    {
+      "name": "control-coarse",
+      "parameters": {
+        "variant": "Regularized",
+        "beta": 0.4,
+        "gamma": 0.0,
+        "gamma_scale": 1.0,
+        "theta": 0.2,
+        "delta": 0.1,
+        "smooth": false,
+        "amplitude": 0.0,
+        "dt": 0.005,
+        "steps": 60
+      },
+      "requested_ranks": 1,
+      "xml": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/flow-001/qualification/control-coarse/case.xml",
+      "xml_sha256": "c54b2522cca860081f23e041a649e0668740f5f4bd86b711e4cf8f1a3d3f6d7b",
+      "status": "stopped",
+      "source_mechanism_only": false,
+      "native_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/flow-001/qualification/control-coarse/case.evolution.json",
+      "native_report_sha256": "6a934342924e9f730fe1b9cddf4391a8df82647acc5a1f7b4f078b5e62e6fc00",
+      "exit_code": 1,
+      "seconds": 294.118775076,
+      "failure_observation": {
+        "classification": "unqualified_numerical_solver_or_initialization_failure",
+        "explicit_invalid_samples": [],
+        "native_failure": "EP-AWF patch: evolution stage rejected every admissible Newton trial",
+        "exit_code": 1,
+        "accepted_states": 12,
+        "last_accepted_time": 0.05499999999999999,
+        "last_reported_time": 0.05499999999999999,
+        "rejected_state_present": false,
+        "pulse_passage_established": false,
+        "limitation": "Newton nonconvergence alone is not a positivity proof or a continuum-instability proof"
+      },
+      "accepted_prefix_physical_gates": {
+        "covariance_pass": false,
+        "covariance_minima": {
+          "source_volume_inner": -0.09983101642016068,
+          "source_volume_outer": 0.03965729071608495,
+          "physical_sample_K": 0.11182683392362111,
+          "physical_sample_outer": 0.1496669794287825,
+          "interface_inner": 0.11423719140506788,
+          "interface_outer": 0.0234067507069049
+        },
+        "finite_sample_turbulence_positive": true,
+        "minimum_k": 0.016294242247740152,
+        "minimum_outer_epsilon": 0.03665642702920845,
+        "minimum_yx_tangent": 0.4265214788888337,
+        "scope": "Native finite constitutive evaluation sets; no unsampled polynomial or all-direction/state-envelope theorem"
+      }
+    }
+  ],
+  "failures": [
+    {
+      "case": "control-coarse",
+      "classification": "unqualified_numerical_solver_or_initialization_failure",
+      "explicit_invalid_samples": [],
+      "native_failure": "EP-AWF patch: evolution stage rejected every admissible Newton trial",
+      "exit_code": 1,
+      "accepted_states": 12,
+      "last_accepted_time": 0.05499999999999999,
+      "last_reported_time": 0.05499999999999999,
+      "rejected_state_present": false,
+      "pulse_passage_established": false,
+      "limitation": "Newton nonconvergence alone is not a positivity proof or a continuum-instability proof"
+    }
+  ],
+  "implementation_verified": false,
+  "candidate_qualified": false,
+  "long_time_qualification": false,
+  "experimental_accuracy_claimed": false,
+  "connection": "tailscale:100.105.247.110",
+  "numerical_threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1"
+  },
+  "driver_sha256": "4e00eeda87c1efbc9ffce40e0581b1bee6b85575a79f5fa856c9d1179973e62a",
+  "environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "TMPDIR": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/tmp",
+    "LD_LIBRARY_PATH": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/geometry-lib:/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/geometry-lib:",
+    "cpu_affinity": [
+      36
+    ]
+  },
+  "checks": 2,
+  "errors": {},
+  "diagnostic_unqualified_flow": true,
+  "finite_covariance_failures": [],
+  "qualification_status": "failed_or_stopped",
+  "remaining_gates": [
+    "certified admissible constitutive state envelope",
+    "outer turbulence positivity and high-order discrete admissibility",
+    "complete long-time perturbation/refinement qualification",
+    "qualified versioned native paired terrain observations and reserved scores"
+  ],
+  "source_clean_end": true,
+  "finished_utc": "2026-11-03T05:36:07.666455+00:00"
+}

@@ -69,8 +69,15 @@ native perturbations, dt/p/mesh and matching-height studies, MPI and perturbed
 restart. All 33 registered gates are covered by passing source-bound Linux
 verification. The original three-component CLS transverse mode grows under
 refinement despite positive sampled covariance, so robust-model qualification
-remains failed. M7 is closed as a faithful-model diagnosis; no M8 remedy is
-adopted and M9 remains open.
+remains failed. M7 is closed as a faithful-model diagnosis.
+[M8 explicit research variants](docs/plans/cls-epawf-revised-m8.md) implement
+common cubic scaling, capped inner destruction and a prescribed
+reference-preserving stress increment. Independent checks establish bounded
+local properties and native implementation behavior, but the declared broader
+diffusion/covariance requirements are incompatible for the fixed scalar
+increment. The screened invariant alternatives also fail. M8 remains open
+at robust qualification; conditional physical terrain validation and M9
+remain open.
 
 
 Tutorials

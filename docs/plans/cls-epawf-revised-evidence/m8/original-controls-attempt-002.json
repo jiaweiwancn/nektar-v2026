@@ -1,0 +1,74 @@
+{
+  "schema": 1,
+  "status": "failed",
+  "source_commit": "ed34052fe4dd967e963c22272a0ec0888cf35b70",
+  "runner_sha256": "4bd3d90909e3930d9e95ecef91e45bd2675a53433a18c5ac1c0b7dede59cad1a",
+  "commands": [
+    {
+      "name": "fingerprint-before",
+      "argv": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/source/docs/plans/cls-epawf-revised-evidence/m7/fingerprint-runtime.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/original-controls-002/runtime-before.json"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/original-controls-002",
+      "exit_code": 0,
+      "seconds": 1.4692377070005023,
+      "log_sha256": "6f655a3648ddb7ef5edb2c794a9fa03a393a6f601bc0627627d888dc572b7502",
+      "timeout": 600
+    },
+    {
+      "name": "original-functions",
+      "argv": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/original-controls-002/flat-functions/case.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/original-controls-002/flat-functions",
+      "exit_code": 0,
+      "seconds": 21.91534424600104,
+      "log_sha256": "55bdf0e23bca427116ab3c2a5983b392a2d2ee77ea1d2cf47a39bdf7928267a1",
+      "timeout": 600
+    },
+    {
+      "name": "fingerprint-after",
+      "argv": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/source/docs/plans/cls-epawf-revised-evidence/m7/fingerprint-runtime.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/original-controls-002/runtime-after.json",
+        "--compare",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/original-controls-002/runtime-before.json"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/original-controls-002",
+      "exit_code": 0,
+      "seconds": 1.5220978939996712,
+      "log_sha256": "08bdb485e67e2f44868d97893f959d0028a78caf3752b92d9b32e7fab8a5ab1e",
+      "timeout": 600
+    }
+  ],
+  "numerical_workers": 1,
+  "numerical_threads": 1,
+  "connection": "tailscale:100.105.247.110",
+  "scope": "Focused Original/Original-source regression on corrected startup solver",
+  "started_utc": "2026-11-03T06:24:13.904146+00:00",
+  "build_environment_differences": {
+    "NUMEXPR_NUM_THREADS": [
+      null,
+      "1"
+    ],
+    "VECLIB_MAXIMUM_THREADS": [
+      null,
+      "1"
+    ]
+  },
+  "failure": "Full independent M8 energy oracle does not infer manufactured forcing",
+  "source_and_runtime_unchanged": true,
+  "finished_utc": "2026-11-03T06:24:38.935488+00:00"
+}

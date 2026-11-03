@@ -1,0 +1,101 @@
+{
+  "schema": 1,
+  "kind": "Static source-epoch binding; no numerical execution",
+  "generated_utc": "2026-11-03T06:19:10.273555+00:00",
+  "generator_sha256": "677111006a883970e2716ce1100f350b08fe4e4ce82f76b9cfb6c7a5dce817b9",
+  "git_object_hash_algorithm": "SHA-1 blob IDs; explicit content SHA256 also supplied",
+  "commits": {
+    "22d5c930": "22d5c930380a202e29bb2c58613e3763bc2aa372",
+    "0736319": "07363199e68a6cf3b6a8cc20fe0a4eae67c2d311",
+    "aa854f4": "aa854f4c5b05451a81a4e1dd60eaaca98eb547e4",
+    "11aa94c": "11aa94c0e3d54f6b460db4b4cb17fac473b06149",
+    "2a93b04": "2a93b04b3c35fc0f184c02e72f42fa1ea1066c22",
+    "6284787": "6284787bf4c436203f4404498ba3dfb68aa144ef",
+    "ed34052": "ed34052fe4dd967e963c22272a0ec0888cf35b70"
+  },
+  "cpp_deltas": [
+    {
+      "before": "aa854f4c5b05451a81a4e1dd60eaaca98eb547e4",
+      "after": "6284787bf4c436203f4404498ba3dfb68aa144ef",
+      "changed_cpp_or_header_paths": [
+        "library/UnitTests/SolverUtils/RANSCurvedWallProbe.cpp"
+      ]
+    },
+    {
+      "before": "6284787bf4c436203f4404498ba3dfb68aa144ef",
+      "after": "ed34052fe4dd967e963c22272a0ec0888cf35b70",
+      "changed_cpp_or_header_paths": [
+        "solvers/IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallEvolution.cpp"
+      ]
+    }
+  ],
+  "kernel_inputs": {
+    "library/SolverUtils/Turbulence/RANSRobustVariant.cpp": {
+      "sha256": "0277fa3b4fdfa05b05b1a25fe4ee0bd0aa4314cd7e913c38e50336193091e229",
+      "git_blob_id": "012bb59a874b57e4c0af012291fde1fe40e40034",
+      "unchanged_since": "07363199e68a6cf3b6a8cc20fe0a4eae67c2d311"
+    },
+    "library/SolverUtils/Turbulence/RANSRobustVariant.h": {
+      "sha256": "b49e3755a3d9473f17e70710f1ee7315671fa1bbb928903a812e98868bcf8307",
+      "git_blob_id": "39e7ecf4073844c25a05ef49d4f23edf05129fdc",
+      "unchanged_since": "07363199e68a6cf3b6a8cc20fe0a4eae67c2d311"
+    },
+    "library/UnitTests/SolverUtils/RANSRobustVariantProbe.cpp": {
+      "sha256": "7c7c27151cf34e2cea3be961e97122b26d9d1b1dc6241cf83b1ea30321c6c1c4",
+      "git_blob_id": "770ddf15579df1d12c4468ef91ec951059935bfc",
+      "unchanged_since": "07363199e68a6cf3b6a8cc20fe0a4eae67c2d311"
+    },
+    "library/UnitTests/SolverUtils/RANSTransverseEvolutionProbe.cpp": {
+      "sha256": "2826248a0426034f14480c534b4f504e99b304144eddf25e0714c6d4c2cdbcd6",
+      "git_blob_id": "c172ece58037c49441503076c81203ee48c2b516",
+      "unchanged_since": "07363199e68a6cf3b6a8cc20fe0a4eae67c2d311"
+    }
+  },
+  "frozen_inputs_unchanged_from_M7": {
+    "docs/literature/cls_neutral_abl_equilibrium_awf_note_revised.tex": {
+      "sha256": "d35e437c2f2f8b25a46f7a3f285c6f1ad8b48d7b554aa1d161315f59eeb6de0f",
+      "git_blob_id": "134ac670e8c74415d6b52ac356fb952d943635d5"
+    },
+    "docs/plans/cls-epawf-revised-contract-v1.json": {
+      "sha256": "4e7bd75022409b8dc2ef31cc73425779b646a97535760b31eeea4ec49087de8a",
+      "git_blob_id": "f1b6c63a21e40228ced35bb3d2360f7de39e2935"
+    },
+    "library/SolverUtils/Turbulence/RANSModels.cpp": {
+      "sha256": "86a7154ba3cb27e4d3319aa42d156a228fd1b180f35f9b217159822ec9d66b05",
+      "git_blob_id": "3ffe34da4cd70281246876470c489f4ff0aaaff9"
+    },
+    "library/SolverUtils/Turbulence/RANSModels.h": {
+      "sha256": "00a284f6dbcb2617ed86370530b34fde9b008492250d31941c380b14833d16f3",
+      "git_blob_id": "f499007cac43522b0379dade702fcd653e253e7c"
+    },
+    "library/SolverUtils/Turbulence/AnalyticalWallFunction.cpp": {
+      "sha256": "5baf29819fed6b81ad1b042bc09258a3e0779d15de13076b688bf32f80ddcf7e",
+      "git_blob_id": "ea03fcf43540b92a6309d533a743681374dfc0ab"
+    },
+    "library/SolverUtils/Turbulence/AnalyticalWallFunction.h": {
+      "sha256": "fcadc9f92cb1747b91f48e3a50db1ed8fcf10338d0a6c4aae5f0551a663a7154",
+      "git_blob_id": "f8f624865da92b1dee654b3d88859678a01a4ec9"
+    },
+    "library/SolverUtils/Turbulence/EquilibriumAWFProfiles.cpp": {
+      "sha256": "2083a6514855635018ecbc895c1af650bc83808950cc73cf825045500ec1ed33",
+      "git_blob_id": "b6ae7f23f93fdb4ae764226f008ffa9e6cddb09b"
+    },
+    "library/SolverUtils/Turbulence/EquilibriumAWFProfiles.h": {
+      "sha256": "c3eb14e624f367e70081f32c1a006f0c71602e6d9818f93df0b520fb383c0a12",
+      "git_blob_id": "e7261b691808a7a480730df44c3272c6645876c0"
+    },
+    "library/SolverUtils/Turbulence/EquilibriumAWFTransition.cpp": {
+      "sha256": "53dc372d3958db2f31dac4d472710f9d62a8b68185b831ba3d660ed765ba2f85",
+      "git_blob_id": "2d2f3a1475d7455bad9b6f28b2742570c6e8ffa1"
+    },
+    "library/SolverUtils/Turbulence/EquilibriumAWFTransition.h": {
+      "sha256": "74a5f7be9ab7909033ae62a69679fcbfe1019d081712f1b74f3224ff3f695049",
+      "git_blob_id": "dcb54177353fd6d6c7cc7a2e383c5e5fad367238"
+    },
+    "library/LibUtilities/Interpreter/Interpreter.cpp": {
+      "sha256": "e66d6ec2109819fa073c87e732b0d185b09f80e545817bd7312793863d81575a",
+      "git_blob_id": "9c6dda312f9a1c1dc460c5ac6c8f76347099e024"
+    }
+  },
+  "limitations": "This verifies source identity, not compiled execution. Use the producing runtime fingerprints for binary/loader/environment identity. Python proof/audit changes keep their separate producing commits."
+}

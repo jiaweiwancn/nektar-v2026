@@ -1,0 +1,113 @@
+{
+  "started_utc": "2026-11-03T05:36:47.627805+00:00",
+  "input": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/scaled-variable/probe.json",
+    "sha256": "67682028108ea9e7ab42f5ed9294c6d219c767d45a6d24f676dd0cd0e5c43a3a"
+  },
+  "driver_sha256": "d5d064d3abc344164cca2803fe2556bb6c6f10b19cd2723dc54bd929a0067fbf",
+  "numerical_threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1"
+  },
+  "schema": 1,
+  "success": true,
+  "checks": 8,
+  "errors": {
+    "m8_curved_selected_all_mode_weak_operator": 1.7763568394002505e-15,
+    "m8_curved_selected_total_energy_exchange": 2.9543055601689335e-15,
+    "m8_curved_same_stress_production_exchange": 0.0
+  },
+  "model_variant": "CubicScaled",
+  "robust_parameters": [
+    0.4,
+    0,
+    0.2,
+    0.1,
+    0,
+    0,
+    1
+  ],
+  "dimension": 2,
+  "map_parameters": [
+    3,
+    2,
+    2,
+    0.04,
+    0,
+    0.025,
+    1.3,
+    1,
+    0,
+    0,
+    20,
+    0.025,
+    2,
+    2
+  ],
+  "complete_weak_blocks": [
+    {
+      "block": 0,
+      "maximum_absolute_error": 2.636779683484747e-16
+    },
+    {
+      "block": 1,
+      "maximum_absolute_error": 4.440892098500626e-16
+    },
+    {
+      "block": 2,
+      "maximum_absolute_error": 1.7763568394002505e-15
+    },
+    {
+      "block": 3,
+      "maximum_absolute_error": 2.7755575615628914e-17
+    },
+    {
+      "block": 4,
+      "maximum_absolute_error": 5.898059818321144e-17
+    },
+    {
+      "block": 5,
+      "maximum_absolute_error": 4.163336342344337e-17
+    }
+  ],
+  "operator_increment": {
+    "source_plateau": {
+      "required": true,
+      "samples": 2560,
+      "minimum_k_over_K": 0.9609310719051437,
+      "theta": 0.2,
+      "source_repair_identically_inactive": true
+    },
+    "maximum_added_component": 0.039076424736766875,
+    "modified_stress_weak_work": -0.02809692647900117,
+    "production_increment": -0.02809692647900117,
+    "mean_plus_k_change": 0.0,
+    "original_energy": [
+      2.154336911293518,
+      0.6742423510776405,
+      1.5285139732118234,
+      -0.008632566203858934,
+      -0.039786846792088666,
+      0.0,
+      2.154336911293516,
+      1.7763568394002505e-15,
+      2.254789835405526
+    ]
+  },
+  "directional": {
+    "independent_full_weak_actions": false,
+    "reason": "Fixed-mode probe does not export coupled directional samples"
+  },
+  "state_scope": "Unsolved generic bounded coefficient state with independently verified inactive source-repair plateau",
+  "variable_matching_height": true,
+  "genuine_curved_gamma_mms": false,
+  "excluded": [
+    "exact curved gamma manufactured solution",
+    "admissible state-envelope coverage",
+    "positivity/covariance qualification",
+    "long-time or physical terrain validation"
+  ],
+  "finished_utc": "2026-11-03T05:36:50.130327+00:00"
+}

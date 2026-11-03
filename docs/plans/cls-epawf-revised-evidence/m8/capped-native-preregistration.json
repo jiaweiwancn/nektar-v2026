@@ -1,0 +1,66 @@
+{
+  "schema": 1,
+  "milestone": "M8",
+  "purpose": "exercise actual native b<delta,lambda<1 and its coupled epsilon trace",
+  "degree": 3,
+  "xknots": [
+    0.0,
+    0.25,
+    0.75,
+    1.0
+  ],
+  "rknots": [
+    0.0,
+    0.1,
+    0.97,
+    1.0,
+    1.03,
+    2.0,
+    4.0
+  ],
+  "H": 2.0,
+  "Z": 4.0,
+  "rK": 1.0,
+  "rm": 1.0,
+  "width": 0.03,
+  "depletion": 0.99,
+  "conditioning_choice": "Before first execution, depth .99 leaves positive .01K; theta/delta/model are unchanged",
+  "model": {
+    "variant": "CubicScaled",
+    "beta": 0.4,
+    "gamma": 0.0,
+    "theta": 0.2,
+    "delta": 0.1,
+    "smoothing": "Linear",
+    "chi": 1,
+    "eta": 0
+  },
+  "initial": "U=0,regional pi=0,k=K0*(1-.99*A(x)*(1-F(r))),K(rK)=K0; outer k linearly recovers K0, epsilon seed E0*H/r",
+  "physical_initialization": "Normal Functions+Capped startup Lift before SetReference; no dummy perturbation",
+  "source": "No body/scalar/manufactured forcing; ordinary fixed essential boundary functions",
+  "directions": {
+    "steps": [
+      0.0002,
+      0.0001
+    ],
+    "formula": "h*K0*A(x)*r*(r-1)*(r-2), inner only",
+    "invariants": "zero at r=0,H,rK and x=0,1; sampler K and exterior k unchanged"
+  },
+  "evolution": {
+    "steps": 1,
+    "dt": 0.0001,
+    "order": 2,
+    "startup": "native first-order startup",
+    "nonlinear_tolerance": 1e-10,
+    "maximum_iterations": 80
+  },
+  "acceptance": {
+    "isolated_identity": 1e-10,
+    "coupled_residual": 1e-09,
+    "minimum_lambda": "strictly between0and1",
+    "source_budget": "zero total redistribution with actual native normalization",
+    "trace": "independent constrained-GLL trace coefficients"
+  },
+  "failure_policy": "Preserve native stop/rejected state; no field clipping, model retuning or automatic smaller-step retry",
+  "interpretation": "A source/trace mechanism fixture; high-order discrete positivity and covariance remain independent, no robust-flow qualification"
+}

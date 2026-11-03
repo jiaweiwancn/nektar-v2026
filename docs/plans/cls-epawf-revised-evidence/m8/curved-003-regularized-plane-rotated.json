@@ -1,0 +1,113 @@
+{
+  "started_utc": "2026-11-03T05:52:00.854313+00:00",
+  "input": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-003/regularized-plane-rotated/probe.json",
+    "sha256": "9b1e65ef3603b9b45209eaa6f522b77523e55d2956f2b1765bceb74e7fe007d5"
+  },
+  "driver_sha256": "d5d064d3abc344164cca2803fe2556bb6c6f10b19cd2723dc54bd929a0067fbf",
+  "numerical_threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1"
+  },
+  "schema": 1,
+  "success": true,
+  "checks": 8,
+  "errors": {
+    "m8_curved_selected_all_mode_weak_operator": 1.1102230246251565e-15,
+    "m8_curved_selected_total_energy_exchange": 4.263234819634044e-15,
+    "m8_curved_same_stress_production_exchange": 0.0
+  },
+  "model_variant": "Regularized",
+  "robust_parameters": [
+    0.4,
+    0,
+    0.2,
+    0.1,
+    0,
+    1,
+    1
+  ],
+  "dimension": 2,
+  "map_parameters": [
+    1,
+    2,
+    2,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0.25,
+    0,
+    20,
+    0.02,
+    1,
+    1
+  ],
+  "complete_weak_blocks": [
+    {
+      "block": 0,
+      "maximum_absolute_error": 2.636779683484747e-16
+    },
+    {
+      "block": 1,
+      "maximum_absolute_error": 4.163336342344337e-16
+    },
+    {
+      "block": 2,
+      "maximum_absolute_error": 1.1102230246251565e-15
+    },
+    {
+      "block": 3,
+      "maximum_absolute_error": 6.245004513516506e-17
+    },
+    {
+      "block": 4,
+      "maximum_absolute_error": 1.734723475976807e-17
+    },
+    {
+      "block": 5,
+      "maximum_absolute_error": 3.122502256758253e-17
+    }
+  ],
+  "operator_increment": {
+    "source_plateau": {
+      "required": true,
+      "samples": 2432,
+      "minimum_k_over_K": 0.9609578977500786,
+      "theta": 0.2,
+      "source_repair_identically_inactive": true
+    },
+    "maximum_added_component": 0.23716504160606125,
+    "modified_stress_weak_work": 0.23812298400181828,
+    "production_increment": 0.23812298400181828,
+    "mean_plus_k_change": 0.0,
+    "original_energy": [
+      2.1085450780297097,
+      0.5947490452556249,
+      1.5638586465474726,
+      -0.007190474296548811,
+      -0.04287213947683973,
+      0.0,
+      2.108545078029709,
+      8.881784197001252e-16,
+      2.239594677685603
+    ]
+  },
+  "directional": {
+    "independent_full_weak_actions": false,
+    "reason": "Fixed-mode probe does not export coupled directional samples"
+  },
+  "state_scope": "Unsolved generic bounded coefficient state with independently verified inactive source-repair plateau",
+  "variable_matching_height": false,
+  "genuine_curved_gamma_mms": false,
+  "excluded": [
+    "exact curved gamma manufactured solution",
+    "admissible state-envelope coverage",
+    "positivity/covariance qualification",
+    "long-time or physical terrain validation"
+  ],
+  "finished_utc": "2026-11-03T05:52:03.210112+00:00"
+}

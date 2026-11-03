@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/legacy-original-audit.py", line 9, in <module>
+    result=verify(raw,a.near,a.require,directional=True)
+  File "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8/verification/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m6_operator_oracle.py", line 426, in verify
+    directional_receipt = _directional(raw, fields, near, require) if directional else dict(independent_full_weak_actions=False, reason='disabled by caller')
+  File "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8/verification/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m6_operator_oracle.py", line 340, in _directional
+    require(omission > 1e-12, 'coupled trace chi-derivative omission control is insensitive in block '+str(block))
+  File "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8/verification/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m7_energy_oracle.py", line 31, in require
+    raise RuntimeError(message)
+RuntimeError: coupled trace chi-derivative omission control is insensitive in block 2

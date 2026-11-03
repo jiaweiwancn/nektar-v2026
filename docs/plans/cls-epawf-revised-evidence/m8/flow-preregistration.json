@@ -1,0 +1,169 @@
+{
+  "schema": 1,
+  "version": "cls-epawf-m8-robust-v1",
+  "milestone": "M8",
+  "mode": "flow",
+  "recorded_utc": "2026-11-03T05:31:13.504248+00:00",
+  "prerequisite": "User approved explicit common-cubic and reference-preserving regularized variants; original M0 contract remains frozen",
+  "selected_parameters": {
+    "variant": "Regularized",
+    "beta": 0.4,
+    "gamma": 0.0,
+    "gamma_scale": 1.0,
+    "theta": 0.2,
+    "delta": 0.1,
+    "smooth": false
+  },
+  "variants": {
+    "Original": "Unchanged original CLS/AWF failure control; no repair or model qualification inferred",
+    "CubicScaled": "beta*(c4,c6,c7), original C(q), paired bounded inner destruction repair; reference-local candidate",
+    "Regularized": "CubicScaled minus prescribed gamma(x)*(S-Sref), same source repair and adapted baseline"
+  },
+  "constitutive_contract": {
+    "reference": "Incoming fixed Cartesian flow/normal, analytic Gref=us/(kappa*r) flow tensor normal; no current-state or hill-normal feedback",
+    "gamma": "GammaUniform+GammaScale*kappa*us*physical wall distance; both coefficients fixed independently of evolving fields",
+    "field_coupling": "Same selected Reynolds stress in momentum, turbulence production and total interface traction",
+    "required_evidence": "All active/limiting branch tangents bounded over declared state envelope; a finite scan alone cannot certify that envelope",
+    "local_certificate_only": "Common beta certificate at neutral reference does not qualify unrestricted hill states"
+  },
+  "source_contract": {
+    "theta": 0.2,
+    "delta": 0.1,
+    "limiter": "piecewise linear min(1,k/(theta*K))",
+    "normalization": "b=int(J*Dpre*limiter)/int(J*Dpre); m=max(b,delta); lambda=b/m",
+    "definitions": "Dpos=Dpre*limiter/m; Epos=lambda*Epre; Cpos=Epos-Dpos; net k source=P_A-Dpos",
+    "plateau": "Original source and all its derivatives retained where every ray value has k/K>theta",
+    "depletion": "lambda<1 explicitly changes total dissipation and dependent epsilon trace; no double-counted redistribution",
+    "baseline": "Same repaired source at chi=0 and in EP transition; Original remains separate",
+    "discrete_limit": "Continuum quasi-positivity is not a high-order CG/IMEX positivity theorem"
+  },
+  "verification_gates": {
+    "isolated_identity": 1e-10,
+    "scaled_coupled_residual": 1e-09,
+    "mpi_and_restart_physical_difference": 1e-08,
+    "positivity": "k>=0 at every declared source/mass/trace/transfer/native/dense finite evaluation set; outer k,epsilon and physical K strictly positive",
+    "covariance": "Every finite evaluated covariance minimum >=-1e-10*K0 for the state range claimed as robust",
+    "source_mechanism": "Depletion counterexample is recorded separately; passing its source balance cannot override a covariance failure",
+    "long_duration": "Only complete predeclared time intervals in named flow-through and turnover units count; a solver stop leaves this gate failed",
+    "refinement": "dt, p and mesh varied independently at fixed physical wall inputs; separate H/transition-width model studies"
+  },
+  "physical_validation": {
+    "status": "conditional; blocked until candidate and native long-time/refinement gates pass",
+    "backend": "Current revised backend is native replicated dense CG; old CV strip trajectories do not qualify this wall representation",
+    "geometry": {
+      "hill_height": 0.04,
+      "hill_half_length": 0.1,
+      "roof": 0.8,
+      "x": [
+        -1.0,
+        1.2
+      ],
+      "matching_height": 0.011,
+      "physical_k_sampler": 0.0055,
+      "sensor_distances": [
+        0.0165,
+        0.022
+      ],
+      "source": "Cao--Tamura frozen geometry; sampler/sensor values are predeclared M8 wall-model choices"
+    },
+    "routes": [
+      "spatial EP/Upstream",
+      "all-baseline same repaired operator"
+    ],
+    "paired_required": "Floor/hill pairs with identical physical inlet, surface, matching/sampling parameters, variant and gamma prescription",
+    "first_surfaces": [
+      "S",
+      "R"
+    ],
+    "calibration_roles": [
+      "f3a_S",
+      "f3a_R",
+      "f3b_S",
+      "f3b_R",
+      "f3c_S",
+      "f3c_R",
+      "reported flat-floor scalar constraints"
+    ],
+    "reserved_flat": [
+      "f3d_S",
+      "f3d_R",
+      "Present-row vertical-rms ratios"
+    ],
+    "reserved_hill": "All hill observations and dimensional holdouts; never select beta,gamma,H,width or inlet parameters by their scores",
+    "development": "At least three unforced domain flow-throughs and two successive one-flow-through extensions; steady drift or preregistered stationary sampling required",
+    "steady_maximum_drift": {
+      "velocity_over_Uinf": 0.0002,
+      "shear_over_ustar2": 0.002,
+      "relative_k": 0.001,
+      "relative_epsilon": 0.001,
+      "friction_and_delta99": 0.002
+    },
+    "physical_targets": [
+      {
+        "endpoint": "mean_velocity",
+        "series": [
+          "f4a_SS_*",
+          "f4b_RR_*"
+        ],
+        "value": "U/Uinf",
+        "height": "physical global y/H, convert yprime=y-yh(x) only for observation mapping",
+        "metric": "sqrt(sum(w_i*(prediction_i-value_i)^2)) per station",
+        "engineering_target": 0.05,
+        "weights": "Use fixed CSV weights on visible source points. An unsupported probe prevents a complete-range score; any conditional subset metric must retain the omitted-weight/height coverage and be labelled separately, not substituted silently.",
+        "required_reporting": "Every station, sign/bias, reverse flow, coverage and worst station; primary target not erased by a pooled mean."
+      },
+      {
+        "endpoint": "crest_speedup",
+        "scalar_ids": [
+          "crest_S_SS",
+          "crest_S_RR"
+        ],
+        "metric": "absolute predicted S minus reported scalar at x=0,yprime/H=0.25",
+        "engineering_target": 0.05,
+        "reference": "Same-surface flat reference at the paper reference station, same physical vertical yprime; not local normal distance or an x-local alternative."
+      },
+      {
+        "endpoint": "reattachment",
+        "scalar_ids": [
+          "reattachment_SS",
+          "reattachment_RR"
+        ],
+        "metric": "absolute difference in crest-referenced x_R/Hh",
+        "engineering_target": 0.5,
+        "observation": "Ground-extrapolated mean U=0 dividing points. Reproduce with the declared CV2 operator; last two tail points linear extrapolation and last-three-point sensitivity where source method is unspecified. Publish wall-shear and finite-probe zero crossings separately."
+      }
+    ],
+    "missing_observations": "Report pressure and wall stress as paired CFD observables where frozen dataset has no direct experimental counterpart; no invented data or pooled replacement scores",
+    "coverage": "Preserve unsupported heights/weights and data uncertainties; incomplete ranges remain conditional"
+  },
+  "frozen_data": {
+    "version": "cao-tamura-2006-v1.1",
+    "snapshot_sha256": "2432937f6ab1b7dd41351e56e3cd4ce31a24e8cc2f63449404af2c3a688b7429",
+    "source_pdf_sha256": "adffb5c1d740be791211d82ce35778a37a3315a6dc72c56c80b70cc6642a43df",
+    "files": {
+      "README.md": "c1286f22350a0412a20d6a0b823277b538f06dc2d486380a3b9a8d26fa5d9528",
+      "extraction.json": "7e5e5fe15fb43c0e6c6c1102197f018ed7cdc758d45e630100977e9de9c370a3",
+      "series.json": "8cef4a13b83c7e9f6afcaecbf7ecc58d861ee54e31df29fa7e8584924e320905",
+      "profiles.csv": "f696657990c1d207a303777f17dd574049239143e6fa2c286f0d87650fd614f2",
+      "reported_scalars.csv": "d746b30d04bb2b5556adc7b1609dd898c57a3c6660b61f636dbe6ed5e2fd3641",
+      "figure_inventory.csv": "a241dbceefd1563407208af3b090dfa67284e19bdd12c02ff45852e27b565120",
+      "source_manifest.json": "8c0cab03d1fe4c1301386539d584a20754d9a0641feaf98e3fdd2f2079e778f8",
+      "uncertainty.json": "b87ba465738bc0665702fd31eebccbe811149acbcc43913e2bde8209719e28ad",
+      "scores.json": "a681bad718a6a72d6543abcad73d91b183d5d955db6933348b866ef35da1afe9"
+    }
+  },
+  "legacy_tool_hashes": {
+    "cao_tamura_campaign.py": "7baced6821f992fe290eb273e7cd2408b8fcfb0b35adc0f5985e0e59d15c6d7f",
+    "cao_tamura_calibration.py": "cd2261b653f959b44796ddab9e151109a4a4341114c1992ea599428c51044090",
+    "cao_tamura_experiment.py": "d50630023571907d15b942ed5fc962f7d7ec6a993a2599a3fb68b11b29a2d62a",
+    "cao_tamura_observables.py": "775c16d2fba8e02f748b9b40e0453298c2d37200e758a9bf07515b3c8944099b"
+  },
+  "new_selection_policy": "A passed M8 qualification receipt plus explicit candidate model identity is required; old original-first select/freeze commands are not invoked",
+  "failure_policy": "Preserve every native failure report, accepted prefix, command and source hash. No rejected/unfinished trajectory enters developed averages or physical scores.",
+  "resources": {
+    "maximum_linux_workers": 72,
+    "numerical_threads_per_rank": 1,
+    "default_ranks": 1,
+    "sequential_cases": true
+  }
+}

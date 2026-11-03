@@ -1,0 +1,114 @@
+{
+  "schema": 1,
+  "milestone": "M8",
+  "status": "passed",
+  "started_utc": "2026-11-03T06:10:41.806408+00:00",
+  "source_commit": "ed34052fe4dd967e963c22272a0ec0888cf35b70",
+  "source_clean_start": true,
+  "connection": "tailscale:100.105.247.110",
+  "allocated_workers": 1,
+  "cpu_affinity": [
+    48
+  ],
+  "numerical_threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "maximum_reserved_server_workers": 38,
+  "lock": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/validation.lock",
+    "mode": "shared",
+    "held_throughout": true
+  },
+  "commands": [
+    {
+      "name": "runtime-before",
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/source/docs/plans/cls-epawf-revised-evidence/m7/fingerprint-runtime.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/capped-native-001-runner/runtime-before.json"
+      ],
+      "exit_code": 0,
+      "seconds": 1.5176707880000322,
+      "timeout": 300,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/capped-native-001-runner/runtime-before.log",
+      "log_sha256": "6f655a3648ddb7ef5edb2c794a9fa03a393a6f601bc0627627d888dc572b7502"
+    },
+    {
+      "name": "capped-native",
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_capped_native.py",
+        "--build",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/capped-native-001",
+        "--timeout",
+        "1800"
+      ],
+      "exit_code": 0,
+      "seconds": 380.1147549879988,
+      "timeout": 4200,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/capped-native-001-runner/capped-native.log",
+      "log_sha256": "5b97dd3738dc4984357de6f13cf1efbda399f69e739b4392d58bf61d924e07f5"
+    },
+    {
+      "name": "runtime-after",
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/source/docs/plans/cls-epawf-revised-evidence/m7/fingerprint-runtime.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/capped-native-001-runner/runtime-after.json",
+        "--compare",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/capped-native-001-runner/runtime-before.json"
+      ],
+      "exit_code": 0,
+      "seconds": 1.521584988999166,
+      "timeout": 300,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/capped-native-001-runner/runtime-after.log",
+      "log_sha256": "08bdb485e67e2f44868d97893f959d0028a78caf3752b92d9b32e7fab8a5ab1e"
+    }
+  ],
+  "failures": [],
+  "physical_robustness_qualified": false,
+  "build002_fingerprint_sha256": "42e14ed5c43abbece959b4ee1c3aba70cdcd7e64670ecf1c4a62cb80f26c3da1",
+  "runtime_image_count": 100,
+  "source_input_count": 3920,
+  "environment_differences_from_build002": {
+    "NUMEXPR_NUM_THREADS": {
+      "build002": null,
+      "current": "1"
+    },
+    "VECLIB_MAXIMUM_THREADS": {
+      "build002": null,
+      "current": "1"
+    }
+  },
+  "driver_sha256": "e6c286f984c84b27428fba691ef9cb90917b54f68b33862b657685879633944f",
+  "solver_sha256": "71897ba6d378acf35f84ae832920ed17cc3c66db8b9f193211e46c5ab043f1e4",
+  "qualification_receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/capped-native-001/validation.json",
+  "qualification_sha256": "df639d8d5deda43cf292fe91139c581c92b80b4d22885cd137cf9e85016bb321",
+  "mechanism_verified": true,
+  "evolution_verified": true,
+  "case_count": 6,
+  "qualification_status": "verified",
+  "qualification_failures": [],
+  "runtime_unchanged": true,
+  "source_commit_end": "ed34052fe4dd967e963c22272a0ec0888cf35b70",
+  "source_clean_end": true,
+  "exit_code": 0,
+  "finished_utc": "2026-11-03T06:17:05.064829+00:00",
+  "seconds": 383.22238792200005
+}

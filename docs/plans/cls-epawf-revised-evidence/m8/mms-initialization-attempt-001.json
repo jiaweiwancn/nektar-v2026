@@ -1,0 +1,123 @@
+{
+  "schema": 1,
+  "status": "failed",
+  "started_utc": "2026-11-03T06:09:54.205427+00:00",
+  "source_commit": "ed34052fe4dd967e963c22272a0ec0888cf35b70",
+  "source_status": "",
+  "program": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/IncNavierStokesSolver",
+    "sha256": "71897ba6d378acf35f84ae832920ed17cc3c66db8b9f193211e46c5ab043f1e4"
+  },
+  "runner_sha256": "da4b55cf947c0a4645967fee9493eb0ed89a30bcce32d72a24cb05228eb3a4bc",
+  "fingerprint_tool_sha256": "819454afd8d0c218d8ef7ce14fb79f144d97ffd36712512964fc39806d9cbbc4",
+  "old_inputs": {
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/mms-completion-001/mms-history/State.bin": "61b61f8233314be57293cec2ba3c4c2b05daefc467b92b49b66bf83f3ec0f26d",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/native-completion-001/scaled-native/history/State.bin": "588d1342124e6d79ff7b3b34e958739108a1e40133cc645b0767a211202ccadf",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/native-completion-001/scaled-native/joint-four/case.evolution.json": "8d23089fe7e98c3f4ecf7f85f576a2a7be6e955cc50f51f2ce175981751e0899"
+  },
+  "maximum_MPI_ranks": 2,
+  "numerical_threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1"
+  },
+  "affinity": [
+    40,
+    41,
+    42,
+    43
+  ],
+  "cpu_binding_policy": "OMPI hwloc logical cpu list40-43; explicit core map in registered native driver",
+  "environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "LD_LIBRARY_PATH": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/geometry-lib:",
+    "TMPDIR": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/tmp",
+    "OMPI_MCA_hwloc_base_cpu_list": "40-43"
+  },
+  "commands": [
+    {
+      "name": "fingerprint-before",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/transfers/fingerprint-runtime.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-runner-001/runtime-before.json"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-runner-001",
+      "timeout_seconds": 300,
+      "pid": 32969,
+      "exit_code": 0,
+      "seconds": 2.0033861030005937,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-runner-001/fingerprint-before.log",
+      "log_sha256": "6f655a3648ddb7ef5edb2c794a9fa03a393a6f601bc0627627d888dc572b7502"
+    },
+    {
+      "name": "fresh-mms",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m8.py",
+        "--build",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build",
+        "--mode",
+        "mms",
+        "--variant",
+        "Regularized",
+        "--beta",
+        ".4",
+        "--gamma-scale",
+        "1",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-001"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-runner-001",
+      "timeout_seconds": 3600,
+      "pid": 33286,
+      "exit_code": 1,
+      "seconds": 212.2411181849984,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-runner-001/fresh-mms.log",
+      "log_sha256": "464a1ea83fda119d3db2c710d8563181944df09dcea63f140137dfcae4c7a373"
+    },
+    {
+      "name": "fingerprint-after",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/transfers/fingerprint-runtime.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-runner-001/runtime-after.json",
+        "--compare",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-runner-001/runtime-before.json"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-runner-001",
+      "timeout_seconds": 300,
+      "pid": 34052,
+      "exit_code": 0,
+      "seconds": 2.004571395000312,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-runner-001/fingerprint-after.log",
+      "log_sha256": "08bdb485e67e2f44868d97893f959d0028a78caf3752b92d9b32e7fab8a5ab1e"
+    }
+  ],
+  "controls": [],
+  "fresh_MMS_output": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/mms-001",
+  "reuse": false,
+  "build_fingerprint_equivalent_inputs_and_images": true,
+  "error": "Fresh corrected-solver MMS qualification failed",
+  "full_runtime_and_source_unchanged": true,
+  "old_inputs_unchanged": true,
+  "source_clean_end": true,
+  "source_revision_unchanged": true,
+  "main_preserved": true,
+  "primary_preserved": true,
+  "program_unchanged": true,
+  "finished_utc": "2026-11-03T06:13:30.517039+00:00"
+}

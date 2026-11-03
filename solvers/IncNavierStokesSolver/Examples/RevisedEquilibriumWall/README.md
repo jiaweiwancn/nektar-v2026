@@ -520,7 +520,7 @@ own implementation checks and separate physical qualification gates.
 The `RANSEquilibriumWallEvolution` backend supports two additional research
 stress selections. Their kernel/source verification, local certificates and
 failed broader constitutive gates are recorded in
-[the M8 report](../../../../../docs/plans/cls-epawf-revised-m8.md).
+[the M8 report](../../../../docs/plans/cls-epawf-revised-m8.md).
 No selection is qualified for unrestricted robust terrain prediction.
 
 | Solver information / parameter | Meaning |
@@ -567,12 +567,12 @@ before that startup correction are rejected. Neutral and already lifted
 mapped/transition initialization keep their previous signature semantics.
 
 For a bounded native verification case on Linux, activate the environment and
-thread settings above, prepend the M8 build's `geometry-lib` to
+thread settings above, prepend `m8/initialization/build/geometry-lib` to
 `LD_LIBRARY_PATH`, and use a fresh directory outside the source checkout:
 
 ```bash
-python3 -B /media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_cases.py case.xml --variant Regularized --beta .4 --gamma-scale 1 --steps 1
-/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8/build/IncNavierStokesSolver case.xml
+python3 -B /media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8/initialization/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_cases.py case.xml --variant Regularized --beta .4 --gamma-scale 1 --steps 1
+/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/IncNavierStokesSolver case.xml
 ```
 
 The generator's flat case uses the isolated reference-verification setup.

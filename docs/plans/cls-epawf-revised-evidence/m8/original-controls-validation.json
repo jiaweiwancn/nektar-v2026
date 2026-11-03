@@ -1,0 +1,215 @@
+{
+  "schema": 1,
+  "status": "passed",
+  "source_commit": "ed34052fe4dd967e963c22272a0ec0888cf35b70",
+  "runner_sha256": "7383e9a349835d7069a095f326898afc2b1c7b986256f30593afe3d1b878b4cc",
+  "numerical_workers": 1,
+  "numerical_threads": 1,
+  "commands": [
+    {
+      "name": "fingerprint-before",
+      "argv": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/source/docs/plans/cls-epawf-revised-evidence/m7/fingerprint-runtime.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/original-controls-003/runtime-before.json",
+        "--compare",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/original-controls-002/runtime-after.json"
+      ],
+      "exit_code": 0,
+      "seconds": 1.5208391870000924,
+      "log_sha256": "08bdb485e67e2f44868d97893f959d0028a78caf3752b92d9b32e7fab8a5ab1e"
+    },
+    {
+      "name": "original-neutral-smoke",
+      "argv": [
+        "ctest",
+        "--test-dir",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build",
+        "--parallel",
+        "1",
+        "-R",
+        "^RANSEquilibriumWallEvolutionSmoke$",
+        "--output-on-failure",
+        "--output-junit",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/original-controls-003/ctest.xml"
+      ],
+      "exit_code": 0,
+      "seconds": 2.7306553950002126,
+      "log_sha256": "aad717c4b95fdb6c474e65714db9eb9326544f713b470c9f0856beff6a30fcb0"
+    },
+    {
+      "name": "fingerprint-after",
+      "argv": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/source/docs/plans/cls-epawf-revised-evidence/m7/fingerprint-runtime.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/original-controls-003/runtime-after.json",
+        "--compare",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/original-controls-003/runtime-before.json"
+      ],
+      "exit_code": 0,
+      "seconds": 1.5189825159995962,
+      "log_sha256": "08bdb485e67e2f44868d97893f959d0028a78caf3752b92d9b32e7fab8a5ab1e"
+    }
+  ],
+  "started_utc": "2026-11-03T06:25:47.905715+00:00",
+  "limitation": "Independent all-field and traction MMS plus selected accounting; full manufactured-forcing volume-energy reconstruction is not claimed",
+  "original_functions": {
+    "success": true,
+    "original_solver_command": {
+      "name": "original-functions",
+      "argv": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/original-controls-002/flat-functions/case.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/original-controls-002/flat-functions",
+      "exit_code": 0,
+      "seconds": 21.91534424600104,
+      "log_sha256": "55bdf0e23bca427116ab3c2a5983b392a2d2ee77ea1d2cf47a39bdf7928267a1",
+      "timeout": 600
+    },
+    "original_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/initialization/original-controls-002/flat-functions/case.evolution.json",
+    "report_sha256": "92a1e02764637532817826014d11f2a72829efbce35406da2f4f9d4be61c0fe2",
+    "xml_sha256": "ef677e09fe99ac09d387328c9207d53b85639961d4a5eb8e8e3a03be9763a495",
+    "previous_receipt_sha256": "243c0223396c80e18729ce5d647b23349cf2a7f3f1952c5aedb0bae146010783",
+    "manufactured": {
+      "schema": 1,
+      "success": true,
+      "checks": 18,
+      "errors": {
+        "m8_mms_exact_shared_tangential_traction": 0.0,
+        "m8_mms_exact_normal_pressure_offset": 0.0,
+        "m8_mms_native_normal_pressure_offset": 0.0,
+        "m8_mms_native_total_traction_and_zero_k_flux": 1.1657341758564144e-15,
+        "m8_mms_inactive_repair_plateau": 0.0
+      },
+      "coefficients": {
+        "nu": 1.5e-05,
+        "H": 2,
+        "roughness": 0.1,
+        "K": 0.5105080130598861,
+        "q": 3.1906750816242875,
+        "kappa": 0.4405539051866587,
+        "us": 0.4,
+        "epsilon": 0.07263583326186134,
+        "g": 0.45397395788663325,
+        "nt": 0.35244312414932705,
+        "zv": -0.005272131216726143,
+        "slope": 0.16397739074295414,
+        "inner_coefficient": 0.24328362945516618,
+        "UH": 0.48656725891033237,
+        "traction": 0.16000000000000006,
+        "pressure_jump": 0.07487450858211664
+      },
+      "field_errors": [
+        4.612292557126131e-16,
+        0.0,
+        2.1747416225079305e-16,
+        2.1560809603985413e-16,
+        5.593544610029182e-17,
+        5.622075861172369e-17
+      ],
+      "persistent_gamma": false,
+      "scope": "Original flat Functions MMS, gamma=0; independent exact fields/traction",
+      "curved_mms": "not established by this flat construction"
+    },
+    "native_audit": {
+      "time": 0.005,
+      "eta": 0,
+      "chi": 1,
+      "states": 2,
+      "min_k": 0.510508013059886,
+      "min_outer_epsilon": 0.07263583326186132,
+      "min_covariance": 0.17776393259446716,
+      "min_yx_tangent": -0.3399518016725653,
+      "maximum_stage_residual": 2.162128649545654e-13,
+      "maximum_energy_closure": 7.494005416219807e-16,
+      "maximum_free_energy_balance": 9.43689570931383e-16,
+      "maximum_strong_divergence": 1.9140901097911947e-15,
+      "maximum_normal_traction_jump": 1.1657341758564144e-15,
+      "independent_dense_min_k": 0.510508013059886,
+      "independent_transfer_samples": {
+        "count": 32,
+        "min_k": 0.510508013059886,
+        "min_epsilon": 0.07263583326186132,
+        "rule": "actual trace/boundary GLL tangential points and physical rK/rA/rB and H samples"
+      },
+      "cumulative_energy_accounting_defect": 3.608224830031759e-18,
+      "final_energy": [
+        0.21956150969840943,
+        0.035329758787980794,
+        0.18423175091042815,
+        -1.8437020571973457e-16,
+        -1.4446825571605913e-35,
+        0.0,
+        0.21956150969840874,
+        6.938893903907228e-16,
+        3.0426968237019163,
+        0.21956150969840849,
+        0.0,
+        9.43689570931383e-16
+      ],
+      "final_wall_sources": [
+        1.5498879329140205,
+        0.9221852179962755,
+        -1.200127101646728e-16,
+        0.03895771690973093,
+        2.367476974435137e-06
+      ],
+      "final_interface": [
+        1,
+        -0.07487450858211664,
+        5.236414563806448e-16,
+        9.06535150165419e-16,
+        1.1657341758564144e-15,
+        0,
+        0,
+        -2.5745323304659934e-16
+      ],
+      "velocity_perturbation_energy": [
+        0.0,
+        0.0
+      ],
+      "velocity_energy_gain": null,
+      "turnover_time": 5.0,
+      "flow_through_time": 1.0632176263423336,
+      "flow_time_convention": "domain length / fixed-reference streamwise velocity at outer midheight",
+      "duration": 0.005,
+      "turnover_units": 0.001,
+      "flow_through_units": 0.004702706083984828
+    },
+    "selected_accounting": {
+      "schema": 1,
+      "checks": 11,
+      "errors": {
+        "m8_actual_physical_mass_storage_and_energy": 1.6992063775552105e-14,
+        "m8_actual_unmasked_weak_energy_work": 9.43689570931383e-16,
+        "m8_fixed_anchor_energy_work": 0.0,
+        "m8_essential_reaction_anchor_accounting": 1.1657341758564144e-15
+      },
+      "model_variant": "Original",
+      "physical_mass_storage": 0.03532975878792909,
+      "stored_resolved_plus_k": 3.042696823701915,
+      "unmasked_work": 0.21956150969840849,
+      "reaction_work": 0.2195615096984087,
+      "anchor_work": 0.0,
+      "direct_volume_components_reconstructed": false,
+      "scope": "independent physical mass, complete captured weak loads and essential reactions",
+      "success": true
+    },
+    "full_forcing_energy": "NOT ESTABLISHED by this fixture; unsupported oracle request retained in 002"
+  },
+  "original_neutral_smoke": {
+    "success": true,
+    "junit_sha256": "4834bd09a4b75ca1371f7d5d2d6b93a6138de5d6700259bc4265b42afa3c4478"
+  },
+  "source_and_runtime_unchanged": true,
+  "finished_utc": "2026-11-03T06:25:53.814447+00:00"
+}

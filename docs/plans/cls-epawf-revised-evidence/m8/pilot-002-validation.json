@@ -1,0 +1,199 @@
+{
+  "schema": 1,
+  "milestone": "M8",
+  "protocol_version": "cls-epawf-m8-robust-v1",
+  "mode": "pilot",
+  "source_commit": "8382e278c3855051e73e539d7400f475e78ea57a",
+  "source_clean_start": true,
+  "parameters": {
+    "variant": "CubicScaled",
+    "beta": 0.4,
+    "gamma": 0.0,
+    "gamma_scale": 0.0,
+    "theta": 0.2,
+    "delta": 0.1,
+    "smooth": false
+  },
+  "program": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/IncNavierStokesSolver",
+    "sha256": "03d7b38a03ca3a90186621ace38c77bf8715054ec8529872cf62c2d3fcb1fbec"
+  },
+  "preregistration": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/pilot-002/qualification/preregistration.json",
+    "sha256": "65d01e1cf85d757bbe6ccb9f7f8f994438ecda64cd261c24193c1b5d4e83c2ff"
+  },
+  "started_utc": "2026-11-03T05:10:05.709854+00:00",
+  "commands": [
+    {
+      "name": "reference",
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/IncNavierStokesSolver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/pilot-002/qualification/reference/case.xml"
+      ],
+      "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/pilot-002/qualification/reference",
+      "ranks": 1,
+      "numerical_threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1"
+      },
+      "exit_code": 0,
+      "seconds": 16.597730187000707,
+      "timeout_seconds": 3600.0,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/pilot-002/qualification/reference/run.log",
+      "log_sha256": "147a16846555aa7962f89ac7bbf8b1b9db54564876f765b635825fc5ef3d5191"
+    }
+  ],
+  "cases": [
+    {
+      "name": "reference",
+      "parameters": {
+        "variant": "CubicScaled",
+        "beta": 0.4,
+        "gamma": 0.0,
+        "gamma_scale": 0.0,
+        "theta": 0.2,
+        "delta": 0.1,
+        "smooth": false,
+        "kind": "none",
+        "eta": 1,
+        "steps": 1
+      },
+      "requested_ranks": 1,
+      "xml": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/pilot-002/qualification/reference/case.xml",
+      "xml_sha256": "d7214519d1d02f2021291a3b062dd9551dbbbbbac6e2318fba7f5bd7e98eda22",
+      "status": "audit_failed",
+      "source_mechanism_only": false,
+      "native_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/pilot-002/qualification/reference/case.evolution.json",
+      "native_report_sha256": "4af061b62a505dd6f058e9a1bc421b92f0f0d4f24aa994d4e72fd9373f18e01b",
+      "exit_code": 0,
+      "seconds": 16.597730187000707,
+      "native_audit": {
+        "time": 0.0025,
+        "eta": 1,
+        "chi": 1,
+        "states": 2,
+        "min_k": 0.5105080130598861,
+        "min_outer_epsilon": 0.018340404652154647,
+        "min_covariance": 0.1747101044240471,
+        "min_yx_tangent": 0.07548515377889156,
+        "maximum_stage_residual": 1.4960945284631973e-16,
+        "maximum_energy_closure": 5.876991030672556e-14,
+        "maximum_free_energy_balance": 0.0,
+        "maximum_strong_divergence": 1.2769574021303627e-15,
+        "maximum_normal_traction_jump": 4.6629367034256575e-15,
+        "independent_dense_min_k": 0.5105080130598861,
+        "independent_transfer_samples": {
+          "count": 32,
+          "min_k": 0.5105080130598861,
+          "min_epsilon": 0.07263583326186132,
+          "rule": "actual trace/boundary GLL tangential points and physical rK/rA/rB and H samples"
+        },
+        "cumulative_energy_accounting_defect": -1.3233858453531866e-15,
+        "final_energy": [
+          9.007234065502104,
+          0.0,
+          9.007234065502665,
+          -3.1210393881490637e-14,
+          0.0,
+          0.0,
+          9.007234065502633,
+          -5.293543381412746e-13,
+          1258.1783347653309,
+          9.007234065502104,
+          0.0,
+          0.0
+        ],
+        "final_wall_sources": [
+          12.399103463312226,
+          7.37748174397022,
+          2.4025242515920975e-17,
+          8.019188006664105,
+          0.018897232375445397
+        ],
+        "final_interface": [
+          8,
+          -0.5989960686569333,
+          4.6629367034256575e-15,
+          2.0965705924759556e-14,
+          4.6629367034256575e-15,
+          0,
+          0,
+          -3.7303493627405266e-14
+        ],
+        "velocity_perturbation_energy": [
+          0.0,
+          0.0
+        ],
+        "velocity_energy_gain": null,
+        "turnover_time": 5.0,
+        "flow_through_time": 1.209997362384301,
+        "flow_time_convention": "domain length / fixed-reference streamwise velocity at outer midheight",
+        "duration": 0.0025,
+        "turnover_units": 0.0005,
+        "flow_through_units": 0.0020661202063066877
+      },
+      "audit_failure": "'quadrature_orders'"
+    }
+  ],
+  "failures": [
+    {
+      "case": "reference",
+      "classification": "verification_audit_failure",
+      "error": "'quadrature_orders'"
+    }
+  ],
+  "implementation_verified": false,
+  "candidate_qualified": false,
+  "long_time_qualification": false,
+  "experimental_accuracy_claimed": false,
+  "connection": "tailscale:100.105.247.110",
+  "numerical_threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1"
+  },
+  "driver_sha256": "a64017bc07f99bc2787efefbf4cc3bdcb6af00738f23a46b1c0f3aab0d59ea21",
+  "environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "TMPDIR": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/tmp",
+    "LD_LIBRARY_PATH": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/geometry-lib:/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/geometry-lib:",
+    "cpu_affinity": [
+      112,
+      113,
+      114,
+      115,
+      116,
+      117,
+      118,
+      119,
+      120,
+      121,
+      122,
+      123,
+      124,
+      125,
+      126,
+      127
+    ]
+  },
+  "checks": 8,
+  "errors": {
+    "reference: explicit model parameters": 0.0
+  },
+  "finite_covariance_failures": [],
+  "qualification_status": "failed_or_stopped",
+  "remaining_gates": [
+    "certified admissible constitutive state envelope",
+    "outer turbulence positivity and high-order discrete admissibility",
+    "complete long-time perturbation/refinement qualification",
+    "qualified versioned native paired terrain observations and reserved scores"
+  ],
+  "source_clean_end": true,
+  "finished_utc": "2026-11-03T05:10:22.411152+00:00"
+}

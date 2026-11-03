@@ -1,0 +1,213 @@
+{
+  "started_utc": "2026-11-03T05:37:02.699797+00:00",
+  "input": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/verification/curved-001/original-transition/probe.json",
+    "sha256": "b4ab27c801a5ab123d60da6110dcd5399504cf1e94dd7d957a09d4fb31e3cce3"
+  },
+  "driver_sha256": "d5d064d3abc344164cca2803fe2556bb6c6f10b19cd2723dc54bd929a0067fbf",
+  "numerical_threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1"
+  },
+  "schema": 1,
+  "success": true,
+  "checks": 43,
+  "errors": {
+    "m8_curved_selected_all_mode_weak_operator": 2.8609597169671074e-15,
+    "m8_curved_selected_total_energy_exchange": 2.8270766534579946e-15,
+    "m8_curved_same_stress_production_exchange": 0.0,
+    "m8_curved_complete_action_block_0_h_0.0002": 1.7763568394002505e-11,
+    "m8_curved_complete_action_block_0_h_0.0001": 3.9968028886505635e-11,
+    "m8_curved_complete_action_block_1_h_0.0002": 2.1094237467877974e-11,
+    "m8_curved_complete_action_block_1_h_0.0001": 5.995204332975845e-11,
+    "m8_curved_complete_action_block_2_h_0.0002": 2.9976021664879227e-11,
+    "m8_curved_complete_action_block_2_h_0.0001": 5.10702591327572e-11,
+    "m8_curved_complete_action_block_3_h_0.0002": 5.551115123125783e-13,
+    "m8_curved_complete_action_block_3_h_0.0001": 9.71445146547012e-13,
+    "m8_curved_complete_action_block_5_h_0.0002": 4.85722573273506e-13,
+    "m8_curved_complete_action_block_5_h_0.0001": 1.0408340855860843e-12
+  },
+  "model_variant": "Original",
+  "robust_parameters": [
+    1,
+    0,
+    0.2,
+    0.1,
+    0,
+    0,
+    0
+  ],
+  "dimension": 2,
+  "map_parameters": [
+    4,
+    2,
+    2,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    20,
+    0.02,
+    1,
+    1
+  ],
+  "complete_weak_blocks": [
+    {
+      "block": 0,
+      "maximum_absolute_error": 3.2335245592207684e-15
+    },
+    {
+      "block": 1,
+      "maximum_absolute_error": 3.552713678800501e-15
+    },
+    {
+      "block": 2,
+      "maximum_absolute_error": 6.661338147750939e-15
+    },
+    {
+      "block": 3,
+      "maximum_absolute_error": 6.938893903907228e-17
+    },
+    {
+      "block": 4,
+      "maximum_absolute_error": 1.3183898417423734e-16
+    },
+    {
+      "block": 5,
+      "maximum_absolute_error": 6.938893903907228e-17
+    }
+  ],
+  "operator_increment": {
+    "source_plateau": {
+      "required": false,
+      "samples": 0,
+      "minimum_k_over_K": null
+    },
+    "maximum_added_component": 0.0,
+    "modified_stress_weak_work": 0.0,
+    "production_increment": 0.0,
+    "mean_plus_k_change": 0.0,
+    "original_energy": [
+      11.460196535525233,
+      3.694137385762115,
+      7.857401312506197,
+      -0.02816974767256629,
+      -0.06317241507051322,
+      0.0,
+      11.460196535525235,
+      -1.7763568394002505e-15,
+      11.938402840022688
+    ]
+  },
+  "directional": {
+    "independent_full_weak_actions": true,
+    "blocks": [
+      {
+        "block": 0,
+        "levels": [
+          {
+            "step": 0.0002,
+            "maximum_native_error": 1.7763568394002505e-11,
+            "plus_minimum_k_over_K": null,
+            "minus_minimum_k_over_K": null
+          },
+          {
+            "step": 0.0001,
+            "maximum_native_error": 3.9968028886505635e-11,
+            "plus_minimum_k_over_K": null,
+            "minus_minimum_k_over_K": null
+          }
+        ],
+        "includes_velocity_stress_increment": true
+      },
+      {
+        "block": 1,
+        "levels": [
+          {
+            "step": 0.0002,
+            "maximum_native_error": 2.1094237467877974e-11,
+            "plus_minimum_k_over_K": null,
+            "minus_minimum_k_over_K": null
+          },
+          {
+            "step": 0.0001,
+            "maximum_native_error": 5.995204332975845e-11,
+            "plus_minimum_k_over_K": null,
+            "minus_minimum_k_over_K": null
+          }
+        ],
+        "includes_velocity_stress_increment": true
+      },
+      {
+        "block": 2,
+        "levels": [
+          {
+            "step": 0.0002,
+            "maximum_native_error": 2.9976021664879227e-11,
+            "plus_minimum_k_over_K": null,
+            "minus_minimum_k_over_K": null
+          },
+          {
+            "step": 0.0001,
+            "maximum_native_error": 5.10702591327572e-11,
+            "plus_minimum_k_over_K": null,
+            "minus_minimum_k_over_K": null
+          }
+        ],
+        "includes_velocity_stress_increment": false
+      },
+      {
+        "block": 3,
+        "levels": [
+          {
+            "step": 0.0002,
+            "maximum_native_error": 5.551115123125783e-13,
+            "plus_minimum_k_over_K": null,
+            "minus_minimum_k_over_K": null
+          },
+          {
+            "step": 0.0001,
+            "maximum_native_error": 9.71445146547012e-13,
+            "plus_minimum_k_over_K": null,
+            "minus_minimum_k_over_K": null
+          }
+        ],
+        "includes_velocity_stress_increment": false
+      },
+      {
+        "block": 5,
+        "levels": [
+          {
+            "step": 0.0002,
+            "maximum_native_error": 4.85722573273506e-13,
+            "plus_minimum_k_over_K": null,
+            "minus_minimum_k_over_K": null
+          },
+          {
+            "step": 0.0001,
+            "maximum_native_error": 1.0408340855860843e-12,
+            "plus_minimum_k_over_K": null,
+            "minus_minimum_k_over_K": null
+          }
+        ],
+        "includes_velocity_stress_increment": false
+      }
+    ],
+    "scope": "Central differences of independently reconstructed selected all-field weak loads and nonlinear matching rows"
+  },
+  "state_scope": "Unsolved generic bounded coefficient state with independently verified inactive source-repair plateau",
+  "variable_matching_height": false,
+  "genuine_curved_gamma_mms": false,
+  "excluded": [
+    "exact curved gamma manufactured solution",
+    "admissible state-envelope coverage",
+    "positivity/covariance qualification",
+    "long-time or physical terrain validation"
+  ],
+  "finished_utc": "2026-11-03T05:38:15.077692+00:00"
+}

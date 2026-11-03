@@ -16,8 +16,10 @@ Implementation branch: codex/cls-epawf-revised, based on
   M6 prescribed upstream transition, independent sensors/derivatives, baseline
   recovery and trace support VERIFIED on Linux; M7 admissibility, perturbation,
   full energy accounting and original-law failure diagnosis VERIFIED on Linux.
-  Conditional M8 is not adopted; M9 remains UNVERIFIED. Original physical
-  stability/positivity gates remain failed as specified.
+  M8 research variants were approved and implemented; bounded local checks
+  pass, but broad robust qualification FAILED for the approved candidates.
+  M8 conditional terrain validation and M9 remain UNVERIFIED. Original
+  physical stability/positivity gates remain failed as specified.
 - Version Label: cls-epawf-revised-plan-v1.
 
 The objective is a native implementation of the high-Re CLS model and the
@@ -64,8 +66,15 @@ pressure/flux/covariance/energy audits, MPI and perturbed history restart.
 The original three-component transverse growth is reproduced and converges
 under refinement; unforced transition passage remains unqualified. All 33
 registered gates are covered by source-bound Linux verification. M7 is closed
-as the required faithful-model diagnosis. M8 requires an approved remedy and
-M9 remains open.
+as the required faithful-model diagnosis.
+The [M8 candidate-study report](/Users/jay/Documents/nektar-v2026/docs/plans/cls-epawf-revised-m8.md)
+records the subsequently approved common cubic scaling/capped source,
+reference-preserving stress increment and invariant-response screens. Local
+certificates and implementation checks pass within their stated scope;
+the fixed scalar increment has contradictory necessary broad diffusion and
+covariance bounds, and the two screened invariant alternatives also fail.
+M8 remains open at robust qualification, with conditional physical terrain
+validation unperformed. M9 remains open.
 
 The [M0 contract and baseline record](/Users/jay/Documents/nektar-v2026/docs/plans/cls-epawf-revised-m0.md)
 and [contract v1](/Users/jay/Documents/nektar-v2026/docs/plans/cls-epawf-revised-contract-v1.json)
@@ -94,7 +103,9 @@ The revised file shares its main derivation with the original file but removes
 the appended common-cubic-scaling and capped-destruction remedies and their
 interval certificate. Those remedies are outside this implementation contract.
 The revised note's stability section discusses possible changes without
-selecting a complete stabilized model.
+selecting a complete stabilized model. The later user-approved M8 extension
+implements and evaluates named remedies separately; it does not change the
+frozen revised-note/M0 specification or reclassify its original physical gates.
 
 [README.md](/Users/jay/Documents/nektar-v2026/README.md) and
 [AGENTS.md](/Users/jay/Documents/nektar-v2026/AGENTS.md) govern the project and
@@ -325,6 +336,9 @@ the outer equation determines its flux.
    diagnosis and leaves robust-model qualification failed.
 
 9. **M8 — Qualify a robust variant and validate terrain conditionally.**
+   The later three-variant proposal was approved and executed as documented
+   in the M8 report. The selected candidates fail the declared broad model
+   gate; M8 remains open and no developed physical terrain result is claimed.
    Before a production-scale or physical-accuracy campaign, resolve the
    demonstrated constitutive and positivity failures with a separately
    identified model decision. Prepare the concrete remedy and its
