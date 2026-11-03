@@ -1,0 +1,663 @@
+{
+  "schema": 1,
+  "milestone": "M8-R2 SaturatedR2 initial auxiliary J0 action check",
+  "method": "Metadata/result-field selection only; no scientific/native calls",
+  "curator": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-020/source/docs/plans/cls-epawf-revised-evidence/m8-r2/curate-saturated-action.py",
+    "bytes": 3015,
+    "sha256": "1e1a8f3b383f753fb974b41104ae9f5f454b9ebb94f9d605f0ecd990b4affdf0"
+  },
+  "authoritative_evidence": [
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/initial-jacobian-saturated-001/receipt.json",
+      "bytes": 14042,
+      "sha256": "7324ac48648ad13a344dee2b69cff09193e7d7209c163089048b745d5eb0db33"
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/initial-jacobian-saturated-001/validation.json",
+      "bytes": 1332004,
+      "sha256": "5f5df2c4254e5a305880d8a61cefe38db21462da8aacaf8daa86c136286268ab"
+    }
+  ],
+  "producing_source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+  "producing_solver": {
+    "bytes": 5226816,
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/build/IncNavierStokesSolver",
+    "sha256": "a90a196fe554d591fa39c6556166bf58ad43afa787b6b8e8d3d5cbf3355a5668"
+  },
+  "producing_runtime_sections": {
+    "python_packages": "b731cac586c07ea233813c735659e5c5093cd20bc178bd95552a87ab7384e44f",
+    "runtime_artifacts": "5550a806cec861e12cc7e26e2bd650a4710419e065af5d0c0c9840c470455baf",
+    "runtime_bindings": "6bc73e934e1403b605450707b62147bb9bd9659aecb16a0fb915d739b963e937",
+    "runtime_environment": "88310c925550f38d37f9ac4904fcffd68fc53c0a83dc0ffceb369b855a2e833e",
+    "source_inputs": "6c301cfd9f88527e85c486e7bf70fe296b4306895cf928b42befa064a4097e49",
+    "tool_images": "b8cc10e2605ae200c5f5a1949009f0c663e216f05c2203310d938036adecf1e7"
+  },
+  "analysis_source_commit": "9e128f73e53ee6e3ff7c351e72b5b4557cbf20ca",
+  "selected_cpu": 49,
+  "cpu_affinity": [
+    49
+  ],
+  "numerical_threads": {
+    "BLIS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "checks": 9724,
+  "native_calls": 0,
+  "scope": "Initial state, first auxiliary alpha3200 J0 derivative verification only",
+  "alpha": 3200.0,
+  "time": 0.0025,
+  "initial_h0_float64_LE_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca",
+  "matrix": {
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2/case.feasible.jsonl.solve1.J0.bin": {
+      "byteorder": "little",
+      "bytes": 37497800,
+      "dtype": "float64",
+      "retention": "Dense matrix stays in the authoritative Linux run directory",
+      "sha256": "2f38db8f04f92b4bdb4be0041165e95c00c4ac4b6b0f84d2badea17916999577",
+      "shape": [
+        2165,
+        2165
+      ]
+    }
+  },
+  "initial_derivative_gates_passed": false,
+  "outer_k_action_gate": {
+    "available": true,
+    "finest_absolute_physical_error": 1.643069826097945e-06,
+    "finest_feasible_central_step": 5e-07,
+    "gate_met": false,
+    "kind": "outer_k_independent_oracle",
+    "scope": "Independent weak-oracle differences of a fixed outer-support direction; no native probe or numerical search",
+    "threshold": 1e-07
+  },
+  "outer_k_action_levels": [
+    {
+      "arithmetic_subtraction_scale_proxy": 4.448679298719588e-08,
+      "central_J_error": {
+        "blocks": [
+          7.355284949626847e-07,
+          5.656166163774081e-09,
+          6.353401869917462e-08,
+          4.88410732200143e-08,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "gauge": 0.0,
+        "maximum": 7.355284949626847e-07,
+        "maximum_constraint": 0.0
+      },
+      "fixed_1e_minus7_gate_met": false,
+      "relative_1e_minus7_gate_met": true,
+      "relative_central_J_error": 9.940590352802742e-11,
+      "step": 2e-05,
+      "uncertainty": "The subtraction scale is a proxy, not an error bound; branch changes and all absolute failures remain recorded",
+      "plus": {
+        "branches": {
+          "inner_saturation": {
+            "available": true,
+            "base_minimum_switch_distance": 0.0013743039984032686,
+            "endpoint_minimum_switch_distance": 0.0013743039984032686,
+            "identical": true,
+            "interpretation": "Literal actual source-ray ordering; moving normal coordinates need not represent identical physical points",
+            "same_length": true
+          },
+          "outer_max": {
+            "available": true,
+            "base_minimum_switch_distance": 0.0,
+            "endpoint_minimum_switch_distance": 0.0,
+            "identical": true,
+            "interpretation": "Fixed outer points",
+            "same_length": true
+          },
+          "outer_yap": {
+            "available": true,
+            "base_minimum_switch_distance": 0.004339630861109445,
+            "endpoint_minimum_switch_distance": 0.004306555853883953,
+            "identical": true,
+            "interpretation": "Fixed outer points",
+            "same_length": true
+          },
+          "source_limiter": {
+            "available": true,
+            "base_minimum_switch_distance": 3.9999999999999982,
+            "endpoint_minimum_switch_distance": 3.999907320382264,
+            "identical": true,
+            "interpretation": "Literal actual source-ray ordering; moving normal coordinates need not represent identical physical points",
+            "same_length": true
+          }
+        },
+        "endpoint_source": "independent weak oracle; not a native recorded endpoint",
+        "evaluated": true,
+        "spatial_residual_float64_LE_sha256": "a3c4f1c895afd7564232b288f2d3c01ebd8c369399171a9bd29db2cc5d197949",
+        "state_float64_LE_sha256": "6255c0d61bd36e7b0ac638054e516282471e83ebe6d2e042b36444648cb18dcb"
+      },
+      "minus": {
+        "branches": {
+          "inner_saturation": {
+            "available": true,
+            "base_minimum_switch_distance": 0.0013743039984032686,
+            "endpoint_minimum_switch_distance": 0.0013743039984032686,
+            "identical": true,
+            "interpretation": "Literal actual source-ray ordering; moving normal coordinates need not represent identical physical points",
+            "same_length": true
+          },
+          "outer_max": {
+            "available": true,
+            "base_minimum_switch_distance": 0.0,
+            "endpoint_minimum_switch_distance": 0.0,
+            "identical": true,
+            "interpretation": "Fixed outer points",
+            "same_length": true
+          },
+          "outer_yap": {
+            "available": true,
+            "base_minimum_switch_distance": 0.004339630861109445,
+            "endpoint_minimum_switch_distance": 0.004304936284653671,
+            "identical": true,
+            "interpretation": "Fixed outer points",
+            "same_length": true
+          },
+          "source_limiter": {
+            "available": true,
+            "base_minimum_switch_distance": 3.9999999999999982,
+            "endpoint_minimum_switch_distance": 3.999895934859145,
+            "identical": true,
+            "interpretation": "Literal actual source-ray ordering; moving normal coordinates need not represent identical physical points",
+            "same_length": true
+          }
+        },
+        "endpoint_source": "independent weak oracle; not a native recorded endpoint",
+        "evaluated": true,
+        "spatial_residual_float64_LE_sha256": "1b5703402b09a6cd406d3d33372c6963744a8b25ef3b618a93d74d265e8a5544",
+        "state_float64_LE_sha256": "59d50049cbf4c2489db5a969414e59d5c82705b2148138b073f8d8abc8545461"
+      }
+    },
+    {
+      "arithmetic_subtraction_scale_proxy": 4.44867929655342e-07,
+      "central_J_error": {
+        "blocks": [
+          7.863197695639377e-07,
+          6.427496850970044e-09,
+          6.979152849567656e-08,
+          5.075489048039144e-08,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "gauge": 0.0,
+        "maximum": 7.863197695639377e-07,
+        "maximum_constraint": 0.0
+      },
+      "fixed_1e_minus7_gate_met": false,
+      "relative_1e_minus7_gate_met": true,
+      "relative_central_J_error": 1.0627029094150738e-10,
+      "step": 2e-06,
+      "uncertainty": "The subtraction scale is a proxy, not an error bound; branch changes and all absolute failures remain recorded",
+      "plus": {
+        "branches": {
+          "inner_saturation": {
+            "available": true,
+            "base_minimum_switch_distance": 0.0013743039984032686,
+            "endpoint_minimum_switch_distance": 0.0013743039984032686,
+            "identical": true,
+            "interpretation": "Literal actual source-ray ordering; moving normal coordinates need not represent identical physical points",
+            "same_length": true
+          },
+          "outer_max": {
+            "available": true,
+            "base_minimum_switch_distance": 0.0,
+            "endpoint_minimum_switch_distance": 0.0,
+            "identical": true,
+            "interpretation": "Fixed outer points",
+            "same_length": true
+          },
+          "outer_yap": {
+            "available": true,
+            "base_minimum_switch_distance": 0.004339630861109445,
+            "endpoint_minimum_switch_distance": 0.004339825121200569,
+            "identical": true,
+            "interpretation": "Fixed outer points",
+            "same_length": true
+          },
+          "source_limiter": {
+            "available": true,
+            "base_minimum_switch_distance": 3.9999999999999982,
+            "endpoint_minimum_switch_distance": 3.999990732038227,
+            "identical": true,
+            "interpretation": "Literal actual source-ray ordering; moving normal coordinates need not represent identical physical points",
+            "same_length": true
+          }
+        },
+        "endpoint_source": "independent weak oracle; not a native recorded endpoint",
+        "evaluated": true,
+        "spatial_residual_float64_LE_sha256": "58f883d77e31f4c90c808b08ff3f2caf98b90200008e8d21d3751ab00958178c",
+        "state_float64_LE_sha256": "5bee40b561e2fd58199db5fc2915595598db9dd323350834faa58a312f945021"
+      },
+      "minus": {
+        "branches": {
+          "inner_saturation": {
+            "available": true,
+            "base_minimum_switch_distance": 0.0013743039984032686,
+            "endpoint_minimum_switch_distance": 0.0013743039984032686,
+            "identical": true,
+            "interpretation": "Literal actual source-ray ordering; moving normal coordinates need not represent identical physical points",
+            "same_length": true
+          },
+          "outer_max": {
+            "available": true,
+            "base_minimum_switch_distance": 0.0,
+            "endpoint_minimum_switch_distance": 0.0,
+            "identical": true,
+            "interpretation": "Fixed outer points",
+            "same_length": true
+          },
+          "outer_yap": {
+            "available": true,
+            "base_minimum_switch_distance": 0.004339630861109445,
+            "endpoint_minimum_switch_distance": 0.0043371172510797695,
+            "identical": true,
+            "interpretation": "Fixed outer points",
+            "same_length": true
+          },
+          "source_limiter": {
+            "available": true,
+            "base_minimum_switch_distance": 3.9999999999999982,
+            "endpoint_minimum_switch_distance": 3.999989593485915,
+            "identical": true,
+            "interpretation": "Literal actual source-ray ordering; moving normal coordinates need not represent identical physical points",
+            "same_length": true
+          }
+        },
+        "endpoint_source": "independent weak oracle; not a native recorded endpoint",
+        "evaluated": true,
+        "spatial_residual_float64_LE_sha256": "0cd5b2cf1b5f1d48b424530d9b594807968165dfdb8d56d7e1631fa94221c749",
+        "state_float64_LE_sha256": "0a9533f35f022a8c36fb789027e9a593c0a02b392e421b6a40c8cff744aab3fe"
+      }
+    },
+    {
+      "arithmetic_subtraction_scale_proxy": 1.7794717185878106e-06,
+      "central_J_error": {
+        "blocks": [
+          1.643069826097945e-06,
+          1.0151450733890687e-08,
+          1.472053276683143e-07,
+          8.407841635981285e-08,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "gauge": 0.0,
+        "maximum": 1.643069826097945e-06,
+        "maximum_constraint": 0.0
+      },
+      "fixed_1e_minus7_gate_met": false,
+      "relative_1e_minus7_gate_met": true,
+      "relative_central_J_error": 2.220591611902015e-10,
+      "step": 5e-07,
+      "uncertainty": "The subtraction scale is a proxy, not an error bound; branch changes and all absolute failures remain recorded",
+      "plus": {
+        "branches": {
+          "inner_saturation": {
+            "available": true,
+            "base_minimum_switch_distance": 0.0013743039984032686,
+            "endpoint_minimum_switch_distance": 0.0013743039984032686,
+            "identical": true,
+            "interpretation": "Literal actual source-ray ordering; moving normal coordinates need not represent identical physical points",
+            "same_length": true
+          },
+          "outer_max": {
+            "available": true,
+            "base_minimum_switch_distance": 0.0,
+            "endpoint_minimum_switch_distance": 0.0,
+            "identical": true,
+            "interpretation": "Fixed outer points",
+            "same_length": true
+          },
+          "outer_yap": {
+            "available": true,
+            "base_minimum_switch_distance": 0.004339630861109445,
+            "endpoint_minimum_switch_distance": 0.004339679426131449,
+            "identical": true,
+            "interpretation": "Fixed outer points",
+            "same_length": true
+          },
+          "source_limiter": {
+            "available": true,
+            "base_minimum_switch_distance": 3.9999999999999982,
+            "endpoint_minimum_switch_distance": 3.999997683009556,
+            "identical": true,
+            "interpretation": "Literal actual source-ray ordering; moving normal coordinates need not represent identical physical points",
+            "same_length": true
+          }
+        },
+        "endpoint_source": "independent weak oracle; not a native recorded endpoint",
+        "evaluated": true,
+        "spatial_residual_float64_LE_sha256": "729fa7e3e3271f7a625fff93ee0f38039ffebd41f5e78d280d04f6a91a6bcf8b",
+        "state_float64_LE_sha256": "86b7c8d950645cf0d17c3b6f3ba4e089e41de600f1459aad61ddad819b4675ca"
+      },
+      "minus": {
+        "branches": {
+          "inner_saturation": {
+            "available": true,
+            "base_minimum_switch_distance": 0.0013743039984032686,
+            "endpoint_minimum_switch_distance": 0.0013743039984032686,
+            "identical": true,
+            "interpretation": "Literal actual source-ray ordering; moving normal coordinates need not represent identical physical points",
+            "same_length": true
+          },
+          "outer_max": {
+            "available": true,
+            "base_minimum_switch_distance": 0.0,
+            "endpoint_minimum_switch_distance": 0.0,
+            "identical": true,
+            "interpretation": "Fixed outer points",
+            "same_length": true
+          },
+          "outer_yap": {
+            "available": true,
+            "base_minimum_switch_distance": 0.004339630861109445,
+            "endpoint_minimum_switch_distance": 0.004339002458405794,
+            "identical": true,
+            "interpretation": "Fixed outer points",
+            "same_length": true
+          },
+          "source_limiter": {
+            "available": true,
+            "base_minimum_switch_distance": 3.9999999999999982,
+            "endpoint_minimum_switch_distance": 3.9999973983714785,
+            "identical": true,
+            "interpretation": "Literal actual source-ray ordering; moving normal coordinates need not represent identical physical points",
+            "same_length": true
+          }
+        },
+        "endpoint_source": "independent weak oracle; not a native recorded endpoint",
+        "evaluated": true,
+        "spatial_residual_float64_LE_sha256": "4b8a206df9736106e93e21deff1ed9f17b101b659bc63b119442c64628cc0d9d",
+        "state_float64_LE_sha256": "ee90162ab8e013a9b9e133e049e9514ad4089d2dfd486e6e7cf4904c2f5725ae"
+      }
+    }
+  ],
+  "exact_affine_continuity_columns": {
+    "checked_as_coupled": true,
+    "dimensionless_column_scale": "us, K0, E0, us^2, us/H by variable block",
+    "fixed_1e_minus7_gate_met": true,
+    "interpretation": "The independent B/mean block is exact. Any native FD continuity-row discrepancy is retained, not replaced or called analytic.",
+    "maximum_absolute_physical_error": 1.1828409075072567e-11,
+    "maximum_velocity_column_error": 1.1828409075072567e-11,
+    "native_rows_are_finite_differences_for_nonpressure_columns": true,
+    "worst_columns": [
+      {
+        "column": 30,
+        "externally_fixed_velocity": false,
+        "input_scale": 0.4,
+        "physical_block_errors": [
+          1.1828409075072567e-11,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "column": 34,
+        "externally_fixed_velocity": false,
+        "input_scale": 0.4,
+        "physical_block_errors": [
+          1.103866386847425e-11,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "column": 32,
+        "externally_fixed_velocity": false,
+        "input_scale": 0.4,
+        "physical_block_errors": [
+          9.260173486320178e-12,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "column": 33,
+        "externally_fixed_velocity": false,
+        "input_scale": 0.4,
+        "physical_block_errors": [
+          9.01307189571394e-12,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "column": 60,
+        "externally_fixed_velocity": false,
+        "input_scale": 0.4,
+        "physical_block_errors": [
+          0.0,
+          5.685843483636656e-12,
+          0.0
+        ]
+      },
+      {
+        "column": 64,
+        "externally_fixed_velocity": false,
+        "input_scale": 0.4,
+        "physical_block_errors": [
+          0.0,
+          5.306279677275282e-12,
+          0.0
+        ]
+      },
+      {
+        "column": 66,
+        "externally_fixed_velocity": false,
+        "input_scale": 0.4,
+        "physical_block_errors": [
+          0.0,
+          5.103813987738074e-12,
+          0.0
+        ]
+      },
+      {
+        "column": 70,
+        "externally_fixed_velocity": false,
+        "input_scale": 0.4,
+        "physical_block_errors": [
+          0.0,
+          4.763159439073048e-12,
+          0.0
+        ]
+      },
+      {
+        "column": 62,
+        "externally_fixed_velocity": false,
+        "input_scale": 0.4,
+        "physical_block_errors": [
+          0.0,
+          4.45133023513034e-12,
+          0.0
+        ]
+      },
+      {
+        "column": 63,
+        "externally_fixed_velocity": false,
+        "input_scale": 0.4,
+        "physical_block_errors": [
+          0.0,
+          4.332503724982757e-12,
+          0.0
+        ]
+      },
+      {
+        "column": 68,
+        "externally_fixed_velocity": false,
+        "input_scale": 0.4,
+        "physical_block_errors": [
+          0.0,
+          3.995687052675417e-12,
+          0.0
+        ]
+      },
+      {
+        "column": 69,
+        "externally_fixed_velocity": false,
+        "input_scale": 0.4,
+        "physical_block_errors": [
+          0.0,
+          3.889190689097121e-12,
+          0.0
+        ]
+      }
+    ]
+  },
+  "pressure_actions": [
+    {
+      "kind": "inner_pressure",
+      "absolute_physical_error": {
+        "blocks": [
+          3.74738819830216e-15,
+          1.1765296607234659e-14,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "gauge": 0.0,
+        "maximum": 1.1765296607234659e-14,
+        "maximum_constraint": 0.0
+      },
+      "fixed_1e_minus7_gate_met": true,
+      "nonlinear_source_and_trace_norm": {
+        "blocks": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "gauge": 0.0,
+        "maximum": 0.0,
+        "maximum_constraint": 0.0
+      }
+    },
+    {
+      "kind": "outer_pressure",
+      "absolute_physical_error": {
+        "blocks": [
+          3.622277897996533e-15,
+          1.421311780958748e-14,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.6263032587282563e-17,
+          0.0
+        ],
+        "gauge": 1.6263032587282563e-17,
+        "maximum": 1.421311780958748e-14,
+        "maximum_constraint": 0.0
+      },
+      "fixed_1e_minus7_gate_met": true,
+      "nonlinear_source_and_trace_norm": {
+        "blocks": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "gauge": 0.0,
+        "maximum": 0.0,
+        "maximum_constraint": 0.0
+      }
+    },
+    {
+      "kind": "gauge",
+      "absolute_physical_error": {
+        "blocks": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          2.0396436394279122e-17,
+          3.1131203127712325e-17,
+          0.0,
+          0.0
+        ],
+        "gauge": 0.0,
+        "maximum": 3.1131203127712325e-17,
+        "maximum_constraint": 0.0
+      },
+      "fixed_1e_minus7_gate_met": true,
+      "nonlinear_source_and_trace_norm": {
+        "blocks": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "gauge": 0.0,
+        "maximum": 0.0,
+        "maximum_constraint": 0.0
+      }
+    },
+    {
+      "kind": "pressure_and_gauge",
+      "absolute_physical_error": {
+        "blocks": [
+          5.1976752702304e-15,
+          1.8470051735284574e-14,
+          0.0,
+          0.0,
+          2.0396436394279122e-17,
+          3.1131203127712325e-17,
+          2.1684043449710086e-17,
+          0.0
+        ],
+        "gauge": 2.1684043449710086e-17,
+        "maximum": 1.8470051735284574e-14,
+        "maximum_constraint": 0.0
+      },
+      "fixed_1e_minus7_gate_met": true,
+      "nonlinear_source_and_trace_norm": {
+        "blocks": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "gauge": 0.0,
+        "maximum": 0.0,
+        "maximum_constraint": 0.0
+      }
+    }
+  ],
+  "solved_path_assessed": false,
+  "target_stage_status_assessed": false,
+  "physical_trajectory_qualification": false,
+  "M8_closed": false,
+  "interpretation": "The original absolute finite-difference action gate remains failed. Finer residual subtraction has no rigorous error bound; this is not a new independent analytic component diagnosis or a nonlinear-causality claim."
+}

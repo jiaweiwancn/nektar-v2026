@@ -157,3 +157,6 @@ The authoritative files are in `epoch-002/initial-jacobian-saturated-001`:
 
 The retained matrix SHA-256 is
 `2f38db8f04f92b4bdb4be0041165e95c00c4ac4b6b0f84d2badea17916999577`.
+The [compact saturated-law summary](saturated-initial-action-result.json)
+retains the absolute gates, full branch records, producing image and input
+hashes without copying vectors or matrices into the checkout.
