@@ -35,6 +35,19 @@ def require(value, message):
     if not value:raise AssertionError(message)
 
 
+def temporal_difference(a,b):
+    """Frozen dimensionless physical mass norms, one field scale per block."""
+    require(a['fields']==b['fields'] and a['offsets']==b['offsets'],'temporal comparison changed the discrete space')
+    fields=spaces(a);d=a['dimension'];off=a['offsets'];delta=np.asarray(a['state'])-b['state']
+    scales=[a['ustar']]*d+[a['parameters'][5],a['ustar']**3/(a['parameters'][7]*a['parameters'][1])]+[a['ustar']**2]*2
+    norms=[]
+    for block,field in enumerate(fields):
+        v=delta[off[block]:off[block+1]]
+        norms.append(math.sqrt(max(0.,float(v@field.mass()@v)))/(scales[block]*math.sqrt(field.volume)))
+    return {'differential':math.sqrt(sum(x*x for x in norms[:d+2])),
+            'field_norms':norms,'norm':'physical mass / (frozen field scale * sqrt(field domain volume))'}
+
+
 def audits(raw, name):
     require(raw.get('diagnostics_schema') == 1 and not raw['failure'], name+': diagnostics missing/failed')
     require(len(raw['state_audits']) == len(raw['accepted_states']) == len(raw['stage_audits'])+1,
@@ -195,13 +208,12 @@ def campaign(run, mode):
     require(abs(results['five-flow-control']['flow_through_units']-5)<1e-12,'five flow-through duration')
     # Independent dt refinement measures the same finite-resolution nonlinear
     # trajectory. Spatial runs are reported separately; no conflated order.
-    errors=[]
+    errors=[];comparisons=[]
     for a,b in [('joint','joint-dt2'),('joint-dt2','joint-dt4')]:
-        x,y=raws[a],raws[b];f=spaces(x);delta=np.asarray(x['state'])-np.asarray(y['state'])
-        errors.append(sum(float(delta[x['offsets'][j]:x['offsets'][j+1]]@f[j].mass()@
-                                delta[x['offsets'][j]:x['offsets'][j+1]]) for j in range(x['dimension']+2))**.5)
+        comparison=temporal_difference(raws[a],raws[b]);comparisons.append(comparison)
+        errors.append(comparison['differential'])
     require(errors[1]<errors[0], 'native temporal refinement must reduce trajectory difference')
-    results['native_dt_refinement']={'differences':errors,'ratio':errors[0]/errors[1]}
+    results['native_dt_refinement']={'differences':errors,'ratio':errors[0]/errors[1],'comparisons':comparisons}
     # Same-source MPI audit and complete physical field parity.
     parallel=run.evolution('joint-mpi2',generator=perturbation_session,ranks=2)
     results['joint-mpi2']=audits(parallel,'joint-mpi2')
@@ -300,11 +312,19 @@ def replay(run, directory):
         result['independent_energy']=verify_energy(raw);results[path.parent.name]=result
         artifacts.append({'path':str(path),'sha256':hashlib.sha256(path.read_bytes()).hexdigest()})
     require(len(results)>=25,'replay omitted successful native reports')
+    comparisons=[]
+    for a,b in [('joint','joint-dt2'),('joint-dt2','joint-dt4')]:
+        left=json.loads((directory/a/'case.evolution.json').read_text())
+        right=json.loads((directory/b/'case.evolution.json').read_text())
+        comparisons.append(temporal_difference(left,right))
+    ratio=comparisons[0]['differential']/comparisons[1]['differential']
+    require(ratio>1,'dimensionless native temporal refinement did not reduce error')
     runtime_check()
     return {'native_source_commit':parent['source_commit'],'audit_source_commit':revision,
             'changed_paths':changed,'native_receipt_sha256':hashlib.sha256((directory.parent/'receipt.json').read_bytes()).hexdigest(),
             'runtime_fingerprint_sha256':hashlib.sha256(pin_path.read_bytes()).hexdigest(),
             'unchanged_runtime_images':len(pin['runtime_artifacts']),
+            'normalized_temporal_refinement':{'comparisons':comparisons,'ratio':ratio},
             'artifact_receipts':artifacts,'cases':results}
 
 

@@ -139,6 +139,7 @@ def _direct(raw, fields, state, audit):
     stress_source, advection, forcing = 0., 0., 0.
     inner_volume = outer_volume = 0.
     original_sink = corrected_sink = redistribution = 0.
+    outer_covariance_minimum=math.inf
     for point, horizontal in _horizontal(fields, d, H, tangential_order):
         profile, metric = _profile(raw, fields, state, point)
         height, scale = metric['height'], metric['scale']
@@ -188,6 +189,7 @@ def _direct(raw, fields, state, audit):
         divergence = np.trace(G, axis1=1, axis2=2)
         closure = [indexed(g, k, e, 'physical') for g, k, e in zip(G, K, epsilon)]
         tensor = np.asarray([value['stress'].real for value in closure])
+        outer_covariance_minimum=min(outer_covariance_minimum,float(np.min(np.linalg.eigvalsh(tensor)[:,0])))
         production = -np.einsum('qab,qab->q', tensor, G)
         stress = -tensor+(2*K/3-pressure)[:, None, None]*np.eye(3)
         unreduced = np.einsum('qab,qab->q', G, stress)-(production-epsilon)
@@ -199,7 +201,9 @@ def _direct(raw, fields, state, audit):
     return dict(stress_work_minus_k_source=stress_source, resolved_advection=advection,
                 roughness_force_work=forcing, volumes=[inner_volume, outer_volume],
                 original_dissipation_integral=original_sink, blended_dissipation_integral=corrected_sink,
-                redistribution_integral=redistribution, quadrature=[tangential_order, 32, tangential_order])
+                redistribution_integral=redistribution,
+                outer_covariance_minimum_on_declared_Gauss_rule=outer_covariance_minimum,
+                quadrature=[tangential_order, 32, tangential_order])
 
 
 def _interface(raw, fields, state):
@@ -286,6 +290,8 @@ def verify(raw):
                       'Full energy oracle supports constant-H flat/plane neutral-data geometry')
         audit.require(abs(raw['parameters'][6]-3.1906750816242875) < 1e-10, 'Full energy oracle requires original CLS')
         direct = _direct(raw, fields, state, audit)
+        audit.near(raw['state_audits'][-1]['source_volume_outer'][3],
+                   direct['outer_covariance_minimum_on_declared_Gauss_rule'],'independent_outer_covariance_eigenvalue')
         if unforced_transition:
             from cls_epawf_m6_operator_oracle import _diagnostic
             view=dict(raw,transition=dict(controls=raw['transition_controls'],weights=raw['transition_weights'],

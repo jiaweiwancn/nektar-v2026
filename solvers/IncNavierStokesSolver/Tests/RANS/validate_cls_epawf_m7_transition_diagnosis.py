@@ -127,6 +127,9 @@ def last_accepted_energy(raw, view, audit, name):
     expected = [storage, direct['stress_work_minus_k_source'], direct['resolved_advection'],
                 direct['roughness_force_work'], total, observed[0]-total, stored]
     audit.near(observed[[1, 2, 3, 4, 6, 7, 8]], expected, name+'_last_accepted_direct_energy', 1e-10)
+    audit.near(view['state_audits'][-1]['source_volume_outer'][3],
+               direct['outer_covariance_minimum_on_declared_Gauss_rule'],
+               name+'_independent_outer_covariance_eigenvalue',1e-10)
     return dict(verified=True, scope='last accepted actual history, physical mass and independent direct-volume components',
                 time=time, alpha=alpha, storage=storage, stored_energy=stored, direct=direct,
                 independently_reconstructed_total=total, native_captured_unmasked_work=float(observed[0]),
@@ -151,6 +154,7 @@ def analyze(raw, record, audit):
     record['accepted_prefix'] = summary
     record['independent_last_accepted_energy'] = last_accepted_energy(raw, view, audit, name)
     record['observation_verified'] = True
+    record['status']='verified_completed' if completed else 'verified_stop'
     return view
 
 
