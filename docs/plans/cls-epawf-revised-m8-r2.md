@@ -161,12 +161,23 @@ contains 500 checks and no native calls. This verifies the independent field
 map and affine block; current stage Jacobians still require their own checks.
 
 The matched actual startup-stage searches use this common admissible
-initialization. Linear has reached its external wall limit; SaturatedR2 is
-still running. The Linear target alpha400 was observed in the actual log,
-with rounded residuals `62.5985,15.4194,13.1962,13.185,13.1849`, before
+initialization. Both cases reached their external wall limits, with producing
+source/runtime fingerprints unchanged. Both actual alpha400 targets were
+observed in their native logs. The Linear target has rounded residuals
+`62.5985,15.4194,13.1962,13.185,13.1849`, before
 interruption during its next Jacobian. No completed target record or final
-case report was published. Its target convergence, final scalar state and
-physical/accounting gates remain unavailable, rather than false.
+case report was published for either case. Target convergence, final scalar
+state and physical/accounting gates remain unavailable, rather than false.
+SaturatedR2 began its exact target after its failed auxiliary search; the
+case limit interrupted its first Jacobian, whose last logged column was256. Its initial
+target residual was `62.6096`. A fresh-Jacobian build is not a completed
+nonlinear update or a proof that the unchanged target has no admissible root.
+
+The [matched native summary](cls-epawf-revised-evidence/m8-r2/matched-stage-summary-001.json)
+retains every complete solve, trial fraction, block norm, scalar margin,
+matrix hash and wall-limit command. Missing final-report flags stay null;
+the separate strict assessment establishes actual target attempts from the
+logs and checks that no complete target-convergence evidence was discarded.
 
 The completed Linear alpha3200 auxiliary search stagnated at
 `5.334240445678192e-12`, above the unchanged `2e-12` coupled tolerance.
@@ -182,6 +193,37 @@ binds the independent reconstruction and actual producing source/runtime,
 including full traction, k flux, separate weak/strong continuity, constraints
 and energy/source accounting. These are independent terminal observations;
 the absent final case report supplies no native postqualification table.
+
+The SaturatedR2 alpha3200 search also ended in
+`feasible_residual_stagnation`, after 12 accepted internal updates. Its
+independent [terminal replay](cls-epawf-revised-evidence/m8-r2/terminal-saturated-auxiliary-result.json)
+completed in 229 seconds. It passes the same finite physical-range checks,
+while its coupled residual remains above tolerance. These two auxiliary
+observations separate scalar/covariance/applicability from convergence:
+
+| Completed auxiliary, alpha3200 | Linear | SaturatedR2 |
+| --- | ---: | ---: |
+| Actual / independent coupled maximum | `5.33424e-12 / 6.09160e-12` | `4.59464e-12 / 5.47327e-12` |
+| Actual coupled tolerance met, `2e-12` | no | no |
+| Actual / independent scalar-block maximum | `6.07507e-13 / 7.98783e-13` | `6.70615e-13 / 7.98319e-13` |
+| Minimum dimensionless scalar margin | `.675284` | `.675182` |
+| Inner / outer covariance minimum | `.0746028 / .176920` | `.0820016 / .176920` |
+| Maximum normalized outer gradient departure | `.000532163` | `.000532248` |
+| Actual/target outer epsilon/epsilon0 range | `[.9832624,1.0000206]` | `[.9832624,1.0000206]` |
+| Common finite box, covariance and scalar conditions | pass | pass |
+| Minimum b / lambda; limiter/cap source measure | `1 / 1; 0 / 0` | `1 / 1; 0 / 0` |
+| Saturation-active source measure, of 12 | `0` | `.0456635` |
+| Complete internal updates / valid non-descent trials | `8 / 33` | `12 / 51` |
+
+The recorded auxiliary trials contain no scalar-domain rejections or residual
+evaluation exceptions; none of the fraction-to-boundary limits is active.
+Late dimensionless steps are about `6.6e-14` / `4.7e-14`; linear residuals
+are about `1e-26`. These observations classify valid non-descent and
+stagnation in a fresh-Jacobian policy. They do not establish a roundoff
+floor, a causal explanation involving the inaccurate k action, or a linear
+factorization failure. Neither failed auxiliary candidate supplies the next
+target guess; alpha400 starts from the source-bound h0 when no auxiliary
+level converged. Native history remains unadvanced by this probe protocol.
 
 The full auxiliary-path audit finished but failed five moving-ray lookup
 checks. A separately bound terminal diagnosis found a one-ULP radius

@@ -1,0 +1,1143 @@
+{
+  "M8_closed": false,
+  "analysis": {
+    "checks": 13262,
+    "command_argv": [
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/docs/plans/cls-epawf-revised-evidence/m8-r2/analyze-terminal-record.py",
+      "--source",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source",
+      "--expected-commit",
+      "7c3a61250a33cb6709551e68709ab92bfb93cad9",
+      "--preflight",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/preflight-002/cases/outer6-saturatedr2-base/case.evolution.json",
+      "--preflight-session",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/preflight-002/cases/outer6-saturatedr2-base/case.xml",
+      "--stage-session",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2/case.xml",
+      "--trace",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2/case.feasible.jsonl",
+      "--runtime-pin",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/runtime-before.json",
+      "--record-index",
+      "0",
+      "--cpu",
+      "48",
+      "--output",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-analysis-saturated-001"
+    ],
+    "cpu_affinity": [
+      48
+    ],
+    "driver": {
+      "bytes": 31676,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/docs/plans/cls-epawf-revised-evidence/m8-r2/analyze-terminal-record.py",
+      "sha256": "23d912bf6fe7f9aa48c0e6356e3d3f90df2a81b13c4e673d4835e70ff7d8c1d9"
+    },
+    "elapsed_seconds": 228.99188546300138,
+    "errors": {
+      "R2_selected_inner_full_strain_energy_cancellation": 9.18634336265903e-16,
+      "R2_selected_inner_weak_divergence_production": 4.346116920273377e-16,
+      "independent_complete_dynamic_ray_coordinates": 3.256777801562335e-16,
+      "independent_complete_dynamic_ray_weights": 3.2959746043559335e-17,
+      "independent_current_projected_constraints": 4.765068548073792e-16,
+      "independent_domain_cutoff_range": 0.0,
+      "independent_domain_minimum_b": 0.0,
+      "independent_domain_minimum_lambda": 0.0,
+      "independent_exact_affine_weak_continuity_and_gauge_values": 4.953695252246937e-16,
+      "independent_exported_scalar_observations": 1.3877787807814457e-16,
+      "independent_exported_scalar_scales": 1.3877787807814457e-17,
+      "independent_external_lift": 0.0,
+      "independent_projected_trace_state": 4.765068548073792e-16,
+      "independent_scalar_domain_minimum_inner_k": 0.0,
+      "independent_scalar_domain_minimum_margin": 0.0,
+      "independent_scalar_domain_minimum_outer_epsilon": 0.0,
+      "independent_scalar_domain_minimum_outer_k": 0.0,
+      "independent_scalar_domain_minimum_projected_trace_epsilon": 4.163336342344337e-17,
+      "independent_scalar_domain_minimum_sampled_K": 0.0,
+      "independent_true_unforced_coupled_residual": 2.5899855177202724e-14,
+      "repaired_inner_stress_production_cancellation": 1.2097363546430735e-15,
+      "selected_outer_stress_production_cancellation": 2.7755575615628914e-17,
+      "terminal_actual_true_mass_dual_norms": 1.6155871338926322e-27
+    },
+    "finished_utc": "2026-11-03T23:46:54.293294+00:00",
+    "imported_source_files_start": {
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/docs/plans/cls-epawf-revised-evidence/m8-r2/analyze-terminal-record.py": "23d912bf6fe7f9aa48c0e6356e3d3f90df2a81b13c4e673d4835e70ff7d8c1d9",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m3_cases.py": "064bce602d05811baaf49756210d7a51ed9a0465c6a8a0cb514a0c1ccabf0675",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m4_cases.py": "57ca6d5f92e1ff91f9d893665bdb0c0eb74d8e02eaed42f6d0ddce500d2534cb",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m5_boundary_oracle.py": "07580298953d001fdda9762a8660d79a18ef59d254803a5eee1a11eb1bdf0976",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m5_cases.py": "9f4ec3b94a93c4785762b78969f2ea95a03a352c646a75b8a5985bbbca250e02",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m6_cases.py": "6ef436c17496af9deee56f4c3e7d501a8b7289e99f9ce4945d8a52dbb99bab06",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m6_operator_oracle.py": "e4ae09358e5a578e71783cb9619d1d83918771a7768bdac8315dc3f732acdece",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m7_cases.py": "6d776a39ad496a00ea728ca5f960c5ecc485f622ae34a93dcb4a1759c57f56b2",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m7_energy_oracle.py": "52a89bb646d4c08c13e08b7b4ba18b5df6f9d959cfe543cf383a82a722cba315",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_cases.py": "d0f3c43567c725b04c13852379672b55274296648391ef6199f0ae6e54c289cf",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_native_oracle.py": "80ec891203275919d992a8c47c4fef6f070dfffd858afffed08b2d76b0901df9",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_r1_cases.py": "40e93cf65ba8dad611b48eceb243520b20dce970ae1f20ec04492edb8b9155ba",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_r1_nonlinear.py": "4d3fd89a201c9170123dc1cd0466b5878a87e8502dd67921651f3e7e7efb5928",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_r1_preflight.py": "d046da906814eea9aafc5ca7e0da6b3598203cc2da23bb764ddc4bdb8ed3dd84",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_r2_cases.py": "1b24945b675a5ed0ad4b3c5caf1182bf7bd8dd1f2fec54eba95d112f0f8200bc",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_r2_oracle.py": "13062edb5a72301c1d92b4639a69005ff850efba99aef3cd1eea7244dd274851",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_r2_preflight.py": "f2731ff17c152d769b8c3387c3891fb4458bb23d1eb05bc3b945755caae63a10",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_r2_stage_analysis.py": "17e4b82acb6728334275bcfda205f0b78af3330aa903d866dfa1059a10ad98fe",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_state_coverage.py": "630167223ce82e9af9270a3de45ad0c58de7e8039443cd7c5478da1ad3b17130",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m1.py": "ad91787c6356831bd4b75e145592c9ea952a45f0e5dbdcff6015f51ce992964a",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m2.py": "26568aa79b41bc737a9247d9f2480d932a6674c8dad46e00f5fd8301a69ff18c",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m3.py": "8d1951cf8018d154d4fa7a78c0bec690a66b2d6023ae442a0d2b1e41c572587f",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m4.py": "979635de780944daeb24add2af0caffa44553f5284432ab632e04fe811863a06",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m5.py": "375d440060a31d426c3e65ed1cdc35415e95cedcc0e3b248d5f04be05b91f761",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m5_geometry.py": "4dfceb445fa6f760200a2d66aef7140e039da4da41d40902f777a0b15ef888c1",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m7.py": "8ddf70d9274b0658700b96149627784b3c9d9ebc0e1a9b617d1e483345d72a32",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m7_transition_flow.py": "d144ecececb3ffcb7d9df20bc5fab3db41ef24c224f1d644f259c62ffb339aca",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m8_r2_pressure.py": "f169abac5abb7af02adaa727c86e6ec4d91685fd6e951070fac955380c0231cd",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_m1.py": "7f4ed7254691ab2046555883ee8abb5795c048b422b0137b3cef80095bde0c75",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_m2.py": "3fc9950bbd49f77206cffcfb838167dde97ae1d835270880f917bc2fadfdc6d1"
+    },
+    "numerical_threads": {
+      "BLIS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "source_clean_end": true,
+    "source_clean_start": true,
+    "source_commit": "7c3a61250a33cb6709551e68709ab92bfb93cad9",
+    "source_commit_end": "7c3a61250a33cb6709551e68709ab92bfb93cad9",
+    "started_utc": "2026-11-03T23:43:05.301449+00:00"
+  },
+  "checkpoint_final_enrichments": [
+    {
+      "all_other_canonical_result_fields_unchanged": true,
+      "checkpoint": {
+        "bytes": 3489,
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-analysis-saturated-001/phase-01-provenance_and_complete_record.json",
+        "sha256": "6da419d1ed35f9f0e3735ce78c9967f055b29a88bcf72ee288af646f88bfbf5a"
+      },
+      "ending_prefix_hash_matches_starting_hash": true,
+      "ending_trace_bytes_cover_frozen_prefix": true,
+      "fields_added_after_completed_checkpoint": {
+        "prefix_sha256_end": "1293f4c5863028057dc39c85f5419a80884f1e8adbb62c10d517fa3e29858cd3",
+        "trace_bytes_end": 366927552
+      },
+      "location": "result.record_snapshot",
+      "phase": "provenance_and_complete_record",
+      "reason": "Wrapper shared prefix dictionary receives final provenance metadata after the phase checkpoint"
+    }
+  ],
+  "completed_phases": [
+    {
+      "checkpoint": {
+        "bytes": 3489,
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-analysis-saturated-001/phase-01-provenance_and_complete_record.json",
+        "sha256": "6da419d1ed35f9f0e3735ce78c9967f055b29a88bcf72ee288af646f88bfbf5a"
+      },
+      "name": "provenance_and_complete_record",
+      "seconds": 11.620730325004843
+    },
+    {
+      "checkpoint": {
+        "bytes": 1458,
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-analysis-saturated-001/phase-02-constructor_and_static_inventory.json",
+        "sha256": "e7048460ebb398cf6555662b089c45cdd68ee3fd23b2d5f195564eb76c1e3591"
+      },
+      "name": "constructor_and_static_inventory",
+      "seconds": 13.60289808500238
+    },
+    {
+      "checkpoint": {
+        "bytes": 45608,
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-analysis-saturated-001/phase-03-common_scalar_domain.json",
+        "sha256": "981452e84adb910ad1e9c3f62b9634350ba88d6f7448eb0b5caedcd662cd8699"
+      },
+      "name": "common_scalar_domain",
+      "seconds": 41.19008378400031
+    },
+    {
+      "checkpoint": {
+        "bytes": 18766,
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-analysis-saturated-001/phase-04-current_projected_constraints.json",
+        "sha256": "1832cc64f2f0a5671da260a4933903c9ea71389feb610b95226597c3acec1201"
+      },
+      "name": "current_projected_constraints",
+      "seconds": 10.8016535160059
+    },
+    {
+      "checkpoint": {
+        "bytes": 6822,
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-analysis-saturated-001/phase-05-true_coupled_residual.json",
+        "sha256": "09e1cb8d23a458fc20c0743d29537c3272929c6f832d4c127a49514db2af6efa"
+      },
+      "name": "true_coupled_residual",
+      "seconds": 34.192143673004466
+    },
+    {
+      "checkpoint": {
+        "bytes": 3419,
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-analysis-saturated-001/phase-06-selected_source_and_direct_accounting.json",
+        "sha256": "fdfb594a33d967a72903310234aed78126d74612a0cda72fd56a3672eaa69fd0"
+      },
+      "name": "selected_source_and_direct_accounting",
+      "seconds": 44.993126110006415
+    },
+    {
+      "checkpoint": {
+        "bytes": 1245,
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-analysis-saturated-001/phase-07-matching_full_traction_and_k_flux.json",
+        "sha256": "3ef54eee4e5f73208aef3337247c019bb6ae99a2cb1b6c37e5b0d0f88ea91512"
+      },
+      "name": "matching_full_traction_and_k_flux",
+      "seconds": 6.224961911997525
+    },
+    {
+      "checkpoint": {
+        "bytes": 1061,
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-analysis-saturated-001/phase-08-strong_continuity.json",
+        "sha256": "294033538f6a3a0d3fe99a41c4d1a0ea137df6f6cb825887bfbcf81018f50577"
+      },
+      "name": "strong_continuity",
+      "seconds": 0.07642139800009318
+    },
+    {
+      "checkpoint": {
+        "bytes": 1526,
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-analysis-saturated-001/phase-09-physical_mass_and_complete_energy.json",
+        "sha256": "0e24adfd7c11cc48df2d0a529190e4e660f480d226740c74e24342f43ac0cfad"
+      },
+      "name": "physical_mass_and_complete_energy",
+      "seconds": 0.0030766729978495277
+    },
+    {
+      "checkpoint": {
+        "bytes": 3274,
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-analysis-saturated-001/phase-10-common_inventory_physical_ranges.json",
+        "sha256": "fd97f0f99e761ae1d5fb0e7a047d1366e18e10dc5e163b82210aaf34e21c2802"
+      },
+      "name": "common_inventory_physical_ranges",
+      "seconds": 63.31777007599885
+    },
+    {
+      "checkpoint": {
+        "bytes": 945,
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-analysis-saturated-001/phase-11-optional_native_budget_crosschecks.json",
+        "sha256": "84af2f213b370e0185a290c94e65ffa84be9f6b87665a49bb88ac11e901c80e4"
+      },
+      "name": "optional_native_budget_crosschecks",
+      "seconds": 6.279299850575626e-05
+    }
+  ],
+  "curated_utc": "2026-11-03T23:49:47.558350+00:00",
+  "curator_sha256": "e6a43cab61118db981da259f017b591654330d9fd55edca0670e512cfc95fcd6",
+  "current_action_or_derivative_gates_assessed": false,
+  "final_native_history_slots_assessed": false,
+  "full_native_case_protocol_assessed": false,
+  "input_pins": [
+    {
+      "bytes": 31676,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/docs/plans/cls-epawf-revised-evidence/m8-r2/analyze-terminal-record.py",
+      "sha256": "23d912bf6fe7f9aa48c0e6356e3d3f90df2a81b13c4e673d4835e70ff7d8c1d9"
+    },
+    {
+      "bytes": 7625,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m3_cases.py",
+      "sha256": "064bce602d05811baaf49756210d7a51ed9a0465c6a8a0cb514a0c1ccabf0675"
+    },
+    {
+      "bytes": 11961,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m4_cases.py",
+      "sha256": "57ca6d5f92e1ff91f9d893665bdb0c0eb74d8e02eaed42f6d0ddce500d2534cb"
+    },
+    {
+      "bytes": 8070,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m5_boundary_oracle.py",
+      "sha256": "07580298953d001fdda9762a8660d79a18ef59d254803a5eee1a11eb1bdf0976"
+    },
+    {
+      "bytes": 8738,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m5_cases.py",
+      "sha256": "9f4ec3b94a93c4785762b78969f2ea95a03a352c646a75b8a5985bbbca250e02"
+    },
+    {
+      "bytes": 6599,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m6_cases.py",
+      "sha256": "6ef436c17496af9deee56f4c3e7d501a8b7289e99f9ce4945d8a52dbb99bab06"
+    },
+    {
+      "bytes": 24429,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m6_operator_oracle.py",
+      "sha256": "e4ae09358e5a578e71783cb9619d1d83918771a7768bdac8315dc3f732acdece"
+    },
+    {
+      "bytes": 3840,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m7_cases.py",
+      "sha256": "6d776a39ad496a00ea728ca5f960c5ecc485f622ae34a93dcb4a1759c57f56b2"
+    },
+    {
+      "bytes": 19757,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m7_energy_oracle.py",
+      "sha256": "52a89bb646d4c08c13e08b7b4ba18b5df6f9d959cfe543cf383a82a722cba315"
+    },
+    {
+      "bytes": 8266,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_cases.py",
+      "sha256": "d0f3c43567c725b04c13852379672b55274296648391ef6199f0ae6e54c289cf"
+    },
+    {
+      "bytes": 15783,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_native_oracle.py",
+      "sha256": "80ec891203275919d992a8c47c4fef6f070dfffd858afffed08b2d76b0901df9"
+    },
+    {
+      "bytes": 13256,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_r1_cases.py",
+      "sha256": "40e93cf65ba8dad611b48eceb243520b20dce970ae1f20ec04492edb8b9155ba"
+    },
+    {
+      "bytes": 48098,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_r1_nonlinear.py",
+      "sha256": "4d3fd89a201c9170123dc1cd0466b5878a87e8502dd67921651f3e7e7efb5928"
+    },
+    {
+      "bytes": 29290,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_r1_preflight.py",
+      "sha256": "d046da906814eea9aafc5ca7e0da6b3598203cc2da23bb764ddc4bdb8ed3dd84"
+    },
+    {
+      "bytes": 10237,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_r2_cases.py",
+      "sha256": "1b24945b675a5ed0ad4b3c5caf1182bf7bd8dd1f2fec54eba95d112f0f8200bc"
+    },
+    {
+      "bytes": 8394,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_r2_oracle.py",
+      "sha256": "13062edb5a72301c1d92b4639a69005ff850efba99aef3cd1eea7244dd274851"
+    },
+    {
+      "bytes": 49342,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_r2_preflight.py",
+      "sha256": "f2731ff17c152d769b8c3387c3891fb4458bb23d1eb05bc3b945755caae63a10"
+    },
+    {
+      "bytes": 109214,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_r2_stage_analysis.py",
+      "sha256": "17e4b82acb6728334275bcfda205f0b78af3330aa903d866dfa1059a10ad98fe"
+    },
+    {
+      "bytes": 21114,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_state_coverage.py",
+      "sha256": "630167223ce82e9af9270a3de45ad0c58de7e8039443cd7c5478da1ad3b17130"
+    },
+    {
+      "bytes": 19742,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m1.py",
+      "sha256": "ad91787c6356831bd4b75e145592c9ea952a45f0e5dbdcff6015f51ce992964a"
+    },
+    {
+      "bytes": 23220,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m2.py",
+      "sha256": "26568aa79b41bc737a9247d9f2480d932a6674c8dad46e00f5fd8301a69ff18c"
+    },
+    {
+      "bytes": 45452,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m3.py",
+      "sha256": "8d1951cf8018d154d4fa7a78c0bec690a66b2d6023ae442a0d2b1e41c572587f"
+    },
+    {
+      "bytes": 47596,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m4.py",
+      "sha256": "979635de780944daeb24add2af0caffa44553f5284432ab632e04fe811863a06"
+    },
+    {
+      "bytes": 38780,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m5.py",
+      "sha256": "375d440060a31d426c3e65ed1cdc35415e95cedcc0e3b248d5f04be05b91f761"
+    },
+    {
+      "bytes": 19250,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m5_geometry.py",
+      "sha256": "4dfceb445fa6f760200a2d66aef7140e039da4da41d40902f777a0b15ef888c1"
+    },
+    {
+      "bytes": 23326,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m7.py",
+      "sha256": "8ddf70d9274b0658700b96149627784b3c9d9ebc0e1a9b617d1e483345d72a32"
+    },
+    {
+      "bytes": 25279,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m7_transition_flow.py",
+      "sha256": "d144ecececb3ffcb7d9df20bc5fab3db41ef24c224f1d644f259c62ffb339aca"
+    },
+    {
+      "bytes": 26750,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m8_r2_pressure.py",
+      "sha256": "f169abac5abb7af02adaa727c86e6ec4d91685fd6e951070fac955380c0231cd"
+    },
+    {
+      "bytes": 7665,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_m1.py",
+      "sha256": "7f4ed7254691ab2046555883ee8abb5795c048b422b0137b3cef80095bde0c75"
+    },
+    {
+      "bytes": 15555,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_m2.py",
+      "sha256": "3fc9950bbd49f77206cffcfb838167dde97ae1d835270880f917bc2fadfdc6d1"
+    },
+    {
+      "bytes": 5226816,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/build/IncNavierStokesSolver",
+      "sha256": "a90a196fe554d591fa39c6556166bf58ad43afa787b6b8e8d3d5cbf3355a5668"
+    },
+    {
+      "bytes": 21495317,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/preflight-002/cases/outer6-saturatedr2-base/case.evolution.json",
+      "sha256": "fa0466c48481abca5ab50bab1d9acee9fa3ad0744e0c27774d0fff666d103ac0"
+    },
+    {
+      "bytes": 13991,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/preflight-002/cases/outer6-saturatedr2-base/case.xml",
+      "sha256": "2c9093c39a497952be994cfde287a70e820ce95c0b612a447fe9b5bd8c9ce425"
+    },
+    {
+      "bytes": 50010,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/source/solvers/IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallEvolution.cpp",
+      "sha256": "1a53851bceaae0c0e63789c4e1ac4abbda363dbfcc6dba3018258e163ebc7807"
+    },
+    {
+      "bytes": 38414,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/source/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionFeasible.cpp",
+      "sha256": "9f73fb59ddc43c917f4f7f7a3f51147fb24a82bc4a19a017221f46bfcb4957f0"
+    },
+    {
+      "bytes": 83690,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/source/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp",
+      "sha256": "238867d959d3a7a6de692ced2072a625d36356866f092dc56c9a535400cc4141"
+    },
+    {
+      "bytes": 13997,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2/case.xml",
+      "sha256": "c911b30b912789a1513cd1a06acee5da79f2b124a9c9c26657def92468ee041a"
+    },
+    {
+      "bytes": 679763,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/runtime-before.json",
+      "sha256": "ccaa1e896029576e08748a6dcd6cf00d51d3f03f1753d528432290cae4029b4f"
+    },
+    {
+      "bytes": 366927552,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-analysis-saturated-001/native-terminal-record-0.raw.jsonl",
+      "sha256": "1293f4c5863028057dc39c85f5419a80884f1e8adbb62c10d517fa3e29858cd3"
+    }
+  ],
+  "iteration_path_assessed": false,
+  "native_calls": 0,
+  "observations": {
+    "common_inventory_physical_ranges": {
+      "covariance_guard_absolute_tolerance": 5.1050801305988614e-11,
+      "covariance_minima": [
+        0.08200160071027562,
+        0.17691996426157414
+      ],
+      "declared_native_covariance_roundoff_guard": true,
+      "fixed_outer_box_covered": true,
+      "minimum_lambda": 1.0,
+      "outer_range": [
+        0.0005322477654643443,
+        0.9999993896450693,
+        1.000003019199108,
+        0.9832624216242487,
+        1.0000205664726853,
+        0.999998080529097,
+        1.0000072817537482
+      ],
+      "qualified_on_common_inventory": true,
+      "rigorous_or_polynomial_everywhere_qualification": false,
+      "scope": "Actual common scalar inventory including both retained epsilon-H and independently projected target; one-sided geometry gradients preserved",
+      "strict_covariance_nonnegative": true,
+      "worst_points": [
+        {
+          "G": [
+            [
+              0.0,
+              0.0,
+              180.1868851690149
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0005607713929304772
+            ]
+          ],
+          "S": [
+            [
+              0.0,
+              0.0,
+              180.1868851690149
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              180.1868851690149,
+              0.0,
+              0.0011215427858609543
+            ]
+          ],
+          "a": 0.22029775891678854,
+          "c": 0.22979053474037617,
+          "chart": [
+            1.6046496089512394,
+            0.0,
+            0.0
+          ],
+          "covariance_minimum": 0.08200160071027562,
+          "geometry": 4,
+          "inventory": "reconstruction_native",
+          "k": 0.34468580211056427,
+          "nu_A": 0.0008645137467282147,
+          "sampled_K": 0.5105117304535237,
+          "side": 0
+        },
+        {
+          "G": [
+            [
+              4.810009244238245e-07,
+              0.0,
+              0.453756494312564
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              -5.189154421153128e-06,
+              0.0,
+              -9.48370643876754e-06
+            ]
+          ],
+          "chart": [
+            -2.125,
+            0.0,
+            2.0
+          ],
+          "covariance_minimum": 0.17691996426157414,
+          "dependent_trace": false,
+          "epsilon": 0.07142008530975293,
+          "geometry": 31,
+          "inventory": "reconstruction_dense",
+          "k": 0.5105094330968489,
+          "side": 1
+        }
+      ]
+    },
+    "common_scalar_domain": {
+      "admissible": true,
+      "coordinate_correspondence": {
+        "additional_absolute_coordinate_safeguard": 1e-13,
+        "additional_absolute_coordinate_safeguard_applicable": true,
+        "exact_structural_fields_equal": true,
+        "maximum_raw_coordinate_difference": 4.440892098500626e-16,
+        "old_rounded_key_equality": false,
+        "original_comparison": "Audit.near componentwise abs(actual-expected)/max(1,abs(expected))",
+        "original_coordinate_tolerance": 2e-11,
+        "original_weight_tolerance": 2e-11,
+        "paired_rows": 89490,
+        "version": "v2"
+      },
+      "cutoff_range": [
+        0.0,
+        0.009515270565278037
+      ],
+      "effective_state_float64_LE_sha256": "b41b6bb647c161b83192fd5052259d6a85ce951c9ddf1d6093444553206213b7",
+      "independent_branch_context": {
+        "inner_saturation": {
+          "count": 14288,
+          "minimum_switch_distance": 1.52551257165391e-05,
+          "pattern_sha256": "a8184e327295fc97559dabd863c4e2e1a8f5df196d78a2e4e8c834386c836b70",
+          "population": {
+            "A": 10943,
+            "I": 3345
+          }
+        },
+        "interpretation": "Actual finite evaluation signatures and switch distances; a matching endpoint signature is not a proof that no switch occurs between endpoints",
+        "outer_max": {
+          "binary64_tie_uncertainty_count": 0,
+          "count": 1920,
+          "minimum_switch_distance": 3.6625222854524964e-09,
+          "pattern_sha256": "efd9c5bdb20aa9374a91b9333ec6577f03abf2e5d4dd7a48fdd3ef24b1b27a3f",
+          "population": {
+            "O": 1360,
+            "S": 560
+          }
+        },
+        "outer_yap": {
+          "binary64_tie_uncertainty_count": 0,
+          "count": 1920,
+          "definition": "k^(3/2)/(2.5*epsilon*physical_r)",
+          "diagnostic_only": true,
+          "minimum_switch_distance": 0.004324850983056683,
+          "nonfinite_ratio_count": 0,
+          "pattern_legend": {
+            "?": "nonfinite diagnostic ratio; no scalar-field value changed",
+            "A": "active ratio>1",
+            "I": "inactive ratio<1",
+            "T": "exact knot ratio=1"
+          },
+          "pattern_sha256": "994620d0b25e661bd640e470dc4d6dc3829c496e3969e5305b0a5a1eaa49aa08",
+          "population": {
+            "A": 1920
+          },
+          "ratio_range": [
+            1.0043248509830567,
+            1.0210665373563201
+          ],
+          "threshold": 1.0
+        },
+        "source_limiter": {
+          "count": 14288,
+          "minimum_switch_distance": 2.3789210752500836,
+          "pattern_sha256": "9eac2f0545632c73bbc1597dbf3a8d57dffae6313d5a9de813f26648293b6569",
+          "population": {
+            "P": 14288
+          }
+        }
+      },
+      "independent_trace_summary": {
+        "actual_epsilon_ratio_range": [
+          0.9834628198088293,
+          0.9999999999999998
+        ],
+        "baseline_and_current_lambda_range": [
+          1.0,
+          1.0
+        ],
+        "chi_zero_epsilon_ratio_range": [
+          0.9834628198088293,
+          0.9846627060736234
+        ],
+        "matching_rows": 16,
+        "maximum_trace_coefficient_error": 5.106592232406726e-16,
+        "relative_to_E0": 7.03040359432075e-15,
+        "scope": "Independent constrained native projection of lambda*Epre(H), including chi=0; no source-cap plateau assumption"
+      },
+      "invalid_points": [],
+      "inventory_counts": {
+        "actual_lifted_outer_epsilon": 8723,
+        "interface_inner": 40,
+        "interface_outer": 80,
+        "mass_volume": 5760,
+        "matching_trace_nodes": 80,
+        "physical_matching_transfer": 302,
+        "physical_sampled_K": 151,
+        "physical_sensor_transfer": 604,
+        "prescribed_source_inner": 14080,
+        "projected_dependent_trace": 316,
+        "reconstruction_dense": 9930,
+        "reconstruction_native": 5760,
+        "source_volume_outer": 3840,
+        "trace_baseline_normalization_ray": 12672,
+        "trace_current_normalization_ray": 12864,
+        "volume_normalization_ray": 14288
+      },
+      "minimum_b": 1.0,
+      "minimum_dimensionless_margin": 0.6751819624624192,
+      "minimum_inner_k": 0.34468580211056427,
+      "minimum_lambda": 1.0,
+      "minimum_outer_epsilon": 0.03631791663093067,
+      "minimum_outer_k": 0.5105077014688032,
+      "minimum_points": [
+        {
+          "admissible": true,
+          "arithmetic_roundoff_scale": 7.877502251577142e-15,
+          "block": 2,
+          "coordinate": [
+            1.6046496089512394,
+            0.0,
+            0.0
+          ],
+          "dependent_trace": false,
+          "geometry": 4,
+          "inventory": "reconstruction_native",
+          "scale": 0.5105080130598861,
+          "side": 0,
+          "sign_resolved": true,
+          "strict": false,
+          "value": 0.34468580211056427,
+          "weight": 0.0
+        },
+        {
+          "admissible": true,
+          "arithmetic_roundoff_scale": 7.877965849012183e-15,
+          "block": 2,
+          "coordinate": [
+            1.6046496089512394,
+            0.0,
+            4.847784062172101e-07
+          ],
+          "dependent_trace": false,
+          "geometry": 4,
+          "inventory": "trace_baseline_normalization_ray",
+          "scale": 0.5105080130598861,
+          "side": 0,
+          "sign_resolved": true,
+          "strict": false,
+          "value": 0.3447285879750099,
+          "weight": 0.0
+        },
+        {
+          "admissible": true,
+          "arithmetic_roundoff_scale": 7.877965849012183e-15,
+          "block": 2,
+          "coordinate": [
+            1.6046496089512394,
+            0.0,
+            4.847784062172101e-07
+          ],
+          "dependent_trace": false,
+          "geometry": 4,
+          "inventory": "trace_current_normalization_ray",
+          "scale": 0.5105080130598861,
+          "side": 0,
+          "sign_resolved": true,
+          "strict": false,
+          "value": 0.3447285879750099,
+          "weight": 0.0
+        },
+        {
+          "admissible": true,
+          "arithmetic_roundoff_scale": 7.879925448477708e-15,
+          "block": 2,
+          "coordinate": [
+            1.6046496089512394,
+            0.0,
+            2.535019075552077e-06
+          ],
+          "dependent_trace": false,
+          "geometry": 4,
+          "inventory": "trace_baseline_normalization_ray",
+          "scale": 0.5105080130598861,
+          "side": 0,
+          "sign_resolved": true,
+          "strict": false,
+          "value": 0.34490946462239247,
+          "weight": 0.0
+        }
+      ],
+      "minimum_projected_trace_epsilon": 0.07142008530975298,
+      "minimum_sampled_K": 0.5105070331546093,
+      "native_failure": "",
+      "native_limiting_inventory": "reconstruction_native",
+      "native_limiting_point": [
+        1.6046496089512394,
+        0,
+        0
+      ],
+      "native_phase": "complete",
+      "phase": "complete",
+      "profile_branch_summary": {
+        "count": 224,
+        "pattern_sha256": "9f3840fe3c1947e43b7f98ee9e37df55953dab90fd9556c5e6098975a3af70f6",
+        "population": {
+          "B": 87,
+          "E": 16,
+          "M": 9,
+          "P": 112
+        }
+      },
+      "scope": "Common actual residual-evaluation inventory; additional diagnostic reconstruction rays are separate",
+      "trace_target_state_float64_LE_sha256": "a79dfd5f381cfce41c6461a66ad921fd2a3c1249d9217f78bb559fde16d39f9a"
+    },
+    "mass_and_complete_energy": {
+      "actual_unmasked_weak_work": 6.452597685369874,
+      "anchor_work": 0.0,
+      "direct_remainder": -1.3322676295501878e-14,
+      "direct_sum": 6.452597685369887,
+      "essential_reaction": 6.45259768538383,
+      "free_weak_work": -1.3955947508748068e-11,
+      "independent_unmasked_load_available": true,
+      "native_energy_budget_table_available": false,
+      "prescribed_body_work": 0.0,
+      "resolved_advection": -5.217969681729631e-09,
+      "roughness_force_work": 0.0015643748569446594,
+      "storage": -2.604675773634895,
+      "stored_energy": 382.55269639840753,
+      "stress_work_minus_k_source": 9.055709089365807,
+      "unmasked_load_origin": "Independent weak oracle; native JSONL exports the constrained residual only"
+    },
+    "matching_interface": {
+      "full_total_traction_and_k_flux": [
+        6.0,
+        -0.45557512993778565,
+        8.246589694627037e-05,
+        0.0002836634754535253,
+        0.0002166168700408061,
+        5.140702048701226e-06,
+        -4.780700350863829e-16,
+        0.00016143467430907037
+      ],
+      "named_observations": {
+        "area": 6.0,
+        "full_total_traction_jump_RMS": 0.0002836634754535253,
+        "inner_normal_velocity_integral": -4.780700350863829e-16,
+        "k_flux_jump_RMS": 5.140702048701226e-06,
+        "maximum_absolute_normal_total_traction_jump": 0.0002166168700408061,
+        "normal_total_traction_jump_RMS": 8.246589694627037e-05,
+        "normal_total_traction_jump_integral": 0.00016143467430907037,
+        "reduced_pressure_jump_integral": -0.45557512993778565,
+        "tangential_total_traction_jump_RMS": 0.00027141175941218883
+      },
+      "native_traction_budget_table_available": false,
+      "pressure_jump_is_not_a_mechanical_pressure_continuity_condition": true,
+      "tangential_traction_RMS": 0.00027141175941218883
+    },
+    "optional_native_budget_crosschecks": {
+      "performed": false,
+      "reason": "No optional actual native audit table; all budgets above are independent terminal-state accounting"
+    },
+    "projected_constraints": {
+      "actual_native_constraints_crosschecked": true,
+      "effective_state_substitutes_external_conditions_only": true,
+      "entries_canonical_sha256": "e5df95f2fd6790e275f22c993a0d44a382cdee720995da428f38064bd115182c",
+      "entries_count": 358,
+      "independent_projected_epsilon_H_retained_as_target": true
+    },
+    "source_and_direct_accounting": {
+      "independent_source_and_direct_accounting": {
+        "constitutive_modification": [
+          -8.817683565082795e-06,
+          -8.817683565083767e-06,
+          9.723938234479368e-19
+        ],
+        "energy_scope": "Actual selected full stress; production includes -(2k/3)*div(U); unchanged scalar diffusion and capped preprofiles",
+        "inner_constitutive_modification": [
+          -0.009110263325216755,
+          -0.009110263325216755,
+          0.0
+        ],
+        "inner_covariance_minimum": 0.08213561673793873,
+        "inner_stress": [
+          0.04566354204508275,
+          12.000000000000027,
+          0.4829719369969628,
+          1.0836759965184033,
+          0.0,
+          0.0003926434719640545
+        ],
+        "inner_stress_max_ratio_point": {
+          "G": [
+            [
+              -0.016627041496711126,
+              0.0,
+              104.14728882630806
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              3.8208425743723124e-05,
+              0.0,
+              0.0007082593028357241
+            ]
+          ],
+          "S": [
+            [
+              -0.03325408299342225,
+              0.0,
+              104.1473270347338
+            ],
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              104.1473270347338,
+              0.0,
+              0.0014165186056714482
+            ]
+          ],
+          "a_over_c": 1.0836759965184033,
+          "chart": [
+            -3.980144928248768,
+            0.0,
+            0.009997431152761124
+          ],
+          "k": 0.5104643976041745,
+          "nu_A": 0.002503862727220679,
+          "radial_tangent": 0.0006061999770274632,
+          "sampled_K": 0.5105079070502101,
+          "t": 0.3238314050504675
+        },
+        "inner_stress_model": "SaturatedR2",
+        "outer_covariance_minimum": 0.17692512237401842,
+        "quadrature": "independently computed Legendre/Jacobi rows on declared finite native source panels",
+        "resolved_advection": -5.217969681729631e-09,
+        "robust_source": [
+          8.436232031134312,
+          8.436232031134312,
+          8.436232031134312,
+          3.6845933205562065e-19,
+          0.0,
+          0.0,
+          1.0,
+          3872.54133218028
+        ],
+        "roughness_force_work": 0.0015643748569446594,
+        "stress_work_minus_k_source": 9.055709089365807,
+        "volumes": [
+          11.999999999999995,
+          11.999999999999993
+        ],
+        "wall_sources": [
+          9.299391297691269,
+          8.436232031134312,
+          3.6845933205562065e-19,
+          5.563170465740552,
+          0.01617242482423074
+        ]
+      },
+      "native_source_budget_table_available": false
+    },
+    "static_inventory": {
+      "common_static_inventory": {
+        "coordinate_comparison_rounding_digits": 12,
+        "differing_literal_multiplicities": 0,
+        "independent_rule_calls": 40627,
+        "independent_rule_duplicate_calls": 801,
+        "interpretation": "Rounding identifies geometric locations only; actual call coordinates and values are retained without rounding",
+        "native_calls": 40627,
+        "native_literal_duplicate_calls": 801,
+        "unique_descriptor_locations": 39826
+      },
+      "fields_bound_to_actual_preflight": true,
+      "gauge_multiplier_scale": 0.2,
+      "native_terminal_residual_export_available": true,
+      "no_matrix_loaded": true,
+      "size": 2165
+    },
+    "strong_continuity": {
+      "independent_strong_continuity": [
+        0.001251591987239071,
+        5.577022498906243e-06,
+        -2.4507090442856384e-16,
+        6.031155081396335e-16,
+        0.0
+      ],
+      "named_observations": {
+        "external_normal_velocity_flux": 0.0,
+        "inner_divergence_L2": 0.001251591987239071,
+        "inner_divergence_integral": -2.4507090442856384e-16,
+        "outer_divergence_L2": 5.577022498906243e-06,
+        "outer_divergence_integral": 6.031155081396335e-16
+      },
+      "native_strong_continuity_table_available": false,
+      "weak_continuity_checked_separately_in_residual_phase": true
+    },
+    "true_coupled_and_scalar_residual": {
+      "actual_full_coupled_maximum": 4.594644710208094e-12,
+      "actual_full_coupled_norms": [
+        4.594644710208094e-12,
+        3.062843239712376e-14,
+        6.706149789384933e-13,
+        3.8635362225994225e-13,
+        6.139459847644926e-16,
+        5.991621399851323e-16,
+        5.903819642362472e-17,
+        4.701862276456552e-16
+      ],
+      "actual_scalar_block_maximum": 6.706149789384933e-13,
+      "convergence_of_a_record_is_not_full_case_or_physical_qualification": true,
+      "frozen_scalar_scope": false,
+      "full_coupled_residual_tolerance_met": false,
+      "independent_full_coupled_maximum": 5.4732733500745174e-12,
+      "independent_full_coupled_residual_tolerance_met": false,
+      "independent_scalar_block_maximum": 7.983189263536324e-13,
+      "independent_scalar_block_tolerance_met": true,
+      "independent_terminal_residual_reconstructions": 1,
+      "native_converged_observation": false,
+      "solved_scalar_or_coupled_tolerance_met": false,
+      "tolerance": 2e-12,
+      "weak_residual": {
+        "exact_affine_weak_continuity": {
+          "absolute_physical_errors": [
+            3.3198852643353678e-15,
+            4.804636530041091e-15,
+            9.495239338720706e-17
+          ],
+          "external_lifting_included": true,
+          "fixed_1e_minus7_gate_met": true,
+          "maximum_absolute_physical_error": 4.804636530041091e-15,
+          "mean_gauge_included": true
+        },
+        "independent_difference_norm": {
+          "blocks": [
+            3.137282194269958e-12,
+            6.759619180131516e-14,
+            4.3336774980010094e-13,
+            1.423539710952669e-13,
+            6.441028313949725e-16,
+            1.0284966260953608e-15,
+            1.0240628332304489e-16,
+            6.5602173666750945e-15
+          ],
+          "gauge": 1.0240628332304489e-16,
+          "maximum": 3.137282194269958e-12,
+          "maximum_constraint": 6.5602173666750945e-15
+        },
+        "masked_true_residual_float64_LE_sha256": "dff18ab21be232d3ae5ef542c8e4dede6a9f4a55282a6c587b6f764b85ef10d4",
+        "maximum_component_error": 2.5899855177202724e-14,
+        "maximum_physical_norm": 5.4732733500745174e-12,
+        "physical_norms": [
+          5.4732733500745174e-12,
+          7.097501057033832e-14,
+          7.983189263536324e-13,
+          4.101776083972242e-13,
+          9.617131216804684e-16,
+          9.380285623583076e-16,
+          4.336808689942017e-17,
+          7.03040359432075e-15
+        ],
+        "quadrature": {
+          "anchor_added": false,
+          "inner_source_volume": 12.0,
+          "inner_stress_model": "SaturatedR2",
+          "maximum_selected_weak_increment": 0.003231658854792521,
+          "orders": [
+            8,
+            16,
+            8
+          ],
+          "rays": 40,
+          "saturation_active_source_volume": 0.04566354204508267,
+          "scope": "Complete independently reconstructed unforced alpha=0 weak loads",
+          "selected_increment_float64_LE_sha256": "415f24824979103b8c95c2232627d3cd7eaa5329566b13ad6a8a46afa0fff721",
+          "source_diffusion_and_preprofiles": "unchanged"
+        },
+        "raw_unmasked_load_float64_LE_sha256": "9dfe01322104e5188b7da10add71efea4b5b1400b1ecbca8a316f42a25243043"
+      }
+    }
+  },
+  "physical_trajectory_qualification": false,
+  "producer": {
+    "cpp": {
+      "RANSEquilibriumWallEvolution.cpp": {
+        "bytes": 50010,
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/source/solvers/IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallEvolution.cpp",
+        "sha256": "1a53851bceaae0c0e63789c4e1ac4abbda363dbfcc6dba3018258e163ebc7807"
+      },
+      "RANSWallEvolutionFeasible.cpp": {
+        "bytes": 38414,
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/source/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionFeasible.cpp",
+        "sha256": "9f73fb59ddc43c917f4f7f7a3f51147fb24a82bc4a19a017221f46bfcb4957f0"
+      },
+      "RANSWallEvolutionPatch.cpp": {
+        "bytes": 83690,
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/source/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp",
+        "sha256": "238867d959d3a7a6de692ced2072a625d36356866f092dc56c9a535400cc4141"
+      }
+    },
+    "executable": {
+      "bytes": 5226816,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/build/IncNavierStokesSolver",
+      "sha256": "a90a196fe554d591fa39c6556166bf58ad43afa787b6b8e8d3d5cbf3355a5668"
+    },
+    "runtime_pin": {
+      "bytes": 679763,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/runtime-before.json",
+      "sha256": "ccaa1e896029576e08748a6dcd6cf00d51d3f03f1753d528432290cae4029b4f"
+    },
+    "runtime_sections": {
+      "python_packages": "b731cac586c07ea233813c735659e5c5093cd20bc178bd95552a87ab7384e44f",
+      "runtime_artifacts": "5550a806cec861e12cc7e26e2bd650a4710419e065af5d0c0c9840c470455baf",
+      "runtime_bindings": "6bc73e934e1403b605450707b62147bb9bd9659aecb16a0fb915d739b963e937",
+      "runtime_environment": "88310c925550f38d37f9ac4904fcffd68fc53c0a83dc0ffceb369b855a2e833e",
+      "source_inputs": "6c301cfd9f88527e85c486e7bf70fe296b4306895cf928b42befa064a4097e49",
+      "tool_images": "b8cc10e2605ae200c5f5a1949009f0c663e216f05c2203310d938036adecf1e7"
+    },
+    "runtime_sections_are_bound_producing_pin_not_new_runtime_capture": true,
+    "source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b"
+  },
+  "receipt": {
+    "bytes": 40193,
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-analysis-saturated-001/receipt.json",
+    "sha256": "0b739e71daa298821f6a310825bbcf6aeae6a22b3f741694a498171654a008be"
+  },
+  "schema": 1,
+  "scientific_reconstructions": 0,
+  "scope": "One complete native terminal record and its completed independent audit; no Newton-path, current-action, target-search, final-history or physical-trajectory qualification, root-absence inference or M8 closure.",
+  "selected_record": {
+    "input_binding": {
+      "alpha": 3200,
+      "final_native_history_slots_assessed": false,
+      "full_native_protocol_verified": false,
+      "geometry_and_expansions": {
+        "EXPANSIONS": "6267955e7f751d680005251c7446805e41f0c796fa11207909f633cb5857eea6",
+        "GEOMETRY": "6ff519faf39cb13b46a94b1fc81772b41e54ddc8a4cd2c8d2228b6d889ce38db"
+      },
+      "mode": "MatchedR2",
+      "native_converged_observation": false,
+      "native_field_descriptors_sha256": "85e2b9afdc96d7a3cb47ee263e386525852891123ae8520b13682ca6a2a4ce8e",
+      "native_frozen_scalar_diagnostic": false,
+      "native_terminal_observation": "feasible_residual_stagnation",
+      "preflight_h0_float64_LE_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca",
+      "protected_physics_sha256": "5ef920049be4794360f59acc72ba29b74dfd28c2d791ca0f25fd9e25dfa47f27",
+      "time": 0.0025
+    },
+    "native_audit": {
+      "available": false,
+      "reason": "No native audit report supplied; independent accounting only"
+    },
+    "prefix_check": {
+      "iteration_entries_inspected": false,
+      "later_trace_appends_permitted": true,
+      "prefix_rehashed": true,
+      "selected_record_bytes_rehashed": true
+    },
+    "record_index": 0,
+    "selected_history_float64_LE_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca",
+    "selected_native_residual_float64_LE_sha256": "afd09717cd58d3f18c01d86662bc79ab60e7d6eab5466d42fad403a1f63ce4ce",
+    "selected_state_float64_LE_sha256": "b41b6bb647c161b83192fd5052259d6a85ce951c9ddf1d6093444553206213b7",
+    "snapshot": {
+      "canonical_terminal_fields_sha256": "7a8392add442e4640f956ba6f37b6e886d79600cfdf400f85f936c2dd49ec321",
+      "iteration_entries_analyzed": 0,
+      "later_append_permitted": true,
+      "native_iteration_entries_present": 12,
+      "original_trace_bytes": 366927552,
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2/case.feasible.jsonl",
+      "prefix_bytes": 366927552,
+      "prefix_sha256": "1293f4c5863028057dc39c85f5419a80884f1e8adbb62c10d517fa3e29858cd3",
+      "prefix_sha256_end": "1293f4c5863028057dc39c85f5419a80884f1e8adbb62c10d517fa3e29858cd3",
+      "selected_bytes": 366927552,
+      "selected_offset": 0,
+      "selected_sha256": "1293f4c5863028057dc39c85f5419a80884f1e8adbb62c10d517fa3e29858cd3",
+      "snapshot": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-analysis-saturated-001/native-terminal-record-0.raw.jsonl",
+      "trace_bytes_end": 366927552
+    }
+  },
+  "success": true,
+  "success_definition": "All terminal-only phases completed with unchanged bindings; convergence and physical gates are separate observations",
+  "terminal_observations": {
+    "alpha": 3200,
+    "converged": false,
+    "frozen_scalar_diagnostic": false,
+    "inner_stress_model": "SaturatedR2",
+    "mode": "MatchedR2",
+    "terminal": "feasible_residual_stagnation",
+    "time": 0.0025,
+    "tolerance": 2e-12
+  },
+  "validation": {
+    "bytes": 88276,
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-analysis-saturated-001/validation.json",
+    "sha256": "5efb8bd1ae5ee60f9a7d9f52b53d7dc45cbf0c85edfdda5c97a6fda5a5689fd5"
+  }
+}
