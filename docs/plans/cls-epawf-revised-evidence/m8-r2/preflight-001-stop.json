@@ -1,0 +1,66 @@
+{
+  "schema": 1,
+  "kind": "retained preflight verifier stop",
+  "source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+  "runner_status": "failed",
+  "completed_native_initializations": 1,
+  "no_evolution_or_stage_calls": true,
+  "receipt": {
+    "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/preflight-001/receipt.json",
+    "sha256": "539a4274195c08a234b347f9bc0db8fafd1ac65f6a9413c7317675a302b8ddbd"
+  },
+  "case": {
+    "name": "outer6-linear-base",
+    "xml_sha256": "e7ddf546a930af044a0e4d23e55d2ba8d5c11a5c7ff771a4583880ed86c81957",
+    "report": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/preflight-001/cases/outer6-linear-base/case.evolution.json",
+      "sha256": "6b6ba2749e47902bbda1e306361e185f391054f996a7be5f3ffcd807c8ee11bf"
+    },
+    "audit": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/preflight-001/cases/outer6-linear-base/preflight.json",
+      "sha256": "131a3107b43a07b690798e1244e466ee7a811b3cf988f09b70c766e0a20a628e",
+      "status": "audit_failed",
+      "failure": {
+        "type": "KeyError",
+        "message": "25"
+      }
+    },
+    "native_time": 0,
+    "native_steps": 0,
+    "native_history_times": [
+      0,
+      -0.0025,
+      0.0025,
+      0.0025
+    ],
+    "initial_state_float64_LE_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca",
+    "initialization_wall_seconds": 10.01491962399814,
+    "initial_evaluation_seconds": {
+      "unanchored_residual_constraints_norms": 0.131343871,
+      "scalar_domain": 0.190669552
+    },
+    "native_source_covariance_minima": [
+      0.07742760739327104,
+      0.17682409140526503
+    ],
+    "native_robust_source": [
+      8.436167051707013,
+      8.436167051707013,
+      8.436167051707017,
+      -8.713692626201005e-18,
+      0,
+      0,
+      1,
+      2616.9832785333138
+    ],
+    "native_scalar_admissible": true
+  },
+  "runtime_source_unchanged": true,
+  "source_clean_end": true,
+  "input_hashes_unchanged": true,
+  "independent_coverage_decision": "pending corrected verifier; native success is not a coverage certificate",
+  "concrete_verifier_defect": "outer H matching transfer selected inner side0 geometry25; corrected helper selects outer side+1",
+  "corrected_helper_sha256": "f2731ff17c152d769b8c3387c3891fb4458bb23d1eb05bc3b945755caae63a10",
+  "native_rerun_needed_for_completed_initialization": false,
+  "next_work": "root-owned analysis continuation on retained report and remaining three predeclared zero-step cases; no stages authorized by this receipt"
+}

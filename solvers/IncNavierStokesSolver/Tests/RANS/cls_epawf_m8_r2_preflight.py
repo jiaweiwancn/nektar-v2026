@@ -241,7 +241,8 @@ class Inventory:
     def grouped(self, name, points, inner=True):
         groups = {}
         for point in points:
-            identity = self.fields[0].element(point, -1 if inner and point[2] == self.H else 0)['geometry']
+            side = (-1 if inner else 1) if point[2] == self.H else 0
+            identity = self.fields[0].element(point, side)['geometry']
             groups.setdefault(identity, []).append(point)
         for identity, values in groups.items():
             yield name, identity, np.asarray(values), inner

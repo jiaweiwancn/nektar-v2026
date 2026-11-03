@@ -1,0 +1,1568 @@
+{
+  "schema": 1,
+  "milestone": "M8-R2 B",
+  "status": "operator checks passed; zero-fixture maximum-ratio reconstruction unresolved",
+  "summary_method": "Read-only extraction and hashes of stored Linux results; no numerical or native reexecution",
+  "summary_generator_sha256": "ed4d6bc8e4a687c0127f1a690523ac47b7f22569d3595e20bd97d9484130cce9",
+  "producing_source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+  "analysis_source_commit": "ecfc04983d97e123760407c98d099f789ea208d4",
+  "independent_checks": 4366,
+  "native_kernel_checks": 128,
+  "compiled_kernel_cases": 38,
+  "native_fixtures": 8,
+  "native_calls_in_final_replay": 0,
+  "native_kernel_reexecuted": false,
+  "solver_stage_launched": false,
+  "trajectory_launched": false,
+  "cpu": 50,
+  "ranks": 1,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "seconds": 142.91902927299816,
+  "runtime_unchanged": true,
+  "analysis_and_runtime_clean": true,
+  "authoritative_inputs": {
+    "validation": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-reanalysis-004/results/validation.json",
+      "bytes": 147559,
+      "sha256": "223be5d6ddfa79e07bd4460feab84c930f1650715490d6e34215cb75210a2986"
+    },
+    "wrapper_receipt": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-reanalysis-004/receipt.json",
+      "bytes": 4967,
+      "sha256": "3caeb7e1c394b651b494ca38caed51d49d07a188a637cd2c2555807f7776d890"
+    },
+    "runtime_before": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-reanalysis-004/runtime-before.json",
+      "bytes": 679763,
+      "sha256": "ea41c5254cd40ffca3ecc883e4e967ea4ef3b0341462888199d429151848ca83"
+    },
+    "runtime_after": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-reanalysis-004/runtime-after.json",
+      "bytes": 680163,
+      "sha256": "a0a7639fa5393ed7499f493d04b1deada398e32bf1f645cc18f4bd9443cb47d0"
+    },
+    "log": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-reanalysis-004/suite.log",
+      "bytes": 569,
+      "sha256": "494cbb1a52c214d8e17011606703a3eee0787423f5c92fc24ff6b6b3325d69d2"
+    }
+  },
+  "helper_sha256": "46f55307099d77ca7f53c5983e44c6377923909f7bf73c1436ab6827a778ce57",
+  "kernel_probe_sha256": "cf0939a06b039a58f3cd01e8449c9b933a4d8e993c019c2664c77e40e025644d",
+  "wall_probe_sha256": "1685fc098a68774459c1434699dc461571ab9167273be0a41dea726ec7c2b169",
+  "kernel_report_sha256": "38860891678e7d1c617c89af4ac34f96b1faafa8b65a99ba4a01339ee064dea9",
+  "template_sha256": "b266fed108dd98ab88bffca850942f6a711ef2d8b50fad664838df59797c1f41",
+  "imported_source_files": {
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-005/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m8_r2_inner.py": "46f55307099d77ca7f53c5983e44c6377923909f7bf73c1436ab6827a778ce57",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-005/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m3_cases.py": "064bce602d05811baaf49756210d7a51ed9a0465c6a8a0cb514a0c1ccabf0675",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-005/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m4_cases.py": "57ca6d5f92e1ff91f9d893665bdb0c0eb74d8e02eaed42f6d0ddce500d2534cb",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-005/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_r2_oracle.py": "13062edb5a72301c1d92b4639a69005ff850efba99aef3cd1eea7244dd274851",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-005/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_r1_kernel.py": "43214f63aa5a96400a85dd8ded0416055ed87d668a051baf5cd125595e9fe293",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-005/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_m1.py": "7f4ed7254691ab2046555883ee8abb5795c048b422b0137b3cef80095bde0c75",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-005/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_m2.py": "3fc9950bbd49f77206cffcfb838167dde97ae1d835270880f917bc2fadfdc6d1",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-005/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m1.py": "ad91787c6356831bd4b75e145592c9ea952a45f0e5dbdcff6015f51ce992964a",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-005/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m2.py": "26568aa79b41bc737a9247d9f2480d932a6674c8dad46e00f5fd8301a69ff18c",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-005/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m3.py": "8d1951cf8018d154d4fa7a78c0bec690a66b2d6023ae442a0d2b1e41c572587f",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-005/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m4.py": "979635de780944daeb24add2af0caffa44553f5284432ab632e04fe811863a06",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-005/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m5_geometry.py": "4dfceb445fa6f760200a2d66aef7140e039da4da41d40902f777a0b15ef888c1",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-005/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m5_cases.py": "9f4ec3b94a93c4785762b78969f2ea95a03a352c646a75b8a5985bbbca250e02",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-005/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m5_boundary_oracle.py": "07580298953d001fdda9762a8660d79a18ef59d254803a5eee1a11eb1bdf0976",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-005/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m5.py": "375d440060a31d426c3e65ed1cdc35415e95cedcc0e3b248d5f04be05b91f761",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-005/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m7_energy_oracle.py": "52a89bb646d4c08c13e08b7b4ba18b5df6f9d959cfe543cf383a82a722cba315",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-005/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_native_oracle.py": "80ec891203275919d992a8c47c4fef6f070dfffd858afffed08b2d76b0901df9",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-005/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_r1_cases.py": "40e93cf65ba8dad611b48eceb243520b20dce970ae1f20ec04492edb8b9155ba",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-005/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_state_coverage.py": "630167223ce82e9af9270a3de45ad0c58de7e8039443cd7c5478da1ad3b17130",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-005/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m6_cases.py": "6ef436c17496af9deee56f4c3e7d501a8b7289e99f9ce4945d8a52dbb99bab06",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-005/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m6_operator_oracle.py": "e4ae09358e5a578e71783cb9619d1d83918771a7768bdac8315dc3f732acdece",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-005/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_r1_preflight.py": "d046da906814eea9aafc5ca7e0da6b3598203cc2da23bb764ddc4bdb8ed3dd84",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-005/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_r2_cases.py": "1b24945b675a5ed0ad4b3c5caf1182bf7bd8dd1f2fec54eba95d112f0f8200bc",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-005/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_r2_preflight.py": "3efb50dd93c5e79e4ea4608c93b36152a7914610c3ebf1562b718eb4222ea14e",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-005/source/solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_certificate.py": "4d9192f10d38b81021b7bbfd969528c0f8115f4cafd406f069ca6f3173fa2360"
+  },
+  "wrapper_suite_command": [
+    "taskset",
+    "-c",
+    "50",
+    "python3",
+    "-B",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-005/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m8_r2_inner.py",
+    "--kernel-probe",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/build/RANSWallInnerStressProbe",
+    "--wall-probe",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/build/RANSCurvedWallProbe",
+    "--template",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/source/solvers/IncNavierStokesSolver/Tests/RANS/EquilibriumWallEvolution.xml",
+    "--producing-source-commit",
+    "9f20b3053c303e8805f5183f668a8ec468d9656b",
+    "--output",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-reanalysis-004/results",
+    "--reuse-run",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-verification-001/results",
+    "--reuse-extra-run",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-continuation-002/results",
+    "--reuse-extra-run",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-continuation-003/results",
+    "--capped-pressure-run",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/pressure-verification-001/results"
+  ],
+  "errors": {
+    "compiled_indexed_stress": 5.551115123125783e-17,
+    "compiled_indexed_turbulent": 5.551115123125783e-17,
+    "compiled_indexed_strain": 0.0,
+    "compiled_indexed_production": 5.551115123125783e-17,
+    "compiled_indexed_s": 0.0,
+    "compiled_indexed_a": 0.0,
+    "compiled_indexed_c": 0.0,
+    "compiled_indexed_t": 0.0,
+    "compiled_indexed_ta": 2.7755575615628914e-17,
+    "compiled_indexed_tc": 1.1102230246251565e-16,
+    "compiled_indexed_radial": 2.6020852139652106e-18,
+    "compiled_indexed_tangential": 0.0,
+    "compiled_mean_stress": 1.1102230246251565e-16,
+    "actual_full_traction": 1.1102230246251565e-16,
+    "compiled_full_action_stress": 2.7755575615628914e-17,
+    "compiled_full_action_turbulent": 2.7755575615628914e-17,
+    "compiled_full_action_strain": 0.0,
+    "compiled_full_action_production": 5.551115123125783e-17,
+    "compiled_perturbed_stress": 1.1102230246251565e-16,
+    "compiled_perturbed_turbulent": 1.1102230246251565e-16,
+    "compiled_perturbed_production": 4.440892098500626e-16,
+    "compiled_frozen_R1_stress": 2.7755575615628914e-17,
+    "compiled_frozen_R1_F": 2.7755575615628914e-17,
+    "exact_zero_k_R": 0.0,
+    "actual_complete_active_weak_operator": 4.171177292455752e-13,
+    "actual_regional_weak_operator_sum": 4.171177292455752e-13,
+    "supplied_state_selected_wall_P_and_sources": 1.3149203947904198e-14,
+    "supplied_state_capped_budget_and_trace": 1.3149203947904198e-14,
+    "supplied_state_full_normal_tangential_traction": 3.6567845043524795e-15,
+    "actual_lifted_interface_all_traction_integrals": 1.0620618070725385e-14,
+    "actual_lifted_projected_trace_difference": 4.163336342344337e-17,
+    "actual_lifted_inner_traction_point": 1.106780198949277e-14,
+    "actual_lifted_outer_traction_point": 3.4988846201296052e-15,
+    "actual_lifted_outer_epsilon_point": 1.3877787807814457e-17,
+    "actual_lambda_EpreH_point": 8.326672684688674e-17,
+    "supplied_state_selected_covariance_including_zero": 1.81569240954554e-14,
+    "actual_same_stress_energy_cancellation": 8.180673458373125e-14,
+    "actual_mixed_perturbed_weak_operator": 4.171177292455752e-13,
+    "actual_mixed_local_K_pressure_trace_action": 1.920685832601521e-09,
+    "supplied_state_saturation_volume_and_range": 1.1116068875374178e-13,
+    "zero_fixture_five_well_conditioned_saturation_statistics": 9.66364143012658e-15,
+    "zero_fixture_exported_witness_is_source_point": 1.1102230246251565e-16,
+    "zero_fixture_exported_primitive_inputs_vs_coefficients": 1.4652769560826987e-15,
+    "zero_fixture_actual_exported_primitive_law_semantics": 1.6634219201301776e-15,
+    "zero_fixture_native_maximum_attains_exported_witness": 0.0,
+    "same_actual_inactive_state": 0.0,
+    "inactive_native_operator_identity": 0.0,
+    "same_actual_zero_fixture_state": 0.0,
+    "retained_cap_actual_complete_weak_mass_constraints": 3.6362620034099103e-14,
+    "retained_cap_full_ray_normalization": 1.2323475573339238e-14,
+    "retained_cap_actual_lambda_Epre_trace": 9.43689570931383e-16,
+    "retained_cap_pre_and_actual_budget_cancellation": 2.220446049250313e-16,
+    "retained_cap_shared_projected_trace_mode": 0.0,
+    "retained_cap_actual_projected_constraint_trace": 1.213330651228528e-15,
+    "retained_cap_actual_lifted_projected_trace": 1.213330651228528e-15
+  },
+  "failures": [],
+  "invalid_values": [],
+  "kernel_cases": [
+    {
+      "name": "archived_first_bad_point",
+      "selector": "Linear",
+      "active": false,
+      "directional_only": false
+    },
+    {
+      "name": "neutral_reference_inactive",
+      "selector": "Linear",
+      "active": false,
+      "directional_only": false
+    },
+    {
+      "name": "full_3d_active_weak_divergence",
+      "selector": "Linear",
+      "active": false,
+      "directional_only": false
+    },
+    {
+      "name": "full_gradient_column_0",
+      "selector": "Linear",
+      "active": false,
+      "directional_only": false
+    },
+    {
+      "name": "full_gradient_column_1",
+      "selector": "Linear",
+      "active": false,
+      "directional_only": false
+    },
+    {
+      "name": "full_gradient_column_2",
+      "selector": "Linear",
+      "active": false,
+      "directional_only": false
+    },
+    {
+      "name": "full_gradient_column_3",
+      "selector": "Linear",
+      "active": false,
+      "directional_only": false
+    },
+    {
+      "name": "full_gradient_column_4",
+      "selector": "Linear",
+      "active": false,
+      "directional_only": false
+    },
+    {
+      "name": "full_gradient_column_5",
+      "selector": "Linear",
+      "active": false,
+      "directional_only": false
+    },
+    {
+      "name": "full_gradient_column_6",
+      "selector": "Linear",
+      "active": false,
+      "directional_only": false
+    },
+    {
+      "name": "full_gradient_column_7",
+      "selector": "Linear",
+      "active": false,
+      "directional_only": false
+    },
+    {
+      "name": "full_gradient_column_8",
+      "selector": "Linear",
+      "active": false,
+      "directional_only": false
+    },
+    {
+      "name": "zero_strain",
+      "selector": "Linear",
+      "active": false,
+      "directional_only": false
+    },
+    {
+      "name": "zero_auxiliary_viscosity",
+      "selector": "Linear",
+      "active": false,
+      "directional_only": false
+    },
+    {
+      "name": "zero_k_positive_strain",
+      "selector": "Linear",
+      "active": false,
+      "directional_only": false
+    },
+    {
+      "name": "joint_zero_k_strain",
+      "selector": "Linear",
+      "active": false,
+      "directional_only": false
+    },
+    {
+      "name": "joint_zero_k_viscosity",
+      "selector": "Linear",
+      "active": false,
+      "directional_only": false
+    },
+    {
+      "name": "all_three_zero",
+      "selector": "Linear",
+      "active": false,
+      "directional_only": false
+    },
+    {
+      "name": "saturation_join",
+      "selector": "Linear",
+      "active": false,
+      "directional_only": false
+    },
+    {
+      "name": "archived_first_bad_point",
+      "selector": "SaturatedR2",
+      "active": true,
+      "directional_only": false
+    },
+    {
+      "name": "neutral_reference_inactive",
+      "selector": "SaturatedR2",
+      "active": false,
+      "directional_only": false
+    },
+    {
+      "name": "full_3d_active_weak_divergence",
+      "selector": "SaturatedR2",
+      "active": true,
+      "directional_only": false
+    },
+    {
+      "name": "full_gradient_column_0",
+      "selector": "SaturatedR2",
+      "active": true,
+      "directional_only": false
+    },
+    {
+      "name": "full_gradient_column_1",
+      "selector": "SaturatedR2",
+      "active": true,
+      "directional_only": false
+    },
+    {
+      "name": "full_gradient_column_2",
+      "selector": "SaturatedR2",
+      "active": true,
+      "directional_only": false
+    },
+    {
+      "name": "full_gradient_column_3",
+      "selector": "SaturatedR2",
+      "active": true,
+      "directional_only": false
+    },
+    {
+      "name": "full_gradient_column_4",
+      "selector": "SaturatedR2",
+      "active": true,
+      "directional_only": false
+    },
+    {
+      "name": "full_gradient_column_5",
+      "selector": "SaturatedR2",
+      "active": true,
+      "directional_only": false
+    },
+    {
+      "name": "full_gradient_column_6",
+      "selector": "SaturatedR2",
+      "active": true,
+      "directional_only": false
+    },
+    {
+      "name": "full_gradient_column_7",
+      "selector": "SaturatedR2",
+      "active": true,
+      "directional_only": false
+    },
+    {
+      "name": "full_gradient_column_8",
+      "selector": "SaturatedR2",
+      "active": true,
+      "directional_only": false
+    },
+    {
+      "name": "zero_strain",
+      "selector": "SaturatedR2",
+      "active": false,
+      "directional_only": false
+    },
+    {
+      "name": "zero_auxiliary_viscosity",
+      "selector": "SaturatedR2",
+      "active": false,
+      "directional_only": false
+    },
+    {
+      "name": "zero_k_positive_strain",
+      "selector": "SaturatedR2",
+      "active": false,
+      "directional_only": false
+    },
+    {
+      "name": "joint_zero_k_strain",
+      "selector": "SaturatedR2",
+      "active": false,
+      "directional_only": true
+    },
+    {
+      "name": "joint_zero_k_viscosity",
+      "selector": "SaturatedR2",
+      "active": false,
+      "directional_only": true
+    },
+    {
+      "name": "all_three_zero",
+      "selector": "SaturatedR2",
+      "active": false,
+      "directional_only": false
+    },
+    {
+      "name": "saturation_join",
+      "selector": "SaturatedR2",
+      "active": false,
+      "directional_only": false
+    }
+  ],
+  "cases": [
+    {
+      "name": "linear-active-chi0",
+      "selector": "Linear",
+      "fixture": 1,
+      "chi": 0,
+      "native_reexecution": false,
+      "input_raw": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-verification-001/results/linear-active-chi0/native.json",
+        "bytes": 149216,
+        "sha256": "53aa147b31005454217b0fc997b32b4366d03c5da94e92ec72e20979b4f1a10e"
+      },
+      "input_xml": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-verification-001/results/linear-active-chi0/case.xml",
+        "bytes": 3393,
+        "sha256": "46ea709cbb3cbeb1fa45a2d309875d4301ab103bfd074070fd99372c4109ded5"
+      },
+      "input_log": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-verification-001/results/linear-active-chi0/run.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "weak": {
+        "orders": [
+          8,
+          16,
+          8
+        ],
+        "rays": 8,
+        "scope": "Complete independently reconstructed unforced alpha=0 weak loads",
+        "inner_stress_model": "Linear",
+        "selected_increment": 0.0
+      },
+      "actual_source_budgets": [
+        1.5971609417086574,
+        1.5971609417086574,
+        1.5971609417086574,
+        0,
+        0,
+        0,
+        1,
+        2618.685057539208
+      ],
+      "actual_wall_sources": [
+        1.5971609417086574,
+        1.5971609417086574,
+        0,
+        12.09712469952962,
+        0.001089684266666665
+      ],
+      "actual_source_inner_covariance_minimum": -1.6876292106835693,
+      "actual_inner_zero_covariance": [
+        0,
+        0,
+        0
+      ],
+      "actual_inner_statistics": null,
+      "actual_inner_statistic_maximum_point": null,
+      "actual_energy_budget": [
+        -17.486222769060163,
+        0,
+        1.7966678976095192,
+        -19.282090666668005,
+        -0.0008000000000000001,
+        0,
+        -17.486222769058486,
+        -1.6768808563938364e-12,
+        386.0090009411285
+      ],
+      "supplied_diagnostic_state": "state",
+      "coupled_action": [
+        {
+          "step": 0.0001,
+          "independent_action_error": 2.3675506000131463e-10
+        },
+        {
+          "step": 1e-05,
+          "independent_action_error": 1.329492071988625e-09
+        }
+      ],
+      "lifted_traction": {
+        "state_key": "lifted_state",
+        "quadrature": 12,
+        "traction_integrals": [
+          2.005490358665925,
+          0.0,
+          0.07078139310374786,
+          2.035136993739817,
+          0.0,
+          0.38492648457765116
+        ],
+        "maximum_trace_projection_difference": 4.326825009393076e-11,
+        "point_checks": 8
+      },
+      "saturation_statistics": null,
+      "physical_signature_sha256": "86cfca476c58d398c1361f46b16fcde1c2cb4cfac441df9beaf23022d6881c0e",
+      "qualification": "Operator verification only; these active states are outside the fixed outer box. No stage/trajectory or qualified physical solution is claimed."
+    },
+    {
+      "name": "saturated-active-chi0",
+      "selector": "SaturatedR2",
+      "fixture": 1,
+      "chi": 0,
+      "native_reexecution": false,
+      "input_raw": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-verification-001/results/saturated-active-chi0/native.json",
+        "bytes": 149749,
+        "sha256": "c7591ef8679c204504cd303b1c7cbe21cbeabedefe673d3508900b9b3fd621b5"
+      },
+      "input_xml": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-verification-001/results/saturated-active-chi0/case.xml",
+        "bytes": 3398,
+        "sha256": "7f3688e1935d121c8556c45709e8c40712dfa7d1a98e4ff742b4420cce7792f1"
+      },
+      "input_log": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-verification-001/results/saturated-active-chi0/run.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "weak": {
+        "orders": [
+          8,
+          16,
+          8
+        ],
+        "rays": 8,
+        "scope": "Complete independently reconstructed unforced alpha=0 weak loads",
+        "inner_stress_model": "SaturatedR2",
+        "selected_increment_float64_LE_sha256": "875a708d99b4a24cd7e1820a45feae86d49f66797a0850f1e09e8def58eddfd2",
+        "maximum_selected_weak_increment": 3.3195708959618977,
+        "inner_source_volume": 1.9999999999999996,
+        "saturation_active_source_volume": 1.8017699935623679,
+        "source_diffusion_and_preprofiles": "unchanged",
+        "anchor_added": false
+      },
+      "actual_source_budgets": [
+        1.5971609417086574,
+        1.5971609417086574,
+        1.5971609417086574,
+        0,
+        0,
+        0,
+        1,
+        2618.685057539208
+      ],
+      "actual_wall_sources": [
+        1.5971609417086574,
+        1.5971609417086574,
+        0,
+        2.7427346229196923,
+        0.001089684266666665
+      ],
+      "actual_source_inner_covariance_minimum": 0.09510045146880061,
+      "actual_inner_zero_covariance": [
+        0,
+        0,
+        0
+      ],
+      "actual_inner_statistics": [
+        1.8017699935623668,
+        2.0000000000000027,
+        0.020420475399896602,
+        8.573401140186718,
+        0,
+        4.333349306021433e-18
+      ],
+      "actual_inner_statistic_maximum_point": [
+        0.019855071751231912,
+        0,
+        1.9973404860059036,
+        0.4909583047747925,
+        0.5109051144949107,
+        0.32851091390060233,
+        8.541943482612204,
+        8.573401140186718,
+        0.32730553651652833,
+        4.333349306021433e-18
+      ],
+      "actual_energy_budget": [
+        -17.486222769060678,
+        0,
+        1.7966678976095196,
+        -19.282090666668005,
+        -0.0008000000000000001,
+        0,
+        -17.486222769058486,
+        -2.192024339819909e-12,
+        386.0090009411285
+      ],
+      "supplied_diagnostic_state": "state",
+      "coupled_action": [
+        {
+          "step": 0.0001,
+          "independent_action_error": 1.6542323066914832e-10
+        },
+        {
+          "step": 1e-05,
+          "independent_action_error": 4.413136522884997e-10
+        }
+      ],
+      "lifted_traction": {
+        "state_key": "lifted_state",
+        "quadrature": 12,
+        "traction_integrals": [
+          0.23602975312409363,
+          0.0,
+          0.059063110947841675,
+          2.035136993739817,
+          0.0,
+          0.38492648457765116
+        ],
+        "maximum_trace_projection_difference": 4.326825009393076e-11,
+        "point_checks": 8
+      },
+      "saturation_statistics": {
+        "full_statistics_independent_tolerance_met": true,
+        "method": "Complete independent coefficient comparison"
+      },
+      "physical_signature_sha256": "62e0d68c049e1389c21f446ceca55bdd314dde51c42b3155c6a98ac344e532f9",
+      "qualification": "Operator verification only; these active states are outside the fixed outer box. No stage/trajectory or qualified physical solution is claimed."
+    },
+    {
+      "name": "saturated-active-chi1",
+      "selector": "SaturatedR2",
+      "fixture": 1,
+      "chi": 1,
+      "native_reexecution": false,
+      "input_raw": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-verification-001/results/saturated-active-chi1/native.json",
+        "bytes": 149354,
+        "sha256": "de298b5febd031a6692fc1fac6f8608dd4cf3d73ab967232ebe4cd035ad2bc1b"
+      },
+      "input_xml": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-verification-001/results/saturated-active-chi1/case.xml",
+        "bytes": 3398,
+        "sha256": "084931948ccf1233f209c1204345d045a84c025dbfe3286806f8d3348b090a7e"
+      },
+      "input_log": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-verification-001/results/saturated-active-chi1/run.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "weak": {
+        "orders": [
+          8,
+          16,
+          8
+        ],
+        "rays": 8,
+        "scope": "Complete independently reconstructed unforced alpha=0 weak loads",
+        "inner_stress_model": "SaturatedR2",
+        "selected_increment_float64_LE_sha256": "875a708d99b4a24cd7e1820a45feae86d49f66797a0850f1e09e8def58eddfd2",
+        "maximum_selected_weak_increment": 3.3195708959618977,
+        "inner_source_volume": 1.9999999999999996,
+        "saturation_active_source_volume": 1.8017699935623679,
+        "source_diffusion_and_preprofiles": "unchanged",
+        "anchor_added": false
+      },
+      "actual_source_budgets": [
+        0.9493760173341211,
+        0.9493760173341211,
+        0.949376017334122,
+        -3.070494433796839e-17,
+        0,
+        0,
+        1,
+        54.97463222429228
+      ],
+      "actual_wall_sources": [
+        1.5971609417086587,
+        0.9493760173341211,
+        -3.070494433796839e-17,
+        2.7427346229196923,
+        0.001089684266666665
+      ],
+      "actual_source_inner_covariance_minimum": 0.09510045146880061,
+      "actual_inner_zero_covariance": [
+        0,
+        0,
+        0
+      ],
+      "actual_inner_statistics": [
+        1.8017699935623668,
+        2.0000000000000004,
+        0.020420475399896602,
+        8.573401140186718,
+        0,
+        4.333349306021433e-18
+      ],
+      "actual_inner_statistic_maximum_point": [
+        0.019855071751231912,
+        0,
+        1.9973404860059036,
+        0.4909583047747925,
+        0.5109051144949107,
+        0.32851091390060233,
+        8.541943482612204,
+        8.573401140186718,
+        0.32730553651652833,
+        4.333349306021433e-18
+      ],
+      "actual_energy_budget": [
+        -18.131712012894422,
+        0,
+        1.151178653771609,
+        -19.28209066666801,
+        -0.0008000000000000007,
+        0,
+        -18.131712012896404,
+        1.9824142327706795e-12,
+        386.0090009411285
+      ],
+      "supplied_diagnostic_state": "state",
+      "coupled_action": [
+        {
+          "step": 0.0001,
+          "independent_action_error": 3.7442271505483404e-10
+        },
+        {
+          "step": 1e-05,
+          "independent_action_error": 6.425415755018093e-10
+        }
+      ],
+      "lifted_traction": {
+        "state_key": "lifted_state",
+        "quadrature": 12,
+        "traction_integrals": [
+          0.23602975312409363,
+          0.0,
+          0.059063110947841675,
+          2.0356369560956815,
+          0.0,
+          0.3817668883335364
+        ],
+        "maximum_trace_projection_difference": 4.394271058139054e-11,
+        "point_checks": 8
+      },
+      "saturation_statistics": {
+        "full_statistics_independent_tolerance_met": true,
+        "method": "Complete independent coefficient comparison"
+      },
+      "physical_signature_sha256": "aa2551b9d75786449b2bb19d762f75517be47ed3a55f3a5574abd304980b7643",
+      "qualification": "Operator verification only; these active states are outside the fixed outer box. No stage/trajectory or qualified physical solution is claimed."
+    },
+    {
+      "name": "linear-inactive-chi0",
+      "selector": "Linear",
+      "fixture": 2,
+      "chi": 0,
+      "native_reexecution": false,
+      "input_raw": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-verification-001/results/linear-inactive-chi0/native.json",
+        "bytes": 150696,
+        "sha256": "ce4d9908c01c46962dbf547515e9d73a778e9728785cea2f456f23a48854345c"
+      },
+      "input_xml": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-verification-001/results/linear-inactive-chi0/case.xml",
+        "bytes": 3393,
+        "sha256": "4de36bf19dbedf1e7cdb0fa48f92b2f7e67d619b5c7c5ae7993add0884fc2dac"
+      },
+      "input_log": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-verification-001/results/linear-inactive-chi0/run.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "weak": {
+        "orders": [
+          8,
+          16,
+          8
+        ],
+        "rays": 8,
+        "scope": "Complete independently reconstructed unforced alpha=0 weak loads",
+        "inner_stress_model": "Linear",
+        "selected_increment": 0.0
+      },
+      "actual_source_budgets": [
+        1.5971609417086574,
+        1.5971609417086574,
+        1.5971609417086574,
+        0,
+        0,
+        0,
+        1,
+        2618.685057539208
+      ],
+      "actual_wall_sources": [
+        1.5971609417086574,
+        1.5971609417086574,
+        0,
+        -0.014513050840455427,
+        5.442666666666678e-07
+      ],
+      "actual_source_inner_covariance_minimum": 0.2742764862527727,
+      "actual_inner_zero_covariance": [
+        0,
+        0,
+        0
+      ],
+      "actual_inner_statistics": null,
+      "actual_inner_statistic_maximum_point": null,
+      "actual_energy_budget": [
+        1.788696090942863,
+        0,
+        1.795578757609531,
+        -0.006869333333333338,
+        -1.3333333333333315e-05,
+        0,
+        1.7886960909428642,
+        -1.1102230246251565e-15,
+        2.115667607795101
+      ],
+      "supplied_diagnostic_state": "state",
+      "coupled_action": [
+        {
+          "step": 0.0001,
+          "independent_action_error": 2.42861286636753e-13
+        },
+        {
+          "step": 1e-05,
+          "independent_action_error": 1.0963994469259664e-12
+        }
+      ],
+      "lifted_traction": {
+        "state_key": "lifted_state",
+        "quadrature": 12,
+        "traction_integrals": [
+          0.04648487586311745,
+          0.0,
+          0.07078139310374786,
+          -0.05118556319264281,
+          0.0,
+          0.009877794413545547
+        ],
+        "maximum_trace_projection_difference": 4.326825009393076e-11,
+        "point_checks": 8
+      },
+      "saturation_statistics": null,
+      "physical_signature_sha256": "86cfca476c58d398c1361f46b16fcde1c2cb4cfac441df9beaf23022d6881c0e",
+      "qualification": "Operator verification only; these active states are outside the fixed outer box. No stage/trajectory or qualified physical solution is claimed."
+    },
+    {
+      "name": "saturated-inactive-chi0",
+      "selector": "SaturatedR2",
+      "fixture": 2,
+      "chi": 0,
+      "native_reexecution": false,
+      "input_raw": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-verification-001/results/saturated-inactive-chi0/native.json",
+        "bytes": 151106,
+        "sha256": "1dac6b2bcba99024ed75894eee8a4d13e7b6755d956028058737732f2be418bf"
+      },
+      "input_xml": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-verification-001/results/saturated-inactive-chi0/case.xml",
+        "bytes": 3398,
+        "sha256": "102c36764ccc40f35f52449c13b3567ad3788bb1c39747f2d9e83256932bea32"
+      },
+      "input_log": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-verification-001/results/saturated-inactive-chi0/run.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "weak": {
+        "orders": [
+          8,
+          16,
+          8
+        ],
+        "rays": 8,
+        "scope": "Complete independently reconstructed unforced alpha=0 weak loads",
+        "inner_stress_model": "SaturatedR2",
+        "selected_increment_float64_LE_sha256": "4e709b2c0d841820dd92d079390c606b2260c07e290aa2e92a99ba3dbc5c1609",
+        "maximum_selected_weak_increment": 3.4811507929199894e-19,
+        "inner_source_volume": 1.9999999999999996,
+        "saturation_active_source_volume": 0.0,
+        "source_diffusion_and_preprofiles": "unchanged",
+        "anchor_added": false
+      },
+      "actual_source_budgets": [
+        1.5971609417086574,
+        1.5971609417086574,
+        1.5971609417086574,
+        0,
+        0,
+        0,
+        1,
+        2618.685057539208
+      ],
+      "actual_wall_sources": [
+        1.5971609417086574,
+        1.5971609417086574,
+        0,
+        -0.014513050840455427,
+        5.442666666666678e-07
+      ],
+      "actual_source_inner_covariance_minimum": 0.2742764862527727,
+      "actual_inner_zero_covariance": [
+        0,
+        0,
+        0
+      ],
+      "actual_inner_statistics": [
+        0,
+        2.0000000000000027,
+        0.0003602418308888544,
+        0.20273429485411978,
+        0,
+        0.0008649557405155737
+      ],
+      "actual_inner_statistic_maximum_point": [
+        0.019855071751231912,
+        0,
+        1.9973404860059036,
+        0.4909583047747925,
+        0.5109051144949107,
+        0.32851091390060233,
+        0.20199041900813408,
+        0.20273429485411978,
+        0.06635605714752772,
+        0.32851091390060233
+      ],
+      "actual_energy_budget": [
+        1.788696090942863,
+        0,
+        1.795578757609531,
+        -0.006869333333333338,
+        -1.3333333333333315e-05,
+        0,
+        1.7886960909428642,
+        -1.1102230246251565e-15,
+        2.115667607795101
+      ],
+      "supplied_diagnostic_state": "state",
+      "coupled_action": [
+        {
+          "step": 0.0001,
+          "independent_action_error": 2.42861286636753e-13
+        },
+        {
+          "step": 1e-05,
+          "independent_action_error": 1.0963994469259664e-12
+        }
+      ],
+      "lifted_traction": {
+        "state_key": "lifted_state",
+        "quadrature": 12,
+        "traction_integrals": [
+          0.04648487586311745,
+          0.0,
+          0.07078139310374786,
+          -0.05118556319264281,
+          0.0,
+          0.009877794413545547
+        ],
+        "maximum_trace_projection_difference": 4.326825009393076e-11,
+        "point_checks": 8
+      },
+      "saturation_statistics": {
+        "full_statistics_independent_tolerance_met": true,
+        "method": "Complete independent coefficient comparison"
+      },
+      "physical_signature_sha256": "62e0d68c049e1389c21f446ceca55bdd314dde51c42b3155c6a98ac344e532f9",
+      "qualification": "Operator verification only; these active states are outside the fixed outer box. No stage/trajectory or qualified physical solution is claimed."
+    },
+    {
+      "name": "saturated-depleted-chi0",
+      "selector": "SaturatedR2",
+      "fixture": 3,
+      "chi": 0,
+      "native_reexecution": false,
+      "input_raw": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-continuation-002/results/saturated-depleted-chi0/native.json",
+        "bytes": 149616,
+        "sha256": "601cabba889078b0a12376829f70e744947ca3b4aa70a9632844a1a4c81fee99"
+      },
+      "input_xml": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-continuation-002/results/saturated-depleted-chi0/case.xml",
+        "bytes": 3398,
+        "sha256": "0bef857fca82e5bcf0f65e1fe0fddfbb7ec79040b051ccf1e07855891d73142a"
+      },
+      "input_log": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-continuation-002/results/saturated-depleted-chi0/run.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "weak": {
+        "orders": [
+          8,
+          16,
+          8
+        ],
+        "rays": 8,
+        "scope": "Complete independently reconstructed unforced alpha=0 weak loads",
+        "inner_stress_model": "SaturatedR2",
+        "selected_increment_float64_LE_sha256": "98f8e5b9ad44276c695afc1ea2d129b222b85c84b4374da04a2850c556fd019a",
+        "maximum_selected_weak_increment": 1.719023865129525,
+        "inner_source_volume": 1.9999999999999993,
+        "saturation_active_source_volume": 1.9999999999999993,
+        "source_diffusion_and_preprofiles": "unchanged",
+        "anchor_added": false
+      },
+      "actual_source_budgets": [
+        1.5498879329140287,
+        1.5498879329140287,
+        1.549887932914035,
+        -1.2997415643756227e-14,
+        0.5975209283990256,
+        0,
+        1,
+        88005.94461170003
+      ],
+      "actual_wall_sources": [
+        1.5498879329140287,
+        1.5498879329140287,
+        -1.2997415643756227e-14,
+        5.683635175958754,
+        0.001089684266666666
+      ],
+      "actual_source_inner_covariance_minimum": 9.732013311211573e-05,
+      "actual_inner_zero_covariance": [
+        0,
+        0,
+        0
+      ],
+      "actual_inner_statistics": [
+        1.9999999999999982,
+        1.9999999999999982,
+        1.0352580254340695,
+        231.13589537041454,
+        0,
+        0
+      ],
+      "actual_inner_statistic_maximum_point": [
+        0.9801449282487682,
+        0,
+        0.07684814094124631,
+        0.0007419638560983699,
+        0.5105080130598858,
+        0.013465867955565583,
+        8.49032931644542,
+        231.13589537041454,
+        0.0004946425707322466,
+        0
+      ],
+      "actual_energy_budget": [
+        -17.391431310795895,
+        0,
+        1.8918593558746801,
+        -19.282090666667997,
+        -0.0012000000000000008,
+        0,
+        -17.39143131079332,
+        -2.575717417130363e-12,
+        416.6488512439381
+      ],
+      "supplied_diagnostic_state": "state",
+      "coupled_action": [
+        {
+          "step": 0.0001,
+          "independent_action_error": 1.4474532683550478e-10
+        },
+        {
+          "step": 1e-05,
+          "independent_action_error": 1.920685832601521e-09
+        }
+      ],
+      "lifted_traction": {
+        "state_key": "lifted_state",
+        "quadrature": 12,
+        "traction_integrals": [
+          1.803335665657066,
+          0.0,
+          0.06944262030236467,
+          2.1576923468746196,
+          0.0,
+          9.482324328427055
+        ],
+        "maximum_trace_projection_difference": 8.326672684688674e-17,
+        "point_checks": 8
+      },
+      "saturation_statistics": {
+        "full_statistics_independent_tolerance_met": true,
+        "method": "Complete independent coefficient comparison"
+      },
+      "physical_signature_sha256": "62e0d68c049e1389c21f446ceca55bdd314dde51c42b3155c6a98ac344e532f9",
+      "qualification": "Operator verification only; these active states are outside the fixed outer box. No stage/trajectory or qualified physical solution is claimed."
+    },
+    {
+      "name": "linear-zero-local-k",
+      "selector": "Linear",
+      "fixture": 4,
+      "chi": 0,
+      "native_reexecution": false,
+      "input_raw": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-continuation-003/results/linear-zero-local-k/native.json",
+        "bytes": 145836,
+        "sha256": "43e8fbba0a79439901f415354bc5d36cff49681aa41683f2fab4af06f544a1f4"
+      },
+      "input_xml": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-continuation-003/results/linear-zero-local-k/case.xml",
+        "bytes": 3545,
+        "sha256": "21f3d11c7a9d67441b19c65c244ecba495dca9bab1af5ce2da205e4c4ce0aae2"
+      },
+      "input_log": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-continuation-003/results/linear-zero-local-k/run.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "weak": {
+        "orders": [
+          8,
+          16,
+          8
+        ],
+        "rays": 8,
+        "scope": "Complete independently reconstructed unforced alpha=0 weak loads",
+        "inner_stress_model": "Linear",
+        "selected_increment": 0.0
+      },
+      "actual_source_budgets": [
+        1.549887932914029,
+        1.549887932914029,
+        1.5498879329140227,
+        -1.645276796746753e-17,
+        0.4606367482650741,
+        0,
+        1,
+        70945.80946857856
+      ],
+      "actual_wall_sources": [
+        1.549887932914029,
+        1.549887932914029,
+        -1.645276796746753e-17,
+        11.989041839590659,
+        0.0010896842666666658
+      ],
+      "actual_source_inner_covariance_minimum": -1.6496945411104433,
+      "actual_inner_zero_covariance": [
+        21,
+        -0.005239191889286443,
+        -0.005204380946781486
+      ],
+      "actual_inner_statistics": null,
+      "actual_inner_statistic_maximum_point": null,
+      "actual_energy_budget": [
+        -17.546535443567414,
+        0,
+        1.736755223099647,
+        -19.282090666667884,
+        -0.001199999999999999,
+        0,
+        -17.54653544356824,
+        8.242295734817162e-13,
+        385.70866226575527
+      ],
+      "supplied_diagnostic_state": "state",
+      "coupled_action": [],
+      "lifted_traction": {
+        "state_key": "lifted_state",
+        "quadrature": 12,
+        "traction_integrals": [
+          1.9861591225111481,
+          0.0,
+          0.07065337167225927,
+          2.0348730704772064,
+          0.0,
+          0.4032316947211769
+        ],
+        "maximum_trace_projection_difference": 2.7755575615628914e-17,
+        "point_checks": 8
+      },
+      "saturation_statistics": null,
+      "physical_signature_sha256": "0267cd8b9b93db623b829724a62ce4a20657582dc808698284f0dd4fd7def79d",
+      "qualification": "Operator verification only; these active states are outside the fixed outer box. No stage/trajectory or qualified physical solution is claimed."
+    },
+    {
+      "name": "saturated-zero-local-k",
+      "selector": "SaturatedR2",
+      "fixture": 4,
+      "chi": 0,
+      "native_reexecution": false,
+      "input_raw": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-continuation-003/results/saturated-zero-local-k/native.json",
+        "bytes": 146295,
+        "sha256": "24dec32c6fd9c3dfa15bfc7b314d81e26063556eb102746ba4ed91e96bf533c3"
+      },
+      "input_xml": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-continuation-003/results/saturated-zero-local-k/case.xml",
+        "bytes": 3550,
+        "sha256": "02f3a86d814d190771c9d9535b226ba32b59a2f5ff5b51248fd1516f509f4984"
+      },
+      "input_log": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-continuation-003/results/saturated-zero-local-k/run.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "weak": {
+        "orders": [
+          8,
+          16,
+          8
+        ],
+        "rays": 8,
+        "scope": "Complete independently reconstructed unforced alpha=0 weak loads",
+        "inner_stress_model": "SaturatedR2",
+        "selected_increment_float64_LE_sha256": "478d6649d7052f86a8088ef1b7c95307568a350385b3add3779c20c8eb6bec00",
+        "maximum_selected_weak_increment": 2.4543513723821158,
+        "inner_source_volume": 1.9999999999999998,
+        "saturation_active_source_volume": 1.9999999999999998,
+        "source_diffusion_and_preprofiles": "unchanged",
+        "anchor_added": false
+      },
+      "actual_source_budgets": [
+        1.549887932914029,
+        1.549887932914029,
+        1.5498879329140227,
+        -1.645276796746753e-17,
+        0.4606367482650741,
+        0,
+        1,
+        70945.80946857856
+      ],
+      "actual_wall_sources": [
+        1.549887932914029,
+        1.549887932914029,
+        -1.645276796746753e-17,
+        1.923840624134802,
+        0.0010896842666666658
+      ],
+      "actual_source_inner_covariance_minimum": 2.287138097700964e-14,
+      "actual_inner_zero_covariance": [
+        21,
+        0,
+        0
+      ],
+      "actual_inner_statistics": [
+        1.9999999999999976,
+        1.9999999999999976,
+        4.135918036228555,
+        91731321307.25974,
+        0,
+        0
+      ],
+      "actual_inner_statistic_maximum_point": [
+        0.9801449282487682,
+        0,
+        4.847801712324853e-07,
+        1.1997541397795422e-13,
+        0.5105080130598861,
+        0.0008645898135607917,
+        8.486107574532811,
+        91731321307.25974,
+        7.998360931863615e-14,
+        0
+      ],
+      "actual_energy_budget": [
+        -17.546535443568047,
+        0,
+        1.7367552230996346,
+        -19.282090666667884,
+        -0.001199999999999999,
+        0,
+        -17.54653544356825,
+        2.0250467969162855e-13,
+        385.70866226575527
+      ],
+      "supplied_diagnostic_state": "state",
+      "coupled_action": [],
+      "lifted_traction": {
+        "state_key": "lifted_state",
+        "quadrature": 12,
+        "traction_integrals": [
+          0.24074374664602874,
+          0.0,
+          0.059094329447986954,
+          2.0348730704772064,
+          0.0,
+          0.4032316947211769
+        ],
+        "maximum_trace_projection_difference": 2.7755575615628914e-17,
+        "point_checks": 8
+      },
+      "saturation_statistics": {
+        "method": "Limited exported-point primitive verification, with coefficient-quotient uncertainty retained",
+        "full_statistics_independent_tolerance_met": false,
+        "coefficient_derived_maximum_status": "UNRESOLVED at original tolerance",
+        "original_relative_tolerance": 3e-10,
+        "original_maximum_relative_error": 2.278586980488665e-05,
+        "native_statistics": [
+          1.9999999999999976,
+          1.9999999999999976,
+          4.135918036228555,
+          91731321307.25974,
+          0.0,
+          0.0
+        ],
+        "coefficient_statistics": [
+          1.9999999999999982,
+          1.9999999999999982,
+          4.135918036228515,
+          91733411532.83168,
+          0.0,
+          0.0
+        ],
+        "native_witness": [
+          0.9801449282487682,
+          0.0,
+          4.847801712324853e-07,
+          1.1997541397795422e-13,
+          0.5105080130598861,
+          0.0008645898135607917,
+          8.486107574532811,
+          91731321307.25974,
+          7.998360931863615e-14,
+          0.0
+        ],
+        "independently_reconstructed_witness_primitives": [
+          1.1997268018085177e-13,
+          0.510508013059886,
+          0.0008645898135607917,
+          8.486107574532799
+        ],
+        "primitive_absolute_discrepancy": [
+          2.7337971024508387e-18,
+          1.1102230246251565e-16,
+          0.0,
+          1.2434497875801753e-14
+        ],
+        "primitive_relative_discrepancy": [
+          2.2786830287777186e-05,
+          2.174741622507931e-16,
+          0.0,
+          1.4652769560826987e-15
+        ],
+        "modal_dot_cancellation_condition": 4125674.305602579,
+        "source_point_location_error": 1.1102230246251565e-16,
+        "same_point_coefficient_ratio": 91733411573.31029,
+        "actual_exported_primitive_recomputed": [
+          8.486107574532799,
+          91731321307.25958,
+          7.998360931863615e-14,
+          0.0
+        ],
+        "same_point_ratio_difference": 2090266.0505523682,
+        "a_posteriori_same_point_quotient_error_bound": [
+          "2090266.05093833866332929879870271319168408968853505261792415",
+          "2090266.05093833866332929879870271319168408968853505261792426"
+        ],
+        "formula": "|an/cn-ai/ci| <= |an-ai|/cn+|ai|*|cn-ci|/(cn*ci), plus gamma5 quotient roundoff",
+        "scope": "The same-point arithmetic bound is rigorous conditional on the two primitive tuples. Native primitive values are independently compared to coefficients at the unchanged physical component tolerance. It is not a bound on all native basis errors, an independently certified global maximum, or a replacement for any zero-stress/covariance/weak/operator test."
+      },
+      "physical_signature_sha256": "e8a08ac55a398d316d91fd898d09ce6e0ad6487b56f64360ac20b9dc1b108a1d",
+      "qualification": "Operator verification only; these active states are outside the fixed outer box. No stage/trajectory or qualified physical solution is claimed."
+    }
+  ],
+  "all_saturation_statistics_independently_certified": false,
+  "unresolved_diagnostics": [
+    {
+      "case": "saturated-zero-local-k",
+      "statistic": "maximum a/c",
+      "original_relative_error": 2.278586980488665e-05,
+      "original_relative_tolerance": 3e-10
+    }
+  ],
+  "independent_outer_evaluations": {
+    "calls": 6112,
+    "rounded_tail_calls": 3112,
+    "maximum_real_q": 2086.3786460048004,
+    "maximum_omitted_tensor_Frobenius_bound": 4.2472579927086853e-54,
+    "coefficient_tail": {
+      "threshold": 8.0,
+      "factor_value_error_upper": 1e-63,
+      "factor_q_derivative_error_upper": 1.1e-61,
+      "coefficient_value_error_upper": 3e-64,
+      "coefficient_q_derivative_error_upper": 4e-62,
+      "exact_factor": "1-exp(-.36*exp(.75*q))",
+      "stable_tail_factor": "1; correctly rounded at binary64 precision",
+      "proof": "exp(6)>403.4; .36*403.4>63*log(10); x*exp(-x) decreases for x>1; B<=.3 and |Bprime|<.0072 for q>=8",
+      "scope": "Real q>=8; no q/field clipping, closure retuning, or finite-state applicability inference"
+    },
+    "scope": "Finite oracle calls in this Python process; the tensor bound excludes ordinary contraction roundoff and does not certify a state envelope"
+  },
+  "retained_pressure_cap": {
+    "producing_source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+    "native_calls": 0,
+    "input_files": {
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/pressure-verification-001/results/validation.json": {
+        "bytes": 174042,
+        "sha256": "eb8e184f496c22bbec5713af6f82eeb4437011e20d6afdf02d9026e541d8c50a"
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/pressure-verification-001/receipt.json": {
+        "bytes": 3779,
+        "sha256": "6cb23bbc9043bdaf4854d5802516c458f17ed2c2bbcefe0c57f48126f220d99b"
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/pressure-verification-001/runtime-before.json": {
+        "bytes": 679763,
+        "sha256": "3c5d0a6ef7ef20ee5a26bc1c4541c9d6431dc8c5f489a616394375ca454b5243"
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/pressure-verification-001/runtime-after.json": {
+        "bytes": 680168,
+        "sha256": "3ad5c8dbeeaa8abc7e581335fce6778da936f504593198d5531d963674a9ce7f"
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/pressure-verification-001/results/pressure-active/probe.json": {
+        "bytes": 3043737,
+        "sha256": "cf3a8844dff263b41d3ed39793c2300acd7d3b668610168fa4f26b8a450d33af"
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/pressure-verification-001/results/pressure-active/case.xml": {
+        "bytes": 13861,
+        "sha256": "1d6b43736472f7a4be5524f1ed2249fba93b6e607fdb867df7e196a3524bf020"
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/pressure-verification-001/results/pressure-active/run.log": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "pressure_probe_sha256": "d2d701891d071590d1530aebad3e9cfba3f99c67c245b94f699a2db785ce10c7",
+    "base_residual_error": 3.6362620034099103e-14,
+    "alpha": 300,
+    "weak": {
+      "orders": [
+        8,
+        16,
+        8
+      ],
+      "rays": 56,
+      "scope": "Complete independently reconstructed unforced alpha=0 weak loads",
+      "inner_stress_model": "SaturatedR2",
+      "selected_increment_float64_LE_sha256": "10b9fe544ff0811bc1881fcb64bc9e23c3adb6f5286a7c661cd18f888c5ff124",
+      "maximum_selected_weak_increment": 0.21318824539675033,
+      "inner_source_volume": 12.000000000000014,
+      "saturation_active_source_volume": 2.6701080095213245,
+      "source_diffusion_and_preprofiles": "unchanged",
+      "anchor_added": false
+    },
+    "capped_rays": 10,
+    "interior_chi_rays": 29,
+    "matching_trace_rows": 22,
+    "scope": "Analysis of retained same-binary pressure-active capped operator, exact time mass and projected trace. Distinct from the legal uncapped chi=0 depletion fixture; no cap-active chi=0 native claim or solver trajectory.",
+    "rays_count": 56,
+    "b_range": [
+      0.058478701744129016,
+      1.0
+    ],
+    "lambda_range": [
+      0.5847870174412901,
+      1.0
+    ],
+    "chi_range": [
+      0.0,
+      0.7901234567905392
+    ],
+    "first_attenuated_ray": {
+      "chart": [
+        -3.901985507175123,
+        0,
+        2
+      ],
+      "chi": 0.7901234567902647,
+      "b": 0.06421068532477195,
+      "lambda_value": 0.6421068532477194,
+      "pre_E_budget": 1.0539252939665775,
+      "pre_D_budget": 1.0539252939665773,
+      "actual_E_budget": 0.6767326540670566,
+      "actual_D_budget": 0.6767326540670565
+    }
+  },
+  "separate_pressure_action_verification": {
+    "input": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/pressure-verification-001/results/validation.json",
+      "bytes": 174042,
+      "sha256": "eb8e184f496c22bbec5713af6f82eeb4437011e20d6afdf02d9026e541d8c50a"
+    },
+    "source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+    "success": true,
+    "case_checks": {
+      "affine": 260,
+      "pressure-active": 360
+    },
+    "physical_action_tolerance": 1e-07,
+    "scope": "Separate C gate; B mixed-action component errors and its 8e-6 threshold do not substitute for the pressure physical-norm threshold"
+  },
+  "retained_failed_attempts": [
+    {
+      "wrapper": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-continuation-002/receipt.json",
+        "bytes": 4703,
+        "sha256": "f37f317c6eeb079e30578c56b1c5d0f42271e716035ebbd893af15064c955802"
+      },
+      "producing_source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+      "analysis_source_commit": "9d425eafd8e40347483f690acd27054458c4e3d2",
+      "runtime_unchanged": true,
+      "suite.log": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-continuation-002/suite.log",
+        "bytes": 2963,
+        "sha256": "8b8f9b2f8c4318769257c7d848e2fca586b33d55f5c0d500b03fa9acdd226016"
+      }
+    },
+    {
+      "wrapper": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-continuation-003/receipt.json",
+        "bytes": 4856,
+        "sha256": "5e0e32d6927f449bd9eda75be13a6e9e999848f54b0a3d109f1f3504920e5c9f"
+      },
+      "producing_source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+      "analysis_source_commit": "42bdb59ca35d212bfb2b07a1284d356dbfb10164",
+      "runtime_unchanged": true,
+      "suite.log": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-continuation-003/suite.log",
+        "bytes": 1583,
+        "sha256": "c681f847465ea4f125bbb4730d4545dc55c914e210060731996ee96da1edb384"
+      },
+      "results/validation.json": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-continuation-003/results/validation.json",
+        "bytes": 109024,
+        "sha256": "ff76db9c3915bd2e9185727c29704816fff4e0ac51cbfb7d88868a19fa78db8c"
+      }
+    },
+    {
+      "wrapper": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-verification-001/receipt.json",
+        "bytes": 4051,
+        "sha256": "bbe2dfcf0879d2136e7a25a4f76661b5c358d37dd6ada8e90ad657ea26ff6698"
+      },
+      "producing_source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+      "analysis_source_commit": null,
+      "runtime_unchanged": true,
+      "suite.log": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-verification-001/suite.log",
+        "bytes": 1370,
+        "sha256": "f1b601f5fb8295f153012a65f47928d488a15a93a7a94b7dc87b6e6bb8efc006"
+      },
+      "results/validation.json": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-verification-001/results/validation.json",
+        "bytes": 85739,
+        "sha256": "f1dfb2f60a024cd2f84e2f0c370dc764aaab5e2666d8e0fed3766fb9a61b2a9e"
+      }
+    },
+    {
+      "wrapper": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/inner-verification-001/receipt.json",
+        "bytes": 3691,
+        "sha256": "9a5ce752f9dfedc77e1e8bc086cf144cabfe19d7d0bea3e0f991a4ce34298f0c"
+      },
+      "producing_source_commit": "1ee3a8454c857c807bcb6911024186afb9d22721",
+      "analysis_source_commit": null,
+      "runtime_unchanged": true,
+      "suite.log": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/inner-verification-001/suite.log",
+        "bytes": 1234,
+        "sha256": "219884a01519fdbd41ef1bcab21de4214584aa4efc6285ef07e3b4936af9d9ea"
+      },
+      "results/validation.json": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/inner-verification-001/results/validation.json",
+        "bytes": 29475,
+        "sha256": "91619e41e00d2323c919986ccc355c44e0c7a039146a3eac3acb5913cdf88cce"
+      }
+    }
+  ],
+  "interpretation": {
+    "passed": "Compiled kernel, active/inactive actual weak loads, coupled mixed actions, full stress/production/traction/energy/source consistency, and exact native zero-k covariance controls on declared finite fixtures",
+    "unresolved": "Coefficient-derived maximum a/c in the zero-k fixture remains unresolved at original3e-10; actual exported primitive semantics are separately checked without changing tolerances",
+    "not_established": "Qualified implicit-stage root, fixed outer-box coverage, polynomial-everywhere positivity, fully discrete positivity, curved MMS, long-time stability, scalability, terrain or physical validation",
+    "milestone_status": "M8 remains OPEN"
+  }
+}

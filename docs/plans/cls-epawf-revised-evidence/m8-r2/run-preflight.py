@@ -86,6 +86,11 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--root', type=Path, required=True, help='Linux experiment root containing source/ and build/')
     parser.add_argument('--expected-source', required=True)
+    parser.add_argument('--analysis-source', type=Path, required=True,
+        help='Clean frozen source for corrected independent oracles; never compiled by this script')
+    parser.add_argument('--expected-analysis-source', required=True)
+    parser.add_argument('--reuse-preflight', type=Path,
+        help='Preserved prior preflight directory; reuse only its verified completed Linear/base initialization')
     parser.add_argument('--build-receipt', type=Path, required=True)
     parser.add_argument('--runtime-pin', type=Path, required=True)
     parser.add_argument('--inner-gate', type=Path, required=True)
@@ -96,8 +101,9 @@ def main():
     args = parser.parse_args()
     require(platform.system() == 'Linux', 'Native preflight belongs on authoritative Linux')
     root, out = args.root.resolve(), args.output.resolve()
-    source, build = root/'source', root/'build'
-    require(out.is_relative_to(root) and not out.is_relative_to(source), 'Generated output must be outside the source checkout')
+    source, build, analysis = root/'source', root/'build', args.analysis_source.resolve()
+    require(out.is_relative_to(root) and not out.is_relative_to(source) and not out.is_relative_to(analysis),
+        'Generated output must be outside both source checkouts')
     out.mkdir(parents=True, exist_ok=False)
     lock = (root/'validation.lock').open('a')
     fcntl.flock(lock, fcntl.LOCK_SH)
@@ -107,21 +113,28 @@ def main():
     Path(env['TMPDIR']).mkdir(exist_ok=True)
     tests = source/'solvers/IncNavierStokesSolver/Tests/RANS'
     fingerprint = source/'docs/plans/cls-epawf-revised-evidence/m7/fingerprint-runtime.py'
-    program, generator, oracle = build/'IncNavierStokesSolver', tests/'cls_epawf_m8_r2_cases.py', tests/'cls_epawf_m8_r2_preflight.py'
+    program, generator = build/'IncNavierStokesSolver', tests/'cls_epawf_m8_r2_cases.py'
+    oracle = analysis/'solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m8_r2_preflight.py'
     git = lambda *words: subprocess.check_output(['git', '-c', 'gc.auto=0', '-C', str(source), *words], text=True).strip()
+    analysis_git = lambda *words: subprocess.check_output(['git', '-c', 'gc.auto=0', '-C', str(analysis), *words], text=True).strip()
     input_paths = dict(original=args.original.resolve(), r1_report=args.r1_report.resolve(),
         build_receipt=args.build_receipt.resolve(), runtime_pin=args.runtime_pin.resolve(),
         inner_gate=args.inner_gate.resolve(), pressure_gate=args.pressure_gate.resolve(),
         generator=generator, oracle=oracle, fingerprint=fingerprint, solver=program)
+    if args.reuse_preflight:
+        previous = args.reuse_preflight.resolve()
+        input_paths.update(previous_receipt=previous/'receipt.json',
+            previous_runtime_before=previous/'runtime-before.json', previous_runtime_after=previous/'runtime-after.json')
     pins = {name: dict(path=str(path), sha256=sha(path)) for name, path in input_paths.items()}
     receipt = dict(schema=2, milestone='M8-R2', role='E outer6 representation preflight',
         status='running', started_utc=stamp(), source_commit=args.expected_source,
+        analysis_source=dict(path=str(analysis), commit=args.expected_analysis_source),
         runner=dict(path=str(Path(__file__).resolve()), sha256=sha(__file__)), inputs=pins,
         maximum_workers=1, ranks=1, affinity=sorted(os.sched_getaffinity(0)), numerical_threads=THREADS,
         environment={key: value for key, value in env.items() if key in (*THREADS,
             'LD_LIBRARY_PATH', 'PYTHONPATH', 'PYTHONHOME', 'PYTHONDONTWRITEBYTECODE', 'TMPDIR',
             'LD_PRELOAD', 'LD_AUDIT', 'LANG', 'LC_ALL') or key.startswith(('OMPI_MCA_', 'PMIX_MCA_', 'UCX_', 'I_MPI_', 'MPICH_'))},
-        planned_zero_step_initializations=4, actual_zero_step_initializations=0,
+        planned_zero_step_initializations=4, actual_zero_step_initializations=0, reused_zero_step_initializations=0,
         native_evolution_calls=0, native_stage_calls=0, extra_Jacobian_probes=0,
         representation='outer6 only', native_GLL_points=[8, 8], source_quadratures=[[8, 16], [12, 24]],
         commands=[], cases=[])
@@ -169,6 +182,8 @@ def main():
     before_exists = False
     try:
         require(git('rev-parse', 'HEAD') == args.expected_source and not git('status', '--porcelain'), 'Producing source is not the frozen clean revision')
+        require(analysis_git('rev-parse', 'HEAD') == args.expected_analysis_source and not analysis_git('status', '--porcelain'),
+            'Analysis source is not the frozen clean revision')
         built = json.loads(args.build_receipt.read_text())
         require(built.get('status') == 'passed' and built.get('source_commit') == args.expected_source, 'Producing build receipt is not passed at the pinned source')
         for kind, path in (('inner', args.inner_gate), ('pressure', args.pressure_gate)):
@@ -185,6 +200,45 @@ def main():
         for name in FP_FIELDS:
             require(captured[name] == pinned[name], 'Producing runtime differs from build pin: '+name)
         receipt['build_pin_full_comparison'] = dict(identical_fields=list(FP_FIELDS), passed=True)
+        cpp_inputs = {path: digest for path, digest in captured['source_inputs'].items()
+            if Path(path).suffix.lower() in ('.cpp', '.cc', '.c', '.cxx', '.h', '.hpp', '.hxx', '.inl')}
+        require(all((analysis/path).is_file() and sha(analysis/path) == digest for path, digest in cpp_inputs.items()),
+            'Analysis-source C/C++ inputs differ from the actual producing epoch')
+        receipt['analysis_Cxx_equivalence_to_producer'] = dict(passed=True, checked_files=len(cpp_inputs),
+            producing_commit=args.expected_source, analysis_commit=args.expected_analysis_source,
+            scope='C/C++ only; corrected Python oracles are independently pinned and may differ')
+        reusable = None
+        if args.reuse_preflight:
+            prior = json.loads((previous/'receipt.json').read_text())
+            require(prior.get('source_commit') == prior.get('source_commit_end') == args.expected_source,
+                'Prior initialization does not identify the producing source')
+            for key in ('full_runtime_source_inputs_unchanged', 'source_clean_end', 'input_hashes_unchanged'):
+                require(prior.get(key) is True, 'Prior preflight lacks verified unchanged provenance: '+key)
+            require(prior['inputs']['solver']['sha256'] == pins['solver']['sha256'] and
+                prior['inputs']['generator']['sha256'] == pins['generator']['sha256'] and
+                prior['inputs']['original']['sha256'] == pins['original']['sha256'],
+                'Prior solver, native generator or original XML differs')
+            for filename in ('runtime-before.json', 'runtime-after.json'):
+                old_runtime = json.loads((previous/filename).read_text())
+                require(old_runtime.get('success') and old_runtime['source_commit'] == args.expected_source,
+                    'Prior runtime fingerprint failed or has another source')
+                for name in FP_FIELDS:
+                    require(old_runtime[name] == captured[name], 'Prior/current native epoch differs: '+name)
+            rows = [case for case in prior['cases'] if case['name'] == 'outer6-linear-base']
+            require(len(rows) == 1 and rows[0].get('solver_exit_code') == 0,
+                'Only a completed successful prior Linear/base initialization may be reused')
+            reusable = rows[0]
+            require(sha(reusable['report']) == reusable['report_sha256'] and
+                sha(reusable['xml']) == reusable['xml_sha256'], 'Retained native report or XML changed')
+            input_paths.update(reused_native_report=Path(reusable['report']), reused_native_xml=Path(reusable['xml']))
+            for name in ('reused_native_report', 'reused_native_xml'):
+                pins[name] = dict(path=str(input_paths[name]), sha256=sha(input_paths[name]))
+            receipt['reuse_native_epoch_verification'] = dict(passed=True,
+                previous_receipt=pins['previous_receipt'], prior_wrapper_status=prior['status'],
+                prior_before_after_runtime_identical_to_current=True,
+                solver_image_sha256=pins['solver']['sha256'], report_sha256=reusable['report_sha256'],
+                native_report_copied=False, completed_initialization_rerun=False)
+            save()
         old = json.loads(args.r1_report.read_text())
         require(old.get('time') == 0 and old.get('steps') == 0 and old.get('audit_times') == [0], 'R1 comparison must be the actual initial zero-step report')
         require(len(old['state']) == 1571 and old['eta'] == 0 and not old['mapped'],
@@ -203,14 +257,26 @@ def main():
                 inner_stress=case['inner_stress'], quadrature=case['quadrature'], steps=0, status='prepared')
             receipt['cases'].append(row); save()
             require(row['xml_sha256'] == case['xml_sha256'], 'Prepared XML hash changed')
-            receipt['actual_zero_step_initializations'] += 1; save()
-            solved = command('initialize-'+name, [program, xml], xml.parent, 1200)
-            raw_path = xml.with_name('case.evolution.json')
-            row.update(solver_exit_code=solved['exit_code'], initialization_wall_seconds=solved['seconds'])
+            if reusable is not None and name == reusable['name']:
+                require(row['xml_sha256'] == reusable['xml_sha256'],
+                    'Freshly generated case XML is not byte-identical to retained successful initialization')
+                raw_path = Path(reusable['report'])
+                row.update(solver_exit_code=0, initialization_wall_seconds=reusable['initialization_wall_seconds'],
+                    native_execution='reused completed native initialization; independent audit rerun', new_solver_calls=0,
+                    original_case_xml=str(reusable['xml']), original_native_report_sha256=reusable['report_sha256'],
+                    initialization_timing_origin='retained prior actual native execution')
+                receipt['reused_zero_step_initializations'] += 1
+            else:
+                receipt['actual_zero_step_initializations'] += 1; save()
+                solved = command('initialize-'+name, [program, xml], xml.parent, 1200)
+                raw_path = xml.with_name('case.evolution.json')
+                row.update(solver_exit_code=solved['exit_code'], initialization_wall_seconds=solved['seconds'],
+                    native_execution='fresh native initialization', new_solver_calls=1,
+                    initialization_timing_origin='this wrapper execution')
             if raw_path.exists():
                 row.update(report=str(raw_path), report_sha256=sha(raw_path))
             save()
-            require(solved['exit_code'] == 0, 'Zero-step native initialization failed; no retry: '+name)
+            require(row['solver_exit_code'] == 0, 'Zero-step native initialization failed; no retry: '+name)
             raw = json.loads(raw_path.read_text())
             require(raw['time'] == 0 and raw['steps'] == 0 and raw['audit_times'] == [0] and len(raw['accepted_states']) == 1,
                 'Preflight advanced or omitted an accepted history')
@@ -227,7 +293,7 @@ def main():
                 fresh_Jacobian_cost='not measured in preflight; first actual auxiliary level only')
             target = xml.parent/'preflight.json'
             audited = command('audit-'+name, ['python3', '-B', oracle, '--raw', raw_path, '--session', xml,
-                '--plan', plan, '--source', source, '--expected-source', args.expected_source, '--output', target], xml.parent, 1800)
+                '--plan', plan, '--source', analysis, '--expected-source', args.expected_analysis_source, '--output', target], xml.parent, 1800)
             if target.exists():
                 row.update(audit=str(target), audit_sha256=sha(target))
             save()
@@ -277,9 +343,12 @@ def main():
             receipt['full_runtime_source_inputs_unchanged'] = False
         receipt['source_clean_end'] = not bool(git('status', '--porcelain'))
         receipt['source_commit_end'] = git('rev-parse', 'HEAD')
+        receipt['analysis_source_clean_end'] = not bool(analysis_git('status', '--porcelain'))
+        receipt['analysis_source_commit_end'] = analysis_git('rev-parse', 'HEAD')
         receipt['input_hashes_unchanged'] = all(sha(value['path']) == value['sha256'] for value in pins.values())
         if not (receipt['full_runtime_source_inputs_unchanged'] and receipt['source_clean_end'] and
-                receipt['source_commit_end'] == args.expected_source and receipt['input_hashes_unchanged']):
+                receipt['source_commit_end'] == args.expected_source and receipt['input_hashes_unchanged'] and
+                receipt['analysis_source_clean_end'] and receipt['analysis_source_commit_end'] == args.expected_analysis_source):
             receipt['status'] = 'failed'
         receipt['finished_utc'] = stamp(); save()
         print(json.dumps(dict(status=receipt['status'], failure=receipt.get('failure'),
