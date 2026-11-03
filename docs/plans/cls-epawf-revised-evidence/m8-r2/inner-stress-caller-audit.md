@@ -115,3 +115,27 @@ an explicit failed marker, so a second JSON error cannot hide the first
 scientific failure. A separately pinned additional-retained-run option
 reuses the successfully produced sixth native report rather than executing
 it again.
+
+The exact-zero R2 fixture subsequently exposed a separate diagnostic
+conditioning limit. At its nearest positive source point r is approximately
+4.85e-7 and k is approximately 1.20e-13, while the reported maximum a/c is
+approximately 9.17e10. The coefficient-derived maximum differs by about
+2.28e-5 relative, so that comparison remains explicitly **unresolved at the
+original 3e-10 tolerance**. The replay retains the strict full weak, energy,
+traction, covariance and exact-zero checks and the five well-conditioned
+saturation statistics. It separately checks the exported worst-point
+location/primitive inputs against the independent coefficients, recomputes
+the selected law using those checked actual inputs at the original tolerance,
+and records a directed-rounding, a-posteriori same-point quotient sensitivity
+bound. That conditional arithmetic bound does not certify all native basis
+evaluation errors or the global maximum. Nonzero fixtures retain the full
+original statistic comparison. The report flags that all saturation
+statistics have **not** been independently certified. Neither the physical
+model nor its fields or evaluation domain changes for this diagnostic issue.
+The separate Linux 80-digit polynomial diagnosis finds a 3.0237e-9 relative
+native k discrepancy at that point and a modal cancellation condition of
+4.12558e6; the older direct binary64 independent basis evaluation is less
+accurate there. The native exported-input ratio recomputation agrees within
+2e-15 relative. These are finite reference calculations, not rigorous native
+basis-error or continuum certificates; their exact inputs and results are
+retained in `inner-zero-ratio-diagnosis.json`.

@@ -15,6 +15,7 @@ only those fixed missing fixtures with the identical retained probe binaries.
 """
 import argparse
 from datetime import datetime, timezone
+from fractions import Fraction
 import hashlib
 import json
 import math
@@ -42,6 +43,7 @@ from cls_epawf_m7_energy_oracle import Audit, _fields, _horizontal, _sample, _ve
 from cls_epawf_m8_native_oracle import ray_source
 from cls_epawf_m8_r2_preflight import weak_loads, selected_direct, selected_interface
 from cls_epawf_m6_operator_oracle import _segment_projection
+from cls_epawf_m8_certificate import Iv
 
 
 def stamp():
@@ -253,6 +255,83 @@ def lifted_traction(raw, fields, state, audit):
                 point_checks=len(raw['interface']['samples']))
 
 
+def zero_fixture_statistics(raw, fields, state, supplied_direct, audit):
+    """Verify actual exported primitive semantics; retain quotient uncertainty.
+
+    a/c is singular at k=0 and very poorly conditioned at the nearest positive
+    source point of the prescribed k~r^2 fixture. This does not change the
+    field or the stress. The original coefficient-derived maximum comparison
+    stays explicitly unresolved; no larger relative tolerance is substituted.
+    """
+    observed = np.asarray(raw['constitutive_audit']['inner_stress'])
+    expected = np.asarray(supplied_direct['inner_stress'])
+    audit.near(observed[[0, 1, 2, 4, 5]], expected[[0, 1, 2, 4, 5]],
+               'zero_fixture_five_well_conditioned_saturation_statistics', 3e-10)
+    original_error = float(abs(observed[3]-expected[3])/max(1., abs(expected[3])))
+    witness = np.asarray(raw['constitutive_audit']['inner_stress_max_ratio_point'])
+    audit.require(witness.shape == (10,) and np.all(np.isfinite(witness)) and witness[3] > 0,
+                  'Missing finite positive-k native saturation witness')
+    point, d, offsets, H = witness[:3], raw['dimension'], raw['offsets'], raw['parameters'][1]
+    anchors = [chart for chart, _ in _horizontal(fields, d, H, int(raw['quadrature_orders'][0]))]
+    chart = min(anchors, key=lambda value: float(np.max(np.abs(value[:2]-point[:2]))))
+    source = ray_source(raw, fields, state, chart)
+    source_point = min(source['points'], key=lambda value: float(np.max(np.abs(value-point))))
+    location_error = audit.near(point, source_point, 'zero_fixture_exported_witness_is_source_point', 3e-10)
+    ray = ray_source(raw, fields, state, point)
+    G = _velocity(fields, state, offsets, d, [point])[1][0]
+    k = float(_sample(fields, state, offsets, d, [point])[3][0])
+    K = float(ray['profile'].k)
+    nt = float(ray['profile'].a)*max(float(point[2])-float(ray['profile'].zv), 0.)
+    independent = indexed_inner(G, k, nt)
+    strain = float(np.real(independent['s']))
+    primitive_expected = np.array([k, K, nt, strain])
+    audit.near(witness[3:7], primitive_expected, 'zero_fixture_exported_primitive_inputs_vs_coefficients', 3e-10)
+    audit.require(k > 0, 'Independent positive-k source witness was not positive')
+    # Recompute the actual selected law on the independently checked exported
+    # native k/nuA inputs, keeping independently reconstructed G. This is not
+    # a claim that the coefficient quotient is reproduced to 3e-10.
+    actual_inputs = indexed_inner(G, witness[3], witness[5])
+    recomputed = [float(np.real(actual_inputs['s'])),
+        float(np.real(actual_inputs['a']/actual_inputs['c'])),
+        float(np.real(actual_inputs['t'])), float(np.real(actual_inputs['radial']))]
+    audit.near(witness[6:10], recomputed, 'zero_fixture_actual_exported_primitive_law_semantics', 3e-10)
+    audit.near(observed[3], witness[7], 'zero_fixture_native_maximum_attains_exported_witness', 0.)
+
+    # Directed-rounding a-posteriori quotient sensitivity for THESE TWO
+    # exported/reconstructed primitive tuples, plus the standard gamma_5
+    # allowance for their normal-range binary64 products/divisions. It does
+    # not bound every native basis interpolation or certify the global max.
+    exact = lambda value: Iv(Fraction.from_float(float(value)))
+    an, ai = exact(witness[5])*exact(witness[6]), exact(nt)*exact(strain)
+    cn, ci = exact(witness[3])*Fraction(2, 3), exact(k)*Fraction(2, 3)
+    unit = Fraction(1, 2**53)
+    gamma = Iv(5*unit/(1-5*unit))
+    bound = Iv((an-ai).absmax())/cn+Iv(ai.absmax())*Iv((cn-ci).absmax())/(cn*ci)
+    bound += gamma*(Iv(an.absmax())/cn+Iv(ai.absmax())/ci)
+    reconstructed_ratio = nt*strain/(2*k/3)
+    point_difference = abs(float(witness[7])-reconstructed_ratio)
+    audit.require(point_difference <= float(bound.hi), 'Exported-point quotient sensitivity bound failed')
+    element = fields[d].element(point)
+    ids, phi, _ = fields[d].rows(element, [point])
+    coefficients = np.asarray(state)[offsets[d]+ids]
+    cancellation = float(np.sum(np.abs(phi[0]*coefficients))/abs(k))
+    absolute = np.abs(witness[3:7]-primitive_expected)
+    relative = [float(error/abs(value)) if value != 0 else None
+                for error, value in zip(absolute, primitive_expected)]
+    return dict(method='Limited exported-point primitive verification, with coefficient-quotient uncertainty retained',
+        full_statistics_independent_tolerance_met=original_error <= 3e-10,
+        coefficient_derived_maximum_status='UNRESOLVED at original tolerance' if original_error > 3e-10 else 'within original tolerance',
+        original_relative_tolerance=3e-10, original_maximum_relative_error=original_error,
+        native_statistics=observed.tolist(), coefficient_statistics=expected.tolist(),
+        native_witness=witness.tolist(), independently_reconstructed_witness_primitives=primitive_expected.tolist(),
+        primitive_absolute_discrepancy=absolute.tolist(), primitive_relative_discrepancy=relative,
+        modal_dot_cancellation_condition=cancellation, source_point_location_error=location_error,
+        same_point_coefficient_ratio=reconstructed_ratio, actual_exported_primitive_recomputed=recomputed,
+        same_point_ratio_difference=point_difference, a_posteriori_same_point_quotient_error_bound=bound.pair(),
+        formula='|an/cn-ai/ci| <= |an-ai|/cn+|ai|*|cn-ci|/(cn*ci), plus gamma5 quotient roundoff',
+        scope='The same-point arithmetic bound is rigorous conditional on the two primitive tuples. Native primitive values are independently compared to coefficients at the unchanged physical component tolerance. It is not a bound on all native basis errors, an independently certified global maximum, or a replacement for any zero-stress/covariance/weak/operator test.')
+
+
 def native(raw, audit):
     audit.require(raw['inner_stress_fixture'] in (1, 2, 3, 4) and raw['unforced_alpha0_fixture']
                   and raw['alpha'] == 0 and not raw['upstream_transition'], 'Not the declared verification-only native fixture')
@@ -278,8 +357,14 @@ def native(raw, audit):
     audit.near(observed['source_volume_inner'][3], supplied_direct['inner_covariance_minimum'], 'supplied_state_selected_covariance_including_zero', 3e-10)
     audit.near(np.asarray(raw['energy_budget'])[[2, 3, 4]], [direct['stress_work_minus_k_source'],
         direct['resolved_advection'], direct['roughness_force_work']], 'actual_same_stress_energy_cancellation', 3e-10)
+    saturation_statistics = None
     if raw['inner_stress_model'] == 'SaturatedR2':
-        audit.near(observed['inner_stress'], supplied_direct['inner_stress'], 'supplied_state_saturation_volume_and_range', 3e-10)
+        if raw['inner_stress_fixture'] == 4:
+            saturation_statistics = zero_fixture_statistics(raw, fields, audit_state, supplied_direct, audit)
+        else:
+            audit.near(observed['inner_stress'], supplied_direct['inner_stress'], 'supplied_state_saturation_volume_and_range', 3e-10)
+            saturation_statistics = dict(full_statistics_independent_tolerance_met=True,
+                                          method='Complete independent coefficient comparison')
         if raw['inner_stress_fixture'] == 2:
             audit.require(observed['inner_stress'][0] == 0, 'Inactive fixture unexpectedly saturates')
         else:
@@ -312,6 +397,7 @@ def native(raw, audit):
     return dict(inner_stress_model=raw['inner_stress_model'], fixture=raw['inner_stress_fixture'],
         chi=raw['chi'], weak=metadata, direct=direct, coupled_action=actions,
         supplied_audit_state_key=audit_key, supplied_audit_direct=supplied_direct,
+        saturation_statistics=saturation_statistics,
         supplied_audit_interface=audit_interface.tolist(), lifted_traction=actual_traction,
         physical_signature=raw['physical_signature'],
         old_oracle_checks=old.checks, old_oracle_errors=old.errors,
@@ -593,7 +679,9 @@ def main():
             report['cases'].append(dict(name=name, input_raw=str(raw_path), input_xml=str(xml),
                 xml_sha256=sha(xml), raw_sha256=sha(raw_path), native_reexecution=reexecuted,
                 producing_source_commit=args.producing_source_commit or None, result=value))
-            print(name+' independently verified', flush=True)
+            uncertain = value['saturation_statistics'] and not value['saturation_statistics']['full_statistics_independent_tolerance_met']
+            print(name+(' operator verified; maximum-ratio reconstruction UNRESOLVED' if uncertain
+                        else ' independently verified'), flush=True)
         if {'linear-inactive-chi0', 'saturated-inactive-chi0'} <= set(raw_cases):
             audit.near(raw_cases['linear-inactive-chi0']['lifted_state'],
                        raw_cases['saturated-inactive-chi0']['lifted_state'], 'same_actual_inactive_state', 0.)
@@ -607,10 +695,17 @@ def main():
                           (raw['inner_stress_model'] == 'SaturatedR2'), 'Selector/checkpoint identity '+name)
         report['retained_pressure_cap'] = retained_pressure_cap(
             args.capped_pressure_run, args.producing_source_commit, audit)
+        report['unresolved_diagnostics'] = [dict(case=row['name'], statistic='maximum a/c',
+            original_relative_error=row['result']['saturation_statistics']['original_maximum_relative_error'],
+            original_relative_tolerance=3e-10)
+            for row in report['cases'] if row['result']['saturation_statistics']
+            and not row['result']['saturation_statistics']['full_statistics_independent_tolerance_met']]
+        report['all_saturation_statistics_independently_certified'] = not report['unresolved_diagnostics']
         report['available_input_reanalysis_success'] = True
         report['verification_complete'] = not report['unperformed_fixtures']
         report['success'] = report['verification_complete']
-        report['status'] = 'passed' if report['verification_complete'] else 'available retained inputs verified; remaining fixtures explicitly unperformed'
+        report['status'] = ('operator checks passed; zero-fixture maximum-ratio reconstruction unresolved'
+            if report['unresolved_diagnostics'] else 'passed') if report['verification_complete'] else 'available retained inputs verified; remaining fixtures explicitly unperformed'
     except Exception as error:
         report['success'] = False
         report['available_input_reanalysis_success'] = False

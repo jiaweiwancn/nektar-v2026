@@ -19,6 +19,7 @@ p.add_argument('--analysis-commit')
 p.add_argument('--reuse-inner-run',type=Path)
 p.add_argument('--reuse-extra-run',type=Path,action='append',default=[])
 p.add_argument('--capped-pressure-run',type=Path)
+p.add_argument('--analysis-only',action='store_true')
 a=p.parse_args()
 root=a.root.resolve();source,build=root/'source',root/'build'
 out=root/a.attempt;out.mkdir(exist_ok=False)
@@ -42,7 +43,10 @@ if a.suite=='inner':
     command=['taskset','-c',str(cpu),'python3','-B',str(driver),'--kernel-probe',str(build/'RANSWallInnerStressProbe'),
         '--wall-probe',str(build/'RANSCurvedWallProbe'),'--template',str(tests/'EquilibriumWallEvolution.xml'),
         '--producing-source-commit',a.expected_source,'--output',str(out/'results')]
-    if a.reuse_inner_run:command+=['--reuse-run',str(a.reuse_inner_run),'--continue-missing']
+    if a.reuse_inner_run:
+        command+=['--reuse-run',str(a.reuse_inner_run)]
+        if not a.analysis_only:command+=['--continue-missing']
+    if a.analysis_only:assert a.reuse_inner_run
     for retained in a.reuse_extra_run:command+=['--reuse-extra-run',str(retained)]
     if a.capped_pressure_run:command+=['--capped-pressure-run',str(a.capped_pressure_run)]
 elif a.suite=='pressure':
