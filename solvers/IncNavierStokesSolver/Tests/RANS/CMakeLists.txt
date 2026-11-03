@@ -60,6 +60,16 @@ add_executable(RANSEquilibriumTimeProbe
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSHistory.cpp)
 target_include_directories(RANSEquilibriumTimeProbe PRIVATE ${RANS_SOURCE_ROOT}/solvers)
 target_link_libraries(RANSEquilibriumTimeProbe RANSKernels ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
+add_executable(RANSTransverseEvolutionProbe
+    ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSTransverseEvolutionProbe.cpp
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.cpp
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallTimeIntegration.cpp
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSHistory.cpp)
+target_include_directories(RANSTransverseEvolutionProbe PRIVATE ${RANS_SOURCE_ROOT}/solvers)
+target_link_libraries(RANSTransverseEvolutionProbe RANSKernels ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(RANSTransverseEvolutionProbe PRIVATE -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror)
+endif()
 add_executable(RANSEquilibriumEvolutionProbe
     ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSEquilibriumEvolutionProbe.cpp
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.cpp
@@ -173,6 +183,7 @@ if(RANS_BUILD_SOLVER)
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSEquilibriumWallSystem.cpp
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallGlobalField.cpp
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallEvolutionPatch.cpp
+            ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallEvolutionDiagnostics.cpp
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallEvolutionTransition.cpp
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallTimeIntegration.cpp
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSEquilibriumWallEvolution.cpp
@@ -302,6 +313,16 @@ if(Python3_Interpreter_FOUND)
             execute_process(COMMAND ${Python3_EXECUTABLE} -c "import numpy, scipy, sympy"
                 RESULT_VARIABLE rans_m3_dependencies OUTPUT_QUIET ERROR_QUIET)
             if(rans_m3_dependencies EQUAL 0)
+                add_test(NAME RANSCLSEPAWFM7NativeOracle COMMAND ${Python3_EXECUTABLE}
+                    ${CMAKE_CURRENT_LIST_DIR}/validate_cls_epawf_m7.py
+                    --build $<TARGET_FILE_DIR:IncNavierStokesSolver>)
+                set_tests_properties(RANSCLSEPAWFM7NativeOracle PROPERTIES PROCESSORS 2 TIMEOUT 14400
+                    ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
+                add_test(NAME RANSCLSEPAWFM7TransverseOracle COMMAND ${Python3_EXECUTABLE}
+                    ${CMAKE_CURRENT_LIST_DIR}/validate_cls_epawf_m7_transverse.py
+                    --build $<TARGET_FILE_DIR:RANSTransverseEvolutionProbe>)
+                set_tests_properties(RANSCLSEPAWFM7TransverseOracle PROPERTIES PROCESSORS 1 TIMEOUT 1800
+                    ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
                 add_test(NAME RANSCLSEPAWFM6KernelOracle COMMAND ${Python3_EXECUTABLE}
                     ${CMAKE_CURRENT_LIST_DIR}/validate_cls_epawf_m6_kernel.py
                     --probe $<TARGET_FILE:RANSEquilibriumTransitionProbe>

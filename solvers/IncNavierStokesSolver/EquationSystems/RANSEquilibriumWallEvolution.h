@@ -35,6 +35,7 @@ private:
     Vector Explicit(const Vector &state,double time);
     void UpdateFields();
     void WriteReport() const;
+    void RecordAudit(const Vector &state,const Vector &history,double alpha,double time);
     void Checkpoint();
     void WriteMappedField(const std::string &name,const std::shared_ptr<RANSWallGlobalField> &field,const Vector &values) const;
     std::string PhysicsSignature() const;
@@ -53,6 +54,12 @@ private:
     Vector m_roughnessBudget,m_energyBudget,m_finalStageLoads;
     std::vector<Vector> m_regionalStageLoads;
     std::map<int,double> m_finalStageConstraints;
+    bool m_diagnostics=false;
+    std::string m_failure;
+    Vector m_rejectedState;
+    std::vector<Vector> m_acceptedStates;
+    std::vector<double> m_auditTimes;
+    std::vector<RANSWallEvolutionPatch::Diagnostic> m_stateAudits;
     static std::string solverTypeLookupId;
 };
 }

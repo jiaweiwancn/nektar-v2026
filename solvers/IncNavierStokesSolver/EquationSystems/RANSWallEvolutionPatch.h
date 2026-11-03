@@ -119,6 +119,11 @@ public:
         const RANSWallEvolutionData &data,bool includeBody=true) const;
     Vector RoughnessBudget(const Vector &state,double time,const RANSWallEvolutionData &data) const;
     Vector EnergyBudget(const Vector &state,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data) const;
+    /** Optional accepted-state audit. Entries are documented in the M7 guide.
+     * Sampled admissibility is not a certificate over the entire polynomial. */
+    using Diagnostic=std::map<std::string,Vector>;
+    Diagnostic Audit(const Vector &state,const Vector &history,double alpha,double time,
+        const RANSWallEvolutionData &data) const;
     std::string Signature() const;
 private:
     struct VolumePoint { RANSWallGlobalPoint v,p,e; double weight; };

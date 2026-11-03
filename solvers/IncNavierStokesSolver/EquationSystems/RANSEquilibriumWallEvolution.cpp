@@ -127,6 +127,8 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         m_session->LoadParameter("RANSWallEta",m_eta,0.);m_session->LoadParameter("RANSWallFrictionVelocity",m_ustar,.4);
         m_session->LoadParameter("RANSWallDirectionX",m_direction[0],1.);m_session->LoadParameter("RANSWallDirectionY",m_direction[1],0.);
         m_session->LoadParameter("RANSWallNonlinearTolerance",m_tolerance,2e-12);m_session->LoadParameter("RANSWallMaxIterations",m_maximumIterations,20);
+        int diagnostics=0;m_session->LoadParameter("RANSWallDiagnostics",diagnostics,0);
+        Require(diagnostics==0 || diagnostics==1,"RANSWallDiagnostics must be 0 or 1");m_diagnostics=diagnostics;
         Require(m_eta==0 || (m_neutral && m_eta==1 && m_patch->Mapping().PlanarConstantHeight()),"eta=1 is restricted to isolated flat neutral verification");
         Require(!m_patch->TransitionEnabled() || m_eta==0,"every upstream transition/terrain run requires eta=0");
         Require(m_session->DefinesTimeIntScheme(),"evolution requires an explicit native IMEX time-integration declaration");
@@ -192,21 +194,48 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
             m_state=checkpoint.coupledState;m_initial=checkpoint.fixedReference;
             m_integrator->Restore(checkpoint.integration);m_time=m_integrator->Time();
         }
-        else m_integrator->Initialise(Vector(m_state.begin(),m_state.begin()+m_patch->DifferentialSize()),m_time);
+        else
+        {
+            // Perturb the state after freezing the neutral reference/defect.
+            // This never changes the reference, wall model or boundary data.
+            if(m_serialSession->DefinesFunction("InitialPerturbationInner") || m_serialSession->DefinesFunction("InitialPerturbationOuter"))
+            {
+                const auto perturbation=m_patch->Project(Functions("InitialPerturbation",false),m_time);
+                for(int i=0;i<m_patch->DifferentialSize();++i)m_state[i]+=perturbation[i];
+                m_state=m_patch->Lift(m_state,m_time,m_data);m_initial=m_state;
+            }
+            m_integrator->Initialise(Vector(m_state.begin(),m_state.begin()+m_patch->DifferentialSize()),m_time);
+        }
+        if(m_diagnostics)RecordAudit(m_state,m_state,0,m_time);
         UpdateFields();
     }
-    catch(const std::exception &error){std::cerr<<"EP-AWF evolution state/history: "<<error.what()<<std::endl;throw;}
+    catch(const std::exception &error)
+    {
+        m_failure=error.what();
+        if(m_diagnostics && m_integrator && m_session->GetComm()->GetRank()==0)WriteReport();
+        std::cerr<<"EP-AWF evolution state/history: "<<error.what()<<std::endl;throw;
+    }
 }
 RANSEquilibriumWallEvolution::Vector RANSEquilibriumWallEvolution::Implicit(const Vector &history,double time,double lambda)
 {
     auto fullHistory=m_state;std::copy(history.begin(),history.end(),fullHistory.begin());int iterations=0;
-    m_state=m_patch->Solve(m_state,fullHistory,1/lambda,time,m_implicitData,m_condensed,iterations,m_tolerance,m_maximumIterations);
+    const auto candidate=m_patch->Solve(m_state,fullHistory,1/lambda,time,m_implicitData,m_condensed,iterations,m_tolerance,m_maximumIterations);
+    if(m_diagnostics)RecordAudit(candidate,fullHistory,1/lambda,time);
+    m_state=candidate;
     const auto residual=m_patch->Residual(m_state,fullHistory,1/lambda,time,m_implicitData);
     const auto norms=m_patch->Norms(residual,m_patch->Constraints(m_state,time,m_implicitData),m_ustar);
     Vector record{time,lambda,1/lambda,static_cast<double>(iterations),Maximum(norms),m_patch->AnchorEnergyWork(m_state)};
     record.insert(record.end(),norms.begin(),norms.end());m_stageAudits.push_back(record);
     m_lastHistory=std::move(fullHistory);m_stageTime=time;m_stageAlpha=1/lambda;
     return Vector(m_state.begin(),m_state.begin()+m_patch->DifferentialSize());
+}
+void RANSEquilibriumWallEvolution::RecordAudit(const Vector &state,const Vector &history,double alpha,double time)
+{
+    auto audit=m_patch->Audit(state,history,alpha,time,alpha?m_implicitData:m_data);
+    m_stateAudits.push_back(std::move(audit));m_auditTimes.push_back(time);
+    if(m_stateAudits.back().at("admissible")[0]!=1)
+    {m_rejectedState=state;throw std::runtime_error("accepted-stage candidate failed sampled admissibility; see state_audits");}
+    m_acceptedStates.push_back(state);
 }
 RANSEquilibriumWallEvolution::Vector RANSEquilibriumWallEvolution::Explicit(const Vector &state,double time)
 {
@@ -227,7 +256,7 @@ void RANSEquilibriumWallEvolution::v_DoSolve()
             if(m_checksteps>0 && m_integrator->Steps()%m_checksteps==0 && m_checkpointBase!="None")Checkpoint();
         }
         if(m_checkpointBase!="None")Checkpoint();
-        if(m_patch->Mapped() || m_patch->TransitionEnabled())
+        if(m_patch->Mapped() || m_patch->TransitionEnabled() || m_diagnostics)
         {
             m_roughnessBudget=m_patch->RoughnessBudget(m_state,m_time,m_data);
             const auto history=m_lastHistory.empty()?m_state:m_lastHistory;
@@ -242,7 +271,12 @@ void RANSEquilibriumWallEvolution::v_DoSolve()
         }
         UpdateFields();
     }
-    catch(const std::exception &error){std::cerr<<"EP-AWF native timestep: "<<error.what()<<std::endl;throw;}
+    catch(const std::exception &error)
+    {
+        m_failure=error.what();
+        if(m_diagnostics && m_session->GetComm()->GetRank()==0)WriteReport();
+        std::cerr<<"EP-AWF native timestep: "<<error.what()<<std::endl;throw;
+    }
 }
 void RANSEquilibriumWallEvolution::Checkpoint()
 {
@@ -373,6 +407,15 @@ void RANSEquilibriumWallEvolution::WriteReport() const
     out<<",\"raw_reference_norms\":";Write(out,m_rawNorms);out<<",\"corrected_reference_norms\":";Write(out,m_correctedNorms);
     out<<",\"defect_integrals\":";Write(out,m_patch->DefectIntegrals());out<<",\"anchor_energy_work\":"<<m_patch->AnchorEnergyWork(m_state);
     out<<",\"stage_audits\":";WriteRows(out,m_stageAudits);out<<",\"step_audits\":";WriteRows(out,m_stepAudits);out<<",\"explicit_audits\":";WriteRows(out,m_explicitAudits);
+    if(m_diagnostics)
+    {
+        out<<",\"diagnostics_schema\":1,\"failure\":"<<Quoted(m_failure)<<",\"rejected_state\":";Write(out,m_rejectedState);
+        out<<",\"accepted_states\":";WriteRows(out,m_acceptedStates);out<<",\"audit_times\":";Write(out,m_auditTimes);
+        out<<",\"state_audits\":[";
+        for(int i=0;i<m_stateAudits.size();++i)
+        {if(i)out<<',';out<<'{';int count=0;for(const auto &[name,value]:m_stateAudits[i])
+            {if(count++)out<<',';out<<Quoted(name)<<':';Write(out,value);}out<<'}';}out<<']';
+    }
     out<<",\"native_history\":";WriteRows(out,snapshot.history);out<<",\"native_history_times\":";Write(out,snapshot.times);
     out<<",\"last_stage_history\":";Write(out,m_lastHistory);out<<",\"last_stage_time\":"<<m_stageTime<<",\"last_stage_alpha\":"<<m_stageAlpha;
     const auto &mapping=m_patch->Mapping();

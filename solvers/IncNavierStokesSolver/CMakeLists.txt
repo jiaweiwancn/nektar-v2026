@@ -27,6 +27,7 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
         ./EquationSystems/RANSEquilibriumWallSystem.cpp
         ./EquationSystems/RANSWallGlobalField.cpp
         ./EquationSystems/RANSWallEvolutionPatch.cpp
+        ./EquationSystems/RANSWallEvolutionDiagnostics.cpp
         ./EquationSystems/RANSWallEvolutionTransition.cpp
         ./EquationSystems/RANSWallTimeIntegration.cpp
         ./EquationSystems/RANSEquilibriumWallEvolution.cpp
@@ -171,6 +172,11 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
                 EquationSystems/RANSWallFieldLayout.cpp
                 EquationSystems/RANSWallTimeIntegration.cpp
                 EquationSystems/RANSHistory.cpp)
+        ADD_NEKTAR_EXECUTABLE(RANSTransverseEvolutionProbe COMPONENT tests DEPENDS SolverUtils
+            SOURCES ${CMAKE_SOURCE_DIR}/library/UnitTests/SolverUtils/RANSTransverseEvolutionProbe.cpp
+                EquationSystems/RANSWallFieldLayout.cpp
+                EquationSystems/RANSWallTimeIntegration.cpp
+                EquationSystems/RANSHistory.cpp)
         ADD_NEKTAR_EXECUTABLE(RANSEquilibriumEvolutionProbe COMPONENT tests DEPENDS SolverUtils
             SOURCES ${CMAKE_SOURCE_DIR}/library/UnitTests/SolverUtils/RANSEquilibriumEvolutionProbe.cpp
                 EquationSystems/RANSWallFieldLayout.cpp
@@ -178,7 +184,7 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
                 EquationSystems/RANSWallGlobalField.cpp
                 EquationSystems/RANSWallEvolutionPatch.cpp
                 EquationSystems/RANSWallEvolutionTransition.cpp)
-        FOREACH(rans_m4_target RANSEquilibriumTimeProbe RANSEquilibriumEvolutionProbe)
+        FOREACH(rans_m4_target RANSEquilibriumTimeProbe RANSEquilibriumEvolutionProbe RANSTransverseEvolutionProbe)
             TARGET_INCLUDE_DIRECTORIES(${rans_m4_target} PRIVATE ${CMAKE_SOURCE_DIR}/solvers)
             TARGET_COMPILE_DEFINITIONS(${rans_m4_target} PRIVATE ENABLE_NEKTAR_EXCEPTIONS)
         ENDFOREACH()
