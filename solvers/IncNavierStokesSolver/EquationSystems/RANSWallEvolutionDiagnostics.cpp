@@ -52,14 +52,19 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
             Point(Epsilon(),v.coordinate,std::abs(v.coordinate[2]-m_parameters.geometry.height)<1e-12?1:0).Value(s,offset[Epsilon()]);
         r[2]=std::min(r[2],epsilon);
         if(!std::isfinite(k) || k<0 || (!inner && !(k>0)) || !std::isfinite(epsilon) || !(epsilon>0))++r[5];
-        if(constitutive && k>0 && epsilon>0 && std::isfinite(k) && std::isfinite(epsilon))
+        // The selected inner law is defined at exact local k=0.  Evaluate
+        // its covariance there even when a collapsed source trace is itself
+        // invalid for the outer high-Re equations; do not silently skip it.
+        const bool stressState=std::isfinite(k) && (inner?k>=0:
+            (k>0 && epsilon>0 && std::isfinite(epsilon)));
+        if(constitutive && stressState)
         {
             RANSTensor G{},covariance{};for(int a=0;a<m_dimension;++a)G[PhysicalAxis(a)]=v.Gradient(s,offset[a]);
             if(inner)
             {
                 const auto profile=StateProfile(s,v.coordinate,time,data);
                 const double nt=profile->Original().EddyViscosity(Distance(v.coordinate));
-                for(int a=0;a<3;++a)for(int b=0;b<3;++b)covariance[a][b]=(a==b?2*k/3:0)-nt*(G[a][b]+G[b][a]);
+                covariance=InnerStress(k,nt,G).reynoldsStress;
                 if(constitutiveReconstruction)
                 {range[5]=std::min(range[5],profile->K()/K0);range[6]=std::max(range[6],profile->K()/K0);}
             }
@@ -167,9 +172,10 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
         const double k=Point(K(),p).Value(s,offset[K()]),eps=Point(Epsilon(),p,1).Value(s,offset[Epsilon()]);
         const double pi=Point(InnerPressure(),p).Value(s,offset[InnerPressure()]),po=Point(OuterPressure(),p).Value(s,offset[OuterPressure()]);
         const auto profile=StateProfile(s,p,time,data);const double nt=profile->Original().EddyViscosity(Distance(p));
+        const auto ti=RANSWallInnerMeanStress(InnerStress(k,nt,gi),m_parameters.geometry.molecularNu,pi);
         const auto c=OuterClosure(k,eps,go,p);
         RANSVector jump{};for(int a=0;a<3;++a)for(int b=0;b<3;++b)
-            jump[a]+=((m_parameters.geometry.molecularNu+nt)*(gi[a][b]+gi[b][a])-(a==b?pi:0)+c.reynoldsStress[a][b]-(a==b?2*k/3-po:0))*n[b];
+            jump[a]+=(ti[a][b]+c.reynoldsStress[a][b]-(a==b?2*k/3-po:0))*n[b];
         double normal=0,norm=0;for(int a=0;a<3;++a){normal+=jump[a]*n[a];norm+=jump[a]*jump[a];}
         const double w=f.weight*measure;face[0]+=w;face[1]+=w*(pi-po);face[2]+=w*normal*normal;
         face[3]+=w*norm;face[4]=std::max(face[4],std::abs(normal));
@@ -190,12 +196,35 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
     }
     result["momentum_k_load_and_boundary_reaction"]=balance;
     Vector wall(5),repair(8);repair[6]=1;
+    const bool saturated=m_innerStress==RANSWallInnerStressModel::SaturatedR2;
+    // R2-only layouts: [active physical volume, positive-k volume, min a/c,
+    // max a/c, zero-k physical volume, minimum turbulent radial tangent].
+    Vector innerLaw{0,0,sentinel,-sentinel,0,sentinel},innerChange(3),ratioPoint(10);
+    double localMaximumRatio=-sentinel;
     for(const auto &ray:m_rays)for(const auto &q:ray.points)
     {
         RANSTensor G{};for(int a=0;a<m_dimension;++a)G[PhysicalAxis(a)]=q.v.Gradient(s,offset[a]);
         const double k=q.v.Value(s,offset[K()]),nt=ray.profile->Original().EddyViscosity(Distance(q.v.coordinate));
-        double production=0,strain=0;for(int a=0;a<3;++a)for(int b=0;b<3;++b)
-        {const double S=G[a][b]+G[b][a];production-=((a==b?2*k/3:0)-nt*S)*G[a][b];strain+=S*S;}
+        const auto selected=InnerStress(k,nt,G);const double production=selected.production;
+        double strain=0;for(const auto &row:selected.strain)for(double value:row)strain+=value*value;
+        if(saturated)
+        {
+            const auto linear=EvaluateRANSWallInnerStress(k,nt,G);
+            for(int a=0;a<3;++a)for(int b=0;b<3;++b)
+                innerChange[0]-=q.weight*(selected.reynoldsStress[a][b]-linear.reynoldsStress[a][b])*G[a][b];
+            innerChange[1]+=q.weight*(selected.production-linear.production);
+            if(selected.active)innerLaw[0]+=q.weight;
+            if(k>0)
+            {
+                const double ratio=selected.a/selected.c;innerLaw[1]+=q.weight;
+                innerLaw[2]=std::min(innerLaw[2],ratio);innerLaw[3]=std::max(innerLaw[3],ratio);
+                if(ratio>localMaximumRatio)
+                {localMaximumRatio=ratio;ratioPoint={q.v.coordinate[0],q.v.coordinate[1],q.v.coordinate[2],
+                    k,ray.profile->K(),nt,selected.strainNorm,ratio,selected.t,selected.radialTangent};}
+            }
+            else innerLaw[4]+=q.weight;
+            innerLaw[5]=std::min(innerLaw[5],selected.radialTangent);
+        }
         const auto pre=ray.profile->AtProduction(Distance(q.v.coordinate),production);
         const auto values=WallSource(s,q.v.coordinate,production,*ray.profile,m_cappedDestruction?&ray.destruction:nullptr);
         wall[0]+=q.weight*ray.profile->Original().OriginalDissipation(Distance(q.v.coordinate));wall[1]+=q.weight*values.dissipation;
@@ -217,6 +246,19 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
     for(int i=0;i<6;++i)m_comm->AllReduce(repair[i],LibUtilities::ReduceSum);
     m_comm->AllReduce(repair[6],LibUtilities::ReduceMin);m_comm->AllReduce(repair[7],LibUtilities::ReduceMax);
     result["robust_source"]=repair;
+    if(saturated)
+    {
+        for(int i:{0,1,4})m_comm->AllReduce(innerLaw[i],LibUtilities::ReduceSum);
+        for(int i:{2,5})m_comm->AllReduce(innerLaw[i],LibUtilities::ReduceMin);
+        m_comm->AllReduce(innerLaw[3],LibUtilities::ReduceMax);
+        int rank=innerLaw[1]>0 && localMaximumRatio==innerLaw[3]?m_comm->GetRank():m_comm->GetSize();
+        m_comm->AllReduce(rank,LibUtilities::ReduceMin);
+        if(rank<m_comm->GetSize())m_comm->Bcast(ratioPoint,rank);
+        for(double &value:innerLaw)if(value==sentinel || value==-sentinel)value=0;
+        m_comm->AllReduce(innerChange,LibUtilities::ReduceSum);innerChange[2]=innerChange[0]-innerChange[1];
+        result["inner_stress"]=innerLaw;result["inner_stress_max_ratio_point"]=ratioPoint;
+        result["inner_constitutive_modification"]=innerChange;
+    }
     Vector modification(3);
     if(m_variantName!="Original")for(const auto &q:m_outer)
     {

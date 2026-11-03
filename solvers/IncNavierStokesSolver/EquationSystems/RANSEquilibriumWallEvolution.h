@@ -38,6 +38,7 @@ private:
     void RecordAudit(const Vector &state,const Vector &history,double alpha,double time);
     void Checkpoint();
     void WriteMappedField(const std::string &name,const std::shared_ptr<RANSWallGlobalField> &field,const Vector &values) const;
+    void RunRestrictedStageTest();
     std::string PhysicsSignature() const;
     LibUtilities::SessionReaderSharedPtr m_serialSession;
     std::shared_ptr<RANSWallEvolutionPatch> m_patch;
@@ -56,6 +57,10 @@ private:
     std::map<int,double> m_finalStageConstraints;
     bool m_diagnostics=false,m_historyReady=false;
     bool m_physicalRangeGuard=false,m_diagnosticRangeContinuation=false;
+    bool m_r2RangeGuard=false;
+    std::string m_rangeGuardName="Off",m_stageTest="Off",m_initialScalarDomain;
+    std::vector<std::string> m_stageTestLevels;
+    bool m_targetConverged=false,m_targetPhysical=false;
     struct PhysicalRangeEvent
     {
         double time,alpha;

@@ -41,6 +41,8 @@ std::array<RANSWallTimeFunction,6> RANSEquilibriumWallSystem::Functions(const st
 void RANSEquilibriumWallSystem::v_InitObject(bool declareFields)
 {
     (void)declareFields;EquationSystem::v_InitObject(false);
+    std::string innerStress;m_session->LoadSolverInfo("RANSWallInnerStress",innerStress,"Linear");
+    Require(innerStress=="Linear","SaturatedR2 is supported by RANSEquilibriumWallEvolution, not the legacy M3 wall system");
     Require(m_spacedim==2 && m_session->GetVariables()==std::vector<std::string>({"u","v","k","eps_tilde","p"}),
             "M3 requires physical mesh (x,y)=(x,z), variables u,v,k,eps_tilde,p");
     RANSWallPatchParameters parameters;

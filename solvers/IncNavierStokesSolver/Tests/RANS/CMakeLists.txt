@@ -12,6 +12,7 @@ include_directories(SYSTEM ${NEKTAR++_INCLUDE_DIRS} ${NEKTAR++_TP_INCLUDE_DIRS})
 add_library(RANSKernels STATIC
     ${RANS_SOURCE_ROOT}/library/SolverUtils/Turbulence/RANSModels.cpp
     ${RANS_SOURCE_ROOT}/library/SolverUtils/Turbulence/RANSRobustVariant.cpp
+    ${RANS_SOURCE_ROOT}/library/SolverUtils/Turbulence/RANSWallInnerStress.cpp
     ${RANS_SOURCE_ROOT}/library/SolverUtils/Turbulence/AnalyticalWallFunction.cpp
     ${RANS_SOURCE_ROOT}/library/SolverUtils/Turbulence/EquilibriumAWFProfiles.cpp
     ${RANS_SOURCE_ROOT}/library/SolverUtils/Turbulence/EquilibriumAWFTransition.cpp
@@ -23,6 +24,9 @@ add_executable(RANSWallLayerProbe
 add_executable(RANSRobustVariantProbe
     ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSRobustVariantProbe.cpp)
 target_link_libraries(RANSRobustVariantProbe RANSKernels)
+add_executable(RANSWallInnerStressProbe
+    ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSWallInnerStressProbe.cpp)
+target_link_libraries(RANSWallInnerStressProbe RANSKernels)
 add_executable(RANSKernelProbe
     ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSKernelProbe.cpp)
 add_executable(RANSWallGeometryProbe
@@ -94,6 +98,30 @@ add_executable(RANSCurvedWallProbe
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionRobust.cpp)
 target_include_directories(RANSCurvedWallProbe PRIVATE ${RANS_SOURCE_ROOT}/solvers)
 target_link_libraries(RANSCurvedWallProbe RANSKernels ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
+foreach(rans_native_target RANSEquilibriumEvolutionProbe RANSCurvedWallProbe)
+    target_sources(${rans_native_target} PRIVATE
+        ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionActions.cpp
+        ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionFeasible.cpp
+        ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionDiagnostics.cpp)
+endforeach()
+add_executable(RANSPressureActionProbe
+    ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSPressureActionProbe.cpp
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.cpp
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallPatch.cpp
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.cpp
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionTransition.cpp
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionRobust.cpp
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionActions.cpp
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionFeasible.cpp
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionDiagnostics.cpp)
+target_include_directories(RANSPressureActionProbe PRIVATE ${RANS_SOURCE_ROOT}/solvers)
+target_link_libraries(RANSPressureActionProbe RANSKernels ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    foreach(rans_r2_target RANSWallInnerStressProbe RANSPressureActionProbe)
+        target_compile_options(${rans_r2_target} PRIVATE -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror)
+    endforeach()
+endif()
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     foreach(rans_target RANSRobustVariantProbe RANSKernels RANSWallLayerProbe RANSKernelProbe RANSWallGeometryProbe RANSCurvedGeometryProbe RANSCurvedNoteProbe RANSObservationKernelProbe RANSStressTangentAudit RANSConstitutiveProbe RANSEquilibriumProfilesProbe RANSEquilibriumPatchProbe RANSEquilibriumTimeProbe RANSEquilibriumEvolutionProbe RANSCurvedWallProbe)
         target_compile_options(${rans_target} PRIVATE

@@ -13,6 +13,8 @@ using RANSWallAlgebra::Require;
 
 void RANSWallEvolutionPatch::InitialiseRobust(const LibUtilities::SessionReaderSharedPtr &session)
 {
+    std::string innerStress;session->LoadSolverInfo("RANSWallInnerStress",innerStress,"Linear");
+    m_innerStress=ParseRANSWallInnerStress(innerStress);
     session->LoadSolverInfo("RANSWallVariant",m_variantName,"Original");
     Require(m_variantName=="Original" || m_variantName=="CubicScaled" || m_variantName=="Regularized",
         "RANSWallVariant must be Original, CubicScaled or Regularized");
@@ -43,6 +45,17 @@ void RANSWallEvolutionPatch::InitialiseRobust(const LibUtilities::SessionReaderS
     const auto incoming=m_mapping.At({lower[0],lower[1],0});
     m_referenceNormal=incoming.normal;
     for(int a=0;a<3;++a)m_referenceFlow[a]=(dx*incoming.tangent1[a]+dy*incoming.tangent2[a])/length;
+}
+
+std::string RANSWallEvolutionPatch::InnerStressName() const
+{
+    return RANSWallInnerStressName(m_innerStress);
+}
+
+RANSWallInnerStressValues RANSWallEvolutionPatch::InnerStress(double k,double auxiliaryNu,
+    const RANSTensor &gradient) const
+{
+    return EvaluateRANSWallInnerStress(k,auxiliaryNu,gradient,m_innerStress);
 }
 
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::RobustParameters() const

@@ -190,6 +190,11 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     m_solveDiagnosticIterations=std::stoi(solveIterations);
     Require(m_solveDiagnosticIterations>0 && m_solveDiagnosticIterations<=20,"diagnostic same-stage retry is limited to 20 iterations");
     Require(!m_solveDiagnostics || m_comm->GetSize()==1,"detailed first-failure diagnostics currently require one MPI rank");
+    session->LoadSolverInfo("RANSWallNonlinearPolicy",m_nonlinearPolicy,"Legacy");
+    session->LoadSolverInfo("RANSWallFeasibleFile",m_feasibleTraceFile,"case.feasible.jsonl");
+    Require(m_nonlinearPolicy=="Legacy" || m_nonlinearPolicy=="ScalarFeasibleR2","unknown wall nonlinear policy");
+    Require(m_nonlinearPolicy=="Legacy" || m_comm->GetSize()==1,
+        "ScalarFeasibleR2 currently requires one MPI rank");
     session->LoadParameter("RANSWallOwnershipShift",m_ownershipShift,0);Require(m_ownershipShift>=0,"negative ownership shift");
     auto full=MemoryManager<MultiRegions::ExpList>::AllocateSharedPtr(session,graph,true,"u");
     auto pressure=MemoryManager<MultiRegions::ExpList>::AllocateSharedPtr(session,graph,true,"p");
@@ -288,6 +293,9 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     Vector seed(Size());for(int i=0;i<size[K()];++i)seed[offset[K()]+i]=parameters.model.Q()*.16*m_constants[K()][i];
     Refresh(seed);for(const auto &ray:m_rays)for(const auto &q:ray.points)m_bodyInner.push_back(q);
     if(m_transitionEnabled)InitialiseTransition(session);
+    if(m_nonlinearPolicy=="ScalarFeasibleR2")
+        Require(m_dimension==2 && !Mapped() && m_transitionEnabled && m_cappedDestruction,
+            "ScalarFeasibleR2 prototype requires a flat 2D upstream patch and capped destruction");
 }
 std::shared_ptr<EquilibriumAWFProfiles> RANSWallEvolutionPatch::Profile(double k,const RANSWallCoordinate &chart,double weight) const
 {
@@ -532,14 +540,11 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Residual(const Vector &st
             double dk,sk,de=0,se=0,epsilon=0;
             if(inner)
             {
-                const double nt=profile->Original().EddyViscosity(Distance(q.v.coordinate));double production=0;
-                for(int a=0;a<3;++a)for(int b=0;b<3;++b)
-                {
-                    const double strain=G[a][b]+G[b][a];production-=((a==b?2*k/3:0)-nt*strain)*G[a][b];
-                    stress[a][b]=(m_parameters.geometry.molecularNu+nt)*strain-(a==b?pi:0);
-                }
+                const double nt=profile->Original().EddyViscosity(Distance(q.v.coordinate));
+                const auto innerStress=InnerStress(k,nt,G);
+                stress=RANSWallInnerMeanStress(innerStress,m_parameters.geometry.molecularNu,pi);
                 dk=m_parameters.geometry.molecularNu+nt/m_parameters.model.Parameters().sigmaK;
-                sk=WallSource(s,q.v.coordinate,production,*profile,normalization).kSource+data.innerKSource(q.v.coordinate,time);
+                sk=WallSource(s,q.v.coordinate,innerStress.production,*profile,normalization).kSource+data.innerKSource(q.v.coordinate,time);
             }
             else
             {
@@ -658,6 +663,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Solve(Vector s,const Vect
     const RANSWallEvolutionData &data,bool condensed,int &iterations,double tolerance,int maximumIterations) const
 {
     Require(Size()<=3000,"replicated dense evolution solve is limited to 3000 unknowns; larger meshes permit reference audits only");
+    if(m_nonlinearPolicy=="ScalarFeasibleR2")
+        return SolveScalarFeasible(std::move(s),history,alpha,time,data,condensed,iterations,tolerance,maximumIterations);
     namespace J=RANSWallSolveJson;
     const bool recording=m_solveDiagnostics && !m_solveDiagnosticWritten;
     std::vector<std::string> records;
@@ -703,7 +710,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Solve(Vector s,const Vect
                     const double nt=ray.profile->Original().EddyViscosity(Distance(q.v.coordinate));
                     RANSTensor G{},S{};for(int a=0;a<m_dimension;++a)G[PhysicalAxis(a)]=q.v.Gradient(actual,offset[a]);
                     for(int a=0;a<3;++a)for(int b=0;b<3;++b)S[a][b]=G[a][b]+G[b][a];
-                    const double largest=J::Eigenvalues(S)[2],cov=2*k/3-nt*largest;
+                    const auto inner=InnerStress(k,nt,G);
+                    const double largest=J::Eigenvalues(S)[2],cov=J::Eigenvalues(inner.reynoldsStress)[0];
                     if(cov<ci)
                     {
                         ci=cov;worstG=G;worstS=S;
@@ -757,6 +765,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Solve(Vector s,const Vect
                 }
             }
             return J::Object({{"status",J::Quote("evaluated_source_quadrature")},
+                {"inner_stress_model",J::Quote(InnerStressName())},
+                {"worst_point_last_ratio_scope",J::Quote("original nuA*S ratio, not the saturated stress ratio")},
                 {"minimum_inner_k",J::Number(ki)},{"minimum_outer_k",J::Number(ko)},
                 {"minimum_outer_epsilon",J::Number(eo)},{"minimum_inner_covariance",J::Number(ci)},
                 {"minimum_native_inner_k",J::Number(nativeKi)},{"minimum_native_outer_k",J::Number(nativeKo)},
@@ -1236,10 +1246,10 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::EnergyBudget(const Vector
         const double k=q.v.Value(s,offset[K()]),pi=q.p.Value(s,offset[inner?InnerPressure():OuterPressure()]);double sk;
         if(inner)
         {
-            const double nt=profile->Original().EddyViscosity(Distance(q.v.coordinate));double production=0;
-            for(int a=0;a<3;++a)for(int b=0;b<3;++b){const double strain=G[a][b]+G[b][a];
-                production-=((a==b?2*k/3:0)-nt*strain)*G[a][b];stress[a][b]=(m_parameters.geometry.molecularNu+nt)*strain-(a==b?pi:0);}
-            sk=WallSource(s,q.v.coordinate,production,*profile,normalization).kSource+data.innerKSource(q.v.coordinate,time);
+            const double nt=profile->Original().EddyViscosity(Distance(q.v.coordinate));
+            const auto innerStress=InnerStress(k,nt,G);
+            stress=RANSWallInnerMeanStress(innerStress,m_parameters.geometry.molecularNu,pi);
+            sk=WallSource(s,q.v.coordinate,innerStress.production,*profile,normalization).kSource+data.innerKSource(q.v.coordinate,time);
             if(Distance(q.v.coordinate)<=m_parameters.geometry.roughness)for(int a=0;a<3;++a)result[4]-=q.weight*u[a]*force[a];
         }
         else
@@ -1288,6 +1298,8 @@ std::string RANSWallEvolutionPatch::Signature() const
         }
     }
     if(Mapped())text<<':'<<m_mapping.Signature();
+    if(m_innerStress==RANSWallInnerStressModel::SaturatedR2)
+        text<<":M8-R2:InnerStress:SaturatedR2:v1:rho=0.8";
     if(m_variantName!="Original" || m_cappedDestruction)
     {
         text<<":M8:"<<m_variantName;

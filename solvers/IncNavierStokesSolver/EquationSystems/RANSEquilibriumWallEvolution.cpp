@@ -4,6 +4,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include <IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallEvolution.h>
 #include <IncNavierStokesSolver/EquationSystems/IncNavierStokes.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
 #include <LibUtilities/Communication/CommSerial.h>
 #include <LibUtilities/BasicUtils/FieldIO.h>
 #include <SpatialDomains/MeshGraphIO.h>
@@ -130,7 +131,8 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         int diagnostics=0;m_session->LoadParameter("RANSWallDiagnostics",diagnostics,0);
         Require(diagnostics==0 || diagnostics==1,"RANSWallDiagnostics must be 0 or 1");m_diagnostics=diagnostics;
         std::string rangeGuard;m_session->LoadSolverInfo("RANSWallPhysicalRangeGuard",rangeGuard,"Off");
-        Require(rangeGuard=="Off" || rangeGuard=="R1LocalV1" || rangeGuard=="R1DiagnosticV1","unknown physical-range guard");
+        Require(rangeGuard=="Off" || rangeGuard=="R1LocalV1" || rangeGuard=="R1DiagnosticV1" || rangeGuard=="R2LocalV1","unknown physical-range guard");
+        m_rangeGuardName=rangeGuard;m_r2RangeGuard=rangeGuard=="R2LocalV1";
         m_physicalRangeGuard=rangeGuard!="Off";m_diagnosticRangeContinuation=rangeGuard=="R1DiagnosticV1";
         if(m_physicalRangeGuard)
         {
@@ -145,6 +147,12 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         Require(m_session->DefinesTimeIntScheme(),"evolution requires an explicit native IMEX time-integration declaration");
         const auto scheme=m_session->GetTimeIntScheme();
         Require(scheme.method=="IMEX" && scheme.variant.empty() && (scheme.order==1 || scheme.order==2),"evolution supports native IMEX orders 1/2, empty variant");m_order=scheme.order;
+        m_session->LoadSolverInfo("RANSWallStageTest",m_stageTest,"Off");
+        Require(m_stageTest=="Off" || m_stageTest=="MatchedR2" || m_stageTest=="FrozenScalarR2","unknown native stage-test mode");
+        if(m_stageTest!="Off")
+            Require(m_patch->NonlinearPolicyName()=="ScalarFeasibleR2" && m_eta==0 && m_neutral &&
+                m_order==2 && m_steps==0 && m_timestep==.0025 && m_maximumIterations<=12 && m_tolerance==2e-12 &&
+                m_session->GetComm()->GetSize()==1,"R2 stage test requires the frozen serial neutral IMEX2 startup input");
         m_session->LoadSolverInfo("RANSWallRestart",m_restart,"None");m_session->LoadSolverInfo("RANSWallCheckpoint",m_checkpointBase,"None");
         Require(m_timestep>0,"evolution requires positive fixed TimeStep");m_data=RANSWallEvolutionData(dim);
         for(int a=0;a<dim;++a)
@@ -221,6 +229,12 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
             m_integrator->Initialise(Vector(m_state.begin(),m_state.begin()+m_patch->DifferentialSize()),m_time);
         }
         m_historyReady=true;
+        if(m_patch->NonlinearPolicyName()=="ScalarFeasibleR2")
+        {
+            const auto domain=m_patch->ScalarDomain(m_state,m_time,m_data,true);
+            m_initialScalarDomain=RANSWallEvolutionPatch::ScalarDomainJSON(domain,true);
+            Require(domain.admissible,"initial R2 scalar inventory is outside its evaluation domain: "+domain.failure);
+        }
         if(m_diagnostics)RecordAudit(m_state,m_state,0,m_time);
         UpdateFields();
     }
@@ -258,7 +272,8 @@ RANSEquilibriumWallEvolution::Vector RANSEquilibriumWallEvolution::Implicit(cons
 void RANSEquilibriumWallEvolution::RecordAudit(const Vector &state,const Vector &history,double alpha,double time)
 {
     RANSWallEvolutionPatch::Diagnostic audit;
-    try{audit=m_patch->Audit(state,history,alpha,time,alpha?m_implicitData:m_data,m_ustar,m_physicalRangeGuard);}
+    try{audit=m_r2RangeGuard?m_patch->CompleteRestrictedAudit(state,history,alpha,time,alpha?m_implicitData:m_data):
+        m_patch->Audit(state,history,alpha,time,alpha?m_implicitData:m_data,m_ustar,m_physicalRangeGuard);}
     catch(const std::exception &error)
     {
         if(m_physicalRangeGuard)
@@ -273,6 +288,12 @@ void RANSEquilibriumWallEvolution::RecordAudit(const Vector &state,const Vector 
     if(m_physicalRangeGuard)
     {
         std::vector<std::string> reasons;bool finitePhysicalExit=false;
+        if(m_r2RangeGuard && audit.at("r2_scalar_domain")[0]!=1)
+        {
+            m_rejectedState=state;
+            m_rangeEvents.push_back({time,alpha,state,history,audit,{"complete_scalar_domain_exit"},true});
+            throw std::runtime_error("complete R2 scalar-domain exit before native history advance");
+        }
         if(audit.at("admissible")[0]!=1)
         {reasons.push_back("sampled_scalar_or_sampler_inadmissibility");finitePhysicalExit=true;}
         const double K0=m_patch->Parameters().model.Q()*m_ustar*m_ustar;
@@ -303,6 +324,12 @@ void RANSEquilibriumWallEvolution::RecordAudit(const Vector &state,const Vector 
                 throw std::runtime_error("declared R1 physical-range exit; candidate saved before advancing native history");
             }
         }
+        if(m_r2RangeGuard && audit.at("r2_qualified")[0]!=1)
+        {
+            m_rejectedState=state;
+            m_rangeEvents.push_back({time,alpha,state,history,audit,{"complete_R2_physical_range_exit"},true});
+            throw std::runtime_error("complete R2 physical-range exit before native history advance");
+        }
     }
     m_stateAudits.push_back(std::move(audit));m_auditTimes.push_back(time);
     if(m_stateAudits.back().at("admissible")[0]!=1)
@@ -316,6 +343,7 @@ RANSEquilibriumWallEvolution::Vector RANSEquilibriumWallEvolution::Explicit(cons
 }
 void RANSEquilibriumWallEvolution::v_DoSolve()
 {
+    if(m_stageTest!="Off"){RunRestrictedStageTest();return;}
     try
     {
         for(int step=0;step<m_steps;++step)
@@ -349,6 +377,74 @@ void RANSEquilibriumWallEvolution::v_DoSolve()
         if(m_diagnostics && m_session->GetComm()->GetRank()==0)WriteReport();
         std::cerr<<"EP-AWF native timestep: "<<error.what()<<std::endl;throw;
     }
+}
+void RANSEquilibriumWallEvolution::RunRestrictedStageTest()
+{
+    namespace J=RANSWallSolveJson;
+    const Vector history=m_state;auto guess=history;bool skipAuxiliary=false;
+    const double targetTime=m_time+m_timestep;
+    const std::vector<double> levels=m_stageTest=="FrozenScalarR2"?std::vector<double>{400.}:
+        std::vector<double>{3200.,1600.,800.,400.};
+    Require(m_timestep==.0025 && m_eta==0 && m_restart=="None" && m_checkpointBase=="None",
+        "bounded R2 stage test requires frozen unforced startup without restart/checkpoint");
+    for(const std::string name:{"BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter"})
+        Require(!m_serialSession->DefinesFunction(name),"R2 matched stage forbids manufactured/body/scalar forcing");
+    for(double alpha:levels)
+    {
+        if(skipAuxiliary && alpha!=400.)
+        {
+            m_stageTestLevels.push_back(J::Object({{"alpha",J::Number(alpha)},
+                {"attempted","false"},{"reason",J::Quote("remaining auxiliary levels skipped after a failed search")}}));
+            continue;
+        }
+        auto candidate=guess;bool converged=false;int iterations=0;std::string failure;
+        try
+        {
+            candidate=m_stageTest=="FrozenScalarR2"?
+                m_patch->SolveFrozenScalars(guess,history,alpha,targetTime,m_implicitData,iterations,m_tolerance,m_maximumIterations):
+                m_patch->Solve(guess,history,alpha,targetTime,m_implicitData,false,iterations,m_tolerance,m_maximumIterations);
+            converged=true;
+        }
+        catch(const std::exception &error)
+        {
+            failure=std::string(J::ExceptionType(error))+": "+error.what();
+            if(!m_patch->LastFeasibleState().empty())candidate=m_patch->LastFeasibleState();
+            skipAuxiliary=true;
+        }
+        const auto domain=m_patch->ScalarDomain(candidate,targetTime,m_implicitData,true);
+        Vector residual,norms;RANSWallEvolutionPatch::Diagnostic audit;
+        if(domain.admissible)
+        {
+            residual=m_patch->Residual(candidate,history,alpha,targetTime,m_implicitData);
+            norms=m_patch->Norms(residual,m_patch->Constraints(candidate,targetTime,m_implicitData),m_ustar);
+            audit=m_patch->CompleteRestrictedAudit(candidate,history,alpha,targetTime,m_implicitData);
+        }
+        const bool trueCoupled=converged && !norms.empty() && Maximum(norms)<m_tolerance;
+        const bool physical=trueCoupled && audit.at("r2_qualified")[0]==1;
+        std::vector<std::pair<std::string,std::string>> entries;
+        for(const auto &[name,value]:audit)entries.push_back({name,J::Numbers(value)});
+        m_stageTestLevels.push_back(J::Object({{"alpha",J::Number(alpha)},{"time",J::Number(targetTime)},
+            {"attempted","true"},{"converged",J::Boolean(converged)},
+            {"true_coupled_residual_converged",J::Boolean(trueCoupled)},
+            {"frozen_velocity_pressure_diagnostic",J::Boolean(m_stageTest=="FrozenScalarR2")},
+            {"iterations",J::Number(iterations)},{"failure",J::Quote(failure)},
+            {"state",J::Numbers(candidate)},{"history",J::Numbers(history)},
+            {"residual",J::Numbers(residual)},{"scaled_block_norms",J::Numbers(norms)},
+            {"scalar_domain",RANSWallEvolutionPatch::ScalarDomainJSON(domain)},
+            {"physical_range_passed",J::Boolean(physical)},{"audit",J::Object(entries)},
+            {"native_history_advanced","false"}}));
+        if(converged)guess=candidate;
+        if(alpha==400.)
+        {
+            m_targetConverged=trueCoupled;m_targetPhysical=physical;
+            if(!trueCoupled)m_failure="bounded target stage unresolved: "+failure;
+        }
+        std::cout<<"EP-AWF R2 stage test alpha "<<alpha<<" converged "<<trueCoupled
+            <<" physical range "<<physical<<" history unchanged"<<std::endl;
+    }
+    // m_state, m_time, the IMEX history and accepted physical-stage arrays
+    // deliberately remain at initialization. Auxiliary roots are not steps.
+    WriteReport();
 }
 void RANSEquilibriumWallEvolution::Checkpoint()
 {
@@ -462,6 +558,14 @@ void RANSEquilibriumWallEvolution::WriteReport() const
        <<",\"time\":"<<m_time<<",\"dt\":"<<m_timestep<<",\"steps\":"<<snapshot.steps<<",\"order\":"<<m_order
        <<",\"chi\":"<<m_patch->Parameters().chi<<",\"eta\":"<<m_eta<<",\"neutral_reference\":"<<(m_neutral?"true":"false")
        <<",\"condensed\":"<<(m_condensed?"true":"false")<<",\"checkpoint\":"<<Quoted(m_lastCheckpoint)<<",\"signature\":"<<Quoted(m_signature);
+    out<<",\"inner_stress_model\":"<<Quoted(m_patch->InnerStressName())
+       <<",\"nonlinear_policy\":"<<Quoted(m_patch->NonlinearPolicyName());
+    if(!m_initialScalarDomain.empty())out<<",\"initial_scalar_domain\":"<<m_initialScalarDomain;
+    if(m_stageTest!="Off")
+        out<<",\"stage_test\":"<<Quoted(m_stageTest)<<",\"stage_test_target_time\":"<<m_time+m_timestep
+           <<",\"stage_test_native_history_advanced\":false,\"stage_test_target_converged\":"<<(m_targetConverged?"true":"false")
+           <<",\"stage_test_target_physical_range\":"<<(m_targetPhysical?"true":"false")
+           <<",\"stage_test_levels\":"<<RANSWallSolveJson::List(m_stageTestLevels);
     const auto &p=m_patch->Parameters();
     out<<",\"parameters\":";Write(out,{p.geometry.molecularNu,p.geometry.height,p.geometry.roughness,p.geometry.sampleHeight,
         p.geometry.tailStart,p.model.Q()*m_ustar*m_ustar,p.model.Q(),p.model.Kappa()});
@@ -487,7 +591,7 @@ void RANSEquilibriumWallEvolution::WriteReport() const
                <<",\"nonlinear_diagnostic_written\":"<<(m_patch->SolveDiagnosticWritten()?"true":"false");
         if(m_physicalRangeGuard)
         {
-            out<<",\"physical_range_guard\":"<<Quoted(m_diagnosticRangeContinuation?"R1DiagnosticV1":"R1LocalV1")
+            out<<",\"physical_range_guard\":"<<Quoted(m_rangeGuardName)
                <<",\"diagnostic_range_continuation\":"<<(m_diagnosticRangeContinuation?"true":"false")
                <<",\"physical_range_inventory\":{\"source_samplers_interfaces_mass_body\":true,\"native_GLL\":true,"
                  "\"inner_dense_points_per_axis\":\"2*p+7\",\"outer_dense_points_per_axis\":\"2*p+3\","

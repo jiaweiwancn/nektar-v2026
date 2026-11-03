@@ -1,0 +1,78 @@
+{
+  "schema": 1,
+  "milestone": "M8-R2",
+  "policy": "ScalarFeasibleR2-operational-v1",
+  "contract_commit": "13a95d66abdbc7b29e95fe6a3b617cfe4e4d77e6",
+  "contract_markdown_sha256": "77e20f90cf931f3572d9a9eed3bd9658eb3d2f44ca177b7e05e735a6a81c3bdd",
+  "contract_json_sha256": "7cbc782674178dfd7366df5e31a9152f0d2fa6c139fd25c4002f66a8f8524e80",
+  "physical_model_residual_bounds_or_tolerances_changed": false,
+  "scope": {
+    "dimension": 2,
+    "mapping": "Flat",
+    "transition": "Upstream",
+    "destruction": "Capped",
+    "MPI_ranks": 1,
+    "solve": "full dense coupled; no Schur condensation",
+    "unknown_guard": 3000,
+    "unsupported_combinations": "explicit rejection"
+  },
+  "defaults": {"RANSWallInnerStress": "Linear", "RANSWallNonlinearPolicy": "Legacy"},
+  "Jacobian": {
+    "rebuild": "fresh at each accepted Newton iterate",
+    "affine_pressure_and_gauge": "exact assembly",
+    "nonlinear_pressure": "complete sensor/profile/source/trace action retained",
+    "stage_mass": "exact alpha*M",
+    "other_columns": "dimensionless, branch-aware, scalar-domain-aware differences",
+    "boundary": "admissible one-sided action",
+    "independent_action_threshold": 1e-7
+  },
+  "globalization": {
+    "initial_step": "maximum=min(1,min(v/(-dv) over decreasing fixed scalar observations)); start .995*maximum only if maximum<1, otherwise1; rebuild every trial-dependent set before residual",
+    "fraction_to_boundary_tau": 0.995,
+    "Armijo_coefficient": 1e-4,
+    "Armijo_merit": "maximum dimensionless true-residual block norm",
+    "strict_decrease": true,
+    "maximum_backtracking_trials": 32,
+    "step_collapse_below": "2^-40",
+    "relative_stagnation_threshold": 1e-4,
+    "consecutive_small_accepted_improvements_for_stagnation": 3,
+    "original_native_Newton_tolerance": 2e-12,
+    "domain_recheck_before": ["trial residual", "internal acceptance"],
+    "no_admissible_coordinate_action": "classified failure; never substitute a positive scalar",
+    "field_replacement": false
+  },
+  "stage_family": {
+    "native_selector": "RANSWallStageTest=MatchedR2; Off default",
+    "time": 0.0025,
+    "startup_dt": 0.0025,
+    "eta": 0,
+    "alpha": [3200, 1600, 800, 400],
+    "target_alpha": 400,
+    "maximum_Newton_updates_per_level": 12,
+    "history": "identical represented initial h0 for every level and both laws",
+    "physical_time_history_advance": false,
+    "failed_level_retry_or_extra_level": false,
+    "auxiliary_failure_flow": "skip remaining auxiliary levels and attempt target400 exactly once from last converged scalar-feasible iterate or initial if none; never retry a failed400",
+    "report_record": "stage_test_levels, separate from native accepted history",
+    "both_targets_unresolved_fallback": "at most one RANSWallStageTest=FrozenScalarR2 alpha400 diagnostic with frozen velocity/pressure",
+    "comparison_laws": ["Linear", "SaturatedR2"]
+  },
+  "physical_acceptance": {
+    "ScalarDomain_is_physical_guard": false,
+    "guard": "R2LocalV1",
+    "box": "unchanged v2/R1 restricted outer box",
+    "lambda_minimum": 0.5,
+    "sampled_K": "positive",
+    "actual_dependent_epsilon": "positive and fixed outer scalar ratio checked",
+    "selected_covariance": "all declared finite sets, including exact inner k=0",
+    "comparison_probe_converged_unqualified_state": "preserved with reasons; no native history advance",
+    "finite_sets_are_everywhere_proof": false
+  },
+  "numerics": {
+    "execution_gate": "root authorization after native operator/action verification",
+    "executor_and_transfer_owner": "root",
+    "analysis_worker": 49,
+    "thread_variables": {"OMP_NUM_THREADS": "1", "OPENBLAS_NUM_THREADS": "1", "MKL_NUM_THREADS": "1", "BLIS_NUM_THREADS": "1", "VECLIB_MAXIMUM_THREADS": "1", "NUMEXPR_NUM_THREADS": "1"},
+    "solver_called_during_preparation": false
+  }
+}

@@ -10,6 +10,7 @@
 #include <SolverUtils/Turbulence/RANSWallNormalMap.h>
 #include <SolverUtils/Turbulence/EquilibriumAWFTransition.h>
 #include <SolverUtils/Turbulence/RANSRobustVariant.h>
+#include <SolverUtils/Turbulence/RANSWallInnerStress.h>
 #include <set>
 
 namespace Nektar
@@ -39,6 +40,7 @@ class RANSWallEvolutionPatch
 public:
     using Vector=RANSWallAlgebra::Vector;
     using WallMatrix=RANSWallAlgebra::DenseMatrix;
+    using Diagnostic=std::map<std::string,Vector>;
     RANSWallEvolutionPatch(const LibUtilities::SessionReaderSharedPtr &serialSession,
         const SpatialDomains::MeshGraphSharedPtr &graph,
         const LibUtilities::CommSharedPtr &collective,const RANSWallPatchParameters &parameters,
@@ -83,6 +85,19 @@ public:
         const RANSWallEvolutionData &data) const;
     std::array<SolverUtils::RANSVector,2> ForcingParts(const Vector &state,
         const RANSWallCoordinate &chart,double time,const RANSWallEvolutionData &data) const;
+    /** Exact discrete affine pressure/gauge action. Differential entries of
+     * direction must be zero. Supplied strong rows are masked, as in Residual.
+     * This avoids subtracting pressure-independent stage loads. */
+    Vector AffinePressureAction(const Vector &direction,
+        const std::map<int,double> &constraints={},int region=-1) const;
+    /** Complete pressure-only directional derivative, including transition
+     * sensors, capped source normalization and projected dependent trace.
+     * History, alpha and the fixed anchor have zero pressure derivative.
+     * At a cap max-knot the existing directional kernel selects its actual
+     * one-sided action; no two-sided smoothness is presumed there. */
+    Vector PressureDirectionalAction(const Vector &state,const Vector &direction,
+        double time,const RANSWallEvolutionData &data,bool imposeConstraints=true,
+        int region=-1) const;
     Vector DirectionalAction(const Vector &state,const Vector &direction,const Vector &history,
         double alpha,double time,const RANSWallEvolutionData &data,double step=2e-6) const;
     double BoundaryFluxCorrection() const { return m_boundaryCorrection; }
@@ -99,6 +114,40 @@ public:
         const RANSWallEvolutionData &data,bool anchored=true,bool imposeConstraints=true,int region=-1) const;
     Vector Solve(Vector state,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data,
         bool condensed,int &iterations,double tolerance=2e-12,int maximumIterations=20) const;
+    struct ScalarObservation
+    {
+        std::string inventory;
+        RANSWallCoordinate coordinate{};
+        int block=0,geometry=-1,side=0;
+        double value=0,scale=1,weight=0;
+        bool strict=false,dependentTrace=false;
+    };
+    struct ScalarDomainResult
+    {
+        bool admissible=false;
+        std::string phase,failure,limitingInventory,profileBranches;
+        RANSWallCoordinate limitingPoint{};
+        double minimumMargin=1e300,minimumInnerK=1e300,minimumOuterK=1e300,
+            minimumOuterEpsilon=1e300,minimumSampledK=1e300,minimumTraceEpsilon=1e300,
+            minimumB=1,minimumLambda=1,minimumCutoff=1e300,maximumCutoff=-1e300;
+        std::map<std::string,int> counts;
+        Vector effectiveState,traceState;
+        std::vector<ScalarObservation> observations;
+    };
+    // Scalar evaluation domain only: covariance and the restricted outer
+    // physical box are separate accepted-stage gates.
+    ScalarDomainResult ScalarDomain(const Vector &state,double time,
+        const RANSWallEvolutionData &data,bool retainLocations=false) const;
+    static std::string ScalarDomainJSON(const ScalarDomainResult &domain,bool locations=false);
+    Diagnostic CompleteRestrictedAudit(const Vector &state,const Vector &history,
+        double alpha,double time,const RANSWallEvolutionData &data) const;
+    WallMatrix ScalarFeasibleJacobian(const Vector &state,const Vector &history,
+        double alpha,double time,const RANSWallEvolutionData &data,
+        std::vector<std::string> *columnMetadata=nullptr,bool scalarOnly=false) const;
+    Vector SolveFrozenScalars(Vector state,const Vector &history,double alpha,double time,
+        const RANSWallEvolutionData &data,int &iterations,double tolerance,int maximumIterations) const;
+    const Vector &LastFeasibleState() const { return m_lastFeasibleState; }
+    const std::string &NonlinearPolicyName() const { return m_nonlinearPolicy; }
     Vector Norms(const Vector &residual,const std::map<int,double> &constraints,double ustar=.4) const;
     Vector StateNorms(const Vector &state,const Vector &reference,double ustar=.4) const;
     Vector ExplicitBody(const Vector &state,double time,const RANSWallEvolutionData &data) const;
@@ -122,7 +171,6 @@ public:
     Vector EnergyBudget(const Vector &state,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data) const;
     /** Optional accepted-state audit. Entries are documented in the M7 guide.
      * Sampled admissibility is not a certificate over the entire polynomial. */
-    using Diagnostic=std::map<std::string,Vector>;
     Diagnostic Audit(const Vector &state,const Vector &history,double alpha,double time,
         const RANSWallEvolutionData &data,double ustar=.4,bool constitutiveReconstruction=false) const;
     const std::string &VariantName() const { return m_variantName; }
@@ -133,6 +181,9 @@ public:
     Vector RobustParameters() const;
     const SolverUtils::RANSVector &RobustReferenceFlow() const { return m_referenceFlow; }
     const SolverUtils::RANSVector &RobustReferenceNormal() const { return m_referenceNormal; }
+    std::string InnerStressName() const;
+    SolverUtils::RANSWallInnerStressValues InnerStress(double k,double auxiliaryNu,
+        const SolverUtils::RANSTensor &gradient) const;
     SolverUtils::RANSClosureValues OuterClosure(double k,double epsilon,
         const SolverUtils::RANSTensor &gradient,const RANSWallCoordinate &point) const;
     SolverUtils::RANSCappedDestructionValues WallNormalization(const Vector &state,
@@ -144,6 +195,17 @@ public:
         const SolverUtils::EquilibriumAWFProfiles &profile) const;
     std::string Signature() const;
 private:
+    struct ScalarLocation
+    {
+        std::string inventory;
+        RANSWallGlobalPoint row;
+        int block=0,side=0;
+        bool strict=false;
+    };
+    void InitialiseScalarLocations() const;
+    Vector SolveScalarFeasible(Vector state,const Vector &history,double alpha,
+        double time,const RANSWallEvolutionData &data,bool condensed,int &iterations,
+        double tolerance,int maximumIterations,bool scalarOnly=false) const;
     struct VolumePoint { RANSWallGlobalPoint v,p,e; double weight; };
     struct Ray
     {
@@ -176,6 +238,7 @@ private:
     SolverUtils::RANSRobustVariant m_robust;
     SolverUtils::RANSCappedDestructionControls m_destruction;
     bool m_cappedDestruction=false;
+    SolverUtils::RANSWallInnerStressModel m_innerStress=SolverUtils::RANSWallInnerStressModel::Linear;
     double m_regularizationGamma=0,m_regularizationScale=0,m_robustUstar=.4;
     SolverUtils::RANSVector m_referenceFlow{1,0,0},m_referenceNormal{0,0,1};
     bool m_transitionEnabled=false,m_transitionReady=false;
@@ -208,6 +271,12 @@ private:
     mutable bool m_solveDiagnosticWritten=false;
     mutable std::string m_solveResidualException;
     mutable std::string m_solveInvalidContext;
+    std::string m_nonlinearPolicy="Legacy",m_feasibleTraceFile="case.feasible.jsonl";
+    mutable bool m_feasibleTraceStarted=false;
+    mutable std::vector<ScalarLocation> m_scalarLocations;
+    mutable std::vector<RANSWallCoordinate> m_traceScalarAnchors,m_scalarSamplerAnchors;
+    mutable Vector m_lastFeasibleState;
+    mutable int m_feasibleSolveCount=0;
 };
 }
 #endif
