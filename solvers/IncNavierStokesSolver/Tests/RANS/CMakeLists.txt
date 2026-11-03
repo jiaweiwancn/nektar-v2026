@@ -320,6 +320,24 @@ if(Python3_Interpreter_FOUND)
             execute_process(COMMAND ${Python3_EXECUTABLE} -c "import numpy, scipy, sympy"
                 RESULT_VARIABLE rans_m3_dependencies OUTPUT_QUIET ERROR_QUIET)
             if(rans_m3_dependencies EQUAL 0)
+                add_test(NAME RANSCLSEPAWFM8KernelOracle COMMAND ${Python3_EXECUTABLE}
+                    ${CMAKE_CURRENT_LIST_DIR}/validate_cls_epawf_m8_kernel.py
+                    --probe $<TARGET_FILE:RANSRobustVariantProbe>
+                    --output ${CMAKE_CURRENT_BINARY_DIR}/cls-epawf-m8-kernel)
+                set_tests_properties(RANSCLSEPAWFM8KernelOracle PROPERTIES PROCESSORS 1 TIMEOUT 3600
+                    ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
+                add_test(NAME RANSCLSEPAWFM8TransverseOracle COMMAND ${Python3_EXECUTABLE}
+                    ${CMAKE_CURRENT_LIST_DIR}/validate_cls_epawf_m8_transverse.py
+                    --build $<TARGET_FILE_DIR:RANSTransverseEvolutionProbe>
+                    --output ${CMAKE_CURRENT_BINARY_DIR}/cls-epawf-m8-transverse)
+                set_tests_properties(RANSCLSEPAWFM8TransverseOracle PROPERTIES PROCESSORS 1 TIMEOUT 7200
+                    ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
+                add_test(NAME RANSCLSEPAWFM8NativeOracle COMMAND ${Python3_EXECUTABLE}
+                    ${CMAKE_CURRENT_LIST_DIR}/validate_cls_epawf_m8.py
+                    --build $<TARGET_FILE_DIR:IncNavierStokesSolver> --mode native
+                    --output ${CMAKE_CURRENT_BINARY_DIR}/cls-epawf-m8-native)
+                set_tests_properties(RANSCLSEPAWFM8NativeOracle PROPERTIES PROCESSORS 2 TIMEOUT 21600
+                    ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
                 add_test(NAME RANSCLSEPAWFM7NativeOracle COMMAND ${Python3_EXECUTABLE}
                     ${CMAKE_CURRENT_LIST_DIR}/validate_cls_epawf_m7.py
                     --build $<TARGET_FILE_DIR:IncNavierStokesSolver>)
