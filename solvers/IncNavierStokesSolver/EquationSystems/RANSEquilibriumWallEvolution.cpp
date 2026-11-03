@@ -496,7 +496,8 @@ void RANSEquilibriumWallEvolution::WriteReport() const
                <<",\"physical_range_events\":[";
             for(int e=0;e<m_rangeEvents.size();++e)
             {
-                if(e)out<<',';const auto &event=m_rangeEvents[e];
+                if(e)out<<',';
+                const auto &event=m_rangeEvents[e];
                 out<<"{\"time\":"<<event.time<<",\"alpha\":"<<event.alpha
                    <<",\"stopped_before_history_advance\":"<<(event.stopped?"true":"false")<<",\"reasons\":[";
                 for(int i=0;i<event.reasons.size();++i){if(i)out<<',';out<<Quoted(event.reasons[i]);}
