@@ -123,7 +123,7 @@ public:
      * Sampled admissibility is not a certificate over the entire polynomial. */
     using Diagnostic=std::map<std::string,Vector>;
     Diagnostic Audit(const Vector &state,const Vector &history,double alpha,double time,
-        const RANSWallEvolutionData &data) const;
+        const RANSWallEvolutionData &data,double ustar=.4) const;
     std::string Signature() const;
 private:
     struct VolumePoint { RANSWallGlobalPoint v,p,e; double weight; };

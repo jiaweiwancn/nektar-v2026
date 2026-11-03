@@ -162,7 +162,7 @@ std::string RANSEquilibriumWallEvolution::PhysicsSignature() const
     std::ostringstream s;s<<std::setprecision(17)<<m_patch->Signature()<<":eta="<<m_eta<<":neutral="<<m_neutral<<":us="<<m_ustar<<":direction="<<m_direction[0]<<','<<m_direction[1]<<":chart_functions="<<m_chartFunctions;
     for(const auto &[name,value]:m_serialSession->GetParameters())
         if(name!="NUMSTEPS" && name!="IO_CHECKSTEPS" && name!="IO_INFOSTEPS" && name!="IO_TIMER_LEVEL" && name!="RANSWALLOWNERSHIPSHIFT")s<<'|'<<name<<'='<<value;
-    const std::vector<std::string> names{"InitialConditionsInner","InitialConditionsOuter","BoundaryValuesInner","BoundaryValuesOuter",
+    const std::vector<std::string> names{"InitialConditionsInner","InitialConditionsOuter","InitialPerturbationInner","InitialPerturbationOuter","BoundaryValuesInner","BoundaryValuesOuter",
         "BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter","ExactSolutionInner","ExactSolutionOuter"};
     for(const auto &name:names)for(const auto &variable:m_session->GetVariables())if(m_serialSession->DefinesFunction(name,variable))
         s<<'|'<<name<<'/'<<variable<<'='<<m_serialSession->GetFunction(name,variable)->GetExpression();
@@ -202,17 +202,29 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
             {
                 const auto perturbation=m_patch->Project(Functions("InitialPerturbation",false),m_time);
                 for(int i=0;i<m_patch->DifferentialSize();++i)m_state[i]+=perturbation[i];
-                m_state=m_patch->Lift(m_state,m_time,m_data);m_initial=m_state;
+                m_state=m_patch->Lift(m_state,m_time,m_data);
             }
             m_integrator->Initialise(Vector(m_state.begin(),m_state.begin()+m_patch->DifferentialSize()),m_time);
         }
+        m_historyReady=true;
         if(m_diagnostics)RecordAudit(m_state,m_state,0,m_time);
         UpdateFields();
     }
     catch(const std::exception &error)
     {
         m_failure=error.what();
-        if(m_diagnostics && m_integrator && m_session->GetComm()->GetRank()==0)WriteReport();
+        if(m_diagnostics && m_session->GetComm()->GetRank()==0)
+        {
+            if(m_historyReady)WriteReport();
+            else
+            {
+                // No native history exists yet. Preserve the original error
+                // without calling Capture() on an uninitialised integrator.
+                std::ofstream out(m_sessionName+".evolution.json");out<<std::setprecision(17)
+                    <<"{\"schema\":1,\"initialization_complete\":false,\"failure\":"<<Quoted(m_failure)
+                    <<",\"accepted_states\":[],\"rejected_state\":";Write(out,m_state);out<<"}\n";
+            }
+        }
         std::cerr<<"EP-AWF evolution state/history: "<<error.what()<<std::endl;throw;
     }
 }
@@ -231,7 +243,7 @@ RANSEquilibriumWallEvolution::Vector RANSEquilibriumWallEvolution::Implicit(cons
 }
 void RANSEquilibriumWallEvolution::RecordAudit(const Vector &state,const Vector &history,double alpha,double time)
 {
-    auto audit=m_patch->Audit(state,history,alpha,time,alpha?m_implicitData:m_data);
+    auto audit=m_patch->Audit(state,history,alpha,time,alpha?m_implicitData:m_data,m_ustar);
     m_stateAudits.push_back(std::move(audit));m_auditTimes.push_back(time);
     if(m_stateAudits.back().at("admissible")[0]!=1)
     {m_rejectedState=state;throw std::runtime_error("accepted-stage candidate failed sampled admissibility; see state_audits");}

@@ -54,7 +54,7 @@ private:
     Vector m_roughnessBudget,m_energyBudget,m_finalStageLoads;
     std::vector<Vector> m_regionalStageLoads;
     std::map<int,double> m_finalStageConstraints;
-    bool m_diagnostics=false;
+    bool m_diagnostics=false,m_historyReady=false;
     std::string m_failure;
     Vector m_rejectedState;
     std::vector<Vector> m_acceptedStates;

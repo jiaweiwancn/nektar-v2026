@@ -16,7 +16,7 @@ import time
 from pathlib import Path
 import numpy as np
 from cls_epawf_m7_cases import perturbation_session
-from validate_cls_epawf_m4 import Runner, spaces, state_difference
+from validate_cls_epawf_m4 import Runner, spaces, state_difference, native_history_difference
 from validate_cls_epawf_m2 import Profiles
 
 CHECKS = 0
@@ -165,6 +165,10 @@ def campaign(run, mode):
     state_difference(raws['joint'],parallel,'M7 MPI all-field parity')
     for a,b in zip(raws['joint']['state_audits'],parallel['state_audits']):
         for name in a:require(np.allclose(a[name],b[name],rtol=1e-8,atol=1e-8),'MPI diagnostic parity '+name)
+    first=case('joint-checkpoint',kind='joint',steps=2,checkpoint=run.output/'perturbed-history')
+    resumed=case('joint-restart',kind='joint',steps=2,restart=first['checkpoint'])
+    state_difference(raws['joint'],resumed,'M7 perturbed all-field restart')
+    native_history_difference(raws['joint'],resumed,'M7 perturbed native histories')
     # h/p tests fix H,h,rK,rm. H study is a separately labelled model study.
     height_study=[]
     for H in (1.5,2.,2.5):
@@ -195,6 +199,13 @@ def campaign(run, mode):
     results['node-alias-reject']={'native_min':bad['reconstruction_native'][1],
         'source_min':bad['source_volume_inner'][1],'dense_min':bad['reconstruction_dense'][1],
         'failure':rejected['failure'],'accepted_states':0}
+    directory=run.output/'invalid-sampler-reject';directory.mkdir()
+    xml=perturbation_session(run.template,directory/'case.xml',kind='invalid_sampler',chi=0,steps=0)
+    run.command('invalid-sampler-reject','IncNavierStokesSolver',[xml],expect_failure=True)
+    rejected=json.loads((directory/'case.evolution.json').read_text())
+    require(not rejected['initialization_complete'] and not rejected['accepted_states']
+            and 'sampled K' in rejected['failure'],'invalid initial sampler must preserve original failure before history exists')
+    results['invalid-sampler-reject']={'failure':rejected['failure'],'accepted_states':0}
     return results
 
 

@@ -31,7 +31,7 @@ double MinimumEigenvalue(RANSTensor a)
 }
 }
 RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s,const Vector &history,
-    double alpha,double time,const RANSWallEvolutionData &data) const
+    double alpha,double time,const RANSWallEvolutionData &data,double ustar) const
 {
     Diagnostic result;const double sentinel=std::numeric_limits<double>::max();
     bool admissible=true;Refresh(s,time,&data);
@@ -96,14 +96,18 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
         const auto &el=fields[0]->Elements()[e];const auto exp=fields[0]->Field()->GetExp(e);
         for(int kind=0;kind<2;++kind)
         {
-            const int n=kind?2*el.degree+3:exp->GetNumPoints(0);
-            for(int k=0;k<(m_dimension==3?n:1);++k)for(int j=0;j<n;++j)for(int i=0;i<n;++i)
+            const int dense=2*el.degree+3;
+            const std::array<int,3> counts{kind?dense:exp->GetNumPoints(0),
+                m_dimension==3?(kind?dense:exp->GetNumPoints(1)):1,
+                kind?dense:exp->GetNumPoints(m_dimension-1)};
+            for(int k=0;k<(m_dimension==3?counts[2]:1);++k)
+                for(int j=0;j<(m_dimension==3?counts[1]:counts[2]);++j)for(int i=0;i<counts[0];++i)
             {
                 RANSWallCoordinate p{};const std::array<int,3> index{i,m_dimension==3?j:0,m_dimension==3?k:j};
                 for(int a=0;a<3;++a)if(m_dimension==3 || a!=1)
                 {
                     const int nativeAxis=m_dimension==2 && a==2?1:a;
-                    const double x=kind?-1.+2.*index[a]/(n-1):exp->GetBasis(nativeAxis)->GetZ()[index[a]];
+                    const double x=kind?-1.+2.*index[a]/(counts[a]-1):exp->GetBasis(nativeAxis)->GetZ()[index[a]];
                     p[a]=el.lower[a]+(x+1)*(el.upper[a]-el.lower[a])/2;
                 }
                 sample(kind?"reconstruction_dense":"reconstruction_native",Transform(fields[0]->ElementPoint(e,p)),
@@ -155,7 +159,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
     face[2]=std::sqrt(face[2]/face[0]);face[3]=std::sqrt(face[3]/face[0]);face[5]=std::sqrt(face[5]/face[0]);result["interface"]=face;
     const auto raw=Residual(s,history,alpha,time,data,false,false);
     const auto constraints=Constraints(s,time,data);
-    result["coupled_norms"]=Norms(Residual(s,history,alpha,time,data),constraints);
+    result["coupled_norms"]=Norms(Residual(s,history,alpha,time,data),constraints,ustar);
     Vector balance(2*(m_dimension+1));
     for(int b=0;b<=K();++b)
     {
@@ -170,7 +174,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
         double production=0,strain=0;for(int a=0;a<3;++a)for(int b=0;b<3;++b)
         {const double S=G[a][b]+G[b][a];production-=((a==b?2*k/3:0)-nt*S)*G[a][b];strain+=S*S;}
         const auto values=ray.profile->AtProduction(Distance(q.v.coordinate),production);
-        wall[0]+=q.weight*ray.profile->Original().MeanOriginalDissipation();wall[1]+=q.weight*values.dissipation;
+        wall[0]+=q.weight*ray.profile->Original().OriginalDissipation(Distance(q.v.coordinate));wall[1]+=q.weight*values.dissipation;
         wall[2]+=q.weight*values.redistribution;wall[3]+=q.weight*production;
         wall[4]+=q.weight*m_parameters.geometry.molecularNu*strain/2;
     }
