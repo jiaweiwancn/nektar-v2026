@@ -354,6 +354,27 @@ int main(int argc,char **argv)
         serial->LoadParameter("RANSWallTailStart",parameters.geometry.tailStart,1.);serial->LoadParameter("RANSWallTangentialOrder",parameters.tangentialOrder,12);
         serial->LoadParameter("RANSWallNormalOrder",parameters.normalOrder,16);
         const auto mapping=LoadRANSWallNormalMap(serial,d,parameters.geometry.height);RANSWallEvolutionPatch patch(serial,graph,world->GetComm(),parameters,mapping);
+        int constructorOnly=0;serial->LoadParameter("RANSWallProbeConstructorOnly",constructorOnly,0);
+        if(constructorOnly)
+        {
+            Require(patch.TransitionEnabled(),"constructor audit requires Upstream mode");
+            double dx,dy;serial->LoadParameter("RANSWallDirectionX",dx,1.);serial->LoadParameter("RANSWallDirectionY",dy,0.);
+            const auto frame=mapping.At({patch.lower[0],patch.lower[1],0});Vec flow{};
+            for(int a=0;a<3;++a)flow[a]=dx*frame.tangent1[a]+dy*frame.tangent2[a];
+            const auto coordinate=EquilibriumAWFWallCoordinateDifferential(mapping,{patch.lower[0],patch.lower[1],0});
+            double rate=0;for(int a=0;a<3;++a)for(int b=0;b<3;++b)rate+=coordinate.chartGradient[b]*frame.inverse[b][a]*flow[a];
+            double departure=0;RANSWallEvolutionData zero(d);
+            for(const auto &q:patch.Surface(0,2,parameters.geometry.height,1,4))if(patch.WallCoordinate(q.test.coordinate)<patch.TransitionControls().end)
+                departure=std::max(departure,patch.Transition(patch.TransitionReference(),q.test.coordinate,0,zero).d2);
+            if(world->GetComm()->GetRank()==0)
+            {
+                std::ofstream file(argv[2]);file<<std::setprecision(17)<<"{\"schema\":1,\"constructor_only\":true,\"dimension\":"<<d
+                    <<",\"ranks\":"<<world->GetComm()->GetSize()<<",\"incoming_flow_cartesian\":";Write(file,flow);
+                file<<",\"actual_wall_coordinate_rate\":"<<rate<<",\"reference_departure_maximum\":"<<departure<<"}\n";
+                Require(static_cast<bool>(file),"cannot write constructor audit");
+            }
+            world->Finalise();return 0;
+        }
         const double K=parameters.model.Q()*.16,H=parameters.geometry.height,Z=patch.upper[2],time=.2,alpha=5.3;
         using F=RANSWallEvolutionFunction;std::vector<F> functions;
         functions.push_back([](const Vec &p,double){return (.1+.03*p[0]+.02*p[1])*p[2];});

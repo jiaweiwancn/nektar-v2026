@@ -314,6 +314,12 @@ if(Python3_Interpreter_FOUND)
                     --output ${CMAKE_CURRENT_BINARY_DIR}/cls-epawf-m6)
                 set_tests_properties(RANSCLSEPAWFM6Oracle PROPERTIES PROCESSORS 4 TIMEOUT 14400
                     ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
+                add_test(NAME RANSCLSEPAWFM6OrientationOracle COMMAND ${Python3_EXECUTABLE}
+                    ${CMAKE_CURRENT_LIST_DIR}/validate_cls_epawf_m6_orientation.py
+                    --build $<TARGET_FILE_DIR:RANSCurvedWallProbe>
+                    --output ${CMAKE_CURRENT_BINARY_DIR}/cls-epawf-m6-orientation)
+                set_tests_properties(RANSCLSEPAWFM6OrientationOracle PROPERTIES PROCESSORS 1 TIMEOUT 1800
+                    ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
                 add_test(NAME RANSCLSEPAWFM5NoteOracle COMMAND ${Python3_EXECUTABLE}
                     ${CMAKE_CURRENT_LIST_DIR}/validate_cls_epawf_m5_note.py
                     --probe $<TARGET_FILE:RANSCurvedNoteProbe>

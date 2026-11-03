@@ -70,7 +70,9 @@ void RANSWallEvolutionPatch::InitialiseTransition(const LibUtilities::SessionRea
     {(void)value;m_baselineTraceIds.insert(id);}
     double us,dx,dy;session->LoadParameter("RANSWallFrictionVelocity",us,.4);
     session->LoadParameter("RANSWallDirectionX",dx,1.);session->LoadParameter("RANSWallDirectionY",dy,0.);
-    Require(dx>0,"the prescribed upstream coordinate is oriented along positive q1");
+    const auto incoming=m_mapping.At({lower[0],lower[1],0});
+    const double incomingX=dx*incoming.tangent1[0]+dy*incoming.tangent2[0];
+    Require(incomingX>0,"the physical incoming flow must increase the prescribed wall coordinate");
     if(m_mapping.kind==RANSWallNormalMap::Kind::CosineHill)
         Require(dy==0,"the extruded hill transition reference follows its prescribed wall curve");
     m_transitionReference=FlatReference(us,{dx,dy});
