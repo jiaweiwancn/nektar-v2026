@@ -63,13 +63,13 @@ def experiment_plan():
                 spatial_reference=dict(degree=9, cells=16, quadrature=64,
                     interpretation='same fine BDF2 step for actual native field comparisons; separate exact semidiscrete exponential control'),
                 partition='all original tensor diffusion and base advection implicit; explicit derivative identically zero',
-                acceptance=dict(mass_and_native_rows=2e-12, original_tangent=3e-9, complete_weak_matrix=3e-9,
+                acceptance=dict(mass_and_native_rows=2e-12, original_tangent=1e-10, complete_weak_matrix=1e-10,
                     projected_initial_finite_rule=1e-10, native_time_recurrence=5e-11,
-                    covariance_sample_identity=2e-10, minimum_covariance='strictly positive at all sampled initial/final points/phases',
+                    covariance_sample_identity=1e-10, minimum_covariance='strictly positive at all sampled initial/final points/phases',
                     turbulence_linear_forcing=1e-10, spatial_fine_to_coarse_error_ratio=.5,
                     time_error_reduction_minimum={'IMEX1': 1.6, 'IMEX2': 3.},
                     growing_energy='gain>1 at all three wavelengths, retained as dt decreases',
-                    amplitude_scaled_gain=2e-10, restricted_chi_eta_operator_identity=1e-12),
+                    amplitude_scaled_gain=1e-10, restricted_chi_eta_operator_identity=1e-12),
                 excluded=['nonlinear 3D trajectory', 'uniform long-time stability', 'constitutive retuning',
                           'molecular outer diffusion', 'filter/SVV', 'positivity floors', 'new inner epsilon PDE'])
 
@@ -293,8 +293,9 @@ def constitutive_checks(raw, reference, audit):
         audit.near(block, closed, 'indexed_closed_transverse_block', 2e-12)
         # The coarser physical differences demonstrate their O(step^2)
         # truncation; the matrices below use only the finest native step.
-        bound = 3e-9+30*step*step
+        bound = 1e-10+30*step*step
         error = audit.near(actual['block'], block, 'native_transverse_tangent', bound)
+        if step == 1e-6:audit.require(error <= 1e-10, 'Finest native tangent must satisfy frozen isolated-identity tolerance')
         audit.near(actual['nut'], float(base['nut'].real), 'neutral_eddy_viscosity', 2e-12)
         audit.near(actual['production'], epsilon, 'neutral_positive_production', 2e-12)
         audit.near(actual['covariance_minimum'], float(np.linalg.eigvalsh(base['stress'].real)[0]),
@@ -329,8 +330,8 @@ def verify(raw, audit):
             audit.require(actual['degree'] == p and actual['cells'] == cells and actual['size'] == space.size and
                           actual['maps'] == space.maps and actual['free_ids'] == space.free, 'Native CG map/boundary mismatch')
             audit.near(actual['mass'], space.mass, 'native_physical_mass', 2e-12)
-            audit.near(actual['real_load'], space.real, 'complete_real_transverse_weak_matrix', 3e-9)
-            audit.near(actual['imaginary_load'], space.imaginary, 'complete_imaginary_transverse_weak_matrix', 3e-9)
+            audit.near(actual['real_load'], space.real, 'complete_real_transverse_weak_matrix', 1e-10)
+            audit.near(actual['imaginary_load'], space.imaginary, 'complete_imaginary_transverse_weak_matrix', 1e-10)
             audit.near(space.imaginary, space.pde_imaginary, 'mixed_stress_derivatives_cancel', 2e-12)
             audit.near(actual['initial_unit_coefficients'], paired(finite.initial), 'native_initial_finite_rule_projection', 1e-10)
             initial_projection_errors.append(dict(id=name, relative_error=field_error(space, unpaired(actual['initial_unit_coefficients']), space, space.initial)))
@@ -364,20 +365,20 @@ def verify(raw, audit):
             audit.near(record['lambda'], dt if order == 1 or step == 1 else 2*dt/3, 'native_IMEX_lambda', 3e-13)
             audit.near(record['stage_history'], paired(histories[step-1]), 'native_complete_history_combination', 5e-11, amplitude)
             audit.near(record['state'], paired(values[step]), 'native_complete_IMEX_recurrence', 5e-11, amplitude)
-            audit.near(record['energy'], space.energy(values[step]), 'native_mass_energy', 2e-10, amplitude*amplitude)
+            audit.near(record['energy'], space.energy(values[step]), 'native_mass_energy', 1e-10, amplitude*amplitude)
             audit.near(record['energy_rate'], float(np.vdot(values[step], space.load@values[step]).real),
-                       'native_transverse_energy_identity', 3e-9, amplitude*amplitude)
+                       'native_transverse_energy_identity', 1e-10, amplitude*amplitude)
             audit.require(record['stage_residual'] <= 1e-10*amplitude, 'Unconverged native implicit linear stage')
         final = unpaired(trial['trajectory'][-1]['state'])
-        audit.near(trial['initial_covariance'], covariance(space, unpaired(trial['initial_state'])), 'finite_initial_covariance', 2e-10)
-        audit.near(trial['final_covariance'], covariance(space, final), 'finite_final_covariance', 2e-10)
+        audit.near(trial['initial_covariance'], covariance(space, unpaired(trial['initial_state'])), 'finite_initial_covariance', 1e-10)
+        audit.near(trial['final_covariance'], covariance(space, final), 'finite_final_covariance', 1e-10)
         audit.require(trial['initial_covariance'][0] > 0 and trial['final_covariance'][0] > 0,
                       'Finite perturbation lost positive covariance in this sample set')
         expected_history = [paired(values[-1-slot]) for slot in range(order)]+[np.zeros_like(paired(values[-1])) for _ in range(order)]
         audit.near(trial['native_history'], expected_history, 'every_native_history_slot', 5e-11, amplitude)
         audit.near(trial['native_history_times'], [FINAL-slot*dt for slot in range(order)]+[dt]*order, 'native_history_times', 3e-13)
         gain = space.energy(final)/space.energy(unpaired(trial['initial_state']))
-        audit.near(trial['gain'], gain, 'native_energy_gain', 2e-10)
+        audit.near(trial['gain'], gain, 'native_energy_gain', 1e-10)
         audit.require(gain > 1, 'The adverse transverse energy growth was removed')
         key = (name, order, dt, amplitude)
         audit.require(key not in actual_final, 'Duplicate trial')
@@ -435,7 +436,7 @@ def verify(raw, audit):
         temporal.append(dict(order=order, records=records, actual_error_reduction=ratio))
     gains = [next(record['gain'] for record in trial_records if record['operator'] == 'p7-n8-xi4' and
                   record['order'] == 2 and record['dt'] == SPATIAL_DT and record['amplitude'] == amplitude) for amplitude in AMPLITUDES]
-    audit.near(gains, np.full(3, gains[1]), 'linear_amplitude_energy_gain', 2e-10)
+    audit.near(gains, np.full(3, gains[1]), 'linear_amplitude_energy_gain', 1e-10)
     controls = raw['restricted_controls']
     audit.require({(record['chi'], record['eta']) for record in controls} == {(c, e) for c in (0, .5, 1) for e in (0, 1)}, 'Missing restricted chi/eta controls')
     for record in controls:

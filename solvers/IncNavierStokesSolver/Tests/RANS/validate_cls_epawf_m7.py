@@ -12,14 +12,22 @@ import itertools
 import json
 import math
 import platform
+import subprocess
 import time
 from pathlib import Path
 import numpy as np
 from cls_epawf_m7_cases import perturbation_session
 from validate_cls_epawf_m4 import Runner, spaces, state_difference, native_history_difference
 from validate_cls_epawf_m2 import Profiles
+from cls_epawf_m7_energy_oracle import verify as verify_energy
+from validate_cls_epawf_m5_geometry import geometry
 
 CHECKS = 0
+FROZEN = {
+    'docs/literature/cls_neutral_abl_equilibrium_awf_note_revised.tex':'d35e437c2f2f8b25a46f7a3f285c6f1ad8b48d7b554aa1d161315f59eeb6de0f',
+    'docs/plans/cls-epawf-revised-contract-v1.json':'4e7bd75022409b8dc2ef31cc73425779b646a97535760b31eeea4ec49087de8a',
+    'library/SolverUtils/Turbulence/RANSModels.cpp':'86a7154ba3cb27e4d3319aa42d156a228fd1b180f35f9b217159822ec9d66b05',
+    'library/SolverUtils/Turbulence/AnalyticalWallFunction.cpp':'5baf29819fed6b81ad1b042bc09258a3e0779d15de13076b688bf32f80ddcf7e'}
 
 def require(value, message):
     global CHECKS
@@ -70,6 +78,7 @@ def audits(raw, name):
     # Independently reconstruct every accepted native polynomial at all dense
     # audit locations. This uses the Jacobi basis oracle, not production rows.
     fields=spaces(raw);offsets=raw['offsets'];dim=raw['dimension'];independent_min=math.inf
+    transfer_min_k=math.inf;transfer_min_epsilon=math.inf;transfer_count=0
     for state,audit in zip(raw['accepted_states'],raw['state_audits']):
         minimum=math.inf
         for el in fields[dim].elements:
@@ -84,7 +93,34 @@ def audits(raw, name):
             minimum=min(minimum,float(np.min(phi@np.asarray(state)[offsets[dim]+ids])))
         require(abs(minimum-audit['reconstruction_dense'][1])<1e-10, name+': independent dense polynomial minimum')
         independent_min=min(independent_min,minimum)
+        # Trace/boundary projection uses its own GLL tangential rule. Its
+        # nonlocal rK/rA/rB sampler locations are not a subset of the source
+        # Gauss rule or the dense reconstruction tensor, so audit explicitly.
+        H=raw['parameters'][1]
+        faces=[e for e in fields[dim+1].elements if abs(e['lower'][2]-H)<1e-12]
+        for el in faces:
+            n=max(8,el['degree']+3)
+            nodes=np.r_[-1.,np.polynomial.legendre.Legendre.basis(n-1).deriv().roots(),1.]
+            for indices in itertools.product(range(n),repeat=dim-1):
+                point=[0.,0.,H]
+                for a,j in zip((0,) if dim==2 else (0,1),indices):
+                    point[a]=el['lower'][a]+(nodes[j]+1)*(el['upper'][a]-el['lower'][a])/2
+                scale=float(geometry(raw['map_parameters'],point)['scale'])
+                sampler=list(point);sampler[2]=raw['parameters'][3]/scale
+                value=fields[dim].evaluate(state,offsets[dim],sampler)[0]
+                require(value>0 and math.isfinite(value),name+': positive physical K at trace-transfer GLL sampler')
+                transfer_min_k=min(transfer_min_k,value);transfer_count+=1
+                positions=[H]
+                if raw['upstream_transition']:positions += [r/scale for r in raw['transition_controls'][2:4]]
+                for position in positions:
+                    sampler[2]=position
+                    k=fields[dim].evaluate(state,offsets[dim],sampler,side=1 if position==H else 0)[0]
+                    epsilon=fields[dim+1].evaluate(state,offsets[dim+1],sampler,side=1 if position==H else 0)[0]
+                    require(k>0 and epsilon>0 and math.isfinite(k+epsilon),name+': positive outer turbulence at actual trace-transfer samples')
+                    transfer_min_k=min(transfer_min_k,k);transfer_min_epsilon=min(transfer_min_epsilon,epsilon);transfer_count+=1
     summary['independent_dense_min_k']=independent_min
+    summary['independent_transfer_samples']={'count':transfer_count,'min_k':transfer_min_k,'min_epsilon':transfer_min_epsilon,
+        'rule':'actual trace/boundary GLL tangential points and physical rK/rA/rB and H samples'}
     # Trapezoidal diagnostic integrals: these are accounting defects sampled
     # in physical time, not a new definition of the IMEX stored-energy change.
     times=np.asarray(raw['audit_times']);rows=np.asarray([a['energy'] for a in raw['state_audits']])
@@ -106,7 +142,13 @@ def audits(raw, name):
     field=fields[0];z=.5*(raw['parameters'][1]+field.upper[2]);p=[.5*(field.lower[0]+field.upper[0]),0.,z]
     if dim==3:p[1]=.5*(field.lower[1]+field.upper[1])
     u=abs(field.evaluate(raw['fixed_reference'],offsets[0],p)[0])
+    convention='domain length / fixed-reference streamwise velocity at outer midheight'
+    if u==0 and raw['upstream_transition']:
+        p[2]=raw['parameters'][1]
+        u=abs(field.evaluate(raw['transition_reference'],offsets[0],p)[0])
+        convention='nominal neutral matching velocity; manufactured base has zero actual advection'
     summary['flow_through_time']=(field.upper[0]-field.lower[0])/u if u>0 else None
+    summary['flow_time_convention']=convention
     duration=raw['time']-raw['audit_times'][0]
     summary.update(duration=duration,turnover_units=duration/summary['turnover_time'],
                    flow_through_units=duration/summary['flow_through_time'] if u>0 else None)
@@ -118,6 +160,7 @@ def campaign(run, mode):
     def case(name, **kwargs):
         raw=run.evolution(name,generator=perturbation_session,**kwargs)
         raws[name]=raw;results[name]=audits(raw,name)
+        results[name]['independent_energy']=verify_energy(raw)
         return raw
     if mode=='pilot':
         case('joint',steps=1)
@@ -162,6 +205,7 @@ def campaign(run, mode):
     # Same-source MPI audit and complete physical field parity.
     parallel=run.evolution('joint-mpi2',generator=perturbation_session,ranks=2)
     results['joint-mpi2']=audits(parallel,'joint-mpi2')
+    results['joint-mpi2']['independent_energy']=verify_energy(parallel)
     state_difference(raws['joint'],parallel,'M7 MPI all-field parity')
     for a,b in zip(raws['joint']['state_audits'],parallel['state_audits']):
         for name in a:require(np.allclose(a[name],b[name],rtol=1e-8,atol=1e-8),'MPI diagnostic parity '+name)
@@ -209,14 +253,69 @@ def campaign(run, mode):
     return results
 
 
+def replay(run, directory):
+    """Add independent accounting to immutable, source-bound stored runs.
+
+    Reuse is allowed only across documentation or these two audit-driver
+    changes. Every native numerical input and runtime executable is unchanged.
+    No failed trajectory can be promoted by this postprocessing path.
+    """
+    directory=directory.resolve()
+    parent=json.loads((directory.parent/'receipt.json').read_text())
+    require(parent['status']=='passed' and parent.get('finished_utc'),'native campaign is not complete/passing')
+    previous=json.loads((directory/'receipt.json').read_text())
+    require(previous['status']=='passed','stored native qualification did not pass')
+    source=Path(__file__).resolve().parents[4]
+    revision=subprocess.check_output(['git','-C',str(source),'rev-parse','HEAD'],text=True).strip()
+    changed=subprocess.check_output(['git','-C',str(source),'diff','--name-only',parent['source_commit'],revision],text=True).splitlines()
+    allowed={'solvers/IncNavierStokesSolver/Tests/RANS/cls_epawf_m7_energy_oracle.py',
+             'solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m7.py',
+             'solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m7_transition_flow.py',
+             'solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_epawf_m7_transverse.py'}
+    for name in changed:
+        require(name in allowed or name.endswith('.md') or name.startswith('docs/'),
+                'native numerical source changed across replay: '+name)
+    # The complete source/runtime fingerprint was captured while this campaign
+    # held the source lock. Re-read every image, not just the main executable.
+    pin_path=directory.parent/'runtime-fingerprint.json'
+    pin=json.loads(pin_path.read_text())
+    require(pin['success'] and pin['source_commit']==parent['source_commit'],'native runtime/source fingerprint missing')
+    for name,expected in pin['source_inputs'].items():
+        if name not in allowed:require(hashlib.sha256((source/name).read_bytes()).hexdigest()==expected,
+                                       'native numerical input changed: '+name)
+    def runtime_check():
+        for name,expected in pin['runtime_artifacts'].items():
+            path=Path(pin['runtime_resolved_paths'][name])
+            require(hashlib.sha256(path.read_bytes()).hexdigest()==expected,'native runtime image changed: '+name)
+    runtime_check()
+    results={};artifacts=[]
+    for path in sorted(directory.glob('*/case.evolution.json')):
+        raw=json.loads(path.read_text())
+        if raw.get('failure'):continue
+        result=audits(raw,path.parent.name)
+        result['independent_energy']=verify_energy(raw);results[path.parent.name]=result
+        artifacts.append({'path':str(path),'sha256':hashlib.sha256(path.read_bytes()).hexdigest()})
+    require(len(results)>=25,'replay omitted successful native reports')
+    runtime_check()
+    return {'native_source_commit':parent['source_commit'],'audit_source_commit':revision,
+            'changed_paths':changed,'native_receipt_sha256':hashlib.sha256((directory.parent/'receipt.json').read_bytes()).hexdigest(),
+            'runtime_fingerprint_sha256':hashlib.sha256(pin_path.read_bytes()).hexdigest(),
+            'unchanged_runtime_images':len(pin['runtime_artifacts']),
+            'artifact_receipts':artifacts,'cases':results}
+
+
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('--build',type=Path,required=True)
     parser.add_argument('--output',type=Path);parser.add_argument('--mode',choices=['pilot','all'],default='all')
+    parser.add_argument('--replay',type=Path,help='Add independent energy audits to a completed source-bound native campaign')
     args=parser.parse_args();require(platform.system()=='Linux','scientific validation belongs on Linux')
     if args.output is None:args.output=Path.cwd()/('cls-epawf-m7-'+str(time.time_ns()))
+    source=Path(__file__).resolve().parents[4]
+    for path,expected in FROZEN.items():
+        require(hashlib.sha256((source/path).read_bytes()).hexdigest()==expected,'frozen original changed: '+path)
     run=Runner(args.build,args.output)
     try:
-        result=campaign(run,args.mode)
+        result=replay(run,args.replay) if args.replay else campaign(run,args.mode)
         receipt={'schema':1,'status':'passed','checks':CHECKS,'mode':args.mode,'results':result,
                  'model_stability':'failed_as_specified','positivity_invariance':'not_guaranteed',
                  'commands':run.commands,'script_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest()}

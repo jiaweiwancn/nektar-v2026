@@ -447,3 +447,63 @@ elimination; their off-constraint algebraic residual extensions differ.
 Equal-input identity does not equate solutions from different upstream histories. The
 original CLS stability and general inner-k positivity failures remain separate
 physical gates, and this short verification does not qualify long terrain flow.
+
+## Accepted-state diagnostics and perturbations (M7)
+
+Set `RANSWallDiagnostics=1` to audit the initial state and every accepted native
+IMEX stage. The default is zero. An invalid audited candidate is rejected
+without clipping; a failure receipt preserves the reason and the last accepted
+states. An initial failure before native history exists has
+`initialization_complete:false` and no accepted states.
+
+Optional `InitialPerturbationInner` and `InitialPerturbationOuter` functions
+add differential velocity/k/outer-epsilon coefficients after the original
+reference/defect is frozen, followed by the declared boundary/trace lifting.
+They do not modify the fixed reference or prescribe another pressure gauge.
+They are included in checkpoint signatures and are not reapplied on restart.
+`initial` retains the original reference; `accepted_states[0]` records the actual
+audited initial state of this run, including a restart or perturbation.
+
+`state_audits` and `audit_times` record the finite evaluation sets. Every sample
+row contains `[count,min_k,min_epsilon,min_covariance_eigenvalue,
+min_yx_stress_tangent,invalid_count]`. A zero placeholder denotes an unevaluated
+quantity, or an empty set (count zero). Inner epsilon/covariance are evaluated
+at inner constitutive source/interface/K samples; outer epsilon is checked
+throughout all outer sample sets. Covariance and the central difference
+`-dR_yx/dU_y,x` are diagnostics, independently of k/epsilon admissibility.
+The tangent step is `1e-5*max(1,abs(U_x,z))`. A covariance sign is not an
+ellipticity test. The reconstruction sets use actual native GLL points and
+`2*p+3` equispaced points per coordinate in every element. Neither finite set
+certifies the minimum of the polynomial everywhere.
+
+Additional entries retain these distinctions:
+
+| Entry | Meaning and order |
+|---|---|
+| `coupled_norms` | Frozen physical dual-mass residual norms, including pressure and constraints; initial residuals need not be stationary. |
+| `strong_continuity` | Inner/outer physical L2 divergence, inner/outer integral divergence, external integrated normal volume flux. |
+| `interface` | Area, integrated pressure jump, RMS normal traction jump, RMS full traction jump, maximum normal traction jump, RMS k diffusive-flux jump, shared integrated normal volume flux, integrated normal traction jump. Pressure means pi; common k makes the physical p/rho jump equal. |
+| `momentum_k_load_and_boundary_reaction` | Constant-test unmasked loads for each Cartesian momentum component and k, followed by the corresponding essential-boundary reactions. Subtract separately recorded anchor integrals to assess free-row balance. |
+| `energy` | Unmasked velocity/constant-k work; stage storage; stress work minus k source; conservative convection work; prescribed/roughness force work; reserved zero; sum of terms; weak-minus-direct difference; stored resolved-plus-k energy; essential-boundary reaction work; anchor work; remaining free-row balance. |
+| `wall_sources` | Physical integrals of baseline EA(r), current EEP(r), signed redistribution, actual production, molecular strain dissipation. The redistribution integral vanishes; the change in the EEP sink generally does not. |
+| `roughness` | Integrated Cartesian force, resolved velocity work, maximum normal force component. Its work is not sign definite. |
+
+Traction and k-flux jumps above use one-sided reconstructed gradients. They
+can be nonzero in a finite CG approximation with converged weak constraints.
+Essential-row reactions supply the conservative weak boundary accounting;
+they must not be silently equated with reconstructed pointwise fluxes.
+Native IMEX storage includes its actual history and physical mass matrix.
+The sampled trapezoidal accounting integrals in the qualification receipt are
+diagnostic integrals, not a replacement stored-energy time discretization.
+
+On Linux, run `validate_cls_epawf_m7.py --build BUILD --output FRESH_RUN_DIR`
+for bounded native perturbations, dt/p/h changes, physical H dependence,
+MPI and perturbed full-history restart, the five-flow stationary control and
+invalid-state controls. Run `validate_cls_epawf_m7_transverse.py --build BUILD
+--output FRESH_RUN_DIR` for the separate three-component linearized
+Fourier/native-CG transverse refinement experiment. Both paths require the
+isolated build and thread environment above, and store generated data outside
+the source checkout. The transverse experiment uses the unchanged compiled
+outer CLS law strictly above the wall layer. Its documented growing mode
+leaves the original stability gate failed. These tests do not implement the
+conditional robust-model changes in M8.
