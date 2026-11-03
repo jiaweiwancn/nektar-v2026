@@ -361,6 +361,8 @@ std::vector<std::pair<std::string,std::string>> Rejections()
     reject("inconsistent_point_denominator",[&](){ EvaluateRANSCappedDestructionPoint(1,1,1,1,.2,.3); });
     auto zero = base; zero.k[0] = 0; RANSCappedDestructionDirection outside; outside.k = {-1,0};
     reject("outward_zero_k_direction",[&](){ RANSCappedDestructionDirectional(zero,outside); });
+    zero=base;zero.preD={0,2};outside={};outside.preD={-1,0};
+    reject("outward_zero_D_direction",[&](){ RANSCappedDestructionDirectional(zero,outside); });
     return result;
 }
 } // namespace

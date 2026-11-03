@@ -272,6 +272,7 @@ RANSCappedDestructionValues RANSCappedDestructionDirectional(const RANSCappedDes
         Require(input.k[i] != 0 || dk >= 0, "Capped-destruction direction leaves the nonnegative k cone");
         const Real weight = input.metricWeights[i], dw = Direction(direction.metricWeights,i);
         const Real D = input.preD[i], dlocalD = Direction(direction.preD,i);
+        Require(D != 0 || dlocalD >= 0, "Capped-destruction direction leaves the nonnegative pre-destruction cone");
         const Real s = static_cast<Real>(input.k[i])/input.sampledK;
         const auto limiter = Limit(s,(dk-s*dK)/input.sampledK,controls);
         dE += dw*input.preE[i]+weight*Direction(direction.preE,i);

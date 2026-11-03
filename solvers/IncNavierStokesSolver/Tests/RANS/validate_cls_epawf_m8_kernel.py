@@ -327,7 +327,7 @@ def main():
         expected_names = {'negative_k', 'zero_K', 'negative_E', 'negative_D', 'zero_weight', 'bad_budget',
                           'bad_shape', 'nonfinite', 'theta_zero', 'theta_one', 'delta_zero', 'delta_one',
                           'negative_beta', 'negative_gamma', 'asymmetric_Sref', 'traceful_Sref',
-                          'inconsistent_point_denominator', 'outward_zero_k_direction'}
+                          'inconsistent_point_denominator', 'outward_zero_k_direction', 'outward_zero_D_direction'}
         audit.require(names == expected_names, 'Missing required invalid-input rejections')
         certificates = mathematical_certificates(report, audit, args.envelopes)
         certificate_path = args.output/'certificates.json'
