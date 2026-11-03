@@ -44,7 +44,7 @@ double Dot(const Vector &a,const Vector &b)
 Vector Multiply(const Matrix &a,const Vector &b){return RANSWallAlgebra::Multiply(a,b);}
 struct Factor
 {
-    int n;Vector entries;std::vector<int> pivots;
+    int n;Vector entries;mutable std::vector<int> pivots;
     explicit Factor(const Matrix &matrix):n(matrix.size()),entries(n*n),pivots(n)
     {
         for(int i=0;i<n;++i)for(int j=0;j<n;++j)entries[i+n*j]=matrix[i][j];

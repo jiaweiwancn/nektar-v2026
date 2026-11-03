@@ -17,6 +17,7 @@ from pathlib import Path
 import numpy as np
 from cls_epawf_m7_cases import perturbation_session
 from validate_cls_epawf_m4 import Runner, spaces, state_difference
+from validate_cls_epawf_m2 import Profiles
 
 CHECKS = 0
 
@@ -91,6 +92,16 @@ def audits(raw, name):
     summary['final_energy']=rows[-1].tolist()
     summary['final_wall_sources']=raw['state_audits'][-1]['wall_sources']
     summary['final_interface']=raw['state_audits'][-1]['interface']
+    if not raw['mapped']:
+        energies=[]
+        reference=np.asarray(raw['fixed_reference'])
+        for state in (raw['accepted_states'][0],raw['accepted_states'][-1]):
+            delta=np.asarray(state)-reference;energy=0.
+            for a in range(dim):
+                v=delta[offsets[a]:offsets[a+1]];energy+=.5*float(v@fields[a].mass()@v)
+            energies.append(energy)
+        summary['velocity_perturbation_energy']=energies
+        summary['velocity_energy_gain']=energies[1]/energies[0] if energies[0]>1e-24 else None
     summary['turnover_time']=raw['parameters'][1]/raw['ustar']
     field=fields[0];z=.5*(raw['parameters'][1]+field.upper[2]);p=[.5*(field.lower[0]+field.upper[0]),0.,z]
     if dim==3:p[1]=.5*(field.lower[1]+field.upper[1])
@@ -155,7 +166,21 @@ def campaign(run, mode):
     for a,b in zip(raws['joint']['state_audits'],parallel['state_audits']):
         for name in a:require(np.allclose(a[name],b[name],rtol=1e-8,atol=1e-8),'MPI diagnostic parity '+name)
     # h/p tests fix H,h,rK,rm. H study is a separately labelled model study.
-    for H in (1.5,2.,2.5):case('height-'+str(H),kind='none',steps=0,height=H)
+    height_study=[]
+    for H in (1.5,2.,2.5):
+        key='height-'+str(H);r=case(key,kind='none',steps=0,height=H)
+        nu,_,h,rK,rm,K,q,kappa=r['parameters']
+        profile=Profiles(dict(geometry=[nu,H,h,rK,rm],k=K,q=q,kappa=kappa,chi=1,metric=[0,0]))
+        require(profile.zv<0,'height reference uses fully turbulent auxiliary branch')
+        zr=float(profile.d/profile.a)
+        formula=H*((H+zr)/zr)**(-kappa/(.2295*math.sqrt(q)))
+        UH=spaces(r)[0].evaluate(r['fixed_reference'],r['offsets'][0],[4.,0.,H])[0]
+        native_z0=H*math.exp(-kappa*UH/r['ustar'])
+        require(abs(native_z0-formula)<1e-10,'M7.matching_height_dependence continuum/native matching')
+        height_study.append(dict(H=H,matching_velocity=UH,roughness_intercept=native_z0,formula=formula))
+    require(abs(height_study[0]['roughness_intercept']-height_study[-1]['roughness_intercept'])>1e-6,
+            'height study must retain model dependence rather than retuning roughness')
+    results['matching_height_study']=height_study
     # A polynomial positive at native GLL/source GL8 abscissae but negative at
     # x=L/2 is rejected at the added reconstruction set, before any timestep.
     directory=run.output/'node-alias-reject';directory.mkdir()
