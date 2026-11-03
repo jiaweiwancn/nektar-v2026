@@ -1,0 +1,456 @@
+{
+  "schema": 1,
+  "scope": "Initial alpha400 solve2.J0 action only, source-bound to h0; no terminal target state/root, history or physical qualification",
+  "target_alpha": 400.0,
+  "auxiliary_alpha": 3200.0,
+  "physical_stage_time": 0.0025,
+  "initial_h0_float64_LE_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca",
+  "native_field_descriptors_sha256": "85e2b9afdc96d7a3cb47ee263e386525852891123ae8520b13682ca6a2a4ce8e",
+  "protected_physics_sha256": "5ef920049be4794360f59acc72ba29b74dfd28c2d791ca0f25fd9e25dfa47f27",
+  "target_initial_guess_binding": {
+    "conclusion": "For the observed failed first auxiliary solve, the native call for400 receives initial h0 by value",
+    "failed_auxiliary_guess_assignment": false,
+    "function_sha256": "c1aebcbdbb7114503dc0097be08c3ee12ed10310ab47320b1577686984b8fb68",
+    "initial_guess": "guess=history=m_state=h0",
+    "last_feasible_candidate_is_diagnostic_only_after_failure": true,
+    "remaining_auxiliary_levels_skipped": true,
+    "scope": "Source-control-flow binding; no directly published target state vector or final history is claimed",
+    "target_alpha": 400.0,
+    "target_time": 0.0025
+  },
+  "actual_log_iteration0": {
+    "3200": {
+      "byte_offset": 391,
+      "printed_residual": "62.5985"
+    },
+    "400": {
+      "byte_offset": 8120,
+      "printed_residual": "62.5985"
+    }
+  },
+  "checks": 72,
+  "mass_change_control_met": true,
+  "target_minus_auxiliary_minus_exact_mass_change": {
+    "blocks": [
+      0.0,
+      0.0,
+      1.3472529138953944e-11,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "gauge": 0.0,
+    "maximum": 1.3472529138953944e-11,
+    "maximum_constraint": 0.0
+  },
+  "target_J_minus_transferred_independent_analytic": {
+    "blocks": [
+      7.15996593112029e-07,
+      5.607262291281462e-09,
+      6.410738244338804e-08,
+      4.859374905274791e-08,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "gauge": 0.0,
+    "maximum": 7.15996593112029e-07,
+    "maximum_constraint": 0.0
+  },
+  "target_support_errors": {
+    "outer_velocity_load_rows": {
+      "blocks": [
+        7.06580251680021e-07,
+        5.607262291281462e-09,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "gauge": 0.0,
+      "maximum": 7.06580251680021e-07,
+      "maximum_constraint": 0.0
+    },
+    "roughness_velocity_load_rows": {
+      "blocks": [
+        1.157274987447134e-07,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "gauge": 0.0,
+      "maximum": 1.157274987447134e-07,
+      "maximum_constraint": 0.0
+    }
+  },
+  "target_initial_k_action_gate_met": false,
+  "original_initial_derivative_gates_passed": false,
+  "original_component_absolute_gate_met": false,
+  "original_failed_gates_preserved": true,
+  "pressure_action_transfer": [
+    {
+      "fixed_1e_minus7_gate_met": true,
+      "kind": "inner_pressure",
+      "retained_independent_analytic_auxiliary_error": {
+        "blocks": [
+          3.74738819830216e-15,
+          1.1765296607234659e-14,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "gauge": 0.0,
+        "maximum": 1.1765296607234659e-14,
+        "maximum_constraint": 0.0
+      },
+      "scope": "Same h0/time and zero pressure mass; exact analytic reference is the bound retained pressure chain, not a new FD endpoint",
+      "target_independent_analytic_error_upper_bound_by_triangle": 1.1765296607234659e-14,
+      "target_minus_auxiliary_action": {
+        "blocks": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "gauge": 0.0,
+        "maximum": 0.0,
+        "maximum_constraint": 0.0
+      }
+    },
+    {
+      "fixed_1e_minus7_gate_met": true,
+      "kind": "outer_pressure",
+      "retained_independent_analytic_auxiliary_error": {
+        "blocks": [
+          3.622277897996533e-15,
+          1.421311780958748e-14,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.6263032587282563e-17,
+          0.0
+        ],
+        "gauge": 1.6263032587282563e-17,
+        "maximum": 1.421311780958748e-14,
+        "maximum_constraint": 0.0
+      },
+      "scope": "Same h0/time and zero pressure mass; exact analytic reference is the bound retained pressure chain, not a new FD endpoint",
+      "target_independent_analytic_error_upper_bound_by_triangle": 1.421311780958748e-14,
+      "target_minus_auxiliary_action": {
+        "blocks": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "gauge": 0.0,
+        "maximum": 0.0,
+        "maximum_constraint": 0.0
+      }
+    },
+    {
+      "fixed_1e_minus7_gate_met": true,
+      "kind": "gauge",
+      "retained_independent_analytic_auxiliary_error": {
+        "blocks": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          2.0396436394279122e-17,
+          3.1131203127712325e-17,
+          0.0,
+          0.0
+        ],
+        "gauge": 0.0,
+        "maximum": 3.1131203127712325e-17,
+        "maximum_constraint": 0.0
+      },
+      "scope": "Same h0/time and zero pressure mass; exact analytic reference is the bound retained pressure chain, not a new FD endpoint",
+      "target_independent_analytic_error_upper_bound_by_triangle": 3.1131203127712325e-17,
+      "target_minus_auxiliary_action": {
+        "blocks": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "gauge": 0.0,
+        "maximum": 0.0,
+        "maximum_constraint": 0.0
+      }
+    },
+    {
+      "fixed_1e_minus7_gate_met": true,
+      "kind": "pressure_and_gauge",
+      "retained_independent_analytic_auxiliary_error": {
+        "blocks": [
+          5.1976752702304e-15,
+          1.8470051735284574e-14,
+          0.0,
+          0.0,
+          2.0396436394279122e-17,
+          3.1131203127712325e-17,
+          2.1684043449710086e-17,
+          0.0
+        ],
+        "gauge": 2.1684043449710086e-17,
+        "maximum": 1.8470051735284574e-14,
+        "maximum_constraint": 0.0
+      },
+      "scope": "Same h0/time and zero pressure mass; exact analytic reference is the bound retained pressure chain, not a new FD endpoint",
+      "target_independent_analytic_error_upper_bound_by_triangle": 1.8470051735284574e-14,
+      "target_minus_auxiliary_action": {
+        "blocks": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "gauge": 0.0,
+        "maximum": 0.0,
+        "maximum_constraint": 0.0
+      }
+    }
+  ],
+  "dense_matrix_files": {
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-linear-matchedr2/case.feasible.jsonl.solve1.J0.bin": {
+      "byteorder": "little",
+      "bytes": 37497800,
+      "dtype": "float64",
+      "retention": "Dense matrix stays in the authoritative Linux run directory",
+      "sha256": "469e86042f7c0d9e0291b0fa7f16011e3c7cfab53a714246778358a804128dee",
+      "shape": [
+        2165,
+        2165
+      ]
+    },
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-linear-matchedr2/case.feasible.jsonl.solve2.J0.bin": {
+      "byteorder": "little",
+      "bytes": 37497800,
+      "dtype": "float64",
+      "retention": "Dense matrix stays in the authoritative Linux run directory",
+      "sha256": "ae6e804b43d90be64ce77c3e44dd532970d35f7a37c449984cb28e6bfaf127e6",
+      "shape": [
+        2165,
+        2165
+      ]
+    }
+  },
+  "fixed_absolute_action_tolerance": 1e-07,
+  "fresh_residual_endpoints": 0,
+  "no_rigorous_floating_point_error_proof": true,
+  "rigorous_derivative_defect_proven": false,
+  "nonlinear_terminal_cause_assessed": false,
+  "target_stage_status_assessed": false,
+  "final_native_history_slots_assessed": false,
+  "coupled_retry_requested": false,
+  "physical_trajectory_qualification": false,
+  "M8_closed": false,
+  "milestone": "M8-R2 actual original-target initial action check",
+  "method": "Metadata/result-field selection only; no scientific/native calls",
+  "curator": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-019/source/docs/plans/cls-epawf-revised-evidence/m8-r2/curate-target-action.py",
+    "bytes": 2674,
+    "sha256": "f09562c91b7ac58eba8bf86af8ceaa46589af179115a4af64a825324aa8f0cce"
+  },
+  "authoritative_evidence": [
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/target-initial-jacobian-001/receipt.json",
+      "bytes": 37490,
+      "sha256": "a33961cfc448cb8cd99059644a3ffbcf8d2550a5129bfd0e082936ddec236b4a"
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/target-initial-jacobian-001/validation.json",
+      "bytes": 158084,
+      "sha256": "29396c6623849f0257869e77624eafb6cae6637ab9c36f0709c1e90b98522d76"
+    }
+  ],
+  "producing_source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+  "producing_solver": {
+    "bytes": 5226816,
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/build/IncNavierStokesSolver",
+    "sha256": "a90a196fe554d591fa39c6556166bf58ad43afa787b6b8e8d3d5cbf3355a5668"
+  },
+  "producing_runtime_sections": {
+    "python_packages": "b731cac586c07ea233813c735659e5c5093cd20bc178bd95552a87ab7384e44f",
+    "runtime_artifacts": "5550a806cec861e12cc7e26e2bd650a4710419e065af5d0c0c9840c470455baf",
+    "runtime_bindings": "6bc73e934e1403b605450707b62147bb9bd9659aecb16a0fb915d739b963e937",
+    "runtime_environment": "88310c925550f38d37f9ac4904fcffd68fc53c0a83dc0ffceb369b855a2e833e",
+    "source_inputs": "6c301cfd9f88527e85c486e7bf70fe296b4306895cf928b42befa064a4097e49",
+    "tool_images": "b8cc10e2605ae200c5f5a1949009f0c663e216f05c2203310d938036adecf1e7"
+  },
+  "analysis_source_commit": "8d03c9a84e2dc1de118a327c1e17a2e93a8b4766",
+  "numerical_threads": {
+    "BLIS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "cpu_affinity": [
+    49
+  ],
+  "native_calls": 0,
+  "exact_affine_continuity_columns": {
+    "checked_as_coupled": true,
+    "dimensionless_column_scale": "us, K0, E0, us^2, us/H by variable block",
+    "fixed_1e_minus7_gate_met": true,
+    "interpretation": "The independent B/mean block is exact. Any native FD continuity-row discrepancy is retained, not replaced or called analytic.",
+    "maximum_absolute_physical_error": 1.1828409075072567e-11,
+    "maximum_velocity_column_error": 1.1828409075072567e-11,
+    "native_rows_are_finite_differences_for_nonpressure_columns": true,
+    "worst_columns": [
+      {
+        "column": 30,
+        "externally_fixed_velocity": false,
+        "input_scale": 0.4,
+        "physical_block_errors": [
+          1.1828409075072567e-11,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "column": 34,
+        "externally_fixed_velocity": false,
+        "input_scale": 0.4,
+        "physical_block_errors": [
+          1.103866386847425e-11,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "column": 32,
+        "externally_fixed_velocity": false,
+        "input_scale": 0.4,
+        "physical_block_errors": [
+          9.260173486320178e-12,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "column": 33,
+        "externally_fixed_velocity": false,
+        "input_scale": 0.4,
+        "physical_block_errors": [
+          9.01307189571394e-12,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "column": 60,
+        "externally_fixed_velocity": false,
+        "input_scale": 0.4,
+        "physical_block_errors": [
+          0.0,
+          5.685843483636656e-12,
+          0.0
+        ]
+      },
+      {
+        "column": 64,
+        "externally_fixed_velocity": false,
+        "input_scale": 0.4,
+        "physical_block_errors": [
+          0.0,
+          5.306279677275282e-12,
+          0.0
+        ]
+      },
+      {
+        "column": 66,
+        "externally_fixed_velocity": false,
+        "input_scale": 0.4,
+        "physical_block_errors": [
+          0.0,
+          5.103813987738074e-12,
+          0.0
+        ]
+      },
+      {
+        "column": 70,
+        "externally_fixed_velocity": false,
+        "input_scale": 0.4,
+        "physical_block_errors": [
+          0.0,
+          4.763159439073048e-12,
+          0.0
+        ]
+      },
+      {
+        "column": 62,
+        "externally_fixed_velocity": false,
+        "input_scale": 0.4,
+        "physical_block_errors": [
+          0.0,
+          4.45133023513034e-12,
+          0.0
+        ]
+      },
+      {
+        "column": 63,
+        "externally_fixed_velocity": false,
+        "input_scale": 0.4,
+        "physical_block_errors": [
+          0.0,
+          4.332503724982757e-12,
+          0.0
+        ]
+      },
+      {
+        "column": 68,
+        "externally_fixed_velocity": false,
+        "input_scale": 0.4,
+        "physical_block_errors": [
+          0.0,
+          3.995687052675417e-12,
+          0.0
+        ]
+      },
+      {
+        "column": 69,
+        "externally_fixed_velocity": false,
+        "input_scale": 0.4,
+        "physical_block_errors": [
+          0.0,
+          3.889190689097121e-12,
+          0.0
+        ]
+      }
+    ]
+  }
+}

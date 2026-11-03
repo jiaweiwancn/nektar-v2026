@@ -126,3 +126,34 @@ The authoritative files remain in `epoch-002/target-initial-jacobian-001`:
   `29396c6623849f0257869e77624eafb6cae6637ab9c36f0709c1e90b98522d76`.
 - `receipt.json`: 37,490 bytes, SHA-256
   `a33961cfc448cb8cd99059644a3ffbcf8d2550a5129bfd0e082936ddec236b4a`.
+
+The [compact target summary](target-initial-action-result.json) preserves the
+separate original failed gate, exact-mass control and source bindings.
+
+## Saturated-law initial action check
+
+An independent check of the actual SaturatedR2 first auxiliary J0 also fails
+the unchanged absolute finite-difference gate. At dimensionless steps
+`2e-5,2e-6,5e-7`, the physical errors are respectively
+`7.355284949626847e-7`, `7.863197695639377e-7` and
+`1.643069826097945e-6`. Reported source-limiter, saturation, outer-max and
+Yap branch signatures are unchanged along those directions. The k direction
+does not resolve an invariant tie by altering G. Its physical-norm relative
+errors are small, but they do not replace the fixed absolute gate. The
+subtraction-scale estimates are proxies, not rigorous error bounds. This
+check is not a new analytic component diagnosis of the saturated operator.
+
+Pressure/gauge errors remain at most `1.8470051735284574e-14`; continuity
+column errors are `1.1828409075072567e-11`. The analysis completed 9,724 checks
+on Linux CPU49 with six one-thread settings, using clean analysis source
+`9e128f73e53ee6e3ff7c351e72b5b4557cbf20ca` and the unchanged 9f20 producer.
+It uses no completed nonlinear path and makes no target-root claim.
+The authoritative files are in `epoch-002/initial-jacobian-saturated-001`:
+
+- `validation.json`: 1,332,004 bytes, SHA-256
+  `5f5df2c4254e5a305880d8a61cefe38db21462da8aacaf8daa86c136286268ab`.
+- `receipt.json`: SHA-256
+  `7324ac48648ad13a344dee2b69cff09193e7d7209c163089048b745d5eb0db33`.
+
+The retained matrix SHA-256 is
+`2f38db8f04f92b4bdb4be0041165e95c00c4ac4b6b0f84d2badea17916999577`.
