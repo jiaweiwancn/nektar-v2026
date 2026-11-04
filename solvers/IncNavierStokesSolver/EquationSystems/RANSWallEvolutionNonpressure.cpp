@@ -362,7 +362,7 @@ struct Loads
 
 RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3(
     const Vector &state,double time,const RANSWallEvolutionData &data,bool imposeConstraints,
-    int region,std::vector<std::string> *metadata) const
+    int region,std::vector<std::string> *metadata,const std::vector<int> *freeK) const
 {
     const auto started=Clock::now();
     Require(m_dimension==2 && !Mapped() && m_transitionEnabled && m_cappedDestruction && Size()<=3000,
@@ -371,13 +371,27 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3
     Require(state.size()==static_cast<std::size_t>(Size()) && region>=-1 && region<=1,
         "invalid R3 nonpressure state/region");
     const auto constraintStarted=Clock::now();
-    const auto constraints=Constraints(state,time,data);const auto s=ExternalLift(state,time,data);
+    const auto constraints=imposeConstraints?Constraints(state,time,data):std::map<int,double>{};
+    const auto s=ExternalLift(state,time,data);
     const double constraintSeconds=std::chrono::duration<double>(Clock::now()-constraintStarted).count();
-    std::vector<std::vector<long double>> jac(Size(),std::vector<long double>(DifferentialSize()));
+    const bool kOnly=freeK!=nullptr;
+    const int rows=kOnly?freeK->size():Size(),columns=kOnly?rows:DifferentialSize();
+    std::vector<int> kIndex(DifferentialSize(),-1);
+    if(kOnly)for(int i=0;i<rows;++i)kIndex.at((*freeK)[i])=i;
+    std::vector<std::vector<long double>> jac(rows,std::vector<long double>(columns));
     std::size_t localKernels=0,volumePoints=0,movingPoints=0,normalizations=0,profileCount=0,traceSamples=0;
     std::string outerBranches,yapBranches;
     auto scatter=[&](const Loads &load,int column,long double factor=1)
-    {if(column<DifferentialSize() && factor!=0)for(auto [row,value]:load.value)jac[row][column]+=factor*value;};
+    {
+        if(column>=DifferentialSize() || factor==0)return;
+        const int c=kOnly?kIndex[column]:column;
+        if(c<0)return;
+        for(auto [row,value]:load.value)
+        {
+            const int r=kOnly?kIndex.at(row):row;
+            if(r>=0)jac[r][c]+=factor*value;
+        }
+    };
     auto rank=[&](const Loads &load,const Sparse &row)
     {for(auto [column,value]:row)scatter(load,column,value);};
     auto basis=[&](int block,const Coordinate &p,int side=0,bool hessian=false)
@@ -393,7 +407,7 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3
         const auto v=basis(0,H,1),k=basis(K(),H,1);RANSVector u{};RANSTensor G{};
         for(int a=0;a<m_dimension;++a){u[PhysicalAxis(a)]=v.row.Value(s,offset[a]);G[PhysicalAxis(a)]=v.row.Gradient(s,offset[a]);}
         for(std::size_t j=0;j<k.row.ids.size();++j)f.dpressure[0][offset[K()]+k.row.ids[j]]-=2*k.gradient[0][j]/3;
-        for(int component=0;component<m_dimension;++component)for(std::size_t j=0;j<v.row.ids.size();++j)
+        if(!kOnly)for(int component=0;component<m_dimension;++component)for(std::size_t j=0;j<v.row.ids.size();++j)
         {
             // Flat tangent force is (u_x d_x)u_x+u_x div_Gamma u.
             // In2D the tangent projector has only x; wall-normal velocity is
@@ -430,7 +444,7 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3
         physical.pressureReference=reference[0];physical.convectionReference=reference[1];
         struct PhysicalDirection {AWFTransitionPhysicalInput input;};
         std::map<int,PhysicalDirection> directions;
-        for(int j=0;j<m_dimension;++j)
+        if(!kOnly)for(int j=0;j<m_dimension;++j)
         {
             const int axis=PhysicalAxis(j);
             for(std::size_t i=0;i<vh.row.ids.size();++i)directions[offset[j]+vh.row.ids[i]].input.matchingVelocity[axis]+=vh.value[i];
@@ -439,7 +453,7 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3
         }
         for(std::size_t i=0;i<ka.row.ids.size();++i)directions[offset[K()]+ka.row.ids[i]].input.kA+=ka.value[i];
         for(std::size_t i=0;i<ks.row.ids.size();++i)directions[offset[K()]+ks.row.ids[i]].input.sampledK+=ks.value[i];
-        for(std::size_t i=0;i<ea.row.ids.size();++i)directions[offset[Epsilon()]+ea.row.ids[i]].input.epsilonA+=ea.value[i];
+        if(!kOnly)for(std::size_t i=0;i<ea.row.ids.size();++i)directions[offset[Epsilon()]+ea.row.ids[i]].input.epsilonA+=ea.value[i];
         for(int axis=0;axis<3;++axis)
         {
             for(auto [column,value]:f.dpressure[axis])directions[column].input.pressure[axis]+=static_cast<double>(value);
@@ -569,7 +583,7 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3
                     (d.k/K0-q.k*d.sampledK/(K0*K0)))/m;
                 const double sk=production-destruction;
                 Loads load;
-                for(int component=0;component<2;++component)
+                if(!kOnly)for(int component=0;component<2;++component)
                 {
                     const int a=PhysicalAxis(component);RANSVector flux{},change{};
                     for(int b=0;b<3;++b)
@@ -585,10 +599,10 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3
                 }
                 load.Add(offset[K()],q.v,-q.sk,kflux,-sk,dkflux,q.weight,d.radius,d.weight);
                 const double div=q.G[0][0]+q.G[2][2],ddiv=d.G[0][0]+d.G[2][2];
-                load.Add(offset[InnerPressure()],q.p,div,{},ddiv,{},q.weight,d.radius,d.weight);
+                if(!kOnly)load.Add(offset[InnerPressure()],q.p,div,{},ddiv,{},q.weight,d.radius,d.weight);
                 return load;
             };
-            for(int component=0;component<2;++component)for(std::size_t j=0;j<q.v.row.ids.size();++j)
+            if(!kOnly)for(int component=0;component<2;++component)for(std::size_t j=0;j<q.v.row.ids.size();++j)
             {
                 Variation d;const int a=PhysicalAxis(component);d.u[a]=q.v.value[j];
                 for(int b=0;b<3;++b)d.G[a][b]=q.v.gradient[b][j];
@@ -612,7 +626,7 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3
             for(std::size_t j=0;j<q.v.row.ids.size();++j)
             {
                 normalizationAction.value[offset[K()]+q.v.row.ids[j]]-=static_cast<long double>(q.weight)*q.v.row.phi[j]*source.destruction/m;
-                if(n.radius<=m_parameters.geometry.roughness)for(int component=0;component<2;++component)
+                if(!kOnly && n.radius<=m_parameters.geometry.roughness)for(int component=0;component<2;++component)
                     forceAction[PhysicalAxis(component)].value[offset[component]+q.v.row.ids[j]]-=static_cast<long double>(q.weight)*q.v.row.phi[j];
             }
         }
@@ -623,7 +637,7 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3
     if(region!=0)for(const auto &native:m_outer)
     {
         ++volumePoints;auto q=stateAt(native.v,native.p,&native.e,native.weight,false);
-        Require(data.outerKSource(q.v.row.coordinate,time)==0 && data.outerEpsilonSource(q.v.row.coordinate,time)==0,
+        Require(data.outerKSource(q.v.row.coordinate,time)==0 && (kOnly || data.outerEpsilonSource(q.v.row.coordinate,time)==0),
             "R3 analytic outer action requires the declared unforced scalar sources");
         const auto closure=OuterClosure(q.k,q.epsilon,q.G,q.v.row.coordinate);
         q.dk=closure.kDiffusion;q.de=closure.epsilonDiffusion;q.sk=closure.kSource;q.se=closure.epsilonSource;
@@ -645,8 +659,8 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3
             (static_cast<long double>(m_parameters.model.Parameters().yapLength*q.epsilon)*r);
         yapBranches.push_back(cls && lengthRatio>1?'A':'I');
         partial[0]=OuterDerivative(q.k,q.epsilon,q.G,r,1,0,zero,m_parameters.model.Parameters(),cls,strain,variant);
-        partial[1]=OuterDerivative(q.k,q.epsilon,q.G,r,0,1,zero,m_parameters.model.Parameters(),cls,strain,variant);
-        for(int component=0;component<2;++component)for(int axis=0;axis<2;++axis)
+        if(!kOnly)partial[1]=OuterDerivative(q.k,q.epsilon,q.G,r,0,1,zero,m_parameters.model.Parameters(),cls,strain,variant);
+        if(!kOnly)for(int component=0;component<2;++component)for(int axis=0;axis<2;++axis)
         {
             auto h=zero;h[PhysicalAxis(component)][PhysicalAxis(axis)]=1;
             partial[2+2*component+axis]=OuterDerivative(q.k,q.epsilon,q.G,r,0,0,h,m_parameters.model.Parameters(),cls,strain,variant);
@@ -665,7 +679,7 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3
                 for(int a=0;a<3;++a)for(int b=0;b<3;++b)stress[a][b]+=action.stress[a][b]*factor;
             }
             Loads load;
-            for(int component=0;component<2;++component)
+            if(!kOnly)for(int component=0;component<2;++component)
             {
                 const int a=PhysicalAxis(component);RANSVector flux{},change{};
                 for(int b=0;b<3;++b)
@@ -681,11 +695,14 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3
                 deflux[a]=q.de*d.ge[a]+nt/m_parameters.model.Parameters().sigmaEpsilon*q.ge[a]-d.u[a]*q.epsilon-q.u[a]*d.epsilon;
             }
             load.Add(offset[K()],q.v,-q.sk,kflux,-sk,dkflux,q.weight,0,0);
-            load.Add(offset[Epsilon()],q.e,-q.se,eflux,-se,deflux,q.weight,0,0);
-            load.Add(offset[OuterPressure()],q.p,q.G[0][0]+q.G[2][2],{},d.G[0][0]+d.G[2][2],{},q.weight,0,0);
+            if(!kOnly)
+            {
+                load.Add(offset[Epsilon()],q.e,-q.se,eflux,-se,deflux,q.weight,0,0);
+                load.Add(offset[OuterPressure()],q.p,q.G[0][0]+q.G[2][2],{},d.G[0][0]+d.G[2][2],{},q.weight,0,0);
+            }
             return load;
         };
-        for(int component=0;component<2;++component)for(std::size_t j=0;j<q.v.row.ids.size();++j)
+        if(!kOnly)for(int component=0;component<2;++component)for(std::size_t j=0;j<q.v.row.ids.size();++j)
         {
             Variation d;const int a=PhysicalAxis(component);d.u[a]=q.v.value[j];for(int b=0;b<3;++b)d.G[a][b]=q.v.gradient[b][j];
             scatter(evaluate(d),offset[component]+q.v.row.ids[j]);
@@ -695,7 +712,7 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3
             Variation d;d.k=q.v.value[j];for(int b=0;b<3;++b)d.gk[b]=q.v.gradient[b][j];
             scatter(evaluate(d),offset[K()]+q.v.row.ids[j]);
         }
-        for(std::size_t j=0;j<q.e.row.ids.size();++j)
+        if(!kOnly)for(std::size_t j=0;j<q.e.row.ids.size();++j)
         {
             Variation d;d.epsilon=q.e.value[j];for(int b=0;b<3;++b)d.ge[b]=q.e.gradient[b][j];
             scatter(evaluate(d),offset[Epsilon()]+q.e.row.ids[j]);
@@ -704,6 +721,16 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3
 
     // External lifting has a fixed derivative. The Upstream matching trace
     // stays an independent unknown in all physical volume equations.
+    if(kOnly)
+    {
+        WallMatrix result(rows,Vector(columns));
+        for(int row=0;row<rows;++row)for(int column=0;column<columns;++column)
+        {
+            result[row][column]=static_cast<double>(jac[row][column]);
+            Require(std::isfinite(result[row][column]),"nonfinite restricted k coefficient");
+        }
+        return result;
+    }
     const auto external=ExternalConstraints(time,data);
     for(auto [column,value]:external)
     {
@@ -789,6 +816,17 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3
         }
         profiles<<"]}";metadata->push_back(profiles.str());
     }
+    return result;
+}
+
+RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::PicardKJacobian(
+    const Vector &state,double alpha,double time,const RANSWallEvolutionData &data,
+    const std::vector<int> &rows) const
+{
+    auto result=AssembleNonpressureR3(state,time,data,false,-1,nullptr,&rows);
+    const int start=offset[K()];
+    for(int i=0;i<rows.size();++i)for(int j=0;j<rows.size();++j)
+        result[i][j]+=alpha*m_mass[K()][rows[i]-start][rows[j]-start];
     return result;
 }
 

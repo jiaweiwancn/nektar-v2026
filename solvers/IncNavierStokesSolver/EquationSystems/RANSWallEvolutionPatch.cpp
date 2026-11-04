@@ -248,6 +248,13 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         session->LoadSolverInfo("RANSWallPicardGroundProjection",projection,"Off");
         Require(projection=="On" || projection=="Off","RANSWallPicardGroundProjection must be On or Off");
         m_picardGroundProjection=projection=="On";
+        std::string kNewton;
+        session->LoadSolverInfo("RANSWallPicardKNewton",kNewton,"Off");
+        Require(kNewton=="On" || kNewton=="Off","RANSWallPicardKNewton must be On or Off");
+        m_picardKNewton=kNewton=="On";
+        Require(!m_picardKNewton || m_picardGroundProjection,"Picard k Newton requires the ground projector");
+        session->LoadSolverInfo("RANSWallPicardGuessFile",m_picardGuessFile,"");
+        session->LoadSolverInfo("RANSWallPicardKDiagnostic",m_picardKDiagnostic,"");
     }
     session->LoadParameter("RANSWallOwnershipShift",m_ownershipShift,0);Require(m_ownershipShift>=0,"negative ownership shift");
     auto full=MemoryManager<MultiRegions::ExpList>::AllocateSharedPtr(session,graph,true,"u");

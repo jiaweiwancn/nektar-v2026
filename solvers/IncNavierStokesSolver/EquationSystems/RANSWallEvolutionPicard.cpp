@@ -6,8 +6,10 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
 #include <algorithm>
+#include <boost/property_tree/json_parser.hpp>
 #include <chrono>
 #include <cmath>
+#include <fstream>
 #include <iostream>
 #include <numeric>
 
@@ -18,6 +20,40 @@ using RANSWallAlgebra::Maximum;
 using RANSWallAlgebra::Multiply;
 using RANSWallAlgebra::Require;
 namespace J = RANSWallSolveJson;
+
+namespace
+{
+template <class Factor>
+double DualNorm(const Factor &mass, const RANSWallAlgebra::Vector &load)
+{
+    const auto dual = mass.Apply(load);
+    return std::sqrt(std::max(
+        0., std::inner_product(load.begin(), load.end(), dual.begin(), 0.)));
+}
+} // namespace
+
+RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::PicardKMass(
+    const std::vector<int> &rows) const
+{
+    const int first = offset[K()];
+    WallMatrix mass(rows.size(), Vector(rows.size()));
+    for (int i = 0; i < rows.size(); ++i)
+        for (int j = 0; j < rows.size(); ++j)
+            mass[i][j] = m_mass[K()][rows[i] - first][rows[j] - first];
+    return mass;
+}
+
+RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::PicardKResidual(
+    const Vector &state, const Vector &history, double alpha, double time,
+    const RANSWallEvolutionData &data, const std::vector<int> &rows) const
+{
+    const auto residual = Residual(state, history, alpha, time, data);
+    Vector result;
+    result.reserve(rows.size());
+    for (int row : rows)
+        result.push_back(residual[row]);
+    return result;
+}
 
 RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
     int block, const Vector &s, const Vector &history, double alpha,
@@ -287,7 +323,8 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
 
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::ProjectPicardGround(
     const Vector &state, const PicardBlock &block, const Factor &factor,
-    const Vector &step, double relaxation, int &cuts) const
+    const Vector &step, double relaxation, int &cuts,
+    std::string *diagnostic) const
 {
     // Project the proposed k increment in the frozen mass-dual residual
     // norm. The metric inverse is A^-1 M A^-T on the free k coefficients.
@@ -307,6 +344,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::ProjectPicardGround(
         entry *= relaxation;
     Vector direction = proposed;
     std::vector<Cut> active;
+    Vector multiplier;
     auto dot = [](const Vector &a, const Vector &b) {
         return std::inner_product(a.begin(), a.end(), b.begin(), 0.);
     };
@@ -321,7 +359,46 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::ProjectPicardGround(
                 return a.value - a.error < b.value - b.error;
             });
         if (worst->value >= worst->error)
+        {
+            if (diagnostic)
+            {
+                Vector change(n), dualRows(n);
+                for (int i = 0; i < n; ++i)
+                    change[i] = direction[i] - proposed[i];
+                const auto dual = Factor(PicardKMass(block.rows))
+                                      .Apply(Multiply(block.matrix, change));
+                std::vector<std::string> constraints;
+                double complementarity = 0., primal = 0.;
+                for (int i = 0; i < active.size(); ++i)
+                {
+                    const auto &c    = active[i];
+                    const double gap = dot(c.row, direction) - c.target;
+                    primal           = std::max(primal, std::max(0., -gap));
+                    complementarity  = std::max(complementarity,
+                                                std::abs(gap * multiplier[i]));
+                    for (int j = 0; j < n; ++j)
+                        dualRows[j] -= multiplier[i] * c.row[j];
+                    constraints.push_back(
+                        J::Object({{"x", J::Number(c.x)},
+                                   {"geometry", J::Number(c.geometry)},
+                                   {"row", J::Numbers(c.row)},
+                                   {"target", J::Number(c.target)},
+                                   {"multiplier", J::Number(multiplier[i])},
+                                   {"gap", J::Number(gap)}}));
+                }
+                for (int i = 0; i < n; ++i)
+                    for (int j = 0; j < n; ++j)
+                        dualRows[i] += block.matrix[j][i] * dual[j];
+                *diagnostic =
+                    J::Object({{"active", J::List(constraints)},
+                               {"primal_defect", J::Number(primal)},
+                               {"complementarity", J::Number(complementarity)},
+                               {"stationarity", J::Number(Maximum(dualRows))},
+                               {"ground_margin",
+                                J::Number(worst->value - worst->error)}});
+            }
             return direction;
+        }
         const auto &point = worst->row;
         if (cuts == 20 ||
             std::any_of(active.begin(), active.end(), [&](const Cut &c) {
@@ -372,7 +449,6 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::ProjectPicardGround(
                 for (int j = 0; j < count; ++j)
                     gram[i][j] = dot(active[i].row, active[j].inverse);
             }
-            Vector multiplier;
             try
             {
                 multiplier = Factor(gram).Apply(rhs);
@@ -400,6 +476,225 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::ProjectPicardGround(
     return {};
 }
 
+void RANSWallEvolutionPatch::DiagnosePicardK(
+    const Vector &state, const Vector &history, double alpha, double time,
+    const RANSWallEvolutionData &data,
+    const std::map<int, double> &external) const
+{
+    Require(!std::ifstream(m_picardKDiagnostic).good(),
+            "refusing to overwrite Picard k diagnostic");
+    auto frozen =
+        AssemblePicardBlock(K(), state, history, alpha, time, data, external);
+    frozen.residual =
+        PicardKResidual(state, history, alpha, time, data, frozen.rows);
+    auto exact      = frozen;
+    exact.matrix    = PicardKJacobian(state, alpha, time, data, frozen.rows);
+    const auto mass = PicardKMass(frozen.rows);
+    const Factor metric(mass);
+    const double scale = m_parameters.model.Q() * std::pow(m_robustUstar, 3) /
+                         m_parameters.geometry.height *
+                         std::sqrt(m_volumes[K()]);
+    auto norm  = [&](const Vector &r) { return DualNorm(metric, r) / scale; };
+    auto trial = [&](const Vector &step, double fraction) {
+        auto result = state;
+        for (int i = 0; i < frozen.rows.size(); ++i)
+            result[frozen.rows[i]] += fraction * step[i];
+        return result;
+    };
+    auto extrema = [&](const Vector &q) {
+        std::vector<std::string> observations;
+        for (const auto &point : WallTraceR4(q))
+            observations.push_back(
+                J::Object({{"x", J::Number(point.row.coordinate[0])},
+                           {"geometry", J::Number(point.row.geometry)},
+                           {"value", J::Number(point.value)},
+                           {"error", J::Number(point.error)}}));
+        return J::List(observations);
+    };
+    const auto base = ScalarDomain(state, time, data);
+    auto evaluate   = [&](const Vector &q, ScalarDomainResult &domain) {
+        bool ground = false;
+        WallTraceJSON(q, ground);
+        if (!ground)
+            return Vector{};
+        domain = ScalarDomain(q, time, data);
+        return domain.admissible
+                     ? PicardKResidual(q, history, alpha, time, data, frozen.rows)
+                     : Vector{};
+    };
+    auto dot = [](const Vector &a, const Vector &b) {
+        return std::inner_product(a.begin(), a.end(), b.begin(), 0.);
+    };
+    const auto contacts = WallTraceR4(state);
+    std::vector<Vector> active;
+    Vector inward(frozen.rows.size()), sampled(inward.size()),
+        normalization(inward.size());
+    for (const auto &point : contacts)
+    {
+        if (point.value > 1e-7)
+            continue;
+        Vector row(inward.size());
+        for (int i = 0; i < point.row.ids.size(); ++i)
+        {
+            const auto id = offset[K()] + point.row.ids[i];
+            const auto col =
+                std::lower_bound(frozen.rows.begin(), frozen.rows.end(), id);
+            if (col != frozen.rows.end() && *col == id)
+                row[col - frozen.rows.begin()] = point.row.phi[i];
+        }
+        if (Maximum(row) == 0.)
+            continue;
+        for (int i = 0; i < row.size(); ++i)
+            inward[i] += row[i] / dot(row, row);
+        active.push_back(std::move(row));
+    }
+    auto shape = [&](double z, Vector &direction) {
+        const auto point = Point(K(), {1.57, 0., z});
+        for (int j = 0; j < point.ids.size(); ++j)
+        {
+            const auto id = offset[K()] + point.ids[j];
+            const auto col =
+                std::lower_bound(frozen.rows.begin(), frozen.rows.end(), id);
+            if (col != frozen.rows.end() && *col == id)
+                direction[col - frozen.rows.begin()] = point.phi[j];
+        }
+    };
+    if (active.empty())
+        shape(0., inward);
+    shape(m_parameters.geometry.sampleHeight, sampled);
+    shape(.04, normalization);
+    std::vector<std::pair<std::string, Vector>> directions{
+        {"ground_inward", inward},
+        {"sampled_K", sampled},
+        {"normalization_ray", normalization}};
+    for (int i = 1; i <= 3; ++i)
+    {
+        Vector tangent(inward.size());
+        for (int j = 0; j < tangent.size(); ++j)
+            tangent[j] = std::sin((.31 + i * .67) * frozen.rows[j]);
+        for (int pass = 0; pass < 3; ++pass)
+            for (const auto &row : active)
+            {
+                const double component = dot(tangent, row) / dot(row, row);
+                for (int j = 0; j < tangent.size(); ++j)
+                    tangent[j] -= component * row[j];
+            }
+        for (int j = 0; j < tangent.size(); ++j)
+            tangent[j] += .01 * inward[j];
+        directions.emplace_back("near_tangent_" + std::to_string(i),
+                                std::move(tangent));
+    }
+    std::vector<std::string> actions;
+    for (auto &[name, direction] : directions)
+    {
+        const double amplitude = Maximum(direction);
+        Require(amplitude > 0., "empty conditional k verification direction");
+        for (auto &entry : direction)
+            entry /= amplitude;
+        const auto action = Multiply(exact.matrix, direction);
+        auto difference   = Multiply(frozen.matrix, direction);
+        for (int j = 0; j < difference.size(); ++j)
+            difference[j] -= action[j];
+        std::vector<std::string> samples;
+        double best = 1e300;
+        for (double h : {1e-4, 1e-5, 1e-6, 1e-7, 1e-8})
+        {
+            ScalarDomainResult plusDomain, minusDomain;
+            const auto plus  = evaluate(trial(direction, h), plusDomain);
+            const auto minus = evaluate(trial(direction, -h), minusDomain);
+            if (plus.empty() && minus.empty())
+                continue;
+            const auto &lo     = minus.empty() ? frozen.residual : minus;
+            const auto &hi     = plus.empty() ? frozen.residual : plus;
+            const double width = !plus.empty() && !minus.empty() ? 2 * h : h;
+            Vector error(direction.size());
+            for (int j = 0; j < error.size(); ++j)
+                error[j] = (hi[j] - lo[j]) / width - action[j];
+            const double relative = norm(error) / std::max(1., norm(action));
+            best                  = std::min(best, relative);
+            const auto &observed  = plus.empty() ? minusDomain : plusDomain;
+            samples.push_back(J::Object(
+                {{"h", J::Number(h)},
+                 {"scheme", J::Quote(width == 2 * h ? "central"
+                                     : plus.empty() ? "backward"
+                                                    : "forward")},
+                 {"relative_error", J::Number(relative)},
+                 {"b_change", J::Number(observed.minimumB - base.minimumB)},
+                 {"sampled_minimum_change",
+                  J::Number(observed.minimumSampledK - base.minimumSampledK)},
+                 {"profile_branch_change",
+                  J::Boolean(observed.profileBranches !=
+                             base.profileBranches)}}));
+        }
+        actions.push_back(
+            J::Object({{"name", J::Quote(name)},
+                       {"direction", J::Numbers(direction)},
+                       {"action_norm", J::Number(norm(action))},
+                       {"frozen_difference", J::Number(norm(difference))},
+                       {"best_relative_error", J::Number(best)},
+                       {"samples", J::List(samples)}}));
+    }
+    auto projection = [&](const PicardBlock &block) {
+        const Factor factor(block.matrix);
+        auto rhs = block.residual;
+        for (auto &entry : rhs)
+            entry = -entry;
+        const auto raw       = factor.Apply(rhs);
+        int cuts             = 0;
+        std::string kkt      = "null";
+        const auto projected = ProjectPicardGround(
+            state, block, factor, raw, m_picardRelaxation[1], cuts, &kkt);
+        std::vector<std::string> samples;
+        if (!projected.empty())
+        {
+            const auto change = Multiply(block.matrix, projected);
+            for (double fraction : {1., .125, .015625})
+            {
+                ScalarDomainResult domain;
+                const auto actual =
+                    evaluate(trial(projected, fraction), domain);
+                auto predicted = block.residual;
+                for (int i = 0; i < predicted.size(); ++i)
+                    predicted[i] += fraction * change[i];
+                samples.push_back(J::Object(
+                    {{"fraction", J::Number(fraction)},
+                     {"predicted_k_norm", J::Number(norm(predicted))},
+                     {"actual_k_norm",
+                      actual.empty() ? "null" : J::Number(norm(actual))}}));
+            }
+        }
+        return J::Object({{"unprojected", J::Numbers(raw)},
+                          {"affine_ground_extrema", extrema(trial(raw, 1.))},
+                          {"projected", J::Numbers(projected)},
+                          {"cuts", J::Number(cuts)},
+                          {"kkt", kkt},
+                          {"trials", J::List(samples)}});
+    };
+    const auto qualified =
+        CompleteRestrictedAudit(state, history, alpha, time, data, true);
+    std::ofstream output(m_picardKDiagnostic);
+    output << J::Object(
+                  {{"alpha", J::Number(alpha)},
+                   {"time", J::Number(time)},
+                   {"guess_sha256", J::Quote(RANSWallR3::Hash(state))},
+                   {"history_sha256", J::Quote(RANSWallR3::Hash(history))},
+                   {"outer_range", J::Numbers(qualified.at("r2_outer_range"))},
+                   {"outer_gradient_witness",
+                    J::Numbers(qualified.at("r4_outer_gradient_witness"))},
+                   {"k_norm", J::Number(norm(frozen.residual))},
+                   {"free_rows", J::Numbers(frozen.rows)},
+                   {"k_residual", J::Numbers(frozen.residual)},
+                   {"mass", J::Rows(mass)},
+                   {"frozen_matrix", J::Rows(frozen.matrix)},
+                   {"k_jacobian", J::Rows(exact.matrix)},
+                   {"ground_extrema", extrema(state)},
+                   {"actions", J::List(actions)},
+                   {"frozen_projection", projection(frozen)},
+                   {"true_projection", projection(exact)}})
+           << '\n';
+    Require(output.good(), "cannot write Picard k diagnostic");
+}
+
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
     Vector s, const Vector &history, double alpha, double time,
     const RANSWallEvolutionData &data, int &iterations, double tolerance,
@@ -413,8 +708,27 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
     iterations = 0;
     m_lastFeasibleState.clear();
     const auto incomingGuessHash = RANSWallR3::Hash(s);
-    s                            = ExternalLift(s, time, data);
-    auto external                = ExternalConstraints(time, data);
+    if (!m_picardGuessFile.empty())
+    {
+        boost::property_tree::ptree packet;
+        boost::property_tree::read_json(m_picardGuessFile, packet);
+        auto read = [&](const char *name) {
+            Vector values;
+            for (const auto &entry : packet.get_child(name))
+                values.push_back(entry.second.get_value<double>());
+            return values;
+        };
+        auto guess = read("state");
+        Require(read("history") == history && guess.size() == s.size() &&
+                    packet.get<double>("alpha") == alpha &&
+                    packet.get<double>("time") == time,
+                "saved Picard guess differs from native stage or history");
+        Require(ExternalLift(guess, time, data) == guess,
+                "saved Picard guess changes boundary data");
+        s = std::move(guess);
+    }
+    s             = ExternalLift(s, time, data);
+    auto external = ExternalConstraints(time, data);
     for (int id : m_traceIds)
         external.erase(offset[Epsilon()] + id);
     Require(external.empty() || external.rbegin()->first < DifferentialSize(),
@@ -475,7 +789,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
     };
     auto apply = [](Vector &state, const PicardBlock &block, const Vector &step,
                     double relaxation) {
-        Require(step.size() == block.rows.size(), "Picard block increment shape mismatch");
+        Require(step.size() == block.rows.size(),
+                "Picard block increment shape mismatch");
         for (int i = 0; i < block.rows.size(); ++i)
             state.at(block.rows[i]) += relaxation * step[i];
     };
@@ -486,6 +801,62 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
             AssemblePicardBlock(b, state, history, alpha, time, data, external);
         if (m_picardVerify && iterations == 0)
             blockCheck(block, state, name);
+        if (b == K() && m_picardKNewton)
+        {
+            auto model = block;
+            model.residual =
+                PicardKResidual(state, history, alpha, time, data, model.rows);
+            model.matrix =
+                PicardKJacobian(state, alpha, time, data, model.rows);
+            const Factor jacobian(model.matrix), mass(PicardKMass(model.rows));
+            const double base = DualNorm(mass, model.residual);
+            auto rhs          = model.residual;
+            for (auto &value : rhs)
+                value = -value;
+            const auto newton = jacobian.Apply(rhs);
+            const double radius =
+                .15 * m_parameters.model.Q() * m_robustUstar * m_robustUstar;
+            double fraction =
+                std::min(requested, radius / std::max(radius, Maximum(newton)));
+            ++kSolves;
+            for (int retry = 0; retry < 9; ++retry, fraction *= .5)
+            {
+                int cuts        = 0;
+                const auto step = ProjectPicardGround(state, model, jacobian,
+                                                      newton, fraction, cuts);
+                if (step.empty())
+                    continue;
+                auto predicted = Multiply(model.matrix, step);
+                for (int i = 0; i < predicted.size(); ++i)
+                    predicted[i] += model.residual[i];
+                const double expected = DualNorm(mass, predicted);
+                if (expected >= base)
+                    continue;
+                auto trial = state;
+                apply(trial, model, step, 1.);
+                if (!admissible(trial, domain, ground))
+                    continue;
+                const auto residual = PicardKResidual(trial, history, alpha,
+                                                      time, data, model.rows);
+                const double actual = DualNorm(mass, residual);
+                const bool accept   = actual < base - 1e-4 * (base - expected);
+                emit("conditional_k_trial",
+                     {{"base", J::Number(base)},
+                      {"predicted", J::Number(expected)},
+                      {"actual", J::Number(actual)},
+                      {"fraction", J::Number(fraction)},
+                      {"cuts", J::Number(cuts)},
+                      {"step_max", J::Number(Maximum(step))},
+                      {"accepted", J::Boolean(accept)},
+                      {"dimension", J::Number(step.size())}});
+                if (accept)
+                {
+                    state = std::move(trial);
+                    return fraction;
+                }
+            }
+            emit("conditional_k_fallback", {{"base", J::Number(base)}});
+        }
         auto rhs = block.residual;
         for (double &entry : rhs)
             entry = -entry;
@@ -529,7 +900,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
              {{"block", J::Quote(name)}, {"domain", ScalarDomainJSON(domain)}});
         return 0.;
     };
-    auto report = [&](const char *event, const Vector &norms,
+    bool outerViolationSeen = false;
+    auto report             = [&](const char *event, const Vector &norms,
                       const ScalarDomainResult &domain,
                       const std::string &ground, const Vector &relaxation) {
         double traceDefect = 0.;
@@ -537,7 +909,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
         {
             const int row = offset[Epsilon()] + id;
             traceDefect   = std::max(traceDefect,
-                                     std::abs(s[row] - domain.traceState[row]));
+                                                 std::abs(s[row] - domain.traceState[row]));
         }
         emit(event, {{"norms", J::Numbers(norms)},
                      {"state_sha256", J::Quote(RANSWallR3::Hash(s))},
@@ -548,6 +920,19 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
                      {"solve_counts",
                       J::Numbers(std::array<int, 4>{flowSolves, flowSolves,
                                                     kSolves, epsilonSolves})}});
+        if (m_picardKNewton && (!outerViolationSeen || iterations % 10 == 0))
+        {
+            const auto audit =
+                CompleteRestrictedAudit(s, history, alpha, time, data, true);
+            const auto &range = audit.at("r2_outer_range");
+            outerViolationSeen |= range[0] > .001;
+            emit(
+                "qualification",
+                {{"outer_range", J::Numbers(range)},
+                 {"outer_gradient_witness",
+                  J::Numbers(audit.at("r4_outer_gradient_witness"))},
+                 {"qualified", J::Boolean(audit.at("r2_qualified")[0] == 1.)}});
+        }
     };
     auto perturb = [&](Vector &guess, double amplitude) {
         const std::array<double, 4> scales{
@@ -585,6 +970,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
           {"incoming_guess_sha256", J::Quote(incomingGuessHash)},
           {"guess_sha256", J::Quote(RANSWallR3::Hash(s))}});
     report("initial", norms, domain, ground, {});
+    if (!m_picardKDiagnostic.empty())
+        DiagnosePicardK(s, history, alpha, time, data, external);
     if (m_picardVerify)
     {
         auto perturbed = s;
@@ -683,7 +1070,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
                 velocityCorrection = std::max(velocityCorrection,
                                               std::abs(step[i] - predictor[i]));
             auto predicted = s, corrected = s;
-            Require(predictor.size() == nv, "Picard velocity predictor shape mismatch");
+            Require(predictor.size() == nv,
+                    "Picard velocity predictor shape mismatch");
             for (int i = 0; i < nv; ++i)
                 predicted.at(flow.rows[i]) += predictor.at(i);
             apply(corrected, flow, step, 1.);

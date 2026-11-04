@@ -65,6 +65,13 @@ def prepare(args):
             "RANSWallPicardGroundProjection": "On" if name == "target" and args.ground_projection else "Off",
         }.items():
             set_info(root, key, value)
+        if name == "target":
+            if getattr(args, "k_newton", False):
+                set_info(root, "RANSWallPicardKNewton", "On")
+            if getattr(args, "guess_file", None):
+                set_info(root, "RANSWallPicardGuessFile", str(args.guess_file.resolve()))
+            if getattr(args, "k_diagnostic", False):
+                set_info(root, "RANSWallPicardKDiagnostic", "k-diagnostic.json")
         for key, value in {
             "NumSteps": steps,
             "RANSWallMaxIterations": sweeps,
@@ -123,6 +130,9 @@ def main():
     parser.add_argument("--prepare-only", action="store_true")
     parser.add_argument("--verify", action="store_true", help="Run same-state and frozen-saddle comparisons")
     parser.add_argument("--ground-projection", action="store_true", help="Project the k trial against ground cuts")
+    parser.add_argument("--k-newton", action="store_true", help="Try a true conditional k correction before the frozen update")
+    parser.add_argument("--guess-file", type=Path, help="Use a saved readback packet as the nonlinear guess only")
+    parser.add_argument("--k-diagnostic", action="store_true", help="Write the restricted matrices and initial action/projection checks")
     parser.add_argument("--steps", type=int, default=1)
     parser.add_argument("--sweeps", type=int, default=120)
     parser.add_argument("--timeout", type=int, default=1800)
@@ -133,7 +143,10 @@ def main():
     parser.add_argument("--perturbation", type=float, default=0.0)
     args = parser.parse_args()
     args.output = args.output.resolve()
-    require(args.steps >= 1 and args.sweeps >= 1 and args.timeout >= 1, "invalid run budget")
+    require(args.steps >= 1 and args.sweeps >= 0 and args.timeout >= 1, "invalid run budget")
+    require(not args.k_newton or args.ground_projection, "--k-newton requires --ground-projection")
+    require(not args.guess_file or args.steps == 1, "a saved guess binds exactly one stage")
+    require(not args.guess_file or args.perturbation == 0, "run saved-guess and perturbation diagnostics separately")
     if not args.prepare_only:
         require(platform.system() == "Linux" and args.solver and args.resolution_probe,
                 "native runs require Linux and explicit solver and readback executables")
@@ -192,6 +205,10 @@ def main():
                         report["native_history_times"] == initial_times and not report["stage_audits"],
                         "deliberate rejection changed native time, coupled state or IMEX history")
                 continue
+
+            if args.guess_file:
+                require(first["guess_sha256"] == state_hash(load(args.guess_file)["state"]),
+                        "saved nonlinear guess differs from the native solve input")
 
             if args.verify:
                 checks = [row for row in records if row["event"] == "fixed_point"]

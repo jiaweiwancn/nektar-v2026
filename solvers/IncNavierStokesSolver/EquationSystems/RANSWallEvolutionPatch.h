@@ -252,7 +252,8 @@ private:
         double alpha,double time,const RANSWallEvolutionData &data,
         const std::map<int,double> &external) const;
     Vector ProjectPicardGround(const Vector &state,const PicardBlock &block,
-        const Factor &factor,const Vector &step,double relaxation,int &cuts) const;
+        const Factor &factor,const Vector &step,double relaxation,int &cuts,
+        std::string *diagnostic=nullptr) const;
     Vector SolveSegregatedPicard(Vector state,const Vector &history,double alpha,double time,
         const RANSWallEvolutionData &data,int &iterations,double tolerance,int maximumIterations) const;
     struct WallExtremum
@@ -291,7 +292,14 @@ private:
         double radius=2.,double *guardWork=nullptr,const std::array<double,4> &interior={}) const;
     WallMatrix AssembleNonpressureR3(const Vector &state,double time,
         const RANSWallEvolutionData &data,bool imposeConstraints,int region,
-        std::vector<std::string> *metadata) const;
+        std::vector<std::string> *metadata,const std::vector<int> *freeK=nullptr) const;
+    WallMatrix PicardKJacobian(const Vector &state,double alpha,double time,
+        const RANSWallEvolutionData &data,const std::vector<int> &rows) const;
+    Vector PicardKResidual(const Vector &state,const Vector &history,double alpha,double time,
+        const RANSWallEvolutionData &data,const std::vector<int> &rows) const;
+    WallMatrix PicardKMass(const std::vector<int> &rows) const;
+    void DiagnosePicardK(const Vector &state,const Vector &history,double alpha,double time,
+        const RANSWallEvolutionData &data,const std::map<int,double> &external) const;
     struct ScalarLocation
     {
         std::string inventory;
@@ -374,6 +382,8 @@ private:
     double m_picardGuessPerturbation=0.;
     bool m_picardVerify=false;
     bool m_picardGroundProjection=false;
+    bool m_picardKNewton=false;
+    std::string m_picardGuessFile,m_picardKDiagnostic;
     std::string m_directionAccuracy="Legacy",m_r7Policy="Off";
     double m_r7PreviousDisplacement=0.,m_r7Radius=0.;
     bool m_r7Interior=false;
