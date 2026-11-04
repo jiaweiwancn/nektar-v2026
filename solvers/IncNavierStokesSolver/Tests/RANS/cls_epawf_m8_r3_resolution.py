@@ -542,16 +542,16 @@ def analyze(raw, session, source, packet=None):
     ranges = finite_ranges(raw, fields, effective, session, inventory) if raw['construct_contact'] else None
     packet_binding = None
     if packet is not None:
-        payload = json.loads(Path(packet).read_text())
-        audit.require(np.array_equal(history, payload['history']), 'Original h0 history packet changed')
+        payload = json.loads(Path(packet).read_text(), parse_int=lambda x: -0.0 if x == '-0' else int(x))
+        audit.require(vector_sha(history) == vector_sha(payload['history']), 'Original h0 history packet changed')
         audit.require(raw['time'] == payload['time'] and raw['alpha'] == payload['alpha'], 'Target time/alpha changed')
         if not raw['construct_contact']:
-            audit.require(np.array_equal(state, payload['state']), 'Saved diagnostic state changed')
+            audit.require(vector_sha(state) == vector_sha(payload['state']), 'Saved diagnostic state changed')
         packet_binding = dict(path=str(Path(packet).resolve()), sha256=sha(packet))
         if not raw['construct_contact'] and payload.get('residual'):
             saved = np.asarray(payload['residual'])
             audit.near(native, saved, 'retained_and_current_same_state_equations', TOLERANCE)
-            packet_binding['retained_residual_bitwise_equal'] = bool(np.array_equal(native, saved))
+            packet_binding['retained_residual_bitwise_equal'] = vector_sha(native) == vector_sha(saved)
             packet_binding['current_minus_retained_residual'] = norm_record(audit, native-saved, constraints)
             packet_binding['retained_residual_physical_norms'] = norm_record(audit, saved, constraints)
     return dict(schema=1, phase='M8-R3 C/D fixed-state diagnostic', checks=audit.checks,
@@ -605,7 +605,7 @@ def main():
     try:
         if receipt['source_worktree_status']:
             raise ValueError('Analysis source has tracked working-tree changes')
-        raw = json.loads(args.report.read_text())
+        raw = json.loads(args.report.read_text(), parse_int=lambda x: -0.0 if x == '-0' else int(x))
         receipt.update(analyze(raw, args.session, args.source, args.packet))
     except Exception as error:
         receipt.update(success=False, failures=[dict(type=type(error).__name__,

@@ -8,7 +8,7 @@ from pathlib import Path
 import struct
 import xml.etree.ElementTree as ET
 
-H0 = 'f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca'
+H0 = '4ad26ed0167bb1765bd0be2c150928280b69dbd82ace8a27ea5f9c8c7f4d0409'
 NUMERICAL_SELECTORS = {'RANSWALLSTAGETEST', 'RANSWALLNONLINEARPOLICY', 'RANSWALLACTIONPOLICY',
     'RANSWALLR3PROGRESSFILE', 'RANSWALLR3PREDICTORFILE', 'RANSWALLFEASIBLEFILE',
     'RANSWALLSOLVEDIAGNOSTICS', 'RANSWALLSOLVEDIAGNOSTICREPLAY', 'RANSWALLSOLVEDIAGNOSTICFILE'}
@@ -39,7 +39,9 @@ def vector(values):
 
 
 def load(path):
-    return json.loads(Path(path).read_text(), parse_constant=lambda x: (_ for _ in ()).throw(ValueError(x)))
+    # Native iostream output represents negative zero as the integer token -0.
+    return json.loads(Path(path).read_text(), parse_int=lambda x: -0.0 if x == '-0' else int(x),
+        parse_constant=lambda x: (_ for _ in ()).throw(ValueError(x)))
 
 
 def protected_xml(path):

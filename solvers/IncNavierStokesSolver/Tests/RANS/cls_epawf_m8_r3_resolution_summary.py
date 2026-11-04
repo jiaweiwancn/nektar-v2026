@@ -45,7 +45,8 @@ def norm(record):
 
 
 def extract(label, native_path, analysis_path):
-    native, analysis = json.loads(Path(native_path).read_text()), json.loads(Path(analysis_path).read_text())
+    native = json.loads(Path(native_path).read_text(), parse_int=lambda x: -0.0 if x == '-0' else int(x))
+    analysis = json.loads(Path(analysis_path).read_text())
     result = dict(label=label, native=pointer(native_path), analysis=pointer(analysis_path),
         analysis_success=bool(analysis.get('success', False)), checks=analysis.get('checks'),
         producing_revision=analysis.get('producing_revision'),

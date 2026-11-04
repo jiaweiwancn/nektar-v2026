@@ -73,6 +73,12 @@ class PredictorMetadataTests(unittest.TestCase):
         self.assertEqual(result['expected_h0_sha256'], predictor.H0)
         self.assertTrue(result['coefficients_are_not_lifted_or_clipped'])
 
+    def test_native_json_negative_zero_retains_binary_sign(self):
+        vector = self.root/'signed-zero.json'
+        vector.write_text('[0,-0,1]\n')
+        values = predictor.load(vector)
+        self.assertEqual(struct.pack('<3d', *values), struct.pack('<3d', 0., -0., 1.))
+
     def test_converged_auxiliary_reclassification_rejected(self):
         self.packet['source_record']['converged'] = True; self.write(self.packet_path, self.packet); self.update_ledger()
         with self.assertRaisesRegex(ValueError, 'saved failed'): predictor.prepare(self.args)

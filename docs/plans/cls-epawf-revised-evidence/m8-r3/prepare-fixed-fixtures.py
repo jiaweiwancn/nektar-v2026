@@ -34,7 +34,7 @@ def main():
     sys.path.insert(0, str(source/'solvers/IncNavierStokesSolver/Tests/RANS'))
     import numpy as np
     from cls_epawf_m8_r2_stage_analysis import Analyzer
-    raw = json.loads(a.reference.read_text())
+    raw = json.loads(a.reference.read_text(), parse_int=lambda x: -0.0 if x == '-0' else int(x))
     h0 = np.fromfile(a.history, dtype='<f8')
     if len(h0) != 2165 or h0.tobytes() != np.asarray(raw['initial'], dtype='<f8').tobytes():
         raise ValueError('Original outer6 h0 binding differs')

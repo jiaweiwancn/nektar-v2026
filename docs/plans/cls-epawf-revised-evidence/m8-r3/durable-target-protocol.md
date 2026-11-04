@@ -21,7 +21,8 @@ payloads, extraction ledger and historical trace. It compares protected XML
 from the historical Sat session, current initialization and target, permitting
 only the declared numerical selectors and maximum-Newton-update choice.
 It preserves the original h0 hash
-`f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca`.
+`4ad26ed0167bb1765bd0be2c150928280b69dbd82ace8a27ea5f9c8c7f4d0409`.
+Preserve the sign of native JSON `-0` tokens in coefficient vectors.
 The native entry rechecks the manifest's state/h0 binaries, current executable,
 exact target XML and current native physics signature. It evaluates the
 current scalar inventory, constraints, exact target residual, covariance and

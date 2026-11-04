@@ -36,7 +36,8 @@ def identity(path):
 
 
 def load(path):
-    return json.loads(Path(path).read_text(), parse_constant=lambda x: (_ for _ in ()).throw(ValueError(x)))
+    return json.loads(Path(path).read_text(), parse_int=lambda x: -0.0 if x == '-0' else int(x),
+        parse_constant=lambda x: (_ for _ in ()).throw(ValueError(x)))
 
 
 def receipt_binds(value, pin):
