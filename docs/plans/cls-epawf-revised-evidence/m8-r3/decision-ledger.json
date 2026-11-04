@@ -1,0 +1,1271 @@
+{
+  "schema": 1,
+  "milestone": "M8-R3",
+  "M8_closed": false,
+  "reviewed_baseline": "e4c9d44758f08109ba5ea8c2b909790a02b3acc8",
+  "decision": "Exact coupled SaturatedR2 stage completed as an experiment; no converged or qualified root. Scalar boundary limits drove observed stagnation. Terminal outer gradient exceeds fixed bound.",
+  "producer": {
+    "source_commit": "ce408c874ff12aaf6133cd8660e8c5b171f17a11",
+    "solver": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/build/IncNavierStokesSolver",
+      "bytes": 5672720,
+      "sha256": "bad1609f8a03b05578a0655a5c612e8b3833ce2bd9915fa371fa67ab7dd41806"
+    },
+    "build_receipt": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/build-run/receipt.json",
+      "bytes": 3289,
+      "sha256": "ecaedf6c5397162bd4a66fb9f166d2b59cbff1b1279001362ec29322e359b8d6"
+    },
+    "runtime": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/runtime-fingerprint.json",
+      "bytes": 636271,
+      "sha256": "04602b26678b284caeb0c5f3d2efac35dc14c78303b3a06ab21e056147a0c636"
+    },
+    "analysis_source": "46c86e0454ab1e208ccce8c42729f81584556249",
+    "mpi_ranks": 1,
+    "numerical_threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    },
+    "compiler_workers": 16
+  },
+  "frozen": {
+    "unknowns": 2165,
+    "unknown_guard": 3000,
+    "inner_stress": "SaturatedR2",
+    "rho": 0.8,
+    "beta": 0.4,
+    "GammaScale": 1,
+    "GammaUniform": 0,
+    "theta": 0.2,
+    "delta": 0.1,
+    "eta": 0,
+    "alpha": 400,
+    "time": 0.0025,
+    "source_quadrature": [
+      8,
+      16
+    ],
+    "absolute_action_gate": 1e-07,
+    "coupled_residual_tolerance": 2e-12,
+    "outer_gradient_bound": 0.001,
+    "outer_k_ratio": [
+      0.99,
+      1.01
+    ],
+    "outer_epsilon_ratio": [
+      0.98,
+      1.02
+    ],
+    "forcing": "unforced"
+  },
+  "inputs": {
+    "ledger": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/inputs-bitwise-003/input-ledger.json",
+      "bytes": 13557,
+      "sha256": "cbeaade5154f64913df9519025d730e1336cea0aee37c2bcc80ecbd45089bc81"
+    },
+    "original_h0": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/inputs-bitwise-003/h0.bin",
+      "bytes": 17320,
+      "sha256": "b8ba7917424057a9f6f16a026d82d53ede43985871537facea170ef6e1841b71"
+    },
+    "frozen_reference_sha256": "4ad26ed0167bb1765bd0be2c150928280b69dbd82ace8a27ea5f9c8c7f4d0409",
+    "current_preflight_report": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/current-preflight-001/case.evolution.json",
+      "bytes": 21495317,
+      "sha256": "d6102d65129aa7be4e25d86e521bddaed15f8922f24c4ca391971cbf61d7076a"
+    },
+    "current_preflight_xml": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/current-preflight-001/case.xml",
+      "bytes": 14014,
+      "sha256": "16eca3cc471d10d84dba8cfcfe582d3ab133116daa0747b7cb236e7b5e73f2fd"
+    },
+    "target_xml": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/target-case-002/case.xml",
+      "bytes": 14335,
+      "sha256": "1187600a59e538c923467d2fa5b5e43b839bbde5704625033cdc9402cedd990b"
+    },
+    "predictor": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/target-case-002/predictor.json",
+      "bytes": 4464,
+      "sha256": "3348711f7f87e40391ca83ab91776024417162940444a6c299903c5896453417"
+    },
+    "predictor_origin_converged": false
+  },
+  "action_verification": {
+    "absolute_gate": 1e-07,
+    "blocks": [
+      "u_x",
+      "u_z",
+      "k",
+      "epsilon",
+      "weak_inner_continuity",
+      "weak_outer_continuity",
+      "gauge",
+      "constraint"
+    ],
+    "gate": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/analysis-006/action-gate-002.json",
+      "bytes": 8167,
+      "sha256": "15de4030ee86758056f332295c5334fb2f2d14fc67c15b663a4aaf9277b96dc8"
+    },
+    "cases": [
+      {
+        "case": "linear-h0",
+        "validation": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/analysis-006/action-linear-h0-initialized.json",
+          "bytes": 33172,
+          "sha256": "debab1f87bd875d2e74a19047824a246e8653ceb95b4eaf97ba92684338ddf7c"
+        },
+        "matrix": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/fixed-h0-initialized-linear-001/case/report.json.J.bin",
+          "bytes": 37497800,
+          "sha256": "40f7894314d7588e90cf91c7e6b8dd2c9e57cc4cfbdcdc915a9ef8ea43bf8c9a"
+        },
+        "native_report": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/fixed-h0-initialized-linear-001/case/report.json",
+          "bytes": 597609,
+          "sha256": "baf505696189d49b10b9463b05b282ed197692e240678deb78b1e2dc66a124df"
+        },
+        "maximum_absolute_error": 1.8906076861584056e-12,
+        "minimum_lambda": 1,
+        "minimum_b": 1,
+        "errors_by_direction": {
+          "velocity": [
+            1.4641263710320373e-12,
+            1.84398561176302e-12,
+            2.5964592659868636e-14,
+            5.1763310919372043e-14,
+            3.111213335304116e-15,
+            4.76548807547681e-15,
+            0.0,
+            0.0
+          ],
+          "inner_k": [
+            4.713253257851018e-34,
+            3.4047826648136294e-36,
+            9.18549717468909e-14,
+            2.050973511225242e-37,
+            5.046921621890178e-39,
+            0.0,
+            0.0,
+            4.2076825925843704e-36
+          ],
+          "sampled_K": [
+            1.302906215708612e-13,
+            3.2467160948054014e-15,
+            8.27515008182079e-13,
+            3.7373100851024394e-31,
+            6.959169265004815e-18,
+            0.0,
+            0.0,
+            8.949835063065845e-15
+          ],
+          "epsilon_with_trace": [
+            6.971757254411294e-15,
+            1.692316909356707e-14,
+            4.0306390922568803e-16,
+            1.5864619500450185e-12,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "joint": [
+            1.5143513077203007e-12,
+            1.8906076861584056e-12,
+            1.6577691847955922e-12,
+            1.559027277869401e-12,
+            3.1112223983484002e-15,
+            4.76548807547681e-15,
+            0.0,
+            4.680965110783412e-15
+          ],
+          "retained_outer_k_witness": [
+            3.6187590101730726e-14,
+            3.320839756155865e-14,
+            1.502808273168183e-12,
+            1.2982860399305486e-14,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      {
+        "case": "sat-h0",
+        "validation": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/analysis-006/action-sat-h0-initialized.json",
+          "bytes": 33164,
+          "sha256": "ab456083171fc4912371a5db877cb9636b48e1ee44a6f3cd4973d5ad54e94330"
+        },
+        "matrix": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/fixed-h0-initialized-sat-001/case/report.json.J.bin",
+          "bytes": 37497800,
+          "sha256": "0ee7bd325c28d36fe5bbf5636a0edd6f82d72295e01bda996714decd754c0f1e"
+        },
+        "native_report": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/fixed-h0-initialized-sat-001/case/report.json",
+          "bytes": 597597,
+          "sha256": "d524c08be4110acc5ffab7bb3958bdfcf1a27cd9a438ae672d64da4025223444"
+        },
+        "maximum_absolute_error": 1.898464465988506e-12,
+        "minimum_lambda": 1,
+        "minimum_b": 1,
+        "errors_by_direction": {
+          "velocity": [
+            1.4561306937081312e-12,
+            1.8595967242320803e-12,
+            2.569549057619074e-14,
+            5.1763310919372043e-14,
+            3.111213335304116e-15,
+            4.76548807547681e-15,
+            0.0,
+            0.0
+          ],
+          "inner_k": [
+            1.0789920402829262e-15,
+            2.532873615374773e-18,
+            7.939950030713465e-14,
+            2.050973511225242e-37,
+            5.046921621890178e-39,
+            0.0,
+            0.0,
+            4.2076825925843704e-36
+          ],
+          "sampled_K": [
+            1.3365287684210147e-13,
+            3.255186868984902e-15,
+            8.290579215008074e-13,
+            3.7373100851024394e-31,
+            6.959169265004815e-18,
+            0.0,
+            0.0,
+            8.949835063065845e-15
+          ],
+          "epsilon_with_trace": [
+            6.971757254411294e-15,
+            1.692316909356707e-14,
+            4.0306390922568803e-16,
+            1.5864619500450185e-12,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "joint": [
+            1.500419661307686e-12,
+            1.898464465988506e-12,
+            1.652650448590759e-12,
+            1.559027277869401e-12,
+            3.1112223983484002e-15,
+            4.76548807547681e-15,
+            0.0,
+            4.680965110783412e-15
+          ],
+          "retained_outer_k_witness": [
+            3.6187590101730726e-14,
+            3.320839756155865e-14,
+            1.502808273168183e-12,
+            1.2982860399305486e-14,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      {
+        "case": "sat-auxiliary",
+        "validation": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/analysis-003/actions-001/sat-auxiliary.json",
+          "bytes": 30441,
+          "sha256": "600f5a80ac93ed5a3f50e7a98edfe1de23c53aabacab441cbc543ac4a3679632"
+        },
+        "matrix": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/fixed-state-004/sat-auxiliary/case/report.json.J.bin",
+          "bytes": 37497800,
+          "sha256": "a5eeae4bd82c0b1bec55c4f71f9411078e0cb37cd76fe5129d28499d2033a174"
+        },
+        "native_report": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/fixed-state-004/sat-auxiliary/case/report.json",
+          "bytes": 573719,
+          "sha256": "5dd4f52d490bc45a4d351222c0f228e5cb3bc706e4c9aa5ef9f4e943be30aa1b"
+        },
+        "maximum_absolute_error": 1.293730404662466e-11,
+        "minimum_lambda": 1,
+        "minimum_b": 1,
+        "errors_by_direction": {
+          "velocity": [
+            1.2518619505324116e-11,
+            1.1730448081323405e-11,
+            2.6317479704247266e-14,
+            4.3848195011399066e-14,
+            3.163532573802725e-15,
+            4.763842005279363e-15,
+            0.0,
+            0.0
+          ],
+          "inner_k": [
+            9.21446777699303e-15,
+            6.194410510936505e-18,
+            6.976704048327323e-13,
+            3.749885056662291e-37,
+            5.985166053028893e-39,
+            0.0,
+            0.0,
+            4.53135048432163e-36
+          ],
+          "sampled_K": [
+            2.0017622847499568e-13,
+            3.618506228891709e-15,
+            7.811299793333322e-12,
+            3.7013635417237486e-31,
+            6.5143047963479976e-18,
+            0.0,
+            0.0,
+            8.84533385752628e-15
+          ],
+          "epsilon_with_trace": [
+            6.911931122163812e-15,
+            1.671989794768056e-14,
+            4.234020660850711e-16,
+            1.1317702511731787e-11,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "joint": [
+            1.293730404662466e-11,
+            1.1427495668915082e-11,
+            1.1585377823277883e-11,
+            1.1689445381945867e-11,
+            3.163532573802725e-15,
+            4.763842005279363e-15,
+            0.0,
+            4.776495011003482e-15
+          ]
+        }
+      },
+      {
+        "case": "sat-boundary-path",
+        "validation": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/analysis-003/actions-001/sat-boundary-path.json",
+          "bytes": 30293,
+          "sha256": "4be02dc93d3148e059ce82cf49932f9852e4c599ce15cc1a5f60ab6616fa1faf"
+        },
+        "matrix": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/fixed-state-004/sat-boundary-path/case/report.json.J.bin",
+          "bytes": 37497800,
+          "sha256": "4fb67b8929f71505150db2c5e1f38aa2bcbd9b2482d6dea12f3bf25a35df9dbf"
+        },
+        "native_report": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/fixed-state-004/sat-boundary-path/case/report.json",
+          "bytes": 553966,
+          "sha256": "793cfa9ccc9acb1e1e893975e98753f7c39a353e26fee04a538b9eb158f86837"
+        },
+        "maximum_absolute_error": 1.7824605456854505e-12,
+        "minimum_lambda": 1,
+        "minimum_b": 0.8324037994771696,
+        "errors_by_direction": {
+          "velocity": [
+            1.4847169793828308e-12,
+            1.7824605456854505e-12,
+            2.6760196665835955e-14,
+            5.1691549399941e-14,
+            3.416522986995545e-15,
+            4.76548807547681e-15,
+            0.0,
+            0.0
+          ],
+          "inner_k": [
+            1.2586906955501838e-14,
+            8.185578473410642e-17,
+            1.3260877915752977e-13,
+            1.961694505245735e-37,
+            2.9099488702733554e-39,
+            0.0,
+            0.0,
+            3.213416227181957e-20
+          ],
+          "sampled_K": [
+            2.1665440278507457e-13,
+            3.559004112705383e-15,
+            9.85088580711119e-13,
+            3.716213529756042e-31,
+            6.96392462978996e-18,
+            0.0,
+            0.0,
+            8.663691337975602e-15
+          ],
+          "epsilon_with_trace": [
+            7.0258758472915475e-15,
+            1.6583155838404968e-14,
+            3.9778604769560533e-16,
+            1.48056210691149e-12,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "joint": [
+            1.4978507713931597e-12,
+            1.7496441936822857e-12,
+            1.5786064839532643e-12,
+            1.5297896025165725e-12,
+            3.416522986995545e-15,
+            4.76548807547681e-15,
+            0.0,
+            4.776495011003482e-15
+          ]
+        }
+      },
+      {
+        "case": "sat-active-dependencies",
+        "validation": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/analysis-003/actions-001/sat-active-dependencies.json",
+          "bytes": 30492,
+          "sha256": "6bd0769da080af751d032940e2a783f55a1676f7652bb67e2554131c67cb4772"
+        },
+        "matrix": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/fixed-state-004/sat-active-dependencies/case/report.json.J.bin",
+          "bytes": 37497800,
+          "sha256": "9c68785934bb6e1d85a69562c06aee45fc57d8304fe4be86c8802a6baa8d19b1"
+        },
+        "native_report": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/fixed-state-004/sat-active-dependencies/case/report.json",
+          "bytes": 551636,
+          "sha256": "24f8c9b9f6a16bd0bb357d4942ecd95901b386c3570119ce4f1cc6691680ec37"
+        },
+        "maximum_absolute_error": 1.906326644446849e-11,
+        "minimum_lambda": 1,
+        "minimum_b": 0.11869261510088054,
+        "errors_by_direction": {
+          "velocity": [
+            1.5923378798733217e-12,
+            1.8076244851633568e-12,
+            7.088011939176571e-14,
+            4.9650136798078634e-14,
+            2.987637277797502e-15,
+            4.76548807547681e-15,
+            0.0,
+            7.424173350965958e-37
+          ],
+          "inner_k": [
+            9.43459573519167e-15,
+            1.9361299818293563e-16,
+            1.81348593938576e-12,
+            1.6842775843640075e-36,
+            5.0005893147144405e-39,
+            0.0,
+            0.0,
+            1.2215797705224893e-18
+          ],
+          "sampled_K": [
+            1.3923463347845065e-13,
+            5.310077852769131e-15,
+            8.257557544770528e-13,
+            1.870888372313422e-30,
+            6.991842849224449e-18,
+            0.0,
+            0.0,
+            8.84786301641738e-15
+          ],
+          "epsilon_with_trace": [
+            7.512183590905354e-15,
+            1.508503247491998e-14,
+            1.290312828673922e-14,
+            1.5562436864282946e-12,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "joint": [
+            1.4490019963924221e-12,
+            1.7417846739916969e-12,
+            1.906326644446849e-11,
+            1.6364197773682113e-12,
+            2.987647056968418e-15,
+            4.76548807547681e-15,
+            0.0,
+            2.705406774232372e-13
+          ]
+        }
+      },
+      {
+        "case": "sat-active-cap",
+        "validation": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/analysis-004/action-active-cap-001.json",
+          "bytes": 30435,
+          "sha256": "d459fd82609221f1e46b07a067fe1103dd17a1bb518154184ff603c64bf236fe"
+        },
+        "matrix": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/fixed-active-cap-001/case/report.json.J.bin",
+          "bytes": 37497800,
+          "sha256": "eb1c22ac864b3ef405f3b7b36702e04f4e039fe925ca9076e4be3b1c28189e5b"
+        },
+        "native_report": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/fixed-active-cap-001/case/report.json",
+          "bytes": 551992,
+          "sha256": "c9eda601e90db3ee3d327768e9ae935facad00ef86bcb60b5c07df3243d3b52f"
+        },
+        "maximum_absolute_error": 1.1689038291182206e-11,
+        "minimum_lambda": 0.7629691261510714,
+        "minimum_b": 0.07629691261510714,
+        "errors_by_direction": {
+          "velocity": [
+            1.6084092329517302e-12,
+            1.720770829471105e-12,
+            7.325399745933742e-14,
+            5.40485730954659e-14,
+            3.0412997595922914e-15,
+            4.76548807547681e-15,
+            0.0,
+            2.6397015434402062e-36
+          ],
+          "inner_k": [
+            9.834835301889277e-15,
+            1.9436300176485374e-16,
+            1.8752122477615807e-12,
+            5.0431324907096126e-36,
+            4.99982555655194e-39,
+            0.0,
+            0.0,
+            1.1528230502538807e-13
+          ],
+          "sampled_K": [
+            1.3229468468533143e-13,
+            5.315024795932814e-15,
+            8.859432903442666e-13,
+            5.222483812497515e-30,
+            6.990663152326003e-18,
+            0.0,
+            0.0,
+            4.592610967562231e-14
+          ],
+          "epsilon_with_trace": [
+            7.618157795176485e-15,
+            1.5210467264246186e-14,
+            1.3678796280569463e-14,
+            1.4787580254108425e-12,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "joint": [
+            1.5948053281349954e-12,
+            1.783285433787735e-12,
+            1.1689038291182206e-11,
+            1.578435361464172e-12,
+            3.04130828328754e-15,
+            4.76548807547681e-15,
+            0.0,
+            2.821953252500857e-13
+          ]
+        }
+      }
+    ],
+    "initial_linear_baseline_outer_k_errors": [
+      7.15996593112029e-07,
+      5.607262291281462e-09,
+      6.410811162823151e-08,
+      4.859374905274791e-08,
+      0,
+      0,
+      0,
+      0
+    ],
+    "active_cap_sampledK_trace_action": 0.58480865395844,
+    "maximum_error": 1.906326644446849e-11
+  },
+  "focused_regressions": {
+    "legacy_tests": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/focused-regressions-001/ctest.log",
+      "bytes": 625,
+      "sha256": "7b4cd4bff32d8fa02acfc96d420decae47e3d61e271b0530dae6c20244632270"
+    },
+    "pressure": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/pressure-verification-001/validation.json",
+      "bytes": 166067,
+      "sha256": "25f28368efca1ecc506ff56a5934e71006b1fd50c5fb44f92ebfd480e191b0f8"
+    },
+    "compiled_durability": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/durable-verification-001/validation.json",
+      "bytes": 598,
+      "sha256": "a74de9921374a04c54f20c987c777ff982e45d1ae8923b5dd5d26a739c3c0e2f"
+    },
+    "predictor": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/analysis-006/predictor-regression.log",
+      "bytes": 107,
+      "sha256": "987b5b06cb290480b4d980e72f37bbf2477a60bdd0e9dc768573667e7f42e94f"
+    },
+    "probe_input_guard": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/probe-guard-001/checks/receipt.json",
+      "bytes": 2011,
+      "sha256": "261cf465b4eac3da6ab98a18e6fa53036b2039ef5c1baa4baea36e66a41af28f"
+    }
+  },
+  "residual_resolution": {
+    "compact_tables": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/analysis-003/resolution-001/compact-summary.json",
+      "bytes": 169210,
+      "sha256": "b671477aea2c4115afce9483ee1c3db5cd90490175488638fc66f23561452a9d"
+    },
+    "cases": {
+      "linear-auxiliary-resolution": {
+        "analysis": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/analysis-003/resolution-001/linear-auxiliary-resolution.json",
+          "bytes": 107759,
+          "sha256": "c7e3905c387a78735138d1ddaa5a04771022882bcf7549804b6519ae82c6776d"
+        },
+        "native_run": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/fixed-state-004/linear-auxiliary-resolution/receipt.json",
+          "bytes": 11879,
+          "sha256": "a394e468a55d568b7eb72733ea77aa7075b2a25a58bacc03f3c4e4b88325c512"
+        },
+        "residual_bitwise_reproduced": true,
+        "observed_maxima": {
+          "extended_cancellation_difference": 1.83615486676514e-15,
+          "independent_terms": 6.084335480122492e-12,
+          "native": 5.334240445678191e-12,
+          "native_compensated_component_sum": 5.561732168082872e-12,
+          "native_component_sum": 5.964243494711417e-12,
+          "native_minus_compensated_component_sum": 1.899189442529373e-12,
+          "native_minus_component_sum": 2.5815573189058327e-12,
+          "native_minus_extended": 1.88997668949255e-12,
+          "native_minus_independent": 3.1317807419826317e-12
+        },
+        "frozen_increment_bound": {
+          "block_maximum_coefficient_bounds": [
+            4.659482673555332e-12,
+            5.5579889205751335e-14,
+            4.554271690188046e-13,
+            7.0481694019195025e-15,
+            1.4010577616385212e-17,
+            1.9040274684214952e-20
+          ],
+          "maximum_coefficient_bound": 4.659482673555332e-12,
+          "maximum_number_of_additions": 3794
+        },
+        "exact_mass_native_norm_interval": [
+          "5.3342404456781907662020488502131487664726070054298744774055399531E-12",
+          "5.3342404456781907662020488502131487664726070054298744774055399534E-12"
+        ]
+      },
+      "sat-auxiliary-resolution": {
+        "analysis": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/analysis-003/resolution-001/sat-auxiliary-resolution.json",
+          "bytes": 108071,
+          "sha256": "34ab7ae82ed12af6096a4346a6bad97a6e4568b45ad7edb76a674f2e080039ed"
+        },
+        "native_run": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/fixed-state-004/sat-auxiliary-resolution/receipt.json",
+          "bytes": 11814,
+          "sha256": "cee5c71d6e30a9bf75171e93e35ffb72ea65e7732a9f31db6948c39e680aee35"
+        },
+        "residual_bitwise_reproduced": true,
+        "observed_maxima": {
+          "extended_cancellation_difference": 1.9926089793979307e-15,
+          "independent_terms": 5.3340862711722235e-12,
+          "native": 4.594644710208094e-12,
+          "native_compensated_component_sum": 4.794796025440564e-12,
+          "native_component_sum": 5.507282918149814e-12,
+          "native_minus_compensated_component_sum": 1.6986020308798474e-12,
+          "native_minus_component_sum": 3.2894564156599753e-12,
+          "native_minus_extended": 1.6877562695163543e-12,
+          "native_minus_independent": 2.9353417757491143e-12
+        },
+        "frozen_increment_bound": {
+          "block_maximum_coefficient_bounds": [
+            4.659273460575912e-12,
+            5.3706806068161343e-14,
+            4.554271489743521e-13,
+            7.048169153738795e-15,
+            1.272347295741704e-17,
+            1.8077183407476692e-20
+          ],
+          "maximum_coefficient_bound": 4.659273460575912e-12,
+          "maximum_number_of_additions": 3794
+        },
+        "exact_mass_native_norm_interval": [
+          "4.5946447102080939263027761773101589077937201433270180849938722300E-12",
+          "4.5946447102080939263027761773101589077937201433270180849938722304E-12"
+        ]
+      }
+    },
+    "attainable_roundoff_floor_established": false,
+    "production_residual_arithmetic_changed": false
+  },
+  "scalar_contact": {
+    "native_run": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/fixed-state-004/sat-contact/receipt.json",
+      "bytes": 11495,
+      "sha256": "d5c32536a91f073bef4b91b974b0443e18270769ba469063170fbfa664d09c7e"
+    },
+    "analysis": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/analysis-003/resolution-001/sat-contact.json",
+      "bytes": 170786,
+      "sha256": "a9e14396e10e82ef6794c4a221dd562e45dc251ed9322d2347c589cd91a4fd36"
+    },
+    "contact_point": [
+      1,
+      0,
+      0
+    ],
+    "contact_exact_k": "0",
+    "physical_k_rate": 34.913814619847734,
+    "fixed_native_load_exact_mass_rate_interval": [
+      "34.913814619844195375810839251030486628421601334521562780884788727",
+      "34.913814619844195375810839251030486628421601334521562780884788728"
+    ],
+    "original_row": [
+      1.6046496089512394,
+      0,
+      0
+    ],
+    "original_row_k": 0.18664231645720092,
+    "original_row_rate": -633.545499831137,
+    "consistent_mass": true,
+    "full_frozen_scalar_DAE_rate_assessed": true,
+    "dependent_trace_relative_error": 5.312358045050435e-15,
+    "verified_discrete_positivity_defect": false
+  },
+  "benchmark": {
+    "first_invocation_stopped_before_J": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/benchmark-run-001/receipt.json",
+      "bytes": 4996,
+      "sha256": "cbc5f6a0197c1703942f80022c752586d299dfafbde0756c0b357e9914cfee67"
+    },
+    "first_binding_diagnosis": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/benchmark-load-diagnostic-001/gdb.log",
+      "bytes": 1754,
+      "sha256": "1f331337e5a37e5310ce19a8f9283e375edc286491ce7e8e843ac3d0a4839bc1"
+    },
+    "complete_receipt": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/benchmark-run-002/receipt.json",
+      "bytes": 5706,
+      "sha256": "4924912c7f6548cb94d3ff7cc70aa8a079ce6bf0701fb391f950d3dc30cbabda"
+    },
+    "action_binding": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/analysis-006/benchmark-action-binding.json",
+      "bytes": 7400,
+      "sha256": "2cfbbec79a78ee4475443a7978c7d0aa504484b872f7271e67918c2598de4136"
+    },
+    "full_matrix": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/benchmark-case-002/case.r3-progress.jsonl.solve1.J0.bin",
+      "bytes": 37497800,
+      "sha256": "96f40b10da0bdd1b648cda75365de89a1e1c3d85ff07dff51277166c140648b9"
+    },
+    "seconds": 54.71333256500657,
+    "profiling": {
+      "complete_action_assembly": {
+        "calls": 1,
+        "seconds": 9.192849414
+      },
+      "constraints": {
+        "calls": 1,
+        "seconds": 0.061547037
+      },
+      "factorization": {
+        "calls": 1,
+        "seconds": 0.161432947
+      },
+      "mass_dual_norms": {
+        "calls": 1,
+        "seconds": 0.00093213
+      },
+      "residual": {
+        "calls": 1,
+        "seconds": 0.149767493
+      },
+      "scalar_domain": {
+        "calls": 1,
+        "seconds": 0.249783999
+      },
+      "scope": "outer solver calls; complete action assembly includes separately reported wrapper/backend work; line-search time includes its domain/residual calls"
+    },
+    "predictor_native_ranges": {
+      "r2_covariance": [
+        0.0820016007102756,
+        0.17691996426157325
+      ],
+      "r2_inner_minimum_point": [
+        1.6046496089512394,
+        0,
+        0,
+        0.34468580211056427,
+        0.5105117304535237,
+        0.0008645137467282145,
+        0.2202977589167887,
+        0.22979053474037617,
+        0.0820016007102756
+      ],
+      "r2_outer_minimum_point": [
+        -2.125,
+        0,
+        2,
+        0.5105094330968489,
+        0.07142008530975293,
+        0.17691996426157325
+      ],
+      "r2_outer_range": [
+        0.0005322477654585711,
+        0.9999993896450693,
+        1.000003019199108,
+        0.9832624216242487,
+        1.0000205664726853,
+        0.999998080529097,
+        1.0000072817537482
+      ],
+      "r2_qualified": [
+        1
+      ],
+      "r2_scalar_domain": [
+        1,
+        0.6751819624624192,
+        0.34468580211056427,
+        0.5105077014688032,
+        0.03631791663093067,
+        0.5105070331546093,
+        0.07142008530975294,
+        1,
+        1
+      ]
+    },
+    "max_abs_actual_matrix_action_comparison": 8.9744349444184e-12
+  },
+  "target": {
+    "native_receipt": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/target-run-001/receipt.json",
+      "bytes": 6116,
+      "sha256": "8c98efe0b1ef8608448da22e3e67ca021d00b3d8ffdd1e45e2bf6ebbe01f76a0"
+    },
+    "native_report": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/target-case-002/case.evolution.json",
+      "bytes": 42931293,
+      "sha256": "c16140bbfbcae293715358bfbcadb575480c62a1fb3e5a9d5343ee8f80e766c5"
+    },
+    "durable_collection": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/target-run-001/durable-collection.json",
+      "bytes": 634476,
+      "sha256": "b12b65275e1d43c4bcf6a928665e40d9d31a3ad7963040acfaf120bd3f37d512"
+    },
+    "progress": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/target-case-002/case.r3-progress.jsonl",
+      "complete_prefix_bytes": 158756,
+      "complete_prefix_sha256": "c959947e17f510a6d2ea02a414f2748852c6f7b5654dc14186fa1020d6ebfbbe",
+      "unpublished_tail": null
+    },
+    "atomic_last": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/target-case-002/case.r3-progress.jsonl.last.json",
+      "bytes": 4457,
+      "sha256": "1a370b9c4bfd683e6796b6884c2ab13dfcee37e5ccb22b1b7364d24e15d60c84"
+    },
+    "terminal_snapshot": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/target-case-002/case.r3-progress.jsonl.solve1.iterate6.snapshot.json",
+      "bytes": 4457,
+      "sha256": "1a370b9c4bfd683e6796b6884c2ab13dfcee37e5ccb22b1b7364d24e15d60c84"
+    },
+    "terminal_state": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/target-case-002/case.r3-progress.jsonl.solve1.iterate6.state.bin",
+      "bytes": 17320,
+      "sha256": "abe29c1f2a6e5f564ff8b93fa139357ad1a69717b8e5973c4d3547e459a84c71"
+    },
+    "terminal_history": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/target-case-002/case.r3-progress.jsonl.solve1.history.bin",
+      "bytes": 17320,
+      "sha256": "b8ba7917424057a9f6f16a026d82d53ede43985871537facea170ef6e1841b71"
+    },
+    "terminal_residual": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/target-case-002/case.r3-progress.jsonl.solve1.iterate6.residual.bin",
+      "bytes": 17320,
+      "sha256": "5c8b221f74bdc86d9f8b566ef03132bccfbae89347fc6588615c5251bd047ec3"
+    },
+    "terminal_constraints": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/target-case-002/case.r3-progress.jsonl.solve1.iterate6.constraints.bin",
+      "bytes": 5728,
+      "sha256": "7610ad40d15b2fa1ec29b278cd25e324b45ca8b3aeac36c4075fc802b21cb691"
+    },
+    "independent_audit": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/analysis-006/target-terminal-audit-001.json",
+      "bytes": 115995,
+      "sha256": "4dda37601d1dd38f9b46a32b0dedaefd1953a0a69fb50655336321b71d8f1e67"
+    },
+    "off_root_energy_localization": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/analysis-006/off-root-energy-localization.json",
+      "bytes": 1293,
+      "sha256": "e9ee4dba30d6490e67a5537256cce426fd239b7024ea1c16ee5b6f1578cf778e"
+    },
+    "terminal_status": "feasible_residual_stagnation",
+    "converged": false,
+    "qualified": false,
+    "native_history_advanced": false,
+    "root_absence_proven": false,
+    "native_wall_seconds": 116.79381439099961,
+    "budget_seconds": 600,
+    "budget_rationale": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/analysis-006/target-budget.txt",
+      "bytes": 363,
+      "sha256": "37a93d8f5b5375659f213b0a5b04deb38c26d9c7c79399a74cb89db573e3f411"
+    },
+    "profiling": {
+      "complete_action_assembly": {
+        "calls": 6,
+        "seconds": 56.7578813
+      },
+      "constraints": {
+        "calls": 7,
+        "seconds": 0.432374422
+      },
+      "factorization": {
+        "calls": 6,
+        "seconds": 1.042278785
+      },
+      "line_search": {
+        "calls": 6,
+        "seconds": 5.8599069329999995
+      },
+      "linear_solve": {
+        "calls": 6,
+        "seconds": 0.012878611000000002
+      },
+      "mass_dual_norms": {
+        "calls": 7,
+        "seconds": 0.006312997000000001
+      },
+      "residual": {
+        "calls": 7,
+        "seconds": 1.602323319
+      },
+      "scalar_domain": {
+        "calls": 13,
+        "seconds": 3.133990715
+      },
+      "scope": "outer solver calls; complete action assembly includes separately reported wrapper/backend work; line-search time includes its domain/residual calls"
+    },
+    "internal_iterates": [
+      {
+        "index": 0,
+        "snapshot": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/target-case-002/case.r3-progress.jsonl.solve1.iterate0.snapshot.json",
+          "bytes": 3166,
+          "sha256": "22886e6e1ae7979b27211931e9487927d35ed82cf2dbfd7264b60419911e6508"
+        },
+        "scaled_residual_by_block": [
+          6.166427317702305,
+          0.03125180483525609,
+          47.38339197240214,
+          0.17555328619957927,
+          6.139459847644923e-16,
+          5.991621399851321e-16,
+          5.903819642362472e-17,
+          4.701862276456552e-16
+        ],
+        "native_min_inner_k": 0.34468580211056427,
+        "minimum_margin": 0.6751819624624192,
+        "lambda_min": 1,
+        "accepted_fraction": null,
+        "limiting_inventory": null,
+        "limiting_point": null,
+        "step_norm": null,
+        "linear_scaled_residual_max": null
+      },
+      {
+        "index": 1,
+        "snapshot": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/target-case-002/case.r3-progress.jsonl.solve1.iterate1.snapshot.json",
+          "bytes": 4429,
+          "sha256": "9bb28d0635952b6771e0d0e8a58476624c1404ebb297d72800fe0faa62eaf9d8"
+        },
+        "scaled_residual_by_block": [
+          4.9920192303843045,
+          0.015197557539497803,
+          17.323806438793824,
+          0.07329029848503447,
+          8.941710525246226e-16,
+          7.187119576354112e-16,
+          3.896351557369781e-18,
+          8.468371091241145e-05
+        ],
+        "native_min_inner_k": 0.0017234290105528228,
+        "minimum_margin": 0.003375909812312099,
+        "lambda_min": 1,
+        "accepted_fraction": 0.5824996262927932,
+        "limiting_inventory": "reconstruction_native",
+        "limiting_point": [
+          1.6046496089512394,
+          0,
+          0
+        ],
+        "step_norm": 3.3682122947486284,
+        "linear_scaled_residual_max": 1.0319848226538191e-13
+      },
+      {
+        "index": 2,
+        "snapshot": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/target-case-002/case.r3-progress.jsonl.solve1.iterate2.snapshot.json",
+          "bytes": 4426,
+          "sha256": "abc0190244506ba3a418900bf572c5a6c989251d4d6a537d8cc383ed0b56c4bc"
+        },
+        "scaled_residual_by_block": [
+          4.6476412824128115,
+          0.014151481214460051,
+          16.075876596214865,
+          0.06821642855339455,
+          1.3315210338273174e-15,
+          9.863904630677376e-16,
+          2.1853450039160946e-17,
+          8.527687333291201e-05
+        ],
+        "native_min_inner_k": 8.617145052768085e-06,
+        "minimum_margin": 1.6879549061568274e-05,
+        "lambda_min": 1,
+        "accepted_fraction": 0.06923027677946195,
+        "limiting_inventory": "reconstruction_native",
+        "limiting_point": [
+          1.6046496089512394,
+          0,
+          0
+        ],
+        "step_norm": 1.767978825704258,
+        "linear_scaled_residual_max": 1.241509831572543e-13
+      },
+      {
+        "index": 3,
+        "snapshot": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/target-case-002/case.r3-progress.jsonl.solve1.iterate3.snapshot.json",
+          "bytes": 4446,
+          "sha256": "084f36147cd516a329b02e16d66f4ce1603cb27d497876371046cd6e0a3a7cfc"
+        },
+        "scaled_residual_by_block": [
+          4.645808775521945,
+          0.01414590154048819,
+          16.06953785563707,
+          0.06818953123296856,
+          1.9376194786070324e-15,
+          1.4264665732313087e-15,
+          5.929230630780101e-17,
+          8.524347277457883e-05
+        ],
+        "native_min_inner_k": 4.308572526840214e-08,
+        "minimum_margin": 8.4397745316777e-08,
+        "lambda_min": 1,
+        "accepted_fraction": 0.0003942938830711926,
+        "limiting_inventory": "reconstruction_native",
+        "limiting_point": [
+          1.6046496089512394,
+          0,
+          0
+        ],
+        "step_norm": 1.5209911510358116,
+        "linear_scaled_residual_max": 4.5901737269404407e-14
+      },
+      {
+        "index": 4,
+        "snapshot": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/target-case-002/case.r3-progress.jsonl.solve1.iterate4.snapshot.json",
+          "bytes": 4449,
+          "sha256": "1e51efb854f150e05429961ea07b1924b9e0610467da8c62b0975cbf9801d49b"
+        },
+        "scaled_residual_by_block": [
+          4.645799612145292,
+          0.014145873639164416,
+          16.069506160132295,
+          0.06818939673617241,
+          2.1411229706711986e-15,
+          1.513983651483439e-15,
+          9.181837148236614e-17,
+          8.524330464599246e-05
+        ],
+        "native_min_inner_k": 2.1542864023839934e-10,
+        "minimum_margin": 4.2198875380459125e-10,
+        "lambda_min": 1,
+        "accepted_fraction": 1.9723965900961697e-06,
+        "limiting_inventory": "reconstruction_native",
+        "limiting_point": [
+          1.6046496089512394,
+          0,
+          0
+        ],
+        "step_norm": 1.52044821311738,
+        "linear_scaled_residual_max": 5.338300376832956e-14
+      },
+      {
+        "index": 5,
+        "snapshot": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/target-case-002/case.r3-progress.jsonl.solve1.iterate5.snapshot.json",
+          "bytes": 4460,
+          "sha256": "35229354016b39cd1c2a79af136571965a898765932adeb9abdd61c1a5f192ed"
+        },
+        "scaled_residual_by_block": [
+          4.645799566328391,
+          0.014145873499657869,
+          16.069506001654624,
+          0.06818939606368575,
+          2.0620094639306042e-15,
+          1.9782854962041205e-15,
+          7.877406409464992e-17,
+          8.52433038087999e-05
+        ],
+        "native_min_inner_k": 1.0771380667832023e-12,
+        "minimum_margin": 2.1099337115729985e-12,
+        "lambda_min": 1,
+        "accepted_fraction": 9.862006776423728e-09,
+        "limiting_inventory": "reconstruction_native",
+        "limiting_point": [
+          1.6046496089512394,
+          0,
+          0
+        ],
+        "step_norm": 1.5204454980228623,
+        "linear_scaled_residual_max": 5.980937076635966e-14
+      },
+      {
+        "index": 6,
+        "snapshot": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/target-case-002/case.r3-progress.jsonl.solve1.iterate6.snapshot.json",
+          "bytes": 4457,
+          "sha256": "1a370b9c4bfd683e6796b6884c2ab13dfcee37e5ccb22b1b7364d24e15d60c84"
+        },
+        "scaled_residual_by_block": [
+          4.645799566099304,
+          0.014145873498960375,
+          16.069506000862376,
+          0.06818939606031736,
+          1.8840842742944176e-15,
+          2.2278969801884217e-15,
+          2.8290900438293625e-17,
+          8.524330380390607e-05
+        ],
+        "native_min_inner_k": 5.353566711035346e-15,
+        "minimum_margin": 1.04867437416841e-14,
+        "lambda_min": 1,
+        "accepted_fraction": 4.930979941616836e-11,
+        "limiting_inventory": "reconstruction_native",
+        "limiting_point": [
+          1.6046496089512394,
+          0,
+          0
+        ],
+        "step_norm": 1.5204454844473585,
+        "linear_scaled_residual_max": 6.062815697031672e-14
+      }
+    ],
+    "trial_classifications": {
+      "feasible_accepted_descent": 6
+    },
+    "terminal_native_norms": {
+      "blocks": [
+        4.645799566099305,
+        0.014145873498960385,
+        16.06950600086237,
+        0.06818939606031742,
+        1.8840842742944184e-15,
+        2.2278969801884225e-15,
+        2.8290900438293625e-17,
+        8.524330380390607e-05
+      ],
+      "gauge": 2.8290900438293625e-17,
+      "maximum": 16.06950600086237,
+      "maximum_constraint": 8.524330380390607e-05
+    },
+    "terminal_independent_norms": {
+      "blocks": [
+        4.645799566099312,
+        0.014145873498958583,
+        16.06950600086231,
+        0.06818939606032011,
+        2.015647648837507e-15,
+        2.1909940467426377e-15,
+        4.336808689942017e-17,
+        8.52433037983392e-05
+      ],
+      "gauge": 4.336808689942017e-17,
+      "maximum": 16.06950600086231,
+      "maximum_constraint": 8.52433037983392e-05
+    },
+    "norm_difference": {
+      "blocks": [
+        3.1106190080640866e-12,
+        7.082364303866238e-14,
+        5.006990628971092e-13,
+        1.3831506806296326e-13,
+        6.767104562474881e-16,
+        8.741865089019037e-16,
+        1.5077186461126543e-17,
+        7.456218329005301e-15
+      ],
+      "gauge": 1.5077186461126543e-17,
+      "maximum": 3.1106190080640866e-12,
+      "maximum_constraint": 7.456218329005301e-15
+    },
+    "unresolved_sign_observation_count": 1,
+    "terminal_scalar_witness": {
+      "admissible": true,
+      "arithmetic_roundoff_scale": 9.160180614920679e-15,
+      "block": 2,
+      "coordinate": [
+        1.6046496089512394,
+        0.0,
+        0.0
+      ],
+      "dependent_trace": false,
+      "geometry": 4,
+      "inventory": "reconstruction_native",
+      "scale": 0.5105080130598861,
+      "side": 0,
+      "sign_resolved": false,
+      "strict": false,
+      "value": 5.418998312144846e-15,
+      "weight": 0.0
+    },
+    "terminal_outer_range": [
+      0.0019658865519027735,
+      0.9999966578106799,
+      1.000012751248982,
+      0.9832968459146939,
+      1.0000483083413623,
+      0.9999901374080346,
+      1.0000316758847563
+    ],
+    "terminal_covariance_minima": [
+      1.0574575683362325e-15,
+      0.1771097373539376
+    ],
+    "strong_continuity": [
+      0.0041103022112709085,
+      2.3325621494670294e-05,
+      -8.155741435932756e-17,
+      3.347692847928505e-16,
+      0.0
+    ],
+    "traction_flux": {
+      "area": 6.0,
+      "full_total_traction_jump_rms": 0.00022788502927670193,
+      "inner_normal_velocity_integral": -4.784655953368476e-16,
+      "k_flux_jump_rms": 1.7461146006836807e-05,
+      "max_absolute_normal_traction_jump": 0.0004424098454692549,
+      "normal_total_traction_jump_integral": 0.00019018641580433677,
+      "normal_total_traction_jump_rms": 9.73167068503732e-05,
+      "reduced_pressure_jump_integral": -0.4551820560196766,
+      "tangential_total_traction_jump_rms": 0.0002060607801990515
+    },
+    "source_and_actual_state_energy_accounting": {
+      "E_minus_D_minus_C": 1.7378913791995382e-16,
+      "energy_weak_minus_direct": -8.526512829121202e-14,
+      "integrated_redistribution": -1.7378913791995382e-16
+    },
+    "independent_free_energy_work": 0.8026646044181414,
+    "native_energy_diagnostic_uses_off_root_trace_lift": true
+  },
+  "next_action": "Use a sign-resolved near-contact iterate and current matrix to test a coupled residual descent direction tangent to the limiting k row, with unchanged trace/residual and separate fixed-box checks."
+}

@@ -1,7 +1,10 @@
 # M8-R3: nonpressure actions and a durable exact target
 
-Status: implementation and fixed-state verification in progress. M8 remains
-**open**. No new target solve is qualified by this working report.
+The exact SaturatedR2 stage did not converge. The new actions pass the
+specified fixed-state checks, and the target finished with a complete durable
+terminal record. Scalar step limits led to stagnation at residual `16.0695`,
+well above `2e-12`. The terminal outer gradient also exits the fixed box.
+No physical step was accepted. M8 remains **open**.
 
 The branch started exactly at reviewed baseline
 `e4c9d44758f08109ba5ea8c2b909790a02b3acc8`, without intervening commits or
@@ -98,7 +101,9 @@ temporary filename vector; the probe now uses the flat field's consistent
 mass and a named filename vector. The first fixed-state attempts also exposed
 missing explicit numerical selectors and a rank-local session discrepancy.
 The subsequent probes use the rank-local session settings and both explicit
-R3 selectors. No physical parameter was changed by these corrections.
+R3 selectors. A focused probe-only guard now rejects a missing selector before
+assembly; the valid initialized-h0 matrix is bitwise unchanged. No physical
+parameter or production solver code was changed by this last probe correction.
 Compiler parallelism is16. Native numerical runs use one rank, and
 OMP_NUM_THREADS, OPENBLAS_NUM_THREADS, MKL_NUM_THREADS, BLIS_NUM_THREADS,
 VECLIB_MAXIMUM_THREADS and NUMEXPR_NUM_THREADS are all explicitly one.
@@ -117,7 +122,10 @@ steps and checks of the cutoff slope. It checks the selected strain/rotation
 and Yap branches, rather than differencing across a switch. The R3
 nonpressure cap selection is uncapped at the exact knot; the existing
 pressure column selection at that knot is directional. A common mixed
-generalized action at that exact knot is outside the verified states.
+generalized action at that exact knot is outside the verified states. The
+moving-point action assumes an interior basis evaluation in the selected
+element; it is not qualified for a point displaced outside its selected
+element and clamped by the native element-search tolerance.
 
 | Fixed state | Maximum absolute physical action error | Result vs `1e-7` |
 | --- | ---: | --- |
@@ -126,6 +134,7 @@ generalized action at that exact knot is outside the verified states.
 | SaturatedR2 saved alpha3200 | `1.294e-11` | Pass |
 | SaturatedR2 positive boundary-path iteration 2 | `1.782e-12` | Pass |
 | Limiter and active transition fixture | `1.906e-11` | Pass |
+| Active cap and projected trace fixture | `1.169e-11` | Pass |
 
 The repaired action of the retained outer-k direction is `1.503e-12` in both
 laws at h0. This result applies to the tested states and directions. It does
@@ -163,8 +172,10 @@ precision. The existing code subtracts state minus history before applying
 mass and accumulates its dot products in long double. Using the same delta,
 the largest observed stored-mass action discrepancy is `9.99e-16` in
 coefficient units. The projected constraint differences are below `7.1e-15`
-in the scaled norms. Bounds for sums of frozen increments are separate from
-errors in the primitives or projection. Spatial momentum assembly is the
+in the scaled norms. For the frozen combined spatial increments, the
+summation-only bound is `4.66e-12` in maximum coefficient units, with up to
+3,794 additions. It does not enclose errors in the basis, closure, other
+pointwise inputs, mass entries, or projection. Spatial momentum assembly is the
 material resolution concern. These fixed-state comparisons do not establish
 a `5e-12` floor or demonstrate an improved attainable root from an arithmetic
 change. The exact target therefore uses the original production residual.
@@ -176,7 +187,8 @@ consistent free/boundary mass partition. A physical rate is a basis-row
 evaluation of the mass solve, with dependent-trace coupling stated explicitly.
 The single constructed polynomial is nonnegative by its exact tensor
 coefficients, keeps U and stored reduced Pi fixed, and reconstructs the actual
-dependent trace (relative discrepancy `5.31e-15`). The verified trace branch
+dependent trace (relative discrepancy `5.31e-15`). It passes the declared
+finite scalar, covariance and outer-box checks. The verified trace branch
 has lambda=1 and zero epsilon feedback in its derivative. The independently
 projected sampled-K trace rate includes its induced epsilon boundary mass.
 The free consistent-mass equations balance to `8.89e-16` for k and
@@ -193,14 +205,118 @@ negative rate at the other row is at positive k; it proves no discrete
 inward-invariance defect. This diagnostic neither explains the full O(10)
 frozen-path residual nor proves absence of an admissible implicit root.
 
-## Open decisions
+## Complete assembly and exact target
 
-The final report will distinguish arithmetic resolution, action accuracy,
-valid non-descent, scalar contact, physical range and resource limits using
-complete retained states. Accounting identities and balance at a root remain
-separate. Only a target passing the original residual, independent reconstruction,
-scalar/covariance/applicability/trace and accounting gates permits one actual
-native startup step with proper history bookkeeping.
+The first benchmark invocation stopped in predictor binding, before any
+Jacobian or nonlinear update. The debugger localized the failure to the
+signature/history check. The corrected manifest selects the actual initialized
+state rather than the equal-valued frozen reference. The one complete benchmark
+then assembled and factored the actual alpha400 matrix from the unchanged
+failed auxiliary predictor, without a nonlinear update. Its actions agree
+with the independently qualified saved-predictor actions after the exact
+mass-coefficient change to `8.97e-12` in the existing norms. The current
+predictor has minimum covariance `.08200` inner and `.17692` outer and
+outer gradient departure `.00053225`; it passes the fixed finite box. It
+remains a numerical initial guess, not a converged auxiliary or time sample.
+
+| Operation | Complete benchmark calls / seconds | Exact target calls / seconds |
+| --- | ---: | ---: |
+| Scalar domain | 1 / `.250` | 13 / `3.134` |
+| Constraints | 1 / `.062` | 7 / `.432` |
+| Native residual | 1 / `.150` | 7 / `1.602` |
+| Complete action assembly | 1 / `9.193` | 6 / `56.758` |
+| Factorization | 1 / `.161` | 6 / `1.042` |
+| Line search | 0 / `0` | 6 / `5.860` |
+
+These are measured solver phase times; line search includes its domain and
+residual calls. The 600-second target cap uses the measured assembly,
+factorization and trial costs, up to 12 updates and 32 trials per update,
+with extra allowance for setup, durable output and terminal audit. The one
+target invocation finished in `116.79 s` of native wall time. It did not
+repeat any auxiliary stage and did not run a Linear target.
+
+| Completed iterate | Scaled residual max | Minimum native inner k | Accepted fraction |
+| ---: | ---: | ---: | ---: |
+| 0, saved predictor | `47.38339197` | `.3446858` | — |
+| 1 | `17.32380644` | `1.72343e-3` | `.582500` |
+| 2 | `16.07587660` | `8.61715e-6` | `.0692303` |
+| 3 | `16.06953786` | `4.30857e-8` | `3.94294e-4` |
+| 4 | `16.06950616` | `2.15429e-10` | `1.97240e-6` |
+| 5 | `16.06950600` | `1.07714e-12` | `9.86201e-9` |
+| 6, terminal | `16.06950600` | `5.35357e-15` | `4.93098e-11` |
+
+All six line-search trials were feasible accepted descents. All six
+factorizations and solves completed. At each update the limiting fixed
+location was the native reconstruction row `(1.6046496089512394,0,0)`.
+The fraction-to-boundary steps shrank while the residual stayed nonzero,
+ending at `feasible_residual_stagnation`. This identifies the barrier on the
+observed Newton path; it does not establish nonexistence of an admissible
+implicit root. The last small positive native k value does not certify its
+sign independently. No resource limit or residual exception stopped the run.
+
+The native terminal maximum comes from k (`16.06950600`); streamwise
+momentum is `4.64580`, normal momentum `.0141459`, epsilon `.0681894`, and
+the scaled constraint error `8.52433e-5`. Weak continuity and gauge are
+small separately. The native covariance minima are about `1.04e-15` and
+`.17711`; the near-zero inner value requires the same numerical caution.
+The terminal outer gradient entry departure is `.00196589 > .001`, while
+the k and epsilon ratios remain inside their intervals. Lambda stayed one
+and no cap was active; cap-induced trace attenuation is not the barrier.
+The outer-box exit is a separate physical failure, not the globalization
+stopping criterion. No native startup step was authorized by this outcome.
+
+The independent reconstruction gives `16.06950600086231` against native
+`16.06950600086237`. The largest block norm of their difference is `3.11e-12`.
+The common finite inventory has one sign-unresolved value at the limiting
+row: independent k is `5.42e-15`, within its `9.16e-15` arithmetic scale.
+The audit confirms the outer gradient departure `.00196588655`, with the
+scalar ratios inside their specified intervals. It also verifies the native
+report and durable residual bytes and the unadvanced integrator history slots.
+
+| Terminal observation | Independent value |
+| --- | ---: |
+| Weak continuity, inner / outer, scaled | `2.02e-15` / `2.19e-15` |
+| Gauge, scaled | `4.34e-17` |
+| Strong divergence L2, inner / outer | `.00411030` / `2.33256e-5` |
+| Normal / tangential total-traction jump RMS | `9.73167e-5` / `2.06061e-4` |
+| k-flux jump RMS | `1.74611e-5` |
+| E minus net D minus redistribution | `1.74e-16` |
+| Integrated redistribution | `-1.74e-16` |
+| Actual-state energy weak work minus direct sum | `-8.53e-14` |
+| Free energy work at this non-root | `.802665` |
+
+Pressure uses the existing gauge and reduced-pressure representation. The
+traction checks retain the full normal and tangential stress; no mechanical
+pressure continuity is imposed. Source and energy identities on the actual
+state are separate from balance at a root. The native energy **report** fails
+its same-state crosscheck by `3.53e-8` at this unconverged iterate. It computes
+direct terms with the dependent epsilon trace substituted, whereas the weak
+residual uses the retained matching coefficients. A read-only substitution of
+the 15 differing trace coefficients reproduces the native direct stress/source
+term to `1.0e-13` and accounts for the discrepancy. The terminal trace constraint
+is not satisfied at the root tolerance, and this diagnostic discrepancy has
+not been promoted to a physical energy defect.
+
+The [decision ledger](cls-epawf-revised-evidence/m8-r3/decision-ledger.json)
+binds the exact source, executable, XML, predictor, h0, action errors by block
+and direction, and all small receipts. The complete target is under
+`epoch-005/target-run-001` and `epoch-005/target-case-002`. The atomic
+`case.r3-progress.jsonl.last.json` and its immutable terminal snapshot bind
+the full state, history, residual and constraints. Each completed iterate
+was published before starting its next matrix. The initial benchmark stop,
+failed setup attempts and historical evidence are preserved. The matrices,
+field vectors, and detailed logs remain on Linux.
+
+## Next decision
+
+Before another expensive stage solve, use near-contact iterate 4 and its
+retained current matrix, after checking the limiting sign, to test for a coupled residual
+descent direction tangent to the limiting native k row. Keep the same
+residual and trace constraints. This isolates whether a different feasible
+direction can continue past the observed Newton step restriction. A nonzero
+constrained residual minimum would remain a failed stage. The present
+contact test supplies no verified positivity defect that would justify a
+discretization change.
 
 Curved MMS, active-cap curved/variable-H coupling, fully discrete positivity,
 long-time/refinement, scalable feasibility and developed physical floor/hill
