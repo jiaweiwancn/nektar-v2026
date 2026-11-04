@@ -133,6 +133,15 @@ void WriteClosure(std::ostream &out, const ClosureCase &c)
     Near(modified.epsilonProduction,1.44*c.epsilon/c.k*modified.production,1e-13,"Consistent epsilon production");
     Near(modified.epsilonSource,modified.epsilonProduction-modified.epsilonDestruction+modified.yap,
         1e-13,"Consistent complete epsilon source");
+    const double sink=(c.epsilon-std::min(0.,modified.production))/c.k;
+    Near(std::max(0.,modified.production)-sink*c.k,modified.kSource,1e-13,"Signed Picard k source");
+    const double epsilonRate=RANSParameters{}.cEpsilon2*c.epsilon/c.k;
+    Near(modified.epsilonProduction+modified.yap-epsilonRate*c.epsilon,
+        modified.epsilonSource,1e-13,"Picard epsilon destruction reaction");
+    if (c.name == "expansion_negative_production")
+    {
+        Require(modified.production < 0 && sink > c.epsilon/c.k,"Negative production remains a sink");
+    }
     if (c.variant.Original())
     {
         Require(Flatten(original) == Flatten(modified),"Original default must be exactly unchanged");
@@ -235,7 +244,14 @@ void WriteSource(std::ostream &out, const SourceCase &c)
         Near(point.dissipation,value.dissipation[i],1e-14,"Point dependent profile");
         Near(point.destruction,value.destruction[i],1e-14,"Point destruction profile");
         Near(point.redistribution,value.redistribution[i],1e-14,"Point redistribution profile");
-        if (c.input.k[i] == 0) { Require(value.destruction[i] == 0,"Zero-k destruction must vanish"); }
+        Near(point.rate*c.input.k[i],point.destruction,1e-14,"Picard destruction reaction");
+        if (c.input.k[i] == 0)
+        {
+            Require(value.destruction[i] == 0,"Zero-k destruction must vanish");
+            const double limit=c.controls.smooth?0.:
+                c.input.preD[i]/(value.m*c.controls.theta*c.input.sampledK);
+            Near(point.rate,limit,1e-14,"Picard one-sided rate at zero k");
+        }
     }
     if (std::all_of(value.limiter.begin(),value.limiter.end(),[](double w){return w == 1;}))
     {
@@ -393,6 +409,11 @@ int main(int argc, char **argv)
             }
         }
         const RANSTensor general{{{.1,.4,.8},{-.2,-.3,.5},{.3,-.6,.2}}};
+        ClosureCase expansion;
+        expansion.name = "expansion_negative_production";
+        expansion.gradient[0][0] = expansion.gradient[2][2] = .01;
+        expansion.variant.beta = .4;
+        cases.push_back(expansion);
         for (int branch : {0,1,2})for (double beta : {1.,.4,.45})
         {
             ClosureCase c; c.name = "general_3d"; c.gradient = general; c.direction = inplane;

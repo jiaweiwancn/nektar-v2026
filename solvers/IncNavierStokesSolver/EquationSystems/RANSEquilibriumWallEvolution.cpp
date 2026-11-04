@@ -285,11 +285,22 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
 RANSEquilibriumWallEvolution::Vector RANSEquilibriumWallEvolution::Implicit(const Vector &history,double time,double lambda)
 {
     auto fullHistory=m_state;std::copy(history.begin(),history.end(),fullHistory.begin());int iterations=0;
-    const auto candidate=m_patch->Solve(m_state,fullHistory,1/lambda,time,m_implicitData,m_condensed,iterations,m_tolerance,m_maximumIterations);
+    Vector candidate;
+    try
+    {
+        candidate=m_patch->Solve(m_state,fullHistory,1/lambda,time,m_implicitData,m_condensed,iterations,m_tolerance,m_maximumIterations);
+    }
+    catch(const std::exception &)
+    {
+        if(m_patch->SegregatedPicard())m_rejectedState=m_patch->LastFeasibleState();
+        throw;
+    }
+    const auto residual=m_patch->Residual(candidate,fullHistory,1/lambda,time,m_implicitData);
+    const auto norms=m_patch->Norms(residual,m_patch->Constraints(candidate,time,m_implicitData),m_ustar);
+    if(m_patch->SegregatedPicard())
+        Require(Maximum(norms)<=m_tolerance,"Picard candidate failed the native stage residual check");
     if(m_diagnostics)RecordAudit(candidate,fullHistory,1/lambda,time);
-    m_state=candidate;
-    const auto residual=m_patch->Residual(m_state,fullHistory,1/lambda,time,m_implicitData);
-    const auto norms=m_patch->Norms(residual,m_patch->Constraints(m_state,time,m_implicitData),m_ustar);
+    m_state=std::move(candidate);
     Vector record{time,lambda,1/lambda,static_cast<double>(iterations),Maximum(norms),m_patch->AnchorEnergyWork(m_state)};
     record.insert(record.end(),norms.begin(),norms.end());m_stageAudits.push_back(record);
     m_lastHistory=std::move(fullHistory);m_stageTime=time;m_stageAlpha=1/lambda;

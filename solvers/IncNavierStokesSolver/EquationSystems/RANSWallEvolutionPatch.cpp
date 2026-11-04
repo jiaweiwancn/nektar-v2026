@@ -24,25 +24,6 @@ namespace
 {
 using WallMatrix=RANSWallAlgebra::DenseMatrix;
 bool Same(double a,double b){return std::abs(a-b)<1e-11;}
-class Factor
-{
-public:
-    explicit Factor(const WallMatrix &a):n(a.size()),lu(n*n),pivots(n)
-    {
-        Require(n>0,"empty factorisation");
-        for(int i=0;i<n;++i)for(int j=0;j<n;++j)lu[i+n*j]=a[i][j];
-        int info;Lapack::Dgetrf(n,n,lu.data(),n,pivots.data(),info);
-        Require(info==0,"singular evolution stage/mass matrix");
-    }
-    Vector Apply(Vector rhs) const
-    {
-        auto pivot=pivots;
-        int info;Lapack::Dgetrs('N',n,1,lu.data(),n,pivot.data(),rhs.data(),n,info);
-        Require(info==0,"failed evolution factor solve");Maximum(rhs);return rhs;
-    }
-private:
-    int n;Vector lu;std::vector<int> pivots;
-};
 void Add(Vector &r,int offset,const RANSWallGlobalPoint &q,double value,
          const std::array<double,3> &flux,double weight)
 {
@@ -54,6 +35,19 @@ void Add(Vector &r,int offset,const RANSWallGlobalPoint &q,double value,
     }
 }
 
+}
+RANSWallEvolutionPatch::Factor::Factor(const WallMatrix &a):n(a.size()),lu(n*n),pivots(n)
+{
+    Require(n>0,"empty factorisation");
+    for(int i=0;i<n;++i)for(int j=0;j<n;++j)lu[i+n*j]=a[i][j];
+    int info;Lapack::Dgetrf(n,n,lu.data(),n,pivots.data(),info);
+    Require(info==0,"singular evolution stage/mass matrix");
+}
+RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Factor::Apply(Vector rhs) const
+{
+    auto pivot=pivots;
+    int info;Lapack::Dgetrs('N',n,1,lu.data(),n,pivot.data(),rhs.data(),n,info);
+    Require(info==0,"failed evolution factor solve");Maximum(rhs);return rhs;
 }
 struct RANSWallEvolutionPatch::SolverCache
 {
@@ -228,9 +222,29 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     Require((m_nonlinearPolicy=="ScalarFeasibleR3")== (m_actionPolicy=="VerifiedR3Action"),
         "VerifiedR3Action and ScalarFeasibleR3 must be selected together");
     Require(m_nonlinearPolicy=="Legacy" || m_nonlinearPolicy=="ScalarFeasibleR2" ||
-        m_nonlinearPolicy=="ScalarFeasibleR3","unknown wall nonlinear policy");
+        m_nonlinearPolicy=="ScalarFeasibleR3" || SegregatedPicard(),"unknown wall nonlinear policy");
     Require(m_nonlinearPolicy=="Legacy" || m_comm->GetSize()==1,
-        "ScalarFeasibleR2 currently requires one MPI rank");
+        "the selected nonlinear policy requires one MPI rank");
+    if(SegregatedPicard())
+    {
+        const std::array<std::string,3> names{{"Flow","K","Epsilon"}};
+        for(int i=0;i<3;++i)
+        {
+            auto &value=m_picardRelaxation[i];
+            session->LoadParameter("RANSWallPicard"+names[i]+"Relaxation",value,value);
+            Require(value>0. && value<=1.,"Picard relaxation must be in (0,1]");
+        }
+        session->LoadParameter("RANSWallPicardPseudoAlpha",m_picardPseudoAlpha,0.);
+        Require(std::isfinite(m_picardPseudoAlpha) && m_picardPseudoAlpha>=0.,
+            "Picard pseudo-time coefficient must be finite and nonnegative");
+        session->LoadParameter("RANSWallPicardGuessPerturbation",m_picardGuessPerturbation,0.);
+        Require(std::abs(m_picardGuessPerturbation)<=1e-3,
+            "Picard test perturbation must be finite and at most 1e-3 in magnitude");
+        std::string verify;
+        session->LoadSolverInfo("RANSWallPicardVerify",verify,"Off");
+        Require(verify=="On" || verify=="Off","RANSWallPicardVerify must be On or Off");
+        m_picardVerify=verify=="On";
+    }
     session->LoadParameter("RANSWallOwnershipShift",m_ownershipShift,0);Require(m_ownershipShift>=0,"negative ownership shift");
     auto full=MemoryManager<MultiRegions::ExpList>::AllocateSharedPtr(session,graph,true,"u");
     auto pressure=MemoryManager<MultiRegions::ExpList>::AllocateSharedPtr(session,graph,true,"p");
@@ -326,6 +340,10 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
             Point(Epsilon(),q.coordinate),q.weight*(Mapped()?m_mapping.At(q.coordinate).determinant:1.)});
     m_solver=std::make_shared<SolverCache>();m_solver->free.resize(Gauge());m_solver->massFactors.resize(Gauge());
     InitialiseRobust(session);
+    if(SegregatedPicard())
+        Require(m_dimension==2 && !Mapped() && m_transitionEnabled && m_cappedDestruction &&
+            m_parameters.model.Model()==RANSModel::CLSHighRe && !m_solveDiagnosticReplay,
+            "SegregatedPicard requires flat 2D upstream CLS with capped destruction and no legacy replay");
     Vector seed(Size());for(int i=0;i<size[K()];++i)seed[offset[K()]+i]=parameters.model.Q()*.16*m_constants[K()][i];
     Refresh(seed);for(const auto &ray:m_rays)for(const auto &q:ray.points)m_bodyInner.push_back(q);
     if(m_transitionEnabled)InitialiseTransition(session);
@@ -699,6 +717,11 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Solve(Vector s,const Vect
     const RANSWallEvolutionData &data,bool condensed,int &iterations,double tolerance,int maximumIterations) const
 {
     Require(Size()<=3000,"replicated dense evolution solve is limited to 3000 unknowns; larger meshes permit reference audits only");
+    if(SegregatedPicard())
+    {
+        Require(!condensed,"SegregatedPicard requires uncondensed native velocity spaces");
+        return SolveSegregatedPicard(std::move(s),history,alpha,time,data,iterations,tolerance,maximumIterations);
+    }
     if(m_nonlinearPolicy=="ScalarFeasibleR3")
     {
         Require(!condensed,"ScalarFeasibleR3 retains the full coupled dense backend");

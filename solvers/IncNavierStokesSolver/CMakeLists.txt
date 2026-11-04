@@ -34,6 +34,7 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
         ./EquationSystems/RANSWallEvolutionNonpressure.cpp
         ./EquationSystems/RANSWallEvolutionResolution.cpp
         ./EquationSystems/RANSWallEvolutionFeasible.cpp
+        ./EquationSystems/RANSWallEvolutionPicard.cpp
         ./EquationSystems/RANSWallTimeIntegration.cpp
         ./EquationSystems/RANSEquilibriumWallEvolution.cpp
         ./EquationSystems/SmoothedProfileMethod.cpp
@@ -200,6 +201,7 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
             EquationSystems/RANSWallEvolutionNonpressure.cpp
             EquationSystems/RANSWallEvolutionResolution.cpp
             EquationSystems/RANSWallEvolutionFeasible.cpp
+            EquationSystems/RANSWallEvolutionPicard.cpp
             EquationSystems/RANSWallEvolutionDiagnostics.cpp)
         FOREACH(rans_m4_target RANSEquilibriumTimeProbe RANSEquilibriumEvolutionProbe RANSTransverseEvolutionProbe)
             TARGET_INCLUDE_DIRECTORIES(${rans_m4_target} PRIVATE ${CMAKE_SOURCE_DIR}/solvers)

@@ -109,7 +109,8 @@ RANSCappedDestructionValues RANSWallEvolutionPatch::WallNormalization(const Vect
 }
 
 AWFProfileValues RANSWallEvolutionPatch::WallSource(const Vector &s,const RANSWallCoordinate &p,
-    double production,const EquilibriumAWFProfiles &profile,const RANSCappedDestructionValues *normalization) const
+    double production,const EquilibriumAWFProfiles &profile,const RANSCappedDestructionValues *normalization,
+    double *destructionRate) const
 {
     auto values=profile.AtProduction(Distance(p),production);
     if(!m_cappedDestruction)return values;
@@ -118,6 +119,7 @@ AWFProfileValues RANSWallEvolutionPatch::WallSource(const Vector &s,const RANSWa
     const double k=Point(K(),p).Value(s,offset[K()]);
     const auto repaired=EvaluateRANSCappedDestructionPoint(k,profile.K(),values.dissipation,
         values.dissipation-values.redistribution,normalization->b,normalization->m,m_destruction);
+    if(destructionRate)*destructionRate=repaired.rate;
     values.dissipation=repaired.dissipation;values.redistribution=repaired.redistribution;
     values.kSource=production-repaired.destruction;
     return values;

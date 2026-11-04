@@ -171,6 +171,7 @@ public:
     bool InteriorProbeR7() const { return m_r7Policy=="InteriorProbe"; }
     bool AdaptiveR7() const { return m_r7Policy=="Adaptive"; }
     bool GroundSafeguard() const { return CoupledR4() || JointRestorationR5(); }
+    bool SegregatedPicard() const { return m_nonlinearPolicy=="SegregatedPicard"; }
     Vector Norms(const Vector &residual,const std::map<int,double> &constraints,double ustar=.4) const;
     Vector StateNorms(const Vector &state,const Vector &reference,double ustar=.4) const;
     Vector ExplicitBody(const Vector &state,double time,const RANSWallEvolutionData &data) const;
@@ -225,11 +226,33 @@ public:
         const RANSWallCoordinate &point,const SolverUtils::EquilibriumAWFProfiles &profile) const;
     SolverUtils::AWFProfileValues WallSource(const Vector &state,const RANSWallCoordinate &point,
         double production,const SolverUtils::EquilibriumAWFProfiles &profile,
-        const SolverUtils::RANSCappedDestructionValues *normalization=nullptr) const;
+        const SolverUtils::RANSCappedDestructionValues *normalization=nullptr,
+        double *destructionRate=nullptr) const;
     double WallDissipation(const Vector &state,const RANSWallCoordinate &point,
         const SolverUtils::EquilibriumAWFProfiles &profile) const;
     std::string Signature() const;
 private:
+    class Factor
+    {
+    public:
+        explicit Factor(const WallMatrix &matrix);
+        Vector Apply(Vector rhs) const;
+    private:
+        int n;
+        Vector lu;
+        std::vector<int> pivots;
+    };
+    struct PicardBlock
+    {
+        std::vector<int> rows;
+        WallMatrix matrix;
+        Vector residual;
+    };
+    PicardBlock AssemblePicardBlock(int block,const Vector &state,const Vector &history,
+        double alpha,double time,const RANSWallEvolutionData &data,
+        const std::map<int,double> &external) const;
+    Vector SolveSegregatedPicard(Vector state,const Vector &history,double alpha,double time,
+        const RANSWallEvolutionData &data,int &iterations,double tolerance,int maximumIterations) const;
     struct WallExtremum
     {
         RANSWallGlobalPoint row;
@@ -344,6 +367,10 @@ private:
     mutable std::string m_solveResidualException;
     mutable std::string m_solveInvalidContext;
     std::string m_nonlinearPolicy="Legacy",m_feasibleTraceFile="case.feasible.jsonl";
+    std::array<double,3> m_picardRelaxation{{1.,.5,.5}};
+    double m_picardPseudoAlpha=0.;
+    double m_picardGuessPerturbation=0.;
+    bool m_picardVerify=false;
     std::string m_directionAccuracy="Legacy",m_r7Policy="Off";
     double m_r7PreviousDisplacement=0.,m_r7Radius=0.;
     bool m_r7Interior=false;
