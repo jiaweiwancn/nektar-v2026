@@ -1,6 +1,6 @@
 # M8-R2: restricted native inner law and admissible implicit stage
 
-Status: final evidence collection. **No admissible coupled target-stage root
+Status: bounded implementation and experiments completed. **No admissible coupled target-stage root
 has been obtained. M8 remains open.** The opt-in inner law and scalar-domain
 policy are implemented, with scoped native operator verification and an
 initial representation inside the fixed finite-set contract. The matched
@@ -303,7 +303,7 @@ diffusion or nonlocal-trace cause, prove root absence, or remove the known
 action-accuracy limitation.
 
 The [independent terminal packet](cls-epawf-revised-evidence/m8-r2/terminal-frozen-scalar-result.json)
-binds the actual complete record, checkpoint, history, native audit table,
+binds the actual complete record, audit checkpoints, history, native audit table,
 producer and analysis source. Its eleven phases completed in 226.5 seconds,
 with one independent residual reconstruction and no native rerun or current
 Jacobian/path analysis. The minimum inner k is `7.97763e-15` natively and
@@ -325,8 +325,9 @@ and minimum b is `.832365063`; cap-active measure is zero. Independent
 integrated E and D are both `8.43645916235`, with redistribution integral
 about `-1.60e-16`. Active saturation measure is `.05983489225` of inner
 volume 12; selected mean-work and production changes both equal
-`-.11843748537`. Including chi=0, the actual matching trace remains
-the projected `lambda*Epre(H)`. Limiter activity is not normalization-cap
+`-.11843748537`. Including chi=0, the matching constraint still targets
+the projection of `lambda*Epre(H)`; the retained actual trace has the nonzero
+constraint residual reported above. Limiter activity is not normalization-cap
 activity, and these observations supply no cap-induced epsilon-attenuation
 explanation.
 
@@ -361,6 +362,54 @@ fingerprint; lost process exit status and elapsed wall time remain null.
 The solver log's `3033.31s` Execute timing is not substituted for a
 supervisor-observed process duration. The supervisor's wall-cap enforcement
 after its failure is unverified. This collection is not a native retry.
+
+## Evidence and focused verification
+
+The [decision ledger](cls-epawf-revised-evidence/m8-r2/decision-ledger-001.json)
+binds source/runtime, XML, coefficient states/history, matrices, reports, logs,
+independent analyses and retained unsuccessful attempts. It is 124,757 bytes,
+SHA256 `3c81e7fa04ea81ea62889f928fa044c49014807221a2322f4184759131814a52`.
+Its integrity and bounded-task evidence flags are true; complete target-stage
+evidence, physical-trajectory qualification and M8 closure remain false.
+These metadata flags do not turn failed scientific gates into passes.
+The [frozen native summary](cls-epawf-revised-evidence/m8-r2/frozen-scalar-summary-001.json)
+retains all six internal update/trial summaries, block norms, margins, branch
+changes and matrix hashes. The [additive completion record](cls-epawf-revised-evidence/m8-r2/completion-recovery-001.json)
+and [recovery note](cls-epawf-revised-evidence/m8-r2/completion-recovery-note.md)
+preserve the failed original supervisor and unknown process status separately.
+
+All native numerical evidence uses clean producing source
+`9f20b3053c303e8805f5183f668a8ec468d9656b` and solver SHA256
+`a90a196fe554d591fa39c6556166bf58ad43afa787b6b8e8d3d5cbf3355a5668`.
+The final metadata drivers use clean analysis source
+`4cca7f4a66bf98a7726439ae637beb0fb21dce5c`; the frozen-scalar terminal
+reconstruction uses the separately pinned `7c3a61250a33cb6709551e68709ab92bfb93cad9`.
+All C++/header/CMake differences from the producing epoch remain empty.
+Producing source/builds, the canonical unrelated Linux checkout and retained
+evidence are unchanged. No numerical result is inferred from a Mac build.
+
+Exact executed command arguments and returned statuses remain in the ledger's
+referenced `epoch-002/build-receipt.json`, operator/pressure/preflight receipts,
+`stages-001/receipt.json`, terminal-analysis receipts and completion records.
+The actual native invocation is `taskset -c 0` followed by
+`epoch-002/build/IncNavierStokesSolver` and its law-specific stage XML.
+The supervisor supplied the bounded level family and wall limit; it did not
+add forcing or change the stage residual. Numerical environments explicitly
+set `OMP_NUM_THREADS`, `OPENBLAS_NUM_THREADS`, `MKL_NUM_THREADS`,
+`BLIS_NUM_THREADS`, `VECLIB_MAXIMUM_THREADS` and `NUMEXPR_NUM_THREADS` to one.
+
+Three focused Legacy regressions pass on the producing epoch:
+`RANSEquilibriumTimeNative`, `RANSEquilibriumEvolutionNative`, and
+`RANSEquilibriumWallEvolutionSmoke`. The final
+[Linux metadata receipt](cls-epawf-revised-evidence/m8-r2/completion-metadata-tests-001.json)
+records 65 passing checks: 15 recovery/curator, 32 normal strict-assessor,
+six broken-output, and 12 bounded-decision semantics tests. They include a
+real disconnected-stdout Python process that finishes its receipt and exits
+normally. The progress-only driver correction preserves child polling and
+timeout enforcement after EPIPE; it was not used to rerun or relabel the
+original native experiment. These metadata checks are separate from the
+failed action gates and from the earlier eight passing ray-association tests.
+No unrelated numerical campaign was repeated.
 
 ## Recommendation and open gates
 

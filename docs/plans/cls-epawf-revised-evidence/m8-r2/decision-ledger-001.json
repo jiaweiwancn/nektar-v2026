@@ -1,0 +1,2658 @@
+{
+  "schema": 1,
+  "milestone": "M8-R2 decision ledger",
+  "created_utc": "2026-11-04T01:02:50.421110+00:00",
+  "curator": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/curate-decision.py",
+    "sha256": "3e5dbfb5349bad09a5c628b16e9a35a78bb523f6ae9f09e0a13c3280fcd5d86b"
+  },
+  "method": "stdlib metadata/hash extraction only; no scientific/native calls",
+  "scientific_or_native_calls": 0,
+  "reviewed_baseline": "5186d63bd825aadd198488d93cff02fc9496a232",
+  "producing_epoch": {
+    "commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+    "runtime_sections": {
+      "source_inputs": "6c301cfd9f88527e85c486e7bf70fe296b4306895cf928b42befa064a4097e49",
+      "runtime_artifacts": "5550a806cec861e12cc7e26e2bd650a4710419e065af5d0c0c9840c470455baf",
+      "runtime_bindings": "6bc73e934e1403b605450707b62147bb9bd9659aecb16a0fb915d739b963e937",
+      "runtime_environment": "88310c925550f38d37f9ac4904fcffd68fc53c0a83dc0ffceb369b855a2e833e",
+      "python_packages": "b731cac586c07ea233813c735659e5c5093cd20bc178bd95552a87ab7384e44f",
+      "tool_images": "b8cc10e2605ae200c5f5a1949009f0c663e216f05c2203310d938036adecf1e7"
+    },
+    "solver": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/build/IncNavierStokesSolver",
+      "sha256": "a90a196fe554d591fa39c6556166bf58ad43afa787b6b8e8d3d5cbf3355a5668"
+    }
+  },
+  "fixed_coefficients": {
+    "beta": 0.4,
+    "GammaUniform": 0,
+    "GammaScale": 1,
+    "C_of_q": "original CLS",
+    "rho": 0.8,
+    "d": 0.2,
+    "theta": 0.2,
+    "delta": 0.1,
+    "eta": 0
+  },
+  "fixed_outer_box": {
+    "normalized_gradient": "Q^T G Q/(u_star/(kappa*r))",
+    "gradient_center": "e_x tensor e_z",
+    "gradient_entry_radius": 0.001,
+    "k_over_K0": [
+      0.99,
+      1.01
+    ],
+    "epsilon_over_epsilon0": [
+      0.98,
+      1.02
+    ],
+    "limiting_max_branches": "both",
+    "minimum_lambda": 0.5,
+    "sampled_K": "strictly positive",
+    "sampled_K_over_K0_bounded_kernel_controls": [
+      0.5,
+      1.5
+    ],
+    "principal_lower_bound_over_nu_t0": "0.53345977306365966796875",
+    "scope": "frozen-state continuum outer certificate; separate finite coverage and time-map gates"
+  },
+  "historical_preservation_from_build": {
+    "preserved_sources": {
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026": {
+        "commit": "f4b70baec10016dd098005bc5a5507b87e4a57bf",
+        "status": ""
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/source": {
+        "commit": "aa854f4c5b05451a81a4e1dd60eaaca98eb547e4",
+        "status": ""
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/source": {
+        "commit": "426d48cd44f9f4af017244f6be4c1a6f62d36c01",
+        "status": ""
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/source": {
+        "commit": "360cbb7ac728b575cdf9af21e6d0963a1d88acb9",
+        "status": ""
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/finalization-001/source": {
+        "commit": "5186d63bd825aadd198488d93cff02fc9496a232",
+        "status": ""
+      },
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/source": {
+        "commit": "1ee3a8454c857c807bcb6911024186afb9d22721",
+        "status": ""
+      }
+    },
+    "preserved_images": {
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/build/IncNavierStokesSolver": "2fa72f138fc65da2b04be52735f1e767185375b0b9900b4fb66f1364da2be2ea",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/build/IncNavierStokesSolver": "40f6d2a37822b418ceb1e4d5e134574e3635a60ce52fc4e0229faadda9afe3c6",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/controlled/build/IncNavierStokesSolver": "aa48843d03d22b7089b2b08f56d777640a1419a3e59296850523d3130206e336",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/build/IncNavierStokesSolver": "1053aacbc1cfb8b7ccd4dd53eec066a3f9aa760486da3f3dcf0a616eb3120a9f",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/build/RANSCurvedWallProbe": "c9416d06a333ff5ceb81775c969c4dbd4caf3093b5975dd44d82448c1bf9b6a3",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/build/RANSPressureActionProbe": "a818a70969de2cb7446d5b7f38b36ae7ee3b31e42b6798fee9673785a20714f2"
+    }
+  },
+  "final_requested": false,
+  "final_stage_evidence_ready": false,
+  "bounded_final_requested": true,
+  "bounded_task_evidence_ready": true,
+  "bounded_task_outcome": "bounded target attempts observed; completion unavailable",
+  "stage_assessment": {
+    "supplied": true,
+    "bounded_evidence_ready": true,
+    "bounded_task_outcome": "bounded target attempts observed; completion unavailable",
+    "source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+    "family_status": "incomplete",
+    "original_receipt": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/receipt.json",
+      "bytes": 8248,
+      "sha256": "35d554bf555fa582dd2cf57717d933e81c513baf8e3d5d58bd15c1d9f09eafeb"
+    },
+    "runtime_binding_passed": true,
+    "bound_file_count": 4087,
+    "bound_file_inventory_sha256": "0cc7676f775a8c2d56efd474c48ec63afcbfff37410afc58d76edb81f8515abd",
+    "bound_file_policy": "Pins are cryptographically bound by the strict assessment; huge matrices/traces are not rehashed here",
+    "conditional_frozen_scalar_allowed": true,
+    "fallback_execution_inferred": false,
+    "cases": [
+      {
+        "inner_stress": "Linear",
+        "preflight_h0_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca",
+        "unknowns": 2165,
+        "evidence_status": "target_attempt_observed_completion_unavailable",
+        "target_start_observed_in_log": true,
+        "complete_target_solve_record": false,
+        "target_attempted": true,
+        "converged_target_evidence": null,
+        "full_coupled_convergence_evidence": null,
+        "scalar_solve_convergence_evidence": null,
+        "wall_cap_stop_observed": true,
+        "wall_cap_interpretation": "Recorded exit/timing only; no nonlinear-failure or root-absence inference",
+        "native_postqualification_report_available": false,
+        "native_history_report_available": false,
+        "native_history_unchanged_verified": null,
+        "issues": [],
+        "native_command": {
+          "name": "native-Linear",
+          "argv": [
+            "taskset",
+            "-c",
+            "0",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/build/IncNavierStokesSolver",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-linear-matchedr2/case.xml"
+          ],
+          "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-linear-matchedr2",
+          "timeout_seconds": 14400,
+          "cpu": 0,
+          "pid": 36332,
+          "exit_code": 124,
+          "seconds": 14401.027712328996,
+          "log_path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/native-Linear.log",
+          "log_sha256": "6f2880fd20fffd9bf373566ce7e361cce8644eb42853987895382fd3f65ed1c4"
+        },
+        "log_evidence": {
+          "target_start_lines": [
+            {
+              "line": 153,
+              "iteration": 0,
+              "alpha": 400.0,
+              "residual": 62.5985
+            },
+            {
+              "line": 171,
+              "iteration": 1,
+              "alpha": 400.0,
+              "residual": 15.4194
+            },
+            {
+              "line": 189,
+              "iteration": 2,
+              "alpha": 400.0,
+              "residual": 13.1962
+            },
+            {
+              "line": 207,
+              "iteration": 3,
+              "alpha": 400.0,
+              "residual": 13.185
+            },
+            {
+              "line": 225,
+              "iteration": 4,
+              "alpha": 400.0,
+              "residual": 13.1849
+            }
+          ],
+          "target_summary_lines": []
+        },
+        "final_report_evidence": null,
+        "complete_prefix": {
+          "complete_prefix_bytes": 251639192,
+          "complete_prefix_sha256": "f3fa6aa4291b3d54fa4e43a84fab64a77a74b796a1bbdb1a4bd666f861be8275",
+          "complete_records": [
+            {
+              "alpha": 3200,
+              "time": 0.0025,
+              "converged": false,
+              "terminal": "feasible_residual_stagnation",
+              "tolerance": 2e-12,
+              "maximum_iterations": 12,
+              "history_advanced": false,
+              "residual_unchanged": true,
+              "frozen_velocity_pressure_diagnostic": false,
+              "scaled_block_norms": [
+                5.3342404456781885e-12,
+                3.951943883158008e-14,
+                6.075066506430928e-13,
+                2.305248869981776e-13,
+                7.136374291937688e-16,
+                7.536024020298983e-16,
+                5.759824041329241e-17,
+                1.580931222269878e-15
+              ],
+              "index": 0,
+              "offset": 0,
+              "bytes": 251639192,
+              "raw_line_sha256": "f3fa6aa4291b3d54fa4e43a84fab64a77a74b796a1bbdb1a4bd666f861be8275",
+              "canonical_record_sha256": "89b19ccf7909e803fd9efbe52060828ec6fe598fd9e484309c0b2081776d569d",
+              "state_sha256": "5daf9ae08d942da5d2bb83f22dca672069d8245f5cfe13cb6b4c5a62955dcc56",
+              "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca",
+              "iteration_count": 8,
+              "matrix_files": [
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-linear-matchedr2/case.feasible.jsonl.solve1.J0.bin",
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-linear-matchedr2/case.feasible.jsonl.solve1.J1.bin",
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-linear-matchedr2/case.feasible.jsonl.solve1.J2.bin",
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-linear-matchedr2/case.feasible.jsonl.solve1.J3.bin",
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-linear-matchedr2/case.feasible.jsonl.solve1.J4.bin",
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-linear-matchedr2/case.feasible.jsonl.solve1.J5.bin",
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-linear-matchedr2/case.feasible.jsonl.solve1.J6.bin",
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-linear-matchedr2/case.feasible.jsonl.solve1.J7.bin"
+              ]
+            }
+          ],
+          "unpublished_tail": null
+        },
+        "retained_native_pins": {
+          "trace": {
+            "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-linear-matchedr2/case.feasible.jsonl",
+            "bytes": 251639192,
+            "sha256": "f3fa6aa4291b3d54fa4e43a84fab64a77a74b796a1bbdb1a4bd666f861be8275"
+          },
+          "matrices": [
+            {
+              "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-linear-matchedr2/case.feasible.jsonl.solve1.J0.bin",
+              "bytes": 37497800,
+              "sha256": "469e86042f7c0d9e0291b0fa7f16011e3c7cfab53a714246778358a804128dee",
+              "shape": [
+                2165,
+                2165
+              ],
+              "referenced_by_complete_record": true,
+              "scope": "Stored matrix only; no derivative/linear-solve accuracy is assessed"
+            },
+            {
+              "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-linear-matchedr2/case.feasible.jsonl.solve1.J1.bin",
+              "bytes": 37497800,
+              "sha256": "5259c75acd539939a63a580b9707f852087bdfab8873763430a66b9233b0ce54",
+              "shape": [
+                2165,
+                2165
+              ],
+              "referenced_by_complete_record": true,
+              "scope": "Stored matrix only; no derivative/linear-solve accuracy is assessed"
+            },
+            {
+              "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-linear-matchedr2/case.feasible.jsonl.solve1.J2.bin",
+              "bytes": 37497800,
+              "sha256": "3e706f8512a458a916f022fd33991d8d6d6215c5c04cb28b73f5f9ea59cb218d",
+              "shape": [
+                2165,
+                2165
+              ],
+              "referenced_by_complete_record": true,
+              "scope": "Stored matrix only; no derivative/linear-solve accuracy is assessed"
+            },
+            {
+              "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-linear-matchedr2/case.feasible.jsonl.solve1.J3.bin",
+              "bytes": 37497800,
+              "sha256": "df7121cdd2198100178d4d4caeb5b08e0e4d945ec00693db1195699e17d630b8",
+              "shape": [
+                2165,
+                2165
+              ],
+              "referenced_by_complete_record": true,
+              "scope": "Stored matrix only; no derivative/linear-solve accuracy is assessed"
+            },
+            {
+              "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-linear-matchedr2/case.feasible.jsonl.solve1.J4.bin",
+              "bytes": 37497800,
+              "sha256": "6e44a658ded3874a4489f9292649767d76f9990684496ae7f0c2addbb9d69bd2",
+              "shape": [
+                2165,
+                2165
+              ],
+              "referenced_by_complete_record": true,
+              "scope": "Stored matrix only; no derivative/linear-solve accuracy is assessed"
+            },
+            {
+              "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-linear-matchedr2/case.feasible.jsonl.solve1.J5.bin",
+              "bytes": 37497800,
+              "sha256": "d6af98a046304b5165571eab9682d404a5e9e7f44ce3ca90d753d84bcd1fef5d",
+              "shape": [
+                2165,
+                2165
+              ],
+              "referenced_by_complete_record": true,
+              "scope": "Stored matrix only; no derivative/linear-solve accuracy is assessed"
+            },
+            {
+              "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-linear-matchedr2/case.feasible.jsonl.solve1.J6.bin",
+              "bytes": 37497800,
+              "sha256": "5db1c5aa5bac0805efbec56343ab6f3800b62608112214645c3e7a90f3516a0b",
+              "shape": [
+                2165,
+                2165
+              ],
+              "referenced_by_complete_record": true,
+              "scope": "Stored matrix only; no derivative/linear-solve accuracy is assessed"
+            },
+            {
+              "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-linear-matchedr2/case.feasible.jsonl.solve1.J7.bin",
+              "bytes": 37497800,
+              "sha256": "98286a69e048bf56ae1dae609f5e447f5e8a9ed20f3d7b71f0b9076db72efede",
+              "shape": [
+                2165,
+                2165
+              ],
+              "referenced_by_complete_record": true,
+              "scope": "Stored matrix only; no derivative/linear-solve accuracy is assessed"
+            },
+            {
+              "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-linear-matchedr2/case.feasible.jsonl.solve2.J0.bin",
+              "bytes": 37497800,
+              "sha256": "ae6e804b43d90be64ce77c3e44dd532970d35f7a37c449984cb28e6bfaf127e6",
+              "shape": [
+                2165,
+                2165
+              ],
+              "referenced_by_complete_record": false,
+              "scope": "Stored matrix only; no derivative/linear-solve accuracy is assessed"
+            },
+            {
+              "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-linear-matchedr2/case.feasible.jsonl.solve2.J1.bin",
+              "bytes": 37497800,
+              "sha256": "b5920865681e38fd9d7444d34e75395eee9e995a261e0a32a2534be02a17871a",
+              "shape": [
+                2165,
+                2165
+              ],
+              "referenced_by_complete_record": false,
+              "scope": "Stored matrix only; no derivative/linear-solve accuracy is assessed"
+            },
+            {
+              "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-linear-matchedr2/case.feasible.jsonl.solve2.J2.bin",
+              "bytes": 37497800,
+              "sha256": "2ca371644a3c98c31745204ee97509d104d28049761295af46a11e3adb2272b6",
+              "shape": [
+                2165,
+                2165
+              ],
+              "referenced_by_complete_record": false,
+              "scope": "Stored matrix only; no derivative/linear-solve accuracy is assessed"
+            },
+            {
+              "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-linear-matchedr2/case.feasible.jsonl.solve2.J3.bin",
+              "bytes": 37497800,
+              "sha256": "ec5abe1b9a64a05749bf5b2f568693fdaa6c5fa32ffc3a68f857398e08e7d51a",
+              "shape": [
+                2165,
+                2165
+              ],
+              "referenced_by_complete_record": false,
+              "scope": "Stored matrix only; no derivative/linear-solve accuracy is assessed"
+            }
+          ]
+        },
+        "independent_complete_target_analysis_supplied_by_assessment": false
+      },
+      {
+        "inner_stress": "SaturatedR2",
+        "preflight_h0_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca",
+        "unknowns": 2165,
+        "evidence_status": "target_attempt_observed_completion_unavailable",
+        "target_start_observed_in_log": true,
+        "complete_target_solve_record": false,
+        "target_attempted": true,
+        "converged_target_evidence": null,
+        "full_coupled_convergence_evidence": null,
+        "scalar_solve_convergence_evidence": null,
+        "wall_cap_stop_observed": true,
+        "wall_cap_interpretation": "Recorded exit/timing only; no nonlinear-failure or root-absence inference",
+        "native_postqualification_report_available": false,
+        "native_history_report_available": false,
+        "native_history_unchanged_verified": null,
+        "issues": [],
+        "native_command": {
+          "name": "native-SaturatedR2",
+          "argv": [
+            "taskset",
+            "-c",
+            "0",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/build/IncNavierStokesSolver",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2/case.xml"
+          ],
+          "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2",
+          "timeout_seconds": 14400,
+          "cpu": 0,
+          "pid": 39358,
+          "exit_code": 124,
+          "seconds": 14400.095461108998,
+          "log_path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/native-SaturatedR2.log",
+          "log_sha256": "7bc521264fa2a7394c3cf6f645829e72f7c868c2fb54d0034c29f3337c7e1c54"
+        },
+        "log_evidence": {
+          "target_start_lines": [
+            {
+              "line": 225,
+              "iteration": 0,
+              "alpha": 400.0,
+              "residual": 62.6096
+            }
+          ],
+          "target_summary_lines": []
+        },
+        "final_report_evidence": null,
+        "complete_prefix": {
+          "complete_prefix_bytes": 366927552,
+          "complete_prefix_sha256": "1293f4c5863028057dc39c85f5419a80884f1e8adbb62c10d517fa3e29858cd3",
+          "complete_records": [
+            {
+              "alpha": 3200,
+              "time": 0.0025,
+              "converged": false,
+              "terminal": "feasible_residual_stagnation",
+              "tolerance": 2e-12,
+              "maximum_iterations": 12,
+              "history_advanced": false,
+              "residual_unchanged": true,
+              "frozen_velocity_pressure_diagnostic": false,
+              "scaled_block_norms": [
+                4.594644710208093e-12,
+                3.062843239712373e-14,
+                6.706149789384931e-13,
+                3.863536222599421e-13,
+                6.139459847644923e-16,
+                5.991621399851321e-16,
+                5.903819642362472e-17,
+                4.701862276456552e-16
+              ],
+              "index": 0,
+              "offset": 0,
+              "bytes": 366927552,
+              "raw_line_sha256": "1293f4c5863028057dc39c85f5419a80884f1e8adbb62c10d517fa3e29858cd3",
+              "canonical_record_sha256": "3d1ce19f2c0dbd8084f0ae1b06f1873e8651b335818b783332c8390d2faad807",
+              "state_sha256": "b41b6bb647c161b83192fd5052259d6a85ce951c9ddf1d6093444553206213b7",
+              "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca",
+              "iteration_count": 12,
+              "matrix_files": [
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2/case.feasible.jsonl.solve1.J0.bin",
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2/case.feasible.jsonl.solve1.J1.bin",
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2/case.feasible.jsonl.solve1.J10.bin",
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2/case.feasible.jsonl.solve1.J11.bin",
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2/case.feasible.jsonl.solve1.J2.bin",
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2/case.feasible.jsonl.solve1.J3.bin",
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2/case.feasible.jsonl.solve1.J4.bin",
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2/case.feasible.jsonl.solve1.J5.bin",
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2/case.feasible.jsonl.solve1.J6.bin",
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2/case.feasible.jsonl.solve1.J7.bin",
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2/case.feasible.jsonl.solve1.J8.bin",
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2/case.feasible.jsonl.solve1.J9.bin"
+              ]
+            }
+          ],
+          "unpublished_tail": null
+        },
+        "retained_native_pins": {
+          "trace": {
+            "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2/case.feasible.jsonl",
+            "bytes": 366927552,
+            "sha256": "1293f4c5863028057dc39c85f5419a80884f1e8adbb62c10d517fa3e29858cd3"
+          },
+          "matrices": [
+            {
+              "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2/case.feasible.jsonl.solve1.J0.bin",
+              "bytes": 37497800,
+              "sha256": "2f38db8f04f92b4bdb4be0041165e95c00c4ac4b6b0f84d2badea17916999577",
+              "shape": [
+                2165,
+                2165
+              ],
+              "referenced_by_complete_record": true,
+              "scope": "Stored matrix only; no derivative/linear-solve accuracy is assessed"
+            },
+            {
+              "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2/case.feasible.jsonl.solve1.J1.bin",
+              "bytes": 37497800,
+              "sha256": "cab7d0cde3628d366b7c43405e4b6ec8dccd535db4ca458bdfe436f3f214bc10",
+              "shape": [
+                2165,
+                2165
+              ],
+              "referenced_by_complete_record": true,
+              "scope": "Stored matrix only; no derivative/linear-solve accuracy is assessed"
+            },
+            {
+              "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2/case.feasible.jsonl.solve1.J10.bin",
+              "bytes": 37497800,
+              "sha256": "eb1c3b9e7d43e90ea1d14441be903da217566c4429c3f322b495c08164a76475",
+              "shape": [
+                2165,
+                2165
+              ],
+              "referenced_by_complete_record": true,
+              "scope": "Stored matrix only; no derivative/linear-solve accuracy is assessed"
+            },
+            {
+              "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2/case.feasible.jsonl.solve1.J11.bin",
+              "bytes": 37497800,
+              "sha256": "1af7025f314749b94b1972c618394d284f960a4e3a6a6ca593513c81eae260c0",
+              "shape": [
+                2165,
+                2165
+              ],
+              "referenced_by_complete_record": true,
+              "scope": "Stored matrix only; no derivative/linear-solve accuracy is assessed"
+            },
+            {
+              "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2/case.feasible.jsonl.solve1.J2.bin",
+              "bytes": 37497800,
+              "sha256": "85dc78fd000fda46de48aa7481effe1477fad7fa209808e70bcb1a9e70672d48",
+              "shape": [
+                2165,
+                2165
+              ],
+              "referenced_by_complete_record": true,
+              "scope": "Stored matrix only; no derivative/linear-solve accuracy is assessed"
+            },
+            {
+              "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2/case.feasible.jsonl.solve1.J3.bin",
+              "bytes": 37497800,
+              "sha256": "4d6f9b9754db2a4de6df547aa94288319a964d3448a55c819ba54cf1bee081ab",
+              "shape": [
+                2165,
+                2165
+              ],
+              "referenced_by_complete_record": true,
+              "scope": "Stored matrix only; no derivative/linear-solve accuracy is assessed"
+            },
+            {
+              "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2/case.feasible.jsonl.solve1.J4.bin",
+              "bytes": 37497800,
+              "sha256": "e8b961aaa58d0eb02c765435eb1f3824e7c07b59edb0a86a6adf20e8b86e55c8",
+              "shape": [
+                2165,
+                2165
+              ],
+              "referenced_by_complete_record": true,
+              "scope": "Stored matrix only; no derivative/linear-solve accuracy is assessed"
+            },
+            {
+              "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2/case.feasible.jsonl.solve1.J5.bin",
+              "bytes": 37497800,
+              "sha256": "912770636bc058d70856cb25234a945829500253f1091ad316cff464e4db8268",
+              "shape": [
+                2165,
+                2165
+              ],
+              "referenced_by_complete_record": true,
+              "scope": "Stored matrix only; no derivative/linear-solve accuracy is assessed"
+            },
+            {
+              "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2/case.feasible.jsonl.solve1.J6.bin",
+              "bytes": 37497800,
+              "sha256": "e6a716e9b509465a8351ea178deeb986cd0a5c194bfd9479a7e8f1518b28cf5f",
+              "shape": [
+                2165,
+                2165
+              ],
+              "referenced_by_complete_record": true,
+              "scope": "Stored matrix only; no derivative/linear-solve accuracy is assessed"
+            },
+            {
+              "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2/case.feasible.jsonl.solve1.J7.bin",
+              "bytes": 37497800,
+              "sha256": "b00163649c12fc89171f800b2444b55da6e3ad0545ec140d8f2bfe30b40c4c1b",
+              "shape": [
+                2165,
+                2165
+              ],
+              "referenced_by_complete_record": true,
+              "scope": "Stored matrix only; no derivative/linear-solve accuracy is assessed"
+            },
+            {
+              "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2/case.feasible.jsonl.solve1.J8.bin",
+              "bytes": 37497800,
+              "sha256": "7db152e3868720d9bff91f436ae2533316029262062a03c97ade7f699ef9a0f9",
+              "shape": [
+                2165,
+                2165
+              ],
+              "referenced_by_complete_record": true,
+              "scope": "Stored matrix only; no derivative/linear-solve accuracy is assessed"
+            },
+            {
+              "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2/case.feasible.jsonl.solve1.J9.bin",
+              "bytes": 37497800,
+              "sha256": "226756173cab2cc93d35c50988f6b011fa41ff53ed1cbcb4df8cc16e48512b61",
+              "shape": [
+                2165,
+                2165
+              ],
+              "referenced_by_complete_record": true,
+              "scope": "Stored matrix only; no derivative/linear-solve accuracy is assessed"
+            }
+          ]
+        },
+        "independent_complete_target_analysis_supplied_by_assessment": false
+      }
+    ]
+  },
+  "remaining_unknowns": [
+    "Linear: complete original-target solve record unavailable",
+    "Linear: original-target convergence status unavailable",
+    "Linear: original-target physical/accounting postqualification report unavailable",
+    "Linear: final native-history equality not verified from a report",
+    "SaturatedR2: complete original-target solve record unavailable",
+    "SaturatedR2: original-target convergence status unavailable",
+    "SaturatedR2: original-target physical/accounting postqualification report unavailable",
+    "SaturatedR2: final native-history equality not verified from a report",
+    "Complete original-target independent residual/action/accounting qualification is not established"
+  ],
+  "ledger_integrity_passed": true,
+  "issues": [],
+  "evidence_roles": {
+    "frozen_candidate-contract-v2.md": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/candidate-contract-v2.md",
+    "frozen_candidate-contract-v2.json": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/candidate-contract-v2.json",
+    "frozen_operational-policy-v1.md": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/operational-policy-v1.md",
+    "frozen_operational-policy-v1.json": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/operational-policy-v1.json",
+    "preserved_R1_contract": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r1/candidate-contract.md",
+    "preserved_R1_preregistered": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r1/kernel-contract-preregistered.md",
+    "document_operational-policy-addendum-v2.md": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/operational-policy-addendum-v2.md",
+    "document_operational-policy-addendum-v2.json": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/operational-policy-addendum-v2.json",
+    "document_operational-policy-addendum-v3.md": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/operational-policy-addendum-v3.md",
+    "document_inner-stress-caller-audit.md": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/inner-stress-caller-audit.md",
+    "document_pressure-action-origin.md": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/pressure-action-origin.md",
+    "document_inner-verification-result.json": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/inner-verification-result.json",
+    "document_inner-zero-ratio-diagnosis.json": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/inner-zero-ratio-diagnosis.json",
+    "document_cap-fixture-screen.json": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/cap-fixture-screen.json",
+    "document_analyzer-static-result.json": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/analyzer-static-result.json",
+    "document_preflight-001-stop.json": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/preflight-001-stop.json",
+    "document_preflight-002-summary.json": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/preflight-002-summary.json",
+    "document_initial-action-result.json": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/initial-action-result.json",
+    "document_target-initial-action-result.json": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/target-initial-action-result.json",
+    "document_saturated-initial-action-result.json": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/saturated-initial-action-result.json",
+    "build": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/build-receipt.json",
+    "runtime": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/runtime-fingerprint.json",
+    "inner_wrapper": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-reanalysis-004/receipt.json",
+    "inner_validation": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-reanalysis-004/results/validation.json",
+    "pressure_wrapper": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/pressure-verification-001/receipt.json",
+    "pressure_validation": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/pressure-verification-001/results/validation.json",
+    "historical_pressure_reanalysis": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/pressure-reanalysis-002/validation.json",
+    "legacy": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/legacy-verification-001/receipt.json",
+    "static": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/analyzer-static-002/receipt.json",
+    "preflight_wrapper": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/preflight-002/receipt.json",
+    "retained_attempt_0": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/sync-receipt.json",
+    "retained_attempt_1": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/build-001/receipt.json",
+    "retained_attempt_2": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/build-002/receipt.json",
+    "retained_attempt_3": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/build-003/receipt.json",
+    "retained_attempt_4": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/analyzer-static-001/receipt.json",
+    "retained_attempt_5": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/analyzer-static-002/receipt.json",
+    "retained_attempt_6": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/analyzer-static-diagnosis-001/receipt.json",
+    "retained_attempt_7": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/assessment-metadata-tests-001/receipt.json",
+    "retained_attempt_8": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/auxiliary-analysis-linear-001/receipt.json",
+    "retained_attempt_9": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/auxiliary-analysis-linear-002/receipt.json",
+    "retained_attempt_10": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/build-receipt.json",
+    "retained_attempt_11": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/completion-curation-001/receipt.json",
+    "retained_attempt_12": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/completion-metadata-tests-001/receipt.json",
+    "retained_attempt_13": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/decision-metadata-tests-001/receipt.json",
+    "retained_attempt_14": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/frozen-scalar-001/receipt.json",
+    "retained_attempt_15": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/initial-jacobian-001/receipt.json",
+    "retained_attempt_16": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/initial-jacobian-saturated-001/receipt.json",
+    "retained_attempt_17": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/initial-k-diagnosis-001/receipt.json",
+    "retained_attempt_18": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-continuation-002/receipt.json",
+    "retained_attempt_19": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-continuation-003/receipt.json",
+    "retained_attempt_20": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-reanalysis-004/receipt.json",
+    "retained_attempt_21": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-verification-001/receipt.json",
+    "retained_attempt_22": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/legacy-verification-001/receipt.json",
+    "retained_attempt_23": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/preflight-001/receipt.json",
+    "retained_attempt_24": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/preflight-002/receipt.json",
+    "retained_attempt_25": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/pressure-verification-001/receipt.json",
+    "retained_attempt_26": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/ray-correspondence-tests-001/receipt.json",
+    "retained_attempt_27": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/ray-identity-diagnosis-001/receipt.json",
+    "retained_attempt_28": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/reuse-metadata-tests-002/receipt.json",
+    "retained_attempt_29": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/receipt.json",
+    "retained_attempt_30": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/target-initial-jacobian-001/receipt.json",
+    "retained_attempt_31": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-analysis-frozen-001/receipt.json",
+    "retained_attempt_32": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-analysis-linear-001/receipt.json",
+    "retained_attempt_33": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-analysis-saturated-001/receipt.json",
+    "retained_attempt_34": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-curation-linear-001-receipt.json",
+    "retained_attempt_35": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/inner-verification-001/receipt.json",
+    "retained_attempt_36": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/pressure-verification-001/receipt.json",
+    "extra_linear_initial_action": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/initial-jacobian-001/validation.json",
+    "extra_linear_initial_action_receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/initial-jacobian-001/receipt.json",
+    "extra_linear_analytic_action": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/initial-k-diagnosis-001/validation.json",
+    "extra_linear_analytic_action_receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/initial-k-diagnosis-001/receipt.json",
+    "extra_linear_target_initial_action": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/target-initial-jacobian-001/validation.json",
+    "extra_linear_target_initial_action_receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/target-initial-jacobian-001/receipt.json",
+    "extra_saturated_initial_action": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/initial-jacobian-saturated-001/validation.json",
+    "extra_saturated_initial_action_receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/initial-jacobian-saturated-001/receipt.json",
+    "extra_linear_auxiliary_terminal": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-linear-auxiliary-result.json",
+    "extra_saturated_auxiliary_terminal": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-saturated-auxiliary-result.json",
+    "extra_frozen_terminal": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-frozen-scalar-result.json",
+    "extra_linear_auxiliary_terminal_receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-analysis-linear-001/receipt.json",
+    "extra_linear_auxiliary_terminal_validation": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-analysis-linear-001/validation.json",
+    "extra_saturated_auxiliary_terminal_receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-analysis-saturated-001/receipt.json",
+    "extra_saturated_auxiliary_terminal_validation": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-analysis-saturated-001/validation.json",
+    "extra_frozen_terminal_receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-analysis-frozen-001/receipt.json",
+    "extra_frozen_terminal_validation": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-analysis-frozen-001/validation.json",
+    "extra_failed_full_auxiliary_analysis": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/auxiliary-analysis-linear-002/validation.json",
+    "extra_failed_full_auxiliary_analysis_receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/auxiliary-analysis-linear-002/receipt.json",
+    "extra_ray_identity_diagnosis": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/ray-identity-diagnosis-001/validation.json",
+    "extra_ray_identity_diagnosis_receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/ray-identity-diagnosis-001/receipt.json",
+    "extra_ray_correspondence_tests": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/ray-correspondence-tests-001/receipt.json",
+    "extra_retained_curator_failure": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-curation-linear-001-receipt.json",
+    "extra_reuse_metadata_tests": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/reuse-metadata-tests-002/receipt.json",
+    "extra_assessment_metadata_tests": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/assessment-metadata-tests-001/receipt.json",
+    "extra_earlier_decision_metadata_tests": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/decision-metadata-tests-001/receipt.json",
+    "extra_completion_metadata_tests": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/completion-metadata-tests-001/receipt.json",
+    "extra_completion_fresh_check": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/frozen-scalar-001/completion-check-001/receipt.json",
+    "extra_completion_fresh_runtime": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/frozen-scalar-001/completion-check-001/runtime-postcompletion.json",
+    "extra_completion_recovery": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/frozen-scalar-001/completion-recovery-001.json",
+    "extra_completion_assessment": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/frozen-scalar-001/recovered-assessment-001.json",
+    "extra_completion_curation": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/completion-curation-001/receipt.json",
+    "extra_analysis_sync": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/sync-receipt.json",
+    "extra_R1_improved_initial_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/preflight-001/cases/resolved-base/case.evolution.json",
+    "matched_summary": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/matched-stage-summary-001.json",
+    "matched_native_receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/receipt.json",
+    "matched_runtime_before": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/runtime-before.json",
+    "matched_runtime_after": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/runtime-after.json",
+    "scalar_summary": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/frozen-scalar-summary-001.json",
+    "scalar_native_receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/frozen-scalar-001/receipt.json",
+    "scalar_runtime_before": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/frozen-scalar-001/runtime-before.json",
+    "scalar_runtime_after": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/frozen-scalar-001/completion-check-001/runtime-postcompletion.json",
+    "strict_stage_assessment": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/assessment-001.json",
+    "strict_stage_assessor": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/docs/plans/cls-epawf-revised-evidence/m8-r2/assess-stage-evidence.py",
+    "strict_stage_original_receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/receipt.json",
+    "strict_stage_preflight": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/preflight-002/receipt.json",
+    "strict_stage_original": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/flow-001/qualification/control-coarse/case.xml",
+    "strict_stage_stage_plan": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/stage-plan.json",
+    "strict_stage_Linear_xml": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-linear-matchedr2/case.xml",
+    "strict_stage_Linear_log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/native-Linear.log",
+    "strict_stage_SaturatedR2_xml": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2/case.xml",
+    "strict_stage_SaturatedR2_log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/native-SaturatedR2.log"
+  },
+  "evidence_files": [
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/candidate-contract-v2.md",
+      "available": true,
+      "bytes": 13982,
+      "sha256": "77e20f90cf931f3572d9a9eed3bd9658eb3d2f44ca177b7e05e735a6a81c3bdd",
+      "stable_during_hash": true,
+      "expected_sha256": "77e20f90cf931f3572d9a9eed3bd9658eb3d2f44ca177b7e05e735a6a81c3bdd",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/candidate-contract-v2.json",
+      "available": true,
+      "bytes": 8262,
+      "sha256": "7cbc782674178dfd7366df5e31a9152f0d2fa6c139fd25c4002f66a8f8524e80",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 2,
+        "milestone": "M8-R2",
+        "status": "research-implementation-and-bounded-stage-test; M8 open"
+      },
+      "failures_count": 0,
+      "first_failures": [],
+      "expected_sha256": "7cbc782674178dfd7366df5e31a9152f0d2fa6c139fd25c4002f66a8f8524e80",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/operational-policy-v1.md",
+      "available": true,
+      "bytes": 5068,
+      "sha256": "c9a00043ae91812ea3a60702285576b51f3b0f7c0d52409fb7b99fe41410dab0",
+      "stable_during_hash": true,
+      "expected_sha256": "c9a00043ae91812ea3a60702285576b51f3b0f7c0d52409fb7b99fe41410dab0",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/operational-policy-v1.json",
+      "available": true,
+      "bytes": 3834,
+      "sha256": "1d630c518f1dadfcae4c7b6d0663c82180a2928f46d822bf71c465e9ea272f53",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "milestone": "M8-R2"
+      },
+      "failures_count": 0,
+      "first_failures": [],
+      "expected_sha256": "1d630c518f1dadfcae4c7b6d0663c82180a2928f46d822bf71c465e9ea272f53",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r1/candidate-contract.md",
+      "available": true,
+      "bytes": 22602,
+      "sha256": "c635154db92a07be5bf27b5b50817340e9d6b5301d778c6a1099ac1d220c8879",
+      "stable_during_hash": true,
+      "expected_sha256": "c635154db92a07be5bf27b5b50817340e9d6b5301d778c6a1099ac1d220c8879",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r1/kernel-contract-preregistered.md",
+      "available": true,
+      "bytes": 12350,
+      "sha256": "082a791fb086a08bd83285e68ae5e05923fdb688c7919410263bb894a6f22313",
+      "stable_during_hash": true,
+      "expected_sha256": "082a791fb086a08bd83285e68ae5e05923fdb688c7919410263bb894a6f22313",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/operational-policy-addendum-v2.md",
+      "available": true,
+      "bytes": 5237,
+      "sha256": "a867a9a9beb937be2ad75ba929f1bde91908098f7c3e82749da48c1b06f7dbe5",
+      "stable_during_hash": true
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/operational-policy-addendum-v2.json",
+      "available": true,
+      "bytes": 3543,
+      "sha256": "6c48eac54fd777b7efb69b8a98500f89c79f2bf476544f27fa613e1e466591a2",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 2,
+        "milestone": "M8-R2"
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/operational-policy-addendum-v3.md",
+      "available": true,
+      "bytes": 2883,
+      "sha256": "4c53aa0305cb26931887a21f0cc6f3e78fbe9247edc9cb5e6890ec47bc8d412e",
+      "stable_during_hash": true
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/inner-stress-caller-audit.md",
+      "available": true,
+      "bytes": 10359,
+      "sha256": "e9c0f560061de50032345eec53eb83f6c6860e649e84a1602664b9fdc5f6ffb9",
+      "stable_during_hash": true
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/pressure-action-origin.md",
+      "available": true,
+      "bytes": 5783,
+      "sha256": "ba0bd1cac021605d387d3107f4294dbc66bf58ef0239a353902a6ff7765b649d",
+      "stable_during_hash": true
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/inner-verification-result.json",
+      "available": true,
+      "bytes": 61441,
+      "sha256": "2842c6b03f1ee34439bf2ee878c1127acbaeeb97fd4224c02b6cda5993310975",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "milestone": "M8-R2 B",
+        "status": "operator checks passed; zero-fixture maximum-ratio reconstruction unresolved",
+        "independent_checks": 4366,
+        "native_kernel_checks": 128,
+        "native_fixtures": 8,
+        "producing_source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "analysis_source_commit": "ecfc04983d97e123760407c98d099f789ea208d4",
+        "runtime_unchanged": true
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/inner-zero-ratio-diagnosis.json",
+      "available": true,
+      "bytes": 2776,
+      "sha256": "8489e57a4937a97227699a0c8c0a2829eaffe9c00605cf22b2d2a5f056b1db31",
+      "stable_during_hash": true,
+      "observed": {},
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/cap-fixture-screen.json",
+      "available": true,
+      "bytes": 1598,
+      "sha256": "3720a56c2ed99120152742e891ed042b5f61f9b3def7f6d4b54eb616287a4048",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "source_commit": "1ee3a8454c857c807bcb6911024186afb9d22721"
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/analyzer-static-result.json",
+      "available": true,
+      "bytes": 13298,
+      "sha256": "417bafbfddddb10169e99fdd0d23887762c3517bd20a3f458fe2980a7eb192b6",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "success": true,
+        "checks": 500,
+        "source_commit": "6a03044e99628b9d85e9e85a734ed81968f4932d",
+        "source_commit_end": "6a03044e99628b9d85e9e85a734ed81968f4932d",
+        "source_clean_start": true,
+        "source_clean_end": true,
+        "native_calls": 0,
+        "weak_residual_calls": 0
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/preflight-001-stop.json",
+      "available": true,
+      "bytes": 2622,
+      "sha256": "c3a4fde963bac56ccf9ca8ab273fa274c98a7835514989c8fe9c721e848a40d1",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "source_clean_end": true,
+        "input_hashes_unchanged": true
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/preflight-002-summary.json",
+      "available": true,
+      "bytes": 54377,
+      "sha256": "4e606777fe164605db5617c9aa0903f0fdcf22a8ca87e65602e2df3db7928f78",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 2,
+        "milestone": "M8-R2",
+        "input_hashes_unchanged": true
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/initial-action-result.json",
+      "available": true,
+      "bytes": 18804,
+      "sha256": "f0402ea2b8a680323333944b4629721ff825874b5dcd7109e9500e6ea5772a26",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "milestone": "M8-R2 initial auxiliary J0 action diagnosis",
+        "checks": {
+          "initial": 9724,
+          "component": 63
+        },
+        "producing_source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "initial_derivative_gates_passed": false,
+        "analytic_controls_met": true,
+        "fixed_absolute_gate_met": false,
+        "localization_classification": "retained_J_fails_against_stable_analytic_reference",
+        "stored_J_minus_analytic": {
+          "blocks": [
+            7.15996593112029e-07,
+            5.607262291281462e-09,
+            6.410811162823151e-08,
+            4.859374905274791e-08,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "gauge": 0.0,
+          "maximum": 7.15996593112029e-07,
+          "maximum_constraint": 0.0
+        },
+        "stored_J_roughness_support_error": {
+          "blocks": [
+            1.157274987447134e-07,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "gauge": 0.0,
+          "maximum": 1.157274987447134e-07,
+          "maximum_constraint": 0.0
+        },
+        "stored_J_outer_support_error": {
+          "blocks": [
+            7.06580251680021e-07,
+            5.607262291281462e-09,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "gauge": 0.0,
+          "maximum": 7.06580251680021e-07,
+          "maximum_constraint": 0.0
+        }
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/target-initial-action-result.json",
+      "available": true,
+      "bytes": 13585,
+      "sha256": "84644d81d92730ffe4f21f0dce74491c88097ed19148d40206fe3dfcb5d87ca6",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "milestone": "M8-R2 actual original-target initial action check",
+        "checks": 72,
+        "producing_source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "analysis_source_commit": "8d03c9a84e2dc1de118a327c1e17a2e93a8b4766",
+        "native_calls": 0
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/source/docs/plans/cls-epawf-revised-evidence/m8-r2/saturated-initial-action-result.json",
+      "available": true,
+      "bytes": 23072,
+      "sha256": "18b37d48da687f3668ea4ac43a7ec64b0b65360a227124cb4df6ded10b360206",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "milestone": "M8-R2 SaturatedR2 initial auxiliary J0 action check",
+        "checks": 9724,
+        "producing_source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "analysis_source_commit": "9e128f73e53ee6e3ff7c351e72b5b4557cbf20ca",
+        "native_calls": 0,
+        "initial_derivative_gates_passed": false
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/build-receipt.json",
+      "available": true,
+      "bytes": 5100,
+      "sha256": "35233414966b5023fcb28be147aa96400714569d74bb6f390e6b5085522c4c25",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "status": "passed",
+        "source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "source_commit_end": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "source_clean_start": true,
+        "source_clean_end": true
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/runtime-fingerprint.json",
+      "available": true,
+      "bytes": 679763,
+      "sha256": "2da098e099d40144fb99cba431d75a8e44a06b4e059b6423170d9d9b80023dfb",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 2,
+        "milestone": "M7",
+        "success": true,
+        "source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "clean": true
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-reanalysis-004/receipt.json",
+      "available": true,
+      "bytes": 4967,
+      "sha256": "3caeb7e1c394b651b494ca38caed51d49d07a188a637cd2c2555807f7776d890",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 2,
+        "status": "passed",
+        "source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "source_commit_end": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "source_clean_start": true,
+        "source_clean_end": true,
+        "runtime_unchanged": true,
+        "suite": "inner"
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-reanalysis-004/results/validation.json",
+      "available": true,
+      "bytes": 147559,
+      "sha256": "223be5d6ddfa79e07bd4460feab84c930f1650715490d6e34215cb75210a2986",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "status": "operator checks passed; zero-fixture maximum-ratio reconstruction unresolved",
+        "success": true,
+        "checks": 4366,
+        "producing_source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b"
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/pressure-verification-001/receipt.json",
+      "available": true,
+      "bytes": 3779,
+      "sha256": "6cb23bbc9043bdaf4854d5802516c458f17ed2c2bbcefe0c57f48126f220d99b",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 2,
+        "status": "passed",
+        "source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "source_commit_end": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "source_clean_start": true,
+        "source_clean_end": true,
+        "runtime_unchanged": true,
+        "suite": "pressure"
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/pressure-verification-001/results/validation.json",
+      "available": true,
+      "bytes": 174042,
+      "sha256": "eb8e184f496c22bbec5713af6f82eeb4437011e20d6afdf02d9026e541d8c50a",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "milestone": "M8-R2 C pressure actions",
+        "success": true,
+        "source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "source_commit_end": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "source_clean_start": true,
+        "source_clean_end": true
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/pressure-reanalysis-002/validation.json",
+      "available": true,
+      "bytes": 176034,
+      "sha256": "27303ba92b3deb57b8f298cb2c074e9aa203ea710d7028dfe248dbf7c3b73021",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "milestone": "M8-R2 C pressure actions",
+        "success": true,
+        "source_commit": "10660ea1b2b1fd8c7f2884c0fe6aff4da2be84fd",
+        "source_commit_end": "10660ea1b2b1fd8c7f2884c0fe6aff4da2be84fd",
+        "source_clean_start": true,
+        "source_clean_end": true
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/legacy-verification-001/receipt.json",
+      "available": true,
+      "bytes": 3456,
+      "sha256": "16947e8645d1b9c4bd545f3ff52149c6dabe40d43897745eda58696dc80246af",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 2,
+        "status": "passed",
+        "source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "source_commit_end": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "source_clean_start": true,
+        "source_clean_end": true,
+        "runtime_unchanged": true,
+        "suite": "legacy"
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/analyzer-static-002/receipt.json",
+      "available": true,
+      "bytes": 13298,
+      "sha256": "417bafbfddddb10169e99fdd0d23887762c3517bd20a3f458fe2980a7eb192b6",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "success": true,
+        "checks": 500,
+        "source_commit": "6a03044e99628b9d85e9e85a734ed81968f4932d",
+        "source_commit_end": "6a03044e99628b9d85e9e85a734ed81968f4932d",
+        "source_clean_start": true,
+        "source_clean_end": true,
+        "native_calls": 0,
+        "weak_residual_calls": 0
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/preflight-002/receipt.json",
+      "available": true,
+      "bytes": 39150,
+      "sha256": "c5c54c606722c6a441a1364948ad05996a4c555b29bce4debec54700ebcbb622",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 2,
+        "milestone": "M8-R2",
+        "status": "passed",
+        "source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "source_commit_end": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "source_clean_end": true,
+        "full_runtime_source_inputs_unchanged": true,
+        "input_hashes_unchanged": true
+      },
+      "failures_count": 0,
+      "first_failures": [],
+      "expected_sha256": "c5c54c606722c6a441a1364948ad05996a4c555b29bce4debec54700ebcbb622",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-026/sync-receipt.json",
+      "available": true,
+      "bytes": 1997,
+      "sha256": "9930c3fc1f65f38ce9e633e9e3250b8251a92fef87fe7d2d14c3cea135f93320",
+      "stable_during_hash": true,
+      "observed": {
+        "success": true,
+        "source_commit": "4cca7f4a66bf98a7726439ae637beb0fb21dce5c",
+        "producing_source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b"
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/build-001/receipt.json",
+      "available": true,
+      "bytes": 3541,
+      "sha256": "2c9ccea31354e2826c98d045c00056c33555389f366c83d54f3ef975e2a6b5cb",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "status": "failed",
+        "source_commit": "26d137f296bf42c39f1ef0e10ac99f8a2e2ef7cb",
+        "source_commit_end": "26d137f296bf42c39f1ef0e10ac99f8a2e2ef7cb",
+        "source_clean_start": true,
+        "source_clean_end": true
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/build-002/receipt.json",
+      "available": true,
+      "bytes": 1409,
+      "sha256": "7872340728eb967239fedcea8c80d94cdedb5fc378e1a48cffd4cdfbf83b3e9d",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "status": "failed",
+        "source_commit": "da36b9a177b6c5fc63d6b8a66a3df80ae7e17d3d",
+        "source_commit_end": "da36b9a177b6c5fc63d6b8a66a3df80ae7e17d3d",
+        "source_clean_end": true
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/build-003/receipt.json",
+      "available": true,
+      "bytes": 2356,
+      "sha256": "1d6b10da494e485bf00cc658311c931b30b26b41bc17daaf3bba929d0742907d",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "status": "passed",
+        "source_commit": "1ee3a8454c857c807bcb6911024186afb9d22721",
+        "source_commit_end": "1ee3a8454c857c807bcb6911024186afb9d22721",
+        "source_clean_end": true
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/analyzer-static-001/receipt.json",
+      "available": true,
+      "bytes": 3071,
+      "sha256": "93731a7d245c858fd20943d751ce1cae18565502469a91ba2c1b6295f95be7ff",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "success": false,
+        "source_commit": "dd7d7cf2b71b532b56288aa9d525ae5955602698",
+        "source_commit_end": "dd7d7cf2b71b532b56288aa9d525ae5955602698",
+        "source_clean_start": true,
+        "source_clean_end": true,
+        "native_calls": 0,
+        "weak_residual_calls": 0
+      },
+      "failures_count": 1,
+      "first_failures": [
+        {
+          "type": "ValueError",
+          "message": "Native/common independent static geometric coverage differs"
+        }
+      ]
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/analyzer-static-diagnosis-001/receipt.json",
+      "available": true,
+      "bytes": 7033,
+      "sha256": "2e302aefd6b685f41ddd6f317c1cffa6980b8c0302635240a3f3a3a56a6d2ec8",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "success": true,
+        "checks": 2,
+        "source_commit": "dd7d7cf2b71b532b56288aa9d525ae5955602698",
+        "source_commit_end": "dd7d7cf2b71b532b56288aa9d525ae5955602698",
+        "source_clean_start": true,
+        "source_clean_end": true,
+        "native_calls": 0,
+        "weak_residual_calls": 0
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/assessment-metadata-tests-001/receipt.json",
+      "available": true,
+      "bytes": 1047,
+      "sha256": "868774beaaf66743b68e7d521feffc908cc044f41b5ebcfcc4cb5f83dfa7f1cd",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "success": true,
+        "source_commit": "efb5311ba0dd378a84162e5039484171fb55dced",
+        "source_clean_end": true,
+        "native_calls": 0
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/auxiliary-analysis-linear-001/receipt.json",
+      "available": true,
+      "bytes": 4382,
+      "sha256": "790d7a144c2c8d8d78d7cb848086c409099b27ed4d59bca92ba1664b38692f4f",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "success": false,
+        "source_commit": "7e8b06f078a6cc46122454ad2af238abdba0dd88",
+        "source_commit_end": "7e8b06f078a6cc46122454ad2af238abdba0dd88",
+        "source_clean_start": true,
+        "source_clean_end": true,
+        "native_calls": 0
+      },
+      "failures_count": 1,
+      "first_failures": [
+        {
+          "type": "ValueError",
+          "message": "Analysis driver source is not the clean requested pin"
+        }
+      ]
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/auxiliary-analysis-linear-002/receipt.json",
+      "available": true,
+      "bytes": 14746,
+      "sha256": "0e114d5fe6e9978bd5ed939226204ad9c94a0c96b3e3efe2678f639e98abf116",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "success": false,
+        "source_commit": "7e8b06f078a6cc46122454ad2af238abdba0dd88",
+        "source_commit_end": "7e8b06f078a6cc46122454ad2af238abdba0dd88",
+        "producing_source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "source_clean_start": true,
+        "source_clean_end": true,
+        "native_calls": 0
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/completion-curation-001/receipt.json",
+      "available": true,
+      "bytes": 6304,
+      "sha256": "7c28f9535bc0fc73c55247b0e6d1594bbb9408d7e0dc5a800d0c3399f78aef7c",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "success": true,
+        "source_commit": "4cca7f4a66bf98a7726439ae637beb0fb21dce5c",
+        "source_commit_end": "4cca7f4a66bf98a7726439ae637beb0fb21dce5c",
+        "source_clean_start": true,
+        "source_clean_end": true,
+        "native_calls": 0
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/completion-metadata-tests-001/receipt.json",
+      "available": true,
+      "bytes": 3400,
+      "sha256": "3284d0b241e9617c6cdb437b188e1fe1b9402309aacecb044c511989a0e7172d",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "success": true,
+        "checks": 65,
+        "source_commit": "4cca7f4a66bf98a7726439ae637beb0fb21dce5c",
+        "source_commit_end": "4cca7f4a66bf98a7726439ae637beb0fb21dce5c",
+        "source_clean_start": true,
+        "source_clean_end": true,
+        "native_calls": 0
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/decision-metadata-tests-001/receipt.json",
+      "available": true,
+      "bytes": 1678,
+      "sha256": "1ec2b127639c79bb381c9ebc4176cc14101759bd9b46cb67f3d68152f0dc511c",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "success": true,
+        "source_commit": "3fa079928cc2a31b5ab00e51b9ede9bbe2518399",
+        "source_clean_start": true,
+        "source_clean_end": true,
+        "native_calls": 0
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/frozen-scalar-001/receipt.json",
+      "available": true,
+      "bytes": 7101,
+      "sha256": "3656d28e44cf878a0177653e7e7bb21dbd3ca0aeec16b738acdb627c477ccfc6",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 2,
+        "status": "failed",
+        "source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "source_clean_start": true,
+        "mode": "frozen-scalar"
+      },
+      "failures_count": 0,
+      "first_failures": [],
+      "expected_sha256": "3656d28e44cf878a0177653e7e7bb21dbd3ca0aeec16b738acdb627c477ccfc6",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/initial-jacobian-001/receipt.json",
+      "available": true,
+      "bytes": 13918,
+      "sha256": "1f3043b6d1b8f33a11018980e402d9e975f083cee61273a38a25a7b1945eb1de",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "success": true,
+        "source_commit": "62571db33a0716a41a86aaf62fd372397a89a3b8",
+        "source_commit_end": "62571db33a0716a41a86aaf62fd372397a89a3b8",
+        "producing_source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "source_clean_start": true,
+        "source_clean_end": true,
+        "native_calls": 0,
+        "initial_derivative_gates_passed": false
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/initial-jacobian-saturated-001/receipt.json",
+      "available": true,
+      "bytes": 14042,
+      "sha256": "7324ac48648ad13a344dee2b69cff09193e7d7209c163089048b745d5eb0db33",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "success": true,
+        "source_commit": "9e128f73e53ee6e3ff7c351e72b5b4557cbf20ca",
+        "source_commit_end": "9e128f73e53ee6e3ff7c351e72b5b4557cbf20ca",
+        "producing_source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "source_clean_start": true,
+        "source_clean_end": true,
+        "native_calls": 0,
+        "initial_derivative_gates_passed": false
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/initial-k-diagnosis-001/receipt.json",
+      "available": true,
+      "bytes": 11880,
+      "sha256": "63c0506106cc85bdadb3f384f8478163bef516d45b780048d170ce13189b8fba",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "success": true,
+        "source_commit": "a268962a5dcc9adfe59fb412981b57242d671654",
+        "source_commit_end": "a268962a5dcc9adfe59fb412981b57242d671654",
+        "source_clean_start": true,
+        "source_clean_end": true,
+        "native_calls": 0,
+        "analytic_controls_met": true,
+        "fixed_absolute_gate_met": false
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-continuation-002/receipt.json",
+      "available": true,
+      "bytes": 4703,
+      "sha256": "f37f317c6eeb079e30578c56b1c5d0f42271e716035ebbd893af15064c955802",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 2,
+        "status": "failed",
+        "source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "source_commit_end": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "source_clean_start": true,
+        "source_clean_end": true,
+        "runtime_unchanged": true,
+        "suite": "inner"
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-continuation-003/receipt.json",
+      "available": true,
+      "bytes": 4856,
+      "sha256": "5e0e32d6927f449bd9eda75be13a6e9e999848f54b0a3d109f1f3504920e5c9f",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 2,
+        "status": "failed",
+        "source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "source_commit_end": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "source_clean_start": true,
+        "source_clean_end": true,
+        "runtime_unchanged": true,
+        "suite": "inner"
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/inner-verification-001/receipt.json",
+      "available": true,
+      "bytes": 4051,
+      "sha256": "bbe2dfcf0879d2136e7a25a4f76661b5c358d37dd6ada8e90ad657ea26ff6698",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 2,
+        "status": "failed",
+        "source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "source_commit_end": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "source_clean_start": true,
+        "source_clean_end": true,
+        "runtime_unchanged": true,
+        "suite": "inner"
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/preflight-001/receipt.json",
+      "available": true,
+      "bytes": 14140,
+      "sha256": "539a4274195c08a234b347f9bc0db8fafd1ac65f6a9413c7317675a302b8ddbd",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 2,
+        "milestone": "M8-R2",
+        "status": "failed",
+        "source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "source_commit_end": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "source_clean_end": true,
+        "full_runtime_source_inputs_unchanged": true,
+        "input_hashes_unchanged": true
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/ray-correspondence-tests-001/receipt.json",
+      "available": true,
+      "bytes": 2061,
+      "sha256": "2850769ab07229518af06a1109a7f4ea71ca3a29e6abab12dea6ad312a80b0e0",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "success": true,
+        "source_commit": "e3dfd0f941f9d7e2965e15f2f9298bccdcb8928e",
+        "source_clean_start": true,
+        "source_clean_end": true,
+        "native_calls": 0
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/ray-identity-diagnosis-001/receipt.json",
+      "available": true,
+      "bytes": 25307,
+      "sha256": "e1577b4dbac6f4a59611b941af1162591b02a30937c8238f9b6d39d9a818f13d",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "status": "completed",
+        "success": true,
+        "source_commit": "42863271b58e34aef7b97d7240de6fdccecfb10c",
+        "source_commit_end": "42863271b58e34aef7b97d7240de6fdccecfb10c",
+        "producing_source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "source_clean_start": true,
+        "source_clean_end": true,
+        "native_calls": 0,
+        "original_geometry_identity_gate": false
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/reuse-metadata-tests-002/receipt.json",
+      "available": true,
+      "bytes": 1039,
+      "sha256": "1db51e7a88d9a8697e92c38fa9f7ecb151c4acd978ec321b126f07d18af8c178",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "success": true,
+        "source_commit": "6fe1c040f7d430c196d1c69b1585090a18f0bd6a",
+        "source_clean_end": true,
+        "native_calls": 0
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/receipt.json",
+      "available": true,
+      "bytes": 8248,
+      "sha256": "35d554bf555fa582dd2cf57717d933e81c513baf8e3d5d58bd15c1d9f09eafeb",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 2,
+        "status": "incomplete",
+        "source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "source_commit_end": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "source_clean_start": true,
+        "source_clean_end": true,
+        "runtime_unchanged": true,
+        "mode": "matched"
+      },
+      "failures_count": 0,
+      "first_failures": [],
+      "expected_sha256": "35d554bf555fa582dd2cf57717d933e81c513baf8e3d5d58bd15c1d9f09eafeb",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/target-initial-jacobian-001/receipt.json",
+      "available": true,
+      "bytes": 37490,
+      "sha256": "a33961cfc448cb8cd99059644a3ffbcf8d2550a5129bfd0e082936ddec236b4a",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "success": true,
+        "source_commit": "8d03c9a84e2dc1de118a327c1e17a2e93a8b4766",
+        "source_commit_end": "8d03c9a84e2dc1de118a327c1e17a2e93a8b4766",
+        "producing_source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "source_clean_start": true,
+        "source_clean_end": true,
+        "native_calls": 0
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-analysis-frozen-001/receipt.json",
+      "available": true,
+      "bytes": 41523,
+      "sha256": "7ce157cac76beb849d0512f0b246fb826bdd5bd960c8c4aceb25b23e40629183",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "status": "completed",
+        "success": true,
+        "checks": 13281,
+        "source_commit": "7c3a61250a33cb6709551e68709ab92bfb93cad9",
+        "source_commit_end": "7c3a61250a33cb6709551e68709ab92bfb93cad9",
+        "producing_source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "source_clean_start": true,
+        "source_clean_end": true,
+        "native_calls": 0
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-analysis-linear-001/receipt.json",
+      "available": true,
+      "bytes": 40094,
+      "sha256": "8045f645407878d560ac9aadc239770d1d2d3da358afeae8fa9280358b78dbca",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "status": "completed",
+        "success": true,
+        "checks": 13262,
+        "source_commit": "e3dfd0f941f9d7e2965e15f2f9298bccdcb8928e",
+        "source_commit_end": "e3dfd0f941f9d7e2965e15f2f9298bccdcb8928e",
+        "producing_source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "source_clean_start": true,
+        "source_clean_end": true,
+        "native_calls": 0
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-analysis-saturated-001/receipt.json",
+      "available": true,
+      "bytes": 40193,
+      "sha256": "0b739e71daa298821f6a310825bbcf6aeae6a22b3f741694a498171654a008be",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "status": "completed",
+        "success": true,
+        "checks": 13262,
+        "source_commit": "7c3a61250a33cb6709551e68709ab92bfb93cad9",
+        "source_commit_end": "7c3a61250a33cb6709551e68709ab92bfb93cad9",
+        "producing_source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "source_clean_start": true,
+        "source_clean_end": true,
+        "native_calls": 0
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-curation-linear-001-receipt.json",
+      "available": true,
+      "bytes": 1160,
+      "sha256": "4fda53b3d08dd604717bc92e0c27cc76282fae480edd0e18c3959d683bbf993d",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "status": "failed",
+        "success": false,
+        "native_calls": 0
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/inner-verification-001/receipt.json",
+      "available": true,
+      "bytes": 3691,
+      "sha256": "9a5ce752f9dfedc77e1e8bc086cf144cabfe19d7d0bea3e0f991a4ce34298f0c",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "status": "failed",
+        "source_commit": "1ee3a8454c857c807bcb6911024186afb9d22721",
+        "source_commit_end": "1ee3a8454c857c807bcb6911024186afb9d22721",
+        "source_clean_start": true,
+        "source_clean_end": true,
+        "runtime_unchanged": true,
+        "suite": "inner",
+        "trajectory_calls": 0
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/pressure-verification-001/receipt.json",
+      "available": true,
+      "bytes": 3528,
+      "sha256": "ae75dbb8717645cd62b15971cf007b1164fd5de356599061b9f539dd5462e053",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "status": "failed",
+        "source_commit": "1ee3a8454c857c807bcb6911024186afb9d22721",
+        "source_commit_end": "1ee3a8454c857c807bcb6911024186afb9d22721",
+        "source_clean_start": true,
+        "source_clean_end": true,
+        "runtime_unchanged": true,
+        "suite": "pressure",
+        "trajectory_calls": 0
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/initial-jacobian-001/validation.json",
+      "available": true,
+      "bytes": 1320396,
+      "sha256": "52491ec3974757cf4b177b0502360171e5715448c68ab1ceb19b8bf564e38977",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "analysis_success": true,
+        "checks": 9724,
+        "initial_derivative_gates_passed": false
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/initial-k-diagnosis-001/validation.json",
+      "available": true,
+      "bytes": 161857,
+      "sha256": "2224a4e387a92d0a8a160e817bb9265534a3d7291384faf025d23ddea8b6ecf0",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "checks": 63,
+        "analytic_controls_met": true,
+        "fixed_absolute_gate_met": false,
+        "localization_classification": "retained_J_fails_against_stable_analytic_reference",
+        "stored_J_minus_analytic": {
+          "blocks": [
+            7.15996593112029e-07,
+            5.607262291281462e-09,
+            6.410811162823151e-08,
+            4.859374905274791e-08,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "gauge": 0.0,
+          "maximum": 7.15996593112029e-07,
+          "maximum_constraint": 0.0
+        },
+        "stored_J_roughness_support_error": {
+          "blocks": [
+            1.157274987447134e-07,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "gauge": 0.0,
+          "maximum": 1.157274987447134e-07,
+          "maximum_constraint": 0.0
+        },
+        "stored_J_outer_support_error": {
+          "blocks": [
+            7.06580251680021e-07,
+            5.607262291281462e-09,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "gauge": 0.0,
+          "maximum": 7.06580251680021e-07,
+          "maximum_constraint": 0.0
+        }
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/target-initial-jacobian-001/validation.json",
+      "available": true,
+      "bytes": 158084,
+      "sha256": "29396c6623849f0257869e77624eafb6cae6637ab9c36f0709c1e90b98522d76",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "checks": 72,
+        "native_calls": 0
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/initial-jacobian-saturated-001/validation.json",
+      "available": true,
+      "bytes": 1332004,
+      "sha256": "5f5df2c4254e5a305880d8a61cefe38db21462da8aacaf8daa86c136286268ab",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "analysis_success": true,
+        "checks": 9724,
+        "initial_derivative_gates_passed": false
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-linear-auxiliary-result.json",
+      "available": true,
+      "bytes": 54405,
+      "sha256": "6e5c10aa312e752991ff65db35ef5e9fb74484027db0d30a689371235776e61a",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "success": true,
+        "native_calls": 0
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-saturated-auxiliary-result.json",
+      "available": true,
+      "bytes": 54836,
+      "sha256": "5e480e410999d753dcb85873ab35884a7a70f2cdce0afd33914640ff6fc76f80",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "success": true,
+        "native_calls": 0
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-frozen-scalar-result.json",
+      "available": true,
+      "bytes": 57362,
+      "sha256": "42675e502f33dc4e9210edfaecfe38520a9d0a1fd81cbf948d23145a3ae28d65",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "success": true,
+        "native_calls": 0
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-analysis-linear-001/validation.json",
+      "available": true,
+      "bytes": 88185,
+      "sha256": "cee4cf15b6e924dcf4553f06bd82dd5d3e60167bfd49d8e73a134fd024c965eb",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "status": "completed",
+        "success": true,
+        "analysis_success": true,
+        "native_calls": 0
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-analysis-saturated-001/validation.json",
+      "available": true,
+      "bytes": 88276,
+      "sha256": "5efb8bd1ae5ee60f9a7d9f52b53d7dc45cbf0c85edfdda5c97a6fda5a5689fd5",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "status": "completed",
+        "success": true,
+        "analysis_success": true,
+        "native_calls": 0
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/terminal-analysis-frozen-001/validation.json",
+      "available": true,
+      "bytes": 77475,
+      "sha256": "0fc88c0497cd03ba2547697f49f72d60a13a0cfec14ddb8841e4db1cc16a8aeb",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "status": "completed",
+        "success": true,
+        "analysis_success": true,
+        "native_calls": 0
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/auxiliary-analysis-linear-002/validation.json",
+      "available": true,
+      "bytes": 19119016,
+      "sha256": "9208cf90b8d6bd7f11f0f46d117c5e9b9d79cac640f8518fecf49855465d0aae",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "milestone": "M8-R2 interim single-record analysis",
+        "success": false,
+        "analysis_success": false,
+        "checks": 740356,
+        "native_calls": 0
+      },
+      "failures_count": 5,
+      "first_failures": [
+        {
+          "label": "alpha 3200.0 iteration 3",
+          "type": "ValueError",
+          "message": "Native/independent moving-ray inventory geometry differs"
+        },
+        {
+          "label": "alpha 3200.0 iteration 5",
+          "type": "ValueError",
+          "message": "Native/independent moving-ray inventory geometry differs"
+        },
+        {
+          "label": "alpha 3200.0 iteration 6",
+          "type": "ValueError",
+          "message": "Native/independent moving-ray inventory geometry differs"
+        }
+      ]
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/ray-identity-diagnosis-001/validation.json",
+      "available": true,
+      "bytes": 11972,
+      "sha256": "1a590ae86fe3b33c0ad65b19f40d7055cfd4aa36d7dbe02e2d110ef055f137c8",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "success": true,
+        "native_calls": 0,
+        "original_geometry_identity_gate": false,
+        "diagnosis_completed": true,
+        "original_failed_full_analysis_remains_failed": true
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/frozen-scalar-001/completion-check-001/receipt.json",
+      "available": true,
+      "bytes": 3979,
+      "sha256": "6b9b44f9bfde3e614116b499db2d7b9ee4d0691b771bb64779c74868c7cb2e8a",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "success": true,
+        "source_commit_end": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "source_clean_start": true,
+        "source_clean_end": true,
+        "native_calls": 0
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/frozen-scalar-001/completion-check-001/runtime-postcompletion.json",
+      "available": true,
+      "bytes": 680202,
+      "sha256": "9aefcf2e4b1295b3f65c29b067d8f9033f463f80f033e9d97a5cb4eef0bd7a43",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 2,
+        "milestone": "M7",
+        "success": true,
+        "source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "clean": true
+      },
+      "failures_count": 0,
+      "first_failures": [],
+      "expected_sha256": "9aefcf2e4b1295b3f65c29b067d8f9033f463f80f033e9d97a5cb4eef0bd7a43",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/frozen-scalar-001/completion-recovery-001.json",
+      "available": true,
+      "bytes": 14466,
+      "sha256": "1ae3278302f1d4125b8fbaf665b4a401e8288aae3f73af936beda12b8854f530",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "success": true,
+        "native_calls": 0
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/frozen-scalar-001/recovered-assessment-001.json",
+      "available": true,
+      "bytes": 1786083,
+      "sha256": "8099890d261c1c12d2f622de0cfe547f34e3b2c590fcf5dfe077f5a8bd6bec88",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "success": true,
+        "native_calls": 0
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r1/preflight-001/cases/resolved-base/case.evolution.json",
+      "available": true,
+      "bytes": 204499,
+      "sha256": "5a7b3eb7fe706ef783f32d2d7b673e4bcdf638cd3652410bf407571529fde025",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/matched-stage-summary-001.json",
+      "available": true,
+      "bytes": 412903,
+      "sha256": "67c2187c6b79d2c51e57b79000166c77cdc56804bf8f0e8a4645308f459e8a43",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "milestone": "M8-R2 F",
+        "producer_source": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "runtime_unchanged": true,
+        "mode": "matched",
+        "native_calls": 0,
+        "operator_reconstructions": 0
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/runtime-before.json",
+      "available": true,
+      "bytes": 679763,
+      "sha256": "ccaa1e896029576e08748a6dcd6cf00d51d3f03f1753d528432290cae4029b4f",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 2,
+        "milestone": "M7",
+        "success": true,
+        "source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "clean": true
+      },
+      "failures_count": 0,
+      "first_failures": [],
+      "expected_sha256": "ccaa1e896029576e08748a6dcd6cf00d51d3f03f1753d528432290cae4029b4f",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/runtime-after.json",
+      "available": true,
+      "bytes": 680153,
+      "sha256": "d6d2a1a5228b88c45cd778fbfa3bcfaebeed6c41e6ee51d6b83bcba3af22e4ea",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 2,
+        "milestone": "M7",
+        "success": true,
+        "source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "clean": true
+      },
+      "failures_count": 0,
+      "first_failures": [],
+      "expected_sha256": "d6d2a1a5228b88c45cd778fbfa3bcfaebeed6c41e6ee51d6b83bcba3af22e4ea",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/frozen-scalar-summary-001.json",
+      "available": true,
+      "bytes": 92135,
+      "sha256": "77812a2a2d9b6d865b363fb01bd99a612b8a8da9b2bf66b5a5b081fd82cda8d3",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "milestone": "M8-R2 F",
+        "status": "recovered_native_artifacts",
+        "producer_source": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "runtime_unchanged": true,
+        "mode": "frozen-scalar",
+        "native_calls": 0,
+        "operator_reconstructions": 0
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/frozen-scalar-001/runtime-before.json",
+      "available": true,
+      "bytes": 679805,
+      "sha256": "cc314fc53937ea8d657225124628ff4da3aae3d40a1cd160d40a462da8237fd2",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 2,
+        "milestone": "M7",
+        "success": true,
+        "source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+        "clean": true
+      },
+      "failures_count": 0,
+      "first_failures": [],
+      "expected_sha256": "cc314fc53937ea8d657225124628ff4da3aae3d40a1cd160d40a462da8237fd2",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/assessment-001.json",
+      "available": true,
+      "bytes": 1809094,
+      "sha256": "5d07cf84294b3b0204095767de99632a54b96f6497317d6938fab9d45ef32d38",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 1,
+        "success": true,
+        "native_calls": 0
+      },
+      "failures_count": 0,
+      "first_failures": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/analysis-025/source/docs/plans/cls-epawf-revised-evidence/m8-r2/assess-stage-evidence.py",
+      "available": true,
+      "bytes": 34571,
+      "sha256": "cdee36521a7aa3b494354c6813c314a93f5fc473878c780082b8a260c0723df1",
+      "stable_during_hash": true,
+      "expected_sha256": "cdee36521a7aa3b494354c6813c314a93f5fc473878c780082b8a260c0723df1",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8/flow-001/qualification/control-coarse/case.xml",
+      "available": true,
+      "bytes": 6601,
+      "sha256": "c54b2522cca860081f23e041a649e0668740f5f4bd86b711e4cf8f1a3d3f6d7b",
+      "stable_during_hash": true,
+      "expected_sha256": "c54b2522cca860081f23e041a649e0668740f5f4bd86b711e4cf8f1a3d3f6d7b",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/stage-plan.json",
+      "available": true,
+      "bytes": 9534,
+      "sha256": "ffffd6627b9fec7fc6bfcf12f40015b6e92da1f1e0148adad2de736b5a849e53",
+      "stable_during_hash": true,
+      "observed": {
+        "schema": 2,
+        "milestone": "M8-R2"
+      },
+      "failures_count": 0,
+      "first_failures": [],
+      "expected_sha256": "ffffd6627b9fec7fc6bfcf12f40015b6e92da1f1e0148adad2de736b5a849e53",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-linear-matchedr2/case.xml",
+      "available": true,
+      "bytes": 13992,
+      "sha256": "b261bcec246f1b3d3142b663bfe61e9743c8c670d0d33b61666a24f4fbaa6892",
+      "stable_during_hash": true,
+      "expected_sha256": "b261bcec246f1b3d3142b663bfe61e9743c8c670d0d33b61666a24f4fbaa6892",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/native-Linear.log",
+      "available": true,
+      "bytes": 12258,
+      "sha256": "6f2880fd20fffd9bf373566ce7e361cce8644eb42853987895382fd3f65ed1c4",
+      "stable_during_hash": true,
+      "expected_sha256": "6f2880fd20fffd9bf373566ce7e361cce8644eb42853987895382fd3f65ed1c4",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2/case.xml",
+      "available": true,
+      "bytes": 13997,
+      "sha256": "c911b30b912789a1513cd1a06acee5da79f2b124a9c9c26657def92468ee041a",
+      "stable_during_hash": true,
+      "expected_sha256": "c911b30b912789a1513cd1a06acee5da79f2b124a9c9c26657def92468ee041a",
+      "expected_hash_matches": true
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/native-SaturatedR2.log",
+      "available": true,
+      "bytes": 12176,
+      "sha256": "7bc521264fa2a7394c3cf6f645829e72f7c868c2fb54d0034c29f3337c7e1c54",
+      "stable_during_hash": true,
+      "expected_sha256": "7bc521264fa2a7394c3cf6f645829e72f7c868c2fb54d0034c29f3337c7e1c54",
+      "expected_hash_matches": true
+    }
+  ],
+  "retained_receipt_inventory_count": 37,
+  "matched_stage_gate_table": {
+    "supplied": true,
+    "mode": "matched",
+    "producer_source": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+    "producer_source_end": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+    "source_clean": true,
+    "runtime_unchanged": true,
+    "runtime_before_matches_producer": true,
+    "runtime_after_matches_producer": true,
+    "target": {
+      "dt": 0.0025,
+      "time": 0.0025,
+      "alpha": 400.0,
+      "fixed_history": true,
+      "native_history_advance": false
+    },
+    "allowed_alpha_levels": [
+      3200.0,
+      1600.0,
+      800.0,
+      400.0
+    ],
+    "cases": [
+      {
+        "inner_stress": "Linear",
+        "mode": "matched",
+        "native_exit_code": 124,
+        "native_seconds": 14401.027712328996,
+        "target_attempted": null,
+        "target_record_present": false,
+        "native_target_true_coupled_convergence": null,
+        "native_target_physical_range_flag": null,
+        "native_time": null,
+        "native_steps": null,
+        "accepted_physical_states": null,
+        "initial_state_sha256": null,
+        "target": {},
+        "scalar_domain": {},
+        "native_target_audit": {},
+        "independent_analyses": [],
+        "report_bound_analysis_count": 0,
+        "frozen_scalar_is_not_a_coupled_root": false,
+        "all_supplied_metadata_qualification_gates": null,
+        "result_from_available_records": "pending original-target record or report-bound final independent analysis"
+      },
+      {
+        "inner_stress": "SaturatedR2",
+        "mode": "matched",
+        "native_exit_code": 124,
+        "native_seconds": 14400.095461108998,
+        "target_attempted": null,
+        "target_record_present": false,
+        "native_target_true_coupled_convergence": null,
+        "native_target_physical_range_flag": null,
+        "native_time": null,
+        "native_steps": null,
+        "accepted_physical_states": null,
+        "initial_state_sha256": null,
+        "target": {},
+        "scalar_domain": {},
+        "native_target_audit": {},
+        "independent_analyses": [],
+        "report_bound_analysis_count": 0,
+        "frozen_scalar_is_not_a_coupled_root": false,
+        "all_supplied_metadata_qualification_gates": null,
+        "result_from_available_records": "pending original-target record or report-bound final independent analysis"
+      }
+    ],
+    "native_file_pins": [
+      {
+        "case": "Linear",
+        "kind": "xml",
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-linear-matchedr2/case.xml",
+        "bytes": 13992,
+        "sha256": "b261bcec246f1b3d3142b663bfe61e9743c8c670d0d33b61666a24f4fbaa6892"
+      },
+      {
+        "case": "Linear",
+        "kind": "trace",
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-linear-matchedr2/case.feasible.jsonl",
+        "bytes": 251639192,
+        "sha256": "f3fa6aa4291b3d54fa4e43a84fab64a77a74b796a1bbdb1a4bd666f861be8275"
+      },
+      {
+        "case": "SaturatedR2",
+        "kind": "xml",
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2/case.xml",
+        "bytes": 13997,
+        "sha256": "c911b30b912789a1513cd1a06acee5da79f2b124a9c9c26657def92468ee041a"
+      },
+      {
+        "case": "SaturatedR2",
+        "kind": "trace",
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/stages-001/cases/outer6-saturatedr2-matchedr2/case.feasible.jsonl",
+        "bytes": 366927552,
+        "sha256": "1293f4c5863028057dc39c85f5419a80884f1e8adbb62c10d517fa3e29858cd3"
+      }
+    ],
+    "unmatched_analysis_roles": []
+  },
+  "prior_gate_overview": {
+    "B_inner": {
+      "reported_status": "operator checks passed; zero-fixture maximum-ratio reconstruction unresolved",
+      "independent_checks": 4366,
+      "native_kernel_checks": 128,
+      "validation_success": true,
+      "scope": "Focused kernel/operator evidence; unresolved ratio diagnostic is retained in its supplied status"
+    },
+    "C_pressure": {
+      "success": true
+    },
+    "D_current_actions": {
+      "initial-action-result.json": {
+        "initial_derivative_gates_passed": false,
+        "fixed_absolute_gate_met": false,
+        "fixed_absolute_action_tolerance": 1e-07,
+        "scope": "Only the initial Linear-inner-law first auxiliary matrix. Later iterates and original target require separate records. Large vectors/matrices remain on Linux.",
+        "numerical_causality_claim": false
+      },
+      "target-initial-action-result.json": {
+        "target_initial_k_action_gate_met": false,
+        "fixed_absolute_action_tolerance": 1e-07,
+        "scope": "Initial alpha400 solve2.J0 action only, source-bound to h0; no terminal target state/root, history or physical qualification",
+        "nonlinear_terminal_cause_assessed": false
+      },
+      "saturated-initial-action-result.json": {
+        "initial_derivative_gates_passed": false,
+        "scope": "Initial state, first auxiliary alpha3200 J0 derivative verification only"
+      }
+    },
+    "E_initial": {
+      "runner_status": "passed",
+      "outer6_coverage_decision": "covered on all declared finite sets at both quadratures",
+      "outer9_needed": false,
+      "final_provenance_passed": true,
+      "source_runtime_inputs_unchanged": true,
+      "input_hashes_unchanged": true
+    },
+    "static": {
+      "success": true,
+      "checks": 500,
+      "scope": "No full weak reassembly or native call; initial fixed-reference weak continuity/gauge values only. No current-Jacobian or stage convergence claim."
+    },
+    "focused_legacy": {
+      "status": "passed",
+      "source_commit": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+      "runtime_unchanged": true
+    }
+  },
+  "frozen_scalar_diagnostic": {
+    "supplied": true,
+    "mode": "frozen-scalar",
+    "producer_source": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+    "producer_source_end": "9f20b3053c303e8805f5183f668a8ec468d9656b",
+    "source_clean": true,
+    "runtime_unchanged": true,
+    "runtime_before_matches_producer": true,
+    "runtime_after_matches_producer": true,
+    "target": {
+      "dt": 0.0025,
+      "time": 0.0025,
+      "alpha": 400.0,
+      "fixed_history": true,
+      "native_history_advance": false
+    },
+    "allowed_alpha_levels": [
+      400.0
+    ],
+    "cases": [
+      {
+        "inner_stress": "SaturatedR2",
+        "mode": "frozen-scalar",
+        "native_exit_code": null,
+        "native_seconds": null,
+        "target_attempted": true,
+        "target_record_present": true,
+        "native_target_true_coupled_convergence": false,
+        "native_target_physical_range_flag": false,
+        "native_time": 0,
+        "native_steps": 0,
+        "accepted_physical_states": 1,
+        "initial_state_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca",
+        "target": {
+          "alpha": 400,
+          "time": 0.0025,
+          "converged": false,
+          "true_coupled_residual_converged": false,
+          "frozen_velocity_pressure_diagnostic": true,
+          "iterations": 5,
+          "failure": "std::runtime_error: feasible_residual_stagnation",
+          "residual_verification_failure": "",
+          "qualification_audit_failure": "",
+          "scaled_block_norms": [
+            8.127147236776816,
+            0.028532919839388295,
+            15.545717638361056,
+            0.06176892446964725,
+            5.05496090631638e-16,
+            6.069542809511854e-17,
+            1.0282979979667204e-16,
+            1.0976414736276302e-09
+          ],
+          "physical_range_passed": false,
+          "native_history_advanced": false,
+          "state_sha256": "c725cf916b352ea172513fa21a30625fb1188c8bc17ff45a1037dc7f1e410b5e",
+          "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca",
+          "residual_sha256": "35c6711a72431ead6dd3ce30c486ab1d3aa26f522133d0078294cbae0fc9e7e6"
+        },
+        "scalar_domain": {
+          "admissible": true,
+          "phase": "complete",
+          "failure": "",
+          "minimum_dimensionless_margin": 1.5626840605239024e-14,
+          "limiting_inventory": "reconstruction_native",
+          "limiting_point": [
+            1.6046496089512394,
+            0,
+            0
+          ],
+          "minimum_inner_k": 7.977627347784122e-15,
+          "minimum_outer_k": 0.5105059576086939,
+          "minimum_outer_epsilon": 0.03631791663093067,
+          "minimum_sampled_K": 0.5105019114768085,
+          "minimum_projected_trace_epsilon": 0.07142254118934419,
+          "minimum_lambda": 1
+        },
+        "native_target_audit": {
+          "r2_qualified": [
+            1
+          ],
+          "r2_outer_range": [
+            0.000500194924468067,
+            0.9999959737141442,
+            1.0000120685252012,
+            0.9832962320310261,
+            1.0000474489777165,
+            0.9999880480170309,
+            1.0000306407800699
+          ],
+          "r2_covariance": [
+            1.5577286349244788e-15,
+            0.17681097725949096
+          ],
+          "robust_source": [
+            8.436459162350696,
+            8.436459162350696,
+            8.436459162350747,
+            9.612045182147075e-17,
+            0.0010327124819076547,
+            0,
+            1,
+            15697.146114339403
+          ],
+          "inner_stress": [
+            0.05983489224845687,
+            11.99999999999992,
+            0.4827697822150045,
+            549.0635219876839,
+            0,
+            0
+          ],
+          "inner_constitutive_modification": [
+            -0.11843748536553789,
+            -0.11843748536553789,
+            0
+          ],
+          "interface": [
+            6.000000000000001,
+            -0.4492470514926998,
+            0.0011952891983755052,
+            0.0012533518185695956,
+            0.0014890656636822874,
+            1.401753462446939e-05,
+            0,
+            -0.006363614914314035
+          ],
+          "energy": [
+            7.02055359111334,
+            -2.035427265081942,
+            9.055980856219728,
+            -3.034955522233177e-14,
+            3.1804060576898223e-21,
+            0,
+            7.020553591137755,
+            -2.4415136579136743e-11,
+            382.54842216392143,
+            6.272195701969381,
+            0,
+            0.7483578891439588
+          ]
+        },
+        "independent_analyses": [],
+        "report_bound_analysis_count": 0,
+        "frozen_scalar_is_not_a_coupled_root": true,
+        "all_supplied_metadata_qualification_gates": false,
+        "result_from_available_records": "frozen-scalar diagnostic only; native scalar convergence and complete coupled/path qualification remain separate; terminal-only audits are supplied as extra evidence"
+      }
+    ],
+    "native_file_pins": [
+      {
+        "case": "SaturatedR2",
+        "kind": "xml",
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/frozen-scalar-001/cases/outer6-saturatedr2-frozenscalarr2/case.xml",
+        "bytes": 14002,
+        "sha256": "c03f5e6acb6b631c316d25362a0fbc85ec626389b3996758a42d6e6e6546249f"
+      },
+      {
+        "case": "SaturatedR2",
+        "kind": "report",
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/frozen-scalar-001/cases/outer6-saturatedr2-frozenscalarr2/case.evolution.json",
+        "bytes": 42867557,
+        "sha256": "0507b017216e91fa33a24702423e1839277fdc0ff58cdeb170b1979f4d2eaae9"
+      },
+      {
+        "case": "SaturatedR2",
+        "kind": "trace",
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r2/epoch-002/frozen-scalar-001/cases/outer6-saturatedr2-frozenscalarr2/case.feasible.jsonl",
+        "bytes": 167792844,
+        "sha256": "d26140f6d375319c1242b395f58811e82e588e412275f6991918bb092952ea10"
+      }
+    ],
+    "unmatched_analysis_roles": []
+  },
+  "fallback_inferred": false,
+  "M8_closed": false,
+  "physical_trajectory_qualification": false,
+  "main_stage_result": "See bounded_task_outcome; complete-stage readiness remains false",
+  "still_open": [
+    "genuine curved MMS",
+    "active-cap curved/variable-H verification",
+    "fully discrete positivity",
+    "long-time/refinement qualification",
+    "scalability",
+    "paired terrain"
+  ],
+  "scope": "No failed bounded search proves root absence; no auxiliary state is a physical trajectory sample. Missing evidence is not a passing gate."
+}
