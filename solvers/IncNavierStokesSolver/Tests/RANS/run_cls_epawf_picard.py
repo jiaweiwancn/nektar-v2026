@@ -62,6 +62,7 @@ def prepare(args):
             "RANSWallPhysicalRangeGuard": "R2LocalV1",
             "RANSWallSolveDiagnostics": "Off",
             "RANSWallPicardVerify": "On" if name == "target" and args.verify else "Off",
+            "RANSWallPicardGroundProjection": "On" if name == "target" and args.ground_projection else "Off",
         }.items():
             set_info(root, key, value)
         for key, value in {
@@ -121,6 +122,7 @@ def main():
     parser.add_argument("--resolution-probe", type=Path)
     parser.add_argument("--prepare-only", action="store_true")
     parser.add_argument("--verify", action="store_true", help="Run same-state and frozen-saddle comparisons")
+    parser.add_argument("--ground-projection", action="store_true", help="Project the k trial against ground cuts")
     parser.add_argument("--steps", type=int, default=1)
     parser.add_argument("--sweeps", type=int, default=120)
     parser.add_argument("--timeout", type=int, default=1800)

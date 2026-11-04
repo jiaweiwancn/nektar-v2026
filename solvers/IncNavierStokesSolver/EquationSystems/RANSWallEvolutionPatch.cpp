@@ -43,10 +43,10 @@ RANSWallEvolutionPatch::Factor::Factor(const WallMatrix &a):n(a.size()),lu(n*n),
     int info;Lapack::Dgetrf(n,n,lu.data(),n,pivots.data(),info);
     Require(info==0,"singular evolution stage/mass matrix");
 }
-RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Factor::Apply(Vector rhs) const
+RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Factor::Apply(Vector rhs,bool transpose) const
 {
     auto pivot=pivots;
-    int info;Lapack::Dgetrs('N',n,1,lu.data(),n,pivot.data(),rhs.data(),n,info);
+    int info;Lapack::Dgetrs(transpose?'T':'N',n,1,lu.data(),n,pivot.data(),rhs.data(),n,info);
     Require(info==0,"failed evolution factor solve");Maximum(rhs);return rhs;
 }
 struct RANSWallEvolutionPatch::SolverCache
@@ -244,6 +244,10 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         session->LoadSolverInfo("RANSWallPicardVerify",verify,"Off");
         Require(verify=="On" || verify=="Off","RANSWallPicardVerify must be On or Off");
         m_picardVerify=verify=="On";
+        std::string projection;
+        session->LoadSolverInfo("RANSWallPicardGroundProjection",projection,"Off");
+        Require(projection=="On" || projection=="Off","RANSWallPicardGroundProjection must be On or Off");
+        m_picardGroundProjection=projection=="On";
     }
     session->LoadParameter("RANSWallOwnershipShift",m_ownershipShift,0);Require(m_ownershipShift>=0,"negative ownership shift");
     auto full=MemoryManager<MultiRegions::ExpList>::AllocateSharedPtr(session,graph,true,"u");

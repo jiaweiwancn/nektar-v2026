@@ -285,6 +285,121 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
     return system;
 }
 
+RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::ProjectPicardGround(
+    const Vector &state, const PicardBlock &block, const Factor &factor,
+    const Vector &step, double relaxation, int &cuts) const
+{
+    // Project the proposed k increment in the frozen mass-dual residual
+    // norm. The metric inverse is A^-1 M A^-T on the free k coefficients.
+    // Ground cuts constrain the search only. They do not replace any k row.
+    struct Cut
+    {
+        int geometry;
+        double x, target;
+        Vector row, inverse;
+    };
+    const int n = block.rows.size(), kOffset = offset[K()];
+    std::vector<int> index(size[K()], -1);
+    for (int i = 0; i < n; ++i)
+        index[block.rows[i] - kOffset] = i;
+    Vector proposed = step;
+    for (double &entry : proposed)
+        entry *= relaxation;
+    Vector direction = proposed;
+    std::vector<Cut> active;
+    auto dot = [](const Vector &a, const Vector &b) {
+        return std::inner_product(a.begin(), a.end(), b.begin(), 0.);
+    };
+    for (cuts = 0; cuts <= 20; ++cuts)
+    {
+        auto trial = state;
+        for (int i = 0; i < n; ++i)
+            trial[block.rows[i]] += direction[i];
+        const auto extrema = WallTraceR4(trial);
+        const auto worst   = std::min_element(
+            extrema.begin(), extrema.end(), [](const auto &a, const auto &b) {
+                return a.value - a.error < b.value - b.error;
+            });
+        if (worst->value >= worst->error)
+            return direction;
+        const auto &point = worst->row;
+        if (cuts == 20 ||
+            std::any_of(active.begin(), active.end(), [&](const Cut &c) {
+                return c.geometry == point.geometry &&
+                       std::abs(c.x - point.coordinate[0]) < 1e-12;
+            }))
+            return {};
+
+        Vector row(n);
+        for (int j = 0; j < point.ids.size(); ++j)
+        {
+            const int col = index[point.ids[j]];
+            if (col >= 0)
+                row[col] = point.phi[j];
+        }
+        const auto adjoint = factor.Apply(row, true);
+        Vector load(n);
+        for (int i = 0; i < n; ++i)
+            for (int j = 0; j < n; ++j)
+                load[i] += m_mass[K()][block.rows[i] - kOffset]
+                                 [block.rows[j] - kOffset] *
+                           adjoint[j];
+        auto inverse        = factor.Apply(load);
+        const double square = dot(row, inverse);
+        if (!(square > 0.))
+            return {};
+        const double scale = std::sqrt(square);
+        for (int j = 0; j < n; ++j)
+        {
+            row[j] /= scale;
+            inverse[j] /= scale;
+        }
+        const double base = point.Value(state, kOffset);
+        const double reserve =
+            std::max(8. * static_cast<double>(worst->error), .005 * base);
+        active.push_back({point.geometry, point.coordinate[0],
+                          (reserve - base) / scale, std::move(row),
+                          std::move(inverse)});
+
+        while (!active.empty())
+        {
+            const int count = active.size();
+            WallMatrix gram(count, Vector(count));
+            Vector rhs(count);
+            for (int i = 0; i < count; ++i)
+            {
+                rhs[i] = active[i].target - dot(active[i].row, proposed);
+                for (int j = 0; j < count; ++j)
+                    gram[i][j] = dot(active[i].row, active[j].inverse);
+            }
+            Vector multiplier;
+            try
+            {
+                multiplier = Factor(gram).Apply(rhs);
+            }
+            catch (const std::runtime_error &)
+            {
+                return {};
+            }
+            const auto leaving =
+                std::min_element(multiplier.begin(), multiplier.end());
+            if (*leaving < 0.)
+            {
+                active.erase(active.begin() + (leaving - multiplier.begin()));
+                continue;
+            }
+            direction = proposed;
+            for (int i = 0; i < count; ++i)
+                for (int j = 0; j < n; ++j)
+                    direction[j] += multiplier[i] * active[i].inverse[j];
+            break;
+        }
+        if (active.empty())
+            return {};
+    }
+    return {};
+}
+
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
     Vector s, const Vector &history, double alpha, double time,
     const RANSWallEvolutionData &data, int &iterations, double tolerance,
@@ -373,7 +488,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
         auto rhs = block.residual;
         for (double &entry : rhs)
             entry = -entry;
-        const auto step = Factor(block.matrix).Apply(rhs);
+        const Factor factor(block.matrix);
+        const auto step = factor.Apply(rhs);
         auto defect     = Multiply(block.matrix, step);
         for (int i = 0; i < defect.size(); ++i)
             defect[i] -= rhs[i];
@@ -386,7 +502,22 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
         for (int i = 0; i < 14; ++i, requested *= .5)
         {
             auto trial = state;
-            apply(trial, block, step, requested);
+            if (b == K() && m_picardGroundProjection)
+            {
+                int cuts             = 0;
+                const auto projected = ProjectPicardGround(
+                    state, block, factor, step, requested, cuts);
+                if (cuts)
+                    emit("ground_projection",
+                         {{"cuts", J::Number(cuts)},
+                          {"relaxation", J::Number(requested)},
+                          {"solved", J::Boolean(!projected.empty())}});
+                if (projected.empty())
+                    continue;
+                apply(trial, block, projected, 1.);
+            }
+            else
+                apply(trial, block, step, requested);
             if (admissible(trial, domain, ground))
             {
                 state = std::move(trial);

@@ -236,7 +236,7 @@ private:
     {
     public:
         explicit Factor(const WallMatrix &matrix);
-        Vector Apply(Vector rhs) const;
+        Vector Apply(Vector rhs,bool transpose=false) const;
     private:
         int n;
         Vector lu;
@@ -251,6 +251,8 @@ private:
     PicardBlock AssemblePicardBlock(int block,const Vector &state,const Vector &history,
         double alpha,double time,const RANSWallEvolutionData &data,
         const std::map<int,double> &external) const;
+    Vector ProjectPicardGround(const Vector &state,const PicardBlock &block,
+        const Factor &factor,const Vector &step,double relaxation,int &cuts) const;
     Vector SolveSegregatedPicard(Vector state,const Vector &history,double alpha,double time,
         const RANSWallEvolutionData &data,int &iterations,double tolerance,int maximumIterations) const;
     struct WallExtremum
@@ -371,6 +373,7 @@ private:
     double m_picardPseudoAlpha=0.;
     double m_picardGuessPerturbation=0.;
     bool m_picardVerify=false;
+    bool m_picardGroundProjection=false;
     std::string m_directionAccuracy="Legacy",m_r7Policy="Off";
     double m_r7PreviousDisplacement=0.,m_r7Radius=0.;
     bool m_r7Interior=false;
