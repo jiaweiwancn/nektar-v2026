@@ -744,7 +744,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
     if(witnessValue/K0<=near)ground.push_back({witnessRow,witnessValue,0});
 
     Vector direction=newton,z(Size()),multipliers;
-    int releases=0;
+    int releases=0,dependentExchanges=0;
     for(int exchange=0;exchange<40;++exchange)
     {
         // Twice reorthogonalized QR of the active residual-space normals.
@@ -847,6 +847,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
                 "R4 constrained solve failed its KKT check");
             details=J::Object({{"method",J::Quote(active.empty()?"ordinary_newton":"residual_space_active_QR")},
                 {"active",J::List(activeRows)},{"releases",J::Number(releases)},
+                {"dependent_exchanges",J::Number(dependentExchanges)},
                 {"exchange_passes",J::Number(exchange+1)},{"trust_radius","2"},
                 {"model_feasibility_tolerance",J::Number(feasibility)},{"stationarity_l2",J::Number(stationarityNorm)},
                 {"active_equality_error",J::Number(activeError)},{"complementarity",J::Number(complementarity)},
@@ -860,6 +861,36 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
         const double length=std::sqrt(dot(normal,normal));
         Require(length>1e-14,"R4 feasibility cut has no free differential response");
         for(double &value:normal)value/=length;
+        auto remainder=normal;
+        Vector coordinates(Q.size());
+        for(int pass=0;pass<2;++pass)for(std::size_t i=0;i<Q.size();++i)
+        {
+            const double coefficient=dot(Q[i],remainder);
+            coordinates[i]+=coefficient;
+            axpy(remainder,-coefficient,Q[i]);
+        }
+        if(std::sqrt(dot(remainder,remainder))<=1e-10)
+        {
+            // An incoming dependent cut cannot enter as another equality.
+            // For g_new=G*c the dual null direction (-c,1) preserves
+            // stationarity. Move until the first old multiplier is zero.
+            for(int i=static_cast<int>(Q.size())-1;i>=0;--i)
+            {
+                for(std::size_t j=i+1;j<Q.size();++j)coordinates[i]-=R[i][j]*coordinates[j];
+                coordinates[i]/=R[i][i];
+            }
+            double distance=std::numeric_limits<double>::infinity();
+            std::size_t leaving=Q.size();
+            for(std::size_t i=0;i<Q.size();++i)if(coordinates[i]>1e-9)
+            {
+                const double candidate=std::max(0.,multipliers[i])/coordinates[i];
+                if(candidate<distance){distance=candidate;leaving=i;}
+            }
+            Require(leaving<Q.size(),"R4 dependent cut has no nonnegative dual exchange: "+kind);
+            active.erase(active.begin()+leaving);
+            ++releases;
+            ++dependentExchanges;
+        }
         active.push_back({std::move(normal),(rhs-dot(violated,newton))/length,length,kind,location});
     }
     throw std::runtime_error("R4 bounded active cut exchange exhausted");
