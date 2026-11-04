@@ -459,7 +459,7 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3
     std::map<std::pair<Coordinate,bool>,std::shared_ptr<RayLinear>> cache;
     auto checkMoving=[&](const RANSWallGlobalPoint &point,int block)
     {
-        if(!CoupledR4())return;
+        if(!GroundSafeguard())return;
         const auto &element=fields[block]->Elements().at(point.element);
         for(int axis:{0,2})Require(point.coordinate[axis]>=element.lower[axis] &&
             point.coordinate[axis]<=element.upper[axis],"R4 action encountered a clamped moving basis point");
@@ -489,7 +489,7 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3
             ray->nodes.push_back(std::move(n));
         }
         ray->normalization=EvaluateRANSCappedDestruction(input,m_destruction);++normalizations;
-        Require(!CoupledR4() || ray->normalization.b!=m_destruction.delta,
+        Require(!GroundSafeguard() || ray->normalization.b!=m_destruction.delta,
             "R4 action encountered an unresolved common cap-knot derivative");
         const long double B=ray->normalization.budgetD,b=ray->normalization.b;long double bk=0,bc=0;
         for(const auto &n:ray->nodes)

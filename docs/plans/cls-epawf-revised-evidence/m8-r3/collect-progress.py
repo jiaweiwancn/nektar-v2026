@@ -69,7 +69,7 @@ def collect(progress, expected_h0=H0, expected_unknowns=2165):
                 require(event['history']['sha256'] == expected_h0, 'History payload differs from original h0')
             elif kind == 'protocol':
                 require(protocol is None and event['tolerance'] == 2e-12 and
-                    0 < event['maximum_Newton_updates'] <= 16 and event['no_auxiliary_alpha_sequence'] is True,
+                    0 < event['maximum_Newton_updates'] <= (32 if event.get('globalization') == 'JointRestorationR5' else 16) and event['no_auxiliary_alpha_sequence'] is True,
                     'Changed R3 tolerance/update/alpha protocol')
                 protocol = event
             elif kind == 'iterate_completed':

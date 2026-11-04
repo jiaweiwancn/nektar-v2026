@@ -4,6 +4,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
 #include <LibUtilities/Communication/CommSerial.h>
 #include <SpatialDomains/MeshGraphIO.h>
 #include <boost/property_tree/json_parser.hpp>
@@ -146,13 +147,34 @@ int main(int argc,char **argv)
         const auto residual=patch.Residual(state,history,alpha,time,data,false);
         std::vector<std::string> metadata;
         const auto start=std::chrono::steady_clock::now();
-        const auto matrix=patch.ScalarFeasibleJacobian(state,history,alpha,time,data,&metadata);
+        RANSWallAlgebra::DenseMatrix matrix;
+        std::string matrixFile;
+        if(const auto bound=input.get_child_optional("r5_matrix_binding"))
+        {
+            namespace D=RANSWallR3;
+            Require(patch.JointRestorationR5() && input.get("only_external_direction",false) &&
+                alpha==400. && time==.0025 && D::Hash(state)==bound->get<std::string>("state_sha256") &&
+                D::Hash(history)==bound->get<std::string>("history_sha256") &&
+                D::Hash(residual)==bound->get<std::string>("residual_sha256"),
+                "R5 saved matrix belongs to a different state, residual or history");
+            matrixFile=bound->get<std::string>("matrix.path");
+            Require(D::HashFile(matrixFile)==bound->get<std::string>("matrix.sha256"),"R5 saved matrix hash differs");
+            auto values=Binary(matrixFile,patch.Size()*patch.Size());
+            for(int i=0;i<patch.Size();++i)
+                matrix.emplace_back(values.begin()+i*patch.Size(),values.begin()+(i+1)*patch.Size());
+            for(const auto &item:bound->get_child("assembly_json"))
+                metadata.push_back(item.second.get_value<std::string>());
+        }
+        else
+        {
+            matrix=patch.ScalarFeasibleJacobian(state,history,alpha,time,data,&metadata);
+            matrixFile=std::string(argv[3])+".J.bin";
+            Require(!std::ifstream(matrixFile).good(),"refusing to overwrite an action matrix");
+            std::ofstream outputMatrix(matrixFile,std::ios::binary);
+            for(const auto &row:matrix)outputMatrix.write(reinterpret_cast<const char*>(row.data()),row.size()*sizeof(double));
+            outputMatrix.close();Require(outputMatrix.good(),"cannot preserve full action matrix");
+        }
         const double seconds=std::chrono::duration<double>(std::chrono::steady_clock::now()-start).count();
-        const std::string matrixFile=std::string(argv[3])+".J.bin";
-        Require(!std::ifstream(matrixFile).good(),"refusing to overwrite an action matrix");
-        std::ofstream outputMatrix(matrixFile,std::ios::binary);
-        for(const auto &row:matrix)outputMatrix.write(reinterpret_cast<const char*>(row.data()),row.size()*sizeof(double));
-        outputMatrix.close();Require(outputMatrix.good(),"cannot preserve full action matrix");
         std::vector<std::pair<std::string,Vector>> directions;
         const bool onlyExternal=input.get("only_external_direction",false);
         Require(!onlyExternal || argc==5,"external-only action check requires a direction payload");
@@ -181,7 +203,7 @@ int main(int argc,char **argv)
             if(!a.effectiveState.empty())for(int i=0;i<patch.Size();++i)direction[i]=a.effectiveState[i]-b.effectiveState[i];
             directions.push_back({kind,std::move(direction)});
         }
-        if(argc==5)directions.push_back({onlyExternal?"coupled_R4_direction":"retained_outer_k_witness",
+        if(argc==5)directions.push_back({onlyExternal?(patch.JointRestorationR5()?"joint_R5_direction":"coupled_R4_direction"):"retained_outer_k_witness",
             Binary(argv[4],patch.Size())});
         std::vector<std::string> actionRecords;
         for(const auto &[name,direction]:directions)

@@ -156,12 +156,14 @@ public:
         const RANSWallEvolutionData &data,int &iterations,double tolerance,int maximumIterations) const;
     Vector SolveScalarFeasibleR3(Vector state,const Vector &history,double alpha,double time,
         const RANSWallEvolutionData &data,int &iterations,double tolerance,
-        int maximumIterations,bool benchmarkOnly=false,bool localR4=false) const;
+        int maximumIterations,bool benchmarkOnly=false,bool localR4=false,bool localR5=false) const;
     const std::string &R3ProgressFile() const { return m_r3ProgressFile; }
     const Vector &LastFeasibleState() const { return m_lastFeasibleState; }
     const std::string &NonlinearPolicyName() const { return m_nonlinearPolicy; }
     const std::string &ActionPolicyName() const { return m_actionPolicy; }
     bool CoupledR4() const { return m_globalization=="CoupledR4"; }
+    bool JointRestorationR5() const { return m_globalization=="JointRestorationR5"; }
+    bool GroundSafeguard() const { return CoupledR4() || JointRestorationR5(); }
     Vector Norms(const Vector &residual,const std::map<int,double> &constraints,double ustar=.4) const;
     Vector StateNorms(const Vector &state,const Vector &reference,double ustar=.4) const;
     Vector ExplicitBody(const Vector &state,double time,const RANSWallEvolutionData &data) const;
@@ -228,9 +230,31 @@ private:
     };
     std::vector<WallExtremum> WallTraceR4(const Vector &state) const;
     std::string WallTraceJSON(const Vector &state,bool &admissible) const;
+    bool RestrictedInner(const ScalarObservation &p) const;
+    RANSWallGlobalPoint RestrictedGradientRow(const ScalarObservation &p) const;
+    struct OuterBound
+    {
+        RANSWallGlobalPoint row;
+        int family,block,axis,side,observationGeometry;
+        bool projected;
+        double scale,value,reference,width,lower,upper;
+        std::string inventory;
+        double Action(const Vector &step,int offset) const;
+    };
+    struct OuterViolation
+    {
+        std::array<double,4> family{};
+        double sum=0;
+        double Max() const;
+        std::string report;
+    };
+    std::vector<OuterBound> OuterBoundsR5(const ScalarDomainResult &domain) const;
+    OuterViolation OuterViolationR5(const std::vector<OuterBound> &bounds,
+        const Vector &effective={},const Vector &trace={},double fraction=0.) const;
     Vector CoupledDirectionR4(const ScalarDomainResult &domain,const Vector &newton,
         const WallMatrix &jac,const std::map<int,double> &constraints,
-        const std::function<Vector(Vector,bool)> &inverse,std::string &details) const;
+        const std::function<Vector(Vector,bool)> &inverse,std::string &details,const std::vector<OuterBound> &outer={},
+        double restoration=1.,bool inward=true) const;
     WallMatrix AssembleNonpressureR3(const Vector &state,double time,
         const RANSWallEvolutionData &data,bool imposeConstraints,int region,
         std::vector<std::string> *metadata) const;

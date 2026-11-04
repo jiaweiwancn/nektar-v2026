@@ -665,10 +665,121 @@ std::string RANSWallEvolutionPatch::WallTraceJSON(const Vector &state,bool &admi
         {"geometry",J::Number(worst->row.geometry)},{"extrema_checked",J::Number(points.size())}});
 }
 
+bool RANSWallEvolutionPatch::RestrictedInner(const ScalarObservation &p) const
+{
+    const double r=Distance(p.coordinate),H=m_mapping.At(p.coordinate).height;
+    return r<H-1e-11 || (Same(r,H) && p.side<0);
+}
+
+RANSWallGlobalPoint RANSWallEvolutionPatch::RestrictedGradientRow(const ScalarObservation &p) const
+{
+    // Keep the one-sided native element gradient even at a shared endpoint.
+    for(int e=0;e<fields[0]->Elements().size();++e)
+        if(fields[0]->Elements()[e].geometry==p.geometry)
+            return Transform(fields[0]->ElementPoint(e,p.coordinate));
+    return Point(0,p.coordinate,p.side);
+}
+
+double RANSWallEvolutionPatch::OuterBound::Action(const Vector &step,int offset) const
+{
+    return (axis<0?row.Value(step,offset):row.Gradient(step,offset)[axis])/(scale*width);
+}
+
+double RANSWallEvolutionPatch::OuterViolation::Max() const
+{
+    return *std::max_element(family.begin(),family.end());
+}
+
+std::vector<RANSWallEvolutionPatch::OuterBound> RANSWallEvolutionPatch::OuterBoundsR5(
+    const ScalarDomainResult &domain) const
+{
+    Require(domain.admissible,"R5 box requires the complete scalar domain");
+    const double us=m_robustUstar,K0=m_parameters.model.Q()*us*us;
+    const auto &state=domain.effectiveState;
+    std::vector<OuterBound> bounds;
+    // Identical audit rows can be reached from several inventories. Keep
+    // their inventory identities in the reported aggregate.
+    for(const auto &p:domain.observations)
+    {
+        if(p.inventory=="physical_sampled_K")
+            bounds.push_back({Point(K(),p.coordinate,p.side),3,K(),-1,p.side,p.geometry,false,
+                K0,p.value/K0,1.,.01,.99,1.01,p.inventory});
+        if((p.block!=K() && !p.dependentTrace) || RestrictedInner(p))continue;
+        // Normalization quadrature is open and lies strictly inside H.
+        // Fail explicitly if a moving point ever enters this frozen box
+        // inventory. Moving rays still enter projected trace through J.
+        Require(p.inventory.find("normalization_ray")==std::string::npos,
+            "R5 outer inventory has a moving normalization ray");
+        const double r=Distance(p.coordinate),g0=us/(m_parameters.model.Kappa()*r);
+        const auto velocity=RestrictedGradientRow(p);
+        for(int a=0;a<m_dimension;++a)
+        {
+            const auto g=velocity.Gradient(state,offset[a]);
+            for(int b=0;b<m_dimension;++b)
+            {
+                const int axis=PhysicalAxis(b);
+                const double reference=m_referenceFlow[PhysicalAxis(a)]*m_referenceNormal[axis];
+                bounds.push_back({velocity,0,a,axis,p.side,p.geometry,false,
+                    g0,g[axis]/g0-reference,reference,.001,-.001,.001,p.inventory});
+            }
+        }
+        const auto k=Point(K(),p.coordinate,p.side);
+        bounds.push_back({k,1,K(),-1,p.side,p.geometry,false,K0,k.Value(state,offset[K()])/K0,
+            1.,.01,.99,1.01,p.inventory});
+        const double e0=us*us*us/(m_parameters.model.Kappa()*r);
+        const int side=Same(r,m_mapping.At(p.coordinate).height)?1:0;
+        const auto epsilon=Point(Epsilon(),p.coordinate,side);
+        const double value=p.dependentTrace?p.value:epsilon.Value(state,offset[Epsilon()]);
+        bounds.push_back({epsilon,2,Epsilon(),-1,p.side,p.geometry,p.dependentTrace,e0,value/e0,
+            1.,.02,.98,1.02,p.inventory});
+    }
+    return bounds;
+}
+
+RANSWallEvolutionPatch::OuterViolation RANSWallEvolutionPatch::OuterViolationR5(
+    const std::vector<OuterBound> &bounds,const Vector &effective,const Vector &trace,double fraction) const
+{
+    OuterViolation result;
+    std::array<const OuterBound *,5> witness{};
+    std::array<double,5> excess,values,signs,actions;
+    excess.fill(-std::numeric_limits<double>::infinity());
+    for(const auto &b:bounds)
+    {
+        const double action=effective.empty()?0.:b.Action(b.projected?trace:effective,offset[b.block]);
+        const double change=fraction*action;
+        const double value=b.value+b.width*change;
+        for(double sign:{-1.,1.})
+        {
+            const double violation=sign*((b.value-(sign<0?b.lower:b.upper))/b.width+change);
+            result.family[b.family]=std::max(result.family[b.family],violation);
+            result.sum+=std::max(0.,violation);
+            const int index=b.projected?4:b.family;
+            if(violation>excess[index])
+            {
+                excess[index]=violation;values[index]=value;signs[index]=sign;actions[index]=action;witness[index]=&b;
+            }
+        }
+    }
+    std::vector<std::string> records;
+    for(int i=0;i<witness.size();++i)if(const auto *b=witness[i])
+        records.push_back(J::Object({{"family",J::Number(b->family)},{"inventory",J::Quote(b->inventory)},
+            {"point",J::Numbers(b->row.coordinate)},{"element_geometry",J::Number(b->row.geometry)},
+            {"observation_geometry",J::Number(b->observationGeometry)},{"side",J::Number(b->side)},
+            {"component",J::Numbers(Vector{double(b->axis<0?-1:PhysicalAxis(b->block)),double(b->axis)})},
+            {"projected_trace",J::Boolean(b->projected)},{"sign",J::Number(signs[i])},
+            {"reference_scale",J::Number(b->scale)},{"reference_component",J::Number(b->reference)},
+            {"signed_excess",J::Number(excess[i])},{"value",J::Number(values[i])},
+            {"directional_quantity_change",J::Number(actions[i]*b->width)}}));
+    result.report=J::Object({{"maximum",J::Number(result.Max())},{"family_maxima",J::Numbers(result.family)},
+        {"sum_positive",J::Number(result.sum)},{"quantity_count",J::Number(bounds.size())},
+        {"witnesses",J::List(records)}});
+    return result;
+}
+
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
     const ScalarDomainResult &domain,const Vector &newton,const WallMatrix &jac,
     const std::map<int,double> &constraints,const std::function<Vector(Vector,bool)> &inverse,
-    std::string &details) const
+    std::string &details,const std::vector<OuterBound> &outer,double restoration,bool inward) const
 {
     // Parameterize d=d_N+J^{-1} B z. B injects the scaled Cholesky
     // factors on free differential rows, leaving every algebraic row zero.
@@ -717,15 +828,17 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
         return constraints.count(col) && !(col>=offset[Epsilon()] && col<offset[InnerPressure()] &&
             m_traceIds.count(col-offset[Epsilon()]));
     };
-    auto scalarRow=[&](const RANSWallGlobalPoint &point,int block,double scale,bool trace)
+    auto scalarRow=[&](const RANSWallGlobalPoint &point,int block,double scale,bool trace,int axis=-1)
     {
+        const auto &basis=axis<0?point.phi:point.derivative[axis];
+        const double constantAction=axis<0?1.:0.;
         Vector a(Size());long double constant=0;
-        for(std::size_t j=0;j<point.ids.size();++j)constant+=(long double)point.phi[j]*point.constant[j];
+        for(std::size_t j=0;j<point.ids.size();++j)constant+=(long double)basis[j]*point.constant[j];
         for(std::size_t j=0;j<point.ids.size();++j)
         {
             const int col=offset[block]+point.ids[j];
             if(external(col))continue;
-            const double phi=(point.phi[j]+(j==0?(1-constant)/point.constant[0]:0))/scale;
+            const double phi=(basis[j]+(j==0?(constantAction-constant)/point.constant[0]:0))/scale;
             a[col]+=phi;
             if(trace && m_traceIds.count(point.ids[j]))axpy(a,-phi,jac[col]);
         }
@@ -775,7 +888,14 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
         return value;
     };
     std::string lastCut;
-    for(int exchange=0;exchange<40;++exchange)
+    std::array<double,4> ceiling{};
+    if(!outer.empty())
+    {
+        ceiling=OuterViolationR5(outer).family;
+        for(double &value:ceiling)value*=1.-restoration;
+    }
+    const int maxExchange=outer.empty()?40:96;
+    for(int exchange=0;exchange<maxExchange;++exchange)
     {
         auto [Q,R]=qr();
         Vector qCoordinates(active.size());
@@ -824,7 +944,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
                 observation.inventory,point.coordinate,[&]
                 {return scalarRow(point,observation.block,observation.scale,observation.dependentTrace);});
         }
-        for(const auto &p:ground)if(p.value/K0<=near)
+        for(const auto &p:ground)if(p.value/K0<=near && (inward || p.value<=0))
             inspect(0,p.row.Value(effective,offset[K()])/K0,"inward_ground_row",p.row.coordinate,[&]
                 {return scalarRow(p.row,K(),K0,false);});
         auto wall=effective;
@@ -833,6 +953,18 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
             inspect(-(1-reserve)*p.row.Value(domain.effectiveState,offset[K()])/K0,
                 p.row.Value(effective,offset[K()])/K0,"continuous_wall_reserve",p.row.coordinate,[&]
                 {return scalarRow(p.row,K(),K0,false);});
+        for(const auto &bound:outer)
+        {
+            const double change=bound.Action(bound.projected?trace:effective,offset[bound.block]);
+            for(double sign:{-1.,1.})
+            {
+                const double limit=sign<0?bound.lower:bound.upper;
+                const double excess=sign*(bound.value-limit)/bound.width;
+                inspect(excess-ceiling[bound.family],-sign*change,
+                    "outer_"+bound.inventory+"_"+std::to_string(bound.family),bound.row.coordinate,[&]
+                    {return scalarRow(bound.row,bound.block,-sign*bound.scale*bound.width,bound.projected,bound.axis);});
+            }
+        }
         if(violated.empty())
         {
             Vector stationarity=z;
@@ -861,7 +993,10 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
                 {"scaled_residual_objective",J::Number(.5*dot(z,z))},
                 {"witness_k",J::Number(witnessValue)},
                 {"witness_newton_delta",J::Number(witnessRow.Value(newton,offset[K()]))},
-                {"witness_direction_delta",J::Number(witnessRow.Value(effective,offset[K()]))}});
+                {"witness_direction_delta",J::Number(witnessRow.Value(effective,offset[K()]))},
+                {"outer_restoration_fraction",outer.empty()?"null":J::Number(restoration)},
+                {"outer_linear_ceiling",J::Numbers(ceiling)},
+                {"inward_positive_ground_rule",J::Boolean(inward)}});
             return direction;
         }
         auto normal=metricAction(inverse(violated,true),true);
@@ -915,14 +1050,16 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
 
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
     Vector s,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data,
-    int &iterations,double tolerance,int maximumIterations,bool benchmarkOnly,bool localR4) const
+    int &iterations,double tolerance,int maximumIterations,bool benchmarkOnly,bool localR4,bool localR5) const
 {
     Require(m_nonlinearPolicy=="ScalarFeasibleR3" && m_dimension==2 && !Mapped() &&
         m_transitionEnabled && m_cappedDestruction && m_comm->GetSize()==1,
         "ScalarFeasibleR3 requires its opt-in serial flat 2D Upstream+Capped policy");
     Require(Size()<=3000 && alpha==400. && time==.0025 && tolerance==2e-12 &&
-        maximumIterations>0 && maximumIterations<=16,"R3 requires the unchanged bounded exact target");
+        maximumIterations>0 && maximumIterations<=(JointRestorationR5()?32:16),"R3 requires the unchanged bounded exact target");
     Require(!localR4 || (CoupledR4() && maximumIterations==1),"R4 local experiment uses one bounded update");
+    Require(!localR5 || (JointRestorationR5() && maximumIterations==1),
+        "R5 local experiment requires the explicit bounded restoration policy");
     iterations=0;
     using Clock=std::chrono::steady_clock;
     std::map<std::string,std::pair<int,double>> profile;
@@ -945,7 +1082,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
     durable.Event("protocol",{{"inner_stress_model",J::Quote(InnerStressName())},
         {"tolerance",J::Number(tolerance)},{"maximum_Newton_updates",J::Number(maximumIterations)},
         {"benchmark_only",J::Boolean(benchmarkOnly)},{"globalization",J::Quote(m_globalization)},
-        {"local_direction_experiment",J::Boolean(localR4)},{"no_auxiliary_alpha_sequence","true"}});
+        {"local_direction_experiment",J::Boolean(localR4 || localR5)},{"no_auxiliary_alpha_sequence","true"}});
     const double us=m_robustUstar,K0=m_parameters.model.Q()*us*us;
     const double E0=us*us*us/(m_parameters.model.Kappa()*m_parameters.geometry.height);
     auto domain=timed("scalar_domain",[&]{return ScalarDomain(s,time,data,true);});
@@ -954,21 +1091,21 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
     auto domainReport=[&](const ScalarDomainResult &value)
     {
         const auto json=ScalarDomainJSON(value);
-        if(!CoupledR4())return json;
+        if(!GroundSafeguard())return json;
         bool wallOK=false;
         const auto trace=WallTraceJSON(value.effectiveState,wallOK);
         return json.substr(0,json.size()-1)+",\"r4_wall_trace\":"+trace+"}";
     };
     auto checkWall=[&](const ScalarDomainResult &value)
     {
-        if(!CoupledR4())return true;
+        if(!GroundSafeguard())return true;
         bool admissible=false;
         WallTraceJSON(value.effectiveState,admissible);
         return admissible;
     };
     auto recordRanges=[&](int iteration,const Vector &state)
     {
-        if(!CoupledR4())return;
+        if(!GroundSafeguard())return;
         const auto audit=CompleteRestrictedAudit(state,history,alpha,time,data,true);
         std::vector<std::pair<std::string,std::string>> values;
         for(const auto &[key,row]:audit)values.push_back({key,J::Numbers(row)});
@@ -1001,7 +1138,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
                     {"iteration",J::Number(iterations)},{"scaled_block_norms",J::Numbers(norms)},{"profiling",profiling()}});
                 return s;
             }
-            Require(iterations<maximumIterations,"R3 Newton iteration limit");
+            Require(iterations<maximumIterations,JointRestorationR5()?"R5 nonlinear update limit":"R3 Newton iteration limit");
             durable.JacobianStatus(iterations,"incomplete");
             std::vector<std::string> assembly;
             const auto jac=timed("complete_action_assembly",[&]{return ScalarFeasibleJacobian(s,history,alpha,time,data,&assembly,false);});
@@ -1051,6 +1188,162 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
                     {"direction",durable.VectorPayload("comparison.newton",newton)}});
                 if(scalar.admissible)recordRanges(-1,trial);
             }
+            if(JointRestorationR5())
+            {
+                const auto bounds=timed("outer_box",[&]{return OuterBoundsR5(domain);});
+                const auto baseBox=OuterViolationR5(bounds);
+                durable.Event("r5_box",{{"iteration",J::Number(iterations)},{"box",baseBox.report}});
+                const auto inverse=[&](Vector rhs,bool transpose){return factor.Apply(std::move(rhs),transpose);};
+                struct Trial
+                {
+                    Vector state,residual,norms;
+                    ScalarDomainResult domain;
+                    std::map<int,double> constraints;
+                    OuterViolation box;
+                    double fraction=0;
+                    std::string stepPin;
+                };
+                int trialCount=0;
+                auto compare=[&](const std::string &name,bool joint,double restoration,bool inward)
+                {
+                    Trial result;
+                    std::string details;
+                    Vector step;
+                    const auto started=Clock::now();++profile["r5_direction"].first;
+                    try
+                    {
+                        step=CoupledDirectionR4(domain,newton,jac,constraints,inverse,details,
+                            joint?bounds:std::vector<OuterBound>{},restoration,inward);
+                    }
+                    catch(const std::exception &e)
+                    {
+                        profile["r5_direction"].second+=std::chrono::duration<double>(Clock::now()-started).count();
+                        details=e.what();
+                        durable.Event("r5_direction_failure",{{"iteration",J::Number(iterations)},
+                            {"name",J::Quote(name)},{"message",J::Quote(details)},{"profiling",profiling()}});
+                        return std::pair{std::move(result),details};
+                    }
+                    profile["r5_direction"].second+=std::chrono::duration<double>(Clock::now()-started).count();
+                    const auto action=Multiply(jac,step);
+                    auto effective=step;
+                    for(const auto &[row,value]:constraints)
+                        if(!(row>=offset[Epsilon()] && row<offset[InnerPressure()] &&
+                            m_traceIds.count(row-offset[Epsilon()])))effective[row]=0.;
+                    auto trace=effective;
+                    for(int id:m_traceIds)trace[offset[Epsilon()]+id]-=action[offset[Epsilon()]+id];
+                    const auto prefix="iterate"+std::to_string(iterations)+"."+name;
+                    result.stepPin=durable.VectorPayload(prefix+".step",step);
+                    auto model=[&](double fraction)
+                    {
+                        auto prediction=residual;
+                        for(int i=0;i<Size();++i)prediction[i]+=fraction*action[i];
+                        return Norms(prediction,constraints,us);
+                    };
+                    const auto full=model(1.);
+                    Require(*std::max_element(full.begin()+InnerPressure(),full.end())<1e-9,
+                        "R5 direction failed full linearized algebraic restoration");
+                    double stepNorm=0;
+                    const std::array<double,7> scales{us,us,K0,E0,us*us,us*us,us/m_parameters.geometry.height};
+                    for(int b=0;b<=Gauge();++b)for(int i=offset[b];i<offset[b]+size[b];++i)
+                        stepNorm=std::max(stepNorm,std::abs(step[i])/scales[b]);
+                    durable.Event("r5_direction",{{"iteration",J::Number(iterations)},{"name",J::Quote(name)},
+                        {"step",result.stepPin},{"action",durable.VectorPayload(prefix+".action",action)},
+                        {"dimensionless_step",J::Number(stepNorm)},{"details",details},
+                        {"model_block_norms",J::Numbers(full)},
+                        {"model_box",OuterViolationR5(bounds,effective,trace,1.).report},
+                        {"base_witness_actions",OuterViolationR5(bounds,effective,trace).report},
+                        {"profiling",profiling()}});
+                    const auto search=Clock::now();++profile["line_search"].first;
+                    double fraction=1.;
+                    const int allowance=localR5?8:32-trialCount;
+                    for(int k=0;k<allowance;++k,fraction*=.5)
+                    {
+                        ++trialCount;
+                        auto trial=s;
+                        for(int i=0;i<Size();++i)trial[i]+=fraction*step[i];
+                        const auto label=prefix+".trial"+std::to_string(k);
+                        auto checked=timed("scalar_domain",[&]{return ScalarDomain(trial,time,data,true);});
+                        std::vector<std::pair<std::string,std::string>> event{
+                            {"iteration",J::Number(iterations)},{"name",J::Quote(name)},{"backtrack",J::Number(k)},
+                            {"fraction",J::Number(fraction)},{"state",durable.VectorPayload(label+".state",trial)},
+                            {"scalar_domain",domainReport(checked)},{"model_block_norms",J::Numbers(model(fraction))},
+                            {"model_box",OuterViolationR5(bounds,effective,trace,fraction).report},
+                            {"profile_branches_changed",J::Boolean(domain.profileBranches!=checked.profileBranches)}};
+                        if(!checked.admissible || !checkWall(checked))
+                        {
+                            event.push_back({"classification",J::Quote(checked.admissible?"ground_trace":"scalar_domain")});
+                            durable.Event("r5_trial",event);continue;
+                        }
+                        try
+                        {
+                            const auto candidateBox=timed("outer_box",[&]{return OuterViolationR5(OuterBoundsR5(checked));});
+                            const auto candidate=timed("residual",[&]{return Residual(trial,history,alpha,time,data);});
+                            const auto current=timed("constraints",[&]{return Constraints(trial,time,data);});
+                            const auto candidateNorms=Norms(candidate,current,us);
+                            const double required=localR5?.01:1e-4*fraction;
+                            bool boxDescent=candidateBox.Max()<=(1.-required)*baseBox.Max();
+                            for(int family=0;family<4;++family)
+                                boxDescent=boxDescent && candidateBox.family[family]<=baseBox.family[family];
+                            const bool descent=Maximum(candidateNorms)<(1.-required)*error;
+                            const bool accept=descent && (!joint || boxDescent);
+                            event.insert(event.end(),{{"classification",J::Quote(accept?"accepted_comparison":
+                                !descent?"residual_non_descent":"outer_non_descent_or_family_worsening")},
+                                {"box",candidateBox.report},{"scaled_block_norms",J::Numbers(candidateNorms)},
+                                {"trace_constraint_norm",J::Number(candidateNorms.back())},
+                                {"residual",durable.VectorPayload(label+".residual",candidate)}});
+                            durable.Event("r5_trial",event);
+                            if(accept)
+                            {
+                                const auto audit=CompleteRestrictedAudit(trial,history,alpha,time,data,true);
+                                durable.Event("r5_trial_audit",{{"iteration",J::Number(iterations)},
+                                    {"name",J::Quote(name)},{"fraction",J::Number(fraction)},
+                                    {"covariance",J::Numbers(audit.at("r2_covariance"))},
+                                    {"qualified",J::Boolean(audit.at("r2_qualified")[0]==1.)}});
+                                result.state=std::move(trial);result.residual=candidate;result.norms=candidateNorms;
+                                result.domain=std::move(checked);result.constraints=current;result.box=candidateBox;
+                                result.fraction=fraction;break;
+                            }
+                        }
+                        catch(const std::exception &e)
+                        {
+                            event.push_back({"classification",J::Quote("trial_exception")});
+                            event.push_back({"message",J::Quote(e.what())});durable.Event("r5_trial",event);
+                        }
+                    }
+                    profile["line_search"].second+=std::chrono::duration<double>(Clock::now()-search).count();
+                    return std::pair{std::move(result),details};
+                };
+                if(localR5)compare("r4_control",false,0.,true);
+                auto [trial,details]=compare("r5_full",true,1.,true);
+                if(trial.fraction==0. && baseBox.Max()>0. && details.find("inward_ground_row")!=std::string::npos)
+                    std::tie(trial,details)=compare("r5_inward_control",true,1.,false);
+                if(trial.fraction==0. && baseBox.Max()>0. && trial.stepPin.empty())
+                    std::tie(trial,details)=compare("r5_partial",true,.25,true);
+                if(localR5)
+                {
+                    m_lastFeasibleState=s;
+                    durable.Event("solve_terminal",{{"converged","false"},{"terminal",J::Quote("r5_local_comparison_completed")},
+                        {"iteration",J::Number(iterations)},{"useful_joint_descent",J::Boolean(trial.fraction>0.)},
+                        {"profiling",profiling()}});
+                    return s;
+                }
+                if(trial.fraction==0.)
+                {
+                    terminal=trial.stepPin.empty()?"r5_direction_unresolved":"r5_joint_line_search_exhausted";
+                    throw std::runtime_error(terminal);
+                }
+                const auto update=J::Object({{"iteration",J::Number(iterations)},{"accepted","true"},
+                    {"accepted_fraction",J::Number(trial.fraction)},{"matrix",matrix},{"step",trial.stepPin},
+                    {"trial_count",J::Number(trialCount)},{"box",trial.box.report}});
+                durable.Snapshot(iterations+1,trial.state,trial.residual,trial.constraints,trial.norms,
+                    domainReport(trial.domain),profiling(),update);
+                durable.Event("newton_update",{{"details",update},{"profiling",profiling()}});
+                s=std::move(trial.state);residual=std::move(trial.residual);norms=std::move(trial.norms);
+                constraints=std::move(trial.constraints);domain=std::move(trial.domain);alreadySaved=true;
+                recordRanges(iterations+1,s);
+                continue;
+            }
+
             std::string directionDetails="null";
             const auto step=CoupledR4()?timed("r4_direction",[&]
                 {return CoupledDirectionR4(domain,newton,jac,constraints,
@@ -1195,14 +1488,8 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
     for(const auto &p:domain.observations)
     {
         if(p.block!=K() && !p.dependentTrace)continue;
-        const double r=Distance(p.coordinate);const bool inner=r<m_mapping.At(p.coordinate).height-1e-11 ||
-            (Same(r,m_mapping.At(p.coordinate).height) && p.side<0);
-        auto row=Point(0,p.coordinate,p.side);
-        // Preserve both one-sided native element gradients at internal
-        // interfaces, rather than reselecting the lowest geometry ID.
-        for(int e=0;e<fields[0]->Elements().size();++e)
-            if(fields[0]->Elements()[e].geometry==p.geometry)
-            {row=Transform(fields[0]->ElementPoint(e,p.coordinate));break;}
+        const double r=Distance(p.coordinate);const bool inner=RestrictedInner(p);
+        const auto row=RestrictedGradientRow(p);
         RANSTensor G{};
         for(int a=0;a<m_dimension;++a)G[PhysicalAxis(a)]=row.Gradient(domain.effectiveState,offset[a]);
         const double k=Point(K(),p.coordinate,p.side).Value(domain.effectiveState,offset[K()]);
@@ -1236,7 +1523,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
     const bool box=outer[0]<=.001 && outer[1]>=.99 && outer[2]<=1.01 && outer[3]>=.98 && outer[4]<=1.02 &&
         outer[5]>=.99 && outer[6]<=1.01;
     const bool covariance=innerCov>=-1e-10*K0 && outerCov>=-1e-10*K0;
-    if(rangesOnly || CoupledR4())audit["r4_outer_gradient_witness"]=gradientPoint;
+    if(rangesOnly || GroundSafeguard())audit["r4_outer_gradient_witness"]=gradientPoint;
     audit["r2_outer_range"]=outer;audit["r2_covariance"]={innerCov,outerCov};
     audit["r2_inner_minimum_point"]=innerPoint;audit["r2_outer_minimum_point"]=outerPoint;
     audit["r2_qualified"]={box && covariance && domain.minimumLambda>=.5?1.:0.};

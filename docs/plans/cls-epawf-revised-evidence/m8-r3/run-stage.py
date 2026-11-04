@@ -70,7 +70,7 @@ def main():
     for name in ('epoch', 'session', 'manifest', 'output'):
         p.add_argument('--'+name, type=Path, required=True)
     p.add_argument('--action-gate', type=Path)
-    p.add_argument('--phase', choices=('benchmark', 'target', 'r4-local'), required=True)
+    p.add_argument('--phase', choices=('benchmark', 'target', 'r4-local', 'r5-local'), required=True)
     p.add_argument('--expected-source', required=True)
     p.add_argument('--seconds', type=int, required=True)
     p.add_argument('--cpu', type=int, default=0); p.add_argument('--metadata-cpu', type=int, default=50)
@@ -89,12 +89,14 @@ def main():
     root = ET.parse(session).getroot()
     info = {row.get('PROPERTY', '').upper():row.get('VALUE') for row in root.findall('.//SOLVERINFO/I')}
     r4 = info.get('RANSWALLGLOBALIZATION') == 'CoupledR4'
+    r5 = info.get('RANSWALLGLOBALIZATION') == 'JointRestorationR5'
     expected_stage = {'benchmark': 'JacobianBenchmarkR3', 'target': 'ExactTargetR3',
-                      'r4-local': 'DirectionExperimentR4'}[a.phase]
+                      'r4-local': 'DirectionExperimentR4', 'r5-local': 'DirectionExperimentR5'}[a.phase]
     require(info.get('RANSWALLSTAGETEST') == expected_stage and
         info.get('RANSWALLNONLINEARPOLICY') == 'ScalarFeasibleR3' and info.get('RANSWALLACTIONPOLICY') == 'VerifiedR3Action',
         'Changed explicit R3 phase/policy')
     require(a.phase != 'r4-local' or r4, 'Local R4 requires the opt-in direction')
+    require(a.phase != 'r5-local' or r5, 'Local R5 requires explicit restoration')
     progress = Path(info.get('RANSWALLR3PROGRESSFILE', 'case.r3-progress.jsonl'))
     progress = progress if progress.is_absolute() else session.parent/progress
     report = session.with_suffix('.evolution.json')
@@ -102,7 +104,7 @@ def main():
     gate = load(a.action_gate) if a.action_gate else {}
     built = load(epoch/'runtime-fingerprint.json')
     executable = pin(build/'IncNavierStokesSolver')
-    require(a.phase == 'r4-local' or (gate.get('schema') == 1 and gate.get('source_commit') == a.expected_source and
+    require(a.phase in ('r4-local', 'r5-local') or (gate.get('schema') == 1 and gate.get('source_commit') == a.expected_source and
         gate.get('executable_sha256') == executable['sha256'] and gate.get('absolute_action_tolerance') == 1e-7 and
         gate.get('required_state_action_gates_met') is True and gate.get('active_dependencies_covered') is True),
         'Current independent absolute action/active-dependency gates are not complete')
@@ -112,15 +114,20 @@ def main():
     if a.phase == 'target':
         require(a.cost_receipt is not None and a.budget_note is not None, 'Target budget requires the measured complete-J receipt and frozen note')
         cost = load(a.cost_receipt)
-        require(cost.get('phase') == ('r4-local' if r4 else 'benchmark') and cost.get('status') == 'completed' and
+        require(cost.get('phase') == ('r5-local' if r5 else 'r4-local' if r4 else 'benchmark') and cost.get('status') == 'completed' and
             cost.get('source_commit') == a.expected_source and cost.get('executable') == executable and
-            cost.get('runtime_unchanged') is True and (r4 or cost.get('durable_collection', {}).get('complete_J_benchmark') is True),
+            cost.get('runtime_unchanged') is True and (r4 or r5 or cost.get('durable_collection', {}).get('complete_J_benchmark') is True),
             'Target cost basis is not the completed current-source full-J benchmark')
         if r4:
             require(a.seconds == 600 and gate.get('local_evidence') == pin(a.cost_receipt) and
                 gate.get('useful_feasible_native_descent') is True and
                 gate.get('base_state') == manifest['state'],
                 'R4 pilot requires the measured useful descent at the exact saved guess and a 600s cap')
+        if r5:
+            require(a.seconds <= 900 and gate.get('local_evidence') == pin(a.cost_receipt) and
+                gate.get('useful_joint_native_descent') is True and gate.get('base_state') == manifest['state'] and
+                0 < int(info['RANSWALLR5UPDATES']) == gate.get('maximum_updates') <= 32,
+                'R5 continuation requires joint descent at its exact saved base and a bounded measured budget')
         require(bool(a.budget_note.read_text().strip()), 'Empty target budget rationale')
     environment = dict(os.environ, **{key:'1' for key in THREADS}, PYTHONDONTWRITEBYTECODE='1',
         TMPDIR=str(epoch/'tmp'), LD_LIBRARY_PATH=str(build/'geometry-lib'))

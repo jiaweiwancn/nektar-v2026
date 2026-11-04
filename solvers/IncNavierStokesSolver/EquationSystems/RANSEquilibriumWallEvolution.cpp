@@ -152,12 +152,15 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         Require(scheme.method=="IMEX" && scheme.variant.empty() && (scheme.order==1 || scheme.order==2),"evolution supports native IMEX orders 1/2, empty variant");m_order=scheme.order;
         m_session->LoadSolverInfo("RANSWallStageTest",m_stageTest,"Off");
         Require(m_stageTest=="Off" || m_stageTest=="MatchedR2" || m_stageTest=="FrozenScalarR2" ||
-            m_stageTest=="ExactTargetR3" || m_stageTest=="JacobianBenchmarkR3" || m_stageTest=="DirectionExperimentR4","unknown native stage-test mode");
-        const bool r3=m_stageTest=="ExactTargetR3" || m_stageTest=="JacobianBenchmarkR3" || m_stageTest=="DirectionExperimentR4";
+            m_stageTest=="ExactTargetR3" || m_stageTest=="JacobianBenchmarkR3" || m_stageTest=="DirectionExperimentR4" || m_stageTest=="DirectionExperimentR5","unknown native stage-test mode");
+        const bool r3=m_stageTest=="ExactTargetR3" || m_stageTest=="JacobianBenchmarkR3" || m_stageTest=="DirectionExperimentR4" || m_stageTest=="DirectionExperimentR5";
         Require(m_stageTest!="DirectionExperimentR4" || m_patch->CoupledR4(),
             "DirectionExperimentR4 requires explicit CoupledR4 globalization");
         Require(!m_patch->CoupledR4() || m_stageTest=="ExactTargetR3" || m_stageTest=="DirectionExperimentR4",
             "CoupledR4 is restricted to the unforced alpha400 research stage");
+        Require((m_stageTest!="DirectionExperimentR5" || m_patch->JointRestorationR5()) &&
+            (!m_patch->JointRestorationR5() || m_stageTest=="ExactTargetR3" || m_stageTest=="DirectionExperimentR5"),
+            "JointRestorationR5 requires the frozen exact target or its local comparison");
         if(m_stageTest!="Off" && !r3)
             Require(m_patch->NonlinearPolicyName()=="ScalarFeasibleR2" && m_eta==0 && m_neutral &&
                 m_order==2 && m_steps==0 && m_timestep==.0025 && m_maximumIterations<=12 && m_tolerance==2e-12 &&
@@ -366,7 +369,7 @@ RANSEquilibriumWallEvolution::Vector RANSEquilibriumWallEvolution::Explicit(cons
 }
 void RANSEquilibriumWallEvolution::v_DoSolve()
 {
-    if(m_stageTest=="ExactTargetR3" || m_stageTest=="JacobianBenchmarkR3" || m_stageTest=="DirectionExperimentR4"){RunR3StageTest();return;}
+    if(m_stageTest=="ExactTargetR3" || m_stageTest=="JacobianBenchmarkR3" || m_stageTest=="DirectionExperimentR4" || m_stageTest=="DirectionExperimentR5"){RunR3StageTest();return;}
     if(m_stageTest!="Off"){RunRestrictedStageTest();return;}
     try
     {
@@ -407,9 +410,10 @@ RANSEquilibriumWallEvolution::Vector RANSEquilibriumWallEvolution::LoadR3Predict
 {
     namespace J=RANSWallSolveJson;namespace D=RANSWallR3;
     boost::property_tree::ptree packet;boost::property_tree::read_json(m_r3PredictorFile,packet);
-    const bool r4=m_patch->CoupledR4();
-    const double originAlpha=r4?400.:3200.;
-    const std::string role=r4?"retained_r3_internal_iterate_only":"nonconverged_auxiliary_predictor_only";
+    const bool retained=m_patch->GroundSafeguard();
+    const double originAlpha=retained?400.:3200.;
+    const std::string role=m_patch->JointRestorationR5()?"retained_r4_terminal_iterate_only":
+        retained?"retained_r3_internal_iterate_only":"nonconverged_auxiliary_predictor_only";
     Require(packet.get<int>("schema")==1 && packet.get<std::string>("role")==role &&
         packet.get<std::string>("encoding")=="little-endian IEEE754 binary64" &&
         packet.get<double>("origin.alpha")==originAlpha && packet.get<double>("origin.time")==.0025 &&
@@ -451,14 +455,14 @@ RANSEquilibriumWallEvolution::Vector RANSEquilibriumWallEvolution::LoadR3Predict
     const auto constraints=m_patch->Constraints(candidate,time,m_implicitData);
     const auto residual=m_patch->Residual(candidate,history,400.,time,m_implicitData);
     const auto norms=m_patch->Norms(residual,constraints,m_ustar);
-    if(r4)
+    if(retained)
     {
         const auto residualFile=pin("origin.residual");
         Require(D::Hash(residual)==D::Hash(read(residualFile)),
-            "R4 retained state did not reproduce the exact original residual");
+            "Retained target state did not reproduce the exact original residual");
     }
-    const auto audit=m_patch->CompleteRestrictedAudit(candidate,history,400.,time,m_implicitData,r4);
-    Require(r4 || (audit.count("r2_qualified") && audit.at("r2_qualified")[0]==1. && audit.count("r2_covariance") &&
+    const auto audit=m_patch->CompleteRestrictedAudit(candidate,history,400.,time,m_implicitData,retained);
+    Require(retained || (audit.count("r2_qualified") && audit.at("r2_qualified")[0]==1. && audit.count("r2_covariance") &&
         *std::min_element(audit.at("r2_covariance").begin(),audit.at("r2_covariance").end())>=0.),
         "R3 predictor exits current finite covariance/constitutive applicability sets");
     Require(before==D::Hash(candidate),"R3 predictor was silently lifted or changed during revalidation");
@@ -492,11 +496,23 @@ void RANSEquilibriumWallEvolution::RunR3StageTest()
     auto candidate=LoadR3Predictor(history,targetTime);
     const bool benchmark=m_stageTest=="JacobianBenchmarkR3";
     const bool localR4=m_stageTest=="DirectionExperimentR4";
+    const bool localR5=m_stageTest=="DirectionExperimentR5";
+    int updateLimit=(localR4 || localR5)?1:m_maximumIterations;
+    if(m_patch->JointRestorationR5() && !localR5)
+    {
+        std::string requested;
+        m_session->LoadSolverInfo("RANSWallR5Updates",requested,"");
+        Require(!requested.empty() && requested.size()<=2 &&
+            requested.find_first_not_of("0123456789")==std::string::npos,
+            "R5 continuation requires an explicit numerical update budget");
+        updateLimit=std::stoi(requested);
+        Require(updateLimit>0 && updateLimit<=32,"R5 update budget exceeds its bound");
+    }
     bool solverReturned=false;int iterations=0;std::string failure;
     try
     {
         candidate=m_patch->SolveScalarFeasibleR3(candidate,history,400.,targetTime,m_implicitData,
-            iterations,m_tolerance,localR4?1:m_maximumIterations,benchmark,localR4);solverReturned=true;
+            iterations,m_tolerance,updateLimit,benchmark,localR4,localR5);solverReturned=true;
     }
     catch(const std::exception &error)
     {
@@ -518,7 +534,7 @@ void RANSEquilibriumWallEvolution::RunR3StageTest()
         try{audit=m_patch->CompleteRestrictedAudit(candidate,history,400.,targetTime,m_implicitData);}
         catch(const std::exception &error){auditFailure=std::string(J::ExceptionType(error))+": "+error.what();}
     }
-    const bool coupled=!benchmark && !localR4 && solverReturned && residualFailure.empty() && !norms.empty() && Maximum(norms)<m_tolerance;
+    const bool coupled=!benchmark && !localR4 && !localR5 && solverReturned && residualFailure.empty() && !norms.empty() && Maximum(norms)<m_tolerance;
     const bool physical=coupled && auditFailure.empty() && audit.count("r2_qualified") && audit.at("r2_qualified")[0]==1.;
     std::vector<std::pair<std::string,std::string>> entries;
     for(const auto &[name,value]:audit)entries.push_back({name,J::Numbers(value)});
@@ -536,7 +552,7 @@ void RANSEquilibriumWallEvolution::RunR3StageTest()
         {"physical_range_passed",J::Boolean(physical)},{"audit",J::Object(entries)},
         {"native_history_advanced","false"}}));
     m_targetConverged=coupled;m_targetPhysical=physical;
-    if(!benchmark && !coupled && (!localR4 || !solverReturned))m_failure="Exact target unresolved: "+failure;
+    if(!benchmark && !coupled && ((!localR4 && !localR5) || !solverReturned))m_failure="Exact target unresolved: "+failure;
     if(benchmark && !solverReturned)m_failure="R3 complete-J benchmark failed: "+failure;
     // The stage/predictor remains separate from original native state/history.
     WriteReport();
@@ -754,7 +770,7 @@ void RANSEquilibriumWallEvolution::WriteReport() const
            <<",\"stage_test_target_physical_range\":"<<(m_targetPhysical?"true":"false")
            <<",\"stage_test_initial_native_history\":"<<m_stageTestInitialHistory
            <<",\"stage_test_levels\":"<<RANSWallSolveJson::List(m_stageTestLevels);
-        if(m_stageTest=="ExactTargetR3" || m_stageTest=="JacobianBenchmarkR3" || m_stageTest=="DirectionExperimentR4")
+        if(m_stageTest=="ExactTargetR3" || m_stageTest=="JacobianBenchmarkR3" || m_stageTest=="DirectionExperimentR4" || m_stageTest=="DirectionExperimentR5")
             out<<",\"r3_action_policy\":"<<Quoted(m_patch->ActionPolicyName())
                <<",\"r3_progress_file\":"<<Quoted(std::filesystem::absolute(m_patch->R3ProgressFile()).string())
                <<",\"r3_predictor_binding\":"<<m_r3PredictorBinding
