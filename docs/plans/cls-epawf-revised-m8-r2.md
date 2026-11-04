@@ -316,6 +316,9 @@ The unchanged finite outer box is covered, with normalized gradient
 departure `.000500194924462`, k/K0 in `[.999995974,1.000012069]`, and
 epsilon/epsilon0 in `[.983296232,1.000047449]`. These are observations on a
 failed diagnostic candidate, not checks on a converged RANS stage.
+The native `audit.r2_qualified=[1]` describes these finite range checks;
+`physical_range_passed=false` also requires true coupled convergence, which
+is absent. The two flags therefore have different scopes.
 
 Lambda remains one. The limiter-active source measure is `.00103271248`
 and minimum b is `.832365063`; cap-active measure is zero. Independent

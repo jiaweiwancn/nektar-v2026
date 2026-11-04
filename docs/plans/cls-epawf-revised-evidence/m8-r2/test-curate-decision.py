@@ -144,6 +144,46 @@ class AssessmentTests(unittest.TestCase):
 
 
 class LedgerInterfaceTests(unittest.TestCase):
+    def frozen_family(self, scalar_converged):
+        runtime, _ = fixture()
+        summary = dict(mode='frozen-scalar', producer_source=CURATOR.PRODUCER,
+            producer_source_end=CURATOR.PRODUCER, source_clean=True, runtime_unchanged=True,
+            cases=[dict(inner_stress='SaturatedR2', target_attempted=True,
+                target_true_coupled_convergence=False, target_native_physical_range_flag=False,
+                native_exit_code=None, native_seconds=None,
+                levels=[dict(alpha=400., attempted=True, converged=scalar_converged,
+                    true_coupled_residual_converged=False, frozen_velocity_pressure_diagnostic=True,
+                    scalar_domain=dict(admissible=True))])])
+
+        class SummaryEvidence:
+            def add(self, *args, **kwargs):
+                return summary
+
+            def reference(self, *args, **kwargs):
+                return {}
+
+        with mock.patch.object(CURATOR, 'runtime_binding', return_value=True):
+            return CURATOR.stage_family(SummaryEvidence(), Path('/scalar-summary.json'), [], 'scalar', runtime)
+
+    def test_complete_failed_scalar_record_is_reported_as_diagnostic_without_path_audit(self):
+        result = self.frozen_family(False)
+        row = result['cases'][0]
+        self.assertTrue(row['target_record_present'])
+        self.assertFalse(row['target']['converged'])
+        self.assertIn('frozen-scalar diagnostic only', row['result_from_available_records'])
+        self.assertEqual(row['report_bound_analysis_count'], 0)
+        self.assertIsNone(row['native_exit_code'])
+        self.assertIsNone(row['native_seconds'])
+        self.assertFalse(row['all_supplied_metadata_qualification_gates'])
+
+    def test_scalar_convergence_without_coupled_solution_is_never_promoted(self):
+        row = self.frozen_family(True)['cases'][0]
+        self.assertTrue(row['target']['converged'])
+        self.assertFalse(row['native_target_true_coupled_convergence'])
+        self.assertTrue(row['frozen_scalar_is_not_a_coupled_root'])
+        self.assertFalse(row['all_supplied_metadata_qualification_gates'])
+        self.assertIn('remain separate', row['result_from_available_records'])
+
     def test_actual_reference_hash_mismatch_is_recorded(self):
         with tempfile.TemporaryDirectory() as folder:
             path = Path(folder)/'receipt.json'

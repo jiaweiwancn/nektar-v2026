@@ -3,6 +3,7 @@ import argparse
 from collections import Counter
 from datetime import datetime, timezone
 import hashlib
+import importlib.util
 import json
 from pathlib import Path
 import struct
@@ -10,6 +11,8 @@ import struct
 p = argparse.ArgumentParser(description=__doc__)
 p.add_argument('--run', type=Path, required=True)
 p.add_argument('--analysis', type=Path, action='append', default=[])
+p.add_argument('--recovery', type=Path,
+    help='Explicit additive completion receipt; rechecks its strict assessor gates')
 p.add_argument('--output', type=Path, required=True)
 a = p.parse_args()
 run = a.run.resolve()
@@ -38,12 +41,29 @@ def domain(value):
 receipt_path = run/'receipt.json'
 receipt = json.loads(receipt_path.read_text())
 assert receipt['status'] != 'running', 'Do not curate an unfinished family as a final result'
+recovered, strict = None, None
+if a.recovery is not None:
+    assessor_path = Path(__file__).with_name('assess-stage-evidence.py')
+    spec = importlib.util.spec_from_file_location('r2_curated_recovery_assessor', assessor_path)
+    assessor = importlib.util.module_from_spec(spec); spec.loader.exec_module(assessor)
+    strict = assessor.assess(receipt_path, receipt['source_commit'], a.recovery)
+    recovered = json.loads(a.recovery.read_text())['recovery']
+    assert strict['family_status'] == 'recovered_native_artifacts' and strict['mode'] == 'frozen-scalar'
+    # This in-memory view contains only the separately verified observations.
+    # The failed raw receipt is never rewritten or relabelled completed.
+    receipt = dict(receipt, cases=[recovered['native_case']], commands=[
+        recovered['native_command'] if row['name'] == 'native-SaturatedR2' else row
+        for row in receipt['commands']])
+source_end = receipt['source_commit_end'] if recovered is None else strict['runtime']['source_commit']
+source_clean = receipt['source_clean_end'] if recovered is None else recovered['source_clean_postcompletion']
+runtime_unchanged = receipt['runtime_unchanged'] if recovered is None else True
+after_path = run/'runtime-after.json' if recovered is None else Path(recovered['post_completion_runtime']['path'])
 result = dict(schema=1, milestone='M8-R2 F', created_utc=datetime.now(timezone.utc).isoformat(),
     curator=file(__file__), run_receipt=file(receipt_path),
     method='Read-only extraction/hashes of native records; no numerical reexecution',
     native_calls=0, operator_reconstructions=0, mode=receipt['mode'],
-    producer_source=receipt['source_commit'], producer_source_end=receipt['source_commit_end'],
-    runtime_unchanged=receipt['runtime_unchanged'], source_clean=receipt['source_clean_end'],
+    producer_source=receipt['source_commit'], producer_source_end=source_end,
+    runtime_unchanged=runtime_unchanged, source_clean=source_clean,
     worker=dict(ranks=receipt['ranks'], threads=receipt['numerical_threads'],
         maximum_concurrent_workers=receipt['maximum_concurrent_workers']),
     matrix_encoding=receipt['matrix_encoding'],
@@ -51,8 +71,20 @@ result = dict(schema=1, milestone='M8-R2 F', created_utc=datetime.now(timezone.u
     target=dict(dt=receipt['target_dt'], time=receipt['target_time'], alpha=400.,
         fixed_history=True, native_history_advance=False),
     allowed_alpha_levels=receipt['alpha_levels'], maximum_Newton_updates=12,
-    runtime_before=file(run/'runtime-before.json'), runtime_after=file(run/'runtime-after.json'),
+    runtime_before=file(run/'runtime-before.json'), runtime_after=file(after_path),
     stage_plan=file(run/'cases/stage-plan.json'), cases=[], independent_analysis=[])
+if recovered is not None:
+    result.update(status='recovered_native_artifacts', original_supervisor_status=recovered['original_supervisor_status'],
+        additive_recovery=file(a.recovery.resolve()), completion_check=recovered['completion_check'],
+        original_early_runtime_after=recovered['early_supervisor_after_runtime'],
+        native_process_exit_code=None, native_process_elapsed_seconds=None,
+        native_wall_cap_enforcement_after_supervisor_failure_verified=False,
+        strict_recovered_assessment=dict(assessor=file(assessor_path),
+            rechecked_metadata_sha256=assessor.canonical(strict), gates_recomputed=True,
+            cases=[{key: item.get(key) for key in ('inner_stress', 'target_attempted',
+                'complete_target_solve_record', 'scalar_solve_convergence_evidence',
+                'full_coupled_convergence_evidence', 'native_history_unchanged_verified',
+                'native_postqualification_report_available', 'issues')} for item in strict['cases']]))
 pin = json.loads((run/'runtime-before.json').read_text())
 result['producing_program'] = dict(path=str(Path(pin['build_root'])/'IncNavierStokesSolver'),
     sha256=pin['runtime_artifacts']['build/IncNavierStokesSolver'])
@@ -69,6 +101,10 @@ for row in receipt['cases']:
         target_flags_origin='Final case-report receipt only; missing flags stay unknown. The strict stage assessment separately inspects actual logs and complete JSONL records.',
         note='Native range flag is separate from independent operator/action/accounting qualification',
         levels=[], nonlinear_solves=[], matrices=[])
+    if recovered is not None:
+        item.update(original_supervisor_status='failed', native_process_exit_status_available=False,
+            native_process_elapsed_seconds_available=False, wall_cap_stop_observed=None,
+            native_wall_cap_enforcement_after_supervisor_failure_verified=False)
     if row.get('report_path'):
         path = Path(row['report_path'])
         assert sha(path) == row['report_sha256']
@@ -111,6 +147,15 @@ for row in receipt['cases']:
                     'jacobian_rebuild_policy', 'scaled_block_norms')}
                 solve.update(state_sha256=vector(record['state']), history_sha256=vector(record['history']),
                     residual_sha256=vector(record['residual']), domain=domain(record['domain']), iterations=[])
+                if recovered is not None:
+                    solve.update(native_iteration_entries=len(record['iterations']),
+                        native_trial_entries=sum(len(iteration['trials']) for iteration in record['iterations']),
+                        trial_classifications=dict(Counter(trial['classification'] for iteration in record['iterations']
+                            for trial in iteration['trials'])))
+                    for level in item['levels']:
+                        if level['alpha'] == record['alpha']:
+                            level['complete_trace_iteration_entries'] = len(record['iterations'])
+                            level['native_iterations_field_scope'] = 'Native report value retained; trace length supplies the entry count'
                 for iteration in record['iterations']:
                     observed = {key: iteration.get(key) for key in ('iteration', 'scaled_block_norms',
                         'linear_scaled_block_norms', 'dimensionless_step', 'fixed_location_maximum_fraction',

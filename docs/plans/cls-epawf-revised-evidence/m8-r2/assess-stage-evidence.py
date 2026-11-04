@@ -9,6 +9,7 @@ when a final evolution/postqualification report was not published.
 import argparse
 from datetime import datetime, timezone
 import hashlib
+import importlib.util
 import json
 import math
 from pathlib import Path
@@ -245,19 +246,47 @@ def final_report(raw, law, h0, fields, mode):
                 native_time=raw.get('time'), native_steps=raw.get('steps'), failure=raw.get('failure'))
 
 
-def assess(receipt_path, expected_source=None):
+def recovered_completion(receipt_path, recovery_path, expected_source, bindings):
+    """Recompute an additive recovery; never promote its lost process status."""
+    recovery_file = bindings.file(recovery_path)
+    stored = load(recovery_path)
+    helper_path = Path(__file__).with_name('recover-stage-completion.py')
+    spec = importlib.util.spec_from_file_location('r2_additive_completion', helper_path)
+    helper = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(helper)
+    require(stored.get('schema') == 1 and stored.get('kind') == helper.KIND and stored.get('success') is True and
+        stored.get('failures') == [] and stored.get('native_calls') == stored.get('scientific_reconstructions') == 0,
+        'Unsuccessful or unsupported additive completion recovery')
+    require(stored.get('collector') == identity(helper_path) and stored.get('assessor') == identity(__file__),
+        'Recovery collector/assessor source changed')
+    data = stored['recovery']
+    require(data.get('original_receipt') == identity(receipt_path), 'Recovery original failed receipt changed')
+    current = helper.collect(receipt_path, data['completion_check']['path'], expected_source or load(receipt_path)['source_commit'])
+    require(canonical(current) == canonical(data), 'Recovered completion bindings or unknown process status changed')
+    return helper.receipt_view(load(receipt_path), current), current, recovery_file
+
+
+def assess(receipt_path, expected_source=None, recovery_path=None):
     receipt_path = Path(receipt_path).resolve()
     run = receipt_path.parent
     bindings = Bindings()
     receipt_file = bindings.file(receipt_path)
     receipt = load(receipt_path)
-    require(receipt.get('schema') == 2 and receipt.get('status') in ('completed', 'incomplete', 'failed') and receipt.get('finished_utc'),
-            'Require a terminal stages-family receipt; do not assess an active supervisor')
+    recovery, recovery_file = None, None
+    if recovery_path is not None:
+        receipt, recovery, recovery_file = recovered_completion(receipt_path, recovery_path, expected_source, bindings)
+    else:
+        require(receipt.get('schema') == 2 and receipt.get('status') in ('completed', 'incomplete', 'failed') and receipt.get('finished_utc'),
+                'Require a terminal stages-family receipt; do not assess an active supervisor')
     mode = receipt['mode']
     require(mode in ('matched', 'frozen-scalar'), 'Unknown stage-family mode')
-    require(receipt.get('runtime_unchanged') is True and receipt.get('source_clean_start') is True and
-            receipt.get('source_clean_end') is True and receipt.get('source_commit_end') == receipt['source_commit'],
-            'Unbound/changed native source or runtime')
+    if recovery is None:
+        require(receipt.get('runtime_unchanged') is True and receipt.get('source_clean_start') is True and
+                receipt.get('source_clean_end') is True and receipt.get('source_commit_end') == receipt['source_commit'],
+                'Unbound/changed native source or runtime')
+    else:
+        require(recovery['source_clean_postcompletion'] is True and
+            recovery['producing_source_commit'] == receipt['source_commit'], 'Unbound recovered source/runtime')
     if expected_source is not None:
         require(receipt['source_commit'] == expected_source, 'Producing source is not the requested pin')
     require(receipt.get('target_dt') == TIME and receipt.get('target_time') == TIME and
@@ -269,7 +298,8 @@ def assess(receipt_path, expected_source=None):
     require(receipt['alpha_levels'] == allowed, 'Changed declared level sequence')
     require(receipt['matrix_encoding'] == dict(dtype='IEEE754 binary64', byte_order=sys.byteorder, layout='row-major'),
             'Unsupported/changed native matrix encoding')
-    before_path, after_path = run/'runtime-before.json', run/'runtime-after.json'
+    before_path = run/'runtime-before.json'
+    after_path = Path(recovery['post_completion_runtime']['path']) if recovery is not None else run/'runtime-after.json'
     bindings.file(before_path); bindings.file(after_path)
     before, after = load(before_path), load(after_path)
     runtime = runtime_identity(before, after, receipt, bindings)
@@ -349,15 +379,24 @@ def assess(receipt_path, expected_source=None):
             continue
         command = commands[0]
         require(command['argv'] == ['taskset', '-c', '0', str(Path(before['build_root'])/'IncNavierStokesSolver'), str(xml)] and
-                Path(command['cwd']).resolve() == xml.parent and command.get('timeout_seconds') == WALL_CAP and
-                type(command.get('exit_code')) is int and type(command.get('seconds')) in (int, float) and math.isfinite(command['seconds']),
-                'Unexpected native argv/cwd/timeout or unfinished command')
+                Path(command['cwd']).resolve() == xml.parent and command.get('timeout_seconds') == WALL_CAP,
+                'Unexpected native argv/cwd/timeout')
+        if recovery is None:
+            require(type(command.get('exit_code')) is int and type(command.get('seconds')) in (int, float) and math.isfinite(command['seconds']),
+                'Unfinished native command')
+        else:
+            require(command.get('exit_code', 'missing') is None and command.get('seconds', 'missing') is None,
+                'Recovered native exit status/duration must remain null')
         require(row.get('native_exit_code') == command['exit_code'] and row.get('native_seconds') == command['seconds'], 'Native row/command timing differs')
         log = bindings.file(command['log_path'], command['log_sha256'])
         log_evidence = read_log(log['path'])
         item.update(native_command=command, log=log, log_evidence=log_evidence,
-                    wall_cap_stop_observed=command['exit_code'] == 124 and command['seconds'] >= WALL_CAP,
-                    wall_cap_interpretation='Recorded exit/timing only; no nonlinear-failure or root-absence inference')
+                    wall_cap_stop_observed=(command['exit_code'] == 124 and command['seconds'] >= WALL_CAP) if recovery is None else None,
+                    wall_cap_interpretation=('Recorded exit/timing only; no nonlinear-failure or root-absence inference' if recovery is None else
+                        'Native process exit/duration were lost; wall-cap enforcement after supervisor failure is unverified'))
+        if recovery is not None:
+            item.update(native_process_exit_status_available=False, native_process_elapsed_seconds_available=False,
+                wall_cap_enforcement_after_supervisor_failure_verified=False)
         report_path, trace_path = xml.with_name('case.evolution.json'), xml.with_name('case.feasible.jsonl')
         report = None
         if row.get('report_path'):
@@ -446,9 +485,9 @@ def assess(receipt_path, expected_source=None):
     require(len({item['preflight_h0_sha256'] for item in case_results}) == 1, 'Matched actual h0 differs across laws')
     eligible = mode == 'matched' and len(case_results) == 2 and all(item['conditional_frozen_scalar_case_eligible'] for item in case_results)
     bindings.finish()
-    return dict(schema=1, method='Strict metadata/hash assessment; no native calls, operator evaluation or numerical qualification',
+    answer = dict(schema=1, method='Strict metadata/hash assessment; no native calls, operator evaluation or numerical qualification',
                 native_calls=0, operator_reconstructions=0, original_receipt=receipt_file,
-                family_status=receipt['status'], mode=mode, representation=receipt['representation'],
+                family_status=receipt['status'] if recovery is None else 'recovered_native_artifacts', mode=mode, representation=receipt['representation'],
                 source_commit=receipt['source_commit'], runtime=runtime, preflight=preflight_file,
                 original=original_file, stage_plan=plan_file, target=dict(alpha=TARGET_ALPHA, time=TIME, dt=TIME),
                 target_convergence_scope=('converged_target_evidence describes the frozen scalar solve; full coupled evidence is separate and scalar convergence is no coupled-root claim' if mode == 'frozen-scalar'
@@ -457,6 +496,12 @@ def assess(receipt_path, expected_source=None):
                 conditional_scope='At most the separately authorized frozen-scalar diagnostic; never a coupled target retry',
                 unknowns_policy='Missing completion/history/audits remain unavailable; a wall cap proves no nonlinear failure or root absence',
                 bound_files=bindings.files)
+    if recovery is not None:
+        answer.update(additive_recovery=recovery_file, original_supervisor_status=recovery['original_supervisor_status'],
+            native_process_exit_code=None, native_process_elapsed_seconds=None,
+            native_wall_cap_enforcement_after_supervisor_failure_verified=False,
+            completion_check=recovery['completion_check'], fresh_post_completion_runtime=recovery['post_completion_runtime'])
+    return answer
 
 
 def check_frozen_scalar(assessment_path, receipt_path, *, expected_source, preflight, original, representation, runtime_pin):
@@ -487,13 +532,14 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--receipt', type=Path, required=True)
     parser.add_argument('--expected-source')
+    parser.add_argument('--recovery', type=Path, help='Separate additive completion receipt; original failed receipt stays unchanged')
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
     require(not args.output.exists(), 'Assessment output already exists; retain original observations')
     result = dict(schema=1, success=False, created_utc=datetime.now(timezone.utc).isoformat(),
                   assessor=identity(__file__), native_calls=0, failures=[])
     try:
-        result['assessment'] = assess(args.receipt, args.expected_source)
+        result['assessment'] = assess(args.receipt, args.expected_source, args.recovery)
         result['success'] = True
     except Exception as error:
         result['failures'].append(dict(type=type(error).__name__, message=str(error)))

@@ -245,10 +245,11 @@ def stage_family(evidence, summary_path, paths, label, runtime):
         row['all_supplied_metadata_qualification_gates'] = (False if frozen else tri_all([
             row['native_target_true_coupled_convergence'], row['native_target_physical_range_flag'],
             domain.get('admissible'), independent, before, after, data.get('runtime_unchanged')]))
-        if not target or not checked:
+        if frozen and target:
+            row['result_from_available_records'] = ('frozen-scalar diagnostic only; native scalar convergence and '
+                'complete coupled/path qualification remain separate; terminal-only audits are supplied as extra evidence')
+        elif not target or not checked:
             row['result_from_available_records'] = 'pending original-target record or report-bound final independent analysis'
-        elif frozen:
-            row['result_from_available_records'] = 'frozen-scalar diagnostic only; inspect its solved scalar convergence separately'
         elif row['all_supplied_metadata_qualification_gates'] is True:
             row['result_from_available_records'] = 'original-target root passes all supplied finite-set metadata gates'
         elif row['native_target_true_coupled_convergence'] is True:
@@ -384,7 +385,8 @@ def main():
     for name in ('operational-policy-addendum-v2.md', 'operational-policy-addendum-v2.json',
             'operational-policy-addendum-v3.md', 'inner-stress-caller-audit.md', 'pressure-action-origin.md',
             'inner-verification-result.json', 'inner-zero-ratio-diagnosis.json', 'cap-fixture-screen.json',
-            'analyzer-static-result.json', 'preflight-001-stop.json', 'preflight-002-summary.json'):
+            'analyzer-static-result.json', 'preflight-001-stop.json', 'preflight-002-summary.json',
+            'initial-action-result.json', 'target-initial-action-result.json', 'saturated-initial-action-result.json'):
         e.add('document_'+name, docs/name, required=True)
     canonical_inputs = {
         'build': epoch/'build-receipt.json', 'runtime': epoch/'runtime-fingerprint.json',
@@ -432,11 +434,17 @@ def main():
         e.issues.append(dict(kind='reviewed_baseline_disagrees_with_frozen_contract'))
     b_summary = e.data.get(str((docs/'inner-verification-result.json').resolve()), {})
     e_summary = e.data.get(str((docs/'preflight-002-summary.json').resolve()), {})
+    initial_actions = {name: e.data.get(str((docs/name).resolve()), {}) for name in
+        ('initial-action-result.json', 'target-initial-action-result.json', 'saturated-initial-action-result.json')}
     gate_overview = dict(
         B_inner=dict(reported_status=b_summary.get('status'), independent_checks=b_summary.get('independent_checks'),
             native_kernel_checks=b_summary.get('native_kernel_checks'), validation_success=(raw['inner_validation'] or {}).get('success'),
             scope='Focused kernel/operator evidence; unresolved ratio diagnostic is retained in its supplied status'),
         C_pressure=pick(raw['pressure_validation'] or {}, ('success', 'checks', 'fixed_action_tolerance')),
+        D_current_actions={name: pick(value, ('initial_derivative_gates_passed', 'fixed_absolute_gate_met',
+            'target_initial_k_action_gate_met', 'fixed_absolute_action_tolerance',
+            'scope', 'nonlinear_terminal_cause_assessed', 'numerical_causality_claim'))
+            for name, value in initial_actions.items()},
         E_initial=pick(e_summary, ('runner_status', 'outer6_coverage_decision', 'outer9_needed',
             'final_provenance_passed', 'source_runtime_inputs_unchanged', 'input_hashes_unchanged')),
         static=pick(raw['static'] or {}, ('success', 'checks', 'scope')),

@@ -1,6 +1,7 @@
 """Run only the predeclared matched stage pair, or one conditional scalar test."""
 import argparse
 from datetime import datetime, timezone
+import errno
 import fcntl
 import hashlib
 import importlib.util
@@ -12,6 +13,41 @@ import struct
 import subprocess
 import sys
 import time
+
+
+class ProgressEmitter:
+    """A disconnected progress consumer must not terminate child supervision."""
+    def __init__(self, stream=None):
+        self.stream = sys.stdout if stream is None else stream
+        self.disabled = False
+
+    def __call__(self, message):
+        if self.disabled:
+            return False
+        try:
+            print(message, file=self.stream, flush=True)
+            return True
+        except OSError as error:
+            if not isinstance(error, BrokenPipeError) and error.errno != errno.EPIPE:
+                raise
+            self.disabled = True
+            if self.stream is sys.stdout:
+                # Redirect the real descriptor as well: swallowing print's
+                # EPIPE alone can leave a buffered final flush exiting 120.
+                try:
+                    destination = os.open(os.devnull, os.O_WRONLY)
+                    try:
+                        os.dup2(destination, self.stream.fileno())
+                    finally:
+                        os.close(destination)
+                except (OSError, ValueError, AttributeError):
+                    # Closed/fake streams may have no descriptor. CPython
+                    # skips its final stdout flush when this binding is None.
+                    sys.stdout = None
+            return False
+
+
+progress = ProgressEmitter()
 
 p=argparse.ArgumentParser(description=__doc__)
 p.add_argument('--root',type=Path,required=True)
@@ -88,12 +124,12 @@ def command(name,argv,cwd,timeout,cpu=0):
                 except subprocess.TimeoutExpired:os.killpg(process.pid,signal.SIGKILL);process.wait()
                 item['exit_code']=124;break
             if now-last>=30:
-                print(name+' alive '+str(round(now-started,1))+'s; '+str(log.stat().st_size)+' log bytes',flush=True);last=now
+                progress(name+' alive '+str(round(now-started,1))+'s; '+str(log.stat().st_size)+' log bytes');last=now
             time.sleep(1)
         else:item['exit_code']=process.returncode
     item.update(seconds=time.monotonic()-started,log_path=str(log),log_sha256=sha(log));save()
-    print(name+' exit '+str(item['exit_code'])+' '+str(round(item['seconds'],3))+'s',flush=True)
-    if item['exit_code']:print(log.read_text()[-3000:],flush=True)
+    progress(name+' exit '+str(item['exit_code'])+' '+str(round(item['seconds'],3))+'s')
+    if item['exit_code']:progress(log.read_text()[-3000:])
     return item
 save();before=False
 try:
@@ -143,5 +179,5 @@ finally:
     else:receipt['runtime_unchanged']=False
     receipt.update(source_commit_end=git('rev-parse','HEAD'),source_clean_end=not bool(git('status','--porcelain')),
         finished_utc=datetime.now(timezone.utc).isoformat())
-    save();print(json.dumps(dict(status=receipt['status'],cases=receipt['cases'])),flush=True)
+    save();progress(json.dumps(dict(status=receipt['status'],cases=receipt['cases'])))
 raise SystemExit(0 if receipt['status']=='completed' and receipt['runtime_unchanged'] else 1)
