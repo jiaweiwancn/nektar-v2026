@@ -1,12 +1,16 @@
 # Segregated Picard for the CLS/EP-AWF physical stage
 
-The backend and its native test harness are implemented. Linux validation is
-blocked by access to `jay-Super-Server`. The original M8 convergence problem
-remains open. No Picard physical stage has been run or accepted.
+The segregated backend completed Linux operator and history checks and
+ran the unchanged M8 startup stage. The original convergence problem
+remains open. The default run stopped at a full residual of 13.69368.
+A k update projected against continuous ground constraints reduced the
+residual further, with the k block still dominant. No Picard physical
+step was accepted.
 
 The branch is `codex/cls-epawf-segregated-picard`. Its base
 `0ed7790450bb7e81f17ff1d0b577f12fc95f9cce` matches the earlier reviewed tip.
 The implementation and harness are in `0486db8c39ce325bc0c2d004382bfc8881f6ea07`.
+The ground projection is in `d3bc3f5f516b7ecb957debac52ed1ac9001f47bd`.
 The Mac checkout had only unrelated untracked files at startup.
 
 ## Discrete stage
@@ -111,6 +115,15 @@ evaluation domain plus the ground trace. The fixture applies the original
 Trial sweeps can leave that constitutive envelope. No clipping or field
 floors are applied.
 
+`RANSWallPicardGroundProjection=On` adds an optional search policy for k.
+If a relaxed k solve crosses the continuous ground constraint, the solver
+projects its increment against cuts at the trial polynomial extrema.
+It minimizes the change in frozen mass-dual k residual and uses the
+free-coefficient metric inverse `A^-1 M A^-T`. The projected increment
+retains all original k equations for the acceptance test. Other scalar
+inventories and the full residual still gate the sweep. The default
+remains backtracking, with the projection selector off.
+
 ## Reproduction on Linux
 
 Inspect the load and the shared source revision and status via `ssh
@@ -125,7 +138,7 @@ source /home/jay/.local/opt/nektar-v2026-mpi/env.sh
 export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
 export BLIS_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 NUMEXPR_NUM_THREADS=1
 run='/media/jay/新加卷/nektar-v2026-runs/cls-epawf-segregated-picard'
-src="$run/source"
+src="$run/validation-source"
 prefix=/home/jay/.local/opt/nektar-v2026-mpi
 mkdir -p "$run/tmp"
 export TMPDIR="$run/tmp"
@@ -159,6 +172,13 @@ original native stage residual from saved coefficient and history data
 in a separate process. On a reported first-stage failure it can also
 read the last feasible trial for the existing k-term decomposition.
 
+For the projection comparisons, build the solver from the separate
+`projection-source` into `projection-build` with the same Release flags.
+Use that solver and the first build's `RANSWallResolutionProbe` in the
+harness. Set `--ground-projection --sweeps 120` and use a fresh output
+directory for each relaxation setting. The readback probe uses the original
+residual, whose assembly is shared by both producing revisions.
+
 After a qualified first stage, run with `--steps 3` in a fresh output
 directory for the focused multi-step fixture through .0075. Use
 `--perturbation 1e-7`, `--perturbation -1e-7` and
@@ -168,20 +188,134 @@ target. Choose later continuation budgets and pseudo-time settings from
 measured sweep, block and readback evidence. The serial Picard path has
 no MPI comparison at present.
 
-## Evidence as of November 4, 2026
+## Linux results on November 4, 2026
 
-| Check | Result |
+Tailscale access recovered after the initial connection failures. The clean
+shared Linux checkout was on `codex/hit-inflow-generator` at
+`f4b70baec10016dd098005bc5a5507b87e4a57bf`. The baseline producing source
+at `f6e8ff839d28247bd5c5f9b7195493ffbdd67543` was checked out in
+`validation-source` using the retained R7 epoch-002 objects and a thin Git
+bundle from the Mac. The projection source at `d3bc3f5f516b7ecb957debac52ed1ac9001f47bd`
+was checked out separately. Both Release builds used eight jobs against
+the existing MPI-enabled prefix. The numerical runs used one rank and one
+thread per configured runtime. The build receipts record the exact compile
+flags, commands and compiler inputs. The runtime manifests record paths,
+hashes and resolved libraries. Both solvers resolved Nektar++ 5.9.0
+libraries from the MPI-enabled prefix, Open MPI and the system OpenBLAS
+pthread LAPACK and BLAS libraries.
+
+| Executable under the run root | Producing revision | SHA256 |
+| --- | --- | --- |
+| `build/IncNavierStokesSolver` | `f6e8ff83` | `6d9521f1923e7fc79a808192a89726fde6b2851ec48b4abe507c7278cf76d252` |
+| `projection-build/IncNavierStokesSolver` | `d3bc3f5f` | `d69ff5ebf8202141c978494467940108f96c0858956007f3e8943b9c20f9f93d` |
+
+The first-stage startup and incoming guess matched the archived h0 hash
+`b8ba7917424057a9f6f16a026d82d53ede43985871537facea170ef6e1841b71`.
+The native callback history matched h0 coefficient values. Its raw hash
+`f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca`
+differs by signed zero bits from the stored guess. Both the zero-sweep
+deliberate rejection and the failed physical attempts retained their
+initialized coupled state, native time labels and all four history slots.
+The accepted step count is zero and the physical clock remains at 0.
+
+### Operator and regression checks
+
+| Native check | Result |
 | --- | --- |
-| Mac syntax check of changed solver translation units | Passed with Clang C++17 and warnings as errors |
-| Mac standalone robust constitutive probe | 28,434 checks passed, including active/capped rays, the zero-k rate, signed production and the epsilon reaction |
-| Archived input preparation | Startup, deliberate rejection and first-stage fixtures generated |
-| Linux source sync and build | Blocked. Direct and Tailscale SSH timed out, and Tailscale reported the target offline |
-| Native consistency, pressure, rejection and regression tests | Pending Linux |
-| Original M8 residual, constraints, qualification and readback | No Picard measurement |
-| Accepted steps, time and perturbation runs | No native run |
+| Same-state flow, k and epsilon block agreement | Maximum scaled difference `3.33e-13` across the reference, nonuniform perturbation and post-update checks |
+| Frozen flow versus direct dense saddle solve | Maximum coefficient difference `3.61e-16`, including both regional pressure spaces |
+| Native affine pressure action | Maximum momentum row difference `2.01e-18` |
+| Predictor/corrector continuity and common gauge | From `(8.54e-4, 2.53e-4, 1.17e-5)` to `(6.87e-16, 8.68e-16, 6.22e-17)` |
+| Velocity correction and frozen flow defect | Largest velocity coefficient change `5.60e-4` and maximum frozen row defect `7.24e-17` |
+| Interface and relative pressure | Integrated reduced-pressure jump `-0.4557867404` in both paths and maximum interface observation difference below `3e-17` |
+| Existing native regressions | 5/5 passed, including equilibrium evolution and the older backend smoke cases |
+| Constitutive kernel | 28,434 checks passed on Linux, including active/capped rays, the zero-k rate, signed production and the epsilon reaction |
 
-See the [validation receipt](cls-epawf-segregated-picard-evidence/validation.json)
-for local fixture identities and access results. Once Linux is reachable,
-run the unchanged first stage with verification enabled. If it stalls,
-the saved readback provides the k-term breakdown and fresh trace defect
-needed to choose the next numerical change.
+The frozen systems had 980 velocity unknowns, 85 pressure and gauge
+unknowns, 504 free k modes, and 254 epsilon modes including the matching
+coefficients. Interface observations compare two frozen-flow solutions
+and include the physical traction and flux terms. The discontinuous
+regional pressure result is retained in the native representation.
+
+### Unchanged first-stage target
+
+All comparisons used the original h0, alpha 400, time .0025, zero
+prescribed forcing and tolerance `2e-12`. The reported full residual is
+the maximum original scaled block norm from a fresh readback. The
+projection comparisons used `--ground-projection`, with
+`--k .75 --epsilon 1` for the second relaxation setting. The
+pseudo-time comparison used `--pseudo-alpha 400`.
+
+| Run | Completed sweeps | Full residual | Solver seconds | Stop |
+| --- | ---: | ---: | ---: | --- |
+| Default | 21 | 13.69367965 | 239.90 | Admissible residual-decreasing sweep unavailable |
+| Pseudo alpha 400 | 23 | 13.94347378 | 188.91 | Admissible residual-decreasing sweep unavailable |
+| Ground projection | 120 | 3.17771676 | 205.18 | Sweep budget |
+| Ground projection, higher scalar relaxation | 74 | 3.17771675 | 145.79 | Admissible residual-decreasing sweep unavailable |
+
+The default terminal relaxation for k was `2.98e-8`, and the
+continuous ground minimum was `2.21e-10` near x=1.596. The finite
+evaluation inventory still had minimum k `1.07e-4`. This difference
+localizes the step restriction to the continuous ground condition.
+Pseudo-time produced similar k relaxation collapse. Projection completed
+all 117 triggered projections in its first run and continued through the
+ground contact. Its k residual changed by about `1.01e-6` between
+sweeps 90 and 120, with the ground minimum at the arithmetic margin.
+The higher-relaxation run reached the same plateau with a final ground
+minimum of `2.21e-16` and a trace coefficient defect of `7.22e-15`.
+Its fresh readback gave the following full norm vector in native order.
+
+| $u$ | $v$ | $k$ | $\varepsilon$ | Inner continuity | Outer continuity | Gauge | Constraints |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 1.36e-5 | 6.10e-8 | 3.17771675 | 1.47e-9 | 7.40e-16 | 9.65e-16 | 1.05e-17 | 9.94e-14 |
+
+Each fresh readback reproduced the complete terminal norm vector
+exactly as serialized by the producing run.
+
+The default terminal k residual decomposes into signed projections
+along the original mass-dual residual direction. Inner destruction
+contributes `+57.2282`, storage `-23.0076`, diffusion `-17.6386`,
+inner production `-2.88685`, and advection `-0.001499`. Outer terms
+nearly cancel, and prescribed scalar forcing is zero. The decomposition
+uses an independently integrated cubic mass and agrees with the native
+dual norm. The full term reassembly differs from the native k normed
+rows by less than `8e-13` in the default case. This is a ground-limited
+k balance failure at order-one residual. The independently rebuilt
+trace constraint is much smaller and continues to converge while k
+stalls.
+
+The saved endpoints pass the scalar evaluation-domain check and have
+minimum normalization lambda one. Normalized outer-gradient departures
+are `.00288665` for the default run, `.00288513` for pseudo-time, and
+`.00288904` for both projected runs, against the original `.001`
+bound. They fail the original constitutive qualification. The retained R7
+audit executable rebuilt the finite-set qualification from each saved
+candidate in an audit-only mode on the original selected stress and source.
+
+The focused multi-step and perturbed-guess trajectory checks are
+conditional on a qualified first stage. The relaxation and pseudo-time
+comparisons are first-stage diagnostics. The evidence supports a
+ground-constrained k residual plateau for the tested split updates.
+The next numerical experiment is to seek an admissible residual descent
+direction that accounts for the feedback of the flow and epsilon
+corrections on the active ground k modes, while retaining the block
+solves and the original qualification. The current experiments leave
+the existence of a qualified root unresolved. The earlier R7 coupled method
+reached 2.9261 on an in-box nonroot from a different starting state.
+Its result remains a separate historical experiment.
+
+### Artifacts
+
+The Linux root is
+`/media/jay/新加卷/nektar-v2026-runs/cls-epawf-segregated-picard`.
+The run directories contain `target/solver.log`, `target/sweeps.json`,
+`target/case.evolution.json` and `target/readback.json`. Build receipts
+are in `build-receipt` and `projection-build-receipt`. The five existing
+test results are in `regression.log`. The two smoke tests also passed on
+the second build and are recorded in `projection-regression.log`.
+Candidate qualification and its
+input packets are under `terminal-audit`.
+
+The repository holds the [validation receipt](cls-epawf-segregated-picard-evidence/validation.json),
+[compact Linux histories](cls-epawf-segregated-picard-evidence/linux-sweeps.json)
+and [collection script](cls-epawf-segregated-picard-evidence/summarize-linux.py).

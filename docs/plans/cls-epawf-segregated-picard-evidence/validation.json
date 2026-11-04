@@ -1,15 +1,7 @@
 {
-  "status": "blocked_before_linux_sync",
+  "status": "m8_unresolved_after_linux_validation",
   "base": "0ed7790450bb7e81f17ff1d0b577f12fc95f9cce",
   "implementation": "0486db8c39ce325bc0c2d004382bfc8881f6ea07",
-  "linux_access": {
-    "date_asia_shanghai": "2026-11-04",
-    "direct": {"host": "linux-usb", "resolved_address": "192.168.77.2", "exit_code": 255, "result": "port 22 timeout"},
-    "tailscale": {"host": "jay@100.105.247.110", "exit_code": 255, "result": "port 22 timeout", "peer_status": "offline"},
-    "source_sync": false,
-    "build": false,
-    "native_run": false
-  },
   "local_checks": {
     "syntax": {
       "compiler": "Apple Clang, C++17, -fsyntax-only with warnings as errors",
@@ -35,13 +27,119 @@
     }
   },
   "native_picard": {
-    "ranks_planned": 1,
-    "threads_per_runtime_planned": 1,
-    "executable": null,
-    "full_residual_norms": null,
-    "constraints": null,
-    "accepted_steps": null,
-    "final_time": null,
-    "robustness_outcomes": null
+    "alpha": 400,
+    "time": 0.0025,
+    "tolerance": 2e-12,
+    "unknowns": 2165,
+    "norm_order": [
+      "u",
+      "v",
+      "k",
+      "epsilon",
+      "inner_continuity",
+      "outer_continuity",
+      "gauge",
+      "constraints"
+    ],
+    "histories_file": "linux-sweeps.json",
+    "histories_sha256": "7f89037b6a75310f079ac7f84f09ec2670fc69f216bee275a7e7e6cbdb3e335f",
+    "attempts": {
+      "unchanged-first-stage": {
+        "accepted_sweeps": 21,
+        "full_residual": 13.69367964890619,
+        "qualified": false,
+        "accepted_steps": 0.0,
+        "final_time": 0.0,
+        "failure_preserved_native_history": true
+      },
+      "pseudo400": {
+        "accepted_sweeps": 23,
+        "full_residual": 13.943473775287128,
+        "qualified": false,
+        "accepted_steps": 0.0,
+        "final_time": 0.0,
+        "failure_preserved_native_history": true
+      },
+      "ground-projection": {
+        "accepted_sweeps": 120,
+        "full_residual": 3.177716759928095,
+        "qualified": false,
+        "accepted_steps": 0.0,
+        "final_time": 0.0,
+        "failure_preserved_native_history": true
+      },
+      "ground-projection-relaxation": {
+        "accepted_sweeps": 74,
+        "full_residual": 3.1777167530397823,
+        "qualified": false,
+        "accepted_steps": 0.0,
+        "final_time": 0.0,
+        "failure_preserved_native_history": true
+      }
+    },
+    "multi_step": "conditional on qualified first-stage root",
+    "perturbed_guess_trajectories": "conditional on qualified first-stage root"
+  },
+  "projection_implementation": "d3bc3f5f516b7ecb957debac52ed1ac9001f47bd",
+  "initial_linux_access": {
+    "date_asia_shanghai": "2026-11-04",
+    "direct": {
+      "host": "linux-usb",
+      "resolved_address": "192.168.77.2",
+      "exit_code": 255,
+      "result": "port 22 timeout"
+    },
+    "tailscale": {
+      "host": "jay@100.105.247.110",
+      "exit_code": 255,
+      "result": "port 22 timeout",
+      "peer_status": "offline"
+    },
+    "source_sync": false,
+    "build": false,
+    "native_run": false
+  },
+  "linux": {
+    "host": "jay-Super-Server",
+    "recovered_via": "jay@100.105.247.110",
+    "run_root": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard",
+    "shared_checkout": "f4b70baec10016dd098005bc5a5507b87e4a57bf",
+    "shared_tracked_tree_clean_before_and_after": true,
+    "compiler_jobs": 8,
+    "ranks": 1,
+    "threads_per_runtime": 1,
+    "build_type": "Release",
+    "cxx_flags": "-fno-fast-math -ffp-contract=off",
+    "dependencies_prefix": "/home/jay/.local/opt/nektar-v2026-mpi",
+    "main_build": {
+      "source": "f6e8ff839d28247bd5c5f9b7195493ffbdd67543",
+      "receipt": "build-receipt/receipt.json",
+      "receipt_sha256": "cfaff704f6aa96b32ebd56e927131390e7497307063991c1a6f7a51813572781"
+    },
+    "projection_build": {
+      "source": "d3bc3f5f516b7ecb957debac52ed1ac9001f47bd",
+      "receipt": "projection-build-receipt/receipt.json",
+      "receipt_sha256": "f0c943448f533cac52c88e186dcb61645b6f5b0a5c2d1eb487762225cb9cd481"
+    },
+    "regression": {
+      "passed": 5,
+      "log": "regression.log",
+      "sha256": "0aa0a0cc4f7f45932cbe3efa05ee456b3c61362d214131cf569f62d355df5fc0"
+    },
+    "projection_regression": {
+      "passed": 2,
+      "log": "projection-regression.log",
+      "sha256": "6546ca69079f5a61ca215748dc13259bc65ff8c8ecbe2c5cadcf03344de41e57"
+    },
+    "robust_kernel": {
+      "checks_passed": 28434,
+      "log": "robust-kernel.json",
+      "sha256": "dd74d8ac778afa93cd94e30649ba55127dfe1f4849116533a669cf1e2f8b364d"
+    },
+    "qualification_executable": {
+      "source": "a5e3aa2b4a060fda02be113e144f3bc86e644338",
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-002/build/RANSNonpressureActionProbe",
+      "sha256": "8571a2a1f0e0adf3012e5e7ae3efdcb65e0350b3eaf33b095869fbda3e4b43cd"
+    }
   }
 }
