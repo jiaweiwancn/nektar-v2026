@@ -168,6 +168,8 @@ public:
     bool DirectionReplayR6() const { return m_directionAccuracy=="ReplayR6"; }
     bool RefinedDirectionR6() const { return m_directionAccuracy=="RefinedR6"; }
     bool CompareR7() const { return m_r7Policy=="Compare"; }
+    bool InteriorProbeR7() const { return m_r7Policy=="InteriorProbe"; }
+    bool AdaptiveR7() const { return m_r7Policy=="Adaptive"; }
     bool GroundSafeguard() const { return CoupledR4() || JointRestorationR5(); }
     Vector Norms(const Vector &residual,const std::map<int,double> &constraints,double ustar=.4) const;
     Vector StateNorms(const Vector &state,const Vector &reference,double ustar=.4) const;
@@ -261,7 +263,7 @@ private:
         const std::function<Vector(Vector,bool)> &inverse,std::string &details,const std::vector<OuterBound> &outer={},
         double restoration=1.,bool inward=true,
         RANSWallR3::DurableProgress *diagnostic=nullptr,const std::string &tag="",const Vector &residual={},
-        double radius=2.,double *guardWork=nullptr) const;
+        double radius=2.,double *guardWork=nullptr,const std::array<double,4> &interior={}) const;
     WallMatrix AssembleNonpressureR3(const Vector &state,double time,
         const RANSWallEvolutionData &data,bool imposeConstraints,int region,
         std::vector<std::string> *metadata) const;
@@ -343,7 +345,8 @@ private:
     mutable std::string m_solveInvalidContext;
     std::string m_nonlinearPolicy="Legacy",m_feasibleTraceFile="case.feasible.jsonl";
     std::string m_directionAccuracy="Legacy",m_r7Policy="Off";
-    double m_r7PreviousDisplacement=0.;
+    double m_r7PreviousDisplacement=0.,m_r7Radius=0.;
+    bool m_r7Interior=false;
     std::string m_r3ProgressFile="case.r3-progress.jsonl";
     std::string m_actionPolicy="Legacy";
     std::string m_globalization="FractionToBoundary";

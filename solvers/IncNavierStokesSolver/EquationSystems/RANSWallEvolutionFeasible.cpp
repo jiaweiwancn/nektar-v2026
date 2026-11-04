@@ -820,7 +820,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
     const std::map<int,double> &constraints,const std::function<Vector(Vector,bool)> &inverse,
     std::string &details,const std::vector<OuterBound> &outer,double restoration,bool inward,
     RANSWallR3::DurableProgress *diagnostic,const std::string &tag,const Vector &residual,
-    double radius,double *guardWork) const
+    double radius,double *guardWork,const std::array<double,4> &interior) const
 {
     // Parameterize d=d_N+J^{-1} B z. B injects the scaled Cholesky
     // factors on free differential rows, leaving every algebraic row zero.
@@ -971,7 +971,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
     if(!outer.empty())
     {
         ceiling=OuterViolationR5(outer).family;
-        for(double &value:ceiling)value*=1.-restoration;
+        for(int i=0;i<ceiling.size();++i)ceiling[i]=(1.-restoration)*ceiling[i]-interior[i];
     }
     const int maxExchange=outer.empty()?40:96;
     int exchange=0;
@@ -1336,10 +1336,21 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
         residual=timed("residual",[&]{return Residual(s,history,alpha,time,data);});
         norms=timed("mass_dual_norms",[&]{return Norms(residual,constraints,us);});
     };
+    double adaptiveRadius=m_r7Radius;
+    std::array<double,4> interior{};
     try
     {
         evaluate();
         Require(checkWall(domain),"R4 base wall polynomial fails the local trace safeguard");
+        if(m_r7Interior)
+        {
+            const auto base=OuterViolationR5(OuterBoundsR5(domain));
+            // Half-step entry needs m >= e for an affine inequality.
+            // Add 25% headroom and keep the target fixed until box entry.
+            for(int i=0;i<interior.size();++i)
+                if(base.family[i]>0.)interior[i]=std::max(1e-8,1.25*base.family[i]);
+            durable.Event("r7_fixed_interior_target",{{"margin",J::Numbers(interior)}});
+        }
         for(iterations=0;iterations<=maximumIterations;++iterations)
         {
             // Every accepted iterate is persisted immediately, including one
@@ -1430,7 +1441,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
                 int trialCount=0;
                 const std::array<double,7> scales{us,us,K0,E0,us*us,us*us,us/m_parameters.geometry.height};
                 double algebraicRadiusLower=0;
-                if(CompareR7())
+                if(CompareR7() || InteriorProbeR7() || AdaptiveR7())
                     for(int i=0;i<Size();++i)
                         if(i>=offset[InnerPressure()] || constraints.count(i))
                         {
@@ -1442,7 +1453,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
                                 static_cast<double>(std::abs(residual[i])/capacity));
                         }
                 auto compare=[&](const std::string &name,bool joint,double restoration,bool inward,
-                                 double radius=2.,int trialLimit=0)
+                                 double radius=2.,int trialLimit=0,const std::array<double,4> &margin={})
                 {
                     Trial result;
                     std::string details;
@@ -1455,7 +1466,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
                             joint?bounds:std::vector<OuterBound>{},restoration,inward,
                             (DirectionReplayR6() || RefinedDirectionR6())?&durable:nullptr,
                             "iterate"+std::to_string(iterations)+"."+name,residual,radius,
-                            CompareR7()?&result.guardWork:nullptr);
+                            CompareR7()?&result.guardWork:nullptr,margin);
                     }
                     catch(const std::exception &e)
                     {
@@ -1528,7 +1539,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
                             const auto candidate=timed("residual",[&]{return Residual(trial,history,alpha,time,data);});
                             const auto current=timed("constraints",[&]{return Constraints(trial,time,data);});
                             const auto candidateNorms=Norms(candidate,current,us);
-                            const double required=localR5 && !CompareR7()?.01:1e-4*fraction;
+                            const double required=localR5 && !(CompareR7() || InteriorProbeR7())?.01:1e-4*fraction;
                             bool boxDescent=candidateBox.Max()<=(1.-required)*baseBox.Max();
                             for(int family=0;family<4;++family)
                                 boxDescent=boxDescent && candidateBox.family[family]<=baseBox.family[family];
@@ -1547,7 +1558,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
                                 {"model_agreement",predicted>0.?J::Number(ratio):"null"},
                                 {"residual",durable.VectorPayload(label+".residual",candidate)}});
                             durable.Event("r5_trial",event);
-                            if(accept || CompareR7())
+                            if(accept || CompareR7() || InteriorProbeR7())
                             {
                                 const auto audit=CompleteRestrictedAudit(trial,history,alpha,time,data,true);
                                 durable.Event("r5_trial_audit",{{"iteration",J::Number(iterations)},
@@ -1570,7 +1581,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
                         }
                     }
                     profile["line_search"].second+=std::chrono::duration<double>(Clock::now()-search).count();
-                    if(CompareR7())
+                    if(CompareR7() || InteriorProbeR7())
                         durable.Event("r7_local_trial_outcome",{{"name",J::Quote(name)},{"fraction",J::Number(result.fraction)},
                             {"trial_allocation",J::Number(allowance)},
                             {"allocation_exhausted",J::Boolean(result.fraction==0.)},{"profiling",profiling()}});
@@ -1614,6 +1625,59 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
                         {"terminal",J::Quote("r7_local_comparison_completed")},{"iteration",J::Number(iterations)},
                         {"profiling",profiling()}});
                     return s;
+                }
+                if(InteriorProbeR7())
+                {
+                    const auto trial=compare("r7_interior_probe",true,1.,false,m_r7Radius,8,interior).first;
+                    m_lastFeasibleState=s;
+                    durable.Event("solve_terminal",{{"converged","false"},
+                        {"terminal",J::Quote("r7_interior_probe_completed")},{"iteration",J::Number(iterations)},
+                        {"useful_joint_descent",J::Boolean(trial.fraction>0.)},{"profiling",profiling()}});
+                    return s;
+                }
+                if(AdaptiveR7())
+                {
+                    const auto margin=baseBox.Max()>0.?interior:std::array<double,4>{};
+                    const double startRadius=std::min(2.,std::max(adaptiveRadius,1.05*algebraicRadiusLower));
+                    double radius=startRadius;
+                    auto trial=compare("r7_full",true,1.,false,radius,8,margin).first;
+                    bool constructed=!trial.stepPin.empty();
+                    if(trial.fraction==0.)
+                    {
+                        const double retry=constructed?std::max({.125,.5*radius,1.05*algebraicRadiusLower}):
+                            std::min(2.,2.*radius);
+                        if(retry!=radius && retry<=2.)
+                        {
+                            radius=retry;
+                            trial=compare("r7_retry_full",true,1.,false,radius,8,margin).first;
+                            constructed=constructed || !trial.stepPin.empty();
+                        }
+                    }
+                    if(trial.fraction==0. && baseBox.Max()>0.)
+                    {
+                        radius=std::max(radius,startRadius);
+                        trial=compare("r7_partial",true,.25,false,radius,16).first;
+                        constructed=constructed || !trial.stepPin.empty();
+                    }
+                    if(trial.fraction==0.)
+                    {
+                        terminal=constructed?"r7_nonlinear_trial_allocation_exhausted":"r7_direction_construction_unresolved";
+                        throw std::runtime_error(terminal);
+                    }
+                    adaptiveRadius=radius;
+                    if(trial.fraction==1. && trial.modelAgreement>=.75)adaptiveRadius=std::min(2.,1.5*radius);
+                    else if(trial.fraction<=.25 || trial.modelAgreement<.25)adaptiveRadius=std::max(.125,.5*radius);
+                    const auto update=J::Object({{"iteration",J::Number(iterations)},{"accepted","true"},
+                        {"accepted_fraction",J::Number(trial.fraction)},{"matrix",matrix},{"step",trial.stepPin},
+                        {"trial_count",J::Number(trialCount)},{"box",trial.box.report},{"radius",J::Number(radius)},
+                        {"next_radius",J::Number(adaptiveRadius)},{"model_agreement",J::Number(trial.modelAgreement)}});
+                    durable.Snapshot(iterations+1,trial.state,trial.residual,trial.constraints,trial.norms,
+                        domainReport(trial.domain),profiling(),update);
+                    durable.Event("newton_update",{{"details",update},{"profiling",profiling()}});
+                    s=std::move(trial.state);residual=std::move(trial.residual);norms=std::move(trial.norms);
+                    constraints=std::move(trial.constraints);domain=std::move(trial.domain);alreadySaved=true;
+                    recordRanges(iterations+1,s);
+                    continue;
                 }
                 if(localR5 && !(DirectionReplayR6() || RefinedDirectionR6()))compare("r4_control",false,0.,true);
                 auto [trial,details]=compare("r5_full",true,1.,true);

@@ -412,7 +412,8 @@ RANSEquilibriumWallEvolution::Vector RANSEquilibriumWallEvolution::LoadR3Predict
     boost::property_tree::ptree packet;boost::property_tree::read_json(m_r3PredictorFile,packet);
     const bool retained=m_patch->GroundSafeguard();
     const double originAlpha=retained?400.:3200.;
-    const std::string role=m_patch->JointRestorationR5()?"retained_r4_terminal_iterate_only":
+    const std::string role=(m_patch->InteriorProbeR7() || m_patch->AdaptiveR7())?"retained_r6_terminal_iterate_only":
+        m_patch->JointRestorationR5()?"retained_r4_terminal_iterate_only":
         retained?"retained_r3_internal_iterate_only":"nonconverged_auxiliary_predictor_only";
     Require(packet.get<int>("schema")==1 && packet.get<std::string>("role")==role &&
         packet.get<std::string>("encoding")=="little-endian IEEE754 binary64" &&
@@ -497,8 +498,9 @@ void RANSEquilibriumWallEvolution::RunR3StageTest()
     const bool benchmark=m_stageTest=="JacobianBenchmarkR3";
     const bool localR4=m_stageTest=="DirectionExperimentR4";
     const bool localR5=m_stageTest=="DirectionExperimentR5";
-    Require(!(m_patch->DirectionReplayR6() || m_patch->CompareR7()) || localR5,
-        "R6 replay and R7 comparison require the fixed-state stage experiment");
+    Require((!(m_patch->DirectionReplayR6() || m_patch->CompareR7() || m_patch->InteriorProbeR7()) || localR5) &&
+        (!m_patch->AdaptiveR7() || (!localR5 && !benchmark)),
+        "R7 comparison and continuation require their designated stage modes");
     RANSWallEvolutionPatch::WallMatrix frozenMatrix;
     std::string frozenAssembly="[]";
     if(localR5 && !m_patch->CompareR7() && (m_patch->DirectionReplayR6() || m_patch->RefinedDirectionR6()))
