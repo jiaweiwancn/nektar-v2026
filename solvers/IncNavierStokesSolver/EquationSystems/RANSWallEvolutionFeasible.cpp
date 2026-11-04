@@ -1263,10 +1263,300 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
     throw std::runtime_error("R4 bounded active cut exchange exhausted: "+lastCut);
 }
 
+void RANSWallEvolutionPatch::RunR8Comparison(const Vector &state,const Vector &history,double alpha,double time,
+    const RANSWallEvolutionData &data,const ScalarDomainResult &baseDomain,const Vector &residual,
+    const std::map<int,double> &constraints,const WallMatrix &jac,const Vector &newton,
+    const std::function<Vector(Vector,bool)> &inverse,const R8Ray &ray,RANSWallR3::DurableProgress &durable) const
+{
+    using Clock=std::chrono::steady_clock;
+    const double us=m_robustUstar,K0=m_parameters.model.Q()*us*us,H=m_parameters.geometry.height;
+    const double E0=us*us*us/(m_parameters.model.Kappa()*H);
+    const auto baseNorms=Norms(residual,constraints,us);
+    const double baseE=Maximum(baseNorms);
+    const auto outer=OuterBoundsR5(baseDomain);
+    const auto baseBox=OuterViolationR5(outer);
+    Require(baseBox.Max()==0. && ray.step.size()==Size() && Multiply(jac,ray.step)==ray.action &&
+        ray.residuals.size()==4 && ray.residuals.count(1.) && ray.residuals.count(.5) &&
+        ray.residuals.count(.25) && ray.residuals.count(.125),"R8 binding or base box differs");
+    bool baseWallOK=false;
+    const auto baseWall=WallTraceJSON(baseDomain.effectiveState,baseWallOK);
+    Require(baseWallOK,"R8 base wall safeguard failed");
+    const auto baseExtrema=WallTraceR4(baseDomain.effectiveState);
+    const double baseK=std::min_element(baseExtrema.begin(),baseExtrema.end(),
+        [](const auto &a,const auto &b){return a.value<b.value;})->value;
+    const std::array<double,7> scales{us,us,K0,E0,us*us,us*us,us/H};
+    auto normStep=[&](const Vector &step)
+    {
+        double norm=0.;
+        for(int b=0;b<=Gauge();++b)for(int i=offset[b];i<offset[b]+size[b];++i)
+            norm=std::max(norm,std::abs(step[i])/scales[b]);
+        return norm;
+    };
+    const double retainedNorm=normStep(ray.step);
+    Require(std::abs(retainedNorm-.125)<5e-12,"R8 retained radius differs");
+    durable.Event("r8_base",{{"scaled_block_norms",J::Numbers(baseNorms)},{"box",baseBox.report},
+        {"wall",baseWall},{"scalar",ScalarDomainJSON(baseDomain)},{"retained_step_norm",J::Number(retainedNorm)},
+        {"maximum_new_native_trials","20"},{"fit_fraction","0.125"},{"holdout_fraction","0.0625"}});
+    auto along=[&](const Vector &step,double f)
+    {
+        auto q=state;
+        for(int i=0;i<Size();++i)q[i]+=f*step[i];
+        return q;
+    };
+    auto linear=[&](const Vector &action,double f)
+    {
+        auto r=residual;
+        for(int i=0;i<Size();++i)r[i]+=f*action[i];
+        return r;
+    };
+    auto difference=[&](const Vector &a,const Vector &b)
+    {
+        Vector delta(Size());
+        for(int i=0;i<Size();++i)delta[i]=a[i]-b[i];
+        return delta;
+    };
+    for(const auto &[f,r]:ray.residuals)
+        durable.Event("r8_retained_remainder",{{"fraction",J::Number(f)},{"actual",J::Numbers(Norms(r,constraints,us))},
+            {"linear",J::Numbers(Norms(linear(ray.action,f),constraints,us))},
+            {"remainder",J::Numbers(Norms(difference(r,linear(ray.action,f)),constraints,us))}});
+
+    struct Trial
+    {
+        Vector state,residual;
+        std::string name;
+        double f=0.,E=0.,ground=0.,seconds=0.;
+        bool accepted=false;
+    };
+    int evaluations=0;
+    auto evaluate=[&](const std::string &name,const Vector &step,const Vector &action,double f,const Vector *model=nullptr)
+    {
+        Require(++evaluations<=20,"R8 local trial budget exhausted");
+        const auto started=Clock::now();
+        Trial t;
+        t.name=name;t.f=f;t.state=along(step,f);
+        const auto checked=ScalarDomain(t.state,time,data,true);
+        std::string verdict=checked.admissible?"ground":"scalar_domain";
+        std::vector<std::pair<std::string,std::string>> fields{{"name",J::Quote(name)},{"fraction",J::Number(f)},
+            {"state",durable.VectorPayload(name+".state",t.state)},{"scalar",ScalarDomainJSON(checked)},
+            {"profile_branches_changed",J::Boolean(checked.profileBranches!=baseDomain.profileBranches)}};
+        if(checked.admissible)
+        {
+            bool wallOK=false;
+            fields.emplace_back("wall",WallTraceJSON(checked.effectiveState,wallOK));
+            if(wallOK)
+            {
+                const auto extrema=WallTraceR4(checked.effectiveState);
+                t.ground=std::min_element(extrema.begin(),extrema.end(),
+                    [](const auto &a,const auto &b){return a.value<b.value;})->value;
+                const auto box=OuterViolationR5(OuterBoundsR5(checked));
+                const auto actualConstraints=Constraints(t.state,time,data);
+                t.residual=Residual(t.state,history,alpha,time,data);
+                const auto norms=Norms(t.residual,actualConstraints,us);
+                t.E=Maximum(norms);
+                const auto predicted=Norms(linear(action,f),constraints,us);
+                const auto audit=CompleteRestrictedAudit(t.state,history,alpha,time,data,true);
+                const bool descent=t.E<(1.-1e-4*f)*baseE;
+                t.accepted=descent && box.Max()==0. && audit.at("r2_qualified")[0]==1.;
+                verdict=t.accepted?"accepted":!descent?"residual_non_descent":box.Max()!=0.?"outer_box":"physical_inventory";
+                double trace=0.;
+                for(int id:m_traceIds)trace=std::max(trace,std::abs(t.residual[offset[Epsilon()]+id])/E0);
+                fields.insert(fields.end(),{{"box",box.report},{"actual",J::Numbers(norms)},{"linear",J::Numbers(predicted)},
+                    {"remainder",J::Numbers(Norms(difference(t.residual,linear(action,f)),constraints,us))},
+                    {"linear_agreement",baseE>Maximum(predicted)?J::Number((baseE-t.E)/(baseE-Maximum(predicted))):"null"},
+                    {"matching_trace",J::Number(trace)},{"covariance",J::Numbers(audit.at("r2_covariance"))},
+                    {"residual",durable.VectorPayload(name+".residual",t.residual)}});
+                if(model)
+                {
+                    const auto modelNorm=Norms(*model,constraints,us);
+                    fields.emplace_back("quadratic",J::Numbers(modelNorm));
+                    fields.emplace_back("quadratic_error",J::Numbers(Norms(difference(t.residual,*model),constraints,us)));
+                    fields.emplace_back("quadratic_agreement",baseE>Maximum(modelNorm)?
+                        J::Number((baseE-t.E)/(baseE-Maximum(modelNorm))):"null");
+                }
+            }
+        }
+        t.seconds=std::chrono::duration<double>(Clock::now()-started).count();
+        fields.emplace_back("classification",J::Quote(verdict));
+        fields.emplace_back("seconds",J::Number(t.seconds));
+        durable.Event("r8_trial",fields);
+        return t;
+    };
+    std::map<double,Trial> sameRay;
+    auto tryRay=[&](double f,const std::string &name,const Vector *model=nullptr)->const Trial &
+    {
+        auto p=sameRay.find(f);
+        if(p!=sameRay.end())return p->second;
+        return sameRay.emplace(f,evaluate(name,ray.step,ray.action,f,model)).first->second;
+    };
+    const Trial *ordinary=nullptr,*bestRay=nullptr;
+    for(double f:{.0625,.03125,.015625,.0078125})
+    {
+        const auto &t=tryRay(f,"r8_ordinary"+std::to_string(sameRay.size()));
+        if(t.accepted){ordinary=bestRay=&t;break;}
+    }
+    durable.Event("r8_ordinary_outcome",{{"accepted",J::Boolean(ordinary)},
+        {"fraction",J::Number(ordinary?ordinary->f:0.)},{"new_evaluations",J::Number(evaluations)}});
+    if(!bestRay)
+        for(double f:{.00390625,.001953125})
+        {
+            const auto &t=tryRay(f,"r8_small"+std::to_string(sameRay.size()));
+            if(t.accepted){bestRay=&t;break;}
+        }
+
+    constexpr double fit=.125,holdout=.0625;
+    const auto &held=sameRay.at(holdout);
+    const auto &fitResidual=ray.residuals.at(fit);
+    if(bestRay && !held.residual.empty())
+    {
+        const auto started=Clock::now();
+        auto curvature=difference(fitResidual,linear(ray.action,fit));
+        for(double &v:curvature)v/=fit*fit;
+        auto quadratic=[&](double f)
+        {
+            auto r=linear(ray.action,f);
+            for(int i=0;i<Size();++i)r[i]+=f*f*curvature[i];
+            return r;
+        };
+        const auto validation=quadratic(holdout);
+        const auto validationNorm=Norms(validation,constraints,us);
+        const bool agrees=std::abs(Maximum(validationNorm)-held.E)<=std::max(2e-6,.5*std::abs(baseE-held.E));
+        // The interval is bracketed by the held-out point and the
+        // predeclared small-step range. Poor validation halves the cap.
+        double candidate=0.,best=baseE;
+        for(int i=16;i<=(agrees?128:64);++i)
+        {
+            const double f=i/2048.;
+            const double E=Maximum(Norms(quadratic(f),constraints,us));
+            if(E<best){best=E;candidate=f;}
+        }
+        const int before=evaluations;
+        const double predictorSeconds=std::chrono::duration<double>(Clock::now()-started).count();
+        const Trial *curved=nullptr;
+        if(candidate>0.)
+        {
+            const auto prediction=quadratic(candidate);
+            const auto &t=tryRay(candidate,"r8_curvature",&prediction);
+            if(t.accepted)curved=&t;
+        }
+        // The ordinary control is a cached bounded fallback on this
+        // exact ray. It requires no repeated native evaluation here.
+        if(!curved)curved=bestRay;
+        if(curved && (!bestRay || curved->E<bestRay->E))bestRay=curved;
+        durable.Event("r8_curvature_outcome",{{"fit_fraction",J::Number(fit)},{"holdout_fraction",J::Number(holdout)},
+            {"heldout_predicted",J::Numbers(validationNorm)},{"heldout_actual",J::Numbers(Norms(held.residual,constraints,us))},
+            {"heldout_vector_error",J::Numbers(Norms(difference(held.residual,validation),constraints,us))},
+            {"validation_agrees",J::Boolean(agrees)},{"proposed_fraction",J::Number(candidate)},
+            {"used_fraction",J::Number(curved?curved->f:0.)},{"new_evaluations",J::Number(evaluations-before)},
+            {"standalone_holdout_evaluations","1"},{"model_construction_seconds",J::Number(predictorSeconds)}});
+    }
+
+    if(!held.residual.empty())
+    {
+        const auto started=Clock::now();
+        const auto zero=ResidualResolutionComponents(state,history,alpha,time,data);
+        const auto middle=ResidualResolutionComponents(held.state,history,alpha,time,data);
+        const auto fitState=along(ray.step,fit);
+        const auto upper=ResidualResolutionComponents(fitState,history,alpha,time,data);
+        Vector saturation;
+        for(const auto *q:{&state,&held.state,&fitState})
+            saturation.push_back(Audit(*q,history,alpha,time,data,us,true).at("inner_stress")[0]);
+        Vector reconstruct;
+        for(const auto &[components,value]:{std::pair{&zero,&residual},std::pair{&middle,&held.residual},
+                                            std::pair{&upper,&fitResidual}})
+            reconstruct.push_back(Maximum(Norms(difference(components->terms.at("total_constrained"),*value),constraints,us)));
+        Require(Maximum(reconstruct)<1e-8,"R8 component residual reconstruction differs");
+        std::vector<std::pair<std::string,std::string>> components;
+        for(const std::string key:{"time_mass","conservative_advection","k_diffusion","inner_k_production",
+            "inner_k_destruction","outer_k_production","outer_k_destruction","total_constrained"})
+        {
+            const auto &a=zero.terms.at(key),&b=middle.terms.at(key),&c=upper.terms.at(key);
+            Vector bend(Size());
+            for(int i=0;i<Size();++i)bend[i]=holdout*holdout*((c[i]-a[i])/fit-(b[i]-a[i])/holdout)/(fit-holdout);
+            components.emplace_back(key,J::Number(Norms(bend,constraints,us)[K()]));
+        }
+        durable.Event("r8_components",{{"scaled_k_second_divided_differences_times_holdout_squared",J::Object(components)},
+            {"residual_reconstruction_error",J::Numbers(reconstruct)},{"states","[0,0.0625,0.125]"},
+            {"active_inner_stress_volume",J::Numbers(saturation)},
+            {"seconds",J::Number(std::chrono::duration<double>(Clock::now()-started).count())}});
+    }
+
+    Trial shorter;
+    // A sub-per-mille improvement is a weak same-ray outcome even when
+    // the selector reduces trial cost. Re-solve rather than rescaling.
+    if(!bestRay || baseE-bestRay->E<.001*baseE)
+    {
+        double lower=0.;
+        for(int i=0;i<Size();++i)if(i>=offset[InnerPressure()] || constraints.count(i))
+        {
+            long double capacity=0.;
+            for(int b=0;b<=Gauge();++b)
+                for(int j=offset[b];j<offset[b]+size[b];++j)capacity+=std::abs(jac[i][j])*scales[b];
+            if(capacity>0.)lower=std::max(lower,static_cast<double>(std::abs(residual[i])/capacity));
+        }
+        const double displacement=retainedNorm*(bestRay?bestRay->f:.0078125);
+        double radius=std::min(.0625,std::max(4.*displacement,2.*lower));
+        for(int attempt=0;attempt<2;++attempt)
+        {
+            const auto started=Clock::now();
+            const std::string tag="r8_radius"+std::to_string(attempt);
+            durable.Event("r8_radius_selection",{{"name",J::Quote(tag)},{"radius",J::Number(radius)},
+                {"retained_displacement",J::Number(displacement)},{"necessary_algebraic_radius",J::Number(lower)}});
+            std::string details;
+            Vector step;
+            try
+            {
+                Require(radius>=lower,"R8 radius violates necessary algebraic bound");
+                step=CoupledDirectionR4(baseDomain,newton,jac,constraints,inverse,details,
+                    outer,1.,false,&durable,tag,residual,radius);
+            }
+            catch(const std::exception &e)
+            {
+                durable.Event("r8_direction_failure",{{"name",J::Quote(tag)},{"failure",J::Quote(e.what())},
+                    {"seconds",J::Number(std::chrono::duration<double>(Clock::now()-started).count())}});
+                radius=std::min(.09375,2.*radius);
+                continue;
+            }
+            const auto action=Multiply(jac,step);
+            const auto model=Norms(linear(action,1.),constraints,us);
+            Require(*std::max_element(model.begin()+InnerPressure(),model.end())<1e-9,
+                "R8 smaller radius failed full algebraic restoration");
+            const double norm=normStep(step);
+            durable.Event("r8_direction",{{"name",J::Quote(tag)},{"radius",J::Number(radius)},
+                {"step_norm",J::Number(norm)},{"details",details},{"linear",J::Numbers(model)},
+                {"step",durable.VectorPayload(tag+".step",step)},{"action",durable.VectorPayload(tag+".action",action)},
+                {"seconds",J::Number(std::chrono::duration<double>(Clock::now()-started).count())}});
+            if(norm<radius*(1.-1e-7) && attempt==0 && .5*radius>=lower)
+            {
+                radius*=.5;
+                continue;
+            }
+            for(int i=0;i<5;++i)
+            {
+                auto t=evaluate(tag+".trial"+std::to_string(i),step,action,std::ldexp(1.,-i));
+                if(t.accepted){shorter=std::move(t);break;}
+            }
+            break;
+        }
+    }
+    const Trial *selected=bestRay;
+    if(shorter.accepted && (!selected || shorter.E<selected->E))selected=&shorter;
+    if(selected)
+    {
+        const auto audit=CompleteRestrictedAudit(selected->state,history,alpha,time,data);
+        std::vector<std::pair<std::string,std::string>> fields;
+        for(const auto &[key,value]:audit)fields.emplace_back(key,J::Numbers(value));
+        durable.Event("r8_selected",{{"name",J::Quote(selected->name)},{"fraction",J::Number(selected->f)},
+            {"residual_E",J::Number(selected->E)},{"ground",J::Number(selected->ground)},
+            {"ground_ratio",J::Number(selected->ground/baseK)},{"audit",J::Object(fields)}});
+    }
+    durable.Event("r8_work",{{"native_trial_states",J::Number(evaluations)},
+        {"retained_trial_states_reused","4"},{"selected",J::Quote(selected?selected->name:"none")}});
+}
+
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
     Vector s,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data,
     int &iterations,double tolerance,int maximumIterations,bool benchmarkOnly,bool localR4,bool localR5,
-    const WallMatrix &frozenMatrix,const std::string &frozenAssembly) const
+    const WallMatrix &frozenMatrix,const std::string &frozenAssembly,const R8Ray &ray) const
 {
     Require(m_nonlinearPolicy=="ScalarFeasibleR3" && m_dimension==2 && !Mapped() &&
         m_transitionEnabled && m_cappedDestruction && m_comm->GetSize()==1,
@@ -1398,6 +1688,16 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
             for(int row=0;row<Size();++row)linear[row]+=residual[row];
             const auto linearNorms=Norms(linear,constraints,us);
             Require(Maximum(linearNorms)<1e-8*std::max(1.,error),"R3 inaccurate linear solve");
+            if(ExperimentR8())
+            {
+                Require(localR5 && !frozenMatrix.empty(),"R8 comparison requires its bound current matrix");
+                RunR8Comparison(s,history,alpha,time,data,domain,residual,constraints,jac,newton,inverse,ray,durable);
+                m_lastFeasibleState=s;
+                durable.Event("solve_terminal",{{"converged","false"},
+                    {"terminal",J::Quote("r8_fixed_comparison_completed")},{"iteration",J::Number(iterations)},
+                    {"profiling",profiling()}});
+                return s;
+            }
             if(localR4)
             {
                 // Compare the ordinary Newton step under the identical wall

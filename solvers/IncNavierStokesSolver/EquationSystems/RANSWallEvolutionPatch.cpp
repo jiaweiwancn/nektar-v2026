@@ -224,6 +224,11 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
             (interior=="On" || (AdaptiveR7() && interior=="Off")), "Invalid R7 radius or interior target");
         m_r7Interior=interior=="On";
     }
+    std::string r8;
+    session->LoadSolverInfo("RANSWallR8Experiment",r8,"Off");
+    m_r8Experiment=r8=="On";
+    Require(r8=="Off" || (m_r8Experiment && RefinedDirectionR6() && m_r7Policy=="Off"),
+        "R8 fixed-state experiment requires RefinedR6 with the R7 policy off");
     Require(m_actionPolicy=="Legacy" || m_actionPolicy=="VerifiedR3Action","unknown wall action policy");
     Require((m_nonlinearPolicy=="ScalarFeasibleR3")== (m_actionPolicy=="VerifiedR3Action"),
         "VerifiedR3Action and ScalarFeasibleR3 must be selected together");

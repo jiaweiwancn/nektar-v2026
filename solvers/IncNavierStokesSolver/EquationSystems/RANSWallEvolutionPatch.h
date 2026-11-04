@@ -155,10 +155,15 @@ public:
         std::vector<std::string> *columnMetadata=nullptr,bool scalarOnly=false) const;
     Vector SolveFrozenScalars(Vector state,const Vector &history,double alpha,double time,
         const RANSWallEvolutionData &data,int &iterations,double tolerance,int maximumIterations) const;
+    struct R8Ray
+    {
+        Vector step,action;
+        std::map<double,Vector> residuals;
+    };
     Vector SolveScalarFeasibleR3(Vector state,const Vector &history,double alpha,double time,
         const RANSWallEvolutionData &data,int &iterations,double tolerance,
         int maximumIterations,bool benchmarkOnly=false,bool localR4=false,bool localR5=false,
-        const WallMatrix &frozenMatrix={},const std::string &frozenAssembly="[]") const;
+        const WallMatrix &frozenMatrix={},const std::string &frozenAssembly="[]",const R8Ray &ray={}) const;
     const std::string &R3ProgressFile() const { return m_r3ProgressFile; }
     const Vector &LastFeasibleState() const { return m_lastFeasibleState; }
     const std::string &NonlinearPolicyName() const { return m_nonlinearPolicy; }
@@ -169,6 +174,7 @@ public:
     bool RefinedDirectionR6() const { return m_directionAccuracy=="RefinedR6"; }
     bool CompareR7() const { return m_r7Policy=="Compare"; }
     bool InteriorProbeR7() const { return m_r7Policy=="InteriorProbe"; }
+    bool ExperimentR8() const { return m_r8Experiment; }
     bool AdaptiveR7() const { return m_r7Policy=="Adaptive"; }
     bool GroundSafeguard() const { return CoupledR4() || JointRestorationR5(); }
     Vector Norms(const Vector &residual,const std::map<int,double> &constraints,double ustar=.4) const;
@@ -264,6 +270,11 @@ private:
         double restoration=1.,bool inward=true,
         RANSWallR3::DurableProgress *diagnostic=nullptr,const std::string &tag="",const Vector &residual={},
         double radius=2.,double *guardWork=nullptr,const std::array<double,4> &interior={}) const;
+    void RunR8Comparison(const Vector &state,const Vector &history,double alpha,double time,
+        const RANSWallEvolutionData &data,const ScalarDomainResult &domain,const Vector &residual,
+        const std::map<int,double> &constraints,const WallMatrix &jac,const Vector &newton,
+        const std::function<Vector(Vector,bool)> &inverse,const R8Ray &ray,
+        RANSWallR3::DurableProgress &durable) const;
     WallMatrix AssembleNonpressureR3(const Vector &state,double time,
         const RANSWallEvolutionData &data,bool imposeConstraints,int region,
         std::vector<std::string> *metadata) const;
@@ -346,7 +357,7 @@ private:
     std::string m_nonlinearPolicy="Legacy",m_feasibleTraceFile="case.feasible.jsonl";
     std::string m_directionAccuracy="Legacy",m_r7Policy="Off";
     double m_r7PreviousDisplacement=0.,m_r7Radius=0.;
-    bool m_r7Interior=false;
+    bool m_r7Interior=false,m_r8Experiment=false;
     std::string m_r3ProgressFile="case.r3-progress.jsonl";
     std::string m_actionPolicy="Legacy";
     std::string m_globalization="FractionToBoundary";

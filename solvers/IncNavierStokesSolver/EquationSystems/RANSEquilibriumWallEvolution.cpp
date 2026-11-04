@@ -412,7 +412,8 @@ RANSEquilibriumWallEvolution::Vector RANSEquilibriumWallEvolution::LoadR3Predict
     boost::property_tree::ptree packet;boost::property_tree::read_json(m_r3PredictorFile,packet);
     const bool retained=m_patch->GroundSafeguard();
     const double originAlpha=retained?400.:3200.;
-    const std::string role=(m_patch->InteriorProbeR7() || m_patch->AdaptiveR7())?"retained_r6_terminal_iterate_only":
+    const std::string role=m_patch->ExperimentR8()?"retained_r7_terminal_iterate_only":
+        (m_patch->InteriorProbeR7() || m_patch->AdaptiveR7())?"retained_r6_terminal_iterate_only":
         m_patch->JointRestorationR5()?"retained_r4_terminal_iterate_only":
         retained?"retained_r3_internal_iterate_only":"nonconverged_auxiliary_predictor_only";
     Require(packet.get<int>("schema")==1 && packet.get<std::string>("role")==role &&
@@ -498,11 +499,12 @@ void RANSEquilibriumWallEvolution::RunR3StageTest()
     const bool benchmark=m_stageTest=="JacobianBenchmarkR3";
     const bool localR4=m_stageTest=="DirectionExperimentR4";
     const bool localR5=m_stageTest=="DirectionExperimentR5";
-    Require((!(m_patch->DirectionReplayR6() || m_patch->CompareR7() || m_patch->InteriorProbeR7()) || localR5) &&
+    Require((!(m_patch->DirectionReplayR6() || m_patch->CompareR7() || m_patch->InteriorProbeR7() || m_patch->ExperimentR8()) || localR5) &&
         (!m_patch->AdaptiveR7() || (!localR5 && !benchmark)),
         "R7 comparison and continuation require their designated stage modes");
     RANSWallEvolutionPatch::WallMatrix frozenMatrix;
     std::string frozenAssembly="[]";
+    RANSWallEvolutionPatch::R8Ray ray;
     if(localR5 && !m_patch->CompareR7() && (m_patch->DirectionReplayR6() || m_patch->RefinedDirectionR6()))
     {
         namespace D=RANSWallR3;
@@ -522,6 +524,32 @@ void RANSEquilibriumWallEvolution::RunR3StageTest()
             binary.read(reinterpret_cast<char*>(row.data()),row.size()*sizeof(double));
         Require(binary.good(),"R6 matrix payload is incomplete");
         frozenAssembly=binding.get<std::string>("assembly_json");
+        if(m_patch->ExperimentR8())
+        {
+            auto readVector=[&](const boost::property_tree::ptree &pin)
+            {
+                const auto name=pin.get<std::string>("path");
+                Require(std::filesystem::file_size(name)==candidate.size()*sizeof(double) &&
+                    D::HashFile(name)==pin.get<std::string>("sha256"),"R8 retained vector binding differs");
+                Vector value(candidate.size());
+                std::ifstream stream(name,std::ios::binary);
+                stream.read(reinterpret_cast<char*>(value.data()),value.size()*sizeof(double));
+                Require(stream.good(),"R8 retained vector is incomplete");
+                return value;
+            };
+            ray.step=readVector(packet.get_child("r8_ray.step"));
+            ray.action=readVector(packet.get_child("r8_ray.action"));
+            for(const auto &entry:packet.get_child("r8_ray.trials"))
+            {
+                const auto &trial=entry.second;
+                const double f=trial.get<double>("fraction");
+                auto predicted=candidate;
+                for(int i=0;i<predicted.size();++i)predicted[i]+=f*ray.step[i];
+                Require(predicted==readVector(trial.get_child("state")),"R8 retained trial leaves the J25 ray");
+                Require(ray.residuals.emplace(f,readVector(trial.get_child("residual"))).second,
+                    "Duplicate R8 retained trial fraction");
+            }
+        }
     }
     int updateLimit=(localR4 || localR5)?1:m_maximumIterations;
     if(m_patch->JointRestorationR5() && !localR5)
@@ -538,7 +566,7 @@ void RANSEquilibriumWallEvolution::RunR3StageTest()
     try
     {
         candidate=m_patch->SolveScalarFeasibleR3(candidate,history,400.,targetTime,m_implicitData,
-            iterations,m_tolerance,updateLimit,benchmark,localR4,localR5,frozenMatrix,frozenAssembly);solverReturned=true;
+            iterations,m_tolerance,updateLimit,benchmark,localR4,localR5,frozenMatrix,frozenAssembly,ray);solverReturned=true;
     }
     catch(const std::exception &error)
     {
