@@ -164,7 +164,8 @@ int main(int argc,char **argv)
         Tree packet;boost::property_tree::read_json(argv[2],packet);
         auto world=LibUtilities::SessionReader::CreateInstance(2,argv);world->InitSession();
         char program[]="wall-resolution-probe";char *args[]{program,nullptr};
-        auto serial=LibUtilities::SessionReader::CreateInstance(1,args,std::vector<std::string>{argv[1]},LibUtilities::CommSerial::create(1,args));serial->InitSession();
+        std::vector<std::string> filenames{argv[1]};
+        auto serial=LibUtilities::SessionReader::CreateInstance(1,args,filenames,LibUtilities::CommSerial::create(1,args));serial->InitSession();
         serial->SetSolverInfo("GlobalSysSoln","DirectFull");const auto graph=SpatialDomains::MeshGraphIO::Read(serial);
         RANSWallPatchParameters p;
         serial->LoadParameter("RANSWallChi",p.chi,1.);serial->LoadParameter("RANSWallHeight",p.geometry.height,2.);
