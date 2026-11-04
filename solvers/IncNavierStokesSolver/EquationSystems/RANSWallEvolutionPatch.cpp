@@ -201,6 +201,18 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     session->LoadSolverInfo("RANSWallDirectionAccuracy",m_directionAccuracy,"Legacy");
     Require(m_directionAccuracy=="Legacy" || (JointRestorationR5() && (DirectionReplayR6() || RefinedDirectionR6())),
         "R6 direction accuracy requires JointRestorationR5");
+    session->LoadSolverInfo("RANSWallR7Policy",m_r7Policy,"Off");
+    Require(m_r7Policy=="Off" || (CompareR7() && RefinedDirectionR6()),
+        "R7 comparison requires RefinedR6");
+    if(CompareR7())
+    {
+        std::string displacement;
+        session->LoadSolverInfo("RANSWallR7PreviousDisplacement",displacement,"0");
+        std::size_t end=0;
+        m_r7PreviousDisplacement=std::stod(displacement,&end);
+        Require(end==displacement.size() && m_r7PreviousDisplacement>0. && m_r7PreviousDisplacement<=2.,
+            "R7 comparison requires a measured previous displacement");
+    }
     Require(m_actionPolicy=="Legacy" || m_actionPolicy=="VerifiedR3Action","unknown wall action policy");
     Require((m_nonlinearPolicy=="ScalarFeasibleR3")== (m_actionPolicy=="VerifiedR3Action"),
         "VerifiedR3Action and ScalarFeasibleR3 must be selected together");

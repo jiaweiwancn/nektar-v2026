@@ -819,7 +819,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
     const ScalarDomainResult &domain,const Vector &newton,const WallMatrix &jac,
     const std::map<int,double> &constraints,const std::function<Vector(Vector,bool)> &inverse,
     std::string &details,const std::vector<OuterBound> &outer,double restoration,bool inward,
-    RANSWallR3::DurableProgress *diagnostic,const std::string &tag,const Vector &residual) const
+    RANSWallR3::DurableProgress *diagnostic,const std::string &tag,const Vector &residual,
+    double radius,double *guardWork) const
 {
     // Parameterize d=d_N+J^{-1} B z. B injects the scaled Cholesky
     // factors on free differential rows, leaving every algebraic row zero.
@@ -899,7 +900,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
         return a;
     };
 
-    constexpr double radius=2., reserve=.05, near=.005, feasibility=5e-12;
+    constexpr double reserve=.05, near=.005, feasibility=5e-12;
     struct Witness
     {
         int block=-1,axis=-1,side=0,coefficient=-1;
@@ -1157,15 +1158,28 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
                     {"multiplier",J::Number(multipliers[i]/row.length)}}));
             }
             const double stationarityNorm=std::sqrt(dot(stationarity,stationarity));
+            const double objective=.5*dot(z,z);
+            if(guardWork)
+            {
+                *guardWork=0.;
+                for(int i=0;i<active.size();++i)
+                    if(active[i].kind=="inward_ground_row")
+                    {
+                        const auto &point=original[active[i].id].witness.point;
+                        const double k=point.Value(domain.effectiveState,offset[K()])/K0;
+                        if(k>0.)*guardWork+=k*multipliers[i]/active[i].length;
+                    }
+                *guardWork/=std::max(objective,1e-30);
+            }
             Require(stationarityNorm<=1e-9 && activeError<=1e-9 && complementarity<=1e-9,
                 "R4 constrained solve failed its KKT check");
             details=J::Object({{"method",J::Quote(active.empty()?"ordinary_newton":"residual_space_active_QR")},
                 {"active",J::List(activeRows)},{"releases",J::Number(releases)},
                 {"dependent_exchanges",J::Number(dependentExchanges)},
-                {"exchange_passes",J::Number(exchange+1)},{"trust_radius","2"},
+                {"exchange_passes",J::Number(exchange+1)},{"trust_radius",J::Number(radius)},
                 {"model_feasibility_tolerance",J::Number(feasibility)},{"stationarity_l2",J::Number(stationarityNorm)},
                 {"active_equality_error",J::Number(activeError)},{"complementarity",J::Number(complementarity)},
-                {"scaled_residual_objective",J::Number(.5*dot(z,z))},
+                {"scaled_residual_objective",J::Number(objective)},
                 {"witness_k",J::Number(witnessValue)},
                 {"witness_newton_delta",J::Number(witnessRow.Value(newton,offset[K()]))},
                 {"witness_direction_delta",J::Number(witnessRow.Value(effective,offset[K()]))},
@@ -1410,11 +1424,25 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
                     ScalarDomainResult domain;
                     std::map<int,double> constraints;
                     OuterViolation box;
-                    double fraction=0;
+                    double fraction=0,stepNorm=0,guardWork=0,modelAgreement=0;
                     std::string stepPin;
                 };
                 int trialCount=0;
-                auto compare=[&](const std::string &name,bool joint,double restoration,bool inward)
+                const std::array<double,7> scales{us,us,K0,E0,us*us,us*us,us/m_parameters.geometry.height};
+                double algebraicRadiusLower=0;
+                if(CompareR7())
+                    for(int i=0;i<Size();++i)
+                        if(i>=offset[InnerPressure()] || constraints.count(i))
+                        {
+                            long double capacity=0;
+                            for(int b=0;b<=Gauge();++b)
+                                for(int j=offset[b];j<offset[b]+size[b];++j)
+                                    capacity+=std::abs(jac[i][j])*scales[b];
+                            if(capacity>0.)algebraicRadiusLower=std::max(algebraicRadiusLower,
+                                static_cast<double>(std::abs(residual[i])/capacity));
+                        }
+                auto compare=[&](const std::string &name,bool joint,double restoration,bool inward,
+                                 double radius=2.,int trialLimit=0)
                 {
                     Trial result;
                     std::string details;
@@ -1422,17 +1450,20 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
                     const auto started=Clock::now();++profile["r5_direction"].first;
                     try
                     {
+                        Require(radius>=algebraicRadiusLower,"Radius below necessary algebraic restoration bound");
                         step=CoupledDirectionR4(domain,newton,jac,constraints,inverse,details,
                             joint?bounds:std::vector<OuterBound>{},restoration,inward,
                             (DirectionReplayR6() || RefinedDirectionR6())?&durable:nullptr,
-                            "iterate"+std::to_string(iterations)+"."+name,residual);
+                            "iterate"+std::to_string(iterations)+"."+name,residual,radius,
+                            CompareR7()?&result.guardWork:nullptr);
                     }
                     catch(const std::exception &e)
                     {
                         profile["r5_direction"].second+=std::chrono::duration<double>(Clock::now()-started).count();
                         details=e.what();
                         durable.Event("r5_direction_failure",{{"iteration",J::Number(iterations)},
-                            {"name",J::Quote(name)},{"message",J::Quote(details)},{"profiling",profiling()}});
+                            {"name",J::Quote(name)},{"message",J::Quote(details)},{"radius",J::Number(radius)},
+                            {"algebraic_radius_lower_bound",J::Number(algebraicRadiusLower)},{"profiling",profiling()}});
                         return std::pair{std::move(result),details};
                     }
                     profile["r5_direction"].second+=std::chrono::duration<double>(Clock::now()-started).count();
@@ -1454,13 +1485,13 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
                     const auto full=model(1.);
                     Require(*std::max_element(full.begin()+InnerPressure(),full.end())<1e-9,
                         "R5 direction failed full linearized algebraic restoration");
-                    double stepNorm=0;
-                    const std::array<double,7> scales{us,us,K0,E0,us*us,us*us,us/m_parameters.geometry.height};
                     for(int b=0;b<=Gauge();++b)for(int i=offset[b];i<offset[b]+size[b];++i)
-                        stepNorm=std::max(stepNorm,std::abs(step[i])/scales[b]);
+                        result.stepNorm=std::max(result.stepNorm,std::abs(step[i])/scales[b]);
                     durable.Event("r5_direction",{{"iteration",J::Number(iterations)},{"name",J::Quote(name)},
                         {"step",result.stepPin},{"action",durable.VectorPayload(prefix+".action",action)},
-                        {"dimensionless_step",J::Number(stepNorm)},{"details",details},
+                        {"dimensionless_step",J::Number(result.stepNorm)},{"details",details},
+                        {"guard_work_over_objective",J::Number(result.guardWork)},
+                        {"algebraic_radius_lower_bound",J::Number(algebraicRadiusLower)},
                         {"model_block_norms",J::Numbers(full)},
                         {"model_box",OuterViolationR5(bounds,effective,trace,1.).report},
                         {"base_witness_actions",OuterViolationR5(bounds,effective,trace).report},
@@ -1469,7 +1500,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
                     double fraction=1.;
                     // Reserve half the trial budget for partial restoration
                     // even if the full model constructs a valid direction.
-                    const int allowance=RefinedDirectionR6()?
+                    const int allowance=trialLimit>0?trialLimit:RefinedDirectionR6()?
                         std::min(R6RestorationTrialLimit(localR5),2*R6RestorationTrialLimit(localR5)-trialCount):
                         (localR5?8:32-trialCount);
                     for(int k=0;k<allowance;++k,fraction*=.5)
@@ -1479,10 +1510,11 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
                         for(int i=0;i<Size();++i)trial[i]+=fraction*step[i];
                         const auto label=prefix+".trial"+std::to_string(k);
                         auto checked=timed("scalar_domain",[&]{return ScalarDomain(trial,time,data,true);});
+                        const auto modelNorms=model(fraction);
                         std::vector<std::pair<std::string,std::string>> event{
                             {"iteration",J::Number(iterations)},{"name",J::Quote(name)},{"backtrack",J::Number(k)},
                             {"fraction",J::Number(fraction)},{"state",durable.VectorPayload(label+".state",trial)},
-                            {"scalar_domain",domainReport(checked)},{"model_block_norms",J::Numbers(model(fraction))},
+                            {"scalar_domain",domainReport(checked)},{"model_block_norms",J::Numbers(modelNorms)},
                             {"model_box",OuterViolationR5(bounds,effective,trace,fraction).report},
                             {"profile_branches_changed",J::Boolean(domain.profileBranches!=checked.profileBranches)}};
                         if(!checked.admissible || !checkWall(checked))
@@ -1496,25 +1528,36 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
                             const auto candidate=timed("residual",[&]{return Residual(trial,history,alpha,time,data);});
                             const auto current=timed("constraints",[&]{return Constraints(trial,time,data);});
                             const auto candidateNorms=Norms(candidate,current,us);
-                            const double required=localR5?.01:1e-4*fraction;
+                            const double required=localR5 && !CompareR7()?.01:1e-4*fraction;
                             bool boxDescent=candidateBox.Max()<=(1.-required)*baseBox.Max();
                             for(int family=0;family<4;++family)
                                 boxDescent=boxDescent && candidateBox.family[family]<=baseBox.family[family];
                             const bool descent=Maximum(candidateNorms)<(1.-required)*error;
                             const bool accept=descent && (!joint || boxDescent);
+                            const double predicted=error-Maximum(modelNorms);
+                            const double ratio=predicted>0.?(error-Maximum(candidateNorms))/predicted:0.;
+                            double traceNorm=0.;
+                            for(int id:m_traceIds)traceNorm=std::max(traceNorm,std::abs(candidate[offset[Epsilon()]+id])/E0);
                             event.insert(event.end(),{{"classification",J::Quote(accept?"accepted_comparison":
                                 !descent?"residual_non_descent":"outer_non_descent_or_family_worsening")},
                                 {"box",candidateBox.report},{"scaled_block_norms",J::Numbers(candidateNorms)},
                                 {"trace_constraint_norm",J::Number(candidateNorms.back())},
+                                {"actual_matching_trace_norm",J::Number(traceNorm)},
+                                {"required_relative_decrease",J::Number(required)},
+                                {"model_agreement",predicted>0.?J::Number(ratio):"null"},
                                 {"residual",durable.VectorPayload(label+".residual",candidate)}});
                             durable.Event("r5_trial",event);
-                            if(accept)
+                            if(accept || CompareR7())
                             {
                                 const auto audit=CompleteRestrictedAudit(trial,history,alpha,time,data,true);
                                 durable.Event("r5_trial_audit",{{"iteration",J::Number(iterations)},
                                     {"name",J::Quote(name)},{"fraction",J::Number(fraction)},
                                     {"covariance",J::Numbers(audit.at("r2_covariance"))},
                                     {"qualified",J::Boolean(audit.at("r2_qualified")[0]==1.)}});
+                            }
+                            if(accept)
+                            {
+                                result.modelAgreement=ratio;
                                 result.state=std::move(trial);result.residual=candidate;result.norms=candidateNorms;
                                 result.domain=std::move(checked);result.constraints=current;result.box=candidateBox;
                                 result.fraction=fraction;break;
@@ -1527,8 +1570,51 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
                         }
                     }
                     profile["line_search"].second+=std::chrono::duration<double>(Clock::now()-search).count();
+                    if(CompareR7())
+                        durable.Event("r7_local_trial_outcome",{{"name",J::Quote(name)},{"fraction",J::Number(result.fraction)},
+                            {"trial_allocation",J::Number(allowance)},
+                            {"allocation_exhausted",J::Boolean(result.fraction==0.)},{"profiling",profiling()}});
                     return std::pair{std::move(result),details};
                 };
+                if(CompareR7())
+                {
+                    Require(localR5,"R7 comparison cannot advance nonlinear iterates");
+                    const auto baseline=compare("r7_r6_radius2",true,1.,true,2.,8).first;
+                    Require(baseline.stepNorm>0.,"R7 could not measure the radius-2 direction");
+                    // Twice the last accepted displacement is still close
+                    // to the observed finite-step regime at the R6 endpoint.
+                    double radius=std::min(.5*baseline.stepNorm,2*m_r7PreviousDisplacement);
+                    durable.Event("r7_initial_radius",{{"baseline_norm",J::Number(baseline.stepNorm)},
+                        {"last_accepted_displacement",J::Number(m_r7PreviousDisplacement)},
+                        {"radius",J::Number(radius)}});
+                    double restoration=1.;
+                    auto contracted=compare("r7_contracted",true,restoration,true,radius,4).first;
+                    if(contracted.stepPin.empty() && baseBox.Max()>0.)
+                    {
+                        restoration=.25;
+                        contracted=compare("r7_contracted_partial",true,restoration,true,radius,4).first;
+                    }
+                    if(contracted.stepPin.empty() || contracted.stepNorm<radius*(1.-1e-7))
+                    {
+                        radius=contracted.stepPin.empty()?std::min(2*radius,.75*baseline.stepNorm):.5*radius;
+                        restoration=1.;
+                        contracted=compare("r7_adjusted_radius",true,restoration,true,radius,4).first;
+                        if(contracted.stepPin.empty() && baseBox.Max()>0.)
+                        {
+                            restoration=.25;
+                            contracted=compare("r7_adjusted_partial",true,restoration,true,radius,4).first;
+                        }
+                    }
+                    // A material multiplier only triggers the matched
+                    // control. Trial outcomes decide whether to use it.
+                    if(!contracted.stepPin.empty() && contracted.guardWork>.01)
+                        compare("r7_positive_ground_control",true,restoration,false,radius,8);
+                    m_lastFeasibleState=s;
+                    durable.Event("solve_terminal",{{"converged","false"},
+                        {"terminal",J::Quote("r7_local_comparison_completed")},{"iteration",J::Number(iterations)},
+                        {"profiling",profiling()}});
+                    return s;
+                }
                 if(localR5 && !(DirectionReplayR6() || RefinedDirectionR6()))compare("r4_control",false,0.,true);
                 auto [trial,details]=compare("r5_full",true,1.,true);
                 if(!RefinedDirectionR6() && trial.fraction==0. && baseBox.Max()>0. &&

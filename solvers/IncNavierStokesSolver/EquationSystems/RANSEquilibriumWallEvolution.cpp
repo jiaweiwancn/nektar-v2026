@@ -497,10 +497,11 @@ void RANSEquilibriumWallEvolution::RunR3StageTest()
     const bool benchmark=m_stageTest=="JacobianBenchmarkR3";
     const bool localR4=m_stageTest=="DirectionExperimentR4";
     const bool localR5=m_stageTest=="DirectionExperimentR5";
-    Require(!m_patch->DirectionReplayR6() || localR5,"ReplayR6 requires the fixed-state stage experiment");
+    Require(!(m_patch->DirectionReplayR6() || m_patch->CompareR7()) || localR5,
+        "R6 replay and R7 comparison require the fixed-state stage experiment");
     RANSWallEvolutionPatch::WallMatrix frozenMatrix;
     std::string frozenAssembly="[]";
-    if(localR5 && (m_patch->DirectionReplayR6() || m_patch->RefinedDirectionR6()))
+    if(localR5 && !m_patch->CompareR7() && (m_patch->DirectionReplayR6() || m_patch->RefinedDirectionR6()))
     {
         namespace D=RANSWallR3;
         boost::property_tree::ptree packet;boost::property_tree::read_json(m_r3PredictorFile,packet);
