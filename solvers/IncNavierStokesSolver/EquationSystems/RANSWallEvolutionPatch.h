@@ -380,6 +380,7 @@ private:
     std::array<double,3> m_picardRelaxation{{1.,.5,.5}};
     double m_picardPseudoAlpha=0.;
     double m_picardGuessPerturbation=0.;
+    double m_picardNonKTolerance=0.;
     bool m_picardVerify=false;
     bool m_picardGroundProjection=false;
     bool m_picardKNewton=false;

@@ -371,10 +371,10 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3
     Require(state.size()==static_cast<std::size_t>(Size()) && region>=-1 && region<=1,
         "invalid R3 nonpressure state/region");
     const auto constraintStarted=Clock::now();
-    const auto constraints=imposeConstraints?Constraints(state,time,data):std::map<int,double>{};
+    const bool kOnly=freeK!=nullptr;
+    const auto constraints=kOnly?std::map<int,double>{}:Constraints(state,time,data);
     const auto s=ExternalLift(state,time,data);
     const double constraintSeconds=std::chrono::duration<double>(Clock::now()-constraintStarted).count();
-    const bool kOnly=freeK!=nullptr;
     const int rows=kOnly?freeK->size():Size(),columns=kOnly?rows:DifferentialSize();
     std::vector<int> kIndex(DifferentialSize(),-1);
     if(kOnly)for(int i=0;i<rows;++i)kIndex.at((*freeK)[i])=i;

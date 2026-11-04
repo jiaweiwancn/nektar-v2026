@@ -255,6 +255,10 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         Require(!m_picardKNewton || m_picardGroundProjection,"Picard k Newton requires the ground projector");
         session->LoadSolverInfo("RANSWallPicardGuessFile",m_picardGuessFile,"");
         session->LoadSolverInfo("RANSWallPicardKDiagnostic",m_picardKDiagnostic,"");
+        session->LoadParameter("RANSWallPicardNonKTolerance",m_picardNonKTolerance,0.);
+        Require(std::isfinite(m_picardNonKTolerance) && m_picardNonKTolerance>=0. &&
+                (m_picardNonKTolerance==0. || (!m_picardGuessFile.empty() && !m_picardKNewton)),
+                "Picard non-k diagnostic requires a saved guess and disabled k Newton");
     }
     session->LoadParameter("RANSWallOwnershipShift",m_ownershipShift,0);Require(m_ownershipShift>=0,"negative ownership shift");
     auto full=MemoryManager<MultiRegions::ExpList>::AllocateSharedPtr(session,graph,true,"u");

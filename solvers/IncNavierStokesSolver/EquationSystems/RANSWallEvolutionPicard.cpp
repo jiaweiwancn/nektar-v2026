@@ -733,7 +733,14 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
         external.erase(offset[Epsilon()] + id);
     Require(external.empty() || external.rbegin()->first < DifferentialSize(),
             "Picard external lifting may constrain differential rows only");
-    const auto start = std::chrono::steady_clock::now();
+    const auto start            = std::chrono::steady_clock::now();
+    const bool nonK             = m_picardNonKTolerance > 0.;
+    const double sweepTolerance = nonK ? m_picardNonKTolerance : tolerance;
+    auto sweepNorms             = [&](Vector values) {
+        if (nonK)
+            values.at(K()) = 0.;
+        return values;
+    };
     int flowSolves = 0, kSolves = 0, epsilonSolves = 0;
     auto emit = [&](const std::string &event,
                     std::vector<std::pair<std::string, std::string>> values) {
@@ -920,7 +927,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
                      {"solve_counts",
                       J::Numbers(std::array<int, 4>{flowSolves, flowSolves,
                                                     kSolves, epsilonSolves})}});
-        if (m_picardKNewton && (!outerViolationSeen || iterations % 10 == 0))
+        if ((m_picardKNewton || nonK) &&
+            (!outerViolationSeen || iterations % 10 == 0))
         {
             const auto audit =
                 CompleteRestrictedAudit(s, history, alpha, time, data, true);
@@ -997,7 +1005,9 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
                        perturbed, name);
         }
     }
-    while (Maximum(norms) > tolerance && iterations < maximumIterations)
+    const Vector fixedK(s.begin() + offset[K()], s.begin() + offset[Epsilon()]);
+    while (Maximum(sweepNorms(norms)) > sweepTolerance &&
+           iterations < maximumIterations)
     {
         const auto flow =
             AssemblePicardBlock(0, s, history, alpha, time, data, external);
@@ -1124,8 +1134,10 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
                     "frozen saddle state");
         }
 
+        const auto governingNorms = sweepNorms(norms);
         const double merit =
-            std::inner_product(norms.begin(), norms.end(), norms.begin(), 0.);
+            std::inner_product(governingNorms.begin(), governingNorms.end(),
+                               governingNorms.begin(), 0.);
         bool accepted   = false;
         double fraction = 1.;
         for (int retry = 0; retry < 12; ++retry, fraction *= .5)
@@ -1146,9 +1158,10 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
             if (flowNorms.empty())
                 continue;
             const double kRelax =
-                scalarStep(K(), trial, m_picardRelaxation[1] * fraction,
-                           trialDomain, trialGround);
-            if (!kRelax)
+                nonK ? 0.
+                     : scalarStep(K(), trial, m_picardRelaxation[1] * fraction,
+                                  trialDomain, trialGround);
+            if (!nonK && !kRelax)
                 continue;
             // The k update may leave a trace mismatch. Assemble epsilon
             // with the new k and freshly evaluated mechanical wall forcing
@@ -1168,10 +1181,15 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
                             J::Numbers(Vector{flowNorms[InnerPressure()],
                                               flowNorms[OuterPressure()],
                                               flowNorms[Gauge()]})}});
-            if (Maximum(next) > tolerance &&
-                std::inner_product(next.begin(), next.end(), next.begin(),
-                                   0.) >= merit)
+            const auto governingNext = sweepNorms(next);
+            if (Maximum(governingNext) > sweepTolerance &&
+                std::inner_product(governingNext.begin(), governingNext.end(),
+                                   governingNext.begin(), 0.) >= merit)
                 continue;
+            if (nonK)
+                Require(std::equal(fixedK.begin(), fixedK.end(),
+                                   trial.begin() + offset[K()]),
+                        "non-k equilibration changed a fixed k coefficient");
             s                   = std::move(trial);
             m_lastFeasibleState = s;
             norms               = next;
@@ -1184,6 +1202,27 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
         Require(
             accepted,
             "Picard could not find an admissible residual-decreasing sweep");
+    }
+    if (nonK)
+    {
+        Require(Maximum(sweepNorms(norms)) <= sweepTolerance,
+                "Picard diagnostic exhausted the non-k equilibration budget");
+        std::vector<int> rows;
+        for (int row = offset[K()]; row < offset[Epsilon()]; ++row)
+            if (!external.count(row))
+                rows.push_back(row);
+        const auto audit =
+            CompleteRestrictedAudit(s, history, alpha, time, data, true);
+        emit("non_k_equilibrated",
+             {{"norms", J::Numbers(norms)},
+              {"non_k_norm", J::Number(Maximum(sweepNorms(norms)))},
+              {"k_residual", J::Numbers(PicardKResidual(s, history, alpha, time,
+                                                        data, rows))},
+              {"outer_range", J::Numbers(audit.at("r2_outer_range"))},
+              {"outer_gradient_witness",
+               J::Numbers(audit.at("r4_outer_gradient_witness"))}});
+        throw std::runtime_error("Picard diagnostic completed non-k "
+                                 "equilibration without advancing history");
     }
     Require(Maximum(norms) <= tolerance,
             "Picard sweep limit before full stage convergence");
