@@ -497,6 +497,29 @@ void RANSEquilibriumWallEvolution::RunR3StageTest()
     const bool benchmark=m_stageTest=="JacobianBenchmarkR3";
     const bool localR4=m_stageTest=="DirectionExperimentR4";
     const bool localR5=m_stageTest=="DirectionExperimentR5";
+    Require(!m_patch->DirectionReplayR6() || localR5,"ReplayR6 requires the fixed-state stage experiment");
+    RANSWallEvolutionPatch::WallMatrix frozenMatrix;
+    std::string frozenAssembly="[]";
+    if(m_patch->DirectionReplayR6())
+    {
+        namespace D=RANSWallR3;
+        boost::property_tree::ptree packet;boost::property_tree::read_json(m_r3PredictorFile,packet);
+        const auto &binding=packet.get_child("frozen_action");
+        const auto path=binding.get<std::string>("matrix.path");
+        const auto residual=m_patch->Residual(candidate,history,400.,targetTime,m_implicitData);
+        Require(binding.get<std::string>("state_sha256")==D::Hash(candidate) &&
+            binding.get<std::string>("history_sha256")==D::Hash(history) &&
+            binding.get<std::string>("residual_sha256")==D::Hash(residual) &&
+            std::filesystem::file_size(path)==candidate.size()*candidate.size()*sizeof(double) &&
+            D::HashFile(path)==binding.get<std::string>("matrix.sha256"),
+            "R6 replay matrix is not bound to this state, history and residual");
+        std::ifstream binary(path,std::ios::binary);
+        frozenMatrix.assign(candidate.size(),Vector(candidate.size()));
+        for(auto &row:frozenMatrix)
+            binary.read(reinterpret_cast<char*>(row.data()),row.size()*sizeof(double));
+        Require(binary.good(),"R6 matrix payload is incomplete");
+        frozenAssembly=binding.get<std::string>("assembly_json");
+    }
     int updateLimit=(localR4 || localR5)?1:m_maximumIterations;
     if(m_patch->JointRestorationR5() && !localR5)
     {
@@ -512,7 +535,7 @@ void RANSEquilibriumWallEvolution::RunR3StageTest()
     try
     {
         candidate=m_patch->SolveScalarFeasibleR3(candidate,history,400.,targetTime,m_implicitData,
-            iterations,m_tolerance,updateLimit,benchmark,localR4,localR5);solverReturned=true;
+            iterations,m_tolerance,updateLimit,benchmark,localR4,localR5,frozenMatrix,frozenAssembly);solverReturned=true;
     }
     catch(const std::exception &error)
     {
