@@ -1,8 +1,14 @@
 # M8-R2: restricted native inner law and admissible implicit stage
 
-Status: in progress. M8 remains **open**. This report will record the actual
-bounded stage result, including unsuccessful verification attempts; it does
-not authorize terrain calibration or a long evolution campaign.
+Status: final evidence collection. **No admissible coupled target-stage root
+has been obtained. M8 remains open.** The opt-in inner law and scalar-domain
+policy are implemented, with scoped native operator verification and an
+initial representation inside the fixed finite-set contract. The matched
+target searches exhausted their execution budgets without publishing complete
+target states. A separately permitted frozen-scalar target search ended in
+residual stagnation near the scalar boundary. An independently observed
+non-pressure Jacobian-action defect also remains above its unchanged gate.
+These results establish neither root absence nor physical qualification.
 
 ## Contract and provenance
 
@@ -35,18 +41,21 @@ See the [caller audit](cls-epawf-revised-evidence/m8-r2/inner-stress-caller-audi
 Heavy source/build epochs, fields, logs, matrices and raw reports live below
 `/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r2`, outside the checkout.
 Compilation uses 16 workers. Numerical programs use one MPI rank and all six
-declared numerical thread settings equal to one. With at most three analysis
-workers, the allocation is at most 19 workers, below the hard limit of 72.
+declared numerical thread settings equal to one. Native searches are sequential;
+concurrent independent analyses receive explicit individual CPU allocations.
+The recorded allocation and process checks remain below the hard limit of 72,
+including the idle MPI management threads observed in native processes.
 Producing source, programs, loaded libraries and inputs are fingerprinted.
 
-The two permitted initial changes refine only the outer mesh (6 then, only
-if needed, 9 outer cells). The inner mesh and physical inputs stay fixed.
-Their preflight counts are 2165 and 2759 unknowns, respectively; the dense
-3000-unknown guard remains enforced. Counts are planning data until checked
-against native field maps. Both base and higher quadrature are checked.
+One targeted outer refinement was sufficient: outer6 has **2165 actual
+unknowns**, verified against native field maps. Its dense matrix occupies
+37,497,800 bytes. The second permitted representation, outer9, was not run;
+its prospective count is 2759. The inner mesh and physical inputs stay fixed,
+and the dense 3000-unknown guard remains enforced. Base and higher quadrature
+are independently checked.
 
-Only after operator/action verification and initial preflight, the matched
-old/new stress problems use the identical initialization, time `.0025`,
+After the scoped inner-operator, pressure-action and initial-state checks, the
+matched old/new stress problems use the identical initialization, time `.0025`,
 history, forcing and tolerance `2e-12`. Auxiliary mass coefficients are
 `3200,1600,800`, followed by the exact target `400`. Auxiliary solves never
 advance history. After an auxiliary failure, remaining auxiliaries are
@@ -142,6 +151,16 @@ dependent trace. **Outer9 is not needed or run.** The stricter operational
 sampled-K guard has margin about .01. This is initial coverage, not
 stationarity or a positivity theorem. The projected field activates
 saturation although the continuous analytical reference is inactive.
+
+The starting R1 improved mesh has 1571 unknowns (19,744,328 dense-matrix
+bytes), with the same inner intervals and only three outer intervals.
+Its retained one-sided outer witness at r=8/3 has normalized gradient-entry
+departure `.003412338694780`, exceeding `.001`; covariance and positive
+scalars alone therefore do not cover the fixed certificate. Its raw
+streamwise/k norms are about `9.86323/62.5985`. These are reused R1
+representation observations, not a new R2 trajectory or a replay of the
+different p7 zero-step mesh. Outer6 reduces the measured gradient departure
+to `.000500194924459` while increasing the actual unknown count by 594.
 At base quadrature the selected inner stress changes integrated mean stress
 work and production equally by `-.0123957428841`, with zero exchange defect.
 The unanchored velocity/k norms remain nonzero: about `9.86324/62.59848`
@@ -169,7 +188,7 @@ interruption during its next Jacobian. No completed target record or final
 case report was published for either case. Target convergence, final scalar
 state and physical/accounting gates remain unavailable, rather than false.
 SaturatedR2 began its exact target after its failed auxiliary search; the
-case limit interrupted its first Jacobian, whose last logged column was256. Its initial
+case limit interrupted its first Jacobian, whose last logged column was 256. Its initial
 target residual was `62.6096`. A fresh-Jacobian build is not a completed
 nonlinear update or a proof that the unchanged target has no admissible root.
 
@@ -248,12 +267,115 @@ constitutive feasibility and does not establish the cause of nonlinear
 stagnation. The bounded native comparison remains diagnostic; physical
 qualification requires all independent action gates.
 
-## Decision gates still open
+The same analytic defect is bound to the Linear target's actual initial
+alpha400 matrix through an independently checked exact mass change. The
+SaturatedR2 initial auxiliary matrix separately fails the absolute
+finite-difference comparison, with errors `7.35528e-7`, `7.86320e-7` and
+`1.64307e-6` on the three-step ladder. That is not a second analytic
+component diagnosis. Both formal outer invariant branches and the active
+sensor/trace fixtures remain part of their respective checks. Neither the
+small relative errors nor accurate linear solves replace the absolute gate.
 
-The terminal R2 decision must distinguish constitutive feasibility, native
-weak-operator correctness, convergence to the unchanged coupled residual,
-scalar/covariance/outer-box checks on that root, and fully discrete or
-physical qualification. A finite-set pass is not positivity everywhere.
+## Frozen-scalar localization and matched decision
+
+The one permitted frozen-scalar diagnostic used the same SaturatedR2 h0,
+actual target alpha400, time `.0025`, unchanged tolerance and zero forcing.
+It held represented velocity and native reduced pressure Pi fixed, retaining
+the actual scalar residual and all scalar-dependent sensor, normalization,
+lift and projected-trace constraints. It never advanced native time/history.
+The complete record terminates as `feasible_residual_stagnation`.
+Its six recorded accepted updates have fractions
+`.681356272, .100605631, .000594326, 2.97374e-6, 1.48688e-8, 7.43449e-11`.
+Each is limited by the fixed-inventory fraction-to-boundary estimate; all
+six trials are evaluable. The limiting native-GLL location is
+`(1.6046496089512394,0,0)`. Fresh Jacobians are used at each update.
+The native level's `iterations=5` is its final zero-based iteration index;
+the complete JSONL record contains six updates.
+
+The native scalar maximum remains `15.545717638361056`; independent terminal
+reconstruction gives `15.545717638361037`. The k block dominates, while the
+epsilon block is `.06176892447`, the unsolved streamwise block is
+`8.127147237`, and the dependent-constraint norm is `1.09764e-9`.
+The scalar subsystem alone therefore stagnates near its evaluation-domain
+boundary under this policy. This localizes a difficulty beyond just searching
+the velocity/pressure unknowns; it does not distinguish a reaction,
+diffusion or nonlocal-trace cause, prove root absence, or remove the known
+action-accuracy limitation.
+
+The [independent terminal packet](cls-epawf-revised-evidence/m8-r2/terminal-frozen-scalar-result.json)
+binds the actual complete record, checkpoint, history, native audit table,
+producer and analysis source. Its eleven phases completed in 226.5 seconds,
+with one independent residual reconstruction and no native rerun or current
+Jacobian/path analysis. The minimum inner k is `7.97763e-15` natively and
+`8.04319e-15` independently. The latter is below the verifier's
+`9.14768e-15` arithmetic-roundoff indicator (`sign_resolved=false`). That
+indicator is not a rigorous error bound; the evaluated positive value is
+not a certified positive margin or a polynomial-everywhere result.
+Evaluated inner/outer covariance minima are `1.57053e-15/.176810977`.
+The unchanged finite outer box is covered, with normalized gradient
+departure `.000500194924462`, k/K0 in `[.999995974,1.000012069]`, and
+epsilon/epsilon0 in `[.983296232,1.000047449]`. These are observations on a
+failed diagnostic candidate, not checks on a converged RANS stage.
+
+Lambda remains one. The limiter-active source measure is `.00103271248`
+and minimum b is `.832365063`; cap-active measure is zero. Independent
+integrated E and D are both `8.43645916235`, with redistribution integral
+about `-1.60e-16`. Active saturation measure is `.05983489225` of inner
+volume 12; selected mean-work and production changes both equal
+`-.11843748537`. Including chi=0, the actual matching trace remains
+the projected `lambda*Epre(H)`. Limiter activity is not normalization-cap
+activity, and these observations supply no cap-induced epsilon-attenuation
+explanation.
+
+| Layer / actual target status | Linear inner law + ScalarFeasibleR2 | SaturatedR2 + ScalarFeasibleR2 | Frozen SaturatedR2 scalar diagnostic |
+| --- | --- | --- | --- |
+| Inner constitutive result | Retained linear law and historical failures | Compiled radial-law/derivative/zero-input checks pass in declared scope | Same research law |
+| Native selected weak operator | Existing control | Active fixtures, full stress/production/traction and capped constrained residual verified; diagnostic maximum a/c limitation retained | Terminal native/independent residual and budget agreement |
+| Initial fixed finite-region coverage | Pass, outer6 / 2165 unknowns | Pass, identical h0 | Same h0 |
+| Pressure/gauge and affine continuity actions | Pass unchanged gates | Pass unchanged gates | Frozen rows are not full coupled actions |
+| Other current-action qualification | Fail: independent analytic k-action error `7.15997e-7 > 1e-7`, including target initial matrix | Fail: initial auxiliary FD comparison; no complete target-matrix qualification | No new independent current-action/path check |
+| Actual alpha400 coupled residual converged | Unknown: wall limit; no complete target record | Unknown: wall limit during first target Jacobian | No: scalar `15.5457`, coupled equations not solved |
+| Scalar/covariance/fixed-box checks on a converged coupled target | Unavailable | Unavailable | No converged coupled target; terminal finite evaluations admissible/covered, near-zero sign margin unresolved |
+| Complete target source/energy/traction qualification | Unavailable | Unavailable | Independent/native accounting agrees; nonzero residual and interface defects remain |
+| Native physical time/history advanced | No advancement by probe protocol; final report absent | Same | Final report confirms time0, steps0, original history retained |
+| Fully discrete or physical qualification | Not established | Not established | Diagnostic only |
+
+Accounting agreement must also be distinguished from balance at a root.
+For the frozen candidate, independent normal/tangential traction-jump RMS
+values are `.001195289/.000377060`, k-flux-jump RMS is `1.40175e-5`, and
+integrated reduced-pressure jump is `-.4492470515`. Strong divergence is
+zero for the frozen represented reference velocity, while the separate weak
+pressure/gauge norms are about `5.05e-16,6.07e-17,1.03e-16`.
+The complete energy identity has direct remainder `2.58e-14`, but free weak
+work remains `.748357889`; a small accounting identity error does not make
+that work zero. No mechanical-pressure continuity condition is imposed.
+
+The frozen supervisor failed with `BrokenPipeError` while printing progress.
+The child continued and published a complete native report and solve record.
+The failed raw receipt is retained unchanged. A separate post-completion
+collection binds those artifacts and a fresh successful source/runtime
+fingerprint; lost process exit status and elapsed wall time remain null.
+The solver log's `3033.31s` Execute timing is not substituted for a
+supervisor-observed process duration. The supervisor's wall-cap enforcement
+after its failure is unverified. This collection is not a native retry.
+
+## Recommendation and open gates
+
+Retain SaturatedR2 and ScalarFeasibleR2 as opt-in research prototypes. The
+bounded R2 result is **an unresolved admissible coupled-stage-root problem,
+with a localized remaining non-pressure action-accuracy defect and expensive
+dense searches**. Fix and independently verify that action before another
+exact-target search; preserve the residual, tolerance and finite inventory,
+and publish internal updates durably so an external stop cannot erase the
+target path. Reserve a subsequent bounded solve for the exact alpha400
+target rather than consuming its budget on nonconverged auxiliaries.
+This is a recommended next task, not an additional R2 campaign.
+
+The five layers remain separate: constitutive feasibility, native operator
+correctness, convergence of the true stage residual, physical checks on that
+root, and fully discrete/physical validation. A finite-set pass is not
+positivity everywhere. No short dt/dt/2 evolutions were launched because the
+new-law target did not pass the prerequisite gates.
 The old broad fixed-gamma and invariant-response counterexamples remain
 failed; improved numerical convergence cannot reverse them.
 
@@ -261,4 +383,6 @@ Genuine curved MMS for an adopted law, active-cap curved/variable-H coupling,
 outer and fully discrete turbulence admissibility, completed perturbation
 and long-time refinement, scalable feasibility beyond the dense backend,
 and paired developed floor/hill validation and reserved physical scores
-remain open.
+remain open. The lambda-to-zero / outer high-Re epsilon continuation remains
+an unresolved model choice: the prototype supplies no floor or continuation
+through epsilon=0. M8 remains **open**.
