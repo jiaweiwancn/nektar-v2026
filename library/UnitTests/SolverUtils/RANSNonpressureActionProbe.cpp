@@ -121,6 +121,25 @@ int main(int argc,char **argv)
         const auto state=Read(input,"state"),history=Read(input,"history");
         Require(state.size()==static_cast<std::size_t>(patch.Size()) && history.size()==state.size(),"input field size differs");
         const double time=input.get<double>("time"),alpha=input.get<double>("alpha");
+        if(const auto saved=input.get_child_optional("audit_states"))
+        {
+            Require(patch.CoupledR4() && alpha==400. && time==.0025,
+                "saved-state audit requires the explicit R4 exact stage");
+            std::vector<std::string> cases;
+            for(const auto &record:*saved)
+            {
+                const auto candidate=Read(record.second,"state");
+                Require(candidate.size()==state.size(),"saved audit state has wrong size");
+                const auto values=patch.CompleteRestrictedAudit(candidate,history,alpha,time,data,true);
+                std::vector<std::pair<std::string,std::string>> rows;
+                for(const auto &[key,row]:values)rows.push_back({key,J::Numbers(row)});
+                cases.push_back(J::Object({{"index",J::Number(record.second.get<int>("index"))},
+                    {"audit",J::Object(rows)}}));
+            }
+            std::ofstream output(argv[3]);output<<J::List(cases)<<'\n';
+            Require(output.good(),"cannot write saved-state audit");
+            world->Finalise();return 0;
+        }
         const auto domain=patch.ScalarDomain(state,time,data,true);
         Require(domain.admissible,"action base is outside common scalar inventory: "+domain.failure);
         const auto constraints=patch.Constraints(state,time,data);
@@ -135,7 +154,9 @@ int main(int argc,char **argv)
         for(const auto &row:matrix)outputMatrix.write(reinterpret_cast<const char*>(row.data()),row.size()*sizeof(double));
         outputMatrix.close();Require(outputMatrix.good(),"cannot preserve full action matrix");
         std::vector<std::pair<std::string,Vector>> directions;
-        for(const std::string kind:{"velocity","inner_k","sampled_K","epsilon_with_trace","joint"})
+        const bool onlyExternal=input.get("only_external_direction",false);
+        Require(!onlyExternal || argc==5,"external-only action check requires a direction payload");
+        if(!onlyExternal)for(const std::string kind:{"velocity","inner_k","sampled_K","epsilon_with_trace","joint"})
         {
             Vector direction(patch.Size());
             if(kind=="inner_k" || kind=="sampled_K")
@@ -160,7 +181,8 @@ int main(int argc,char **argv)
             if(!a.effectiveState.empty())for(int i=0;i<patch.Size();++i)direction[i]=a.effectiveState[i]-b.effectiveState[i];
             directions.push_back({kind,std::move(direction)});
         }
-        if(argc==5)directions.push_back({"retained_outer_k_witness",Binary(argv[4],patch.Size())});
+        if(argc==5)directions.push_back({onlyExternal?"coupled_R4_direction":"retained_outer_k_witness",
+            Binary(argv[4],patch.Size())});
         std::vector<std::string> actionRecords;
         for(const auto &[name,direction]:directions)
             actionRecords.push_back(J::Object({{"name",J::Quote(name)},{"direction",J::Numbers(direction)},

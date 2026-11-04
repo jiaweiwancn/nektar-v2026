@@ -13,6 +13,7 @@
 #include <fstream>
 #include <iostream>
 #include <limits>
+#include <numeric>
 #include <set>
 
 namespace Nektar
@@ -33,10 +34,10 @@ public:
         int info=0;Lapack::Dgetrf(m_n,m_n,m_lu.data(),m_n,m_pivots.data(),info);
         Require(info==0,"ScalarFeasibleR2 linear factorization failure");
     }
-    RANSWallAlgebra::Vector Apply(RANSWallAlgebra::Vector rhs) const
+    RANSWallAlgebra::Vector Apply(RANSWallAlgebra::Vector rhs,bool transpose=false) const
     {
         auto pivots=m_pivots;int info=0;
-        Lapack::Dgetrs('N',m_n,1,m_lu.data(),m_n,pivots.data(),rhs.data(),m_n,info);
+        Lapack::Dgetrs(transpose?'T':'N',m_n,1,m_lu.data(),m_n,pivots.data(),rhs.data(),m_n,info);
         Require(info==0,"ScalarFeasibleR2 linear solve failure");Maximum(rhs);return rhs;
     }
 private:
@@ -600,15 +601,280 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveFrozenScalars(Vector
     return SolveScalarFeasible(std::move(state),history,alpha,time,data,false,iterations,tolerance,maximumIterations,true);
 }
 
+std::vector<RANSWallEvolutionPatch::WallExtremum>
+RANSWallEvolutionPatch::WallTraceR4(const Vector &state) const
+{
+    Require(m_dimension==2 && !Mapped(),"R4 wall trace requires canonical flat 2D");
+    const auto &field=*fields[K()];
+    const auto native=field.Field();
+    const auto map=native->GetLocalToGlobalMap();
+    std::vector<WallExtremum> extrema;
+    for(int e=0;e<field.Elements().size();++e)
+    {
+        const auto &el=field.Elements()[e];
+        if(el.lower[2]!=0.)continue;
+        Require(el.degree==3 && native->GetExp(e)->GetBasis(0)->GetBasisType()==LibUtilities::eModified_A &&
+            native->GetExp(e)->GetBasis(1)->GetBasisType()==LibUtilities::eModified_A,
+            "R4 wall trace requires the frozen tensor cubic basis");
+        const int start=native->GetCoeff_Offset(e);
+        std::array<long double,4> c{};
+        for(int j=0;j<4;++j)
+            c[j]=map->GetLocalToGlobalSign(start+j)*state[offset[K()]+map->GetLocalToGlobalMap(start+j)];
+        const long double a0=(c[0]+c[1])/2+c[2]/4, a1=(c[1]-c[0]+c[3])/2;
+        const long double a2=-c[2]/4, a3=-c[3]/2;
+        const long double A=3*a3,B=2*a2,C=a1;
+        std::vector<long double> points{-1,1};
+        auto add=[&](long double x){if(std::abs(x)<1)points.push_back(x);};
+        if(A==0)
+        {
+            if(B!=0)add(-C/B);
+        }
+        else
+        {
+            const long double discriminant=B*B-4*A*C;
+            if(discriminant>=0)
+            {
+                const long double q=-(B+std::copysign(std::sqrt(discriminant),B))/2;
+                if(q==0)add(-B/(2*A));
+                else {add(q/A);add(C/q);}
+            }
+        }
+        const long double error=128*std::numeric_limits<long double>::epsilon()*
+            (std::abs(c[0])+std::abs(c[1])+std::abs(c[2])+std::abs(c[3]));
+        for(long double x:points)
+        {
+            const double physical=el.lower[0]+(x+1)*(el.upper[0]-el.lower[0])/2;
+            const long double value=x==-1?c[0]:x==1?c[1]:a0+x*(a1+x*(a2+x*a3));
+            extrema.push_back({field.ElementPoint(e,{physical,0,0}),value,
+                x==-1 || x==1?0.L:error});
+        }
+    }
+    Require(!extrema.empty(),"R4 wall trace has no ground elements");
+    return extrema;
+}
+
+std::string RANSWallEvolutionPatch::WallTraceJSON(const Vector &state,bool &admissible) const
+{
+    const auto points=WallTraceR4(state);
+    const auto worst=std::min_element(points.begin(),points.end(),[](const auto &a,const auto &b)
+        {return a.value-a.error<b.value-b.error;});
+    admissible=worst->value>=worst->error;
+    return J::Object({{"admissible",J::Boolean(admissible)},
+        {"minimum",J::Number(worst->value)},{"arithmetic_scale",J::Number(worst->error)},
+        {"point",J::Numbers(Vector(worst->row.coordinate.begin(),worst->row.coordinate.end()))},
+        {"geometry",J::Number(worst->row.geometry)},{"extrema_checked",J::Number(points.size())}});
+}
+
+RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
+    const ScalarDomainResult &domain,const Vector &newton,const WallMatrix &jac,
+    const std::map<int,double> &constraints,const std::function<Vector(Vector,bool)> &inverse,
+    std::string &details) const
+{
+    // Parameterize d=d_N+J^{-1} B z. B injects the scaled Cholesky
+    // factors on free differential rows, leaving every algebraic row zero.
+    // The physical least-squares objective becomes ||z||^2/2.
+    struct MetricBlock {std::vector<int> free;WallMatrix lower;double scale;};
+    const double us=m_robustUstar,H=m_parameters.geometry.height;
+    const double K0=m_parameters.model.Q()*us*us,E0=us*us*us/(m_parameters.model.Kappa()*H);
+    const std::array<double,7> scales{us,us,K0,E0,us*us,us*us,us/H};
+    std::vector<MetricBlock> metric;
+    for(int b=0;b<InnerPressure();++b)
+    {
+        MetricBlock block;
+        block.scale=scales[b]*us/H*std::sqrt(m_volumes[b]);
+        for(int i=0;i<size[b];++i)if(!constraints.count(offset[b]+i))block.free.push_back(offset[b]+i);
+        const int n=block.free.size();
+        block.lower.assign(n,Vector(n));
+        for(int i=0;i<n;++i)for(int j=0;j<=i;++j)
+        {
+            long double value=m_mass[b][block.free[i]-offset[b]][block.free[j]-offset[b]];
+            for(int k=0;k<j;++k)value-=block.lower[i][k]*block.lower[j][k];
+            Require(i!=j || value>0,"R4 free consistent mass is not SPD");
+            block.lower[i][j]=i==j?std::sqrt(value):value/block.lower[j][j];
+        }
+        metric.push_back(std::move(block));
+    }
+    auto dot=[](const Vector &a,const Vector &b)
+    {
+        long double result=0;
+        for(std::size_t i=0;i<a.size();++i)result+=(long double)a[i]*b[i];
+        return static_cast<double>(result);
+    };
+    auto axpy=[](Vector &a,double factor,const Vector &b)
+    {for(std::size_t i=0;i<a.size();++i)a[i]+=factor*b[i];};
+    auto metricAction=[&](const Vector &x,bool transpose)
+    {
+        Vector result(Size());
+        for(const auto &block:metric)
+            for(std::size_t i=0;i<block.free.size();++i)
+                for(std::size_t j=0;j<=i;++j)
+                    if(transpose)result[block.free[j]]+=block.scale*block.lower[i][j]*x[block.free[i]];
+                    else result[block.free[i]]+=block.scale*block.lower[i][j]*x[block.free[j]];
+        return result;
+    };
+    auto external=[&](int col)
+    {
+        return constraints.count(col) && !(col>=offset[Epsilon()] && col<offset[InnerPressure()] &&
+            m_traceIds.count(col-offset[Epsilon()]));
+    };
+    auto scalarRow=[&](const RANSWallGlobalPoint &point,int block,double scale,bool trace)
+    {
+        Vector a(Size());long double constant=0;
+        for(std::size_t j=0;j<point.ids.size();++j)constant+=(long double)point.phi[j]*point.constant[j];
+        for(std::size_t j=0;j<point.ids.size();++j)
+        {
+            const int col=offset[block]+point.ids[j];
+            if(external(col))continue;
+            const double phi=(point.phi[j]+(j==0?(1-constant)/point.constant[0]:0))/scale;
+            a[col]+=phi;
+            if(trace && m_traceIds.count(point.ids[j]))axpy(a,-phi,jac[col]);
+        }
+        return a;
+    };
+
+    constexpr double radius=2., reserve=.05, near=.005, feasibility=5e-12;
+    struct Cut {Vector normal;double rhs,length;std::string kind;RANSWallCoordinate point;};
+    std::vector<Cut> active;
+    auto ground=WallTraceR4(domain.effectiveState);
+    // Inward motion is allowed at the observed native witness and all
+    // currently near-active extrema, including tied and endpoint minima.
+    const RANSWallCoordinate witness{1.6046496089512394,0,0};
+    const auto witnessRow=Point(K(),witness);
+    const double witnessValue=witnessRow.Value(domain.effectiveState,offset[K()]);
+    if(witnessValue/K0<=near)ground.push_back({witnessRow,witnessValue,0});
+
+    Vector direction=newton,z(Size()),multipliers;
+    int releases=0;
+    for(int exchange=0;exchange<40;++exchange)
+    {
+        // Twice reorthogonalized QR of the active residual-space normals.
+        // A rank failure is reported rather than forming normal equations.
+        WallMatrix Q,R(active.size(),Vector(active.size()));
+        Vector qCoordinates(active.size());
+        for(std::size_t j=0;j<active.size();++j)
+        {
+            auto v=active[j].normal;
+            for(int pass=0;pass<2;++pass)for(std::size_t i=0;i<j;++i)
+            {
+                const double coefficient=dot(Q[i],v);
+                R[i][j]+=coefficient;
+                axpy(v,-coefficient,Q[i]);
+            }
+            R[j][j]=std::sqrt(dot(v,v));
+            Require(R[j][j]>1e-10,"R4 active cuts are numerically rank deficient");
+            for(double &entry:v)entry/=R[j][j];
+            Q.push_back(std::move(v));
+            double rhs=active[j].rhs;
+            for(std::size_t i=0;i<j;++i)rhs-=R[i][j]*qCoordinates[i];
+            qCoordinates[j]=rhs/R[j][j];
+        }
+        multipliers=qCoordinates;
+        for(int i=static_cast<int>(active.size())-1;i>=0;--i)
+        {
+            for(std::size_t j=i+1;j<active.size();++j)multipliers[i]-=R[i][j]*multipliers[j];
+            multipliers[i]/=R[i][i];
+        }
+        const auto release=std::min_element(multipliers.begin(),multipliers.end());
+        if(release!=multipliers.end() && *release < -1e-10)
+        {
+            active.erase(active.begin()+std::distance(multipliers.begin(),release));
+            ++releases;
+            continue;
+        }
+        z.assign(Size(),0.);
+        for(std::size_t i=0;i<Q.size();++i)axpy(z,qCoordinates[i],Q[i]);
+        direction=newton;
+        if(!active.empty())axpy(direction,1,inverse(metricAction(z,false),false));
+        auto effective=direction;
+        const auto action=Multiply(jac,direction);
+        for(const auto &[col,value]:constraints)if(external(col))effective[col]=0.;
+        auto trace=effective;
+        for(int id:m_traceIds)trace[offset[Epsilon()]+id]-=action[offset[Epsilon()]+id];
+
+        Vector violated;
+        double violation=feasibility,rhs=0;
+        std::string kind;
+        RANSWallCoordinate location{};
+        auto inspect=[&](double lower,double observed,const std::string &label,
+                         const RANSWallCoordinate &point,auto makeRow)
+        {
+            if(lower-observed<=violation)return;
+            violation=lower-observed;
+            rhs=lower;
+            kind=label;
+            location=point;
+            violated=makeRow();
+        };
+        for(int b=0;b<=Gauge();++b)for(int i=offset[b];i<offset[b]+size[b];++i)
+            for(double sign:{-1.,1.})
+                inspect(-radius,sign*direction[i]/scales[b],"dimensionless_box",{},[&]
+                {Vector row(Size());row[i]=sign/scales[b];return row;});
+        for(const auto &observation:domain.observations)
+        {
+            const auto point=Point(observation.block,observation.coordinate,observation.side);
+            const double delta=point.Value(observation.dependentTrace?trace:effective,offset[observation.block]);
+            inspect(-(1-reserve)*observation.value/observation.scale,delta/observation.scale,
+                observation.inventory,point.coordinate,[&]
+                {return scalarRow(point,observation.block,observation.scale,observation.dependentTrace);});
+        }
+        for(const auto &p:ground)if(p.value/K0<=near)
+            inspect(0,p.row.Value(effective,offset[K()])/K0,"inward_ground_row",p.row.coordinate,[&]
+                {return scalarRow(p.row,K(),K0,false);});
+        auto wall=effective;
+        axpy(wall,1-reserve,domain.effectiveState);
+        for(const auto &p:WallTraceR4(wall))
+            inspect(-(1-reserve)*p.row.Value(domain.effectiveState,offset[K()])/K0,
+                p.row.Value(effective,offset[K()])/K0,"continuous_wall_reserve",p.row.coordinate,[&]
+                {return scalarRow(p.row,K(),K0,false);});
+        if(violated.empty())
+        {
+            Vector stationarity=z;
+            std::vector<std::string> activeRows;
+            double activeError=0,complementarity=0;
+            for(std::size_t i=0;i<active.size();++i)
+            {
+                const auto &row=active[i];
+                axpy(stationarity,-multipliers[i],row.normal);
+                const double gap=dot(row.normal,z)-row.rhs;
+                activeError=std::max(activeError,std::abs(gap));
+                complementarity=std::max(complementarity,std::abs(gap*multipliers[i]));
+                activeRows.push_back(J::Object({{"inventory",J::Quote(row.kind)},
+                    {"point",J::Numbers(Vector(row.point.begin(),row.point.end()))},
+                    {"multiplier",J::Number(multipliers[i]/row.length)}}));
+            }
+            const double stationarityNorm=std::sqrt(dot(stationarity,stationarity));
+            Require(stationarityNorm<=1e-9 && activeError<=1e-9 && complementarity<=1e-9,
+                "R4 constrained solve failed its KKT check");
+            details=J::Object({{"method",J::Quote(active.empty()?"ordinary_newton":"residual_space_active_QR")},
+                {"active",J::List(activeRows)},{"releases",J::Number(releases)},
+                {"exchange_passes",J::Number(exchange+1)},{"trust_radius","2"},
+                {"model_feasibility_tolerance",J::Number(feasibility)},{"stationarity_l2",J::Number(stationarityNorm)},
+                {"active_equality_error",J::Number(activeError)},{"complementarity",J::Number(complementarity)},
+                {"scaled_residual_objective",J::Number(.5*dot(z,z))},
+                {"witness_k",J::Number(witnessValue)},
+                {"witness_newton_delta",J::Number(witnessRow.Value(newton,offset[K()]))},
+                {"witness_direction_delta",J::Number(witnessRow.Value(effective,offset[K()]))}});
+            return direction;
+        }
+        auto normal=metricAction(inverse(violated,true),true);
+        const double length=std::sqrt(dot(normal,normal));
+        Require(length>1e-14,"R4 feasibility cut has no free differential response");
+        for(double &value:normal)value/=length;
+        active.push_back({std::move(normal),(rhs-dot(violated,newton))/length,length,kind,location});
+    }
+    throw std::runtime_error("R4 bounded active cut exchange exhausted");
+}
+
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
     Vector s,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data,
-    int &iterations,double tolerance,int maximumIterations,bool benchmarkOnly) const
+    int &iterations,double tolerance,int maximumIterations,bool benchmarkOnly,bool localR4) const
 {
     Require(m_nonlinearPolicy=="ScalarFeasibleR3" && m_dimension==2 && !Mapped() &&
         m_transitionEnabled && m_cappedDestruction && m_comm->GetSize()==1,
         "ScalarFeasibleR3 requires its opt-in serial flat 2D Upstream+Capped policy");
     Require(Size()<=3000 && alpha==400. && time==.0025 && tolerance==2e-12 &&
         maximumIterations>0 && maximumIterations<=16,"R3 requires the unchanged bounded exact target");
+    Require(!localR4 || (CoupledR4() && maximumIterations==1),"R4 local experiment uses one bounded update");
     iterations=0;
     using Clock=std::chrono::steady_clock;
     std::map<std::string,std::pair<int,double>> profile;
@@ -630,12 +896,36 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
     RANSWallR3::DurableProgress durable(m_r3ProgressFile,solve,alpha,time,history,ActionPolicyName()+":v1");
     durable.Event("protocol",{{"inner_stress_model",J::Quote(InnerStressName())},
         {"tolerance",J::Number(tolerance)},{"maximum_Newton_updates",J::Number(maximumIterations)},
-        {"benchmark_only",J::Boolean(benchmarkOnly)},{"no_auxiliary_alpha_sequence","true"}});
+        {"benchmark_only",J::Boolean(benchmarkOnly)},{"globalization",J::Quote(m_globalization)},
+        {"local_direction_experiment",J::Boolean(localR4)},{"no_auxiliary_alpha_sequence","true"}});
     const double us=m_robustUstar,K0=m_parameters.model.Q()*us*us;
     const double E0=us*us*us/(m_parameters.model.Kappa()*m_parameters.geometry.height);
     auto domain=timed("scalar_domain",[&]{return ScalarDomain(s,time,data,true);});
     auto constraints=std::map<int,double>{};Vector residual,norms;std::string terminal="started";
     bool alreadySaved=false;int stagnant=0;
+    auto domainReport=[&](const ScalarDomainResult &value)
+    {
+        const auto json=ScalarDomainJSON(value);
+        if(!CoupledR4())return json;
+        bool wallOK=false;
+        const auto trace=WallTraceJSON(value.effectiveState,wallOK);
+        return json.substr(0,json.size()-1)+",\"r4_wall_trace\":"+trace+"}";
+    };
+    auto checkWall=[&](const ScalarDomainResult &value)
+    {
+        if(!CoupledR4())return true;
+        bool admissible=false;
+        WallTraceJSON(value.effectiveState,admissible);
+        return admissible;
+    };
+    auto recordRanges=[&](int iteration,const Vector &state)
+    {
+        if(!CoupledR4())return;
+        const auto audit=CompleteRestrictedAudit(state,history,alpha,time,data,true);
+        std::vector<std::pair<std::string,std::string>> values;
+        for(const auto &[key,row]:audit)values.push_back({key,J::Numbers(row)});
+        durable.Event("r4_applicability",{{"iteration",J::Number(iteration)},{"audit",J::Object(values)}});
+    };
     auto evaluate=[&]()
     {
         Require(domain.admissible,"R3 iterate is outside its scalar evaluation domain: "+domain.failure);
@@ -646,12 +936,14 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
     try
     {
         evaluate();
+        Require(checkWall(domain),"R4 base wall polynomial fails the local trace safeguard");
         for(iterations=0;iterations<=maximumIterations;++iterations)
         {
             // Every accepted iterate is persisted immediately, including one
             // at which stagnation stops the search. No next J starts first.
             if(!alreadySaved)durable.Snapshot(iterations,s,residual,constraints,norms,
-                ScalarDomainJSON(domain),profiling());
+                domainReport(domain),profiling());
+            if(iterations==0)recordRanges(0,s);
             alreadySaved=false;
             const double error=Maximum(norms);
             if(error<tolerance && !benchmarkOnly)
@@ -680,12 +972,53 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
                 return s;
             }
             auto rhs=residual;for(auto &value:rhs)value=-value;
-            const auto step=timed("linear_solve",[&]{return factor.Apply(std::move(rhs));});
-            const auto stepPin=durable.VectorPayload("iterate"+std::to_string(iterations)+".step",step);
-            const auto jacStep=Multiply(jac,step);auto linear=jacStep;
+            const auto newton=timed("linear_solve",[&]{return factor.Apply(std::move(rhs));});
+            auto linear=Multiply(jac,newton);
             for(int row=0;row<Size();++row)linear[row]+=residual[row];
             const auto linearNorms=Norms(linear,constraints,us);
             Require(Maximum(linearNorms)<1e-8*std::max(1.,error),"R3 inaccurate linear solve");
+            if(localR4)
+            {
+                // Compare the ordinary Newton step under the identical wall
+                // safeguard. Compute the first ground contact by bisection.
+                double hi=1,lo=0;
+                auto trial=s;
+                for(int pass=0;pass<40;++pass)
+                {
+                    const double f=(lo+hi)/2;
+                    for(int row=0;row<Size();++row)trial[row]=s[row]+f*newton[row];
+                    bool admissible=false;
+                    WallTraceJSON(ExternalLift(trial,time,data),admissible);
+                    if(admissible)lo=f;else hi=f;
+                }
+                const double fraction=.995*lo;
+                for(int row=0;row<Size();++row)trial[row]=s[row]+fraction*newton[row];
+                const auto scalar=ScalarDomain(trial,time,data,true);
+                Vector values;
+                if(scalar.admissible)
+                    values=Norms(Residual(trial,history,alpha,time,data),Constraints(trial,time,data),us);
+                durable.Event("r4_newton_comparison",{{"fraction",J::Number(fraction)},
+                    {"wall_contact_fraction",J::Number(lo)},{"scalar_domain",domainReport(scalar)},
+                    {"predicted_norm",J::Number((1-fraction)*error)},{"actual_norms",J::Numbers(values)},
+                    {"direction",durable.VectorPayload("comparison.newton",newton)}});
+                if(scalar.admissible)recordRanges(-1,trial);
+            }
+            std::string directionDetails="null";
+            const auto step=CoupledR4()?timed("r4_direction",[&]
+                {return CoupledDirectionR4(domain,newton,jac,constraints,
+                    [&](Vector rhs,bool transpose){return factor.Apply(std::move(rhs),transpose);},directionDetails);}):newton;
+            const auto stepPin=durable.VectorPayload("iterate"+std::to_string(iterations)+".step",step);
+            const auto jacStep=Multiply(jac,step);
+            if(CoupledR4())
+            {
+                auto prediction=residual;
+                for(int row=0;row<Size();++row)prediction[row]+=jacStep[row];
+                const auto model=Norms(prediction,constraints,us);
+                Require(*std::max_element(model.begin()+InnerPressure(),model.end())<1e-9,
+                    "R4 direction failed full linearized algebraic restoration");
+                durable.Event("r4_direction",{{"iteration",J::Number(iterations)},{"step",stepPin},
+                    {"model_block_norms",J::Numbers(model)},{"details",directionDetails},{"profiling",profiling()}});
+            }
             auto moved=s;for(int row=0;row<Size();++row)moved[row]+=step[row];
             moved=ExternalLift(moved,time,data);Vector actualStep(Size());
             for(int row=0;row<Size();++row)actualStep[row]=moved[row]-domain.effectiveState[row];
@@ -718,11 +1051,11 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
                 const auto trialName="iterate"+std::to_string(iterations)+".trial"+std::to_string(backtrack);
                 const auto trialPin=durable.VectorPayload(trialName+".state",trial);
                 auto checked=timed("scalar_domain",[&]{return ScalarDomain(trial,time,data,true);});
-                if(!checked.admissible)
+                if(!checked.admissible || !checkWall(checked))
                 {
                     durable.Event("line_search_trial",{{"iteration",J::Number(iterations)},{"backtrack",J::Number(backtrack)},
-                        {"fraction",J::Number(fraction)},{"classification",J::Quote("scalar_domain_rejection_before_residual")},
-                        {"state",trialPin},{"scalar_domain",ScalarDomainJSON(checked)}});continue;
+                        {"fraction",J::Number(fraction)},{"classification",J::Quote(checked.admissible?"r4_wall_trace_rejection":"scalar_domain_rejection_before_residual")},
+                        {"state",trialPin},{"scalar_domain",domainReport(checked)}});continue;
                 }
                 try
                 {
@@ -732,11 +1065,11 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
                     const auto candidatePin=durable.VectorPayload(trialName+".residual",candidate);
                     const bool descent=Maximum(candidateNorms)<(1.-1e-4*fraction)*error;
                     auto rechecked=timed("scalar_domain",[&]{return ScalarDomain(trial,time,data,true);});
-                    const bool accept=descent && rechecked.admissible;
+                    const bool accept=descent && rechecked.admissible && checkWall(rechecked);
                     durable.Event("line_search_trial",{{"iteration",J::Number(iterations)},{"backtrack",J::Number(backtrack)},
                         {"fraction",J::Number(fraction)},{"classification",J::Quote(accept?"feasible_accepted_descent":"valid_non_descent_or_recheck_failure")},
                         {"state",trialPin},{"residual",candidatePin},{"scaled_block_norms",J::Numbers(candidateNorms)},
-                        {"scalar_domain",ScalarDomainJSON(rechecked)},
+                        {"scalar_domain",domainReport(rechecked)},
                         {"profile_branches_changed",J::Boolean(domain.profileBranches!=rechecked.profileBranches)}});
                     if(accept)
                     {
@@ -769,10 +1102,18 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
             // Publish the completed accepted state before any further action,
             // including the stagnation decision and the next loop's J start.
             durable.Snapshot(iterations+1,nextState,nextResidual,nextConstraints,nextNorms,
-                ScalarDomainJSON(nextDomain),profiling(),update);
+                domainReport(nextDomain),profiling(),update);
             durable.Event("newton_update",{{"details",update},{"profiling",profiling()}});
             s=std::move(nextState);residual=std::move(nextResidual);norms=std::move(nextNorms);
             constraints=std::move(nextConstraints);domain=std::move(nextDomain);alreadySaved=true;
+            recordRanges(iterations+1,s);
+            if(localR4)
+            {
+                m_lastFeasibleState=s;
+                durable.Event("solve_terminal",{{"converged","false"},{"terminal",J::Quote("r4_local_experiment_completed")},
+                    {"iteration",J::Number(iterations+1)},{"scaled_block_norms",J::Numbers(norms)},{"profiling",profiling()}});
+                return s;
+            }
             stagnant=nextError>error*(1.-1e-4)?stagnant+1:0;
             if(stagnant>=3){terminal="feasible_residual_stagnation";throw std::runtime_error(terminal);}
         }
@@ -790,19 +1131,19 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
 }
 
 RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAudit(
-    const Vector &state,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data) const
+    const Vector &state,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data,bool rangesOnly) const
 {
     const auto domain=ScalarDomain(state,time,data,true);Diagnostic audit;
     audit["r2_scalar_domain"]={domain.admissible?1.:0.,domain.minimumMargin,domain.minimumInnerK,
         domain.minimumOuterK,domain.minimumOuterEpsilon,domain.minimumSampledK,
         domain.minimumTraceEpsilon,domain.minimumB,domain.minimumLambda};
     if(!domain.admissible){audit["r2_qualified"]={0};return audit;}
-    audit=Audit(domain.effectiveState,history,alpha,time,data,m_robustUstar,true);
+    if(!rangesOnly)audit=Audit(domain.effectiveState,history,alpha,time,data,m_robustUstar,true);
     audit["r2_scalar_domain"]={1,domain.minimumMargin,domain.minimumInnerK,domain.minimumOuterK,
         domain.minimumOuterEpsilon,domain.minimumSampledK,domain.minimumTraceEpsilon,domain.minimumB,domain.minimumLambda};
     const double K0=m_parameters.model.Q()*m_robustUstar*m_robustUstar;
     Vector outer{0,1e300,-1e300,1e300,-1e300,domain.minimumSampledK/K0,-1e300};
-    double innerCov=1e300,outerCov=1e300;Vector innerPoint,outerPoint;
+    double innerCov=1e300,outerCov=1e300;Vector innerPoint,outerPoint,gradientPoint;
     for(const auto &p:domain.observations)
     {
         if(p.block!=K() && !p.dependentTrace)continue;
@@ -831,7 +1172,15 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
         const double g0=m_robustUstar/(m_parameters.model.Kappa()*r);
         const double e0=m_robustUstar*m_robustUstar*m_robustUstar/(m_parameters.model.Kappa()*r);
         for(int a=0;a<3;++a)for(int b=0;b<3;++b)
-            outer[0]=std::max(outer[0],std::abs(G[a][b]/g0-m_referenceFlow[a]*m_referenceNormal[b]));
+        {
+            const double departure=G[a][b]/g0-m_referenceFlow[a]*m_referenceNormal[b];
+            if(std::abs(departure)>outer[0])
+            {
+                outer[0]=std::abs(departure);
+                gradientPoint={p.coordinate[0],p.coordinate[1],p.coordinate[2],double(a),double(b),
+                    departure,double(p.geometry),double(p.side)};
+            }
+        }
         outer[1]=std::min(outer[1],k/K0);outer[2]=std::max(outer[2],k/K0);
         outer[3]=std::min(outer[3],epsilon/e0);outer[4]=std::max(outer[4],epsilon/e0);
     }
@@ -839,6 +1188,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
     const bool box=outer[0]<=.001 && outer[1]>=.99 && outer[2]<=1.01 && outer[3]>=.98 && outer[4]<=1.02 &&
         outer[5]>=.99 && outer[6]<=1.01;
     const bool covariance=innerCov>=-1e-10*K0 && outerCov>=-1e-10*K0;
+    if(rangesOnly || CoupledR4())audit["r4_outer_gradient_witness"]=gradientPoint;
     audit["r2_outer_range"]=outer;audit["r2_covariance"]={innerCov,outerCov};
     audit["r2_inner_minimum_point"]=innerPoint;audit["r2_outer_minimum_point"]=outerPoint;
     audit["r2_qualified"]={box && covariance && domain.minimumLambda>=.5?1.:0.};

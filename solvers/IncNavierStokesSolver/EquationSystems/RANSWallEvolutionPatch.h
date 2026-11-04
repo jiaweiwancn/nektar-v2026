@@ -148,7 +148,7 @@ public:
         const RANSWallEvolutionData &data,bool retainLocations=false) const;
     static std::string ScalarDomainJSON(const ScalarDomainResult &domain,bool locations=false);
     Diagnostic CompleteRestrictedAudit(const Vector &state,const Vector &history,
-        double alpha,double time,const RANSWallEvolutionData &data) const;
+        double alpha,double time,const RANSWallEvolutionData &data,bool rangesOnly=false) const;
     WallMatrix ScalarFeasibleJacobian(const Vector &state,const Vector &history,
         double alpha,double time,const RANSWallEvolutionData &data,
         std::vector<std::string> *columnMetadata=nullptr,bool scalarOnly=false) const;
@@ -156,11 +156,12 @@ public:
         const RANSWallEvolutionData &data,int &iterations,double tolerance,int maximumIterations) const;
     Vector SolveScalarFeasibleR3(Vector state,const Vector &history,double alpha,double time,
         const RANSWallEvolutionData &data,int &iterations,double tolerance,
-        int maximumIterations,bool benchmarkOnly=false) const;
+        int maximumIterations,bool benchmarkOnly=false,bool localR4=false) const;
     const std::string &R3ProgressFile() const { return m_r3ProgressFile; }
     const Vector &LastFeasibleState() const { return m_lastFeasibleState; }
     const std::string &NonlinearPolicyName() const { return m_nonlinearPolicy; }
     const std::string &ActionPolicyName() const { return m_actionPolicy; }
+    bool CoupledR4() const { return m_globalization=="CoupledR4"; }
     Vector Norms(const Vector &residual,const std::map<int,double> &constraints,double ustar=.4) const;
     Vector StateNorms(const Vector &state,const Vector &reference,double ustar=.4) const;
     Vector ExplicitBody(const Vector &state,double time,const RANSWallEvolutionData &data) const;
@@ -220,6 +221,16 @@ public:
         const SolverUtils::EquilibriumAWFProfiles &profile) const;
     std::string Signature() const;
 private:
+    struct WallExtremum
+    {
+        RANSWallGlobalPoint row;
+        long double value,error;
+    };
+    std::vector<WallExtremum> WallTraceR4(const Vector &state) const;
+    std::string WallTraceJSON(const Vector &state,bool &admissible) const;
+    Vector CoupledDirectionR4(const ScalarDomainResult &domain,const Vector &newton,
+        const WallMatrix &jac,const std::map<int,double> &constraints,
+        const std::function<Vector(Vector,bool)> &inverse,std::string &details) const;
     WallMatrix AssembleNonpressureR3(const Vector &state,double time,
         const RANSWallEvolutionData &data,bool imposeConstraints,int region,
         std::vector<std::string> *metadata) const;
@@ -302,6 +313,7 @@ private:
     std::string m_nonlinearPolicy="Legacy",m_feasibleTraceFile="case.feasible.jsonl";
     std::string m_r3ProgressFile="case.r3-progress.jsonl";
     std::string m_actionPolicy="Legacy";
+    std::string m_globalization="FractionToBoundary";
     mutable bool m_feasibleTraceStarted=false;
     mutable std::vector<ScalarLocation> m_scalarLocations;
     mutable std::vector<RANSWallCoordinate> m_traceScalarAnchors,m_scalarSamplerAnchors;

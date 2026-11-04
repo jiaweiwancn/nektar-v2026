@@ -457,6 +457,13 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3
     };
 
     std::map<std::pair<Coordinate,bool>,std::shared_ptr<RayLinear>> cache;
+    auto checkMoving=[&](const RANSWallGlobalPoint &point,int block)
+    {
+        if(!CoupledR4())return;
+        const auto &element=fields[block]->Elements().at(point.element);
+        for(int axis:{0,2})Require(point.coordinate[axis]>=element.lower[axis] &&
+            point.coordinate[axis]<=element.upper[axis],"R4 action encountered a clamped moving basis point");
+    };
     auto rayLinear=[&](const Coordinate &chart,bool baseline)->const RayLinear&
     {
         auto key=chart;key[2]=0;const auto cacheKey=std::make_pair(key,baseline);auto found=cache.find(cacheKey);
@@ -475,12 +482,15 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3
         {
             auto point=chart;point[2]=rule[i].r;Node n;n.radius=rule[i].r;n.radiusK=T(dRule[i].r);
             n.weight=rule[i].weight;n.weightK=T(dRule[i].w);n.k=basis(K(),point);
+            if(n.radiusK!=0)checkMoving(n.k.row,K());
             n.kValue=n.k.row.Value(s,offset[K()]);n.kRadial=n.k.row.Gradient(s,offset[K()])[2];
             n.pre=ray->differential->At(n.radius,n.radiusK);n.limiter=Limit(static_cast<long double>(n.kValue)/K0,m_destruction);
             input.k.push_back(n.kValue);input.preE.push_back(n.pre.E);input.preD.push_back(n.pre.Dpre);input.metricWeights.push_back(n.weight);
             ray->nodes.push_back(std::move(n));
         }
         ray->normalization=EvaluateRANSCappedDestruction(input,m_destruction);++normalizations;
+        Require(!CoupledR4() || ray->normalization.b!=m_destruction.delta,
+            "R4 action encountered an unresolved common cap-knot derivative");
         const long double B=ray->normalization.budgetD,b=ray->normalization.b;long double bk=0,bc=0;
         for(const auto &n:ray->nodes)
         {
@@ -523,6 +533,7 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3
             ++volumePoints;if(n.radiusK!=0 || n.weightK!=0)++movingPoints;
             auto point=nativeRay.coordinate;point[2]=n.radius;
             const auto v=Point(0,point),pressure=Point(InnerPressure(),point);
+            if(n.radiusK!=0){checkMoving(v,0);checkMoving(pressure,InnerPressure());}
             Require(v.ids==n.k.row.ids,"R3 k/velocity native maps differ");
             auto q=stateAt(v,pressure,nullptr,nativeRay.weight*n.weight,true);
             Require(data.innerKSource(point,time)==0,"R3 moving-source action requires the declared unforced inner scalar source");

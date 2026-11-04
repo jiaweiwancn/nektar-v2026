@@ -194,6 +194,10 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     session->LoadSolverInfo("RANSWallFeasibleFile",m_feasibleTraceFile,"case.feasible.jsonl");
     session->LoadSolverInfo("RANSWallR3ProgressFile",m_r3ProgressFile,"case.r3-progress.jsonl");
     session->LoadSolverInfo("RANSWallActionPolicy",m_actionPolicy,"Legacy");
+    session->LoadSolverInfo("RANSWallGlobalization",m_globalization,"FractionToBoundary");
+    Require(m_globalization=="FractionToBoundary" ||
+        (CoupledR4() && m_nonlinearPolicy=="ScalarFeasibleR3"),
+        "CoupledR4 requires ScalarFeasibleR3 and VerifiedR3Action");
     Require(m_actionPolicy=="Legacy" || m_actionPolicy=="VerifiedR3Action","unknown wall action policy");
     Require((m_nonlinearPolicy=="ScalarFeasibleR3")== (m_actionPolicy=="VerifiedR3Action"),
         "VerifiedR3Action and ScalarFeasibleR3 must be selected together");
@@ -1246,7 +1250,9 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::RoughnessBudget(const Vec
 }
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::EnergyBudget(const Vector &state,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data) const
 {
-    const auto s=Lift(state,time,data);const auto raw=Residual(state,history,alpha,time,data,false,false);Vector result(9);
+    // R4 reports direct and weak work on the same retained epsilon-H state.
+    const auto s=CoupledR4()?ExternalLift(state,time,data):Lift(state,time,data);
+    const auto raw=Residual(state,history,alpha,time,data,false,false);Vector result(9);
     for(int a=0;a<m_dimension;++a)for(int i=0;i<size[a];++i)result[0]+=s[offset[a]+i]*raw[offset[a]+i];
     for(int i=0;i<size[K()];++i)result[0]+=m_constants[K()][i]*raw[offset[K()]+i];
     auto integrate=[&](const VolumePoint &q,bool inner,const EquilibriumAWFProfiles *profile,const RANSVector &force,
