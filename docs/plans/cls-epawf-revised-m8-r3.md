@@ -75,6 +75,10 @@ lib64 CMake package. Its receipt/logs remain in `epoch-001`; no C++ or numerical
 run completed there. The next helper supplies the documented Nektar++_DIR.
 Static review also aligned invariant, limiter and cap selection with the native
 pre-cast long-double branches before compiling the next source epoch.
+Epoch002 configured successfully, then exposed a C++ name ambiguity between
+the prototype dense matrix and Nektar's matrix type in the new resolution
+diagnostic. Qualifying that type changes no arithmetic or equation. The failed
+build receipt and complete compiler log are preserved.
 
 ## Execution gates
 

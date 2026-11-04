@@ -62,7 +62,7 @@ Vector Difference(const Vector &a,const Vector &b)
 class MassFactor
 {
 public:
-    explicit MassFactor(const DenseMatrix &a):n(a.size()),lu(n*n),pivots(n)
+    explicit MassFactor(const RANSWallAlgebra::DenseMatrix &a):n(a.size()),lu(n*n),pivots(n)
     {
         Require(n>0,"empty scalar free mass");
         for(int i=0;i<n;++i)for(int j=0;j<n;++j)lu[i+n*j]=a[i][j];
@@ -299,7 +299,7 @@ RANSWallScalarMassRate RANSWallResolutionMassRate(const RANSWallEvolutionPatch &
     for(int i:free)Require(result.boundaryRate[i]==0,"boundary-rate input has a nonzero free entry");
     for(int i:free){result.freeRows.push_back(i);}
     for(int i:fixed){result.fixedRows.push_back(i);}
-    DenseMatrix ff(free.size(),Vector(free.size()));
+    RANSWallAlgebra::DenseMatrix ff(free.size(),Vector(free.size()));
     for(int i=0;i<free.size();++i)for(int j=0;j<free.size();++j)ff[i][j]=mass[free[i]][free[j]];
     const MassFactor factor(ff);const auto &spatial=resolution.native.at("spatial_unmasked");
     result.spatialLoad.assign(spatial.begin()+offset,spatial.begin()+offset+n);
