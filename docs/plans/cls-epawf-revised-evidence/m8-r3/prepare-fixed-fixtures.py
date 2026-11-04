@@ -25,6 +25,8 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     for name in ('source', 'reference', 'session', 'history', 'output'):
         p.add_argument('--'+name, type=Path, required=True)
+    p.add_argument('--depleted-ratio', type=float, choices=(.01, .001), default=.01,
+        help='The second declared operator fixture targets the cap after b=.11869 in the first')
     a = p.parse_args()
     if platform.system() != 'Linux' or a.output.exists():
         raise ValueError('Linux and a fresh external output directory required')
@@ -59,6 +61,7 @@ def main():
     # a modification of a computed update. It deliberately lies outside the
     # restricted outer box to exercise cap/source/trace derivatives.
     K0, Q, H, nu = (raw['parameters'][i] for i in (5, 6, 1, 0))
+    depleted, rise = a.depleted_ratio, 1-a.depleted_ratio
     offsets, fields = raw['offsets'], raw['fields']
     state = h0.copy(); one = np.asarray([1., 1., 0., 0.])
     values = {}
@@ -71,15 +74,15 @@ def main():
             [('lower', 0), ('upper', 0), ('lower', 2), ('upper', 2)])
         f = np.asarray([fx(xl), fx(xu), 0., 0.])
         if ru <= .5+1e-14:
-            g = .01*one
+            g = depleted*one
         elif abs(rl-.5)<1e-14 and abs(ru-1)<1e-14:
-            g = np.asarray([.01, 1., -1.5*.99, -.25*.99])
+            g = np.asarray([depleted, 1., -1.5*rise, -.25*rise])
         elif abs(rl-1)<1e-14 and abs(ru-2)<1e-14:
-            g = np.asarray([1., .01, -1.5*.99, .25*.99])
+            g = np.asarray([1., depleted, -1.5*rise, .25*rise])
         elif abs(rl-2)<1e-14:
             if abs(ru-7/3)>1e-12:
                 raise ValueError('Unexpected first outer interval')
-            g = np.asarray([.01, 1., 0., 0.])
+            g = np.asarray([depleted, 1., 0., 0.])
         elif rl >= 7/3-1e-12:
             g = one.copy()
         else:
@@ -101,7 +104,7 @@ def main():
             raise ValueError('Frozen fixture requires p1 reduced pressure')
         for j, (index, sign) in enumerate(zip(e['ids'], e['sign'])):
             x = e['lower' if j % 2 == 0 else 'upper'][0]
-            kH = K0*(1-.99*fx(x))
+            kH = K0*(1-rise*fx(x))
             increment = (2/3)*(kH-K0)+.06*scale2/H*(x+1)
             value = sign*increment
             index = int(index)
@@ -119,7 +122,7 @@ def main():
     save('active-sampledK-source-trace', state,
          scope='Positive constructed operator fixture; outside the fixed physical applicability box',
          polynomial='k=K0*(1-f(x)*(1-g(r))); f piecewise linear, g declared piecewise cubic/linear',
-         prescribed_polynomial_minimum_ratio=.01, pressure_sensor_dose=.06,
+         prescribed_polynomial_minimum_ratio=depleted, pressure_sensor_dose=.06,
          trace_construction='Independent actual projected dependent epsilon; only matching coefficients set',
          native_scalar_domain_gate_required=True, active_cap_and_sensor_measured_not_assumed=True)
     (a.output/'receipt.json').write_text(json.dumps(ledger, indent=2)+'\n')
