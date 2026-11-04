@@ -68,6 +68,10 @@ def prepare(args):
         if name == "target":
             if getattr(args, "k_newton", False):
                 set_info(root, "RANSWallPicardKNewton", "On")
+            if getattr(args, "equilibrate_after_k", False):
+                set_info(root, "RANSWallPicardEquilibrateK", "On")
+            if getattr(args, "k_radius", None) is not None:
+                set_parameter(root, "RANSWallPicardKRadius", args.k_radius)
             if getattr(args, "guess_file", None):
                 set_info(root, "RANSWallPicardGuessFile", str(args.guess_file.resolve()))
             if getattr(args, "k_diagnostic", False):
@@ -131,6 +135,9 @@ def main():
     parser.add_argument("--verify", action="store_true", help="Run same-state and frozen-saddle comparisons")
     parser.add_argument("--ground-projection", action="store_true", help="Project the k trial against ground cuts")
     parser.add_argument("--k-newton", action="store_true", help="Try a true conditional k correction before the frozen update")
+    parser.add_argument("--equilibrate-after-k", action="store_true",
+                        help="Try fixed-k non-k equilibration when the full sweep would be rejected")
+    parser.add_argument("--k-radius", type=float, help="Limit the raw k Newton proposal relative to reference k")
     parser.add_argument("--guess-file", type=Path, help="Use a saved readback packet as the nonlinear guess only")
     parser.add_argument("--k-diagnostic", action="store_true", help="Write the restricted matrices and initial action/projection checks")
     parser.add_argument("--steps", type=int, default=1)
@@ -145,6 +152,7 @@ def main():
     args.output = args.output.resolve()
     require(args.steps >= 1 and args.sweeps >= 0 and args.timeout >= 1, "invalid run budget")
     require(not args.k_newton or args.ground_projection, "--k-newton requires --ground-projection")
+    require(not args.equilibrate_after_k or args.k_newton, "--equilibrate-after-k requires --k-newton")
     require(not args.guess_file or args.steps == 1, "a saved guess binds exactly one stage")
     require(not args.guess_file or args.perturbation == 0, "run saved-guess and perturbation diagnostics separately")
     if not args.prepare_only:

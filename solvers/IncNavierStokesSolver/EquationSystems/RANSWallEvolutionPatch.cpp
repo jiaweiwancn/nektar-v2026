@@ -253,6 +253,13 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         Require(kNewton=="On" || kNewton=="Off","RANSWallPicardKNewton must be On or Off");
         m_picardKNewton=kNewton=="On";
         Require(!m_picardKNewton || m_picardGroundProjection,"Picard k Newton requires the ground projector");
+        std::string equilibrate;
+        session->LoadSolverInfo("RANSWallPicardEquilibrateK",equilibrate,"Off");
+        Require(equilibrate=="Off" || (equilibrate=="On" && m_picardKNewton),
+                "Picard equilibration requires the conditional k correction");
+        m_picardEquilibrateK=equilibrate=="On";
+        session->LoadParameter("RANSWallPicardKRadius",m_picardKRadius,.15);
+        Require(m_picardKRadius>0. && m_picardKRadius<=1.,"invalid dimensionless Picard k radius");
         session->LoadSolverInfo("RANSWallPicardGuessFile",m_picardGuessFile,"");
         session->LoadSolverInfo("RANSWallPicardKDiagnostic",m_picardKDiagnostic,"");
         session->LoadParameter("RANSWallPicardNonKTolerance",m_picardNonKTolerance,0.);

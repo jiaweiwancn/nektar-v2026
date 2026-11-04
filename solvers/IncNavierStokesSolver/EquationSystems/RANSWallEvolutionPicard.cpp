@@ -820,9 +820,9 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
             auto rhs          = model.residual;
             for (auto &value : rhs)
                 value = -value;
-            const auto newton = jacobian.Apply(rhs);
-            const double radius =
-                .15 * m_parameters.model.Q() * m_robustUstar * m_robustUstar;
+            const auto newton   = jacobian.Apply(rhs);
+            const double radius = m_picardKRadius * m_parameters.model.Q() *
+                                  m_robustUstar * m_robustUstar;
             double fraction =
                 std::min(requested, radius / std::max(radius, Maximum(newton)));
             ++kSolves;
@@ -1006,11 +1006,9 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
         }
     }
     const Vector fixedK(s.begin() + offset[K()], s.begin() + offset[Epsilon()]);
-    while (Maximum(sweepNorms(norms)) > sweepTolerance &&
-           iterations < maximumIterations)
-    {
-        const auto flow =
-            AssemblePicardBlock(0, s, history, alpha, time, data, external);
+    auto flowDirection = [&](const Vector &base, bool verify) {
+        auto flow =
+            AssemblePicardBlock(0, base, history, alpha, time, data, external);
         const int nv = std::lower_bound(flow.rows.begin(), flow.rows.end(),
                                         DifferentialSize()) -
                        flow.rows.begin();
@@ -1066,7 +1064,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
               {"predictor_continuity_gauge_max",
                J::Number(Maximum(pressureRhs))},
               {"frozen_flow_defect", J::Number(Maximum(frozenDefect))}});
-        if (m_picardVerify && iterations == 0)
+        if (verify)
         {
             auto directRhs = flow.residual;
             for (double &entry : directRhs)
@@ -1079,7 +1077,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
             for (int i = 0; i < nv; ++i)
                 velocityCorrection = std::max(velocityCorrection,
                                               std::abs(step[i] - predictor[i]));
-            auto predicted = s, corrected = s;
+            auto predicted = base, corrected = base;
             Require(predictor.size() == nv,
                     "Picard velocity predictor shape mismatch");
             for (int i = 0; i < nv; ++i)
@@ -1097,7 +1095,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
                     assembledPressure[i] - nativePressure[flow.rows[i]];
             const auto predictedNorms = normsAt(predicted),
                        correctedNorms = normsAt(corrected);
-            auto directState          = s;
+            auto directState          = base;
             apply(directState, flow, direct, 1.);
             const auto correctedInterface =
                 Audit(corrected, history, alpha, time, data, m_robustUstar)
@@ -1134,6 +1132,67 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
                     "frozen saddle state");
         }
 
+        return std::make_pair(std::move(flow), std::move(step));
+    };
+
+    auto meritOf = [](const Vector &values) {
+        return std::inner_product(values.begin(), values.end(), values.begin(),
+                                  0.);
+    };
+    auto equilibrate = [&](Vector &state, Vector &values,
+                           ScalarDomainResult &domain, std::string &ground) {
+        auto h = [&](Vector n) {
+            n.at(K()) = 0.;
+            return n;
+        };
+        const auto before   = values;
+        const double target = std::max(1e-11, 1e-3 * Maximum(h(values)));
+        const Vector held(state.begin() + offset[K()],
+                          state.begin() + offset[Epsilon()]);
+        int updates = 0;
+        while (updates < 12 && Maximum(h(values)) > target)
+        {
+            const auto [flow, step] = flowDirection(state, false);
+            bool improved           = false;
+            for (double fraction : {1., .5, .25, .125})
+            {
+                auto candidate = state;
+                apply(candidate, flow, step, fraction);
+                ScalarDomainResult candidateDomain;
+                std::string candidateGround;
+                if (!admissible(candidate, candidateDomain, candidateGround) ||
+                    !scalarStep(Epsilon(), candidate, fraction, candidateDomain,
+                                candidateGround))
+                    continue;
+                auto next = trialNorms(candidate, fraction);
+                if (next.empty() || meritOf(h(next)) >= meritOf(h(values)))
+                    continue;
+                Require(std::equal(held.begin(), held.end(),
+                                   candidate.begin() + offset[K()]),
+                        "reduced Picard trial changed fixed k during "
+                        "equilibration");
+                state  = std::move(candidate);
+                values = std::move(next);
+                domain = std::move(candidateDomain);
+                ground = std::move(candidateGround);
+                ++updates;
+                improved = true;
+                break;
+            }
+            if (!improved)
+                break;
+        }
+        emit("reduced_k_trial", {{"before_equilibration", J::Numbers(before)},
+                                 {"after_equilibration", J::Numbers(values)},
+                                 {"non_k_target", J::Number(target)},
+                                 {"non_k_updates", J::Number(updates)}});
+    };
+
+    while (Maximum(sweepNorms(norms)) > sweepTolerance &&
+           iterations < maximumIterations)
+    {
+        const auto [flow, step] =
+            flowDirection(s, m_picardVerify && iterations == 0);
         const auto governingNorms = sweepNorms(norms);
         const double merit =
             std::inner_product(governingNorms.begin(), governingNorms.end(),
@@ -1171,7 +1230,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
                            trialDomain, trialGround);
             if (!epsRelax)
                 continue;
-            const auto next = trialNorms(trial, fraction);
+            auto next = trialNorms(trial, fraction);
             if (next.empty())
                 continue;
             const Vector relaxation{flowRelax, kRelax, epsRelax};
@@ -1181,6 +1240,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
                             J::Numbers(Vector{flowNorms[InnerPressure()],
                                               flowNorms[OuterPressure()],
                                               flowNorms[Gauge()]})}});
+            if (m_picardEquilibrateK && retry == 0 && meritOf(next) >= merit)
+                equilibrate(trial, next, trialDomain, trialGround);
             const auto governingNext = sweepNorms(next);
             if (Maximum(governingNext) > sweepTolerance &&
                 std::inner_product(governingNext.begin(), governingNext.end(),

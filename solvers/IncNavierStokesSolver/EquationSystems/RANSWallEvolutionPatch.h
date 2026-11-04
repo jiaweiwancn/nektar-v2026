@@ -384,6 +384,8 @@ private:
     bool m_picardVerify=false;
     bool m_picardGroundProjection=false;
     bool m_picardKNewton=false;
+    bool m_picardEquilibrateK=false;
+    double m_picardKRadius=.15;
     std::string m_picardGuessFile,m_picardKDiagnostic;
     std::string m_directionAccuracy="Legacy",m_r7Policy="Off";
     double m_r7PreviousDisplacement=0.,m_r7Radius=0.;
