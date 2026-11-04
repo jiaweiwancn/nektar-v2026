@@ -745,12 +745,10 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
 
     Vector direction=newton,z(Size()),multipliers;
     int releases=0,dependentExchanges=0;
-    for(int exchange=0;exchange<40;++exchange)
+    auto qr=[&]()
     {
         // Twice reorthogonalized QR of the active residual-space normals.
-        // A rank failure is reported rather than forming normal equations.
         WallMatrix Q,R(active.size(),Vector(active.size()));
-        Vector qCoordinates(active.size());
         for(std::size_t j=0;j<active.size();++j)
         {
             auto v=active[j].normal;
@@ -764,23 +762,32 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
             Require(R[j][j]>1e-10,"R4 active cuts are numerically rank deficient");
             for(double &entry:v)entry/=R[j][j];
             Q.push_back(std::move(v));
+        }
+        return std::pair{std::move(Q),std::move(R)};
+    };
+    auto triangular=[](const WallMatrix &R,Vector value)
+    {
+        for(int i=static_cast<int>(value.size())-1;i>=0;--i)
+        {
+            for(std::size_t j=i+1;j<value.size();++j)value[i]-=R[i][j]*value[j];
+            value[i]/=R[i][i];
+        }
+        return value;
+    };
+    std::string lastCut;
+    for(int exchange=0;exchange<40;++exchange)
+    {
+        auto [Q,R]=qr();
+        Vector qCoordinates(active.size());
+        for(std::size_t j=0;j<active.size();++j)
+        {
             double rhs=active[j].rhs;
             for(std::size_t i=0;i<j;++i)rhs-=R[i][j]*qCoordinates[i];
             qCoordinates[j]=rhs/R[j][j];
         }
-        multipliers=qCoordinates;
-        for(int i=static_cast<int>(active.size())-1;i>=0;--i)
-        {
-            for(std::size_t j=i+1;j<active.size();++j)multipliers[i]-=R[i][j]*multipliers[j];
-            multipliers[i]/=R[i][i];
-        }
-        const auto release=std::min_element(multipliers.begin(),multipliers.end());
-        if(release!=multipliers.end() && *release < -1e-10)
-        {
-            active.erase(active.begin()+std::distance(multipliers.begin(),release));
-            ++releases;
-            continue;
-        }
+        multipliers=triangular(R,qCoordinates);
+        Require(multipliers.empty() || *std::min_element(multipliers.begin(),multipliers.end())>=-1e-8,
+            "R4 active solution lost dual feasibility");
         z.assign(Size(),0.);
         for(std::size_t i=0;i<Q.size();++i)axpy(z,qCoordinates[i],Q[i]);
         direction=newton;
@@ -861,39 +868,49 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
         const double length=std::sqrt(dot(normal,normal));
         Require(length>1e-14,"R4 feasibility cut has no free differential response");
         for(double &value:normal)value/=length;
-        auto remainder=normal;
-        Vector coordinates(Q.size());
-        for(int pass=0;pass<2;++pass)for(std::size_t i=0;i<Q.size();++i)
+        const Cut incoming{std::move(normal),(rhs-dot(violated,newton))/length,length,kind,location};
+        lastCut=kind+" violation "+J::Number(violation)+" at "+J::Numbers(Vector(location.begin(),location.end()));
+        // Dual active-set projection. Keep the incoming constraint through
+        // every blocking release. Re-selecting a different cut mid-update
+        // can cycle when several evaluation rows share the same polynomial.
+        for(;;)
         {
-            const double coefficient=dot(Q[i],remainder);
-            coordinates[i]+=coefficient;
-            axpy(remainder,-coefficient,Q[i]);
-        }
-        if(std::sqrt(dot(remainder,remainder))<=1e-10)
-        {
-            // An incoming dependent cut cannot enter as another equality.
-            // For g_new=G*c the dual null direction (-c,1) preserves
-            // stationarity. Move until the first old multiplier is zero.
-            for(int i=static_cast<int>(Q.size())-1;i>=0;--i)
+            auto [basis,upper]=qr();
+            auto primal=incoming.normal;
+            Vector projected(basis.size());
+            for(int pass=0;pass<2;++pass)for(std::size_t i=0;i<basis.size();++i)
             {
-                for(std::size_t j=i+1;j<Q.size();++j)coordinates[i]-=R[i][j]*coordinates[j];
-                coordinates[i]/=R[i][i];
+                const double coefficient=dot(basis[i],primal);
+                projected[i]+=coefficient;
+                axpy(primal,-coefficient,basis[i]);
             }
-            double distance=std::numeric_limits<double>::infinity();
-            std::size_t leaving=Q.size();
-            for(std::size_t i=0;i<Q.size();++i)if(coordinates[i]>1e-9)
+            const auto dual=triangular(upper,std::move(projected));
+            const double square=dot(primal,primal);
+            const double distance=square>1e-20?
+                std::max(0.,incoming.rhs-dot(incoming.normal,z))/square:
+                std::numeric_limits<double>::infinity();
+            double blocker=std::numeric_limits<double>::infinity();
+            std::size_t leaving=basis.size();
+            for(std::size_t i=0;i<basis.size();++i)if(dual[i]>1e-12)
             {
-                const double candidate=std::max(0.,multipliers[i])/coordinates[i];
-                if(candidate<distance){distance=candidate;leaving=i;}
+                const double candidate=std::max(0.,multipliers[i])/dual[i];
+                if(candidate<blocker){blocker=candidate;leaving=i;}
             }
-            Require(leaving<Q.size(),"R4 dependent cut has no nonnegative dual exchange: "+kind);
+            if(std::isfinite(distance) && distance<=blocker)
+            {
+                active.push_back(incoming);
+                break;
+            }
+            Require(leaving<basis.size(),"R4 cuts have no feasible dual exchange: "+lastCut);
+            axpy(z,blocker,primal);
+            axpy(multipliers,-blocker,dual);
             active.erase(active.begin()+leaving);
+            multipliers.erase(multipliers.begin()+leaving);
             ++releases;
-            ++dependentExchanges;
+            if(square<=1e-20)++dependentExchanges;
         }
-        active.push_back({std::move(normal),(rhs-dot(violated,newton))/length,length,kind,location});
     }
-    throw std::runtime_error("R4 bounded active cut exchange exhausted");
+    throw std::runtime_error("R4 bounded active cut exchange exhausted: "+lastCut);
 }
 
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
