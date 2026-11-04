@@ -1,0 +1,790 @@
+{
+  "schema": 1,
+  "milestone": "M8-R7",
+  "M8_closed": false,
+  "reviewed_baseline": "d0ac41af5b249d61ccc5a97a1f0db016a9567f19",
+  "target": {
+    "alpha": 400,
+    "time": 0.0025,
+    "eta": 0,
+    "original_h0": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-002/cases-001/pilot/case.r3-progress.jsonl.solve1.history.bin",
+      "bytes": 17320,
+      "sha256": "b8ba7917424057a9f6f16a026d82d53ede43985871537facea170ef6e1841b71"
+    },
+    "root_gate": 2e-12,
+    "independent_action_gate": 1e-07,
+    "direction_gate": 5e-12,
+    "unknowns": 2165
+  },
+  "replay": {
+    "origin": {
+      "alpha": 400,
+      "time": 0.0025,
+      "converged": false,
+      "inner_stress_model": "SaturatedR2",
+      "iteration": 17,
+      "snapshot": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/pilot/case.r3-progress.jsonl.solve1.iterate17.snapshot.json",
+        "bytes": 6207,
+        "sha256": "b596e47e69c55047c62972f98883860189ad8ac15bfd2cfc6a0ff36ebf8854cf"
+      },
+      "residual": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/pilot/case.r3-progress.jsonl.solve1.iterate17.residual.bin",
+        "bytes": 17320,
+        "sha256": "8e26b205c58ebb16f3dd2ed104aae68366c43703e47f040c6003e53df416efb3"
+      },
+      "constraints": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/pilot/case.r3-progress.jsonl.solve1.iterate17.constraints.bin",
+        "bytes": 5728,
+        "sha256": "a1583b28653e4de5b3c307ecae35b4b4f152178c47dc238ae14fd94e1e730350"
+      },
+      "prior_nonterminal_matrix": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/pilot/case.r3-progress.jsonl.solve1.J16.bin",
+        "bytes": 37497800,
+        "sha256": "b8e4cd8fc2c6930a84daa55f3e8bdeff52adf87cc646ff2206b664610e019d8f"
+      }
+    },
+    "state": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/pilot/case.r3-progress.jsonl.solve1.iterate17.state.bin",
+      "bytes": 17320,
+      "sha256": "eceb0841f73e2e4a912fa03f025387a4acc73c6e772b8fdccb9e32df8076a84b"
+    },
+    "base_box": {"maximum":0.023740587186017216,"family_maxima":[0.023740587186017216,0,0.0025910823899799595,0],"sum_positive":7.953584804911925},
+    "byte_identical": ["state","history","residual","constraints"],
+    "initial_residual": [0.14793539750685336,0.23717504981047374,3.2307133438934885,4.736917975135038e-05,1.0365127803733269e-15,8.619141342730286e-16,3.405072447962287e-17,0.0014245296478180617]
+  },
+  "matched_control": {
+    "receipt": {"path":"/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-001/local-run/receipt.json","bytes":5360,"sha256":"908969f5882481ee2fcae39a2cbf3b5876b0a445d117bb71b58111b303c41456"},
+    "report": {"path":"/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-001/local/comparison.json","bytes":439036,"sha256":"1e1b14f0a51e3d28c6d3b841539e46c38b4c4916a0a439812d207b2f82b1be4f"},
+    "J17": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-001/local/case.r3-progress.jsonl.solve1.J0.bin",
+      "bytes": 37497800,
+      "sha256": "05427bd1b06807606e3f24cd31e0debba27bff358fe17c0ed41656b2e61255cf"
+    },
+    "directions": [
+      {
+        "name": "r7_r6_radius2",
+        "step": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-001/local/case.r3-progress.jsonl.solve1.iterate0.r7_r6_radius2.step.bin",
+          "bytes": 17320,
+          "sha256": "834a07f50170d3a9ca235347b575f9767f3721ee3f81da18d700bb84a7091605"
+        },
+        "action": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-001/local/case.r3-progress.jsonl.solve1.iterate0.r7_r6_radius2.action.bin",
+          "bytes": 17320,
+          "sha256": "d1c0109d39d566dcbe8378ec1c2c54d867afe336192beae22e4bba40fde9a57d"
+        },
+        "dimensionless_step": 1.0755219017416071,
+        "guard_work_over_objective": 0.14126625995745104,
+        "algebraic_radius_lower_bound": 0.00013569999012215452,
+        "model_block_norms": [0.12795693543863412,0.2375050139683565,3.127014541925192,5.826966366621512e-05,5.174026412852418e-20,9.578249129302097e-22,1.2994167317898438e-20,9.329091818366174e-19],
+        "radius": 2,
+        "box_model": {"maximum":8.352554758950248e-13,"family_maxima":[8.352554758950248e-13,0,0,0],"sum_positive":1.5082780510655702e-11},
+        "seconds": {"direction":13.540033704,"trials":5.791543895},
+        "active_row_counts": {
+          "outer_physical_matching_transfer_0": 3,
+          "outer_reconstruction_native_0": 10,
+          "outer_reconstruction_dense_0": 9,
+          "inward_ground_row": 1,
+          "outer_projected_dependent_trace_2": 1,
+          "outer_physical_matching_transfer_2": 1,
+          "continuous_wall_reserve": 1
+        },
+        "governing_ground_and_radius": [
+          {
+            "kind": "inward_ground_row",
+            "point": [1.5623614544160511,0,0],
+            "geometry": 4,
+            "block": 2,
+            "axis": -1,
+            "side": 0,
+            "coefficient": -1,
+            "native_gap": 1.3283039367942299e-17,
+            "coefficient_gap": 1.3282909496563524e-17,
+            "transformed_gap": 6.938893903907228e-18,
+            "rhs": 0,
+            "multiplier": 218.1100151933137
+          },
+          {
+            "kind": "continuous_wall_reserve",
+            "point": [-2.598784778243558,0,0],
+            "geometry": 1,
+            "block": 2,
+            "axis": -1,
+            "side": 0,
+            "coefficient": -1,
+            "native_gap": -1.1015494072452725e-15,
+            "coefficient_gap": -1.115427195053087e-15,
+            "transformed_gap": -1.1102230246251565e-15,
+            "rhs": -0.014714638934756687,
+            "multiplier": 0.00329621057227016
+          }
+        ],
+        "cut_scan": {"status":"passed_original_cut_scan","exchange":39,"worst_native_violation":2.282236899464607e-12,"worst_extended_violation":2.2822416326847162e-12},
+        "trials": [
+          {
+            "name": "r7_r6_radius2",
+            "fraction": 1,
+            "classification": "residual_non_descent",
+            "scaled_block_norms": [0.1747456501775919,0.2375074075985787,3.543714565168086,6.0438718810305054e-05,8.185473666368932e-16,6.90434440946125e-16,4.336808689942017e-17,0.004060390022243612],
+            "model_block_norms": [0.12795693543863412,0.2375050139683565,3.127014541925192,5.826966366621512e-05,5.174026412852418e-20,9.578249129302097e-22,1.2994167317898438e-20,9.329091818366174e-19],
+            "model_agreement": -3.0183687307235214,
+            "actual_matching_trace_norm": 0.004060390022243612,
+            "required_relative_decrease": 0.0001,
+            "box": {"maximum":2.998469528225911e-12,"family_maxima":[2.998469528225911e-12,0,0,0]},
+            "model_box": {"maximum":8.352554758950248e-13,"family_maxima":[8.352554758950248e-13,0,0,0]},
+            "scalar_admissible": true,
+            "ground": 0.0003872495143651021,
+            "covariance": [8.975616684741796e-05,0.17687168715469376],
+            "lambda_min": 1
+          },
+          {
+            "name": "r7_r6_radius2",
+            "fraction": 0.5,
+            "classification": "residual_non_descent",
+            "scaled_block_norms": [0.14467514415007496,0.23731854293337473,3.2674408416353145,5.28823996191978e-05,8.126637852000015e-16,1.1535724354712745e-15,2.3378109344218686e-17,0.002303088552861963],
+            "model_block_norms": [0.13290667066259299,0.2373179275513319,3.1531983391536946,5.2186557500175735e-05,5.182568081952821e-16,4.309571337591834e-16,1.7031859323470383e-17,0.0007122648239090308],
+            "model_agreement": -0.4738114622467556,
+            "actual_matching_trace_norm": 0.002303088552861963,
+            "required_relative_decrease": 5e-05,
+            "box": {"maximum":0.01187029359339762,"family_maxima":[0.01187029359339762,0,0.0012955411949899798,0]},
+            "model_box": {"maximum":0.011870293592861512,"family_maxima":[0.011870293592861512,0,0.001295541194988408,0]},
+            "scalar_admissible": true,
+            "ground": 0.0016286050996552105,
+            "covariance": [0.0004572819496650054,0.17687299065273904],
+            "lambda_min": 1
+          },
+          {
+            "name": "r7_r6_radius2",
+            "fraction": 0.25,
+            "classification": "accepted_comparison",
+            "scaled_block_norms": [0.14252759687692687,0.23724113753086273,3.222785467020937,4.9804565367559714e-05,1.2071705681771325e-15,9.239735460875016e-16,2.2531076396964386e-17,0.0016618183265190857],
+            "model_block_norms": [0.13931383941454592,0.23724095702503817,3.1857154765859206,4.959433507151836e-05,7.773847940691315e-16,6.46435634016019e-16,2.5541291901546624e-17,0.0010683972358635464],
+            "model_agreement": 0.17618339150082632,
+            "actual_matching_trace_norm": 0.0016618183265190857,
+            "state": {
+              "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-001/local/case.r3-progress.jsonl.solve1.iterate0.r7_r6_radius2.trial2.state.bin",
+              "bytes": 17320,
+              "sha256": "954f1d3316e9abadbcaaee1485363aa463dbd67eec7ed5b8a31919af352761cd"
+            },
+            "residual": {
+              "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-001/local/case.r3-progress.jsonl.solve1.iterate0.r7_r6_radius2.trial2.residual.bin",
+              "bytes": 17320,
+              "sha256": "6281a364314f8cbcfd5ec679fcb7ddfd86717fe4eb6d8636e17f6421f73b97e2"
+            },
+            "required_relative_decrease": 2.5e-05,
+            "box": {"maximum":0.01780544038976293,"family_maxima":[0.01780544038976293,0,0.0019433117924905208,0]},
+            "model_box": {"maximum":0.017805440389439365,"family_maxima":[0.017805440389439365,0,0.0019433117924841838,0]},
+            "scalar_admissible": true,
+            "ground": 0.0016286051117296604,
+            "covariance": [0.00045730223161006276,0.1768736424014089],
+            "lambda_min": 1
+          }
+        ]
+      },
+      {
+        "name": "r7_contracted",
+        "step": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-001/local/case.r3-progress.jsonl.solve1.iterate0.r7_contracted.step.bin",
+          "bytes": 17320,
+          "sha256": "abe123d57ed9cd0469be0b9211d7c534355ce5298bc15c77cae772c83e9787df"
+        },
+        "action": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-001/local/case.r3-progress.jsonl.solve1.iterate0.r7_contracted.action.bin",
+          "bytes": 17320,
+          "sha256": "78c66339828e31f61d35eeacde316103d4e22649071ea51ac289478ee867f512"
+        },
+        "dimensionless_step": 0.4999999999999679,
+        "guard_work_over_objective": 0.1412637847178215,
+        "algebraic_radius_lower_bound": 0.00013569999012215452,
+        "model_block_norms": [0.12819230060817785,0.23755049988505295,3.1270105880925314,6.087537886441988e-05,4.6667839053913914e-20,1.0108159255594307e-21,3.1734372225877757e-21,1.865818363673235e-19],
+        "radius": 0.4999999999999814,
+        "box_model": {"maximum":8.408117951885785e-13,"family_maxima":[8.408117951885785e-13,0,4.7271214720367993e-17,0],"sum_positive":1.4352700885428282e-11},
+        "seconds": {"direction":13.182329523999998,"trials":5.89971242},
+        "active_row_counts": {
+          "outer_reconstruction_native_0": 14,
+          "outer_reconstruction_dense_0": 9,
+          "inward_ground_row": 1,
+          "outer_projected_dependent_trace_2": 1,
+          "dimensionless_box": 1,
+          "outer_physical_matching_transfer_2": 1,
+          "outer_physical_matching_transfer_0": 1
+        },
+        "governing_ground_and_radius": [
+          {
+            "kind": "inward_ground_row",
+            "point": [1.5623614544160511,0,0],
+            "geometry": 4,
+            "block": 2,
+            "axis": -1,
+            "side": 0,
+            "coefficient": -1,
+            "native_gap": -1.6046160831257262e-18,
+            "coefficient_gap": -1.604778778418708e-18,
+            "transformed_gap": -6.938893903907228e-18,
+            "rhs": 0,
+            "multiplier": 218.10745928290837
+          },
+          {
+            "kind": "dimensionless_box",
+            "point": [0,0,0],
+            "geometry": -1,
+            "block": 2,
+            "axis": -1,
+            "side": 0,
+            "coefficient": 1536,
+            "native_gap": 1.3489209749195652e-14,
+            "coefficient_gap": 1.3489209749195652e-14,
+            "transformed_gap": 1.4210854715202004e-14,
+            "rhs": -0.4999999999999814,
+            "multiplier": 6.436739982672486e-05
+          }
+        ],
+        "cut_scan": {"status":"passed_original_cut_scan","exchange":35,"worst_native_violation":8.408117951885785e-13,"worst_extended_violation":8.408122826560397e-13},
+        "trials": [
+          {
+            "name": "r7_contracted",
+            "fraction": 1,
+            "classification": "residual_non_descent",
+            "scaled_block_norms": [0.12949042167079483,0.23755061916489312,3.710534319485099,6.172041794850313e-05,8.636576319414418e-16,7.92646028884337e-16,4.658681209898651e-17,0.0038821791740542197],
+            "model_block_norms": [0.12819230060817785,0.23755049988505295,3.1270105880925314,6.087537886441988e-05,4.6667839053913914e-20,1.0108159255594307e-21,3.1734372225877757e-21,1.865818363673235e-19],
+            "model_agreement": -4.626887413797945,
+            "actual_matching_trace_norm": 0.0038821791740542197,
+            "required_relative_decrease": 0.0001,
+            "box": {"maximum":5.4409601824012555e-12,"family_maxima":[5.4409601824012555e-12,0,5.551115123125783e-15,0]},
+            "model_box": {"maximum":8.408117951885785e-13,"family_maxima":[8.408117951885785e-13,0,4.7271214720367993e-17,0]},
+            "scalar_admissible": true,
+            "ground": 0.0016286050196984393,
+            "covariance": [0.0004572232063315497,0.17686051878373615],
+            "lambda_min": 1
+          },
+          {
+            "name": "r7_contracted",
+            "fraction": 0.5,
+            "classification": "residual_non_descent",
+            "scaled_block_norms": [0.13432731899590655,0.23733590553410067,3.280202093333276,5.3781200700120435e-05,1.0045021780000223e-15,1.091354158467581e-15,4.167402100491157e-17,0.002532344088816744],
+            "model_block_norms": [0.13299025801685072,0.23733581329585954,3.1531989965493414,5.3324922489200946e-05,5.18256950485319e-16,4.309571646540945e-16,1.7026948958422728e-17,0.0007122648239090308],
+            "model_agreement": -0.6384463152359121,
+            "actual_matching_trace_norm": 0.002532344088816744,
+            "required_relative_decrease": 5e-05,
+            "box": {"maximum":0.011870293592509441,"family_maxima":[0.011870293592509441,0,0.0012955411949899798,0]},
+            "model_box": {"maximum":0.011870293593021209,"family_maxima":[0.011870293593021209,0,0.0012955411949884044,0]},
+            "scalar_admissible": true,
+            "ground": 0.0016286050917403122,
+            "covariance": [0.0004572728599557548,0.17687294326418274],
+            "lambda_min": 1
+          },
+          {
+            "name": "r7_contracted",
+            "fraction": 0.25,
+            "classification": "accepted_comparison",
+            "scaled_block_norms": [0.13978985726251872,0.2372487145507735,3.224571816716526,5.0261790642734035e-05,9.611207397975432e-16,7.829354510706215e-16,6.268043809681821e-17,0.0017757508284543767],
+            "model_block_norms": [0.1393466145694101,0.23724868345235503,3.1857164497219106,5.010861948050493e-05,7.773848652543266e-16,6.464356494634665e-16,2.5538836719022796e-17,0.0010683972358635464],
+            "model_agreement": 0.13648780188126286,
+            "actual_matching_trace_norm": 0.0017757508284543767,
+            "state": {
+              "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-001/local/case.r3-progress.jsonl.solve1.iterate0.r7_contracted.trial2.state.bin",
+              "bytes": 17320,
+              "sha256": "ff93f3eeedb425d051dc0ce5e48262c14e3870318f35e9ab909c992b47c9c6a8"
+            },
+            "residual": {
+              "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-001/local/case.r3-progress.jsonl.solve1.iterate0.r7_contracted.trial2.residual.bin",
+              "bytes": 17320,
+              "sha256": "d589d5a11a0274f9c128df69852955887a651cab50705c87827ec371d707a2b2"
+            },
+            "required_relative_decrease": 2.5e-05,
+            "box": {"maximum":0.017805440390207018,"family_maxima":[0.017805440390207018,0,0.0019433117924794185,0]},
+            "model_box": {"maximum":0.017805440389519214,"family_maxima":[0.017805440389519214,0,0.001943311792484182,0]},
+            "scalar_admissible": true,
+            "ground": 0.0016286051097509494,
+            "covariance": [0.00045729768675649874,0.1768736187069681],
+            "lambda_min": 1
+          }
+        ]
+      },
+      {
+        "name": "r7_positive_ground_control",
+        "step": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-001/local/case.r3-progress.jsonl.solve1.iterate0.r7_positive_ground_control.step.bin",
+          "bytes": 17320,
+          "sha256": "2740f3be23df5abe49b0776af2a68ebdd1b69dbab5bfed05b615ba61349c2694"
+        },
+        "action": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-001/local/case.r3-progress.jsonl.solve1.iterate0.r7_positive_ground_control.action.bin",
+          "bytes": 17320,
+          "sha256": "04d56e11100d5f41fe8b34908b091bd2694b2fc063631993819928b7ad3b3138"
+        },
+        "dimensionless_step": 0.49999999999997563,
+        "guard_work_over_objective": 0,
+        "algebraic_radius_lower_bound": 0.00013569999012215452,
+        "model_block_norms": [0.11996640116312782,0.2219727320165084,2.9176118288867627,5.66390547217154e-05,5.492429628421644e-20,1.0099557492930656e-21,1.9608441628572395e-20,5.597455091019705e-19],
+        "radius": 0.4999999999999814,
+        "box_model": {"maximum":8.406114346271032e-13,"family_maxima":[8.406114346271032e-13,0,0,0],"sum_positive":1.4263010043868984e-11},
+        "seconds": {"direction":17.754631815000003,"trials":3.8757292989999996},
+        "active_row_counts": {
+          "outer_reconstruction_native_0": 12,
+          "outer_reconstruction_dense_0": 9,
+          "outer_projected_dependent_trace_2": 1,
+          "outer_physical_matching_transfer_0": 1,
+          "dimensionless_box": 1,
+          "outer_physical_matching_transfer_2": 1,
+          "continuous_wall_reserve": 1
+        },
+        "governing_ground_and_radius": [
+          {
+            "kind": "dimensionless_box",
+            "point": [0,0,0],
+            "geometry": -1,
+            "block": 2,
+            "axis": -1,
+            "side": 0,
+            "coefficient": 1536,
+            "native_gap": 5.773159728050814e-15,
+            "coefficient_gap": 5.773159728050814e-15,
+            "transformed_gap": 7.105427357601002e-15,
+            "rhs": -0.4999999999999814,
+            "multiplier": 4.90147053725269e-05
+          },
+          {
+            "kind": "continuous_wall_reserve",
+            "point": [1.5636532714019682,0,0],
+            "geometry": 4,
+            "block": 2,
+            "axis": -1,
+            "side": 0,
+            "coefficient": -1,
+            "native_gap": 5.637851296924623e-18,
+            "coefficient_gap": 5.637851296924623e-18,
+            "transformed_gap": 1.3877787807814457e-17,
+            "rhs": -0.00303531953959008,
+            "multiplier": 202.6027672893286
+          }
+        ],
+        "cut_scan": {"status":"passed_original_cut_scan","exchange":59,"worst_native_violation":8.406114346271032e-13,"worst_extended_violation":8.406111428242529e-13},
+        "trials": [
+          {
+            "name": "r7_positive_ground_control",
+            "fraction": 1,
+            "classification": "residual_non_descent",
+            "scaled_block_norms": [0.1225973921466787,0.22198608266395656,3.24588937048052,5.71603594382764e-05,9.259192937092307e-16,6.867148919309213e-16,6.589916329638455e-17,0.0029045036632976222],
+            "model_block_norms": [0.11996640116312782,0.2219727320165084,2.9176118288867627,5.66390547217154e-05,5.492429628421644e-20,1.0099557492930656e-21,1.9608441628572395e-20,5.597455091019705e-19],
+            "model_agreement": -0.048469987718537694,
+            "actual_matching_trace_norm": 0.0029045036632976222,
+            "required_relative_decrease": 0.0001,
+            "box": {"maximum":3.4425587380759737e-12,"family_maxima":[3.4425587380759737e-12,0,0,0]},
+            "model_box": {"maximum":8.406114346271032e-13,"family_maxima":[8.406114346271032e-13,0,0,0]},
+            "scalar_admissible": true,
+            "ground": 8.154923836454539e-05,
+            "covariance": [0.00013696858315980824,0.17687577447986708],
+            "lambda_min": 1
+          },
+          {
+            "name": "r7_positive_ground_control",
+            "fraction": 0.5,
+            "classification": "accepted_comparison",
+            "scaled_block_norms": [0.13100532729342226,0.2295532311872856,3.128963691791833,5.1768867231354745e-05,6.403618426221063e-16,1.0781276517263415e-15,1.6093625997831703e-17,0.001961718238608002],
+            "model_block_norms": [0.1290763766604229,0.22954982525062478,3.049370567251184,5.145282881465577e-05,5.182558682135732e-16,4.3095691834055074e-16,1.703516646062572e-17,0.0007122648239090312],
+            "model_agreement": 0.5610901850386633,
+            "actual_matching_trace_norm": 0.001961718238608002,
+            "state": {
+              "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-001/local/case.r3-progress.jsonl.solve1.iterate0.r7_positive_ground_control.trial1.state.bin",
+              "bytes": 17320,
+              "sha256": "8d8f46e67a53626bd5d5ddf499e316dacc29ca05de71360ce8d6195bee61000e"
+            },
+            "residual": {
+              "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-001/local/case.r3-progress.jsonl.solve1.iterate0.r7_positive_ground_control.trial1.residual.bin",
+              "bytes": 17320,
+              "sha256": "05737020720f2c4b8d41937a807df5aaefe64a0f94c2ee20dcacad5fbac9d148"
+            },
+            "required_relative_decrease": 5e-05,
+            "box": {"maximum":0.011870293595507043,"family_maxima":[0.011870293595507043,0,0.0012955411949899798,0]},
+            "model_box": {"maximum":0.01187029359302001,"family_maxima":[0.01187029359302001,0,0.001295541194988393,0]},
+            "scalar_admissible": true,
+            "ground": 0.000855644783957144,
+            "covariance": [0.00029705880003937687,0.17687503435396928],
+            "lambda_min": 1
+          }
+        ]
+      }
+    ],
+    "failures": [],
+    "initial_radius": {"baseline_norm":1.0755219017416071,"last_accepted_displacement":0.2499999999999907,"radius":0.4999999999999814},
+    "interior_target": null,
+    "timing": {
+      "complete_action_assembly": {"calls":1,"seconds":9.19723887},
+      "factorization": {"calls":1,"seconds":0.19275289},
+      "r5_direction": {"calls":3,"seconds":44.476995043},
+      "line_search": {"calls":3,"seconds":15.566985614}
+    }
+  },
+  "interior_probe": {
+    "receipt": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-002/cases-001/interior-run/receipt.json",
+      "bytes": 5517,
+      "sha256": "57374e9ba65d9ee4710f98670f426c57e0269d2e0ec4b6628abb42dce24d4b2a"
+    },
+    "report": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-002/cases-001/interior/comparison.json",
+      "bytes": 188294,
+      "sha256": "54e3d9594362967a7ac74b5b037fb3acfc49236cfaecbe15d6912b3571eafb34"
+    },
+    "J17": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-002/cases-001/interior/case.r3-progress.jsonl.solve1.J0.bin",
+      "bytes": 37497800,
+      "sha256": "05427bd1b06807606e3f24cd31e0debba27bff358fe17c0ed41656b2e61255cf"
+    },
+    "directions": [
+      {
+        "name": "r7_interior_probe",
+        "step": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-002/cases-001/interior/case.r3-progress.jsonl.solve1.iterate0.r7_interior_probe.step.bin",
+          "bytes": 17320,
+          "sha256": "7446493f6e037b99e17f13e8eb7ba0d2b5d397a49e1b4e92c75f37f4d8004831"
+        },
+        "action": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-002/cases-001/interior/case.r3-progress.jsonl.solve1.iterate0.r7_interior_probe.action.bin",
+          "bytes": 17320,
+          "sha256": "0e058bc8d710040367252a168d7fd84468bb19a5c365a7462c6ca68cbf408295"
+        },
+        "dimensionless_step": 0.4999999999999813,
+        "guard_work_over_objective": 0,
+        "algebraic_radius_lower_bound": 0.00013569999012215452,
+        "model_block_norms": [0.12009987865136111,0.22203132810467413,2.9180248493906498,5.699176117827281e-05,4.2446256406514534e-20,5.522385876678005e-22,3.2869574622927e-20,1.865818363673235e-19],
+        "radius": 0.4999999999999814,
+        "box_model": {"maximum":0,"family_maxima":[0,0,0,0],"sum_positive":0},
+        "seconds": {"direction":16.104751499,"trials":3.958651373},
+        "active_row_counts": {
+          "outer_reconstruction_native_0": 13,
+          "outer_reconstruction_dense_0": 10,
+          "outer_projected_dependent_trace_2": 1,
+          "outer_physical_matching_transfer_0": 1,
+          "dimensionless_box": 1,
+          "outer_physical_matching_transfer_2": 1,
+          "continuous_wall_reserve": 1
+        },
+        "governing_ground_and_radius": [
+          {
+            "kind": "dimensionless_box",
+            "point": [0,0,0],
+            "geometry": -1,
+            "block": 2,
+            "axis": -1,
+            "side": 0,
+            "coefficient": 1536,
+            "native_gap": 1.1102230246251565e-16,
+            "coefficient_gap": 1.1102230246251565e-16,
+            "transformed_gap": 3.552713678800501e-15,
+            "rhs": -0.4999999999999814,
+            "multiplier": 4.8894088475782354e-05
+          },
+          {
+            "kind": "continuous_wall_reserve",
+            "point": [1.5636558818314965,0,0],
+            "geometry": 4,
+            "block": 2,
+            "axis": -1,
+            "side": 0,
+            "coefficient": -1,
+            "native_gap": 2.3852447794681098e-17,
+            "coefficient_gap": 2.3852447794681098e-17,
+            "transformed_gap": 2.0816681711721685e-17,
+            "rhs": -0.0030353384223703044,
+            "multiplier": 202.65369531240128
+          }
+        ],
+        "cut_scan": {"status":"passed_original_cut_scan","exchange":59,"worst_native_violation":8.403416851265888e-13,"worst_extended_violation":8.403390389956616e-13},
+        "trials": [
+          {
+            "name": "r7_interior_probe",
+            "fraction": 1,
+            "classification": "residual_non_descent",
+            "scaled_block_norms": [0.12272517113803842,0.22204451786025833,3.245821147026607,5.7442302574104786e-05,6.118793902546087e-16,8.253459821737984e-16,7.962109704190422e-18,0.0029135044330890034],
+            "model_block_norms": [0.12009987865136111,0.22203132810467413,2.9180248493906498,5.699176117827281e-05,4.2446256406514534e-20,5.522385876678005e-22,3.2869574622927e-20,1.865818363673235e-19],
+            "model_agreement": -0.04831582676919218,
+            "actual_matching_trace_norm": 0.0029135044330890034,
+            "required_relative_decrease": 0.0001,
+            "box": {"maximum":0,"family_maxima":[0,0,0,0]},
+            "model_box": {"maximum":0,"family_maxima":[0,0,0,0]},
+            "scalar_admissible": true,
+            "ground": 8.154972040220603e-05,
+            "covariance": [0.00013694006360465526,0.17687213879194982],
+            "lambda_min": 1
+          },
+          {
+            "name": "r7_interior_probe",
+            "fraction": 0.5,
+            "classification": "accepted_comparison",
+            "scaled_block_norms": [0.13106519961097657,0.22958244188937157,3.1291227589922452,5.19450032854588e-05,1.2753061196671057e-15,1.173745891496478e-15,2.7952087259391905e-17,0.00196621822563068],
+            "model_block_norms": [0.12913833605200925,0.22957907624013588,3.0495795164197492,5.164215706767748e-05,5.182567369617852e-16,4.3095713721226464e-16,1.7041797027122897e-17,0.000712264823909031],
+            "model_agreement": 0.5608592625580765,
+            "actual_matching_trace_norm": 0.00196621822563068,
+            "state": {
+              "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-002/cases-001/interior/case.r3-progress.jsonl.solve1.iterate0.r7_interior_probe.trial1.state.bin",
+              "bytes": 17320,
+              "sha256": "fc7c27a1eded92b2aa0b675c6e836948f32b9e7e853d7cef5d6a91896a84a1ed"
+            },
+            "residual": {
+              "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-002/cases-001/interior/case.r3-progress.jsonl.solve1.iterate0.r7_interior_probe.trial1.residual.bin",
+              "bytes": 17320,
+              "sha256": "d678408f54bf75ffad32f8cd9fac6578c9543618b37c6d380e4afcc880a434a7"
+            },
+            "required_relative_decrease": 5e-05,
+            "box": {"maximum":0,"family_maxima":[0,0,0,0]},
+            "model_box": {"maximum":0,"family_maxima":[0,0,0,0]},
+            "scalar_admissible": true,
+            "ground": 0.000855647326514685,
+            "covariance": [0.00029704480184674395,0.17687321655325922],
+            "lambda_min": 1
+          }
+        ]
+      }
+    ],
+    "failures": [],
+    "initial_radius": null,
+    "interior_target": {"margin":[0.02967573398252152,0,0.0032388529874749494,0]},
+    "timing": {"factorization":{"calls":1,"seconds":0.196187879},"r5_direction":{"calls":1,"seconds":16.104751499},"line_search":{"calls":1,"seconds":3.958651373}}
+  },
+  "policy": {
+    "selection": {"path":"/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-002/cases-001/gate.json","bytes":1499,"sha256":"866dd77554ced666ea6a11e41eb5f7f2498537149041cbbdba289c24b5a87a80"},
+    "budget": {"path":"/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-002/cases-001/budget.txt","bytes":336,"sha256":"df24cbc00fa0dcc8cf93b1709254d92dc84b4a87b0589bcd57a4b7f04b23bfe0"},
+    "action_error": 4.0244769375982144e-15,
+    "outer_action_error": 1.6398557858843255e-15
+  },
+  "pilot": {
+    "receipt": {"path":"/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-002/cases-001/pilot-run/receipt.json","bytes":5893,"sha256":"eede1cc33c6789c264dfe61b6ae7b5fa8f5782fee896ca1dedc57e9699bb8de6"},
+    "source": "a5e3aa2b4a060fda02be113e144f3bc86e644338",
+    "runtime": {"path":"/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-002/runtime-fingerprint.json","bytes":623563,"sha256":"2df36fd2b624a393ba5f0f3fa8364e23c6dc15524e024f4ea04daf4df5dba441"},
+    "executable": {"path":"/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-002/build/IncNavierStokesSolver","bytes":5912184,"sha256":"110dd353dfdaae988af32291c7c932091705b58122854bc5deaa4583a83ff168"},
+    "XML": {"path":"/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-002/cases-001/pilot/case.xml","bytes":14667,"sha256":"64ee96810179fd313272274942ad73c982d5427ae77896a1e039d55d6da95d53"},
+    "progress": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-002/cases-001/pilot/case.r3-progress.jsonl",
+      "complete_prefix_bytes": 3200438,
+      "complete_prefix_sha256": "95b9923c3282ea3e9b014832aba4f4a980186cc2ad3e342ad7616428e26c9e69",
+      "unpublished_tail": null
+    },
+    "duration": 900.1793052369903,
+    "exit_code": 124,
+    "stop": "native_wall_cap",
+    "profiling": {
+      "complete_action_assembly": {"calls":25,"seconds":240.461466027},
+      "factorization": {"calls":25,"seconds":4.522309798},
+      "r5_direction": {"calls":25,"seconds":421.04743421899997},
+      "line_search": {"calls":25,"seconds":120.352554836}
+    },
+    "accepted_updates": 25,
+    "trials": 110,
+    "trial_classifications": {"residual_non_descent":84,"accepted_comparison":25,"outer_non_descent_or_family_worsening":1},
+    "policy_verification": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-002/cases-001/pilot-policy-verification.json",
+      "bytes": 715,
+      "sha256": "242a406a45966fb923f702580ba6631285d06b3be1a908d56208af27c0f9eaf7"
+    },
+    "trajectory": [
+      {"i":0,"E":3.2307133438934885,"V":0.023740587186017216,"radius":null,"fraction":null,"ground":0.0016286051157544954,"rho":null},
+      {"i":1,"E":3.1291227589922452,"V":0,"radius":0.4999999999999814,"fraction":0.5,"ground":0.000855647326514685,"rho":0.5608592625580765},
+      {"i":2,"E":3.108893450022421,"V":0,"radius":0.4999999999999814,"fraction":0.125,"ground":0.0007541588147121852,"rho":0.5269441112021268},
+      {"i":3,"E":3.094758863759497,"V":0,"radius":0.2499999999999907,"fraction":0.125,"ground":0.0006646922591787423,"rho":0.3999196641349176},
+      {"i":4,"E":3.0736756687953606,"V":0,"radius":0.125,"fraction":0.25,"ground":0.0005069483526274087,"rho":0.328334430598595},
+      {"i":5,"E":3.0665575538890035,"V":0,"radius":0.125,"fraction":0.125,"ground":0.0004468216512324427,"rho":0.22799723415599457},
+      {"i":6,"E":3.047943384113704,"V":0,"radius":0.125,"fraction":0.25,"ground":0.0003407973377704834,"rho":0.32004487651346236},
+      {"i":7,"E":3.0426417687250646,"V":0,"radius":0.125,"fraction":0.125,"ground":0.0003003419719344166,"rho":0.18965132967889733},
+      {"i":8,"E":2.9736441217867426,"V":0,"radius":0.125,"fraction":0.5,"ground":0.00015770410163049565,"rho":0.7471941135838397},
+      {"i":9,"E":2.9731247191160093,"V":0,"radius":0.125,"fraction":0.125,"ground":0.0001389801848282262,"rho":0.037675974002744285},
+      {"i":10,"E":2.9616400557513347,"V":0,"radius":0.125,"fraction":0.25,"ground":0.00010597611868571238,"rho":0.4352439668731042},
+      {"i":11,"E":2.960403303708483,"V":0,"radius":0.125,"fraction":0.0625,"ground":9.968478443872612e-05,"rho":0.2034175876074305},
+      {"i":12,"E":2.9593761481046954,"V":0,"radius":0.125,"fraction":0.0625,"ground":9.376679798331518e-05,"rho":0.17168622790294874},
+      {"i":13,"E":2.939499491641986,"V":0,"radius":0.125,"fraction":0.5,"ground":4.9229809715199315e-05,"rho":0.5214059289259266},
+      {"i":14,"E":2.9387461762998295,"V":0,"radius":0.125,"fraction":0.0625,"ground":4.6307086353756776e-05,"rho":0.19271893601108758},
+      {"i":15,"E":2.938174800289241,"V":0,"radius":0.125,"fraction":0.125,"ground":4.080851591167435e-05,"rho":0.07657245517921187},
+      {"i":16,"E":2.9376593737843204,"V":0,"radius":0.125,"fraction":0.0625,"ground":3.838566102068301e-05,"rho":0.13503153436893583},
+      {"i":17,"E":2.9344703744926304,"V":0,"radius":0.125,"fraction":0.25,"ground":2.9269308125879097e-05,"rho":0.23172422401685858},
+      {"i":18,"E":2.9343485459531555,"V":0,"radius":0.125,"fraction":0.03125,"ground":2.8400450136372294e-05,"rho":0.06904544482369569},
+      {"i":19,"E":2.9340089194458643,"V":0,"radius":0.125,"fraction":0.015625,"ground":2.7978915615988958e-05,"rho":0.38328443078112606},
+      {"i":20,"E":2.933160989410908,"V":0,"radius":0.125,"fraction":0.0625,"ground":2.6317731321549646e-05,"rho":0.24764813416308532},
+      {"i":21,"E":2.929284538949682,"V":0,"radius":0.125,"fraction":0.25,"ground":2.0067366387442673e-05,"rho":0.3193885862647077},
+      {"i":22,"E":2.9289745835905157,"V":0,"radius":0.125,"fraction":0.015625,"ground":1.9769519016422918e-05,"rho":0.4135249843837601},
+      {"i":23,"E":2.9287042054029917,"V":0,"radius":0.125,"fraction":0.015625,"ground":1.9476091291485613e-05,"rho":0.3652913220378592},
+      {"i":24,"E":2.9280305985202717,"V":0,"radius":0.125,"fraction":0.03125,"ground":1.8897919109806667e-05,"rho":0.46419939026522455},
+      {"i":25,"E":2.926121942401994,"V":0,"radius":0.125,"fraction":0.25,"ground":1.4409725337355881e-05,"rho":0.1887589240981299}
+    ],
+    "terminal_snapshot": {
+      "snapshot": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-002/cases-001/pilot/case.r3-progress.jsonl.solve1.iterate25.snapshot.json",
+        "bytes": 6191,
+        "sha256": "3e8ce688268b614743084f2268ae39f31f1911412cc5a70bcdff6d3d4694fe52"
+      },
+      "state": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-002/cases-001/pilot/case.r3-progress.jsonl.solve1.iterate25.state.bin",
+        "bytes": 17320,
+        "sha256": "3d1a47dde56909c9e418f1484ab4bb984e925f513f19dbb695c6aa2a1b5ce6cb"
+      },
+      "residual": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-002/cases-001/pilot/case.r3-progress.jsonl.solve1.iterate25.residual.bin",
+        "bytes": 17320,
+        "sha256": "d170a339a61bb2bf3bfd201e52523ce4ee62b3fe22a3882308905886b0925181"
+      },
+      "constraints": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-002/cases-001/pilot/case.r3-progress.jsonl.solve1.iterate25.constraints.bin",
+        "bytes": 5728,
+        "sha256": "611d00b4b80adfca04847e0e828a9c822b9dff2a44d459ecb6c37f98f25d060d"
+      },
+      "iteration": 25
+    },
+    "terminal_box": {
+      "maximum": 0,
+      "family_maxima": [0,0,0,0],
+      "sum_positive": 0,
+      "quantity_count": 54385,
+      "witnesses": [
+        {
+          "family": 0,
+          "inventory": "physical_matching_transfer",
+          "point": [-2.6666666666666665,0,2],
+          "element_geometry": 31,
+          "observation_geometry": 31,
+          "side": 1,
+          "component": [0,2],
+          "projected_trace": false,
+          "sign": -1,
+          "reference_scale": 0.45397395788663325,
+          "reference_component": 1,
+          "signed_excess": -3.8416592239819136e-05,
+          "value": -0.0009999615834077602,
+          "directional_quantity_change": 0
+        },
+        {
+          "family": 2,
+          "inventory": "reconstruction_dense",
+          "point": [1.75,0,2],
+          "element_geometry": 34,
+          "observation_geometry": 34,
+          "side": 1,
+          "component": [-1,-1],
+          "projected_trace": false,
+          "sign": -1,
+          "reference_scale": 0.07263583326186134,
+          "reference_component": 1,
+          "signed_excess": -4.192843788830558e-06,
+          "value": 0.9800000838568758,
+          "directional_quantity_change": 0
+        },
+        {
+          "family": 2,
+          "inventory": "projected_dependent_trace",
+          "point": [1.75,0,2],
+          "element_geometry": 34,
+          "observation_geometry": 34,
+          "side": 1,
+          "component": [-1,-1],
+          "projected_trace": true,
+          "sign": -1,
+          "reference_scale": 0.07263583326186134,
+          "reference_component": 1,
+          "signed_excess": -4.202124653795991e-06,
+          "value": 0.9800000840424931,
+          "directional_quantity_change": 0
+        }
+      ]
+    },
+    "terminal_wall": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-002/cases-001/pilot-terminal-wall.json",
+      "bytes": 10286,
+      "sha256": "506a4826b6340f4e83dea388e8a39714eb28b72331266299340fc3c7c0166947"
+    },
+    "latest_complete_matrix": {
+      "iteration": 25,
+      "matrix": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-002/cases-001/pilot/case.r3-progress.jsonl.solve1.J25.bin",
+        "bytes": 37497800,
+        "sha256": "79dd1ace128f742a7d5f19cf748fd98df85b6ef0136a89aecee463ba49ce93a4"
+      }
+    },
+    "failures": [],
+    "terminal_direction_events": [
+      {
+        "iteration": 25,
+        "name": "r7_full",
+        "dimensionless_step": 0.1250000000000071,
+        "model_block_norms": [0.11846452362970612,0.22003496302753775,2.9036968231411215,4.949514200139805e-05,3.595939310472402e-21,1.048335544612166e-21,1.3759955619363546e-21,2.7987275455098523e-19]
+      }
+    ],
+    "independent_audit": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-002/cases-001/pilot-terminal-audit.json",
+      "bytes": 111538,
+      "sha256": "38ca07eabcf19df71f7447eb5d2313d6260b1eaafeb99ee741ba713f75aa3475"
+    },
+    "residual": {
+      "native": {
+        "blocks": [0.11851117443053419,0.22035743447183864,2.926121942401997,5.1154591028445604e-05,1.6067103095054313e-15,2.091665774832381e-15,6.098637220230961e-18,0.0008677409007784225],
+        "gauge": 6.098637220230961e-18,
+        "maximum": 2.926121942401997,
+        "maximum_constraint": 0.0008677409007784225
+      },
+      "independent": {
+        "blocks": [0.11851117443051797,0.22035743447183784,2.926121942402105,5.115459103246952e-05,1.7169331143084604e-15,2.4706060461813753e-15,4.336808689942017e-17,0.0008677409007754508],
+        "gauge": 4.336808689942017e-17,
+        "maximum": 2.926121942402105,
+        "maximum_constraint": 0.0008677409007754508
+      },
+      "difference": {
+        "blocks": [3.004675965923694e-12,6.690601492952841e-14,1.0058800861815727e-12,1.3974552887031324e-13,6.54141250409088e-16,1.0487028351046802e-15,3.726944967918921e-17,5.5082689732361244e-15],
+        "gauge": 3.726944967918921e-17,
+        "maximum": 3.004675965923694e-12,
+        "maximum_constraint": 5.5082689732361244e-15
+      },
+      "native_tolerance_met": false,
+      "independent_tolerance_met": false,
+      "independent_constraint_target_error": 4.0009770670146327e-16,
+      "weak_affine_values_gate_met": true
+    },
+    "trace": {"maximum_trace_coefficient_error":6.302908338322301e-05,"relative_to_E0":0.0008677409007754508,"matching_rows":16,"actual_epsilon_ratio_range":[0.9802732907758503,1.0003821921540694]},
+    "accounting": {
+      "accounting_defects": {"E_minus_D_minus_C":-1.4269286436035394e-16,"energy_weak_minus_direct":-4.440892098500626e-14,"integrated_redistribution":1.4269286436035394e-16},
+      "independent_accounting_identities_met": true,
+      "native_budget_crosschecks": {"available":false,"complete":false,"errors":{},"passed":null,"tolerance":3e-10},
+      "matching_observations": {
+        "full_total_traction_jump_rms": 0.0004352032732213285,
+        "normal_total_traction_jump_rms": 0.00038333402002356553,
+        "tangential_total_traction_jump_rms": 0.00020605076586882893,
+        "k_flux_jump_rms": 0.0006530472802046601
+      },
+      "strong_continuity": [0.03396745121580169,9.249990729877766e-05,-3.0324118324882854e-16,5.705832043688885e-16,0]
+    },
+    "outcome": {
+      "root": false,
+      "box": true,
+      "finite_physical_qualification": true,
+      "finite_scalar": true,
+      "independent_unresolved_signs": 0,
+      "wall_positive": true,
+      "covariance": [0.00012084919059196502,0.17687695301520842],
+      "lambda_min": 1,
+      "physical_history_advanced": false,
+      "accepted_physical_steps": 0,
+      "independent_history": {"available":false,"reason":"Final native report was not published"},
+      "same_executable_startup_probe": {
+        "report": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-002/cases-001/interior/case.evolution.json",
+          "bytes": 42934122,
+          "sha256": "ea86f523e2ec092b962369b390a8654b9c5cbb5f4bf2f93401eb9f9d8664a941"
+        },
+        "slot_sha256": [
+          "4ad505b63e7fb7bc94b653568e8baf2f00039b2cc1c515992e7db757fb8b9328",
+          "af06c95b066477742f815814f36b6c986ceca43765bc7b5fa978052ec736844f",
+          "af06c95b066477742f815814f36b6c986ceca43765bc7b5fa978052ec736844f",
+          "af06c95b066477742f815814f36b6c986ceca43765bc7b5fa978052ec736844f"
+        ],
+        "times": [0,-0.0025,0.0025,0.0025],
+        "startup_steps": 0
+      }
+    }
+  },
+  "regressions": {
+    "compare_ctest": {"path":"/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-001/regression/ctest.log","bytes":625,"sha256":"3dc28bcda453a94935c19f4585abc07ce786a81d7cb96773ca1dc674a791c797"},
+    "pilot_ctest": {"path":"/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-002/regression/ctest.log","bytes":625,"sha256":"ae7b2f8b0486a437342834d7bd051f0610f0023859038bfb6c789c9b45abf30d"},
+    "predictor": {"path":"/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r7/epoch-002/regression/predictor.log","bytes":107,"sha256":"987b5b06cb290480b4d980e72f37bbf2477a60bdd0e9dc768573667e7f42e94f"}
+  },
+  "next_action": "At the saved in-box state and J25, compare a curvature-aware trial predictor for the dominant k residual with ordinary damping, retaining the same radius and feasibility checks.",
+  "decision": "The positive-ground nondepletion control improved the matched nonlinear trial, while the contracted radius alone did not. The fixed interior target entered the box. The continuation reached its wall cap with joint progress and the root threshold unmet."
+}
