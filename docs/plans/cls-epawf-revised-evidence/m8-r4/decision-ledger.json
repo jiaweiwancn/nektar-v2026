@@ -1,0 +1,1851 @@
+{
+  "schema": 1,
+  "milestone": "M8-R4",
+  "M8_closed": false,
+  "reviewed_baseline": "797ca6629299e8433c7dd524e958d8b7f11002a3",
+  "decision": "Coupled feasible directions reduce the exact target beyond R3. The pilot reached its update limit above the root tolerance and outside the fixed outer box.",
+  "producer": {
+    "source": "a61a607d424d003323bdc69a80e5543daf0896fb",
+    "executable": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/build/IncNavierStokesSolver",
+      "bytes": 5733632,
+      "sha256": "559f82f5f9c382c4f9a993e84e7b784a9e3623f5bf51940e9a0552d12739704e"
+    },
+    "runtime": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/runtime-fingerprint.json",
+      "bytes": 623304,
+      "sha256": "89917e86973eb79c5978ecfadb184fddbc2c5b752ed078c0d4c1ed8ad06a06d9"
+    },
+    "build_receipt": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/build-run/receipt.json",
+      "bytes": 3182,
+      "sha256": "d324f36ea309591a5d381aa07c93b57c43ee0d971fb2cab21ff0aad9c8fbe0cf"
+    },
+    "compiler_workers": 16,
+    "mpi_ranks": 1,
+    "native_cpu": 0,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    }
+  },
+  "target": {
+    "alpha": 400,
+    "time": 0.0025,
+    "eta": 0,
+    "unknowns": 2165,
+    "unknown_guard": 3000,
+    "action_gate": 1e-07,
+    "residual_gate": 2e-12,
+    "xml": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/pilot/case.xml",
+      "bytes": 14391,
+      "sha256": "18b3b0072e3e3751a8a90a945912949d6fda2169ab3a04b1cdfa107d92bb1f0c"
+    },
+    "history": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/pilot/case.r3-progress.jsonl.solve1.history.bin",
+      "bytes": 17320,
+      "sha256": "b8ba7917424057a9f6f16a026d82d53ede43985871537facea170ef6e1841b71"
+    },
+    "seed": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/target-case-002/case.r3-progress.jsonl.solve1.iterate1.snapshot.json",
+      "bytes": 4429,
+      "sha256": "9bb28d0635952b6771e0d0e8a58476624c1404ebb297d72800fe0faa62eaf9d8"
+    }
+  },
+  "recovery": {
+    "report": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/wall-check.json",
+      "bytes": 83725,
+      "sha256": "57f1984530cc77a21c5663a6076d2b37a037ad4047c7a8e7ada1608a2a6dd830"
+    },
+    "selected": 1,
+    "original_gll": "1.6046496089512394",
+    "saved_outer_audit": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-001/cases-001/saved-outer.json",
+      "bytes": 5698,
+      "sha256": "c5ab8a63d9033b92f2833ccac8bd3b20b711657c29596aabee08bbec22e53fa0"
+    },
+    "first_outer_exit": {
+      "index": 1,
+      "audit": {
+        "r2_covariance": [
+          0.00033637048281288777,
+          0.1770926712612238
+        ],
+        "r2_inner_minimum_point": [
+          1.6046496089512394,
+          0,
+          0,
+          0.0017234290105528228,
+          0.510527529499641,
+          0.0008645283078747762,
+          0.22272624722699477,
+          0.0011489526737018818,
+          0.00033637048281288777
+        ],
+        "r2_outer_minimum_point": [
+          2,
+          0,
+          2.0416666666666665,
+          0.5105080130598861,
+          0.07017838612566094,
+          0.1770926712612238
+        ],
+        "r2_outer_range": [
+          0.0018960121056336154,
+          0.9999973278374321,
+          1.000014817251951,
+          0.9833042102387185,
+          1.0000470371160153,
+          0.9999922770489919,
+          1.0000382294484231
+        ],
+        "r2_qualified": [
+          0
+        ],
+        "r2_scalar_domain": [
+          1,
+          0.003375909812312099,
+          0.0017234290105528228,
+          0.510506648899483,
+          0.03631791663093067,
+          0.510504070431512,
+          0.07142312068055436,
+          0.8442808046220511,
+          1
+        ],
+        "r4_outer_gradient_witness": [
+          1.6046496089512394,
+          0,
+          2,
+          0,
+          2,
+          -0.0018960121056336154,
+          34,
+          1
+        ]
+      }
+    },
+    "retained_matrix": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r3/epoch-005/target-case-002/case.r3-progress.jsonl.solve1.J1.bin",
+      "bytes": 37497800,
+      "sha256": "1eee2030d8c55f866b6446fdc120cc397655bf685994b2ed4d53dd7b7909512b"
+    },
+    "saved_wall": [
+      {
+        "index": 0,
+        "historical_inventory_admissible": true,
+        "historical_native_inner_minimum": 0.34468580211056427,
+        "wall_minimum": {
+          "kind": "stationary",
+          "x": "1.6136664556366069597113372315480691045045940989751026560072413959717231989661813094351682128176879022827330827",
+          "value": "0.34463017764627696805524390983456562542704661074395868013231474168031918439784443512935690295040813012974937626"
+        },
+        "wall_sign": "positive"
+      },
+      {
+        "index": 1,
+        "historical_inventory_admissible": true,
+        "historical_native_inner_minimum": 0.0017234290105528228,
+        "wall_minimum": {
+          "kind": "stationary",
+          "x": "1.6143907917671009615643816145105928242060874794917611348118174839622652395296957221442771257006432958548404908",
+          "value": "0.001523457435999497658983614090532356843454894881404116969816546979336748389970870908946039945781495789152041017"
+        },
+        "wall_sign": "positive"
+      },
+      {
+        "index": 2,
+        "historical_inventory_admissible": true,
+        "historical_native_inner_minimum": 8.617145052768085e-06,
+        "wall_minimum": {
+          "kind": "stationary",
+          "x": "1.6107365935798798042031713994345753099850083473895240127374327588527962171386758965071284548176788939530752001",
+          "value": "-0.000068227419496728041552172916381561504504129875303719039113206057358482676818042072903322009099657150490219535"
+        },
+        "wall_sign": "negative"
+      },
+      {
+        "index": 3,
+        "historical_inventory_admissible": true,
+        "historical_native_inner_minimum": 4.308572526840214e-08,
+        "wall_minimum": {
+          "kind": "stationary",
+          "x": "1.6107178029088123244680669103947654714090656355923243502909655889970989363187572507839922175523627492620851062",
+          "value": "-0.000076321481602424805508487250944355973215109715741862407967114199252448522839208778292239794173473052723857454"
+        },
+        "wall_sign": "negative"
+      },
+      {
+        "index": 4,
+        "historical_inventory_admissible": true,
+        "historical_native_inner_minimum": 2.1542864023839934e-10,
+        "wall_minimum": {
+          "kind": "stationary",
+          "x": "1.6107177089440377732908760022850986383916628425329898031565180417527116137531335791203636850695099409497370324",
+          "value": "-0.000076361955499286502769319911628469896869091963682111629407353760008861075131282063315056742773308342617617881"
+        },
+        "wall_sign": "negative"
+      },
+      {
+        "index": 5,
+        "historical_inventory_admissible": true,
+        "historical_native_inner_minimum": 1.0771380667832023e-12,
+        "wall_minimum": {
+          "kind": "stationary",
+          "x": "1.6107177084742135965300178604759392931405871066510888220413037786591811784036605280646649170775447805217743106",
+          "value": "-0.000076362157868870679478479163346001568091190355324420064523786187110186213298240768488672985153507349447570962"
+        },
+        "wall_sign": "negative"
+      },
+      {
+        "index": 6,
+        "historical_inventory_admissible": true,
+        "historical_native_inner_minimum": 5.353566711035346e-15,
+        "wall_minimum": {
+          "kind": "stationary",
+          "x": "1.6107177084718644850648215262566648088963844107622266784044436858816278138301531653001294040151224064096689662",
+          "value": "-0.000076362158880741686993575143492191116427934066254908272922866797368929577199714466581261693051660241175892598"
+        },
+        "wall_sign": "negative"
+      }
+    ],
+    "iterate4_limiting_and_neighbor": [
+      {
+        "geometry": 3,
+        "bounds": [
+          "-1",
+          "1"
+        ],
+        "modal": [
+          "0.07408665923481723425414458006343920715153217315673828125",
+          "0.034442188910171089855083437214489094913005828857421875",
+          "0.08022541759063729627232675056802690960466861724853515625",
+          "0.0691912782970897921597241975177894346415996551513671875"
+        ],
+        "power": [
+          "0.0743207784701534861226956962809708784334361553192138671875",
+          "0.014773403986221823880331527334419661201536655426025390625",
+          "-0.0200563543976593240680816876420067274011671543121337890625",
+          "-0.03459563914854489607986209875889471732079982757568359375"
+        ],
+        "samples": [
+          {
+            "kind": "left",
+            "x": "-1",
+            "value": "0.0740866592348172342541445800634392071515321731567382812500"
+          },
+          {
+            "kind": "right",
+            "x": "1",
+            "value": "0.0344421889101710898550834372144890949130058288574218750000"
+          },
+          {
+            "kind": "stationary",
+            "x": "-0.61714103438031264641759347236995499681204824749368552662438503559554917618133058935073320489201721947989805473",
+            "value": "0.065696354447086898368330967996588068984146126748974349157276250185438822444727136075670236185198538893772863604"
+          },
+          {
+            "kind": "stationary",
+            "x": "0.2306500412709898700749623064985269595169598426601431623776587814485493301310405974666615615148544578804429351",
+            "value": "0.076236773678493569264575203919412624037890833531294818571427217162964082784384103325918821528840424515774016549"
+          }
+        ],
+        "minimum": {
+          "kind": "right",
+          "x": "1",
+          "value": "0.0344421889101710898550834372144890949130058288574218750000"
+        }
+      },
+      {
+        "geometry": 4,
+        "bounds": [
+          "1",
+          "2"
+        ],
+        "modal": [
+          "0.034442188910171089855083437214489094913005828857421875",
+          "0.51050801305988613432162992467056028544902801513671875",
+          "-1.005332593665448026598596698022447526454925537109375",
+          "-0.81918493533886749258243753502028994262218475341796875"
+        ],
+        "power": [
+          "0.0211419525686666054387075064369128085672855377197265625",
+          "-0.1715595555945762240579455237821093760430812835693359375",
+          "0.25133314841636200664964917450561188161373138427734375",
+          "0.409592467669433746291218767510144971311092376708984375"
+        ],
+        "samples": [
+          {
+            "kind": "left",
+            "x": "1",
+            "value": "0.0344421889101710898550834372144890949130058288574218750"
+          },
+          {
+            "kind": "right",
+            "x": "2",
+            "value": "0.5105080130598861343216299246705602854490280151367187500"
+          },
+          {
+            "kind": "stationary",
+            "x": "1.1847430898946725786427504410871062442865562364509722619207042360335192630911202167800818369506232072471883643",
+            "value": "0.12656136957165721150363609909727205144138441124840969769557353496519467808690634213651902159602395076892950830"
+          },
+          {
+            "kind": "stationary",
+            "x": "1.6107177089440377732908760022850986383916628425329898031565180417527116137531335791203636850695099409497370324",
+            "value": "-0.000076361955499286502769319911628469896869091963682111629407353760008861075131282063315056742773308342617617881"
+          },
+          {
+            "kind": "original_GLL",
+            "x": "1.6046496089512394",
+            "value": "2.15428681762047696938194954989247857258395436603820041199242041329853236675262451171875000000E-10"
+          }
+        ],
+        "minimum": {
+          "kind": "stationary",
+          "x": "1.6107177089440377732908760022850986383916628425329898031565180417527116137531335791203636850695099409497370324",
+          "value": "-0.000076361955499286502769319911628469896869091963682111629407353760008861075131282063315056742773308342617617881"
+        }
+      }
+    ]
+  },
+  "local": {
+    "receipt": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/local-run/receipt.json",
+      "bytes": 5480,
+      "sha256": "f3ec1a16ffc0683051d1c6e07a1bc793ad5116284cac4dcc5cb1b2f7175eb0ee"
+    },
+    "prior_algorithm_failures": [
+      {
+        "receipt": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-001/cases-001/local-run/receipt.json",
+          "bytes": 5480,
+          "sha256": "5f66b7c6f62a1892518a68f324f7470d2bafaf5806ff0ec7cfa43b078e9418ac"
+        },
+        "terminal": "std::runtime_error: EP-AWF patch: R4 active cuts are numerically rank deficient"
+      },
+      {
+        "receipt": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-002/cases-001/local-run/receipt.json",
+          "bytes": 5481,
+          "sha256": "0b1ba86d2e22aff18091388a22a746ca47d6e96731cdfa68b336f22ee9727e90"
+        },
+        "terminal": "std::runtime_error: R4 bounded active cut exchange exhausted"
+      }
+    ],
+    "durable": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/local-run/durable-collection.json",
+      "bytes": 124847,
+      "sha256": "c366304707ff146e3915da306aae77ca9c7899673118b765edd9d41a2fb80f58"
+    },
+    "current_matrix": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/local/case.r3-progress.jsonl.solve1.J0.bin",
+      "bytes": 37497800,
+      "sha256": "1eee2030d8c55f866b6446fdc120cc397655bf685994b2ed4d53dd7b7909512b"
+    },
+    "newton": {
+      "fraction": 0.06598102741022104,
+      "predicted_norm": 16.180763891306405,
+      "actual_norms": [
+        4.663751827546229,
+        0.014200307858176657,
+        16.1365274934238,
+        0.06845456397970756,
+        6.610675019108343e-16,
+        9.840561136640991e-16,
+        7.657177843178874e-17,
+        8.492438185595127e-05
+      ],
+      "wall": {
+        "admissible": true,
+        "minimum": 7.746849366746515e-06,
+        "arithmetic_scale": 3.288894761313177e-17,
+        "point": [
+          1.6109102542595215,
+          0,
+          0
+        ],
+        "geometry": 4,
+        "extrema_checked": 19
+      },
+      "direction": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/local/case.r3-progress.jsonl.solve1.comparison.newton.bin",
+        "bytes": 17320,
+        "sha256": "efafbbdfbab0493d318017a6c67e8841883392ecde9f7744073c3ee31c68dc5f"
+      }
+    },
+    "direction": {
+      "step": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/local/case.r3-progress.jsonl.solve1.iterate0.step.bin",
+        "bytes": 17320,
+        "sha256": "ed08c42c6da1d5340bd5010baaf5a0175391d08221d4667ddcf7f762fd96df4a"
+      },
+      "details": {
+        "method": "residual_space_active_QR",
+        "active": [
+          {
+            "inventory": "reconstruction_native",
+            "point": [
+              1,
+              0,
+              0
+            ],
+            "multiplier": 18.251313056342543
+          },
+          {
+            "inventory": "continuous_wall_reserve",
+            "point": [
+              -2.150375367362481,
+              0,
+              0
+            ],
+            "multiplier": 42.85136105303328
+          },
+          {
+            "inventory": "continuous_wall_reserve",
+            "point": [
+              1.5632163786545172,
+              0,
+              0
+            ],
+            "multiplier": 222.49118580337367
+          }
+        ],
+        "releases": 12,
+        "dependent_exchanges": 4,
+        "exchange_passes": 16,
+        "trust_radius": 2,
+        "model_feasibility_tolerance": 5e-12,
+        "stationarity_l2": 5.743970440386169e-16,
+        "active_equality_error": 4.440892098500626e-16,
+        "complementarity": 1.5498783836520713e-15,
+        "scaled_residual_objective": 6.796328268988992,
+        "witness_k": 0.0017234290105528228,
+        "witness_newton_delta": -0.02476968091522607,
+        "witness_direction_delta": 0.001001421570118174
+      },
+      "full_model_norms": [
+        0.1732209075217734,
+        0.3388162796117627,
+        3.6671316557438347,
+        5.7329665882709675e-05,
+        1.7306880102615708e-16,
+        2.140018526905384e-18,
+        5.541820590890891e-18,
+        1.3597151325268701e-17
+      ]
+    },
+    "trials": [
+      {
+        "fraction": 1,
+        "actual_norms": [
+          0.38332134976679433,
+          0.3285989047754414,
+          34.50176078739771,
+          0.0003976336075837314,
+          6.838355075458035e-16,
+          8.447456260390299e-16,
+          5.675120746603811e-17,
+          0.020659533200356836
+        ],
+        "wall": {
+          "admissible": true,
+          "minimum": 0.0003187820314142467,
+          "arithmetic_scale": 3.0379087045088375e-17,
+          "point": [
+            1.5663763085056566,
+            0,
+            0
+          ],
+          "geometry": 4,
+          "extrema_checked": 18
+        },
+        "profile_branch_changed": true,
+        "classification": "valid_non_descent_or_recheck_failure"
+      },
+      {
+        "fraction": 0.5,
+        "actual_norms": [
+          2.508852737797756,
+          0.16754853088009408,
+          27.37237926563349,
+          0.03664960150076472,
+          7.501237865357012e-16,
+          7.480751405137236e-16,
+          8.080694316806024e-17,
+          0.030688388657357988
+        ],
+        "wall": {
+          "admissible": true,
+          "minimum": 0.0019653185522266474,
+          "arithmetic_scale": 3.16884260210746e-17,
+          "point": [
+            1.5929015850901433,
+            0,
+            0
+          ],
+          "geometry": 4,
+          "extrema_checked": 19
+        },
+        "profile_branch_changed": true,
+        "classification": "valid_non_descent_or_recheck_failure"
+      },
+      {
+        "fraction": 0.25,
+        "actual_norms": [
+          3.7402359213558465,
+          0.08565631778231211,
+          14.096135494823026,
+          0.054967875443804305,
+          1.1414504280825866e-15,
+          8.634889338782214e-16,
+          1.0232158002831946e-16,
+          0.07452161822591592
+        ],
+        "wall": {
+          "admissible": true,
+          "minimum": 0.0019733463245770098,
+          "arithmetic_scale": 3.2343095509067716e-17,
+          "point": [
+            1.6041805841321077,
+            0,
+            0
+          ],
+          "geometry": 4,
+          "extrema_checked": 19
+        },
+        "profile_branch_changed": true,
+        "classification": "feasible_accepted_descent"
+      }
+    ],
+    "states": [
+      {
+        "index": 0,
+        "snapshot": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/local/case.r3-progress.jsonl.solve1.iterate0.snapshot.json",
+          "bytes": 3372,
+          "sha256": "5ca9e81150d625bb2f650ad238c669247c4f46fe63ca898fc3ae86607df91af6"
+        },
+        "norms": [
+          4.9920192303843045,
+          0.015197557539497803,
+          17.323806438793824,
+          0.07329029848503447,
+          8.941710525246226e-16,
+          7.187119576354112e-16,
+          3.896351557369781e-18,
+          8.468371091241145e-05
+        ],
+        "scalar_admissible": true,
+        "min_native_inner_k": 0.0017234290105528228,
+        "min_b": 0.8442808046220511,
+        "lambda_min": 1,
+        "wall": {
+          "admissible": true,
+          "minimum": 0.0015234574359994976,
+          "arithmetic_scale": 3.299776499706083e-17,
+          "point": [
+            1.614390791767101,
+            0,
+            0
+          ],
+          "geometry": 4,
+          "extrema_checked": 19
+        },
+        "accepted_fraction": null,
+        "scaled_step_inf": null,
+        "outer_range": [
+          0.0018960121056336154,
+          0.9999973278374321,
+          1.000014817251951,
+          0.9833042102387185,
+          1.0000470371160153,
+          0.9999922770489919,
+          1.0000382294484231
+        ],
+        "outer_gradient_witness": [
+          1.6046496089512394,
+          0,
+          2,
+          0,
+          2,
+          -0.0018960121056336154,
+          34,
+          1
+        ],
+        "covariance": [
+          0.00033637048281288777,
+          0.1770926712612238
+        ],
+        "native_fixed_qualification": false,
+        "previous_model": null,
+        "previous_direction": null
+      },
+      {
+        "index": 1,
+        "snapshot": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/local/case.r3-progress.jsonl.solve1.iterate1.snapshot.json",
+          "bytes": 4574,
+          "sha256": "bbebf37d368b66a980f680b6983256c9975807d1fd6412b44b8df3af96a7f6c8"
+        },
+        "norms": [
+          3.7402359213558465,
+          0.08565631778231211,
+          14.096135494823026,
+          0.054967875443804305,
+          1.1414504280825866e-15,
+          8.634889338782214e-16,
+          1.0232158002831946e-16,
+          0.07452161822591592
+        ],
+        "scalar_admissible": true,
+        "min_native_inner_k": 0.001973784403082359,
+        "min_b": 0.8417258642916257,
+        "lambda_min": 1,
+        "wall": {
+          "admissible": true,
+          "minimum": 0.0019733463245770098,
+          "arithmetic_scale": 3.2343095509067716e-17,
+          "point": [
+            1.6041805841321077,
+            0,
+            0
+          ],
+          "geometry": 4,
+          "extrema_checked": 19
+        },
+        "accepted_fraction": 0.25,
+        "scaled_step_inf": 1.8439302174153906,
+        "outer_range": [
+          0.0027885769350587397,
+          0.9999828950416888,
+          1.000222909452597,
+          0.9806295842353772,
+          1.0024824920840547,
+          0.9982429006555649,
+          1.0001650454458044
+        ],
+        "outer_gradient_witness": [
+          -3.2372337950418357,
+          0,
+          2,
+          0,
+          2,
+          -0.0027885769350587397,
+          30,
+          1
+        ],
+        "covariance": [
+          0.0003868880658377087,
+          0.17699555605425057
+        ],
+        "native_fixed_qualification": false,
+        "previous_model": [
+          0.1732209075217734,
+          0.3388162796117627,
+          3.6671316557438347,
+          5.7329665882709675e-05,
+          1.7306880102615708e-16,
+          2.140018526905384e-18,
+          5.541820590890891e-18,
+          1.3597151325268701e-17
+        ],
+        "previous_direction": "residual_space_active_QR"
+      }
+    ],
+    "action_validation": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/direction-validation.json",
+      "bytes": 8292,
+      "sha256": "cbf9d8c126dfffc81579c5c1af838cdeb860e23ddeb19de6d2ea9ba0ae53acdf"
+    },
+    "directional_errors": [
+      {
+        "complex_step": "1e-20",
+        "absolute_physical_error": {
+          "blocks": [
+            6.532188011159433e-15,
+            7.52564238328682e-15,
+            1.7271672204592304e-14,
+            1.63798806327046e-15,
+            1.2692748915459808e-17,
+            3.14904007683493e-19,
+            1.0794025590106009e-17,
+            4.4081017040881506e-17
+          ],
+          "maximum": 1.7271672204592304e-14,
+          "maximum_constraint": 4.4081017040881506e-17,
+          "gauge": 1.0794025590106009e-17
+        },
+        "absolute_gate": 1e-07,
+        "gate_met": true
+      },
+      {
+        "complex_step": "1e-30",
+        "absolute_physical_error": {
+          "blocks": [
+            6.526709549558305e-15,
+            7.525340500218824e-15,
+            1.7275175386098407e-14,
+            1.6380055087323632e-15,
+            1.2692677876724027e-17,
+            3.1491043768004427e-19,
+            1.0792413812930875e-17,
+            4.406919828967756e-17
+          ],
+          "maximum": 1.7275175386098407e-14,
+          "maximum_constraint": 4.406919828967756e-17,
+          "gauge": 1.0792413812930875e-17
+        },
+        "absolute_gate": 1e-07,
+        "gate_met": true
+      }
+    ],
+    "gate": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/r4-gate.json",
+      "bytes": 1605,
+      "sha256": "cbf889751563d8044d00236edf21e044a262e8d090db080a9d3400b3c3de4b31"
+    }
+  },
+  "pilot": {
+    "receipt": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/pilot-run/receipt.json",
+      "bytes": 6151,
+      "sha256": "f70b42c58ff70931056cccbef105214ade337901588402af2df743018a05e585"
+    },
+    "manifest": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/pilot/predictor.json",
+      "bytes": 4424,
+      "sha256": "4f2bbbc89c7edece49b698f56ca3e685b64bf30f4762b7790764cd599c096a72"
+    },
+    "native_report": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/pilot/case.evolution.json",
+      "bytes": 42934225,
+      "sha256": "03236d50172bbad28c8df3a080eda59c9759a377826a90048942f39f2d66b0ce"
+    },
+    "durable": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/pilot-run/durable-collection.json",
+      "bytes": 1384851,
+      "sha256": "8a1fe98e5efc2a157a7b4ffbbcad2b840d34c62f141662af4330b8bfbba1705d"
+    },
+    "progress": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/pilot/case.r3-progress.jsonl",
+      "complete_prefix_bytes": 441554,
+      "complete_prefix_sha256": "c47d3cfb5ac0593a6f6af2e056d30dfc0aeb49175871c032af3b793f19799149",
+      "unpublished_tail": null
+    },
+    "atomic_last": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/pilot/case.r3-progress.jsonl.last.json",
+      "bytes": 4595,
+      "sha256": "dba740302bc1e64a6cef37c74d3220c6e11eaa5f9d37a6b00851eb90a07bd12e"
+    },
+    "terminal_snapshot": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/pilot/case.r3-progress.jsonl.solve1.iterate12.snapshot.json",
+      "bytes": 4595,
+      "sha256": "dba740302bc1e64a6cef37c74d3220c6e11eaa5f9d37a6b00851eb90a07bd12e"
+    },
+    "state": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/pilot/case.r3-progress.jsonl.solve1.iterate12.state.bin",
+      "bytes": 17320,
+      "sha256": "7911e116552e3b081359bf20ac13047118341582cd223421420c54836d3b6472"
+    },
+    "residual": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/pilot/case.r3-progress.jsonl.solve1.iterate12.residual.bin",
+      "bytes": 17320,
+      "sha256": "676d855fe2cb607d05a7355a39efcd923dd0f0a0a480e03b0f81d84e93d31a43"
+    },
+    "constraints": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/pilot/case.r3-progress.jsonl.solve1.iterate12.constraints.bin",
+      "bytes": 5728,
+      "sha256": "508565869920656138bab0eed08fec88cd93a2a10afd4e8dd162220da5a07245"
+    },
+    "wall_verification": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/pilot-terminal-wall.json",
+      "bytes": 10016,
+      "sha256": "434b2fa4ef507e8dd2784ce63b59085fba23ed9f6347c4ee9586ef4af79d4b94"
+    },
+    "independent": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/pilot-terminal-audit.json",
+      "bytes": 113597,
+      "sha256": "5550838cf91560bdabbf7edd09190c8d3e671b2b4bcf88a4636b291a6f1521b9"
+    },
+    "wall_seconds": 252.75627111700305,
+    "native_wall_cap_seconds": 600,
+    "terminal": "std::runtime_error: EP-AWF patch: R3 Newton iteration limit",
+    "accepted": 12,
+    "trials": 45,
+    "maximum_trials_per_update": 6,
+    "trial_classifications": {
+      "valid_non_descent_or_recheck_failure": 33,
+      "feasible_accepted_descent": 12
+    },
+    "all_scalar_and_wall_trials_admissible": true,
+    "states": [
+      {
+        "index": 0,
+        "snapshot": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/pilot/case.r3-progress.jsonl.solve1.iterate0.snapshot.json",
+          "bytes": 3355,
+          "sha256": "61d8b82758a0adbbaf0c62581e95b2890947f2175eec3b0a2627ed837214e5e4"
+        },
+        "norms": [
+          4.9920192303843045,
+          0.015197557539497803,
+          17.323806438793824,
+          0.07329029848503447,
+          8.941710525246226e-16,
+          7.187119576354112e-16,
+          3.896351557369781e-18,
+          8.468371091241145e-05
+        ],
+        "scalar_admissible": true,
+        "min_native_inner_k": 0.0017234290105528228,
+        "min_b": 0.8442808046220511,
+        "lambda_min": 1,
+        "wall": {
+          "admissible": true,
+          "minimum": 0.0015234574359994976,
+          "arithmetic_scale": 3.299776499706083e-17,
+          "point": [
+            1.614390791767101,
+            0,
+            0
+          ],
+          "geometry": 4,
+          "extrema_checked": 19
+        },
+        "accepted_fraction": null,
+        "scaled_step_inf": null,
+        "outer_range": [
+          0.0018960121056336154,
+          0.9999973278374321,
+          1.000014817251951,
+          0.9833042102387185,
+          1.0000470371160153,
+          0.9999922770489919,
+          1.0000382294484231
+        ],
+        "outer_gradient_witness": [
+          1.6046496089512394,
+          0,
+          2,
+          0,
+          2,
+          -0.0018960121056336154,
+          34,
+          1
+        ],
+        "covariance": [
+          0.00033637048281288777,
+          0.1770926712612238
+        ],
+        "native_fixed_qualification": false,
+        "previous_model": null,
+        "previous_direction": null
+      },
+      {
+        "index": 1,
+        "snapshot": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/pilot/case.r3-progress.jsonl.solve1.iterate1.snapshot.json",
+          "bytes": 4584,
+          "sha256": "d4835fdf296c0a673af57590a37c14482ee3129019d8629c4952b953fb12586f"
+        },
+        "norms": [
+          3.7402359213558465,
+          0.08565631778231211,
+          14.096135494823026,
+          0.054967875443804305,
+          1.1414504280825866e-15,
+          8.634889338782214e-16,
+          1.0232158002831946e-16,
+          0.07452161822591592
+        ],
+        "scalar_admissible": true,
+        "min_native_inner_k": 0.001973784403082359,
+        "min_b": 0.8417258642916257,
+        "lambda_min": 1,
+        "wall": {
+          "admissible": true,
+          "minimum": 0.0019733463245770098,
+          "arithmetic_scale": 3.2343095509067716e-17,
+          "point": [
+            1.6041805841321077,
+            0,
+            0
+          ],
+          "geometry": 4,
+          "extrema_checked": 19
+        },
+        "accepted_fraction": 0.25,
+        "scaled_step_inf": 1.8439302174153906,
+        "outer_range": [
+          0.0027885769350587397,
+          0.9999828950416888,
+          1.000222909452597,
+          0.9806295842353772,
+          1.0024824920840547,
+          0.9982429006555649,
+          1.0001650454458044
+        ],
+        "outer_gradient_witness": [
+          -3.2372337950418357,
+          0,
+          2,
+          0,
+          2,
+          -0.0027885769350587397,
+          30,
+          1
+        ],
+        "covariance": [
+          0.0003868880658377087,
+          0.17699555605425057
+        ],
+        "native_fixed_qualification": false,
+        "previous_model": [
+          0.1732209075217734,
+          0.3388162796117627,
+          3.6671316557438347,
+          5.7329665882709675e-05,
+          1.7306880102615708e-16,
+          2.140018526905384e-18,
+          5.541820590890891e-18,
+          1.3597151325268701e-17
+        ],
+        "previous_direction": "residual_space_active_QR"
+      },
+      {
+        "index": 2,
+        "snapshot": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/pilot/case.r3-progress.jsonl.solve1.iterate2.snapshot.json",
+          "bytes": 4581,
+          "sha256": "844e43c05cdd5782aa788e0c965ffe6989162a584fe5c7857919f81f2e8ca521"
+        },
+        "norms": [
+          1.8614394991970686,
+          0.17708206332094753,
+          8.084326339994968,
+          0.027485522577304147,
+          8.344144790359693e-16,
+          8.622988422942185e-16,
+          2.9646153153900506e-17,
+          0.03896054249742432
+        ],
+        "scalar_admissible": true,
+        "min_native_inner_k": 0.0018196021095878317,
+        "min_b": 0.8364054491154687,
+        "lambda_min": 1,
+        "wall": {
+          "admissible": true,
+          "minimum": 0.0018081240167474924,
+          "arithmetic_scale": 3.132184354285129e-17,
+          "point": [
+            1.585896951756181,
+            0,
+            0
+          ],
+          "geometry": 4,
+          "extrema_checked": 18
+        },
+        "accepted_fraction": 0.5,
+        "scaled_step_inf": 1.9999999999999865,
+        "outer_range": [
+          0.0038276173822481274,
+          0.9998702875300208,
+          1.0005044226887014,
+          0.9784535393340743,
+          1.0058423761712347,
+          0.9958011091676089,
+          1.0001817751944637
+        ],
+        "outer_gradient_witness": [
+          -2.75,
+          0,
+          2,
+          0,
+          2,
+          -0.0038276173822481274,
+          31,
+          1
+        ],
+        "covariance": [
+          0.0003588212729929113,
+          0.17712166350916894
+        ],
+        "native_fixed_qualification": false,
+        "previous_model": [
+          0.13456679218759826,
+          0.27830758408654266,
+          3.3696423807233913,
+          5.2995542274431546e-05,
+          1.5937325868832995e-16,
+          9.51633881278227e-18,
+          4.613103558146979e-18,
+          2.6569253498706867e-16
+        ],
+        "previous_direction": "residual_space_active_QR"
+      },
+      {
+        "index": 3,
+        "snapshot": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/pilot/case.r3-progress.jsonl.solve1.iterate3.snapshot.json",
+          "bytes": 4587,
+          "sha256": "36983498705a78ec1d8cf38b6f3c474afdd766da60fb298f5668e6f1b6a6a61b"
+        },
+        "norms": [
+          1.3894658100192243,
+          0.18245809803536303,
+          7.179352480668684,
+          0.020613989030040854,
+          1.0901282341011584e-15,
+          9.822722064180965e-16,
+          2.4733362059825564e-17,
+          0.02491811980764163
+        ],
+        "scalar_admissible": true,
+        "min_native_inner_k": 0.0017553458018436754,
+        "min_b": 0.8352763339204403,
+        "lambda_min": 1,
+        "wall": {
+          "admissible": true,
+          "minimum": 0.0017167747940572359,
+          "arithmetic_scale": 3.099552512750303e-17,
+          "point": [
+            1.5785471761876941,
+            0,
+            0
+          ],
+          "geometry": 4,
+          "extrema_checked": 17
+        },
+        "accepted_fraction": 0.25,
+        "scaled_step_inf": 1.605663472096788,
+        "outer_range": [
+          0.0033227729157527808,
+          0.9999060241483093,
+          1.0005731784592564,
+          0.9775597988020213,
+          1.0046961544622226,
+          0.9951945014080552,
+          1.000144001407156
+        ],
+        "outer_gradient_witness": [
+          -3,
+          0,
+          2,
+          0,
+          2,
+          -0.0033227729157527808,
+          30,
+          1
+        ],
+        "covariance": [
+          0.0003464406008836093,
+          0.1771133119192358
+        ],
+        "native_fixed_qualification": false,
+        "previous_model": [
+          0.12280710348987153,
+          0.23568754322602783,
+          3.104792012762257,
+          2.5665157449265654e-05,
+          1.126215569990486e-16,
+          5.011823308699223e-17,
+          3.6192460521645165e-18,
+          2.746484631327002e-16
+        ],
+        "previous_direction": "residual_space_active_QR"
+      },
+      {
+        "index": 4,
+        "snapshot": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/pilot/case.r3-progress.jsonl.solve1.iterate4.snapshot.json",
+          "bytes": 4584,
+          "sha256": "53c417444b15d90db0b38a30a5bd7770c34aa47e4eba6851916d87d781e2e9fd"
+        },
+        "norms": [
+          1.036019285886644,
+          0.19082621003778347,
+          6.197093007982379,
+          0.015459682090958127,
+          1.0197343608575264e-15,
+          7.048992142934799e-16,
+          1.0503208545953323e-17,
+          0.019043362416670883
+        ],
+        "scalar_admissible": true,
+        "min_native_inner_k": 0.0018291331623242013,
+        "min_b": 0.8346256732866647,
+        "lambda_min": 1,
+        "wall": {
+          "admissible": true,
+          "minimum": 0.0016803583714984681,
+          "arithmetic_scale": 3.0782793027700387e-17,
+          "point": [
+            1.5738226778079225,
+            0,
+            0
+          ],
+          "geometry": 4,
+          "extrema_checked": 17
+        },
+        "accepted_fraction": 0.25,
+        "scaled_step_inf": 1.569302284647877,
+        "outer_range": [
+          0.003283481023077073,
+          0.999925367114984,
+          1.0006433038282505,
+          0.9766585035912146,
+          1.0035274218869816,
+          0.9945826010977157,
+          1.000118280960073
+        ],
+        "outer_gradient_witness": [
+          1.625,
+          0,
+          2,
+          0,
+          2,
+          -0.003283481023077073,
+          34,
+          1
+        ],
+        "covariance": [
+          0.0003612149520941981,
+          0.1771025056224677
+        ],
+        "native_fixed_qualification": false,
+        "previous_model": [
+          0.12235875656988954,
+          0.2343845199391065,
+          3.1087768973531382,
+          3.1763642091145e-05,
+          1.29784399448063e-16,
+          2.3936233617839126e-17,
+          4.46543113929095e-19,
+          1.728494132106885e-15
+        ],
+        "previous_direction": "residual_space_active_QR"
+      },
+      {
+        "index": 5,
+        "snapshot": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/pilot/case.r3-progress.jsonl.solve1.iterate5.snapshot.json",
+          "bytes": 4559,
+          "sha256": "73c586e8a5d47eeef3327e90fe8eae0f295b2e35b8fdac04be61a18cbcc2dbbf"
+        },
+        "norms": [
+          0.7715910027470675,
+          0.19938841380722802,
+          6.173766521596646,
+          0.011594188367197068,
+          1.208342830568618e-15,
+          8.135000062614161e-16,
+          1.7618285302889444e-17,
+          0.014165406830973443
+        ],
+        "scalar_admissible": true,
+        "min_native_inner_k": 0.0019290761267365712,
+        "min_b": 0.8341651586658945,
+        "lambda_min": 1,
+        "wall": {
+          "admissible": true,
+          "minimum": 0.0016628442998821483,
+          "arithmetic_scale": 3.0632477833174216e-17,
+          "point": [
+            1.5705058054263765,
+            0,
+            0
+          ],
+          "geometry": 4,
+          "extrema_checked": 20
+        },
+        "accepted_fraction": 0.25,
+        "scaled_step_inf": 0.7536514175970818,
+        "outer_range": [
+          0.003372564318663951,
+          0.9999473990309299,
+          1.0006973577301643,
+          0.9759732092630258,
+          1.002419960285718,
+          0.9941172915604463,
+          1.000100657897865
+        ],
+        "outer_gradient_witness": [
+          1.6666666666666665,
+          0,
+          2,
+          0,
+          2,
+          -0.003372564318663951,
+          34,
+          1
+        ],
+        "covariance": [
+          0.0003811135581163051,
+          0.1770946387342292
+        ],
+        "native_fixed_qualification": false,
+        "previous_model": [
+          0.12272303654812916,
+          0.23454488355639058,
+          3.106339463551338,
+          3.0670146066813426e-05,
+          3.155684920131488e-16,
+          3.214265106370612e-17,
+          9.549076388888719e-19,
+          2.594233852851266e-15
+        ],
+        "previous_direction": "residual_space_active_QR"
+      },
+      {
+        "index": 6,
+        "snapshot": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/pilot/case.r3-progress.jsonl.solve1.iterate6.snapshot.json",
+          "bytes": 4582,
+          "sha256": "17e1c2b3721165c2a6e8a0e599fb6defa3b905a70bb1b439db0197d778e205fe"
+        },
+        "norms": [
+          0.7221168338446201,
+          0.2011638008912608,
+          6.049556428523331,
+          0.010869139916459278,
+          1.4040799076127613e-15,
+          1.102711465349312e-15,
+          3.422013106907373e-17,
+          0.013195349163573731
+        ],
+        "scalar_admissible": true,
+        "min_native_inner_k": 0.001952396926531918,
+        "min_b": 0.8340846731709098,
+        "lambda_min": 1,
+        "wall": {
+          "admissible": true,
+          "minimum": 0.0016623101072041396,
+          "arithmetic_scale": 3.060540565894359e-17,
+          "point": [
+            1.5699240269020331,
+            0,
+            0
+          ],
+          "geometry": 4,
+          "extrema_checked": 19
+        },
+        "accepted_fraction": 0.0625,
+        "scaled_step_inf": 2.0000000000001674,
+        "outer_range": [
+          0.0033896421630279505,
+          0.9999459604079246,
+          1.0007075632080173,
+          0.9758438521231008,
+          1.0027285139637876,
+          0.9940294380813947,
+          1.0000976960665109
+        ],
+        "outer_gradient_witness": [
+          1.6666666666666665,
+          0,
+          2,
+          0,
+          2,
+          -0.0033896421630279505,
+          34,
+          1
+        ],
+        "covariance": [
+          0.00038574995522911164,
+          0.17709316150533666
+        ],
+        "native_fixed_qualification": false,
+        "previous_model": [
+          0.12414162074423037,
+          0.23442148663453716,
+          3.106909001517122,
+          4.535022656621386e-05,
+          2.5080978840170723e-16,
+          1.7169813163819007e-17,
+          7.849085813242707e-18,
+          6.582607187039173e-16
+        ],
+        "previous_direction": "residual_space_active_QR"
+      },
+      {
+        "index": 7,
+        "snapshot": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/pilot/case.r3-progress.jsonl.solve1.iterate7.snapshot.json",
+          "bytes": 4572,
+          "sha256": "1bcdfa9eb3d55189b0e5804d70af316c15677e8e8746e3661175bbfbd8208c44"
+        },
+        "norms": [
+          0.6296638278319131,
+          0.20465560371066505,
+          5.967062158011515,
+          0.009509577477166284,
+          1.7490542394301657e-15,
+          1.1833485500671197e-15,
+          1.2705494208814502e-17,
+          0.0116547092767466
+        ],
+        "scalar_admissible": true,
+        "min_native_inner_k": 0.001997491871566495,
+        "min_b": 0.8339360157913964,
+        "lambda_min": 1,
+        "wall": {
+          "admissible": true,
+          "minimum": 0.001660470524366826,
+          "arithmetic_scale": 3.055534625887118e-17,
+          "point": [
+            1.5688409475506302,
+            0,
+            0
+          ],
+          "geometry": 4,
+          "extrema_checked": 19
+        },
+        "accepted_fraction": 0.125,
+        "scaled_step_inf": 1.1752832876291466,
+        "outer_range": [
+          0.003421671831600359,
+          0.9999473567940174,
+          1.0007266888104878,
+          0.9756014609556503,
+          1.0029454703300502,
+          0.9938648100857203,
+          1.0000921525934614
+        ],
+        "outer_gradient_witness": [
+          1.6666666666666665,
+          0,
+          2,
+          0,
+          2,
+          -0.003421671831600359,
+          34,
+          1
+        ],
+        "covariance": [
+          0.00039471533244796826,
+          0.1770904000144719
+        ],
+        "native_fixed_qualification": false,
+        "previous_model": [
+          0.12423951329021075,
+          0.23428561470247058,
+          3.108236147271875,
+          4.433070904614859e-05,
+          2.580939034289153e-16,
+          2.085081361410057e-16,
+          9.180474368177433e-18,
+          6.090031139029439e-16
+        ],
+        "previous_direction": "residual_space_active_QR"
+      },
+      {
+        "index": 8,
+        "snapshot": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/pilot/case.r3-progress.jsonl.solve1.iterate8.snapshot.json",
+          "bytes": 4591,
+          "sha256": "55685f003f78a0500f6cd0b7b527f3b2b106651d16a6a45213ec5090dac9163f"
+        },
+        "norms": [
+          0.33473308525510825,
+          0.21797197537708743,
+          5.173130585067032,
+          0.004752562017001862,
+          9.410774076428436e-16,
+          8.670443896318357e-16,
+          5.776764700274327e-17,
+          0.006052013526838878
+        ],
+        "scalar_admissible": true,
+        "min_native_inner_k": 0.002166593120768368,
+        "min_b": 0.8334526683342673,
+        "lambda_min": 1,
+        "wall": {
+          "admissible": true,
+          "minimum": 0.0016379323679880755,
+          "arithmetic_scale": 3.03823924627562e-17,
+          "point": [
+            1.5650101926026914,
+            0,
+            0
+          ],
+          "geometry": 4,
+          "extrema_checked": 20
+        },
+        "accepted_fraction": 0.5,
+        "scaled_step_inf": 1.8070674957569588,
+        "outer_range": [
+          0.0035356603346432536,
+          0.9999489879770991,
+          1.0007983082684309,
+          0.9746840260236962,
+          1.0011392600476476,
+          0.9932415461487314,
+          1.0003703023061563
+        ],
+        "outer_gradient_witness": [
+          1.6666666666666665,
+          0,
+          2,
+          0,
+          2,
+          -0.0035356603346432536,
+          34,
+          1
+        ],
+        "covariance": [
+          0.0004283275463519636,
+          0.17708031660183604
+        ],
+        "native_fixed_qualification": false,
+        "previous_model": [
+          0.12168459056189583,
+          0.23335750453303314,
+          3.1085371298829547,
+          2.996175012892334e-05,
+          1.1469608373764475e-16,
+          6.51830342626562e-17,
+          1.260147624678596e-18,
+          1.1433734932589584e-15
+        ],
+        "previous_direction": "residual_space_active_QR"
+      },
+      {
+        "index": 9,
+        "snapshot": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/pilot/case.r3-progress.jsonl.solve1.iterate9.snapshot.json",
+          "bytes": 4573,
+          "sha256": "c465e8ab36b2f200e68b112836f1b6ced398478c1a5c16242fce1241b6ec8c7a"
+        },
+        "norms": [
+          0.3145703488089253,
+          0.21882705989489493,
+          5.1372899162223,
+          0.00445519939485305,
+          1.0927835301842047e-15,
+          9.6290859197661e-16,
+          1.3552527156068803e-18,
+          0.0056319333159105985
+        ],
+        "scalar_admissible": true,
+        "min_native_inner_k": 0.0021781278286549756,
+        "min_b": 0.8334201159085066,
+        "lambda_min": 1,
+        "wall": {
+          "admissible": true,
+          "minimum": 0.0016378653576710456,
+          "arithmetic_scale": 3.0372325782096073e-17,
+          "point": [
+            1.5648005018273268,
+            0,
+            0
+          ],
+          "geometry": 4,
+          "extrema_checked": 20
+        },
+        "accepted_fraction": 0.0625,
+        "scaled_step_inf": 1.9999999999994889,
+        "outer_range": [
+          0.003542695841581067,
+          0.9999448088345472,
+          1.000803652815233,
+          0.9746167592680327,
+          1.0014710261754298,
+          0.9931958623942211,
+          1.0004040937113376
+        ],
+        "outer_gradient_witness": [
+          1.6666666666666665,
+          0,
+          2,
+          0,
+          2,
+          -0.003542695841581067,
+          34,
+          1
+        ],
+        "covariance": [
+          0.0004306178081303325,
+          0.17707968034329574
+        ],
+        "native_fixed_qualification": false,
+        "previous_model": [
+          0.12447242612103306,
+          0.2327128351483843,
+          3.1068833305473125,
+          4.0009072747243745e-05,
+          1.6025335460397169e-15,
+          1.509819607314425e-16,
+          4.944003979007805e-17,
+          2.328504001496924e-14
+        ],
+        "previous_direction": "residual_space_active_QR"
+      },
+      {
+        "index": 10,
+        "snapshot": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/pilot/case.r3-progress.jsonl.solve1.iterate10.snapshot.json",
+          "bytes": 4596,
+          "sha256": "560d95ae18c293fb23eed77e477f602b5957424db2a9ef9482c249ed06b49caa"
+        },
+        "norms": [
+          0.2770033768857556,
+          0.22045047579524038,
+          5.07435570938311,
+          0.0038976219696698496,
+          1.0928672691723499e-15,
+          1.0712375769484508e-15,
+          1.9651164376299765e-17,
+          0.0043903820193221844
+        ],
+        "scalar_admissible": true,
+        "min_native_inner_k": 0.0021997606105002157,
+        "min_b": 0.8333588547412921,
+        "lambda_min": 1,
+        "wall": {
+          "admissible": true,
+          "minimum": 0.0016376344289748463,
+          "arithmetic_scale": 3.0353658707746906e-17,
+          "point": [
+            1.56441078112133,
+            0,
+            0
+          ],
+          "geometry": 4,
+          "extrema_checked": 20
+        },
+        "accepted_fraction": 0.125,
+        "scaled_step_inf": 2.000000000001131,
+        "outer_range": [
+          0.0035558572772573793,
+          0.9999370793537943,
+          1.0008136380997796,
+          0.9744911682734752,
+          1.0016686606991867,
+          0.9931105664767355,
+          1.0004667683391644
+        ],
+        "outer_gradient_witness": [
+          1.6666666666666665,
+          0,
+          2,
+          0,
+          2,
+          -0.0035558572772573793,
+          34,
+          1
+        ],
+        "covariance": [
+          0.00043491329541752745,
+          0.17707849842440995
+        ],
+        "native_fixed_qualification": false,
+        "previous_model": [
+          0.1233424886934376,
+          0.23265050919628877,
+          3.1072150039430424,
+          3.8181009034185474e-05,
+          9.359465927729052e-16,
+          1.777675725865087e-16,
+          1.0632178928147411e-17,
+          3.695467838366664e-14
+        ],
+        "previous_direction": "residual_space_active_QR"
+      },
+      {
+        "index": 11,
+        "snapshot": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/pilot/case.r3-progress.jsonl.solve1.iterate11.snapshot.json",
+          "bytes": 4600,
+          "sha256": "2c8860dee0e95ec2ab044b64c677ad9a0a9c429c97bfff2d92b726d19b88a307"
+        },
+        "norms": [
+          0.2689205967458233,
+          0.2208005914934412,
+          5.03976638118192,
+          0.003775613118088985,
+          1.4269219268186805e-15,
+          1.3887766232183763e-15,
+          2.7105054312137605e-17,
+          0.004243099861278333
+        ],
+        "scalar_admissible": true,
+        "min_native_inner_k": 0.0022048693886524825,
+        "min_b": 0.8333474457213065,
+        "lambda_min": 1,
+        "wall": {
+          "admissible": true,
+          "minimum": 0.0016376220533428595,
+          "arithmetic_scale": 3.034942292951644e-17,
+          "point": [
+            1.5643205108003246,
+            0,
+            0
+          ],
+          "geometry": 4,
+          "extrema_checked": 19
+        },
+        "accepted_fraction": 0.03125,
+        "scaled_step_inf": 1.9999999999978049,
+        "outer_range": [
+          0.003558874821252167,
+          0.9999352052718212,
+          1.000816060471196,
+          0.974460716692201,
+          1.0018400026421679,
+          0.9930898858357208,
+          1.0004819237478435
+        ],
+        "outer_gradient_witness": [
+          1.6666666666666665,
+          0,
+          2,
+          0,
+          2,
+          -0.003558874821252167,
+          34,
+          1
+        ],
+        "covariance": [
+          0.00043592647965595515,
+          0.17707820015189854
+        ],
+        "native_fixed_qualification": false,
+        "previous_model": [
+          0.12438987576489047,
+          0.23276356513398969,
+          3.106090201368645,
+          4.890842747432731e-05,
+          1.0490548171050419e-15,
+          3.0363130093632744e-16,
+          1.0130969515486218e-17,
+          7.975580531898518e-15
+        ],
+        "previous_direction": "residual_space_active_QR"
+      },
+      {
+        "index": 12,
+        "snapshot": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/cases-001/pilot/case.r3-progress.jsonl.solve1.iterate12.snapshot.json",
+          "bytes": 4595,
+          "sha256": "dba740302bc1e64a6cef37c74d3220c6e11eaa5f9d37a6b00851eb90a07bd12e"
+        },
+        "norms": [
+          0.2533808585055595,
+          0.22148587800420663,
+          4.995492353429328,
+          0.003539213233626224,
+          1.481295723887457e-15,
+          1.3271399357726754e-15,
+          7.877406409464992e-17,
+          0.003991932214711736
+        ],
+        "scalar_admissible": true,
+        "min_native_inner_k": 0.0022148146204150625,
+        "min_b": 0.8333254644743849,
+        "lambda_min": 1,
+        "wall": {
+          "admissible": true,
+          "minimum": 0.0016375755634094017,
+          "arithmetic_scale": 3.0341298109525973e-17,
+          "point": [
+            1.5641454596488784,
+            0,
+            0
+          ],
+          "geometry": 4,
+          "extrema_checked": 19
+        },
+        "accepted_fraction": 0.0625,
+        "scaled_step_inf": 2.0000000000017435,
+        "outer_range": [
+          0.0035647171382096055,
+          0.9999315959358005,
+          1.0008207477462512,
+          0.9744018120861614,
+          1.0020322041753884,
+          0.9930498814933183,
+          1.0005111511642286
+        ],
+        "outer_gradient_witness": [
+          1.6666666666666665,
+          0,
+          2,
+          0,
+          2,
+          -0.0035647171382096055,
+          34,
+          1
+        ],
+        "covariance": [
+          0.00043789886535951293,
+          0.1770776314847532
+        ],
+        "native_fixed_qualification": false,
+        "previous_model": [
+          0.12381301208114923,
+          0.23275740396479008,
+          3.1063213493387463,
+          4.814863005409402e-05,
+          8.165501409404161e-16,
+          8.079883595562754e-17,
+          4.3715735401239723e-17,
+          3.8443321565123334e-15
+        ],
+        "previous_direction": "residual_space_active_QR"
+      }
+    ],
+    "profiling": {
+      "complete_action_assembly": {
+        "calls": 12,
+        "seconds": 114.570210409
+      },
+      "constraints": {
+        "calls": 46,
+        "seconds": 3.17304522
+      },
+      "factorization": {
+        "calls": 12,
+        "seconds": 2.3170343370000004
+      },
+      "line_search": {
+        "calls": 12,
+        "seconds": 44.618991179999995
+      },
+      "linear_solve": {
+        "calls": 12,
+        "seconds": 0.02500514
+      },
+      "mass_dual_norms": {
+        "calls": 46,
+        "seconds": 0.04478788999999999
+      },
+      "r4_direction": {
+        "calls": 12,
+        "seconds": 28.982988599000002
+      },
+      "residual": {
+        "calls": 46,
+        "seconds": 11.413113414
+      },
+      "scalar_domain": {
+        "calls": 91,
+        "seconds": 21.89025316699999
+      },
+      "scope": "outer solver calls; complete action assembly includes separately reported wrapper/backend work; line-search time includes its domain/residual calls"
+    },
+    "native_norms": {
+      "blocks": [
+        0.25338085850555964,
+        0.22148587800420674,
+        4.995492353429332,
+        0.003539213233626227,
+        1.4812957238874576e-15,
+        1.3271399357726756e-15,
+        7.877406409464992e-17,
+        0.003991932214711736
+      ],
+      "gauge": 7.877406409464992e-17,
+      "maximum": 4.995492353429332,
+      "maximum_constraint": 0.003991932214711736
+    },
+    "independent_norms": {
+      "blocks": [
+        0.25338085850555564,
+        0.22148587800420458,
+        4.995492353429094,
+        0.003539213233625126,
+        1.6076405245435108e-15,
+        1.6685424661702758e-15,
+        2.1684043449710086e-17,
+        0.003991932214704781
+      ],
+      "gauge": 2.1684043449710086e-17,
+      "maximum": 4.995492353429094,
+      "maximum_constraint": 0.003991932214704781
+    },
+    "norm_difference": {
+      "blocks": [
+        2.9644265717382727e-12,
+        6.683150555381676e-14,
+        1.0218793287774211e-12,
+        1.461035940380362e-13,
+        5.317651833625704e-16,
+        9.946039230902578e-16,
+        5.709002064493983e-17,
+        6.955024532428351e-15
+      ],
+      "gauge": 5.709002064493983e-17,
+      "maximum": 2.9644265717382727e-12,
+      "maximum_constraint": 6.955024532428351e-15
+    },
+    "independent_sign_unresolved": 0,
+    "same_state_accounting": {
+      "E_minus_D_minus_C": 4.495373257668023e-17,
+      "energy_weak_minus_direct": 5.1514348342607263e-14,
+      "integrated_redistribution": -4.495373257668023e-17
+    },
+    "native_budget_crosschecks": {
+      "available": true,
+      "complete": true,
+      "errors": {
+        "constitutive_modification": 2.8545349135648823e-16,
+        "energy": 1.2851941733060812e-12,
+        "inner_constitutive_modification": 3.885780586188048e-16,
+        "inner_stress": 2.3349127154590183e-14,
+        "interface": 1.3263045176015176e-15,
+        "r2_covariance": 6.106226635438361e-16,
+        "r2_outer_range": 2.220446049250313e-16,
+        "r2_qualified": 0.0,
+        "robust_source": 2.4849171272256558e-15,
+        "strong_continuity": 5.384581563093655e-15,
+        "wall_sources": 3.250282365877532e-15
+      },
+      "passed": true,
+      "tolerance": 3e-10
+    },
+    "free_energy_work": 0.04352016812940995,
+    "matching": {
+      "area": 6.0,
+      "full_total_traction_jump_rms": 0.0005165549670234974,
+      "inner_normal_velocity_integral": -4.801997596387303e-16,
+      "k_flux_jump_rms": 0.001307348616518434,
+      "max_absolute_normal_traction_jump": 0.0018294629971681467,
+      "normal_total_traction_jump_integral": 0.00015881687854363491,
+      "normal_total_traction_jump_rms": 0.0003606491805478104,
+      "reduced_pressure_jump_integral": -0.4552961702886105,
+      "tangential_total_traction_jump_rms": 0.00036981238828200357
+    },
+    "strong_continuity": [
+      0.03409623491792545,
+      8.312911295689148e-05,
+      -3.365837881845468e-16,
+      1.4324174171017473e-16,
+      0.0
+    ],
+    "root_converged": false,
+    "scalar_and_ground_admissible": true,
+    "outer_box_covered": false,
+    "measured_covariance_passes": true,
+    "physical_history_advanced": false
+  },
+  "regressions": {
+    "native": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/focused-regressions.log",
+      "bytes": 625,
+      "sha256": "97200841d1b8e9640d23a3b4bfd54312e6f9c69c623652832d2a0837ad8cbc0e"
+    },
+    "predictor": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-revised/m8-r4/epoch-003/predictor-regressions.log",
+      "bytes": 107,
+      "sha256": "987b5b06cb290480b4d980e72f37bbf2477a60bdd0e9dc768573667e7f42e94f"
+    }
+  },
+  "next_action": "At the retained pilot terminal state, test one fixed-state coupled direction with joint scalar and unchanged outer-box restoration. Measure actual merit and applicability together before another stage attempt."
+}
