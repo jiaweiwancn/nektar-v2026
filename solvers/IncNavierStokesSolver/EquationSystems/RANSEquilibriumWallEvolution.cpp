@@ -412,7 +412,7 @@ RANSEquilibriumWallEvolution::Vector RANSEquilibriumWallEvolution::LoadR3Predict
     boost::property_tree::ptree packet;boost::property_tree::read_json(m_r3PredictorFile,packet);
     const bool retained=m_patch->GroundSafeguard();
     const double originAlpha=retained?400.:3200.;
-    const std::string role=m_patch->ExperimentR8()?"retained_r7_terminal_iterate_only":
+    const std::string role=(m_patch->ExperimentR8() || m_patch->PilotR8())?"retained_r7_terminal_iterate_only":
         (m_patch->InteriorProbeR7() || m_patch->AdaptiveR7())?"retained_r6_terminal_iterate_only":
         m_patch->JointRestorationR5()?"retained_r4_terminal_iterate_only":
         retained?"retained_r3_internal_iterate_only":"nonconverged_auxiliary_predictor_only";
@@ -500,12 +500,13 @@ void RANSEquilibriumWallEvolution::RunR3StageTest()
     const bool localR4=m_stageTest=="DirectionExperimentR4";
     const bool localR5=m_stageTest=="DirectionExperimentR5";
     Require((!(m_patch->DirectionReplayR6() || m_patch->CompareR7() || m_patch->InteriorProbeR7() || m_patch->ExperimentR8()) || localR5) &&
-        (!m_patch->AdaptiveR7() || (!localR5 && !benchmark)),
+        (!(m_patch->AdaptiveR7() || m_patch->PilotR8()) || (!localR5 && !benchmark)),
         "R7 comparison and continuation require their designated stage modes");
     RANSWallEvolutionPatch::WallMatrix frozenMatrix;
     std::string frozenAssembly="[]";
     RANSWallEvolutionPatch::R8Ray ray;
-    if(localR5 && !m_patch->CompareR7() && (m_patch->DirectionReplayR6() || m_patch->RefinedDirectionR6()))
+    if(m_patch->PilotR8() ||
+        (localR5 && !m_patch->CompareR7() && (m_patch->DirectionReplayR6() || m_patch->RefinedDirectionR6())))
     {
         namespace D=RANSWallR3;
         boost::property_tree::ptree packet;boost::property_tree::read_json(m_r3PredictorFile,packet);
@@ -524,7 +525,7 @@ void RANSEquilibriumWallEvolution::RunR3StageTest()
             binary.read(reinterpret_cast<char*>(row.data()),row.size()*sizeof(double));
         Require(binary.good(),"R6 matrix payload is incomplete");
         frozenAssembly=binding.get<std::string>("assembly_json");
-        if(m_patch->ExperimentR8())
+        if(m_patch->ExperimentR8() || m_patch->PilotR8())
         {
             auto readVector=[&](const boost::property_tree::ptree &pin)
             {
@@ -560,7 +561,7 @@ void RANSEquilibriumWallEvolution::RunR3StageTest()
             requested.find_first_not_of("0123456789")==std::string::npos,
             "R5 continuation requires an explicit numerical update budget");
         updateLimit=std::stoi(requested);
-        Require(updateLimit>0 && updateLimit<=32,"R5 update budget exceeds its bound");
+        Require(updateLimit>0 && updateLimit<=(m_patch->PilotR8()?12:32),"Stage update budget exceeds its bound");
     }
     bool solverReturned=false;int iterations=0;std::string failure;
     try

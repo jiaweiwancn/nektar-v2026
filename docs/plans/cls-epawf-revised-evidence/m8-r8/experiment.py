@@ -157,13 +157,102 @@ def summary(epoch, out, h):
         if k in ('r8_radius_selection','r8_curvature_outcome','r8_work','r8_direction_failure','r8_components'):
             print({x:y for x,y in t.items() if x not in ('schema','policy','alpha','time','action_policy','sequence','solve_number')})
 
+def pilot_prepare(epoch, binding, local, out, h):
+    comparison=h.load(local/'comparison.json')
+    cost=h.load(h.bound(comparison['receipt']))
+    records=comparison['results']
+    selected,=[x for x in records if x['kind']=='r8_selected']
+    trials=[x for x in records if x['kind']=='r8_trial']
+    ordinary,=[x for x in trials if x['name']=='r8_ordinary0']
+    chosen,=[x for x in trials if x['name']==selected['name']]
+    assert chosen['name']=='r8_curvature' and chosen['classification']=='accepted'
+    assert max(chosen['actual'])<max(ordinary['actual']) and chosen['wall']['minimum']>ordinary['wall']['minimum']
+    assert chosen['box']['maximum']==0. and ordinary['box']['maximum']==0.
+    action=h.load(binding/'action-check.json')
+    assert action['success'] and action['binding']==h.pin(binding/'binding.json')
+    old=h.load(h.bound(cost['manifest']))
+    assert comparison['J25']['sha256']==old['frozen_action']['matrix']['sha256']
+    runtime_path=epoch/'runtime-fingerprint.json'
+    runtime=h.load(runtime_path)
+    exe=h.pin(epoch/'build/IncNavierStokesSolver')
+    assert runtime['success'] and runtime['runtime_artifacts']['build/IncNavierStokesSolver']==exe['sha256']
+    out.mkdir()
+    tree=ET.parse(h.bound(old['current_target_xml']))
+    info=tree.find('.//SOLVERINFO')
+    selectors={row.get('PROPERTY'):row for row in info}
+    selectors['RANSWallR8Experiment'].set('VALUE','Pilot')
+    selectors['RANSWallStageTest'].set('VALUE','ExactTargetR3')
+    selectors['RANSWallR3PredictorFile'].set('VALUE',str(out/'predictor.json'))
+    selectors['RANSWallR3ProgressFile'].set('VALUE',str(out/'case.r3-progress.jsonl'))
+    ET.SubElement(info,'I',PROPERTY='RANSWallR5Updates',VALUE='10')
+    xml=out/'case.xml'
+    tree.write(xml,encoding='unicode')
+    assert h.predictor.protected_xml(xml)==old['protected_physical_xml_sha256']
+    replay=old['r8_ray']
+    fit,=[t for t in replay['trials'] if t['fraction']==.125]
+    holdout={k:ordinary[k] for k in ('fraction','state','residual')}
+    h.save(out/'predictor.json',dict(old,current_executable=exe,
+        current_target_xml=h.pin(xml),current_runtime=h.pin(runtime_path),producing_source_commit=runtime['source_commit'],
+        r8_ray=dict(replay,trials=[fit,holdout])))
+    h.save(out/'gate.json',dict(schema=1,source_commit=runtime['source_commit'],
+        executable_sha256=exe['sha256'],absolute_action_tolerance=1e-7,required_state_action_gates_met=True,
+        active_dependencies_covered=True,useful_joint_native_descent=True,base_state=old['state'],
+        maximum_updates=10,local_evidence=comparison['receipt'],local_source_commit=cost['source_commit'],
+        local_executable=cost['executable'],current_first_matrix=comparison['J25'],
+        action=h.pin(binding/'action-check.json'),comparison=h.pin(local/'comparison.json'),
+        selected_fraction=chosen['fraction'],selected_state=chosen['state'],selected_residual=chosen['residual']))
+    (out/'budget.txt').write_text(
+        "One pilot with ten accepted updates, nine reachable native trials and one current direction per base. "
+        "The first base reuses its verified current J25, direction and two samples. A fresh matrix and live samples "
+        "are required after acceptance. Cooperative stop at a completed state after 300 solver seconds. "
+        "The external cap is 450 native seconds. No restart.\n")
+
+
+def verify_pilot(epoch, out, h):
+    receipt=h.load(epoch/'pilot-run/receipt.json')
+    collection=h.load(h.bound(receipt['durable_collection']['file']))
+    gate=h.load(out/'gate.json')
+    saved=collection['completed_iterates']
+    assert receipt['maximum_seconds']==450 and collection['protocol']['maximum_Newton_updates']==10
+    assert 2<=len(saved)<=11
+    assert saved[0]['state']['sha256']==gate['base_state']['sha256']
+    assert saved[1]['state']['sha256']==gate['selected_state']['sha256']
+    assert saved[1]['residual']['sha256']==gate['selected_residual']['sha256']
+    for row in collection['jacobians']:
+        if row['status']=='complete':
+            bound=row['event']['details']['loaded_bound_matrix']
+            assert bound==(row['iteration']==0)
+            if bound:
+                assert row['event']['matrix']['sha256']==gate['current_first_matrix']['sha256']
+    import hashlib
+    prefix=collection['progress']
+    payload=Path(prefix['path']).read_bytes()[:prefix['complete_prefix_bytes']]
+    assert hashlib.sha256(payload).hexdigest()==prefix['complete_prefix_sha256']
+    progress=[json.loads(l) for l in payload.splitlines()]
+    trials=[x for x in progress if x['kind']=='r8_trial']
+    updates={x['details']['iteration']+1:x['details'] for x in progress if x['kind']=='newton_update'}
+    maximum=max((sum(t['iteration']==i for t in trials) for i in range(len(saved))),default=0)
+    assert maximum<=9
+    for left,right in zip(saved,saved[1:]):
+        update=updates[right['iteration']]
+        assert max(right['scaled_block_norms'])<(1.-1e-4*update['accepted_fraction'])*max(left['scaled_block_norms'])
+        assert update['box']['maximum']==0. and right['scalar_domain']['admissible']
+        assert right['scalar_domain']['r4_wall_trace']['minimum']>=0. and not right['history_advanced']
+    cut_rows=[x for x in progress if x['kind']=='r6_cut_audit' and x['status']=='passed_original_cut_scan']
+    largest_cut=max((max(x['worst_native_violation'],x['worst_extended_violation']) for x in cut_rows),default=0.)
+    assert largest_cut<=5e-12
+    h.save(out/'verification.json',dict(success=True,receipt=h.pin(epoch/'pilot-run/receipt.json'),
+        first_step_reproduced=True,maximum_new_trials=maximum,trials=len(trials),accepted_updates=len(saved)-1,
+        terminal=collection['terminal'],largest_original_row_violation=largest_cut))
+
 def main():
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument('mode',choices=('bind','action','prepare','summary'))
+    p.add_argument('mode',choices=('bind','action','prepare','summary','pilot','verify-pilot'))
     p.add_argument('--r7',type=Path,required=True)
     p.add_argument('--binding',type=Path,required=True)
     p.add_argument('--epoch',type=Path)
     p.add_argument('--out',type=Path)
+    p.add_argument('--local',type=Path)
     a=p.parse_args()
     if platform.system()!='Linux':
         raise ValueError('Use the designated Linux host')
@@ -180,8 +269,12 @@ def main():
         h=module(a.epoch/'source/docs/plans/cls-epawf-revised-evidence/m8-r4/prepare.py','r8_prepare')
         if a.mode=='prepare':
             prepare(a.epoch,r7,a.binding,a.out,h)
-        else:
+        elif a.mode=='summary':
             summary(a.epoch,a.out,h)
+        elif a.mode=='pilot':
+            pilot_prepare(a.epoch,a.binding,a.local,a.out,h)
+        else:
+            verify_pilot(a.epoch,a.out,h)
 
 
 if __name__=='__main__':

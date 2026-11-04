@@ -90,6 +90,7 @@ def main():
     info = {row.get('PROPERTY', '').upper():row.get('VALUE') for row in root.findall('.//SOLVERINFO/I')}
     r4 = info.get('RANSWALLGLOBALIZATION') == 'CoupledR4'
     r5 = info.get('RANSWALLGLOBALIZATION') == 'JointRestorationR5'
+    r8 = info.get('RANSWALLR8EXPERIMENT') == 'Pilot'
     expected_stage = {'benchmark': 'JacobianBenchmarkR3', 'target': 'ExactTargetR3',
                       'r4-local': 'DirectionExperimentR4', 'r5-local': 'DirectionExperimentR5'}[a.phase]
     require(info.get('RANSWALLSTAGETEST') == expected_stage and
@@ -114,8 +115,13 @@ def main():
     if a.phase == 'target':
         require(a.cost_receipt is not None and a.budget_note is not None, 'Target budget requires the measured complete-J receipt and frozen note')
         cost = load(a.cost_receipt)
+        current_cost = cost.get('source_commit') == a.expected_source and cost.get('executable') == executable
+        bound_r8_cost = (r8 and gate.get('local_evidence') == pin(a.cost_receipt) and
+                         gate.get('local_source_commit') == cost.get('source_commit') and
+                         gate.get('local_executable') == cost.get('executable') and
+                         gate.get('current_first_matrix') == manifest.get('frozen_action', {}).get('matrix'))
         require(cost.get('phase') == ('r5-local' if r5 else 'r4-local' if r4 else 'benchmark') and cost.get('status') == 'completed' and
-            cost.get('source_commit') == a.expected_source and cost.get('executable') == executable and
+            (current_cost or bound_r8_cost) and
             cost.get('runtime_unchanged') is True and (r4 or r5 or cost.get('durable_collection', {}).get('complete_J_benchmark') is True),
             'Target cost basis is not the completed current-source full-J benchmark')
         if r4:
@@ -128,6 +134,9 @@ def main():
                 gate.get('useful_joint_native_descent') is True and gate.get('base_state') == manifest['state'] and
                 0 < int(info['RANSWALLR5UPDATES']) == gate.get('maximum_updates') <= 32,
                 'R5 continuation requires joint descent at its exact saved base and a bounded measured budget')
+        if r8:
+            require(a.seconds <= 450 and gate.get('maximum_updates', 0) <= 12 and bound_r8_cost,
+                    'R8 requires the same verified first-state matrix and short pilot budgets')
         require(bool(a.budget_note.read_text().strip()), 'Empty target budget rationale')
     environment = dict(os.environ, **{key:'1' for key in THREADS}, PYTHONDONTWRITEBYTECODE='1',
         TMPDIR=str(epoch/'tmp'), LD_LIBRARY_PATH=str(build/'geometry-lib'))
