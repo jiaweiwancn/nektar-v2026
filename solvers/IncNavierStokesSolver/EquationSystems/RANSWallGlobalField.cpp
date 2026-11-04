@@ -49,9 +49,10 @@ std::array<int,3> Indices(int index,int modes)
 
 struct RANSWallGlobalField::BasisData
 {
-    struct Values { Vector value,derivative; };
+    struct Values { Vector value,derivative,secondDerivative; };
     std::shared_ptr<StdRegions::StdSegExp> segment;
     std::vector<Array<OneD,NekDouble>> derivative;
+    std::vector<Array<OneD,NekDouble>> secondDerivative;
     mutable std::map<double,std::shared_ptr<const Values>> cache;
 
     explicit BasisData(const LibUtilities::BasisKey &key)
@@ -60,7 +61,11 @@ struct RANSWallGlobalField::BasisData
         const int points=segment->GetTotPoints();
         const auto db=segment->GetBasis(0)->GetDbdata();
         for(int j=0;j<segment->GetNcoeffs();++j)
+        {
             derivative.emplace_back(points,db.data()+j*points);
+            secondDerivative.emplace_back(points,0.);
+            segment->StdPhysDeriv(derivative.back(),secondDerivative.back());
+        }
     }
     std::shared_ptr<const Values> Evaluate(double coordinate) const
     {
@@ -73,6 +78,7 @@ struct RANSWallGlobalField::BasisData
         {
             result->value.push_back(segment->PhysEvaluateBasis(local,j));
             result->derivative.push_back(segment->StdPhysEvaluate(local,derivative[j]));
+            result->secondDerivative.push_back(segment->StdPhysEvaluate(local,secondDerivative[j]));
         }
         // Moving cutoffs can create many radial coordinates during a Jacobian.
         // Bound the cache; shared results stay valid through the current row.
@@ -221,6 +227,37 @@ RANSWallGlobalPoint RANSWallGlobalField::ElementPoint(int e,const Coordinate &co
             derivative[m_axes[d]]=entry;
         }
         for(int d=0;d<3;++d) result.derivative[d].push_back(derivative[d]);
+    }
+    return result;
+}
+std::array<RANSWallGlobalField::Vector,3> RANSWallGlobalField::RadialGradientDerivative(
+    const RANSWallGlobalPoint &point) const
+{
+    const auto &element=m_elements.at(point.element);
+    Require(point.geometry==element.geometry,"radial Hessian has mismatched native geometry");
+    const int radial=m_dimension-1,modes=element.degree+1,count=TensorSize(modes,m_dimension);
+    Require(point.ids.size()==static_cast<std::size_t>(count),"radial Hessian row shape differs");
+    std::array<std::shared_ptr<const BasisData::Values>,3> basis{};
+    std::array<double,3> inverse{};
+    for(int d=0;d<m_dimension;++d)
+    {
+        const int axis=m_axes[d];inverse[d]=2/(element.upper[axis]-element.lower[axis]);
+        basis[d]=m_elementBasis[point.element][d]->Evaluate(
+            (point.coordinate[axis]-element.lower[axis])*inverse[d]-1);
+    }
+    std::array<Vector,3> result;for(auto &row:result)row.assign(count,0.);
+    const auto map=m_field->GetLocalToGlobalMap();const int start=m_field->GetCoeff_Offset(point.element);
+    for(int j=0;j<count;++j)
+    {
+        const auto index=Indices(j,modes);
+        for(int d=0;d<m_dimension;++d)
+        {
+            double value=map->GetLocalToGlobalSign(start+j)*inverse[d]*inverse[radial];
+            for(int a=0;a<m_dimension;++a)
+                value*=a==radial && a==d?basis[a]->secondDerivative[index[a]]:
+                    a==radial || a==d?basis[a]->derivative[index[a]]:basis[a]->value[index[a]];
+            result[m_axes[d]][j]=value;
+        }
     }
     return result;
 }

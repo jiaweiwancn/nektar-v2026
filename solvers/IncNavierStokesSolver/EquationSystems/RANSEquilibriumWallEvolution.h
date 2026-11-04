@@ -39,6 +39,8 @@ private:
     void Checkpoint();
     void WriteMappedField(const std::string &name,const std::shared_ptr<RANSWallGlobalField> &field,const Vector &values) const;
     void RunRestrictedStageTest();
+    void RunR3StageTest();
+    Vector LoadR3Predictor(const Vector &history,double time);
     std::string PhysicsSignature() const;
     LibUtilities::SessionReaderSharedPtr m_serialSession;
     std::shared_ptr<RANSWallEvolutionPatch> m_patch;
@@ -61,6 +63,7 @@ private:
     std::string m_rangeGuardName="Off",m_stageTest="Off",m_initialScalarDomain;
     std::vector<std::string> m_stageTestLevels;
     std::string m_stageTestInitialHistory;
+    std::string m_r3PredictorFile="None",m_r3PredictorBinding="null",m_r3PredictorRevalidation="null";
     Vector m_initialEvaluationSeconds;
     bool m_targetConverged=false,m_targetPhysical=false;
     struct PhysicalRangeEvent

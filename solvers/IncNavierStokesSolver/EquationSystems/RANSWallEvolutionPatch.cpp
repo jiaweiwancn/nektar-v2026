@@ -192,7 +192,13 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     Require(!m_solveDiagnostics || m_comm->GetSize()==1,"detailed first-failure diagnostics currently require one MPI rank");
     session->LoadSolverInfo("RANSWallNonlinearPolicy",m_nonlinearPolicy,"Legacy");
     session->LoadSolverInfo("RANSWallFeasibleFile",m_feasibleTraceFile,"case.feasible.jsonl");
-    Require(m_nonlinearPolicy=="Legacy" || m_nonlinearPolicy=="ScalarFeasibleR2","unknown wall nonlinear policy");
+    session->LoadSolverInfo("RANSWallR3ProgressFile",m_r3ProgressFile,"case.r3-progress.jsonl");
+    session->LoadSolverInfo("RANSWallActionPolicy",m_actionPolicy,"Legacy");
+    Require(m_actionPolicy=="Legacy" || m_actionPolicy=="VerifiedR3Action","unknown wall action policy");
+    Require((m_nonlinearPolicy=="ScalarFeasibleR3")== (m_actionPolicy=="VerifiedR3Action"),
+        "VerifiedR3Action and ScalarFeasibleR3 must be selected together");
+    Require(m_nonlinearPolicy=="Legacy" || m_nonlinearPolicy=="ScalarFeasibleR2" ||
+        m_nonlinearPolicy=="ScalarFeasibleR3","unknown wall nonlinear policy");
     Require(m_nonlinearPolicy=="Legacy" || m_comm->GetSize()==1,
         "ScalarFeasibleR2 currently requires one MPI rank");
     session->LoadParameter("RANSWallOwnershipShift",m_ownershipShift,0);Require(m_ownershipShift>=0,"negative ownership shift");
@@ -293,7 +299,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     Vector seed(Size());for(int i=0;i<size[K()];++i)seed[offset[K()]+i]=parameters.model.Q()*.16*m_constants[K()][i];
     Refresh(seed);for(const auto &ray:m_rays)for(const auto &q:ray.points)m_bodyInner.push_back(q);
     if(m_transitionEnabled)InitialiseTransition(session);
-    if(m_nonlinearPolicy=="ScalarFeasibleR2")
+    if(m_nonlinearPolicy=="ScalarFeasibleR2" || m_nonlinearPolicy=="ScalarFeasibleR3")
         Require(m_dimension==2 && !Mapped() && m_transitionEnabled && m_cappedDestruction,
             "ScalarFeasibleR2 prototype requires a flat 2D upstream patch and capped destruction");
 }
@@ -663,6 +669,11 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Solve(Vector s,const Vect
     const RANSWallEvolutionData &data,bool condensed,int &iterations,double tolerance,int maximumIterations) const
 {
     Require(Size()<=3000,"replicated dense evolution solve is limited to 3000 unknowns; larger meshes permit reference audits only");
+    if(m_nonlinearPolicy=="ScalarFeasibleR3")
+    {
+        Require(!condensed,"ScalarFeasibleR3 retains the full coupled dense backend");
+        return SolveScalarFeasibleR3(std::move(s),history,alpha,time,data,iterations,tolerance,maximumIterations);
+    }
     if(m_nonlinearPolicy=="ScalarFeasibleR2")
         return SolveScalarFeasible(std::move(s),history,alpha,time,data,condensed,iterations,tolerance,maximumIterations);
     namespace J=RANSWallSolveJson;

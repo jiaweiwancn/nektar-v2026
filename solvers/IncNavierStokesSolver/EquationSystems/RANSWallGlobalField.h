@@ -64,6 +64,11 @@ public:
     int Size() const;
     RANSWallGlobalPoint Point(const Coordinate &coordinate, int side=0) const;
     RANSWallGlobalPoint ElementPoint(int element, const Coordinate &coordinate) const;
+    /** d/dz of each Cartesian basis-gradient row on the same native element.
+     * Used by the opt-in R3 action when a normalization-ray point moves.
+     * Contracting with a field uses the same constant-centering as Gradient.
+     */
+    std::array<Vector,3> RadialGradientDerivative(const RANSWallGlobalPoint &point) const;
     std::vector<RANSWallGlobalPoint> Quadrature(int order=0) const;
     WallMatrix Mass() const;
     Vector Project(const RANSWallFunction &function) const;

@@ -100,6 +100,14 @@ public:
         int region=-1) const;
     Vector DirectionalAction(const Vector &state,const Vector &direction,const Vector &history,
         double alpha,double time,const RANSWallEvolutionData &data,double step=2e-6) const;
+    /** Opt-in R3 spatial nonpressure actions, including moving normalization
+     * rules and projected dependent-trace constraints. Time mass and the
+     * separately qualified pressure/gauge columns are supplied by the caller.
+     */
+    WallMatrix NonpressureJacobianR3(const Vector &state,double time,
+        const RANSWallEvolutionData &data,std::vector<std::string> *metadata=nullptr) const;
+    Vector NonpressureDirectionalActionR3(const Vector &state,const Vector &direction,
+        double time,const RANSWallEvolutionData &data,bool imposeConstraints=true,int region=-1) const;
     double BoundaryFluxCorrection() const { return m_boundaryCorrection; }
     std::vector<std::shared_ptr<RANSWallGlobalField>> fields;
     std::shared_ptr<RANSWallGlobalField> innerVelocity,outerVelocity;
@@ -146,8 +154,13 @@ public:
         std::vector<std::string> *columnMetadata=nullptr,bool scalarOnly=false) const;
     Vector SolveFrozenScalars(Vector state,const Vector &history,double alpha,double time,
         const RANSWallEvolutionData &data,int &iterations,double tolerance,int maximumIterations) const;
+    Vector SolveScalarFeasibleR3(Vector state,const Vector &history,double alpha,double time,
+        const RANSWallEvolutionData &data,int &iterations,double tolerance,
+        int maximumIterations,bool benchmarkOnly=false) const;
+    const std::string &R3ProgressFile() const { return m_r3ProgressFile; }
     const Vector &LastFeasibleState() const { return m_lastFeasibleState; }
     const std::string &NonlinearPolicyName() const { return m_nonlinearPolicy; }
+    const std::string &ActionPolicyName() const { return m_actionPolicy; }
     Vector Norms(const Vector &residual,const std::map<int,double> &constraints,double ustar=.4) const;
     Vector StateNorms(const Vector &state,const Vector &reference,double ustar=.4) const;
     Vector ExplicitBody(const Vector &state,double time,const RANSWallEvolutionData &data) const;
@@ -169,6 +182,18 @@ public:
         const RANSWallEvolutionData &data,bool includeBody=true) const;
     Vector RoughnessBudget(const Vector &state,double time,const RANSWallEvolutionData &data) const;
     Vector EnergyBudget(const Vector &state,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data) const;
+    struct ResidualResolutionResult
+    {
+        Vector effectiveState;
+        std::map<int,double> constraints;
+        Diagnostic native,terms,compensated,absoluteAccumulation,additionCounts,norms;
+        std::map<std::string,std::vector<long double>> extended;
+        std::string scope;
+    };
+    ResidualResolutionResult ResidualResolution(const Vector &state,const Vector &history,
+        double alpha,double time,const RANSWallEvolutionData &data,bool anchored=false) const;
+    ResidualResolutionResult ResidualResolutionComponents(const Vector &state,const Vector &history,
+        double alpha,double time,const RANSWallEvolutionData &data,bool anchored=false) const;
     /** Optional accepted-state audit. Entries are documented in the M7 guide.
      * Sampled admissibility is not a certificate over the entire polynomial. */
     Diagnostic Audit(const Vector &state,const Vector &history,double alpha,double time,
@@ -195,6 +220,9 @@ public:
         const SolverUtils::EquilibriumAWFProfiles &profile) const;
     std::string Signature() const;
 private:
+    WallMatrix AssembleNonpressureR3(const Vector &state,double time,
+        const RANSWallEvolutionData &data,bool imposeConstraints,int region,
+        std::vector<std::string> *metadata) const;
     struct ScalarLocation
     {
         std::string inventory;
@@ -272,6 +300,8 @@ private:
     mutable std::string m_solveResidualException;
     mutable std::string m_solveInvalidContext;
     std::string m_nonlinearPolicy="Legacy",m_feasibleTraceFile="case.feasible.jsonl";
+    std::string m_r3ProgressFile="case.r3-progress.jsonl";
+    std::string m_actionPolicy="Legacy";
     mutable bool m_feasibleTraceStarted=false;
     mutable std::vector<ScalarLocation> m_scalarLocations;
     mutable std::vector<RANSWallCoordinate> m_traceScalarAnchors,m_scalarSamplerAnchors;

@@ -31,6 +31,8 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
         ./EquationSystems/RANSWallEvolutionTransition.cpp
         ./EquationSystems/RANSWallEvolutionRobust.cpp
         ./EquationSystems/RANSWallEvolutionActions.cpp
+        ./EquationSystems/RANSWallEvolutionNonpressure.cpp
+        ./EquationSystems/RANSWallEvolutionResolution.cpp
         ./EquationSystems/RANSWallEvolutionFeasible.cpp
         ./EquationSystems/RANSWallTimeIntegration.cpp
         ./EquationSystems/RANSEquilibriumWallEvolution.cpp
@@ -99,6 +101,8 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
             EquationSystems/RANSWallInterface.h
             EquationSystems/RANSWallGlobalField.h
             EquationSystems/RANSWallEvolutionPatch.h
+            EquationSystems/RANSWallEvolutionResolution.h
+            EquationSystems/RANSWallDurableProgress.h
             EquationSystems/RANSWallTimeIntegration.h
             EquationSystems/RANSEquilibriumWallEvolution.h
             EquationSystems/WeakPressureExtrapolate.h
@@ -193,6 +197,8 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
                 EquationSystems/RANSWallEvolutionRobust.cpp)
         TARGET_SOURCES(RANSEquilibriumEvolutionProbe PRIVATE
             EquationSystems/RANSWallEvolutionActions.cpp
+            EquationSystems/RANSWallEvolutionNonpressure.cpp
+            EquationSystems/RANSWallEvolutionResolution.cpp
             EquationSystems/RANSWallEvolutionFeasible.cpp
             EquationSystems/RANSWallEvolutionDiagnostics.cpp)
         FOREACH(rans_m4_target RANSEquilibriumTimeProbe RANSEquilibriumEvolutionProbe RANSTransverseEvolutionProbe)

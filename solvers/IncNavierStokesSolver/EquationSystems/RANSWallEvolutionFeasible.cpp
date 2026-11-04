@@ -4,10 +4,12 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
 #include <LibUtilities/Foundations/ManagerAccess.h>
 #include <LibUtilities/LinearAlgebra/Lapack.hpp>
 #include <algorithm>
 #include <cmath>
+#include <chrono>
 #include <fstream>
 #include <iostream>
 #include <limits>
@@ -252,6 +254,46 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::ScalarFeasibleJacobia
     std::vector<std::string> *metadata,bool scalarOnly) const
 {
     Require(Size()<=3000,"ScalarFeasibleR2 retains the 3000-unknown dense guard");
+    if(m_nonlinearPolicy=="ScalarFeasibleR3")
+    {
+        Require(!scalarOnly,"VerifiedR3Action is a coupled action, not the frozen R2 scalar diagnostic");
+        const auto domainStarted=std::chrono::steady_clock::now();
+        const auto checked=ScalarDomain(s,time,data);
+        const double domainSeconds=std::chrono::duration<double>(std::chrono::steady_clock::now()-domainStarted).count();
+        Require(checked.admissible,"R3 Jacobian base is outside its scalar evaluation domain");
+        const auto constraintsStarted=std::chrono::steady_clock::now();
+        const auto constraints=Constraints(s,time,data);
+        const double constraintsSeconds=std::chrono::duration<double>(std::chrono::steady_clock::now()-constraintsStarted).count();
+        auto jac=NonpressureJacobianR3(s,time,data,metadata);
+        Require(jac.size()==Size(),"R3 spatial action matrix has wrong row count");
+        for(const auto &row:jac)Require(row.size()==Size(),"R3 spatial action matrix has wrong column count");
+        const auto pressureStarted=std::chrono::steady_clock::now();
+        for(int column=offset[InnerPressure()];column<Size();++column)
+        {
+            Vector direction(Size());direction[column]=1.;
+            const auto action=PressureDirectionalAction(s,direction,time,data);
+            for(int row=0;row<Size();++row)jac[row][column]=action[row];
+        }
+        const double pressureSeconds=std::chrono::duration<double>(std::chrono::steady_clock::now()-pressureStarted).count();
+        const auto massStarted=std::chrono::steady_clock::now();
+        for(int block=0;block<InnerPressure();++block)for(int local=0;local<size[block];++local)
+        {
+            const int column=offset[block]+local;
+            const bool external=constraints.count(column) &&
+                !(block==Epsilon() && m_transitionEnabled && m_traceIds.count(local));
+            if(external)continue;
+            for(int row=0;row<size[block];++row)if(!constraints.count(offset[block]+row))
+                jac[offset[block]+row][column]+=alpha*m_mass[block][row][local];
+        }
+        if(metadata)metadata->push_back(J::Object({{"component",J::Quote("complete_verified_R3_action")},
+            {"pressure_and_gauge_columns",J::Number(Size()-offset[InnerPressure()])},
+            {"wrapper_scalar_domain_calls","1"},{"wrapper_scalar_domain_seconds",J::Number(domainSeconds)},
+            {"wrapper_constraints_calls","1"},{"wrapper_constraints_seconds",J::Number(constraintsSeconds)},
+            {"pressure_action_seconds",J::Number(pressureSeconds)},
+            {"exact_time_mass_seconds",J::Number(std::chrono::duration<double>(std::chrono::steady_clock::now()-massStarted).count())},
+            {"exact_time_mass","true"},{"whole_residual_difference_calls","0"}}));
+        return jac;
+    }
     const auto domain=ScalarDomain(s,time,data);Require(domain.admissible,"Jacobian base is outside scalar domain");
     const auto constraints=Constraints(s,time,data);const auto base=Residual(s,history,0,time,data);
     const double us=m_robustUstar,K0=m_parameters.model.Q()*us*us;
@@ -556,6 +598,195 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveFrozenScalars(Vector
 {
     Require(m_nonlinearPolicy=="ScalarFeasibleR2","frozen scalar diagnostic requires ScalarFeasibleR2");
     return SolveScalarFeasible(std::move(state),history,alpha,time,data,false,iterations,tolerance,maximumIterations,true);
+}
+
+RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
+    Vector s,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data,
+    int &iterations,double tolerance,int maximumIterations,bool benchmarkOnly) const
+{
+    Require(m_nonlinearPolicy=="ScalarFeasibleR3" && m_dimension==2 && !Mapped() &&
+        m_transitionEnabled && m_cappedDestruction && m_comm->GetSize()==1,
+        "ScalarFeasibleR3 requires its opt-in serial flat 2D Upstream+Capped policy");
+    Require(Size()<=3000 && alpha==400. && time==.0025 && tolerance==2e-12 &&
+        maximumIterations>0 && maximumIterations<=16,"R3 requires the unchanged bounded exact target");
+    iterations=0;
+    using Clock=std::chrono::steady_clock;
+    std::map<std::string,std::pair<int,double>> profile;
+    auto timed=[&](const std::string &name,auto function)
+    {
+        const auto start=Clock::now();++profile[name].first;
+        auto value=function();profile[name].second+=std::chrono::duration<double>(Clock::now()-start).count();
+        return value;
+    };
+    auto profiling=[&]()
+    {
+        std::vector<std::pair<std::string,std::string>> rows;
+        for(const auto &[name,value]:profile)rows.push_back({name,J::Object({
+            {"calls",J::Number(value.first)},{"seconds",J::Number(value.second)}})});
+        rows.push_back({"scope",J::Quote("outer solver calls; complete action assembly includes separately reported wrapper/backend work; line-search time includes its domain/residual calls")});
+        return J::Object(rows);
+    };
+    const int solve=++m_feasibleSolveCount;
+    RANSWallR3::DurableProgress durable(m_r3ProgressFile,solve,alpha,time,history,ActionPolicyName()+":v1");
+    durable.Event("protocol",{{"inner_stress_model",J::Quote(InnerStressName())},
+        {"tolerance",J::Number(tolerance)},{"maximum_Newton_updates",J::Number(maximumIterations)},
+        {"benchmark_only",J::Boolean(benchmarkOnly)},{"no_auxiliary_alpha_sequence","true"}});
+    const double us=m_robustUstar,K0=m_parameters.model.Q()*us*us;
+    const double E0=us*us*us/(m_parameters.model.Kappa()*m_parameters.geometry.height);
+    auto domain=timed("scalar_domain",[&]{return ScalarDomain(s,time,data,true);});
+    auto constraints=std::map<int,double>{};Vector residual,norms;std::string terminal="started";
+    bool alreadySaved=false;int stagnant=0;
+    auto evaluate=[&]()
+    {
+        Require(domain.admissible,"R3 iterate is outside its scalar evaluation domain: "+domain.failure);
+        constraints=timed("constraints",[&]{return Constraints(s,time,data);});
+        residual=timed("residual",[&]{return Residual(s,history,alpha,time,data);});
+        norms=timed("mass_dual_norms",[&]{return Norms(residual,constraints,us);});
+    };
+    try
+    {
+        evaluate();
+        for(iterations=0;iterations<=maximumIterations;++iterations)
+        {
+            // Every accepted iterate is persisted immediately, including one
+            // at which stagnation stops the search. No next J starts first.
+            if(!alreadySaved)durable.Snapshot(iterations,s,residual,constraints,norms,
+                ScalarDomainJSON(domain),profiling());
+            alreadySaved=false;
+            const double error=Maximum(norms);
+            if(error<tolerance && !benchmarkOnly)
+            {
+                terminal="true_coupled_residual_converged";m_lastFeasibleState=s;
+                durable.Event("solve_terminal",{{"converged","true"},{"terminal",J::Quote(terminal)},
+                    {"iteration",J::Number(iterations)},{"scaled_block_norms",J::Numbers(norms)},{"profiling",profiling()}});
+                return s;
+            }
+            Require(iterations<maximumIterations,"R3 Newton iteration limit");
+            durable.JacobianStatus(iterations,"incomplete");
+            std::vector<std::string> assembly;
+            const auto jac=timed("complete_action_assembly",[&]{return ScalarFeasibleJacobian(s,history,alpha,time,data,&assembly,false);});
+            const auto matrix=durable.MatrixPayload(iterations,jac);
+            durable.JacobianStatus(iterations,"complete",matrix,J::Object({
+                {"shape",J::Numbers(Vector{double(Size()),double(Size())})},
+                {"assembly",J::List(assembly)},{"profiling",profiling()}}));
+            const auto factor=timed("factorization",[&]{return FeasibleFactor(jac);});
+            durable.Event("factorization_completed",{{"iteration",J::Number(iterations)},
+                {"matrix",matrix},{"profiling",profiling()}});
+            if(benchmarkOnly)
+            {
+                terminal="one_complete_current_J_and_factorization_benchmark_no_update";m_lastFeasibleState=s;
+                durable.Event("solve_terminal",{{"converged","false"},{"benchmark_completed","true"},
+                    {"terminal",J::Quote(terminal)},{"iteration",J::Number(iterations)},{"profiling",profiling()}});
+                return s;
+            }
+            auto rhs=residual;for(auto &value:rhs)value=-value;
+            const auto step=timed("linear_solve",[&]{return factor.Apply(std::move(rhs));});
+            const auto stepPin=durable.VectorPayload("iterate"+std::to_string(iterations)+".step",step);
+            const auto jacStep=Multiply(jac,step);auto linear=jacStep;
+            for(int row=0;row<Size();++row)linear[row]+=residual[row];
+            const auto linearNorms=Norms(linear,constraints,us);
+            Require(Maximum(linearNorms)<1e-8*std::max(1.,error),"R3 inaccurate linear solve");
+            auto moved=s;for(int row=0;row<Size();++row)moved[row]+=step[row];
+            moved=ExternalLift(moved,time,data);Vector actualStep(Size());
+            for(int row=0;row<Size();++row)actualStep[row]=moved[row]-domain.effectiveState[row];
+            auto traceStep=actualStep;
+            for(int id:m_traceIds)traceStep[offset[Epsilon()]+id]=step[offset[Epsilon()]+id]-jacStep[offset[Epsilon()]+id];
+            double maximum=1;ScalarObservation limiting;bool limited=false;
+            for(const auto &point:domain.observations)
+            {
+                const auto row=Point(point.block,point.coordinate,point.side);
+                const double delta=row.Value(point.dependentTrace?traceStep:actualStep,offset[point.block]);
+                if(delta<0)
+                {
+                    const double bound=point.value/(-delta);
+                    if(bound<maximum){maximum=std::max(0.,bound);limiting=point;limited=true;}
+                }
+            }
+            double stepNorm=0;
+            for(int block=0;block<=Gauge();++block)for(int local=0;local<size[block];++local)
+            {
+                const double scale=block<m_dimension?us:block==K()?K0:block==Epsilon()?E0:
+                    block==Gauge()?us/m_parameters.geometry.height:us*us;
+                stepNorm=std::max(stepNorm,std::abs(step[offset[block]+local])/scale);
+            }
+            double fraction=maximum<1?.995*maximum:1.;bool accepted=false;
+            Vector nextState,nextResidual,nextNorms;std::map<int,double> nextConstraints;
+            ScalarDomainResult nextDomain;const auto searchStarted=Clock::now();++profile["line_search"].first;
+            for(int backtrack=0;backtrack<32 && fraction>=std::ldexp(1.,-40);++backtrack,fraction*=.5)
+            {
+                auto trial=s;for(int row=0;row<Size();++row)trial[row]+=fraction*step[row];
+                const auto trialName="iterate"+std::to_string(iterations)+".trial"+std::to_string(backtrack);
+                const auto trialPin=durable.VectorPayload(trialName+".state",trial);
+                auto checked=timed("scalar_domain",[&]{return ScalarDomain(trial,time,data,true);});
+                if(!checked.admissible)
+                {
+                    durable.Event("line_search_trial",{{"iteration",J::Number(iterations)},{"backtrack",J::Number(backtrack)},
+                        {"fraction",J::Number(fraction)},{"classification",J::Quote("scalar_domain_rejection_before_residual")},
+                        {"state",trialPin},{"scalar_domain",ScalarDomainJSON(checked)}});continue;
+                }
+                try
+                {
+                    auto candidate=timed("residual",[&]{return Residual(trial,history,alpha,time,data);});
+                    auto current=timed("constraints",[&]{return Constraints(trial,time,data);});
+                    auto candidateNorms=timed("mass_dual_norms",[&]{return Norms(candidate,current,us);});
+                    const auto candidatePin=durable.VectorPayload(trialName+".residual",candidate);
+                    const bool descent=Maximum(candidateNorms)<(1.-1e-4*fraction)*error;
+                    auto rechecked=timed("scalar_domain",[&]{return ScalarDomain(trial,time,data,true);});
+                    const bool accept=descent && rechecked.admissible;
+                    durable.Event("line_search_trial",{{"iteration",J::Number(iterations)},{"backtrack",J::Number(backtrack)},
+                        {"fraction",J::Number(fraction)},{"classification",J::Quote(accept?"feasible_accepted_descent":"valid_non_descent_or_recheck_failure")},
+                        {"state",trialPin},{"residual",candidatePin},{"scaled_block_norms",J::Numbers(candidateNorms)},
+                        {"scalar_domain",ScalarDomainJSON(rechecked)},
+                        {"profile_branches_changed",J::Boolean(domain.profileBranches!=rechecked.profileBranches)}});
+                    if(accept)
+                    {
+                        accepted=true;nextState=std::move(trial);nextResidual=std::move(candidate);
+                        nextNorms=std::move(candidateNorms);nextConstraints=std::move(current);nextDomain=std::move(rechecked);break;
+                    }
+                }
+                catch(const std::exception &errorValue)
+                {
+                    durable.Event("line_search_trial",{{"iteration",J::Number(iterations)},{"backtrack",J::Number(backtrack)},
+                        {"fraction",J::Number(fraction)},{"classification",J::Quote("evaluable_scalar_state_residual_exception")},
+                        {"state",trialPin},{"exception_type",J::Quote(J::ExceptionType(errorValue))},
+                        {"exception_message",J::Quote(errorValue.what())}});
+                }
+            }
+            profile["line_search"].second+=std::chrono::duration<double>(Clock::now()-searchStarted).count();
+            const auto update=J::Object({{"iteration",J::Number(iterations)},{"accepted",J::Boolean(accepted)},
+                {"matrix",matrix},{"step",stepPin},{"dimensionless_step",J::Number(stepNorm)},
+                {"linear_scaled_block_norms",J::Numbers(linearNorms)},
+                {"fixed_location_maximum_fraction",J::Number(maximum)},{"boundary_limited",J::Boolean(limited)},
+                {"limiting_inventory",J::Quote(limiting.inventory)},{"limiting_point",J::Numbers(limiting.coordinate)},
+                {"limiting_value",J::Number(limiting.value)},{"accepted_fraction",J::Number(accepted?fraction:0)}});
+            if(!accepted)
+            {
+                durable.Event("newton_update",{{"details",update},{"profiling",profiling()}});
+                terminal=maximum<std::ldexp(1.,-40)?"feasible_step_collapsed":"feasible_line_search_exhausted";
+                throw std::runtime_error(terminal);
+            }
+            const double nextError=Maximum(nextNorms);
+            // Publish the completed accepted state before any further action,
+            // including the stagnation decision and the next loop's J start.
+            durable.Snapshot(iterations+1,nextState,nextResidual,nextConstraints,nextNorms,
+                ScalarDomainJSON(nextDomain),profiling(),update);
+            durable.Event("newton_update",{{"details",update},{"profiling",profiling()}});
+            s=std::move(nextState);residual=std::move(nextResidual);norms=std::move(nextNorms);
+            constraints=std::move(nextConstraints);domain=std::move(nextDomain);alreadySaved=true;
+            stagnant=nextError>error*(1.-1e-4)?stagnant+1:0;
+            if(stagnant>=3){terminal="feasible_residual_stagnation";throw std::runtime_error(terminal);}
+        }
+        throw std::runtime_error("unreachable R3 solve");
+    }
+    catch(const std::exception &error)
+    {
+        m_lastFeasibleState=s;
+        if(terminal=="started")terminal=std::string(J::ExceptionType(error))+": "+error.what();
+        durable.Event("solve_terminal",{{"converged","false"},{"terminal",J::Quote(terminal)},
+            {"iteration",J::Number(iterations)},{"last_completed_iteration",J::Number(iterations+(alreadySaved?1:0))},
+            {"scaled_block_norms",J::Numbers(norms)},{"profiling",profiling()}});
+        throw;
+    }
 }
 
 RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAudit(

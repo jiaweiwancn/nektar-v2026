@@ -5,9 +5,11 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallEvolution.h>
 #include <IncNavierStokesSolver/EquationSystems/IncNavierStokes.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
 #include <LibUtilities/Communication/CommSerial.h>
 #include <LibUtilities/BasicUtils/FieldIO.h>
 #include <SpatialDomains/MeshGraphIO.h>
+#include <boost/property_tree/json_parser.hpp>
 #include <algorithm>
 #include <chrono>
 #include <cmath>
@@ -149,11 +151,22 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         const auto scheme=m_session->GetTimeIntScheme();
         Require(scheme.method=="IMEX" && scheme.variant.empty() && (scheme.order==1 || scheme.order==2),"evolution supports native IMEX orders 1/2, empty variant");m_order=scheme.order;
         m_session->LoadSolverInfo("RANSWallStageTest",m_stageTest,"Off");
-        Require(m_stageTest=="Off" || m_stageTest=="MatchedR2" || m_stageTest=="FrozenScalarR2","unknown native stage-test mode");
-        if(m_stageTest!="Off")
+        Require(m_stageTest=="Off" || m_stageTest=="MatchedR2" || m_stageTest=="FrozenScalarR2" ||
+            m_stageTest=="ExactTargetR3" || m_stageTest=="JacobianBenchmarkR3","unknown native stage-test mode");
+        const bool r3=m_stageTest=="ExactTargetR3" || m_stageTest=="JacobianBenchmarkR3";
+        if(m_stageTest!="Off" && !r3)
             Require(m_patch->NonlinearPolicyName()=="ScalarFeasibleR2" && m_eta==0 && m_neutral &&
                 m_order==2 && m_steps==0 && m_timestep==.0025 && m_maximumIterations<=12 && m_tolerance==2e-12 &&
                 m_session->GetComm()->GetSize()==1,"R2 stage test requires the frozen serial neutral IMEX2 startup input");
+        if(r3)
+        {
+            m_session->LoadSolverInfo("RANSWallR3PredictorFile",m_r3PredictorFile,"None");
+            Require(m_patch->NonlinearPolicyName()=="ScalarFeasibleR3" && m_patch->InnerStressName()=="SaturatedR2" &&
+                m_eta==0 && m_neutral && m_order==2 && m_steps==0 && m_timestep==.0025 &&
+                m_maximumIterations>0 && m_maximumIterations<=16 && m_tolerance==2e-12 &&
+                m_session->GetComm()->GetSize()==1 && m_r3PredictorFile!="None",
+                "R3 requires its explicit serial exact-target input and bound nonconverged predictor");
+        }
         m_session->LoadSolverInfo("RANSWallRestart",m_restart,"None");m_session->LoadSolverInfo("RANSWallCheckpoint",m_checkpointBase,"None");
         Require(m_timestep>0,"evolution requires positive fixed TimeStep");m_data=RANSWallEvolutionData(dim);
         for(int a=0;a<dim;++a)
@@ -232,7 +245,7 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
             m_integrator->Initialise(Vector(m_state.begin(),m_state.begin()+m_patch->DifferentialSize()),m_time);
         }
         m_historyReady=true;
-        if(m_patch->NonlinearPolicyName()=="ScalarFeasibleR2")
+        if(m_patch->NonlinearPolicyName()=="ScalarFeasibleR2" || m_patch->NonlinearPolicyName()=="ScalarFeasibleR3")
         {
             const auto domainStart=std::chrono::steady_clock::now();
             const auto domain=m_patch->ScalarDomain(m_state,m_time,m_data,true);
@@ -349,6 +362,7 @@ RANSEquilibriumWallEvolution::Vector RANSEquilibriumWallEvolution::Explicit(cons
 }
 void RANSEquilibriumWallEvolution::v_DoSolve()
 {
+    if(m_stageTest=="ExactTargetR3" || m_stageTest=="JacobianBenchmarkR3"){RunR3StageTest();return;}
     if(m_stageTest!="Off"){RunRestrictedStageTest();return;}
     try
     {
@@ -384,6 +398,136 @@ void RANSEquilibriumWallEvolution::v_DoSolve()
         std::cerr<<"EP-AWF native timestep: "<<error.what()<<std::endl;throw;
     }
 }
+RANSEquilibriumWallEvolution::Vector RANSEquilibriumWallEvolution::LoadR3Predictor(
+    const Vector &history,double time)
+{
+    namespace J=RANSWallSolveJson;namespace D=RANSWallR3;
+    boost::property_tree::ptree packet;boost::property_tree::read_json(m_r3PredictorFile,packet);
+    Require(packet.get<int>("schema")==1 && packet.get<std::string>("role")=="nonconverged_auxiliary_predictor_only" &&
+        packet.get<std::string>("encoding")=="little-endian IEEE754 binary64" &&
+        packet.get<double>("origin.alpha")==3200. && packet.get<double>("origin.time")==.0025 &&
+        !packet.get<bool>("origin.converged") && packet.get<std::string>("origin.inner_stress_model")=="SaturatedR2" &&
+        packet.get<double>("target.alpha")==400. && packet.get<double>("target.time")==time &&
+        packet.get<double>("target.eta")==0. && packet.get<double>("target.tolerance")==m_tolerance &&
+        !packet.get<bool>("target.history_advanced"),"R3 predictor changed its historical/target scope");
+    auto pin=[&](const std::string &key)
+    {
+        const auto path=packet.get<std::string>(key+".path");
+        Require(std::filesystem::path(path).is_absolute() && std::filesystem::is_regular_file(path) &&
+            std::filesystem::file_size(path)==packet.get<std::uintmax_t>(key+".bytes") &&
+            D::HashFile(path)==packet.get<std::string>(key+".sha256"),"R3 predictor file binding mismatch: "+key);
+        return path;
+    };
+    const auto stateFile=pin("state"),historyFile=pin("history");
+    const auto executable=pin("current_executable"),xml=pin("current_target_xml");
+    Require(std::filesystem::exists("/proc/self/exe") && std::filesystem::equivalent(executable,"/proc/self/exe") &&
+        D::HashFile("/proc/self/exe")==packet.get<std::string>("current_executable.sha256"),
+        "R3 predictor belongs to a different current executable");
+    const auto &inputs=m_session->GetFilenames();
+    Require(inputs.size()==1 && std::filesystem::equivalent(xml,inputs[0]),"R3 predictor belongs to a different target XML");
+    Require(packet.get<std::string>("current_native_signature_sha256")==D::Hash(m_signature) &&
+        packet.get<std::string>("expected_h0_sha256")==D::Hash(history) &&
+        packet.get<std::string>("history.sha256")==D::Hash(history),"R3 predictor changed native physics/mesh or original h0");
+    auto read=[&](const std::string &file)
+    {
+        Require(std::filesystem::file_size(file)==history.size()*sizeof(double),"R3 predictor vector length differs");
+        Vector values(history.size());std::ifstream in(file,std::ios::binary);
+        in.read(reinterpret_cast<char*>(values.data()),values.size()*sizeof(double));
+        Require(in.good() && std::all_of(values.begin(),values.end(),[](double value){return std::isfinite(value);}),
+            "R3 predictor vector is incomplete or nonfinite");
+        return values;
+    };
+    Require(D::Hash(read(historyFile))==D::Hash(history),"R3 predictor history payload differs from original h0");
+    auto candidate=read(stateFile);const auto before=D::Hash(candidate);
+    const auto domain=m_patch->ScalarDomain(candidate,time,m_implicitData,true);
+    Require(domain.admissible,"R3 predictor is outside current scalar evaluation domain: "+domain.failure);
+    const auto constraints=m_patch->Constraints(candidate,time,m_implicitData);
+    const auto residual=m_patch->Residual(candidate,history,400.,time,m_implicitData);
+    const auto norms=m_patch->Norms(residual,constraints,m_ustar);
+    const auto audit=m_patch->CompleteRestrictedAudit(candidate,history,400.,time,m_implicitData);
+    Require(audit.count("r2_qualified") && audit.at("r2_qualified")[0]==1. && audit.count("r2_covariance") &&
+        *std::min_element(audit.at("r2_covariance").begin(),audit.at("r2_covariance").end())>=0.,
+        "R3 predictor exits current finite covariance/constitutive applicability sets");
+    Require(before==D::Hash(candidate),"R3 predictor was silently lifted or changed during revalidation");
+    std::vector<std::pair<std::string,std::string>> compactAudit;
+    for(const auto &[name,value]:audit)if(name.rfind("r2_",0)==0)compactAudit.push_back({name,J::Numbers(value)});
+    m_r3PredictorBinding=J::Object({{"manifest",D::Pin(m_r3PredictorFile)},
+        {"state",D::Pin(stateFile)},{"history",D::Pin(historyFile)},
+        {"current_executable",D::Pin(executable)},{"current_target_xml",D::Pin(xml)},
+        {"current_native_signature_sha256",J::Quote(D::Hash(m_signature))},
+        {"original_h0_sha256",J::Quote(D::Hash(history))},{"origin_converged","false"},
+        {"origin_alpha","3200"},{"target_alpha","400"},{"target_time",J::Number(time)},
+        {"predictor_is_physical_time_sample","false"},{"history_advanced","false"}});
+    m_r3PredictorRevalidation=J::Object({{"scalar_domain",RANSWallEvolutionPatch::ScalarDomainJSON(domain)},
+        {"current_target_scaled_block_norms",J::Numbers(norms)},{"current_target_constraints",J::Constraints(constraints)},
+        {"current_target_residual_sha256",J::Quote(D::Hash(residual))},{"finite_set_audit",J::Object(compactAudit)},
+        {"predictor_coefficients_unchanged","true"},{"historical_auxiliary_remains_nonconverged","true"}});
+    return candidate;
+}
+
+void RANSEquilibriumWallEvolution::RunR3StageTest()
+{
+    namespace J=RANSWallSolveJson;
+    Require(m_timestep==.0025 && m_time==0. && m_eta==0. && m_restart=="None" && m_checkpointBase=="None",
+        "R3 exact target requires the unchanged unforced native startup and original history");
+    for(const std::string name:{"BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter"})
+        Require(!m_serialSession->DefinesFunction(name),"R3 exact target forbids prescribed body/scalar forcing");
+    const Vector history=m_state;const auto native=m_integrator->Capture();const double targetTime=.0025;
+    Require(native.steps==0,"R3 predictor import cannot follow a physical time step");
+    m_stageTestInitialHistory=J::Object({{"state",J::Numbers(m_state)},{"time",J::Number(m_time)},
+        {"steps",J::Number(native.steps)},{"history",J::Rows(native.history)},{"times",J::Numbers(native.times)}});
+    auto candidate=LoadR3Predictor(history,targetTime);
+    const bool benchmark=m_stageTest=="JacobianBenchmarkR3";
+    bool solverReturned=false;int iterations=0;std::string failure;
+    try
+    {
+        candidate=m_patch->SolveScalarFeasibleR3(candidate,history,400.,targetTime,m_implicitData,
+            iterations,m_tolerance,m_maximumIterations,benchmark);solverReturned=true;
+    }
+    catch(const std::exception &error)
+    {
+        failure=std::string(J::ExceptionType(error))+": "+error.what();
+        if(!m_patch->LastFeasibleState().empty())candidate=m_patch->LastFeasibleState();
+    }
+    const auto domain=m_patch->ScalarDomain(candidate,targetTime,m_implicitData,true);
+    Vector residual,norms;std::map<int,double> constraints;RANSWallEvolutionPatch::Diagnostic audit;
+    std::string residualFailure,auditFailure;
+    if(domain.admissible)
+    {
+        try
+        {
+            constraints=m_patch->Constraints(candidate,targetTime,m_implicitData);
+            residual=m_patch->Residual(candidate,history,400.,targetTime,m_implicitData);
+            norms=m_patch->Norms(residual,constraints,m_ustar);
+        }
+        catch(const std::exception &error){residualFailure=std::string(J::ExceptionType(error))+": "+error.what();}
+        try{audit=m_patch->CompleteRestrictedAudit(candidate,history,400.,targetTime,m_implicitData);}
+        catch(const std::exception &error){auditFailure=std::string(J::ExceptionType(error))+": "+error.what();}
+    }
+    const bool coupled=!benchmark && solverReturned && residualFailure.empty() && !norms.empty() && Maximum(norms)<m_tolerance;
+    const bool physical=coupled && auditFailure.empty() && audit.count("r2_qualified") && audit.at("r2_qualified")[0]==1.;
+    std::vector<std::pair<std::string,std::string>> entries;
+    for(const auto &[name,value]:audit)entries.push_back({name,J::Numbers(value)});
+    m_stageTestLevels.push_back(J::Object({{"alpha","400"},{"time",J::Number(targetTime)},
+        {"attempted",J::Boolean(!benchmark)},{"benchmark_only",J::Boolean(benchmark)},
+        {"benchmark_completed",J::Boolean(benchmark && solverReturned)},{"converged",J::Boolean(coupled)},
+        {"true_coupled_residual_converged",J::Boolean(coupled)},
+        {"frozen_velocity_pressure_diagnostic","false"},{"iterations",J::Number(iterations)},
+        {"failure",J::Quote(failure)},{"residual_verification_failure",J::Quote(residualFailure)},
+        {"qualification_audit_failure",J::Quote(auditFailure)},
+        {"state",J::Numbers(candidate)},{"history",J::Numbers(history)},
+        {"constraints",J::Constraints(constraints)},{"residual",J::Numbers(residual)},
+        {"scaled_block_norms",J::Numbers(norms)},
+        {"scalar_domain",RANSWallEvolutionPatch::ScalarDomainJSON(domain,true)},
+        {"physical_range_passed",J::Boolean(physical)},{"audit",J::Object(entries)},
+        {"native_history_advanced","false"}}));
+    m_targetConverged=coupled;m_targetPhysical=physical;
+    if(!benchmark && !coupled)m_failure="R3 exact target unresolved: "+failure;
+    if(benchmark && !solverReturned)m_failure="R3 complete-J benchmark failed: "+failure;
+    // The stage/predictor remains separate from original native state/history.
+    WriteReport();
+}
+
 void RANSEquilibriumWallEvolution::RunRestrictedStageTest()
 {
     namespace J=RANSWallSolveJson;
@@ -590,11 +734,18 @@ void RANSEquilibriumWallEvolution::WriteReport() const
             {"unanchored_residual_constraints_norms",RANSWallSolveJson::Number(m_initialEvaluationSeconds[0])},
             {"scalar_domain",RANSWallSolveJson::Number(m_initialEvaluationSeconds[1])}});
     if(m_stageTest!="Off")
+    {
         out<<",\"stage_test\":"<<Quoted(m_stageTest)<<",\"stage_test_target_time\":"<<m_time+m_timestep
            <<",\"stage_test_native_history_advanced\":false,\"stage_test_target_converged\":"<<(m_targetConverged?"true":"false")
            <<",\"stage_test_target_physical_range\":"<<(m_targetPhysical?"true":"false")
            <<",\"stage_test_initial_native_history\":"<<m_stageTestInitialHistory
            <<",\"stage_test_levels\":"<<RANSWallSolveJson::List(m_stageTestLevels);
+        if(m_stageTest=="ExactTargetR3" || m_stageTest=="JacobianBenchmarkR3")
+            out<<",\"r3_action_policy\":"<<Quoted(m_patch->ActionPolicyName())
+               <<",\"r3_progress_file\":"<<Quoted(std::filesystem::absolute(m_patch->R3ProgressFile()).string())
+               <<",\"r3_predictor_binding\":"<<m_r3PredictorBinding
+               <<",\"r3_predictor_revalidation\":"<<m_r3PredictorRevalidation;
+    }
     const auto &p=m_patch->Parameters();
     out<<",\"parameters\":";Write(out,{p.geometry.molecularNu,p.geometry.height,p.geometry.roughness,p.geometry.sampleHeight,
         p.geometry.tailStart,p.model.Q()*m_ustar*m_ustar,p.model.Q(),p.model.Kappa()});
