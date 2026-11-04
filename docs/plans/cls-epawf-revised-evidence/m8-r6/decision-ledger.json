@@ -1,0 +1,878 @@
+{
+  "schema": 1,
+  "milestone": "M8-R6",
+  "reviewed_baseline": "7ae3daae99c1f3e8fb9be1ea357ef01ef9169293",
+  "M8_closed": false,
+  "producing_source": "7f637f98367a4e99cd0367d555f28452b3d0a27a",
+  "producing_executable": {
+    "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/build/IncNavierStokesSolver",
+    "bytes": 5854608,
+    "sha256": "fed715bf272962b587edb5c656e1f3cf1f4d77ddb4d9dfaff16f21d53cf5b89e"
+  },
+  "pilot_xml": {
+    "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/pilot/case.xml",
+    "bytes": 14505,
+    "sha256": "fe7e30b3010c611418857b151a710f7c56855f91833b7ff3ceb9543c44b62462"
+  },
+  "runtime": {
+    "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/runtime-fingerprint.json",
+    "bytes": 623563,
+    "sha256": "12c24cfffc6d7c7f5aaaa2066008bfaf7592015de519560bc581805db0641634"
+  },
+  "ranks": 1,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "target": {
+    "alpha": 400,
+    "time": 0.0025,
+    "eta": 0,
+    "original_h0": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/pilot/case.r3-progress.jsonl.solve1.history.bin",
+      "bytes": 17320,
+      "sha256": "b8ba7917424057a9f6f16a026d82d53ede43985871537facea170ef6e1841b71"
+    },
+    "tolerance": 2e-12,
+    "action_tolerance": 1e-7,
+    "unknowns": 2165
+  },
+  "legacy_replay": {
+    "receipt": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-002/cases-001/terminal-run/receipt.json",
+      "bytes": 5516,
+      "sha256": "aedb70f9de508cb3138d2cfe01b71c52da4cfe5b87fbcc8bf745ec1c544f9218"
+    },
+    "cut_audit": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-002/cases-001/terminal/cut-audit.json",
+      "bytes": 104430,
+      "sha256": "9d31c48d74731df41a31fe7c527b6899bd1dcdcc75e67236a626cb750b0d7fb6"
+    },
+    "state": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-002/cases-001/terminal/case.r3-progress.jsonl.solve1.iterate0.state.bin",
+      "bytes": 17320,
+      "sha256": "678b0cc21258ad877fef9fbf5d703e6232fd1059ba1bd247704f6b1d425bbcb4"
+    },
+    "residual": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-002/cases-001/terminal/case.r3-progress.jsonl.solve1.iterate0.residual.bin",
+      "bytes": 17320,
+      "sha256": "202fd4c602c57f4ed5ae745a424297b32619cceff6a6e668679ffa6a05c86217"
+    },
+    "constraints": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-002/cases-001/terminal/case.r3-progress.jsonl.solve1.iterate0.constraints.bin",
+      "bytes": 5728,
+      "sha256": "14b77c6d1095ddb4c24f5911379da76deced0ab7ca0daaa198ad33546ec7a97e"
+    },
+    "snapshot": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-002/cases-001/terminal/case.r3-progress.jsonl.solve1.iterate0.snapshot.json",
+      "bytes": 3383,
+      "sha256": "cf1d1eb33930c16f844bdc1e723e3a71484f2acb20b42831ea6dffaae401370a"
+    },
+    "matrix": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-002/cases-001/terminal/case.r3-progress.jsonl.solve1.J0.bin",
+      "bytes": 37497800,
+      "sha256": "a74c554340e4dfb5a9040d9d207b842d3c5c72ab23a933d7178562126717641e"
+    },
+    "norm": 3.9287991324715383,
+    "cuts": [
+      {
+        "name": "iterate0.r5_full",
+        "status": "exchange_limit_candidate",
+        "exchange": 96,
+        "active_count": 29,
+        "active_condition": 11.10325934100427,
+        "minimum_qr_diagonal": 0.21709468632904386,
+        "minimum_scaled_multiplier": 0.00005420340943767287,
+        "stationarity_l2": 9.648986033050687e-16,
+        "complementarity": 5.714064177970565e-16,
+        "forward_Jd_residual_inf": 1.1880393856240375e-15,
+        "forward_Jcorrection_residual_inf": 2.320769055039586e-15,
+        "Jnewton_residual_inf": 1.224572472504487e-15,
+        "algebraic_residual_inf": 3.153692822290239e-16,
+        "exact_recurrent_entries": 54,
+        "minimum_projected_length": 3.711380393838155e-17,
+        "high_precision_active": {
+          "status": "solved",
+          "minimum_scaled_multiplier": 0.000054203409437670016,
+          "max_abs_active_gap": 1.503e-55,
+          "entering_gap": 3e-59,
+          "maximum_z_difference": 3.309023535924974e-16
+        },
+        "entering_row": {
+          "kind": "outer_reconstruction_native_0",
+          "point": [-3,0,2.3333333333333335],
+          "geometry": 30,
+          "block": 0,
+          "axis": 2,
+          "side": 0,
+          "scale": -0.00038912053533139983,
+          "native_gap": -3.572497853099321e-11,
+          "coefficient_gap": -3.572520057559814e-11,
+          "transformed_gap": -4.440892098500626e-16,
+          "independent_coefficient_gap": -3.572511936885542e-11,
+          "independent_transformed_gap": -4.3194614551822497e-16,
+          "coefficient_minus_transformed": -3.57246874227099e-11,
+          "transpose_residual_inf": 6.841870458910118e-10,
+          "transpose_dot_error": -3.169696961646183e-11,
+          "forward_dot_error": -4.02401481179032e-12,
+          "metric_dot_error": -3.8248484240943625e-15
+        },
+        "maximum_original_map_gap_difference": 3.726548773340041e-11,
+        "worst_active_native_gap": -3.572497853099321e-11
+      },
+      {
+        "name": "iterate0.r5_partial",
+        "status": "exchange_limit_candidate",
+        "exchange": 96,
+        "active_count": 14,
+        "active_condition": 27.303707719952378,
+        "minimum_qr_diagonal": 0.07850959091835363,
+        "minimum_scaled_multiplier": 0.000011267096583669877,
+        "stationarity_l2": 4.056542306973599e-16,
+        "complementarity": 7.424540403461953e-16,
+        "forward_Jd_residual_inf": 2.8932688832098742e-15,
+        "forward_Jcorrection_residual_inf": 1.6700719922117281e-15,
+        "Jnewton_residual_inf": 1.224572472504487e-15,
+        "algebraic_residual_inf": 2.2563890982736613e-16,
+        "exact_recurrent_entries": 71,
+        "minimum_projected_length": 4.894538571238231e-18,
+        "high_precision_active": {
+          "status": "solved",
+          "minimum_scaled_multiplier": 0.0000112670965836705,
+          "max_abs_active_gap": 1.265e-55,
+          "entering_gap": -7.74e-59,
+          "maximum_z_difference": 2.4827883608974446e-16
+        },
+        "entering_row": {
+          "kind": "outer_physical_matching_transfer_0",
+          "point": [-1.5833333333333333,0,2],
+          "geometry": 32,
+          "block": 0,
+          "axis": 2,
+          "side": 1,
+          "scale": 0.0004539739578866333,
+          "native_gap": -9.017508961761678e-12,
+          "coefficient_gap": -9.017502022867774e-12,
+          "transformed_gap": 1.942890293094024e-16,
+          "independent_coefficient_gap": -9.017504956989903e-12,
+          "independent_transformed_gap": 1.9621348816556416e-16,
+          "coefficient_minus_transformed": -9.017701170478069e-12,
+          "transpose_residual_inf": 1.6609669195588594e-10,
+          "transpose_dot_error": -1.014292506879321e-12,
+          "forward_dot_error": -8.003773341760705e-12,
+          "metric_dot_error": 3.612764926629042e-16
+        },
+        "maximum_original_map_gap_difference": 1.2495474422421875e-11,
+        "worst_active_native_gap": -9.017508961761678e-12
+      }
+    ],
+    "trials": [],
+    "terminal": {"terminal":"r5_local_comparison_completed","useful_joint_descent":false}
+  },
+  "refined_local": {
+    "receipt": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/terminal-run/receipt.json",
+      "bytes": 5516,
+      "sha256": "bb22d3851adcfbc084e21e14d365c336302b784d21c0d8f375d3c3eb3dc74db4"
+    },
+    "cut_audit": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/terminal/cut-audit.json",
+      "bytes": 67816,
+      "sha256": "46481c3b68d80baccae80a420c510c9ec3c94e72a3339a67bb28fbe39d242c8e"
+    },
+    "state": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/terminal/case.r3-progress.jsonl.solve1.iterate0.state.bin",
+      "bytes": 17320,
+      "sha256": "678b0cc21258ad877fef9fbf5d703e6232fd1059ba1bd247704f6b1d425bbcb4"
+    },
+    "residual": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/terminal/case.r3-progress.jsonl.solve1.iterate0.residual.bin",
+      "bytes": 17320,
+      "sha256": "202fd4c602c57f4ed5ae745a424297b32619cceff6a6e668679ffa6a05c86217"
+    },
+    "constraints": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/terminal/case.r3-progress.jsonl.solve1.iterate0.constraints.bin",
+      "bytes": 5728,
+      "sha256": "14b77c6d1095ddb4c24f5911379da76deced0ab7ca0daaa198ad33546ec7a97e"
+    },
+    "snapshot": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/terminal/case.r3-progress.jsonl.solve1.iterate0.snapshot.json",
+      "bytes": 3383,
+      "sha256": "001cbc48202d3bceb7d49074c19fe00bb5d84af8b071916962ebac7fd34e1ef1"
+    },
+    "matrix": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/terminal/case.r3-progress.jsonl.solve1.J0.bin",
+      "bytes": 37497800,
+      "sha256": "a74c554340e4dfb5a9040d9d207b842d3c5c72ab23a933d7178562126717641e"
+    },
+    "norm": 3.9287991324715383,
+    "cuts": [
+      {
+        "name": "iterate0.r5_full",
+        "status": "passed_original_cut_scan",
+        "exchange": 50,
+        "active_count": 29,
+        "active_condition": 11.103259340992862,
+        "minimum_qr_diagonal": 0.21709468630706946,
+        "minimum_scaled_multiplier": 0.00005420340943761723,
+        "stationarity_l2": 1.0118256788425167e-15,
+        "complementarity": 5.354180958535413e-16,
+        "forward_Jd_residual_inf": 2.2542723099989136e-18,
+        "forward_Jcorrection_residual_inf": 5.507514102165868e-16,
+        "Jnewton_residual_inf": 5.525602490754483e-16,
+        "algebraic_residual_inf": 4.859851534871548e-20,
+        "exact_recurrent_entries": 7,
+        "minimum_projected_length": 1.6294349815664821e-16,
+        "original_tolerance": 5e-12,
+        "worst_native_violation": 6.513678485475793e-13,
+        "worst_extended_violation": 6.513184631386226e-13,
+        "maximum_scan_difference": 2.419939248987646e-16,
+        "high_precision_active": {
+          "status": "solved",
+          "minimum_scaled_multiplier": 0.000054203409437657406,
+          "max_abs_active_gap": 2.29e-56,
+          "entering_gap": null,
+          "maximum_z_difference": 2.9028214248131397e-16
+        },
+        "maximum_original_map_gap_difference": 2.981555974335137e-15,
+        "worst_active_native_gap": -1.2323475573339238e-14
+      }
+    ],
+    "trials": [
+      {
+        "name": "r5_full",
+        "fraction": 1,
+        "classification": "residual_non_descent",
+        "scaled_block_norms": [
+          0.4320337224783476,
+          0.23626050618197564,
+          7.910682833769155,
+          0.00009314991307569934,
+          5.846454781456193e-16,
+          8.23001198711612e-16,
+          1.0333801956502463e-17,
+          0.016270725171292983
+        ],
+        "state": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/terminal/case.r3-progress.jsonl.solve1.iterate0.r5_full.trial0.state.bin",
+          "bytes": 17320,
+          "sha256": "3d0cd445aab6cdf0cad74c35d4099a6db8ae771d0681fb118240be5acfa52601"
+        },
+        "residual": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/terminal/case.r3-progress.jsonl.solve1.iterate0.r5_full.trial0.residual.bin",
+          "bytes": 17320,
+          "sha256": "fd8c7e59f2d10bca8b0c00ea873078d8a00313103a8efefa555ead264b21c29f"
+        },
+        "model_block_norms": [
+          0.12637473762579843,
+          0.2362393608603954,
+          3.1271518437238517,
+          0.00004321771975698182,
+          1.6217435485418148e-19,
+          2.0758136065588165e-21,
+          2.1059501407717236e-20,
+          6.690708038484492e-19
+        ],
+        "box": {"maximum":1.2795754039673923e-12,"family_maxima":[1.2795754039673923e-12,0,5.551115123125783e-15,0],"sum_positive":6.492540879921016e-11},
+        "model_box": {"maximum":6.513678485475793e-13,"family_maxima":[6.513678485475793e-13,0,0,0],"sum_positive":1.3985257396598172e-11},
+        "wall_k": 0.0016279984196335457,
+        "lambda_min": 1
+      },
+      {
+        "name": "r5_full",
+        "fraction": 0.5,
+        "classification": "accepted_comparison",
+        "scaled_block_norms": [
+          0.26277530225254886,
+          0.23516400887976974,
+          3.720035001754851,
+          0.00004229298042665208,
+          8.247648345594246e-16,
+          8.34334447798952e-16,
+          6.776263578034402e-19,
+          0.0013624407027270796
+        ],
+        "state": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/terminal/case.r3-progress.jsonl.solve1.iterate0.r5_full.trial1.state.bin",
+          "bytes": 17320,
+          "sha256": "2da318b4e6a962fef39064cdfa4ff40cf1f0278cb0b332d988470263377d2573"
+        },
+        "residual": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/terminal/case.r3-progress.jsonl.solve1.iterate0.r5_full.trial1.residual.bin",
+          "bytes": 17320,
+          "sha256": "18ec8da55d7d5f148870a81412271b0671d5b8132f6a8af5f3434690559de2f8"
+        },
+        "model_block_norms": [
+          0.17007463911753162,
+          0.23515896856854213,
+          3.339165619466265,
+          0.00003575975946955874,
+          4.392039186696371e-16,
+          4.170942809168295e-16,
+          5.410481111723663e-18,
+          0.00021094950845067635
+        ],
+        "box": {"maximum":0.9617689268172089,"family_maxima":[0.9617689268172089,0,0.10496602338446737,0],"sum_positive":488.4243588958439},
+        "model_box": {"maximum":0.9617689268176518,"family_maxima":[0.9617689268176518,0,0.10496602338446988,0],"sum_positive":488.42495123603476},
+        "wall_k": 0.0016286283003475724,
+        "lambda_min": 1
+      }
+    ],
+    "terminal": {"terminal":"r5_local_comparison_completed","useful_joint_descent":true}
+  },
+  "earlier_control": {
+    "receipt": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/control-run/receipt.json",
+      "bytes": 5507,
+      "sha256": "3f6ebd3111594eb3a3fdac676145e85714a15bb4536f4fc0ebd4a68aecb633f9"
+    },
+    "cut_audit": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/control/cut-audit.json",
+      "bytes": 61250,
+      "sha256": "388570fa4f8ff81b126137dd6557ff3f832d24fe8800d386faa3cafcb73c1910"
+    },
+    "snapshot": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/control/case.r3-progress.jsonl.solve1.iterate0.snapshot.json",
+      "bytes": 3391,
+      "sha256": "4ba79ad13a17531f80322c5dafabe745008a810bbdfa289385874f81d8b7a0dd"
+    },
+    "matrix": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/control/case.r3-progress.jsonl.solve1.J0.bin",
+      "bytes": 37497800,
+      "sha256": "71b4e93490bc81e2f1f0d9eff0ae0872cc02eb5d7a95510025235b1aab80a00b"
+    },
+    "norm": 4.995492353429328,
+    "cuts": [
+      {
+        "name": "iterate0.r5_full",
+        "status": "passed_original_cut_scan",
+        "exchange": 51,
+        "active_count": 26,
+        "active_condition": 18.631765511295953,
+        "minimum_qr_diagonal": 0.18840434096191444,
+        "minimum_scaled_multiplier": 0.00011900690354363117,
+        "stationarity_l2": 1.9669802890135734e-15,
+        "complementarity": 9.540740888668609e-16,
+        "forward_Jd_residual_inf": 2.3469165386048527e-17,
+        "forward_Jcorrection_residual_inf": 1.9486124241692004e-15,
+        "Jnewton_residual_inf": 1.922182031599551e-15,
+        "algebraic_residual_inf": 2.5103938974249326e-19,
+        "exact_recurrent_entries": 1,
+        "minimum_projected_length": 1.5543597743100965e-16,
+        "original_tolerance": 5e-12,
+        "worst_native_violation": 3.3986702341337605e-12,
+        "worst_extended_violation": 3.398672859935897e-12,
+        "maximum_scan_difference": 4.382345181186409e-16,
+        "high_precision_active": {
+          "status": "solved",
+          "minimum_scaled_multiplier": 0.00011900690354363027,
+          "max_abs_active_gap": 1.6522e-55,
+          "entering_gap": null,
+          "maximum_z_difference": 5.209190717321424e-16
+        },
+        "maximum_original_map_gap_difference": 2.8171909249863347e-15,
+        "worst_active_native_gap": -3.2862601528904634e-14
+      }
+    ],
+    "trials": [
+      {
+        "name": "r5_full",
+        "fraction": 1,
+        "classification": "accepted_comparison",
+        "scaled_block_norms": [
+          0.26827536386879464,
+          0.23777785915919156,
+          3.988432316399133,
+          0.00014509314609999403,
+          6.562482070199604e-16,
+          7.334846339355857e-16,
+          2.9476746564449646e-17,
+          0.0006075259804712869
+        ],
+        "state": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/control/case.r3-progress.jsonl.solve1.iterate0.r5_full.trial0.state.bin",
+          "bytes": 17320,
+          "sha256": "d91fa30d89d80e604c25c2b93b85ef360434dac30b56dd9b5206ce53288bd21f"
+        },
+        "residual": {
+          "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/control/case.r3-progress.jsonl.solve1.iterate0.r5_full.trial0.residual.bin",
+          "bytes": 17320,
+          "sha256": "a60118d88d0364d4d153652880a0b033a5271d243112247d4a62d8a9123dd21f"
+        },
+        "model_block_norms": [
+          0.12706599672628466,
+          0.23776329362667206,
+          3.1276997377620877,
+          0.00004723226759971143,
+          1.477802562709379e-19,
+          1.1176108812547418e-21,
+          1.6729210901002137e-19,
+          3.5450548909791465e-18
+        ],
+        "box": {"maximum":4.996870972551193e-12,"family_maxima":[4.996870972551193e-12,0,0,0],"sum_positive":5.583710577239387e-10},
+        "model_box": {"maximum":5.372369216161132e-13,"family_maxima":[5.372369216161132e-13,0,0,0],"sum_positive":1.696237594828176e-11},
+        "wall_k": 0.001525356140270536,
+        "lambda_min": 1
+      }
+    ],
+    "terminal": {"terminal":"r5_local_comparison_completed","useful_joint_descent":true}
+  },
+  "action_check": {
+    "qualification": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/terminal/comparison.json",
+      "bytes": 72004,
+      "sha256": "3b99ed1ebfb937cd1113ed954b053861d7be93d7e83a87f5ded7e88663240154"
+    },
+    "maximum_action_error": 1.543359885327053e-14,
+    "maximum_outer_witness_action_error": 6.505213034913027e-16,
+    "selected_direction": "r5_full",
+    "action_pass": true
+  },
+  "pilot": {
+    "receipt": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/pilot-run/receipt.json",
+      "bytes": 6153,
+      "sha256": "054a3eb6f61b197cadbf50664f7597e23ebbe382ae6f5598caf3ad064843a81e"
+    },
+    "durable": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/pilot-run/durable-collection.json",
+      "bytes": 2481861,
+      "sha256": "34d603e2a9c02071b851e9900368f4530ce98e83c5730621a96b2a385aa006d7"
+    },
+    "progress": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/pilot/case.r3-progress.jsonl",
+      "complete_prefix_bytes": 1932437,
+      "complete_prefix_sha256": "595d38ca529084faf6a1a60d3b6457a5d482dea4bcd7d9e9d7bc3fa6e35b7e7a",
+      "unpublished_tail": null
+    },
+    "native_report": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/pilot/case.evolution.json",
+      "bytes": 42934242,
+      "sha256": "08c1efbd1853a92f4bb743cc31dab3cc1ab9a1b8a9bc80694382e9057e30f60e"
+    },
+    "budget": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/budget.txt",
+      "bytes": 381,
+      "sha256": "232096c8937cfc9d55d58a8ddb068e1c2c0e63d1a79447568d77166191bfb4da"
+    },
+    "gate": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/r5-gate.json",
+      "bytes": 1372,
+      "sha256": "9835a772c39aadca7eb61eaebc8f40fdf55f11e3e8967bdd072094b312101854"
+    },
+    "seconds": 585.2674808739976,
+    "exit_code": 0,
+    "terminal_reason": "std::runtime_error: EP-AWF patch: R5 nonlinear update limit",
+    "profiling": {
+      "complete_action_assembly": {"calls":17,"seconds":173.06041327400004},
+      "factorization": {"calls":17,"seconds":3.208524925},
+      "r5_direction": {"calls":17,"seconds":252.81004005500003},
+      "line_search": {"calls":17,"seconds":76.196797579}
+    },
+    "accepted_updates": 17,
+    "trial_count": 61,
+    "trial_classifications": {"residual_non_descent":44,"accepted_comparison":17},
+    "states": [
+      {
+        "iteration": 0,
+        "E": 3.9287991324715383,
+        "ground": 0.0015180360335289732,
+        "finite_scalar": true,
+        "lambda_min": 1,
+        "covariance": [0.00030392242679261295,0.17706049812071667]
+      },
+      {
+        "iteration": 1,
+        "E": 3.720035001754851,
+        "ground": 0.0016286283003475724,
+        "finite_scalar": true,
+        "lambda_min": 1,
+        "covariance": [0.0004604284578778677,0.1769714945396077],
+        "box": {"maximum":0.9617689268172089,"family_maxima":[0.9617689268172089,0,0.10496602338446737,0],"sum_positive":488.4243588958439},
+        "fraction": 0.5
+      },
+      {
+        "iteration": 2,
+        "E": 3.706436209795857,
+        "ground": 0.001628628104938152,
+        "finite_scalar": true,
+        "lambda_min": 1,
+        "covariance": [0.00046028820675805956,0.17696870966013595],
+        "box": {"maximum":0.9316884111070243,"family_maxima":[0.9316884111070243,0,0.10168583515370866,0],"sum_positive":471.03542451423954},
+        "fraction": 0.03125
+      },
+      {
+        "iteration": 3,
+        "E": 3.655513991872385,
+        "ground": 0.0016286256185325098,
+        "finite_scalar": true,
+        "lambda_min": 1,
+        "covariance": [0.00045978953217490977,0.1769579116894141],
+        "box": {"maximum":0.8152273597160651,"family_maxima":[0.8152273597160651,0,0.0889751057594923,0],"sum_positive":404.7559666728939},
+        "fraction": 0.125
+      },
+      {
+        "iteration": 4,
+        "E": 3.5833730176093415,
+        "ground": 0.0016286240978129738,
+        "finite_scalar": true,
+        "lambda_min": 1,
+        "covariance": [0.00045940148972363135,0.17694844629211634],
+        "box": {"maximum":0.7133239397530975,"family_maxima":[0.7133239397530975,0,0.07785321753955854,0],"sum_positive":347.79017438686503},
+        "fraction": 0.125
+      },
+      {
+        "iteration": 5,
+        "E": 3.4885332903637476,
+        "ground": 0.001628606361253072,
+        "finite_scalar": true,
+        "lambda_min": 1,
+        "covariance": [0.00040914244777560894,0.17691015109756897],
+        "box": {"maximum":0.3566619698772708,"family_maxima":[0.3566619698772708,0,0.03892660876977372,0],"sum_positive":157.95581048116236},
+        "fraction": 0.5
+      },
+      {
+        "iteration": 6,
+        "E": 3.4454460400048776,
+        "ground": 0.0016286055436685357,
+        "finite_scalar": true,
+        "lambda_min": 1,
+        "covariance": [0.00045779391823689696,0.17690049125534524],
+        "box": {"maximum":0.2674964774085362,"family_maxima":[0.2674964774085362,0,0.029194956577327513,0],"sum_positive":113.50201929295608},
+        "fraction": 0.25
+      },
+      {
+        "iteration": 7,
+        "E": 3.414769538350874,
+        "ground": 0.0016286055155042395,
+        "finite_scalar": true,
+        "lambda_min": 1,
+        "covariance": [0.0004577431012699185,0.17689689970341688],
+        "box": {"maximum":0.2340594177335795,"family_maxima":[0.2340594177335795,0,0.025545587005160186,0],"sum_positive":97.27627416028521},
+        "fraction": 0.125
+      },
+      {
+        "iteration": 8,
+        "E": 3.409876536567177,
+        "ground": 0.0016286052614062207,
+        "finite_scalar": true,
+        "lambda_min": 1,
+        "covariance": [0.0004575854545781729,0.176890583941759],
+        "box": {"maximum":0.17554456329849175,"family_maxima":[0.17554456329849175,0,0.01915919025387569,0],"sum_positive":70.030480386996},
+        "fraction": 0.25
+      },
+      {
+        "iteration": 9,
+        "E": 3.382951819789806,
+        "ground": 0.001628605240780914,
+        "finite_scalar": true,
+        "lambda_min": 1,
+        "covariance": [0.0004575410061463264,0.17688823322599018],
+        "box": {"maximum":0.15360149288534772,"family_maxima":[0.15360149288534772,0,0.01676429147213776,0],"sum_positive":60.162798792788},
+        "fraction": 0.125
+      },
+      {
+        "iteration": 10,
+        "E": 3.3548452069407118,
+        "ground": 0.0016286051769680671,
+        "finite_scalar": true,
+        "lambda_min": 1,
+        "covariance": [0.00045746259562354024,0.17688417820625715],
+        "box": {"maximum":0.11520111966778576,"family_maxima":[0.11520111966778576,0,0.012573218604106096,0],"sum_positive":43.395310116787215},
+        "fraction": 0.25
+      },
+      {
+        "iteration": 11,
+        "E": 3.3299748266698903,
+        "ground": 0.0016286051646615591,
+        "finite_scalar": true,
+        "lambda_min": 1,
+        "covariance": [0.00045742787822354667,0.17688258714997654],
+        "box": {"maximum":0.10080097971110288,"family_maxima":[0.10080097971110288,0,0.011001566278590058,0],"sum_positive":37.24510840987303},
+        "fraction": 0.125
+      },
+      {
+        "iteration": 12,
+        "E": 3.32482708516068,
+        "ground": 0.0016286051483562806,
+        "finite_scalar": true,
+        "lambda_min": 1,
+        "covariance": [0.00045738855764837505,0.17687985884445284],
+        "box": {"maximum":0.07560073478096815,"family_maxima":[0.07560073478096815,0,0.008251174708945319,0],"sum_positive":27.011622761438204},
+        "fraction": 0.25
+      },
+      {
+        "iteration": 13,
+        "E": 3.3190007040091376,
+        "ground": 0.0016286051408250153,
+        "finite_scalar": true,
+        "lambda_min": 1,
+        "covariance": [0.00045736075219598884,0.17687935058580906],
+        "box": {"maximum":0.07087568885610993,"family_maxima":[0.07087568885610993,0,0.007735476289627563,0],"sum_positive":25.10075782335464},
+        "fraction": 0.0625
+      },
+      {
+        "iteration": 14,
+        "E": 3.304625973315687,
+        "ground": 0.0016286051408153051,
+        "finite_scalar": true,
+        "lambda_min": 1,
+        "covariance": [0.00045736047844301326,0.1768784003636481],
+        "box": {"maximum":0.06201622775003999,"family_maxima":[0.06201622775003999,0,0.006768541753426893,0],"sum_positive":21.69966556459461},
+        "fraction": 0.125
+      },
+      {
+        "iteration": 15,
+        "E": 3.245880368998576,
+        "ground": 0.0016286051224201198,
+        "finite_scalar": true,
+        "lambda_min": 1,
+        "covariance": [0.0004573187354636938,0.17687508203094754],
+        "box": {"maximum":0.031008113873799183,"family_maxima":[0.031008113873799183,0,0.003384270876716222,0],"sum_positive":10.463283550931598},
+        "fraction": 0.5
+      },
+      {
+        "iteration": 16,
+        "E": 3.240919902669565,
+        "ground": 0.001628605119668901,
+        "finite_scalar": true,
+        "lambda_min": 1,
+        "covariance": [0.00045730195490926366,0.1768746786483807],
+        "box": {"maximum":0.027132099638450292,"family_maxima":[0.027132099638450292,0,0.002961237017123919,0],"sum_positive":9.113444289584725},
+        "fraction": 0.125
+      },
+      {
+        "iteration": 17,
+        "E": 3.2307133438934885,
+        "ground": 0.0016286051157544954,
+        "finite_scalar": true,
+        "lambda_min": 1,
+        "covariance": [0.00045732251354967124,0.17687429414984668],
+        "box": {"maximum":0.023740587186017216,"family_maxima":[0.023740587186017216,0,0.0025910823899799595,0],"sum_positive":7.953584804911925},
+        "fraction": 0.125
+      }
+    ],
+    "cut_scan_summary": {
+      "count": 17,
+      "maximum_exchange_count": 54,
+      "worst_native_cut_violation": 3.2717474562904414e-12,
+      "worst_extended_cut_violation": 3.2717388428124008e-12
+    },
+    "fallback": [],
+    "terminal_witnesses": [
+      {
+        "family": 0,
+        "inventory": "physical_matching_transfer",
+        "point": [-2.6666666666666665,0,2],
+        "element_geometry": 31,
+        "observation_geometry": 31,
+        "side": 1,
+        "component": [0,2],
+        "projected_trace": false,
+        "sign": -1,
+        "reference_scale": 0.45397395788663325,
+        "reference_component": 1,
+        "signed_excess": 0.023740587186017216,
+        "value": -0.0010237405871860172,
+        "directional_quantity_change": 0
+      },
+      {
+        "family": 2,
+        "inventory": "reconstruction_dense",
+        "point": [1.75,0,2],
+        "element_geometry": 34,
+        "observation_geometry": 34,
+        "side": 1,
+        "component": [-1,-1],
+        "projected_trace": false,
+        "sign": -1,
+        "reference_scale": 0.07263583326186134,
+        "reference_component": 1,
+        "signed_excess": 0.0025910823899799595,
+        "value": 0.9799481783522004,
+        "directional_quantity_change": 0
+      },
+      {
+        "family": 2,
+        "inventory": "projected_dependent_trace",
+        "point": [1.75,0,2],
+        "element_geometry": 34,
+        "observation_geometry": 34,
+        "side": 1,
+        "component": [-1,-1],
+        "projected_trace": true,
+        "sign": -1,
+        "reference_scale": 0.07263583326186134,
+        "reference_component": 1,
+        "signed_excess": 0.0025897014863662804,
+        "value": 0.9799482059702727,
+        "directional_quantity_change": 0
+      }
+    ],
+    "terminal_state": {
+      "snapshot": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/pilot/case.r3-progress.jsonl.solve1.iterate17.snapshot.json",
+        "bytes": 6207,
+        "sha256": "b596e47e69c55047c62972f98883860189ad8ac15bfd2cfc6a0ff36ebf8854cf"
+      },
+      "state": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/pilot/case.r3-progress.jsonl.solve1.iterate17.state.bin",
+        "bytes": 17320,
+        "sha256": "eceb0841f73e2e4a912fa03f025387a4acc73c6e772b8fdccb9e32df8076a84b"
+      },
+      "constraints": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/pilot/case.r3-progress.jsonl.solve1.iterate17.constraints.bin",
+        "bytes": 5728,
+        "sha256": "a1583b28653e4de5b3c307ecae35b4b4f152178c47dc238ae14fd94e1e730350"
+      },
+      "residual": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/pilot/case.r3-progress.jsonl.solve1.iterate17.residual.bin",
+        "bytes": 17320,
+        "sha256": "8e26b205c58ebb16f3dd2ed104aae68366c43703e47f040c6003e53df416efb3"
+      },
+      "iteration": 17
+    },
+    "last_completed_matrix": {
+      "iteration": 16,
+      "matrix": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/pilot/case.r3-progress.jsonl.solve1.J16.bin",
+        "bytes": 37497800,
+        "sha256": "b8e4cd8fc2c6930a84daa55f3e8bdeff52adf87cc646ff2206b664610e019d8f"
+      }
+    },
+    "failures": [],
+    "terminal_independent_audit": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/pilot-terminal-audit.json",
+      "bytes": 113574,
+      "sha256": "04c07ee8e8e07ffb8e402ea97dc6abbfc0e19c8de686ddd4d44ea6ed5b329e8b"
+    },
+    "terminal_wall": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/cases-001/pilot-terminal-wall.json",
+      "bytes": 10311,
+      "sha256": "4f58c070e3a1c92381b5e579ef5b092cb00a2dde8247fb5b86db2de62832c247"
+    },
+    "residual": {
+      "native": {
+        "blocks": [
+          0.14793539750685347,
+          0.2371750498104738,
+          3.2307133438934934,
+          0.00004736917975135039,
+          1.0365127803733273e-15,
+          8.619141342730292e-16,
+          3.405072447962287e-17,
+          0.0014245296478180617
+        ],
+        "gauge": 3.405072447962287e-17,
+        "maximum": 3.2307133438934934,
+        "maximum_constraint": 0.0014245296478180617
+      },
+      "independent": {
+        "blocks": [
+          0.14793539750683263,
+          0.23717504981047133,
+          3.2307133438936027,
+          0.0000473691797526473,
+          1.194287932325704e-15,
+          1.1572605368241589e-15,
+          2.1684043449710086e-17,
+          0.00142452964781759
+        ],
+        "gauge": 2.1684043449710086e-17,
+        "maximum": 3.2307133438936027,
+        "maximum_constraint": 0.00142452964781759
+      },
+      "difference": {
+        "blocks": [
+          2.840282817934001e-12,
+          6.702387760395028e-14,
+          9.966830175649873e-13,
+          1.4973597443516052e-13,
+          6.054014313698901e-16,
+          9.57097878877177e-16,
+          1.2366681029912782e-17,
+          9.168304920876634e-15
+        ],
+        "gauge": 1.2366681029912782e-17,
+        "maximum": 2.840282817934001e-12,
+        "maximum_constraint": 9.168304920876634e-15
+      },
+      "independent_constraint_target_error": 6.65947467526698e-16,
+      "weak_affine_values_gate_met": true
+    },
+    "accounting": {
+      "accounting_defects": {
+        "E_minus_D_minus_C": -1.7212048301386285e-16,
+        "energy_weak_minus_direct": -3.8191672047105385e-14,
+        "integrated_redistribution": 1.7212048301386285e-16
+      },
+      "independent_accounting_identities_met": true,
+      "native_budget_crosschecks": {
+        "available": true,
+        "complete": true,
+        "errors": {
+          "constitutive_modification": 4.910588808412081e-17,
+          "energy": 1.0524914273446484e-12,
+          "inner_constitutive_modification": 1.6375789613221059e-15,
+          "inner_stress": 1.1325571177647793e-15,
+          "interface": 5.077318773749617e-16,
+          "r2_covariance": 3.885780586188048e-16,
+          "r2_outer_range": 3.4416913763379853e-15,
+          "r2_qualified": 0,
+          "robust_source": 1.2591174125495153e-14,
+          "strong_continuity": 5.3845815394097965e-15,
+          "wall_sources": 1.0320634529094387e-15
+        },
+        "passed": true,
+        "tolerance": 3e-10
+      },
+      "strong_continuity": [0.036773882468403594,0.00008484739232216604,-1.5528485615423637e-16,4.0599665590437903e-16,0],
+      "matching_observations": {
+        "full_total_traction_jump_rms": 0.00043698370206583646,
+        "normal_total_traction_jump_rms": 0.0003857431801806609,
+        "tangential_total_traction_jump_rms": 0.00020532158877057695,
+        "k_flux_jump_rms": 0.0006543442627879175
+      }
+    },
+    "outcome": {
+      "root": false,
+      "scalar": true,
+      "ground_nonnegative": true,
+      "outer_range": [0.001023740587189459,0.9997352267973134,1.000373118786023,0.9799481783522004,1.0004689232455755,0.9968130536601661,1.00009850689933],
+      "covariance": [0.0004573225135496596,0.1768742941498463],
+      "lambda_min": 1,
+      "physical_history_advanced": false,
+      "fixed_outer_box_passed": false,
+      "measured_covariance_passed": true,
+      "lambda_gate_passed": true
+    }
+  },
+  "regressions": {
+    "native": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/regression/ctest.log",
+      "bytes": 625,
+      "sha256": "36c9264a8f150e34c0315bc5f8997fcef9b164bf03f66b91ccd6c3c683a83e5d"
+    },
+    "predictor": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/epoch-003/regression/test-predictor.log",
+      "bytes": 107,
+      "sha256": "987b5b06cb290480b4d980e72f37bbf2477a60bdd0e9dc768573667e7f42e94f"
+    },
+    "fallback_build": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/fallback-regression/build-run/receipt.json",
+      "bytes": 3125,
+      "sha256": "990bc32fff0c39dac65a49fe89bf6014397bbe3c8d98179b86ad87b08ab5b24d"
+    },
+    "fallback_smoke": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r6/fallback-regression/wall-stage.log",
+      "bytes": 424,
+      "sha256": "e16946fb5c2cd7469c13f572ade3d3b6933c168e7ee6c6d3f29ebf1707ace529"
+    }
+  },
+  "decision": "Solve-map error reproduced and repaired under the original cut tolerance. The exact-target pilot reached its update cap with joint progress.",
+  "next_action": "At the saved R6 terminal state, test a trust-radius contraction based on measured model-versus-trial residual error, with the same scalar and box gates."
+}
