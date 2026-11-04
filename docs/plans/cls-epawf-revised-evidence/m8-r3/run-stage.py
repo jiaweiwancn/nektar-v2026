@@ -67,9 +67,10 @@ emit.disabled = False
 
 def main():
     p = argparse.ArgumentParser(description=__doc__)
-    for name in ('epoch', 'session', 'manifest', 'action-gate', 'output'):
+    for name in ('epoch', 'session', 'manifest', 'output'):
         p.add_argument('--'+name, type=Path, required=True)
-    p.add_argument('--phase', choices=('benchmark', 'target'), required=True)
+    p.add_argument('--action-gate', type=Path)
+    p.add_argument('--phase', choices=('benchmark', 'target', 'r4-local'), required=True)
     p.add_argument('--expected-source', required=True)
     p.add_argument('--seconds', type=int, required=True)
     p.add_argument('--cpu', type=int, default=0); p.add_argument('--metadata-cpu', type=int, default=50)
@@ -87,18 +88,23 @@ def main():
     require(git('rev-parse', 'HEAD') == a.expected_source and not git('status', '--porcelain'), 'Wrong/unclean producing checkout')
     root = ET.parse(session).getroot()
     info = {row.get('PROPERTY', '').upper():row.get('VALUE') for row in root.findall('.//SOLVERINFO/I')}
-    require(info.get('RANSWALLSTAGETEST') == ('JacobianBenchmarkR3' if a.phase == 'benchmark' else 'ExactTargetR3') and
+    r4 = info.get('RANSWALLGLOBALIZATION') == 'CoupledR4'
+    expected_stage = {'benchmark': 'JacobianBenchmarkR3', 'target': 'ExactTargetR3',
+                      'r4-local': 'DirectionExperimentR4'}[a.phase]
+    require(info.get('RANSWALLSTAGETEST') == expected_stage and
         info.get('RANSWALLNONLINEARPOLICY') == 'ScalarFeasibleR3' and info.get('RANSWALLACTIONPOLICY') == 'VerifiedR3Action',
         'Changed explicit R3 phase/policy')
+    require(a.phase != 'r4-local' or r4, 'Local R4 requires the opt-in direction')
     progress = Path(info.get('RANSWALLR3PROGRESSFILE', 'case.r3-progress.jsonl'))
     progress = progress if progress.is_absolute() else session.parent/progress
     report = session.with_suffix('.evolution.json')
     require(not progress.exists() and not report.exists(), 'Native outputs already exist; no silent retry/reuse')
-    gate = load(a.action_gate); built = load(epoch/'runtime-fingerprint.json')
+    gate = load(a.action_gate) if a.action_gate else {}
+    built = load(epoch/'runtime-fingerprint.json')
     executable = pin(build/'IncNavierStokesSolver')
-    require(gate.get('schema') == 1 and gate.get('source_commit') == a.expected_source and
+    require(a.phase == 'r4-local' or (gate.get('schema') == 1 and gate.get('source_commit') == a.expected_source and
         gate.get('executable_sha256') == executable['sha256'] and gate.get('absolute_action_tolerance') == 1e-7 and
-        gate.get('required_state_action_gates_met') is True and gate.get('active_dependencies_covered') is True,
+        gate.get('required_state_action_gates_met') is True and gate.get('active_dependencies_covered') is True),
         'Current independent absolute action/active-dependency gates are not complete')
     manifest = load(a.manifest)
     require(manifest['current_target_xml'] == pin(session) and manifest['current_executable'] == executable,
@@ -106,16 +112,21 @@ def main():
     if a.phase == 'target':
         require(a.cost_receipt is not None and a.budget_note is not None, 'Target budget requires the measured complete-J receipt and frozen note')
         cost = load(a.cost_receipt)
-        require(cost.get('phase') == 'benchmark' and cost.get('status') == 'completed' and
+        require(cost.get('phase') == ('r4-local' if r4 else 'benchmark') and cost.get('status') == 'completed' and
             cost.get('source_commit') == a.expected_source and cost.get('executable') == executable and
-            cost.get('runtime_unchanged') is True and cost.get('durable_collection', {}).get('complete_J_benchmark') is True,
+            cost.get('runtime_unchanged') is True and (r4 or cost.get('durable_collection', {}).get('complete_J_benchmark') is True),
             'Target cost basis is not the completed current-source full-J benchmark')
+        if r4:
+            require(a.seconds == 600 and gate.get('local_evidence') == pin(a.cost_receipt) and
+                gate.get('useful_feasible_native_descent') is True and
+                gate.get('base_state') == manifest['state'],
+                'R4 pilot requires the measured useful descent at the exact saved guess and a 600s cap')
         require(bool(a.budget_note.read_text().strip()), 'Empty target budget rationale')
     environment = dict(os.environ, **{key:'1' for key in THREADS}, PYTHONDONTWRITEBYTECODE='1',
         TMPDIR=str(epoch/'tmp'), LD_LIBRARY_PATH=str(build/'geometry-lib'))
     receipt = dict(schema=1, phase=a.phase, status='running', source_commit=a.expected_source,
         source_clean_start=True, started_utc=datetime.now(timezone.utc).isoformat(), runner=pin(__file__),
-        session=pin(session), manifest=pin(a.manifest), action_gate=pin(a.action_gate), executable=executable,
+        session=pin(session), manifest=pin(a.manifest), action_gate=pin(a.action_gate) if a.action_gate else None, executable=executable,
         numerical_threads={key:'1' for key in THREADS}, ranks=1, native_cpu=a.cpu, metadata_cpu=a.metadata_cpu,
         maximum_seconds=a.seconds, cost_receipt=pin(a.cost_receipt) if a.cost_receipt else None,
         budget_note=pin(a.budget_note) if a.budget_note else None, commands=[], failures=[])
