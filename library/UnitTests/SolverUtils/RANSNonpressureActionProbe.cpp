@@ -91,9 +91,13 @@ int main(int argc,char **argv)
         std::vector<std::string> filenames{argv[1]};
         auto session=LibUtilities::SessionReader::CreateInstance(1,args,filenames,
             LibUtilities::CommSerial::create(1,args));
-        session->InitSession();session->SetSolverInfo("GlobalSysSoln","DirectFull");
-        session->SetSolverInfo("RANSWallNonlinearPolicy","ScalarFeasibleR3");
-        session->SetSolverInfo("RANSWallActionPolicy","VerifiedR3Action");
+        session->InitSession();
+        std::string global,nonlinear,action;
+        session->LoadSolverInfo("GlobalSysSoln",global,"Undefined");
+        session->LoadSolverInfo("RANSWallNonlinearPolicy",nonlinear,"Legacy");
+        session->LoadSolverInfo("RANSWallActionPolicy",action,"Legacy");
+        Require(global=="DirectFull" && nonlinear=="ScalarFeasibleR3" && action=="VerifiedR3Action",
+            "action probe requires rank-local DirectFull and explicit ScalarFeasibleR3/VerifiedR3Action selectors");
         const auto graph=SpatialDomains::MeshGraphIO::Read(session);
         Require(world->GetComm()->GetSize()==1 && graph->GetMeshDimension()==2,"R3 action probe is serial flat2D");
         RANSWallPatchParameters parameters;
