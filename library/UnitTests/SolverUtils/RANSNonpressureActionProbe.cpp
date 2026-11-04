@@ -70,7 +70,9 @@ Vector MassAction(const RANSWallEvolutionPatch &patch,const Vector &direction,
             if(row>=patch.offset[block] && row<patch.offset[block]+patch.size[block] && block!=patch.Epsilon())part[row]=0;
         }
         Vector local(part.begin()+patch.offset[block],part.begin()+patch.offset[block]+patch.size[block]);
-        const auto load=RANSWallAlgebra::Multiply(patch.PhysicalMass(block),local);
+        // This probe explicitly requires a flat patch, where the physical
+        // consistent mass is the public field mass (no mapping Jacobian).
+        const auto load=RANSWallAlgebra::Multiply(patch.fields[block]->Mass(),local);
         for(int i=0;i<patch.size[block];++i)if(!constraints.count(patch.offset[block]+i))
             result[patch.offset[block]+i]=alpha*load[i];
     }
@@ -86,7 +88,8 @@ int main(int argc,char **argv)
         Require(!std::ifstream(argv[3]).good(),"refusing to overwrite an action report");
         auto world=LibUtilities::SessionReader::CreateInstance(2,argv);world->InitSession();
         char name[]="nonpressure-action-probe";char *args[]{name,nullptr};
-        auto session=LibUtilities::SessionReader::CreateInstance(1,args,std::vector<std::string>{argv[1]},
+        std::vector<std::string> filenames{argv[1]};
+        auto session=LibUtilities::SessionReader::CreateInstance(1,args,filenames,
             LibUtilities::CommSerial::create(1,args));
         session->InitSession();session->SetSolverInfo("GlobalSysSoln","DirectFull");
         session->SetSolverInfo("RANSWallNonlinearPolicy","ScalarFeasibleR3");
