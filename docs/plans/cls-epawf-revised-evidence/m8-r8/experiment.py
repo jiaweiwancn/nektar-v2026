@@ -198,7 +198,7 @@ def pilot_prepare(epoch, binding, local, out, h):
         executable_sha256=exe['sha256'],absolute_action_tolerance=1e-7,required_state_action_gates_met=True,
         active_dependencies_covered=True,useful_joint_native_descent=True,base_state=old['state'],
         maximum_updates=10,local_evidence=comparison['receipt'],local_source_commit=cost['source_commit'],
-        local_executable=cost['executable'],current_first_matrix=comparison['J25'],
+        local_executable=cost['executable'],current_first_matrix=old['frozen_action']['matrix'],
         action=h.pin(binding/'action-check.json'),comparison=h.pin(local/'comparison.json'),
         selected_fraction=chosen['fraction'],selected_state=chosen['state'],selected_residual=chosen['residual']))
     (out/'budget.txt').write_text(
