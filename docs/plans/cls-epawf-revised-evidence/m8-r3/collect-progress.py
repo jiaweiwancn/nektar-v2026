@@ -87,7 +87,9 @@ def collect(progress, expected_h0=H0, expected_unknowns=2165):
                     require(iteration in jacobians and jacobians[iteration]['status'] == 'incomplete', 'No preceding Jacobian start')
                     matrix = bind(event['matrix']); require(matrix['bytes'] == 8*expected_unknowns**2, 'Wrong complete matrix shape')
                     jacobians[iteration] = dict(status='complete', event=event)
-            elif kind == 'line_search_trial':
+            elif kind in ('line_search_trial', 'r5_trial'):
+                require(kind != 'r5_trial' or protocol.get('globalization') == 'JointRestorationR5',
+                    'R5 trial in another globalization protocol')
                 vector(event['state'], expected_unknowns)
                 if 'residual' in event: vector(event['residual'], expected_unknowns)
                 trials.append(event)
