@@ -25,6 +25,25 @@ namespace
 {
 bool Same(double a,double b){return std::abs(a-b)<1e-11;}
 using Matrix=RANSWallAlgebra::DenseMatrix;
+
+enum class FullRestorationOutcome { DirectionUnresolved, LineSearchExhausted, Accepted };
+
+constexpr int R6RestorationTrialLimit(bool local)
+{
+    return local?4:16;
+}
+
+constexpr bool R6TryPartialRestoration(FullRestorationOutcome outcome,double violation)
+{
+    return outcome!=FullRestorationOutcome::Accepted && violation>0.;
+}
+
+static_assert(2*R6RestorationTrialLimit(false)==32 && 2*R6RestorationTrialLimit(true)==8);
+static_assert(R6TryPartialRestoration(FullRestorationOutcome::DirectionUnresolved,1.));
+static_assert(R6TryPartialRestoration(FullRestorationOutcome::LineSearchExhausted,1.));
+static_assert(!R6TryPartialRestoration(FullRestorationOutcome::Accepted,1.) &&
+              !R6TryPartialRestoration(FullRestorationOutcome::LineSearchExhausted,0.));
+
 class FeasibleFactor
 {
 public:
@@ -1451,7 +1470,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
                     // Reserve half the trial budget for partial restoration
                     // even if the full model constructs a valid direction.
                     const int allowance=RefinedDirectionR6()?
-                        std::min(localR5?4:16,(localR5?8:32)-trialCount):
+                        std::min(R6RestorationTrialLimit(localR5),2*R6RestorationTrialLimit(localR5)-trialCount):
                         (localR5?8:32-trialCount);
                     for(int k=0;k<allowance;++k,fraction*=.5)
                     {
@@ -1515,12 +1534,18 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
                 if(!RefinedDirectionR6() && trial.fraction==0. && baseBox.Max()>0. &&
                     details.find("inward_ground_row")!=std::string::npos)
                     std::tie(trial,details)=compare("r5_inward_control",true,1.,false);
-                if(trial.fraction==0. && baseBox.Max()>0. && (RefinedDirectionR6() || trial.stepPin.empty()))
+                const auto fullOutcome=trial.fraction>0.?FullRestorationOutcome::Accepted:
+                    trial.stepPin.empty()?FullRestorationOutcome::DirectionUnresolved:
+                        FullRestorationOutcome::LineSearchExhausted;
+                const bool tryPartial=RefinedDirectionR6()?R6TryPartialRestoration(fullOutcome,baseBox.Max()):
+                    trial.fraction==0. && baseBox.Max()>0. && trial.stepPin.empty();
+                if(tryPartial)
                 {
                     if(RefinedDirectionR6())
                         durable.Event("r6_partial_fallback",{{"iteration",J::Number(iterations)},
                             {"full_direction_constructed",J::Boolean(!trial.stepPin.empty())},
-                            {"full_trials",J::Number(trialCount)},{"reserved_trials",J::Number(localR5?4:16)}});
+                            {"full_trials",J::Number(trialCount)},
+                            {"reserved_trials",J::Number(R6RestorationTrialLimit(localR5))}});
                     std::tie(trial,details)=compare("r5_partial",true,.25,true);
                 }
                 if(localR5)
