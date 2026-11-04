@@ -922,7 +922,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
     const int maxExchange=outer.empty()?40:96;
     int exchange=0;
     bool published=false;
-    auto record=[&](const Cut *entering,const Matrix &R,const Vector &effective,const Vector &trace,
+    auto record=[&](const Cut *entering,const WallMatrix &R,const Vector &effective,const Vector &trace,
                     const std::string &status)
     {
         if(!diagnostic)return;
