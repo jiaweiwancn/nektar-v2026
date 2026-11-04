@@ -362,7 +362,7 @@ struct Loads
 
 RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3(
     const Vector &state,double time,const RANSWallEvolutionData &data,bool imposeConstraints,
-    int region,std::vector<std::string> *metadata) const
+    int region,std::vector<std::string> *metadata,bool destructionOnly) const
 {
     const auto started=Clock::now();
     Require(m_dimension==2 && !Mapped() && m_transitionEnabled && m_cappedDestruction && Size()<=3000,
@@ -373,11 +373,13 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3
     const auto constraintStarted=Clock::now();
     const auto constraints=Constraints(state,time,data);const auto s=ExternalLift(state,time,data);
     const double constraintSeconds=std::chrono::duration<double>(Clock::now()-constraintStarted).count();
-    std::vector<std::vector<long double>> jac(Size(),std::vector<long double>(DifferentialSize()));
+    Require(!destructionOnly || (region==0 && !imposeConstraints),"R9 action requires only free inner destruction");
+    const int columns=destructionOnly?Size():DifferentialSize();
+    std::vector<std::vector<long double>> jac(Size(),std::vector<long double>(columns));
     std::size_t localKernels=0,volumePoints=0,movingPoints=0,normalizations=0,profileCount=0,traceSamples=0;
     std::string outerBranches,yapBranches;
     auto scatter=[&](const Loads &load,int column,long double factor=1)
-    {if(column<DifferentialSize() && factor!=0)for(auto [row,value]:load.value)jac[row][column]+=factor*value;};
+    {if(column<columns && factor!=0)for(auto [row,value]:load.value)jac[row][column]+=factor*value;};
     auto rank=[&](const Loads &load,const Sparse &row)
     {for(auto [column,value]:row)scatter(load,column,value);};
     auto basis=[&](int block,const Coordinate &p,int side=0,bool hessian=false)
@@ -393,6 +395,14 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3
         const auto v=basis(0,H,1),k=basis(K(),H,1);RANSVector u{};RANSTensor G{};
         for(int a=0;a<m_dimension;++a){u[PhysicalAxis(a)]=v.row.Value(s,offset[a]);G[PhysicalAxis(a)]=v.row.Gradient(s,offset[a]);}
         for(std::size_t j=0;j<k.row.ids.size();++j)f.dpressure[0][offset[K()]+k.row.ids[j]]-=2*k.gradient[0][j]/3;
+        if(destructionOnly)
+        {
+            // The source-only matrix includes the pressure sensor columns
+            // that the physical R3 matrix assembles in a separate pass.
+            const auto p=basis(OuterPressure(),H,1);
+            for(std::size_t j=0;j<p.row.ids.size();++j)
+                f.dpressure[0][offset[OuterPressure()]+p.row.ids[j]]+=p.gradient[0][j];
+        }
         for(int component=0;component<m_dimension;++component)for(std::size_t j=0;j<v.row.ids.size();++j)
         {
             // Flat tangent force is (u_x d_x)u_x+u_x div_Gamma u.
@@ -537,12 +547,42 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3
             Require(v.ids==n.k.row.ids,"R3 k/velocity native maps differ");
             auto q=stateAt(v,pressure,nullptr,nativeRay.weight*n.weight,true);
             Require(data.innerKSource(point,time)==0,"R3 moving-source action requires the declared unforced inner scalar source");
-            const auto inner=InnerStress(q.k,n.pre.nt,q.G);
-            q.stress=RANSWallInnerMeanStress(inner,m_parameters.geometry.molecularNu,q.pi);
-            q.dk=m_parameters.geometry.molecularNu+n.pre.nt/m_parameters.model.Parameters().sigmaK;
             const double m=ray.normalization.m,K0=ray.profile->K();
             const auto source=EvaluateRANSCappedDestructionPoint(q.k,K0,n.pre.E,n.pre.Dpre,
                 ray.normalization.b,m,m_destruction);
+            auto destructionAction=[&](const Variation &d)
+            {
+                return (d.preD*n.limiter.value+n.pre.Dpre*n.limiter.slope*
+                    (d.k/K0-q.k*d.sampledK/(K0*K0)))/m;
+            };
+            if(destructionOnly)
+            {
+                auto load=[&](const Variation &d)
+                {
+                    Loads result;
+                    result.Add(offset[K()],q.v,source.destruction,{},destructionAction(d),{},q.weight,d.radius,d.weight);
+                    return result;
+                };
+                for(std::size_t j=0;j<q.v.row.ids.size();++j)
+                {
+                    Variation d;d.k=q.v.value[j];
+                    scatter(load(d),offset[K()]+q.v.row.ids[j]);
+                }
+                Variation kd;kd.sampledK=1;kd.radius=n.radiusK;kd.weight=nativeRay.weight*n.weightK;
+                kd.k=q.gk[2]*n.radiusK;kd.preD=n.pre.DK;
+                const auto kload=load(kd);
+                for(auto [row,value]:kload.value)sampledAction.value[row]+=value;
+                Variation cd;cd.preD=n.pre.Dchi;
+                const auto cload=load(cd);
+                for(auto [row,value]:cload.value)chiAction.value[row]+=value;
+                for(std::size_t j=0;j<q.v.row.ids.size();++j)
+                    normalizationAction.value[offset[K()]+q.v.row.ids[j]]-=
+                        static_cast<long double>(q.weight)*q.v.row.phi[j]*source.destruction/m;
+                continue;
+            }
+            const auto inner=InnerStress(q.k,n.pre.nt,q.G);
+            q.stress=RANSWallInnerMeanStress(inner,m_parameters.geometry.molecularNu,q.pi);
+            q.dk=m_parameters.geometry.molecularNu+n.pre.nt/m_parameters.model.Parameters().sigmaK;
             q.sk=inner.production-source.destruction;
             std::array<RANSWallInnerStressAction,6> partial{};RANSTensor zero{};
             partial[0]=RANSWallInnerStressDirectional(q.k,n.pre.nt,q.G,1,0,zero,m_innerStress);
@@ -565,8 +605,7 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3
                     production+=action.production*factor;
                     for(int a=0;a<3;++a)for(int b=0;b<3;++b)stress[a][b]+=action.turbulentStress[a][b]*factor;
                 }
-                const double destruction=(d.preD*n.limiter.value+n.pre.Dpre*n.limiter.slope*
-                    (d.k/K0-q.k*d.sampledK/(K0*K0)))/m;
+                const double destruction=destructionAction(d);
                 const double sk=production-destruction;
                 Loads load;
                 for(int component=0;component<2;++component)
@@ -709,7 +748,7 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3
     {
         (void)value;
         if(column>=offset[Epsilon()] && column<offset[InnerPressure()] && m_traceIds.count(column-offset[Epsilon()]))continue;
-        if(column<DifferentialSize())for(auto &row:jac)row[column]=0;
+        if(column<columns)for(auto &row:jac)row[column]=0;
     }
     if(imposeConstraints)
     {
@@ -755,8 +794,10 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3
             if(column<DifferentialSize() && constraints.count(column))jac[column][column]=1;
         }
     }
+    if(destructionOnly)
+        for(const auto &[row,value]:constraints)std::fill(jac[row].begin(),jac[row].end(),0.L);
     WallMatrix result(Size(),Vector(Size()));
-    for(int row=0;row<Size();++row)for(int column=0;column<DifferentialSize();++column)
+    for(int row=0;row<Size();++row)for(int column=0;column<columns;++column)
     {
         result[row][column]=static_cast<double>(jac[row][column]);
         Require(std::isfinite(result[row][column]),"nonfinite R3 nonpressure action coefficient");

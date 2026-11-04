@@ -175,6 +175,7 @@ public:
     bool CompareR7() const { return m_r7Policy=="Compare"; }
     bool InteriorProbeR7() const { return m_r7Policy=="InteriorProbe"; }
     bool ExperimentR8() const { return m_r8Experiment; }
+    bool ExperimentR9() const { return m_r9Experiment; }
     bool PilotR8() const { return m_r8Pilot; }
     bool AdaptiveR7() const { return m_r7Policy=="Adaptive"; }
     bool GroundSafeguard() const { return CoupledR4() || JointRestorationR5(); }
@@ -285,10 +286,22 @@ private:
         const RANSWallEvolutionData &data,const ScalarDomainResult &domain,const Vector &residual,
         const std::map<int,double> &constraints,const WallMatrix &jac,const Vector &newton,
         const std::function<Vector(Vector,bool)> &inverse,const R8Ray &ray,
-        RANSWallR3::DurableProgress &durable,int iteration=0) const;
+        RANSWallR3::DurableProgress &durable,int iteration=0,const std::string &comparison="",
+        std::map<double,R8Trial> *samples=nullptr) const;
+    struct InnerDestruction
+    {
+        Vector value,ranges;
+        std::string limiter,cap,profile,panels;
+    };
+    InnerDestruction DestructionValueR9(const ScalarDomainResult &domain,double time,
+        const RANSWallEvolutionData &data,const std::map<int,double> &constraints) const;
+    R8Trial RunR9Comparison(const Vector &state,const Vector &history,double alpha,double time,
+        const RANSWallEvolutionData &data,const ScalarDomainResult &domain,const Vector &residual,
+        const std::map<int,double> &constraints,const WallMatrix &jac,const Vector &newton,
+        const std::function<Vector(Vector,bool)> &inverse,RANSWallR3::DurableProgress &durable) const;
     WallMatrix AssembleNonpressureR3(const Vector &state,double time,
         const RANSWallEvolutionData &data,bool imposeConstraints,int region,
-        std::vector<std::string> *metadata) const;
+        std::vector<std::string> *metadata,bool destructionOnly=false) const;
     struct ScalarLocation
     {
         std::string inventory;
@@ -368,7 +381,7 @@ private:
     std::string m_nonlinearPolicy="Legacy",m_feasibleTraceFile="case.feasible.jsonl";
     std::string m_directionAccuracy="Legacy",m_r7Policy="Off";
     double m_r7PreviousDisplacement=0.,m_r7Radius=0.;
-    bool m_r7Interior=false,m_r8Experiment=false,m_r8Pilot=false;
+    bool m_r7Interior=false,m_r8Experiment=false,m_r8Pilot=false,m_r9Experiment=false;
     std::string m_r3ProgressFile="case.r3-progress.jsonl";
     std::string m_actionPolicy="Legacy";
     std::string m_globalization="FractionToBoundary";

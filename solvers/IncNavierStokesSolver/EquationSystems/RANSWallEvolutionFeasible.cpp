@@ -1267,11 +1267,11 @@ RANSWallEvolutionPatch::R8Trial RANSWallEvolutionPatch::RunR8Comparison(const Ve
     const RANSWallEvolutionData &data,const ScalarDomainResult &baseDomain,const Vector &residual,
     const std::map<int,double> &constraints,const WallMatrix &jac,const Vector &newton,
     const std::function<Vector(Vector,bool)> &inverse,const R8Ray &ray,RANSWallR3::DurableProgress &durable,
-    int iteration) const
+    int iteration,const std::string &comparison,std::map<double,R8Trial> *samples) const
 {
     using Clock=std::chrono::steady_clock;
-    const bool pilot=PilotR8();
-    const std::string prefix="iterate"+std::to_string(iteration)+".";
+    const bool pilot=PilotR8() || ExperimentR9();
+    const std::string prefix="iterate"+std::to_string(iteration)+"."+comparison;
     constexpr double fit=.125,holdout=.0625;
     const double us=m_robustUstar,K0=m_parameters.model.Q()*us*us,H=m_parameters.geometry.height;
     const double E0=us*us*us/(m_parameters.model.Kappa()*H);
@@ -1337,7 +1337,7 @@ RANSWallEvolutionPatch::R8Trial RANSWallEvolutionPatch::RunR8Comparison(const Ve
         const auto checked=ScalarDomain(t.state,time,data,true);
         std::string verdict=checked.admissible?"ground":"scalar_domain";
         std::vector<std::pair<std::string,std::string>> fields{{"iteration",J::Number(iteration)},
-            {"name",J::Quote(name)},{"fraction",J::Number(f)},
+            {"name",J::Quote(name)},{"comparison",J::Quote(comparison)},{"fraction",J::Number(f)},
             {"state",durable.VectorPayload(prefix+name+".state",t.state)},{"scalar",ScalarDomainJSON(checked)},
             {"profile_branches_changed",J::Boolean(checked.profileBranches!=baseDomain.profileBranches)}};
         if(checked.admissible)
@@ -1468,6 +1468,7 @@ RANSWallEvolutionPatch::R8Trial RANSWallEvolutionPatch::RunR8Comparison(const Ve
             {"fit_fraction",J::Number(fit)},{"holdout_fraction",J::Number(holdout)},
             {"heldout_predicted",J::Numbers(validationNorm)},{"heldout_actual",J::Numbers(heldNorm)},
             {"heldout_vector_error",J::Numbers(Norms(difference(*heldResidual,validation),constraints,us))},
+            {"comparison",J::Quote(comparison)},
             {"samples",J::Quote(pilot?(ray.residuals.empty()?"current_live":"current_bound"):"fixed_comparison")},
             {"validation_agrees",J::Boolean(agrees)},{"proposed_fraction",J::Number(candidate)},
             {"used_fraction",J::Number(curved?curved->f:0.)},{"new_evaluations",J::Number(evaluations-before)},
@@ -1482,8 +1483,9 @@ RANSWallEvolutionPatch::R8Trial RANSWallEvolutionPatch::RunR8Comparison(const Ve
                 const auto &t=tryRay(std::ldexp(fit,-i),"r8_fallback"+std::to_string(i));
                 if(t.accepted){bestRay=&t;break;}
             }
-        durable.Event("r8_work",{{"iteration",J::Number(iteration)},{"native_trial_states",J::Number(evaluations)},
-            {"selected",J::Quote(bestRay?bestRay->name:"none")}});
+        durable.Event("r8_work",{{"iteration",J::Number(iteration)},{"comparison",J::Quote(comparison)},
+            {"native_trial_states",J::Number(evaluations)},{"selected",J::Quote(bestRay?bestRay->name:"none")}});
+        if(samples)*samples=sameRay;
         return bestRay?*bestRay:R8Trial{};
     }
 
@@ -1590,6 +1592,317 @@ RANSWallEvolutionPatch::R8Trial RANSWallEvolutionPatch::RunR8Comparison(const Ve
     durable.Event("r8_work",{{"native_trial_states",J::Number(evaluations)},
         {"retained_trial_states_reused","4"},{"selected",J::Quote(selected?selected->name:"none")}});
     return selected?*selected:R8Trial{};
+}
+
+RANSWallEvolutionPatch::R8Trial RANSWallEvolutionPatch::RunR9Comparison(const Vector &state,const Vector &history,
+    double alpha,double time,const RANSWallEvolutionData &data,const ScalarDomainResult &domain,const Vector &residual,
+    const std::map<int,double> &constraints,const WallMatrix &jac,const Vector &newton,
+    const std::function<Vector(Vector,bool)> &inverse,RANSWallR3::DurableProgress &durable) const
+{
+    using Clock=std::chrono::steady_clock;
+    const double us=m_robustUstar;
+    const auto bounds=OuterBoundsR5(domain);
+    const auto baseNorms=Norms(residual,constraints,us);
+    Require(OuterViolationR5(bounds).Max()==0.,"R9 requires an in-box endpoint");
+    auto at=[&](const Vector &d,double f=1.)
+    {
+        auto s=state;
+        for(int i=0;i<Size();++i)s[i]+=f*d[i];
+        return s;
+    };
+    auto difference=[&](const Vector &a,const Vector &b)
+    {
+        auto v=a;
+        for(int i=0;i<Size();++i)v[i]-=b[i];
+        return v;
+    };
+    auto scale=[](Vector v,double f)
+    {
+        for(double &x:v)x*=f;
+        return v;
+    };
+    auto merit=[&](const Vector &norms)
+    {
+        double sum=0.;
+        for(int i=0;i<InnerPressure();++i)sum+=norms[i]*norms[i];
+        return .5*sum;
+    };
+    auto support=[&](const Vector &v)
+    {
+        double outside=0.;
+        for(int i=0;i<Size();++i)
+            if(i<offset[K()] || i>=offset[Epsilon()] || constraints.count(i))
+                outside=std::max(outside,std::abs(v[i]));
+        return outside;
+    };
+    int sourceValues=0,sourceActions=0,factorizations=0,refinements=0;
+    double sourceSeconds=0.,actionSeconds=0.,factorSeconds=0.;
+    auto source=[&](const Vector &q,InnerDestruction &value)
+    {
+        const auto started=Clock::now();++sourceValues;
+        const auto checked=ScalarDomain(q,time,data,true);
+        bool wall=false;
+        if(checked.admissible)WallTraceJSON(checked.effectiveState,wall);
+        if(wall)value=DestructionValueR9(checked,time,data,constraints);
+        sourceSeconds+=std::chrono::duration<double>(Clock::now()-started).count();
+        return wall;
+    };
+    auto sourceAction=[&](const Vector &q)
+    {
+        const auto started=Clock::now();++sourceActions;
+        auto a=AssembleNonpressureR3(q,time,data,false,0,nullptr,true);
+        actionSeconds+=std::chrono::duration<double>(Clock::now()-started).count();
+        return a;
+    };
+    auto changes=[](const std::string &a,const std::string &b)
+    {
+        if(a.size()!=b.size())return -1;
+        return static_cast<int>(std::inner_product(a.begin(),a.end(),b.begin(),0,std::plus<int>{},
+            [](char x,char y){return x!=y;}));
+    };
+    InnerDestruction D0;
+    Require(source(state,D0) && support(D0.value)==0.,"R9 base destruction support differs");
+    const auto JD=sourceAction(state);
+    double excluded=0.;
+    for(int i=0;i<Size();++i)if(i<offset[K()] || i>=offset[Epsilon()] || constraints.count(i))
+        excluded=std::max(excluded,Maximum(JD[i]));
+    Require(excluded==0.,"R9 source action touches algebraic or overwritten rows");
+    durable.Event("r9_component",{{"D0",durable.VectorPayload("r9.D0",D0.value)},
+        {"JD0",durable.MatrixPayload(10000,JD)},{"source_only_matrix_label",J::Quote("JD0, separate from physical J")},
+        {"native_b_m_lambda_chi_ranges_and_branch_counts",J::Numbers(D0.ranges)},
+        {"smoothing",J::Quote(m_destruction.smooth?"C2":"Linear")},{"component_excluded_rows",J::Number(support(D0.value))},
+        {"action_excluded_rows",J::Number(excluded)}});
+    auto model=[&](const Vector &d,const InnerDestruction &value)
+    {
+        auto m=Multiply(jac,d);
+        const auto action=Multiply(JD,d);
+        for(int i=0;i<Size();++i)m[i]+=residual[i]+(value.value[i]-D0.value[i])-action[i];
+        return m;
+    };
+    const auto zero=Norms(difference(model(Vector(Size()),D0),residual),constraints,us);
+    Require(Maximum(zero)==0.,"R9 source model does not recover its base residual");
+    const auto reference=ResidualResolutionComponents(state,history,alpha,time,data);
+    auto inner=reference.terms.at("inner_k_destruction");
+    for(const auto &[row,value]:constraints)inner[row]=0.;
+    const auto baseDifference=Norms(difference(D0.value,inner),constraints,us);
+    Require(Maximum(baseDifference)<1e-8,"R9 source component and residual decomposition differ");
+    durable.Event("r9_base_consistency",{{"decomposition_error",J::Numbers(baseDifference)},
+        {"model_at_zero_error",J::Numbers(zero)},
+        {"first_order_model_identity",J::Quote("J + JD0 - JD0 = J on the selected base branch")}});
+
+    auto directionalCheck=[&](const std::string &name,const Vector &d)
+    {
+        const auto exact=Multiply(JD,d);
+        double error=1e300;
+        for(int level:{9,11,13})
+        {
+            const double h=std::ldexp(1.,-level);
+            std::array<InnerDestruction,4> values;
+            bool stable=true;
+            for(int i=0;i<4;++i)
+            {
+                const double f=(i%2?-1.:1.)*h/(i<2?1.:2.);
+                if(!source(at(d,f),values[i])){stable=false;break;}
+                stable=stable && values[i].limiter==D0.limiter && values[i].cap==D0.cap &&
+                    values[i].profile==D0.profile && values[i].panels==D0.panels;
+            }
+            if(!stable)
+            {
+                durable.Event("r9_component_action_check",{{"name",J::Quote(name)},{"h",J::Number(h)},
+                    {"same_ordered_branch_inventory","false"}});
+                continue;
+            }
+            const auto coarse=scale(difference(values[0].value,values[1].value),.5/h);
+            const auto fine=scale(difference(values[2].value,values[3].value),1/h);
+            auto richardson=fine;
+            for(int i=0;i<Size();++i)richardson[i]+=(fine[i]-coarse[i])/3.;
+            const auto errors=Norms(difference(richardson,exact),constraints,us);
+            const auto derivative=Norms(exact,constraints,us);
+            const auto gap=Norms(difference(fine,coarse),constraints,us);
+            durable.Event("r9_component_action_check",{{"name",J::Quote(name)},{"h",J::Number(h)},
+                {"same_ordered_branch_inventory","true"},{"errors",J::Numbers(errors)},
+                {"central_difference_gap",J::Numbers(gap)},{"analytic_norms",J::Numbers(derivative)}});
+            error=std::min(error,Maximum(errors));
+            if(error<=1e-7 && Maximum(gap)<=1e-6)break;
+        }
+        return error;
+    };
+
+    const auto controlStarted=Clock::now();
+    R8Ray linear;
+    std::string linearDetails;
+    linear.step=CoupledDirectionR4(domain,newton,jac,constraints,inverse,linearDetails,bounds,1.,false,
+        &durable,"r9_linear",residual,.125);
+    linear.action=Multiply(jac,linear.step);
+    const double linearConstructSeconds=std::chrono::duration<double>(Clock::now()-controlStarted).count();
+    durable.Event("r9_linear_direction",{{"step",durable.VectorPayload("r9.linear.step",linear.step)},
+        {"action",durable.VectorPayload("r9.linear.action",linear.action)},{"details",linearDetails},
+        {"seconds",J::Number(linearConstructSeconds)}});
+    auto p=linear.step;
+    std::fill(p.begin(),p.begin()+offset[InnerPressure()],0.);
+    const double linearError=directionalCheck("coupled_control",linear.step);
+    const double pressureError=directionalCheck("control_pressure_part",p);
+    const auto controlTrialStarted=Clock::now();
+    std::map<double,R8Trial> controlSamples;
+    auto control=RunR8Comparison(state,history,alpha,time,data,domain,residual,constraints,jac,newton,inverse,
+        linear,durable,0,"r9_linear",&controlSamples);
+    const double linearTrialSeconds=std::chrono::duration<double>(Clock::now()-controlTrialStarted).count();
+    bool supportsModel=false;
+    for(double f:{control.accepted?control.f:.0625,.125})
+    {
+        const auto &t=control.accepted && f==control.f?control:controlSamples.at(f);
+        if(!t.qualified || t.residual.empty())continue;
+        const auto d=scale(linear.step,f);
+        InnerDestruction value;
+        if(!source(t.state,value))continue;
+        auto simple=residual;
+        for(int i=0;i<Size();++i)simple[i]+=f*linear.action[i];
+        const auto corrected=model(d,value);
+        const auto L=Norms(difference(t.residual,simple),constraints,us);
+        const auto M=Norms(difference(t.residual,corrected),constraints,us);
+        const double algebraic=support(difference(difference(value.value,D0.value),Multiply(JD,d)));
+        const auto decomposition=ResidualResolutionComponents(t.state,history,alpha,time,data);
+        auto native=decomposition.terms.at("inner_k_destruction");
+        for(const auto &[row,target]:constraints)native[row]=0.;
+        const auto valueError=Norms(difference(native,value.value),constraints,us);
+        Require(Maximum(valueError)<1e-8 && algebraic==0.,"R9 endpoint destruction component mismatch");
+        supportsModel=supportsModel || (M[K()]<.5*L[K()] && Maximum(M)<.5*Maximum(L));
+        durable.Event("r9_endpoint_model",{{"fraction",J::Number(f)},{"actual",J::Numbers(t.norms.empty()?Norms(t.residual,constraints,us):t.norms)},
+            {"linear",J::Numbers(Norms(simple,constraints,us))},{"source_model",J::Numbers(Norms(corrected,constraints,us))},
+            {"linear_vector_error",J::Numbers(L)},{"source_model_vector_error",J::Numbers(M)},
+            {"decomposition_error",J::Numbers(valueError)},{"excluded_row_correction",J::Number(algebraic)},
+            {"source_ranges",J::Numbers(value.ranges)},{"ordered_limiter_changes",J::Number(changes(D0.limiter,value.limiter))},
+            {"ordered_cap_changes",J::Number(changes(D0.cap,value.cap))},{"ordered_profile_changes",J::Number(changes(D0.profile,value.profile))},
+            {"ordered_panel_identity_changes",J::Number(changes(D0.panels,value.panels))}});
+    }
+    const bool actionPass=std::max(linearError,pressureError)<=1e-7;
+    durable.Event("r9_model_gate",{{"action_pass",J::Boolean(actionPass)},{"endpoint_supports_model",J::Boolean(supportsModel)},
+        {"control_trials_seconds",J::Number(linearTrialSeconds)}});
+    if(!control.accepted || !supportsModel || !actionPass)
+    {
+        durable.Event("r9_decision",{{"selected",J::Quote(control.accepted?"linear":"none")},
+            {"promote","false"},{"reason",J::Quote(!actionPass?"component_action_gate":!supportsModel?"endpoint_model_gate":"linear_trial_unresolved")},
+            {"source_value_calls",J::Number(sourceValues)},{"source_action_calls",J::Number(sourceActions)},
+            {"source_seconds",J::Number(sourceSeconds)},{"source_action_seconds",J::Number(actionSeconds)}});
+        return control;
+    }
+
+    const auto modelStarted=Clock::now();
+    auto anchor=linear.step;
+    InnerDestruction anchorValue;
+    if(!source(at(anchor),anchorValue))
+    {
+        anchor=scale(linear.step,control.f);
+        Require(source(at(anchor),anchorValue),"R9 accepted control tangent is outside the scalar domain");
+    }
+    double incumbent=merit(Norms(model(anchor,anchorValue),constraints,us));
+    Vector best;
+    double bestMerit=1e300;
+    for(int i=0;i<3;++i)
+    {
+        ++refinements;
+        const auto ASource=sourceAction(at(anchor));
+        auto A=jac;
+        for(int row=offset[K()];row<offset[Epsilon()];++row)
+            for(int col=0;col<Size();++col)A[row][col]+=ASource[row][col]-JD[row][col];
+        const auto dSource=Multiply(ASource,anchor);
+        auto r=residual;
+        for(int row=offset[K()];row<offset[Epsilon()];++row)
+            r[row]+=(anchorValue.value[row]-D0.value[row])-dSource[row];
+        const auto factStarted=Clock::now();
+        const auto factor=FeasibleFactor(A);++factorizations;
+        factorSeconds+=std::chrono::duration<double>(Clock::now()-factStarted).count();
+        auto apply=[&](Vector rhs,bool transpose){return factor.Refine(A,rhs,transpose);};
+        const auto n=apply(scale(r,-1.),false);
+        const std::string tag="r9_model"+std::to_string(i);
+        const auto directionStarted=Clock::now();
+        std::string details;
+        Vector d;
+        try
+        {
+            d=CoupledDirectionR4(domain,n,A,constraints,apply,details,bounds,1.,false,&durable,tag,r,.125);
+        }
+        catch(const std::exception &e)
+        {
+            durable.Event("r9_refinement_failure",{{"index",J::Number(i)},{"reason",J::Quote(e.what())},
+                {"seconds",J::Number(std::chrono::duration<double>(Clock::now()-directionStarted).count())}});
+            break;
+        }
+        const double directionSeconds=std::chrono::duration<double>(Clock::now()-directionStarted).count();
+        const auto affine=Norms([&]{
+            auto v=Multiply(A,d);
+            for(int j=0;j<Size();++j)v[j]+=r[j];
+            return v;
+        }(),constraints,us);
+        Require(*std::max_element(affine.begin()+InnerPressure(),affine.end())<1e-9,
+            "R9 model direction loses frozen-base algebraic restoration");
+        InnerDestruction value;
+        const bool valid=source(at(d),value);
+        const auto norms=valid?Norms(model(d,value),constraints,us):Vector{};
+        const double objective=valid?merit(norms):1e300;
+        durable.Event("r9_refinement",{{"index",J::Number(i)},{"source_tangent_state",durable.VectorPayload(tag+".anchor",at(anchor))},
+            {"direction",durable.VectorPayload(tag+".step",d)},{"affine",J::Numbers(affine)},{"full_source_model",J::Numbers(norms)},
+            {"merit",valid?J::Number(objective):"null"},{"previous_merit",J::Number(incumbent)},
+            {"valid_source_state",J::Boolean(valid)},{"details",details},{"direction_seconds",J::Number(directionSeconds)}});
+        if(valid && objective<bestMerit){best=d;bestMerit=objective;}
+        if(valid && objective<incumbent)
+        {
+            const double previous=incumbent;
+            incumbent=objective;anchor=std::move(d);anchorValue=std::move(value);
+            if(previous-incumbent<=1e-5*std::max(1.,previous))break;
+        }
+        else
+        {
+            auto middle=anchor;
+            for(int row=0;row<Size();++row)middle[row]=.5*(anchor[row]+d[row]);
+            InnerDestruction candidate;
+            if(!source(at(middle),candidate))break;
+            anchor=std::move(middle);anchorValue=std::move(candidate);
+            incumbent=merit(Norms(model(anchor,anchorValue),constraints,us));
+        }
+    }
+    const double modelSeconds=std::chrono::duration<double>(Clock::now()-modelStarted).count();
+    R8Trial nonlinear;
+    double nonlinearTrialSeconds=0.;
+    if(!best.empty())
+    {
+        const double error=directionalCheck("nonlinear_direction",best);
+        if(error<=1e-7)
+        {
+            R8Ray ray;ray.step=best;ray.action=Multiply(jac,best);
+            const auto trialStarted=Clock::now();
+            nonlinear=RunR8Comparison(state,history,alpha,time,data,domain,residual,constraints,jac,newton,
+                inverse,ray,durable,0,"r9_source");
+            nonlinearTrialSeconds=std::chrono::duration<double>(Clock::now()-trialStarted).count();
+            if(nonlinear.accepted)
+            {
+                InnerDestruction value;
+                Require(source(nonlinear.state,value),"R9 qualified native trial lost source domain");
+                const auto d=scale(best,nonlinear.f);
+                const auto M=Norms(model(d,value),constraints,us);
+                durable.Event("r9_source_trial_model",{{"fraction",J::Number(nonlinear.f)},{"model",J::Numbers(M)},
+                    {"actual",J::Numbers(nonlinear.norms)},{"source_ranges",J::Numbers(value.ranges)}});
+            }
+        }
+    }
+    const double oldGain=Maximum(baseNorms)-control.E;
+    const double newGain=nonlinear.accepted?Maximum(baseNorms)-nonlinear.E:0.;
+    // Charge the source policy for its extra construction and trial work.
+    const double controlCost=linearConstructSeconds+linearTrialSeconds;
+    const double sourceCost=linearConstructSeconds+modelSeconds+nonlinearTrialSeconds;
+    const bool promote=nonlinear.accepted && newGain>=1.25*oldGain &&
+        newGain>=1e-4*Maximum(baseNorms) && nonlinear.ground>=control.ground &&
+        nonlinear.norms.back()<=1.1*control.norms.back() && newGain/sourceCost>oldGain/controlCost;
+    durable.Event("r9_decision",{{"selected",J::Quote(promote?"source":"linear")},{"promote",J::Boolean(promote)},
+        {"reason",J::Quote(best.empty()?"bounded_model_construction_unresolved":!nonlinear.accepted?"source_trial_unresolved":
+            promote?"material_matched_gain":"material_gain_gate_not_met")},
+        {"linear_gain",J::Number(oldGain)},{"source_gain",J::Number(newGain)},
+        {"linear_seconds",J::Number(controlCost)},{"source_seconds",J::Number(sourceCost)},
+        {"refinements",J::Number(refinements)},{"source_value_calls",J::Number(sourceValues)},
+        {"source_action_calls",J::Number(sourceActions)},{"source_value_seconds",J::Number(sourceSeconds)},
+        {"source_action_seconds",J::Number(actionSeconds)},{"model_factorizations",J::Number(factorizations)},
+        {"model_factorization_seconds",J::Number(factorSeconds)},{"model_seconds",J::Number(modelSeconds)}});
+    return promote?nonlinear:control;
 }
 
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
@@ -1734,6 +2047,23 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
             for(int row=0;row<Size();++row)linear[row]+=residual[row];
             const auto linearNorms=Norms(linear,constraints,us);
             Require(Maximum(linearNorms)<1e-8*std::max(1.,error),"R3 inaccurate linear solve");
+            if(ExperimentR9())
+            {
+                Require(localR5 && !useFrozen,"R9 requires a fresh current endpoint matrix");
+                auto trial=RunR9Comparison(s,history,alpha,time,data,domain,residual,constraints,jac,newton,inverse,durable);
+                if(trial.accepted)
+                {
+                    durable.Snapshot(1,trial.state,trial.residual,trial.constraints,trial.norms,
+                        domainReport(trial.domain),profiling(),J::Object({{"trial",J::Quote(trial.name)},
+                            {"accepted_fraction",J::Number(trial.f)},{"matrix",matrix},{"box",trial.box.report}}));
+                    iterations=1;
+                }
+                m_lastFeasibleState=trial.accepted?trial.state:s;
+                durable.Event("solve_terminal",{{"converged","false"},
+                    {"terminal",J::Quote("r9_fixed_comparison_completed")},{"iteration",J::Number(iterations)},
+                    {"profiling",profiling()}});
+                return m_lastFeasibleState;
+            }
             if(ExperimentR8())
             {
                 Require(localR5 && !frozenMatrix.empty(),"R8 comparison requires its bound current matrix");

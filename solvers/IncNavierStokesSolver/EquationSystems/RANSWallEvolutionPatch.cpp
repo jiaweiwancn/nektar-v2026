@@ -229,6 +229,11 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     m_r8Experiment=r8=="On";m_r8Pilot=r8=="Pilot";
     Require(r8=="Off" || ((m_r8Experiment || m_r8Pilot) && RefinedDirectionR6() && m_r7Policy=="Off"),
         "R8 fixed-state experiment requires RefinedR6 with the R7 policy off");
+    std::string r9;
+    session->LoadSolverInfo("RANSWallR9Experiment",r9,"Off");
+    m_r9Experiment=r9=="On";
+    Require(r9=="Off" || (m_r9Experiment && RefinedDirectionR6() && m_r7Policy=="Off" && r8=="Off"),
+        "R9 comparison requires only RefinedR6");
     Require(m_actionPolicy=="Legacy" || m_actionPolicy=="VerifiedR3Action","unknown wall action policy");
     Require((m_nonlinearPolicy=="ScalarFeasibleR3")== (m_actionPolicy=="VerifiedR3Action"),
         "VerifiedR3Action and ScalarFeasibleR3 must be selected together");
@@ -412,6 +417,50 @@ void RANSWallEvolutionPatch::Refresh(const Vector &s,double time,const RANSWallE
         ray.cachedK=k;ray.cachedWeight=weight;ray.profile=std::move(profile);ray.points=std::move(points);
     }
 }
+RANSWallEvolutionPatch::InnerDestruction RANSWallEvolutionPatch::DestructionValueR9(
+    const ScalarDomainResult &domain,double time,const RANSWallEvolutionData &data,
+    const std::map<int,double> &constraints) const
+{
+    Require(domain.admissible && m_cappedDestruction && m_comm->GetSize()==1 && !Mapped(),
+        "R9 destruction requires the qualified serial flat scalar domain");
+    const auto &s=domain.effectiveState;
+    Refresh(s,time,&data);
+    InnerDestruction out;
+    out.value.resize(Size());
+    // b, m, lambda and profile weight bounds. Count each cap and
+    // limiter branch on the actual ordered moving quadrature.
+    out.ranges={1.,0.,1.,0.,1.,0.,1.,0.,0.,0.};
+    for(const auto &ray:m_rays)
+    {
+        const auto &n=ray.destruction;
+        const auto &profile=*ray.profile;
+        const std::array<double,4> ranges{n.b,n.m,n.lambda,profile.Reference().weight};
+        for(int i=0;i<ranges.size();++i)
+        {
+            out.ranges[2*i]=std::min(out.ranges[2*i],ranges[i]);
+            out.ranges[2*i+1]=std::max(out.ranges[2*i+1],ranges[i]);
+        }
+        out.ranges[8]+=n.capped;
+        out.cap+=n.capped?'C':'P';
+        const double weight=profile.Reference().weight;
+        out.profile+=weight==0?'B':weight==1?'E':'M';
+        for(const auto &q:ray.points)
+        {
+            const double k=Point(K(),q.v.coordinate).Value(s,offset[K()]);
+            const bool limited=k/profile.K()<m_destruction.theta;
+            out.limiter+=limited?'L':'S';
+            out.ranges[9]+=limited;
+            out.panels+=std::to_string(q.v.geometry)+",";
+            // At zero production the native k source is -D.
+            const double destruction=-WallSource(s,q.v.coordinate,0.,profile,&n).kSource;
+            Add(out.value,offset[K()],q.v,destruction,{},q.weight);
+        }
+        out.limiter+='|';out.panels+='|';
+    }
+    for(const auto &[row,value]:constraints)out.value[row]=0.;
+    return out;
+}
+
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Project(const std::vector<RANSWallEvolutionFunction> &f,double time) const
 {
     Require(f.size()==fields.size(),"incomplete evolution initial/reference functions");Vector s(Size());
