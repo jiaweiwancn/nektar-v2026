@@ -475,8 +475,9 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
     };
     auto apply = [](Vector &state, const PicardBlock &block, const Vector &step,
                     double relaxation) {
+        Require(step.size() == block.rows.size(), "Picard block increment shape mismatch");
         for (int i = 0; i < block.rows.size(); ++i)
-            state[block.rows[i]] += relaxation * step[i];
+            state.at(block.rows[i]) += relaxation * step[i];
     };
     auto scalarStep = [&](int b, Vector &state, double requested,
                           ScalarDomainResult &domain, std::string &ground) {
@@ -539,6 +540,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
                                      std::abs(s[row] - domain.traceState[row]));
         }
         emit(event, {{"norms", J::Numbers(norms)},
+                     {"state_sha256", J::Quote(RANSWallR3::Hash(s))},
                      {"relaxation", J::Numbers(relaxation)},
                      {"scalar_domain", ScalarDomainJSON(domain)},
                      {"ground", ground},
@@ -681,7 +683,9 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
                 velocityCorrection = std::max(velocityCorrection,
                                               std::abs(step[i] - predictor[i]));
             auto predicted = s, corrected = s;
-            apply(predicted, flow, predictor, 1.);
+            Require(predictor.size() == nv, "Picard velocity predictor shape mismatch");
+            for (int i = 0; i < nv; ++i)
+                predicted.at(flow.rows[i]) += predictor.at(i);
             apply(corrected, flow, step, 1.);
             auto pressureDirection = Vector(Size());
             for (int j = 0; j < np; ++j)
