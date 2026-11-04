@@ -69,6 +69,13 @@ This reproduction is in `reproduce-initial-k-001`. It establishes the retained
 Linear witness again; it supplies no SaturatedR2 action result or nonlinear
 causality claim. Lambda remains one in the relevant R2 completed records.
 
+The first source epoch, `b19299eafe572401032b9922b13fbcbcc2847283`, stopped at
+configuration because prefix-only package discovery did not locate the installed
+lib64 CMake package. Its receipt/logs remain in `epoch-001`; no C++ or numerical
+run completed there. The next helper supplies the documented Nektar++_DIR.
+Static review also aligned invariant, limiter and cap selection with the native
+pre-cast long-double branches before compiling the next source epoch.
+
 ## Execution gates
 
 The ordered work is component action implementation and independent checks;

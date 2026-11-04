@@ -42,7 +42,9 @@ def main():
         (output/'receipt.json').write_text(json.dumps(receipt, indent=2)+'\n')
     commands = [('configure', ['cmake', '-S', str(source/'solvers/IncNavierStokesSolver/Tests/RANS'),
         '-B', str(build), '-DRANS_BUILD_SOLVER=ON', '-DCMAKE_BUILD_TYPE=Release',
-        '-DCMAKE_PREFIX_PATH='+str(a.prefix.resolve()), '-DCMAKE_EXPORT_COMPILE_COMMANDS=ON',
+        '-DCMAKE_PREFIX_PATH='+str(a.prefix.resolve()),
+        '-DNektar++_DIR='+str(a.prefix.resolve()/'lib64/nektar++/cmake'),
+        '-DCMAKE_EXPORT_COMPILE_COMMANDS=ON',
         '-DCMAKE_CXX_FLAGS=-fno-fast-math -ffp-contract=off']),
         ('build', ['cmake', '--build', str(build), '--parallel', str(a.jobs), '--target',
             *(a.target or ['IncNavierStokesSolver', 'RANSPressureActionProbe'])])]

@@ -63,6 +63,20 @@ struct OuterAction
 {
     RANSTensor stress{};double viscosity=0,kSource=0,epsilonSource=0;
 };
+bool SelectStrain(double k,double epsilon,const RANSTensor &gradient)
+{
+    // Match EvaluateRANSClosureSelected before its reported invariants are
+    // cast to double. Equal long-double norms select the first (strain) arm.
+    const long double time=static_cast<long double>(k)/epsilon;
+    long double ss=0,oo=0;
+    for(int i=0;i<3;++i)for(int j=0;j<3;++j)
+    {
+        const long double s=time*(static_cast<long double>(gradient[i][j])+gradient[j][i]);
+        const long double o=time*(static_cast<long double>(gradient[i][j])-gradient[j][i]);
+        ss+=s*s;oo+=o*o;
+    }
+    return std::sqrt(ss/2.L)>=std::sqrt(oo/2.L);
+}
 OuterAction OuterDerivative(double k,double epsilon,const RANSTensor &g,double r,
     double dk,double de,const RANSTensor &dg,const RANSParameters &p,
     bool cls,bool strainBranch,const RANSRobustVariant &variant)
@@ -114,7 +128,11 @@ OuterAction OuterDerivative(double k,double epsilon,const RANSTensor &g,double r
     D yap{};const D scale=E*E/K;
     if(cls)
     {
-        const D ratio=K*Sqrt(K)/(D{p.yapLength*r}*E);
+        D lengthScale=D{p.yapLength}*E;
+        // The native value expression multiplies these two double inputs
+        // before the geometric distance promotes its denominator to Real.
+        lengthScale.v=p.yapLength*epsilon;
+        const D ratio=K*Sqrt(K)/(lengthScale*D{r});
         // One fixed generalized derivative: inactive at the Yap knot.
         yap=scale*D{p.yapCoefficient}*PositivePart(ratio-D{1})*ratio*ratio;
     }
@@ -282,13 +300,14 @@ void Append(Sparse &target,const Sparse &source,long double factor)
 Sparse ValueRow(const Basis &basis,int offset)
 {Sparse result;for(std::size_t j=0;j<basis.row.ids.size();++j)result[offset+basis.row.ids[j]]+=basis.value[j];return result;}
 struct LimitValue {double value=0,slope=0;};
-LimitValue Limit(double ratio,const RANSCappedDestructionControls &controls)
+LimitValue Limit(long double ratio,const RANSCappedDestructionControls &controls)
 {
-    if(ratio>=controls.theta)return {1,0};
-    if(!controls.smooth)return {ratio/controls.theta,1/controls.theta};
+    const long double theta=controls.theta;
+    if(ratio>=theta)return {1,0};
+    if(!controls.smooth)return {static_cast<double>(ratio/theta),static_cast<double>(1/theta)};
     if(ratio<=0)return {0,0};
-    const double t=ratio/controls.theta,one=1-t;
-    return {t*t*t*(10+t*(-15+6*t)),30*t*t*one*one/controls.theta};
+    const long double t=ratio/theta,one=1-t;
+    return {static_cast<double>(t*t*t*(10+t*(-15+6*t))),static_cast<double>(30*t*t*one*one/theta)};
 }
 struct Node
 {
@@ -457,7 +476,7 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3
             auto point=chart;point[2]=rule[i].r;Node n;n.radius=rule[i].r;n.radiusK=T(dRule[i].r);
             n.weight=rule[i].weight;n.weightK=T(dRule[i].w);n.k=basis(K(),point);
             n.kValue=n.k.row.Value(s,offset[K()]);n.kRadial=n.k.row.Gradient(s,offset[K()])[2];
-            n.pre=ray->differential->At(n.radius,n.radiusK);n.limiter=Limit(n.kValue/K0,m_destruction);
+            n.pre=ray->differential->At(n.radius,n.radiusK);n.limiter=Limit(static_cast<long double>(n.kValue)/K0,m_destruction);
             input.k.push_back(n.kValue);input.preE.push_back(n.pre.E);input.preD.push_back(n.pre.Dpre);input.metricWeights.push_back(n.weight);
             ray->nodes.push_back(std::move(n));
         }
@@ -473,7 +492,7 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3
             for(std::size_t j=0;j<n.k.row.ids.size();++j)ray->b[offset[K()]+n.k.row.ids[j]]+=factor*n.k.value[j];
         }
         Append(ray->b,ray->sampled,bk/B);Append(ray->b,ray->chi,bc/B);
-        if(ray->normalization.b>=m_destruction.delta)ray->m=ray->b;
+        if(!ray->normalization.capped)ray->m=ray->b;
         else Append(ray->lambda,ray->b,1/m_destruction.delta);
         return *cache.emplace(cacheKey,std::move(ray)).first->second;
     };
@@ -609,10 +628,10 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3
                 variant.referenceStrain[a][b]=shear*(m_referenceFlow[a]*m_referenceNormal[b]+m_referenceNormal[a]*m_referenceFlow[b]);
         }
         std::array<OuterAction,6> partial{};RANSTensor zero{};
-        const bool strain=closure.strainInvariant>=closure.rotationInvariant,cls=m_parameters.model.Model()==RANSModel::CLSHighRe;
+        const bool strain=SelectStrain(q.k,q.epsilon,q.G),cls=m_parameters.model.Model()==RANSModel::CLSHighRe;
         outerBranches.push_back(strain?'S':'R');
         const long double lengthRatio=static_cast<long double>(q.k)*std::sqrt(static_cast<long double>(q.k))/
-            (static_cast<long double>(m_parameters.model.Parameters().yapLength)*q.epsilon*r);
+            (static_cast<long double>(m_parameters.model.Parameters().yapLength*q.epsilon)*r);
         yapBranches.push_back(cls && lengthRatio>1?'A':'I');
         partial[0]=OuterDerivative(q.k,q.epsilon,q.G,r,1,0,zero,m_parameters.model.Parameters(),cls,strain,variant);
         partial[1]=OuterDerivative(q.k,q.epsilon,q.G,r,0,1,zero,m_parameters.model.Parameters(),cls,strain,variant);
