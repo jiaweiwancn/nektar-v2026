@@ -507,18 +507,22 @@ def analyze(raw, session, source, packet=None):
     audit.near(raw['native']['stage_constrained'], total, 'unchanged_native_coupled_stage_residual', TOLERANCE)
     native = np.asarray(raw['native']['stage_constrained'])
     constrained = np.asarray(raw['terms']['total_constrained'])
+    compensated = np.asarray(raw['compensated']['total_constrained'])
     cpp_wide = np.asarray(raw['extended_decimal']['total_constrained'], dtype=np.longdouble)
     cancelled = np.asarray(raw['extended_decimal']['total_constrained_cancelled'], dtype=np.longdouble)
     observations = dict(
         native=norm_record(audit, native, constraints),
         independent_terms=norm_record(audit, total, constraints),
         native_component_sum=norm_record(audit, constrained, constraints),
+        native_compensated_component_sum=norm_record(audit, compensated, constraints),
         native_minus_independent=norm_record(audit, native-total, constraints),
         native_minus_component_sum=norm_record(audit, native-constrained, constraints),
+        native_minus_compensated_component_sum=norm_record(audit, native-compensated, constraints),
         native_minus_extended=norm_record(audit, native-np.asarray(cpp_wide, float), constraints),
         extended_cancellation_difference=norm_record(audit, np.asarray(cancelled-cpp_wide, float), constraints),
         native_time_minus_independent_time=physical_term_record(audit, np.asarray(raw['terms']['time_mass'])-time_mass, constraints))
     exact, factors = exact_norms(raw, audit, constraints, dict(native=native,
+        compensated=compensated,
         extended=raw['extended_decimal']['total_constrained'],
         extended_cancelled=raw['extended_decimal']['total_constrained_cancelled']))
     exact_time = {}
