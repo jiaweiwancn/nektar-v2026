@@ -1,0 +1,47 @@
+{
+  "status": "blocked_before_linux_sync",
+  "base": "0ed7790450bb7e81f17ff1d0b577f12fc95f9cce",
+  "implementation": "0486db8c39ce325bc0c2d004382bfc8881f6ea07",
+  "linux_access": {
+    "date_asia_shanghai": "2026-11-04",
+    "direct": {"host": "linux-usb", "resolved_address": "192.168.77.2", "exit_code": 255, "result": "port 22 timeout"},
+    "tailscale": {"host": "jay@100.105.247.110", "exit_code": 255, "result": "port 22 timeout", "peer_status": "offline"},
+    "source_sync": false,
+    "build": false,
+    "native_run": false
+  },
+  "local_checks": {
+    "syntax": {
+      "compiler": "Apple Clang, C++17, -fsyntax-only with warnings as errors",
+      "translation_units_passed": [
+        "RANSEquilibriumWallEvolution.cpp",
+        "RANSWallEvolutionPatch.cpp",
+        "RANSWallEvolutionPicard.cpp",
+        "RANSWallEvolutionRobust.cpp"
+      ]
+    },
+    "constitutive_probe": {
+      "checks_passed": 28434,
+      "raw_report_sha256": "1dedb6275f9b1370836ff978d6f352a567c05d90170ce5880ac08e805be6b0a5",
+      "raw_report_local_path": "/private/tmp/nektar-picard.4VFXTn/robust-v2.json"
+    },
+    "fixture_preparation": {
+      "command": "run_cls_epawf_picard.py --prepare-only --verify",
+      "archived_xml_sha256": "c54b2522cca860081f23e041a649e0668740f5f4bd86b711e4cf8f1a3d3f6d7b",
+      "expected_historical_h0_sha256": "b8ba7917424057a9f6f16a026d82d53ede43985871537facea170ef6e1841b71",
+      "startup_xml_sha256": "2d243ebaed7f274df2382d307a86a78f50d72dc82b6d819b9333cadc8eb45038",
+      "rejected_xml_sha256": "37a93cb7c6f9a67a50befd28e134d802a5d2e262eddf9bef8f5771fe6a67eb3b",
+      "target_xml_sha256": "cd535d89e382e0b1f1c704b828afd479e16623e731c86eabc10c65f57e959a82"
+    }
+  },
+  "native_picard": {
+    "ranks_planned": 1,
+    "threads_per_runtime_planned": 1,
+    "executable": null,
+    "full_residual_norms": null,
+    "constraints": null,
+    "accepted_steps": null,
+    "final_time": null,
+    "robustness_outcomes": null
+  }
+}

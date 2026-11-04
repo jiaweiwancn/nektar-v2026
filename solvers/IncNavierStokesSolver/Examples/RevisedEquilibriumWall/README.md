@@ -617,3 +617,13 @@ perturbation/refinement, scalable feasibility and paired floor/hill physical
 validation are separate open gates. Use the bounded frozen generators and
 producing-runtime receipts in the R2 report, rather than changing physical
 coefficients or the applicability box to fit a result.
+
+### Segregated Picard stage solver
+
+Set `RANSWallNonlinearPolicy=SegregatedPicard` for the flat, serial,
+uncondensed upstream CLS evolution solver with capped destruction. It
+uses a velocity predictor, regional pressure correction with a common
+gauge, k solve and outer epsilon transport/trace solve. The native full
+stage residual remains the convergence criterion. The implementation
+report lists relaxation parameters, scope and the archived M8 reproduction
+command. [Segregated Picard report](../../../../docs/plans/cls-epawf-segregated-picard.md)
