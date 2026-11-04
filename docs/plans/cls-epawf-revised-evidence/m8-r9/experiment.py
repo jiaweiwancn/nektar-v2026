@@ -93,9 +93,81 @@ def summarize(evidence, epoch, out, h):
         cut_audits=[x for x in progress if x['kind'] == 'r6_cut_audit']))
 
 
+def audit_model(epoch, out, h):
+    """Reconstruct source-model predictions at two existing native trials."""
+    import os
+    import time
+
+    threads = ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS',
+               'BLIS_NUM_THREADS', 'VECLIB_MAXIMUM_THREADS', 'NUMEXPR_NUM_THREADS')
+    assert all(os.environ.get(key) == '1' for key in threads)
+    assert len(os.sched_getaffinity(0)) == 1
+    started = time.monotonic()
+    source = epoch/'source'
+    sys.path.insert(0, str(source/'solvers/IncNavierStokesSolver/Tests/RANS'))
+    import numpy as np
+    from cls_epawf_m8_r2_stage_analysis import Analyzer
+    from cls_epawf_m8_r3_resolution import ResolutionAudit, independent_terms
+
+    comparison_path = epoch/'comparison.json'
+    comparison = h.load(comparison_path)
+    receipt = h.load(h.bound(comparison['receipt']))
+    manifest = h.load(h.bound(receipt['manifest']))
+    xml = h.bound(receipt['session'])
+    preflight = h.bound(manifest['current_preflight'])
+    raw = h.load(preflight)
+    analyzer = Analyzer(dict(raw, stage_test_target_time=.0025), xml, source)
+    audit = ResolutionAudit(raw, source)
+    base = comparison['initial']
+    results = comparison['results']
+    component, = [r for r in results if r['kind'] == 'r9_component']
+    refinements = [r for r in results if r['kind'] == 'r9_refinement' and r['valid_source_state']]
+    chosen = min(refinements, key=lambda r: r['merit'])
+    ray = [t for t in results if t['kind'] == 'r8_trial' and
+           t['comparison'] == 'r9_source' and 'residual' in t]
+    d = np.array(h.vector(chosen['direction']))
+    q = np.array(h.vector(base['state']))
+    R = np.array(h.vector(base['residual']))
+    rows = {int(i): value for i, value in
+            np.fromfile(h.bound(base['constraints']), dtype='<f8').reshape(-1, 2)}
+    Jd = np.fromfile(h.bound(comparison['current_matrix']), dtype='<f8').reshape(len(q), -1) @ d
+    JDd = np.fromfile(h.bound(component['JD0']), dtype='<f8').reshape(len(q), -1) @ d
+    D0 = np.array(h.vector(component['D0']))
+
+    def destruction(state):
+        terms, _ = independent_terms(raw, analyzer.fields, analyzer.external_lift(state))
+        value = terms['inner_k_destruction']
+        value[list(rows)] = 0.
+        return value
+
+    Dbase = destruction(q)
+    error = audit.norms(Dbase-D0, rows)
+    assert max(error) <= 1e-8
+    records = []
+    for t in (max(ray, key=lambda t: t['fraction']), min(ray, key=lambda t: t['fraction'])):
+        f = t['fraction']
+        state = np.array(h.vector(t['state']))
+        assert np.array_equal(state, q+f*d)
+        residual = np.array(h.vector(t['residual']))
+        linear = R + f*Jd
+        model = linear + destruction(state) - Dbase - f*JDd
+        record = dict(fraction=f, state=t['state'], residual=t['residual'],
+                      actual=audit.norms(residual, rows).tolist(),
+                      linear=audit.norms(linear, rows).tolist(),
+                      nonlinear_destruction=audit.norms(model, rows).tolist(),
+                      linear_error=audit.norms(residual-linear, rows).tolist(),
+                      nonlinear_error=audit.norms(residual-model, rows).tolist())
+        assert max(abs(a-b) for a,b in zip(record['actual'], t['actual'])) < 2e-10
+        records.append(record)
+    h.save(out, dict(comparison=h.pin(comparison_path), source_commit=receipt['source_commit'],
+        script=h.pin(__file__), preflight=manifest['current_preflight'], base_component_error=error.tolist(),
+        selected_refinement=chosen['index'], independent_term_evaluations=3, new_native_trial_states=0,
+        seconds=time.monotonic()-started, trials=records))
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument('mode', choices=('prepare', 'summary'))
+    p.add_argument('mode', choices=('prepare', 'summary', 'audit-model'))
     p.add_argument('--epoch', type=Path, required=True)
     p.add_argument('--out', type=Path, required=True)
     a = p.parse_args()
@@ -104,7 +176,10 @@ def main():
     epoch = a.epoch.resolve()
     evidence = epoch/'source/docs/plans/cls-epawf-revised-evidence'
     h = module(evidence/'m8-r4/prepare.py', 'r4_prepare')
-    (prepare if a.mode == 'prepare' else summarize)(evidence, epoch, a.out.resolve(), h)
+    if a.mode == 'audit-model':
+        audit_model(epoch, a.out.resolve(), h)
+    else:
+        (prepare if a.mode == 'prepare' else summarize)(evidence, epoch, a.out.resolve(), h)
 
 
 if __name__ == '__main__':
