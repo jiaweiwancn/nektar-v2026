@@ -199,8 +199,8 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         (GroundSafeguard() && m_nonlinearPolicy=="ScalarFeasibleR3"),
         "CoupledR4 and JointRestorationR5 require ScalarFeasibleR3 and VerifiedR3Action");
     session->LoadSolverInfo("RANSWallDirectionAccuracy",m_directionAccuracy,"Legacy");
-    Require(m_directionAccuracy=="Legacy" || (JointRestorationR5() && DirectionReplayR6()),
-        "R6 direction replay requires JointRestorationR5");
+    Require(m_directionAccuracy=="Legacy" || (JointRestorationR5() && (DirectionReplayR6() || RefinedDirectionR6())),
+        "R6 direction accuracy requires JointRestorationR5");
     Require(m_actionPolicy=="Legacy" || m_actionPolicy=="VerifiedR3Action","unknown wall action policy");
     Require((m_nonlinearPolicy=="ScalarFeasibleR3")== (m_actionPolicy=="VerifiedR3Action"),
         "VerifiedR3Action and ScalarFeasibleR3 must be selected together");

@@ -40,6 +40,26 @@ public:
         Lapack::Dgetrs(transpose?'T':'N',m_n,1,m_lu.data(),m_n,pivots.data(),rhs.data(),m_n,info);
         Require(info==0,"ScalarFeasibleR2 linear solve failure");Maximum(rhs);return rhs;
     }
+    RANSWallAlgebra::Vector Refine(const Matrix &matrix,const RANSWallAlgebra::Vector &rhs,bool transpose=false) const
+    {
+        // Keep the original pivoted LU as a correction solver. Recompute
+        // the defect and accumulate both corrections in extended precision.
+        const auto initial=Apply(rhs,transpose);
+        std::vector<long double> solution(initial.begin(),initial.end()),defect(m_n);
+        for(int pass=0;pass<2;++pass)
+        {
+            std::copy(rhs.begin(),rhs.end(),defect.begin());
+            if(transpose)
+                for(int i=0;i<m_n;++i)for(int j=0;j<m_n;++j)
+                    defect[j]-=(long double)matrix[i][j]*solution[i];
+            else
+                for(int i=0;i<m_n;++i)for(int j=0;j<m_n;++j)
+                    defect[i]-=(long double)matrix[i][j]*solution[j];
+            const auto correction=Apply(RANSWallAlgebra::Vector(defect.begin(),defect.end()),transpose);
+            for(int i=0;i<m_n;++i)solution[i]+=correction[i];
+        }
+        return RANSWallAlgebra::Vector(solution.begin(),solution.end());
+    }
 private:
     int m_n;RANSWallAlgebra::Vector m_lu;std::vector<int> m_pivots;
 };
@@ -780,7 +800,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
     const ScalarDomainResult &domain,const Vector &newton,const WallMatrix &jac,
     const std::map<int,double> &constraints,const std::function<Vector(Vector,bool)> &inverse,
     std::string &details,const std::vector<OuterBound> &outer,double restoration,bool inward,
-    RANSWallR3::DurableProgress *diagnostic,const std::string &tag) const
+    RANSWallR3::DurableProgress *diagnostic,const std::string &tag,const Vector &residual) const
 {
     // Parameterize d=d_N+J^{-1} B z. B injects the scaled Cholesky
     // factors on free differential rows, leaving every algebraic row zero.
@@ -814,8 +834,22 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
     };
     auto axpy=[](Vector &a,double factor,const Vector &b)
     {for(std::size_t i=0;i<a.size();++i)a[i]+=factor*b[i];};
+    const bool refined=RefinedDirectionR6();
     auto metricAction=[&](const Vector &x,bool transpose)
     {
+        if(refined)
+        {
+            std::vector<long double> result(Size());
+            for(const auto &block:metric)
+                for(std::size_t i=0;i<block.free.size();++i)
+                    for(std::size_t j=0;j<=i;++j)
+                    {
+                        const long double entry=(long double)block.scale*block.lower[i][j];
+                        if(transpose)result[block.free[j]]+=entry*x[block.free[i]];
+                        else result[block.free[i]]+=entry*x[block.free[j]];
+                    }
+            return Vector(result.begin(),result.end());
+        }
         Vector result(Size());
         for(const auto &block:metric)
             for(std::size_t i=0;i<block.free.size();++i)
@@ -922,6 +956,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
     const int maxExchange=outer.empty()?40:96;
     int exchange=0;
     bool published=false;
+    double worstNative=0,worstExtended=0,maximumScanDifference=0;
     auto record=[&](const Cut *entering,const WallMatrix &R,const Vector &effective,const Vector &trace,
                     const std::string &status)
     {
@@ -956,6 +991,9 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
         if(entering)rowRecord(*entering,true,0.);
         diagnostic->Event("r6_cut_audit",{{"name",J::Quote(tag)},{"status",J::Quote(status)},
             {"exchange",J::Number(exchange+1)},{"rows",J::List(rows)},{"qr_diagonal",J::Numbers(diagonal)},
+            {"original_tolerance",J::Number(feasibility)},{"worst_native_violation",J::Number(worstNative)},
+            {"worst_extended_violation",J::Number(worstExtended)},
+            {"maximum_scan_difference",J::Number(maximumScanDifference)},
             {"exchanges",J::List(exchanges)},{"z",diagnostic->VectorPayload(tag+".z",z)},
             {"direction",diagnostic->VectorPayload(tag+".direction",direction)},
             {"newton",diagnostic->VectorPayload(tag+".newton",newton)},
@@ -978,14 +1016,35 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
         z.assign(Size(),0.);
         for(std::size_t i=0;i<Q.size();++i)axpy(z,qCoordinates[i],Q[i]);
         direction=newton;
-        if(!active.empty())axpy(direction,1,inverse(metricAction(z,false),false));
+        if(!active.empty())
+        {
+            auto load=metricAction(z,false);
+            if(refined)
+            {
+                Require(residual.size()==load.size(),"R6 direction requires its actual coupled residual");
+                axpy(load,-1,residual);
+                direction=inverse(std::move(load),false);
+            }
+            else axpy(direction,1,inverse(std::move(load),false));
+        }
         auto effective=direction;
         const auto action=Multiply(jac,direction);
         for(const auto &[col,value]:constraints)if(external(col))effective[col]=0.;
         auto trace=effective;
         for(int id:m_traceIds)trace[offset[Epsilon()]+id]-=action[offset[Epsilon()]+id];
+        std::vector<long double> extendedTrace;
+        if(refined)
+        {
+            extendedTrace.assign(effective.begin(),effective.end());
+            for(int id:m_traceIds)
+            {
+                const int i=offset[Epsilon()]+id;
+                for(int j=0;j<Size();++j)extendedTrace[i]-=(long double)jac[i][j]*direction[j];
+            }
+        }
 
         Vector violated;
+        worstNative=worstExtended=maximumScanDifference=0;
         double violation=feasibility,rhs=0;
         std::string kind;
         RANSWallCoordinate location{};
@@ -994,6 +1053,30 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
                          const RANSWallCoordinate &point,auto makeRow,int block,int axis,double scale,
                          bool projected,int side,const RANSWallGlobalPoint *row,int coefficient=-1)
         {
+            worstNative=std::max(worstNative,lower-observed);
+            if(refined)
+            {
+                long double value=0;
+                if(coefficient>=0)value=(long double)direction[coefficient]/scale;
+                else
+                {
+                    const auto &basis=axis<0?row->phi:row->derivative[axis];
+                    auto entry=[&](int i)->long double
+                    {
+                        const int j=offset[block]+row->ids[i];
+                        return projected?extendedTrace[j]:effective[j];
+                    };
+                    const long double centre=entry(0)/row->constant[0];
+                    if(axis<0)value=centre;
+                    for(int i=0;i<basis.size();++i)value+=(long double)basis[i]*(entry(i)-centre*row->constant[i]);
+                    value/=scale;
+                }
+                worstExtended=std::max(worstExtended,static_cast<double>(lower-value));
+                maximumScanDifference=std::max(maximumScanDifference,static_cast<double>(std::abs(value-observed)));
+                // Both the native scan and the separate extended row
+                // evaluation must satisfy the unchanged tolerance.
+                observed=std::min(observed,static_cast<double>(value));
+            }
             if(lower-observed<=violation)return;
             violation=lower-observed;
             rhs=lower;
@@ -1090,6 +1173,12 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
                 {"kind",J::Quote(kind)},{"point",J::Numbers(location)},{"active",J::Numbers(activeIds)},
                 {"exact_previous_alias_ids",J::Numbers(aliases)},{"violation",J::Number(violation)}}));
             if(exchange+1==maxExchange)record(&incoming,R,effective,trace,"exchange_limit_candidate");
+            if(refined && std::any_of(active.begin(),active.end(),[&](const Cut &cut)
+                {return original[cut.id].row==violated && original[cut.id].rhs==rhs;}))
+            {
+                if(!published)record(&incoming,R,effective,trace,"active_original_row_accuracy_unresolved");
+                throw std::runtime_error("R6 active original row still violates the verified cut scan");
+            }
         }
         lastCut=kind+" violation "+J::Number(violation)+" at "+J::Numbers(Vector(location.begin(),location.end()));
         // Dual active-set projection. Keep the incoming constraint through
@@ -1154,7 +1243,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
     Require(!localR4 || (CoupledR4() && maximumIterations==1),"R4 local experiment uses one bounded update");
     Require(!localR5 || (JointRestorationR5() && maximumIterations==1),
         "R5 local experiment requires the explicit bounded restoration policy");
-    Require(frozenMatrix.empty() || (DirectionReplayR6() && localR5),"Frozen J is restricted to local R6");
+    Require(frozenMatrix.empty() || ((DirectionReplayR6() || RefinedDirectionR6()) && localR5),"Frozen J is restricted to local R6");
     iterations=0;
     using Clock=std::chrono::steady_clock;
     std::map<std::string,std::pair<int,double>> profile;
@@ -1255,8 +1344,12 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
                     {"terminal",J::Quote(terminal)},{"iteration",J::Number(iterations)},{"profiling",profiling()}});
                 return s;
             }
+            const auto inverse=[&](Vector rhs,bool transpose)
+            {
+                return RefinedDirectionR6()?factor.Refine(jac,rhs,transpose):factor.Apply(std::move(rhs),transpose);
+            };
             auto rhs=residual;for(auto &value:rhs)value=-value;
-            const auto newton=timed("linear_solve",[&]{return factor.Apply(std::move(rhs));});
+            const auto newton=timed("linear_solve",[&]{return inverse(std::move(rhs),false);});
             auto linear=Multiply(jac,newton);
             for(int row=0;row<Size();++row)linear[row]+=residual[row];
             const auto linearNorms=Norms(linear,constraints,us);
@@ -1292,7 +1385,6 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
                 const auto bounds=timed("outer_box",[&]{return OuterBoundsR5(domain);});
                 const auto baseBox=OuterViolationR5(bounds);
                 durable.Event("r5_box",{{"iteration",J::Number(iterations)},{"box",baseBox.report}});
-                const auto inverse=[&](Vector rhs,bool transpose){return factor.Apply(std::move(rhs),transpose);};
                 struct Trial
                 {
                     Vector state,residual,norms;
@@ -1313,7 +1405,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
                     {
                         step=CoupledDirectionR4(domain,newton,jac,constraints,inverse,details,
                             joint?bounds:std::vector<OuterBound>{},restoration,inward,
-                            DirectionReplayR6()?&durable:nullptr,"iterate"+std::to_string(iterations)+"."+name);
+                            (DirectionReplayR6() || RefinedDirectionR6())?&durable:nullptr,
+                            "iterate"+std::to_string(iterations)+"."+name,residual);
                     }
                     catch(const std::exception &e)
                     {
@@ -1355,7 +1448,11 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
                         {"profiling",profiling()}});
                     const auto search=Clock::now();++profile["line_search"].first;
                     double fraction=1.;
-                    const int allowance=localR5?8:32-trialCount;
+                    // Reserve half the trial budget for partial restoration
+                    // even if the full model constructs a valid direction.
+                    const int allowance=RefinedDirectionR6()?
+                        std::min(localR5?4:16,(localR5?8:32)-trialCount):
+                        (localR5?8:32-trialCount);
                     for(int k=0;k<allowance;++k,fraction*=.5)
                     {
                         ++trialCount;
@@ -1413,12 +1510,19 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
                     profile["line_search"].second+=std::chrono::duration<double>(Clock::now()-search).count();
                     return std::pair{std::move(result),details};
                 };
-                if(localR5 && !DirectionReplayR6())compare("r4_control",false,0.,true);
+                if(localR5 && !(DirectionReplayR6() || RefinedDirectionR6()))compare("r4_control",false,0.,true);
                 auto [trial,details]=compare("r5_full",true,1.,true);
-                if(trial.fraction==0. && baseBox.Max()>0. && details.find("inward_ground_row")!=std::string::npos)
+                if(!RefinedDirectionR6() && trial.fraction==0. && baseBox.Max()>0. &&
+                    details.find("inward_ground_row")!=std::string::npos)
                     std::tie(trial,details)=compare("r5_inward_control",true,1.,false);
-                if(trial.fraction==0. && baseBox.Max()>0. && trial.stepPin.empty())
+                if(trial.fraction==0. && baseBox.Max()>0. && (RefinedDirectionR6() || trial.stepPin.empty()))
+                {
+                    if(RefinedDirectionR6())
+                        durable.Event("r6_partial_fallback",{{"iteration",J::Number(iterations)},
+                            {"full_direction_constructed",J::Boolean(!trial.stepPin.empty())},
+                            {"full_trials",J::Number(trialCount)},{"reserved_trials",J::Number(localR5?4:16)}});
                     std::tie(trial,details)=compare("r5_partial",true,.25,true);
+                }
                 if(localR5)
                 {
                     m_lastFeasibleState=s;
@@ -1429,7 +1533,9 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
                 }
                 if(trial.fraction==0.)
                 {
-                    terminal=trial.stepPin.empty()?"r5_direction_unresolved":"r5_joint_line_search_exhausted";
+                    terminal=trial.stepPin.empty()?
+                        (RefinedDirectionR6()?"r6_inner_direction_accuracy_unresolved":"r5_direction_unresolved"):
+                        "r5_joint_line_search_exhausted";
                     throw std::runtime_error(terminal);
                 }
                 const auto update=J::Object({{"iteration",J::Number(iterations)},{"accepted","true"},

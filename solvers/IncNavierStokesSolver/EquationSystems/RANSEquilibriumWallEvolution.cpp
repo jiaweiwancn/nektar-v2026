@@ -500,7 +500,7 @@ void RANSEquilibriumWallEvolution::RunR3StageTest()
     Require(!m_patch->DirectionReplayR6() || localR5,"ReplayR6 requires the fixed-state stage experiment");
     RANSWallEvolutionPatch::WallMatrix frozenMatrix;
     std::string frozenAssembly="[]";
-    if(m_patch->DirectionReplayR6())
+    if(localR5 && (m_patch->DirectionReplayR6() || m_patch->RefinedDirectionR6()))
     {
         namespace D=RANSWallR3;
         boost::property_tree::ptree packet;boost::property_tree::read_json(m_r3PredictorFile,packet);

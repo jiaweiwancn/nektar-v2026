@@ -123,14 +123,16 @@ def bound_actions(raw, proposal, oracle_type, complex_type, real_type, np):
     return records
 
 
-def qualify(epoch, cases, h, cpu):
+def qualify(epoch, cases, h, cpu, case=None):
     source = epoch / 'source'
     tests = source / 'solvers/IncNavierStokesSolver/Tests/RANS'
     sys.path.insert(0, str(tests))
     import numpy as np
     from validate_cls_epawf_m8_r3_actions import validate_case, ValueOracle, CD, LD
 
-    receipt_path = cases / 'local-run/receipt.json'
+    receipt_path = cases / (case+'-run' if case else 'local-run') / 'receipt.json'
+    if case:
+        cases = cases / case
     receipt = h.load(receipt_path)
     h.require(receipt['status'] == 'completed' and receipt['runtime_unchanged'], 'Incomplete local replay')
     collection = h.load(h.bound(receipt['durable_collection']['file']))
@@ -140,9 +142,14 @@ def qualify(epoch, cases, h, cpu):
               manifest['origin'][key])['sha256'] for key in ('state', 'history', 'residual', 'constraints')),
               'Replay changed the exact retained state/history/residual/constraints')
     matrix, = collection['jacobians']
-    h.require(matrix['iteration'] == 0 and matrix['status'] == 'complete' and
-              matrix['event']['matrix']['sha256'] != manifest['origin']['prior_nonterminal_matrix']['sha256'],
-              'No current independent terminal-state matrix')
+    h.require(matrix['iteration'] == 0 and matrix['status'] == 'complete', 'No current terminal-state matrix')
+    if 'frozen_action' in manifest:
+        h.require(matrix['event']['details']['loaded_bound_matrix'] and
+                  matrix['event']['matrix']['sha256'] == manifest['frozen_action']['matrix']['sha256'],
+                  'The saved matrix is not the bound terminal-state action')
+    else:
+        h.require(matrix['event']['matrix']['sha256'] != manifest['origin']['prior_nonterminal_matrix']['sha256'],
+                  'No current independent terminal-state matrix')
     packet = h.load(cases / 'packet.json')
     packet['r5_matrix_binding'] = dict(state_sha256=base['state']['sha256'], history_sha256=base['history']['sha256'],
         residual_sha256=base['residual']['sha256'], matrix=matrix['event']['matrix'],
@@ -204,8 +211,8 @@ def qualify(epoch, cases, h, cpu):
                           directions=list(verification), profiling=local_terminal['profiling']), indent=2))
 
 
-def stage_budget(cases, h):
-    comparison_path = cases / 'comparison.json'
+def stage_budget(cases, h, case=None, bound_action_seconds=None):
+    comparison_path = (cases / case if case else cases) / 'comparison.json'
     audit = h.load(comparison_path)
     h.require(audit['action_gate'] and audit['chosen_trial'], 'Local evidence did not pass the continuation gate')
     receipt = h.load(h.bound(audit['local_receipt']))
@@ -213,7 +220,8 @@ def stage_budget(cases, h):
     trial = t['line_search']['seconds'] / t['line_search']['calls']
     # Count even the R4 control time against each update's direction budget.
     # Six trials is a cost estimate, not a change to the 32-trial search cap.
-    per_update = (t['complete_action_assembly']['seconds'] + t['factorization']['seconds']
+    assembly_seconds = t['complete_action_assembly']['seconds'] if bound_action_seconds is None else bound_action_seconds
+    per_update = (assembly_seconds + t['factorization']['seconds']
                   + t['r5_direction']['seconds'] + 6*trial + 1.)
     maximum = min(24, int((900-90)/per_update))
     h.require(maximum >= 4, 'Measured direction and trial cost leaves an impractical pilot budget')
@@ -235,7 +243,8 @@ def stage_budget(cases, h):
         required_state_action_gates_met=True, active_dependencies_covered=True, useful_joint_native_descent=True,
         local_evidence=audit['local_receipt'], comparison=h.pin(comparison_path), base_state=manifest['state'],
         maximum_updates=maximum, maximum_trials_per_update=32, maximum_native_seconds=900,
-        estimated_seconds_per_update=per_update, setup_and_audit_allowance_seconds=90))
+        estimated_seconds_per_update=per_update, estimated_action_assembly_seconds=assembly_seconds,
+        setup_and_audit_allowance_seconds=90))
     (cases/'budget.txt').write_text(
         f"One exact-target continuation, at most {maximum} accepted updates, 32 trials per update, and 900 native seconds. "
         f"Measured local assembly, factorization, all directions, six trials at the observed mean cost, and one second "
