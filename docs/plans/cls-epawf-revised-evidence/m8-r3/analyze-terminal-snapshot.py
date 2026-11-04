@@ -15,7 +15,7 @@ import tempfile
 import time
 import xml.etree.ElementTree as ET
 
-H0 = '4ad26ed0167bb1765bd0be2c150928280b69dbd82ace8a27ea5f9c8c7f4d0409'
+H0 = 'b8ba7917424057a9f6f16a026d82d53ede43985871537facea170ef6e1841b71'
 THREADS = ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS',
            'BLIS_NUM_THREADS', 'VECLIB_MAXIMUM_THREADS', 'NUMEXPR_NUM_THREADS')
 RUNTIME_KEYS = ('source_inputs', 'runtime_artifacts', 'runtime_bindings',
@@ -234,7 +234,8 @@ def main():
                     raw['inner_stress_model'] == 'SaturatedR2' and raw['model_variant'] == 'Regularized' and
                     raw['robust_parameters'] == [.4, 0, .2, .1, 0, 1, 1] and
                     hashlib.sha256(raw['signature'].encode()).hexdigest() == manifest['current_native_signature_sha256'] and
-                    analysis.vector_hash(raw['initial']) == H0, 'Current preflight fields/physics/h0 changed')
+                    raw['initial'] == raw['state'] and analysis.vector_hash(raw['state']) == H0,
+                    'Current preflight fields/physics/h0 changed')
             collection_path = bound(receipt['durable_collection']['file'])
             collection = load(collection_path)
             protocol = collection['protocol']
@@ -317,7 +318,7 @@ def main():
                             stopped_process_partial_report=provenance_result['supervisor_wall_cap_observed'])
             try:
                 require(report['stage_test'] == 'ExactTargetR3' and report['stage_test_native_history_advanced'] is False and
-                        report['time'] == report['steps'] == 0 and analysis.vector_hash(report['initial']) == H0 and
+                        report['time'] == report['steps'] == 0 and analysis.vector_hash(report['state']) == H0 and
                         canonical(report['fields']) == canonical(raw['fields']), 'Native final report changes fields/h0/history scope')
                 levels = [level for level in report['stage_test_levels'] if level.get('attempted') and
                           level['alpha'] == 400 and level['time'] == .0025 and

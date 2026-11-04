@@ -8,7 +8,8 @@ from pathlib import Path
 import struct
 
 
-H0 = '4ad26ed0167bb1765bd0be2c150928280b69dbd82ace8a27ea5f9c8c7f4d0409'
+H0 = 'b8ba7917424057a9f6f16a026d82d53ede43985871537facea170ef6e1841b71'
+REFERENCE = '4ad26ed0167bb1765bd0be2c150928280b69dbd82ace8a27ea5f9c8c7f4d0409'
 
 
 def signed_int(token):
@@ -55,14 +56,17 @@ def main():
         prior_ledger=pin(a.prior_ledger), extractor=pin(__file__),
         historical_native_source=old['historical_native_source'], native_solver=old['native_solver'],
         inputs=old['inputs'], states=[], native_calls=0, scientific_reconstructions=0)
-    references = []
+    references, starts = [], []
     for row in old['states'][:2]:
         ref = row['preflight_report']
         if pin(ref['path']) != ref:
             raise ValueError('Historical native initialization report changed')
-        references.append(load(Path(ref['path']).read_text())['initial'])
-    initial = packed(references[1])
-    if hashlib.sha256(initial).hexdigest() != H0 or packed(references[0]) != initial:
+        report = load(Path(ref['path']).read_text())
+        references.append(report['initial']); starts.append(report['state'])
+    initial = packed(starts[1])
+    if (hashlib.sha256(initial).hexdigest() != H0 or packed(starts[0]) != initial or
+        starts[1] != references[1] or
+        any(hashlib.sha256(packed(ref)).hexdigest() != REFERENCE for ref in references)):
         raise ValueError('Original outer6 native initialization binding differs')
     names = ('linear-auxiliary', 'saturatedr2-auxiliary', 'boundary-path-2', 'boundary-path-3', 'frozen-terminal')
     for name in names:
@@ -82,12 +86,11 @@ def main():
             packet[field] = values
             vector = a.output/(name+'-'+field+'.bin'); vector.write_bytes(after)
             packet[field+'_binary'] = pin(vector)
-        if packet['history'] != references[1]:
+        if packet['history'] != starts[1]:
             raise ValueError('An archived stage history differs in value from h0')
-        # R2's stage-history construction can change zero signs. Preserve
-        # those actual stage-history bits in C rather than replacing them
-        # with the initial state's zero signs. The R3 target binds h0 itself.
-        packet['require_history_h0'] = packet['history_binary']['sha256'] == H0
+        # The resolution probe rebuilds the frozen reference, before the
+        # zero-amplitude initialization expression changes zero signs.
+        packet['require_history_h0'] = packet['history_binary']['sha256'] == REFERENCE
         packet['history_equals_original_h0_coefficient_values'] = True
         path = a.output/(name+'.json'); path.write_text(json.dumps(packet, separators=(',', ':'), allow_nan=False)+'\n')
         result['states'].append(dict(name=name, packet=pin(path), previous_packet=pin(previous),
@@ -95,6 +98,7 @@ def main():
             vectors={field:packet[field+'_binary'] for field in current}))
     h0 = a.output/'h0.bin'; h0.write_bytes(initial)
     result['initial_h0'] = pin(h0)
+    result['frozen_reference_sha256'] = REFERENCE
     result['initial_outer_k_direction'] = old['initial_outer_k_direction']
     result['success'] = True
     (a.output/'input-ledger.json').write_text(json.dumps(result, indent=2)+'\n')

@@ -13,7 +13,7 @@ import math
 from pathlib import Path
 import struct
 
-H0 = '4ad26ed0167bb1765bd0be2c150928280b69dbd82ace8a27ea5f9c8c7f4d0409'
+H0 = 'b8ba7917424057a9f6f16a026d82d53ede43985871537facea170ef6e1841b71'
 
 
 def require(condition, message):

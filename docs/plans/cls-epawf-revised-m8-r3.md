@@ -42,15 +42,23 @@ and scalar evaluation-domain definitions retain their physical meanings.
 
 Heavy inputs and results live under
 `/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r3`.
-`inputs/input-ledger.json` pins the producing R2 source/binary, original XML,
-complete native records, state/history/residual binaries and extracted packets.
-Original history h0 has float64-LE SHA256
-`f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca`.
+`inputs-bitwise-003/input-ledger.json` pins the producing R2 source/binary,
+original XML, complete native records and lossless state/history/residual
+payloads. The original native initialization h0 has float64-LE SHA256
+`b8ba7917424057a9f6f16a026d82d53ede43985871537facea170ef6e1841b71`.
+The current production zero-step preflight reproduces both the initialized
+state and the frozen reference bit for bit. The latter has SHA256
+`4ad26ed0167bb1765bd0be2c150928280b69dbd82ace8a27ea5f9c8c7f4d0409`.
+Evaluating the retained zero-amplitude initial functions changes 46 zero sign
+bits between these vectors, without changing any coefficient value. The R2
+auxiliary histories and the R3 target use the actual initialized h0. Native
+JSON `-0` tokens are parsed losslessly. The earlier extraction and unsuccessful
+setup receipts are retained.
 The exact saved Linear and SaturatedR2 alpha3200 terminal states remain separate
 from the frozen-scalar path. Saved path iterations2 and3 have native minimum k
-`1.2762700326467293e-5` and `6.38135016469755e-8`; their signs and the full
-current inventory must be checked before directional verification. The terminal
-value near8e-15 remains numerically unresolved and is not a positivity proof.
+`1.2762700326467293e-5` and `6.38135016469755e-8`. Iteration 2 supplies the
+verified positive boundary-path action base. The terminal value near8e-15
+remains numerically unresolved and is not a positivity proof.
 
 The retained initial outer-k component discrepancy was reproduced on Linux
 without a native call or trajectory, using the immutable R2 analytic diagnosis
@@ -80,38 +88,110 @@ the prototype dense matrix and Nektar's matrix type in the new resolution
 diagnostic. Qualifying that type changes no arithmetic or equation. The failed
 build receipt and complete compiler log are preserved.
 
-## Execution gates
+## Producing build and action verification
 
-The ordered work is component action implementation and independent checks;
-saved-state residual-resolution audit and scalar-contact accounting; durable
-iterate/timeout verification; one complete repaired Jacobian/factorization
-benchmark; then a budgeted exact SaturatedR2 target from the revalidated saved
-predictor. The target is not launched before its independent action gates.
+The producing epoch is `epoch-005` at
+`ce408c874ff12aaf6133cd8660e8c5b171f17a11`. Its build receipt and runtime
+fingerprint pin the images, toolchain and libraries. Epochs 003 and 004
+retained probe compilation errors involving private mass access and a
+temporary filename vector; the probe now uses the flat field's consistent
+mass and a named filename vector. The first fixed-state attempts also exposed
+missing explicit numerical selectors and a rank-local session discrepancy.
+The subsequent probes use the rank-local session settings and both explicit
+R3 selectors. No physical parameter was changed by these corrections.
 Compiler parallelism is16. Native numerical runs use one rank, and
 OMP_NUM_THREADS, OPENBLAS_NUM_THREADS, MKL_NUM_THREADS, BLIS_NUM_THREADS,
 VECLIB_MAXIMUM_THREADS and NUMEXPR_NUM_THREADS are all explicitly one.
-Parent-owned allocations include concurrent analyses and remain below72.
+Independent analyses use separately allocated single CPUs. The three focused
+legacy time/evolution/stage tests passed, the current affine and active
+pressure-action regressions passed, and the four compiled durability checks
+and nine predictor metadata checks passed.
 
-The revised action must include moving quadrature panels, weights, evaluation
-locations, local polynomial rows, cutoff budget, normalization, sampled K,
-transition and actual projected trace derivatives. A closure value evaluator
-with a selected invariant branch is not a derivative API. Nonsmooth choices and
-appropriate one-sided comparisons are recorded. Small relative errors do not
-replace the absolute gate.
+The component assembly differentiates moving quadrature panels, weights,
+evaluation locations, local polynomial rows and gradients, the discrete
+cutoff budget, normalization, sampled K, transition and actual projected
+trace. The existing exact time-mass and pressure/gauge actions are retained.
+The independent value oracle uses indexed constitutive tensors and a separate
+complex evaluation of the discrete operator, with both `1e-20` and `1e-30`
+steps and checks of the cutoff slope. It checks the selected strain/rotation
+and Yap branches, rather than differencing across a switch. The R3
+nonpressure cap selection is uncapped at the exact knot; the existing
+pressure column selection at that knot is directional. A common mixed
+generalized action at that exact knot is outside the verified states.
 
-The resolution audit keeps coefficients fixed while comparing arithmetic.
-The existing code already forms state minus history before applying mass, and
-its matrix-vector products already accumulate in long double. These are not
-invented defects. Any stable equivalent evaluation requires measured evidence;
-the2e-12 threshold is unchanged.
+| Fixed state | Maximum absolute physical action error | Result vs `1e-7` |
+| --- | ---: | --- |
+| Linear h0, including retained direction | `1.891e-12` | Pass |
+| SaturatedR2 h0, including retained direction | `1.898e-12` | Pass |
+| SaturatedR2 saved alpha3200 | `1.294e-11` | Pass |
+| SaturatedR2 positive boundary-path iteration 2 | `1.782e-12` | Pass |
+| Limiter and active transition fixture | `1.906e-11` | Pass |
+
+The repaired action of the retained outer-k direction is `1.503e-12` in both
+laws at h0. This result applies to the tested states and directions. It does
+not revise the historic failed Linear or SaturatedR2 gates or establish the
+cause of any earlier nonlinear stagnation. The first constructed positive
+fixture activates the limiter and transition but has minimum b=`.11869` and
+lambda=1. A second, targeted cap fixture reduces only the declared fixture's
+low polynomial background from `.01 K0` to `.001 K0`; its measured minimum
+b=`.07630`, lambda=`.76297`, and its maximum action error is `1.169e-11`.
+The sampled-K derivative of the actual projected trace has a nonzero
+coefficient action of `.58481`. The admissibility interpolation gate is on its
+unit plateau in the tested states. These are operator inputs outside the fixed
+physical box, not field floors, clipping, or physical retuning.
+
+## Fixed-state residual resolution
+
+Each original native residual is reproduced bit for bit. These comparisons
+keep coefficients, histories, time, alpha and quadrature fixed. The maxima
+below are all in the existing scaled physical norms and are dominated by
+streamwise momentum. The root criterion remains `2e-12`.
+
+| Evaluation | Linear alpha3200 | SaturatedR2 alpha3200 |
+| --- | ---: | ---: |
+| Actual native | `5.33424e-12` | `4.59464e-12` |
+| Independent term assembly | `6.08434e-12` | `5.33409e-12` |
+| Native term split, compensated sums | `5.56173e-12` | `4.79480e-12` |
+| Native rounded primitives, extended products/sums | `5.55832e-12` | `4.79064e-12` |
+| Native minus extended, norm of the difference | `1.88998e-12` | `1.68776e-12` |
+| Native minus independent, norm of the difference | `3.13178e-12` | `2.93534e-12` |
+| Extra outer isotropic cancellation, norm of the difference | `1.84e-15` | `1.99e-15` |
+
+The exact-polynomial mass certificate encloses the norm of each **fixed**
+load and agrees with the corresponding native mass-dual norm at the reported
+precision. The existing code subtracts state minus history before applying
+mass and accumulates its dot products in long double. Using the same delta,
+the largest observed stored-mass action discrepancy is `9.99e-16` in
+coefficient units. The projected constraint differences are below `7.1e-15`
+in the scaled norms. Bounds for sums of frozen increments are separate from
+errors in the primitives or projection. Spatial momentum assembly is the
+material resolution concern. These fixed-state comparisons do not establish
+a `5e-12` floor or demonstrate an improved attainable root from an arithmetic
+change. The exact target therefore uses the original production residual.
+
+## Scalar contact
 
 The contact diagnostic uses conservative scalar coefficient loads and the
 consistent free/boundary mass partition. A physical rate is a basis-row
 evaluation of the mass solve, with dependent-trace coupling stated explicitly.
-It cannot be inferred from a load coefficient's sign. A constructed contact
-state is a separate diagnostic. Any discrete inward-invariance conclusion
-must retain its finite-state/operator scope and does not prove implicit-root
-absence or continuum instability.
+The single constructed polynomial is nonnegative by its exact tensor
+coefficients, keeps U and stored reduced Pi fixed, and reconstructs the actual
+dependent trace (relative discrepancy `5.31e-15`). The verified trace branch
+has lambda=1 and zero epsilon feedback in its derivative. The independently
+projected sampled-K trace rate includes its induced epsilon boundary mass.
+The free consistent-mass equations balance to `8.89e-16` for k and
+`4.78e-18` for epsilon in coefficient units.
+
+| Row in the constructed state | k | Physical k rate | Largest contributions |
+| --- | ---: | ---: | --- |
+| Constructed zero at `(1,0,0)` | `0` | `+34.9138` | Diffusion `+28.4932`, production `+6.67569`, destruction `-.254739` |
+| Original diagnostic row at `(1.6046496089512394,0,0)` | `.186642` | `-633.545` | Destruction `-677.698`, production `+26.0784`, diffusion `+18.0769` |
+
+The assembled component loads recover the unchanged scalar load, with net
+destruction counted once. The constructed zero row has an inward rate. The
+negative rate at the other row is at positive k; it proves no discrete
+inward-invariance defect. This diagnostic neither explains the full O(10)
+frozen-path residual nor proves absence of an admissible implicit root.
 
 ## Open decisions
 

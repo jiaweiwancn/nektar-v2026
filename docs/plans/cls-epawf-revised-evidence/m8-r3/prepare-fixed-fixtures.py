@@ -38,7 +38,7 @@ def main():
     from cls_epawf_m8_r2_stage_analysis import Analyzer
     raw = json.loads(a.reference.read_text(), parse_int=lambda x: -0.0 if x == '-0' else int(x))
     h0 = np.fromfile(a.history, dtype='<f8')
-    if len(h0) != 2165 or h0.tobytes() != np.asarray(raw['initial'], dtype='<f8').tobytes():
+    if len(h0) != 2165 or h0.tobytes() != np.asarray(raw['state'], dtype='<f8').tobytes():
         raise ValueError('Original outer6 h0 binding differs')
     a.output.mkdir(parents=True)
     ledger = dict(schema=1, scope='Fixed-state operator verification only; no physical qualification',
@@ -55,6 +55,7 @@ def main():
 
     save('h0', h0, scope='Exact original represented initial state; no state changes')
     save('constructed-contact', h0, construct_contact=True, compute_scalar_rate=True,
+         require_history_h0=h0.tobytes() == np.asarray(raw['initial'], dtype='<f8').tobytes(),
          scope='One preregistered contact polynomial is constructed by the native probe; not an accepted state')
 
     # A declared positive polynomial test INPUT is not a model field floor or

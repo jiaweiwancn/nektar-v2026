@@ -43,7 +43,7 @@ class PredictorMetadataTests(unittest.TestCase):
         self.current_xml.write_text(self.xml('ScalarFeasibleR3', 'Off'))
         self.target_xml.write_text(self.xml('ScalarFeasibleR3', 'ExactTargetR3'))
         self.current = self.root/'initial.json'
-        self.write(self.current, dict(initial=self.history, time=0., steps=0, eta=0., dt=.0025,
+        self.write(self.current, dict(initial=self.history, state=self.history, time=0., steps=0, eta=0., dt=.0025,
             inner_stress_model='SaturatedR2', nonlinear_policy='ScalarFeasibleR3', signature='same native signature'))
         self.args = SimpleNamespace(packet=self.packet_path, input_ledger=self.ledger, reference_session=self.reference,
             current_preflight=self.current, current_preflight_session=self.current_xml, target_session=self.target_xml,
@@ -101,7 +101,7 @@ class PredictorMetadataTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'executable changed'): predictor.prepare(self.args)
 
     def test_changed_actual_h0_rejected(self):
-        raw = json.loads(self.current.read_text()); raw['initial'][0] = 3.; self.write(self.current, raw)
+        raw = json.loads(self.current.read_text()); raw['state'][0] = 3.; self.write(self.current, raw)
         with self.assertRaisesRegex(ValueError, 'original h0'): predictor.prepare(self.args)
 
     def test_current_signature_newton_budget_mismatch_rejected(self):

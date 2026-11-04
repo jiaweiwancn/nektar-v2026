@@ -8,7 +8,7 @@ from pathlib import Path
 import struct
 import xml.etree.ElementTree as ET
 
-H0 = '4ad26ed0167bb1765bd0be2c150928280b69dbd82ace8a27ea5f9c8c7f4d0409'
+H0 = 'b8ba7917424057a9f6f16a026d82d53ede43985871537facea170ef6e1841b71'
 NUMERICAL_SELECTORS = {'RANSWALLSTAGETEST', 'RANSWALLNONLINEARPOLICY', 'RANSWALLACTIONPOLICY',
     'RANSWALLR3PROGRESSFILE', 'RANSWALLR3PREDICTORFILE', 'RANSWALLFEASIBLEFILE',
     'RANSWALLSOLVEDIAGNOSTICS', 'RANSWALLSOLVEDIAGNOSTICREPLAY', 'RANSWALLSOLVEDIAGNOSTICFILE'}
@@ -70,7 +70,8 @@ def prepare(args):
         require(identity(pin['path']) == pin and pin['bytes'] == 2165*8 and vector(packet[field]) == pin['sha256'],
             'Historical packet/binary binding changed: '+field)
         pins[field] = pin
-    require(packet['history'] == current['initial'] and vector(current['initial']) == H0 and
+    require(packet['history'] == current['state'] and vector(current['state']) == H0 and
+        current['initial'] == current['state'] and
         current.get('time') == current.get('steps') == current.get('eta') == 0 and current.get('dt') == .0025 and
         current.get('inner_stress_model') == 'SaturatedR2' and current.get('nonlinear_policy') == 'ScalarFeasibleR3',
         'Current initialization changed original h0, target scope or selected policy')
