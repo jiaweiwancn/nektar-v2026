@@ -70,7 +70,7 @@ def prepare(args):
         require(identity(pin['path']) == pin and pin['bytes'] == 2165*8 and vector(packet[field]) == pin['sha256'],
             'Historical packet/binary binding changed: '+field)
         pins[field] = pin
-    require(vector(packet['history']) == H0 and vector(current['initial']) == H0 and
+    require(packet['history'] == current['initial'] and vector(current['initial']) == H0 and
         current.get('time') == current.get('steps') == current.get('eta') == 0 and current.get('dt') == .0025 and
         current.get('inner_stress_model') == 'SaturatedR2' and current.get('nonlinear_policy') == 'ScalarFeasibleR3',
         'Current initialization changed original h0, target scope or selected policy')
@@ -86,6 +86,9 @@ def prepare(args):
             return any(contains_pin(item) for item in value.values())
         return isinstance(value, list) and any(contains_pin(item) for item in value)
     require(contains_pin(ledger), 'Immutable input ledger does not bind this exact historical packet')
+    target_history = identity(ledger['initial_h0']['path'])
+    require(target_history == ledger['initial_h0'] and target_history['sha256'] == H0 and
+        target_history['bytes'] == 2165*8, 'Exact original target h0 payload differs')
     protected = [protected_xml(path) for path in (args.reference_session, args.current_preflight_session, args.target_session)]
     require(len(set(protected)) == 1, 'R3 target changed protected physics, geometry, expansions or initial functions')
     target = ET.parse(args.target_session).getroot()
@@ -115,14 +118,14 @@ def prepare(args):
     executable = identity(runtime['runtime_resolved_paths'][key])
     require(executable['sha256'] == runtime['runtime_artifacts'][key], 'Current executable changed')
     return dict(schema=1, role='nonconverged_auxiliary_predictor_only',
-        encoding='little-endian IEEE754 binary64', state=pins['state'], history=pins['history'],
+        encoding='little-endian IEEE754 binary64', state=pins['state'], history=target_history,
         expected_h0_sha256=H0, current_executable=executable, current_target_xml=identity(args.target_session),
         current_native_signature_sha256=hashlib.sha256(current['signature'].encode()).hexdigest(),
         current_preflight=identity(args.current_preflight), current_preflight_session=identity(args.current_preflight_session),
         current_runtime=identity(args.runtime_pin), producing_source_commit=args.expected_source,
         protected_physical_xml_sha256=protected[0], historical_input_ledger=ledger_pin, historical_packet=packet_pin,
         origin=dict(alpha=3200., time=.0025, converged=False, inner_stress_model='SaturatedR2',
-            source_record=packet['source_record'], residual=pins['residual'],
+            source_record=packet['source_record'], residual=pins['residual'], history=pins['history'],
             scaled_block_norms=packet['scaled_block_norms'], historical_failure_is_not_reclassified=True),
         target=dict(alpha=400., time=.0025, eta=0., tolerance=2e-12, history_advanced=False),
         predictor_is_not_a_physical_time_sample=True, coefficients_are_not_lifted_or_clipped=True)

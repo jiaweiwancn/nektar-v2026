@@ -63,7 +63,8 @@ class PredictorMetadataTests(unittest.TestCase):
             '</SOLVERINFO><PARAMETERS><P>H=2</P><P>RANSWallMaxIterations=12</P></PARAMETERS></CONDITIONS></NEKTAR>')
 
     def update_ledger(self):
-        self.write(self.ledger, dict(states=[dict(packet=predictor.identity(self.packet_path))]))
+        self.write(self.ledger, dict(states=[dict(packet=predictor.identity(self.packet_path))],
+            initial_h0=self.packet['history_binary']))
 
     def test_valid_numerical_predictor_preserves_failed_origin_and_h0(self):
         result = predictor.prepare(self.args)

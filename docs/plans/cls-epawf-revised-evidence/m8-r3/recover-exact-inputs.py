@@ -55,6 +55,15 @@ def main():
         prior_ledger=pin(a.prior_ledger), extractor=pin(__file__),
         historical_native_source=old['historical_native_source'], native_solver=old['native_solver'],
         inputs=old['inputs'], states=[], native_calls=0, scientific_reconstructions=0)
+    references = []
+    for row in old['states'][:2]:
+        ref = row['preflight_report']
+        if pin(ref['path']) != ref:
+            raise ValueError('Historical native initialization report changed')
+        references.append(load(Path(ref['path']).read_text())['initial'])
+    initial = packed(references[1])
+    if hashlib.sha256(initial).hexdigest() != H0 or packed(references[0]) != initial:
+        raise ValueError('Original outer6 native initialization binding differs')
     names = ('linear-auxiliary', 'saturatedr2-auxiliary', 'boundary-path-2', 'boundary-path-3', 'frozen-terminal')
     for name in names:
         previous = a.prior_ledger.parent/(name+'.json')
@@ -73,13 +82,18 @@ def main():
             packet[field] = values
             vector = a.output/(name+'-'+field+'.bin'); vector.write_bytes(after)
             packet[field+'_binary'] = pin(vector)
-        if packet['history_binary']['sha256'] != H0:
-            raise ValueError('Archive does not bind original signed-zero-preserving h0')
+        if packet['history'] != references[1]:
+            raise ValueError('An archived stage history differs in value from h0')
+        # R2's stage-history construction can change zero signs. Preserve
+        # those actual stage-history bits in C rather than replacing them
+        # with the initial state's zero signs. The R3 target binds h0 itself.
+        packet['require_history_h0'] = packet['history_binary']['sha256'] == H0
+        packet['history_equals_original_h0_coefficient_values'] = True
         path = a.output/(name+'.json'); path.write_text(json.dumps(packet, separators=(',', ':'), allow_nan=False)+'\n')
         result['states'].append(dict(name=name, packet=pin(path), previous_packet=pin(previous),
             sign_bit_changes_only=changes, source_record=origin,
             vectors={field:packet[field+'_binary'] for field in current}))
-    h0 = a.output/'h0.bin'; h0.write_bytes(packed(packet['history']))
+    h0 = a.output/'h0.bin'; h0.write_bytes(initial)
     result['initial_h0'] = pin(h0)
     result['initial_outer_k_direction'] = old['initial_outer_k_direction']
     result['success'] = True
