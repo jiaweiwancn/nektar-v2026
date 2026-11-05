@@ -6,6 +6,13 @@ find_package(Nektar++ REQUIRED)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 get_filename_component(RANS_SOURCE_ROOT "${CMAKE_CURRENT_LIST_DIR}/../../../.." ABSOLUTE)
+add_executable(RANSReducedModelChecks test_cls_epawf_reduced_model.cpp)
+target_include_directories(RANSReducedModelChecks PRIVATE ${RANS_SOURCE_ROOT}/solvers)
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(RANSReducedModelChecks PRIVATE -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror)
+endif()
+enable_testing()
+add_test(NAME RANSReducedModelChecks COMMAND RANSReducedModelChecks)
 add_definitions(${NEKTAR++_DEFINITIONS} -DENABLE_NEKTAR_EXCEPTIONS)
 include_directories(${RANS_SOURCE_ROOT}/library)
 include_directories(SYSTEM ${NEKTAR++_INCLUDE_DIRS} ${NEKTAR++_TP_INCLUDE_DIRS})
@@ -105,6 +112,7 @@ foreach(rans_native_target RANSEquilibriumEvolutionProbe RANSCurvedWallProbe)
         ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionResolution.cpp
         ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionFeasible.cpp
         ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPicard.cpp
+        ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionReduced.cpp
         ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionDiagnostics.cpp)
 endforeach()
 add_executable(RANSPressureActionProbe
@@ -120,6 +128,7 @@ add_executable(RANSPressureActionProbe
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionResolution.cpp
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionFeasible.cpp
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPicard.cpp
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionReduced.cpp
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionDiagnostics.cpp)
 target_include_directories(RANSPressureActionProbe PRIVATE ${RANS_SOURCE_ROOT}/solvers)
 target_link_libraries(RANSPressureActionProbe RANSKernels ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
@@ -137,6 +146,7 @@ foreach(rans_r3_probe RANSNonpressureActionProbe RANSWallResolutionProbe)
         ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionResolution.cpp
         ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionFeasible.cpp
         ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPicard.cpp
+        ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionReduced.cpp
         ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionDiagnostics.cpp)
     target_include_directories(${rans_r3_probe} PRIVATE ${RANS_SOURCE_ROOT}/solvers)
     target_link_libraries(${rans_r3_probe} RANSKernels ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
@@ -252,6 +262,7 @@ if(RANS_BUILD_SOLVER)
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallEvolutionActions.cpp
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallEvolutionFeasible.cpp
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallEvolutionPicard.cpp
+            ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallEvolutionReduced.cpp
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallTimeIntegration.cpp
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSEquilibriumWallEvolution.cpp
             PROPERTIES COMPILE_OPTIONS "-Wall;-Wextra;-Wpedantic;-Wno-sign-compare;-Werror")

@@ -248,6 +248,28 @@ private:
         WallMatrix matrix;
         Vector residual;
     };
+    struct PicardFlowResult
+    {
+        PicardBlock block;
+        Vector predictor,step,defect;
+        int velocitySize=0,pressureSize=0;
+        double predictorDefect=0.;
+    };
+    PicardFlowResult PicardFlowCorrection(const Vector &state,const Vector &history,
+        double alpha,double time,const RANSWallEvolutionData &data,
+        const std::map<int,double> &external) const;
+    struct NonKResponse
+    {
+        bool converged=false;
+        Vector state,residual,norms;
+        int updates=0,flowSolves=0,epsilonSolves=0;
+        double error=1e300;
+        std::string failure;
+    };
+    NonKResponse EquilibrateNonK(const Vector &state,const Vector &history,double alpha,
+        double time,const RANSWallEvolutionData &data,double tolerance,int maximumUpdates) const;
+    Vector SolveReducedPicard(Vector state,const Vector &history,double alpha,double time,
+        const RANSWallEvolutionData &data,int &iterations,double tolerance,int maximumIterations) const;
     PicardBlock AssemblePicardBlock(int block,const Vector &state,const Vector &history,
         double alpha,double time,const RANSWallEvolutionData &data,
         const std::map<int,double> &external) const;
@@ -384,6 +406,9 @@ private:
     bool m_picardVerify=false;
     bool m_picardGroundProjection=false;
     bool m_picardKNewton=false;
+    bool m_picardReduced=false,m_reducedVerify=false;
+    int m_reducedBasis=10,m_reducedHUpdates=50;
+    double m_reducedRadius=.05,m_reducedStep=2e-5,m_reducedHTolerance=2e-9;
     bool m_picardEquilibrateK=false;
     double m_picardKRadius=.15;
     std::string m_picardGuessFile,m_picardKDiagnostic;

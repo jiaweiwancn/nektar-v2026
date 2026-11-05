@@ -978,6 +978,9 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
           {"incoming_guess_sha256", J::Quote(incomingGuessHash)},
           {"guess_sha256", J::Quote(RANSWallR3::Hash(s))}});
     report("initial", norms, domain, ground, {});
+    if (m_picardReduced)
+        return SolveReducedPicard(std::move(s), history, alpha, time, data,
+                                  iterations, tolerance, maximumIterations);
     if (!m_picardKDiagnostic.empty())
         DiagnosePicardK(s, history, alpha, time, data, external);
     if (m_picardVerify)
@@ -1007,63 +1010,22 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
     }
     const Vector fixedK(s.begin() + offset[K()], s.begin() + offset[Epsilon()]);
     auto flowDirection = [&](const Vector &base, bool verify) {
-        auto flow =
-            AssemblePicardBlock(0, base, history, alpha, time, data, external);
-        const int nv = std::lower_bound(flow.rows.begin(), flow.rows.end(),
-                                        DifferentialSize()) -
-                       flow.rows.begin();
-        const int np = flow.rows.size() - nv;
-        WallMatrix a(nv, Vector(nv)), d(np, Vector(nv)), g(nv, Vector(np));
-        for (int i = 0; i < nv; ++i)
-        {
-            std::copy_n(flow.matrix[i].begin(), nv, a[i].begin());
-            std::copy_n(flow.matrix[i].begin() + nv, np, g[i].begin());
-        }
-        for (int i = 0; i < np; ++i)
-            std::copy_n(flow.matrix[nv + i].begin(), nv, d[i].begin());
-        Vector rhs(nv);
-        for (int i = 0; i < nv; ++i)
-            rhs[i] = -flow.residual[i];
-        const Factor velocity(a);
-        const auto predictor = velocity.Apply(rhs);
+        auto correction =
+            PicardFlowCorrection(base, history, alpha, time, data, external);
+        auto flow    = std::move(correction.block);
+        const int nv = correction.velocitySize, np = correction.pressureSize;
+        const auto &predictor = correction.predictor;
+        auto step             = std::move(correction.step);
+        ++flowSolves;
         emit("solve", {{"block", J::Quote("velocity_predictor")},
                        {"dimension", J::Number(nv)}});
-
-        // A du + G dp = -r_u, D du + C dp = -r_p.
-        // Use the same A inverse for both the Schur columns and correction.
-        WallMatrix schur(np, Vector(np)), inverseGradient(np, Vector(nv));
-        for (int j = 0; j < np; ++j)
-        {
-            for (int i = 0; i < nv; ++i)
-                rhs[i] = g[i][j];
-            inverseGradient[j] = velocity.Apply(rhs);
-            const auto column  = Multiply(d, inverseGradient[j]);
-            for (int i = 0; i < np; ++i)
-                schur[i][j] = column[i] - flow.matrix[nv + i][nv + j];
-        }
-        auto pressureRhs = Multiply(d, predictor);
-        for (int i = 0; i < np; ++i)
-            pressureRhs[i] += flow.residual[nv + i];
-        const auto pressure = Factor(schur).Apply(pressureRhs);
-        Vector step(predictor);
-        for (int i = 0; i < nv; ++i)
-            for (int j = 0; j < np; ++j)
-                step[i] -= inverseGradient[j][i] * pressure[j];
-        step.insert(step.end(), pressure.begin(), pressure.end());
-        ++flowSolves;
-        auto frozenDefect = Multiply(flow.matrix, step);
-        for (int i = 0; i < step.size(); ++i)
-            frozenDefect[i] += flow.residual[i];
-        Require(Maximum(frozenDefect) <=
-                    1e-9 * std::max(1., Maximum(flow.residual)),
-                "inaccurate Picard predictor/correction solve");
         emit("solve",
              {{"block", J::Quote("pressure_correction")},
               {"dimension", J::Number(np)},
               {"schur_velocity_rhs", J::Number(np)},
               {"predictor_continuity_gauge_max",
-               J::Number(Maximum(pressureRhs))},
-              {"frozen_flow_defect", J::Number(Maximum(frozenDefect))}});
+               J::Number(correction.predictorDefect)},
+              {"frozen_flow_defect", J::Number(Maximum(correction.defect))}});
         if (verify)
         {
             auto directRhs = flow.residual;
@@ -1085,10 +1047,14 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
             apply(corrected, flow, step, 1.);
             auto pressureDirection = Vector(Size());
             for (int j = 0; j < np; ++j)
-                pressureDirection[flow.rows[nv + j]] = pressure[j];
+                pressureDirection[flow.rows[nv + j]] = step[nv + j];
             const auto nativePressure =
                 AffinePressureAction(pressureDirection, external);
-            const auto assembledPressure = Multiply(g, pressure);
+            Vector assembledPressure(nv);
+            for (int i = 0; i < nv; ++i)
+                for (int j = 0; j < np; ++j)
+                    assembledPressure[i] +=
+                        flow.matrix[i][nv + j] * step[nv + j];
             Vector pressureError(nv);
             for (int i = 0; i < nv; ++i)
                 pressureError[i] =

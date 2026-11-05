@@ -262,10 +262,31 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         Require(m_picardKRadius>0. && m_picardKRadius<=1.,"invalid dimensionless Picard k radius");
         session->LoadSolverInfo("RANSWallPicardGuessFile",m_picardGuessFile,"");
         session->LoadSolverInfo("RANSWallPicardKDiagnostic",m_picardKDiagnostic,"");
+        std::string reduced,reducedVerify;
+        session->LoadSolverInfo("RANSWallPicardReduced",reduced,"Off");
+        session->LoadSolverInfo("RANSWallReducedVerify",reducedVerify,"Off");
+        Require((reduced=="On" || reduced=="Off") && (reducedVerify=="On" || reducedVerify=="Off"),
+                "unknown Picard reduced selector");
+        m_picardReduced=reduced=="On";m_reducedVerify=reducedVerify=="On";
+        session->LoadParameter("RANSWallReducedBasis",m_reducedBasis,10);
+        session->LoadParameter("RANSWallReducedHUpdates",m_reducedHUpdates,50);
+        session->LoadParameter("RANSWallReducedRadius",m_reducedRadius,.05);
+        session->LoadParameter("RANSWallReducedStep",m_reducedStep,2e-5);
+        session->LoadParameter("RANSWallReducedHTolerance",m_reducedHTolerance,2e-9);
+        Require(m_reducedBasis>=4 && m_reducedBasis<=32 && m_reducedHUpdates>=0 &&
+                m_reducedRadius>0. && m_reducedRadius<=1. &&
+                m_reducedStep>0. && m_reducedStep<.01 && m_reducedHTolerance>0. &&
+                std::isfinite(m_reducedHTolerance),
+                "invalid Picard reduced controls");
         session->LoadParameter("RANSWallPicardNonKTolerance",m_picardNonKTolerance,0.);
         Require(std::isfinite(m_picardNonKTolerance) && m_picardNonKTolerance>=0. &&
                 (m_picardNonKTolerance==0. || (!m_picardGuessFile.empty() && !m_picardKNewton)),
                 "Picard non-k diagnostic requires a saved guess and disabled k Newton");
+        Require(!m_picardReduced || (!m_picardKNewton && !m_picardEquilibrateK &&
+                !m_picardVerify && m_picardNonKTolerance==0.),
+                "use reduced verification and keep R2 controls in separate runs");
+        Require(!m_reducedVerify || m_picardReduced,
+                "reduced verification requires the reduced search");
     }
     session->LoadParameter("RANSWallOwnershipShift",m_ownershipShift,0);Require(m_ownershipShift>=0,"negative ownership shift");
     auto full=MemoryManager<MultiRegions::ExpList>::AllocateSharedPtr(session,graph,true,"u");

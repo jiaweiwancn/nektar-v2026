@@ -66,6 +66,14 @@ def prepare(args):
         }.items():
             set_info(root, key, value)
         if name == "target":
+            if getattr(args, "reduced", False):
+                set_info(root, "RANSWallPicardReduced", "On")
+                set_info(root, "RANSWallReducedVerify", "On" if args.reduced_verify else "Off")
+                for key, value in {"Basis": args.reduced_basis, "Radius": args.reduced_radius,
+                                   "HTolerance": args.reduced_h_tolerance,
+                                   "HUpdates": args.reduced_h_updates,
+                                   "Step": args.reduced_step}.items():
+                    set_parameter(root, "RANSWallReduced"+key, value)
             if getattr(args, "k_newton", False):
                 set_info(root, "RANSWallPicardKNewton", "On")
             if getattr(args, "equilibrate_after_k", False):
@@ -135,6 +143,13 @@ def main():
     parser.add_argument("--verify", action="store_true", help="Run same-state and frozen-saddle comparisons")
     parser.add_argument("--ground-projection", action="store_true", help="Project the k trial against ground cuts")
     parser.add_argument("--k-newton", action="store_true", help="Try a true conditional k correction before the frozen update")
+    parser.add_argument("--reduced", action="store_true", help="Use the constrained reduced response search")
+    parser.add_argument("--reduced-verify", action="store_true", help="Check repeatability, rollback and two-scale responses")
+    parser.add_argument("--reduced-basis", type=int, default=10)
+    parser.add_argument("--reduced-radius", type=float, default=.05)
+    parser.add_argument("--reduced-h-tolerance", type=float, default=2e-9)
+    parser.add_argument("--reduced-h-updates", type=int, default=50)
+    parser.add_argument("--reduced-step", type=float, default=2e-5)
     parser.add_argument("--equilibrate-after-k", action="store_true",
                         help="Try fixed-k non-k equilibration when the full sweep would be rejected")
     parser.add_argument("--k-radius", type=float, help="Limit the raw k Newton proposal relative to reference k")
@@ -152,6 +167,9 @@ def main():
     args.output = args.output.resolve()
     require(args.steps >= 1 and args.sweeps >= 0 and args.timeout >= 1, "invalid run budget")
     require(not args.k_newton or args.ground_projection, "--k-newton requires --ground-projection")
+    require(not args.reduced or not (args.k_newton or args.equilibrate_after_k or args.verify),
+            "use --reduced-verify for reduced checks and retain R2 selectors as controls")
+    require(not args.reduced_verify or args.reduced, "--reduced-verify requires --reduced")
     require(not args.equilibrate_after_k or args.k_newton, "--equilibrate-after-k requires --k-newton")
     require(not args.guess_file or args.steps == 1, "a saved guess binds exactly one stage")
     require(not args.guess_file or args.perturbation == 0, "run saved-guess and perturbation diagnostics separately")
