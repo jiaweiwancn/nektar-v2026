@@ -1226,7 +1226,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
             for(const auto &cut:active)activeIds.push_back(cut.id);
             original.push_back({std::move(selected),violated,std::move(transposeSolution),rhs,kind,location});
             exchanges.push_back(J::Object({{"op",J::Quote("enter")},{"id",J::Number(id)},
-                {"kind",J::Quote(kind)},{"point",J::Numbers(location)},{"active",J::Numbers(activeIds)},
+                {"kind",J::Quote(kind)},{"point",kind=="native_merit_slope"?"null":J::Numbers(location)},{"active",J::Numbers(activeIds)},
                 {"exact_previous_alias_ids",J::Numbers(aliases)},{"violation",J::Number(violation)}}));
             if(exchange+1==maxExchange)record(&incoming,R,effective,trace,"exchange_limit_candidate");
             if(refined && std::any_of(active.begin(),active.end(),[&](const Cut &cut)
@@ -1236,7 +1236,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
                 throw std::runtime_error("R6 active original row still violates the verified cut scan");
             }
         }
-        lastCut=kind+" violation "+J::Number(violation)+" at "+J::Numbers(Vector(location.begin(),location.end()));
+        lastCut=kind+" violation "+J::Number(violation)+
+            (kind=="native_merit_slope"?"":" at "+J::Numbers(Vector(location.begin(),location.end())));
         // Dual active-set projection. Keep the incoming constraint through
         // every blocking release. Re-selecting a different cut mid-update
         // can cycle when several evaluation rows share the same polynomial.

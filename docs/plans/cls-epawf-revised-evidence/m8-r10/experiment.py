@@ -35,6 +35,34 @@ def prepare(e, out, h, evidence):
     comp = h.load(h.bound(r9['binding']['comparison']))
     previous = h.load(h.bound(h.load(h.bound(r9['binding']['receipt']))['manifest']))
     old_xml = h.bound(r9['xml'])
+    previous_runtime = h.load(h.bound(r9['runtime']))
+    old_source = Path(previous_runtime['source_root'])
+    current_source = e/'source'
+    relative = Path('solvers/IncNavierStokesSolver/EquationSystems')
+    unchanged = {}
+    for filename in ('RANSWallEvolutionNonpressure.cpp', 'RANSWallEvolutionRobust.cpp',
+                     'RANSWallEvolutionResolution.cpp', 'RANSWallEvolutionTransition.cpp'):
+        old = h.pin(old_source/relative/filename)
+        current = h.pin(current_source/relative/filename)
+        assert old['sha256'] == current['sha256']
+        unchanged[filename] = current['sha256']
+
+    def function_bytes(source, name):
+        text=(source/relative/'RANSWallEvolutionPatch.cpp').read_text()
+        start=text.index('RANSWallEvolutionPatch::'+name+'(')
+        begin=text.index('{', start)
+        depth=1
+        end=begin+1
+        while depth:
+            depth += (text[end]=='{')-(text[end]=='}')
+            end += 1
+        return text[start:end].encode()
+
+    for name in ('Residual', 'Norms', 'DestructionValueR9'):
+        old = function_bytes(old_source, name)
+        current = function_bytes(current_source, name)
+        assert old == current
+        unchanged[name] = hashlib.sha256(current).hexdigest()
     runtime_path = e/'runtime-fingerprint.json'
     runtime = h.load(runtime_path)
     exe = h.pin(e/'build/IncNavierStokesSolver')
@@ -69,6 +97,7 @@ def prepare(e, out, h, evidence):
         source_Armijo_fractions_per_tangent=10,new_source_value_limit=50,native_trials_per_ray=9,
         comparison_cooperative_seconds=600,stop_source_work_at_seconds=540,
         comparison_reserve_seconds=35,comparison_selector_full_endpoint_tested=False,
+        physical_value_and_source_compatibility=unchanged,
         native_external_supervisor_seconds=650,source='Linear smoothing',base=original['state'],history=r9['target']['original_h0']))
 
 
