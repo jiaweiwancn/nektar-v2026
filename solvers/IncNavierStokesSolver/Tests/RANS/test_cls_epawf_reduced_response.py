@@ -5,6 +5,7 @@
 import argparse
 import json
 from pathlib import Path
+import xml.etree.ElementTree as ET
 
 from run_cls_epawf_picard import require, load, state_hash, H0, write_json
 
@@ -98,7 +99,56 @@ def check(directory):
     write_json(directory / "reduced-checks.json", result)
 
 
+def compare_verification(verified, unverified):
+    """Compare identical native numerical inputs with observation On/Off."""
+    def numerical_xml(directory):
+        root = ET.parse(directory / "target/case.xml").getroot()
+        values = [e.get("VALUE") for e in root.iter()
+                  if e.get("PROPERTY") == "RANSWallReducedVerify"]
+        require(values == ["On" if directory == verified else "Off"],
+                "the comparison requires verified and unverified native inputs")
+        for element in root.iter():
+            for child in list(element):
+                if child.get("PROPERTY") == "RANSWallReducedVerify":
+                    element.remove(child)
+        return ET.tostring(root)
+
+    require(numerical_xml(verified) == numerical_xml(unverified),
+            "verification comparison changes a numerical input or iteration budget")
+    a, b = (load(p / "manifest.json") for p in (verified, unverified))
+    require(a["IncNavierStokesSolver"]["sha256"] ==
+            b["IncNavierStokesSolver"]["sha256"] and
+            a["IncNavierStokesSolver"]["libraries"] ==
+            b["IncNavierStokesSolver"]["libraries"],
+            "verification comparison uses different solver/runtime identities")
+    x, y = (load(p / "target/case.evolution.json") for p in (verified, unverified))
+    for key in ("steps", "time", "native_history_times", "last_stage_alpha", "last_stage_time"):
+        require(x[key] == y[key], "verification changes native time or stage bookkeeping")
+    hashes = {}
+    for key in ("state", "rejected_state", "initial", "last_stage_history"):
+        hashes[key] = state_hash(x[key])
+        require(hashes[key] == state_hash(y[key]),
+                "verification changes native coefficients or physical history")
+    require([state_hash(q) for q in x["native_history"]] ==
+            [state_hash(q) for q in y["native_history"]],
+            "verification changes a physical history slot")
+    require([state_hash(q) for q in x["accepted_states"]] ==
+            [state_hash(q) for q in y["accepted_states"]],
+            "verification changes an accepted native state")
+    write_json(verified / "verification-comparison.json",
+               dict(status="passed_reduced_verification_observability",
+                    scope="Bitwise numerical trajectory and history comparison; not M8 convergence",
+                    verified=str(verified), unverified=str(unverified),
+                    solver_sha256=a["IncNavierStokesSolver"]["sha256"],
+                    state_sha256=hashes, accepted_physical_steps=x["steps"], time=x["time"]))
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("directory", type=Path)
-    check(parser.parse_args().directory)
+    parser.add_argument("--compare-unverified", type=Path,
+                        help="Also require bitwise identical numerical states/history with verification Off")
+    args = parser.parse_args()
+    check(args.directory)
+    if args.compare_unverified:
+        compare_verification(args.directory, args.compare_unverified)
