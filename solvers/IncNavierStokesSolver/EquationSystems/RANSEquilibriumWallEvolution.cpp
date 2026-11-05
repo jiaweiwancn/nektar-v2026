@@ -407,7 +407,28 @@ void RANSEquilibriumWallEvolution::v_DoSolve()
     {
         for(int step=0;step<m_steps;++step)
         {
-            const auto diff=m_integrator->Advance();std::copy(diff.begin(),diff.end(),m_state.begin());m_time=m_integrator->Time();
+            // Native GLM work after the implicit callback can still fail
+            // (e.g. a nonfinite explicit evaluation). Keep the coupled state
+            // and accepted diagnostics transactional as well as native history.
+            const bool single=m_patch->PimpleSingleSweep();
+            const auto committedState=single?m_state:Vector{},committedHistory=single?m_lastHistory:Vector{};
+            const auto committedSamples=single?m_physicalSamples:RANSWallEvolutionPatch::Diagnostic{};
+            const double committedStageTime=m_stageTime,committedStageAlpha=m_stageAlpha;
+            const auto stages=m_stageAudits.size(),audits=m_stateAudits.size(),states=m_acceptedStates.size(),times=m_auditTimes.size();
+            Vector diff;
+            try{diff=m_integrator->Advance();}
+            catch(...)
+            {
+                if(single)
+                {
+                    if(m_rejectedState.empty())m_rejectedState=m_state;
+                    m_state=committedState;m_lastHistory=committedHistory;m_physicalSamples=committedSamples;
+                    m_stageTime=committedStageTime;m_stageAlpha=committedStageAlpha;
+                    m_stageAudits.resize(stages);m_stateAudits.resize(audits);m_acceptedStates.resize(states);m_auditTimes.resize(times);
+                }
+                throw;
+            }
+            std::copy(diff.begin(),diff.end(),m_state.begin());m_time=m_integrator->Time();
             const auto drift=m_patch->StateNorms(m_state,m_initial,m_ustar);
             Vector record{m_time,static_cast<double>(m_integrator->Steps()),Maximum(drift),m_patch->AnchorEnergyWork(m_state)};
             record.insert(record.end(),drift.begin(),drift.end());m_stepAudits.push_back(record);

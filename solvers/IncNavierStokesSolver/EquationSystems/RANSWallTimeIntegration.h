@@ -20,10 +20,11 @@ namespace Nektar
  * A single native variable accommodates the different native coefficient
  * counts of velocity, full-domain k and outer-only epsilon. Algebraic pressure
  * and gauge values stay in the caller's coupled stage state. The implicit
- * callback solves the complete coupled stage for history and lambda, with
+ * callback supplies the coupled stage update for history and lambda, with
  * alpha=1/lambda, and returns its differential coefficients. Its input already
  * contains the native explicit-history combination; it is not a previous-time
- * solution to be reconstructed by the caller.
+ * solution to be reconstructed by the caller. The selected temporal coupling
+ * decides whether this update is a converged stage or a single sweep.
  *
  * The original RANSIMEX tableaux, order-1 startup, explicit derivative slots
  * and GLM output combinations are retained. All algebraic/essential/dependent
