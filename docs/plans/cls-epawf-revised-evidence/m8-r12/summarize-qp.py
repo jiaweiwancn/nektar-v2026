@@ -13,7 +13,7 @@ def main():
     p.add_argument('--out',type=Path,required=True)
     a=p.parse_args()
     records=[json.loads(x) for x in a.progress.read_text().splitlines()]
-    cuts={int(x['id']):x for x in records if x['kind']=='r12_original_cut'}
+    cuts={int(x['id']):x for x in records if 'identity' in x and 'row' in x and 'transformed_rhs' in x}
     passes=[x for x in records if x['kind']=='r12_qp_pass']
     oracle=[x for x in records if x['kind']=='r6_cut_audit']
     last=oracle[-1] if oracle else None
@@ -34,7 +34,7 @@ def main():
         largest_dual_decrease=max((u-v for u,v in zip(lower,lower[1:])),default=0.),
         feasible_upper_Psi=witness['Psi_Lf'],
         final_upper_lower_gap=witness['Psi_Lf']-lower[-1] if lower else None,
-        entering_families=dict(Counter(x['kind'] for x in cuts.values())),
+        entering_families=dict(Counter(x.get('family',x['kind']) for x in cuts.values())),
         first_passes=passes[:4],last_passes=passes[-8:],
         outcomes=[x for x in records if x['kind']=='r12_frozen_outcome'])
     a.out.write_text(json.dumps(result,indent=2)+'\n')

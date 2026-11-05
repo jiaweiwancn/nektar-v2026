@@ -1264,7 +1264,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
             {
                 const std::string prefix=tag+".original"+std::to_string(id);
                 diagnostic->Event("r12_original_cut",{{"name",J::Quote(tag)},{"id",J::Number(id)},
-                    {"kind",J::Quote(kind)},{"point",J::Numbers(location)},{"rhs",J::Number(rhs)},
+                    {"family",J::Quote(kind)},{"point",J::Numbers(location)},{"rhs",J::Number(rhs)},
                     {"identity",J::Quote(RANSWallR3::Hash([&]{auto v=violated;v.push_back(rhs);return v;}()))},
                     {"aliases",J::Numbers(aliases)},{"length",J::Number(length)},
                     {"transformed_rhs",J::Number(incoming.rhs*length)},
