@@ -240,6 +240,11 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     m_r10Experiment=r10=="On";
     Require(r10=="Off" || (m_r10Experiment && RefinedDirectionR6() && m_r7Policy=="Off" &&
         r8=="Off" && r9=="Off"),"R10 requires its isolated RefinedR6 comparison");
+    std::string r11;
+    session->LoadSolverInfo("RANSWallR11Experiment",r11,"Off");
+    m_r11Experiment=r11=="On";
+    Require(r11=="Off" || (m_r11Experiment && RefinedDirectionR6() && m_r7Policy=="Off" &&
+        r8=="Off" && r9=="Off" && r10=="Off"),"R11 requires its isolated RefinedR6 comparison");
     Require(m_actionPolicy=="Legacy" || m_actionPolicy=="VerifiedR3Action","unknown wall action policy");
     Require((m_nonlinearPolicy=="ScalarFeasibleR3")== (m_actionPolicy=="VerifiedR3Action"),
         "VerifiedR3Action and ScalarFeasibleR3 must be selected together");

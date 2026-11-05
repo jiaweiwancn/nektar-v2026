@@ -155,11 +155,19 @@ public:
         std::vector<std::string> *columnMetadata=nullptr,bool scalarOnly=false) const;
     Vector SolveFrozenScalars(Vector state,const Vector &history,double alpha,double time,
         const RANSWallEvolutionData &data,int &iterations,double tolerance,int maximumIterations) const;
+    struct R11Replay
+    {
+        std::string name;
+        Vector direction,actual;
+        double fraction;
+        bool anchor;
+    };
     struct R8Ray
     {
         Vector step,action,destruction,ascentRegression;
         WallMatrix destructionAction;
         std::map<double,Vector> residuals;
+        std::vector<R11Replay> replay;
     };
     Vector SolveScalarFeasibleR3(Vector state,const Vector &history,double alpha,double time,
         const RANSWallEvolutionData &data,int &iterations,double tolerance,
@@ -178,6 +186,7 @@ public:
     bool ExperimentR8() const { return m_r8Experiment; }
     bool ExperimentR9() const { return m_r9Experiment; }
     bool ExperimentR10() const { return m_r10Experiment; }
+    bool ExperimentR11() const { return m_r11Experiment; }
     bool PilotR8() const { return m_r8Pilot; }
     bool AdaptiveR7() const { return m_r7Policy=="Adaptive"; }
     bool GroundSafeguard() const { return CoupledR4() || JointRestorationR5(); }
@@ -287,20 +296,26 @@ private:
         const std::vector<DirectionRestriction> &extra={},bool scanOnly=false) const;
     struct R8Trial
     {
-        Vector state,residual,norms;
+        Vector state,residual,norms,covariance;
         std::map<int,double> constraints;
         ScalarDomainResult domain;
         OuterViolation box;
         std::string name;
-        double f=0.,E=0.,ground=0.;
+        double f=0.,E=0.,ground=0.,evaluationSeconds=0.;
         bool accepted=false,qualified=false;
+    };
+    struct R11TrialWork
+    {
+        int fresh=0,reused=0;
+        double actual=0.,charged=0.;
     };
     R8Trial RunR8Comparison(const Vector &state,const Vector &history,double alpha,double time,
         const RANSWallEvolutionData &data,const ScalarDomainResult &domain,const Vector &residual,
         const std::map<int,double> &constraints,const WallMatrix &jac,const Vector &newton,
         const std::function<Vector(Vector,bool)> &inverse,const R8Ray &ray,
         RANSWallR3::DurableProgress &durable,int iteration=0,const std::string &comparison="",
-        std::map<double,R8Trial> *samples=nullptr) const;
+        std::map<double,R8Trial> *samples=nullptr,
+        std::map<Vector,R8Trial> *cache=nullptr,R11TrialWork *work=nullptr) const;
     struct InnerDestruction
     {
         Vector value,ranges;
@@ -313,6 +328,11 @@ private:
         const std::map<int,double> &constraints,const WallMatrix &jac,const Vector &newton,
         const std::function<Vector(Vector,bool)> &inverse,RANSWallR3::DurableProgress &durable) const;
     R8Trial RunR10Comparison(const Vector &state,const Vector &history,double alpha,double time,
+        const RANSWallEvolutionData &data,const ScalarDomainResult &domain,const Vector &residual,
+        const std::map<int,double> &constraints,const WallMatrix &jac,const Vector &newton,
+        const std::function<Vector(Vector,bool)> &inverse,const R8Ray &binding,
+        RANSWallR3::DurableProgress &durable) const;
+    R8Trial RunR11Comparison(const Vector &state,const Vector &history,double alpha,double time,
         const RANSWallEvolutionData &data,const ScalarDomainResult &domain,const Vector &residual,
         const std::map<int,double> &constraints,const WallMatrix &jac,const Vector &newton,
         const std::function<Vector(Vector,bool)> &inverse,const R8Ray &binding,
@@ -399,7 +419,7 @@ private:
     std::string m_nonlinearPolicy="Legacy",m_feasibleTraceFile="case.feasible.jsonl";
     std::string m_directionAccuracy="Legacy",m_r7Policy="Off";
     double m_r7PreviousDisplacement=0.,m_r7Radius=0.;
-    bool m_r7Interior=false,m_r8Experiment=false,m_r8Pilot=false,m_r9Experiment=false,m_r10Experiment=false;
+    bool m_r7Interior=false,m_r8Experiment=false,m_r8Pilot=false,m_r9Experiment=false,m_r10Experiment=false,m_r11Experiment=false;
     std::string m_r3ProgressFile="case.r3-progress.jsonl";
     std::string m_actionPolicy="Legacy";
     std::string m_globalization="FractionToBoundary";

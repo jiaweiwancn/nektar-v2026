@@ -97,8 +97,9 @@ def main():
     parser.add_argument('--cpu', type=int, required=True)
     parser.add_argument('--r9-local', action='store_true')
     parser.add_argument('--r10-local', action='store_true')
+    parser.add_argument('--r11-local', action='store_true')
     args = parser.parse_args()
-    local_comparison = args.r9_local or args.r10_local
+    local_comparison = args.r9_local or args.r10_local or args.r11_local
     run, source, output = (path.resolve() for path in (args.run, args.source, args.output))
     require(platform.system() == 'Linux' and os.sched_getaffinity(0) == {args.cpu},
             'Use the authoritative Linux host and one explicitly allocated CPU')
@@ -225,6 +226,7 @@ def main():
             require(info.get('RANSWALLSTAGETEST') == ('DirectionExperimentR5' if local_comparison else 'ExactTargetR3') and
                     (not args.r9_local or info.get('RANSWALLR9EXPERIMENT') == 'On') and
                     (not args.r10_local or info.get('RANSWALLR10EXPERIMENT') == 'On') and
+                    (not args.r11_local or info.get('RANSWALLR11EXPERIMENT') == 'On') and
                     info.get('RANSWALLNONLINEARPOLICY') == 'ScalarFeasibleR3' and
                     info.get('RANSWALLACTIONPOLICY') == 'VerifiedR3Action' and
                     info.get('RANSWALLINNERSTRESS') == 'SaturatedR2' and float(params['TIMESTEP']) == .0025 and
