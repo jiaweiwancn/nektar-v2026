@@ -41,7 +41,7 @@ def collect(directory):
                  ("protocol", "initial", "accepted", "converged", "repeatability",
                   "direction", "trial", "model_retry", "prediction_decomposition",
                   "inaccurate_or_failed_responses", "trial_packet", "model_packet",
-                  "ground_cut", "ground_inward_roundoff")]
+                  "ground_cut", "ground_inward_roundoff", "restoration_balance")]
     checks = [compact(r) for r in rows if r["event"] == "response_check"]
     for row in checks:
         if row["iteration"]:

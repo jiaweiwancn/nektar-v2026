@@ -508,6 +508,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
     Vector previous;
     int failedModels = 0;
     int basisBudget = m_reducedBasis;
+    double restorationWeight = 1.;
+    int qualificationStalls = 0;
     std::vector<OuterBound> activeWitnesses;
     auto qualifiedRoot = [&]() {
         if (Maximum(base.response.norms) > tolerance) return false;
@@ -927,7 +929,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         const int n = columns.size(), variables = n + (restore ? 1 : 0);
         // Keep both goals outside the envelope. Normalize the residual term
         // so its units do not overwhelm the signed qualification slack.
-        const double residualWeight = restore ? std::pow(.1, failedModels) /
+        const double residualWeight = restore ? restorationWeight * std::pow(.1, failedModels) /
                                                     std::max(1., base.merit * base.merit) : 1.;
         WallMatrix gram(n, Vector(n)), hessian(variables, Vector(variables));
         Vector gradient(variables), dualResidual = mass.Apply(base.r);
@@ -1261,6 +1263,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         emit("direction",
              {{"restoration", J::Boolean(restore)},
               {"residual_weight", J::Number(residualWeight)},
+              {"restoration_balance", J::Number(restorationWeight)},
               {"qualification_funnel", J::Number(restore ? base.violation * 1.01 + 1e-7 : 0.)},
               {"next_basis_budget", J::Number(basisBudget)},
               {"basis_dimension", J::Number(n)},
@@ -1389,6 +1392,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                        J::Number(kScale * fraction * Length(displacement))}});
                 if (!take)
                     continue;
+                const double oldViolation = base.violation;
                 previous = displacement;
                 for (double &x : previous)
                     x *= fraction;
@@ -1405,6 +1409,26 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 ++iterations;
                 failedModels = 0;
                 report(base, "accepted");
+                if (restore && base.violation > 1e-7)
+                {
+                    const double restored = (oldViolation - base.violation) /
+                                            std::max(1e-7, oldViolation);
+                    qualificationStalls = restored < .01 ? qualificationStalls + 1 : 0;
+                    if (qualificationStalls >= 2)
+                    {
+                        restorationWeight = std::max(1e-4, .1 * restorationWeight);
+                        basisBudget = std::min(32, basisBudget + 3);
+                        qualificationStalls = 0;
+                        emit("restoration_balance", {{"residual_multiplier", J::Number(restorationWeight)},
+                             {"basis_budget", J::Number(basisBudget)},
+                             {"last_relative_qualification_improvement", J::Number(restored)}});
+                    }
+                }
+                else
+                {
+                    qualificationStalls = 0;
+                    restorationWeight = 1.;
+                }
                 accepted = true;
                 break;
             }
