@@ -3,6 +3,8 @@
 import argparse
 import importlib.util
 import json
+import hashlib
+import struct
 from pathlib import Path
 import platform
 import sys
@@ -101,7 +103,19 @@ def summary(e, out, h, evidence):
         assert retained is not None and last['state']['sha256']==retained['state']['sha256']
         assert last['residual']['sha256']==retained['residual']['sha256']
     assert all(not s['history_advanced'] for s in collection['completed_iterates'])
+    report=h.load(h.bound(receipt['native_report']))
+    def digest(values):
+        return hashlib.sha256(struct.pack('<'+str(len(values))+'d',*values)).hexdigest()
+    h0=base['history']['sha256']
+    start=report['stage_test_initial_native_history']
+    assert report['time']==report['steps']==0 and digest(report['state'])==h0
+    assert [digest(v) for v in start['history']]==[digest(v) for v in report['native_history']]
+    assert start['times']==report['native_history_times'] and digest(start['state'])==h0
+    level,=[v for v in report['stage_test_levels'] if v.get('attempted') and
+            digest(v['state'])==last['state']['sha256'] and digest(v['history'])==h0]
+    assert digest(level['residual'])==last['residual']['sha256'] and not level['native_history_advanced']
     h.save(out,dict(receipt=h.pin(e/'local-run/receipt.json'),collection=receipt['durable_collection']['file'],
+        native_history_verified=True,native_report=receipt['native_report'],
         initial=base,selected=last,matrix=matrix['event']['matrix'],events=events,
         policies=policies,chosen=chosen,decision=decision))
     # Reuse a complete independent audit only after exact state/residual/history binding.
@@ -109,8 +123,13 @@ def summary(e, out, h, evidence):
     old_snapshot=h.load(h.bound(r10['final']['snapshot']))
     if all(last[k]['sha256']==old_snapshot[k]['sha256'] for k in ('state','residual','history')):
         h.bound(r10['final']['audit'])
-        h.save(e/'retained-audit-reuse.json',dict(audit=r10['final']['audit'],state=last['state'],
-             residual=last['residual'],history=last['history'],reason='Exact audited payload bytes reused'))
+        reuse=dict(audit=r10['final']['audit'],state=last['state'],
+             residual=last['residual'],history=last['history'],reason='Exact audited payload bytes reused')
+        reuse_path=e/'retained-audit-reuse.json'
+        if reuse_path.exists():
+            assert h.load(reuse_path)==reuse
+        else:
+            h.save(reuse_path,reuse)
 
 
 def main():
