@@ -1,35 +1,78 @@
 {
   "schema": 1,
   "milestone": "M8-R10",
-  "status": "awaiting_authoritative_volume",
-  "completed": false,
+  "completed": true,
   "M8_closed": false,
   "reviewed_baseline": "3b906f7fd2d2e657526ae291165ab2e4d6b0e901",
-  "implementation_revision": "6d6a92bb0f9b4e7102d9c3bdefd5066d0a1bba07",
-  "intervening_commits_before_implementation": [],
-  "expected_bindings_not_yet_reverified_on_Linux": {
+  "producing_revision": "6d6a92bb0f9b4e7102d9c3bdefd5066d0a1bba07",
+  "runtime": {
+    "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/runtime-fingerprint.json",
+    "bytes": 624120,
+    "sha256": "18a03e1c5f16decab3081c610dab62c6eed475fa49860380a3eaf70e3d4fb0be"
+  },
+  "analysis_driver": {
+    "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/review-driver.py",
+    "bytes": 20889,
+    "sha256": "a8ff947a376ab3abeefcfe7d091bddbb0cdd8c468995b8158273557e58b4313a"
+  },
+  "reuse_compatibility": {
+    "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/reuse-compatibility.json",
+    "bytes": 905,
+    "sha256": "deaa201e19faf1b2ccb9a2b114cf7bcf55b7ad1087c6b696799a1cd4bb1c6944"
+  },
+  "binary": {
+    "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/build/IncNavierStokesSolver",
+    "bytes": 6191736,
+    "sha256": "cf9b4a7314ef5296751c8f81490d60e986c33d87e6149aa79112797ff0816566"
+  },
+  "xml": {
+    "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-bound/case.xml",
+    "bytes": 14511,
+    "sha256": "6a16eadfe0c8d9d706774698dcc9dbce6e2542f921266c195f42aab7411ee867"
+  },
+  "comparison": {
+    "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/comparison.json",
+    "bytes": 699110,
+    "sha256": "23f0acd54a4e342d905bb68cf3a7ddf2b83edc7f8725e98aea29971d53d77ff1"
+  },
+  "receipt": {
+    "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-run/receipt.json",
+    "bytes": 5408,
+    "sha256": "d341cfb0d049a1e5aa66394c20dfd50965575f8b685f526e36457076a14a4e94"
+  },
+  "collection": {
+    "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-run/durable-collection.json",
+    "bytes": 119210,
+    "sha256": "b5c661a3d47bee053ecd8b5d135ffe9e214cfe9e63d6f5d5ef36c7df9e98887d"
+  },
+  "budget": {
+    "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-bound/budget.json",
+    "bytes": 1701,
+    "sha256": "ee76ff30950a7e89dafc3f4976e8a4769b87355daeb7e695f5018927232e56dd"
+  },
+  "bindings": {
     "state": {
-      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r9/epoch-001/local-bound/case.r3-progress.jsonl.solve1.iterate0.state.bin",
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-bound/case.r3-progress.jsonl.solve1.iterate0.state.bin",
       "bytes": 17320,
       "sha256": "eb063e15f16b2610f1c5a832280d87894f567e8dab321560202e6dd9af95194c"
     },
     "history": {
-      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r9/epoch-001/local-bound/case.r3-progress.jsonl.solve1.history.bin",
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-bound/case.r3-progress.jsonl.solve1.history.bin",
       "bytes": 17320,
       "sha256": "b8ba7917424057a9f6f16a026d82d53ede43985871537facea170ef6e1841b71"
     },
     "residual": {
-      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r9/epoch-001/local-bound/case.r3-progress.jsonl.solve1.iterate0.residual.bin",
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-bound/case.r3-progress.jsonl.solve1.iterate0.residual.bin",
       "bytes": 17320,
       "sha256": "819c592e1dadacaea9defcb92db4a829a5ae03c1de04d4ec59eb769a5d8dbd26"
     },
     "constraints": {
-      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r9/epoch-001/local-bound/case.r3-progress.jsonl.solve1.iterate0.constraints.bin",
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-bound/case.r3-progress.jsonl.solve1.iterate0.constraints.bin",
       "bytes": 5728,
       "sha256": "62dc35b908e6dfdfec2189ff537cb5c79efea9df720866e37131c64821734369"
     },
-    "physical_matrix": {
-      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r9/epoch-001/local-bound/case.r3-progress.jsonl.solve1.J0.bin",
+    "matrix": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-bound/case.r3-progress.jsonl.solve1.J0.bin",
       "bytes": 37497800,
       "sha256": "2194965dee9c5960ba4e1c1604f76e8e85372cabef2d5ced7c8a394f593c8dc6"
     },
@@ -42,77 +85,1312 @@
       "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r9/epoch-001/local-bound/case.r3-progress.jsonl.solve1.J10000.bin",
       "bytes": 37497800,
       "sha256": "d3bebd4b4f4a50070e0efb8c62c4a2d3bc07efbb14eecb00055588e755ed10ee"
-    },
-    "ascent_regression_direction": {
-      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r9/epoch-001/local-bound/case.r3-progress.jsonl.solve1.r9_model1.step.bin",
-      "bytes": 17320,
-      "sha256": "5f58e97e74d09ec520816b04547227781ea1ab064cb7105f8b42e9070fdd5162"
     }
   },
-  "target": {
-    "alpha": 400,
-    "time": 0.0025,
-    "eta": 0,
-    "unknowns": 2165,
-    "root_gate": 2e-12,
-    "action_gate": 1e-07,
-    "original_row_gate": 5e-12,
-    "inner": "SaturatedR2",
-    "rho": 0.8,
-    "beta": 0.4,
-    "GammaScale": 1,
-    "GammaUniform": 0,
-    "destruction": "Capped",
-    "smoothing": "Linear",
-    "theta": 0.2,
-    "delta": 0.1,
-    "total_radius": 0.125,
-    "reserve": 0.05,
-    "positive_ground_inward_only": false
+  "compatibility": {
+    "RANSWallEvolutionNonpressure.cpp": "94ef95853bdc98794c7a0590551c7b16994cc1eadfddce0a92ddcd68e778c284",
+    "RANSWallEvolutionRobust.cpp": "1224f66c773405bf43527587e63cbea66a4b38fa7f7c646e246581742c301d86",
+    "RANSWallEvolutionResolution.cpp": "8053475441a118d862cb72430c0f8b73987d1d3605ee1fb8a79e483433ebda29",
+    "RANSWallEvolutionTransition.cpp": "72f40cde10a957b16fe0ab2ec004157d99573a3802e4513431f97e08318dfb6b",
+    "Residual": "8e761ead61a708cc2a7c72e68da5c7d896b15c85672bc42ca9a805e0879ce908",
+    "Norms": "e9fc957c0451aa9db9ebaed52d689c8086829e0091cedb6dda8340282d7ffca8",
+    "DestructionValueR9": "40ee5461505481783f414c3d549f99f9563ad3a44b1356db273208dc1cc54a39"
   },
-  "budget": {
-    "tangent_qp_solves": 4,
-    "conditional_slope_retry": 1,
-    "Armijo_fractions_per_tangent": 10,
-    "new_source_values": 50,
-    "native_trials_per_ray": 9,
-    "comparison_cooperative_seconds": 600,
-    "native_supervisor_seconds": 650,
+  "R9_reproducibility": {
+    "control_direction_identical": true,
+    "control_trial_state_identical": true,
+    "control_trial_residual_identical": true
+  },
+  "ascent_regression": {
+    "slope": 0.23615166528855394,
+    "bound": -0.0005823283020047622,
+    "rejected_before_native_trials": true
+  },
+  "independent_native_slopes": {
+    "control": -0.014934753521387845,
+    "R9_ascent": 0.23615166528855416,
+    "anchor0": -0.014934753521387845,
+    "anchor1": -0.008630059812800111,
+    "anchor2": -0.003575275636156491,
+    "anchor3": -0.001636016409406249,
+    "anchor4": -0.0005823283020052545
+  },
+  "scaled_anchor_regression": {
+    "fraction": 0.125,
+    "actual_affine_defect": 0.00037125978279136594,
+    "expected_trace_defect": 0.00037125978279136594,
+    "rejected_as_restored_anchor": true
+  },
+  "accepted_model_anchors": [
+    {
+      "index": 0,
+      "direction": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-bound/case.r3-progress.jsonl.solve1.r10.anchor0.bin",
+        "bytes": 17320,
+        "sha256": "adf3783bdfe73c6403e9b9cbed179d5f1e9861093867e344857137f82fb7fd10"
+      },
+      "Phi": 4.321035707495087,
+      "model": [0.11861217668642576, 0.22017684564318615, 2.9290825731393872, 5.390403911269806e-05, 6.2970977267178104e-21, 3.4040944915037683e-22, 1.2459407976579977e-21, 5.830682386478859e-20],
+      "native_slope": -0.014934753521387885
+    },
+    {
+      "index": 1,
+      "direction": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-bound/case.r3-progress.jsonl.solve1.r10.anchor1.bin",
+        "bytes": 17320,
+        "sha256": "8fb75777e151719f4f2fcdb64b05b24b37c8d19e35f8b9be46e7d383ab7cbea0"
+      },
+      "Phi": 4.319092104780485,
+      "best_Phi": 4.319092104780485,
+      "eta": 0.03125,
+      "model": [0.11857062004039208, 0.22016422307636652, 2.92842157649015, 5.336979985993863e-05, 4.7062667385659264e-21, 3.7979309734690793e-22, 3.765287374250168e-21, 5.830682386478859e-20],
+      "native_slope": -0.008630059812800118,
+      "branches_changed": true
+    },
+    {
+      "index": 2,
+      "direction": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-bound/case.r3-progress.jsonl.solve1.r10.anchor2.bin",
+        "bytes": 17320,
+        "sha256": "641de2fd0988a6161182ad91a7e4221bbd4d2ec789c43c8e8445229c1bd8a3ca"
+      },
+      "Phi": 4.317125368800499,
+      "best_Phi": 4.317125368800499,
+      "eta": 0.03125,
+      "model": [0.11853794488017075, 0.220154856981289, 2.92775192415115, 5.2928012089968246e-05, 7.107570569325897e-21, 7.098561175050149e-22, 7.822349784881345e-21, 2.3322729545915436e-19],
+      "native_slope": -0.003575275636156446,
+      "branches_changed": false
+    },
+    {
+      "index": 3,
+      "direction": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-bound/case.r3-progress.jsonl.solve1.r10.anchor3.bin",
+        "bytes": 17320,
+        "sha256": "b23b1b96c3adccc0a1b9363bfbdb894da32900cd290263feccd7a405a2d3bb83"
+      },
+      "Phi": 4.315499223516734,
+      "best_Phi": 4.315499223516734,
+      "eta": 0.015625,
+      "model": [0.11852575804050552, 0.2201519548371331, 2.9271971586678243, 5.27522454508227e-05, 1.418710750416843e-20, 5.052622925936828e-22, 9.156420860693186e-21, 1.9824320114028122e-19],
+      "native_slope": -0.0016360164094063392,
+      "branches_changed": false
+    },
+    {
+      "index": 4,
+      "direction": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-bound/case.r3-progress.jsonl.solve1.r10.anchor4.bin",
+        "bytes": 17320,
+        "sha256": "ee11c4e4e09e7e3ec3f4fe459910556e6155a57595bc431cf12c3dbf62949951"
+      },
+      "Phi": 4.299254353607844,
+      "best_Phi": 4.299254353607844,
+      "eta": 1,
+      "model": [0.11821002493209948, 0.2204359629089434, 2.921633632278701, 4.707032748130886e-05, 2.1734595138688206e-20, 1.6213342991773599e-21, 1.8637978632082264e-20, 1.3993637727549262e-19],
+      "native_slope": -0.0005823283020053455,
+      "branches_changed": true
+    }
+  ],
+  "anchor_checks": [
+    {
+      "name": "initial",
+      "original_rows": {
+        "passed": true,
+        "worst_native_violation": 4.634102987005314e-12,
+        "worst_extended_violation": 4.634102986941621e-12
+      },
+      "algebraic": 5.830682386478859e-20,
+      "native_slope": -0.014934753521387885,
+      "slope_bound": -0.0005823283020047622,
+      "source_valid": true,
+      "passed": true
+    },
+    {
+      "name": "t0.trial5",
+      "original_rows": {
+        "passed": true,
+        "worst_native_violation": 4.1378610471853525e-13,
+        "worst_extended_violation": 4.1378606785936715e-13
+      },
+      "algebraic": 5.830682386478859e-20,
+      "native_slope": -0.008630059812800118,
+      "slope_bound": -0.0005823283020047622,
+      "source_valid": true,
+      "passed": true
+    },
+    {
+      "name": "t1.trial5",
+      "original_rows": {
+        "passed": true,
+        "worst_native_violation": 4.112684720775431e-13,
+        "worst_extended_violation": 4.1126842871342665e-13
+      },
+      "algebraic": 2.3322729545915436e-19,
+      "native_slope": -0.003575275636156446,
+      "slope_bound": -0.0005823283020047622,
+      "source_valid": true,
+      "passed": true
+    },
+    {
+      "name": "t2.trial6",
+      "original_rows": {
+        "passed": true,
+        "worst_native_violation": 4.1005964086533037e-13,
+        "worst_extended_violation": 4.1005969383466807e-13
+      },
+      "algebraic": 1.9824320114028122e-19,
+      "native_slope": -0.0016360164094063392,
+      "slope_bound": -0.0005823283020047622,
+      "source_valid": true,
+      "passed": true
+    },
+    {
+      "name": "t3.trial0",
+      "original_rows": {
+        "passed": true,
+        "worst_native_violation": 4.558184619953432e-12,
+        "worst_extended_violation": 4.5581846198955295e-12
+      },
+      "algebraic": 1.3993637727549262e-19,
+      "native_slope": -0.0005823283020053455,
+      "slope_bound": -0.0005823283020047622,
+      "source_valid": true,
+      "passed": true
+    },
+    {
+      "name": "before_native",
+      "original_rows": {
+        "passed": true,
+        "worst_native_violation": 4.558184619953432e-12,
+        "worst_extended_violation": 4.5581846198955295e-12
+      },
+      "algebraic": 1.3993637727549262e-19,
+      "native_slope": -0.0005823283020053455,
+      "slope_bound": -0.0005823283020047622,
+      "source_valid": true,
+      "passed": true
+    }
+  ],
+  "tangents": [
+    {
+      "index": 0,
+      "slope_cut": false,
+      "anchor": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-bound/case.r3-progress.jsonl.solve1.r10.t0.anchor.bin",
+        "bytes": 17320,
+        "sha256": "adf3783bdfe73c6403e9b9cbed179d5f1e9861093867e344857137f82fb7fd10"
+      },
+      "target": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-bound/case.r3-progress.jsonl.solve1.r10.t0.target.bin",
+        "bytes": 17320,
+        "sha256": "49056e811d3cf3883b2810ec975afff06e563a77676419a7086bc3bd19181d35"
+      },
+      "affine_identity_error": [0, 0, 9.300699194038103e-18, 0, 0, 0, 0, 0],
+      "s_Phi": -0.1487815155278657,
+      "Ap_squared": 0.14803797026947105,
+      "diagnostic": -0.07476253039313017,
+      "diagnostic_tolerance": 4.321035707495087e-09,
+      "details": {
+        "trust_radius": 0.125,
+        "stationarity_l2": 9.03756338757466e-16,
+        "active_equality_error": 5.551115123125783e-17,
+        "complementarity": 1.2565943527977112e-17,
+        "scaled_residual_objective": 4.246273177101963,
+        "exchange_passes": 71
+      },
+      "seconds": 31.060981587
+    },
+    {
+      "index": 1,
+      "slope_cut": false,
+      "anchor": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-bound/case.r3-progress.jsonl.solve1.r10.t1.anchor.bin",
+        "bytes": 17320,
+        "sha256": "8fb75777e151719f4f2fcdb64b05b24b37c8d19e35f8b9be46e7d383ab7cbea0"
+      },
+      "target": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-bound/case.r3-progress.jsonl.solve1.r10.t1.target.bin",
+        "bytes": 17320,
+        "sha256": "282db515dd305c05361e045b3fd052260c0f03ac870552847037aef33941ff92"
+      },
+      "affine_identity_error": [0, 0, 5.565556450373357e-18, 0, 0, 0, 0, 0],
+      "s_Phi": -0.14474886896732114,
+      "Ap_squared": 0.14413176782280143,
+      "diagnostic": -0.07268298505592043,
+      "diagnostic_tolerance": 4.319092104780485e-09,
+      "details": {
+        "trust_radius": 0.125,
+        "stationarity_l2": 1.0043647547075377e-15,
+        "active_equality_error": 1.3322676295501878e-15,
+        "complementarity": 3.949582503634345e-15,
+        "scaled_residual_objective": 4.24640911972457,
+        "exchange_passes": 73
+      },
+      "seconds": 28.002597529
+    },
+    {
+      "index": 2,
+      "slope_cut": false,
+      "anchor": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-bound/case.r3-progress.jsonl.solve1.r10.t2.anchor.bin",
+        "bytes": 17320,
+        "sha256": "641de2fd0988a6161182ad91a7e4221bbd4d2ec789c43c8e8445229c1bd8a3ca"
+      },
+      "target": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-bound/case.r3-progress.jsonl.solve1.r10.t2.target.bin",
+        "bytes": 17320,
+        "sha256": "93971916a1260a86e0aac5d2b331945ae952f6b961d93ca76450c4b65c4ba021"
+      },
+      "affine_identity_error": [0, 0, 2.9484851182178738e-18, 0, 0, 0, 0, 0],
+      "s_Phi": -0.14068066719009703,
+      "Ap_squared": 0.14018326145391158,
+      "diagnostic": -0.07058903646314124,
+      "diagnostic_tolerance": 4.317125368800499e-09,
+      "details": {
+        "trust_radius": 0.125,
+        "stationarity_l2": 8.909727427898759e-16,
+        "active_equality_error": 4.440892098500626e-16,
+        "complementarity": 1.3164443132539832e-15,
+        "scaled_residual_objective": 4.2465363323373655,
+        "exchange_passes": 71
+      },
+      "seconds": 23.909921644
+    },
+    {
+      "index": 3,
+      "slope_cut": true,
+      "anchor": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-bound/case.r3-progress.jsonl.solve1.r10.t3.anchor.bin",
+        "bytes": 17320,
+        "sha256": "b23b1b96c3adccc0a1b9363bfbdb894da32900cd290263feccd7a405a2d3bb83"
+      },
+      "target": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-bound/case.r3-progress.jsonl.solve1.r10.t3.target.bin",
+        "bytes": 17320,
+        "sha256": "deb9f3065b36f38b57c8241d1f22c6fa52647bc21a56977a22e808f4b077892d"
+      },
+      "affine_identity_error": [0, 0, 4.2647595356968076e-18, 0, 0, 0, 0, 0],
+      "s_Phi": -0.13703331116718268,
+      "Ap_squared": 0.13700234517307847,
+      "diagnostic": -0.06853213858064344,
+      "diagnostic_tolerance": 4.3154992235167345e-09,
+      "details": {
+        "trust_radius": 0.125,
+        "stationarity_l2": 6.233031150111392e-16,
+        "active_equality_error": 8.881784197001252e-16,
+        "complementarity": 2.6364879823865262e-15,
+        "scaled_residual_objective": 4.246967084936098,
+        "exchange_passes": 69
+      },
+      "seconds": 23.957439209
+    }
+  ],
+  "source_action_checks": [
+    {
+      "index": 0,
+      "h": 0.00048828125,
+      "ordered_branches_match": true,
+      "one_sided": false,
+      "error": [0, 0, 6.18744764447187e-09, 0, 0, 0, 0, 0],
+      "passed": true
+    },
+    {
+      "index": 1,
+      "h": 0.00048828125,
+      "ordered_branches_match": true,
+      "one_sided": false,
+      "error": [0, 0, 1.6636121895084982e-09, 0, 0, 0, 0, 0],
+      "passed": true
+    }
+  ],
+  "model_trials": [
+    {
+      "index": 0,
+      "eta": 1,
+      "Phi_before": 4.321035707495087,
+      "Phi_trial": 414.0546485449024,
+      "Armijo_ceiling": 4.321020829343534,
+      "native_slope": 0.1868154451534207,
+      "model_armijo": false,
+      "reason": "model_armijo",
+      "accepted": false
+    },
+    {
+      "index": 0,
+      "eta": 0.5,
+      "Phi_before": 4.321035707495087,
+      "Phi_trial": 19.604809411905048,
+      "Armijo_ceiling": 4.32102826841931,
+      "native_slope": 0.0859403458160164,
+      "model_armijo": false,
+      "reason": "model_armijo",
+      "accepted": false
+    },
+    {
+      "index": 0,
+      "eta": 0.25,
+      "Phi_before": 4.321035707495087,
+      "Phi_trial": 4.688620220879651,
+      "Armijo_ceiling": 4.321031987957198,
+      "native_slope": 0.035502796147314254,
+      "model_armijo": false,
+      "reason": "model_armijo",
+      "accepted": false
+    },
+    {
+      "index": 0,
+      "eta": 0.125,
+      "Phi_before": 4.321035707495087,
+      "Phi_trial": 4.353591718325227,
+      "Armijo_ceiling": 4.3210338477261425,
+      "native_slope": 0.010284021312963184,
+      "model_armijo": false,
+      "reason": "model_armijo",
+      "accepted": false
+    },
+    {
+      "index": 0,
+      "eta": 0.0625,
+      "Phi_before": 4.321035707495087,
+      "Phi_trial": 4.322870746277614,
+      "Armijo_ceiling": 4.321034777610615,
+      "native_slope": -0.002325366104212348,
+      "model_armijo": false,
+      "reason": "model_armijo",
+      "accepted": false
+    },
+    {
+      "index": 0,
+      "eta": 0.03125,
+      "Phi_before": 4.321035707495087,
+      "Phi_trial": 4.319092104780485,
+      "Armijo_ceiling": 4.321035242552851,
+      "native_slope": -0.008630059812800118,
+      "model_armijo": true,
+      "reason": "accepted",
+      "accepted": true
+    },
+    {
+      "index": 1,
+      "eta": 1,
+      "Phi_before": 4.319092104780485,
+      "Phi_trial": 239.34998426670185,
+      "Armijo_ceiling": 4.319077629893588,
+      "native_slope": 0.1531230338397973,
+      "model_armijo": false,
+      "reason": "model_armijo",
+      "accepted": false
+    },
+    {
+      "index": 1,
+      "eta": 0.5,
+      "Phi_before": 4.319092104780485,
+      "Phi_trial": 10.756976441769721,
+      "Armijo_ceiling": 4.319084867337037,
+      "native_slope": 0.0722464870134986,
+      "model_armijo": false,
+      "reason": "model_armijo",
+      "accepted": false
+    },
+    {
+      "index": 1,
+      "eta": 0.25,
+      "Phi_before": 4.319092104780485,
+      "Phi_trial": 4.588705085147166,
+      "Armijo_ceiling": 4.319088486058761,
+      "native_slope": 0.03180821360034924,
+      "model_armijo": false,
+      "reason": "model_armijo",
+      "accepted": false
+    },
+    {
+      "index": 1,
+      "eta": 0.125,
+      "Phi_before": 4.319092104780485,
+      "Phi_trial": 4.347199261719787,
+      "Armijo_ceiling": 4.319090295419623,
+      "native_slope": 0.011589076893774562,
+      "model_armijo": false,
+      "reason": "model_armijo",
+      "accepted": false
+    },
+    {
+      "index": 1,
+      "eta": 0.0625,
+      "Phi_before": 4.319092104780485,
+      "Phi_trial": 4.3204505851204145,
+      "Armijo_ceiling": 4.319091200100054,
+      "native_slope": 0.00147950854048722,
+      "model_armijo": false,
+      "reason": "model_armijo",
+      "accepted": false
+    },
+    {
+      "index": 1,
+      "eta": 0.03125,
+      "Phi_before": 4.319092104780485,
+      "Phi_trial": 4.317125368800499,
+      "Armijo_ceiling": 4.319091652440269,
+      "native_slope": -0.003575275636156446,
+      "model_armijo": true,
+      "reason": "accepted",
+      "accepted": true
+    },
+    {
+      "index": 2,
+      "eta": 1,
+      "Phi_before": 4.317125368800499,
+      "Phi_trial": 62.608733502172406,
+      "Armijo_ceiling": 4.317111300733781,
+      "native_slope": 0.12053731487585055,
+      "model_armijo": false,
+      "reason": "model_armijo",
+      "accepted": false
+    },
+    {
+      "index": 2,
+      "eta": 0.5,
+      "Phi_before": 4.317125368800499,
+      "Phi_trial": 6.715361492043811,
+      "Armijo_ceiling": 4.31711833476714,
+      "native_slope": 0.05848101961984705,
+      "model_armijo": false,
+      "reason": "model_armijo",
+      "accepted": false
+    },
+    {
+      "index": 2,
+      "eta": 0.25,
+      "Phi_before": 4.317125368800499,
+      "Phi_trial": 4.49617171061082,
+      "Armijo_ceiling": 4.31712185178382,
+      "native_slope": 0.027452871991845304,
+      "model_armijo": false,
+      "reason": "model_armijo",
+      "accepted": false
+    },
+    {
+      "index": 2,
+      "eta": 0.125,
+      "Phi_before": 4.317125368800499,
+      "Phi_trial": 4.33836036295219,
+      "Armijo_ceiling": 4.3171236102921595,
+      "native_slope": 0.011938798177844429,
+      "model_armijo": false,
+      "reason": "model_armijo",
+      "accepted": false
+    },
+    {
+      "index": 2,
+      "eta": 0.0625,
+      "Phi_before": 4.317125368800499,
+      "Phi_trial": 4.317469258204623,
+      "Armijo_ceiling": 4.317124489546329,
+      "native_slope": 0.004181761270843993,
+      "model_armijo": false,
+      "reason": "model_armijo",
+      "accepted": false
+    },
+    {
+      "index": 2,
+      "eta": 0.03125,
+      "Phi_before": 4.317125368800499,
+      "Phi_trial": 4.315006018102632,
+      "Armijo_ceiling": 4.317124929173414,
+      "native_slope": 0.00030324281734377335,
+      "model_armijo": true,
+      "reason": "native_slope",
+      "accepted": false
+    },
+    {
+      "index": 2,
+      "eta": 0.015625,
+      "Phi_before": 4.317125368800499,
+      "Phi_trial": 4.315499223516734,
+      "Armijo_ceiling": 4.317125148986957,
+      "native_slope": -0.0016360164094063392,
+      "model_armijo": true,
+      "reason": "accepted",
+      "accepted": true
+    },
+    {
+      "index": 3,
+      "eta": 1,
+      "Phi_before": 4.315499223516734,
+      "Phi_trial": 4.299254353607844,
+      "Armijo_ceiling": 4.315485520185617,
+      "native_slope": -0.0005823283020053455,
+      "model_armijo": true,
+      "reason": "accepted",
+      "accepted": true
+    }
+  ],
+  "model_outcome": {
+    "stop": "tangent_budget",
+    "Phi_initial": 4.321035707495087,
+    "Phi_best": 4.299254353607844,
+    "solves": 4,
+    "retry_used": true,
+    "source_values": 30,
+    "cache_hits": 9,
+    "seconds": 128.367819945
+  },
+  "original_row_checks": [
+    {
+      "name": "r10_linear",
+      "status": "passed_original_cut_scan",
+      "worst_native_violation": 4.634102987005314e-12,
+      "worst_extended_violation": 4.634102986941621e-12,
+      "active_families": {
+        "outer_reconstruction_native_0": 12,
+        "outer_reconstruction_dense_0": 9,
+        "outer_reconstruction_dense_2": 1,
+        "outer_physical_matching_transfer_0": 4,
+        "outer_projected_dependent_trace_2": 1,
+        "dimensionless_box": 1,
+        "continuous_wall_reserve": 1
+      },
+      "governing": [
+        {
+          "kind": "continuous_wall_reserve",
+          "point": [1.5638450844430585, 0, 0],
+          "general_affine_row": false,
+          "rhs": -1.2529459798102131e-05,
+          "native_gap": 1.2673306956818842e-17,
+          "coefficient_gap": 1.2673306956818842e-17,
+          "transformed_gap": 6.938893903907228e-18,
+          "multiplier_scaled": 2.958681660365332
+        },
+        {
+          "kind": "outer_projected_dependent_trace_2",
+          "point": [1.6666666666666665, 0, 2],
+          "general_affine_row": false,
+          "rhs": -2.0033000425190295e-06,
+          "native_gap": -3.5073093246958814e-17,
+          "coefficient_gap": -3.5073093246958814e-17,
+          "transformed_gap": -5.551115123125783e-17,
+          "multiplier_scaled": 0.2267559698109206
+        },
+        {
+          "kind": "outer_reconstruction_dense_2",
+          "point": [1.75, 0, 2],
+          "general_affine_row": false,
+          "rhs": -1.8781059041295123e-06,
+          "native_gap": 1.2030070136673926e-16,
+          "coefficient_gap": 1.2030091312497607e-16,
+          "transformed_gap": 8.326672684688674e-17,
+          "multiplier_scaled": 0.08776995717685587
+        }
+      ]
+    },
+    {
+      "name": "r10_tangent0",
+      "status": "passed_original_cut_scan",
+      "worst_native_violation": 4.200610828481431e-12,
+      "worst_extended_violation": 4.200610828262228e-12,
+      "active_families": {
+        "outer_reconstruction_native_0": 12,
+        "outer_physical_matching_transfer_0": 3,
+        "outer_reconstruction_dense_0": 11,
+        "outer_reconstruction_dense_2": 1,
+        "outer_projected_dependent_trace_2": 1,
+        "dimensionless_box": 2,
+        "continuous_wall_reserve": 1
+      }
+    },
+    {
+      "name": "r10_tangent1",
+      "status": "passed_original_cut_scan",
+      "worst_native_violation": 4.482434266968836e-12,
+      "worst_extended_violation": 4.48243426685634e-12,
+      "active_families": {
+        "outer_reconstruction_native_0": 12,
+        "outer_physical_matching_transfer_0": 3,
+        "outer_reconstruction_dense_0": 11,
+        "outer_reconstruction_dense_2": 1,
+        "dimensionless_box": 1,
+        "outer_projected_dependent_trace_2": 1,
+        "continuous_wall_reserve": 1
+      }
+    },
+    {
+      "name": "r10_tangent2",
+      "status": "passed_original_cut_scan",
+      "worst_native_violation": 4.506299759070905e-12,
+      "worst_extended_violation": 4.506299759601955e-12,
+      "active_families": {
+        "outer_reconstruction_native_0": 12,
+        "outer_physical_matching_transfer_0": 3,
+        "outer_reconstruction_dense_0": 11,
+        "dimensionless_box": 1,
+        "outer_reconstruction_dense_2": 1,
+        "outer_projected_dependent_trace_2": 1,
+        "continuous_wall_reserve": 1
+      }
+    },
+    {
+      "name": "r10_tangent3",
+      "status": "passed_original_cut_scan",
+      "worst_native_violation": 4.558184619953432e-12,
+      "worst_extended_violation": 4.558184620026224e-12,
+      "active_families": {
+        "outer_reconstruction_native_0": 11,
+        "outer_reconstruction_dense_0": 10,
+        "dimensionless_box": 1,
+        "outer_reconstruction_dense_2": 1,
+        "outer_physical_matching_transfer_0": 2,
+        "native_merit_slope": 1,
+        "outer_projected_dependent_trace_2": 1,
+        "continuous_wall_reserve": 1
+      },
+      "governing": [
+        {
+          "kind": "continuous_wall_reserve",
+          "point": [1.5638420058986433, 0, 0],
+          "general_affine_row": false,
+          "rhs": -1.2529416113887123e-05,
+          "native_gap": 1.654932972345452e-17,
+          "coefficient_gap": 1.654932972345452e-17,
+          "transformed_gap": 1.3877787807814457e-17,
+          "multiplier_scaled": 2.9684215737606876
+        },
+        {
+          "kind": "outer_projected_dependent_trace_2",
+          "point": [1.6666666666666665, 0, 2],
+          "general_affine_row": false,
+          "rhs": -2.0033000425190295e-06,
+          "native_gap": 6.86731961986424e-18,
+          "coefficient_gap": 6.86731961986424e-18,
+          "transformed_gap": 0,
+          "multiplier_scaled": 0.22706923485733901
+        },
+        {
+          "kind": "dimensionless_box",
+          "point": [0, 0, 0],
+          "general_affine_row": false,
+          "rhs": -0.125,
+          "native_gap": -5.35682609381638e-15,
+          "coefficient_gap": -5.35682609381638e-15,
+          "transformed_gap": -3.552713678800501e-15,
+          "multiplier_scaled": 0.15127567879895945
+        },
+        {
+          "kind": "native_merit_slope",
+          "point": null,
+          "general_affine_row": true,
+          "rhs": 0.0005823283020047622,
+          "native_gap": 4.95371972608627e-16,
+          "coefficient_gap": 5.860112742284151e-16,
+          "transformed_gap": 4.440892098500626e-16,
+          "multiplier_scaled": 0.05894364695306681
+        }
+      ]
+    }
+  ],
+  "general_slope_row_scans": [
+    {
+      "name": "initial",
+      "rows": [
+        {
+          "name": "native_merit_slope",
+          "point": null,
+          "lower": 0.0005823283020047622,
+          "native_gap": 0.014352425219383192,
+          "independent_accumulation_gap": 0.014352425219383123
+        }
+      ]
+    },
+    {
+      "name": "t0.trial5",
+      "rows": [
+        {
+          "name": "native_merit_slope",
+          "point": null,
+          "lower": 0.0005823283020047622,
+          "native_gap": 0.008047731510795391,
+          "independent_accumulation_gap": 0.008047731510795356
+        }
+      ]
+    },
+    {
+      "name": "t1.trial5",
+      "rows": [
+        {
+          "name": "native_merit_slope",
+          "point": null,
+          "lower": 0.0005823283020047622,
+          "native_gap": 0.00299294733415162,
+          "independent_accumulation_gap": 0.0029929473341516835
+        }
+      ]
+    },
+    {
+      "name": "t2.trial6",
+      "rows": [
+        {
+          "name": "native_merit_slope",
+          "point": null,
+          "lower": 0.0005823283020047622,
+          "native_gap": 0.0010536881074015361,
+          "independent_accumulation_gap": 0.0010536881074015769
+        }
+      ]
+    },
+    {
+      "name": "r10_tangent3",
+      "rows": [
+        {
+          "name": "native_merit_slope",
+          "point": null,
+          "lower": 0.0005823283020047622,
+          "native_gap": 4.95371972608627e-16,
+          "independent_accumulation_gap": 5.860112742284151e-16
+        }
+      ]
+    },
+    {
+      "name": "t3.trial0",
+      "rows": [
+        {
+          "name": "native_merit_slope",
+          "point": null,
+          "lower": 0.0005823283020047622,
+          "native_gap": 4.95371972608627e-16,
+          "independent_accumulation_gap": 5.833007687972014e-16
+        }
+      ]
+    },
+    {
+      "name": "before_native",
+      "rows": [
+        {
+          "name": "native_merit_slope",
+          "point": null,
+          "lower": 0.0005823283020047622,
+          "native_gap": 4.95371972608627e-16,
+          "independent_accumulation_gap": 5.833007687972014e-16
+        }
+      ]
+    }
+  ],
+  "native_trials": [
+    {
+      "comparison": "r10_linear",
+      "name": "r8_live_fit",
+      "fraction": 0.125,
+      "classification": "accepted",
+      "actual": [0.11849855670857697, 0.22023659705202142, 2.9102535179430604, 5.153492120173765e-05, 1.8849185239824177e-15, 2.1116418295542054e-15, 4.912791094074941e-18, 0.00037724401502598273],
+      "linear": [0.11849837171310527, 0.2202365970768287, 2.909883843055302, 5.153869270677813e-05, 1.5323679170890408e-15, 2.0734907818180766e-15, 2.6088459032832737e-17, 0.00037125978279136594],
+      "matching_trace": 0.00037724401502598273,
+      "covariance": [0.00011909940605749002, 0.17687700137364099],
+      "seconds": 2.082097269,
+      "state": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-bound/case.r3-progress.jsonl.solve1.iterate0.r10_linearr8_live_fit.state.bin",
+        "bytes": 17320,
+        "sha256": "1f526895dea096279cbd0f6b1280278862870da3ac12d07bd135e1f337ffe1a9"
+      },
+      "residual": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-bound/case.r3-progress.jsonl.solve1.iterate0.r10_linearr8_live_fit.residual.bin",
+        "bytes": 17320,
+        "sha256": "0ba8782e81c21449037f4ee38e9331c66c7932276cbf19c510113aee30200299"
+      },
+      "ground": {
+        "admissible": true,
+        "minimum": 5.933475279262443e-06,
+        "arithmetic_scale": 3.0388497400598816e-17,
+        "point": [1.5638416679122193, 0, 0],
+        "geometry": 4,
+        "extrema_checked": 20
+      },
+      "box": {
+        "maximum": 0,
+        "family_maxima": [0, 0, 0, 0],
+        "sum_positive": 0,
+        "quantity_count": 54385,
+        "witnesses": [
+          {
+            "family": 0,
+            "inventory": "physical_matching_transfer",
+            "point": [-2.6666666666666665, 0, 2],
+            "element_geometry": 31,
+            "side": 1,
+            "component": [0, 2],
+            "projected_trace": false,
+            "signed_excess": -1.5056991208538262e-05,
+            "value": -0.0009999849430087915
+          },
+          {
+            "family": 1,
+            "inventory": "physical_matching_transfer",
+            "point": [1.6666666666666665, 0, 2],
+            "element_geometry": 34,
+            "side": 1,
+            "component": [-1, -1],
+            "projected_trace": false,
+            "signed_excess": -0.9632397879435262,
+            "value": 1.0003676021205647
+          },
+          {
+            "family": 2,
+            "inventory": "reconstruction_dense",
+            "point": [1.75, 0, 2],
+            "element_geometry": 34,
+            "side": 1,
+            "component": [-1, -1],
+            "projected_trace": false,
+            "signed_excess": -1.643342661949987e-06,
+            "value": 0.9800000328668532
+          },
+          {
+            "family": 3,
+            "inventory": "physical_sampled_K",
+            "point": [1.75, 0, 1],
+            "element_geometry": 24,
+            "side": 0,
+            "component": [-1, -1],
+            "projected_trace": false,
+            "signed_excess": -0.6848193243816025,
+            "value": 0.996848193243816
+          },
+          {
+            "family": 2,
+            "inventory": "projected_dependent_trace",
+            "point": [1.75, 0, 2],
+            "element_geometry": 34,
+            "side": 1,
+            "component": [-1, -1],
+            "projected_trace": true,
+            "signed_excess": -1.6469802133212141e-06,
+            "value": 0.9800000329396042
+          }
+        ]
+      },
+      "scalar": {
+        "admissible": true,
+        "minimum_dimensionless_margin": 0.0011807079947097631,
+        "minimum_lambda": 1,
+        "minimum_b": 0.8272643806796101
+      }
+    },
+    {
+      "comparison": "r10_linear",
+      "name": "r8_live_holdout",
+      "fraction": 0.0625,
+      "classification": "accepted",
+      "actual": [0.11849269932502175, 0.2202409256803757, 2.9108341353841087, 5.139221710653985e-05, 1.707115847113385e-15, 2.3537118018102096e-15, 1.9312351197398045e-17, 0.0003993237472581977],
+      "linear": [0.11849265131979662, 0.22024092568473827, 2.9107353738652457, 5.139304467254289e-05, 1.6418227811639595e-15, 2.2215972705442487e-15, 2.795200938809205e-17, 0.00039777833870503494],
+      "matching_trace": 0.0003993237472581977,
+      "covariance": [0.00011918196311912942, 0.1768770006860313],
+      "seconds": 2.000645588,
+      "state": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-bound/case.r3-progress.jsonl.solve1.iterate0.r10_linearr8_live_holdout.state.bin",
+        "bytes": 17320,
+        "sha256": "6048a72830c1b56c9c675f1e0c967ef6e643388555cf3bdfa954343ae0c809c8"
+      },
+      "residual": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-bound/case.r3-progress.jsonl.solve1.iterate0.r10_linearr8_live_holdout.residual.bin",
+        "bytes": 17320,
+        "sha256": "94d476533437e71fbe4c5fd217f70526f0d4a1680d4dd2687dfc91920dee23b5"
+      },
+      "ground": {
+        "admissible": true,
+        "minimum": 6.333246194332112e-06,
+        "arithmetic_scale": 3.038845935531115e-17,
+        "point": [1.563841351438486, 0, 0],
+        "geometry": 4,
+        "extrema_checked": 20
+      },
+      "box": {
+        "maximum": 0,
+        "family_maxima": [0, 0, 0, 0],
+        "sum_positive": 0,
+        "quantity_count": 54385
+      },
+      "scalar": {
+        "admissible": true,
+        "minimum_dimensionless_margin": 0.001181525951587836,
+        "minimum_lambda": 1,
+        "minimum_b": 0.8272656690305392
+      }
+    },
+    {
+      "comparison": "r10_source",
+      "name": "r8_live_fit",
+      "fraction": 0.125,
+      "classification": "residual_non_descent",
+      "actual": [0.11844547025908847, 0.22026884496078358, 2.911671604341546, 5.066209384083809e-05, 1.7131216497112308e-15, 2.5457990293328294e-15, 3.422013106907373e-17, 0.0003731225735795188],
+      "linear": [0.11844538629040882, 0.22026884484168, 2.9116349766999847, 5.0660081387083826e-05, 1.532368109928569e-15, 2.073490855090135e-15, 2.6090944522761455e-17, 0.00037125978279136594],
+      "matching_trace": 0.0003731225735795188,
+      "covariance": [0.00011910405400937507, 0.17687700663400774],
+      "seconds": 1.929756069,
+      "state": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-bound/case.r3-progress.jsonl.solve1.iterate0.r10_sourcer8_live_fit.state.bin",
+        "bytes": 17320,
+        "sha256": "7954c6fa8425ec8da812e6b98aec8ea1bb98a105905c1c9f70eb4effc4a67ae7"
+      },
+      "residual": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-bound/case.r3-progress.jsonl.solve1.iterate0.r10_sourcer8_live_fit.residual.bin",
+        "bytes": 17320,
+        "sha256": "faf3b915e20bafd4c35e3f3e93f936c19daedf1c9bc0d1455f70d4790c8edc75"
+      },
+      "ground": {
+        "admissible": true,
+        "minimum": 5.9334715667968806e-06,
+        "arithmetic_scale": 3.038851991919063e-17,
+        "point": [1.5638413010719197, 0, 0],
+        "geometry": 4,
+        "extrema_checked": 20
+      },
+      "box": {
+        "maximum": 0,
+        "family_maxima": [0, 0, 0, 0],
+        "sum_positive": 0,
+        "quantity_count": 54385
+      },
+      "scalar": {
+        "admissible": true,
+        "minimum_dimensionless_margin": 0.0011807511380949622,
+        "minimum_lambda": 1,
+        "minimum_b": 0.8272643763374782
+      }
+    },
+    {
+      "comparison": "r10_source",
+      "name": "r8_live_holdout",
+      "fraction": 0.0625,
+      "classification": "residual_non_descent",
+      "actual": [0.11846608452053822, 0.22025704452057185, 2.9116298934912246, 5.095364806492561e-05, 2.0386731480643127e-15, 2.317936188745077e-15, 1.6771252355635144e-17, 0.00039823888076668406],
+      "linear": [0.11846606234949454, 0.22025704449100036, 2.9116216788677147, 5.095313668189157e-05, 1.6418228775831379e-15, 2.2215973071802756e-15, 2.795325213305641e-17, 0.00039777833870503494],
+      "matching_trace": 0.00039823888076668406,
+      "covariance": [0.00011918428719588783, 0.1768770033162131],
+      "seconds": 1.948135235,
+      "state": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-bound/case.r3-progress.jsonl.solve1.iterate0.r10_sourcer8_live_holdout.state.bin",
+        "bytes": 17320,
+        "sha256": "19a68aa16781382552ceffb91a8c25899a7f95282a679d567278a386dd94991c"
+      },
+      "residual": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-bound/case.r3-progress.jsonl.solve1.iterate0.r10_sourcer8_live_holdout.residual.bin",
+        "bytes": 17320,
+        "sha256": "97add6488578f2372ad61881e774ba2fe63a9d93bfdd991bfd3b8647c63dba0a"
+      },
+      "ground": {
+        "admissible": true,
+        "minimum": 6.333244212818311e-06,
+        "arithmetic_scale": 3.038847061460706e-17,
+        "point": [1.5638411680178739, 0, 0],
+        "geometry": 4,
+        "extrema_checked": 20
+      },
+      "box": {
+        "maximum": 0,
+        "family_maxima": [0, 0, 0, 0],
+        "sum_positive": 0,
+        "quantity_count": 54385
+      },
+      "scalar": {
+        "admissible": true,
+        "minimum_dimensionless_margin": 0.0011815475232804754,
+        "minimum_lambda": 1,
+        "minimum_b": 0.8272656668594733
+      }
+    },
+    {
+      "comparison": "r10_source",
+      "name": "r8_curvature",
+      "fraction": 0.04541015625,
+      "classification": "accepted",
+      "actual": [0.11847181733754789, 0.22025382102304825, 2.911628012134409, 5.1034320431338486e-05, 1.8634798746796046e-15, 2.3807994737960283e-15, 3.896351557369781e-17, 0.0004052718817248218],
+      "linear": [0.11847180545086103, 0.2202538210074695, 2.9116238105987438, 5.1034049300995055e-05, 1.6717519156139172e-15, 2.2620951651736743e-15, 2.846247687024644e-17, 0.00040502950633767876],
+      "matching_trace": 0.0004052718817248218,
+      "covariance": [0.00011920622593447662, 0.17687700240900422],
+      "seconds": 1.946558078,
+      "state": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-bound/case.r3-progress.jsonl.solve1.iterate0.r10_sourcer8_curvature.state.bin",
+        "bytes": 17320,
+        "sha256": "df065f575fbf879eaf4cbe0811787d7cc6342246d99d5d6aba2d9949688e3fd9"
+      },
+      "residual": {
+        "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-bound/case.r3-progress.jsonl.solve1.iterate0.r10_sourcer8_curvature.residual.bin",
+        "bytes": 17320,
+        "sha256": "9f89f1a1a3381e79c3f5b40cf220e7d2544148a7cc560555ecf6fc3bb2d32848"
+      },
+      "ground": {
+        "admissible": true,
+        "minimum": 6.442557036365932e-06,
+        "arithmetic_scale": 3.0388457132884996e-17,
+        "point": [1.5638411316358047, 0, 0],
+        "geometry": 4,
+        "extrema_checked": 20
+      },
+      "box": {
+        "maximum": 0,
+        "family_maxima": [0, 0, 0, 0],
+        "sum_positive": 0,
+        "quantity_count": 54385,
+        "witnesses": [
+          {
+            "family": 0,
+            "inventory": "physical_matching_transfer",
+            "point": [-2.6666666666666665, 0, 2],
+            "element_geometry": 31,
+            "side": 1,
+            "component": [0, 2],
+            "projected_trace": false,
+            "signed_excess": -1.642657287883459e-05,
+            "value": -0.0009999835734271212
+          },
+          {
+            "family": 1,
+            "inventory": "physical_matching_transfer",
+            "point": [1.6666666666666665, 0, 2],
+            "element_geometry": 34,
+            "side": 1,
+            "component": [-1, -1],
+            "projected_trace": false,
+            "signed_excess": -0.9632397932755721,
+            "value": 1.0003676020672443
+          },
+          {
+            "family": 2,
+            "inventory": "reconstruction_dense",
+            "point": [1.75, 0, 2],
+            "element_geometry": 34,
+            "side": 1,
+            "component": [-1, -1],
+            "projected_trace": false,
+            "signed_excess": -1.7928208195794326e-06,
+            "value": 0.9800000358564164
+          },
+          {
+            "family": 3,
+            "inventory": "physical_sampled_K",
+            "point": [1.75, 0, 1],
+            "element_geometry": 24,
+            "side": 0,
+            "component": [-1, -1],
+            "projected_trace": false,
+            "signed_excess": -0.6848195274651858,
+            "value": 0.9968481952746518
+          },
+          {
+            "family": 2,
+            "inventory": "projected_dependent_trace",
+            "point": [1.75, 0, 2],
+            "element_geometry": 34,
+            "side": 1,
+            "component": [-1, -1],
+            "projected_trace": true,
+            "signed_excess": -1.796789256269804e-06,
+            "value": 0.9800000359357851
+          }
+        ]
+      },
+      "scalar": {
+        "admissible": true,
+        "minimum_dimensionless_margin": 0.0011817652848545293,
+        "minimum_lambda": 1,
+        "minimum_b": 0.8272660197365805
+      }
+    }
+  ],
+  "decision": {
+    "promote": false,
+    "distinct": true,
+    "selected": "linear",
+    "control_gain": 0.0013879920807506885,
+    "source_gain": 1.3497889402191987e-05,
+    "control_seconds": 31.182750014,
+    "source_seconds": 163.798838241,
+    "source_values": 30,
+    "source_actions": 4,
+    "source_value_seconds": 12.783794853,
+    "source_action_seconds": 2.717971382,
+    "tangent_seconds": 106.93093996900001,
+    "native_source_trial_seconds": 6.273410216,
+    "elapsed": 168.660742658,
+    "reason": "promotion_gain_or_cost"
+  },
+  "promotion_gates": {
+    "at_least_25_percent_more_gain": false,
+    "source_absolute_gain": false,
+    "ground_noninferior": true,
+    "trace_block_limit": true,
+    "gain_per_second": false
+  },
+  "continuation": {
+    "run": false,
+    "reason": "Promotion gate failed"
+  },
+  "work": {
+    "native_seconds": 205.2031407280001,
+    "trial_count": 5,
+    "ranks": 1,
+    "numerical_threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    },
     "compiler_workers": 16,
-    "numerical_threads": 1
+    "build": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/build-run/receipt.json",
+      "bytes": 3192,
+      "sha256": "07769bc7b3d74be225e4b24c6b7503682e8a35978e7abafe7197046b66db91ad"
+    }
   },
-  "execution": {
-    "ssh_route": "jay@100.105.247.110",
-    "host": "jay-Super-Server",
-    "payload_volume": "/dev/sda2",
-    "required_mount": "/media/jay/新加卷",
-    "mount_status": "unmounted",
-    "user_mount_error": "org.freedesktop.UDisks2.Error.NotAuthorizedCanObtain",
-    "administrator_mount_error": "sudo: a password is required",
-    "launch_script": "/tmp/cls-m8-r10-launch.sh",
-    "launch_log": "/tmp/cls-m8-r10-launch.log",
-    "launch_wait_seconds": 1800,
-    "checks_script": "/tmp/cls-m8-r10-checks.sh",
-    "isolated_epoch": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001",
-    "native_trial_states_executed": 0,
-    "source_values_executed": 0,
-    "build_status": "not_started"
+  "regressions": {
+    "compile_time_policy_assertions": true,
+    "native_ctest_passed": 3,
+    "predictor_binding_passed": 9,
+    "log": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/regressions.log",
+      "bytes": 734,
+      "sha256": "5e9cdc0ab2b372fa8466afb42fc2780bd56ef9f9731fddde980ae9e825c8f3d2"
+    },
+    "native_summary_regression_assertions": true
   },
-  "verification": {
-    "source_diff_check_passed": true,
-    "Python_AST_checks_passed": true,
-    "native_build_and_regressions": "pending",
-    "retained_payload_verification": "pending",
-    "moved_source_action_check": "pending",
-    "original_row_scans": "pending"
+  "source_proposal_accounting": {
+    "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/source-proposal-accounting.json",
+    "bytes": 6941,
+    "sha256": "81709203ea608b36dbac19009cc7c0efb11e0077a4f514e8be0b572898d1553c"
+  },
+  "final": {
+    "snapshot": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-bound/case.r3-progress.jsonl.solve1.iterate1.snapshot.json",
+      "bytes": 5602,
+      "sha256": "c55a2bf19b68391d8603991c521ae5c744271ff95343a4be7e5920b64e3a5e14"
+    },
+    "audit": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/terminal-audit.json",
+      "bytes": 113492,
+      "sha256": "a9443fe16c35caf3829b6446998ee4dca89e172492746d5a4ae1b85ea25e7bf9"
+    },
+    "native_report": {
+      "bytes": 42934301,
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-bound/case.evolution.json",
+      "sha256": "fe5cb8e64716497ad19cf00a4ea74573aad9ec5101456144190d291b5c93f356"
+    },
+    "residual": {
+      "complete_value_comparison_met": true,
+      "constrained_rows": 358,
+      "difference": {
+        "blocks": [3.2640400387332434e-12, 7.96903862018569e-14, 2.583842971249402e-12, 1.3707140301212601e-13, 7.200598841005958e-16, 8.141815618860678e-16, 1.6771252355635144e-17, 8.561867307223741e-15],
+        "gauge": 1.6771252355635144e-17,
+        "maximum": 3.2640400387332434e-12,
+        "maximum_constraint": 8.561867307223741e-15
+      },
+      "independent": {
+        "blocks": [0.11849855670857143, 0.22023659705202045, 2.9102535179429765, 5.153492119746702e-05, 1.927289939996438e-15, 2.387801870648159e-15, 2.1684043449710086e-17, 0.00037724401502164663],
+        "gauge": 2.1684043449710086e-17,
+        "maximum": 2.9102535179429765,
+        "maximum_constraint": 0.00037724401502164663
+      },
+      "independent_constraint_target_error": 6.218983661376853e-16,
+      "independent_residual_float64_LE_sha256": "96d9e176ba3d08bb6cbb3886829d63493f8e8317b2d20234cb3088b742a88409",
+      "independent_tolerance_met": false,
+      "native": {
+        "blocks": [0.11849855670857701, 0.22023659705202145, 2.9102535179430635, 5.153492120173765e-05, 1.884918523982418e-15, 2.1116418295542062e-15, 4.912791094074941e-18, 0.00037724401502598273],
+        "gauge": 4.912791094074941e-18,
+        "maximum": 2.9102535179430635,
+        "maximum_constraint": 0.00037724401502598273
+      },
+      "native_norm_table_error": 1.0681627733750097e-15,
+      "native_tolerance_met": false,
+      "quadrature": {
+        "anchor_added": false,
+        "inner_source_volume": 12.000000000000002,
+        "inner_stress_model": "SaturatedR2",
+        "maximum_selected_weak_increment": 0.05939675360535493,
+        "orders": [8, 16, 8],
+        "rays": 40,
+        "saturation_active_source_volume": 0.05661948785579614,
+        "scope": "Complete independently reconstructed unforced alpha=0 weak loads",
+        "selected_increment_float64_LE_sha256": "d35698e963a346eca38eb4511287a4ea14a8331948570f579bf1e81c4a8a30a9",
+        "source_diffusion_and_preprofiles": "unchanged"
+      },
+      "relative_component_value_error": 3.602760451082432e-14,
+      "weak_affine_values_gate_met": true,
+      "weak_continuity_and_gauge_absolute_errors": {
+        "independent": [3.1663704548309543e-15, 4.619165448775677e-15, 3.523657060577889e-17],
+        "native": [3.0275795607845082e-15, 4.477171493727944e-15, 1.8465318250143744e-17]
+      }
+    },
+    "trace": {
+      "actual_epsilon_ratio_range": [0.9802732455869113, 1.0001980667795018],
+      "baseline_and_current_lambda_range": [1.0, 1.0],
+      "chi_zero_epsilon_ratio_range": [0.9802732455869113, 0.9856531737100926],
+      "matching_rows": 16,
+      "maximum_trace_coefficient_error": 2.7401433374147438e-05,
+      "relative_to_E0": 0.00037724401502164663,
+      "scope": "Independent constrained native projection of lambda*Epre(H), including chi=0; no source-cap plateau assumption"
+    },
+    "scalar": {
+      "admissible": true,
+      "minimum_inner_k": 0.0006027608923831635,
+      "minimum_outer_k": 0.5103654141904571,
+      "minimum_outer_epsilon": 0.03631791663093067,
+      "minimum_b": 0.8272643806796101,
+      "minimum_lambda": 1.0,
+      "sign_unresolved_observations": 0
+    },
+    "ground": {
+      "kind": "stationary",
+      "x": "1.5638416679122193817382524916073322626406758562695748479355873376003320034790361107353205911147057218251413489",
+      "value": "0.0000059334752792624431683770944173807305329526206317347250980386292005083433744470492989273326953128990256620623",
+      "geometry": 4
+    },
+    "box_covered": true,
+    "outer_range": [0.0009999849430074592, 0.9997206726128072, 1.0003676021205647, 0.9800000328668534, 1.0004764617472677, 0.996848193243816, 1.0001204824732204],
+    "covariance": [0.00011909940605748204, 0.17687700137364054],
+    "accounting": {
+      "E_minus_D_minus_C": -1.9427717084814083e-16,
+      "energy_weak_minus_direct": -7.815970093361102e-14,
+      "integrated_redistribution": 1.9427717084814083e-16
+    },
+    "traction": {
+      "area": 6.0,
+      "full_total_traction_jump_rms": 0.0004353327982563742,
+      "inner_normal_velocity_integral": -4.794306537226234e-16,
+      "k_flux_jump_rms": 0.0006524606808883918,
+      "max_absolute_normal_traction_jump": 0.001631459605045116,
+      "normal_total_traction_jump_integral": 0.000110299219823459,
+      "normal_total_traction_jump_rms": 0.00038345010982196345,
+      "reduced_pressure_jump_integral": -0.4556953836100578,
+      "tangential_total_traction_jump_rms": 0.00020610836595162552
+    },
+    "physical_steps": 0,
+    "history_advanced": false
+  },
+  "status": "completed_bounded_comparison",
+  "source_proposal_accounting_summary": {
+    "state": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-bound/case.r3-progress.jsonl.solve1.iterate0.r10_sourcer8_curvature.state.bin",
+      "bytes": 17320,
+      "sha256": "df065f575fbf879eaf4cbe0811787d7cc6342246d99d5d6aba2d9949688e3fd9"
+    },
+    "native_residual": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001/local-bound/case.r3-progress.jsonl.solve1.iterate0.r10_sourcer8_curvature.residual.bin",
+      "bytes": 17320,
+      "sha256": "9f89f1a1a3381e79c3f5b40cf220e7d2544148a7cc560555ecf6fc3bb2d32848"
+    },
+    "fraction": 0.04541015625,
+    "proposal_only": true,
+    "selected_as_saved_state": false,
+    "source_identity_error": -2.128778449632558e-15,
+    "integrated_redistribution": 3.5242161023230772e-16,
+    "energy_weak_minus_direct": -2.3092638912203256e-14,
+    "seconds": 179.07812419400034,
+    "new_native_trials": 0,
+    "new_direction_construction_values": 0
   },
   "outcomes": {
-    "model_globalization": "implemented; authoritative verification pending",
-    "native_merit_descent": "implemented; bound-payload regression pending",
-    "useful_native_gain_and_cost": "unmeasured",
-    "coupled_root_obtained": false,
-    "physical_steps_accepted": 0,
-    "continuation": "conditional; not started"
+    "A_model_globalization": "Monotone and internally consistent on the four-tangent experiment; optimization stopped at its declared budget.",
+    "B_native_merit_descent": "Native-base slope safeguard and actual sufficient-decrease source proposal both verified.",
+    "C_practical_improvement": "Promotion failed gain and cost gates against the matched control; ground and trace comparison gates passed.",
+    "D_root_and_physical_history": "Coupled root threshold unmet. No accepted physical time step or native history advancement."
   },
-  "next_action": "Mount the existing data volume at /media/jay/新加卷, then complete the queued isolated build and bounded frozen-base experiment."
+  "next_decision": "At this same frozen base, test the verified native-slope constraint from the first tangent, retaining the model Armijo safeguard and the unchanged promotion gates.",
+  "remaining_gates": ["Curved-wall MMS", "Active-cap and variable-height coupling", "Full-element positivity", "Fully discrete positivity", "Refinement", "Long-time robustness", "Scalability", "Physical floor/hill validation"]
 }

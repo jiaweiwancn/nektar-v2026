@@ -152,9 +152,195 @@ def summary(e, out, h, evidence):
         cuts=[r for r in events if r['kind']=='r6_cut_audit'],focused_regressions_passed=True))
 
 
+
+def review(e, out, h, evidence):
+    """Collect compact completed evidence and independently check the native slopes."""
+    import os
+    from collections import Counter
+    from decimal import Decimal
+    import numpy as np
+    from scipy.linalg import solve_triangular
+
+    assert len(os.sched_getaffinity(0))==1
+    summary_path=e/'comparison.json'
+    C=h.load(summary_path)
+    receipt=h.load(h.bound(C['receipt']))
+    manifest=h.load(h.bound(receipt['manifest']))
+    audit=h.load(e/'terminal-audit.json')
+    assert audit['success'] and receipt['status']=='completed' and receipt['runtime_unchanged']
+    assert C['focused_regressions_passed']
+    base=C['initial']
+    def one(kind):
+        return next(x for x in C['events'] if x['kind']==kind)
+    def keep(obj, *names):
+        return {name:obj[name] for name in names if name in obj}
+    def clean(obj):
+        return {k:v for k,v in obj.items() if k not in
+                ('schema','kind','policy','action_policy','solve_number','sequence','alpha','time')}
+    raw=h.load(h.bound(manifest['current_preflight']))
+    sys.path.insert(0,str(e/'source/solvers/IncNavierStokesSolver/Tests/RANS'))
+    from cls_epawf_m8_r3_resolution import ResolutionAudit
+    metric=ResolutionAudit(raw,e/'source')
+    R=np.array(h.vector(base['residual']))
+    constraints={int(i):v for i,v in np.fromfile(h.bound(base['constraints']),dtype='<f8').reshape(-1,2)}
+    block=raw['dimension']
+    free=[i for i in range(metric.fields[block].size) if metric.off[block]+i not in constraints]
+    ids=metric.off[block]+np.array(free)
+    L=np.linalg.cholesky(metric.mass[block][np.ix_(free,free)])
+    white=solve_triangular(L,R[ids],lower=True,check_finite=False)
+    rate=metric.K0*metric.us/metric.H
+    denominator=rate*rate*metric.fields[block].volume
+    norm=metric.norms(R,constraints)[block]
+    J=np.fromfile(h.bound(C['matrix']),dtype='<f8').reshape(len(R),-1)
+    control=one('r10_control')
+    independently={}
+    directions=[('control',control['direction']),('R9_ascent',manifest['r10_source']['ascent'])]
+    directions += [('anchor'+str(a['index']),a['direction']) for a in C['events'] if a['kind']=='r10_anchor']
+    for name,pin in directions:
+        action=J@np.array(h.vector(pin))
+        dwhite=solve_triangular(L,action[ids],lower=True,check_finite=False)
+        independently[name]=float(white@dwhite/denominator/norm)
+    assert abs(independently['control']-control['native_slope'])<1e-9
+    assert abs(independently['R9_ascent']-one('r10_ascent_regression')['slope'])<1e-9
+    r9=h.load(evidence/'m8-r9/decision-ledger.json')
+    old=h.load(h.bound(r9['binding']['comparison']))
+    old_control=next(x for x in old['results'] if x['kind']=='r9_linear_direction')
+    reproducibility=dict(control_direction_identical=control['direction']['sha256']==old_control['step']['sha256'])
+    live=next(t for t in C['native'] if t['kind']=='r8_trial' and t['comparison']=='r10_linear' and t['fraction']==.125)
+    previous=r9['terminal']['snapshot']
+    reproducibility.update(control_trial_state_identical=live['state']['sha256']==previous['state']['sha256'],
+                           control_trial_residual_identical=live['residual']['sha256']==previous['residual']['sha256'])
+    assert all(reproducibility.values())
+    selected=C['selected'] or base
+    state=h.vector(selected['state'])
+    wall=[]
+    for precision in (80,110):
+        rows=h.wall_rows(raw,state,precision)
+        row=min(rows,key=lambda r:Decimal(r['minimum']['value']))
+        wall.append(dict(row['minimum'],geometry=row['geometry']))
+    assert Decimal(wall[-1]['value'])>0
+    assert abs(Decimal(wall[0]['value'])-Decimal(wall[1]['value']))<Decimal('1e-65')
+    phases=audit['phases']
+    physical=phases['finite_ranges_and_accounting']
+    common=physical['common_inventory_physical_qualification']
+    trace=phases['scalar_and_projected_trace']
+    native_report=phases['native_report']
+    assert native_report['available'] and native_report['native_integrator_history_slots_verified']
+    assert native_report['residual_matches_durable_bytes']
+    assert physical['independent_accounting_identities_met']
+    assert physical['native_budget_crosschecks']['passed']
+    assert not audit['native_history_advanced']
+    tests=(e/'regressions.log').read_text()
+    assert '100% tests passed, 0 tests failed out of 3' in tests and 'Ran 9 tests' in tests and '\nOK\n' in tests
+    native_trials=[x for x in C['native'] if x['kind']=='r8_trial']
+    tangents=[]
+    for t in C['events']:
+        if t['kind']!='r10_tangent':
+            continue
+        small=clean(t)
+        small['details']=keep(t['details'],'trust_radius','stationarity_l2','active_equality_error',
+                              'complementarity','scaled_residual_objective','exchange_passes')
+        tangents.append(small)
+    cuts=[]
+    for c in C['cuts']:
+        groups=Counter(r['kind'] for r in c['rows'])
+        governing=sorted(c['rows'],key=lambda r:abs(r['multiplier_scaled']),reverse=True)[:3]
+        governing += [r for r in c['rows'] if r.get('general_affine_row') and r not in governing]
+        cuts.append(keep(c,'name','status','worst_native_violation','worst_extended_violation')|
+            dict(active_families=dict(groups),governing=[
+                keep(r,'kind','point','general_affine_row','rhs','native_gap','coefficient_gap','transformed_gap','multiplier_scaled')
+                for r in governing]))
+    small_trials=[]
+    for t in native_trials:
+        small_trials.append(keep(t,'comparison','name','fraction','classification','actual','linear','matching_trace','covariance','seconds',
+                                'state','residual')|dict(ground=t.get('wall'),box=t.get('box'),
+                    scalar=keep(t.get('scalar',{}),'admissible','minimum_dimensionless_margin','minimum_lambda','minimum_b')))
+    decision=one('r10_decision')
+    control_trial=next(t for t in native_trials if t['comparison']=='r10_linear' and t['fraction']==.125)
+    source_trial=next(t for t in native_trials if t['comparison']=='r10_source' and t['classification']=='accepted')
+    gain_gates=dict(at_least_25_percent_more_gain=decision['source_gain']>=1.25*decision['control_gain'],
+        source_absolute_gain=decision['source_gain']>=1e-4*max(base['scaled_block_norms']),
+        ground_noninferior=source_trial['wall']['minimum']>=control_trial['wall']['minimum'],
+        trace_block_limit=source_trial['actual'][-1]<=1.1*control_trial['actual'][-1],
+        gain_per_second=decision['source_gain']/decision['source_seconds']>decision['control_gain']/decision['control_seconds'])
+    assert decision['promote']==all(gain_gates.values())
+    h.save(out,dict(schema=1,milestone='M8-R10',completed=True,M8_closed=False,
+        reviewed_baseline='3b906f7fd2d2e657526ae291165ab2e4d6b0e901',
+        producing_revision=receipt['source_commit'],runtime=h.pin(e/'runtime-fingerprint.json'),
+        analysis_driver=h.pin(__file__),reuse_compatibility=h.pin(e/'reuse-compatibility.json'),
+        binary=receipt['executable'],xml=receipt['session'],comparison=h.pin(summary_path),
+        receipt=C['receipt'],collection=C['collection'],budget=h.pin(e/'local-bound/budget.json'),
+        bindings=keep(base,'state','history','residual','constraints')|dict(matrix=C['matrix'],
+            source_value=manifest['r10_source']['value'],source_action=manifest['r10_source']['action']),
+        compatibility=h.load(e/'local-bound/budget.json')['physical_value_and_source_compatibility'],
+        R9_reproducibility=reproducibility,
+        ascent_regression=clean(one('r10_ascent_regression')),independent_native_slopes=independently,
+        scaled_anchor_regression=clean(one('r10_scaled_anchor_regression')),
+        accepted_model_anchors=[clean(x) for x in C['events'] if x['kind']=='r10_anchor'],
+        anchor_checks=[clean(x) for x in C['events'] if x['kind']=='r10_anchor_feasibility'],
+        tangents=tangents,source_action_checks=[clean(x) for x in C['events'] if x['kind']=='r10_moved_action'],
+        model_trials=[clean(x) for x in C['events'] if x['kind']=='r10_model_trial'],
+        model_outcome=clean(one('r10_model_outcome')),
+        original_row_checks=cuts,general_slope_row_scans=[
+            clean(x) for x in C['events'] if x['kind']=='r10_general_row_scan'],
+        native_trials=small_trials,decision=clean(decision),promotion_gates=gain_gates,
+        continuation=dict(run=False,reason='Promotion gate failed' if not decision['promote'] else 'Required next step'),
+        work=dict(native_seconds=receipt['commands'][1]['seconds'],trial_count=len(native_trials),
+            ranks=1,numerical_threads=receipt['numerical_threads'],compiler_workers=16,
+            build=h.pin(e/'build-run/receipt.json')),
+        regressions=dict(compile_time_policy_assertions=True,native_ctest_passed=3,predictor_binding_passed=9,
+                         log=h.pin(e/'regressions.log'),native_summary_regression_assertions=True),
+        source_proposal_accounting=h.pin(e/'source-proposal-accounting.json'),
+        final=dict(snapshot=selected['snapshot'],audit=h.pin(e/'terminal-audit.json'),
+            native_report=native_report['file'],residual=phases['coupled_residual'],
+            trace=trace['independent_trace'],scalar=keep(trace,'admissible','minimum_inner_k','minimum_outer_k','minimum_outer_epsilon',
+                                                       'minimum_b','minimum_lambda','sign_unresolved_observations'),
+            ground=wall[-1],box_covered=common['qualified_on_common_inventory'],outer_range=common['outer_range'],
+            covariance=common['covariance_minima'],accounting=physical['accounting_defects'],
+            traction=physical['matching_observations'],physical_steps=0,history_advanced=False)))
+
+
+def candidate_accounting(e, out, h, evidence):
+    """Read-only accounting on the accepted source proposal, distinct from the saved control."""
+    import os
+    import time
+    import numpy as np
+
+    assert len(os.sched_getaffinity(0))==1
+    started=time.monotonic()
+    C=h.load(e/'comparison.json')
+    receipt=h.load(h.bound(C['receipt']))
+    manifest=h.load(h.bound(receipt['manifest']))
+    candidate, = [x for x in C['native'] if x['kind']=='r8_trial' and
+                  x['comparison']=='r10_source' and x['classification']=='accepted']
+    sys.path.insert(0,str(e/'source/solvers/IncNavierStokesSolver/Tests/RANS'))
+    import cls_epawf_m8_r2_stage_analysis as analysis
+    raw=h.load(h.bound(manifest['current_preflight']))
+    analyzer=analysis.Analyzer(dict(raw,stage_test_target_time=.0025),h.bound(receipt['session']),e/'source')
+    q=np.array(h.vector(candidate['state']))
+    h0=np.array(h.vector(C['initial']['history']))
+    effective=analyzer.external_lift(q)
+    constraints=analyzer.constraints(q)
+    loads,quad=analysis.weak_loads(raw,analyzer.fields,effective)
+    unmasked=loads+analyzer.time_mass(effective,h0,400.)
+    physical=analyzer.physical(q,h0,400.,unmasked=unmasked,constraints=constraints)
+    _,E,D,redistribution,*_=physical['source_energy']['robust_source']
+    source_error=E-D-redistribution
+    energy_error=physical['energy']['direct_remainder']
+    assert max(abs(source_error),abs(redistribution),abs(energy_error))<3e-10
+    h.save(out,dict(state=candidate['state'],native_residual=candidate['residual'],
+        fraction=candidate['fraction'],proposal_only=True,selected_as_saved_state=False,
+        source_identity_error=source_error,integrated_redistribution=redistribution,
+        energy_weak_minus_direct=energy_error,source=physical['source_energy']['robust_source'],
+        energy=physical['energy'],traction=physical['full_total_traction_and_k_flux'],
+        native_scalar=candidate['scalar'],native_box=candidate['box'],native_covariance=candidate['covariance'],
+        continuous_ground=candidate['wall'],seconds=time.monotonic()-started,
+        new_native_trials=0,new_direction_construction_values=0,producing_source=receipt['source_commit']))
+
+
 def main():
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument('mode', choices=('prepare', 'summary'))
+    p.add_argument('mode', choices=('prepare', 'summary', 'review', 'candidate-accounting'))
     p.add_argument('--epoch', type=Path, required=True)
     p.add_argument('--out', type=Path, required=True)
     a=p.parse_args()
@@ -163,7 +349,8 @@ def main():
     e=a.epoch.resolve()
     evidence=e/'source/docs/plans/cls-epawf-revised-evidence'
     h=module(evidence/'m8-r4/prepare.py','r10_prepare')
-    (prepare if a.mode=='prepare' else summary)(e,a.out.resolve(),h,evidence)
+    functions={'prepare':prepare, 'summary':summary, 'review':review, 'candidate-accounting':candidate_accounting}
+    functions[a.mode](e,a.out.resolve(),h,evidence)
 
 
 if __name__=='__main__':
