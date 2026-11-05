@@ -6,6 +6,9 @@
 // checks do not assemble native fields and do not certify M8 convergence.
 #include <IncNavierStokesSolver/EquationSystems/RANSWallReducedModel.h>
 #include <iostream>
+#include <fstream>
+#include <cstdint>
+#include <iomanip>
 
 namespace R = Nektar::RANSWallReduced;
 namespace
@@ -57,15 +60,49 @@ R::QuadraticResult Solve(const R::Matrix &h, const R::Vector &g,
                          const std::vector<Cut> &cuts, const R::Vector &start)
 {
     const auto result = R::SolveQuadratic<Factor>(h, g, cuts, start);
+    const double dualTolerance = std::max(1e-8, 1e-12 * R::Length(g));
     Check(result.solved && result.primal < 1e-9 &&
-          result.stationarity < 1e-8 && result.complementarity < 1e-8,
+          result.stationarity < dualTolerance && result.complementarity < dualTolerance,
           "known-answer model failed its affine KKT checks");
     return result;
 }
 }
 
-int main()
+int main(int argc, char **argv)
 {
+    if (argc == 2)
+    {
+        std::ifstream in(argv[1], std::ios::binary);
+        std::uint64_t shape[2]{};
+        in.read(reinterpret_cast<char *>(shape), sizeof(shape));
+        Check(in.good() && shape[0] > 0 && shape[0] <= 64 && shape[1] <= 1000000,
+              "invalid native affine replay packet shape");
+        const int n = shape[0];
+        auto read = [&](R::Vector &v) {
+            in.read(reinterpret_cast<char *>(v.data()), v.size() * sizeof(double));
+        };
+        R::Matrix h(n, R::Vector(n));
+        R::Vector g(n), initial(n);
+        for (auto &row : h) read(row);
+        read(g); read(initial);
+        std::vector<Cut> cuts;
+        for (std::uint64_t i = 0; i < shape[1]; ++i)
+        {
+            Cut cut{R::Vector(n),0.}; read(cut.a);
+            in.read(reinterpret_cast<char *>(&cut.b), sizeof(double));
+            cuts.push_back(std::move(cut));
+        }
+        Check(in.good() && in.peek() == std::char_traits<char>::eof(), "truncated or extended model packet");
+        const auto result = R::SolveQuadratic<Factor>(h, g, cuts, initial, 500);
+        std::cout << std::setprecision(17) << "{\"solved\":" << (result.solved?"true":"false")
+                  << ",\"failure\":\"" << result.failure << "\",\"steps\":" << result.steps
+                  << ",\"primal\":" << result.primal << ",\"stationarity\":" << result.stationarity
+                  << ",\"complementarity\":" << result.complementarity << ",\"redundant_rows\":"
+                  << result.redundantRows << ",\"solution\":[";
+        for (int i = 0; i < n; ++i) std::cout << (i?",":"") << result.solution[i];
+        std::cout << "]}\n";
+        return result.solved ? 0 : 1;
+    }
     auto r = Solve({{2.,0.},{0.,4.}}, {-2.,-8.}, {}, {0.,0.});
     Close(r.solution[0], 1.); Close(r.solution[1], 2.);
     r = Solve({{2.,0.},{0.,4.}}, {-2.,-8.},
@@ -77,6 +114,10 @@ int main()
               {{{-1.,0.},0.}, {{0.,1.},10.}, {{1.,1.},1.}}, {0.,0.});
     Close(r.solution[0],0.); Close(r.solution[1],1.);
     Check(r.active.size() == 2, "missed a newly active observation");
+    r = Solve({{1e10,0.},{0.,1e6}}, {-1e10,-1e6*(1.+1e-12)},
+              {{{1.,0.},.5}, {{1.,1e-7},.5000001},
+               {{2.,1e-7},1.0000001}}, {0.,0.});
+    Close(r.solution[0],.5); Close(r.solution[1],1.);
     // Minimax restoration balances two opposing gradient witnesses.
     r = Solve({{.001,0.},{0.,1.}}, {0.,0.},
               {{{-1.,-1.},-2.}, {{1.,-1.},-.5}, {{0.,-1.},0.},

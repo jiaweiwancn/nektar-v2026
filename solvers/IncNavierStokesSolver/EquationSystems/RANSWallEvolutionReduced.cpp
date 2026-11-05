@@ -8,6 +8,8 @@
 #include <algorithm>
 #include <chrono>
 #include <cmath>
+#include <cstdint>
+#include <fstream>
 #include <iostream>
 #include <numeric>
 #include <set>
@@ -903,6 +905,38 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         qpOK = qpOK && groundModelOK;
         if (!groundModelOK && quadratic.solved)
             quadratic.failure = "ground_cut_limit";
+        if (m_reducedVerify && iterations == 0)
+        {
+            // Replay the small affine problem without repeating field solves.
+            // Native little-endian uint64 dimensions followed by f64 arrays:
+            // H, g, feasible initial point, then [a,b] for every cut.
+            const std::string file = "reduced-model-" + std::to_string(iterations) +
+                                     "-" + std::to_string(failedModels) + ".bin";
+            std::ofstream out(file, std::ios::binary | std::ios::trunc);
+            const std::uint64_t shape[2] = {
+                static_cast<std::uint64_t>(variables),
+                static_cast<std::uint64_t>(cuts.size())};
+            out.write(reinterpret_cast<const char *>(shape), sizeof(shape));
+            auto write = [&](const Vector &v) {
+                out.write(reinterpret_cast<const char *>(v.data()),
+                          v.size() * sizeof(double));
+            };
+            for (const auto &row : hessian) write(row);
+            write(gradient);
+            Vector initial(variables);
+            if (restore) initial[n] = base.violation + 1e-10;
+            write(initial);
+            for (const auto &cut : cuts)
+            {
+                write(cut.a);
+                out.write(reinterpret_cast<const char *>(&cut.b), sizeof(double));
+            }
+            out.close();
+            Require(out.good(), "failed to write reduced affine replay packet");
+            emit("model_packet", {{"path", J::Quote(file)},
+                 {"variables", J::Number(variables)},
+                 {"cuts", J::Number(cuts.size())}});
+        }
         auto predicted = base.r;
         for (int i = 0; i < n; ++i)
             for (int j = 0; j < dimension; ++j)
@@ -957,6 +991,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
               {"response_rank", J::Number(actionOrthogonal.size())},
               {"qp_solved", J::Boolean(qpOK)},
               {"qp_steps", J::Number(qpSteps)},
+              {"redundant_rows", J::Number(quadratic.redundantRows)},
               {"qp_failure", J::Quote(quadratic.failure)},
               {"unscaled_affine_kkt", J::Numbers(Vector{quadratic.primal,
                    quadratic.stationarity, quadratic.complementarity})},

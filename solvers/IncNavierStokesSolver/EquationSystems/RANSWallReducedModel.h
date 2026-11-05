@@ -33,7 +33,7 @@ struct QuadraticResult
     bool solved = false;
     Vector solution, multipliers;
     std::vector<int> active;
-    int steps = 0;
+    int steps = 0, redundantRows = 0;
     double primal = 0., stationarity = 0., complementarity = 0.;
     std::string failure;
 };
@@ -88,30 +88,85 @@ QuadraticResult SolveQuadratic(const Matrix &hessian, const Vector &gradient,
     try
     {
         const Factor objective(hessian);
-        std::vector<Vector> inverse;
-        for (const auto &cut : cuts)
-            inverse.push_back(objective.Apply(cut.a));
         while (result.steps < maximumSteps)
         {
             ++result.steps;
             Vector g(n);
             for (int i = 0; i < n; ++i)
                 g[i] = -gradient[i] - Dot(hessian[i], solution);
-            auto direction = objective.Apply(g);
-            if (!active.empty())
+            // A_active^T = Q R. Work in its Euclidean null space rather
+            // than forming A H^-1 A^T, which squares active-row conditioning.
+            std::vector<Vector> face;
+            Matrix upper(active.size(), Vector(active.size()));
+            for (int i = 0; i < active.size(); ++i)
             {
-                Matrix normal(active.size(), Vector(active.size()));
-                Vector rhs(active.size());
-                for (int i = 0; i < active.size(); ++i)
+                auto row = cuts[active[i]].a;
+                for (int pass = 0; pass < 2; ++pass)
+                    for (int j = 0; j < face.size(); ++j)
+                    {
+                        const double c = Dot(row, face[j]);
+                        upper[j][i] += c;
+                        for (int k = 0; k < n; ++k) row[k] -= c * face[j][k];
+                    }
+                const double length = Length(row);
+                if (length < 1e-10 * Length(cuts[active[i]].a))
+                    return finish("quadratic_active_rank_loss");
+                upper[i][i] = length;
+                for (double &x : row) x /= length;
+                face.push_back(std::move(row));
+            }
+            Vector direction(n);
+            if (active.empty())
+                direction = objective.Apply(g);
+            else
+            {
+                std::vector<Vector> null;
+                for (int axis = 0; axis < n; ++axis)
                 {
-                    rhs[i] = Dot(cuts[active[i]].a, direction);
-                    for (int j = 0; j < active.size(); ++j)
-                        normal[i][j] = Dot(cuts[active[i]].a, inverse[active[j]]);
+                    Vector v(n); v[axis] = 1.;
+                    for (int pass = 0; pass < 2; ++pass)
+                    {
+                        for (const auto &q : face)
+                        {
+                            const double c = Dot(v, q);
+                            for (int j = 0; j < n; ++j) v[j] -= c * q[j];
+                        }
+                        for (const auto &q : null)
+                        {
+                            const double c = Dot(v, q);
+                            for (int j = 0; j < n; ++j) v[j] -= c * q[j];
+                        }
+                    }
+                    const double length = Length(v);
+                    if (length > 1e-8)
+                    {
+                        for (double &x : v) x /= length;
+                        null.push_back(std::move(v));
+                    }
                 }
-                multipliers = Factor(normal).Apply(rhs);
-                for (int i = 0; i < active.size(); ++i)
-                    for (int j = 0; j < n; ++j)
-                        direction[j] -= multipliers[i] * inverse[active[i]][j];
+                if (null.size() + active.size() != gradient.size())
+                    return finish("quadratic_null_rank_loss");
+                if (!null.empty())
+                {
+                    Matrix reduced(null.size(), Vector(null.size()));
+                    Vector rhs(null.size());
+                    for (int i = 0; i < null.size(); ++i)
+                    {
+                        rhs[i] = Dot(null[i], g);
+                        Vector hv(n);
+                        for (int k = 0; k < n; ++k) hv[k] = Dot(hessian[k], null[i]);
+                        for (int j = 0; j < null.size(); ++j)
+                            reduced[i][j] = Dot(null[j], hv);
+                    }
+                    const auto z = Factor(reduced).Apply(rhs);
+                    for (int i = 0; i < null.size(); ++i)
+                        for (int j = 0; j < n; ++j) direction[j] += z[i] * null[i][j];
+                }
+                Vector stationarity(n), rhs(active.size());
+                for (int i = 0; i < n; ++i)
+                    stationarity[i] = g[i] - Dot(hessian[i], direction);
+                for (int i = 0; i < active.size(); ++i) rhs[i] = Dot(face[i], stationarity);
+                multipliers = Factor(upper).Apply(rhs);
             }
             if (Length(direction) < 1e-9 * std::max(1., Length(solution)))
             {
@@ -134,43 +189,30 @@ QuadraticResult SolveQuadratic(const Matrix &hessian, const Vector &gradient,
                 const double bound = (cuts[i].b - Dot(cuts[i].a, solution)) / advance;
                 if (bound < fraction)
                 {
+                    auto remainder = cuts[i].a;
+                    for (int pass = 0; pass < 2; ++pass)
+                        for (const auto &q : face)
+                        {
+                            const double c = Dot(remainder, q);
+                            for (int j = 0; j < n; ++j) remainder[j] -= c * q[j];
+                        }
+                    if (Length(remainder) < 1e-10 * Length(cuts[i].a))
+                    {
+                        // A dependent row cannot block exact motion on this
+                        // face. Ignore roundoff-sized advances only while the
+                        // row is feasible; finish() still scans every row.
+                        if (Dot(cuts[i].a, solution) - cuts[i].b > 1e-8)
+                            return finish("quadratic_degenerate_primal_defect");
+                        ++result.redundantRows;
+                        continue;
+                    }
                     fraction = std::max(0., bound);
                     entering = i;
                 }
             }
             for (int i = 0; i < n; ++i)
                 solution[i] += fraction * direction[i];
-            if (entering >= 0)
-            {
-                auto row = cuts[entering].a;
-                std::vector<Vector> q;
-                for (int id : active)
-                {
-                    auto a = cuts[id].a;
-                    for (int pass = 0; pass < 2; ++pass)
-                        for (const auto &v : q)
-                        {
-                            const double c = Dot(a, v);
-                            for (int j = 0; j < n; ++j)
-                                a[j] -= c * v[j];
-                        }
-                    if (Length(a) > 1e-8)
-                    {
-                        const double length = Length(a);
-                        for (double &x : a) x /= length;
-                        q.push_back(std::move(a));
-                    }
-                }
-                for (int pass = 0; pass < 2; ++pass)
-                    for (const auto &v : q)
-                    {
-                        const double c = Dot(row, v);
-                        for (int j = 0; j < n; ++j) row[j] -= c * v[j];
-                    }
-                if (Length(row) < 1e-8)
-                    return finish("quadratic_dependent_active_rows");
-                active.push_back(entering);
-            }
+            if (entering >= 0) active.push_back(entering);
         }
         return finish("quadratic_iteration_limit");
     }
