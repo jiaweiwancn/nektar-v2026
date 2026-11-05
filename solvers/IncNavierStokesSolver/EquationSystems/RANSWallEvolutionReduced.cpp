@@ -992,6 +992,13 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             continue;
         }
         const int n = columns.size(), variables = n + (restore ? 1 : 0);
+        // Do not spend successive response models approaching an exact
+        // qualification boundary from outside at the scale of H-solve error.
+        // This is an inward search target only. It vanishes with the original
+        // residual, and neither the actual inventory nor final acceptance is
+        // changed. Inside the envelope the original model bounds are used.
+        const double qualificationBuffer = restore && base.violation < 1e-4
+            ? std::min(1e-6, 1e-4 * base.merit) : 0.;
         // Keep both goals outside the envelope. Normalize the residual term
         // so its units do not overwhelm the signed qualification slack.
         const double residualWeight = restore ? restorationWeight * std::pow(.1, failedModels) /
@@ -1056,7 +1063,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                     a[n] = -1.;
                 insertCut(std::move(a),
                           -sign * (b.value - (sign < 0 ? b.lower : b.upper)) /
-                              b.width,
+                              b.width - qualificationBuffer,
                           j, sign, "qualification");
             }
         }
@@ -1087,7 +1094,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             // its full unconstrained proposal exceeds the allowed increase.
             Vector ceiling(variables);
             ceiling[n] = 1.;
-            insertCut(std::move(ceiling), base.violation * 1.01 + 1e-7,
+            insertCut(std::move(ceiling), base.violation * 1.01 + 1e-7 + qualificationBuffer,
                       -1, 0, "qualification_funnel");
         }
         auto groundCut = [&](const WallExtremum &p) {
@@ -1108,7 +1115,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             groundCut(p);
         Vector solution(variables);
         if (restore)
-            solution[n] = base.violation + 1e-10;
+            solution[n] = base.violation + qualificationBuffer + 1e-10;
         std::vector<int> active;
         Vector multipliers;
         bool qpOK   = false;
@@ -1329,6 +1336,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
              {{"restoration", J::Boolean(restore)},
               {"residual_weight", J::Number(residualWeight)},
               {"restoration_balance", J::Number(restorationWeight)},
+              {"inward_qualification_search_margin", J::Number(qualificationBuffer)},
               {"qualification_funnel", J::Number(restore ? base.violation * 1.01 + 1e-7 : 0.)},
               {"next_basis_budget", J::Number(basisBudget)},
               {"basis_dimension", J::Number(n)},

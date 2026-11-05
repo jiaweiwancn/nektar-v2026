@@ -150,6 +150,18 @@ int main(int argc, char **argv)
     Close(r.solution[0],violation/(1.+mu));
     Check(R::QualificationDecrease(violation,r.solution[1],1.,1e-3),
           "pure qualification restoration stalled at a mixed-penalty fixed point");
+    // A tiny positive excess can otherwise remain outside after a soft
+    // restoration. An inward model target crosses the original bound; the
+    // physical qualification observation remains x <= 0, without an allowance.
+    const double tinyExcess=1.8e-9, inwardTarget=1e-6;
+    r = Solve({{mu,0.},{0.,1.}}, {0.,0.},
+              {{{1.,-1.},-tinyExcess},{{0.,-1.},0.}}, {0.,tinyExcess});
+    Check(tinyExcess+r.solution[0] > 0., "soft-restoration control unexpectedly interior");
+    r = Solve({{mu,0.},{0.,1.}}, {0.,0.},
+              {{{1.,-1.},-tinyExcess-inwardTarget},{{0.,-1.},0.}},
+              {0.,tinyExcess+inwardTarget});
+    Check(tinyExcess+r.solution[0] < -0.9*inwardTarget,
+          "inward restoration model did not cross the unchanged original bound");
     // H(y,k)=y-3k and F(k,y)=k+y-4 have a reduced slope of 4.
     // Feedback in B, rather than post-direction settling, selects dk=1.
     r = Solve({{16.}}, {-16.}, {}, {0.});
