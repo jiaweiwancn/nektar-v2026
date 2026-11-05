@@ -70,7 +70,7 @@ R::QuadraticResult Solve(const R::Matrix &h, const R::Vector &g,
 
 int main(int argc, char **argv)
 {
-    if (argc == 2)
+    if (argc == 2 || (argc == 5 && std::string(argv[2]) == "--orthogonal-radius"))
     {
         std::ifstream in(argv[1], std::ios::binary);
         std::uint64_t shape[2]{};
@@ -93,12 +93,34 @@ int main(int argc, char **argv)
             cuts.push_back(std::move(cut));
         }
         Check(in.good() && in.peek() == std::char_traits<char>::eof(), "truncated or extended model packet");
-        const auto result = R::SolveQuadratic<Factor>(h, g, cuts, initial, 500);
+        R::QuadraticResult result;
+        double replayRadius=0., replayMultiplier=0.;
+        if (argc == 5)
+        {
+            // Diagnostic only: the caller must have verified ordinary model
+            // coordinates with orthonormal field columns. Remove the saved
+            // radius multiplier, retaining the original merit/regularization
+            // and every cut, then solve with the requested field radius.
+            replayRadius=std::stod(argv[3]);
+            const double oldMultiplier=std::stod(argv[4]);
+            Check(n<=64 && replayRadius>0. && std::isfinite(replayRadius) &&
+                  oldMultiplier>=0. && std::isfinite(oldMultiplier) &&
+                  R::Length(initial)==0., "orthogonal-radius replay assumptions differ");
+            R::Matrix columns(n,R::Vector(n));
+            for (int i=0; i<n; ++i) { columns[i][i]=1.; h[i][i]-=oldMultiplier; }
+            const auto bounded=R::SolveRadiusQuadratic<Factor>(
+                h,g,cuts,initial,columns,replayRadius,500);
+            replayMultiplier=bounded.multiplier;
+            result=bounded.quadratic;
+        }
+        else result=R::SolveQuadratic<Factor>(h, g, cuts, initial, 500);
         std::cout << std::setprecision(17) << "{\"solved\":" << (result.solved?"true":"false")
                   << ",\"failure\":\"" << result.failure << "\",\"steps\":" << result.steps
                   << ",\"primal\":" << result.primal << ",\"stationarity\":" << result.stationarity
                   << ",\"complementarity\":" << result.complementarity << ",\"redundant_rows\":"
-                  << result.redundantRows << ",\"solution\":[";
+                  << result.redundantRows << ",\"diagnostic_radius\":" << replayRadius
+                  << ",\"radius_multiplier\":" << replayMultiplier
+                  << ",\"scope\":\"affine model replay only; not nonlinear stationarity or M8 convergence\",\"solution\":[";
         for (int i = 0; i < n; ++i) std::cout << (i?",":"") << result.solution[i];
         std::cout << "]}\n";
         return result.solved ? 0 : 1;
