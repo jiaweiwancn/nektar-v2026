@@ -128,6 +128,11 @@ int main(int argc, char **argv)
               {{{-1.,-1.},-2.}, {{1.,-1.},-.5}, {{0.,-1.},0.},
                {{-1.,0.},-.9}}, {.9,2.});
     Close(r.solution[0],.9); Close(r.solution[1],1.4);
+    // A residual-reducing proposal must honor the same qualification funnel
+    // that the nonlinear filter will enforce, even while outside the box.
+    r = Solve({{16.,0.},{0.,1.}}, {-16.,0.},
+              {{{1.,-1.},-2.}, {{0.,1.},2.02}, {{0.,-1.},0.}}, {0.,2.});
+    Close(r.solution[0],.02); Close(r.solution[1],2.02);
     // H(y,k)=y-3k and F(k,y)=k+y-4 have a reduced slope of 4.
     // Feedback in B, rather than post-direction settling, selects dk=1.
     r = Solve({{16.}}, {-16.}, {}, {0.});

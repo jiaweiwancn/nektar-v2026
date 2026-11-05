@@ -23,10 +23,11 @@ def compact(row):
     if "active" in result:
         result["active"] = [{k: v for k, v in cut.items() if k != "row"}
                             for cut in result["active"]]
-    if "shift_domain" in result:
-        domain = result.pop("shift_domain")
-        result["shift_domain_summary"] = {k: v for k, v in domain.items()
-                                          if k not in ("profile_branch_pattern", "limiting_point")}
+    for key in ("shift_domain", "half_domain"):
+        if key in result:
+            domain = result.pop(key)
+            result[key+"_summary"] = {k: v for k, v in domain.items()
+                                       if k not in ("profile_branch_pattern", "limiting_point")}
     return result
 
 
@@ -39,7 +40,8 @@ def collect(directory):
     histories = [compact(r) for r in rows if r["event"] in
                  ("protocol", "initial", "accepted", "converged", "repeatability",
                   "direction", "trial", "model_retry", "prediction_decomposition",
-                  "inaccurate_or_failed_responses")]
+                  "inaccurate_or_failed_responses", "trial_packet", "model_packet",
+                  "ground_cut", "ground_inward_roundoff")]
     checks = [compact(r) for r in rows if r["event"] == "response_check"]
     for row in checks:
         if row["iteration"]:

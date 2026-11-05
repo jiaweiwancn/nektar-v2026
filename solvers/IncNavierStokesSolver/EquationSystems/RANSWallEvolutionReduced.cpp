@@ -877,6 +877,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                       {"shift_violation", J::Number(column.shifted.violation)},
                       {"half_violation", J::Number(half.violation)},
                       {"shift_domain", ScalarDomainJSON(column.shifted.domain)},
+                      {"half_domain", ScalarDomainJSON(half.domain)},
                       {"profile_branch_change",
                        J::Boolean(column.shifted.domain.profileBranches !=
                                   base.domain.profileBranches)}});
@@ -1013,6 +1014,13 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             Vector a(variables);
             a[n] = -1.;
             insertCut(std::move(a), 0., -1, 0, "restoration_slack");
+            // Match the actual outside-envelope filter during construction,
+            // rather than reject a useful residual direction only because
+            // its full unconstrained proposal exceeds the allowed increase.
+            Vector ceiling(variables);
+            ceiling[n] = 1.;
+            insertCut(std::move(ceiling), base.violation * 1.01 + 1e-7,
+                      -1, 0, "qualification_funnel");
         }
         auto groundCut = [&](const WallExtremum &p) {
             Vector a(variables);
@@ -1252,6 +1260,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         emit("direction",
              {{"restoration", J::Boolean(restore)},
               {"residual_weight", J::Number(residualWeight)},
+              {"qualification_funnel", J::Number(restore ? base.violation * 1.01 + 1e-7 : 0.)},
               {"next_basis_budget", J::Number(basisBudget)},
               {"basis_dimension", J::Number(n)},
               {"basis_names", J::List(basisNames)},
@@ -1280,11 +1289,10 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         bool decomposed = false;
         if (qpOK && Length(displacement) > 0. &&
             (restore ? (predictedViolation < base.violation - 1e-7 ||
-                        (dualNorm(predicted) < base.merit &&
-                         predictedViolation <= base.violation * 1.01 + 1e-7))
+                        slope < -1e-8 * base.merit * base.merit)
                      : slope < -1e-8 * base.merit * base.merit))
         {
-            for (double fraction : {1., .5, .25, .125, .0625})
+            for (double fraction : {1., .5, .25, .125, .0625, .03125, .015625, .0078125, .00390625})
             {
                 auto guess = state;
                 Apply(guess, rows, displacement, kScale * fraction);
