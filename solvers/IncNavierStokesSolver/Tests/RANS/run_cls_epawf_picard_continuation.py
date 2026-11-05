@@ -97,7 +97,8 @@ def main():
         if report.exists():
             state = load(report)
             require(state["steps"] == state["time"] == 0 and state_hash(state["state"]) == H0 and
-                    state["native_history"] == startup["native_history"] and
+                    [state_hash(slot) for slot in state["native_history"]] ==
+                    [state_hash(slot) for slot in startup["native_history"]] and
                     state["native_history_times"] == startup["native_history_times"],
                     "continuation diagnostic advanced accepted state or history")
             result.update(accepted_steps=0, accepted_time=0., history_preserved=True,

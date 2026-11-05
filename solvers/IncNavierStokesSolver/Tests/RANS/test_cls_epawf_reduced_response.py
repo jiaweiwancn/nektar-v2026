@@ -50,7 +50,8 @@ def check(directory):
     if report["steps"] == 0:
         startup = load(directory / "startup/case.evolution.json")
         require(state_hash(report["state"]) == H0 and report["time"] == 0 and
-                report["native_history"] == startup["native_history"] and
+                [state_hash(slot) for slot in report["native_history"]] ==
+                [state_hash(slot) for slot in startup["native_history"]] and
                 report["native_history_times"] == startup["native_history_times"],
                 "reduced failure advanced the native state or history")
     result = dict(status="passed_operator_checks", manifest_status=manifest["status"],

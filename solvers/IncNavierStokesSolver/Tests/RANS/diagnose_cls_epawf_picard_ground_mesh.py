@@ -94,7 +94,8 @@ def main():
         if report_path.exists():
             report = load(report_path)
             require(report["steps"] == report["time"] == 0 and report["state"] == startup["state"] and
-                    report["native_history"] == startup["native_history"] and
+                    [state_hash(slot) for slot in report["native_history"]] ==
+                    [state_hash(slot) for slot in startup["native_history"]] and
                     report["native_history_times"] == startup["native_history_times"],
                     "spatial diagnostic advanced accepted state/history")
             result.update(accepted_steps=0, accepted_time=0., history_preserved=True,
