@@ -44,7 +44,8 @@ def collect(directory):
                   "ground_cut", "ground_inward_roundoff", "restoration_balance",
                   "half_response_warm_start", "response_krylov_seed", "response_krylov_failed",
                   "combined_direction_check", "second_order_trial",
-                  "second_order_model_failed", "radius_agreement", "constraint_response_secant")]
+                  "second_order_model_failed", "radius_agreement", "constraint_response_secant",
+                  "response_space_adapt")]
     checks = [compact(r) for r in rows if r["event"] == "response_check"]
     for row in checks:
         if row["iteration"]:

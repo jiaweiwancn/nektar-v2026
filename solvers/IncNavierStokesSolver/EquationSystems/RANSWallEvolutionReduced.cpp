@@ -429,6 +429,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         {"combined_direction_checks", J::Boolean(m_reducedVerify)},
         {"second_order_qualification_correction", J::Boolean(m_reducedSecondOrder)},
         {"constraint_response_secants", J::Boolean(m_reducedConstraintSecant)},
+        {"adaptive_qualified_response_space", J::Boolean(m_reducedAdaptiveSpace)},
         {"qualification_correction_budget", J::Number(m_reducedConstraintSecant ? 6 : 3)},
         {"continuation_algebraic_diagnostic", J::Boolean(continuationDiagnostic)},
         {"qualification_policy", J::Quote(continuationDiagnostic
@@ -1901,6 +1902,31 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 ++iterations;
                 failedModels = 0;
                 report(base, "accepted");
+                if (m_reducedAdaptiveSpace && !restore && base.merit > 1e-6)
+                {
+                    const double relativeGain = (oldMerit-base.merit)/oldMerit;
+                    if (fraction <= .25 || relativeGain < 1e-3)
+                    {
+                        const int oldBudget = basisBudget;
+                        basisBudget = std::min(m_reducedMaximumBasis,
+                            std::max(basisBudget+4,5*basisBudget/4));
+                        const bool refresh = oldBudget == m_reducedMaximumBasis &&
+                            (fraction <= .0625 || relativeGain < 1e-5);
+                        if (refresh)
+                        {
+                            // Drop seed history only. Every governing row,
+                            // actual qualification observation and physical
+                            // history remains part of the next native solve.
+                            activeWitnesses.clear();
+                            previous.clear();
+                        }
+                        emit("response_space_adapt", {{"previous_budget",J::Number(oldBudget)},
+                            {"next_budget",J::Number(basisBudget)},
+                            {"seed_history_refreshed",J::Boolean(refresh)},
+                            {"relative_original_residual_gain",J::Number(relativeGain)},
+                            {"fraction",J::Number(fraction)}});
+                    }
+                }
                 if (restore && base.violation > 0.)
                 {
                     const double restored = (oldViolation - base.violation) /

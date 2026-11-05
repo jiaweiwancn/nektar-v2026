@@ -267,11 +267,12 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         Require(m_picardKRadius>0. && m_picardKRadius<=1.,"invalid dimensionless Picard k radius");
         session->LoadSolverInfo("RANSWallPicardGuessFile",m_picardGuessFile,"");
         session->LoadSolverInfo("RANSWallPicardKDiagnostic",m_picardKDiagnostic,"");
-        std::string reduced,reducedVerify,reducedSecondOrder,reducedSecant;
+        std::string reduced,reducedVerify,reducedSecondOrder,reducedSecant,reducedAdaptive;
         session->LoadSolverInfo("RANSWallPicardReduced",reduced,"Off");
         session->LoadSolverInfo("RANSWallReducedVerify",reducedVerify,"Off");
         session->LoadSolverInfo("RANSWallReducedSecondOrder",reducedSecondOrder,"Off");
         session->LoadSolverInfo("RANSWallReducedConstraintSecant",reducedSecant,"Off");
+        session->LoadSolverInfo("RANSWallReducedAdaptiveSpace",reducedAdaptive,"Off");
         Require((reduced=="On" || reduced=="Off") && (reducedVerify=="On" || reducedVerify=="Off"),
                 "unknown Picard reduced selector");
         m_picardReduced=reduced=="On";m_reducedVerify=reducedVerify=="On";
@@ -285,6 +286,11 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         m_reducedConstraintSecant=reducedSecant=="On";
         Require(!m_reducedConstraintSecant || m_reducedSecondOrder,
                 "constraint secants require the nonlinear qualification corrector");
+        Require(reducedAdaptive=="On" || reducedAdaptive=="Off",
+                "unknown reduced adaptive response selector");
+        m_reducedAdaptiveSpace=reducedAdaptive=="On";
+        Require(!m_reducedAdaptiveSpace || m_picardReduced,
+                "adaptive response spaces require the reduced search");
         session->LoadParameter("RANSWallReducedBasis",m_reducedBasis,10);
         session->LoadParameter("RANSWallReducedMaximumBasis",m_reducedMaximumBasis,32);
         session->LoadParameter("RANSWallReducedHUpdates",m_reducedHUpdates,50);

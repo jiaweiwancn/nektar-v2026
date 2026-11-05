@@ -71,6 +71,7 @@ def prepare(args):
                 set_info(root, "RANSWallReducedVerify", "On" if args.reduced_verify else "Off")
                 set_info(root, "RANSWallReducedSecondOrder", "On" if getattr(args, "reduced_second_order", False) else "Off")
                 set_info(root, "RANSWallReducedConstraintSecant", "On" if getattr(args, "reduced_constraint_secant", False) else "Off")
+                set_info(root, "RANSWallReducedAdaptiveSpace", "On" if getattr(args, "reduced_adaptive_space", False) else "Off")
                 for key, value in {"Basis": args.reduced_basis, "Radius": args.reduced_radius,
                                    "MaximumBasis": getattr(args, "reduced_maximum_basis", 32),
                                    "HTolerance": args.reduced_h_tolerance,
@@ -154,6 +155,8 @@ def main():
                         help="Correct nonlinear qualification curvature within the checked response space")
     parser.add_argument("--reduced-constraint-secant", action="store_true",
                         help="Refine qualification responses with measured secants during nonlinear corrections")
+    parser.add_argument("--reduced-adaptive-space", action="store_true",
+                        help="Enlarge or refresh the response seeds after slow qualified progress")
     parser.add_argument("--reduced-basis", type=int, default=10)
     parser.add_argument("--reduced-maximum-basis", type=int, default=32,
                         help="Adaptive response-space ceiling (up to 64; 32 retains earlier controls)")
@@ -188,6 +191,7 @@ def main():
     require(not args.reduced_second_order or args.reduced, "--reduced-second-order requires --reduced")
     require(not args.reduced_constraint_secant or args.reduced_second_order,
             "--reduced-constraint-secant requires --reduced-second-order")
+    require(not args.reduced_adaptive_space or args.reduced, "--reduced-adaptive-space requires --reduced")
     require(not args.equilibrate_after_k or args.k_newton, "--equilibrate-after-k requires --k-newton")
     require(not args.guess_file or args.steps == 1, "a saved guess binds exactly one stage")
     require(not args.guess_file or args.perturbation == 0, "run saved-guess and perturbation diagnostics separately")
