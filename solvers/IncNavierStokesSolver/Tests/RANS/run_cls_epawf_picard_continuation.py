@@ -83,7 +83,9 @@ def main():
         set_info(root, "RANSWallPicardContinuation", "On")
         set_parameter(root, "RANSWallPicardContinuationEta", eta)
         accuracy = args.auxiliary_tolerance if eta > 0 else 2e-12
-        set_parameter(root, "RANSWallPicardContinuationTolerance", accuracy if eta > 0 else 0.)
+        # Pass the request even at eta zero so the native eta-positive guard,
+        # rather than only this driver, must retain the original 2e-12 gate.
+        set_parameter(root, "RANSWallPicardContinuationTolerance", args.auxiliary_tolerance)
         write(root, target / "case.xml")
         result = dict(eta=eta, operator_alpha=400.+eta, physical_alpha=400., time=.0025,
                       auxiliary_tolerance=accuracy, original_tolerance=2e-12,
