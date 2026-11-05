@@ -23,6 +23,8 @@ def main():
     parser.add_argument("--bracket-iterations", type=int, default=4)
     parser.add_argument("--auxiliary-tolerance", type=float, default=2e-12,
                         help="Declared eta-positive diagnostic tolerance; eta-zero remains 2e-12")
+    parser.add_argument("--initial-guess", type=Path,
+                        help="Previously saved diagnostic root; physical history remains the original h0")
     args = parser.parse_args()
     require(platform.system() == "Linux", "authoritative continuation runs require Linux")
     args.solver = args.solver.resolve(strict=True)
@@ -72,6 +74,10 @@ def main():
             history = startup["state"]
             require(receipt["exit_code"] == 0 and state_hash(history) == H0, "continuation startup differs from h0")
             summary["startup"] = receipt
+        if warm:
+            require(warm["history"] == history and warm["time"] == .0025 and
+                    len(warm["state"]) == len(history),
+                    "continuation guess would replace the original physical history or stage")
         target = case / "target"
         root = ET.parse(target / "case.xml").getroot()
         set_info(root, "RANSWallPicardContinuation", "On")
@@ -133,7 +139,11 @@ def main():
         save()
         return packet
 
-    warm = None
+    warm = load(args.initial_guess.resolve(strict=True)) if args.initial_guess else None
+    if args.initial_guess:
+        summary["initial_guess"] = dict(path=str(args.initial_guess.resolve()),
+                                       sha256=sha(args.initial_guess),
+                                       state_sha256=state_hash(warm["state"]))
     previous = None
     bracket = None
     try:
