@@ -48,10 +48,11 @@ def identity(executable):
                 libraries={str(p): sha(p) for p in sorted(libraries)})
 
 
-def check_report(report):
+def check_report(report, restarting=False):
     require(report['temporal_coupling'] == 'PimpleSingleSweep' and report['order'] == 1,
             'wrong temporal mode')
-    require(state_hash(report['accepted_states'][0]) == H0, 'changed represented outer6 initial state')
+    if not restarting:
+        require(state_hash(report['accepted_states'][0]) == H0, 'changed represented outer6 initial state')
     require(report['eta'] == 0 and report['inner_stress_model'] == 'SaturatedR2', 'changed physics')
     attempts = report['pimple_attempts']
     require(report['implicit_callback_count'] == len(attempts), 'callback/attempt mismatch')
@@ -106,7 +107,7 @@ def main():
         manifest['executable'] = identity(a.solver)
         manifest['execution'] = run([str(a.solver), 'case.xml'], a.output, 'solver.log', a.timeout)
         report = load(a.output/'case.evolution.json')
-        attempts = check_report(report)
+        attempts = check_report(report, bool(a.restart))
         manifest.update(status='numerical_trajectory_completed' if manifest['execution']['exit_code'] == 0 else 'attempt_rejected',
             accepted_steps=report['steps'], final_time=report['time'], failure=report['failure'],
             callback_count=report['implicit_callback_count'], attempts=attempts,

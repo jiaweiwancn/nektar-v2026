@@ -21,7 +21,10 @@ def main():
     p.add_argument('--solver',type=Path,required=True)
     p.add_argument('--resolution-probe',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True)
+    p.add_argument('--comparison-dt',type=float,default=.0025)
+    p.add_argument('--comparison-steps',type=int,default=2)
     a=p.parse_args()
+    require(a.comparison_dt>0 and a.comparison_steps>=2 and a.comparison_steps%2==0,'even comparison step count required')
     require(platform.system()=='Linux','Linux is authoritative')
     a.output=a.output.resolve();a.output.mkdir(parents=True,exist_ok=False)
     runner=Path(__file__).with_name('run_cls_epawf_pimple.py')
@@ -44,11 +47,11 @@ def main():
     summary['strict_qualification_first_exit']=[{k:v for k,v in e.items() if k not in ('state','history','audit')}
         for e in strict.get('physical_range_events',[])]
     # Independent physical-step runs: smaller dt is never a relaxed field update.
-    stable=[];dt=.0025
+    stable=[];dt=a.comparison_dt
     for attempt in range(5):
         stable=[]
         for level in range(3):
-            r=case(f'refine-{attempt}-{level}',dt/2**level,2*2**level,'--diagnostic')
+            r=case(f'refine-{attempt}-{level}',dt/2**level,a.comparison_steps*2**level,'--diagnostic')
             if r['failure']:
                 break
             stable.append(r)
@@ -63,15 +66,17 @@ def main():
     import math
     summary['observed_difference_orders']={k:math.log2(deltas[0][k]/deltas[1][k])
         for k in deltas[0] if k!='pressure_common_gauge_shift' and deltas[0][k]>0 and deltas[1][k]>0}
-    verification=case('verification-only',dt,1,'--diagnostic','--verify')
-    unverified=case('unverified-one',dt,1,'--diagnostic','--checkpoint')
+    half=a.comparison_steps//2
+    verification=case('verification-only',dt,half,'--diagnostic','--verify')
+    unverified=case('unverified-one',dt,half,'--diagnostic','--checkpoint')
     require(verification['state']==unverified['state'],'verification changed the retained solution')
-    resumed=case('restart-one',dt,1,'--diagnostic','--restart',unverified['checkpoint'])
+    resumed=case('restart-one',dt,a.comparison_steps-half,'--diagnostic','--restart',unverified['checkpoint'])
+    require(state_hash(resumed['accepted_states'][0])==state_hash(unverified['state']),'restart initial state differs from checkpoint')
     summary['restart_bitwise_equal']=same_history(stable[0],resumed)
-    rejected=case('rejected-second',dt,2,'--diagnostic','--reject-step',2)
+    rejected=case('rejected-second',dt,half+1,'--diagnostic','--reject-step',half+1)
     require('deliberate PIMPLE rejection' in rejected['failure'],'did not exercise deliberate rejection')
     summary['rejection_bitwise_equal']=same_history(unverified,rejected)
-    require(rejected['implicit_callback_count']==2 and rejected['steps']==1,'rejection/callback count')
+    require(rejected['implicit_callback_count']==half+1 and rejected['steps']==half,'rejection/callback count')
     require(initial['initial']==stable[0]['initial'] and
         all(r['native_history'][0]==r['state'][:int(r['offsets'][4])] for r in stable),
         'native history did not evolve with differential solution')
