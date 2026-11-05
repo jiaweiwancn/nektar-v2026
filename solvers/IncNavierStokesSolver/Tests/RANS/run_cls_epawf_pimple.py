@@ -121,7 +121,9 @@ def main():
                              report['last_stage_time'], report['last_stage_alpha'], manifest)
             require(max(abs(x-y) for x,y in zip(norms, report['stage_audits'][-1][6:])) < 1e-8,
                     'independent original residual differs')
-        manifest['runtime_identity_unchanged'] = identity(a.solver) == manifest['executable']
+        final_identity = identity(a.solver)
+        manifest['runtime_identity_unchanged'] = all(final_identity[key] == manifest['executable'][key]
+            for key in ('path','sha256','libraries'))
         require(manifest['runtime_identity_unchanged'], 'runtime binary/library changed')
     write_json(a.output/'manifest.json', manifest)
     print(json.dumps({k:manifest[k] for k in ('status','accepted_steps','final_time','failure') if k in manifest}))

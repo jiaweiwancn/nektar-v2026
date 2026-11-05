@@ -77,7 +77,8 @@ target_include_directories(RANSEquilibriumTimeProbe PRIVATE ${RANS_SOURCE_ROOT}/
 target_link_libraries(RANSEquilibriumTimeProbe RANSKernels ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
 add_executable(RANSHistoryRejectionChecks
     test_cls_epawf_history_rejection.cpp
-    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallTimeIntegration.cpp)
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallTimeIntegration.cpp
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSHistory.cpp)
 target_include_directories(RANSHistoryRejectionChecks PRIVATE ${RANS_SOURCE_ROOT}/solvers)
 target_link_libraries(RANSHistoryRejectionChecks ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
 add_test(NAME RANSHistoryRejectionChecks COMMAND RANSHistoryRejectionChecks)
