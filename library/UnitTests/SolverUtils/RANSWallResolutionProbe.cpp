@@ -199,6 +199,11 @@ int main(int argc,char **argv)
             for(int i=0;i<patch.size[patch.K()];++i)
                 Require(state[patch.offset[patch.K()]+i]==beforeTrace[patch.offset[patch.K()]+i],"trace construction replaced k");
         }
+        const bool qualificationRequested=packet.get<bool>("audit_original_qualification",false);
+        bool groundAdmissible=false;
+        const auto ground=qualificationRequested?patch.WallTraceJSON(state,groundAdmissible):"null";
+        Require(!qualificationRequested || groundAdmissible,
+            "resolution state outside continuous ground domain before scalar evaluation: "+ground);
         const auto domain=patch.ScalarDomain(state,time,data,true);Require(domain.admissible,"resolution state outside native scalar evaluation domain");
         const auto resolution=patch.ResidualResolution(state,history,alpha,time,data,false);
         const RANSWallCoordinate original{1.6046496089512394,0,0},zero{1,0,0};
@@ -219,6 +224,7 @@ int main(int argc,char **argv)
         }
         std::vector<std::string> fields,keys;for(int b=0;b<patch.Gauge();++b){fields.push_back(Field(patch,b));}
         for(const auto &key:RANSWallResolutionSpatialTerms()){keys.push_back(J::Quote(key));}
+        const auto qualification=qualificationRequested?patch.CompleteRestrictedAudit(state,history,alpha,time,data,true):RANSWallEvolutionPatch::Diagnostic{};
         const auto &control=patch.TransitionControls();const auto distances=patch.TransitionDistances();
         const auto output=J::Object({{"schema","1"},{"scope",J::Quote("R3 fixed-state arithmetic/component/mass-contact diagnostic only; no solver, trajectory, field repair or root inference")},
             {"dimension","2"},{"ranks","1"},{"mapped","false"},{"upstream_transition","true"},{"chi",J::Number(p.chi)},{"eta","0"},
@@ -237,6 +243,8 @@ int main(int argc,char **argv)
                 control.state.marginOff,control.state.marginOn,control.state.reynoldsOff,control.state.reynoldsOn})},
             {"transition_weights",J::Numbers(control.state.weights)},{"transition_reference",J::Numbers(patch.TransitionReference())},
             {"scalar_domain",RANSWallEvolutionPatch::ScalarDomainJSON(domain,true)},
+            {"original_qualification_requested",J::Boolean(qualificationRequested)},
+            {"continuous_ground",ground},{"qualification",qualificationRequested?Maps(qualification):"null"},
             {"effective_state",J::Numbers(resolution.effectiveState)},{"constraints",J::Constraints(resolution.constraints)},
             {"spatial_sum_keys",J::List(keys)},{"terms",Maps(resolution.terms)},{"native",Maps(resolution.native)},
             {"compensated",Maps(resolution.compensated)},{"extended_decimal",Wide(resolution.extended)},

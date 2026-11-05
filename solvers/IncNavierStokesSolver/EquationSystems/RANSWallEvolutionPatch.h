@@ -150,6 +150,8 @@ public:
     static std::string ScalarDomainJSON(const ScalarDomainResult &domain,bool locations=false);
     Diagnostic CompleteRestrictedAudit(const Vector &state,const Vector &history,
         double alpha,double time,const RANSWallEvolutionData &data,bool rangesOnly=false) const;
+    // Read-only continuous cubic trace audit; existing serial/flat limits apply.
+    std::string WallTraceJSON(const Vector &state,bool &admissible) const;
     WallMatrix ScalarFeasibleJacobian(const Vector &state,const Vector &history,
         double alpha,double time,const RANSWallEvolutionData &data,
         std::vector<std::string> *columnMetadata=nullptr,bool scalarOnly=false) const;
@@ -286,7 +288,6 @@ private:
         long double value,error;
     };
     std::vector<WallExtremum> WallTraceR4(const Vector &state) const;
-    std::string WallTraceJSON(const Vector &state,bool &admissible) const;
     bool RestrictedInner(const ScalarObservation &p) const;
     RANSWallGlobalPoint RestrictedGradientRow(const ScalarObservation &p) const;
     struct OuterBound
