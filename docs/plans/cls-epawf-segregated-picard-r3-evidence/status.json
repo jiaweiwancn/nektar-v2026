@@ -1,8 +1,8 @@
 {
   "status": "native_development_in_progress_original_m8_unresolved",
-  "producing_code_commit": "8dc862f270632dacad1d60ca22d8e870ebd9b7c6",
+  "producing_code_commit": "9a5b58dd1db067636f9fe6fea586163d912e2048",
   "native_m8": {
-    "status": "primary_original_start_running",
+    "status": "radius-aware original-start pure and mixed runs in progress; no qualified first-stage root",
     "qualified_first_stage": false,
     "accepted_physical_steps": 0,
     "final_time": 0
@@ -11,7 +11,9 @@
     "linux_native_pressure_verification": "passed; same verified/unverified states",
     "linux_focused_ctest": "6 passed",
     "linux_sanitized_reduced_model": "passed",
-    "native_controlled_H_and_reduced_operator": "passed on completed bounded runs; not stage convergence"
+    "native_controlled_H_and_reduced_operator": "passed on completed bounded runs; not stage convergence",
+    "native_radius_and_buffer_controls": "passed_operator_checks; failed native stages preserve accepted h0/history bitwise",
+    "native_affine_model_replay": "passed under Linux ASan/UBSan for radius-active and inward-buffered packets; not nonlinear convergence"
   },
   "continued_branch": {
     "auxiliary_positive_eta_tolerance": 2e-11,
@@ -30,5 +32,18 @@
     "admissible nonlinear-guess perturbations of the same qualified physical target",
     "qualified final-trajectory independent residual readback"
   ],
-  "heavy_run_root": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3"
+  "heavy_run_root": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3",
+  "qualification_restored_diagnostic": {
+    "original_full_residual": 20.240190577584954,
+    "gradient_departure": 0.0009999990002125259,
+    "ground_minimum": 0.0005205280674749418,
+    "algebraic_root": false,
+    "physical_acceptance": false
+  },
+  "completed_qualified_reduced_search": {
+    "full_residual": 19.887303979286997,
+    "gradient_departure": 0.0009999544751542189,
+    "ground_minimum": 0.001078865312152447,
+    "scope": "three numerical updates from a saved guess with original physical target/history; not an accepted stage"
+  }
 }

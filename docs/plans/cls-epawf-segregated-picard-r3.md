@@ -15,9 +15,15 @@ velocity, pressure/gauge, and epsilon/trace solves. It no longer chooses a
 conditional Jkk direction and only optionally settles the other equations.
 The R2 conditional method, old backends, verification repair, restricted k
 analytic assembly, original residual, and historical evidence remain intact.
+The R2 projected map could be stationary in its frozen A_k^T Mff^-1 A_k
+metric at ground contact while its original k residual stayed nonzero. R3
+therefore scores the original reduced residual, not that projected-map defect.
 No full all-field Jacobian or hidden coupled direction solver was added.
 
-The current producing solver is `3cd9dca` (checked half-response warm starts).
+The current producing solver is `9a5b58d` (radius-constrained reduced models).
+The measured-response enrichment is `bdcdc48`.
+The inward restoration search target is `ef83196`;
+`3cd9dca` supplies the checked half-response warm starts.
 The pure-restoration control is `8687dc3f6d7c9cf7dc6e1a1cc3e3f7fd069f84da`.
 Its mixed-search and relative-restoration controls are `1c23b84` and `ad1dbc3`;
 the completed earlier radius/filter controls use `8dc862f`.
@@ -74,7 +80,15 @@ It must attain the same tighter H tolerance. Failure retries the canonical warm
 start. In verification mode, the first used response of every model is also
 solved from the canonical warm start; inconsistent local responses are rejected.
 This reduces repeated nonlinear equilibration work without substituting a partial
-H solve for Y(k).
+H solve for Y(k). At the nearly restored checkpoint, the first half response
+takes one update versus nine canonically, with relative action difference
+3.64e-6 and maximum normalized observation-action difference4.94e-6.
+The bounded original-h0 control passes the operator/history checks. Its first
+14-column update uses162 flow/epsilon pairs versus239 canonically, including
+the extra independent warm-start check. The finite-accuracy optimization path
+is not bitwise identical: maximum k-coefficient difference is.00310, residuals
+64.185405 versus64.208867 and qualification excesses.5230437 versus.5230460.
+Both trials are scored using their actual rebuilt residual and inventory.
 
 Verification repeats the same k, changes the y warm start, tightens H, and forces
 a zero-budget failure. Representative measured reduced-residual differences are:
@@ -117,6 +131,25 @@ normalization on both sides, epsilon lower-bound witnesses, spatially distinct
 signed qualification witnesses, active cuts, kinetic defect modes and previous
 displacements. The model expands toward 32 columns when needed. Thirty-two
 columns are still a tested subspace, not the entire 504-dimensional free-k space.
+
+The optional response enrichment (`bdcdc48`, `RANSWallReducedKrylov`, zero
+retains the previous space) adds up to four preconditioned missing-response
+seeds in the tested configuration. With conditional k preconditioner P and a
+verified reduced action Bv, the next seed is -P^-1(Bv-K0 P v)/K0. It extends
+the preconditioned Krylov space using the measured non-k response; the rate
+Picard block is a fallback preconditioner. A seed is generated only when the
+missing response exceeds ten times its empirical two-scale action uncertainty.
+Every generated seed is independently subjected to feasible H solves and the
+same two-size action/observation checks before use. These seeds occupy the
+declared response budget; they do not assemble an all-field matrix. Matched
+18-column plain/enriched controls and an enriched original-h0 run are recorded
+separately. At the same qualified saved state, the enriched model accepts
+fraction .5 (displacement .2) and reduces residual20.232366 ->20.179175 with
+zero qualification excess; the plain model accepts1/32 (displacement .0125),
+reaching20.226733. After three enriched updates, residual is20.127916 and the
+original qualification still passes. This is useful local progress, not stage
+convergence or a nonlinear stationarity certificate. A small exact H/F model verifies that this enrichment recovers a
+known reduced root missed by the single conditional seed; it is not M8 evidence.
 
 Feedback changes signed directions materially. At the original-run eight-update
 checkpoint, the sampled-K direction on the negative-x side has conditional merit
@@ -180,8 +213,11 @@ and a minimax qualification slack. Restoration can raise residual while reducing
 qualification violation. The filter tracks these quantities separately. The
 model now includes the filter's allowed qualification ceiling, rather than
 rejecting every proposal before an actual line search when its full-step
-violation exceeds that ceiling. Inside qualification, all original signed
-bounds are enforced while reducing the original residual.
+violation exceeds that ceiling. Inside qualification, the model uses all original signed
+bounds while reducing the original residual. The actual search filter permits
+a normalized numerical excess below1e-8; every positive excess triggers
+restoration on the next model. This search allowance never qualifies a physical
+state: the complete original final audit has its unchanged exact bounds.
 
 Two accepted steps with less than 1% relative qualification improvement reduce
 the residual multiplier by ten and expand the response budget. The default mixed
@@ -221,6 +257,54 @@ the radius and rescanned as a continuous polynomial. Observed coefficients were
 scale 3.04e-17. This changes the numerical proposed polynomial; it is not clipping,
 a k floor, a source change, or relaxation of residual/qualification acceptance.
 
+A near-envelope restoration model adds an inward search margin of
+min(1e-6,1e-4 times the original k residual norm) in normalized observation
+units when the positive excess is below1e-4. This addresses the measured
+unbuffered progression1.28e-5 ->1.78e-9 ->4.00e-12, whose last predicted
+excess was2.44e-13: aiming at exact contact reaches the scale of inner error.
+The margin shifts only the restoration model, shrinks with original residual
+progress and is zero for an inside-envelope model. Its first native saved-state
+update passes the original complete qualification at residual20.240190578:
+gradient .0009999990002, epsilon minimum ratio .9846519511, sampled-K maximum
+ratio1.0099999900, continuous-ground minimum .0005205281. Predicted residual
+20.240190575 agrees with actual20.240190578 at displacement4.35512e-7
+within radius .4. This is a qualified constitutive state, not an algebraic root
+or an accepted physical stage. Actual trial scoring and
+complete physical acceptance retain the original bounds. A standalone tiny-
+excess test verifies crossing the unchanged bound instead of asymptotic
+outside contact; it passes Linux ASan/UBSan and bounds assertions.
+
+The enlarged original-h0 response space exposed a radius-handling weakness:
+its raw affine model predicted qualification excess .411883, but post-solve
+radial scaling to radius .4 raised the prediction to1.700588. The smaller
+space's in-radius direction had predicted .456267. Thus adding useful response
+directions could degrade the bounded proposal. The radius now participates in
+the small constrained model through a nonnegative multiplier on V^T V. A bounded
+search keeps the converged inside-radius bracket and reports the multiplier,
+raw/final field norms, solve count and radius complementarity. The actual final
+correction is still re-bounded after ground arithmetic handling and rescanned.
+This multiplier changes direction construction, not the physical mass or source.
+Anisotropic known-answer tests show the advantage over radial scaling, preserve
+an independent slack, enforce an active cut and use the actual field norm for
+an oblique response basis. They pass ASan/UBSan. Native controls confirm the improvement. At original h0 the raw correction
+norm3.77048 becomes an in-model correction .399804 within radius .4, with
+multiplier .014856 and predicted/actual qualification excess .450799/.494633.
+The radius model uses16 QP solves (4,486 affine iterations); its radius
+complementarity is2.33e-6, separately from affine stationarity1.48e-15.
+At the matched qualified endpoint, predicted/actual residuals are
+19.995316/19.995620 at a half step, compared with20.179175 for post-solve radial
+scaling. After three radius-aware updates the residual is19.887304, gradient
+.0009999545 and ground minimum .001078865; qualification passes, full algebraic
+convergence does not. The original-start complete run remains in progress.
+
+The buffered model's ground-cut restart and saved replay initial point also now
+include the inward buffer. The earlier artifact could encode an infeasible
+starting slack despite a correctly solved first native model. Replay evidence
+uses the Hessian including the radius multiplier and the corrected feasible
+initial point. ASan/UBSan replay passes both the radius-active and positive-buffer native
+packets. The latter has affine primal/stationarity defects4.30e-23/2.03e-22.
+An affine replay certificate remains a model check.
+
 ## Native progress and nonlinear trial agreement
 
 The original unmodified h0 first has gradient departure .000500195, inside the
@@ -239,9 +323,11 @@ step. The final primary-run entry is pending completion.
 | R3 mixed original h0, six updates (`82ca255`) | 32.866814956 | .001660092 | bounded native control, fresh readback |
 | R3 pre-filter-repair original h0, eight updates (`e7313f7`) | 24.415622070 | .001273039 | filter mismatch; no convergence |
 | R3 repaired filter, three more updates from that saved guess | 18.566628956 | .001264727 | additional warm-start diagnostic |
-| R3 adaptive mixed h0, 17 numerical updates (`1c23b84`) | 19.494577545 | .001011874 | in progress |
-| Pure restoration from mixed checkpoint, first update (`8687dc3`) | 20.239805178 | .001000012818 | additional diagnostic, in progress |
-| Current pure original-h0 run (`3cd9dca`) | pending | pending | primary final test |
+| R3 adaptive mixed h0, 17 numerical updates (`1c23b84`) | 19.494577545 | .001011874 | historical progress snapshot |
+| Pure restoration from mixed checkpoint, first update (`8687dc3`) | 20.239805178 | .001000012818 | recorded first-update diagnostic |
+| Inward saved-state restoration (`ef83196`), first update | 20.240190578 | .000999999000 | passes qualification only; not an algebraic root |
+| Radius-aware saved-state search (`9a5b58d`), three updates | 19.887303979 | .000999954475 | passes qualification, not an algebraic root |
+| Current original-h0 runs (`9a5b58d`) | pending | pending | primary final tests |
 
 The saved R2 endpoint is used only for diagnostics. Its first reduced restoration
 step changed residual 2.908834 -> 3.271267 while improving gradient .003826405 ->
@@ -375,6 +461,37 @@ one rank and one thread per BLAS/OpenMP runtime were used, within the72-worker
 limit including the simultaneous bounded experiments. No support claim extends
 beyond the existing serial/flat tensor-cubic ground implementation.
 
+The current original-start command can be reproduced in the isolated Linux tree
+(the retained run directories must not be overwritten):
+
+```bash
+R=/media/jay/新加卷/nektar-v2026-runs/cls-epawf-segregated-picard-r3
+S="$R/continuation-source"
+B="$R/continuation-build"
+source /home/jay/.local/opt/nektar-v2026-mpi/env.sh
+export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
+export BLIS_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 NUMEXPR_NUM_THREADS=1
+export PYTHONDONTWRITEBYTECODE=1 TMPDIR="$R/tmp"
+export OMPI_MCA_orte_tmpdir_base=/tmp PMIX_MCA_gds=hash
+cmake -S "$S/solvers/IncNavierStokesSolver/Tests/RANS" -B "$B" \
+  -DRANS_BUILD_SOLVER=ON -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_PREFIX_PATH=/home/jay/.local/opt/nektar-v2026-mpi \
+  '-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake' \
+  '-DCMAKE_CXX_FLAGS=-fno-fast-math -ffp-contract=off -D_GLIBCXX_ASSERTIONS'
+cmake --build "$B" --parallel 8 --target IncNavierStokesSolver RANSWallResolutionProbe RANSReducedModelChecks
+python3 "$S/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py" \
+  --solver "$R/binaries-9a5b58d/IncNavierStokesSolver" \
+  --resolution-probe "$R/binaries-9a5b58d/RANSWallResolutionProbe" \
+  --reduced --reduced-verify --reduced-basis 18 --reduced-krylov 4 --reduced-radius .4 \
+  --reduced-restoration-weight 0 --sweeps 40 --timeout 18000 \
+  --output "$R/radius-original-reproduction"
+```
+
+The harness deliberately returns nonzero unless the original stage completes;
+run the operator checker separately on bounded failed-stage controls. Each
+native numerical command is one rank. Logs and manifests distinguish solver,
+readback, expected rejected-stage and startup return codes.
+
 [Build and sanitized regression evidence](cls-epawf-segregated-picard-r3-evidence/native/build-validation.json),
 [pressure verification](cls-epawf-segregated-picard-r3-evidence/native/verification.json),
 [development controls](cls-epawf-segregated-picard-r3-evidence/native/development-controls.json),
@@ -382,7 +499,16 @@ beyond the existing serial/flat tensor-cubic ground implementation.
 [continued roots and independent readbacks](cls-epawf-segregated-picard-r3-evidence/native/continuation-aux.json),
 [current build/control evidence](cls-epawf-segregated-picard-r3-evidence/native/build-validation-current.json),
 [8687dc3 regressions and pressure verification](cls-epawf-segregated-picard-r3-evidence/native/build-validation-8687dc3.json),
+[inward-search build and sanitizers](cls-epawf-segregated-picard-r3-evidence/native/build-validation-ef83196.json),
+[enriched-source regressions and verification](cls-epawf-segregated-picard-r3-evidence/native/build-validation-bdcdc48.json),
+[radius-source build and replays](cls-epawf-segregated-picard-r3-evidence/native/build-validation-9a5b58d.json),
+[matched response-space controls](cls-epawf-segregated-picard-r3-evidence/native/response-enrichment-completed.json),
+[completed radius controls](cls-epawf-segregated-picard-r3-evidence/native/radius-completed.json),
+[sanitized native model replays](cls-epawf-segregated-picard-r3-evidence/native/radius-replay-checks.json),
+[independent restored-state audit](cls-epawf-segregated-picard-r3-evidence/native/audit-inward-qualified-1.json),
 [independent feedback components](cls-epawf-segregated-picard-r3-evidence/native/feedback-components.json),
+[completed native controls](cls-epawf-segregated-picard-r3-evidence/native/development-completed.json),
+[fresh residual/qualification audits](cls-epawf-segregated-picard-r3-evidence/native/native-audits.json),
 [continued branch below eta600](cls-epawf-segregated-picard-r3-evidence/native/continuation-near-ground.json),
 [repeated auxiliary root](cls-epawf-segregated-picard-r3-evidence/native/continuation-repeat.json),
 and [changed-mesh diagnostic](cls-epawf-segregated-picard-r3-evidence/native/ground-mesh.json)

@@ -1,0 +1,45 @@
+{
+  "source": "9a5b58dd1db067636f9fe6fea586163d912e2048",
+  "utc": "2026-11-05T18:24:35.715251+00:00",
+  "scope": "Linux radius-model, native operator and affine replay safety checks; not M8 convergence",
+  "build_workers": 8,
+  "ranks_per_case": 1,
+  "threads_per_rank": 1,
+  "test_concurrency": 1,
+  "compile_flags": "Release -fno-fast-math -ffp-contract=off -D_GLIBCXX_ASSERTIONS",
+  "cmake_cache_sha256": "b334e6c0718909aac37e56f070abc87532fb364ee550187aec69bf19a0fc898b",
+  "build_log_sha256": "2bba61f170df3e13f6cb79e7440c9752cc39e3401a307613d5b2a68b69faf1ca",
+  "model_ctest": "Internal ctest changing into directory: /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-build\nTest project /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-build\n    Start 1: RANSReducedModelChecks\n1/1 Test #1: RANSReducedModelChecks ...........   Passed    0.01 sec\n\n100% tests passed, 0 tests failed out of 1\n\nTotal Test time (real) =   0.01 sec\n",
+  "sanitized_model": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/model-sanitized/RANSReducedModelChecks-9a5b58d",
+    "sha256": "e084de32a17510890b849a1d85a0f3b66b33418be47eb1cea1a0093c8e8bec18",
+    "output": "passed_reduced_model_checks (not M8 convergence)\n"
+  },
+  "native_affine_replays": [
+    {
+      "case": "radius-original-control",
+      "packet": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/radius-original-control/target/reduced-model-t0.0025000000000000001-f006292c518d-0-0.bin",
+      "packet_sha256": "9a226685058e6aec9789940ad57f2f230b73a358a6e05e971e801922f186764c",
+      "exit_code": 0,
+      "output": "{\"solved\":true,\"failure\":\"\",\"steps\":273,\"primal\":1.0408340855860843e-17,\"stationarity\":1.4802600407163996e-15,\"complementarity\":1.287914173830107e-16,\"redundant_rows\":0,\"solution\":[0.66085942353402549,-4.6392317770728031,-13.218014724613576,-18.012362470748261,-9.0584873776084809,-0.6894988053276927,-0.0195388340195554,0.044084740693955987,-0.0034132881380111047,0.064484277542548069,-0.0032699446556029264,-0.03117760336400658,-0.015088762238289161,0.051274999420578497,0.030236808900062358,-0.02012791589959758,-0.039378263177733859,0.025147349845246393,0.45079940583710915]}\n"
+    },
+    {
+      "case": "radius-buffered-replay",
+      "packet": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/radius-buffered-replay/target/reduced-model-t0.0025000000000000001-f006292c518d-0-0.bin",
+      "packet_sha256": "f963c503bdc14fd447a4b0bac2ebe730505828e4b05d0ab0a2773036f89b7e6f",
+      "exit_code": 0,
+      "output": "{\"solved\":true,\"failure\":\"\",\"steps\":7,\"primal\":4.3013391852757439e-23,\"stationarity\":2.0260356633039082e-22,\"complementarity\":1.6758358431742504e-32,\"redundant_rows\":0,\"solution\":[-9.9683596410541178e-09,-1.8318046802766586e-08,3.8047068119318095e-07,5.2562188274822922e-08,1.1053412718327253e-08,8.1177479661063677e-08,2.2944781494694423e-08,7.44213272963381e-08,1.2904107072627825e-07,-1.1521894646202743e-07,-3.7241372225296965e-09,-9.4269064483656811e-09,-6.0583011239401588e-08,-3.4741166676835944e-08,1.8936510089420026e-10]}\n"
+    }
+  ],
+  "reused_shared_regressions": {
+    "source": "bdcdc481d3b3a2f05d9965aba8a8c4bd8a63d65c",
+    "ctest_passed": 6,
+    "verified_unverified_picard": "bitwise identical",
+    "reason": "Changes are confined to the reduced model/direction and its focused tests; governing-field kernels and repaired predictor code are unchanged"
+  },
+  "source_sha256": {
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionReduced.cpp": "1ec70d0e5cb48c3fb22ee33f09e46370e8f54c195b002776b6b991f727c3d432",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSWallReducedModel.h": "4f3478e2eca89f41dafc164471fda9d64c9cd42cf67c3c63b7344b2ded7a3699",
+    "solvers/IncNavierStokesSolver/Tests/RANS/test_cls_epawf_reduced_model.cpp": "8df5362ad8418d2bb30aadfbf8c09a7f9dfbd38e44b1d301965a5d046519167f"
+  }
+}

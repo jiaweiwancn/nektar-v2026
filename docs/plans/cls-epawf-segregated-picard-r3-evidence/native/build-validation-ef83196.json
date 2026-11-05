@@ -1,0 +1,33 @@
+{
+  "utc": "2026-11-05T17:24:02.278013+00:00",
+  "source": "ef831968f56fd6b917a2703a9f671ce3040a62fd",
+  "source_sha256": {
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionReduced.cpp": "b137cda2e164550e879664e6278e4bab831e2997689bbda95ca2da9efa5e3513",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSWallReducedModel.h": "dfd8b54507911cfcafe5d81977849e1e9e36e8941f15f1f5ab91ae084213e6c1",
+    "solvers/IncNavierStokesSolver/Tests/RANS/test_cls_epawf_reduced_model.cpp": "1f01164d2b95712ed0a6b9f62bd28e75b6f11d58257504bcc5e9eabdca6596de"
+  },
+  "build_workers": 8,
+  "test_concurrency": 1,
+  "ranks": 1,
+  "threads_per_rank": 1,
+  "cache": {
+    "CMAKE_BUILD_TYPE": "Release",
+    "CMAKE_CXX_FLAGS": "-fno-fast-math -ffp-contract=off -D_GLIBCXX_ASSERTIONS",
+    "CMAKE_CXX_COMPILER": "/usr/bin/c++",
+    "Nektar++_DIR": "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake"
+  },
+  "cmake_cache_sha256": "b334e6c0718909aac37e56f070abc87532fb364ee550187aec69bf19a0fc898b",
+  "build_log_sha256": "2bba61f170df3e13f6cb79e7440c9752cc39e3401a307613d5b2a68b69faf1ca",
+  "model_ctest": "Internal ctest changing into directory: /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-build\nTest project /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-build\n    Start 1: RANSReducedModelChecks\n1/1 Test #1: RANSReducedModelChecks ...........   Passed    0.01 sec\n\n100% tests passed, 0 tests failed out of 1\n\nTotal Test time (real) =   0.02 sec\n",
+  "model_sanitized": {
+    "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/model-sanitized/RANSReducedModelChecks-ef83196",
+    "sha256": "7f0372f93228e57622f149b3f82825dac817bf7117f3d223e5047ac8971720d3",
+    "output": "passed_reduced_model_checks (not M8 convergence)\n"
+  },
+  "executable_sha256": {
+    "IncNavierStokesSolver": "677e1399fc3eb57e59156ae6db88a1c5a1a5cadcd05964f55770bafefdedb593",
+    "RANSWallResolutionProbe": "3ed22fa23fc7f2f6a1fc534f00c2ea3776dae0dab8927be7514d5bb8e2d4b64c"
+  },
+  "scope": "Inward search target and checked half-response warm start; not successful M8 convergence",
+  "reused_regressions": "8687dc3: six shared-kernel CTests and verified/unverified Picard; those shared kernels are unchanged"
+}

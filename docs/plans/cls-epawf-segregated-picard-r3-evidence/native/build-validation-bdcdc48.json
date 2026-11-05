@@ -1,0 +1,151 @@
+{
+  "source": "bdcdc481d3b3a2f05d9965aba8a8c4bd8a63d65c",
+  "utc": "2026-11-05T17:43:08.355594+00:00",
+  "build_workers": 8,
+  "test_concurrency": 1,
+  "ranks_per_case": 1,
+  "threads_per_rank": 1,
+  "scope": "Shared-kernel, predictor verification and reduced-model checks; not original M8 convergence",
+  "cmake_cache_sha256": "b334e6c0718909aac37e56f070abc87532fb364ee550187aec69bf19a0fc898b",
+  "compile_flags": "Release -fno-fast-math -ffp-contract=off -D_GLIBCXX_ASSERTIONS",
+  "shared_kernel_regressions": "Internal ctest changing into directory: /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-build\nTest project /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-build\n    Start 1: RANSReducedModelChecks\n1/6 Test #1: RANSReducedModelChecks ..............   Passed    0.01 sec\n    Start 2: RANSEquilibriumTimeNative\n2/6 Test #2: RANSEquilibriumTimeNative ...........   Passed    0.08 sec\n    Start 3: RANSEquilibriumEvolutionNative\n3/6 Test #3: RANSEquilibriumEvolutionNative ......   Passed    2.21 sec\n    Start 4: RANSEquilibriumPatchNative\n4/6 Test #4: RANSEquilibriumPatchNative ..........   Passed    9.24 sec\n    Start 5: RANSEquilibriumWallEvolutionSmoke\n5/6 Test #5: RANSEquilibriumWallEvolutionSmoke ...   Passed    1.58 sec\n    Start 6: RANSEquilibriumWallStageSmoke\n6/6 Test #6: RANSEquilibriumWallStageSmoke .......   Passed   24.30 sec\n\n100% tests passed, 0 tests failed out of 6\n\nTotal Test time (real) =  37.43 sec\n",
+  "pressure_verification": {
+    "solver": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-bdcdc48/IncNavierStokesSolver",
+    "solver_sha256": "be1644a6b740ddb4ee2978c268452a91565f46a1fb168fbce1ec58ae84171632",
+    "unverified": {
+      "receipt": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-bdcdc48/IncNavierStokesSolver",
+          "case.xml"
+        ],
+        "exit_code": 1,
+        "seconds": 24.17456062600104,
+        "log_sha256": "b9d6c3d3f91217f3dd285ec8a093650e1ea79103f32c1d41f3e2e00cea8af0db"
+      },
+      "states": [
+        [
+          "74b6741959dad6ff4a5cb68ca09e50d158f90bdfcdcb16171216accc10622fe9",
+          [
+            1.1794004946784609,
+            0.004400581061650341,
+            48.77958067150591,
+            0.10762616664602309,
+            6.873424991234585e-16,
+            8.680010011686546e-16,
+            6.217221832846563e-17,
+            0.0007445094986887393
+          ]
+        ],
+        [
+          "f44703a5907dd1242af29bfb4ac6c1446bd6edc00aee8a0cf86c96d82f676234",
+          [
+            1.2763733497620593,
+            0.0017370324339079442,
+            40.04133463826203,
+            0.05372680780059099,
+            7.941210260267363e-16,
+            9.262577085512644e-16,
+            4.370690007832189e-17,
+            0.0008564959256433586
+          ]
+        ]
+      ]
+    },
+    "verified": {
+      "receipt": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-bdcdc48/IncNavierStokesSolver",
+          "case.xml"
+        ],
+        "exit_code": 1,
+        "seconds": 41.67106942600003,
+        "log_sha256": "2f0b325abaf8de4663d119e4077436cb72f27d1795feff9362de04259829e86c"
+      },
+      "states": [
+        [
+          "74b6741959dad6ff4a5cb68ca09e50d158f90bdfcdcb16171216accc10622fe9",
+          [
+            1.1794004946784609,
+            0.004400581061650341,
+            48.77958067150591,
+            0.10762616664602309,
+            6.873424991234585e-16,
+            8.680010011686546e-16,
+            6.217221832846563e-17,
+            0.0007445094986887393
+          ]
+        ],
+        [
+          "f44703a5907dd1242af29bfb4ac6c1446bd6edc00aee8a0cf86c96d82f676234",
+          [
+            1.2763733497620593,
+            0.0017370324339079442,
+            40.04133463826203,
+            0.05372680780059099,
+            7.941210260267363e-16,
+            9.262577085512644e-16,
+            4.370690007832189e-17,
+            0.0008564959256433586
+          ]
+        ]
+      ],
+      "saddle": {
+        "coefficient_difference": 3.608224830031759e-16,
+        "velocity_correction": 0.0005595416395993133,
+        "affine_pressure_difference": 2.1955093992831465e-18,
+        "interface_corrected": [
+          6.000000000000001,
+          -0.45578674039861067,
+          0.0002152998383378736,
+          0.0003874010138812978,
+          0.0004911855667140697,
+          0,
+          -4.786140279346866e-16,
+          0.0011415978999939364
+        ],
+        "interface_direct": [
+          6.000000000000001,
+          -0.45578674039861067,
+          0.00021529983833787816,
+          0.0003874010138813013,
+          0.0004911855667140697,
+          0,
+          -4.790825297987468e-16,
+          0.0011415978999939633
+        ],
+        "original_predictor_continuity_gauge": [
+          0.000854316123584103,
+          0.00025325040000847383,
+          1.0282979979667204e-16
+        ],
+        "original_corrected_continuity_gauge": [
+          6.873469676717627e-16,
+          8.680010011686546e-16,
+          6.217221832846563e-17
+        ],
+        "event": "frozen_saddle_comparison",
+        "sweep": 0,
+        "alpha": 400,
+        "time": 0.0025,
+        "seconds": 17.414228325
+      }
+    },
+    "status": "passed"
+  },
+  "model_ctest": "Internal ctest changing into directory: /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-build\nTest project /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-build\n    Start 1: RANSReducedModelChecks\n1/1 Test #1: RANSReducedModelChecks ...........   Passed    0.01 sec\n\n100% tests passed, 0 tests failed out of 1\n\nTotal Test time (real) =   0.01 sec\n",
+  "sanitized_model": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/model-sanitized/RANSReducedModelChecks-bdcdc48",
+    "sha256": "91872220d5fbf0979551082e76c2448e3f62c982cbebe770d10376b811d33f89",
+    "output": "passed_reduced_model_checks (not M8 convergence)\n"
+  },
+  "build_logs": {
+    "build-bdcdc48.log": "147fd351b6c9dcc4463551f240464feb9b35625cc675d4f317af38889cb6b79f",
+    "build-regressions-bdcdc48.log": "3aa4ef3960e2bcc52161e4d114af9b9b93c42438cb3600087246a2981dc48888"
+  },
+  "source_sha256": {
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionReduced.cpp": "eff400444972b57ad27ed3eec03cab27e7d8db4a1403733ee6236a4d37351eb7",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp": "fede3e351a3ce8a2e61cc2b9be63a19cd16b02c0639c17a641149f7beafb1623",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h": "36fa73b936d71ac5788e252288e67d8017cb98947ff0bdec36e89863b304b9a3",
+    "solvers/IncNavierStokesSolver/Tests/RANS/test_cls_epawf_reduced_model.cpp": "a8fe3c1b27f12a743d255246bc43197e91ef0a332ade23a34c8aac051c91c21f"
+  }
+}
