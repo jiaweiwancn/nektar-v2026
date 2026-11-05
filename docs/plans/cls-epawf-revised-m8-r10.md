@@ -115,4 +115,3 @@ is unavailable.
 M8 remains open. Curved-wall MMS, active-cap and variable-height coupling,
 full-element and fully discrete positivity, refinement, long-time
 robustness, scalability and physical floor/hill validation remain open.
-
