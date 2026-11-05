@@ -736,6 +736,31 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             if (++witness == std::max(5, (basisBudget+1)/2))
                 break;
         }
+        if (m_reducedAdaptiveSpace && basisBudget >= 40)
+        {
+            // Point and trace seeds can exhaust their span before an expanded
+            // response budget is filled. In particular, they need not span
+            // interior free modes. Append residual-ranked coefficient modes;
+            // the same rank, feasible-probe and two-scale H checks below decide
+            // which genuinely add information. This is only a seed pool: no
+            // full reduced or all-field matrix is assembled. Modal signs here
+            // choose an orientation, never certify polynomial positivity.
+            const auto dual = mass.Apply(base.r);
+            std::vector<int> modes(dimension);
+            std::iota(modes.begin(), modes.end(), 0);
+            std::stable_sort(modes.begin(), modes.end(), [&](int a, int b) {
+                return std::abs(dual[a]) > std::abs(dual[b]);
+            });
+            for (int i : modes)
+            {
+                Vector mode(dimension);
+                mode[i] = dual[i] > 0. ? -1. : 1.;
+                add("expanded_free_mode_" + std::to_string(rows[i]), std::move(mode));
+            }
+            emit("free_mode_seed_pool", {{"modes", J::Number(dimension)},
+                {"basis_budget", J::Number(basisBudget)},
+                {"ranking", J::Quote("absolute free-k mass-inverse residual")}});
+        }
         if (!previous.empty()) add("previous", previous);
         std::vector<Vector> orthogonal;
         std::vector<Column> columns;
