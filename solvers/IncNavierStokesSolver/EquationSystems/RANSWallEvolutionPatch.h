@@ -409,7 +409,7 @@ private:
     bool m_picardVerify=false;
     bool m_picardGroundProjection=false;
     bool m_picardKNewton=false;
-    bool m_picardReduced=false,m_reducedVerify=false;
+    bool m_picardReduced=false,m_reducedVerify=false,m_reducedSecondOrder=false;
     bool m_picardContinuation=false;
     double m_picardContinuationEta=0.,m_picardContinuationTolerance=0.;
     int m_reducedBasis=10,m_reducedHUpdates=50,m_reducedKrylov=0;

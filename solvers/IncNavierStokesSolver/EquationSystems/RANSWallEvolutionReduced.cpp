@@ -421,6 +421,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         {"response_krylov_budget", J::Number(m_reducedKrylov)},
         {"probe_basis", J::Quote("orthogonal field directions when admissible; feasible inward fallback")},
         {"combined_direction_checks", J::Boolean(m_reducedVerify)},
+        {"second_order_qualification_correction", J::Boolean(m_reducedSecondOrder)},
         {"maximum_basis", J::Number(32)}, {"response_accuracy", J::Number(innerTolerance)}});
     auto base = evaluate(state, innerTolerance, m_reducedHUpdates, "base");
     Require(base.valid,
@@ -1551,6 +1552,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         }
         bool accepted = false;
         bool decomposed = false;
+        int correctionEvaluations = 0;
         if (qpOK && Length(displacement) > 0. &&
             (restore ? (RANSWallReduced::QualificationDecrease(base.violation, predictedViolation, 1., 1e-6) ||
                         slope < -1e-8 * base.merit * base.merit)
@@ -1566,10 +1568,147 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                                       "reduced_trial");
                 if (!trial.valid)
                     continue;
+                Vector trialCoefficients(n);
+                for (int i = 0; i < n; ++i)
+                    trialCoefficients[i] = fraction * solution[i];
+                Vector trialDisplacement = displacement;
+                for (double &x : trialDisplacement) x *= fraction;
+                const double originalTrialLength = Length(trialDisplacement);
+                int usedCorrections = 0;
+                // A tangent reduced step can leave curved qualification
+                // surfaces even when its checked first derivative is accurate.
+                // Correct the actual trial observations in the same measured
+                // response space. This changes k only; each corrected trial
+                // must again solve H and scan the complete actual inventory.
+                while (m_reducedSecondOrder && !restore && fraction >= .25 &&
+                       trial.violation > 0. && trial.violation < .1 &&
+                       trial.merit < base.merit && correctionEvaluations < 3 &&
+                       originalTrialLength > 1e-8)
+                {
+                    const int count = n + 1; // Last variable is an elastic slack.
+                    WallMatrix correctionH(count, Vector(count));
+                    Vector correctionG(count), initial(count);
+                    for (int i = 0; i < n; ++i)
+                        for (int j = 0; j < n; ++j)
+                            correctionH[i][j] = gram[i][j] + (i == j ? 1e-10 : 0.);
+                    correctionH[n][n] = 1e8;
+                    const double margin = std::min(1e-6, 1e-4 * base.merit);
+                    initial[n] = trial.violation + margin + 1e-10;
+                    std::vector<Cut> correctionCuts;
+                    auto cut = [&](Vector a, double b, const std::string &kind) {
+                        const double norm = Length(a);
+                        if (norm < 1e-15) return;
+                        for (double &x : a) x /= norm;
+                        correctionCuts.push_back({std::move(a), b/norm, -1, 0, kind});
+                    };
+                    for (const auto &b : trial.bounds)
+                        for (int sign : {-1, 1})
+                        {
+                            Vector a(count);
+                            for (int i = 0; i < n; ++i)
+                                a[i] = sign * b.Action(b.projected ? columns[i].traceAction
+                                                                  : columns[i].stateAction,
+                                                       offset[b.block]);
+                            a[n] = -1.;
+                            cut(std::move(a), -sign * (b.value -
+                                (sign < 0 ? b.lower : b.upper))/b.width - margin,
+                                "qualification");
+                        }
+                    for (const auto &p : WallTraceR4(trial.response.state))
+                    {
+                        Vector a(count);
+                        for (int i = 0; i < n; ++i)
+                            for (int j = 0; j < p.row.ids.size(); ++j)
+                            {
+                                const int c = index[p.row.ids[j]];
+                                if (c >= 0) a[i] -= kScale * p.row.phi[j] * columns[i].k[c];
+                            }
+                        cut(std::move(a), p.value - p.error, "continuous_ground");
+                    }
+                    for (const auto &p : trial.domain.observations)
+                    {
+                        const auto row = Point(p.block, p.coordinate, p.side);
+                        Vector a(count);
+                        for (int i = 0; i < n; ++i)
+                            a[i] = -row.Value(p.dependentTrace ? columns[i].traceAction
+                                                              : columns[i].stateAction,
+                                             offset[p.block])/p.scale;
+                        cut(std::move(a), p.value/p.scale, "evaluation_domain");
+                    }
+                    Vector nonnegative(count); nonnegative[n] = -1.;
+                    cut(std::move(nonnegative), 0., "elastic_slack");
+                    const auto correction = RANSWallReduced::SolveRadiusQuadratic<Factor>(
+                        correctionH, correctionG, correctionCuts, initial, kColumns,
+                        .5*originalTrialLength, 500);
+                    if (!correction.quadratic.solved)
+                    {
+                        emit("second_order_model_failed", {{"fraction", J::Number(fraction)},
+                            {"failure", J::Quote(correction.quadratic.failure)}});
+                        break;
+                    }
+                    auto delta = correction.quadratic.solution;
+                    const auto change = RANSWallReduced::BoundCorrection(delta, kColumns,
+                        std::numeric_limits<double>::max());
+                    auto total = trialDisplacement;
+                    for (int i = 0; i < dimension; ++i) total[i] += change[i];
+                    if (Length(total) > radius ||
+                        Length(change) > .5*originalTrialLength*(1.+1e-12))
+                    {
+                        emit("second_order_model_failed", {{"fraction", J::Number(fraction)},
+                            {"failure", J::Quote("corrected actual field exceeds its displacement bound")}});
+                        break;
+                    }
+                    // Warm start on the same converged H branch, while
+                    // prescribing exactly the corrected independent k.
+                    auto correctedGuess = trial.response.state;
+                    Apply(correctedGuess, rows, change, kScale);
+                    if (!admissible(correctedGuess))
+                    {
+                        emit("second_order_model_failed", {{"fraction", J::Number(fraction)},
+                            {"failure", J::Quote("corrected k fails actual ground or evaluation-domain scan")}});
+                        break;
+                    }
+                    ++correctionEvaluations;
+                    auto corrected = evaluate(correctedGuess, innerTolerance, m_reducedHUpdates,
+                                               "second_order_trial");
+                    double predictedQualification = 0.;
+                    for (const auto &b : trial.bounds)
+                    {
+                        double change = 0.;
+                        for (int i = 0; i < n; ++i)
+                            change += delta[i] * b.Action(b.projected ? columns[i].traceAction
+                                                                    : columns[i].stateAction,
+                                                          offset[b.block]);
+                        predictedQualification = std::max(predictedQualification,
+                            std::max((b.value-b.upper)/b.width+change,
+                                     (b.lower-b.value)/b.width-change));
+                    }
+                    const bool improved = corrected.valid && corrected.merit < base.merit &&
+                                          corrected.violation < trial.violation;
+                    emit("second_order_trial", {{"fraction", J::Number(fraction)},
+                        {"valid", J::Boolean(corrected.valid)}, {"improved", J::Boolean(improved)},
+                        {"before_norm", J::Number(trial.merit)},
+                        {"norm", J::Number(corrected.merit)},
+                        {"before_violation", J::Number(trial.violation)},
+                        {"violation", J::Number(corrected.violation)},
+                        {"predicted_violation", J::Number(predictedQualification)},
+                        {"elastic_slack", J::Number(delta[n])},
+                        {"inventory_size", J::Number(trial.bounds.size())},
+                        {"required", J::Number(innerTolerance)},
+                        {"non_k_error", J::Number(corrected.response.error)},
+                        {"correction", J::Number(Length(change))},
+                        {"correction_radius", J::Number(.5*originalTrialLength)},
+                        {"displacement", J::Number(Length(total))}, {"radius", J::Number(radius)}});
+                    if (!improved) break;
+                    trial = std::move(corrected);
+                    trialDisplacement = std::move(total);
+                    for (int i = 0; i < n; ++i) trialCoefficients[i] += delta[i];
+                    ++usedCorrections;
+                }
                 auto model = base.r;
                 for (int i = 0; i < n; ++i)
                     for (int j = 0; j < dimension; ++j)
-                        model[j] += fraction * solution[i] * columns[i].r[j];
+                        model[j] += trialCoefficients[i] * columns[i].r[j];
                 auto error = trial.r;
                 for (int i = 0; i < dimension; ++i)
                     error[i] -= model[i];
@@ -1580,7 +1719,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                     double change = 0.;
                     for (int i = 0; i < n; ++i)
                         change +=
-                            fraction * solution[i] * columns[i].observations[j];
+                            trialCoefficients[i] * columns[i].observations[j];
                     modelViolation = std::max(
                         modelViolation,
                         std::max((b.value - b.upper) / b.width + change,
@@ -1610,7 +1749,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                     {
                         const auto shiftedD = component(columns[i].shifted.response.state);
                         for (int j = 0; j < dimension; ++j)
-                            predictedD[j] += fraction * solution[i] *
+                            predictedD[j] += trialCoefficients[i] *
                                 (shiftedD[j] - baseD[j]) / columns[i].h;
                     }
                     auto destructionError = component(trial.response.state);
@@ -1642,16 +1781,16 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                       {"model_error", J::Number(dualNorm(error))},
                       {"predicted_violation", J::Number(modelViolation)},
                       {"non_k_error", J::Number(trial.response.error)},
+                      {"second_order_corrections", J::Number(usedCorrections)},
                       {"displacement",
-                       J::Number(fraction * Length(displacement))},
+                       J::Number(Length(trialDisplacement))},
                       {"physical_k_displacement",
-                       J::Number(kScale * fraction * Length(displacement))}});
+                       J::Number(kScale * Length(trialDisplacement))}});
                 if (!take)
                     continue;
                 const double oldViolation = base.violation;
-                previous = displacement;
-                for (double &x : previous)
-                    x *= fraction;
+                const double oldMerit = base.merit;
+                previous = trialDisplacement;
                 state               = trial.response.state;
                 m_lastFeasibleState = state;
                 base                = std::move(trial);
@@ -1660,8 +1799,20 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 const bool agreement = predictionError < .2 * std::max(1., base.merit)
                     && std::abs(base.violation - modelViolation) <
                        .2 * std::max(1., base.violation);
-                radius = std::min(1.,
-                                  radius * (fraction == 1. && agreement ? 1.8 : .6));
+                if (m_reducedSecondOrder && !restore)
+                {
+                    const double predictedGain = oldMerit*oldMerit-dualNorm(model)*dualNorm(model);
+                    const double actualGain = oldMerit*oldMerit-base.merit*base.merit;
+                    const double ratio = predictedGain > 0. ? actualGain/predictedGain : 0.;
+                    if (ratio < .25) radius *= .5;
+                    else if (ratio > .75 && Length(previous) > .8*radius)
+                        radius = std::min(1.,1.8*radius);
+                    emit("radius_agreement", {{"actual_to_predicted_gain", J::Number(ratio)},
+                        {"next_radius", J::Number(radius)}});
+                }
+                else
+                    radius = std::min(1.,
+                                      radius * (fraction == 1. && agreement ? 1.8 : .6));
                 ++iterations;
                 failedModels = 0;
                 report(base, "accepted");

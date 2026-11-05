@@ -267,12 +267,18 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         Require(m_picardKRadius>0. && m_picardKRadius<=1.,"invalid dimensionless Picard k radius");
         session->LoadSolverInfo("RANSWallPicardGuessFile",m_picardGuessFile,"");
         session->LoadSolverInfo("RANSWallPicardKDiagnostic",m_picardKDiagnostic,"");
-        std::string reduced,reducedVerify;
+        std::string reduced,reducedVerify,reducedSecondOrder;
         session->LoadSolverInfo("RANSWallPicardReduced",reduced,"Off");
         session->LoadSolverInfo("RANSWallReducedVerify",reducedVerify,"Off");
+        session->LoadSolverInfo("RANSWallReducedSecondOrder",reducedSecondOrder,"Off");
         Require((reduced=="On" || reduced=="Off") && (reducedVerify=="On" || reducedVerify=="Off"),
                 "unknown Picard reduced selector");
         m_picardReduced=reduced=="On";m_reducedVerify=reducedVerify=="On";
+        Require(reducedSecondOrder=="On" || reducedSecondOrder=="Off",
+                "unknown reduced second-order correction selector");
+        m_reducedSecondOrder=reducedSecondOrder=="On";
+        Require(!m_reducedSecondOrder || m_picardReduced,
+                "second-order correction requires the reduced search");
         session->LoadParameter("RANSWallReducedBasis",m_reducedBasis,10);
         session->LoadParameter("RANSWallReducedHUpdates",m_reducedHUpdates,50);
         session->LoadParameter("RANSWallReducedKrylov",m_reducedKrylov,0);

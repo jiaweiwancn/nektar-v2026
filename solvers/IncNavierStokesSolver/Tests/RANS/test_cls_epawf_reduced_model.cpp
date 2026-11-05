@@ -225,6 +225,25 @@ int main(int argc, char **argv)
     const double actualFieldNorm=std::hypot(oz[0]+oz[1],oz[1]);
     Check(obliqueBall.quadratic.solved && actualFieldNorm <= .2 && actualFieldNorm >= .1998,
           "oblique response coefficients were mistaken for the physical field norm");
+    // H(y,k)=y-k1^2 has Y(k)=k1^2. At k=(0,0), the checked
+    // qualification derivative of Y(k)-k2<=0 is (0,-1). The tangent
+    // residual step (.1,0) leaves the true surface by .01. Correcting the
+    // measured trial observation in the same response space restores it,
+    // keeps ||delta||<.05, and still reduces F=(k1-.1,k2) from its base.
+    const double curvedViolation=.01, margin=1e-6;
+    const auto curved = R::SolveRadiusQuadratic<Factor>(
+        R::Matrix{{1.,0.,0.},{0.,1.,0.},{0.,0.,1e8}}, R::Vector(3),
+        std::vector<Cut>{{{0.,-1.,-1.},-curvedViolation-margin},{{0.,0.,-1.},0.}},
+        R::Vector{0.,0.,curvedViolation+margin+1e-10},
+        R::Matrix{{1.,0.},{0.,1.}}, .05);
+    Check(curved.quadratic.solved && curved.norm <= .05,
+          "nonlinear-qualification correction model failed");
+    const auto &cz=curved.quadratic.solution;
+    const double actualConstraint=std::pow(.1+cz[0],2)-cz[1],
+                 actualResidual=std::hypot(cz[0],cz[1]);
+    Check(actualConstraint < 0. && actualResidual < .02 &&
+          std::hypot(.1+cz[0],cz[1]) < .11,
+          "curved qualification was not restored with useful true residual progress");
     const auto infeasible = R::SolveQuadratic<Factor>(
         R::Matrix{{1.}}, R::Vector{0.}, std::vector<Cut>{{{1.},0.}}, R::Vector{1.});
     Check(!infeasible.solved && infeasible.failure == "quadratic_infeasible_start",

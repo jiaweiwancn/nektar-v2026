@@ -63,6 +63,14 @@ def check(directory):
                     "a direction used an inconsistent warm-start branch")
     trials = [r for r in records if r["event"] == "trial"]
     require(trials, "no constrained direction received an equilibrated native trial")
+    corrections = [r for r in records if r["event"] == "second_order_trial"]
+    require(all(r["correction"] <= r["correction_radius"]*(1+1e-12) and
+                r["displacement"] <= r["radius"]*(1+1e-12) and
+                (not r["valid"] or r["non_k_error"] <= r["required"])
+                for r in corrections),
+            "nonlinear qualification correction violated a field bound or H accuracy")
+    require(all(r["violation"] < r["before_violation"] for r in corrections if r["improved"]),
+            "a failed nonlinear qualification correction was marked useful")
     combined = [r for r in records if r["event"] == "combined_direction_check"]
     require(all(r["attained"] <= r["required"] and r["half_attained"] <= r["required"] and
                 r["half_relative_residual_error"] <= .03 and
@@ -85,7 +93,8 @@ def check(directory):
     result = dict(status="passed_operator_checks", manifest_status=manifest["status"],
                   repeatability=repeat, half_response_warm_starts=warm_starts,
                   action_checks=checks, directions=directions,
-                  trials=trials, combined_direction_checks=combined)
+                  trials=trials, combined_direction_checks=combined,
+                  second_order_corrections=corrections)
     write_json(directory / "reduced-checks.json", result)
 
 
