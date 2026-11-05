@@ -1,0 +1,134 @@
+{
+  "host": "jay-Super-Server",
+  "timestamp": "2026-11-05T11:25:10Z",
+  "workers": 1,
+  "threads": 1,
+  "source_directory": "/tmp/nektar-picard-r3-syntax",
+  "compiler": {
+    "command": [
+      "c++",
+      "--version"
+    ],
+    "exit_code": 0,
+    "seconds": 0.003444884000600723,
+    "output": "c++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0\nCopyright (C) 2021 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
+  },
+  "syntax": {
+    "command": [
+      "mpicxx",
+      "-std=c++17",
+      "-fsyntax-only",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-sign-compare",
+      "-Wno-deprecated-declarations",
+      "-Wno-cast-function-type",
+      "-Werror",
+      "-D_GLIBCXX_ASSERTIONS",
+      "-DNEKTAR_USE_MPI",
+      "-DNEKTAR_MPI_TYPE=0",
+      "-DTIXML_USE_STL",
+      "-DENABLE_NEKTAR_EXCEPTIONS",
+      "-DBOOST_BIND_GLOBAL_PLACEHOLDERS",
+      "-I",
+      "solvers",
+      "-I",
+      "library",
+      "-isystem",
+      "/home/jay/.local/opt/nektar-v2026-mpi/include/nektar++",
+      "-isystem",
+      "/home/jay/build/nektar-v2026-mpi/ThirdParty/dist/include",
+      "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionReduced.cpp",
+      "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPicard.cpp",
+      "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp"
+    ],
+    "exit_code": 0,
+    "seconds": 14.197035490999951,
+    "output": ""
+  },
+  "model_build": {
+    "command": [
+      "c++",
+      "-std=c++17",
+      "-O1",
+      "-g",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "-D_GLIBCXX_ASSERTIONS",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-sign-compare",
+      "-Werror",
+      "-I",
+      "solvers",
+      "solvers/IncNavierStokesSolver/Tests/RANS/test_cls_epawf_reduced_model.cpp",
+      "-o",
+      "reduced-model-test"
+    ],
+    "exit_code": 0,
+    "seconds": 3.5915519270001823,
+    "output": ""
+  },
+  "model_test": {
+    "command": [
+      "./reduced-model-test"
+    ],
+    "exit_code": 0,
+    "seconds": 0.013836944000104268,
+    "output": "passed_reduced_model_checks (not M8 convergence)\n"
+  },
+  "executable_sha256": "dad7a7854eadd53e22f9c52294d14482c8a54554e0b5956c9172e8e2b3e95660",
+  "ldd": {
+    "command": [
+      "ldd",
+      "reduced-model-test"
+    ],
+    "exit_code": 0,
+    "seconds": 0.008802520999779517,
+    "output": "\tlinux-vdso.so.1 (0x00007ffc89ca7000)\n\tlibasan.so.6 => /lib/x86_64-linux-gnu/libasan.so.6 (0x00007914e4000000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007914e3c00000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007914e3f19000)\n\tlibubsan.so.1 => /lib/x86_64-linux-gnu/libubsan.so.1 (0x00007914e3400000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007914e4a56000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007914e3000000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007914e4bcc000)\n"
+  },
+  "library_sha256": {
+    "/lib/x86_64-linux-gnu/libasan.so.6": "66dd4c48dabb1f0a722b164786c1432447d017e562e6beb68ca96bbf0cfe178b",
+    "/lib/x86_64-linux-gnu/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+    "/lib/x86_64-linux-gnu/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+    "/lib/x86_64-linux-gnu/libubsan.so.1": "b2ff12501a22d25610067af24ec7c9dcc29a44fa7ec94916a0e193e12daff5f5",
+    "/lib/x86_64-linux-gnu/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+    "/lib/x86_64-linux-gnu/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+    "/lib64/ld-linux-x86-64.so.2": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01"
+  },
+  "source_sha256": {
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionReduced.cpp": "d2f3c0df85a5b413c6b25affa4f7c44e9bba0587741eca8f52308c24bd6d0916",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPicard.cpp": "349f2cb045195700c1b631542b0ce4147d9e30d014b68cbe42823cf6351f9b42",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp": "d1510d8f66474b8ced41d196433c023ad9c7f58d53d6c56b1790387743eda78f",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSWallReducedModel.h": "8f34903722d7e65cf95e0bd18ffa6e941a1c00b9c0a33023eef08e7c5209e031",
+    "solvers/IncNavierStokesSolver/Tests/RANS/test_cls_epawf_reduced_model.cpp": "63e7855b9be56f5cca9a0e9b3b2662979d32b9b2c38ba4cef0da85b116c94140"
+  },
+  "volume": {
+    "command": [
+      "findmnt",
+      "-rn",
+      "-S",
+      "/dev/sda2",
+      "-o",
+      "TARGET,SOURCE,FSTYPE"
+    ],
+    "exit_code": 1,
+    "seconds": 0.002738307999607059,
+    "output": ""
+  },
+  "volume_identity": {
+    "command": [
+      "lsblk",
+      "-no",
+      "NAME,FSTYPE,LABEL,UUID,MOUNTPOINTS",
+      "/dev/sda2"
+    ],
+    "exit_code": 0,
+    "seconds": 0.002598893999675056,
+    "output": "sda2 ntfs   \u65b0\u52a0\u5377 5AB8A669B8A642FD                     \n"
+  },
+  "producing_code_commit": "819c135177a5381d9332013609378eb943c8e0b9",
+  "scope": "Syntax and standalone reduced-model algebra only. Native field response and M8 convergence were not tested."
+}
