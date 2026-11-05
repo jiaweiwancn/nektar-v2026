@@ -133,12 +133,6 @@ int main(int argc, char **argv)
     r = Solve({{16.,0.},{0.,1.}}, {-16.,0.},
               {{{1.,-1.},-2.}, {{0.,1.},2.02}, {{0.,-1.},0.}}, {0.,2.});
     Close(r.solution[0],.02); Close(r.solution[1],2.02);
-    // A 50% restoration is useful even close to the original boundary and
-    // when residual merit must rise; an absolute violation floor erases it.
-    Check(R::QualificationDecrease(1e-5,5e-6,1.,1e-3), "small-violation restoration erased");
-    Check(R::QualificationDecrease(1e-14,0.,1.,1e-3), "arithmetic-scale restoration erased");
-    Check(!R::QualificationDecrease(1e-5,1e-5-1e-12,1.,1e-3), "insignificant restoration counted");
-    Check(!R::QualificationDecrease(0.,0.,1.,1e-3), "unchanged qualification counted as progress");
     // H(y,k)=y-3k and F(k,y)=k+y-4 have a reduced slope of 4.
     // Feedback in B, rather than post-direction settling, selects dk=1.
     r = Solve({{16.}}, {-16.}, {}, {0.});

@@ -223,8 +223,8 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::PhysicalSamples(
     {
         const auto p=q.test.coordinate;const auto profile=StateProfile(s,p,time,data);
         const auto normal=WallNormalization(s,p,*profile);
-        RANSTensor grad{};for(int a=0;a<m_dimension;++a)grad[PhysicalAxis(a)]=q.test.Gradient(s,offset[a]);
-        const auto stress=RANSWallInnerMeanStress(InnerStress(q.test.Value(s,offset[K()]),
+        SolverUtils::RANSTensor grad{};for(int a=0;a<m_dimension;++a)grad[PhysicalAxis(a)]=q.test.Gradient(s,offset[a]);
+        const auto stress=SolverUtils::RANSWallInnerMeanStress(InnerStress(q.test.Value(s,offset[K()]),
             profile->Original().EddyViscosity(0.),grad),m_parameters.geometry.molecularNu,0.);
         result["wall_weights"].push_back(q.weight);
         result["wall_stress"].push_back(stress[0][2]);result["wall_B"].push_back(normal.b);
