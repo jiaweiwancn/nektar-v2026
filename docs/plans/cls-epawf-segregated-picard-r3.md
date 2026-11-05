@@ -20,7 +20,10 @@ metric at ground contact while its original k residual stayed nonzero. R3
 therefore scores the original reduced residual, not that projected-map defect.
 No full all-field Jacobian or hidden coupled direction solver was added.
 
-The current producing solver is `9a5b58d` (radius-constrained reduced models).
+The current producing solver is `cbbd486` (explicit reduced continuation diagnostic).
+The ordinary constrained curvature-correction runs use `ba89d11`; orthogonal
+field-response probes and combined-direction checks use `62201de`.
+The radius-constrained model control is `9a5b58d`.
 The measured-response enrichment is `bdcdc48`.
 The inward restoration search target is `ef83196`;
 `3cd9dca` supplies the checked half-response warm starts.
@@ -305,6 +308,72 @@ initial point. ASan/UBSan replay passes both the radius-active and positive-buff
 packets. The latter has affine primal/stationarity defects4.30e-23/2.03e-22.
 An affine replay certificate remains a model check.
 
+## Orthogonal responses and nonlinear qualification curvature
+
+The raw 18-column model could pass individual two-scale checks while amplifying
+column errors: its saved field Gram matrix had condition number 18,746, maximum
+column correlation .97494, and coefficient-l1/actual-displacement amplification
+116.62. `62201de` probes the normalized two-pass QR directions themselves when
+the actual ground and scalar inventory permit them; otherwise it retains the
+feasible inward seed. Every retained column still receives its own two-size H,
+original-residual and signed-observation checks. It also checks the **combined**
+proposed direction at two small admissible fractions before larger trials.
+
+At the qualified saved checkpoint, all 18 or 32 probes are orthogonal (maximum
+correlations below 6.1e-17), with response rank 18 or 32. The combined 18-column
+merit slope is predicted -2.93994496 versus measured -2.93983456/-2.93984242.
+Its residual-action errors are 4.38e-5/5.14e-5 and normalized observation-action
+errors 3.89e-6/8.08e-6; the full inventory remains qualified at both probe sizes.
+The 32-column errors are 5.61e-5/4.37e-5 and 1.51e-5/1.41e-5, with no recorded
+profile branch change. These are local empirical checks with attained H<=2e-12.
+
+The 32-column full trial predicts qualification excess about 1.1e-14 but measures
+.00190403 at x=-3.75,z2. Halving exposes another signed gradient witness at
+x=-1,z4, excess .000118772; the quarter trial still exceeds by 1.116e-6. Only
+one eighth is qualified, reaching residual 19.83066648. Thus accurate local
+responses do not remove nonlinear qualification curvature or witness migration.
+
+`ba89d11` adds optional `RANSWallReducedSecondOrder=On` / `--reduced-second-order`.
+For a qualified base and residual-improving trial outside qualification, it
+minimizes a correction in the checked response space using the **actual trial's**
+complete signed inventory. A penalized elastic slack provides a feasible model
+start. Domain and ground cuts remain hard; each correction is bounded by half
+the initial trial length, and the **total actual displacement** must stay inside
+the outer radius. Each assessed correction re-solves H to the same declared
+accuracy, rebuilds dependent data and scans the actual full inventory/extrema.
+There are at most three such H evaluations per model. Failures retain the caller
+state and return to backtracking. Ordinary final acceptance is unchanged.
+Residual actual/predicted gain controls the radius inside qualification; a
+useful half step no longer automatically causes successive .6 radius shrinkage.
+The previous control remains selectable with the option Off.
+
+The first 18-column native correction restores the rejected full trial from
+qualification excess .000107983 to 0 using correction norm 3.85259e-5. Its actual
+residual is 19.76496439 and total displacement .25905542<=.2592. The control had
+to halve the step and reached 19.81849948. This is useful nonlinear constrained
+progress, **not an algebraic root or an accepted physical step**. A fresh process reproduces the residual to 3.6e-15, continuous ground minimum
+.00131160, gradient .000999999522 and sampled-K maximum 1.0099999900; the
+original complete qualification audit passes. The second update reaches
+19.63663504 while remaining qualified.
+
+The 32-column full trial is restored in three bounded corrections: normalized
+qualification excess .00190403 -> 6.27958e-5 -> 6.59128e-7 -> 0. The final
+residual is 19.59825833 and displacement .25915022<=.2592, versus the control's
+19.83066648 at one eighth of the step. Corrections are 2.23961e-4, 2.51467e-6,
+and 6.53987e-8. These are candidate-based correction predictions; the original
+base's flat constraint model need not predict qualification after a nonlinear
+correction. Actual rebuilt observations remain the acceptance authority.
+Extended original-start and larger-space tests continue; completed results are
+recorded separately as they finish.
+
+The one-update original-h0 verification control passes the native operator
+checker. Verification On/Off gives bitwise-identical rejected coefficients,
+accepted h0 and native history; their XML differs only in that observation flag.
+The rejected-state SHA256 is
+`e3d5aee52a87fdd2fbbc88ba82bffca8d891d257af157b086b4e96e411bca1fb`.
+The standalone curved-qualification known-answer model passes Mac and Linux
+ASan/UBSan. The six focused native regressions pass for the correction source.
+
 ## Native progress and nonlinear trial agreement
 
 The original unmodified h0 first has gradient departure .000500195, inside the
@@ -423,6 +492,25 @@ This one refinement changes the near-ground response and the retained control's
 convergence behavior, but does not remove the gradient failure at eta600 or prove
 a general spatial positivity obstruction. A mesh-convergence theorem is not claimed.
 
+The reduced-response continuation option (`cbbd486`, driver `--method reduced`)
+observes original qualification while solving the labelled auxiliary algebraic
+problem. It retains actual domain and continuous-ground cuts, separate field
+solves, full original residual readback and the wrapper's unconditional rejection
+of physical advance. Ordinary reduced stages still enforce qualification during
+direction construction and final acceptance. There is no unqualified ordinary
+stage path. The eta-zero guard test deliberately requests auxiliary tolerance
+1e-8; the native target retains 2e-12 and preserves accepted state/history.
+A reproduced eta500 root also returns through explicit native no-advance
+rejection, with original-target residual 25.54458179, gradient .00160673758 and
+ground .07065555. A stricter reduced repeat reaches auxiliary residual
+1.92635e-11 after one k correction. These are positive-eta diagnostic roots.
+A separate demand for H<=1e-13 fails explicitly at 1.62051e-12 with
+`non_k_line_search`; it is not silently used as Y(k) and does not establish a
+fundamental precision floor. A second branch experiment declares positive-eta
+auxiliary tolerance 2e-10; eta zero remains 2e-12. The followed lower-eta reduced
+branches are still in progress and do not yet certify ground contact or an
+eta-zero root.
+
 ## Verification, provenance, and outstanding work
 
 The fixed-state readback now optionally requests the original complete
@@ -480,11 +568,11 @@ cmake -S "$S/solvers/IncNavierStokesSolver/Tests/RANS" -B "$B" \
   '-DCMAKE_CXX_FLAGS=-fno-fast-math -ffp-contract=off -D_GLIBCXX_ASSERTIONS'
 cmake --build "$B" --parallel 8 --target IncNavierStokesSolver RANSWallResolutionProbe RANSReducedModelChecks
 python3 "$S/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py" \
-  --solver "$R/binaries-9a5b58d/IncNavierStokesSolver" \
-  --resolution-probe "$R/binaries-9a5b58d/RANSWallResolutionProbe" \
+  --solver "$R/binaries-ba89d11/IncNavierStokesSolver" \
+  --resolution-probe "$R/binaries-ba89d11/RANSWallResolutionProbe" \
   --reduced --reduced-verify --reduced-basis 18 --reduced-krylov 4 --reduced-radius .4 \
-  --reduced-restoration-weight 0 --sweeps 40 --timeout 18000 \
-  --output "$R/radius-original-reproduction"
+  --reduced-restoration-weight 0 --reduced-second-order --sweeps 60 --timeout 21600 \
+  --output "$R/curvature-original-reproduction"
 ```
 
 The harness deliberately returns nonzero unless the original stage completes;
@@ -492,6 +580,15 @@ run the operator checker separately on bounded failed-stage controls. Each
 native numerical command is one rank. Logs and manifests distinguish solver,
 readback, expected rejected-stage and startup return codes.
 
+[Orthogonal verification controls](cls-epawf-segregated-picard-r3-evidence/native/orthogonal-controls.json),
+[verification observability](cls-epawf-segregated-picard-r3-evidence/native/orthogonal-verification.json),
+[raw response-basis conditioning](cls-epawf-segregated-picard-r3-evidence/native/basis-conditioning.json),
+[curvature-source regressions and sanitizers](cls-epawf-segregated-picard-r3-evidence/native/build-validation-ba89d11.json),
+[Current-code regressions and continuation guards](cls-epawf-segregated-picard-r3-evidence/native/build-validation-cbbd486.json),
+[fresh corrected-state audit](cls-epawf-segregated-picard-r3-evidence/native/audit-curvature-checkpoint18-1.json),
+[Completed orthogonal and radius controls](cls-epawf-segregated-picard-r3-evidence/native/orthogonal-checkpoint-completed.json),
+[fresh 32-direction corrected-state audit](cls-epawf-segregated-picard-r3-evidence/native/audit-curvature-expanded32-1.json),
+[explicit interim curvature histories](cls-epawf-segregated-picard-r3-evidence/native/curvature-progress.json),
 [Build and sanitized regression evidence](cls-epawf-segregated-picard-r3-evidence/native/build-validation.json),
 [pressure verification](cls-epawf-segregated-picard-r3-evidence/native/verification.json),
 [development controls](cls-epawf-segregated-picard-r3-evidence/native/development-controls.json),

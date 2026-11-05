@@ -1,0 +1,44 @@
+{
+  "scope": "Focused native regressions and isolated model safety, not M8 convergence",
+  "producing_code": "ba89d11163362ba7f3acf358d6050d82eefab9e7",
+  "build_command": "cmake --build continuation-build --parallel 8 --target IncNavierStokesSolver RANSWallResolutionProbe RANSReducedModelChecks",
+  "thread_limits": {
+    "OMP_NUM_THREADS": 1,
+    "OPENBLAS_NUM_THREADS": 1,
+    "MKL_NUM_THREADS": 1,
+    "BLIS_NUM_THREADS": 1,
+    "NUMEXPR_NUM_THREADS": 1
+  },
+  "ctest_parallel": 1,
+  "test_names": [
+    "RANSReducedModelChecks",
+    "RANSEquilibriumTimeNative",
+    "RANSEquilibriumEvolutionNative",
+    "RANSEquilibriumPatchNative",
+    "RANSEquilibriumWallEvolutionSmoke",
+    "RANSEquilibriumWallStageSmoke"
+  ],
+  "logs": {
+    "ctest-ba89d11.log": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/ctest-ba89d11.log",
+      "sha256": "7e2415787001a50040778e2821aedda2d1473a66a4b1f8976960b78850891634",
+      "text": "Internal ctest changing into directory: /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-build\nTest project /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-build\n    Start 1: RANSReducedModelChecks\n1/4 Test #1: RANSReducedModelChecks ...........   Passed    0.01 sec\n    Start 2: RANSEquilibriumTimeNative\n2/4 Test #2: RANSEquilibriumTimeNative ........   Passed    0.07 sec\n    Start 3: RANSEquilibriumEvolutionNative\n3/4 Test #3: RANSEquilibriumEvolutionNative ...   Passed    2.26 sec\n    Start 4: RANSEquilibriumPatchNative\n4/4 Test #4: RANSEquilibriumPatchNative .......   Passed    9.29 sec\n\n100% tests passed, 0 tests failed out of 4\n\nTotal Test time (real) =  11.64 sec\n"
+    },
+    "ctest-ba89d11-smoke.log": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/ctest-ba89d11-smoke.log",
+      "sha256": "bfe0898fb5d0514c5b52206f2d8c837014ca2521b4bde06eec7827102f6e5d82",
+      "text": "Internal ctest changing into directory: /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-build\nTest project /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-build\n    Start 5: RANSEquilibriumWallEvolutionSmoke\n1/2 Test #5: RANSEquilibriumWallEvolutionSmoke ...   Passed    1.68 sec\n    Start 6: RANSEquilibriumWallStageSmoke\n2/2 Test #6: RANSEquilibriumWallStageSmoke .......   Passed   24.07 sec\n\n100% tests passed, 0 tests failed out of 2\n\nTotal Test time (real) =  25.76 sec\n"
+    },
+    "model-check-ba89d11-asan.log": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/model-check-ba89d11-asan.log",
+      "sha256": "71b1a65e6bce79cd2df697491ad6bb5baea96dd56c29c37adc8ffa3beb82dda3",
+      "text": "passed_reduced_model_checks (not M8 convergence)\n"
+    }
+  },
+  "executable_sha256": {
+    "IncNavierStokesSolver": "bd8ad4e4e1f529cd87dc185a99ea5eb3c5b793ae66b0199309351185321bb564",
+    "RANSWallResolutionProbe": "27c3dbb74726a95fc8f7e9100a155eb3e79ccebbae17fe5d5ea188579a361778"
+  },
+  "isolated_model_sanitizers": "Linux g++ -O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer; ASAN_OPTIONS=detect_leaks=0",
+  "mac_model_sanitizers": "clang++ -O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer: passed"
+}

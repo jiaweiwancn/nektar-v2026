@@ -1,19 +1,23 @@
 {
   "status": "native_development_in_progress_original_m8_unresolved",
-  "producing_code_commit": "9a5b58dd1db067636f9fe6fea586163d912e2048",
+  "producing_code_commit": "cbbd4867fbcdd48a474b15b1b75573fb28d906d4",
   "native_m8": {
-    "status": "radius-aware original-start pure and mixed runs in progress; no qualified first-stage root",
+    "status": "orthogonal response and nonlinear qualification correction original-start tests in progress; no qualified first-stage root",
     "qualified_first_stage": false,
     "accepted_physical_steps": 0,
     "final_time": 0
   },
   "checks": {
     "linux_native_pressure_verification": "passed; same verified/unverified states",
-    "linux_focused_ctest": "6 passed",
+    "linux_focused_ctest": "6 passed on cbbd486; prior correction source ba89d11 also passes",
     "linux_sanitized_reduced_model": "passed",
     "native_controlled_H_and_reduced_operator": "passed on completed bounded runs; not stage convergence",
     "native_radius_and_buffer_controls": "passed_operator_checks; failed native stages preserve accepted h0/history bitwise",
-    "native_affine_model_replay": "passed under Linux ASan/UBSan for radius-active and inward-buffered packets; not nonlinear convergence"
+    "native_affine_model_replay": "passed under Linux ASan/UBSan for radius-active and inward-buffered packets; not nonlinear convergence",
+    "native_R3_verification_observability": "passed; bitwise identical rejected state/accepted h0/history with verification On/Off",
+    "combined_reduced_directions": "18- and 32-dimensional two-size residual and full signed-observation checks passed locally",
+    "nonlinear_qualification_correction": "18- and 32-direction full steps restored actual original qualification, original residuals19.76496439 and19.59825833 independently rebuilt; not roots",
+    "native_reduced_continuation_guards": "passed: eta-zero retains2e-12; auxiliary root explicitly rejects physical advance; accepted state/history preserved"
   },
   "continued_branch": {
     "auxiliary_positive_eta_tolerance": 2e-11,
@@ -41,9 +45,9 @@
     "physical_acceptance": false
   },
   "completed_qualified_reduced_search": {
-    "full_residual": 19.887303979286997,
-    "gradient_departure": 0.0009999544751542189,
-    "ground_minimum": 0.001078865312152447,
-    "scope": "three numerical updates from a saved guess with original physical target/history; not an accepted stage"
+    "full_residual": 19.598258333467996,
+    "gradient_departure": 0.0009999990431666106,
+    "ground_minimum": 2.4710787259042335e-05,
+    "scope": "First corrected32-direction update from a saved guess with original physical target/history; independently audited; not an accepted stage"
   }
 }
