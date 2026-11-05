@@ -270,6 +270,8 @@ private:
         double time,const RANSWallEvolutionData &data,double tolerance,int maximumUpdates) const;
     Vector SolveReducedPicard(Vector state,const Vector &history,double alpha,double time,
         const RANSWallEvolutionData &data,int &iterations,double tolerance,int maximumIterations) const;
+    Vector SolvePicardContinuation(Vector state,const Vector &history,double alpha,double time,
+        const RANSWallEvolutionData &data,int &iterations,double tolerance,int maximumIterations) const;
     PicardBlock AssemblePicardBlock(int block,const Vector &state,const Vector &history,
         double alpha,double time,const RANSWallEvolutionData &data,
         const std::map<int,double> &external) const;
@@ -407,6 +409,8 @@ private:
     bool m_picardGroundProjection=false;
     bool m_picardKNewton=false;
     bool m_picardReduced=false,m_reducedVerify=false;
+    bool m_picardContinuation=false;
+    double m_picardContinuationEta=0.;
     int m_reducedBasis=10,m_reducedHUpdates=50;
     double m_reducedRadius=.05,m_reducedStep=2e-5,m_reducedHTolerance=2e-9;
     bool m_picardEquilibrateK=false;

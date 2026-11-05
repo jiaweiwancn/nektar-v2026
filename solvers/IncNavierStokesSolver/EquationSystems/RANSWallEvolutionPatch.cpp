@@ -287,6 +287,17 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
                 "use reduced verification and keep R2 controls in separate runs");
         Require(!m_reducedVerify || m_picardReduced,
                 "reduced verification requires the reduced search");
+        std::string continuation;
+        session->LoadSolverInfo("RANSWallPicardContinuation",continuation,"Off");
+        session->LoadParameter("RANSWallPicardContinuationEta",m_picardContinuationEta,0.);
+        Require((continuation=="On" || continuation=="Off") &&
+                std::isfinite(m_picardContinuationEta) && m_picardContinuationEta>=0.,
+                "invalid Picard algebraic continuation controls");
+        m_picardContinuation=continuation=="On";
+        Require(m_picardContinuation || m_picardContinuationEta==0.,
+                "continuation eta requires the explicit diagnostic selector");
+        Require(!m_picardContinuation || (!m_picardReduced && m_picardNonKTolerance==0.),
+                "algebraic continuation uses the retained segregated control as a separate diagnostic");
     }
     session->LoadParameter("RANSWallOwnershipShift",m_ownershipShift,0);Require(m_ownershipShift>=0,"negative ownership shift");
     auto full=MemoryManager<MultiRegions::ExpList>::AllocateSharedPtr(session,graph,true,"u");
@@ -763,6 +774,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Solve(Vector s,const Vect
     if(SegregatedPicard())
     {
         Require(!condensed,"SegregatedPicard requires uncondensed native velocity spaces");
+        if(m_picardContinuation)
+            return SolvePicardContinuation(std::move(s),history,alpha,time,data,iterations,tolerance,maximumIterations);
         return SolveSegregatedPicard(std::move(s),history,alpha,time,data,iterations,tolerance,maximumIterations);
     }
     if(m_nonlinearPolicy=="ScalarFeasibleR3")

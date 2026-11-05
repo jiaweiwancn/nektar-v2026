@@ -231,6 +231,75 @@ RANSWallEvolutionPatch::NonKResponse RANSWallEvolutionPatch::EquilibrateNonK(
     return result;
 }
 
+RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePicardContinuation(
+    Vector state, const Vector &history, double alpha, double time,
+    const RANSWallEvolutionData &data, int &iterations, double tolerance,
+    int maximumIterations) const
+{
+    const double eta = m_picardContinuationEta, operatorAlpha = alpha + eta;
+    Require(std::isfinite(operatorAlpha), "nonfinite continued stage alpha");
+    auto emit = [&](const std::string &event,
+                    std::vector<std::pair<std::string,std::string>> fields) {
+        fields.emplace_back("event", J::Quote(event));
+        fields.emplace_back("physical_alpha", J::Number(alpha));
+        fields.emplace_back("operator_alpha", J::Number(operatorAlpha));
+        fields.emplace_back("eta", J::Number(eta));
+        fields.emplace_back("time", J::Number(time));
+        fields.emplace_back("history_sha256", J::Quote(RANSWallR3::Hash(history)));
+        std::cout << "EP-AWF Continuation " << J::Object(fields) << std::endl;
+    };
+    emit("target", {{"physical_history_advanced", "false"}});
+    auto root = SolveSegregatedPicard(std::move(state), history, operatorAlpha,
+                                     time, data, iterations, tolerance, maximumIterations);
+    m_lastFeasibleState = root;
+    const auto constraints = Constraints(root, time, data);
+    const auto original = Residual(root, history, alpha, time, data);
+    const auto continued = Residual(root, history, operatorAlpha, time, data);
+    const auto originalNorms = Norms(original, constraints, m_robustUstar);
+    const auto continuedNorms = Norms(continued, constraints, m_robustUstar);
+    Require(Maximum(continuedNorms) <= tolerance,
+            "continued root missed its independently recomputed complete residual");
+    Vector massRate(Size()), identity(Size());
+    const auto lifted = ExternalLift(root, time, data);
+    for (int b = 0; b < InnerPressure(); ++b)
+    {
+        Vector delta(size[b]);
+        for (int i = 0; i < size[b]; ++i)
+            delta[i] = lifted[offset[b]+i] - history[offset[b]+i];
+        const auto load = Multiply(m_mass[b], delta);
+        for (int i = 0; i < size[b]; ++i) massRate[offset[b]+i] = eta * load[i];
+    }
+    for (const auto &[row, value] : constraints) massRate[row] = 0.;
+    for (int i = 0; i < Size(); ++i)
+        identity[i] = continued[i] - original[i] - massRate[i];
+    const double defect = Maximum(identity) /
+        std::max({1., Maximum(original), Maximum(continued), Maximum(massRate)});
+    Require(defect < 2e-12, "continued operator differs from the declared physical mass homotopy");
+    const auto audit = CompleteRestrictedAudit(root, history, alpha, time, data, true);
+    bool ground = false;
+    const auto wall = WallTraceJSON(root, ground);
+    Require(ground, "continued root is outside the continuous ground domain");
+    std::ofstream out("picard-continuation-root.json");
+    out << J::Object({{"status", J::Quote("algebraic_continuation_root_only")},
+        {"state", J::Numbers(root)}, {"history", J::Numbers(history)},
+        {"alpha", J::Number(alpha)}, {"operator_alpha", J::Number(operatorAlpha)},
+        {"eta", J::Number(eta)}, {"time", J::Number(time)},
+        {"require_history_h0", "false"}, {"inner_stress_model", J::Quote(InnerStressName())}}) << '\n';
+    out.close();
+    Require(out.good(), "failed to save algebraic continuation root");
+    emit("root", {{"original_norms", J::Numbers(originalNorms)},
+        {"continued_norms", J::Numbers(continuedNorms)},
+        {"iterations", J::Number(iterations)}, {"mass_identity_defect", J::Number(defect)},
+        {"ground", wall}, {"outer_range", J::Numbers(audit.at("r2_outer_range"))},
+        {"gradient_witness", J::Numbers(audit.at("r4_outer_gradient_witness"))},
+        {"qualified", J::Boolean(audit.at("r2_qualified")[0] == 1.)},
+        {"scalar_domain", J::Numbers(audit.at("r2_scalar_domain"))},
+        {"covariance", J::Numbers(audit.at("r2_covariance"))}});
+    // Even an eta-zero qualified root from this diagnostic must be submitted
+    // to the ordinary native stage path before physical history can advance.
+    throw std::runtime_error("Picard algebraic continuation diagnostic completed a root without advancing physical history");
+}
+
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
     Vector state, const Vector &history, double alpha, double time,
     const RANSWallEvolutionData &data, int &iterations, double tolerance,
