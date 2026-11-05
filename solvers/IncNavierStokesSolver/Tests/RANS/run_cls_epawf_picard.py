@@ -72,6 +72,7 @@ def prepare(args):
                 for key, value in {"Basis": args.reduced_basis, "Radius": args.reduced_radius,
                                    "HTolerance": args.reduced_h_tolerance,
                                    "HUpdates": args.reduced_h_updates,
+                                   "Krylov": getattr(args, "reduced_krylov", 0),
                                    "Step": args.reduced_step,
                                    "RestorationWeight": getattr(args, "reduced_restoration_weight", 1.)}.items():
                     set_parameter(root, "RANSWallReduced"+key, value)
@@ -147,6 +148,8 @@ def main():
     parser.add_argument("--reduced", action="store_true", help="Use the constrained reduced response search")
     parser.add_argument("--reduced-verify", action="store_true", help="Check repeatability, rollback and two-scale responses")
     parser.add_argument("--reduced-basis", type=int, default=10)
+    parser.add_argument("--reduced-krylov", type=int, default=0,
+                        help="Preconditioned true-response enrichment seeds (0 to 8, within the basis budget)")
     parser.add_argument("--reduced-radius", type=float, default=.05)
     parser.add_argument("--reduced-h-tolerance", type=float, default=2e-9)
     parser.add_argument("--reduced-h-updates", type=int, default=50)

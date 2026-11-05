@@ -275,11 +275,13 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         m_picardReduced=reduced=="On";m_reducedVerify=reducedVerify=="On";
         session->LoadParameter("RANSWallReducedBasis",m_reducedBasis,10);
         session->LoadParameter("RANSWallReducedHUpdates",m_reducedHUpdates,50);
+        session->LoadParameter("RANSWallReducedKrylov",m_reducedKrylov,0);
         session->LoadParameter("RANSWallReducedRadius",m_reducedRadius,.05);
         session->LoadParameter("RANSWallReducedStep",m_reducedStep,2e-5);
         session->LoadParameter("RANSWallReducedHTolerance",m_reducedHTolerance,2e-9);
         session->LoadParameter("RANSWallReducedRestorationWeight",m_reducedRestorationWeight,1.);
         Require(m_reducedBasis>=4 && m_reducedBasis<=32 && m_reducedHUpdates>=0 &&
+                m_reducedKrylov>=0 && m_reducedKrylov<=8 &&
                 m_reducedRadius>0. && m_reducedRadius<=1. &&
                 m_reducedStep>0. && m_reducedStep<.01 && m_reducedHTolerance>0. &&
                 std::isfinite(m_reducedHTolerance) &&

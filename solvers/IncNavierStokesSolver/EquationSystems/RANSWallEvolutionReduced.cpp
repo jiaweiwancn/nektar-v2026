@@ -12,6 +12,7 @@
 #include <fstream>
 #include <iostream>
 #include <limits>
+#include <memory>
 #include <numeric>
 #include <set>
 
@@ -417,6 +418,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         {"half_response_warm_start", J::Quote("interpolate converged non-k coefficients; preserve exact requested k")},
         {"initial_basis_budget", J::Number(m_reducedBasis)},
         {"initial_restoration_weight", J::Number(m_reducedRestorationWeight)},
+        {"response_krylov_budget", J::Number(m_reducedKrylov)},
         {"maximum_basis", J::Number(32)}, {"response_accuracy", J::Number(innerTolerance)}});
     auto base = evaluate(state, innerTolerance, m_reducedHUpdates, "base");
     Require(base.valid,
@@ -562,11 +564,18 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         for (double &x : rhs)
             x = -x;
         WallMatrix conditionalJacobian;
+        std::unique_ptr<Factor> responsePreconditioner;
+        bool conditionalPreconditioner = false;
         try
         {
             conditionalJacobian = PicardKJacobian(state, alpha, time, data, rows);
-            add("conditional_newton",
-                Factor(conditionalJacobian).Apply(rhs));
+            auto factor = std::make_unique<Factor>(conditionalJacobian);
+            add("conditional_newton", factor->Apply(rhs));
+            if (m_reducedKrylov)
+            {
+                responsePreconditioner = std::move(factor);
+                conditionalPreconditioner = true;
+            }
         }
         catch (const std::runtime_error &e)
         {
@@ -576,7 +585,10 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                                                 time, data, external);
         try
         {
-            add("rate_picard", Factor(frozen.matrix).Apply(rhs));
+            auto factor = std::make_unique<Factor>(frozen.matrix);
+            add("rate_picard", factor->Apply(rhs));
+            if (m_reducedKrylov && !responsePreconditioner)
+                responsePreconditioner = std::move(factor);
         }
         catch (const std::runtime_error &e)
         {
@@ -707,8 +719,10 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         std::vector<Vector> orthogonal;
         std::vector<Column> columns;
         double maxActionError = 0.;
-        for (auto &[name, seed] : seeds)
+        int generatedKrylov = 0;
+        for (int seedId = 0; seedId < seeds.size(); ++seedId)
         {
+            auto [name, seed] = seeds[seedId];
             // A positive physical ground polynomial supplies feasible one-sided
             // probes.
             double inward = 0.;
@@ -975,6 +989,45 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             column.shifted.bounds.shrink_to_fit();
             column.shifted.domain.observations.clear();
             column.shifted.domain.observations.shrink_to_fit();
+            // Enrich beyond point/witness rows with the measured response
+            // missing from the restricted k preconditioner. For a smooth
+            // response this generates a preconditioned Krylov space for Jred.
+            // It uses no all-field matrix; every new seed still receives its
+            // own feasible, converged, two-scale response check above.
+            if (responsePreconditioner && generatedKrylov < m_reducedKrylov &&
+                (columns.empty() || name.rfind("response_krylov_", 0) == 0))
+            {
+                auto feedback = Multiply(conditionalPreconditioner ?
+                    conditionalJacobian : frozen.matrix, column.k);
+                for (int j = 0; j < dimension; ++j)
+                    feedback[j] = column.r[j] - kScale * feedback[j];
+                const double feedbackNorm = dualNorm(feedback);
+                const double uncertainty = column.error * std::max(1., dualNorm(column.r));
+                if (feedbackNorm > 10. * uncertainty)
+                {
+                    try
+                    {
+                        auto next = responsePreconditioner->Apply(feedback);
+                        for (double &v : next) v /= -kScale;
+                        const double norm = Length(next);
+                        if (norm > 1e-14)
+                        {
+                            for (double &v : next) v /= norm;
+                            const auto nextName = "response_krylov_" + std::to_string(++generatedKrylov);
+                            seeds.insert(seeds.begin()+seedId+1, {nextName, std::move(next)});
+                            emit("response_krylov_seed", {{"name", J::Quote(nextName)},
+                                {"parent", J::Quote(name)},
+                                {"preconditioner", J::Quote(conditionalPreconditioner ? "analytic_conditional_k" : "rate_picard_k")},
+                                {"missing_response_norm", J::Number(feedbackNorm)},
+                                {"two_scale_error_estimate", J::Number(uncertainty)}});
+                        }
+                    }
+                    catch (const std::runtime_error &e)
+                    {
+                        emit("response_krylov_failed", {{"failure", J::Quote(e.what())}});
+                    }
+                }
+            }
             orthogonal.push_back(std::move(q));
             columns.push_back(std::move(column));
             if (columns.size() >=

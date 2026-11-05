@@ -166,6 +166,20 @@ int main(int argc, char **argv)
     // Feedback in B, rather than post-direction settling, selects dk=1.
     r = Solve({{16.}}, {-16.}, {}, {0.});
     Close(r.solution[0],1.);
+    // H(y,k)=y-3*k2, F=(k1+y-4,k2-1). The conditional
+    // preconditioner is I. Its residual seed alone misses the reduced root;
+    // -P^-1*(Jred-P)*v supplies an independent response direction and the
+    // two-dimensional model recovers the known positive solution (1,1).
+    const double root17=std::sqrt(17.);
+    r = Solve({{50./17.}}, {-29./root17}, {}, {0.});
+    const double restrictedK1=4.*r.solution[0]/root17,
+                 restrictedK2=r.solution[0]/root17;
+    Check(std::hypot(restrictedK1+3.*restrictedK2-4.,restrictedK2-1.) > .1,
+          "single conditional seed unexpectedly solved the reduced problem");
+    r = Solve({{50./17.,-7./root17},{-7./root17,1.}},
+              {-29./root17,4.}, {}, {0.,0.});
+    Close(4.*r.solution[0]/root17-r.solution[1],1.);
+    Close(r.solution[0]/root17,1.);
     r = Solve({{16.}}, {-16e-15}, {}, {0.});
     Check(std::abs(r.solution[0]/1e-15 - 1.) < 1e-12,
           "an absolute inner step threshold erased a small Newton correction");
