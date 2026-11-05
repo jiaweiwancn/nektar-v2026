@@ -2,7 +2,10 @@
 
 **Development status: the original M8 problem remains unresolved. No qualified
 physical stage has been accepted; accepted physical steps/time remain 0/0.**
-The designated volume was restored and native Linux development resumed. The
+The designated volume was restored and native Linux development resumed.
+A later concurrent task switched the shared Mac checkout; subsequent work uses
+an isolated Mac worktree and preserves that task's PIMPLE branch. Only the
+Picard commits are delivered to the requested remote branch. The
 long original-start validation and an extended diagnostic solve are still
 running while this report is being assembled; their final results will replace
 the interim entries below before publication of the final evidence.
@@ -14,7 +17,10 @@ The R2 conditional method, old backends, verification repair, restricted k
 analytic assembly, original residual, and historical evidence remain intact.
 No full all-field Jacobian or hidden coupled direction solver was added.
 
-The producing solver implementation is `8dc862f270632dacad1d60ca22d8e870ebd9b7c6`.
+The current producing solver is `3cd9dca` (checked half-response warm starts).
+The pure-restoration control is `8687dc3f6d7c9cf7dc6e1a1cc3e3f7fd069f84da`.
+Its mixed-search and relative-restoration controls are `1c23b84` and `ad1dbc3`;
+the completed earlier radius/filter controls use `8dc862f`.
 Its initial implementation was `819c135177a5381d9332013609378eb943c8e0b9`;
 native-driven repairs include QR handling of degenerate active rows (`380bad3`),
 mixed restoration (`7848ad4`), bounded ground arithmetic corrections (`645d05b`),
@@ -62,6 +68,13 @@ the caller's incoming state, rather than exposing a partial iterate as Y(k).
 Expected factorization, invalid-domain and exhausted-iteration failures permit
 retry. Shape and fixed-k violations remain programming errors. No history advances.
 Every assessed reduced trial fraction requires H convergence before scoring.
+The tighter half-response solve now starts from the midpoint of the converged
+non-k response, while retaining the exact prescribed half-step k coefficients.
+It must attain the same tighter H tolerance. Failure retries the canonical warm
+start. In verification mode, the first used response of every model is also
+solved from the canonical warm start; inconsistent local responses are rejected.
+This reduces repeated nonlinear equilibration work without substituting a partial
+H solve for Y(k).
 
 Verification repeats the same k, changes the y warm start, tightens H, and forces
 a zero-budget failure. Representative measured reduced-residual differences are:
@@ -118,6 +131,36 @@ the local predicted merit sign.
 At the original h0, feedback is much smaller: conditional-Newton action norm
 6.822192 versus reduced 6.822456, with feedback norm .00047165; the frozen Picard
 action norm is 14.912641. Fixed-point consistency does not make these actions equal.
+An independent component experiment at the original-run checkpoint constructs
+its sampled-K direction from the native field map at(-2.604649609,1), validates
+that point functional against the native sampler, and independently assembles
+the free tensor mass. Its native norm difference is4.26e-14. Controlled H solves
+use2e-11 and2e-12 accuracy at perturbations1e-5 and5e-6; the ground polynomial
+is unchanged by this direction. All conditional partial readbacks verify that
+independent coefficients are not silently lifted.
+
+At the smaller perturbation, the conditional-k action has merit projection
++1380.249, while the reduced action has projection-486.135. Direct chain-rule
+contributions along the complete non-k response are:
+
+| Independent y field | k-action norm | Original merit projection |
+| --- | ---: | ---: |
+| Velocity | 5.43352 | +16.7322 |
+| Regional pressures/common gauge | 196.56889 | -1883.1109 |
+| Outer epsilon/trace | .021309 | +.00574 |
+
+The pressure contribution matches the inner-destruction contribution to about
+2.2e-9 in action norm; other k source components have zero direct pressure
+response in this test. Source inspection routes pressure through mechanical
+wall forcing and the reconstructed destruction profile/complete-ray treatment.
+This measurement does not isolate the normalization part from the profile part.
+The sum of conditional y contributions leaves remainder .005528 at the larger
+perturbation and .002763 at the smaller, against total feedback194.488.
+The reduced two-scale action difference is7.05e-5. These are local directional
+measurements, not full-space stationarity. Epsilon and velocity also influence
+the solved pressure response, so the direct component sizes are not a causal
+argument for dropping their equations.
+
 Small-step merit differences include their quadratic term: at the R2 endpoint,
 a nearly tangent sampled-K direction has negative first-order slope but positive
 finite-h merit changes. Its large action norm explains that curvature; an action
@@ -139,6 +182,29 @@ model now includes the filter's allowed qualification ceiling, rather than
 rejecting every proposal before an actual line search when its full-step
 violation exceeds that ceiling. Inside qualification, all original signed
 bounds are enforced while reducing the original residual.
+
+Two accepted steps with less than 1% relative qualification improvement reduce
+the residual multiplier by ten and expand the response budget. The default mixed
+control retains a minimum multiplier1e-4. A separate explicit
+`RANSWallReducedRestorationWeight=0` control performs pure qualification
+restoration outside the box, then restores the full original-residual objective
+inside it. This tests whether a finite mixed penalty is itself holding a state
+outside a feasible box. A known scalar model demonstrates such a soft-penalty
+fixed point; it does not establish an M8 infeasibility result.
+
+Qualification progress and filter comparisons now use relative violation
+reduction, including close to the original bound. The previous absolute
+comparisons could reject a 50% improvement when the normalized violation was
+1e-5. Every positive violation remains outside the original envelope; the H
+accuracy is tightened with the remaining violation, down to the original stage
+tolerance. These are solver controls. No physical bound or stopping tolerance
+is widened.
+
+A native mixed-restoration example reduces violation .2720621 -> .2121202 while
+raising residual14.06670 ->15.17449; the next update reaches violation .1601001
+at residual16.30274. This verifies actual restoration with a residual increase.
+The original-start mixed run has also reached violation .01280786 at residual
+19.60144 (still an interim state, not a qualified root).
 
 Active cuts use two-pass QR/null-space solves rather than the ill-conditioned
 normal Gram system. The final combined correction is bounded after cut handling,
@@ -173,7 +239,9 @@ step. The final primary-run entry is pending completion.
 | R3 mixed original h0, six updates (`82ca255`) | 32.866814956 | .001660092 | bounded native control, fresh readback |
 | R3 pre-filter-repair original h0, eight updates (`e7313f7`) | 24.415622070 | .001273039 | filter mismatch; no convergence |
 | R3 repaired filter, three more updates from that saved guess | 18.566628956 | .001264727 | additional warm-start diagnostic |
-| R3 current fresh h0 run (`8dc862f`) | pending | pending | primary final test |
+| R3 adaptive mixed h0, 17 numerical updates (`1c23b84`) | 19.494577545 | .001011874 | in progress |
+| Pure restoration from mixed checkpoint, first update (`8687dc3`) | 20.239805178 | .001000012818 | additional diagnostic, in progress |
+| Current pure original-h0 run (`3cd9dca`) | pending | pending | primary final test |
 
 The saved R2 endpoint is used only for diagnostics. Its first reduced restoration
 step changed residual 2.908834 -> 3.271267 while improving gradient .003826405 ->
@@ -210,6 +278,15 @@ This supports safeguarding actual trials, not importing the coupled R8/R9
 optimizer or treating a better source prediction as evidence of a useful direction.
 The source model, normalization and destruction remain fully nonlinear in trials.
 
+The supplementary coupled R9 iterate is a separate diagnostic starting state.
+A fresh original readback matches all2,165 saved residual coefficients exactly.
+It is inside the original box but has non-k residual as large as .220237.
+Holding every k coefficient fixed and converging H raises k residual2.910254 ->
+11.879869 and gradient .000999985 -> .003322874. Ground remains5.93348e-6.
+It therefore supplies neither a controlled Y(k) nor a qualified root before
+that equilibration. Its k state is not substituted for the original-h0 test,
+and no coupled direction matrix or optimizer is imported.
+
 ## Algebraic continuation and the qualification obstruction
 
 The separate opt-in continuation evaluates
@@ -219,8 +296,8 @@ control. The wrapper checks the exact mass identity (relative defects about
 1e-16) and always rejects physical advancement, even at eta0. Positive-eta roots
 are diagnostic only. The eta-zero/original acceptance tolerance stays2e-12.
 
-A strict eta5000 attempt stopped at about9.34e-12 and did not qualify as a
-2e-12 root. A separate explicitly declared eta-positive tolerance2e-11 allowed
+A strict eta5000 attempt stopped at about9.34e-12 and did not meet the
+2e-12 algebraic tolerance. A separate explicitly declared eta-positive tolerance2e-11 allowed
 following the nearby branch. Original residuals on these states remain tens,
 not zero; each continued and original residual was reconstructed independently.
 
@@ -262,6 +339,14 @@ a general spatial positivity obstruction. A mesh-convergence theorem is not clai
 
 ## Verification, provenance, and outstanding work
 
+The fixed-state readback now optionally requests the original complete
+qualification and continuous-ground audit in a fresh process. A negative physical
+ground vertex is rejected before evaluating the candidate scalar model. The
+focused guard check passes; the successful fixed-state audit reproduces the
+previous residual norm vector bitwise. Optional audit flags leave historical
+probe behavior intact. This is an observation, not native physical acceptance.
+
+
 The `_GLIBCXX_ASSERTIONS` Linux solver exercises the repaired predictor with
 verification On. Verified and unverified two-sweep states and norms are bitwise
 identical. Predictor continuity/gauge is [8.54316e-4,2.53250e-4,1.02830e-16];
@@ -295,6 +380,11 @@ beyond the existing serial/flat tensor-cubic ground implementation.
 [development controls](cls-epawf-segregated-picard-r3-evidence/native/development-controls.json),
 [updated native checkpoints](cls-epawf-segregated-picard-r3-evidence/native/development-updated.json),
 [continued roots and independent readbacks](cls-epawf-segregated-picard-r3-evidence/native/continuation-aux.json),
+[current build/control evidence](cls-epawf-segregated-picard-r3-evidence/native/build-validation-current.json),
+[8687dc3 regressions and pressure verification](cls-epawf-segregated-picard-r3-evidence/native/build-validation-8687dc3.json),
+[independent feedback components](cls-epawf-segregated-picard-r3-evidence/native/feedback-components.json),
+[continued branch below eta600](cls-epawf-segregated-picard-r3-evidence/native/continuation-near-ground.json),
+[repeated auxiliary root](cls-epawf-segregated-picard-r3-evidence/native/continuation-repeat.json),
 and [changed-mesh diagnostic](cls-epawf-segregated-picard-r3-evidence/native/ground-mesh.json)
 record producing revisions, executable/library hashes, exact numerical commands,
 XML hashes, work, elapsed time, block histories, qualification witnesses and
