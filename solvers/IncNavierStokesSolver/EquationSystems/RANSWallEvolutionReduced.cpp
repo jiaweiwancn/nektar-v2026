@@ -407,7 +407,10 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         e.valid              = true;
         return e;
     };
-    double innerTolerance = std::max(tolerance * .2, m_reducedHTolerance);
+    // Honor an explicitly tighter request, but do not automatically demand
+    // H accuracy beyond the complete original stage tolerance at the end.
+    const double minimumInnerAccuracy = std::min(tolerance, m_reducedHTolerance);
+    double innerTolerance = m_reducedHTolerance;
     emit("protocol", {{"physical_history_sha256", J::Quote(RANSWallR3::Hash(history))},
         {"radius_scaling", J::Quote("Euclidean norm of free k coefficient displacement divided by reference K")},
         {"response_method", J::Quote("one-sided differences of converged sequential non-k solves")},
@@ -472,7 +475,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                     failed.failure == "non_k_iteration_limit",
                 "insufficient response accuracy was silently accepted");
         const auto tightened =
-            evaluate(disturbed, std::max(tolerance * .2, innerTolerance * .05),
+            evaluate(disturbed, std::max(minimumInnerAccuracy, innerTolerance * .05),
                      m_reducedHUpdates, "tightened_same_k");
         Require(tightened.valid, "tight repeated reduced evaluation failed");
         auto tightDifference = tightened.r;
@@ -504,8 +507,20 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
     int failedModels = 0;
     int basisBudget = m_reducedBasis;
     std::vector<OuterBound> activeWitnesses;
+    auto qualifiedRoot = [&]() {
+        if (Maximum(base.response.norms) > tolerance) return false;
+        const auto audit = CompleteRestrictedAudit(state, history, alpha, time, data, true);
+        return audit.at("r2_qualified")[0] == 1.;
+    };
     while (iterations < maximumIterations)
     {
+        // Original equations and qualification are the acceptance authority,
+        // before any optional tightening of the conditional response accuracy.
+        if (qualifiedRoot())
+        {
+            report(base, "converged");
+            return state;
+        }
         if (base.response.error > innerTolerance)
         {
             auto refined = evaluate(state, innerTolerance, m_reducedHUpdates,
@@ -515,12 +530,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             base = std::move(refined);
             state = base.response.state;
             m_lastFeasibleState = state;
-        }
-        if (Maximum(base.response.norms) <= tolerance)
-        {
-            const auto audit = CompleteRestrictedAudit(state, history, alpha,
-                                                       time, data, true);
-            if (audit.at("r2_qualified")[0] == 1.)
+            if (qualifiedRoot())
             {
                 report(base, "converged");
                 return state;
@@ -726,7 +736,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 auto guess = state;
                 Apply(guess, rows, seed, kScale * h * .5);
                 const auto half = evaluate(
-                    guess, std::max(tolerance * .2, innerTolerance * .05),
+                    guess, std::max(minimumInnerAccuracy, innerTolerance * .05),
                     m_reducedHUpdates, "half_response_" + name);
                 if (!half.valid)
                     continue;
@@ -854,7 +864,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         if (columns.size() < 3)
         {
             ++failedModels;
-            innerTolerance = std::max(tolerance * .2, innerTolerance * .1);
+            innerTolerance = std::max(minimumInnerAccuracy, innerTolerance * .1);
             emit("inaccurate_or_failed_responses", {{"usable", J::Number(columns.size())},
                  {"required_accuracy", J::Number(innerTolerance)}});
             Require(failedModels < 4,
@@ -1330,7 +1340,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         {
             ++failedModels;
             radius *= .5;
-            innerTolerance = std::max(tolerance * .2, innerTolerance * .1);
+            innerTolerance = std::max(minimumInnerAccuracy, innerTolerance * .1);
             emit("model_retry", {{"failed_models", J::Number(failedModels)},
                                  {"radius", J::Number(radius)}});
             Require(failedModels < 4 && radius > 1e-6,
@@ -1338,7 +1348,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                     "acceptable progress");
         }
         innerTolerance = std::max(
-            tolerance * .2, std::min(innerTolerance, base.merit * 1e-3));
+            minimumInnerAccuracy, std::min(innerTolerance, base.merit * 1e-3));
     }
     Require(Maximum(base.response.norms) <= tolerance,
             "reduced iteration limit before original full-stage convergence");
