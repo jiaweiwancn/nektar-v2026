@@ -1,0 +1,118 @@
+{
+  "schema": 1,
+  "milestone": "M8-R10",
+  "status": "awaiting_authoritative_volume",
+  "completed": false,
+  "M8_closed": false,
+  "reviewed_baseline": "3b906f7fd2d2e657526ae291165ab2e4d6b0e901",
+  "implementation_revision": "6d6a92bb0f9b4e7102d9c3bdefd5066d0a1bba07",
+  "intervening_commits_before_implementation": [],
+  "expected_bindings_not_yet_reverified_on_Linux": {
+    "state": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r9/epoch-001/local-bound/case.r3-progress.jsonl.solve1.iterate0.state.bin",
+      "bytes": 17320,
+      "sha256": "eb063e15f16b2610f1c5a832280d87894f567e8dab321560202e6dd9af95194c"
+    },
+    "history": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r9/epoch-001/local-bound/case.r3-progress.jsonl.solve1.history.bin",
+      "bytes": 17320,
+      "sha256": "b8ba7917424057a9f6f16a026d82d53ede43985871537facea170ef6e1841b71"
+    },
+    "residual": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r9/epoch-001/local-bound/case.r3-progress.jsonl.solve1.iterate0.residual.bin",
+      "bytes": 17320,
+      "sha256": "819c592e1dadacaea9defcb92db4a829a5ae03c1de04d4ec59eb769a5d8dbd26"
+    },
+    "constraints": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r9/epoch-001/local-bound/case.r3-progress.jsonl.solve1.iterate0.constraints.bin",
+      "bytes": 5728,
+      "sha256": "62dc35b908e6dfdfec2189ff537cb5c79efea9df720866e37131c64821734369"
+    },
+    "physical_matrix": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r9/epoch-001/local-bound/case.r3-progress.jsonl.solve1.J0.bin",
+      "bytes": 37497800,
+      "sha256": "2194965dee9c5960ba4e1c1604f76e8e85372cabef2d5ced7c8a394f593c8dc6"
+    },
+    "source_value": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r9/epoch-001/local-bound/case.r3-progress.jsonl.solve1.r9.D0.bin",
+      "bytes": 17320,
+      "sha256": "0af81e4c886c5d3f18bf8c06108f361603f6ca27809011f359aaf287cbde3f5f"
+    },
+    "source_action": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r9/epoch-001/local-bound/case.r3-progress.jsonl.solve1.J10000.bin",
+      "bytes": 37497800,
+      "sha256": "d3bebd4b4f4a50070e0efb8c62c4a2d3bc07efbb14eecb00055588e755ed10ee"
+    },
+    "ascent_regression_direction": {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r9/epoch-001/local-bound/case.r3-progress.jsonl.solve1.r9_model1.step.bin",
+      "bytes": 17320,
+      "sha256": "5f58e97e74d09ec520816b04547227781ea1ab064cb7105f8b42e9070fdd5162"
+    }
+  },
+  "target": {
+    "alpha": 400,
+    "time": 0.0025,
+    "eta": 0,
+    "unknowns": 2165,
+    "root_gate": 2e-12,
+    "action_gate": 1e-07,
+    "original_row_gate": 5e-12,
+    "inner": "SaturatedR2",
+    "rho": 0.8,
+    "beta": 0.4,
+    "GammaScale": 1,
+    "GammaUniform": 0,
+    "destruction": "Capped",
+    "smoothing": "Linear",
+    "theta": 0.2,
+    "delta": 0.1,
+    "total_radius": 0.125,
+    "reserve": 0.05,
+    "positive_ground_inward_only": false
+  },
+  "budget": {
+    "tangent_qp_solves": 4,
+    "conditional_slope_retry": 1,
+    "Armijo_fractions_per_tangent": 10,
+    "new_source_values": 50,
+    "native_trials_per_ray": 9,
+    "comparison_cooperative_seconds": 600,
+    "native_supervisor_seconds": 650,
+    "compiler_workers": 16,
+    "numerical_threads": 1
+  },
+  "execution": {
+    "ssh_route": "jay@100.105.247.110",
+    "host": "jay-Super-Server",
+    "payload_volume": "/dev/sda2",
+    "required_mount": "/media/jay/新加卷",
+    "mount_status": "unmounted",
+    "user_mount_error": "org.freedesktop.UDisks2.Error.NotAuthorizedCanObtain",
+    "administrator_mount_error": "sudo: a password is required",
+    "launch_script": "/tmp/cls-m8-r10-launch.sh",
+    "launch_log": "/tmp/cls-m8-r10-launch.log",
+    "launch_wait_seconds": 1800,
+    "checks_script": "/tmp/cls-m8-r10-checks.sh",
+    "isolated_epoch": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-revised/m8-r10/epoch-001",
+    "native_trial_states_executed": 0,
+    "source_values_executed": 0,
+    "build_status": "not_started"
+  },
+  "verification": {
+    "source_diff_check_passed": true,
+    "Python_AST_checks_passed": true,
+    "native_build_and_regressions": "pending",
+    "retained_payload_verification": "pending",
+    "moved_source_action_check": "pending",
+    "original_row_scans": "pending"
+  },
+  "outcomes": {
+    "model_globalization": "implemented; authoritative verification pending",
+    "native_merit_descent": "implemented; bound-payload regression pending",
+    "useful_native_gain_and_cost": "unmeasured",
+    "coupled_root_obtained": false,
+    "physical_steps_accepted": 0,
+    "continuation": "conditional; not started"
+  },
+  "next_action": "Mount the existing data volume at /media/jay/新加卷, then complete the queued isolated build and bounded frozen-base experiment."
+}
