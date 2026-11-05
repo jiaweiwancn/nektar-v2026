@@ -51,7 +51,7 @@ def identity(executable):
 def check_report(report):
     require(report['temporal_coupling'] == 'PimpleSingleSweep' and report['order'] == 1,
             'wrong temporal mode')
-    require(state_hash(report['initial']) == H0, 'changed represented outer6 initial state')
+    require(state_hash(report['accepted_states'][0]) == H0, 'changed represented outer6 initial state')
     require(report['eta'] == 0 and report['inner_stress_model'] == 'SaturatedR2', 'changed physics')
     attempts = report['pimple_attempts']
     require(report['implicit_callback_count'] == len(attempts), 'callback/attempt mismatch')

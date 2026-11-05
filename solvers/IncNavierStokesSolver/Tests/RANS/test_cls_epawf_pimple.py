@@ -55,6 +55,8 @@ def main():
         if len(stable)==3:break
         dt/=2
     require(len(stable)==3,'three meaningful stable common-time comparisons unavailable; retained failures in summary')
+    require(all(r['initialization_lift_calls_iterations']==initial['initialization_lift_calls_iterations'] for r in stable),
+        'hidden nonlinear trace lifting during physical trajectory')
     summary['refinement']=[describe(r) for r in stable]
     deltas=[differences(x,y) for x,y in zip(stable,stable[1:])]
     summary['successive_physical_L2_differences']=deltas
