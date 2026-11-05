@@ -733,7 +733,9 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                       b.family == 0);
             pointSeed(x, m_parameters.geometry.height,
                       "trace_witness_" + std::to_string(witness));
-            if (++witness == std::max(5, (basisBudget+1)/2))
+            // Beyond64, retain the established point/trace seed prefix and
+            // spend the larger budget on independent free-field directions.
+            if (++witness == std::min(32, std::max(5, (basisBudget+1)/2)))
                 break;
         }
         if (m_reducedAdaptiveSpace && basisBudget >= 40)
