@@ -56,6 +56,22 @@ def collect(directory):
                               maximum_attained=max((r["attained"] for r in responses if r["converged"]), default=None),
                               maximum_attained_ratio=max((r["attained"]/r["required"] for r in responses
                                                           if r["converged"]), default=None)))
+    # Old development controls used a build path subsequently rebuilt. Keep
+    # their launch identities and report that distinction; current immutable
+    # image runs must still match their launch executable and libraries.
+    outcome["runtime_at_collection"] = {}
+    for name in ("IncNavierStokesSolver", "RANSWallResolutionProbe"):
+        launched = manifest.get(name)
+        if not launched:
+            continue
+        paths = {launched["path"]: launched["sha256"], **launched["libraries"]}
+        current = {path: sha(Path(path)) if Path(path).is_file() else None for path in paths}
+        differences = [path for path in paths if current[path] != paths[path]]
+        immutable = "/binaries-" in launched["path"]
+        require(not immutable or not differences,
+                "an immutable native image/runtime changed since launch")
+        outcome["runtime_at_collection"][name] = dict(sha256=current,
+            differences_from_launch=differences, immutable_image=immutable)
     report = directory / "target/case.evolution.json"
     if report.exists():
         state = load(report)
