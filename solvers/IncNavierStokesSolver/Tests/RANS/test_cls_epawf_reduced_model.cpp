@@ -103,7 +103,7 @@ int main(int argc, char **argv)
             // and every cut, then solve with the requested field radius.
             replayRadius=std::stod(argv[3]);
             const double oldMultiplier=std::stod(argv[4]);
-            Check(n<=64 && replayRadius>0. && std::isfinite(replayRadius) &&
+            Check(n<=160 && replayRadius>0. && std::isfinite(replayRadius) &&
                   oldMultiplier>=0. && std::isfinite(oldMultiplier) &&
                   R::Length(initial)==0., "orthogonal-radius replay assumptions differ");
             R::Matrix columns(n,R::Vector(n));

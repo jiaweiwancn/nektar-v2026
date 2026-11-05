@@ -57,7 +57,7 @@ def check(directory):
     directions = [r for r in records if r["event"] == "direction"]
     require(directions, "the reduced direction was not constructed")
     protocol, = [r for r in records if r["event"] == "protocol"]
-    require(all(d["basis_dimension"] <= protocol["maximum_basis"] <= 64 for d in directions),
+    require(all(d["basis_dimension"] <= protocol["maximum_basis"] <= 160 for d in directions),
             "the direction exceeds its declared adaptive response budget")
     require(any(d["qp_solved"] and d["displacement"] > 0 for d in directions),
             "no nonzero constrained model direction was solved")

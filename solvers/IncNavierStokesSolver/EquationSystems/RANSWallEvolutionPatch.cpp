@@ -300,7 +300,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         session->LoadParameter("RANSWallReducedHTolerance",m_reducedHTolerance,2e-9);
         session->LoadParameter("RANSWallReducedRestorationWeight",m_reducedRestorationWeight,1.);
         Require(m_reducedBasis>=4 && m_reducedBasis<=m_reducedMaximumBasis &&
-                m_reducedMaximumBasis>=4 && m_reducedMaximumBasis<=64 && m_reducedHUpdates>=0 &&
+                m_reducedMaximumBasis>=4 && m_reducedMaximumBasis<=160 && m_reducedHUpdates>=0 &&
                 m_reducedKrylov>=0 && m_reducedKrylov<=16 &&
                 m_reducedRadius>0. && m_reducedRadius<=1. &&
                 m_reducedStep>0. && m_reducedStep<.01 && m_reducedHTolerance>0. &&
