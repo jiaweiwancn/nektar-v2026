@@ -90,7 +90,6 @@ def main():
     d=lu_solve(lu,load);Jlong=J.astype(np.longdouble);extended=d.astype(np.longdouble)
     for _ in range(4):extended+=lu_solve(lu,np.array(load.astype(np.longdouble)-Jlong@extended,float)).astype(np.longdouble)
     d=np.array(extended,float)
-    origin=np.array(h.vector(record['newton']))
     gaps=original.astype(np.longdouble)@d.astype(np.longdouble)-ell.astype(np.longdouble)
     transformed=(N.astype(np.longdouble)@z.astype(np.longdouble)-beta.astype(np.longdouble))*length.astype(np.longdouble)
     map_error=float(np.max(abs(gaps-transformed)))
@@ -101,6 +100,21 @@ def main():
     assert abs(metric_obj-objective)<=2e-8 and objective<=seed_obj+2e-9
     assert map_error<=5e-12 and max(-gaps)<=5e-12 and algebraic<=5e-12
     assert objective-lower<=2e-8
+    state=np.array(h.vector(manifest['state']));effective=state.copy();delta=d.copy()
+    for col in con:
+        # K wall rows use the actual external lifting. Dependent epsilon rows
+        # do not occur in the K polynomial and do not affect this calculation.
+        effective[col]=state[col]-R[col];delta[col]=0.
+    reserve=delta+.95*effective
+    from decimal import Decimal
+    extrema=[]
+    for precision in (80,110):
+        candidates=h.wall_rows(raw,reserve,precision)
+        worst=min(candidates,key=lambda x:Decimal(x['minimum']['value']))
+        extrema.append(dict(worst['minimum'],geometry=worst['geometry']))
+    wall_min=Decimal(extrema[-1]['value'])/Decimal(float(metric.state_scale(raw['dimension'])))
+    assert wall_min>=Decimal('-5e-12')
+    assert abs(Decimal(extrema[0]['value'])-Decimal(extrema[1]['value']))<Decimal('1e-65')
     a.output.parent.mkdir(parents=True,exist_ok=True)
     destination=a.output.with_suffix('.direction.bin');np.asarray(d,dtype='<f8').tofile(destination)
     h.save(a.output,dict(status='finite_pool_reference_verified_pending_full_oracle',script=h.pin(__file__),
@@ -113,6 +127,7 @@ def main():
         stationarity=float(np.linalg.norm(z-N.T@lam)),complementarity=float(np.max(abs(lam*(N@z-beta)))),
         active_original_violation=float(max(0.,max(-gaps))),transformation_gap_error=map_error,
         full_algebraic_coefficient_error=algebraic,independent_metric_objective=metric_obj,
+        independent_continuous_wall_reserve=extrema[-1],normalized_wall_reserve_minimum=str(wall_min),
         direction=h.pin(destination),seconds=time.monotonic()-begin,physical_steps=0,
         qualification='Finite pool is a relaxation. Require the complete native plus extended original oracle and recomputed continuous-wall extrema.'))
 

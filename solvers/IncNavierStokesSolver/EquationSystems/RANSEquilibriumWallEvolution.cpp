@@ -412,7 +412,7 @@ RANSEquilibriumWallEvolution::Vector RANSEquilibriumWallEvolution::LoadR3Predict
     boost::property_tree::ptree packet;boost::property_tree::read_json(m_r3PredictorFile,packet);
     const bool retained=m_patch->GroundSafeguard();
     const double originAlpha=retained?400.:3200.;
-    const std::string role=(m_patch->ExperimentR9() || m_patch->ExperimentR10() || m_patch->ExperimentR11())?"retained_r8_terminal_iterate_only":
+    const std::string role=(m_patch->ExperimentR9() || m_patch->ExperimentR10() || m_patch->ExperimentR11() || m_patch->ExperimentR12())?"retained_r8_terminal_iterate_only":
         (m_patch->ExperimentR8() || m_patch->PilotR8())?"retained_r7_terminal_iterate_only":
         (m_patch->InteriorProbeR7() || m_patch->AdaptiveR7())?"retained_r6_terminal_iterate_only":
         m_patch->JointRestorationR5()?"retained_r4_terminal_iterate_only":
@@ -496,7 +496,13 @@ void RANSEquilibriumWallEvolution::RunR3StageTest()
     Require(native.steps==0,"R3 predictor import cannot follow a physical time step");
     m_stageTestInitialHistory=J::Object({{"state",J::Numbers(m_state)},{"time",J::Number(m_time)},
         {"steps",J::Number(native.steps)},{"history",J::Rows(native.history)},{"times",J::Numbers(native.times)}});
-    auto candidate=LoadR3Predictor(history,targetTime);
+    Vector candidate;
+    try{candidate=LoadR3Predictor(history,targetTime);}
+    catch(const std::exception &error)
+    {
+        if(m_patch->ExperimentR12())std::cerr<<"R12 predictor import: "<<error.what()<<std::endl;
+        throw;
+    }
     const bool benchmark=m_stageTest=="JacobianBenchmarkR3";
     const bool localR4=m_stageTest=="DirectionExperimentR4";
     const bool localR5=m_stageTest=="DirectionExperimentR5";

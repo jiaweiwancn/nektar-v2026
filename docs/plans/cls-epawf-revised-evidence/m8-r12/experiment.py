@@ -34,7 +34,7 @@ def main():
     for item in list(info):
         if item.get('PROPERTY')=='RANSWallR10Experiment':info.remove(item)
     ET.SubElement(info,'I',PROPERTY='RANSWallR12Experiment',VALUE=a.phase)
-    params=tree.find('.//PARAMETERS');ET.SubElement(params,'P').text='RANSWallR12CutLimit = '+str(a.cuts)
+    ET.SubElement(info,'I',PROPERTY='RANSWallR12CutLimit',VALUE=str(a.cuts))
     tree.write(a.out/'case.xml',encoding='unicode')
     assert h.predictor.protected_xml(a.out/'case.xml')==manifest['protected_physical_xml_sha256']
     control=next(x for x in old['policies'] if x['name']=='L1')

@@ -246,7 +246,11 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     Require(r11=="Off" || (m_r11Experiment && RefinedDirectionR6() && m_r7Policy=="Off" &&
         r8=="Off" && r9=="Off" && r10=="Off"),"R11 requires its isolated RefinedR6 comparison");
     session->LoadSolverInfo("RANSWallR12Experiment",m_r12Experiment,"Off");
-    session->LoadParameter("RANSWallR12CutLimit",m_r12CutLimit,96);
+    std::string r12Limit;
+    session->LoadSolverInfo("RANSWallR12CutLimit",r12Limit,"96");
+    Require(!r12Limit.empty() && r12Limit.size()<=3 && r12Limit.find_first_not_of("0123456789")==std::string::npos,
+        "R12 cut budget must be an integer solver setting");
+    m_r12CutLimit=std::stoi(r12Limit);
     Require(m_r12Experiment=="Off" || ((m_r12Experiment=="Replay" || m_r12Experiment=="Complete" ||
         m_r12Experiment=="Verify" || m_r12Experiment=="Compare") && RefinedDirectionR6() &&
         m_r7Policy=="Off" && r8=="Off" && r9=="Off" && r10=="Off" && r11=="Off" &&
