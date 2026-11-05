@@ -464,11 +464,12 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         auto rhs = base.r;
         for (double &x : rhs)
             x = -x;
+        WallMatrix conditionalJacobian;
         try
         {
+            conditionalJacobian = PicardKJacobian(state, alpha, time, data, rows);
             add("conditional_newton",
-                Factor(PicardKJacobian(state, alpha, time, data, rows))
-                    .Apply(rhs));
+                Factor(conditionalJacobian).Apply(rhs));
         }
         catch (const std::runtime_error &e)
         {
@@ -708,10 +709,26 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                             {"predicted_change", J::Number(sign * column.observations[witness] * h * .5)},
                             {"measured_change", J::Number(sign * measured)}}));
                     }
+                Vector conditionalAction = conditionalJacobian.empty() ? Vector(dimension)
+                    : Multiply(conditionalJacobian, seed);
+                auto frozenAction = Multiply(frozen.matrix, seed);
+                auto feedback = action;
+                for (int i = 0; i < dimension; ++i)
+                {
+                    conditionalAction[i] *= kScale;
+                    frozenAction[i] *= kScale;
+                    feedback[i] -= conditionalAction[i];
+                }
                 emit("response_check",
                      {{"name", J::Quote(name)},
                       {"h", J::Number(h)},
                       {"relative_error", J::Number(column.error)},
+                      {"conditional_action_norm", J::Number(dualNorm(conditionalAction))},
+                      {"frozen_action_norm", J::Number(dualNorm(frozenAction))},
+                      {"reduced_action_norm", J::Number(dualNorm(action))},
+                      {"feedback_action_norm", J::Number(dualNorm(feedback))},
+                      {"conditional_merit_slope", J::Number(Dot(base.r, mass.Apply(conditionalAction)) /
+                                                             (residualScale * residualScale))},
                       {"signed_merit_slope",
                        J::Number(Dot(base.r, mass.Apply(column.r)) /
                                  (residualScale * residualScale))},
