@@ -10,8 +10,29 @@ import xml.etree.ElementTree as ET
 from run_cls_epawf_picard import require, load, state_hash, H0, write_json
 
 
+def execution_manifest(directory):
+    """Use the actual native launch receipt for ordinary or diagnostic runs."""
+    ordinary = directory / "manifest.json"
+    if ordinary.exists():
+        return load(ordinary)
+    continuation = load(directory.parent / "continuation.json")
+    matching = [case for case in continuation["cases"]
+                if Path(case["path"]).resolve() == directory.resolve()]
+    require(len(matching) == 1 and continuation["method"] == "reduced",
+            "missing or ambiguous reduced continuation launch receipt")
+    case, = matching
+    require(case.get("history_preserved") and case["accepted_steps"] == 0 and
+            case["accepted_time"] == 0 and case["native"]["command"] ==
+            [continuation["solver"], "case.xml"],
+            "continuation operator check lacks a completed no-advance receipt")
+    return dict(status=case["status"], scope=continuation["scope"],
+                IncNavierStokesSolver=dict(path=continuation["solver"],
+                    sha256=continuation["solver_sha256"],
+                    libraries=continuation["IncNavierStokesSolver"]["libraries"]))
+
+
 def check(directory):
-    manifest = load(directory / "manifest.json")
+    manifest = execution_manifest(directory)
     report = load(directory / "target/case.evolution.json")
     records = []
     for line in (directory / "target/solver.log").read_text().splitlines():
@@ -122,7 +143,7 @@ def compare_verification(verified, unverified):
 
     require(numerical_xml(verified) == numerical_xml(unverified),
             "verification comparison changes a numerical input or iteration budget")
-    a, b = (load(p / "manifest.json") for p in (verified, unverified))
+    a, b = (execution_manifest(p) for p in (verified, unverified))
     require(a["IncNavierStokesSolver"]["sha256"] ==
             b["IncNavierStokesSolver"]["sha256"] and
             a["IncNavierStokesSolver"]["libraries"] ==
