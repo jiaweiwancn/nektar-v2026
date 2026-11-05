@@ -24,6 +24,14 @@ def check(directory):
     checks = [r for r in records if r["event"] == "response_check"]
     require(len(checks) >= 3 and sum(c["usable"] for c in checks) >= 3,
             "insufficient independently consistent reduced responses")
+    warm_starts = [r for r in records if r["event"] == "half_response_warm_start"]
+    if any(r.get("half_response_warm_start") for r in records if r["event"] == "protocol"):
+        require(warm_starts, "the half-response warm start was not checked independently")
+    require(all(r["attained"] <= r["required"] and
+                r["canonical_attained"] <= r["required"] and
+                r["same_local_response"] == (r["relative_action_difference"] <= .01 and
+                                             r["observation_action_difference"] <= .01)
+                for r in warm_starts), "invalid half-response warm-start status")
     directions = [r for r in records if r["event"] == "direction"]
     require(directions, "the reduced direction was not constructed")
     require(any(d["qp_solved"] and d["displacement"] > 0 for d in directions),
@@ -39,6 +47,11 @@ def check(directory):
                     matching[-1]["relative_error"] <= .03 and
                     matching[-1]["observation_relative_error"] <= .05,
                     "a direction used an unchecked or inaccurate response")
+            checked_warm_starts = [r for r in warm_starts if r["name"] == name and
+                                  r["iteration"] == direction["iteration"] and
+                                  r["seconds"] <= direction["seconds"]]
+            require(not checked_warm_starts or checked_warm_starts[-1]["same_local_response"],
+                    "a direction used an inconsistent warm-start branch")
     trials = [r for r in records if r["event"] == "trial"]
     require(trials, "no constrained direction received an equilibrated native trial")
     inward = [r for r in records if r["event"] == "ground_inward_roundoff"]
@@ -55,7 +68,8 @@ def check(directory):
                 report["native_history_times"] == startup["native_history_times"],
                 "reduced failure advanced the native state or history")
     result = dict(status="passed_operator_checks", manifest_status=manifest["status"],
-                  repeatability=repeat, action_checks=checks, directions=directions,
+                  repeatability=repeat, half_response_warm_starts=warm_starts,
+                  action_checks=checks, directions=directions,
                   trials=trials)
     write_json(directory / "reduced-checks.json", result)
 

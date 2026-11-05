@@ -414,6 +414,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
     emit("protocol", {{"physical_history_sha256", J::Quote(RANSWallR3::Hash(history))},
         {"radius_scaling", J::Quote("Euclidean norm of free k coefficient displacement divided by reference K")},
         {"response_method", J::Quote("one-sided differences of converged sequential non-k solves")},
+        {"half_response_warm_start", J::Quote("interpolate converged non-k coefficients; preserve exact requested k")},
         {"initial_basis_budget", J::Number(m_reducedBasis)},
         {"initial_restoration_weight", J::Number(m_reducedRestorationWeight)},
         {"maximum_basis", J::Number(32)}, {"response_accuracy", J::Number(innerTolerance)}});
@@ -786,11 +787,71 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             {
                 auto guess = state;
                 Apply(guess, rows, seed, kScale * h * .5);
+                const auto canonicalGuess = guess;
+                // The full response is already on the local H branch. Its
+                // midpoint predicts the non-k half response to O(h^2), while
+                // the independently prescribed k coefficients remain exact.
+                // This only changes the warm start: H must still converge to
+                // the same declared tighter accuracy before the action is used.
+                for (int j = 0; j < Size(); ++j)
+                    if (j < offset[K()] || j >= offset[Epsilon()])
+                        guess[j] += .5 * (column.shifted.response.state[j] - state[j]);
+                const double halfAccuracy =
+                    std::max(minimumInnerAccuracy, innerTolerance * .05);
                 auto half = evaluate(
-                    guess, std::max(minimumInnerAccuracy, innerTolerance * .05),
+                    guess, halfAccuracy,
                     m_reducedHUpdates, "half_response_" + name);
                 if (!half.valid)
+                    half = evaluate(canonicalGuess, halfAccuracy,
+                                    m_reducedHUpdates, "retry_half_response_" + name);
+                if (!half.valid)
                     continue;
+                // Independently check the accelerated warm start on the first
+                // usable column of each verified model. Failure to recover the
+                // same response branch rejects this column, rather than mixing
+                // different local Y(k) solutions in a reduced model.
+                if (m_reducedVerify && columns.empty())
+                {
+                    const auto canonical = evaluate(
+                        canonicalGuess, halfAccuracy, m_reducedHUpdates,
+                        "canonical_half_response_" + name);
+                    if (!canonical.valid)
+                        continue;
+                    auto difference = half.r;
+                    auto change = half.r;
+                    for (int j = 0; j < dimension; ++j)
+                    {
+                        difference[j] = (difference[j] - canonical.r[j]) / (h * .5);
+                        change[j] = (change[j] - base.r[j]) / (h * .5);
+                    }
+                    const double actionDifference = dualNorm(difference) /
+                                                    std::max(1., dualNorm(change));
+                    double observationDifference = 0.;
+                    Vector ds = half.response.state, dt = half.domain.traceState;
+                    for (int j = 0; j < Size(); ++j)
+                    {
+                        ds[j] -= canonical.response.state[j];
+                        dt[j] -= canonical.domain.traceState[j];
+                    }
+                    for (const auto &b : base.bounds)
+                        observationDifference = std::max(observationDifference,
+                            std::abs(b.Action(b.projected ? dt : ds,
+                                              offset[b.block])) / (h * .5));
+                    const bool sameBranch = actionDifference <= .01 &&
+                                            observationDifference <= .01;
+                    emit("half_response_warm_start",
+                        {{"name", J::Quote(name)},
+                         {"required", J::Number(halfAccuracy)},
+                         {"attained", J::Number(half.response.error)},
+                         {"canonical_attained", J::Number(canonical.response.error)},
+                         {"updates", J::Number(half.response.updates)},
+                         {"canonical_updates", J::Number(canonical.response.updates)},
+                         {"relative_action_difference", J::Number(actionDifference)},
+                         {"observation_action_difference", J::Number(observationDifference)},
+                         {"same_local_response", J::Boolean(sameBranch)}});
+                    if (!sameBranch)
+                        continue;
+                }
                 auto action = half.r;
                 for (int i = 0; i < dimension; ++i)
                     action[i] = (action[i] - base.r[i]) / (h * .5);
