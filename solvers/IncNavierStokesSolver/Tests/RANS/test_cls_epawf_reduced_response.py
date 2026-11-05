@@ -41,6 +41,9 @@ def check(directory):
                     "a direction used an unchecked or inaccurate response")
     trials = [r for r in records if r["event"] == "trial"]
     require(trials, "no constrained direction received an equilibrated native trial")
+    inward = [r for r in records if r["event"] == "ground_inward_roundoff"]
+    require(all(r["after"]["admissible"] and r["displacement"] <= r["radius"]*(1+1e-12)
+                for r in inward), "ground-inward correction violated the ground or radius bound")
     responses = [r for r in records if r["event"] == "non_k_response"]
     require(all(r["attained"] <= r["required"] for r in responses if r["converged"]),
             "a partially converged response was accepted")

@@ -11,6 +11,7 @@
 #include <cstdint>
 #include <fstream>
 #include <iostream>
+#include <limits>
 #include <numeric>
 #include <set>
 
@@ -980,7 +981,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         WallMatrix kColumns;
         for (const auto &column : columns) kColumns.push_back(column.k);
         Vector displacement(dimension);
-        for (int cutLoop = 0; cutLoop < 12; ++cutLoop)
+        for (int cutLoop = 0; cutLoop < 32; ++cutLoop)
         {
             try
             {
@@ -1006,6 +1007,53 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             {
                 groundModelOK = true;
                 break;
+            }
+            const double roundoff = 256. * std::numeric_limits<double>::epsilon() *
+                std::max(kScale, Maximum(extract(guess)));
+            emit("ground_cut", {{"minimum", J::Number(worst->value)},
+                 {"arithmetic_scale", J::Number(worst->error)},
+                 {"point", J::Numbers(worst->row.coordinate)},
+                 {"cut_loop", J::Number(cutLoop)},
+                 {"double_roundoff_scale", J::Number(roundoff)}});
+            if (worst->error - worst->value <= roundoff)
+            {
+                const auto liftColumn = std::find_if(columns.begin(), columns.end(),
+                    [](const Column &c) { return c.name == "ground_lift"; });
+                if (liftColumn != columns.end())
+                {
+                    const int c = liftColumn - columns.begin();
+                    double inwardSlope = 0.;
+                    for (int j = 0; j < worst->row.ids.size(); ++j)
+                    {
+                        const int i = index[worst->row.ids[j]];
+                        if (i >= 0) inwardSlope += kScale * worst->row.phi[j] * columns[c].k[i];
+                    }
+                    if (inwardSlope > 0.)
+                    {
+                        double tau = std::max(2. * static_cast<double>(worst->error - worst->value) / inwardSlope,
+                            8. * std::numeric_limits<double>::epsilon() * std::max(1., std::abs(solution[c])));
+                        for (int retry = 0; retry < 12; ++retry, tau *= 2.)
+                        {
+                            auto coefficients = solution;
+                            coefficients[c] += tau;
+                            auto adjusted = RANSWallReduced::BoundCorrection(coefficients, kColumns, radius);
+                            auto interior = state;
+                            Apply(interior, rows, adjusted, kScale);
+                            bool valid = false;
+                            const auto wall = WallTraceJSON(interior, valid);
+                            if (!valid) continue;
+                            solution = std::move(coefficients);
+                            displacement = std::move(adjusted);
+                            groundModelOK = true;
+                            emit("ground_inward_roundoff", {{"coefficient", J::Number(tau)},
+                                 {"before_minimum", J::Number(worst->value)},
+                                 {"after", wall}, {"radius", J::Number(radius)},
+                                 {"displacement", J::Number(Length(displacement))}});
+                            break;
+                        }
+                    }
+                }
+                if (groundModelOK) break;
             }
             auto cut  = *worst;
             cut.value = cut.row.Value(state, offset[K()]);
