@@ -414,7 +414,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
     emit("protocol", {{"physical_history_sha256", J::Quote(RANSWallR3::Hash(history))},
         {"radius_scaling", J::Quote("Euclidean norm of free k coefficient displacement divided by reference K")},
         {"response_method", J::Quote("one-sided differences of converged sequential non-k solves")},
-        {"maximum_basis", J::Number(m_reducedBasis)}, {"response_accuracy", J::Number(innerTolerance)}});
+        {"initial_basis_budget", J::Number(m_reducedBasis)},
+        {"maximum_basis", J::Number(32)}, {"response_accuracy", J::Number(innerTolerance)}});
     auto base = evaluate(state, innerTolerance, m_reducedHUpdates, "base");
     Require(base.valid,
             "reduced base non-k solve failed: " + base.response.failure);

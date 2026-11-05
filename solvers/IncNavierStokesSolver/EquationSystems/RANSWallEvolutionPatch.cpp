@@ -38,15 +38,20 @@ void Add(Vector &r,int offset,const RANSWallGlobalPoint &q,double value,
 }
 RANSWallEvolutionPatch::Factor::Factor(const WallMatrix &a):n(a.size()),lu(n*n),pivots(n)
 {
-    Require(n>0,"empty factorisation");
+    if(n<=0 || std::any_of(a.begin(),a.end(),[&](const auto &row){return row.size()!=a.size();}))
+        throw std::logic_error("evolution factor matrix shape mismatch");
     for(int i=0;i<n;++i)for(int j=0;j<n;++j)lu[i+n*j]=a[i][j];
     int info;Lapack::Dgetrf(n,n,lu.data(),n,pivots.data(),info);
+    if(info<0)throw std::logic_error("invalid evolution factorisation argument");
     Require(info==0,"singular evolution stage/mass matrix");
 }
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Factor::Apply(Vector rhs,bool transpose) const
 {
+    if(rhs.size()!=static_cast<std::size_t>(n))
+        throw std::logic_error("evolution factor right-hand side shape mismatch");
     auto pivot=pivots;
     int info;Lapack::Dgetrs(transpose?'T':'N',n,1,lu.data(),n,pivot.data(),rhs.data(),n,info);
+    if(info<0)throw std::logic_error("invalid evolution factor solve argument");
     Require(info==0,"failed evolution factor solve");Maximum(rhs);return rhs;
 }
 struct RANSWallEvolutionPatch::SolverCache

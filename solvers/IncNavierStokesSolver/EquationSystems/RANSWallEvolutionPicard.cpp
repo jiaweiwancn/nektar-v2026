@@ -796,8 +796,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
     };
     auto apply = [](Vector &state, const PicardBlock &block, const Vector &step,
                     double relaxation) {
-        Require(step.size() == block.rows.size(),
-                "Picard block increment shape mismatch");
+        if(step.size() != block.rows.size())
+            throw std::logic_error("Picard block increment shape mismatch");
         for (int i = 0; i < block.rows.size(); ++i)
             state.at(block.rows[i]) += relaxation * step[i];
     };
