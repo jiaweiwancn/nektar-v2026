@@ -165,7 +165,8 @@ public:
     struct R8Ray
     {
         Vector step,action,destruction,ascentRegression,r12Seed,r12Direction,r12Reference;
-        double r12SeedCost=0.,r12DirectionCost=0.;
+        double r12SeedCost,r12DirectionCost;
+        R8Ray():r12SeedCost(0.),r12DirectionCost(0.) {}
         WallMatrix destructionAction;
         std::map<double,Vector> residuals;
         std::vector<R11Replay> replay;

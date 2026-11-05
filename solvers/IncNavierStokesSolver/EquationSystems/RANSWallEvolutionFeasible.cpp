@@ -2357,6 +2357,7 @@ RANSWallEvolutionPatch::R8Trial RANSWallEvolutionPatch::RunR12Frozen(
     const WallMatrix &jac,const Vector &newton,const std::function<Vector(Vector,bool)> &inverse,
     const R8Ray &binding,RANSWallR3::DurableProgress &durable) const
 {
+    Require(history.size()==Size() && newton.size()==Size() && alpha==400.,"R12 frozen target changed");
     const auto started=std::chrono::steady_clock::now();
     const auto outer=OuterBoundsR5(domain);
     const auto merit=MeritRowsR10(residual,jac,constraints);
