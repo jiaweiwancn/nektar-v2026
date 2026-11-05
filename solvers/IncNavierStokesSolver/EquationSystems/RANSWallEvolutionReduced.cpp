@@ -428,10 +428,12 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         {"probe_basis", J::Quote("orthogonal field directions when admissible; feasible inward fallback")},
         {"combined_direction_checks", J::Boolean(m_reducedVerify)},
         {"second_order_qualification_correction", J::Boolean(m_reducedSecondOrder)},
+        {"constraint_response_secants", J::Boolean(m_reducedConstraintSecant)},
+        {"qualification_correction_budget", J::Number(m_reducedConstraintSecant ? 6 : 3)},
         {"continuation_algebraic_diagnostic", J::Boolean(continuationDiagnostic)},
         {"qualification_policy", J::Quote(continuationDiagnostic
             ? "record_only_no_physical_acceptance" : "original_bounds_enforced")},
-        {"maximum_basis", J::Number(32)}, {"response_accuracy", J::Number(innerTolerance)}});
+        {"maximum_basis", J::Number(m_reducedMaximumBasis)}, {"response_accuracy", J::Number(innerTolerance)}});
     auto base = evaluate(state, innerTolerance, m_reducedHUpdates, "base");
     Require(base.valid,
             "reduced base non-k solve failed: " + base.response.failure);
@@ -1060,7 +1062,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             orthogonal.push_back(std::move(q));
             columns.push_back(std::move(column));
             if (columns.size() >=
-                std::min(32, basisBudget + failedModels * 3))
+                std::min(m_reducedMaximumBasis, basisBudget + failedModels * 3))
                 break;
         }
         if (columns.size() < 3)
@@ -1435,7 +1437,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                         activeWitnesses.push_back(b);
                 }
             if (restore && unscaledViolation > .5 * base.violation)
-                basisBudget = std::min(32, basisBudget + 3);
+                basisBudget = std::min(m_reducedMaximumBasis, basisBudget + 3);
         }
         emit("direction",
              {{"restoration", J::Boolean(restore)},
@@ -1586,6 +1588,23 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 for (double &x : trialDisplacement) x *= fraction;
                 const double originalTrialLength = Length(trialDisplacement);
                 int usedCorrections = 0;
+                WallMatrix correctionState, correctionTrace;
+                for (const auto &column : columns)
+                {
+                    correctionState.push_back(column.stateAction);
+                    correctionTrace.push_back(column.traceAction);
+                }
+                auto exactKActions = [&]() {
+                    for (int i = 0; i < n; ++i)
+                    {
+                        for (int j = offset[K()]; j < offset[Epsilon()]; ++j)
+                            correctionState[i][j] = correctionTrace[i][j] = 0.;
+                        for (int j = 0; j < dimension; ++j)
+                            correctionState[i][rows[j]] = correctionTrace[i][rows[j]] =
+                                kScale*columns[i].k[j];
+                    }
+                };
+                if (m_reducedConstraintSecant) exactKActions();
                 // A tangent reduced step can leave curved qualification
                 // surfaces even when its checked first derivative is accurate.
                 // Correct the actual trial observations in the same measured
@@ -1593,7 +1612,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 // must again solve H and scan the complete actual inventory.
                 while (m_reducedSecondOrder && !continuationDiagnostic && !restore && fraction >= .25 &&
                        trial.violation > 0. && trial.violation < .1 &&
-                       trial.merit < base.merit && correctionEvaluations < 3 &&
+                       trial.merit < base.merit &&
+                       correctionEvaluations < (m_reducedConstraintSecant ? 6 : 3) &&
                        originalTrialLength > 1e-8)
                 {
                     const int count = n + 1; // Last variable is an elastic slack.
@@ -1617,8 +1637,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                         {
                             Vector a(count);
                             for (int i = 0; i < n; ++i)
-                                a[i] = sign * b.Action(b.projected ? columns[i].traceAction
-                                                                  : columns[i].stateAction,
+                                a[i] = sign * b.Action(b.projected ? correctionTrace[i]
+                                                                  : correctionState[i],
                                                        offset[b.block]);
                             a[n] = -1.;
                             cut(std::move(a), -sign * (b.value -
@@ -1641,8 +1661,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                         const auto row = Point(p.block, p.coordinate, p.side);
                         Vector a(count);
                         for (int i = 0; i < n; ++i)
-                            a[i] = -row.Value(p.dependentTrace ? columns[i].traceAction
-                                                              : columns[i].stateAction,
+                            a[i] = -row.Value(p.dependentTrace ? correctionTrace[i]
+                                                              : correctionState[i],
                                              offset[p.block])/p.scale;
                         cut(std::move(a), p.value/p.scale, "evaluation_domain");
                     }
@@ -1687,8 +1707,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                     {
                         double change = 0.;
                         for (int i = 0; i < n; ++i)
-                            change += delta[i] * b.Action(b.projected ? columns[i].traceAction
-                                                                    : columns[i].stateAction,
+                            change += delta[i] * b.Action(b.projected ? correctionTrace[i]
+                                                                    : correctionState[i],
                                                           offset[b.block]);
                         predictedQualification = std::max(predictedQualification,
                             std::max((b.value-b.upper)/b.width+change,
@@ -1711,6 +1731,58 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                         {"correction_radius", J::Number(.5*originalTrialLength)},
                         {"displacement", J::Number(Length(total))}, {"radius", J::Number(radius)}});
                     if (!improved) break;
+                    if (m_reducedConstraintSecant)
+                    {
+                        Vector observedState = corrected.domain.effectiveState,
+                               observedTrace = corrected.domain.traceState;
+                        for (int j = 0; j < Size(); ++j)
+                        {
+                            observedState[j] -= trial.domain.effectiveState[j];
+                            observedTrace[j] -= trial.domain.traceState[j];
+                        }
+                        double observationError = 0.;
+                        for (const auto &b : trial.bounds)
+                        {
+                            double predicted = 0.;
+                            for (int i = 0; i < n; ++i)
+                                predicted += delta[i] * b.Action(b.projected ? correctionTrace[i]
+                                                                            : correctionState[i],
+                                                                 offset[b.block]);
+                            const double measured = b.Action(b.projected ? observedTrace : observedState,
+                                                              offset[b.block]);
+                            observationError = std::max(observationError,std::abs(measured-predicted));
+                        }
+                        bool updated = false;
+                        std::string failure;
+                        try
+                        {
+                            auto nextState = correctionState, nextTrace = correctionTrace;
+                            const Vector coefficients(delta.begin(), delta.begin()+n);
+                            updated = RANSWallReduced::UpdateSecantActions(
+                                nextState,kColumns,coefficients,observedState,1e-6);
+                            const bool traceUpdated = RANSWallReduced::UpdateSecantActions(
+                                nextTrace,kColumns,coefficients,observedTrace,1e-6);
+                            if (updated != traceUpdated)
+                                throw std::logic_error("constraint secant signal tests disagree");
+                            correctionState = std::move(nextState);
+                            correctionTrace = std::move(nextTrace);
+                            // Independent k has a known exact response. Refine
+                            // only the other fields and dependent trace target.
+                            exactKActions();
+                        }
+                        catch (const std::runtime_error &error)
+                        {
+                            updated = false;
+                            failure = error.what();
+                        }
+                        emit("constraint_response_secant", {{"updated",J::Boolean(updated)},
+                            {"failure",J::Quote(failure)},
+                            {"minimum_field_signal",J::Number(1e-6)},
+                            {"field_signal",J::Number(Length(change))},
+                            {"maximum_signed_observation_prediction_error",J::Number(observationError)},
+                            {"before_violation",J::Number(trial.violation)},
+                            {"after_violation",J::Number(corrected.violation)}});
+                    }
                     trial = std::move(corrected);
                     trialDisplacement = std::move(total);
                     for (int i = 0; i < n; ++i) trialCoefficients[i] += delta[i];
@@ -1838,7 +1910,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                     {
                         if (restorationWeight > 0.)
                             restorationWeight = std::max(1e-4, .1 * restorationWeight);
-                        basisBudget = std::min(32, basisBudget + 3);
+                        basisBudget = std::min(m_reducedMaximumBasis, basisBudget + 3);
                         qualificationStalls = 0;
                         emit("restoration_balance", {{"residual_multiplier", J::Number(restorationWeight)},
                              {"basis_budget", J::Number(basisBudget)},

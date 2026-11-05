@@ -75,7 +75,7 @@ int main(int argc, char **argv)
         std::ifstream in(argv[1], std::ios::binary);
         std::uint64_t shape[2]{};
         in.read(reinterpret_cast<char *>(shape), sizeof(shape));
-        Check(in.good() && shape[0] > 0 && shape[0] <= 64 && shape[1] <= 1000000,
+        Check(in.good() && shape[0] > 0 && shape[0] <= 65 && shape[1] <= 1000000,
               "invalid native affine replay packet shape");
         const int n = shape[0];
         auto read = [&](R::Vector &v) {
@@ -244,6 +244,33 @@ int main(int argc, char **argv)
     Check(actualConstraint < 0. && actualResidual < .02 &&
           std::hypot(.1+cz[0],cz[1]) < .11,
           "curved qualification was not restored with useful true residual progress");
+    // A lower bound on the nonlinear H response Y(k)=k^2: the derivative
+    // from base k=1.5 is too steep at trial k=.95. Three unchanged chord
+    // corrections still violate Y>=1. A secant measured from two true H
+    // responses restores the bound in two corrections, while reducing the
+    // original F=k-.9 relative to its base value .6.
+    double staleK=.95;
+    for (int i=0; i<3; ++i) staleK += (1.-staleK*staleK+1e-6)/3.;
+    Check(staleK*staleK<1., "stale chord unexpectedly restored the curved bound");
+    const double secantStart=.95, firstChange=(1.-secantStart*secantStart+1e-6)/3.;
+    const double afterFirst=secantStart+firstChange;
+    R::Matrix response{{3.}};
+    Check(R::UpdateSecantActions(response,{{1.}},{firstChange},
+          {afterFirst*afterFirst-secantStart*secantStart},1e-6),
+          "measured response secant was not used");
+    Close(response[0][0],afterFirst+secantStart);
+    const double restored=afterFirst+(1.-afterFirst*afterFirst+1e-6)/response[0][0];
+    Check(restored*restored>=1. && std::abs(restored-.9)<.11 && std::abs(restored-1.5)<.55,
+          "response secant lost actual qualification, residual progress or displacement bound");
+    R::Matrix obliqueResponse{{2.,3.},{4.,5.}};
+    Check(R::UpdateSecantActions(obliqueResponse,{{1.,0.},{1.,1.}}, {1.,-1.}, {7.,11.},1e-6),
+          "oblique response secant failed");
+    Close(obliqueResponse[0][0],2.); Close(obliqueResponse[0][1],3.);
+    Close(obliqueResponse[0][0]-obliqueResponse[1][0],7.);
+    Close(obliqueResponse[0][1]-obliqueResponse[1][1],11.);
+    const auto beforeSmall=response;
+    Check(!R::UpdateSecantActions(response,{{1.}},{1e-9},{1e-8},1e-6) && response==beforeSmall,
+          "a below-signal secant changed the response model");
     const auto infeasible = R::SolveQuadratic<Factor>(
         R::Matrix{{1.}}, R::Vector{0.}, std::vector<Cut>{{{1.},0.}}, R::Vector{1.});
     Check(!infeasible.solved && infeasible.failure == "quadratic_infeasible_start",

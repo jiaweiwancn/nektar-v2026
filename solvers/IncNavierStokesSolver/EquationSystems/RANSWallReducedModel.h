@@ -50,6 +50,40 @@ struct QuadraticResult
     std::string failure;
 };
 
+// Broyden update in the actual field metric. This is a finite-step response
+// model, not a claim of an exact Jacobian. The caller must still evaluate its
+// nonlinear trial. Leave changes below the declared signal scale untouched.
+inline bool UpdateSecantActions(Matrix &actions, const Matrix &columns,
+                                const Vector &coefficients,
+                                const Vector &observedChange, double minimumNorm)
+{
+    const int n = columns.size();
+    if (!n || actions.size() != columns.size() || coefficients.size() != columns.size() ||
+        !(minimumNorm > 0.) || !std::isfinite(minimumNorm))
+        throw std::logic_error("invalid reduced response secant shape or signal scale");
+    Vector field(columns[0].size()), defect = observedChange, covector(n);
+    for (int i = 0; i < n; ++i)
+    {
+        if (columns[i].size() != field.size() || actions[i].size() != defect.size())
+            throw std::logic_error("inconsistent reduced response secant rows");
+        for (int j = 0; j < field.size(); ++j) field[j] += coefficients[i]*columns[i][j];
+        for (int j = 0; j < defect.size(); ++j) defect[j] -= coefficients[i]*actions[i][j];
+    }
+    const double denominator = Dot(field,field);
+    if (!std::isfinite(denominator))
+        throw std::runtime_error("nonfinite reduced response secant signal");
+    if (denominator <= minimumNorm*minimumNorm) return false;
+    for (int i = 0; i < n; ++i) covector[i] = Dot(columns[i],field)/denominator;
+    for (int i = 0; i < n; ++i)
+        for (int j = 0; j < defect.size(); ++j)
+        {
+            actions[i][j] += defect[j]*covector[i];
+            if (!std::isfinite(actions[i][j]))
+                throw std::runtime_error("nonfinite reduced response secant update");
+        }
+    return true;
+}
+
 // Small strictly convex subspace problem, starting at a feasible point.
 // The factor type supplies the native dense factorization in production;
 // this kernel has no field assembly or governing-equation solve.

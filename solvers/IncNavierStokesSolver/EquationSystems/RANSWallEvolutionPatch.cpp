@@ -267,10 +267,11 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         Require(m_picardKRadius>0. && m_picardKRadius<=1.,"invalid dimensionless Picard k radius");
         session->LoadSolverInfo("RANSWallPicardGuessFile",m_picardGuessFile,"");
         session->LoadSolverInfo("RANSWallPicardKDiagnostic",m_picardKDiagnostic,"");
-        std::string reduced,reducedVerify,reducedSecondOrder;
+        std::string reduced,reducedVerify,reducedSecondOrder,reducedSecant;
         session->LoadSolverInfo("RANSWallPicardReduced",reduced,"Off");
         session->LoadSolverInfo("RANSWallReducedVerify",reducedVerify,"Off");
         session->LoadSolverInfo("RANSWallReducedSecondOrder",reducedSecondOrder,"Off");
+        session->LoadSolverInfo("RANSWallReducedConstraintSecant",reducedSecant,"Off");
         Require((reduced=="On" || reduced=="Off") && (reducedVerify=="On" || reducedVerify=="Off"),
                 "unknown Picard reduced selector");
         m_picardReduced=reduced=="On";m_reducedVerify=reducedVerify=="On";
@@ -279,15 +280,22 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         m_reducedSecondOrder=reducedSecondOrder=="On";
         Require(!m_reducedSecondOrder || m_picardReduced,
                 "second-order correction requires the reduced search");
+        Require(reducedSecant=="On" || reducedSecant=="Off",
+                "unknown reduced constraint secant selector");
+        m_reducedConstraintSecant=reducedSecant=="On";
+        Require(!m_reducedConstraintSecant || m_reducedSecondOrder,
+                "constraint secants require the nonlinear qualification corrector");
         session->LoadParameter("RANSWallReducedBasis",m_reducedBasis,10);
+        session->LoadParameter("RANSWallReducedMaximumBasis",m_reducedMaximumBasis,32);
         session->LoadParameter("RANSWallReducedHUpdates",m_reducedHUpdates,50);
         session->LoadParameter("RANSWallReducedKrylov",m_reducedKrylov,0);
         session->LoadParameter("RANSWallReducedRadius",m_reducedRadius,.05);
         session->LoadParameter("RANSWallReducedStep",m_reducedStep,2e-5);
         session->LoadParameter("RANSWallReducedHTolerance",m_reducedHTolerance,2e-9);
         session->LoadParameter("RANSWallReducedRestorationWeight",m_reducedRestorationWeight,1.);
-        Require(m_reducedBasis>=4 && m_reducedBasis<=32 && m_reducedHUpdates>=0 &&
-                m_reducedKrylov>=0 && m_reducedKrylov<=8 &&
+        Require(m_reducedBasis>=4 && m_reducedBasis<=m_reducedMaximumBasis &&
+                m_reducedMaximumBasis>=4 && m_reducedMaximumBasis<=64 && m_reducedHUpdates>=0 &&
+                m_reducedKrylov>=0 && m_reducedKrylov<=16 &&
                 m_reducedRadius>0. && m_reducedRadius<=1. &&
                 m_reducedStep>0. && m_reducedStep<.01 && m_reducedHTolerance>0. &&
                 std::isfinite(m_reducedHTolerance) &&

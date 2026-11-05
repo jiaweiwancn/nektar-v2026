@@ -35,6 +35,9 @@ def check(directory):
                 for r in warm_starts), "invalid half-response warm-start status")
     directions = [r for r in records if r["event"] == "direction"]
     require(directions, "the reduced direction was not constructed")
+    protocol, = [r for r in records if r["event"] == "protocol"]
+    require(all(d["basis_dimension"] <= protocol["maximum_basis"] <= 64 for d in directions),
+            "the direction exceeds its declared adaptive response budget")
     require(any(d["qp_solved"] and d["displacement"] > 0 for d in directions),
             "no nonzero constrained model direction was solved")
     require(all(d["displacement"] <= d["radius"]*(1+1e-12) for d in directions),
@@ -72,6 +75,10 @@ def check(directory):
             "nonlinear qualification correction violated a field bound or H accuracy")
     require(all(r["violation"] < r["before_violation"] for r in corrections if r["improved"]),
             "a failed nonlinear qualification correction was marked useful")
+    secants = [r for r in records if r["event"] == "constraint_response_secant"]
+    require(all(r["field_signal"] > r["minimum_field_signal"] and not r["failure"]
+                for r in secants if r["updated"]),
+            "a below-signal or failed constraint response was updated")
     combined = [r for r in records if r["event"] == "combined_direction_check"]
     require(all(r["attained"] <= r["required"] and r["half_attained"] <= r["required"] and
                 r["half_relative_residual_error"] <= .03 and
@@ -95,7 +102,7 @@ def check(directory):
                   repeatability=repeat, half_response_warm_starts=warm_starts,
                   action_checks=checks, directions=directions,
                   trials=trials, combined_direction_checks=combined,
-                  second_order_corrections=corrections)
+                  second_order_corrections=corrections, constraint_response_secants=secants)
     write_json(directory / "reduced-checks.json", result)
 
 

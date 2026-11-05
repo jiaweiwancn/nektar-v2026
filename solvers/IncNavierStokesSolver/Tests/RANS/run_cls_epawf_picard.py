@@ -70,7 +70,9 @@ def prepare(args):
                 set_info(root, "RANSWallPicardReduced", "On")
                 set_info(root, "RANSWallReducedVerify", "On" if args.reduced_verify else "Off")
                 set_info(root, "RANSWallReducedSecondOrder", "On" if getattr(args, "reduced_second_order", False) else "Off")
+                set_info(root, "RANSWallReducedConstraintSecant", "On" if getattr(args, "reduced_constraint_secant", False) else "Off")
                 for key, value in {"Basis": args.reduced_basis, "Radius": args.reduced_radius,
+                                   "MaximumBasis": getattr(args, "reduced_maximum_basis", 32),
                                    "HTolerance": args.reduced_h_tolerance,
                                    "HUpdates": args.reduced_h_updates,
                                    "Krylov": getattr(args, "reduced_krylov", 0),
@@ -150,9 +152,13 @@ def main():
     parser.add_argument("--reduced-verify", action="store_true", help="Check repeatability, rollback and two-scale responses")
     parser.add_argument("--reduced-second-order", action="store_true",
                         help="Correct nonlinear qualification curvature within the checked response space")
+    parser.add_argument("--reduced-constraint-secant", action="store_true",
+                        help="Refine qualification responses with measured secants during nonlinear corrections")
     parser.add_argument("--reduced-basis", type=int, default=10)
+    parser.add_argument("--reduced-maximum-basis", type=int, default=32,
+                        help="Adaptive response-space ceiling (up to 64; 32 retains earlier controls)")
     parser.add_argument("--reduced-krylov", type=int, default=0,
-                        help="Preconditioned true-response enrichment seeds (0 to 8, within the basis budget)")
+                        help="Preconditioned true-response enrichment seeds (0 to 16, within the basis budget)")
     parser.add_argument("--reduced-radius", type=float, default=.05)
     parser.add_argument("--reduced-h-tolerance", type=float, default=2e-9)
     parser.add_argument("--reduced-h-updates", type=int, default=50)
@@ -180,6 +186,8 @@ def main():
             "use --reduced-verify for reduced checks and retain R2 selectors as controls")
     require(not args.reduced_verify or args.reduced, "--reduced-verify requires --reduced")
     require(not args.reduced_second_order or args.reduced, "--reduced-second-order requires --reduced")
+    require(not args.reduced_constraint_secant or args.reduced_second_order,
+            "--reduced-constraint-secant requires --reduced-second-order")
     require(not args.equilibrate_after_k or args.k_newton, "--equilibrate-after-k requires --k-newton")
     require(not args.guess_file or args.steps == 1, "a saved guess binds exactly one stage")
     require(not args.guess_file or args.perturbation == 0, "run saved-guess and perturbation diagnostics separately")
