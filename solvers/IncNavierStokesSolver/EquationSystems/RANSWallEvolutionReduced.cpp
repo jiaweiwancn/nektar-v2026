@@ -1173,19 +1173,28 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         Vector multipliers;
         bool qpOK   = false;
         bool groundModelOK = false;
-        int qpSteps = 0, groundAdded = 0;
+        int qpSteps = 0, groundAdded = 0, radiusSolves = 0;
+        double radiusMultiplier = 0., rawDisplacement = 0., radiusComplementarity = 0.;
+        std::string radiusRefinementFailure;
+        WallMatrix solvedHessian = hessian, kColumns;
+        for (const auto &column : columns) kColumns.push_back(column.k);
         RANSWallReduced::QuadraticResult quadratic;
         auto solveQP = [&]() {
-            quadratic = RANSWallReduced::SolveQuadratic<Factor>(
-                hessian, gradient, cuts, solution, 500);
-            qpSteps += quadratic.steps;
+            auto bounded = RANSWallReduced::SolveRadiusQuadratic<Factor>(
+                hessian, gradient, cuts, solution, kColumns, radius, 500);
+            qpSteps += bounded.steps;
+            radiusSolves += bounded.solves;
+            radiusMultiplier = bounded.multiplier;
+            rawDisplacement = bounded.rawNorm;
+            radiusComplementarity = bounded.complementarity;
+            radiusRefinementFailure = bounded.refinementFailure;
+            solvedHessian = std::move(bounded.hessian);
+            quadratic = std::move(bounded.quadratic);
             solution = quadratic.solution;
             active = quadratic.active;
             multipliers = quadratic.multipliers;
             return quadratic.solved;
         };
-        WallMatrix kColumns;
-        for (const auto &column : columns) kColumns.push_back(column.k);
         Vector displacement(dimension);
         for (int cutLoop = 0; cutLoop < 32; ++cutLoop)
         {
@@ -1267,7 +1276,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             ++groundAdded;
             std::fill(solution.begin(), solution.end(), 0.);
             if (restore)
-                solution[n] = base.violation + 1e-10;
+                solution[n] = base.violation + qualificationBuffer + 1e-10;
             active.clear();
         }
         qpOK = qpOK && groundModelOK;
@@ -1277,7 +1286,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         {
             // Replay the small affine problem without repeating field solves.
             // Native little-endian uint64 dimensions followed by f64 arrays:
-            // H, g, feasible initial point, then [a,b] for every cut.
+            // H (including the radius multiplier), g, feasible initial point,
+            // then [a,b] for every cut.
             const std::string file = "reduced-model-" + stageTag + "-" + std::to_string(iterations) +
                                      "-" + std::to_string(failedModels) + ".bin";
             std::ofstream out(file, std::ios::binary | std::ios::trunc);
@@ -1289,10 +1299,10 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 out.write(reinterpret_cast<const char *>(v.data()),
                           v.size() * sizeof(double));
             };
-            for (const auto &row : hessian) write(row);
+            for (const auto &row : solvedHessian) write(row);
             write(gradient);
             Vector initial(variables);
-            if (restore) initial[n] = base.violation + 1e-10;
+            if (restore) initial[n] = base.violation + qualificationBuffer + 1e-10;
             write(initial);
             for (const auto &cut : cuts)
             {
@@ -1303,6 +1313,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             Require(out.good(), "failed to write reduced affine replay packet");
             emit("model_packet", {{"path", J::Quote(file)},
                  {"variables", J::Number(variables)},
+                 {"radius_multiplier", J::Number(radiusMultiplier)},
+                 {"inward_qualification_search_margin", J::Number(qualificationBuffer)},
                  {"cuts", J::Number(cuts.size())}});
         }
         auto predicted = base.r;
@@ -1397,6 +1409,11 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
               {"response_rank", J::Number(actionOrthogonal.size())},
               {"qp_solved", J::Boolean(qpOK)},
               {"qp_steps", J::Number(qpSteps)},
+              {"radius_model_solves", J::Number(radiusSolves)},
+              {"radius_multiplier", J::Number(radiusMultiplier)},
+              {"radius_complementarity", J::Number(radiusComplementarity)},
+              {"radius_refinement_failure", J::Quote(radiusRefinementFailure)},
+              {"unconstrained_displacement", J::Number(rawDisplacement)},
               {"redundant_rows", J::Number(quadratic.redundantRows)},
               {"qp_failure", J::Quote(quadratic.failure)},
               {"unscaled_affine_kkt", J::Numbers(Vector{quadratic.primal,

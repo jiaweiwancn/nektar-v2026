@@ -187,6 +187,44 @@ int main(int argc, char **argv)
     const auto step = R::BoundCorrection(z, {{1.,0.},{1.,1.}}, .2);
     Close(R::Length(step),.2);
     Close(step[0],z[0]+z[1]); Close(step[1],z[1]); Close(z[2],2.);
+    // Post-hoc radial scaling wastes a small radius on the weak direction of
+    // an anisotropic model. The radius-constrained solve uses it on the useful
+    // field direction, and leaves an independent restoration slack untouched.
+    const R::Matrix ballH{{1.,0.,0.},{0.,100.,0.},{0.,0.,1.}},
+                    ballV{{1.,0.},{0.,1.}};
+    const R::Vector ballG{-10.,-100.,-7.};
+    const auto ball = R::SolveRadiusQuadratic<Factor>(ballH, ballG,
+        std::vector<Cut>{}, R::Vector(3), ballV, 1.);
+    Check(ball.quadratic.solved && ball.multiplier > 0. &&
+          ball.norm <= 1. && ball.norm >= .999 && ball.solves > 1,
+          "radius-constrained model did not resolve its field bound");
+    const auto &bz=ball.quadratic.solution;
+    Close(bz[2],7.);
+    const double ballObjective=.5*std::pow(bz[0]-10.,2)+50.*std::pow(bz[1]-1.,2);
+    R::Vector radial{10.,1.,7.};
+    R::BoundCorrection(radial,ballV,1.);
+    const double radialObjective=.5*std::pow(radial[0]-10.,2)+50.*std::pow(radial[1]-1.,2);
+    Check(ballObjective < 46.2 && radialObjective > 80.,
+          "radius-aware direction lost its known advantage over radial scaling");
+    const auto cutBall = R::SolveRadiusQuadratic<Factor>(ballH, ballG,
+        std::vector<Cut>{{{1.,0.,0.},.3}}, R::Vector(3), ballV, 1.);
+    Check(cutBall.quadratic.solved && cutBall.norm <= 1., "radius solve lost an active cut");
+    Close(cutBall.quadratic.solution[0],.3);
+    Check(std::abs(cutBall.quadratic.solution[1]-std::sqrt(.91)) < .002,
+          "constrained circle model missed its known boundary solution");
+    const auto interiorBall = R::SolveRadiusQuadratic<Factor>(
+        R::Matrix{{1.}}, R::Vector{-.1}, std::vector<Cut>{}, R::Vector{0.},
+        R::Matrix{{1.}}, 1.);
+    Check(interiorBall.quadratic.solved && interiorBall.multiplier == 0. && interiorBall.solves == 1,
+          "unnecessary radius penalty changed an interior model");
+    Close(interiorBall.quadratic.solution[0],.1);
+    const auto obliqueBall = R::SolveRadiusQuadratic<Factor>(
+        R::Matrix{{1.,0.},{0.,1.}}, R::Vector{-3.,-4.}, std::vector<Cut>{},
+        R::Vector(2), R::Matrix{{1.,0.},{1.,1.}}, .2);
+    const auto &oz=obliqueBall.quadratic.solution;
+    const double actualFieldNorm=std::hypot(oz[0]+oz[1],oz[1]);
+    Check(obliqueBall.quadratic.solved && actualFieldNorm <= .2 && actualFieldNorm >= .1998,
+          "oblique response coefficients were mistaken for the physical field norm");
     const auto infeasible = R::SolveQuadratic<Factor>(
         R::Matrix{{1.}}, R::Vector{0.}, std::vector<Cut>{{{1.},0.}}, R::Vector{1.});
     Check(!infeasible.solved && infeasible.failure == "quadratic_infeasible_start",

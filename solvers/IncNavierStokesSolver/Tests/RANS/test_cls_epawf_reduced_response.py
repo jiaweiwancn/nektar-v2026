@@ -38,6 +38,10 @@ def check(directory):
             "no nonzero constrained model direction was solved")
     require(all(d["displacement"] <= d["radius"]*(1+1e-12) for d in directions),
             "final correction exceeds its radius")
+    require(all(d["radius_model_solves"] >= 1 and d["radius_multiplier"] >= 0. and
+                d["radius_complementarity"] >= 0. for d in directions
+                if "radius_model_solves" in d and d["qp_solved"]),
+            "invalid radius-constrained model status")
     for direction in directions:
         for name in direction["basis_names"]:
             matching = [c for c in checks if c["name"] == name and

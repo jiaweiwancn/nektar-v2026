@@ -265,5 +265,124 @@ inline Vector BoundCorrection(Vector &coefficients, const Matrix &columns,
     }
     return step;
 }
+
+struct RadiusResult
+{
+    QuadraticResult quadratic;
+    Matrix hessian;
+    double multiplier = 0., rawNorm = 0., norm = 0., complementarity = 0.;
+    int solves = 0, steps = 0;
+    std::string refinementFailure;
+};
+
+// Solve the linear-cut model with ||V z|| <= radius, rather than scaling an
+// arbitrarily long minimizer afterwards. A nonnegative Lagrange multiplier
+// adds lambda V^T V only to field coefficients (never the restoration slack).
+// The conservative inside bracket gives an inexact radius solve; actual field
+// bounds and nonlinear acceptance remain the caller's responsibility.
+template <typename Factor, typename Cut>
+RadiusResult SolveRadiusQuadratic(const Matrix &hessian, const Vector &gradient,
+                                 const std::vector<Cut> &cuts, const Vector &initial,
+                                 const Matrix &columns, double radius,
+                                 int maximumSteps = 500)
+{
+    if (columns.empty() || columns.size() > gradient.size() ||
+        !(radius > 0.) || !std::isfinite(radius))
+        throw std::logic_error("invalid radius-constrained model shape or radius");
+    RadiusResult result;
+    struct Trial
+    {
+        QuadraticResult quadratic;
+        Matrix hessian;
+        double multiplier = 0., norm = 0.;
+    };
+    Matrix gram;
+    auto solve = [&](double multiplier) {
+        Trial t;
+        t.multiplier = multiplier;
+        t.hessian = hessian;
+        if (multiplier > 0.)
+            for (int i = 0; i < columns.size(); ++i)
+                for (int j = 0; j < columns.size(); ++j)
+                    t.hessian[i][j] += multiplier * gram[i][j];
+        t.quadratic = SolveQuadratic<Factor>(t.hessian, gradient, cuts, initial, maximumSteps);
+        ++result.solves;
+        result.steps += t.quadratic.steps;
+        if (t.quadratic.solved)
+        {
+            auto coefficients = t.quadratic.solution;
+            const auto field = BoundCorrection(coefficients, columns,
+                                               std::numeric_limits<double>::max());
+            if (std::any_of(field.begin(), field.end(), [](double x) { return !std::isfinite(x); }))
+            {
+                t.quadratic.solved = false;
+                t.quadratic.failure = "nonfinite_radius_model_correction";
+            }
+            else
+            {
+                t.norm = Length(field);
+                if (!std::isfinite(t.norm))
+                {
+                    t.norm = 0.;
+                    t.quadratic.solved = false;
+                    t.quadratic.failure = "nonfinite_radius_model_norm";
+                }
+            }
+        }
+        return t;
+    };
+    auto finish = [&](Trial t) {
+        result.multiplier = t.multiplier;
+        result.norm = t.norm;
+        result.complementarity = t.multiplier * std::abs(t.norm*t.norm-radius*radius);
+        result.hessian = std::move(t.hessian);
+        result.quadratic = std::move(t.quadratic);
+        return result;
+    };
+    auto current = solve(0.);
+    result.rawNorm = current.norm;
+    if (!current.quadratic.solved || current.norm <= radius)
+        return finish(std::move(current));
+    gram.assign(columns.size(), Vector(columns.size()));
+    double scale = 0.;
+    for (int i = 0; i < columns.size(); ++i)
+    {
+        for (int j = 0; j < columns.size(); ++j)
+            gram[i][j] = Dot(columns[i], columns[j]);
+        scale = std::max(scale, std::abs(hessian[i][i]) / std::max(1e-30, gram[i][i]));
+    }
+    double lower = 0., upper = std::max(1e-3, 1e-3 * scale);
+    bool bracketed = false;
+    for (int bracket = 0; bracket < 14; ++bracket)
+    {
+        current = solve(upper);
+        if (!current.quadratic.solved) return finish(std::move(current));
+        if (current.norm <= radius) { bracketed = true; break; }
+        lower = upper;
+        upper *= 10.;
+    }
+    if (!bracketed)
+    {
+        current.quadratic.solved = false;
+        current.quadratic.failure = "radius_multiplier_bracket_exhausted";
+        return finish(std::move(current));
+    }
+    for (int refine = 0; refine < 16 && current.norm < .999 * radius; ++refine)
+    {
+        auto trial = solve(.5 * (lower + upper));
+        if (!trial.quadratic.solved)
+        {
+            result.refinementFailure = trial.quadratic.failure;
+            break; // Keep the converged inside-radius bracket, not this failed query.
+        }
+        if (trial.norm > radius) lower = trial.multiplier;
+        else
+        {
+            upper = trial.multiplier;
+            current = std::move(trial);
+        }
+    }
+    return finish(std::move(current));
+}
 } // namespace Nektar::RANSWallReduced
 #endif
