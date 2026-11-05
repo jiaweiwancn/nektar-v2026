@@ -346,6 +346,19 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         const auto wall  = WallTraceJSON(e.response.state, ground);
         const auto audit = CompleteRestrictedAudit(e.response.state, history,
                                                            alpha, time, data, true);
+        if (m_reducedVerify)
+        {
+            const std::string file = "reduced-trial-" + std::to_string(iterations) +
+                                     "-" + event + ".json";
+            std::ofstream out(file);
+            out << J::Object({{"status", J::Quote("nonlinear_trial_only")},
+                {"state", J::Numbers(e.response.state)}, {"history", J::Numbers(history)},
+                {"alpha", J::Number(alpha)}, {"time", J::Number(time)},
+                {"require_history_h0", "false"},
+                {"inner_stress_model", J::Quote("SaturatedR2")}}) << '\n';
+            out.close();
+            Require(out.good(), "failed to save reduced nonlinear trial packet");
+        }
         emit(event,
                      {{"norms", J::Numbers(e.response.norms)},
               {"reduced_norm", J::Number(e.merit)},
@@ -353,6 +366,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
               {"families", J::Numbers(e.family)},
               {"qualification_inventory", OuterViolationR5(e.bounds).report},
               {"outer_range", J::Numbers(audit.at("r2_outer_range"))},
+              {"covariance", J::Numbers(audit.at("r2_covariance"))},
+              {"scalar_domain", ScalarDomainJSON(e.domain)},
               {"gradient_witness",
                J::Numbers(audit.at("r4_outer_gradient_witness"))},
               {"qualified", J::Boolean(audit.at("r2_qualified")[0] == 1.)},
@@ -410,6 +425,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
     std::vector<std::pair<double, double>> filter{{base.merit, base.violation}};
     Vector previous;
     int failedModels = 0;
+    int basisBudget = m_reducedBasis;
+    std::vector<OuterBound> activeWitnesses;
     while (iterations < maximumIterations)
     {
         if (base.response.error > innerTolerance)
@@ -437,7 +454,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         std::vector<std::pair<std::string, Vector>> seeds;
         auto add = [&](const std::string &name, Vector v) {
             const double length = Length(v);
-            if (length > 1e-14)
+            if (length > 0.)
             {
                 for (double &x : v)
                     x /= length;
@@ -480,8 +497,6 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             if (index[id] >= 0)
                 lift[index[id]] = value;
         add("ground_lift", lift);
-        if (!previous.empty())
-            add("previous", previous);
         auto pointSeed = [&](double x, double z, const std::string &name,
                              bool derivative = false) {
             const auto q = Point(K(), {x, 0., z},
@@ -519,6 +534,16 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             pointSeed(x, m_parameters.geometry.sampleHeight, "epsilon_lower_sample");
             pointSeed(x, m_parameters.geometry.height, "epsilon_lower_trace");
         }
+        int activeSeed = 0;
+        for (const auto &b : activeWitnesses)
+        {
+            const double x = b.row.coordinate[0];
+            pointSeed(x, m_parameters.geometry.sampleHeight,
+                      "active_sample_" + std::to_string(activeSeed), b.family == 0);
+            pointSeed(x, b.row.coordinate[2],
+                      "active_location_" + std::to_string(activeSeed));
+            ++activeSeed;
+        }
         std::set<std::pair<int, int>> patches;
         int witness = 0;
         for (int id : ordered)
@@ -537,6 +562,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             if (++witness == 5)
                 break;
         }
+        if (!previous.empty()) add("previous", previous);
         std::vector<Vector> orthogonal;
         std::vector<Column> columns;
         const auto contacts   = WallTraceR4(state);
@@ -727,7 +753,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             orthogonal.push_back(std::move(q));
             columns.push_back(std::move(column));
             if (columns.size() >=
-                std::min(32, m_reducedBasis + failedModels * 3))
+                std::min(32, basisBudget + failedModels * 3))
                 break;
         }
         if (columns.size() < 3)
@@ -741,14 +767,16 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             continue;
         }
         const int n = columns.size(), variables = n + (restore ? 1 : 0);
+        // Keep both goals outside the envelope. Normalize the residual term
+        // so its units do not overwhelm the signed qualification slack.
+        const double residualWeight = restore ? 1. / std::max(1., base.merit * base.merit) : 1.;
         WallMatrix gram(n, Vector(n)), hessian(variables, Vector(variables));
         Vector gradient(variables), dualResidual = mass.Apply(base.r);
         std::vector<Vector> actionOrthogonal;
         for (int i = 0; i < n; ++i)
         {
             const auto dual = mass.Apply(columns[i].r);
-            gradient[i]     = restore ? 0.
-                                      : Dot(columns[i].r, dualResidual) /
+            gradient[i]     = residualWeight * Dot(columns[i].r, dualResidual) /
                                         (residualScale * residualScale);
             auto q          = columns[i].r;
             for (int pass = 0; pass < 2; ++pass)
@@ -772,7 +800,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 gram[i][j] = Dot(columns[i].k, columns[j].k);
                 const double objective =
                     Dot(columns[j].r, dual) / (residualScale * residualScale);
-                hessian[i][j] = (restore ? 0. : objective) + 1e-3 * gram[i][j]
+                hessian[i][j] = residualWeight * objective + 1e-3 * gram[i][j]
                               + (i == j ? 1e-10 : 0.);
             }
         }
@@ -856,7 +884,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         RANSWallReduced::QuadraticResult quadratic;
         auto solveQP = [&]() {
             quadratic = RANSWallReduced::SolveQuadratic<Factor>(
-                hessian, gradient, cuts, solution);
+                hessian, gradient, cuts, solution, 500);
             qpSteps += quadratic.steps;
             solution = quadratic.solution;
             active = quadratic.active;
@@ -905,7 +933,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         qpOK = qpOK && groundModelOK;
         if (!groundModelOK && quadratic.solved)
             quadratic.failure = "ground_cut_limit";
-        if (m_reducedVerify && iterations == 0)
+        if (m_reducedVerify)
         {
             // Replay the small affine problem without repeating field solves.
             // Native little-endian uint64 dimensions followed by f64 arrays:
@@ -942,20 +970,30 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             for (int j = 0; j < dimension; ++j)
                 predicted[j] += solution[i] * columns[i].r[j];
         double predictedViolation = 0.;
+        double unscaledViolation = 0.;
         for (int j = 0; j < base.bounds.size(); ++j)
         {
             const auto &b = base.bounds[j];
             double change = 0.;
+            double rawChange = 0.;
             for (int i = 0; i < n; ++i)
+            {
                 change += solution[i] * columns[i].observations[j];
+                if (quadratic.solution.size() == variables)
+                    rawChange += quadratic.solution[i] * columns[i].observations[j];
+            }
             predictedViolation =
                 std::max(predictedViolation,
                          std::max((b.value - b.upper) / b.width + change,
                                   (b.lower - b.value) / b.width - change));
+            unscaledViolation = std::max(unscaledViolation,
+                std::max((b.value - b.upper)/b.width + rawChange,
+                         (b.lower - b.value)/b.width - rawChange));
         }
-        const double slope = Dot(base.r, mass.Apply(predicted)) /
-                                 (residualScale * residualScale) -
-                             base.merit * base.merit;
+        auto predictedChange = predicted;
+        for (int j = 0; j < dimension; ++j) predictedChange[j] -= base.r[j];
+        const double slope = Dot(base.r, mass.Apply(predictedChange)) /
+                             (residualScale * residualScale);
         std::vector<std::string> activeRecords;
         std::vector<std::string> basisNames;
         for (const auto &column : columns) basisNames.push_back(J::Quote(column.name));
@@ -984,8 +1022,24 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             }
             activeRecords.push_back(J::Object(fields));
         }
+        if (qpOK)
+        {
+            activeWitnesses.clear();
+            std::set<std::pair<int,int>> seen;
+            for (int id : active)
+                if (cuts[id].observation >= 0)
+                {
+                    const auto &b = base.bounds[cuts[id].observation];
+                    if (seen.emplace(b.family, static_cast<int>(std::floor(4.*(b.row.coordinate[0]-left)))).second)
+                        activeWitnesses.push_back(b);
+                }
+            if (restore && unscaledViolation > .5 * base.violation)
+                basisBudget = std::min(32, basisBudget + 3);
+        }
         emit("direction",
              {{"restoration", J::Boolean(restore)},
+              {"residual_weight", J::Number(residualWeight)},
+              {"next_basis_budget", J::Number(basisBudget)},
               {"basis_dimension", J::Number(n)},
               {"basis_names", J::List(basisNames)},
               {"response_rank", J::Number(actionOrthogonal.size())},
@@ -1003,13 +1057,16 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
               {"displacement", J::Number(Length(displacement))},
               {"predicted_norm", J::Number(dualNorm(predicted))},
               {"predicted_violation", J::Number(predictedViolation)},
+              {"unscaled_predicted_violation", J::Number(unscaledViolation)},
               {"merit_slope", J::Number(slope)},
               {"action_uncertainty", J::Number(maxActionError)}});
         bool accepted = false;
         bool decomposed = false;
-        if (qpOK && Length(displacement) > 1e-12 &&
-            (restore ? predictedViolation < base.violation - 1e-7
-                     : slope < -1e-10))
+        if (qpOK && Length(displacement) > 0. &&
+            (restore ? (predictedViolation < base.violation - 1e-7 ||
+                        (dualNorm(predicted) < base.merit &&
+                         predictedViolation <= base.violation * 1.01 + 1e-7))
+                     : slope < -1e-8 * base.merit * base.merit))
         {
             for (double fraction : {1., .5, .25, .125, .0625})
             {
@@ -1118,8 +1175,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 const bool agreement = predictionError < .2 * std::max(1., base.merit)
                     && std::abs(base.violation - modelViolation) <
                        .2 * std::max(1., base.violation);
-                radius = std::min(m_reducedRadius * 2.,
-                                  radius * (fraction == 1. && agreement ? 1.4 : .6));
+                radius = std::min(1.,
+                                  radius * (fraction == 1. && agreement ? 1.8 : .6));
                 ++iterations;
                 failedModels = 0;
                 report(base, "accepted");

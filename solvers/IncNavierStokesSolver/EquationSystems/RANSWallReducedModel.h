@@ -6,6 +6,7 @@
 #define NEKTAR_RANS_WALL_REDUCED_MODEL_H
 #include <algorithm>
 #include <cmath>
+#include <limits>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -88,6 +89,11 @@ QuadraticResult SolveQuadratic(const Matrix &hessian, const Vector &gradient,
     try
     {
         const Factor objective(hessian);
+        Vector initialGradient(n);
+        for (int i = 0; i < n; ++i)
+            initialGradient[i] = -gradient[i] - Dot(hessian[i], solution);
+        const double stepScale = std::max(Length(solution),
+                                         Length(objective.Apply(initialGradient)));
         while (result.steps < maximumSteps)
         {
             ++result.steps;
@@ -168,10 +174,11 @@ QuadraticResult SolveQuadratic(const Matrix &hessian, const Vector &gradient,
                 for (int i = 0; i < active.size(); ++i) rhs[i] = Dot(face[i], stationarity);
                 multipliers = Factor(upper).Apply(rhs);
             }
-            if (Length(direction) < 1e-9 * std::max(1., Length(solution)))
+            if (Length(direction) <= 1e-9 * std::max(stepScale, Length(solution)))
             {
                 if (active.empty() ||
-                    *std::min_element(multipliers.begin(), multipliers.end()) >= -1e-8)
+                    *std::min_element(multipliers.begin(), multipliers.end()) >=
+                        -1e-9 * Length(multipliers))
                     return finish("");
                 active.erase(active.begin() + (std::min_element(multipliers.begin(),
                     multipliers.end()) - multipliers.begin()));
@@ -184,7 +191,8 @@ QuadraticResult SolveQuadratic(const Matrix &hessian, const Vector &gradient,
                 if (std::find(active.begin(), active.end(), i) != active.end())
                     continue;
                 const double advance = Dot(cuts[i].a, direction);
-                if (advance <= 1e-12)
+                if (advance <= 64. * std::numeric_limits<double>::epsilon() *
+                                   Length(cuts[i].a) * Length(direction))
                     continue;
                 const double bound = (cuts[i].b - Dot(cuts[i].a, solution)) / advance;
                 if (bound < fraction)

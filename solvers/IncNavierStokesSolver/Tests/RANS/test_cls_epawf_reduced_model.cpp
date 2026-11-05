@@ -132,6 +132,9 @@ int main(int argc, char **argv)
     // Feedback in B, rather than post-direction settling, selects dk=1.
     r = Solve({{16.}}, {-16.}, {}, {0.});
     Close(r.solution[0],1.);
+    r = Solve({{16.}}, {-16e-15}, {}, {0.});
+    Check(std::abs(r.solution[0]/1e-15 - 1.) < 1e-12,
+          "an absolute inner step threshold erased a small Newton correction");
     R::Vector z{3.,4.,2.};
     const auto step = R::BoundCorrection(z, {{1.,0.},{1.,1.}}, .2);
     Close(R::Length(step),.2);

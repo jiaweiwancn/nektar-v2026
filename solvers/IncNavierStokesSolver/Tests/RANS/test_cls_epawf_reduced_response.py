@@ -26,13 +26,21 @@ def check(directory):
             "insufficient independently consistent reduced responses")
     directions = [r for r in records if r["event"] == "direction"]
     require(directions, "the reduced direction was not constructed")
+    require(any(d["qp_solved"] and d["displacement"] > 0 for d in directions),
+            "no nonzero constrained model direction was solved")
     require(all(d["displacement"] <= d["radius"]*(1+1e-12) for d in directions),
             "final correction exceeds its radius")
-    require(all(any(c["name"] == name and c["iteration"] == d["iteration"] and
-                        c["usable"] and c["relative_error"] <= .03 and
-                        c["observation_relative_error"] <= .05 for c in checks)
-                for d in directions for name in d["basis_names"]),
-            "a direction used an unchecked or inaccurate response")
+    for direction in directions:
+        for name in direction["basis_names"]:
+            matching = [c for c in checks if c["name"] == name and
+                        c["iteration"] == direction["iteration"] and
+                        c["seconds"] <= direction["seconds"]]
+            require(matching and matching[-1]["usable"] and
+                    matching[-1]["relative_error"] <= .03 and
+                    matching[-1]["observation_relative_error"] <= .05,
+                    "a direction used an unchecked or inaccurate response")
+    trials = [r for r in records if r["event"] == "trial"]
+    require(trials, "no constrained direction received an equilibrated native trial")
     responses = [r for r in records if r["event"] == "non_k_response"]
     require(all(r["attained"] <= r["required"] for r in responses if r["converged"]),
             "a partially converged response was accepted")
@@ -44,7 +52,7 @@ def check(directory):
                 "reduced failure advanced the native state or history")
     result = dict(status="passed_operator_checks", manifest_status=manifest["status"],
                   repeatability=repeat, action_checks=checks, directions=directions,
-                  trials=[r for r in records if r["event"] == "trial"])
+                  trials=trials)
     write_json(directory / "reduced-checks.json", result)
 
 
