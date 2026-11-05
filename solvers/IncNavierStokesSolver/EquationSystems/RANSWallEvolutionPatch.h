@@ -271,7 +271,8 @@ private:
     NonKResponse EquilibrateNonK(const Vector &state,const Vector &history,double alpha,
         double time,const RANSWallEvolutionData &data,double tolerance,int maximumUpdates) const;
     Vector SolveReducedPicard(Vector state,const Vector &history,double alpha,double time,
-        const RANSWallEvolutionData &data,int &iterations,double tolerance,int maximumIterations) const;
+        const RANSWallEvolutionData &data,int &iterations,double tolerance,int maximumIterations,
+        bool continuationDiagnostic=false) const;
     Vector SolvePicardContinuation(Vector state,const Vector &history,double alpha,double time,
         const RANSWallEvolutionData &data,int &iterations,double tolerance,int maximumIterations) const;
     PicardBlock AssemblePicardBlock(int block,const Vector &state,const Vector &history,

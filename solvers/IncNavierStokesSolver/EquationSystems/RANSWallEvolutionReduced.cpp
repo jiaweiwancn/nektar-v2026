@@ -254,7 +254,11 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePicardContinuation(
         fields.emplace_back("history_sha256", J::Quote(RANSWallR3::Hash(history)));
         std::cout << "EP-AWF Continuation " << J::Object(fields) << std::endl;
     };
-    emit("target", {{"physical_history_advanced", "false"}});
+    emit("target", {{"physical_history_advanced", "false"},
+        {"method", J::Quote(m_picardReduced ? "sequential_reduced_response" : "retained_conditional_control")},
+        {"qualification_policy", J::Quote(m_picardReduced
+            ? "observe_original_qualification_without_enforcing_it_in_algebraic_diagnostic"
+            : "retained_control")}});
     auto root = SolveSegregatedPicard(std::move(state), history, operatorAlpha,
                                      time, data, iterations, auxiliaryTolerance, maximumIterations);
     m_lastFeasibleState = root;
@@ -309,8 +313,10 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePicardContinuation(
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
     Vector state, const Vector &history, double alpha, double time,
     const RANSWallEvolutionData &data, int &iterations, double tolerance,
-    int maximumIterations) const
+    int maximumIterations, bool continuationDiagnostic) const
 {
+    if (continuationDiagnostic && !m_picardContinuation)
+        throw std::logic_error("unqualified reduced solves require the explicit no-advance continuation wrapper");
     const auto started = std::chrono::steady_clock::now();
     const std::string stageTag = "t" + J::Number(time) + "-" +
                                   RANSWallR3::Hash(history).substr(0,12);
@@ -422,6 +428,9 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         {"probe_basis", J::Quote("orthogonal field directions when admissible; feasible inward fallback")},
         {"combined_direction_checks", J::Boolean(m_reducedVerify)},
         {"second_order_qualification_correction", J::Boolean(m_reducedSecondOrder)},
+        {"continuation_algebraic_diagnostic", J::Boolean(continuationDiagnostic)},
+        {"qualification_policy", J::Quote(continuationDiagnostic
+            ? "record_only_no_physical_acceptance" : "original_bounds_enforced")},
         {"maximum_basis", J::Number(32)}, {"response_accuracy", J::Number(innerTolerance)}});
     auto base = evaluate(state, innerTolerance, m_reducedHUpdates, "base");
     Require(base.valid,
@@ -438,7 +447,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             const std::string file = "reduced-trial-" + stageTag + "-" + std::to_string(iterations) +
                                      "-" + event + ".json";
             std::ofstream out(file);
-            out << J::Object({{"status", J::Quote("nonlinear_trial_only")},
+            out << J::Object({{"status", J::Quote(continuationDiagnostic
+                    ? "algebraic_continuation_trial_only" : "nonlinear_trial_only")},
                 {"state", J::Numbers(e.response.state)}, {"history", J::Numbers(history)},
                 {"alpha", J::Number(alpha)}, {"time", J::Number(time)},
                 {"require_history_h0", "false"},
@@ -519,21 +529,22 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
     double restorationWeight = m_reducedRestorationWeight;
     int qualificationStalls = 0;
     std::vector<OuterBound> activeWitnesses;
-    auto qualifiedRoot = [&]() {
+    auto stageRoot = [&]() {
         if (Maximum(base.response.norms) > tolerance) return false;
         const auto audit = CompleteRestrictedAudit(state, history, alpha, time, data, true);
-        return audit.at("r2_qualified")[0] == 1.;
+        return continuationDiagnostic || audit.at("r2_qualified")[0] == 1.;
     };
     while (iterations < maximumIterations)
     {
-        // Original equations and qualification are the acceptance authority,
-        // before any optional tightening of the conditional response accuracy.
-        if (qualifiedRoot())
+        // Ordinary stages require original equations and qualification. The
+        // explicitly labelled continuation wrapper may inspect an unqualified
+        // algebraic root, and always rejects physical/history advancement.
+        if (stageRoot())
         {
-            report(base, "converged");
+            report(base, continuationDiagnostic ? "converged_algebraic_diagnostic" : "converged");
             return state;
         }
-        if (base.violation > 0.)
+        if (!continuationDiagnostic && base.violation > 0.)
             innerTolerance = std::max(minimumInnerAccuracy,
                 std::min(innerTolerance, 1e-7 * base.violation));
         if (base.response.error > innerTolerance)
@@ -545,13 +556,13 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             base = std::move(refined);
             state = base.response.state;
             m_lastFeasibleState = state;
-            if (qualifiedRoot())
+            if (stageRoot())
             {
-                report(base, "converged");
+                report(base, continuationDiagnostic ? "converged_algebraic_diagnostic" : "converged");
                 return state;
             }
         }
-        const bool restore  = base.violation > 0.;
+        const bool restore  = !continuationDiagnostic && base.violation > 0.;
         const int dimension = rows.size();
         const auto contacts = WallTraceR4(state);
         std::vector<std::pair<std::string, Vector>> seeds;
@@ -1131,7 +1142,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 x /= norm;
             cuts.push_back({std::move(a), b / norm, observation, sign, kind});
         };
-        for (int j = 0; j < base.bounds.size(); ++j)
+        for (int j = 0; !continuationDiagnostic && j < base.bounds.size(); ++j)
         {
             const auto &b = base.bounds[j];
             for (int sign : {-1, 1})
@@ -1580,7 +1591,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 // Correct the actual trial observations in the same measured
                 // response space. This changes k only; each corrected trial
                 // must again solve H and scan the complete actual inventory.
-                while (m_reducedSecondOrder && !restore && fraction >= .25 &&
+                while (m_reducedSecondOrder && !continuationDiagnostic && !restore && fraction >= .25 &&
                        trial.violation > 0. && trial.violation < .1 &&
                        trial.merit < base.merit && correctionEvaluations < 3 &&
                        originalTrialLength > 1e-8)
@@ -1728,14 +1739,16 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 bool filterOK = true;
                 for (auto [merit, violation] : filter)
                     if (trial.merit >= merit * (1. - 1e-6) &&
-                        !RANSWallReduced::QualificationDecrease(violation, trial.violation, 1., 1e-5))
+                        (continuationDiagnostic ||
+                         !RANSWallReduced::QualificationDecrease(violation, trial.violation, 1., 1e-5)))
                         filterOK = false;
                 const bool progress =
                     restore
                         ? (RANSWallReduced::QualificationDecrease(base.violation, trial.violation, fraction, 1e-3) ||
                            (trial.merit < base.merit * (1. - 1e-3 * fraction) &&
                             trial.violation <= base.violation * 1.01 + 1e-7))
-                        : (trial.merit < base.merit && trial.violation < 1e-8);
+                        : (trial.merit < base.merit &&
+                           (continuationDiagnostic || trial.violation < 1e-8));
                 const bool take = filterOK && progress;
                 if (!decomposed && dualNorm(error) > .2 * std::max(1., base.merit))
                 {
@@ -1799,7 +1812,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 const bool agreement = predictionError < .2 * std::max(1., base.merit)
                     && std::abs(base.violation - modelViolation) <
                        .2 * std::max(1., base.violation);
-                if (m_reducedSecondOrder && !restore)
+                if ((m_reducedSecondOrder || continuationDiagnostic) && !restore)
                 {
                     const double predictedGain = oldMerit*oldMerit-dualNorm(model)*dualNorm(model);
                     const double actualGain = oldMerit*oldMerit-base.merit*base.merit;
@@ -1859,7 +1872,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             "reduced iteration limit before original full-stage convergence");
     const auto audit =
         CompleteRestrictedAudit(state, history, alpha, time, data, true);
-    Require(audit.at("r2_qualified")[0] == 1.,
+    Require(continuationDiagnostic || audit.at("r2_qualified")[0] == 1.,
             "reduced algebraic result failed original qualification");
     return state;
 }

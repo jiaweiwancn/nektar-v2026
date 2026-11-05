@@ -980,7 +980,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
     report("initial", norms, domain, ground, {});
     if (m_picardReduced)
         return SolveReducedPicard(std::move(s), history, alpha, time, data,
-                                  iterations, tolerance, maximumIterations);
+                                  iterations, tolerance, maximumIterations,
+                                  m_picardContinuation);
     if (!m_picardKDiagnostic.empty())
         DiagnosePicardK(s, history, alpha, time, data, external);
     if (m_picardVerify)

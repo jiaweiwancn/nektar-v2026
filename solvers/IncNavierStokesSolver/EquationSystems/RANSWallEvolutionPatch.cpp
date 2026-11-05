@@ -315,8 +315,8 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         m_picardContinuation=continuation=="On";
         Require(m_picardContinuation || (m_picardContinuationEta==0. && m_picardContinuationTolerance==0.),
                 "continuation eta requires the explicit diagnostic selector");
-        Require(!m_picardContinuation || (!m_picardReduced && m_picardNonKTolerance==0.),
-                "algebraic continuation uses the retained segregated control as a separate diagnostic");
+        Require(!m_picardContinuation || m_picardNonKTolerance==0.,
+                "algebraic continuation cannot use the non-k-only diagnostic");
     }
     session->LoadParameter("RANSWallOwnershipShift",m_ownershipShift,0);Require(m_ownershipShift>=0,"negative ownership shift");
     auto full=MemoryManager<MultiRegions::ExpList>::AllocateSharedPtr(session,graph,true,"u");

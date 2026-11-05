@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
-"""Follow a labelled algebraic mass continuation with the retained Picard control."""
+"""Follow a labelled, non-physical mass continuation using separate field solves."""
 import argparse
 import json
 from pathlib import Path
@@ -25,6 +25,14 @@ def main():
                         help="Declared eta-positive diagnostic tolerance; eta-zero remains 2e-12")
     parser.add_argument("--initial-guess", type=Path,
                         help="Previously saved diagnostic root; physical history remains the original h0")
+    parser.add_argument("--method", choices=("conditional", "reduced"), default="conditional",
+                        help="Reduced observes qualification without imposing it; the native wrapper always rejects physical advance")
+    parser.add_argument("--reduced-basis", type=int, default=18)
+    parser.add_argument("--reduced-krylov", type=int, default=4)
+    parser.add_argument("--reduced-radius", type=float, default=.4)
+    parser.add_argument("--reduced-step", type=float, default=2e-5)
+    parser.add_argument("--reduced-h-tolerance", type=float, default=2e-12)
+    parser.add_argument("--reduced-verify", action="store_true")
     args = parser.parse_args()
     require(platform.system() == "Linux", "authoritative continuation runs require Linux")
     args.solver = args.solver.resolve(strict=True)
@@ -41,7 +49,7 @@ def main():
                    source=subprocess.check_output(["git", "-C", str(ROOT), "rev-parse", "HEAD"], text=True).strip(),
                    solver=str(args.solver), solver_sha256=sha(args.solver),
                    resolution_probe=str(args.resolution_probe), resolution_probe_sha256=sha(args.resolution_probe),
-                   ranks=1, thread_limits=THREADS, cases=[], status="running")
+                   ranks=1, thread_limits=THREADS, cases=[], status="running", method=args.method)
     summary.update(original_tolerance=2e-12, eta_positive_auxiliary_tolerance=args.auxiliary_tolerance)
     for executable in [args.solver, args.resolution_probe]:
         linked = subprocess.check_output(["ldd", str(executable)], text=True)
@@ -63,10 +71,20 @@ def main():
             packet = dict(warm, alpha=400.+eta, physical_alpha=400., eta=eta)
             guess = case / "guess.json"
             write_json(guess, packet)
+        reduced = args.method == "reduced"
         params = argparse.Namespace(output=case, steps=1, sweeps=args.iterations,
-                                    verify=False, ground_projection=True, k_newton=True,
-                                    equilibrate_after_k=True, k_radius=.4, flow=1., k=.75,
+                                    verify=False, ground_projection=True, k_newton=not reduced,
+                                    equilibrate_after_k=not reduced, k_radius=.4, flow=1., k=.75,
                                     epsilon=1., pseudo_alpha=0., perturbation=0., guess_file=guess)
+        params.reduced = reduced
+        params.reduced_verify = args.reduced_verify
+        params.reduced_basis = args.reduced_basis
+        params.reduced_krylov = args.reduced_krylov
+        params.reduced_radius = args.reduced_radius
+        params.reduced_step = args.reduced_step
+        params.reduced_h_tolerance = args.reduced_h_tolerance
+        params.reduced_h_updates = 80
+        params.reduced_restoration_weight = 0.
         prepare(params)
         if history is None:
             receipt = run([str(args.solver), "case.xml"], case / "startup", "solver.log", args.timeout)
@@ -106,6 +124,17 @@ def main():
         packet_file = target / "picard-continuation-root.json"
         events = [json.loads(line[20:]) for line in (target / "solver.log").read_text().splitlines()
                   if line.startswith("EP-AWF Continuation ")]
+        targets = [row for row in events if row["event"] == "target"]
+        require(len(targets) == 1 and targets[0]["eta"] == eta and
+                targets[0]["auxiliary_tolerance"] == accuracy and
+                not targets[0]["physical_history_advanced"],
+                "native continuation target or eta-zero tolerance guard differs")
+        if reduced:
+            require(targets[0]["method"] == "sequential_reduced_response" and
+                    targets[0]["qualification_policy"] ==
+                    "observe_original_qualification_without_enforcing_it_in_algebraic_diagnostic",
+                    "reduced continuation lacks its explicit qualification diagnostic label")
+        result["native_target"] = targets[0]
         roots = [row for row in events if row["event"] == "root"]
         if not packet_file.exists() or not roots:
             result["status"] = "no_certified_continuation_root"
