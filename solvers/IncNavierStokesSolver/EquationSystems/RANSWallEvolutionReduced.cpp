@@ -307,6 +307,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
     int maximumIterations) const
 {
     const auto started = std::chrono::steady_clock::now();
+    const std::string stageTag = "t" + J::Number(time) + "-" +
+                                  RANSWallR3::Hash(history).substr(0,12);
     auto emit          = [&](const std::string &event,
                     std::vector<std::pair<std::string, std::string>> fields) {
         fields.emplace_back("event", J::Quote(event));
@@ -418,7 +420,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                                                            alpha, time, data, true);
         if (m_reducedVerify)
         {
-            const std::string file = "reduced-trial-" + std::to_string(iterations) +
+            const std::string file = "reduced-trial-" + stageTag + "-" + std::to_string(iterations) +
                                      "-" + event + ".json";
             std::ofstream out(file);
             out << J::Object({{"status", J::Quote("nonlinear_trial_only")},
@@ -428,6 +430,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 {"inner_stress_model", J::Quote("SaturatedR2")}}) << '\n';
             out.close();
             Require(out.good(), "failed to save reduced nonlinear trial packet");
+            emit("trial_packet", {{"path", J::Quote(file)}});
         }
         emit(event,
                      {{"norms", J::Numbers(e.response.norms)},
@@ -794,6 +797,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                       {"h", J::Number(h)},
                       {"relative_error", J::Number(column.error)},
                       {"conditional_action_norm", J::Number(dualNorm(conditionalAction))},
+                      {"conditional_action_available", J::Boolean(!conditionalJacobian.empty())},
                       {"frozen_action_norm", J::Number(dualNorm(frozenAction))},
                       {"reduced_action_norm", J::Number(dualNorm(action))},
                       {"feedback_action_norm", J::Number(dualNorm(feedback))},
@@ -1072,7 +1076,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             // Replay the small affine problem without repeating field solves.
             // Native little-endian uint64 dimensions followed by f64 arrays:
             // H, g, feasible initial point, then [a,b] for every cut.
-            const std::string file = "reduced-model-" + std::to_string(iterations) +
+            const std::string file = "reduced-model-" + stageTag + "-" + std::to_string(iterations) +
                                      "-" + std::to_string(failedModels) + ".bin";
             std::ofstream out(file, std::ios::binary | std::ios::trunc);
             const std::uint64_t shape[2] = {
