@@ -139,6 +139,17 @@ int main(int argc, char **argv)
     Check(R::QualificationDecrease(1e-14,0.,1.,1e-3), "arithmetic-scale restoration erased");
     Check(!R::QualificationDecrease(1e-5,1e-5-1e-12,1.,1e-3), "insignificant restoration counted");
     Check(!R::QualificationDecrease(0.,0.,1.,1e-3), "unchanged qualification counted as progress");
+    // A finite mixed penalty can stop outside a feasible qualification set.
+    // At this exact soft-penalty fixed point, pure restoration still moves.
+    const double w=1e-4, mu=1e-3, xstar=1./(1.+w), violation=1.-xstar;
+    r = Solve({{w+mu,0.},{0.,1.}}, {w*xstar,0.},
+              {{{-1.,-1.},-violation},{{0.,-1.},0.}}, {0.,violation});
+    Close(r.solution[0],0.); Close(r.solution[1],violation);
+    r = Solve({{mu,0.},{0.,1.}}, {0.,0.},
+              {{{-1.,-1.},-violation},{{0.,-1.},0.}}, {0.,violation});
+    Close(r.solution[0],violation/(1.+mu));
+    Check(R::QualificationDecrease(violation,r.solution[1],1.,1e-3),
+          "pure qualification restoration stalled at a mixed-penalty fixed point");
     // H(y,k)=y-3k and F(k,y)=k+y-4 have a reduced slope of 4.
     // Feedback in B, rather than post-direction settling, selects dk=1.
     r = Solve({{16.}}, {-16.}, {}, {0.});

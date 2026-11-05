@@ -72,7 +72,8 @@ def prepare(args):
                 for key, value in {"Basis": args.reduced_basis, "Radius": args.reduced_radius,
                                    "HTolerance": args.reduced_h_tolerance,
                                    "HUpdates": args.reduced_h_updates,
-                                   "Step": args.reduced_step}.items():
+                                   "Step": args.reduced_step,
+                                   "RestorationWeight": getattr(args, "reduced_restoration_weight", 1.)}.items():
                     set_parameter(root, "RANSWallReduced"+key, value)
             if getattr(args, "k_newton", False):
                 set_info(root, "RANSWallPicardKNewton", "On")
@@ -150,6 +151,8 @@ def main():
     parser.add_argument("--reduced-h-tolerance", type=float, default=2e-9)
     parser.add_argument("--reduced-h-updates", type=int, default=50)
     parser.add_argument("--reduced-step", type=float, default=2e-5)
+    parser.add_argument("--reduced-restoration-weight", type=float, default=1.,
+                        help="Outside-envelope residual weight; zero performs pure qualification restoration")
     parser.add_argument("--equilibrate-after-k", action="store_true",
                         help="Try fixed-k non-k equilibration when the full sweep would be rejected")
     parser.add_argument("--k-radius", type=float, help="Limit the raw k Newton proposal relative to reference k")

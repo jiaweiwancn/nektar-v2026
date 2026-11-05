@@ -415,6 +415,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         {"radius_scaling", J::Quote("Euclidean norm of free k coefficient displacement divided by reference K")},
         {"response_method", J::Quote("one-sided differences of converged sequential non-k solves")},
         {"initial_basis_budget", J::Number(m_reducedBasis)},
+        {"initial_restoration_weight", J::Number(m_reducedRestorationWeight)},
         {"maximum_basis", J::Number(32)}, {"response_accuracy", J::Number(innerTolerance)}});
     auto base = evaluate(state, innerTolerance, m_reducedHUpdates, "base");
     Require(base.valid,
@@ -508,7 +509,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
     Vector previous;
     int failedModels = 0;
     int basisBudget = m_reducedBasis;
-    double restorationWeight = 1.;
+    double restorationWeight = m_reducedRestorationWeight;
     int qualificationStalls = 0;
     std::vector<OuterBound> activeWitnesses;
     auto qualifiedRoot = [&]() {
@@ -1415,7 +1416,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                     qualificationStalls = restored < .01 ? qualificationStalls + 1 : 0;
                     if (qualificationStalls >= 2)
                     {
-                        restorationWeight = std::max(1e-4, .1 * restorationWeight);
+                        if (restorationWeight > 0.)
+                            restorationWeight = std::max(1e-4, .1 * restorationWeight);
                         basisBudget = std::min(32, basisBudget + 3);
                         qualificationStalls = 0;
                         emit("restoration_balance", {{"residual_multiplier", J::Number(restorationWeight)},
@@ -1426,7 +1428,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 else
                 {
                     qualificationStalls = 0;
-                    restorationWeight = 1.;
+                    restorationWeight = m_reducedRestorationWeight;
                 }
                 accepted = true;
                 break;
