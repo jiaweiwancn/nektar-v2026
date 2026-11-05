@@ -38,6 +38,11 @@ def check(directory):
             "no nonzero constrained model direction was solved")
     require(all(d["displacement"] <= d["radius"]*(1+1e-12) for d in directions),
             "final correction exceeds its radius")
+    require(all(d["orthogonal_probes"] <= d["basis_dimension"] and
+                (d["orthogonal_probes"] != d["basis_dimension"] or
+                 d["maximum_column_correlation"] < 1e-10)
+                for d in directions if "orthogonal_probes" in d),
+            "orthogonal field probes retained correlated model columns")
     require(all(d["radius_model_solves"] >= 1 and d["radius_multiplier"] >= 0. and
                 d["radius_complementarity"] >= 0. for d in directions
                 if "radius_model_solves" in d and d["qp_solved"]),
@@ -58,6 +63,12 @@ def check(directory):
                     "a direction used an inconsistent warm-start branch")
     trials = [r for r in records if r["event"] == "trial"]
     require(trials, "no constrained direction received an equilibrated native trial")
+    combined = [r for r in records if r["event"] == "combined_direction_check"]
+    require(all(r["attained"] <= r["required"] and r["half_attained"] <= r["required"] and
+                r["half_relative_residual_error"] <= .03 and
+                r["half_observation_relative_error"] <= .05
+                for r in combined if r["available"]),
+            "combined response does not match its checked reduced model")
     inward = [r for r in records if r["event"] == "ground_inward_roundoff"]
     require(all(r["after"]["admissible"] and r["displacement"] <= r["radius"]*(1+1e-12)
                 for r in inward), "ground-inward correction violated the ground or radius bound")
@@ -74,7 +85,7 @@ def check(directory):
     result = dict(status="passed_operator_checks", manifest_status=manifest["status"],
                   repeatability=repeat, half_response_warm_starts=warm_starts,
                   action_checks=checks, directions=directions,
-                  trials=trials)
+                  trials=trials, combined_direction_checks=combined)
     write_json(directory / "reduced-checks.json", result)
 
 

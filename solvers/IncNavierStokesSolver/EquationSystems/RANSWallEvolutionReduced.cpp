@@ -419,6 +419,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         {"initial_basis_budget", J::Number(m_reducedBasis)},
         {"initial_restoration_weight", J::Number(m_reducedRestorationWeight)},
         {"response_krylov_budget", J::Number(m_reducedKrylov)},
+        {"probe_basis", J::Quote("orthogonal field directions when admissible; feasible inward fallback")},
+        {"combined_direction_checks", J::Boolean(m_reducedVerify)},
         {"maximum_basis", J::Number(32)}, {"response_accuracy", J::Number(innerTolerance)}});
     auto base = evaluate(state, innerTolerance, m_reducedHUpdates, "base");
     Require(base.valid,
@@ -499,6 +501,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         Evaluation shifted;
         double h = 0., error = 0.;
         double observationError = 0.;
+        bool orthogonalProbe = false;
     };
     struct Cut
     {
@@ -764,6 +767,18 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 x /= qLength;
             Column column;
             column.name = name;
+            // Rank testing alone leaves nearly parallel finite-difference
+            // columns and can amplify their errors in a cancelling proposal.
+            // Probe the orthogonal field direction itself when its actual
+            // ground polynomial and scalar inventory permit it. At contact,
+            // retain the original feasible inward direction as a fallback.
+            auto orthogonalGuess = state;
+            Apply(orthogonalGuess, rows, q, kScale * m_reducedStep);
+            if (admissible(orthogonalGuess))
+            {
+                seed = q;
+                column.orthogonalProbe = true;
+            }
             column.k    = seed;
             Evaluation shifted;
             double h = m_reducedStep;
@@ -934,6 +949,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 }
                 emit("response_check",
                      {{"name", J::Quote(name)},
+                      {"orthogonal_probe", J::Boolean(column.orthogonalProbe)},
+                      {"independent_component", J::Number(qLength)},
                       {"h", J::Number(h)},
                       {"relative_error", J::Number(column.error)},
                       {"conditional_action_norm", J::Number(dualNorm(conditionalAction))},
@@ -1092,6 +1109,15 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         }
         if (restore)
             hessian[n][n] = 1.;
+        double maximumColumnCorrelation = 0.;
+        int orthogonalProbes = 0;
+        for (int i = 0; i < n; ++i)
+        {
+            orthogonalProbes += columns[i].orthogonalProbe;
+            for (int j = 0; j < i; ++j)
+                maximumColumnCorrelation = std::max(maximumColumnCorrelation,
+                                                    std::abs(gram[i][j]));
+        }
         std::vector<Cut> cuts;
         std::map<int, WallExtremum> groundLocations;
         std::map<int, ScalarObservation> domainLocations;
@@ -1321,6 +1347,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         for (int i = 0; i < n; ++i)
             for (int j = 0; j < dimension; ++j)
                 predicted[j] += solution[i] * columns[i].r[j];
+        Vector observationDirection(base.bounds.size());
         double predictedViolation = 0.;
         double unscaledViolation = 0.;
         for (int j = 0; j < base.bounds.size(); ++j)
@@ -1334,6 +1361,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 if (quadratic.solution.size() == variables)
                     rawChange += quadratic.solution[i] * columns[i].observations[j];
             }
+            observationDirection[j] = change;
             predictedViolation =
                 std::max(predictedViolation,
                          std::max((b.value - b.upper) / b.width + change,
@@ -1407,6 +1435,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
               {"basis_dimension", J::Number(n)},
               {"basis_names", J::List(basisNames)},
               {"response_rank", J::Number(actionOrthogonal.size())},
+              {"orthogonal_probes", J::Number(orthogonalProbes)},
+              {"maximum_column_correlation", J::Number(maximumColumnCorrelation)},
               {"qp_solved", J::Boolean(qpOK)},
               {"qp_steps", J::Number(qpSteps)},
               {"radius_model_solves", J::Number(radiusSolves)},
@@ -1432,6 +1462,93 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
               {"original_merit_gradient", J::Numbers(originalMeritGradient)},
               {"two_scale_gradient_error_estimate", J::Numbers(actionUncertainty)},
               {"observation_action_relative_error", J::Numbers(observationUncertainty)}});
+        if (m_reducedVerify && qpOK && base.merit > 1e-6 && Length(displacement) > 1e-8)
+        {
+            // Check the actual combined direction before its larger trials.
+            // Individually accurate columns need not predict a cancelling
+            // combination accurately, especially at constitutive branch changes.
+            const double fraction = std::min(1e-3, m_reducedStep / Length(displacement));
+            auto guess = state;
+            Apply(guess, rows, displacement, kScale * fraction);
+            auto coarse = evaluate(guess, innerTolerance, m_reducedHUpdates,
+                                   "combined_direction");
+            guess = state;
+            Apply(guess, rows, displacement, kScale * fraction * .5);
+            auto fine = evaluate(guess, innerTolerance, m_reducedHUpdates,
+                                 "half_combined_direction");
+            if (coarse.valid && fine.valid)
+            {
+                auto coarseAction = coarse.r, fineAction = fine.r;
+                Vector coarseError(dimension), fineError(dimension);
+                for (int j = 0; j < dimension; ++j)
+                {
+                    coarseAction[j] = (coarseAction[j]-base.r[j])/fraction;
+                    fineAction[j] = (fineAction[j]-base.r[j])/(fraction*.5);
+                    coarseError[j] = coarseAction[j]-predictedChange[j];
+                    fineError[j] = fineAction[j]-predictedChange[j];
+                }
+                Vector ds = coarse.response.state, dt = coarse.domain.traceState,
+                       hs = fine.response.state, ht = fine.domain.traceState;
+                for (int j = 0; j < Size(); ++j)
+                {
+                    ds[j] -= state[j]; hs[j] -= state[j];
+                    dt[j] -= base.domain.traceState[j];
+                    ht[j] -= base.domain.traceState[j];
+                }
+                double coarseObservationError = 0., fineObservationError = 0.,
+                       coarseChangeError = 0., fineChangeError = 0.;
+                std::vector<std::string> observations;
+                std::set<std::pair<int,int>> selected;
+                for (int id : active)
+                    if (cuts[id].observation >= 0)
+                        selected.emplace(cuts[id].observation,cuts[id].sign);
+                for (int j = 0; j < base.bounds.size(); ++j)
+                {
+                    const auto &b = base.bounds[j];
+                    const double measured = b.Action(b.projected ? dt : ds,offset[b.block]);
+                    const double halfMeasured = b.Action(b.projected ? ht : hs,offset[b.block]);
+                    const double fullError = measured-fraction*observationDirection[j],
+                                 halfError = halfMeasured-fraction*.5*observationDirection[j];
+                    coarseChangeError = std::max(coarseChangeError,std::abs(fullError));
+                    fineChangeError = std::max(fineChangeError,std::abs(halfError));
+                    coarseObservationError = std::max(coarseObservationError,
+                        std::abs(fullError/fraction)/std::max(1.,std::abs(measured/fraction)));
+                    fineObservationError = std::max(fineObservationError,
+                        std::abs(halfError/(fraction*.5))/std::max(1.,std::abs(halfMeasured/(fraction*.5))));
+                    for (int sign : {-1,1}) if (selected.count({j,sign}))
+                        observations.push_back(J::Object({{"family",J::Number(b.family)},
+                            {"sign",J::Number(sign)},{"point",J::Numbers(b.row.coordinate)},
+                            {"projected",J::Boolean(b.projected)},
+                            {"predicted_change",J::Number(sign*fraction*observationDirection[j])},
+                            {"measured_change",J::Number(sign*measured)},
+                            {"half_predicted_change",J::Number(sign*fraction*.5*observationDirection[j])},
+                            {"half_measured_change",J::Number(sign*halfMeasured)}}));
+                }
+                emit("combined_direction_check", {{"available","true"},
+                    {"role",J::Quote(restore ? "restoration" : "residual_reduction")},
+                    {"fraction",J::Number(fraction)},
+                    {"required",J::Number(innerTolerance)},
+                    {"attained",J::Number(coarse.response.error)},
+                    {"half_attained",J::Number(fine.response.error)},
+                    {"relative_residual_error",J::Number(dualNorm(coarseError)/std::max(1.,dualNorm(coarseAction)))},
+                    {"half_relative_residual_error",J::Number(dualNorm(fineError)/std::max(1.,dualNorm(fineAction)))},
+                    {"observation_relative_error",J::Number(coarseObservationError)},
+                    {"half_observation_relative_error",J::Number(fineObservationError)},
+                    {"observation_change_error",J::Number(coarseChangeError)},
+                    {"half_observation_change_error",J::Number(fineChangeError)},
+                    {"predicted_merit_slope",J::Number(slope)},
+                    {"actual_merit_slope",J::Number((coarse.merit*coarse.merit-base.merit*base.merit)/(2.*fraction))},
+                    {"half_merit_slope",J::Number((fine.merit*fine.merit-base.merit*base.merit)/fraction)},
+                    {"full_inventory_violation",J::Number(coarse.violation)},
+                    {"half_full_inventory_violation",J::Number(fine.violation)},
+                    {"profile_branch_change",J::Boolean(coarse.domain.profileBranches!=base.domain.profileBranches)},
+                    {"half_profile_branch_change",J::Boolean(fine.domain.profileBranches!=base.domain.profileBranches)},
+                    {"signed_active_observations",J::List(observations)}});
+            }
+            else emit("combined_direction_check", {{"available","false"},
+                {"coarse_valid",J::Boolean(coarse.valid)}, {"half_valid",J::Boolean(fine.valid)},
+                {"failure",J::Quote("combined probes did not both attain valid controlled H responses")}});
+        }
         bool accepted = false;
         bool decomposed = false;
         if (qpOK && Length(displacement) > 0. &&
