@@ -29,6 +29,17 @@ inline double Length(const Vector &a)
 {
     return std::sqrt(std::max(0., Dot(a, a)));
 }
+// Relative progress remains meaningful near the original qualification
+// boundary. An absolute O(1) scale can reject a large fractional restoration
+// when the remaining normalized violation is small.
+inline bool QualificationDecrease(double before, double after,
+                                  double fraction, double rate)
+{
+    if (!std::isfinite(before) || !std::isfinite(after) || before < 0. || after < 0. ||
+        !(fraction > 0. && fraction <= 1.) || !(rate > 0. && rate < 1.))
+        throw std::logic_error("invalid qualification progress comparison");
+    return after < before * (1. - rate * fraction);
+}
 struct QuadraticResult
 {
     bool solved = false;

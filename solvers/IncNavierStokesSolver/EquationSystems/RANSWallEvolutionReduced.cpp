@@ -525,6 +525,9 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             report(base, "converged");
             return state;
         }
+        if (base.violation > 0.)
+            innerTolerance = std::max(minimumInnerAccuracy,
+                std::min(innerTolerance, 1e-7 * base.violation));
         if (base.response.error > innerTolerance)
         {
             auto refined = evaluate(state, innerTolerance, m_reducedHUpdates,
@@ -540,7 +543,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 return state;
             }
         }
-        const bool restore  = base.violation > 1e-7;
+        const bool restore  = base.violation > 0.;
         const int dimension = rows.size();
         const auto contacts = WallTraceR4(state);
         std::vector<std::pair<std::string, Vector>> seeds;
@@ -1292,7 +1295,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         bool accepted = false;
         bool decomposed = false;
         if (qpOK && Length(displacement) > 0. &&
-            (restore ? (predictedViolation < base.violation - 1e-7 ||
+            (restore ? (RANSWallReduced::QualificationDecrease(base.violation, predictedViolation, 1., 1e-6) ||
                         slope < -1e-8 * base.merit * base.merit)
                      : slope < -1e-8 * base.merit * base.merit))
         {
@@ -1329,15 +1332,11 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 bool filterOK = true;
                 for (auto [merit, violation] : filter)
                     if (trial.merit >= merit * (1. - 1e-6) &&
-                        trial.violation >=
-                            violation - 1e-5 * std::max(1., violation))
+                        !RANSWallReduced::QualificationDecrease(violation, trial.violation, 1., 1e-5))
                         filterOK = false;
                 const bool progress =
                     restore
-                        ? (trial.violation <
-                               base.violation -
-                                   1e-3 * fraction *
-                                       std::max(1., base.violation) ||
+                        ? (RANSWallReduced::QualificationDecrease(base.violation, trial.violation, fraction, 1e-3) ||
                            (trial.merit < base.merit * (1. - 1e-3 * fraction) &&
                             trial.violation <= base.violation * 1.01 + 1e-7))
                         : (trial.merit < base.merit && trial.violation < 1e-8);
@@ -1409,10 +1408,10 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 ++iterations;
                 failedModels = 0;
                 report(base, "accepted");
-                if (restore && base.violation > 1e-7)
+                if (restore && base.violation > 0.)
                 {
                     const double restored = (oldViolation - base.violation) /
-                                            std::max(1e-7, oldViolation);
+                                            oldViolation;
                     qualificationStalls = restored < .01 ? qualificationStalls + 1 : 0;
                     if (qualificationStalls >= 2)
                     {

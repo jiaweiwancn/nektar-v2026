@@ -173,6 +173,7 @@ public:
     bool GroundSafeguard() const { return CoupledR4() || JointRestorationR5(); }
     bool PimpleSingleSweep() const { return m_temporalCoupling=="PimpleSingleSweep"; }
     const std::string &TemporalCouplingName() const { return m_temporalCoupling; }
+    Vector InitializationWork() const { return {double(m_liftCalls),double(m_liftIterations)}; }
     const std::vector<std::string> &PimpleRecords() const { return m_pimpleRecords; }
     Diagnostic PhysicalSamples(const Vector &state,double time,const RANSWallEvolutionData &data) const;
     bool SegregatedPicard() const { return m_nonlinearPolicy=="SegregatedPicard"; }
@@ -409,6 +410,7 @@ private:
     std::string m_nonlinearPolicy="Legacy",m_feasibleTraceFile="case.feasible.jsonl";
     std::string m_temporalCoupling="ConvergedStage";
     bool m_pimpleVerify=false;
+    mutable int m_liftCalls=0,m_liftIterations=0;
     mutable std::vector<std::string> m_pimpleRecords;
     std::array<double,3> m_picardRelaxation{{1.,.5,.5}};
     double m_picardPseudoAlpha=0.;

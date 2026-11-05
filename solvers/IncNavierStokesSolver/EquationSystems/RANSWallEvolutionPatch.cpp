@@ -642,13 +642,13 @@ std::map<int,double> RANSWallEvolutionPatch::Constraints(const Vector &state,dou
 }
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Lift(const Vector &state,double time,const RANSWallEvolutionData &data) const
 {
-    auto s=state;
+    ++m_liftCalls;auto s=state;
     // The independent outer epsilon sample contains dependent trace modes.
     // Solve that trace constraint at initialization; stage Newton retains its
     // columns explicitly and never substitutes a lagged sensor value.
     for(int iteration=0;iteration<(m_transitionEnabled?100:1);++iteration)
     {
-        double change=0;for(auto [row,value]:Constraints(s,time,data)){change=std::max(change,std::abs(s[row]-value));s[row]=value;}
+        ++m_liftIterations;double change=0;for(auto [row,value]:Constraints(s,time,data)){change=std::max(change,std::abs(s[row]-value));s[row]=value;}
         if(!m_transitionEnabled || change<2e-14)return s;
     }
     throw std::runtime_error("dependent transition trace lifting did not converge");

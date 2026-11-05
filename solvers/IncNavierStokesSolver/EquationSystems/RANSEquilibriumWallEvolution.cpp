@@ -175,6 +175,7 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         if(r3)
         {
             Require(!m_patch->PimpleSingleSweep() || m_stageTest=="Off","PIMPLE is a physical time mode, not a stage test");
+        Require(!m_patch->PimpleSingleSweep() || m_stageTest=="Off","PIMPLE forbids stage-test drivers");
         m_session->LoadSolverInfo("RANSWallR3PredictorFile",m_r3PredictorFile,"None");
             Require(m_patch->NonlinearPolicyName()=="ScalarFeasibleR3" && m_patch->InnerStressName()=="SaturatedR2" &&
                 m_eta==0 && m_neutral && m_order==2 && m_steps==0 && m_timestep==.0025 &&
@@ -210,8 +211,9 @@ std::string RANSEquilibriumWallEvolution::PhysicsSignature() const
     std::ostringstream s;s<<std::setprecision(17)<<m_patch->Signature()<<":eta="<<m_eta<<":neutral="<<m_neutral<<":us="<<m_ustar<<":direction="<<m_direction[0]<<','<<m_direction[1]<<":chart_functions="<<m_chartFunctions;
     if(!m_neutral && m_patch->CappedDestruction() && !m_patch->Mapped() && !m_patch->TransitionEnabled())
         s<<":capped_initial_trace=1";
+    if(m_patch->PimpleSingleSweep())s<<":temporal_coupling=PimpleSingleSweep";
     for(const auto &[name,value]:m_serialSession->GetParameters())
-        if(name!="NUMSTEPS" && name!="IO_CHECKSTEPS" && name!="IO_INFOSTEPS" && name!="IO_TIMER_LEVEL" && name!="RANSWALLOWNERSHIPSHIFT")s<<'|'<<name<<'='<<value;
+        if(name!="NUMSTEPS" && name!="IO_CHECKSTEPS" && name!="IO_INFOSTEPS" && name!="IO_TIMER_LEVEL" && name!="RANSWALLOWNERSHIPSHIFT" && name!="RANSWALLPIMPLEREJECTSTEP")s<<'|'<<name<<'='<<value;
     const std::vector<std::string> names{"InitialConditionsInner","InitialConditionsOuter","InitialPerturbationInner","InitialPerturbationOuter","BoundaryValuesInner","BoundaryValuesOuter",
         "BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter","ExactSolutionInner","ExactSolutionOuter"};
     for(const auto &name:names)for(const auto &variable:m_session->GetVariables())if(m_serialSession->DefinesFunction(name,variable))
@@ -310,8 +312,8 @@ RANSEquilibriumWallEvolution::Vector RANSEquilibriumWallEvolution::Implicit(cons
         Require(Maximum(norms)<=m_tolerance,"Picard candidate failed the native stage residual check");
     if(m_patch->PimpleSingleSweep() && m_pimpleRejectStep>0 && m_integrator->Steps()+1==m_pimpleRejectStep)
     {m_rejectedState=candidate;throw std::runtime_error("deliberate PIMPLE rejection after scheduled solves before commit");}
-    if(m_diagnostics)RecordAudit(candidate,fullHistory,1/lambda,time);
     if(m_patch->PimpleSingleSweep())m_physicalSamples=m_patch->PhysicalSamples(candidate,time,m_implicitData);
+    if(m_diagnostics)RecordAudit(candidate,fullHistory,1/lambda,time);
     m_state=std::move(candidate);
     Vector record{time,lambda,1/lambda,static_cast<double>(iterations),Maximum(norms),m_patch->AnchorEnergyWork(m_state)};
     record.insert(record.end(),norms.begin(),norms.end());m_stageAudits.push_back(record);
@@ -815,6 +817,7 @@ void RANSEquilibriumWallEvolution::WriteReport() const
        <<",\"nonlinear_policy\":"<<Quoted(m_patch->NonlinearPolicyName())
        <<",\"temporal_coupling\":"<<Quoted(m_patch->TemporalCouplingName())
        <<",\"implicit_callback_count\":"<<m_implicitCallbacks
+       <<",\"initialization_lift_calls_iterations\":"<<RANSWallSolveJson::Numbers(m_patch->InitializationWork())
        <<",\"pimple_attempts\":"<<RANSWallSolveJson::List(m_patch->PimpleRecords());
     out<<",\"physical_samples\":{";int sampleCount=0;
     for(const auto &[name,values]:m_physicalSamples){if(sampleCount++)out<<',';out<<Quoted(name)<<':';Write(out,values);}out<<'}';
