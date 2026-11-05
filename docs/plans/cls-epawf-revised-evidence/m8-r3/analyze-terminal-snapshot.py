@@ -96,7 +96,9 @@ def main():
     parser.add_argument('--expected-producer-source', required=True)
     parser.add_argument('--cpu', type=int, required=True)
     parser.add_argument('--r9-local', action='store_true')
+    parser.add_argument('--r10-local', action='store_true')
     args = parser.parse_args()
+    local_comparison = args.r9_local or args.r10_local
     run, source, output = (path.resolve() for path in (args.run, args.source, args.output))
     require(platform.system() == 'Linux' and os.sched_getaffinity(0) == {args.cpu},
             'Use the authoritative Linux host and one explicitly allocated CPU')
@@ -165,7 +167,7 @@ def main():
             receipt_path = run/'receipt.json'
             bind(receipt_path)
             receipt = load(receipt_path)
-            require(receipt.get('schema') == 1 and receipt.get('phase') == ('r5-local' if args.r9_local else 'target') and receipt.get('finished_utc') and
+            require(receipt.get('schema') == 1 and receipt.get('phase') == ('r5-local' if local_comparison else 'target') and receipt.get('finished_utc') and
                     receipt.get('status') in ('completed', 'native_stopped', 'failed') and receipt.get('ranks') == 1 and
                     receipt.get('runtime_unchanged') is True and receipt.get('source_clean_start') is True and
                     receipt.get('source_clean_end') is True and
@@ -220,8 +222,9 @@ def main():
                     manifest['protected_physical_xml_sha256'], 'Protected target physics/geometry changed')
             xml = ET.parse(session).getroot()
             info, params = solver_info(xml), parameters(xml)
-            require(info.get('RANSWALLSTAGETEST') == ('DirectionExperimentR5' if args.r9_local else 'ExactTargetR3') and
+            require(info.get('RANSWALLSTAGETEST') == ('DirectionExperimentR5' if local_comparison else 'ExactTargetR3') and
                     (not args.r9_local or info.get('RANSWALLR9EXPERIMENT') == 'On') and
+                    (not args.r10_local or info.get('RANSWALLR10EXPERIMENT') == 'On') and
                     info.get('RANSWALLNONLINEARPOLICY') == 'ScalarFeasibleR3' and
                     info.get('RANSWALLACTIONPOLICY') == 'VerifiedR3Action' and
                     info.get('RANSWALLINNERSTRESS') == 'SaturatedR2' and float(params['TIMESTEP']) == .0025 and
@@ -319,7 +322,7 @@ def main():
                 return dict(available=False, partial_file=item, reason=str(error),
                             stopped_process_partial_report=provenance_result['supervisor_wall_cap_observed'])
             try:
-                require(report['stage_test'] == ('DirectionExperimentR5' if args.r9_local else 'ExactTargetR3') and report['stage_test_native_history_advanced'] is False and
+                require(report['stage_test'] == ('DirectionExperimentR5' if local_comparison else 'ExactTargetR3') and report['stage_test_native_history_advanced'] is False and
                         report['time'] == report['steps'] == 0 and analysis.vector_hash(report['state']) == H0 and
                         canonical(report['fields']) == canonical(raw['fields']), 'Native final report changes fields/h0/history scope')
                 levels = [level for level in report['stage_test_levels'] if level.get('attempted') and

@@ -820,7 +820,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
     const std::map<int,double> &constraints,const std::function<Vector(Vector,bool)> &inverse,
     std::string &details,const std::vector<OuterBound> &outer,double restoration,bool inward,
     RANSWallR3::DurableProgress *diagnostic,const std::string &tag,const Vector &residual,
-    double radius,double *guardWork,const std::array<double,4> &interior) const
+    double radius,double *guardWork,const std::array<double,4> &interior,
+    const std::vector<DirectionRestriction> &extra,bool scanOnly) const
 {
     // Parameterize d=d_N+J^{-1} B z. B injects the scaled Cholesky
     // factors on free differential rows, leaving every algebraic row zero.
@@ -905,7 +906,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
     {
         int block=-1,axis=-1,side=0,coefficient=-1;
         double scale=1;
-        bool trace=false;
+        bool trace=false,general=false;
         RANSWallGlobalPoint point;
     };
     struct Cut
@@ -988,14 +989,14 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
         {
             const auto &o=original[cut.id];
             const auto &w=o.witness;
-            const double native=w.coefficient>=0?direction[w.coefficient]/w.scale:
+            const double native=w.general?std::inner_product(o.row.begin(),o.row.end(),direction.begin(),0.):w.coefficient>=0?direction[w.coefficient]/w.scale:
                 (w.axis<0?w.point.Value(w.trace?trace:effective,offset[w.block]):
                     w.point.Gradient(effective,offset[w.block])[w.axis])/w.scale;
             const std::string name=tag+".cut"+std::to_string(rows.size());
             auto unscaled=cut.normal;
             for(double &x:unscaled)x*=cut.length;
-            rows.push_back(J::Object({{"id",J::Number(cut.id)},{"kind",J::Quote(cut.kind)},
-                {"point",J::Numbers(cut.point)},{"geometry",J::Number(w.point.geometry)},
+            rows.push_back(J::Object({{"id",J::Number(cut.id)},{"kind",J::Quote(cut.kind)},{"general_affine_row",J::Boolean(w.general)},
+                {"point",w.general?"null":J::Numbers(cut.point)},{"geometry",w.general?"null":J::Number(w.point.geometry)},
                 {"block",J::Number(w.block)},{"axis",J::Number(w.axis)},{"side",J::Number(w.side)},
                 {"scale",J::Number(w.scale)},{"projected",J::Boolean(w.trace)},
                 {"coefficient",J::Number(w.coefficient)},{"incoming",J::Boolean(incoming)},
@@ -1071,13 +1072,14 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
         Witness selected;
         auto inspect=[&](double lower,double observed,const std::string &label,
                          const RANSWallCoordinate &point,auto makeRow,int block,int axis,double scale,
-                         bool projected,int side,const RANSWallGlobalPoint *row,int coefficient=-1)
+                         bool projected,int side,const RANSWallGlobalPoint *row,int coefficient=-1,const Vector *general=nullptr)
         {
             worstNative=std::max(worstNative,lower-observed);
             if(refined)
             {
                 long double value=0;
-                if(coefficient>=0)value=(long double)direction[coefficient]/scale;
+                if(general)for(int j=0;j<Size();++j)value+=(long double)(*general)[j]*direction[j];
+                else if(coefficient>=0)value=(long double)direction[coefficient]/scale;
                 else
                 {
                     const auto &basis=axis<0?row->phi:row->derivative[axis];
@@ -1104,7 +1106,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
             location=point;
             violated=makeRow();
             if(diagnostic)
-                selected={block,axis,side,coefficient,scale,projected,row?*row:RANSWallGlobalPoint{}};
+                selected={block,axis,side,coefficient,scale,projected,general!=nullptr,row?*row:RANSWallGlobalPoint{}};
         };
         for(int b=0;b<=Gauge();++b)for(int i=offset[b];i<offset[b]+size[b];++i)
             for(double sign:{-1.,1.})
@@ -1141,6 +1143,27 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
                     bound.block,bound.axis,-sign*bound.scale*bound.width,bound.projected,bound.side,&bound.row);
             }
         }
+        std::vector<std::string> extraAudit;
+        for(const auto &cut:extra)
+        {
+            Require(cut.row.size()==Size(),"Invalid R10 general affine row");
+            inspect(cut.lower,std::inner_product(cut.row.begin(),cut.row.end(),direction.begin(),0.),
+                cut.name,{},[&]{return cut.row;},-1,-1,1.,false,0,nullptr,-1,&cut.row);
+            extraAudit.push_back(J::Object({{"name",J::Quote(cut.name)},{"point","null"},
+                {"lower",J::Number(cut.lower)},{"native_gap",J::Number(
+                    std::inner_product(cut.row.begin(),cut.row.end(),direction.begin(),0.)-cut.lower)},
+                {"independent_accumulation_gap",J::Number(dot(cut.row,direction)-cut.lower)}}));
+        }
+        if(diagnostic && !extra.empty() && (scanOnly || violated.empty()))
+            diagnostic->Event("r10_general_row_scan",{{"name",J::Quote(tag)},{"rows",J::List(extraAudit)}});
+        if(scanOnly)
+        {
+            details=J::Object({{"passed",J::Boolean(violated.empty())},
+                {"worst_native_violation",J::Number(worstNative)},
+                {"worst_extended_violation",J::Number(worstExtended)}});
+            if(diagnostic)diagnostic->Event("r10_anchor_original_rows",{{"name",J::Quote(tag)},{"scan",details}});
+            return violated.empty()?direction:Vector{};
+        }
         if(violated.empty())
         {
             Vector stationarity=z;
@@ -1154,7 +1177,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
                 activeError=std::max(activeError,std::abs(gap));
                 complementarity=std::max(complementarity,std::abs(gap*multipliers[i]));
                 activeRows.push_back(J::Object({{"inventory",J::Quote(row.kind)},
-                    {"point",J::Numbers(Vector(row.point.begin(),row.point.end()))},
+                    {"point",row.kind=="native_merit_slope"?"null":J::Numbers(Vector(row.point.begin(),row.point.end()))},
                     {"multiplier",J::Number(multipliers[i]/row.length)}}));
             }
             const double stationarityNorm=std::sqrt(dot(stationarity,stationarity));
@@ -1270,7 +1293,7 @@ RANSWallEvolutionPatch::R8Trial RANSWallEvolutionPatch::RunR8Comparison(const Ve
     int iteration,const std::string &comparison,std::map<double,R8Trial> *samples) const
 {
     using Clock=std::chrono::steady_clock;
-    const bool pilot=PilotR8() || ExperimentR9();
+    const bool pilot=PilotR8() || ExperimentR9() || ExperimentR10();
     const std::string prefix="iterate"+std::to_string(iteration)+"."+comparison;
     constexpr double fit=.125,holdout=.0625;
     const double us=m_robustUstar,K0=m_parameters.model.Q()*us*us,H=m_parameters.geometry.height;
@@ -1905,6 +1928,340 @@ RANSWallEvolutionPatch::R8Trial RANSWallEvolutionPatch::RunR9Comparison(const Ve
     return promote?nonlinear:control;
 }
 
+namespace
+{
+constexpr bool R10ModelAccept(double incumbent,double candidate,double slope,double eta,
+    double nativeSlope,double bound,bool feasible)
+{
+    return feasible && slope<0. && nativeSlope<=bound &&
+        candidate<=incumbent+1e-4*eta*slope && candidate<incumbent;
+}
+constexpr double R10Retain(double incumbent,double candidate,bool accepted)
+{
+    return accepted && candidate<incumbent?candidate:incumbent;
+}
+constexpr double R10AffineDefect(double C,double Jd){return C+Jd;}
+static_assert(R10Retain(4.,10.,false)==4. && R10Retain(4.,3.,false)==4.);
+static_assert(!R10ModelAccept(4.,5.,-1.,.5,-1.,-.01,true));
+static_assert(R10Retain(4.,5.,R10ModelAccept(4.,5.,-1.,.5,-1.,-.01,true))==4.);
+static_assert(R10AffineDefect(.2,.5*(-.2)+.5*(-.2))==0.);
+static_assert(R10AffineDefect(.2,.125*(-.2))>.1);
+static_assert(!R10ModelAccept(4.,3.,-1.,1.,.2361516653,-.000582328302,true));
+}
+
+RANSWallEvolutionPatch::R8Trial RANSWallEvolutionPatch::RunR10Comparison(
+    const Vector &state,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data,
+    const ScalarDomainResult &domain,const Vector &residual,const std::map<int,double> &constraints,
+    const WallMatrix &jac,const Vector &newton,const std::function<Vector(Vector,bool)> &inverse,
+    const R8Ray &binding,RANSWallR3::DurableProgress &durable) const
+{
+    using Clock=std::chrono::steady_clock;
+    const auto started=Clock::now();
+    auto elapsed=[&]{return std::chrono::duration<double>(Clock::now()-started).count();};
+    const double us=m_robustUstar;
+    const auto baseNorms=Norms(residual,constraints,us);
+    const double baseE=Maximum(baseNorms),slopeBound=-2e-4*baseE;
+    const auto outer=OuterBoundsR5(domain);
+    Require(OuterViolationR5(outer).Max()==0. && !m_destruction.smooth,
+        "R10 requires the in-box frozen Linear-smoothing base");
+    durable.Event("r10_budget",{{"tangent_limit","4"},{"armijo_limit_per_tangent","10"},
+        {"new_source_values_limit","50"},{"native_limit_per_ray","9"},{"comparison_seconds","600"},
+        {"source_stop_seconds","540"},{"native_selector_tests_full_endpoint","false"}});
+    auto dot=[](const Vector &a,const Vector &b)
+    {
+        long double sum=0.;for(int i=0;i<a.size();++i)sum+=(long double)a[i]*b[i];
+        return static_cast<double>(sum);
+    };
+    auto minus=[](Vector a,const Vector &b)
+    {for(int i=0;i<a.size();++i)a[i]-=b[i];return a;};
+    auto add=[](Vector a,const Vector &b,double f)
+    {for(int i=0;i<a.size();++i)a[i]+=f*b[i];return a;};
+    auto at=[&](const Vector &d){return add(state,d,1.);};
+    auto objective=[&](const Vector &value)
+    {
+        const auto products=DualProductsR10(value,value,constraints);
+        return .5*std::accumulate(products.begin(),products.begin()+InnerPressure(),0.);
+    };
+    const auto meritRows=MeritRowsR10(residual,jac,constraints);
+    auto nativeSlope=[&](const Vector &d)
+    {
+        double value=-std::numeric_limits<double>::infinity();
+        for(const auto &row:meritRows)value=std::max(value,dot(row,d));
+        return value;
+    };
+    std::vector<DirectionRestriction> slopeCuts;
+    for(auto row:meritRows)
+    {
+        for(double &x:row)x=-x;
+        slopeCuts.push_back({std::move(row),-slopeBound,"native_merit_slope"});
+    }
+    auto algebraic=[&](const Vector &d)
+    {
+        const auto norms=Norms(add(residual,Multiply(jac,d),1.),constraints,us);
+        return *std::max_element(norms.begin()+InnerPressure(),norms.end());
+    };
+    int valueCalls=0,cacheHits=0,actionCalls=0,solves=0;
+    double valueSeconds=0.,actionSeconds=0.,solveSeconds=0.;
+    struct CachedSource {bool valid=false;InnerDestruction source;};
+    std::map<Vector,CachedSource> cache;
+    auto source=[&](const Vector &d)->const CachedSource *
+    {
+        auto found=cache.find(d);
+        if(found!=cache.end()){++cacheHits;return &found->second;}
+        if(valueCalls>=50 || elapsed()>=540.)return nullptr;
+        ++valueCalls;const auto begin=Clock::now();
+        CachedSource item;
+        const auto checked=ScalarDomain(at(d),time,data,true);
+        if(checked.admissible)
+        {
+            bool wall=false;WallTraceJSON(checked.effectiveState,wall);
+            if(wall){item.source=DestructionValueR9(checked,time,data,constraints);item.valid=true;}
+        }
+        valueSeconds+=std::chrono::duration<double>(Clock::now()-begin).count();
+        return &cache.emplace(d,std::move(item)).first->second;
+    };
+    const Vector zero(Size());
+    const auto *base=source(zero);
+    Require(base && base->valid && base->source.value==binding.destruction &&
+        binding.destructionAction.size()==Size(),"R10 bound source value differs from current extraction");
+    const auto &D0=binding.destruction;
+    const auto &JD=binding.destructionAction;
+    auto model=[&](const Vector &d,const InnerDestruction &D)
+    {return add(add(add(residual,Multiply(jac,d),1.),minus(D.value,D0),1.),Multiply(JD,d),-1.);};
+    auto action=[&](const Vector &d)
+    {
+        ++actionCalls;const auto begin=Clock::now();
+        auto value=AssembleNonpressureR3(at(d),time,data,false,0,nullptr,true);
+        actionSeconds+=std::chrono::duration<double>(Clock::now()-begin).count();
+        return value;
+    };
+    auto verified=[&](const Vector &d,const std::string &name)
+    {
+        std::string scan;
+        const auto rows=CoupledDirectionR4(domain,d,jac,constraints,inverse,scan,outer,1.,false,
+            &durable,name,residual,.125,nullptr,{},slopeCuts,true);
+        const double affine=algebraic(d),slope=nativeSlope(d);
+        const auto *value=source(d);
+        const bool passed=!rows.empty() && affine<=5e-12 && slope<=slopeBound && value && value->valid;
+        durable.Event("r10_anchor_feasibility",{{"name",J::Quote(name)},{"original_rows",scan},
+            {"algebraic",J::Number(affine)},{"native_slope",J::Number(slope)},{"slope_bound",J::Number(slopeBound)},
+            {"source_valid",J::Boolean(value && value->valid)},{"passed",J::Boolean(passed)}});
+        return passed;
+    };
+    const double oldSlope=nativeSlope(binding.ascentRegression);
+    durable.Event("r10_ascent_regression",{{"slope",J::Number(oldSlope)},{"bound",J::Number(slopeBound)},
+        {"rejected_before_native_trials",J::Boolean(oldSlope>slopeBound)}});
+    Require(std::abs(oldSlope-.2361516653)<1e-8 && oldSlope>slopeBound,"R10 retained ascent regression differs");
+
+    const auto controlStarted=Clock::now();
+    R8Ray controlRay;std::string details;
+    controlRay.step=CoupledDirectionR4(domain,newton,jac,constraints,inverse,details,outer,1.,false,
+        &durable,"r10_linear",residual,.125);
+    controlRay.action=Multiply(jac,controlRay.step);
+    Require(nativeSlope(controlRay.step)<=slopeBound,"R10 linear control fails native descent");
+    durable.Event("r10_control",{{"direction",durable.VectorPayload("r10.linear.step",controlRay.step)},
+        {"physical_action",durable.VectorPayload("r10.linear.action",controlRay.action)},
+        {"native_slope",J::Number(nativeSlope(controlRay.step))},{"details",details}});
+    const double directionSeconds=std::chrono::duration<double>(Clock::now()-controlStarted).count();
+    const auto control=RunR8Comparison(state,history,alpha,time,data,domain,residual,constraints,jac,newton,
+        inverse,controlRay,durable,0,"r10_linear");
+    const double controlSeconds=std::chrono::duration<double>(Clock::now()-controlStarted).count();
+    Require(control.accepted,"R10 matched native control unresolved");
+    const auto sourcePolicyStarted=Clock::now();
+    const double baseValueSeconds=valueSeconds;
+    auto scaled=controlRay.step;for(double &x:scaled)x*=control.f;
+    const double scaledDefect=algebraic(scaled);
+    durable.Event("r10_scaled_anchor_regression",{{"fraction",J::Number(control.f)},
+        {"actual_affine_defect",J::Number(scaledDefect)},
+        {"expected_trace_defect",J::Number((1.-control.f)*baseNorms.back())},
+        {"rejected_as_restored_anchor",J::Boolean(scaledDefect>5e-12)}});
+
+    Vector anchor=controlRay.step,best=anchor;
+    if(!verified(anchor,"initial"))
+    {
+        durable.Event("r10_decision",{{"promote","false"},{"reason",J::Quote("initial_model_anchor_unverified")},
+            {"selected",J::Quote("linear")},{"source_values",J::Number(valueCalls)}});
+        return control;
+    }
+    auto incumbent=model(anchor,source(anchor)->source);
+    double phi=objective(incumbent),bestPhi=phi;
+    const double initialPhi=phi;
+    durable.Event("r10_anchor",{{"index","0"},{"direction",durable.VectorPayload("r10.anchor0",anchor)},
+        {"Phi",J::Number(phi)},{"model",J::Numbers(Norms(incumbent,constraints,us))},
+        {"native_slope",J::Number(nativeSlope(anchor))}});
+    bool retryUsed=false,needSlopeCut=false,checkDerivative=true;
+    std::string stop="tangent_budget";
+    const auto modelStarted=Clock::now();
+    for(int index=0;index<4 && elapsed()<500. && valueCalls<45;++index)
+    {
+        const auto *anchorSource=source(anchor);
+        Require(anchorSource && anchorSource->valid,"R10 incumbent lost its cached source");
+        WallMatrix JDanchor;
+        try{JDanchor=action(anchor);}
+        catch(const std::exception &error)
+        {
+            stop="moved_source_action_unresolved";
+            durable.Event("r10_action_failure",{{"message",J::Quote(error.what())}});
+            break;
+        }
+        auto A=jac;
+        for(int row=0;row<Size();++row)for(int col=0;col<Size();++col)
+            A[row][col]+=JDanchor[row][col]-JD[row][col];
+        const auto r=add(model(anchor,anchorSource->source),Multiply(A,anchor),-1.);
+        const auto consistency=Norms(minus(add(r,Multiply(A,anchor),1.),incumbent),constraints,us);
+        Require(Maximum(consistency)<1e-10,"R10 affine tangent identity failed");
+        const auto begin=Clock::now();
+        const auto factor=FeasibleFactor(A);
+        auto apply=[&](Vector rhs,bool transpose){return factor.Refine(A,rhs,transpose);};
+        auto rhs=r;for(double &x:rhs)x=-x;
+        const auto n=apply(rhs,false);
+        Vector target;
+        std::string subproblem;
+        ++solves;
+        try
+        {
+            target=CoupledDirectionR4(domain,n,A,constraints,apply,subproblem,outer,1.,false,
+                &durable,"r10_tangent"+std::to_string(index),r,.125,nullptr,{},
+                needSlopeCut?slopeCuts:std::vector<DirectionRestriction>{});
+        }
+        catch(const std::exception &error)
+        {
+            stop="tangent_construction_unresolved";
+            durable.Event("r10_tangent_failure",{{"index",J::Number(index)},{"message",J::Quote(error.what())}});
+            break;
+        }
+        const double seconds=std::chrono::duration<double>(Clock::now()-begin).count();solveSeconds+=seconds;
+        const auto p=minus(target,anchor),Ap=Multiply(A,p);
+        const auto cross=DualProductsR10(incumbent,Ap,constraints),square=DualProductsR10(Ap,Ap,constraints);
+        const double slope=std::accumulate(cross.begin(),cross.begin()+InnerPressure(),0.);
+        const double curvature=std::accumulate(square.begin(),square.begin()+InnerPressure(),0.);
+        const double diagnostic=slope+.5*curvature,tolerance=1e-9*std::max({1.,phi,curvature});
+        durable.Event("r10_tangent",{{"index",J::Number(index)},{"slope_cut",J::Boolean(needSlopeCut)},
+            {"anchor",durable.VectorPayload("r10.t"+std::to_string(index)+".anchor",anchor)},
+            {"target",durable.VectorPayload("r10.t"+std::to_string(index)+".target",target)},
+            {"affine_identity_error",J::Numbers(consistency)},{"s_Phi",J::Number(slope)},
+            {"Ap_squared",J::Number(curvature)},{"diagnostic",J::Number(diagnostic)},
+            {"diagnostic_tolerance",J::Number(tolerance)},{"details",subproblem},{"seconds",J::Number(seconds)}});
+        if(diagnostic>tolerance || slope>=0.)
+        {stop="tangent_slope_consistency";break;}
+        if(checkDerivative)
+        {
+            bool passed=false;
+            for(int level:{11,13})
+            {
+                const double h=std::ldexp(1.,-level);
+                std::array<const CachedSource *,4> values{};
+                bool same=true;
+                for(int i=0;i<4;++i)
+                {
+                    values[i]=source(add(anchor,p,(i%2?-1.:1.)*h/(i<2?1.:2.)));
+                    if(!values[i] || !values[i]->valid){same=false;continue;}
+                    const auto &v=values[i]->source,&a=anchorSource->source;
+                    same=same && v.limiter==a.limiter && v.cap==a.cap && v.profile==a.profile && v.panels==a.panels;
+                }
+                const auto &reference=anchorSource->source;
+                bool oneSided=!same && values[0] && values[2] && values[0]->valid && values[2]->valid;
+                if(oneSided)for(int id:{0,2})
+                {
+                    const auto &v=values[id]->source;
+                    oneSided=oneSided && v.limiter==reference.limiter && v.cap==reference.cap &&
+                        v.profile==reference.profile && v.panels==reference.panels;
+                }
+                if(!same && !oneSided)
+                {
+                    durable.Event("r10_moved_action",{{"index",J::Number(index)},{"h",J::Number(h)},
+                        {"ordered_branches_match","false"},{"passed","false"}});
+                    continue;
+                }
+                auto coarse=minus(values[0]->source.value,oneSided?reference.value:values[1]->source.value);
+                auto fine=minus(values[2]->source.value,oneSided?reference.value:values[3]->source.value);
+                for(int row=0;row<Size();++row)
+                {
+                    coarse[row]/=oneSided?h:2*h;fine[row]/=oneSided?.5*h:h;
+                    fine[row]+=(fine[row]-coarse[row])/(oneSided?1.:3.);
+                }
+                const auto error=Norms(minus(fine,Multiply(JDanchor,p)),constraints,us);
+                passed=Maximum(error)<=1e-7;
+                durable.Event("r10_moved_action",{{"index",J::Number(index)},{"h",J::Number(h)},
+                    {"ordered_branches_match","true"},{"one_sided",J::Boolean(oneSided)},
+                    {"error",J::Numbers(error)},{"passed",J::Boolean(passed)}});
+                if(passed)break;
+            }
+            if(!passed){stop="moved_source_action_unresolved";break;}
+        }
+        bool accepted=false,slopeBlocked=false;
+        for(int trial=0;trial<10 && valueCalls<50 && elapsed()<540.;++trial)
+        {
+            const double eta=std::ldexp(1.,-trial);
+            const auto d=add(anchor,p,eta);
+            const auto *value=source(d);
+            if(!value)break;
+            const auto valueM=value->valid?model(d,value->source):Vector{};
+            const double nextPhi=value->valid?objective(valueM):phi;
+            const double g=nativeSlope(d);
+            const bool armijo=value->valid && nextPhi<=phi+1e-4*eta*slope && nextPhi<phi;
+            slopeBlocked=slopeBlocked || (armijo && g>slopeBound);
+            const bool possible=R10ModelAccept(phi,nextPhi,slope,eta,g,slopeBound,value->valid);
+            const bool feasible=possible && verified(d,"t"+std::to_string(index)+".trial"+std::to_string(trial));
+            const bool accept=possible && feasible;
+            const std::string reason=!value->valid?"source_domain":!armijo?"model_armijo":
+                g>slopeBound?"native_slope":!feasible?"original_rows_or_affine":"accepted";
+            durable.Event("r10_model_trial",{{"index",J::Number(index)},{"eta",J::Number(eta)},
+                {"Phi_before",J::Number(phi)},{"Phi_trial",value->valid?J::Number(nextPhi):"null"},
+                {"Armijo_ceiling",J::Number(phi+1e-4*eta*slope)},{"native_slope",J::Number(g)},
+                {"model_armijo",J::Boolean(armijo)},{"reason",J::Quote(reason)},{"accepted",J::Boolean(accept)}});
+            if(!accept)continue;
+            const auto &before=anchorSource->source,&after=value->source;
+            checkDerivative=before.limiter!=after.limiter || before.cap!=after.cap ||
+                before.profile!=after.profile || before.panels!=after.panels;
+            anchor=d;incumbent=valueM;phi=nextPhi;
+            if(phi<bestPhi){best=anchor;bestPhi=R10Retain(bestPhi,phi,true);}
+            durable.Event("r10_anchor",{{"index",J::Number(index+1)},
+                {"direction",durable.VectorPayload("r10.anchor"+std::to_string(index+1),anchor)},
+                {"Phi",J::Number(phi)},{"best_Phi",J::Number(bestPhi)},{"eta",J::Number(eta)},
+                {"model",J::Numbers(Norms(incumbent,constraints,us))},{"native_slope",J::Number(g)},
+                {"branches_changed",J::Boolean(checkDerivative)}});
+            accepted=true;break;
+        }
+        if(slopeBlocked && !retryUsed)
+        {retryUsed=true;needSlopeCut=true;continue;}
+        if(!accepted){stop=valueCalls>=50?"source_value_budget":"model_backtracking";break;}
+    }
+    const double modelSeconds=std::chrono::duration<double>(Clock::now()-modelStarted).count();
+    if(elapsed()>=500.)stop="cooperative_time";
+    else if(valueCalls>=45 && solves<4)stop="source_value_budget";
+    durable.Event("r10_model_outcome",{{"stop",J::Quote(stop)},{"Phi_initial",J::Number(initialPhi)},
+        {"Phi_best",J::Number(bestPhi)},{"solves",J::Number(solves)},{"retry_used",J::Boolean(retryUsed)},
+        {"source_values",J::Number(valueCalls)},{"cache_hits",J::Number(cacheHits)},{"seconds",J::Number(modelSeconds)}});
+    R8Trial nonlinear;
+    double sourceTrialSeconds=0.;
+    const bool distinct=best!=controlRay.step;
+    if(distinct && elapsed()<565. && verified(best,"before_native"))
+    {
+        R8Ray ray;ray.step=best;ray.action=Multiply(jac,best);
+        const auto trialStarted=Clock::now();
+        nonlinear=RunR8Comparison(state,history,alpha,time,data,domain,residual,constraints,jac,newton,
+            inverse,ray,durable,0,"r10_source");
+        sourceTrialSeconds=std::chrono::duration<double>(Clock::now()-trialStarted).count();
+    }
+    else if(!distinct)nonlinear=control;
+    const double controlGain=baseE-control.E,sourceGain=nonlinear.accepted?baseE-nonlinear.E:0.;
+    const double sourceSeconds=directionSeconds+baseValueSeconds+
+        std::chrono::duration<double>(Clock::now()-sourcePolicyStarted).count();
+    const bool promote=distinct && nonlinear.accepted && sourceGain>=1.25*controlGain &&
+        sourceGain>=1e-4*baseE && nonlinear.ground>=control.ground &&
+        nonlinear.norms.back()<=1.1*control.norms.back() && sourceGain/sourceSeconds>controlGain/controlSeconds;
+    durable.Event("r10_decision",{{"promote",J::Boolean(promote)},{"distinct",J::Boolean(distinct)},
+        {"selected",J::Quote(promote?"source":"linear")},{"control_gain",J::Number(controlGain)},
+        {"source_gain",J::Number(sourceGain)},{"control_seconds",J::Number(controlSeconds)},
+        {"source_seconds",J::Number(sourceSeconds)},{"source_values",J::Number(valueCalls)},
+        {"source_actions",J::Number(actionCalls)},{"source_value_seconds",J::Number(valueSeconds)},
+        {"source_action_seconds",J::Number(actionSeconds)},{"tangent_seconds",J::Number(solveSeconds)},{"native_source_trial_seconds",J::Number(sourceTrialSeconds)},
+        {"elapsed",J::Number(elapsed())},{"reason",J::Quote(!distinct?"no_distinct_improved_source_candidate":
+            promote?"promotion_passed":!nonlinear.accepted?"native_trial_unresolved":"promotion_gain_or_cost")}});
+    return promote?nonlinear:control;
+}
+
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
     Vector s,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data,
     int &iterations,double tolerance,int maximumIterations,bool benchmarkOnly,bool localR4,bool localR5,
@@ -2047,6 +2404,24 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
             for(int row=0;row<Size();++row)linear[row]+=residual[row];
             const auto linearNorms=Norms(linear,constraints,us);
             Require(Maximum(linearNorms)<1e-8*std::max(1.,error),"R3 inaccurate linear solve");
+            if(ExperimentR10())
+            {
+                Require(localR5 && useFrozen,"R10 must use its bound current physical matrix");
+                const auto trial=RunR10Comparison(s,history,alpha,time,data,domain,residual,constraints,
+                    jac,newton,inverse,ray,durable);
+                if(trial.accepted)
+                {
+                    durable.Snapshot(1,trial.state,trial.residual,trial.constraints,trial.norms,
+                        domainReport(trial.domain),profiling(),J::Object({{"trial",J::Quote(trial.name)},
+                            {"fraction",J::Number(trial.f)},{"physical_matrix",matrix},{"box",trial.box.report}}));
+                    iterations=1;
+                }
+                m_lastFeasibleState=trial.accepted?trial.state:s;
+                durable.Event("solve_terminal",{{"converged","false"},
+                    {"terminal",J::Quote("r10_fixed_comparison_completed")},{"iteration",J::Number(iterations)},
+                    {"profiling",profiling()}});
+                return m_lastFeasibleState;
+            }
             if(ExperimentR9())
             {
                 Require(localR5 && !useFrozen,"R9 requires a fresh current endpoint matrix");

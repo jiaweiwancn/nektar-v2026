@@ -412,7 +412,7 @@ RANSEquilibriumWallEvolution::Vector RANSEquilibriumWallEvolution::LoadR3Predict
     boost::property_tree::ptree packet;boost::property_tree::read_json(m_r3PredictorFile,packet);
     const bool retained=m_patch->GroundSafeguard();
     const double originAlpha=retained?400.:3200.;
-    const std::string role=m_patch->ExperimentR9()?"retained_r8_terminal_iterate_only":
+    const std::string role=(m_patch->ExperimentR9() || m_patch->ExperimentR10())?"retained_r8_terminal_iterate_only":
         (m_patch->ExperimentR8() || m_patch->PilotR8())?"retained_r7_terminal_iterate_only":
         (m_patch->InteriorProbeR7() || m_patch->AdaptiveR7())?"retained_r6_terminal_iterate_only":
         m_patch->JointRestorationR5()?"retained_r4_terminal_iterate_only":
@@ -527,6 +527,30 @@ void RANSEquilibriumWallEvolution::RunR3StageTest()
             binary.read(reinterpret_cast<char*>(row.data()),row.size()*sizeof(double));
         Require(binary.good(),"R6 matrix payload is incomplete");
         frozenAssembly=binding.get<std::string>("assembly_json");
+        if(m_patch->ExperimentR10())
+        {
+            auto vector=[&](const std::string &key)
+            {
+                const auto &p=packet.get_child(key);
+                const auto file=p.get<std::string>("path");
+                Require(std::filesystem::file_size(file)==candidate.size()*sizeof(double) &&
+                    D::HashFile(file)==p.get<std::string>("sha256"),"R10 component binding mismatch");
+                Vector value(candidate.size());std::ifstream in(file,std::ios::binary);
+                in.read(reinterpret_cast<char*>(value.data()),value.size()*sizeof(double));
+                Require(in.good(),"R10 component vector incomplete");return value;
+            };
+            ray.destruction=vector("r10_source.value");
+            ray.ascentRegression=vector("r10_source.ascent");
+            const auto &p=packet.get_child("r10_source.action");
+            const auto file=p.get<std::string>("path");
+            Require(std::filesystem::file_size(file)==candidate.size()*candidate.size()*sizeof(double) &&
+                D::HashFile(file)==p.get<std::string>("sha256"),"R10 source action binding mismatch");
+            ray.destructionAction.assign(candidate.size(),Vector(candidate.size()));
+            std::ifstream in(file,std::ios::binary);
+            for(auto &row:ray.destructionAction)
+                in.read(reinterpret_cast<char*>(row.data()),row.size()*sizeof(double));
+            Require(in.good(),"R10 source action incomplete");
+        }
         if(m_patch->ExperimentR8() || m_patch->PilotR8())
         {
             auto readVector=[&](const boost::property_tree::ptree &pin)

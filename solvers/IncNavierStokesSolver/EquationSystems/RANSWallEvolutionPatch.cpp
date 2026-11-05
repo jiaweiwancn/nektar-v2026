@@ -234,6 +234,11 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     m_r9Experiment=r9=="On";
     Require(r9=="Off" || (m_r9Experiment && RefinedDirectionR6() && m_r7Policy=="Off" && r8=="Off"),
         "R9 comparison requires only RefinedR6");
+    std::string r10;
+    session->LoadSolverInfo("RANSWallR10Experiment",r10,"Off");
+    m_r10Experiment=r10=="On";
+    Require(r10=="Off" || (m_r10Experiment && RefinedDirectionR6() && m_r7Policy=="Off" &&
+        r8=="Off" && r9=="Off"),"R10 requires its isolated RefinedR6 comparison");
     Require(m_actionPolicy=="Legacy" || m_actionPolicy=="VerifiedR3Action","unknown wall action policy");
     Require((m_nonlinearPolicy=="ScalarFeasibleR3")== (m_actionPolicy=="VerifiedR3Action"),
         "VerifiedR3Action and ScalarFeasibleR3 must be selected together");
@@ -728,6 +733,76 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Norms(const Vector &r,con
     }
     norms.push_back(bc);return norms;
 }
+RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::DualProductsR10(
+    const Vector &a,const Vector &b,const std::map<int,double> &constraints) const
+{
+    Norms(a,constraints,m_robustUstar); // Populate the identical free consistent-mass factors.
+    Vector products;
+    const double us=m_robustUstar,H=m_parameters.geometry.height;
+    const double K0=m_parameters.model.Q()*us*us,E0=us*us*us/(m_parameters.model.Kappa()*H);
+    for(int block=0;block<Gauge();++block)
+    {
+        const auto &free=m_solver->free[block];
+        if(free.empty()){products.push_back(0.);continue;}
+        Vector load;
+        for(int id:free)load.push_back(b[offset[block]+id]);
+        const auto inverse=m_solver->massFactors[block]->Apply(load);
+        long double sum=0;
+        for(int i=0;i<free.size();++i)sum+=(long double)a[offset[block]+free[i]]*inverse[i];
+        const double scale=block<m_dimension?us:block==K()?K0:block==Epsilon()?E0:1.;
+        const double rate=block>=InnerPressure()?us/H:scale*us/H;
+        products.push_back(sum/(rate*rate*m_volumes[block]));
+    }
+    return products;
+}
+
+std::vector<RANSWallEvolutionPatch::Vector> RANSWallEvolutionPatch::MeritRowsR10(
+    const Vector &residual,const WallMatrix &jac,const std::map<int,double> &constraints) const
+{
+    const double us=m_robustUstar,H=m_parameters.geometry.height;
+    const double K0=m_parameters.model.Q()*us*us,E0=us*us*us/(m_parameters.model.Kappa()*H);
+    const auto norms=Norms(residual,constraints,us);
+    const double maximum=Maximum(norms);
+    Require(maximum>0.,"R10 slope rows require a nonzero native merit");
+    const double tie=64*std::numeric_limits<double>::epsilon()*maximum;
+    std::vector<Vector> rows;
+    for(int block=0;block<Gauge();++block)if(norms[block]>=maximum-tie)
+    {
+        Vector load;
+        for(int id:m_solver->free[block])load.push_back(residual[offset[block]+id]);
+        const auto dual=m_solver->massFactors[block]->Apply(load);
+        const double scale=block<m_dimension?us:block==K()?K0:block==Epsilon()?E0:1.;
+        const double rate=block>=InnerPressure()?us/H:scale*us/H;
+        const double denominator=rate*rate*m_volumes[block]*norms[block];
+        Vector row(Size());
+        for(int col=0;col<Size();++col)
+        {
+            long double value=0.;
+            for(int i=0;i<dual.size();++i)value+=(long double)dual[i]*jac[offset[block]+m_solver->free[block][i]][col];
+            row[col]=value/denominator;
+        }
+        rows.push_back(std::move(row));
+    }
+    if(norms[Gauge()]>=maximum-tie)
+    {
+        auto row=jac[offset[Gauge()]];
+        for(double &v:row)v*=std::copysign(1.,residual[offset[Gauge()]])/(us*us);
+        rows.push_back(std::move(row));
+    }
+    if(norms.back()>=maximum-tie)for(const auto &[id,value]:constraints)
+    {
+        (void)value;
+        int block=0;while(block+1<offset.size() && id>=offset[block+1])++block;
+        const double scale=block<m_dimension?us:block==K()?K0:E0;
+        if(std::abs(residual[id])/scale<maximum-tie)continue;
+        auto row=jac[id];
+        for(double &v:row)v*=std::copysign(1.,residual[id])/scale;
+        rows.push_back(std::move(row));
+    }
+    Require(!rows.empty(),"R10 native merit has no active block");
+    return rows;
+}
+
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::StateNorms(const Vector &s,const Vector &reference,double us) const
 {
     Vector norms;

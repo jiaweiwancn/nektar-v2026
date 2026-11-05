@@ -157,7 +157,8 @@ public:
         const RANSWallEvolutionData &data,int &iterations,double tolerance,int maximumIterations) const;
     struct R8Ray
     {
-        Vector step,action;
+        Vector step,action,destruction,ascentRegression;
+        WallMatrix destructionAction;
         std::map<double,Vector> residuals;
     };
     Vector SolveScalarFeasibleR3(Vector state,const Vector &history,double alpha,double time,
@@ -176,6 +177,7 @@ public:
     bool InteriorProbeR7() const { return m_r7Policy=="InteriorProbe"; }
     bool ExperimentR8() const { return m_r8Experiment; }
     bool ExperimentR9() const { return m_r9Experiment; }
+    bool ExperimentR10() const { return m_r10Experiment; }
     bool PilotR8() const { return m_r8Pilot; }
     bool AdaptiveR7() const { return m_r7Policy=="Adaptive"; }
     bool GroundSafeguard() const { return CoupledR4() || JointRestorationR5(); }
@@ -266,12 +268,23 @@ private:
     std::vector<OuterBound> OuterBoundsR5(const ScalarDomainResult &domain) const;
     OuterViolation OuterViolationR5(const std::vector<OuterBound> &bounds,
         const Vector &effective={},const Vector &trace={},double fraction=0.) const;
+    struct DirectionRestriction
+    {
+        Vector row;
+        double lower;
+        std::string name;
+    };
+    Vector DualProductsR10(const Vector &a,const Vector &b,
+        const std::map<int,double> &constraints) const;
+    std::vector<Vector> MeritRowsR10(const Vector &residual,const WallMatrix &jac,
+        const std::map<int,double> &constraints) const;
     Vector CoupledDirectionR4(const ScalarDomainResult &domain,const Vector &newton,
         const WallMatrix &jac,const std::map<int,double> &constraints,
         const std::function<Vector(Vector,bool)> &inverse,std::string &details,const std::vector<OuterBound> &outer={},
         double restoration=1.,bool inward=true,
         RANSWallR3::DurableProgress *diagnostic=nullptr,const std::string &tag="",const Vector &residual={},
-        double radius=2.,double *guardWork=nullptr,const std::array<double,4> &interior={}) const;
+        double radius=2.,double *guardWork=nullptr,const std::array<double,4> &interior={},
+        const std::vector<DirectionRestriction> &extra={},bool scanOnly=false) const;
     struct R8Trial
     {
         Vector state,residual,norms;
@@ -299,6 +312,11 @@ private:
         const RANSWallEvolutionData &data,const ScalarDomainResult &domain,const Vector &residual,
         const std::map<int,double> &constraints,const WallMatrix &jac,const Vector &newton,
         const std::function<Vector(Vector,bool)> &inverse,RANSWallR3::DurableProgress &durable) const;
+    R8Trial RunR10Comparison(const Vector &state,const Vector &history,double alpha,double time,
+        const RANSWallEvolutionData &data,const ScalarDomainResult &domain,const Vector &residual,
+        const std::map<int,double> &constraints,const WallMatrix &jac,const Vector &newton,
+        const std::function<Vector(Vector,bool)> &inverse,const R8Ray &binding,
+        RANSWallR3::DurableProgress &durable) const;
     WallMatrix AssembleNonpressureR3(const Vector &state,double time,
         const RANSWallEvolutionData &data,bool imposeConstraints,int region,
         std::vector<std::string> *metadata,bool destructionOnly=false) const;
@@ -381,7 +399,7 @@ private:
     std::string m_nonlinearPolicy="Legacy",m_feasibleTraceFile="case.feasible.jsonl";
     std::string m_directionAccuracy="Legacy",m_r7Policy="Off";
     double m_r7PreviousDisplacement=0.,m_r7Radius=0.;
-    bool m_r7Interior=false,m_r8Experiment=false,m_r8Pilot=false,m_r9Experiment=false;
+    bool m_r7Interior=false,m_r8Experiment=false,m_r8Pilot=false,m_r9Experiment=false,m_r10Experiment=false;
     std::string m_r3ProgressFile="case.r3-progress.jsonl";
     std::string m_actionPolicy="Legacy";
     std::string m_globalization="FractionToBoundary";
