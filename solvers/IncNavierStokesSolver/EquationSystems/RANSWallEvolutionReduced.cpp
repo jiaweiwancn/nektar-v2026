@@ -238,6 +238,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePicardContinuation(
     int maximumIterations) const
 {
     const double eta = m_picardContinuationEta, operatorAlpha = alpha + eta;
+    const double auxiliaryTolerance = eta > 0. && m_picardContinuationTolerance > 0.
+                                          ? m_picardContinuationTolerance : tolerance;
     Require(std::isfinite(operatorAlpha), "nonfinite continued stage alpha");
     auto emit = [&](const std::string &event,
                     std::vector<std::pair<std::string,std::string>> fields) {
@@ -245,20 +247,22 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePicardContinuation(
         fields.emplace_back("physical_alpha", J::Number(alpha));
         fields.emplace_back("operator_alpha", J::Number(operatorAlpha));
         fields.emplace_back("eta", J::Number(eta));
+        fields.emplace_back("original_tolerance", J::Number(tolerance));
+        fields.emplace_back("auxiliary_tolerance", J::Number(auxiliaryTolerance));
         fields.emplace_back("time", J::Number(time));
         fields.emplace_back("history_sha256", J::Quote(RANSWallR3::Hash(history)));
         std::cout << "EP-AWF Continuation " << J::Object(fields) << std::endl;
     };
     emit("target", {{"physical_history_advanced", "false"}});
     auto root = SolveSegregatedPicard(std::move(state), history, operatorAlpha,
-                                     time, data, iterations, tolerance, maximumIterations);
+                                     time, data, iterations, auxiliaryTolerance, maximumIterations);
     m_lastFeasibleState = root;
     const auto constraints = Constraints(root, time, data);
     const auto original = Residual(root, history, alpha, time, data);
     const auto continued = Residual(root, history, operatorAlpha, time, data);
     const auto originalNorms = Norms(original, constraints, m_robustUstar);
     const auto continuedNorms = Norms(continued, constraints, m_robustUstar);
-    Require(Maximum(continuedNorms) <= tolerance,
+    Require(Maximum(continuedNorms) <= auxiliaryTolerance,
             "continued root missed its independently recomputed complete residual");
     Vector massRate(Size()), identity(Size());
     const auto lifted = ExternalLift(root, time, data);

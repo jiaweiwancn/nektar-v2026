@@ -290,11 +290,14 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         std::string continuation;
         session->LoadSolverInfo("RANSWallPicardContinuation",continuation,"Off");
         session->LoadParameter("RANSWallPicardContinuationEta",m_picardContinuationEta,0.);
+        session->LoadParameter("RANSWallPicardContinuationTolerance",m_picardContinuationTolerance,0.);
         Require((continuation=="On" || continuation=="Off") &&
                 std::isfinite(m_picardContinuationEta) && m_picardContinuationEta>=0.,
                 "invalid Picard algebraic continuation controls");
+        Require(std::isfinite(m_picardContinuationTolerance) && m_picardContinuationTolerance>=0.,
+                "invalid declared auxiliary continuation tolerance");
         m_picardContinuation=continuation=="On";
-        Require(m_picardContinuation || m_picardContinuationEta==0.,
+        Require(m_picardContinuation || (m_picardContinuationEta==0. && m_picardContinuationTolerance==0.),
                 "continuation eta requires the explicit diagnostic selector");
         Require(!m_picardContinuation || (!m_picardReduced && m_picardNonKTolerance==0.),
                 "algebraic continuation uses the retained segregated control as a separate diagnostic");

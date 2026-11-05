@@ -21,6 +21,8 @@ def main():
     parser.add_argument("--iterations", type=int, default=100)
     parser.add_argument("--timeout", type=int, default=600)
     parser.add_argument("--bracket-iterations", type=int, default=4)
+    parser.add_argument("--auxiliary-tolerance", type=float, default=2e-12,
+                        help="Declared eta-positive diagnostic tolerance; eta-zero remains 2e-12")
     args = parser.parse_args()
     require(platform.system() == "Linux", "authoritative continuation runs require Linux")
     args.solver = args.solver.resolve(strict=True)
@@ -29,6 +31,7 @@ def main():
     require(args.output.is_relative_to(Path("/media/jay/新加卷/nektar-v2026-runs")),
             "use designated heavy-run storage")
     etas = [float(v) for v in args.etas.split(",")]
+    require(0 < args.auxiliary_tolerance <= 1e-8, "invalid auxiliary diagnostic tolerance")
     require(etas and all(v >= 0 for v in etas) and
             all(a > b for a, b in zip(etas, etas[1:])), "etas must descend and stay nonnegative")
     args.output.mkdir()
@@ -37,6 +40,7 @@ def main():
                    solver=str(args.solver), solver_sha256=sha(args.solver),
                    resolution_probe=str(args.resolution_probe), resolution_probe_sha256=sha(args.resolution_probe),
                    ranks=1, thread_limits=THREADS, cases=[], status="running")
+    summary.update(original_tolerance=2e-12, eta_positive_auxiliary_tolerance=args.auxiliary_tolerance)
     for executable in [args.solver, args.resolution_probe]:
         linked = subprocess.check_output(["ldd", str(executable)], text=True)
         require("not found" not in linked, "unresolved continuation executable dependency")
@@ -72,8 +76,11 @@ def main():
         root = ET.parse(target / "case.xml").getroot()
         set_info(root, "RANSWallPicardContinuation", "On")
         set_parameter(root, "RANSWallPicardContinuationEta", eta)
+        accuracy = args.auxiliary_tolerance if eta > 0 else 2e-12
+        set_parameter(root, "RANSWallPicardContinuationTolerance", accuracy if eta > 0 else 0.)
         write(root, target / "case.xml")
         result = dict(eta=eta, operator_alpha=400.+eta, physical_alpha=400., time=.0025,
+                      auxiliary_tolerance=accuracy, original_tolerance=2e-12,
                       path=str(case), purpose=label, xml_sha256=sha(target / "case.xml"))
         summary["cases"].append(result)
         save()
@@ -102,7 +109,8 @@ def main():
                 "continued root lacks its explicit native no-advance rejection receipt")
         require(row["eta"] == eta and row["physical_alpha"] == packet["alpha"] == 400 and
                 row["operator_alpha"] == 400.+eta and row["time"] == packet["time"] == .0025 and
-                packet["history"] == history and max(row["continued_norms"]) <= 2e-12,
+                packet["history"] == history and max(row["continued_norms"]) <= accuracy and
+                row["original_tolerance"] == 2e-12 and row["auxiliary_tolerance"] == accuracy,
                 "continued root has incorrect target/history or incomplete convergence")
         result["root"] = row
         result["readback"] = {}
@@ -116,8 +124,8 @@ def main():
             norms = load(output_file)["norms"]["native_stage"]
             result["readback"][name] = dict(receipt, norms=norms)
             if name == "continued":
-                require(max(norms) <= 2e-12, "fresh continued residual misses the original tolerance")
-        result["status"] = "continued_root_only"
+                require(max(norms) <= accuracy, "fresh continued residual misses the declared auxiliary tolerance")
+        result["status"] = "continued_auxiliary_root_only"
         result["state_sha256"] = state_hash(packet["state"])
         print(json.dumps(dict(eta=eta, qualified=row["qualified"], range=row["outer_range"],
                               ground=row["ground"], original=max(row["original_norms"]),
