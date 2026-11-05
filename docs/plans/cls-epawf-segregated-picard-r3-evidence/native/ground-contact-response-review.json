@@ -1,0 +1,5770 @@
+{
+  "scope": "One constrained-ground, eta-zero algebraic diagnostic update; original qualification observed without enforcement; not physical-stage convergence.",
+  "continuation_manifest": {
+    "scope": "Algebraic continuation only: original alpha400, h0 and t.0025 fixed; no physical acceptance.",
+    "source": "092697475ed2c6ed01b0d6d9dd9124725e1c124e",
+    "solver": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0926974/IncNavierStokesSolver",
+    "solver_sha256": "3a1f76432f2ff398171911d29829dbc98f9b269a988d85400adad35d5ec42270",
+    "resolution_probe": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0926974/RANSWallResolutionProbe",
+    "resolution_probe_sha256": "f542ae85d003b6e6a0b3f425c51daacf03d113c6bccf9cabf8ff2647d05f81b6",
+    "ranks": 1,
+    "thread_limits": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    },
+    "cases": [
+      {
+        "eta": 0.0,
+        "operator_alpha": 400.0,
+        "physical_alpha": 400.0,
+        "time": 0.0025,
+        "auxiliary_tolerance": 2e-12,
+        "original_tolerance": 2e-12,
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/contact-orthogonal-verified/eta-0",
+        "purpose": "ladder",
+        "xml_sha256": "6feb09cec6f412435efde1eff5362fda4c7944e1cdddbc7c524fd24ba9253269",
+        "native": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0926974/IncNavierStokesSolver",
+            "case.xml"
+          ],
+          "exit_code": 1,
+          "seconds": 642.2132141410038,
+          "log_sha256": "a097c42616bd83b7a429467461cc9be7ccb9608bd9c631ea40a17ef2c76ab576"
+        },
+        "accepted_steps": 0,
+        "accepted_time": 0.0,
+        "history_preserved": true,
+        "native_failure": "EP-AWF patch: reduced iteration limit before original full-stage convergence",
+        "native_target": {
+          "physical_history_advanced": false,
+          "method": "sequential_reduced_response",
+          "qualification_policy": "observe_original_qualification_without_enforcing_it_in_algebraic_diagnostic",
+          "event": "target",
+          "physical_alpha": 400,
+          "operator_alpha": 400,
+          "eta": 0,
+          "original_tolerance": 2e-12,
+          "auxiliary_tolerance": 2e-12,
+          "time": 0.0025,
+          "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca"
+        },
+        "status": "no_certified_continuation_root"
+      }
+    ],
+    "status": "continued_solve_failed_not_nonexistence",
+    "method": "reduced",
+    "original_tolerance": 2e-12,
+    "eta_positive_auxiliary_tolerance": 2e-10,
+    "IncNavierStokesSolver": {
+      "ldd": "\tlinux-vdso.so.1 (0x00007fff007ea000)\n\tlibSpatialDomains.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libSpatialDomains.so.5.9.0 (0x00007b6c21600000)\n\tlibSolverUtils.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libSolverUtils.so.5.9.0 (0x00007b6c21000000)\n\tlibFieldUtils.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libFieldUtils.so.5.9.0 (0x00007b6c20c00000)\n\tlibmpi_cxx.so.40 => /lib/x86_64-linux-gnu/libmpi_cxx.so.40 (0x00007b6c21f7f000)\n\tlibmpi.so.40 => /lib/x86_64-linux-gnu/libmpi.so.40 (0x00007b6c218c9000)\n\tlibGlobalMapping.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libGlobalMapping.so.5.9.0 (0x00007b6c21834000)\n\tlibMultiRegions.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0 (0x00007b6c20800000)\n\tlibLocalRegions.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0 (0x00007b6c20400000)\n\tlibStdRegions.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0 (0x00007b6c20000000)\n\tlibLibUtilities.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0 (0x00007b6c1fa00000)\n\tliblapack.so.3 => /lib/x86_64-linux-gnu/liblapack.so.3 (0x00007b6c1f200000)\n\tlibblas.so.3 => /lib/x86_64-linux-gnu/libblas.so.3 (0x00007b6c2159e000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007b6c1ee00000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007b6c214b7000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007b6c21814000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007b6c1ea00000)\n\tlibptscotch-6.1.so => /lib/x86_64-linux-gnu/libptscotch-6.1.so (0x00007b6c2072d000)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007b6c2149b000)\n\tlibboost_program_options.so.1.74.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0 (0x00007b6c21456000)\n\tlibopen-pal.so.40 => /lib/x86_64-linux-gnu/libopen-pal.so.40 (0x00007b6c2067a000)\n\tlibopen-rte.so.40 => /lib/x86_64-linux-gnu/libopen-rte.so.40 (0x00007b6c20343000)\n\tlibhwloc.so.15 => /lib/x86_64-linux-gnu/libhwloc.so.15 (0x00007b6c2061e000)\n\tlibCollections.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0 (0x00007b6c1fe8d000)\n\tlibfftw3.so.3 => /lib/x86_64-linux-gnu/libfftw3.so.3 (0x00007b6c1e600000)\n\tlibboost_iostreams.so.1.74.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0 (0x00007b6c20fe8000)\n\tlibopenblas.so.0 => /lib/x86_64-linux-gnu/libopenblas.so.0 (0x00007b6c1c1b0000)\n\tlibgfortran.so.5 => /lib/x86_64-linux-gnu/libgfortran.so.5 (0x00007b6c1be00000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007b6c21fbd000)\n\tlibptscotcherr-6.1.so => /lib/x86_64-linux-gnu/libptscotcherr-6.1.so (0x00007b6c2180f000)\n\tlibbz2.so.1.0 => /lib/x86_64-linux-gnu/libbz2.so.1.0 (0x00007b6c20fd5000)\n\tliblzma.so.5 => /lib/x86_64-linux-gnu/liblzma.so.5 (0x00007b6c20318000)\n\tlibevent_core-2.1.so.7 => /lib/x86_64-linux-gnu/libevent_core-2.1.so.7 (0x00007b6c202e3000)\n\tlibevent_pthreads-2.1.so.7 => /lib/x86_64-linux-gnu/libevent_pthreads-2.1.so.7 (0x00007b6c21808000)\n\tlibudev.so.1 => /lib/x86_64-linux-gnu/libudev.so.1 (0x00007b6c202b9000)\n\tlibMatrixFreeOps.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0 (0x00007b6c19000000)\n\tlibzstd.so.1 => /lib/x86_64-linux-gnu/libzstd.so.1 (0x00007b6c1f931000)\n\tlibquadmath.so.0 => /lib/x86_64-linux-gnu/libquadmath.so.0 (0x00007b6c1f8e9000)\n",
+      "libraries": {
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+        "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01",
+        "/usr/lib/x86_64-linux-gnu/libbz2.so.1.0.4": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+        "/usr/lib/x86_64-linux-gnu/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+        "/usr/lib/x86_64-linux-gnu/libevent_core-2.1.so.7.0.1": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+        "/usr/lib/x86_64-linux-gnu/libevent_pthreads-2.1.so.7.0.1": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+        "/usr/lib/x86_64-linux-gnu/libfftw3.so.3.5.8": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+        "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+        "/usr/lib/x86_64-linux-gnu/libgfortran.so.5.0.0": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+        "/usr/lib/x86_64-linux-gnu/libhwloc.so.15.5.2": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+        "/usr/lib/x86_64-linux-gnu/liblzma.so.5.2.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+        "/usr/lib/x86_64-linux-gnu/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+        "/usr/lib/x86_64-linux-gnu/libmpi.so.40.30.2": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+        "/usr/lib/x86_64-linux-gnu/libmpi_cxx.so.40.30.1": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+        "/usr/lib/x86_64-linux-gnu/libopen-pal.so.40.30.2": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+        "/usr/lib/x86_64-linux-gnu/libopen-rte.so.40.30.2": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+        "/usr/lib/x86_64-linux-gnu/libptscotch-6.1.3.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+        "/usr/lib/x86_64-linux-gnu/libptscotcherr-6.1.3.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+        "/usr/lib/x86_64-linux-gnu/libquadmath.so.0.0.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+        "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+        "/usr/lib/x86_64-linux-gnu/libudev.so.1.7.2": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+        "/usr/lib/x86_64-linux-gnu/libz.so.1.2.11": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+        "/usr/lib/x86_64-linux-gnu/libzstd.so.1.4.8": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+        "/usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+        "/usr/lib/x86_64-linux-gnu/openblas-pthread/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+        "/usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9"
+      }
+    },
+    "RANSWallResolutionProbe": {
+      "ldd": "\tlinux-vdso.so.1 (0x00007ffeb35f5000)\n\tlibmpi_cxx.so.40 => /lib/x86_64-linux-gnu/libmpi_cxx.so.40 (0x000072d1a23e6000)\n\tlibmpi.so.40 => /lib/x86_64-linux-gnu/libmpi.so.40 (0x000072d1a22af000)\n\tlibMultiRegions.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0 (0x000072d1a1e00000)\n\tlibLocalRegions.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0 (0x000072d1a1a00000)\n\tlibSpatialDomains.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libSpatialDomains.so.5.9.0 (0x000072d1a1600000)\n\tlibStdRegions.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0 (0x000072d1a1200000)\n\tlibLibUtilities.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0 (0x000072d1a0c00000)\n\tliblapack.so.3 => /lib/x86_64-linux-gnu/liblapack.so.3 (0x000072d1a0400000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x000072d1a0000000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x000072d1a1d19000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x000072d1a228f000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x000072d19fc00000)\n\tlibopen-pal.so.40 => /lib/x86_64-linux-gnu/libopen-pal.so.40 (0x000072d1a21dc000)\n\tlibopen-rte.so.40 => /lib/x86_64-linux-gnu/libopen-rte.so.40 (0x000072d1a1c5c000)\n\tlibhwloc.so.15 => /lib/x86_64-linux-gnu/libhwloc.so.15 (0x000072d1a19a4000)\n\tlibCollections.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0 (0x000072d1a1831000)\n\tlibptscotch-6.1.so => /lib/x86_64-linux-gnu/libptscotch-6.1.so (0x000072d1a152d000)\n\tlibblas.so.3 => /lib/x86_64-linux-gnu/libblas.so.3 (0x000072d1a14cb000)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x000072d1a1c40000)\n\tlibfftw3.so.3 => /lib/x86_64-linux-gnu/libfftw3.so.3 (0x000072d19f800000)\n\tlibboost_iostreams.so.1.74.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0 (0x000072d1a1c28000)\n\tlibboost_program_options.so.1.74.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0 (0x000072d1a11bb000)\n\tlibopenblas.so.0 => /lib/x86_64-linux-gnu/libopenblas.so.0 (0x000072d19d3b0000)\n\tlibgfortran.so.5 => /lib/x86_64-linux-gnu/libgfortran.so.5 (0x000072d19d000000)\n\t/lib64/ld-linux-x86-64.so.2 (0x000072d1a266a000)\n\tlibevent_core-2.1.so.7 => /lib/x86_64-linux-gnu/libevent_core-2.1.so.7 (0x000072d1a1186000)\n\tlibevent_pthreads-2.1.so.7 => /lib/x86_64-linux-gnu/libevent_pthreads-2.1.so.7 (0x000072d1a1c23000)\n\tlibudev.so.1 => /lib/x86_64-linux-gnu/libudev.so.1 (0x000072d1a115c000)\n\tlibMatrixFreeOps.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0 (0x000072d19a200000)\n\tlibptscotcherr-6.1.so => /lib/x86_64-linux-gnu/libptscotcherr-6.1.so (0x000072d1a1c1e000)\n\tlibbz2.so.1.0 => /lib/x86_64-linux-gnu/libbz2.so.1.0 (0x000072d1a181e000)\n\tliblzma.so.5 => /lib/x86_64-linux-gnu/liblzma.so.5 (0x000072d1a1131000)\n\tlibzstd.so.1 => /lib/x86_64-linux-gnu/libzstd.so.1 (0x000072d1a0b31000)\n\tlibquadmath.so.0 => /lib/x86_64-linux-gnu/libquadmath.so.0 (0x000072d1a10e9000)\n",
+      "libraries": {
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+        "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+        "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01",
+        "/usr/lib/x86_64-linux-gnu/libbz2.so.1.0.4": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+        "/usr/lib/x86_64-linux-gnu/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+        "/usr/lib/x86_64-linux-gnu/libevent_core-2.1.so.7.0.1": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+        "/usr/lib/x86_64-linux-gnu/libevent_pthreads-2.1.so.7.0.1": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+        "/usr/lib/x86_64-linux-gnu/libfftw3.so.3.5.8": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+        "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+        "/usr/lib/x86_64-linux-gnu/libgfortran.so.5.0.0": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+        "/usr/lib/x86_64-linux-gnu/libhwloc.so.15.5.2": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+        "/usr/lib/x86_64-linux-gnu/liblzma.so.5.2.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+        "/usr/lib/x86_64-linux-gnu/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+        "/usr/lib/x86_64-linux-gnu/libmpi.so.40.30.2": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+        "/usr/lib/x86_64-linux-gnu/libmpi_cxx.so.40.30.1": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+        "/usr/lib/x86_64-linux-gnu/libopen-pal.so.40.30.2": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+        "/usr/lib/x86_64-linux-gnu/libopen-rte.so.40.30.2": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+        "/usr/lib/x86_64-linux-gnu/libptscotch-6.1.3.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+        "/usr/lib/x86_64-linux-gnu/libptscotcherr-6.1.3.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+        "/usr/lib/x86_64-linux-gnu/libquadmath.so.0.0.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+        "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+        "/usr/lib/x86_64-linux-gnu/libudev.so.1.7.2": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+        "/usr/lib/x86_64-linux-gnu/libz.so.1.2.11": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+        "/usr/lib/x86_64-linux-gnu/libzstd.so.1.4.8": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+        "/usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+        "/usr/lib/x86_64-linux-gnu/openblas-pthread/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+        "/usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9"
+      }
+    },
+    "initial_guess": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/reduced-algebraic-target/eta-0/target/reduced-trial-t0.0025000000000000001-f006292c518d-1-accepted.json",
+      "sha256": "d0c44b281bb9ff49a49c9f6b72223a3375e7bae8355412c7c6491e1066b15c68",
+      "state_sha256": "13981b4e064fef6513185077cc9c39e6e83718fb60ec9630ca9f552763ff58d3"
+    },
+    "startup": {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0926974/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "exit_code": 0,
+      "seconds": 23.532148602003872,
+      "log_sha256": "3a6e9347d3c8a70901d76804fb04010d670ffbd9993450ae86ef7aadfabd1b2f"
+    }
+  },
+  "history": [
+    {
+      "physical_history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca",
+      "radius_scaling": "Euclidean norm of free k coefficient displacement divided by reference K",
+      "response_method": "one-sided differences of converged sequential non-k solves",
+      "half_response_warm_start": "interpolate converged non-k coefficients; preserve exact requested k",
+      "initial_basis_budget": 32,
+      "initial_restoration_weight": 0,
+      "response_krylov_budget": 16,
+      "probe_basis": "orthogonal field directions with feasible sign/size selection; inward fallback",
+      "minimum_orthogonal_probe_step": 1e-10,
+      "canonical_half_branch_check": "always; optional verification cannot change column selection",
+      "combined_direction_checks": true,
+      "second_order_qualification_correction": false,
+      "constraint_response_secants": false,
+      "adaptive_qualified_response_space": true,
+      "qualification_correction_budget": 3,
+      "continuation_algebraic_diagnostic": true,
+      "qualification_policy": "record_only_no_physical_acceptance",
+      "maximum_basis": 64,
+      "response_accuracy": 2e-12,
+      "event": "protocol",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 0.004579094
+    },
+    {
+      "norms": [
+        1.054584623907777e-12,
+        9.532407175680503e-13,
+        18.454728711702224,
+        4.2030396849366426e-14,
+        8.727924229299217e-16,
+        8.05134161469553e-16,
+        9.571472303973591e-17,
+        4.8063481048222535e-16
+      ],
+      "reduced_norm": 18.454728711702224,
+      "violation": 4.824722142127259,
+      "families": [
+        4.824722142127259,
+        0.6164254828979976,
+        0.6112486724538568,
+        0.1459553261200508
+      ],
+      "qualification_inventory": {
+        "maximum": 4.824722142127259,
+        "family_maxima": [
+          4.824722142127259,
+          0.6164254828979976,
+          0.6112486724538568,
+          0.1459553261200508
+        ],
+        "sum_positive": 2376.805728239857,
+        "quantity_count": 54385,
+        "witnesses": [
+          {
+            "family": 0,
+            "inventory": "physical_matching_transfer",
+            "point": [
+              -2.6666666666666665,
+              0,
+              2
+            ],
+            "element_geometry": 31,
+            "observation_geometry": 31,
+            "side": 1,
+            "component": [
+              0,
+              2
+            ],
+            "projected_trace": false,
+            "sign": -1,
+            "reference_scale": 0.45397395788663325,
+            "reference_component": 1,
+            "signed_excess": 4.824722142127259,
+            "value": -0.005824722142127259,
+            "directional_quantity_change": 0
+          },
+          {
+            "family": 1,
+            "inventory": "reconstruction_dense",
+            "point": [
+              -2.25,
+              0,
+              2
+            ],
+            "element_geometry": 31,
+            "observation_geometry": 31,
+            "side": 1,
+            "component": [
+              -1,
+              -1
+            ],
+            "projected_trace": false,
+            "sign": 1,
+            "reference_scale": 0.5105080130598861,
+            "reference_component": 1,
+            "signed_excess": 0.6164254828979976,
+            "value": 1.01616425482898,
+            "directional_quantity_change": 0
+          },
+          {
+            "family": 2,
+            "inventory": "reconstruction_native",
+            "point": [
+              -1,
+              0,
+              2
+            ],
+            "element_geometry": 32,
+            "observation_geometry": 32,
+            "side": 1,
+            "component": [
+              -1,
+              -1
+            ],
+            "projected_trace": false,
+            "sign": -1,
+            "reference_scale": 0.07263583326186134,
+            "reference_component": 1,
+            "signed_excess": 0.6112486724538568,
+            "value": 0.9677750265509228,
+            "directional_quantity_change": 0
+          },
+          {
+            "family": 3,
+            "inventory": "physical_sampled_K",
+            "point": [
+              -1,
+              0,
+              1
+            ],
+            "element_geometry": 22,
+            "observation_geometry": 22,
+            "side": 0,
+            "component": [
+              -1,
+              -1
+            ],
+            "projected_trace": false,
+            "sign": -1,
+            "reference_scale": 0.5105080130598861,
+            "reference_component": 1,
+            "signed_excess": 0.1459553261200508,
+            "value": 0.9885404467387995,
+            "directional_quantity_change": 0
+          },
+          {
+            "family": 2,
+            "inventory": "projected_dependent_trace",
+            "point": [
+              -1,
+              0,
+              2
+            ],
+            "element_geometry": 32,
+            "observation_geometry": 32,
+            "side": 1,
+            "component": [
+              -1,
+              -1
+            ],
+            "projected_trace": true,
+            "sign": -1,
+            "reference_scale": 0.07263583326186134,
+            "reference_component": 1,
+            "signed_excess": 0.6112486724538568,
+            "value": 0.9677750265509228,
+            "directional_quantity_change": 0
+          }
+        ]
+      },
+      "outer_range": [
+        0.005824722142127259,
+        0.9999321264756433,
+        1.01616425482898,
+        0.9677750265509228,
+        1.001933411173629,
+        0.9885404467387995,
+        1.009950123674268
+      ],
+      "covariance": [
+        1.0165999456307938e-13,
+        0.17684373745122794
+      ],
+      "gradient_witness": [
+        -2.6666666666666665,
+        0,
+        2,
+        0,
+        2,
+        -0.005824722142127259,
+        31,
+        1
+      ],
+      "qualified": false,
+      "ground": {
+        "admissible": true,
+        "minimum": 1.4616273482878119e-15,
+        "arithmetic_scale": 3.08611130105451e-17,
+        "point": [
+          1.5824668012162577,
+          0,
+          0
+        ],
+        "geometry": 4,
+        "extrema_checked": 18
+      },
+      "state_sha256": "13981b4e064fef6513185077cc9c39e6e83718fb60ec9630ca9f552763ff58d3",
+      "work": [
+        1,
+        0,
+        0
+      ],
+      "event": "initial",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 1.89750842
+    },
+    {
+      "same_k_difference": 0,
+      "tightened_k_difference": 1.688323031298071e-11,
+      "failed_response_rolled_back": true,
+      "k_coefficients_fixed": true,
+      "event": "repeatability",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 24.473280034
+    },
+    {
+      "name": "conditional_newton",
+      "required": 2e-12,
+      "attained": 1.0611006084718107e-12,
+      "canonical_attained": 1.1590967958029253e-12,
+      "updates": 1,
+      "canonical_updates": 9,
+      "relative_action_difference": 7.147777934577074e-07,
+      "observation_action_difference": 1.7805710630881058e-05,
+      "same_local_response": true,
+      "event": "half_response_warm_start",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 50.131031565
+    },
+    {
+      "restoration": false,
+      "residual_weight": 1,
+      "restoration_balance": 0,
+      "inward_qualification_search_margin": 0,
+      "qualification_funnel": 0,
+      "next_basis_budget": 32,
+      "basis_dimension": 32,
+      "basis_names": [
+        "conditional_newton",
+        "response_krylov_1",
+        "response_krylov_2",
+        "response_krylov_3",
+        "response_krylov_4",
+        "response_krylov_5",
+        "response_krylov_6",
+        "response_krylov_7",
+        "response_krylov_8",
+        "response_krylov_9",
+        "response_krylov_10",
+        "response_krylov_11",
+        "response_krylov_12",
+        "response_krylov_13",
+        "response_krylov_14",
+        "response_krylov_15",
+        "response_krylov_16",
+        "rate_picard",
+        "ground_lift",
+        "normalization_-2.600000",
+        "normalization_1.600000",
+        "epsilon_lower_sample",
+        "epsilon_lower_trace",
+        "conditional_mass_gradient",
+        "mass_residual",
+        "modal_defect_1540",
+        "modal_defect_1541",
+        "contact_value_0",
+        "contact_tangent_0",
+        "contact_nearby_0",
+        "contact_value_1",
+        "contact_tangent_1"
+      ],
+      "response_rank": 32,
+      "orthogonal_probes": 22,
+      "maximum_column_correlation": 0.9864776662819926,
+      "qp_solved": true,
+      "qp_steps": 1205,
+      "radius_model_solves": 110,
+      "radius_multiplier": 19.84509199490057,
+      "radius_complementarity": 0.026441315294948312,
+      "radius_refinement_failure": "",
+      "unconstrained_displacement": 4.368876439195863,
+      "redundant_rows": 0,
+      "qp_failure": "",
+      "unscaled_affine_kkt": [
+        2.2551405187698492e-17,
+        2.063739136660923e-12,
+        2.167925197829979e-15
+      ],
+      "active_constraints": 1,
+      "active": [
+        {
+          "kind": "continuous_ground",
+          "rhs": 0.0010645477405496985,
+          "point": [
+            1.5693268040562063,
+            0,
+            0
+          ]
+        }
+      ],
+      "ground_cuts_added": 8,
+      "ground_model_admissible": true,
+      "radius": 1,
+      "displacement": 0.9993335851332048,
+      "predicted_norm": 7.176836460801706,
+      "predicted_violation": 3.6123163572184205,
+      "unscaled_predicted_violation": 3.612316357216284,
+      "merit_slope": -269.14803548903967,
+      "action_uncertainty": 0.0003331108684863439,
+      "original_merit_gradient": [
+        -96.86348511228965,
+        -183.6765704465804,
+        -451.08346836242356,
+        -401.14630201193495,
+        -29.178906573385436,
+        -73.13272461319616,
+        -1514.3331015619472,
+        -698.9825008898003,
+        -159.2142911285919,
+        -235.33554048970237,
+        -20.502792333681388,
+        -280.2808708889792,
+        -128.61842856521406,
+        -20.730665447461455,
+        -184.60852010062786,
+        -48.17126414988965,
+        -25.59536379188265,
+        -278.3650699779745,
+        -42.08635439532484,
+        23.657556839386356,
+        71.48513807933185,
+        -212.22252146896895,
+        35.068760413576214,
+        -1235.1423553907077,
+        -381.42809244983346,
+        20.717310823935385,
+        -24.049698145031474,
+        -497.7817259214728,
+        -1643.3413619134437,
+        -58.39632337762426,
+        -584.3194355080024,
+        263.5629694641806
+      ],
+      "two_scale_gradient_error_estimate": [
+        0.00018339536732146135,
+        0.00039227114086667263,
+        0.000517471181496025,
+        0.0006967267305819099,
+        0.0006860578082750909,
+        0.00025579637383409435,
+        0.008435105643543333,
+        0.0023240043901380097,
+        0.00026458765474029013,
+        0.0007844248645306769,
+        0.0005257451015307071,
+        0.0011651675931130163,
+        0.0005895163637297384,
+        0.00023893048322909554,
+        0.0008981923758828009,
+        0.0010777506690913847,
+        0.0003968493195398435,
+        0.000999514905285514,
+        0.0003511512572437109,
+        0.0003426607905253702,
+        0.0005348497192398898,
+        0.019872447440050334,
+        0.7264662230440792,
+        0.37410469442130084,
+        0.0011418032294205395,
+        0.0010747392018074324,
+        0.0004296614280351557,
+        0.0038156639799774585,
+        0.010286142196477626,
+        0.0007769281065454798,
+        0.003464124989588579,
+        0.013583055599867378
+      ],
+      "observation_action_relative_error": [
+        4.068850110380828e-05,
+        5.370626507689158e-05,
+        3.022623360903181e-05,
+        4.0112670747771695e-05,
+        4.452751343902994e-05,
+        6.200361009042754e-05,
+        4.7767410005061794e-05,
+        4.663480750799476e-05,
+        3.8672199264816465e-05,
+        4.6810701936739196e-05,
+        5.624566476702172e-05,
+        8.43452833848013e-05,
+        4.483853491171752e-05,
+        2.6202538094237046e-05,
+        3.41368933693912e-05,
+        6.075006673972316e-05,
+        2.6495140207992863e-05,
+        5.2347888564977394e-05,
+        4.388784522713074e-05,
+        7.550950797114916e-05,
+        5.714247558781527e-05,
+        6.224822797384899e-05,
+        0.04156822152934264,
+        0.00021846752703424954,
+        9.725238790969648e-05,
+        5.5895440211579245e-05,
+        4.922588290348119e-05,
+        9.36297149747925e-05,
+        7.665371735104953e-05,
+        4.0105291062991766e-05,
+        2.9222978596921134e-05,
+        0.0011957878836127028
+      ],
+      "event": "direction",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 553.048232394
+    },
+    {
+      "available": true,
+      "role": "residual_reduction",
+      "fraction": 5.0033342963586404e-06,
+      "required": 2e-12,
+      "attained": 1.7793786865253598e-12,
+      "half_attained": 1.0538580367101166e-12,
+      "relative_residual_error": 0.00028247932758866,
+      "half_relative_residual_error": 0.00028197881624985926,
+      "observation_relative_error": 0.010799387814744585,
+      "half_observation_relative_error": 0.010756002777302006,
+      "observation_change_error": 5.403294743318918e-08,
+      "half_observation_change_error": 2.6907938793701958e-08,
+      "predicted_merit_slope": -269.14803548903967,
+      "actual_merit_slope": -269.118255127977,
+      "half_merit_slope": -269.1187766652979,
+      "full_inventory_violation": 4.824716054983692,
+      "half_full_inventory_violation": 4.824719098590392,
+      "profile_branch_change": false,
+      "half_profile_branch_change": false,
+      "signed_active_observations": [],
+      "event": "combined_direction_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 578.591930997
+    },
+    {
+      "total": 3.8343666495248625,
+      "inner_destruction": 3.8278321677426588,
+      "remaining": 0.03444716218763578,
+      "base_b": 0.8416321287253044,
+      "trial_b": 0.8361036736327991,
+      "base_lambda": 1,
+      "trial_lambda": 1,
+      "event": "prediction_decomposition",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 616.790313448
+    },
+    {
+      "fraction": 1,
+      "accepted": true,
+      "norm": 8.915726235835272,
+      "full_norm": 8.915726235835272,
+      "violation": 3.6744832211077503,
+      "families": [
+        3.6744832211077503,
+        0.0026867564274279943,
+        0.08076715464446771,
+        0
+      ],
+      "qualification_inventory": {
+        "maximum": 3.6744832211077503,
+        "family_maxima": [
+          3.6744832211077503,
+          0.0026867564274279943,
+          0.08076715464446771,
+          0
+        ],
+        "sum_positive": 1632.5197141608721,
+        "quantity_count": 54385,
+        "witnesses": [
+          {
+            "family": 0,
+            "inventory": "reconstruction_native",
+            "point": [
+              -2.6046496089512394,
+              0,
+              2
+            ],
+            "element_geometry": 31,
+            "observation_geometry": 31,
+            "side": 1,
+            "component": [
+              0,
+              2
+            ],
+            "projected_trace": false,
+            "sign": -1,
+            "reference_scale": 0.45397395788663325,
+            "reference_component": 1,
+            "signed_excess": 3.6744832211077503,
+            "value": -0.00467448322110775,
+            "directional_quantity_change": 0
+          },
+          {
+            "family": 1,
+            "inventory": "reconstruction_dense",
+            "point": [
+              -2.5,
+              0,
+              2
+            ],
+            "element_geometry": 31,
+            "observation_geometry": 31,
+            "side": 1,
+            "component": [
+              -1,
+              -1
+            ],
+            "projected_trace": false,
+            "sign": 1,
+            "reference_scale": 0.5105080130598861,
+            "reference_component": 1,
+            "signed_excess": 0.0026867564274279943,
+            "value": 1.0100268675642743,
+            "directional_quantity_change": 0
+          },
+          {
+            "family": 2,
+            "inventory": "physical_matching_transfer",
+            "point": [
+              0.33333333333333326,
+              0,
+              2
+            ],
+            "element_geometry": 33,
+            "observation_geometry": 33,
+            "side": 1,
+            "component": [
+              -1,
+              -1
+            ],
+            "projected_trace": false,
+            "sign": -1,
+            "reference_scale": 0.07263583326186134,
+            "reference_component": 1,
+            "signed_excess": 0.08076715464446771,
+            "value": 0.9783846569071106,
+            "directional_quantity_change": 0
+          },
+          {
+            "family": 3,
+            "inventory": "physical_sampled_K",
+            "point": [
+              -2,
+              0,
+              1
+            ],
+            "element_geometry": 21,
+            "observation_geometry": 21,
+            "side": 0,
+            "component": [
+              -1,
+              -1
+            ],
+            "projected_trace": false,
+            "sign": 1,
+            "reference_scale": 0.5105080130598861,
+            "reference_component": 1,
+            "signed_excess": -0.41691548211491014,
+            "value": 1.005830845178851,
+            "directional_quantity_change": 0
+          },
+          {
+            "family": 2,
+            "inventory": "projected_dependent_trace",
+            "point": [
+              0.33333333333333326,
+              0,
+              2
+            ],
+            "element_geometry": 33,
+            "observation_geometry": 33,
+            "side": 1,
+            "component": [
+              -1,
+              -1
+            ],
+            "projected_trace": true,
+            "sign": -1,
+            "reference_scale": 0.07263583326186134,
+            "reference_component": 1,
+            "signed_excess": 0.08076715464446771,
+            "value": 0.9783846569071106,
+            "directional_quantity_change": 0
+          }
+        ]
+      },
+      "predicted_norm": 7.176836460801706,
+      "model_error": 3.8343666495248625,
+      "predicted_violation": 3.6123163572184205,
+      "non_k_error": 1.4700075421073186e-12,
+      "second_order_corrections": 0,
+      "displacement": 0.9993335851332048,
+      "physical_k_displacement": 0.5101678029303649,
+      "event": "trial",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 616.791643363
+    },
+    {
+      "actual_to_predicted_gain": 0.9031958010165079,
+      "next_radius": 1,
+      "event": "radius_agreement",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 616.822859817
+    },
+    {
+      "norms": [
+        9.22712702434941e-13,
+        1.4700075421073186e-12,
+        8.915726235835272,
+        4.925983912796301e-14,
+        6.6448549116584205e-16,
+        7.394486193165594e-16,
+        4.811147140404425e-17,
+        0
+      ],
+      "reduced_norm": 8.915726235835272,
+      "violation": 3.6744832211077503,
+      "families": [
+        3.6744832211077503,
+        0.0026867564274279943,
+        0.08076715464446771,
+        0
+      ],
+      "qualification_inventory": {
+        "maximum": 3.6744832211077503,
+        "family_maxima": [
+          3.6744832211077503,
+          0.0026867564274279943,
+          0.08076715464446771,
+          0
+        ],
+        "sum_positive": 1632.5197141608721,
+        "quantity_count": 54385,
+        "witnesses": [
+          {
+            "family": 0,
+            "inventory": "reconstruction_native",
+            "point": [
+              -2.6046496089512394,
+              0,
+              2
+            ],
+            "element_geometry": 31,
+            "observation_geometry": 31,
+            "side": 1,
+            "component": [
+              0,
+              2
+            ],
+            "projected_trace": false,
+            "sign": -1,
+            "reference_scale": 0.45397395788663325,
+            "reference_component": 1,
+            "signed_excess": 3.6744832211077503,
+            "value": -0.00467448322110775,
+            "directional_quantity_change": 0
+          },
+          {
+            "family": 1,
+            "inventory": "reconstruction_dense",
+            "point": [
+              -2.5,
+              0,
+              2
+            ],
+            "element_geometry": 31,
+            "observation_geometry": 31,
+            "side": 1,
+            "component": [
+              -1,
+              -1
+            ],
+            "projected_trace": false,
+            "sign": 1,
+            "reference_scale": 0.5105080130598861,
+            "reference_component": 1,
+            "signed_excess": 0.0026867564274279943,
+            "value": 1.0100268675642743,
+            "directional_quantity_change": 0
+          },
+          {
+            "family": 2,
+            "inventory": "physical_matching_transfer",
+            "point": [
+              0.33333333333333326,
+              0,
+              2
+            ],
+            "element_geometry": 33,
+            "observation_geometry": 33,
+            "side": 1,
+            "component": [
+              -1,
+              -1
+            ],
+            "projected_trace": false,
+            "sign": -1,
+            "reference_scale": 0.07263583326186134,
+            "reference_component": 1,
+            "signed_excess": 0.08076715464446771,
+            "value": 0.9783846569071106,
+            "directional_quantity_change": 0
+          },
+          {
+            "family": 3,
+            "inventory": "physical_sampled_K",
+            "point": [
+              -2,
+              0,
+              1
+            ],
+            "element_geometry": 21,
+            "observation_geometry": 21,
+            "side": 0,
+            "component": [
+              -1,
+              -1
+            ],
+            "projected_trace": false,
+            "sign": 1,
+            "reference_scale": 0.5105080130598861,
+            "reference_component": 1,
+            "signed_excess": -0.41691548211491014,
+            "value": 1.005830845178851,
+            "directional_quantity_change": 0
+          },
+          {
+            "family": 2,
+            "inventory": "projected_dependent_trace",
+            "point": [
+              0.33333333333333326,
+              0,
+              2
+            ],
+            "element_geometry": 33,
+            "observation_geometry": 33,
+            "side": 1,
+            "component": [
+              -1,
+              -1
+            ],
+            "projected_trace": true,
+            "sign": -1,
+            "reference_scale": 0.07263583326186134,
+            "reference_component": 1,
+            "signed_excess": 0.08076715464446771,
+            "value": 0.9783846569071106,
+            "directional_quantity_change": 0
+          }
+        ]
+      },
+      "outer_range": [
+        0.00467448322110775,
+        0.998738243552413,
+        1.0100268675642743,
+        0.9783846569071106,
+        1.002901859542756,
+        0.9957527730918169,
+        1.005830845178851
+      ],
+      "covariance": [
+        6.169871932157383e-05,
+        0.17693626601654552
+      ],
+      "gradient_witness": [
+        -2.6046496089512394,
+        0,
+        2,
+        0,
+        2,
+        -0.00467448322110775,
+        31,
+        1
+      ],
+      "qualified": false,
+      "ground": {
+        "admissible": true,
+        "minimum": 6.3899157571657185e-15,
+        "arithmetic_scale": 3.064459316304734e-17,
+        "point": [
+          1.5693267408071356,
+          0,
+          0
+        ],
+        "geometry": 4,
+        "extrema_checked": 17
+      },
+      "state_sha256": "64b4623debf7141cba1f3ce9b7dece51619498c194af69ca46164c03c9279900",
+      "work": [
+        75,
+        436,
+        436
+      ],
+      "event": "accepted",
+      "iteration": 1,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 617.936819
+    }
+  ],
+  "response_checks": [
+    {
+      "name": "conditional_newton",
+      "orthogonal_probe": true,
+      "probe_orientation": 1,
+      "probe_searches": 1,
+      "independent_component": 1,
+      "h": 5e-06,
+      "relative_error": 1.4328170868049638e-06,
+      "conditional_action_norm": 6.895895409128933,
+      "conditional_action_available": true,
+      "frozen_action_norm": 10.672355269526548,
+      "reduced_action_norm": 6.93569431302801,
+      "feedback_action_norm": 0.476895790674735,
+      "conditional_merit_slope": -95.0329391627871,
+      "signed_merit_slope": -96.86346486268245,
+      "actual_merit_slope": -96.8633446007061,
+      "half_merit_slope": -96.8634249943534,
+      "observation_relative_error": 4.068850110380828e-05,
+      "usable": true,
+      "signed_observations": [
+        {
+          "family": 0,
+          "sign": -1,
+          "point": [
+            -2.6666666666666665,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 4.824722142127259,
+          "predicted_change": -6.95006107536037e-07,
+          "measured_change": -6.949721391608945e-07
+        },
+        {
+          "family": 0,
+          "sign": 1,
+          "point": [
+            -1.6046496089512394,
+            0,
+            4
+          ],
+          "projected": false,
+          "signed_base": 0.7256435308328211,
+          "predicted_change": -1.3572756618493572e-07,
+          "measured_change": -1.3572095643126738e-07
+        },
+        {
+          "family": 1,
+          "sign": -1,
+          "point": [
+            -2.6046496089512394,
+            0,
+            2.3333333333333335
+          ],
+          "projected": false,
+          "signed_base": -0.9932126475643344,
+          "predicted_change": -1.6242418931401748e-09,
+          "measured_change": -1.6242418934058193e-09
+        },
+        {
+          "family": 1,
+          "sign": 1,
+          "point": [
+            -2.25,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6164254828979976,
+          "predicted_change": -3.964170079233281e-07,
+          "measured_change": -3.964169997840064e-07
+        },
+        {
+          "family": 2,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6112486724538568,
+          "predicted_change": -2.0579373518820642e-07,
+          "measured_change": -2.0579372085872138e-07
+        },
+        {
+          "family": 2,
+          "sign": 1,
+          "point": [
+            -3,
+            0,
+            2.13178346368292
+          ],
+          "projected": false,
+          "signed_base": -0.9033294413185455,
+          "predicted_change": -1.7843936010202555e-08,
+          "measured_change": -1.784413542244721e-08
+        },
+        {
+          "family": 3,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": 0.1459553261200508,
+          "predicted_change": -2.802792323582269e-07,
+          "measured_change": -2.802792214845188e-07
+        },
+        {
+          "family": 3,
+          "sign": 1,
+          "point": [
+            -2,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": -0.004987632573194567,
+          "predicted_change": -2.4545742173054346e-07,
+          "measured_change": -2.4545741085683535e-07
+        }
+      ],
+      "base_violation": 4.824722142127259,
+      "shift_violation": 4.824720752115042,
+      "half_violation": 4.824721447154957,
+      "profile_branch_change": false,
+      "event": "response_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 50.181005503
+    },
+    {
+      "name": "response_krylov_1",
+      "orthogonal_probe": true,
+      "probe_orientation": 1,
+      "probe_searches": 1,
+      "independent_component": 0.5480167533475714,
+      "h": 5e-06,
+      "relative_error": 1.5631345123707094e-06,
+      "conditional_action_norm": 13.809864716172282,
+      "conditional_action_available": true,
+      "frozen_action_norm": 18.04509027422903,
+      "reduced_action_norm": 13.59822870623613,
+      "feedback_action_norm": 4.021843164659926,
+      "conditional_merit_slope": -165.3380753729661,
+      "signed_merit_slope": -183.67643307830116,
+      "actual_merit_slope": -183.6759707941837,
+      "half_merit_slope": -183.67633929301516,
+      "observation_relative_error": 5.370626507689158e-05,
+      "usable": true,
+      "signed_observations": [
+        {
+          "family": 0,
+          "sign": -1,
+          "point": [
+            -2.6666666666666665,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 4.824722142127259,
+          "predicted_change": -1.2031627632764304e-06,
+          "measured_change": -1.2031754372921452e-06
+        },
+        {
+          "family": 0,
+          "sign": 1,
+          "point": [
+            -1.6046496089512394,
+            0,
+            4
+          ],
+          "projected": false,
+          "signed_base": 0.7256435308328211,
+          "predicted_change": -4.310699511440331e-07,
+          "measured_change": -4.310743816648408e-07
+        },
+        {
+          "family": 1,
+          "sign": -1,
+          "point": [
+            -2.6046496089512394,
+            0,
+            2.3333333333333335
+          ],
+          "projected": false,
+          "signed_base": -0.9932126475643344,
+          "predicted_change": -2.5228261386101093e-09,
+          "measured_change": -2.522823864020716e-09
+        },
+        {
+          "family": 1,
+          "sign": 1,
+          "point": [
+            -2.25,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6164254828979976,
+          "predicted_change": -6.0495742981516e-07,
+          "measured_change": -6.049574216599101e-07
+        },
+        {
+          "family": 2,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6112486724538568,
+          "predicted_change": -3.1403862691560716e-07,
+          "measured_change": -3.1403863169210224e-07
+        },
+        {
+          "family": 2,
+          "sign": 1,
+          "point": [
+            -3,
+            0,
+            2.13178346368292
+          ],
+          "projected": false,
+          "signed_base": -0.9033294413185455,
+          "predicted_change": -5.741092539819189e-08,
+          "measured_change": -5.7411097968912986e-08
+        },
+        {
+          "family": 3,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": 0.1459553261200508,
+          "predicted_change": -4.2770255298483853e-07,
+          "measured_change": -4.2770256385854664e-07
+        },
+        {
+          "family": 3,
+          "sign": 1,
+          "point": [
+            -2,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": -0.004987632573194567,
+          "predicted_change": -3.744297886097652e-07,
+          "measured_change": -3.744297886097652e-07
+        }
+      ],
+      "base_violation": 4.824722142127259,
+      "shift_violation": 4.8247197358015645,
+      "half_violation": 4.8247209389517,
+      "profile_branch_change": false,
+      "event": "response_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 65.633032037
+    },
+    {
+      "name": "response_krylov_2",
+      "orthogonal_probe": true,
+      "probe_orientation": 1,
+      "probe_searches": 1,
+      "independent_component": 0.08387638358723117,
+      "h": 5e-06,
+      "relative_error": 8.303139197177716e-07,
+      "conditional_action_norm": 34.06104584884592,
+      "conditional_action_available": true,
+      "frozen_action_norm": 43.95650245445194,
+      "reduced_action_norm": 33.77039842236562,
+      "feedback_action_norm": 14.22469104009593,
+      "conditional_merit_slope": -386.8110214172619,
+      "signed_merit_slope": -451.083221955182,
+      "actual_merit_slope": -451.0803708456023,
+      "half_merit_slope": -451.082042809503,
+      "observation_relative_error": 3.022623360903181e-05,
+      "usable": true,
+      "signed_observations": [
+        {
+          "family": 0,
+          "sign": -1,
+          "point": [
+            -2.6666666666666665,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 4.824722142127259,
+          "predicted_change": -3.2147402024489633e-06,
+          "measured_change": -3.214737011126698e-06
+        },
+        {
+          "family": 0,
+          "sign": 1,
+          "point": [
+            -1.6046496089512394,
+            0,
+            4
+          ],
+          "projected": false,
+          "signed_base": 0.7256435308328211,
+          "predicted_change": -1.2057041702045348e-06,
+          "measured_change": -1.2057018641156303e-06
+        },
+        {
+          "family": 1,
+          "sign": -1,
+          "point": [
+            -2.6046496089512394,
+            0,
+            2.3333333333333335
+          ],
+          "projected": false,
+          "signed_base": -0.9932126475643344,
+          "predicted_change": -6.081739665709544e-09,
+          "measured_change": -6.081739665709543e-09
+        },
+        {
+          "family": 1,
+          "sign": 1,
+          "point": [
+            -2.25,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6164254828979976,
+          "predicted_change": -1.5316927390056335e-06,
+          "measured_change": -1.5316927389897053e-06
+        },
+        {
+          "family": 2,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6112486724538568,
+          "predicted_change": -7.937824204654899e-07,
+          "measured_change": -7.937824156889949e-07
+        },
+        {
+          "family": 2,
+          "sign": 1,
+          "point": [
+            -3,
+            0,
+            2.13178346368292
+          ],
+          "projected": false,
+          "signed_base": -0.9033294413185455,
+          "predicted_change": -1.9077642370394728e-07,
+          "measured_change": -1.9077674622368723e-07
+        },
+        {
+          "family": 3,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": 0.1459553261200508,
+          "predicted_change": -1.0810860036916634e-06,
+          "measured_change": -1.0810860036916634e-06
+        },
+        {
+          "family": 3,
+          "sign": 1,
+          "point": [
+            -2,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": -0.004987632573194567,
+          "predicted_change": -9.423600076251585e-07,
+          "measured_change": -9.423600184988666e-07
+        }
+      ],
+      "base_violation": 4.824722142127259,
+      "shift_violation": 4.824715712646755,
+      "half_violation": 4.824718927390227,
+      "profile_branch_change": false,
+      "event": "response_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 81.380864411
+    },
+    {
+      "name": "response_krylov_3",
+      "orthogonal_probe": true,
+      "probe_orientation": -1,
+      "probe_searches": 2,
+      "independent_component": 0.009949405980403314,
+      "h": 5e-06,
+      "relative_error": 1.2627628618995224e-06,
+      "conditional_action_norm": 30.463653175639635,
+      "conditional_action_available": true,
+      "frozen_action_norm": 38.939403377523846,
+      "reduced_action_norm": 29.89737142711066,
+      "feedback_action_norm": 11.381114252417262,
+      "conditional_merit_slope": -349.6127597849349,
+      "signed_merit_slope": -401.146043038172,
+      "actual_merit_slope": -401.1438084091878,
+      "half_merit_slope": -401.14518467362353,
+      "observation_relative_error": 4.0112670747771695e-05,
+      "usable": true,
+      "signed_observations": [
+        {
+          "family": 0,
+          "sign": -1,
+          "point": [
+            -2.6666666666666665,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 4.824722142127259,
+          "predicted_change": -2.88834779870772e-06,
+          "measured_change": -2.888337358012734e-06
+        },
+        {
+          "family": 0,
+          "sign": 1,
+          "point": [
+            -1.6046496089512394,
+            0,
+            4
+          ],
+          "projected": false,
+          "signed_base": 0.7256435308328211,
+          "predicted_change": -1.0506000674576232e-06,
+          "measured_change": -1.0505992523431015e-06
+        },
+        {
+          "family": 1,
+          "sign": -1,
+          "point": [
+            -2.6046496089512394,
+            0,
+            2.3333333333333335
+          ],
+          "projected": false,
+          "signed_base": -0.9932126475643344,
+          "predicted_change": -5.8728395585590496e-09,
+          "measured_change": -5.872850432001517e-09
+        },
+        {
+          "family": 1,
+          "sign": 1,
+          "point": [
+            -2.25,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6164254828979976,
+          "predicted_change": -1.4099517065134883e-06,
+          "measured_change": -1.4099517010925933e-06
+        },
+        {
+          "family": 2,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6112486724538568,
+          "predicted_change": -7.312555214641484e-07,
+          "measured_change": -7.312555071346634e-07
+        },
+        {
+          "family": 2,
+          "sign": 1,
+          "point": [
+            -3,
+            0,
+            2.13178346368292
+          ],
+          "projected": false,
+          "signed_base": -0.9033294413185455,
+          "predicted_change": -1.5648466593420555e-07,
+          "measured_change": -1.5648557041777326e-07
+        },
+        {
+          "family": 3,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": 0.1459553261200508,
+          "predicted_change": -9.959279605543628e-07,
+          "measured_change": -9.959279496806548e-07
+        },
+        {
+          "family": 3,
+          "sign": 1,
+          "point": [
+            -2,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": -0.004987632573194567,
+          "predicted_change": -8.702342450189423e-07,
+          "measured_change": -8.702342341452341e-07
+        }
+      ],
+      "base_violation": 4.824722142127259,
+      "shift_violation": 4.8247163654316925,
+      "half_violation": 4.824719253789801,
+      "profile_branch_change": false,
+      "event": "response_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 96.482000921
+    },
+    {
+      "name": "response_krylov_4",
+      "orthogonal_probe": true,
+      "probe_orientation": 1,
+      "probe_searches": 1,
+      "independent_component": 0.00021287655902205152,
+      "h": 5e-06,
+      "relative_error": 9.090327000496757e-06,
+      "conditional_action_norm": 4.503652255876646,
+      "conditional_action_available": true,
+      "frozen_action_norm": 6.973755334872429,
+      "reduced_action_norm": 4.089531333975125,
+      "feedback_action_norm": 1.8866250058690424,
+      "conditional_merit_slope": -21.15745200649998,
+      "signed_merit_slope": -29.178906471700643,
+      "actual_merit_slope": -29.17886465070296,
+      "half_merit_slope": -29.178885665714912,
+      "observation_relative_error": 4.452751343902994e-05,
+      "usable": true,
+      "signed_observations": [
+        {
+          "family": 0,
+          "sign": -1,
+          "point": [
+            -2.6666666666666665,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 4.824722142127259,
+          "predicted_change": -3.218887545118145e-07,
+          "measured_change": -3.2191737058713095e-07
+        },
+        {
+          "family": 0,
+          "sign": 1,
+          "point": [
+            -1.6046496089512394,
+            0,
+            4
+          ],
+          "projected": false,
+          "signed_base": 0.7256435308328211,
+          "predicted_change": -5.086394285020586e-08,
+          "measured_change": -5.086252385327292e-08
+        },
+        {
+          "family": 1,
+          "sign": -1,
+          "point": [
+            -2.6046496089512394,
+            0,
+            2.3333333333333335
+          ],
+          "projected": false,
+          "signed_base": -0.9932126475643344,
+          "predicted_change": -3.1014083760437363e-10,
+          "measured_change": -3.1014311446654305e-10
+        },
+        {
+          "family": 1,
+          "sign": 1,
+          "point": [
+            -2.25,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6164254828979976,
+          "predicted_change": -1.4253507229254294e-07,
+          "measured_change": -1.425350695740848e-07
+        },
+        {
+          "family": 2,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6112486724538568,
+          "predicted_change": -7.360742168085742e-08,
+          "measured_change": -7.360742168085742e-08
+        },
+        {
+          "family": 2,
+          "sign": 1,
+          "point": [
+            -3,
+            0,
+            2.13178346368292
+          ],
+          "projected": false,
+          "signed_base": -0.9033294413185455,
+          "predicted_change": -2.7302084434091057e-08,
+          "measured_change": -2.7299662261686158e-08
+        },
+        {
+          "family": 3,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": 0.1459553261200508,
+          "predicted_change": -1.0024907544645618e-07,
+          "measured_change": -1.002490863201643e-07
+        },
+        {
+          "family": 3,
+          "sign": 1,
+          "point": [
+            -2,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": -0.004987632573194567,
+          "predicted_change": -8.460671351487037e-08,
+          "measured_change": -8.460671351487038e-08
+        }
+      ],
+      "base_violation": 4.824722142127259,
+      "shift_violation": 4.824721498349672,
+      "half_violation": 4.824721820209877,
+      "profile_branch_change": false,
+      "event": "response_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 109.309925619
+    },
+    {
+      "name": "response_krylov_5",
+      "orthogonal_probe": true,
+      "probe_orientation": -1,
+      "probe_searches": 2,
+      "independent_component": 0.00543099432431722,
+      "h": 5e-06,
+      "relative_error": 2.3654510101154442e-06,
+      "conditional_action_norm": 5.952712194033641,
+      "conditional_action_available": true,
+      "frozen_action_norm": 10.22075124549909,
+      "reduced_action_norm": 5.859664627562749,
+      "feedback_action_norm": 0.31803075829702804,
+      "conditional_merit_slope": -74.47660370059864,
+      "signed_merit_slope": -73.13274462088808,
+      "actual_merit_slope": -73.1326587640524,
+      "half_merit_slope": -73.13268167763454,
+      "observation_relative_error": 6.200361009042754e-05,
+      "usable": true,
+      "signed_observations": [
+        {
+          "family": 0,
+          "sign": -1,
+          "point": [
+            -2.6666666666666665,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 4.824722142127259,
+          "predicted_change": -4.011717061686859e-07,
+          "measured_change": -4.0119486597497227e-07
+        },
+        {
+          "family": 0,
+          "sign": 1,
+          "point": [
+            -1.6046496089512394,
+            0,
+            4
+          ],
+          "projected": false,
+          "signed_base": 0.7256435308328211,
+          "predicted_change": -8.692081119814743e-08,
+          "measured_change": -8.692402466002141e-08
+        },
+        {
+          "family": 1,
+          "sign": -1,
+          "point": [
+            -2.6046496089512394,
+            0,
+            2.3333333333333335
+          ],
+          "projected": false,
+          "signed_base": -0.9932126475643344,
+          "predicted_change": -1.1470577276722025e-09,
+          "measured_change": -1.1470468539640901e-09
+        },
+        {
+          "family": 1,
+          "sign": 1,
+          "point": [
+            -2.25,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6164254828979976,
+          "predicted_change": -2.430293353060456e-07,
+          "measured_change": -2.430293353219739e-07
+        },
+        {
+          "family": 2,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6112486724538568,
+          "predicted_change": -1.2618800062552085e-07,
+          "measured_change": -1.2618799584902586e-07
+        },
+        {
+          "family": 2,
+          "sign": 1,
+          "point": [
+            -3,
+            0,
+            2.13178346368292
+          ],
+          "projected": false,
+          "signed_base": -0.9033294413185455,
+          "predicted_change": -4.186680259450329e-09,
+          "measured_change": -4.186183434008463e-09
+        },
+        {
+          "family": 3,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": 0.1459553261200508,
+          "predicted_change": -1.7186080524906833e-07,
+          "measured_change": -1.7186080524906833e-07
+        },
+        {
+          "family": 3,
+          "sign": 1,
+          "point": [
+            -2,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": -0.004987632573194567,
+          "predicted_change": -1.5130068921279725e-07,
+          "measured_change": -1.5130068921279725e-07
+        }
+      ],
+      "base_violation": 4.824722142127259,
+      "shift_violation": 4.824721339783734,
+      "half_violation": 4.824721740932293,
+      "profile_branch_change": false,
+      "event": "response_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 123.268870912
+    },
+    {
+      "name": "response_krylov_6",
+      "orthogonal_probe": true,
+      "probe_orientation": 1,
+      "probe_searches": 1,
+      "independent_component": 0.026846025649131806,
+      "h": 5e-06,
+      "relative_error": 3.528321078885256e-06,
+      "conditional_action_norm": 114.36835985334258,
+      "conditional_action_available": true,
+      "frozen_action_norm": 162.94824495352327,
+      "reduced_action_norm": 129.54324196448542,
+      "feedback_action_norm": 59.904432735184535,
+      "conditional_merit_slope": -1224.5780933835638,
+      "signed_merit_slope": -1514.3316984667852,
+      "actual_merit_slope": -1514.2897449663903,
+      "half_merit_slope": -1514.3121247660927,
+      "observation_relative_error": 4.7767410005061794e-05,
+      "usable": true,
+      "signed_observations": [
+        {
+          "family": 0,
+          "sign": -1,
+          "point": [
+            -2.6666666666666665,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 4.824722142127259,
+          "predicted_change": -1.5853508142375762e-06,
+          "measured_change": -1.5853487469282434e-06
+        },
+        {
+          "family": 0,
+          "sign": 1,
+          "point": [
+            -1.6046496089512394,
+            0,
+            4
+          ],
+          "projected": false,
+          "signed_base": 0.7256435308328211,
+          "predicted_change": -5.719635299081513e-06,
+          "measured_change": -5.71964449805014e-06
+        },
+        {
+          "family": 1,
+          "sign": -1,
+          "point": [
+            -2.6046496089512394,
+            0,
+            2.3333333333333335
+          ],
+          "projected": false,
+          "signed_base": -0.9932126475643344,
+          "predicted_change": 2.4009635214473348e-09,
+          "measured_change": 2.400970095227127e-09
+        },
+        {
+          "family": 1,
+          "sign": 1,
+          "point": [
+            -2.25,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6164254828979976,
+          "predicted_change": 5.726123559036198e-07,
+          "measured_change": 5.726123559195169e-07
+        },
+        {
+          "family": 2,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6112486724538568,
+          "predicted_change": 2.970327332095762e-07,
+          "measured_change": 2.970327332095762e-07
+        },
+        {
+          "family": 2,
+          "sign": 1,
+          "point": [
+            -3,
+            0,
+            2.13178346368292
+          ],
+          "projected": false,
+          "signed_base": -0.9033294413185455,
+          "predicted_change": -4.5111387099385084e-07,
+          "measured_change": -4.511151172770433e-07
+        },
+        {
+          "family": 3,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": 0.1459553261200508,
+          "predicted_change": 4.0454150033658854e-07,
+          "measured_change": 4.045415003365885e-07
+        },
+        {
+          "family": 3,
+          "sign": 1,
+          "point": [
+            -2,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": -0.004987632573194567,
+          "predicted_change": 3.533933389159162e-07,
+          "measured_change": 3.533933389159162e-07
+        }
+      ],
+      "base_violation": 4.824722142127259,
+      "shift_violation": 4.824718971425558,
+      "half_violation": 4.824720556778407,
+      "profile_branch_change": false,
+      "event": "response_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 140.057406063
+    },
+    {
+      "name": "response_krylov_7",
+      "orthogonal_probe": true,
+      "probe_orientation": -1,
+      "probe_searches": 2,
+      "independent_component": 0.0014359975872646942,
+      "h": 5e-06,
+      "relative_error": 2.0653731723947384e-06,
+      "conditional_action_norm": 52.73181072553605,
+      "conditional_action_available": true,
+      "frozen_action_norm": 75.61568900596201,
+      "reduced_action_norm": 60.97204299253034,
+      "feedback_action_norm": 28.707395556044727,
+      "conditional_merit_slope": -559.6401248317318,
+      "signed_merit_slope": -698.9822726002863,
+      "actual_merit_slope": -698.9729786255338,
+      "half_merit_slope": -698.9778539036705,
+      "observation_relative_error": 4.663480750799476e-05,
+      "usable": true,
+      "signed_observations": [
+        {
+          "family": 0,
+          "sign": -1,
+          "point": [
+            -2.6666666666666665,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 4.824722142127259,
+          "predicted_change": -1.426308887460217e-07,
+          "measured_change": -1.4260598358440992e-07
+        },
+        {
+          "family": 0,
+          "sign": 1,
+          "point": [
+            -1.6046496089512394,
+            0,
+            4
+          ],
+          "projected": false,
+          "signed_base": 0.7256435308328211,
+          "predicted_change": -2.672430864891431e-06,
+          "measured_change": -2.6724256684344436e-06
+        },
+        {
+          "family": 1,
+          "sign": -1,
+          "point": [
+            -2.6046496089512394,
+            0,
+            2.3333333333333335
+          ],
+          "projected": false,
+          "signed_base": -0.9932126475643344,
+          "predicted_change": 2.4581048365729424e-09,
+          "measured_change": 2.458109135497697e-09
+        },
+        {
+          "family": 1,
+          "sign": 1,
+          "point": [
+            -2.25,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6164254828979976,
+          "predicted_change": 6.367246538393553e-07,
+          "measured_change": 6.367246483865729e-07
+        },
+        {
+          "family": 2,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6112486724538568,
+          "predicted_change": 3.298296621040446e-07,
+          "measured_change": 3.298296573275496e-07
+        },
+        {
+          "family": 2,
+          "sign": 1,
+          "point": [
+            -3,
+            0,
+            2.13178346368292
+          ],
+          "projected": false,
+          "signed_base": -0.9033294413185455,
+          "predicted_change": -2.0216840031746854e-07,
+          "measured_change": -2.02168925625744e-07
+        },
+        {
+          "family": 3,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": 0.1459553261200508,
+          "predicted_change": 4.4920902958556024e-07,
+          "measured_change": 4.4920901871185207e-07
+        },
+        {
+          "family": 3,
+          "sign": 1,
+          "point": [
+            -2,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": -0.004987632573194567,
+          "predicted_change": 3.9192747698805307e-07,
+          "measured_change": 3.9192747698805307e-07
+        }
+      ],
+      "base_violation": 4.824722142127259,
+      "shift_violation": 4.824721856865445,
+      "half_violation": 4.82472199952111,
+      "profile_branch_change": false,
+      "event": "response_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 156.869771325
+    },
+    {
+      "name": "response_krylov_8",
+      "orthogonal_probe": true,
+      "probe_orientation": -1,
+      "probe_searches": 2,
+      "independent_component": 8.917308342980295e-05,
+      "h": 5e-06,
+      "relative_error": 9.54911952120591e-07,
+      "conditional_action_norm": 12.469109103501415,
+      "conditional_action_available": true,
+      "frozen_action_norm": 16.562333380131996,
+      "reduced_action_norm": 15.014075043621272,
+      "feedback_action_norm": 6.100903056063742,
+      "conditional_merit_slope": -128.54597580326066,
+      "signed_merit_slope": -159.2142454378027,
+      "actual_merit_slope": -159.21368188855922,
+      "half_merit_slope": -159.21400936349528,
+      "observation_relative_error": 3.8672199264816465e-05,
+      "usable": true,
+      "signed_observations": [
+        {
+          "family": 0,
+          "sign": -1,
+          "point": [
+            -2.6666666666666665,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 4.824722142127259,
+          "predicted_change": 7.063610099303548e-07,
+          "measured_change": 7.063682775980463e-07
+        },
+        {
+          "family": 0,
+          "sign": 1,
+          "point": [
+            -1.6046496089512394,
+            0,
+            4
+          ],
+          "projected": false,
+          "signed_base": 0.7256435308328211,
+          "predicted_change": -5.701835474090016e-07,
+          "measured_change": -5.701825538787572e-07
+        },
+        {
+          "family": 1,
+          "sign": -1,
+          "point": [
+            -2.6046496089512394,
+            0,
+            2.3333333333333335
+          ],
+          "projected": false,
+          "signed_base": -0.9932126475643344,
+          "predicted_change": 2.19344596305931e-09,
+          "measured_change": 2.193445963324955e-09
+        },
+        {
+          "family": 1,
+          "sign": 1,
+          "point": [
+            -2.25,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6164254828979976,
+          "predicted_change": 5.654328286836881e-07,
+          "measured_change": 5.654328286677288e-07
+        },
+        {
+          "family": 2,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6112486724538568,
+          "predicted_change": 2.943652900176913e-07,
+          "measured_change": 2.943652900176913e-07
+        },
+        {
+          "family": 2,
+          "sign": 1,
+          "point": [
+            -3,
+            0,
+            2.13178346368292
+          ],
+          "projected": false,
+          "signed_base": -0.9033294413185455,
+          "predicted_change": -2.3456113999870677e-08,
+          "measured_change": -2.345643185813479e-08
+        },
+        {
+          "family": 3,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": 0.1459553261200508,
+          "predicted_change": 4.00908594456189e-07,
+          "measured_change": 4.00908594456189e-07
+        },
+        {
+          "family": 3,
+          "sign": 1,
+          "point": [
+            -2,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": -0.004987632573194567,
+          "predicted_change": 3.507179174033664e-07,
+          "measured_change": 3.507179282770745e-07
+        }
+      ],
+      "base_violation": 4.824722142127259,
+      "shift_violation": 4.824723554849198,
+      "half_violation": 4.824722848495445,
+      "profile_branch_change": false,
+      "event": "response_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 172.053253561
+    },
+    {
+      "name": "response_krylov_9",
+      "orthogonal_probe": true,
+      "probe_orientation": -1,
+      "probe_searches": 2,
+      "independent_component": 0.0009074145863665313,
+      "h": 5e-06,
+      "relative_error": 2.4008226922027396e-06,
+      "conditional_action_norm": 16.9423009737886,
+      "conditional_action_available": true,
+      "frozen_action_norm": 21.185235007090082,
+      "reduced_action_norm": 17.704497249365183,
+      "feedback_action_norm": 4.854722849946391,
+      "conditional_merit_slope": -211.5410519973083,
+      "signed_merit_slope": -235.33557400740162,
+      "actual_merit_slope": -235.33479038064795,
+      "half_merit_slope": -235.33514867040137,
+      "observation_relative_error": 4.6810701936739196e-05,
+      "usable": true,
+      "signed_observations": [
+        {
+          "family": 0,
+          "sign": -1,
+          "point": [
+            -2.6666666666666665,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 4.824722142127259,
+          "predicted_change": -5.382857254384559e-08,
+          "measured_change": -5.384122666661948e-08
+        },
+        {
+          "family": 0,
+          "sign": 1,
+          "point": [
+            -1.6046496089512394,
+            0,
+            4
+          ],
+          "projected": false,
+          "signed_base": 0.7256435308328211,
+          "predicted_change": -4.1829729092498565e-07,
+          "measured_change": -4.1829491009973706e-07
+        },
+        {
+          "family": 1,
+          "sign": -1,
+          "point": [
+            -2.6046496089512394,
+            0,
+            2.3333333333333335
+          ],
+          "projected": false,
+          "signed_base": -0.9932126475643344,
+          "predicted_change": 3.5749983987879764e-10,
+          "measured_change": 3.57493263826229e-10
+        },
+        {
+          "family": 1,
+          "sign": 1,
+          "point": [
+            -2.25,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6164254828979976,
+          "predicted_change": 9.002732827679839e-08,
+          "measured_change": 9.002732826087012e-08
+        },
+        {
+          "family": 2,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6112486724538568,
+          "predicted_change": 4.652684916771764e-08,
+          "measured_change": 4.6526863497202665e-08
+        },
+        {
+          "family": 2,
+          "sign": 1,
+          "point": [
+            -3,
+            0,
+            2.13178346368292
+          ],
+          "projected": false,
+          "signed_base": -0.9033294413185455,
+          "predicted_change": -3.690756587226944e-08,
+          "measured_change": -3.690531870445695e-08
+        },
+        {
+          "family": 3,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": 0.1459553261200508,
+          "predicted_change": 6.336689285819253e-08,
+          "measured_change": 6.336690373190065e-08
+        },
+        {
+          "family": 3,
+          "sign": 1,
+          "point": [
+            -2,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": -0.004987632573194567,
+          "predicted_change": 5.4603858479961735e-08,
+          "measured_change": 5.4603869353669844e-08
+        }
+      ],
+      "base_violation": 4.824722142127259,
+      "shift_violation": 4.824722034470042,
+      "half_violation": 4.824722088285994,
+      "profile_branch_change": false,
+      "event": "response_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 187.147169826
+    },
+    {
+      "name": "response_krylov_10",
+      "orthogonal_probe": false,
+      "probe_orientation": 0,
+      "probe_searches": 32,
+      "independent_component": 0.0014360021701876025,
+      "h": 5e-06,
+      "relative_error": 1.595250005523048e-05,
+      "conditional_action_norm": 2.7398477832230443,
+      "conditional_action_available": true,
+      "frozen_action_norm": 6.123298224891684,
+      "reduced_action_norm": 1.7858246562169595,
+      "feedback_action_norm": 2.546477832149331,
+      "conditional_merit_slope": -8.729468753771666,
+      "signed_merit_slope": -20.502852607239042,
+      "actual_merit_slope": -20.502844620295946,
+      "half_merit_slope": -20.502788345311274,
+      "observation_relative_error": 5.624566476702172e-05,
+      "usable": true,
+      "signed_observations": [
+        {
+          "family": 0,
+          "sign": -1,
+          "point": [
+            -2.6666666666666665,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 4.824722142127259,
+          "predicted_change": -1.0895441213039916e-07,
+          "measured_change": -1.0895982857954832e-07
+        },
+        {
+          "family": 0,
+          "sign": 1,
+          "point": [
+            -1.6046496089512394,
+            0,
+            4
+          ],
+          "projected": false,
+          "signed_base": 0.7256435308328211,
+          "predicted_change": -1.538295735813223e-07,
+          "measured_change": -1.5382820220067247e-07
+        },
+        {
+          "family": 1,
+          "sign": -1,
+          "point": [
+            -2.6046496089512394,
+            0,
+            2.3333333333333335
+          ],
+          "projected": false,
+          "signed_base": -0.9932126475643344,
+          "predicted_change": 4.442745639977231e-12,
+          "measured_change": 4.442746643542992e-12
+        },
+        {
+          "family": 1,
+          "sign": 1,
+          "point": [
+            -2.25,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6164254828979976,
+          "predicted_change": -2.548552266489853e-10,
+          "measured_change": -2.5485250819084724e-10
+        },
+        {
+          "family": 2,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6112486724538568,
+          "predicted_change": 3.4003867983333786e-11,
+          "measured_change": 3.4018197468366797e-11
+        },
+        {
+          "family": 2,
+          "sign": 1,
+          "point": [
+            -3,
+            0,
+            2.13178346368292
+          ],
+          "projected": false,
+          "signed_base": -0.9033294413185455,
+          "predicted_change": -2.4078557859593712e-08,
+          "measured_change": -2.4077180153909287e-08
+        },
+        {
+          "family": 3,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": 0.1459553261200508,
+          "predicted_change": 4.631112285130638e-11,
+          "measured_change": 4.632199655941892e-11
+        },
+        {
+          "family": 3,
+          "sign": 1,
+          "point": [
+            -2,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": -0.004987632573194567,
+          "predicted_change": 5.884307145100833e-10,
+          "measured_change": 5.884415882181958e-10
+        }
+      ],
+      "base_violation": 4.824722142127259,
+      "shift_violation": 4.824721924218457,
+      "half_violation": 4.824722033167418,
+      "profile_branch_change": false,
+      "event": "response_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 201.025525709
+    },
+    {
+      "name": "response_krylov_11",
+      "orthogonal_probe": true,
+      "probe_orientation": 1,
+      "probe_searches": 1,
+      "independent_component": 5.630131259908954e-06,
+      "h": 5e-06,
+      "relative_error": 2.834493948141094e-06,
+      "conditional_action_norm": 21.581438388120763,
+      "conditional_action_available": true,
+      "frozen_action_norm": 29.57166450814309,
+      "reduced_action_norm": 22.274358109507833,
+      "feedback_action_norm": 11.611301950564021,
+      "conditional_merit_slope": -227.0300610424677,
+      "signed_merit_slope": -280.2807632715966,
+      "actual_merit_slope": -280.2795229001731,
+      "half_merit_slope": -280.2802506721491,
+      "observation_relative_error": 8.43452833848013e-05,
+      "usable": true,
+      "signed_observations": [
+        {
+          "family": 0,
+          "sign": -1,
+          "point": [
+            -2.6666666666666665,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 4.824722142127259,
+          "predicted_change": -2.127147339727386e-06,
+          "measured_change": -2.127200673179232e-06
+        },
+        {
+          "family": 0,
+          "sign": 1,
+          "point": [
+            -1.6046496089512394,
+            0,
+            4
+          ],
+          "projected": false,
+          "signed_base": 0.7256435308328211,
+          "predicted_change": -1.0159698535589542e-06,
+          "measured_change": -1.0159672259734212e-06
+        },
+        {
+          "family": 1,
+          "sign": -1,
+          "point": [
+            -2.6046496089512394,
+            0,
+            2.3333333333333335
+          ],
+          "projected": false,
+          "signed_base": -0.9932126475643344,
+          "predicted_change": -2.4300260087974973e-09,
+          "measured_change": -2.4300325838465e-09
+        },
+        {
+          "family": 1,
+          "sign": 1,
+          "point": [
+            -2.25,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6164254828979976,
+          "predicted_change": -9.366270945185269e-07,
+          "measured_change": -9.366270999553498e-07
+        },
+        {
+          "family": 2,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6112486724538568,
+          "predicted_change": -4.671643589709638e-07,
+          "measured_change": -4.6716434941797376e-07
+        },
+        {
+          "family": 2,
+          "sign": 1,
+          "point": [
+            -3,
+            0,
+            2.13178346368292
+          ],
+          "projected": false,
+          "signed_base": -0.9033294413185455,
+          "predicted_change": -1.1797388680374082e-07,
+          "measured_change": -1.1797000655090283e-07
+        },
+        {
+          "family": 3,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": 0.1459553261200508,
+          "predicted_change": -6.36250988436621e-07,
+          "measured_change": -6.362509775629128e-07
+        },
+        {
+          "family": 3,
+          "sign": 1,
+          "point": [
+            -2,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": -0.004987632573194567,
+          "predicted_change": -5.863812923735724e-07,
+          "measured_change": -5.863812814998643e-07
+        }
+      ],
+      "base_violation": 4.824722142127259,
+      "shift_violation": 4.8247178878324535,
+      "half_violation": 4.82472001492651,
+      "profile_branch_change": false,
+      "event": "response_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 216.270636791
+    },
+    {
+      "name": "response_krylov_12",
+      "orthogonal_probe": true,
+      "probe_orientation": -1,
+      "probe_searches": 2,
+      "independent_component": 0.0006272305962621607,
+      "h": 5e-06,
+      "relative_error": 2.103541709767358e-06,
+      "conditional_action_norm": 12.0480841439562,
+      "conditional_action_available": true,
+      "frozen_action_norm": 16.437107157775085,
+      "reduced_action_norm": 15.185778870333284,
+      "feedback_action_norm": 5.421909151266807,
+      "conditional_merit_slope": -100.52448099011636,
+      "signed_merit_slope": -128.61828741421596,
+      "actual_merit_slope": -128.61771089092144,
+      "half_merit_slope": -128.61814028610752,
+      "observation_relative_error": 4.483853491171752e-05,
+      "usable": true,
+      "signed_observations": [
+        {
+          "family": 0,
+          "sign": -1,
+          "point": [
+            -2.6666666666666665,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 4.824722142127259,
+          "predicted_change": 1.3231443550781925e-06,
+          "measured_change": 1.3231626061021166e-06
+        },
+        {
+          "family": 0,
+          "sign": 1,
+          "point": [
+            -1.6046496089512394,
+            0,
+            4
+          ],
+          "projected": false,
+          "signed_base": 0.7256435308328211,
+          "predicted_change": -6.003830436602768e-07,
+          "measured_change": -6.003873104083986e-07
+        },
+        {
+          "family": 1,
+          "sign": -1,
+          "point": [
+            -2.6046496089512394,
+            0,
+            2.3333333333333335
+          ],
+          "projected": false,
+          "signed_base": -0.9932126475643344,
+          "predicted_change": 5.146203576729721e-10,
+          "measured_change": 5.146269324563303e-10
+        },
+        {
+          "family": 1,
+          "sign": 1,
+          "point": [
+            -2.25,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6164254828979976,
+          "predicted_change": 8.77307389683046e-07,
+          "measured_change": 8.773073869805472e-07
+        },
+        {
+          "family": 2,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6112486724538568,
+          "predicted_change": 4.2543590026738e-07,
+          "measured_change": 4.254358954908851e-07
+        },
+        {
+          "family": 2,
+          "sign": 1,
+          "point": [
+            -3,
+            0,
+            2.13178346368292
+          ],
+          "projected": false,
+          "signed_base": -0.9033294413185455,
+          "predicted_change": -2.7896081455095887e-08,
+          "measured_change": -2.7896097066970086e-08
+        },
+        {
+          "family": 3,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": 0.1459553261200508,
+          "predicted_change": 5.794192267751891e-07,
+          "measured_change": 5.79419215901481e-07
+        },
+        {
+          "family": 3,
+          "sign": 1,
+          "point": [
+            -2,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": -0.004987632573194567,
+          "predicted_change": 5.545681389172557e-07,
+          "measured_change": 5.545681389172557e-07
+        }
+      ],
+      "base_violation": 4.824722142127259,
+      "shift_violation": 4.8247247884158915,
+      "half_violation": 4.824723465289727,
+      "profile_branch_change": false,
+      "event": "response_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 231.46531489
+    },
+    {
+      "name": "response_krylov_13",
+      "orthogonal_probe": false,
+      "probe_orientation": 0,
+      "probe_searches": 32,
+      "independent_component": 0.00043438799338454514,
+      "h": 5e-06,
+      "relative_error": 6.835128120305453e-06,
+      "conditional_action_norm": 2.8581750932614907,
+      "conditional_action_available": true,
+      "frozen_action_norm": 6.833898400402998,
+      "reduced_action_norm": 1.8941625094852061,
+      "feedback_action_norm": 2.8116319763749664,
+      "conditional_merit_slope": -7.761729599589115,
+      "signed_merit_slope": -20.730610650354937,
+      "actual_merit_slope": -20.730601670493343,
+      "half_merit_slope": -20.73066094681053,
+      "observation_relative_error": 2.6202538094237046e-05,
+      "usable": true,
+      "signed_observations": [
+        {
+          "family": 0,
+          "sign": -1,
+          "point": [
+            -2.6666666666666665,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 4.824722142127259,
+          "predicted_change": -1.2027056167632402e-07,
+          "measured_change": -1.202594962647167e-07
+        },
+        {
+          "family": 0,
+          "sign": 1,
+          "point": [
+            -1.6046496089512394,
+            0,
+            4
+          ],
+          "projected": false,
+          "signed_base": 0.7256435308328211,
+          "predicted_change": -1.651612997271242e-07,
+          "measured_change": -1.6516330141833103e-07
+        },
+        {
+          "family": 1,
+          "sign": -1,
+          "point": [
+            -2.6046496089512394,
+            0,
+            2.3333333333333335
+          ],
+          "projected": false,
+          "signed_base": -0.9932126475643344,
+          "predicted_change": 7.956394706954541e-12,
+          "measured_change": 7.949821192806977e-12
+        },
+        {
+          "family": 1,
+          "sign": 1,
+          "point": [
+            -2.25,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6164254828979976,
+          "predicted_change": -3.5282199531343184e-10,
+          "measured_change": -3.5283286899043446e-10
+        },
+        {
+          "family": 2,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6112486724538568,
+          "predicted_change": 4.935074645368798e-11,
+          "measured_change": 4.936029944370998e-11
+        },
+        {
+          "family": 2,
+          "sign": 1,
+          "point": [
+            -3,
+            0,
+            2.13178346368292
+          ],
+          "projected": false,
+          "signed_base": -0.9033294413185455,
+          "predicted_change": -2.6846419669358872e-08,
+          "measured_change": -2.6845616160894968e-08
+        },
+        {
+          "family": 3,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": 0.1459553261200508,
+          "predicted_change": 6.72103898436076e-11,
+          "measured_change": 6.722126355172014e-11
+        },
+        {
+          "family": 3,
+          "sign": 1,
+          "point": [
+            -2,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": -0.004987632573194567,
+          "predicted_change": 7.754367466295403e-10,
+          "measured_change": 7.754258729214277e-10
+        }
+      ],
+      "base_violation": 4.824722142127259,
+      "shift_violation": 4.824721901586005,
+      "half_violation": 4.824722021867679,
+      "profile_branch_change": false,
+      "event": "response_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 247.994223883
+    },
+    {
+      "name": "response_krylov_14",
+      "orthogonal_probe": true,
+      "probe_orientation": 1,
+      "probe_searches": 1,
+      "independent_component": 1.2933850516746976e-06,
+      "h": 5e-06,
+      "relative_error": 2.683252788841764e-06,
+      "conditional_action_norm": 15.449551241255062,
+      "conditional_action_available": true,
+      "frozen_action_norm": 23.035077949226498,
+      "reduced_action_norm": 18.138447383975134,
+      "feedback_action_norm": 5.818691912687121,
+      "conditional_merit_slope": -155.53871646565602,
+      "signed_merit_slope": -184.60849945476744,
+      "actual_merit_slope": -184.60767694250532,
+      "half_merit_slope": -184.60810883880183,
+      "observation_relative_error": 3.41368933693912e-05,
+      "usable": true,
+      "signed_observations": [
+        {
+          "family": 0,
+          "sign": -1,
+          "point": [
+            -2.6666666666666665,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 4.824722142127259,
+          "predicted_change": -6.564958994930895e-09,
+          "measured_change": -6.584107329881016e-09
+        },
+        {
+          "family": 0,
+          "sign": 1,
+          "point": [
+            -1.6046496089512394,
+            0,
+            4
+          ],
+          "projected": false,
+          "signed_base": 0.7256435308328211,
+          "predicted_change": -7.18770759417152e-07,
+          "measured_change": -7.187740316706759e-07
+        },
+        {
+          "family": 1,
+          "sign": -1,
+          "point": [
+            -2.6046496089512394,
+            0,
+            2.3333333333333335
+          ],
+          "projected": false,
+          "signed_base": -0.9932126475643344,
+          "predicted_change": 4.9204464205073e-09,
+          "measured_change": 4.920442121582545e-09
+        },
+        {
+          "family": 1,
+          "sign": 1,
+          "point": [
+            -2.25,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6164254828979976,
+          "predicted_change": 1.6582627966674206e-07,
+          "measured_change": 1.6582627693241785e-07
+        },
+        {
+          "family": 2,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6112486724538568,
+          "predicted_change": 1.2212048554549565e-07,
+          "measured_change": 1.2212049509848567e-07
+        },
+        {
+          "family": 2,
+          "sign": 1,
+          "point": [
+            -3,
+            0,
+            2.13178346368292
+          ],
+          "projected": false,
+          "signed_base": -0.9033294413185455,
+          "predicted_change": -2.434760600307382e-08,
+          "measured_change": -2.434475687172327e-08
+        },
+        {
+          "family": 3,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": 0.1459553261200508,
+          "predicted_change": 1.6632107504034577e-07,
+          "measured_change": 1.663210859140539e-07
+        },
+        {
+          "family": 3,
+          "sign": 1,
+          "point": [
+            -2,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": -0.004987632573194567,
+          "predicted_change": 5.174836836106826e-08,
+          "measured_change": 5.174836836106826e-08
+        }
+      ],
+      "base_violation": 4.824722142127259,
+      "shift_violation": 4.824722128997206,
+      "half_violation": 4.82472213554297,
+      "profile_branch_change": false,
+      "event": "response_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 263.462206122
+    },
+    {
+      "name": "response_krylov_15",
+      "orthogonal_probe": true,
+      "probe_orientation": 1,
+      "probe_searches": 1,
+      "independent_component": 0.0012969033058282467,
+      "h": 5e-06,
+      "relative_error": 7.686524973949434e-06,
+      "conditional_action_norm": 8.369507617400377,
+      "conditional_action_available": true,
+      "frozen_action_norm": 8.483952894009926,
+      "reduced_action_norm": 7.597672919731374,
+      "feedback_action_norm": 1.305666205891319,
+      "conditional_merit_slope": -50.995599196666035,
+      "signed_merit_slope": -48.171210385205065,
+      "actual_merit_slope": -48.17106606651577,
+      "half_merit_slope": -48.17119195195118,
+      "observation_relative_error": 6.075006673972316e-05,
+      "usable": true,
+      "signed_observations": [
+        {
+          "family": 0,
+          "sign": -1,
+          "point": [
+            -2.6666666666666665,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 4.824722142127259,
+          "predicted_change": 1.5291669632318852e-06,
+          "measured_change": 1.529135635755957e-06
+        },
+        {
+          "family": 0,
+          "sign": 1,
+          "point": [
+            -1.6046496089512394,
+            0,
+            4
+          ],
+          "projected": false,
+          "signed_base": 0.7256435308328211,
+          "predicted_change": -3.1404064915845763e-09,
+          "measured_change": -3.1391029970042692e-09
+        },
+        {
+          "family": 1,
+          "sign": -1,
+          "point": [
+            -2.6046496089512394,
+            0,
+            2.3333333333333335
+          ],
+          "projected": false,
+          "signed_base": -0.9932126475643344,
+          "predicted_change": 5.202281508402511e-09,
+          "measured_change": 5.202288082920225e-09
+        },
+        {
+          "family": 1,
+          "sign": 1,
+          "point": [
+            -2.25,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6164254828979976,
+          "predicted_change": 8.608900643410129e-07,
+          "measured_change": 8.608900616066887e-07
+        },
+        {
+          "family": 2,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6112486724538568,
+          "predicted_change": 4.4114778415699005e-07,
+          "measured_change": 4.411477841569901e-07
+        },
+        {
+          "family": 2,
+          "sign": 1,
+          "point": [
+            -3,
+            0,
+            2.13178346368292
+          ],
+          "projected": false,
+          "signed_base": -0.9033294413185455,
+          "predicted_change": 2.2503114036147524e-08,
+          "measured_change": 2.250653582176993e-08
+        },
+        {
+          "family": 3,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": 0.1459553261200508,
+          "predicted_change": 6.008179123073911e-07,
+          "measured_change": 6.008179123073911e-07
+        },
+        {
+          "family": 3,
+          "sign": 1,
+          "point": [
+            -2,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": -0.004987632573194567,
+          "predicted_change": 5.122532125343888e-07,
+          "measured_change": 5.122532125343888e-07
+        }
+      ],
+      "base_violation": 4.824722142127259,
+      "shift_violation": 4.824725200461067,
+      "half_violation": 4.824723671262855,
+      "profile_branch_change": false,
+      "event": "response_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 277.242218546
+    },
+    {
+      "name": "response_krylov_16",
+      "orthogonal_probe": false,
+      "probe_orientation": 0,
+      "probe_searches": 32,
+      "independent_component": 0.0020898401683572963,
+      "h": 5e-06,
+      "relative_error": 8.140533873727366e-06,
+      "conditional_action_norm": 2.4106516626255736,
+      "conditional_action_available": true,
+      "frozen_action_norm": 3.6327066588859114,
+      "reduced_action_norm": 2.6415880230042554,
+      "feedback_action_norm": 0.3971930809099206,
+      "conditional_merit_slope": -23.54683844177389,
+      "signed_merit_slope": -25.59534652627186,
+      "actual_merit_slope": -25.59532906047934,
+      "half_merit_slope": -25.5953550436061,
+      "observation_relative_error": 2.6495140207992863e-05,
+      "usable": true,
+      "signed_observations": [
+        {
+          "family": 0,
+          "sign": -1,
+          "point": [
+            -2.6666666666666665,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 4.824722142127259,
+          "predicted_change": -1.6849769011812044e-08,
+          "measured_change": -1.687466945165945e-08
+        },
+        {
+          "family": 0,
+          "sign": 1,
+          "point": [
+            -1.6046496089512394,
+            0,
+            4
+          ],
+          "projected": false,
+          "signed_base": 0.7256435308328211,
+          "predicted_change": -6.721628600659078e-08,
+          "measured_change": -6.721123086129143e-08
+        },
+        {
+          "family": 1,
+          "sign": -1,
+          "point": [
+            -2.6046496089512394,
+            0,
+            2.3333333333333335
+          ],
+          "projected": false,
+          "signed_base": -0.9932126475643344,
+          "predicted_change": 9.521341936353357e-12,
+          "measured_change": 9.527917723277216e-12
+        },
+        {
+          "family": 1,
+          "sign": 1,
+          "point": [
+            -2.25,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6164254828979976,
+          "predicted_change": -1.0865705036780195e-10,
+          "measured_change": -1.0866522160827964e-10
+        },
+        {
+          "family": 2,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6112486724538568,
+          "predicted_change": 1.3015948904984488e-11,
+          "measured_change": 1.302072539999549e-11
+        },
+        {
+          "family": 2,
+          "sign": 1,
+          "point": [
+            -3,
+            0,
+            2.13178346368292
+          ],
+          "projected": false,
+          "signed_base": -0.9033294413185455,
+          "predicted_change": -2.086897835168996e-09,
+          "measured_change": -2.0856289390041794e-09
+        },
+        {
+          "family": 3,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": 0.1459553261200508,
+          "predicted_change": 1.7724144223439635e-11,
+          "measured_change": 1.7724144223439635e-11
+        },
+        {
+          "family": 3,
+          "sign": 1,
+          "point": [
+            -2,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": -0.004987632573194567,
+          "predicted_change": 8.120485218444613e-11,
+          "measured_change": 8.120485218444613e-11
+        }
+      ],
+      "base_violation": 4.824722142127259,
+      "shift_violation": 4.82472210842766,
+      "half_violation": 4.824722125252535,
+      "profile_branch_change": false,
+      "event": "response_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 289.545659776
+    },
+    {
+      "name": "rate_picard",
+      "orthogonal_probe": false,
+      "probe_orientation": 0,
+      "probe_searches": 32,
+      "independent_component": 0.16384987320497452,
+      "h": 5e-06,
+      "relative_error": 2.290552687755287e-06,
+      "conditional_action_norm": 25.281175069543615,
+      "conditional_action_available": true,
+      "frozen_action_norm": 25.6824333886453,
+      "reduced_action_norm": 23.64510917582256,
+      "feedback_action_norm": 4.341252373081442,
+      "conditional_merit_slope": -267.1703881869125,
+      "signed_merit_slope": -278.3647575314317,
+      "actual_merit_slope": -278.3633598085089,
+      "half_merit_slope": -278.3643711154582,
+      "observation_relative_error": 5.2347888564977394e-05,
+      "usable": true,
+      "signed_observations": [
+        {
+          "family": 0,
+          "sign": -1,
+          "point": [
+            -2.6666666666666665,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 4.824722142127259,
+          "predicted_change": -5.1065831693204e-06,
+          "measured_change": -5.1065867109936e-06
+        },
+        {
+          "family": 0,
+          "sign": 1,
+          "point": [
+            -1.6046496089512394,
+            0,
+            4
+          ],
+          "projected": false,
+          "signed_base": 0.7256435308328211,
+          "predicted_change": -2.7854989502420027e-07,
+          "measured_change": -2.7855200946856396e-07
+        },
+        {
+          "family": 1,
+          "sign": -1,
+          "point": [
+            -2.6046496089512394,
+            0,
+            2.3333333333333335
+          ],
+          "projected": false,
+          "signed_base": -0.9932126475643344,
+          "predicted_change": -1.2221561458817358e-08,
+          "measured_change": -1.2221561458817358e-08
+        },
+        {
+          "family": 1,
+          "sign": 1,
+          "point": [
+            -2.25,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6164254828979976,
+          "predicted_change": -2.902325512037908e-06,
+          "measured_change": -2.9023255229275445e-06
+        },
+        {
+          "family": 2,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6112486724538568,
+          "predicted_change": -1.501071725364088e-06,
+          "measured_change": -1.501071715811098e-06
+        },
+        {
+          "family": 2,
+          "sign": 1,
+          "point": [
+            -3,
+            0,
+            2.13178346368292
+          ],
+          "projected": false,
+          "signed_base": -0.9033294413185455,
+          "predicted_change": -1.6922607705722478e-07,
+          "measured_change": -1.692254530623979e-07
+        },
+        {
+          "family": 3,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": 0.1459553261200508,
+          "predicted_change": -2.0443733433497613e-06,
+          "measured_change": -2.0443733433497613e-06
+        },
+        {
+          "family": 3,
+          "sign": 1,
+          "point": [
+            -2,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": -0.004987632573194567,
+          "predicted_change": -1.798937853888481e-06,
+          "measured_change": -1.798937853888481e-06
+        }
+      ],
+      "base_violation": 4.824722142127259,
+      "shift_violation": 4.824711928960835,
+      "half_violation": 4.824717035540439,
+      "profile_branch_change": false,
+      "event": "response_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 304.343346891
+    },
+    {
+      "name": "ground_lift",
+      "orthogonal_probe": true,
+      "probe_orientation": 1,
+      "probe_searches": 1,
+      "independent_component": 0.024588228103952798,
+      "h": 5e-06,
+      "relative_error": 1.6080036966287697e-06,
+      "conditional_action_norm": 10.224495187676919,
+      "conditional_action_available": true,
+      "frozen_action_norm": 8.534185741086572,
+      "reduced_action_norm": 11.833126832921556,
+      "feedback_action_norm": 2.6254213918111637,
+      "conditional_merit_slope": -26.999650068941193,
+      "signed_merit_slope": -42.08634366289445,
+      "actual_merit_slope": -42.08599360708831,
+      "half_merit_slope": -42.086179325906414,
+      "observation_relative_error": 4.388784522713074e-05,
+      "usable": true,
+      "signed_observations": [
+        {
+          "family": 0,
+          "sign": -1,
+          "point": [
+            -2.6666666666666665,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 4.824722142127259,
+          "predicted_change": 3.3906141029805638e-06,
+          "measured_change": 3.3906120093640218e-06
+        },
+        {
+          "family": 0,
+          "sign": 1,
+          "point": [
+            -1.6046496089512394,
+            0,
+            4
+          ],
+          "projected": false,
+          "signed_base": 0.7256435308328211,
+          "predicted_change": -3.082497735912962e-07,
+          "measured_change": -3.0825039325105926e-07
+        },
+        {
+          "family": 1,
+          "sign": -1,
+          "point": [
+            -2.6046496089512394,
+            0,
+            2.3333333333333335
+          ],
+          "projected": false,
+          "signed_base": -0.9932126475643344,
+          "predicted_change": 6.532251104727382e-09,
+          "measured_change": 6.53224883013799e-09
+        },
+        {
+          "family": 1,
+          "sign": 1,
+          "point": [
+            -2.25,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6164254828979976,
+          "predicted_change": 1.9646834441519015e-06,
+          "measured_change": 1.9646834359966204e-06
+        },
+        {
+          "family": 2,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6112486724538568,
+          "predicted_change": 9.456923434807457e-07,
+          "measured_change": 9.456923530337357e-07
+        },
+        {
+          "family": 2,
+          "sign": 1,
+          "point": [
+            -3,
+            0,
+            2.13178346368292
+          ],
+          "projected": false,
+          "signed_base": -0.9033294413185455,
+          "predicted_change": -3.631433068576172e-08,
+          "measured_change": -3.6312553509864914e-08
+        },
+        {
+          "family": 3,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": 0.1459553261200508,
+          "predicted_change": 1.2879785908720683e-06,
+          "measured_change": 1.2879785908720683e-06
+        },
+        {
+          "family": 3,
+          "sign": 1,
+          "point": [
+            -2,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": -0.004987632573194567,
+          "predicted_change": 1.2197501609801323e-06,
+          "measured_change": 1.2197501609801323e-06
+        }
+      ],
+      "base_violation": 4.824722142127259,
+      "shift_violation": 4.824728923355393,
+      "half_violation": 4.824725532739272,
+      "profile_branch_change": false,
+      "event": "response_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 319.023417507
+    },
+    {
+      "name": "opposite_sample_-2.600000",
+      "orthogonal_probe": true,
+      "probe_orientation": -1,
+      "probe_searches": 28,
+      "independent_component": 0.9999184138734143,
+      "h": 6.103515625e-10,
+      "relative_error": 0.0003331108684863439,
+      "conditional_action_norm": 262.85945725234285,
+      "conditional_action_available": true,
+      "frozen_action_norm": 259.3707078661249,
+      "reduced_action_norm": 399.8373319425984,
+      "feedback_action_norm": 265.8615974951189,
+      "conditional_merit_slope": -358.4587009369394,
+      "signed_merit_slope": 455.0731863340485,
+      "actual_merit_slope": 455.0733603537082,
+      "half_merit_slope": 455.7338543236255,
+      "observation_relative_error": 0.30472162899892286,
+      "usable": false,
+      "signed_observations": [
+        {
+          "family": 0,
+          "sign": -1,
+          "point": [
+            -2.6666666666666665,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 4.824722142127259,
+          "predicted_change": 2.928147548133603e-08,
+          "measured_change": 2.9298870986077814e-08
+        },
+        {
+          "family": 0,
+          "sign": 1,
+          "point": [
+            -1.6046496089512394,
+            0,
+            4
+          ],
+          "projected": false,
+          "signed_base": 0.7256435308328211,
+          "predicted_change": 3.5017250638457517e-10,
+          "measured_change": 3.480916231727627e-10
+        },
+        {
+          "family": 1,
+          "sign": -1,
+          "point": [
+            -2.6046496089512394,
+            0,
+            2.3333333333333335
+          ],
+          "projected": false,
+          "signed_base": -0.9932126475643344,
+          "predicted_change": -3.014758111986886e-15,
+          "measured_change": -3.0162929672918553e-15
+        },
+        {
+          "family": 1,
+          "sign": 1,
+          "point": [
+            -2.25,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6164254828979976,
+          "predicted_change": -1.850545089208291e-12,
+          "measured_change": -1.842389777013958e-12
+        },
+        {
+          "family": 2,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6112486724538568,
+          "predicted_change": -9.31416527145679e-13,
+          "measured_change": -9.266400321346753e-13
+        },
+        {
+          "family": 2,
+          "sign": 1,
+          "point": [
+            -3,
+            0,
+            2.13178346368292
+          ],
+          "projected": false,
+          "signed_base": -0.9033294413185455,
+          "predicted_change": 2.730363105969368e-09,
+          "measured_change": 2.7309837996268787e-09
+        },
+        {
+          "family": 3,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": 0.1459553261200508,
+          "predicted_change": -1.2722238491671392e-12,
+          "measured_change": -1.2613501410545996e-12
+        },
+        {
+          "family": 3,
+          "sign": 1,
+          "point": [
+            -2,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": -0.004987632573194567,
+          "predicted_change": -1.593645224119755e-08,
+          "measured_change": -1.5936463114905664e-08
+        }
+      ],
+      "base_violation": 4.824722142127259,
+      "shift_violation": 4.824722200690191,
+      "half_violation": 4.824722171426044,
+      "profile_branch_change": false,
+      "event": "response_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 329.32762354
+    },
+    {
+      "name": "normalization_-2.600000",
+      "orthogonal_probe": true,
+      "probe_orientation": 1,
+      "probe_searches": 1,
+      "independent_component": 0.9998126700757985,
+      "h": 5e-06,
+      "relative_error": 2.1483222563175346e-07,
+      "conditional_action_norm": 86.08393517918975,
+      "conditional_action_available": true,
+      "frozen_action_norm": 88.12163516157098,
+      "reduced_action_norm": 86.42856839915872,
+      "feedback_action_norm": 6.993566737384076,
+      "conditional_merit_slope": 56.86873624025571,
+      "signed_merit_slope": 23.657649944153068,
+      "actual_merit_slope": 23.676324690313773,
+      "half_merit_slope": 23.666894219331876,
+      "observation_relative_error": 7.550950797114916e-05,
+      "usable": true,
+      "signed_observations": [
+        {
+          "family": 0,
+          "sign": -1,
+          "point": [
+            -2.6666666666666665,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 4.824722142127259,
+          "predicted_change": -3.131654283761532e-07,
+          "measured_change": -3.1316195054047855e-07
+        },
+        {
+          "family": 0,
+          "sign": 1,
+          "point": [
+            -1.6046496089512394,
+            0,
+            4
+          ],
+          "projected": false,
+          "signed_base": 0.7256435308328211,
+          "predicted_change": -3.444799167456881e-07,
+          "measured_change": -3.4448468438576773e-07
+        },
+        {
+          "family": 1,
+          "sign": -1,
+          "point": [
+            -2.6046496089512394,
+            0,
+            2.3333333333333335
+          ],
+          "projected": false,
+          "signed_base": -0.9932126475643344,
+          "predicted_change": -3.00722300913474e-11,
+          "measured_change": -3.006565557363407e-11
+        },
+        {
+          "family": 1,
+          "sign": 1,
+          "point": [
+            -2.25,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6164254828979976,
+          "predicted_change": -1.0148743544178492e-08,
+          "measured_change": -1.014875171535675e-08
+        },
+        {
+          "family": 2,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6112486724538568,
+          "predicted_change": -5.350032649449724e-09,
+          "measured_change": -5.3500183199646914e-09
+        },
+        {
+          "family": 2,
+          "sign": 1,
+          "point": [
+            -3,
+            0,
+            2.13178346368292
+          ],
+          "projected": false,
+          "signed_base": -0.9033294413185455,
+          "predicted_change": -6.843506609608877e-08,
+          "measured_change": -6.843379225566914e-08
+        },
+        {
+          "family": 3,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": 0.1459553261200508,
+          "predicted_change": -7.286439185088484e-09,
+          "measured_change": -7.2864283113803715e-09
+        },
+        {
+          "family": 3,
+          "sign": 1,
+          "point": [
+            -2,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": -0.004987632573194567,
+          "predicted_change": -6.555367167558104e-09,
+          "measured_change": -6.555367167558105e-09
+        }
+      ],
+      "base_violation": 4.824722142127259,
+      "shift_violation": 4.824721515796383,
+      "half_violation": 4.824721828965207,
+      "profile_branch_change": false,
+      "event": "response_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 346.575976821
+    },
+    {
+      "name": "opposite_sample_1.600000",
+      "orthogonal_probe": true,
+      "probe_orientation": -1,
+      "probe_searches": 30,
+      "independent_component": 0.9999021361209605,
+      "h": 3.0517578125e-10,
+      "relative_error": 6.515746345812856e-05,
+      "conditional_action_norm": 256.1593608596933,
+      "conditional_action_available": true,
+      "frozen_action_norm": 254.96184706314497,
+      "reduced_action_norm": 256.23318495947194,
+      "feedback_action_norm": 6.431679653882327,
+      "conditional_merit_slope": 330.602926472671,
+      "signed_merit_slope": 299.28891305369814,
+      "actual_merit_slope": 299.288984388113,
+      "half_merit_slope": 299.2749214172363,
+      "observation_relative_error": 0.057696366929099754,
+      "usable": false,
+      "signed_observations": [
+        {
+          "family": 0,
+          "sign": -1,
+          "point": [
+            -2.6666666666666665,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 4.824722142127259,
+          "predicted_change": -3.099505260708478e-11,
+          "measured_change": -3.099688691384941e-11
+        },
+        {
+          "family": 0,
+          "sign": 1,
+          "point": [
+            -1.6046496089512394,
+            0,
+            4
+          ],
+          "projected": false,
+          "signed_base": 0.7256435308328211,
+          "predicted_change": -8.48089694908089e-12,
+          "measured_change": -1.2028782028680887e-11
+        },
+        {
+          "family": 1,
+          "sign": -1,
+          "point": [
+            -2.6046496089512394,
+            0,
+            2.3333333333333335
+          ],
+          "projected": false,
+          "signed_base": -0.9932126475643344,
+          "predicted_change": -9.118728006474999e-15,
+          "measured_change": -9.11899365124692e-15
+        },
+        {
+          "family": 1,
+          "sign": 1,
+          "point": [
+            -2.25,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6164254828979976,
+          "predicted_change": -2.560302251171823e-12,
+          "measured_change": -2.552146970087418e-12
+        },
+        {
+          "family": 2,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6112486724538568,
+          "predicted_change": -1.2896536529709397e-12,
+          "measured_change": -1.2896536529709399e-12
+        },
+        {
+          "family": 2,
+          "sign": 1,
+          "point": [
+            -3,
+            0,
+            2.13178346368292
+          ],
+          "projected": false,
+          "signed_base": -0.9033294413185455,
+          "predicted_change": -2.722420967474931e-12,
+          "measured_change": -2.7193235429347246e-12
+        },
+        {
+          "family": 3,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": 0.1459553261200508,
+          "predicted_change": -1.7615407142314235e-12,
+          "measured_change": -1.7615407142314237e-12
+        },
+        {
+          "family": 3,
+          "sign": 1,
+          "point": [
+            -2,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": -0.004987632573194567,
+          "predicted_change": -1.6093088006558686e-12,
+          "measured_change": -1.6093088006558686e-12
+        }
+      ],
+      "base_violation": 4.824722142127259,
+      "shift_violation": 4.824722142065197,
+      "half_violation": 4.824722142096173,
+      "profile_branch_change": false,
+      "event": "response_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 354.561286194
+    },
+    {
+      "name": "normalization_1.600000",
+      "orthogonal_probe": true,
+      "probe_orientation": 1,
+      "probe_searches": 1,
+      "independent_component": 0.9994204302534402,
+      "h": 5e-06,
+      "relative_error": 3.424783523763735e-07,
+      "conditional_action_norm": 84.60184882600718,
+      "conditional_action_available": true,
+      "frozen_action_norm": 86.95199841494181,
+      "reduced_action_norm": 84.62349954605611,
+      "feedback_action_norm": 1.1323368884356035,
+      "conditional_merit_slope": 79.04361921574751,
+      "signed_merit_slope": 71.48530543397564,
+      "actual_merit_slope": 71.50320827804535,
+      "half_merit_slope": 71.49408951363512,
+      "observation_relative_error": 5.714247558781527e-05,
+      "usable": true,
+      "signed_observations": [
+        {
+          "family": 0,
+          "sign": -1,
+          "point": [
+            -2.6666666666666665,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 4.824722142127259,
+          "predicted_change": 2.491741680348067e-07,
+          "measured_change": 2.491717861294251e-07
+        },
+        {
+          "family": 0,
+          "sign": 1,
+          "point": [
+            -1.6046496089512394,
+            0,
+            4
+          ],
+          "projected": false,
+          "signed_base": 0.7256435308328211,
+          "predicted_change": -3.870588388673879e-07,
+          "measured_change": -3.8705367030442093e-07
+        },
+        {
+          "family": 1,
+          "sign": -1,
+          "point": [
+            -2.6046496089512394,
+            0,
+            2.3333333333333335
+          ],
+          "projected": false,
+          "signed_base": -0.9932126475643344,
+          "predicted_change": 6.191231119785365e-10,
+          "measured_change": 6.191231122441814e-10
+        },
+        {
+          "family": 1,
+          "sign": 1,
+          "point": [
+            -2.25,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6164254828979976,
+          "predicted_change": 1.7343577605640374e-07,
+          "measured_change": 1.7343577332201735e-07
+        },
+        {
+          "family": 2,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6112486724538568,
+          "predicted_change": 8.652471208138961e-08,
+          "measured_change": 8.652471685788463e-08
+        },
+        {
+          "family": 2,
+          "sign": 1,
+          "point": [
+            -3,
+            0,
+            2.13178346368292
+          ],
+          "projected": false,
+          "signed_base": -0.9033294413185455,
+          "predicted_change": -5.1426516095628e-10,
+          "measured_change": -5.138918477116419e-10
+        },
+        {
+          "family": 3,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": 0.1459553261200508,
+          "predicted_change": 1.1784168042285843e-07,
+          "measured_change": 1.1784168042285843e-07
+        },
+        {
+          "family": 3,
+          "sign": 1,
+          "point": [
+            -2,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": -0.004987632573194567,
+          "predicted_change": 1.0871372440037079e-07,
+          "measured_change": 1.0871372440037079e-07
+        }
+      ],
+      "base_violation": 4.824722142127259,
+      "shift_violation": 4.82472264047551,
+      "half_violation": 4.824722391299053,
+      "profile_branch_change": false,
+      "event": "response_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 372.796682994
+    },
+    {
+      "name": "epsilon_lower_sample",
+      "orthogonal_probe": false,
+      "probe_orientation": 0,
+      "probe_searches": 32,
+      "independent_component": 0.9997425672497561,
+      "h": 5e-06,
+      "relative_error": 3.5025664818866427e-06,
+      "conditional_action_norm": 290.8972623051771,
+      "conditional_action_available": true,
+      "frozen_action_norm": 289.8354024434273,
+      "reduced_action_norm": 307.4378287520998,
+      "feedback_action_norm": 99.45079106881143,
+      "conditional_merit_slope": -727.9857449801467,
+      "signed_merit_slope": -212.22672160336288,
+      "actual_merit_slope": -211.99042658395226,
+      "half_merit_slope": -212.1043739180095,
+      "observation_relative_error": 6.224822797384899e-05,
+      "usable": true,
+      "signed_observations": [
+        {
+          "family": 0,
+          "sign": -1,
+          "point": [
+            -2.6666666666666665,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 4.824722142127259,
+          "predicted_change": 3.6192154428429307e-06,
+          "measured_change": 3.6192208025148125e-06
+        },
+        {
+          "family": 0,
+          "sign": 1,
+          "point": [
+            -1.6046496089512394,
+            0,
+            4
+          ],
+          "projected": false,
+          "signed_base": 0.7256435308328211,
+          "predicted_change": -2.15559083695153e-06,
+          "measured_change": -2.1555905133954182e-06
+        },
+        {
+          "family": 1,
+          "sign": -1,
+          "point": [
+            -2.6046496089512394,
+            0,
+            2.3333333333333335
+          ],
+          "projected": false,
+          "signed_base": -0.9932126475643344,
+          "predicted_change": 0,
+          "measured_change": 0
+        },
+        {
+          "family": 1,
+          "sign": 1,
+          "point": [
+            -2.25,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6164254828979976,
+          "predicted_change": 0,
+          "measured_change": 0
+        },
+        {
+          "family": 2,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6112486724538568,
+          "predicted_change": -0.0001835470540084853,
+          "measured_change": -0.0001835469379683155
+        },
+        {
+          "family": 2,
+          "sign": 1,
+          "point": [
+            -3,
+            0,
+            2.13178346368292
+          ],
+          "projected": false,
+          "signed_base": -0.9033294413185455,
+          "predicted_change": 1.3027767729733762e-07,
+          "measured_change": 1.302814546837939e-07
+        },
+        {
+          "family": 3,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": 0.1459553261200508,
+          "predicted_change": -0.0002499802156158059,
+          "measured_change": -0.0002499802156158059
+        },
+        {
+          "family": 3,
+          "sign": 1,
+          "point": [
+            -2,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": -0.004987632573194567,
+          "predicted_change": 0,
+          "measured_change": 0
+        }
+      ],
+      "base_violation": 4.824722142127259,
+      "shift_violation": 4.8247293805580025,
+      "half_violation": 4.82472576134796,
+      "profile_branch_change": false,
+      "event": "response_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 392.889871926
+    },
+    {
+      "name": "epsilon_lower_trace",
+      "orthogonal_probe": true,
+      "probe_orientation": 1,
+      "probe_searches": 21,
+      "independent_component": 0.9999208586728228,
+      "h": 4.8828125e-09,
+      "relative_error": 0.00014315135673889455,
+      "conditional_action_norm": 274.7394005358134,
+      "conditional_action_available": true,
+      "frozen_action_norm": 274.88410175857985,
+      "reduced_action_norm": 274.9870821523442,
+      "feedback_action_norm": 11.634327727838803,
+      "conditional_merit_slope": -19.783795371763066,
+      "signed_merit_slope": 35.09763637684313,
+      "actual_merit_slope": 35.097834188491106,
+      "half_merit_slope": 35.068870056420565,
+      "observation_relative_error": 0.04156822152934264,
+      "usable": true,
+      "signed_observations": [
+        {
+          "family": 0,
+          "sign": -1,
+          "point": [
+            -2.6666666666666665,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 4.824722142127259,
+          "predicted_change": 5.574736690090746e-09,
+          "measured_change": 5.584132416502273e-09
+        },
+        {
+          "family": 0,
+          "sign": 1,
+          "point": [
+            -1.6046496089512394,
+            0,
+            4
+          ],
+          "projected": false,
+          "signed_base": 0.7256435308328211,
+          "predicted_change": -3.596416365356976e-09,
+          "measured_change": -3.5919830459361534e-09
+        },
+        {
+          "family": 1,
+          "sign": -1,
+          "point": [
+            -2.6046496089512394,
+            0,
+            2.3333333333333335
+          ],
+          "projected": false,
+          "signed_base": -0.9932126475643344,
+          "predicted_change": -3.4172719046710206e-15,
+          "measured_change": -3.4170062598991e-15
+        },
+        {
+          "family": 1,
+          "sign": 1,
+          "point": [
+            -2.25,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6164254828979976,
+          "predicted_change": -1.9532347839315259e-13,
+          "measured_change": -1.9532347839315259e-13
+        },
+        {
+          "family": 2,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6112486724538568,
+          "predicted_change": 0,
+          "measured_change": 0
+        },
+        {
+          "family": 2,
+          "sign": 1,
+          "point": [
+            -3,
+            0,
+            2.13178346368292
+          ],
+          "projected": false,
+          "signed_base": -0.9033294413185455,
+          "predicted_change": 1.031307204844113e-10,
+          "measured_change": 1.0600467890269545e-10
+        },
+        {
+          "family": 3,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": 0.1459553261200508,
+          "predicted_change": 0,
+          "measured_change": 0
+        },
+        {
+          "family": 3,
+          "sign": 1,
+          "point": [
+            -2,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": -0.004987632573194567,
+          "predicted_change": -1.1961078923793619e-13,
+          "measured_change": -1.0873708112539652e-13
+        }
+      ],
+      "base_violation": 4.824722142127259,
+      "shift_violation": 4.8247221532766735,
+      "half_violation": 4.8247221477113476,
+      "profile_branch_change": false,
+      "event": "response_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 403.378912152
+    },
+    {
+      "name": "conditional_mass_gradient",
+      "orthogonal_probe": false,
+      "probe_orientation": 0,
+      "probe_searches": 32,
+      "independent_component": 0.8992838035481017,
+      "h": 5e-06,
+      "relative_error": 0.00010136330481767022,
+      "conditional_action_norm": 189.70785112626038,
+      "conditional_action_available": true,
+      "frozen_action_norm": 20.836959172365887,
+      "reduced_action_norm": 199.9883654713265,
+      "feedback_action_norm": 11.653752950364513,
+      "conditional_merit_slope": -1174.6981560216175,
+      "signed_merit_slope": -1235.1237723452105,
+      "actual_merit_slope": -1235.0237879616088,
+      "half_merit_slope": -1235.0923612075349,
+      "observation_relative_error": 0.00021846752703424954,
+      "usable": true,
+      "signed_observations": [
+        {
+          "family": 0,
+          "sign": -1,
+          "point": [
+            -2.6666666666666665,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 4.824722142127259,
+          "predicted_change": -4.374843592972525e-06,
+          "measured_change": -4.375003937022587e-06
+        },
+        {
+          "family": 0,
+          "sign": 1,
+          "point": [
+            -1.6046496089512394,
+            0,
+            4
+          ],
+          "projected": false,
+          "signed_base": 0.7256435308328211,
+          "predicted_change": -4.5568491868527317e-07,
+          "measured_change": -4.5569416096785513e-07
+        },
+        {
+          "family": 1,
+          "sign": -1,
+          "point": [
+            -2.6046496089512394,
+            0,
+            2.3333333333333335
+          ],
+          "projected": false,
+          "signed_base": -0.9932126475643344,
+          "predicted_change": 5.250365626664919e-07,
+          "measured_change": 5.250365626680267e-07
+        },
+        {
+          "family": 1,
+          "sign": 1,
+          "point": [
+            -2.25,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6164254828979976,
+          "predicted_change": -4.340889435345423e-07,
+          "measured_change": -4.3408893267679355e-07
+        },
+        {
+          "family": 2,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6112486724538568,
+          "predicted_change": -1.4094476701974062e-08,
+          "measured_change": -1.4094481478469073e-08
+        },
+        {
+          "family": 2,
+          "sign": 1,
+          "point": [
+            -3,
+            0,
+            2.13178346368292
+          ],
+          "projected": false,
+          "signed_base": -0.9033294413185455,
+          "predicted_change": 7.216115154805996e-06,
+          "measured_change": 7.215935801080062e-06
+        },
+        {
+          "family": 3,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": 0.1459553261200508,
+          "predicted_change": -1.919586799534754e-08,
+          "measured_change": -1.919587886905565e-08
+        },
+        {
+          "family": 3,
+          "sign": 1,
+          "point": [
+            -2,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": -0.004987632573194567,
+          "predicted_change": -1.0283587623788879e-07,
+          "measured_change": -1.028358762378888e-07
+        }
+      ],
+      "base_violation": 4.824722142127259,
+      "shift_violation": 4.824713392440062,
+      "half_violation": 4.824717767123233,
+      "profile_branch_change": false,
+      "event": "response_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 422.601355544
+    },
+    {
+      "name": "mass_residual",
+      "orthogonal_probe": false,
+      "probe_orientation": 0,
+      "probe_searches": 32,
+      "independent_component": 0.32242961867455316,
+      "h": 5e-06,
+      "relative_error": 2.2404190589153234e-06,
+      "conditional_action_norm": 26.661174720196836,
+      "conditional_action_available": true,
+      "frozen_action_norm": 34.29375021716036,
+      "reduced_action_norm": 27.6155910751549,
+      "feedback_action_norm": 8.059778447666668,
+      "conditional_merit_slope": -342.7083393849774,
+      "signed_merit_slope": -381.42786881529884,
+      "actual_merit_slope": -381.4259622686222,
+      "half_merit_slope": -381.4271391547663,
+      "observation_relative_error": 9.725238790969648e-05,
+      "usable": true,
+      "signed_observations": [
+        {
+          "family": 0,
+          "sign": -1,
+          "point": [
+            -2.6666666666666665,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 4.824722142127259,
+          "predicted_change": -8.064109279912398e-07,
+          "measured_change": -8.063788636837374e-07
+        },
+        {
+          "family": 0,
+          "sign": 1,
+          "point": [
+            -1.6046496089512394,
+            0,
+            4
+          ],
+          "projected": false,
+          "signed_base": 0.7256435308328211,
+          "predicted_change": -8.180647144510734e-07,
+          "measured_change": -8.180582097093665e-07
+        },
+        {
+          "family": 1,
+          "sign": -1,
+          "point": [
+            -2.6046496089512394,
+            0,
+            2.3333333333333335
+          ],
+          "projected": false,
+          "signed_base": -0.9932126475643344,
+          "predicted_change": -2.163078333506604e-08,
+          "measured_change": -2.1630787632721583e-08
+        },
+        {
+          "family": 1,
+          "sign": 1,
+          "point": [
+            -2.25,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6164254828979976,
+          "predicted_change": -2.876759876321089e-07,
+          "measured_change": -2.876759794927561e-07
+        },
+        {
+          "family": 2,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6112486724538568,
+          "predicted_change": -1.445441473767274e-07,
+          "measured_change": -1.4454413304724237e-07
+        },
+        {
+          "family": 2,
+          "sign": 1,
+          "point": [
+            -3,
+            0,
+            2.13178346368292
+          ],
+          "projected": false,
+          "signed_base": -0.9033294413185455,
+          "predicted_change": -7.760813152249221e-08,
+          "measured_change": -7.761052923076413e-08
+        },
+        {
+          "family": 3,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": 0.1459553261200508,
+          "predicted_change": -1.9686081941331106e-07,
+          "measured_change": -1.9686080853960294e-07
+        },
+        {
+          "family": 3,
+          "sign": 1,
+          "point": [
+            -2,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": -0.004987632573194567,
+          "predicted_change": -1.6910796293475724e-07,
+          "measured_change": -1.6910797380846536e-07
+        }
+      ],
+      "base_violation": 4.824722142127259,
+      "shift_violation": 4.824720529305272,
+      "half_violation": 4.824721335748406,
+      "profile_branch_change": false,
+      "event": "response_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 437.48744148
+    },
+    {
+      "name": "modal_defect_1540",
+      "orthogonal_probe": true,
+      "probe_orientation": -1,
+      "probe_searches": 2,
+      "independent_component": 0.1791231017493794,
+      "h": 5e-06,
+      "relative_error": 6.607428569021332e-06,
+      "conditional_action_norm": 10.784528904653602,
+      "conditional_action_available": true,
+      "frozen_action_norm": 10.705244120620309,
+      "reduced_action_norm": 8.8137950637261,
+      "feedback_action_norm": 4.614813038608299,
+      "conditional_merit_slope": 4.711983121499373,
+      "signed_merit_slope": 20.717478180523095,
+      "actual_merit_slope": 20.71767239044675,
+      "half_merit_slope": 20.717407960546552,
+      "observation_relative_error": 5.5895440211579245e-05,
+      "usable": true,
+      "signed_observations": [
+        {
+          "family": 0,
+          "sign": -1,
+          "point": [
+            -2.6666666666666665,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 4.824722142127259,
+          "predicted_change": 3.6726131948882216e-06,
+          "measured_change": 3.6726279681112997e-06
+        },
+        {
+          "family": 0,
+          "sign": 1,
+          "point": [
+            -1.6046496089512394,
+            0,
+            4
+          ],
+          "projected": false,
+          "signed_base": 0.7256435308328211,
+          "predicted_change": 1.8810280407066327e-08,
+          "measured_change": 1.8808213657656455e-08
+        },
+        {
+          "family": 1,
+          "sign": -1,
+          "point": [
+            -2.6046496089512394,
+            0,
+            2.3333333333333335
+          ],
+          "projected": false,
+          "signed_base": -0.9932126475643344,
+          "predicted_change": -1.923199742702068e-08,
+          "measured_change": -1.9232001725945435e-08
+        },
+        {
+          "family": 1,
+          "sign": 1,
+          "point": [
+            -2.25,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6164254828979976,
+          "predicted_change": 1.935621991934855e-06,
+          "measured_change": 1.935621991918958e-06
+        },
+        {
+          "family": 2,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6112486724538568,
+          "predicted_change": 0,
+          "measured_change": 0
+        },
+        {
+          "family": 2,
+          "sign": 1,
+          "point": [
+            -3,
+            0,
+            2.13178346368292
+          ],
+          "projected": false,
+          "signed_base": -0.9033294413185455,
+          "predicted_change": -6.072294631454833e-08,
+          "measured_change": -6.072493651060198e-08
+        },
+        {
+          "family": 3,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": 0.1459553261200508,
+          "predicted_change": 0,
+          "measured_change": 0
+        },
+        {
+          "family": 3,
+          "sign": 1,
+          "point": [
+            -2,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": -0.004987632573194567,
+          "predicted_change": 1.243182784488493e-06,
+          "measured_change": 1.243182784488493e-06
+        }
+      ],
+      "base_violation": 4.824722142127259,
+      "shift_violation": 4.824729487353575,
+      "half_violation": 4.824725814755127,
+      "profile_branch_change": false,
+      "event": "response_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 452.481126621
+    },
+    {
+      "name": "modal_defect_1541",
+      "orthogonal_probe": false,
+      "probe_orientation": 0,
+      "probe_searches": 32,
+      "independent_component": 0.13410058263223798,
+      "h": 5e-06,
+      "relative_error": 9.499590089347284e-06,
+      "conditional_action_norm": 2.341108079609084,
+      "conditional_action_available": true,
+      "frozen_action_norm": 2.943108356571677,
+      "reduced_action_norm": 2.4508336605999306,
+      "feedback_action_norm": 0.650307208254552,
+      "conditional_merit_slope": -20.87394530476531,
+      "signed_merit_slope": -24.04961416766702,
+      "actual_merit_slope": -24.049599130648854,
+      "half_merit_slope": -24.049690603078485,
+      "observation_relative_error": 4.922588290348119e-05,
+      "usable": true,
+      "signed_observations": [
+        {
+          "family": 0,
+          "sign": -1,
+          "point": [
+            -2.6666666666666665,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 4.824722142127259,
+          "predicted_change": -2.8025951945082182e-08,
+          "measured_change": -2.8060864548704627e-08
+        },
+        {
+          "family": 0,
+          "sign": 1,
+          "point": [
+            -1.6046496089512394,
+            0,
+            4
+          ],
+          "projected": false,
+          "signed_base": 0.7256435308328211,
+          "predicted_change": -7.414920578793885e-08,
+          "measured_change": -7.414904860060285e-08
+        },
+        {
+          "family": 1,
+          "sign": -1,
+          "point": [
+            -2.6046496089512394,
+            0,
+            2.3333333333333335
+          ],
+          "projected": false,
+          "signed_base": -0.9932126475643344,
+          "predicted_change": 0,
+          "measured_change": 0
+        },
+        {
+          "family": 1,
+          "sign": 1,
+          "point": [
+            -2.25,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6164254828979976,
+          "predicted_change": 0,
+          "measured_change": 0
+        },
+        {
+          "family": 2,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6112486724538568,
+          "predicted_change": 0,
+          "measured_change": 0
+        },
+        {
+          "family": 2,
+          "sign": 1,
+          "point": [
+            -3,
+            0,
+            2.13178346368292
+          ],
+          "projected": false,
+          "signed_base": -0.9033294413185455,
+          "predicted_change": -4.651728543084263e-09,
+          "measured_change": -4.6506047332387875e-09
+        },
+        {
+          "family": 3,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": 0.1459553261200508,
+          "predicted_change": 0,
+          "measured_change": 0
+        },
+        {
+          "family": 3,
+          "sign": 1,
+          "point": [
+            -2,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": -0.004987632573194567,
+          "predicted_change": 0,
+          "measured_change": 0
+        }
+      ],
+      "base_violation": 4.824722142127259,
+      "shift_violation": 4.824722086075207,
+      "half_violation": 4.824722114066261,
+      "profile_branch_change": false,
+      "event": "response_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 464.701856666
+    },
+    {
+      "name": "contact_value_0",
+      "orthogonal_probe": false,
+      "probe_orientation": 0,
+      "probe_searches": 32,
+      "independent_component": 0.9258790077805223,
+      "h": 5e-06,
+      "relative_error": 1.9907536251509026e-06,
+      "conditional_action_norm": 103.32968252737942,
+      "conditional_action_available": true,
+      "frozen_action_norm": 156.53337364828383,
+      "reduced_action_norm": 103.85919251004566,
+      "feedback_action_norm": 7.424610601306452,
+      "conditional_merit_slope": -459.0693006273801,
+      "signed_merit_slope": -497.78069086531946,
+      "actual_merit_slope": -497.75372412454993,
+      "half_merit_slope": -497.76824248510815,
+      "observation_relative_error": 9.36297149747925e-05,
+      "usable": true,
+      "signed_observations": [
+        {
+          "family": 0,
+          "sign": -1,
+          "point": [
+            -2.6666666666666665,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 4.824722142127259,
+          "predicted_change": -3.6064294887122096e-07,
+          "measured_change": -3.6059193977130833e-07
+        },
+        {
+          "family": 0,
+          "sign": 1,
+          "point": [
+            -1.6046496089512394,
+            0,
+            4
+          ],
+          "projected": false,
+          "signed_base": 0.7256435308328211,
+          "predicted_change": -2.785149681071004e-06,
+          "measured_change": -2.7851473475171417e-06
+        },
+        {
+          "family": 1,
+          "sign": -1,
+          "point": [
+            -2.6046496089512394,
+            0,
+            2.3333333333333335
+          ],
+          "projected": false,
+          "signed_base": -0.9932126475643344,
+          "predicted_change": 0,
+          "measured_change": 0
+        },
+        {
+          "family": 1,
+          "sign": 1,
+          "point": [
+            -2.25,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6164254828979976,
+          "predicted_change": 0,
+          "measured_change": 0
+        },
+        {
+          "family": 2,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6112486724538568,
+          "predicted_change": 0,
+          "measured_change": 0
+        },
+        {
+          "family": 2,
+          "sign": 1,
+          "point": [
+            -3,
+            0,
+            2.13178346368292
+          ],
+          "projected": false,
+          "signed_base": -0.9033294413185455,
+          "predicted_change": -3.0989106797038907e-08,
+          "measured_change": -3.099240956634721e-08
+        },
+        {
+          "family": 3,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": 0.1459553261200508,
+          "predicted_change": 0,
+          "measured_change": 0
+        },
+        {
+          "family": 3,
+          "sign": 1,
+          "point": [
+            -2,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": -0.004987632573194567,
+          "predicted_change": 0,
+          "measured_change": 0
+        }
+      ],
+      "base_violation": 4.824722142127259,
+      "shift_violation": 4.824721420841339,
+      "half_violation": 4.824721781535147,
+      "profile_branch_change": false,
+      "event": "response_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 480.24054381
+    },
+    {
+      "name": "contact_tangent_0",
+      "orthogonal_probe": false,
+      "probe_orientation": 0,
+      "probe_searches": 32,
+      "independent_component": 0.37845697360500713,
+      "h": 5e-06,
+      "relative_error": 4.043275570903867e-06,
+      "conditional_action_norm": 121.08427578729798,
+      "conditional_action_available": true,
+      "frozen_action_norm": 169.80494489786975,
+      "reduced_action_norm": 137.85150647664977,
+      "feedback_action_norm": 68.32064864584714,
+      "conditional_merit_slope": -1315.9172543685188,
+      "signed_merit_slope": -1643.3401392007336,
+      "actual_merit_slope": -1643.2926317804684,
+      "half_merit_slope": -1643.3176080909104,
+      "observation_relative_error": 7.665371735104953e-05,
+      "usable": true,
+      "signed_observations": [
+        {
+          "family": 0,
+          "sign": -1,
+          "point": [
+            -2.6666666666666665,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 4.824722142127259,
+          "predicted_change": -2.9027591339425036e-06,
+          "measured_change": -2.9027218209826287e-06
+        },
+        {
+          "family": 0,
+          "sign": 1,
+          "point": [
+            -1.6046496089512394,
+            0,
+            4
+          ],
+          "projected": false,
+          "signed_base": 0.7256435308328211,
+          "predicted_change": -5.616389945586301e-06,
+          "measured_change": -5.616395190520082e-06
+        },
+        {
+          "family": 1,
+          "sign": -1,
+          "point": [
+            -2.6046496089512394,
+            0,
+            2.3333333333333335
+          ],
+          "projected": false,
+          "signed_base": -0.9932126475643344,
+          "predicted_change": 0,
+          "measured_change": 0
+        },
+        {
+          "family": 1,
+          "sign": 1,
+          "point": [
+            -2.25,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6164254828979976,
+          "predicted_change": 0,
+          "measured_change": 0
+        },
+        {
+          "family": 2,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6112486724538568,
+          "predicted_change": 0,
+          "measured_change": 0
+        },
+        {
+          "family": 2,
+          "sign": 1,
+          "point": [
+            -3,
+            0,
+            2.13178346368292
+          ],
+          "projected": false,
+          "signed_base": -0.9033294413185455,
+          "predicted_change": -5.596529003006696e-07,
+          "measured_change": -5.596546594641719e-07
+        },
+        {
+          "family": 3,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": 0.1459553261200508,
+          "predicted_change": 0,
+          "measured_change": 0
+        },
+        {
+          "family": 3,
+          "sign": 1,
+          "point": [
+            -2,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": -0.004987632573194567,
+          "predicted_change": 0,
+          "measured_change": 0
+        }
+      ],
+      "base_violation": 4.824722142127259,
+      "shift_violation": 4.8247163366089705,
+      "half_violation": 4.824719239405418,
+      "profile_branch_change": false,
+      "event": "response_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 496.735619205
+    },
+    {
+      "name": "contact_nearby_0",
+      "orthogonal_probe": true,
+      "probe_orientation": 1,
+      "probe_searches": 1,
+      "independent_component": 0.012888725050039228,
+      "h": 5e-06,
+      "relative_error": 9.911287647310342e-07,
+      "conditional_action_norm": 42.22118890050368,
+      "conditional_action_available": true,
+      "frozen_action_norm": 60.8803625189029,
+      "reduced_action_norm": 42.47594865276448,
+      "feedback_action_norm": 1.1585137497907125,
+      "conditional_merit_slope": -63.86098803145533,
+      "signed_merit_slope": -58.39605248890888,
+      "actual_merit_slope": -58.391541961100295,
+      "half_merit_slope": -58.39406810537184,
+      "observation_relative_error": 4.0105291062991766e-05,
+      "usable": true,
+      "signed_observations": [
+        {
+          "family": 0,
+          "sign": -1,
+          "point": [
+            -2.6666666666666665,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 4.824722142127259,
+          "predicted_change": -7.701494088251417e-07,
+          "measured_change": -7.701516966849853e-07
+        },
+        {
+          "family": 0,
+          "sign": 1,
+          "point": [
+            -1.6046496089512394,
+            0,
+            4
+          ],
+          "projected": false,
+          "signed_base": 0.7256435308328211,
+          "predicted_change": -7.414449473696257e-07,
+          "measured_change": -7.414461881755731e-07
+        },
+        {
+          "family": 1,
+          "sign": -1,
+          "point": [
+            -2.6046496089512394,
+            0,
+            2.3333333333333335
+          ],
+          "projected": false,
+          "signed_base": -0.9932126475643344,
+          "predicted_change": 4.311401109558968e-09,
+          "measured_change": 4.311407685611536e-09
+        },
+        {
+          "family": 1,
+          "sign": 1,
+          "point": [
+            -2.25,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6164254828979976,
+          "predicted_change": -4.891333269754034e-07,
+          "measured_change": -4.891333188201535e-07
+        },
+        {
+          "family": 2,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6112486724538568,
+          "predicted_change": 0,
+          "measured_change": 0
+        },
+        {
+          "family": 2,
+          "sign": 1,
+          "point": [
+            -3,
+            0,
+            2.13178346368292
+          ],
+          "projected": false,
+          "signed_base": -0.9033294413185455,
+          "predicted_change": -1.2037958134268675e-07,
+          "measured_change": -1.2037913713962996e-07
+        },
+        {
+          "family": 3,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": 0.1459553261200508,
+          "predicted_change": 0,
+          "measured_change": 0
+        },
+        {
+          "family": 3,
+          "sign": 1,
+          "point": [
+            -2,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": -0.004987632573194567,
+          "predicted_change": -3.209705945091024e-07,
+          "measured_change": -3.209705945091024e-07
+        }
+      ],
+      "base_violation": 4.824722142127259,
+      "shift_violation": 4.82472060182837,
+      "half_violation": 4.824721371975539,
+      "profile_branch_change": false,
+      "event": "response_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 511.539909153
+    },
+    {
+      "name": "contact_value_1",
+      "orthogonal_probe": true,
+      "probe_orientation": 1,
+      "probe_searches": 1,
+      "independent_component": 0.7083517045641446,
+      "h": 5e-06,
+      "relative_error": 1.764245492792181e-06,
+      "conditional_action_norm": 104.53663553533667,
+      "conditional_action_available": true,
+      "frozen_action_norm": 146.9753423371314,
+      "reduced_action_norm": 106.39638480568314,
+      "feedback_action_norm": 17.933095013855258,
+      "conditional_merit_slope": -660.4727578511925,
+      "signed_merit_slope": -584.3174791314877,
+      "actual_merit_slope": -584.2891786869586,
+      "half_merit_slope": -584.3052852469555,
+      "observation_relative_error": 2.9222978596921134e-05,
+      "usable": true,
+      "signed_observations": [
+        {
+          "family": 0,
+          "sign": -1,
+          "point": [
+            -2.6666666666666665,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 4.824722142127259,
+          "predicted_change": -1.6163613518873942e-07,
+          "measured_change": -1.616505626872842e-07
+        },
+        {
+          "family": 0,
+          "sign": 1,
+          "point": [
+            -1.6046496089512394,
+            0,
+            4
+          ],
+          "projected": false,
+          "signed_base": 0.7256435308328211,
+          "predicted_change": -1.1029560077318276e-06,
+          "measured_change": -1.1029509432252685e-06
+        },
+        {
+          "family": 1,
+          "sign": -1,
+          "point": [
+            -2.6046496089512394,
+            0,
+            2.3333333333333335
+          ],
+          "projected": false,
+          "signed_base": -0.9932126475643344,
+          "predicted_change": 9.463001230674813e-10,
+          "measured_change": 9.463066978508394e-10
+        },
+        {
+          "family": 1,
+          "sign": 1,
+          "point": [
+            -2.25,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6164254828979976,
+          "predicted_change": -5.160339215699177e-07,
+          "measured_change": -5.16033932459523e-07
+        },
+        {
+          "family": 2,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6112486724538568,
+          "predicted_change": 0,
+          "measured_change": 0
+        },
+        {
+          "family": 2,
+          "sign": 1,
+          "point": [
+            -3,
+            0,
+            2.13178346368292
+          ],
+          "projected": false,
+          "signed_base": -0.9033294413185455,
+          "predicted_change": 1.9809585497376133e-07,
+          "measured_change": 1.9809699716490778e-07
+        },
+        {
+          "family": 3,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": 0.1459553261200508,
+          "predicted_change": 0,
+          "measured_change": 0
+        },
+        {
+          "family": 3,
+          "sign": 1,
+          "point": [
+            -2,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": -0.004987632573194567,
+          "predicted_change": -3.22153099392633e-07,
+          "measured_change": -3.221531102663411e-07
+        }
+      ],
+      "base_violation": 4.824722142127259,
+      "shift_violation": 4.82472181885485,
+      "half_violation": 4.824721980476566,
+      "profile_branch_change": false,
+      "event": "response_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 527.369132378
+    },
+    {
+      "name": "contact_tangent_1",
+      "orthogonal_probe": true,
+      "probe_orientation": 1,
+      "probe_searches": 11,
+      "independent_component": 0.5119848572065862,
+      "h": 1.5625e-07,
+      "relative_error": 2.142527843383438e-05,
+      "conditional_action_norm": 30.539462461504087,
+      "conditional_action_available": true,
+      "frozen_action_norm": 42.069940391355345,
+      "reduced_action_norm": 34.35289472634963,
+      "feedback_action_norm": 14.027686110663323,
+      "conditional_merit_slope": 195.72671302060442,
+      "signed_merit_slope": 263.5645884910941,
+      "actual_merit_slope": 263.56468097219476,
+      "half_merit_slope": 263.5630160511937,
+      "observation_relative_error": 0.0011957878836127028,
+      "usable": true,
+      "signed_observations": [
+        {
+          "family": 0,
+          "sign": -1,
+          "point": [
+            -2.6666666666666665,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 4.824722142127259,
+          "predicted_change": 4.476930617584694e-09,
+          "measured_change": 4.471038123538211e-09
+        },
+        {
+          "family": 0,
+          "sign": 1,
+          "point": [
+            -1.6046496089512394,
+            0,
+            4
+          ],
+          "projected": false,
+          "signed_base": 0.7256435308328211,
+          "predicted_change": 2.5877986448349187e-08,
+          "measured_change": 2.5876947503936432e-08
+        },
+        {
+          "family": 1,
+          "sign": -1,
+          "point": [
+            -2.6046496089512394,
+            0,
+            2.3333333333333335
+          ],
+          "projected": false,
+          "signed_base": -0.9932126475643344,
+          "predicted_change": 1.3125572735526575e-11,
+          "measured_change": 1.312329687692292e-11
+        },
+        {
+          "family": 1,
+          "sign": 1,
+          "point": [
+            -2.25,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6164254828979976,
+          "predicted_change": -8.242096728101292e-09,
+          "measured_change": -8.242107601809404e-09
+        },
+        {
+          "family": 2,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            2
+          ],
+          "projected": false,
+          "signed_base": 0.6112486724538568,
+          "predicted_change": 0,
+          "measured_change": 0
+        },
+        {
+          "family": 2,
+          "sign": 1,
+          "point": [
+            -3,
+            0,
+            2.13178346368292
+          ],
+          "projected": false,
+          "signed_base": -0.9033294413185455,
+          "predicted_change": 2.198207512960417e-09,
+          "measured_change": 2.196762177715299e-09
+        },
+        {
+          "family": 3,
+          "sign": -1,
+          "point": [
+            -1,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": 0.1459553261200508,
+          "predicted_change": 0,
+          "measured_change": 0
+        },
+        {
+          "family": 3,
+          "sign": 1,
+          "point": [
+            -2,
+            0,
+            1
+          ],
+          "projected": false,
+          "signed_base": -0.004987632573194567,
+          "predicted_change": -5.340186791149348e-09,
+          "measured_change": -5.340186791149349e-09
+        }
+      ],
+      "base_violation": 4.824722142127259,
+      "shift_violation": 4.8247221510809855,
+      "half_violation": 4.824722146598238,
+      "profile_branch_change": false,
+      "event": "response_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 539.930978228
+    }
+  ],
+  "operator_check": {
+    "status": "passed_operator_checks",
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/contact-orthogonal-verified/eta-0/reduced-checks.json",
+    "sha256": "c62d1a5ec72ebde1a51f67b24c7ed5be4bf826438cb83549f4701853f2507b45"
+  },
+  "verification": {
+    "status": "passed_reduced_verification_observability",
+    "scope": "Bitwise numerical trajectory and history comparison; not M8 convergence",
+    "verified": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/contact-orthogonal-verified/eta-0",
+    "unverified": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/contact-orthogonal-unverified/eta-0",
+    "solver_sha256": "3a1f76432f2ff398171911d29829dbc98f9b269a988d85400adad35d5ec42270",
+    "state_sha256": {
+      "state": "b8ba7917424057a9f6f16a026d82d53ede43985871537facea170ef6e1841b71",
+      "rejected_state": "64b4623debf7141cba1f3ce9b7dece51619498c194af69ca46164c03c9279900",
+      "initial": "4ad26ed0167bb1765bd0be2c150928280b69dbd82ace8a27ea5f9c8c7f4d0409",
+      "last_stage_history": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "accepted_physical_steps": 0.0,
+    "time": 0.0
+  },
+  "fresh_audit": {
+    "scope": "Fresh original residual, continuous-ground and constitutive audit only.\n\nThe supplied alpha/time/history identify the target. Physical acceptance or\nhistory advancement is never inferred from this fixed-state observation.\n",
+    "source": "e65139618bca0061bc1ee357b15a346becafee1d",
+    "probe": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0926974/RANSWallResolutionProbe",
+    "probe_sha256": "f542ae85d003b6e6a0b3f425c51daacf03d113c6bccf9cabf8ff2647d05f81b6",
+    "libraries": {
+      "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+      "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+      "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+      "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+      "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+      "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+      "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+      "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+      "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01",
+      "/usr/lib/x86_64-linux-gnu/libbz2.so.1.0.4": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+      "/usr/lib/x86_64-linux-gnu/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+      "/usr/lib/x86_64-linux-gnu/libevent_core-2.1.so.7.0.1": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+      "/usr/lib/x86_64-linux-gnu/libevent_pthreads-2.1.so.7.0.1": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+      "/usr/lib/x86_64-linux-gnu/libfftw3.so.3.5.8": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+      "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+      "/usr/lib/x86_64-linux-gnu/libgfortran.so.5.0.0": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+      "/usr/lib/x86_64-linux-gnu/libhwloc.so.15.5.2": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+      "/usr/lib/x86_64-linux-gnu/liblzma.so.5.2.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+      "/usr/lib/x86_64-linux-gnu/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+      "/usr/lib/x86_64-linux-gnu/libmpi.so.40.30.2": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+      "/usr/lib/x86_64-linux-gnu/libmpi_cxx.so.40.30.1": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+      "/usr/lib/x86_64-linux-gnu/libopen-pal.so.40.30.2": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+      "/usr/lib/x86_64-linux-gnu/libopen-rte.so.40.30.2": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+      "/usr/lib/x86_64-linux-gnu/libptscotch-6.1.3.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+      "/usr/lib/x86_64-linux-gnu/libptscotcherr-6.1.3.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+      "/usr/lib/x86_64-linux-gnu/libquadmath.so.0.0.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+      "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+      "/usr/lib/x86_64-linux-gnu/libudev.so.1.7.2": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+      "/usr/lib/x86_64-linux-gnu/libz.so.1.2.11": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+      "/usr/lib/x86_64-linux-gnu/libzstd.so.1.4.8": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+      "/usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+      "/usr/lib/x86_64-linux-gnu/openblas-pthread/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+      "/usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9"
+    },
+    "session_sha256": "6feb09cec6f412435efde1eff5362fda4c7944e1cdddbc7c524fd24ba9253269",
+    "packet_sha256": "1d1fbb1e18b99d1f06c634fd088274f9eee3a92347c41071ac2256328ee7eada",
+    "state_sha256": "64b4623debf7141cba1f3ce9b7dece51619498c194af69ca46164c03c9279900",
+    "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca",
+    "unknowns": 2165,
+    "alpha": 400.0,
+    "time": 0.0025,
+    "ranks": 1,
+    "thread_limits": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    },
+    "receipt": {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0926974/RANSWallResolutionProbe",
+        "case.xml",
+        "input.json",
+        "readback.json"
+      ],
+      "exit_code": 0,
+      "seconds": 8.737808732999838,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "original_norms": [
+      9.22712702434941e-13,
+      1.4700075421073186e-12,
+      8.915726235835272,
+      4.925983912796301e-14,
+      6.6448549116584205e-16,
+      7.394486193165594e-16,
+      4.811147140404425e-17,
+      0.0
+    ],
+    "ground": {
+      "admissible": true,
+      "minimum": 6.3899157571657185e-15,
+      "arithmetic_scale": 3.064459316304734e-17,
+      "point": [
+        1.5693267408071356,
+        0.0,
+        0.0
+      ],
+      "geometry": 4.0,
+      "extrema_checked": 17.0
+    },
+    "qualification": {
+      "r2_covariance": [
+        6.169871932157383e-05,
+        0.17693626601654552
+      ],
+      "r2_inner_minimum_point": [
+        1.5833333333333335,
+        0.0,
+        0.0,
+        0.00031670609838614644,
+        0.5100186282989793,
+        0.0008640591782146384,
+        0.2529024303232191,
+        0.00021113739892409763,
+        6.169871932157383e-05
+      ],
+      "r2_outer_minimum_point": [
+        -1.0,
+        0.0,
+        2.0,
+        0.509863876282863,
+        0.071119122295994,
+        0.17693626601654552
+      ],
+      "r2_outer_range": [
+        0.00467448322110775,
+        0.998738243552413,
+        1.0100268675642743,
+        0.9783846569071106,
+        1.002901859542756,
+        0.9957527730918169,
+        1.005830845178851
+      ],
+      "r2_qualified": [
+        0.0
+      ],
+      "r2_scalar_domain": [
+        1.0,
+        0.0006203743923388615,
+        0.00031670609838614644,
+        0.509863876282863,
+        0.03631791663093067,
+        0.5083397696899751,
+        0.0710657848050683,
+        0.8361036736327991,
+        1.0
+      ],
+      "r4_outer_gradient_witness": [
+        -2.6046496089512394,
+        0.0,
+        2.0,
+        0.0,
+        2.0,
+        -0.00467448322110775,
+        31.0,
+        1.0
+      ]
+    },
+    "physical_acceptance_inferred": false,
+    "negative_ground_guard": {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0926974/RANSWallResolutionProbe",
+        "case.xml",
+        "negative-ground.json",
+        "must-not-exist.json"
+      ],
+      "exit_code": 1,
+      "seconds": 1.5686348929957603,
+      "log_sha256": "fbad3e1b83782e56b97595d481b407145f1e3a040fef434906e2da9b8b07392f",
+      "rejected_before_scalar_evaluation": true,
+      "changed_row": 1185
+    }
+  }
+}

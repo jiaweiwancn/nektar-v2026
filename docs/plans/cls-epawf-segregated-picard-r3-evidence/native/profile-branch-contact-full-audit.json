@@ -1,0 +1,1036 @@
+{
+  "scope": "Observe limiter branches and native moving panels in flat-state readbacks.\n\nPanel endpoints are reconstructed from the actual ordered Gauss points, not\nfrom a frozen profile or a differentiated maximum. This observes panel counts,\nlocations and evaluation elements, not the origin labels of tied breakpoints.\nNo residual, state, qualification bound or physical history is modified.\n",
+  "command": [
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-source/solvers/IncNavierStokesSolver/Tests/RANS/audit_cls_epawf_profile_branches.py",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/profile-branch-contact-full-audit.json",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/audit-contact-orthogonal-base/readback.json",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/audit-contact-orthogonal-1/readback.json"
+  ],
+  "thread_limits": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "numpy_version": "1.21.5",
+  "comparisons": [
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/audit-contact-orthogonal-base/readback.json",
+      "sha256": "7808ff726adb9733f7f60b3af1cb99dc8c9115a062703d8d543145f11ae486a6",
+      "state_sha256": "ee93cf89bb46c5dae89a91bb628a5f9b913b2b223c7c5a54d228cc573916edd3",
+      "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca",
+      "alpha": 400,
+      "time": 0.0025,
+      "norms": [
+        1.054584623907777e-12,
+        9.532407175680503e-13,
+        18.454728711702224,
+        4.2030396849366426e-14,
+        8.727924229299217e-16,
+        8.05134161469553e-16,
+        9.571472303973591e-17,
+        4.8063481048222535e-16
+      ],
+      "rays": 112,
+      "native_panels": 2487,
+      "profile_counts": {
+        "M": 23,
+        "B": 89
+      },
+      "cap_counts": {
+        "P": 112
+      },
+      "minimum_limiter_gap": 8.626810781209304e-05,
+      "limiter_pattern_sha256": "ebc7e8bf52c15de646fafe18a511d3a19f6bbaa14a07befaf4aa6d2d4bdb4150",
+      "panels_sha256": "c35c5a0dfe2f71553ddd1f79e0d896762619abaaabf052870b4f8cafef4a3a33",
+      "maximum_endpoint_displacement": 0,
+      "changed_rays": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/audit-contact-orthogonal-1/readback.json",
+      "sha256": "847b2a0d1e527d06f98306149cbc426d1371ca8fd80a4d4951986e25038501d0",
+      "state_sha256": "02eabf9ab466d3b62cdc4e9fa9874e325d0e457933ad9f60ed740b2e28623995",
+      "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca",
+      "alpha": 400,
+      "time": 0.0025,
+      "norms": [
+        9.22712702434941e-13,
+        1.4700075421073186e-12,
+        8.915726235835272,
+        4.925983912796301e-14,
+        6.6448549116584205e-16,
+        7.394486193165594e-16,
+        4.811147140404425e-17,
+        0
+      ],
+      "rays": 112,
+      "native_panels": 2481,
+      "profile_counts": {
+        "M": 17,
+        "B": 95
+      },
+      "cap_counts": {
+        "P": 112
+      },
+      "minimum_limiter_gap": 7.703696264155235e-05,
+      "limiter_pattern_sha256": "2bea4df1fe6385450f37c40c175892ab63d0787851e555dc8a812a767520f1f1",
+      "panels_sha256": "3c9556c0acf74ba5fa0fc16efdcde92f89f4039d0228201917a5b569a7ee936a",
+      "maximum_endpoint_displacement": 0.005844161336825637,
+      "changed_rays": [
+        {
+          "ray": [
+            "volume_normalization_ray",
+            -3.1016667612931865,
+            0
+          ],
+          "profile_changed": true,
+          "cap_changed": false,
+          "panel_count_change": -1,
+          "evaluation_elements_changed": true,
+          "limiter_switches": null,
+          "maximum_endpoint_displacement": null
+        },
+        {
+          "ray": [
+            "volume_normalization_ray",
+            -3.019855071751232,
+            0
+          ],
+          "profile_changed": true,
+          "cap_changed": false,
+          "panel_count_change": -1,
+          "evaluation_elements_changed": true,
+          "limiter_switches": null,
+          "maximum_endpoint_displacement": null
+        },
+        {
+          "ray": [
+            "volume_normalization_ray",
+            -2.591717321247825,
+            0
+          ],
+          "profile_changed": true,
+          "cap_changed": false,
+          "panel_count_change": -1,
+          "evaluation_elements_changed": true,
+          "limiter_switches": null,
+          "maximum_endpoint_displacement": null
+        },
+        {
+          "ray": [
+            "volume_normalization_ray",
+            -2.408282678752175,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 8,
+          "maximum_endpoint_displacement": 0.001208528744598869
+        },
+        {
+          "ray": [
+            "volume_normalization_ray",
+            -2.2372337950418357,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 2,
+          "maximum_endpoint_displacement": 0.002244806573742597
+        },
+        {
+          "ray": [
+            "volume_normalization_ray",
+            -2.019855071751232,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 4,
+          "maximum_endpoint_displacement": 0.0030223380668585875
+        },
+        {
+          "ray": [
+            "volume_normalization_ray",
+            -1.9801449282487682,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 8,
+          "maximum_endpoint_displacement": 0.002877772760731645
+        },
+        {
+          "ray": [
+            "volume_normalization_ray",
+            -1.8983332387068135,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 3,
+          "maximum_endpoint_displacement": 0.002153353517759582
+        },
+        {
+          "ray": [
+            "volume_normalization_ray",
+            -1.7627662049581645,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 2,
+          "maximum_endpoint_displacement": 0.000920392809593551
+        },
+        {
+          "ray": [
+            "volume_normalization_ray",
+            -1.5917173212478248,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 1,
+          "maximum_endpoint_displacement": 0.0006652288763804304
+        },
+        {
+          "ray": [
+            "volume_normalization_ray",
+            -1.4082826787521752,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 2,
+          "maximum_endpoint_displacement": 0.002358722130609614
+        },
+        {
+          "ray": [
+            "volume_normalization_ray",
+            -1.2372337950418355,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 2,
+          "maximum_endpoint_displacement": 0.0038869192812758246
+        },
+        {
+          "ray": [
+            "volume_normalization_ray",
+            -1.1016667612931865,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 3,
+          "maximum_endpoint_displacement": 0.005034485378659248
+        },
+        {
+          "ray": [
+            "volume_normalization_ray",
+            -1.0198550717512318,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 1,
+          "maximum_endpoint_displacement": 0.005689970932495347
+        },
+        {
+          "ray": [
+            "volume_normalization_ray",
+            -0.9602898564975362,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 1,
+          "maximum_endpoint_displacement": 0.005534561346237421
+        },
+        {
+          "ray": [
+            "volume_normalization_ray",
+            -0.7966664774136268,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 1,
+          "maximum_endpoint_displacement": 0.00455351290112338
+        },
+        {
+          "ray": [
+            "volume_normalization_ray",
+            -0.525532409916329,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 1,
+          "maximum_endpoint_displacement": 0.003758674641414661
+        },
+        {
+          "ray": [
+            "volume_normalization_ray",
+            -0.18343464249564978,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 1,
+          "maximum_endpoint_displacement": 0.003646274014588613
+        },
+        {
+          "ray": [
+            "volume_normalization_ray",
+            0.1834346424956499,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 1,
+          "maximum_endpoint_displacement": 0.0037348782804471625
+        },
+        {
+          "ray": [
+            "volume_normalization_ray",
+            0.525532409916329,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 1,
+          "maximum_endpoint_displacement": 0.0031168018223497462
+        },
+        {
+          "ray": [
+            "volume_normalization_ray",
+            0.796666477413627,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 1,
+          "maximum_endpoint_displacement": 0.001582364897554811
+        },
+        {
+          "ray": [
+            "volume_normalization_ray",
+            0.9602898564975364,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 1,
+          "maximum_endpoint_displacement": 3.087826360959056e-05
+        },
+        {
+          "ray": [
+            "volume_normalization_ray",
+            1.0198550717512318,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 1,
+          "maximum_endpoint_displacement": 0.0004250813044988089
+        },
+        {
+          "ray": [
+            "volume_normalization_ray",
+            1.1016667612931865,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 4,
+          "maximum_endpoint_displacement": 0.0003723316687711531
+        },
+        {
+          "ray": [
+            "volume_normalization_ray",
+            1.2372337950418355,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 15,
+          "maximum_endpoint_displacement": 0.00017356532545353964
+        },
+        {
+          "ray": [
+            "volume_normalization_ray",
+            1.4082826787521752,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 3,
+          "maximum_endpoint_displacement": 0.0001688387624763088
+        },
+        {
+          "ray": [
+            "volume_normalization_ray",
+            1.5917173212478248,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 2,
+          "maximum_endpoint_displacement": 0.0004818582869983157
+        },
+        {
+          "ray": [
+            "volume_normalization_ray",
+            1.7627662049581645,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 3,
+          "maximum_endpoint_displacement": 0.0005540198079421188
+        },
+        {
+          "ray": [
+            "trace_current_normalization_ray",
+            -3.064129925745197,
+            0
+          ],
+          "profile_changed": true,
+          "cap_changed": false,
+          "panel_count_change": -1,
+          "evaluation_elements_changed": true,
+          "limiter_switches": null,
+          "maximum_endpoint_displacement": null
+        },
+        {
+          "ray": [
+            "trace_current_normalization_ray",
+            -3,
+            0
+          ],
+          "profile_changed": true,
+          "cap_changed": false,
+          "panel_count_change": -1,
+          "evaluation_elements_changed": true,
+          "limiter_switches": null,
+          "maximum_endpoint_displacement": null
+        },
+        {
+          "ray": [
+            "trace_current_normalization_ray",
+            -2.6046496089512394,
+            0
+          ],
+          "profile_changed": true,
+          "cap_changed": false,
+          "panel_count_change": -1,
+          "evaluation_elements_changed": true,
+          "limiter_switches": null,
+          "maximum_endpoint_displacement": null
+        },
+        {
+          "ray": [
+            "trace_baseline_normalization_ray",
+            -2.3953503910487606,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 8,
+          "maximum_endpoint_displacement": 0.0012948933946925756
+        },
+        {
+          "ray": [
+            "trace_current_normalization_ray",
+            -2.3953503910487606,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 8,
+          "maximum_endpoint_displacement": 0.0012948933946925756
+        },
+        {
+          "ray": [
+            "trace_baseline_normalization_ray",
+            -2.204149909283429,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 2,
+          "maximum_endpoint_displacement": 0.002410229883113235
+        },
+        {
+          "ray": [
+            "trace_current_normalization_ray",
+            -2.204149909283429,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 2,
+          "maximum_endpoint_displacement": 0.002410229883113235
+        },
+        {
+          "ray": [
+            "trace_baseline_normalization_ray",
+            -2.064129925745197,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 2,
+          "maximum_endpoint_displacement": 0.002930157984600168
+        },
+        {
+          "ray": [
+            "trace_current_normalization_ray",
+            -2.064129925745197,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 2,
+          "maximum_endpoint_displacement": 0.002930157984600168
+        },
+        {
+          "ray": [
+            "trace_baseline_normalization_ray",
+            -2,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 10,
+          "maximum_endpoint_displacement": 0.003050699998269124
+        },
+        {
+          "ray": [
+            "trace_current_normalization_ray",
+            -2,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 10,
+          "maximum_endpoint_displacement": 0.003050699998269124
+        },
+        {
+          "ray": [
+            "trace_baseline_normalization_ray",
+            -1.9358700742548032,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 4,
+          "maximum_endpoint_displacement": 0.002487960588220428
+        },
+        {
+          "ray": [
+            "trace_current_normalization_ray",
+            -1.9358700742548032,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 4,
+          "maximum_endpoint_displacement": 0.002487960588220428
+        },
+        {
+          "ray": [
+            "trace_baseline_normalization_ray",
+            -1.795850090716571,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 2,
+          "maximum_endpoint_displacement": 0.0012241751128674316
+        },
+        {
+          "ray": [
+            "trace_current_normalization_ray",
+            -1.795850090716571,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 2,
+          "maximum_endpoint_displacement": 0.0012241751128674316
+        },
+        {
+          "ray": [
+            "trace_baseline_normalization_ray",
+            -1.6046496089512394,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 1,
+          "maximum_endpoint_displacement": 0.0005450073866850591
+        },
+        {
+          "ray": [
+            "trace_current_normalization_ray",
+            -1.6046496089512394,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 1,
+          "maximum_endpoint_displacement": 0.0005450073866850591
+        },
+        {
+          "ray": [
+            "trace_baseline_normalization_ray",
+            -1.3953503910487606,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 2,
+          "maximum_endpoint_displacement": 0.0024765441191201276
+        },
+        {
+          "ray": [
+            "trace_current_normalization_ray",
+            -1.3953503910487606,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 2,
+          "maximum_endpoint_displacement": 0.0024765441191201276
+        },
+        {
+          "ray": [
+            "trace_baseline_normalization_ray",
+            -1.204149909283429,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 3,
+          "maximum_endpoint_displacement": 0.004173143125460799
+        },
+        {
+          "ray": [
+            "trace_current_normalization_ray",
+            -1.204149909283429,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 3,
+          "maximum_endpoint_displacement": 0.004173143125460799
+        },
+        {
+          "ray": [
+            "trace_baseline_normalization_ray",
+            -1.0641299257451968,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 2,
+          "maximum_endpoint_displacement": 0.005339108763057876
+        },
+        {
+          "ray": [
+            "trace_current_normalization_ray",
+            -1.0641299257451968,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 2,
+          "maximum_endpoint_displacement": 0.005339108763057876
+        },
+        {
+          "ray": [
+            "trace_baseline_normalization_ray",
+            -1,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 1,
+          "maximum_endpoint_displacement": 0.005844161336825637
+        },
+        {
+          "ray": [
+            "trace_current_normalization_ray",
+            -1,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 1,
+          "maximum_endpoint_displacement": 0.005844161336825637
+        },
+        {
+          "ray": [
+            "trace_baseline_normalization_ray",
+            -0.8717401485096066,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 2,
+          "maximum_endpoint_displacement": 0.004948125739288045
+        },
+        {
+          "ray": [
+            "trace_current_normalization_ray",
+            -0.8717401485096066,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 2,
+          "maximum_endpoint_displacement": 0.004948125739288045
+        },
+        {
+          "ray": [
+            "trace_baseline_normalization_ray",
+            -0.5917001814331423,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 1,
+          "maximum_endpoint_displacement": 0.0038754555662818824
+        },
+        {
+          "ray": [
+            "trace_current_normalization_ray",
+            -0.5917001814331423,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 1,
+          "maximum_endpoint_displacement": 0.0038754555662818824
+        },
+        {
+          "ray": [
+            "trace_baseline_normalization_ray",
+            -0.20929921790247885,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 1,
+          "maximum_endpoint_displacement": 0.003636945874283759
+        },
+        {
+          "ray": [
+            "trace_current_normalization_ray",
+            -0.20929921790247885,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 1,
+          "maximum_endpoint_displacement": 0.003636945874283759
+        },
+        {
+          "ray": [
+            "trace_baseline_normalization_ray",
+            0.20929921790247885,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 1,
+          "maximum_endpoint_displacement": 0.0037230772269771784
+        },
+        {
+          "ray": [
+            "trace_current_normalization_ray",
+            0.20929921790247885,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 1,
+          "maximum_endpoint_displacement": 0.0037230772269771784
+        },
+        {
+          "ray": [
+            "trace_baseline_normalization_ray",
+            0.8717401485096066,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 1,
+          "maximum_endpoint_displacement": 0.0009357952971760231
+        },
+        {
+          "ray": [
+            "trace_current_normalization_ray",
+            0.8717401485096066,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 1,
+          "maximum_endpoint_displacement": 0.0009357952971760231
+        },
+        {
+          "ray": [
+            "trace_baseline_normalization_ray",
+            1,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 2,
+          "maximum_endpoint_displacement": 0.00042774986468341325
+        },
+        {
+          "ray": [
+            "trace_current_normalization_ray",
+            1,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 2,
+          "maximum_endpoint_displacement": 0.00042774986468341325
+        },
+        {
+          "ray": [
+            "trace_baseline_normalization_ray",
+            1.0641299257451968,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 3,
+          "maximum_endpoint_displacement": 0.0004043184109416842
+        },
+        {
+          "ray": [
+            "trace_current_normalization_ray",
+            1.0641299257451968,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 3,
+          "maximum_endpoint_displacement": 0.0004043184109416842
+        },
+        {
+          "ray": [
+            "trace_baseline_normalization_ray",
+            1.204149909283429,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 18,
+          "maximum_endpoint_displacement": 0.00023161923547876384
+        },
+        {
+          "ray": [
+            "trace_current_normalization_ray",
+            1.204149909283429,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 18,
+          "maximum_endpoint_displacement": 0.00023161923547876384
+        },
+        {
+          "ray": [
+            "trace_baseline_normalization_ray",
+            1.3953503910487606,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 7,
+          "maximum_endpoint_displacement": 0.00014253127943542054
+        },
+        {
+          "ray": [
+            "trace_current_normalization_ray",
+            1.3953503910487606,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 7,
+          "maximum_endpoint_displacement": 0.00014253127943542054
+        },
+        {
+          "ray": [
+            "trace_baseline_normalization_ray",
+            1.6046496089512394,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 1,
+          "maximum_endpoint_displacement": 0.0004968618431080429
+        },
+        {
+          "ray": [
+            "trace_current_normalization_ray",
+            1.6046496089512394,
+            0
+          ],
+          "profile_changed": false,
+          "cap_changed": false,
+          "panel_count_change": 0,
+          "evaluation_elements_changed": false,
+          "limiter_switches": 1,
+          "maximum_endpoint_displacement": 0.0004968618431080429
+        }
+      ]
+    }
+  ],
+  "acceptance_inferred": false,
+  "stationarity_inferred": false
+}

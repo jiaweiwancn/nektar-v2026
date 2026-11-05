@@ -1,0 +1,119 @@
+{
+  "scope": "Observe limiter branches and native moving panels in flat-state readbacks.\n\nPanel endpoints are reconstructed from the actual ordered Gauss points, not\nfrom a frozen profile or a differentiated maximum. This observes panel counts,\nlocations and evaluation elements, not the origin labels of tied breakpoints.\nNo residual, state, qualification bound or physical history is modified.\n",
+  "command": [
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-source/solvers/IncNavierStokesSolver/Tests/RANS/audit_cls_epawf_profile_branches.py",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/profile-branch-feedback-audit.json",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/feedback-components/base/readback.json",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/feedback-components/read-1e-05-reduced/readback.json",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/feedback-components/read-5e-06-reduced/readback.json"
+  ],
+  "thread_limits": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "numpy_version": "1.21.5",
+  "comparisons": [
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/feedback-components/base/readback.json",
+      "sha256": "4ab4b61b95891ed7740c19fac186a3a1e3505ef453b034becac26921824a196a",
+      "state_sha256": "2d616dabf7ad5a4c49637bb70f8f1f3d9e4994d41e531cf4794c85cb58ae8308",
+      "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca",
+      "alpha": 400,
+      "time": 0.0025,
+      "norms": [
+        1.3918940866963136e-12,
+        1.1265692223091779e-11,
+        24.415622068906934,
+        4.665573625573827e-14,
+        6.434401161283751e-16,
+        7.986327975940869e-16,
+        2.8629713617195345e-17,
+        0
+      ],
+      "rays": 112,
+      "native_panels": 2489,
+      "profile_counts": {
+        "M": 25,
+        "B": 87
+      },
+      "cap_counts": {
+        "P": 112
+      },
+      "minimum_limiter_gap": 2.0515582878938288e-05,
+      "limiter_pattern_sha256": "f2a2be0dff70f6904956e66512a8b1257fdbaa0ebfd7ff3d89438bb1c1201b70",
+      "panels_sha256": "9284edda7fbcef1fd84064646111e160f7fb8cd45edb7743b2314b4537cf2ec9",
+      "maximum_endpoint_displacement": 0,
+      "changed_rays": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/feedback-components/read-1e-05-reduced/readback.json",
+      "sha256": "711b2592b779f14348d119db6d1d3d87af1ab2a091665f19bc9be5d7b655293c",
+      "state_sha256": "81e57ad662007d7e6ddd65f036cb3e7914371425fa2729a1dfec3fab7d4aad07",
+      "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca",
+      "alpha": 400,
+      "time": 0.0025,
+      "norms": [
+        1.4522276090038765e-12,
+        9.05778410813189e-12,
+        24.415423215264358,
+        6.688858388075187e-14,
+        7.702434230234708e-16,
+        6.852876790218766e-16,
+        1.6263032587282563e-17,
+        0
+      ],
+      "rays": 112,
+      "native_panels": 2489,
+      "profile_counts": {
+        "M": 25,
+        "B": 87
+      },
+      "cap_counts": {
+        "P": 112
+      },
+      "minimum_limiter_gap": 2.0515582878938288e-05,
+      "limiter_pattern_sha256": "f2a2be0dff70f6904956e66512a8b1257fdbaa0ebfd7ff3d89438bb1c1201b70",
+      "panels_sha256": "1968e0dcebbaaf796c8640441906fbf91004b7f02489f0559bfe7e441607fe43",
+      "maximum_endpoint_displacement": 5.9620040646635175e-06,
+      "changed_rays": []
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/feedback-components/read-5e-06-reduced/readback.json",
+      "sha256": "c051d77e8a7a910f73b8055f8ceb5a06f436bb471583d38e97aae4bb3e0dfc71",
+      "state_sha256": "6b24a61f4da2f20236cbab7e593ae355935222ec364c49b82d94f78a9dc3a3ba",
+      "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca",
+      "alpha": 400,
+      "time": 0.0025,
+      "norms": [
+        9.393111871368867e-13,
+        1.5749824025049636e-12,
+        24.415522561580925,
+        4.3052020311454326e-14,
+        7.601683605202537e-16,
+        5.886754854923454e-16,
+        6.928729508540176e-17,
+        0
+      ],
+      "rays": 112,
+      "native_panels": 2489,
+      "profile_counts": {
+        "M": 25,
+        "B": 87
+      },
+      "cap_counts": {
+        "P": 112
+      },
+      "minimum_limiter_gap": 2.0515582878938288e-05,
+      "limiter_pattern_sha256": "f2a2be0dff70f6904956e66512a8b1257fdbaa0ebfd7ff3d89438bb1c1201b70",
+      "panels_sha256": "52a54e3092a103f0865736b0c51c23b84a71054252dba9e845558df71e7cf0be",
+      "maximum_endpoint_displacement": 2.981010971403464e-06,
+      "changed_rays": []
+    }
+  ],
+  "acceptance_inferred": false,
+  "stationarity_inferred": false
+}

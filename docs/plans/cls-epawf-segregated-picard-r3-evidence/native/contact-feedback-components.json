@@ -1,0 +1,622 @@
+{
+  "scope": "Separate conditional y responses using original residual readbacks.\n\nEach Y(k) is obtained by the controlled R3 H solve with zero k updates.\nPartial-field readbacks are conditional diagnostics, never labelled Y(k).\nThe tensor mass is assembled independently; no coupled Jacobian is built.\n",
+  "source": "bd1c47d59bf7f4dce0e20c3678c064fbd05e8aa8",
+  "workers": 2,
+  "ranks_per_process": 1,
+  "thread_limits": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "guess_sha256": "1d1fbb1e18b99d1f06c634fd088274f9eee3a92347c41071ac2256328ee7eada",
+  "evaluations": [
+    {
+      "name": "base-H",
+      "receipt": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-97ec1d7/IncNavierStokesSolver",
+          "case.xml"
+        ],
+        "exit_code": 1,
+        "seconds": 25.464602922998893,
+        "log_sha256": "a4faed05f3d13cecfbde96c6d88abaf39631e84fcb654bd5234daa14f4eba281"
+      },
+      "response": {
+        "purpose": "base",
+        "converged": true,
+        "required": 2e-11,
+        "attained": 1.4700075421073186e-12,
+        "updates": 0,
+        "flow_solves": 0,
+        "epsilon_solves": 0,
+        "failure": "",
+        "event": "non_k_response",
+        "iteration": 0,
+        "alpha": 400,
+        "time": 0.0025,
+        "seconds": 0.491640092
+      },
+      "physical_steps": 0,
+      "physical_time": 0.0,
+      "fixed_k": true
+    },
+    {
+      "name": "base",
+      "receipt": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-97ec1d7/RANSWallResolutionProbe",
+          "case.xml",
+          "input.json",
+          "readback.json"
+        ],
+        "exit_code": 0,
+        "seconds": 7.481873203003488,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "input_sha256": "eaa986815df4658fb7e8712e37680ff807109de1ad6fc34da8ee33afe965a6aa",
+      "state_sha256": "64b4623debf7141cba1f3ce9b7dece51619498c194af69ca46164c03c9279900",
+      "original_norms": [
+        9.22712702434941e-13,
+        1.4700075421073186e-12,
+        8.915726235835272,
+        4.925983912796301e-14,
+        6.6448549116584205e-16,
+        7.394486193165594e-16,
+        4.811147140404425e-17,
+        0.0
+      ]
+    },
+    {
+      "name": "H-1e-05",
+      "receipt": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-97ec1d7/IncNavierStokesSolver",
+          "case.xml"
+        ],
+        "exit_code": 1,
+        "seconds": 40.139666324001155,
+        "log_sha256": "b6345c1071c43b67ca51e7952acac7f6ea967c7b65f952378834ee0350e015ff"
+      },
+      "response": {
+        "purpose": "base",
+        "converged": true,
+        "required": 2e-11,
+        "attained": 7.446101022179207e-12,
+        "updates": 13,
+        "flow_solves": 13,
+        "epsilon_solves": 13,
+        "failure": "",
+        "event": "non_k_response",
+        "iteration": 0,
+        "alpha": 400,
+        "time": 0.0025,
+        "seconds": 15.236995374
+      },
+      "physical_steps": 0,
+      "physical_time": 0.0,
+      "fixed_k": true
+    },
+    {
+      "name": "read-1e-05-reduced",
+      "receipt": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-97ec1d7/RANSWallResolutionProbe",
+          "case.xml",
+          "input.json",
+          "readback.json"
+        ],
+        "exit_code": 0,
+        "seconds": 7.624274607995176,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "input_sha256": "410d9c879967439d6c536f0668dd9cf2a4db255a94538aaf839076d743a2894d",
+      "state_sha256": "aca47acd17afdd4a4404288ac9338f899cc5ea8d959dc669ec57cf76bf08f42b",
+      "original_norms": [
+        1.4045214730224262e-12,
+        7.446101022179207e-12,
+        8.914728794479988,
+        4.110151196877306e-14,
+        8.850720939315998e-16,
+        6.408042338754826e-16,
+        1.25869095961989e-16,
+        0.0
+      ]
+    },
+    {
+      "name": "read-1e-05-conditional_k",
+      "receipt": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-97ec1d7/RANSWallResolutionProbe",
+          "case.xml",
+          "input.json",
+          "readback.json"
+        ],
+        "exit_code": 0,
+        "seconds": 6.606258004001575,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "input_sha256": "b8000cc66b436ecc2f30c15bd2ae25e33d752931af0089ae32c7c3a38392b830",
+      "state_sha256": "99c99b32039625ba2ad0573166cbcde2797ef8dd328269159ec3ff87064d9755",
+      "original_norms": [
+        2.6089733733051646e-05,
+        2.7914418699092986e-06,
+        8.916020255493457,
+        4.925983912796301e-14,
+        6.644616558671632e-16,
+        7.394486193165594e-16,
+        4.811147140404425e-17,
+        1.1616536585462747e-05
+      ]
+    },
+    {
+      "name": "read-1e-05-velocity",
+      "receipt": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-97ec1d7/RANSWallResolutionProbe",
+          "case.xml",
+          "input.json",
+          "readback.json"
+        ],
+        "exit_code": 0,
+        "seconds": 7.2290731750035775,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "input_sha256": "b9151884591169552f8b5a89e0ec5496b52263c8d35138f60c10c42e503bab89",
+      "state_sha256": "1d794f7b58dea40ff15a67680d6a9033f8e86cbbffc6c8075bab39e6f30511a7",
+      "original_norms": [
+        2.655107745419497e-05,
+        7.5740002254086994e-06,
+        8.915742284387107,
+        4.4732816780669945e-07,
+        8.850870605324852e-16,
+        6.408042343238377e-16,
+        4.811147140404425e-17,
+        3.9049570685744796e-07
+      ]
+    },
+    {
+      "name": "read-1e-05-pressure_gauge",
+      "receipt": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-97ec1d7/RANSWallResolutionProbe",
+          "case.xml",
+          "input.json",
+          "readback.json"
+        ],
+        "exit_code": 0,
+        "seconds": 7.359049901002436,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "input_sha256": "cd8750bcde74e81d4cf22c07756a67e5e8ff654b701dc850d8e6480dae2db2c1",
+      "state_sha256": "01bf6426633410367e1d7dbe6254227b54e491102aa96309e711e5ac2342fc5d",
+      "original_norms": [
+        2.3243040736087738e-06,
+        5.192077907683716e-06,
+        8.914418660082,
+        4.925983912796301e-14,
+        6.644854879899632e-16,
+        7.394486197128796e-16,
+        1.25869095961989e-16,
+        8.851058741344456e-06
+      ]
+    },
+    {
+      "name": "read-1e-05-epsilon_trace",
+      "receipt": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-97ec1d7/RANSWallResolutionProbe",
+          "case.xml",
+          "input.json",
+          "readback.json"
+        ],
+        "exit_code": 0,
+        "seconds": 7.478250645996013,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "input_sha256": "21d1cfb0d941565d47cfdf81c0411c77f479487c73f8f8e67faeb915d18f7926",
+      "state_sha256": "40771940c0abe523c9139ea4cbd3e9105e0bc47490f5fa5b808ca9148796cc83",
+      "original_norms": [
+        3.0453118104969014e-06,
+        9.891779037308584e-06,
+        8.91572625758067,
+        4.4744159489856236e-07,
+        6.6448549116584205e-16,
+        7.394486193165594e-16,
+        4.811147140404425e-17,
+        1.1616536585462747e-05
+      ]
+    },
+    {
+      "name": "H-5e-06",
+      "receipt": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-97ec1d7/IncNavierStokesSolver",
+          "case.xml"
+        ],
+        "exit_code": 1,
+        "seconds": 41.41750575399783,
+        "log_sha256": "9af0007eb60fda9bca06214ef127d4b294ed4f2c5369e0562d89460ac9c925fa"
+      },
+      "response": {
+        "purpose": "base",
+        "converged": true,
+        "required": 2e-12,
+        "attained": 1.322064051438763e-12,
+        "updates": 14,
+        "flow_solves": 14,
+        "epsilon_solves": 14,
+        "failure": "",
+        "event": "non_k_response",
+        "iteration": 0,
+        "alpha": 400,
+        "time": 0.0025,
+        "seconds": 16.398374101
+      },
+      "physical_steps": 0,
+      "physical_time": 0.0,
+      "fixed_k": true
+    },
+    {
+      "name": "read-5e-06-reduced",
+      "receipt": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-97ec1d7/RANSWallResolutionProbe",
+          "case.xml",
+          "input.json",
+          "readback.json"
+        ],
+        "exit_code": 0,
+        "seconds": 7.218670578004094,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "input_sha256": "31742aade7c4d0d6ff503b33848fd99bbef72b6f0a4cd699c472321b6e516262",
+      "state_sha256": "48198212479c658101f49f8b0e6a809b0532469e83863da35f65dbb71d6d3075",
+      "original_norms": [
+        9.419469135799201e-13,
+        1.322064051438763e-12,
+        8.915227352975922,
+        4.652923728088385e-14,
+        6.719155821484714e-16,
+        8.092557461839277e-16,
+        5.692061405548897e-17,
+        0.0
+      ]
+    },
+    {
+      "name": "read-5e-06-conditional_k",
+      "receipt": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-97ec1d7/RANSWallResolutionProbe",
+          "case.xml",
+          "input.json",
+          "readback.json"
+        ],
+        "exit_code": 0,
+        "seconds": 7.547702777002996,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "input_sha256": "1af205bb63edb74bf1ff9cd0545bc42c9c7e4168410acc69272a251fc2b73df3",
+      "state_sha256": "7e723d5180333624c790cdc8d615fa18f1cb694e79c1f2237bbde3a800d89b29",
+      "original_norms": [
+        1.3044855613310058e-05,
+        1.3957223838967767e-06,
+        8.915873136215536,
+        4.925983912796301e-14,
+        6.644782363569459e-16,
+        7.394486193165594e-16,
+        4.811147140404425e-17,
+        5.808262554059208e-06
+      ]
+    },
+    {
+      "name": "read-5e-06-velocity",
+      "receipt": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-97ec1d7/RANSWallResolutionProbe",
+          "case.xml",
+          "input.json",
+          "readback.json"
+        ],
+        "exit_code": 0,
+        "seconds": 7.407980930998747,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "input_sha256": "3a61eb026eeb2ba746164d66d33cd57b152eb815b47df55185a5bcd295c2e8f1",
+      "state_sha256": "1444901b74b670058d4789a0935d34d9083c392028d0af14d67fbbb8bb031fbd",
+      "original_norms": [
+        1.3275522649972396e-05,
+        3.7870045310957735e-06,
+        8.91573425821071,
+        2.2366290383711274e-07,
+        6.719098574144325e-16,
+        8.092557478198537e-16,
+        4.811147140404425e-17,
+        1.9522710711670451e-07
+      ]
+    },
+    {
+      "name": "read-5e-06-pressure_gauge",
+      "receipt": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-97ec1d7/RANSWallResolutionProbe",
+          "case.xml",
+          "input.json",
+          "readback.json"
+        ],
+        "exit_code": 0,
+        "seconds": 7.135054712998681,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "input_sha256": "6d370d99f4392c7a4a43b37c9e27b198462052fe4407256e59c3a640da68aaa6",
+      "state_sha256": "24162a820013ad7a9d7ec504fe2d549eee6d5b5477cc3b9910ad7c0ffc6d8a18",
+      "original_norms": [
+        1.162150707777412e-06,
+        2.5960406389290567e-06,
+        8.915072408245365,
+        4.925983912796301e-14,
+        6.644854855173959e-16,
+        7.394486211816755e-16,
+        5.692061405548897e-17,
+        4.424958723089405e-06
+      ]
+    },
+    {
+      "name": "read-5e-06-epsilon_trace",
+      "receipt": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-97ec1d7/RANSWallResolutionProbe",
+          "case.xml",
+          "input.json",
+          "readback.json"
+        ],
+        "exit_code": 0,
+        "seconds": 7.377337723999517,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "input_sha256": "0f5a02311877af0182c21b8dcbfb50132171ce69609aa5b1f23f899662291256",
+      "state_sha256": "de7c64c891b776d4710d54d4303797e10e5e82d9bf845e0e6d5abb2a3dcbafef",
+      "original_norms": [
+        1.5226309707919436e-06,
+        4.9458931491671424e-06,
+        8.915726246706738,
+        2.2369125928038506e-07,
+        6.6448549116584205e-16,
+        7.394486193165594e-16,
+        4.811147140404425e-17,
+        5.808262554059208e-06
+      ]
+    }
+  ],
+  "status": "measured_conditional_components_not_stationarity_or_root",
+  "IncNavierStokesSolver": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-97ec1d7/IncNavierStokesSolver",
+    "sha256": "61563802366a5e99f2aa3fdbfc82060efbdfd5bb06fd325ad695a37101bb99c3",
+    "ldd": "\tlinux-vdso.so.1 (0x00007ffd7b90f000)\n\tlibSpatialDomains.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libSpatialDomains.so.5.9.0 (0x00007eac14c00000)\n\tlibSolverUtils.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libSolverUtils.so.5.9.0 (0x00007eac14600000)\n\tlibFieldUtils.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libFieldUtils.so.5.9.0 (0x00007eac14200000)\n\tlibmpi_cxx.so.40 => /lib/x86_64-linux-gnu/libmpi_cxx.so.40 (0x00007eac155b9000)\n\tlibmpi.so.40 => /lib/x86_64-linux-gnu/libmpi.so.40 (0x00007eac14ec9000)\n\tlibGlobalMapping.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libGlobalMapping.so.5.9.0 (0x00007eac14e34000)\n\tlibMultiRegions.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0 (0x00007eac13e00000)\n\tlibLocalRegions.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0 (0x00007eac13a00000)\n\tlibStdRegions.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0 (0x00007eac13600000)\n\tlibLibUtilities.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0 (0x00007eac13000000)\n\tliblapack.so.3 => /lib/x86_64-linux-gnu/liblapack.so.3 (0x00007eac12800000)\n\tlibblas.so.3 => /lib/x86_64-linux-gnu/libblas.so.3 (0x00007eac14b9e000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007eac12400000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007eac14ab7000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007eac15595000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007eac12000000)\n\tlibptscotch-6.1.so => /lib/x86_64-linux-gnu/libptscotch-6.1.so (0x00007eac13d2d000)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007eac14e18000)\n\tlibboost_program_options.so.1.74.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0 (0x00007eac14a72000)\n\tlibopen-pal.so.40 => /lib/x86_64-linux-gnu/libopen-pal.so.40 (0x00007eac13c7a000)\n\tlibopen-rte.so.40 => /lib/x86_64-linux-gnu/libopen-rte.so.40 (0x00007eac13943000)\n\tlibhwloc.so.15 => /lib/x86_64-linux-gnu/libhwloc.so.15 (0x00007eac13c1e000)\n\tlibCollections.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0 (0x00007eac1348d000)\n\tlibfftw3.so.3 => /lib/x86_64-linux-gnu/libfftw3.so.3 (0x00007eac11c00000)\n\tlibboost_iostreams.so.1.74.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0 (0x00007eac15579000)\n\tlibopenblas.so.0 => /lib/x86_64-linux-gnu/libopenblas.so.0 (0x00007eac0f7b0000)\n\tlibgfortran.so.5 => /lib/x86_64-linux-gnu/libgfortran.so.5 (0x00007eac0f400000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007eac155f7000)\n\tlibptscotcherr-6.1.so => /lib/x86_64-linux-gnu/libptscotcherr-6.1.so (0x00007eac14e11000)\n\tlibbz2.so.1.0 => /lib/x86_64-linux-gnu/libbz2.so.1.0 (0x00007eac14a5f000)\n\tliblzma.so.5 => /lib/x86_64-linux-gnu/liblzma.so.5 (0x00007eac145d5000)\n\tlibevent_core-2.1.so.7 => /lib/x86_64-linux-gnu/libevent_core-2.1.so.7 (0x00007eac1390e000)\n\tlibevent_pthreads-2.1.so.7 => /lib/x86_64-linux-gnu/libevent_pthreads-2.1.so.7 (0x00007eac14e0a000)\n\tlibudev.so.1 => /lib/x86_64-linux-gnu/libudev.so.1 (0x00007eac138e4000)\n\tlibMatrixFreeOps.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0 (0x00007eac0c600000)\n\tlibzstd.so.1 => /lib/x86_64-linux-gnu/libzstd.so.1 (0x00007eac12f31000)\n\tlibquadmath.so.0 => /lib/x86_64-linux-gnu/libquadmath.so.0 (0x00007eac12ee9000)\n",
+    "libraries": {
+      "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+      "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+      "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+      "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+      "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+      "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+      "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+      "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+      "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+      "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+      "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+      "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01",
+      "/usr/lib/x86_64-linux-gnu/libbz2.so.1.0.4": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+      "/usr/lib/x86_64-linux-gnu/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+      "/usr/lib/x86_64-linux-gnu/libevent_core-2.1.so.7.0.1": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+      "/usr/lib/x86_64-linux-gnu/libevent_pthreads-2.1.so.7.0.1": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+      "/usr/lib/x86_64-linux-gnu/libfftw3.so.3.5.8": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+      "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+      "/usr/lib/x86_64-linux-gnu/libgfortran.so.5.0.0": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+      "/usr/lib/x86_64-linux-gnu/libhwloc.so.15.5.2": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+      "/usr/lib/x86_64-linux-gnu/liblzma.so.5.2.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+      "/usr/lib/x86_64-linux-gnu/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+      "/usr/lib/x86_64-linux-gnu/libmpi.so.40.30.2": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+      "/usr/lib/x86_64-linux-gnu/libmpi_cxx.so.40.30.1": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+      "/usr/lib/x86_64-linux-gnu/libopen-pal.so.40.30.2": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+      "/usr/lib/x86_64-linux-gnu/libopen-rte.so.40.30.2": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+      "/usr/lib/x86_64-linux-gnu/libptscotch-6.1.3.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+      "/usr/lib/x86_64-linux-gnu/libptscotcherr-6.1.3.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+      "/usr/lib/x86_64-linux-gnu/libquadmath.so.0.0.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+      "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+      "/usr/lib/x86_64-linux-gnu/libudev.so.1.7.2": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+      "/usr/lib/x86_64-linux-gnu/libz.so.1.2.11": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+      "/usr/lib/x86_64-linux-gnu/libzstd.so.1.4.8": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+      "/usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+      "/usr/lib/x86_64-linux-gnu/openblas-pthread/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+      "/usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9"
+    }
+  },
+  "RANSWallResolutionProbe": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-97ec1d7/RANSWallResolutionProbe",
+    "sha256": "635894ccf5249a8281ff1da293f19df6a2aa180fa5c748c8a677df6258d25bc7",
+    "ldd": "\tlinux-vdso.so.1 (0x00007ffd6712e000)\n\tlibmpi_cxx.so.40 => /lib/x86_64-linux-gnu/libmpi_cxx.so.40 (0x0000760274ad4000)\n\tlibmpi.so.40 => /lib/x86_64-linux-gnu/libmpi.so.40 (0x00007602746c9000)\n\tlibMultiRegions.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0 (0x0000760274200000)\n\tlibLocalRegions.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0 (0x0000760273e00000)\n\tlibSpatialDomains.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libSpatialDomains.so.5.9.0 (0x0000760273a00000)\n\tlibStdRegions.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0 (0x0000760273600000)\n\tlibLibUtilities.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0 (0x0000760273000000)\n\tliblapack.so.3 => /lib/x86_64-linux-gnu/liblapack.so.3 (0x0000760272800000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x0000760272400000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007602745e2000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x0000760274ab2000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x0000760272000000)\n\tlibopen-pal.so.40 => /lib/x86_64-linux-gnu/libopen-pal.so.40 (0x000076027414d000)\n\tlibopen-rte.so.40 => /lib/x86_64-linux-gnu/libopen-rte.so.40 (0x0000760274090000)\n\tlibhwloc.so.15 => /lib/x86_64-linux-gnu/libhwloc.so.15 (0x0000760274a54000)\n\tlibCollections.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0 (0x0000760273c8d000)\n\tlibptscotch-6.1.so => /lib/x86_64-linux-gnu/libptscotch-6.1.so (0x000076027392d000)\n\tlibblas.so.3 => /lib/x86_64-linux-gnu/libblas.so.3 (0x000076027402e000)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x0000760274012000)\n\tlibfftw3.so.3 => /lib/x86_64-linux-gnu/libfftw3.so.3 (0x0000760271c00000)\n\tlibboost_iostreams.so.1.74.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0 (0x0000760273c75000)\n\tlibboost_program_options.so.1.74.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0 (0x0000760273c30000)\n\tlibopenblas.so.0 => /lib/x86_64-linux-gnu/libopenblas.so.0 (0x000076026f7b0000)\n\tlibgfortran.so.5 => /lib/x86_64-linux-gnu/libgfortran.so.5 (0x000076026f400000)\n\t/lib64/ld-linux-x86-64.so.2 (0x0000760274b12000)\n\tlibevent_core-2.1.so.7 => /lib/x86_64-linux-gnu/libevent_core-2.1.so.7 (0x00007602738f8000)\n\tlibevent_pthreads-2.1.so.7 => /lib/x86_64-linux-gnu/libevent_pthreads-2.1.so.7 (0x0000760274a4b000)\n\tlibudev.so.1 => /lib/x86_64-linux-gnu/libudev.so.1 (0x00007602738ce000)\n\tlibMatrixFreeOps.so.5.9.0 => /home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0 (0x000076026c600000)\n\tlibptscotcherr-6.1.so => /lib/x86_64-linux-gnu/libptscotcherr-6.1.so (0x0000760274a44000)\n\tlibbz2.so.1.0 => /lib/x86_64-linux-gnu/libbz2.so.1.0 (0x0000760273c1d000)\n\tliblzma.so.5 => /lib/x86_64-linux-gnu/liblzma.so.5 (0x00007602735d5000)\n\tlibzstd.so.1 => /lib/x86_64-linux-gnu/libzstd.so.1 (0x0000760273506000)\n\tlibquadmath.so.0 => /lib/x86_64-linux-gnu/libquadmath.so.0 (0x00007602734be000)\n",
+    "libraries": {
+      "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+      "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+      "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+      "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+      "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+      "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+      "/home/jay/.local/opt/nektar-v2026-mpi/lib64/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+      "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+      "/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01",
+      "/usr/lib/x86_64-linux-gnu/libbz2.so.1.0.4": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+      "/usr/lib/x86_64-linux-gnu/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+      "/usr/lib/x86_64-linux-gnu/libevent_core-2.1.so.7.0.1": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+      "/usr/lib/x86_64-linux-gnu/libevent_pthreads-2.1.so.7.0.1": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+      "/usr/lib/x86_64-linux-gnu/libfftw3.so.3.5.8": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+      "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+      "/usr/lib/x86_64-linux-gnu/libgfortran.so.5.0.0": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+      "/usr/lib/x86_64-linux-gnu/libhwloc.so.15.5.2": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+      "/usr/lib/x86_64-linux-gnu/liblzma.so.5.2.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+      "/usr/lib/x86_64-linux-gnu/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+      "/usr/lib/x86_64-linux-gnu/libmpi.so.40.30.2": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+      "/usr/lib/x86_64-linux-gnu/libmpi_cxx.so.40.30.1": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+      "/usr/lib/x86_64-linux-gnu/libopen-pal.so.40.30.2": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+      "/usr/lib/x86_64-linux-gnu/libopen-rte.so.40.30.2": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+      "/usr/lib/x86_64-linux-gnu/libptscotch-6.1.3.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+      "/usr/lib/x86_64-linux-gnu/libptscotcherr-6.1.3.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+      "/usr/lib/x86_64-linux-gnu/libquadmath.so.0.0.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+      "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+      "/usr/lib/x86_64-linux-gnu/libudev.so.1.7.2": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+      "/usr/lib/x86_64-linux-gnu/libz.so.1.2.11": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+      "/usr/lib/x86_64-linux-gnu/libzstd.so.1.4.8": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+      "/usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+      "/usr/lib/x86_64-linux-gnu/openblas-pthread/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+      "/usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9"
+    }
+  },
+  "point": [
+    -2.6046496089512394,
+    0.0,
+    1.0
+  ],
+  "independent_mass_native_norm_difference": 8.881784197001252e-15,
+  "free_k_rows": 504,
+  "ground_polynomial_unchanged_by_direction": true,
+  "responses": [
+    {
+      "h": 1e-05,
+      "H_tolerance": 2e-11,
+      "actions": {
+        "reduced": {
+          "norm": 342.5450112024546,
+          "original_merit_slope": -889.8283469613459,
+          "k_term_action_norms": {
+            "diagnostic_outer_cancelled_k_production": 0.0022700399447398963,
+            "inner_k_destruction": 222.30196447331863,
+            "inner_k_production": 1.5489405612261644,
+            "outer_k_destruction": 0.0169449065716118,
+            "outer_k_production": 0.0022700399459731693
+          }
+        },
+        "conditional_k": {
+          "norm": 259.92704941051755,
+          "original_merit_slope": 261.80639005725226,
+          "k_term_action_norms": {
+            "diagnostic_outer_cancelled_k_production": 0.0,
+            "inner_k_destruction": 21.12221616440612,
+            "inner_k_production": 1.6303298891813625,
+            "outer_k_destruction": 0.0,
+            "outer_k_production": 0.0
+          }
+        },
+        "velocity": {
+          "norm": 7.463993327142884,
+          "original_merit_slope": 14.308183786520795,
+          "k_term_action_norms": {
+            "diagnostic_outer_cancelled_k_production": 0.004033732986697327,
+            "inner_k_destruction": 7.451725081338488,
+            "inner_k_production": 0.2784525367262434,
+            "outer_k_destruction": 0.0,
+            "outer_k_production": 0.004033732985419507
+          }
+        },
+        "pressure_gauge": {
+          "norm": 216.1713466519251,
+          "original_merit_slope": -1165.9469074167841,
+          "k_term_action_norms": {
+            "diagnostic_outer_cancelled_k_production": 0.0,
+            "inner_k_destruction": 216.17134665143766,
+            "inner_k_production": 0.0,
+            "outer_k_destruction": 0.0,
+            "outer_k_production": 0.0
+          }
+        },
+        "epsilon_trace": {
+          "norm": 0.01989528426516432,
+          "original_merit_slope": 0.01938760073496166,
+          "k_term_action_norms": {
+            "diagnostic_outer_cancelled_k_production": 0.0028409152899593446,
+            "inner_k_destruction": 0.001402060908874681,
+            "inner_k_production": 0.0,
+            "outer_k_destruction": 0.0169449065716118,
+            "outer_k_production": 0.0028409152937957875
+          }
+        }
+      },
+      "total_feedback_norm": 216.91316364459092,
+      "component_sum_remainder": 0.004967927449123071
+    },
+    {
+      "h": 5e-06,
+      "H_tolerance": 2e-12,
+      "actions": {
+        "reduced": {
+          "norm": 342.55218257617304,
+          "original_merit_slope": -889.8490661266754,
+          "k_term_action_norms": {
+            "diagnostic_outer_cancelled_k_production": 0.0022700426138910555,
+            "inner_k_destruction": 222.31296124881578,
+            "inner_k_production": 1.5489429302150837,
+            "outer_k_destruction": 0.01694489964662111,
+            "outer_k_production": 0.0022700426174750224
+          }
+        },
+        "conditional_k": {
+          "norm": 259.9271398191115,
+          "original_merit_slope": 261.77796755139957,
+          "k_term_action_norms": {
+            "diagnostic_outer_cancelled_k_production": 0.0,
+            "inner_k_destruction": 21.122832204736355,
+            "inner_k_production": 1.6303319631383608,
+            "outer_k_destruction": 0.0,
+            "outer_k_production": 0.0
+          }
+        },
+        "velocity": {
+          "norm": 7.463986201382915,
+          "original_merit_slope": 14.304927789474796,
+          "k_term_action_norms": {
+            "diagnostic_outer_cancelled_k_production": 0.004033717689858274,
+            "inner_k_destruction": 7.451717469204847,
+            "inner_k_production": 0.2784523254044321,
+            "outer_k_destruction": 0.0,
+            "outer_k_production": 0.004033717691724373
+          }
+        },
+        "pressure_gauge": {
+          "norm": 216.17725347339842,
+          "original_merit_slope": -1165.9436418671162,
+          "k_term_action_norms": {
+            "diagnostic_outer_cancelled_k_production": 0.0,
+            "inner_k_destruction": 216.17725347247622,
+            "inner_k_production": 0.0,
+            "outer_k_destruction": 0.0,
+            "outer_k_production": 0.0
+          }
+        },
+        "epsilon_trace": {
+          "norm": 0.01989523667366186,
+          "original_merit_slope": 0.019385403218496876,
+          "k_term_action_norms": {
+            "diagnostic_outer_cancelled_k_production": 0.00284087016246421,
+            "inner_k_destruction": 0.0014024050664934251,
+            "inner_k_production": 0.0,
+            "outer_k_destruction": 0.01694489964662111,
+            "outer_k_production": 0.002840870162493165
+          }
+        }
+      },
+      "total_feedback_norm": 216.92006903016835,
+      "component_sum_remainder": 0.0024846829582149043
+    }
+  ],
+  "two_scale_relative_differences": {
+    "reduced": 4.690042892022999e-05,
+    "conditional_k": 1.8512593894807917e-05,
+    "velocity": 9.965090192356683e-05,
+    "pressure_gauge": 5.8960490349972254e-05,
+    "epsilon_trace": 4.14211781557808e-07
+  }
+}
