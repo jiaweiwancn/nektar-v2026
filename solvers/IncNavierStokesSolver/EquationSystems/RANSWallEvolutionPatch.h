@@ -164,7 +164,8 @@ public:
     };
     struct R8Ray
     {
-        Vector step,action,destruction,ascentRegression;
+        Vector step,action,destruction,ascentRegression,r12Seed,r12Direction,r12Reference;
+        double r12SeedCost=0.,r12DirectionCost=0.;
         WallMatrix destructionAction;
         std::map<double,Vector> residuals;
         std::vector<R11Replay> replay;
@@ -187,6 +188,7 @@ public:
     bool ExperimentR9() const { return m_r9Experiment; }
     bool ExperimentR10() const { return m_r10Experiment; }
     bool ExperimentR11() const { return m_r11Experiment; }
+    bool ExperimentR12() const { return m_r12Experiment!="Off"; }
     bool PilotR8() const { return m_r8Pilot; }
     bool AdaptiveR7() const { return m_r7Policy=="Adaptive"; }
     bool GroundSafeguard() const { return CoupledR4() || JointRestorationR5(); }
@@ -332,6 +334,11 @@ private:
         const std::map<int,double> &constraints,const WallMatrix &jac,const Vector &newton,
         const std::function<Vector(Vector,bool)> &inverse,const R8Ray &binding,
         RANSWallR3::DurableProgress &durable) const;
+    R8Trial RunR12Frozen(
+        const Vector &state,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data,
+        const ScalarDomainResult &domain,const Vector &residual,const std::map<int,double> &constraints,
+        const WallMatrix &jac,const Vector &newton,const std::function<Vector(Vector,bool)> &inverse,
+        const R8Ray &binding,RANSWallR3::DurableProgress &durable) const;
     R8Trial RunR11Comparison(const Vector &state,const Vector &history,double alpha,double time,
         const RANSWallEvolutionData &data,const ScalarDomainResult &domain,const Vector &residual,
         const std::map<int,double> &constraints,const WallMatrix &jac,const Vector &newton,
@@ -419,6 +426,8 @@ private:
     std::string m_nonlinearPolicy="Legacy",m_feasibleTraceFile="case.feasible.jsonl";
     std::string m_directionAccuracy="Legacy",m_r7Policy="Off";
     double m_r7PreviousDisplacement=0.,m_r7Radius=0.;
+    std::string m_r12Experiment="Off";
+    int m_r12CutLimit=96;
     bool m_r7Interior=false,m_r8Experiment=false,m_r8Pilot=false,m_r9Experiment=false,m_r10Experiment=false,m_r11Experiment=false;
     std::string m_r3ProgressFile="case.r3-progress.jsonl";
     std::string m_actionPolicy="Legacy";

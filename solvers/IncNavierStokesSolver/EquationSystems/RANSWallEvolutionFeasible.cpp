@@ -5,6 +5,7 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallCutBudget.h>
 #include <LibUtilities/Foundations/ManagerAccess.h>
 #include <LibUtilities/LinearAlgebra/Lapack.hpp>
 #include <algorithm>
@@ -974,7 +975,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
         ceiling=OuterViolationR5(outer).family;
         for(int i=0;i<ceiling.size();++i)ceiling[i]=(1.-restoration)*ceiling[i]-interior[i];
     }
-    const int maxExchange=outer.empty()?40:96;
+    const bool r12=ExperimentR12();
+    const int maxExchange=r12?m_r12CutLimit:(outer.empty()?40:96);
     int exchange=0;
     bool published=false;
     double worstNative=0,worstExtended=0,maximumScanDifference=0;
@@ -992,7 +994,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
             const double native=w.general?std::inner_product(o.row.begin(),o.row.end(),direction.begin(),0.):w.coefficient>=0?direction[w.coefficient]/w.scale:
                 (w.axis<0?w.point.Value(w.trace?trace:effective,offset[w.block]):
                     w.point.Gradient(effective,offset[w.block])[w.axis])/w.scale;
-            const std::string name=tag+".cut"+std::to_string(rows.size());
+            const std::string name=tag+(r12?".pass"+std::to_string(exchange):"")+".cut"+std::to_string(rows.size());
             auto unscaled=cut.normal;
             for(double &x:unscaled)x*=cut.length;
             rows.push_back(J::Object({{"id",J::Number(cut.id)},{"kind",J::Quote(cut.kind)},{"general_affine_row",J::Boolean(w.general)},
@@ -1015,13 +1017,13 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
             {"original_tolerance",J::Number(feasibility)},{"worst_native_violation",J::Number(worstNative)},
             {"worst_extended_violation",J::Number(worstExtended)},
             {"maximum_scan_difference",J::Number(maximumScanDifference)},
-            {"exchanges",J::List(exchanges)},{"z",diagnostic->VectorPayload(tag+".z",z)},
-            {"direction",diagnostic->VectorPayload(tag+".direction",direction)},
-            {"newton",diagnostic->VectorPayload(tag+".newton",newton)},
-            {"Bz",diagnostic->VectorPayload(tag+".Bz",metricAction(z,false))}});
+            {"exchanges",J::List(exchanges)},{"z",diagnostic->VectorPayload(tag+(r12?".pass"+std::to_string(exchange):"")+".z",z)},
+            {"direction",diagnostic->VectorPayload(tag+(r12?".pass"+std::to_string(exchange):"")+".direction",direction)},
+            {"newton",diagnostic->VectorPayload(tag+(r12?".pass"+std::to_string(exchange):"")+".newton",newton)},
+            {"Bz",diagnostic->VectorPayload(tag+(r12?".pass"+std::to_string(exchange):"")+".Bz",metricAction(z,false))}});
         published=true;
     };
-    for(;exchange<maxExchange;++exchange)
+    for(;exchange<(r12?CutBudgetR12{maxExchange}.Scans():maxExchange);++exchange)
     {
         auto [Q,R]=qr();
         Vector qCoordinates(active.size());
@@ -1156,6 +1158,28 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
         }
         if(diagnostic && !extra.empty() && (scanOnly || violated.empty()))
             diagnostic->Event("r10_general_row_scan",{{"name",J::Quote(tag)},{"rows",J::List(extraAudit)}});
+        if(r12 && diagnostic && !scanOnly)
+        {
+            Vector nonnegative=multipliers,dualVector(Size());
+            double dualLinear=0.;
+            for(int i=0;i<active.size();++i)
+            {
+                nonnegative[i]=std::max(0.,nonnegative[i]);
+                dualLinear+=active[i].rhs*nonnegative[i];
+                axpy(dualVector,nonnegative[i],active[i].normal);
+            }
+            Vector activeIds,diagonal;
+            for(int i=0;i<active.size();++i){activeIds.push_back(active[i].id);diagonal.push_back(R[i][i]);}
+            diagnostic->Event("r12_qp_pass",{{"name",J::Quote(tag)},{"oracle_scan",J::Number(exchange+1)},
+                {"admitted",J::Number(original.size())},{"releases",J::Number(releases)},
+                {"active_ids",J::Numbers(activeIds)},{"qr_diagonal",J::Numbers(diagonal)},
+                {"primal_objective",J::Number(.5*dot(z,z))},
+                {"nonnegative_dual_bound",J::Number(dualLinear-.5*dot(dualVector,dualVector))},
+                {"worst_native_violation",J::Number(worstNative)},
+                {"worst_extended_violation",J::Number(worstExtended)},
+                {"direction",diagnostic->VectorPayload(tag+".scan"+std::to_string(exchange)+".d",direction)},
+                {"z",diagnostic->VectorPayload(tag+".scan"+std::to_string(exchange)+".z",z)}});
+        }
         if(scanOnly)
         {
             details=J::Object({{"passed",J::Boolean(violated.empty())},
@@ -1212,6 +1236,14 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
             record(nullptr,R,effective,trace,"passed_original_cut_scan");
             return direction;
         }
+        // R12 performs one last reconstruction and complete scan after the last
+        // admitted cut. This check cannot discover/admit another cut.
+        if(r12 && !CutBudgetR12{maxExchange}.CanAdmit(exchange))
+        {
+            record(nullptr,R,effective,trace,"post_limit_updated_candidate_infeasible");
+            throw std::runtime_error("R12 post-limit updated candidate still violates original rows: "+
+                kind+" violation "+J::Number(violation));
+        }
         auto transposeSolution=inverse(violated,true);
         auto normal=metricAction(transposeSolution,true);
         const double length=std::sqrt(dot(normal,normal));
@@ -1228,6 +1260,17 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::CoupledDirectionR4(
             exchanges.push_back(J::Object({{"op",J::Quote("enter")},{"id",J::Number(id)},
                 {"kind",J::Quote(kind)},{"point",kind=="native_merit_slope"?"null":J::Numbers(location)},{"active",J::Numbers(activeIds)},
                 {"exact_previous_alias_ids",J::Numbers(aliases)},{"violation",J::Number(violation)}}));
+            if(r12)
+            {
+                const std::string prefix=tag+".original"+std::to_string(id);
+                diagnostic->Event("r12_original_cut",{{"name",J::Quote(tag)},{"id",J::Number(id)},
+                    {"kind",J::Quote(kind)},{"point",J::Numbers(location)},{"rhs",J::Number(rhs)},
+                    {"identity",J::Quote(RANSWallR3::Hash([&]{auto v=violated;v.push_back(rhs);return v;}()))},
+                    {"aliases",J::Numbers(aliases)},{"length",J::Number(length)},
+                    {"transformed_rhs",J::Number(incoming.rhs*length)},
+                    {"row",diagnostic->VectorPayload(prefix+".row",violated)},
+                    {"normal",diagnostic->VectorPayload(prefix+".normal",[&]{auto v=incoming.normal;for(auto &x:v)x*=length;return v;}())}});
+            }
             if(exchange+1==maxExchange)record(&incoming,R,effective,trace,"exchange_limit_candidate");
             if(refined && std::any_of(active.begin(),active.end(),[&](const Cut &cut)
                 {return original[cut.id].row==violated && original[cut.id].rhs==rhs;}))
@@ -1295,7 +1338,7 @@ RANSWallEvolutionPatch::R8Trial RANSWallEvolutionPatch::RunR8Comparison(const Ve
     std::map<Vector,R8Trial> *cache,R11TrialWork *work) const
 {
     using Clock=std::chrono::steady_clock;
-    const bool pilot=PilotR8() || ExperimentR9() || ExperimentR10() || ExperimentR11();
+    const bool pilot=PilotR8() || ExperimentR9() || ExperimentR10() || ExperimentR11() || ExperimentR12();
     const std::string prefix="iterate"+std::to_string(iteration)+"."+comparison;
     constexpr double fit=.125,holdout=.0625;
     const double us=m_robustUstar,K0=m_parameters.model.Q()*us*us,H=m_parameters.geometry.height;
@@ -2308,6 +2351,79 @@ static_assert((R11Square(2.+.125*(2.+.5))-R11Square(2.+.125*(2.-.5)))/(2*.125*.5
 static_assert(R10Retain(4.,3.,false)==4.);
 }
 
+RANSWallEvolutionPatch::R8Trial RANSWallEvolutionPatch::RunR12Frozen(
+    const Vector &state,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data,
+    const ScalarDomainResult &domain,const Vector &residual,const std::map<int,double> &constraints,
+    const WallMatrix &jac,const Vector &newton,const std::function<Vector(Vector,bool)> &inverse,
+    const R8Ray &binding,RANSWallR3::DurableProgress &durable) const
+{
+    const auto started=std::chrono::steady_clock::now();
+    const auto outer=OuterBoundsR5(domain);
+    const auto merit=MeritRowsR10(residual,jac,constraints);
+    const double E=Maximum(Norms(residual,constraints,m_robustUstar)),slopeBound=-2e-4*E;
+    std::vector<DirectionRestriction> cuts;
+    for(auto row:merit){for(auto &x:row)x=-x;cuts.push_back({row,-slopeBound,"native_merit_slope"});}
+    auto r=residual;
+    for(int i=0;i<Size();++i)if(i<offset[InnerPressure()] && !constraints.count(i))r[i]/=.125;
+    auto inspect=[&](const Vector &d,const std::string &name)
+    {
+        Require(d.size()==Size(),"R12 candidate binding missing");
+        std::string scan;
+        const auto passed=CoupledDirectionR4(domain,d,jac,constraints,inverse,scan,outer,1.,false,
+            &durable,name,residual,.125,nullptr,{},cuts,true);
+        auto jd=Multiply(jac,d),linear=jd,mixed=jd;
+        for(int i=0;i<Size();++i){linear[i]+=residual[i];mixed[i]+=r[i];}
+        const auto products=DualProductsR10(mixed,mixed,constraints);
+        const double psi=.5*std::accumulate(products.begin(),products.begin()+InnerPressure(),0.);
+        const auto norms=Norms(linear,constraints,m_robustUstar);
+        const double C=*std::max_element(norms.begin()+InnerPressure(),norms.end());
+        double slope=-std::numeric_limits<double>::infinity();
+        for(const auto &row:merit)
+        {long double s=0.;for(int i=0;i<Size();++i)s+=(long double)row[i]*d[i];slope=std::max(slope,double(s));}
+        auto stateAt=state;for(int i=0;i<Size();++i)stateAt[i]+=d[i];
+        const auto sourceDomain=ScalarDomain(stateAt,time,data,true);
+        bool wall=false;if(sourceDomain.admissible)WallTraceJSON(sourceDomain.effectiveState,wall);
+        const bool qualified=!passed.empty() && C<=5e-12 && slope<=slopeBound;
+        durable.Event("r12_candidate",{{"name",J::Quote(name)},{"original_scan",scan},
+            {"qualified_affine",J::Boolean(qualified)},{"full_anchor_source_domain",J::Boolean(sourceDomain.admissible && wall)},
+            {"algebraic",J::Number(C)},{"native_slope",J::Number(slope)},{"slope_bound",J::Number(slopeBound)},
+            {"Psi_Lf",J::Number(psi)},{"Phi_Lf",J::Number(psi*.125*.125)},
+            {"direction",durable.VectorPayload("r12."+name+".direction",d)},
+            {"mixed_residual",durable.VectorPayload("r12."+name+".mixed",mixed)}});
+        Require(qualified,"R12 frozen candidate failed original feasibility/algebraic/slope checks");
+        return psi;
+    };
+    const double upper=inspect(binding.r12Seed,"L1_witness");
+    Require(std::abs(upper-272.9590401766774)<2e-9,"R12 feasible objective bound changed");
+    if(m_r12Experiment=="Verify")
+    {
+        inspect(binding.r12Direction,"native_completed");
+        inspect(binding.r12Reference,"independent_reference");
+        durable.Event("r12_frozen_outcome",{{"status",J::Quote("independent_direction_original_oracle_verified")}});
+        return {};
+    }
+    auto rhs=r;for(auto &x:rhs)x=-x;
+    const auto n=inverse(rhs,false);
+    std::string details;
+    try
+    {
+        const auto d=CoupledDirectionR4(domain,n,jac,constraints,inverse,details,outer,1.,false,
+            &durable,"r12_Lf",r,.125,nullptr,{},cuts);
+        const auto objective=inspect(d,"Lf_completed");
+        Require(objective<=upper+2e-9,"R12 result exceeds its feasible L1 upper bound");
+        durable.Event("r12_frozen_outcome",{{"status",J::Quote("qualified")},{"details",details},
+            {"cut_admission_limit",J::Number(m_r12CutLimit)},{"upper_Psi",J::Number(upper)},
+            {"seconds",J::Number(std::chrono::duration<double>(std::chrono::steady_clock::now()-started).count())}});
+    }
+    catch(const std::exception &e)
+    {
+        durable.Event("r12_frozen_outcome",{{"status",J::Quote("unresolved")},{"reason",J::Quote(e.what())},
+            {"cut_admission_limit",J::Number(m_r12CutLimit)},{"upper_Psi",J::Number(upper)},
+            {"seconds",J::Number(std::chrono::duration<double>(std::chrono::steady_clock::now()-started).count())}});
+    }
+    return {};
+}
+
 RANSWallEvolutionPatch::R8Trial RANSWallEvolutionPatch::RunR11Comparison(
     const Vector &state,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data,
     const ScalarDomainResult &domain,const Vector &residual,const std::map<int,double> &constraints,
@@ -2315,6 +2431,7 @@ RANSWallEvolutionPatch::R8Trial RANSWallEvolutionPatch::RunR11Comparison(
     const R8Ray &binding,RANSWallR3::DurableProgress &durable) const
 {
     using Clock=std::chrono::steady_clock;
+    const bool r12=ExperimentR12();
     const double us=m_robustUstar,referenceFraction=.125;
     const auto baseNorms=Norms(residual,constraints,us);
     const double baseE=Maximum(baseNorms),slopeBound=-2e-4*baseE;
@@ -2378,6 +2495,8 @@ RANSWallEvolutionPatch::R8Trial RANSWallEvolutionPatch::RunR11Comparison(
     std::map<Vector,InnerDestruction> replayCache;
     bool replayPass=true;
     int replayValues=1;
+    if(!r12)
+    {
     for(const auto &item:binding.replay)
     {
         const auto d=scaled(item.direction,item.fraction);
@@ -2418,6 +2537,7 @@ RANSWallEvolutionPatch::R8Trial RANSWallEvolutionPatch::RunR11Comparison(
         durable.Event("r11_decision",{{"promote","false"},{"reason",J::Quote("retrospective_model_mismatch")},
             {"selected_policy","null"},{"retained_policy","null"}});
         return {};
+    }
     }
     const auto started=Clock::now();
     auto elapsed=[&]{return std::chrono::duration<double>(Clock::now()-started).count();};
@@ -2495,6 +2615,16 @@ RANSWallEvolutionPatch::R8Trial RANSWallEvolutionPatch::RunR11Comparison(
         auto rhs=r;for(auto &x:rhs)x=-x;
         const auto n=s==1.?newton:inverse(rhs,false);
         std::string detail;
+        if(r12)
+        {
+            p.d=p.name=="L1"?binding.r12Seed:binding.r12Direction;
+            p.status=!p.d.empty() && validate(p.d,p.name+".initial")?"bound_qualified_affine":"bound_affine_invalid";
+            p.directionSeconds=p.name=="L1"?binding.r12SeedCost:binding.r12SeedCost+binding.r12DirectionCost;
+            p.directionSeconds+=std::chrono::duration<double>(Clock::now()-begin).count();
+            p.cost=p.directionSeconds;
+            if(p.status=="bound_qualified_affine")native(p);
+            publish(p);policies.push_back(std::move(p));continue;
+        }
         try
         {
             p.d=CoupledDirectionR4(domain,n,jac,constraints,inverse,detail,outer,1.,false,&durable,
@@ -2510,6 +2640,8 @@ RANSWallEvolutionPatch::R8Trial RANSWallEvolutionPatch::RunR11Comparison(
     for(int arm=0;arm<2;++arm)
     {
         Policy p;p.name=arm?"Nf":"N1";
+        if(r12 && !arm)
+        {p.status="historical_N1_not_repeated";publish(p);policies.push_back(std::move(p));continue;}
         const double s=arm?referenceFraction:1.;
         const auto modelStarted=Clock::now();
         int calls=0,hits=0,actions=0,solves=0,fullChecks=0;
@@ -2893,7 +3025,15 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
             for(int row=0;row<Size();++row)linear[row]+=residual[row];
             const auto linearNorms=Norms(linear,constraints,us);
             Require(Maximum(linearNorms)<1e-8*std::max(1.,error),"R3 inaccurate linear solve");
-            if(ExperimentR11())
+            if(ExperimentR12() && m_r12Experiment!="Compare")
+            {
+                Require(localR5 && useFrozen,"R12 requires its bound frozen problem");
+                RunR12Frozen(s,history,alpha,time,data,domain,residual,constraints,jac,newton,inverse,ray,durable);
+                m_lastFeasibleState=s;
+                durable.Event("solve_terminal",{{"converged","false"},{"terminal",J::Quote("r12_frozen_completed")}});
+                return s;
+            }
+            if(ExperimentR11() || ExperimentR12())
             {
                 Require(localR5 && useFrozen,"R11 must use its bound current physical matrix");
                 const auto trial=RunR11Comparison(s,history,alpha,time,data,domain,residual,constraints,
@@ -2907,7 +3047,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
                 }
                 m_lastFeasibleState=trial.accepted?trial.state:s;
                 durable.Event("solve_terminal",{{"converged","false"},
-                    {"terminal",J::Quote("r11_fixed_comparison_completed")},{"iteration",J::Number(iterations)},
+                    {"terminal",J::Quote(ExperimentR12()?"r12_fixed_comparison_completed":"r11_fixed_comparison_completed")},{"iteration",J::Number(iterations)},
                     {"profiling",profiling()}});
                 return m_lastFeasibleState;
             }

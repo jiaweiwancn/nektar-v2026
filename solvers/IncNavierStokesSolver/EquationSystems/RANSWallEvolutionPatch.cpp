@@ -245,6 +245,12 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     m_r11Experiment=r11=="On";
     Require(r11=="Off" || (m_r11Experiment && RefinedDirectionR6() && m_r7Policy=="Off" &&
         r8=="Off" && r9=="Off" && r10=="Off"),"R11 requires its isolated RefinedR6 comparison");
+    session->LoadSolverInfo("RANSWallR12Experiment",m_r12Experiment,"Off");
+    session->LoadParameter("RANSWallR12CutLimit",m_r12CutLimit,96);
+    Require(m_r12Experiment=="Off" || ((m_r12Experiment=="Replay" || m_r12Experiment=="Complete" ||
+        m_r12Experiment=="Verify" || m_r12Experiment=="Compare") && RefinedDirectionR6() &&
+        m_r7Policy=="Off" && r8=="Off" && r9=="Off" && r10=="Off" && r11=="Off" &&
+        m_r12CutLimit>=1 && m_r12CutLimit<=512),"R12 requires its isolated bounded RefinedR6 policy");
     Require(m_actionPolicy=="Legacy" || m_actionPolicy=="VerifiedR3Action","unknown wall action policy");
     Require((m_nonlinearPolicy=="ScalarFeasibleR3")== (m_actionPolicy=="VerifiedR3Action"),
         "VerifiedR3Action and ScalarFeasibleR3 must be selected together");

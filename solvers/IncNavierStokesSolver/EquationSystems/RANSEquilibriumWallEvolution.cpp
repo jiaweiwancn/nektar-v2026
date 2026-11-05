@@ -527,7 +527,7 @@ void RANSEquilibriumWallEvolution::RunR3StageTest()
             binary.read(reinterpret_cast<char*>(row.data()),row.size()*sizeof(double));
         Require(binary.good(),"R6 matrix payload is incomplete");
         frozenAssembly=binding.get<std::string>("assembly_json");
-        if(m_patch->ExperimentR10() || m_patch->ExperimentR11())
+        if(m_patch->ExperimentR10() || m_patch->ExperimentR11() || m_patch->ExperimentR12())
         {
             auto vector=[&](const std::string &key)
             {
@@ -567,6 +567,14 @@ void RANSEquilibriumWallEvolution::RunR3StageTest()
                     }
                     ray.replay.push_back({item.get<std::string>("name"),direction,actual,fraction,item.get<bool>("anchor")});
                 }
+            }
+            if(m_patch->ExperimentR12())
+            {
+                ray.r12Seed=vector("r12.seed");
+                ray.r12SeedCost=packet.get<double>("r12.seed_cost");
+                if(packet.get_child_optional("r12.direction"))ray.r12Direction=vector("r12.direction");
+                if(packet.get_child_optional("r12.reference"))ray.r12Reference=vector("r12.reference");
+                ray.r12DirectionCost=packet.get<double>("r12.direction_cost",0.);
             }
             ray.destruction=vector("r10_source.value");
             ray.ascentRegression=vector("r10_source.ascent");
