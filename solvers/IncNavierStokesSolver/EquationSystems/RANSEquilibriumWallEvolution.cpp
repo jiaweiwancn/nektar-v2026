@@ -172,11 +172,10 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
             Require(m_patch->NonlinearPolicyName()=="ScalarFeasibleR2" && m_eta==0 && m_neutral &&
                 m_order==2 && m_steps==0 && m_timestep==.0025 && m_maximumIterations<=12 && m_tolerance==2e-12 &&
                 m_session->GetComm()->GetSize()==1,"R2 stage test requires the frozen serial neutral IMEX2 startup input");
+        Require(!m_patch->PimpleSingleSweep() || m_stageTest=="Off","PIMPLE forbids stage-test drivers");
         if(r3)
         {
-            Require(!m_patch->PimpleSingleSweep() || m_stageTest=="Off","PIMPLE is a physical time mode, not a stage test");
-        Require(!m_patch->PimpleSingleSweep() || m_stageTest=="Off","PIMPLE forbids stage-test drivers");
-        m_session->LoadSolverInfo("RANSWallR3PredictorFile",m_r3PredictorFile,"None");
+            m_session->LoadSolverInfo("RANSWallR3PredictorFile",m_r3PredictorFile,"None");
             Require(m_patch->NonlinearPolicyName()=="ScalarFeasibleR3" && m_patch->InnerStressName()=="SaturatedR2" &&
                 m_eta==0 && m_neutral && m_order==2 && m_steps==0 && m_timestep==.0025 &&
                 m_maximumIterations>0 && m_maximumIterations<=16 && m_tolerance==2e-12 &&
@@ -312,8 +311,10 @@ RANSEquilibriumWallEvolution::Vector RANSEquilibriumWallEvolution::Implicit(cons
         Require(Maximum(norms)<=m_tolerance,"Picard candidate failed the native stage residual check");
     if(m_patch->PimpleSingleSweep() && m_pimpleRejectStep>0 && m_integrator->Steps()+1==m_pimpleRejectStep)
     {m_rejectedState=candidate;throw std::runtime_error("deliberate PIMPLE rejection after scheduled solves before commit");}
-    if(m_patch->PimpleSingleSweep())m_physicalSamples=m_patch->PhysicalSamples(candidate,time,m_implicitData);
+    RANSWallEvolutionPatch::Diagnostic samples;
+    if(m_patch->PimpleSingleSweep())samples=m_patch->PhysicalSamples(candidate,time,m_implicitData);
     if(m_diagnostics)RecordAudit(candidate,fullHistory,1/lambda,time);
+    if(m_patch->PimpleSingleSweep())m_physicalSamples=std::move(samples);
     m_state=std::move(candidate);
     Vector record{time,lambda,1/lambda,static_cast<double>(iterations),Maximum(norms),m_patch->AnchorEnergyWork(m_state)};
     record.insert(record.end(),norms.begin(),norms.end());m_stageAudits.push_back(record);
