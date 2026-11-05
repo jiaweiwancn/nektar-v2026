@@ -1,192 +1,311 @@
-# Segregated CLS/EP-AWF Picard R3: reduced search implementation
+# Segregated CLS/EP-AWF Picard R3: sequential reduced directions
 
-**Status: implemented, native numerical validation blocked by the unmounted
-Linux data volume. The original M8 convergence problem is unresolved.**
+**Development status: the original M8 problem remains unresolved. No qualified
+physical stage has been accepted; accepted physical steps/time remain 0/0.**
+The designated volume was restored and native Linux development resumed. The
+long original-start validation and an extended diagnostic solve are still
+running while this report is being assembled; their final results will replace
+the interim entries below before publication of the final evidence.
 
-This phase continues the reviewed `1f2b67db0260ccf0e09271cc7ab7d75424c4e6c7`
-on `codex/cls-epawf-segregated-picard`. The new implementation is commit
-`819c135` (the full producing commit is in the evidence manifest). R1/R2
-implementation, reports, evidence, legacy selectors, and the unrelated Mac
-files were preserved. The shared Linux checkout and installation were not
-modified. Serial, flat, tensor-cubic ground support remains explicit.
+R3 now constructs a constrained k direction from the response of converged
+velocity, pressure/gauge, and epsilon/trace solves. It no longer chooses a
+conditional Jkk direction and only optionally settles the other equations.
+The R2 conditional method, old backends, verification repair, restricted k
+analytic assembly, original residual, and historical evidence remain intact.
+No full all-field Jacobian or hidden coupled direction solver was added.
 
-No new native M8 solve was run in this phase. The last numerical result is
-the **historical R2 original-start result**, not an R3 result:
+The producing solver implementation is `8dc862f270632dacad1d60ca22d8e870ebd9b7c6`.
+Its initial implementation was `819c135177a5381d9332013609378eb943c8e0b9`;
+native-driven repairs include QR handling of degenerate active rows (`380bad3`),
+mixed restoration (`7848ad4`), bounded ground arithmetic corrections (`645d05b`),
+physical-history-bound trial packets (`e7313f7`), and a filter-consistent direction
+constraint (`8dc862f`). The continuation and spatial diagnostic harnesses are
+`315cbee` and `0bd00ae`. R1/R2 reports and evidence are preserved.
 
-| Quantity | R2 result | Original requirement |
+## Target and acceptance authority
+
+The primary target is unchanged: original outer6 M8 mesh and physical history,
+2,165 unknowns, p3/p1 spaces, native GLL8 rule and original source quadrature,
+SaturatedR2, capped destruction with Linear smoothing, original transition,
+closures, normalization, diffusion, boundary data and zero prescribed forcing.
+The physical implicit coefficient is 400, stage time .0025, and original
+complete-residual tolerance 2e-12. Loading a numerical trial changes the
+nonlinear guess only. It never replaces h0, history slots, stage time or alpha.
+
+The original qualification requires maximum normalized outer-gradient departure
+<=.001, local outer k and sampled K ratios in [.99,1.01], actual outer epsilon
+and projected matching trace in [.98,1.02], covariance and normalization-lambda
+checks, the native scalar evaluation domain, and continuous-ground admissibility.
+Finite scalar-inventory validity is not a full-element positivity theorem.
+Ground admissibility uses the actual continuous cubic polynomial and its extrema,
+not signs of Modified_A coefficients.
+
+The initial represented h0 remains bitwise SHA256
+`b8ba7917424057a9f6f16a026d82d53ede43985871537facea170ef6e1841b71`.
+The native callback's numerically equivalent history (canonicalized zero signs)
+is `f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca`.
+The harness asserts target size, alpha, time, tolerance, h0 and history binding.
+A converged affine model, vanishing projected update or eta-positive root is
+never an acceptance certificate.
+
+## Controlled non-k operation
+
+`EquilibrateNonK` fixes every independent k coefficient. It preserves the const
+physical history, stage coefficients/time and external data, and uses separate
+velocity prediction, pressure Schur correction, and epsilon transport/nonlinear
+trace solves. H contains original momentum, both regional continuity equations,
+common gauge, outer epsilon and matching trace. Its merit excludes k.
+
+Tolerance and update budget are arguments. The return includes convergence status,
+attained block norms, work and failure reason. An unsuccessful operation returns
+the caller's incoming state, rather than exposing a partial iterate as Y(k).
+Expected factorization, invalid-domain and exhausted-iteration failures permit
+retry. Shape and fixed-k violations remain programming errors. No history advances.
+Every assessed reduced trial fraction requires H convergence before scoring.
+
+Verification repeats the same k, changes the y warm start, tightens H, and forces
+a zero-budget failure. Representative measured reduced-residual differences are:
+
+| State | Same warm start | Disturbed/tighter warm start |
 | --- | ---: | ---: |
-| Complete original residual | 2.9088338887423277 | <= 2e-12 |
-| Continuous ground minimum k | about 2.14e-16 | arithmetic admissibility |
-| Maximum normalized outer-gradient departure | 0.00382640524 | <= 0.001 |
-| Minimum outer-epsilon ratio | 0.9744548514 | >= 0.98 |
-| Accepted physical steps / final time | 0 / 0 | qualified first stage, then .0075 |
+| Original h0, after H | 0 | 5.315e-12 |
+| R2 endpoint, after H | 0 | 9.770e-8 |
+| Ground diagnostic endpoint | 0 | 5.180e-8 |
+| Same ground endpoint with H tolerance 2e-11 | 0 | 1.860e-10 |
 
-There is no new evidence of reduced stationarity or nonexistence. A failed
-subspace model, failed non-k solve, or future exhausted line search must not
-be interpreted as such a certificate.
+All k coefficients stayed fixed; the deliberate insufficient-accuracy operation
+failed explicitly and rolled back. These differences and two-scale response
+checks are empirical local accuracy evidence, not global uniqueness of Y(k).
+For example, the six-update mixed original run used 177 converged H evaluations,
+1,352 velocity/pressure pairs and 1,352 epsilon solves. Maximum attained H error
+was 1.986e-9 for declared 2e-9 accuracy. Tighter half-response solves use 1e-10;
+the expanded diagnostic uses H=2e-11 and half-response H=2e-12.
 
-## Direction construction
+## Actual reduced action and direction construction
 
-`RANSWallPicardReduced=On` selects the new path. It is opt-in; the conditional
-k method remains a reproducible control. The old optional settling code is
-retained, but it does not define a reduced residual for the new method.
+The true conditional analytic free-k matrix, including exact alpha mass, supplies
+one seed. The rate-Picard matrix is another seed. Neither is substituted for
+Jred. Each used column of B is a one-sided difference of original k residuals
+after converged H solves at fixed candidate k. All dependent wall profiles,
+moving quadrature/basis evaluations, complete-ray normalization, cutoffs,
+mechanical forcing, stress, production/destruction, diffusivity, sensors, chi,
+and nonlinear trace quantities are rebuilt by native residual/evaluation calls.
 
-The reusable `EquilibrateNonK` operation holds **all independent k
-coefficients** fixed. It uses the extracted native velocity predictor and
-pressure Schur correction followed by the original epsilon transport and
-nonlinear matching-trace solve. Its merit excludes k and includes momentum,
-both continuity equations, common gauge, outer epsilon and trace. Accuracy
-and update budget are arguments. Its return value includes converged/failed
-status, attained block norms, residual, work counts and failure reason.
+Each column is checked at h and h/2 with tighter H. Unusable columns are rejected
+(3% residual-action and 5% maximum individual-observation action limits). Typical
+h is 2e-5 in dimensionless coefficient norm, and 5e-6 in the 32-column diagnostic.
+Probes at ground contact are one-sided and inward; no undefined negative-k
+constitutive state is used. Logs retain branch-change flags, cutoff ranges,
+normalization margins and moving-inventory counts at both perturbation sizes.
 
-The input state and physical history are const. Failure returns the incoming
-state, never the partially equilibrated iterate. Expected factorization,
-domain and line-search failures permit retries. Dimension errors and the
-fixed-k invariant throw programming errors separately. The numerical trial
-state is stored only for rejected-state diagnostics; it never advances the
-native physical history.
+Two-pass orthogonalization tests independent k seeds and response rank. Seeds
+cover ground value/tangent modes, conditional/rate corrections, sampled K and
+normalization on both sides, epsilon lower-bound witnesses, spatially distinct
+signed qualification witnesses, active cuts, kinetic defect modes and previous
+displacements. The model expands toward 32 columns when needed. Thirty-two
+columns are still a tested subspace, not the entire 504-dimensional free-k space.
 
-Every response and trial requires explicit H convergence. A column is a
-one-sided difference of **converged** non-k solutions from the same base
-warm start. Each candidate response is checked at h and h/2, with a tighter
-non-k tolerance for the latter. Columns exceeding 3% relative residual-action
-error or 5% maximum normalized observation-action error are discarded.
-Insufficient usable columns trigger tighter accuracy and an expanded model,
-not silent use of partial solves. `RANSWallReducedVerify=On` additionally
-checks repeated k evaluation, a disturbed warm start, and deliberate zero-
-budget failure/rollback. These native checks are implemented but **unrun**.
+Feedback changes signed directions materially. At the original-run eight-update
+checkpoint, the sampled-K direction on the negative-x side has conditional merit
+slope +1382.779 but reduced slope -503.291. Actual finite differences give
+-502.366 at h and -503.158 at h/2. The reduced action norm is 304.223 and its
+feedback component norm 196.358. Near the ground diagnostic endpoint, the
+inward-feasible conditional-Newton seed has conditional merit slope +.320858
+but reduced slope -.594301, with measured slopes -.589468 and -.592603.
+Thus feedback enters the actual model before direction selection and can reverse
+the local predicted merit sign.
 
-The response basis includes conditional Newton and rate-Picard seeds,
-ground-inward modes, sampled-K and normalization modes on both sides of the
-support, independent epsilon-bound witness seeds, spatially distinct signed
-qualification witnesses, and the previous displacement. Feasible one-sided
-probes are constructed using the physical ground polynomial. Two-pass
-rank-revealing orthogonalization rejects dependent seed columns. Failed
-models can expand the requested basis by three directions, up to 32.
+At the original h0, feedback is much smaller: conditional-Newton action norm
+6.822192 versus reduced 6.822456, with feedback norm .00047165; the frozen Picard
+action norm is 14.912641. Fixed-point consistency does not make these actions equal.
+Small-step merit differences include their quadratic term: at the R2 endpoint,
+a nearly tangent sampled-K direction has negative first-order slope but positive
+finite-h merit changes. Its large action norm explains that curvature; an action
+norm check alone would not establish usable finite-step descent.
 
-The reduced action B enters the small direction optimization **before**
-choosing the correction. This differs from choosing a conditional Jkk
-direction and then optionally settling the other fields. No full all-field
-Jacobian is assembled or solved. The verified free-k analytic matrix and
-exact alpha mass remain the conditional seed, not a substitute for B.
+The small quadratic model uses the original k mass-dual norm, displacement scaling
+S=I/K0, regularization 1e-3||S d||² plus a 1e-10 coefficient diagonal. It includes
+individual signed observations, both signs, for every applicable OuterBoundsR5
+row, including local outer k, sampled K, gradient components, actual epsilon and
+projected trace. Domain cuts cover all current scalar evaluation points. Actual
+candidates rebuild the full moving inventory, so newly active observations can
+be discovered away from the previously worst point. Covariance and lambda remain
+complete final-audit gates.
 
-## Constraints, restoration and actual trials
+Outside qualification, the objective combines normalized original-residual merit
+and a minimax qualification slack. Restoration can raise residual while reducing
+qualification violation. The filter tracks these quantities separately. The
+model now includes the filter's allowed qualification ceiling, rather than
+rejecting every proposal before an actual line search when its full-step
+violation exceeds that ceiling. Inside qualification, all original signed
+bounds are enforced while reducing the original residual.
 
-The small quadratic model uses the original free-k mass-dual residual norm.
-The displacement scaling is the Euclidean free-k coefficient norm divided
-by reference K. Regularization is 1e-3 times its squared norm plus a 1e-10
-coefficient diagonal for nearly dependent response coordinates.
+Active cuts use two-pass QR/null-space solves rather than the ill-conditioned
+normal Gram system. The final combined correction is bounded after cut handling,
+and predictions are recomputed. This is a radius-bounded model search; radial
+scaling is not claimed to preserve the unscaled affine model's optimum. Logged
+small affine KKT defects are not nonlinear stationarity certificates. Original
+merit gradients and empirical two-scale action uncertainty are logged separately.
 
-Both signs of every `OuterBoundsR5` observation enter direction selection:
-individual gradient components, local outer k, sampled K, actual outer
-epsilon, and projected matching trace. Each observation receives the
-equilibrated full-state or projected-trace response. It is not a derivative
-of the single worst violation. Ground constraints start with all continuous
-ground extrema and add cuts at actual candidate extrema. Positivity cuts
-also cover the complete current scalar inventory. At moving-ray locations
-these constrain the current points; the actual candidate rebuilds and scans
-its own moving points separately. This is not a full-element positivity
-theorem.
+A small inward coefficient correction handles arithmetic contact only when the
+computed continuous minimum is within 256 double-epsilon times the field scale.
+The correction lies in an already measured ground-lift column, is re-bounded by
+the radius and rescanned as a continuous polynomial. Observed coefficients were
+1.776e-15: minima near -1.6e-17 became about 1.18e-16, above their arithmetic
+scale 3.04e-17. This changes the numerical proposed polynomial; it is not clipping,
+a k floor, a source change, or relaxation of residual/qualification acceptance.
 
-Outside qualification, a minimax slack restoration objective reduces the
-largest normalized signed violation. It may increase residual merit. A
-filter tracks residual and qualification separately. Inside the envelope,
-the model targets reduced residual decrease subject to the signed bounds.
-Continuous ground admissibility and native evaluation-domain validity
-remain enforced throughout; no clipping, floor, forcing or envelope change
-is introduced.
+## Native progress and nonlinear trial agreement
 
-After cut handling, the **combined actual correction** is bounded by the
-radius, and all predictions are recomputed. Scaling this constrained model
-solution is not claimed to preserve its affine KKT optimality. Logged
-`unscaled_affine_kkt` values describe only the small unscaled model, not
-nonlinear reduced stationarity.
+The original unmodified h0 first has gradient departure .000500195, inside the
+bound. At the first fully equilibrated non-k state with k still equal to h0 it
+is .002857296, witness (x,z)=(1.625,2), component (0,2), geometry34/outer side.
+Thus the violation is already present before the first reduced k update. The
+current logs locate this first complete H state, not its individual internal
+velocity/epsilon sub-iteration.
 
-Every assessed fraction constructs k, converges H to the same required
-accuracy, rebuilds dependent quantities, evaluates the original full and
-reduced residuals, scans continuous ground extrema and the complete signed
-qualification inventory, and compares actual versus predicted progress.
-Radius and accuracy adapt to agreement and failures. The log records
-response rank, basis identities, active cuts, work, H errors, actual
-displacement, model errors, signed observation changes, full-inventory
-witnesses, ground minima and original qualification margins. Large model
-discrepancy triggers native inner-destruction decomposition. The R8/R9
-reports informed this diagnostic; their coupled optimizer was not imported.
+The following are numerical stage iterations only; none is an accepted physical
+step. The final primary-run entry is pending completion.
 
-Final return requires the original complete residual tolerance and
-`CompleteRestrictedAudit`, including covariance and normalization-lambda
-checks. Eta continuation was not attempted: no R3 native numerical evidence
-exists yet to justify choosing a continuation experiment.
+| Experiment | Complete residual | Gradient maximum | Role |
+| --- | ---: | ---: | --- |
+| Historical best R2 endpoint | 2.908833889 | .003826405 | retained control |
+| R3 mixed original h0, six updates (`82ca255`) | 32.866814956 | .001660092 | bounded native control, fresh readback |
+| R3 pre-filter-repair original h0, eight updates (`e7313f7`) | 24.415622070 | .001273039 | filter mismatch; no convergence |
+| R3 repaired filter, three more updates from that saved guess | 18.566628956 | .001264727 | additional warm-start diagnostic |
+| R3 current fresh h0 run (`8dc862f`) | pending | pending | primary final test |
 
-## Checks completed and their scope
+The saved R2 endpoint is used only for diagnostics. Its first reduced restoration
+step changed residual 2.908834 -> 3.271267 while improving gradient .003826405 ->
+.002337314 and epsilon lower ratio .974454851 -> .980310747. The gradient witness
+migrated from x=1.666667 to x=-.871740. The complete inventory detected that
+migration; differentiating only the old maximum would miss it. The ground
+arithmetic repair then permitted further updates to residual 3.384774 and
+gradient .002150084, still outside the original qualification.
 
-Compact Linux compiler commands, source hashes, executable identity,
-runtime-library identities, worker allocation and output are in
-[`linux-checks.json`](cls-epawf-segregated-picard-r3-evidence/linux-checks.json).
-Only small temporary artifacts were placed under
-`/tmp/nektar-picard-r3-syntax` and `/tmp/nektar-picard-r3-model` while the
-heavy-test volume was unavailable. One compiler worker and one OpenMP/BLAS
-thread were used, below the 72-worker limit.
+Representative predicted/actual reduced trial norms and normalized maximum
+qualification excesses are:
 
-The standalone `RANSReducedModelChecks` test covers unconstrained and binding
-solutions, duplicate observations, discovery of newly active constraints,
-opposing-witness restoration, a separate lower-bound condition, a known
-feedback-dependent correction, the radius on the final combined step,
-infeasible starts, exhausted budgets, factorization failures and programming
-shape errors. It uses address/undefined sanitizers and bounds assertions on
-Linux. It is explicitly labelled **model checks, not M8 convergence**.
+| Trial | Predicted residual | Actual residual | Predicted violation | Actual violation |
+| --- | ---: | ---: | ---: | ---: |
+| Original h0 first k update, radius .4 | 60.0947648 | 60.0946233 | 1.7674851 | 1.7671654 |
+| Original h0 third k update, radius1 | 49.3828514 | 49.3919176 | 1.4092333 | 1.4092871 |
+| Saved R2 endpoint first restoration | 3.2702170 | 3.2712669 | 1.3373250 | 1.3373141 |
+| Repaired checkpoint first update, radius1 | 23.2713918 | 22.9391808 | .2674437 | .2675366 |
+| Expanded ground response, 32 columns/rank32, radius .4 | 3.3114674 | 3.3149908 | 1.1442756 | 1.1444590 |
 
-The new native sources received syntax-only checks on Linux and Mac. The
-Python harness/checker parses successfully; fixture preparation preserves
-the original physical XML semantically after removing only the new solver
-controls. `git diff --check` passes.
+Individual signed observations also agree. At a migrated ground endpoint, the
+negative epsilon lower-bound observation changed by predicted -.000268710415
+versus measured -.000268710153; the sampled-K lower observation changed by
+-.000364407914 in both checks. The negative gradient witness at x=-.871740
+changed by predicted -5.111307e-5 versus measured -5.111284e-5 on that response.
+The full inventories, both signed bounds, branch summaries and two-scale actions
+are in the compact evidence, not only the maxima in this table.
 
-The native post-run checker `test_cls_epawf_reduced_response.py` verifies
-repeatability, fixed-k/rollback checks, usable two-scale actions, used-basis
-checks, final radius, H accuracy, and native accepted-state/history retention.
-It has **not** been executed because it needs a native run. No small-model
-check is evidence that sequential H solves converge on this fixture, that
-reduced predictions agree there, or that qualification is restored.
+A later useful full step exposed finite-step source curvature: predicted residual
+16.80015 versus actual21.72800, full vector model error10.82331. Native component
+reconstruction attributed10.82317 to inner destruction, with remaining error
+.013539. The half step passed the actual filter and reduced residual to20.42408.
+This supports safeguarding actual trials, not importing the coupled R8/R9
+optimizer or treating a better source prediction as evidence of a useful direction.
+The source model, normalization and destruction remain fully nonlinear in trials.
 
-## External prerequisite and resumption
+## Algebraic continuation and the qualification obstruction
 
-The server reboot left `/dev/sda2` unmounted. It is the 3.6 TB NTFS volume
-labelled `新加卷`, UUID `5AB8A669B8A642FD`. The required source, original
-saved endpoints, and designated heavy-run root are therefore absent.
-Tailscale SSH works; `linux-usb` timed out. UDisks mounting requires desktop
-authorization, and passwordless sudo is unavailable. The user elected to
-mount it manually with their password and request resumption afterward.
-The supplied [`mount-volume.sh`](cls-epawf-segregated-picard-r3-evidence/mount-volume.sh)
-uses the verified UUID and installed NTFS-3G driver; it formats or repairs
-nothing.
+The separate opt-in continuation evaluates
+F_eta=F_target+eta M_D(Q-h0), with original physical alpha400, h0, t=.0025 and
+external data fixed. The retained segregated conditional solver is used as a
+control. The wrapper checks the exact mass identity (relative defects about
+1e-16) and always rejects physical advancement, even at eta0. Positive-eta roots
+are diagnostic only. The eta-zero/original acceptance tolerance stays2e-12.
 
-After that prerequisite, the intended isolated experiment root is
+A strict eta5000 attempt stopped at about9.34e-12 and did not qualify as a
+2e-12 root. A separate explicitly declared eta-positive tolerance2e-11 allowed
+following the nearby branch. Original residuals on these states remain tens,
+not zero; each continued and original residual was reconstructed independently.
+
+| Eta | Gradient departure | Ground minimum | Original qualification |
+| ---: | ---: | ---: | --- |
+| 5000 | .000500195 | .40511246 | passes |
+| 2500 | .000582927 | .33036459 | passes |
+| 1250 | .000967567 | .22662976 | passes |
+| 1209.375 | .000988819 | .22106282 | passes |
+| 1168.75 | .001011025 | .21525707 | fails gradient |
+| 1087.5 | .001058584 | .20286116 | fails gradient |
+| 925 | .001168619 | .17435135 | fails gradient |
+| 600 | .001476320 | .09561097 | fails gradient |
+| 500 | .001606738 | .07065555 | fails gradient |
+
+The followed branch exits the original gradient envelope between eta1168.75
+and1209.375, at witness (1.604649609,2), component(0,2), geometry34/outer side.
+Ground is still well positive there. Other scalar ratios, covariance and lambda
+pass on these bracket roots. The eta1209.375 root repeated from h0 and from a
+nearby branch root differs by at most9.326e-14 in coefficients, with identical
+history. This supports the same nearby branch in that comparison, not global
+uniqueness or global absence of another qualifying target root.
+
+The retained control failed at eta400 (a separate larger ladder also failed at
+eta200), before certifying an eta-zero root. At eta400 its last accepted numerical
+state still had positive ground minimum .05153 and substantial residual; this
+failure is not a ground-contact bracket. No claim of nonexistence or a floating-
+point lower bound follows from the failed line searches.
+
+A separate spatial diagnostic splits only [0,.01] at .005, increasing unknowns
+2165 ->2315 and regenerating that mesh's own represented h0/history. Physical
+parameters, spaces/degrees, quadrature, functions and timestep stay unchanged.
+It is explicitly a different discrete problem and never an original M8 success.
+The auxiliary eta600 root has ground .07856770 and gradient .001480973; eta400
+converges there with ground .03993422. Eta0 still failed to certify a root.
+This one refinement changes the near-ground response and the retained control's
+convergence behavior, but does not remove the gradient failure at eta600 or prove
+a general spatial positivity obstruction. A mesh-convergence theorem is not claimed.
+
+## Verification, provenance, and outstanding work
+
+The `_GLIBCXX_ASSERTIONS` Linux solver exercises the repaired predictor with
+verification On. Verified and unverified two-sweep states and norms are bitwise
+identical. Predictor continuity/gauge is [8.54316e-4,2.53250e-4,1.02830e-16];
+after correction it is [6.87347e-16,8.68001e-16,6.21722e-17]. Direct saddle
+coefficient difference is3.60822e-16. Block sizes remain velocity980, pressure85,
+free-k504 and epsilon/trace254. This verification defect is repaired independently
+of the unresolved k/qualification problem.
+
+Six focused Linux CTests pass: RANSReducedModelChecks, RANSEquilibriumTimeNative,
+RANSEquilibriumEvolutionNative, RANSEquilibriumPatchNative,
+RANSEquilibriumWallEvolutionSmoke and RANSEquilibriumWallStageSmoke.
+The standalone model additionally passes Linux ASan/UBSan and bounds assertions,
+including known feedback correction, duplicate/near-dependent cuts, constraint
+discovery, epsilon lower observation, restoration, actual final radius, tiny
+corrections, filter ceiling, failure and programming-shape cases. Model checks
+are not labelled M8 convergence. Native response-checker results explicitly use
+`passed_operator_checks`, retaining failed stage results separately.
+
+Heavy artifacts are under
 `/media/jay/新加卷/nektar-v2026-runs/cls-epawf-segregated-picard-r3`.
-Check the shared and isolated revisions/working trees before synchronizing.
-Build only the isolated source, using the installed MPI environment,
-`-D_GLIBCXX_ASSERTIONS -fno-fast-math -ffp-contract=off`, and at most eight
-compiler workers. Record actual executable/library identities. Do not reuse
-a binary merely because this syntax check passed.
+The shared Linux checkout and installation were preserved; the shared revision
+is `f4b70baec10016dd098005bc5a5507b87e4a57bf` and its pre-existing symlink content
+status is recorded in the build manifest. Source/build trees and immutable copied
+executables are isolated. Eight explicit compiler workers, one test at a time,
+one rank and one thread per BLAS/OpenMP runtime were used, within the72-worker
+limit including the simultaneous bounded experiments. No support claim extends
+beyond the existing serial/flat tensor-cubic ground implementation.
 
-The immediate native sequence remains outstanding:
+[Build and sanitized regression evidence](cls-epawf-segregated-picard-r3-evidence/native/build-validation.json),
+[pressure verification](cls-epawf-segregated-picard-r3-evidence/native/verification.json),
+[development controls](cls-epawf-segregated-picard-r3-evidence/native/development-controls.json),
+[updated native checkpoints](cls-epawf-segregated-picard-r3-evidence/native/development-updated.json),
+[continued roots and independent readbacks](cls-epawf-segregated-picard-r3-evidence/native/continuation-aux.json),
+and [changed-mesh diagnostic](cls-epawf-segregated-picard-r3-evidence/native/ground-mesh.json)
+record producing revisions, executable/library hashes, exact numerical commands,
+XML hashes, work, elapsed time, block histories, qualification witnesses and
+independent residual reconstructions. Large raw inventories and binary replay
+packets remain on Linux. Earlier pre-mount compiler evidence is preserved.
 
-1. Revalidate the shared predictor extraction with
-   `test_cls_epawf_picard_verification.py` and relevant existing regressions.
-2. Run the new method with `--reduced --reduced-verify` at the original h0 and
-   the R2 endpoint packet
-   `.../cls-epawf-segregated-picard-r2/reduced-radius/target/readback-input.json`.
-   Check H convergence, branch repeatability and two-scale signed responses
-   before increasing outer budgets. Exercise both gradient witnesses and
-   the epsilon lower bound, and inspect complete-inventory witness migration.
-3. Correct numerical issues exposed by those tests and run the unchanged
-   original-start target (2165 unknowns, alpha400, t.0025, tolerance2e-12,
-   zero prescribed forcing). Retain independent saved-state readback.
-4. Only after a qualified first stage, run three accepted native steps to
-   .0075, admissible guess perturbations, rejected-state/history checks and
-   independent final residual reconstruction.
-
-Thus the controlled response and constrained direction have been implemented,
-but their native accuracy and usefulness are not established yet. Original-
-start R3 residual/qualification, physical evolution and any mathematical
-obstruction assessment remain open; the current blocker is external access
-to the data volume, not a numerical nonexistence result.
+The unchanged first stage is still unresolved. Three qualified native steps to
+.0075, small admissible nonlinear-guess perturbations of that physical target,
+and final qualified-trajectory readback remain outstanding. Deliberate rejection
+and completed failed reduced stages preserve accepted h0, native time and history;
+killed processes without native receipts are recorded as unknown, not as verified
+rejections. No eta-positive or changed-mesh state was used to advance the original
+physical trajectory. The current evidence does not establish global infeasibility,
+full-space reduced stationarity, or existence of a different qualifying root.

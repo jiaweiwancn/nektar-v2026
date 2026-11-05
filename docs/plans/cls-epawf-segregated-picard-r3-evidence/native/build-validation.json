@@ -1,0 +1,29 @@
+{
+  "host": "jay-Super-Server",
+  "utc": "2026-11-05T14:08:24.154763+00:00",
+  "source": "0bd00aec6121983abf53f1341d2b9c797f1fa982",
+  "producing_cpp_commit": "8dc862f270632dacad1d60ca22d8e870ebd9b7c6",
+  "build_workers": 8,
+  "test_concurrency": 1,
+  "ranks": 1,
+  "thread_counts": 1,
+  "compile_options": "Release -fno-fast-math -ffp-contract=off -D_GLIBCXX_ASSERTIONS",
+  "regressions": "Internal ctest changing into directory: /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-build\nTest project /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-build\n    Start 1: RANSReducedModelChecks\n1/6 Test #1: RANSReducedModelChecks ..............   Passed    0.01 sec\n    Start 2: RANSEquilibriumTimeNative\n2/6 Test #2: RANSEquilibriumTimeNative ...........   Passed    0.07 sec\n    Start 3: RANSEquilibriumEvolutionNative\n3/6 Test #3: RANSEquilibriumEvolutionNative ......   Passed    4.56 sec\n    Start 4: RANSEquilibriumPatchNative\n4/6 Test #4: RANSEquilibriumPatchNative ..........   Passed   11.13 sec\n    Start 5: RANSEquilibriumWallEvolutionSmoke\n5/6 Test #5: RANSEquilibriumWallEvolutionSmoke ...   Passed    3.83 sec\n    Start 6: RANSEquilibriumWallStageSmoke\n6/6 Test #6: RANSEquilibriumWallStageSmoke .......   Passed   25.39 sec\n\n100% tests passed, 0 tests failed out of 6\n\nTotal Test time (real) =  45.02 sec\n",
+  "sanitized_model": {
+    "command": "c++ -std=c++17 -O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer -D_GLIBCXX_ASSERTIONS -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror -I SOURCE/solvers SOURCE/solvers/IncNavierStokesSolver/Tests/RANS/test_cls_epawf_reduced_model.cpp -o RUN/model-sanitized/RANSReducedModelChecks",
+    "build_exit": 0,
+    "test_exit": 0,
+    "output": "passed_reduced_model_checks (not M8 convergence)\n",
+    "sha256": "6352f71c5c8404f84f1ff31a8f45389c5aefc9f05dbcbdb3b8a39907bf8e470a",
+    "ldd": "\tlinux-vdso.so.1 (0x00007fff277cb000)\n\tlibasan.so.6 => /lib/x86_64-linux-gnu/libasan.so.6 (0x00007e616d600000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007e616d200000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007e616d519000)\n\tlibubsan.so.1 => /lib/x86_64-linux-gnu/libubsan.so.1 (0x00007e616ca00000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007e616e00a000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007e616c600000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007e616e1b5000)\n"
+  },
+  "source_sha256": {
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionReduced.cpp": "759859e48aa00ef2e8498e5f5bf3488529dca5119729d7dab19f73102547143a",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSWallReducedModel.h": "57cfe66424c2d82fd16ada57e17ca38f1d0a76cade54a31dbfc09a8599afc33f",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPicard.cpp": "349f2cb045195700c1b631542b0ce4147d9e30d014b68cbe42823cf6351f9b42",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp": "47819291ce85dcab5f75d446e8ab42b3817ee6753f3481e815fab902e2e0f667"
+  },
+  "shared_source_revision": "f4b70baec10016dd098005bc5a5507b87e4a57bf",
+  "shared_source_status": " M docs/developer-guide/src/library\n",
+  "volume": "/media/jay/\\xe6\\x96\\xb0\\xe5\\x8a\\xa0\\xe5\\x8d\\xb7 /dev/sda2 fuseblk\n"
+}

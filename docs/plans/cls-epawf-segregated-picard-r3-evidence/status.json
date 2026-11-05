@@ -1,36 +1,34 @@
 {
-  "status": "native_validation_blocked",
-  "producing_code_commit": "819c135177a5381d9332013609378eb943c8e0b9",
+  "status": "native_development_in_progress_original_m8_unresolved",
+  "producing_code_commit": "8dc862f270632dacad1d60ca22d8e870ebd9b7c6",
   "native_m8": {
-    "status": "not_run",
-    "reason": "Designated Linux NTFS volume unmounted; user will mount manually and request resumption."
-  },
-  "historical_r2": {
-    "label": "historical result, not an R3 run",
-    "full_residual": 2.9088338887423277,
-    "ground_minimum": 2.14e-16,
-    "gradient_departure": 0.00382640524,
-    "epsilon_lower_ratio": 0.9744548514,
+    "status": "primary_original_start_running",
+    "qualified_first_stage": false,
     "accepted_physical_steps": 0,
     "final_time": 0
   },
   "checks": {
-    "linux_syntax": "passed",
+    "linux_native_pressure_verification": "passed; same verified/unverified states",
+    "linux_focused_ctest": "6 passed",
     "linux_sanitized_reduced_model": "passed",
-    "mac_syntax": "passed",
-    "python_ast": "passed",
-    "fixture_semantic_comparison": "passed",
-    "native_response_checker": "not_run",
-    "native_predictor_regression": "not_rerun_after_extraction"
+    "native_controlled_H_and_reduced_operator": "passed on completed bounded runs; not stage convergence"
   },
-  "intended_heavy_run_root": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3",
+  "continued_branch": {
+    "auxiliary_positive_eta_tolerance": 2e-11,
+    "original_tolerance": 2e-12,
+    "qualification_exit_bracket": [
+      1168.75,
+      1209.375
+    ],
+    "qualification_exit_precedes_ground_contact": true,
+    "scope": "followed nearby root branch only, not global infeasibility"
+  },
   "outstanding": [
-    "native fixed-k/non-k accuracy and repeatability",
-    "native reduced actions and qualification response",
-    "witness migration and epsilon lower bound",
-    "unchanged original-h0 M8 stage",
-    "independent native residual readback",
-    "shared-kernel regressions",
-    "qualified three-step trajectory and perturbations"
-  ]
+    "primary original-start complete residual/qualification",
+    "continued reduced-search development if progress remains useful",
+    "qualified native three-step trajectory to .0075",
+    "admissible nonlinear-guess perturbations of the same qualified physical target",
+    "qualified final-trajectory independent residual readback"
+  ],
+  "heavy_run_root": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3"
 }

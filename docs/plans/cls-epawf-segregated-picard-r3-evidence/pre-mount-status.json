@@ -1,0 +1,36 @@
+{
+  "status": "native_validation_blocked",
+  "producing_code_commit": "819c135177a5381d9332013609378eb943c8e0b9",
+  "native_m8": {
+    "status": "not_run",
+    "reason": "Designated Linux NTFS volume unmounted; user will mount manually and request resumption."
+  },
+  "historical_r2": {
+    "label": "historical result, not an R3 run",
+    "full_residual": 2.9088338887423277,
+    "ground_minimum": 2.14e-16,
+    "gradient_departure": 0.00382640524,
+    "epsilon_lower_ratio": 0.9744548514,
+    "accepted_physical_steps": 0,
+    "final_time": 0
+  },
+  "checks": {
+    "linux_syntax": "passed",
+    "linux_sanitized_reduced_model": "passed",
+    "mac_syntax": "passed",
+    "python_ast": "passed",
+    "fixture_semantic_comparison": "passed",
+    "native_response_checker": "not_run",
+    "native_predictor_regression": "not_rerun_after_extraction"
+  },
+  "intended_heavy_run_root": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3",
+  "outstanding": [
+    "native fixed-k/non-k accuracy and repeatability",
+    "native reduced actions and qualification response",
+    "witness migration and epsilon lower bound",
+    "unchanged original-h0 M8 stage",
+    "independent native residual readback",
+    "shared-kernel regressions",
+    "qualified three-step trajectory and perturbations"
+  ]
+}
