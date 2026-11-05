@@ -35,6 +35,7 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
         ./EquationSystems/RANSWallEvolutionResolution.cpp
         ./EquationSystems/RANSWallEvolutionFeasible.cpp
         ./EquationSystems/RANSWallEvolutionPicard.cpp
+        ./EquationSystems/RANSWallEvolutionPimple.cpp
         ./EquationSystems/RANSWallEvolutionReduced.cpp
         ./EquationSystems/RANSWallTimeIntegration.cpp
         ./EquationSystems/RANSEquilibriumWallEvolution.cpp
@@ -204,6 +205,7 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
             EquationSystems/RANSWallEvolutionResolution.cpp
             EquationSystems/RANSWallEvolutionFeasible.cpp
             EquationSystems/RANSWallEvolutionPicard.cpp
+            EquationSystems/RANSWallEvolutionPimple.cpp
             EquationSystems/RANSWallEvolutionReduced.cpp
             EquationSystems/RANSWallEvolutionDiagnostics.cpp)
         FOREACH(rans_m4_target RANSEquilibriumTimeProbe RANSEquilibriumEvolutionProbe RANSTransverseEvolutionProbe)

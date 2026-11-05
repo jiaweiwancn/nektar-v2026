@@ -134,9 +134,9 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         int diagnostics=0;m_session->LoadParameter("RANSWallDiagnostics",diagnostics,0);
         Require(diagnostics==0 || diagnostics==1,"RANSWallDiagnostics must be 0 or 1");m_diagnostics=diagnostics;
         std::string rangeGuard;m_session->LoadSolverInfo("RANSWallPhysicalRangeGuard",rangeGuard,"Off");
-        Require(rangeGuard=="Off" || rangeGuard=="R1LocalV1" || rangeGuard=="R1DiagnosticV1" || rangeGuard=="R2LocalV1","unknown physical-range guard");
-        m_rangeGuardName=rangeGuard;m_r2RangeGuard=rangeGuard=="R2LocalV1";
-        m_physicalRangeGuard=rangeGuard!="Off";m_diagnosticRangeContinuation=rangeGuard=="R1DiagnosticV1";
+        Require(rangeGuard=="Off" || rangeGuard=="R1LocalV1" || rangeGuard=="R1DiagnosticV1" || rangeGuard=="R2LocalV1" || (m_patch->PimpleSingleSweep() && rangeGuard=="R2DiagnosticV1"),"unknown physical-range guard");
+        m_rangeGuardName=rangeGuard;m_r2RangeGuard=rangeGuard=="R2LocalV1" || rangeGuard=="R2DiagnosticV1";
+        m_physicalRangeGuard=rangeGuard!="Off";m_diagnosticRangeContinuation=rangeGuard=="R1DiagnosticV1" || rangeGuard=="R2DiagnosticV1";
         if(m_physicalRangeGuard)
         {
             const auto robust=m_patch->RobustParameters();
@@ -150,6 +150,13 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         Require(m_session->DefinesTimeIntScheme(),"evolution requires an explicit native IMEX time-integration declaration");
         const auto scheme=m_session->GetTimeIntScheme();
         Require(scheme.method=="IMEX" && scheme.variant.empty() && (scheme.order==1 || scheme.order==2),"evolution supports native IMEX orders 1/2, empty variant");m_order=scheme.order;
+        if(m_patch->PimpleSingleSweep())
+        {
+            Require(m_order==1 && m_eta==0 && !m_condensed && m_diagnostics && m_r2RangeGuard,
+                "PimpleSingleSweep requires native IMEX1, eta=0, no condensation and complete R2 diagnostics");
+            m_session->LoadParameter("RANSWallPimpleRejectStep",m_pimpleRejectStep,0);
+            Require(m_pimpleRejectStep>=0,"invalid deliberate PIMPLE rejection step");
+        }
         m_session->LoadSolverInfo("RANSWallStageTest",m_stageTest,"Off");
         Require(m_stageTest=="Off" || m_stageTest=="MatchedR2" || m_stageTest=="FrozenScalarR2" ||
             m_stageTest=="ExactTargetR3" || m_stageTest=="JacobianBenchmarkR3" || m_stageTest=="DirectionExperimentR4" || m_stageTest=="DirectionExperimentR5","unknown native stage-test mode");
@@ -167,7 +174,8 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
                 m_session->GetComm()->GetSize()==1,"R2 stage test requires the frozen serial neutral IMEX2 startup input");
         if(r3)
         {
-            m_session->LoadSolverInfo("RANSWallR3PredictorFile",m_r3PredictorFile,"None");
+            Require(!m_patch->PimpleSingleSweep() || m_stageTest=="Off","PIMPLE is a physical time mode, not a stage test");
+        m_session->LoadSolverInfo("RANSWallR3PredictorFile",m_r3PredictorFile,"None");
             Require(m_patch->NonlinearPolicyName()=="ScalarFeasibleR3" && m_patch->InnerStressName()=="SaturatedR2" &&
                 m_eta==0 && m_neutral && m_order==2 && m_steps==0 && m_timestep==.0025 &&
                 m_maximumIterations>0 && m_maximumIterations<=16 && m_tolerance==2e-12 &&
@@ -284,6 +292,7 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
 }
 RANSEquilibriumWallEvolution::Vector RANSEquilibriumWallEvolution::Implicit(const Vector &history,double time,double lambda)
 {
+    ++m_implicitCallbacks;
     auto fullHistory=m_state;std::copy(history.begin(),history.end(),fullHistory.begin());int iterations=0;
     Vector candidate;
     try
@@ -292,14 +301,17 @@ RANSEquilibriumWallEvolution::Vector RANSEquilibriumWallEvolution::Implicit(cons
     }
     catch(const std::exception &)
     {
-        if(m_patch->SegregatedPicard())m_rejectedState=m_patch->LastFeasibleState();
+        if(m_patch->SegregatedPicard() || m_patch->PimpleSingleSweep())m_rejectedState=m_patch->LastFeasibleState();
         throw;
     }
     const auto residual=m_patch->Residual(candidate,fullHistory,1/lambda,time,m_implicitData);
     const auto norms=m_patch->Norms(residual,m_patch->Constraints(candidate,time,m_implicitData),m_ustar);
     if(m_patch->SegregatedPicard())
         Require(Maximum(norms)<=m_tolerance,"Picard candidate failed the native stage residual check");
+    if(m_patch->PimpleSingleSweep() && m_pimpleRejectStep>0 && m_integrator->Steps()+1==m_pimpleRejectStep)
+    {m_rejectedState=candidate;throw std::runtime_error("deliberate PIMPLE rejection after scheduled solves before commit");}
     if(m_diagnostics)RecordAudit(candidate,fullHistory,1/lambda,time);
+    if(m_patch->PimpleSingleSweep())m_physicalSamples=m_patch->PhysicalSamples(candidate,time,m_implicitData);
     m_state=std::move(candidate);
     Vector record{time,lambda,1/lambda,static_cast<double>(iterations),Maximum(norms),m_patch->AnchorEnergyWork(m_state)};
     record.insert(record.end(),norms.begin(),norms.end());m_stageAudits.push_back(record);
@@ -361,7 +373,13 @@ void RANSEquilibriumWallEvolution::RecordAudit(const Vector &state,const Vector 
                 throw std::runtime_error("declared R1 physical-range exit; candidate saved before advancing native history");
             }
         }
-        if(m_r2RangeGuard && audit.at("r2_qualified")[0]!=1)
+        if(m_patch->PimpleSingleSweep())
+        {
+            const auto &cov=audit.at("r2_covariance");
+            Require(cov[0]>=-1e-10*K0 && cov[1]>=-1e-10*K0 && audit.at("r2_scalar_domain")[8]>=.5,
+                "PIMPLE hard covariance or normalization validity exit");
+        }
+        if(m_r2RangeGuard && audit.at("r2_qualified")[0]!=1 && !m_diagnosticRangeContinuation)
         {
             m_rejectedState=state;
             m_rangeEvents.push_back({time,alpha,state,history,audit,{"complete_R2_physical_range_exit"},true});
@@ -794,7 +812,12 @@ void RANSEquilibriumWallEvolution::WriteReport() const
        <<",\"chi\":"<<m_patch->Parameters().chi<<",\"eta\":"<<m_eta<<",\"neutral_reference\":"<<(m_neutral?"true":"false")
        <<",\"condensed\":"<<(m_condensed?"true":"false")<<",\"checkpoint\":"<<Quoted(m_lastCheckpoint)<<",\"signature\":"<<Quoted(m_signature);
     out<<",\"inner_stress_model\":"<<Quoted(m_patch->InnerStressName())
-       <<",\"nonlinear_policy\":"<<Quoted(m_patch->NonlinearPolicyName());
+       <<",\"nonlinear_policy\":"<<Quoted(m_patch->NonlinearPolicyName())
+       <<",\"temporal_coupling\":"<<Quoted(m_patch->TemporalCouplingName())
+       <<",\"implicit_callback_count\":"<<m_implicitCallbacks
+       <<",\"pimple_attempts\":"<<RANSWallSolveJson::List(m_patch->PimpleRecords());
+    out<<",\"physical_samples\":{";int sampleCount=0;
+    for(const auto &[name,values]:m_physicalSamples){if(sampleCount++)out<<',';out<<Quoted(name)<<':';Write(out,values);}out<<'}';
     if(!m_initialScalarDomain.empty())out<<",\"initial_scalar_domain\":"<<m_initialScalarDomain;
     if(!m_initialEvaluationSeconds.empty())
         out<<",\"initial_evaluation_seconds\":"<<RANSWallSolveJson::Object({

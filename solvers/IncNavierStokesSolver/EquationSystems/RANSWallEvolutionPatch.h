@@ -171,6 +171,10 @@ public:
     bool InteriorProbeR7() const { return m_r7Policy=="InteriorProbe"; }
     bool AdaptiveR7() const { return m_r7Policy=="Adaptive"; }
     bool GroundSafeguard() const { return CoupledR4() || JointRestorationR5(); }
+    bool PimpleSingleSweep() const { return m_temporalCoupling=="PimpleSingleSweep"; }
+    const std::string &TemporalCouplingName() const { return m_temporalCoupling; }
+    const std::vector<std::string> &PimpleRecords() const { return m_pimpleRecords; }
+    Diagnostic PhysicalSamples(const Vector &state,double time,const RANSWallEvolutionData &data) const;
     bool SegregatedPicard() const { return m_nonlinearPolicy=="SegregatedPicard"; }
     Vector Norms(const Vector &residual,const std::map<int,double> &constraints,double ustar=.4) const;
     Vector StateNorms(const Vector &state,const Vector &reference,double ustar=.4) const;
@@ -258,6 +262,8 @@ private:
     PicardFlowResult PicardFlowCorrection(const Vector &state,const Vector &history,
         double alpha,double time,const RANSWallEvolutionData &data,
         const std::map<int,double> &external) const;
+    Vector SolvePimpleSingleSweep(Vector state,const Vector &history,double alpha,double time,
+        const RANSWallEvolutionData &data,int &iterations) const;
     struct NonKResponse
     {
         bool converged=false;
@@ -401,6 +407,9 @@ private:
     mutable std::string m_solveResidualException;
     mutable std::string m_solveInvalidContext;
     std::string m_nonlinearPolicy="Legacy",m_feasibleTraceFile="case.feasible.jsonl";
+    std::string m_temporalCoupling="ConvergedStage";
+    bool m_pimpleVerify=false;
+    mutable std::vector<std::string> m_pimpleRecords;
     std::array<double,3> m_picardRelaxation{{1.,.5,.5}};
     double m_picardPseudoAlpha=0.;
     double m_picardGuessPerturbation=0.;

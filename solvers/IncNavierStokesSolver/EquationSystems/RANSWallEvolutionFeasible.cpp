@@ -247,7 +247,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::ScalarDomain(
         // it is NEVER substituted into that coupled residual/Newton iterate.
         result.traceState=result.effectiveState;
         for(auto [row,value]:Constraints(state,time,data))result.traceState[row]=value;
-        if(!m_transitionEnabled)result.effectiveState=result.traceState;
+        if(!m_transitionEnabled && !PimpleSingleSweep())result.effectiveState=result.traceState;
         for(const auto &point:m_scalarLocations)if(point.block==Epsilon())
         {
             if(!check("actual_lifted_outer_epsilon",point.row,Epsilon(),true,result.effectiveState,point.side))return result;
@@ -1904,7 +1904,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
     const bool box=outer[0]<=.001 && outer[1]>=.99 && outer[2]<=1.01 && outer[3]>=.98 && outer[4]<=1.02 &&
         outer[5]>=.99 && outer[6]<=1.01;
     const bool covariance=innerCov>=-1e-10*K0 && outerCov>=-1e-10*K0;
-    if(rangesOnly || GroundSafeguard())audit["r4_outer_gradient_witness"]=gradientPoint;
+    if(rangesOnly || GroundSafeguard() || PimpleSingleSweep())audit["r4_outer_gradient_witness"]=gradientPoint;
     audit["r2_outer_range"]=outer;audit["r2_covariance"]={innerCov,outerCov};
     audit["r2_inner_minimum_point"]=innerPoint;audit["r2_outer_minimum_point"]=outerPoint;
     audit["r2_qualified"]={box && covariance && domain.minimumLambda>=.5?1.:0.};

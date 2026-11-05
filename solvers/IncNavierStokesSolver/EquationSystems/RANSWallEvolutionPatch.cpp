@@ -190,6 +190,24 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     Require(m_solveDiagnosticIterations>0 && m_solveDiagnosticIterations<=20,"diagnostic same-stage retry is limited to 20 iterations");
     Require(!m_solveDiagnostics || m_comm->GetSize()==1,"detailed first-failure diagnostics currently require one MPI rank");
     session->LoadSolverInfo("RANSWallNonlinearPolicy",m_nonlinearPolicy,"Legacy");
+    session->LoadSolverInfo("RANSWallTemporalCoupling",m_temporalCoupling,"ConvergedStage");
+    Require(m_temporalCoupling=="ConvergedStage" || PimpleSingleSweep(),"unknown temporal coupling mode");
+    if(PimpleSingleSweep())
+    {
+        Require(m_nonlinearPolicy=="Legacy" && m_comm->GetSize()==1 && m_dimension==2 && !Mapped(),
+            "PimpleSingleSweep pilot requires Legacy policy, serial flat 2D and the inherited transition implementation");
+        std::string verify;session->LoadSolverInfo("RANSWallPimpleVerify",verify,"Off");
+        Require(verify=="Off" || verify=="On","invalid PIMPLE verification selector");m_pimpleVerify=verify=="On";
+        for(const std::string key:{"FlowRelaxation","KRelaxation","EpsilonRelaxation","PseudoAlpha","GuessPerturbation","NonKTolerance","ContinuationEta"})
+        {
+            const double expected=key.find("Relaxation")!=std::string::npos?1.:0.;double value;
+            session->LoadParameter("RANSWallPicard"+key,value,expected);
+            Require(value==expected,"PimpleSingleSweep requires unit relaxation and zero auxiliary coefficients");
+        }
+        for(const std::string key:{"GroundProjection","KNewton","Reduced","Continuation","EquilibrateK"})
+        {std::string value;session->LoadSolverInfo("RANSWallPicard"+key,value,"Off");Require(value=="Off","PIMPLE forbids nonlinear search policies");}
+        Require(!m_solveDiagnostics && !m_solveDiagnosticReplay,"PIMPLE forbids nonlinear diagnostic retries");
+    }
     session->LoadSolverInfo("RANSWallFeasibleFile",m_feasibleTraceFile,"case.feasible.jsonl");
     session->LoadSolverInfo("RANSWallR3ProgressFile",m_r3ProgressFile,"case.r3-progress.jsonl");
     session->LoadSolverInfo("RANSWallActionPolicy",m_actionPolicy,"Legacy");
@@ -402,7 +420,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
             Point(Epsilon(),q.coordinate),q.weight*(Mapped()?m_mapping.At(q.coordinate).determinant:1.)});
     m_solver=std::make_shared<SolverCache>();m_solver->free.resize(Gauge());m_solver->massFactors.resize(Gauge());
     InitialiseRobust(session);
-    if(SegregatedPicard())
+    if(SegregatedPicard() || PimpleSingleSweep())
         Require(m_dimension==2 && !Mapped() && m_transitionEnabled && m_cappedDestruction &&
             m_parameters.model.Model()==RANSModel::CLSHighRe && !m_solveDiagnosticReplay,
             "SegregatedPicard requires flat 2D upstream CLS with capped destruction and no legacy replay");
@@ -641,7 +659,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Residual(const Vector &st
     if(m_solveDiagnostics){m_solveResidualException.clear();m_solveInvalidContext.clear();}
     Require(state.size()==static_cast<size_t>(Size()) && history.size()==state.size() && alpha>=0,"invalid evolution stage state/history");
     const auto constraints=Constraints(state,time,data);auto s=m_transitionEnabled?ExternalLift(state,time,data):state;
-    if(!m_transitionEnabled)for(auto [row,value]:constraints)s[row]=value;
+    if(!m_transitionEnabled && !PimpleSingleSweep())for(auto [row,value]:constraints)s[row]=value;
     Vector r(Size());int bad=0;
     try
     {
@@ -779,6 +797,11 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Solve(Vector s,const Vect
     const RANSWallEvolutionData &data,bool condensed,int &iterations,double tolerance,int maximumIterations) const
 {
     Require(Size()<=3000,"replicated dense evolution solve is limited to 3000 unknowns; larger meshes permit reference audits only");
+    if(PimpleSingleSweep())
+    {
+        Require(!condensed && m_eta==0.,"PimpleSingleSweep requires uncondensed eta-zero physical equations");
+        return SolvePimpleSingleSweep(std::move(s),history,alpha,time,data,iterations);
+    }
     if(SegregatedPicard())
     {
         Require(!condensed,"SegregatedPicard requires uncondensed native velocity spaces");
@@ -1348,7 +1371,7 @@ double RANSWallEvolutionPatch::AnchorEnergyWork(const Vector &s) const
 }
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::RoughnessBudget(const Vector &state,double time,const RANSWallEvolutionData &data) const
 {
-    const auto s=Lift(state,time,data);Refresh(s,time,&data);Vector sum(5);double normal=0;
+    const auto s=PimpleSingleSweep()?ExternalLift(state,time,data):Lift(state,time,data);Refresh(s,time,&data);Vector sum(5);double normal=0;
     for(const auto &ray:m_rays)
     {
         const auto force=CartesianForcing(s,ray.coordinate,time,data,true);const auto n=m_mapping.At(ray.coordinate).normal;
@@ -1364,7 +1387,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::RoughnessBudget(const Vec
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::EnergyBudget(const Vector &state,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data) const
 {
     // R4 reports direct and weak work on the same retained epsilon-H state.
-    const auto s=GroundSafeguard()?ExternalLift(state,time,data):Lift(state,time,data);
+    const auto s=(GroundSafeguard() || PimpleSingleSweep())?ExternalLift(state,time,data):Lift(state,time,data);
     const auto raw=Residual(state,history,alpha,time,data,false,false);Vector result(9);
     for(int a=0;a<m_dimension;++a)for(int i=0;i<size[a];++i)result[0]+=s[offset[a]+i]*raw[offset[a]+i];
     for(int i=0;i<size[K()];++i)result[0]+=m_constants[K()][i]*raw[offset[K()]+i];

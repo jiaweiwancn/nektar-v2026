@@ -234,8 +234,17 @@ RANSWallTimeIntegration::Vector RANSWallTimeIntegration::Advance()
     Require(m_steps < std::numeric_limits<std::size_t>::max() &&
                 std::isfinite(m_time + m_dt) && m_time + m_dt > m_time,
             "time/step range exceeded");
-    const auto &result = m_scheme->TimeIntegrate(m_localSteps, m_dt);
-    m_state = Input(result);
+    const auto committed = Capture();
+    try
+    {
+        const auto &result = m_scheme->TimeIntegrate(m_localSteps, m_dt);
+        m_state = Input(result);
+    }
+    catch (...)
+    {
+        Restore(committed);
+        throw;
+    }
     ++m_localSteps;
     ++m_steps;
     m_time += m_dt;
