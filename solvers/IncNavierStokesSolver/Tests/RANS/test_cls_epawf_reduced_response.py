@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
-from run_cls_epawf_picard import require, load, state_hash, H0, write_json
+from run_cls_epawf_picard import require, load, state_hash, H0, write_json, sha
 
 
 def execution_manifest(directory):
@@ -135,6 +135,16 @@ def compare_verification(verified, unverified):
                   if e.get("PROPERTY") == "RANSWallReducedVerify"]
         require(values == ["On" if directory == verified else "Off"],
                 "the comparison requires verified and unverified native inputs")
+        for element in root.iter():
+            if element.get("PROPERTY") == "RANSWallPicardGuessFile":
+                guess = Path(element.get("VALUE"))
+                if not guess.is_absolute():
+                    guess = directory / "target" / guess
+                require(guess.is_file(), "verification guess file is missing")
+                # Continuation writes separate copies of the same packet.
+                # Compare every input byte, rather than treating those paths
+                # as different numerical data or ignoring the guess input.
+                element.set("VALUE", "sha256:" + sha(guess))
         for element in root.iter():
             for child in list(element):
                 if child.get("PROPERTY") == "RANSWallReducedVerify":
