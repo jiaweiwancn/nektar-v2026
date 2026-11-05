@@ -493,6 +493,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         Vector k, r, observations, stateAction, traceAction;
         Evaluation shifted;
         double h = 0., error = 0.;
+        double observationError = 0.;
     };
     struct Cut
     {
@@ -538,6 +539,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         }
         const bool restore  = base.violation > 1e-7;
         const int dimension = rows.size();
+        const auto contacts = WallTraceR4(state);
         std::vector<std::pair<std::string, Vector>> seeds;
         auto add = [&](const std::string &name, Vector v) {
             const double length = Length(v);
@@ -622,6 +624,49 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             pointSeed(x, m_parameters.geometry.sampleHeight, "epsilon_lower_sample");
             pointSeed(x, m_parameters.geometry.height, "epsilon_lower_trace");
         }
+        if (basisBudget >= 20 || failedModels)
+        {
+            auto dual = mass.Apply(base.r);
+            Vector gradient(dimension);
+            if (!conditionalJacobian.empty())
+            {
+                for (int i = 0; i < dimension; ++i)
+                    for (int j = 0; j < dimension; ++j)
+                        gradient[i] -= conditionalJacobian[j][i] * dual[j];
+                add("conditional_mass_gradient", mass.Apply(gradient));
+            }
+            for (double &value : dual) value = -value;
+            add("mass_residual", dual);
+            std::vector<int> defects(dimension);
+            std::iota(defects.begin(), defects.end(), 0);
+            const int defectCount = std::min(2, dimension);
+            std::partial_sort(defects.begin(), defects.begin()+defectCount, defects.end(),
+                [&](int a, int b) { return std::abs(dual[a]) > std::abs(dual[b]); });
+            for (int j = 0; j < defectCount; ++j)
+            {
+                const int i = defects[j];
+                Vector mode(dimension); mode[i] = dual[i] < 0. ? -1. : 1.;
+                add("modal_defect_" + std::to_string(rows[i]), std::move(mode));
+            }
+            auto ground = contacts;
+            std::stable_sort(ground.begin(), ground.end(), [](const auto &a, const auto &b) {
+                return a.value - a.error < b.value - b.error;
+            });
+            std::vector<double> locations;
+            for (const auto &p : ground)
+            {
+                const double x = p.row.coordinate[0];
+                if (x <= left || x >= right || p.value > .05*kScale ||
+                    std::any_of(locations.begin(), locations.end(), [&](double y) { return std::abs(x-y)<.1; }))
+                    continue;
+                pointSeed(x, 0., "contact_value_" + std::to_string(locations.size()));
+                pointSeed(x, 0., "contact_tangent_" + std::to_string(locations.size()), true);
+                const double nearby = x + .02*length < right ? x + .02*length : x - .02*length;
+                pointSeed(nearby, 0., "contact_nearby_" + std::to_string(locations.size()));
+                locations.push_back(x);
+                if (locations.size() == 2) break;
+            }
+        }
         int activeSeed = 0;
         for (const auto &b : activeWitnesses)
         {
@@ -647,13 +692,12 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                       b.family == 0);
             pointSeed(x, m_parameters.geometry.height,
                       "trace_witness_" + std::to_string(witness));
-            if (++witness == 5)
+            if (++witness == std::max(5, (basisBudget+1)/2))
                 break;
         }
         if (!previous.empty()) add("previous", previous);
         std::vector<Vector> orthogonal;
         std::vector<Column> columns;
-        const auto contacts   = WallTraceR4(state);
         double maxActionError = 0.;
         for (auto &[name, seed] : seeds)
         {
@@ -735,7 +779,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             {
                 auto guess = state;
                 Apply(guess, rows, seed, kScale * h * .5);
-                const auto half = evaluate(
+                auto half = evaluate(
                     guess, std::max(minimumInnerAccuracy, innerTolerance * .05),
                     m_reducedHUpdates, "half_response_" + name);
                 if (!half.valid)
@@ -838,6 +882,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                                   base.domain.profileBranches)}});
                 if (column.error > .03 || observationError > .05)
                     continue;
+                column.observationError = observationError;
                 column.r = std::move(action);
                 for (int j = 0; j < base.bounds.size(); ++j)
                 {
@@ -846,7 +891,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                                                        offset[b.block]) / (h * .5);
                 }
                 column.h = h * .5;
-                column.shifted = half;
+                column.shifted = std::move(half);
             }
             column.stateAction = column.shifted.domain.effectiveState;
             column.traceAction = column.shifted.domain.traceState;
@@ -855,6 +900,12 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 column.stateAction[j] = (column.stateAction[j] - base.domain.effectiveState[j]) / column.h;
                 column.traceAction[j] = (column.traceAction[j] - base.domain.traceState[j]) / column.h;
             }
+            // Retain the converged coefficients and actions, not a complete
+            // duplicate of the large qualification inventory for every column.
+            column.shifted.bounds.clear();
+            column.shifted.bounds.shrink_to_fit();
+            column.shifted.domain.observations.clear();
+            column.shifted.domain.observations.shrink_to_fit();
             orthogonal.push_back(std::move(q));
             columns.push_back(std::move(column));
             if (columns.size() >=
@@ -874,7 +925,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         const int n = columns.size(), variables = n + (restore ? 1 : 0);
         // Keep both goals outside the envelope. Normalize the residual term
         // so its units do not overwhelm the signed qualification slack.
-        const double residualWeight = restore ? 1. / std::max(1., base.merit * base.merit) : 1.;
+        const double residualWeight = restore ? std::pow(.1, failedModels) /
+                                                    std::max(1., base.merit * base.merit) : 1.;
         WallMatrix gram(n, Vector(n)), hessian(variables, Vector(variables));
         Vector gradient(variables), dualResidual = mass.Apply(base.r);
         std::vector<Vector> actionOrthogonal;
@@ -1146,6 +1198,15 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         for (int j = 0; j < dimension; ++j) predictedChange[j] -= base.r[j];
         const double slope = Dot(base.r, mass.Apply(predictedChange)) /
                              (residualScale * residualScale);
+        Vector originalMeritGradient(n), actionUncertainty(n), observationUncertainty(n);
+        for (int i = 0; i < n; ++i)
+        {
+            originalMeritGradient[i] = Dot(columns[i].r, dualResidual) /
+                                       (residualScale * residualScale);
+            actionUncertainty[i] = base.merit * columns[i].error *
+                                      std::max(1., dualNorm(columns[i].r));
+            observationUncertainty[i] = columns[i].observationError;
+        }
         std::vector<std::string> activeRecords;
         std::vector<std::string> basisNames;
         for (const auto &column : columns) basisNames.push_back(J::Quote(column.name));
@@ -1211,7 +1272,10 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
               {"predicted_violation", J::Number(predictedViolation)},
               {"unscaled_predicted_violation", J::Number(unscaledViolation)},
               {"merit_slope", J::Number(slope)},
-              {"action_uncertainty", J::Number(maxActionError)}});
+              {"action_uncertainty", J::Number(maxActionError)},
+              {"original_merit_gradient", J::Numbers(originalMeritGradient)},
+              {"two_scale_gradient_error_estimate", J::Numbers(actionUncertainty)},
+              {"observation_action_relative_error", J::Numbers(observationUncertainty)}});
         bool accepted = false;
         bool decomposed = false;
         if (qpOK && Length(displacement) > 0. &&
