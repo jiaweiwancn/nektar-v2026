@@ -52,7 +52,8 @@ def protected_xml(path):
         for child in list(parent):
             if child.tag == 'I' and child.get('PROPERTY', '').upper() in NUMERICAL_SELECTORS:
                 parent.remove(child)
-            elif child.tag == 'P' and (child.text or '').split('=', 1)[0].strip().upper() == 'RANSWALLMAXITERATIONS':
+            elif child.tag == 'P' and ((child.text or '').split('=', 1)[0].strip().upper() in
+                    (NUMERICAL_SELECTORS | {'RANSWALLMAXITERATIONS'})):
                 parent.remove(child)
     value = ET.canonicalize(ET.tostring(root, encoding='unicode'), strip_text=True)
     return hashlib.sha256(value.encode()).hexdigest()
