@@ -28,6 +28,8 @@ def main():
     parser.add_argument("--method", choices=("conditional", "reduced"), default="conditional",
                         help="Reduced observes qualification without imposing it; the native wrapper always rejects physical advance")
     parser.add_argument("--reduced-basis", type=int, default=18)
+    parser.add_argument("--reduced-maximum-basis", type=int, default=32)
+    parser.add_argument("--reduced-adaptive-space", action="store_true")
     parser.add_argument("--reduced-krylov", type=int, default=4)
     parser.add_argument("--reduced-radius", type=float, default=.4)
     parser.add_argument("--reduced-step", type=float, default=2e-5)
@@ -79,6 +81,8 @@ def main():
         params.reduced = reduced
         params.reduced_verify = args.reduced_verify
         params.reduced_basis = args.reduced_basis
+        params.reduced_maximum_basis = args.reduced_maximum_basis
+        params.reduced_adaptive_space = args.reduced_adaptive_space
         params.reduced_krylov = args.reduced_krylov
         params.reduced_radius = args.reduced_radius
         params.reduced_step = args.reduced_step

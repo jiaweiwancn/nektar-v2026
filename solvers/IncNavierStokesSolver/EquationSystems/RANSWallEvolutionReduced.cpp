@@ -425,7 +425,9 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         {"initial_basis_budget", J::Number(m_reducedBasis)},
         {"initial_restoration_weight", J::Number(m_reducedRestorationWeight)},
         {"response_krylov_budget", J::Number(m_reducedKrylov)},
-        {"probe_basis", J::Quote("orthogonal field directions when admissible; feasible inward fallback")},
+        {"probe_basis", J::Quote("orthogonal field directions with feasible sign/size selection; inward fallback")},
+        {"minimum_orthogonal_probe_step", J::Number(1e-10)},
+        {"canonical_half_branch_check", J::Quote("always; optional verification cannot change column selection")},
         {"combined_direction_checks", J::Boolean(m_reducedVerify)},
         {"second_order_qualification_correction", J::Boolean(m_reducedSecondOrder)},
         {"constraint_response_secants", J::Boolean(m_reducedConstraintSecant)},
@@ -516,6 +518,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         double h = 0., error = 0.;
         double observationError = 0.;
         bool orthogonalProbe = false;
+        int probeOrientation = 0, probeSearches = 0;
     };
     struct Cut
     {
@@ -784,19 +787,33 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             column.name = name;
             // Rank testing alone leaves nearly parallel finite-difference
             // columns and can amplify their errors in a cancelling proposal.
-            // Probe the orthogonal field direction itself when its actual
-            // ground polynomial and scalar inventory permit it. At contact,
-            // retain the original feasible inward direction as a fallback.
-            auto orthogonalGuess = state;
-            Apply(orthogonalGuess, rows, q, kScale * m_reducedStep);
-            if (admissible(orthogonalGuess))
+            // At contact the opposite orientation can be inward even when q
+            // is outward. Near-tangent polynomials can also require a smaller
+            // probe because their minimum moves quadratically. Check both
+            // signs before resorting to a common inward component, which can
+            // make individually accurate actions almost parallel.
+            double probeSize = m_reducedStep;
+            for (int refinement = 0; refinement < 20 && probeSize >= 1e-10;
+                 ++refinement, probeSize *= .5)
             {
-                seed = q;
-                column.orthogonalProbe = true;
+                for (int orientation : {1,-1})
+                {
+                    auto guess = state;
+                    Apply(guess,rows,q,kScale*probeSize*orientation);
+                    ++column.probeSearches;
+                    if (!admissible(guess)) continue;
+                    seed = q;
+                    for (double &x : seed) x *= orientation;
+                    column.orthogonalProbe = true;
+                    column.probeOrientation = orientation;
+                    break;
+                }
+                if (column.orthogonalProbe) break;
             }
+            if (!column.orthogonalProbe) probeSize = m_reducedStep;
             column.k    = seed;
             Evaluation shifted;
-            double h = m_reducedStep;
+            double h = probeSize;
             for (int retry = 0; retry < 5; ++retry, h *= .5)
             {
                 auto guess = state;
@@ -851,10 +868,12 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 if (!half.valid)
                     continue;
                 // Independently check the accelerated warm start on the first
-                // usable column of each verified model. Failure to recover the
+                // usable column of every model. Failure to recover the
                 // same response branch rejects this column, rather than mixing
-                // different local Y(k) solutions in a reduced model.
-                if (m_reducedVerify && columns.empty())
+                // different local Y(k) solutions in a reduced model. Since it
+                // can reject a column, this algorithmic check is independent
+                // of the optional observation/verification selector.
+                if (columns.empty())
                 {
                     const auto canonical = evaluate(
                         canonicalGuess, halfAccuracy, m_reducedHUpdates,
@@ -965,6 +984,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 emit("response_check",
                      {{"name", J::Quote(name)},
                       {"orthogonal_probe", J::Boolean(column.orthogonalProbe)},
+                      {"probe_orientation", J::Number(column.probeOrientation)},
+                      {"probe_searches", J::Number(column.probeSearches)},
                       {"independent_component", J::Number(qLength)},
                       {"h", J::Number(h)},
                       {"relative_error", J::Number(column.error)},
@@ -1823,7 +1844,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                         : (trial.merit < base.merit &&
                            (continuationDiagnostic || trial.violation < 1e-8));
                 const bool take = filterOK && progress;
-                if (!decomposed && dualNorm(error) > .2 * std::max(1., base.merit))
+                if (!decomposed && dualNorm(error) > .05 * std::max(1., base.merit))
                 {
                     auto component = [&](const Vector &s) {
                         return extract(ResidualResolutionComponents(s, history, alpha, time, data, false)
@@ -1872,6 +1893,22 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                        J::Number(Length(trialDisplacement))},
                       {"physical_k_displacement",
                        J::Number(kScale * Length(trialDisplacement))}});
+                if (m_reducedVerify)
+                {
+                    const std::string file = "reduced-evaluated-" + stageTag + "-" +
+                        std::to_string(iterations) + "-" + std::to_string(failedModels) +
+                        "-f" + J::Number(fraction) + ".json";
+                    std::ofstream out(file);
+                    out << J::Object({{"status",J::Quote("nonlinear_trial_only")},
+                        {"state",J::Numbers(trial.response.state)},
+                        {"history",J::Numbers(history)}, {"alpha",J::Number(alpha)},
+                        {"time",J::Number(time)}, {"require_history_h0","false"},
+                        {"inner_stress_model",J::Quote(InnerStressName())}}) << '\n';
+                    out.close();
+                    Require(out.good(),"failed to save evaluated reduced trial");
+                    emit("evaluated_trial_packet", {{"path",J::Quote(file)},
+                        {"fraction",J::Number(fraction)}, {"accepted",J::Boolean(take)}});
+                }
                 if (!take)
                     continue;
                 const double oldViolation = base.violation;
