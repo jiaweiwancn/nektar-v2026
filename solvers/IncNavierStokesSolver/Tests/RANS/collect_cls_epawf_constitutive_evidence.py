@@ -85,7 +85,12 @@ def main():
     for b in compact['budgets']:
         locations=b.pop('active_constraints');b['active_constraint_count']=len(locations)
         b['active_extent']={axis:[min(v['coordinate'][i] for v in locations),max(v['coordinate'][i] for v in locations)] for i,axis in ((0,'x'),(2,'z'))} if locations else {}
-    current_identity=identity(r/'campaign/trajectory/runtime/IncNavierStokesSolver')
+    diagnostic_path=os.environ.get('LD_LIBRARY_PATH')
+    os.environ['LD_LIBRARY_PATH']=str(r/'campaign/trajectory/runtime/lib')
+    try:current_identity=identity(r/'campaign/trajectory/runtime/IncNavierStokesSolver')
+    finally:
+        if diagnostic_path is None:os.environ.pop('LD_LIBRARY_PATH',None)
+        else:os.environ['LD_LIBRARY_PATH']=diagnostic_path
     pinned=load(r/'campaign/trajectory/runtime/identity.json')['frozen']
     require(current_identity['sha256']==pinned['sha256'] and current_identity['libraries']==pinned['libraries'],'pinned runtime changed')
     identities=dict(driver=process_identity(progress['pid']),supervisor=process_identity(load(r/'launch.json')['pid']),native=process_identity(progress['native_pid']),
