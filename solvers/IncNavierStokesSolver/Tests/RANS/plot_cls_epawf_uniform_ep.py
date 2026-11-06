@@ -66,7 +66,8 @@ def main():
     fig,axes=plt.subplots(2,3,figsize=(12,7))
     for states,budget,label,style in [(old_states,old_budget,'Upstream','--'),(u['states'],u['budgets'],'Uniform EP','-')]:
         ss=sorted(states.values(),key=lambda v:v['time']);t=[v['time'] for v in ss];bt=[v['time'] for v in budget]
-        axes[0,0].plot(bt,[v['ground']['minimum'] for v in budget],style,label=label)
+        axes[0,0].plot([0.]+bt,[ss[0]['scales_U_K_E_H_L_volume'][1]]+[v['ground']['minimum'] for v in budget],style,label=label+' ground')
+        if label=='Uniform EP':axes[0,0].plot(bt,[v['minimum']['value'] for v in budget],':',label=label+' retained bound rows')
         for key,tag in [('global_k_integral','global'),('near_k_integral','z<=.01')]:
             axes[0,1].plot(t,[v[key]/ss[0][key] for v in ss],style,marker='.',label=label+' '+tag)
         axes[0,2].plot(t,[v['mean_wall_stress']/.16 for v in ss],style,marker='.',label=label)
@@ -76,7 +77,7 @@ def main():
         axes[1,1].plot(bt,[v['absolute_integral']/.000625 for v in budget],style,label=label+' absolute',alpha=.6)
         axes[1,2].plot(bt,[v['raw_increment_mass_norm'] for v in budget],style,label=label+' raw')
         axes[1,2].plot(bt,[v['correction_mass_norm'] for v in budget],style,label=label+' repair',alpha=.6)
-    for ax,title,y in zip(axes.flat,['Continuous-ground minimum','Integrated k / own h0','Mean ground stress','Original spatial residual, alpha=0','Correction supply rate','Raw k update and correction'],
+    for ax,title,y in zip(axes.flat,['Ground and retained-row minima','Integrated k / own h0','Mean ground stress','Original spatial residual, alpha=0','Correction supply rate','Raw k update and correction'],
                           ['k','ratio','tau / u_star squared','native scaled block norm','integral(k) / time','physical mass norm']):
         ax.set(xlabel='physical time',ylabel=y,title=title);ax.legend(fontsize=6)
     save(fig,'comparison-budgets')

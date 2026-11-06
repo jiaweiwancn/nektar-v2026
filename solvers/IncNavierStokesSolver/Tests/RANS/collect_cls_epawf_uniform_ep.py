@@ -126,6 +126,11 @@ def main():
         result['upstream_terminal']['first_rejection']['attempt']['k_bound'].pop(key,None)
     # Exact native one-sweep counts, plus separately counted post-k work.
     for name,rows in [('upstream',upstream_rows),('uniform',uniform_rows)]:
+        campaign_root=old/'campaign/trajectory' if name=='upstream' else r/'uniform-campaign/trajectory'
+        cutoff=int(result[name+'_campaign']['checkpoint_steps'])
+        rows=[v for v in map(json.loads,(campaign_root/'steps.jsonl').read_text().splitlines()) if v['global_step']<=cutoff]
+        require(len(rows)==cutoff,'snapshot/ledger count differs')
+        require(all(all(q['attempt'][key]==1 for key in ('momentum_predictor_solves','pressure_system_solves','epsilon_transport_solves','k_transport_solves')) for q in rows),'production schedule changed')
         keys=('outer_sweeps','momentum_predictor_solves','pressure_system_solves','epsilon_transport_solves','k_transport_solves',
               'additional_governing_equation_solves','bound_calls','bound_activations','bound_active_set_iterations','bound_mass_factor_applications','bound_kkt_solves')
         result[name+'_counts']={k:sum(q['attempt'].get(k,0) for q in rows) for k in keys}
@@ -146,8 +151,20 @@ def main():
     require(result['case_inputs']['upstream']['functions']==result['case_inputs']['uniform']['functions'],'physical function changed')
     result['archived_xml']=dict(path=str(ROOT/'docs/plans/cls-epawf-revised-evidence/m8-r1/archive-session.xml'),
         sha256=sha(ROOT/'docs/plans/cls-epawf-revised-evidence/m8-r1/archive-session.xml'))
+    result['source_files_sha256']={}
+    for name in subprocess.check_output(['git','-C',str(ROOT),'diff','--name-only',result['base'],'HEAD'],text=True).splitlines():
+        f=ROOT/name
+        if f.is_file() and (f.suffix in ('.cpp','.h','.py') or f.name=='CMakeLists.txt'):result['source_files_sha256'][name]=sha(f)
+    for name,file in [('representation',r/'first-cell-source-check/summary.json'),('final_cold_build',r/'final-build-check.json')]:
+        if file.exists():result[name]=load(file)
+    later=r/'uniform-monitor/step-000064/summary.json'
+    if later.exists():
+        z=load(later);state=copy.deepcopy(z['states']['step64']);state.pop('profiles',None)
+        result['later_immutable_readback64']=dict(path=str(later),sha256=sha(later),state=state,windows=z['windows'],cumulative_correction=z['cumulative_correction'])
+    up32=load(old/'monitor/step-000032/summary.json')
+    result['upstream_correction_through_T002']=up32['cumulative_correction']
     files=[]
-    for base in (r/'validation-runtime',r/'trace-probe-runtime',r/'policy-checks-r2',r/'upstream-terminal',a.sources,a.uniform_analysis):
+    for base in (r/'validation-runtime',r/'trace-probe-runtime',r/'policy-checks-r2',r/'upstream-terminal',r/'first-cell-source-check',r/'final-build-runtime',a.sources,a.uniform_analysis):
         if not base.exists():continue
         for f in sorted(base.rglob('*')):
             if f.is_file():files.append(dict(path=str(f),bytes=f.stat().st_size,sha256=sha(f)))
