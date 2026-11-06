@@ -85,6 +85,13 @@ def main():
     os.environ.update(THREADS); os.environ['TMPDIR'] = str(a.output/'tmp')
     if a.resume:
         progress = load(a.output/'progress.json'); a.checkpoint = Path(progress['checkpoint'])
+        require(progress['status']!='numerically_rejected','numerical rejection is terminal; use a separately identified follow-up')
+        old_stat=Path('/proc')/str(int(progress['pid']))/'stat'
+        if old_stat.exists():
+            stat=old_stat.read_text().split()
+            require(stat[21]!=progress.get('process_start') or stat[2]=='Z','campaign is already running')
+        if progress.get('failure'):
+            progress.setdefault('interruption_history',[]).append(dict(reason=progress.pop('failure'),time=progress.get('updated_unix')))
         executable = a.output/'runtime'/a.solver.name
         os.environ['LD_LIBRARY_PATH'] = str(a.output/'runtime/lib')
         pinned = load(a.output/'runtime/identity.json')['frozen']
