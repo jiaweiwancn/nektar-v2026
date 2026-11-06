@@ -51,6 +51,16 @@ additional response. The independent current-operator branch/combined checks
 remain enabled. These are inexact search responses; final acceptance retains
 the original complete2e-12 gate.
 
+The signed checks also show why feedback matters when choosing directions.
+At this16.4202 base, the x=-2.6 sampled-K seed has logged conditional merit
+slope+285.059, reduced prediction-1685.636 and measured half-step slope-1685.215.
+The independent x=1.6 seed instead has reduced prediction+94.978 and measured
+half-step+95.142. Each direction therefore supplies different residual and
+constraint information. The epsilon-lower seed predicts a signed normalized
+lower-bound change-3.14410560e-4 at x=-2,z=2 versus measured-3.14410224e-4.
+These reported probes preserve the observed profile branch selections; field
+and moving-panel quantities are rebuilt at both perturbation sizes.
+
 Finite-step curvature remains substantial. On the second accepted update the
 nonlinear destruction surrogate predicts9.240817519 versus actual9.328564927
 for16 seeds, and9.975535343 versus9.902925424 for64. Corresponding residual-vector
@@ -83,6 +93,13 @@ gradient.0009999990032, minimum epsilon ratio.9800480092. This ongoing run has
 no final native stage/history receipt yet; the audited checkpoint remains a
 qualified nonroot. It continues with further full-space updates.
 [Independent checkpoint audit](cls-epawf-segregated-picard-r3-evidence/native/audit-warm-full504-update2.json).
+Independent full-space first-order audits at the earlier16.4202 and11.5216
+bases include the original qualification cuts. Their near-active cone defects
+are12411.90 and1947.16 versus empirical two-size gradient uncertainties12.82
+and16.21, respectively. Both models have rank504. These earlier bases are not
+shown stationary; this does not certify the later7.50043 checkpoint's
+stationarity or global root existence.
+[Qualified full-space model audits](cls-epawf-segregated-picard-r3-evidence/native/first-order-qualified-full504-20261106.json).
 
 ## Latest completed original-target validation
 
@@ -153,6 +170,26 @@ thread limits; their outcomes remain pending.
 [Build, commands and identities](cls-epawf-segregated-picard-r3-evidence/native/build-validation-cea2a06.json),
 [identical-model comparison](cls-epawf-segregated-picard-r3-evidence/native/medium-face96-radius-replay-review.json),
 [new native commands](cls-epawf-segregated-picard-r3-evidence/native/medium-face-native-launch.json).
+
+The first optimized saved-guess numerical update independently reproduces its
+original norm vector exactly and passes the complete qualification/ground
+audit. Its residual8.83235687962 differs from the retained control8.83235687951
+by1.05e-10; maximum coefficient difference is4.54e-13. All96 initial response
+records match bitwise before optimization. The actual final displacement is
+.344982331 within radius.72, with H error7.685e-10 below2e-9. The source model
+predicts8.619766019 versus actual8.832356880; two qualification corrections
+produce actual violation zero. The source/linear residual-vector errors are
+.976475/2.231108. First-update log times are1448.12s and1108.16s under
+concurrent jobs. This is a tolerance-consistent numerical checkpoint comparison;
+both searches continue and neither has a final native physical-stage receipt.
+[Actual native correction and fresh audit](cls-epawf-segregated-picard-r3-evidence/native/medium-native-first-update-comparison.json).
+
+A separate original-h0 run now constructs all504 free-k responses from its
+first model, keeping the original physical target/history. Its bounded budget
+is six numerical updates per stage and eight hours, with the native three-step
+horizon requested. This tests fresh-start subspace limitations directly;
+its outcome remains pending.
+[Full-space original-start command](cls-epawf-segregated-picard-r3-evidence/native/full504-original-launch.json).
 
 `90dd801` extends the optional response-Krylov ceiling from16 to128; its
 default remains0. The existing enrichment applies the measured non-k feedback
