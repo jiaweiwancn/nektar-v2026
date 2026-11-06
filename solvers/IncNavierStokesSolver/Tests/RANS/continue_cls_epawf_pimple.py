@@ -128,13 +128,13 @@ def main():
             pending=None; local=[]; infra=None
             with (directory/'solver.log').open('w') as log, (a.output/'steps.jsonl').open('a') as metrics:
                 while True:
+                    if time.monotonic()-started>a.timeout:
+                        infra='block_timeout';child.terminate();child.wait(timeout=30);break
                     try: line=lines.get(timeout=5)
                     except queue.Empty:
                         save();continue
                     if line is None:
                         child.wait();break
-                    if time.monotonic()-started>a.timeout:
-                        infra='block_timeout';child.terminate();child.wait(timeout=30);break
                     for line in (line,):
                         log.write(line);log.flush()
                         if line.startswith('EP-AWF PIMPLE '): pending=json.loads(line[len('EP-AWF PIMPLE '):])
