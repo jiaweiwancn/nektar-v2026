@@ -75,7 +75,7 @@ int main(int argc, char **argv)
         std::ifstream in(argv[1], std::ios::binary);
         std::uint64_t shape[2]{};
         in.read(reinterpret_cast<char *>(shape), sizeof(shape));
-        Check(in.good() && shape[0] > 0 && shape[0] <= 65 && shape[1] <= 1000000,
+        Check(in.good() && shape[0] > 0 && shape[0] <= 161 && shape[1] <= 1000000,
               "invalid native affine replay packet shape");
         const int n = shape[0];
         auto read = [&](R::Vector &v) {
