@@ -199,11 +199,27 @@ def compare_verification(verified, unverified):
     require([state_hash(q) for q in x["accepted_states"]] ==
             [state_hash(q) for q in y["accepted_states"]],
             "verification changes an accepted native state")
+    def numerical_updates(directory):
+        result = []
+        for line in (directory / "target/solver.log").read_text().splitlines():
+            if not line.startswith("EP-AWF Reduced "):
+                continue
+            row = json.loads(line[15:])
+            if row["event"] in ("initial", "accepted", "converged", "converged_algebraic_diagnostic"):
+                result.append({k: row[k] for k in
+                               ("event", "iteration", "alpha", "time", "state_sha256", "norms")})
+        require(result, "verification comparison lacks numerical update receipts")
+        return result
+
+    updates = numerical_updates(verified)
+    require(updates == numerical_updates(unverified),
+            "verification changes an intermediate numerical update or its original residual")
     write_json(verified / "verification-comparison.json",
                dict(status="passed_reduced_verification_observability",
                     scope="Bitwise numerical trajectory and history comparison; not M8 convergence",
                     verified=str(verified), unverified=str(unverified),
                     solver_sha256=a["IncNavierStokesSolver"]["sha256"],
+                    numerical_updates=updates,
                     state_sha256=hashes, accepted_physical_steps=x["steps"], time=x["time"]))
 
 
