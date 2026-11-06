@@ -59,6 +59,8 @@ def check(directory):
     protocol, = [r for r in records if r["event"] == "protocol"]
     require(all(d["basis_dimension"] <= protocol["maximum_basis"] <= 512 for d in directions),
             "the direction exceeds its declared adaptive response budget")
+    require(0 <= protocol["response_krylov_budget"] <= 128,
+            "the response Krylov budget exceeds its explicit limit")
     require(any(d["qp_solved"] and d["displacement"] > 0 for d in directions),
             "no nonzero constrained model direction was solved")
     require(all(d["displacement"] <= d["radius"]*(1+1e-12) for d in directions),

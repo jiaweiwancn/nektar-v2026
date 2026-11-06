@@ -40,6 +40,9 @@ def main():
     parser.add_argument("--reduced-verify", action="store_true")
     args = parser.parse_args()
     require(platform.system() == "Linux", "authoritative continuation runs require Linux")
+    require(not args.reduced_response_cache or args.method == "reduced",
+            "response preconditioner reuse requires --method reduced")
+    require(0 <= args.reduced_krylov <= 128, "reduced Krylov budget must be between 0 and 128")
     args.solver = args.solver.resolve(strict=True)
     args.resolution_probe = args.resolution_probe.resolve(strict=True)
     args.output = args.output.resolve()

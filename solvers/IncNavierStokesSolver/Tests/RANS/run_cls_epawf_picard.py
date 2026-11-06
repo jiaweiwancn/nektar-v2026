@@ -170,7 +170,7 @@ def main():
     parser.add_argument("--reduced-maximum-basis", type=int, default=32,
                         help="Adaptive response-space ceiling (up to 512; 32 retains earlier controls)")
     parser.add_argument("--reduced-krylov", type=int, default=0,
-                        help="Preconditioned true-response enrichment seeds (0 to 16, within the basis budget)")
+                        help="Preconditioned true-response enrichment seeds (0 to 128, within the basis budget)")
     parser.add_argument("--reduced-radius", type=float, default=.05)
     parser.add_argument("--reduced-h-tolerance", type=float, default=2e-9)
     parser.add_argument("--reduced-h-updates", type=int, default=50)
@@ -203,6 +203,7 @@ def main():
     require(not args.reduced_adaptive_space or args.reduced, "--reduced-adaptive-space requires --reduced")
     require(not args.reduced_source_ray or args.reduced, "--reduced-source-ray requires --reduced")
     require(not args.reduced_response_cache or args.reduced, "--reduced-response-cache requires --reduced")
+    require(0 <= args.reduced_krylov <= 128, "reduced Krylov budget must be between 0 and 128")
     require(0 <= args.reduced_source_refinements <= 3 and
             (not args.reduced_source_refinements or args.reduced_source_ray),
             "source refinements require --reduced-source-ray and a budget from zero to three")

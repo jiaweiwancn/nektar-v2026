@@ -317,7 +317,10 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
                 // free-k response space; governing fields are still solved
                 // separately. The default budget remains32.
                 m_reducedMaximumBasis>=4 && m_reducedMaximumBasis<=512 && m_reducedHUpdates>=0 &&
-                m_reducedKrylov>=0 && m_reducedKrylov<=16 &&
+                // The benchmark's pressure/epsilon feedback need not fit
+                // the original16-seed experiment. Every extra Krylov seed
+                // still requires an independent feasible H-response check.
+                m_reducedKrylov>=0 && m_reducedKrylov<=128 &&
                 m_reducedSourceRefinements>=0 && m_reducedSourceRefinements<=3 &&
                 (!m_reducedSourceRefinements || m_reducedSourceRay) &&
                 m_reducedRadius>0. && m_reducedRadius<=1. &&
