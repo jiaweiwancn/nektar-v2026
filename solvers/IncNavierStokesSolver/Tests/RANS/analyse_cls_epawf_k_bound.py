@@ -38,15 +38,23 @@ def main():
               'k_snapshot_sha256', 'k_budget_last_accepted', 'k_budget_post_flow', 'k_budget_pre_k')
     for name, r in reports.items():
         m = load(a.experiments/name/'manifest.json')
+        require(r['implicit_callback_count'] == len(r['pimple_attempts']), 'callback count differs from attempts')
         accepted = set(r['audit_times'][1:]); attempts = []; integral = 0.
         for row in r['pimple_attempts']:
             item = {k: row[k] for k in (*counts, *detail) if k in row}
             item['accepted'] = row['time'] in accepted
+            if item['accepted']:
+                require(all(row[k] == 1 for k in counts[:5]) and row['additional_governing_equation_solves'] == 0,
+                        'accepted step changed the governing solve schedule')
             for phase in ('k_domain', 'k_ground'):
                 if phase in row: item[phase] = row[phase]
             if row.get('k_snapshot'):
                 packet = load(Path(row['k_snapshot']))
                 item['raw_sha256'] = state_hash(packet['raw']); item['corrected_sha256'] = state_hash(packet['corrected'])
+                first, last = int(r['offsets'][2]), int(r['offsets'][3])
+                require(state_hash(packet['raw'][:first]+packet['raw'][last:]) ==
+                        state_hash(packet['corrected'][:first]+packet['corrected'][last:]), 'production bound changed a non-k field')
+                require(state_hash(packet['history']) == row['history_sha256'], 'snapshot history changed')
                 require(sha(Path(row['k_snapshot'])) == row['k_snapshot_sha256'], 'snapshot changed')
                 require(sha(Path(packet['matrix_file'])) == packet['matrix_sha256'], 'frozen matrix changed')
             if 'k_bound' in row:
