@@ -16,7 +16,8 @@ def main():
     s=load(a.summary);states=sorted(s['states'].values(),key=lambda x:x['time']);b=s['budgets']
     plt.rcParams.update({'font.size':9,'axes.grid':True,'grid.alpha':.25})
     def save(fig,name):
-        fig.tight_layout();fig.savefig(a.output/(name+'.png'),dpi=170);fig.savefig(a.output/(name+'.pdf'));plt.close(fig)
+        fig.tight_layout(rect=(0,0,1,.94) if fig._suptitle else (0,0,1,1))
+        fig.savefig(a.output/(name+'.png'),dpi=170,bbox_inches='tight');fig.savefig(a.output/(name+'.pdf'),bbox_inches='tight');plt.close(fig)
     fig,axes=plt.subplots(1,3,figsize=(10,4))
     for v in states:
         rows=[x for x in v['profiles'] if abs(x['coordinate'][0]-1.6)<1e-12]
@@ -28,7 +29,7 @@ def main():
         axes[2].plot([x['u_v_k_outer_epsilon'][3] for x in outer],[x['coordinate'][2] for x in outer],'.-',label=label)
     for ax,title,x in zip(axes,('Streamwise velocity','Near-ground k','Outer dissipation'),('u','k','epsilon')):
         ax.set(title=title,xlabel=x,ylabel='z')
-    axes[0].legend(fontsize=7);fig.suptitle('Retained fields at x=1.60; V2 bounded one-sweep evolution',y=1.03)
+    axes[0].legend(fontsize=7);fig.suptitle('Retained fields at x=1.60; V2 bounded one-sweep evolution',y=.99)
     save(fig,'profiles')
     t=[x['time'] for x in states];bt=[x['time'] for x in b]
     fig,axes=plt.subplots(2,3,figsize=(12,7))
