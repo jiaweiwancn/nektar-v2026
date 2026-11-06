@@ -299,7 +299,10 @@ def main():
             verify_identity()
             report_file=directory/'case.evolution.json'
             if report_file.exists():
-                report=load(report_file);check_report(report,True)
+                report=load(report_file)
+                if report.get('initialization_complete') is False:
+                    save(status='numerically_rejected',failure=report['failure'],exit_code=child.returncode);return
+                check_report(report,start>0)
                 require(report['steps']==progress['accepted_steps'], 'report/checkpoint count differs')
                 for record,audit in zip(local,report['state_audits'][1:]):record['audit']=audit
                 with gzip.open(directory/'accepted-metrics.json.gz','wt') as f: json.dump(local,f,separators=(',',':'))
