@@ -14,8 +14,8 @@ int main()
     Check(p.Add({1.,0.},2.,2),"stronger dependent cut");
     Check(std::abs(p.delta[0]-2.)<1e-12,"dependent replacement");
     Check(p.Stationarity()<1e-12 && p.Complementarity()<1e-12,"KKT accounting");
-    Projection infeasible({{1.}});Check(infeasible.Add({1.},1.,0),"first feasible half-space");
+    Projection infeasible(Matrix{{1.}});Check(infeasible.Add({1.},1.,0),"first feasible half-space");
     Check(!infeasible.Add({-1.},0.,1),"incompatible half-spaces accepted");
-    Projection zero({{1.}});Check(!zero.Add({0.},1.,0),"prescribed incompatibility accepted");
+    Projection zero(Matrix{{1.}});Check(!zero.Add({0.},1.,0),"prescribed incompatibility accepted");
     std::cout<<"Mass-metric positivity QP checks passed\n";
 }

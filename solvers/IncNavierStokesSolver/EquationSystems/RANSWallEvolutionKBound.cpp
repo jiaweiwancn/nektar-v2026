@@ -82,7 +82,12 @@ RANSWallEvolutionPatch::KBoundResult RANSWallEvolutionPatch::ApplyPimpleKBound(
                     bool movingViolation=false;
                     for(const auto &p:domain.observations)if(p.block==K() && p.value<threshold)
                     {cut={Point(K(),p.coordinate,p.side),p.inventory+":moving"};movingViolation=true;break;}
-                    if(!movingViolation){result.success=true;break;}
+                    if(!movingViolation)
+                    {
+                        for(const auto &p:domain.observations)if(p.block==K() && p.value<correctedMinimum)
+                        {correctedMinimum=p.value;correctedWitness={Point(K(),p.coordinate,p.side),p.inventory};}
+                        result.success=true;break;
+                    }
                 }
                 else if(domain.failure=="negative_inner_k" || domain.failure=="nonpositive_K_or_outer_k")
                     cut={Point(K(),domain.limitingPoint),domain.limitingInventory+":moving"};
@@ -106,7 +111,8 @@ RANSWallEvolutionPatch::KBoundResult RANSWallEvolutionPatch::ApplyPimpleKBound(
         if(!result.success && result.failure.empty())result.failure="k_bound_separation_limit";
     }
     catch(const std::exception &error){result.failure=error.what();}
-    if(!points.empty())correctedMinimum=evaluate(result.state,correctedWitness);
+    if(!points.empty())
+    {Location fixed;const double minimum=evaluate(result.state,fixed);if(minimum<correctedMinimum){correctedMinimum=minimum;correctedWitness=fixed;}}
     correctedGround=WallTraceJSON(result.state,correctedGroundOK);
     for(int i=0;i<size[K()];++i)change[i]=result.state[offset[K()]+i]-raw[offset[K()]+i];
     const auto load=Multiply(m_mass[K()],change);
@@ -144,6 +150,7 @@ RANSWallEvolutionPatch::KBoundResult RANSWallEvolutionPatch::ApplyPimpleKBound(
     result.report=J::Object({{"mode",J::Quote(m_pimpleKBound)},{"algorithm",J::Quote("MassQR-v1")},
         {"calls","1"},{"activations",J::Number(result.activated?1:0)},{"success",J::Boolean(result.success)},{"failure",J::Quote(result.failure)},
         {"floor_relative",J::Number(m_pimpleKFloorRelative)},{"K0",J::Number(K0)},{"floor",J::Number(floor)},{"arithmetic_reserve",J::Number(reserve)},
+        {"raw_minimum_scope",J::Quote("static and available pre-k ray locations; no inadmissible raw normalization evaluation")},
         {"raw_minimum",location(rawMinimum,rawWitness)},{"corrected_minimum",location(correctedMinimum,correctedWitness)},
         {"raw_ground",rawGround},{"corrected_ground",correctedGround},
         {"raw_sha256",J::Quote(RANSWallR3::Hash(raw))},{"corrected_sha256",J::Quote(RANSWallR3::Hash(result.state))},

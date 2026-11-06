@@ -24,6 +24,8 @@ public:
     struct Cut {Vector row;double rhs;int witness;};
     explicit Projection(const Matrix &mass):lower(mass),n(mass.size()),y(n),delta(n)
     {
+        if(n==0 || std::any_of(mass.begin(),mass.end(),[&](const auto &r){return r.size()!=std::size_t(n);}))
+            throw std::logic_error("invalid k-bound mass shape");
         for(int i=0;i<n;++i)for(int j=0;j<=i;++j)
         {
             long double s=mass[i][j];for(int k=0;k<j;++k)s-=(long double)lower[i][k]*lower[j][k];
