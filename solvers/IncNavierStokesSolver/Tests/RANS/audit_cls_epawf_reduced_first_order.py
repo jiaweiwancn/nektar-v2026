@@ -28,6 +28,27 @@ def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def model_launch(directory):
+    """Identify a published model; a running model is not a stage receipt."""
+    if (directory / "manifest.json").exists():
+        return execution_manifest(directory)
+    continuation = json.loads((directory.parent / "continuation.json").read_text())
+    matching = [c for c in continuation["cases"]
+                if Path(c["path"]).resolve() == directory.resolve()]
+    if len(matching) != 1 or continuation["method"] != "reduced":
+        raise ValueError("missing or ambiguous reduced-model launch")
+    case, = matching
+    if sha(directory / "target/case.xml") != case["xml_sha256"] or \
+       sha(Path(continuation["solver"])) != continuation["solver_sha256"]:
+        raise ValueError("model input or producing executable identity changed")
+    return dict(status=case.get("status", "running_model_only"),
+                source=continuation["source"],
+                physical_history_receipt_available=bool(case.get("history_preserved")),
+                IncNavierStokesSolver=dict(path=continuation["solver"],
+                    sha256=continuation["solver_sha256"],
+                    libraries=continuation["IncNavierStokesSolver"]["libraries"]))
+
+
 def audit(root, specification, windows):
     name, iteration = specification.rsplit(":", 1)
     iteration = int(iteration)
@@ -35,7 +56,12 @@ def audit(root, specification, windows):
     snapshot = (directory / "target/solver.log").read_bytes()
     packet = selected = None
     protocol = None
+    continuation_target = None
     for line in snapshot.splitlines(keepends=True):
+        if line.startswith(b"EP-AWF Continuation ") and line.endswith(b"\n"):
+            record = json.loads(line[len(b"EP-AWF Continuation "):])
+            if record["event"] == "target":
+                continuation_target = record
         if not line.startswith(b"EP-AWF Reduced ") or not line.endswith(b"\n"):
             continue
         record = json.loads(line[15:])
@@ -89,10 +115,21 @@ def audit(root, specification, windows):
         results.append(dict(coordinate_window=window, near_active_rows=int(mask.sum()),
             gradient_cone_defect=float(np.linalg.norm(residual)*length),
             empirical_two_size_gradient_error=float(uncertainty), dual_support=support))
-    launch = execution_manifest(directory)
-    continued = protocol.get("continuation_algebraic_diagnostic", False)
+    launch = model_launch(directory)
+    diagnostic = protocol.get("continuation_algebraic_diagnostic", False)
+    eta = 0.
+    if diagnostic:
+        if continuation_target is None or \
+           continuation_target["operator_alpha"] != direction["alpha"] or \
+           continuation_target["operator_alpha"] != \
+           continuation_target["physical_alpha"] + continuation_target["eta"]:
+            raise ValueError("ambiguous continued-model operator")
+        eta = continuation_target["eta"]
     return dict(case=name, iteration=iteration, operator_alpha=direction["alpha"],
-        merit_scope="continued_operator" if continued else "original_physical_operator",
+        merit_scope="continued_operator" if eta > 0 else "original_physical_operator",
+        algebraic_diagnostic_wrapper=diagnostic, continuation_eta=eta,
+        launch_status=launch["status"],
+        physical_acceptance_inferred=False,
         qualification_policy=protocol["qualification_policy"],
         time=direction["time"], model=str(path), model_sha256=sha(path),
         log_snapshot_sha256=hashlib.sha256(snapshot).hexdigest(), native_source=launch.get("source"),
