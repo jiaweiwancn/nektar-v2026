@@ -14,7 +14,15 @@ def norm(weights, values):
 def differences(a, b):
     require(abs(a['time']-b['time']) < 1e-13 and a['initial'] == b['initial'],
             'comparison changed time or initial state')
-    aa, bb = a['physical_samples'], b['physical_samples']
+    return physical_differences(a['physical_samples'],b['physical_samples'])
+
+
+def physical_differences(aa, bb):
+    """Same-space physical norms; caller states time and initialization context.
+
+    Unlike trajectory differences(), this also permits an explicitly labelled
+    cross-policy comparison whose legitimate initialized epsilon traces differ.
+    """
     require(aa and bb, 'comparison needs a completed numerical trajectory')
     result = {}
     pressure_diff, pressure_weights = [], []
