@@ -53,6 +53,95 @@ void Apply(Vector &state, const std::vector<int> &rows, const Vector &step,
 }
 } // namespace
 
+// These are the existing separate Picard field operators at one equilibrated
+// base point. They are preconditioners for small response probes, never a
+// replacement for the original H residual. No k row or column is stored here.
+struct RANSWallEvolutionPatch::NonKPreconditioner
+{
+    PicardBlock flow, epsilon;
+    int nv;
+    WallMatrix divergence, inverseGradient;
+    std::unique_ptr<Factor> velocityFactor, pressureFactor, epsilonFactor;
+
+    NonKPreconditioner(PicardBlock f, PicardBlock e, int velocitySize)
+        : flow(std::move(f)), epsilon(std::move(e)), nv(velocitySize)
+    {
+        const int np = flow.rows.size()-nv;
+        if (nv <= 0 || np <= 0 || flow.matrix.size() != flow.rows.size())
+            throw std::logic_error("invalid response preconditioner flow shape");
+        WallMatrix a(nv,Vector(nv)), gradient(nv,Vector(np));
+        divergence.assign(np,Vector(nv));
+        for (int i=0;i<flow.rows.size();++i)
+        {
+            if (flow.matrix[i].size()!=flow.rows.size())
+                throw std::logic_error("nonsquare response preconditioner flow matrix");
+            if (i<nv)
+            {
+                std::copy_n(flow.matrix[i].begin(),nv,a[i].begin());
+                std::copy_n(flow.matrix[i].begin()+nv,np,gradient[i].begin());
+            }
+            else std::copy_n(flow.matrix[i].begin(),nv,divergence[i-nv].begin());
+        }
+        velocityFactor=std::make_unique<Factor>(a);
+        inverseGradient.assign(np,Vector(nv));
+        WallMatrix schur(np,Vector(np));
+        for (int j=0;j<np;++j)
+        {
+            Vector rhs(nv);
+            for (int i=0;i<nv;++i) rhs[i]=gradient[i][j];
+            inverseGradient[j]=velocityFactor->Apply(std::move(rhs));
+            const auto column=Multiply(divergence,inverseGradient[j]);
+            for (int i=0;i<np;++i)
+                schur[i][j]=column[i]-flow.matrix[nv+i][nv+j];
+        }
+        pressureFactor=std::make_unique<Factor>(schur);
+        epsilonFactor=std::make_unique<Factor>(epsilon.matrix);
+    }
+
+    Vector FlowStep(const Vector &residual) const
+    {
+        const int np=flow.rows.size()-nv;
+        Vector rhs(nv);
+        for (int i=0;i<nv;++i) rhs[i]=-residual.at(flow.rows[i]);
+        auto step=velocityFactor->Apply(std::move(rhs));
+        auto pressureRhs=Multiply(divergence,step);
+        for (int i=0;i<np;++i) pressureRhs[i]+=residual.at(flow.rows[nv+i]);
+        const auto pressure=pressureFactor->Apply(std::move(pressureRhs));
+        for (int i=0;i<nv;++i)
+            for (int j=0;j<np;++j) step[i]-=inverseGradient[j][i]*pressure[j];
+        step.insert(step.end(),pressure.begin(),pressure.end());
+        auto defect=Multiply(flow.matrix,step);
+        Vector selected(flow.rows.size());
+        for (int i=0;i<flow.rows.size();++i)
+        {
+            selected[i]=residual.at(flow.rows[i]);
+            defect[i]+=selected[i];
+        }
+        Require(Maximum(defect)<=1e-9*std::max(1.,Maximum(selected)),
+                "inaccurate cached velocity predictor/correction application");
+        return step;
+    }
+
+    Vector EpsilonStep(const Vector &residual) const
+    {
+        Vector rhs;
+        for (int row:epsilon.rows) rhs.push_back(-residual.at(row));
+        return epsilonFactor->Apply(std::move(rhs));
+    }
+};
+
+std::unique_ptr<RANSWallEvolutionPatch::NonKPreconditioner>
+RANSWallEvolutionPatch::PrepareNonKPreconditioner(
+    const Vector &state,const Vector &history,double alpha,double time,
+    const RANSWallEvolutionData &data,const std::map<int,double> &external) const
+{
+    auto flow=AssemblePicardBlock(0,state,history,alpha,time,data,external);
+    auto epsilon=AssemblePicardBlock(Epsilon(),state,history,alpha,time,data,external);
+    const int nv=std::lower_bound(flow.rows.begin(),flow.rows.end(),DifferentialSize())-
+                 flow.rows.begin();
+    return std::make_unique<NonKPreconditioner>(std::move(flow),std::move(epsilon),nv);
+}
+
 RANSWallEvolutionPatch::PicardFlowResult RANSWallEvolutionPatch::
     PicardFlowCorrection(const Vector &state, const Vector &history,
                          double alpha, double time,
@@ -114,7 +203,7 @@ RANSWallEvolutionPatch::PicardFlowResult RANSWallEvolutionPatch::
 RANSWallEvolutionPatch::NonKResponse RANSWallEvolutionPatch::EquilibrateNonK(
     const Vector &state, const Vector &history, double alpha, double time,
     const RANSWallEvolutionData &data, double tolerance,
-    int maximumUpdates) const
+    int maximumUpdates, const NonKPreconditioner *preconditioner) const
 {
     Require(state.size() == Size() && history.size() == state.size() &&
                 tolerance > 0. && std::isfinite(tolerance) &&
@@ -150,8 +239,20 @@ RANSWallEvolutionPatch::NonKResponse RANSWallEvolutionPatch::EquilibrateNonK(
         evaluate(current);
         while (result.error > tolerance && result.updates < maximumUpdates)
         {
-            const auto correction = PicardFlowCorrection(
-                current, history, alpha, time, data, external);
+            std::vector<int> flowRows;
+            Vector flowStep;
+            if (preconditioner)
+            {
+                flowRows=preconditioner->flow.rows;
+                flowStep=preconditioner->FlowStep(result.residual);
+                ++result.cachedFlowSolves;
+            }
+            else
+            {
+                auto correction=PicardFlowCorrection(current,history,alpha,time,data,external);
+                flowRows=std::move(correction.block.rows);
+                flowStep=std::move(correction.step);
+            }
             ++result.flowSolves;
             const double before =
                 Dot(HNorms(result.norms, K()), HNorms(result.norms, K()));
@@ -161,19 +262,34 @@ RANSWallEvolutionPatch::NonKResponse RANSWallEvolutionPatch::EquilibrateNonK(
             {
                 const double fraction = std::ldexp(1., -retry);
                 auto trial            = current;
-                Apply(trial, correction.block.rows, correction.step, fraction);
+                Apply(trial, flowRows, flowStep, fraction);
                 try
                 {
                     if (!admissible(trial))
                         continue;
-                    const auto epsilon = AssemblePicardBlock(
-                        Epsilon(), trial, history, alpha, time, data, external);
-                    auto rhs = epsilon.residual;
-                    for (auto &v : rhs)
-                        v = -v;
-                    const auto step = Factor(epsilon.matrix).Apply(rhs);
+                    std::vector<int> epsilonRows;
+                    Vector step;
+                    if (preconditioner)
+                    {
+                        // Momentum has just changed. Rebuild the original
+                        // residual, including the nonlinear matching trace,
+                        // before the separate epsilon correction.
+                        const auto residual=Residual(trial,history,alpha,time,data);
+                        epsilonRows=preconditioner->epsilon.rows;
+                        step=preconditioner->EpsilonStep(residual);
+                        ++result.cachedEpsilonSolves;
+                    }
+                    else
+                    {
+                        auto epsilon=AssemblePicardBlock(
+                            Epsilon(),trial,history,alpha,time,data,external);
+                        auto rhs=epsilon.residual;
+                        for (auto &v:rhs) v=-v;
+                        step=Factor(epsilon.matrix).Apply(std::move(rhs));
+                        epsilonRows=std::move(epsilon.rows);
+                    }
                     ++result.epsilonSolves;
-                    Apply(trial, epsilon.rows, step, fraction);
+                    Apply(trial, epsilonRows, step, fraction);
                     if (!admissible(trial))
                         continue;
                     const auto residual =
@@ -364,6 +480,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         return ground && ScalarDomain(s, time, data).admissible;
     };
     int responseSolves = 0, flowSolves = 0, epsilonSolves = 0;
+    int cachedFlowSolves=0,cachedEpsilonSolves=0;
+    std::unique_ptr<NonKPreconditioner> nonKCache;
     struct Evaluation
     {
         bool valid = false;
@@ -375,22 +493,40 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         std::array<double, 4> family{};
     };
     auto evaluate = [&](const Vector &guess, double accuracy, int budget,
-                        const std::string &purpose) {
+                        const std::string &purpose, bool reusePreconditioner=false) {
         Evaluation e;
-        e.response = EquilibrateNonK(guess, history, alpha, time, data,
-                                     accuracy, budget);
-        ++responseSolves;
-        flowSolves += e.response.flowSolves;
-        epsilonSolves += e.response.epsilonSolves;
-        emit("non_k_response",
+        const auto *preconditioner=reusePreconditioner ? nonKCache.get() : nullptr;
+        while (true)
+        {
+            e.response=EquilibrateNonK(guess,history,alpha,time,data,accuracy,budget,
+                                      preconditioner);
+            ++responseSolves;
+            flowSolves+=e.response.flowSolves;
+            epsilonSolves+=e.response.epsilonSolves;
+            cachedFlowSolves+=e.response.cachedFlowSolves;
+            cachedEpsilonSolves+=e.response.cachedEpsilonSolves;
+            emit("non_k_response",
              {{"purpose", J::Quote(purpose)},
+              {"base_field_preconditioner",J::Boolean(preconditioner!=nullptr)},
               {"converged", J::Boolean(e.response.converged)},
               {"required", J::Number(accuracy)},
               {"attained", J::Number(e.response.error)},
               {"updates", J::Number(e.response.updates)},
               {"flow_solves", J::Number(e.response.flowSolves)},
               {"epsilon_solves", J::Number(e.response.epsilonSolves)},
+              {"cached_flow_solves",J::Number(e.response.cachedFlowSolves)},
+              {"cached_epsilon_solves",J::Number(e.response.cachedEpsilonSolves)},
               {"failure", J::Quote(e.response.failure)}});
+            if (!e.response.converged && e.response.state!=guess)
+                throw std::logic_error("failed cached non-k solve changed its caller state");
+            if (e.response.converged || !preconditioner) break;
+            // A stale/unsuitable field preconditioner is a numerical retry,
+            // not an H solution. Retry from the exact incoming guess using
+            // the retained current-operator separate field solves.
+            emit("response_preconditioner_retry",{{"purpose",J::Quote(purpose)},
+                {"failure",J::Quote(e.response.failure)}});
+            preconditioner=nullptr;
+        }
         if (!e.response.converged)
         {
             if (e.response.state != guess)
@@ -422,6 +558,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         {"radius_scaling", J::Quote("Euclidean norm of free k coefficient displacement divided by reference K")},
         {"response_method", J::Quote("one-sided differences of converged sequential non-k solves")},
         {"half_response_warm_start", J::Quote("interpolate converged non-k coefficients; preserve exact requested k")},
+        {"response_field_preconditioner_reuse",J::Boolean(m_reducedResponseCache)},
+        {"response_preconditioner_policy",J::Quote("probe-only separate base velocity/pressure and epsilon factors; original H convergence required; fresh-operator retry on failure; canonical check and actual trials use current operators")},
         {"initial_basis_budget", J::Number(m_reducedBasis)},
         {"initial_restoration_weight", J::Number(m_reducedRestorationWeight)},
         {"response_krylov_budget", J::Number(m_reducedKrylov)},
@@ -481,7 +619,9 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
               {"ground", wall},
               {"state_sha256", J::Quote(RANSWallR3::Hash(e.response.state))},
               {"work", J::Numbers(std::array<int, 3>{responseSolves, flowSolves,
-                                                     epsilonSolves})}});
+                                                     epsilonSolves})},
+              {"cached_field_applications",J::Numbers(std::array<int,2>{
+                  cachedFlowSolves,cachedEpsilonSolves})}});
     };
     report(base, "initial");
     if (m_reducedVerify)
@@ -574,6 +714,23 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         }
         const bool restore  = !continuationDiagnostic && base.violation > 0.;
         const int dimension = rows.size();
+        nonKCache.reset();
+        if (m_reducedResponseCache)
+        {
+            try
+            {
+                nonKCache=PrepareNonKPreconditioner(state,history,alpha,time,data,external);
+                emit("response_preconditioner_prepared",{
+                    {"base_state_sha256",J::Quote(RANSWallR3::Hash(state))},
+                    {"velocity_size",J::Number(nonKCache->nv)},
+                    {"pressure_gauge_size",J::Number(nonKCache->flow.rows.size()-nonKCache->nv)},
+                    {"epsilon_trace_size",J::Number(nonKCache->epsilon.rows.size())}});
+            }
+            catch (const std::runtime_error &error)
+            {
+                emit("response_preconditioner_unavailable",{{"failure",J::Quote(error.what())}});
+            }
+        }
         const auto contacts = WallTraceR4(state);
         std::vector<std::pair<std::string, Vector>> seeds;
         auto add = [&](const std::string &name, Vector v) {
@@ -852,7 +1009,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 if (!admissible(guess))
                     continue;
                 shifted = evaluate(guess, innerTolerance, m_reducedHUpdates,
-                                   "response_" + name);
+                                   "response_" + name, true);
                 if (shifted.valid)
                     break;
             }
@@ -892,7 +1049,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                     std::max(minimumInnerAccuracy, innerTolerance * .05);
                 auto half = evaluate(
                     guess, halfAccuracy,
-                    m_reducedHUpdates, "half_response_" + name);
+                    m_reducedHUpdates, "half_response_" + name, true);
                 if (!half.valid)
                     half = evaluate(canonicalGuess, halfAccuracy,
                                     m_reducedHUpdates, "retry_half_response_" + name);

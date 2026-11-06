@@ -73,6 +73,7 @@ def prepare(args):
                 set_info(root, "RANSWallReducedConstraintSecant", "On" if getattr(args, "reduced_constraint_secant", False) else "Off")
                 set_info(root, "RANSWallReducedAdaptiveSpace", "On" if getattr(args, "reduced_adaptive_space", False) else "Off")
                 set_info(root, "RANSWallReducedSourceRay", "On" if getattr(args, "reduced_source_ray", False) else "Off")
+                set_info(root, "RANSWallReducedResponseCache", "On" if getattr(args, "reduced_response_cache", False) else "Off")
                 for key, value in {"Basis": args.reduced_basis, "Radius": args.reduced_radius,
                                    "MaximumBasis": getattr(args, "reduced_maximum_basis", 32),
                                    "HTolerance": args.reduced_h_tolerance,
@@ -163,6 +164,8 @@ def main():
                         help="Select reduced step lengths using nonlinear destruction on affine field responses")
     parser.add_argument("--reduced-source-refinements", type=int, default=0,
                         help="Up to three constrained nonlinear destruction model direction refinements")
+    parser.add_argument("--reduced-response-cache", action="store_true",
+                        help="Reuse separate base field factors for response probes; still converge the original H")
     parser.add_argument("--reduced-basis", type=int, default=10)
     parser.add_argument("--reduced-maximum-basis", type=int, default=32,
                         help="Adaptive response-space ceiling (up to 512; 32 retains earlier controls)")
@@ -199,6 +202,7 @@ def main():
             "--reduced-constraint-secant requires --reduced-second-order")
     require(not args.reduced_adaptive_space or args.reduced, "--reduced-adaptive-space requires --reduced")
     require(not args.reduced_source_ray or args.reduced, "--reduced-source-ray requires --reduced")
+    require(not args.reduced_response_cache or args.reduced, "--reduced-response-cache requires --reduced")
     require(0 <= args.reduced_source_refinements <= 3 and
             (not args.reduced_source_refinements or args.reduced_source_ray),
             "source refinements require --reduced-source-ray and a budget from zero to three")

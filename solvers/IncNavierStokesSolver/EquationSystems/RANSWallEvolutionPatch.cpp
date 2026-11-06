@@ -267,13 +267,14 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         Require(m_picardKRadius>0. && m_picardKRadius<=1.,"invalid dimensionless Picard k radius");
         session->LoadSolverInfo("RANSWallPicardGuessFile",m_picardGuessFile,"");
         session->LoadSolverInfo("RANSWallPicardKDiagnostic",m_picardKDiagnostic,"");
-        std::string reduced,reducedVerify,reducedSecondOrder,reducedSecant,reducedAdaptive,reducedSourceRay;
+        std::string reduced,reducedVerify,reducedSecondOrder,reducedSecant,reducedAdaptive,reducedSourceRay,reducedResponseCache;
         session->LoadSolverInfo("RANSWallPicardReduced",reduced,"Off");
         session->LoadSolverInfo("RANSWallReducedVerify",reducedVerify,"Off");
         session->LoadSolverInfo("RANSWallReducedSecondOrder",reducedSecondOrder,"Off");
         session->LoadSolverInfo("RANSWallReducedConstraintSecant",reducedSecant,"Off");
         session->LoadSolverInfo("RANSWallReducedAdaptiveSpace",reducedAdaptive,"Off");
         session->LoadSolverInfo("RANSWallReducedSourceRay",reducedSourceRay,"Off");
+        session->LoadSolverInfo("RANSWallReducedResponseCache",reducedResponseCache,"Off");
         Require((reduced=="On" || reduced=="Off") && (reducedVerify=="On" || reducedVerify=="Off"),
                 "unknown Picard reduced selector");
         m_picardReduced=reduced=="On";m_reducedVerify=reducedVerify=="On";
@@ -297,6 +298,11 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         m_reducedSourceRay=reducedSourceRay=="On";
         Require(!m_reducedSourceRay || m_picardReduced,
                 "source-ray selection requires the reduced search");
+        Require(reducedResponseCache=="On" || reducedResponseCache=="Off",
+                "unknown reduced response preconditioner reuse selector");
+        m_reducedResponseCache=reducedResponseCache=="On";
+        Require(!m_reducedResponseCache || m_picardReduced,
+                "response preconditioner reuse requires the reduced search");
         session->LoadParameter("RANSWallReducedBasis",m_reducedBasis,10);
         session->LoadParameter("RANSWallReducedMaximumBasis",m_reducedMaximumBasis,32);
         session->LoadParameter("RANSWallReducedHUpdates",m_reducedHUpdates,50);

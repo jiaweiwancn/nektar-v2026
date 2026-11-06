@@ -260,16 +260,21 @@ private:
     PicardFlowResult PicardFlowCorrection(const Vector &state,const Vector &history,
         double alpha,double time,const RANSWallEvolutionData &data,
         const std::map<int,double> &external) const;
+    struct NonKPreconditioner;
+    std::unique_ptr<NonKPreconditioner> PrepareNonKPreconditioner(const Vector &state,
+        const Vector &history,double alpha,double time,const RANSWallEvolutionData &data,
+        const std::map<int,double> &external) const;
     struct NonKResponse
     {
         bool converged=false;
         Vector state,residual,norms;
-        int updates=0,flowSolves=0,epsilonSolves=0;
+        int updates=0,flowSolves=0,epsilonSolves=0,cachedFlowSolves=0,cachedEpsilonSolves=0;
         double error=1e300;
         std::string failure;
     };
     NonKResponse EquilibrateNonK(const Vector &state,const Vector &history,double alpha,
-        double time,const RANSWallEvolutionData &data,double tolerance,int maximumUpdates) const;
+        double time,const RANSWallEvolutionData &data,double tolerance,int maximumUpdates,
+        const NonKPreconditioner *preconditioner=nullptr) const;
     Vector SolveReducedPicard(Vector state,const Vector &history,double alpha,double time,
         const RANSWallEvolutionData &data,int &iterations,double tolerance,int maximumIterations,
         bool continuationDiagnostic=false) const;
@@ -416,6 +421,7 @@ private:
     double m_picardContinuationEta=0.,m_picardContinuationTolerance=0.;
     int m_reducedBasis=10,m_reducedHUpdates=50,m_reducedKrylov=0,m_reducedMaximumBasis=32;
     int m_reducedSourceRefinements=0;
+    bool m_reducedResponseCache=false;
     double m_reducedRadius=.05,m_reducedStep=2e-5,m_reducedHTolerance=2e-9;
     double m_reducedRestorationWeight=1.;
     bool m_picardEquilibrateK=false;

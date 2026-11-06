@@ -32,6 +32,7 @@ def main():
     parser.add_argument("--reduced-adaptive-space", action="store_true")
     parser.add_argument("--reduced-source-ray", action="store_true")
     parser.add_argument("--reduced-source-refinements", type=int, default=0)
+    parser.add_argument("--reduced-response-cache", action="store_true")
     parser.add_argument("--reduced-krylov", type=int, default=4)
     parser.add_argument("--reduced-radius", type=float, default=.4)
     parser.add_argument("--reduced-step", type=float, default=2e-5)
@@ -87,6 +88,7 @@ def main():
         params.reduced_adaptive_space = args.reduced_adaptive_space
         params.reduced_source_ray = args.reduced_source_ray
         params.reduced_source_refinements = args.reduced_source_refinements
+        params.reduced_response_cache = args.reduced_response_cache
         params.reduced_krylov = args.reduced_krylov
         params.reduced_radius = args.reduced_radius
         params.reduced_step = args.reduced_step

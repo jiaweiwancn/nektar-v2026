@@ -118,6 +118,20 @@ def check(directory):
     responses = [r for r in records if r["event"] == "non_k_response"]
     require(all(r["attained"] <= r["required"] for r in responses if r["converged"]),
             "a partially converged response was accepted")
+    prepared = [r for r in records if r["event"] == "response_preconditioner_prepared"]
+    if protocol.get("response_field_preconditioner_reuse"):
+        cached = [r for r in responses if r.get("base_field_preconditioner")]
+        require(prepared and cached and warm_starts,
+                "response preconditioner reuse lacks native applications or independent fresh branch checks")
+        require(all(r["velocity_size"] > 0 and r["pressure_gauge_size"] > 0 and
+                    r["epsilon_trace_size"] > 0 for r in prepared),
+                "response preconditioner has an invalid separate-field shape")
+    require(all(0 <= r.get("cached_flow_solves", 0) <= r["flow_solves"] and
+                0 <= r.get("cached_epsilon_solves", 0) <= r["epsilon_solves"] and
+                (not r.get("base_field_preconditioner") or
+                 r["purpose"].startswith(("response_", "half_response_")))
+                for r in responses),
+            "cached response accounting is invalid or actual trial did not use current operators")
     source_selections = [r for r in records if r["event"] == "source_ray_selection"]
     require(all(0 <= r["fraction"] <= 1 and r["evaluations"] <= 12 and
                 r["invalid"] <= r["evaluations"] and
@@ -156,6 +170,7 @@ def check(directory):
                   source_ray_selections=source_selections, source_ray_predictions=source_predictions,
                   source_direction_refinements=refinements, source_refined_directions=refined_directions,
                   source_refined_direction_checks=refined_checks)
+    result["response_preconditioners"] = prepared
     write_json(directory / "reduced-checks.json", result)
 
 
