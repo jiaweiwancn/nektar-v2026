@@ -20,6 +20,72 @@ metric at ground contact while its original k residual stayed nonzero. R3
 therefore scores the original reduced residual, not that projected-map defect.
 No full all-field Jacobian or hidden coupled direction solver was added.
 
+## Full-space curvature and source-stencil accuracy (fd8c034)
+
+The full 504-direction experiment at the qualified 5.18197 checkpoint has
+rank 504 and maximum column correlation 1.68e-16. Its original reduced merit
+gradient has norm 1432.08. A separately computed cone defect using 58
+near-active rows is 1348.71, compared with empirical two-size gradient
+uncertainty 2.66. This base is not established to be a constrained stationary
+point. These are measurements at this base, not a certificate about later
+states or global existence.
+[Independent first-order audit](cls-epawf-segregated-picard-r3-evidence/native/first-order-qualified-full504-at5p182-iteration0.json).
+
+The chosen linear-model direction predicts residual 4.00522. Its signed
+original reduced-merit slope is -9.57888, versus measured half-step slope
+-9.58109; both response solves meet H tolerance 2e-12. At the full proposed
+length, however, the nonlinear destruction surrogate predicts ascent to
+5.76306. The guarded ray chooses fraction 0.353927: its prediction is
+4.83016 and the actual original residual is **4.857816821924814**. Qualification
+passes and displacement 0.254314 is within radius 0.72. Thus locally useful
+reduced feedback survives an actual original-equation trial; large finite-step
+curvature, rather than a vanishing true reduced response, limits this update.
+
+All 504 surrogate coordinate derivatives are available, but their maximum
+two-size error 0.0382067 exceeds the unchanged 0.03 limit. The source-direction
+refinement therefore aborts. This is a separate internal surrogate accuracy
+failure; it is not a failure of the independently checked original reduced
+actions or a proof of infeasibility.
+[Direction, signed checks, failed surrogate refinement and actual trial](cls-epawf-segregated-picard-r3-evidence/native/qualified-full504-at5p182-iteration0-review.json).
+
+Commit `fd8c0344bbbe3ea4a180df7358d0235ee8b675a4` retries an inaccurate
+surrogate column with up to three smaller stencils. Each retry reuses the
+previous half-step and needs one new guarded quarter-step evaluation. It
+retains the 0.03 accuracy bound, the incumbent anchor and all ground/domain
+guards. An unresolved derivative remains unavailable. The existing
+`4*n+64` model-evaluation budget now applies with either anchor policy.
+Per-column records retain sizes and initial/final errors. These refinements
+affect the internal destruction model only; actual candidates still converge
+H and evaluate the complete original nonlinear equations and qualification.
+
+The four-worker Linux build passes in 86.30s, all six focused CTests pass in
+43.10s with concurrency 1, and the changed standalone helper/tests pass
+ASan/UBSan in 10.04s (30.39s compiler invocation). Independent quadratic
+values test recovery of a resolvable truncation error; a discontinuous example
+must remain unavailable after all three retries. The sanitizer scope is the
+small helper and tests, not the full solver/dependency build.
+[Producing image, libraries and commands](cls-epawf-segregated-picard-r3-evidence/native/build-validation-fd8c034.json).
+
+Two new native tests are running. A one-update full504 diagnostic repeats the
+same 5.18197 input, H tolerance 2e-12, probe sizes and original target, with
+interior anchors disabled. Its focused assertion requires recovered accuracy
+to produce an independently checked, actually accepted refined direction
+that lowers the original full residual. A fresh original-h0 primary attempt
+requests three physical steps, using 160 responses, 64 Krylov seeds, cap 4
+and three source refinements. Neither pending run is counted as convergence.
+[Exact native commands and allocations](cls-epawf-segregated-picard-r3-evidence/native/source-precision-native-launch.json).
+
+Separately, a fresh fd8c034 probe reproduces every original norm of the
+continuing fa5ac96 checkpoint **4.042756543242138** bit for bit. Complete
+qualification passes: ground minimum 1.33977e-6, gradient departure
+0.00099999888562 at x=-1/3, z=2, and epsilon lower ratio 0.9826997882.
+Covariance/lambda and the deliberate negative-ground guard pass. This is an
+in-flight numerical checkpoint, not a completed physical stage/history receipt.
+A separate 4.11828 checkpoint has also started a tighter full504 diagnostic
+using 9f65eed; its reduced first-order audit is pending.
+[Fresh 4.04276 checkpoint audit](cls-epawf-segregated-picard-r3-evidence/native/audit-previous-warm-current.json),
+[Tighter full-space diagnostic launch](cls-epawf-segregated-picard-r3-evidence/native/qualified-full504-latest-9f-launch.json).
+
 ## Recovery after a failed radius-free model query (9f65eed)
 
 The 6b1f28a original-h0 control reaches residual 24.6865, then repeatedly

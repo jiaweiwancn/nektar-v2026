@@ -1,6 +1,6 @@
 {
   "status": "native_development_in_progress_original_m8_unresolved",
-  "producing_code_commit": "9f65eedf2b59429ce3c04de0672064ad459baceb",
+  "producing_code_commit": "fd8c0344bbbe3ea4a180df7358d0235ee8b675a4",
   "native_m8": {
     "status": "Completed original-h0 18-update run fails original residual; complete qualification passes; larger native follow-ups in progress",
     "qualified_first_stage": false,
@@ -206,7 +206,7 @@
     "Rejection after an already accepted physical step",
     "Final qualified-trajectory residual in an independent fresh process"
   ],
-  "heavy_run_root": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-segregated-picard-r3",
+  "heavy_run_root": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3",
   "qualification_restored_diagnostic": {
     "original_full_residual": 20.240190577584954,
     "gradient_departure": 0.0009999990002125259,
@@ -338,16 +338,57 @@
     }
   ],
   "best_audited_development_checkpoint": {
-    "full_residual": 4.253091674121031,
-    "gradient_departure": 0.000999999347675029,
-    "minimum_outer_epsilon_ratio": 0.982323873983886,
-    "ground_minimum": 6.049695304142611e-06,
+    "full_residual": 4.042756543242138,
+    "gradient_departure": 0.0009999988856227437,
+    "minimum_outer_epsilon_ratio": 0.9826997881642872,
+    "ground_minimum": 1.3397688354401293e-06,
     "producing_code_commit": "fa5ac96b5b396a759002a104d2c0d7cf88bb6b3b",
-    "independent_probe_code_commit": "9f65eedf2b59429ce3c04de0672064ad459baceb",
-    "audit": "native/audit-previous-warm-third.json",
+    "independent_probe_code_commit": "fd8c0344bbbe3ea4a180df7358d0235ee8b675a4",
+    "audit": "native/audit-previous-warm-current.json",
     "original_norm_vector_bitwise_reproduced": true,
     "physical_acceptance_inferred": false,
     "algebraic_root": false,
-    "scope": "Fresh original residual/complete qualification of an in-flight numerical checkpoint; not physical acceptance or a final native history receipt"
+    "scope": "Fresh original residual and full constitutive audit of an in-flight numerical checkpoint; no physical acceptance or final native history receipt inferred"
+  },
+  "source_precision_code_commit": "fd8c0344bbbe3ea4a180df7358d0235ee8b675a4",
+  "source_precision_validation": {
+    "build": "native/build-validation-fd8c034.json",
+    "focused_regressions_passed": 6,
+    "standalone_address_undefined_sanitizer": "passed",
+    "native_status": "running",
+    "native_launch": "native/source-precision-native-launch.json",
+    "original_h0_attempt": true,
+    "physical_steps_accepted": 0,
+    "scope": "Model derivative accuracy repair tested on Linux; native recovery and primary original-start convergence still pending"
+  },
+  "best_audited_development_checkpoint_history": [
+    {
+      "full_residual": 4.253091674121031,
+      "gradient_departure": 0.000999999347675029,
+      "minimum_outer_epsilon_ratio": 0.982323873983886,
+      "ground_minimum": 6.049695304142611e-06,
+      "producing_code_commit": "fa5ac96b5b396a759002a104d2c0d7cf88bb6b3b",
+      "independent_probe_code_commit": "9f65eedf2b59429ce3c04de0672064ad459baceb",
+      "audit": "native/audit-previous-warm-third.json",
+      "original_norm_vector_bitwise_reproduced": true,
+      "physical_acceptance_inferred": false,
+      "algebraic_root": false,
+      "scope": "Fresh original residual/complete qualification of an in-flight numerical checkpoint; not physical acceptance or a final native history receipt"
+    }
+  ],
+  "full_space_qualified_5p182_first_order": {
+    "dimension": 504,
+    "rank": 504,
+    "gradient_norm": 1432.0763797189966,
+    "near_active_cone_defect": 1348.7098594375757,
+    "near_active_rows": 58,
+    "coordinate_window": 1e-06,
+    "empirical_gradient_uncertainty": 2.658113348914568,
+    "constrained_stationarity_established": false,
+    "actual_next_original_residual": 4.857816821924814,
+    "qualification_passed": true,
+    "physical_acceptance_inferred": false,
+    "evidence": "native/first-order-qualified-full504-at5p182-iteration0.json",
+    "direction_and_trial": "native/qualified-full504-at5p182-iteration0-review.json"
   }
 }
