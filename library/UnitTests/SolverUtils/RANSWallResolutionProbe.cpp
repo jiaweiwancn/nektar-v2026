@@ -186,6 +186,53 @@ int main(int argc,char **argv)
         const bool historyMatch=std::memcmp(history.data(),reference.data(),history.size()*sizeof(double))==0;
         Require(!packet.get<bool>("require_history_h0",true) || historyMatch,"packet history differs from rebuilt native h0");
         const double time=packet.get<double>("time"),alpha=packet.get<double>("alpha");
+        if(packet.get<std::string>("operation","")=="k_bound")
+        {
+            Vector pre=packet.get_child_optional("pre_k")?Read(packet,"pre_k"):history;
+            const auto fixture=packet.get<std::string>("fixture","");
+            double nodeMinimum=1e300;
+            if(!fixture.empty())
+            {
+                const double K0=p.model.Q()*us*us;auto field=patch.fields[patch.K()];
+                int chosen=-1;for(int i=0;i<field->Elements().size();++i)if(field->Elements()[i].geometry==4)chosen=i;
+                Require(chosen>=0,"missing geometry4 fixture");const auto el=field->Elements()[chosen];
+                const auto coefficients=field->Project([&](const RANSWallCoordinate &x)
+                {
+                    if(fixture=="smooth")return K0*(1+.01*(x[0]-patch.lower[0])*(patch.upper[0]-x[0])*
+                        x[2]*(patch.upper[2]-x[2])/std::pow(patch.upper[0]-patch.lower[0],2)/std::pow(patch.upper[2],2));
+                    if(fixture=="between_nodes" && x[0]>=el.lower[0] && x[0]<=el.upper[0] && x[2]<=el.upper[2])
+                    {const double z=2*(x[0]-el.lower[0])/(el.upper[0]-el.lower[0])-1;return K0*(1-(.997+.16*z)*(1-z*z)*(1-x[2]/el.upper[2]));}
+                    return K0;
+                });
+                pre=reference;state=reference;
+                if(fixture!="reference")for(int i=0;i<coefficients.size();++i)state[patch.offset[patch.K()]+i]=coefficients[i];
+                for(auto [id,value]:data.fixedBoundary)if(id>=patch.offset[patch.K()] && id<patch.offset[patch.Epsilon()])state[id]=value;
+                const auto exp=field->Field()->GetExp(chosen);const auto z=exp->GetBasis(0)->GetZ();
+                for(int i=0;i<exp->GetNumPoints(0);++i)
+                    nodeMinimum=std::min(nodeMinimum,field->ElementPoint(chosen,{el.lower[0]+(z[i]+1)*(el.upper[0]-el.lower[0])/2,0,0}).Value(state,patch.offset[patch.K()]));
+            }
+            const auto bounded=patch.ApplyPimpleKBound(state,pre,time,data);
+            double nonK=0,essential=0;
+            for(int i=0;i<patch.Size();++i)if(i<patch.offset[patch.K()] || i>=patch.offset[patch.Epsilon()])nonK=std::max(nonK,std::abs(state[i]-bounded.state[i]));
+            for(auto [id,value]:data.fixedBoundary)if(id>=patch.offset[patch.K()] && id<patch.offset[patch.Epsilon()])essential=std::max(essential,std::abs(state[id]-bounded.state[id]));
+            Vector dk(patch.size[patch.K()]);for(int i=0;i<dk.size();++i)dk[i]=bounded.state[patch.offset[patch.K()]+i]-state[patch.offset[patch.K()]+i];
+            double square=0,integral=0,jump=0;
+            for(const auto &q:patch.Quadrature(patch.K())){const double x=q.Value(dk);square+=q.weight*x*x;integral+=q.weight*x;}
+            const auto f=patch.fields[patch.K()];
+            for(int i=0;i<f->Elements().size();++i)for(int j=i+1;j<f->Elements().size();++j)
+            {
+                const auto &a=f->Elements()[i],&b=f->Elements()[j];
+                if(a.upper[0]!=b.lower[0] || a.lower[2]!=b.lower[2] || a.upper[2]!=b.upper[2])continue;
+                for(int k=0;k<=6;++k){const RANSWallCoordinate x{a.upper[0],0,a.lower[2]+k*(a.upper[2]-a.lower[2])/6};
+                    jump=std::max(jump,std::abs(f->ElementPoint(i,x).Value(bounded.state,patch.offset[patch.K()])-f->ElementPoint(j,x).Value(bounded.state,patch.offset[patch.K()])));}
+            }
+            std::ofstream out(argv[3]);out<<J::Object({{"operation",J::Quote("k_bound")},{"k_bound",bounded.report},
+                {"quadrature_correction_mass_norm",J::Number(std::sqrt(square))},{"quadrature_correction_integral",J::Number(integral)},
+                {"shared_cg_jump",J::Number(jump)},{"raw_native_ground_node_minimum",J::Number(nodeMinimum)},
+                {"raw",J::Numbers(state)},{"corrected",J::Numbers(bounded.state)},
+                {"non_k_change",J::Number(nonK)},{"essential_k_change",J::Number(essential)}})<<'\n';
+            Require(out.good(),"bound replay write failed");world->Finalise();return 0;
+        }
         const bool constructed=packet.get<bool>("construct_contact",false);
         Vector beforeTrace;
         if(constructed)

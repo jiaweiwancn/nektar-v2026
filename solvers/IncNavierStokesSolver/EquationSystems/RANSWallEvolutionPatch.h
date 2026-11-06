@@ -176,6 +176,19 @@ public:
     Vector InitializationWork() const { return {double(m_liftCalls),double(m_liftIterations)}; }
     const std::vector<std::string> &PimpleRecords() const { return m_pimpleRecords; }
     Diagnostic PhysicalSamples(const Vector &state,double time,const RANSWallEvolutionData &data) const;
+    bool PimpleKBoundEnabled() const { return m_pimpleKBound!="Off"; }
+    const std::string &PimpleKBoundMode() const { return m_pimpleKBound; }
+    std::string PimpleKBoundSignature() const;
+    struct KBoundResult
+    {
+        Vector state;
+        bool success=false,activated=false;
+        int iterations=0,massFactorApplications=0,kktSolves=0;
+        double integral=0;
+        std::string report,failure;
+    };
+    KBoundResult ApplyPimpleKBound(const Vector &raw,const Vector &preK,double time,
+        const RANSWallEvolutionData &data) const;
     bool SegregatedPicard() const { return m_nonlinearPolicy=="SegregatedPicard"; }
     Vector Norms(const Vector &residual,const std::map<int,double> &constraints,double ustar=.4) const;
     Vector StateNorms(const Vector &state,const Vector &reference,double ustar=.4) const;
@@ -410,6 +423,9 @@ private:
     std::string m_nonlinearPolicy="Legacy",m_feasibleTraceFile="case.feasible.jsonl";
     std::string m_temporalCoupling="ConvergedStage";
     bool m_pimpleVerify=false;
+    std::string m_pimpleKBound="Off",m_pimpleSnapshotDirectory="pimple-states";
+    double m_pimpleKFloorRelative=1e-8,m_pimpleBudgetTime=-1.;
+    bool m_pimpleSnapshots=false;
     mutable int m_liftCalls=0,m_liftIterations=0;
     mutable std::vector<std::string> m_pimpleRecords;
     std::array<double,3> m_picardRelaxation{{1.,.5,.5}};

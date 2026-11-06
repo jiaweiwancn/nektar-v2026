@@ -208,6 +208,15 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         {std::string value;session->LoadSolverInfo("RANSWallPicard"+key,value,"Off");Require(value=="Off","PIMPLE forbids nonlinear search policies");}
         Require(!m_solveDiagnostics && !m_solveDiagnosticReplay,"PIMPLE forbids nonlinear diagnostic retries");
     }
+    session->LoadSolverInfo("RANSWallPimpleKBound",m_pimpleKBound,"Off");
+    Require(m_pimpleKBound=="Off" || (PimpleSingleSweep() && m_pimpleKBound=="MassProjection"),"invalid PIMPLE k-bound mode");
+    session->LoadParameter("RANSWallPimpleKFloorRelative",m_pimpleKFloorRelative,1e-8);
+    Require(std::isfinite(m_pimpleKFloorRelative) && m_pimpleKFloorRelative>0 && m_pimpleKFloorRelative<=1.,"invalid k floor relative to K0");
+    std::string snapshots;session->LoadSolverInfo("RANSWallPimpleSnapshots",snapshots,"Off");
+    Require(snapshots=="Off" || snapshots=="On","invalid PIMPLE snapshot selector");
+    m_pimpleSnapshots=snapshots=="On" || PimpleKBoundEnabled();
+    session->LoadSolverInfo("RANSWallPimpleSnapshotDirectory",m_pimpleSnapshotDirectory,"pimple-states");
+    session->LoadParameter("RANSWallPimpleBudgetTime",m_pimpleBudgetTime,-1.);
     session->LoadSolverInfo("RANSWallFeasibleFile",m_feasibleTraceFile,"case.feasible.jsonl");
     session->LoadSolverInfo("RANSWallR3ProgressFile",m_r3ProgressFile,"case.r3-progress.jsonl");
     session->LoadSolverInfo("RANSWallActionPolicy",m_actionPolicy,"Legacy");

@@ -66,6 +66,7 @@ private:
     std::vector<std::string> m_stageTestLevels;
     std::string m_stageTestInitialHistory;
     std::string m_r3PredictorFile="None",m_r3PredictorBinding="null",m_r3PredictorRevalidation="null";
+    std::string m_initialKBoundCheck;
     Vector m_initialEvaluationSeconds;
     bool m_targetConverged=false,m_targetPhysical=false;
     struct PhysicalRangeEvent

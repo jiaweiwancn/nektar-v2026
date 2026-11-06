@@ -4,6 +4,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionResolution.h>
+#include <filesystem>
+#include <fstream>
 #include <algorithm>
 #include <chrono>
 #include <cmath>
@@ -27,6 +30,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
     iterations=0;
     std::vector<std::pair<std::string,std::string>> record;
     int momentum=0,pressure=0,epsilon=0,k=0,massApplications=0;
+    int boundCalls=0,boundActivations=0,boundIterations=0,boundMass=0,boundKKT=0;
     auto put=[&](const std::string &key,const std::string &value){record.emplace_back(key,value);};
     auto publish=[&](bool completed,const std::string &failure)
     {
@@ -37,7 +41,11 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
         put("pressure_system_solves",J::Number(pressure));
         put("epsilon_transport_solves",J::Number(epsilon));put("k_transport_solves",J::Number(k));
         put("mass_inverse_applications",J::Number(massApplications));
-        put("additional_correction_or_restoration_solves","0");
+        put("additional_governing_equation_solves","0");
+        put("additional_correction_or_restoration_solves",J::Number(boundKKT));
+        put("bound_calls",J::Number(boundCalls));put("bound_activations",J::Number(boundActivations));
+        put("bound_active_set_iterations",J::Number(boundIterations));put("bound_mass_factor_applications",J::Number(boundMass));
+        put("bound_kkt_solves",J::Number(boundKKT));
         put("seconds",J::Number(std::chrono::duration<double>(std::chrono::steady_clock::now()-start).count()));
         m_pimpleRecords.push_back(J::Object(record));
         std::cout<<"EP-AWF PIMPLE "<<m_pimpleRecords.back()<<std::endl;
@@ -154,6 +162,28 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
             put("verification_pressure_action_dt_absolute_relative",J::List(actions));
         }
         check(s,"flow");
+        const auto flowState=s;
+        auto budget=[&](const char *phase,const Vector &q)
+        {
+            if(m_pimpleBudgetTime<0 || std::abs(time-m_pimpleBudgetTime)>.25/alpha)return;
+            const auto resolution=ResidualResolutionComponents(q,history,0.,time,data,false);
+            const auto ground=WallTraceR4(q);
+            const auto worst=std::min_element(ground.begin(),ground.end(),[](const auto &a,const auto &b){return a.value<b.value;});
+            const auto rate=RANSWallResolutionMassRate(*this,resolution,K(),worst->row.coordinate);
+            const auto fixed=Point(K(),{1.60,0.,0.});
+            std::vector<std::pair<std::string,std::string>> terms;
+            for(const auto &[name,value]:rate.componentRates)
+                terms.push_back({name,J::Numbers(Vector{worst->row.Value(value),fixed.Value(value)})});
+            const auto constraints=Constraints(q,time,data);double trace=0;
+            for(int id:m_traceIds)trace=std::max(trace,std::abs(q[offset[Epsilon()]+id]-constraints.at(offset[Epsilon()]+id)));
+            put(std::string("k_budget_")+phase,J::Object({{"ground_point",J::Numbers(worst->row.coordinate)},
+                {"ground_value",J::Number(worst->value)},{"fixed_witness",J::Numbers(Vector{1.6,0,0})},
+                {"rates_ground_and_fixed",J::Numbers(Vector{rate.contactRate,fixed.Value(rate.rate)})},
+                {"component_rates",J::Object(terms)},{"mass_solve_residual",J::Number(Maximum(rate.freeMassResidual))},
+                {"diagnostic_mass_rate_inverse_applications",J::Number(rate.componentRates.size()+1)},
+                {"epsilon_trace_defect",J::Number(trace)},
+                {"scope",J::Quote("instantaneous spatial k rate with zero essential rates; net destruction once; not a full-sweep h-to-zero consistency claim")}}));
+        };
         auto scalar=[&](int b)
         {
             const auto block=AssemblePicardBlock(b,s,history,alpha,time,data,external);
@@ -183,6 +213,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
                     traceStorage=std::max(traceStorage,std::abs(alpha*massEntry*(s[block.rows[j]]-history[block.rows[j]]+delta[j])));
                 }
             }
+            const auto preScalar=s;
+            if(b==K()) {budget("last_accepted",base);budget("post_flow",flowState);budget("pre_k",preScalar);}
             for(int i=0;i<block.rows.size();++i)s[block.rows[i]]+=delta[i];
             const std::string name=b==Epsilon()?"epsilon":"k";
             put(name+"_frozen_linear_residual",J::Number(Maximum(linear)));
@@ -192,6 +224,49 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
                 put("imposed_trace_defect",J::Number(imposed));
                 put("retained_trace_column_max",J::Number(traceColumns));put("trace_mass_column_max",J::Number(traceMass));
                 put("trace_physical_storage_contribution_max",J::Number(traceStorage));
+            }
+            if(b==K())
+            {
+                const auto raw=s;KBoundResult bounded;bounded.state=raw;bounded.success=true;
+                if(PimpleKBoundEnabled())
+                {
+                    ++boundCalls;bounded=ApplyPimpleKBound(raw,preScalar,time,data);s=bounded.state;
+                    boundActivations+=bounded.activated?1:0;boundIterations+=bounded.iterations;
+                    boundMass+=bounded.massFactorApplications;boundKKT+=bounded.kktSolves;
+                    put("k_bound",bounded.report);
+                    Vector dk(block.rows.size());for(int i=0;i<dk.size();++i)dk[i]=s[block.rows[i]]-raw[block.rows[i]];
+                    const auto added=Multiply(block.matrix,dk),storage=Multiply(PicardKMass(block.rows),dk);
+                    auto corrected=linear;for(int i=0;i<corrected.size();++i)corrected[i]+=added[i];
+                    Vector physicalStorage=storage;for(auto &x:physicalStorage)x*=alpha;
+                    put("k_corrected_frozen_linear_residual",J::Number(Maximum(corrected)));
+                    put("k_added_frozen_residual",J::Number(Maximum(added)));
+                    put("k_added_storage_residual",J::Number(Maximum(physicalStorage)));
+                    put("bound_residual_accounting_mass_applications","1");
+                }
+                if(m_pimpleSnapshots)
+                {
+                    std::filesystem::create_directories(m_pimpleSnapshotDirectory);
+                    const auto stem=(std::filesystem::path(m_pimpleSnapshotDirectory)/
+                        ("k-t"+J::Number(time)+"-"+RANSWallR3::Hash(history).substr(0,12))).string();
+                    const auto matrix=stem+".matrix.bin";
+                    std::ofstream mat(matrix,std::ios::binary);
+                    for(const auto &row:block.matrix)mat.write(reinterpret_cast<const char*>(row.data()),row.size()*sizeof(double));
+                    mat.close();Require(mat.good(),"could not save frozen k matrix");
+                    const auto packet=stem+".json";std::ofstream out(packet);
+                    out<<J::Object({{"schema","1"},{"time",J::Number(time)},{"alpha",J::Number(alpha)},
+                        {"committed",J::Numbers(base)},{"post_flow",J::Numbers(flowState)},{"pre_k",J::Numbers(preScalar)},
+                        {"raw",J::Numbers(raw)},{"corrected",J::Numbers(s)},{"history",J::Numbers(history)},
+                        {"transport_rows",J::Numbers(block.rows)},{"transport_residual",J::Numbers(block.residual)},
+                        {"raw_increment",J::Numbers(delta)},{"raw_linear_residual",J::Numbers(linear)},
+                        {"matrix_file",J::Quote(std::filesystem::absolute(matrix).string())},
+                        {"matrix_sha256",J::Quote(RANSWallR3::HashFile(matrix))},
+                        {"matrix_encoding",J::Quote("row-major native IEEE754 binary64")},
+                        {"k_bound",PimpleKBoundEnabled()?bounded.report:"null"}})<<'\n';
+                    out.close();Require(out.good(),"could not save raw/corrected k snapshot");
+                    put("k_snapshot",J::Quote(std::filesystem::absolute(packet).string()));
+                    put("k_snapshot_sha256",J::Quote(RANSWallR3::HashFile(packet)));
+                }
+                Require(bounded.success,"PIMPLE k corrector failed: "+bounded.failure);
             }
             check(s,name.c_str());
         };

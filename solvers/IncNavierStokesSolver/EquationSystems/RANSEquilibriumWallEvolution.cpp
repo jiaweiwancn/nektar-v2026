@@ -210,9 +210,9 @@ std::string RANSEquilibriumWallEvolution::PhysicsSignature() const
     std::ostringstream s;s<<std::setprecision(17)<<m_patch->Signature()<<":eta="<<m_eta<<":neutral="<<m_neutral<<":us="<<m_ustar<<":direction="<<m_direction[0]<<','<<m_direction[1]<<":chart_functions="<<m_chartFunctions;
     if(!m_neutral && m_patch->CappedDestruction() && !m_patch->Mapped() && !m_patch->TransitionEnabled())
         s<<":capped_initial_trace=1";
-    if(m_patch->PimpleSingleSweep())s<<":temporal_coupling=PimpleSingleSweep";
+    if(m_patch->PimpleSingleSweep())s<<":temporal_coupling=PimpleSingleSweep"<<m_patch->PimpleKBoundSignature();
     for(const auto &[name,value]:m_serialSession->GetParameters())
-        if(name!="NUMSTEPS" && name!="IO_CHECKSTEPS" && name!="IO_INFOSTEPS" && name!="IO_TIMER_LEVEL" && name!="RANSWALLOWNERSHIPSHIFT" && name!="RANSWALLPIMPLEREJECTSTEP")s<<'|'<<name<<'='<<value;
+        if(name!="NUMSTEPS" && name!="IO_CHECKSTEPS" && name!="IO_INFOSTEPS" && name!="IO_TIMER_LEVEL" && name!="RANSWALLOWNERSHIPSHIFT" && name!="RANSWALLPIMPLEREJECTSTEP" && name!="RANSWALLPIMPLEKFLOORRELATIVE" && name!="RANSWALLPIMPLEBUDGETTIME")s<<'|'<<name<<'='<<value;
     const std::vector<std::string> names{"InitialConditionsInner","InitialConditionsOuter","InitialPerturbationInner","InitialPerturbationOuter","BoundaryValuesInner","BoundaryValuesOuter",
         "BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter","ExactSolutionInner","ExactSolutionOuter"};
     for(const auto &name:names)for(const auto &variable:m_session->GetVariables())if(m_serialSession->DefinesFunction(name,variable))
@@ -261,6 +261,12 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
             m_integrator->Initialise(Vector(m_state.begin(),m_state.begin()+m_patch->DifferentialSize()),m_time);
         }
         m_historyReady=true;
+        if(m_patch->PimpleKBoundEnabled())
+        {
+            const auto bounded=m_patch->ApplyPimpleKBound(m_state,m_state,m_time,m_data);
+            m_initialKBoundCheck=bounded.report;
+            Require(bounded.success && bounded.state==m_state,"k-bound configuration must preserve the represented initial/restarted state and prescribed data");
+        }
         if(m_patch->NonlinearPolicyName()=="ScalarFeasibleR2" || m_patch->NonlinearPolicyName()=="ScalarFeasibleR3")
         {
             const auto domainStart=std::chrono::steady_clock::now();
@@ -379,8 +385,12 @@ void RANSEquilibriumWallEvolution::RecordAudit(const Vector &state,const Vector 
         if(m_patch->PimpleSingleSweep())
         {
             const auto &cov=audit.at("r2_covariance");
-            Require(cov[0]>=-1e-10*K0 && cov[1]>=-1e-10*K0 && audit.at("r2_scalar_domain")[8]>=.5,
-                "PIMPLE hard covariance or normalization validity exit");
+            if(!(cov[0]>=-1e-10*K0 && cov[1]>=-1e-10*K0 && audit.at("r2_scalar_domain")[8]>=.5))
+            {
+                m_rejectedState=state;
+                m_rangeEvents.push_back({time,alpha,state,history,audit,{"PIMPLE_hard_covariance_or_normalization_exit"},true});
+                throw std::runtime_error("PIMPLE hard covariance or normalization validity exit; actual candidate/history saved");
+            }
         }
         if(m_r2RangeGuard && audit.at("r2_qualified")[0]!=1 && !m_diagnosticRangeContinuation)
         {
@@ -838,11 +848,14 @@ void RANSEquilibriumWallEvolution::WriteReport() const
     out<<",\"inner_stress_model\":"<<Quoted(m_patch->InnerStressName())
        <<",\"nonlinear_policy\":"<<Quoted(m_patch->NonlinearPolicyName())
        <<",\"temporal_coupling\":"<<Quoted(m_patch->TemporalCouplingName())
+       <<",\"k_bound_mode\":"<<Quoted(m_patch->PimpleKBoundMode())
+       <<",\"k_bound_signature\":"<<Quoted(m_patch->PimpleKBoundSignature())
        <<",\"implicit_callback_count\":"<<m_implicitCallbacks
        <<",\"initialization_lift_calls_iterations\":"<<RANSWallSolveJson::Numbers(m_patch->InitializationWork())
        <<",\"pimple_attempts\":"<<RANSWallSolveJson::List(m_patch->PimpleRecords());
     out<<",\"physical_samples\":{";int sampleCount=0;
     for(const auto &[name,values]:m_physicalSamples){if(sampleCount++)out<<',';out<<Quoted(name)<<':';Write(out,values);}out<<'}';
+    if(!m_initialKBoundCheck.empty())out<<",\"initial_k_bound_check\":"<<m_initialKBoundCheck;
     if(!m_initialScalarDomain.empty())out<<",\"initial_scalar_domain\":"<<m_initialScalarDomain;
     if(!m_initialEvaluationSeconds.empty())
         out<<",\"initial_evaluation_seconds\":"<<RANSWallSolveJson::Object({

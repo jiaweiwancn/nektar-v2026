@@ -8,6 +8,7 @@ The optional exact-flow work is verification-only, never a production sweep.
 import argparse
 import json
 import platform
+import struct
 from pathlib import Path
 import subprocess
 import xml.etree.ElementTree as ET
@@ -17,7 +18,7 @@ from run_cls_epawf_picard import (ROOT, ORIGINAL, H0, THREADS, session, set_info
 
 
 def prepare(output, dt, steps, diagnostic=False, verify=False, restart=None,
-            checkpoint=False, reject_step=0):
+            checkpoint=False, reject_step=0, k_bound="Off", floor_relative=None, snapshots=False, budget_time=-1.):
     output.mkdir(parents=True, exist_ok=False)
     xml = session(ORIGINAL, output/'case.xml', 'outer6')
     root = ET.parse(xml).getroot()
@@ -36,6 +37,10 @@ def prepare(output, dt, steps, diagnostic=False, verify=False, restart=None,
         'RANSWallPicardFlowRelaxation': 1, 'RANSWallPicardKRelaxation': 1,
         'RANSWallPicardEpsilonRelaxation': 1, 'RANSWallPicardPseudoAlpha': 0}.items():
         set_parameter(root, key, value)
+    set_info(root, 'RANSWallPimpleKBound', k_bound)
+    set_info(root, 'RANSWallPimpleSnapshots', 'On' if snapshots else 'Off')
+    if floor_relative is not None:set_parameter(root, 'RANSWallPimpleKFloorRelative', floor_relative)
+    if budget_time>=0:set_parameter(root, 'RANSWallPimpleBudgetTime', budget_time)
     write(root, xml)
     return xml
 
@@ -63,7 +68,11 @@ def check_report(report, restarting=False):
                     'epsilon_transport_solves', 'k_transport_solves'):
             require(row[key] == 1, 'extra or missing governing solve: '+key)
         require(row['mass_inverse_applications'] == row['pressure_gauge_size'] and
-                row['additional_correction_or_restoration_solves'] == 0, 'hidden correction')
+                row.get('additional_governing_equation_solves',0) == 0, 'hidden PDE correction')
+        if report.get('k_bound_mode','Off')=='Off':
+            require(row['additional_correction_or_restoration_solves']==0 and row.get('bound_calls',0)==0,'Off correction work')
+        else:
+            require(row['bound_calls']==1 and row['additional_correction_or_restoration_solves']==row['bound_kkt_solves'],'bound accounting')
         require(max(row['corrected_continuity_gauge']) < 1e-10 and
                 row['boundary_defect'] < 1e-13 and row['momentum_splitting_identity_defect'] < 1e-9,
                 'flow constraints/identity failed')
@@ -80,7 +89,12 @@ def main():
     p.add_argument('--solver', type=Path)
     p.add_argument('--resolution-probe', type=Path)
     p.add_argument('--dt', type=float, default=.0025)
-    p.add_argument('--steps', type=int, default=1)
+    p.add_argument('--steps', type=int)
+    p.add_argument('--final-time', type=float)
+    p.add_argument('--k-bound',choices=('Off','MassProjection'),default='Off')
+    p.add_argument('--floor-relative',type=float)
+    p.add_argument('--snapshots',action='store_true')
+    p.add_argument('--budget-time',type=float,default=-1.)
     p.add_argument('--diagnostic', action='store_true')
     p.add_argument('--verify', action='store_true')
     p.add_argument('--prepare-only', action='store_true')
@@ -89,13 +103,23 @@ def main():
     p.add_argument('--reject-step', type=int, default=0)
     p.add_argument('--timeout', type=int, default=3600)
     a = p.parse_args()
+    start_time=0.
+    if a.restart:
+        payload=(a.restart/'State.bin').read_bytes();n=struct.unpack_from('<Q',payload,24)[0]
+        _,_,start_time,_=struct.unpack_from('<QQdd',payload,32+n)
+    if a.final_time is not None:
+        count=round((a.final_time-start_time)/a.dt)
+        require(count>=0 and abs(start_time+count*a.dt-a.final_time)<1e-13,'final time must lie on fixed dt grid')
+        require(a.steps is None or a.steps==count,'steps conflict with fixed final time');a.steps=count
+    if a.steps is None:a.steps=1
     require(a.dt > 0 and a.steps >= 0 and a.reject_step >= 0, 'invalid time configuration')
     a.output = a.output.resolve()
     if not a.prepare_only:
         require(platform.system() == 'Linux' and a.solver, 'authoritative runs require Linux')
         require(a.output.is_relative_to(Path('/media/jay/新加卷/nektar-v2026-runs')), 'heavy run storage')
     xml = prepare(a.output, a.dt, a.steps, a.diagnostic, a.verify,
-                  a.restart.resolve() if a.restart else None, a.checkpoint, a.reject_step)
+                  a.restart.resolve() if a.restart else None, a.checkpoint, a.reject_step,
+                  a.k_bound,a.floor_relative,a.snapshots,a.budget_time)
     git = lambda *args: subprocess.check_output(['git', '-C', str(ROOT), *args], text=True).strip()
     manifest = dict(schema=1, source=git('rev-parse', 'HEAD'), source_status=git('status', '--porcelain'),
         archived_xml_sha256=sha(ORIGINAL), xml_sha256=sha(xml), expected_h0_sha256=H0,
@@ -108,6 +132,14 @@ def main():
         manifest['execution'] = run([str(a.solver), 'case.xml'], a.output, 'solver.log', a.timeout)
         report = load(a.output/'case.evolution.json')
         attempts = check_report(report, bool(a.restart))
+        accepted_times={x[0] for x in report['stage_audits']}
+        cumulative=0.
+        for x in attempts:
+            x['numerically_accepted']=x['time'] in accepted_times
+            if x['numerically_accepted']:cumulative+=x.get('k_bound',{}).get('integral_total',0.)
+            x['cumulative_bound_integral_current_run']=cumulative
+        if manifest['execution']['exit_code']==0:
+            require(len(accepted_times)==a.steps and abs(report['time']-(start_time+a.steps*a.dt))<1e-12,'incomplete fixed horizon')
         manifest.update(status='numerical_trajectory_completed' if manifest['execution']['exit_code'] == 0 else 'attempt_rejected',
             accepted_steps=report['steps'], final_time=report['time'], failure=report['failure'],
             callback_count=report['implicit_callback_count'], attempts=attempts,
