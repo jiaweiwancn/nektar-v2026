@@ -20,6 +20,45 @@ metric at ground contact while its original k residual stayed nonzero. R3
 therefore scores the original reduced residual, not that projected-map defect.
 No full all-field Jacobian or hidden coupled direction solver was added.
 
+## Common-reference accuracy for cancelling directions (41ef144)
+
+The first historical-response correction is now actually accepted in the
+7ba50d3 diagnostic: original residual 3.9711215458 becomes 3.9637524540,
+qualification violation stays zero, and displacement 0.63675849 remains within
+radius 0.72 after two qualification corrections. A second historical
+correction reaches 3.9603257365. This is numerical progress on the original
+equations, not a physical stage or a current per-column derivative certificate.
+The matched four-update control and final readbacks are still running.
+[Actual coarse-reference direction checks and trials](cls-epawf-segregated-picard-r3-evidence/native/response-chord-coarse-progress.json).
+
+Its initial chosen-direction check has two-size residual discrepancy 0.02190
+and measured merit slopes -0.08554 and -0.08182. A cancelling combination can
+have a much smaller signal than its individual columns. These observations
+motivate a tighter shared reference before claiming reliable small-step
+responses, even though the larger actual accepted residual reduction is clear.
+
+Commit `41ef14412554f336250f2569e03b5a22beb410ac` refines the fixed-k
+reference and both chosen-direction probes to the smaller of the outer H
+tolerance and stage tolerance. Every actual line-search trial retains the
+same declared inexact H tolerance. Failure of this optional accuracy
+refinement discards the historical model and rebuilds fresh responses without
+changing the accepted state. The event records the original k-residual change
+caused by tightening H. Signed observation records separately retain both
+sides, both signs and actual/projected epsilon observations, with response
+errors also expressed in bound-width units. All original acceptance gates
+remain unchanged.
+
+The four-worker Linux build passes in 80.96s and all six focused CTests pass
+in 44.24s. The unchanged helper retains its prior sanitizer evidence; the new
+orchestration has no full-solver sanitizer claim. Matched verification-On/Off
+native tests have started from the same audited diagnostic input. A fresh
+original-h0 follow-up is gated on an actual checked correction with the
+tighter reference; the coarse-reference 7ba50d3 original-h0 attempt continues
+as a separate control. Native accuracy and trajectory comparisons are pending.
+[Build and producing identities](cls-epawf-segregated-picard-r3-evidence/native/build-validation-41ef144.json),
+[Tighter matched native commands](cls-epawf-segregated-picard-r3-evidence/native/response-chord-tight-native-launch.json),
+[Coarse-reference fresh original-h0 command](cls-epawf-segregated-picard-r3-evidence/native/response-chord-original160-3step-launch.json).
+
 ## Safeguarded short-lived response reuse (7ba50d3)
 
 Reconstructing 96--504 converged, independently checked field responses at
@@ -68,12 +107,19 @@ are retained separately.
 Matched four-update enabled/disabled native tests are running from a freshly
 audited **3.9946700988643817** diagnostic checkpoint. Original norms reproduce
 bit for bit; complete qualification and the negative-ground guard pass.
-They use the same executable, original h0/history, 96 responses, 16 Krylov
-seeds, radius 0.4 and H tolerance 2e-9. Native utility and cost are pending.
-A fresh original-h0 follow-up is gated on an actually accepted checked reuse
-correction; the ongoing fresh fd8c034 original-h0 attempt remains the primary
-new-code test meanwhile. No speedup, root or physical acceptance is inferred.
+They use the same executable, original h0/history, an initial 96-response
+budget, 16 Krylov seeds, radius 0.4 and H tolerance 2e-9. Their four-update
+comparison and cost remain pending. A fresh original-h0 follow-up has now
+started after an actually accepted checked reuse correction. It uses 160
+responses, 64 Krylov seeds, cap 4, three source refinements and requests three
+physical steps; the fresh fd8c034 attempt continues as a separate control.
+No speedup, root or physical acceptance is inferred.
 [Matched native commands and initial independent audit](cls-epawf-segregated-picard-r3-evidence/native/response-chord-native-launch.json).
+
+Mac input preparation emits the new reuse budget correctly and rejects a
+negative budget, a budget above four and reuse without the reduced solver.
+These are input checks, with no native numerical conclusion.
+[Input preparation and guards](cls-epawf-segregated-picard-r3-evidence/native/response-chord-input-checks.json).
 
 ## Full-space curvature and source-stencil accuracy (fd8c034)
 
@@ -191,15 +237,33 @@ answer, and explicit failure when all 14 positive queries fail. The sanitizer
 scope remains the standalone model and tests.
 [Build and immutable executable/library identities](cls-epawf-segregated-picard-r3-evidence/native/build-validation-9f65eed.json).
 
-Two fresh original-h0 native tests are running: an eight-update, cap-1 fixture
-matching the failed control's first-stage settings, and a cap-4, 48-update-per-
-stage run requesting three physical steps. Their process limits are eight and
-16 hours. The focused recovery assertion additionally requires a checked
-negative true reduced-merit slope and an actually accepted correction that
-lowers the original full residual. It is named as an operator recovery test,
-not M8 convergence. Native recovery is pending; no result from the small
-quadratic alone is counted as a physical step.
+The eight-update cap-1 original-h0 fixture matching the failed control is now
+complete. The cap-4, 48-update-per-stage three-step request continues with its
+16-hour process limit.
 [Native commands](cls-epawf-segregated-picard-r3-evidence/native/radius-query-native-launch.json).
+
+The focused native recovery assertion passes. Initial state and all first six
+numerical updates match the failed control bit for bit. At model 6, the zero
+query again exhausts 500 iterations, but the positive-multiplier solve returns
+a bounded direction with radius 1 and displacement 0.9998250752. Its measured
+original reduced-merit half-step slope is -152.82904 versus prediction
+-152.83393; relative half-action error is 0.0001155. After three qualification
+corrections, actual displacement is 0.9998932922 and the original full residual
+falls from 24.68650 to **23.1739120920**. The eighth update reaches
+**21.102638703378357**. This is actual original-equation recovery beyond the
+old stalled numerical solve, not a result inferred from its small quadratic.
+
+Every original terminal norm reproduces exactly in a separate process.
+Qualification passes: continuous ground minimum 0.0007594564, gradient
+departure 0.00099999989355 and epsilon lower ratio 0.9800007655. All 1,588 H
+evaluations converge, with 6,121 velocity/pressure and 6,121 epsilon solves;
+target elapsed time is 9220.23s. The original 2e-12 gate still fails. Native
+accepted steps/time remain **0/0**, and accepted state and physical history
+are preserved. The passing test is explicitly named as bounded-model/operator
+recovery, not M8 convergence.
+[Focused native assertions](cls-epawf-segregated-picard-r3-evidence/native/radius-query-direction-checks.json),
+[Check execution receipt](cls-epawf-segregated-picard-r3-evidence/native/radius-query-direction-check-receipt.json),
+[Complete operator/history/readback evidence](cls-epawf-segregated-picard-r3-evidence/native/completed-original-and-expanded-review.json).
 
 A further independently audited diagnostic checkpoint reaches original full
 residual **4.253091674121031** in the continuing 160-direction previous-step
@@ -244,9 +308,36 @@ three requested physical steps. Both start at radius 0.4, with 160 responses,
 64 Krylov seeds, one source refinement and H tolerance 2e-9. The primary
 process has a 16-hour limit, chosen from measured model costs; the control has
 a four-hour limit. Run budgets differ, so matched claims concern the common
-prefix only. Both tests are in progress; no enlarged-radius outcome or
-original root is claimed yet.
+prefix only. The longer cap-4 test remains in progress; its four-update
+checkpoint and the completed cap-1 control can now be compared as follows.
 [Exact native commands](cls-epawf-segregated-picard-r3-evidence/native/radius-cap-native-launch.json).
+
+| Original-h0 numerical update | Cap 1 control | Cap 4 experiment |
+| --- | ---: | ---: |
+| 1, qualification restoration | 63.74366608 | 63.74366608 |
+| 2 | 49.09361202 | 49.09361202 |
+| 3 | 43.31318662 | 40.81722751 |
+| 4 | 37.52204608 | 29.99279194 |
+
+Both use the same immutable executable/libraries. Their initial state and
+first two updates reproduce bit for bit. The numerical XML differs only in
+the declared maximum radius and update budget. The cap-1 control completes
+with zero accepted physical steps/time, accepted state/history preserved and
+an exact fresh original norm readback. All 1,310 H solves converge, with
+4,804 velocity/pressure and 4,804 epsilon solves; target elapsed time is
+7942.69s. The four-update cap is a control budget, not a convergence result.
+
+The cap-4 fourth correction has actual displacement **1.2947276287**, within
+radius **1.296** after three qualification corrections. A separate process
+reproduces every original norm at that checkpoint bit for bit and passes
+complete qualification and the negative-ground guard. Ground minimum is
+0.0203734663, gradient departure 0.00099999900209, and epsilon lower ratio
+0.9806180819. The local outer k ratios 0.99000001--1.00999999 also pass.
+This establishes useful native use of a radius above one. It is an in-flight
+numerical checkpoint, not a qualified algebraic root or completed native
+physical/history receipt for the cap-4 run.
+[Matched comparison and independent audit](cls-epawf-segregated-picard-r3-evidence/native/radius-cap-four-update-comparison.json),
+[Completed cap-1 operator/history/readback review](cls-epawf-segregated-picard-r3-evidence/native/completed-original-and-expanded-review.json).
 
 ## Interior source-model anchors (900a9aa)
 

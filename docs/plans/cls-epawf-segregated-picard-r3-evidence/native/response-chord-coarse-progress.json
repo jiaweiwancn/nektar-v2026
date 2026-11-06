@@ -1,0 +1,699 @@
+{
+  "scope": "In-flight original-target historical-response search. Actual original residual/qualification progress is recorded; no completed history receipt, current per-column derivative certificate or physical acceptance is inferred.",
+  "utc": "2026-11-06T23:08:21.550416+00:00",
+  "producing_code_commit": "7ba50d302cad7e7c0f676879a51029a4fcdc5416",
+  "source_log": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/response-chord-enabled/target/solver.log",
+    "prefix_bytes": 1218869,
+    "sha256": "647e2fc1ffee188a1fd7fdcbac7f1069731e1a66f6eca2463af2d422ce862955"
+  },
+  "history": [
+    {
+      "physical_history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca",
+      "radius_scaling": "Euclidean norm of free k coefficient displacement divided by reference K",
+      "maximum_radius": 1,
+      "response_method": "one-sided differences of converged sequential non-k solves",
+      "half_response_warm_start": "interpolate converged non-k coefficients; preserve exact requested k",
+      "response_field_preconditioner_reuse": true,
+      "response_chord_update_budget": 2,
+      "response_chord_policy": "opt-in historical response secants; fresh two-size signed direction checks; every actual trial converges original H; fresh model after failure, branch change, enlargement or age limit",
+      "response_preconditioner_policy": "probe-only separate base velocity/pressure and epsilon factors; original H convergence required; fresh-operator retry on failure; canonical check and actual trials use current operators",
+      "initial_basis_budget": 96,
+      "initial_restoration_weight": 0,
+      "response_krylov_budget": 16,
+      "active_witness_selection": "original_observation_order_per_family_and_region",
+      "previous_direction_priority": "after_conditional_krylov_and_rate_seeds",
+      "probe_basis": "orthogonal field directions with feasible sign/size selection; inward fallback",
+      "minimum_orthogonal_probe_step": 1e-10,
+      "canonical_half_branch_check": "always; optional verification cannot change column selection",
+      "combined_direction_checks": true,
+      "second_order_qualification_correction": true,
+      "constraint_response_secants": true,
+      "adaptive_qualified_response_space": true,
+      "nonlinear_destruction_ray": true,
+      "nonlinear_destruction_refinements": 1,
+      "interior_source_model_anchors": true,
+      "model_face_solver": "Euclidean null space through 64 model variables; checked augmented orthonormal-face solve above; null-space fallback",
+      "model_direct_face_threshold": 64,
+      "model_cut_filter": "large slack-free models: conservative field-Gram ball bound; final scan of every original frozen cut",
+      "qualification_correction_budget": 6,
+      "continuation_algebraic_diagnostic": false,
+      "qualification_policy": "original_bounds_enforced",
+      "maximum_basis": 512,
+      "response_accuracy": 2e-09,
+      "event": "protocol",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 0.005119757
+    },
+    {
+      "norms": [
+        5.907265337000405e-10,
+        1.220620752132247e-09,
+        3.9946700988643817,
+        1.6575170735364634e-11,
+        7.263269253051614e-16,
+        7.949674748795297e-16,
+        5.065257024580715e-17,
+        5.343703793560146e-16
+      ],
+      "reduced_norm": 3.9946700988643817,
+      "violation": 0,
+      "families": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "outer_range": [
+        0.0009999990248706903,
+        0.9931552560197769,
+        1.0065909175299188,
+        0.9828517012097211,
+        1.003306974458803,
+        0.9987808002833959,
+        1.0060854987347665
+      ],
+      "covariance": [
+        9.987294705102523e-05,
+        0.17570900365946746
+      ],
+      "scalar_domain": {
+        "admissible": true,
+        "scope": "declared finite scalar evaluation sets only",
+        "phase": "complete",
+        "failure": "",
+        "minimum_dimensionless_margin": 0.001001303125000828,
+        "limiting_inventory": "reconstruction_native",
+        "limiting_point": [
+          -2.204149909283429,
+          0,
+          0
+        ],
+        "minimum_inner_k": 0.0005111732688148276,
+        "minimum_outer_k": 0.5070137164106389,
+        "minimum_outer_epsilon": 0.03631791663093067,
+        "minimum_sampled_K": 0.5098856018350394,
+        "minimum_projected_trace_epsilon": 0.07139025229020605,
+        "minimum_b": 0.8186502608064875,
+        "minimum_lambda": 1,
+        "cutoff_range": [
+          0,
+          0.009516815764842186
+        ]
+      },
+      "gradient_witness": [
+        -2.5,
+        0,
+        2,
+        0,
+        2,
+        -0.0009999990248706903,
+        31,
+        1
+      ],
+      "qualified": true,
+      "ground": {
+        "admissible": true,
+        "minimum": 1.6971737288524383e-06,
+        "arithmetic_scale": 3.03895748404482e-17,
+        "point": [
+          1.5633868482352902,
+          0,
+          0
+        ],
+        "geometry": 4,
+        "extrema_checked": 20
+      },
+      "state_sha256": "d889c92c9b7b33a49928094a36673deb3cfdca4ccaf2f5b5c45c8483a3c19d34",
+      "work": [
+        1,
+        0,
+        0
+      ],
+      "cached_field_applications": [
+        0,
+        0
+      ],
+      "event": "initial",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 2.157021378
+    },
+    {
+      "available": true,
+      "required": 2e-09,
+      "attained": 3.9194117383746135e-10,
+      "half_attained": 1.2256273511028921e-09,
+      "half_relative_residual_error": 0.01737537990175854,
+      "predicted_merit_slope": -0.1744326365385972,
+      "actual_merit_slope": -0.17273221967227695,
+      "half_merit_slope": -0.1725106491729948,
+      "event": "source_refined_direction_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 1471.941627055
+    },
+    {
+      "fraction": 1,
+      "proposal_origin": "nonlinear_source_refined_direction",
+      "accepted": true,
+      "norm": 3.971121545762026,
+      "full_norm": 3.971121545762026,
+      "violation": 0,
+      "families": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "predicted_norm": 3.9654669187702396,
+      "model_error": 0.10458459036335617,
+      "predicted_violation": 0.006595209122801036,
+      "non_k_error": 1.7156959811033852e-09,
+      "second_order_corrections": 3,
+      "displacement": 0.3933798822786699,
+      "physical_k_displacement": 0.20082358207981568,
+      "event": "trial",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 1550.528255245
+    },
+    {
+      "updated": true,
+      "next_age": 1,
+      "field_signal": 0.3933798822786699,
+      "minimum_field_signal": 1e-08,
+      "span_error": 2.1816984487505558e-16,
+      "residual_secant_defect": 2.4075506725053628e-15,
+      "state_secant_defect": 3.322404636885244e-17,
+      "trace_secant_defect": 3.3227057164438976e-17,
+      "scope": "secant interpolation defects only; not current derivative or nonlinear stationarity certificates",
+      "event": "response_chord_secant",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 1550.545604779
+    },
+    {
+      "actual_to_predicted_gain": 0.8789781891809992,
+      "prediction_model": "nonlinear_destruction_surrogate",
+      "source_model_evaluations": 216,
+      "next_radius": 0.7200000000000001,
+      "event": "radius_agreement",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 1550.596456769
+    },
+    {
+      "norms": [
+        7.501264462991606e-10,
+        1.7156959811033852e-09,
+        3.971121545762026,
+        6.618814494817366e-11,
+        6.206533735887425e-16,
+        8.212264679023866e-16,
+        2.3378109344218686e-17,
+        5.313850699741373e-16
+      ],
+      "reduced_norm": 3.971121545762026,
+      "violation": 0,
+      "families": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "outer_range": [
+        0.0009999990824520744,
+        0.9932210758166315,
+        1.006644692722049,
+        0.9829352477676724,
+        1.0031116505286575,
+        0.9988373931691401,
+        1.0064046891314353
+      ],
+      "covariance": [
+        9.688884990709194e-05,
+        0.17571467843223104
+      ],
+      "scalar_domain": {
+        "admissible": true,
+        "scope": "declared finite scalar evaluation sets only",
+        "phase": "complete",
+        "failure": "",
+        "minimum_dimensionless_margin": 0.0009715398685716456,
+        "limiting_inventory": "reconstruction_dense",
+        "limiting_point": [
+          -2.1666666666666665,
+          0,
+          0
+        ],
+        "minimum_inner_k": 0.0004959788879129737,
+        "minimum_outer_k": 0.5070473179443511,
+        "minimum_outer_epsilon": 0.03631791663093067,
+        "minimum_sampled_K": 0.509914492956694,
+        "minimum_projected_trace_epsilon": 0.07139632076405901,
+        "minimum_b": 0.8180057561436723,
+        "minimum_lambda": 1,
+        "cutoff_range": [
+          0,
+          0.009516851090257593
+        ]
+      },
+      "gradient_witness": [
+        -2.875,
+        0,
+        2.3333333333333335,
+        0,
+        2,
+        0.0009999990824520744,
+        31,
+        0
+      ],
+      "qualified": true,
+      "ground": {
+        "admissible": true,
+        "minimum": 6.788289694847343e-06,
+        "arithmetic_scale": 3.038953688366825e-17,
+        "point": [
+          1.5634014690829077,
+          0,
+          0
+        ],
+        "geometry": 4,
+        "extrema_checked": 20
+      },
+      "state_sha256": "2c48f87cc324b2159c8c6475064cfc5e80056f6a8f8c386741d382e3f3c0f416",
+      "work": [
+        204,
+        851,
+        851
+      ],
+      "cached_field_applications": [
+        778,
+        778
+      ],
+      "event": "accepted",
+      "iteration": 1,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 1551.909194343
+    },
+    {
+      "dimension": 96,
+      "age": 1,
+      "origin_iteration": 0,
+      "scope": "secant model, not current per-column derivative verification; original direction checks and controlled actual H trials required",
+      "event": "response_chord_reused",
+      "iteration": 1,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 1555.496956779
+    },
+    {
+      "purpose": "linear",
+      "available": true,
+      "passed": true,
+      "age": 1,
+      "required": 2e-09,
+      "attained": 1.4408612090232123e-09,
+      "half_attained": 7.204519043287817e-10,
+      "two_size_residual_error": 0.02190139683486075,
+      "two_size_observation_error": 0.01107179904427345,
+      "model_residual_error": 0.13140722322295614,
+      "model_observation_error": 0.022926997486647165,
+      "predicted_merit_slope": -0.10679688527533272,
+      "actual_merit_slope": -0.08553818293443965,
+      "half_merit_slope": -0.08182043591825518,
+      "profile_branch_change": false,
+      "event": "response_chord_direction_check",
+      "iteration": 1,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 1590.717227948
+    },
+    {
+      "purpose": "source_refined",
+      "available": true,
+      "passed": true,
+      "age": 1,
+      "required": 2e-09,
+      "attained": 1.4344887633771782e-09,
+      "half_attained": 7.172673773128169e-10,
+      "two_size_residual_error": 0.021922717638854186,
+      "two_size_observation_error": 0.011080941253854833,
+      "model_residual_error": 0.13052290688917229,
+      "model_observation_error": 0.022894183850526814,
+      "predicted_merit_slope": -0.10680877104671134,
+      "actual_merit_slope": -0.08586605780859002,
+      "half_merit_slope": -0.0821440218217172,
+      "profile_branch_change": false,
+      "event": "response_chord_direction_check",
+      "iteration": 1,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 1936.620818532
+    },
+    {
+      "fraction": 1,
+      "proposal_origin": "nonlinear_source_refined_direction",
+      "accepted": true,
+      "norm": 3.9637524539553466,
+      "full_norm": 3.9637524539553466,
+      "violation": 0,
+      "families": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "predicted_norm": 3.952382639330025,
+      "model_error": 0.22864079751271815,
+      "predicted_violation": 0.0014279309710636375,
+      "non_k_error": 8.165267692008635e-10,
+      "second_order_corrections": 2,
+      "displacement": 0.6367584930225482,
+      "physical_k_displacement": 0.32507031307194845,
+      "event": "trial",
+      "iteration": 1,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 1993.165533928
+    },
+    {
+      "updated": true,
+      "next_age": 2,
+      "field_signal": 0.6367584930225482,
+      "minimum_field_signal": 1e-08,
+      "span_error": 2.804484049070418e-16,
+      "residual_secant_defect": 3.474897305397578e-15,
+      "state_secant_defect": 3.5431889084795584e-17,
+      "trace_secant_defect": 3.54338431333277e-17,
+      "scope": "secant interpolation defects only; not current derivative or nonlinear stationarity certificates",
+      "event": "response_chord_secant",
+      "iteration": 1,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 1993.178254031
+    },
+    {
+      "actual_to_predicted_gain": 0.4171855771536606,
+      "prediction_model": "nonlinear_destruction_surrogate",
+      "source_model_evaluations": 221,
+      "next_radius": 0.7200000000000001,
+      "event": "radius_agreement",
+      "iteration": 1,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 1993.230931023
+    },
+    {
+      "norms": [
+        6.260554633663925e-10,
+        8.165267692008635e-10,
+        3.9637524539553466,
+        2.8908146277493663e-12,
+        5.983495251223877e-16,
+        8.027807989046163e-16,
+        9.317362419797302e-18,
+        2.8061908189645453e-16
+      ],
+      "reduced_norm": 3.9637524539553466,
+      "violation": 0,
+      "families": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "outer_range": [
+        0.0009999990037302675,
+        0.9932296667558999,
+        1.0065378525450366,
+        0.982964374822938,
+        1.0031813560689335,
+        0.9988571263881207,
+        1.0064733577270564
+      ],
+      "covariance": [
+        9.073825843939574e-05,
+        0.17571818998724237
+      ],
+      "scalar_domain": {
+        "admissible": true,
+        "scope": "declared finite scalar evaluation sets only",
+        "phase": "complete",
+        "failure": "",
+        "minimum_dimensionless_margin": 0.0009097301527522923,
+        "limiting_inventory": "reconstruction_native",
+        "limiting_point": [
+          -2.204149909283429,
+          0,
+          0
+        ],
+        "minimum_inner_k": 0.0004644245327022395,
+        "minimum_outer_k": 0.5070517036876873,
+        "minimum_outer_epsilon": 0.03631791663093067,
+        "minimum_sampled_K": 0.5099245669231071,
+        "minimum_projected_trace_epsilon": 0.07139843643198869,
+        "minimum_b": 0.8173582246945515,
+        "minimum_lambda": 1,
+        "cutoff_range": [
+          0,
+          0.009516873702114417
+        ]
+      },
+      "gradient_witness": [
+        0.8717401485096066,
+        0,
+        2,
+        0,
+        2,
+        -0.0009999990037302675,
+        33,
+        1
+      ],
+      "qualified": true,
+      "ground": {
+        "admissible": true,
+        "minimum": 1.2554698060178653e-05,
+        "arithmetic_scale": 3.039034118535706e-17,
+        "point": [
+          1.5634100610247843,
+          0,
+          0
+        ],
+        "geometry": 4,
+        "extrema_checked": 20
+      },
+      "state_sha256": "9c1274f19770cae9001b2de8aa05f35ce3f356d5517deb6b0e1e5d0ad40a9817",
+      "work": [
+        211,
+        893,
+        893
+      ],
+      "cached_field_applications": [
+        778,
+        778
+      ],
+      "event": "accepted",
+      "iteration": 2,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 1994.557019977
+    },
+    {
+      "dimension": 96,
+      "age": 2,
+      "origin_iteration": 0,
+      "scope": "secant model, not current per-column derivative verification; original direction checks and controlled actual H trials required",
+      "event": "response_chord_reused",
+      "iteration": 2,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 1998.023713516
+    },
+    {
+      "purpose": "linear",
+      "available": true,
+      "passed": true,
+      "age": 2,
+      "required": 2e-09,
+      "attained": 9.079789417157994e-10,
+      "half_attained": 4.5397345768734e-10,
+      "two_size_residual_error": 0.0005176671963910038,
+      "two_size_observation_error": 0.0014213783342077227,
+      "model_residual_error": 0.14410361493130652,
+      "model_observation_error": 0.0038466735586785775,
+      "predicted_merit_slope": -0.09780772257310466,
+      "actual_merit_slope": -0.05225884141665604,
+      "half_merit_slope": -0.052094952174636826,
+      "profile_branch_change": false,
+      "event": "response_chord_direction_check",
+      "iteration": 2,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 2034.252226435
+    },
+    {
+      "purpose": "source_refined",
+      "available": true,
+      "passed": true,
+      "age": 2,
+      "required": 2e-09,
+      "attained": 8.155809092611859e-10,
+      "half_attained": 4.077547087794476e-10,
+      "two_size_residual_error": 0.0005091905583306141,
+      "two_size_observation_error": 0.0014047899143404038,
+      "model_residual_error": 0.10781226605849444,
+      "model_observation_error": 0.003014445371956987,
+      "predicted_merit_slope": -0.0983976631894936,
+      "actual_merit_slope": -0.06535227701342641,
+      "half_merit_slope": -0.0651921465998294,
+      "profile_branch_change": false,
+      "event": "response_chord_direction_check",
+      "iteration": 2,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 2365.860471399
+    },
+    {
+      "fraction": 1,
+      "proposal_origin": "nonlinear_source_refined_direction",
+      "accepted": true,
+      "norm": 3.960325736547093,
+      "full_norm": 3.960325736547093,
+      "violation": 0,
+      "families": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "predicted_norm": 3.949778601612681,
+      "model_error": 0.2171189912974564,
+      "predicted_violation": 0.0018121355219620542,
+      "non_k_error": 8.277017580907857e-10,
+      "second_order_corrections": 3,
+      "displacement": 0.5422714526866466,
+      "physical_k_displacement": 0.276833921850158,
+      "event": "trial",
+      "iteration": 2,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 2438.055629777
+    },
+    {
+      "actual_to_predicted_gain": 0.26341341105511396,
+      "prediction_model": "nonlinear_destruction_surrogate",
+      "source_model_evaluations": 217,
+      "next_radius": 0.7200000000000001,
+      "event": "radius_agreement",
+      "iteration": 2,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 2438.131814422
+    },
+    {
+      "norms": [
+        4.741607553706134e-10,
+        8.277017580907857e-10,
+        3.960325736547093,
+        6.581285352333467e-11,
+        6.27417887854116e-16,
+        1.0167555945008333e-15,
+        5.285485590866833e-17,
+        9.761961678738365e-16
+      ],
+      "reduced_norm": 3.960325736547093,
+      "violation": 0,
+      "families": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "outer_range": [
+        0.0009999990716887952,
+        0.9932143053258079,
+        1.006481492000051,
+        0.9829793307205544,
+        1.0033698613169584,
+        0.9988672605813427,
+        1.0064798290542363
+      ],
+      "covariance": [
+        7.22969814640601e-05,
+        0.17571792936533126
+      ],
+      "scalar_domain": {
+        "admissible": true,
+        "scope": "declared finite scalar evaluation sets only",
+        "phase": "complete",
+        "failure": "",
+        "minimum_dimensionless_margin": 0.000724842678307355,
+        "limiting_inventory": "reconstruction_native",
+        "limiting_point": [
+          -2.204149909283429,
+          0,
+          0
+        ],
+        "minimum_inner_k": 0.00037003799548369405,
+        "minimum_outer_k": 0.5070438615545333,
+        "minimum_outer_epsilon": 0.03631791663093067,
+        "minimum_sampled_K": 0.5099297405099528,
+        "minimum_projected_trace_epsilon": 0.07139952276607424,
+        "minimum_b": 0.816989462579075,
+        "minimum_lambda": 1,
+        "cutoff_range": [
+          0,
+          0.009516892170007805
+        ]
+      },
+      "gradient_witness": [
+        -3.75,
+        0,
+        2,
+        0,
+        2,
+        -0.0009999990716887952,
+        30,
+        1
+      ],
+      "qualified": true,
+      "ground": {
+        "admissible": true,
+        "minimum": 1.130586445273329e-05,
+        "arithmetic_scale": 3.0390266564215705e-17,
+        "point": [
+          1.563408905107252,
+          0,
+          0
+        ],
+        "geometry": 4,
+        "extrema_checked": 19
+      },
+      "state_sha256": "8e4145aee202cd85278199697d06bc2a0c602f8ec9418bb7ee84620d37fc2337",
+      "work": [
+        219,
+        939,
+        939
+      ],
+      "cached_field_applications": [
+        778,
+        778
+      ],
+      "event": "accepted",
+      "iteration": 3,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 2439.531837082
+    }
+  ]
+}

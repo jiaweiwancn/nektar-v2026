@@ -1,0 +1,96 @@
+{
+  "status": "passed_radius_query_recovery_checks_not_m8_convergence",
+  "script_sha256": "d0425dfdd21983d68c2ed90af9fd5691903eb1ef8d239619a8176e7af9adde8c",
+  "run": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/radius-query-original-prefix",
+  "recovered_directions": [
+    {
+      "retry": {
+        "purpose": "main_direction",
+        "initial_failure": "quadratic_iteration_limit",
+        "unconstrained_available": false,
+        "failed_positive_queries": 0,
+        "solved": true,
+        "failure": "",
+        "radius": 1,
+        "displacement": 0.9998250751609236,
+        "multiplier": 26.949455868514484,
+        "primal": 8.255758821646748e-18,
+        "stationarity": 4.296408078364883e-12,
+        "scope": "small linear-cut model only; actual trials still converge H",
+        "event": "radius_query_retry",
+        "iteration": 6,
+        "alpha": 400,
+        "time": 0.0025,
+        "seconds": 7768.502349119
+      },
+      "direction": {
+        "basis_dimension": 96,
+        "response_rank": 96,
+        "displacement": 0.9998250751609236,
+        "radius": 1,
+        "active_constraints": 22
+      },
+      "signed_check": {
+        "available": true,
+        "role": "residual_reduction",
+        "fraction": 1.0001749554431293e-05,
+        "required": 2e-09,
+        "attained": 1.5682355508057738e-09,
+        "half_attained": 7.841310245691964e-10,
+        "relative_residual_error": 0.00013657626101074935,
+        "half_relative_residual_error": 0.00011550254478384353,
+        "observation_relative_error": 0.005220687590932377,
+        "half_observation_relative_error": 0.004204182667380062,
+        "observation_change_error": 5.221600978643288e-08,
+        "half_observation_change_error": 2.1024591060108148e-08,
+        "predicted_merit_slope": -152.83393118757556,
+        "actual_merit_slope": -152.8287852250575,
+        "half_merit_slope": -152.82903888990884,
+        "full_inventory_violation": 0,
+        "half_full_inventory_violation": 0,
+        "profile_branch_change": false,
+        "half_profile_branch_change": false,
+        "event": "combined_direction_check",
+        "iteration": 6,
+        "alpha": 400,
+        "time": 0.0025,
+        "seconds": 7787.595245499
+      },
+      "actual_trial": {
+        "fraction": 1,
+        "proposal_origin": "linear_reduced_direction",
+        "accepted": true,
+        "norm": 23.173912092022878,
+        "full_norm": 23.173912092022878,
+        "violation": 0,
+        "families": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "predicted_norm": 21.2596080611227,
+        "model_error": 11.46152707238011,
+        "predicted_violation": 0.13159387695859037,
+        "non_k_error": 1.2504455913321119e-09,
+        "second_order_corrections": 3,
+        "displacement": 0.9998932922219853,
+        "physical_k_displacement": 0.5104535378841538,
+        "event": "trial",
+        "iteration": 6,
+        "alpha": 400,
+        "time": 0.0025,
+        "seconds": 7944.534041772
+      },
+      "original_full_residual_before": 24.68650069511402
+    }
+  ],
+  "accepted_physical_steps": 0.0,
+  "time": 0.0,
+  "matched_prefix": {
+    "control": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/previous-original-3step",
+    "before_iteration": 6,
+    "original_states_and_norms_bitwise_identical": true,
+    "scope": "Observed first-stage prefix; run budgets and producing executables are recorded separately"
+  }
+}

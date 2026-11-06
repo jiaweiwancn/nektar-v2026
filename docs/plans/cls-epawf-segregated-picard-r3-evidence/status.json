@@ -1,6 +1,6 @@
 {
   "status": "native_development_in_progress_original_m8_unresolved",
-  "producing_code_commit": "7ba50d302cad7e7c0f676879a51029a4fcdc5416",
+  "producing_code_commit": "41ef14412554f336250f2569e03b5a22beb410ac",
   "native_m8": {
     "status": "Completed original-h0 18-update run fails original residual; complete qualification passes; larger native follow-ups in progress",
     "qualified_first_stage": false,
@@ -412,6 +412,64 @@
     "focused_regressions_passed": 6,
     "native_status": "running",
     "native_launch": "native/response-chord-native-launch.json",
-    "scope": "Historical response secants with fresh signed chosen-direction checks; no current per-column derivative or stationarity certificate. Native utility and cost not established yet."
+    "scope": "Historical response secants with fresh signed chosen-direction checks; no current per-column derivative or stationarity certificate. Native utility and cost not established yet.",
+    "original_h0_status": "running",
+    "original_h0_launch": "native/response-chord-original160-3step-launch.json",
+    "actual_checked_reuse_progress": {
+      "before": 3.971121545762026,
+      "after": 3.9637524539553466,
+      "qualified": true,
+      "physical_acceptance_inferred": false,
+      "evidence": "native/response-chord-coarse-progress.json",
+      "scope": "In-flight original-target numerical correction, coarse-H chosen-direction check subsequently motivates tighter-reference validation"
+    }
+  },
+  "radius_cap_comparison": {
+    "evidence": "native/radius-cap-four-update-comparison.json",
+    "scope": "Matched first four original-h0 numerical updates. Cap1 control has a completed zero-step native/history receipt; cap4 result is an independently audited in-flight checkpoint, not a completed stage or physical acceptance.",
+    "original_full_residual_histories": {
+      "radius-cap1-original-control": [
+        63.00211881239651,
+        63.743666080778,
+        49.09361201508664,
+        43.31318661752424,
+        37.52204608490828
+      ],
+      "radius-cap4-original-3step": [
+        63.00211881239651,
+        63.743666080778,
+        49.09361201508664,
+        40.81722751252558,
+        29.99279194286757
+      ]
+    },
+    "cap4_actual_displacement": 1.2947276287217968,
+    "cap4_radius": 1.2960000000000003,
+    "cap4_checkpoint_qualified": true,
+    "cap1_completed_accepted_state_and_history_preserved": true,
+    "cap1_accepted_physical_steps": 0,
+    "physical_acceptance_inferred": false
+  },
+  "tight_response_reference_validation": {
+    "code_commit": "41ef14412554f336250f2569e03b5a22beb410ac",
+    "build": "native/build-validation-41ef144.json",
+    "focused_regressions_passed": 6,
+    "native_status": "running",
+    "native_launch": "native/response-chord-tight-native-launch.json",
+    "scope": "Common fixed-k reference and chosen-direction probes tightened to stage accuracy; actual trials share their original inexact H accuracy. Original root/trajectory remain unresolved."
+  },
+  "radius_query_native_recovery": {
+    "status": "passed_radius_query_recovery_checks_not_m8_convergence",
+    "original_full_residual_before_recovery": 24.68650069511402,
+    "original_full_residual_first_recovered": 23.173912092022878,
+    "original_full_residual_terminal": 21.102638703378357,
+    "qualified": true,
+    "physical_steps_accepted": 0,
+    "final_time": 0,
+    "accepted_state_and_history_preserved": true,
+    "independent_norm_difference": 0,
+    "evidence": "native/radius-query-direction-checks.json",
+    "execution": "native/radius-query-direction-check-receipt.json",
+    "completed_review": "native/completed-original-and-expanded-review.json"
   }
 }

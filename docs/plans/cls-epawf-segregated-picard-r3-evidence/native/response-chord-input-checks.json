@@ -1,0 +1,65 @@
+{
+  "scope": "Mac input preparation and option guards only; no native solver or numerical conclusion",
+  "producing_code_commit": "7ba50d302cad7e7c0f676879a51029a4fcdc5416",
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "/private/tmp/nektar-picard-r3/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py",
+        "--prepare-only",
+        "--output",
+        "/private/tmp/picard-r3-chord-input-check-20261107/valid",
+        "--reduced-response-reuse-updates",
+        "2",
+        "--reduced"
+      ],
+      "exit_code": 0,
+      "seconds": 0.09124820900000002,
+      "assertion": "parameter emitted"
+    },
+    {
+      "command": [
+        "python3",
+        "/private/tmp/nektar-picard-r3/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py",
+        "--prepare-only",
+        "--output",
+        "/private/tmp/picard-r3-chord-input-check-20261107/negative",
+        "--reduced-response-reuse-updates",
+        "-1",
+        "--reduced"
+      ],
+      "exit_code": 1,
+      "seconds": 0.03348100000000004,
+      "assertion": "invalid combination rejected before native execution"
+    },
+    {
+      "command": [
+        "python3",
+        "/private/tmp/nektar-picard-r3/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py",
+        "--prepare-only",
+        "--output",
+        "/private/tmp/picard-r3-chord-input-check-20261107/too_large",
+        "--reduced-response-reuse-updates",
+        "5",
+        "--reduced"
+      ],
+      "exit_code": 1,
+      "seconds": 0.03209362499999996,
+      "assertion": "invalid combination rejected before native execution"
+    },
+    {
+      "command": [
+        "python3",
+        "/private/tmp/nektar-picard-r3/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py",
+        "--prepare-only",
+        "--output",
+        "/private/tmp/picard-r3-chord-input-check-20261107/requires_reduced",
+        "--reduced-response-reuse-updates",
+        "2"
+      ],
+      "exit_code": 1,
+      "seconds": 0.03196683300000003,
+      "assertion": "invalid combination rejected before native execution"
+    }
+  ]
+}
