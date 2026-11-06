@@ -63,6 +63,25 @@ def main():
         dt=cp['dt'],order=cp['order'],coupled_state_sha256=state_hash(cp['coupled_state']),
         native_history_sha256=[state_hash(v) for v in cp['history']],native_history_times=cp['history_times'])
     histories=load(r/'history/summary.json');fixtures=load(r/'fixtures/summary.json')
+    text=(r/'campaign/trajectory/steps.jsonl').read_text();lines=text.splitlines()
+    if text and not text.endswith('\n'):lines=lines[:-1]
+    records={v['global_step']:v for v in map(json.loads,lines) if v['global_step']<=cp['steps']}
+    require(len(records)==cp['steps'],'checkpoint accepted prefix is not contiguous')
+    keys=('momentum_predictor_solves','pressure_system_solves','epsilon_transport_solves','k_transport_solves',
+        'outer_sweeps','bound_calls','additional_governing_equation_solves','mass_inverse_applications',
+        'bound_active_set_iterations','bound_mass_factor_applications','bound_kkt_solves')
+    counts={k:sum(v['attempt'][k] for v in records.values()) for k in keys}
+    for record in records.values():
+        require(record['attempt']['governing_solves_complete'] and all(record['attempt'][k]==1 for k in keys[:6]),'accepted solve schedule changed')
+    callback_rows=[]
+    for segment in {v['segment'] for v in records.values()}:
+        for line in (Path(segment)/'solver.log').read_text().splitlines():
+            if line.startswith('EP-AWF PIMPLE '):
+                row=json.loads(line[len('EP-AWF PIMPLE '):])
+                if row['time']<=cp['time']+1e-13:callback_rows.append(row)
+    require(len(callback_rows)==cp['steps'],'hidden callback or repeated sweep in accepted prefix')
+    counts['implicit_callbacks_for_accepted_prefix']=len(callback_rows)
+
     working=r/'source';git=lambda *args:subprocess.check_output(['git','-C',str(working),*args],text=True).strip()
     source_files={}
     for path in subprocess.check_output(['git','-C',str(working),'diff','--name-only','0b86269739075af81622319402370967fdeffbe8','HEAD'],text=True).splitlines():
@@ -101,7 +120,8 @@ def main():
         progress=progress,supervisor_status=load(r/'campaign/status.json'),monitor_status=load(r/'monitor/status.json'),process_identities=identities,
         runtime=load(r/'campaign/trajectory/runtime/identity.json'),runtime_identity_unchanged=True,
         production_kernel_revision=git('rev-parse','1c49c07'),probe=identity(r/'audit-probe/RANSWallResolutionProbe'),
-        checkpoint=checkpoint,fixtures=fixtures,history_checks=histories,
+        checkpoint=checkpoint,production_counts_at_checkpoint=counts,fixtures=fixtures,history_checks=histories,
+        qp_log=(r/'qp.log').read_text(),
         durability=json.loads((r/'durability-terminal.log').read_text()),simultaneous_resume=load(r/'simultaneous-resume.json'),
         frozen_repair_budgets=load(r/'repair-budget.json'),analysis=compact,
         ranks_per_native_job=1,thread_environment={k:os.environ.get(k) for k in ('OMP_NUM_THREADS','OPENBLAS_NUM_THREADS','MKL_NUM_THREADS','BLIS_NUM_THREADS','VECLIB_MAXIMUM_THREADS','NUMEXPR_NUM_THREADS')},
