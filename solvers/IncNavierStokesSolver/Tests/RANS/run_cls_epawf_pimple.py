@@ -18,7 +18,7 @@ from run_cls_epawf_picard import (ROOT, ORIGINAL, H0, THREADS, session, set_info
 
 
 def prepare(output, dt, steps, diagnostic=False, verify=False, restart=None,
-            checkpoint=False, reject_step=0, k_bound="Off", floor_relative=None, snapshots=False, budget_time=-1.):
+            checkpoint=False, reject_step=0, k_bound="Off", floor_relative=None, snapshots=False, budget_time=-1., hard_reject_step=0):
     output.mkdir(parents=True, exist_ok=False)
     xml = session(ORIGINAL, output/'case.xml', 'outer6')
     root = ET.parse(xml).getroot()
@@ -41,6 +41,7 @@ def prepare(output, dt, steps, diagnostic=False, verify=False, restart=None,
     set_info(root, 'RANSWallPimpleSnapshots', 'On' if snapshots else 'Off')
     if floor_relative is not None:set_parameter(root, 'RANSWallPimpleKFloorRelative', floor_relative)
     if budget_time>=0:set_parameter(root, 'RANSWallPimpleBudgetTime', budget_time)
+    if hard_reject_step:set_parameter(root,'RANSWallPimpleHardAuditRejectStep',hard_reject_step)
     write(root, xml)
     return xml
 
@@ -101,6 +102,7 @@ def main():
     p.add_argument('--checkpoint', action='store_true')
     p.add_argument('--restart', type=Path)
     p.add_argument('--reject-step', type=int, default=0)
+    p.add_argument('--hard-reject-step',type=int,default=0)
     p.add_argument('--timeout', type=int, default=3600)
     a = p.parse_args()
     start_time=0.
@@ -119,7 +121,7 @@ def main():
         require(a.output.is_relative_to(Path('/media/jay/新加卷/nektar-v2026-runs')), 'heavy run storage')
     xml = prepare(a.output, a.dt, a.steps, a.diagnostic, a.verify,
                   a.restart.resolve() if a.restart else None, a.checkpoint, a.reject_step,
-                  a.k_bound,a.floor_relative,a.snapshots,a.budget_time)
+                  a.k_bound,a.floor_relative,a.snapshots,a.budget_time,a.hard_reject_step)
     git = lambda *args: subprocess.check_output(['git', '-C', str(ROOT), *args], text=True).strip()
     manifest = dict(schema=1, source=git('rev-parse', 'HEAD'), source_status=git('status', '--porcelain'),
         archived_xml_sha256=sha(ORIGINAL), xml_sha256=sha(xml), expected_h0_sha256=H0,

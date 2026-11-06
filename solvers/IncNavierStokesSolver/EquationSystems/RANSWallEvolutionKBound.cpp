@@ -156,7 +156,7 @@ RANSWallEvolutionPatch::KBoundResult RANSWallEvolutionPatch::ApplyPimpleKBound(
         {"raw_ground",rawGround},{"corrected_ground",correctedGround},
         {"raw_sha256",J::Quote(RANSWallR3::Hash(raw))},{"corrected_sha256",J::Quote(RANSWallR3::Hash(result.state))},
         {"mass_norm_correction",J::Number(massNorm)},{"mass_norm_raw_step",J::Number(stepNorm)},
-        {"correction_to_step_ratio",J::Number(stepNorm>0?massNorm/stepNorm:0.)},{"integral_total",J::Number(result.integral)},
+        {"correction_to_step_ratio_defined",J::Boolean(stepNorm>0.)},{"correction_to_step_ratio",J::Number(stepNorm>0?massNorm/stepNorm:0.)},{"integral_total",J::Number(result.integral)},
         {"integrals_inner_outer_near_positive_negative",J::Numbers(integrals)},{"near_ground_height",J::Number(nearHeight)},
         {"active_constraints",J::List(active)},{"active_set_iterations",J::Number(result.iterations)},
         {"mass_factorizations",J::Number(projection?1:0)},{"mass_factor_applications",J::Number(result.massFactorApplications)},

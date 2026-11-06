@@ -155,7 +155,8 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
             Require(m_order==1 && m_eta==0 && !m_condensed && m_diagnostics && m_r2RangeGuard,
                 "PimpleSingleSweep requires native IMEX1, eta=0, no condensation and complete R2 diagnostics");
             m_session->LoadParameter("RANSWallPimpleRejectStep",m_pimpleRejectStep,0);
-            Require(m_pimpleRejectStep>=0,"invalid deliberate PIMPLE rejection step");
+            m_session->LoadParameter("RANSWallPimpleHardAuditRejectStep",m_pimpleHardAuditRejectStep,0);
+            Require(m_pimpleRejectStep>=0 && m_pimpleHardAuditRejectStep>=0,"invalid deliberate PIMPLE rejection step");
         }
         m_session->LoadSolverInfo("RANSWallStageTest",m_stageTest,"Off");
         Require(m_stageTest=="Off" || m_stageTest=="MatchedR2" || m_stageTest=="FrozenScalarR2" ||
@@ -212,7 +213,7 @@ std::string RANSEquilibriumWallEvolution::PhysicsSignature() const
         s<<":capped_initial_trace=1";
     if(m_patch->PimpleSingleSweep())s<<":temporal_coupling=PimpleSingleSweep"<<m_patch->PimpleKBoundSignature();
     for(const auto &[name,value]:m_serialSession->GetParameters())
-        if(name!="NUMSTEPS" && name!="IO_CHECKSTEPS" && name!="IO_INFOSTEPS" && name!="IO_TIMER_LEVEL" && name!="RANSWALLOWNERSHIPSHIFT" && name!="RANSWALLPIMPLEREJECTSTEP" && name!="RANSWALLPIMPLEKFLOORRELATIVE" && name!="RANSWALLPIMPLEBUDGETTIME")s<<'|'<<name<<'='<<value;
+        if(name!="NUMSTEPS" && name!="IO_CHECKSTEPS" && name!="IO_INFOSTEPS" && name!="IO_TIMER_LEVEL" && name!="RANSWALLOWNERSHIPSHIFT" && name!="RANSWALLPIMPLEREJECTSTEP" && name!="RANSWALLPIMPLEHARDAUDITREJECTSTEP" && name!="RANSWALLPIMPLEKFLOORRELATIVE" && name!="RANSWALLPIMPLEBUDGETTIME")s<<'|'<<name<<'='<<value;
     const std::vector<std::string> names{"InitialConditionsInner","InitialConditionsOuter","InitialPerturbationInner","InitialPerturbationOuter","BoundaryValuesInner","BoundaryValuesOuter",
         "BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter","ExactSolutionInner","ExactSolutionOuter"};
     for(const auto &name:names)for(const auto &variable:m_session->GetVariables())if(m_serialSession->DefinesFunction(name,variable))
@@ -385,11 +386,13 @@ void RANSEquilibriumWallEvolution::RecordAudit(const Vector &state,const Vector 
         if(m_patch->PimpleSingleSweep())
         {
             const auto &cov=audit.at("r2_covariance");
-            if(!(cov[0]>=-1e-10*K0 && cov[1]>=-1e-10*K0 && audit.at("r2_scalar_domain")[8]>=.5))
+            const bool auditTest=alpha>0 && m_pimpleHardAuditRejectStep>0 && m_integrator->Steps()+1==m_pimpleHardAuditRejectStep;
+            if(auditTest || !(cov[0]>=-1e-10*K0 && cov[1]>=-1e-10*K0 && audit.at("r2_scalar_domain")[8]>=.5))
             {
                 m_rejectedState=state;
-                m_rangeEvents.push_back({time,alpha,state,history,audit,{"PIMPLE_hard_covariance_or_normalization_exit"},true});
-                throw std::runtime_error("PIMPLE hard covariance or normalization validity exit; actual candidate/history saved");
+                m_rangeEvents.push_back({time,alpha,state,history,audit,{auditTest?"PIMPLE_forced_hard_audit_rejection_test":"PIMPLE_hard_covariance_or_normalization_exit"},true});
+                throw std::runtime_error(auditTest?"deliberate PIMPLE hard-audit rejection; actual candidate/history saved":
+                    "PIMPLE hard covariance or normalization validity exit; actual candidate/history saved");
             }
         }
         if(m_r2RangeGuard && audit.at("r2_qualified")[0]!=1 && !m_diagnosticRangeContinuation)
