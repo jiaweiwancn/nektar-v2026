@@ -57,6 +57,12 @@ def check(directory):
     directions = [r for r in records if r["event"] == "direction"]
     require(directions, "the reduced direction was not constructed")
     protocol, = [r for r in records if r["event"] == "protocol"]
+    destruction_checks = [r for r in records if r["event"] == "restricted_destruction_value_check"]
+    require(protocol.get("restricted_destruction_value", False) or not destruction_checks,
+            "restricted destruction values were used without their selector")
+    require(all(r["bitwise_equal"] and r["rows"] > 0 and r["mass_dual_norm"] > 0 and
+                r["restricted_seconds"] >= 0 and r["diagnostic_seconds"] >= 0
+                for r in destruction_checks), "restricted destruction value guard failed")
     require(all(d["basis_dimension"] <= protocol["maximum_basis"] <= 512 for d in directions),
             "the direction exceeds its declared adaptive response budget")
     require(0 <= protocol["response_krylov_budget"] <= 128,
@@ -266,6 +272,7 @@ def check(directory):
     result["source_linearization_anchors"] = anchors
     result["source_derivative_precision"] = precision
     result["response_chord_checks"] = chord_checks
+    result["restricted_destruction_value_checks"] = destruction_checks
     result["response_chord_secants"] = chord_secants
     result["radius_query_retries"] = radius_retries
     write_json(directory / "reduced-checks.json", result)

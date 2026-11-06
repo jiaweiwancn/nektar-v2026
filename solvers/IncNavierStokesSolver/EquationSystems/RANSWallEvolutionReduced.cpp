@@ -483,6 +483,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
     };
     int responseSolves = 0, flowSolves = 0, epsilonSolves = 0;
     int cachedFlowSolves=0,cachedEpsilonSolves=0;
+    int restrictedDestructionChecks=0;
     std::unique_ptr<NonKPreconditioner> nonKCache;
     struct Evaluation
     {
@@ -580,6 +581,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         {"constraint_response_secants", J::Boolean(m_reducedConstraintSecant)},
         {"adaptive_qualified_response_space", J::Boolean(m_reducedAdaptiveSpace)},
         {"nonlinear_destruction_ray", J::Boolean(m_reducedSourceRay)},
+        {"restricted_destruction_value",J::Boolean(m_reducedFastDestruction)},
         {"nonlinear_destruction_refinements", J::Number(m_reducedSourceRefinements)},
         {"interior_source_model_anchors", J::Boolean(m_reducedInteriorSourceAnchor)},
         {"model_face_solver", J::Quote("Euclidean null space through " +
@@ -2012,8 +2014,32 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         bool decomposed = false;
         int correctionEvaluations = 0;
         auto component = [&](const Vector &s) {
-            return extract(ResidualResolutionComponents(s, history, alpha, time, data, false)
-                               .terms.at("inner_k_destruction"));
+            if (!m_reducedFastDestruction)
+                return extract(ResidualResolutionComponents(s, history, alpha, time, data, false)
+                                   .terms.at("inner_k_destruction"));
+            const auto fastStarted=std::chrono::steady_clock::now();
+            auto value=RestrictedInnerDestructionValue(s,time,data,rows);
+            const double fastSeconds=std::chrono::duration<double>(
+                std::chrono::steady_clock::now()-fastStarted).count();
+            // This functional guard is independent of the optional verifier.
+            // Cover the base, finite affine trial and small tangent sample.
+            if (restrictedDestructionChecks<3)
+            {
+                const auto fullStarted=std::chrono::steady_clock::now();
+                const auto full=extract(ResidualResolutionComponents(s,history,alpha,time,data,false)
+                    .terms.at("inner_k_destruction"));
+                const double fullSeconds=std::chrono::duration<double>(
+                    std::chrono::steady_clock::now()-fullStarted).count();
+                Require(RANSWallR3::Hash(value)==RANSWallR3::Hash(full),
+                    "restricted destruction value differs from the full diagnostic component");
+                emit("restricted_destruction_value_check",{{"sample",J::Number(restrictedDestructionChecks++)},
+                    {"rows",J::Number(value.size())}, {"bitwise_equal","true"},
+                    {"mass_dual_norm",J::Number(dualNorm(value))},
+                    {"restricted_seconds",J::Number(fastSeconds)},
+                    {"diagnostic_seconds",J::Number(fullSeconds)},
+                    {"scope",J::Quote("shared spatial destruction value only; original equations and physical/history acceptance unchanged")}});
+            }
+            return value;
         };
         Vector sourceBase;
         int sourceModelEvaluations = 0;

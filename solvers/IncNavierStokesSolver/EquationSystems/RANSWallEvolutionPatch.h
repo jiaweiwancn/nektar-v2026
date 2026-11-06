@@ -207,6 +207,11 @@ public:
         double alpha,double time,const RANSWallEvolutionData &data,bool anchored=false) const;
     ResidualResolutionResult ResidualResolutionComponents(const Vector &state,const Vector &history,
         double alpha,double time,const RANSWallEvolutionData &data,bool anchored=false) const;
+    Vector RestrictedInnerDestructionValue(const Vector &state,double time,
+        const RANSWallEvolutionData &data,const std::vector<int> &rows) const;
+    SolverUtils::RANSCappedDestructionPoint InnerDestructionPoint(double k,double distance,
+        double production,const SolverUtils::EquilibriumAWFProfiles &profile,
+        const SolverUtils::RANSCappedDestructionValues &normalization) const;
     /** Optional accepted-state audit. Entries are documented in the M7 guide.
      * Sampled admissibility is not a certificate over the entire polynomial. */
     Diagnostic Audit(const Vector &state,const Vector &history,double alpha,double time,
@@ -424,6 +429,7 @@ private:
     int m_reducedResponseReuseUpdates=0;
     bool m_reducedResponseCache=false;
     bool m_reducedInteriorSourceAnchor=false;
+    bool m_reducedFastDestruction=false;
     double m_reducedRadius=.05,m_reducedMaximumRadius=1.;
     double m_reducedStep=2e-5,m_reducedHTolerance=2e-9;
     double m_reducedRestorationWeight=1.;

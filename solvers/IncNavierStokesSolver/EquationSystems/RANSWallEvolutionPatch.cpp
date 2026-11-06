@@ -267,7 +267,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         Require(m_picardKRadius>0. && m_picardKRadius<=1.,"invalid dimensionless Picard k radius");
         session->LoadSolverInfo("RANSWallPicardGuessFile",m_picardGuessFile,"");
         session->LoadSolverInfo("RANSWallPicardKDiagnostic",m_picardKDiagnostic,"");
-        std::string reduced,reducedVerify,reducedSecondOrder,reducedSecant,reducedAdaptive,reducedSourceRay,reducedResponseCache,reducedInteriorSourceAnchor;
+        std::string reduced,reducedVerify,reducedSecondOrder,reducedSecant,reducedAdaptive,reducedSourceRay,reducedResponseCache,reducedInteriorSourceAnchor,reducedFastDestruction;
         session->LoadSolverInfo("RANSWallPicardReduced",reduced,"Off");
         session->LoadSolverInfo("RANSWallReducedVerify",reducedVerify,"Off");
         session->LoadSolverInfo("RANSWallReducedSecondOrder",reducedSecondOrder,"Off");
@@ -276,6 +276,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         session->LoadSolverInfo("RANSWallReducedSourceRay",reducedSourceRay,"Off");
         session->LoadSolverInfo("RANSWallReducedResponseCache",reducedResponseCache,"Off");
         session->LoadSolverInfo("RANSWallReducedInteriorSourceAnchor",reducedInteriorSourceAnchor,"Off");
+        session->LoadSolverInfo("RANSWallReducedFastDestruction",reducedFastDestruction,"Off");
         Require((reduced=="On" || reduced=="Off") && (reducedVerify=="On" || reducedVerify=="Off"),
                 "unknown Picard reduced selector");
         m_picardReduced=reduced=="On";m_reducedVerify=reducedVerify=="On";
@@ -307,6 +308,11 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         Require(reducedInteriorSourceAnchor=="On" || reducedInteriorSourceAnchor=="Off",
                 "unknown reduced interior source anchor selector");
         m_reducedInteriorSourceAnchor=reducedInteriorSourceAnchor=="On";
+        Require(reducedFastDestruction=="On" || reducedFastDestruction=="Off",
+                "unknown restricted destruction value selector");
+        m_reducedFastDestruction=reducedFastDestruction=="On";
+        Require(!m_reducedFastDestruction || (m_picardReduced && m_reducedSourceRay),
+                "restricted destruction values require the reduced source-ray model");
         session->LoadParameter("RANSWallReducedBasis",m_reducedBasis,10);
         session->LoadParameter("RANSWallReducedMaximumBasis",m_reducedMaximumBasis,32);
         session->LoadParameter("RANSWallReducedHUpdates",m_reducedHUpdates,50);

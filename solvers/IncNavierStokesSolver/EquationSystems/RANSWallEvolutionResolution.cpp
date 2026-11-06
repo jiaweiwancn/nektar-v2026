@@ -8,6 +8,7 @@
 #include <cmath>
 #include <limits>
 #include <set>
+#include <stdexcept>
 
 namespace Nektar
 {
@@ -84,6 +85,46 @@ const std::vector<std::string> &RANSWallResolutionSpatialTerms()
     return names;
 }
 
+RANSCappedDestructionPoint RANSWallEvolutionPatch::InnerDestructionPoint(double k,double distance,
+    double production,const EquilibriumAWFProfiles &profile,const RANSCappedDestructionValues &normalization) const
+{
+    const auto pre=profile.AtProduction(distance,production);
+    return EvaluateRANSCappedDestructionPoint(k,profile.K(),pre.dissipation,
+        pre.dissipation-pre.redistribution,normalization.b,normalization.m,m_destruction);
+}
+
+RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::RestrictedInnerDestructionValue(
+    const Vector &state,double time,const RANSWallEvolutionData &data,const std::vector<int> &rows) const
+{
+    Require(m_comm->GetSize()==1 && m_dimension==2 && !Mapped() && m_transitionEnabled &&
+            m_cappedDestruction && m_eta==0 && state.size()==Size(),
+            "restricted destruction values require the serial flat2D capped original operator");
+    std::set<int> unique;
+    for (int row:rows)
+        if (row<offset[K()] || row>=offset[Epsilon()] || !unique.insert(row).second)
+            throw std::logic_error("invalid restricted destruction rows");
+    const auto s=ExternalLift(state,time,data);
+    // Rebuild every ray, profile, moving point and complete-ray normalization.
+    // The point law and native accumulation are shared with the full audit;
+    // unrelated momentum/epsilon, mass and extended diagnostics are omitted.
+    Refresh(s,time,&data);
+    Buckets buckets;
+    auto &destruction=Bucket(buckets,"inner_k_destruction",Size());
+    for (const auto &ray:m_rays) for (const auto &q:ray.points)
+    {
+        RANSTensor G{};
+        for (int a=0;a<m_dimension;++a) G[PhysicalAxis(a)]=q.v.Gradient(s,offset[a]);
+        const double k=q.v.Value(s,offset[K()]),distance=Distance(q.v.coordinate);
+        const auto nt=ray.profile->Original().EddyViscosity(distance);
+        const auto law=InnerStress(k,nt,G);
+        const auto point=InnerDestructionPoint(k,distance,law.production,*ray.profile,ray.destruction);
+        Add(buckets,"inner_k_destruction",Size(),offset[K()],q.v,point.destruction,{},q.weight);
+    }
+    Vector result;
+    for (int row:rows) result.push_back(destruction.sum.at(row));
+    return result;
+}
+
 RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::ResidualResolutionComponents(
     const Vector &state,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data,bool anchored) const
 {
@@ -110,9 +151,7 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
             const double nt=profile->Original().EddyViscosity(Distance(q.v.coordinate));
             const auto law=InnerStress(k,nt,G);stress=RANSWallInnerMeanStress(law,m_parameters.geometry.molecularNu,pi);
             dk=m_parameters.geometry.molecularNu+nt/m_parameters.model.Parameters().sigmaK;
-            const auto pre=profile->AtProduction(Distance(q.v.coordinate),law.production);
-            const auto repaired=EvaluateRANSCappedDestructionPoint(k,profile->K(),pre.dissipation,
-                pre.dissipation-pre.redistribution,normalization->b,normalization->m,m_destruction);
+            const auto repaired=InnerDestructionPoint(k,Distance(q.v.coordinate),law.production,*profile,*normalization);
             const auto actual=WallSource(s,q.v.coordinate,law.production,*profile,normalization);
             sk=actual.kSource+data.innerKSource(q.v.coordinate,time);
             load("inner_k_production",K(),q.v,-law.production,{},q.weight);

@@ -76,6 +76,7 @@ def prepare(args):
                 set_info(root, "RANSWallReducedSourceRay", "On" if getattr(args, "reduced_source_ray", False) else "Off")
                 set_info(root, "RANSWallReducedResponseCache", "On" if getattr(args, "reduced_response_cache", False) else "Off")
                 set_info(root, "RANSWallReducedInteriorSourceAnchor", "On" if getattr(args, "reduced_interior_source_anchor", False) else "Off")
+                set_info(root, "RANSWallReducedFastDestruction", "On" if getattr(args, "reduced_fast_destruction", False) else "Off")
                 for key, value in {"Basis": args.reduced_basis, "Radius": args.reduced_radius,
                                    "MaximumRadius": getattr(args, "reduced_maximum_radius", 1.),
                                    "MaximumBasis": getattr(args, "reduced_maximum_basis", 32),
@@ -174,6 +175,8 @@ def main():
                         help="Reuse separate base field factors for response probes; still converge the original H")
     parser.add_argument("--reduced-response-reuse-updates", type=int, default=0,
                         help="Up to four checked secant response updates between fresh response models (default off)")
+    parser.add_argument("--reduced-fast-destruction", action="store_true",
+                        help="Use the shared value-only inner destruction kernel in the numerical source model")
     parser.add_argument("--reduced-basis", type=int, default=10)
     parser.add_argument("--reduced-maximum-basis", type=int, default=32,
                         help="Adaptive response-space ceiling (up to 512; 32 retains earlier controls)")
@@ -212,6 +215,8 @@ def main():
             "--reduced-constraint-secant requires --reduced-second-order")
     require(not args.reduced_adaptive_space or args.reduced, "--reduced-adaptive-space requires --reduced")
     require(not args.reduced_source_ray or args.reduced, "--reduced-source-ray requires --reduced")
+    require(not args.reduced_fast_destruction or (args.reduced and args.reduced_source_ray),
+            "restricted destruction values require --reduced and --reduced-source-ray")
     require(not args.reduced_response_cache or args.reduced, "--reduced-response-cache requires --reduced")
     require(0 <= args.reduced_response_reuse_updates <= 4 and
             (not args.reduced_response_reuse_updates or args.reduced),
