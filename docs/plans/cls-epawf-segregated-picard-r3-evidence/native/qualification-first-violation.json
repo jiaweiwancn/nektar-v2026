@@ -1,0 +1,599 @@
+{
+  "scope": "Fresh original alpha400/t.0025 h0 audit and first qualification violation during fixed-k non-k response; numerical search timeline only, no physical acceptance",
+  "utc": "2026-11-06T03:42:24.147925+00:00",
+  "case": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/source-refine-original-3step",
+  "solver_producing_revision": "0633d23fe888d1fe12b2a971009d32c0b2f9f321",
+  "probe": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/RANSWallResolutionProbe",
+  "probe_sha256": "1ed3c1299fb8bd4cff8be3318d23c5448ec658513cfdeb814a03e694bafde8fd",
+  "receipt": {
+    "command": [
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/RANSWallResolutionProbe",
+      "case.xml",
+      "input.json",
+      "readback.json"
+    ],
+    "exit_code": 0,
+    "seconds": 7.885180931996729,
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "session_sha256": "3e9b8608ad722443ab3fd8df10fbb606b80ab12d841977743cd6569128742b23",
+  "input_sha256": "b5f79cddb36db98e125b96013dfdab8adb0911d42cddc5ad3063293d2395ed91",
+  "h0_sha256": "b8ba7917424057a9f6f16a026d82d53ede43985871537facea170ef6e1841b71",
+  "fixed_k_during_first_H": true,
+  "original_history_held": true,
+  "rebuilt_h0_values_match_exactly": true,
+  "bitwise_history_guard_matched": false,
+  "initial_bitwise_guard_rejection": {
+    "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/qualification-first-violation/readback.log",
+    "reason": "Native raw rebuilt h0 and serialized original h0 differ only in zero signs; all serialized coefficient values, including all nonzero values, match exactly; input history is unchanged"
+  },
+  "unknowns": 2165,
+  "alpha": 400,
+  "time": 0.0025,
+  "original_tolerance": 2e-12,
+  "baseline": {
+    "original_norms": [
+      8.22728188423385,
+      0.02707604942388912,
+      62.60959506799984,
+      0.21566889534417708,
+      5.054833882704713e-16,
+      6.069542809511854e-17,
+      1.0282979979667204e-16,
+      0.0
+    ],
+    "qualification": {
+      "r2_covariance": [
+        0.11080295752776595,
+        0.17680711000423574
+      ],
+      "r2_inner_minimum_point": [
+        -3.4166666666666665,
+        0.0,
+        0.01,
+        0.5105080130598861,
+        0.5105080130598861,
+        0.0025042842280027706,
+        0.3720023135752794,
+        0.3403386753732574,
+        0.11080295752776595
+      ],
+      "r2_outer_minimum_point": [
+        -2.125,
+        0.0,
+        2.0,
+        0.5105080130598861,
+        0.07141936269365268,
+        0.17680711000423574
+      ],
+      "r2_outer_range": [
+        0.000500194924468067,
+        1.0,
+        1.0,
+        0.9832524731447201,
+        1.0000053804929312,
+        1.0,
+        1.0
+      ],
+      "r2_qualified": [
+        1.0
+      ],
+      "r2_scalar_domain": [
+        1.0,
+        0.9832524731447201,
+        0.5105080130598861,
+        0.5105080130598861,
+        0.03631791663093067,
+        0.5105080130598861,
+        0.07141936269365268,
+        1.0,
+        1.0
+      ],
+      "r4_outer_gradient_witness": [
+        -3.625,
+        0.0,
+        2.3333333333333335,
+        0.0,
+        2.0,
+        0.000500194924468067,
+        30.0,
+        0.0
+      ]
+    },
+    "ground": {
+      "admissible": true,
+      "minimum": 0.5105080130598861,
+      "arithmetic_scale": 0.0,
+      "point": [
+        -4.0,
+        0.0,
+        0.0
+      ],
+      "geometry": 0.0,
+      "extrema_checked": 10.0
+    }
+  },
+  "timeline": [
+    {
+      "event": "initial",
+      "iteration": 0,
+      "norms": [
+        5.111532317081629e-10,
+        5.925216671058982e-10,
+        63.00211881239651,
+        9.781942204970696e-14,
+        7.684673072495792e-16,
+        7.725323733463372e-16,
+        3.557538378468061e-18,
+        0
+      ],
+      "outer_range": [
+        0.002857296286552735,
+        1,
+        1,
+        0.9832524731447201,
+        1.000166408160956,
+        1,
+        1
+      ],
+      "gradient_witness": [
+        1.625,
+        0,
+        2,
+        0,
+        2,
+        -0.002857296286552735,
+        34,
+        1
+      ],
+      "qualified": false,
+      "ground": {
+        "admissible": true,
+        "minimum": 0.5105080130598861,
+        "arithmetic_scale": 0,
+        "point": [
+          -4,
+          0,
+          0
+        ],
+        "geometry": 0,
+        "extrema_checked": 10
+      },
+      "state_sha256": "ffd0aabeb1c2e2e6e85cdae0f42608af70601902ae1890d3b44aa1569f090fbe",
+      "seconds": 12.052021377
+    },
+    {
+      "event": "accepted",
+      "iteration": 1,
+      "norms": [
+        6.794498989848719e-11,
+        7.711173742277576e-10,
+        63.364004954768774,
+        2.0970600776348835e-13,
+        6.084843129771434e-16,
+        7.855311068909467e-16,
+        4.048817487875555e-17,
+        0
+      ],
+      "outer_range": [
+        0.0014595043801897134,
+        0.98598566634744,
+        1.0015625569611866,
+        0.9789166073823328,
+        1.0209853723044597,
+        0.99640862621898,
+        1.0140143336495084
+      ],
+      "gradient_witness": [
+        0.5917001814331422,
+        0,
+        2,
+        0,
+        2,
+        0.0014595043801897134,
+        33,
+        1
+      ],
+      "qualified": false,
+      "ground": {
+        "admissible": true,
+        "minimum": 0.4897946190646038,
+        "arithmetic_scale": 1.4345184967668597e-17,
+        "point": [
+          1.1201918168429266,
+          0,
+          0
+        ],
+        "geometry": 4,
+        "extrema_checked": 17
+      },
+      "state_sha256": "339a578b244dd1eabe78faee3a50425d756a47bee085e2e8365088d50f48447c",
+      "seconds": 384.778605058
+    },
+    {
+      "event": "accepted",
+      "iteration": 2,
+      "norms": [
+        7.952783111958496e-11,
+        1.1888909476487287e-09,
+        66.13257385126579,
+        8.582065694674772e-12,
+        8.226793467217598e-16,
+        8.164658915910918e-16,
+        4.607859233063393e-17,
+        3.3435465077024374e-16
+      ],
+      "outer_range": [
+        0.0013277903622932463,
+        0.9866593883985452,
+        1.0009426189599273,
+        0.9785886282506315,
+        1.0069324921247684,
+        0.9963663826324483,
+        1.0133406115979569
+      ],
+      "gradient_witness": [
+        -0.75,
+        0,
+        2,
+        0,
+        2,
+        -0.0013277903622932463,
+        33,
+        1
+      ],
+      "qualified": false,
+      "ground": {
+        "admissible": true,
+        "minimum": 0.5001210388917181,
+        "arithmetic_scale": 1.5868177821104834e-17,
+        "point": [
+          1.1350867193028011,
+          0,
+          0
+        ],
+        "geometry": 4,
+        "extrema_checked": 19
+      },
+      "state_sha256": "40b8dc0e0dfbe325a72adf05d01583328154ea738e0ecc7c15ae8181d30ef54d",
+      "seconds": 805.859161137
+    },
+    {
+      "event": "accepted",
+      "iteration": 3,
+      "norms": [
+        5.054864420933807e-11,
+        7.695333870043323e-10,
+        63.596313467968336,
+        2.4638801833192234e-13,
+        7.964718002377886e-16,
+        7.902669198512491e-16,
+        4.235164736271501e-18,
+        5.194438324466286e-16
+      ],
+      "outer_range": [
+        0.001122871411649018,
+        0.9896276518130017,
+        1.0003186172879472,
+        0.9793347834566108,
+        1.01390103574355,
+        0.9964017818796156,
+        1.010372348187375
+      ],
+      "gradient_witness": [
+        -3.6666666666666665,
+        0,
+        2,
+        0,
+        2,
+        -0.001122871411649018,
+        30,
+        1
+      ],
+      "qualified": false,
+      "ground": {
+        "admissible": true,
+        "minimum": 0.5013623692936856,
+        "arithmetic_scale": 0,
+        "point": [
+          -1,
+          0,
+          0
+        ],
+        "geometry": 2,
+        "extrema_checked": 19
+      },
+      "state_sha256": "d9859731d354074e59e7415a3bcfb0ea7e2d58c0c5304cc8c0cac5bd82181a8a",
+      "seconds": 1158.160576943
+    },
+    {
+      "event": "accepted",
+      "iteration": 4,
+      "norms": [
+        1.690837533125422e-10,
+        1.936940610913371e-09,
+        63.27160102743215,
+        1.227819765091286e-13,
+        7.203476723942704e-16,
+        5.460250570064215e-16,
+        4.963613070910199e-17,
+        0
+      ],
+      "outer_range": [
+        0.001038261339743607,
+        0.9896241793359856,
+        1.0000988159705224,
+        0.97924488902128,
+        1.0146242195942041,
+        0.9963439250997752,
+        1.0103758206629894
+      ],
+      "gradient_witness": [
+        0.33333333333333326,
+        0,
+        2,
+        0,
+        2,
+        -0.001038261339743607,
+        33,
+        1
+      ],
+      "qualified": false,
+      "ground": {
+        "admissible": true,
+        "minimum": 0.4984846857855561,
+        "arithmetic_scale": 0,
+        "point": [
+          -1,
+          0,
+          0
+        ],
+        "geometry": 2,
+        "extrema_checked": 19
+      },
+      "state_sha256": "33a34fdae7968dceafe8855c2ff75d28120a78bae4091eaa69346607abd5a76d",
+      "seconds": 1494.385032824
+    },
+    {
+      "event": "accepted",
+      "iteration": 5,
+      "norms": [
+        6.442558960820786e-11,
+        7.708718399314652e-10,
+        63.34702524231737,
+        1.2156047715762041e-13,
+        8.606762870079515e-16,
+        6.543343822921057e-16,
+        2.6766241133235885e-17,
+        0
+      ],
+      "outer_range": [
+        0.0010006380206325494,
+        0.9899994899103473,
+        1.0000825018897403,
+        0.9807350384102238,
+        1.0140867677508427,
+        0.9973510121205938,
+        1.0100005100900138
+      ],
+      "gradient_witness": [
+        -3.6666666666666665,
+        0,
+        2,
+        0,
+        2,
+        -0.0010006380206325494,
+        30,
+        1
+      ],
+      "qualified": false,
+      "ground": {
+        "admissible": true,
+        "minimum": 0.498267231221262,
+        "arithmetic_scale": 0,
+        "point": [
+          -1,
+          0,
+          0
+        ],
+        "geometry": 2,
+        "extrema_checked": 19
+      },
+      "state_sha256": "27dcb96ad49a8d6d20073437f9335fd3549bf8bcd175fc5a773af3df9a8e93e3",
+      "seconds": 1870.880355598
+    },
+    {
+      "event": "accepted",
+      "iteration": 6,
+      "norms": [
+        4.115764957261491e-12,
+        3.950267883344018e-11,
+        63.34723921831065,
+        6.615461021413463e-14,
+        6.6342840066756e-16,
+        7.378797373119937e-16,
+        1.8465318250143744e-17,
+        0
+      ],
+      "outer_range": [
+        0.0010000003984836914,
+        0.9899999994529016,
+        1.0000824444602574,
+        0.980754655930664,
+        1.0140847219007765,
+        0.997364301246592,
+        1.0100000005471002
+      ],
+      "gradient_witness": [
+        -3.6666666666666665,
+        0,
+        2,
+        0,
+        2,
+        -0.0010000003984836914,
+        30,
+        1
+      ],
+      "qualified": false,
+      "ground": {
+        "admissible": true,
+        "minimum": 0.4982663724994072,
+        "arithmetic_scale": 0,
+        "point": [
+          -1,
+          0,
+          0
+        ],
+        "geometry": 2,
+        "extrema_checked": 19
+      },
+      "state_sha256": "eb237678220f3ace583d9bd814383e192f3510d60b492ad600d2fa97894b3815",
+      "seconds": 2307.240307955
+    },
+    {
+      "event": "accepted",
+      "iteration": 7,
+      "norms": [
+        1.1956291454108548e-12,
+        1.601842265682465e-12,
+        63.34723721800969,
+        4.487247565570111e-14,
+        9.735771389164351e-16,
+        7.499555005973989e-16,
+        2.9307339974998786e-17,
+        0
+      ],
+      "outer_range": [
+        0.0009999990009971205,
+        0.9900000099989992,
+        1.00008244441895,
+        0.9807546955001705,
+        1.0140847057846154,
+        0.9973643280376979,
+        1.0099999900010006
+      ],
+      "gradient_witness": [
+        -3.6666666666666665,
+        0,
+        2,
+        0,
+        2,
+        -0.0009999990009971205,
+        30,
+        1
+      ],
+      "qualified": true,
+      "ground": {
+        "admissible": true,
+        "minimum": 0.4982663722241656,
+        "arithmetic_scale": 0,
+        "point": [
+          -1,
+          0,
+          0
+        ],
+        "geometry": 2,
+        "extrema_checked": 19
+      },
+      "state_sha256": "cd663e1716af7599e381b7646b52e372455a2b0e6f414761d4f51228b283553e",
+      "seconds": 2832.662395662
+    },
+    {
+      "event": "accepted",
+      "iteration": 8,
+      "norms": [
+        9.246870753526137e-13,
+        1.2132057632146146e-12,
+        49.11413627266483,
+        4.3874062323212406e-14,
+        7.874704292722905e-16,
+        7.720459185296443e-16,
+        7.08119543904595e-17,
+        0
+      ],
+      "outer_range": [
+        0.000999999419542319,
+        0.9900000108091507,
+        1.0000777768645834,
+        0.9800033004356994,
+        1.012518112181258,
+        0.9968535793754515,
+        1.0096909150411641
+      ],
+      "gradient_witness": [
+        -3.6666666666666665,
+        0,
+        2,
+        0,
+        2,
+        -0.000999999419542319,
+        30,
+        1
+      ],
+      "qualified": true,
+      "ground": {
+        "admissible": true,
+        "minimum": 0.22861293206808897,
+        "arithmetic_scale": 0,
+        "point": [
+          -1,
+          0,
+          0
+        ],
+        "geometry": 2,
+        "extrema_checked": 12
+      },
+      "state_sha256": "f5d452af6b6ffac2c336236f38b24bc863495a8f327df4f4e6c47ad719ae0c7f",
+      "seconds": 3625.181063951
+    },
+    {
+      "event": "accepted",
+      "iteration": 9,
+      "norms": [
+        1.10109139145001e-12,
+        1.1185875132673572e-12,
+        40.95530306987536,
+        5.477563077831471e-14,
+        1.1771783727110071e-15,
+        7.919833401713878e-16,
+        8.470329472543002e-18,
+        0
+      ],
+      "outer_range": [
+        0.0009999990064794018,
+        0.9900000099999976,
+        1.000180035691275,
+        0.980000019999996,
+        1.007985348587565,
+        0.996852256815631,
+        1.0099999900000023
+      ],
+      "gradient_witness": [
+        -3.6666666666666665,
+        0,
+        2,
+        0,
+        2,
+        -0.0009999990064794018,
+        30,
+        1
+      ],
+      "qualified": true,
+      "ground": {
+        "admissible": true,
+        "minimum": 0.13808292518034387,
+        "arithmetic_scale": 4.89413124655083e-18,
+        "point": [
+          -1.175554286962694,
+          0,
+          0
+        ],
+        "geometry": 2,
+        "extrema_checked": 14
+      },
+      "state_sha256": "6d47dbad60dda704746dbd8f355cb3250056f84abf2afb54ba1d078259a5587d",
+      "seconds": 4575.899875001
+    }
+  ],
+  "complete_native_stage_status": "still running at snapshot"
+}

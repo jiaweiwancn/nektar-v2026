@@ -753,6 +753,28 @@ and no coupled direction matrix or optimizer is imported.
 
 ## Algebraic continuation and the qualification obstruction
 
+The original-start qualification failure occurs before a k update. A fresh
+probe at the actual target alpha400/time.0025 confirms that original h0 is
+qualified (gradient.000500194924, ground.5105080131). Keeping every k
+coefficient at h0 and solving H raises the gradient to.002857296287, with the
+negative witness at x=1.625,z=2. The k residual changes62.60959507 ->63.00211881
+while the non-k blocks meet their declared2e-9 inner tolerance. Thus a k update
+must account for flow/epsilon feedback and qualification even from the original
+initial state.
+
+The full inventory tracks witness migration during restoration: x=.59170018,
+-.75,-3.66666667,.33333333, then-3.66666667 at z=2. Some intermediate epsilon
+and local/sample-k bounds are also violated; evaluation-domain and continuous
+ground admissibility remain enforced. The seventh numerical update first enters
+full original qualification, with gradient.000999999001 and residual63.34723722.
+The next two source-refined updates retain qualification and reduce residual to
+49.11413627 and40.95530307. This is restoration/search progress, not acceptance
+of a physical stage. The [fresh qualification trace](cls-epawf-segregated-picard-r3-evidence/native/qualification-first-violation.json)
+binds the baseline, unchanged k during H, h0 history and target parameters.
+Its first strict raw-bit h0 guard rejected serialized zero signs; the repeat
+asserts exact equality of every coefficient value and the original serialized
+history hash. No incoming state or history coefficient was replaced.
+
 The separate opt-in continuation evaluates
 F_eta=F_target+eta M_D(Q-h0), with original physical alpha400, h0, t=.0025 and
 external data fixed. The retained segregated conditional solver is used as a
