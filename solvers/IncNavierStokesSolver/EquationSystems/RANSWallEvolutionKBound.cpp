@@ -17,14 +17,15 @@ std::string RANSWallEvolutionPatch::PimpleKBoundSignature() const
     if(!PimpleKBoundEnabled())return ""; // Preserve Off checkpoint signatures.
     const double K0=m_parameters.model.Q()*m_robustUstar*m_robustUstar;
     std::ostringstream out;out<<std::setprecision(17)<<":k_bound="<<m_pimpleKBound
-        <<":version=MassQR-v1:metric=physical_consistent_Mff:constraints=static_preK_rays_moving_witnesses_cubic_ground"
+        <<(ConstitutiveKInventory()?":version=MassQR-ConstitutiveV2:metric=physical_consistent_Mff:constraints=shared_constitutive_all_profiles_contact_rays_retained_cuts_cubic_ground":
+            ":version=MassQR-v1:metric=physical_consistent_Mff:constraints=static_preK_rays_moving_witnesses_cubic_ground")
         <<":floor_relative="<<m_pimpleKFloorRelative<<":K0="<<K0<<":floor="<<K0*m_pimpleKFloorRelative
         <<":arithmetic_reserve="<<4096*std::numeric_limits<double>::epsilon()*K0;
     return out.str();
 }
 
 RANSWallEvolutionPatch::KBoundResult RANSWallEvolutionPatch::ApplyPimpleKBound(
-    const Vector &raw,const Vector &preK,double time,const RANSWallEvolutionData &data) const
+    const Vector &raw,const Vector &preK,double time,const RANSWallEvolutionData &data,bool projectionOnly) const
 {
     Require(raw.size()==Size() && preK.size()==raw.size(),"k-bound state shape differs");
     KBoundResult result;result.state=raw;
@@ -35,6 +36,7 @@ RANSWallEvolutionPatch::KBoundResult RANSWallEvolutionPatch::ApplyPimpleKBound(
     const double target=floor+reserve,threshold=floor+reserve/2;
     struct Location {RANSWallGlobalPoint row;std::string inventory;};
     std::vector<Location> points,witnesses;
+    std::vector<RANSWallCoordinate> retainedAnchors;
     std::vector<int> rows,index(size[K()],-1);
     std::unique_ptr<RANSWallKBound::Projection> projection;
     double rawMinimum=1e300,correctedMinimum=1e300,primal=0;
@@ -42,7 +44,9 @@ RANSWallEvolutionPatch::KBoundResult RANSWallEvolutionPatch::ApplyPimpleKBound(
     bool rawGroundOK=false,correctedGroundOK=false;
     const auto rawGround=WallTraceJSON(raw,rawGroundOK);
     std::string correctedGround=rawGround;
-    Vector change(size[K()]);
+    Vector change(size[K()]);int separations=0,inventoryRebuilds=0;
+    std::map<std::string,int> familyCounts,discovered;
+
     auto evaluate=[&](const Vector &s,Location &where)
     {
         double minimum=1e300;
@@ -60,13 +64,15 @@ RANSWallEvolutionPatch::KBoundResult RANSWallEvolutionPatch::ApplyPimpleKBound(
         for(const auto &p:m_scalarLocations)if(p.block==K())points.push_back({p.row,p.inventory});
         // preK is admissible. Preserve its moving normalization-ray inventory
         // before touching the raw candidate or evaluating its normalization.
-        const auto before=ScalarDomain(preK,time,data,true);
-        Require(before.admissible,"k-bound pre-k state is inadmissible: "+before.failure);
+        Require(!projectionOnly || ConstitutiveKInventory(),"projection-only legacy replay is not a production-entry waiver");
+        const auto before=ScalarDomain(preK,time,data,true,ConstitutiveKInventory());
+        if(!projectionOnly)Require(before.admissible,"k-bound pre-k state is inadmissible: "+before.failure);
         for(const auto &p:before.observations)if(p.block==K() && p.inventory.find("normalization_ray")!=std::string::npos)
             points.push_back({Point(K(),p.coordinate,p.side),p.inventory+":pre_k"});
         rawMinimum=evaluate(raw,rawWitness);
-        for(int separation=0;separation<500;++separation)
+        for(int separation=0;separation<(ConstitutiveKInventory()?2000:500);++separation)
         {
+            ++separations;
             correctedMinimum=evaluate(result.state,correctedWitness);
             auto ground=WallTraceR4(result.state);
             const auto worst=std::min_element(ground.begin(),ground.end(),[](const auto &a,const auto &b){return a.value-a.error<b.value-b.error;});
@@ -77,7 +83,8 @@ RANSWallEvolutionPatch::KBoundResult RANSWallEvolutionPatch::ApplyPimpleKBound(
             {
                 // Safe order: static/samplers first, every newly moving k ray
                 // before normalization. Never turn a non-k failure into a cut.
-                const auto domain=ScalarDomain(result.state,time,data,true);
+                const auto domain=ScalarDomain(result.state,time,data,true,ConstitutiveKInventory(),retainedAnchors);
+                ++inventoryRebuilds;familyCounts=domain.counts;
                 if(domain.admissible)
                 {
                     bool movingViolation=false;
@@ -87,21 +94,28 @@ RANSWallEvolutionPatch::KBoundResult RANSWallEvolutionPatch::ApplyPimpleKBound(
                     {
                         for(const auto &p:domain.observations)if(p.block==K() && p.value<correctedMinimum)
                         {correctedMinimum=p.value;correctedWitness={Point(K(),p.coordinate,p.side),p.inventory};}
+                        if(ConstitutiveKInventory())
+                        {
+                            const auto full=ScalarDomain(result.state,time,data,false,false,retainedAnchors);
+                            if(!full.admissible){result.failure="k_bound_final_domain_exit: "+full.phase+": "+full.failure;break;}
+                        }
                         result.success=true;break;
                     }
                 }
                 else if(domain.failure=="negative_inner_k" || domain.failure=="nonpositive_K_or_outer_k")
                     cut={Point(K(),domain.limitingPoint),domain.limitingInventory+":moving"};
                 else {result.failure="k_bound_non_k_domain_exit: "+domain.phase+": "+domain.failure;break;}
-                points.push_back(cut);
+                if(!ConstitutiveKInventory())points.push_back(cut);
             }
+            if(ConstitutiveKInventory())points.push_back(cut); // retain inactive physical cuts as well
+            ++discovered[cut.inventory];
             result.activated=true;
             Vector row(rows.size());
             for(int j=0;j<cut.row.ids.size();++j)
             {const int col=index[cut.row.ids[j]];if(col>=0)row[col]+=cut.row.phi[j];}
             if(Maximum(row)==0.){result.failure="incompatible_prescribed_k_floor";break;}
             if(!projection)projection=std::make_unique<RANSWallKBound::Projection>(PicardKMass(rows));
-            witnesses.push_back(cut);
+            witnesses.push_back(cut);retainedAnchors.push_back(cut.row.coordinate);
             if(!projection->Add(row,lower-cut.row.Value(raw,offset[K()]),witnesses.size()-1))
             {result.failure=projection->failure;break;}
             // Every subproblem is relative to the original k*, never to the
@@ -148,7 +162,13 @@ RANSWallEvolutionPatch::KBoundResult RANSWallEvolutionPatch::ApplyPimpleKBound(
     }
     auto location=[&](double value,const Location &w){return J::Object({{"value",J::Number(value)},
         {"coordinate",J::Numbers(w.row.coordinate)},{"geometry",J::Number(w.row.geometry)},{"inventory",J::Quote(w.inventory)}});};
-    result.report=J::Object({{"mode",J::Quote(m_pimpleKBound)},{"algorithm",J::Quote("MassQR-v1")},
+    std::vector<std::pair<std::string,std::string>> counts,cuts;
+    for(auto [name,count]:familyCounts)counts.push_back({name,J::Number(count)});
+    for(auto [name,count]:discovered)cuts.push_back({name,J::Number(count)});
+    result.report=J::Object({{"mode",J::Quote(m_pimpleKBound)},{"algorithm",J::Quote(ConstitutiveKInventory()?"MassQR-ConstitutiveV2":"MassQR-v1")},
+        {"inventory_policy",J::Quote(m_pimpleKInventory)},{"projection_only",J::Boolean(projectionOnly)},
+        {"separation_passes",J::Number(separations)},{"inventory_rebuilds",J::Number(inventoryRebuilds)},
+        {"inventory_counts",J::Object(counts)},{"discovered_constraint_families",J::Object(cuts)},
         {"calls","1"},{"activations",J::Number(result.activated?1:0)},{"success",J::Boolean(result.success)},{"failure",J::Quote(result.failure)},
         {"floor_relative",J::Number(m_pimpleKFloorRelative)},{"K0",J::Number(K0)},{"floor",J::Number(floor)},{"arithmetic_reserve",J::Number(reserve)},
         {"raw_minimum_scope",J::Quote("static and available pre-k ray locations; no inadmissible raw normalization evaluation")},

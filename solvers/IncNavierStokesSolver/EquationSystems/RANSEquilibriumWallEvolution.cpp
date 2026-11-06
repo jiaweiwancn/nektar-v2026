@@ -340,7 +340,8 @@ void RANSEquilibriumWallEvolution::RecordAudit(const Vector &state,const Vector 
             m_rejectedState=state;
             m_rangeEvents.push_back({time,alpha,state,history,{},
                 {std::string("range_audit_evaluation_failed:")+error.what()},true});
-            throw std::runtime_error("declared R1 physical-range audit failed; complete candidate/history saved");
+            throw std::runtime_error(std::string("constitutive audit failed; complete candidate/history saved: ")+error.what()+
+                "; witness="+m_patch->ConstitutiveFailureContext());
         }
         throw;
     }

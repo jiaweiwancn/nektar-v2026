@@ -18,7 +18,7 @@ from run_cls_epawf_picard import (ROOT, ORIGINAL, H0, THREADS, session, set_info
 
 
 def prepare(output, dt, steps, diagnostic=False, verify=False, restart=None,
-            checkpoint=False, reject_step=0, k_bound="Off", floor_relative=None, snapshots=False, budget_time=-1., hard_reject_step=0):
+            checkpoint=False, reject_step=0, k_bound="Off", floor_relative=None, snapshots=False, budget_time=-1., hard_reject_step=0, inventory="LegacyV1"):
     output.mkdir(parents=True, exist_ok=False)
     xml = session(ORIGINAL, output/'case.xml', 'outer6')
     root = ET.parse(xml).getroot()
@@ -38,6 +38,7 @@ def prepare(output, dt, steps, diagnostic=False, verify=False, restart=None,
         'RANSWallPicardEpsilonRelaxation': 1, 'RANSWallPicardPseudoAlpha': 0}.items():
         set_parameter(root, key, value)
     set_info(root, 'RANSWallPimpleKBound', k_bound)
+    set_info(root, 'RANSWallPimpleKInventory', inventory)
     set_info(root, 'RANSWallPimpleSnapshots', 'On' if snapshots else 'Off')
     if floor_relative is not None:set_parameter(root, 'RANSWallPimpleKFloorRelative', floor_relative)
     if budget_time>=0:set_parameter(root, 'RANSWallPimpleBudgetTime', budget_time)
@@ -93,6 +94,7 @@ def main():
     p.add_argument('--steps', type=int)
     p.add_argument('--final-time', type=float)
     p.add_argument('--k-bound',choices=('Off','MassProjection'),default='Off')
+    p.add_argument('--inventory',choices=('LegacyV1','ConstitutiveV2'),default='LegacyV1')
     p.add_argument('--floor-relative',type=float)
     p.add_argument('--snapshots',action='store_true')
     p.add_argument('--budget-time',type=float,default=-1.)
@@ -122,7 +124,7 @@ def main():
         require(a.output.is_relative_to(Path('/media/jay/新加卷/nektar-v2026-runs')), 'heavy run storage')
     xml = prepare(a.output, a.dt, a.steps, a.diagnostic, a.verify,
                   a.restart.resolve() if a.restart else None, a.checkpoint, a.reject_step,
-                  a.k_bound,a.floor_relative,a.snapshots,a.budget_time,a.hard_reject_step)
+                  a.k_bound,a.floor_relative,a.snapshots,a.budget_time,a.hard_reject_step,a.inventory)
     require(a.checkpoint_interval>=0,'negative checkpoint interval')
     if a.checkpoint_interval:
         require(a.checkpoint,'checkpoint interval requires checkpoint output')

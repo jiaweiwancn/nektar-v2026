@@ -84,6 +84,63 @@ private:
 };
 }
 
+std::vector<RANSWallEvolutionPatch::ScalarLocation>
+RANSWallEvolutionPatch::ReconstructionLocations(int block,bool complete) const
+{
+    std::vector<ScalarLocation> locations;
+    for(int e=0;e<fields[block]->Elements().size();++e)
+    {
+        const auto &el=fields[block]->Elements()[e];const auto exp=fields[block]->Field()->GetExp(e);
+        const bool inner=el.upper[2]<=m_parameters.geometry.height;
+        for(int kind=0;kind<2;++kind)
+        {
+            const int dense=2*el.degree+(complete && inner?7:3);
+            const int nx=kind?dense:exp->GetNumPoints(0);
+            const int ny=m_dimension==3?(kind?dense:exp->GetNumPoints(1)):1;
+            const int nz=kind?dense:exp->GetNumPoints(m_dimension-1);
+            for(int iz=0;iz<nz;++iz)for(int iy=0;iy<ny;++iy)for(int ix=0;ix<nx;++ix)
+            {
+                RANSWallCoordinate p{};const std::array<int,3> indices{ix,iy,iz};
+                for(int a=0;a<3;++a)if(m_dimension==3 || a!=1)
+                {
+                    const int axis=m_dimension==2 && a==2?1:a;
+                    const double z=kind?-1.+2.*indices[a]/(dense-1):exp->GetBasis(axis)->GetZ()[indices[a]];
+                    p[a]=el.lower[a]+(z+1)*(el.upper[a]-el.lower[a])/2;
+                }
+                locations.push_back({kind?"reconstruction_dense":"reconstruction_native",
+                    Transform(fields[block]->ElementPoint(e,p)),K(),Same(p[2],m_parameters.geometry.height)?(inner?-1:1):0,!inner});
+            }
+        }
+    }
+    return locations;
+}
+
+std::vector<RANSWallCoordinate> RANSWallEvolutionPatch::ConstitutiveAnchors(const Vector &state,const std::vector<RANSWallCoordinate> &additional) const
+{
+    InitialiseScalarLocations();
+    std::set<RANSWallCoordinate> anchors(m_scalarSamplerAnchors.begin(),m_scalarSamplerAnchors.end());
+    auto add=[&](RANSWallCoordinate p){p[2]=0;anchors.insert(p);};
+    // These are the same generators consumed by Audit, PhysicalSamples and
+    // the continuation profile/flux/contact diagnostic. Both regional meshes
+    // contribute; no hand-copied list of the two observed failure witnesses.
+    for(int b:{0,K()})for(const auto &p:ReconstructionLocations(b,true))add(p.row.coordinate);
+    for(int b:{0,K()})for(int order:{8,16})for(int axis:{0,2})for(int side:{-1,1})
+        for(const auto &p:Surface(b,axis,axis==2?(side<0?0.:upper[2]):(side<0?lower[0]:upper[0]),side,order))add(p.test.coordinate);
+    for(const auto &p:WallTraceR4(state))add(p.row.coordinate);
+    for(const auto &p:additional)add(p);
+    for(double x:ContinuationProfileAbscissae())if(x>=lower[0] && x<=upper[0])add({x,0,0});
+    return {anchors.begin(),anchors.end()};
+}
+
+std::vector<RANSWallGlobalPoint> RANSWallEvolutionPatch::NormalizationRows(
+    const RANSWallCoordinate &anchor,const EquilibriumAWFProfiles &profile) const
+{
+    std::vector<RANSWallGlobalPoint> rows;const double scale=m_mapping.At(anchor).scale;
+    for(const auto &q:profile.Quadrature())
+    {auto p=anchor;p[2]=q.r/scale;rows.push_back(Point(K(),p));}
+    return rows;
+}
+
 void RANSWallEvolutionPatch::InitialiseScalarLocations() const
 {
     if(!m_scalarLocations.empty())return;
@@ -106,30 +163,7 @@ void RANSWallEvolutionPatch::InitialiseScalarLocations() const
         pair("interface_inner",Point(K(),face.test.coordinate,-1),true,-1);
         pair("interface_outer",Point(K(),face.test.coordinate,1),false,1);
     }
-    for(int e=0;e<fields[K()]->Elements().size();++e)
-    {
-        const auto &el=fields[K()]->Elements()[e];const auto exp=fields[K()]->Field()->GetExp(e);
-        const bool inner=el.upper[2]<=m_parameters.geometry.height;
-        for(int kind=0;kind<2;++kind)
-        {
-            const int dense=2*el.degree+(inner?7:3);
-            const int nx=kind?dense:exp->GetNumPoints(0);
-            const int ny=m_dimension==3?(kind?dense:exp->GetNumPoints(1)):1;
-            const int nz=kind?dense:exp->GetNumPoints(m_dimension-1);
-            for(int iz=0;iz<nz;++iz)for(int iy=0;iy<ny;++iy)for(int ix=0;ix<nx;++ix)
-            {
-                RANSWallCoordinate p{};const std::array<int,3> indices{ix,iy,iz};
-                for(int a=0;a<3;++a)if(m_dimension==3 || a!=1)
-                {
-                    const int axis=m_dimension==2 && a==2?1:a;
-                    const double z=kind?-1.+2.*indices[a]/(dense-1):exp->GetBasis(axis)->GetZ()[indices[a]];
-                    p[a]=el.lower[a]+(z+1)*(el.upper[a]-el.lower[a])/2;
-                }
-                pair(kind?"reconstruction_dense":"reconstruction_native",
-                    Transform(fields[K()]->ElementPoint(e,p)),inner,Same(p[2],m_parameters.geometry.height)?(inner?-1:1):0);
-            }
-        }
-    }
+    for(const auto &p:ReconstructionLocations(K(),true))pair(p.inventory,p.row,!p.strict,p.side);
     // EXACT evaluation nodes used by RANSWallGlobalField::Boundary, not the
     // source Gauss anchors or an assumed degree+1 interpolation grid.
     for(const auto &el:fields[Epsilon()]->Elements())if(Same(el.lower[2],m_parameters.geometry.height))
@@ -163,7 +197,8 @@ void RANSWallEvolutionPatch::InitialiseScalarLocations() const
 }
 
 RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::ScalarDomain(
-    const Vector &state,double time,const RANSWallEvolutionData &data,bool retain) const
+    const Vector &state,double time,const RANSWallEvolutionData &data,bool retain,bool kInventoryOnly,
+    const std::vector<RANSWallCoordinate> &additionalAnchors) const
 {
     ScalarDomainResult result;result.phase="coefficients";
     const double us=m_robustUstar,K0=m_parameters.model.Q()*us*us;
@@ -172,6 +207,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::ScalarDomain(
                    const Vector &values,int side=0,bool dependent=false,double weight=0.)
     {
         const double value=q.Value(values,offset[block]);
+        if(ConstitutiveKInventory() && block==K())m_coveredKLocations.insert(q.coordinate);
         const double scale=block==K()?K0:E0*m_parameters.geometry.height/Distance(q.coordinate);
         const double margin=value/scale;++result.counts[name];
         if(block==K())
@@ -188,7 +224,8 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::ScalarDomain(
         if(retain)result.observations.push_back({name,q.coordinate,block,q.geometry,side,value,scale,weight,strict,dependent});
         if(!std::isfinite(value) || (strict?value<=0:value<0))
         {
-            result.failure=block==K()?(strict?"nonpositive_K_or_outer_k":"negative_inner_k"):"nonpositive_epsilon";
+            result.failure=ConstitutiveKInventory() && !std::isfinite(value)?"nonfinite_physical_evaluation":
+                block==K()?(strict?"nonpositive_K_or_outer_k":"negative_inner_k"):"nonpositive_epsilon";
             result.limitingPoint=q.coordinate;result.limitingInventory=name;return false;
         }
         return true;
@@ -198,6 +235,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::ScalarDomain(
         Require(state.size()==static_cast<std::size_t>(Size()),"scalar-domain state size differs");
         for(double value:state)if(!std::isfinite(value)){result.failure="nonfinite_coefficient";return result;}
         InitialiseScalarLocations();
+        if(ConstitutiveKInventory())m_coveredKLocations.clear();
         result.effectiveState=ExternalLift(state,time,data);result.phase="fixed_fields_and_samplers";
         for(const auto &point:m_scalarLocations)
             if(!check(point.inventory,point.row,point.block,point.strict,result.effectiveState,point.side))return result;
@@ -212,16 +250,13 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::ScalarDomain(
         auto ray=[&](const RANSWallCoordinate &p,const std::shared_ptr<EquilibriumAWFProfiles> &profile,
                      const std::string &name,bool source,double horizontalWeight)
         {
-            const double scale=m_mapping.At(p).scale;
             result.minimumCutoff=std::min(result.minimumCutoff,profile->Reference().cutoff);
             result.maximumCutoff=std::max(result.maximumCutoff,profile->Reference().cutoff);
             result.profileBranches.push_back(profile->Reference().weight==0?'B':profile->Reference().weight==1?'E':'M');
+            const auto rows=NormalizationRows(p,*profile);int i=0;
             for(const auto &q:profile->Quadrature())
-            {
-                auto point=p;point[2]=q.r/scale;
-                if(!check(name,Point(K(),point),K(),false,result.effectiveState,0,false,
+                if(!check(name,rows[i++],K(),false,result.effectiveState,0,false,
                     source?horizontalWeight*q.weight*q.jacobian:0.))return false;
-            }
             pending.push_back({p,profile,source});return true;
         };
         // Check every physical k BEFORE calling WallNormalization or a
@@ -235,6 +270,32 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::ScalarDomain(
             if(!ray(p,StateProfile(result.effectiveState,p,time,data),
                     "trace_current_normalization_ray",false,0))return result;
         }
+        if(ConstitutiveKInventory())
+        {
+            // Profile construction needs only fixed/sampled fields. Validate
+            // all dynamic-anchor samplers before constructing ANY new profile.
+            const auto anchors=ConstitutiveAnchors(result.effectiveState,additionalAnchors);
+            for(auto p:anchors)
+            {
+                const double scale=m_mapping.At(p).scale;
+                p[2]=m_parameters.geometry.sampleHeight/scale;
+                if(!check("physical_sampled_K",Point(K(),p),K(),true,result.effectiveState))return result;
+                p[2]=m_parameters.geometry.height;
+                if(!check("constitutive_matching_K",Point(K(),p,1),K(),true,result.effectiveState,1))return result;
+                if(m_transitionEnabled)for(double r:{m_sensorA,m_sensorB})
+                {
+                    p[2]=r/scale;
+                    if(!check("constitutive_sensor_K",Point(K(),p),K(),true,result.effectiveState) ||
+                       !check("constitutive_sensor_epsilon",Point(Epsilon(),p),Epsilon(),true,result.effectiveState))return result;
+                }
+            }
+            for(const auto &p:anchors)
+            {
+                if(!ray(p,Profile(SampleK(result.effectiveState,p),p,0),"constitutive_baseline_normalization_ray",false,0) ||
+                   !ray(p,StateProfile(result.effectiveState,p,time,data),"constitutive_current_normalization_ray",false,0))return result;
+            }
+        }
+        if(kInventoryOnly){result.phase="k_inventory_complete";result.admissible=true;return result;}
         result.phase="normalization_and_dependent_trace";
         for(const auto &p:pending)if(m_cappedDestruction)
         {
@@ -258,6 +319,23 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::ScalarDomain(
     }
     catch(const std::exception &error)
     {result.failure=std::string(J::ExceptionType(error))+": "+error.what();return result;}
+}
+
+std::string RANSWallEvolutionPatch::CheckConstitutiveCoverage(const Vector &s,double time,
+    const RANSWallEvolutionData &data,const RANSWallCoordinate &unregistered) const
+{
+    const auto domain=ScalarDomain(s,time,data,true);
+    Require(ConstitutiveKInventory() && domain.admissible,"coverage check requires admissible ConstitutiveV2 state");
+    const auto audit=CompleteRestrictedAudit(s,s,0.,time,data);
+    bool caught=false;std::string reason;
+    {
+        CoverageScope coverage(m_assertKCoverage,true);
+        try{WallNormalization(s,unregistered,*StateProfile(s,unregistered,time,data));}
+        catch(const std::exception &error){reason=error.what();caught=reason.find("unprotected constitutive k evaluation")!=std::string::npos;}
+    }
+    Require(caught,"coverage tripwire failed to reject an undeclared consumer");
+    return J::Object({{"tripwire_passed",J::Boolean(caught)},{"reason",J::Quote(reason)},
+        {"scalar_domain",ScalarDomainJSON(domain)},{"production_governing_solves","0"}});
 }
 
 std::string RANSWallEvolutionPatch::ScalarDomainJSON(const ScalarDomainResult &d,bool locations)
@@ -1860,6 +1938,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
         domain.minimumOuterK,domain.minimumOuterEpsilon,domain.minimumSampledK,
         domain.minimumTraceEpsilon,domain.minimumB,domain.minimumLambda};
     if(!domain.admissible){audit["r2_qualified"]={0};return audit;}
+    CoverageScope coverage(m_assertKCoverage,ConstitutiveKInventory());
     if(!rangesOnly)audit=Audit(domain.effectiveState,history,alpha,time,data,m_robustUstar,true);
     audit["r2_scalar_domain"]={1,domain.minimumMargin,domain.minimumInnerK,domain.minimumOuterK,
         domain.minimumOuterEpsilon,domain.minimumSampledK,domain.minimumTraceEpsilon,domain.minimumB,domain.minimumLambda};

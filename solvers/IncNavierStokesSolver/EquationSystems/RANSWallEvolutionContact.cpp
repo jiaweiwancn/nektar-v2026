@@ -17,7 +17,7 @@ std::string RANSWallEvolutionPatch::PimpleContactDiagnostic(const Vector &s,doub
     const RANSWallEvolutionData &data,const Vector &steps,
     const std::vector<RANSWallCoordinate> &witnesses,bool exportMass,bool isolate) const
 {
-    Require(PimpleSingleSweep() && ScalarDomain(s,time,data).admissible,"contact diagnostic requires an admissible PIMPLE state");
+    Require(PimpleSingleSweep() && ScalarDomain(s,time,data,false,false,witnesses).admissible,"contact diagnostic requires an admissible PIMPLE state");
     const auto hash=RANSWallR3::Hash(s);const auto ground=WallTraceR4(s);
     const auto worst=std::min_element(ground.begin(),ground.end(),[](const auto &a,const auto &b){return a.value<b.value;});
     std::vector<RANSWallCoordinate> points{worst->row.coordinate,{1.60,0.,0.}};
@@ -109,7 +109,7 @@ std::string RANSWallEvolutionPatch::PimpleContactDiagnostic(const Vector &s,doub
         contacts.push_back(J::Object(values));
     }
     std::vector<std::string> profiles;
-    for(double x:{-3.,-1.,0.,1.,1.6})for(double z:{0.,.0025,.005,.01,.02,.05,.1,.25,.5,1.,2.,3.,4.,6.})if(z<=upper[2])
+    for(double x:ContinuationProfileAbscissae())for(double z:{0.,.0025,.005,.01,.02,.05,.1,.25,.5,1.,2.,3.,4.,6.})if(z<=upper[2])
     {
         const RANSWallCoordinate p{x,0,z};Vector values;
         for(int b=0;b<=K();++b)values.push_back(Point(b,p).Value(s,offset[b]));

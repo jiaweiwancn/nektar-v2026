@@ -146,7 +146,8 @@ public:
     // Scalar evaluation domain only: covariance and the restricted outer
     // physical box are separate accepted-stage gates.
     ScalarDomainResult ScalarDomain(const Vector &state,double time,
-        const RANSWallEvolutionData &data,bool retainLocations=false) const;
+        const RANSWallEvolutionData &data,bool retainLocations=false,bool kInventoryOnly=false,
+        const std::vector<RANSWallCoordinate> &additionalAnchors={}) const;
     static std::string ScalarDomainJSON(const ScalarDomainResult &domain,bool locations=false);
     Diagnostic CompleteRestrictedAudit(const Vector &state,const Vector &history,
         double alpha,double time,const RANSWallEvolutionData &data,bool rangesOnly=false) const;
@@ -177,6 +178,10 @@ public:
     const std::vector<std::string> &PimpleRecords() const { return m_pimpleRecords; }
     Diagnostic PhysicalSamples(const Vector &state,double time,const RANSWallEvolutionData &data) const;
     bool PimpleKBoundEnabled() const { return m_pimpleKBound!="Off"; }
+    static Vector ContinuationProfileAbscissae(){return {-3.,-1.,0.,1.,1.6};}
+    bool ConstitutiveKInventory() const { return PimpleKBoundEnabled() && m_pimpleKInventory=="ConstitutiveV2"; }
+    std::string CheckConstitutiveCoverage(const Vector &state,double time,
+        const RANSWallEvolutionData &data,const RANSWallCoordinate &unregistered) const;
     const std::string &PimpleKBoundMode() const { return m_pimpleKBound; }
     std::string PimpleKBoundSignature() const;
     struct KBoundResult
@@ -193,7 +198,7 @@ public:
         const RANSWallEvolutionData &data,const Vector &steps,
         const std::vector<RANSWallCoordinate> &witnesses,bool exportMass,bool isolate) const;
     KBoundResult ApplyPimpleKBound(const Vector &raw,const Vector &preK,double time,
-        const RANSWallEvolutionData &data) const;
+        const RANSWallEvolutionData &data,bool projectionOnly=false) const;
     bool SegregatedPicard() const { return m_nonlinearPolicy=="SegregatedPicard"; }
     Vector Norms(const Vector &residual,const std::map<int,double> &constraints,double ustar=.4) const;
     Vector StateNorms(const Vector &state,const Vector &reference,double ustar=.4) const;
@@ -358,6 +363,21 @@ private:
         bool strict=false;
     };
     void InitialiseScalarLocations() const;
+    std::vector<ScalarLocation> ReconstructionLocations(int block,bool complete) const;
+    std::vector<RANSWallCoordinate> ConstitutiveAnchors(const Vector &state,
+        const std::vector<RANSWallCoordinate> &additional) const;
+    std::vector<RANSWallGlobalPoint> NormalizationRows(const RANSWallCoordinate &anchor,
+        const SolverUtils::EquilibriumAWFProfiles &profile) const;
+    // A coverage tripwire in the final audit checks actual consumers, in
+    // addition to sharing their location generators with the projection.
+    struct CoverageScope
+    {
+        bool &flag,previous;
+        CoverageScope(bool &value,bool enable):flag(value),previous(value){flag=enable;}
+        ~CoverageScope(){flag=previous;}
+    };
+    mutable bool m_assertKCoverage=false;
+    mutable std::set<RANSWallCoordinate> m_coveredKLocations;
     Vector SolveScalarFeasible(Vector state,const Vector &history,double alpha,
         double time,const RANSWallEvolutionData &data,bool condensed,int &iterations,
         double tolerance,int maximumIterations,bool scalarOnly=false) const;
@@ -430,6 +450,7 @@ private:
     std::string m_temporalCoupling="ConvergedStage";
     bool m_pimpleVerify=false;
     std::string m_pimpleKBound="Off",m_pimpleSnapshotDirectory="pimple-states";
+    std::string m_pimpleKInventory="LegacyV1";
     double m_pimpleKFloorRelative=1e-8,m_pimpleBudgetTime=-1.;
     bool m_pimpleSnapshots=false;
     mutable int m_liftCalls=0,m_liftIterations=0;

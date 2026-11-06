@@ -33,6 +33,12 @@ double MinimumEigenvalue(RANSTensor a)
 RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s,const Vector &history,
     double alpha,double time,const RANSWallEvolutionData &data,double ustar,bool constitutiveReconstruction) const
 {
+    if(ConstitutiveKInventory() && !m_assertKCoverage)
+    {
+        const auto domain=ScalarDomain(s,time,data);
+        Require(domain.admissible,"audit outside ConstitutiveV2 inventory: "+domain.failure);
+    }
+    CoverageScope coverage(m_assertKCoverage,ConstitutiveKInventory());
     Diagnostic result;const double sentinel=std::numeric_limits<double>::max();
     Vector range{0,sentinel,-sentinel,sentinel,-sentinel,sentinel,-sentinel,0};
     Vector zeroInnerCovariance{0,sentinel,-sentinel};
@@ -120,30 +126,8 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
     // Include actual native GLL output/reconstruction locations and a denser
     // equispaced set, independently of source Gauss points. This remains a
     // finite sample, even when every sampled value is positive.
-    for(int e=0;e<fields[0]->Elements().size();++e)
-    {
-        const auto &el=fields[0]->Elements()[e];const auto exp=fields[0]->Field()->GetExp(e);
-        for(int kind=0;kind<2;++kind)
-        {
-            const int dense=2*el.degree+(constitutiveReconstruction && el.upper[2]<=m_parameters.geometry.height?7:3);
-            const std::array<int,3> counts{kind?dense:exp->GetNumPoints(0),
-                m_dimension==3?(kind?dense:exp->GetNumPoints(1)):1,
-                kind?dense:exp->GetNumPoints(m_dimension-1)};
-            for(int k=0;k<(m_dimension==3?counts[2]:1);++k)
-                for(int j=0;j<(m_dimension==3?counts[1]:counts[2]);++j)for(int i=0;i<counts[0];++i)
-            {
-                RANSWallCoordinate p{};const std::array<int,3> index{i,m_dimension==3?j:0,m_dimension==3?k:j};
-                for(int a=0;a<3;++a)if(m_dimension==3 || a!=1)
-                {
-                    const int nativeAxis=m_dimension==2 && a==2?1:a;
-                    const double x=kind?-1.+2.*index[a]/(counts[a]-1):exp->GetBasis(nativeAxis)->GetZ()[index[a]];
-                    p[a]=el.lower[a]+(x+1)*(el.upper[a]-el.lower[a])/2;
-                }
-                sample(kind?"reconstruction_dense":"reconstruction_native",Transform(fields[0]->ElementPoint(e,p)),
-                    el.upper[2]<=m_parameters.geometry.height,false,false);
-            }
-        }
-    }
+    for(const auto &p:ReconstructionLocations(0,constitutiveReconstruction))
+        sample(p.inventory,p.row,!p.strict,false,false);
     for(auto &[name,r]:result)
     {
         (void)name;for(int i:{0,5})m_comm->AllReduce(r[i],LibUtilities::ReduceSum);
