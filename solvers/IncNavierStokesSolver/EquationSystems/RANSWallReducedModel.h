@@ -95,6 +95,44 @@ RaySelection SelectSourceRay(double baseMerit, Evaluate evaluate)
     return result;
 }
 
+struct ModelDerivative
+{
+    bool available = false;
+    Vector coarse, fine;
+    double step = 0.;
+};
+
+// Surrogate differentiation only. Stay in the callback's evaluation domain,
+// and return both scales so the caller can reject an unresolved derivative.
+template <typename Evaluate>
+ModelDerivative DifferentiateModel(const Vector &at, const Vector &base,
+                                   int column, double step, Evaluate evaluate)
+{
+    if (column < 0 || column >= at.size() || base.empty() ||
+        !(step > 0.) || !std::isfinite(step))
+        throw std::logic_error("invalid nonlinear model derivative request");
+    for (int shrink=0;shrink<4;++shrink)
+        for (double sign : {1.,-1.})
+        {
+            const double h=sign*std::ldexp(step,-shrink);
+            auto a=at,b=at;
+            a[column]+=h; b[column]+=.5*h;
+            Vector coarse,fine;
+            if (!evaluate(a,coarse) || !evaluate(b,fine)) continue;
+            if (coarse.size()!=base.size() || fine.size()!=base.size())
+                throw std::logic_error("nonlinear model derivative output shape");
+            for (int j=0;j<base.size();++j)
+            {
+                coarse[j]=(coarse[j]-base[j])/h;
+                fine[j]=(fine[j]-base[j])/(.5*h);
+                if (!std::isfinite(coarse[j]) || !std::isfinite(fine[j]))
+                    throw std::logic_error("nonfinite nonlinear model derivative");
+            }
+            return {true,std::move(coarse),std::move(fine),h};
+        }
+    return {};
+}
+
 // Broyden update in the actual field metric. This is a finite-step response
 // model, not a claim of an exact Jacobian. The caller must still evaluate its
 // nonlinear trial. Leave changes below the declared signal scale untouched.

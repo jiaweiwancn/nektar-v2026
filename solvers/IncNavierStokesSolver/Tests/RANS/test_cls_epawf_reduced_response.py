@@ -122,6 +122,19 @@ def check(directory):
                 r["actual_displacement"] <= r["radius"]*(1+1e-12)
                 for r in source_predictions),
             "a source-ray actual trial lacked controlled H or exceeded its radius")
+    refinements = [r for r in records if r["event"] == "source_direction_refinement"]
+    require(all(r["dimension"] == r["available_derivatives"] and r["two_scale_error"] <= .03 and
+                r["predicted_norm"] < r["before_norm"] and r["original_merit_slope"] < 0.
+                for r in refinements if r["improved"]),
+            "a source-model direction used inaccurate derivatives or lacks predicted descent")
+    refined_directions = [r for r in records if r["event"] == "source_refined_direction"]
+    require(all(r["displacement"] <= r["radius"]*(1+1e-12) and r["original_merit_slope"] < 0.
+                for r in refined_directions), "source refinement violates its bound or true linear descent")
+    refined_checks = [r for r in records if r["event"] == "source_refined_direction_check"]
+    require(all(r["attained"] <= r["required"] and r["half_attained"] <= r["required"] and
+                r["half_relative_residual_error"] <= .03
+                for r in refined_checks if r["available"]),
+            "source-refined direction does not match the independent local reduced action")
     if report["steps"] == 0:
         startup = load(directory / "startup/case.evolution.json")
         require(state_hash(report["state"]) == H0 and report["time"] == 0 and
@@ -134,7 +147,9 @@ def check(directory):
                   action_checks=checks, directions=directions,
                   trials=trials, combined_direction_checks=combined,
                   second_order_corrections=corrections, constraint_response_secants=secants,
-                  source_ray_selections=source_selections, source_ray_predictions=source_predictions)
+                  source_ray_selections=source_selections, source_ray_predictions=source_predictions,
+                  source_direction_refinements=refinements, source_refined_directions=refined_directions,
+                  source_refined_direction_checks=refined_checks)
     write_json(directory / "reduced-checks.json", result)
 
 

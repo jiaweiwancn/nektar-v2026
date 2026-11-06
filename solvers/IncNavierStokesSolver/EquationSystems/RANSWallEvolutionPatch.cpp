@@ -301,6 +301,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         session->LoadParameter("RANSWallReducedMaximumBasis",m_reducedMaximumBasis,32);
         session->LoadParameter("RANSWallReducedHUpdates",m_reducedHUpdates,50);
         session->LoadParameter("RANSWallReducedKrylov",m_reducedKrylov,0);
+        session->LoadParameter("RANSWallReducedSourceRefinements",m_reducedSourceRefinements,0);
         session->LoadParameter("RANSWallReducedRadius",m_reducedRadius,.05);
         session->LoadParameter("RANSWallReducedStep",m_reducedStep,2e-5);
         session->LoadParameter("RANSWallReducedHTolerance",m_reducedHTolerance,2e-9);
@@ -308,6 +309,8 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         Require(m_reducedBasis>=4 && m_reducedBasis<=m_reducedMaximumBasis &&
                 m_reducedMaximumBasis>=4 && m_reducedMaximumBasis<=160 && m_reducedHUpdates>=0 &&
                 m_reducedKrylov>=0 && m_reducedKrylov<=16 &&
+                m_reducedSourceRefinements>=0 && m_reducedSourceRefinements<=3 &&
+                (!m_reducedSourceRefinements || m_reducedSourceRay) &&
                 m_reducedRadius>0. && m_reducedRadius<=1. &&
                 m_reducedStep>0. && m_reducedStep<.01 && m_reducedHTolerance>0. &&
                 std::isfinite(m_reducedHTolerance) &&

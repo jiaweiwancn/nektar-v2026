@@ -145,6 +145,17 @@ int main(int argc, char **argv)
     Check(ray.invalid==1,"invalid surrogate state was not distinguished");
     ray=R::SelectSourceRay(1.,[](double f,double &value) { value=1.+f; return true; });
     Check(ray.fraction==0.,"nondecreasing surrogate replaced the control");
+    auto derivative=R::DifferentiateModel(R::Vector{.125},R::Vector{.9375},0,1e-4,
+        [](const R::Vector &z,R::Vector &value) {
+            if (z[0]>.125) return false; // Only the inward one-sided branch is defined.
+            value={1.-z[0]+4.*z[0]*z[0]}; return true;
+        });
+    Check(derivative.available && derivative.step<0.,"model derivative left its domain");
+    Check(std::abs(derivative.coarse[0]+.0004)<1e-10 &&
+          std::abs(derivative.fine[0]+.0002)<1e-10,"two-scale model derivative is incorrect");
+    derivative=R::DifferentiateModel(R::Vector{0.},R::Vector{1.},0,1e-4,
+        [](const R::Vector &,R::Vector &) { return false; });
+    Check(!derivative.available,"undefined model derivative silently accepted");
     // A full scan must discover the sum constraint and then ground contact.
     r = Solve({{1.,0.},{0.,1.}}, {-2.,-4.},
               {{{-1.,0.},0.}, {{0.,1.},10.}, {{1.,1.},1.}}, {0.,0.});

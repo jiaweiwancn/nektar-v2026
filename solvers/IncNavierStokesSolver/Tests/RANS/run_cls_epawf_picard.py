@@ -78,6 +78,7 @@ def prepare(args):
                                    "HTolerance": args.reduced_h_tolerance,
                                    "HUpdates": args.reduced_h_updates,
                                    "Krylov": getattr(args, "reduced_krylov", 0),
+                                   "SourceRefinements": getattr(args, "reduced_source_refinements", 0),
                                    "Step": args.reduced_step,
                                    "RestorationWeight": getattr(args, "reduced_restoration_weight", 1.)}.items():
                     set_parameter(root, "RANSWallReduced"+key, value)
@@ -160,6 +161,8 @@ def main():
                         help="Enlarge or refresh the response seeds after slow qualified progress")
     parser.add_argument("--reduced-source-ray", action="store_true",
                         help="Select reduced step lengths using nonlinear destruction on affine field responses")
+    parser.add_argument("--reduced-source-refinements", type=int, default=0,
+                        help="Up to three constrained nonlinear destruction model direction refinements")
     parser.add_argument("--reduced-basis", type=int, default=10)
     parser.add_argument("--reduced-maximum-basis", type=int, default=32,
                         help="Adaptive response-space ceiling (up to 160; 32 retains earlier controls)")
@@ -196,6 +199,9 @@ def main():
             "--reduced-constraint-secant requires --reduced-second-order")
     require(not args.reduced_adaptive_space or args.reduced, "--reduced-adaptive-space requires --reduced")
     require(not args.reduced_source_ray or args.reduced, "--reduced-source-ray requires --reduced")
+    require(0 <= args.reduced_source_refinements <= 3 and
+            (not args.reduced_source_refinements or args.reduced_source_ray),
+            "source refinements require --reduced-source-ray and a budget from zero to three")
     require(not args.equilibrate_after_k or args.k_newton, "--equilibrate-after-k requires --k-newton")
     require(not args.guess_file or args.steps == 1, "a saved guess binds exactly one stage")
     require(not args.guess_file or args.perturbation == 0, "run saved-guess and perturbation diagnostics separately")

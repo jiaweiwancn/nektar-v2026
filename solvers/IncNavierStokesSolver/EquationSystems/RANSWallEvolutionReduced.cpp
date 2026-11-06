@@ -433,6 +433,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         {"constraint_response_secants", J::Boolean(m_reducedConstraintSecant)},
         {"adaptive_qualified_response_space", J::Boolean(m_reducedAdaptiveSpace)},
         {"nonlinear_destruction_ray", J::Boolean(m_reducedSourceRay)},
+        {"nonlinear_destruction_refinements", J::Number(m_reducedSourceRefinements)},
         {"qualification_correction_budget", J::Number(m_reducedConstraintSecant ? 6 : 3)},
         {"continuation_algebraic_diagnostic", J::Boolean(continuationDiagnostic)},
         {"qualification_policy", J::Quote(continuationDiagnostic
@@ -1664,10 +1665,22 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                         slope < -1e-8 * base.merit * base.merit)
                      : slope < -1e-8 * base.merit * base.merit))
         {
-            Vector fractions;
+            struct Proposal { Vector coefficients; double fraction; std::string origin; };
+            std::vector<Proposal> proposals;
+            auto addProposal=[&](const Vector &z,double f,const std::string &origin) {
+                if (!(f>0. && f<=1.)) return;
+                auto scaled=z;
+                for (double &x:scaled) x*=f;
+                for (const auto &old:proposals)
+                {
+                    auto difference=scaled;
+                    for (int i=0;i<n;++i) difference[i]-=old.coefficients[i];
+                    if (Length(difference)<1e-14) return;
+                }
+                proposals.push_back({std::move(scaled),f,origin});
+            };
             auto addFraction=[&](double f) {
-                if (f>0. && f<=1. && std::none_of(fractions.begin(),fractions.end(),
-                    [&](double old) { return std::abs(old-f)<1e-14; })) fractions.push_back(f);
+                addProposal(solution,f,"linear_reduced_direction");
             };
             if (m_reducedSourceRay && !restore && base.merit>1e-6)
             {
@@ -1686,25 +1699,168 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                     {"evaluations",J::Number(choice.evaluations)}, {"invalid",J::Number(choice.invalid)},
                     {"samples",J::List(samples)},
                     {"scope",J::Quote("surrogate only: nonlinear destruction on affine converged-field responses; actual trials solve H")}});
+                if (choice.fraction>0. && m_reducedSourceRefinements)
+                {
+                    Vector z(n),model;
+                    for (int i=0;i<n;++i) z[i]=choice.fraction*solution[i];
+                    auto objective=[&](const Vector &q,const Vector &r) {
+                        auto coefficients=q;
+                        const auto field=RANSWallReduced::BoundCorrection(coefficients,kColumns,
+                            std::numeric_limits<double>::max());
+                        return dualNorm(r)*dualNorm(r)+1e-3*Dot(field,field)+1e-10*Dot(q,q);
+                    };
+                    bool changed=false;
+                    for (int refinement=0;refinement<m_reducedSourceRefinements;++refinement)
+                    {
+                        if (!sourceModel(z,model)) break;
+                        WallMatrix derivative(n), nextH(n,Vector(n));
+                        double error=0.;
+                        int available=0;
+                        for (int i=0;i<n;++i)
+                        {
+                            auto d=RANSWallReduced::DifferentiateModel(z,model,i,2e-5,sourceModel);
+                            if (!d.available) break;
+                            auto difference=d.coarse;
+                            for (int j=0;j<dimension;++j) difference[j]-=d.fine[j];
+                            error=std::max(error,dualNorm(difference)/std::max(1.,dualNorm(d.fine)));
+                            derivative[i]=std::move(d.fine);
+                            ++available;
+                        }
+                        if (available!=n || error>.03)
+                        {
+                            emit("source_direction_refinement", {{"refinement",J::Number(refinement)},
+                                {"improved","false"},{"failure",J::Quote("unresolved surrogate derivative")},
+                                {"available_derivatives",J::Number(available)},
+                                {"dimension",J::Number(n)},{"two_scale_error",J::Number(error)}});
+                            break;
+                        }
+                        auto constant=model;
+                        for (int i=0;i<n;++i)
+                            for (int j=0;j<dimension;++j) constant[j]-=z[i]*derivative[i][j];
+                        const auto dualConstant=mass.Apply(constant);
+                        Vector nextG(n);
+                        for (int i=0;i<n;++i)
+                        {
+                            const auto dual=mass.Apply(derivative[i]);
+                            nextG[i]=Dot(derivative[i],dualConstant)/(residualScale*residualScale);
+                            for (int j=0;j<n;++j)
+                                nextH[i][j]=Dot(derivative[j],dual)/(residualScale*residualScale)
+                                    +1e-3*gram[i][j]+(i==j?1e-10:0.);
+                        }
+                        RANSWallReduced::RadiusResult refined;
+                        try
+                        {
+                            refined=RANSWallReduced::SolveRadiusQuadratic<Factor>(
+                                nextH,nextG,cuts,z,kColumns,radius,500);
+                        }
+                        catch (const std::runtime_error &e)
+                        {
+                            emit("source_direction_refinement", {{"refinement",J::Number(refinement)},
+                                {"improved","false"},{"failure",J::Quote(e.what())}});
+                            break;
+                        }
+                        bool improved=false;
+                        double chosenFraction=0.,chosenNorm=dualNorm(model),originalSlope=0.;
+                        Vector next=z;
+                        if (refined.quadratic.solved)
+                            for (double f:{1.,.5,.25,.125,.0625,.03125,.015625})
+                            {
+                                auto q=z;
+                                for (int i=0;i<n;++i) q[i]+=f*(refined.quadratic.solution[i]-z[i]);
+                                const auto field=RANSWallReduced::BoundCorrection(q,kColumns,
+                                    std::numeric_limits<double>::max());
+                                if (Length(field)>radius*(1.+1e-12) ||
+                                    std::any_of(cuts.begin(),cuts.end(),[&](const Cut &c) {
+                                        return Dot(c.a,q)>c.b+1e-8; })) continue;
+                                const double trueSlope=Dot(originalMeritGradient,q);
+                                if (trueSlope>=-1e-8*base.merit*base.merit) continue;
+                                Vector value;
+                                if (!sourceModel(q,value)) continue;
+                                if (objective(q,value)>=objective(z,model)*(1.-1e-6*f)) continue;
+                                next=std::move(q); chosenFraction=f; chosenNorm=dualNorm(value);
+                                originalSlope=trueSlope; improved=true; break;
+                            }
+                        emit("source_direction_refinement", {{"refinement",J::Number(refinement)},
+                            {"improved",J::Boolean(improved)},
+                            {"failure",J::Quote(refined.quadratic.failure)},
+                            {"dimension",J::Number(n)},{"available_derivatives",J::Number(available)},
+                            {"two_scale_error",J::Number(error)},
+                            {"before_norm",J::Number(dualNorm(model))},
+                            {"predicted_norm",J::Number(chosenNorm)},
+                            {"fraction",J::Number(chosenFraction)},
+                            {"original_merit_slope",J::Number(originalSlope)},
+                            {"radius",J::Number(radius)},
+                            {"scope",J::Quote("constrained nonlinear destruction surrogate in measured response space; not Y(k)")}});
+                        if (!improved) break;
+                        z=std::move(next); changed=true;
+                    }
+                    if (changed)
+                    {
+                        auto q=z;
+                        const auto field=RANSWallReduced::BoundCorrection(q,kColumns,
+                            std::numeric_limits<double>::max());
+                        emit("source_refined_direction", {{"displacement",J::Number(Length(field))},
+                            {"radius",J::Number(radius)},
+                            {"original_merit_slope",J::Number(Dot(originalMeritGradient,z))},
+                            {"coefficients",J::Numbers(z)},
+                            {"source_model_evaluations",J::Number(sourceModelEvaluations)}});
+                        if (m_reducedVerify)
+                        {
+                            const double f=std::min(1e-3,m_reducedStep/Length(field));
+                            auto guess=state;
+                            Apply(guess,rows,field,kScale*f);
+                            auto coarse=evaluate(guess,innerTolerance,m_reducedHUpdates,"source_refined_direction");
+                            guess=state;
+                            Apply(guess,rows,field,kScale*f*.5);
+                            auto fine=evaluate(guess,innerTolerance,m_reducedHUpdates,"half_source_refined_direction");
+                            if (coarse.valid && fine.valid)
+                            {
+                                auto difference=fine.r;
+                                Vector action(dimension);
+                                for (int i=0;i<n;++i)
+                                    for (int j=0;j<dimension;++j) action[j]+=z[i]*columns[i].r[j];
+                                for (int j=0;j<dimension;++j)
+                                    difference[j]=(difference[j]-base.r[j])/(.5*f)-action[j];
+                                emit("source_refined_direction_check", {{"available","true"},
+                                    {"required",J::Number(innerTolerance)},
+                                    {"attained",J::Number(coarse.response.error)},
+                                    {"half_attained",J::Number(fine.response.error)},
+                                    {"half_relative_residual_error",J::Number(dualNorm(difference)/std::max(1.,dualNorm(action)))},
+                                    {"predicted_merit_slope",J::Number(Dot(originalMeritGradient,z))},
+                                    {"actual_merit_slope",J::Number((coarse.merit*coarse.merit-base.merit*base.merit)/(2.*f))},
+                                    {"half_merit_slope",J::Number((fine.merit*fine.merit-base.merit*base.merit)/f)}});
+                            }
+                            else emit("source_refined_direction_check",{{"available","false"}});
+                        }
+                        for (double f:{1.,.5,.25}) addProposal(z,f,"nonlinear_source_refined_direction");
+                    }
+                }
                 if (choice.fraction>0.)
                     for (double f:{choice.fraction,.5*choice.fraction,.25*choice.fraction}) addFraction(f);
             }
             for (double f:{1.,.5,.25,.125,.0625,.03125,.015625,.0078125,.00390625}) addFraction(f);
-            for (double fraction : fractions)
+            int proposalIndex=0;
+            for (const auto &proposal : proposals)
             {
+                ++proposalIndex;
+                const double fraction=proposal.fraction;
+                auto trialCoefficients=proposal.coefficients;
+                auto trialDisplacement=RANSWallReduced::BoundCorrection(trialCoefficients,kColumns,
+                    std::numeric_limits<double>::max());
+                if (proposal.origin=="linear_reduced_direction")
+                {
+                    // Preserve the established control's floating-point path.
+                    trialDisplacement=displacement;
+                    for (double &x:trialDisplacement) x*=fraction;
+                }
                 auto guess = state;
-                Apply(guess, rows, displacement, kScale * fraction);
+                Apply(guess, rows, trialDisplacement, kScale);
                 if (!admissible(guess))
                     continue;
                 auto trial = evaluate(guess, innerTolerance, m_reducedHUpdates,
                                       "reduced_trial");
                 if (!trial.valid)
                     continue;
-                Vector trialCoefficients(n);
-                for (int i = 0; i < n; ++i)
-                    trialCoefficients[i] = fraction * solution[i];
-                Vector trialDisplacement = displacement;
-                for (double &x : trialDisplacement) x *= fraction;
                 const double originalTrialLength = Length(trialDisplacement);
                 int usedCorrections = 0;
                 WallMatrix correctionState, correctionTrace;
@@ -1991,6 +2147,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 }
                 emit("trial",
                      {{"fraction", J::Number(fraction)},
+                      {"proposal_origin",J::Quote(proposal.origin)},
                       {"accepted", J::Boolean(take)},
                       {"norm", J::Number(trial.merit)},
                       {"full_norm", J::Number(Maximum(trial.response.norms))},
@@ -2010,7 +2167,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 {
                     const std::string file = "reduced-evaluated-" + stageTag + "-" +
                         std::to_string(iterations) + "-" + std::to_string(failedModels) +
-                        "-f" + J::Number(fraction) + ".json";
+                        "-p" + std::to_string(proposalIndex) + "-f" + J::Number(fraction) + ".json";
                     std::ofstream out(file);
                     out << J::Object({{"status",J::Quote("nonlinear_trial_only")},
                         {"state",J::Numbers(trial.response.state)},
@@ -2020,6 +2177,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                     out.close();
                     Require(out.good(),"failed to save evaluated reduced trial");
                     emit("evaluated_trial_packet", {{"path",J::Quote(file)},
+                        {"proposal_origin",J::Quote(proposal.origin)},
                         {"fraction",J::Number(fraction)}, {"accepted",J::Boolean(take)}});
                 }
                 if (!take)
