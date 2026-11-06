@@ -175,6 +175,8 @@ std::string RANSWallEvolutionPatch::PimpleContactDiagnostic(const Vector &s,doub
         {"field_L2_norms_u_v_k_epsilon_pinner_pouter",J::Numbers(fieldNorms)},{"field_integrals",J::Numbers(fieldIntegrals)},
         {"bulk_u",J::Number(fieldIntegrals[0]/volume)},{"flow_through_time",J::Number((upper[0]-lower[0])*volume/fieldIntegrals[0])},
         {"H_over_ustar",J::Number(m_parameters.geometry.height/m_robustUstar)},{"profiles",J::List(profiles)},
+        {"scales_U_K_E_H_L_volume",J::Numbers(Vector{m_robustUstar,m_parameters.model.Q()*m_robustUstar*m_robustUstar,
+            std::pow(m_robustUstar,3)/(m_parameters.model.Kappa()*m_parameters.geometry.height),m_parameters.geometry.height,upper[0]-lower[0],volume})},
         {"wall_stress",J::Numbers(sample.at("wall_stress"))},{"wall_B",J::Numbers(sample.at("wall_B"))},{"wall_lambda",J::Numbers(sample.at("wall_lambda"))},
         {"maximum_sampled_destruction_rate",J::Number(maximumRate)},{"spatial_rate_mass_norm",J::Number(allNorm(rate.rate))},
         {"mass_solve_residual",J::Number(Maximum(rate.freeMassResidual))},{"native_frozen_load_agreement",J::Number(agreement)},

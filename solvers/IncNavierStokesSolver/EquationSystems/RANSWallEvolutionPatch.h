@@ -254,6 +254,7 @@ public:
     double WallDissipation(const Vector &state,const RANSWallCoordinate &point,
         const SolverUtils::EquilibriumAWFProfiles &profile) const;
     std::string Signature() const;
+    const std::string &ConstitutiveFailureContext() const { return m_solveInvalidContext; }
 private:
     class Factor
     {

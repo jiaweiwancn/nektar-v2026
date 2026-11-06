@@ -186,6 +186,14 @@ int main(int argc,char **argv)
         const bool historyMatch=std::memcmp(history.data(),reference.data(),history.size()*sizeof(double))==0;
         Require(!packet.get<bool>("require_history_h0",true) || historyMatch,"packet history differs from rebuilt native h0");
         const double time=packet.get<double>("time"),alpha=packet.get<double>("alpha");
+        if(packet.get<std::string>("operation","")=="audit_witness")
+        {
+            std::string failure;try{patch.CompleteRestrictedAudit(state,history,alpha,time,data);}
+            catch(const std::exception &e){failure=e.what();}
+            std::ofstream out(argv[3]);out<<J::Object({{"operation",J::Quote("audit_witness")},
+                {"failure",J::Quote(failure)},{"context",patch.ConstitutiveFailureContext().empty()?"null":patch.ConstitutiveFailureContext()},
+                {"governing_solves","0"}})<<'\n';Require(out.good(),"audit witness write failed");world->Finalise();return 0;
+        }
         if(packet.get<std::string>("operation","")=="contact")
         {
             Vector steps=packet.get_child_optional("h")?Read(packet,"h"):Vector{};
