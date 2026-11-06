@@ -556,6 +556,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
     double innerTolerance = m_reducedHTolerance;
     emit("protocol", {{"physical_history_sha256", J::Quote(RANSWallR3::Hash(history))},
         {"radius_scaling", J::Quote("Euclidean norm of free k coefficient displacement divided by reference K")},
+        {"maximum_radius", J::Number(m_reducedMaximumRadius)},
         {"response_method", J::Quote("one-sided differences of converged sequential non-k solves")},
         {"half_response_warm_start", J::Quote("interpolate converged non-k coefficients; preserve exact requested k")},
         {"response_field_preconditioner_reuse",J::Boolean(m_reducedResponseCache)},
@@ -2428,14 +2429,14 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                     const double ratio = predictedGain > 0. ? actualGain/predictedGain : 0.;
                     if (ratio < .25) radius *= .5;
                     else if (ratio > .75 && Length(previous) > .8*radius)
-                        radius = std::min(1.,1.8*radius);
+                        radius = std::min(m_reducedMaximumRadius,1.8*radius);
                     emit("radius_agreement", {{"actual_to_predicted_gain", J::Number(ratio)},
                         {"prediction_model",J::Quote(sourceAvailable ? "nonlinear_destruction_surrogate" : "original_linear_reduced")},
                         {"source_model_evaluations",J::Number(sourceModelEvaluations)},
                         {"next_radius", J::Number(radius)}});
                 }
                 else
-                    radius = std::min(1.,
+                    radius = std::min(m_reducedMaximumRadius,
                                       radius * (fraction == 1. && agreement ? 1.8 : .6));
                 ++iterations;
                 failedModels = 0;

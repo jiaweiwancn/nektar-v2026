@@ -313,6 +313,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         session->LoadParameter("RANSWallReducedKrylov",m_reducedKrylov,0);
         session->LoadParameter("RANSWallReducedSourceRefinements",m_reducedSourceRefinements,0);
         session->LoadParameter("RANSWallReducedRadius",m_reducedRadius,.05);
+        session->LoadParameter("RANSWallReducedMaximumRadius",m_reducedMaximumRadius,1.);
         session->LoadParameter("RANSWallReducedStep",m_reducedStep,2e-5);
         session->LoadParameter("RANSWallReducedHTolerance",m_reducedHTolerance,2e-9);
         session->LoadParameter("RANSWallReducedRestorationWeight",m_reducedRestorationWeight,1.);
@@ -328,7 +329,8 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
                 m_reducedSourceRefinements>=0 && m_reducedSourceRefinements<=3 &&
                 (!m_reducedSourceRefinements || m_reducedSourceRay) &&
                 (!m_reducedInteriorSourceAnchor || m_reducedSourceRefinements>0) &&
-                m_reducedRadius>0. && m_reducedRadius<=1. &&
+                m_reducedRadius>0. && std::isfinite(m_reducedMaximumRadius) &&
+                m_reducedRadius<=m_reducedMaximumRadius &&
                 m_reducedStep>0. && m_reducedStep<.01 && m_reducedHTolerance>0. &&
                 std::isfinite(m_reducedHTolerance) &&
                 std::isfinite(m_reducedRestorationWeight) && m_reducedRestorationWeight>=0. &&

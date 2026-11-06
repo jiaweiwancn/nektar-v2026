@@ -322,6 +322,16 @@ int main(int argc, char **argv)
     Check(interiorBall.quadratic.solved && interiorBall.multiplier == 0. && interiorBall.solves == 1,
           "unnecessary radius penalty changed an interior model");
     Close(interiorBall.quadratic.solution[0],.1);
+    // A radius larger than one remains a bound on the field displacement.
+    // The identity model's exact constrained minimizer is (2.5,0).
+    const auto largeBall = R::SolveRadiusQuadratic<Factor>(
+        R::Matrix{{1.,0.},{0.,1.}}, R::Vector{-4.,0.}, std::vector<Cut>{},
+        R::Vector(2), R::Matrix{{1.,0.},{0.,1.}}, 2.5);
+    Check(largeBall.quadratic.solved && largeBall.multiplier > 0. &&
+          largeBall.norm <= 2.5 && largeBall.norm >= 2.4975 &&
+          std::abs(largeBall.quadratic.solution[0]-2.5) <= .0025,
+          "large field radius lost its known constrained minimizer");
+    Close(largeBall.quadratic.solution[1],0.);
     const auto obliqueBall = R::SolveRadiusQuadratic<Factor>(
         R::Matrix{{1.,0.},{0.,1.}}, R::Vector{-3.,-4.}, std::vector<Cut>{},
         R::Vector(2), R::Matrix{{1.,0.},{1.,1.}}, .2);

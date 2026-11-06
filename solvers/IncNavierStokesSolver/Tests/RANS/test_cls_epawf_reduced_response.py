@@ -65,6 +65,13 @@ def check(directory):
             "no nonzero constrained model direction was solved")
     require(all(d["displacement"] <= d["radius"]*(1+1e-12) for d in directions),
             "final correction exceeds its radius")
+    maximum_radius = protocol.get("maximum_radius", 1.)
+    require(0 < maximum_radius < float("inf") and
+            all(0 < d["radius"] <= maximum_radius*(1+1e-12) for d in directions),
+            "a direction exceeds the configured maximum field radius")
+    require(all(0 < r["next_radius"] <= maximum_radius*(1+1e-12)
+                for r in records if r["event"] == "radius_agreement"),
+            "radius adaptation exceeds its configured cap")
     require(all(d["orthogonal_probes"] <= d["basis_dimension"] and
                 (d["orthogonal_probes"] != d["basis_dimension"] or
                  d["maximum_column_correlation"] < 1e-10)

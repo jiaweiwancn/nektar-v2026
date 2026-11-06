@@ -423,7 +423,8 @@ private:
     int m_reducedSourceRefinements=0;
     bool m_reducedResponseCache=false;
     bool m_reducedInteriorSourceAnchor=false;
-    double m_reducedRadius=.05,m_reducedStep=2e-5,m_reducedHTolerance=2e-9;
+    double m_reducedRadius=.05,m_reducedMaximumRadius=1.;
+    double m_reducedStep=2e-5,m_reducedHTolerance=2e-9;
     double m_reducedRestorationWeight=1.;
     bool m_picardEquilibrateK=false;
     double m_picardKRadius=.15;

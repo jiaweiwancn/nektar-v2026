@@ -5,6 +5,7 @@
 import argparse
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import platform
@@ -76,6 +77,7 @@ def prepare(args):
                 set_info(root, "RANSWallReducedResponseCache", "On" if getattr(args, "reduced_response_cache", False) else "Off")
                 set_info(root, "RANSWallReducedInteriorSourceAnchor", "On" if getattr(args, "reduced_interior_source_anchor", False) else "Off")
                 for key, value in {"Basis": args.reduced_basis, "Radius": args.reduced_radius,
+                                   "MaximumRadius": getattr(args, "reduced_maximum_radius", 1.),
                                    "MaximumBasis": getattr(args, "reduced_maximum_basis", 32),
                                    "HTolerance": args.reduced_h_tolerance,
                                    "HUpdates": args.reduced_h_updates,
@@ -175,6 +177,8 @@ def main():
     parser.add_argument("--reduced-krylov", type=int, default=0,
                         help="Preconditioned true-response enrichment seeds (0 to 128, within the basis budget)")
     parser.add_argument("--reduced-radius", type=float, default=.05)
+    parser.add_argument("--reduced-maximum-radius", type=float, default=1.,
+                        help="Cap on the actual scaled k displacement radius; default retains the original control")
     parser.add_argument("--reduced-h-tolerance", type=float, default=2e-9)
     parser.add_argument("--reduced-h-updates", type=int, default=50)
     parser.add_argument("--reduced-step", type=float, default=2e-5)
@@ -206,6 +210,9 @@ def main():
     require(not args.reduced_adaptive_space or args.reduced, "--reduced-adaptive-space requires --reduced")
     require(not args.reduced_source_ray or args.reduced, "--reduced-source-ray requires --reduced")
     require(not args.reduced_response_cache or args.reduced, "--reduced-response-cache requires --reduced")
+    require(math.isfinite(args.reduced_maximum_radius) and
+            0 < args.reduced_radius <= args.reduced_maximum_radius,
+            "reduced radii must be finite, positive and ordered")
     require(0 <= args.reduced_krylov <= 128, "reduced Krylov budget must be between 0 and 128")
     require(0 <= args.reduced_source_refinements <= 3 and
             (not args.reduced_source_refinements or args.reduced_source_ray),
