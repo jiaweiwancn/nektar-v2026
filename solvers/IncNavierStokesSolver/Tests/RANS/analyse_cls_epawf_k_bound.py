@@ -116,16 +116,17 @@ def main():
         idx = next(i for i, t in enumerate(report['audit_times']) if abs(t-time) < 1e-13)
         row = next(v for v in report['pimple_attempts'] if abs(v['time']-time) < 1e-13)
         packet = load(Path(row['k_snapshot'])); state = report['accepted_states'][idx]
+        actual_time = packet['time']
         require(state_hash(state) == state_hash(packet['corrected']), 'snapshot is not accepted prefix')
         folder = a.output/(name+'-t'+str(time)); folder.mkdir()
         shutil.copy2(a.experiments/name/'case.xml', folder/'case.xml')
         write_json(folder/'input.json', dict(operation='samples', state=state, history=packet['history'],
-            alpha=packet['alpha'], time=time, require_history_h0=False, inner_stress_model='SaturatedR2'))
+            alpha=packet['alpha'], time=actual_time, require_history_h0=False, inner_stress_model='SaturatedR2'))
         receipt = run([str(a.probe), 'case.xml', 'input.json', 'result.json'], folder, 'probe.log', 900)
         require(receipt['exit_code'] == 0, 'physical prefix replay failed')
         result = load(folder/'result.json'); result['initial'] = report['initial']
-        short = dict(report, time=time, steps=idx, state_audits=report['state_audits'][:idx+1],
-                     pimple_attempts=[v for v in report['pimple_attempts'] if v['time'] <= time])
+        short = dict(report, time=actual_time, steps=idx, state_audits=report['state_audits'][:idx+1],
+                     pimple_attempts=[v for v in report['pimple_attempts'] if v['time'] <= actual_time+1e-13])
         description = describe(short); description['ground_minimum'] = row['k_ground']['minimum']
         description['bound_integral'] = sum(v.get('k_bound', {}).get('integral_total', 0.) for v in short['pimple_attempts'])
         description['activations'] = sum(v.get('bound_activations', 0) for v in short['pimple_attempts'])
