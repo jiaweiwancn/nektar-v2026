@@ -12,18 +12,25 @@ import subprocess
 import sys
 import time
 import os
-from continue_cls_epawf_pimple import CampaignLock,atomic,process_identity
+from continue_cls_epawf_pimple import CampaignLock,atomic,process_identity,load_progress
 from run_cls_epawf_picard import load,THREADS
 
 
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--campaign',type=Path,required=True);p.add_argument('--probe',type=Path,required=True)
-    p.add_argument('--output',type=Path,required=True);a=p.parse_args()
-    a.output=a.output.resolve();a.output.mkdir(parents=True,exist_ok=False)
+    p.add_argument('--output',type=Path,required=True);p.add_argument('--resume',action='store_true');a=p.parse_args()
+    a.output=a.output.resolve();a.output.mkdir(parents=True,exist_ok=a.resume)
     lock=CampaignLock(a.output);root=a.campaign.resolve()/'trajectory';done=set();receipts=[]
+    if a.resume:
+        previous=load_progress(a.output/'status.json');done=set(map(int,previous.get('completed_diagnostics',[])));receipts=previous.get('receipts',[])
+        for folder in a.output.glob('step-??????'):
+            if (folder/'summary.json').exists():done.add(int(folder.name.split('-')[-1]))
     while True:
-        progress=load(root/'progress.json');accepted=int(progress['accepted_steps'])
+        try:progress=load_progress(root/'progress.json')
+        except (FileNotFoundError,json.JSONDecodeError):
+            time.sleep(5);continue
+        accepted=int(progress['accepted_steps'])
         candidates=[v for v in range(32,accepted+1,32) if v not in done]
         terminal=progress['status'] in ('numerically_rejected','targets_completed')
         if terminal and accepted and accepted not in done:candidates.append(accepted)

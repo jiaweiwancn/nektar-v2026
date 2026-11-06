@@ -7,8 +7,9 @@ from pathlib import Path
 import subprocess
 import sys
 import tempfile
+from unittest.mock import patch
 
-from continue_cls_epawf_pimple import CampaignLock,StepLedger,process_identity,assert_native_stopped
+from continue_cls_epawf_pimple import CampaignLock,StepLedger,process_identity,assert_native_stopped,load_progress
 from run_cls_epawf_picard import require
 
 
@@ -59,8 +60,14 @@ def main():
         rejected=subprocess.run(command,capture_output=True,text=True,timeout=10)
         require(rejected.returncode and 'numerical rejection is terminal' in rejected.stderr,'ordinary resume retried numerical rejection')
         require(progress.read_bytes()==original,'terminal progress changed')
+        with patch('continue_cls_epawf_pimple.load',side_effect=[FileNotFoundError(),json.JSONDecodeError('partial','',0),dict(status='running')]):
+            require(load_progress(progress,3)['status']=='running','transient publication gap was not retried')
+        with patch('continue_cls_epawf_pimple.load',side_effect=FileNotFoundError()):
+            try:load_progress(progress,2)
+            except FileNotFoundError:pass
+            else:raise AssertionError('permanent progress absence was hidden')
     print(json.dumps(dict(simultaneous_resume_excluded=True,orphan_native_excluded=True,
-        native_identity_checked=True,idempotent_step_and_budget_recovery=True,partial_final_record_repaired=True,numerical_rejection_terminal=True)))
+        native_identity_checked=True,idempotent_step_and_budget_recovery=True,partial_final_record_repaired=True,numerical_rejection_terminal=True,transient_progress_gap_retried=True,permanent_progress_absence_explicit=True)))
 
 
 if __name__=='__main__':main()

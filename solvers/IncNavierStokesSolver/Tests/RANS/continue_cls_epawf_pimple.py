@@ -33,6 +33,19 @@ def atomic(path, value):
     os.replace(temporary, path)
 
 
+def load_progress(path,attempts=20):
+    """Bounded reader retry for observed progress-replacement visibility gaps.
+
+    A permanent absence/corruption remains an infrastructure error. Never
+    interpret a failed read as permission to launch a replacement process.
+    """
+    for attempt in range(attempts):
+        try:return load(path)
+        except (FileNotFoundError,json.JSONDecodeError):
+            if attempt==attempts-1:raise
+            time.sleep(.05)
+
+
 class CampaignLock:
     """The native child inherits the same flock: an orphan keeps ownership."""
     def __init__(self, output):

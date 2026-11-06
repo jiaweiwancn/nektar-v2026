@@ -11,7 +11,7 @@ import subprocess
 import time
 from run_cls_epawf_picard import load,write_json,require,sha,state_hash
 from run_cls_epawf_pimple import identity
-from continue_cls_epawf_pimple import header,process_identity
+from continue_cls_epawf_pimple import header,process_identity,load_progress
 from compare_cls_epawf_pimple import differences
 from analyse_cls_epawf_constitutive_v2 import read_report
 
@@ -51,7 +51,7 @@ def main():
     # history bytes. No signatures/history contents are edited or fabricated.
     progress_path=r/'campaign/trajectory/progress.json'
     for attempt in range(3):
-        progress=load(progress_path);source=Path(progress['checkpoint']);destination=a.output/f'checkpoint-{attempt}'
+        progress=load_progress(progress_path);source=Path(progress['checkpoint']);destination=a.output/f'checkpoint-{attempt}'
         try:
             shutil.copytree(source,destination);cp=header(destination,True)
             require(cp['sha256']==progress['checkpoint_sha256'] and cp['steps']==progress['accepted_steps'],'checkpoint moved during snapshot')
@@ -112,12 +112,14 @@ def main():
         else:os.environ['LD_LIBRARY_PATH']=diagnostic_path
     pinned=load(r/'campaign/trajectory/runtime/identity.json')['frozen']
     require(current_identity['sha256']==pinned['sha256'] and current_identity['libraries']==pinned['libraries'],'pinned runtime changed')
-    identities=dict(driver=process_identity(progress['pid']),supervisor=process_identity(load(r/'launch.json')['pid']),native=process_identity(progress['native_pid']),
+    supervisor_status=load_progress(r/'campaign/status.json')
+    supervisor_id=supervisor_status.get('supervisor_identity') or {}
+    identities=dict(driver=process_identity(progress['pid']),supervisor=process_identity(supervisor_id['pid']) if supervisor_id else None,native=process_identity(progress['native_pid']),
         monitor=process_identity(load(r/'monitor-launch.json')['pid']))
     evidence=dict(schema=1,base='0b86269739075af81622319402370967fdeffbe8',branch=git('branch','--show-current'),
         source_revision=git('rev-parse','HEAD'),source_status=git('status','--porcelain'),source_files_sha256=source_files,
         root=str(r),collected_unix=time.time(),production_launch=load(r/'launch.json'),monitor_launch=load(r/'monitor-launch.json'),
-        progress=progress,supervisor_status=load(r/'campaign/status.json'),monitor_status=load(r/'monitor/status.json'),process_identities=identities,
+        progress=progress,supervisor_status=load_progress(r/'campaign/status.json'),monitor_status=load_progress(r/'monitor/status.json'),process_identities=identities,
         runtime=load(r/'campaign/trajectory/runtime/identity.json'),runtime_identity_unchanged=True,
         production_kernel_revision=git('rev-parse','1c49c07'),probe=identity(r/'audit-probe/RANSWallResolutionProbe'),
         checkpoint=checkpoint,production_counts_at_checkpoint=counts,fixtures=fixtures,history_checks=histories,
