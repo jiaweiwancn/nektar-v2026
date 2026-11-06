@@ -1,0 +1,197 @@
+{
+  "status": "passed_source_anchor_direction_checks_not_m8_convergence",
+  "script_sha256": "1f96ca8871d542c48507f2552e1450067251a91dcca9ebb039fc84055ec1fc3b",
+  "run": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/source-anchor-enabled",
+  "used_anchors": [
+    {
+      "anchor": {
+        "refinement": 0.0,
+        "available": true,
+        "anchor_reductions": 1.0,
+        "attempts": 2.0,
+        "anchor_fraction": 0.5,
+        "available_derivatives": 96.0,
+        "dimension": 96.0,
+        "two_scale_error": 0.007177554743594824,
+        "model_evaluations": 201.0,
+        "model_evaluation_budget": 448.0,
+        "scope": "surrogate-only anchor; incumbent retained; actual trials converge H",
+        "event": "source_linearization_anchor",
+        "iteration": 0.0,
+        "alpha": 400.0,
+        "time": 0.0025,
+        "seconds": 1415.839817968
+      },
+      "refinement": {
+        "refinement": 0.0,
+        "improved": true,
+        "failure": "",
+        "dimension": 96.0,
+        "available_derivatives": 96.0,
+        "two_scale_error": 0.007177554743594824,
+        "augmented_face_solves": 553.0,
+        "augmented_face_fallbacks": 0.0,
+        "warm_face_solves": 17.0,
+        "warm_face_fallbacks": 0.0,
+        "ball_redundant_cuts": 159028.0,
+        "before_norm": 5.79796777115848,
+        "predicted_norm": 5.755898544697161,
+        "fraction": 0.0625,
+        "original_merit_slope": -20.791616423130503,
+        "radius": 0.4,
+        "scope": "constrained nonlinear destruction surrogate in measured response space; not Y(k)",
+        "event": "source_direction_refinement",
+        "iteration": 0.0,
+        "alpha": 400.0,
+        "time": 0.0025,
+        "seconds": 1421.931249764
+      },
+      "signed_actual_check": {
+        "available": true,
+        "required": 2e-09,
+        "attained": 7.868619049793998e-10,
+        "half_attained": 1.7982477941438253e-09,
+        "half_relative_residual_error": 0.0006944365636135653,
+        "predicted_merit_slope": -20.791616423130503,
+        "actual_merit_slope": -20.792999810809913,
+        "half_merit_slope": -20.779521493432814,
+        "event": "source_refined_direction_check",
+        "iteration": 0.0,
+        "alpha": 400.0,
+        "time": 0.0025,
+        "seconds": 1435.248982324
+      },
+      "actual_trial": {
+        "fraction": 1.0,
+        "proposal_origin": "nonlinear_source_refined_direction",
+        "accepted": true,
+        "norm": 5.742734530309229,
+        "full_norm": 5.742734530309229,
+        "violation": 0.0,
+        "families": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "predicted_norm": 5.355496017030825,
+        "model_error": 1.9914451238872402,
+        "predicted_violation": 0.002228202035029594,
+        "non_k_error": 1.7367847702963925e-09,
+        "second_order_corrections": 2.0,
+        "displacement": 0.3986921302963031,
+        "physical_k_displacement": 0.20353552726017893,
+        "event": "trial",
+        "iteration": 0.0,
+        "alpha": 400.0,
+        "time": 0.0025,
+        "seconds": 1535.025954494
+      }
+    },
+    {
+      "anchor": {
+        "refinement": 0.0,
+        "available": true,
+        "anchor_reductions": 1.0,
+        "attempts": 2.0,
+        "anchor_fraction": 0.5,
+        "available_derivatives": 96.0,
+        "dimension": 96.0,
+        "two_scale_error": 0.011948925927245545,
+        "model_evaluations": 201.0,
+        "model_evaluation_budget": 448.0,
+        "scope": "surrogate-only anchor; incumbent retained; actual trials converge H",
+        "event": "source_linearization_anchor",
+        "iteration": 1.0,
+        "alpha": 400.0,
+        "time": 0.0025,
+        "seconds": 2997.400944866
+      },
+      "refinement": {
+        "refinement": 0.0,
+        "improved": true,
+        "failure": "",
+        "dimension": 96.0,
+        "available_derivatives": 96.0,
+        "two_scale_error": 0.011948925927245545,
+        "augmented_face_solves": 459.0,
+        "augmented_face_fallbacks": 0.0,
+        "warm_face_solves": 17.0,
+        "warm_face_fallbacks": 0.0,
+        "ball_redundant_cuts": 140997.0,
+        "before_norm": 5.221047530672277,
+        "predicted_norm": 5.179094341991875,
+        "fraction": 0.125,
+        "original_merit_slope": -6.669472068712565,
+        "radius": 0.7200000000000001,
+        "scope": "constrained nonlinear destruction surrogate in measured response space; not Y(k)",
+        "event": "source_direction_refinement",
+        "iteration": 1.0,
+        "alpha": 400.0,
+        "time": 0.0025,
+        "seconds": 3004.914077769
+      },
+      "signed_actual_check": {
+        "available": true,
+        "required": 2e-09,
+        "attained": 1.6692992098598934e-09,
+        "half_attained": 8.348081359218054e-10,
+        "half_relative_residual_error": 0.00543428010276471,
+        "predicted_merit_slope": -6.669472068712565,
+        "actual_merit_slope": -6.6765642662223605,
+        "half_merit_slope": -6.676191515349471,
+        "event": "source_refined_direction_check",
+        "iteration": 1.0,
+        "alpha": 400.0,
+        "time": 0.0025,
+        "seconds": 3017.074280047
+      },
+      "actual_trial": {
+        "fraction": 1.0,
+        "proposal_origin": "nonlinear_source_refined_direction",
+        "accepted": true,
+        "norm": 5.201830400141313,
+        "full_norm": 5.201830400141313,
+        "violation": 0.0,
+        "families": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "predicted_norm": 5.042533495757184,
+        "model_error": 0.941775955311238,
+        "predicted_violation": 0.005645034211681143,
+        "non_k_error": 8.550161068662847e-10,
+        "second_order_corrections": 2.0,
+        "displacement": 0.7146460474205067,
+        "physical_k_displacement": 0.36483253370974406,
+        "event": "trial",
+        "iteration": 1.0,
+        "alpha": 400.0,
+        "time": 0.0025,
+        "seconds": 3121.621100981
+      }
+    }
+  ],
+  "matched_control": {
+    "run": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/source-anchor-control",
+    "identical_input_except_selector": true,
+    "identical_executable_and_libraries": true,
+    "prior_updates_bitwise_identical": true,
+    "residual_histories": {
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/source-anchor-enabled": [
+        5.742734530309229,
+        5.201830400141313
+      ],
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/source-anchor-control": [
+        5.77493728993443,
+        5.241850492167935
+      ]
+    },
+    "accepted_physical_steps": [
+      0.0,
+      0.0
+    ]
+  }
+}

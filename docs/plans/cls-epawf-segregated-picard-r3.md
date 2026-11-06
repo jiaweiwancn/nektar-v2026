@@ -20,6 +20,164 @@ metric at ground contact while its original k residual stayed nonzero. R3
 therefore scores the original reduced residual, not that projected-map defect.
 No full all-field Jacobian or hidden coupled direction solver was added.
 
+## Configurable measured radius growth (be04686)
+
+Several original-h0 models repeatedly hit the scaled k-displacement radius 1,
+with positive radius multipliers and unconstrained proposals between 5.55 and
+16.57. Eleven recorded updates have actual displacement above 0.8 and measured
+actual/predicted gain above 0.75, yet retain radius 1 because of the hard cap.
+These observations justify testing more growth; they do not establish that a
+larger step will be useful or that a qualifying root exists.
+[Measured cap-limited controls](cls-epawf-segregated-picard-r3-evidence/native/radius-cap-motivation.json).
+
+Commit `be04686bb3dac8987b517f380c8a60d075f7b940` adds
+`RANSWallReducedMaximumRadius` / `--reduced-maximum-radius`. Its default is 1,
+retaining the historical control. A larger configured cap allows the existing
+agreement test to grow the radius; poor agreement still shrinks it. The
+configured radius continues to bound the actual proposed correction, including
+constraint handling. Original residual, H accuracy, ground checks, complete
+qualification, model and physical history are unchanged.
+
+A Linux four-worker build passes in 125.52s, all six focused CTests pass in
+43.40s with concurrency 1, and the changed standalone model test passes
+ASan/UBSan in 9.42s (23.83s compiler invocation). A new identity-model test
+checks the known constrained correction (2.5,0), ensuring that a radius above
+1 remains a field-displacement bound. The Python native checker also asserts
+the configured cap on every model radius and subsequent radius update. Input
+preparation and three invalid-radius guards pass separately on the Mac; those
+are input checks, with no solver execution.
+[Build, commands and executable/library identities](cls-epawf-segregated-picard-r3-evidence/native/build-validation-be04686.json).
+
+Native tests use the same be04686 executable and original h0: a four-update
+cap-1 control and a cap-4 primary run with 48 numerical updates per stage and
+three requested physical steps. Both start at radius 0.4, with 160 responses,
+64 Krylov seeds, one source refinement and H tolerance 2e-9. The primary
+process has a 16-hour limit, chosen from measured model costs; the control has
+a four-hour limit. Run budgets differ, so matched claims concern the common
+prefix only. Both tests are in progress; no enlarged-radius outcome or
+original root is claimed yet.
+[Exact native commands](cls-epawf-segregated-picard-r3-evidence/native/radius-cap-native-launch.json).
+
+## Interior source-model anchors (900a9aa)
+
+The continuing 160-direction search exposes a separate limitation in the
+nonlinear destruction surrogate: at iteration 2 its best ray proposal has
+zero available coordinate derivatives, and the refinement reports
+`unresolved surrogate derivative`. The original reduced actions and actual
+trial remain valid; this abort concerns the internal curvature model. A
+constrained corner can forbid both signs of a coordinate perturbation.
+The old rejection log does not distinguish the ground and scalar-inventory
+families, so the exact rejection family is not inferred from that message.
+
+Commit `900a9aabc58f368f7f61a0aa95e56f834551bc76` adds the opt-in
+`RANSWallReducedInteriorSourceAnchor=On` selector, exposed by
+`--reduced-interior-source-anchor`. The disabled selector retains the control.
+After a blocked or inaccurate model derivative, it retries the linearization
+at one half and one quarter of the incumbent coefficient vector. Every model
+sample still passes the actual ground/domain guard. All derivatives must pass
+the existing two-size error bound. There are at most two anchor reductions
+and `4*n+64` additional model evaluations per refinement.
+
+The affine constant uses the new anchor, while the incumbent proposal stays
+unchanged. A replacement must improve its surrogate residual and regularized
+objective, satisfy the original frozen cuts and displacement bound, and have
+negative original reduced-merit slope. Every actual trial still equilibrates
+H and scans the original complete residual, ground extrema and qualification.
+The anchor is an internal model point; no physical state, history, source,
+acceptance envelope or final 2e-12 tolerance is changed.
+
+The focused C++ test uses two active affine positivity cuts for which neither
+sign of the first coordinate probe is defined. It verifies rejection at the
+corner, recovery at the interior anchor against independent analytic
+derivatives, preservation of an already valid anchor and explicit exhausted
+retry status. The Linux build with four workers passes in 117.91s, all six
+focused CTests pass in 38.48s, and the changed standalone model passes
+ASan/UBSan in 8.91s (24.33s compiler invocation). This sanitizer scope covers
+the small model helper and tests, not the full dependency/solver build.
+[Build, commands and immutable executable/library identities](cls-epawf-segregated-picard-r3-evidence/native/build-validation-900a9aa.json).
+
+Matched enabled/disabled native tests and a verification-Off repeat use the
+same 900a9aa executable, physical target and 7.13029 saved guess. Each permits
+two numerical updates. The focused native assertion requires recovered
+derivatives to produce an independently checked, actually accepted refined
+direction, with the original operator and history assertions. A separate
+original-h0 run enables the method with 160 responses/64 Krylov seeds, eight
+numerical updates per stage, an eight-hour process limit, and three requested
+physical steps. The original-h0 test remains in progress.
+[Exact native commands](cls-epawf-segregated-picard-r3-evidence/native/source-anchor-native-launch.json).
+
+The matched two-update native comparison is complete:
+
+| Source-anchor policy | Update 1 | Update 2 | Qualification | Physical steps |
+| --- | ---: | ---: | --- | ---: |
+| Off | 5.7749372899 | 5.2418504922 | Pass | 0 |
+| On | 5.7427345303 | 5.2018304001 | Pass | 0 |
+
+Both models recover all 96 surrogate derivatives at the half-ray anchor, with
+201 model evaluations against a 448-evaluation budget. Two-size derivative
+errors are 0.00718 and 0.01195. The resulting directions have original reduced
+merit slopes -20.7916 and -6.66947, versus measured half-step slopes -20.7795
+and -6.67619. Both refined directions are actually accepted. The final source
+prediction is 5.18600872 versus actual 5.20183040; vector error is 0.22738,
+compared with 0.94178 for the original linear prediction. Qualification
+curvature still requires two actual corrections per update. The final
+correction has displacement 0.71464605 within radius 0.72. Passing the source
+model checks alone is not its acceptance criterion.
+
+All 403 H evaluations converge to their requested accuracies, no larger than
+2e-9; 1690 velocity/pressure and 1690 epsilon solves are recorded. All 192
+retained true response checks pass, with maximum residual/observation errors
+0.002129 / 0.022650. The first 96 response records match the disabled control
+bitwise apart from timing. Target-process elapsed times are 3146.63s enabled
+and 2497.31s disabled under the recorded concurrent allocation; the modest
+residual improvement is not a convergence or performance claim.
+
+The enabled endpoint has ground minimum 1.34386009e-5, maximum gradient
+departure 0.00099999911131 and epsilon lower ratio 0.9801652658. Fresh readback
+reproduces every original block norm bitwise and passes complete
+qualification, covariance/lambda and negative-ground checks. Native rejection
+preserves accepted h0, every physical history slot and time. Verification On
+and Off also produce bitwise identical initial and both numerical states,
+original residual vectors, rejected endpoint and physical history.
+
+`check_cls_epawf_source_anchor.py` passes its explicit requirement for an
+independently checked, actually accepted direction from recovered derivatives;
+its status is `passed_source_anchor_direction_checks_not_m8_convergence`.
+The verification comparison passes separately. The original full residual
+remains 5.201830400141313, so no physical stage is accepted.
+[Focused direction assertions](cls-epawf-segregated-picard-r3-evidence/native/source-anchor-direction-comparison.json),
+[verification equality](cls-epawf-segregated-picard-r3-evidence/native/source-anchor-verification-comparison.json),
+[command receipts](cls-epawf-segregated-picard-r3-evidence/native/source-anchor-direction-comparison-receipt.json),
+[fresh endpoint audit](cls-epawf-segregated-picard-r3-evidence/native/audit-source-anchor-enabled.json),
+[compact completed histories](cls-epawf-segregated-picard-r3-evidence/native/completed-original-and-expanded-review.json).
+
+Separately, a full 504-response search starts at the independently audited
+5.18197 point, with H tolerance 2e-12, probe step 5e-6 and the learned radius
+0.72 (preceding actual/predicted gain ratio 0.9023). Its two-update budget has
+an eight-hour process limit. It retains the original h0/history and physical
+target. This tests the remaining response-space limitation; it has no original
+root or physical-acceptance certificate yet.
+[Full-space command and radius evidence](cls-epawf-segregated-picard-r3-evidence/native/qualified-full504-at5p182-launch.json).
+
+The continuing canonical 160-direction run has reached numerical update 5,
+with original full residual **4.396589811578443**. A new 900a9aa probe process
+reproduces every original block norm bitwise. The complete qualification audit
+passes: ground minimum 1.17275968e-5, gradient departure 0.00099999900310,
+epsilon lower ratio 0.9816889339, and covariance/lambda checks. The gradient
+witness has moved to x=-2, z=4. The negative physical-ground guard also passes.
+This remains an in-flight checkpoint with no completed native stage/history
+receipt and no physical acceptance.
+[Fresh checkpoint audit](cls-epawf-segregated-picard-r3-evidence/native/audit-canonical-warm-fifth.json).
+
+A further 900a9aa saved-guess search starts from this checkpoint with three
+source refinements, H tolerance 2e-10 and its learned radius 0.72. This is a
+one-stage development diagnostic; the original-h0 tests remain separate. An
+initial invocation requested multiple stages and was rejected by the saved-
+guess argument guard before any native process or state was created. That
+invocation is preserved and the corrected one-stage run is in progress.
+[Corrected command](cls-epawf-segregated-picard-r3-evidence/native/source-anchor-warm160-three-refinements-launch.json),
+[guarded pre-native invocation](cls-epawf-segregated-picard-r3-evidence/native/source-anchor-warm160-three-refinements-failed-invocation.json).
+
 ## Latest implementation and native checks
 
 Code `6b1f28a9b316713ba1d06db5c794bd1e61eabb15` fixes another response-budget
@@ -79,7 +237,8 @@ ratio 0.9801856994. Independent readback reproduces every original block norm
 exactly and passes complete qualification, covariance/lambda and the negative
 ground guard. Both rejected native stages preserve accepted h0, every physical
 history slot and physical time exactly. They fail the original residual gate;
-the best completed qualified saved-guess result is now 5.241850492167935.
+that delivery's best completed qualified saved-guess result is 5.241850492167935.
+The later source-anchor comparison above improves it to 5.201830400141313.
 
 `check_cls_epawf_previous_direction.py RUN --control CONTROL` passes its focused
 assertions for retained current responses, identical physical input, identical

@@ -1,6 +1,6 @@
 {
   "status": "native_development_in_progress_original_m8_unresolved",
-  "producing_code_commit": "fa5ac96b5b396a759002a104d2c0d7cf88bb6b3b",
+  "producing_code_commit": "be04686bb3dac8987b517f380c8a60d075f7b940",
   "native_m8": {
     "status": "Completed original-h0 18-update run fails original residual; complete qualification passes; larger native follow-ups in progress",
     "qualified_first_stage": false,
@@ -10,7 +10,7 @@
     "original_alpha": 400,
     "time_target": 0.0025,
     "original_tolerance": 2e-12,
-    "progress_utc": "2026-11-06T18:24:21.784309+00:00",
+    "progress_utc": "2026-11-06T19:56:07.359833+00:00",
     "original_start_completed_evidence": "native/completed-original-and-expanded-review.json",
     "original_start_result": {
       "numerical_updates": 18,
@@ -41,14 +41,15 @@
       }
     },
     "latest_completed_original_start_case": "source-refine-original-3step",
-    "running_original_start_case": "current-original160-3step",
+    "running_original_start_case": "source-anchor-original160",
     "running_original_start_cases": [
       "response-krylov64-original-3step",
       "medium-face-original-3step",
       "medium-face-original-full504",
       "canonical-original-3step",
       "previous-original-3step",
-      "current-original160-3step"
+      "current-original160-3step",
+      "source-anchor-original160"
     ],
     "incomplete_original_start_followup": {
       "case": "response-cache-original-3step",
@@ -103,7 +104,9 @@
         "completed_native_receipt": false,
         "scope": "In-flight numerical progress only; no physical-stage completion/history receipt inferred"
       }
-    }
+    },
+    "latest_code_original_start_case": "radius-cap4-original-3step",
+    "latest_code_original_start_status": "Running from original h0; cap4,48 numerical updates per stage,three requested physical steps,16-hour process limit. No accepted physical stage yet."
   },
   "checks": {
     "linux_native_pressure_verification": "0926974 bounds assertions and two-sweep bitwise On/Off passed; unchanged Picard translation unit through7715312",
@@ -142,7 +145,9 @@
     "previous_direction_priority": "6b1f28a focused operator and matched-control fixture passes. Same physical XML/start/all96 first responses/first update bitwise; second model retains independent previous response with two-size errors.0001122/.01505. Repaired residual5.2418504922 versus old5.2426008180; modest improvement, both qualified nonroots,0steps and accepted physical history preserved. All400 H solves and192 response checks pass; not robust M8 convergence.",
     "qualified_full_space_first_order_at_7p5": "At original400/time.0025 full504-response base7.5004290706: rank504, gradient norm3172.69, near-active cone defect2847.89 versus empirical two-size gradient uncertainty9.54. This base is not shown stationary; no later-base or global root-existence inference.",
     "compiled_model_face_metadata": "fa5ac96 diagnostics-only: actual threshold64 is derived from DirectFaceThreshold, replacing stale through160 text. Linux two-worker compilation56.93s and unchanged reduced-model CTest.97s pass; five shared native regressions and unchanged-header sanitizer evidence reused with exact source diff. Numerical runs preserve their6b/389 producing identities.",
-    "previous_direction_verification_observability": "PASS: matched6b1f28a verified/unverified two-update fixture. Initial and both accepted numerical-update hashes and original norm vectors agree bitwise; accepted state, every physical history slot/time, rejected endpoint and native bookkeeping identical. Same executable/library identities and numerical input; both native0/time0, not M8 convergence."
+    "previous_direction_verification_observability": "PASS: matched6b1f28a verified/unverified two-update fixture. Initial and both accepted numerical-update hashes and original norm vectors agree bitwise; accepted state, every physical history slot/time, rejected endpoint and native bookkeeping identical. Same executable/library identities and numerical input; both native0/time0, not M8 convergence.",
+    "interior_source_model_anchor": "900a9aa known-answer corner test, six Linux CTests and standalone ASan/UBSan pass. Matched two-update enabled/disabled native tests finish5.2018304001/5.2418504922; both pass complete qualification and exact original readback,zero physical steps/history preserved. Recovered derivatives produce independently checked accepted directions; verification On/Off trajectory/history bitwise identical. Original-h0 follow-up in progress; not M8 convergence.",
+    "configurable_reduced_maximum_radius": "be04686 Linux four-worker build125.52s, six focused CTests43.40s and changed standalone model ASan/UBSan9.42s pass. Default cap1 retained; original-h0 cap1/cap4 native tests in progress; no larger-radius benefit or root claimed yet."
   },
   "continued_branch": {
     "auxiliary_positive_eta_tolerance": 2e-11,
@@ -200,7 +205,7 @@
     "Rejection after an already accepted physical step",
     "Final qualified-trajectory residual in an independent fresh process"
   ],
-  "heavy_run_root": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3",
+  "heavy_run_root": "/media/jay/新加卷/nektar-v2026-runs/cls-epawf-segregated-picard-r3",
   "qualification_restored_diagnostic": {
     "original_full_residual": 20.240190577584954,
     "gradient_departure": 0.0009999990002125259,
@@ -209,26 +214,28 @@
     "physical_acceptance": false
   },
   "completed_qualified_reduced_search": {
-    "producing_code_commit": "6b1f28a9b316713ba1d06db5c794bd1e61eabb15",
-    "full_residual": 5.241850492167935,
-    "gradient_departure": 0.0009999990429379046,
-    "minimum_outer_epsilon_ratio": 0.9801856994179545,
-    "ground_minimum": 2.132345905469373e-05,
+    "producing_code_commit": "900a9aabc58f368f7f61a0aa95e56f834551bc76",
+    "full_residual": 5.201830400141313,
+    "gradient_departure": 0.0009999991113120998,
+    "minimum_outer_epsilon_ratio": 0.9801652658205143,
+    "ground_minimum": 1.3438600869481542e-05,
     "accepted_physical_steps": 0,
     "final_time": 0,
     "algebraic_root": false,
     "accepted_state_and_history_preserved": true,
-    "independent_norm_difference": 0,
+    "independent_norm_difference": 0.0,
     "response_space_dimension": 96,
-    "controlled_H_evaluations": 400,
+    "controlled_H_evaluations": 403,
     "maximum_required_H_tolerance": 2e-09,
     "flow_and_epsilon_solve_counts": [
-      1656,
-      1656
+      1690,
+      1690
     ],
-    "scope": "Completed two-update original-target saved-guess constrained reduced search; original qualification passes, original residual fails; complete native history receipt and fresh bitwise norm readback",
+    "scope": "Completed two-update original-target saved-guess source-anchor search; complete qualification passes, original residual fails; native history receipt and fresh bitwise norm readback. Not the original-h0 primary test.",
     "evidence": "native/completed-original-and-expanded-review.json",
-    "independent_audit": "native/audit-previous-pair-new.json"
+    "independent_audit": "native/audit-source-anchor-enabled.json",
+    "focused_test": "native/source-anchor-direction-comparison.json",
+    "verification_comparison": "native/source-anchor-verification-comparison.json"
   },
   "ground_contact_diagnostic": {
     "initial_full_residual": 18.454728711702224,
@@ -281,16 +288,17 @@
   },
   "qualified_canonical_checkpoint": {
     "producing_code_commit": "389d0a55b4533beed26081842e93387b6230540d",
-    "full_residual": 5.1819703502288155,
-    "ground_minimum": 5.8598988915361584e-05,
-    "gradient_departure": 0.0009999992190504736,
-    "minimum_outer_epsilon_ratio": 0.9812599215948283,
+    "independent_probe_code_commit": "900a9aabc58f368f7f61a0aa95e56f834551bc76",
+    "full_residual": 4.396589811578443,
+    "ground_minimum": 1.1727596841452762e-05,
+    "gradient_departure": 0.0009999990031028805,
+    "minimum_outer_epsilon_ratio": 0.9816889339322259,
     "algebraic_root": false,
     "physical_acceptance_inferred": false,
-    "scope": "Ongoing numerical checkpoint only; fresh original residual vector matches bitwise and complete qualification passes. No completed native physical-history receipt.",
-    "audit": "native/audit-canonical-warm-third.json",
-    "numerical_update": 3,
-    "earlier_model_trial_review": "native/canonical-warm-second-checkpoint-review.json"
+    "scope": "Fixed-state original residual and complete qualification audit of an in-flight numerical checkpoint; not physical acceptance or a final history-preservation receipt",
+    "audit": "native/audit-canonical-warm-fifth.json",
+    "numerical_update": 5,
+    "original_norm_vector_bitwise_reproduced": true
   },
   "strict_full_space_completed_control": {
     "full_residual": 7.498542874129245,
@@ -312,5 +320,20 @@
     "scope": "Completed strict full504-response two-update original-target saved-guess search; original qualification passes, original residual fails; full native history receipt and independent bitwise norm readback",
     "evidence": "native/completed-original-and-expanded-review.json",
     "independent_audit": "native/audit-filtered-search504.json"
-  }
+  },
+  "qualified_canonical_checkpoint_history": [
+    {
+      "producing_code_commit": "389d0a55b4533beed26081842e93387b6230540d",
+      "full_residual": 5.1819703502288155,
+      "ground_minimum": 5.8598988915361584e-05,
+      "gradient_departure": 0.0009999992190504736,
+      "minimum_outer_epsilon_ratio": 0.9812599215948283,
+      "algebraic_root": false,
+      "physical_acceptance_inferred": false,
+      "scope": "Ongoing numerical checkpoint only; fresh original residual vector matches bitwise and complete qualification passes. No completed native physical-history receipt.",
+      "audit": "native/audit-canonical-warm-third.json",
+      "numerical_update": 3,
+      "earlier_model_trial_review": "native/canonical-warm-second-checkpoint-review.json"
+    }
+  ]
 }

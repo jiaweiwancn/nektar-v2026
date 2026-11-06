@@ -1,6 +1,6 @@
 {
   "scope": "Completed bounded original-target native searches, original residual/qualification authority; no root or physical acceptance inferred from numerical updates",
-  "utc": "2026-11-06T17:58:27.986166+00:00",
+  "utc": "2026-11-06T19:56:07.359833+00:00",
   "cases": {
     "source-refine-original-3step": {
       "review_path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/source-refine-original-3step-completed-review.json",
@@ -31918,11 +31918,3566 @@
           "changed_row": 1185
         }
       }
+    },
+    "source-anchor-control": {
+      "review_path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/source-anchor-control-completed-review.json",
+      "review_sha256": "48844a73df20dab0571dea569d6565ba17e3f9720a1ffd7ebeb3636c4f7462e5",
+      "raw": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/source-anchor-control-completed.json",
+        "sha256": "50ad91bb0df30d00a956f721bbf924602905bc58c146b348e7e317dbe0f9d2fd"
+      },
+      "execution_source": "900a9aabc58f368f7f61a0aa95e56f834551bc76",
+      "manifest_status": "failed",
+      "manifest_sha256": "e0b380ad27f2358ed1b2e788942812014f239a4d927c03e22014919377089c4e",
+      "target_xml_sha256": "aabdefdfa5b0176cb984e239770976415703770e15b33bdce422a467dc495008",
+      "executables": {
+        "IncNavierStokesSolver": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-900a9aa/IncNavierStokesSolver",
+          "sha256": "f85e9677109831270c50946b6e7eb58ede217a95e94f25947f60758feca776d9"
+        },
+        "RANSWallResolutionProbe": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-900a9aa/RANSWallResolutionProbe",
+          "sha256": "4bb79a8c3855d4677addb1c550042093ad33973de107e7a0afabc6f668a05ab9"
+        }
+      },
+      "ranks": 1.0,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "target": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-900a9aa/IncNavierStokesSolver",
+          "case.xml"
+        ],
+        "exit_code": 1.0,
+        "seconds": 2497.306903927005,
+        "log_sha256": "2a08a10ebf8a6c2c86565e72cfe242855aee674ce04c59973d37925b14bee108",
+        "steps": 0.0,
+        "time": 0.0,
+        "failure": "EP-AWF patch: reduced iteration limit before original full-stage convergence",
+        "native_report_sha256": "7a77ac1fc42523d37ec392f9df6c2db6470991e7e2644132109d5b6ff88eff09",
+        "first_stage_input": {
+          "unknowns": 2165.0,
+          "tolerance": 2e-12,
+          "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca",
+          "history_value_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca",
+          "incoming_guess_sha256": "b8ba7917424057a9f6f16a026d82d53ede43985871537facea170ef6e1841b71",
+          "guess_sha256": "825506e674ac4ba0efbec53232bb8fc832f22894360d93fb74042e2d2aa630ac",
+          "event": "stage_input",
+          "sweep": 0.0,
+          "alpha": 400.0,
+          "time": 0.0025,
+          "seconds": 0.622122587
+        }
+      },
+      "commands": [
+        {
+          "command": [
+            "python3",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-source/solvers/IncNavierStokesSolver/Tests/RANS/test_cls_epawf_reduced_response.py",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/source-anchor-control"
+          ],
+          "exit_code": 0,
+          "seconds": 0.20186985698819626,
+          "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/source-anchor-control-operator-checks.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": [
+            "python3",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-source/solvers/IncNavierStokesSolver/Tests/RANS/audit_cls_epawf_saved_state.py",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-900a9aa/RANSWallResolutionProbe",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/source-anchor-control/target/case.xml",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/source-anchor-control/target/readback-input.json",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/audit-source-anchor-control",
+            "--check-ground-guard"
+          ],
+          "exit_code": 0,
+          "seconds": 11.083738230008748,
+          "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/source-anchor-control-independent-audit.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "native": {
+        "steps": 0.0,
+        "time": 0.0,
+        "failure": "EP-AWF patch: reduced iteration limit before original full-stage convergence",
+        "accepted_state_and_history_preserved": true,
+        "readback_norm_difference": 0.0,
+        "H_refined_after_last_logged_state": false
+      },
+      "operator_checks": "passed_operator_checks",
+      "non_k": {
+        "evaluations": 400,
+        "converged": 400,
+        "failed": {},
+        "flow_solves": 1656,
+        "epsilon_solves": 1656,
+        "maximum_attained": 1.9937906073835583e-09,
+        "maximum_attained_ratio": 0.996895303691779
+      },
+      "response_summary": {
+        "total": 192,
+        "usable": 192,
+        "maximum_used_two_scale_error": 0.0018900257548909473,
+        "maximum_used_observation_error": 0.022650197662938243
+      },
+      "history": [
+        {
+          "physical_history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca",
+          "radius_scaling": "Euclidean norm of free k coefficient displacement divided by reference K",
+          "response_method": "one-sided differences of converged sequential non-k solves",
+          "half_response_warm_start": "interpolate converged non-k coefficients; preserve exact requested k",
+          "response_field_preconditioner_reuse": true,
+          "response_preconditioner_policy": "probe-only separate base velocity/pressure and epsilon factors; original H convergence required; fresh-operator retry on failure; canonical check and actual trials use current operators",
+          "initial_basis_budget": 96,
+          "initial_restoration_weight": 0,
+          "response_krylov_budget": 16,
+          "active_witness_selection": "original_observation_order_per_family_and_region",
+          "previous_direction_priority": "after_conditional_krylov_and_rate_seeds",
+          "probe_basis": "orthogonal field directions with feasible sign/size selection; inward fallback",
+          "minimum_orthogonal_probe_step": 1e-10,
+          "canonical_half_branch_check": "always; optional verification cannot change column selection",
+          "combined_direction_checks": true,
+          "second_order_qualification_correction": true,
+          "constraint_response_secants": true,
+          "adaptive_qualified_response_space": true,
+          "nonlinear_destruction_ray": true,
+          "nonlinear_destruction_refinements": 1,
+          "interior_source_model_anchors": false,
+          "model_face_solver": "Euclidean null space through 64 model variables; checked augmented orthonormal-face solve above; null-space fallback",
+          "model_direct_face_threshold": 64,
+          "model_cut_filter": "large slack-free models: conservative field-Gram ball bound; final scan of every original frozen cut",
+          "qualification_correction_budget": 6,
+          "continuation_algebraic_diagnostic": false,
+          "qualification_policy": "original_bounds_enforced",
+          "maximum_basis": 512,
+          "response_accuracy": 2e-09,
+          "event": "protocol",
+          "iteration": 0,
+          "alpha": 400,
+          "time": 0.0025,
+          "seconds": 0.004699706
+        },
+        {
+          "event": "initial",
+          "iteration": 0,
+          "seconds": 2.198733293,
+          "alpha": 400,
+          "time": 0.0025,
+          "norms": [
+            1.4559763998548924e-10,
+            1.0344012461319982e-09,
+            7.1302877208629,
+            4.2949215298494454e-12,
+            6.55427126998624e-16,
+            6.794737794953839e-16,
+            2.3208702754767826e-17,
+            0
+          ],
+          "reduced_norm": 7.1302877208629,
+          "violation": 0,
+          "outer_range": [
+            0.0009999998290262102,
+            0.9913007212943005,
+            1.0062416585076146,
+            0.9812197153976333,
+            1.00283949724592,
+            0.9976749724126304,
+            1.005535619587661
+          ],
+          "covariance": [
+            5.133850282483769e-05,
+            0.1760168160680483
+          ],
+          "gradient_witness": [
+            1,
+            0,
+            2,
+            0,
+            2,
+            -0.0009999998290262102,
+            33,
+            1
+          ],
+          "qualified": true,
+          "ground": {
+            "admissible": true,
+            "minimum": 5.3226435726209056e-05,
+            "arithmetic_scale": 3.032042284340007e-17,
+            "point": [
+              1.5599897531771276,
+              0,
+              0
+            ],
+            "geometry": 4,
+            "extrema_checked": 20
+          },
+          "state_sha256": "825506e674ac4ba0efbec53232bb8fc832f22894360d93fb74042e2d2aa630ac",
+          "work": [
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "same_k_difference": 0,
+          "tightened_k_difference": 1.6572895404456037e-08,
+          "failed_response_rolled_back": true,
+          "k_coefficients_fixed": true,
+          "event": "repeatability",
+          "iteration": 0,
+          "alpha": 400,
+          "time": 0.0025,
+          "seconds": 21.277676963
+        },
+        {
+          "event": "direction",
+          "iteration": 0,
+          "seconds": 1095.843421543,
+          "basis_dimension": 96,
+          "response_rank": 96,
+          "orthogonal_probes": 96,
+          "maximum_column_correlation": 1.2522429446000095e-16,
+          "qp_solved": true,
+          "qp_failure": "",
+          "qp_steps": 6977,
+          "radius_model_solves": 214,
+          "augmented_face_solves": 6965,
+          "augmented_face_fallbacks": 0,
+          "warm_face_solves": 202,
+          "warm_face_fallbacks": 0,
+          "active_constraints": 16,
+          "next_witness_policy": "original_observation_order_per_family_and_region",
+          "next_active_witnesses": [
+            {
+              "observation": 23185,
+              "family": 0,
+              "point": [
+                -0.9602898564975362,
+                0,
+                2
+              ],
+              "projected": false
+            },
+            {
+              "observation": 24127,
+              "family": 0,
+              "point": [
+                -3.375,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false
+            },
+            {
+              "observation": 24133,
+              "family": 0,
+              "point": [
+                -3.25,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false
+            },
+            {
+              "observation": 24493,
+              "family": 0,
+              "point": [
+                -2.935870074254803,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false
+            },
+            {
+              "observation": 25357,
+              "family": 0,
+              "point": [
+                -2,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false
+            },
+            {
+              "observation": 25435,
+              "family": 0,
+              "point": [
+                -1.375,
+                0,
+                2
+              ],
+              "projected": false
+            },
+            {
+              "observation": 25933,
+              "family": 0,
+              "point": [
+                1,
+                0,
+                2
+              ],
+              "projected": false
+            },
+            {
+              "observation": 28921,
+              "family": 0,
+              "point": [
+                -2.25,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false
+            },
+            {
+              "observation": 46255,
+              "family": 0,
+              "point": [
+                -2.6046496089512394,
+                0,
+                4
+              ],
+              "projected": false
+            },
+            {
+              "observation": 49811,
+              "family": 0,
+              "point": [
+                -3.6666666666666665,
+                0,
+                2
+              ],
+              "projected": false
+            },
+            {
+              "observation": 50495,
+              "family": 0,
+              "point": [
+                -2.4166666666666665,
+                0,
+                2
+              ],
+              "projected": false
+            },
+            {
+              "observation": 52281,
+              "family": 0,
+              "point": [
+                1.6666666666666665,
+                0,
+                2
+              ],
+              "projected": false
+            }
+          ],
+          "ground_cuts_added": 11,
+          "maximum_ball_redundant_cuts": 159028,
+          "original_model_cuts": 193716,
+          "ground_model_admissible": true,
+          "radius": 0.4,
+          "displacement": 0.39901651686971856,
+          "predicted_norm": 5.33329421373153,
+          "predicted_violation": 8.791231631555263e-14,
+          "merit_slope": -20.954493789555798,
+          "unscaled_affine_kkt": [
+            6.578396681555798e-17,
+            7.071394777885706e-13,
+            2.490499389335184e-14
+          ],
+          "active": [
+            {
+              "kind": "qualification",
+              "rhs": 7.402362639493564e-10,
+              "family": 0,
+              "point": [
+                1,
+                0,
+                2
+              ],
+              "projected": false,
+              "sign": -1,
+              "value": -0.0009999998290262102
+            },
+            {
+              "kind": "qualification",
+              "rhs": 1.5793352920532332e-06,
+              "family": 0,
+              "point": [
+                -2.6046496089512394,
+                0,
+                4
+              ],
+              "projected": false,
+              "sign": 1,
+              "value": 0.0009999945545553501
+            },
+            {
+              "kind": "qualification",
+              "rhs": 4.839538306870336e-05,
+              "family": 0,
+              "point": [
+                -2,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "sign": -1,
+              "value": -0.0009971891922035958
+            },
+            {
+              "kind": "qualification",
+              "rhs": 0.00015026682775320135,
+              "family": 0,
+              "point": [
+                -2.935870074254803,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "sign": 1,
+              "value": 0.0009879865786210917
+            },
+            {
+              "kind": "qualification",
+              "rhs": 0.0004211417664332299,
+              "family": 0,
+              "point": [
+                -3.6666666666666665,
+                0,
+                2
+              ],
+              "projected": false,
+              "sign": -1,
+              "value": -0.0009521448654306042
+            },
+            {
+              "kind": "qualification",
+              "rhs": 3.395028499683518e-05,
+              "family": 0,
+              "point": [
+                -2.4166666666666665,
+                0,
+                2
+              ],
+              "projected": false,
+              "sign": -1,
+              "value": -0.0009936824083824902
+            },
+            {
+              "kind": "qualification",
+              "rhs": 8.967300289947763e-05,
+              "family": 0,
+              "point": [
+                1.6666666666666665,
+                0,
+                2
+              ],
+              "projected": false,
+              "sign": -1,
+              "value": -0.000992298092170052
+            },
+            {
+              "kind": "qualification",
+              "rhs": 0.0018993593474755106,
+              "family": 0,
+              "point": [
+                -3.375,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "sign": 1,
+              "value": 0.0009071323063920556
+            },
+            {
+              "kind": "qualification",
+              "rhs": 0.00010851482038932423,
+              "family": 0,
+              "point": [
+                -1.3333333333333335,
+                0,
+                2
+              ],
+              "projected": false,
+              "sign": -1,
+              "value": -0.0009790112551375518
+            },
+            {
+              "kind": "qualification",
+              "rhs": 1.0509788705434986e-05,
+              "family": 0,
+              "point": [
+                -0.8717401485096066,
+                0,
+                2
+              ],
+              "projected": false,
+              "sign": -1,
+              "value": -0.0009976983377315563
+            },
+            {
+              "kind": "qualification",
+              "rhs": 0.0011247851025949702,
+              "family": 0,
+              "point": [
+                -2.25,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "sign": 1,
+              "value": 0.0009586256150939665
+            },
+            {
+              "kind": "qualification",
+              "rhs": 0.0012920322826304048,
+              "family": 0,
+              "point": [
+                -3.25,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "sign": 1,
+              "value": 0.0009239606428537162
+            },
+            {
+              "kind": "qualification",
+              "rhs": 2.3866478762673255e-06,
+              "family": 0,
+              "point": [
+                -0.9602898564975362,
+                0,
+                2
+              ],
+              "projected": false,
+              "sign": -1,
+              "value": -0.0009994549307962286
+            },
+            {
+              "kind": "qualification",
+              "rhs": 0.00011330372614964666,
+              "family": 0,
+              "point": [
+                -1.375,
+                0,
+                2
+              ],
+              "projected": false,
+              "sign": -1,
+              "value": -0.0009786846444068686
+            },
+            {
+              "kind": "continuous_ground",
+              "rhs": 0.00046522194276607054,
+              "point": [
+                -2.1648118918125276,
+                0,
+                0
+              ]
+            },
+            {
+              "kind": "continuous_ground",
+              "rhs": 0.00021221823660938838,
+              "point": [
+                1.5610555165354698,
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "available": true,
+          "role": "residual_reduction",
+          "fraction": 2.5061619199250002e-05,
+          "required": 2e-09,
+          "attained": 7.804324902775297e-10,
+          "half_attained": 1.7823714604252966e-09,
+          "relative_residual_error": 0.0006070357411365023,
+          "half_relative_residual_error": 0.0007312100715967811,
+          "observation_relative_error": 0.001786278767714968,
+          "half_observation_relative_error": 0.007192040506248346,
+          "observation_change_error": 4.476703826017808e-08,
+          "half_observation_change_error": 9.012209021658863e-08,
+          "predicted_merit_slope": -20.954493789555798,
+          "actual_merit_slope": -20.955558843091445,
+          "half_merit_slope": -20.94169195004045,
+          "full_inventory_violation": 0,
+          "half_full_inventory_violation": 0,
+          "profile_branch_change": false,
+          "half_profile_branch_change": false,
+          "signed_active_observations": [
+            {
+              "family": 0,
+              "sign": -1,
+              "point": [
+                -0.9602898564975362,
+                0,
+                2
+              ],
+              "projected": false,
+              "predicted_change": 1.3660316821918736e-08,
+              "measured_change": 1.399872357774442e-08,
+              "half_predicted_change": 6.830158410959368e-09,
+              "half_measured_change": 2.728813043143382e-09
+            },
+            {
+              "family": 0,
+              "sign": 1,
+              "point": [
+                -3.375,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "predicted_change": 2.327414773116839e-06,
+              "measured_change": 2.323797446507768e-06,
+              "half_predicted_change": 1.1637073865584195e-06,
+              "half_measured_change": 1.164255464946728e-06
+            },
+            {
+              "family": 0,
+              "sign": 1,
+              "point": [
+                -3.25,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "predicted_change": 1.9056694129577635e-06,
+              "measured_change": 1.907774190352257e-06,
+              "half_predicted_change": 9.528347064788817e-07,
+              "half_measured_change": 9.61435892084244e-07
+            },
+            {
+              "family": 0,
+              "sign": 1,
+              "point": [
+                -2.935870074254803,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "predicted_change": 3.010757918805315e-07,
+              "measured_change": 3.188673361020611e-07,
+              "half_predicted_change": 1.5053789594026574e-07,
+              "half_measured_change": 1.8107355628715222e-07
+            },
+            {
+              "family": 0,
+              "sign": -1,
+              "point": [
+                -2,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "predicted_change": 7.044339463614163e-08,
+              "measured_change": 8.737003658479435e-08,
+              "half_predicted_change": 3.522169731807081e-08,
+              "half_measured_change": 4.837683488337136e-08
+            },
+            {
+              "family": 0,
+              "sign": -1,
+              "point": [
+                -1.375,
+                0,
+                2
+              ],
+              "projected": false,
+              "predicted_change": 5.341973249714873e-07,
+              "measured_change": 5.330526511360597e-07,
+              "half_predicted_change": 2.6709866248574366e-07,
+              "half_measured_change": 2.638825962464288e-07
+            },
+            {
+              "family": 0,
+              "sign": -1,
+              "point": [
+                -0.8717401485096066,
+                0,
+                2
+              ],
+              "projected": false,
+              "predicted_change": 5.7683383296780354e-08,
+              "measured_change": 5.778751764098697e-08,
+              "half_predicted_change": 2.8841691648390177e-08,
+              "half_measured_change": 2.4643132756705546e-08
+            },
+            {
+              "family": 0,
+              "sign": -1,
+              "point": [
+                1,
+                0,
+                2
+              ],
+              "projected": false,
+              "predicted_change": 4.284879528675236e-12,
+              "measured_change": -6.75047710419336e-10,
+              "half_predicted_change": 2.142439764337618e-12,
+              "half_measured_change": -2.958529246123352e-09
+            },
+            {
+              "family": 0,
+              "sign": 1,
+              "point": [
+                -2.25,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "predicted_change": 1.036909079118362e-06,
+              "measured_change": 1.0233701934229271e-06,
+              "half_predicted_change": 5.18454539559181e-07,
+              "half_measured_change": 5.015091559436603e-07
+            },
+            {
+              "family": 0,
+              "sign": 1,
+              "point": [
+                -2.6046496089512394,
+                0,
+                4
+              ],
+              "projected": false,
+              "predicted_change": 1.3647165162158764e-10,
+              "measured_change": 2.044423984698602e-10,
+              "half_predicted_change": 6.823582581079382e-11,
+              "half_measured_change": 1.4340682608400762e-10
+            },
+            {
+              "family": 0,
+              "sign": -1,
+              "point": [
+                -3.6666666666666665,
+                0,
+                2
+              ],
+              "projected": false,
+              "predicted_change": 1.1993271593055558e-06,
+              "measured_change": 1.1946078600566384e-06,
+              "half_predicted_change": 5.996635796527779e-07,
+              "half_measured_change": 6.073140215052468e-07
+            },
+            {
+              "family": 0,
+              "sign": -1,
+              "point": [
+                -2.4166666666666665,
+                0,
+                2
+              ],
+              "projected": false,
+              "predicted_change": 1.5832907537413326e-07,
+              "measured_change": 1.557983119843148e-07,
+              "half_predicted_change": 7.916453768706663e-08,
+              "half_measured_change": 7.395834643193319e-08
+            },
+            {
+              "family": 0,
+              "sign": -1,
+              "point": [
+                -1.3333333333333335,
+                0,
+                2
+              ],
+              "projected": false,
+              "predicted_change": 5.260119312126963e-07,
+              "measured_change": 5.247739888228853e-07,
+              "half_predicted_change": 2.6300596560634816e-07,
+              "half_measured_change": 2.597386532326646e-07
+            },
+            {
+              "family": 0,
+              "sign": -1,
+              "point": [
+                1.6666666666666665,
+                0,
+                2
+              ],
+              "projected": false,
+              "predicted_change": 1.9302228114158193e-07,
+              "measured_change": 1.9257778159945156e-07,
+              "half_predicted_change": 9.651114057079097e-08,
+              "half_measured_change": 9.173473808974663e-08
+            }
+          ],
+          "event": "combined_direction_check",
+          "iteration": 0,
+          "alpha": 400,
+          "time": 0.0025,
+          "seconds": 1108.994157966
+        },
+        {
+          "refinement": 0,
+          "improved": false,
+          "failure": "unresolved surrogate derivative",
+          "available_derivatives": 0,
+          "dimension": 96,
+          "two_scale_error": 0,
+          "event": "source_direction_refinement",
+          "iteration": 0,
+          "alpha": 400,
+          "time": 0.0025,
+          "seconds": 1126.270742374
+        },
+        {
+          "fraction": 1,
+          "predicted_norm": 5.776124471145186,
+          "actual_norm": 5.774937289934429,
+          "model_error": 0.02947334032932657,
+          "linear_model_error": 2.0107268236231084,
+          "non_k_error": 6.450030773361073e-10,
+          "required": 2e-09,
+          "actual_displacement": 0.3990150241817487,
+          "radius": 0.4,
+          "event": "source_ray_prediction",
+          "iteration": 0,
+          "alpha": 400,
+          "time": 0.0025,
+          "seconds": 1188.508426327
+        },
+        {
+          "total": 2.0107268236231084,
+          "inner_destruction": 2.0104276058235078,
+          "remaining": 0.0033870282530731517,
+          "base_b": 0.8323316977592996,
+          "trial_b": 0.831061333192654,
+          "base_lambda": 1,
+          "trial_lambda": 1,
+          "event": "prediction_decomposition",
+          "iteration": 0,
+          "alpha": 400,
+          "time": 0.0025,
+          "seconds": 1228.236175714
+        },
+        {
+          "fraction": 1,
+          "proposal_origin": "linear_reduced_direction",
+          "accepted": true,
+          "norm": 5.774937289934429,
+          "full_norm": 5.77493728993443,
+          "violation": 0,
+          "families": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "predicted_norm": 5.352673427121698,
+          "model_error": 2.0107268236231084,
+          "predicted_violation": 0.0014612532437486836,
+          "non_k_error": 6.450030773361073e-10,
+          "second_order_corrections": 2,
+          "displacement": 0.3990150241817487,
+          "physical_k_displacement": 0.20370036717606696,
+          "event": "trial",
+          "iteration": 0,
+          "alpha": 400,
+          "time": 0.0025,
+          "seconds": 1228.242462145
+        },
+        {
+          "actual_to_predicted_gain": 1.0007846254052777,
+          "prediction_model": "nonlinear_destruction_surrogate",
+          "source_model_evaluations": 21,
+          "next_radius": 0.7200000000000001,
+          "event": "radius_agreement",
+          "iteration": 0,
+          "alpha": 400,
+          "time": 0.0025,
+          "seconds": 1228.29756914
+        },
+        {
+          "event": "accepted",
+          "iteration": 1,
+          "seconds": 1229.603771725,
+          "alpha": 400,
+          "time": 0.0025,
+          "norms": [
+            2.427557633465972e-10,
+            6.450030773361073e-10,
+            5.77493728993443,
+            3.171956409216545e-12,
+            7.566181100949305e-16,
+            6.615160274015722e-16,
+            1.6940658945086003e-18,
+            2.746484631327002e-16
+          ],
+          "reduced_norm": 5.774937289934429,
+          "violation": 0,
+          "outer_range": [
+            0.0009999990724217644,
+            0.9925227952695174,
+            1.0067332075017996,
+            0.9803930959950359,
+            1.0051058612769768,
+            0.9971155479656421,
+            1.0049580164625145
+          ],
+          "covariance": [
+            1.560566420865217e-05,
+            0.17596223812598638
+          ],
+          "gradient_witness": [
+            -0.8717401485096066,
+            0,
+            2,
+            0,
+            2,
+            -0.0009999990724217644,
+            33,
+            1
+          ],
+          "qualified": true,
+          "ground": {
+            "admissible": true,
+            "minimum": 2.4825701615853784e-05,
+            "arithmetic_scale": 3.034667859317788e-17,
+            "point": [
+              1.5610743452947404,
+              0,
+              0
+            ],
+            "geometry": 4,
+            "extrema_checked": 20
+          },
+          "state_sha256": "25bf7d39a8db642ada57568a1385be9fbda3d1587091bb1407eb3624961e0628",
+          "work": [
+            201,
+            833,
+            833
+          ]
+        },
+        {
+          "event": "direction",
+          "iteration": 1,
+          "seconds": 2314.280962403,
+          "basis_dimension": 96,
+          "response_rank": 96,
+          "orthogonal_probes": 96,
+          "maximum_column_correlation": 8.403190126921523e-17,
+          "qp_solved": true,
+          "qp_failure": "",
+          "qp_steps": 4922,
+          "radius_model_solves": 198,
+          "augmented_face_solves": 4911,
+          "augmented_face_fallbacks": 0,
+          "warm_face_solves": 187,
+          "warm_face_fallbacks": 0,
+          "active_constraints": 15,
+          "next_witness_policy": "original_observation_order_per_family_and_region",
+          "next_active_witnesses": [
+            {
+              "observation": 23641,
+              "family": 0,
+              "point": [
+                -3.3953503910487606,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false
+            },
+            {
+              "observation": 23677,
+              "family": 0,
+              "point": [
+                -3.75,
+                0,
+                2
+              ],
+              "projected": false
+            },
+            {
+              "observation": 24487,
+              "family": 0,
+              "point": [
+                -3,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false
+            },
+            {
+              "observation": 24565,
+              "family": 0,
+              "point": [
+                -2.375,
+                0,
+                2
+              ],
+              "projected": false
+            },
+            {
+              "observation": 25357,
+              "family": 0,
+              "point": [
+                -2,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false
+            },
+            {
+              "observation": 25441,
+              "family": 0,
+              "point": [
+                -1.25,
+                0,
+                2
+              ],
+              "projected": false
+            },
+            {
+              "observation": 26761,
+              "family": 0,
+              "point": [
+                1,
+                0,
+                2
+              ],
+              "projected": false
+            },
+            {
+              "observation": 28531,
+              "family": 0,
+              "point": [
+                -2.204149909283429,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false
+            },
+            {
+              "observation": 46255,
+              "family": 0,
+              "point": [
+                -2.6046496089512394,
+                0,
+                4
+              ],
+              "projected": false
+            },
+            {
+              "observation": 51031,
+              "family": 2,
+              "point": [
+                -1.5833333333333333,
+                0,
+                2
+              ],
+              "projected": false
+            },
+            {
+              "observation": 52281,
+              "family": 0,
+              "point": [
+                1.6666666666666665,
+                0,
+                2
+              ],
+              "projected": false
+            }
+          ],
+          "ground_cuts_added": 10,
+          "maximum_ball_redundant_cuts": 140993,
+          "original_model_cuts": 193749,
+          "ground_model_admissible": true,
+          "radius": 0.7200000000000001,
+          "displacement": 0.7133000465240051,
+          "predicted_norm": 5.032937703704819,
+          "predicted_violation": 3.08456385433864e-13,
+          "merit_slope": -7.16690784864127,
+          "unscaled_affine_kkt": [
+            3.678155870157074e-17,
+            4.549724782054714e-13,
+            3.2264456781398274e-14
+          ],
+          "active": [
+            {
+              "kind": "qualification",
+              "rhs": 1.1799214589449883e-08,
+              "family": 0,
+              "point": [
+                1.6666666666666665,
+                0,
+                2
+              ],
+              "projected": false,
+              "sign": -1,
+              "value": -0.000999998987797679
+            },
+            {
+              "kind": "qualification",
+              "rhs": 2.1911905161167364e-07,
+              "family": 0,
+              "point": [
+                -2.6046496089512394,
+                0,
+                4
+              ],
+              "projected": false,
+              "sign": 1,
+              "value": 0.0009999989096367567
+            },
+            {
+              "kind": "qualification",
+              "rhs": 2.6659924926020057e-08,
+              "family": 0,
+              "point": [
+                1,
+                0,
+                2
+              ],
+              "projected": false,
+              "sign": -1,
+              "value": -0.0009999938458854496
+            },
+            {
+              "kind": "qualification",
+              "rhs": 0.00010542153017875625,
+              "family": 0,
+              "point": [
+                -2,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "sign": -1,
+              "value": -0.0009917643572089352
+            },
+            {
+              "kind": "qualification",
+              "rhs": 4.5241545969001186e-05,
+              "family": 0,
+              "point": [
+                -2.935870074254803,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "sign": 1,
+              "value": 0.0009956160250073065
+            },
+            {
+              "kind": "qualification",
+              "rhs": 0.00012959076370644467,
+              "family": 0,
+              "point": [
+                -2.375,
+                0,
+                2
+              ],
+              "projected": false,
+              "sign": -1,
+              "value": -0.0009753203168821889
+            },
+            {
+              "kind": "qualification",
+              "rhs": 0.0010888260428022778,
+              "family": 0,
+              "point": [
+                -2.125,
+                0,
+                2.6666666666666665
+              ],
+              "projected": false,
+              "sign": 1,
+              "value": 0.0009760657424304764
+            },
+            {
+              "kind": "qualification",
+              "rhs": 8.383522321805236e-05,
+              "family": 0,
+              "point": [
+                -3,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "sign": 1,
+              "value": 0.0009887626051001686
+            },
+            {
+              "kind": "qualification",
+              "rhs": 2.428310238161585e-05,
+              "family": 0,
+              "point": [
+                -3.3953503910487606,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "sign": 1,
+              "value": 0.0009985572069581838
+            },
+            {
+              "kind": "qualification",
+              "rhs": 0.000430870984244184,
+              "family": 0,
+              "point": [
+                -3.75,
+                0,
+                2
+              ],
+              "projected": false,
+              "sign": -1,
+              "value": -0.0009516698107558952
+            },
+            {
+              "kind": "qualification",
+              "rhs": 5.2639686681615956e-05,
+              "family": 0,
+              "point": [
+                -2.204149909283429,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "sign": 1,
+              "value": 0.0009968873869272699
+            },
+            {
+              "kind": "qualification",
+              "rhs": 0.0003598751428084498,
+              "family": 2,
+              "point": [
+                -1.5833333333333333,
+                0,
+                2
+              ],
+              "projected": false,
+              "sign": -1,
+              "value": 0.9804040544046251
+            },
+            {
+              "kind": "qualification",
+              "rhs": 3.537216834282783e-05,
+              "family": 0,
+              "point": [
+                -1.25,
+                0,
+                2
+              ],
+              "projected": false,
+              "sign": -1,
+              "value": -0.0009927632916881812
+            },
+            {
+              "kind": "continuous_ground",
+              "rhs": 0.0001602835550115749,
+              "point": [
+                -2.164437899523094,
+                0,
+                0
+              ]
+            },
+            {
+              "kind": "continuous_ground",
+              "rhs": 0.00010379146624126124,
+              "point": [
+                1.5622248301418171,
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "available": true,
+          "role": "residual_reduction",
+          "fraction": 1.401934578405143e-05,
+          "required": 2e-09,
+          "attained": 1.6070178710435288e-09,
+          "half_attained": 8.035788256787665e-10,
+          "relative_residual_error": 0.0022074328348214932,
+          "half_relative_residual_error": 0.0018201854112283177,
+          "observation_relative_error": 0.009812728273485284,
+          "half_observation_relative_error": 0.006510601650561789,
+          "observation_change_error": 1.375680307509282e-07,
+          "half_observation_change_error": 4.563718790072085e-08,
+          "predicted_merit_slope": -7.16690784864127,
+          "actual_merit_slope": -7.17166724539847,
+          "half_merit_slope": -7.171033235831491,
+          "full_inventory_violation": 0,
+          "half_full_inventory_violation": 0,
+          "profile_branch_change": false,
+          "half_profile_branch_change": false,
+          "signed_active_observations": [
+            {
+              "family": 0,
+              "sign": 1,
+              "point": [
+                -3.3953503910487606,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "predicted_change": 2.022701455069388e-08,
+              "measured_change": -4.870273786082604e-09,
+              "half_predicted_change": 1.011350727534694e-08,
+              "half_measured_change": -3.18645239680229e-11
+            },
+            {
+              "family": 0,
+              "sign": -1,
+              "point": [
+                -3.75,
+                0,
+                2
+              ],
+              "projected": false,
+              "predicted_change": 6.775576348218297e-07,
+              "measured_change": 6.525787357062563e-07,
+              "half_predicted_change": 3.3877881741091486e-07,
+              "half_measured_change": 3.285366620746078e-07
+            },
+            {
+              "family": 0,
+              "sign": 1,
+              "point": [
+                -3,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "predicted_change": 1.5754092481699765e-07,
+              "measured_change": 1.9972894066069452e-08,
+              "half_predicted_change": 7.877046240849882e-08,
+              "half_measured_change": 3.313327450777797e-08
+            },
+            {
+              "family": 0,
+              "sign": 1,
+              "point": [
+                -2.935870074254803,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "predicted_change": 6.146046133423346e-08,
+              "measured_change": -4.215301692014678e-08,
+              "half_predicted_change": 3.073023066711673e-08,
+              "half_measured_change": -3.913840832229892e-09
+            },
+            {
+              "family": 0,
+              "sign": -1,
+              "point": [
+                -2.375,
+                0,
+                2
+              ],
+              "projected": false,
+              "predicted_change": 3.459930114698281e-07,
+              "measured_change": 3.539170285437859e-07,
+              "half_predicted_change": 1.7299650573491406e-07,
+              "half_measured_change": 1.7718841212593196e-07
+            },
+            {
+              "family": 0,
+              "sign": -1,
+              "point": [
+                -2,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "predicted_change": 1.1545832404219129e-07,
+              "measured_change": 1.2989485176200974e-07,
+              "half_predicted_change": 5.7729162021095646e-08,
+              "half_measured_change": 6.343762614034285e-08
+            },
+            {
+              "family": 0,
+              "sign": -1,
+              "point": [
+                -1.25,
+                0,
+                2
+              ],
+              "projected": false,
+              "predicted_change": 1.0145391616197999e-07,
+              "measured_change": 9.662610072085834e-08,
+              "half_predicted_change": 5.0726958080989996e-08,
+              "half_measured_change": 4.806660656615847e-08
+            },
+            {
+              "family": 0,
+              "sign": -1,
+              "point": [
+                1,
+                0,
+                2
+              ],
+              "projected": false,
+              "predicted_change": 8.627665991204041e-11,
+              "measured_change": -1.76392378385077e-09,
+              "half_predicted_change": 4.313832995602021e-11,
+              "half_measured_change": -8.781932373617032e-10
+            },
+            {
+              "family": 0,
+              "sign": 1,
+              "point": [
+                -2.204149909283429,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "predicted_change": 4.363679895807216e-08,
+              "measured_change": 6.069975613392917e-08,
+              "half_predicted_change": 2.181839947903608e-08,
+              "half_measured_change": 2.526493255211841e-08
+            },
+            {
+              "family": 0,
+              "sign": 1,
+              "point": [
+                -2.125,
+                0,
+                2.6666666666666665
+              ],
+              "projected": false,
+              "predicted_change": 3.355426329513513e-07,
+              "measured_change": 3.433174947508384e-07,
+              "half_predicted_change": 1.6777131647567566e-07,
+              "half_measured_change": 1.681912144883859e-07
+            },
+            {
+              "family": 0,
+              "sign": 1,
+              "point": [
+                -2.6046496089512394,
+                0,
+                4
+              ],
+              "projected": false,
+              "predicted_change": 1.5286164886418114e-11,
+              "measured_change": 7.894016291058756e-10,
+              "half_predicted_change": 7.643082443209057e-12,
+              "half_measured_change": 2.674682048531258e-10
+            },
+            {
+              "family": 2,
+              "sign": -1,
+              "point": [
+                -1.5833333333333333,
+                0,
+                2
+              ],
+              "projected": false,
+              "predicted_change": 2.8322892070039664e-07,
+              "measured_change": 2.832274699413947e-07,
+              "half_predicted_change": 1.4161446035019832e-07,
+              "half_measured_change": 1.4161372970563436e-07
+            },
+            {
+              "family": 0,
+              "sign": -1,
+              "point": [
+                1.6666666666666665,
+                0,
+                2
+              ],
+              "projected": false,
+              "predicted_change": 1.4190414691735763e-11,
+              "measured_change": -2.5968082509826497e-09,
+              "half_predicted_change": 7.0952073458678816e-12,
+              "half_measured_change": -1.2997180016129194e-09
+            }
+          ],
+          "event": "combined_direction_check",
+          "iteration": 1,
+          "alpha": 400,
+          "time": 0.0025,
+          "seconds": 2326.932219936
+        },
+        {
+          "refinement": 0,
+          "improved": false,
+          "failure": "unresolved surrogate derivative",
+          "available_derivatives": 0,
+          "dimension": 96,
+          "two_scale_error": 0,
+          "event": "source_direction_refinement",
+          "iteration": 1,
+          "alpha": 400,
+          "time": 0.0025,
+          "seconds": 2345.656714627
+        },
+        {
+          "fraction": 1,
+          "predicted_norm": 5.2265296772119365,
+          "actual_norm": 5.241850492167935,
+          "model_error": 0.26280755829059826,
+          "linear_model_error": 1.0628955264582802,
+          "non_k_error": 1.4981655406897648e-09,
+          "required": 2e-09,
+          "actual_displacement": 0.7132995919543648,
+          "radius": 0.7200000000000001,
+          "event": "source_ray_prediction",
+          "iteration": 1,
+          "alpha": 400,
+          "time": 0.0025,
+          "seconds": 2428.801966685
+        },
+        {
+          "total": 1.0628955264582802,
+          "inner_destruction": 1.059827190335033,
+          "remaining": 0.004439970253331173,
+          "base_b": 0.831061333192654,
+          "trial_b": 0.8291080661445158,
+          "base_lambda": 1,
+          "trial_lambda": 1,
+          "event": "prediction_decomposition",
+          "iteration": 1,
+          "alpha": 400,
+          "time": 0.0025,
+          "seconds": 2472.05135617
+        },
+        {
+          "fraction": 1,
+          "proposal_origin": "linear_reduced_direction",
+          "accepted": true,
+          "norm": 5.241850492167935,
+          "full_norm": 5.241850492167935,
+          "violation": 0,
+          "families": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "predicted_norm": 5.055414078138497,
+          "model_error": 1.0628955264582802,
+          "predicted_violation": 0.020609185314130578,
+          "non_k_error": 1.4981655406897648e-09,
+          "second_order_corrections": 3,
+          "displacement": 0.7132995919543648,
+          "physical_k_displacement": 0.3641451574050503,
+          "event": "trial",
+          "iteration": 1,
+          "alpha": 400,
+          "time": 0.0025,
+          "seconds": 2472.057627536
+        },
+        {
+          "actual_to_predicted_gain": 0.9734167987350864,
+          "prediction_model": "nonlinear_destruction_surrogate",
+          "source_model_evaluations": 21,
+          "next_radius": 1,
+          "event": "radius_agreement",
+          "iteration": 1,
+          "alpha": 400,
+          "time": 0.0025,
+          "seconds": 2472.114642824
+        },
+        {
+          "event": "accepted",
+          "iteration": 2,
+          "seconds": 2473.49343645,
+          "alpha": 400,
+          "time": 0.0025,
+          "norms": [
+            6.955203670634641e-10,
+            1.4981655406897648e-09,
+            5.241850492167935,
+            1.8493738437198065e-11,
+            6.208674852175315e-16,
+            7.125867449439103e-16,
+            2.3716922523120406e-18,
+            4.358551697540677e-16
+          ],
+          "reduced_norm": 5.241850492167935,
+          "violation": 0,
+          "outer_range": [
+            0.0009999990429379046,
+            0.9915718832102483,
+            1.0090410634034912,
+            0.9801856994179545,
+            1.0047990514769374,
+            0.9969748397850393,
+            1.0067845354668743
+          ],
+          "covariance": [
+            1.4633934241992646e-05,
+            0.17569888423745203
+          ],
+          "gradient_witness": [
+            -2.125,
+            0,
+            2.6666666666666665,
+            0,
+            2,
+            0.0009999990429379046,
+            36,
+            0
+          ],
+          "qualified": true,
+          "ground": {
+            "admissible": true,
+            "minimum": 2.132345905469373e-05,
+            "arithmetic_scale": 3.036750087163734e-17,
+            "point": [
+              1.5622409839272393,
+              0,
+              0
+            ],
+            "geometry": 4,
+            "extrema_checked": 20
+          },
+          "state_sha256": "1052562ca6272555dd2fdae0f7a119873c473fa021603d3aaf885971b92bd474",
+          "work": [
+            400,
+            1656,
+            1656
+          ]
+        }
+      ],
+      "independent_audit": {
+        "scope": "Fresh original residual, continuous-ground and constitutive audit only.\n\nThe supplied alpha/time/history identify the target. Physical acceptance or\nhistory advancement is never inferred from this fixed-state observation.\n",
+        "probe": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-900a9aa/RANSWallResolutionProbe",
+        "probe_sha256": "4bb79a8c3855d4677addb1c550042093ad33973de107e7a0afabc6f668a05ab9",
+        "session_sha256": "aabdefdfa5b0176cb984e239770976415703770e15b33bdce422a467dc495008",
+        "packet_sha256": "5d5459136b2b2fe64be6762cde69741be78ff43b30ae84ffb2b837203e6af88d",
+        "state_sha256": "1052562ca6272555dd2fdae0f7a119873c473fa021603d3aaf885971b92bd474",
+        "history_sha256": "b8ba7917424057a9f6f16a026d82d53ede43985871537facea170ef6e1841b71",
+        "unknowns": 2165,
+        "alpha": 400.0,
+        "time": 0.0025,
+        "ranks": 1,
+        "thread_limits": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1"
+        },
+        "receipt": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-900a9aa/RANSWallResolutionProbe",
+            "case.xml",
+            "input.json",
+            "readback.json"
+          ],
+          "exit_code": 0,
+          "seconds": 8.737252878010622,
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "original_norms": [
+          6.955203670634641e-10,
+          1.4981655406897648e-09,
+          5.241850492167935,
+          1.8493738437198065e-11,
+          6.208674852175315e-16,
+          7.125867449439103e-16,
+          2.3716922523120406e-18,
+          4.358551697540677e-16
+        ],
+        "ground": {
+          "admissible": true,
+          "minimum": 2.132345905469373e-05,
+          "arithmetic_scale": 3.036750087163734e-17,
+          "point": [
+            1.5622409839272393,
+            0.0,
+            0.0
+          ],
+          "geometry": 4.0,
+          "extrema_checked": 20.0
+        },
+        "qualification": {
+          "r2_covariance": [
+            1.4633934241992646e-05,
+            0.17569888423745203
+          ],
+          "r2_inner_minimum_point": [
+            -2.1666666666666665,
+            0.0,
+            0.0,
+            7.488732527494111e-05,
+            0.513037979634873,
+            0.0008668394793236201,
+            0.26122516255637757,
+            4.992488351662741e-05,
+            1.4633934241992646e-05
+          ],
+          "r2_outer_minimum_point": [
+            -1.6666666666666667,
+            0.0,
+            2.0,
+            0.50783651532194,
+            0.07122833478121703,
+            0.17569888423745203
+          ],
+          "r2_outer_range": [
+            0.0009999990429379046,
+            0.9915718832102483,
+            1.0090410634034912,
+            0.9801856994179545,
+            1.0047990514769374,
+            0.9969748397850393,
+            1.0067845354668743
+          ],
+          "r2_qualified": [
+            1.0
+          ],
+          "r2_scalar_domain": [
+            1.0,
+            0.00014669177242895954,
+            7.488732527494111e-05,
+            0.5062053919037133,
+            0.03631791663093067,
+            0.5089636445293587,
+            0.07119660502858348,
+            0.8291080661445158,
+            1.0
+          ],
+          "r4_outer_gradient_witness": [
+            -2.125,
+            0.0,
+            2.6666666666666665,
+            0.0,
+            2.0,
+            0.0009999990429379046,
+            36.0,
+            0.0
+          ]
+        },
+        "physical_acceptance_inferred": false,
+        "negative_ground_guard": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-900a9aa/RANSWallResolutionProbe",
+            "case.xml",
+            "negative-ground.json",
+            "must-not-exist.json"
+          ],
+          "exit_code": 1,
+          "seconds": 1.5176457819907228,
+          "log_sha256": "fbad3e1b83782e56b97595d481b407145f1e3a040fef434906e2da9b8b07392f",
+          "rejected_before_scalar_evaluation": true,
+          "changed_row": 1185
+        }
+      }
+    },
+    "source-anchor-enabled": {
+      "review_path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/source-anchor-enabled-completed-review.json",
+      "review_sha256": "51d1011751eb67ce07cf72f4c037333b03bf7cb0ac74db0eacd0837260aa1443",
+      "raw": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/source-anchor-enabled-completed.json",
+        "sha256": "9ad393c66503d0aa29e2341bee1d5fd946ca31004a82ed095ca052a6e0654da7"
+      },
+      "execution_source": "900a9aabc58f368f7f61a0aa95e56f834551bc76",
+      "manifest_status": "failed",
+      "manifest_sha256": "9d94c3e7dd3d43110ea575bfaab3d704fe0a802a959ed4e15deb0df3a8048c7a",
+      "target_xml_sha256": "a8e701d0a6ea30b39a8c55baa4e110c575ba8306d50d264ac9612e9bc2262541",
+      "executables": {
+        "IncNavierStokesSolver": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-900a9aa/IncNavierStokesSolver",
+          "sha256": "f85e9677109831270c50946b6e7eb58ede217a95e94f25947f60758feca776d9"
+        },
+        "RANSWallResolutionProbe": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-900a9aa/RANSWallResolutionProbe",
+          "sha256": "4bb79a8c3855d4677addb1c550042093ad33973de107e7a0afabc6f668a05ab9"
+        }
+      },
+      "ranks": 1.0,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "target": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-900a9aa/IncNavierStokesSolver",
+          "case.xml"
+        ],
+        "exit_code": 1.0,
+        "seconds": 3146.6338615580025,
+        "log_sha256": "660922bfa929f74a0ccf5a060d8588542d3ec355ce503d4bd783800ded582954",
+        "steps": 0.0,
+        "time": 0.0,
+        "failure": "EP-AWF patch: reduced iteration limit before original full-stage convergence",
+        "native_report_sha256": "65d28b2d7bded0a784d7673f67be49773228bb2f43873d78b6e7544963e4a7f3",
+        "first_stage_input": {
+          "unknowns": 2165.0,
+          "tolerance": 2e-12,
+          "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca",
+          "history_value_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca",
+          "incoming_guess_sha256": "b8ba7917424057a9f6f16a026d82d53ede43985871537facea170ef6e1841b71",
+          "guess_sha256": "825506e674ac4ba0efbec53232bb8fc832f22894360d93fb74042e2d2aa630ac",
+          "event": "stage_input",
+          "sweep": 0.0,
+          "alpha": 400.0,
+          "time": 0.0025,
+          "seconds": 0.607676088
+        }
+      },
+      "commands": [
+        {
+          "command": [
+            "python3",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-source/solvers/IncNavierStokesSolver/Tests/RANS/test_cls_epawf_reduced_response.py",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/source-anchor-enabled"
+          ],
+          "exit_code": 0,
+          "seconds": 0.18840320700837765,
+          "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/source-anchor-enabled-operator-checks.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "command": [
+            "python3",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-source/solvers/IncNavierStokesSolver/Tests/RANS/audit_cls_epawf_saved_state.py",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-900a9aa/RANSWallResolutionProbe",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/source-anchor-enabled/target/case.xml",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/source-anchor-enabled/target/readback-input.json",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/audit-source-anchor-enabled",
+            "--check-ground-guard"
+          ],
+          "exit_code": 0,
+          "seconds": 10.929903382988414,
+          "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/source-anchor-enabled-independent-audit.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "native": {
+        "steps": 0.0,
+        "time": 0.0,
+        "failure": "EP-AWF patch: reduced iteration limit before original full-stage convergence",
+        "accepted_state_and_history_preserved": true,
+        "readback_norm_difference": 0.0,
+        "H_refined_after_last_logged_state": false
+      },
+      "operator_checks": "passed_operator_checks",
+      "non_k": {
+        "evaluations": 403,
+        "converged": 403,
+        "failed": {},
+        "flow_solves": 1690,
+        "epsilon_solves": 1690,
+        "maximum_attained": 1.980499612233234e-09,
+        "maximum_attained_ratio": 0.9948790014838395
+      },
+      "response_summary": {
+        "total": 192,
+        "usable": 192,
+        "maximum_used_two_scale_error": 0.0021284234151675704,
+        "maximum_used_observation_error": 0.022650197662938243
+      },
+      "history": [
+        {
+          "physical_history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca",
+          "radius_scaling": "Euclidean norm of free k coefficient displacement divided by reference K",
+          "response_method": "one-sided differences of converged sequential non-k solves",
+          "half_response_warm_start": "interpolate converged non-k coefficients; preserve exact requested k",
+          "response_field_preconditioner_reuse": true,
+          "response_preconditioner_policy": "probe-only separate base velocity/pressure and epsilon factors; original H convergence required; fresh-operator retry on failure; canonical check and actual trials use current operators",
+          "initial_basis_budget": 96,
+          "initial_restoration_weight": 0,
+          "response_krylov_budget": 16,
+          "active_witness_selection": "original_observation_order_per_family_and_region",
+          "previous_direction_priority": "after_conditional_krylov_and_rate_seeds",
+          "probe_basis": "orthogonal field directions with feasible sign/size selection; inward fallback",
+          "minimum_orthogonal_probe_step": 1e-10,
+          "canonical_half_branch_check": "always; optional verification cannot change column selection",
+          "combined_direction_checks": true,
+          "second_order_qualification_correction": true,
+          "constraint_response_secants": true,
+          "adaptive_qualified_response_space": true,
+          "nonlinear_destruction_ray": true,
+          "nonlinear_destruction_refinements": 1,
+          "interior_source_model_anchors": true,
+          "model_face_solver": "Euclidean null space through 64 model variables; checked augmented orthonormal-face solve above; null-space fallback",
+          "model_direct_face_threshold": 64,
+          "model_cut_filter": "large slack-free models: conservative field-Gram ball bound; final scan of every original frozen cut",
+          "qualification_correction_budget": 6,
+          "continuation_algebraic_diagnostic": false,
+          "qualification_policy": "original_bounds_enforced",
+          "maximum_basis": 512,
+          "response_accuracy": 2e-09,
+          "event": "protocol",
+          "iteration": 0,
+          "alpha": 400,
+          "time": 0.0025,
+          "seconds": 0.004737199
+        },
+        {
+          "event": "initial",
+          "iteration": 0,
+          "seconds": 1.944732846,
+          "alpha": 400,
+          "time": 0.0025,
+          "norms": [
+            1.4559763998548924e-10,
+            1.0344012461319982e-09,
+            7.1302877208629,
+            4.2949215298494454e-12,
+            6.55427126998624e-16,
+            6.794737794953839e-16,
+            2.3208702754767826e-17,
+            0
+          ],
+          "reduced_norm": 7.1302877208629,
+          "violation": 0,
+          "outer_range": [
+            0.0009999998290262102,
+            0.9913007212943005,
+            1.0062416585076146,
+            0.9812197153976333,
+            1.00283949724592,
+            0.9976749724126304,
+            1.005535619587661
+          ],
+          "covariance": [
+            5.133850282483769e-05,
+            0.1760168160680483
+          ],
+          "gradient_witness": [
+            1,
+            0,
+            2,
+            0,
+            2,
+            -0.0009999998290262102,
+            33,
+            1
+          ],
+          "qualified": true,
+          "ground": {
+            "admissible": true,
+            "minimum": 5.3226435726209056e-05,
+            "arithmetic_scale": 3.032042284340007e-17,
+            "point": [
+              1.5599897531771276,
+              0,
+              0
+            ],
+            "geometry": 4,
+            "extrema_checked": 20
+          },
+          "state_sha256": "825506e674ac4ba0efbec53232bb8fc832f22894360d93fb74042e2d2aa630ac",
+          "work": [
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "same_k_difference": 0,
+          "tightened_k_difference": 1.6572895404456037e-08,
+          "failed_response_rolled_back": true,
+          "k_coefficients_fixed": true,
+          "event": "repeatability",
+          "iteration": 0,
+          "alpha": 400,
+          "time": 0.0025,
+          "seconds": 20.867345176
+        },
+        {
+          "event": "direction",
+          "iteration": 0,
+          "seconds": 1098.696596122,
+          "basis_dimension": 96,
+          "response_rank": 96,
+          "orthogonal_probes": 96,
+          "maximum_column_correlation": 1.2522429446000095e-16,
+          "qp_solved": true,
+          "qp_failure": "",
+          "qp_steps": 6977,
+          "radius_model_solves": 214,
+          "augmented_face_solves": 6965,
+          "augmented_face_fallbacks": 0,
+          "warm_face_solves": 202,
+          "warm_face_fallbacks": 0,
+          "active_constraints": 16,
+          "next_witness_policy": "original_observation_order_per_family_and_region",
+          "next_active_witnesses": [
+            {
+              "observation": 23185,
+              "family": 0,
+              "point": [
+                -0.9602898564975362,
+                0,
+                2
+              ],
+              "projected": false
+            },
+            {
+              "observation": 24127,
+              "family": 0,
+              "point": [
+                -3.375,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false
+            },
+            {
+              "observation": 24133,
+              "family": 0,
+              "point": [
+                -3.25,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false
+            },
+            {
+              "observation": 24493,
+              "family": 0,
+              "point": [
+                -2.935870074254803,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false
+            },
+            {
+              "observation": 25357,
+              "family": 0,
+              "point": [
+                -2,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false
+            },
+            {
+              "observation": 25435,
+              "family": 0,
+              "point": [
+                -1.375,
+                0,
+                2
+              ],
+              "projected": false
+            },
+            {
+              "observation": 25933,
+              "family": 0,
+              "point": [
+                1,
+                0,
+                2
+              ],
+              "projected": false
+            },
+            {
+              "observation": 28921,
+              "family": 0,
+              "point": [
+                -2.25,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false
+            },
+            {
+              "observation": 46255,
+              "family": 0,
+              "point": [
+                -2.6046496089512394,
+                0,
+                4
+              ],
+              "projected": false
+            },
+            {
+              "observation": 49811,
+              "family": 0,
+              "point": [
+                -3.6666666666666665,
+                0,
+                2
+              ],
+              "projected": false
+            },
+            {
+              "observation": 50495,
+              "family": 0,
+              "point": [
+                -2.4166666666666665,
+                0,
+                2
+              ],
+              "projected": false
+            },
+            {
+              "observation": 52281,
+              "family": 0,
+              "point": [
+                1.6666666666666665,
+                0,
+                2
+              ],
+              "projected": false
+            }
+          ],
+          "ground_cuts_added": 11,
+          "maximum_ball_redundant_cuts": 159028,
+          "original_model_cuts": 193716,
+          "ground_model_admissible": true,
+          "radius": 0.4,
+          "displacement": 0.39901651686971856,
+          "predicted_norm": 5.33329421373153,
+          "predicted_violation": 8.791231631555263e-14,
+          "merit_slope": -20.954493789555798,
+          "unscaled_affine_kkt": [
+            6.578396681555798e-17,
+            7.071394777885706e-13,
+            2.490499389335184e-14
+          ],
+          "active": [
+            {
+              "kind": "qualification",
+              "rhs": 7.402362639493564e-10,
+              "family": 0,
+              "point": [
+                1,
+                0,
+                2
+              ],
+              "projected": false,
+              "sign": -1,
+              "value": -0.0009999998290262102
+            },
+            {
+              "kind": "qualification",
+              "rhs": 1.5793352920532332e-06,
+              "family": 0,
+              "point": [
+                -2.6046496089512394,
+                0,
+                4
+              ],
+              "projected": false,
+              "sign": 1,
+              "value": 0.0009999945545553501
+            },
+            {
+              "kind": "qualification",
+              "rhs": 4.839538306870336e-05,
+              "family": 0,
+              "point": [
+                -2,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "sign": -1,
+              "value": -0.0009971891922035958
+            },
+            {
+              "kind": "qualification",
+              "rhs": 0.00015026682775320135,
+              "family": 0,
+              "point": [
+                -2.935870074254803,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "sign": 1,
+              "value": 0.0009879865786210917
+            },
+            {
+              "kind": "qualification",
+              "rhs": 0.0004211417664332299,
+              "family": 0,
+              "point": [
+                -3.6666666666666665,
+                0,
+                2
+              ],
+              "projected": false,
+              "sign": -1,
+              "value": -0.0009521448654306042
+            },
+            {
+              "kind": "qualification",
+              "rhs": 3.395028499683518e-05,
+              "family": 0,
+              "point": [
+                -2.4166666666666665,
+                0,
+                2
+              ],
+              "projected": false,
+              "sign": -1,
+              "value": -0.0009936824083824902
+            },
+            {
+              "kind": "qualification",
+              "rhs": 8.967300289947763e-05,
+              "family": 0,
+              "point": [
+                1.6666666666666665,
+                0,
+                2
+              ],
+              "projected": false,
+              "sign": -1,
+              "value": -0.000992298092170052
+            },
+            {
+              "kind": "qualification",
+              "rhs": 0.0018993593474755106,
+              "family": 0,
+              "point": [
+                -3.375,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "sign": 1,
+              "value": 0.0009071323063920556
+            },
+            {
+              "kind": "qualification",
+              "rhs": 0.00010851482038932423,
+              "family": 0,
+              "point": [
+                -1.3333333333333335,
+                0,
+                2
+              ],
+              "projected": false,
+              "sign": -1,
+              "value": -0.0009790112551375518
+            },
+            {
+              "kind": "qualification",
+              "rhs": 1.0509788705434986e-05,
+              "family": 0,
+              "point": [
+                -0.8717401485096066,
+                0,
+                2
+              ],
+              "projected": false,
+              "sign": -1,
+              "value": -0.0009976983377315563
+            },
+            {
+              "kind": "qualification",
+              "rhs": 0.0011247851025949702,
+              "family": 0,
+              "point": [
+                -2.25,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "sign": 1,
+              "value": 0.0009586256150939665
+            },
+            {
+              "kind": "qualification",
+              "rhs": 0.0012920322826304048,
+              "family": 0,
+              "point": [
+                -3.25,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "sign": 1,
+              "value": 0.0009239606428537162
+            },
+            {
+              "kind": "qualification",
+              "rhs": 2.3866478762673255e-06,
+              "family": 0,
+              "point": [
+                -0.9602898564975362,
+                0,
+                2
+              ],
+              "projected": false,
+              "sign": -1,
+              "value": -0.0009994549307962286
+            },
+            {
+              "kind": "qualification",
+              "rhs": 0.00011330372614964666,
+              "family": 0,
+              "point": [
+                -1.375,
+                0,
+                2
+              ],
+              "projected": false,
+              "sign": -1,
+              "value": -0.0009786846444068686
+            },
+            {
+              "kind": "continuous_ground",
+              "rhs": 0.00046522194276607054,
+              "point": [
+                -2.1648118918125276,
+                0,
+                0
+              ]
+            },
+            {
+              "kind": "continuous_ground",
+              "rhs": 0.00021221823660938838,
+              "point": [
+                1.5610555165354698,
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "available": true,
+          "role": "residual_reduction",
+          "fraction": 2.5061619199250002e-05,
+          "required": 2e-09,
+          "attained": 7.804324902775297e-10,
+          "half_attained": 1.7823714604252966e-09,
+          "relative_residual_error": 0.0006070357411365023,
+          "half_relative_residual_error": 0.0007312100715967811,
+          "observation_relative_error": 0.001786278767714968,
+          "half_observation_relative_error": 0.007192040506248346,
+          "observation_change_error": 4.476703826017808e-08,
+          "half_observation_change_error": 9.012209021658863e-08,
+          "predicted_merit_slope": -20.954493789555798,
+          "actual_merit_slope": -20.955558843091445,
+          "half_merit_slope": -20.94169195004045,
+          "full_inventory_violation": 0,
+          "half_full_inventory_violation": 0,
+          "profile_branch_change": false,
+          "half_profile_branch_change": false,
+          "signed_active_observations": [
+            {
+              "family": 0,
+              "sign": -1,
+              "point": [
+                -0.9602898564975362,
+                0,
+                2
+              ],
+              "projected": false,
+              "predicted_change": 1.3660316821918736e-08,
+              "measured_change": 1.399872357774442e-08,
+              "half_predicted_change": 6.830158410959368e-09,
+              "half_measured_change": 2.728813043143382e-09
+            },
+            {
+              "family": 0,
+              "sign": 1,
+              "point": [
+                -3.375,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "predicted_change": 2.327414773116839e-06,
+              "measured_change": 2.323797446507768e-06,
+              "half_predicted_change": 1.1637073865584195e-06,
+              "half_measured_change": 1.164255464946728e-06
+            },
+            {
+              "family": 0,
+              "sign": 1,
+              "point": [
+                -3.25,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "predicted_change": 1.9056694129577635e-06,
+              "measured_change": 1.907774190352257e-06,
+              "half_predicted_change": 9.528347064788817e-07,
+              "half_measured_change": 9.61435892084244e-07
+            },
+            {
+              "family": 0,
+              "sign": 1,
+              "point": [
+                -2.935870074254803,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "predicted_change": 3.010757918805315e-07,
+              "measured_change": 3.188673361020611e-07,
+              "half_predicted_change": 1.5053789594026574e-07,
+              "half_measured_change": 1.8107355628715222e-07
+            },
+            {
+              "family": 0,
+              "sign": -1,
+              "point": [
+                -2,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "predicted_change": 7.044339463614163e-08,
+              "measured_change": 8.737003658479435e-08,
+              "half_predicted_change": 3.522169731807081e-08,
+              "half_measured_change": 4.837683488337136e-08
+            },
+            {
+              "family": 0,
+              "sign": -1,
+              "point": [
+                -1.375,
+                0,
+                2
+              ],
+              "projected": false,
+              "predicted_change": 5.341973249714873e-07,
+              "measured_change": 5.330526511360597e-07,
+              "half_predicted_change": 2.6709866248574366e-07,
+              "half_measured_change": 2.638825962464288e-07
+            },
+            {
+              "family": 0,
+              "sign": -1,
+              "point": [
+                -0.8717401485096066,
+                0,
+                2
+              ],
+              "projected": false,
+              "predicted_change": 5.7683383296780354e-08,
+              "measured_change": 5.778751764098697e-08,
+              "half_predicted_change": 2.8841691648390177e-08,
+              "half_measured_change": 2.4643132756705546e-08
+            },
+            {
+              "family": 0,
+              "sign": -1,
+              "point": [
+                1,
+                0,
+                2
+              ],
+              "projected": false,
+              "predicted_change": 4.284879528675236e-12,
+              "measured_change": -6.75047710419336e-10,
+              "half_predicted_change": 2.142439764337618e-12,
+              "half_measured_change": -2.958529246123352e-09
+            },
+            {
+              "family": 0,
+              "sign": 1,
+              "point": [
+                -2.25,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "predicted_change": 1.036909079118362e-06,
+              "measured_change": 1.0233701934229271e-06,
+              "half_predicted_change": 5.18454539559181e-07,
+              "half_measured_change": 5.015091559436603e-07
+            },
+            {
+              "family": 0,
+              "sign": 1,
+              "point": [
+                -2.6046496089512394,
+                0,
+                4
+              ],
+              "projected": false,
+              "predicted_change": 1.3647165162158764e-10,
+              "measured_change": 2.044423984698602e-10,
+              "half_predicted_change": 6.823582581079382e-11,
+              "half_measured_change": 1.4340682608400762e-10
+            },
+            {
+              "family": 0,
+              "sign": -1,
+              "point": [
+                -3.6666666666666665,
+                0,
+                2
+              ],
+              "projected": false,
+              "predicted_change": 1.1993271593055558e-06,
+              "measured_change": 1.1946078600566384e-06,
+              "half_predicted_change": 5.996635796527779e-07,
+              "half_measured_change": 6.073140215052468e-07
+            },
+            {
+              "family": 0,
+              "sign": -1,
+              "point": [
+                -2.4166666666666665,
+                0,
+                2
+              ],
+              "projected": false,
+              "predicted_change": 1.5832907537413326e-07,
+              "measured_change": 1.557983119843148e-07,
+              "half_predicted_change": 7.916453768706663e-08,
+              "half_measured_change": 7.395834643193319e-08
+            },
+            {
+              "family": 0,
+              "sign": -1,
+              "point": [
+                -1.3333333333333335,
+                0,
+                2
+              ],
+              "projected": false,
+              "predicted_change": 5.260119312126963e-07,
+              "measured_change": 5.247739888228853e-07,
+              "half_predicted_change": 2.6300596560634816e-07,
+              "half_measured_change": 2.597386532326646e-07
+            },
+            {
+              "family": 0,
+              "sign": -1,
+              "point": [
+                1.6666666666666665,
+                0,
+                2
+              ],
+              "projected": false,
+              "predicted_change": 1.9302228114158193e-07,
+              "measured_change": 1.9257778159945156e-07,
+              "half_predicted_change": 9.651114057079097e-08,
+              "half_measured_change": 9.173473808974663e-08
+            }
+          ],
+          "event": "combined_direction_check",
+          "iteration": 0,
+          "alpha": 400,
+          "time": 0.0025,
+          "seconds": 1111.924421973
+        },
+        {
+          "refinement": 0,
+          "improved": true,
+          "failure": "",
+          "dimension": 96,
+          "available_derivatives": 96,
+          "two_scale_error": 0.007177554743594824,
+          "augmented_face_solves": 553,
+          "augmented_face_fallbacks": 0,
+          "warm_face_solves": 17,
+          "warm_face_fallbacks": 0,
+          "ball_redundant_cuts": 159028,
+          "before_norm": 5.79796777115848,
+          "predicted_norm": 5.755898544697161,
+          "fraction": 0.0625,
+          "original_merit_slope": -20.791616423130503,
+          "radius": 0.4,
+          "scope": "constrained nonlinear destruction surrogate in measured response space; not Y(k)",
+          "event": "source_direction_refinement",
+          "iteration": 0,
+          "alpha": 400,
+          "time": 0.0025,
+          "seconds": 1421.931249764
+        },
+        {
+          "available": true,
+          "required": 2e-09,
+          "attained": 7.868619049793998e-10,
+          "half_attained": 1.7982477941438253e-09,
+          "half_relative_residual_error": 0.0006944365636135653,
+          "predicted_merit_slope": -20.791616423130503,
+          "actual_merit_slope": -20.792999810809913,
+          "half_merit_slope": -20.779521493432814,
+          "event": "source_refined_direction_check",
+          "iteration": 0,
+          "alpha": 400,
+          "time": 0.0025,
+          "seconds": 1435.248982324
+        },
+        {
+          "fraction": 1,
+          "predicted_norm": 5.744401490351726,
+          "actual_norm": 5.742734530309229,
+          "model_error": 0.03470012951107498,
+          "linear_model_error": 1.9914451238872402,
+          "non_k_error": 1.7367847702963925e-09,
+          "required": 2e-09,
+          "actual_displacement": 0.3986921302963031,
+          "radius": 0.4,
+          "event": "source_ray_prediction",
+          "iteration": 0,
+          "alpha": 400,
+          "time": 0.0025,
+          "seconds": 1496.072533184
+        },
+        {
+          "total": 1.9914451238872402,
+          "inner_destruction": 1.9911957070921584,
+          "remaining": 0.0035664967261902067,
+          "base_b": 0.8323316977592996,
+          "trial_b": 0.8310667693898964,
+          "base_lambda": 1,
+          "trial_lambda": 1,
+          "event": "prediction_decomposition",
+          "iteration": 0,
+          "alpha": 400,
+          "time": 0.0025,
+          "seconds": 1535.020300918
+        },
+        {
+          "fraction": 1,
+          "proposal_origin": "nonlinear_source_refined_direction",
+          "accepted": true,
+          "norm": 5.742734530309229,
+          "full_norm": 5.742734530309229,
+          "violation": 0,
+          "families": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "predicted_norm": 5.355496017030825,
+          "model_error": 1.9914451238872402,
+          "predicted_violation": 0.002228202035029594,
+          "non_k_error": 1.7367847702963925e-09,
+          "second_order_corrections": 2,
+          "displacement": 0.3986921302963031,
+          "physical_k_displacement": 0.20353552726017893,
+          "event": "trial",
+          "iteration": 0,
+          "alpha": 400,
+          "time": 0.0025,
+          "seconds": 1535.025954494
+        },
+        {
+          "actual_to_predicted_gain": 1.0010731801208852,
+          "prediction_model": "nonlinear_destruction_surrogate",
+          "source_model_evaluations": 219,
+          "next_radius": 0.7200000000000001,
+          "event": "radius_agreement",
+          "iteration": 0,
+          "alpha": 400,
+          "time": 0.0025,
+          "seconds": 1535.074232744
+        },
+        {
+          "event": "accepted",
+          "iteration": 1,
+          "seconds": 1536.250117658,
+          "alpha": 400,
+          "time": 0.0025,
+          "norms": [
+            7.487017405341499e-10,
+            1.7367847702963925e-09,
+            5.742734530309229,
+            1.874413114921215e-11,
+            7.174553866577478e-16,
+            8.10585761819532e-16,
+            2.0328790734103204e-18,
+            1.4807134534110792e-15
+          ],
+          "reduced_norm": 5.742734530309229,
+          "violation": 0,
+          "outer_range": [
+            0.0009999990624661725,
+            0.9925025279326462,
+            1.0067462003380774,
+            0.9803874190504583,
+            1.0051024554453787,
+            0.9971117140626274,
+            1.0049970350882151
+          ],
+          "covariance": [
+            1.604258135440624e-05,
+            0.17595688368561446
+          ],
+          "gradient_witness": [
+            -0.8717401485096066,
+            0,
+            2,
+            0,
+            2,
+            -0.0009999990624661725,
+            33,
+            1
+          ],
+          "qualified": true,
+          "ground": {
+            "admissible": true,
+            "minimum": 2.5764724611582992e-05,
+            "arithmetic_scale": 3.0346619711026224e-17,
+            "point": [
+              1.5610736722241219,
+              0,
+              0
+            ],
+            "geometry": 4,
+            "extrema_checked": 20
+          },
+          "state_sha256": "92b7b3781fe178700a01d4977835f9eb79f3dae6dab4840a0bbcda1b214b5dd3",
+          "work": [
+            203,
+            841,
+            841
+          ]
+        },
+        {
+          "event": "direction",
+          "iteration": 1,
+          "seconds": 2676.743492391,
+          "basis_dimension": 96,
+          "response_rank": 96,
+          "orthogonal_probes": 96,
+          "maximum_column_correlation": 8.888631079056132e-17,
+          "qp_solved": true,
+          "qp_failure": "",
+          "qp_steps": 6698,
+          "radius_model_solves": 198,
+          "augmented_face_solves": 6687,
+          "augmented_face_fallbacks": 0,
+          "warm_face_solves": 187,
+          "warm_face_fallbacks": 0,
+          "active_constraints": 15,
+          "next_witness_policy": "original_observation_order_per_family_and_region",
+          "next_active_witnesses": [
+            {
+              "observation": 23641,
+              "family": 0,
+              "point": [
+                -3.3953503910487606,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false
+            },
+            {
+              "observation": 23677,
+              "family": 0,
+              "point": [
+                -3.75,
+                0,
+                2
+              ],
+              "projected": false
+            },
+            {
+              "observation": 24487,
+              "family": 0,
+              "point": [
+                -3,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false
+            },
+            {
+              "observation": 24565,
+              "family": 0,
+              "point": [
+                -2.375,
+                0,
+                2
+              ],
+              "projected": false
+            },
+            {
+              "observation": 25357,
+              "family": 0,
+              "point": [
+                -2,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false
+            },
+            {
+              "observation": 25441,
+              "family": 0,
+              "point": [
+                -1.25,
+                0,
+                2
+              ],
+              "projected": false
+            },
+            {
+              "observation": 26761,
+              "family": 0,
+              "point": [
+                1,
+                0,
+                2
+              ],
+              "projected": false
+            },
+            {
+              "observation": 28531,
+              "family": 0,
+              "point": [
+                -2.204149909283429,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false
+            },
+            {
+              "observation": 46255,
+              "family": 0,
+              "point": [
+                -2.6046496089512394,
+                0,
+                4
+              ],
+              "projected": false
+            },
+            {
+              "observation": 51031,
+              "family": 2,
+              "point": [
+                -1.5833333333333333,
+                0,
+                2
+              ],
+              "projected": false
+            },
+            {
+              "observation": 52281,
+              "family": 0,
+              "point": [
+                1.6666666666666665,
+                0,
+                2
+              ],
+              "projected": false
+            }
+          ],
+          "ground_cuts_added": 10,
+          "maximum_ball_redundant_cuts": 140997,
+          "original_model_cuts": 193749,
+          "ground_model_admissible": true,
+          "radius": 0.7200000000000001,
+          "displacement": 0.7164736096977307,
+          "predicted_norm": 5.024949835795011,
+          "predicted_violation": 2.918741637270017e-13,
+          "merit_slope": -6.840477754723121,
+          "unscaled_affine_kkt": [
+            5.851303599632707e-18,
+            1.476140748268359e-12,
+            1.1482987539763972e-14
+          ],
+          "active": [
+            {
+              "kind": "qualification",
+              "rhs": 1.1780705627677282e-08,
+              "family": 0,
+              "point": [
+                1.6666666666666665,
+                0,
+                2
+              ],
+              "projected": false,
+              "sign": -1,
+              "value": -0.0009999989892908179
+            },
+            {
+              "kind": "qualification",
+              "rhs": 2.14329696504421e-07,
+              "family": 0,
+              "point": [
+                -2.6046496089512394,
+                0,
+                4
+              ],
+              "projected": false,
+              "sign": 1,
+              "value": 0.0009999989334656956
+            },
+            {
+              "kind": "qualification",
+              "rhs": 3.1334781750601855e-08,
+              "family": 0,
+              "point": [
+                1,
+                0,
+                2
+              ],
+              "projected": false,
+              "sign": -1,
+              "value": -0.000999992766680724
+            },
+            {
+              "kind": "qualification",
+              "rhs": 0.00010701143450032538,
+              "family": 0,
+              "point": [
+                -2,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "sign": -1,
+              "value": -0.000991638161467634
+            },
+            {
+              "kind": "qualification",
+              "rhs": 3.4938748341860007e-05,
+              "family": 0,
+              "point": [
+                -2.935870074254803,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "sign": 1,
+              "value": 0.0009966035584410005
+            },
+            {
+              "kind": "qualification",
+              "rhs": 0.00012706382119269383,
+              "family": 0,
+              "point": [
+                -2.375,
+                0,
+                2
+              ],
+              "projected": false,
+              "sign": -1,
+              "value": -0.0009757989120284805
+            },
+            {
+              "kind": "qualification",
+              "rhs": 2.434848518169042e-05,
+              "family": 0,
+              "point": [
+                -3.3953503910487606,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "sign": 1,
+              "value": 0.0009985525728435363
+            },
+            {
+              "kind": "qualification",
+              "rhs": 0.0011969867904067083,
+              "family": 0,
+              "point": [
+                -2.125,
+                0,
+                2.6666666666666665
+              ],
+              "projected": false,
+              "sign": 1,
+              "value": 0.0009737901939583793
+            },
+            {
+              "kind": "qualification",
+              "rhs": 5.0098792883621776e-05,
+              "family": 0,
+              "point": [
+                -2.204149909283429,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "sign": 1,
+              "value": 0.000997033659471791
+            },
+            {
+              "kind": "qualification",
+              "rhs": 0.0004319154676904361,
+              "family": 0,
+              "point": [
+                -3.75,
+                0,
+                2
+              ],
+              "projected": false,
+              "sign": -1,
+              "value": -0.0009516273449489132
+            },
+            {
+              "kind": "qualification",
+              "rhs": 0.00035504010282148444,
+              "family": 2,
+              "point": [
+                -1.5833333333333333,
+                0,
+                2
+              ],
+              "projected": false,
+              "sign": -1,
+              "value": 0.9803986250387088
+            },
+            {
+              "kind": "qualification",
+              "rhs": 9.464655134187649e-05,
+              "family": 0,
+              "point": [
+                -3,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "sign": 1,
+              "value": 0.0009872436848834543
+            },
+            {
+              "kind": "qualification",
+              "rhs": 3.1651602117513386e-05,
+              "family": 0,
+              "point": [
+                -1.25,
+                0,
+                2
+              ],
+              "projected": false,
+              "sign": -1,
+              "value": -0.0009935243762408952
+            },
+            {
+              "kind": "continuous_ground",
+              "rhs": 0.00010722165525228797,
+              "point": [
+                1.562208887280664,
+                0,
+                0
+              ]
+            },
+            {
+              "kind": "continuous_ground",
+              "rhs": 0.00016860061266369176,
+              "point": [
+                -2.164100523307315,
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "available": true,
+          "role": "residual_reduction",
+          "fraction": 1.3957248200975398e-05,
+          "required": 2e-09,
+          "attained": 1.6407185514651323e-09,
+          "half_attained": 8.205335978035252e-10,
+          "relative_residual_error": 0.004673593490313129,
+          "half_relative_residual_error": 0.0055860864132759435,
+          "observation_relative_error": 0.014980709474207564,
+          "half_observation_relative_error": 0.025221381561271412,
+          "observation_change_error": 2.0908948035821862e-07,
+          "half_observation_change_error": 1.7601054121108474e-07,
+          "predicted_merit_slope": -6.840477754723121,
+          "actual_merit_slope": -6.847967444991997,
+          "half_merit_slope": -6.847529656989598,
+          "full_inventory_violation": 0,
+          "half_full_inventory_violation": 0,
+          "profile_branch_change": false,
+          "half_profile_branch_change": false,
+          "signed_active_observations": [
+            {
+              "family": 0,
+              "sign": 1,
+              "point": [
+                -3.3953503910487606,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "predicted_change": 2.020210007801489e-08,
+              "measured_change": 6.365575338580724e-08,
+              "half_predicted_change": 1.0101050039007445e-08,
+              "half_measured_change": 4.6851699760069783e-08
+            },
+            {
+              "family": 0,
+              "sign": -1,
+              "point": [
+                -3.75,
+                0,
+                2
+              ],
+              "projected": false,
+              "predicted_change": 6.751491526882944e-07,
+              "measured_change": 6.936793179711547e-07,
+              "half_predicted_change": 3.375745763441472e-07,
+              "half_measured_change": 3.5637135062035707e-07
+            },
+            {
+              "family": 0,
+              "sign": 1,
+              "point": [
+                -3,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "predicted_change": 1.7804305621555728e-07,
+              "measured_change": 3.871325365737745e-07,
+              "half_predicted_change": 8.902152810777864e-08,
+              "half_measured_change": 2.650320693188627e-07
+            },
+            {
+              "family": 0,
+              "sign": 1,
+              "point": [
+                -2.935870074254803,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "predicted_change": 4.74049778418555e-08,
+              "measured_change": 2.0517092370697135e-07,
+              "half_predicted_change": 2.370248892092775e-08,
+              "half_measured_change": 1.561407598622129e-07
+            },
+            {
+              "family": 0,
+              "sign": -1,
+              "point": [
+                -2.375,
+                0,
+                2
+              ],
+              "projected": false,
+              "predicted_change": 3.3778059155254794e-07,
+              "measured_change": 3.1781886065005026e-07,
+              "half_predicted_change": 1.6889029577627397e-07,
+              "half_measured_change": 1.5239213593235317e-07
+            },
+            {
+              "family": 0,
+              "sign": -1,
+              "point": [
+                -2,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "predicted_change": 1.1670825581298578e-07,
+              "measured_change": 9.660572535675861e-08,
+              "half_predicted_change": 5.835412790649289e-08,
+              "half_measured_change": 4.022945712548137e-08
+            },
+            {
+              "family": 0,
+              "sign": -1,
+              "point": [
+                -1.25,
+                0,
+                2
+              ],
+              "projected": false,
+              "predicted_change": 9.038188806223739e-08,
+              "measured_change": 7.091316178044099e-08,
+              "half_predicted_change": 4.519094403111869e-08,
+              "half_measured_change": 3.1901415882357165e-08
+            },
+            {
+              "family": 0,
+              "sign": -1,
+              "point": [
+                1,
+                0,
+                2
+              ],
+              "projected": false,
+              "predicted_change": 1.0095723256200994e-10,
+              "measured_change": 5.142737542467433e-09,
+              "half_predicted_change": 5.047861628100497e-11,
+              "half_measured_change": 4.436609179010619e-09
+            },
+            {
+              "family": 0,
+              "sign": 1,
+              "point": [
+                -2.204149909283429,
+                0,
+                2.3333333333333335
+              ],
+              "projected": false,
+              "predicted_change": 4.140195100035452e-08,
+              "measured_change": 1.0750079403070283e-08,
+              "half_predicted_change": 2.070097550017726e-08,
+              "half_measured_change": -2.969646171510898e-09
+            },
+            {
+              "family": 0,
+              "sign": 1,
+              "point": [
+                -2.125,
+                0,
+                2.6666666666666665
+              ],
+              "projected": false,
+              "predicted_change": 3.658167682219818e-07,
+              "measured_change": 3.4949403007164723e-07,
+              "half_predicted_change": 1.829083841109909e-07,
+              "half_measured_change": 1.7097755848628296e-07
+            },
+            {
+              "family": 0,
+              "sign": 1,
+              "point": [
+                -2.6046496089512394,
+                0,
+                4
+              ],
+              "projected": false,
+              "predicted_change": 1.488587076412546e-11,
+              "measured_change": -1.3847360609813366e-09,
+              "half_predicted_change": 7.44293538206273e-12,
+              "half_measured_change": -1.1325191772269616e-09
+            },
+            {
+              "family": 2,
+              "sign": -1,
+              "point": [
+                -1.5833333333333333,
+                0,
+                2
+              ],
+              "projected": false,
+              "predicted_change": 2.7818543021908086e-07,
+              "measured_change": 2.7818404967685306e-07,
+              "half_predicted_change": 1.3909271510954043e-07,
+              "half_measured_change": 1.390920212709127e-07
+            },
+            {
+              "family": 0,
+              "sign": -1,
+              "point": [
+                1.6666666666666665,
+                0,
+                2
+              ],
+              "projected": false,
+              "predicted_change": 1.4106719320954488e-11,
+              "measured_change": 5.766357759285559e-11,
+              "half_predicted_change": 7.053359660477244e-12,
+              "half_measured_change": 7.105081606055395e-10
+            }
+          ],
+          "event": "combined_direction_check",
+          "iteration": 1,
+          "alpha": 400,
+          "time": 0.0025,
+          "seconds": 2690.017073232
+        },
+        {
+          "refinement": 0,
+          "improved": true,
+          "failure": "",
+          "dimension": 96,
+          "available_derivatives": 96,
+          "two_scale_error": 0.011948925927245545,
+          "augmented_face_solves": 459,
+          "augmented_face_fallbacks": 0,
+          "warm_face_solves": 17,
+          "warm_face_fallbacks": 0,
+          "ball_redundant_cuts": 140997,
+          "before_norm": 5.221047530672277,
+          "predicted_norm": 5.179094341991875,
+          "fraction": 0.125,
+          "original_merit_slope": -6.669472068712565,
+          "radius": 0.7200000000000001,
+          "scope": "constrained nonlinear destruction surrogate in measured response space; not Y(k)",
+          "event": "source_direction_refinement",
+          "iteration": 1,
+          "alpha": 400,
+          "time": 0.0025,
+          "seconds": 3004.914077769
+        },
+        {
+          "available": true,
+          "required": 2e-09,
+          "attained": 1.6692992098598934e-09,
+          "half_attained": 8.348081359218054e-10,
+          "half_relative_residual_error": 0.00543428010276471,
+          "predicted_merit_slope": -6.669472068712565,
+          "actual_merit_slope": -6.6765642662223605,
+          "half_merit_slope": -6.676191515349471,
+          "event": "source_refined_direction_check",
+          "iteration": 1,
+          "alpha": 400,
+          "time": 0.0025,
+          "seconds": 3017.074280047
+        },
+        {
+          "fraction": 1,
+          "predicted_norm": 5.1860087235911685,
+          "actual_norm": 5.201830400141313,
+          "model_error": 0.22738031839939832,
+          "linear_model_error": 0.941775955311238,
+          "non_k_error": 8.550161068662847e-10,
+          "required": 2e-09,
+          "actual_displacement": 0.7146460474205067,
+          "radius": 0.7200000000000001,
+          "event": "source_ray_prediction",
+          "iteration": 1,
+          "alpha": 400,
+          "time": 0.0025,
+          "seconds": 3080.34807478
+        },
+        {
+          "total": 0.941775955311238,
+          "inner_destruction": 0.9386927071682596,
+          "remaining": 0.004109831920371647,
+          "base_b": 0.8310667693898964,
+          "trial_b": 0.8289576008570706,
+          "base_lambda": 1,
+          "trial_lambda": 1,
+          "event": "prediction_decomposition",
+          "iteration": 1,
+          "alpha": 400,
+          "time": 0.0025,
+          "seconds": 3121.61547156
+        },
+        {
+          "fraction": 1,
+          "proposal_origin": "nonlinear_source_refined_direction",
+          "accepted": true,
+          "norm": 5.201830400141313,
+          "full_norm": 5.201830400141313,
+          "violation": 0,
+          "families": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "predicted_norm": 5.042533495757184,
+          "model_error": 0.941775955311238,
+          "predicted_violation": 0.005645034211681143,
+          "non_k_error": 8.550161068662847e-10,
+          "second_order_corrections": 2,
+          "displacement": 0.7146460474205067,
+          "physical_k_displacement": 0.36483253370974406,
+          "event": "trial",
+          "iteration": 1,
+          "alpha": 400,
+          "time": 0.0025,
+          "seconds": 3121.621100981
+        },
+        {
+          "actual_to_predicted_gain": 0.9729874153835273,
+          "prediction_model": "nonlinear_destruction_surrogate",
+          "source_model_evaluations": 218,
+          "next_radius": 1,
+          "event": "radius_agreement",
+          "iteration": 1,
+          "alpha": 400,
+          "time": 0.0025,
+          "seconds": 3121.678605443
+        },
+        {
+          "event": "accepted",
+          "iteration": 2,
+          "seconds": 3123.051750453,
+          "alpha": 400,
+          "time": 0.0025,
+          "norms": [
+            2.2247864240515215e-10,
+            8.550161068662847e-10,
+            5.201830400141313,
+            8.047005396026703e-12,
+            7.203801561430545e-16,
+            6.655610189716081e-16,
+            3.659182332138577e-17,
+            7.493126548511712e-16
+          ],
+          "reduced_norm": 5.201830400141313,
+          "violation": 0,
+          "outer_range": [
+            0.0009999991113120998,
+            0.9915724413424793,
+            1.0092045420016622,
+            0.9801652658205143,
+            1.0045995741954117,
+            0.9969610845644974,
+            1.0064641710228057
+          ],
+          "covariance": [
+            1.0233992189186258e-05,
+            0.17569724664119873
+          ],
+          "gradient_witness": [
+            -2.6046496089512394,
+            0,
+            4,
+            0,
+            2,
+            0.0009999991113120998,
+            56,
+            0
+          ],
+          "qualified": true,
+          "ground": {
+            "admissible": true,
+            "minimum": 1.3438600869481542e-05,
+            "arithmetic_scale": 3.0376593573496905e-17,
+            "point": [
+              1.5622325758493338,
+              0,
+              0
+            ],
+            "geometry": 4,
+            "extrema_checked": 20
+          },
+          "state_sha256": "92f0c2152d67e4c77aa7cd9ccab645f7426c2faec48f827e133ae70f7095426a",
+          "work": [
+            403,
+            1690,
+            1690
+          ]
+        }
+      ],
+      "independent_audit": {
+        "scope": "Fresh original residual, continuous-ground and constitutive audit only.\n\nThe supplied alpha/time/history identify the target. Physical acceptance or\nhistory advancement is never inferred from this fixed-state observation.\n",
+        "probe": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-900a9aa/RANSWallResolutionProbe",
+        "probe_sha256": "4bb79a8c3855d4677addb1c550042093ad33973de107e7a0afabc6f668a05ab9",
+        "session_sha256": "a8e701d0a6ea30b39a8c55baa4e110c575ba8306d50d264ac9612e9bc2262541",
+        "packet_sha256": "077a59b0da32652e3f86c5543ba4bc44369f240c41d6e7033c5a149a3cdf05a8",
+        "state_sha256": "92f0c2152d67e4c77aa7cd9ccab645f7426c2faec48f827e133ae70f7095426a",
+        "history_sha256": "b8ba7917424057a9f6f16a026d82d53ede43985871537facea170ef6e1841b71",
+        "unknowns": 2165,
+        "alpha": 400.0,
+        "time": 0.0025,
+        "ranks": 1,
+        "thread_limits": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1"
+        },
+        "receipt": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-900a9aa/RANSWallResolutionProbe",
+            "case.xml",
+            "input.json",
+            "readback.json"
+          ],
+          "exit_code": 0,
+          "seconds": 8.440590084006544,
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "original_norms": [
+          2.2247864240515215e-10,
+          8.550161068662847e-10,
+          5.201830400141313,
+          8.047005396026703e-12,
+          7.203801561430545e-16,
+          6.655610189716081e-16,
+          3.659182332138577e-17,
+          7.493126548511712e-16
+        ],
+        "ground": {
+          "admissible": true,
+          "minimum": 1.3438600869481542e-05,
+          "arithmetic_scale": 3.0376593573496905e-17,
+          "point": [
+            1.5622325758493338,
+            0.0,
+            0.0
+          ],
+          "geometry": 4.0,
+          "extrema_checked": 20.0
+        },
+        "qualification": {
+          "r2_covariance": [
+            1.0233992189186258e-05,
+            0.17569724664119873
+          ],
+          "r2_inner_minimum_point": [
+            -2.1666666666666665,
+            0.0,
+            0.0,
+            5.237143070424094e-05,
+            0.5130633601169181,
+            0.000866862819014,
+            0.26121357984820365,
+            3.4914287136160624e-05,
+            1.0233992189186258e-05
+          ],
+          "r2_outer_minimum_point": [
+            -1.6666666666666667,
+            0.0,
+            2.0,
+            0.5078344450144285,
+            0.07122732081291763,
+            0.17569724664119873
+          ],
+          "r2_outer_range": [
+            0.0009999991113120998,
+            0.9915724413424793,
+            1.0092045420016622,
+            0.9801652658205143,
+            1.0045995741954117,
+            0.9969610845644974,
+            1.0064641710228057
+          ],
+          "r2_qualified": [
+            1.0
+          ],
+          "r2_scalar_domain": [
+            1.0,
+            0.0001025868925941764,
+            5.237143070424094e-05,
+            0.5062056768346896,
+            0.03631791663093067,
+            0.5089566223790507,
+            0.07119512081720687,
+            0.8289576008570706,
+            1.0
+          ],
+          "r4_outer_gradient_witness": [
+            -2.6046496089512394,
+            0.0,
+            4.0,
+            0.0,
+            2.0,
+            0.0009999991113120998,
+            56.0,
+            0.0
+          ]
+        },
+        "physical_acceptance_inferred": false,
+        "negative_ground_guard": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-900a9aa/RANSWallResolutionProbe",
+            "case.xml",
+            "negative-ground.json",
+            "must-not-exist.json"
+          ],
+          "exit_code": 1,
+          "seconds": 1.625677274991176,
+          "log_sha256": "fbad3e1b83782e56b97595d481b407145f1e3a040fef434906e2da9b8b07392f",
+          "rejected_before_scalar_evaluation": true,
+          "changed_row": 1185
+        }
+      }
     }
   },
   "pending": [
     "warm-response-search504",
-    "response-krylov64-original-3step",
     "response-krylov16-extended",
     "response-krylov64-extended",
     "medium-face-original-3step",
@@ -31930,7 +35485,14 @@
     "medium-face-original-full504",
     "canonical-original-3step",
     "canonical-warm160",
-    "previous-original-3step"
+    "previous-original-3step",
+    "previous-warm160-extended",
+    "current-original160-3step",
+    "qualified-full504-at5p182",
+    "source-anchor-original160",
+    "source-anchor-warm160-three-refinements",
+    "radius-cap1-original-control",
+    "radius-cap4-original-3step"
   ],
   "incomplete": {
     "source-refine-space504": {
@@ -32006,6 +35568,21 @@
         "exit_code": 124,
         "seconds": 21600.087748961,
         "log_sha256": "442bb30747c09cd099cfb059c1efb30ec578379f861e8da8db1d3a39f78516f2"
+      },
+      "scope": "No completed operator/readback review in this collection; not physical acceptance",
+      "native_report_available": false
+    },
+    "response-krylov64-original-3step": {
+      "manifest_status": "failed",
+      "failure": "target did not publish a native report",
+      "target": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-90dd801/IncNavierStokesSolver",
+          "case.xml"
+        ],
+        "exit_code": 124,
+        "seconds": 21600.08274832899,
+        "log_sha256": "31817447913461e8dfc5be2af052e71fc36bf2d3e268cf0305cc069d6a568c7b"
       },
       "scope": "No completed operator/readback review in this collection; not physical acceptance",
       "native_report_available": false
