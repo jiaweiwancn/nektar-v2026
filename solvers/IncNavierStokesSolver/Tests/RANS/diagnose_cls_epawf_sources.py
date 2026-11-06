@@ -33,7 +33,8 @@ def main():
         points=[v for v in r['points'] if not v.get('valid') or (v.get('z') in (0.,.0001,.0025,.01,1.,2.))]
         compact=dict(time=time,state_sha256=state_hash(state),wall_policy=r['wall_policy'],input_sha256=sha(folder/'input.json'),
             result_sha256=sha(folder/'result.json'),xml_sha256=sha(folder/'case.xml'),points=points,ray_budgets=r['ray_budgets'],
-            native_mass_solve_defect=r['native_mass_solve_defect'],diagnostic_mass_inverse_applications=r['diagnostic_mass_inverse_applications'])
+            native_mass_solve_defect=r['native_mass_solve_defect'],component_load_sum_defect=r.get('component_load_sum_defect'),
+            component_mass_rate_sum_defect=r.get('component_mass_rate_sum_defect'),diagnostic_mass_inverse_applications=r['diagnostic_mass_inverse_applications'])
         compact['fixed_native_quadrature_source_comparisons']=[{k:v for k,v in w.items() if k not in ('weak_source_residual','mass_inverted_source_rate')} for w in r['fixed_native_quadrature_source_comparisons']]
         summary['states'][name]=compact;write_json(a.output/'summary.partial.json',summary)
         return r

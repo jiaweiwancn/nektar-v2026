@@ -14,6 +14,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--solver',type=Path,required=True);p.add_argument('--probe',type=Path,required=True)
     p.add_argument('--upstream-reference',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
+    p.add_argument('--reuse-upstream-replay',type=Path,help='immutable six-step replay already executed with this frozen runtime')
     a=p.parse_args();a.solver=a.solver.resolve();a.probe=a.probe.resolve();a.output=a.output.resolve()
     a.output.mkdir(parents=True,exist_ok=False);summary=dict(schema=1,status='running',cases={})
     def case(name,steps,policy,restart=None):
@@ -26,7 +27,9 @@ def main():
         write_json(a.output/'summary.json',summary)
         if r.get('initialization_complete') is not False:check_report(r,bool(restart))
         return r
-    upstream=case('upstream6',6,'Upstream');prior=load(a.upstream_reference)
+    upstream=load(a.reuse_upstream_replay) if a.reuse_upstream_replay else case('upstream6',6,'Upstream');prior=load(a.upstream_reference)
+    if a.reuse_upstream_replay:
+        check_report(upstream);summary['reused_upstream_replay']=dict(path=str(a.reuse_upstream_replay),sha256=sha(a.reuse_upstream_replay))
     require(not upstream['failure'] and upstream['steps']==6,'inherited prefix failed');same_history(upstream,prior)
     require(any(v['bound_activations'] for v in upstream['pimple_attempts']),'inherited prefix lacks active correction')
     uniform=case('uniform0',0,'UniformEPFlat')
@@ -34,9 +37,12 @@ def main():
     require(uniform['initial_k_bound_check']['activations']==0,'control modifies initial k')
     require(uniform['signature']!=upstream['signature'],'wall policy missing from checkpoint identity')
     initial=uniform['state'];old=upstream['accepted_states'][0]
+    # Native initialization includes the archived zero perturbation projection
+    # and its second Lift; the read-only probe's separately rebuilt reference
+    # is not a bitwise substitute for the actual initialized state/history.
     # All six block sizes come from actual native spaces; full state remains distinct.
     folder=a.output/'initial-contact';folder.mkdir();xml=a.output/'uniform0/case.xml'
-    request=dict(operation='contact',state=initial,history=initial,time=0.,alpha=0.,h=[],require_history_h0=True,
+    request=dict(operation='contact',state=initial,history=initial,time=0.,alpha=0.,h=[],require_history_h0=False,
         inner_stress_model='SaturatedR2',export_mass=True,isolate=False)
     write_json(folder/'input.json',request)
     rc=run([str(a.probe),str(xml),str(folder/'input.json'),str(folder/'result.json')],folder,'probe.log',3600)
