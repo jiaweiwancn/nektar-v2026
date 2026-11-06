@@ -20,7 +20,16 @@ metric at ground contact while its original k residual stayed nonzero. R3
 therefore scores the original reduced residual, not that projected-map defect.
 No full all-field Jacobian or hidden coupled direction solver was added.
 
-The current producing solver is `0633d23` (constrained nonlinear-source
+`cfec988` extends only the optional response ceiling to512, permitting a
+benchmark-sized complete free-k response diagnostic (504 free coefficients).
+The default remains32; no all-field matrix or governing-equation solve is
+introduced. It passes all six focused Linux regressions (37.40s). Matched160-
+and504-direction constrained native searches from the same qualified diagnostic
+state are in progress; requesting504 columns is not yet a completed rank or
+convergence result. [Build, identities and regressions](cls-epawf-segregated-picard-r3-evidence/native/build-validation-cfec988.json)
+record the exact producing revision and unchanged installed libraries.
+
+The current numerical direction implementation is `0633d23` (constrained nonlinear-source
 direction refinements, opt-in and verified in matched native controls).
 `04f275f` supplies the completed source-aware step-length comparison described
 below. Both pass the six focused Linux regressions and standalone ASan/UBSan
