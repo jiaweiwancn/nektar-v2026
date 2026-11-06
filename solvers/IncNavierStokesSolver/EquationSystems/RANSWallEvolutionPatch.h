@@ -189,6 +189,9 @@ public:
     };
     std::string PimpleKRateBudget(const Vector &state,const Vector &history,double time,
         const RANSWallEvolutionData &data) const;
+    std::string PimpleContactDiagnostic(const Vector &state,double time,
+        const RANSWallEvolutionData &data,const Vector &steps,
+        const std::vector<RANSWallCoordinate> &witnesses,bool exportMass,bool isolate) const;
     KBoundResult ApplyPimpleKBound(const Vector &raw,const Vector &preK,double time,
         const RANSWallEvolutionData &data) const;
     bool SegregatedPicard() const { return m_nonlinearPolicy=="SegregatedPicard"; }

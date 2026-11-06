@@ -186,6 +186,17 @@ int main(int argc,char **argv)
         const bool historyMatch=std::memcmp(history.data(),reference.data(),history.size()*sizeof(double))==0;
         Require(!packet.get<bool>("require_history_h0",true) || historyMatch,"packet history differs from rebuilt native h0");
         const double time=packet.get<double>("time"),alpha=packet.get<double>("alpha");
+        if(packet.get<std::string>("operation","")=="contact")
+        {
+            Vector steps=packet.get_child_optional("h")?Read(packet,"h"):Vector{};
+            std::vector<RANSWallCoordinate> witnesses;
+            if(packet.get_child_optional("witnesses"))for(const auto &item:packet.get_child("witnesses"))
+            {RANSWallCoordinate p{};int i=0;for(const auto &v:item.second){Require(i<3,"witness coordinate shape");p[i++]=v.second.get_value<double>();}Require(i==3,"witness coordinate shape");witnesses.push_back(p);}
+            const auto &selected=packet.get<bool>("reference_state",false)?reference:state;
+            std::ofstream out(argv[3]);out<<patch.PimpleContactDiagnostic(selected,time,data,steps,witnesses,
+                packet.get<bool>("export_mass",false),packet.get<bool>("isolate",false))<<'\n';
+            Require(out.good(),"contact diagnostic write failed");world->Finalise();return 0;
+        }
         if(packet.get<std::string>("operation","")=="samples")
         {
             Require(patch.ScalarDomain(state,time,data).admissible,"sample replay outside scalar domain");

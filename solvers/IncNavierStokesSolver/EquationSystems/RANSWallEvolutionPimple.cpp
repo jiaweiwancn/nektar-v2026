@@ -30,12 +30,21 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
     iterations=0;
     std::vector<std::pair<std::string,std::string>> record;
     int momentum=0,pressure=0,epsilon=0,k=0,massApplications=0;
+    int momentumAttempts=0,pressureAttempts=0,epsilonAttempts=0,kAttempts=0;
     int boundCalls=0,boundActivations=0,boundIterations=0,boundMass=0,boundKKT=0;
     auto put=[&](const std::string &key,const std::string &value){record.emplace_back(key,value);};
     auto publish=[&](bool completed,const std::string &failure)
     {
         put("time",J::Number(time));put("alpha",J::Number(alpha));
         put("governing_solves_complete",J::Boolean(momentum==1 && pressure==1 && epsilon==1 && k==1));
+        put("momentum_predictor_solve_attempts",J::Number(momentumAttempts));
+        put("pressure_system_solve_attempts",J::Number(pressureAttempts));
+        put("epsilon_transport_solve_attempts",J::Number(epsilonAttempts));
+        put("k_transport_solve_attempts",J::Number(kAttempts));
+        put("momentum_predictor_solve_completed",J::Boolean(momentum==1));
+        put("pressure_system_solve_completed",J::Boolean(pressure==1));
+        put("epsilon_transport_solve_completed",J::Boolean(epsilon==1));
+        put("k_transport_solve_completed",J::Boolean(k==1));
         put("scheduled_complete",J::Boolean(completed));put("failure",J::Quote(failure));
         put("outer_sweeps",J::Number(iterations));
         put("momentum_predictor_solves",J::Number(momentum));
@@ -86,11 +95,12 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
         for(int i=0;i<np;++i)std::copy_n(flow.matrix[nv+i].begin(),nv,d[i].begin());
         Vector rhs(nv);
         for(int i=0;i<nv;++i)rhs[i]=-flow.residual[i];
-        const Factor momentumFactor(a),mass(m);
-        ++momentum;const auto predictor=momentumFactor.Apply(rhs);
+        ++momentumAttempts;const Factor momentumFactor(a),mass(m);
+        const auto predictor=momentumFactor.Apply(rhs);
         auto predictorDefect=Multiply(a,predictor);
         for(int i=0;i<nv;++i)predictorDefect[i]-=rhs[i];
         Require(Maximum(predictorDefect)<=1e-10*std::max(1.,Maximum(rhs)),"PIMPLE predictor linear residual");
+        ++momentum;
         // B = (alpha M_free)^-1. This is never a full momentum inverse.
         WallMatrix bg(np,Vector(nv)),schur(np,Vector(np));
         for(int j=0;j<np;++j)
@@ -103,10 +113,11 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
         }
         auto pressureRhs=Multiply(d,predictor);
         for(int i=0;i<np;++i)pressureRhs[i]+=flow.residual[nv+i];
-        ++pressure;const auto dz=Factor(schur).Apply(pressureRhs);
+        ++pressureAttempts;const auto dz=Factor(schur).Apply(pressureRhs);
         auto pressureDefect=Multiply(schur,dz);
         for(int i=0;i<np;++i)pressureDefect[i]-=pressureRhs[i];
         Require(Maximum(pressureDefect)<=1e-10*std::max(1.,Maximum(pressureRhs)),"PIMPLE pressure linear residual");
+        ++pressure;
         Vector bGz(nv),Gz=Multiply(g,dz),du=predictor;
         for(int i=0;i<nv;++i)for(int j=0;j<np;++j)bGz[i]+=bg[j][i]*dz[j];
         for(int i=0;i<nv;++i){du[i]-=bGz[i];s[flow.rows[i]]+=du[i];}
@@ -185,11 +196,12 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
             for(int i=0;i<block.rows.size();++i)agreement[i]=block.residual[i]-original[block.rows[i]];
             Require(Maximum(agreement)<1e-9*std::max(1.,Maximum(original)),"PIMPLE scalar source/storage mismatch");
             auto rhs=block.residual;for(auto &x:rhs)x=-x;
-            if(b==Epsilon())++epsilon;else ++k;
+            if(b==Epsilon())++epsilonAttempts;else ++kAttempts;
             const auto delta=Factor(block.matrix).Apply(rhs);
             auto linear=Multiply(block.matrix,delta);
             for(int i=0;i<linear.size();++i)linear[i]-=rhs[i];
             Require(Maximum(linear)<1e-10*std::max(1.,Maximum(rhs)),"PIMPLE scalar linear residual");
+            if(b==Epsilon())++epsilon;else ++k;
             double traceColumns=0,traceMass=0,traceStorage=0,imposed=0;
             for(int i=0;i<block.rows.size();++i)
             {

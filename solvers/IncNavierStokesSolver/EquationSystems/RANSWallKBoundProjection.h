@@ -18,6 +18,9 @@ inline double Norm(const Vector &a){return std::sqrt(std::max(0.,Dot(a,a)));}
 
 // Small serial consistent-mass projection. Whitening, QR and dual active-set
 // work are algebraic operations; this class has no transport inverse or fields.
+// Add/Optimize maintain the working active set. Inactive physical constraints
+// can become violated after another cut is added: the separation wrapper must
+// rescan its complete physical inventory, including previously dropped cuts.
 class Projection
 {
 public:
