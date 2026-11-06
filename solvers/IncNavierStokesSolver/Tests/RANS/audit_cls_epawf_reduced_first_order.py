@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
-"""Audit the original reduced merit gradient in recorded response coordinates.
+"""Audit the declared reduced merit gradient in recorded response coordinates.
 
 Near-active windows use the saved cut normalization, not a physical positivity
 theorem. This measured linearization is not a nonlinear stationarity certificate
 and cannot establish global infeasibility outside its tested response space.
+Positive-eta results describe the continued operator, not the original target.
 """
 import argparse
 import hashlib
@@ -20,6 +21,7 @@ os.environ.update(THREADS)
 import numpy as np
 import scipy
 from scipy.optimize import nnls
+from test_cls_epawf_reduced_response import execution_manifest
 
 
 def sha(path):
@@ -32,17 +34,22 @@ def audit(root, specification, windows):
     directory = root / name
     snapshot = (directory / "target/solver.log").read_bytes()
     packet = selected = None
+    protocol = None
     for line in snapshot.splitlines(keepends=True):
         if not line.startswith(b"EP-AWF Reduced ") or not line.endswith(b"\n"):
             continue
         record = json.loads(line[15:])
-        if record["event"] == "model_packet":
+        if record["event"] == "protocol":
+            protocol = record
+        elif record["event"] == "model_packet":
             packet = record
         elif record["event"] == "direction" and record["iteration"] == iteration:
             selected = (packet, record)
     if selected is None:
         raise ValueError("requested native model has not been published")
     packet, direction = selected
+    if protocol is None:
+        raise ValueError("missing reduced operator protocol")
     if direction["restoration"] or direction["residual_weight"] != 1.:
         raise ValueError("use an original-merit model without a restoration slack")
     path = directory / "target" / packet["path"]
@@ -82,9 +89,11 @@ def audit(root, specification, windows):
         results.append(dict(coordinate_window=window, near_active_rows=int(mask.sum()),
             gradient_cone_defect=float(np.linalg.norm(residual)*length),
             empirical_two_size_gradient_error=float(uncertainty), dual_support=support))
-    manifest = directory / "manifest.json"
-    launch = json.loads(manifest.read_text()) if manifest.exists() else {}
+    launch = execution_manifest(directory)
+    continued = protocol.get("continuation_algebraic_diagnostic", False)
     return dict(case=name, iteration=iteration, operator_alpha=direction["alpha"],
+        merit_scope="continued_operator" if continued else "original_physical_operator",
+        qualification_policy=protocol["qualification_policy"],
         time=direction["time"], model=str(path), model_sha256=sha(path),
         log_snapshot_sha256=hashlib.sha256(snapshot).hexdigest(), native_source=launch.get("source"),
         solver=launch.get("IncNavierStokesSolver", {}), tested_dimension=int(n),
