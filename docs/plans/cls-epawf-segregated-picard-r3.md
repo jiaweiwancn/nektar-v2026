@@ -20,6 +20,70 @@ metric at ground contact while its original k residual stayed nonzero. R3
 therefore scores the original reduced residual, not that projected-map defect.
 No full all-field Jacobian or hidden coupled direction solver was added.
 
+## Completed matched Krylov follow-up
+
+The `90dd801` matched searches start from the independently qualified numerical
+checkpoint at16.4201949282, with the original alpha400/time.0025/h0/history.
+They change only `RANSWallReducedKrylov` (16 versus64) in otherwise identical
+session files. Executable/library identities, initial coefficients/norms and
+the first17 response checks are identical; elapsed times are excluded from
+the response comparison. Both models have96 independent directions.
+
+| Krylov directions | First numerical update | Second numerical update | Final ground minimum | Final gradient departure | Final minimum epsilon ratio |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 16 | 13.4942429683 | 9.3285649274 | 2.39380747e-4 | .000999999039 | .9817519306 |
+| 64 | 11.7713161888 | 9.9029254238 | 1.55559381e-4 | .000999999049 | .9803458666 |
+
+Every accepted numerical update passes the original qualification and ground
+checks. Both final norm vectors reproduce exactly in a fresh process; the
+complete covariance/lambda audit and negative-ground guard pass. Both native
+stages fail the original2e-12 residual gate and preserve accepted h0 and all
+physical-history slots/time. Physical steps/time remain0/0. More Krylov
+directions help the first update but do not dominate after two updates.
+These saved-guess experiments do not replace original-h0 validation.
+
+All402 H evaluations in each search attain their declared tolerances, at most
+2e-9. The16-seed run records1649 velocity/pressure pairs and1649 epsilon solves;
+the64-seed run records1673 of each. All192 retained actions in each run pass
+two-size checks. Maximum retained residual/observation relative differences
+are.0008106/.017623 and.009291/.026122, respectively. The64-seed run rejects one
+additional response. The independent current-operator branch/combined checks
+remain enabled. These are inexact search responses; final acceptance retains
+the original complete2e-12 gate.
+
+Finite-step curvature remains substantial. On the second accepted update the
+nonlinear destruction surrogate predicts9.240817519 versus actual9.328564927
+for16 seeds, and9.975535343 versus9.902925424 for64. Corresponding residual-vector
+errors are.641892 versus3.184512 for the linear model, and.186829 versus6.007674.
+The latter correction has actual normalized displacement.719296630 within
+radius.72. The former has displacement.399668275 within radius.4.
+
+The full qualification scan is necessary: the16-seed first full proposal has
+predicted violation near zero but actual normalized gradient violation.165945
+at x=-2.6666667,z=2, together with an epsilon lower-bound violation. The
+backtracked, re-equilibrated half proposal passes the complete inventory.
+Thus the signed response model is useful locally, while finite-step
+qualification predictions still require actual scans and safeguards.
+
+[Matched-input, signed-action and witness checks](cls-epawf-segregated-picard-r3-evidence/native/response-krylov96-matched-review.json)
+are reproduced by
+`solvers/IncNavierStokesSolver/Tests/RANS/check_cls_epawf_krylov96_comparison.py RUN_ROOT OUTPUT`.
+This specifically named check verifies two completed qualified nonroots; it
+does not certify M8 convergence. The compact completed-history collection below
+also includes both native receipts, commands and independent full audits.
+Both endpoints are being followed with additional numerical updates, preserving
+the original physical history and stage target;
+[16-seed launch](cls-epawf-segregated-picard-r3-evidence/native/krylov16-extension-launch.json),
+[64-seed launch](cls-epawf-segregated-picard-r3-evidence/native/krylov64-extension-launch.json).
+
+Separately, the running `ce7e53a` full504-response follow-up reaches a second
+numerical checkpoint at7.5004290706. An independent process reproduces its norm
+vector exactly and passes complete original qualification: ground6.27326187e-7,
+gradient.0009999990032, minimum epsilon ratio.9800480092. This ongoing run has
+no final native stage/history receipt yet; the audited checkpoint remains a
+qualified nonroot. It continues with further full-space updates.
+[Independent checkpoint audit](cls-epawf-segregated-picard-r3-evidence/native/audit-warm-full504-update2.json).
+
 ## Latest completed original-target validation
 
 The0633d23 native original-h0 run completes18 numerical updates with original
@@ -77,9 +141,9 @@ checks remain in force. This is motivated by the measured dominant pressure
 feedback and the high cost of repeatedly sampling504 arbitrary field
 directions. It neither assembles an all-field matrix nor changes a governing
 equation. Six Linux regressions pass (39.67s) and ASan/UBSan passes (7.56s).
-Matched96-dimensional searches with64 versus16 Krylov seeds, and an unchanged-h0
-native run with64, are in progress. Their outcomes are not inferred from build
-or operator success.
+The matched96-dimensional two-update searches with64 versus16 Krylov seeds
+complete as described above. Their extensions and an unchanged-h0 native run
+with64 continue. Their outcomes are not inferred from build or operator success.
 [Build and identities](cls-epawf-segregated-picard-r3-evidence/native/build-validation-90dd801.json),
 [exact native commands](cls-epawf-segregated-picard-r3-evidence/native/response-krylov-launch.json).
 
@@ -189,9 +253,24 @@ advance and observes qualification only. It is not shown stationary. The
 direction predicts residual 2.90880695 and merit slope -1.48724843e-4; an
 independent feasible half probe measures -1.48720552e-4 with relative vector
 error 4.81e-5. The regularized model has eigenvalue range [0.001353,5.660e6],
-condition 4.18e9. Actual full-step/refinement trials continue; a small affine KKT
-defect is not substituted for original reduced stationarity.
+condition 4.18e9. The completed two-update diagnostic reaches original residual
+2.908809697352376, continuous ground minimum8.98767433e-15, gradient departure
+.003821016357 and minimum epsilon ratio.9745118805. The original qualification
+still fails. Fresh-process readback reproduces the original norm vector exactly;
+the native receipt verifies zero accepted steps and unchanged accepted state
+and every physical-history slot/time. The full run takes18502.93s and records
+2029 controlled H evaluations and11524 velocity/pressure and epsilon solves.
+
+The second full-rank model, based after the first update, has original gradient
+norm102.604, near-active cone defect5.83457 and empirical two-size gradient
+uncertainty.689805. Neither tested base is shown stationary; these models also
+do not certify stationarity of the final numerical endpoint. A small affine KKT
+defect is not substituted for original reduced stationarity. The useful actual
+descent is small despite all504 field directions and the original ground cuts;
+this diagnoses the local difficulty without proving global nonexistence.
 [Operator-labelled full-space diagnostic](cls-epawf-segregated-picard-r3-evidence/native/first-order-r2-full504-audit.json).
+[Completed two-update diagnostic and independent final audit](cls-epawf-segregated-picard-r3-evidence/native/r2-full504-completed-review.json),
+[both full-space first-order models](cls-epawf-segregated-picard-r3-evidence/native/first-order-r2-full504-completed.json).
 
 `b89f2be` caches immutable cut-row norms within each quadratic solve and computes
 the direction norm once per QP iteration. It changes no matrix entry, cut or

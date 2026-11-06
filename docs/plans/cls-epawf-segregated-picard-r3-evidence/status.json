@@ -10,7 +10,7 @@
     "original_alpha": 400,
     "time_target": 0.0025,
     "original_tolerance": 2e-12,
-    "progress_utc": "2026-11-06T12:54:34.170125+00:00",
+    "progress_utc": "2026-11-06T15:10:20.354474+00:00",
     "original_start_completed_evidence": "native/completed-original-and-expanded-review.json",
     "original_start_result": {
       "numerical_updates": 18,
@@ -76,7 +76,7 @@
     "probe_field_factor_reuse": "Completed matched32 controls18.6379733298 versus18.6380670320, qualified nonroots;74 H evaluations all<=2e-12,386 cached applications,0retries; independent fresh half branch action8.02e-6/observation2.32e-5; On/Off all numerical updates and physical history bitwise identical; cache-versus-current algorithms are tolerance-consistent, not bitwise identical.",
     "true_full_space_gradient": "First native504-rank original reduced model at18.6652853: cone defect1759.12 versus empirical gradient uncertainty9.15; not stationary at this base, not a global root-existence claim",
     "model_face_warm_start": "ce7e53a real192-radius model replay coefficient difference4.30e-16; original-cut primal2.18e-17;14warm solves and1successful cold retry; not nonlinear stationarity. Native full-response follow-up running.",
-    "expanded_response_Krylov": "90dd801 optional ceiling128 (default0), retained current-operator preconditioner and independently checked H differences; matched64-versus16 Krylov seeds in96-response spaces and unchanged-h0 three-step horizon in progress. No M8 success inferred."
+    "expanded_response_Krylov": "90dd801 matched two-update96-response searches complete:16 Krylov seeds9.3285649274 versus64seeds9.9029254238; both independently qualified nonroots, zero physical steps/history preserved. Identical inputs except Krylov count, identical executable/libraries/start and common17-response prefix. Extensions and original-h0 run continue; no uniform ordering or stationarity claim."
   },
   "continued_branch": {
     "auxiliary_positive_eta_tolerance": 2e-11,
@@ -143,13 +143,14 @@
     "physical_acceptance": false
   },
   "completed_qualified_reduced_search": {
-    "full_residual": 17.7530797901111,
-    "gradient_departure": 0.000999999083216463,
-    "minimum_outer_epsilon_ratio": 0.9805312097999067,
-    "ground_minimum": 1.278742803768469e-05,
+    "full_residual": 9.32856492735344,
+    "gradient_departure": 0.0009999990387161706,
+    "minimum_outer_epsilon_ratio": 0.9817519306481076,
+    "ground_minimum": 0.00023938074740327764,
     "accepted_physical_steps": 0,
-    "scope": "Completed matched160-dimensional two-update original-target warm-start control; original qualification passes, original residual fails; independently rebuilt",
-    "evidence": "native/completed-original-and-expanded-review.json"
+    "algebraic_root": false,
+    "scope": "Completed matched16-Krylov96-response two-update original-target saved-guess control; original qualification passes, original residual fails; independent bitwise readback/history receipt",
+    "evidence": "native/response-krylov96-matched-review.json"
   },
   "ground_contact_diagnostic": {
     "initial_full_residual": 18.454728711702224,
@@ -163,13 +164,14 @@
     "verification": "passed_reduced_verification_observability"
   },
   "qualified_full_space_checkpoint": {
-    "full_residual": 16.420194928157844,
-    "ground_minimum": 2.633926395721705e-06,
-    "gradient_departure": 0.0009999370392679285,
-    "minimum_outer_epsilon_ratio": 0.9800205038092307,
+    "full_residual": 7.500429070562743,
+    "ground_minimum": 6.273261872792267e-07,
+    "gradient_departure": 0.0009999990031941408,
+    "minimum_outer_epsilon_ratio": 0.9800480091735433,
     "algebraic_root": false,
-    "scope": "First native504-response numerical update independently audited; process later times out without native final stage/history receipt; not physical acceptance",
-    "evidence": "native/audit-wide504-checkpoint-d710404.json"
+    "physical_acceptance_inferred": false,
+    "scope": "Second numerical checkpoint of running ce7e53a full504-response search, independently audited; complete qualification passes, original residual fails; final native stage/history receipt not yet available",
+    "evidence": "native/audit-warm-full504-update2.json"
   },
   "first_order_auditor_commit": "ebe9db7",
   "full_space_R2_ground_model": {
@@ -188,7 +190,15 @@
     "predicted_merit_slope": -0.000148724843481587,
     "measured_half_merit_slope": -0.00014872055235519552,
     "constrained_stationarity_established": false,
-    "scope": "Base-point original reduced first-order evidence; full nonlinear refinement/trials in progress, not M8 success",
-    "evidence": "native/first-order-r2-full504-audit.json"
+    "scope": "Completed two-update eta-zero R2 diagnostic; original target/history, ground/domain enforced, qualification observed only; not stationary at either tested full-space base and no global infeasibility claim",
+    "evidence": "native/r2-full504-completed-review.json",
+    "final_full_residual": 2.908809697352376,
+    "final_ground_minimum": 8.987674326836354e-15,
+    "final_gradient_departure": 0.0038210163566095856,
+    "final_minimum_outer_epsilon_ratio": 0.9745118804520474,
+    "final_qualified": false,
+    "accepted_physical_steps": 0,
+    "accepted_history_preserved": true,
+    "independent_norm_difference": 0
   }
 }
