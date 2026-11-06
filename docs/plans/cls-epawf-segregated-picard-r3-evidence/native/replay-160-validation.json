@@ -1,0 +1,88 @@
+{
+  "scope": "Standalone ASan/UBSan affine-model replay only; not original nonlinear stationarity or M8 convergence",
+  "source": "e65b0be37dc76f196bd9994779c88e881a01749d",
+  "packet": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/nested-response96/target/reduced-model-t0.0025000000000000001-f006292c518d-2-0.bin",
+  "packet_sha256": "e4b9af5b926b2abc3aede23e8dacde8eea83c4ab974587cfb737d84c1c3234c3",
+  "commands": [
+    {
+      "command": [
+        "cmake",
+        "--build",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-build",
+        "--parallel",
+        "8",
+        "--target",
+        "RANSReducedModelChecks"
+      ],
+      "exit_code": 0,
+      "seconds": 3.0961085540038766,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/replay-build-e65b0be.log",
+      "output": "Consolidate compiler generated dependencies of target RANSReducedModelChecks\n[100%] Building CXX object CMakeFiles/RANSReducedModelChecks.dir/test_cls_epawf_reduced_model.cpp.o\n[100%] Linking CXX executable RANSReducedModelChecks\n[100%] Built target RANSReducedModelChecks\n"
+    },
+    {
+      "command": [
+        "ctest",
+        "--test-dir",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-build",
+        "--parallel",
+        "1",
+        "--output-on-failure",
+        "-R",
+        "^RANSReducedModelChecks$"
+      ],
+      "exit_code": 0,
+      "seconds": 0.025599340995540842,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/replay-ctest-e65b0be.log",
+      "output": "Internal ctest changing into directory: /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-build\nTest project /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-build\n    Start 1: RANSReducedModelChecks\n1/1 Test #1: RANSReducedModelChecks ...........   Passed    0.01 sec\n\n100% tests passed, 0 tests failed out of 1\n\nTotal Test time (real) =   0.01 sec\n"
+    },
+    {
+      "command": [
+        "c++",
+        "-std=c++17",
+        "-O1",
+        "-g",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-D_GLIBCXX_ASSERTIONS",
+        "-fno-omit-frame-pointer",
+        "-fsanitize=address,undefined",
+        "-I",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-source/solvers",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-source/solvers/IncNavierStokesSolver/Tests/RANS/test_cls_epawf_reduced_model.cpp",
+        "-o",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/reduced-model-asan-e65b0be"
+      ],
+      "exit_code": 0,
+      "seconds": 9.899125128999003,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/replay-asan-build-e65b0be.log",
+      "output": ""
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/reduced-model-asan-e65b0be"
+      ],
+      "exit_code": 0,
+      "seconds": 0.02167263100272976,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/replay-asan-unit-e65b0be.log",
+      "output": "passed_reduced_model_checks (not M8 convergence)\n"
+    },
+    {
+      "command": [
+        "timeout",
+        "1200",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/reduced-model-asan-e65b0be",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/nested-response96/target/reduced-model-t0.0025000000000000001-f006292c518d-2-0.bin"
+      ],
+      "exit_code": 0,
+      "seconds": 31.871261883999978,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/replay-asan-native120-e65b0be.log",
+      "output": "{\"solved\":true,\"failure\":\"\",\"steps\":41,\"primal\":2.6969529040576923e-18,\"stationarity\":2.9986344839377987e-12,\"complementarity\":1.11547263939273e-15,\"redundant_rows\":0,\"diagnostic_radius\":0,\"radius_multiplier\":0,\"scope\":\"affine model replay only; not nonlinear stationarity or M8 convergence\",\"solution\":[-0.011593015030094408,-0.067480393887300608,-0.0055074875803365012,-0.15966598015274272,-0.098388170384756266,-0.12202435273714463,-0.01469655539558172,-0.055487253186536828,0.11960733315112199,-0.083019586448548094,-0.0074547203447046734,-0.023852176181629752,0.0057165100180120148,-0.032272808078771281,-0.040824723302385041,-0.090222938422682197,-0.047121420635780044,0.02240710938364467,0.015271216452544789,0.00056339143936902749,0.00062277596194461522,-0.0026841726095213673,-0.0051521730786958228,-0.0046900973928325597,-0.00016961759289324966,0.071949153033062527,-0.045017079871479779,0.043296697943966747,0.0041471470575676975,-0.0067868450288977927,-0.011328244465146926,-0.015627739509582236,0.0053248334458657958,-0.044825550086729976,-0.019790050511413249,0.0059629244662075687,-0.00053448385851076106,-2.1978463673618169e-05,-0.0022787908649098015,0.00047471094668598149,-0.009026393396689536,0.00055692797274672196,-5.4052436976643245e-06,-0.00022614841495849965,-0.013804915898793341,0.0075448560844272585,-0.004978389815949516,0.0023001024397434171,-0.0086327350157772154,-0.0074470508074501469,-0.0024189375817573904,0.0069371479931694055,-0.019156889123942665,0.0040729005477724168,-0.0017072807007342079,-0.02446288067907048,0.0042888086423759318,0.0056231576996889996,-0.01227132156048737,-0.029908865429344053,0.020518550580657862,-0.0086089972885133818,0.063181553716748218,0.033583497820312544,-0.043289136314218706,-0.01406084011288012,0.0073076171716012139,-0.040940697029634404,0.055668718653491635,-0.032775949919848543,-0.014349021632939793,-0.03050852000629823,-0.033224414388896742,-0.0025850495849252596,-0.010396580911451255,0.011215823943468489,0.010147258562097684,-0.049316785687221636,0.013782985987864264,0.010301940278498501,0.02386876496916519,-0.0068990881290837353,0.024844655392114907,-0.018473747558288414,0.01098241166009876,-0.012066945412285679,0.019276829803963863,-0.044940615419356109,0.019997535387213786,0.015769099087158196,0.045476776677320564,0.020656714548217534,-0.042915695829646348,-0.025608495097281338,-0.056199271812193294,-0.030352564731384687,-0.011825470539686359,-0.0061614776898683745,0.02314524464893988,-0.058296163123846209,0.0020769723878932395,0.020914230088919,0.011361250882427423,0.026078639311903348,-0.0090902424661260355,-0.019503225165945156,0.025249775825919391,-0.034959463748166122,0.025138397812120062,-0.0057685238102253844,0.023169861213387082,-0.0055057634436828165,-0.0096622119211953374,-0.0067440584045281955,0.0076824849657378645,-0.0043902907794886358,-0.0082655613452360145,0.017711055157905733,-0.052603043906568732,-0.079012073315089193]}\n"
+    }
+  ],
+  "initial_rejected_attempt": {
+    "binary": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/reduced-model-asan-0633d23",
+    "exit_code": 134,
+    "reason": "legacy replay input guard limited packets to65 variables; corrected to161 (160 responses plus restoration slack); no sanitizer memory diagnostic",
+    "stderr": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/asan-native120-0633d23.stderr"
+  }
+}

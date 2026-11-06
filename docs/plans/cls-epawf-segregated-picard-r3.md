@@ -20,7 +20,11 @@ metric at ground contact while its original k residual stayed nonzero. R3
 therefore scores the original reduced residual, not that projected-map defect.
 No full all-field Jacobian or hidden coupled direction solver was added.
 
-The current producing solver is `7715312` (optional larger response spaces,
+The current producing solver is `0633d23` (constrained nonlinear-source
+direction refinements, opt-in and verified in matched native controls).
+`04f275f` supplies the completed source-aware step-length comparison described
+below. Both pass the six focused Linux regressions and standalone ASan/UBSan
+checks. The earlier producing solver is `7715312` (optional larger response spaces,
 retaining the point/trace seed prefix beyond64). `bdcf657` permits an explicit
 ceiling up to160; the default remains32. `97ec1d7` supplies the expanded
 free-mode seed pool.
@@ -45,6 +49,168 @@ mixed restoration (`7848ad4`), bounded ground arithmetic corrections (`645d05b`)
 physical-history-bound trial packets (`e7313f7`), and a filter-consistent direction
 constraint (`8dc862f`). The continuation and spatial diagnostic harnesses are
 `315cbee` and `0bd00ae`. R1/R2 reports and evidence are preserved.
+
+## Completed larger-space and nonlinear-source controls
+
+The completed `7715312` enlargement used96,120,120 independent responses in
+three numerical updates and reached original residual18.8837693663 with a
+positive continuous-ground minimum3.32426e-5 and original qualification passing.
+It remains a nonroot. The matched free-mode64 control reached18.9235364098
+versus18.9453816015 for the point/trace-only59-dimensional control after two
+updates. Both preserved accepted h0/history and reproduced their original
+residuals independently. The first64 response records and original gradient
+are byte-identical in the64/96 comparison; their original action-Gram prefix
+differs relatively by1.81e-20 after removing each radius multiplier. These are
+actual added directions, not a changed physical problem.
+
+The120-dimensional original-merit gradient norm is2611.72. Near-active cut
+cone defects for normalized windows1e-10,1e-8,1e-6 are2611.72,2514.18,2321.34,
+against empirical two-size gradient uncertainty13.01. This is evidence of
+remaining descent in the tested response space, not a constrained stationary
+point or a global infeasibility result. The old affine-projection KKT defect
+does not replace this original-gradient calculation.
+
+At the last rejected full enlarged-space trial, vector prediction error is
+9.07004; inner destruction accounts for9.06188, leaving.010613. The small
+combined-direction check is accurate (half-step relative residual error.00215),
+but the accepted nonlinear fraction is only1/128. Increasing the response space
+alone therefore did not resolve finite-step curvature.
+
+`04f275f` adds optional `RANSWallReducedSourceRay=On`. Its internal surrogate is
+
+\[
+M(z)=r_0+Bz+D(s_0+S'z)-D(s_0)-D'_0[S'z].
+\]
+
+Here B contains measured converged non-k responses, S' predicts their independent
+field coefficients, and the independent k displacement is inserted exactly.
+D is the complete native nonlinear inner destruction component, with profiles,
+moving quadrature and normalization rebuilt. The final subtraction is calibrated
+with a small directional component difference. This affine-field state is an
+internal model, never labelled Y(k). Every actual trial still converges H,
+rebuilds the original residual and scans the full qualification and ground sets.
+
+The selector samples11 dyadic model fractions and at most one parabolic
+interpolation, promotes only a model decrease, and retains the original dyadic
+fallback. The declared policy also permits nonlinear qualification corrections
+at smaller fractions and uses source-model gain for radius adjustment. Thus the
+following comparison is of these complete numerical policies, not an isolated
+one-line interpolation change. The target and acceptance conditions are identical.
+
+| Completed matched warm-start run | Source-aware selection | Linear-ray control |
+| --- | ---: | ---: |
+| Initial original residual |18.8837693663|18.8837693663|
+| After two numerical updates |18.8135344559|18.8761902618|
+| Maximum outer-gradient departure |.000999999468|.000999999954|
+| Minimum outer-epsilon ratio |.9841946074|.9841502701|
+| Continuous-ground minimum |2.27570e-5|3.27262e-5|
+| Controlled H evaluations |301|313|
+| Velocity/pressure pairs; epsilon solves |1887;1887|2132;2132|
+| Solver elapsed seconds |2898.00|3207.38|
+| Physical steps/time |0/0|0/0|
+
+Both use64 then80 columns with matching numerical rank, initial radius.4 and
+H tolerance2e-12. The source-aware final actual displacement is.11826566 within
+.4. Its final original block norms are
+[1.0210e-12,1.5109e-12,18.8135344559,4.2990e-14,8.0064e-16,7.3629e-16,
+6.2511e-17,0]. Fresh native complete audits report r2_qualified=1, positive
+covariance and lambda1; the complete original residual still fails overwhelmingly.
+Both failed native stages preserve accepted h0/history bitwise, with zero fresh
+readback norm discrepancy. The negative-ground pre-evaluation guard also passes.
+
+The first actual source-aware trial uses fraction.09664672: predicted norm
+18.85479443 versus actual18.85497599 after qualification correction. Vector
+error drops from the original linear model's.0933476 to.00380373. The second
+uses fraction.29583513: predicted18.81466100 versus actual18.81353446, with
+vector error.0223100 versus.224006 linearly. These are useful finite-step
+predictions and actual reductions, not convergence certificates. The final
+gradient witness moves to x=-1,z=4; the control's witness is x=-1,z=2. Complete
+signed inventories continue to catch observations away from the initial active set.
+The verified/unverified source-aware runs have bitwise identical terminal
+coefficients, rejected state, accepted physical history and time. Verification
+only adds observations and work.
+
+`0633d23` adds an optional budget of up to three constrained nonlinear-source
+direction refinements (`--reduced-source-refinements`; default0). Starting from
+the source-ray candidate, each refinement builds a two-size-checked derivative
+of this surrogate in the measured response coordinates and solves a small
+Gauss-Newton model with the same signed cuts and actual displacement radius.
+It requires surrogate improvement and descent against the original measured
+reduced gradient. Undefined or inaccurate model derivatives, failed model solves
+and unhelpful candidates retain the original ray. Actual trials and nonlinear
+qualification corrections remain controlled H operations. This is a model
+direction refinement in the existing free-k response space, not an all-field
+Jacobian or an unequilibrated trial acceptance path.
+
+The matched0633d23 native controls now complete two updates. Refinement reaches
+18.7645225166 versus18.8136254786 for ray-only selection, from the same
+18.8837693663 guess and physical history. The first update alone uses the same
+64 response columns and reaches18.8264587558 versus18.8549759911. On update2
+the refined method retains64 columns/rank64, while the adaptive ray-only control
+uses80/rank80. This comparison includes the declared adaptive policy; it is
+not a claim that adding source curvature changes only one coefficient.
+
+Both refined full proposals are accepted after controlled H and nonlinear
+qualification correction. Final actual displacement.25833959 is inside radius.4.
+The second refined direction's original predicted merit slope is-2.5010258;
+actual small-step slopes are-2.4988820 and-2.4989143. Half-step residual-action
+error is.00128031. All64 surrogate derivatives pass their two-size checks
+(maximum.00483935 on this refinement). At the final actual trial, the nonlinear
+source prediction is18.76287582 versus18.76452252 observed; vector error.0187001
+compares with.534987 for the original linear prediction.
+
+The refined endpoint's full original block norms are
+[9.9746e-13,1.1673e-12,18.7645225166,4.0851e-14,5.3893e-16,7.3850e-16,
+2.0668e-17,0]. Independent complete qualification passes: gradient
+.000999999106, epsilon lower ratio.9839749693, ground2.38331e-5, positive
+covariance and lambda1. Verification On/Off matches every initial/accepted
+numerical state hash and original norm vector, as well as terminal coefficients,
+accepted h0/history and time. Neither run accepts a physical step.
+
+The refined verified run uses273 converged H evaluations and1773 separate
+flow/epsilon pairs, versus301 and1890 for its ray-only control. It additionally
+spends549 internal source-model evaluations constructing its two directions.
+Elapsed time is3525.21s versus2824.72s. The larger actual residual reduction
+therefore comes with model-construction cost; this bounded comparison supplies
+useful progress, not a convergence or general performance guarantee. The fresh
+original-h0 run and a six-update endpoint extension remain in progress.
+At their common initial k, a disturbed/tighter non-k warm start changes the
+reduced residual by3.37e-11, while H itself meets2e-12. H tolerance is therefore
+not claimed to bound the propagated k-residual error. The signed response,
+two-size and actual combined-direction checks supply the empirical action
+accuracy evidence; the original complete residual remains the final authority.
+
+The dated03:25UTC original-start snapshot records14 numerical updates and
+residual20.32393218 for04f275f, and9 updates/residual40.95530307 for0633d23.
+Both have entered original qualification, but neither has solved or accepted
+its first physical stage. These are different progress points, not a matched
+performance comparison or completed trajectory validation. The
+[history-bound snapshot](cls-epawf-segregated-picard-r3-evidence/native/source-model-progress-20261106-0330.json)
+records the original initial-guess selection, alpha400, t.0025, 2,165 unknowns,
+physical-history hashes, complete block histories, ground minima and XML/log
+identities. Running cases are not counted as completed failed-stage history tests.
+
+The six focused CTests pass on04f275f (37.41s) and0633d23 (38.50s), and both
+standalone model binaries pass ASan/UBSan. New known-answer checks exercise
+nonlinear-ray curvature, an invalid full surrogate sample, no-descent fallback,
+and two-scale one-sided differentiation where the opposite branch is undefined.
+The120-response native affine packet also passes ASan/UBSan replay in31.87s:
+41 active-set iterations, primal defect2.70e-18, affine stationarity3.00e-12,
+complementarity1.12e-15. The initial replay was rejected by a legacy65-variable
+input guard, not a sanitizer memory finding. Test-only commit`e65b0be` extends
+that guard to161 (160 responses plus restoration slack); production solver code
+is unchanged. These affine defects do not supersede the nonzero original
+gradient audit above.
+
+See [completed source controls and independent audits](cls-epawf-segregated-picard-r3-evidence/native/source-ray-completed-review.json),
+[completed direction-refinement controls](cls-epawf-segregated-picard-r3-evidence/native/source-refine-completed-review.json),
+[completed enlarged-space controls](cls-epawf-segregated-picard-r3-evidence/native/enlarged-completed-review.json),
+[120-dimensional original-gradient audit](cls-epawf-segregated-picard-r3-evidence/native/first-order-large-audit.json),
+[nested response-prefix check](cls-epawf-segregated-picard-r3-evidence/native/nested-prefix-check.json),
+[source-ray build identities](cls-epawf-segregated-picard-r3-evidence/native/build-validation-04f275f.json),
+and [refinement build identities](cls-epawf-segregated-picard-r3-evidence/native/build-validation-0633d23.json).
+The [large sanitized replay receipt](cls-epawf-segregated-picard-r3-evidence/native/replay-160-validation.json)
+preserves the initial rejection and successful corrected replay.
 
 ## Target and acceptance authority
 
@@ -539,7 +705,7 @@ step. The final primary-run entry is pending completion.
 | Pure restoration from mixed checkpoint, first update (`8687dc3`) | 20.239805178 | .001000012818 | recorded first-update diagnostic |
 | Inward saved-state restoration (`ef83196`), first update | 20.240190578 | .000999999000 | passes qualification only; not an algebraic root |
 | Radius-aware saved-state search (`9a5b58d`), three updates | 19.887303979 | .000999954475 | passes qualification, not an algebraic root |
-| Current original-h0 run (`7715312`, adaptive ceiling160) | in progress | in progress | original first-stage validation remains unresolved |
+| Current original-h0 run (`0633d23`, adaptive ceiling160 and two source refinements) | in progress | in progress | original first-stage validation remains unresolved |
 
 The saved R2 endpoint is used only for diagnostics. Its first reduced restoration
 step changed residual 2.908834 -> 3.271267 while improving gradient .003826405 ->
@@ -660,7 +826,9 @@ tolerance2e-11), original-target norm18.9335635180, gradient departure
 .00195261177912, epsilon lower ratio.982196382536, and continuous ground
 minimum.0281343569353. Both continued and original residuals were rebuilt
 independently. Original qualification fails the gradient bound, and accepted
-physical state/history remain unchanged. Eta200 is still being followed.
+physical state/history remain unchanged. Eta200 subsequently certified continued
+norm7.54681124186e-12, ground.0110053572728 and gradient.00218914012184; it
+also fails original qualification and advances no physical history.
 
 A secant guess extrapolated from the eta400/450 roots to eta300 had ground
 minimum-.235017 at x=-2.748466; the native guard rejected it before scalar
@@ -696,9 +864,9 @@ discovery, epsilon lower observation, restoration, actual final radius, tiny
 corrections, filter ceiling, failure and programming-shape cases. Model checks
 are not labelled M8 convergence. Native response-checker results explicitly use
 `passed_operator_checks`, retaining failed stage results separately.
-All six pass on7715312 (41.99s),97ec1d7 (38.24s),0926974 (41.65s) and849c70f
-(39.80s). The7715312 standalone model also passes ASan/UBSan; the larger native
-packet replay remains pending. Pressure-verification source is unchanged from
+All six pass on0633d23 (38.50s),04f275f (37.41s),7715312 (41.99s),97ec1d7 (38.24s),0926974 (41.65s) and849c70f
+(39.80s). The larger120-response native packet subsequently passes ASan/UBSan
+with the e65b0be test-only input-guard repair. Pressure-verification source is unchanged from
 the0926974 bounds-checked two-sweep comparison.
 
 Heavy artifacts are under
@@ -730,12 +898,13 @@ cmake -S "$S/solvers/IncNavierStokesSolver/Tests/RANS" -B "$B" \
   '-DCMAKE_CXX_FLAGS=-fno-fast-math -ffp-contract=off -D_GLIBCXX_ASSERTIONS'
 cmake --build "$B" --parallel 8 --target IncNavierStokesSolver RANSWallResolutionProbe RANSReducedModelChecks
 python3 "$S/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py" \
-  --solver "$R/binaries-7715312/IncNavierStokesSolver" \
-  --resolution-probe "$R/binaries-7715312/RANSWallResolutionProbe" \
+  --solver "$R/binaries-0633d23/IncNavierStokesSolver" \
+  --resolution-probe "$R/binaries-0633d23/RANSWallResolutionProbe" \
   --reduced --reduced-verify --reduced-basis 24 --reduced-krylov 8 --reduced-radius .4 \
   --reduced-restoration-weight 0 --reduced-second-order --reduced-constraint-secant \
   --reduced-adaptive-space --reduced-maximum-basis 160 --steps 3 \
-  --sweeps 60 --timeout 28800 --output "$R/nested-original-reproduction"
+  --reduced-source-ray --reduced-source-refinements 2 \
+  --sweeps 18 --timeout 21600 --output "$R/source-refine-original-reproduction"
 ```
 
 The harness deliberately returns nonzero unless the original stage completes;

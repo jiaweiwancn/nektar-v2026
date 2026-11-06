@@ -1,32 +1,51 @@
 {
   "status": "native_development_in_progress_original_m8_unresolved",
-  "producing_code_commit": "7715312ae12990b5cfd5f0dd13bfcdd3473bcfb4",
+  "producing_code_commit": "0633d23fe888d1fe12b2a971009d32c0b2f9f321",
   "native_m8": {
-    "status": "Newest original-h0 adaptive160 run and96-direction comparison in progress; no qualified first-stage root",
+    "status": "Fresh original-h0 source-model refinement run in progress; no qualified first-stage root",
     "qualified_first_stage": false,
     "accepted_physical_steps": 0,
     "final_time": 0,
-    "current_original_start_case": "nested-original-3step",
+    "current_original_start_case": "source-refine-original-3step",
     "original_alpha": 400,
     "time_target": 0.0025,
     "original_tolerance": 2e-12,
-    "current_progress_evidence": "native/large-space-progress.json"
+    "current_progress_evidence": "native/source-model-progress-20261106-0330.json",
+    "progress_utc": "2026-11-06T03:25:16.461399+00:00",
+    "original_start_progress": {
+      "source-ray-original-3step": {
+        "numerical_updates": 14,
+        "original_full_residual": 20.323932176446103,
+        "qualification_violation": 0,
+        "status": "prepared",
+        "native_stage_completed": false
+      },
+      "source-refine-original-3step": {
+        "numerical_updates": 9,
+        "original_full_residual": 40.95530306987536,
+        "qualification_violation": 0,
+        "status": "prepared",
+        "native_stage_completed": false
+      }
+    }
   },
   "checks": {
     "linux_native_pressure_verification": "0926974 bounds assertions and two-sweep bitwise On/Off passed; unchanged Picard translation unit through7715312",
-    "linux_focused_ctest": "6 passed on7715312; explicit serial CTest and8-worker builds",
-    "linux_sanitized_reduced_model": "7715312 ASan/UBSan standalone unit cases passed; large native replay pending",
+    "linux_focused_ctest": "6 passed on0633d23 (38.50s) and04f275f (37.41s); explicit serial CTest and8-worker builds",
+    "linux_sanitized_reduced_model": "0633d23 known-answer/source-derivative unit passed ASan/UBSan; e65b0be expands only replay guard; actual120-response affine packet replay passed ASan/UBSan in31.87s (not original stationarity)",
     "native_controlled_H_and_reduced_operator": "passed on completed bounded runs; not stage convergence",
     "native_radius_and_buffer_controls": "passed_operator_checks; failed native stages preserve accepted h0/history bitwise",
     "native_affine_model_replay": "passed under Linux ASan/UBSan for radius-active and inward-buffered packets; not nonlinear convergence",
-    "native_R3_verification_observability": "Contact-state On/Off passed bitwise numerical coefficients, acceptedh0/history/time; exact guess bytes compared",
+    "native_R3_verification_observability": "b3a707d checker compares every initial/accepted numerical-update hash and original norm vector; both source-aware and refined paired runs pass, with bitwise acceptedh0/history/time preserved",
     "combined_reduced_directions": "18- and 32-dimensional two-size residual and full signed-observation checks passed locally",
     "nonlinear_qualification_correction": "18- and 32-direction full steps restored actual original qualification, original residuals19.76496439 and19.59825833 independently rebuilt; not roots",
     "native_reduced_continuation_guards": "passed: eta-zero retains2e-12; auxiliary root explicitly rejects physical advance; accepted state/history preserved",
     "measured_constraint_secants": "Matched four-update32-direction qualified controls19.1478499169 versus19.4017629319; not roots",
-    "expanded_free_modes": "First matched64-direction update18.9466404975 versus59-direction18.9548244686; both qualified; comparisons remain active",
+    "expanded_free_modes": "Completed64-direction two-update residual18.9235364098 versus59-direction18.9453816015; completed96/120/120 three-update residual18.8837693663; qualified nonroots",
     "observed_limiter_and_panels": "Small two-size reduced probes preserve observed selections while native panel endpoints move; full contact step changes panels and limiter selections",
-    "true_original_gradient_audit": "Finite response-space near-active NNLS defects remain much larger than measured action uncertainty; no stationarity/global infeasibility claim"
+    "true_original_gradient_audit": "Finite response-space near-active NNLS defects remain much larger than measured action uncertainty; no stationarity/global infeasibility claim",
+    "source_model_ray": "Completed two-update matched source-aware versus linear control18.8135344559 versus18.8761902618; original complete qualification passes; original residual fails",
+    "source_model_direction_refinement": "0633d23 completed two-update matched controls:18.7645225166 versus ray-only18.8136254786, independently qualified nonroots; all-update On/Off comparison passed; fresh original-h0 and six-update extension in progress"
   },
   "continued_branch": {
     "auxiliary_positive_eta_tolerance": 2e-11,
@@ -41,14 +60,18 @@
       500,
       450,
       400,
-      300
+      300,
+      200
     ],
-    "lowest_completed_eta": 300,
+    "lowest_completed_eta": 200,
     "continued_norm_eta300": 6.863525056687324e-12,
     "original_norm_eta300": 18.93356351799532,
     "gradient_departure_eta300": 0.0019526117791194286,
     "ground_minimum_eta300": 0.028134356935279704,
-    "continuing_eta": 200
+    "continuing_eta": 150,
+    "continued_norm_eta200": 7.546811241855026e-12,
+    "ground_minimum_eta200": 0.011005357272808958,
+    "gradient_departure_eta200": 0.0021891401218399054
   },
   "outstanding": [
     "Qualified original-start first-stage complete residual and qualification",
@@ -67,12 +90,13 @@
     "physical_acceptance": false
   },
   "completed_qualified_reduced_search": {
-    "full_residual": 18.99705734584673,
-    "gradient_departure": 0.0009999994783995714,
-    "minimum_outer_epsilon_ratio": 0.9832639559914378,
-    "ground_minimum": 6.132523994503205e-05,
+    "full_residual": 18.764522516550674,
+    "gradient_departure": 0.0009999991062372704,
+    "minimum_outer_epsilon_ratio": 0.9839749692869076,
+    "ground_minimum": 2.3833135146387293e-05,
     "accepted_physical_steps": 0,
-    "scope": "Completed expanded-space warm-start control, original history and target; qualified nonroot; independently rebuilt"
+    "scope": "Completed matched64-dimensional warm-start nonlinear-source direction control, original history/target; qualified nonroot; independently rebuilt",
+    "evidence": "native/source-refine-completed-review.json"
   },
   "ground_contact_diagnostic": {
     "initial_full_residual": 18.454728711702224,

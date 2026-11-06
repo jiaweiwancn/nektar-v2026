@@ -1,0 +1,30 @@
+{
+  "status": "passed_nested_reduced_response_prefix",
+  "scope": "Same physical target and base state.64 measured response summaries and original gradient agree bitwise; regularized mass action-Gram prefix agrees after removing each model radius multiplier. Not convergence or full-space stationarity.",
+  "cases": [
+    "free-mode64",
+    "nested-response96"
+  ],
+  "models": [
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/free-mode64/target/reduced-model-t0.0025000000000000001-f006292c518d-0-0.bin",
+      "sha256": "d5830b4658a66541aac06bb35190b1a93e85315452cc36f7b82aebbc1a979f5b"
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/nested-response96/target/reduced-model-t0.0025000000000000001-f006292c518d-0-0.bin",
+      "sha256": "3b09e56c3b75f6d11507744d42c1c632bcaa6d7d53fa609fc5040b5d02e52e67"
+    }
+  ],
+  "common_columns": 64,
+  "dimensions": [
+    64,
+    96
+  ],
+  "same_named_response_summaries": true,
+  "same_original_gradient_bytes": true,
+  "relative_action_gram_prefix_difference": 1.8108044149713814e-20,
+  "maximum_column_correlations": [
+    1.0440238971993156e-16,
+    1.1036833579036779e-16
+  ]
+}
