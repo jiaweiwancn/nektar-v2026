@@ -100,6 +100,7 @@ def main():
     p.add_argument('--verify', action='store_true')
     p.add_argument('--prepare-only', action='store_true')
     p.add_argument('--checkpoint', action='store_true')
+    p.add_argument('--checkpoint-interval', type=int, default=0)
     p.add_argument('--restart', type=Path)
     p.add_argument('--reject-step', type=int, default=0)
     p.add_argument('--hard-reject-step',type=int,default=0)
@@ -122,6 +123,10 @@ def main():
     xml = prepare(a.output, a.dt, a.steps, a.diagnostic, a.verify,
                   a.restart.resolve() if a.restart else None, a.checkpoint, a.reject_step,
                   a.k_bound,a.floor_relative,a.snapshots,a.budget_time,a.hard_reject_step)
+    require(a.checkpoint_interval>=0,'negative checkpoint interval')
+    if a.checkpoint_interval:
+        require(a.checkpoint,'checkpoint interval requires checkpoint output')
+        root=ET.parse(xml).getroot();set_parameter(root,'IO_CheckSteps',a.checkpoint_interval);write(root,xml)
     git = lambda *args: subprocess.check_output(['git', '-C', str(ROOT), *args], text=True).strip()
     manifest = dict(schema=1, source=git('rev-parse', 'HEAD'), source_status=git('status', '--porcelain'),
         archived_xml_sha256=sha(ORIGINAL), xml_sha256=sha(xml), expected_h0_sha256=H0,
