@@ -422,6 +422,7 @@ private:
     int m_reducedBasis=10,m_reducedHUpdates=50,m_reducedKrylov=0,m_reducedMaximumBasis=32;
     int m_reducedSourceRefinements=0;
     bool m_reducedResponseCache=false;
+    bool m_reducedInteriorSourceAnchor=false;
     double m_reducedRadius=.05,m_reducedStep=2e-5,m_reducedHTolerance=2e-9;
     double m_reducedRestorationWeight=1.;
     bool m_picardEquilibrateK=false;

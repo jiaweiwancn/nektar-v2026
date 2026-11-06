@@ -176,6 +176,43 @@ int main(int argc, char **argv)
     derivative=R::DifferentiateModel(R::Vector{0.},R::Vector{1.},0,1e-4,
         [](const R::Vector &,R::Vector &) { return false; });
     Check(!derivative.available,"undefined model derivative silently accepted");
+    // Two active ground-like cuts forbid both signs of the first coordinate.
+    // A fractional ray anchor restores a genuine model neighborhood without
+    // modifying a physical state or evaluating outside the declared domain.
+    int guarded=0;
+    auto cornerModel=[&](const R::Vector &z,R::Vector &value) {
+        const double a=1.-z[0]-z[1],b=1.+z[0]-3.*z[1];
+        if (a<0. || b<0.) { ++guarded; return false; }
+        value={a*a+2.*b*b+z[0]*z[0]+3.*z[1]*z[1]};
+        return true;
+    };
+    auto derivativeError=[](const R::ModelDerivative &d) {
+        return std::abs(d.coarse[0]-d.fine[0])/std::max(1.,std::abs(d.fine[0]));
+    };
+    R::Vector cornerValue;
+    Check(cornerModel({.5,.5},cornerValue),"corner model was not defined");
+    auto linearization=R::LinearizeModelOnRay(R::Vector{.5,.5},cornerValue,
+        1e-4,0,.03,cornerModel,derivativeError);
+    Check(!linearization.available && linearization.availableDerivatives==0 && guarded>0,
+          "blocked corner derivative was silently used");
+    linearization=R::LinearizeModelOnRay(R::Vector{.5,.5},cornerValue,
+        1e-4,2,.03,cornerModel,derivativeError);
+    Check(linearization.available && linearization.availableDerivatives==2 &&
+          linearization.anchorReductions==1 && linearization.attempts==2,
+          "interior source anchor did not recover the model derivatives");
+    Close(linearization.at[0],.25); Close(linearization.at[1],.25);
+    Check(std::abs(linearization.derivatives[0][0]-1.5)<.001 &&
+          std::abs(linearization.derivatives[1][0]+5.5)<.002,
+          "anchored derivatives differ from their independent quadratic values");
+    auto interior=linearization;
+    linearization=R::LinearizeModelOnRay(interior.at,interior.value,
+        1e-4,2,.03,cornerModel,derivativeError);
+    Check(linearization.available && linearization.anchorReductions==0 &&
+          linearization.at==interior.at,"valid incumbent model was moved unnecessarily");
+    linearization=R::LinearizeModelOnRay(R::Vector{.5,.5},cornerValue,
+        1e-4,2,.03,[](const R::Vector &,R::Vector &) { return false; },derivativeError);
+    Check(!linearization.available && linearization.attempts==3,
+          "exhausted anchor attempts were silently accepted");
     // A full scan must discover the sum constraint and then ground contact.
     r = Solve({{1.,0.},{0.,1.}}, {-2.,-4.},
               {{{-1.,0.},0.}, {{0.,1.},10.}, {{1.,1.},1.}}, {0.,0.});

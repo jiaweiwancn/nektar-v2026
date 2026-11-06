@@ -267,7 +267,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         Require(m_picardKRadius>0. && m_picardKRadius<=1.,"invalid dimensionless Picard k radius");
         session->LoadSolverInfo("RANSWallPicardGuessFile",m_picardGuessFile,"");
         session->LoadSolverInfo("RANSWallPicardKDiagnostic",m_picardKDiagnostic,"");
-        std::string reduced,reducedVerify,reducedSecondOrder,reducedSecant,reducedAdaptive,reducedSourceRay,reducedResponseCache;
+        std::string reduced,reducedVerify,reducedSecondOrder,reducedSecant,reducedAdaptive,reducedSourceRay,reducedResponseCache,reducedInteriorSourceAnchor;
         session->LoadSolverInfo("RANSWallPicardReduced",reduced,"Off");
         session->LoadSolverInfo("RANSWallReducedVerify",reducedVerify,"Off");
         session->LoadSolverInfo("RANSWallReducedSecondOrder",reducedSecondOrder,"Off");
@@ -275,6 +275,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         session->LoadSolverInfo("RANSWallReducedAdaptiveSpace",reducedAdaptive,"Off");
         session->LoadSolverInfo("RANSWallReducedSourceRay",reducedSourceRay,"Off");
         session->LoadSolverInfo("RANSWallReducedResponseCache",reducedResponseCache,"Off");
+        session->LoadSolverInfo("RANSWallReducedInteriorSourceAnchor",reducedInteriorSourceAnchor,"Off");
         Require((reduced=="On" || reduced=="Off") && (reducedVerify=="On" || reducedVerify=="Off"),
                 "unknown Picard reduced selector");
         m_picardReduced=reduced=="On";m_reducedVerify=reducedVerify=="On";
@@ -303,6 +304,9 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         m_reducedResponseCache=reducedResponseCache=="On";
         Require(!m_reducedResponseCache || m_picardReduced,
                 "response preconditioner reuse requires the reduced search");
+        Require(reducedInteriorSourceAnchor=="On" || reducedInteriorSourceAnchor=="Off",
+                "unknown reduced interior source anchor selector");
+        m_reducedInteriorSourceAnchor=reducedInteriorSourceAnchor=="On";
         session->LoadParameter("RANSWallReducedBasis",m_reducedBasis,10);
         session->LoadParameter("RANSWallReducedMaximumBasis",m_reducedMaximumBasis,32);
         session->LoadParameter("RANSWallReducedHUpdates",m_reducedHUpdates,50);
@@ -323,6 +327,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
                 m_reducedKrylov>=0 && m_reducedKrylov<=128 &&
                 m_reducedSourceRefinements>=0 && m_reducedSourceRefinements<=3 &&
                 (!m_reducedSourceRefinements || m_reducedSourceRay) &&
+                (!m_reducedInteriorSourceAnchor || m_reducedSourceRefinements>0) &&
                 m_reducedRadius>0. && m_reducedRadius<=1. &&
                 m_reducedStep>0. && m_reducedStep<.01 && m_reducedHTolerance>0. &&
                 std::isfinite(m_reducedHTolerance) &&

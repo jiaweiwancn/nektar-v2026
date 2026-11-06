@@ -165,6 +165,64 @@ ModelDerivative DifferentiateModel(const Vector &at, const Vector &base,
     return {};
 }
 
+struct ModelLinearization
+{
+    bool available = false;
+    Vector at, value;
+    Matrix derivatives;
+    int availableDerivatives = 0, anchorReductions = 0, attempts = 0;
+    double error = 0.;
+};
+
+// A constrained corner can forbid both signs of a coordinate probe even when
+// the model is smooth on its domain. Retry its linearization toward the base
+// of the ray. This changes only the internal model's anchor; the incumbent
+// proposal and actual nonlinear acceptance tests remain the caller's authority.
+template <typename Evaluate, typename RelativeError>
+ModelLinearization LinearizeModelOnRay(const Vector &at, const Vector &value,
+                                      double step, int maximumReductions,
+                                      double maximumError, Evaluate evaluate,
+                                      RelativeError relativeError)
+{
+    if (at.empty() || value.empty() || !(step > 0.) || !std::isfinite(step) ||
+        maximumReductions < 0 || maximumReductions > 3 ||
+        !(maximumError > 0.) || !std::isfinite(maximumError))
+        throw std::logic_error("invalid source-model ray linearization request");
+    ModelLinearization result;
+    for (int anchor = 0; anchor <= maximumReductions; ++anchor)
+    {
+        ModelLinearization current;
+        current.at = at;
+        current.anchorReductions = anchor;
+        current.attempts = anchor + 1;
+        for (double &entry : current.at) entry *= std::ldexp(1., -anchor);
+        if (anchor == 0) current.value = value;
+        else if (!evaluate(current.at, current.value))
+        {
+            result.attempts = current.attempts;
+            continue;
+        }
+        if (current.value.size() != value.size())
+            throw std::logic_error("source-model anchor changed residual shape");
+        for (int i = 0; i < at.size(); ++i)
+        {
+            auto d = DifferentiateModel(current.at, current.value, i, step, evaluate);
+            if (!d.available) break;
+            const double error = relativeError(d);
+            if (!(error >= 0.) || !std::isfinite(error))
+                throw std::logic_error("invalid source-model derivative error");
+            current.error = std::max(current.error, error);
+            current.derivatives.push_back(std::move(d.fine));
+        }
+        current.availableDerivatives = current.derivatives.size();
+        current.available = current.availableDerivatives == at.size() &&
+                            current.error <= maximumError;
+        result = std::move(current);
+        if (result.available) return result;
+    }
+    return result;
+}
+
 // Broyden update in the actual field metric. This is a finite-step response
 // model, not a claim of an exact Jacobian. The caller must still evaluate its
 // nonlinear trial. Leave changes below the declared signal scale untouched.

@@ -574,6 +574,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         {"adaptive_qualified_response_space", J::Boolean(m_reducedAdaptiveSpace)},
         {"nonlinear_destruction_ray", J::Boolean(m_reducedSourceRay)},
         {"nonlinear_destruction_refinements", J::Number(m_reducedSourceRefinements)},
+        {"interior_source_model_anchors", J::Boolean(m_reducedInteriorSourceAnchor)},
         {"model_face_solver", J::Quote("Euclidean null space through " +
             std::to_string(RANSWallReduced::DirectFaceThreshold) +
             " model variables; checked augmented orthonormal-face solve above; null-space fallback")},
@@ -1912,20 +1913,38 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                     for (int refinement=0;refinement<m_reducedSourceRefinements;++refinement)
                     {
                         if (!sourceModel(z,model)) break;
-                        WallMatrix derivative(n), nextH(n,Vector(n));
-                        double error=0.;
-                        int available=0;
-                        for (int i=0;i<n;++i)
-                        {
-                            auto d=RANSWallReduced::DifferentiateModel(z,model,i,2e-5,sourceModel);
-                            if (!d.available) break;
+                        WallMatrix nextH(n,Vector(n));
+                        const int evaluationsBefore=sourceModelEvaluations;
+                        const int evaluationBudget=4*n+64;
+                        auto boundedModel=[&](const Vector &q,Vector &value) {
+                            if (m_reducedInteriorSourceAnchor &&
+                                sourceModelEvaluations-evaluationsBefore>=evaluationBudget)
+                                return false;
+                            return sourceModel(q,value);
+                        };
+                        auto relativeError=[&](const RANSWallReduced::ModelDerivative &d) {
                             auto difference=d.coarse;
                             for (int j=0;j<dimension;++j) difference[j]-=d.fine[j];
-                            error=std::max(error,dualNorm(difference)/std::max(1.,dualNorm(d.fine)));
-                            derivative[i]=std::move(d.fine);
-                            ++available;
-                        }
-                        if (available!=n || error>.03)
+                            return dualNorm(difference)/std::max(1.,dualNorm(d.fine));
+                        };
+                        auto linearization=RANSWallReduced::LinearizeModelOnRay(
+                            z,model,2e-5,m_reducedInteriorSourceAnchor?2:0,.03,
+                            boundedModel,relativeError);
+                        const double error=linearization.error;
+                        const int available=linearization.availableDerivatives;
+                        if (m_reducedInteriorSourceAnchor)
+                            emit("source_linearization_anchor",{
+                                {"refinement",J::Number(refinement)},
+                                {"available",J::Boolean(linearization.available)},
+                                {"anchor_reductions",J::Number(linearization.anchorReductions)},
+                                {"attempts",J::Number(linearization.attempts)},
+                                {"anchor_fraction",J::Number(std::ldexp(1.,-linearization.anchorReductions))},
+                                {"available_derivatives",J::Number(available)},
+                                {"dimension",J::Number(n)}, {"two_scale_error",J::Number(error)},
+                                {"model_evaluations",J::Number(sourceModelEvaluations-evaluationsBefore)},
+                                {"model_evaluation_budget",J::Number(evaluationBudget)},
+                                {"scope",J::Quote("surrogate-only anchor; incumbent retained; actual trials converge H")}});
+                        if (!linearization.available)
                         {
                             emit("source_direction_refinement", {{"refinement",J::Number(refinement)},
                                 {"improved","false"},{"failure",J::Quote("unresolved surrogate derivative")},
@@ -1933,9 +1952,11 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                                 {"dimension",J::Number(n)},{"two_scale_error",J::Number(error)}});
                             break;
                         }
-                        auto constant=model;
+                        auto derivative=std::move(linearization.derivatives);
+                        auto constant=linearization.value;
                         for (int i=0;i<n;++i)
-                            for (int j=0;j<dimension;++j) constant[j]-=z[i]*derivative[i][j];
+                            for (int j=0;j<dimension;++j)
+                                constant[j]-=linearization.at[i]*derivative[i][j];
                         const auto dualConstant=mass.Apply(constant);
                         Vector nextG(n);
                         for (int i=0;i<n;++i)
@@ -1975,6 +1996,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                                 if (trueSlope>=-1e-8*base.merit*base.merit) continue;
                                 Vector value;
                                 if (!sourceModel(q,value)) continue;
+                                if (m_reducedInteriorSourceAnchor &&
+                                    dualNorm(value)>=dualNorm(model)) continue;
                                 if (objective(q,value)>=objective(z,model)*(1.-1e-6*f)) continue;
                                 next=std::move(q); chosenFraction=f; chosenNorm=dualNorm(value);
                                 originalSlope=trueSlope; improved=true; break;

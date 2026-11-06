@@ -148,6 +148,16 @@ def check(directory):
                 for r in source_predictions),
             "a source-ray actual trial lacked controlled H or exceeded its radius")
     refinements = [r for r in records if r["event"] == "source_direction_refinement"]
+    anchors = [r for r in records if r["event"] == "source_linearization_anchor"]
+    require(protocol.get("interior_source_model_anchors", False) or not anchors,
+            "an interior source anchor was used without its selector")
+    require(all(1 <= r["attempts"] <= 3 and 0 <= r["anchor_reductions"] <= 2 and
+                r["anchor_fraction"] == 2.**(-r["anchor_reductions"]) and
+                0 <= r["model_evaluations"] <= r["model_evaluation_budget"] ==
+                4*r["dimension"]+64 and
+                (not r["available"] or r["available_derivatives"] == r["dimension"] and
+                 r["two_scale_error"] <= .03) for r in anchors),
+            "source anchor exceeded its retry/evaluation budget or used unresolved derivatives")
     require(all(r["dimension"] == r["available_derivatives"] and r["two_scale_error"] <= .03 and
                 r["predicted_norm"] < r["before_norm"] and r["original_merit_slope"] < 0.
                 for r in refinements if r["improved"]),
@@ -176,6 +186,7 @@ def check(directory):
                   source_direction_refinements=refinements, source_refined_directions=refined_directions,
                   source_refined_direction_checks=refined_checks)
     result["response_preconditioners"] = prepared
+    result["source_linearization_anchors"] = anchors
     write_json(directory / "reduced-checks.json", result)
 
 

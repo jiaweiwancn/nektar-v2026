@@ -74,6 +74,7 @@ def prepare(args):
                 set_info(root, "RANSWallReducedAdaptiveSpace", "On" if getattr(args, "reduced_adaptive_space", False) else "Off")
                 set_info(root, "RANSWallReducedSourceRay", "On" if getattr(args, "reduced_source_ray", False) else "Off")
                 set_info(root, "RANSWallReducedResponseCache", "On" if getattr(args, "reduced_response_cache", False) else "Off")
+                set_info(root, "RANSWallReducedInteriorSourceAnchor", "On" if getattr(args, "reduced_interior_source_anchor", False) else "Off")
                 for key, value in {"Basis": args.reduced_basis, "Radius": args.reduced_radius,
                                    "MaximumBasis": getattr(args, "reduced_maximum_basis", 32),
                                    "HTolerance": args.reduced_h_tolerance,
@@ -164,6 +165,8 @@ def main():
                         help="Select reduced step lengths using nonlinear destruction on affine field responses")
     parser.add_argument("--reduced-source-refinements", type=int, default=0,
                         help="Up to three constrained nonlinear destruction model direction refinements")
+    parser.add_argument("--reduced-interior-source-anchor", action="store_true",
+                        help="Retry blocked source-model derivatives at an interior ray anchor")
     parser.add_argument("--reduced-response-cache", action="store_true",
                         help="Reuse separate base field factors for response probes; still converge the original H")
     parser.add_argument("--reduced-basis", type=int, default=10)
@@ -207,6 +210,8 @@ def main():
     require(0 <= args.reduced_source_refinements <= 3 and
             (not args.reduced_source_refinements or args.reduced_source_ray),
             "source refinements require --reduced-source-ray and a budget from zero to three")
+    require(not args.reduced_interior_source_anchor or args.reduced_source_refinements > 0,
+            "interior source anchors require a positive --reduced-source-refinements budget")
     require(not args.equilibrate_after_k or args.k_newton, "--equilibrate-after-k requires --k-newton")
     require(not args.guess_file or args.steps == 1, "a saved guess binds exactly one stage")
     require(not args.guess_file or args.perturbation == 0, "run saved-guess and perturbation diagnostics separately")
