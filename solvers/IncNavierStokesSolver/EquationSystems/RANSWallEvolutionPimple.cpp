@@ -167,23 +167,13 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
         auto budget=[&](const char *phase,const Vector &q)
         {
             if(m_pimpleBudgetTime<0 || std::abs(time-m_pimpleBudgetTime)>.25/alpha)return;
-            const auto resolution=ResidualResolutionComponents(q,history,0.,time,data,false);
-            const auto ground=WallTraceR4(q);
-            const auto worst=std::min_element(ground.begin(),ground.end(),[](const auto &a,const auto &b){return a.value<b.value;});
-            const auto rate=RANSWallResolutionMassRate(*this,resolution,K(),worst->row.coordinate);
-            const auto fixed=Point(K(),{1.60,0.,0.});
-            std::vector<std::pair<std::string,std::string>> terms;
-            for(const auto &[name,value]:rate.componentRates)
-                terms.push_back({name,J::Numbers(Vector{worst->row.Value(value),fixed.Value(value)})});
-            const auto constraints=Constraints(q,time,data);double trace=0;
-            for(int id:m_traceIds)trace=std::max(trace,std::abs(q[offset[Epsilon()]+id]-constraints.at(offset[Epsilon()]+id)));
-            put(std::string("k_budget_")+phase,J::Object({{"ground_point",J::Numbers(worst->row.coordinate)},
-                {"ground_value",J::Number(worst->value)},{"fixed_witness",J::Numbers(Vector{1.6,0,0})},
-                {"rates_ground_and_fixed",J::Numbers(Vector{rate.contactRate,fixed.Value(rate.rate)})},
-                {"component_rates",J::Object(terms)},{"mass_solve_residual",J::Number(Maximum(rate.freeMassResidual))},
-                {"diagnostic_mass_rate_inverse_applications",J::Number(rate.componentRates.size()+1)},
-                {"epsilon_trace_defect",J::Number(trace)},
-                {"scope",J::Quote("instantaneous spatial k rate with zero essential rates; net destruction once; not a full-sweep h-to-zero consistency claim")}}));
+            try
+            {
+                const double evaluationTime=std::string(phase)=="last_accepted"?time-1/alpha:time;
+                put(std::string("k_budget_")+phase,PimpleKRateBudget(q,history,evaluationTime,data));
+            }
+            catch(const std::exception &error)
+            {put(std::string("k_budget_")+phase,J::Object({{"success","false"},{"failure",J::Quote(error.what())}}));}
         };
         auto scalar=[&](int b)
         {

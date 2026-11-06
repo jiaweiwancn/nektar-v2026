@@ -186,6 +186,11 @@ int main(int argc,char **argv)
         const bool historyMatch=std::memcmp(history.data(),reference.data(),history.size()*sizeof(double))==0;
         Require(!packet.get<bool>("require_history_h0",true) || historyMatch,"packet history differs from rebuilt native h0");
         const double time=packet.get<double>("time"),alpha=packet.get<double>("alpha");
+        if(packet.get<std::string>("operation","")=="k_budget")
+        {
+            std::ofstream out(argv[3]);out<<patch.PimpleKRateBudget(state,history,time,data)<<'\n';
+            Require(out.good(),"budget replay write failed");world->Finalise();return 0;
+        }
         if(packet.get<std::string>("operation","")=="k_bound")
         {
             Vector pre=packet.get_child_optional("pre_k")?Read(packet,"pre_k"):history;

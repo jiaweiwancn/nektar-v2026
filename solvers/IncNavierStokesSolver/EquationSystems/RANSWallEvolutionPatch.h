@@ -187,6 +187,8 @@ public:
         double integral=0;
         std::string report,failure;
     };
+    std::string PimpleKRateBudget(const Vector &state,const Vector &history,double time,
+        const RANSWallEvolutionData &data) const;
     KBoundResult ApplyPimpleKBound(const Vector &raw,const Vector &preK,double time,
         const RANSWallEvolutionData &data) const;
     bool SegregatedPicard() const { return m_nonlinearPolicy=="SegregatedPicard"; }

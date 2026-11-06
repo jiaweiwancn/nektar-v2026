@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallKBoundProjection.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionResolution.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
 #include <cmath>
 #include <iomanip>
@@ -112,7 +113,7 @@ RANSWallEvolutionPatch::KBoundResult RANSWallEvolutionPatch::ApplyPimpleKBound(
     }
     catch(const std::exception &error){result.failure=error.what();}
     if(!points.empty())
-    {Location fixed;const double minimum=evaluate(result.state,fixed);if(minimum<correctedMinimum){correctedMinimum=minimum;correctedWitness=fixed;}}
+    {Location fixed;const double minimum=evaluate(result.state,fixed);if(!result.success || minimum<correctedMinimum){correctedMinimum=minimum;correctedWitness=fixed;}}
     correctedGround=WallTraceJSON(result.state,correctedGroundOK);
     for(int i=0;i<size[K()];++i)change[i]=result.state[offset[K()]+i]-raw[offset[K()]+i];
     const auto load=Multiply(m_mass[K()],change);
@@ -165,4 +166,37 @@ RANSWallEvolutionPatch::KBoundResult RANSWallEvolutionPatch::ApplyPimpleKBound(
         {"scope",J::Quote("declared k inventories and continuous cubic ground; no volume-wide polynomial certificate")}});
     return result;
 }
+std::string RANSWallEvolutionPatch::PimpleKRateBudget(const Vector &q,const Vector &history,
+    double time,const RANSWallEvolutionData &data) const
+{
+    Require(ScalarDomain(q,time,data).admissible,"k-rate budget requires an admissible selected state");
+    auto resolution=ResidualResolutionComponents(q,history,0.,time,data,false);
+    // Components deliberately do not populate the independent native load.
+    // Supply it explicitly before the consistent-mass rate reconstruction.
+    resolution.native["spatial_unmasked"]=Residual(q,history,0.,time,data,false,false);
+    const auto ground=WallTraceR4(q);
+    const auto worst=std::min_element(ground.begin(),ground.end(),[](const auto &a,const auto &b){return a.value<b.value;});
+    const auto rate=RANSWallResolutionMassRate(*this,resolution,K(),worst->row.coordinate);
+    const auto fixed=Point(K(),{1.60,0.,0.});
+    std::vector<std::pair<std::string,std::string>> terms;
+    Vector sum(2);
+    for(const auto &[name,value]:rate.componentRates)
+    {
+        const Vector values{worst->row.Value(value),fixed.Value(value)};
+        sum[0]+=values[0];sum[1]+=values[1];terms.push_back({name,J::Numbers(values)});
+    }
+    const Vector total{rate.contactRate,fixed.Value(rate.rate)};
+    for(int i=0;i<2;++i)sum[i]-=total[i];
+    const auto constraints=Constraints(q,time,data);double trace=0.;
+    for(int id:m_traceIds)trace=std::max(trace,std::abs(q[offset[Epsilon()]+id]-constraints.at(offset[Epsilon()]+id)));
+    return J::Object({{"success","true"},{"state_time",J::Number(time)},{"state_sha256",J::Quote(RANSWallR3::Hash(q))},
+        {"ground_point",J::Numbers(worst->row.coordinate)},{"ground_geometry",J::Number(worst->row.geometry)},
+        {"ground_value",J::Number(worst->value)},{"fixed_witness",J::Numbers(Vector{1.6,0,0})},{"fixed_geometry",J::Number(fixed.geometry)},
+        {"rates_ground_and_fixed",J::Numbers(total)},{"component_rates",J::Object(terms)},
+        {"component_sum_minus_native_rate",J::Numbers(sum)},{"mass_solve_residual",J::Number(Maximum(rate.freeMassResidual))},
+        {"diagnostic_mass_rate_inverse_applications",J::Number(rate.componentRates.size()+1)},
+        {"epsilon_trace_defect",J::Number(trace)},
+        {"scope",J::Quote("instantaneous spatial k rate with zero essential rates; net destruction once; not a full-sweep h-to-zero consistency claim")}});
+}
+
 }
