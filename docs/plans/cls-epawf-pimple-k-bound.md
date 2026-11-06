@@ -4,6 +4,11 @@ This experiment continues `codex/cls-epawf-pimple-one-sweep` from the actual
 local and fetched remote HEAD `c166f4441b5f89beed2874f267e2d5df1c75c335`.
 The separate Picard checkout and its subsequent work are preserved.
 
+The subsequent [continuation and contact-state study](cls-epawf-pimple-longtime.md)
+retains these short-run results and follows the bounded solver to its first
+interior normalization-ray k rejection. It reports the actual accepted
+horizon, correction budgets, fixed-state rates and preserved checkpoints.
+
 `RANSWallPimpleKBound=Off|MassProjection` is an opt-in, algebraic post-k
 operation. Off remains the default. The bound changes the numerical
 step map; the repaired state is not an exact solution of the original
