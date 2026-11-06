@@ -6,6 +6,11 @@ native IMEX1 and one implicit callback per physical step. It does not solve
 the fully implicit backward-Euler stage to nonlinear convergence. The
 existing default `ConvergedStage` and all nonlinear policies remain available.
 
+This report records the uncorrected `RANSWallPimpleKBound=Off` baseline.
+The later opt-in mass projection, its modified step map and continued
+Linux experiments are documented in
+[the focused k-bounding report](cls-epawf-pimple-k-bound.md).
+
 The branch is `codex/cls-epawf-pimple-one-sweep`. The fetched remote base was
 `0f2574b7f558963aafbc814b479c840e60880893`; the actual base was the newer local
 `6156937022124575e67376799487accb9b271069`, containing the repaired pressure
