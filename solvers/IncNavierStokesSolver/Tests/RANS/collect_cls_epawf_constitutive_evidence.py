@@ -13,6 +13,7 @@ from run_cls_epawf_picard import load,write_json,require,sha,state_hash
 from run_cls_epawf_pimple import identity
 from continue_cls_epawf_pimple import header,process_identity
 from compare_cls_epawf_pimple import differences
+from analyse_cls_epawf_constitutive_v2 import read_report
 
 
 def main():
@@ -37,6 +38,14 @@ def main():
             correction_positive=sum(v['positive_integral'] for v in rows),correction_negative=sum(v['negative_integral'] for v in rows),
             correction_absolute=sum(v['absolute_integral'] for v in rows),physical_production_destruction_global_near=physical,
             physical_time_quadrature='trapezoid at retained endpoints; not a closed local CG balance',exact_frozen_discrete=exact))
+    legacy_report=load(r.parent/'cls-epawf-pimple-k-bound/fixed-horizon/bound-0/case.evolution.json')
+    new_report=read_report(r/'campaign/trajectory/steps-000001-000016')
+    same=[i for i,(old,new) in enumerate(zip(legacy_report['accepted_states'],new_report['accepted_states'])) if state_hash(old)==state_hash(new)]
+    old12=load(r.parent/'cls-epawf-pimple-longtime-20261106/analysis-final/samples-later/result.json')
+    new12=load(r/'analysis16/step12/samples.json');old12['initial']=new12['initial']=initial
+    joined['legacy_comparison']=dict(bitwise_identical_available_states=same,
+        physical_L2_at_T00075=differences(old12,new12),
+        caveat='V1 accepted state twelve violates the V2 inventory; only its retained safe physical samples are compared')
     write_json(a.output/'analysis.json',joined)
     # Capture a real last accepted checkpoint immediately, with all native
     # history bytes. No signatures/history contents are edited or fabricated.
@@ -76,18 +85,24 @@ def main():
     for b in compact['budgets']:
         locations=b.pop('active_constraints');b['active_constraint_count']=len(locations)
         b['active_extent']={axis:[min(v['coordinate'][i] for v in locations),max(v['coordinate'][i] for v in locations)] for i,axis in ((0,'x'),(2,'z'))} if locations else {}
-    identities=dict(supervisor=process_identity(load(r/'launch.json')['pid']),native=process_identity(progress['native_pid']),
+    current_identity=identity(r/'campaign/trajectory/runtime/IncNavierStokesSolver')
+    pinned=load(r/'campaign/trajectory/runtime/identity.json')['frozen']
+    require(current_identity['sha256']==pinned['sha256'] and current_identity['libraries']==pinned['libraries'],'pinned runtime changed')
+    identities=dict(driver=process_identity(progress['pid']),supervisor=process_identity(load(r/'launch.json')['pid']),native=process_identity(progress['native_pid']),
         monitor=process_identity(load(r/'monitor-launch.json')['pid']))
     evidence=dict(schema=1,base='0b86269739075af81622319402370967fdeffbe8',branch=git('branch','--show-current'),
         source_revision=git('rev-parse','HEAD'),source_status=git('status','--porcelain'),source_files_sha256=source_files,
         root=str(r),collected_unix=time.time(),production_launch=load(r/'launch.json'),monitor_launch=load(r/'monitor-launch.json'),
         progress=progress,supervisor_status=load(r/'campaign/status.json'),monitor_status=load(r/'monitor/status.json'),process_identities=identities,
-        runtime=load(r/'campaign/trajectory/runtime/identity.json'),probe=identity(r/'audit-probe/RANSWallResolutionProbe'),
+        runtime=load(r/'campaign/trajectory/runtime/identity.json'),runtime_identity_unchanged=True,
+        production_kernel_revision=git('rev-parse','1c49c07'),probe=identity(r/'audit-probe/RANSWallResolutionProbe'),
         checkpoint=checkpoint,fixtures=fixtures,history_checks=histories,
         durability=json.loads((r/'durability-terminal.log').read_text()),simultaneous_resume=load(r/'simultaneous-resume.json'),
         frozen_repair_budgets=load(r/'repair-budget.json'),analysis=compact,
         ranks_per_native_job=1,thread_environment={k:os.environ.get(k) for k in ('OMP_NUM_THREADS','OPENBLAS_NUM_THREADS','MKL_NUM_THREADS','BLIS_NUM_THREADS','VECLIB_MAXIMUM_THREADS','NUMEXPR_NUM_THREADS')},
         build_parallelism=8,worker_limit=72,
+        build_cache=[v for v in (r/'build/CMakeCache.txt').read_text().splitlines() if any(v.startswith(k) for k in ('CMAKE_CXX_COMPILER:','CMAKE_CXX_FLAGS:','CMAKE_BUILD_TYPE:','Nektar++_DIR:','RANS_BUILD_SOLVER:'))],
+        receipts={str(path.relative_to(r)):sha(path) for path in sorted(r.glob('*.log'))},
         artifact_index=dict(path=str(a.output/'artifact-index.json'),sha256=sha(a.output/'artifact-index.json'),files=len(index)))
     write_json(a.output/'native.json',evidence);print(a.output/'native.json')
 
