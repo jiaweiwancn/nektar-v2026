@@ -46,6 +46,18 @@ def main():
         progress=progress,probe=identity(a.probe.resolve()),states={},windows=[],budgets=[],
         classification='unresolved evolution; T=.02 is only a first milestone, not a long-time assessment',
         ranks=1,threads=1,governing_solves={k:sum(v[k] for v in rows) for k in ('momentum_predictor_solves','pressure_system_solves','epsilon_transport_solves','k_transport_solves','additional_governing_equation_solves')})
+    summary['completed_native_segments']=[]
+    for segment in sorted({v['segment'] for v in records.values()}):
+        folder=Path(segment)
+        if not (folder/'case.evolution.json').exists() and not (folder/'case.evolution.json.gz').exists():continue
+        report=read_report(folder)
+        attempts=report['pimple_attempts'];accepted_here=len(report['accepted_states'])-1
+        require(report['implicit_callback_count']==len(attempts),'native callback counter mismatch')
+        if not report['failure']:require(len(attempts)==accepted_here,'hidden implicit callback in completed segment')
+        summary['completed_native_segments'].append(dict(path=segment,callbacks=report['implicit_callback_count'],
+            accepted=accepted_here,global_end_step=report['steps'],failure=report['failure'],
+            initialization_k_bound=report.get('initial_k_bound_check'),initialization_lift_calls_iterations=report.get('initialization_lift_calls_iterations'),
+            qualification_events=[{k:v for k,v in e.items() if k not in ('state','history','audit')} for e in report.get('physical_range_events',[])]))
     sampled={}
     def replay(name,state,time,xml):
         folder=a.output/name;folder.mkdir();shutil.copy2(xml,folder/'case.xml')
@@ -60,6 +72,9 @@ def main():
         require(receipt['exit_code']==0,'sample readback failed '+name)
         samples=load(folder/'samples.json');samples['initial']=initial;sampled[name]=samples
         summary['states'][name]={k:v for k,v in contact.items() if k not in ('free_k_mass','free_k_rows','offsets','k_integral_load','near_k_integral_load','scan')}
+        weights=samples['physical_samples']['wall_weights'];stress=samples['physical_samples']['wall_stress']
+        summary['states'][name]['mean_wall_stress']=math.fsum(w*t for w,t in zip(weights,stress))/math.fsum(weights)
+        summary['states'][name]['rms_wall_stress']=math.sqrt(math.fsum(w*t*t for w,t in zip(weights,stress))/math.fsum(weights))
         write_json(a.output/'summary.partial.json',summary)
         return contact
     xml=Path(records[1]['segment'])/'case.xml';mass_spec=replay('initial',initial,0.,xml)
@@ -86,18 +101,21 @@ def main():
             correction_raw_ratio=b['correction_to_step_ratio'],correction_rate_mass_norm=b['mass_norm_correction']/.000625,
             signed_integral=b['integral_total'],signed_integral_rate=b['integral_total']/.000625,
             near_integral=ints[2],positive_integral=ints[3],negative_integral=ints[4],absolute_integral=ints[3]-ints[4],
-            minimum=b['corrected_minimum'],ground=b['corrected_ground'],separations=b['separation_passes'],
+            minimum=b['corrected_minimum'],raw_minimum=b['raw_minimum'],floor=b['floor'],ground=b['corrected_ground'],separations=b['separation_passes'],
+            bound_calls=b['calls'],activations=b['activations'],mass_applications=b['mass_factor_applications'],kkt_solves=b['kkt_solves'],
             active_set_iterations=b['active_set_iterations'],active_constraints=b['active_constraints'],
             inventory_counts=b['inventory_counts'],constraint_families=b['discovered_constraint_families'],
             raw_frozen_residual=v['k_frozen_linear_residual'],corrected_frozen_residual=v['k_corrected_frozen_linear_residual'],
             added_frozen_residual=v['k_added_frozen_residual'],storage_reaction=v['k_added_storage_residual'],
-            cumulative_integral=cumulative,matching=v['refreshed_trace_defect'],continuity=v['corrected_continuity_gauge'])
+            cumulative_integral=cumulative,matching=v['refreshed_trace_defect'],continuity=v['corrected_continuity_gauge'],
+            B_min=v['k_domain']['minimum_b'],lambda_min=v['k_domain']['minimum_lambda'])
         packet=Path(v['k_snapshot'])
         if packet.exists():
             q=load(packet);raw=np.array(q['raw']);corrected=np.array(q['corrected']);before=np.array(q['pre_k']);dk=(corrected-raw)[free];net=(corrected-before)[free]
             out['corrected_increment_mass_norm']=math.sqrt(net@(mass@net))
             out['global_k']=float(integral@corrected[off:off+len(integral)]);out['near_k']=float(near@corrected[off:off+len(near)])
             out['cancellation_identity']=float(np.max(np.abs(net-(raw-before)[free]-dk)))
+            out['pre_k_minus_native_history_max']=float(np.max(np.abs((before-np.array(q['history']))[off:off+len(integral)])))
             matrix=np.frombuffer(Path(q['matrix_file']).read_bytes(),dtype='<f8').reshape(len(free),len(free));h=1/q['alpha']
             rd=np.array(q['raw_increment']);input_load=-h*(dual@np.array(q['transport_residual']))
             implicit=-h*(dual@(matrix@rd-mass@rd/h));repair=np.array([integral[free-off]@dk,near[free-off]@dk]);actual=np.array([integral[free-off]@net,near[free-off]@net])
@@ -106,6 +124,19 @@ def main():
         summary['budgets'].append(out)
     if cutoff==progress['accepted_steps']:require(abs(cumulative-progress['cumulative_bound_integral'])<1e-15,'live prefix cumulative correction differs')
     summary['cumulative_correction']=dict(net=cumulative,positive=positive,negative=negative,absolute=positive-negative,near=near_total)
+    summary['window_integrated_budgets']=[]
+    for x,y in zip(names,names[1:]):
+        start=sampled[x]['time'];end=sampled[y]['time'];selected_budget=[v for v in summary['budgets'] if start+1e-13<v['time']<=end+1e-13]
+        physical=[(end-start)*(a+b)/2 for a,b in zip(summary['states'][x]['physical_production_destruction_global_near'],summary['states'][y]['physical_production_destruction_global_near'])]
+        row=dict(start=start,end=end,correction_net=sum(v['signed_integral'] for v in selected_budget),
+            correction_positive=sum(v['positive_integral'] for v in selected_budget),correction_negative=sum(v['negative_integral'] for v in selected_budget),
+            correction_absolute=sum(v['absolute_integral'] for v in selected_budget),correction_near=sum(v['near_integral'] for v in selected_budget),
+            physical_production_destruction_global_near=physical,
+            physical_time_quadrature='trapezoid at retained endpoints; not an exactly closed CG control-volume balance')
+        if all('exact_discrete_global_near_budget' in v for v in selected_budget):
+            row['exact_frozen_discrete']={k:np.sum([v['exact_discrete_global_near_budget'][k] for v in selected_budget],axis=0).tolist() for k in ('input_load','implicit_increment','bound','actual','closure')}
+        summary['window_integrated_budgets'].append(row)
+
     summary['checkpoint_identity_at_readback']=dict(path=str(checkpoint),snapshot=str(a.output/'checkpoint-at-readback'),sha256=saved['sha256'],steps=saved['steps'],time=saved['time'])
     summary['status']='analysis_completed';write_json(a.output/'summary.json',summary);print(a.output/'summary.json')
 
