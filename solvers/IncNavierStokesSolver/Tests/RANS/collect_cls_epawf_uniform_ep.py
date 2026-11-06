@@ -101,12 +101,23 @@ def main():
         native_lift_calls_iterations=control_h0['initialization_lift_calls_iterations'],
         fixed_boundary_data=initial_source['fixed_external_coefficients'])
     require(result['initialization_detail']['all_changes_on_matching_trace'],'initial non-trace coefficient changed')
+    result['initialization_detail']['fixed_external_data_identical']=initial_source['fixed_external_coefficients']==load(a.sources/'upstream-h0/result.json')['fixed_external_coefficients']
     result['initialization_detail'].pop('fixed_boundary_data') # full native map retained in the source readback
     strict=r/'uniform-strict/manifest.json'
     if strict.exists():
         m=load(strict);report=load(strict.parent/'case.evolution.json')
         result['strict_qualification']=dict(path=str(strict),sha256=sha(strict),accepted_steps=m['accepted_steps'],
             final_time=m['final_time'],failure=m['failure'],events=[{k:v for k,v in e.items() if k not in ('state','history','audit')} for e in report['physical_range_events']])
+        full=load(r/'policy-checks-r2/uniform2/case.evolution.json')
+        from compare_cls_epawf_pimple import same_history
+        cps=[f.parent for f in (r/'policy-checks-r2/uniform2').glob('checkpoint*/State.bin') if header(f.parent)['steps']==1]
+        require(len(cps)==1,'missing saved first-step native history');before=header(cps[0],True)
+        require(report['steps']==1 and report['time']==before['time'],'strict guard stopped at unexpected time')
+        require(state_hash(report['state'])==state_hash(before['coupled_state']),'strict rejection changed accepted state')
+        require([state_hash(v) for v in report['native_history']]==[state_hash(v) for v in before['history']] and report['native_history_times']==before['history_times'],'strict rejection changed native history')
+        require(state_hash(report['rejected_state'])==state_hash(full['state']),'strict record is not the actual second candidate')
+        require(any('outer_gradient_box_exit' in e['reasons'] for e in report['physical_range_events']),'unexpected strict rejection reason')
+        result['strict_qualification'].update(actual_candidate_saved=True,accepted_state_time_history_rolled_back=True)
     result['uniform_launch']=load(r/'uniform-launch.json');result['uniform_monitor_launch']=load(r/'uniform-monitor-launch.json')
     result['upstream_terminal']=load(r/'upstream-terminal/manifest.json')
     attempt=result['upstream_terminal']['first_rejection']['attempt']
@@ -120,15 +131,17 @@ def main():
         result[name+'_counts']={k:sum(q['attempt'].get(k,0) for q in rows) for k in keys}
         result[name+'_counts']['accepted_steps']=len(rows)
         result[name+'_counts']['implicit_callbacks_accepted']=len(rows)
+    def xml_part(root,path):
+        element=root.find(path);return ET.tostring(element,encoding='unicode') if element is not None else None
     def config(xml):
         t=ET.parse(xml).getroot()
         return dict(sha256=sha(xml),path=str(xml),solver_info={v.attrib['PROPERTY']:v.attrib['VALUE'] for v in t.findall('./CONDITIONS/SOLVERINFO/I')},
             parameters=[v.text.strip() for v in t.findall('./CONDITIONS/PARAMETERS/P')],
-            boundary_xml=ET.tostring(t.find('./CONDITIONS/BOUNDARYCONDITIONS'),encoding='unicode'),
+            boundary_xml=xml_part(t,'./CONDITIONS/BOUNDARYCONDITIONS'),
             functions=[ET.tostring(v,encoding='unicode') for v in t.findall('./CONDITIONS/FUNCTION')])
     result['case_inputs']={name:config(Path(rows[0]['segment'])/'case.xml') for name,rows in [('upstream',upstream_rows),('uniform',uniform_rows)]}
     up=ET.parse(Path(upstream_rows[0]['segment'])/'case.xml').getroot();un=ET.parse(Path(uniform_rows[0]['segment'])/'case.xml').getroot()
-    result['same_spatial_and_external_problem']={part:ET.tostring(up.find(part))==ET.tostring(un.find(part)) for part in ('GEOMETRY','EXPANSIONS','CONDITIONS/BOUNDARYCONDITIONS')}
+    result['same_spatial_and_external_problem']={part:xml_part(up,part)==xml_part(un,part) for part in ('GEOMETRY','EXPANSIONS','CONDITIONS/BOUNDARYCONDITIONS')}
     require(all(result['same_spatial_and_external_problem'].values()),'uniform control changed mesh/spaces/external XML boundary data')
     require(result['case_inputs']['upstream']['functions']==result['case_inputs']['uniform']['functions'],'physical function changed')
     result['archived_xml']=dict(path=str(ROOT/'docs/plans/cls-epawf-revised-evidence/m8-r1/archive-session.xml'),
