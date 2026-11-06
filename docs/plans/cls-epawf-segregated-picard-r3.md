@@ -20,6 +20,81 @@ metric at ground contact while its original k residual stayed nonzero. R3
 therefore scores the original reduced residual, not that projected-map defect.
 No full all-field Jacobian or hidden coupled direction solver was added.
 
+## Previous-correction retention and current follow-ups
+
+Code `6b1f28a9b316713ba1d06db5c794bd1e61eabb15` fixes another response-budget
+problem: the previous successful k correction was queued after all504 free
+modes. The96/160-direction searches exhausted their budgets before reaching
+it. It is now queued after the conditional/Krylov and rate seeds. Its current
+reduced response must still pass independent feasible two-size H solves and
+rank checks before retention. This changes direction construction without
+reusing an old action as a current derivative or changing any physical row.
+
+The Linux build passes with8 compiler workers; all six focused CTests pass in
+37.96s with test concurrency1. Bounds assertions remain enabled. The standalone
+reduced-model header/test are unchanged from389d0a5, so their recorded ASan/UBSan
+evidence is reused only for those files; it does not sanitize the changed
+Picard driver or the full dependencies.
+[Build, commands and binary/library identities](cls-epawf-segregated-picard-r3-evidence/native/build-validation-6b1f28a.json).
+
+Matched two-update saved-guess tests compare389d0a5 and6b1f28a with identical
+physical input and numerical settings. A separate6b1f28a native original-h0 run
+requests three physical steps, with48 numerical updates per stage and an8h
+process limit. These tests are in progress; no completed native result is
+inferred from their prefixes. The focused
+`check_cls_epawf_previous_direction.py` requires an independently checked,
+retained previous direction after the first update, in addition to the
+existing original-operator and history assertions. Passing it will describe
+that bounded fixture, not M8 convergence.
+[Exact native launch commands](cls-epawf-segregated-picard-r3-evidence/native/previous-direction-native-launch.json).
+
+The389d0a5 canonical160-direction warm search makes a useful qualified numerical
+update from7.5004290706 to7.1302877208629. The actual continuous-ground minimum
+increases from6.2733e-7 to5.32264357e-5; minimum epsilon ratio increases to
+.9812197154. Maximum gradient departure is.0009999998290 with witness x=1,z=2.
+The full scalar evaluation inventory, complete qualification, covariance and
+lambda checks pass. A fresh process reproduces every original block norm
+exactly and rejects the deliberately negative continuous-ground test before
+scalar evaluation. This remains an ongoing numerical checkpoint with no final
+native physical-history receipt, and is not an algebraic root or accepted step.
+
+The160 response columns are independent; maximum correlation is9.98e-17. The
+model has24 active constraints and11 added ground cuts. Its combined local
+predicted merit slope-29.63178 agrees with measured half-step-29.60851. The
+nonlinear source refinement uses all160 directional derivatives; its local
+prediction-18.92105 agrees with measured-18.90670. After two actual qualification
+corrections, the source prediction is7.328295228 versus actual7.130287721, with
+residual-vector error.491810 versus3.212774 for the linear model. Actual final
+displacement.212164569 is within radius.4; attained H error1.0344e-9 is below
+the declared2e-9. The logged next-witness inventory is checked for canonical
+ordering, one observation per family/spatial region, and membership in the
+active physical observations.
+[Compact checkpoint/model/trial review](cls-epawf-segregated-picard-r3-evidence/native/canonical-warm-first-checkpoint-review.json),
+[independent original-operator audit](cls-epawf-segregated-picard-r3-evidence/native/audit-canonical-warm-first.json).
+
+Its next numerical update reaches5.5688705520357455 with complete original
+qualification still passing. Ground minimum is2.34885008e-5, maximum gradient
+departure.00099999902235 (witness x=-2.60465,z=4), and minimum epsilon ratio
+.9807155533. The source prediction5.562813859 differs from the actual norm by
+.00606; vector error.035155 is smaller than the linear model's.488066. The
+refined direction predicts local merit slope-17.85791 versus measured
+half-step-17.85391. Actual displacement.291132591 stays within radius.4 and
+attained H error1.5031e-9 is below2e-9. Independent6b1f28a probe readback is
+bitwise identical to every original block norm and passes complete
+qualification/ground/covariance/lambda and the negative-ground guard. This
+lower-residual checkpoint also remains a qualified nonroot; its run continues
+and has no final native physical-history receipt.
+[Second checkpoint/model/trial review](cls-epawf-segregated-picard-r3-evidence/native/canonical-warm-second-checkpoint-review.json),
+[fresh second-checkpoint audit](cls-epawf-segregated-picard-r3-evidence/native/audit-canonical-warm-second.json).
+
+At the preceding7.5004290706 full504-response base, the true reduced gradient
+norm is3172.69 and the near-active cone defect is2847.89, compared with empirical
+two-size gradient uncertainty9.54. All504 response coordinates are independent.
+This tested base is not shown stationary. It supports continued search and
+does not establish global root existence, impossibility, or stationarity at
+the later7.13029 checkpoint.
+[Full-space original-merit first-order audit](cls-epawf-segregated-picard-r3-evidence/native/first-order-qualified-full504-at-7p50043.json).
+
 ## Latest completed full-space search
 
 The strict-accuracy `d710404` full504-response run completes two numerical
