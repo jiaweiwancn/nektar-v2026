@@ -35,11 +35,17 @@ def main():
                   row["half_merit_slope"] < 0]
         trials = [row for row in later if row["event"] == "trial" and row["accepted"] and
                   row["proposal_origin"] == "nonlinear_source_refined_direction"]
-        points = [row for row in later if row["event"] == "accepted"]
+        # Direction/trial events use the incoming iteration. The saved
+        # accepted point uses the number of completed updates, one higher.
+        points = [row for row in rows if row["event"] == "accepted" and
+                  row["iteration"] == iteration+1 and
+                  row["seconds"] > precision["seconds"]]
         base = [row for row in rows if row["event"] in ("initial", "accepted") and
                 row["seconds"] < precision["seconds"]]
         if not (refinements and checks and trials and points and base):
             continue
+        require(trials[0]["full_norm"] == max(points[0]["norms"]),
+                "accepted refined trial and saved original residual disagree")
         require(max(points[0]["norms"]) < max(base[-1]["norms"]),
                 "refined source direction did not reduce the original full residual")
         used.append(dict(precision=precision, refinement=refinements[0],
