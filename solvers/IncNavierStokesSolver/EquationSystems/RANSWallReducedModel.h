@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <cmath>
 #include <limits>
+#include <set>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -20,6 +21,32 @@ using Matrix = std::vector<Vector>;
 // reconstruction as on their separately converged field responses. Retain
 // the established path through64 coordinates; use checked primal faces above.
 inline constexpr int DirectFaceThreshold = 64;
+struct WitnessKey
+{
+    int observation, family, region;
+};
+// Equivalent active faces can list the same physical observations in different
+// orders. Choose representatives in original inventory order, so that this
+// optimizer detail cannot decide which field responses enter the next model.
+inline std::vector<int> SelectWitnesses(std::vector<WitnessKey> keys)
+{
+    std::sort(keys.begin(),keys.end(),[](const auto &a,const auto &b) {
+        return a.observation<b.observation;
+    });
+    std::set<std::pair<int,int>> regions;
+    std::vector<int> selected;
+    for (int i=0;i<keys.size();++i)
+    {
+        const auto &key=keys[i];
+        if (key.observation<0 || key.family<0 ||
+            (i && keys[i-1].observation==key.observation &&
+             (keys[i-1].family!=key.family || keys[i-1].region!=key.region)))
+            throw std::logic_error("invalid canonical witness metadata");
+        if (regions.emplace(key.family,key.region).second)
+            selected.push_back(key.observation);
+    }
+    return selected;
+}
 inline double Dot(const Vector &a, const Vector &b)
 {
     if (a.size() != b.size())

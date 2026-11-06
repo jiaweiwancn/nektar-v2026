@@ -563,6 +563,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         {"initial_basis_budget", J::Number(m_reducedBasis)},
         {"initial_restoration_weight", J::Number(m_reducedRestorationWeight)},
         {"response_krylov_budget", J::Number(m_reducedKrylov)},
+        {"active_witness_selection", J::Quote("original_observation_order_per_family_and_region")},
         {"probe_basis", J::Quote("orthogonal field directions with feasible sign/size selection; inward fallback")},
         {"minimum_orthogonal_probe_step", J::Number(1e-10)},
         {"canonical_half_branch_check", J::Quote("always; optional verification cannot change column selection")},
@@ -1643,17 +1644,28 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             }
             activeRecords.push_back(J::Object(fields));
         }
+        std::vector<std::string> nextWitnessRecords;
         if (qpOK)
         {
             activeWitnesses.clear();
-            std::set<std::pair<int,int>> seen;
+            std::vector<RANSWallReduced::WitnessKey> candidates;
             for (int id : active)
                 if (cuts[id].observation >= 0)
                 {
-                    const auto &b = base.bounds[cuts[id].observation];
-                    if (seen.emplace(b.family, static_cast<int>(std::floor(4.*(b.row.coordinate[0]-left)))).second)
-                        activeWitnesses.push_back(b);
+                    const int observation=cuts[id].observation;
+                    const auto &b=base.bounds[observation];
+                    candidates.push_back({observation,b.family,
+                        static_cast<int>(std::floor(4.*(b.row.coordinate[0]-left)))});
                 }
+            for (int id:RANSWallReduced::SelectWitnesses(std::move(candidates)))
+            {
+                const auto &b=base.bounds[id];
+                activeWitnesses.push_back(b);
+                nextWitnessRecords.push_back(J::Object({
+                    {"observation",J::Number(id)}, {"family",J::Number(b.family)},
+                    {"point",J::Numbers(b.row.coordinate)},
+                    {"projected",J::Boolean(b.projected)}}));
+            }
             if (restore && unscaledViolation > .5 * base.violation)
                 basisBudget = std::min(m_reducedMaximumBasis, basisBudget + 3);
         }
@@ -1688,6 +1700,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                    quadratic.stationarity, quadratic.complementarity})},
               {"active_constraints", J::Number(active.size())},
               {"active",J::List(activeRecords)},
+              {"next_witness_policy",J::Quote("original_observation_order_per_family_and_region")},
+              {"next_active_witnesses",J::List(nextWitnessRecords)},
               {"ground_cuts_added", J::Number(groundAdded)},
               {"ground_model_admissible", J::Boolean(groundModelOK)},
               {"radius", J::Number(radius)},

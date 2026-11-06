@@ -338,6 +338,21 @@ int main(int argc, char **argv)
     const auto beforeSmall=response;
     Check(!R::UpdateSecantActions(response,{{1.}},{1e-9},{1e-8},1e-6) && response==beforeSmall,
           "a below-signal secant changed the response model");
+    // Identical active observations must supply the same next field witnesses
+    // even when an equivalent optimization face reorders or repeats its rows.
+    const std::vector<R::WitnessKey> witnesses{{5,0,3},{3,0,3},{2,2,3},{4,0,4},{2,2,3}};
+    std::vector<int> witnessOrder{0,1,2,3,4};
+    do
+    {
+        std::vector<R::WitnessKey> permuted;
+        for (int i:witnessOrder) permuted.push_back(witnesses[i]);
+        Check(R::SelectWitnesses(permuted)==std::vector<int>({2,3,4}),
+              "equivalent active-row order changed next response witnesses");
+    } while (std::next_permutation(witnessOrder.begin(),witnessOrder.end()));
+    bool inconsistentWitness=false;
+    try { R::SelectWitnesses({{2,0,1},{2,1,1}}); }
+    catch (const std::logic_error &) { inconsistentWitness=true; }
+    Check(inconsistentWitness,"conflicting observation metadata was treated as a valid witness");
     // Exercise both sides of the medium-model dispatch with closed answers.
     // The64-coordinate control keeps the original null-space path;96 uses
     // checked primal faces, warm radius queries and certified cut omission.
