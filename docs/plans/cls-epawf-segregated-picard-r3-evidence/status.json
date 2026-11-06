@@ -1,8 +1,8 @@
 {
   "status": "native_development_in_progress_original_m8_unresolved",
-  "producing_code_commit": "cfec98879c16b9867f4fbfd68430611b6b6bdaf4",
+  "producing_code_commit": "217e47d95783babbcd9d2662513aac2cad57ef7d",
   "native_m8": {
-    "status": "Fresh original-h0 source-model refinement run in progress; no qualified first-stage root",
+    "status": "Completed original-h0 18-update run fails original residual; complete qualification passes; larger native follow-ups in progress",
     "qualified_first_stage": false,
     "accepted_physical_steps": 0,
     "final_time": 0,
@@ -10,9 +10,21 @@
     "original_alpha": 400,
     "time_target": 0.0025,
     "original_tolerance": 2e-12,
-    "current_progress_evidence": "native/source-model-progress-20261106-0330.json",
     "progress_utc": "2026-11-06T03:25:16.461399+00:00",
-    "original_start_progress": {
+    "original_start_completed_evidence": "native/completed-original-and-expanded-review.json",
+    "original_start_result": {
+      "numerical_updates": 18,
+      "full_residual": 19.17479906831806,
+      "gradient_departure": 0.0009999990042272033,
+      "minimum_outer_epsilon_ratio": 0.9846519510665871,
+      "ground_minimum": 1.9061545645469572e-05,
+      "qualified": true,
+      "algebraic_root": false,
+      "accepted_state_and_history_preserved": true,
+      "independent_norm_difference": 0
+    },
+    "historical_progress_evidence": "native/source-model-progress-20261106-0330.json",
+    "historical_original_start_progress": {
       "source-ray-original-3step": {
         "numerical_updates": 14,
         "original_full_residual": 20.323932176446103,
@@ -31,7 +43,7 @@
   },
   "checks": {
     "linux_native_pressure_verification": "0926974 bounds assertions and two-sweep bitwise On/Off passed; unchanged Picard translation unit through7715312",
-    "linux_focused_ctest": "6 passed on0633d23 (38.50s) and04f275f (37.41s); explicit serial CTest and8-worker builds",
+    "linux_focused_ctest": "6 pass on217e47d36.94s; ASan/UBSan known-answer large-face and deliberate-factor-fallback cases pass",
     "linux_sanitized_reduced_model": "0633d23 known-answer/source-derivative unit passed ASan/UBSan; e65b0be expands only replay guard; actual120-response affine packet replay passed ASan/UBSan in31.87s (not original stationarity)",
     "native_controlled_H_and_reduced_operator": "passed on completed bounded runs; not stage convergence",
     "native_radius_and_buffer_controls": "passed_operator_checks; failed native stages preserve accepted h0/history bitwise",
@@ -47,7 +59,10 @@
     "source_model_ray": "Completed two-update matched source-aware versus linear control18.8135344559 versus18.8761902618; original complete qualification passes; original residual fails",
     "source_model_direction_refinement": "0633d23 completed two-update matched controls:18.7645225166 versus ray-only18.8136254786, independently qualified nonroots; all-update On/Off comparison passed; fresh original-h0 and six-update extension in progress",
     "qualification_first_violation": "Fresh alpha400/t.0025 h0 audit passes; fixed-k controlled H changes gradient .000500194924 to .002857296287 before firstk update; actual witness x1.625,z2; original h0/history exact serialized values preserved",
-    "complete_free_k_response_budget": "cfec988 permits explicit maximum512 (default32), six Linux regressions pass37.40s; matched160/504-direction native constrained searches in progress"
+    "complete_free_k_response_budget": "cfec988 permits explicit maximum512 (default32), six Linux regressions pass37.40s; matched160/504-direction native constrained searches in progress",
+    "source_model_extension": "Matched6updates from18.7645225: refinement18.5778314 versus ray-only18.4988246, both qualified nonroots; space enrichment remains important",
+    "larger_source_space": "Matched2updates from18.6652853:64/80responses18.6338420 versus96/9618.6063142 and160/16017.7530798; operator checks and independent qualification/readback pass",
+    "large_model_face_solver": "217e47d checked augmented orthonormal-face solves above160 variables, with existing null-space fallback; native504 and192On/Off controls in progress"
   },
   "continued_branch": {
     "auxiliary_positive_eta_tolerance": 2e-11,
@@ -92,13 +107,13 @@
     "physical_acceptance": false
   },
   "completed_qualified_reduced_search": {
-    "full_residual": 18.764522516550674,
-    "gradient_departure": 0.0009999991062372704,
-    "minimum_outer_epsilon_ratio": 0.9839749692869076,
-    "ground_minimum": 2.3833135146387293e-05,
+    "full_residual": 17.7530797901111,
+    "gradient_departure": 0.000999999083216463,
+    "minimum_outer_epsilon_ratio": 0.9805312097999067,
+    "ground_minimum": 1.278742803768469e-05,
     "accepted_physical_steps": 0,
-    "scope": "Completed matched64-dimensional warm-start nonlinear-source direction control, original history/target; qualified nonroot; independently rebuilt",
-    "evidence": "native/source-refine-completed-review.json"
+    "scope": "Completed matched160-dimensional two-update original-target warm-start control; original qualification passes, original residual fails; independently rebuilt",
+    "evidence": "native/completed-original-and-expanded-review.json"
   },
   "ground_contact_diagnostic": {
     "initial_full_residual": 18.454728711702224,

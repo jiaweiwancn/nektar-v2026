@@ -6,8 +6,8 @@ The designated volume was restored and native Linux development resumed.
 A later concurrent task switched the shared Mac checkout; subsequent work uses
 an isolated Mac worktree and preserves that task's PIMPLE branch. Only the
 Picard commits are delivered to the requested remote branch. The
-long original-start validations and extended diagnostic solves are still
-running. Completed controls and explicitly dated progress snapshots are
+original-start18-update validation has completed without convergence. Larger
+response-space and saved-endpoint follow-ups continue. Completed controls and explicitly dated progress snapshots are
 distinguished below; no running experiment is counted as a successful stage.
 
 R3 now constructs a constrained k direction from the response of converged
@@ -19,6 +19,19 @@ The R2 projected map could be stationary in its frozen A_k^T Mff^-1 A_k
 metric at ground contact while its original k residual stayed nonzero. R3
 therefore scores the original reduced residual, not that projected-map defect.
 No full all-field Jacobian or hidden coupled direction solver was added.
+
+`217e47d` adds a checked augmented solve for active faces of models above160
+variables. It keeps the orthonormal constraint QR, solves a scaled saddle system
+in response coordinates, performs two residual refinements and reprojects the
+correction onto the active face. A projected linear-defect check gates this
+path; numerical failure returns to the existing Euclidean null-space solve.
+This addresses the measured roughly17-minute-per-cut cost in the504-direction
+control; the speed and resulting native steps are still being measured. The
+saddle matrix contains optimization coordinates and multipliers, never the
+independent governing fields. Six Linux regressions pass (36.94s), as does
+ASan/UBSan including a192-variable closed-form case and deliberate saddle-factor
+failure/fallback. [Producing build and checks](cls-epawf-segregated-picard-r3-evidence/native/build-validation-217e47d.json)
+record commands and executable/library hashes.
 
 `cfec988` extends only the optional response ceiling to512, permitting a
 benchmark-sized complete free-k response diagnostic (504 free coefficients).
@@ -58,6 +71,52 @@ mixed restoration (`7848ad4`), bounded ground arithmetic corrections (`645d05b`)
 physical-history-bound trial packets (`e7313f7`), and a filter-consistent direction
 constraint (`8dc862f`). The continuation and spatial diagnostic harnesses are
 `315cbee` and `0bd00ae`. R1/R2 reports and evidence are preserved.
+
+## Latest completed original-target validation
+
+The0633d23 native original-h0 run completes18 numerical updates with original
+block norms [9.34492e-13,1.02304e-12,19.1747990683,4.58916e-14,7.23219e-16,
+7.42248e-16,4.74338e-18,0]. It fails the unchanged2e-12 complete residual test.
+The final continuous-ground minimum is1.90615456e-5; maximum gradient departure
+is.000999999004 and minimum outer-epsilon ratio.9846519511. A fresh process
+reproduces the norm vector exactly and passes the original complete qualification,
+covariance, lambda and negative-ground guard checks. The rejected stage preserves
+accepted h0 and every physical-history slot/time. Physical steps/time are0/0.
+Its1089 controlled H evaluations all attain their requested accuracies;7480
+velocity/pressure pairs and7480 epsilon solves are recorded. All retained
+responses pass the independent two-scale checks. This is a qualified nonroot.
+
+The matched six-update extension from18.7645225166 reaches18.5778313750 with
+source refinements versus18.4988245721 with ray-only selection. Both remain
+qualified nonroots with exact fresh readback and preserved accepted history.
+The ray-only policy expands its response space earlier: this counterexample
+prevents a claim that the source refinements uniformly dominate adaptive
+response enrichment.
+
+A second matched pair starts at18.6652852921. Two updates using64 then80
+responses reach18.6338419815;96 then96 reach18.6063142340. Both have full
+numerical rank, pass all operator checks and original qualification, reproduce
+their residuals independently, and accept zero physical steps. The final96-space
+source prediction is18.60678920 versus actual18.60631423, vector error.01228865
+versus.31720522 for its linear model. Its refined direction predicts merit slope
+-1.21494328 versus measured half-step-1.21388370. These tests support useful
+reduced directions and continued missing-space investigation, not stationarity
+or successful M8 convergence.
+
+[Compact completed histories and independent receipts](cls-epawf-segregated-picard-r3-evidence/native/completed-original-and-expanded-review.json)
+retain commands, identities, H errors, signed active observations, displacement
+radii, true residual histories and complete fresh audits. Larger raw payloads
+remain in the linked Linux directories. The160-direction control also completes two updates, reaching17.7530797901
+with original qualification passing, continuous ground1.27874280e-5 and minimum
+outer-epsilon ratio.9805312098. Its second source prediction is17.75068755 versus
+actual17.75307979; vector error.01986048 versus.88429921 linearly. The actual
+normalized coefficient displacement.27286294 is within radius.4. Its local
+predicted merit slope-20.38793030 agrees with the measured half-step-20.38184430.
+All320 response columns pass two-scale checks, all658 H evaluations attain the
+requested2e-12,3857 flow/epsilon pairs are recorded, and fresh readback has zero
+norm discrepancy. This confirms that additional directions materially improve
+this particular search; it remains a qualified nonroot. The504-space and new
+large-face native controls continue and do not replace the original-h0 test.
 
 ## Completed larger-space and nonlinear-source controls
 
@@ -182,7 +241,8 @@ spends549 internal source-model evaluations constructing its two directions.
 Elapsed time is3525.21s versus2824.72s. The larger actual residual reduction
 therefore comes with model-construction cost; this bounded comparison supplies
 useful progress, not a convergence or general performance guarantee. The fresh
-original-h0 run and a six-update endpoint extension remain in progress.
+original-h0 run and six-update extension now complete as recorded above; both
+fail the original residual tolerance.
 At their common initial k, a disturbed/tighter non-k warm start changes the
 reduced residual by3.37e-11, while H itself meets2e-12. H tolerance is therefore
 not claimed to bound the propagated k-residual error. The signed response,
@@ -714,7 +774,7 @@ step. The final primary-run entry is pending completion.
 | Pure restoration from mixed checkpoint, first update (`8687dc3`) | 20.239805178 | .001000012818 | recorded first-update diagnostic |
 | Inward saved-state restoration (`ef83196`), first update | 20.240190578 | .000999999000 | passes qualification only; not an algebraic root |
 | Radius-aware saved-state search (`9a5b58d`), three updates | 19.887303979 | .000999954475 | passes qualification, not an algebraic root |
-| Current original-h0 run (`0633d23`, adaptive ceiling160 and two source refinements) | in progress | in progress | original first-stage validation remains unresolved |
+| Completed original-h0 run (`0633d23`,18 numerical updates) |19.1747990683|.000999999004| qualification passes; original residual fails;0 accepted physical steps |
 
 The saved R2 endpoint is used only for diagnostics. Its first reduced restoration
 step changed residual 2.908834 -> 3.271267 while improving gradient .003826405 ->
