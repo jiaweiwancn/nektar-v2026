@@ -50,6 +50,51 @@ struct QuadraticResult
     std::string failure;
 };
 
+struct RaySelection
+{
+    double fraction = 0., merit = 0.;
+    int evaluations = 0, invalid = 0;
+    std::vector<std::pair<double,double>> samples;
+};
+
+// A bounded surrogate selector only. The caller must equilibrate and assess
+// every actual trial against the original residual and qualification inventory.
+template <typename Evaluate>
+RaySelection SelectSourceRay(double baseMerit, Evaluate evaluate)
+{
+    if (!(baseMerit > 0.) || !std::isfinite(baseMerit))
+        throw std::logic_error("invalid source-ray base merit");
+    RaySelection result;
+    result.merit = baseMerit;
+    auto sample = [&](double f) {
+        double value = 0.;
+        ++result.evaluations;
+        if (!evaluate(f,value)) { ++result.invalid; return; }
+        if (!(value >= 0.) || !std::isfinite(value))
+            throw std::logic_error("invalid source-ray surrogate value");
+        result.samples.emplace_back(f,value);
+        if (value < result.merit) { result.merit=value; result.fraction=f; }
+    };
+    for (int j=0;j<=10;++j) sample(std::ldexp(1.,-j));
+    auto best=std::find_if(result.samples.begin(),result.samples.end(),
+        [&](const auto &p) { return p.first==result.fraction; });
+    if (best!=result.samples.begin() && best!=result.samples.end() && best+1!=result.samples.end())
+    {
+        const auto a=*(best+1), b=*best, c=*(best-1);
+        const double slope1=(b.second*b.second-a.second*a.second)/(b.first-a.first);
+        const double slope2=(c.second*c.second-b.second*b.second)/(c.first-b.first);
+        const double quadratic=(slope2-slope1)/(c.first-a.first);
+        const double linear=slope1-quadratic*(a.first+b.first);
+        if (quadratic>0.)
+        {
+            const double f=-linear/(2.*quadratic);
+            if (f>a.first && f<c.first && std::isfinite(f)) sample(f);
+        }
+    }
+    if (result.merit >= baseMerit*(1.-1e-6)) result.fraction=0.;
+    return result;
+}
+
 // Broyden update in the actual field metric. This is a finite-step response
 // model, not a claim of an exact Jacobian. The caller must still evaluate its
 // nonlinear trial. Leave changes below the declared signal scale untouched.

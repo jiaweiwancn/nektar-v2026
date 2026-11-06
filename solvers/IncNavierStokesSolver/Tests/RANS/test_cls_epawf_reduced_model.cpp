@@ -131,6 +131,20 @@ int main(int argc, char **argv)
               {{{0.,1.}, .5}, {{0.,1.}, .5}}, {0.,0.});
     Close(r.solution[0], 1.); Close(r.solution[1], .5);
     Check(r.active.size() == 1, "duplicate cut entered the active set");
+    // Nonlinear destruction can make the full linear-model step ascend.
+    auto ray=R::SelectSourceRay(1.,[](double f,double &value) {
+        value=1.-f+4.*f*f; return true;
+    });
+    Close(ray.fraction,.125); Close(ray.merit,.9375);
+    Check(ray.evaluations<=12,"unbounded surrogate sample budget");
+    ray=R::SelectSourceRay(1.,[](double f,double &value) {
+        if (f>.5) return false;
+        value=std::abs(1.-2.*f); return true;
+    });
+    Close(ray.fraction,.5); Close(ray.merit,0.);
+    Check(ray.invalid==1,"invalid surrogate state was not distinguished");
+    ray=R::SelectSourceRay(1.,[](double f,double &value) { value=1.+f; return true; });
+    Check(ray.fraction==0.,"nondecreasing surrogate replaced the control");
     // A full scan must discover the sum constraint and then ground contact.
     r = Solve({{1.,0.},{0.,1.}}, {-2.,-4.},
               {{{-1.,0.},0.}, {{0.,1.},10.}, {{1.,1.},1.}}, {0.,0.});

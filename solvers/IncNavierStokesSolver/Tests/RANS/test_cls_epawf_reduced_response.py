@@ -112,6 +112,16 @@ def check(directory):
     responses = [r for r in records if r["event"] == "non_k_response"]
     require(all(r["attained"] <= r["required"] for r in responses if r["converged"]),
             "a partially converged response was accepted")
+    source_selections = [r for r in records if r["event"] == "source_ray_selection"]
+    require(all(0 <= r["fraction"] <= 1 and r["evaluations"] <= 12 and
+                r["invalid"] <= r["evaluations"] and
+                (not r["fraction"] or r["predicted_norm"] < r["base_norm"]*(1-1e-6))
+                for r in source_selections), "invalid surrogate-only source-ray selection")
+    source_predictions = [r for r in records if r["event"] == "source_ray_prediction"]
+    require(all(r["non_k_error"] <= r["required"] and
+                r["actual_displacement"] <= r["radius"]*(1+1e-12)
+                for r in source_predictions),
+            "a source-ray actual trial lacked controlled H or exceeded its radius")
     if report["steps"] == 0:
         startup = load(directory / "startup/case.evolution.json")
         require(state_hash(report["state"]) == H0 and report["time"] == 0 and
@@ -123,7 +133,8 @@ def check(directory):
                   repeatability=repeat, half_response_warm_starts=warm_starts,
                   action_checks=checks, directions=directions,
                   trials=trials, combined_direction_checks=combined,
-                  second_order_corrections=corrections, constraint_response_secants=secants)
+                  second_order_corrections=corrections, constraint_response_secants=secants,
+                  source_ray_selections=source_selections, source_ray_predictions=source_predictions)
     write_json(directory / "reduced-checks.json", result)
 
 

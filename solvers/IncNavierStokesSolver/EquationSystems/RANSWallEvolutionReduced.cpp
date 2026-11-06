@@ -432,6 +432,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         {"second_order_qualification_correction", J::Boolean(m_reducedSecondOrder)},
         {"constraint_response_secants", J::Boolean(m_reducedConstraintSecant)},
         {"adaptive_qualified_response_space", J::Boolean(m_reducedAdaptiveSpace)},
+        {"nonlinear_destruction_ray", J::Boolean(m_reducedSourceRay)},
         {"qualification_correction_budget", J::Number(m_reducedConstraintSecant ? 6 : 3)},
         {"continuation_algebraic_diagnostic", J::Boolean(continuationDiagnostic)},
         {"qualification_policy", J::Quote(continuationDiagnostic
@@ -1615,12 +1616,81 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         bool accepted = false;
         bool decomposed = false;
         int correctionEvaluations = 0;
+        auto component = [&](const Vector &s) {
+            return extract(ResidualResolutionComponents(s, history, alpha, time, data, false)
+                               .terms.at("inner_k_destruction"));
+        };
+        Vector sourceBase;
+        int sourceModelEvaluations = 0;
+        // This is an internal surrogate on the measured affine y response,
+        // never an unequilibrated state claimed to be Y(k). Every actual
+        // fraction below must still converge H and scan the original fields.
+        auto sourceModel = [&](const Vector &coefficients, Vector &model) {
+            if (coefficients.size()!=n) throw std::logic_error("source-ray coefficient shape");
+            ++sourceModelEvaluations;
+            try
+            {
+                Vector ds(Size()), dk(dimension);
+                model=base.r;
+                for (int i=0;i<n;++i)
+                {
+                    for (int j=0;j<Size();++j) ds[j]+=coefficients[i]*columns[i].stateAction[j];
+                    for (int j=0;j<dimension;++j)
+                    {
+                        dk[j]+=coefficients[i]*columns[i].k[j];
+                        model[j]+=coefficients[i]*columns[i].r[j];
+                    }
+                }
+                const double length=Length(dk);
+                if (!(length>0.)) return true;
+                for (int j=offset[K()];j<offset[Epsilon()];++j) ds[j]=0.;
+                for (int j=0;j<dimension;++j) ds[rows[j]]=kScale*dk[j];
+                const double h=std::min(1e-3,m_reducedStep/length);
+                auto predictedState=state, probe=state;
+                for (int j=0;j<Size();++j)
+                { predictedState[j]+=ds[j]; probe[j]+=h*ds[j]; }
+                if (!admissible(predictedState) || !admissible(probe)) return false;
+                if (sourceBase.empty()) sourceBase=component(state);
+                const auto value=component(predictedState), tangent=component(probe);
+                for (int j=0;j<dimension;++j)
+                    model[j]+=value[j]-sourceBase[j]-(tangent[j]-sourceBase[j])/h;
+                return true;
+            }
+            catch (const std::runtime_error &) { return false; }
+            catch (const std::invalid_argument &) { return false; }
+        };
         if (qpOK && Length(displacement) > 0. &&
             (restore ? (RANSWallReduced::QualificationDecrease(base.violation, predictedViolation, 1., 1e-6) ||
                         slope < -1e-8 * base.merit * base.merit)
                      : slope < -1e-8 * base.merit * base.merit))
         {
-            for (double fraction : {1., .5, .25, .125, .0625, .03125, .015625, .0078125, .00390625})
+            Vector fractions;
+            auto addFraction=[&](double f) {
+                if (f>0. && f<=1. && std::none_of(fractions.begin(),fractions.end(),
+                    [&](double old) { return std::abs(old-f)<1e-14; })) fractions.push_back(f);
+            };
+            if (m_reducedSourceRay && !restore && base.merit>1e-6)
+            {
+                const auto choice=RANSWallReduced::SelectSourceRay(base.merit,
+                    [&](double f,double &value) {
+                        Vector z(n),model;
+                        for (int i=0;i<n;++i) z[i]=f*solution[i];
+                        if (!sourceModel(z,model)) return false;
+                        value=dualNorm(model); return true;
+                    });
+                std::vector<std::string> samples;
+                for (auto [f,value]:choice.samples)
+                    samples.push_back(J::Numbers(Vector{f,value}));
+                emit("source_ray_selection", {{"fraction",J::Number(choice.fraction)},
+                    {"predicted_norm",J::Number(choice.merit)}, {"base_norm",J::Number(base.merit)},
+                    {"evaluations",J::Number(choice.evaluations)}, {"invalid",J::Number(choice.invalid)},
+                    {"samples",J::List(samples)},
+                    {"scope",J::Quote("surrogate only: nonlinear destruction on affine converged-field responses; actual trials solve H")}});
+                if (choice.fraction>0.)
+                    for (double f:{choice.fraction,.5*choice.fraction,.25*choice.fraction}) addFraction(f);
+            }
+            for (double f:{1.,.5,.25,.125,.0625,.03125,.015625,.0078125,.00390625}) addFraction(f);
+            for (double fraction : fractions)
             {
                 auto guess = state;
                 Apply(guess, rows, displacement, kScale * fraction);
@@ -1659,7 +1729,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 // Correct the actual trial observations in the same measured
                 // response space. This changes k only; each corrected trial
                 // must again solve H and scan the complete actual inventory.
-                while (m_reducedSecondOrder && !continuationDiagnostic && !restore && fraction >= .25 &&
+                while (m_reducedSecondOrder && !continuationDiagnostic && !restore &&
+                       fraction >= (m_reducedSourceRay ? 1e-5 : .25) &&
                        trial.violation > 0. && trial.violation < .1 &&
                        trial.merit < base.merit &&
                        correctionEvaluations < (m_reducedConstraintSecant ? 6 : 3) &&
@@ -1871,12 +1942,27 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                         : (trial.merit < base.merit &&
                            (continuationDiagnostic || trial.violation < 1e-8));
                 const bool take = filterOK && progress;
+                Vector sourcePrediction;
+                const bool sourceAvailable=m_reducedSourceRay && !restore && base.merit>1e-6 &&
+                                           sourceModel(trialCoefficients,sourcePrediction);
+                double sourceError=0.;
+                if (sourceAvailable)
+                {
+                    auto difference=trial.r;
+                    for (int j=0;j<dimension;++j) difference[j]-=sourcePrediction[j];
+                    sourceError=dualNorm(difference);
+                    emit("source_ray_prediction", {{"fraction",J::Number(fraction)},
+                        {"predicted_norm",J::Number(dualNorm(sourcePrediction))},
+                        {"actual_norm",J::Number(trial.merit)},
+                        {"model_error",J::Number(sourceError)},
+                        {"linear_model_error",J::Number(dualNorm(error))},
+                        {"non_k_error",J::Number(trial.response.error)},
+                        {"required",J::Number(innerTolerance)},
+                        {"actual_displacement",J::Number(Length(trialDisplacement))},
+                        {"radius",J::Number(radius)}});
+                }
                 if (!decomposed && dualNorm(error) > .05 * std::max(1., base.merit))
                 {
-                    auto component = [&](const Vector &s) {
-                        return extract(ResidualResolutionComponents(s, history, alpha, time, data, false)
-                                           .terms.at("inner_k_destruction"));
-                    };
                     const auto baseD = component(state);
                     auto predictedD = baseD;
                     for (int i = 0; i < n; ++i)
@@ -1951,13 +2037,16 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                        .2 * std::max(1., base.violation);
                 if ((m_reducedSecondOrder || continuationDiagnostic) && !restore)
                 {
-                    const double predictedGain = oldMerit*oldMerit-dualNorm(model)*dualNorm(model);
+                    const double predictedNorm=sourceAvailable ? dualNorm(sourcePrediction) : dualNorm(model);
+                    const double predictedGain = oldMerit*oldMerit-predictedNorm*predictedNorm;
                     const double actualGain = oldMerit*oldMerit-base.merit*base.merit;
                     const double ratio = predictedGain > 0. ? actualGain/predictedGain : 0.;
                     if (ratio < .25) radius *= .5;
                     else if (ratio > .75 && Length(previous) > .8*radius)
                         radius = std::min(1.,1.8*radius);
                     emit("radius_agreement", {{"actual_to_predicted_gain", J::Number(ratio)},
+                        {"prediction_model",J::Quote(sourceAvailable ? "nonlinear_destruction_surrogate" : "original_linear_reduced")},
+                        {"source_model_evaluations",J::Number(sourceModelEvaluations)},
                         {"next_radius", J::Number(radius)}});
                 }
                 else

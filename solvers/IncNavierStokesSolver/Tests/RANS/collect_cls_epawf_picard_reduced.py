@@ -45,7 +45,8 @@ def collect(directory):
                   "half_response_warm_start", "response_krylov_seed", "response_krylov_failed",
                   "combined_direction_check", "second_order_trial",
                   "second_order_model_failed", "radius_agreement", "constraint_response_secant",
-                  "response_space_adapt", "free_mode_seed_pool", "evaluated_trial_packet")]
+                  "response_space_adapt", "free_mode_seed_pool", "evaluated_trial_packet",
+                  "source_ray_selection", "source_ray_prediction")]
     checks = [compact(r) for r in rows if r["event"] == "response_check"]
     for row in checks:
         if row["iteration"]:

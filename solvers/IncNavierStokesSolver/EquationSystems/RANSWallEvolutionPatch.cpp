@@ -267,12 +267,13 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         Require(m_picardKRadius>0. && m_picardKRadius<=1.,"invalid dimensionless Picard k radius");
         session->LoadSolverInfo("RANSWallPicardGuessFile",m_picardGuessFile,"");
         session->LoadSolverInfo("RANSWallPicardKDiagnostic",m_picardKDiagnostic,"");
-        std::string reduced,reducedVerify,reducedSecondOrder,reducedSecant,reducedAdaptive;
+        std::string reduced,reducedVerify,reducedSecondOrder,reducedSecant,reducedAdaptive,reducedSourceRay;
         session->LoadSolverInfo("RANSWallPicardReduced",reduced,"Off");
         session->LoadSolverInfo("RANSWallReducedVerify",reducedVerify,"Off");
         session->LoadSolverInfo("RANSWallReducedSecondOrder",reducedSecondOrder,"Off");
         session->LoadSolverInfo("RANSWallReducedConstraintSecant",reducedSecant,"Off");
         session->LoadSolverInfo("RANSWallReducedAdaptiveSpace",reducedAdaptive,"Off");
+        session->LoadSolverInfo("RANSWallReducedSourceRay",reducedSourceRay,"Off");
         Require((reduced=="On" || reduced=="Off") && (reducedVerify=="On" || reducedVerify=="Off"),
                 "unknown Picard reduced selector");
         m_picardReduced=reduced=="On";m_reducedVerify=reducedVerify=="On";
@@ -291,6 +292,11 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         m_reducedAdaptiveSpace=reducedAdaptive=="On";
         Require(!m_reducedAdaptiveSpace || m_picardReduced,
                 "adaptive response spaces require the reduced search");
+        Require(reducedSourceRay=="On" || reducedSourceRay=="Off",
+                "unknown reduced source-ray selector");
+        m_reducedSourceRay=reducedSourceRay=="On";
+        Require(!m_reducedSourceRay || m_picardReduced,
+                "source-ray selection requires the reduced search");
         session->LoadParameter("RANSWallReducedBasis",m_reducedBasis,10);
         session->LoadParameter("RANSWallReducedMaximumBasis",m_reducedMaximumBasis,32);
         session->LoadParameter("RANSWallReducedHUpdates",m_reducedHUpdates,50);

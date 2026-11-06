@@ -411,7 +411,7 @@ private:
     bool m_picardGroundProjection=false;
     bool m_picardKNewton=false;
     bool m_picardReduced=false,m_reducedVerify=false,m_reducedSecondOrder=false;
-    bool m_reducedConstraintSecant=false,m_reducedAdaptiveSpace=false;
+    bool m_reducedConstraintSecant=false,m_reducedAdaptiveSpace=false,m_reducedSourceRay=false;
     bool m_picardContinuation=false;
     double m_picardContinuationEta=0.,m_picardContinuationTolerance=0.;
     int m_reducedBasis=10,m_reducedHUpdates=50,m_reducedKrylov=0,m_reducedMaximumBasis=32;
