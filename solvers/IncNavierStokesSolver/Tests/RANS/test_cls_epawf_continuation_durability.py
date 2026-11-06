@@ -51,8 +51,16 @@ def main():
         ledger=StepLedger(path)
         require(len(ledger.records)==1 and ledger.budget(prefix,5)==.375,'journal recovery differs')
         require(len(path.read_text().splitlines())==1,'journal not canonical after reconciliation')
+        terminal=root/'terminal';terminal.mkdir()
+        progress=terminal/'progress.json';progress.write_text(json.dumps(dict(status='numerically_rejected',checkpoint=None)))
+        original=progress.read_bytes()
+        command=[sys.executable,'-B',str(Path(__file__).with_name('continue_cls_epawf_pimple.py')),
+            '--solver',str(root/'never-execute'),'--output',str(terminal),'--resume']
+        rejected=subprocess.run(command,capture_output=True,text=True,timeout=10)
+        require(rejected.returncode and 'numerical rejection is terminal' in rejected.stderr,'ordinary resume retried numerical rejection')
+        require(progress.read_bytes()==original,'terminal progress changed')
     print(json.dumps(dict(simultaneous_resume_excluded=True,orphan_native_excluded=True,
-        native_identity_checked=True,idempotent_step_and_budget_recovery=True,partial_final_record_repaired=True)))
+        native_identity_checked=True,idempotent_step_and_budget_recovery=True,partial_final_record_repaired=True,numerical_rejection_terminal=True)))
 
 
 if __name__=='__main__':main()

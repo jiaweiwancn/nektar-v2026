@@ -7,6 +7,7 @@ import json
 import math
 from pathlib import Path
 import shutil
+import time
 from run_cls_epawf_picard import load,run,require,write_json,state_hash,H0,sha
 from run_cls_epawf_pimple import identity
 from continue_cls_epawf_pimple import header
@@ -15,8 +16,13 @@ from compare_cls_epawf_pimple import differences
 
 def read_report(folder):
     p=folder/'case.evolution.json'
-    if p.exists():return load(p)
-    with gzip.open(str(p)+'.gz','rt') as f:return json.load(f,parse_int=float)
+    for attempt in range(5):
+        try:
+            if p.exists():return load(p)
+            with gzip.open(str(p)+'.gz','rt') as f:return json.load(f,parse_int=float)
+        except (FileNotFoundError,EOFError,json.JSONDecodeError):
+            if attempt==4:raise
+            time.sleep(.1)
 
 
 def main():
@@ -26,7 +32,8 @@ def main():
     p.add_argument('--steps',type=int,nargs='+',default=[4,8,12,16,32])
     a=p.parse_args();a.output=a.output.resolve();a.output.mkdir(parents=True,exist_ok=False)
     root=a.campaign.resolve()/'trajectory';progress=load(root/'progress.json')
-    lines=(root/'steps.jsonl').read_text().splitlines();records={}
+    text=(root/'steps.jsonl').read_text();lines=text.splitlines();records={}
+    if text and not text.endswith('\n'):lines=lines[:-1]
     for line in lines:
         r=json.loads(line);require(r['global_step'] not in records,'duplicate accepted ledger entry');records[r['global_step']]=r
     cutoff=a.through_step or int(progress['accepted_steps']);require(cutoff<=progress['accepted_steps'],'requested prefix is not accepted')
@@ -59,10 +66,10 @@ def main():
             initialization_k_bound=report.get('initial_k_bound_check'),initialization_lift_calls_iterations=report.get('initialization_lift_calls_iterations'),
             qualification_events=[{k:v for k,v in e.items() if k not in ('state','history','audit')} for e in report.get('physical_range_events',[])]))
     sampled={}
-    def replay(name,state,time,xml):
+    def replay(name,state,time,xml,witnesses=()):
         folder=a.output/name;folder.mkdir();shutil.copy2(xml,folder/'case.xml')
         request=dict(operation='contact',state=state,history=state,time=time,alpha=0.,h=[],
-            inner_stress_model='SaturatedR2',require_history_h0=False,export_mass=name=='initial',isolate=False)
+            inner_stress_model='SaturatedR2',require_history_h0=False,export_mass=name=='initial',isolate=False,witnesses=list(witnesses))
         write_json(folder/'input.json',request)
         receipt=run([str(a.probe.resolve()),'case.xml','input.json','result.json'],folder,'probe.log',3600)
         write_json(folder/'receipt.json',receipt);require(receipt['exit_code']==0,'readback failed '+name)
@@ -81,8 +88,12 @@ def main():
     selected=[n for n in sorted(set(a.steps)) if n<=cutoff]
     for n in selected:
         row=records[n];packet=Path(row['attempt']['k_snapshot'])
-        if not packet.exists():continue
-        q=load(packet);replay('step'+str(n),q['corrected'],q['time'],Path(row['segment'])/'case.xml')
+        if packet.exists():q=load(packet)
+        else:
+            report=read_report(Path(row['segment']));start=int(report['steps'])-len(report['accepted_states'])+1
+            q=dict(corrected=report['accepted_states'][n-start],time=row['time'])
+        witnesses=sorted({tuple(v['coordinate']) for v in row['attempt']['k_bound']['active_constraints'] if v['coordinate'][2]<=mass_spec['scales_U_K_E_H_L_volume'][3]})
+        replay('step'+str(n),q['corrected'],q['time'],Path(row['segment'])/'case.xml',witnesses)
     names=['initial']+['step'+str(n) for n in selected if 'step'+str(n) in sampled]
     for x,y in zip(names,names[1:]):
         first=dict(sampled[x],time=sampled[y]['time'])
@@ -93,6 +104,15 @@ def main():
     mass=np.array(mass_spec['free_k_mass']);free=np.array(mass_spec['free_k_rows'],dtype=int);off=int(mass_spec['offsets'][2])
     integral=np.array(mass_spec['k_integral_load']);near=np.array(mass_spec['near_k_integral_load'])
     dual=np.linalg.solve(mass.T,np.array([integral[free-off],near[free-off]]).T).T
+    native_net_norms={}
+    for entry in summary['completed_native_segments']:
+        report=read_report(Path(entry['path']));states=report['accepted_states'];start=int(report['steps'])-len(states)+1
+        for i,(before,after) in enumerate(zip(states,states[1:]),1):
+            delta=np.array(after)-np.array(before);step=start+i
+            if step>cutoff:continue
+            essential=set(range(off,off+len(integral)))-set(free)
+            require(all(delta[j]==0 for j in essential),'prescribed k changed; free-mass increment norm requires full lifting accounting')
+            d=delta[free];native_net_norms[step]=math.sqrt(d@(mass@d))
     cumulative=0.;positive=0.;negative=0.;near_total=0.
     for n,row in sorted(records.items()):
         v=row['attempt'];b=v['k_bound'];cumulative+=b['integral_total']
@@ -109,10 +129,13 @@ def main():
             added_frozen_residual=v['k_added_frozen_residual'],storage_reaction=v['k_added_storage_residual'],
             cumulative_integral=cumulative,matching=v['refreshed_trace_defect'],continuity=v['corrected_continuity_gauge'],
             B_min=v['k_domain']['minimum_b'],lambda_min=v['k_domain']['minimum_lambda'])
+        if n in native_net_norms:out['corrected_increment_mass_norm']=native_net_norms[n]
         packet=Path(v['k_snapshot'])
         if packet.exists():
             q=load(packet);raw=np.array(q['raw']);corrected=np.array(q['corrected']);before=np.array(q['pre_k']);dk=(corrected-raw)[free];net=(corrected-before)[free]
-            out['corrected_increment_mass_norm']=math.sqrt(net@(mass@net))
+            value=math.sqrt(net@(mass@net))
+            if n in native_net_norms:require(abs(value-native_net_norms[n])<1e-12,'native accepted k increment differs from saved correction')
+            out['corrected_increment_mass_norm']=value
             out['global_k']=float(integral@corrected[off:off+len(integral)]);out['near_k']=float(near@corrected[off:off+len(near)])
             out['cancellation_identity']=float(np.max(np.abs(net-(raw-before)[free]-dk)))
             out['pre_k_minus_native_history_max']=float(np.max(np.abs((before-np.array(q['history']))[off:off+len(integral)])))
