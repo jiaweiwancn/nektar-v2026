@@ -89,15 +89,24 @@ std::string RANSWallEvolutionPatch::PimpleContactDiagnostic(const Vector &s,doub
         Require(Distance(p)<=m_parameters.geometry.height,"contact witness must be in the inner region");
         const auto row=Point(K(),p);std::vector<std::pair<std::string,std::string>> terms;
         double sum=0.;for(const auto &[name,v]:rate.componentRates){const double a=row.Value(v);sum+=a;terms.push_back({name,J::Number(a)});}
-        const double k=row.Value(s,offset[K()]);const auto profile=StateProfile(s,p,time,data);RANSTensor g{};
-        for(int a=0;a<m_dimension;++a)g[PhysicalAxis(a)]=Point(a,p).Gradient(s,offset[a]);
-        const double nt=profile->Original().EddyViscosity(Distance(p));const auto law=InnerStress(k,nt,g);
-        const auto normal=WallNormalization(s,p,*profile);double c=0.;const auto source=WallSource(s,p,law.production,*profile,&normal,&c);
-        contacts.push_back(J::Object({{"coordinate",J::Numbers(p)},{"geometry",J::Number(row.geometry)},{"k",J::Number(k)},
+        const double k=row.Value(s,offset[K()]);
+        std::vector<std::pair<std::string,std::string>> values{{"coordinate",J::Numbers(p)},{"geometry",J::Number(row.geometry)},{"k",J::Number(k)},
             {"mass_inverted_rate",J::Number(row.Value(rate.rate))},{"component_rates",J::Object(terms)},
-            {"component_sum_error",J::Number(sum-row.Value(rate.rate))},{"point_production",J::Number(law.production)},
-            {"point_net_destruction",J::Number(law.production-source.kSource)},{"point_source",J::Number(source.kSource)},
-            {"point_destruction_rate",J::Number(c)},{"nu_t",J::Number(nt)}}));
+            {"component_sum_error",J::Number(sum-row.Value(rate.rate))}};
+        m_solveInvalidContext.clear();
+        try
+        {
+            const auto profile=StateProfile(s,p,time,data);RANSTensor g{};
+            for(int a=0;a<m_dimension;++a)g[PhysicalAxis(a)]=Point(a,p).Gradient(s,offset[a]);
+            const double nt=profile->Original().EddyViscosity(Distance(p));const auto law=InnerStress(k,nt,g);
+            const auto normal=WallNormalization(s,p,*profile);double c=0.;const auto source=WallSource(s,p,law.production,*profile,&normal,&c);
+            values.insert(values.end(),{{"point_source_valid","true"},{"point_production",J::Number(law.production)},
+                {"point_net_destruction",J::Number(law.production-source.kSource)},{"point_source",J::Number(source.kSource)},
+                {"point_destruction_rate",J::Number(c)},{"nu_t",J::Number(nt)}});
+        }
+        catch(const std::exception &error)
+        {values.insert(values.end(),{{"point_source_valid","false"},{"query_failure",J::Quote(error.what())},{"query_context",m_solveInvalidContext.empty()?"null":m_solveInvalidContext}});}
+        contacts.push_back(J::Object(values));
     }
     std::vector<std::string> profiles;
     for(double x:{-3.,-1.,0.,1.,1.6})for(double z:{0.,.0025,.005,.01,.02,.05,.1,.25,.5,1.,2.,3.,4.,6.})if(z<=upper[2])
@@ -122,6 +131,13 @@ std::string RANSWallEvolutionPatch::PimpleContactDiagnostic(const Vector &s,doub
             for(int axis:{0,2}){result[0]+=face.weight*k*u[axis]*face.area[axis];result[1]-=face.weight*diff*grad[axis]*face.area[axis];}
         }
         return result;
+    };
+    auto safeFlux=[&](double height)
+    {
+        m_solveInvalidContext.clear();
+        try{return J::Object({{"success","true"},{"outward_advection_diffusion",J::Numbers(flux(height))}});}
+        catch(const std::exception &error){return J::Object({{"success","false"},{"failure",J::Quote(error.what())},
+            {"query_context",m_solveInvalidContext.empty()?"null":m_solveInvalidContext}});}
     };
     std::vector<std::string> scans;int solves=0;
     const std::vector<std::string> variants=isolate?std::vector<std::string>{"complete","destruction","diffusion","destruction_diffusion"}:std::vector<std::string>{"complete"};
@@ -170,7 +186,7 @@ std::string RANSWallEvolutionPatch::PimpleContactDiagnostic(const Vector &s,doub
         {"spatial_block_norms",J::Numbers(Norms(rawSpatial,constraints,m_robustUstar))},
         {"epsilon_trace_defect",J::Number(trace)},{"contacts",J::List(contacts)},
         {"component_integral_rates",J::List(componentIntegrals)},{"physical_production_destruction_global_near",J::Numbers(productionDestruction)},
-        {"physical_outward_advection_diffusion_global",J::Numbers(flux(upper[2]))},{"physical_outward_advection_diffusion_near",J::Numbers(flux(nearHeight))},
+        {"physical_outward_advection_diffusion_global",safeFlux(upper[2])},{"physical_outward_advection_diffusion_near",safeFlux(nearHeight)},
         {"near_height",J::Number(nearHeight)},{"global_k_integral",J::Number(integral(kval,integralLoad))},{"near_k_integral",J::Number(integral(kval,nearLoad))},
         {"field_L2_norms_u_v_k_epsilon_pinner_pouter",J::Numbers(fieldNorms)},{"field_integrals",J::Numbers(fieldIntegrals)},
         {"bulk_u",J::Number(fieldIntegrals[0]/volume)},{"flow_through_time",J::Number((upper[0]-lower[0])*volume/fieldIntegrals[0])},
