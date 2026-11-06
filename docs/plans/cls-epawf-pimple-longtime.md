@@ -6,6 +6,8 @@ step 23 at T=.0071875 after 22 accepted steps to T=.006875. Both are hard
 constitutive-evaluation-domain failures caused by interior negative k,
 despite successful scheduled solves, bounding, declared scalar sampling
 and continuous-ground checks. Neither campaign remains running.
+The subsequent [ConstitutiveV2 implementation and fresh continuation](cls-epawf-pimple-constitutive-v2.md)
+retains these failed campaigns and addresses their missing evaluation coverage.
 
 The observed classification is **unresolved evolution / numerical
 representation and evaluation-inventory limitation**. No original-equation
