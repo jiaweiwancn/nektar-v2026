@@ -307,7 +307,10 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         session->LoadParameter("RANSWallReducedHTolerance",m_reducedHTolerance,2e-9);
         session->LoadParameter("RANSWallReducedRestorationWeight",m_reducedRestorationWeight,1.);
         Require(m_reducedBasis>=4 && m_reducedBasis<=m_reducedMaximumBasis &&
-                m_reducedMaximumBasis>=4 && m_reducedMaximumBasis<=160 && m_reducedHUpdates>=0 &&
+                // The optional ceiling permits a benchmark-sized complete
+                // free-k response space; governing fields are still solved
+                // separately. The default budget remains32.
+                m_reducedMaximumBasis>=4 && m_reducedMaximumBasis<=512 && m_reducedHUpdates>=0 &&
                 m_reducedKrylov>=0 && m_reducedKrylov<=16 &&
                 m_reducedSourceRefinements>=0 && m_reducedSourceRefinements<=3 &&
                 (!m_reducedSourceRefinements || m_reducedSourceRay) &&

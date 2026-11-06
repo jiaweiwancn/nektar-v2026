@@ -165,7 +165,7 @@ def main():
                         help="Up to three constrained nonlinear destruction model direction refinements")
     parser.add_argument("--reduced-basis", type=int, default=10)
     parser.add_argument("--reduced-maximum-basis", type=int, default=32,
-                        help="Adaptive response-space ceiling (up to 160; 32 retains earlier controls)")
+                        help="Adaptive response-space ceiling (up to 512; 32 retains earlier controls)")
     parser.add_argument("--reduced-krylov", type=int, default=0,
                         help="Preconditioned true-response enrichment seeds (0 to 16, within the basis budget)")
     parser.add_argument("--reduced-radius", type=float, default=.05)

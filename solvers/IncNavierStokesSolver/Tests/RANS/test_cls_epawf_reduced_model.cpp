@@ -75,7 +75,7 @@ int main(int argc, char **argv)
         std::ifstream in(argv[1], std::ios::binary);
         std::uint64_t shape[2]{};
         in.read(reinterpret_cast<char *>(shape), sizeof(shape));
-        Check(in.good() && shape[0] > 0 && shape[0] <= 161 && shape[1] <= 1000000,
+        Check(in.good() && shape[0] > 0 && shape[0] <= 513 && shape[1] <= 1000000,
               "invalid native affine replay packet shape");
         const int n = shape[0];
         auto read = [&](R::Vector &v) {
@@ -103,7 +103,7 @@ int main(int argc, char **argv)
             // and every cut, then solve with the requested field radius.
             replayRadius=std::stod(argv[3]);
             const double oldMultiplier=std::stod(argv[4]);
-            Check(n<=160 && replayRadius>0. && std::isfinite(replayRadius) &&
+            Check(n<=512 && replayRadius>0. && std::isfinite(replayRadius) &&
                   oldMultiplier>=0. && std::isfinite(oldMultiplier) &&
                   R::Length(initial)==0., "orthogonal-radius replay assumptions differ");
             R::Matrix columns(n,R::Vector(n));
