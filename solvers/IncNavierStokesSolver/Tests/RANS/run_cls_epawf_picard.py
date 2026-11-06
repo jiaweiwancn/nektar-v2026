@@ -85,6 +85,7 @@ def prepare(args):
                                    "Krylov": getattr(args, "reduced_krylov", 0),
                                    "SourceRefinements": getattr(args, "reduced_source_refinements", 0),
                                    "ResponseReuseUpdates": getattr(args, "reduced_response_reuse_updates", 0),
+                                   "DirectionalRefreshUpdates": getattr(args, "reduced_directional_refresh_updates", 0),
                                    "Step": args.reduced_step,
                                    "RestorationWeight": getattr(args, "reduced_restoration_weight", 1.)}.items():
                     set_parameter(root, "RANSWallReduced"+key, value)
@@ -175,6 +176,8 @@ def main():
                         help="Reuse separate base field factors for response probes; still converge the original H")
     parser.add_argument("--reduced-response-reuse-updates", type=int, default=0,
                         help="Up to four checked secant response updates between fresh response models (default off)")
+    parser.add_argument("--reduced-directional-refresh-updates", type=int, default=0,
+                        help="Up to four measured direction-action refreshes before re-solving a reused constrained model")
     parser.add_argument("--reduced-fast-destruction", action="store_true",
                         help="Use the shared value-only inner destruction kernel in the numerical source model")
     parser.add_argument("--reduced-basis", type=int, default=10)
@@ -221,6 +224,9 @@ def main():
     require(0 <= args.reduced_response_reuse_updates <= 4 and
             (not args.reduced_response_reuse_updates or args.reduced),
             "response reuse requires --reduced and a budget from zero to four")
+    require(0 <= args.reduced_directional_refresh_updates <= 4 and
+            (not args.reduced_directional_refresh_updates or args.reduced_response_reuse_updates > 0),
+            "direction-action refresh requires response reuse and a budget from zero to four")
     require(math.isfinite(args.reduced_maximum_radius) and
             0 < args.reduced_radius <= args.reduced_maximum_radius,
             "reduced radii must be finite, positive and ordered")

@@ -150,6 +150,23 @@ def check(directory):
                     r["original_k_norm_change"] >= 0 for r in records
                     if r["event"] == "response_chord_base_accuracy"),
                 "invalid fixed-k reference accuracy refinement")
+    direction_refreshes = [r for r in records if r["event"] == "response_direction_refreshed"]
+    refresh_budget = protocol.get("directional_refresh_budget", 0)
+    require(0 <= refresh_budget <= 4 and (refresh_budget or not direction_refreshes),
+            "direction-action refreshes lack a declared bounded budget")
+    require(all(1 <= r["refresh"] <= r["budget"] == refresh_budget and
+                r["before_state_sha256"] == r["state_sha256"] and
+                r["before_history_sha256"] == r["history_sha256"] and
+                r["attained"] <= r["required"] and r["half_attained"] <= r["required"] and
+                r["two_size_bound_scaled_error"] <= .05 and
+                max(r["residual_interpolation_defect"], r["state_interpolation_defect"],
+                    r["trace_interpolation_defect"]) <= 1e-8 for r in direction_refreshes),
+            "direction-action refresh changed the state/history or used an inaccurate action")
+    if refresh_budget:
+        require(all(r["model_consistent_in_bound_units"] and r["model_residual_error"] <= .03 and
+                    r["bound_scaled_observation_model_error"] <= .1
+                    for r in chord_checks if r["passed"]),
+                "a reused direction bypassed the bound-scaled model agreement gate")
     for trial in [r for r in trials if r["accepted"]]:
         model = [r for r in directions if r["iteration"] == trial["iteration"] and
                  r["seconds"] < trial["seconds"]][-1]

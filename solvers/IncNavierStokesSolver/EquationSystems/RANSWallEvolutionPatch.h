@@ -427,6 +427,7 @@ private:
     int m_reducedBasis=10,m_reducedHUpdates=50,m_reducedKrylov=0,m_reducedMaximumBasis=32;
     int m_reducedSourceRefinements=0;
     int m_reducedResponseReuseUpdates=0;
+    int m_reducedDirectionalRefreshUpdates=0;
     bool m_reducedResponseCache=false;
     bool m_reducedInteriorSourceAnchor=false;
     bool m_reducedFastDestruction=false;
