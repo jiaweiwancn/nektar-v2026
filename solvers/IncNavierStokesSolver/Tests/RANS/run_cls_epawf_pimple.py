@@ -18,7 +18,7 @@ from run_cls_epawf_picard import (ROOT, ORIGINAL, H0, THREADS, session, set_info
 
 
 def prepare(output, dt, steps, diagnostic=False, verify=False, restart=None,
-            checkpoint=False, reject_step=0, k_bound="Off", floor_relative=None, snapshots=False, budget_time=-1., hard_reject_step=0, inventory="LegacyV1"):
+            checkpoint=False, reject_step=0, k_bound="Off", floor_relative=None, snapshots=False, budget_time=-1., hard_reject_step=0, inventory="LegacyV1", wall_policy="Upstream"):
     output.mkdir(parents=True, exist_ok=False)
     xml = session(ORIGINAL, output/'case.xml', 'outer6')
     root = ET.parse(xml).getroot()
@@ -37,6 +37,8 @@ def prepare(output, dt, steps, diagnostic=False, verify=False, restart=None,
         'RANSWallPicardFlowRelaxation': 1, 'RANSWallPicardKRelaxation': 1,
         'RANSWallPicardEpsilonRelaxation': 1, 'RANSWallPicardPseudoAlpha': 0}.items():
         set_parameter(root, key, value)
+    require(wall_policy in ('Upstream','UniformEPFlat'),'unknown flat wall policy')
+    set_info(root, 'RANSWallTransition', wall_policy)
     set_info(root, 'RANSWallPimpleKBound', k_bound)
     set_info(root, 'RANSWallPimpleKInventory', inventory)
     set_info(root, 'RANSWallPimpleSnapshots', 'On' if snapshots else 'Off')
@@ -58,7 +60,7 @@ def identity(executable):
 def check_report(report, restarting=False):
     require(report['temporal_coupling'] == 'PimpleSingleSweep' and report['order'] == 1,
             'wrong temporal mode')
-    if not restarting:
+    if not restarting and report.get('wall_policy','Upstream')=='Upstream':
         require(state_hash(report['accepted_states'][0]) == H0, 'changed represented outer6 initial state')
     require(report['eta'] == 0 and report['inner_stress_model'] == 'SaturatedR2', 'changed physics')
     attempts = report['pimple_attempts']
@@ -94,6 +96,7 @@ def main():
     p.add_argument('--steps', type=int)
     p.add_argument('--final-time', type=float)
     p.add_argument('--k-bound',choices=('Off','MassProjection'),default='Off')
+    p.add_argument('--wall-policy',choices=('Upstream','UniformEPFlat'),default='Upstream')
     p.add_argument('--inventory',choices=('LegacyV1','ConstitutiveV2'),default='LegacyV1')
     p.add_argument('--floor-relative',type=float)
     p.add_argument('--snapshots',action='store_true')
@@ -124,14 +127,14 @@ def main():
         require(a.output.is_relative_to(Path('/media/jay/新加卷/nektar-v2026-runs')), 'heavy run storage')
     xml = prepare(a.output, a.dt, a.steps, a.diagnostic, a.verify,
                   a.restart.resolve() if a.restart else None, a.checkpoint, a.reject_step,
-                  a.k_bound,a.floor_relative,a.snapshots,a.budget_time,a.hard_reject_step,a.inventory)
+                  a.k_bound,a.floor_relative,a.snapshots,a.budget_time,a.hard_reject_step,a.inventory,a.wall_policy)
     require(a.checkpoint_interval>=0,'negative checkpoint interval')
     if a.checkpoint_interval:
         require(a.checkpoint,'checkpoint interval requires checkpoint output')
         root=ET.parse(xml).getroot();set_parameter(root,'IO_CheckSteps',a.checkpoint_interval);write(root,xml)
     git = lambda *args: subprocess.check_output(['git', '-C', str(ROOT), *args], text=True).strip()
     manifest = dict(schema=1, source=git('rev-parse', 'HEAD'), source_status=git('status', '--porcelain'),
-        archived_xml_sha256=sha(ORIGINAL), xml_sha256=sha(xml), expected_h0_sha256=H0,
+        wall_policy=a.wall_policy, actual_initial_sha256=None, archived_xml_sha256=sha(ORIGINAL), xml_sha256=sha(xml), expected_h0_sha256=H0 if a.wall_policy=='Upstream' else None,
         ranks=1, threads=THREADS, dt=a.dt, requested_steps=a.steps,
         qualification='R2DiagnosticV1; outside-box states are not physically qualified M8' if a.diagnostic else 'R2LocalV1 strict',
         status='prepared')
@@ -141,6 +144,7 @@ def main():
         manifest['execution'] = run([str(a.solver), 'case.xml'], a.output, 'solver.log', a.timeout)
         report = load(a.output/'case.evolution.json')
         attempts = check_report(report, bool(a.restart))
+        manifest['actual_initial_sha256']=state_hash(report['accepted_states'][0])
         accepted_times={x[0] for x in report['stage_audits']}
         cumulative=0.
         for x in attempts:

@@ -231,6 +231,13 @@ int main(int argc,char **argv)
                 {"failure",J::Quote(failure)},{"audit",Maps(audit)},{"context",patch.ConstitutiveFailureContext().empty()?"null":patch.ConstitutiveFailureContext()},
                 {"governing_solves","0"}})<<'\n';Require(out.good(),"audit witness write failed");world->Finalise();return 0;
         }
+        if(packet.get<std::string>("operation","")=="source_balance")
+        {
+            const auto stations=packet.get_child_optional("stations")?Read(packet,"stations"):Vector{-3.5,-2.625,-1.,1.6};
+            const auto heights=packet.get_child_optional("heights")?Read(packet,"heights"):Vector{0.,.00001,.00005,.0001,.0002,.0005,.001,.0025,.005,.01,.05,.1,1.,2.};
+            std::ofstream out(argv[3]);out<<patch.SourceBalanceDiagnostic(state,time,data,stations,heights)<<'\n';
+            Require(out.good(),"source balance write failed");world->Finalise();return 0;
+        }
         if(packet.get<std::string>("operation","")=="contact")
         {
             Vector steps=packet.get_child_optional("h")?Read(packet,"h"):Vector{};

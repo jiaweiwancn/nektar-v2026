@@ -15,13 +15,14 @@ from run_cls_epawf_picard import load,require
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--solver',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
+    p.add_argument('--wall-policy',choices=('Upstream','UniformEPFlat'),default='Upstream')
     p.add_argument('--targets',type=int,nargs='+',default=[32,160,800,1600,3200,8000])
     p.add_argument('--block-steps',type=int,default=16);p.add_argument('--timeout',type=float,default=7200)
     a=p.parse_args();a.output=a.output.resolve();a.output.mkdir(parents=True,exist_ok=True)
     ownership=a.output/'supervisor';ownership.mkdir(exist_ok=True);lock=CampaignLock(ownership)
     root=a.output/'trajectory';driver=Path(__file__).with_name('continue_cls_epawf_pimple.py')
     base=[sys.executable,'-B',str(driver),'--solver',str(a.solver.resolve()),'--output',str(root),
-        '--inventory','ConstitutiveV2','--block-steps',str(a.block_steps),'--timeout',str(a.timeout),
+        '--inventory','ConstitutiveV2','--wall-policy',a.wall_policy,'--block-steps',str(a.block_steps),'--timeout',str(a.timeout),
         '--targets',*map(str,a.targets)]
     retries=0
     while True:

@@ -849,7 +849,8 @@ void RANSEquilibriumWallEvolution::WriteReport() const
        <<",\"time\":"<<m_time<<",\"dt\":"<<m_timestep<<",\"steps\":"<<snapshot.steps<<",\"order\":"<<m_order
        <<",\"chi\":"<<m_patch->Parameters().chi<<",\"eta\":"<<m_eta<<",\"neutral_reference\":"<<(m_neutral?"true":"false")
        <<",\"condensed\":"<<(m_condensed?"true":"false")<<",\"checkpoint\":"<<Quoted(m_lastCheckpoint)<<",\"signature\":"<<Quoted(m_signature);
-    out<<",\"inner_stress_model\":"<<Quoted(m_patch->InnerStressName())
+    out<<",\"wall_policy\":"<<Quoted(m_patch->WallPolicyName())
+       <<",\"inner_stress_model\":"<<Quoted(m_patch->InnerStressName())
        <<",\"nonlinear_policy\":"<<Quoted(m_patch->NonlinearPolicyName())
        <<",\"temporal_coupling\":"<<Quoted(m_patch->TemporalCouplingName())
        <<",\"k_bound_mode\":"<<Quoted(m_patch->PimpleKBoundMode())

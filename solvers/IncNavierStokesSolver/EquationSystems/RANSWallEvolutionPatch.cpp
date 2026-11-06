@@ -360,8 +360,11 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     Require(!inner.empty() && !outer.empty() && Same(lower[2],0),"incomplete wall/outer physical domains");
     m_mapping.Validate(lower,upper,.1);
     std::string transition;session->LoadSolverInfo("RANSWallTransition",transition,"Fixed");
-    Require(transition=="Fixed" || transition=="Upstream","RANSWallTransition must be Fixed or Upstream");
-    m_transitionEnabled=transition=="Upstream";
+    Require(transition=="Fixed" || transition=="Upstream" || transition=="UniformEPFlat","unknown RANSWallTransition");
+    m_uniformEP=transition=="UniformEPFlat";
+    m_transitionEnabled=transition=="Upstream" || m_uniformEP;
+    Require(!m_uniformEP || (PimpleSingleSweep() && m_dimension==2 && !Mapped() && m_parameters.chi==1),
+        "UniformEPFlat is an explicit chi=1 serial flat2D PIMPLE control");
     Require(m_mapping.PlanarConstantHeight() || parameters.chi==0 || m_transitionEnabled,
         "curved corrections require the prescribed upstream transition");
     for(const auto &point:std::vector<RANSWallCoordinate>{lower,upper,{lower[0],upper[1],0},{upper[0],lower[1],0}})
@@ -1473,6 +1476,7 @@ std::string RANSWallEvolutionPatch::Signature() const
         for(double v:m_referenceNormal)text<<':'<<v;
         text<<':'<<m_robustUstar<<":incoming-flat-strain-extension";
     }
+    if(m_uniformEP)text<<":wall_policy=UniformEPFlat-v1:chi=1:full_EP_trace:require_intrinsic_admissibility";
     if(m_transitionEnabled)
     {
         text<<":upstream:"<<m_transition.start<<':'<<m_transition.end<<':'<<m_sensorA<<':'<<m_sensorB<<':'<<m_baselineStart;

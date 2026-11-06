@@ -125,6 +125,7 @@ foreach(rans_native_target RANSEquilibriumEvolutionProbe RANSCurvedWallProbe)
         ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPimple.cpp
         ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionKBound.cpp
         ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionContact.cpp
+        ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionSource.cpp
         ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionReduced.cpp
         ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionDiagnostics.cpp)
 endforeach()
@@ -144,6 +145,7 @@ add_executable(RANSPressureActionProbe
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPimple.cpp
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionKBound.cpp
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionContact.cpp
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionSource.cpp
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionReduced.cpp
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionDiagnostics.cpp)
 target_include_directories(RANSPressureActionProbe PRIVATE ${RANS_SOURCE_ROOT}/solvers)
@@ -165,6 +167,7 @@ foreach(rans_r3_probe RANSNonpressureActionProbe RANSWallResolutionProbe)
         ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPimple.cpp
         ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionKBound.cpp
         ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionContact.cpp
+        ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionSource.cpp
         ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionReduced.cpp
         ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionDiagnostics.cpp)
     target_include_directories(${rans_r3_probe} PRIVATE ${RANS_SOURCE_ROOT}/solvers)
@@ -284,6 +287,7 @@ if(RANS_BUILD_SOLVER)
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallEvolutionPimple.cpp
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallEvolutionKBound.cpp
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallEvolutionContact.cpp
+            ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallEvolutionSource.cpp
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallEvolutionReduced.cpp
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallTimeIntegration.cpp
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSEquilibriumWallEvolution.cpp

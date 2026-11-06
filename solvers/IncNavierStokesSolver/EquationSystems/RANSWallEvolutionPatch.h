@@ -69,6 +69,8 @@ public:
     double DependentEpsilon(const Vector &state,const RANSWallCoordinate &chart) const;
     double DependentEpsilon(const Vector &state,const RANSWallCoordinate &chart,double time,
         const RANSWallEvolutionData &data) const;
+    bool UniformEPFlat() const { return m_uniformEP; }
+    std::string WallPolicyName() const { return m_uniformEP?"UniformEPFlat-v1":(m_transitionEnabled?"Upstream":"Fixed"); }
     bool TransitionEnabled() const { return m_transitionEnabled; }
     const SolverUtils::AWFTransitionControls &TransitionControls() const { return m_transition; }
     const Vector &TransitionReference() const { return m_transitionReference; }
@@ -194,6 +196,8 @@ public:
     };
     std::string PimpleKRateBudget(const Vector &state,const Vector &history,double time,
         const RANSWallEvolutionData &data) const;
+    std::string SourceBalanceDiagnostic(const Vector &state,double time,
+        const RANSWallEvolutionData &data,const Vector &stations,const Vector &heights) const;
     std::string PimpleContactDiagnostic(const Vector &state,double time,
         const RANSWallEvolutionData &data,const Vector &steps,
         const std::vector<RANSWallCoordinate> &witnesses,bool exportMass,bool isolate) const;
@@ -416,7 +420,7 @@ private:
     SolverUtils::RANSWallInnerStressModel m_innerStress=SolverUtils::RANSWallInnerStressModel::Linear;
     double m_regularizationGamma=0,m_regularizationScale=0,m_robustUstar=.4;
     SolverUtils::RANSVector m_referenceFlow{1,0,0},m_referenceNormal{0,0,1};
-    bool m_transitionEnabled=false,m_transitionReady=false;
+    bool m_transitionEnabled=false,m_transitionReady=false,m_uniformEP=false;
     SolverUtils::AWFTransitionControls m_transition;
     double m_sensorA=2.5,m_sensorB=3.5,m_baselineStart=-1.25;
     Vector m_transitionReference;

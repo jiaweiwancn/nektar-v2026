@@ -39,10 +39,10 @@ void RANSWallEvolutionPatch::InitialiseTransition(const LibUtilities::SessionRea
     for(int j=0;j<7;++j)session->LoadParameter("RANSWallSensorWeight"+names[j],c.weights[j],1.);
     m_transition.Validate();
     Require(c.reynoldsOff>=m_options.minimumReynolds,"the smooth Reynolds gate must stay inside the declared high-Re branch");
-    ValidateEquilibriumAWFTransitionSupport(m_mapping,m_transition);
+    if(!m_uniformEP)ValidateEquilibriumAWFTransitionSupport(m_mapping,m_transition);
     Require(m_mapping.heightSlopeX==0 && m_mapping.heightSlopeY==0 && m_mapping.heightAmplitude==0,
         "the flat upstream reference requires constant physical H; use the adapted baseline otherwise");
-    Require(std::isfinite(m_baselineStart) && m_baselineStart>m_transition.end,
+    Require(m_uniformEP || (std::isfinite(m_baselineStart) && m_baselineStart>m_transition.end),
         "the designated baseline faces need a positive physical transition buffer");
     if(m_mapping.kind==RANSWallNormalMap::Kind::CosineHill)
         Require(m_baselineStart<WallCoordinate({-m_mapping.lengthX,0,0}),"the projection buffer must end before the incoming hill foot");
@@ -52,6 +52,20 @@ void RANSWallEvolutionPatch::InitialiseTransition(const LibUtilities::SessionRea
         {return axis==2 && !side && Same(e.lower[2],m_parameters.geometry.height);};
     for(auto [id,value]:fields[Epsilon()]->Boundary([](const RANSWallCoordinate&){return 0.;},atH))
     {(void)value;m_traceIds.insert(id);}
+    if(m_uniformEP)
+    {
+        // No downstream baseline-only trace modes in the uniform control.
+        // Native reference/essential data and initialization use this same
+        // fully active profile; no old state or history is migrated.
+        Require(m_dimension==2 && !Mapped() && m_parameters.chi==1,"UniformEPFlat scope");
+        double us,dx,dy;session->LoadParameter("RANSWallFrictionVelocity",us,.4);
+        session->LoadParameter("RANSWallDirectionX",dx,1.);session->LoadParameter("RANSWallDirectionY",dy,0.);
+        m_transitionReference=FlatReference(us,{dx,dy});m_transitionReady=true;
+        const auto profile=Profile(m_parameters.model.Q()*us*us,{lower[0],0,0},1);
+        Require(profile->Reference().weight==1 && profile->Reference().reason==AWFFallbackReason::Active,
+            "UniformEPFlat reference is not intrinsically admissible");
+        return;
+    }
     bool plateau=false,baseline=false;
     for(const auto &e:fields[Epsilon()]->Elements())if(Same(e.lower[2],m_parameters.geometry.height))
     {
@@ -154,6 +168,14 @@ AWFTransitionInput RANSWallEvolutionPatch::TransitionInput(const Vector &s,
 AWFTransitionValues RANSWallEvolutionPatch::Transition(const Vector &s,const RANSWallCoordinate &p,
     double time,const RANSWallEvolutionData &data) const
 {
+    if(m_uniformEP)
+    {
+        const auto profile=Profile(SampleK(s,p),p,1);
+        Require(profile->Reference().weight==1 && profile->Reference().reason==AWFFallbackReason::Active,
+            "UniformEPFlat profile is not intrinsically admissible");
+        AWFTransitionValues value;value.chi=value.spatial=value.state=value.admissibility=value.marginGate=value.reynoldsGate=1;
+        return value;
+    }
     auto result=EvaluateEquilibriumAWFTransition(TransitionInput(s,p,time,data),m_transition).value;
     if(m_parameters.chi==0)result.chi=0;
     return result;
@@ -163,6 +185,13 @@ std::shared_ptr<EquilibriumAWFProfiles> RANSWallEvolutionPatch::StateProfile(con
     const RANSWallCoordinate &p,double time,const RANSWallEvolutionData &data) const
 {
     const double K0=SampleK(s,p);
+    if(m_uniformEP)
+    {
+        const auto profile=Profile(K0,p,1);
+        Require(profile->Reference().weight==1 && profile->Reference().reason==AWFFallbackReason::Active,
+            "UniformEPFlat forbids an inactive/fallback profile");
+        return profile;
+    }
     if(!m_transitionEnabled)return Profile(K0,p);
     if(m_parameters.chi==0 || WallCoordinate(p)>=m_transition.end)return Profile(K0,p,0);
     const auto base=Profile(K0,p,0);const auto &ref=base->Reference();

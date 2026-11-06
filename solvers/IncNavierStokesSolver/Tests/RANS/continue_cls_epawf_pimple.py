@@ -162,6 +162,7 @@ def main():
     p.add_argument('--checkpoint', type=Path)
     p.add_argument('--prefix-report', type=Path)
     p.add_argument('--from-h0',action='store_true')
+    p.add_argument('--wall-policy',choices=('Upstream','UniformEPFlat'),default='Upstream')
     p.add_argument('--inventory',choices=('LegacyV1','ConstitutiveV2'),default='LegacyV1')
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--targets', type=int, nargs='+', default=[32,160,800,1600,3200,8000])
@@ -179,6 +180,7 @@ def main():
         progress = load(a.output/'progress.json'); a.checkpoint = Path(progress['checkpoint']) if progress['checkpoint'] else None
         require(progress['status']!='numerically_rejected','numerical rejection is terminal; use a separately identified follow-up')
         require(progress.get('inventory','LegacyV1')==a.inventory,'inventory differs from campaign')
+        require(progress.get('wall_policy','Upstream')==a.wall_policy,'wall policy differs from campaign')
         assert_native_stopped(progress)
         old_stat=Path('/proc')/str(int(progress['pid']))/'stat'
         if old_stat.exists():
@@ -224,16 +226,17 @@ def main():
         if a.from_h0:
             require(a.checkpoint is None and a.prefix_report is None,'h0 is not checkpoint migration')
             progress=dict(schema=2,status='starting',checkpoint=None,accepted_steps=0,accepted_time=0.,dt=.000625,
-                cumulative_bound_integral=0.,prefix_steps=0,prefix_integral=0.,inventory=a.inventory,
+                cumulative_bound_integral=0.,prefix_steps=0,prefix_integral=0.,inventory=a.inventory,wall_policy=a.wall_policy,
                 requested_targets=a.targets,completed_targets=[],segments=[])
         else:
             require(a.checkpoint and a.prefix_report,'restart needs real checkpoint and prefix report')
             prefix = load(a.prefix_report); info = header(a.checkpoint)
             require(info['order'] == 1 and info['dt'] == .000625 and prefix['steps'] == info['steps'], 'incompatible primary restart')
+            require(prefix.get('wall_policy','Upstream')==('UniformEPFlat-v1' if a.wall_policy=='UniformEPFlat' else 'Upstream'),'wrong prefix wall policy')
             require(prefix['k_bound_mode'] == 'MassProjection', 'wrong prefix mode')
             integral = sum(v.get('k_bound',{}).get('integral_total',0.) for v in prefix['pimple_attempts'] if v['time']<=info['time']+1e-13)
             progress = dict(schema=2, status='starting', checkpoint=str(a.checkpoint), accepted_steps=info['steps'],
-                accepted_time=info['time'], dt=info['dt'], cumulative_bound_integral=integral,inventory=a.inventory,
+                accepted_time=info['time'], dt=info['dt'], cumulative_bound_integral=integral,inventory=a.inventory,wall_policy=a.wall_policy,
                 prefix_report=str(a.prefix_report.resolve()), prefix_report_sha256=sha(a.prefix_report),
                 prefix_steps=info['steps'], prefix_integral=integral, requested_targets=a.targets, completed_targets=[], segments=[])
     progress.update(pid=os.getpid(), host=socket.gethostname(), started_unix=time.time(),
@@ -261,7 +264,7 @@ def main():
                 while Path(str(directory)+f'-attempt{suffix}').exists(): suffix+=1
                 directory=Path(str(directory)+f'-attempt{suffix}')
             xml = prepare(directory, .000625, end-start, True, restart=Path(progress['checkpoint']) if progress['checkpoint'] else None,
-                          checkpoint=True, k_bound='MassProjection', floor_relative=1e-8, snapshots=True,inventory=a.inventory)
+                          checkpoint=True, k_bound='MassProjection', floor_relative=1e-8, snapshots=True,inventory=a.inventory,wall_policy=a.wall_policy)
             tree=ET.parse(xml).getroot(); set_parameter(tree,'IO_CheckSteps',1); write(tree,xml)
             command=[str(executable),'case.xml']; started=time.monotonic()
             child=subprocess.Popen(command,cwd=directory,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,
