@@ -35,6 +35,8 @@ def replay(probe,xml,packet,output,*,floor=None,fixture=None):
     require(receipt['exit_code']==0,'native k-bound replay failed')
     result=load(output/'result.json');bound=result['k_bound']
     require(result['non_k_change']==result['essential_k_change']==0,'bound changed non-k or essential data')
+    first,last=map(int,(result['offsets'][2],result['offsets'][3]))
+    require(state_hash(result['raw'][:first]+result['raw'][last:])==state_hash(result['corrected'][:first]+result['corrected'][last:]),'non-k bitwise invariance failed')
     require(result['shared_cg_jump']<1e-12,'bound broke native CG continuity')
     require(abs(result['quadrature_correction_mass_norm']-bound['mass_norm_correction'])<1e-12 and
             abs(result['quadrature_correction_integral']-bound['integral_total'])<1e-12,'mass/integral accounting differs')

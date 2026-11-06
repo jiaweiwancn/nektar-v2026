@@ -65,7 +65,8 @@ public:
                     double t=std::numeric_limits<double>::infinity();int leaving=-1;
                     for(int j=0;j<i;++j)if(c[j]>1e-13 && lambda[j]/c[j]<t){t=lambda[j]/c[j];leaving=j;}
                     if(leaving<0){failure="k_bound_incompatible_dependent_constraints";return false;}
-                    for(int j=0;j<i;++j)lambda[j]-=t*c[j];lambda.back()+=t;
+                    for(int j=0;j<i;++j){lambda[j]-=t*c[j];}
+                    lambda.back()+=t;
                     active.erase(active.begin()+leaving);lambda.erase(lambda.begin()+leaving);
                     dependent=true;break;
                 }

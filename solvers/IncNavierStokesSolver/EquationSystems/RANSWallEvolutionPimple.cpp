@@ -35,6 +35,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
     auto publish=[&](bool completed,const std::string &failure)
     {
         put("time",J::Number(time));put("alpha",J::Number(alpha));
+        put("governing_solves_complete",J::Boolean(momentum==1 && pressure==1 && epsilon==1 && k==1));
         put("scheduled_complete",J::Boolean(completed));put("failure",J::Quote(failure));
         put("outer_sweeps",J::Number(iterations));
         put("momentum_predictor_solves",J::Number(momentum));

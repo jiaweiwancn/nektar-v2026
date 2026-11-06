@@ -226,7 +226,7 @@ int main(int argc,char **argv)
                 for(int k=0;k<=6;++k){const RANSWallCoordinate x{a.upper[0],0,a.lower[2]+k*(a.upper[2]-a.lower[2])/6};
                     jump=std::max(jump,std::abs(f->ElementPoint(i,x).Value(bounded.state,patch.offset[patch.K()])-f->ElementPoint(j,x).Value(bounded.state,patch.offset[patch.K()])));}
             }
-            std::ofstream out(argv[3]);out<<J::Object({{"operation",J::Quote("k_bound")},{"k_bound",bounded.report},
+            std::ofstream out(argv[3]);out<<J::Object({{"operation",J::Quote("k_bound")},{"offsets",J::Numbers(patch.offset)},{"k_bound",bounded.report},
                 {"quadrature_correction_mass_norm",J::Number(std::sqrt(square))},{"quadrature_correction_integral",J::Number(integral)},
                 {"shared_cg_jump",J::Number(jump)},{"raw_native_ground_node_minimum",J::Number(nodeMinimum)},
                 {"raw",J::Numbers(state)},{"corrected",J::Numbers(bounded.state)},
