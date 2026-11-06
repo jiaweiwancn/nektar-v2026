@@ -10,7 +10,7 @@
     "original_alpha": 400,
     "time_target": 0.0025,
     "original_tolerance": 2e-12,
-    "progress_utc": "2026-11-06T16:26:07.719128+00:00",
+    "progress_utc": "2026-11-06T16:40:19.583296+00:00",
     "original_start_completed_evidence": "native/completed-original-and-expanded-review.json",
     "original_start_result": {
       "numerical_updates": 18,
@@ -150,14 +150,25 @@
     "physical_acceptance": false
   },
   "completed_qualified_reduced_search": {
-    "full_residual": 9.32856492735344,
-    "gradient_departure": 0.0009999990387161706,
-    "minimum_outer_epsilon_ratio": 0.9817519306481076,
-    "ground_minimum": 0.00023938074740327764,
+    "full_residual": 7.498542874129245,
+    "gradient_departure": 0.0009999990011619886,
+    "minimum_outer_epsilon_ratio": 0.9800289529428698,
+    "ground_minimum": 5.784547059593834e-07,
     "accepted_physical_steps": 0,
+    "final_time": 0,
     "algebraic_root": false,
-    "scope": "Completed matched16-Krylov96-response two-update original-target saved-guess control; original qualification passes, original residual fails; independent bitwise readback/history receipt",
-    "evidence": "native/response-krylov96-matched-review.json"
+    "accepted_state_and_history_preserved": true,
+    "independent_norm_difference": 0,
+    "response_space_dimension": 504,
+    "controlled_H_evaluations": 2033,
+    "maximum_required_H_tolerance": 2e-12,
+    "flow_and_epsilon_solve_counts": [
+      12272,
+      12272
+    ],
+    "scope": "Completed strict full504-response two-update original-target saved-guess search; original qualification passes, original residual fails; full native history receipt and independent bitwise norm readback",
+    "evidence": "native/completed-original-and-expanded-review.json",
+    "independent_audit": "native/audit-filtered-search504.json"
   },
   "ground_contact_diagnostic": {
     "initial_full_residual": 18.454728711702224,

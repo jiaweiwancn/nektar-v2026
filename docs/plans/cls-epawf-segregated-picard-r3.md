@@ -20,6 +20,36 @@ metric at ground contact while its original k residual stayed nonzero. R3
 therefore scores the original reduced residual, not that projected-map defect.
 No full all-field Jacobian or hidden coupled direction solver was added.
 
+## Latest completed full-space search
+
+The strict-accuracy `d710404` full504-response run completes two numerical
+updates from the audited16.4201949282 diagnostic guess, reaching11.5210784187
+then7.498542874129245. The physical alpha400/time.0025/h0/history and original
+discrete problem remain fixed. The original complete residual still fails
+2e-12. Its other block norms are[9.30e-13,1.36e-12,4.90e-14,6.43e-16,
+8.06e-16,1.78e-17,0], leaving k dominant.
+
+The final continuous-ground minimum is5.78454706e-7, maximum gradient
+departure.0009999990012 and minimum epsilon ratio.9800289529. The independent
+process reproduces the original norm vector exactly and passes complete
+qualification, covariance/lambda and the negative-ground guard. Native
+physical steps/time are0/0; accepted h0 and every history slot/time are
+preserved. This completed saved-guess result does not replace original-h0
+validation, whose latest completed run remains19.1747990683 as reported below.
+
+All2033 controlled H evaluations converge to their declared accuracies, at most
+2e-12;12272 velocity/pressure pairs and12272 epsilon solves are recorded.
+All1008 retained two-size actions pass, with maximum residual/observation
+relative differences.0004717/.009930. Both models have rank504. The last source
+prediction is7.572041303 versus actual7.498542874, with residual-vector error
+.272731 versus3.838011 for the linear model. The actual final normalized
+displacement.399969604 lies within radius.4. Reduced-solver log time is20032.17s.
+Further full-space and original-start tests continue; this is a qualified
+nonroot, not a stationarity or root-existence certificate.
+
+[Complete compact native history](cls-epawf-segregated-picard-r3-evidence/native/completed-original-and-expanded-review.json),
+[fresh original endpoint audit](cls-epawf-segregated-picard-r3-evidence/native/audit-filtered-search504.json).
+
 ## Completed matched Krylov follow-up
 
 The `90dd801` matched searches start from the independently qualified numerical
