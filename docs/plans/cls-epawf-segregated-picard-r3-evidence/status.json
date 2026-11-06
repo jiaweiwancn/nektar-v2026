@@ -1,6 +1,6 @@
 {
   "status": "native_development_in_progress_original_m8_unresolved",
-  "producing_code_commit": "be04686bb3dac8987b517f380c8a60d075f7b940",
+  "producing_code_commit": "9f65eedf2b59429ce3c04de0672064ad459baceb",
   "native_m8": {
     "status": "Completed original-h0 18-update run fails original residual; complete qualification passes; larger native follow-ups in progress",
     "qualified_first_stage": false,
@@ -10,7 +10,7 @@
     "original_alpha": 400,
     "time_target": 0.0025,
     "original_tolerance": 2e-12,
-    "progress_utc": "2026-11-06T19:56:07.359833+00:00",
+    "progress_utc": "2026-11-06T20:35:43.934762+00:00",
     "original_start_completed_evidence": "native/completed-original-and-expanded-review.json",
     "original_start_result": {
       "numerical_updates": 18,
@@ -105,8 +105,8 @@
         "scope": "In-flight numerical progress only; no physical-stage completion/history receipt inferred"
       }
     },
-    "latest_code_original_start_case": "radius-cap4-original-3step",
-    "latest_code_original_start_status": "Running from original h0; cap4,48 numerical updates per stage,three requested physical steps,16-hour process limit. No accepted physical stage yet."
+    "latest_code_original_start_case": "radius-query-original-cap4-3step",
+    "latest_code_original_start_status": "Running from original h0 with repaired bounded-model queries,cap4,48 numerical updates per stage,three requested physical steps,16-hour process limit. No accepted physical stage yet."
   },
   "checks": {
     "linux_native_pressure_verification": "0926974 bounds assertions and two-sweep bitwise On/Off passed; unchanged Picard translation unit through7715312",
@@ -147,7 +147,8 @@
     "compiled_model_face_metadata": "fa5ac96 diagnostics-only: actual threshold64 is derived from DirectFaceThreshold, replacing stale through160 text. Linux two-worker compilation56.93s and unchanged reduced-model CTest.97s pass; five shared native regressions and unchanged-header sanitizer evidence reused with exact source diff. Numerical runs preserve their6b/389 producing identities.",
     "previous_direction_verification_observability": "PASS: matched6b1f28a verified/unverified two-update fixture. Initial and both accepted numerical-update hashes and original norm vectors agree bitwise; accepted state, every physical history slot/time, rejected endpoint and native bookkeeping identical. Same executable/library identities and numerical input; both native0/time0, not M8 convergence.",
     "interior_source_model_anchor": "900a9aa known-answer corner test, six Linux CTests and standalone ASan/UBSan pass. Matched two-update enabled/disabled native tests finish5.2018304001/5.2418504922; both pass complete qualification and exact original readback,zero physical steps/history preserved. Recovered derivatives produce independently checked accepted directions; verification On/Off trajectory/history bitwise identical. Original-h0 follow-up in progress; not M8 convergence.",
-    "configurable_reduced_maximum_radius": "be04686 Linux four-worker build125.52s, six focused CTests43.40s and changed standalone model ASan/UBSan9.42s pass. Default cap1 retained; original-h0 cap1/cap4 native tests in progress; no larger-radius benefit or root claimed yet."
+    "configurable_reduced_maximum_radius": "be04686 Linux four-worker build125.52s, six focused CTests43.40s and changed standalone model ASan/UBSan9.42s pass. Default cap1 retained; original-h0 cap1/cap4 native tests in progress; no larger-radius benefit or root claimed yet.",
+    "failed_radius_free_query_recovery": "9f65eed same-LAPACK native96 model failure reproduced at500; repaired500 replay returns exactly the2000-budget control vector, all193692 cuts independently checked, norm.999825<=1. Six Linux CTests and standalone ASan/UBSan pass. Actual original-h0 recovery tests running; not nonlinear stationarity or M8 convergence."
   },
   "continued_branch": {
     "auxiliary_positive_eta_tolerance": 2e-11,
@@ -335,5 +336,18 @@
       "numerical_update": 3,
       "earlier_model_trial_review": "native/canonical-warm-second-checkpoint-review.json"
     }
-  ]
+  ],
+  "best_audited_development_checkpoint": {
+    "full_residual": 4.253091674121031,
+    "gradient_departure": 0.000999999347675029,
+    "minimum_outer_epsilon_ratio": 0.982323873983886,
+    "ground_minimum": 6.049695304142611e-06,
+    "producing_code_commit": "fa5ac96b5b396a759002a104d2c0d7cf88bb6b3b",
+    "independent_probe_code_commit": "9f65eedf2b59429ce3c04de0672064ad459baceb",
+    "audit": "native/audit-previous-warm-third.json",
+    "original_norm_vector_bitwise_reproduced": true,
+    "physical_acceptance_inferred": false,
+    "algebraic_root": false,
+    "scope": "Fresh original residual/complete qualification of an in-flight numerical checkpoint; not physical acceptance or a final native history receipt"
+  }
 }

@@ -20,6 +20,75 @@ metric at ground contact while its original k residual stayed nonzero. R3
 therefore scores the original reduced residual, not that projected-map defect.
 No full all-field Jacobian or hidden coupled direction solver was added.
 
+## Recovery after a failed radius-free model query (9f65eed)
+
+The 6b1f28a original-h0 control reaches residual 24.6865, then repeatedly
+exhausts 500 active-set iterations in its zero-multiplier quadratic query.
+The 96-, 99- and 102-direction responses are accurate and full rank within
+those spaces. Their model stationarity defects remain large; these are
+unfinished model solves, not constrained stationarity of the original PDE.
+The control eventually ends without accepting a physical stage.
+
+Its independent terminal original residual is 24.68650069522063. All 2,002
+non-k solves converge, with 8,821 flow and 8,821 epsilon solves. Accepted h0,
+physical history and time remain unchanged. Tightening H after the last
+numerical update changes the reported block norms by at most 8.41e-10; the
+fresh terminal vector is retained separately as the authority rather than
+claiming a bitwise match to that earlier logged point.
+
+A standalone replay uses the production LAPACK factorization pattern and
+identical libraries. At 500 iterations it reproduces the native failure
+exactly, including stationarity defect 24.1012519835. A 2,000-iteration control
+resolves the radius-free problem after the ball-certified cut filter; its
+minimizer has displacement 10.8216, far outside radius 1. The filtered model
+outside that ball is not a physical admissibility or root-existence test.
+A positive-multiplier query resolves a better conditioned small problem.
+
+Commit `9f65eedf2b59429ce3c04de0672064ad459baceb` therefore permits the bounded
+solver to try positive multipliers after an unsolved zero query. An unsolved
+query supplies neither a norm nor a lower bracket. Feasible-start failures
+remain failures; exhausted positive queries remain explicit failures. The
+existing 14-query bracket budget, original cuts and actual displacement bound
+remain in force. New records distinguish an unavailable radius-free solution
+from a solved bounded model. Governing equations, field responses and original
+nonlinear acceptance are unchanged.
+
+The repaired 500-iteration replay returns **exactly the same coefficient
+vector** as the 2,000-iteration control. Independent checks of all 193,692
+original cuts give primal defect 3.82e-18 and displacement 0.9998250752 within
+radius 1. Model stationarity is 9.65e-13; its inexact radius complementarity is
+0.00943. Total active-set steps are 697 versus 2843, and elapsed times 8.87s
+versus 34.05s for this one helper comparison. This establishes bounded-model
+recovery, not nonlinear progress, stationarity or M8 convergence.
+[Matched model replays and independent checks](cls-epawf-segregated-picard-r3-evidence/native/radius-query-affine-review.json).
+
+The four-worker Linux build passes in 81.80s, all six focused CTests pass in
+42.73s with concurrency 1, and the changed standalone model passes ASan/UBSan
+in 9.83s (28.85s compiler invocation). New known-answer tests exercise a failed
+zero query, two failed positive queries, recovery of the independent bounded
+answer, and explicit failure when all 14 positive queries fail. The sanitizer
+scope remains the standalone model and tests.
+[Build and immutable executable/library identities](cls-epawf-segregated-picard-r3-evidence/native/build-validation-9f65eed.json).
+
+Two fresh original-h0 native tests are running: an eight-update, cap-1 fixture
+matching the failed control's first-stage settings, and a cap-4, 48-update-per-
+stage run requesting three physical steps. Their process limits are eight and
+16 hours. The focused recovery assertion additionally requires a checked
+negative true reduced-merit slope and an actually accepted correction that
+lowers the original full residual. It is named as an operator recovery test,
+not M8 convergence. Native recovery is pending; no result from the small
+quadratic alone is counted as a physical step.
+[Native commands](cls-epawf-segregated-picard-r3-evidence/native/radius-query-native-launch.json).
+
+A further independently audited diagnostic checkpoint reaches original full
+residual **4.253091674121031** in the continuing 160-direction previous-step
+search. Every original norm matches the saved point bitwise. Complete
+qualification passes: ground minimum 6.04969530e-6, gradient departure
+0.00099999934768 at x=-2.625, z=4, and epsilon lower ratio 0.9823238740.
+Covariance/lambda and the negative-ground guard pass. This is an in-flight
+checkpoint, with no final native stage/history receipt or physical acceptance.
+[Fresh checkpoint audit](cls-epawf-segregated-picard-r3-evidence/native/audit-previous-warm-third.json).
+
 ## Configurable measured radius growth (be04686)
 
 Several original-h0 models repeatedly hit the scaled k-displacement radius 1,
