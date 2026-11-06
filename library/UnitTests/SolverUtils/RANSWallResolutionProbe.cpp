@@ -224,10 +224,11 @@ int main(int argc,char **argv)
         }
         if(packet.get<std::string>("operation","")=="audit_witness")
         {
-            std::string failure;try{patch.CompleteRestrictedAudit(state,history,alpha,time,data);}
+            RANSWallEvolutionPatch::Diagnostic audit;
+            std::string failure;try{audit=patch.CompleteRestrictedAudit(state,history,alpha,time,data);}
             catch(const std::exception &e){failure=e.what();}
             std::ofstream out(argv[3]);out<<J::Object({{"operation",J::Quote("audit_witness")},
-                {"failure",J::Quote(failure)},{"context",patch.ConstitutiveFailureContext().empty()?"null":patch.ConstitutiveFailureContext()},
+                {"failure",J::Quote(failure)},{"audit",Maps(audit)},{"context",patch.ConstitutiveFailureContext().empty()?"null":patch.ConstitutiveFailureContext()},
                 {"governing_solves","0"}})<<'\n';Require(out.good(),"audit witness write failed");world->Finalise();return 0;
         }
         if(packet.get<std::string>("operation","")=="contact")
