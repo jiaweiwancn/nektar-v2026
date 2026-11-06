@@ -67,6 +67,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::RobustParameters() const
 RANSClosureValues RANSWallEvolutionPatch::OuterClosure(double k,double epsilon,
     const RANSTensor &gradient,const RANSWallCoordinate &p) const
 {
+    if(m_assertKCoverage)Require(m_coveredKLocations.count(p),"unprotected constitutive k evaluation: outer closure");
     if(m_variantName=="Original")return EvaluateRANSClosure(m_parameters.model.Model(),k,epsilon,
         gradient,Distance(p),m_parameters.model.Parameters(),0);
     auto variant=m_robust;
@@ -123,6 +124,7 @@ AWFProfileValues RANSWallEvolutionPatch::WallSource(const Vector &s,const RANSWa
     if(!m_cappedDestruction)return values;
     RANSCappedDestructionValues local;
     if(!normalization){local=WallNormalization(s,p,profile);normalization=&local;}
+    if(m_assertKCoverage)Require(m_coveredKLocations.count(p),"unprotected constitutive k evaluation: wall source");
     const double k=Point(K(),p).Value(s,offset[K()]);
     const auto repaired=EvaluateRANSCappedDestructionPoint(k,profile.K(),values.dissipation,
         values.dissipation-values.redistribution,normalization->b,normalization->m,m_destruction);

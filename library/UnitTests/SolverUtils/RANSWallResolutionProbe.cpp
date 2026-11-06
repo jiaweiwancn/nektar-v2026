@@ -212,6 +212,11 @@ int main(int argc,char **argv)
         const bool historyMatch=std::memcmp(history.data(),reference.data(),history.size()*sizeof(double))==0;
         Require(!packet.get<bool>("require_history_h0",true) || historyMatch,"packet history differs from rebuilt native h0");
         const double time=packet.get<double>("time"),alpha=packet.get<double>("alpha");
+        if(packet.get<std::string>("operation","")=="k_inventory")
+        {
+            std::ofstream out(argv[3]);out<<patch.ScalarDomainJSON(patch.ScalarDomain(state,time,data,true,true),true)<<'\n';
+            Require(out.good(),"inventory write failed");world->Finalise();return 0;
+        }
         if(packet.get<std::string>("operation","")=="coverage")
         {
             std::ofstream out(argv[3]);out<<patch.CheckConstitutiveCoverage(state,time,data,{1.23456789,0,0})<<'\n';
@@ -280,6 +285,7 @@ int main(int argc,char **argv)
                 for(int i=0;i<exp->GetNumPoints(0);++i)
                     nodeMinimum=std::min(nodeMinimum,field->ElementPoint(chosen,{el.lower[0]+(z[i]+1)*(el.upper[0]-el.lower[0])/2,0,0}).Value(state,patch.offset[patch.K()]));
             }
+            const auto preDomain=patch.ScalarDomain(pre,time,data,false,true);
             const auto bounded=patch.ApplyPimpleKBound(state,pre,time,data,packet.get<bool>("projection_only",false));
             double nonK=0,essential=0;
             for(int i=0;i<patch.Size();++i)if(i<patch.offset[patch.K()] || i>=patch.offset[patch.Epsilon()])nonK=std::max(nonK,std::abs(state[i]-bounded.state[i]));
@@ -295,11 +301,21 @@ int main(int argc,char **argv)
                 for(int k=0;k<=6;++k){const RANSWallCoordinate x{a.upper[0],0,a.lower[2]+k*(a.upper[2]-a.lower[2])/6};
                     jump=std::max(jump,std::abs(f->ElementPoint(i,x).Value(bounded.state,patch.offset[patch.K()])-f->ElementPoint(j,x).Value(bounded.state,patch.offset[patch.K()])));}
             }
+            std::vector<std::string> witnessValues;
+            if(packet.get_child_optional("witnesses"))for(const auto &item:packet.get_child("witnesses"))
+            {
+                RANSWallCoordinate x{};int i=0;for(const auto &v:item.second)x[i++]=v.second.get_value<double>();
+                const auto row=patch.Point(patch.K(),x);
+                witnessValues.push_back(J::Object({{"coordinate",J::Numbers(x)},
+                    {"raw",J::Number(row.Value(state,patch.offset[patch.K()]))},
+                    {"corrected",J::Number(row.Value(bounded.state,patch.offset[patch.K()]))}}));
+            }
             const auto domain=patch.ScalarDomain(bounded.state,time,data,true);
             std::string auditFailure;
             if(bounded.success)try{patch.CompleteRestrictedAudit(bounded.state,history,alpha,time,data);}
                 catch(const std::exception &error){auditFailure=error.what();}
             std::ofstream out(argv[3]);out<<J::Object({{"operation",J::Quote("k_bound")},
+                {"pre_k_inventory",patch.ScalarDomainJSON(preDomain)},{"witness_values",J::List(witnessValues)},
                 {"scalar_domain",patch.ScalarDomainJSON(domain,true)},{"complete_audit_failure",J::Quote(auditFailure)},
                 {"complete_audit_context",patch.ConstitutiveFailureContext().empty()?"null":patch.ConstitutiveFailureContext()},{"offsets",J::Numbers(patch.offset)},{"k_bound",bounded.report},
                 {"quadrature_correction_mass_norm",J::Number(std::sqrt(square))},{"quadrature_correction_integral",J::Number(integral)},

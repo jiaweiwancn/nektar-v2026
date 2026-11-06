@@ -19,12 +19,12 @@ def main():
     original=load(a.prior/'fixed-horizon/bound-0/case.evolution.json')
     summary=dict(schema=1,probe=identity(a.probe.resolve()),cases={},purpose='projection-only, not a production step or restart migration')
     def save():write_json(a.output/'summary.json',summary)
-    def execute(name,state,pre,history,time,alpha,policy,operation='k_bound'):
+    def execute(name,state,pre,history,time,alpha,policy,operation='k_bound',witnesses=()):
         folder=a.output/name;folder.mkdir()
         tree=ET.parse(a.prior/'fixed-horizon/bound-0/case.xml').getroot()
         set_info(tree,'RANSWallPimpleKInventory',policy);write(tree,folder/'case.xml')
         request=dict(operation=operation,state=state,pre_k=pre,history=history,time=time,alpha=alpha,
-            require_history_h0=False,inner_stress_model='SaturatedR2',projection_only=policy=='ConstitutiveV2')
+            require_history_h0=False,inner_stress_model='SaturatedR2',projection_only=policy=='ConstitutiveV2',witnesses=list(witnesses))
         write_json(folder/'input.json',request)
         receipt=run([str(a.probe.resolve()),'case.xml','input.json','result.json'],folder,'probe.log',3600)
         write_json(folder/'receipt.json',receipt);require(receipt['exit_code']==0,'native replay failed: '+name)
@@ -35,7 +35,7 @@ def main():
         require(old['k_bound']['success'] and old['scalar_domain']['admissible'],'legacy limited inventory changed')
         require(state_hash(old['corrected'])==state_hash(packet['corrected']),'legacy corrected candidate changed')
         require('nonnegative transported k' in old['complete_audit_failure'],'legacy missing-ray failure did not reproduce')
-        new=execute(name+'-v2',packet['raw'],packet['pre_k'],packet['history'],packet['time'],packet['alpha'],'ConstitutiveV2')
+        new=execute(name+'-v2',packet['raw'],packet['pre_k'],packet['history'],packet['time'],packet['alpha'],'ConstitutiveV2',witnesses=[old['complete_audit_context']['chart']])
         b=new['k_bound'];require(b['success'] and new['scalar_domain']['admissible'],'V2 projection failed: '+b['failure'])
         require(new['complete_audit_failure']=='','V2 final consumer audit failed: '+new['complete_audit_failure'])
         require(new['non_k_change']==new['essential_k_change']==0 and new['shared_cg_jump']<1e-12,'invariance/continuity changed')
@@ -43,11 +43,13 @@ def main():
         # The exact old witness must be in the declared family, not an ad hoc cut.
         witness=old['complete_audit_context']['chart']
         locations=new['scalar_domain']['observations']
-        require(any(v['block']==2 and max(abs(x-y) for x,y in zip(v['coordinate'],witness))<2e-7 for v in locations),
+        require(any(v['block']==2 and abs(v['coordinate'][0]-witness[0])<1e-12 for v in locations),
             'missing the old normalization-ray family')
+        require(new['witness_values'][0]['corrected']>=0,'old physical witness remains negative')
         summary['cases'][name]=dict(legacy_failure=old['complete_audit_failure'],legacy_witness=old['complete_audit_context'],
             raw_sha256=state_hash(packet['raw']),legacy_corrected_sha256=state_hash(packet['corrected']),
             revised_corrected_sha256=state_hash(new['corrected']),bound=b,complete_audit_passed=True,
+            pre_k_inventory=new['pre_k_inventory'],retained_physical_witness=new['witness_values'],
             non_k_change=new['non_k_change'],essential_k_change=new['essential_k_change'],shared_cg_jump=new['shared_cg_jump'])
         save()
     s=primary['state'];t=primary['time']

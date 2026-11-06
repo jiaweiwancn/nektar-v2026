@@ -10,6 +10,7 @@
 namespace Nektar
 {
 using namespace SolverUtils;
+using RANSWallAlgebra::Require;
 namespace
 {
 double MinimumEigenvalue(RANSTensor a)
@@ -54,6 +55,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
         if(!owned && m_comm->GetRank()!=0)return;
         constitutive=constitutive || constitutiveReconstruction;
         auto &r=result[name];if(r.empty())r={0,sentinel,sentinel,sentinel,sentinel,0};
+        if(m_assertKCoverage)Require(m_coveredKLocations.count(v.coordinate),"unprotected constitutive k evaluation: audit sample");
         ++r[0];const double k=v.Value(s,offset[K()]);r[1]=std::min(r[1],k);
         const double epsilon=inner?(constitutive?DependentEpsilon(s,v.coordinate,time,data):sentinel):
             Point(Epsilon(),v.coordinate,std::abs(v.coordinate[2]-m_parameters.geometry.height)<1e-12?1:0).Value(s,offset[Epsilon()]);
