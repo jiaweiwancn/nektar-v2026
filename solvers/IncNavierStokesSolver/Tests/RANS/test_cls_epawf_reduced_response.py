@@ -72,6 +72,13 @@ def check(directory):
     require(all(0 < r["next_radius"] <= maximum_radius*(1+1e-12)
                 for r in records if r["event"] == "radius_agreement"),
             "radius adaptation exceeds its configured cap")
+    radius_retries = [r for r in records if r["event"] == "radius_query_retry"]
+    require(all(0 <= r["failed_positive_queries"] <= 14 and
+                (r["unconstrained_available"] or r["initial_failure"]) and
+                (not r["solved"] or not r["failure"] and r["primal"] <= 1e-8 and
+                 r["displacement"] <= r["radius"]*(1+1e-12))
+                for r in radius_retries),
+            "a radius-query retry accepted an unsolved or unbounded model")
     require(all(d["orthogonal_probes"] <= d["basis_dimension"] and
                 (d["orthogonal_probes"] != d["basis_dimension"] or
                  d["maximum_column_correlation"] < 1e-10)
@@ -194,6 +201,7 @@ def check(directory):
                   source_refined_direction_checks=refined_checks)
     result["response_preconditioners"] = prepared
     result["source_linearization_anchors"] = anchors
+    result["radius_query_retries"] = radius_retries
     write_json(directory / "reduced-checks.json", result)
 
 

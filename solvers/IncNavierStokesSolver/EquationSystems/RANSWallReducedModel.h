@@ -564,7 +564,9 @@ struct RadiusResult
     int augmentedFaceSolves = 0, augmentedFaceFallbacks = 0;
     int ballRedundantCuts = 0;
     int warmFaceSolves = 0, warmFaceFallbacks = 0;
-    std::string refinementFailure;
+    bool unconstrainedAvailable = false;
+    int failedPositiveQueries = 0;
+    std::string unconstrainedFailure, refinementFailure;
 };
 
 // Solve the linear-cut model with ||V z|| <= radius, rather than scaling an
@@ -720,9 +722,17 @@ RadiusResult SolveRadiusQuadratic(const Matrix &hessian, const Vector &gradient,
         return result;
     };
     auto current = solve(0.);
+    result.unconstrainedAvailable = current.quadratic.solved;
+    result.unconstrainedFailure = current.quadratic.failure;
     result.rawNorm = current.norm;
-    if (!current.quadratic.solved || current.norm <= radius)
+    if ((current.quadratic.solved && current.norm <= radius) ||
+        current.quadratic.failure == "quadratic_infeasible_start")
         return finish(std::move(current));
+    // A failed radius-free query need not prevent a well-conditioned solve
+    // inside the displacement ball. The native model can spend its budget
+    // resolving a minimizer far outside that ball. Try positive multipliers
+    // from the same feasible point; an unsolved query never supplies a norm
+    // or a lower bracket, and no partial iterate becomes a solved model.
     buildGram();
     double scale = 0.;
     for (int i = 0; i < columns.size(); ++i)
@@ -734,7 +744,12 @@ RadiusResult SolveRadiusQuadratic(const Matrix &hessian, const Vector &gradient,
     for (int bracket = 0; bracket < 14; ++bracket)
     {
         current = solve(upper);
-        if (!current.quadratic.solved) return finish(std::move(current));
+        if (!current.quadratic.solved)
+        {
+            ++result.failedPositiveQueries;
+            upper *= 10.;
+            continue;
+        }
         if (current.norm <= radius) { bracketed = true; break; }
         lower = upper;
         upper *= 10.;

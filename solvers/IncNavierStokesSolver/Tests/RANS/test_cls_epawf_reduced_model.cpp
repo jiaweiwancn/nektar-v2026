@@ -59,6 +59,24 @@ public:
 private:
     R::Matrix a;
 };
+class RejectWeakObjectiveFactor
+{
+public:
+    explicit RejectWeakObjectiveFactor(const R::Matrix &matrix) : a(matrix)
+    {
+        if (a[0][0] < .05) throw std::runtime_error("deliberate weak model rejection");
+    }
+    R::Vector Apply(R::Vector rhs) const { return Factor(a).Apply(std::move(rhs)); }
+private:
+    R::Matrix a;
+};
+class RejectEveryFactor
+{
+public:
+    explicit RejectEveryFactor(const R::Matrix &)
+    { throw std::runtime_error("deliberate numerical factor failure"); }
+    R::Vector Apply(R::Vector) const { throw std::logic_error("unreachable factor"); }
+};
 void Check(bool valid, const char *message)
 {
     if (!valid) throw std::runtime_error(message);
@@ -332,6 +350,26 @@ int main(int argc, char **argv)
           std::abs(largeBall.quadratic.solution[0]-2.5) <= .0025,
           "large field radius lost its known constrained minimizer");
     Close(largeBall.quadratic.solution[1],0.);
+    // A failed zero-multiplier objective is not a failed radius problem.
+    // This weak scalar model has the independent constrained answer x=1.
+    // The first two positive queries deliberately fail as well.
+    const auto recoveredBall = R::SolveRadiusQuadratic<RejectWeakObjectiveFactor>(
+        R::Matrix{{1e-12}}, R::Vector{-1.}, std::vector<Cut>{{{1.},2.}},
+        R::Vector{0.}, R::Matrix{{1.}}, 1.);
+    Check(recoveredBall.quadratic.solved && !recoveredBall.unconstrainedAvailable &&
+          !recoveredBall.unconstrainedFailure.empty() &&
+          recoveredBall.failedPositiveQueries==2 && recoveredBall.multiplier>0. &&
+          recoveredBall.norm<=1. && recoveredBall.norm>=.999 &&
+          recoveredBall.quadratic.primal<1e-9 && recoveredBall.quadratic.stationarity<1e-9,
+          "failed unbounded query prevented a valid bounded model solve");
+    Close(recoveredBall.quadratic.solution[0],1.);
+    const auto exhaustedBall = R::SolveRadiusQuadratic<RejectEveryFactor>(
+        R::Matrix{{1.}}, R::Vector{-1.}, std::vector<Cut>{},
+        R::Vector{0.}, R::Matrix{{1.}}, 1.);
+    Check(!exhaustedBall.quadratic.solved && !exhaustedBall.unconstrainedAvailable &&
+          exhaustedBall.failedPositiveQueries==14 &&
+          exhaustedBall.quadratic.failure=="radius_multiplier_bracket_exhausted",
+          "exhausted positive queries silently accepted a partial model");
     const auto obliqueBall = R::SolveRadiusQuadratic<Factor>(
         R::Matrix{{1.,0.},{0.,1.}}, R::Vector{-3.,-4.}, std::vector<Cut>{},
         R::Vector(2), R::Matrix{{1.,0.},{1.,1.}}, .2);

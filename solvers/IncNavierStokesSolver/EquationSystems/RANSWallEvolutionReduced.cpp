@@ -1443,6 +1443,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         int maximumBallRedundantCuts = 0;
         int warmFaceSolves=0,warmFaceFallbacks=0;
         double radiusMultiplier = 0., rawDisplacement = 0., radiusComplementarity = 0.;
+        bool unconstrainedAvailable = false;
         std::string radiusRefinementFailure;
         WallMatrix solvedHessian = hessian, kColumns;
         for (const auto &column : columns) kColumns.push_back(column.k);
@@ -1450,6 +1451,18 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         auto solveQP = [&]() {
             auto bounded = RANSWallReduced::SolveRadiusQuadratic<Factor>(
                 hessian, gradient, cuts, solution, kColumns, radius, 500);
+            if (!bounded.unconstrainedAvailable || bounded.failedPositiveQueries)
+                emit("radius_query_retry", {{"purpose",J::Quote("main_direction")},
+                    {"initial_failure",J::Quote(bounded.unconstrainedFailure)},
+                    {"unconstrained_available",J::Boolean(bounded.unconstrainedAvailable)},
+                    {"failed_positive_queries",J::Number(bounded.failedPositiveQueries)},
+                    {"solved",J::Boolean(bounded.quadratic.solved)},
+                    {"failure",J::Quote(bounded.quadratic.failure)},
+                    {"radius",J::Number(radius)}, {"displacement",J::Number(bounded.norm)},
+                    {"multiplier",J::Number(bounded.multiplier)},
+                    {"primal",J::Number(bounded.quadratic.primal)},
+                    {"stationarity",J::Number(bounded.quadratic.stationarity)},
+                    {"scope",J::Quote("small linear-cut model only; actual trials still converge H")} });
             qpSteps += bounded.steps;
             radiusSolves += bounded.solves;
             augmentedFaceSolves += bounded.augmentedFaceSolves;
@@ -1459,6 +1472,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             warmFaceFallbacks+=bounded.warmFaceFallbacks;
             radiusMultiplier = bounded.multiplier;
             rawDisplacement = bounded.rawNorm;
+            unconstrainedAvailable = bounded.unconstrainedAvailable;
             radiusComplementarity = bounded.complementarity;
             radiusRefinementFailure = bounded.refinementFailure;
             solvedHessian = std::move(bounded.hessian);
@@ -1708,6 +1722,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
               {"radius_complementarity", J::Number(radiusComplementarity)},
               {"radius_refinement_failure", J::Quote(radiusRefinementFailure)},
               {"unconstrained_displacement", J::Number(rawDisplacement)},
+              {"unconstrained_available", J::Boolean(unconstrainedAvailable)},
               {"redundant_rows", J::Number(quadratic.redundantRows)},
               {"qp_failure", J::Quote(quadratic.failure)},
               {"unscaled_affine_kkt", J::Numbers(Vector{quadratic.primal,
@@ -1973,6 +1988,18 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                         {
                             refined=RANSWallReduced::SolveRadiusQuadratic<Factor>(
                                 nextH,nextG,cuts,z,kColumns,radius,500);
+                            if (!refined.unconstrainedAvailable || refined.failedPositiveQueries)
+                                emit("radius_query_retry", {{"purpose",J::Quote("source_refinement")},
+                                    {"initial_failure",J::Quote(refined.unconstrainedFailure)},
+                                    {"unconstrained_available",J::Boolean(refined.unconstrainedAvailable)},
+                                    {"failed_positive_queries",J::Number(refined.failedPositiveQueries)},
+                                    {"solved",J::Boolean(refined.quadratic.solved)},
+                                    {"failure",J::Quote(refined.quadratic.failure)},
+                                    {"radius",J::Number(radius)}, {"displacement",J::Number(refined.norm)},
+                                    {"multiplier",J::Number(refined.multiplier)},
+                                    {"primal",J::Number(refined.quadratic.primal)},
+                                    {"stationarity",J::Number(refined.quadratic.stationarity)},
+                                    {"scope",J::Quote("source surrogate model only; actual trials still converge H")} });
                         }
                         catch (const std::runtime_error &e)
                         {
