@@ -434,6 +434,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         {"adaptive_qualified_response_space", J::Boolean(m_reducedAdaptiveSpace)},
         {"nonlinear_destruction_ray", J::Boolean(m_reducedSourceRay)},
         {"nonlinear_destruction_refinements", J::Number(m_reducedSourceRefinements)},
+        {"model_face_solver", J::Quote("Euclidean null space through160 variables; checked augmented orthonormal-face solve with null-space fallback above160")},
         {"qualification_correction_budget", J::Number(m_reducedConstraintSecant ? 6 : 3)},
         {"continuation_algebraic_diagnostic", J::Boolean(continuationDiagnostic)},
         {"qualification_policy", J::Quote(continuationDiagnostic
@@ -1265,6 +1266,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         bool qpOK   = false;
         bool groundModelOK = false;
         int qpSteps = 0, groundAdded = 0, radiusSolves = 0;
+        int augmentedFaceSolves = 0, augmentedFaceFallbacks = 0;
         double radiusMultiplier = 0., rawDisplacement = 0., radiusComplementarity = 0.;
         std::string radiusRefinementFailure;
         WallMatrix solvedHessian = hessian, kColumns;
@@ -1275,6 +1277,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 hessian, gradient, cuts, solution, kColumns, radius, 500);
             qpSteps += bounded.steps;
             radiusSolves += bounded.solves;
+            augmentedFaceSolves += bounded.augmentedFaceSolves;
+            augmentedFaceFallbacks += bounded.augmentedFaceFallbacks;
             radiusMultiplier = bounded.multiplier;
             rawDisplacement = bounded.rawNorm;
             radiusComplementarity = bounded.complementarity;
@@ -1505,6 +1509,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
               {"qp_solved", J::Boolean(qpOK)},
               {"qp_steps", J::Number(qpSteps)},
               {"radius_model_solves", J::Number(radiusSolves)},
+              {"augmented_face_solves", J::Number(augmentedFaceSolves)},
+              {"augmented_face_fallbacks", J::Number(augmentedFaceFallbacks)},
               {"radius_multiplier", J::Number(radiusMultiplier)},
               {"radius_complementarity", J::Number(radiusComplementarity)},
               {"radius_refinement_failure", J::Quote(radiusRefinementFailure)},
@@ -1785,6 +1791,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                             {"failure",J::Quote(refined.quadratic.failure)},
                             {"dimension",J::Number(n)},{"available_derivatives",J::Number(available)},
                             {"two_scale_error",J::Number(error)},
+                            {"augmented_face_solves",J::Number(refined.augmentedFaceSolves)},
+                            {"augmented_face_fallbacks",J::Number(refined.augmentedFaceFallbacks)},
                             {"before_norm",J::Number(dualNorm(model))},
                             {"predicted_norm",J::Number(chosenNorm)},
                             {"fraction",J::Number(chosenFraction)},

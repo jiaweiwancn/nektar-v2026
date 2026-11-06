@@ -46,6 +46,7 @@ struct QuadraticResult
     Vector solution, multipliers;
     std::vector<int> active;
     int steps = 0, redundantRows = 0;
+    int augmentedFaceSolves = 0, augmentedFaceFallbacks = 0;
     double primal = 0., stationarity = 0., complementarity = 0.;
     std::string failure;
 };
@@ -254,47 +255,113 @@ QuadraticResult SolveQuadratic(const Matrix &hessian, const Vector &gradient,
                 direction = objective.Apply(g);
             else
             {
-                std::vector<Vector> null;
-                for (int axis = 0; axis < n; ++axis)
+                bool augmented = false;
+                if (n > 160)
                 {
-                    Vector v(n); v[axis] = 1.;
-                    for (int pass = 0; pass < 2; ++pass)
+                    // The orthonormal active face also defines a small saddle
+                    // problem in response coordinates. This avoids rebuilding
+                    // the complete null basis at every large-model QP step.
+                    // The governing fields are not part of this matrix.
+                    try
                     {
-                        for (const auto &q : face)
+                        const int size = n + face.size();
+                        double scale = 1.;
+                        for (int i = 0; i < n; ++i)
+                            scale = std::max(scale, std::sqrt(std::abs(hessian[i][i])));
+                        Matrix saddle(size, Vector(size));
+                        Vector rhs(size);
+                        for (int i = 0; i < n; ++i)
                         {
-                            const double c = Dot(v, q);
-                            for (int j = 0; j < n; ++j) v[j] -= c * q[j];
+                            std::copy(hessian[i].begin(), hessian[i].end(), saddle[i].begin());
+                            rhs[i] = g[i];
+                            for (int j = 0; j < face.size(); ++j)
+                                saddle[i][n+j] = saddle[n+j][i] = scale * face[j][i];
                         }
-                        for (const auto &q : null)
+                        const Factor factor(saddle);
+                        auto answer = factor.Apply(rhs);
+                        for (int refine = 0; refine < 2; ++refine)
                         {
-                            const double c = Dot(v, q);
-                            for (int j = 0; j < n; ++j) v[j] -= c * q[j];
+                            auto residual = rhs;
+                            for (int i = 0; i < size; ++i)
+                                residual[i] -= Dot(saddle[i], answer);
+                            const auto correction = factor.Apply(residual);
+                            for (int i = 0; i < size; ++i) answer[i] += correction[i];
                         }
+                        std::copy(answer.begin(), answer.begin()+n, direction.begin());
+                        for (int pass = 0; pass < 2; ++pass)
+                            for (const auto &q : face)
+                            {
+                                const double c = Dot(direction, q);
+                                for (int i = 0; i < n; ++i) direction[i] -= c*q[i];
+                            }
+                        Vector defect(n), hd(n);
+                        for (int i = 0; i < n; ++i)
+                        {
+                            hd[i] = Dot(hessian[i], direction);
+                            defect[i] = g[i] - hd[i];
+                        }
+                        for (int pass = 0; pass < 2; ++pass)
+                            for (const auto &q : face)
+                            {
+                                const double c = Dot(defect, q);
+                                for (int i = 0; i < n; ++i) defect[i] -= c*q[i];
+                            }
+                        if (!std::isfinite(Length(defect)) ||
+                            Length(defect) > 1e-10 * std::max({1.,Length(g),Length(hd)}))
+                            throw std::runtime_error("inaccurate augmented face solve");
+                        ++result.augmentedFaceSolves;
+                        augmented = true;
                     }
-                    const double length = Length(v);
-                    if (length > 1e-8)
+                    catch (const std::runtime_error &)
                     {
-                        for (double &x : v) x /= length;
-                        null.push_back(std::move(v));
+                        ++result.augmentedFaceFallbacks;
+                        std::fill(direction.begin(), direction.end(), 0.);
                     }
                 }
-                if (null.size() + active.size() != gradient.size())
-                    return finish("quadratic_null_rank_loss");
-                if (!null.empty())
+                if (!augmented)
                 {
-                    Matrix reduced(null.size(), Vector(null.size()));
-                    Vector rhs(null.size());
-                    for (int i = 0; i < null.size(); ++i)
+                    std::vector<Vector> null;
+                    for (int axis = 0; axis < n; ++axis)
                     {
-                        rhs[i] = Dot(null[i], g);
-                        Vector hv(n);
-                        for (int k = 0; k < n; ++k) hv[k] = Dot(hessian[k], null[i]);
-                        for (int j = 0; j < null.size(); ++j)
-                            reduced[i][j] = Dot(null[j], hv);
+                        Vector v(n); v[axis] = 1.;
+                        for (int pass = 0; pass < 2; ++pass)
+                        {
+                            for (const auto &q : face)
+                            {
+                                const double c = Dot(v, q);
+                                for (int j = 0; j < n; ++j) v[j] -= c * q[j];
+                            }
+                            for (const auto &q : null)
+                            {
+                                const double c = Dot(v, q);
+                                for (int j = 0; j < n; ++j) v[j] -= c * q[j];
+                            }
+                        }
+                        const double length = Length(v);
+                        if (length > 1e-8)
+                        {
+                            for (double &x : v) x /= length;
+                            null.push_back(std::move(v));
+                        }
                     }
-                    const auto z = Factor(reduced).Apply(rhs);
-                    for (int i = 0; i < null.size(); ++i)
-                        for (int j = 0; j < n; ++j) direction[j] += z[i] * null[i][j];
+                    if (null.size() + active.size() != gradient.size())
+                        return finish("quadratic_null_rank_loss");
+                    if (!null.empty())
+                    {
+                        Matrix reduced(null.size(), Vector(null.size()));
+                        Vector rhs(null.size());
+                        for (int i = 0; i < null.size(); ++i)
+                        {
+                            rhs[i] = Dot(null[i], g);
+                            Vector hv(n);
+                            for (int k = 0; k < n; ++k) hv[k] = Dot(hessian[k], null[i]);
+                            for (int j = 0; j < null.size(); ++j)
+                                reduced[i][j] = Dot(null[j], hv);
+                        }
+                        const auto z = Factor(reduced).Apply(rhs);
+                        for (int i = 0; i < null.size(); ++i)
+                            for (int j = 0; j < n; ++j) direction[j] += z[i] * null[i][j];
+                    }
                 }
                 Vector stationarity(n), rhs(active.size());
                 for (int i = 0; i < n; ++i)
@@ -389,6 +456,7 @@ struct RadiusResult
     Matrix hessian;
     double multiplier = 0., rawNorm = 0., norm = 0., complementarity = 0.;
     int solves = 0, steps = 0;
+    int augmentedFaceSolves = 0, augmentedFaceFallbacks = 0;
     std::string refinementFailure;
 };
 
@@ -425,6 +493,8 @@ RadiusResult SolveRadiusQuadratic(const Matrix &hessian, const Vector &gradient,
         t.quadratic = SolveQuadratic<Factor>(t.hessian, gradient, cuts, initial, maximumSteps);
         ++result.solves;
         result.steps += t.quadratic.steps;
+        result.augmentedFaceSolves += t.quadratic.augmentedFaceSolves;
+        result.augmentedFaceFallbacks += t.quadratic.augmentedFaceFallbacks;
         if (t.quadratic.solved)
         {
             auto coefficients = t.quadratic.solution;

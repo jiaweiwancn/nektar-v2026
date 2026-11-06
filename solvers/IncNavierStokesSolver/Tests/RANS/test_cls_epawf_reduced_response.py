@@ -72,6 +72,9 @@ def check(directory):
                 d["radius_complementarity"] >= 0. for d in directions
                 if "radius_model_solves" in d and d["qp_solved"]),
             "invalid radius-constrained model status")
+    require(all(d["augmented_face_solves"] >= 0 and d["augmented_face_fallbacks"] >= 0
+                for d in directions if "augmented_face_solves" in d),
+            "invalid response-coordinate face-solve accounting")
     for direction in directions:
         for name in direction["basis_names"]:
             matching = [c for c in checks if c["name"] == name and

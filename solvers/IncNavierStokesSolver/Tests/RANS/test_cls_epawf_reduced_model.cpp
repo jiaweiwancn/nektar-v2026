@@ -48,6 +48,17 @@ public:
 private:
     R::Matrix a;
 };
+class RejectAugmentedFactor
+{
+public:
+    explicit RejectAugmentedFactor(const R::Matrix &matrix) : a(matrix)
+    {
+        if (a.size() > 192) throw std::runtime_error("deliberate saddle factor failure");
+    }
+    R::Vector Apply(R::Vector rhs) const { return Factor(a).Apply(std::move(rhs)); }
+private:
+    R::Matrix a;
+};
 void Check(bool valid, const char *message)
 {
     if (!valid) throw std::runtime_error(message);
@@ -119,6 +130,8 @@ int main(int argc, char **argv)
                   << ",\"primal\":" << result.primal << ",\"stationarity\":" << result.stationarity
                   << ",\"complementarity\":" << result.complementarity << ",\"redundant_rows\":"
                   << result.redundantRows << ",\"diagnostic_radius\":" << replayRadius
+                  << ",\"augmented_face_solves\":" << result.augmentedFaceSolves
+                  << ",\"augmented_face_fallbacks\":" << result.augmentedFaceFallbacks
                   << ",\"radius_multiplier\":" << replayMultiplier
                   << ",\"scope\":\"affine model replay only; not nonlinear stationarity or M8 convergence\",\"solution\":[";
         for (int i = 0; i < n; ++i) std::cout << (i?",":"") << result.solution[i];
@@ -318,6 +331,25 @@ int main(int argc, char **argv)
     const auto beforeSmall=response;
     Check(!R::UpdateSecantActions(response,{{1.}},{1e-9},{1e-8},1e-6) && response==beforeSmall,
           "a below-signal secant changed the response model");
+    // A closed-form large model exercises the response-coordinate saddle
+    // path and its numerical-failure fallback with two independent bounds.
+    R::Matrix largeH(192,R::Vector(192));
+    R::Vector largeG(192), upperCut(192), lowerCut(192);
+    for (int i=0;i<192;++i) largeH[i][i]=i+1.;
+    largeG[0]=-2.; largeG[1]=3.; upperCut[0]=1.; lowerCut[1]=-1.;
+    auto dependent=upperCut; dependent[2]=1e-14;
+    const std::vector<Cut> largeCuts{{upperCut,.25},{lowerCut,.5},{dependent,.25}};
+    const auto large=R::SolveQuadratic<Factor>(largeH,largeG,largeCuts,R::Vector(192));
+    Check(large.solved && large.augmentedFaceSolves>0 && large.augmentedFaceFallbacks==0 &&
+          large.primal<1e-10 && large.stationarity<1e-8 && large.complementarity<1e-8,
+          "large orthonormal-face saddle model failed");
+    Close(large.solution[0],.25); Close(large.solution[1],-.5);
+    for (int i=2;i<192;++i) Close(large.solution[i],0.);
+    const auto fallback=R::SolveQuadratic<RejectAugmentedFactor>(
+        largeH,largeG,largeCuts,R::Vector(192));
+    Check(fallback.solved && fallback.augmentedFaceFallbacks>0 && fallback.augmentedFaceSolves==0,
+          "large face factor failure did not use the original null-space solve");
+    for (int i=0;i<192;++i) Close(fallback.solution[i],large.solution[i]);
     const auto infeasible = R::SolveQuadratic<Factor>(
         R::Matrix{{1.}}, R::Vector{0.}, std::vector<Cut>{{{1.},0.}}, R::Vector{1.});
     Check(!infeasible.solved && infeasible.failure == "quadratic_infeasible_start",
