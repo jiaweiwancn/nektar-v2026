@@ -104,7 +104,7 @@ std::string RANSWallEvolutionPatch::PimpleContactDiagnostic(const Vector &s,doub
     {
         const RANSWallCoordinate p{x,0,z};Vector values;
         for(int b=0;b<=K();++b)values.push_back(Point(b,p).Value(s,offset[b]));
-        if(z>=m_parameters.geometry.height)values.push_back(Point(Epsilon(),p,1).Value(s,offset[Epsilon()]));
+        if(z>=m_parameters.geometry.height)values.push_back(Point(Epsilon(),p,z==m_parameters.geometry.height?1:0).Value(s,offset[Epsilon()]));
         profiles.push_back(J::Object({{"coordinate",J::Numbers(p)},{"u_v_k_outer_epsilon",J::Numbers(values)}}));
     }
     auto flux=[&](double height)
