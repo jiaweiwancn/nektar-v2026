@@ -350,6 +350,35 @@ int main(int argc, char **argv)
     Check(fallback.solved && fallback.augmentedFaceFallbacks>0 && fallback.augmentedFaceSolves==0,
           "large face factor failure did not use the original null-space solve");
     for (int i=0;i<192;++i) Close(fallback.solution[i],large.solution[i]);
+    R::Matrix largeBallH(192,R::Vector(192)), largeBallV=largeBallH;
+    R::Vector largeBallG(192), far(192), near(192);
+    for (int i=0;i<192;++i) largeBallH[i][i]=largeBallV[i][i]=1.;
+    largeBallH[1][1]=100.;
+    largeBallG[0]=-271.3; largeBallG[1]=-1000.*std::sqrt(.91);
+    far[1]=1.; near[0]=1.;
+    std::vector<Cut> manyCuts(5000,Cut{far,5.});
+    manyCuts.push_back({near,.3});
+    const auto pruned=R::SolveRadiusQuadratic<Factor>(
+        largeBallH,largeBallG,manyCuts,R::Vector(192),largeBallV,1.);
+    Check(pruned.quadratic.solved && pruned.ballRedundantCuts==5000 &&
+          pruned.norm<=1. && pruned.norm>=.999 &&
+          pruned.quadratic.active==std::vector<int>{5000},
+          "ball-inactive cuts or original active-row indices differ");
+    Close(pruned.quadratic.solution[0],.3);
+    Check(std::abs(pruned.quadratic.solution[1]-std::sqrt(.91))<.002,
+          "pruned ball model missed its closed-form boundary solution");
+    // A nearly cancelling field basis allows large coefficients inside the
+    // physical ball. Its far coefficient cut must remain in the model.
+    largeBallV[1][0]=1.; largeBallV[1][1]=1e-3;
+    largeBallH[1][1]=1.; largeBallG.assign(192,0.);
+    largeBallG[0]=10.; largeBallG[1]=-10.;
+    const auto unpruned=R::SolveRadiusQuadratic<Factor>(
+        largeBallH,largeBallG,manyCuts,R::Vector(192),largeBallV,1.);
+    Check(unpruned.quadratic.solved && unpruned.ballRedundantCuts==0 && unpruned.norm<=1.,
+          "ill-conditioned field geometry lost a necessary coefficient cut");
+    Close(unpruned.quadratic.solution[1],5.);
+    Check(std::abs(unpruned.quadratic.solution[0]+6.)<.002,
+          "oblique field radius was confused with a coefficient radius");
     const auto infeasible = R::SolveQuadratic<Factor>(
         R::Matrix{{1.}}, R::Vector{0.}, std::vector<Cut>{{{1.},0.}}, R::Vector{1.});
     Check(!infeasible.solved && infeasible.failure == "quadratic_infeasible_start",

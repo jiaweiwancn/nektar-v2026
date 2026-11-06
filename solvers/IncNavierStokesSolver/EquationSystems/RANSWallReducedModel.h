@@ -463,6 +463,7 @@ struct RadiusResult
     double multiplier = 0., rawNorm = 0., norm = 0., complementarity = 0.;
     int solves = 0, steps = 0;
     int augmentedFaceSolves = 0, augmentedFaceFallbacks = 0;
+    int ballRedundantCuts = 0;
     std::string refinementFailure;
 };
 
@@ -488,6 +489,55 @@ RadiusResult SolveRadiusQuadratic(const Matrix &hessian, const Vector &gradient,
         double multiplier = 0., norm = 0.;
     };
     Matrix gram;
+    auto buildGram = [&]() {
+        if (!gram.empty()) return;
+        gram.assign(columns.size(), Vector(columns.size()));
+        for (int i = 0; i < columns.size(); ++i)
+            for (int j = 0; j < columns.size(); ++j)
+                gram[i][j] = Dot(columns[i], columns[j]);
+    };
+    // A conservative field-Gram bound certifies cuts that cannot bind
+    // anywhere in this displacement ball. Keep slack-variable models intact.
+    // Recheck every original cut at the final inside-ball solution below.
+    std::vector<Cut> filtered;
+    std::vector<int> originalIds;
+    const std::vector<Cut> *modelCuts = &cuts;
+    if (columns.size() > 160 && columns.size() == gradient.size() && cuts.size() > 4096)
+    {
+        buildGram();
+        double lower = std::numeric_limits<double>::max(), upper = 0.;
+        for (int i = 0; i < gram.size(); ++i)
+        {
+            long double off = 0.;
+            for (int j = 0; j < gram.size(); ++j)
+                if (i != j) off += std::abs(gram[i][j]);
+            lower = std::min(lower, gram[i][i] - static_cast<double>(off));
+            upper = std::max(upper, gram[i][i] + static_cast<double>(off));
+        }
+        if (std::isfinite(upper) && lower > .5*upper)
+        {
+            const double safeLower = lower - 64.*(columns.size()+columns[0].size()+1)*
+                std::numeric_limits<double>::epsilon()*upper;
+            if (safeLower > 0.)
+            {
+                const double coefficientRadius = radius/std::sqrt(safeLower);
+                for (int i = 0; i < cuts.size(); ++i)
+                {
+                    if (cuts[i].a.size() != gradient.size())
+                        throw std::logic_error("invalid radius model cut shape");
+                    const double extent = coefficientRadius*Length(cuts[i].a);
+                    if (cuts[i].b > extent + 1e-10*std::max({1.,std::abs(cuts[i].b),extent}))
+                        ++result.ballRedundantCuts;
+                    else
+                    {
+                        filtered.push_back(cuts[i]);
+                        originalIds.push_back(i);
+                    }
+                }
+                if (result.ballRedundantCuts) modelCuts = &filtered;
+            }
+        }
+    }
     auto solve = [&](double multiplier) {
         Trial t;
         t.multiplier = multiplier;
@@ -496,7 +546,7 @@ RadiusResult SolveRadiusQuadratic(const Matrix &hessian, const Vector &gradient,
             for (int i = 0; i < columns.size(); ++i)
                 for (int j = 0; j < columns.size(); ++j)
                     t.hessian[i][j] += multiplier * gram[i][j];
-        t.quadratic = SolveQuadratic<Factor>(t.hessian, gradient, cuts, initial, maximumSteps);
+        t.quadratic = SolveQuadratic<Factor>(t.hessian, gradient, *modelCuts, initial, maximumSteps);
         ++result.solves;
         result.steps += t.quadratic.steps;
         result.augmentedFaceSolves += t.quadratic.augmentedFaceSolves;
@@ -525,6 +575,21 @@ RadiusResult SolveRadiusQuadratic(const Matrix &hessian, const Vector &gradient,
         return t;
     };
     auto finish = [&](Trial t) {
+        if (modelCuts != &cuts)
+        {
+            for (int &id : t.quadratic.active) id = originalIds.at(id);
+            if (t.quadratic.solved && t.norm <= radius*(1.+1e-12))
+            {
+                for (const auto &cut : cuts)
+                    t.quadratic.primal = std::max(t.quadratic.primal,
+                        Dot(cut.a,t.quadratic.solution)-cut.b);
+                if (t.quadratic.primal > 1e-8)
+                {
+                    t.quadratic.solved = false;
+                    t.quadratic.failure = "radius_original_cut_defect";
+                }
+            }
+        }
         result.multiplier = t.multiplier;
         result.norm = t.norm;
         result.complementarity = t.multiplier * std::abs(t.norm*t.norm-radius*radius);
@@ -536,12 +601,10 @@ RadiusResult SolveRadiusQuadratic(const Matrix &hessian, const Vector &gradient,
     result.rawNorm = current.norm;
     if (!current.quadratic.solved || current.norm <= radius)
         return finish(std::move(current));
-    gram.assign(columns.size(), Vector(columns.size()));
+    buildGram();
     double scale = 0.;
     for (int i = 0; i < columns.size(); ++i)
     {
-        for (int j = 0; j < columns.size(); ++j)
-            gram[i][j] = Dot(columns[i], columns[j]);
         scale = std::max(scale, std::abs(hessian[i][i]) / std::max(1e-30, gram[i][i]));
     }
     double lower = 0., upper = std::max(1e-3, 1e-3 * scale);
