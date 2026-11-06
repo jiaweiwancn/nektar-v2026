@@ -146,7 +146,7 @@ TraceRates QuietTraceRate(const RANSWallEvolutionPatch &patch,const Vector &stat
     const auto baseline=field->Boundary([&](const RANSWallCoordinate &p){return derivative(p,true);},face);
     auto correction=field->Boundary([&](const RANSWallCoordinate &p){return derivative(p,false)-derivative(p,true);},face);
     const auto map=field->Field()->GetLocalToGlobalMap();
-    for(int e=0;e<field->Elements().size();++e)
+    if(!patch.UniformEPFlat())for(int e=0;e<field->Elements().size();++e)
     {
         const auto &element=field->Elements()[e];
         if(std::abs(element.lower[2]-H)>1e-11 || element.lower[0]<patch.TransitionDistances()[2]-1e-11)continue;
@@ -367,7 +367,7 @@ int main(int argc,char **argv)
         for(const auto &key:RANSWallResolutionSpatialTerms()){keys.push_back(J::Quote(key));}
         const auto &control=patch.TransitionControls();const auto distances=patch.TransitionDistances();
         const auto output=J::Object({{"schema","1"},{"scope",J::Quote("R3 fixed-state arithmetic/component/mass-contact diagnostic only; no solver, trajectory, field repair or root inference")},
-            {"dimension","2"},{"ranks","1"},{"mapped","false"},{"upstream_transition","true"},{"chi",J::Number(p.chi)},{"eta","0"},
+            {"dimension","2"},{"ranks","1"},{"mapped","false"},{"wall_policy",J::Quote(patch.WallPolicyName())},{"upstream_transition",J::Boolean(!patch.UniformEPFlat())},{"chi",J::Number(p.chi)},{"eta","0"},
             {"inner_stress_model",J::Quote(patch.InnerStressName())},{"model_variant",J::Quote(patch.VariantName())},
             {"robust_parameters",J::Numbers(patch.RobustParameters())},{"robust_reference_flow",J::Numbers(patch.RobustReferenceFlow())},
             {"robust_reference_normal",J::Numbers(patch.RobustReferenceNormal())},{"map_parameters",J::Numbers(MapParameters(patch.Mapping()))},

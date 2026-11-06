@@ -97,6 +97,7 @@ std::string RANSWallEvolutionPatch::SourceBalanceDiagnostic(const Vector &s,doub
                     RANSTensor g{},reference{};for(int a=0;a<m_dimension;++a)g[PhysicalAxis(a)]=Point(a,p).Gradient(s,offset[a]);
                     const auto ag=profile->Original().VelocityGradient(z,{profile->Reference().matchingVelocity,0},{0,0});
                     for(int a=0;a<3;++a)for(int b=0;b<3;++b)reference[a][b]=m_referenceFlow[a]*m_referenceNormal[b]*ag[0];
+                    Vector velocity;for(int a=0;a<m_dimension;++a)velocity.push_back(Point(a,p).Value(s,offset[a]));
                     const double nt=profile->Original().EddyViscosity(z);const auto actual=InnerStress(k,nt,g);
                     const auto linear=EvaluateRANSWallInnerStress(k,nt,g,RANSWallInnerStressModel::Linear);
                     const auto analyticalLinear=EvaluateRANSWallInnerStress(k,nt,reference,RANSWallInnerStressModel::Linear);
@@ -113,13 +114,14 @@ std::string RANSWallEvolutionPatch::SourceBalanceDiagnostic(const Vector &s,doub
                         {"local_k",J::Number(k)},{"sampled_K",J::Number(profile->K())},{"sample_height",J::Number(m_parameters.geometry.sampleHeight)},
                         {"z_epsilon",J::Number(ze)},{"c_length",J::Number(profile->Original().Parameters().cLength)},
                         {"molecular_nu",J::Number(m_parameters.geometry.molecularNu)},
-                        {"represented_gradient",J::Numbers(tensor(g))},{"analytical_gradient",J::Numbers(tensor(reference))},
+                        {"represented_velocity",J::Numbers(velocity)},{"represented_gradient",J::Numbers(tensor(g))},{"analytical_gradient",J::Numbers(tensor(reference))},
                         {"production",J::Number(actual.production)},{"linear_production_same_gradient",J::Number(linear.production)},
                         {"analytical_gradient_linear_production",J::Number(analyticalLinear.production)},
                         {"analytical_gradient_saturated_production",J::Number(analyticalSelected.production)},
                         {"reference_production",J::Number(p0)},{"epsilon_A",J::Number(ea)},{"D_pre",J::Number(dpre)},
                         {"D_pre_identity_defect",J::Number(dpre-((1-chi)*ea+chi*p0))},
                         {"limiter",J::Number(value.limiter)},{"B",J::Number(normal.b)},{"m",J::Number(normal.m)},{"lambda",J::Number(normal.lambda)},
+                        {"dependent_epsilon",J::Number(value.dissipation)},{"redistribution",J::Number(value.redistribution)},
                         {"D",J::Number(value.destruction)},{"D_over_k",J::Number(value.rate)},{"source",J::Number(actual.production-value.destruction)},
                         {"auxiliary_nu",J::Number(nt)},{"k_diffusivity",J::Number(m_parameters.geometry.molecularNu+nt/m_parameters.model.Parameters().sigmaK)},
                         {"saturation_active",J::Boolean(actual.active)},{"saturation_a_c",J::Numbers(Vector{actual.a,actual.c})},
@@ -169,9 +171,15 @@ std::string RANSWallEvolutionPatch::SourceBalanceDiagnostic(const Vector &s,doub
         catch(const std::exception &error){weak.push_back(J::Object({{"variant",J::Number(variant)},{"valid","false"},{"reason",J::Quote(error.what())},
             {"witness",m_solveInvalidContext.empty()?"null":m_solveInvalidContext}}));}
     }
+    const auto trace=DissipationTrace(s,time,data);std::vector<std::string> matching;
+    for(const auto &[id,baseline]:trace[0])matching.push_back(J::Object({{"global_row",J::Number(offset[Epsilon()]+id)},
+        {"retained",J::Number(s[offset[Epsilon()]+id])},{"baseline",J::Number(baseline)},
+        {"policy_correction",J::Number(trace[1].at(id))},{"refreshed_target",J::Number(baseline+trace[1].at(id))},
+        {"baseline_only_restriction",J::Boolean(m_baselineTraceIds.count(id))}}));
     Require(hash==RANSWallR3::Hash(s),"source readback modified selected coefficients");
     return J::Object({{"schema","1"},{"wall_policy",J::Quote(WallPolicyName())},{"time",J::Number(time)},
-        {"state_sha256",J::Quote(hash)},{"retained_state_unchanged","true"},{"production_governing_solves","0"},
+        {"state_sha256",J::Quote(hash)},{"matching_trace",J::List(matching)},
+        {"fixed_external_coefficients",J::Constraints(data.fixedBoundary)},{"retained_state_unchanged","true"},{"production_governing_solves","0"},
         {"normalization_evaluations",J::Number(normalizations)},{"diagnostic_mass_inverse_applications",J::Number(massApplications)},
         {"native_mass_solve_defect",J::Number(Maximum(rate.freeMassResidual))},
         {"component_load_sum_defect",J::Number(componentLoadDefect)},{"component_mass_rate_sum_defect",J::Number(componentRateDefect)},{"points",J::List(points)},
