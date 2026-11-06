@@ -564,6 +564,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         {"initial_restoration_weight", J::Number(m_reducedRestorationWeight)},
         {"response_krylov_budget", J::Number(m_reducedKrylov)},
         {"active_witness_selection", J::Quote("original_observation_order_per_family_and_region")},
+        {"previous_direction_priority", J::Quote("after_conditional_krylov_and_rate_seeds")},
         {"probe_basis", J::Quote("orthogonal field directions with feasible sign/size selection; inward fallback")},
         {"minimum_orthogonal_probe_step", J::Number(1e-10)},
         {"canonical_half_branch_check", J::Quote("always; optional verification cannot change column selection")},
@@ -777,6 +778,15 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         {
             emit("frozen_seed_failed", {{"failure", J::Quote(e.what())}});
         }
+        if (!previous.empty())
+        {
+            // Retain successful nonlinear field information before the large
+            // witness/free-mode pool can exhaust a finite response budget.
+            // Its current response still needs the same independent checks.
+            add("previous", previous);
+            emit("previous_direction_seed", {{"field_norm",J::Number(Length(previous))},
+                {"basis_budget",J::Number(basisBudget)}});
+        }
         Vector lift(dimension);
         const double left = lower[0], right = upper[0], length = right - left;
         const auto groundData = fields[K()]->Boundary(
@@ -925,7 +935,6 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 {"basis_budget", J::Number(basisBudget)},
                 {"ranking", J::Quote("absolute free-k mass-inverse residual")}});
         }
-        if (!previous.empty()) add("previous", previous);
         std::vector<Vector> orthogonal;
         std::vector<Column> columns;
         double maxActionError = 0.;
