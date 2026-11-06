@@ -8,6 +8,7 @@ the native reader. Detailed step packets are retained at selected contacts
 and failures; other accepted packets/matrices are hashed then discarded.
 """
 import argparse
+import fcntl
 import gzip
 import json
 import os
@@ -30,6 +31,78 @@ def atomic(path, value):
     with temporary.open('w') as f:
         json.dump(value, f, indent=2, allow_nan=False); f.write('\n'); f.flush(); os.fsync(f.fileno())
     os.replace(temporary, path)
+
+
+class CampaignLock:
+    """The native child inherits the same flock: an orphan keeps ownership."""
+    def __init__(self, output):
+        self.stream=(output/'.campaign.lock').open('a+')
+        try:fcntl.flock(self.stream,fcntl.LOCK_EX|fcntl.LOCK_NB)
+        except BlockingIOError:
+            self.stream.close()
+            raise RuntimeError('campaign lock held by a live driver or native child')
+    def close(self):
+        # Never LOCK_UN: a surviving child shares this open file description.
+        self.stream.close()
+
+
+def process_identity(pid):
+    root=Path('/proc')/str(int(pid))
+    try:
+        fields=(root/'stat').read_text().rsplit(')',1)[1].split()
+        if fields[0]=='Z':return None
+        return dict(pid=int(pid),start=fields[19],executable=str((root/'exe').resolve(strict=True)),
+                    cwd=str((root/'cwd').resolve(strict=True)))
+    except (FileNotFoundError,ProcessLookupError):return None
+
+
+def assert_native_stopped(progress):
+    expected=progress.get('native_identity')
+    if expected:
+        actual=process_identity(expected['pid'])
+        require(actual is None or actual!=expected,
+                'recorded native solver is still alive; replacement/reconciliation refused')
+    elif progress.get('native_pid'):
+        # Old progress lacks a start token. Do not guess that a live PID is
+        # safe to replace; retain it for explicit process/checkpoint inspection.
+        require(process_identity(progress['native_pid']) is None,
+                'legacy recorded native PID is alive; inspect identity before recovery')
+
+
+class StepLedger:
+    """One durable record per (global step, checkpoint SHA); idempotent replay."""
+    def __init__(self,path):
+        self.path=path;self.records={};lines=path.read_text().splitlines() if path.exists() else []
+        repair=False
+        for i,line in enumerate(lines):
+            try:record=json.loads(line)
+            except json.JSONDecodeError:
+                require(i==len(lines)-1,'corrupt interior step record');repair=True;break
+            step=record['global_step']
+            if step in self.records:
+                require(self.records[step]['checkpoint_sha256']==record['checkpoint_sha256'],
+                        'conflicting checkpoint hashes for one accepted step')
+                repair=True
+            else:self.records[step]=record
+        if repair:
+            temporary=path.with_suffix('.reconcile.tmp')
+            with temporary.open('w') as stream:
+                for r in self.records.values():stream.write(json.dumps(r,separators=(',',':'))+'\n')
+                stream.flush();os.fsync(stream.fileno())
+            os.replace(temporary,path)
+    def append(self,record):
+        step=record['global_step']
+        if step in self.records:
+            require(self.records[step]['checkpoint_sha256']==record['checkpoint_sha256'],
+                    'accepted-step identity conflict')
+            return False
+        with self.path.open('a') as stream:
+            stream.write(json.dumps(record,separators=(',',':'))+'\n');stream.flush();os.fsync(stream.fileno())
+        self.records[step]=record;return True
+    def budget(self,progress,through):
+        return progress.get('prefix_integral',0.)+sum(
+            r['attempt'].get('k_bound',{}).get('integral_total',0.)
+            for n,r in self.records.items() if progress.get('prefix_steps',0)<n<=through)
 
 
 def header(checkpoint, full=False):
@@ -73,19 +146,27 @@ def freeze(executable, output):
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--solver', type=Path, required=True)
-    p.add_argument('--checkpoint', type=Path, required=True)
-    p.add_argument('--prefix-report', type=Path, required=True)
+    p.add_argument('--checkpoint', type=Path)
+    p.add_argument('--prefix-report', type=Path)
+    p.add_argument('--from-h0',action='store_true')
+    p.add_argument('--inventory',choices=('LegacyV1','ConstitutiveV2'),default='LegacyV1')
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--targets', type=int, nargs='+', default=[32,160,800,1600,3200,8000])
     p.add_argument('--block-steps', type=int, default=16)
     p.add_argument('--timeout', type=float, default=7200)
     p.add_argument('--resume', action='store_true')
-    a = p.parse_args(); a.output = a.output.resolve(); a.checkpoint = a.checkpoint.resolve()
+    a = p.parse_args(); a.output = a.output.resolve()
+    a.checkpoint = a.checkpoint.resolve() if a.checkpoint else None
     require(1 <= a.block_steps <= 64 and a.timeout > 0, 'invalid block controls')
     os.environ.update(THREADS); os.environ['TMPDIR'] = str(a.output/'tmp')
+    if not a.resume:a.output.mkdir(parents=True,exist_ok=False)
+    lock=CampaignLock(a.output)
+    ledger=StepLedger(a.output/'steps.jsonl')
     if a.resume:
-        progress = load(a.output/'progress.json'); a.checkpoint = Path(progress['checkpoint'])
+        progress = load(a.output/'progress.json'); a.checkpoint = Path(progress['checkpoint']) if progress['checkpoint'] else None
         require(progress['status']!='numerically_rejected','numerical rejection is terminal; use a separately identified follow-up')
+        require(progress.get('inventory','LegacyV1')==a.inventory,'inventory differs from campaign')
+        assert_native_stopped(progress)
         old_stat=Path('/proc')/str(int(progress['pid']))/'stat'
         if old_stat.exists():
             stat=old_stat.read_text().split()
@@ -108,22 +189,30 @@ def main():
             require(state_hash(receipt['coupled_state'])==state_hash(packet['corrected']),'publication/candidate mismatch')
             records=[json.loads(x[len('EP-AWF PIMPLE '):]) for x in (segment/'solver.log').read_text().splitlines() if x.startswith('EP-AWF PIMPLE ')]
             attempt=next(x for x in records if abs(x['time']-receipt['time'])<1e-13)
-            with (a.output/'steps.jsonl').open('a') as f:
-                f.write(json.dumps(dict(global_step=step,time=receipt['time'],checkpoint=str(checkpoint),
-                    checkpoint_sha256=receipt['sha256'],attempt=attempt,recovered_publication=True))+'\n')
+            record=dict(global_step=step,time=receipt['time'],checkpoint=str(checkpoint),
+                checkpoint_sha256=receipt['sha256'],attempt=attempt,recovered_publication=True)
+            ledger.append(record)
             progress.update(accepted_steps=step,accepted_time=receipt['time'],checkpoint=str(checkpoint),
-                checkpoint_sha256=receipt['sha256'],cumulative_bound_integral=progress['cumulative_bound_integral']+packet['k_bound']['integral_total'])
+                checkpoint_sha256=receipt['sha256'],cumulative_bound_integral=ledger.budget(progress,step))
+        progress['cumulative_bound_integral']=ledger.budget(progress,progress['accepted_steps'])
     else:
-        a.output.mkdir(parents=True, exist_ok=False); (a.output/'tmp').mkdir()
+        (a.output/'tmp').mkdir()
         executable, pinned = freeze(a.solver.resolve(), a.output/'runtime')
-        prefix = load(a.prefix_report); info = header(a.checkpoint)
-        require(info['order'] == 1 and info['dt'] == .000625 and prefix['steps'] == info['steps'], 'incompatible primary restart')
-        require(prefix['k_bound_mode'] == 'MassProjection', 'wrong prefix mode')
-        integral = sum(v.get('k_bound',{}).get('integral_total',0.) for v in prefix['pimple_attempts'])
-        progress = dict(schema=1, status='starting', checkpoint=str(a.checkpoint), accepted_steps=info['steps'],
-            accepted_time=info['time'], dt=info['dt'], cumulative_bound_integral=integral,
-            prefix_report=str(a.prefix_report.resolve()), prefix_report_sha256=sha(a.prefix_report),
-            prefix_steps=info['steps'], prefix_integral=integral, requested_targets=a.targets, completed_targets=[], segments=[])
+        if a.from_h0:
+            require(a.checkpoint is None and a.prefix_report is None,'h0 is not checkpoint migration')
+            progress=dict(schema=2,status='starting',checkpoint=None,accepted_steps=0,accepted_time=0.,dt=.000625,
+                cumulative_bound_integral=0.,prefix_steps=0,prefix_integral=0.,inventory=a.inventory,
+                requested_targets=a.targets,completed_targets=[],segments=[])
+        else:
+            require(a.checkpoint and a.prefix_report,'restart needs real checkpoint and prefix report')
+            prefix = load(a.prefix_report); info = header(a.checkpoint)
+            require(info['order'] == 1 and info['dt'] == .000625 and prefix['steps'] == info['steps'], 'incompatible primary restart')
+            require(prefix['k_bound_mode'] == 'MassProjection', 'wrong prefix mode')
+            integral = sum(v.get('k_bound',{}).get('integral_total',0.) for v in prefix['pimple_attempts'])
+            progress = dict(schema=2, status='starting', checkpoint=str(a.checkpoint), accepted_steps=info['steps'],
+                accepted_time=info['time'], dt=info['dt'], cumulative_bound_integral=integral,inventory=a.inventory,
+                prefix_report=str(a.prefix_report.resolve()), prefix_report_sha256=sha(a.prefix_report),
+                prefix_steps=info['steps'], prefix_integral=integral, requested_targets=a.targets, completed_targets=[], segments=[])
     progress.update(pid=os.getpid(), host=socket.gethostname(), started_unix=time.time(),
                     process_start=Path('/proc/self/stat').read_text().split()[21], executable=str(executable),
                     executable_sha256=pinned['sha256'], source_revision=subprocess.check_output(['git','-C',str(Path(__file__).resolve().parents[4]),'rev-parse','HEAD'],text=True).strip())
@@ -148,13 +237,13 @@ def main():
                 suffix=1
                 while Path(str(directory)+f'-attempt{suffix}').exists(): suffix+=1
                 directory=Path(str(directory)+f'-attempt{suffix}')
-            xml = prepare(directory, .000625, end-start, True, restart=Path(progress['checkpoint']),
-                          checkpoint=True, k_bound='MassProjection', floor_relative=1e-8, snapshots=True)
+            xml = prepare(directory, .000625, end-start, True, restart=Path(progress['checkpoint']) if progress['checkpoint'] else None,
+                          checkpoint=True, k_bound='MassProjection', floor_relative=1e-8, snapshots=True,inventory=a.inventory)
             tree=ET.parse(xml).getroot(); set_parameter(tree,'IO_CheckSteps',1); write(tree,xml)
             command=[str(executable),'case.xml']; started=time.monotonic()
             child=subprocess.Popen(command,cwd=directory,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,
-                                   text=True,bufsize=1,env=os.environ.copy())
-            save(status='running',native_pid=child.pid,segment=str(directory),segment_target=end,next_target=stage,
+                                   text=True,bufsize=1,env=os.environ.copy(),pass_fds=(lock.stream.fileno(),))
+            save(status='running',native_pid=child.pid,native_identity=process_identity(child.pid),segment=str(directory),segment_target=end,next_target=stage,
                  segment_start_steps=start,command=command,xml_sha256=sha(xml),existing_worker_threads=count)
             lines=queue.Queue()
             def reader():
@@ -162,7 +251,7 @@ def main():
                 lines.put(None)
             threading.Thread(target=reader,daemon=True).start()
             pending=None; local=[]; infra=None
-            with (directory/'solver.log').open('w') as log, (a.output/'steps.jsonl').open('a') as metrics:
+            with (directory/'solver.log').open('w') as log:
                 while True:
                     if time.monotonic()-started>a.timeout:
                         infra='block_timeout';child.terminate();child.wait(timeout=30);break
@@ -188,10 +277,10 @@ def main():
                             bound=pending.get('k_bound',{}); amount=bound.get('integral_total',0.)
                             record=dict(global_step=step,time=receipt['time'],segment=str(directory),checkpoint=str(checkpoint),
                                 checkpoint_sha256=receipt['sha256'],attempt=pending)
-                            metrics.write(json.dumps(record,separators=(',',':'))+'\n');metrics.flush();os.fsync(metrics.fileno())
+                            ledger.append(record)
                             local.append(record)
                             save(accepted_steps=step,accepted_time=receipt['time'],checkpoint=str(checkpoint),
-                                 checkpoint_sha256=receipt['sha256'],cumulative_bound_integral=progress['cumulative_bound_integral']+amount)
+                                 checkpoint_sha256=receipt['sha256'],cumulative_bound_integral=ledger.budget(progress,step))
                             # Keep early contact/failure evidence and every
                             # 32nd step. Delete only *accepted* unselected packets.
                             packet=Path(pending['k_snapshot']) if pending.get('k_snapshot') else None
@@ -212,8 +301,7 @@ def main():
             if report_file.exists():
                 report=load(report_file);check_report(report,True)
                 require(report['steps']==progress['accepted_steps'], 'report/checkpoint count differs')
-                for i,audit in enumerate(report['state_audits'][1:]):
-                    local[i]['audit']=audit
+                for record,audit in zip(local,report['state_audits'][1:]):record['audit']=audit
                 with gzip.open(directory/'accepted-metrics.json.gz','wt') as f: json.dump(local,f,separators=(',',':'))
                 summary=dict(start_step=start,end_step=int(report['steps']),time=report['time'],requested_end_step=end,
                     seconds=time.monotonic()-started,exit_code=child.returncode,failure=report['failure'],
