@@ -195,6 +195,16 @@ def main():
             progress.update(accepted_steps=step,accepted_time=receipt['time'],checkpoint=str(checkpoint),
                 checkpoint_sha256=receipt['sha256'],cumulative_bound_integral=ledger.budget(progress,step))
         progress['cumulative_bound_integral']=ledger.budget(progress,progress['accepted_steps'])
+        # A driver can die after its child records a numerical failure but
+        # before the terminal progress replace. That is still not a retry.
+        orphan_report=segment/'case.evolution.json'
+        if orphan_report.exists():
+            report=load(orphan_report)
+            if report.get('failure'):
+                progress.update(status='numerically_rejected',failure=report['failure'],updated_unix=time.time())
+                atomic(a.output/'progress.json',progress)
+                raise ValueError('native report contains terminal numerical rejection; no replacement launched')
+
     else:
         (a.output/'tmp').mkdir()
         executable, pinned = freeze(a.solver.resolve(), a.output/'runtime')
@@ -208,7 +218,7 @@ def main():
             prefix = load(a.prefix_report); info = header(a.checkpoint)
             require(info['order'] == 1 and info['dt'] == .000625 and prefix['steps'] == info['steps'], 'incompatible primary restart')
             require(prefix['k_bound_mode'] == 'MassProjection', 'wrong prefix mode')
-            integral = sum(v.get('k_bound',{}).get('integral_total',0.) for v in prefix['pimple_attempts'])
+            integral = sum(v.get('k_bound',{}).get('integral_total',0.) for v in prefix['pimple_attempts'] if v['time']<=info['time']+1e-13)
             progress = dict(schema=2, status='starting', checkpoint=str(a.checkpoint), accepted_steps=info['steps'],
                 accepted_time=info['time'], dt=info['dt'], cumulative_bound_integral=integral,inventory=a.inventory,
                 prefix_report=str(a.prefix_report.resolve()), prefix_report_sha256=sha(a.prefix_report),
