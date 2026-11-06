@@ -48,8 +48,11 @@ def main():
     for v in rows:
         require(all(v[k]==1 for k in ('outer_sweeps','momentum_predictor_solves','pressure_system_solves','epsilon_transport_solves','k_transport_solves','bound_calls')),'changed schedule')
         require(v['additional_governing_equation_solves']==0,'additional governing solve')
-    initial=read_report(Path(records[1]['segment']))['accepted_states'][0];require(state_hash(initial)==H0,'initial h0 differs')
-    summary=dict(schema=1,status_at_readback=progress['status'],last_verified_step=cutoff,last_verified_time=records[cutoff]['time'],
+    first_report=read_report(Path(records[1]['segment']));initial=first_report['accepted_states'][0]
+    wall_policy=first_report.get('wall_policy','Upstream')
+    if wall_policy=='Upstream':require(state_hash(initial)==H0,'initial h0 differs')
+    else:require(wall_policy=='UniformEPFlat-v1','unknown initialized wall policy')
+    summary=dict(schema=1,wall_policy=wall_policy,actual_initial_sha256=state_hash(initial),status_at_readback=progress['status'],last_verified_step=cutoff,last_verified_time=records[cutoff]['time'],
         progress=progress,probe=identity(a.probe.resolve()),states={},windows=[],budgets=[],
         classification='unresolved evolution; T=.02 is only a first milestone, not a long-time assessment',
         ranks=1,threads=1,governing_solves={k:sum(v[k] for v in rows) for k in ('momentum_predictor_solves','pressure_system_solves','epsilon_transport_solves','k_transport_solves','additional_governing_equation_solves')})
