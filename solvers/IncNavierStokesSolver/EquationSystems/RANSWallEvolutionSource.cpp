@@ -20,6 +20,16 @@ std::string RANSWallEvolutionPatch::SourceBalanceDiagnostic(const Vector &s,doub
     auto resolution=ResidualResolutionComponents(s,s,0.,time,data,false);
     resolution.native["spatial_unmasked"]=Residual(s,s,0.,time,data,false,false);
     const auto rate=RANSWallResolutionMassRate(*this,resolution,K(),{1.6,0,0});
+    double componentLoadDefect=0.,componentRateDefect=0.;
+    for(int i=0;i<size[K()];++i)
+    {
+        double load=0.,sum=0.;
+        for(const auto &name:RANSWallResolutionSpatialTerms())load+=resolution.terms.at(name)[offset[K()]+i];
+        for(const auto &[name,value]:rate.componentRates)sum+=value[i];
+        componentLoadDefect=std::max(componentLoadDefect,std::abs(load-resolution.native.at("spatial_unmasked")[offset[K()]+i]));
+        componentRateDefect=std::max(componentRateDefect,std::abs(sum-rate.rate[i]));
+    }
+    Require(componentLoadDefect<1e-9 && componentRateDefect<1e-7,"source component/native sum mismatch");
     auto tensor=[](const RANSTensor &g){Vector v;for(const auto &row:g)for(double x:row)v.push_back(x);return v;};
     auto checkedNormalization=[&](const RANSWallCoordinate &p,const EquilibriumAWFProfiles &profile)
     {
@@ -89,6 +99,8 @@ std::string RANSWallEvolutionPatch::SourceBalanceDiagnostic(const Vector &s,doub
                     for(int a=0;a<3;++a)for(int b=0;b<3;++b)reference[a][b]=m_referenceFlow[a]*m_referenceNormal[b]*ag[0];
                     const double nt=profile->Original().EddyViscosity(z);const auto actual=InnerStress(k,nt,g);
                     const auto linear=EvaluateRANSWallInnerStress(k,nt,g,RANSWallInnerStressModel::Linear);
+                    const auto analyticalLinear=EvaluateRANSWallInnerStress(k,nt,reference,RANSWallInnerStressModel::Linear);
+                    const auto analyticalSelected=InnerStress(k,nt,reference);
                     const auto pre=profile->AtProduction(z,actual.production);const double dpre=pre.dissipation-pre.redistribution;
                     const double ea=profile->Original().OriginalDissipation(z),p0=profile->ReferenceProduction(z),chi=profile->Reference().weight;
                     const auto value=EvaluateRANSCappedDestructionPoint(k,profile->K(),pre.dissipation,dpre,normal.b,normal.m,m_destruction);
@@ -103,6 +115,8 @@ std::string RANSWallEvolutionPatch::SourceBalanceDiagnostic(const Vector &s,doub
                         {"molecular_nu",J::Number(m_parameters.geometry.molecularNu)},
                         {"represented_gradient",J::Numbers(tensor(g))},{"analytical_gradient",J::Numbers(tensor(reference))},
                         {"production",J::Number(actual.production)},{"linear_production_same_gradient",J::Number(linear.production)},
+                        {"analytical_gradient_linear_production",J::Number(analyticalLinear.production)},
+                        {"analytical_gradient_saturated_production",J::Number(analyticalSelected.production)},
                         {"reference_production",J::Number(p0)},{"epsilon_A",J::Number(ea)},{"D_pre",J::Number(dpre)},
                         {"D_pre_identity_defect",J::Number(dpre-((1-chi)*ea+chi*p0))},
                         {"limiter",J::Number(value.limiter)},{"B",J::Number(normal.b)},{"m",J::Number(normal.m)},{"lambda",J::Number(normal.lambda)},
@@ -159,7 +173,8 @@ std::string RANSWallEvolutionPatch::SourceBalanceDiagnostic(const Vector &s,doub
     return J::Object({{"schema","1"},{"wall_policy",J::Quote(WallPolicyName())},{"time",J::Number(time)},
         {"state_sha256",J::Quote(hash)},{"retained_state_unchanged","true"},{"production_governing_solves","0"},
         {"normalization_evaluations",J::Number(normalizations)},{"diagnostic_mass_inverse_applications",J::Number(massApplications)},
-        {"native_mass_solve_defect",J::Number(Maximum(rate.freeMassResidual))},{"points",J::List(points)},
+        {"native_mass_solve_defect",J::Number(Maximum(rate.freeMassResidual))},
+        {"component_load_sum_defect",J::Number(componentLoadDefect)},{"component_mass_rate_sum_defect",J::Number(componentRateDefect)},{"points",J::List(points)},
         {"ray_budgets",J::List(budgets)},{"fixed_native_quadrature_source_comparisons",J::List(weak)},
         {"scope",J::Quote("same retained fields/time; chi counterfactual source only, not a lifted coupled state or production step")}});
 }
