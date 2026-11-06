@@ -1,0 +1,60 @@
+{
+  "scope": "Original193721-cut radius-model replay; conservative cut filtering only, not M8 convergence or nonlinear stationarity",
+  "utc": "2026-11-06T11:57:52.925422+00:00",
+  "packet": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/fast-face-verified192/target/reduced-model-t0.0025000000000000001-f006292c518d-0-0.bin",
+  "packet_sha256": "448945ba6febcb633dcb93308876d3f8b0c4b1d1af73c935ca1dac8669001812",
+  "radius": 0.4,
+  "original_multiplier": 16.541849118280787,
+  "commands": [
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-d710404/RANSReducedModelChecks",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/fast-face-verified192/target/reduced-model-t0.0025000000000000001-f006292c518d-0-0.bin",
+        "--orthogonal-radius",
+        "0.4",
+        "16.541849118280787"
+      ],
+      "executable_sha256": "9dcc512e0e0428a44f2581922425c6e65ae41172a5429044e5f9f29830d19e29",
+      "exit_code": 0,
+      "seconds": 24.02521038299892,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/warm-face-radius-replay-d710404.json",
+      "log_sha256": "116585650dd0931a5fea2f8b8ae8f5a2270cc53b1c5d28dbf6482f154114f2c8"
+    },
+    {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-ce7e53a/RANSReducedModelChecks",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/fast-face-verified192/target/reduced-model-t0.0025000000000000001-f006292c518d-0-0.bin",
+        "--orthogonal-radius",
+        "0.4",
+        "16.541849118280787"
+      ],
+      "executable_sha256": "30c1dd6e169f755bc13b14138b06af2bc99733cb90fac79e89c1804a35f2a0d1",
+      "exit_code": 0,
+      "seconds": 20.8706189890072,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/warm-face-radius-replay-ce7e53a.json",
+      "log_sha256": "c491e8fb78fd73bd425e619859061624e822982cdf1613f1018d3857a6886064"
+    }
+  ],
+  "maximum_coefficient_difference": 4.3021142204224816e-16,
+  "replayed_multipliers": [
+    16.541849118280787,
+    16.541849118280787
+  ],
+  "warm_work": [
+    {},
+    {
+      "radius_total_steps": 774,
+      "radius_model_solves": 16,
+      "warm_face_solves": 14,
+      "warm_face_fallbacks": 1
+    }
+  ],
+  "primal": [
+    1.9648517398339598e-17,
+    2.1774623035507095e-17
+  ],
+  "affine_stationarity": [
+    2.5198381477214604e-12,
+    2.1628751404860535e-12
+  ]
+}

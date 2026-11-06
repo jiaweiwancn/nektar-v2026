@@ -1,6 +1,6 @@
 {
   "status": "native_development_in_progress_original_m8_unresolved",
-  "producing_code_commit": "b89f2bee561b08f6b4ba5476ac4e487be6e4d695",
+  "producing_code_commit": "90dd80152ef5a8b69e92e05b7048c60f782cc2b3",
   "native_m8": {
     "status": "Completed original-h0 18-update run fails original residual; complete qualification passes; larger native follow-ups in progress",
     "qualified_first_stage": false,
@@ -10,7 +10,7 @@
     "original_alpha": 400,
     "time_target": 0.0025,
     "original_tolerance": 2e-12,
-    "progress_utc": "2026-11-06T03:25:16.461399+00:00",
+    "progress_utc": "2026-11-06T12:54:34.170125+00:00",
     "original_start_completed_evidence": "native/completed-original-and-expanded-review.json",
     "original_start_result": {
       "numerical_updates": 18,
@@ -39,11 +39,17 @@
         "status": "prepared",
         "native_stage_completed": false
       }
-    }
+    },
+    "latest_completed_original_start_case": "source-refine-original-3step",
+    "running_original_start_case": "response-cache-original-3step",
+    "running_original_start_cases": [
+      "response-cache-original-3step",
+      "response-krylov64-original-3step"
+    ]
   },
   "checks": {
     "linux_native_pressure_verification": "0926974 bounds assertions and two-sweep bitwise On/Off passed; unchanged Picard translation unit through7715312",
-    "linux_focused_ctest": "6 pass on217e47d36.94s; ASan/UBSan known-answer large-face and deliberate-factor-fallback cases pass",
+    "linux_focused_ctest": "Six focused CTests pass90dd80139.67s, ce7e53a37.77s, c02f96538.48s, d71040437.48s; corresponding reduced-model ASan/UBSan pass; not M8 convergence",
     "linux_sanitized_reduced_model": "0633d23 known-answer/source-derivative unit passed ASan/UBSan; e65b0be expands only replay guard; actual120-response affine packet replay passed ASan/UBSan in31.87s (not original stationarity)",
     "native_controlled_H_and_reduced_operator": "passed on completed bounded runs; not stage convergence",
     "native_radius_and_buffer_controls": "passed_operator_checks; failed native stages preserve accepted h0/history bitwise",
@@ -62,10 +68,15 @@
     "complete_free_k_response_budget": "cfec988 permits explicit maximum512 (default32), six Linux regressions pass37.40s; matched160/504-direction native constrained searches in progress",
     "source_model_extension": "Matched6updates from18.7645225: refinement18.5778314 versus ray-only18.4988246, both qualified nonroots; space enrichment remains important",
     "larger_source_space": "Matched2updates from18.6652853:64/80responses18.6338420 versus96/9618.6063142 and160/16017.7530798; operator checks and independent qualification/readback pass",
-    "large_model_face_solver": "217e47d checked augmented orthonormal-face solves above160 variables, with existing null-space fallback; native504 and192On/Off controls in progress",
-    "constant_row_cache": "b89f2be6LinuxCTest37.80s plus ASan/UBSan pass; actual192-model replay has identical output and zero coefficient difference, helper13.15s versus6.83s",
+    "large_model_face_solver": "Completed192-rank constrained native update18.16569068, original qualification passes; On/Off every numerical update hash/norm and accepted state/history/time bitwise identical; full504 follow-ups continue",
+    "constant_row_cache": "Completed217e47d versusb89f2be matched192-direction native trajectory and all physical state/history identical bitwise; separate real-model replay also identical",
     "original_start_prefix": "217e47d first4 updates and initial reduced state match0633d23 bitwise; same physical input, only run budget/ceiling differ",
-    "first_order_operator_scope": "282f224 labels continued operator explicitly; original160/96 and positive-eta130.952 cases checked independently"
+    "first_order_operator_scope": "282f224 labels continued operator explicitly; original160/96 and positive-eta130.952 cases checked independently",
+    "conservative_ball_cut_filter": "Completed matched192-direction native endpoint and original norms identical bitwise, accepted physical history identical, independent readback exact;151975/193721 modelcuts provably ball-inactive at radius.4. Every original cut and actual inventory audited.",
+    "probe_field_factor_reuse": "Completed matched32 controls18.6379733298 versus18.6380670320, qualified nonroots;74 H evaluations all<=2e-12,386 cached applications,0retries; independent fresh half branch action8.02e-6/observation2.32e-5; On/Off all numerical updates and physical history bitwise identical; cache-versus-current algorithms are tolerance-consistent, not bitwise identical.",
+    "true_full_space_gradient": "First native504-rank original reduced model at18.6652853: cone defect1759.12 versus empirical gradient uncertainty9.15; not stationary at this base, not a global root-existence claim",
+    "model_face_warm_start": "ce7e53a real192-radius model replay coefficient difference4.30e-16; original-cut primal2.18e-17;14warm solves and1successful cold retry; not nonlinear stationarity. Native full-response follow-up running.",
+    "expanded_response_Krylov": "90dd801 optional ceiling128 (default0), retained current-operator preconditioner and independently checked H differences; matched64-versus16 Krylov seeds in96-response spaces and unchanged-h0 three-step horizon in progress. No M8 success inferred."
   },
   "continued_branch": {
     "auxiliary_positive_eta_tolerance": 2e-11,
@@ -108,7 +119,7 @@
     "continued_norm_lowest_eta": 9.384677685211777e-11,
     "ground_minimum_lowest_eta": 1.2037480790514484e-07,
     "gradient_departure_lowest_eta": 0.002389486383516992,
-    "contact_status": "At130.951 finite-space search reaches arithmetic ground margin at continued residual~4.93e-6; no completed native history receipt for that bounded process; expanded64-response controlled restart in progress",
+    "contact_status": "Completed64-response restart at130.951: continued norm4.92248169e-6, original norm9.55312366, ground5.20104e-17, gradient.00238948989; native no-advance/history receipt and both fresh readbacks pass. Base tested cone defect9.46e-6 exceeds action uncertainty1.50e-6, so no stationarity claim.",
     "contact_secant_estimate_range": [
       130.95122361974148,
       130.9512236692372
@@ -150,5 +161,34 @@
     "physical_acceptance": false,
     "scope": "One eta-zero algebraic diagnostic update with qualification observed only; no physical advance",
     "verification": "passed_reduced_verification_observability"
+  },
+  "qualified_full_space_checkpoint": {
+    "full_residual": 16.420194928157844,
+    "ground_minimum": 2.633926395721705e-06,
+    "gradient_departure": 0.0009999370392679285,
+    "minimum_outer_epsilon_ratio": 0.9800205038092307,
+    "algebraic_root": false,
+    "scope": "First native504-response numerical update independently audited; process later times out without native final stage/history receipt; not physical acceptance",
+    "evidence": "native/audit-wide504-checkpoint-d710404.json"
+  },
+  "first_order_auditor_commit": "ebe9db7",
+  "full_space_R2_ground_model": {
+    "operator_alpha": 400,
+    "time": 0.0025,
+    "diagnostic_wrapper_no_physical_advance": true,
+    "qualification_policy": "record_only",
+    "dimension": 504,
+    "rank": 504,
+    "orthogonal_probes": 504,
+    "original_full_residual": 2.90883423239144,
+    "gradient_norm": 102.38825042551507,
+    "near_active_cone_defect": 3.39683777013229,
+    "empirical_gradient_uncertainty": 0.7161630604091944,
+    "predicted_norm": 2.9088069546149065,
+    "predicted_merit_slope": -0.000148724843481587,
+    "measured_half_merit_slope": -0.00014872055235519552,
+    "constrained_stationarity_established": false,
+    "scope": "Base-point original reduced first-order evidence; full nonlinear refinement/trials in progress, not M8 success",
+    "evidence": "native/first-order-r2-full504-audit.json"
   }
 }

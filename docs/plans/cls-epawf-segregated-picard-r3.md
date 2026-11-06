@@ -20,6 +20,179 @@ metric at ground contact while its original k residual stayed nonzero. R3
 therefore scores the original reduced residual, not that projected-map defect.
 No full all-field Jacobian or hidden coupled direction solver was added.
 
+## Latest completed original-target validation
+
+The0633d23 native original-h0 run completes18 numerical updates with original
+block norms [9.34492e-13,1.02304e-12,19.1747990683,4.58916e-14,7.23219e-16,
+7.42248e-16,4.74338e-18,0]. It fails the unchanged2e-12 complete residual test.
+The final continuous-ground minimum is1.90615456e-5; maximum gradient departure
+is.000999999004 and minimum outer-epsilon ratio.9846519511. A fresh process
+reproduces the norm vector exactly and passes the original complete qualification,
+covariance, lambda and negative-ground guard checks. The rejected stage preserves
+accepted h0 and every physical-history slot/time. Physical steps/time are0/0.
+Its1089 controlled H evaluations all attain their requested accuracies;7480
+velocity/pressure pairs and7480 epsilon solves are recorded. All retained
+responses pass the independent two-scale checks. This is a qualified nonroot.
+
+The matched six-update extension from18.7645225166 reaches18.5778313750 with
+source refinements versus18.4988245721 with ray-only selection. Both remain
+qualified nonroots with exact fresh readback and preserved accepted history.
+The ray-only policy expands its response space earlier: this counterexample
+prevents a claim that the source refinements uniformly dominate adaptive
+response enrichment.
+
+A second matched pair starts at18.6652852921. Two updates using64 then80
+responses reach18.6338419815;96 then96 reach18.6063142340. Both have full
+numerical rank, pass all operator checks and original qualification, reproduce
+their residuals independently, and accept zero physical steps. The final96-space
+source prediction is18.60678920 versus actual18.60631423, vector error.01228865
+versus.31720522 for its linear model. Its refined direction predicts merit slope
+-1.21494328 versus measured half-step-1.21388370. These tests support useful
+reduced directions and continued missing-space investigation, not stationarity
+or successful M8 convergence.
+
+[Compact completed histories and independent receipts](cls-epawf-segregated-picard-r3-evidence/native/completed-original-and-expanded-review.json)
+retain commands, identities, H errors, signed active observations, displacement
+radii, true residual histories and complete fresh audits. Larger raw payloads
+remain in the linked Linux directories. The160-direction control also completes two updates, reaching17.7530797901
+with original qualification passing, continuous ground1.27874280e-5 and minimum
+outer-epsilon ratio.9805312098. Its second source prediction is17.75068755 versus
+actual17.75307979; vector error.01986048 versus.88429921 linearly. The actual
+normalized coefficient displacement.27286294 is within radius.4. Its local
+predicted merit slope-20.38793030 agrees with the measured half-step-20.38184430.
+All320 response columns pass two-scale checks, all658 H evaluations attain the
+requested2e-12,3857 flow/epsilon pairs are recorded, and fresh readback has zero
+norm discrepancy. This confirms that additional directions materially improve
+this particular search; it remains a qualified nonroot. The504-space and new
+large-face native controls continue and do not replace the original-h0 test.
+
+## Latest full-space checks and execution improvements
+
+`90dd801` extends the optional response-Krylov ceiling from16 to128; its
+default remains0. The existing enrichment applies the measured non-k feedback
+through the restricted conditional-k preconditioner, generating directions in
+the space of `(I - Jkk^-1 Jred) q`. Each direction still needs a feasible
+two-size, converged-H response; rank, action-error and feedback-above-noise
+checks remain in force. This is motivated by the measured dominant pressure
+feedback and the high cost of repeatedly sampling504 arbitrary field
+directions. It neither assembles an all-field matrix nor changes a governing
+equation. Six Linux regressions pass (39.67s) and ASan/UBSan passes (7.56s).
+Matched96-dimensional searches with64 versus16 Krylov seeds, and an unchanged-h0
+native run with64, are in progress. Their outcomes are not inferred from build
+or operator success.
+[Build and identities](cls-epawf-segregated-picard-r3-evidence/native/build-validation-90dd801.json),
+[exact native commands](cls-epawf-segregated-picard-r3-evidence/native/response-krylov-launch.json).
+
+`d710404` omits a frozen-model cut only when a conservative field-Gram bound
+proves it cannot become active anywhere in the prescribed displacement ball.
+The bound uses a Gershgorin lower eigenvalue estimate, reduced for roundoff.
+It is disabled for restoration slack variables or a poorly conditioned field
+Gram matrix. Every original frozen cut is still scanned at the final
+inside-ball solution; actual candidates still receive the complete original
+inventory and continuous-ground audit. The 192-coordinate model replay
+has exactly zero coefficient difference, the same radius multiplier, primal
+defect 1.96e-17 and affine stationarity 2.52e-12. Helper replay times are 89.83s
+and 26.39s. These are optimization-model checks, not nonlinear stationarity or
+native convergence. Six Linux regressions pass (37.48s), including a known
+radius/active-cut answer and an ill-conditioned-field counterexample that
+disables omission; ASan/UBSan passes (7.79s).
+[Build](cls-epawf-segregated-picard-r3-evidence/native/build-validation-d710404.json),
+[original-cut radius replay](cls-epawf-segregated-picard-r3-evidence/native/ball-filter-radius-replay-review.json).
+The completed matched 192-direction native update also reproduces the entire
+numerical endpoint and original norm vector bitwise, with accepted state and
+physical history unchanged. It omits 151,975 of 193,721 frozen cuts within the
+radius 0.4 ball, then passes the original full inventory and fresh residual
+readback. This single update is not a trajectory or convergence certificate.
+[Native cut-filter control](cls-epawf-segregated-picard-r3-evidence/native/ball-filter-native-review.json).
+
+The first complete 504-response model at original residual 18.6652852921 has
+rank 504. Its original-merit gradient norm is 1908.20. Near-active cone defects
+at normalized windows 1e-10,1e-8,1e-6 are 1908.20,1804.91,1759.12, versus
+empirical two-size gradient uncertainty 9.15. Thus this base is not shown
+stationary even when every free k coefficient is represented. This is a
+first-order audit of the original reduced operator at the model's base, not of
+the later checkpoint and not a global root-existence test.
+[Full-space first-order audit](cls-epawf-segregated-picard-r3-evidence/native/first-order-full504-audit.json).
+
+That bounded504-response run publishes one accepted **numerical** checkpoint
+at original residual 16.4201949282. A separate process rebuilds its original
+norm vector and complete qualification: continuous ground 2.63392640e-6,
+gradient departure 0.0009999370393, minimum outer-epsilon ratio 0.9800205038.
+The process then times out during the next response construction without a
+final native stage report. Therefore its final physical-history receipt is
+unavailable; the independently audited checkpoint is not physical acceptance.
+The ordinary constrained follow-up keeps the original h0/history and stage
+target, starting only its nonlinear guess from this qualified nonroot.
+[Fresh checkpoint audit](cls-epawf-segregated-picard-r3-evidence/native/audit-wide504-checkpoint-d710404.json).
+
+The completed matched 192-direction native control reaches 18.1656906795,
+with original qualification passing and zero physical steps. Verification
+On/Off reproduces every logged initial/accepted numerical state hash and norm
+vector bitwise, together with accepted state, rejection and physical history.
+The constant-row-norm cache produces the same complete native trajectory
+bitwise on the same input. These controls do not establish that192 directions
+outperform160; the160 comparison above follows two updates.
+[Verification receipt](cls-epawf-segregated-picard-r3-evidence/native/fast-face192-verification-comparison.json),
+[native cache identity](cls-epawf-segregated-picard-r3-evidence/native/cached-native-identity-review.json).
+
+`c02f965` adds opt-in `RANSWallReducedResponseCache=On` (driver
+`--reduced-response-cache`). Small response probes can reuse the separate base
+velocity factor, pressure/gauge Schur factor and epsilon/trace factor. At every
+iteration the original nonlinear H is rebuilt, including epsilon's actual
+matching-trace residual after the flow correction. The original fixed-k,
+accuracy, admissibility and rollback tests remain mandatory. A failed cached
+subsolve retries from its incoming guess with current-operator field solves.
+The canonical half-response branch check, combined-direction checks, actual
+trials and final acceptance use the current operators. Every model rebuilds
+these preconditioners at its equilibrated base; no all-field matrix is stored.
+The default is Off, preserving the retained controls. Six focused Linux
+regressions pass (38.48s) and the reduced-model ASan/UBSan check passes (7.78s).
+The matched 32-direction native controls complete at 18.6379733298 with reuse
+and 18.6380670320 without reuse, both qualified nonroots with bitwise fresh
+residual readback and preserved accepted h0/history. All 32 responses pass
+two-size checks; the cached path's maximum residual/observation relative errors
+are 6.05e-5/0.001215. The independent current-operator canonical half response
+agrees to 8.02e-6 in relative action and 2.32e-5 in normalized observation action.
+All 74 logged H evaluations satisfy their requested 2e-12,386 cached flow/epsilon
+applications are recorded, and no fresh retry is needed. Verification On/Off
+reproduces every numerical update and all accepted physical history bitwise.
+Reuse versus current-operator iterations are tolerance-consistent, not bitwise
+identical algorithms. Native target invocations take677.1s versus755.3s
+(reduced-solver log times656.1s versus734.1s), under concurrent experiments;
+this single comparison is not a general performance claim. A new unchanged-h0
+run continues. Build/operator progress must not be read as M8 convergence.
+[Producing build and library identities](cls-epawf-segregated-picard-r3-evidence/native/build-validation-c02f965.json).
+[Controlled native reuse comparison and independent audits](cls-epawf-segregated-picard-r3-evidence/native/response-cache32-review.json).
+
+`ce7e53a` additionally reuses a feasible point and checked active face between
+radius queries of the same large quadratic model. Obsolete constraints leave
+through their multiplier signs; numerical failure retries the original feasible
+point with an empty face. This is only an optimization-coordinate warm start.
+The 192-coordinate model replay differs in coefficients by 4.30e-16,
+retains the same radius multiplier and passes every original cut. It exercises
+14 warm solves and one successful cold retry; the final primal defect is
+2.18e-17 and affine stationarity2.16e-12. Replay time is 20.87s. Six Linux
+regressions pass (37.77s), including a changed-gradient problem that removes an
+obsolete active constraint and a deliberately inconsistent warm face;
+ASan/UBSan passes. The ordinary full-response follow-up uses this implementation
+with the original target and an explicitly declared inexact H tolerance that
+tightens toward the unchanged final 2e-12 gate.
+[Build and tests](cls-epawf-segregated-picard-r3-evidence/native/build-validation-ce7e53a.json),
+[real-model warm-face replay](cls-epawf-segregated-picard-r3-evidence/native/warm-face-radius-replay-review.json).
+
+The eta-zero R2-endpoint diagnostic also constructs all 504 orthogonal field
+responses (rank 504, maximum column correlation3.11e-16). At its initial
+original residual 2.9088342324 the reduced gradient norm is102.388, its
+near-ground cone defect 3.397 and empirical two-size gradient uncertainty 0.716.
+This is an original-alpha400 model, although its wrapper forbids physical
+advance and observes qualification only. It is not shown stationary. The
+direction predicts residual 2.90880695 and merit slope -1.48724843e-4; an
+independent feasible half probe measures -1.48720552e-4 with relative vector
+error 4.81e-5. The regularized model has eigenvalue range [0.001353,5.660e6],
+condition 4.18e9. Actual full-step/refinement trials continue; a small affine KKT
+defect is not substituted for original reduced stationarity.
+[Operator-labelled full-space diagnostic](cls-epawf-segregated-picard-r3-evidence/native/first-order-r2-full504-audit.json).
+
 `b89f2be` caches immutable cut-row norms within each quadratic solve and computes
 the direction norm once per QP iteration. It changes no matrix entry, cut or
 acceptance bound. Six Linux regressions pass (37.80s), together with ASan/UBSan.
@@ -32,7 +205,8 @@ a helper replay timing, not a native convergence or general performance claim.
 The original-h0 four-update prefix on217e47d also matches0633d23 bitwise in every
 state hash and original norm vector, with only run budget/ceiling changed.
 [Exact prefix receipt](cls-epawf-segregated-picard-r3-evidence/native/original-start-prefix-217-review.json).
-A matched cached-kernel native control and full-response experiments continue.
+The matched cached-kernel native control has completed as recorded above;
+full-response follow-ups continue.
 
 `217e47d` adds a checked augmented solve for active faces of models above160
 variables. It keeps the orthonormal constraint QR, solves a scaled saddle system
@@ -85,52 +259,6 @@ mixed restoration (`7848ad4`), bounded ground arithmetic corrections (`645d05b`)
 physical-history-bound trial packets (`e7313f7`), and a filter-consistent direction
 constraint (`8dc862f`). The continuation and spatial diagnostic harnesses are
 `315cbee` and `0bd00ae`. R1/R2 reports and evidence are preserved.
-
-## Latest completed original-target validation
-
-The0633d23 native original-h0 run completes18 numerical updates with original
-block norms [9.34492e-13,1.02304e-12,19.1747990683,4.58916e-14,7.23219e-16,
-7.42248e-16,4.74338e-18,0]. It fails the unchanged2e-12 complete residual test.
-The final continuous-ground minimum is1.90615456e-5; maximum gradient departure
-is.000999999004 and minimum outer-epsilon ratio.9846519511. A fresh process
-reproduces the norm vector exactly and passes the original complete qualification,
-covariance, lambda and negative-ground guard checks. The rejected stage preserves
-accepted h0 and every physical-history slot/time. Physical steps/time are0/0.
-Its1089 controlled H evaluations all attain their requested accuracies;7480
-velocity/pressure pairs and7480 epsilon solves are recorded. All retained
-responses pass the independent two-scale checks. This is a qualified nonroot.
-
-The matched six-update extension from18.7645225166 reaches18.5778313750 with
-source refinements versus18.4988245721 with ray-only selection. Both remain
-qualified nonroots with exact fresh readback and preserved accepted history.
-The ray-only policy expands its response space earlier: this counterexample
-prevents a claim that the source refinements uniformly dominate adaptive
-response enrichment.
-
-A second matched pair starts at18.6652852921. Two updates using64 then80
-responses reach18.6338419815;96 then96 reach18.6063142340. Both have full
-numerical rank, pass all operator checks and original qualification, reproduce
-their residuals independently, and accept zero physical steps. The final96-space
-source prediction is18.60678920 versus actual18.60631423, vector error.01228865
-versus.31720522 for its linear model. Its refined direction predicts merit slope
--1.21494328 versus measured half-step-1.21388370. These tests support useful
-reduced directions and continued missing-space investigation, not stationarity
-or successful M8 convergence.
-
-[Compact completed histories and independent receipts](cls-epawf-segregated-picard-r3-evidence/native/completed-original-and-expanded-review.json)
-retain commands, identities, H errors, signed active observations, displacement
-radii, true residual histories and complete fresh audits. Larger raw payloads
-remain in the linked Linux directories. The160-direction control also completes two updates, reaching17.7530797901
-with original qualification passing, continuous ground1.27874280e-5 and minimum
-outer-epsilon ratio.9805312098. Its second source prediction is17.75068755 versus
-actual17.75307979; vector error.01986048 versus.88429921 linearly. The actual
-normalized coefficient displacement.27286294 is within radius.4. Its local
-predicted merit slope-20.38793030 agrees with the measured half-step-20.38184430.
-All320 response columns pass two-scale checks, all658 H evaluations attain the
-requested2e-12,3857 flow/epsilon pairs are recorded, and fresh readback has zero
-norm discrepancy. This confirms that additional directions materially improve
-this particular search; it remains a qualified nonroot. The504-space and new
-large-face native controls continue and do not replace the original-h0 test.
 
 ## Completed larger-space and nonlinear-source controls
 
@@ -965,8 +1093,18 @@ slope about1.55056e-4 per eta. This is a local branch estimate, not a certified
 root/nonexistence bracket. At130.951 the tested search reaches an arithmetic
 ground margin and residual about4.93e-6. That bounded process has no final native
 history receipt; it must not be counted as a verified rejected stage. A separate
-64-response restart requests a completed controlled receipt and tighter probe
-size. The branch qualification exit was already observed much earlier, at
+64-response restart has completed with a native no-advance receipt, a fresh
+continued residual4.92248169e-6 and original-target residual9.55312366.
+Its actual continuous ground minimum is5.20104e-17 and gradient
+departure.00238948989. The original and continued residuals are distinct:
+this state equilibrates non-k equations at operator alpha530.951, not400.
+Accepted state and every physical-history slot/time are preserved. At the
+restart's base the tested64-dimensional continued-merit cone defect9.46e-6
+still exceeds empirical action uncertainty1.50e-6, so this experiment does not
+establish a local stationary obstruction even in that space.
+[Completed contact receipt and both readbacks](cls-epawf-segregated-picard-r3-evidence/native/contact64-completed-review.json),
+[continued first-order audit](cls-epawf-segregated-picard-r3-evidence/native/first-order-contact64-audit.json).
+The branch qualification exit was already observed much earlier, at
 eta1168.75..1209.375 with positive ground. No statement excludes other roots or
 other H branches.
 
@@ -1030,7 +1168,7 @@ one rank and one thread per BLAS/OpenMP runtime were used, within the72-worker
 limit including the simultaneous bounded experiments. No support claim extends
 beyond the existing serial/flat tensor-cubic ground implementation.
 
-The current original-start command can be reproduced in the isolated Linux tree
+The completed18-update original-start command can be reproduced in the isolated Linux tree
 (the retained run directories must not be overwritten):
 
 ```bash
