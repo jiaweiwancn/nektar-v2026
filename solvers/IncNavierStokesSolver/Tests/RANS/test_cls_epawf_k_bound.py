@@ -11,11 +11,35 @@ import math
 from pathlib import Path
 import platform
 import subprocess
+import struct
 import xml.etree.ElementTree as ET
 
 from run_cls_epawf_picard import load,run,sha,state_hash,require,write_json,set_info,set_parameter,write
 from run_cls_epawf_pimple import ROOT,identity,prepare
 from compare_cls_epawf_pimple import differences,same_history,describe
+
+
+def frozen_accounting(packet, attempt):
+    """Independent readback of the saved transport matrix, without a solve."""
+    n = len(packet['transport_rows'])
+    payload = Path(packet['matrix_file']).read_bytes()
+    require(len(payload) == 8*n*n, 'frozen k matrix shape changed')
+    matrix = struct.unpack('<'+str(n*n)+'d', payload)
+    raw_delta = packet['raw_increment']
+    correction = [packet['corrected'][int(i)]-packet['raw'][int(i)] for i in packet['transport_rows']]
+    raw = []; added = []
+    for i in range(n):
+        raw.append(packet['transport_residual'][i]+math.fsum(matrix[i*n+j]*raw_delta[j] for j in range(n)))
+        added.append(math.fsum(matrix[i*n+j]*correction[j] for j in range(n)))
+    maximum = lambda values: max(map(abs, values), default=0.)
+    result = dict(raw=maximum(raw), added=maximum(added),
+                  corrected=maximum(x+y for x,y in zip(raw,added)),
+                  raw_vector_readback_defect=maximum(x-y for x,y in zip(raw,packet['raw_linear_residual'])))
+    require(result['raw_vector_readback_defect'] < 1e-12, 'raw frozen residual packet differs')
+    if 'k_corrected_frozen_linear_residual' in attempt:
+        require(abs(result['corrected']-attempt['k_corrected_frozen_linear_residual']) < 1e-12 and
+                abs(result['added']-attempt['k_added_frozen_residual']) < 1e-12, 'corrected frozen residual accounting differs')
+    return result
 
 
 def replay(probe,xml,packet,output,*,floor=None,fixture=None):

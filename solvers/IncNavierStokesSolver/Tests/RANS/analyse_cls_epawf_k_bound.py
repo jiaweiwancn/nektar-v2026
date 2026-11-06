@@ -13,7 +13,7 @@ import shutil
 from run_cls_epawf_picard import load, require, run, sha, state_hash, write_json
 from run_cls_epawf_pimple import identity
 from compare_cls_epawf_pimple import describe, differences, same_history
-from test_cls_epawf_k_bound import replay
+from test_cls_epawf_k_bound import replay, frozen_accounting
 
 
 def main():
@@ -50,6 +50,7 @@ def main():
                 if phase in row: item[phase] = row[phase]
             if row.get('k_snapshot'):
                 packet = load(Path(row['k_snapshot']))
+                item['independent_frozen_accounting'] = frozen_accounting(packet, row)
                 item['raw_sha256'] = state_hash(packet['raw']); item['corrected_sha256'] = state_hash(packet['corrected'])
                 first, last = int(r['offsets'][2]), int(r['offsets'][3])
                 require(state_hash(packet['raw'][:first]+packet['raw'][last:]) ==
