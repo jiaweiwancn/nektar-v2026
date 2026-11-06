@@ -32,10 +32,21 @@ def atomic(path, value):
     os.replace(temporary, path)
 
 
-def header(checkpoint):
+def header(checkpoint, full=False):
     b = (checkpoint/'State.bin').read_bytes(); n = struct.unpack_from('<Q', b, 24)[0]
     order, steps, t, dt = struct.unpack_from('<QQdd', b, 32+n)
-    return dict(order=order, steps=steps, time=t, dt=dt, sha256=sha(checkpoint/'State.bin'))
+    result=dict(order=order, steps=steps, time=t, dt=dt, sha256=sha(checkpoint/'State.bin'))
+    if full:
+        cursor=32+n+32+8  # signature, order/steps/time/dt, eta
+        def vector():
+            nonlocal cursor
+            count=struct.unpack_from('<Q',b,cursor)[0];cursor+=8
+            values=list(struct.unpack_from('<'+str(count)+'d',b,cursor));cursor+=8*count
+            return values
+        vector();slots=struct.unpack_from('<Q',b,cursor)[0];cursor+=8
+        result['history']=[vector() for _ in range(slots)];result['history_times']=vector()
+        result['coupled_state']=vector()
+    return result
 
 
 def freeze(executable, output):
@@ -77,6 +88,24 @@ def main():
         executable = a.output/'runtime'/a.solver.name
         os.environ['LD_LIBRARY_PATH'] = str(a.output/'runtime/lib')
         pinned = load(a.output/'runtime/identity.json')['frozen']
+        # Reconcile only genuine native publications after an orchestration
+        # interruption. Never manufacture or edit a checkpoint payload.
+        segment=Path(progress.get('segment','/nonexistent'))
+        candidates=sorted((x.parent for x in segment.glob('checkpoint*/State.bin')),key=lambda x:header(x)['steps'])
+        for checkpoint in candidates:
+            receipt=header(checkpoint,True);step=receipt['steps']
+            if step<=progress['accepted_steps']:continue
+            require(step==progress['accepted_steps']+1,'noncontiguous checkpoint recovery')
+            packets=[x for x in segment.glob('pimple-states/*.json') if abs(load(x)['time']-receipt['time'])<1e-13]
+            require(len(packets)==1,'missing recovery packet');packet=load(packets[0])
+            require(state_hash(receipt['coupled_state'])==state_hash(packet['corrected']),'publication/candidate mismatch')
+            records=[json.loads(x[len('EP-AWF PIMPLE '):]) for x in (segment/'solver.log').read_text().splitlines() if x.startswith('EP-AWF PIMPLE ')]
+            attempt=next(x for x in records if abs(x['time']-receipt['time'])<1e-13)
+            with (a.output/'steps.jsonl').open('a') as f:
+                f.write(json.dumps(dict(global_step=step,time=receipt['time'],checkpoint=str(checkpoint),
+                    checkpoint_sha256=receipt['sha256'],attempt=attempt,recovered_publication=True))+'\n')
+            progress.update(accepted_steps=step,accepted_time=receipt['time'],checkpoint=str(checkpoint),
+                checkpoint_sha256=receipt['sha256'],cumulative_bound_integral=progress['cumulative_bound_integral']+packet['k_bound']['integral_total'])
     else:
         a.output.mkdir(parents=True, exist_ok=False); (a.output/'tmp').mkdir()
         executable, pinned = freeze(a.solver.resolve(), a.output/'runtime')
@@ -141,7 +170,11 @@ def main():
                         if line.startswith('EP-AWF IMEX1 step '):
                             fields=line.split(); step=int(fields[3])
                             require(pending is not None and pending['scheduled_complete'], 'missing completed schedule')
-                            candidates=[x.parent for x in directory.glob('checkpoint*/State.bin') if header(x.parent)['steps']==step]
+                            deadline=time.monotonic()+30
+                            candidates=[]
+                            while not candidates and time.monotonic()<deadline:
+                                candidates=[x.parent for x in directory.glob('checkpoint*/State.bin') if header(x.parent)['steps']==step]
+                                if not candidates:time.sleep(.05)
                             require(candidates, 'accepted step has no published checkpoint')
                             checkpoint=max(candidates,key=lambda x:(x/'State.bin').stat().st_mtime_ns)
                             receipt=header(checkpoint); require(receipt['dt']==.000625, 'checkpoint dt changed')
@@ -191,6 +224,8 @@ def main():
             save(status='infrastructure_interrupted',failure=infra or 'process_exit_without_native_report',exit_code=child.returncode);return
         save(status='targets_completed',next_target=None)
     except BaseException as error:
+        if 'child' in locals() and child.poll() is None:
+            child.terminate();child.wait(timeout=30)
         save(status='orchestration_interrupted',failure=repr(error));raise
 
 
