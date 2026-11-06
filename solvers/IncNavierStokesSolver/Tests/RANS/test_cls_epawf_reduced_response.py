@@ -78,6 +78,9 @@ def check(directory):
     require(all(0 <= d["maximum_ball_redundant_cuts"] <= d["original_model_cuts"]
                 for d in directions if "maximum_ball_redundant_cuts" in d),
             "invalid conservative ball-cut filter accounting")
+    require(all(0 <= d["warm_face_fallbacks"] <= d["warm_face_solves"] <= d["radius_model_solves"]
+                for d in directions if "warm_face_solves" in d),
+            "invalid large-model warm-face solve accounting")
     for direction in directions:
         for name in direction["basis_names"]:
             matching = [c for c in checks if c["name"] == name and

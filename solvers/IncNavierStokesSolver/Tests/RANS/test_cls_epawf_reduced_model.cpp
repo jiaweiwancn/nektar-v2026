@@ -106,6 +106,7 @@ int main(int argc, char **argv)
         Check(in.good() && in.peek() == std::char_traits<char>::eof(), "truncated or extended model packet");
         R::QuadraticResult result;
         double replayRadius=0., replayMultiplier=0.;
+        int radiusSteps=0,radiusSolves=0,warmFaces=0,warmFallbacks=0;
         if (argc == 5)
         {
             // Diagnostic only: the caller must have verified ordinary model
@@ -122,6 +123,8 @@ int main(int argc, char **argv)
             const auto bounded=R::SolveRadiusQuadratic<Factor>(
                 h,g,cuts,initial,columns,replayRadius,500);
             replayMultiplier=bounded.multiplier;
+            radiusSteps=bounded.steps;radiusSolves=bounded.solves;
+            warmFaces=bounded.warmFaceSolves;warmFallbacks=bounded.warmFaceFallbacks;
             result=bounded.quadratic;
         }
         else result=R::SolveQuadratic<Factor>(h, g, cuts, initial, 500);
@@ -133,6 +136,10 @@ int main(int argc, char **argv)
                   << ",\"augmented_face_solves\":" << result.augmentedFaceSolves
                   << ",\"augmented_face_fallbacks\":" << result.augmentedFaceFallbacks
                   << ",\"radius_multiplier\":" << replayMultiplier
+                  << ",\"radius_total_steps\":" << radiusSteps
+                  << ",\"radius_model_solves\":" << radiusSolves
+                  << ",\"warm_face_solves\":" << warmFaces
+                  << ",\"warm_face_fallbacks\":" << warmFallbacks
                   << ",\"scope\":\"affine model replay only; not nonlinear stationarity or M8 convergence\",\"solution\":[";
         for (int i = 0; i < n; ++i) std::cout << (i?",":"") << result.solution[i];
         std::cout << "]}\n";
@@ -345,6 +352,19 @@ int main(int argc, char **argv)
           "large orthonormal-face saddle model failed");
     Close(large.solution[0],.25); Close(large.solution[1],-.5);
     for (int i=2;i<192;++i) Close(large.solution[i],0.);
+    auto changedG=largeG;changedG[0]=1.;
+    const auto coldChanged=R::SolveQuadratic<Factor>(largeH,changedG,largeCuts,R::Vector(192));
+    const auto warmChanged=R::SolveQuadratic<Factor>(
+        largeH,changedG,largeCuts,large.solution,120,large.active);
+    Check(coldChanged.solved && warmChanged.solved && warmChanged.primal<1e-10 &&
+          warmChanged.stationarity<1e-8 && warmChanged.complementarity<1e-8,
+          "warm face failed to remove an obsolete constraint");
+    for (int i=0;i<192;++i) Close(warmChanged.solution[i],coldChanged.solution[i]);
+    Close(warmChanged.solution[0],-1.);Close(warmChanged.solution[1],-.5);
+    const auto staleFace=R::SolveQuadratic<Factor>(
+        largeH,changedG,largeCuts,R::Vector(192),120,large.active);
+    Check(!staleFace.solved && staleFace.failure=="quadratic_inconsistent_warm_face",
+          "inconsistent warm face was silently accepted");
     const auto fallback=R::SolveQuadratic<RejectAugmentedFactor>(
         largeH,largeG,largeCuts,R::Vector(192));
     Check(fallback.solved && fallback.augmentedFaceFallbacks>0 && fallback.augmentedFaceSolves==0,
@@ -361,6 +381,7 @@ int main(int argc, char **argv)
     const auto pruned=R::SolveRadiusQuadratic<Factor>(
         largeBallH,largeBallG,manyCuts,R::Vector(192),largeBallV,1.);
     Check(pruned.quadratic.solved && pruned.ballRedundantCuts==5000 &&
+          pruned.warmFaceSolves>0 && pruned.warmFaceFallbacks==0 &&
           pruned.norm<=1. && pruned.norm>=.999 &&
           pruned.quadratic.active==std::vector<int>{5000},
           "ball-inactive cuts or original active-row indices differ");

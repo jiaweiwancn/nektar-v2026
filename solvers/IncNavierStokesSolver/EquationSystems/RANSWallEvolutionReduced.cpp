@@ -1426,6 +1426,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         int qpSteps = 0, groundAdded = 0, radiusSolves = 0;
         int augmentedFaceSolves = 0, augmentedFaceFallbacks = 0;
         int maximumBallRedundantCuts = 0;
+        int warmFaceSolves=0,warmFaceFallbacks=0;
         double radiusMultiplier = 0., rawDisplacement = 0., radiusComplementarity = 0.;
         std::string radiusRefinementFailure;
         WallMatrix solvedHessian = hessian, kColumns;
@@ -1439,6 +1440,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             augmentedFaceSolves += bounded.augmentedFaceSolves;
             augmentedFaceFallbacks += bounded.augmentedFaceFallbacks;
             maximumBallRedundantCuts = std::max(maximumBallRedundantCuts,bounded.ballRedundantCuts);
+            warmFaceSolves+=bounded.warmFaceSolves;
+            warmFaceFallbacks+=bounded.warmFaceFallbacks;
             radiusMultiplier = bounded.multiplier;
             rawDisplacement = bounded.rawNorm;
             radiusComplementarity = bounded.complementarity;
@@ -1672,6 +1675,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
               {"augmented_face_solves", J::Number(augmentedFaceSolves)},
               {"augmented_face_fallbacks", J::Number(augmentedFaceFallbacks)},
               {"maximum_ball_redundant_cuts", J::Number(maximumBallRedundantCuts)},
+              {"warm_face_solves",J::Number(warmFaceSolves)},
+              {"warm_face_fallbacks",J::Number(warmFaceFallbacks)},
               {"original_model_cuts", J::Number(cuts.size())},
               {"radius_multiplier", J::Number(radiusMultiplier)},
               {"radius_complementarity", J::Number(radiusComplementarity)},
@@ -1955,6 +1960,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                             {"two_scale_error",J::Number(error)},
                             {"augmented_face_solves",J::Number(refined.augmentedFaceSolves)},
                             {"augmented_face_fallbacks",J::Number(refined.augmentedFaceFallbacks)},
+                            {"warm_face_solves",J::Number(refined.warmFaceSolves)},
+                            {"warm_face_fallbacks",J::Number(refined.warmFaceFallbacks)},
                             {"ball_redundant_cuts",J::Number(refined.ballRedundantCuts)},
                             {"before_norm",J::Number(dualNorm(model))},
                             {"predicted_norm",J::Number(chosenNorm)},

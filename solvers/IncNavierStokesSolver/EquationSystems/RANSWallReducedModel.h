@@ -174,7 +174,8 @@ inline bool UpdateSecantActions(Matrix &actions, const Matrix &columns,
 template <typename Factor, typename Cut>
 QuadraticResult SolveQuadratic(const Matrix &hessian, const Vector &gradient,
                               const std::vector<Cut> &cuts, Vector initial,
-                              int maximumSteps = 120)
+                              int maximumSteps = 120,
+                              const std::vector<int> &initialActive = {})
 {
     const int n = gradient.size();
     if (!n || initial.size() != gradient.size() ||
@@ -220,6 +221,15 @@ QuadraticResult SolveQuadratic(const Matrix &hessian, const Vector &gradient,
     for (const auto &cut : cuts)
         if (Dot(cut.a, solution) > cut.b + 1e-8)
             return finish("quadratic_infeasible_start");
+    for (int id:initialActive)
+    {
+        if (id<0 || id>=cuts.size() ||
+            std::find(active.begin(),active.end(),id)!=active.end())
+            throw std::logic_error("invalid reduced quadratic warm face index");
+        if (std::abs(Dot(cuts[id].a,solution)-cuts[id].b)>1e-8)
+            return finish("quadratic_inconsistent_warm_face");
+        active.push_back(id);
+    }
     try
     {
         const Factor objective(hessian);
@@ -464,6 +474,7 @@ struct RadiusResult
     int solves = 0, steps = 0;
     int augmentedFaceSolves = 0, augmentedFaceFallbacks = 0;
     int ballRedundantCuts = 0;
+    int warmFaceSolves = 0, warmFaceFallbacks = 0;
     std::string refinementFailure;
 };
 
@@ -482,6 +493,7 @@ RadiusResult SolveRadiusQuadratic(const Matrix &hessian, const Vector &gradient,
         !(radius > 0.) || !std::isfinite(radius))
         throw std::logic_error("invalid radius-constrained model shape or radius");
     RadiusResult result;
+    QuadraticResult previousQuadratic;
     struct Trial
     {
         QuadraticResult quadratic;
@@ -546,11 +558,30 @@ RadiusResult SolveRadiusQuadratic(const Matrix &hessian, const Vector &gradient,
             for (int i = 0; i < columns.size(); ++i)
                 for (int j = 0; j < columns.size(); ++j)
                     t.hessian[i][j] += multiplier * gram[i][j];
-        t.quadratic = SolveQuadratic<Factor>(t.hessian, gradient, *modelCuts, initial, maximumSteps);
-        ++result.solves;
-        result.steps += t.quadratic.steps;
-        result.augmentedFaceSolves += t.quadratic.augmentedFaceSolves;
-        result.augmentedFaceFallbacks += t.quadratic.augmentedFaceFallbacks;
+        auto record=[&](const QuadraticResult &q) {
+            ++result.solves;
+            result.steps+=q.steps;
+            result.augmentedFaceSolves+=q.augmentedFaceSolves;
+            result.augmentedFaceFallbacks+=q.augmentedFaceFallbacks;
+        };
+        // Radius queries change the objective multiplier, not the cut geometry.
+        // Reuse a previously feasible point and its independent binding face
+        // in large models. Wrong-sign multipliers remove obsolete active cuts
+        // through the same active-set solve. Any numerical failure retries the
+        // original feasible initial point with no assumed active face.
+        if (columns.size()>160 && previousQuadratic.solved)
+        {
+            ++result.warmFaceSolves;
+            t.quadratic=SolveQuadratic<Factor>(t.hessian,gradient,*modelCuts,
+                previousQuadratic.solution,maximumSteps,previousQuadratic.active);
+            record(t.quadratic);
+            if (!t.quadratic.solved) ++result.warmFaceFallbacks;
+        }
+        if (!t.quadratic.solved)
+        {
+            t.quadratic=SolveQuadratic<Factor>(t.hessian,gradient,*modelCuts,initial,maximumSteps);
+            record(t.quadratic);
+        }
         if (t.quadratic.solved)
         {
             auto coefficients = t.quadratic.solution;
@@ -572,6 +603,7 @@ RadiusResult SolveRadiusQuadratic(const Matrix &hessian, const Vector &gradient,
                 }
             }
         }
+        if (t.quadratic.solved) previousQuadratic=t.quadratic;
         return t;
     };
     auto finish = [&](Trial t) {
