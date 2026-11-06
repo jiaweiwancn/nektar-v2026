@@ -132,6 +132,28 @@ large-face native controls continue and do not replace the original-h0 test.
 
 ## Latest full-space checks and execution improvements
 
+`cea2a06` applies the existing checked primal-face solve, conservative
+ball-inactive-cut test and feasible-face reuse above64 coordinates, including
+the96-direction searches. The established path through64 coordinates remains.
+This addresses measured12–28minute optimization intervals after constructing
+each96-response model. New64/96 closed-answer tests exercise both paths,
+obsolete-bound removal, original cut indices and the final displacement ball.
+All six Linux regressions pass (37.85s); ASan/UBSan passes (8.87s).
+
+Replaying the same native96-response model with all193747 original cuts at
+radius.72 gives maximum coefficient difference1.79e-15 and model-objective
+difference-8.53e-14. An independent scan of every original cut gives primal
+defect1.56e-17; actual displacement.719328752 is inside the ball. The new affine
+stationarity defect is2.11e-12. The replay takes134.34s with `90dd801` and12.30s
+with `cea2a06`, recording17 warm queries and one successful cold retry. This is
+one optimization-model comparison under concurrent jobs, not a nonlinear
+stationarity or general performance result. New unchanged-h0 and matched
+saved-guess native searches have launched with explicit singleton ranks and
+thread limits; their outcomes remain pending.
+[Build, commands and identities](cls-epawf-segregated-picard-r3-evidence/native/build-validation-cea2a06.json),
+[identical-model comparison](cls-epawf-segregated-picard-r3-evidence/native/medium-face96-radius-replay-review.json),
+[new native commands](cls-epawf-segregated-picard-r3-evidence/native/medium-face-native-launch.json).
+
 `90dd801` extends the optional response-Krylov ceiling from16 to128; its
 default remains0. The existing enrichment applies the measured non-k feedback
 through the restricted conditional-k preconditioner, generating directions in
