@@ -47,7 +47,8 @@ def collect(directory):
                   "second_order_model_failed", "radius_agreement", "constraint_response_secant",
                   "response_space_adapt", "free_mode_seed_pool", "evaluated_trial_packet",
                   "source_ray_selection", "source_ray_prediction", "source_direction_refinement",
-                  "source_refined_direction", "source_refined_direction_check", "radius_query_retry")]
+                  "source_refined_direction", "source_refined_direction_check", "radius_query_retry",
+                  "source_derivative_precision")]
     checks = [compact(r) for r in rows if r["event"] == "response_check"]
     for row in checks:
         if row["iteration"]:

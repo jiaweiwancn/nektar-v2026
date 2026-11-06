@@ -167,11 +167,18 @@ ModelDerivative DifferentiateModel(const Vector &at, const Vector &base,
 
 struct ModelLinearization
 {
+    struct Stencil
+    {
+        int column, halvings;
+        double initialError, finalError, coarseStep;
+    };
     bool available = false;
     Vector at, value;
     Matrix derivatives;
     int availableDerivatives = 0, anchorReductions = 0, attempts = 0;
-    double error = 0.;
+    int refinedDerivatives = 0, derivativeRefinements = 0;
+    double error = 0., initialError = 0., minimumStep = 0.;
+    std::vector<Stencil> stencils;
 };
 
 // A constrained corner can forbid both signs of a coordinate probe even when
@@ -208,9 +215,45 @@ ModelLinearization LinearizeModelOnRay(const Vector &at, const Vector &value,
         {
             auto d = DifferentiateModel(current.at, current.value, i, step, evaluate);
             if (!d.available) break;
-            const double error = relativeError(d);
+            double error = relativeError(d);
             if (!(error >= 0.) || !std::isfinite(error))
                 throw std::logic_error("invalid source-model derivative error");
+            current.initialError = std::max(current.initialError, error);
+            const double beforeError = error;
+            int halvings = 0;
+            bool refined = false;
+            // Reuse the previous half-step sample as the new coarse action.
+            // Each retry needs only one additional, guarded quarter sample.
+            // A topology/roundoff error that does not resolve remains a
+            // failure; it does not relax the caller's accuracy threshold.
+            for (int retry = 0; retry < 3 && error > maximumError; ++retry)
+            {
+                auto atQuarter = current.at;
+                atQuarter[i] += .25*d.step;
+                Vector value;
+                if (!evaluate(atQuarter, value)) break;
+                if (value.size() != current.value.size())
+                    throw std::logic_error("source-model quarter sample changed shape");
+                for (int j = 0; j < value.size(); ++j)
+                {
+                    value[j] = (value[j]-current.value[j])/(.25*d.step);
+                    if (!std::isfinite(value[j]))
+                        throw std::logic_error("nonfinite refined source-model derivative");
+                }
+                d.coarse = std::move(d.fine);
+                d.fine = std::move(value);
+                d.step *= .5;
+                error = relativeError(d);
+                if (!(error >= 0.) || !std::isfinite(error))
+                    throw std::logic_error("invalid refined source-model derivative error");
+                ++current.derivativeRefinements;
+                ++halvings;
+                refined = true;
+            }
+            current.refinedDerivatives += refined;
+            if (refined) current.stencils.push_back({i,halvings,beforeError,error,std::abs(d.step)});
+            current.minimumStep = current.minimumStep > 0.
+                ? std::min(current.minimumStep,std::abs(d.step)) : std::abs(d.step);
             current.error = std::max(current.error, error);
             current.derivatives.push_back(std::move(d.fine));
         }

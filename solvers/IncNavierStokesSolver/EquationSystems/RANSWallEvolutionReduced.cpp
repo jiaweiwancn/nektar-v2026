@@ -1933,8 +1933,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                         const int evaluationsBefore=sourceModelEvaluations;
                         const int evaluationBudget=4*n+64;
                         auto boundedModel=[&](const Vector &q,Vector &value) {
-                            if (m_reducedInteriorSourceAnchor &&
-                                sourceModelEvaluations-evaluationsBefore>=evaluationBudget)
+                            if (sourceModelEvaluations-evaluationsBefore>=evaluationBudget)
                                 return false;
                             return sourceModel(q,value);
                         };
@@ -1948,6 +1947,32 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                             boundedModel,relativeError);
                         const double error=linearization.error;
                         const int available=linearization.availableDerivatives;
+                        if (linearization.derivativeRefinements)
+                        {
+                            std::vector<std::string> stencils;
+                            for (const auto &s:linearization.stencils)
+                                stencils.push_back(J::Object({{"column",J::Number(s.column)},
+                                    {"name",J::Quote(columns.at(s.column).name)},
+                                    {"halvings",J::Number(s.halvings)},
+                                    {"initial_error",J::Number(s.initialError)},
+                                    {"final_error",J::Number(s.finalError)},
+                                    {"coarse_step",J::Number(s.coarseStep)},
+                                    {"fine_step",J::Number(.5*s.coarseStep)}}));
+                            emit("source_derivative_precision",{
+                                {"refinement",J::Number(refinement)},
+                                {"available",J::Boolean(linearization.available)},
+                                {"dimension",J::Number(n)},
+                                {"refined_columns",J::Number(linearization.refinedDerivatives)},
+                                {"stencil_halvings",J::Number(linearization.derivativeRefinements)},
+                                {"minimum_coarse_step",J::Number(linearization.minimumStep)},
+                                {"minimum_fine_step",J::Number(.5*linearization.minimumStep)},
+                                {"initial_error",J::Number(linearization.initialError)},
+                                {"final_error",J::Number(error)},
+                                {"model_evaluations",J::Number(sourceModelEvaluations-evaluationsBefore)},
+                                {"model_evaluation_budget",J::Number(evaluationBudget)},
+                                {"columns",J::List(stencils)},
+                                {"scope",J::Quote("surrogate derivatives only; accuracy threshold unchanged; actual trials converge H")}});
+                        }
                         if (m_reducedInteriorSourceAnchor)
                             emit("source_linearization_anchor",{
                                 {"refinement",J::Number(refinement)},

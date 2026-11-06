@@ -162,6 +162,20 @@ def check(directory):
                 for r in source_predictions),
             "a source-ray actual trial lacked controlled H or exceeded its radius")
     refinements = [r for r in records if r["event"] == "source_direction_refinement"]
+    precision = [r for r in records if r["event"] == "source_derivative_precision"]
+    require(all(1 <= r["refined_columns"] <= r["dimension"] and
+                r["refined_columns"] <= r["stencil_halvings"] <= 3*r["refined_columns"] and
+                0 < r["minimum_coarse_step"] <= 2e-5 and
+                r["minimum_fine_step"] == .5*r["minimum_coarse_step"] and
+                r["model_evaluations"] <= r["model_evaluation_budget"] == 4*r["dimension"]+64 and
+                (not r["available"] or r["final_error"] <= .03)
+                for r in precision),
+            "source derivative precision exhausted its budget or accepted unresolved actions")
+    require(all(len(r["columns"]) == r["refined_columns"] and
+                sum(c["halvings"] for c in r["columns"]) == r["stencil_halvings"] and
+                all(0 <= c["column"] < r["dimension"] and 1 <= c["halvings"] <= 3 and
+                    c["fine_step"] == .5*c["coarse_step"] for c in r["columns"])
+                for r in precision), "invalid refined source-column accounting")
     anchors = [r for r in records if r["event"] == "source_linearization_anchor"]
     require(protocol.get("interior_source_model_anchors", False) or not anchors,
             "an interior source anchor was used without its selector")
@@ -201,6 +215,7 @@ def check(directory):
                   source_refined_direction_checks=refined_checks)
     result["response_preconditioners"] = prepared
     result["source_linearization_anchors"] = anchors
+    result["source_derivative_precision"] = precision
     result["radius_query_retries"] = radius_retries
     write_json(directory / "reduced-checks.json", result)
 

@@ -231,6 +231,30 @@ int main(int argc, char **argv)
         1e-4,2,.03,[](const R::Vector &,R::Vector &) { return false; },derivativeError);
     Check(!linearization.available && linearization.attempts==3,
           "exhausted anchor attempts were silently accepted");
+    // Coarse stencils can miss the declared accuracy at a smooth interior
+    // point. The quadratic's independent derivative at zero is2; one reused
+    // half stencil reduces its truncation error without moving the anchor.
+    int precisionCalls=0;
+    auto curvedModel=[&](const R::Vector &z,R::Vector &value) {
+        ++precisionCalls;value={1.+2.*z[0]+1e4*z[0]*z[0]};return true;
+    };
+    linearization=R::LinearizeModelOnRay(R::Vector{0.},R::Vector{1.},
+        2e-5,0,.03,curvedModel,derivativeError);
+    Check(linearization.available && linearization.anchorReductions==0 &&
+          linearization.refinedDerivatives==1 && linearization.derivativeRefinements==1 &&
+          linearization.initialError>.03 && linearization.error<.03 && precisionCalls==3 &&
+          linearization.minimumStep==1e-5 && linearization.stencils.size()==1,
+          "an inaccurate coarse source stencil discarded a resolvable derivative");
+    Check(std::abs(linearization.derivatives[0][0]-2.)<.06,
+          "refined source action disagrees with the independent quadratic derivative");
+    precisionCalls=0;
+    linearization=R::LinearizeModelOnRay(R::Vector{0.},R::Vector{1.},
+        2e-5,0,.03,[&](const R::Vector &z,R::Vector &value) {
+            ++precisionCalls;value={z[0]==0.?1.:2.};return true;
+        },derivativeError);
+    Check(!linearization.available && linearization.derivativeRefinements==3 &&
+          linearization.error>.03 && precisionCalls==5,
+          "an unresolved source jump was silently accepted as a derivative");
     // A full scan must discover the sum constraint and then ground contact.
     r = Solve({{1.,0.},{0.,1.}}, {-2.,-4.},
               {{{-1.,0.},0.}, {{0.,1.},10.}, {{1.,1.},1.}}, {0.,0.});
