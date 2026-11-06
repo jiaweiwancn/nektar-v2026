@@ -1,0 +1,1943 @@
+{
+  "scope": "Positive-eta algebraic continuation of fixed alpha400/time.0025/history; auxiliary roots and scoped ground approach, never original M8 success or physical advance",
+  "utc": "2026-11-06T09:23:11.442282+00:00",
+  "original_tolerance": 2e-12,
+  "eta_positive_auxiliary_tolerance": 1e-10,
+  "branches": [
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/source-ray-ground-ladder-aux1e-10/continuation.json",
+      "snapshot_sha256": "ce72bd396a667f43514769602bbae93817c7ddc168fba2f0a84c89081e9d4543",
+      "status": "continued_solve_failed_not_nonexistence",
+      "source": "e65b0be37dc76f196bd9994779c88e881a01749d",
+      "solver": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/IncNavierStokesSolver",
+      "solver_sha256": "7f123e5189a4aeb11781a743b99b7f6b4d4fa6e3ceb58a5f0e5f725c8d849e86",
+      "resolution_probe": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/RANSWallResolutionProbe",
+      "resolution_probe_sha256": "1ed3c1299fb8bd4cff8be3318d23c5448ec658513cfdeb814a03e694bafde8fd",
+      "ranks": 1,
+      "thread_limits": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "cases": [
+        {
+          "eta": 150.0,
+          "operator_alpha": 550.0,
+          "physical_alpha": 400.0,
+          "time": 0.0025,
+          "auxiliary_tolerance": 1e-10,
+          "original_tolerance": 2e-12,
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/source-ray-ground-ladder-aux1e-10/eta-150",
+          "purpose": "ladder",
+          "xml_sha256": "8eb24573f7b559b96e33f1d37cd1e5be3574f39f2a54e469f54c547bdac4a75a",
+          "native": {
+            "command": [
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/IncNavierStokesSolver",
+              "case.xml"
+            ],
+            "exit_code": 1,
+            "seconds": 47.08149995999702,
+            "log_sha256": "aa22ad29c90fef2ddc8896e9492d9d6fc996986af6db694401888b16e64fe8fe"
+          },
+          "accepted_steps": 0,
+          "accepted_time": 0.0,
+          "history_preserved": true,
+          "native_failure": "Picard algebraic continuation diagnostic completed a root without advancing physical history",
+          "native_target": {
+            "physical_history_advanced": false,
+            "method": "sequential_reduced_response",
+            "qualification_policy": "observe_original_qualification_without_enforcing_it_in_algebraic_diagnostic",
+            "event": "target",
+            "physical_alpha": 400,
+            "operator_alpha": 550,
+            "eta": 150,
+            "original_tolerance": 2e-12,
+            "auxiliary_tolerance": 1e-10,
+            "time": 0.0025,
+            "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca"
+          },
+          "readback": {
+            "original": {
+              "command": [
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/RANSWallResolutionProbe",
+                "case.xml",
+                "original-input.json",
+                "original-readback.json"
+              ],
+              "exit_code": 0,
+              "seconds": 6.981716888993105,
+              "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "norms": [
+                1.7890745228516887,
+                0.05885531468808889,
+                10.742305969564585,
+                0.05992342362588466,
+                4.905453818343031e-16,
+                8.513140569359977e-16,
+                9.486769009248162e-18,
+                0.0
+              ]
+            },
+            "continued": {
+              "command": [
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/RANSWallResolutionProbe",
+                "case.xml",
+                "continued-input.json",
+                "continued-readback.json"
+              ],
+              "exit_code": 0,
+              "seconds": 3.924378695002815,
+              "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "norms": [
+                1.1792084722273408e-12,
+                9.033651946440005e-14,
+                4.0925738736085186e-11,
+                5.263959308309555e-14,
+                4.905453818343031e-16,
+                8.513140569359977e-16,
+                9.486769009248162e-18,
+                0.0
+              ]
+            }
+          },
+          "status": "continued_auxiliary_root_only",
+          "state_sha256": "8151d5535fd5b108a0b064dc542c9cf206ad676e4d5966865910ab7bd42b5a38",
+          "root": {
+            "original_norms": [
+              1.7890745228516887,
+              0.05885531468808889,
+              10.742305969564585,
+              0.05992342362588466,
+              4.905453818343031e-16,
+              8.513140569359977e-16,
+              9.486769009248162e-18,
+              0
+            ],
+            "continued_norms": [
+              1.1792084722273408e-12,
+              9.033651946440005e-14,
+              4.0925738736085186e-11,
+              5.263959308309555e-14,
+              4.905453818343031e-16,
+              8.513140569359977e-16,
+              9.486769009248162e-18,
+              0
+            ],
+            "iterations": 0,
+            "mass_identity_defect": 8.326672684688674e-17,
+            "ground": {
+              "admissible": true,
+              "minimum": 0.002966298567606948,
+              "arithmetic_scale": 3.1489175200802487e-17,
+              "point": [
+                1.5840545332155416,
+                0,
+                0
+              ],
+              "geometry": 4,
+              "extrema_checked": 20
+            },
+            "outer_range": [
+              0.0023305999859366544,
+              0.9999980280098713,
+              1.0000103434083503,
+              0.9824058786698099,
+              1.0007928676972047,
+              0.9999876466855371,
+              1.0000306623693371
+            ],
+            "gradient_witness": [
+              1.6046496089512394,
+              0,
+              2,
+              0,
+              2,
+              -0.0023305999859366544,
+              34,
+              1
+            ],
+            "qualified": false,
+            "scalar_domain": [
+              1,
+              0.005812254501504391,
+              0.0029672024969613856,
+              0.5105070063431237,
+              0.03631791663093067,
+              0.510501706593865,
+              0.07135786959853269,
+              0.8410589891241623,
+              1
+            ],
+            "covariance": [
+              0.0005783454670790387,
+              0.17712570429550584
+            ],
+            "event": "root",
+            "physical_alpha": 400,
+            "operator_alpha": 550,
+            "eta": 150,
+            "original_tolerance": 2e-12,
+            "auxiliary_tolerance": 1e-10,
+            "time": 0.0025,
+            "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca"
+          }
+        },
+        {
+          "eta": 140.0,
+          "operator_alpha": 540.0,
+          "physical_alpha": 400.0,
+          "time": 0.0025,
+          "auxiliary_tolerance": 1e-10,
+          "original_tolerance": 2e-12,
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/source-ray-ground-ladder-aux1e-10/eta-140",
+          "purpose": "ladder",
+          "xml_sha256": "ed0b9266c7f2aa7ea8404f726cfe44197cb6f6e994eec37efce796f21c403654",
+          "native": {
+            "command": [
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/IncNavierStokesSolver",
+              "case.xml"
+            ],
+            "exit_code": 1,
+            "seconds": 3285.6457392489974,
+            "log_sha256": "960f32ab64764075d5309bde8f2ac3ab73cae8afb8e84d810eeadb8c8f88e631"
+          },
+          "accepted_steps": 0,
+          "accepted_time": 0.0,
+          "history_preserved": true,
+          "native_failure": "Picard algebraic continuation diagnostic completed a root without advancing physical history",
+          "native_target": {
+            "physical_history_advanced": false,
+            "method": "sequential_reduced_response",
+            "qualification_policy": "observe_original_qualification_without_enforcing_it_in_algebraic_diagnostic",
+            "event": "target",
+            "physical_alpha": 400,
+            "operator_alpha": 540,
+            "eta": 140,
+            "original_tolerance": 2e-12,
+            "auxiliary_tolerance": 1e-10,
+            "time": 0.0025,
+            "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca"
+          },
+          "readback": {
+            "original": {
+              "command": [
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/RANSWallResolutionProbe",
+                "case.xml",
+                "original-input.json",
+                "original-readback.json"
+              ],
+              "exit_code": 0,
+              "seconds": 7.078951021001558,
+              "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "norms": [
+                1.7101372356949949,
+                0.05676786009754522,
+                10.123012010620943,
+                0.057055186096247205,
+                5.906144333154848e-16,
+                7.192509358961891e-16,
+                5.742883382384155e-17,
+                0.0
+              ]
+            },
+            "continued": {
+              "command": [
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/RANSWallResolutionProbe",
+                "case.xml",
+                "continued-input.json",
+                "continued-readback.json"
+              ],
+              "exit_code": 0,
+              "seconds": 4.023395968004479,
+              "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "norms": [
+                1.2253690497529393e-12,
+                1.0079782214351017e-13,
+                7.414885633737232e-11,
+                4.5361640472761624e-14,
+                5.906144333154848e-16,
+                7.192509358961891e-16,
+                5.742883382384155e-17,
+                0.0
+              ]
+            }
+          },
+          "status": "continued_auxiliary_root_only",
+          "state_sha256": "dff191e7513d34843e01eeb085392f28b00a8e989dda44bd1e8b8bda2f0b37de",
+          "root": {
+            "original_norms": [
+              1.7101372356949949,
+              0.05676786009754522,
+              10.123012010620943,
+              0.057055186096247205,
+              5.906144333154848e-16,
+              7.192509358961891e-16,
+              5.742883382384155e-17,
+              0
+            ],
+            "continued_norms": [
+              1.2253690497529393e-12,
+              1.0079782214351017e-13,
+              7.414885633737232e-11,
+              4.5361640472761624e-14,
+              5.906144333154848e-16,
+              7.192509358961891e-16,
+              5.742883382384155e-17,
+              0
+            ],
+            "iterations": 7,
+            "mass_identity_defect": 5.551115123125783e-17,
+            "ground": {
+              "admissible": true,
+              "minimum": 0.0014030962938544175,
+              "arithmetic_scale": 3.1524793281663516e-17,
+              "point": [
+                1.5835681003061894,
+                0,
+                0
+              ],
+              "geometry": 4,
+              "extrema_checked": 20
+            },
+            "outer_range": [
+              0.002361143085283013,
+              0.9999977159628817,
+              1.0000106475259947,
+              0.982431404578151,
+              1.0007837001901352,
+              0.9999854654238721,
+              1.0000315998797884
+            ],
+            "gradient_witness": [
+              1.6046496089512394,
+              0,
+              2,
+              0,
+              2,
+              -0.002361143085283013,
+              34,
+              1
+            ],
+            "qualified": false,
+            "scalar_domain": [
+              1,
+              0.002748619249646705,
+              0.0014031921517952946,
+              0.5105068470406351,
+              0.03631791663093067,
+              0.5105005930423064,
+              0.07135972369415482,
+              0.8366423210561308,
+              1
+            ],
+            "covariance": [
+              0.00027348838687614376,
+              0.1771277855368717
+            ],
+            "event": "root",
+            "physical_alpha": 400,
+            "operator_alpha": 540,
+            "eta": 140,
+            "original_tolerance": 2e-12,
+            "auxiliary_tolerance": 1e-10,
+            "time": 0.0025,
+            "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca"
+          }
+        },
+        {
+          "eta": 135.0,
+          "operator_alpha": 535.0,
+          "physical_alpha": 400.0,
+          "time": 0.0025,
+          "auxiliary_tolerance": 1e-10,
+          "original_tolerance": 2e-12,
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/source-ray-ground-ladder-aux1e-10/eta-135",
+          "purpose": "ladder",
+          "xml_sha256": "47831d486793f57f3f0400ca10cd04d392c26fb74ac815f93e0a107b3c6572c7",
+          "native": {
+            "command": [
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/IncNavierStokesSolver",
+              "case.xml"
+            ],
+            "exit_code": 1,
+            "seconds": 2396.4849519369964,
+            "log_sha256": "1055620d4542ef1f318d447b1ffd2f0de53659ce6a21498208a698dba21bf81b"
+          },
+          "accepted_steps": 0,
+          "accepted_time": 0.0,
+          "history_preserved": true,
+          "native_failure": "Picard algebraic continuation diagnostic completed a root without advancing physical history",
+          "native_target": {
+            "physical_history_advanced": false,
+            "method": "sequential_reduced_response",
+            "qualification_policy": "observe_original_qualification_without_enforcing_it_in_algebraic_diagnostic",
+            "event": "target",
+            "physical_alpha": 400,
+            "operator_alpha": 535,
+            "eta": 135,
+            "original_tolerance": 2e-12,
+            "auxiliary_tolerance": 1e-10,
+            "time": 0.0025,
+            "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca"
+          },
+          "readback": {
+            "original": {
+              "command": [
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/RANSWallResolutionProbe",
+                "case.xml",
+                "original-input.json",
+                "original-readback.json"
+              ],
+              "exit_code": 0,
+              "seconds": 7.1799499619955895,
+              "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "norms": [
+                1.6691082878935692,
+                0.05565435413574149,
+                9.809240473741713,
+                0.05559165044560617,
+                6.570372528393583e-16,
+                7.282800994478542e-16,
+                5.031375706690543e-17,
+                0.0
+              ]
+            },
+            "continued": {
+              "command": [
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/RANSWallResolutionProbe",
+                "case.xml",
+                "continued-input.json",
+                "continued-readback.json"
+              ],
+              "exit_code": 0,
+              "seconds": 4.023387076995277,
+              "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "norms": [
+                1.3106994610064185e-12,
+                1.0796860145500001e-13,
+                3.455082207817434e-11,
+                5.1433938617966634e-14,
+                6.570372528393583e-16,
+                7.282800994478542e-16,
+                5.031375706690543e-17,
+                0.0
+              ]
+            }
+          },
+          "status": "continued_auxiliary_root_only",
+          "state_sha256": "8ba47d0e87e221ded121790193da652028e38bd1be70a4b8301f0806d3b403a7",
+          "root": {
+            "original_norms": [
+              1.6691082878935692,
+              0.05565435413574149,
+              9.809240473741713,
+              0.05559165044560617,
+              6.570372528393583e-16,
+              7.282800994478542e-16,
+              5.031375706690543e-17,
+              0
+            ],
+            "continued_norms": [
+              1.3106994610064185e-12,
+              1.0796860145500001e-13,
+              3.455082207817434e-11,
+              5.1433938617966634e-14,
+              6.570372528393583e-16,
+              7.282800994478542e-16,
+              5.031375706690543e-17,
+              0
+            ],
+            "iterations": 5,
+            "mass_identity_defect": 2.7755575615628914e-17,
+            "ground": {
+              "admissible": true,
+              "minimum": 0.0006276014334382847,
+              "arithmetic_scale": 3.154308118311492e-17,
+              "point": [
+                1.5833436497860134,
+                0,
+                0
+              ],
+              "geometry": 4,
+              "extrema_checked": 20
+            },
+            "outer_range": [
+              0.0023767208704873477,
+              0.9999973919048993,
+              1.0000107778578555,
+              0.9824449357232657,
+              1.000779048369048,
+              0.9999843309839656,
+              1.0000320013305775
+            ],
+            "gradient_witness": [
+              1.6046496089512394,
+              0,
+              2,
+              0,
+              2,
+              -0.0023767208704873477,
+              34,
+              1
+            ],
+            "qualified": false,
+            "scalar_domain": [
+              1,
+              0.0012293668318049155,
+              0.0006276016186264546,
+              0.5105066816064384,
+              0.03631791663093067,
+              0.5105000139016438,
+              0.07136070654015521,
+              0.8344236778857573,
+              1
+            ],
+            "covariance": [
+              0.00012231970087314573,
+              0.17712884826320524
+            ],
+            "event": "root",
+            "physical_alpha": 400,
+            "operator_alpha": 535,
+            "eta": 135,
+            "original_tolerance": 2e-12,
+            "auxiliary_tolerance": 1e-10,
+            "time": 0.0025,
+            "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca"
+          }
+        },
+        {
+          "eta": 132.5,
+          "operator_alpha": 532.5,
+          "physical_alpha": 400.0,
+          "time": 0.0025,
+          "auxiliary_tolerance": 1e-10,
+          "original_tolerance": 2e-12,
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/source-ray-ground-ladder-aux1e-10/eta-132.5",
+          "purpose": "ladder",
+          "xml_sha256": "60a4f3189217acca00f434fe41ff9d36436ddeb5e4f1a9f8035ce0d32e510610",
+          "native": {
+            "command": [
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/IncNavierStokesSolver",
+              "case.xml"
+            ],
+            "exit_code": 1,
+            "seconds": 1873.5503765130052,
+            "log_sha256": "f6b1a5430ececa2e2f0405e9392ac7b53edaf27ee898ad2510f2c757be3120fe"
+          },
+          "accepted_steps": 0,
+          "accepted_time": 0.0,
+          "history_preserved": true,
+          "native_failure": "Picard algebraic continuation diagnostic completed a root without advancing physical history",
+          "native_target": {
+            "physical_history_advanced": false,
+            "method": "sequential_reduced_response",
+            "qualification_policy": "observe_original_qualification_without_enforcing_it_in_algebraic_diagnostic",
+            "event": "target",
+            "physical_alpha": 400,
+            "operator_alpha": 532.5,
+            "eta": 132.5,
+            "original_tolerance": 2e-12,
+            "auxiliary_tolerance": 1e-10,
+            "time": 0.0025,
+            "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca"
+          },
+          "readback": {
+            "original": {
+              "command": [
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/RANSWallResolutionProbe",
+                "case.xml",
+                "original-input.json",
+                "original-readback.json"
+              ],
+              "exit_code": 0,
+              "seconds": 6.929390699995565,
+              "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "norms": [
+                1.648192924229218,
+                0.05507969620498288,
+                9.651320069564159,
+                0.054852145335959474,
+                5.864648703435025e-16,
+                9.38766091785958e-16,
+                4.573977915173221e-18,
+                0.0
+              ]
+            },
+            "continued": {
+              "command": [
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/RANSWallResolutionProbe",
+                "case.xml",
+                "continued-input.json",
+                "continued-readback.json"
+              ],
+              "exit_code": 0,
+              "seconds": 4.024241399005405,
+              "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "norms": [
+                1.2033113699761277e-12,
+                1.646213598766644e-13,
+                7.968268108807017e-11,
+                5.834729525138754e-14,
+                5.864648703435025e-16,
+                9.38766091785958e-16,
+                4.573977915173221e-18,
+                0.0
+              ]
+            }
+          },
+          "status": "continued_auxiliary_root_only",
+          "state_sha256": "25c8502bd676a03bc605c6ef38b3a2062b8a726192e042089eebb0eb29bd80db",
+          "root": {
+            "original_norms": [
+              1.648192924229218,
+              0.05507969620498288,
+              9.651320069564159,
+              0.054852145335959474,
+              5.864648703435025e-16,
+              9.38766091785958e-16,
+              4.573977915173221e-18,
+              0
+            ],
+            "continued_norms": [
+              1.2033113699761277e-12,
+              1.646213598766644e-13,
+              7.968268108807017e-11,
+              5.834729525138754e-14,
+              5.864648703435025e-16,
+              9.38766091785958e-16,
+              4.573977915173221e-18,
+              0
+            ],
+            "iterations": 4,
+            "mass_identity_defect": 1.3877787807814457e-17,
+            "ground": {
+              "admissible": true,
+              "minimum": 0.00024022499391680244,
+              "arithmetic_scale": 3.155232608706624e-17,
+              "point": [
+                1.5832350822380494,
+                0,
+                0
+              ],
+              "geometry": 4,
+              "extrema_checked": 20
+            },
+            "outer_range": [
+              0.0023845882956998743,
+              0.9999972269726608,
+              1.0000108377723704,
+              0.9824519078755105,
+              1.0007767051333873,
+              0.9999837530203892,
+              1.0000321857212733
+            ],
+            "gradient_witness": [
+              1.6046496089512394,
+              0,
+              2,
+              0,
+              2,
+              -0.0023845882956998743,
+              34,
+              1
+            ],
+            "qualified": false,
+            "scalar_domain": [
+              1,
+              0.00047059358265224844,
+              0.00024024179483853264,
+              0.510506597407209,
+              0.03631791663093067,
+              0.5104997188466068,
+              0.07136121296824313,
+              0.8333124017070546,
+              1
+            ],
+            "covariance": [
+              4.682266982670141e-05,
+              0.17712938531389355
+            ],
+            "event": "root",
+            "physical_alpha": 400,
+            "operator_alpha": 532.5,
+            "eta": 132.5,
+            "original_tolerance": 2e-12,
+            "auxiliary_tolerance": 1e-10,
+            "time": 0.0025,
+            "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca"
+          }
+        },
+        {
+          "eta": 131.25,
+          "operator_alpha": 531.25,
+          "physical_alpha": 400.0,
+          "time": 0.0025,
+          "auxiliary_tolerance": 1e-10,
+          "original_tolerance": 2e-12,
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/source-ray-ground-ladder-aux1e-10/eta-131.25",
+          "purpose": "ladder",
+          "xml_sha256": "57aead2b8d0f4172bcaecefb28ff3a58318c14dfa0b699febd3272214a2129ba",
+          "native": {
+            "command": [
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/IncNavierStokesSolver",
+              "case.xml"
+            ],
+            "exit_code": 1,
+            "seconds": 1893.0158526190062,
+            "log_sha256": "f285c92afc07daed6952518fd9066b6636e6162a4733090ba60b72209631cf59"
+          },
+          "accepted_steps": 0,
+          "accepted_time": 0.0,
+          "history_preserved": true,
+          "native_failure": "Picard algebraic continuation diagnostic completed a root without advancing physical history",
+          "native_target": {
+            "physical_history_advanced": false,
+            "method": "sequential_reduced_response",
+            "qualification_policy": "observe_original_qualification_without_enforcing_it_in_algebraic_diagnostic",
+            "event": "target",
+            "physical_alpha": 400,
+            "operator_alpha": 531.25,
+            "eta": 131.25,
+            "original_tolerance": 2e-12,
+            "auxiliary_tolerance": 1e-10,
+            "time": 0.0025,
+            "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca"
+          },
+          "readback": {
+            "original": {
+              "command": [
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/RANSWallResolutionProbe",
+                "case.xml",
+                "original-input.json",
+                "original-readback.json"
+              ],
+              "exit_code": 0,
+              "seconds": 7.031033620995004,
+              "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "norms": [
+                1.6376330929441114,
+                0.05478780488367892,
+                9.572097363122673,
+                0.054480379642421715,
+                8.886044290594458e-16,
+                7.176541399400506e-16,
+                2.6258021364883304e-17,
+                0.0
+              ]
+            },
+            "continued": {
+              "command": [
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/RANSWallResolutionProbe",
+                "case.xml",
+                "continued-input.json",
+                "continued-readback.json"
+              ],
+              "exit_code": 0,
+              "seconds": 4.023524293996161,
+              "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "norms": [
+                1.7019509761384142e-12,
+                2.0839337363341828e-13,
+                6.836832679014494e-11,
+                5.93952094507239e-14,
+                8.886044290594458e-16,
+                7.176541399400506e-16,
+                2.6258021364883304e-17,
+                0.0
+              ]
+            }
+          },
+          "status": "continued_auxiliary_root_only",
+          "state_sha256": "b666dd433ece7218e7cf1591a20a431a339baf39233eb97cb548f6c54461879c",
+          "root": {
+            "original_norms": [
+              1.6376330929441114,
+              0.05478780488367892,
+              9.572097363122673,
+              0.054480379642421715,
+              8.886044290594458e-16,
+              7.176541399400506e-16,
+              2.6258021364883304e-17,
+              0
+            ],
+            "continued_norms": [
+              1.7019509761384142e-12,
+              2.0839337363341828e-13,
+              6.836832679014494e-11,
+              5.93952094507239e-14,
+              8.886044290594458e-16,
+              7.176541399400506e-16,
+              2.6258021364883304e-17,
+              0
+            ],
+            "iterations": 4,
+            "mass_identity_defect": 2.7755575615628914e-17,
+            "ground": {
+              "admissible": true,
+              "minimum": 4.6336834215708656e-05,
+              "arithmetic_scale": 3.155700389589429e-17,
+              "point": [
+                1.5831814739642875,
+                0,
+                0
+              ],
+              "geometry": 4,
+              "extrema_checked": 20
+            },
+            "outer_range": [
+              0.0023885418868861974,
+              0.9999971437883515,
+              1.000010866025488,
+              0.982455445104032,
+              1.0007755291703568,
+              0.9999834613741143,
+              1.0000322726240853
+            ],
+            "gradient_witness": [
+              1.6046496089512394,
+              0,
+              2,
+              0,
+              2,
+              -0.0023885418868861974,
+              34,
+              1
+            ],
+            "qualified": false,
+            "scalar_domain": [
+              1,
+              9.08447561474784e-05,
+              4.637697595775907e-05,
+              0.5105065549409525,
+              0.03631791663093067,
+              0.5104995699588465,
+              0.07136146989778423,
+              0.8327556240405795,
+              1
+            ],
+            "covariance": [
+              9.038734923009321e-06,
+              0.17712965527981692
+            ],
+            "event": "root",
+            "physical_alpha": 400,
+            "operator_alpha": 531.25,
+            "eta": 131.25,
+            "original_tolerance": 2e-12,
+            "auxiliary_tolerance": 1e-10,
+            "time": 0.0025,
+            "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca"
+          }
+        },
+        {
+          "eta": 130.625,
+          "operator_alpha": 530.625,
+          "physical_alpha": 400.0,
+          "time": 0.0025,
+          "auxiliary_tolerance": 1e-10,
+          "original_tolerance": 2e-12,
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/source-ray-ground-ladder-aux1e-10/eta-130.625",
+          "purpose": "ladder",
+          "xml_sha256": "b5a7a4d10545971d01e978fb81824381b0c00c109d852813c6da2d10ffa6114d",
+          "native": {
+            "command": [
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/IncNavierStokesSolver",
+              "case.xml"
+            ],
+            "exit_code": 124,
+            "seconds": 7200.047396802998,
+            "log_sha256": "9cb2314cdb34a9a98b3ad1b85bfa244f5b2481b57c3e562a5ebc204c497034be"
+          },
+          "native_target": {
+            "physical_history_advanced": false,
+            "method": "sequential_reduced_response",
+            "qualification_policy": "observe_original_qualification_without_enforcing_it_in_algebraic_diagnostic",
+            "event": "target",
+            "physical_alpha": 400,
+            "operator_alpha": 530.625,
+            "eta": 130.625,
+            "original_tolerance": 2e-12,
+            "auxiliary_tolerance": 1e-10,
+            "time": 0.0025,
+            "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca"
+          },
+          "status": "no_certified_continuation_root"
+        }
+      ]
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/source-ray-ground-fine-ladder-aux1e-10/continuation.json",
+      "snapshot_sha256": "4d19818ecebea939ef4a5357251a9cb4ab5162eab9ebd62dbc0a85cfa007f555",
+      "status": "continued_solve_failed_not_nonexistence",
+      "source": "cfec98879c16b9867f4fbfd68430611b6b6bdaf4",
+      "solver": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/IncNavierStokesSolver",
+      "solver_sha256": "7f123e5189a4aeb11781a743b99b7f6b4d4fa6e3ceb58a5f0e5f725c8d849e86",
+      "resolution_probe": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/RANSWallResolutionProbe",
+      "resolution_probe_sha256": "1ed3c1299fb8bd4cff8be3318d23c5448ec658513cfdeb814a03e694bafde8fd",
+      "ranks": 1,
+      "thread_limits": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "cases": [
+        {
+          "eta": 131.0,
+          "operator_alpha": 531.0,
+          "physical_alpha": 400.0,
+          "time": 0.0025,
+          "auxiliary_tolerance": 1e-10,
+          "original_tolerance": 2e-12,
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/source-ray-ground-fine-ladder-aux1e-10/eta-131",
+          "purpose": "ladder",
+          "xml_sha256": "6e820643f2533faa2bb192cdc216c2e2aca03cdc694fefbb866b9fef1efbca98",
+          "native": {
+            "command": [
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/IncNavierStokesSolver",
+              "case.xml"
+            ],
+            "exit_code": 1,
+            "seconds": 2309.8126019369956,
+            "log_sha256": "b32697157da8b7f6ae8a817c7e1e60a50ea1bc8a87dc51d8b9a89ee473b077af"
+          },
+          "accepted_steps": 0,
+          "accepted_time": 0.0,
+          "history_preserved": true,
+          "native_failure": "Picard algebraic continuation diagnostic completed a root without advancing physical history",
+          "native_target": {
+            "physical_history_advanced": false,
+            "method": "sequential_reduced_response",
+            "qualification_policy": "observe_original_qualification_without_enforcing_it_in_algebraic_diagnostic",
+            "event": "target",
+            "physical_alpha": 400,
+            "operator_alpha": 531,
+            "eta": 131,
+            "original_tolerance": 2e-12,
+            "auxiliary_tolerance": 1e-10,
+            "time": 0.0025,
+            "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca"
+          },
+          "readback": {
+            "original": {
+              "command": [
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/RANSWallResolutionProbe",
+                "case.xml",
+                "original-input.json",
+                "original-readback.json"
+              ],
+              "exit_code": 0,
+              "seconds": 6.934982031001709,
+              "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "norms": [
+                1.6355130110630007,
+                0.05472906159609026,
+                9.556232626095062,
+                0.05440587374445868,
+                7.230039214363871e-16,
+                7.226039312978612e-16,
+                3.0154372922253086e-17,
+                0.0
+              ]
+            },
+            "continued": {
+              "command": [
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/RANSWallResolutionProbe",
+                "case.xml",
+                "continued-input.json",
+                "continued-readback.json"
+              ],
+              "exit_code": 0,
+              "seconds": 4.126226887994562,
+              "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "norms": [
+                1.5461813667061837e-12,
+                7.862612155194578e-14,
+                1.1621875866537471e-11,
+                4.5621221715394384e-14,
+                7.230039214363871e-16,
+                7.226039312978612e-16,
+                3.0154372922253086e-17,
+                0.0
+              ]
+            }
+          },
+          "status": "continued_auxiliary_root_only",
+          "state_sha256": "61295ecb55333c7b15ef3d02f721d70a10235a4d2d3b36210c4930017d72dcfd",
+          "root": {
+            "original_norms": [
+              1.6355130110630007,
+              0.05472906159609026,
+              9.556232626095062,
+              0.05440587374445868,
+              7.230039214363871e-16,
+              7.226039312978612e-16,
+              3.0154372922253086e-17,
+              0
+            ],
+            "continued_norms": [
+              1.5461813667061837e-12,
+              7.862612155194578e-14,
+              1.1621875866537471e-11,
+              4.5621221715394384e-14,
+              7.230039214363871e-16,
+              7.226039312978612e-16,
+              3.0154372922253086e-17,
+              0
+            ],
+            "iterations": 5,
+            "mass_identity_defect": 5.551115123125783e-17,
+            "ground": {
+              "admissible": true,
+              "minimum": 7.563000422772053e-06,
+              "arithmetic_scale": 3.155794540163174e-17,
+              "point": [
+                1.5831709521538542,
+                0,
+                0
+              ],
+              "geometry": 4,
+              "extrema_checked": 20
+            },
+            "outer_range": [
+              0.002389334199279891,
+              0.9999971271002843,
+              1.0000108716821785,
+              0.9824561575396593,
+              1.0007752936280396,
+              0.9999834028484675,
+              1.0000322900171932
+            ],
+            "gradient_witness": [
+              1.6046496089512394,
+              0,
+              2,
+              0,
+              2,
+              -0.002389334199279891,
+              34,
+              1
+            ],
+            "qualified": false,
+            "scalar_domain": [
+              1,
+              1.4904562590152422e-05,
+              7.608898633425423e-06,
+              0.5105065464215606,
+              0.03631791663093067,
+              0.5104995400810348,
+              0.07136152164613967,
+              0.8326442109915257,
+              1
+            ],
+            "covariance": [
+              1.48295012022893e-06,
+              0.17712970938732714
+            ],
+            "event": "root",
+            "physical_alpha": 400,
+            "operator_alpha": 531,
+            "eta": 131,
+            "original_tolerance": 2e-12,
+            "auxiliary_tolerance": 1e-10,
+            "time": 0.0025,
+            "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca"
+          }
+        },
+        {
+          "eta": 130.98,
+          "operator_alpha": 530.98,
+          "physical_alpha": 400.0,
+          "time": 0.0025,
+          "auxiliary_tolerance": 1e-10,
+          "original_tolerance": 2e-12,
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/source-ray-ground-fine-ladder-aux1e-10/eta-130.98",
+          "purpose": "ladder",
+          "xml_sha256": "c4d1a0eb7ff4f869baca60cc13b6210812671457869b43f7000e0be7c7566772",
+          "native": {
+            "command": [
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/IncNavierStokesSolver",
+              "case.xml"
+            ],
+            "exit_code": 1,
+            "seconds": 1821.9008672180062,
+            "log_sha256": "43882e37c5b1e442ed94a67aa9261b49e6a878f669f4c24ad3984ad0529a0575"
+          },
+          "accepted_steps": 0,
+          "accepted_time": 0.0,
+          "history_preserved": true,
+          "native_failure": "Picard algebraic continuation diagnostic completed a root without advancing physical history",
+          "native_target": {
+            "physical_history_advanced": false,
+            "method": "sequential_reduced_response",
+            "qualification_policy": "observe_original_qualification_without_enforcing_it_in_algebraic_diagnostic",
+            "event": "target",
+            "physical_alpha": 400,
+            "operator_alpha": 530.98,
+            "eta": 130.98,
+            "original_tolerance": 2e-12,
+            "auxiliary_tolerance": 1e-10,
+            "time": 0.0025,
+            "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca"
+          },
+          "readback": {
+            "original": {
+              "command": [
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/RANSWallResolutionProbe",
+                "case.xml",
+                "original-input.json",
+                "original-readback.json"
+              ],
+              "exit_code": 0,
+              "seconds": 7.032571820993326,
+              "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "norms": [
+                1.6353432820498477,
+                0.05472435650521029,
+                9.554963134405433,
+                0.054399910982244455,
+                7.515855965826963e-16,
+                5.7571508159110475e-16,
+                3.777766944754179e-17,
+                0.0
+              ]
+            },
+            "continued": {
+              "command": [
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/RANSWallResolutionProbe",
+                "case.xml",
+                "continued-input.json",
+                "continued-readback.json"
+              ],
+              "exit_code": 0,
+              "seconds": 4.075261721009156,
+              "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "norms": [
+                1.1773558911008695e-12,
+                1.0160932909431488e-13,
+                2.271254465855943e-12,
+                5.805261071720415e-14,
+                7.515855965826963e-16,
+                5.7571508159110475e-16,
+                3.777766944754179e-17,
+                0.0
+              ]
+            }
+          },
+          "status": "continued_auxiliary_root_only",
+          "state_sha256": "7609e94006c43dfd7561e5b8de5ad7ac393d56ff6e007ed5c27d7f85eb29e838",
+          "root": {
+            "original_norms": [
+              1.6353432820498477,
+              0.05472435650521029,
+              9.554963134405433,
+              0.054399910982244455,
+              7.515855965826963e-16,
+              5.7571508159110475e-16,
+              3.777766944754179e-17,
+              0
+            ],
+            "continued_norms": [
+              1.1773558911008695e-12,
+              1.0160932909431488e-13,
+              2.271254465855943e-12,
+              5.805261071720415e-14,
+              7.515855965826963e-16,
+              5.7571508159110475e-16,
+              3.777766944754179e-17,
+              0
+            ],
+            "iterations": 4,
+            "mass_identity_defect": 1.1102230246251565e-16,
+            "ground": {
+              "admissible": true,
+              "minimum": 4.461923632797477e-06,
+              "arithmetic_scale": 3.155802113210348e-17,
+              "point": [
+                1.5831701244021945,
+                0,
+                0
+              ],
+              "geometry": 4,
+              "extrema_checked": 20
+            },
+            "outer_range": [
+              0.0023893976069847556,
+              0.9999971257650919,
+              1.0000108721348888,
+              0.9824562146005379,
+              1.0007752747794327,
+              0.9999833981652565,
+              1.0000322914091004
+            ],
+            "gradient_witness": [
+              1.6046496089512394,
+              0,
+              2,
+              0,
+              2,
+              -0.0023893976069847556,
+              34,
+              1
+            ],
+            "qualified": false,
+            "scalar_domain": [
+              1,
+              8.830989838529545e-06,
+              4.508291075819763e-06,
+              0.5105065457399341,
+              0.03631791663093067,
+              0.510499537690218,
+              0.07136152579080413,
+              0.8326352980819378,
+              1
+            ],
+            "covariance": [
+              8.786515008338419e-07,
+              0.17712971371757671
+            ],
+            "event": "root",
+            "physical_alpha": 400,
+            "operator_alpha": 530.98,
+            "eta": 130.98,
+            "original_tolerance": 2e-12,
+            "auxiliary_tolerance": 1e-10,
+            "time": 0.0025,
+            "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca"
+          }
+        },
+        {
+          "eta": 130.96,
+          "operator_alpha": 530.96,
+          "physical_alpha": 400.0,
+          "time": 0.0025,
+          "auxiliary_tolerance": 1e-10,
+          "original_tolerance": 2e-12,
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/source-ray-ground-fine-ladder-aux1e-10/eta-130.96",
+          "purpose": "ladder",
+          "xml_sha256": "caae92c6423642a1ae3646cacbc00290c61fd65f476c3f77dccbaea1b3b7cfa8",
+          "native": {
+            "command": [
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/IncNavierStokesSolver",
+              "case.xml"
+            ],
+            "exit_code": 1,
+            "seconds": 1398.7064640330063,
+            "log_sha256": "d269995c3eea956ebf479ff7140f6ef1350c38ca56cfa80744dc078a2fe8a8f1"
+          },
+          "accepted_steps": 0,
+          "accepted_time": 0.0,
+          "history_preserved": true,
+          "native_failure": "Picard algebraic continuation diagnostic completed a root without advancing physical history",
+          "native_target": {
+            "physical_history_advanced": false,
+            "method": "sequential_reduced_response",
+            "qualification_policy": "observe_original_qualification_without_enforcing_it_in_algebraic_diagnostic",
+            "event": "target",
+            "physical_alpha": 400,
+            "operator_alpha": 530.96,
+            "eta": 130.96,
+            "original_tolerance": 2e-12,
+            "auxiliary_tolerance": 1e-10,
+            "time": 0.0025,
+            "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca"
+          },
+          "readback": {
+            "original": {
+              "command": [
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/RANSWallResolutionProbe",
+                "case.xml",
+                "original-input.json",
+                "original-readback.json"
+              ],
+              "exit_code": 0,
+              "seconds": 7.082870263999212,
+              "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "norms": [
+                1.6351735359225714,
+                0.05471965065139219,
+                9.553693600694004,
+                0.05439394789993359,
+                7.612323080407446e-16,
+                7.348079212107776e-16,
+                1.3891340334970522e-17,
+                0.0
+              ]
+            },
+            "continued": {
+              "command": [
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/RANSWallResolutionProbe",
+                "case.xml",
+                "continued-input.json",
+                "continued-readback.json"
+              ],
+              "exit_code": 0,
+              "seconds": 4.075300077995053,
+              "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "norms": [
+                1.0863041994491683e-12,
+                1.5917577020027505e-13,
+                3.1137439132609916e-11,
+                5.64258107199679e-14,
+                7.612323080407446e-16,
+                7.348079212107776e-16,
+                1.3891340334970522e-17,
+                0.0
+              ]
+            }
+          },
+          "status": "continued_auxiliary_root_only",
+          "state_sha256": "de2a2c669b6e53d62e1756a1d85d809b263b67e6bd3681e7338ec5a0d36c6bd7",
+          "root": {
+            "original_norms": [
+              1.6351735359225714,
+              0.05471965065139219,
+              9.553693600694004,
+              0.05439394789993359,
+              7.612323080407446e-16,
+              7.348079212107776e-16,
+              1.3891340334970522e-17,
+              0
+            ],
+            "continued_norms": [
+              1.0863041994491683e-12,
+              1.5917577020027505e-13,
+              3.1137439132609916e-11,
+              5.64258107199679e-14,
+              7.612323080407446e-16,
+              7.348079212107776e-16,
+              1.3891340334970522e-17,
+              0
+            ],
+            "iterations": 3,
+            "mass_identity_defect": 1.1102230246251565e-16,
+            "ground": {
+              "admissible": true,
+              "minimum": 1.36082224846032e-06,
+              "arithmetic_scale": 3.155809686146153e-17,
+              "point": [
+                1.583169296607244,
+                0,
+                0
+              ],
+              "geometry": 4,
+              "extrema_checked": 20
+            },
+            "outer_range": [
+              0.002389461018119654,
+              0.9999971244297651,
+              1.0000108725876196,
+              0.9824562716729438,
+              1.0007752559300795,
+              0.9999833934815541,
+              1.0000322928010488
+            ],
+            "gradient_witness": [
+              1.6046496089512394,
+              0,
+              2,
+              0,
+              2,
+              -0.002389461018119654,
+              34,
+              1
+            ],
+            "qualified": false,
+            "scalar_domain": [
+              1,
+              2.757373635619651e-06,
+              1.4076613359839026e-06,
+              0.5105065450582391,
+              0.03631791663093067,
+              0.5104995352991505,
+              0.07136152993630589,
+              0.8326263850082921,
+              1
+            ],
+            "covariance": [
+              2.7434866466262333e-07,
+              0.17712971804807218
+            ],
+            "event": "root",
+            "physical_alpha": 400,
+            "operator_alpha": 530.96,
+            "eta": 130.96,
+            "original_tolerance": 2e-12,
+            "auxiliary_tolerance": 1e-10,
+            "time": 0.0025,
+            "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca"
+          }
+        },
+        {
+          "eta": 130.955,
+          "operator_alpha": 530.955,
+          "physical_alpha": 400.0,
+          "time": 0.0025,
+          "auxiliary_tolerance": 1e-10,
+          "original_tolerance": 2e-12,
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/source-ray-ground-fine-ladder-aux1e-10/eta-130.955",
+          "purpose": "ladder",
+          "xml_sha256": "9d86ec0e747d826511a787dc2eecc06e8f224601b5250365a22771003e9c701b",
+          "native": {
+            "command": [
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/IncNavierStokesSolver",
+              "case.xml"
+            ],
+            "exit_code": 1,
+            "seconds": 1385.0325598909985,
+            "log_sha256": "f9a84196eb1b1930651ec5b2e436a5a3b5a7f1b946a9f5ba6676c8220585a3c8"
+          },
+          "accepted_steps": 0,
+          "accepted_time": 0.0,
+          "history_preserved": true,
+          "native_failure": "Picard algebraic continuation diagnostic completed a root without advancing physical history",
+          "native_target": {
+            "physical_history_advanced": false,
+            "method": "sequential_reduced_response",
+            "qualification_policy": "observe_original_qualification_without_enforcing_it_in_algebraic_diagnostic",
+            "event": "target",
+            "physical_alpha": 400,
+            "operator_alpha": 530.955,
+            "eta": 130.955,
+            "original_tolerance": 2e-12,
+            "auxiliary_tolerance": 1e-10,
+            "time": 0.0025,
+            "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca"
+          },
+          "readback": {
+            "original": {
+              "command": [
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/RANSWallResolutionProbe",
+                "case.xml",
+                "original-input.json",
+                "original-readback.json"
+              ],
+              "exit_code": 0,
+              "seconds": 7.03272058100265,
+              "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "norms": [
+                1.6351310967162431,
+                0.05471847406871905,
+                9.55337621070695,
+                0.05439245707922636,
+                6.211601675895472e-16,
+                6.772075121171347e-16,
+                4.099639464710813e-17,
+                0.0
+              ]
+            },
+            "continued": {
+              "command": [
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/RANSWallResolutionProbe",
+                "case.xml",
+                "continued-input.json",
+                "continued-readback.json"
+              ],
+              "exit_code": 0,
+              "seconds": 4.02530273499724,
+              "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "norms": [
+                9.974178213513228e-13,
+                1.2522965014935698e-13,
+                8.185851706291743e-11,
+                5.466532605688754e-14,
+                6.211601675895472e-16,
+                6.772075121171347e-16,
+                4.099639464710813e-17,
+                0.0
+              ]
+            }
+          },
+          "status": "continued_auxiliary_root_only",
+          "state_sha256": "c5dd6c20b538cff5e6e87380249af84036c2c9ec15a9433de7a1b7a482835707",
+          "root": {
+            "original_norms": [
+              1.6351310967162431,
+              0.05471847406871905,
+              9.55337621070695,
+              0.05439245707922636,
+              6.211601675895472e-16,
+              6.772075121171347e-16,
+              4.099639464710813e-17,
+              0
+            ],
+            "continued_norms": [
+              9.974178213513228e-13,
+              1.2522965014935698e-13,
+              8.185851706291743e-11,
+              5.466532605688754e-14,
+              6.211601675895472e-16,
+              6.772075121171347e-16,
+              4.099639464710813e-17,
+              0
+            ],
+            "iterations": 3,
+            "mass_identity_defect": 5.551115123125783e-17,
+            "ground": {
+              "admissible": true,
+              "minimum": 5.85543059664484e-07,
+              "arithmetic_scale": 3.155811579362699e-17,
+              "point": [
+                1.5831690896517436,
+                0,
+                0
+              ],
+              "geometry": 4,
+              "extrema_checked": 20
+            },
+            "outer_range": [
+              0.002389476871404783,
+              0.999997124095912,
+              1.0000108727008021,
+              0.9824562859428312,
+              1.0007752512176247,
+              0.9999833923105514,
+              1.000032293149039
+            ],
+            "gradient_witness": [
+              1.6046496089512394,
+              0,
+              2,
+              0,
+              2,
+              -0.002389476871404783,
+              34,
+              1
+            ],
+            "qualified": false,
+            "scalar_domain": [
+              1,
+              1.2389627960250674e-06,
+              6.325004352538781e-07,
+              0.5105065448878044,
+              0.03631791663093067,
+              0.5104995347013442,
+              0.07136153097281105,
+              0.8326241567142431,
+              1
+            ],
+            "covariance": [
+              1.2327229678938413e-07,
+              0.17712971913073294
+            ],
+            "event": "root",
+            "physical_alpha": 400,
+            "operator_alpha": 530.955,
+            "eta": 130.955,
+            "original_tolerance": 2e-12,
+            "auxiliary_tolerance": 1e-10,
+            "time": 0.0025,
+            "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca"
+          }
+        },
+        {
+          "eta": 130.952,
+          "operator_alpha": 530.952,
+          "physical_alpha": 400.0,
+          "time": 0.0025,
+          "auxiliary_tolerance": 1e-10,
+          "original_tolerance": 2e-12,
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/source-ray-ground-fine-ladder-aux1e-10/eta-130.952",
+          "purpose": "ladder",
+          "xml_sha256": "de6803989483a2af9fbc3a4f1b14093ed7beb244ecf594905a58da26c11599e0",
+          "native": {
+            "command": [
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/IncNavierStokesSolver",
+              "case.xml"
+            ],
+            "exit_code": 1,
+            "seconds": 957.8872123430046,
+            "log_sha256": "f337dfd322d795567860d986c94278fc9e78cfb34ed79a4f8aec22f4cd680c83"
+          },
+          "accepted_steps": 0,
+          "accepted_time": 0.0,
+          "history_preserved": true,
+          "native_failure": "Picard algebraic continuation diagnostic completed a root without advancing physical history",
+          "native_target": {
+            "physical_history_advanced": false,
+            "method": "sequential_reduced_response",
+            "qualification_policy": "observe_original_qualification_without_enforcing_it_in_algebraic_diagnostic",
+            "event": "target",
+            "physical_alpha": 400,
+            "operator_alpha": 530.952,
+            "eta": 130.952,
+            "original_tolerance": 2e-12,
+            "auxiliary_tolerance": 1e-10,
+            "time": 0.0025,
+            "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca"
+          },
+          "readback": {
+            "original": {
+              "command": [
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/RANSWallResolutionProbe",
+                "case.xml",
+                "original-input.json",
+                "original-readback.json"
+              ],
+              "exit_code": 0,
+              "seconds": 7.0822613640048075,
+              "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "norms": [
+                1.6351056326786941,
+                0.05471776809621853,
+                9.55318577544591,
+                0.05439156257661974,
+                7.009926961110302e-16,
+                7.767537199843238e-16,
+                7.606355866343616e-17,
+                0.0
+              ]
+            },
+            "continued": {
+              "command": [
+                "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/RANSWallResolutionProbe",
+                "case.xml",
+                "continued-input.json",
+                "continued-readback.json"
+              ],
+              "exit_code": 0,
+              "seconds": 4.023978597004316,
+              "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "norms": [
+                1.543402172170272e-12,
+                4.563823950932687e-13,
+                9.384677685211777e-11,
+                4.6062314232922e-14,
+                7.009926961110302e-16,
+                7.767537199843238e-16,
+                7.606355866343616e-17,
+                0.0
+              ]
+            }
+          },
+          "status": "continued_auxiliary_root_only",
+          "state_sha256": "3c39ef91bbc7501c31aaf24230d5904b4e046a68afccdacef0487fbf6b9b98de",
+          "root": {
+            "original_norms": [
+              1.6351056326786941,
+              0.05471776809621853,
+              9.55318577544591,
+              0.05439156257661974,
+              7.009926961110302e-16,
+              7.767537199843238e-16,
+              7.606355866343616e-17,
+              0
+            ],
+            "continued_norms": [
+              1.543402172170272e-12,
+              4.563823950932687e-13,
+              9.384677685211777e-11,
+              4.6062314232922e-14,
+              7.009926961110302e-16,
+              7.767537199843238e-16,
+              7.606355866343616e-17,
+              0
+            ],
+            "iterations": 2,
+            "mass_identity_defect": 8.326672684688674e-17,
+            "ground": {
+              "admissible": true,
+              "minimum": 1.2037480790514484e-07,
+              "arithmetic_scale": 3.1558127152892364e-17,
+              "point": [
+                1.5831689654771361,
+                0,
+                0
+              ],
+              "geometry": 4,
+              "extrema_checked": 20
+            },
+            "outer_range": [
+              0.002389486383516992,
+              0.999997123895597,
+              1.0000108727688868,
+              0.9824562945051263,
+              1.0007752483901242,
+              0.999983391607935,
+              1.0000322933579076
+            ],
+            "gradient_witness": [
+              1.6046496089512394,
+              0,
+              2,
+              0,
+              2,
+              -0.002389486383516992,
+              34,
+              1
+            ],
+            "qualified": false,
+            "scalar_domain": [
+              1,
+              3.279149875147864e-07,
+              1.6740322872873097e-07,
+              0.510506544785542,
+              0.03631791663093067,
+              0.5104995343426529,
+              0.07136153159474048,
+              0.8326228197329204,
+              1
+            ],
+            "covariance": [
+              3.262634944170852e-08,
+              0.1771297197803473
+            ],
+            "event": "root",
+            "physical_alpha": 400,
+            "operator_alpha": 530.952,
+            "eta": 130.952,
+            "original_tolerance": 2e-12,
+            "auxiliary_tolerance": 1e-10,
+            "time": 0.0025,
+            "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca"
+          }
+        },
+        {
+          "eta": 130.951,
+          "operator_alpha": 530.951,
+          "physical_alpha": 400.0,
+          "time": 0.0025,
+          "auxiliary_tolerance": 1e-10,
+          "original_tolerance": 2e-12,
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/source-ray-ground-fine-ladder-aux1e-10/eta-130.951",
+          "purpose": "ladder",
+          "xml_sha256": "696c39f6e2c4550bb2a0e4a597d017dce81653473ebb0c29eb2167fe54eb0a92",
+          "native": {
+            "command": [
+              "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-0633d23/IncNavierStokesSolver",
+              "case.xml"
+            ],
+            "exit_code": 124,
+            "seconds": 3600.0478032029932,
+            "log_sha256": "a9cd57db2fa8a66a3e45283e1f69352a93e6305a31be1f5bb6da8e6a7623fd90"
+          },
+          "native_target": {
+            "physical_history_advanced": false,
+            "method": "sequential_reduced_response",
+            "qualification_policy": "observe_original_qualification_without_enforcing_it_in_algebraic_diagnostic",
+            "event": "target",
+            "physical_alpha": 400,
+            "operator_alpha": 530.951,
+            "eta": 130.951,
+            "original_tolerance": 2e-12,
+            "auxiliary_tolerance": 1e-10,
+            "time": 0.0025,
+            "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca"
+          },
+          "status": "no_certified_continuation_root"
+        }
+      ]
+    }
+  ],
+  "roots": [
+    {
+      "branch": "source-ray-ground-ladder-aux1e-10",
+      "eta": 150.0,
+      "continued": 4.0925738736085186e-11,
+      "original": 10.742305969564585,
+      "ground": 0.002966298567606948,
+      "ground_point": [
+        1.5840545332155416,
+        0,
+        0
+      ],
+      "gradient": 0.0023305999859366544,
+      "epsilon_min": 0.9824058786698099,
+      "qualified": false,
+      "state_sha256": "8151d5535fd5b108a0b064dc542c9cf206ad676e4d5966865910ab7bd42b5a38"
+    },
+    {
+      "branch": "source-ray-ground-ladder-aux1e-10",
+      "eta": 140.0,
+      "continued": 7.414885633737232e-11,
+      "original": 10.123012010620943,
+      "ground": 0.0014030962938544175,
+      "ground_point": [
+        1.5835681003061894,
+        0,
+        0
+      ],
+      "gradient": 0.002361143085283013,
+      "epsilon_min": 0.982431404578151,
+      "qualified": false,
+      "state_sha256": "dff191e7513d34843e01eeb085392f28b00a8e989dda44bd1e8b8bda2f0b37de"
+    },
+    {
+      "branch": "source-ray-ground-ladder-aux1e-10",
+      "eta": 135.0,
+      "continued": 3.455082207817434e-11,
+      "original": 9.809240473741713,
+      "ground": 0.0006276014334382847,
+      "ground_point": [
+        1.5833436497860134,
+        0,
+        0
+      ],
+      "gradient": 0.0023767208704873477,
+      "epsilon_min": 0.9824449357232657,
+      "qualified": false,
+      "state_sha256": "8ba47d0e87e221ded121790193da652028e38bd1be70a4b8301f0806d3b403a7"
+    },
+    {
+      "branch": "source-ray-ground-ladder-aux1e-10",
+      "eta": 132.5,
+      "continued": 7.968268108807017e-11,
+      "original": 9.651320069564159,
+      "ground": 0.00024022499391680244,
+      "ground_point": [
+        1.5832350822380494,
+        0,
+        0
+      ],
+      "gradient": 0.0023845882956998743,
+      "epsilon_min": 0.9824519078755105,
+      "qualified": false,
+      "state_sha256": "25c8502bd676a03bc605c6ef38b3a2062b8a726192e042089eebb0eb29bd80db"
+    },
+    {
+      "branch": "source-ray-ground-ladder-aux1e-10",
+      "eta": 131.25,
+      "continued": 6.836832679014494e-11,
+      "original": 9.572097363122673,
+      "ground": 4.6336834215708656e-05,
+      "ground_point": [
+        1.5831814739642875,
+        0,
+        0
+      ],
+      "gradient": 0.0023885418868861974,
+      "epsilon_min": 0.982455445104032,
+      "qualified": false,
+      "state_sha256": "b666dd433ece7218e7cf1591a20a431a339baf39233eb97cb548f6c54461879c"
+    },
+    {
+      "branch": "source-ray-ground-fine-ladder-aux1e-10",
+      "eta": 131.0,
+      "continued": 1.1621875866537471e-11,
+      "original": 9.556232626095062,
+      "ground": 7.563000422772053e-06,
+      "ground_point": [
+        1.5831709521538542,
+        0,
+        0
+      ],
+      "gradient": 0.002389334199279891,
+      "epsilon_min": 0.9824561575396593,
+      "qualified": false,
+      "state_sha256": "61295ecb55333c7b15ef3d02f721d70a10235a4d2d3b36210c4930017d72dcfd"
+    },
+    {
+      "branch": "source-ray-ground-fine-ladder-aux1e-10",
+      "eta": 130.98,
+      "continued": 2.271254465855943e-12,
+      "original": 9.554963134405433,
+      "ground": 4.461923632797477e-06,
+      "ground_point": [
+        1.5831701244021945,
+        0,
+        0
+      ],
+      "gradient": 0.0023893976069847556,
+      "epsilon_min": 0.9824562146005379,
+      "qualified": false,
+      "state_sha256": "7609e94006c43dfd7561e5b8de5ad7ac393d56ff6e007ed5c27d7f85eb29e838"
+    },
+    {
+      "branch": "source-ray-ground-fine-ladder-aux1e-10",
+      "eta": 130.96,
+      "continued": 3.1137439132609916e-11,
+      "original": 9.553693600694004,
+      "ground": 1.36082224846032e-06,
+      "ground_point": [
+        1.583169296607244,
+        0,
+        0
+      ],
+      "gradient": 0.002389461018119654,
+      "epsilon_min": 0.9824562716729438,
+      "qualified": false,
+      "state_sha256": "de2a2c669b6e53d62e1756a1d85d809b263b67e6bd3681e7338ec5a0d36c6bd7"
+    },
+    {
+      "branch": "source-ray-ground-fine-ladder-aux1e-10",
+      "eta": 130.955,
+      "continued": 8.185851706291743e-11,
+      "original": 9.55337621070695,
+      "ground": 5.85543059664484e-07,
+      "ground_point": [
+        1.5831690896517436,
+        0,
+        0
+      ],
+      "gradient": 0.002389476871404783,
+      "epsilon_min": 0.9824562859428312,
+      "qualified": false,
+      "state_sha256": "c5dd6c20b538cff5e6e87380249af84036c2c9ec15a9433de7a1b7a482835707"
+    },
+    {
+      "branch": "source-ray-ground-fine-ladder-aux1e-10",
+      "eta": 130.952,
+      "continued": 9.384677685211777e-11,
+      "original": 9.55318577544591,
+      "ground": 1.2037480790514484e-07,
+      "ground_point": [
+        1.5831689654771361,
+        0,
+        0
+      ],
+      "gradient": 0.002389486383516992,
+      "epsilon_min": 0.9824562945051263,
+      "qualified": false,
+      "state_sha256": "3c39ef91bbc7501c31aaf24230d5904b4e046a68afccdacef0487fbf6b9b98de"
+    }
+  ],
+  "uncertainty": "Secant contact locations are estimates on the followed branch, not certified global nonexistence or a root below ground",
+  "ground_secants": [
+    {
+      "eta_interval": [
+        131.0,
+        131.25
+      ],
+      "ground_slope": 0.0001550953351717464,
+      "linear_contact_eta": 130.95123644167379
+    },
+    {
+      "eta_interval": [
+        130.98,
+        131.0
+      ],
+      "ground_slope": 0.00015505383949864946,
+      "linear_contact_eta": 130.95122339151854
+    },
+    {
+      "eta_interval": [
+        130.96,
+        130.98
+      ],
+      "ground_slope": 0.00015505506921699888,
+      "linear_contact_eta": 130.95122361974148
+    },
+    {
+      "eta_interval": [
+        130.955,
+        130.96
+      ],
+      "ground_slope": 0.00015505583775930824,
+      "linear_contact_eta": 130.95122366324208
+    },
+    {
+      "eta_interval": [
+        130.952,
+        130.955
+      ],
+      "ground_slope": 0.00015505608391903935,
+      "linear_contact_eta": 130.9512236692372
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "status": "native_development_in_progress_original_m8_unresolved",
-  "producing_code_commit": "217e47d95783babbcd9d2662513aac2cad57ef7d",
+  "producing_code_commit": "b89f2bee561b08f6b4ba5476ac4e487be6e4d695",
   "native_m8": {
     "status": "Completed original-h0 18-update run fails original residual; complete qualification passes; larger native follow-ups in progress",
     "qualified_first_stage": false,
@@ -62,7 +62,10 @@
     "complete_free_k_response_budget": "cfec988 permits explicit maximum512 (default32), six Linux regressions pass37.40s; matched160/504-direction native constrained searches in progress",
     "source_model_extension": "Matched6updates from18.7645225: refinement18.5778314 versus ray-only18.4988246, both qualified nonroots; space enrichment remains important",
     "larger_source_space": "Matched2updates from18.6652853:64/80responses18.6338420 versus96/9618.6063142 and160/16017.7530798; operator checks and independent qualification/readback pass",
-    "large_model_face_solver": "217e47d checked augmented orthonormal-face solves above160 variables, with existing null-space fallback; native504 and192On/Off controls in progress"
+    "large_model_face_solver": "217e47d checked augmented orthonormal-face solves above160 variables, with existing null-space fallback; native504 and192On/Off controls in progress",
+    "constant_row_cache": "b89f2be6LinuxCTest37.80s plus ASan/UBSan pass; actual192-model replay has identical output and zero coefficient difference, helper13.15s versus6.83s",
+    "original_start_prefix": "217e47d first4 updates and initial reduced state match0633d23 bitwise; same physical input, only run budget/ceiling differ",
+    "first_order_operator_scope": "282f224 labels continued operator explicitly; original160/96 and positive-eta130.952 cases checked independently"
   },
   "continued_branch": {
     "auxiliary_positive_eta_tolerance": 2e-11,
@@ -80,15 +83,37 @@
       300,
       200
     ],
-    "lowest_completed_eta": 200,
+    "lowest_completed_eta": 130.952,
     "continued_norm_eta300": 6.863525056687324e-12,
     "original_norm_eta300": 18.93356351799532,
     "gradient_departure_eta300": 0.0019526117791194286,
     "ground_minimum_eta300": 0.028134356935279704,
-    "continuing_eta": 150,
+    "continuing_eta": 130.951,
     "continued_norm_eta200": 7.546811241855026e-12,
     "ground_minimum_eta200": 0.011005357272808958,
-    "gradient_departure_eta200": 0.0021891401218399054
+    "gradient_departure_eta200": 0.0021891401218399054,
+    "additional_positive_eta_tolerance": 1e-10,
+    "additional_certified_roots": [
+      150,
+      140,
+      135,
+      132.5,
+      131.25,
+      131,
+      130.98,
+      130.96,
+      130.955,
+      130.952
+    ],
+    "continued_norm_lowest_eta": 9.384677685211777e-11,
+    "ground_minimum_lowest_eta": 1.2037480790514484e-07,
+    "gradient_departure_lowest_eta": 0.002389486383516992,
+    "contact_status": "At130.951 finite-space search reaches arithmetic ground margin at continued residual~4.93e-6; no completed native history receipt for that bounded process; expanded64-response controlled restart in progress",
+    "contact_secant_estimate_range": [
+      130.95122361974148,
+      130.9512236692372
+    ],
+    "contact_secant_scope": "Local followed-branch estimate only, not a certified root or global nonexistence bracket"
   },
   "outstanding": [
     "Qualified original-start first-stage complete residual and qualification",

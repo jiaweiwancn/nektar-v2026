@@ -20,6 +20,20 @@ metric at ground contact while its original k residual stayed nonzero. R3
 therefore scores the original reduced residual, not that projected-map defect.
 No full all-field Jacobian or hidden coupled direction solver was added.
 
+`b89f2be` caches immutable cut-row norms within each quadratic solve and computes
+the direction norm once per QP iteration. It changes no matrix entry, cut or
+acceptance bound. Six Linux regressions pass (37.80s), together with ASan/UBSan.
+Replaying the actual192-coordinate native model before and after caching gives
+identical output bytes, coefficients and affine KKT values (69 steps,68 augmented
+face solves,0 fallbacks). The standalone replay takes13.15s versus6.83s; this is
+a helper replay timing, not a native convergence or general performance claim.
+[Build and checks](cls-epawf-segregated-picard-r3-evidence/native/build-validation-b89f2be.json),
+[native-model identity replay](cls-epawf-segregated-picard-r3-evidence/native/cut-cache-native-replay-review.json).
+The original-h0 four-update prefix on217e47d also matches0633d23 bitwise in every
+state hash and original norm vector, with only run budget/ceiling changed.
+[Exact prefix receipt](cls-epawf-segregated-picard-r3-evidence/native/original-start-prefix-217-review.json).
+A matched cached-kernel native control and full-response experiments continue.
+
 `217e47d` adds a checked augmented solve for active faces of models above160
 variables. It keeps the orthonormal constraint QR, solves a scaled saddle system
 in response coordinates, performs two residual refinements and reprojects the
@@ -927,6 +941,52 @@ evaluation. Yet the safeguarded eta300 solve above obtained an admissible
 auxiliary root. This is a concrete example of why a failed initial predictor
 must not be interpreted as branch nonexistence. See the
 [dated reduced-continuation receipt](cls-epawf-segregated-picard-r3-evidence/native/reduced-continuation-branch-review.json).
+
+## Continued roots near ground contact
+
+An explicitly separate positive-eta sequence declares auxiliary tolerance1e-10;
+the original eta-zero gate remains2e-12. It certifies roots at150,140,135,132.5,
+131.25,131,130.98,130.96,130.955 and130.952, with both original and continued
+residuals independently rebuilt and physical history unchanged. These are not
+solutions of the original alpha400 equations.
+
+| Eta | Continued norm | Continuous-ground minimum | Gradient departure |
+| ---: | ---: | ---: | ---: |
+|131.25|6.83683e-11|4.63368342e-5|.00238854189|
+|131|1.16219e-11|7.56300042e-6|.00238933420|
+|130.98|2.27125e-12|4.46192363e-6|.00238939761|
+|130.96|3.11374e-11|1.36082225e-6|.00238946102|
+|130.955|8.18585e-11|5.85543060e-7|.00238947687|
+|130.952|9.38468e-11|1.20374808e-7|.00238948638|
+
+All violate the original.001 gradient bound. The three closest certified-root
+secants predict ground contact at eta130.95122362..130.95122367, with ground
+slope about1.55056e-4 per eta. This is a local branch estimate, not a certified
+root/nonexistence bracket. At130.951 the tested search reaches an arithmetic
+ground margin and residual about4.93e-6. That bounded process has no final native
+history receipt; it must not be counted as a verified rejected stage. A separate
+64-response restart requests a completed controlled receipt and tighter probe
+size. The branch qualification exit was already observed much earlier, at
+eta1168.75..1209.375 with positive ground. No statement excludes other roots or
+other H branches.
+
+[Compact root/readback receipts and secants](cls-epawf-segregated-picard-r3-evidence/native/continued-ground-collar-review.json)
+retain the declared auxiliary versus original tolerances and incomplete-case
+statuses. The first-order auditor now labels the actual operator explicitly;
+[its positive-eta check](cls-epawf-segregated-picard-r3-evidence/native/first-order-continued-root-audit.json)
+says `continued_operator`, with operator alpha530.952. It is not original-target
+stationarity information. The
+[original160/96-space audit](cls-epawf-segregated-picard-r3-evidence/native/first-order-160-audit.json)
+retains large original-merit cone defects (2345.02 and1794.46 at window1e-6)
+versus empirical action uncertainties12.01 and11.32. These states are not shown
+stationary in their tested spaces.
+
+The ordinary504-response search enforces qualification. An additional explicitly
+labelled eta-zero diagnostic starts from the preserved R2 endpoint with the same
+physical alpha400/time.0025/history and2e-12 original tolerance. It observes
+qualification while enforcing ground/evaluation validity and unconditionally
+rejects physical advance. Its purpose is to distinguish a ground obstruction
+from qualification, and it cannot replace the original-h0 native test.
 
 ## Verification, provenance, and outstanding work
 
