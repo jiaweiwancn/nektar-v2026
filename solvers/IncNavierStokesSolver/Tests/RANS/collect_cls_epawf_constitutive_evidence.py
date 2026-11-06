@@ -116,6 +116,13 @@ def main():
     supervisor_id=supervisor_status.get('supervisor_identity') or {}
     identities=dict(driver=process_identity(progress['pid']),supervisor=process_identity(supervisor_id['pid']) if supervisor_id else None,native=process_identity(progress['native_pid']),
         monitor=process_identity(load(r/'monitor-launch.json')['pid']))
+    later=[]
+    for path in sorted((r/'monitor').glob('step-??????/summary.json')):
+        data=load(path)
+        if data.get('last_verified_step',0)<=32:continue
+        n=int(data['last_verified_step']);state=data['states'].get('step'+str(n),{})
+        later.append(dict(step=n,time=data['last_verified_time'],states={str(k):v for k,v in state.items() if k in ('global_k_integral','near_k_integral','mean_wall_stress','spatial_block_norms','epsilon_trace_defect','spatial_rate_mass_norm')},
+            cumulative_correction=data['cumulative_correction'],last_budget={k:v for k,v in data['budgets'][-1].items() if k not in ('active_constraints',)}))
     evidence=dict(schema=1,base='0b86269739075af81622319402370967fdeffbe8',branch=git('branch','--show-current'),
         source_revision=git('rev-parse','HEAD'),source_status=git('status','--porcelain'),source_files_sha256=source_files,
         root=str(r),collected_unix=time.time(),production_launch=load(r/'launch.json'),monitor_launch=load(r/'monitor-launch.json'),
@@ -124,7 +131,8 @@ def main():
         production_kernel_revision=git('rev-parse','1c49c07'),probe=identity(r/'audit-probe/RANSWallResolutionProbe'),
         checkpoint=checkpoint,production_counts_at_checkpoint=counts,fixtures=fixtures,history_checks=histories,
         qp_log=(r/'qp.log').read_text(),
-        durability=json.loads((r/'durability-terminal.log').read_text()),simultaneous_resume=load(r/'simultaneous-resume.json'),
+        durability=json.loads((r/('durability-recovery.log' if (r/'durability-recovery.log').exists() else 'durability-terminal.log')).read_text()),
+        supervisor_recovery=load(r/'supervisor-recovery.json') if (r/'supervisor-recovery.json').exists() else None,later_analyses=later,simultaneous_resume=load(r/'simultaneous-resume.json'),
         frozen_repair_budgets=load(r/'repair-budget.json'),analysis=compact,
         ranks_per_native_job=1,thread_environment={k:os.environ.get(k) for k in ('OMP_NUM_THREADS','OPENBLAS_NUM_THREADS','MKL_NUM_THREADS','BLIS_NUM_THREADS','VECLIB_MAXIMUM_THREADS','NUMEXPR_NUM_THREADS')},
         build_parallelism=8,worker_limit=72,
