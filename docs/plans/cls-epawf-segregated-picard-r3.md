@@ -149,6 +149,34 @@ large-face native controls continue and do not replace the original-h0 test.
 
 ## Latest full-space checks and execution improvements
 
+`389d0a5` makes selection of subsequent response witnesses independent of the
+active-row order returned by the quadratic solver. The retained and optimized
+native controls have the same first physical active-observation set, with row
+differences at most6.83e-16, but different order. The old first-seen-per-region
+rule therefore picks different points and changes the second response space;
+their second residuals8.61860502 and8.45610707 are not trajectory-equivalent.
+Model-local cut indices also differ and are not used as cross-model physical
+identities.
+
+The new rule selects the lowest original observation index for each family
+and spatial region, then orders the selected indices canonically. Successful
+models record those indices and physical points. All original constraints,
+response checks, physical equations and acceptance criteria remain. This
+removes dependence on permutations of the same active observations; it does
+not assert that different active sets or inventory topologies give identical
+trajectories. A focused unit checks120 index permutations including duplicate
+observations, distinct families/regions and conflicting-metadata rejection.
+Six Linux regressions pass (38.46s), and the reduced-model unit passes
+ASan/UBSan (8.87s).
+
+New native tests use original h0 with96 responses/64 Krylov seeds, and a
+separate160-response/64-seed diagnostic from the independently audited7.50043
+checkpoint. Their outcomes remain pending. Every numerical rank has one OpenMP
+and BLAS thread; the added two singleton ranks remain within the72-worker cap.
+[Native ordering diagnosis](cls-epawf-segregated-picard-r3-evidence/native/active-order-native-diagnosis.json),
+[build and checks](cls-epawf-segregated-picard-r3-evidence/native/build-validation-389d0a5.json),
+[exact native commands](cls-epawf-segregated-picard-r3-evidence/native/canonical-native-launch.json).
+
 `cea2a06` applies the existing checked primal-face solve, conservative
 ball-inactive-cut test and feasible-face reuse above64 coordinates, including
 the96-direction searches. The established path through64 coordinates remains.
