@@ -1,5 +1,12 @@
 # ConstitutiveV2: complete declared k coverage and fresh continuation
 
+Follow-up, 2026-11-07: the original Upstream campaign subsequently accepted
+72 steps to T=.045, then attempt 73 hit the active-set iteration limit with
+a remaining negative ground value. It stopped without numerical retry. The
+historical snapshot below is preserved. The [uniform-EP source/control study](cls-epawf-pimple-uniform-ep-flat.md)
+records the terminal checkpoint and a separate freshly initialized comparison.
+
+
 The fresh h0 trajectory has completed **32 steps to T=.02**, passed both
 V1 rejection times, and continued automatically toward T=.1. The numerical
 method remains one U/p/outer-epsilon/k sweep. The longer assessment is
