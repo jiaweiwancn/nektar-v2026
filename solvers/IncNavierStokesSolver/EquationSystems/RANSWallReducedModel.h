@@ -186,6 +186,11 @@ QuadraticResult SolveQuadratic(const Matrix &hessian, const Vector &gradient,
     for (const auto &cut : cuts)
         if (cut.a.size() != gradient.size())
             throw std::logic_error("invalid reduced quadratic cut shape");
+    // Cut geometry is constant throughout this model solve. The complete
+    // qualification inventory can contain more than100,000 rows.
+    Vector cutLengths;
+    cutLengths.reserve(cuts.size());
+    for (const auto &cut : cuts) cutLengths.push_back(Length(cut.a));
     QuadraticResult result;
     result.solution = std::move(initial);
     auto &solution = result.solution;
@@ -244,7 +249,7 @@ QuadraticResult SolveQuadratic(const Matrix &hessian, const Vector &gradient,
                         for (int k = 0; k < n; ++k) row[k] -= c * face[j][k];
                     }
                 const double length = Length(row);
-                if (length < 1e-10 * Length(cuts[active[i]].a))
+                if (length < 1e-10 * cutLengths[active[i]])
                     return finish("quadratic_active_rank_loss");
                 upper[i][i] = length;
                 for (double &x : row) x /= length;
@@ -369,7 +374,8 @@ QuadraticResult SolveQuadratic(const Matrix &hessian, const Vector &gradient,
                 for (int i = 0; i < active.size(); ++i) rhs[i] = Dot(face[i], stationarity);
                 multipliers = Factor(upper).Apply(rhs);
             }
-            if (Length(direction) <= 1e-9 * std::max(stepScale, Length(solution)))
+            const double directionLength = Length(direction);
+            if (directionLength <= 1e-9 * std::max(stepScale, Length(solution)))
             {
                 if (active.empty() ||
                     *std::min_element(multipliers.begin(), multipliers.end()) >=
@@ -387,7 +393,7 @@ QuadraticResult SolveQuadratic(const Matrix &hessian, const Vector &gradient,
                     continue;
                 const double advance = Dot(cuts[i].a, direction);
                 if (advance <= 64. * std::numeric_limits<double>::epsilon() *
-                                   Length(cuts[i].a) * Length(direction))
+                                   cutLengths[i] * directionLength)
                     continue;
                 const double bound = (cuts[i].b - Dot(cuts[i].a, solution)) / advance;
                 if (bound < fraction)
@@ -399,7 +405,7 @@ QuadraticResult SolveQuadratic(const Matrix &hessian, const Vector &gradient,
                             const double c = Dot(remainder, q);
                             for (int j = 0; j < n; ++j) remainder[j] -= c * q[j];
                         }
-                    if (Length(remainder) < 1e-10 * Length(cuts[i].a))
+                    if (Length(remainder) < 1e-10 * cutLengths[i])
                     {
                         // A dependent row cannot block exact motion on this
                         // face. Ignore roundoff-sized advances only while the
