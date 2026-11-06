@@ -84,12 +84,29 @@ def main():
         finally:
             if env is None:os.environ.pop('LD_LIBRARY_PATH',None)
             else:os.environ['LD_LIBRARY_PATH']=env
-        require(runtime==expected,'frozen executable/library identity changed')
+        unchanged=all(runtime[k]==expected[k] for k in ('path','sha256','libraries'))
+        require(unchanged,'frozen executable/library identity changed') # ldd load addresses vary with ASLR
         result[name+'_campaign']=dict(progress=progress,runtime=runtime,checkpoint_snapshot=str(copy_to),checkpoint_sha256=cp['sha256'],
             checkpoint_steps=cp['steps'],checkpoint_time=cp['time'],checkpoint_signature_sha256=hashlib.sha256(payload[32:32+signature_length]).hexdigest(),
             native_process_now=process_identity(progress['native_identity']['pid']) if progress.get('native_identity') else None,
             driver_process_now=process_identity(progress['pid']),
             supervisor_status=load(root.parent/'status.json'))
+    initial_source=load(a.sources/'uniform-h0/result.json')
+    control_h0=load(r/'uniform-initial/case.evolution.json');up_h0=read_report(Path(upstream_rows[0]['segment']))['accepted_states'][0]
+    trace_rows={int(v['global_row']) for v in initial_source['matching_trace']}
+    changed=[i for i,(x,y) in enumerate(zip(control_h0['state'],up_h0)) if x!=y]
+    result['initialization_detail']=dict(changed_rows=changed,all_changes_on_matching_trace=set(changed)<=trace_rows,
+        max_change_outside_matching_trace=max(abs(x-y) for i,(x,y) in enumerate(zip(control_h0['state'],up_h0)) if i not in trace_rows),
+        matching_trace=initial_source['matching_trace'],baseline_only_restrictions=sum(v['baseline_only_restriction'] for v in initial_source['matching_trace']),
+        native_lift_calls_iterations=control_h0['initialization_lift_calls_iterations'],
+        fixed_boundary_data=initial_source['fixed_external_coefficients'])
+    require(result['initialization_detail']['all_changes_on_matching_trace'],'initial non-trace coefficient changed')
+    result['initialization_detail'].pop('fixed_boundary_data') # full native map retained in the source readback
+    strict=r/'uniform-strict/manifest.json'
+    if strict.exists():
+        m=load(strict);report=load(strict.parent/'case.evolution.json')
+        result['strict_qualification']=dict(path=str(strict),sha256=sha(strict),accepted_steps=m['accepted_steps'],
+            final_time=m['final_time'],failure=m['failure'],events=[{k:v for k,v in e.items() if k not in ('state','history','audit')} for e in report['physical_range_events']])
     result['uniform_launch']=load(r/'uniform-launch.json');result['uniform_monitor_launch']=load(r/'uniform-monitor-launch.json')
     result['upstream_terminal']=load(r/'upstream-terminal/manifest.json')
     attempt=result['upstream_terminal']['first_rejection']['attempt']
