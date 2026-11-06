@@ -16,6 +16,10 @@ namespace Nektar::RANSWallReduced
 {
 using Vector = std::vector<double>;
 using Matrix = std::vector<Vector>;
+// Native 96-response models already spend as much time on repeated null-space
+// reconstruction as on their separately converged field responses. Retain
+// the established path through64 coordinates; use checked primal faces above.
+inline constexpr int DirectFaceThreshold = 64;
 inline double Dot(const Vector &a, const Vector &b)
 {
     if (a.size() != b.size())
@@ -271,7 +275,7 @@ QuadraticResult SolveQuadratic(const Matrix &hessian, const Vector &gradient,
             else
             {
                 bool augmented = false;
-                if (n > 160)
+                if (n > DirectFaceThreshold)
                 {
                     // The orthonormal active face also defines a small saddle
                     // problem in response coordinates. This avoids rebuilding
@@ -514,7 +518,8 @@ RadiusResult SolveRadiusQuadratic(const Matrix &hessian, const Vector &gradient,
     std::vector<Cut> filtered;
     std::vector<int> originalIds;
     const std::vector<Cut> *modelCuts = &cuts;
-    if (columns.size() > 160 && columns.size() == gradient.size() && cuts.size() > 4096)
+    if (columns.size() > DirectFaceThreshold &&
+        columns.size() == gradient.size() && cuts.size() > 4096)
     {
         buildGram();
         double lower = std::numeric_limits<double>::max(), upper = 0.;
@@ -569,7 +574,7 @@ RadiusResult SolveRadiusQuadratic(const Matrix &hessian, const Vector &gradient,
         // in large models. Wrong-sign multipliers remove obsolete active cuts
         // through the same active-set solve. Any numerical failure retries the
         // original feasible initial point with no assumed active face.
-        if (columns.size()>160 && previousQuadratic.solved)
+        if (columns.size()>DirectFaceThreshold && previousQuadratic.solved)
         {
             ++result.warmFaceSolves;
             t.quadratic=SolveQuadratic<Factor>(t.hessian,gradient,*modelCuts,

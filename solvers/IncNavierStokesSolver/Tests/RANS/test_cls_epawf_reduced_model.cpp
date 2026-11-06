@@ -338,6 +338,46 @@ int main(int argc, char **argv)
     const auto beforeSmall=response;
     Check(!R::UpdateSecantActions(response,{{1.}},{1e-9},{1e-8},1e-6) && response==beforeSmall,
           "a below-signal secant changed the response model");
+    // Exercise both sides of the medium-model dispatch with closed answers.
+    // The64-coordinate control keeps the original null-space path;96 uses
+    // checked primal faces, warm radius queries and certified cut omission.
+    for (int size : {64,96})
+    {
+        R::Matrix h(size,R::Vector(size)), v=h;
+        R::Vector g(size), upper(size), lower(size);
+        for (int i=0;i<size;++i) { h[i][i]=i+1.; v[i][i]=1.; }
+        g[0]=-2.; g[1]=3.; upper[0]=1.; lower[1]=-1.;
+        const std::vector<Cut> bounds{{upper,.25},{lower,.5}};
+        const auto q=R::SolveQuadratic<Factor>(h,g,bounds,R::Vector(size));
+        Check(q.solved && q.primal<1e-10 && q.stationarity<1e-8 &&
+              q.complementarity<1e-8 &&
+              (size==64 ? q.augmentedFaceSolves==0 : q.augmentedFaceSolves>0),
+              "medium-model primal-face dispatch missed its checked solution");
+        Close(q.solution[0],.25); Close(q.solution[1],-.5);
+        g[0]=1.;
+        const auto changed=R::SolveQuadratic<Factor>(h,g,bounds,R::Vector(size));
+        const auto warm=R::SolveQuadratic<Factor>(h,g,bounds,q.solution,120,q.active);
+        Check(changed.solved && warm.solved && warm.stationarity<1e-8,
+              "medium warm face did not release an obsolete bound");
+        for (int i=0;i<size;++i) Close(changed.solution[i],warm.solution[i]);
+        Close(warm.solution[0],-1.); Close(warm.solution[1],-.5);
+        for (int i=0;i<size;++i) h[i][i]=1.;
+        h[1][1]=100.; g.assign(size,0.);
+        g[0]=-271.3; g[1]=-1000.*std::sqrt(.91);
+        R::Vector far(size), near(size); far[1]=1.; near[0]=1.;
+        std::vector<Cut> cuts(5000,Cut{far,5.}); cuts.push_back({near,.3});
+        const auto bounded=R::SolveRadiusQuadratic<Factor>(
+            h,g,cuts,R::Vector(size),v,1.);
+        Check(bounded.quadratic.solved && bounded.norm<=1. && bounded.norm>=.999 &&
+              bounded.quadratic.primal<1e-10 &&
+              bounded.quadratic.active==std::vector<int>{5000} &&
+              (size==64 ? bounded.ballRedundantCuts==0 && bounded.warmFaceSolves==0
+                        : bounded.ballRedundantCuts==5000 && bounded.warmFaceSolves>0),
+              "medium radius solve lost original cuts, active indices or its field bound");
+        Close(bounded.quadratic.solution[0],.3);
+        Check(std::abs(bounded.quadratic.solution[1]-std::sqrt(.91))<.002,
+              "medium radius model missed its known boundary answer");
+    }
     // A closed-form large model exercises the response-coordinate saddle
     // path and its numerical-failure fallback with two independent bounds.
     R::Matrix largeH(192,R::Vector(192));
