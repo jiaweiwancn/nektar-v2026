@@ -4,6 +4,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionResolution.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
 #include <LibUtilities/Communication/CommSerial.h>
 #include <SpatialDomains/MeshGraphIO.h>
 #include <boost/property_tree/json_parser.hpp>
@@ -181,7 +182,32 @@ int main(int argc,char **argv)
         const auto rawReference=patch.NeutralReference(us,{1.,0.});RANSWallEvolutionData data(2);
         data.fixedBoundary=patch.FixedReferenceBoundary(rawReference);
         const auto reference=patch.Lift(rawReference,0,data);patch.SetReference(reference,data,0,0);
-        const auto history=Read(packet,"history");auto state=Read(packet,"state");
+        auto history=Read(packet,"history");auto state=Read(packet,"state");std::string transfer="null";
+        if(packet.get_optional<std::string>("transfer_source_xml"))
+        {
+            const auto sourceXml=packet.get<std::string>("transfer_source_xml");
+            std::vector<std::string> sourceNames{sourceXml};
+            auto sourceSession=LibUtilities::SessionReader::CreateInstance(1,args,sourceNames,LibUtilities::CommSerial::create(1,args));sourceSession->InitSession();
+            sourceSession->SetSolverInfo("GlobalSysSoln","DirectFull");const auto sourceGraph=SpatialDomains::MeshGraphIO::Read(sourceSession);
+            RANSWallEvolutionPatch source(sourceSession,sourceGraph,world->GetComm(),p,LoadRANSWallNormalMap(sourceSession,2,p.geometry.height));
+            Require(state.size()==source.Size(),"transfer source shape differs");const auto original=state;state.assign(patch.Size(),0.);Vector error;
+            for(int b=0;b<patch.Gauge();++b)
+            {
+                const auto values=patch.fields[b]->Project([&](const RANSWallCoordinate &x)
+                    {return source.Point(b,x,b==patch.Epsilon() && std::abs(x[2]-p.geometry.height)<1e-12?1:0).Value(original,source.offset[b]);});
+                std::copy(values.begin(),values.end(),state.begin()+patch.offset[b]);double maximum=0.;
+                for(const auto &q:patch.Quadrature(b))maximum=std::max(maximum,std::abs(q.Value(state,patch.offset[b])-source.Point(b,q.coordinate).Value(original,source.offset[b])));
+                error.push_back(maximum);
+            }
+            state[patch.offset[patch.Gauge()]]=original[source.offset[source.Gauge()]];history=state;
+            // A representation-only local test keeps the *represented* old
+            // essential traces, rather than freshly projecting analytic data.
+            for(auto &[id,value]:data.fixedBoundary)value=state[id];
+            Require(Maximum(error)<1e-11,"local mesh transfer changed the physical polynomial");
+            transfer=J::Object({{"source_xml",J::Quote(sourceXml)},{"source_state_sha256",J::Quote(RANSWallR3::Hash(original))},
+                {"target_state_sha256",J::Quote(RANSWallR3::Hash(state))},{"physical_block_errors",J::Numbers(error)},
+                {"essential_policy",J::Quote("exact restriction of original represented boundary traces")},{"native_history_advanced","false"}});
+        }
         Require(state.size()==patch.Size() && history.size()==patch.Size(),"packet coefficient size differs");
         const bool historyMatch=std::memcmp(history.data(),reference.data(),history.size()*sizeof(double))==0;
         Require(!packet.get<bool>("require_history_h0",true) || historyMatch,"packet history differs from rebuilt native h0");
@@ -201,8 +227,14 @@ int main(int argc,char **argv)
             if(packet.get_child_optional("witnesses"))for(const auto &item:packet.get_child("witnesses"))
             {RANSWallCoordinate p{};int i=0;for(const auto &v:item.second){Require(i<3,"witness coordinate shape");p[i++]=v.second.get_value<double>();}Require(i==3,"witness coordinate shape");witnesses.push_back(p);}
             const auto &selected=packet.get<bool>("reference_state",false)?reference:state;
-            std::ofstream out(argv[3]);out<<patch.PimpleContactDiagnostic(selected,time,data,steps,witnesses,
-                packet.get<bool>("export_mass",false),packet.get<bool>("isolate",false))<<'\n';
+            const auto domain=patch.ScalarDomain(selected,time,data,true);
+            std::string result;
+            if(!domain.admissible)result=J::Object({{"diagnostic_domain_admissible","false"},
+                {"scalar_domain",patch.ScalarDomainJSON(domain)},{"state_sha256",J::Quote(RANSWallR3::Hash(selected))},{"production_governing_solves","0"}});
+            else result=patch.PimpleContactDiagnostic(selected,time,data,steps,witnesses,
+                packet.get<bool>("export_mass",false),packet.get<bool>("isolate",false));
+            Require(result.back()=='}',"invalid diagnostic JSON");result.pop_back();result+=",\"transfer\":"+transfer+"}";
+            std::ofstream out(argv[3]);out<<result<<'\n';
             Require(out.good(),"contact diagnostic write failed");world->Finalise();return 0;
         }
         if(packet.get<std::string>("operation","")=="samples")
