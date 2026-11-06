@@ -6,6 +6,7 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallReducedModel.h>
 #include <algorithm>
+#include <array>
 #include <chrono>
 #include <cmath>
 #include <cstdint>
@@ -13,6 +14,7 @@
 #include <iostream>
 #include <limits>
 #include <memory>
+#include <map>
 #include <numeric>
 #include <set>
 
@@ -561,6 +563,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         {"half_response_warm_start", J::Quote("interpolate converged non-k coefficients; preserve exact requested k")},
         {"response_field_preconditioner_reuse",J::Boolean(m_reducedResponseCache)},
         {"response_chord_update_budget",J::Number(m_reducedResponseReuseUpdates)},
+        {"response_chord_tight_checks","true"},
+        {"response_chord_check_accuracy_limit",J::Number(std::min(tolerance,m_reducedHTolerance))},
         {"response_chord_policy",J::Quote("opt-in historical response secants; fresh two-size signed direction checks; every actual trial converges original H; fresh model after failure, branch change, enlargement or age limit")},
         {"response_preconditioner_policy",J::Quote("probe-only separate base velocity/pressure and epsilon factors; original H convergence required; fresh-operator retry on failure; canonical check and actual trials use current operators")},
         {"initial_basis_budget", J::Number(m_reducedBasis)},
@@ -691,6 +695,12 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
     std::vector<Column> chordColumns;
     int chordAge=0, chordOrigin=-1;
     std::string chordBranches;
+    auto chordEligible=[&]() {
+        return m_reducedResponseReuseUpdates && base.violation==0. && !failedModels &&
+            base.merit>1e-6 && !chordColumns.empty() &&
+            chordAge<=m_reducedResponseReuseUpdates && chordColumns.size()>=basisBudget &&
+            chordBranches==base.domain.profileBranches;
+    };
     auto stageRoot = [&]() {
         if (Maximum(base.response.norms) > tolerance) return false;
         const auto audit = CompleteRestrictedAudit(state, history, alpha, time, data, true);
@@ -709,12 +719,38 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         if (!continuationDiagnostic && base.violation > 0.)
             innerTolerance = std::max(minimumInnerAccuracy,
                 std::min(innerTolerance, 1e-7 * base.violation));
-        if (base.response.error > innerTolerance)
+        // A nearly cancelling chosen direction can have a much smaller
+        // signal than its individual response columns. Tighten both its
+        // reference Y(k) and probes, rather than subtract a coarse-H base
+        // from accurate probes. Actual line-search trials keep the common
+        // declared inexact tolerance.
+        const double chordAccuracy=chordEligible()?std::min(innerTolerance,tolerance):innerTolerance;
+        if (base.response.error > chordAccuracy)
         {
-            auto refined = evaluate(state, innerTolerance, m_reducedHUpdates,
+            auto refined = evaluate(state, chordAccuracy, m_reducedHUpdates,
                                     "refine_base_accuracy");
+            if (!refined.valid && chordAccuracy<innerTolerance)
+            {
+                chordColumns.clear();chordAge=0;
+                emit("response_chord_discarded",{{"reason",J::Quote("tight reference response failed: "+refined.response.failure)},
+                    {"scope",J::Quote("accepted state unchanged; rebuild fresh responses at the declared outer accuracy")}});
+                continue;
+            }
             Require(refined.valid, "reduced base accuracy refinement failed: " +
                                        refined.response.failure);
+            if (chordAccuracy<innerTolerance)
+            {
+                auto difference=refined.r;
+                for (int j=0;j<rows.size();++j) difference[j]-=base.r[j];
+                emit("response_chord_base_accuracy",{{"required",J::Number(chordAccuracy)},
+                    {"trial_accuracy",J::Number(innerTolerance)},
+                    {"before_non_k_error",J::Number(base.response.error)},
+                    {"attained",J::Number(refined.response.error)},
+                    {"original_k_norm_change",J::Number(dualNorm(difference))},
+                    {"before_norms",J::Numbers(base.response.norms)},
+                    {"after_norms",J::Numbers(refined.response.norms)},
+                    {"scope",J::Quote("fixed-k non-k accuracy refinement, no physical/history advance")}});
+            }
             base = std::move(refined);
             state = base.response.state;
             m_lastFeasibleState = state;
@@ -726,10 +762,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         }
         const bool restore  = !continuationDiagnostic && base.violation > 0.;
         const int dimension = rows.size();
-        const bool chordReuse=m_reducedResponseReuseUpdates && !restore && !failedModels &&
-            base.merit>1e-6 && !chordColumns.empty() &&
-            chordAge<=m_reducedResponseReuseUpdates && chordColumns.size()>=basisBudget &&
-            chordBranches==base.domain.profileBranches;
+        const bool chordReuse=chordEligible();
         nonKCache.reset();
         if (m_reducedResponseCache && !chordReuse)
         {
@@ -1778,10 +1811,10 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             const double f=std::min(1e-3,m_reducedStep/Length(field));
             auto guess=state;
             Apply(guess,rows,field,kScale*f);
-            auto coarse=evaluate(guess,innerTolerance,m_reducedHUpdates,"chord_direction");
+            auto coarse=evaluate(guess,chordAccuracy,m_reducedHUpdates,"chord_direction");
             guess=state;
             Apply(guess,rows,field,kScale*f*.5);
-            auto fine=evaluate(guess,innerTolerance,m_reducedHUpdates,"half_chord_direction");
+            auto fine=evaluate(guess,chordAccuracy,m_reducedHUpdates,"half_chord_direction");
             if (!coarse.valid || !fine.valid)
             {
                 emit("response_chord_direction_check",{{"purpose",J::Quote(purpose)},
@@ -1808,6 +1841,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 ht[j]=(ht[j]-base.domain.traceState[j])/(.5*f);
             }
             double observationTwoSize=0.,observationModelError=0.;
+            double boundScaledError=0.,boundScaledTwoSize=0.;
+            std::map<std::array<int,4>,std::pair<int,double>> witnesses;
             for (int j=0;j<base.bounds.size();++j)
             {
                 const auto &b=base.bounds[j];
@@ -1818,6 +1853,35 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 const double scale=std::max(1.,std::abs(observed));
                 observationTwoSize=std::max(observationTwoSize,std::abs(coarseObserved-observed)/scale);
                 observationModelError=std::max(observationModelError,std::abs(predictedObservation-observed)/scale);
+                boundScaledError=std::max(boundScaledError,std::abs(predictedObservation-observed)/b.width);
+                boundScaledTwoSize=std::max(boundScaledTwoSize,std::abs(coarseObserved-observed)/b.width);
+                for (int sign:{-1,1})
+                {
+                    const std::array<int,4> key{{b.family,sign,
+                        b.row.coordinate[0]<.5*(lower[0]+upper[0])?0:1,b.projected?1:0}};
+                    const double excess=sign*(b.value-(sign<0?b.lower:b.upper))/b.width;
+                    auto old=witnesses.find(key);
+                    if (old==witnesses.end() || excess>old->second.second) witnesses[key]={j,excess};
+                }
+            }
+            std::vector<std::string> signedObservations;
+            for (const auto &[key,witness]:witnesses)
+            {
+                const int id=witness.first,sign=key[1];
+                const auto &b=base.bounds[id];
+                const double observed=b.Action(b.projected?ht:hs,offset[b.block]);
+                const double coarseObserved=b.Action(b.projected?dt:ds,offset[b.block]);
+                double predictedObservation=0.;
+                for (int i=0;i<n;++i) predictedObservation+=coefficients[i]*columns[i].observations[id];
+                signedObservations.push_back(J::Object({{"observation",J::Number(id)},
+                    {"family",J::Number(b.family)}, {"sign",J::Number(sign)},
+                    {"region",J::Number(key[2])}, {"block",J::Number(b.block)},
+                    {"point",J::Numbers(b.row.coordinate)}, {"projected",J::Boolean(b.projected)},
+                    {"signed_base",J::Number(witness.second)},
+                    {"predicted_change",J::Number(sign*f*predictedObservation)},
+                    {"measured_change",J::Number(sign*f*coarseObserved)},
+                    {"half_predicted_change",J::Number(sign*.5*f*predictedObservation)},
+                    {"half_measured_change",J::Number(sign*.5*f*observed)}}));
             }
             const double scale=std::max(1.,dualNorm(fineAction));
             const double twoSizeError=dualNorm(twoSize)/scale;
@@ -1830,13 +1894,21 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 modelRelativeError<=.15 && observationModelError<=.1 && coarseSlope<0. && halfSlope<0.;
             emit("response_chord_direction_check",{{"purpose",J::Quote(purpose)},
                 {"available","true"},{"passed",J::Boolean(passed)},
-                {"age",J::Number(chordAge)}, {"required",J::Number(innerTolerance)},
+                {"age",J::Number(chordAge)}, {"required",J::Number(chordAccuracy)},
                 {"attained",J::Number(coarse.response.error)},
                 {"half_attained",J::Number(fine.response.error)},
                 {"two_size_residual_error",J::Number(twoSizeError)},
                 {"two_size_observation_error",J::Number(observationTwoSize)},
                 {"model_residual_error",J::Number(modelRelativeError)},
                 {"model_observation_error",J::Number(observationModelError)},
+                {"bound_scaled_observation_model_error",J::Number(boundScaledError)},
+                {"bound_scaled_observation_two_size_error",J::Number(boundScaledTwoSize)},
+                {"fraction",J::Number(f)}, {"field_norm",J::Number(Length(field))},
+                {"measured_action_norm",J::Number(dualNorm(fineAction))},
+                {"half_residual_signal",J::Number(.5*f*dualNorm(fineAction))},
+                {"coarse_violation",J::Number(coarse.violation)},
+                {"half_violation",J::Number(fine.violation)},
+                {"signed_observations",J::List(signedObservations)},
                 {"predicted_merit_slope",J::Number(Dot(originalMeritGradient,coefficients))},
                 {"actual_merit_slope",J::Number(coarseSlope)},
                 {"half_merit_slope",J::Number(halfSlope)},

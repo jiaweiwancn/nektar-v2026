@@ -133,6 +133,17 @@ def check(directory):
                 r["actual_merit_slope"] < 0 and r["half_merit_slope"] < 0 and
                 not r["profile_branch_change"] for r in chord_checks if r["passed"]),
             "historical response direction bypassed its fresh signed or accuracy checks")
+    if protocol.get("response_chord_tight_checks"):
+        require(all(r["required"] <= protocol["response_chord_check_accuracy_limit"] and
+                    r["signed_observations"] and r["half_residual_signal"] > 0 and
+                    {p["region"] for p in r["signed_observations"]} == {0, 1} and
+                    {p["sign"] for p in r["signed_observations"]} == {-1, 1}
+                    for r in chord_checks if r["available"]),
+                "historical response checks did not tighten the common reference/probes or scan signed regions")
+        require(all(r["attained"] <= r["required"] <= r["trial_accuracy"] and
+                    r["original_k_norm_change"] >= 0 for r in records
+                    if r["event"] == "response_chord_base_accuracy"),
+                "invalid fixed-k reference accuracy refinement")
     for trial in [r for r in trials if r["accepted"]]:
         model = [r for r in directions if r["iteration"] == trial["iteration"] and
                  r["seconds"] < trial["seconds"]][-1]
