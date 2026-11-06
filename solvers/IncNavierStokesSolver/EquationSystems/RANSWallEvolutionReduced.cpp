@@ -574,7 +574,10 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         {"adaptive_qualified_response_space", J::Boolean(m_reducedAdaptiveSpace)},
         {"nonlinear_destruction_ray", J::Boolean(m_reducedSourceRay)},
         {"nonlinear_destruction_refinements", J::Number(m_reducedSourceRefinements)},
-        {"model_face_solver", J::Quote("Euclidean null space through160 variables; checked augmented orthonormal-face solve with null-space fallback above160")},
+        {"model_face_solver", J::Quote("Euclidean null space through " +
+            std::to_string(RANSWallReduced::DirectFaceThreshold) +
+            " model variables; checked augmented orthonormal-face solve above; null-space fallback")},
+        {"model_direct_face_threshold", J::Number(RANSWallReduced::DirectFaceThreshold)},
         {"model_cut_filter", J::Quote("large slack-free models: conservative field-Gram ball bound; final scan of every original frozen cut")},
         {"qualification_correction_budget", J::Number(m_reducedConstraintSecant ? 6 : 3)},
         {"continuation_algebraic_diagnostic", J::Boolean(continuationDiagnostic)},
