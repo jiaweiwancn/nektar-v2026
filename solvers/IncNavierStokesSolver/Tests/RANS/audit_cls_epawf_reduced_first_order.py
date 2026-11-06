@@ -74,6 +74,8 @@ def audit(root, specification, windows):
     if selected is None:
         raise ValueError("requested native model has not been published")
     packet, direction = selected
+    if direction.get("response_model_kind") == "historical_secant":
+        raise ValueError("a historical secant model is not a freshly measured original first-order audit")
     if protocol is None:
         raise ValueError("missing reduced operator protocol")
     if direction["restoration"] or direction["residual_weight"] != 1.:

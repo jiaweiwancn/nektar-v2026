@@ -421,6 +421,7 @@ private:
     double m_picardContinuationEta=0.,m_picardContinuationTolerance=0.;
     int m_reducedBasis=10,m_reducedHUpdates=50,m_reducedKrylov=0,m_reducedMaximumBasis=32;
     int m_reducedSourceRefinements=0;
+    int m_reducedResponseReuseUpdates=0;
     bool m_reducedResponseCache=false;
     bool m_reducedInteriorSourceAnchor=false;
     double m_reducedRadius=.05,m_reducedMaximumRadius=1.;

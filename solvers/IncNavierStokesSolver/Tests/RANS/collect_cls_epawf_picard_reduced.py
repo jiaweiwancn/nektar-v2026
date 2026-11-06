@@ -48,7 +48,8 @@ def collect(directory):
                   "response_space_adapt", "free_mode_seed_pool", "evaluated_trial_packet",
                   "source_ray_selection", "source_ray_prediction", "source_direction_refinement",
                   "source_refined_direction", "source_refined_direction_check", "radius_query_retry",
-                  "source_derivative_precision")]
+                  "source_derivative_precision", "response_chord_reused", "response_chord_direction_check",
+                  "response_chord_secant", "response_chord_discarded")]
     checks = [compact(r) for r in rows if r["event"] == "response_check"]
     for row in checks:
         if row["iteration"]:

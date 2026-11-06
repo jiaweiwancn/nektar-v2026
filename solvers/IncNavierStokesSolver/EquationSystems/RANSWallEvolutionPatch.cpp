@@ -312,6 +312,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         session->LoadParameter("RANSWallReducedHUpdates",m_reducedHUpdates,50);
         session->LoadParameter("RANSWallReducedKrylov",m_reducedKrylov,0);
         session->LoadParameter("RANSWallReducedSourceRefinements",m_reducedSourceRefinements,0);
+        session->LoadParameter("RANSWallReducedResponseReuseUpdates",m_reducedResponseReuseUpdates,0);
         session->LoadParameter("RANSWallReducedRadius",m_reducedRadius,.05);
         session->LoadParameter("RANSWallReducedMaximumRadius",m_reducedMaximumRadius,1.);
         session->LoadParameter("RANSWallReducedStep",m_reducedStep,2e-5);
@@ -327,6 +328,8 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
                 // still requires an independent feasible H-response check.
                 m_reducedKrylov>=0 && m_reducedKrylov<=128 &&
                 m_reducedSourceRefinements>=0 && m_reducedSourceRefinements<=3 &&
+                m_reducedResponseReuseUpdates>=0 && m_reducedResponseReuseUpdates<=4 &&
+                (!m_reducedResponseReuseUpdates || m_picardReduced) &&
                 (!m_reducedSourceRefinements || m_reducedSourceRay) &&
                 (!m_reducedInteriorSourceAnchor || m_reducedSourceRefinements>0) &&
                 m_reducedRadius>0. && std::isfinite(m_reducedMaximumRadius) &&

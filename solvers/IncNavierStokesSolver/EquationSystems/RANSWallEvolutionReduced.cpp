@@ -560,6 +560,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         {"response_method", J::Quote("one-sided differences of converged sequential non-k solves")},
         {"half_response_warm_start", J::Quote("interpolate converged non-k coefficients; preserve exact requested k")},
         {"response_field_preconditioner_reuse",J::Boolean(m_reducedResponseCache)},
+        {"response_chord_update_budget",J::Number(m_reducedResponseReuseUpdates)},
+        {"response_chord_policy",J::Quote("opt-in historical response secants; fresh two-size signed direction checks; every actual trial converges original H; fresh model after failure, branch change, enlargement or age limit")},
         {"response_preconditioner_policy",J::Quote("probe-only separate base velocity/pressure and epsilon factors; original H convergence required; fresh-operator retry on failure; canonical check and actual trials use current operators")},
         {"initial_basis_budget", J::Number(m_reducedBasis)},
         {"initial_restoration_weight", J::Number(m_reducedRestorationWeight)},
@@ -686,6 +688,9 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
     double restorationWeight = m_reducedRestorationWeight;
     int qualificationStalls = 0;
     std::vector<OuterBound> activeWitnesses;
+    std::vector<Column> chordColumns;
+    int chordAge=0, chordOrigin=-1;
+    std::string chordBranches;
     auto stageRoot = [&]() {
         if (Maximum(base.response.norms) > tolerance) return false;
         const auto audit = CompleteRestrictedAudit(state, history, alpha, time, data, true);
@@ -721,8 +726,12 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         }
         const bool restore  = !continuationDiagnostic && base.violation > 0.;
         const int dimension = rows.size();
+        const bool chordReuse=m_reducedResponseReuseUpdates && !restore && !failedModels &&
+            base.merit>1e-6 && !chordColumns.empty() &&
+            chordAge<=m_reducedResponseReuseUpdates && chordColumns.size()>=basisBudget &&
+            chordBranches==base.domain.profileBranches;
         nonKCache.reset();
-        if (m_reducedResponseCache)
+        if (m_reducedResponseCache && !chordReuse)
         {
             try
             {
@@ -944,7 +953,22 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         std::vector<Column> columns;
         double maxActionError = 0.;
         int generatedKrylov = 0;
-        for (int seedId = 0; seedId < seeds.size(); ++seedId)
+        if (chordReuse)
+        {
+            columns=std::move(chordColumns);
+            for (auto &column:columns)
+            {
+                column.observations.clear();
+                for (const auto &b:base.bounds)
+                    column.observations.push_back(b.Action(
+                        b.projected?column.traceAction:column.stateAction,offset[b.block]));
+                maxActionError=std::max(maxActionError,column.error);
+            }
+            emit("response_chord_reused",{{"dimension",J::Number(columns.size())},
+                {"age",J::Number(chordAge)}, {"origin_iteration",J::Number(chordOrigin)},
+                {"scope",J::Quote("secant model, not current per-column derivative verification; original direction checks and controlled actual H trials required")}});
+        }
+        for (int seedId = 0; !chordReuse && seedId < seeds.size(); ++seedId)
         {
             auto [name, seed] = seeds[seedId];
             // A positive physical ground polynomial supplies feasible one-sided
@@ -1699,6 +1723,9 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         }
         emit("direction",
              {{"restoration", J::Boolean(restore)},
+              {"response_model_kind",J::Quote(chordReuse?"historical_secant":"fresh_two_size_responses")},
+              {"response_model_age",J::Number(chordReuse?chordAge:0)},
+              {"gradient_scope",J::Quote(chordReuse?"secant model, not current first-order certificate":"fresh measured original reduced gradient")},
               {"residual_weight", J::Number(residualWeight)},
               {"restoration_balance", J::Number(restorationWeight)},
               {"inward_qualification_search_margin", J::Number(qualificationBuffer)},
@@ -1743,7 +1770,86 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
               {"original_merit_gradient", J::Numbers(originalMeritGradient)},
               {"two_scale_gradient_error_estimate", J::Numbers(actionUncertainty)},
               {"observation_action_relative_error", J::Numbers(observationUncertainty)}});
-        if (m_reducedVerify && qpOK && base.merit > 1e-6 && Length(displacement) > 1e-8)
+        auto checkChordDirection=[&](const Vector &coefficients,const std::string &purpose) {
+            auto z=coefficients;
+            const auto field=RANSWallReduced::BoundCorrection(z,kColumns,
+                std::numeric_limits<double>::max());
+            if (!(Length(field)>1e-8)) return false;
+            const double f=std::min(1e-3,m_reducedStep/Length(field));
+            auto guess=state;
+            Apply(guess,rows,field,kScale*f);
+            auto coarse=evaluate(guess,innerTolerance,m_reducedHUpdates,"chord_direction");
+            guess=state;
+            Apply(guess,rows,field,kScale*f*.5);
+            auto fine=evaluate(guess,innerTolerance,m_reducedHUpdates,"half_chord_direction");
+            if (!coarse.valid || !fine.valid)
+            {
+                emit("response_chord_direction_check",{{"purpose",J::Quote(purpose)},
+                    {"available","false"},{"passed","false"},
+                    {"failure",J::Quote("both controlled H responses are required")}});
+                return false;
+            }
+            Vector action(dimension),fineAction=fine.r,twoSize(dimension),modelError(dimension);
+            for (int i=0;i<n;++i)
+                for (int j=0;j<dimension;++j) action[j]+=coefficients[i]*columns[i].r[j];
+            for (int j=0;j<dimension;++j)
+            {
+                fineAction[j]=(fineAction[j]-base.r[j])/(.5*f);
+                twoSize[j]=(coarse.r[j]-base.r[j])/f-fineAction[j];
+                modelError[j]=action[j]-fineAction[j];
+            }
+            Vector ds=coarse.domain.effectiveState,dt=coarse.domain.traceState,
+                   hs=fine.domain.effectiveState,ht=fine.domain.traceState;
+            for (int j=0;j<Size();++j)
+            {
+                ds[j]=(ds[j]-base.domain.effectiveState[j])/f;
+                dt[j]=(dt[j]-base.domain.traceState[j])/f;
+                hs[j]=(hs[j]-base.domain.effectiveState[j])/(.5*f);
+                ht[j]=(ht[j]-base.domain.traceState[j])/(.5*f);
+            }
+            double observationTwoSize=0.,observationModelError=0.;
+            for (int j=0;j<base.bounds.size();++j)
+            {
+                const auto &b=base.bounds[j];
+                const double observed=b.Action(b.projected?ht:hs,offset[b.block]);
+                const double coarseObserved=b.Action(b.projected?dt:ds,offset[b.block]);
+                double predictedObservation=0.;
+                for (int i=0;i<n;++i) predictedObservation+=coefficients[i]*columns[i].observations[j];
+                const double scale=std::max(1.,std::abs(observed));
+                observationTwoSize=std::max(observationTwoSize,std::abs(coarseObserved-observed)/scale);
+                observationModelError=std::max(observationModelError,std::abs(predictedObservation-observed)/scale);
+            }
+            const double scale=std::max(1.,dualNorm(fineAction));
+            const double twoSizeError=dualNorm(twoSize)/scale;
+            const double modelRelativeError=dualNorm(modelError)/scale;
+            const double coarseSlope=(coarse.merit*coarse.merit-base.merit*base.merit)/(2.*f);
+            const double halfSlope=(fine.merit*fine.merit-base.merit*base.merit)/f;
+            const bool branchChange=coarse.domain.profileBranches!=base.domain.profileBranches ||
+                                    fine.domain.profileBranches!=base.domain.profileBranches;
+            const bool passed=!branchChange && twoSizeError<=.03 && observationTwoSize<=.05 &&
+                modelRelativeError<=.15 && observationModelError<=.1 && coarseSlope<0. && halfSlope<0.;
+            emit("response_chord_direction_check",{{"purpose",J::Quote(purpose)},
+                {"available","true"},{"passed",J::Boolean(passed)},
+                {"age",J::Number(chordAge)}, {"required",J::Number(innerTolerance)},
+                {"attained",J::Number(coarse.response.error)},
+                {"half_attained",J::Number(fine.response.error)},
+                {"two_size_residual_error",J::Number(twoSizeError)},
+                {"two_size_observation_error",J::Number(observationTwoSize)},
+                {"model_residual_error",J::Number(modelRelativeError)},
+                {"model_observation_error",J::Number(observationModelError)},
+                {"predicted_merit_slope",J::Number(Dot(originalMeritGradient,coefficients))},
+                {"actual_merit_slope",J::Number(coarseSlope)},
+                {"half_merit_slope",J::Number(halfSlope)},
+                {"profile_branch_change",J::Boolean(branchChange)}});
+            return passed;
+        };
+        if (chordReuse && qpOK && !checkChordDirection(solution,"linear"))
+        {
+            chordColumns.clear();chordAge=0;
+            emit("response_chord_discarded",{{"reason",J::Quote("fresh signed direction or accuracy check failed; rebuild responses without changing caller state")}});
+            continue;
+        }
+        if (!chordReuse && m_reducedVerify && qpOK && base.merit > 1e-6 && Length(displacement) > 1e-8)
         {
             // Check the actual combined direction before its larger trials.
             // Individually accurate columns need not predict a cancelling
@@ -2084,7 +2190,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                             {"original_merit_slope",J::Number(Dot(originalMeritGradient,z))},
                             {"coefficients",J::Numbers(z)},
                             {"source_model_evaluations",J::Number(sourceModelEvaluations)}});
-                        if (m_reducedVerify)
+                        if (m_reducedVerify && !chordReuse)
                         {
                             const double f=std::min(1e-3,m_reducedStep/Length(field));
                             auto guess=state;
@@ -2112,7 +2218,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                             }
                             else emit("source_refined_direction_check",{{"available","false"}});
                         }
-                        for (double f:{1.,.5,.25}) addProposal(z,f,"nonlinear_source_refined_direction");
+                        if (!chordReuse || checkChordDirection(z,"source_refined"))
+                            for (double f:{1.,.5,.25}) addProposal(z,f,"nonlinear_source_refined_direction");
                     }
                 }
                 if (choice.fraction>0.)
@@ -2397,7 +2504,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                         {"actual_displacement",J::Number(Length(trialDisplacement))},
                         {"radius",J::Number(radius)}});
                 }
-                if (!decomposed && dualNorm(error) > .05 * std::max(1., base.merit))
+                if (!chordReuse && !decomposed && dualNorm(error) > .05 * std::max(1., base.merit))
                 {
                     const auto baseD = component(state);
                     auto predictedD = baseD;
@@ -2464,6 +2571,91 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                     continue;
                 const double oldViolation = base.violation;
                 const double oldMerit = base.merit;
+                if (m_reducedResponseReuseUpdates)
+                {
+                    try
+                    {
+                        chordColumns.clear();
+                        // A secant model is temporary search information, never
+                        // a partially equilibrated Y(k). Only converged actual
+                        // endpoints supply changes, and each reused direction
+                        // must pass new original-operator checks above.
+                        if (!restore && trial.violation<1e-8 &&
+                            trial.domain.profileBranches==base.domain.profileBranches &&
+                            (!chordReuse || chordAge<m_reducedResponseReuseUpdates) &&
+                            dualNorm(error)<.2*std::max(1.,base.merit))
+                        {
+                            RANSWallReduced::Matrix kBasis,rActions,stateActions,traceActions;
+                            for (const auto &column:columns)
+                            {
+                                kBasis.push_back(column.k);rActions.push_back(column.r);
+                                stateActions.push_back(column.stateAction);traceActions.push_back(column.traceAction);
+                            }
+                            Vector mapped(dimension),dr=trial.r,
+                                   ds=trial.domain.effectiveState,dt=trial.domain.traceState;
+                            for (int i=0;i<n;++i)
+                                for (int j=0;j<dimension;++j) mapped[j]+=trialCoefficients[i]*columns[i].k[j];
+                            for (int j=0;j<dimension;++j)
+                            { mapped[j]-=trialDisplacement[j];dr[j]-=base.r[j]; }
+                            for (int j=0;j<Size();++j)
+                            { ds[j]-=base.domain.effectiveState[j];dt[j]-=base.domain.traceState[j]; }
+                            const double spanError=Length(mapped);
+                            const double minimumSignal=1e-8;
+                            const bool updated=spanError<=1e-10*std::max(1.,Length(trialDisplacement)) &&
+                                RANSWallReduced::UpdateSecantActions(rActions,kBasis,trialCoefficients,dr,minimumSignal) &&
+                                RANSWallReduced::UpdateSecantActions(stateActions,kBasis,trialCoefficients,ds,minimumSignal) &&
+                                RANSWallReduced::UpdateSecantActions(traceActions,kBasis,trialCoefficients,dt,minimumSignal);
+                            double residualDefect=0.,stateDefect=0.,traceDefect=0.;
+                            if (updated)
+                            {
+                                auto defect=[&](const RANSWallReduced::Matrix &actions,Vector change) {
+                                    for (int i=0;i<n;++i)
+                                        for (int j=0;j<change.size();++j) change[j]-=trialCoefficients[i]*actions[i][j];
+                                    return change;
+                                };
+                                residualDefect=dualNorm(defect(rActions,dr))/std::max(1.,dualNorm(dr));
+                                stateDefect=Length(defect(stateActions,ds))/std::max(1.,Length(ds));
+                                traceDefect=Length(defect(traceActions,dt))/std::max(1.,Length(dt));
+                                if (residualDefect>1e-8 || stateDefect>1e-8 || traceDefect>1e-8)
+                                    throw std::runtime_error("inaccurate reduced response secant interpolation");
+                                for (int i=0;i<n;++i)
+                                {
+                                    Column column=columns[i];
+                                    column.r=std::move(rActions[i]);
+                                    column.stateAction=std::move(stateActions[i]);
+                                    column.traceAction=std::move(traceActions[i]);
+                                    // k is an independent prescribed direction,
+                                    // not an approximate part of the y response.
+                                    for (int j=offset[K()];j<offset[Epsilon()];++j)
+                                        column.stateAction[j]=column.traceAction[j]=0.;
+                                    for (int j=0;j<dimension;++j)
+                                        column.stateAction[rows[j]]=column.traceAction[rows[j]]=kScale*column.k[j];
+                                    column.shifted=Evaluation{};
+                                    column.observations.clear();column.observations.shrink_to_fit();
+                                    chordColumns.push_back(std::move(column));
+                                }
+                                chordAge=chordReuse?chordAge+1:1;
+                                if (!chordReuse) chordOrigin=iterations;
+                                chordBranches=trial.domain.profileBranches;
+                            }
+                            emit("response_chord_secant",{{"updated",J::Boolean(updated)},
+                                {"next_age",J::Number(chordAge)},
+                                {"field_signal",J::Number(Length(trialDisplacement))},
+                                {"minimum_field_signal",J::Number(minimumSignal)},
+                                {"span_error",J::Number(spanError)},
+                                {"residual_secant_defect",J::Number(residualDefect)},
+                                {"state_secant_defect",J::Number(stateDefect)},
+                                {"trace_secant_defect",J::Number(traceDefect)},
+                                {"scope",J::Quote("secant interpolation defects only; not current derivative or nonlinear stationarity certificates")}});
+                        }
+                    }
+                    catch (const std::runtime_error &error)
+                    {
+                        chordColumns.clear();chordAge=0;
+                        emit("response_chord_discarded",{{"reason",J::Quote(error.what())},
+                            {"scope",J::Quote("optional model update failed; retain the accepted actual trial and rebuild fresh responses")}});
+                    }
+                }
                 previous = trialDisplacement;
                 state               = trial.response.state;
                 m_lastFeasibleState = state;
@@ -2545,6 +2737,12 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         }
         if (!accepted)
         {
+            if (chordReuse)
+            {
+                chordColumns.clear();chordAge=0;
+                emit("response_chord_discarded",{{"reason",J::Quote("no acceptable original-equation trial; rebuild fresh responses before changing radius")}});
+                continue;
+            }
             ++failedModels;
             radius *= .5;
             innerTolerance = std::max(minimumInnerAccuracy, innerTolerance * .1);

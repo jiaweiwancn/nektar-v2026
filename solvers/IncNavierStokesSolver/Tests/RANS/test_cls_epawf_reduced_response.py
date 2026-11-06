@@ -98,9 +98,19 @@ def check(directory):
                 for d in directions if "warm_face_solves" in d),
             "invalid large-model warm-face solve accounting")
     for direction in directions:
+        reused = direction.get("response_model_kind") == "historical_secant"
+        origin = direction["iteration"]
+        if reused:
+            sources = [r for r in records if r["event"] == "response_chord_reused" and
+                       r["iteration"] == direction["iteration"] and r["seconds"] <= direction["seconds"]]
+            require(sources and 1 <= sources[-1]["age"] <= protocol.get("response_chord_update_budget", 0) <= 4,
+                    "historical response model has no bounded declared origin")
+            origin = sources[-1]["origin_iteration"]
+            require(origin < direction["iteration"] and direction["response_model_age"] == sources[-1]["age"],
+                    "invalid historical response model age")
         for name in direction["basis_names"]:
             matching = [c for c in checks if c["name"] == name and
-                        c["iteration"] == direction["iteration"] and
+                        c["iteration"] == origin and
                         c["seconds"] <= direction["seconds"]]
             require(matching and matching[-1]["usable"] and
                     matching[-1]["relative_error"] <= .03 and
@@ -113,6 +123,34 @@ def check(directory):
                     "a direction used an inconsistent warm-start branch")
     trials = [r for r in records if r["event"] == "trial"]
     require(trials, "no constrained direction received an equilibrated native trial")
+    chord_checks = [r for r in records if r["event"] == "response_chord_direction_check"]
+    require(0 <= protocol.get("response_chord_update_budget", 0) <= 4 and
+            (protocol.get("response_chord_update_budget", 0) or not chord_checks),
+            "response chord checks appeared without an explicit reuse budget")
+    require(all(r["attained"] <= r["required"] and r["half_attained"] <= r["required"] and
+                r["two_size_residual_error"] <= .03 and r["two_size_observation_error"] <= .05 and
+                r["model_residual_error"] <= .15 and r["model_observation_error"] <= .1 and
+                r["actual_merit_slope"] < 0 and r["half_merit_slope"] < 0 and
+                not r["profile_branch_change"] for r in chord_checks if r["passed"]),
+            "historical response direction bypassed its fresh signed or accuracy checks")
+    for trial in [r for r in trials if r["accepted"]]:
+        model = [r for r in directions if r["iteration"] == trial["iteration"] and
+                 r["seconds"] < trial["seconds"]][-1]
+        if model.get("response_model_kind") != "historical_secant":
+            continue
+        purpose = "source_refined" if trial["proposal_origin"] == "nonlinear_source_refined_direction" else "linear"
+        require(any(r["iteration"] == trial["iteration"] and r["purpose"] == purpose and
+                    model["seconds"] < r["seconds"] < trial["seconds"] and r["passed"] for r in chord_checks),
+                "an accepted historical-model correction lacks fresh original-direction checks")
+        before = [r for r in records if r["event"] in ("initial", "accepted") and
+                  r["seconds"] < model["seconds"]][-1]
+        require(trial["full_norm"] < max(before["norms"]) and trial["violation"] < 1e-8,
+                "an accepted historical-model correction lacks original residual/qualification progress")
+    chord_secants = [r for r in records if r["event"] == "response_chord_secant"]
+    require(all(r["field_signal"] > r["minimum_field_signal"] and
+                r["span_error"] <= 1e-10*max(1., r["field_signal"]) and
+                max(r["residual_secant_defect"], r["state_secant_defect"], r["trace_secant_defect"]) <= 1e-8
+                for r in chord_secants if r["updated"]), "inaccurate historical response secant interpolation")
     corrections = [r for r in records if r["event"] == "second_order_trial"]
     require(all(r["correction"] <= r["correction_radius"]*(1+1e-12) and
                 r["displacement"] <= r["radius"]*(1+1e-12) and
@@ -216,6 +254,8 @@ def check(directory):
     result["response_preconditioners"] = prepared
     result["source_linearization_anchors"] = anchors
     result["source_derivative_precision"] = precision
+    result["response_chord_checks"] = chord_checks
+    result["response_chord_secants"] = chord_secants
     result["radius_query_retries"] = radius_retries
     write_json(directory / "reduced-checks.json", result)
 

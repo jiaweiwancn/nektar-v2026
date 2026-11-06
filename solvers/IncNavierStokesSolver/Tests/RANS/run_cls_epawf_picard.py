@@ -83,6 +83,7 @@ def prepare(args):
                                    "HUpdates": args.reduced_h_updates,
                                    "Krylov": getattr(args, "reduced_krylov", 0),
                                    "SourceRefinements": getattr(args, "reduced_source_refinements", 0),
+                                   "ResponseReuseUpdates": getattr(args, "reduced_response_reuse_updates", 0),
                                    "Step": args.reduced_step,
                                    "RestorationWeight": getattr(args, "reduced_restoration_weight", 1.)}.items():
                     set_parameter(root, "RANSWallReduced"+key, value)
@@ -171,6 +172,8 @@ def main():
                         help="Retry blocked source-model derivatives at an interior ray anchor")
     parser.add_argument("--reduced-response-cache", action="store_true",
                         help="Reuse separate base field factors for response probes; still converge the original H")
+    parser.add_argument("--reduced-response-reuse-updates", type=int, default=0,
+                        help="Up to four checked secant response updates between fresh response models (default off)")
     parser.add_argument("--reduced-basis", type=int, default=10)
     parser.add_argument("--reduced-maximum-basis", type=int, default=32,
                         help="Adaptive response-space ceiling (up to 512; 32 retains earlier controls)")
@@ -210,6 +213,9 @@ def main():
     require(not args.reduced_adaptive_space or args.reduced, "--reduced-adaptive-space requires --reduced")
     require(not args.reduced_source_ray or args.reduced, "--reduced-source-ray requires --reduced")
     require(not args.reduced_response_cache or args.reduced, "--reduced-response-cache requires --reduced")
+    require(0 <= args.reduced_response_reuse_updates <= 4 and
+            (not args.reduced_response_reuse_updates or args.reduced),
+            "response reuse requires --reduced and a budget from zero to four")
     require(math.isfinite(args.reduced_maximum_radius) and
             0 < args.reduced_radius <= args.reduced_maximum_radius,
             "reduced radii must be finite, positive and ordered")
