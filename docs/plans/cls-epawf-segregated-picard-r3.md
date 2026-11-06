@@ -20,6 +20,61 @@ metric at ground contact while its original k residual stayed nonzero. R3
 therefore scores the original reduced residual, not that projected-map defect.
 No full all-field Jacobian or hidden coupled direction solver was added.
 
+## Safeguarded short-lived response reuse (7ba50d3)
+
+Reconstructing 96--504 converged, independently checked field responses at
+every numerical correction is a substantial cost in the continuing tests.
+Commit `7ba50d302cad7e7c0f676879a51029a4fcdc5416` adds the opt-in
+`RANSWallReducedResponseReuseUpdates` / `--reduced-response-reuse-updates`
+budget (default 0, maximum 4). The default retains fresh responses at every
+update. The new native comparison uses budget 2 against budget 0.
+
+After an actually accepted, qualified, converged-H endpoint, a field-metric
+Broyden update interpolates the measured changes in original k residual,
+effective independent fields and projected matching trace. Prescribed k
+directions remain exact. Reuse is confined to the same profile branch,
+qualified bases and a fixed response space. Age, basis enlargement, branch
+changes, poor agreement or failed actual progress require fresh responses.
+Below residual 1e-6 it always rebuilds fresh responses. No physical state or
+history is advanced by retaining this search information.
+
+These are explicitly labelled historical secant models, not newly verified
+per-column Jacobians. Before any reused direction receives larger trials,
+two fresh sequential H solves check its sign and size response. The two-size
+residual/observation tolerances remain 0.03/0.05. The historical-model errors
+must be at most 0.15/0.1, respectively, with residual normalization by the
+measured mass-dual response and observation normalization by
+`max(1, abs(measured response))`. Both measured merit slopes must be negative
+and the probe branch must agree. A failed check rebuilds fresh responses at
+the same accepted state. Source-refined directions receive the same mandatory
+check. These checks operate independently of the observation/verification flag.
+
+Actual trials still converge H, refresh all dependent data and scan the
+original complete residual, ground polynomial and qualification inventory.
+They retain the actual displacement radius. A model interpolation defect or
+small quadratic KKT defect is not reported as original reduced stationarity:
+the independent first-order auditor explicitly refuses historical secant
+models. The focused native checker requires a freshly checked, actually
+accepted original-residual reduction and tests that refusal.
+
+The four-worker Linux build passes in 128.53s and all six focused CTests pass
+in 45.79s with concurrency 1. The unchanged small model helper retains the
+fd8c034 ASan/UBSan evidence; there is no new full-solver sanitizer claim.
+An incorrect build-launch commit label was caught before compilation; the
+corrected producing revision, failed guard log and successful build identities
+are retained separately.
+[Build and commands](cls-epawf-segregated-picard-r3-evidence/native/build-validation-7ba50d3.json).
+
+Matched four-update enabled/disabled native tests are running from a freshly
+audited **3.9946700988643817** diagnostic checkpoint. Original norms reproduce
+bit for bit; complete qualification and the negative-ground guard pass.
+They use the same executable, original h0/history, 96 responses, 16 Krylov
+seeds, radius 0.4 and H tolerance 2e-9. Native utility and cost are pending.
+A fresh original-h0 follow-up is gated on an actually accepted checked reuse
+correction; the ongoing fresh fd8c034 original-h0 attempt remains the primary
+new-code test meanwhile. No speedup, root or physical acceptance is inferred.
+[Matched native commands and initial independent audit](cls-epawf-segregated-picard-r3-evidence/native/response-chord-native-launch.json).
+
 ## Full-space curvature and source-stencil accuracy (fd8c034)
 
 The full 504-direction experiment at the qualified 5.18197 checkpoint has

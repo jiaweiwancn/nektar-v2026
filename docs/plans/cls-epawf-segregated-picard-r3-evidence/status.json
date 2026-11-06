@@ -1,6 +1,6 @@
 {
   "status": "native_development_in_progress_original_m8_unresolved",
-  "producing_code_commit": "fd8c0344bbbe3ea4a180df7358d0235ee8b675a4",
+  "producing_code_commit": "7ba50d302cad7e7c0f676879a51029a4fcdc5416",
   "native_m8": {
     "status": "Completed original-h0 18-update run fails original residual; complete qualification passes; larger native follow-ups in progress",
     "qualified_first_stage": false,
@@ -338,17 +338,17 @@
     }
   ],
   "best_audited_development_checkpoint": {
-    "full_residual": 4.042756543242138,
-    "gradient_departure": 0.0009999988856227437,
-    "minimum_outer_epsilon_ratio": 0.9826997881642872,
-    "ground_minimum": 1.3397688354401293e-06,
+    "full_residual": 3.9946700988643817,
+    "gradient_departure": 0.0009999990248706903,
+    "minimum_outer_epsilon_ratio": 0.9828517012097211,
+    "ground_minimum": 1.6971737288524383e-06,
     "producing_code_commit": "fa5ac96b5b396a759002a104d2c0d7cf88bb6b3b",
-    "independent_probe_code_commit": "fd8c0344bbbe3ea4a180df7358d0235ee8b675a4",
-    "audit": "native/audit-previous-warm-current.json",
+    "independent_probe_code_commit": "7ba50d302cad7e7c0f676879a51029a4fcdc5416",
+    "audit": "native/response-chord-native-launch.json#initial_audit",
     "original_norm_vector_bitwise_reproduced": true,
     "physical_acceptance_inferred": false,
     "algebraic_root": false,
-    "scope": "Fresh original residual and full constitutive audit of an in-flight numerical checkpoint; no physical acceptance or final native history receipt inferred"
+    "scope": "Fresh original residual and complete qualification of the sixth in-flight numerical update; no final native history receipt or physical acceptance."
   },
   "source_precision_code_commit": "fd8c0344bbbe3ea4a180df7358d0235ee8b675a4",
   "source_precision_validation": {
@@ -374,6 +374,19 @@
       "physical_acceptance_inferred": false,
       "algebraic_root": false,
       "scope": "Fresh original residual/complete qualification of an in-flight numerical checkpoint; not physical acceptance or a final native history receipt"
+    },
+    {
+      "full_residual": 4.042756543242138,
+      "gradient_departure": 0.0009999988856227437,
+      "minimum_outer_epsilon_ratio": 0.9826997881642872,
+      "ground_minimum": 1.3397688354401293e-06,
+      "producing_code_commit": "fa5ac96b5b396a759002a104d2c0d7cf88bb6b3b",
+      "independent_probe_code_commit": "fd8c0344bbbe3ea4a180df7358d0235ee8b675a4",
+      "audit": "native/audit-previous-warm-current.json",
+      "original_norm_vector_bitwise_reproduced": true,
+      "physical_acceptance_inferred": false,
+      "algebraic_root": false,
+      "scope": "Fresh original residual and full constitutive audit of an in-flight numerical checkpoint; no physical acceptance or final native history receipt inferred"
     }
   ],
   "full_space_qualified_5p182_first_order": {
@@ -390,5 +403,15 @@
     "physical_acceptance_inferred": false,
     "evidence": "native/first-order-qualified-full504-at5p182-iteration0.json",
     "direction_and_trial": "native/qualified-full504-at5p182-iteration0-review.json"
+  },
+  "response_reuse_validation": {
+    "code_commit": "7ba50d302cad7e7c0f676879a51029a4fcdc5416",
+    "default_budget": 0,
+    "diagnostic_budget": 2,
+    "build": "native/build-validation-7ba50d3.json",
+    "focused_regressions_passed": 6,
+    "native_status": "running",
+    "native_launch": "native/response-chord-native-launch.json",
+    "scope": "Historical response secants with fresh signed chosen-direction checks; no current per-column derivative or stationarity certificate. Native utility and cost not established yet."
   }
 }
