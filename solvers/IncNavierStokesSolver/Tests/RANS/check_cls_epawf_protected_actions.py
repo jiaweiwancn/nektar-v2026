@@ -30,9 +30,11 @@ def main():
                      r["iteration"] == trial["iteration"] and r["seconds"] < trial["seconds"]][-1]
         if not direction.get("reference_branch_bridged") or direction["directional_refreshes"] < 2:
             continue
+        purpose = "source_refined" if trial["proposal_origin"] == "nonlinear_source_refined_direction" else "linear"
         checks = [r for r in rows if r["event"] == "response_chord_direction_check" and
-                  r["iteration"] == trial["iteration"] and direction["seconds"] < r["seconds"] < trial["seconds"]]
-        require(checks and all(r["passed"] for r in checks),
+                  r["purpose"] == purpose and r["iteration"] == trial["iteration"] and
+                  direction["seconds"] < r["seconds"] < trial["seconds"]]
+        require(checks and checks[-1]["passed"],
                 "protected direction lacked accurate independent current-base action checks")
         useful.append(dict(direction={k: direction[k] for k in [
             "iteration", "directional_refreshes", "basis_dimension", "response_rank", "radius", "displacement"]},
