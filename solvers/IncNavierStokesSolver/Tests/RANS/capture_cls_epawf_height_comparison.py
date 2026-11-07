@@ -8,7 +8,7 @@ import json
 from pathlib import Path
 import shutil
 import subprocess
-from run_cls_epawf_picard import load,sha,write_json,THREADS
+from run_cls_epawf_picard import load,sha,write_json,THREADS,state_hash,require
 from capture_cls_epawf_projection_repair import snapshot
 
 
@@ -23,6 +23,9 @@ def main():
                           ('selected-G',r/'selected-G'),('selected-H',r/'selected-H')]:
         if not (campaign/'trajectory/progress.json').exists():continue
         record=snapshot(campaign,a.output/(name+'-checkpoint'));out['campaigns'][name]=record
+        identity=load(campaign/'trajectory/runtime/identity.json')['frozen']
+        require(sha(Path(identity['path']))==identity['sha256'] and all(sha(Path(p))==h for p,h in identity['libraries'].items()),'frozen runtime changed '+name)
+        record['verified_frozen_runtime']=identity
         if record['progress']['status']=='numerically_rejected':
             segment=Path(record['progress']['segment']);path=segment/'case.evolution.json'
             if not path.exists():path=path.with_suffix(path.suffix+'.gz')
@@ -30,9 +33,10 @@ def main():
             d=json.load(gzip.open(path,'rt') if path.suffix=='.gz' else path.open());attempt=d['pimple_attempts'][-1]
             record['first_failure']={k:attempt[k] for k in ('time','failure','scheduled_complete','flow_domain','flow_ground') if k in attempt}
             record['terminal_report']=dict(path=str(target),sha256=sha(target),contains='actual rejected_state and last_stage_history; no retry')
+            record['terminal_report'].update(rejected_state_sha256=state_hash(d['rejected_state']),last_stage_history_sha256=state_hash(d['last_stage_history']))
     # Index native checkpoints/packets/reports and logs, leaving dense matrices
     # and fields on Linux. Do not hash mutable active files as immutable evidence.
-    for family in ('screening','focused','dt-half'):
+    for family in ('screening','focused','dt-half','outer-refined','quadrature','discrete-budgets','band-row-checks','outer-balance','latest-native-one'):
         root=r/family
         if not root.exists():continue
         for path in sorted(root.rglob('*')):
