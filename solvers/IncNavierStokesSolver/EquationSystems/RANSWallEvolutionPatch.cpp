@@ -444,7 +444,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
             m_dimension==3?column[2]+(z[j]+1)*(column[3]-column[2])/2:0.,parameters.geometry.sampleHeight};
         ray.weight=w[i]*(column[1]-column[0])/2;
         if(m_dimension==3)ray.weight*=w[j]*(column[3]-column[2])/2;
-        ray.coordinate[2]=parameters.geometry.sampleHeight/m_mapping.At(ray.coordinate).scale;
+        ray.coordinate[2]=(ColumnAverageK()?m_parameters.geometry.sampleHeight:parameters.geometry.sampleHeight)/m_mapping.At(ray.coordinate).scale;
         ray.weight*=m_mapping.At(ray.coordinate).baseArea;
         ray.sample=SampleKRow(ray.coordinate);
         auto H=ray.coordinate;H[2]=parameters.geometry.height;
