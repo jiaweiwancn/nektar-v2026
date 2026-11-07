@@ -221,7 +221,8 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     session->LoadSolverInfo("RANSWallPimpleKBound",m_pimpleKBound,"Off");
     Require(m_pimpleKBound=="Off" || (PimpleSingleSweep() && m_pimpleKBound=="MassProjection"),"invalid PIMPLE k-bound mode");
     session->LoadSolverInfo("RANSWallPimpleKInventory",m_pimpleKInventory,"LegacyV1");
-    Require(m_pimpleKInventory=="LegacyV1" || (PimpleKBoundEnabled() && m_pimpleKInventory=="ConstitutiveV2"),"invalid PIMPLE k inventory policy");
+    Require(m_pimpleKInventory=="LegacyV1" || (PimpleKBoundEnabled() &&
+        (m_pimpleKInventory=="ConstitutiveV2" || m_pimpleKInventory=="ConstitutiveV3")),"invalid PIMPLE k inventory policy");
     session->LoadParameter("RANSWallPimpleKFloorRelative",m_pimpleKFloorRelative,1e-8);
     Require(std::isfinite(m_pimpleKFloorRelative) && m_pimpleKFloorRelative>0 && m_pimpleKFloorRelative<=1.,"invalid k floor relative to K0");
     session->LoadParameter("RANSWallPimpleKBoundMaxAdd",m_kBoundMaxAdd,2000);

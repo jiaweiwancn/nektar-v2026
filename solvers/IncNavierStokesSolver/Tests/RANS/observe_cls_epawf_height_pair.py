@@ -14,15 +14,23 @@ from run_cls_epawf_picard import load,sha,require
 
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True)
-    p.add_argument('--output',type=Path,required=True);p.add_argument('--once',action='store_true');a=p.parse_args()
+    p.add_argument('--output',type=Path,required=True);p.add_argument('--once',action='store_true')
+    p.add_argument('--cases',nargs=2,default=['G','H'])
+    p.add_argument('--initial-reports',nargs=2,type=Path)
+    p.add_argument('--campaigns',nargs=2,type=Path)
+    a=p.parse_args();require(bool(a.initial_reports)==bool(a.campaigns),'both case paths must be explicit')
     a.output.mkdir(parents=True,exist_ok=True);lock=CampaignLock(a.output);states={};initial={};digests={}
-    for c in 'GH':
-        initial[c]=load(a.root/'focused'/c/'whole4/case.evolution.json')['height_comparison_initial'];states[c]={0:initial[c]}
+    reports=dict(zip(a.cases,a.initial_reports or [a.root/'focused'/c/'whole4/case.evolution.json' for c in a.cases]))
+    campaigns=dict(zip(a.cases,a.campaigns or [a.root/('selected-'+c)/'trajectory' for c in a.cases]))
+    for c in a.cases:
+        initial[c]=load(reports[c])['height_comparison_initial'];states[c]={0:initial[c]}
+        prefix=load(reports[c])
+        if prefix.get('height_comparison_final'):states[c][prefix['steps']]=prefix['height_comparison_final']
     while True:
         result=dict(status='observing',observer=process_identity(os.getpid()),production_governing_solves=0,cases={},paired={})
         terminal=True
-        for c in 'GH':
-            root=a.root/('selected-'+c)/'trajectory';progress=load_progress(root/'progress.json')
+        for c in a.cases:
+            root=campaigns[c];progress=load_progress(root/'progress.json')
             terminal=terminal and progress['status'] in ('numerically_rejected','targets_completed')
             for segment in progress['segments']:
                 step=int(segment['end_step']);path=Path(segment['checkpoint']).parent/'case.evolution.json.gz'
@@ -34,7 +42,7 @@ def main():
                 require(d['steps']==step,'native block identity differs')
                 q=d['height_comparison_final'];require(abs(q['time']-d['time'])<1e-13,'diagnostic time differs')
                 states[c][step]=q;digests[str(path)]=sha(path)
-            prefix=load(a.root/'focused'/c/'whole4/case.evolution.json')['pimple_attempts']
+            prefix=load(reports[c])['pimple_attempts']
             text=(root/'steps.jsonl').read_text() if (root/'steps.jsonl').exists() else ''
             if text and not text.endswith('\n'):text=text[:text.rfind('\n')+1]
             ledger=[json.loads(v) for v in text.splitlines()];attempts=prefix+[v['attempt'] for v in ledger if v['global_step']<=progress['accepted_steps']]
@@ -57,7 +65,8 @@ def main():
                     case['fixed_time_windows'].append(dict(first_step=n-80,last_step=n,start=old['time'],end=q['time'],
                         physical_L2_change=differences(q,old),wall_stress_change=q['mean_wall_stress']-old['mean_wall_stress']))
             result['cases'][c]=case
-        for n in sorted(states['G'].keys() & states['H'].keys()):result['paired'][str(n)]=differences(states['G'][n],states['H'][n])
+        left,right=a.cases
+        for n in sorted(states[left].keys() & states[right].keys()):result['paired'][str(n)]=differences(states[left][n],states[right][n])
         result['immutable_report_sha256']=digests;result['status']='terminal_observed' if terminal else 'observing'
         atomic(a.output/'summary.json',result)
         if terminal or a.once:return

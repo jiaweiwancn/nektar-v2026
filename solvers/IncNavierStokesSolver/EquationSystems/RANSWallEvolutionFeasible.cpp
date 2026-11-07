@@ -128,7 +128,8 @@ std::vector<RANSWallCoordinate> RANSWallEvolutionPatch::ConstitutiveAnchors(cons
         for(const auto &p:Surface(b,axis,axis==2?(side<0?0.:upper[2]):(side<0?lower[0]:upper[0]),side,order))add(p.test.coordinate);
     for(const auto &p:WallTraceR4(state))add(p.row.coordinate);
     for(const auto &p:additional)add(p);
-    for(double x:ContinuationProfileAbscissae())if(x>=lower[0] && x<=upper[0])add({x,0,0});
+    if(ProspectiveKInventory())for(const auto &[p,w]:PhysicalBandRays())add(p);
+    for(double x:ConstitutiveReportingAbscissae())if(x>=lower[0] && x<=upper[0])add({x,0,0});
     return {anchors.begin(),anchors.end()};
 }
 
@@ -139,6 +140,88 @@ std::vector<RANSWallGlobalPoint> RANSWallEvolutionPatch::NormalizationRows(
     for(const auto &q:profile.Quadrature())
     {auto p=anchor;p[2]=q.r/scale;rows.push_back(Point(K(),p));}
     return rows;
+}
+
+std::string RANSWallEvolutionPatch::BranchCoverageDiagnostic(const Vector &s,double time,
+    const RANSWallEvolutionData &data,const std::vector<RANSWallCoordinate> &anchors) const
+{
+    Require(m_dimension==2 && !Mapped(),"branch diagnostic requires flat serial pilot");
+    const auto hash=RANSWallR3::Hash(s);std::vector<std::string> output;
+    for(auto p:anchors)
+    {
+        p[2]=0;const auto sampling=SampleKRow(p);const double k=sampling.Value(s,offset[K()]);
+        Require(k>0 && std::isfinite(k),"branch diagnostic sampled K is inadmissible");
+        for(double z:{m_sensorA,m_sensorB})
+        {
+            auto q=p;q[2]=z;
+            Require(Point(K(),q).Value(s,offset[K()])>0 && Point(Epsilon(),q).Value(s,offset[Epsilon()])>0,
+                "branch diagnostic sensor scalar is inadmissible");
+        }
+        const auto base=Profile(k,p,0),current=StateProfile(s,p,time,data);
+        std::string reason;const auto active=ProspectiveActiveProfile(s,p,reason);
+        const auto gates=Transition(s,p,time,data);std::vector<std::string> profiles,panels;
+        for(auto [name,profile]:std::vector<std::pair<std::string,std::shared_ptr<EquilibriumAWFProfiles>>>{
+            {"baseline",base},{"current",current},{"prospective_active",active}})
+        {
+            if(!profile)continue;
+            std::vector<std::string> rows;double minimum=1e300;
+            for(const auto &q:NormalizationRows(p,*profile))
+            {
+                const double value=q.Value(s,offset[K()]);minimum=std::min(minimum,value);
+                rows.push_back(J::Object({{"coordinate",J::Numbers(q.coordinate)},{"k",J::Number(value)}}));
+            }
+            profiles.push_back(J::Object({{"branch",J::Quote(name)},{"chi",J::Number(profile->Reference().weight)},
+                {"cutoff",J::Number(profile->Reference().cutoff)},{"minimum",J::Number(minimum)},{"rows",J::List(rows)}}));
+        }
+        double positiveQuadratureDefect=0.;
+        if(active)for(double chi:{.0001,.125,.5,1.})
+        {
+            const auto q=active->Reweighted(chi);
+            Require(q.Quadrature().size()==active->Quadrature().size(),"positive chi changed quadrature size");
+            for(int i=0;i<q.Quadrature().size();++i)
+                positiveQuadratureDefect=std::max(positiveQuadratureDefect,std::abs(q.Quadrature()[i].r-active->Quadrature()[i].r));
+        }
+        // Independent continuous vertical cubic test at this x, separately
+        // on each native panel. This is not a 2D volume positivity certificate.
+        for(int e=0;e<fields[K()]->Elements().size();++e)
+        {
+            const auto &el=fields[K()]->Elements()[e];
+            if(p[0]<el.lower[0] || p[0]>el.upper[0] || el.lower[2]>=m_parameters.geometry.height)continue;
+            Require(el.degree==3,"vertical diagnostic requires cubic panels");
+            std::array<long double,4> v{};
+            for(int j=0;j<4;++j){auto q=p;q[2]=el.lower[2]+j*(el.upper[2]-el.lower[2])/3;
+                v[j]=fields[K()]->ElementPoint(e,q).Value(s,offset[K()]);}
+            const long double ends=(v[0]+v[3])/2,middle=(v[1]+v[2])/2;
+            const long double a2=9*(ends-middle)/8,a0=ends-a2;
+            const long double slope=(v[3]-v[0])/2,a3=9*(slope-3*(v[2]-v[1])/2)/8,a1=slope-a3;
+            const long double A=3*a3,B=2*a2,C=a1;std::vector<long double> roots{-1,1};
+            auto add=[&](long double x){if(x>-1 && x<1)roots.push_back(x);};
+            if(A==0){if(B!=0)add(-C/B);}
+            else if(B*B-4*A*C>=0)
+            {const long double d=std::sqrt(B*B-4*A*C),q=-(B+std::copysign(d,B))/2;
+             if(q==0)add(-B/(2*A));else{add(q/A);add(C/q);}}
+            long double minimum=1e300L,at=0;double nativeMinimum=0;
+            const long double error=512*std::numeric_limits<double>::epsilon()*(1+std::abs(a0)+std::abs(a1)+std::abs(a2)+std::abs(a3));
+            for(long double x:roots)
+            {const long double value=a0+x*(a1+x*(a2+x*a3));if(value<minimum)
+             {minimum=value;at=el.lower[2]+(x+1)*(el.upper[2]-el.lower[2])/2;auto q=p;q[2]=at;
+              nativeMinimum=fields[K()]->ElementPoint(e,q).Value(s,offset[K()]);}}
+            panels.push_back(J::Object({{"z_bounds",J::Numbers(Vector{el.lower[2],el.upper[2]})},
+                {"minimum",J::Number(double(minimum))},{"z",J::Number(double(at))},
+                {"native_evaluation",J::Number(nativeMinimum)},{"arithmetic_error_estimate",J::Number(double(error))}}));
+        }
+        output.push_back(J::Object({{"anchor",J::Numbers(p)},{"K",J::Number(k)},{"column_average",J::Boolean(sampling.columnAverage)},
+            {"chi",J::Number(gates.chi)},{"spatial",J::Number(gates.spatial)},{"state",J::Number(gates.state)},
+            {"d2",J::Number(gates.d2)},{"admissibility",J::Number(gates.admissibility)},
+            {"margin_gate",J::Number(gates.marginGate)},{"reynolds_gate",J::Number(gates.reynoldsGate)},
+            {"margin",J::Number(base->Reference().margin)},{"reynolds",J::Number(base->Reference().reynolds)},
+            {"prospective_reason",J::Quote(reason)},{"positive_chi_quadrature_defect",J::Number(positiveQuadratureDefect)},
+            {"profiles",J::List(profiles)},{"vertical_cubic_panels",J::List(panels)}}));
+    }
+    Require(hash==RANSWallR3::Hash(s),"branch readback changed coefficients");
+    return J::Object({{"state_sha256",J::Quote(hash)},{"anchors",J::List(output)},
+        {"initialization_work",J::Numbers(InitializationWork())},{"governing_solves","0"},
+        {"scope",J::Quote("read-only profile reachability and vertical-panel extrema; no normalization, repair, Lift, restart conversion or history advance")}});
 }
 
 void RANSWallEvolutionPatch::InitialiseScalarLocations() const
@@ -295,6 +378,18 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::ScalarDomain(
             {
                 if(!ray(p,Profile(SampleK(result.effectiveState,p),p,0),"constitutive_baseline_normalization_ray",false,0) ||
                    !ray(p,StateProfile(result.effectiveState,p,time,data),"constitutive_current_normalization_ray",false,0))return result;
+                if(ProspectiveKInventory())
+                {
+                    // Only positivity constraints: never normalize this
+                    // prospective profile, change chi, or add source weights.
+                    // At fixed K every positive chi reweights the SAME Q+.
+                    std::string reason;
+                    const auto active=ProspectiveActiveProfile(result.effectiveState,p,reason);
+                    ++result.counts["prospective_branch_"+reason];
+                    if(active)for(const auto &q:NormalizationRows(p,*active))
+                        if(!check("constitutive_prospective_active_normalization_ray",q,K(),false,
+                                  result.effectiveState))return result;
+                }
             }
         }
         if(kInventoryOnly){result.phase="k_inventory_complete";result.admissible=true;return result;}

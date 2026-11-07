@@ -13,6 +13,22 @@ using namespace RANSWallAlgebra;
 using namespace SolverUtils;
 namespace J=RANSWallSolveJson;
 
+std::vector<std::pair<RANSWallCoordinate,double>> RANSWallEvolutionPatch::PhysicalBandRays() const
+{
+    std::vector<std::pair<RANSWallCoordinate,double>> rays;
+    if(!ProspectiveKInventory())
+    {for(const auto &r:m_rays)rays.push_back({r.coordinate,r.weight});return rays;}
+    std::set<double> x{lower[0],upper[0]};
+    for(const auto &e:fields[K()]->Elements()){x.insert(e.lower[0]);x.insert(e.upper[0]);}
+    for(double a:{-3.,-2.25,-2.})if(a>lower[0] && a<upper[0])x.insert(a);
+    const auto rule=LibUtilities::PointsManager()[LibUtilities::PointsKey(8,LibUtilities::eGaussGaussLegendre)];
+    for(auto b=std::next(x.begin());b!=x.end();++b)
+    {
+        const double a=*std::prev(b),length=*b-a;
+        for(int j=0;j<8;++j)rays.push_back({{a+(rule->GetZ()[j]+1)*length/2,0,0},rule->GetW()[j]*length/2});
+    }
+    return rays;
+}
 
 std::string RANSWallEvolutionPatch::PhysicalKBands(const Vector &s,double time,
     const RANSWallEvolutionData &data,const Vector *change,bool exportIntegralRows) const
@@ -24,19 +40,25 @@ std::string RANSWallEvolutionPatch::PhysicalKBands(const Vector &s,double time,
     std::vector<std::string> output;
     const auto rule=LibUtilities::PointsManager()[LibUtilities::PointsKey(16,LibUtilities::eGaussGaussLegendre)];
     const auto z=rule->GetZ(),w=rule->GetW();
+    const auto reportingRays=PhysicalBandRays();
+    std::vector<std::pair<std::string,std::pair<double,double>>> regions{{"all",{lower[0],upper[0]}}};
+    if(ProspectiveKInventory())for(auto r:std::vector<std::pair<std::string,std::pair<double,double>>>{
+        {"upstream_plateau",{lower[0],-3.}},{"transition",{-3.,-2.25}},{"trace_buffer",{-2.25,-2.}},{"downstream",{-2.,upper[0]}}})regions.push_back(r);
     for(auto [name,top]:std::vector<std::pair<std::string,double>>{{"z_le_0.01",.01},{"z_le_0.1",.1},{"wall_layer",H},{"first_element",first},{"global",upper[2]}})
+    for(const auto &[region,bounds]:regions)
     {
         Vector sums(6),integralRow(exportIntegralRows?size[K()]:0);std::vector<std::string> invalid; // k, correction signed/positive/negative, production, destruction
-        for(const auto &ray:m_rays)
+        for(const auto &[anchor,horizontalWeight]:reportingRays)
         {
+            if(anchor[0]<bounds.first || anchor[0]>bounds.second)continue;
             auto knots=panels;knots.insert(top);
             for(auto b=std::next(knots.begin());b!=knots.end() && *b<=top;++b)
             {
                 const double a=*std::prev(b),length=*b-a;
                 for(int j=0;j<16;++j)
                 {
-                    auto p=ray.coordinate;p[2]=a+(z[j]+1)*length/2;const auto q=Point(K(),p);
-                    const double weight=ray.weight*w[j]*length/2;
+                    auto p=anchor;p[2]=a+(z[j]+1)*length/2;const auto q=Point(K(),p);
+                    const double weight=horizontalWeight*w[j]*length/2;
                     sums[0]+=weight*q.Value(s,offset[K()]);
                     if(exportIntegralRows)
                     {
@@ -50,15 +72,15 @@ std::string RANSWallEvolutionPatch::PhysicalKBands(const Vector &s,double time,
             }
             if(!change)
             {
-                const auto profile=StateProfile(s,ray.coordinate,time,data);const auto normal=WallNormalization(s,ray.coordinate,*profile);
+                const auto profile=StateProfile(s,anchor,time,data);const auto normal=WallNormalization(s,anchor,*profile);
                 for(const auto &qp:profile->IntegrationQuadrature(std::min(H,top),{.01,.1}))
                 {
-                    auto p=ray.coordinate;p[2]=qp.r;const auto q=Point(K(),p);RANSTensor G{};
+                    auto p=anchor;p[2]=qp.r;const auto q=Point(K(),p);RANSTensor G{};
                     for(int a=0;a<m_dimension;++a)G[PhysicalAxis(a)]=Point(a,p).Gradient(s,offset[a]);
                     const double kval=q.Value(s,offset[K()]);
                     if(!(kval>=0 && std::isfinite(kval))){invalid.push_back(J::Object({{"point",J::Numbers(p)},{"k",J::Number(kval)}}));continue;}
                     const auto law=InnerStress(kval,profile->Original().EddyViscosity(qp.r),G);
-                    const auto src=WallSource(s,p,law.production,*profile,&normal);const double weight=ray.weight*qp.weight*qp.jacobian;
+                    const auto src=WallSource(s,p,law.production,*profile,&normal);const double weight=horizontalWeight*qp.weight*qp.jacobian;
                     sums[4]+=weight*law.production;sums[5]+=weight*(law.production-src.kSource);
                 }
                 if(top>H)
@@ -69,18 +91,19 @@ std::string RANSWallEvolutionPatch::PhysicalKBands(const Vector &s,double time,
                         const double a=*std::prev(b);if(a<H)continue;
                         for(int j=0;j<16;++j)
                         {
-                            auto p=ray.coordinate;p[2]=a+(z[j]+1)*(*b-a)/2;RANSTensor G{};
+                            auto p=anchor;p[2]=a+(z[j]+1)*(*b-a)/2;RANSTensor G{};
                             for(int k=0;k<m_dimension;++k)G[PhysicalAxis(k)]=Point(k,p).Gradient(s,offset[k]);
                             const double k=Point(K(),p).Value(s,offset[K()]),e=Point(Epsilon(),p).Value(s,offset[Epsilon()]);
                             if(!(k>0 && e>0)){invalid.push_back(J::Object({{"point",J::Numbers(p)},{"k",J::Number(k)},{"epsilon",J::Number(e)}}));continue;}
-                            const auto law=OuterClosure(k,e,G,p);const double weight=ray.weight*w[j]*(*b-a)/2;
+                            const auto law=OuterClosure(k,e,G,p);const double weight=horizontalWeight*w[j]*(*b-a)/2;
                             sums[4]+=weight*law.production;sums[5]+=weight*e;
                         }
                     }
                 }
             }
         }
-        output.push_back(J::Object({{"name",J::Quote(name)},{"lower","0"},{"upper",J::Number(top)},
+        output.push_back(J::Object({{"name",J::Quote(name)},{"x_region",J::Quote(region)},
+            {"x_bounds",J::Numbers(Vector{bounds.first,bounds.second})},{"lower","0"},{"upper",J::Number(top)},
             {"k_integral",J::Number(sums[0])},{"correction_signed",J::Number(sums[1])},
             {"correction_positive",J::Number(sums[2])},{"correction_negative",J::Number(sums[3])},
             {"correction_absolute",J::Number(sums[2]-sums[3])},{"production",change || !invalid.empty()?"null":J::Number(sums[4])},
@@ -133,7 +156,7 @@ std::string RANSWallEvolutionPatch::HeightComparison(const Vector &s,const Vecto
         }
     }
     for(auto &e:errors)e=std::sqrt(e);
-    for(double x:{-3.5,-1.,1.6})
+    for(double x:(ProspectiveKInventory()?Vector{-3.5,-2.625,-1.,1.6}:Vector{-3.5,-1.,1.6}))
     {
         auto anchor=RANSWallCoordinate{x,0,0};const auto profile=StateProfile(s,anchor,time,data);const auto normal=WallNormalization(s,anchor,*profile);
         const auto row=SampleKRow(anchor);std::vector<std::string> values;
@@ -273,7 +296,7 @@ std::string RANSWallEvolutionPatch::PimpleContactDiagnostic(const Vector &s,doub
         contacts.push_back(J::Object(values));
     }
     std::vector<std::string> profiles;
-    for(double x:ContinuationProfileAbscissae())for(double z:{0.,.0025,.005,.01,.02,.05,.1,.25,.5,1.,2.,3.,4.,6.})if(z<=upper[2])
+    for(double x:ConstitutiveReportingAbscissae())for(double z:{0.,.0025,.005,.01,.02,.05,.1,.25,.5,1.,2.,3.,4.,6.})if(z<=upper[2])
     {
         const RANSWallCoordinate p{x,0,z};Vector values;
         for(int b=0;b<=K();++b)values.push_back(Point(b,p).Value(s,offset[b]));

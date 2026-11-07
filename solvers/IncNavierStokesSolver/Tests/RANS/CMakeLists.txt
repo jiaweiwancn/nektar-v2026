@@ -53,6 +53,9 @@ add_executable(RANSConstitutiveProbe
     ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSConstitutiveProbe.cpp)
 add_executable(RANSHeightReferenceChecks test_cls_epawf_height_reference.cpp)
 target_link_libraries(RANSHeightReferenceChecks RANSKernels ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
+add_executable(RANSProfileBranchChecks test_cls_epawf_profile_branches.cpp)
+target_link_libraries(RANSProfileBranchChecks RANSKernels ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
+add_test(NAME RANSProfileBranchChecks COMMAND RANSProfileBranchChecks)
 add_executable(RANSEquilibriumProfilesProbe
     ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSEquilibriumProfilesProbe.cpp)
 add_executable(RANSEquilibriumTransitionProbe

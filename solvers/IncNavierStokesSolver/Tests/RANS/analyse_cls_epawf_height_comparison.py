@@ -83,7 +83,8 @@ def attempts_summary(attempts,through):
         require(all(a[k]==1 for k in ('outer_sweeps','momentum_predictor_solves','pressure_system_solves','epsilon_transport_solves','k_transport_solves','bound_calls')) and a['additional_governing_equation_solves']==0,'production schedule changed')
         b=a.get('k_bound',{})
         for r in (b.get('physical_bands') or {}).get('regions',[]):
-            acc=bands.setdefault(r['name'],dict(lower=r['lower'],upper=r['upper'],signed=0.,positive=0.,negative=0.,absolute=0.))
+            name=r['name'] if r.get('x_region','all')=='all' else r['name']+':'+r['x_region']
+            acc=bands.setdefault(name,dict(lower=r['lower'],upper=r['upper'],x_bounds=r.get('x_bounds'),signed=0.,positive=0.,negative=0.,absolute=0.))
             for k in ('signed','positive','negative','absolute'):acc[k]+=r['correction_'+k]
         increments.append(dict({k:a[k] for k in a if k in ('time','k_frozen_linear_residual','k_corrected_frozen_linear_residual','k_added_frozen_residual','k_added_storage_residual','refreshed_trace_defect','refreshed_original_block_norms','seconds')},
             raw_sha256=b.get('raw_sha256'),corrected_sha256=b.get('corrected_sha256'),raw_step_mass_norm=b.get('mass_norm_raw_step'),

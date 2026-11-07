@@ -183,7 +183,13 @@ public:
     Diagnostic PhysicalSamples(const Vector &state,double time,const RANSWallEvolutionData &data) const;
     bool PimpleKBoundEnabled() const { return m_pimpleKBound!="Off"; }
     static Vector ContinuationProfileAbscissae(){return {-3.,-1.,0.,1.,1.6};}
-    bool ConstitutiveKInventory() const { return PimpleKBoundEnabled() && m_pimpleKInventory=="ConstitutiveV2"; }
+    Vector ConstitutiveReportingAbscissae() const
+    { return ProspectiveKInventory()?Vector{-3.5,-3.,-2.625,-1.,0.,1.,1.6}:ContinuationProfileAbscissae(); }
+    bool ConstitutiveKInventory() const { return PimpleKBoundEnabled() &&
+        (m_pimpleKInventory=="ConstitutiveV2" || m_pimpleKInventory=="ConstitutiveV3"); }
+    bool ProspectiveKInventory() const { return PimpleKBoundEnabled() && m_pimpleKInventory=="ConstitutiveV3"; }
+    std::string BranchCoverageDiagnostic(const Vector &state,double time,
+        const RANSWallEvolutionData &data,const std::vector<RANSWallCoordinate> &anchors) const;
     std::string CheckConstitutiveCoverage(const Vector &state,double time,
         const RANSWallEvolutionData &data,const RANSWallCoordinate &unregistered) const;
     const std::string &PimpleKBoundMode() const { return m_pimpleKBound; }
@@ -383,8 +389,11 @@ private:
     std::vector<ScalarLocation> ReconstructionLocations(int block,bool complete) const;
     std::vector<RANSWallCoordinate> ConstitutiveAnchors(const Vector &state,
         const std::vector<RANSWallCoordinate> &additional) const;
+    std::vector<std::pair<RANSWallCoordinate,double>> PhysicalBandRays() const;
     std::vector<RANSWallGlobalPoint> NormalizationRows(const RANSWallCoordinate &anchor,
         const SolverUtils::EquilibriumAWFProfiles &profile) const;
+    std::shared_ptr<SolverUtils::EquilibriumAWFProfiles> ProspectiveActiveProfile(
+        const Vector &state,const RANSWallCoordinate &anchor,std::string &reason) const;
     // A coverage tripwire in the final audit checks actual consumers, in
     // addition to sharing their location generators with the projection.
     struct CoverageScope
@@ -444,6 +453,7 @@ private:
     std::set<int> m_traceIds,m_baselineTraceIds;
     using ProfilePair=std::array<std::shared_ptr<SolverUtils::EquilibriumAWFProfiles>,2>;
     mutable std::map<std::array<double,3>,ProfilePair> m_profileCache;
+    mutable std::map<std::array<double,3>,std::shared_ptr<SolverUtils::EquilibriumAWFProfiles>> m_prospectiveProfileCache;
     std::vector<WallMatrix> m_mass;
     mutable std::array<WallMatrix,2> m_regionalMass;
     mutable Vector m_boundaryFlux,m_boundaryDirection;

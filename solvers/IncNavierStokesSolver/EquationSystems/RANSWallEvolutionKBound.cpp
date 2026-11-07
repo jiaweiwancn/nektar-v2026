@@ -35,7 +35,8 @@ std::string RANSWallEvolutionPatch::PimpleKBoundSignature() const
     if(!PimpleKBoundEnabled())return ""; // Preserve Off checkpoint signatures.
     const double K0=m_parameters.model.Q()*m_robustUstar*m_robustUstar;
     std::ostringstream out;out<<std::setprecision(17)<<":k_bound="<<m_pimpleKBound
-        <<(ConstitutiveKInventory()?":version=MassQR-ConstitutiveV2:metric=physical_consistent_Mff:constraints=shared_constitutive_all_profiles_contact_rays_retained_cuts_cubic_ground":
+        <<(ProspectiveKInventory()?":version=MassQR-ConstitutiveV3:metric=physical_consistent_Mff:constraints=shared_Q0_union_permitted_Qpositive_reporting_contact_retained_cuts_cubic_ground":
+           ConstitutiveKInventory()?":version=MassQR-ConstitutiveV2:metric=physical_consistent_Mff:constraints=shared_constitutive_all_profiles_contact_rays_retained_cuts_cubic_ground":
             ":version=MassQR-v1:metric=physical_consistent_Mff:constraints=static_preK_rays_moving_witnesses_cubic_ground")
         <<":floor_relative="<<m_pimpleKFloorRelative<<":K0="<<K0<<":floor="<<K0*m_pimpleKFloorRelative
         <<":arithmetic_reserve="<<4096*std::numeric_limits<double>::epsilon()*K0;
@@ -278,7 +279,7 @@ RANSWallEvolutionPatch::KBoundResult RANSWallEvolutionPatch::ApplyPimpleKBound(
     std::string bands="null";
     if(HeightComparisonEnabled() && result.success)
     {Vector full(raw.size());for(int i=0;i<full.size();++i)full[i]=result.state[i]-raw[i];bands=PhysicalKBands(result.state,time,data,&full);}
-    result.report=J::Object({{"physical_bands",bands},{"mode",J::Quote(m_pimpleKBound)},{"algorithm",J::Quote(ConstitutiveKInventory()?"MassQR-ConstitutiveV2":"MassQR-v1")},
+    result.report=J::Object({{"physical_bands",bands},{"mode",J::Quote(m_pimpleKBound)},{"algorithm",J::Quote(ProspectiveKInventory()?"MassQR-ConstitutiveV3":ConstitutiveKInventory()?"MassQR-ConstitutiveV2":"MassQR-v1")},
         {"inventory_policy",J::Quote(m_pimpleKInventory)},{"projection_only",J::Boolean(projectionOnly)},
         {"work_controls",PimpleKBoundControls()},{"telemetry_schema","1"},
         {"separation_passes",J::Number(separations)},{"inventory_rebuilds",J::Number(inventoryRebuilds)},

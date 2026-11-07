@@ -118,7 +118,7 @@ def main():
     p.add_argument('--final-time', type=float)
     p.add_argument('--k-bound',choices=('Off','MassProjection'),default='Off')
     p.add_argument('--wall-policy',choices=('Upstream','UniformEPFlat'),default='Upstream')
-    p.add_argument('--inventory',choices=('LegacyV1','ConstitutiveV2'),default='LegacyV1')
+    p.add_argument('--inventory',choices=('LegacyV1','ConstitutiveV2','ConstitutiveV3'),default='LegacyV1')
     p.add_argument('--floor-relative',type=float)
     p.add_argument('--snapshots',action='store_true')
     p.add_argument('--budget-time',type=float,default=-1.)

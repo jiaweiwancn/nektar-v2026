@@ -200,6 +200,39 @@ std::shared_ptr<EquilibriumAWFProfiles> RANSWallEvolutionPatch::StateProfile(con
     return weight==0?base:Profile(K0,p,weight);
 }
 
+std::shared_ptr<EquilibriumAWFProfiles> RANSWallEvolutionPatch::ProspectiveActiveProfile(
+    const Vector &s,const RANSWallCoordinate &p,std::string &reason) const
+{
+    // Reachability depends on spatial support and K-dependent intrinsic gates,
+    // not on the current velocity/pressure sensor. A U/p update can change the
+    // latter without changing a single transported k coefficient.
+    if(m_parameters.chi==0){reason="disabled";return {};}
+    if(m_transitionEnabled && !m_uniformEP && WallCoordinate(p)>=m_transition.end)
+    {reason="spatially_excluded";return {};}
+    const double k=SampleK(s,p);
+    const auto base=Profile(k,p,0);const auto &ref=base->Reference();
+    if(m_transitionEnabled && !m_uniformEP &&
+       (ref.margin<=m_transition.state.marginOff || ref.reynolds<=m_transition.state.reynoldsOff))
+    {reason="intrinsic_gate_inactive";return {};}
+    const std::array<double,3> key{p[0],p[1],k};
+    const auto found=m_prospectiveProfileCache.find(key);
+    if(found!=m_prospectiveProfileCache.end())
+    {reason=found->second?"permitted_active":"intrinsically_unavailable";return found->second;}
+    const auto metric=m_mapping.At(p);auto geometry=m_parameters.geometry;geometry.height=metric.height;
+    auto options=m_options;options.requestedWeight=1;
+    // Query intrinsic feasibility explicitly; unrelated errors still propagate.
+    // This query never changes the actual profile's failure policy or cache.
+    options.failurePolicy=AWFFailurePolicy::UseOriginal;
+    for(double &r:options.physicalBreakpoints)r*=metric.scale;
+    auto active=std::make_shared<EquilibriumAWFProfiles>(geometry,k,m_parameters.model,
+        AWFNormalMetric{metric.kappa1,metric.kappa2},options);
+    if(active->Reference().weight!=1 || active->Reference().reason!=AWFFallbackReason::Active)
+    {reason="intrinsically_unavailable";m_prospectiveProfileCache[key]={};return {};}
+    if(m_prospectiveProfileCache.size()>4096)m_prospectiveProfileCache.clear();
+    m_prospectiveProfileCache[key]=active;
+    reason="permitted_active";return active;
+}
+
 std::array<std::map<int,double>,2> RANSWallEvolutionPatch::DissipationTrace(const Vector &s,
     double time,const RANSWallEvolutionData &data) const
 {
