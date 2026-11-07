@@ -69,6 +69,8 @@ def attempts_summary(attempts,through):
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True)
     p.add_argument('--screening',type=Path);p.add_argument('--output',type=Path,required=True)
+    p.add_argument('--compare-to',type=Path,help='another immutable suite, compared at common physical times')
+    p.add_argument('--comparison-kind',choices=('temporal','outer-representation'),default='temporal')
     a=p.parse_args();r=a.root.resolve();s=(a.screening or r/'screening').resolve();a.output.mkdir(parents=True,exist_ok=True)
     out=dict(schema=1,captured_UTC=datetime.datetime.now(datetime.timezone.utc).isoformat(),root=str(r),
         common_norms='dimensional physical L2; pressure difference has one common weighted-mean gauge removed; epsilon only z>=2',
@@ -87,6 +89,7 @@ def main():
             initial=compact_diagnostic(initial),initial_error_to_own_analytic= differences(initial,initial,True),observations={},qualification_events=result['qualification_events'],
             total_execution_seconds=result['trajectory_receipt']['seconds'])
         for step,packet in result['observations'].items():states[case][int(step)]=load(Path(packet['path']))
+        if result.get('final'):states[case][int(result['steps'])]=result['final']
         for step,d in states[case].items():
             if step==0:continue
             row=dict(diagnostic=compact_diagnostic(d),drift_from_actual_h0=differences(d,initial),error_to_own_analytic=differences(d,d,True),
@@ -113,25 +116,53 @@ def main():
             out['cross_height_differences'][first+'-'+second]=dict(
                 reference_velocity_offset=norm(states[first][0]['common_samples']['weights'],[x-y for x,y in zip(states[first][0]['common_samples']['reference_u'],states[second][0]['common_samples']['reference_u'])]),
                 represented={str(step):differences(states[first][step],states[second][step]) for step in states[first].keys() & states[second].keys()})
+    if a.compare_to:
+        out['cross_suite_comparison']=dict(kind=a.comparison_kind,other_suite=str(a.compare_to.resolve()),cases={})
+        for case,by_step in states.items():
+            path=a.compare_to/case/'result.json'
+            if not path.exists():continue
+            other=load(path);other_states={0:other['initialization']}
+            for step,packet in other['observations'].items():other_states[int(step)]=load(Path(packet['path']))
+            if other.get('final'):other_states[int(other['steps'])]=other['final']
+            same_h0=out['cases'][case]['actual_h0_sha256']==other['actual_h0_sha256']
+            if a.comparison_kind=='temporal':require(same_h0,'time refinement changed actual h0 '+case)
+            table={}
+            for step,q in sorted(by_step.items()):
+                match=next((p for p in other_states.values() if abs(p['time']-q['time'])<1e-12),None)
+                if match:table[str(q['time'])]=differences(q,match)
+            out['cross_suite_comparison']['cases'][case]=dict(actual_h0_identical=same_h0,differences_at_common_times=table)
     write_json(a.output/'native.json',out)
     try:
         import matplotlib;matplotlib.use('Agg')
         import matplotlib.pyplot as plt
         for pair in [('C','D'),('E','F'),('G','H')]:
             if not all(c in states for c in pair):continue
-            fig,axes=plt.subplots(1,3,figsize=(12,4.5),layout='constrained')
+            fig,axes=plt.subplots(2,3,figsize=(12,8),layout='constrained')
             for c in pair:
-                for step in (0,32):
+                for step in (0,max(states[c])):
                     if step not in states[c]:continue
                     q=states[c][step];p=min(q['profiles'],key=lambda p:abs(p['x']-1.6));rows=p['profile'];H=q['H']
-                    for ax,index,scale in zip(axes,[6,2,4],[1,1,H]):
-                        ax.plot([v[index] for v in rows if v[0]<=H],[v[0]/scale for v in rows if v[0]<=H],label=f'{c} t={q["time"]:.3g}')
+                    for line,scale in zip(axes,[1,H]):
+                        for ax,index in zip(line,[6,2,4]):
+                            ax.plot([v[index] for v in rows if v[0]<=H],[v[0]/scale for v in rows if v[0]<=H],label=f'{c} t={q["time"]:.3g}')
                 p=states[c][0]['profiles'][-1];rows=p['profile'];H=states[c][0]['H']
-                axes[1].plot([v[3] for v in rows if v[0]<=H],[v[0] for v in rows if v[0]<=H],':',color='black')
-                axes[2].plot([v[5] for v in rows if v[0]<=H],[v[0]/H for v in rows if v[0]<=H],':',color='black')
-            axes[0].set(xlabel='transported k',ylabel='physical z',ylim=(0,.1));axes[1].set(xlabel='velocity u',ylabel='physical z')
-            axes[2].set(xlabel='represented du/dz',ylabel='z/H',xscale='symlog');axes[0].legend(fontsize=8)
+                for line,scale in zip(axes,[1,H]):
+                    line[1].plot([v[3] for v in rows if v[0]<=H],[v[0]/scale for v in rows if v[0]<=H],':',color='black')
+                    line[2].plot([v[5] for v in rows if v[0]<=H],[v[0]/scale for v in rows if v[0]<=H],':',color='black')
+            for line,ylabel in zip(axes,['physical z','z/H']):
+                line[0].set(xlabel='transported k',ylabel=ylabel);line[1].set(xlabel='velocity u',ylabel=ylabel)
+                line[2].set(xlabel='represented du/dz',ylabel=ylabel,xscale='symlog')
+            axes[0,0].set_ylim(0,.1);axes[0,0].legend(fontsize=8)
             fig.savefig(a.output/('profiles-'+''.join(pair)+'.png'),dpi=160);plt.close(fig)
+            fig,axes=plt.subplots(1,2,figsize=(9,4),layout='constrained')
+            for c in pair:
+                p0=states[c][0]['profiles'][-1];e0={v[0]:v[7] for v in p0['profile'] if len(v)>7}
+                for step in (0,max(states[c])):
+                    q=states[c][step];p=q['profiles'][-1];rows=[v for v in p['profile'] if len(v)>7]
+                    axes[0].plot([v[7] for v in rows],[v[0] for v in rows],label=f'{c} t={q["time"]:.3g}')
+                    if step:axes[1].plot([v[7]-e0[v[0]] for v in rows],[v[0] for v in rows],label=c)
+            axes[0].set(xlabel='transported outer epsilon',ylabel='physical z');axes[1].set(xlabel='epsilon change from actual h0',ylabel='physical z')
+            axes[0].axhline(2,color='grey',linestyle=':');axes[0].legend(fontsize=8);fig.savefig(a.output/('epsilon-'+''.join(pair)+'.png'),dpi=160);plt.close(fig)
         fig,axes=plt.subplots(1,2,figsize=(10,4),layout='constrained')
         for case,by_step in states.items():
             times=[];integ=[];tau=[]

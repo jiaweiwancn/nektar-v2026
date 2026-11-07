@@ -29,6 +29,12 @@ def main():
         offset=int(mass['offsets'][2]);size=int(mass['offsets'][3])-offset;index=rows-offset;factor=cho_factor(M,lower=True)
         bands=mass['fixed_physical_band_rows']['regions'];ell=np.array([b['coefficient_integral_row'] for b in bands]);free=ell[:,index]
         dual=cho_solve(factor,free.T).T
+        loads=initial['height_comparison_final']['weak_k_component_loads'];initial_components={};component_sum=np.zeros(len(rows))
+        for name in ('conservative_advection','k_diffusion','inner_k_production','inner_k_destruction','outer_k_production','outer_k_destruction','prescribed_scalar_source'):
+            v=np.array(loads[name])[index];component_sum+=v
+            initial_components[name]=dict(all_free_modes_mass_dual_norm=float(np.sqrt(max(0.,v@cho_solve(factor,v)))),
+                projected_band_rates=(-dual@v).tolist(),maximum_free_load=float(max(abs(v),default=0.)))
+        require(max(abs(component_sum-np.array(loads['spatial_sum'])[index]),default=0.)<1e-12,'initial physical components do not sum; possible double counting')
         totals={k:np.zeros(len(bands)) for k in ('input_load','implicit_increment','bound','actual','closure')};steps=[]
         report=load(root/'trajectory/case.evolution.json')
         for attempt in report['pimple_attempts']:
@@ -56,6 +62,7 @@ def main():
         endpoint=ell@(final_k-initial_k)
         require(max(abs(endpoint-totals['actual']),default=0.)<1e-12,'step budget did not telescope to physical band storage')
         out[case]=dict(bands=[dict(name=b['name'],lower=b['lower'],upper=b['upper']) for b in bands],steps=steps,totals={k:v.tolist() for k,v in totals.items()},
+            initialized_weak_components=initial_components,initialized_projected_band_rates=(-dual@component_sum).tolist(),
             endpoint_integral_change=endpoint.tolist(),production_governing_solves=0,diagnostic_k_transport_solves=mass['diagnostic_k_solves'],
             mass_source='native PicardKMass on identical free rows; saved matrix is A_k, not M_ff',
             meaning='all totals have units of integrated k; input=-h ell^T Mff^-1 r_spatial, implicit=-h ell^T Mff^-1 L Delta_raw; correction=ell^T delta_bound')
