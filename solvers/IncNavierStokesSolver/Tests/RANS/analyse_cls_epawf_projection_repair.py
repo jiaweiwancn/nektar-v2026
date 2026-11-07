@@ -107,9 +107,16 @@ def main():
     require(native['steps']==73 and native['failure']=='','native restart did not pass former failure')
     attempt=native['pimple_attempts'][0];packet=load(Path(attempt['k_snapshot']))
     require(state_hash(packet['raw'])==RAW_SHA and state_hash(packet['history'])==state_hash(q['history']),'native raw/history differs from archived attempt')
+    require(state_hash(packet['pre_k'])==state_hash(q['pre_k']) and packet['transport_rows']==q['transport_rows'] and
+            packet['matrix_sha256']==q['matrix_sha256'],'native pre-k/free rows/frozen transport A differs')
     require(state_hash(packet['corrected'])==new['corrected_sha256'],'native repair differs from diagnostic replay')
     require(native['initial_k_bound_check']['activations']==0,'startup bound changed accepted restart')
     require(state_hash(native['accepted_states'][0])==state_hash(cp['coupled_state']),'restart initial state changed')
+    published=header(segment/'checkpoint.1',True)
+    require(published['steps']==73 and published['time']==native['time'] and
+            state_hash(published['coupled_state'])==state_hash(native['state']) and
+            [state_hash(v) for v in published['history']]==[state_hash(v) for v in native['native_history']] and
+            published['history_times']==native['native_history_times'],'native accepted publication differs from state/history')
     for key in ('momentum_predictor_solves','pressure_system_solves','epsilon_transport_solves','k_transport_solves','bound_calls'):
         require(attempt[key]==1,'changed native governing schedule: '+key)
     require(attempt['additional_governing_equation_solves']==0 and native['implicit_callback_count']==1,'extra native callback/solve')
@@ -117,6 +124,15 @@ def main():
             abs(attempt['k_corrected_frozen_linear_residual']-out['frozen_accounting']['corrected_linear_max'])<1e-12,'native corrected residual accounting differs')
     out['checks']['native_attempt73_raw_history_corrected_bitwise_matches_replay']=True
     out['checks']['native_restart_startup_no_op']=True
+    out['checks']['native_pre_k_free_rows_transport_A_and_published_history_exact']=True
+    samples=native['physical_samples'];w=np.array(samples['weights_2']);values=np.array(samples['values_2'])
+    integral=float(w@values);field_norm=float(np.sqrt(w@(values*values)))
+    out['step73_correction_scales']=dict(field_k_integral=integral,field_k_mass_norm=field_norm,
+        correction_over_raw_step=b['mass_norm_correction']/b['mass_norm_raw_step'],
+        correction_over_field_mass_norm=b['mass_norm_correction']/field_norm,
+        correction_integral_over_field_integral=b['integral_total']/integral,
+        signed_correction_integral_rate=b['integral_total']/.000625,
+        inner_outer_near_positive_negative=b['integrals_inner_outer_near_positive_negative'])
     out['native_attempt73']=dict(time=native['time'],steps=native['steps'],attempt={k:v for k,v in attempt.items() if k!='k_bound'},
         startup=native['initial_k_bound_check'],signature=native['signature'],last_audit=native['state_audits'][-1])
     out['current_campaign_progress']=load(r/'repaired-campaign/trajectory/progress.json')
