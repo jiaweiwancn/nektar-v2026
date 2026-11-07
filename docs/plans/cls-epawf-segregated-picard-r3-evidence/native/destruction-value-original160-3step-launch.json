@@ -1,0 +1,150 @@
+{
+  "scope": "Primary fresh original-h0 unchanged2165/alpha400/time.0025/tolerance2e-12 three-step attempt with the shared restricted destruction value kernel. Enabled only after three bitwise component checks and an actual qualified diagnostic correction. Actual complete original equations/history/qualification unchanged.",
+  "utc": "2026-11-07T00:01:45.871072+00:00",
+  "producing_code_commit": "987bea8f4a9ea5444318661ced91d3100e2928eb",
+  "command": [
+    "python3",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-source/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py",
+    "--solver",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-987bea8/IncNavierStokesSolver",
+    "--resolution-probe",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-987bea8/RANSWallResolutionProbe",
+    "--output",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/destruction-value-original160-3step",
+    "--reduced",
+    "--reduced-verify",
+    "--reduced-response-cache",
+    "--reduced-basis",
+    "160",
+    "--reduced-maximum-basis",
+    "512",
+    "--reduced-krylov",
+    "64",
+    "--reduced-radius",
+    ".4",
+    "--reduced-step",
+    "1e-5",
+    "--reduced-h-tolerance",
+    "2e-9",
+    "--reduced-source-ray",
+    "--reduced-source-refinements",
+    "3",
+    "--reduced-adaptive-space",
+    "--reduced-second-order",
+    "--reduced-constraint-secant",
+    "--reduced-restoration-weight",
+    "0",
+    "--steps",
+    "3",
+    "--sweeps",
+    "48",
+    "--timeout",
+    "57600",
+    "--reduced-interior-source-anchor",
+    "--reduced-maximum-radius",
+    "4",
+    "--reduced-response-reuse-updates",
+    "2",
+    "--reduced-fast-destruction"
+  ],
+  "pid": 125232,
+  "watcher_pid": 125233,
+  "thread_limits": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "ranks": 1,
+  "reserved_auxiliary_threads": 6,
+  "observed_numerical_processes": [
+    [
+      104998,
+      3
+    ],
+    [
+      105005,
+      3
+    ],
+    [
+      107751,
+      3
+    ],
+    [
+      108944,
+      3
+    ],
+    [
+      110361,
+      3
+    ],
+    [
+      111503,
+      3
+    ],
+    [
+      113895,
+      3
+    ],
+    [
+      115794,
+      3
+    ],
+    [
+      117246,
+      3
+    ],
+    [
+      117253,
+      3
+    ],
+    [
+      120954,
+      3
+    ],
+    [
+      122251,
+      3
+    ],
+    [
+      122258,
+      3
+    ],
+    [
+      123467,
+      3
+    ],
+    [
+      123552,
+      3
+    ],
+    [
+      124145,
+      3
+    ],
+    [
+      124152,
+      3
+    ],
+    [
+      124729,
+      3
+    ],
+    [
+      125172,
+      3
+    ],
+    [
+      125179,
+      3
+    ]
+  ],
+  "conservative_MPI_threads_before_launch": 60,
+  "trigger": {
+    "bitwise_checked_samples": 3,
+    "original_full_residual": 3.971121545762026,
+    "qualified": true
+  }
+}

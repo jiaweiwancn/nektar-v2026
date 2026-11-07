@@ -1,0 +1,63 @@
+{
+  "status": "passed_restricted_destruction_value_checks_not_m8_convergence",
+  "run": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/destruction-value-enabled",
+  "script_sha256": "be9bbc35d7d9bbf501cd3bb496530064494f41255428a40aaa214076e51c61ed",
+  "checked_values": [
+    {
+      "sample": 0,
+      "rows": 504,
+      "bitwise_equal": true,
+      "mass_dual_norm": 52.16532038971589,
+      "restricted_seconds": 0.173909662,
+      "diagnostic_seconds": 0.323949621,
+      "scope": "shared spatial destruction value only; original equations and physical/history acceptance unchanged",
+      "event": "restricted_destruction_value_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 1110.764455589
+    },
+    {
+      "sample": 1,
+      "rows": 504,
+      "bitwise_equal": true,
+      "mass_dual_norm": 51.89463630768063,
+      "restricted_seconds": 0.1789468,
+      "diagnostic_seconds": 0.321536332,
+      "scope": "shared spatial destruction value only; original equations and physical/history acceptance unchanged",
+      "event": "restricted_destruction_value_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 1111.265343746
+    },
+    {
+      "sample": 2,
+      "rows": 504,
+      "bitwise_equal": true,
+      "mass_dual_norm": 52.16531215751958,
+      "restricted_seconds": 0.176893964,
+      "diagnostic_seconds": 0.326925561,
+      "scope": "shared spatial destruction value only; original equations and physical/history acceptance unchanged",
+      "event": "restricted_destruction_value_check",
+      "iteration": 0,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 1111.769591277
+    }
+  ],
+  "matched_control": {
+    "run": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/destruction-value-control",
+    "identical_input_except_component_selector": true,
+    "identical_executable_and_libraries": true,
+    "all_original_states_and_norms_bitwise_identical": true,
+    "target_seconds": {
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/destruction-value-enabled": 1771.3851411700016,
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/destruction-value-control": 1969.2911910000257
+    },
+    "accepted_original_residual_history": [
+      3.971121545762026,
+      3.963751759207461
+    ]
+  }
+}

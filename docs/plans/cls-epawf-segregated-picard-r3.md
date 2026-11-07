@@ -6,7 +6,7 @@ The designated volume was restored and native Linux development resumed.
 A later concurrent task switched the shared Mac checkout; subsequent work uses
 an isolated Mac worktree and preserves that task's PIMPLE branch. Only the
 Picard commits are delivered to the requested remote branch. The
-original-start18-update validation has completed without convergence. Larger
+completed original-start validations have not converged. Larger
 response-space and saved-endpoint follow-ups continue. Completed controls and explicitly dated progress snapshots are
 distinguished below; no running experiment is counted as a successful stage.
 
@@ -19,6 +19,162 @@ The R2 projected map could be stationary in its frozen A_k^T Mff^-1 A_k
 metric at ground contact while its original k residual stayed nonzero. R3
 therefore scores the original reduced residual, not that projected-map defect.
 No full all-field Jacobian or hidden coupled direction solver was added.
+
+## Current follow-up: measured action refresh and full-space progress
+
+The original first stage is still unresolved. The latest completed original-h0
+eight-update run reaches residual **17.7529247432**, improving the earlier
+18-update control's **19.1747990683**. Original qualification passes: gradient
+departure **0.0009999992023**, epsilon lower ratio **0.9800000241**, and continuous
+ground minimum **0.0138760891**. A fresh process reproduces the original norms;
+accepted physical state/history remain unchanged. Later original-h0 searches
+continue; an in-flight checkpoint is not a completed-stage receipt. All
+physical acceptance counts remain **0 steps, time 0**. Three-step evolution,
+same-history guess perturbations, and rejection after an accepted stage remain
+outstanding.
+[Completed original-start and matched follow-ups](cls-epawf-segregated-picard-r3-evidence/native/followup-completed-review.json).
+
+The saved-guess full504 experiment now makes a separately audited correction
+on the unchanged original operator. Its tightly equilibrated base residual
+**4.1182787654** becomes **3.8960677838**. The final destruction-model prediction,
+including one qualification correction, is **3.8948918678**; actual/predicted
+squared-merit gain is **0.99488194**. Actual displacement **0.25842899** is within
+radius **0.4**. The independent process reproduces all original residual norm
+bits, checks the negative-ground guard, and rebuilds all dependent quantities.
+The largest non-k norm is **1.80162e-12**, continuous ground minimum is
+**6.67452e-7**, gradient departure is **0.0009999987966**, and epsilon lower ratio
+is **0.9819776988**. Complete original qualification passes. This is a diagnostic
+numerical correction with the original h0/history, not an accepted physical
+stage or a replacement for original-start validation.
+[Correction, prediction and independent readback](cls-epawf-segregated-picard-r3-evidence/native/qualified-full504-latest-9f-iteration0-review.json).
+
+At that experiment's initial base, independent rank-504 first-order analysis
+finds gradient norm **551.795** and near-active cone defect **519.182**, against
+empirical two-size gradient uncertainty **2.530**. These observations and the
+accepted correction do not establish a stationary obstruction. At the separate
+4.85782 full-space base the corresponding defect is **1703.77**, with uncertainty
+**4.107**. No nonexistence claim follows from either measured local model.
+[Lower-base first-order audit](cls-epawf-segregated-picard-r3-evidence/native/first-order-qualified-full504-latest-9f-iteration0.json),
+[second base audit](cls-epawf-segregated-picard-r3-evidence/native/first-order-qualified-full504-at5p182-iteration1.json).
+
+The four-update 7ba50d3 response-reuse comparison has completed its focused
+checks, full original readbacks, and failed-stage history checks. Reuse reduces
+the controlled H evaluations from **807 to 470** and elapsed native target time
+from **6244.89s to 4472.57s**, while giving the weaker terminal residual
+**3.94084132 versus 3.93120535**. This is a work/progress tradeoff, not an
+equal-accuracy speedup or successful M8 convergence. Initial state and all
+numerical states before reuse match bit for bit; both endpoints pass original
+qualification, accept zero physical steps, and preserve the physical history.
+[Matched direction assertions](cls-epawf-segregated-picard-r3-evidence/native/response-chord-enabled-response-chord-checks.json),
+[execution receipt](cls-epawf-segregated-picard-r3-evidence/native/response-chord-direction-comparison-receipt.json).
+
+Tightening the common H reference for its first reused direction reduces the
+two-size residual discrepancy from **0.0219014 to 0.0000238823**. The underlying
+reference change in original k residual has mass-dual norm **3.44989e-7**,
+whereas the half-probe signal is only **1.10908e-6**. This identifies an inner
+accuracy sensitivity in small cancelling directions. Its historical residual
+model discrepancy remains **0.0951773**, normalized by
+`max(1, measured action norm)`; the measured action norm is **0.141164**. Thus
+0.0951773 is not a 9.5% relative-error claim. Neither this model discrepancy nor
+interpolation KKT accuracy certifies a current reduced derivative.
+
+Inspection found a separate normalization error in the new observation
+diagnostics: `OuterBound::Action` already divides by `scale*width`, but the
+41ef144 diagnostic divided the action discrepancy by `width` again. Its reported
+**1.51201/0.0257185** values are therefore superseded and must not be interpreted
+as physical bound-width errors. The original qualification cuts, residuals and
+acceptance audits were not affected. The initial optional 4e024ae refresh gate
+used those overly strict diagnostic units; its numerical artifacts are retained
+as a superseded variant, and its idle follow-up controller was stopped before
+launching a new primary test. Its numerical processes were preserved.
+
+Commit `7300df33eb5130415a6d615f0e61c49ef1aa3871` applies this scaling once and
+records the raw field contractions, normalization scale and bound width at both
+maximum-error witnesses. The automated check independently reconstructs each
+reported error from those raw values. Protocol version 2 identifies corrected
+units; the focused refresh test refuses the superseded protocol.
+[Measured and historical failed checks](cls-epawf-segregated-picard-r3-evidence/native/followup-checks-20261107-0010.json).
+
+The corrected update, introduced in `4e024ae` and repaired in `7300df3`, adds opt-in
+`RANSWallReducedDirectionalRefreshUpdates` /
+`--reduced-directional-refresh-updates`, default 0, maximum 4. A reliable
+same-base two-size direction measurement now updates residual, effective-field
+and projected-trace actions **before re-solving** the constrained direction.
+Every individual signed qualification row is rebuilt from these actions;
+independent k actions remain exact. The update does not change the accepted
+nonlinear state or physical history. Historical directions must agree within
+0.03 residual units normalized by `max(1, measured action norm)` and 0.1
+qualification-bound widths. Measurement uncertainty must also pass the
+unchanged two-size checks and be at most 0.05 bound widths before an action is
+used. Exhausted or unreliable updates rebuild fresh responses. A refreshed
+model remains explicitly historical; it cannot be promoted to a fresh
+first-order or nonlinear stationarity certificate. Affine replay packets retain
+distinct names across re-solves.
+
+The corrected four-worker Linux build passes in **83.81s**, and all six focused
+CTests pass in **43.37s**, with test concurrency 1. The precursor 4e024ae build
+also passed its build and regressions; that does not validate its erroneous
+diagnostic normalization. A corrected same-image two-update native
+comparison uses refresh budgets 0 and 4 with identical physical inputs. The
+focused checker requires an actually accepted correction using the re-solved
+historical model, unchanged state/history during refresh, subsequent independent
+signed action checks, and fresh full residual/qualification readback. It is
+named `check_cls_epawf_direction_refresh.py` and does not assert M8 convergence.
+The corrected native comparison is pending. A fresh original-h0 follow-up is gated on an actual
+qualified correction using this update.
+[Corrected build and immutable executable/library identities](cls-epawf-segregated-picard-r3-evidence/native/build-validation-7300df3.json),
+[corrected matched native commands and allocation](cls-epawf-segregated-picard-r3-evidence/native/direction-refresh-v2-native-launch.json),
+[superseded diagnostic scope](cls-epawf-segregated-picard-r3-evidence/native/direction-refresh-v1-superseded.json),
+[Mac input preparation checks only](cls-epawf-segregated-picard-r3-evidence/native/direction-refresh-input-checks.json).
+
+Commit `987bea8f4a9ea5444318661ced91d3100e2928eb` shares the actual pointwise
+inner destruction law between the full diagnostic and a restricted value-only
+evaluation. The opt-in `RANSWallReducedFastDestruction` selector refreshes all
+wall/normalization dependencies and retains the exact native accumulation; it
+avoids unrelated equation assembly when the source model asks only for this
+component. The first three native samples agree bit for bit at all 504 free k
+rows, independently of verification. Their restricted times are
+0.174/0.179/0.177s versus full diagnostic 0.324/0.322/0.327s. These three timings
+are component observations, not an end-to-end solver speedup. The Linux build
+and six focused regressions pass. The matched enabled/disabled two-update
+comparison now passes: all original state/norm bits agree and both original
+readbacks and failed-stage physical-history checks pass. Native target elapsed
+times are **1771.39s enabled versus 1969.29s control**, with the same 212 H
+evaluations and 918 separate flow/epsilon solves. This is one matched fixture
+under concurrent server load. A fresh original-h0
+three-step attempt has started after
+the guarded kernel produced an actual qualified correction. All actual trials
+still use the complete original equations, complete nonlinear destruction,
+qualification and physical acceptance gates. No new full-solver sanitizer claim
+is made for either orchestration change; the small unchanged model helper
+retains its earlier sanitizer evidence.
+[Value-kernel build](cls-epawf-segregated-picard-r3-evidence/native/build-validation-987bea8.json),
+[matched value-kernel test](cls-epawf-segregated-picard-r3-evidence/native/destruction-value-native-launch.json),
+[bitwise component and full-trajectory assertions](cls-epawf-segregated-picard-r3-evidence/native/destruction-value-checks.json),
+[check execution receipt](cls-epawf-segregated-picard-r3-evidence/native/destruction-value-comparison-receipt.json),
+[original-h0 command](cls-epawf-segregated-picard-r3-evidence/native/destruction-value-original160-3step-launch.json).
+
+The tighter 41ef144 verification-On/Off four-update native comparison also
+passes: all numerical state and original norm bits agree. Its final original
+residual is **3.9435906107**, original qualification passes, independent readback
+is exact, and accepted physical steps/time remain 0/0. This confirms the
+verification selector does not alter that trajectory; the superseded diagnostic
+units are a separate issue.
+[Tight-reference functional checks](cls-epawf-segregated-picard-r3-evidence/native/response-chord-tight-checks.json),
+[verification execution receipt](cls-epawf-segregated-picard-r3-evidence/native/response-chord-tight-verification-comparison-receipt.json).
+
+The older fa5ac96 eight-update warm run ends at residual **3.93839142**, but its
+combined-direction check at iteration 6 has half-probe residual discrepancy
+**0.0337936**, above 0.03. Its operator-check postprocessor therefore fails.
+That failed check is preserved; the run is not counted as passing the focused
+operator suite. Its converged H errors are 5.98e-10/1.81e-9 at a direction
+fraction 1.42424e-5. Tight common-reference measurements and the new
+bound-scaled direction gate address the demonstrated measurement/model issues;
+they do not retroactively validate this historical check.
+
+Heavy logs, all dense replay rows, checkpoints and failed-check logs remain under
+`/media/jay/新加卷/nektar-v2026-runs/cls-epawf-segregated-picard-r3/`.
+The dated follow-up statements above supersede older in-flight snapshots below.
 
 ## Common-reference accuracy for cancelling directions (41ef144)
 
@@ -81,8 +237,8 @@ These are explicitly labelled historical secant models, not newly verified
 per-column Jacobians. Before any reused direction receives larger trials,
 two fresh sequential H solves check its sign and size response. The two-size
 residual/observation tolerances remain 0.03/0.05. The historical-model errors
-must be at most 0.15/0.1, respectively, with residual normalization by the
-measured mass-dual response and observation normalization by
+must be at most 0.15/0.1, respectively, with residual normalization by
+`max(1, measured mass-dual response norm)` and observation normalization by
 `max(1, abs(measured response))`. Both measured merit slopes must be negative
 and the probe branch must agree. A failed check rebuilds fresh responses at
 the same accepted state. Source-refined directions receive the same mandatory

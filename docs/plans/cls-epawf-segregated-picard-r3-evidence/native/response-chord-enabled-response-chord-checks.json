@@ -1,0 +1,102 @@
+{
+  "status": "passed_response_chord_checks_not_m8_convergence",
+  "run": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/response-chord-enabled",
+  "script_sha256": "340b1bf290fda766a3ab45677d2f0a849955d4260da986a87fd6a5bcc1e36607",
+  "accepted_chord_corrections": [
+    {
+      "direction": {
+        "iteration": 1,
+        "basis_dimension": 96,
+        "response_model_age": 1,
+        "response_rank": 96,
+        "radius": 0.7200000000000001
+      },
+      "actual_trial": {
+        "fraction": 1,
+        "proposal_origin": "nonlinear_source_refined_direction",
+        "accepted": true,
+        "norm": 3.9637524539553466,
+        "full_norm": 3.9637524539553466,
+        "violation": 0,
+        "families": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "predicted_norm": 3.952382639330025,
+        "model_error": 0.22864079751271815,
+        "predicted_violation": 0.0014279309710636375,
+        "non_k_error": 8.165267692008635e-10,
+        "second_order_corrections": 2,
+        "displacement": 0.6367584930225482,
+        "physical_k_displacement": 0.32507031307194845,
+        "event": "trial",
+        "iteration": 1,
+        "alpha": 400,
+        "time": 0.0025,
+        "seconds": 1993.165533928
+      }
+    },
+    {
+      "direction": {
+        "iteration": 2,
+        "basis_dimension": 96,
+        "response_model_age": 2,
+        "response_rank": 96,
+        "radius": 0.7200000000000001
+      },
+      "actual_trial": {
+        "fraction": 1,
+        "proposal_origin": "nonlinear_source_refined_direction",
+        "accepted": true,
+        "norm": 3.960325736547093,
+        "full_norm": 3.960325736547093,
+        "violation": 0,
+        "families": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "predicted_norm": 3.949778601612681,
+        "model_error": 0.2171189912974564,
+        "predicted_violation": 0.0018121355219620542,
+        "non_k_error": 8.277017580907857e-10,
+        "second_order_corrections": 3,
+        "displacement": 0.5422714526866466,
+        "physical_k_displacement": 0.276833921850158,
+        "event": "trial",
+        "iteration": 2,
+        "alpha": 400,
+        "time": 0.0025,
+        "seconds": 2438.055629777
+      }
+    }
+  ],
+  "fresh_first_order_audit_refused": true,
+  "matched_control": {
+    "run": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/response-chord-control",
+    "identical_input_except_reuse_budget": true,
+    "identical_executable_and_libraries": true,
+    "original_prefix_bitwise_identical": true,
+    "accepted_original_residual_histories": {
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/response-chord-enabled": [
+        3.971121545762026,
+        3.9637524539553466,
+        3.960325736547093,
+        3.9408413164698364
+      ],
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/response-chord-control": [
+        3.971121545762026,
+        3.9526468925560616,
+        3.937417619943716,
+        3.931205349163674
+      ]
+    },
+    "controlled_H_evaluations": {
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/response-chord-enabled": 470,
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/response-chord-control": 807
+    }
+  }
+}

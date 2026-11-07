@@ -1,0 +1,193 @@
+{
+  "scope": "Same-image matched two-update direction-action refresh comparison from audited original-target3.99467 guess/h0. Both use guarded restricted destruction values. Refresh budget0 versus4; require unchanged prefix and controlled actual original-equation/qualification progress after constrained re-solve. Not M8 convergence.",
+  "utc": "2026-11-07T00:16:53.227028+00:00",
+  "producing_code_commit": "7300df33eb5130415a6d615f0e61c49ef1aa3871",
+  "cases": {
+    "direction-refresh-v2-control": {
+      "command": [
+        "python3",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-source/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py",
+        "--solver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-7300df3/IncNavierStokesSolver",
+        "--resolution-probe",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-7300df3/RANSWallResolutionProbe",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/direction-refresh-v2-control",
+        "--reduced",
+        "--reduced-verify",
+        "--reduced-response-cache",
+        "--reduced-basis",
+        "96",
+        "--reduced-maximum-basis",
+        "512",
+        "--reduced-krylov",
+        "16",
+        "--reduced-radius",
+        ".4",
+        "--reduced-step",
+        "1e-5",
+        "--reduced-h-tolerance",
+        "2e-9",
+        "--reduced-source-ray",
+        "--reduced-source-refinements",
+        "1",
+        "--reduced-adaptive-space",
+        "--reduced-second-order",
+        "--reduced-constraint-secant",
+        "--reduced-restoration-weight",
+        "0",
+        "--steps",
+        "1",
+        "--sweeps",
+        "2",
+        "--timeout",
+        "14400",
+        "--guess-file",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/previous-warm160-extended/target/reduced-trial-t0.0025000000000000001-f006292c518d-6-accepted.json",
+        "--reduced-response-reuse-updates",
+        "2",
+        "--reduced-interior-source-anchor",
+        "--reduced-fast-destruction",
+        "--reduced-directional-refresh-updates",
+        "0"
+      ],
+      "pid": 125847,
+      "postprocess_pid": 125848,
+      "directional_refresh_budget": 0,
+      "restricted_value": true
+    },
+    "direction-refresh-v2-enabled": {
+      "command": [
+        "python3",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-source/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py",
+        "--solver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-7300df3/IncNavierStokesSolver",
+        "--resolution-probe",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-7300df3/RANSWallResolutionProbe",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/direction-refresh-v2-enabled",
+        "--reduced",
+        "--reduced-verify",
+        "--reduced-response-cache",
+        "--reduced-basis",
+        "96",
+        "--reduced-maximum-basis",
+        "512",
+        "--reduced-krylov",
+        "16",
+        "--reduced-radius",
+        ".4",
+        "--reduced-step",
+        "1e-5",
+        "--reduced-h-tolerance",
+        "2e-9",
+        "--reduced-source-ray",
+        "--reduced-source-refinements",
+        "1",
+        "--reduced-adaptive-space",
+        "--reduced-second-order",
+        "--reduced-constraint-secant",
+        "--reduced-restoration-weight",
+        "0",
+        "--steps",
+        "1",
+        "--sweeps",
+        "2",
+        "--timeout",
+        "14400",
+        "--guess-file",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/previous-warm160-extended/target/reduced-trial-t0.0025000000000000001-f006292c518d-6-accepted.json",
+        "--reduced-response-reuse-updates",
+        "2",
+        "--reduced-interior-source-anchor",
+        "--reduced-fast-destruction",
+        "--reduced-directional-refresh-updates",
+        "4"
+      ],
+      "pid": 125849,
+      "postprocess_pid": 125850,
+      "directional_refresh_budget": 4,
+      "restricted_value": true
+    }
+  },
+  "thread_limits": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "ranks_per_case": 1,
+  "reserved_auxiliary_threads": 6,
+  "observed_numerical_processes": [
+    [
+      104998,
+      3
+    ],
+    [
+      105005,
+      3
+    ],
+    [
+      107751,
+      3
+    ],
+    [
+      110361,
+      3
+    ],
+    [
+      111503,
+      3
+    ],
+    [
+      113895,
+      3
+    ],
+    [
+      115794,
+      3
+    ],
+    [
+      117246,
+      3
+    ],
+    [
+      117253,
+      3
+    ],
+    [
+      120954,
+      3
+    ],
+    [
+      123467,
+      3
+    ],
+    [
+      123552,
+      3
+    ],
+    [
+      125172,
+      3
+    ],
+    [
+      125179,
+      3
+    ],
+    [
+      125301,
+      3
+    ],
+    [
+      125585,
+      3
+    ]
+  ],
+  "conservative_MPI_threads_before_launch": 48,
+  "input_launch": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/response-chord-tight-native-launch.json",
+  "input_launch_sha256": "baff289cd46b50d61eeb4b5351cc03c8c446e06166ae08d5e76db798538a7159",
+  "launcher_sha256": "a463841b06a172712933309f04b2c59c0cbd47af7de7366fd229976544b74f1c"
+}

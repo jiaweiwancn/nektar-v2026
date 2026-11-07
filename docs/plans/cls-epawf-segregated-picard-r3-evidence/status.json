@@ -1,27 +1,37 @@
 {
   "status": "native_development_in_progress_original_m8_unresolved",
-  "producing_code_commit": "41ef14412554f336250f2569e03b5a22beb410ac",
+  "producing_code_commit": "7300df33eb5130415a6d615f0e61c49ef1aa3871",
   "native_m8": {
-    "status": "Completed original-h0 18-update run fails original residual; complete qualification passes; larger native follow-ups in progress",
+    "status": "Completed original-h0 eight-update follow-up improves residual to17.75292474315745 and passes qualification, but does not converge; corrected direction-action refresh tests and longer original-start attempts continue",
     "qualified_first_stage": false,
     "accepted_physical_steps": 0,
     "final_time": 0,
-    "current_original_start_case": "source-refine-original-3step",
+    "current_original_start_case": "source-anchor-original160",
     "original_alpha": 400,
     "time_target": 0.0025,
     "original_tolerance": 2e-12,
     "progress_utc": "2026-11-06T20:35:43.934762+00:00",
-    "original_start_completed_evidence": "native/completed-original-and-expanded-review.json",
+    "original_start_completed_evidence": "native/followup-completed-review.json",
     "original_start_result": {
-      "numerical_updates": 18,
-      "full_residual": 19.17479906831806,
-      "gradient_departure": 0.0009999990042272033,
-      "minimum_outer_epsilon_ratio": 0.9846519510665871,
-      "ground_minimum": 1.9061545645469572e-05,
+      "numerical_updates": 8,
+      "full_residual": 17.75292474315745,
+      "original_norms": [
+        4.3855440333635773e-10,
+        1.4659981788211078e-09,
+        17.75292474315745,
+        7.288724146895236e-12,
+        7.706198517896237e-16,
+        7.964749054680477e-16,
+        2.0498197323554065e-17,
+        2.985309381877176e-16
+      ],
+      "gradient_departure": 0.0009999992022979853,
+      "minimum_outer_epsilon_ratio": 0.9800000240728397,
+      "ground_minimum": 0.013876089137657099,
       "qualified": true,
       "algebraic_root": false,
       "accepted_state_and_history_preserved": true,
-      "independent_norm_difference": 0
+      "independent_norm_difference": 0.0
     },
     "historical_progress_evidence": "native/source-model-progress-20261106-0330.json",
     "historical_original_start_progress": {
@@ -40,16 +50,16 @@
         "native_stage_completed": false
       }
     },
-    "latest_completed_original_start_case": "source-refine-original-3step",
-    "running_original_start_case": "source-anchor-original160",
+    "latest_completed_original_start_case": "source-anchor-original160",
+    "running_original_start_case": "destruction-value-original160-3step",
     "running_original_start_cases": [
-      "response-krylov64-original-3step",
-      "medium-face-original-3step",
-      "medium-face-original-full504",
-      "canonical-original-3step",
-      "previous-original-3step",
       "current-original160-3step",
-      "source-anchor-original160"
+      "radius-cap4-original-3step",
+      "radius-query-original-cap4-3step",
+      "source-precision-original160-3step",
+      "response-chord-original160-3step",
+      "response-chord-tight-original160-3step",
+      "destruction-value-original160-3step"
     ],
     "incomplete_original_start_followup": {
       "case": "response-cache-original-3step",
@@ -106,7 +116,18 @@
       }
     },
     "latest_code_original_start_case": "radius-query-original-cap4-3step",
-    "latest_code_original_start_status": "Running from original h0 with repaired bounded-model queries,cap4,48 numerical updates per stage,three requested physical steps,16-hour process limit. No accepted physical stage yet."
+    "latest_code_original_start_status": "Running from original h0 with repaired bounded-model queries,cap4,48 numerical updates per stage,three requested physical steps,16-hour process limit. No accepted physical stage yet.",
+    "historical_original_start_18_update_result": {
+      "numerical_updates": 18,
+      "full_residual": 19.17479906831806,
+      "gradient_departure": 0.0009999990042272033,
+      "minimum_outer_epsilon_ratio": 0.9846519510665871,
+      "ground_minimum": 1.9061545645469572e-05,
+      "qualified": true,
+      "algebraic_root": false,
+      "accepted_state_and_history_preserved": true,
+      "independent_norm_difference": 0
+    }
   },
   "checks": {
     "linux_native_pressure_verification": "0926974 bounds assertions and two-sweep bitwise On/Off passed; unchanged Picard translation unit through7715312",
@@ -471,5 +492,55 @@
     "evidence": "native/radius-query-direction-checks.json",
     "execution": "native/radius-query-direction-check-receipt.json",
     "completed_review": "native/completed-original-and-expanded-review.json"
+  },
+  "latest_followup": {
+    "evidence": "native/followup-completed-review.json",
+    "scope": "Completed bounded tests and explicitly labelled checkpoints; not M8 convergence",
+    "restricted_destruction": {
+      "code": "987bea8f4a9ea5444318661ced91d3100e2928eb",
+      "status": "passed_restricted_destruction_value_checks_not_m8_convergence",
+      "all_matched_original_states_and_norms_bitwise_identical": true,
+      "checked_samples": 3,
+      "checked_free_k_rows": 504,
+      "target_seconds_enabled": 1771.3851411700016,
+      "target_seconds_control": 1969.2911910000257,
+      "receipt": "native/destruction-value-comparison-receipt.json"
+    },
+    "tight_verification": {
+      "code": "41ef14412554f336250f2569e03b5a22beb410ac",
+      "status": "passed_bitwise_numerical_trajectory_comparison",
+      "full_residual": 3.943590610672181,
+      "physical_steps": 0,
+      "receipt": "native/response-chord-tight-verification-comparison-receipt.json"
+    },
+    "observation_normalization": {
+      "fixed_code": "7300df33eb5130415a6d615f0e61c49ef1aa3871",
+      "protocol_version": 2,
+      "defect": "OuterBound.Action already divides by scale*width; the v1 diagnostic and optional4e024ae refresh gate divided by width twice",
+      "scope": "Original equation residual, qualification cuts and physical acceptance were unaffected",
+      "superseded_scope": "native/direction-refresh-v1-superseded.json",
+      "new_independent_check": "Reconstruct maximum error from raw field contractions, scale and width"
+    },
+    "direction_action_refresh": {
+      "code": "7300df33eb5130415a6d615f0e61c49ef1aa3871",
+      "build_passed": true,
+      "focused_ctests_passed": 6,
+      "native_status": "running_matched_v2_two_update_tests",
+      "native_launch": "native/direction-refresh-v2-native-launch.json",
+      "acceptance_scope": "requires actual qualified original-equation correction after constrained re-solve; no convergence claim"
+    }
+  },
+  "latest_diagnostic_correction": {
+    "scope": "Completed first numerical correction only at a saved original-stage diagnostic guess; independent original-equation/qualification audit. The two-update native search continues and this checkpoint is not physical acceptance or a complete history receipt.",
+    "code": "9f65eedf2b59429ce3c04de0672064ad459baceb",
+    "from_original_residual": 4.11827876540024,
+    "to_original_residual": 3.8960677838217963,
+    "fresh_original_norms_bitwise_identical": true,
+    "ground_minimum": 6.674520211230873e-07,
+    "gradient_departure": 0.0009999987965951807,
+    "minimum_epsilon_ratio": 0.9819776987880399,
+    "qualified": true,
+    "physical_acceptance_inferred": false,
+    "evidence": "native/qualified-full504-latest-9f-iteration0-review.json"
   }
 }
