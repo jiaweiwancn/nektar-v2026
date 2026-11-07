@@ -15,7 +15,7 @@ int main()
         AWFProfileOptions options;options.quadratureOrder=64;
         EquilibriumAWFProfiles p({nu,H,h,H/2,H*fraction},K,model,{},options);
         const auto &r=p.Reference();const auto &a=p.Original();
-        const double scale=nu/(.09*2.55*std::sqrt(K))-a.ViscosityInterceptHeight();
+        const double scale=nu/(a.Parameters().cMu*a.Parameters().cLength*std::sqrt(K))-a.ViscosityInterceptHeight();
         const double UHstar=us/model.Kappa()*std::log(H/zstar),tstar=UHstar/a.Integrals().j0;
         if(!first)std::cout<<',';first=false;
         std::cout<<"{\"H\":"<<H<<",\"h\":"<<h<<",\"Z\":4,\"z_m\":"<<H*fraction

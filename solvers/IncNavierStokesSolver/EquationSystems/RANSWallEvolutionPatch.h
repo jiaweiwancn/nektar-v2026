@@ -232,7 +232,7 @@ public:
     std::string HeightComparison(const Vector &state,const Vector &history,double time,
         const RANSWallEvolutionData &data) const;
     std::string PhysicalKBands(const Vector &state,double time,const RANSWallEvolutionData &data,
-        const Vector *correction=nullptr) const;
+        const Vector *correction=nullptr,bool exportIntegralRows=false) const;
     std::array<double,2> Forcing(const Vector &state,const RANSWallCoordinate &point,double time,
         const RANSWallEvolutionData &data,bool includeBody=true) const;
     std::array<double,3> CartesianForcing(const Vector &state,const RANSWallCoordinate &point,double time,

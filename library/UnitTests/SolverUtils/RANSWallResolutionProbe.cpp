@@ -19,6 +19,7 @@
 #include <iostream>
 #include <limits>
 #include <set>
+#include <sstream>
 
 using namespace Nektar;
 using namespace Nektar::SolverUtils;
@@ -286,12 +287,13 @@ int main(int argc,char **argv)
             const double H=p.geometry.height;auto polynomial=reference;
             const auto values=patch.fields[patch.K()]->Project([&](const RANSWallCoordinate &x){return 1+.02*x[0]+.1*x[2]+.03*x[2]*x[2]/(H*H)+.005*std::pow(x[2]/H,3);});
             std::copy(values.begin(),values.end(),polynomial.begin()+patch.offset[patch.K()]);
-            double error=0,rowError=0,constantError=0;
+            double error=0,rowError=0,constantError=0,tangentialError=0;
             std::vector<std::string> samples;
             for(double x:{-3.5,-1.,1.6})
             {
                 const auto row=patch.SampleKRow({x,0,0});const double got=patch.SampleK(polynomial,{x,0,0});
                 constantError=std::max(constantError,std::abs(patch.SampleK(reference,{x,0,0})-p.model.Q()*us*us));
+                tangentialError=std::max(tangentialError,std::abs(row.Gradient(polynomial,patch.offset[patch.K()])[0]-.02));
                 const double expected=patch.ColumnAverageK()?1+.02*x+.05*H+.01+.00125:
                     1+.02*x+.1*p.geometry.sampleHeight+.03*std::pow(p.geometry.sampleHeight/H,2)+.005*std::pow(p.geometry.sampleHeight/H,3);
                 long double linear=0;for(int j=0;j<row.ids.size();++j)linear+=(long double)row.phi[j]*polynomial[patch.offset[patch.K()]+row.ids[j]];
@@ -300,6 +302,19 @@ int main(int argc,char **argv)
                     {"row_ids",J::Numbers(row.ids)},{"row_phi",J::Numbers(row.phi)}}));
             }
             Require(error<1e-11 && rowError<1e-12 && constantError<1e-12,"representative K constant/polynomial/row verification failed");
+            Require(tangentialError<1e-12,"column functional lost tangential variation");
+            Vector zero(patch.Size());Tree bands;std::istringstream bandJson(patch.PhysicalKBands(polynomial,0,data,&zero,true));
+            boost::property_tree::read_json(bandJson,bands);double bandError=0,bandRowError=0;
+            for(const auto &entry:bands.get_child("regions"))
+            {
+                const auto &region=entry.second;const double z=region.get<double>("upper"),length=patch.upper[0]-patch.lower[0];
+                const double expected=length*((1+.01*(patch.lower[0]+patch.upper[0]))*z+.05*z*z+.01*std::pow(z,3)/(H*H)+.00125*std::pow(z,4)/(H*H*H));
+                const auto row=Read(region,"coefficient_integral_row");long double value=0;
+                for(int i=0;i<row.size();++i)value+=(long double)row[i]*polynomial[patch.offset[patch.K()]+i];
+                bandError=std::max(bandError,std::abs(region.get<double>("k_integral")-expected));
+                bandRowError=std::max(bandRowError,std::abs(double(value)-expected));
+            }
+            Require(bandError<1e-10 && bandRowError<1e-10,"physical band integral/row missed a cut element");
             const auto domain=patch.ScalarDomain(polynomial,0,data,true,true);int means=0;
             Require(domain.admissible,"polynomial sampler fixture left scalar domain");
             if(patch.ColumnAverageK())for(const auto &o:domain.observations)if(o.inventory=="physical_sampled_K")
@@ -333,6 +348,8 @@ int main(int argc,char **argv)
             Require(mean>0 && !bad.admissible,"positive representative K waived negative local k");
             std::ofstream out(argv[3]);out<<J::Object({{"polynomial_error",J::Number(error)},{"coefficient_row_error",J::Number(rowError)},
                 {"constant_error",J::Number(constantError)},
+                {"tangential_derivative_error",J::Number(tangentialError)},
+                {"physical_band_integral_error",J::Number(bandError)},{"physical_band_row_error",J::Number(bandRowError)},
                 {"mean_observations_with_exact_rows",J::Number(means)},{"samples",J::List(samples)},
                 {"mean_projection_constraint_error",J::Number(meanProjectionError)},{"mean_projection_stationarity",J::Number(meanStationarity)},
                 {"positive_K_negative_local_rejected","true"},{"local_failure",J::Quote(bad.failure)}})<<'\n';

@@ -15,7 +15,7 @@ namespace J=RANSWallSolveJson;
 
 
 std::string RANSWallEvolutionPatch::PhysicalKBands(const Vector &s,double time,
-    const RANSWallEvolutionData &data,const Vector *change) const
+    const RANSWallEvolutionData &data,const Vector *change,bool exportIntegralRows) const
 {
     Require(m_dimension==2 && !Mapped(),"physical bands require flat 2D");
     const double H=m_parameters.geometry.height;double first=H;
@@ -26,7 +26,7 @@ std::string RANSWallEvolutionPatch::PhysicalKBands(const Vector &s,double time,
     const auto z=rule->GetZ(),w=rule->GetW();
     for(auto [name,top]:std::vector<std::pair<std::string,double>>{{"z_le_0.01",.01},{"z_le_0.1",.1},{"wall_layer",H},{"first_element",first},{"global",upper[2]}})
     {
-        Vector sums(6);std::vector<std::string> invalid; // k, correction signed/positive/negative, production, destruction
+        Vector sums(6),integralRow(exportIntegralRows?size[K()]:0);std::vector<std::string> invalid; // k, correction signed/positive/negative, production, destruction
         for(const auto &ray:m_rays)
         {
             auto knots=panels;knots.insert(top);
@@ -38,6 +38,13 @@ std::string RANSWallEvolutionPatch::PhysicalKBands(const Vector &s,double time,
                     auto p=ray.coordinate;p[2]=a+(z[j]+1)*length/2;const auto q=Point(K(),p);
                     const double weight=ray.weight*w[j]*length/2;
                     sums[0]+=weight*q.Value(s,offset[K()]);
+                    if(exportIntegralRows)
+                    {
+                        long double constant=0;
+                        for(int k=0;k<q.ids.size();++k)
+                        {integralRow[q.ids[k]]+=weight*q.phi[k];constant+=(long double)q.phi[k]*q.constant[k];}
+                        integralRow[q.ids[0]]+=weight*double((1-constant)/q.constant[0]);
+                    }
                     if(change){const double d=q.Value(*change,offset[K()]);sums[1]+=weight*d;sums[d>=0?2:3]+=weight*d;}
                 }
             }
@@ -77,6 +84,7 @@ std::string RANSWallEvolutionPatch::PhysicalKBands(const Vector &s,double time,
             {"k_integral",J::Number(sums[0])},{"correction_signed",J::Number(sums[1])},
             {"correction_positive",J::Number(sums[2])},{"correction_negative",J::Number(sums[3])},
             {"correction_absolute",J::Number(sums[2]-sums[3])},{"production",change || !invalid.empty()?"null":J::Number(sums[4])},
+            {"coefficient_integral_row",exportIntegralRows?J::Numbers(integralRow):"null"},
             {"destruction",change || !invalid.empty()?"null":J::Number(sums[5])},{"invalid_diagnostic_points",J::List(invalid)}}));
     }
     return J::Object({{"regions",J::List(output)},{"quadrature",J::Quote("physical native panels split exactly at each band edge; GL16; source retains roughness/cutoff/geometric panels")}});
@@ -157,7 +165,7 @@ std::string RANSWallEvolutionPatch::HeightComparison(const Vector &s,const Vecto
         {"K_sampling",J::Quote(m_kSampling)},{"H",J::Number(H)},{"h",J::Number(m_parameters.geometry.roughness)},
         {"z_K",ColumnAverageK()?"null":J::Number(m_parameters.geometry.sampleHeight)},{"z_m",J::Number(m_parameters.geometry.tailStart)},{"Z",J::Number(upper[2])},
         {"reference",J::Object({{"K0",J::Number(K0)},{"U_H",J::Number(ref.matchingVelocity)},{"traction",J::Number(ref.traction)},
-            {"z0_c",J::Number(z0)},{"J0",J::Number(wall.Integrals().j0)},{"velocity_scale",J::Number(m_parameters.geometry.molecularNu/(.09*2.55*std::sqrt(K0))-wall.ViscosityInterceptHeight())},
+            {"z0_c",J::Number(z0)},{"J0",J::Number(wall.Integrals().j0)},{"velocity_scale",J::Number(m_parameters.geometry.molecularNu/(wall.Parameters().cMu*wall.Parameters().cLength*std::sqrt(K0))-wall.ViscosityInterceptHeight())},
             {"cutoff",J::Number(ref.cutoff)},{"budget_ratio",J::Number(ref.productionBudget/ref.minimumBudget)},
             {"Re_H",J::Number(ref.reynolds)},{"intrinsic_chi",J::Number(ref.weight)}})},
         {"scaled_native_spatial_blocks",J::Numbers(scaled)},{"dimensional_mass_dual_spatial_first4",J::Numbers(dimensional)},
@@ -354,7 +362,11 @@ std::string RANSWallEvolutionPatch::PimpleContactDiagnostic(const Vector &s,doub
         {"mass_solve_residual",J::Number(Maximum(rate.freeMassResidual))},{"native_frozen_load_agreement",J::Number(agreement)},
         {"scan",J::List(scans)},{"diagnostic_k_solves",J::Number(solves)},{"production_governing_solves","0"},
         {"scope",J::Quote("fixed state and evaluation time; k history equals this k; no flow/epsilon update, no Lift of selected state; flux estimates need not close a local CG control-volume budget")}};
-    if(exportMass){result.push_back({"free_k_mass",J::Rows(mass)});result.push_back({"free_k_rows",J::Numbers(block.rows)});result.push_back({"offsets",J::Numbers(offset)});result.push_back({"k_integral_load",J::Numbers(integralLoad)});result.push_back({"near_k_integral_load",J::Numbers(nearLoad)});}
+    if(exportMass)
+    {
+        result.push_back({"free_k_mass",J::Rows(mass)});result.push_back({"free_k_rows",J::Numbers(block.rows)});result.push_back({"offsets",J::Numbers(offset)});result.push_back({"k_integral_load",J::Numbers(integralLoad)});result.push_back({"near_k_integral_load",J::Numbers(nearLoad)});
+        Vector zero(Size());result.push_back({"fixed_physical_band_rows",PhysicalKBands(s,time,data,&zero,true)});
+    }
     return J::Object(result);
 }
 }
