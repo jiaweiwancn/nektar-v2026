@@ -53,6 +53,10 @@ int main()
     Check(!perAdd.Add({1.,1.},3.,1),"per-add limit not enforced");
     Check(perAdd.iterations==2 && perAdd.addLimitChecks==1 && perAdd.totalLimitChecks==0,"per-add/cumulative work confused");
     Check(perAdd.delta==Vector({1.,0.}) && perAdd.Stationarity()<1e-14,"per-add failure incoherent");
+    Controls timed;timed.maximumSeconds=1e-15;
+    Projection wall(Matrix{{1.}},timed);
+    Check(!wall.Add({1.},1.,0) && wall.timeLimitChecks==1 && wall.iterations==0,"wall-time budget work accounting");
+    Check(wall.delta==Vector({0.}) && wall.solvedActive.empty() && !wall.workComplete,"wall-time failed snapshot");
     Controls generous;generous.maximumPerAdd=20;generous.maximumTotal=100;
     Projection more(Matrix{{1.,0.},{0.,1.}},generous);
     Check(more.Add({1.,0.},1.,0) && more.Add({1.,1.},3.,1),"generous controls changed a finite solve");

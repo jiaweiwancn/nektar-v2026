@@ -17,8 +17,26 @@ from run_cls_epawf_picard import (ROOT, ORIGINAL, H0, THREADS, session, set_info
     set_parameter, write, run, load, sha, state_hash, write_json, require, readback)
 
 
+BOUND_WORK = dict(add='RANSWallPimpleKBoundMaxAdd', total='RANSWallPimpleKBoundMaxTotal',
+                  separations='RANSWallPimpleKBoundMaxSeparations', seconds='RANSWallPimpleKBoundMaxSeconds')
+
+
+def add_bound_work_arguments(parser):
+    for key in BOUND_WORK:
+        parser.add_argument('--bound-max-'+key, type=float if key=='seconds' else int)
+
+
+def bound_work_arguments(args):
+    return {key:getattr(args,'bound_max_'+key) for key in BOUND_WORK
+            if getattr(args,'bound_max_'+key) is not None}
+
+
+def bound_work_command(controls):
+    return [word for key,value in controls.items() for word in ('--bound-max-'+key,str(value))]
+
+
 def prepare(output, dt, steps, diagnostic=False, verify=False, restart=None,
-            checkpoint=False, reject_step=0, k_bound="Off", floor_relative=None, snapshots=False, budget_time=-1., hard_reject_step=0, inventory="LegacyV1", wall_policy="Upstream"):
+            checkpoint=False, reject_step=0, k_bound="Off", floor_relative=None, snapshots=False, budget_time=-1., hard_reject_step=0, inventory="LegacyV1", wall_policy="Upstream", bound_work=None):
     output.mkdir(parents=True, exist_ok=False)
     xml = session(ORIGINAL, output/'case.xml', 'outer6')
     root = ET.parse(xml).getroot()
@@ -45,6 +63,9 @@ def prepare(output, dt, steps, diagnostic=False, verify=False, restart=None,
     if floor_relative is not None:set_parameter(root, 'RANSWallPimpleKFloorRelative', floor_relative)
     if budget_time>=0:set_parameter(root, 'RANSWallPimpleBudgetTime', budget_time)
     if hard_reject_step:set_parameter(root,'RANSWallPimpleHardAuditRejectStep',hard_reject_step)
+    for key,value in (bound_work or {}).items():
+        require(key in BOUND_WORK and value>0,'invalid projection work control')
+        set_parameter(root,BOUND_WORK[key],value)
     write(root, xml)
     return xml
 
@@ -110,6 +131,7 @@ def main():
     p.add_argument('--reject-step', type=int, default=0)
     p.add_argument('--hard-reject-step',type=int,default=0)
     p.add_argument('--timeout', type=int, default=3600)
+    add_bound_work_arguments(p)
     a = p.parse_args()
     start_time=0.
     if a.restart:
@@ -127,7 +149,7 @@ def main():
         require(a.output.is_relative_to(Path('/media/jay/新加卷/nektar-v2026-runs')), 'heavy run storage')
     xml = prepare(a.output, a.dt, a.steps, a.diagnostic, a.verify,
                   a.restart.resolve() if a.restart else None, a.checkpoint, a.reject_step,
-                  a.k_bound,a.floor_relative,a.snapshots,a.budget_time,a.hard_reject_step,a.inventory,a.wall_policy)
+                  a.k_bound,a.floor_relative,a.snapshots,a.budget_time,a.hard_reject_step,a.inventory,a.wall_policy,bound_work_arguments(a))
     require(a.checkpoint_interval>=0,'negative checkpoint interval')
     if a.checkpoint_interval:
         require(a.checkpoint,'checkpoint interval requires checkpoint output')
@@ -137,7 +159,7 @@ def main():
         wall_policy=a.wall_policy, actual_initial_sha256=None, archived_xml_sha256=sha(ORIGINAL), xml_sha256=sha(xml), expected_h0_sha256=H0 if a.wall_policy=='Upstream' else None,
         ranks=1, threads=THREADS, dt=a.dt, requested_steps=a.steps,
         qualification='R2DiagnosticV1; outside-box states are not physically qualified M8' if a.diagnostic else 'R2LocalV1 strict',
-        status='prepared')
+        status='prepared', projection_work_controls=bound_work_arguments(a))
     if not a.prepare_only:
         a.solver = a.solver.resolve(strict=True)
         manifest['executable'] = identity(a.solver)

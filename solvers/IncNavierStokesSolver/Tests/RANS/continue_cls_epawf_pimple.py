@@ -23,7 +23,7 @@ import time
 import xml.etree.ElementTree as ET
 
 from run_cls_epawf_picard import THREADS, load, require, sha, state_hash, write_json, set_parameter, write
-from run_cls_epawf_pimple import prepare, identity, check_report
+from run_cls_epawf_pimple import prepare, identity, check_report, add_bound_work_arguments, bound_work_arguments
 
 
 def atomic(path, value):
@@ -169,6 +169,7 @@ def main():
     p.add_argument('--block-steps', type=int, default=16)
     p.add_argument('--timeout', type=float, default=7200)
     p.add_argument('--resume', action='store_true')
+    add_bound_work_arguments(p)
     a = p.parse_args(); a.output = a.output.resolve()
     a.checkpoint = a.checkpoint.resolve() if a.checkpoint else None
     require(1 <= a.block_steps <= 64 and a.timeout > 0, 'invalid block controls')
@@ -181,6 +182,7 @@ def main():
         require(progress['status']!='numerically_rejected','numerical rejection is terminal; use a separately identified follow-up')
         require(progress.get('inventory','LegacyV1')==a.inventory,'inventory differs from campaign')
         require(progress.get('wall_policy','Upstream')==a.wall_policy,'wall policy differs from campaign')
+        require(progress.get('projection_work_controls',{})==bound_work_arguments(a),'projection work controls differ from recorded campaign')
         assert_native_stopped(progress)
         old_stat=Path('/proc')/str(int(progress['pid']))/'stat'
         if old_stat.exists():
@@ -240,6 +242,7 @@ def main():
                 prefix_report=str(a.prefix_report.resolve()), prefix_report_sha256=sha(a.prefix_report),
                 prefix_steps=info['steps'], prefix_integral=integral, requested_targets=a.targets, completed_targets=[], segments=[])
     progress.update(pid=os.getpid(), host=socket.gethostname(), started_unix=time.time(),
+                    projection_work_controls=bound_work_arguments(a),
                     process_start=Path('/proc/self/stat').read_text().split()[21], executable=str(executable),
                     executable_sha256=pinned['sha256'], source_revision=subprocess.check_output(['git','-C',str(Path(__file__).resolve().parents[4]),'rev-parse','HEAD'],text=True).strip())
     def save(**changes):
@@ -264,7 +267,8 @@ def main():
                 while Path(str(directory)+f'-attempt{suffix}').exists(): suffix+=1
                 directory=Path(str(directory)+f'-attempt{suffix}')
             xml = prepare(directory, .000625, end-start, True, restart=Path(progress['checkpoint']) if progress['checkpoint'] else None,
-                          checkpoint=True, k_bound='MassProjection', floor_relative=1e-8, snapshots=True,inventory=a.inventory,wall_policy=a.wall_policy)
+                          checkpoint=True, k_bound='MassProjection', floor_relative=1e-8, snapshots=True,inventory=a.inventory,wall_policy=a.wall_policy,
+                          bound_work=bound_work_arguments(a))
             tree=ET.parse(xml).getroot(); set_parameter(tree,'IO_CheckSteps',1); write(tree,xml)
             command=[str(executable),'case.xml']; started=time.monotonic()
             child=subprocess.Popen(command,cwd=directory,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,
@@ -310,7 +314,7 @@ def main():
                             # Keep early contact/failure evidence and every
                             # 32nd step. Delete only *accepted* unselected packets.
                             packet=Path(pending['k_snapshot']) if pending.get('k_snapshot') else None
-                            if packet and step>32 and step%32:
+                            if packet and step>32 and step%32 and step!=start+1 and step not in a.targets:
                                 saved=load(packet)
                                 with (a.output/'discarded-packets.jsonl').open('a') as tomb:
                                     tomb.write(json.dumps(dict(step=step,path=str(packet),sha256=sha(packet),matrix_sha256=saved['matrix_sha256']))+'\n')

@@ -10,6 +10,7 @@ import sys
 import time
 from continue_cls_epawf_pimple import CampaignLock,atomic,process_identity,load_progress
 from run_cls_epawf_picard import load,require
+from run_cls_epawf_pimple import add_bound_work_arguments,bound_work_arguments,bound_work_command
 
 
 def main():
@@ -18,12 +19,14 @@ def main():
     p.add_argument('--wall-policy',choices=('Upstream','UniformEPFlat'),default='Upstream')
     p.add_argument('--targets',type=int,nargs='+',default=[32,160,800,1600,3200,8000])
     p.add_argument('--block-steps',type=int,default=16);p.add_argument('--timeout',type=float,default=7200)
+    p.add_argument('--checkpoint',type=Path);p.add_argument('--prefix-report',type=Path)
+    add_bound_work_arguments(p)
     a=p.parse_args();a.output=a.output.resolve();a.output.mkdir(parents=True,exist_ok=True)
     ownership=a.output/'supervisor';ownership.mkdir(exist_ok=True);lock=CampaignLock(ownership)
     root=a.output/'trajectory';driver=Path(__file__).with_name('continue_cls_epawf_pimple.py')
     base=[sys.executable,'-B',str(driver),'--solver',str(a.solver.resolve()),'--output',str(root),
         '--inventory','ConstitutiveV2','--wall-policy',a.wall_policy,'--block-steps',str(a.block_steps),'--timeout',str(a.timeout),
-        '--targets',*map(str,a.targets)]
+        '--targets',*map(str,a.targets),*bound_work_command(bound_work_arguments(a))]
     retries=0
     while True:
         try:progress=load_progress(root/'progress.json') if root.exists() else {}
@@ -49,7 +52,14 @@ def main():
             atomic(a.output/'status.json',dict(status='waiting_for_recorded_native',native_identity=progress['native_identity'],
                 accepted_steps=progress['accepted_steps'],accepted_time=progress['accepted_time']))
             time.sleep(5);continue
-        command=base+(['--resume'] if progress else ['--from-h0'])
+        if progress:initial=['--resume']
+        elif a.checkpoint:
+            require(a.prefix_report is not None,'checkpoint continuation requires a native prefix report')
+            initial=['--checkpoint',str(a.checkpoint.resolve()),'--prefix-report',str(a.prefix_report.resolve())]
+        else:
+            require(a.prefix_report is None,'prefix report without checkpoint')
+            initial=['--from-h0']
+        command=base+initial
         atomic(a.output/'status.json',dict(status='launching' if not progress else 'recovering_infrastructure',command=command,retries=retries))
         with (a.output/'driver.log').open('a') as stream:
             child=subprocess.Popen(command,stdout=stream,stderr=subprocess.STDOUT)
