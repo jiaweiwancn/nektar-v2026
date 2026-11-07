@@ -50,7 +50,7 @@ passing in **38.25s**, test concurrency one. Exact helper/test hashes retain the
 ff1c4fc standalone sanitizer evidence; the new orchestration has no full-solver
 sanitizer claim. Input preparation accepts the complete option combination and
 rejects missing measured refreshes or source refinements. Same-image original-h0
-Off/On runs are in progress. `check_cls_epawf_verified_linear_trials.py` requires
+Off/On runs test this policy. `check_cls_epawf_verified_linear_trials.py` requires
 an actually accepted qualified reduced correction after the measured response,
 a re-solved independently checked direction, retained nonlinear destruction
 ray evaluation, complete original readback/history checks, and matched prefix
@@ -58,6 +58,41 @@ states. It does not label operator checks as M8 convergence.
 [Build and identities](cls-epawf-segregated-picard-r3-evidence/native/build-validation-3a85fa5.json),
 [native commands and allocation](cls-epawf-segregated-picard-r3-evidence/native/verified-linear-native-launch.json),
 [Mac input checks only](cls-epawf-segregated-picard-r3-evidence/native/verified-linear-input-checks.json).
+
+The enabled run has completed and **passes the actual verified-linear trial
+assertions**. It retains six current measurements, re-solves and passes the
+linear-action checks (residual error **0.0104884**, individual qualification
+error **0.0653529**). The inaccurate optional source proposal is not used.
+The actual full linear-reduced step reaches residual **33.35297** but normalized
+gradient violation **0.587287**, so it is rejected. The half-step, with one
+nonlinear qualification correction, gives **49.2816311106 → 41.4203920207**
+versus predicted **40.7679696803**. Actual displacement **0.64743244** stays
+within radius **1.296**. Complete qualification passes: gradient departure
+**0.0009991896782**, epsilon lower ratio **0.9800025828**, and ground minimum
+**0.1634834203**. The gradient witness moves to x=-2.66667, illustrating why
+the full inventory must be refreshed rather than retaining the old x=1.5
+witness alone.
+
+All **427** H evaluations converge (1,592 flow and epsilon solves each).
+Independent readback reproduces all original norm bits and exercises the
+negative-ground guard; zero-step accepted state/history checks pass. Native
+target time is **2,412.71s** in this concurrent fixture. The endpoint is not a
+stage root and accepts **0 physical steps/time 0**. The completed same-image
+comparison also **passes**: only the preference flag differs, executable and
+library hashes agree, and both earlier accepted numerical states and original
+norms are bitwise identical. The control uses nine measurements and **447** H
+evaluations (1,784 flow and epsilon solves each), finishes in **3,415.31s**,
+and reaches the slightly lower residual **41.2760082402**. Its independent
+readback and zero-step history checks pass too. The preference therefore saves
+work and elapsed time in this measured fixture, with a modestly worse terminal
+residual; this single concurrent comparison does not establish a general
+performance ordering. The longer original-h0 attempt starts only after the
+actual qualified correction, with its original physical history.
+[Passing single-run actual-trial assertions](cls-epawf-segregated-picard-r3-evidence/native/verified-linear-trial-checks.json),
+[execution receipt](cls-epawf-segregated-picard-r3-evidence/native/verified-linear-single-receipt.json),
+[matched comparison receipt](cls-epawf-segregated-picard-r3-evidence/native/verified-linear-comparison-receipt.json),
+[independent native histories/readbacks](cls-epawf-segregated-picard-r3-evidence/native/followup-completed-review.json),
+[longer original-h0 run command](cls-epawf-segregated-picard-r3-evidence/native/verified-linear-original160-3step-launch.json).
 
 ## Current-base action preservation (ff1c4fc)
 
@@ -72,6 +107,26 @@ preserves accepted state and every physical-history slot. This supersedes the
 17.7529 eight-update result as the best completed original-start result in this
 collection; numerical updates are not physical steps.
 [Completed original-start readback and rejection evidence](cls-epawf-segregated-picard-r3-evidence/native/followup-completed-review.json).
+
+The longer `radius-cap4-original-3step` run has separately reached a saved
+original-h0 checkpoint at numerical update eleven with residual
+**11.8919999812**. A fresh process reproduces every original norm bit and passes
+the complete qualification and negative-ground checks. Gradient departure is
+**0.0009999801154**, epsilon lower ratio **0.9804242850**, and ground minimum
+**0.0002862139**. This improves the in-flight original-start evidence but is
+not a completed native-stage/history receipt or physical acceptance; the
+completed 13.4622 control and this running checkpoint have different scopes.
+[Fresh original-start checkpoint audit](cls-epawf-segregated-picard-r3-evidence/native/original-start-cap4-point11-review.json).
+
+The next saved original-start checkpoint, numerical update twelve, is also
+independently audited: **11.7391880376**, gradient departure
+**0.0009999989999**, epsilon lower ratio **0.9811907095**, and continuous-ground
+minimum **0.0004260749**. All original residual norm bits agree in the fresh
+process, and the negative-ground guard passes. Its original incoming-guess,
+history, alpha, time, unknown count and tolerance are recorded explicitly.
+This is still an in-flight numerical checkpoint from `be04686`, not a completed
+stage or evidence that the new 3a85fa5 policy attains this residual.
+[Update-twelve independent audit](cls-epawf-segregated-picard-r3-evidence/native/original-start-cap4-point12-review.json).
 
 The two-update full504 saved-guess control has also completed. Its second
 correction gives **3.8960677838 → 3.8070368229**, with final source-model
@@ -95,6 +150,24 @@ that tested model as evidence of local stationarity. It proves neither a
 qualifying root nor global feasibility.
 [Completed full-space history and independent audit](cls-epawf-segregated-picard-r3-evidence/native/followup-completed-review.json),
 [fresh reduced first-order audit at 3.89607](cls-epawf-segregated-picard-r3-evidence/native/first-order-qualified-full504-latest-9f-iteration1.json).
+
+A separate running 7300df3 full504 saved-guess diagnostic now has an independently
+audited second checkpoint at **3.8005499761**. Fresh original norms agree bit
+for bit; complete qualification passes with gradient **0.0009999989975**,
+epsilon lower ratio **0.9808213348**, and ground minimum **7.90803e-9**.
+The original physical target/history are retained. It has no final native
+stage/history receipt yet and does not replace the completed 3.80704 diagnostic
+or the original-h0 test. Neither checkpoint is a root or a stationarity
+certificate.
+[Fresh full504 checkpoint audit](cls-epawf-segregated-picard-r3-evidence/native/full504-direction-refresh-point2-review.json).
+
+The dated final progress inventory records the active original-start and
+full504 follow-ups, immutable executable hashes and current work. It finds no
+qualified root or subsequent native stage. The sampled Linux inventory has
+36 numerical OS threads plus six reserved auxiliary threads, within the hard
+72-worker budget. These bounded jobs continue in their isolated directories;
+their future outcomes are not included in this report's completed results.
+[Dated progress and worker inventory](cls-epawf-segregated-picard-r3-evidence/native/progress-published-20261107-final.json).
 
 The first e9bbda5 reference-bridge attempt exposes a concrete direction-model
 defect at original-start numerical point two (residual **49.2816311106**).

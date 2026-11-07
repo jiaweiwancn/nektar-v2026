@@ -2,7 +2,7 @@
   "status": "native_development_in_progress_original_m8_unresolved",
   "producing_code_commit": "3a85fa59a77fc4dea6ad1269fe257cca16d9572d",
   "native_m8": {
-    "status": "Completed original-h0 twelve-update control reaches13.462175000498513 with full qualification but no first-stage convergence; protected current-action original-start comparisons continue",
+    "status": "Original M8 unresolved, no qualified first stage. Best completed original-h0 result13.462175000498513; latest independently audited original-h0 checkpoint11.73918803758114 is in flight. New3a85fa5 matched reduced-direction trials pass; longer original-h0 validation continues.",
     "qualified_first_stage": false,
     "accepted_physical_steps": 0,
     "final_time": 0,
@@ -10,7 +10,7 @@
     "original_alpha": 400,
     "time_target": 0.0025,
     "original_tolerance": 2e-12,
-    "progress_utc": "2026-11-07T02:02:17.481997+00:00",
+    "progress_utc": "2026-11-07T04:37:59.814240+00:00",
     "original_start_completed_evidence": "native/followup-completed-review.json",
     "original_start_result": {
       "numerical_updates": 12,
@@ -51,7 +51,7 @@
       }
     },
     "latest_completed_original_start_case": "current-original160-3step",
-    "running_original_start_case": "direction-refresh-v2-original160-3step",
+    "running_original_start_case": "verified-linear-original160-3step",
     "running_original_start_cases": [
       "radius-cap4-original-3step",
       "radius-query-original-cap4-3step",
@@ -60,11 +60,8 @@
       "response-chord-tight-original160-3step",
       "destruction-value-original160-3step",
       "direction-refresh-v2-original160-3step",
-      "reference-branch-enabled",
-      "reference-branch-control",
       "protected-expansion-original160-3step",
-      "verified-linear-control",
-      "verified-linear-enabled"
+      "verified-linear-original160-3step"
     ],
     "incomplete_original_start_followup": {
       "case": "response-cache-original-3step",
@@ -75,53 +72,101 @@
       "final_native_history_receipt_available": false,
       "scope": "Incomplete run; no final accepted-history receipt inferred from the saved numerical checkpoint"
     },
-    "current_inflight_evidence": "native/progress-published-20261106-evening.json",
+    "current_inflight_evidence": "native/progress-published-20261107-final.json",
     "original_start_inflight_progress": {
-      "response-krylov64-original-3step": {
-        "numerical_updates": 15,
-        "original_full_residual": 16.25138855025634,
+      "radius-cap4-original-3step": {
+        "numerical_updates": 12,
+        "original_full_residual": 11.73918803758114,
         "qualified": true,
         "completed_native_receipt": false,
-        "scope": "In-flight numerical progress only; no physical-stage completion/history receipt inferred"
+        "phase": "response_krylov_seed",
+        "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-be04686/IncNavierStokesSolver",
+        "executable_sha256": "e65adf574362de28ee06a2d16d2f6c84e0020c8c4e91de9676711652eabe25bd",
+        "scope": "Dated in-flight numerical progress only; no physical-stage completion/history receipt inferred"
       },
-      "medium-face-original-3step": {
-        "numerical_updates": 10,
-        "original_full_residual": 18.002640337228883,
+      "radius-query-original-cap4-3step": {
+        "numerical_updates": 11,
+        "original_full_residual": 11.891999981211562,
         "qualified": true,
         "completed_native_receipt": false,
-        "scope": "In-flight numerical progress only; no physical-stage completion/history receipt inferred"
+        "phase": "response_krylov_seed",
+        "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-9f65eed/IncNavierStokesSolver",
+        "executable_sha256": "50ce17b6613565cfa360babc7ad26e354dfe52124eaf881b0929326a36c9a698",
+        "scope": "Dated in-flight numerical progress only; no physical-stage completion/history receipt inferred"
       },
-      "medium-face-original-full504": {
-        "numerical_updates": 2,
-        "original_full_residual": 48.94164153575723,
-        "qualified": true,
-        "completed_native_receipt": false,
-        "scope": "In-flight numerical progress only; no physical-stage completion/history receipt inferred"
-      },
-      "canonical-original-3step": {
+      "source-precision-original160-3step": {
         "numerical_updates": 7,
-        "original_full_residual": 20.38859810724901,
+        "original_full_residual": 15.494227496733187,
         "qualified": true,
         "completed_native_receipt": false,
-        "scope": "In-flight numerical progress only; no physical-stage completion/history receipt inferred"
+        "phase": "response_check",
+        "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-fd8c034/IncNavierStokesSolver",
+        "executable_sha256": "84d99dc560798c843897a37bae5529149020d5403d2549292fa8777ff7f99e4a",
+        "scope": "Dated in-flight numerical progress only; no physical-stage completion/history receipt inferred"
       },
-      "previous-original-3step": {
-        "numerical_updates": 4,
-        "original_full_residual": 32.66051303068288,
+      "response-chord-original160-3step": {
+        "numerical_updates": 6,
+        "original_full_residual": 16.616992564135025,
         "qualified": true,
         "completed_native_receipt": false,
-        "scope": "In-flight numerical progress only; no physical-stage completion/history receipt inferred"
+        "phase": "source_direction_refinement",
+        "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-7ba50d3/IncNavierStokesSolver",
+        "executable_sha256": "76f92efb28ab880b09c40862905bd6b449557bbd5ca146e6ace1d9e9444f755d",
+        "scope": "Dated in-flight numerical progress only; no physical-stage completion/history receipt inferred"
       },
-      "current-original160-3step": {
-        "numerical_updates": 0,
-        "original_full_residual": 63.00211881239651,
-        "qualified": false,
+      "response-chord-tight-original160-3step": {
+        "numerical_updates": 6,
+        "original_full_residual": 16.616992564135025,
+        "qualified": true,
         "completed_native_receipt": false,
-        "scope": "In-flight numerical progress only; no physical-stage completion/history receipt inferred"
+        "phase": "response_check",
+        "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-41ef144/IncNavierStokesSolver",
+        "executable_sha256": "870070239b02e50027b3a832cce65f11e57a95b216c3d6d45dc52a88e2f083c6",
+        "scope": "Dated in-flight numerical progress only; no physical-stage completion/history receipt inferred"
+      },
+      "destruction-value-original160-3step": {
+        "numerical_updates": 6,
+        "original_full_residual": 16.616992564135025,
+        "qualified": true,
+        "completed_native_receipt": false,
+        "phase": "ground_cut",
+        "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-987bea8/IncNavierStokesSolver",
+        "executable_sha256": "e548edcd98268c6c44a8dcec2693e98bd9acded7e19c445018c30048a2915838",
+        "scope": "Dated in-flight numerical progress only; no physical-stage completion/history receipt inferred"
+      },
+      "direction-refresh-v2-original160-3step": {
+        "numerical_updates": 5,
+        "original_full_residual": 18.259333948661627,
+        "qualified": true,
+        "completed_native_receipt": false,
+        "phase": "source_direction_refinement",
+        "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-7300df3/IncNavierStokesSolver",
+        "executable_sha256": "7af2d98a118abd671aa7c6cc099b23fce42f56b2637d968b70e316059dd482f8",
+        "scope": "Dated in-flight numerical progress only; no physical-stage completion/history receipt inferred"
+      },
+      "protected-expansion-original160-3step": {
+        "numerical_updates": 2,
+        "original_full_residual": 49.09361201508664,
+        "qualified": true,
+        "completed_native_receipt": false,
+        "phase": "source_ray_selection",
+        "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-4f3f768/IncNavierStokesSolver",
+        "executable_sha256": "16997fea83003a4ea918c8f562ca05536304938278d7fa4e27398e4bddcba040",
+        "scope": "Dated in-flight numerical progress only; no physical-stage completion/history receipt inferred"
+      },
+      "verified-linear-original160-3step": {
+        "numerical_updates": 1,
+        "original_full_residual": 63.743666080778,
+        "qualified": true,
+        "completed_native_receipt": false,
+        "phase": "non_k_response",
+        "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-3a85fa5/IncNavierStokesSolver",
+        "executable_sha256": "bce6eda020e873b354a602a223523e0ce68d10ee5691f923d24157634bd28764",
+        "scope": "Dated in-flight numerical progress only; no physical-stage completion/history receipt inferred"
       }
     },
-    "latest_code_original_start_case": "radius-query-original-cap4-3step",
-    "latest_code_original_start_status": "Running from original h0 with repaired bounded-model queries,cap4,48 numerical updates per stage,three requested physical steps,16-hour process limit. No accepted physical stage yet.",
+    "latest_code_original_start_case": "verified-linear-original160-3step",
+    "latest_code_original_start_status": "Running3a85fa5 from originalh0/history with160 initial response directions,64 Krylov seeds,3 source refinements,16 protected current measurements and verified-linear preference;48 numerical updates per stage/three physical steps requested/57600-second limit. No first-stage root or physical acceptance.",
     "historical_original_start_18_update_result": {
       "numerical_updates": 18,
       "full_residual": 19.17479906831806,
@@ -133,7 +178,21 @@
       "accepted_state_and_history_preserved": true,
       "independent_norm_difference": 0
     },
-    "progress_utc_scope": "Compact evidence review time; producing native commands and original stage target are retained in the linked cases"
+    "progress_utc_scope": "Compact evidence review time; producing native commands and original stage target are retained in the linked cases",
+    "latest_independently_audited_original_start_checkpoint": {
+      "case": "radius-cap4-original-3step",
+      "producing_code_commit": "be04686bb3dac8987b517f380c8a60d075f7b940",
+      "numerical_updates": 12,
+      "full_residual": 11.73918803758114,
+      "qualified": true,
+      "gradient_departure": 0.0009999989999103231,
+      "minimum_outer_epsilon_ratio": 0.9811907095339847,
+      "ground_minimum": 0.0004260749179018704,
+      "original_norms_bitwise_identical": true,
+      "native_stage_completed": false,
+      "physical_acceptance_inferred": false,
+      "evidence": "native/original-start-cap4-point12-review.json"
+    }
   },
   "checks": {
     "linux_native_pressure_verification": "0926974 bounds assertions and two-sweep bitwise On/Off passed; unchanged Picard translation unit through7715312",
@@ -175,7 +234,9 @@
     "previous_direction_verification_observability": "PASS: matched6b1f28a verified/unverified two-update fixture. Initial and both accepted numerical-update hashes and original norm vectors agree bitwise; accepted state, every physical history slot/time, rejected endpoint and native bookkeeping identical. Same executable/library identities and numerical input; both native0/time0, not M8 convergence.",
     "interior_source_model_anchor": "900a9aa known-answer corner test, six Linux CTests and standalone ASan/UBSan pass. Matched two-update enabled/disabled native tests finish5.2018304001/5.2418504922; both pass complete qualification and exact original readback,zero physical steps/history preserved. Recovered derivatives produce independently checked accepted directions; verification On/Off trajectory/history bitwise identical. Original-h0 follow-up in progress; not M8 convergence.",
     "configurable_reduced_maximum_radius": "be04686 Linux four-worker build125.52s, six focused CTests43.40s and changed standalone model ASan/UBSan9.42s pass. Default cap1 retained; original-h0 cap1/cap4 native tests in progress; no larger-radius benefit or root claimed yet.",
-    "failed_radius_free_query_recovery": "9f65eed same-LAPACK native96 model failure reproduced at500; repaired500 replay returns exactly the2000-budget control vector, all193692 cuts independently checked, norm.999825<=1. Six Linux CTests and standalone ASan/UBSan pass. Actual original-h0 recovery tests running; not nonlinear stationarity or M8 convergence."
+    "failed_radius_free_query_recovery": "9f65eed same-LAPACK native96 model failure reproduced at500; repaired500 replay returns exactly the2000-budget control vector, all193692 cuts independently checked, norm.999825<=1. Six Linux CTests and standalone ASan/UBSan pass. Actual original-h0 recovery tests running; not nonlinear stationarity or M8 convergence.",
+    "latest_linux_native_build_and_focused_ctest": "3a85fa5 four-worker optimized Linux build134.5106846190174s; all six focused CTests passed38.25249536600313s at concurrency1; immutable binary/library identities recorded; exact unchanged helper/test reuse ff1c4fc standalone ASan/UBSan scope, not full-solver sanitizer",
+    "verified_linear_native_trial": "Same-image original-h0 preference-only comparison passed; six current measurements, actual qualified half-step after full-step qualification rejection, exact fresh original norm readback and zero-step accepted-history preservation. Not original M8 convergence."
   },
   "continued_branch": {
     "auxiliary_positive_eta_tolerance": 2e-11,
@@ -620,13 +681,18 @@
     },
     "additional_complete_space_attempt": {
       "code": "7300df33eb5130415a6d615f0e61c49ef1aa3871",
-      "status": "running_original_target_diagnostic_with_original_history",
+      "status": "running_original_target_saved_guess_diagnostic_with_original_history; numerical_point2 independently audited, no completed stage/history receipt",
       "initial_original_norm": 3.8960677838217963,
       "basis": 504,
       "non_k_tolerance": 2e-12,
       "numerical_updates_requested": 8,
       "launch": "native/direction-refresh-v2-full504-at3p896-launch.json",
-      "physical_acceptance_inferred": false
+      "physical_acceptance_inferred": false,
+      "latest_checkpoint_original_norm": 3.800549976055716,
+      "latest_checkpoint_numerical_updates": 2,
+      "latest_checkpoint_qualified": true,
+      "latest_checkpoint_original_norms_bitwise_identical": true,
+      "latest_checkpoint_evidence": "native/full504-direction-refresh-point2-review.json"
     },
     "protected_current_actions": {
       "code": "ff1c4fc5ac2ce75279f821dd944dcd8a97648bbc",
@@ -634,7 +700,7 @@
       "build_passed": true,
       "focused_ctests_passed": 6,
       "standalone_asan_ubsan_passed": true,
-      "status": "four_measurement_actual_bridged_use_assertion_failed; action_preservation_and_generic_checks_passed; expanded_native_rerun_active",
+      "status": "four_measurement_actual_bridged_use_assertion_failed; action_preservation_and_generic_checks_passed; expanded_native_rerun_passed_actual_use",
       "diagnostic": "Accurate non-k solves and two-size actions; unprotected rank-one current-action refreshes overwrite correlated earlier measurements",
       "diagnostic_evidence": "native/current-direction-interference.json",
       "native_launch": "native/protected-actions-native-launch.json",
@@ -690,14 +756,46 @@
     },
     "verified_linear_policy": {
       "code": "3a85fa59a77fc4dea6ad1269fe257cca16d9572d",
-      "status": "build_and_six_ctests_passed; same_image_original_h0_native_tests_running",
+      "status": "passed_verified_linear_trials_not_m8_convergence; same-image preference-only comparison passed",
       "default": "Off",
       "scope": "After measuring inaccurate optional source proposal, re-solve and independently verify constrained linear reduced direction before actual nonlinear trials; nonlinear destruction ray and original acceptance retained",
       "build_seconds": 134.5106846190174,
       "ctest_seconds": 38.25249536600313,
       "input_checks": "native/verified-linear-input-checks.json",
       "build": "native/build-validation-3a85fa5.json",
-      "native_launch": "native/verified-linear-native-launch.json"
+      "native_launch": "native/verified-linear-native-launch.json",
+      "native_receipt": "native/verified-linear-comparison-receipt.json",
+      "evidence": "native/verified-linear-trial-checks.json",
+      "actual_original_start_correction": {
+        "from_residual": 49.28163111055679,
+        "to_residual": 41.42039202067207,
+        "numeric_updates": 3,
+        "qualified": true,
+        "physical_steps": 0,
+        "accepted_time": 0,
+        "original_readback_exact": true,
+        "accepted_state_and_history_preserved": true,
+        "control_terminal_residual": 41.27600824015673
+      },
+      "controlled_H_evaluations": 427,
+      "all_H_converged": true,
+      "flow_epsilon_solves_each": 1592,
+      "target_seconds": 2412.713583595003,
+      "current_measurements": 6,
+      "actual_displacement": 0.6474324404473115,
+      "radius": 1.2960000000000003,
+      "gradient_departure": 0.0009991896781738063,
+      "minimum_epsilon_ratio": 0.9800025827964047,
+      "ground_minimum": 0.1634834202625435,
+      "matched_comparison": "passed_only_preference_flag_differs_same_image_and_bitwise_original_prefix",
+      "longer_original_run": "native/verified-linear-original160-3step-launch.json",
+      "single_run_receipt": "native/verified-linear-single-receipt.json",
+      "control_current_measurements": 9,
+      "control_H_evaluations": 447,
+      "control_flow_epsilon_solves_each": 1784,
+      "control_target_seconds": 3415.310091373016,
+      "timing_scope": "Single concurrent same-image fixture; fewer current measurements, H solves and elapsed seconds with slightly worse terminal residual; no general performance claim",
+      "focused_ctests_passed": 6
     }
   },
   "latest_diagnostic_correction": {

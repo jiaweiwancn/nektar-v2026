@@ -1,0 +1,124 @@
+{
+  "status": "passed_reference_branch_reuse_checks_not_m8_convergence",
+  "run": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/verified-linear-enabled",
+  "script_sha256": "0b38bf2647e1ce6c51c88e28b36bcdb5b4c9f9853f077909c0ced63a93a92497",
+  "original_target": {
+    "unknowns": 2165.0,
+    "tolerance": 2e-12,
+    "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca",
+    "history_value_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca",
+    "incoming_guess_sha256": "b8ba7917424057a9f6f16a026d82d53ede43985871537facea170ef6e1841b71",
+    "guess_sha256": "b8ba7917424057a9f6f16a026d82d53ede43985871537facea170ef6e1841b71",
+    "event": "stage_input",
+    "sweep": 0.0,
+    "alpha": 400.0,
+    "time": 0.0025,
+    "seconds": 0.311536458
+  },
+  "branch_switches": [
+    {
+      "before_pattern": "MMMMEEMMMMMMMBBBBBBBBBBBBBBBBBBBBBBBBBBBBMBMBMBMBEBEBMBMBMBMBMBMBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "after_pattern": "MMMEEEMMMMMMMBBBBBBBBBBBBBBBBBBBBBBBBBBBBMBMBMBEBEBEBMBMBMBMBMBMBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "switches": [
+        {
+          "index": 3,
+          "anchor": [
+            -3.591717321247825,
+            0,
+            1
+          ],
+          "before": "M",
+          "after": "E"
+        },
+        {
+          "index": 47,
+          "anchor": [
+            -3.6046496089512394,
+            0,
+            2
+          ],
+          "before": "M",
+          "after": "E"
+        }
+      ],
+      "next_age": 1,
+      "scope": "retain an approximate historical model only; no old-branch derivative claim; mandatory current-branch action and independent same-k checks before actual trials",
+      "event": "response_reference_branch_bridge",
+      "iteration": 1,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 1759.698303793
+    },
+    {
+      "before_pattern": "MMMEEEMMMMMMMBBBBBBBBBBBBBBBBBBBBBBBBBBBBMBMBMBEBEBEBMBMBMBMBMBMBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "after_pattern": "MMMEEMMMMMMMMBBBBBBBBBBBBBBBBBBBBBBBBBBBBMBMBMBEBEBMBMBMBMBMBMBMBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+      "switches": [
+        {
+          "index": 5,
+          "anchor": [
+            -3.2372337950418357,
+            0,
+            1
+          ],
+          "before": "E",
+          "after": "M"
+        },
+        {
+          "index": 51,
+          "anchor": [
+            -3.204149909283429,
+            0,
+            2
+          ],
+          "before": "E",
+          "after": "M"
+        }
+      ],
+      "next_age": 2,
+      "scope": "retain an approximate historical model only; no old-branch derivative claim; mandatory current-branch action and independent same-k checks before actual trials",
+      "event": "response_reference_branch_bridge",
+      "iteration": 2,
+      "alpha": 400,
+      "time": 0.0025,
+      "seconds": 2390.237024781
+    }
+  ],
+  "accepted_corrections": [
+    {
+      "direction": {
+        "iteration": 2,
+        "basis_dimension": 96,
+        "response_rank": 96,
+        "radius": 1.2960000000000003,
+        "directional_refreshes": 6,
+        "reference_branch_bridged": true
+      },
+      "trial": {
+        "fraction": 0.5,
+        "proposal_origin": "linear_reduced_direction",
+        "accepted": true,
+        "norm": 41.420392020672075,
+        "full_norm": 41.42039202067207,
+        "violation": 0,
+        "families": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "predicted_norm": 40.76796968028529,
+        "model_error": 2.644920166061201,
+        "predicted_violation": 3.475892434158566e-05,
+        "non_k_error": 1.2063356587846886e-09,
+        "second_order_corrections": 1,
+        "displacement": 0.6474324404473115,
+        "physical_k_displacement": 0.33051944876327005,
+        "event": "trial",
+        "iteration": 2,
+        "alpha": 400,
+        "time": 0.0025,
+        "seconds": 2390.097364006
+      }
+    }
+  ]
+}

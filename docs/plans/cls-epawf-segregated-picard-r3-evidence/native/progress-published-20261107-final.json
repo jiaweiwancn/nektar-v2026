@@ -1,0 +1,715 @@
+{
+  "scope": "Dated in-flight numerical progress and Linux process inventory. Checkpoints are not completed stage/history receipts or physical acceptance.",
+  "utc": "2026-11-07T04:37:59.814240+00:00",
+  "raw_snapshot": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/progress-20261107-043759.json",
+  "raw_snapshot_sha256": "f64b2e1782c93b29ac360330a414ef594ac0178841944db6eaab9b71ae98f6e2",
+  "cases": {
+    "radius-cap4-original-3step": {
+      "log_prefix_bytes": 13393486,
+      "log_prefix_sha256": "90486aed8f689b1b10a9485b2ade80229c17241cee892c9e5793c7170fb9c2d9",
+      "manifest_status": "prepared",
+      "launch_source": "be04686bb3dac8987b517f380c8a60d075f7b940",
+      "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-be04686/IncNavierStokesSolver",
+      "executable_sha256": "e65adf574362de28ee06a2d16d2f6c84e0020c8c4e91de9676711652eabe25bd",
+      "numeric_updates": 12,
+      "latest_point": {
+        "iteration": 12,
+        "norms": [
+          5.196830636885597e-10,
+          1.0951998528584358e-09,
+          11.73918803758114,
+          4.730726536871569e-12,
+          6.759534245856746e-16,
+          8.155330283140648e-16,
+          6.268043809681821e-18,
+          5.194438324466286e-16
+        ],
+        "reduced_norm": 11.73918803758114,
+        "violation": 0,
+        "qualified": true,
+        "ground": {
+          "admissible": true,
+          "minimum": 0.0004260749179018704,
+          "arithmetic_scale": 3.0712903635150855e-17,
+          "point": [
+            1.5661416649775195,
+            0,
+            0
+          ],
+          "geometry": 4,
+          "extrema_checked": 20
+        },
+        "outer_range": [
+          0.0009999989999103231,
+          0.990194338091688,
+          1.009999572630253,
+          0.9811907095339847,
+          1.0084360047555014,
+          0.9976551629738274,
+          1.0074235658121984
+        ],
+        "state_sha256": "b20f2caaff7c4543f46ae75eca566fe6e7d444979a62fb852d4b3ca309446005",
+        "work": [
+          3950,
+          15622,
+          15622
+        ],
+        "seconds": 31532.644594078
+      },
+      "checked_responses": 1956,
+      "usable_responses": 1952,
+      "phase": "response_krylov_seed",
+      "last_seconds": 31820.485258048,
+      "latest_model": {
+        "basis_dimension": 160,
+        "response_rank": 160,
+        "radius": 4,
+        "active_constraints": 30
+      },
+      "native_stage_report_available": false
+    },
+    "radius-query-original-cap4-3step": {
+      "log_prefix_bytes": 12196682,
+      "log_prefix_sha256": "701af07724705314798f61dc41191090e425a1bfd0e0c2103c42c8082e46374c",
+      "manifest_status": "prepared",
+      "launch_source": "9f65eedf2b59429ce3c04de0672064ad459baceb",
+      "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-9f65eed/IncNavierStokesSolver",
+      "executable_sha256": "50ce17b6613565cfa360babc7ad26e354dfe52124eaf881b0929326a36c9a698",
+      "numeric_updates": 11,
+      "latest_point": {
+        "iteration": 11,
+        "norms": [
+          1.135899590434673e-10,
+          8.170164216995464e-10,
+          11.891999981211562,
+          2.0632297370963118e-12,
+          8.838231009292106e-16,
+          7.893814866396247e-16,
+          1.4738373282224823e-17,
+          0
+        ],
+        "reduced_norm": 11.891999981211562,
+        "violation": 0,
+        "qualified": true,
+        "ground": {
+          "admissible": true,
+          "minimum": 0.0002862138637589896,
+          "arithmetic_scale": 3.0726241840356737e-17,
+          "point": [
+            1.5657980932573012,
+            0,
+            0
+          ],
+          "geometry": 4,
+          "extrema_checked": 20
+        },
+        "outer_range": [
+          0.000999980115413801,
+          0.9901052554883346,
+          1.0090729139853734,
+          0.9804242849785193,
+          1.0064463388628917,
+          0.997135571837724,
+          1.007978158177483
+        ],
+        "state_sha256": "29c69d3c456a2bde259e1f6be3598d9598a555a0a8e25bac910118c87204eec6",
+        "work": [
+          3621,
+          14304,
+          14304
+        ],
+        "seconds": 29551.80770896
+      },
+      "checked_responses": 1780,
+      "usable_responses": 1776,
+      "phase": "response_krylov_seed",
+      "last_seconds": 29697.26740387,
+      "latest_model": {
+        "basis_dimension": 160,
+        "response_rank": 160,
+        "radius": 4,
+        "active_constraints": 36
+      },
+      "native_stage_report_available": false
+    },
+    "source-precision-original160-3step": {
+      "log_prefix_bytes": 8828898,
+      "log_prefix_sha256": "afffc4f114f01c4433f9c373ee25fc4d1b9b34ed4f147ee49f7598991831ae4c",
+      "manifest_status": "prepared",
+      "launch_source": "fd8c0344bbbe3ea4a180df7358d0235ee8b675a4",
+      "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-fd8c034/IncNavierStokesSolver",
+      "executable_sha256": "84d99dc560798c843897a37bae5529149020d5403d2549292fa8777ff7f99e4a",
+      "numeric_updates": 7,
+      "latest_point": {
+        "iteration": 7,
+        "norms": [
+          2.1691342834824422e-10,
+          1.615565263996704e-09,
+          15.494227496733187,
+          1.0030262866776596e-12,
+          6.097876282195258e-16,
+          7.170776032357505e-16,
+          2.5410988417629006e-18,
+          5.43326307501646e-16
+        ],
+        "reduced_norm": 15.494227496733187,
+        "violation": 0,
+        "qualified": true,
+        "ground": {
+          "admissible": true,
+          "minimum": 0.005647772022418118,
+          "arithmetic_scale": 3.0091925486114435e-17,
+          "point": [
+            1.5526215199795355,
+            0,
+            0
+          ],
+          "geometry": 4,
+          "extrema_checked": 20
+        },
+        "outer_range": [
+          0.0009999188373845946,
+          0.9900000099998733,
+          1.009999990000127,
+          0.981502364250244,
+          1.0096429277227066,
+          0.9978671186096233,
+          1.0076966396763134
+        ],
+        "state_sha256": "77c7c8b60487c0b3ffd8921d1824adb09196e43be82b3982a3d80953aea99f5b",
+        "work": [
+          2380,
+          9110,
+          9110
+        ],
+        "seconds": 23481.296672946
+      },
+      "checked_responses": 1322,
+      "usable_responses": 1322,
+      "phase": "response_check",
+      "last_seconds": 25092.397514347,
+      "latest_model": {
+        "basis_dimension": 200,
+        "response_rank": 200,
+        "radius": 4,
+        "active_constraints": 52
+      },
+      "native_stage_report_available": false
+    },
+    "response-chord-original160-3step": {
+      "log_prefix_bytes": 7847383,
+      "log_prefix_sha256": "21944bcddca866b50c3980e7c253e125d51de95016a6e5ba2dfb54ffc58a4564",
+      "manifest_status": "prepared",
+      "launch_source": "7ba50d302cad7e7c0f676879a51029a4fcdc5416",
+      "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-7ba50d3/IncNavierStokesSolver",
+      "executable_sha256": "76f92efb28ab880b09c40862905bd6b449557bbd5ca146e6ace1d9e9444f755d",
+      "numeric_updates": 6,
+      "latest_point": {
+        "iteration": 6,
+        "norms": [
+          1.1608773098339818e-09,
+          1.381166103741998e-09,
+          16.616992564135025,
+          2.633363535266022e-13,
+          8.557209589047482e-16,
+          7.598776508762411e-16,
+          2.3716922523120406e-17,
+          0
+        ],
+        "reduced_norm": 16.616992564135025,
+        "violation": 0,
+        "qualified": true,
+        "ground": {
+          "admissible": true,
+          "minimum": 0.01373445900565254,
+          "arithmetic_scale": 2.90986791713595e-17,
+          "point": [
+            1.5340449758117765,
+            0,
+            0
+          ],
+          "geometry": 4,
+          "extrema_checked": 17
+        },
+        "outer_range": [
+          0.000999999117620387,
+          0.990320505418612,
+          1.0098900231468433,
+          0.9832266317641263,
+          1.0090523180970403,
+          0.9990356052672303,
+          1.0092298899442351
+        ],
+        "state_sha256": "75c8c4222437766c861e91032015c7d88cbca7ff2767f9391d72e3829baa615c",
+        "work": [
+          1973,
+          7472,
+          7472
+        ],
+        "seconds": 17060.72506412
+      },
+      "checked_responses": 1160,
+      "usable_responses": 1160,
+      "phase": "source_direction_refinement",
+      "last_seconds": 20892.883586923,
+      "latest_model": {
+        "basis_dimension": 200,
+        "response_rank": 200,
+        "radius": 4,
+        "active_constraints": 52
+      },
+      "native_stage_report_available": false
+    },
+    "response-chord-tight-original160-3step": {
+      "log_prefix_bytes": 7285718,
+      "log_prefix_sha256": "ef07dcdf92c4f8a7cb5989392c9854ea24f21bcfa503d339537ae746f322822d",
+      "manifest_status": "prepared",
+      "launch_source": "41ef14412554f336250f2569e03b5a22beb410ac",
+      "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-41ef144/IncNavierStokesSolver",
+      "executable_sha256": "870070239b02e50027b3a832cce65f11e57a95b216c3d6d45dc52a88e2f083c6",
+      "numeric_updates": 6,
+      "latest_point": {
+        "iteration": 6,
+        "norms": [
+          1.1608773098339818e-09,
+          1.381166103741998e-09,
+          16.616992564135025,
+          2.633363535266022e-13,
+          8.557209589047482e-16,
+          7.598776508762411e-16,
+          2.3716922523120406e-17,
+          0
+        ],
+        "reduced_norm": 16.616992564135025,
+        "violation": 0,
+        "qualified": true,
+        "ground": {
+          "admissible": true,
+          "minimum": 0.01373445900565254,
+          "arithmetic_scale": 2.90986791713595e-17,
+          "point": [
+            1.5340449758117765,
+            0,
+            0
+          ],
+          "geometry": 4,
+          "extrema_checked": 17
+        },
+        "outer_range": [
+          0.000999999117620387,
+          0.990320505418612,
+          1.0098900231468433,
+          0.9832266317641263,
+          1.0090523180970403,
+          0.9990356052672303,
+          1.0092298899442351
+        ],
+        "state_sha256": "75c8c4222437766c861e91032015c7d88cbca7ff2767f9391d72e3829baa615c",
+        "work": [
+          1973,
+          7472,
+          7472
+        ],
+        "seconds": 16862.647188881
+      },
+      "checked_responses": 1111,
+      "usable_responses": 1111,
+      "phase": "response_check",
+      "last_seconds": 18327.137740925,
+      "latest_model": {
+        "basis_dimension": 160,
+        "response_rank": 160,
+        "radius": 4,
+        "active_constraints": 40
+      },
+      "native_stage_report_available": false
+    },
+    "destruction-value-original160-3step": {
+      "log_prefix_bytes": 7568944,
+      "log_prefix_sha256": "99e17b2ced806da80ec3ac82e39aa90ab3cc6f5d31dbf4f68df7f9b2124683c0",
+      "manifest_status": "prepared",
+      "launch_source": "75404e3bf0acaa1cce58a7a71f236b630cb217e1",
+      "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-987bea8/IncNavierStokesSolver",
+      "executable_sha256": "e548edcd98268c6c44a8dcec2693e98bd9acded7e19c445018c30048a2915838",
+      "numeric_updates": 6,
+      "latest_point": {
+        "iteration": 6,
+        "norms": [
+          1.1608773098339818e-09,
+          1.381166103741998e-09,
+          16.616992564135025,
+          2.633363535266022e-13,
+          8.557209589047482e-16,
+          7.598776508762411e-16,
+          2.3716922523120406e-17,
+          0
+        ],
+        "reduced_norm": 16.616992564135025,
+        "violation": 0,
+        "qualified": true,
+        "ground": {
+          "admissible": true,
+          "minimum": 0.01373445900565254,
+          "arithmetic_scale": 2.90986791713595e-17,
+          "point": [
+            1.5340449758117765,
+            0,
+            0
+          ],
+          "geometry": 4,
+          "extrema_checked": 17
+        },
+        "outer_range": [
+          0.000999999117620387,
+          0.990320505418612,
+          1.0098900231468433,
+          0.9832266317641263,
+          1.0090523180970403,
+          0.9990356052672303,
+          1.0092298899442351
+        ],
+        "state_sha256": "75c8c4222437766c861e91032015c7d88cbca7ff2767f9391d72e3829baa615c",
+        "work": [
+          1973,
+          7472,
+          7472
+        ],
+        "seconds": 14269.999928374
+      },
+      "checked_responses": 1160,
+      "usable_responses": 1160,
+      "phase": "ground_cut",
+      "last_seconds": 16509.370661076,
+      "latest_model": {
+        "basis_dimension": 160,
+        "response_rank": 160,
+        "radius": 4,
+        "active_constraints": 40
+      },
+      "native_stage_report_available": false
+    },
+    "direction-refresh-v2-original160-3step": {
+      "log_prefix_bytes": 6365496,
+      "log_prefix_sha256": "c26ef640474c9f403e50f0778bb631bfc4bbea9b43b3abf74f885dd76447cf13",
+      "manifest_status": "prepared",
+      "launch_source": "7300df33eb5130415a6d615f0e61c49ef1aa3871",
+      "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-7300df3/IncNavierStokesSolver",
+      "executable_sha256": "7af2d98a118abd671aa7c6cc099b23fce42f56b2637d968b70e316059dd482f8",
+      "numeric_updates": 5,
+      "latest_point": {
+        "iteration": 5,
+        "norms": [
+          2.8579554225422813e-10,
+          9.630153192333017e-10,
+          18.259333948661627,
+          7.625394590620823e-12,
+          6.150110126366757e-16,
+          7.595622143770432e-16,
+          4.7772658225142527e-17,
+          4.821274651731639e-16
+        ],
+        "reduced_norm": 18.259333948661627,
+        "violation": 0,
+        "qualified": true,
+        "ground": {
+          "admissible": true,
+          "minimum": 0.017816028182856557,
+          "arithmetic_scale": 2.8565265388343815e-17,
+          "point": [
+            1.5233765651156614,
+            0,
+            0
+          ],
+          "geometry": 4,
+          "extrema_checked": 16
+        },
+        "outer_range": [
+          0.000999999336314783,
+          0.99000001,
+          1.0099999900000003,
+          0.983513789991746,
+          1.0118786434754075,
+          0.998769853042302,
+          1.0099929826788647
+        ],
+        "state_sha256": "2898cc7d99e5853915297aeb304791f51101f9164897897b9ac71679c65011d9",
+        "work": [
+          1643,
+          6136,
+          6136
+        ],
+        "seconds": 11288.887891425
+      },
+      "checked_responses": 960,
+      "usable_responses": 960,
+      "phase": "source_direction_refinement",
+      "last_seconds": 13697.106205139,
+      "latest_model": {
+        "basis_dimension": 160,
+        "response_rank": 160,
+        "radius": 4,
+        "active_constraints": 40
+      },
+      "native_stage_report_available": false
+    },
+    "direction-refresh-v2-full504-at3p896": {
+      "log_prefix_bytes": 5696001,
+      "log_prefix_sha256": "8f2489105c1d2521e24a58d171df79eb7b6c76aca81b02b21aadd943e91b5c9a",
+      "manifest_status": "prepared",
+      "launch_source": "7300df33eb5130415a6d615f0e61c49ef1aa3871",
+      "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-7300df3/IncNavierStokesSolver",
+      "executable_sha256": "7af2d98a118abd671aa7c6cc099b23fce42f56b2637d968b70e316059dd482f8",
+      "numeric_updates": 2,
+      "latest_point": {
+        "iteration": 2,
+        "norms": [
+          8.41783191441291e-13,
+          7.828106084669529e-13,
+          3.800549976055716,
+          3.971813836349489e-14,
+          6.635750970671448e-16,
+          6.710838269322144e-16,
+          5.692061405548897e-17,
+          0
+        ],
+        "reduced_norm": 3.8005499760557164,
+        "violation": 0,
+        "qualified": true,
+        "ground": {
+          "admissible": true,
+          "minimum": 7.908032054929958e-09,
+          "arithmetic_scale": 3.038632970776217e-17,
+          "point": [
+            1.5632671857398872,
+            0,
+            0
+          ],
+          "geometry": 4,
+          "extrema_checked": 20
+        },
+        "outer_range": [
+          0.000999998997490703,
+          0.9915230457769472,
+          1.0049343336056165,
+          0.9808213348331958,
+          1.0038450033003004,
+          0.9974055583634673,
+          1.0081921710156658
+        ],
+        "state_sha256": "57eed55b819c5d80f3af33859d097dfa9228742662513ec1979f252d62b724c7",
+        "work": [
+          1034,
+          6482,
+          6482
+        ],
+        "seconds": 13755.279035373
+      },
+      "checked_responses": 587,
+      "usable_responses": 587,
+      "phase": "response_check",
+      "last_seconds": 14855.95603947,
+      "latest_model": {
+        "basis_dimension": 504,
+        "response_rank": 504,
+        "radius": 0.7200000000000001,
+        "active_constraints": 26
+      },
+      "native_stage_report_available": false
+    },
+    "protected-expansion-original160-3step": {
+      "log_prefix_bytes": 2899579,
+      "log_prefix_sha256": "f66014157823bdf43aa8558d63dd2ad61b3221f66f643a8c7369b9e6a9bf3a14",
+      "manifest_status": "prepared",
+      "launch_source": "4f3f7684360387e50cb7957244fc4b838de15ecd",
+      "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-4f3f768/IncNavierStokesSolver",
+      "executable_sha256": "16997fea83003a4ea918c8f562ca05536304938278d7fa4e27398e4bddcba040",
+      "numeric_updates": 2,
+      "latest_point": {
+        "iteration": 2,
+        "norms": [
+          2.8803645559554326e-10,
+          1.667444833786566e-09,
+          49.09361201508664,
+          3.372734966167647e-12,
+          8.216005645838482e-16,
+          6.574404937339526e-16,
+          1.8634724839594604e-17,
+          4.895907386278569e-16
+        ],
+        "reduced_norm": 49.09361201508664,
+        "violation": 0,
+        "qualified": true,
+        "ground": {
+          "admissible": true,
+          "minimum": 0.29120237541188215,
+          "arithmetic_scale": 8.99740495341343e-18,
+          "point": [
+            0.23243213396178541,
+            0,
+            0
+          ],
+          "geometry": 3,
+          "extrema_checked": 11
+        },
+        "outer_range": [
+          0.0009967401289124878,
+          0.9906351020555182,
+          1.0041610226429447,
+          0.9800004348599402,
+          1.0079948566919088,
+          0.9968568709666069,
+          1.0042250266221924
+        ],
+        "state_sha256": "a50c2a257356c2694c8b2aaad12996ff4a9a4b62d6092ccd857b92ccde305e3b",
+        "work": [
+          655,
+          2135,
+          2135
+        ],
+        "seconds": 3067.418585886
+      },
+      "checked_responses": 320,
+      "usable_responses": 320,
+      "phase": "source_ray_selection",
+      "last_seconds": 3718.036984683,
+      "latest_model": {
+        "basis_dimension": 160,
+        "response_rank": 160,
+        "radius": 1.2960000000000003,
+        "active_constraints": 22
+      },
+      "native_stage_report_available": false
+    },
+    "verified-linear-original160-3step": {
+      "log_prefix_bytes": 1047871,
+      "log_prefix_sha256": "b13ca59db96d2a9004b9cca9d886717a69626797be46be13c074bcb2d85526f0",
+      "manifest_status": "prepared",
+      "launch_source": "3a85fa59a77fc4dea6ad1269fe257cca16d9572d",
+      "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-3a85fa5/IncNavierStokesSolver",
+      "executable_sha256": "bce6eda020e873b354a602a223523e0ce68d10ee5691f923d24157634bd28764",
+      "numeric_updates": 1,
+      "latest_point": {
+        "iteration": 1,
+        "norms": [
+          1.9057773075242437e-10,
+          9.835356981008264e-10,
+          63.743666080778,
+          1.2181085783681191e-13,
+          7.82353155267223e-16,
+          8.271635143610408e-16,
+          1.9142944607947185e-17,
+          0
+        ],
+        "reduced_norm": 63.743666080778,
+        "violation": 0,
+        "qualified": true,
+        "ground": {
+          "admissible": true,
+          "minimum": 0.5105077404798565,
+          "arithmetic_scale": 1.4169451741376433e-17,
+          "point": [
+            -1.8242588883107722,
+            0,
+            0
+          ],
+          "geometry": 2,
+          "extrema_checked": 17
+        },
+        "outer_range": [
+          0.000995382197818695,
+          0.9909221697089404,
+          1.0000093721667322,
+          0.9846519510665871,
+          1.0053564660528282,
+          1,
+          1.0091940385164953
+        ],
+        "state_sha256": "3d8eb51d1a2cdee8bb0c087f5b256b6d9a61d50db962e71143cbe6080aa5e66c",
+        "work": [
+          327,
+          1029,
+          1029
+        ],
+        "seconds": 1076.828150956
+      },
+      "checked_responses": 173,
+      "usable_responses": 173,
+      "phase": "non_k_response",
+      "last_seconds": 1204.557501522,
+      "latest_model": {
+        "basis_dimension": 160,
+        "response_rank": 160,
+        "radius": 0.4,
+        "active_constraints": 6
+      },
+      "native_stage_report_available": false
+    }
+  },
+  "linux_processes": [
+    {
+      "pid": 111503,
+      "os_threads": 3,
+      "command": "IncNavierStokes"
+    },
+    {
+      "pid": 113895,
+      "os_threads": 3,
+      "command": "IncNavierStokes"
+    },
+    {
+      "pid": 117253,
+      "os_threads": 3,
+      "command": "IncNavierStokes"
+    },
+    {
+      "pid": 120954,
+      "os_threads": 3,
+      "command": "IncNavierStokes"
+    },
+    {
+      "pid": 123552,
+      "os_threads": 3,
+      "command": "IncNavierStokes"
+    },
+    {
+      "pid": 125301,
+      "os_threads": 3,
+      "command": "IncNavierStokes"
+    },
+    {
+      "pid": 126111,
+      "os_threads": 3,
+      "command": "IncNavierStokes"
+    },
+    {
+      "pid": 126478,
+      "os_threads": 3,
+      "command": "IncNavierStokes"
+    },
+    {
+      "pid": 130030,
+      "os_threads": 3,
+      "command": "IncNavierStokes"
+    },
+    {
+      "pid": 135008,
+      "os_threads": 3,
+      "command": "IncNavierStokes"
+    },
+    {
+      "pid": 135337,
+      "os_threads": 3,
+      "command": "IncNavierStokes"
+    },
+    {
+      "pid": 136089,
+      "os_threads": 3,
+      "command": "IncNavierStokes"
+    }
+  ],
+  "os_threads_observed": 36,
+  "reserved_auxiliary_threads": 6,
+  "hard_total_worker_limit": 72,
+  "qualified_root_alert": false,
+  "qualified_native_stage_alert": false
+}

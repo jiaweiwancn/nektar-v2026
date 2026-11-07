@@ -1,0 +1,127 @@
+{
+  "scope": "Primary fresh original-h0 unchanged2165/alpha400/time.0025/tolerance2e-12 three-step attempt using guarded historical responses across E/M reference switches and protected current-base actions. Launched only after a controlled current-branch and independently repeated same-k response produces an actually accepted qualified original-start correction. Governing equations, physical history and original acceptance unchanged.",
+  "utc": "2026-11-07T04:16:57.671672+00:00",
+  "producing_code_commit": "3a85fa59a77fc4dea6ad1269fe257cca16d9572d",
+  "command": [
+    "python3",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-source/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py",
+    "--solver",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-3a85fa5/IncNavierStokesSolver",
+    "--resolution-probe",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-3a85fa5/RANSWallResolutionProbe",
+    "--output",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/verified-linear-original160-3step",
+    "--reduced",
+    "--reduced-verify",
+    "--reduced-response-cache",
+    "--reduced-basis",
+    "160",
+    "--reduced-maximum-basis",
+    "512",
+    "--reduced-krylov",
+    "64",
+    "--reduced-radius",
+    ".4",
+    "--reduced-step",
+    "1e-5",
+    "--reduced-h-tolerance",
+    "2e-9",
+    "--reduced-source-ray",
+    "--reduced-source-refinements",
+    "3",
+    "--reduced-adaptive-space",
+    "--reduced-second-order",
+    "--reduced-constraint-secant",
+    "--reduced-restoration-weight",
+    "0",
+    "--steps",
+    "3",
+    "--sweeps",
+    "48",
+    "--timeout",
+    "57600",
+    "--reduced-interior-source-anchor",
+    "--reduced-maximum-radius",
+    "4",
+    "--reduced-response-reuse-updates",
+    "2",
+    "--reduced-fast-destruction",
+    "--reduced-directional-refresh-updates",
+    "16",
+    "--reduced-reference-branch-reuse",
+    "--reduced-prefer-verified-linear"
+  ],
+  "pid": 134855,
+  "watcher_pid": 134856,
+  "thread_limits": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "ranks": 1,
+  "reserved_auxiliary_threads": 6,
+  "observed_numerical_processes": [
+    [
+      111503,
+      3
+    ],
+    [
+      113895,
+      3
+    ],
+    [
+      117253,
+      3
+    ],
+    [
+      120954,
+      3
+    ],
+    [
+      123552,
+      3
+    ],
+    [
+      125301,
+      3
+    ],
+    [
+      126111,
+      3
+    ],
+    [
+      126478,
+      3
+    ],
+    [
+      130030,
+      3
+    ],
+    [
+      130718,
+      3
+    ],
+    [
+      133200,
+      3
+    ],
+    [
+      134692,
+      3
+    ],
+    [
+      134847,
+      3
+    ]
+  ],
+  "conservative_MPI_threads_before_launch": 39,
+  "trigger": {
+    "bitwise_checked_samples": 3,
+    "original_full_residual": 41.42039202067207,
+    "qualified": true,
+    "direction_refreshes": 6
+  }
+}
