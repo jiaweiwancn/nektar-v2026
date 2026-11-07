@@ -422,7 +422,7 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3
     auto chiRow=[&](const Coordinate &chart,const ProfileDerivative &base)->Sparse
     {
         Sparse result;
-        if(m_parameters.chi==0 || WallCoordinate(chart)>=m_transition.end)return result;
+        if(m_uniformEP || m_parameters.chi==0 || WallCoordinate(chart)>=m_transition.end)return result;
         const auto input=TransitionInput(s,chart,time,data);
         if(input.budgetMargin<=m_transition.state.marginOff || input.reynolds<=m_transition.state.reynoldsOff)return result;
         auto H=chart;H[2]=m_parameters.geometry.height;auto a=H,b=H,sample=H;

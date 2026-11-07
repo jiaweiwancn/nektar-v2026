@@ -299,8 +299,10 @@ int main(int argc,char **argv)
             }
             Require(error<1e-11 && rowError<1e-12,"representative K polynomial/row verification failed");
             const auto domain=patch.ScalarDomain(polynomial,0,data,true,true);int means=0;
+            Require(domain.admissible,"polynomial sampler fixture left scalar domain");
             if(patch.ColumnAverageK())for(const auto &o:domain.observations)if(o.inventory=="physical_sampled_K")
             {Require(o.functional && o.functional->columnAverage,"mean observation lost its row");++means;}
+            Require(!patch.ColumnAverageK() || means>0,"mean observations were not exercised");
             auto negative=reference;const auto k=patch.fields[patch.K()]->Project([&](const RANSWallCoordinate &x){return -.1+2*x[2]/H;});
             std::copy(k.begin(),k.end(),negative.begin()+patch.offset[patch.K()]);
             const double mean=patch.SampleK(negative,{-1,0,0});const auto bad=patch.ScalarDomain(negative,0,data,true,true);
