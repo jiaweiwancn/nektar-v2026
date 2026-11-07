@@ -1,0 +1,59 @@
+{
+  "scope": "Mac input preparation and bounded-parameter guards only, not native numerical validation",
+  "utc": "2026-11-07T02:31:17.735317+00:00",
+  "producing_code_commit": "4f3f7684360387e50cb7957244fc4b838de15ecd",
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "/private/tmp/nektar-picard-r3/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py",
+        "--prepare-only",
+        "--reduced",
+        "--reduced-response-reuse-updates",
+        "2",
+        "--reduced-reference-branch-reuse",
+        "--reduced-directional-refresh-updates",
+        "16",
+        "--output",
+        "/private/tmp/picard-r3-protected-expansion-input-16"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "python3",
+        "/private/tmp/nektar-picard-r3/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py",
+        "--prepare-only",
+        "--reduced",
+        "--reduced-response-reuse-updates",
+        "2",
+        "--reduced-reference-branch-reuse",
+        "--reduced-directional-refresh-updates",
+        "17",
+        "--output",
+        "/private/tmp/picard-r3-protected-expansion-input-17"
+      ],
+      "exit_code": 1,
+      "output": "Traceback (most recent call last):\n  File \"/private/tmp/nektar-picard-r3/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py\", line 345, in <module>\n    raise SystemExit(main())\n  File \"/private/tmp/nektar-picard-r3/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py\", line 230, in main\n    require(0 <= args.reduced_directional_refresh_updates <= 16 and\n  File \"/private/tmp/nektar-picard-r3/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py\", line 30, in require\n    raise ValueError(message)\nValueError: direction-action refresh requires response reuse and a budget from zero to sixteen\n"
+    },
+    {
+      "command": [
+        "python3",
+        "/private/tmp/nektar-picard-r3/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py",
+        "--prepare-only",
+        "--reduced",
+        "--reduced-response-reuse-updates",
+        "2",
+        "--reduced-reference-branch-reuse",
+        "--reduced-directional-refresh-updates",
+        "-1",
+        "--output",
+        "/private/tmp/picard-r3-protected-expansion-input--1"
+      ],
+      "exit_code": 1,
+      "output": "Traceback (most recent call last):\n  File \"/private/tmp/nektar-picard-r3/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py\", line 345, in <module>\n    raise SystemExit(main())\n  File \"/private/tmp/nektar-picard-r3/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py\", line 230, in main\n    require(0 <= args.reduced_directional_refresh_updates <= 16 and\n  File \"/private/tmp/nektar-picard-r3/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py\", line 30, in require\n    raise ValueError(message)\nValueError: direction-action refresh requires response reuse and a budget from zero to sixteen\n"
+    }
+  ],
+  "status": "passed_input_preparation_only"
+}

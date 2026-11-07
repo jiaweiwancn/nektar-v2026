@@ -34,6 +34,29 @@ preserves accepted state and every physical-history slot. This supersedes the
 collection; numerical updates are not physical steps.
 [Completed original-start readback and rejection evidence](cls-epawf-segregated-picard-r3-evidence/native/followup-completed-review.json).
 
+The two-update full504 saved-guess control has also completed. Its second
+correction gives **3.8960677838 → 3.8070368229**, with final source-model
+prediction **3.8026839056** and actual/predicted squared-merit gain **0.953926**.
+Actual displacement **0.38922814** stays within radius **0.4**; one nonlinear
+qualification correction is used. The predicted merit slope **-0.5591267**
+agrees with actual two-size slopes **-0.5591527/-0.5591530**. The final ground
+minimum is **1.37308e-8**, gradient departure **0.0009999999899** with witness
+at x=-1, and epsilon lower ratio **0.9808261426**. Complete qualification passes.
+All **2,033** H evaluations converge (12,647 sequential flow and epsilon solves
+each); the independent process reproduces all original norm bits, exercises
+the negative-ground guard, and verifies zero-step accepted-state/history
+preservation. Native target time is **19,171.78s**. This diagnostic retains the
+original physical history and operator and does not replace original-h0
+validation or accept a physical step.
+
+At its 3.89607 base the fresh rank-504 gradient norm is **588.305**, with
+near-active cone defect **566.594** versus empirical two-size uncertainty
+**3.490**. Together with the verified actual reduction, this excludes using
+that tested model as evidence of local stationarity. It proves neither a
+qualifying root nor global feasibility.
+[Completed full-space history and independent audit](cls-epawf-segregated-picard-r3-evidence/native/followup-completed-review.json),
+[fresh reduced first-order audit at 3.89607](cls-epawf-segregated-picard-r3-evidence/native/first-order-qualified-full504-latest-9f-iteration1.json).
+
 The first e9bbda5 reference-bridge attempt exposes a concrete direction-model
 defect at original-start numerical point two (residual **49.2816311106**).
 Independent same-k H solves converge near 1e-12 and agree, and two-size
@@ -82,6 +105,33 @@ current-base measurements, retained-action checks, and an accepted qualified
 original-start correction selected with those responses. Native outcomes are
 pending; passing the helper is not a convergence result.
 [Exact native commands and allocation](cls-epawf-segregated-picard-r3-evidence/native/protected-actions-native-launch.json).
+
+The four-measurement native attempt subsequently confirms preservation but
+does not yet pass the current observation-response gate. After four protected
+refreshes its residual-model error is **0.02188194** (limit 0.03) and maximum
+individual bound-scaled observation error **0.14156314** (limit 0.1), compared
+with the unprotected residual/observation errors **0.449015/2.98716**. All
+earlier residual actions remain within **2.15e-15**, and field/trace actions
+within **6.38e-11**; two-size action uncertainty is **7.73e-7**. The guard
+correctly rebuilds fresh responses rather than accepting the incomplete model.
+Thus action interference was real, but its repair alone does not make four
+current measurements sufficient for this 96-dimensional model.
+
+Commit `4f3f7684360387e50cb7957244fc4b838de15ecd` allows an explicitly bounded
+budget of up to sixteen protected measurements, still default Off. It changes
+neither error limits nor the original physical target, qualification, rank,
+signal, continuous-ground, radius, or failed-response safeguards. The protocol
+records the new ceiling; legacy zero-to-four controls remain reproducible.
+Mac input preparation accepts sixteen and rejects seventeen/negative budgets;
+these are input checks, not numerical validation. A fresh matched original-h0
+native rerun requests sixteen measurements with the same original fixture.
+The four-worker build passes in **66.60s** and all six focused CTests pass in
+**39.27s**, with test concurrency one. Independent hashes confirm that the
+helper and known-answer test are identical to their passing ff1c4fc sanitizer
+versions. Native outcomes remain pending.
+[Input preparation and range guards](cls-epawf-segregated-picard-r3-evidence/native/protected-expansion-input-checks.json),
+[producing build and reused sanitizer provenance](cls-epawf-segregated-picard-r3-evidence/native/build-validation-4f3f768.json),
+[matched original-h0 commands and allocation](cls-epawf-segregated-picard-r3-evidence/native/protected-expansion-native-launch.json).
 
 The source-stencil recovery also now has independently read original-start
 evidence: at numerical update five, five columns require eleven stencil
@@ -133,7 +183,16 @@ numerical settings except this switch. The native branch-use test requires an
 actually accepted qualified original-residual reduction using the bridged
 direction, independent same-k/current-branch checks, unchanged numerical prefix
 and fresh endpoint readback. Its name is
-`check_cls_epawf_reference_branch_reuse.py`; native outcomes remain pending.
+`check_cls_epawf_reference_branch_reuse.py`.
+The completed e9bbda5 comparison subsequently reaches qualified residuals
+**41.1742337091** (control) and **41.6130755891** (enabled) after three numerical
+updates. Both original readbacks are exact, all controlled H evaluations
+converge, and failed-stage accepted state/history remain unchanged at zero
+physical steps. The enabled run discards its inaccurate historical model and
+uses a fresh direction. Its focused **actual bridged-use assertion fails**;
+generic operator checks passing is not counted as successful feature use.
+The protected-action rerun above addresses the measured interference.
+[Preserved failed feature receipt and reason](cls-epawf-segregated-picard-r3-evidence/native/reference-branch-failed-use-check.json).
 The longer original-start and complete-space attempts continue independently.
 [Producing build, flags and identities](cls-epawf-segregated-picard-r3-evidence/native/build-validation-e9bbda5.json),
 [matched original-start commands and allocation](cls-epawf-segregated-picard-r3-evidence/native/reference-branch-native-launch.json),

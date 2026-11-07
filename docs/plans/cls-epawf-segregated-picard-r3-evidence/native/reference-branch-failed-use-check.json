@@ -1,0 +1,16 @@
+{
+  "command": [
+    "python3",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-source/solvers/IncNavierStokesSolver/Tests/RANS/check_cls_epawf_reference_branch_reuse.py",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/reference-branch-enabled",
+    "--control",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/reference-branch-control"
+  ],
+  "exit_code": 1,
+  "seconds": 0.5666850970010273,
+  "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/reference-branch-comparison.log",
+  "log_sha256": "ada6e862b7d823efe7ab53dd446e6bc06217c77c8ba8ee58efa455069b86a632",
+  "utc": "2026-11-07T02:00:31.617993+00:00",
+  "scope": "Intentionally retained failed feature assertion: original-start run converged no physical stage and accepted no direction using the bridged historical model; generic operator/readback/rejection checks passed separately",
+  "failure_tail": "Traceback (most recent call last):\n  File \"/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-source/solvers/IncNavierStokesSolver/Tests/RANS/check_cls_epawf_reference_branch_reuse.py\", line 84, in <module>\n    main()\n  File \"/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-source/solvers/IncNavierStokesSolver/Tests/RANS/check_cls_epawf_reference_branch_reuse.py\", line 49, in main\n    require(used, \"no current-branch checked historical direction produced an actual original-start correction\")\n  File \"/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-source/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py\", line 30, in require\n    raise ValueError(message)\nValueError: no current-branch checked historical direction produced an actual original-start correction\n"
+}

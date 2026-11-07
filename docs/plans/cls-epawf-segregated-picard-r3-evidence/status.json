@@ -1,6 +1,6 @@
 {
   "status": "native_development_in_progress_original_m8_unresolved",
-  "producing_code_commit": "ff1c4fc5ac2ce75279f821dd944dcd8a97648bbc",
+  "producing_code_commit": "4f3f7684360387e50cb7957244fc4b838de15ecd",
   "native_m8": {
     "status": "Completed original-h0 twelve-update control reaches13.462175000498513 with full qualification but no first-stage convergence; protected current-action original-start comparisons continue",
     "qualified_first_stage": false,
@@ -10,7 +10,7 @@
     "original_alpha": 400,
     "time_target": 0.0025,
     "original_tolerance": 2e-12,
-    "progress_utc": "2026-11-06T20:35:43.934762+00:00",
+    "progress_utc": "2026-11-07T02:02:17.481997+00:00",
     "original_start_completed_evidence": "native/followup-completed-review.json",
     "original_start_result": {
       "numerical_updates": 12,
@@ -63,7 +63,9 @@
       "reference-branch-enabled",
       "reference-branch-control",
       "protected-actions-control",
-      "protected-actions-enabled"
+      "protected-actions-enabled",
+      "protected-expansion-control",
+      "protected-expansion-enabled"
     ],
     "incomplete_original_start_followup": {
       "case": "response-cache-original-3step",
@@ -131,7 +133,8 @@
       "algebraic_root": false,
       "accepted_state_and_history_preserved": true,
       "independent_norm_difference": 0
-    }
+    },
+    "progress_utc_scope": "Compact evidence review time; producing native commands and original stage target are retained in the linked cases"
   },
   "checks": {
     "linux_native_pressure_verification": "0926974 bounds assertions and two-sweep bitwise On/Off passed; unchanged Picard translation unit through7715312",
@@ -363,17 +366,16 @@
     }
   ],
   "best_audited_development_checkpoint": {
-    "full_residual": 3.9946700988643817,
-    "gradient_departure": 0.0009999990248706903,
-    "minimum_outer_epsilon_ratio": 0.9828517012097211,
-    "ground_minimum": 1.6971737288524383e-06,
-    "producing_code_commit": "fa5ac96b5b396a759002a104d2c0d7cf88bb6b3b",
-    "independent_probe_code_commit": "7ba50d302cad7e7c0f676879a51029a4fcdc5416",
-    "audit": "native/response-chord-native-launch.json#initial_audit",
+    "full_residual": 3.8070368228505718,
+    "gradient_departure": 0.0009999999899271694,
+    "minimum_outer_epsilon_ratio": 0.9808261425567018,
+    "ground_minimum": 1.3730754735975427e-08,
+    "producing_code_commit": "9f65eedf2b59429ce3c04de0672064ad459baceb",
+    "audit": "native/followup-completed-review.json#qualified-full504-latest-9f",
     "original_norm_vector_bitwise_reproduced": true,
     "physical_acceptance_inferred": false,
     "algebraic_root": false,
-    "scope": "Fresh original residual and complete qualification of the sixth in-flight numerical update; no final native history receipt or physical acceptance."
+    "scope": "Completed diagnostic two-update saved-guess native search with original history; full original readback and zero-step physical-history receipt"
   },
   "source_precision_code_commit": "fd8c0344bbbe3ea4a180df7358d0235ee8b675a4",
   "source_precision_validation": {
@@ -412,6 +414,19 @@
       "physical_acceptance_inferred": false,
       "algebraic_root": false,
       "scope": "Fresh original residual and full constitutive audit of an in-flight numerical checkpoint; no physical acceptance or final native history receipt inferred"
+    },
+    {
+      "full_residual": 3.9946700988643817,
+      "gradient_departure": 0.0009999990248706903,
+      "minimum_outer_epsilon_ratio": 0.9828517012097211,
+      "ground_minimum": 1.6971737288524383e-06,
+      "producing_code_commit": "fa5ac96b5b396a759002a104d2c0d7cf88bb6b3b",
+      "independent_probe_code_commit": "7ba50d302cad7e7c0f676879a51029a4fcdc5416",
+      "audit": "native/response-chord-native-launch.json#initial_audit",
+      "original_norm_vector_bitwise_reproduced": true,
+      "physical_acceptance_inferred": false,
+      "algebraic_root": false,
+      "scope": "Fresh original residual and complete qualification of the sixth in-flight numerical update; no final native history receipt or physical acceptance."
     }
   ],
   "full_space_qualified_5p182_first_order": {
@@ -576,13 +591,22 @@
     },
     "reference_branch_reuse": {
       "code": "e9bbda5382ee45bc69739b8649493330b38b82a7",
-      "status": "first_historical_attempt_rejected_current_action_checks_and_rebuilt_fresh; native_three_update_runs_continuing",
+      "status": "failed_actual_bridged_use_check_not_m8_convergence; inaccurate historical action discarded and fresh trials completed",
       "build_passed": true,
       "focused_ctests_passed": 6,
       "diagnosis": "Literal E/M reference-weight changes discard otherwise usable response history in the early original-start prefix; no baseline/cap changes observed there",
       "policy": "Opt-in finite endpoint E/M history bridge only, current-branch direction checks and an independent identical-k non-k solve required before larger trials",
       "diagnostic_evidence": "native/original-start-reference-switches.json",
-      "native_launch": "native/reference-branch-native-launch.json"
+      "native_launch": "native/reference-branch-native-launch.json",
+      "receipt": "native/reference-branch-failed-use-check.json",
+      "completed_endpoints": {
+        "control": 41.17423370912804,
+        "enabled": 41.61307558909514
+      },
+      "qualified": true,
+      "accepted_physical_steps": 0,
+      "physical_history_preserved": true,
+      "original_readbacks_exact": true
     },
     "corrected_verification_repeat": {
       "code": "7300df33eb5130415a6d615f0e61c49ef1aa3871",
@@ -607,29 +631,70 @@
     },
     "protected_current_actions": {
       "code": "ff1c4fc5ac2ce75279f821dd944dcd8a97648bbc",
-      "native_checker_commit": "46b8a24",
+      "native_checker_commit": "cd5e5fc",
       "build_passed": true,
       "focused_ctests_passed": 6,
       "standalone_asan_ubsan_passed": true,
-      "status": "running_matched_original_start_three_update_tests",
+      "status": "four_measurements_preserve_actions_but_fail_observation_accuracy; expanded_budget_native_rerun_pending",
       "diagnostic": "Accurate non-k solves and two-size actions; unprotected rank-one current-action refreshes overwrite correlated earlier measurements",
       "diagnostic_evidence": "native/current-direction-interference.json",
       "native_launch": "native/protected-actions-native-launch.json",
       "build": "native/build-validation-ff1c4fc.json",
-      "scope": "No M8 convergence inferred from helper or direction interpolation checks"
+      "scope": "No M8 convergence inferred from helper or direction interpolation checks",
+      "four_measurement_residual_model_error": 0.02188194194943436,
+      "four_measurement_observation_model_error": 0.1415631394674602,
+      "preserved_residual_defect": 2.1481380127022748e-15,
+      "preserved_state_defect": 6.375528292290968e-11
+    },
+    "expanded_protected_budget": {
+      "code": "4f3f7684360387e50cb7957244fc4b838de15ecd",
+      "maximum_budget": 16,
+      "default_budget": 0,
+      "all_original_accuracy_and_acceptance_limits_unchanged": true,
+      "input_checks": "native/protected-expansion-input-checks.json",
+      "status": "build_and_six_ctests_passed; matched_original_h0_native_tests_running",
+      "build": "native/build-validation-4f3f768.json",
+      "native_launch": "native/protected-expansion-native-launch.json",
+      "build_seconds": 66.59712394600501,
+      "focused_ctests_passed": 6,
+      "ctest_seconds": 39.26926010099123,
+      "sanitizer_scope": "Exact unchanged helper and unit test reuse independently hashed ff1c4fc standalone ASan/UBSan evidence"
     }
   },
   "latest_diagnostic_correction": {
-    "scope": "Completed first numerical correction only at a saved original-stage diagnostic guess; independent original-equation/qualification audit. The two-update native search continues and this checkpoint is not physical acceptance or a complete history receipt.",
+    "scope": "Completed second full504 numerical correction and complete native zero-step original-history receipt from a saved nonlinear guess; not original-h0 success or physical acceptance",
     "code": "9f65eedf2b59429ce3c04de0672064ad459baceb",
-    "from_original_residual": 4.11827876540024,
-    "to_original_residual": 3.8960677838217963,
+    "from_original_residual": 3.8960677838217963,
+    "to_original_residual": 3.8070368228505718,
+    "predicted_original_norm": 3.8026839056392387,
+    "actual_to_predicted_merit_gain": 0.9539258950002966,
     "fresh_original_norms_bitwise_identical": true,
-    "ground_minimum": 6.674520211230873e-07,
-    "gradient_departure": 0.0009999987965951807,
-    "minimum_epsilon_ratio": 0.9819776987880399,
+    "ground_minimum": 1.3730754735975427e-08,
+    "gradient_departure": 0.0009999999899271694,
+    "minimum_epsilon_ratio": 0.9808261425567018,
     "qualified": true,
     "physical_acceptance_inferred": false,
-    "evidence": "native/qualified-full504-latest-9f-iteration0-review.json"
-  }
+    "accepted_state_and_history_preserved": true,
+    "controlled_H_evaluations": 2033,
+    "all_H_converged": true,
+    "actual_displacement": 0.3892281429322921,
+    "radius": 0.4,
+    "evidence": "native/followup-completed-review.json",
+    "fresh_first_order_audit": "native/first-order-qualified-full504-latest-9f-iteration1.json"
+  },
+  "latest_diagnostic_correction_history": [
+    {
+      "scope": "Completed first numerical correction only at a saved original-stage diagnostic guess; independent original-equation/qualification audit. The two-update native search continues and this checkpoint is not physical acceptance or a complete history receipt.",
+      "code": "9f65eedf2b59429ce3c04de0672064ad459baceb",
+      "from_original_residual": 4.11827876540024,
+      "to_original_residual": 3.8960677838217963,
+      "fresh_original_norms_bitwise_identical": true,
+      "ground_minimum": 6.674520211230873e-07,
+      "gradient_departure": 0.0009999987965951807,
+      "minimum_epsilon_ratio": 0.9819776987880399,
+      "qualified": true,
+      "physical_acceptance_inferred": false,
+      "evidence": "native/qualified-full504-latest-9f-iteration0-review.json"
+    }
+  ]
 }
