@@ -102,7 +102,7 @@ RANSWallEvolutionPatch::KBoundResult RANSWallEvolutionPatch::ApplyPimpleKBound(
         inventorySeconds+=std::chrono::duration<double>(Clock::now()-beforeStart).count();
         if(!projectionOnly)Require(before.admissible,"k-bound pre-k state is inadmissible: "+before.failure);
         for(const auto &p:before.observations)if(p.block==K() && p.inventory.find("normalization_ray")!=std::string::npos)
-            points.push_back({Point(K(),p.coordinate,p.side),p.inventory+":pre_k"});
+            points.push_back({(p.functional?*p.functional:Point(K(),p.coordinate,p.side)),p.inventory+":pre_k"});
         rawMinimum=evaluate(raw,rawWitness);
         for(int separation=0;separation<m_kBoundMaxSeparations;++separation)
         {
@@ -127,11 +127,11 @@ RANSWallEvolutionPatch::KBoundResult RANSWallEvolutionPatch::ApplyPimpleKBound(
                 {
                     bool movingViolation=false;
                     for(const auto &p:domain.observations)if(p.block==K() && p.value<threshold)
-                    {cut={Point(K(),p.coordinate,p.side),p.inventory+":moving"};movingViolation=true;break;}
+                    {cut={(p.functional?*p.functional:Point(K(),p.coordinate,p.side)),p.inventory+":moving"};movingViolation=true;break;}
                     if(!movingViolation)
                     {
                         for(const auto &p:domain.observations)if(p.block==K() && p.value<correctedMinimum)
-                        {correctedMinimum=p.value;correctedWitness={Point(K(),p.coordinate,p.side),p.inventory};}
+                        {correctedMinimum=p.value;correctedWitness={(p.functional?*p.functional:Point(K(),p.coordinate,p.side)),p.inventory};}
                         if(ConstitutiveKInventory())
                         {
                             const auto fullStart=Clock::now();const auto full=ScalarDomain(result.state,time,data,false,false,retainedAnchors);
@@ -142,7 +142,7 @@ RANSWallEvolutionPatch::KBoundResult RANSWallEvolutionPatch::ApplyPimpleKBound(
                     }
                 }
                 else if(domain.failure=="negative_inner_k" || domain.failure=="nonpositive_K_or_outer_k")
-                    cut={Point(K(),domain.limitingPoint),domain.limitingInventory+":moving"};
+                    cut={(domain.limitingFunctional?*domain.limitingFunctional:Point(K(),domain.limitingPoint)),domain.limitingInventory+":moving"};
                 else {result.failure="k_bound_non_k_domain_exit: "+domain.phase+": "+domain.failure;break;}
                 if(!ConstitutiveKInventory())points.push_back(cut);
             }
@@ -275,7 +275,10 @@ RANSWallEvolutionPatch::KBoundResult RANSWallEvolutionPatch::ApplyPimpleKBound(
     std::vector<std::pair<std::string,std::string>> counts,cuts;
     for(auto [name,count]:familyCounts)counts.push_back({name,J::Number(count)});
     for(auto [name,count]:discovered)cuts.push_back({name,J::Number(count)});
-    result.report=J::Object({{"mode",J::Quote(m_pimpleKBound)},{"algorithm",J::Quote(ConstitutiveKInventory()?"MassQR-ConstitutiveV2":"MassQR-v1")},
+    std::string bands="null";
+    if(HeightComparisonEnabled() && result.success)
+    {Vector full(raw.size());for(int i=0;i<full.size();++i)full[i]=result.state[i]-raw[i];bands=PhysicalKBands(result.state,time,data,&full);}
+    result.report=J::Object({{"physical_bands",bands},{"mode",J::Quote(m_pimpleKBound)},{"algorithm",J::Quote(ConstitutiveKInventory()?"MassQR-ConstitutiveV2":"MassQR-v1")},
         {"inventory_policy",J::Quote(m_pimpleKInventory)},{"projection_only",J::Boolean(projectionOnly)},
         {"work_controls",PimpleKBoundControls()},{"telemetry_schema","1"},
         {"separation_passes",J::Number(separations)},{"inventory_rebuilds",J::Number(inventoryRebuilds)},

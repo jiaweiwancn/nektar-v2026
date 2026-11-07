@@ -132,12 +132,14 @@ public:
         int block=0,geometry=-1,side=0;
         double value=0,scale=1,weight=0;
         bool strict=false,dependentTrace=false;
+        std::shared_ptr<RANSWallGlobalPoint> functional;
     };
     struct ScalarDomainResult
     {
         bool admissible=false;
         std::string phase,failure,limitingInventory,profileBranches;
         RANSWallCoordinate limitingPoint{};
+        std::shared_ptr<RANSWallGlobalPoint> limitingFunctional;
         double minimumMargin=1e300,minimumInnerK=1e300,minimumOuterK=1e300,
             minimumOuterEpsilon=1e300,minimumSampledK=1e300,minimumTraceEpsilon=1e300,
             minimumB=1,minimumLambda=1,minimumCutoff=1e300,maximumCutoff=-1e300;
@@ -221,6 +223,13 @@ public:
     double AnchorEnergyWork(const Vector &state) const;
     std::vector<int> CondensableVelocity(const std::map<int,double> &constraints) const;
     double SampleK(const Vector &state,const RANSWallCoordinate &point) const;
+    bool ColumnAverageK() const {return m_kSampling=="ColumnAverage";}
+    bool HeightComparisonEnabled() const {return m_heightComparison;}
+    RANSWallGlobalPoint SampleKRow(const RANSWallCoordinate &anchor) const;
+    std::string HeightComparison(const Vector &state,const Vector &history,double time,
+        const RANSWallEvolutionData &data) const;
+    std::string PhysicalKBands(const Vector &state,double time,const RANSWallEvolutionData &data,
+        const Vector *correction=nullptr) const;
     std::array<double,2> Forcing(const Vector &state,const RANSWallCoordinate &point,double time,
         const RANSWallEvolutionData &data,bool includeBody=true) const;
     std::array<double,3> CartesianForcing(const Vector &state,const RANSWallCoordinate &point,double time,
@@ -384,6 +393,10 @@ private:
     };
     mutable bool m_assertKCoverage=false;
     mutable std::set<RANSWallCoordinate> m_coveredKLocations;
+    mutable std::set<RANSWallCoordinate> m_coveredKFunctionals;
+    std::string m_kSampling="Point";
+    bool m_heightComparison=false;
+    mutable std::map<RANSWallCoordinate,RANSWallGlobalPoint> m_kSamplingRows;
     Vector SolveScalarFeasible(Vector state,const Vector &history,double alpha,
         double time,const RANSWallEvolutionData &data,bool condensed,int &iterations,
         double tolerance,int maximumIterations,bool scalarOnly=false) const;

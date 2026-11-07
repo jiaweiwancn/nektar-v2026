@@ -96,6 +96,9 @@ public:
     const AnalyticalWallFunction &Original() const { return m_original; }
     const AWFProfileReference &Reference() const { return m_reference; }
     const std::vector<AWFProfileQuadraturePoint> &Quadrature() const { return m_quadrature; }
+    // Read-only integration panels, retaining this profile's solved cutoff.
+    std::vector<AWFProfileQuadraturePoint> IntegrationQuadrature(double upper,
+        const std::vector<double> &additionalBreakpoints={}) const;
     double K() const { return m_original.K(); }
     double Production(double r, const AWFVector &velocity, const AWFVector &forcing) const;
     double ReferenceProduction(double r) const;

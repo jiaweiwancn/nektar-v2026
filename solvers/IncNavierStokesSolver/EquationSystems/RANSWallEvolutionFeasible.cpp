@@ -188,7 +188,7 @@ void RANSWallEvolutionPatch::InitialiseScalarLocations() const
         p[2]=m_parameters.geometry.height;
         pair("physical_matching_transfer",Point(K(),p,1),false,1);
         p[2]=m_parameters.geometry.sampleHeight/scale;
-        add("physical_sampled_K",Point(K(),p,Same(p[2],m_parameters.geometry.height)?-1:0),K(),true);
+        add("physical_sampled_K",SampleKRow(p),K(),true);
         if(m_transitionEnabled)for(double r:{m_sensorA,m_sensorB})
         {
             p[2]=r/scale;pair("physical_sensor_transfer",Point(K(),p),false);
@@ -207,7 +207,8 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::ScalarDomain(
                    const Vector &values,int side=0,bool dependent=false,double weight=0.)
     {
         const double value=q.Value(values,offset[block]);
-        if(ConstitutiveKInventory() && block==K())m_coveredKLocations.insert(q.coordinate);
+        if(ConstitutiveKInventory() && block==K())
+        {if(q.columnAverage){auto a=q.coordinate;a[2]=0;m_coveredKFunctionals.insert(a);}else m_coveredKLocations.insert(q.coordinate);}
         const double scale=block==K()?K0:E0*m_parameters.geometry.height/Distance(q.coordinate);
         const double margin=value/scale;++result.counts[name];
         if(block==K())
@@ -220,13 +221,14 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::ScalarDomain(
         else if(dependent)result.minimumTraceEpsilon=std::min(result.minimumTraceEpsilon,value);
         else result.minimumOuterEpsilon=std::min(result.minimumOuterEpsilon,value);
         if(margin<result.minimumMargin || !std::isfinite(value))
-        {result.minimumMargin=margin;result.limitingPoint=q.coordinate;result.limitingInventory=name;}
-        if(retain)result.observations.push_back({name,q.coordinate,block,q.geometry,side,value,scale,weight,strict,dependent});
+        {result.minimumMargin=margin;result.limitingPoint=q.coordinate;result.limitingInventory=name;result.limitingFunctional=q.columnAverage?std::make_shared<RANSWallGlobalPoint>(q):nullptr;}
+        if(retain)result.observations.push_back({name,q.coordinate,block,q.geometry,side,value,scale,weight,strict,dependent,
+            q.columnAverage?std::make_shared<RANSWallGlobalPoint>(q):nullptr});
         if(!std::isfinite(value) || (strict?value<=0:value<0))
         {
             result.failure=ConstitutiveKInventory() && !std::isfinite(value)?"nonfinite_physical_evaluation":
                 block==K()?(strict?"nonpositive_K_or_outer_k":"negative_inner_k"):"nonpositive_epsilon";
-            result.limitingPoint=q.coordinate;result.limitingInventory=name;return false;
+            result.limitingPoint=q.coordinate;result.limitingInventory=name;result.limitingFunctional=q.columnAverage?std::make_shared<RANSWallGlobalPoint>(q):nullptr;return false;
         }
         return true;
     };
@@ -235,7 +237,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::ScalarDomain(
         Require(state.size()==static_cast<std::size_t>(Size()),"scalar-domain state size differs");
         for(double value:state)if(!std::isfinite(value)){result.failure="nonfinite_coefficient";return result;}
         InitialiseScalarLocations();
-        if(ConstitutiveKInventory())m_coveredKLocations.clear();
+        if(ConstitutiveKInventory()){m_coveredKLocations.clear();m_coveredKFunctionals.clear();}
         result.effectiveState=ExternalLift(state,time,data);result.phase="fixed_fields_and_samplers";
         for(const auto &point:m_scalarLocations)
             if(!check(point.inventory,point.row,point.block,point.strict,result.effectiveState,point.side))return result;
@@ -279,7 +281,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::ScalarDomain(
             {
                 const double scale=m_mapping.At(p).scale;
                 p[2]=m_parameters.geometry.sampleHeight/scale;
-                if(!check("physical_sampled_K",Point(K(),p),K(),true,result.effectiveState))return result;
+                if(!check("physical_sampled_K",SampleKRow(p),K(),true,result.effectiveState))return result;
                 p[2]=m_parameters.geometry.height;
                 if(!check("constitutive_matching_K",Point(K(),p,1),K(),true,result.effectiveState,1))return result;
                 if(m_transitionEnabled)for(double r:{m_sensorA,m_sensorB})

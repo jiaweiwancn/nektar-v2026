@@ -305,6 +305,13 @@ std::vector<AWFProfileQuadraturePoint> EquilibriumAWFProfiles::MakeQuadrature(
     }
     return result;
 }
+std::vector<AWFProfileQuadraturePoint> EquilibriumAWFProfiles::IntegrationQuadrature(
+    double upper,const std::vector<double> &additional) const
+{
+    auto copy=*this;
+    for(double z:additional){Finite(z);if(z>0 && z<m_geometry.height)copy.m_options.physicalBreakpoints.push_back(z);}
+    return copy.MakeQuadrature(upper,m_reference.weight>0?m_reference.cutoff:0.);
+}
 double EquilibriumAWFProfiles::Integrate(const std::function<double(double)> &f,
     double upper, double cutoff) const
 {

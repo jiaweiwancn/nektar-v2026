@@ -176,6 +176,15 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     Require((m_dimension==2 || m_dimension==3) && session->GetComm()->GetSize()==1,
             "evolution requires a full serial native mesh on each collective rank");
     parameters.geometry.Validate();m_mapping.dimension=m_dimension;m_mapping.height=parameters.geometry.height;
+    session->LoadSolverInfo("RANSWallKSampling",m_kSampling,"Point");
+    std::string comparison;session->LoadSolverInfo("RANSWallComparison",comparison,"Off");
+    Require(comparison=="Off" || comparison=="HeightV1","unknown height comparison family");m_heightComparison=comparison=="HeightV1";
+    Require(m_kSampling=="Point" || m_kSampling=="ColumnAverage","unknown representative K functional");
+    if(ColumnAverageK())
+    {
+        Require(m_dimension==2 && !Mapped() && m_comm->GetSize()==1,"ColumnAverage K is a serial flat2D pilot");
+        m_parameters.geometry.sampleHeight=parameters.geometry.height/2; // unused internal geometry placeholder
+    }
     std::string solveDiagnostics,solveReplay,solveIterations;
     session->LoadSolverInfo("RANSWallSolveDiagnostics",solveDiagnostics,"Off");
     session->LoadSolverInfo("RANSWallSolveDiagnosticReplay",solveReplay,"Off");
@@ -436,7 +445,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         if(m_dimension==3)ray.weight*=w[j]*(column[3]-column[2])/2;
         ray.coordinate[2]=parameters.geometry.sampleHeight/m_mapping.At(ray.coordinate).scale;
         ray.weight*=m_mapping.At(ray.coordinate).baseArea;
-        ray.sample=Point(K(),ray.coordinate,Same(ray.coordinate[2],parameters.geometry.height)?-1:0);
+        ray.sample=SampleKRow(ray.coordinate);
         auto H=ray.coordinate;H[2]=parameters.geometry.height;
         ray.outerV=Point(0,H,1);ray.outerP=Point(OuterPressure(),H,1);ray.outerK=Point(K(),H,1);
         m_rays.push_back(std::move(ray));
@@ -476,8 +485,47 @@ std::shared_ptr<EquilibriumAWFProfiles> RANSWallEvolutionPatch::Profile(double k
     return std::make_shared<EquilibriumAWFProfiles>(entry[1]->Reweighted(weight));
 }
 void RANSWallEvolutionPatch::Broadcast(Vector &value) const {m_comm->Bcast(value,0);}
+RANSWallGlobalPoint RANSWallEvolutionPatch::SampleKRow(const RANSWallCoordinate &point) const
+{
+    if(!ColumnAverageK())
+    {auto p=point;p[2]=m_parameters.geometry.sampleHeight/m_mapping.At(point).scale;return Point(K(),p,Same(p[2],m_parameters.geometry.height)?-1:0);}
+    auto anchor=point;anchor[2]=0;
+    const auto old=m_kSamplingRows.find(anchor);if(old!=m_kSamplingRows.end())return old->second;
+    const double H=m_parameters.geometry.height;
+    std::set<double> panels{0,H};for(const auto &e:fields[K()]->Elements())
+        for(double z:{e.lower[2],e.upper[2]})if(z>0 && z<H)panels.insert(z);
+    const auto rule=LibUtilities::PointsManager()[LibUtilities::PointsKey(8,LibUtilities::eGaussGaussLegendre)];
+    const auto x=rule->GetZ(),w=rule->GetW();
+    std::map<int,std::array<long double,2>> values;
+    for(auto next=std::next(panels.begin());next!=panels.end();++next)
+    {
+        const double a=*std::prev(next),b=*next;
+        for(int j=0;j<8;++j)
+        {
+            auto p=anchor;p[2]=a+(x[j]+1)*(b-a)/2;const auto row=Point(K(),p);
+            for(int k=0;k<row.ids.size();++k)
+            {auto &v=values[row.ids[k]];v[0]+=(long double)w[j]*(b-a)/(2*H)*row.phi[k];v[1]+=(long double)w[j]*(b-a)/(2*H)*row.derivative[0][k];}
+        }
+    }
+    RANSWallGlobalPoint row;row.coordinate=anchor;row.coordinate[2]=H/2;row.columnAverage=true;
+    for(auto [id,v]:values)
+    {row.ids.push_back(id);row.phi.push_back(v[0]);row.constant.push_back(m_constants[K()][id]);row.derivative[0].push_back(v[1]);}
+    for(int axis:{1,2})row.derivative[axis].assign(row.ids.size(),0.);
+    Require(!row.ids.empty() && row.constant[0]!=0,"invalid normalized column functional");
+    // Expose the exact coefficient row of the constant-centred Value operation.
+    long double norm=0;for(int j=0;j<row.ids.size();++j)norm+=(long double)row.phi[j]*row.constant[j];
+    row.phi[0]+=double((1-norm)/row.constant[0]);
+    m_kSamplingRows.emplace(anchor,row);return row;
+}
 double RANSWallEvolutionPatch::SampleK(const Vector &s,const RANSWallCoordinate &point) const
 {
+    if(ColumnAverageK())
+    {
+        auto anchor=point;anchor[2]=0;
+        if(m_assertKCoverage)Require(m_coveredKFunctionals.count(anchor),"unprotected constitutive k evaluation: column mean K");
+        const double k=SampleKRow(point).Value(s,offset[K()]);
+        Require(k>0 && std::isfinite(k),"invalid physical column mean K");return k;
+    }
     auto p=point;p[2]=m_parameters.geometry.sampleHeight/m_mapping.At(point).scale;
     if(m_assertKCoverage)Require(m_coveredKLocations.count(p),"unprotected constitutive k evaluation: sampled K");
     const double k=Point(K(),p,Same(p[2],m_parameters.geometry.height)?-1:0).Value(s,offset[K()]);
@@ -1464,7 +1512,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::EnergyBudget(const Vector
 std::string RANSWallEvolutionPatch::Signature() const
 {
     std::ostringstream text;text<<std::setprecision(17)<<"CLS-EPAWF-M4:replicated-CG:"<<m_dimension<<':'<<m_parameters.geometry.height
-        <<':'<<m_parameters.geometry.molecularNu<<':'<<m_parameters.geometry.roughness<<':'<<m_parameters.geometry.sampleHeight
+        <<':'<<m_parameters.geometry.molecularNu<<':'<<m_parameters.geometry.roughness<<':'<<(ColumnAverageK()?0:m_parameters.geometry.sampleHeight)
         <<':'<<m_parameters.geometry.tailStart<<':'<<m_parameters.chi<<':'<<m_parameters.model.Q()<<':'<<m_parameters.tangentialOrder<<':'<<m_parameters.normalOrder;
     for(int b=0;b<Gauge();++b)
     {
@@ -1477,6 +1525,7 @@ std::string RANSWallEvolutionPatch::Signature() const
                 <<':'<<exp->GetBasis(d)->GetPointsType()<<':'<<exp->GetBasis(d)->GetNumPoints();
         }
     }
+    if(ColumnAverageK())text<<":K-functional=ColumnAverage-v1:physical-dz/H:fixed-native-panel-Gauss8:global-CG-row";
     if(Mapped())text<<':'<<m_mapping.Signature();
     if(m_innerStress==RANSWallInnerStressModel::SaturatedR2)
         text<<":M8-R2:InnerStress:SaturatedR2:v1:rho=0.8";

@@ -136,7 +136,7 @@ TraceRates QuietTraceRate(const RANSWallEvolutionPatch &patch,const Vector &stat
             H>profile->Original().DissipationCutoff() && H>profile->Reference().cutoff;
         if(!quiet){result.verified=false;result.reason="Quiet/unit/uncapped trace assumptions not established at all projection nodes";}
         auto sample=p;sample[2]=patch.Parameters().geometry.sampleHeight;
-        const double dotK=patch.Point(patch.K(),sample).Value(kRate);
+        const double dotK=patch.SampleKRow(sample).Value(kRate);
         const double E=profile->Dissipation(H);
         result.nodes.push_back(J::Object({{"coordinate",J::Numbers(p)},{"baseline",J::Boolean(baseline)},
             {"chi",J::Number(transition.chi)},{"state_gate",J::Number(transition.state)},
@@ -279,6 +279,43 @@ int main(int argc,char **argv)
             const auto heights=packet.get_child_optional("heights")?Read(packet,"heights"):Vector{0.,.00001,.00005,.0001,.0002,.0005,.001,.0025,.005,.01,.05,.1,1.,2.};
             std::ofstream out(argv[3]);out<<patch.SourceBalanceDiagnostic(state,time,data,stations,heights)<<'\n';
             Require(out.good(),"source balance write failed");world->Finalise();return 0;
+        }
+        if(packet.get<std::string>("operation","")=="sampling_checks")
+        {
+            const double H=p.geometry.height;auto polynomial=reference;
+            const auto values=patch.fields[patch.K()]->Project([&](const RANSWallCoordinate &x){return 1+.02*x[0]+.1*x[2]+.03*x[2]*x[2]/(H*H)+.005*std::pow(x[2]/H,3);});
+            std::copy(values.begin(),values.end(),polynomial.begin()+patch.offset[patch.K()]);
+            double error=0,rowError=0;
+            std::vector<std::string> samples;
+            for(double x:{-3.5,-1.,1.6})
+            {
+                const auto row=patch.SampleKRow({x,0,0});const double got=patch.SampleK(polynomial,{x,0,0});
+                const double expected=patch.ColumnAverageK()?1+.02*x+.05*H+.01+.00125:
+                    1+.02*x+.1*p.geometry.sampleHeight+.03*std::pow(p.geometry.sampleHeight/H,2)+.005*std::pow(p.geometry.sampleHeight/H,3);
+                long double linear=0;for(int j=0;j<row.ids.size();++j)linear+=(long double)row.phi[j]*polynomial[patch.offset[patch.K()]+row.ids[j]];
+                error=std::max(error,std::abs(got-expected));rowError=std::max(rowError,std::abs(got-double(linear)));
+                samples.push_back(J::Object({{"x",J::Number(x)},{"value",J::Number(got)},{"expected",J::Number(expected)},
+                    {"row_ids",J::Numbers(row.ids)},{"row_phi",J::Numbers(row.phi)}}));
+            }
+            Require(error<1e-11 && rowError<1e-12,"representative K polynomial/row verification failed");
+            const auto domain=patch.ScalarDomain(polynomial,0,data,true,true);int means=0;
+            if(patch.ColumnAverageK())for(const auto &o:domain.observations)if(o.inventory=="physical_sampled_K")
+            {Require(o.functional && o.functional->columnAverage,"mean observation lost its row");++means;}
+            auto negative=reference;const auto k=patch.fields[patch.K()]->Project([&](const RANSWallCoordinate &x){return -.1+2*x[2]/H;});
+            std::copy(k.begin(),k.end(),negative.begin()+patch.offset[patch.K()]);
+            const double mean=patch.SampleK(negative,{-1,0,0});const auto bad=patch.ScalarDomain(negative,0,data,true,true);
+            Require(mean>0 && !bad.admissible,"positive representative K waived negative local k");
+            std::ofstream out(argv[3]);out<<J::Object({{"polynomial_error",J::Number(error)},{"coefficient_row_error",J::Number(rowError)},
+                {"mean_observations_with_exact_rows",J::Number(means)},{"samples",J::List(samples)},
+                {"positive_K_negative_local_rejected","true"},{"local_failure",J::Quote(bad.failure)}})<<'\n';
+            Require(out.good(),"sampling check write failed");world->Finalise();return 0;
+        }
+        if(packet.get<std::string>("operation","")=="height_comparison")
+        {
+            const double time=packet.get<double>("time");
+            Require(patch.ScalarDomain(state,time,data).admissible,"height replay outside hard scalar domain");
+            std::ofstream out(argv[3]);out<<patch.HeightComparison(state,history,time,data)<<'\n';
+            Require(out.good(),"height replay write failed");world->Finalise();return 0;
         }
         if(packet.get<std::string>("operation","")=="contact")
         {

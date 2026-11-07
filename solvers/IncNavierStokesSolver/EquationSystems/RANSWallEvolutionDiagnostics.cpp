@@ -109,7 +109,8 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
     for(const auto &ray:m_rays)
     {
         for(const auto &q:ray.points)sample("source_volume_inner",q.v,true,true,true);
-        sample("physical_sample_K",ray.sample,true,true,false);
+        if(!ColumnAverageK())sample("physical_sample_K",ray.sample,true,true,false);
+        else {auto &r=result["physical_sample_K"];++r[0];r[1]=std::min(r[1],SampleK(s,ray.coordinate));}
         if(m_transitionEnabled)
         {
             const double scale=m_mapping.At(ray.coordinate).scale;

@@ -51,6 +51,8 @@ add_executable(RANSStressTangentAudit
     ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSStressTangentAudit.cpp)
 add_executable(RANSConstitutiveProbe
     ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSConstitutiveProbe.cpp)
+add_executable(RANSHeightReferenceChecks test_cls_epawf_height_reference.cpp)
+target_link_libraries(RANSHeightReferenceChecks RANSKernels ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
 add_executable(RANSEquilibriumProfilesProbe
     ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSEquilibriumProfilesProbe.cpp)
 add_executable(RANSEquilibriumTransitionProbe

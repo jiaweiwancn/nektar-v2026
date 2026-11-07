@@ -4,6 +4,7 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallKBoundProjection.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
 #include <cmath>
+#include <LibUtilities/Foundations/ManagerAccess.h>
 #include <set>
 
 namespace Nektar
@@ -11,6 +12,156 @@ namespace Nektar
 using namespace RANSWallAlgebra;
 using namespace SolverUtils;
 namespace J=RANSWallSolveJson;
+
+
+std::string RANSWallEvolutionPatch::PhysicalKBands(const Vector &s,double time,
+    const RANSWallEvolutionData &data,const Vector *change) const
+{
+    Require(m_dimension==2 && !Mapped(),"physical bands require flat 2D");
+    const double H=m_parameters.geometry.height;double first=H;
+    std::set<double> panels{0,upper[2]};for(const auto &e:fields[K()]->Elements())
+    {panels.insert(e.lower[2]);panels.insert(e.upper[2]);if(e.lower[2]==0)first=std::min(first,e.upper[2]);}
+    std::vector<std::string> output;
+    const auto rule=LibUtilities::PointsManager()[LibUtilities::PointsKey(16,LibUtilities::eGaussGaussLegendre)];
+    const auto z=rule->GetZ(),w=rule->GetW();
+    for(auto [name,top]:std::vector<std::pair<std::string,double>>{{"z_le_0.01",.01},{"z_le_0.1",.1},{"wall_layer",H},{"first_element",first},{"global",upper[2]}})
+    {
+        Vector sums(6); // k, correction signed/positive/negative, production, destruction
+        for(const auto &ray:m_rays)
+        {
+            auto knots=panels;knots.insert(top);
+            for(auto b=std::next(knots.begin());b!=knots.end() && *b<=top;++b)
+            {
+                const double a=*std::prev(b),length=*b-a;
+                for(int j=0;j<16;++j)
+                {
+                    auto p=ray.coordinate;p[2]=a+(z[j]+1)*length/2;const auto q=Point(K(),p);
+                    const double weight=ray.weight*w[j]*length/2;
+                    sums[0]+=weight*q.Value(s,offset[K()]);
+                    if(change){const double d=q.Value(*change,offset[K()]);sums[1]+=weight*d;sums[d>=0?2:3]+=weight*d;}
+                }
+            }
+            if(!change)
+            {
+                const auto profile=StateProfile(s,ray.coordinate,time,data);const auto normal=WallNormalization(s,ray.coordinate,*profile);
+                for(const auto &qp:profile->IntegrationQuadrature(std::min(H,top),{.01,.1}))
+                {
+                    auto p=ray.coordinate;p[2]=qp.r;const auto q=Point(K(),p);RANSTensor G{};
+                    for(int a=0;a<m_dimension;++a)G[PhysicalAxis(a)]=Point(a,p).Gradient(s,offset[a]);
+                    const auto law=InnerStress(q.Value(s,offset[K()]),profile->Original().EddyViscosity(qp.r),G);
+                    const auto src=WallSource(s,p,law.production,*profile,&normal);const double weight=ray.weight*qp.weight*qp.jacobian;
+                    sums[4]+=weight*law.production;sums[5]+=weight*(law.production-src.kSource);
+                }
+                if(top>H)
+                {
+                    auto knots=panels;knots.insert(top);
+                    for(auto b=std::next(knots.begin());b!=knots.end() && *b<=top;++b)
+                    {
+                        const double a=*std::prev(b);if(a<H)continue;
+                        for(int j=0;j<16;++j)
+                        {
+                            auto p=ray.coordinate;p[2]=a+(z[j]+1)*(*b-a)/2;RANSTensor G{};
+                            for(int k=0;k<m_dimension;++k)G[PhysicalAxis(k)]=Point(k,p).Gradient(s,offset[k]);
+                            const double k=Point(K(),p).Value(s,offset[K()]),e=Point(Epsilon(),p).Value(s,offset[Epsilon()]);
+                            const auto law=OuterClosure(k,e,G,p);const double weight=ray.weight*w[j]*(*b-a)/2;
+                            sums[4]+=weight*law.production;sums[5]+=weight*e;
+                        }
+                    }
+                }
+            }
+        }
+        output.push_back(J::Object({{"name",J::Quote(name)},{"lower","0"},{"upper",J::Number(top)},
+            {"k_integral",J::Number(sums[0])},{"correction_signed",J::Number(sums[1])},
+            {"correction_positive",J::Number(sums[2])},{"correction_negative",J::Number(sums[3])},
+            {"correction_absolute",J::Number(sums[2]-sums[3])},{"production",change?"null":J::Number(sums[4])},
+            {"destruction",change?"null":J::Number(sums[5])}}));
+    }
+    return J::Object({{"regions",J::List(output)},{"quadrature",J::Quote("physical native panels split exactly at each band edge; GL16; source retains roughness/cutoff/geometric panels")}});
+}
+
+std::string RANSWallEvolutionPatch::HeightComparison(const Vector &s,const Vector &history,double time,
+    const RANSWallEvolutionData &data) const
+{
+    const auto hash=RANSWallR3::Hash(s);const double H=m_parameters.geometry.height,us=m_robustUstar;
+    const double K0=m_parameters.model.Q()*us*us,kap=m_parameters.model.Kappa();
+    const auto analytic=Profile(K0,{0,0,0},1);const auto &ref=analytic->Reference();const auto &wall=analytic->Original();
+    const double z0=H*std::exp(-kap*ref.matchingVelocity/us);
+    const auto raw=Residual(s,history,0.,time,data,false,true);const auto constraints=Constraints(s,time,data);
+    const auto scaled=Norms(raw,constraints,us);Vector dimensional,common;
+    for(int b=0;b<4;++b)
+    {
+        const double scale=b<2?us:(b==K()?K0:us*us*us/(kap*H));
+        const double dual=scaled[b]*scale*us/H*std::sqrt(m_volumes[b]);dimensional.push_back(dual);
+        const double reference=b<2?us:(b==K()?K0:us*us*us/(kap*2));
+        common.push_back(dual/(reference*us/2*std::sqrt(b==Epsilon()?12.:24.)));
+    }
+    std::map<std::string,Vector> samples;std::vector<std::string> profiles;
+    const auto rule=LibUtilities::PointsManager()[LibUtilities::PointsKey(16,LibUtilities::eGaussGaussLegendre)];
+    const auto z=rule->GetZ(),w=rule->GetW();
+    const Vector knots{0,.01,.1,.25,.5,1,2,2+1./3,2+2./3,3,3+1./3,3+2./3,4};
+    Vector errors(4); // velocity value, gradient, production, analytical production scale
+    for(const auto &ray:m_rays)for(int panel=1;panel<knots.size();++panel)for(int j=0;j<16;++j)
+    {
+        auto p=ray.coordinate;p[2]=knots[panel-1]+(z[j]+1)*(knots[panel]-knots[panel-1])/2;
+        const double weight=ray.weight*w[j]*(knots[panel]-knots[panel-1])/2,r=p[2];
+        const auto uv=Point(0,p);const double u=uv.Value(s,offset[0]),v=uv.Value(s,offset[1]),k=Point(K(),p).Value(s,offset[K()]);
+        const double u0=r<H?wall.Velocity(r,{ref.matchingVelocity,0},{0,0})[0]:ref.matchingVelocity+us/kap*std::log(r/H);
+        const double g0=r<H?wall.VelocityGradient(r,{ref.matchingVelocity,0},{0,0})[0]:us/(kap*r);
+        samples["weights"].push_back(weight);samples["u"].push_back(u);samples["v"].push_back(v);samples["k"].push_back(k);
+        samples["reference_u"].push_back(u0);samples["reference_k"].push_back(K0);
+        samples["pressure"].push_back(Point(r<H?InnerPressure():OuterPressure(),p).Value(s,offset[r<H?InnerPressure():OuterPressure()]));
+        if(r>=2){samples["epsilon_weights"].push_back(weight);samples["epsilon"].push_back(Point(Epsilon(),p).Value(s,offset[Epsilon()]));samples["reference_epsilon"].push_back(us*us*us/(kap*r));}
+        const auto g=uv.Gradient(s,offset[0]);errors[0]+=weight*((u-u0)*(u-u0)+v*v);errors[1]+=weight*(g[2]-g0)*(g[2]-g0);
+        if(r<H)
+        {
+            RANSTensor G{};for(int a=0;a<m_dimension;++a)G[PhysicalAxis(a)]=Point(a,p).Gradient(s,offset[a]);
+            const double production=InnerStress(k,analytic->Original().EddyViscosity(r),G).production,P0=analytic->ReferenceProduction(r);
+            errors[2]+=weight*(production-P0)*(production-P0);errors[3]+=weight*P0*P0;
+        }
+    }
+    for(auto &e:errors)e=std::sqrt(e);
+    for(double x:{-3.5,-1.,1.6})
+    {
+        auto anchor=RANSWallCoordinate{x,0,0};const auto profile=StateProfile(s,anchor,time,data);const auto normal=WallNormalization(s,anchor,*profile);
+        const auto row=SampleKRow(anchor);std::vector<std::string> values;
+        std::set<double> heights{0,.00001,.0001,.001,.0025,.005,.01,.02,.05,.1,.25,.5,1.,2.,3.,4.,H/4,H/2,H};
+        for(double r:heights)if(r<=upper[2])
+        {
+            auto p=anchor;p[2]=r;const auto u=Point(0,p);const double k=Point(K(),p).Value(s,offset[K()]);
+            const double u0=r<=H?wall.Velocity(r,{ref.matchingVelocity,0},{0,0})[0]:ref.matchingVelocity+us/kap*std::log(r/H);
+            const double g0=r<=H?wall.VelocityGradient(r,{ref.matchingVelocity,0},{0,0})[0]:us/(kap*r);
+            Vector v{r,r/H,u.Value(s,offset[0]),u0,u.Gradient(s,offset[0])[2],g0,k};
+            if(r>=H)v.push_back(Point(Epsilon(),p,r==H?1:0).Value(s,offset[Epsilon()]));
+            values.push_back(J::Numbers(v));
+        }
+        profiles.push_back(J::Object({{"x",J::Number(x)},{"K",J::Number(profile->K())},{"chi",J::Number(profile->Reference().weight)},
+            {"cutoff",J::Number(profile->Reference().cutoff)},{"B",J::Number(normal.b)},{"m",J::Number(normal.m)},{"lambda",J::Number(normal.lambda)},
+            {"functional_ids",J::Numbers(row.ids)},{"functional_phi",J::Numbers(row.phi)},{"column_average",J::Boolean(row.columnAverage)},
+            {"profile_columns",J::Quote("z,z/H,u,u_reference,du_dz,du_reference_dz,k,[outer epsilon]")},{"profile",J::List(values)}}));
+    }
+    auto components=ResidualResolutionComponents(s,history,0.,time,data,false);
+    std::vector<std::pair<std::string,std::string>> loads,physical;
+    for(const auto &[name,v]:components.terms)
+    {Vector k(size[K()]);for(int i=0;i<k.size();++i)k[i]=v[offset[K()]+i];loads.push_back({name,J::Numbers(k)});}
+    for(const auto &[name,v]:samples)physical.push_back({name,J::Numbers(v)});
+    const auto wallSamples=PhysicalSamples(s,time,data);
+    double tau=0,area=0;for(int i=0;i<wallSamples.at("wall_weights").size();++i)
+    {area+=wallSamples.at("wall_weights")[i];tau+=wallSamples.at("wall_weights")[i]*wallSamples.at("wall_stress")[i];}
+    Require(hash==RANSWallR3::Hash(s),"height diagnostic changed retained state");
+    return J::Object({{"schema","1"},{"state_sha256",J::Quote(hash)},{"time",J::Number(time)},
+        {"K_sampling",J::Quote(m_kSampling)},{"H",J::Number(H)},{"h",J::Number(m_parameters.geometry.roughness)},
+        {"z_K",ColumnAverageK()?"null":J::Number(m_parameters.geometry.sampleHeight)},{"z_m",J::Number(m_parameters.geometry.tailStart)},{"Z",J::Number(upper[2])},
+        {"reference",J::Object({{"K0",J::Number(K0)},{"U_H",J::Number(ref.matchingVelocity)},{"traction",J::Number(ref.traction)},
+            {"z0_c",J::Number(z0)},{"J0",J::Number(wall.Integrals().j0)},{"velocity_scale",J::Number(m_parameters.geometry.molecularNu/(.09*2.55*std::sqrt(K0))-wall.ViscosityInterceptHeight())},
+            {"cutoff",J::Number(ref.cutoff)},{"budget_ratio",J::Number(ref.productionBudget/ref.minimumBudget)},
+            {"Re_H",J::Number(ref.reynolds)},{"intrinsic_chi",J::Number(ref.weight)}})},
+        {"scaled_native_spatial_blocks",J::Numbers(scaled)},{"dimensional_mass_dual_spatial_first4",J::Numbers(dimensional)},
+        {"common_normalized_spatial_first4",J::Numbers(common)},{"common_scales_U_K_E_H_V",J::Numbers(Vector{us,K0,us*us*us/(kap*2),2,24})},
+        {"representation_L2_velocity_gradient_production_referenceProduction",J::Numbers(errors)},
+        {"common_samples",J::Object(physical)},{"profiles",J::List(profiles)},{"fixed_bands",PhysicalKBands(s,time,data)},
+        {"mean_wall_stress",J::Number(tau/area)},{"native_degrees_of_freedom",J::Numbers(size)},
+        {"weak_k_component_loads",J::Object(loads)},{"state_unchanged","true"},{"governing_solves","0"}});
+}
 
 // Diagnostic replays only. No call from a production implicit callback.
 std::string RANSWallEvolutionPatch::PimpleContactDiagnostic(const Vector &s,double time,

@@ -33,6 +33,7 @@ struct RANSWallGlobalPoint
     std::array<Vector,3> derivative;
     Vector constant;
     double weight = 0;
+    bool columnAverage = false; // normalized physical functional, not a point
     double Value(const Vector &state, int offset=0) const;
     std::array<double,3> Gradient(const Vector &state, int offset=0) const;
 };

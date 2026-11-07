@@ -427,7 +427,7 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3
         if(input.budgetMargin<=m_transition.state.marginOff || input.reynolds<=m_transition.state.reynoldsOff)return result;
         auto H=chart;H[2]=m_parameters.geometry.height;auto a=H,b=H,sample=H;
         a[2]=m_sensorA;b[2]=m_sensorB;sample[2]=m_parameters.geometry.sampleHeight;
-        const auto vh=basis(0,H,1),va=basis(0,a),vb=basis(0,b),ka=basis(K(),a),ea=basis(Epsilon(),a),ks=basis(K(),sample);
+        const auto vh=basis(0,H,1),va=basis(0,a),vb=basis(0,b),ka=basis(K(),a),ea=basis(Epsilon(),a),ks=LinearBasis(SampleKRow(sample),*fields[K()],false);
         AWFTransitionPhysicalInput physical;physical.normal={0,0,1};physical.sampledK=SampleK(s,H);
         physical.height=m_parameters.geometry.height;physical.molecularNu=m_parameters.geometry.molecularNu;physical.Q=m_parameters.model.Q();
         for(int j=0;j<m_dimension;++j)
@@ -484,7 +484,7 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3
         if(found!=cache.end())return *found->second;
         auto ray=std::make_shared<RayLinear>();const double K0=SampleK(s,chart);
         auto sample=chart;sample[2]=m_parameters.geometry.sampleHeight;
-        ray->sampled=ValueRow(basis(K(),sample),offset[K()]);
+        ray->sampled=ValueRow(LinearBasis(SampleKRow(sample),*fields[K()],false),offset[K()]);
         const auto base=Profile(K0,chart,0);
         ProfileDerivative baseDerivative(*base,m_parameters.model);++profileCount;
         ray->chi=baseline?Sparse{}:chiRow(chart,baseDerivative);

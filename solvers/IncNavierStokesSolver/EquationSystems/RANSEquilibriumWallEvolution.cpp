@@ -852,6 +852,11 @@ void RANSEquilibriumWallEvolution::WriteReport() const
        <<",\"pimple_attempts\":"<<RANSWallSolveJson::List(m_patch->PimpleRecords());
     out<<",\"physical_samples\":{";int sampleCount=0;
     for(const auto &[name,values]:m_physicalSamples){if(sampleCount++)out<<',';out<<Quoted(name)<<':';Write(out,values);}out<<'}';
+    if(m_patch->HeightComparisonEnabled() && !m_acceptedStates.empty())
+    {
+        out<<",\"height_comparison_initial\":"<<m_patch->HeightComparison(m_acceptedStates.front(),m_acceptedStates.front(),m_auditTimes.front(),m_data);
+        out<<",\"height_comparison_final\":"<<m_patch->HeightComparison(m_state,m_state,m_time,m_data);
+    }
     if(!m_initialKBoundCheck.empty())out<<",\"initial_k_bound_check\":"<<m_initialKBoundCheck;
     if(!m_initialScalarDomain.empty())out<<",\"initial_scalar_domain\":"<<m_initialScalarDomain;
     if(!m_initialEvaluationSeconds.empty())
