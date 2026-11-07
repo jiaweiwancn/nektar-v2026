@@ -37,8 +37,11 @@ def main():
             continue
         previous = [r for r in data if r["event"] in ("initial", "accepted") and
                     r["seconds"] < model["seconds"]][-1]
+        endpoint = [r for r in data if r["event"] == "accepted" and
+                    r["iteration"] == model["iteration"]+1 and r["seconds"] > trial["seconds"]][0]
         require(model["response_model_kind"] == "historical_secant" and
-                trial["full_norm"] < max(previous["norms"]) and trial["violation"] < 1e-8,
+                trial["full_norm"] < max(previous["norms"]) and trial["violation"] < 1e-8 and
+                previous["qualified"] and endpoint["qualified"],
                 "bridged historical model did not produce qualified original-equation progress")
         used.append(dict(direction={k:model[k] for k in [
             "iteration", "basis_dimension", "response_rank", "radius", "directional_refreshes",
