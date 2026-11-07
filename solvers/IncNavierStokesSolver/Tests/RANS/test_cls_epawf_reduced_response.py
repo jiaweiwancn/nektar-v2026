@@ -150,6 +150,16 @@ def check(directory):
                     r["original_k_norm_change"] >= 0 for r in records
                     if r["event"] == "response_chord_base_accuracy"),
                 "invalid fixed-k reference accuracy refinement")
+    if protocol.get("response_chord_bound_error_version", 1) >= 2:
+        for row in [r for r in chord_checks if r["available"]]:
+            for name, source in [("model", "predicted"), ("two_size", "coarse")]:
+                witness = row["bound_scaled_"+name+"_error_witness"]
+                scale = witness["normalization_scale"]*witness["bound_width"]
+                require(scale > 0, "invalid qualification action normalization")
+                expected = abs(witness[source+"_raw_action"]-witness["half_raw_action"])/scale
+                measured = row["bound_scaled_observation_"+name+"_error"]
+                require(abs(measured-expected) <= 1e-11*max(1., expected),
+                        "qualification action error applies its physical bound scaling more than once")
     direction_refreshes = [r for r in records if r["event"] == "response_direction_refreshed"]
     refresh_budget = protocol.get("directional_refresh_budget", 0)
     require(0 <= refresh_budget <= 4 and (refresh_budget or not direction_refreshes),

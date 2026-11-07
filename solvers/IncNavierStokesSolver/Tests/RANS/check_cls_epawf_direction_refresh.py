@@ -21,6 +21,9 @@ def main():
     args = parser.parse_args()
     subprocess.run([sys.executable, operator_checks.__file__, str(args.run)], check=True)
     data = records(args.run)
+    protocol, = [r for r in data if r["event"] == "protocol"]
+    require(protocol.get("response_chord_bound_error_version", 1) >= 2,
+            "direction-action refresh uses the superseded twice-scaled qualification diagnostic")
     refreshed = [r for r in data if r["event"] == "response_direction_refreshed"]
     require(refreshed, "no measured action refreshed a reused constrained direction")
     packets = [r["path"] for r in data if r["event"] == "model_packet"]

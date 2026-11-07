@@ -568,6 +568,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         {"directional_refresh_policy",J::Quote("optional same-base measured action interpolation before re-solving the residual and individual qualification model; not a derivative certificate")},
         {"response_chord_tight_checks","true"},
         {"response_chord_check_accuracy_limit",J::Number(std::min(tolerance,m_reducedHTolerance))},
+        {"response_chord_bound_error_version",J::Number(2)},
+        {"response_chord_observation_units",J::Quote("OuterBound::Action already divides by normalization scale and qualification width")},
         {"response_chord_policy",J::Quote("opt-in historical response secants; fresh two-size signed direction checks; every actual trial converges original H; fresh model after failure, branch change, enlargement or age limit")},
         {"response_preconditioner_policy",J::Quote("probe-only separate base velocity/pressure and epsilon factors; original H convergence required; fresh-operator retry on failure; canonical check and actual trials use current operators")},
         {"initial_basis_budget", J::Number(m_reducedBasis)},
@@ -1854,6 +1856,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             }
             double observationTwoSize=0.,observationModelError=0.;
             double boundScaledError=0.,boundScaledTwoSize=0.;
+            int modelWitness=-1,twoSizeWitness=-1;
             std::map<std::array<int,4>,std::pair<int,double>> witnesses;
             for (int j=0;j<base.bounds.size();++j)
             {
@@ -1865,8 +1868,14 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 const double scale=std::max(1.,std::abs(observed));
                 observationTwoSize=std::max(observationTwoSize,std::abs(coarseObserved-observed)/scale);
                 observationModelError=std::max(observationModelError,std::abs(predictedObservation-observed)/scale);
-                boundScaledError=std::max(boundScaledError,std::abs(predictedObservation-observed)/b.width);
-                boundScaledTwoSize=std::max(boundScaledTwoSize,std::abs(coarseObserved-observed)/b.width);
+                // OuterBound::Action is ALREADY divided by scale*width.
+                // Dividing by width again misreports the physical bound units.
+                const double modelDifference=std::abs(predictedObservation-observed);
+                const double sizeDifference=std::abs(coarseObserved-observed);
+                if (modelWitness<0 || modelDifference>boundScaledError)
+                { modelWitness=j;boundScaledError=modelDifference; }
+                if (twoSizeWitness<0 || sizeDifference>boundScaledTwoSize)
+                { twoSizeWitness=j;boundScaledTwoSize=sizeDifference; }
                 for (int sign:{-1,1})
                 {
                     const std::array<int,4> key{{b.family,sign,
@@ -1900,6 +1909,26 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             const double modelRelativeError=dualNorm(modelError)/scale;
             const double coarseSlope=(coarse.merit*coarse.merit-base.merit*base.merit)/(2.*f);
             const double halfSlope=(fine.merit*fine.merit-base.merit*base.merit)/f;
+            auto errorWitness=[&](int id) {
+                if (id<0) return J::Object({});
+                const auto &b=base.bounds[id];
+                // Independently retain raw field contractions so the test can
+                // reconstruct the normalization without calling Action again.
+                auto raw=[&](const Vector &v) {
+                    return b.axis<0?b.row.Value(v,offset[b.block]):
+                        b.row.Gradient(v,offset[b.block])[b.axis];
+                };
+                double predictedRaw=0.;
+                for (int i=0;i<n;++i)
+                    predictedRaw+=coefficients[i]*raw(b.projected?columns[i].traceAction:columns[i].stateAction);
+                return J::Object({{"observation",J::Number(id)},
+                    {"family",J::Number(b.family)}, {"point",J::Numbers(b.row.coordinate)},
+                    {"projected",J::Boolean(b.projected)},
+                    {"normalization_scale",J::Number(b.scale)}, {"bound_width",J::Number(b.width)},
+                    {"predicted_raw_action",J::Number(predictedRaw)},
+                    {"coarse_raw_action",J::Number(raw(b.projected?dt:ds))},
+                    {"half_raw_action",J::Number(raw(b.projected?ht:hs))}});
+            };
             const bool branchChange=coarse.domain.profileBranches!=base.domain.profileBranches ||
                                     fine.domain.profileBranches!=base.domain.profileBranches;
             const bool accurate=!branchChange && twoSizeError<=.03 && observationTwoSize<=.05;
@@ -1923,6 +1952,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 {"model_observation_error",J::Number(observationModelError)},
                 {"bound_scaled_observation_model_error",J::Number(boundScaledError)},
                 {"bound_scaled_observation_two_size_error",J::Number(boundScaledTwoSize)},
+                {"bound_scaled_model_error_witness",errorWitness(modelWitness)},
+                {"bound_scaled_two_size_error_witness",errorWitness(twoSizeWitness)},
                 {"fraction",J::Number(f)}, {"field_norm",J::Number(Length(field))},
                 {"measured_action_norm",J::Number(dualNorm(fineAction))},
                 {"half_residual_signal",J::Number(.5*f*dualNorm(fineAction))},
