@@ -577,6 +577,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         {"protected_direction_refresh","true"},
         {"directional_refresh_minimum_independence",J::Number(1e-4)},
         {"reference_branch_reuse",J::Boolean(m_reducedReferenceBranchReuse)},
+        {"prefer_verified_linear",J::Boolean(m_reducedPreferVerifiedLinear)},
+        {"verified_linear_policy",J::Quote("after a failed optional source direction supplies a new current action, re-solve and independently check the constrained linear direction, then try actual nonlinear trials before more source Gauss-Newton refinements")},
         {"reference_branch_reuse_policy",J::Quote("only finite-step E/M reference-weight switches; historical model, not a derivative on the old branch; current probes must agree with the current branch and an independent same-k response")},
         {"directional_refresh_policy",J::Quote("optional same-base measured action interpolation before re-solving the residual and individual qualification model; not a derivative certificate")},
         {"response_chord_tight_checks","true"},
@@ -721,6 +723,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         Vector coefficients,field,r,state,trace;
     };
     std::vector<DirectionMeasurement> directionMeasurements;
+    bool deferSourceRefinement=false;
     std::string chordBranches;
     auto chordEligible=[&]() {
         return m_reducedResponseReuseUpdates && base.violation==0. && !failedModels &&
@@ -790,7 +793,11 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         const bool restore  = !continuationDiagnostic && base.violation > 0.;
         const int dimension = rows.size();
         const bool chordReuse=chordEligible();
-        if (!chordReuse) directionMeasurements.clear();
+        if (!chordReuse)
+        {
+            directionMeasurements.clear();
+            deferSourceRefinement=false;
+        }
         nonKCache.reset();
         if (m_reducedResponseCache && !chordReuse)
         {
@@ -2336,7 +2343,14 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                     {"evaluations",J::Number(choice.evaluations)}, {"invalid",J::Number(choice.invalid)},
                     {"samples",J::List(samples)},
                     {"scope",J::Quote("surrogate only: nonlinear destruction on affine converged-field responses; actual trials solve H")}});
-                if (choice.fraction>0. && m_reducedSourceRefinements)
+                if (chordReuse && deferSourceRefinement)
+                    emit("source_refinement_deferred",{{"phase",J::Quote("verified_linear_trial")},
+                        {"refresh",J::Number(directionRefreshes)},
+                        {"state_sha256",J::Quote(RANSWallR3::Hash(state))},
+                        {"history_sha256",J::Quote(RANSWallR3::Hash(history))},
+                        {"scope",J::Quote("current linear residual and individual qualification actions independently passed; retain nonlinear destruction ray prediction and fully equilibrated actual trials; no source proposal bypass")}});
+                if (choice.fraction>0. && m_reducedSourceRefinements &&
+                    !(chordReuse && deferSourceRefinement))
                 {
                     Vector z(n),model;
                     for (int i=0;i<n;++i) z[i]=choice.fraction*solution[i];
@@ -2535,6 +2549,19 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                         }
                         if (!chordReuse || checkChordDirection(z,"source_refined"))
                             for (double f:{1.,.5,.25}) addProposal(z,f,"nonlinear_source_refined_direction");
+                        else if (m_reducedPreferVerifiedLinear && directionModelRefreshed)
+                        {
+                            // Keep the newly measured source response, then
+                            // use it when re-solving the constrained model.
+                            // Its next independently verified linear direction
+                            // gets actual trials before optional source work.
+                            deferSourceRefinement=true;
+                            emit("source_refinement_deferred",{{"phase",J::Quote("requested")},
+                                {"refresh",J::Number(directionRefreshes)},
+                                {"state_sha256",J::Quote(RANSWallR3::Hash(state))},
+                                {"history_sha256",J::Quote(RANSWallR3::Hash(history))},
+                                {"scope",J::Quote("failed optional source proposal measured at fixed k; caller state and physical history unchanged; re-solve and verify before any actual trial")}});
+                        }
                     }
                 }
                 if (choice.fraction>0.)
@@ -3026,6 +3053,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 report(base, "accepted");
                 directionRefreshes=0;
                 directionMeasurements.clear();
+                deferSourceRefinement=false;
                 if (m_reducedAdaptiveSpace && !restore && base.merit > 1e-6)
                 {
                     const double relativeGain = (oldMerit-base.merit)/oldMerit;

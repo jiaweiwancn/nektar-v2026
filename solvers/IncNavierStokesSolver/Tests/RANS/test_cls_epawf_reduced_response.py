@@ -208,6 +208,29 @@ def check(directory):
                     r["purpose"] == row["purpose"] and r["seconds"] < row["seconds"]]
         require(matching and matching[-1]["passed"] and row["canonical_branch_check_passed"],
                 "a reference-branch direction bypassed its canonical same-k response check")
+    deferred = [r for r in records if r["event"] == "source_refinement_deferred"]
+    require(protocol.get("prefer_verified_linear", False) or not deferred,
+            "source refinements were deferred without the explicit policy")
+    for row in deferred:
+        require(row["phase"] in ("requested", "verified_linear_trial") and
+                row["history_sha256"] == protocol["physical_history_sha256"],
+                "deferred source work changed physical history")
+        if row["phase"] == "requested":
+            matching = [r for r in direction_refreshes if r["iteration"] == row["iteration"] and
+                        r["refresh"] == row["refresh"] and r["seconds"] < row["seconds"]]
+            require(matching and matching[-1]["purpose"] == "source_refined" and
+                    matching[-1]["state_sha256"] == row["state_sha256"],
+                    "deferred source proposal did not first supply a fixed-state measured response")
+        else:
+            model = [r for r in directions if r["iteration"] == row["iteration"] and
+                     r["seconds"] < row["seconds"]][-1]
+            matching = [r for r in chord_checks if r["iteration"] == row["iteration"] and
+                        r["purpose"] == "linear" and model["seconds"] < r["seconds"] < row["seconds"]]
+            require(matching and matching[-1]["passed"],
+                    "deferred source work bypassed the re-solved current linear action checks")
+            require(any(r["phase"] == "requested" and r["iteration"] == row["iteration"] and
+                        r["seconds"] < model["seconds"] for r in deferred),
+                    "linear fallback reused the old model instead of re-solving with the measured response")
     for trial in [r for r in trials if r["accepted"]]:
         model = [r for r in directions if r["iteration"] == trial["iteration"] and
                  r["seconds"] < trial["seconds"]][-1]
