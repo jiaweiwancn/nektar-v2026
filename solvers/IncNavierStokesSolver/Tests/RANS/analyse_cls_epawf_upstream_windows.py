@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 from analyse_cls_epawf_height_comparison import attempts_summary
 from continue_cls_epawf_pimple import load_progress
-from run_cls_epawf_picard import load,write_json,require
+from run_cls_epawf_picard import load,write_json,require,sha
 
 
 def main():
@@ -42,8 +42,30 @@ def main():
             'native prefix/restart correction budgets were duplicated or lost')
         windows=[budget(n-32,n) for n in range(32,end+1,32)]
         if end>=160:windows.append(budget(80,160))
+        # Sparse immutable raw/corrected packets quantify cancellation, rather
+        # than inferring it merely from a correction/raw norm ratio near one.
+        import numpy as np
+        mass_file=a.root/'discrete-budget'/c/'mass-and-bands.json';mass=load(mass_file)
+        M=np.array(mass['free_k_mass']);free=np.array(mass['free_k_rows'],dtype=int);samples={}
+        norm=lambda v:float(np.sqrt(max(0.,v@M@v)))
+        for n in sorted({32,64,80,160,32*(end//32)}):
+            if n>end:continue
+            attempt=attempts[n];packet=Path(attempt['k_snapshot'])
+            require(sha(packet)==attempt['k_snapshot_sha256'],'retained increment packet changed')
+            q=load(packet);require(np.array_equal(free,np.array(q['transport_rows'],dtype=int)),'consistent-mass free rows differ')
+            pre=np.array(q['pre_k']);raw=np.array(q['raw']);corrected=np.array(q['corrected'])
+            r=(raw-pre)[free];b=(corrected-raw)[free];net=(corrected-pre)[free]
+            rn,bn,nn=map(norm,(r,b,net));defect=norm(net-r-b)
+            require(defect<1e-13,'raw+bound increment identity failed')
+            require(abs(rn-q['k_bound']['mass_norm_raw_step'])<1e-13 and
+                abs(bn-q['k_bound']['mass_norm_correction'])<1e-13,'mass replay differs from native correction accounting')
+            samples[str(n)]=dict(time=q['time'],packet=str(packet),packet_sha256=sha(packet),
+                mass_file_sha256=sha(mass_file),raw_mass_norm=rn,bound_mass_norm=bn,accepted_mass_norm=nn,
+                mass_angle_cosine=float(r@M@b/(rn*bn)) if rn*bn else None,
+                accepted_over_raw=nn/rn if rn else None,increment_identity_mass_norm=defect)
         out['cases'][c]=dict(status=progress['status'],accepted_steps=end,accepted_time=progress['accepted_time'],
             cumulative=complete,physical_windows=windows,
+            retained_increment_samples=samples,
             milestone_cumulative={str(n):budget(0,n) for n in (32,64,80,160) if n<=end})
     write_json(a.output,out);print(a.output)
 
