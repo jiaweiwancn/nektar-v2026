@@ -20,6 +20,53 @@ metric at ground contact while its original k residual stayed nonzero. R3
 therefore scores the original reduced residual, not that projected-map defect.
 No full all-field Jacobian or hidden coupled direction solver was added.
 
+## Guarded reference-weight history bridge (e9bbda5)
+
+The early original-start reuse control makes 8, 3 and 7 E/M profile-weight
+switches over its first three numerical corrections. Its baseline B and
+destruction P/C classifications do not change. At the first qualified-to-
+qualified correction, the original linear prediction error is only **1.47374**
+against the reuse policy's **12.7487** error limit, but the literal reference
+branch comparison discards the response history. This explains why the
+endpoint reuse improvement does not yet accelerate that original-start prefix.
+It is a search-policy limitation, not evidence that H or the original equations
+are solved or that a qualifying root cannot exist.
+[Measured original-start switches and prediction errors](cls-epawf-segregated-picard-r3-evidence/native/original-start-reference-switches.json).
+
+Commit `e9bbda5382ee45bc69739b8649493330b38b82a7` adds opt-in
+`RANSWallReducedReferenceBranchReuse` /
+`--reduced-reference-branch-reuse`, default Off. It permits only E/M switches
+between **actual converged endpoints inside the qualification observation bounds** when forming a historical
+secant model. It requires the measured-action refresh policy. Baseline and cap
+switches still rebuild fresh responses, and the usual age, rank, signal and
+actual-progress safeguards remain. It changes reuse policy; it does not change
+the model's physical reference or wall-profile weights.
+
+Before any larger trial, both fresh direction probes must remain on the current
+selected branch and pass signed residual/individual-constraint checks. An
+additional independent H solve reaches the identical prescribed k from the
+other converged response. The residual action, all observation actions and
+effective coefficients must agree within the declared limits; fixed k, attained
+H errors and branch identity are recorded. Failure discards the historical
+model while preserving the accepted state/history. The recorded old branch is
+never presented as a current Jacobian certificate. Switch records include their
+normalization/trace anchors.
+
+The four-worker Linux build passes in **129.90s** and all six focused CTests
+pass in **39.32s**, with test concurrency 1. Matched original-h0 runs request
+three numerical updates, with three physical steps requested if the original
+stage actually converges. They keep 2,165 unknowns, alpha 400, time .0025,
+tolerance 2e-12, all original physics/history, and use the same executable and
+numerical settings except this switch. The native branch-use test requires an
+actually accepted qualified original-residual reduction using the bridged
+direction, independent same-k/current-branch checks, unchanged numerical prefix
+and fresh endpoint readback. Its name is
+`check_cls_epawf_reference_branch_reuse.py`; native outcomes remain pending.
+The longer original-start and complete-space attempts continue independently.
+[Producing build, flags and identities](cls-epawf-segregated-picard-r3-evidence/native/build-validation-e9bbda5.json),
+[matched original-start commands and allocation](cls-epawf-segregated-picard-r3-evidence/native/reference-branch-native-launch.json),
+[Mac input preparation checks only](cls-epawf-segregated-picard-r3-evidence/native/reference-branch-input-checks.json).
+
 ## Current follow-up: measured action refresh and full-space progress
 
 The original first stage is still unresolved. The latest completed original-h0
@@ -120,10 +167,44 @@ focused checker requires an actually accepted correction using the re-solved
 historical model, unchanged state/history during refresh, subsequent independent
 signed action checks, and fresh full residual/qualification readback. It is
 named `check_cls_epawf_direction_refresh.py` and does not assert M8 convergence.
-The corrected native comparison is pending. A fresh original-h0 follow-up is gated on an actual
-qualified correction using this update.
+The corrected same-image native comparison now **passes**. Both runs first
+reach exactly the same original state/residual, **3.9711215458**. One measured
+action refresh then reduces its direction-model discrepancy from **0.0951773
+to 0.00746080** and its correctly normalized observation discrepancy from
+**0.00241572 to 0.000803762**. A separately measured source-refined direction
+has model discrepancy **0.00658842**, two-size discrepancy **4.65834e-6**, and
+actual merit slopes **-0.09530548/-0.09530475**. The test independently rebuilds
+the error normalization from raw field contractions; it does not accept the
+superseded units or interpret interpolation defects as stationarity.
+
+Its actual original residual reaches **3.9587753030**, versus **3.9637517592**
+with refresh disabled. The source prediction after two qualification corrections
+is **3.9540112155**. Original qualification passes: gradient departure
+**0.0009999990455**, epsilon lower ratio **0.9829384300**, and continuous ground
+minimum **6.75284e-6**. Actual displacement **0.59187820** stays within radius
+**0.72**. All 214 H evaluations converge, with 936 separate flow/epsilon solves;
+the control uses 212 H evaluations and 918 solves. Independent readback is exact
+and both rejected physical stages preserve accepted state/history. Each accepts
+zero physical steps. This is useful original-equation progress, not M8
+convergence. The 96-direction historical model remains a measured search model,
+not a freshly assembled 504-direction Jacobian certificate.
+
+A fresh original-h0 three-step attempt has now started with corrected code,
+and an additional eight-update full504 experiment starts from the separately
+audited **3.8960677838** diagnostic point. The latter uses H tolerance 2e-12 and
+keeps the original physical history. The matched corrected-code verification-Off
+repeat now **passes**: intermediate numerical state/norm bits, native accepted
+and rejected states, stage bookkeeping and all physical-history slots match.
+The longer original-start/full-space tests have no completed-stage claim.
 [Corrected build and immutable executable/library identities](cls-epawf-segregated-picard-r3-evidence/native/build-validation-7300df3.json),
 [corrected matched native commands and allocation](cls-epawf-segregated-picard-r3-evidence/native/direction-refresh-v2-native-launch.json),
+[corrected native direction assertions](cls-epawf-segregated-picard-r3-evidence/native/direction-refresh-v2-checks.json),
+[assertion execution receipt](cls-epawf-segregated-picard-r3-evidence/native/direction-refresh-v2-comparison-receipt.json),
+[fresh original-h0 command](cls-epawf-segregated-picard-r3-evidence/native/direction-refresh-v2-original160-3step-launch.json),
+[additional full-space command](cls-epawf-segregated-picard-r3-evidence/native/direction-refresh-v2-full504-at3p896-launch.json),
+[verification-Off repeat command](cls-epawf-segregated-picard-r3-evidence/native/direction-refresh-v2-unverified-launch.json),
+[corrected bitwise verification/history assertions](cls-epawf-segregated-picard-r3-evidence/native/direction-refresh-v2-verification-comparison.json),
+[verification execution receipt](cls-epawf-segregated-picard-r3-evidence/native/direction-refresh-v2-verification-comparison-receipt.json),
 [superseded diagnostic scope](cls-epawf-segregated-picard-r3-evidence/native/direction-refresh-v1-superseded.json),
 [Mac input preparation checks only](cls-epawf-segregated-picard-r3-evidence/native/direction-refresh-input-checks.json).
 
@@ -175,6 +256,29 @@ they do not retroactively validate this historical check.
 Heavy logs, all dense replay rows, checkpoints and failed-check logs remain under
 `/media/jay/新加卷/nektar-v2026-runs/cls-epawf-segregated-picard-r3/`.
 The dated follow-up statements above supersede older in-flight snapshots below.
+
+The fd8c034 full504 source-stencil experiment has also completed its focused
+native check. One column requires one smaller stencil: its error changes from
+**0.0382067 to 0.0178874**, within the unchanged 0.03 bound. All 504 surrogate
+derivatives become available with 1,009 model evaluations, below the 2,080
+budget. The resulting direction has predicted merit slope **-5.84426** versus
+actual **-5.84520** at both probe sizes; H errors stay below 2e-12. It produces
+an actual qualified correction from **5.1819703505 to 4.3905627178**, versus the
+older same-input control's first **4.8578168219** endpoint. The final source
+prediction is **4.3527817785**. Two qualification corrections reduce the
+normalized violation **0.00303985 -> 7.66268e-6 -> 0**. Displacement
+**0.47432403** is within radius **0.72**; ground minimum is **1.91595e-5**, gradient
+departure **0.0009999990138**, and epsilon lower ratio **0.9818966470**.
+
+All 1,019 controlled H evaluations converge, with 6,448 separate flow and
+epsilon solves. Independent full residual readback is exact, original
+qualification passes, and the one-update failed-stage receipt preserves h0 and
+physical history, with zero accepted physical steps/time. This completes a
+useful native recovery from the source accuracy failure; it does not resolve
+the original stage or substitute its saved starting guess for original h0.
+[Focused source-recovery assertions](cls-epawf-segregated-picard-r3-evidence/native/source-precision-checks.json),
+[execution receipt](cls-epawf-segregated-picard-r3-evidence/native/source-precision-direction-check-receipt.json),
+[completed histories and independent audits](cls-epawf-segregated-picard-r3-evidence/native/followup-completed-review.json).
 
 ## Common-reference accuracy for cancelling directions (41ef144)
 

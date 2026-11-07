@@ -1,0 +1,213 @@
+{
+  "scope": "Additional diagnostic from independently audited original-target3.8960677838 endpoint, same original h0/history and stage400/.0025/2165/tol2e-12. Full504 free-k response space, controlled H2e-12, corrected bound normalization and measured direction refresh before constrained re-solve. Eight numerical corrections requested; not original-start validation or physical acceptance.",
+  "utc": "2026-11-07T00:29:23.884913+00:00",
+  "producing_code_commit": "7300df33eb5130415a6d615f0e61c49ef1aa3871",
+  "command": [
+    "python3",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-source/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py",
+    "--solver",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-7300df3/IncNavierStokesSolver",
+    "--resolution-probe",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-7300df3/RANSWallResolutionProbe",
+    "--output",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/direction-refresh-v2-full504-at3p896",
+    "--reduced",
+    "--reduced-verify",
+    "--reduced-response-cache",
+    "--reduced-basis",
+    "504",
+    "--reduced-maximum-basis",
+    "512",
+    "--reduced-krylov",
+    "64",
+    "--reduced-radius",
+    ".4",
+    "--reduced-step",
+    "5e-6",
+    "--reduced-h-tolerance",
+    "2e-12",
+    "--reduced-source-ray",
+    "--reduced-source-refinements",
+    "1",
+    "--reduced-adaptive-space",
+    "--reduced-second-order",
+    "--reduced-constraint-secant",
+    "--reduced-restoration-weight",
+    "0",
+    "--steps",
+    "1",
+    "--sweeps",
+    "8",
+    "--timeout",
+    "28800",
+    "--guess-file",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/qualified-full504-latest-9f/target/reduced-trial-t0.0025000000000000001-f006292c518d-1-accepted.json",
+    "--reduced-interior-source-anchor",
+    "--reduced-fast-destruction",
+    "--reduced-response-reuse-updates",
+    "2",
+    "--reduced-directional-refresh-updates",
+    "4",
+    "--reduced-maximum-radius",
+    "4"
+  ],
+  "pid": 126064,
+  "postprocess_pid": 126065,
+  "ranks": 1,
+  "thread_limits": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "observed_numerical_or_compiler_processes": [
+    [
+      107751,
+      3
+    ],
+    [
+      110361,
+      3
+    ],
+    [
+      111503,
+      3
+    ],
+    [
+      113895,
+      3
+    ],
+    [
+      115794,
+      3
+    ],
+    [
+      117246,
+      3
+    ],
+    [
+      117253,
+      3
+    ],
+    [
+      120954,
+      3
+    ],
+    [
+      123467,
+      3
+    ],
+    [
+      123552,
+      3
+    ],
+    [
+      125179,
+      3
+    ],
+    [
+      125301,
+      3
+    ],
+    [
+      125926,
+      3
+    ],
+    [
+      125933,
+      3
+    ],
+    [
+      126016,
+      3
+    ]
+  ],
+  "conservative_threads_before_launch": 45,
+  "reserved_auxiliary_threads": 6,
+  "input_audit": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/audit-qualified-full504-latest-9f-point1/audit.json",
+    "sha256": "2595c42ff70db3802c88907ed775a41cfad909e6ed677ae2bcbe5bb8851a54d1",
+    "original_norms": [
+      9.654686164860706e-13,
+      1.801619556602896e-12,
+      3.8960677838217963,
+      5.3138168167240856e-14,
+      6.204563137581017e-16,
+      6.917341909863082e-16,
+      3.2017845406212547e-17,
+      0.0
+    ],
+    "ground": {
+      "admissible": true,
+      "minimum": 6.674520211230873e-07,
+      "arithmetic_scale": 3.038726226247024e-17,
+      "point": [
+        1.5632817638986287,
+        0.0,
+        0.0
+      ],
+      "geometry": 4.0,
+      "extrema_checked": 20.0
+    },
+    "qualification": {
+      "r2_covariance": [
+        5.275085123185762e-05,
+        0.17563893780447784
+      ],
+      "r2_inner_minimum_point": [
+        -2.1666666666666665,
+        0.0,
+        0.0,
+        0.0002700084576360101,
+        0.5131442275256985,
+        0.0008669371805676811,
+        0.2644633378803249,
+        0.00018000563842400673,
+        5.275085123185762e-05
+      ],
+      "r2_outer_minimum_point": [
+        -2.0,
+        0.0,
+        2.0,
+        0.5066178397589804,
+        0.07151702031197135,
+        0.17563893780447784
+      ],
+      "r2_outer_range": [
+        0.0009999987965951807,
+        0.9923797997261811,
+        1.0055956168488467,
+        0.9819776987880399,
+        1.0030950443017737,
+        0.9981890980217292,
+        1.0075126919529598
+      ],
+      "r2_qualified": [
+        1.0
+      ],
+      "r2_scalar_domain": [
+        1.0,
+        0.0005289015073781736,
+        0.0002700084576360101,
+        0.5066178397589804,
+        0.03631791663093067,
+        0.5095835330891129,
+        0.07132676839603436,
+        0.821053214919213,
+        1.0
+      ],
+      "r4_outer_gradient_witness": [
+        -2.5,
+        0.0,
+        2.0,
+        0.0,
+        2.0,
+        -0.0009999987965951807,
+        31.0,
+        1.0
+      ]
+    }
+  }
+}

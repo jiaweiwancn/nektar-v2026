@@ -1,0 +1,939 @@
+{
+  "status": "passed_direction_refresh_checks_not_m8_convergence",
+  "run": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/direction-refresh-v2-enabled",
+  "script_sha256": "3deb0bd231f6eaf8751fae76f3afdcb96940e9b32a81c8d7dbba48dfbc6a4a0c",
+  "corrections": [
+    {
+      "refresh": {
+        "purpose": "linear",
+        "refresh": 1,
+        "budget": 4,
+        "before_state_sha256": "5da910a0399de374cdc392aaf1a0c4796c62f7a16ae6967c022b13bdedc67ba7",
+        "state_sha256": "5da910a0399de374cdc392aaf1a0c4796c62f7a16ae6967c022b13bdedc67ba7",
+        "before_history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca",
+        "history_sha256": "f006292c518da35196f096cd36d46b062315aacc6700441cadd417d684fa69ca",
+        "residual_interpolation_defect": 2.8985925192880396e-15,
+        "state_interpolation_defect": 3.8484962263271365e-17,
+        "trace_interpolation_defect": 3.8485618335931136e-17,
+        "previous_bound_scaled_error": 0.0024157152275860808,
+        "two_size_bound_scaled_error": 2.5718473081581816e-05,
+        "required": 2e-12,
+        "attained": 1.0147429294486153e-12,
+        "half_attained": 1.0836086927654232e-12,
+        "scope": "rebuild all signed observation rows and re-solve the constrained model before any actual trial; accepted state, k and physical history unchanged",
+        "event": "response_direction_refreshed",
+        "iteration": 1,
+        "alpha": 400,
+        "time": 0.0025,
+        "seconds": 1281.75703603
+      },
+      "direction": {
+        "iteration": 1,
+        "basis_dimension": 96,
+        "response_rank": 96,
+        "active_constraints": 19,
+        "radius": 0.7200000000000001,
+        "displacement": 0.5913111780505149,
+        "predicted_norm": 3.9511486339189457,
+        "predicted_violation": 1.3945195909484398e-12,
+        "directional_refreshes": 1
+      },
+      "checks": [
+        {
+          "purpose": "linear",
+          "available": true,
+          "passed": true,
+          "age": 1,
+          "required": 2e-12,
+          "attained": 9.79317476797991e-13,
+          "half_attained": 1.148484525647506e-12,
+          "two_size_residual_error": 2.5878984363194118e-05,
+          "two_size_observation_error": 1.954545520184859e-05,
+          "model_residual_error": 0.00746079864402912,
+          "model_observation_error": 0.000803761797272852,
+          "bound_scaled_observation_model_error": 0.000803761797272852,
+          "bound_scaled_observation_two_size_error": 1.954545520184859e-05,
+          "bound_scaled_model_error_witness": {
+            "observation": 23327,
+            "family": 2,
+            "point": [
+              -3,
+              0,
+              2
+            ],
+            "projected": false,
+            "normalization_scale": 0.07263583326186134,
+            "bound_width": 0.02,
+            "predicted_raw_action": 7.211946105437813e-05,
+            "coarse_raw_action": 7.095154142767543e-05,
+            "half_raw_action": 7.095182289659869e-05
+          },
+          "bound_scaled_two_size_error_witness": {
+            "observation": 24193,
+            "family": 0,
+            "point": [
+              -2,
+              0,
+              2
+            ],
+            "projected": false,
+            "normalization_scale": 0.45397395788663325,
+            "bound_width": 0.001,
+            "predicted_raw_action": -1.9212628317540072e-06,
+            "coarse_raw_action": -1.9170087280887914e-06,
+            "half_raw_action": -1.9081356004321125e-06
+          },
+          "fraction": 1.6911569358402548e-05,
+          "field_norm": 0.5913111780505149,
+          "measured_action_norm": 0.18241578024706864,
+          "half_residual_signal": 1.5424685598577094e-06,
+          "coarse_violation": 0,
+          "half_violation": 0,
+          "signed_observations": [
+            {
+              "observation": 24559,
+              "family": 0,
+              "sign": -1,
+              "region": 0,
+              "block": 0,
+              "point": [
+                -2.5,
+                0,
+                2
+              ],
+              "projected": false,
+              "signed_base": -9.984038032082032e-07,
+              "predicted_change": 1.6884558487030586e-11,
+              "measured_change": -1.3151042177482305e-10,
+              "half_predicted_change": 8.442279243515293e-12,
+              "half_measured_change": -5.159908183730372e-11
+            },
+            {
+              "observation": 25063,
+              "family": 0,
+              "sign": -1,
+              "region": 1,
+              "block": 0,
+              "point": [
+                -1,
+                0,
+                2
+              ],
+              "projected": false,
+              "signed_base": -1.000091231183331e-06,
+              "predicted_change": 1.691311171592577e-11,
+              "measured_change": 1.5754838909218257e-10,
+              "half_predicted_change": 8.456555857962885e-12,
+              "half_measured_change": 1.8829946397315299e-10
+            },
+            {
+              "observation": 47107,
+              "family": 0,
+              "sign": 1,
+              "region": 0,
+              "block": 0,
+              "point": [
+                -2,
+                0,
+                4
+              ],
+              "projected": false,
+              "signed_base": -9.99735515726241e-07,
+              "predicted_change": -3.0950750243245816e-08,
+              "measured_change": -3.1006677428354336e-08,
+              "half_predicted_change": -1.5475375121622908e-08,
+              "half_measured_change": -1.5496652397342204e-08
+            },
+            {
+              "observation": 47149,
+              "family": 0,
+              "sign": 1,
+              "region": 1,
+              "block": 0,
+              "point": [
+                -1,
+                0,
+                4
+              ],
+              "projected": false,
+              "signed_base": -0.00039313024624478693,
+              "predicted_change": 6.648449347916184e-09,
+              "measured_change": 6.595897247051163e-09,
+              "half_predicted_change": 3.324224673958092e-09,
+              "half_measured_change": 3.299861341099647e-09
+            },
+            {
+              "observation": 24196,
+              "family": 1,
+              "sign": -1,
+              "region": 0,
+              "block": 2,
+              "point": [
+                -2,
+                0,
+                2
+              ],
+              "projected": false,
+              "signed_base": -0.3221075816631558,
+              "predicted_change": -3.873302299588749e-08,
+              "measured_change": -3.873301819351525e-08,
+              "half_predicted_change": -1.9366511497943744e-08,
+              "half_measured_change": -1.9366509096757625e-08
+            },
+            {
+              "observation": 52284,
+              "family": 1,
+              "sign": -1,
+              "region": 1,
+              "block": 2,
+              "point": [
+                1.6666666666666665,
+                0,
+                2
+              ],
+              "projected": false,
+              "signed_base": -0.3864886315377847,
+              "predicted_change": -1.3505192283156114e-08,
+              "measured_change": -1.3505189109045116e-08,
+              "half_predicted_change": -6.752596141578057e-09,
+              "half_measured_change": -6.7525981727992734e-09
+            },
+            {
+              "observation": 24898,
+              "family": 1,
+              "sign": 1,
+              "region": 0,
+              "block": 2,
+              "point": [
+                -2.25,
+                0,
+                2.25
+              ],
+              "projected": false,
+              "signed_base": -0.33553072779510806,
+              "predicted_change": -1.3414490093151135e-07,
+              "measured_change": -1.3414490097806944e-07,
+              "half_predicted_change": -6.707245046575568e-08,
+              "half_measured_change": -6.707245048654593e-08
+            },
+            {
+              "observation": 25726,
+              "family": 1,
+              "sign": 1,
+              "region": 1,
+              "block": 2,
+              "point": [
+                -1,
+                0,
+                2.2083333333333335
+              ],
+              "projected": false,
+              "signed_base": -0.741163231626385,
+              "predicted_change": -6.163456907346758e-08,
+              "measured_change": -6.163457090600256e-08,
+              "half_predicted_change": -3.081728453673379e-08,
+              "half_measured_change": -3.08172881714283e-08
+            },
+            {
+              "observation": 51031,
+              "family": 2,
+              "sign": -1,
+              "region": 0,
+              "block": 3,
+              "point": [
+                -1.5833333333333333,
+                0,
+                2
+              ],
+              "projected": false,
+              "signed_base": -0.14676238838362,
+              "predicted_change": 1.6465937302404285e-08,
+              "measured_change": 1.6466325341999936e-08,
+              "half_predicted_change": 8.232968651202142e-09,
+              "half_measured_change": 8.233151195050893e-09
+            },
+            {
+              "observation": 53928,
+              "family": 2,
+              "sign": -1,
+              "region": 0,
+              "block": 3,
+              "point": [
+                -1.5833333333333333,
+                0,
+                2
+              ],
+              "projected": true,
+              "signed_base": -0.14676238838362,
+              "predicted_change": 1.6465937302404285e-08,
+              "measured_change": 1.6466325341999936e-08,
+              "half_predicted_change": 8.232968651202142e-09,
+              "half_measured_change": 8.233151195050893e-09
+            },
+            {
+              "observation": 52361,
+              "family": 2,
+              "sign": -1,
+              "region": 1,
+              "block": 3,
+              "point": [
+                1.8333333333333335,
+                0,
+                2
+              ],
+              "projected": false,
+              "signed_base": -0.17560588938196897,
+              "predicted_change": 4.03932337001983e-09,
+              "measured_change": 4.039300000586713e-09,
+              "half_predicted_change": 2.019661685009915e-09,
+              "half_measured_change": 2.0196497998906435e-09
+            },
+            {
+              "observation": 54348,
+              "family": 2,
+              "sign": -1,
+              "region": 1,
+              "block": 3,
+              "point": [
+                1.8333333333333335,
+                0,
+                2
+              ],
+              "projected": true,
+              "signed_base": -0.17560588938196897,
+              "predicted_change": 4.03932337001983e-09,
+              "measured_change": 4.039300000586713e-09,
+              "half_predicted_change": 2.019661685009915e-09,
+              "half_measured_change": 2.0196497998906435e-09
+            },
+            {
+              "observation": 49929,
+              "family": 2,
+              "sign": 1,
+              "region": 0,
+              "block": 3,
+              "point": [
+                -3.4166666666666665,
+                0,
+                2
+              ],
+              "projected": false,
+              "signed_base": -0.844417480843751,
+              "predicted_change": 9.173334335687681e-08,
+              "measured_change": 9.144011736614224e-08,
+              "half_predicted_change": 4.5866671678438405e-08,
+              "half_measured_change": 4.572682363150399e-08
+            },
+            {
+              "observation": 53580,
+              "family": 2,
+              "sign": 1,
+              "region": 0,
+              "block": 3,
+              "point": [
+                -3.4166666666666665,
+                0,
+                2
+              ],
+              "projected": true,
+              "signed_base": -0.844417480843751,
+              "predicted_change": 9.173334335613261e-08,
+              "measured_change": 9.144011736614224e-08,
+              "half_predicted_change": 4.5866671678066306e-08,
+              "half_measured_change": 4.572682363150399e-08
+            },
+            {
+              "observation": 3263,
+              "family": 2,
+              "sign": 1,
+              "region": 1,
+              "block": 3,
+              "point": [
+                0.9602898564975364,
+                0,
+                2.4694275595840582
+              ],
+              "projected": false,
+              "signed_base": -0.9959849216752303,
+              "predicted_change": 1.720514489240506e-10,
+              "measured_change": 1.7208055152261778e-10,
+              "half_predicted_change": 8.60257244620253e-11,
+              "half_measured_change": 8.603920439640882e-11
+            },
+            {
+              "observation": 52692,
+              "family": 2,
+              "sign": 1,
+              "region": 1,
+              "block": 3,
+              "point": [
+                1.1016667612931865,
+                0,
+                2
+              ],
+              "projected": true,
+              "signed_base": -1.5596970641117092,
+              "predicted_change": 2.74540686979349e-08,
+              "measured_change": 2.7454088837375783e-08,
+              "half_predicted_change": 1.372703434896745e-08,
+              "half_measured_change": 1.3727029897999603e-08
+            },
+            {
+              "observation": 51032,
+              "family": 3,
+              "sign": -1,
+              "region": 0,
+              "block": 2,
+              "point": [
+                -1.5833333333333333,
+                0,
+                1
+              ],
+              "projected": false,
+              "signed_base": -0.8837393169140118,
+              "predicted_change": 2.230909708031852e-08,
+              "measured_change": 2.230909397001878e-08,
+              "half_predicted_change": 1.115454854015926e-08,
+              "half_measured_change": 1.1154551515936186e-08
+            },
+            {
+              "observation": 52362,
+              "family": 3,
+              "sign": -1,
+              "region": 1,
+              "block": 2,
+              "point": [
+                1.8333333333333335,
+                0,
+                1
+              ],
+              "projected": false,
+              "signed_base": -0.922847642832636,
+              "predicted_change": 5.464902244574257e-09,
+              "measured_change": 5.464901521129147e-09,
+              "half_predicted_change": 2.7324511222871284e-09,
+              "half_measured_change": 2.732452562033758e-09
+            },
+            {
+              "observation": 50500,
+              "family": 3,
+              "sign": 1,
+              "region": 0,
+              "block": 2,
+              "point": [
+                -2.4166666666666665,
+                0,
+                1
+              ],
+              "projected": false,
+              "signed_base": -0.3595310868564683,
+              "predicted_change": 1.266945362327594e-07,
+              "measured_change": 1.2669453676175904e-07,
+              "half_predicted_change": 6.33472681163797e-08,
+              "half_measured_change": 6.334727291159123e-08
+            },
+            {
+              "observation": 51982,
+              "family": 3,
+              "sign": 1,
+              "region": 1,
+              "block": 2,
+              "point": [
+                1.1016667612931865,
+                0,
+                1
+              ],
+              "projected": false,
+              "signed_base": -0.7189000601295348,
+              "predicted_change": 3.713246624570511e-08,
+              "measured_change": 3.7132470174211876e-08,
+              "half_predicted_change": 1.8566233122852554e-08,
+              "half_measured_change": 1.8566225314651135e-08
+            }
+          ],
+          "predicted_merit_slope": -0.09684554591719931,
+          "actual_merit_slope": -0.09499910567037312,
+          "half_merit_slope": -0.09500017306617888,
+          "model_consistent_in_bound_units": true,
+          "directional_refreshes": 1,
+          "profile_branch_change": false,
+          "event": "response_chord_direction_check",
+          "iteration": 1,
+          "alpha": 400,
+          "time": 0.0025,
+          "seconds": 1323.938783027
+        },
+        {
+          "purpose": "source_refined",
+          "available": true,
+          "passed": true,
+          "age": 1,
+          "required": 2e-12,
+          "attained": 9.942160006007067e-13,
+          "half_attained": 1.1448397362256027e-12,
+          "two_size_residual_error": 4.65834407129599e-06,
+          "two_size_observation_error": 1.262680435446396e-05,
+          "model_residual_error": 0.0065884166295243525,
+          "model_observation_error": 0.0007278157160299989,
+          "bound_scaled_observation_model_error": 0.0007278157160299989,
+          "bound_scaled_observation_two_size_error": 1.262680435446396e-05,
+          "bound_scaled_model_error_witness": {
+            "observation": 23327,
+            "family": 2,
+            "point": [
+              -3,
+              0,
+              2
+            ],
+            "projected": false,
+            "normalization_scale": 0.07263583326186134,
+            "bound_width": 0.02,
+            "predicted_raw_action": 7.09706164287249e-05,
+            "coarse_raw_action": 6.991349779409507e-05,
+            "half_raw_action": 6.99133064088264e-05
+          },
+          "bound_scaled_two_size_error_witness": {
+            "observation": 32359,
+            "family": 0,
+            "point": [
+              -3,
+              0,
+              3
+            ],
+            "projected": false,
+            "normalization_scale": 0.30264930525775546,
+            "bound_width": 0.001,
+            "predicted_raw_action": -1.4940201904886064e-07,
+            "coarse_raw_action": -1.5005089556574777e-07,
+            "half_raw_action": -1.5387238913125188e-07
+          },
+          "fraction": 1.6895368082506342e-05,
+          "field_norm": 0.5918781970991278,
+          "measured_action_norm": 0.18310134162178932,
+          "half_residual_signal": 1.5467822815504346e-06,
+          "coarse_violation": 0,
+          "half_violation": 0,
+          "signed_observations": [
+            {
+              "observation": 24559,
+              "family": 0,
+              "sign": -1,
+              "region": 0,
+              "block": 0,
+              "point": [
+                -2.5,
+                0,
+                2
+              ],
+              "projected": false,
+              "signed_base": -9.984038032082032e-07,
+              "predicted_change": 1.6868383346412493e-11,
+              "measured_change": -3.06796636682303e-10,
+              "half_predicted_change": 8.434191673206247e-12,
+              "half_measured_change": -1.478390490887342e-10
+            },
+            {
+              "observation": 25063,
+              "family": 0,
+              "sign": -1,
+              "region": 1,
+              "block": 0,
+              "point": [
+                -1,
+                0,
+                2
+              ],
+              "projected": false,
+              "signed_base": -1.000091231183331e-06,
+              "predicted_change": 1.6896908959894552e-11,
+              "measured_change": 2.5314683201565835e-10,
+              "half_predicted_change": 8.448454479947276e-12,
+              "half_measured_change": 1.0484812551215794e-10
+            },
+            {
+              "observation": 47107,
+              "family": 0,
+              "sign": 1,
+              "region": 0,
+              "block": 0,
+              "point": [
+                -2,
+                0,
+                4
+              ],
+              "projected": false,
+              "signed_base": -9.99735515726241e-07,
+              "predicted_change": -3.0437693339300966e-08,
+              "measured_change": -3.058118952160928e-08,
+              "half_predicted_change": -1.5218846669650483e-08,
+              "half_measured_change": -1.5286102467246788e-08
+            },
+            {
+              "observation": 47149,
+              "family": 0,
+              "sign": 1,
+              "region": 1,
+              "block": 0,
+              "point": [
+                -1,
+                0,
+                4
+              ],
+              "projected": false,
+              "signed_base": -0.00039313024624478693,
+              "predicted_change": 6.642080137631891e-09,
+              "measured_change": 6.535675795014313e-09,
+              "half_predicted_change": 3.3210400688159456e-09,
+              "half_measured_change": 3.265393376919806e-09
+            },
+            {
+              "observation": 24196,
+              "family": 1,
+              "sign": -1,
+              "region": 0,
+              "block": 2,
+              "point": [
+                -2,
+                0,
+                2
+              ],
+              "projected": false,
+              "signed_base": -0.3221075816631558,
+              "predicted_change": -3.839387160843781e-08,
+              "measured_change": -3.8393867237485136e-08,
+              "half_predicted_change": -1.9196935804218905e-08,
+              "half_measured_change": -1.9196944492450683e-08
+            },
+            {
+              "observation": 52284,
+              "family": 1,
+              "sign": -1,
+              "region": 1,
+              "block": 2,
+              "point": [
+                1.6666666666666665,
+                0,
+                2
+              ],
+              "projected": false,
+              "signed_base": -0.3864886315377847,
+              "predicted_change": -1.3343476582142041e-08,
+              "measured_change": -1.3343476542770525e-08,
+              "half_predicted_change": -6.671738291071021e-09,
+              "half_measured_change": -6.671741895954634e-09
+            },
+            {
+              "observation": 24898,
+              "family": 1,
+              "sign": 1,
+              "region": 0,
+              "block": 2,
+              "point": [
+                -2.25,
+                0,
+                2.25
+              ],
+              "projected": false,
+              "signed_base": -0.33553072779510806,
+              "predicted_change": -1.3570339999167306e-07,
+              "measured_change": -1.3570339931933904e-07,
+              "half_predicted_change": -6.785169999583653e-08,
+              "half_measured_change": -6.785169759645907e-08
+            },
+            {
+              "observation": 25726,
+              "family": 1,
+              "sign": 1,
+              "region": 1,
+              "block": 2,
+              "point": [
+                -1,
+                0,
+                2.2083333333333335
+              ],
+              "projected": false,
+              "signed_base": -0.741163231626385,
+              "predicted_change": -6.126408219015563e-08,
+              "measured_change": -6.126408123827591e-08,
+              "half_predicted_change": -3.0632041095077816e-08,
+              "half_measured_change": -3.0632040658958664e-08
+            },
+            {
+              "observation": 51031,
+              "family": 2,
+              "sign": -1,
+              "region": 0,
+              "block": 3,
+              "point": [
+                -1.5833333333333333,
+                0,
+                2
+              ],
+              "projected": false,
+              "signed_base": -0.14676238838362,
+              "predicted_change": 1.686802512726812e-08,
+              "measured_change": 1.686838418937206e-08,
+              "half_predicted_change": 8.43401256363406e-09,
+              "half_measured_change": 8.434212415780283e-09
+            },
+            {
+              "observation": 53928,
+              "family": 2,
+              "sign": -1,
+              "region": 0,
+              "block": 3,
+              "point": [
+                -1.5833333333333333,
+                0,
+                2
+              ],
+              "projected": true,
+              "signed_base": -0.14676238838362,
+              "predicted_change": 1.686802512726812e-08,
+              "measured_change": 1.686838418937206e-08,
+              "half_predicted_change": 8.43401256363406e-09,
+              "half_measured_change": 8.434212415780283e-09
+            },
+            {
+              "observation": 52361,
+              "family": 2,
+              "sign": -1,
+              "region": 1,
+              "block": 3,
+              "point": [
+                1.8333333333333335,
+                0,
+                2
+              ],
+              "projected": false,
+              "signed_base": -0.17560588938196897,
+              "predicted_change": 3.9897490987166615e-09,
+              "measured_change": 3.989710346457215e-09,
+              "half_predicted_change": 1.9948745493583307e-09,
+              "half_measured_change": 1.9948560757318607e-09
+            },
+            {
+              "observation": 54348,
+              "family": 2,
+              "sign": -1,
+              "region": 1,
+              "block": 3,
+              "point": [
+                1.8333333333333335,
+                0,
+                2
+              ],
+              "projected": true,
+              "signed_base": -0.17560588938196897,
+              "predicted_change": 3.9897490987166615e-09,
+              "measured_change": 3.989710346457215e-09,
+              "half_predicted_change": 1.9948745493583307e-09,
+              "half_measured_change": 1.9948560757318607e-09
+            },
+            {
+              "observation": 49929,
+              "family": 2,
+              "sign": 1,
+              "region": 0,
+              "block": 3,
+              "point": [
+                -3.4166666666666665,
+                0,
+                2
+              ],
+              "projected": false,
+              "signed_base": -0.844417480843751,
+              "predicted_change": 9.288149952574817e-08,
+              "measured_change": 9.27442504984938e-08,
+              "half_predicted_change": 4.6440749762874084e-08,
+              "half_measured_change": 4.637082535536076e-08
+            },
+            {
+              "observation": 53580,
+              "family": 2,
+              "sign": 1,
+              "region": 0,
+              "block": 3,
+              "point": [
+                -3.4166666666666665,
+                0,
+                2
+              ],
+              "projected": true,
+              "signed_base": -0.844417480843751,
+              "predicted_change": 9.288149952488388e-08,
+              "measured_change": 9.27442504984938e-08,
+              "half_predicted_change": 4.644074976244194e-08,
+              "half_measured_change": 4.637082535536076e-08
+            },
+            {
+              "observation": 3263,
+              "family": 2,
+              "sign": 1,
+              "region": 1,
+              "block": 3,
+              "point": [
+                0.9602898564975364,
+                0,
+                2.4694275595840582
+              ],
+              "projected": false,
+              "signed_base": -0.9959849216752303,
+              "predicted_change": 1.7110631122545597e-10,
+              "measured_change": 1.7113152425045732e-10,
+              "half_predicted_change": 8.555315561272799e-11,
+              "half_measured_change": 8.556769653492481e-11
+            },
+            {
+              "observation": 52692,
+              "family": 2,
+              "sign": 1,
+              "region": 1,
+              "block": 3,
+              "point": [
+                1.1016667612931865,
+                0,
+                2
+              ],
+              "projected": true,
+              "signed_base": -1.5596970641117092,
+              "predicted_change": 2.730568608648811e-08,
+              "measured_change": 2.7305697165884235e-08,
+              "half_predicted_change": 1.3652843043244056e-08,
+              "half_measured_change": 1.3652855534239727e-08
+            },
+            {
+              "observation": 51032,
+              "family": 3,
+              "sign": -1,
+              "region": 0,
+              "block": 2,
+              "point": [
+                -1.5833333333333333,
+                0,
+                1
+              ],
+              "projected": false,
+              "signed_base": -0.8837393169140118,
+              "predicted_change": 2.2853799446628872e-08,
+              "measured_change": 2.2853801232690102e-08,
+              "half_predicted_change": 1.1426899723314436e-08,
+              "half_measured_change": 1.1426905147271847e-08
+            },
+            {
+              "observation": 52362,
+              "family": 3,
+              "sign": -1,
+              "region": 1,
+              "block": 2,
+              "point": [
+                1.8333333333333335,
+                0,
+                1
+              ],
+              "projected": false,
+              "signed_base": -0.922847642832636,
+              "predicted_change": 5.397786358758717e-09,
+              "measured_change": 5.397786632159832e-09,
+              "half_predicted_change": 2.6988931793793586e-09,
+              "half_measured_change": 2.6988915116610497e-09
+            },
+            {
+              "observation": 50500,
+              "family": 3,
+              "sign": 1,
+              "region": 0,
+              "block": 2,
+              "point": [
+                -2.4166666666666665,
+                0,
+                1
+              ],
+              "projected": false,
+              "signed_base": -0.3595310868564683,
+              "predicted_change": 1.2581015163654834e-07,
+              "measured_change": 1.2581014680509355e-07,
+              "half_predicted_change": 6.290507581827417e-08,
+              "half_measured_change": 6.290507793669978e-08
+            },
+            {
+              "observation": 51982,
+              "family": 3,
+              "sign": 1,
+              "region": 1,
+              "block": 2,
+              "point": [
+                1.1016667612931865,
+                0,
+                1
+              ],
+              "projected": false,
+              "signed_base": -0.7189000601295348,
+              "predicted_change": 3.693176336810907e-08,
+              "measured_change": 3.693176186512993e-08,
+              "half_predicted_change": 1.8465881684054534e-08,
+              "half_measured_change": 1.8465890706959416e-08
+            }
+          ],
+          "predicted_merit_slope": -0.0968898234058621,
+          "actual_merit_slope": -0.09530548055017218,
+          "half_merit_slope": -0.0953047520442006,
+          "model_consistent_in_bound_units": true,
+          "directional_refreshes": 1,
+          "profile_branch_change": false,
+          "event": "response_chord_direction_check",
+          "iteration": 1,
+          "alpha": 400,
+          "time": 0.0025,
+          "seconds": 1518.368494285
+        }
+      ],
+      "trial": {
+        "fraction": 1,
+        "proposal_origin": "nonlinear_source_refined_direction",
+        "accepted": true,
+        "norm": 3.958775302989178,
+        "full_norm": 3.958775302989178,
+        "violation": 0,
+        "families": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "predicted_norm": 3.953108411160756,
+        "model_error": 0.13420309353348825,
+        "predicted_violation": 0.0010745468528323577,
+        "non_k_error": 7.114220182432315e-10,
+        "second_order_corrections": 2,
+        "displacement": 0.5918781997791749,
+        "physical_k_displacement": 0.3021585637427289,
+        "event": "trial",
+        "iteration": 1,
+        "alpha": 400,
+        "time": 0.0025,
+        "seconds": 1567.05518299
+      }
+    }
+  ],
+  "matched_control": {
+    "run": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/direction-refresh-v2-control",
+    "identical_input_except_refresh_budget": true,
+    "identical_executable_and_libraries": true,
+    "original_prefix_bitwise_identical": true,
+    "accepted_original_residual_histories": {
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/direction-refresh-v2-enabled": [
+        3.971121545762026,
+        3.958775302989178
+      ],
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/direction-refresh-v2-control": [
+        3.971121545762026,
+        3.963751759207461
+      ]
+    },
+    "controlled_H_evaluations": {
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/direction-refresh-v2-enabled": 214,
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/direction-refresh-v2-control": 212
+    }
+  }
+}

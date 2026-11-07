@@ -1,0 +1,112 @@
+{
+  "scope": "Same-image verification-Off repeat of corrected two-update native refresh fixture. Require all initial/accepted original-state/norm bits to match On and preserve original physical history; not M8 convergence.",
+  "utc": "2026-11-07T00:45:29.607215+00:00",
+  "producing_code_commit": "7300df33eb5130415a6d615f0e61c49ef1aa3871",
+  "command": [
+    "python3",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-source/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py",
+    "--solver",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-7300df3/IncNavierStokesSolver",
+    "--resolution-probe",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/binaries-7300df3/RANSWallResolutionProbe",
+    "--output",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/direction-refresh-v2-unverified",
+    "--reduced",
+    "--reduced-response-cache",
+    "--reduced-basis",
+    "96",
+    "--reduced-maximum-basis",
+    "512",
+    "--reduced-krylov",
+    "16",
+    "--reduced-radius",
+    ".4",
+    "--reduced-step",
+    "1e-5",
+    "--reduced-h-tolerance",
+    "2e-9",
+    "--reduced-source-ray",
+    "--reduced-source-refinements",
+    "1",
+    "--reduced-adaptive-space",
+    "--reduced-second-order",
+    "--reduced-constraint-secant",
+    "--reduced-restoration-weight",
+    "0",
+    "--steps",
+    "1",
+    "--sweeps",
+    "2",
+    "--timeout",
+    "14400",
+    "--guess-file",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/previous-warm160-extended/target/reduced-trial-t0.0025000000000000001-f006292c518d-6-accepted.json",
+    "--reduced-response-reuse-updates",
+    "2",
+    "--reduced-interior-source-anchor",
+    "--reduced-fast-destruction",
+    "--reduced-directional-refresh-updates",
+    "4"
+  ],
+  "pid": 126491,
+  "ranks": 1,
+  "thread_limits": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "observed_numerical_or_compiler_processes": [
+    [
+      107751,
+      3
+    ],
+    [
+      110361,
+      3
+    ],
+    [
+      111503,
+      3
+    ],
+    [
+      113895,
+      3
+    ],
+    [
+      115794,
+      3
+    ],
+    [
+      117253,
+      3
+    ],
+    [
+      120954,
+      3
+    ],
+    [
+      123552,
+      3
+    ],
+    [
+      125301,
+      3
+    ],
+    [
+      126111,
+      3
+    ],
+    [
+      126355,
+      3
+    ],
+    [
+      126478,
+      3
+    ]
+  ],
+  "reserved_auxiliary_threads": 6
+}

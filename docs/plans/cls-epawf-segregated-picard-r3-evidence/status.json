@@ -1,6 +1,6 @@
 {
   "status": "native_development_in_progress_original_m8_unresolved",
-  "producing_code_commit": "7300df33eb5130415a6d615f0e61c49ef1aa3871",
+  "producing_code_commit": "e9bbda5382ee45bc69739b8649493330b38b82a7",
   "native_m8": {
     "status": "Completed original-h0 eight-update follow-up improves residual to17.75292474315745 and passes qualification, but does not converge; corrected direction-action refresh tests and longer original-start attempts continue",
     "qualified_first_stage": false,
@@ -51,7 +51,7 @@
       }
     },
     "latest_completed_original_start_case": "source-anchor-original160",
-    "running_original_start_case": "destruction-value-original160-3step",
+    "running_original_start_case": "direction-refresh-v2-original160-3step",
     "running_original_start_cases": [
       "current-original160-3step",
       "radius-cap4-original-3step",
@@ -59,7 +59,10 @@
       "source-precision-original160-3step",
       "response-chord-original160-3step",
       "response-chord-tight-original160-3step",
-      "destruction-value-original160-3step"
+      "destruction-value-original160-3step",
+      "direction-refresh-v2-original160-3step",
+      "reference-branch-enabled",
+      "reference-branch-control"
     ],
     "incomplete_original_start_followup": {
       "case": "response-cache-original-3step",
@@ -525,9 +528,73 @@
       "code": "7300df33eb5130415a6d615f0e61c49ef1aa3871",
       "build_passed": true,
       "focused_ctests_passed": 6,
-      "native_status": "running_matched_v2_two_update_tests",
+      "native_status": "passed_direction_refresh_checks_not_m8_convergence",
       "native_launch": "native/direction-refresh-v2-native-launch.json",
-      "acceptance_scope": "requires actual qualified original-equation correction after constrained re-solve; no convergence claim"
+      "acceptance_scope": "requires actual qualified original-equation correction after constrained re-solve; no convergence claim",
+      "native_receipt": "native/direction-refresh-v2-comparison-receipt.json",
+      "source_from_original_norm": 3.9946700988643817,
+      "terminal_original_norm": 3.958775302989178,
+      "control_original_norm": 3.963751759207461,
+      "controlled_H_evaluations": 214,
+      "control_H_evaluations": 212,
+      "all_H_converged": true,
+      "qualified": true,
+      "accepted_physical_steps": 0,
+      "accepted_time": 0,
+      "original_readback_exact": true,
+      "reference_initial_model_error": 0.0951773009735483,
+      "refreshed_model_error": 0.00746079864402912,
+      "actual_final_displacement": 0.5918781997791749,
+      "radius": 0.7200000000000001
+    },
+    "source_stencil_recovery": {
+      "code": "fd8c0344bbbe3ea4a180df7358d0235ee8b675a4",
+      "status": "passed_source_precision_direction_checks_not_m8_convergence",
+      "initial_derivative_error": 0.038206689174833955,
+      "final_derivative_error": 0.01788736359160398,
+      "refined_columns": 1,
+      "stencil_halvings": 1,
+      "initial_original_norm": 5.181970350463995,
+      "terminal_original_norm": 4.390562717753202,
+      "predicted_original_norm": 4.352781778504556,
+      "controlled_H_evaluations": 1019,
+      "all_H_converged": true,
+      "qualified": true,
+      "accepted_physical_steps": 0,
+      "accepted_time": 0,
+      "original_readback_exact": true,
+      "receipt": "native/source-precision-direction-check-receipt.json"
+    },
+    "reference_branch_reuse": {
+      "code": "e9bbda5382ee45bc69739b8649493330b38b82a7",
+      "status": "running_matched_original_start_three_update_tests",
+      "build_passed": true,
+      "focused_ctests_passed": 6,
+      "diagnosis": "Literal E/M reference-weight changes discard otherwise usable response history in the early original-start prefix; no baseline/cap changes observed there",
+      "policy": "Opt-in finite endpoint E/M history bridge only, current-branch direction checks and an independent identical-k non-k solve required before larger trials",
+      "diagnostic_evidence": "native/original-start-reference-switches.json",
+      "native_launch": "native/reference-branch-native-launch.json"
+    },
+    "corrected_verification_repeat": {
+      "code": "7300df33eb5130415a6d615f0e61c49ef1aa3871",
+      "status": "passed_reduced_verification_observability",
+      "launch": "native/direction-refresh-v2-unverified-launch.json",
+      "receipt": "native/direction-refresh-v2-verification-comparison-receipt.json",
+      "evidence": "native/direction-refresh-v2-verification-comparison.json",
+      "all_intermediate_states_and_original_norm_bits_identical": true,
+      "all_physical_history_slots_identical": true,
+      "accepted_physical_steps": 0,
+      "accepted_time": 0
+    },
+    "additional_complete_space_attempt": {
+      "code": "7300df33eb5130415a6d615f0e61c49ef1aa3871",
+      "status": "running_original_target_diagnostic_with_original_history",
+      "initial_original_norm": 3.8960677838217963,
+      "basis": 504,
+      "non_k_tolerance": 2e-12,
+      "numerical_updates_requested": 8,
+      "launch": "native/direction-refresh-v2-full504-at3p896-launch.json",
+      "physical_acceptance_inferred": false
     }
   },
   "latest_diagnostic_correction": {

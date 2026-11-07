@@ -1,0 +1,106 @@
+{
+  "status": "passed_source_precision_direction_checks_not_m8_convergence",
+  "script_sha256": "8934d10823cf1f218d90e37e4d2f0c83cea3f37d5f77725a6bf67f29effeb7a0",
+  "run": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/source-precision-full504",
+  "used_precision_refinements": [
+    {
+      "precision": {
+        "refinement": 0,
+        "available": true,
+        "dimension": 504,
+        "refined_columns": 1,
+        "stencil_halvings": 1,
+        "minimum_coarse_step": 1e-05,
+        "minimum_fine_step": 5e-06,
+        "initial_error": 0.038206689174833955,
+        "final_error": 0.01788736359160398,
+        "model_evaluations": 1009,
+        "model_evaluation_budget": 2080,
+        "columns": [
+          {
+            "column": 1,
+            "name": "response_krylov_1",
+            "halvings": 1,
+            "initial_error": 0.038206689174833955,
+            "final_error": 0.007778367523585628,
+            "coarse_step": 1e-05,
+            "fine_step": 5e-06
+          }
+        ],
+        "scope": "surrogate derivatives only; accuracy threshold unchanged; actual trials converge H",
+        "event": "source_derivative_precision",
+        "iteration": 0,
+        "alpha": 400,
+        "time": 0.0025,
+        "seconds": 10420.679404529
+      },
+      "refinement": {
+        "refinement": 0,
+        "improved": true,
+        "failure": "",
+        "dimension": 504,
+        "available_derivatives": 504,
+        "two_scale_error": 0.01788736359160398,
+        "augmented_face_solves": 544,
+        "augmented_face_fallbacks": 0,
+        "warm_face_solves": 17,
+        "warm_face_fallbacks": 0,
+        "ball_redundant_cuts": 89436,
+        "before_norm": 4.830095224819837,
+        "predicted_norm": 4.352490189206075,
+        "fraction": 0.5,
+        "original_merit_slope": -5.844257936893886,
+        "radius": 0.7200000000000001,
+        "scope": "constrained nonlinear destruction surrogate in measured response space; not Y(k)",
+        "event": "source_direction_refinement",
+        "iteration": 0,
+        "alpha": 400,
+        "time": 0.0025,
+        "seconds": 10489.860014196
+      },
+      "signed_actual_check": {
+        "available": true,
+        "required": 2e-12,
+        "attained": 1.1620006096304786e-12,
+        "half_attained": 1.803327073868223e-12,
+        "half_relative_residual_error": 0.0005577378318656148,
+        "predicted_merit_slope": -5.844257936893886,
+        "actual_merit_slope": -5.84520251565248,
+        "half_merit_slope": -5.8452022108111095,
+        "event": "source_refined_direction_check",
+        "iteration": 0,
+        "alpha": 400,
+        "time": 0.0025,
+        "seconds": 10513.919420671
+      },
+      "actual_trial": {
+        "fraction": 1,
+        "proposal_origin": "nonlinear_source_refined_direction",
+        "accepted": true,
+        "norm": 4.390562717753202,
+        "full_norm": 4.390562717753202,
+        "violation": 0,
+        "families": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "predicted_norm": 4.308871773587765,
+        "model_error": 0.6321869867984998,
+        "predicted_violation": 0,
+        "non_k_error": 1.6085501832034338e-12,
+        "second_order_corrections": 2,
+        "displacement": 0.4743240336763144,
+        "physical_k_displacement": 0.2421462199786458,
+        "event": "trial",
+        "iteration": 0,
+        "alpha": 400,
+        "time": 0.0025,
+        "seconds": 10801.426362917
+      },
+      "original_full_before": 5.181970350463995,
+      "original_full_after": 4.390562717753202
+    }
+  ]
+}

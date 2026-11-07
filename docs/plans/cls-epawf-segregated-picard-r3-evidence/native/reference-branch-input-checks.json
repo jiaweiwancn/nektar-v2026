@@ -1,0 +1,61 @@
+{
+  "scope": "Mac input preparation only; no native solver or original M8 convergence claim",
+  "source": "e9bbda5382ee45bc69739b8649493330b38b82a7",
+  "runner_sha256": "2c97818171a74f75e22593afc5d7ccb99ee5a144e8f9f7f96532c5b623d6658b",
+  "status": "passed_reference_branch_input_preparation_checks",
+  "checks": [
+    {
+      "case": "enabled",
+      "command": [
+        "python3",
+        "/private/tmp/nektar-picard-r3/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py",
+        "--prepare-only",
+        "--output",
+        "/private/tmp/picard-r3-reference-branch-input-e9bbda5/enabled",
+        "--reduced",
+        "--reduced-response-reuse-updates",
+        "2",
+        "--reduced-directional-refresh-updates",
+        "4",
+        "--reduced-reference-branch-reuse"
+      ],
+      "expected_success": true,
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "case": "no-refresh",
+      "command": [
+        "python3",
+        "/private/tmp/nektar-picard-r3/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py",
+        "--prepare-only",
+        "--output",
+        "/private/tmp/picard-r3-reference-branch-input-e9bbda5/no-refresh",
+        "--reduced",
+        "--reduced-response-reuse-updates",
+        "2",
+        "--reduced-reference-branch-reuse"
+      ],
+      "expected_success": false,
+      "exit_code": 1,
+      "stderr": "Traceback (most recent call last):\n  File \"/private/tmp/nektar-picard-r3/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py\", line 345, in <module>\n    raise SystemExit(main())\n  File \"/private/tmp/nektar-picard-r3/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py\", line 233, in main\n    require(not args.reduced_reference_branch_reuse or args.reduced_directional_refresh_updates > 0,\n  File \"/private/tmp/nektar-picard-r3/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py\", line 30, in require\n    raise ValueError(message)\nValueError: reference-branch reuse requires a positive direction-action refresh budget\n"
+    },
+    {
+      "case": "no-reuse",
+      "command": [
+        "python3",
+        "/private/tmp/nektar-picard-r3/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py",
+        "--prepare-only",
+        "--output",
+        "/private/tmp/picard-r3-reference-branch-input-e9bbda5/no-reuse",
+        "--reduced",
+        "--reduced-directional-refresh-updates",
+        "4",
+        "--reduced-reference-branch-reuse"
+      ],
+      "expected_success": false,
+      "exit_code": 1,
+      "stderr": "Traceback (most recent call last):\n  File \"/private/tmp/nektar-picard-r3/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py\", line 345, in <module>\n    raise SystemExit(main())\n  File \"/private/tmp/nektar-picard-r3/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py\", line 230, in main\n    require(0 <= args.reduced_directional_refresh_updates <= 4 and\n  File \"/private/tmp/nektar-picard-r3/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py\", line 30, in require\n    raise ValueError(message)\nValueError: direction-action refresh requires response reuse and a budget from zero to four\n"
+    }
+  ]
+}
