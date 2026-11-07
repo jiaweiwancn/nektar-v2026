@@ -573,6 +573,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         {"response_field_preconditioner_reuse",J::Boolean(m_reducedResponseCache)},
         {"response_chord_update_budget",J::Number(m_reducedResponseReuseUpdates)},
         {"directional_refresh_budget",J::Number(m_reducedDirectionalRefreshUpdates)},
+        {"protected_direction_refresh","true"},
+        {"directional_refresh_minimum_independence",J::Number(1e-4)},
         {"reference_branch_reuse",J::Boolean(m_reducedReferenceBranchReuse)},
         {"reference_branch_reuse_policy",J::Quote("only finite-step E/M reference-weight switches; historical model, not a derivative on the old branch; current probes must agree with the current branch and an independent same-k response")},
         {"directional_refresh_policy",J::Quote("optional same-base measured action interpolation before re-solving the residual and individual qualification model; not a derivative certificate")},
@@ -713,6 +715,11 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
     bool chordReferenceBridged=false;
     int directionRefreshes=0;
     int modelPacketSerial=0;
+    struct DirectionMeasurement
+    {
+        Vector coefficients,field,r,state,trace;
+    };
+    std::vector<DirectionMeasurement> directionMeasurements;
     std::string chordBranches;
     auto chordEligible=[&]() {
         return m_reducedResponseReuseUpdates && base.violation==0. && !failedModels &&
@@ -782,6 +789,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         const bool restore  = !continuationDiagnostic && base.violation > 0.;
         const int dimension = rows.size();
         const bool chordReuse=chordEligible();
+        if (!chordReuse) directionMeasurements.clear();
         nonKCache.reset();
         if (m_reducedResponseCache && !chordReuse)
         {
@@ -2041,21 +2049,36 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                         stateActions.push_back(column.stateAction);
                         traceActions.push_back(column.traceAction);
                     }
+                    RANSWallReduced::Matrix protectedFields;
+                    for (const auto &measured:directionMeasurements) protectedFields.push_back(measured.field);
+                    RANSWallReduced::SecantActionGeometry geometry;
                     const bool updated=RANSWallReduced::UpdateSecantActions(
-                            rActions,kColumns,coefficients,fineAction,1e-8) &&
-                        RANSWallReduced::UpdateSecantActions(stateActions,kColumns,coefficients,hs,1e-8) &&
-                        RANSWallReduced::UpdateSecantActions(traceActions,kColumns,coefficients,ht,1e-8);
+                            rActions,kColumns,coefficients,fineAction,1e-8,protectedFields,&geometry) &&
+                        RANSWallReduced::UpdateSecantActions(stateActions,kColumns,coefficients,hs,1e-8,protectedFields) &&
+                        RANSWallReduced::UpdateSecantActions(traceActions,kColumns,coefficients,ht,1e-8,protectedFields);
                     if (!updated) throw std::runtime_error("insufficient measured direction-action signal");
-                    auto defect=[&](const RANSWallReduced::Matrix &actions,Vector observed) {
+                    auto defect=[&](const RANSWallReduced::Matrix &actions,const Vector &z,Vector observed) {
                         for (int i=0;i<n;++i)
-                            for (int j=0;j<observed.size();++j) observed[j]-=coefficients[i]*actions[i][j];
+                            for (int j=0;j<observed.size();++j) observed[j]-=z[i]*actions[i][j];
                         return observed;
                     };
-                    const double residualDefect=dualNorm(defect(rActions,fineAction))/scale;
-                    const double stateDefect=Length(defect(stateActions,hs))/std::max(1.,Length(hs));
-                    const double traceDefect=Length(defect(traceActions,ht))/std::max(1.,Length(ht));
+                    const double residualDefect=dualNorm(defect(rActions,coefficients,fineAction))/scale;
+                    const double stateDefect=Length(defect(stateActions,coefficients,hs))/std::max(1.,Length(hs));
+                    const double traceDefect=Length(defect(traceActions,coefficients,ht))/std::max(1.,Length(ht));
                     if (std::max({residualDefect,stateDefect,traceDefect})>1e-8)
                         throw std::runtime_error("inaccurate direction-action interpolation");
+                    double preservedResidual=0.,preservedState=0.,preservedTrace=0.;
+                    for (const auto &measured:directionMeasurements)
+                    {
+                        preservedResidual=std::max(preservedResidual,
+                            dualNorm(defect(rActions,measured.coefficients,measured.r))/std::max(1.,dualNorm(measured.r)));
+                        preservedState=std::max(preservedState,
+                            Length(defect(stateActions,measured.coefficients,measured.state))/std::max(1.,Length(measured.state)));
+                        preservedTrace=std::max(preservedTrace,
+                            Length(defect(traceActions,measured.coefficients,measured.trace))/std::max(1.,Length(measured.trace)));
+                    }
+                    if (std::max({preservedResidual,preservedState,preservedTrace})>1e-8)
+                        throw std::runtime_error("direction-action refresh lost an earlier current-base measurement");
                     auto refreshed=columns;
                     for (int i=0;i<n;++i)
                     {
@@ -2073,6 +2096,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                         column.observations.clear();
                     }
                     chordColumns=std::move(refreshed);
+                    directionMeasurements.push_back({coefficients,field,fineAction,hs,ht});
                     ++directionRefreshes;
                     directionModelRefreshed=true;
                     emit("response_direction_refreshed",{{"purpose",J::Quote(purpose)},
@@ -2085,6 +2109,13 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                         {"residual_interpolation_defect",J::Number(residualDefect)},
                         {"state_interpolation_defect",J::Number(stateDefect)},
                         {"trace_interpolation_defect",J::Number(traceDefect)},
+                        {"protected_rank",J::Number(geometry.protectedRank)},
+                        {"independent_field_norm",J::Number(geometry.independentNorm)},
+                        {"relative_field_independence",J::Number(geometry.relativeIndependence)},
+                        {"preserved_directions",J::Number(directionMeasurements.size()-1)},
+                        {"preserved_residual_defect",J::Number(preservedResidual)},
+                        {"preserved_state_defect",J::Number(preservedState)},
+                        {"preserved_trace_defect",J::Number(preservedTrace)},
                         {"previous_bound_scaled_error",J::Number(boundScaledError)},
                         {"two_size_bound_scaled_error",J::Number(boundScaledTwoSize)},
                         {"required",J::Number(chordAccuracy)},
@@ -2993,6 +3024,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 failedModels = 0;
                 report(base, "accepted");
                 directionRefreshes=0;
+                directionMeasurements.clear();
                 if (m_reducedAdaptiveSpace && !restore && base.merit > 1e-6)
                 {
                     const double relativeGain = (oldMerit-base.merit)/oldMerit;

@@ -172,6 +172,13 @@ def check(directory):
                 max(r["residual_interpolation_defect"], r["state_interpolation_defect"],
                     r["trace_interpolation_defect"]) <= 1e-8 for r in direction_refreshes),
             "direction-action refresh changed the state/history or used an inaccurate action")
+    if protocol.get("protected_direction_refresh"):
+        require(all(r["protected_rank"] == r["preserved_directions"] and
+                    0 <= r["preserved_directions"] <= r["refresh"]-1 and
+                    r["relative_field_independence"] > protocol["directional_refresh_minimum_independence"] and
+                    max(r["preserved_residual_defect"], r["preserved_state_defect"], r["preserved_trace_defect"]) <= 1e-8
+                    for r in direction_refreshes),
+                "a current-base action refresh lost earlier measured responses or failed its rank check")
     if refresh_budget:
         require(all(r["model_consistent_in_bound_units"] and r["model_residual_error"] <= .03 and
                     r["bound_scaled_observation_model_error"] <= .1

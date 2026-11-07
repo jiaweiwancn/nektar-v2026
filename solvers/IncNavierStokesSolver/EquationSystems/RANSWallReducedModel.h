@@ -266,12 +266,22 @@ ModelLinearization LinearizeModelOnRay(const Vector &at, const Vector &value,
     return result;
 }
 
+struct SecantActionGeometry
+{
+    int protectedRank=0;
+    double fieldNorm=0., independentNorm=0., relativeIndependence=0.;
+};
 // Broyden update in the actual field metric. This is a finite-step response
 // model, not a claim of an exact Jacobian. The caller must still evaluate its
-// nonlinear trial. Leave changes below the declared signal scale untouched.
+// nonlinear trial. Protected directions are current-base measurements, not
+// endpoint data from different nonlinear states. Rank-revealing projection
+// preserves those earlier actions instead of undoing them at each re-solve.
+// Leave below-signal or nearly dependent changes untouched.
 inline bool UpdateSecantActions(Matrix &actions, const Matrix &columns,
                                 const Vector &coefficients,
-                                const Vector &observedChange, double minimumNorm)
+                                const Vector &observedChange, double minimumNorm,
+                                const Matrix &protectedFields={},
+                                SecantActionGeometry *geometry=nullptr)
 {
     const int n = columns.size();
     if (!n || actions.size() != columns.size() || coefficients.size() != columns.size() ||
@@ -285,11 +295,45 @@ inline bool UpdateSecantActions(Matrix &actions, const Matrix &columns,
         for (int j = 0; j < field.size(); ++j) field[j] += coefficients[i]*columns[i][j];
         for (int j = 0; j < defect.size(); ++j) defect[j] -= coefficients[i]*actions[i][j];
     }
-    const double denominator = Dot(field,field);
-    if (!std::isfinite(denominator))
+    const double squaredNorm=Dot(field,field);
+    if (!std::isfinite(squaredNorm))
         throw std::runtime_error("nonfinite reduced response secant signal");
-    if (denominator <= minimumNorm*minimumNorm) return false;
-    for (int i = 0; i < n; ++i) covector[i] = Dot(columns[i],field)/denominator;
+    if (geometry) *geometry=SecantActionGeometry{};
+    if (squaredNorm <= minimumNorm*minimumNorm) return false;
+    Vector direction=field;
+    Matrix basis;
+    for (const auto &protectedField:protectedFields)
+    {
+        if (protectedField.size()!=field.size())
+            throw std::logic_error("invalid protected response field shape");
+        auto q=protectedField;
+        const double before=Length(q);
+        if (!(before>0.) || !std::isfinite(before))
+            throw std::logic_error("invalid protected response field signal");
+        for (int pass=0;pass<2;++pass)
+            for (const auto &v:basis)
+            {
+                const double coefficient=Dot(q,v);
+                for (int j=0;j<q.size();++j) q[j]-=coefficient*v[j];
+            }
+        const double norm=Length(q);
+        if (norm<=1e-10*before) continue;
+        for (double &value:q) value/=norm;
+        basis.push_back(std::move(q));
+    }
+    for (int pass=0;pass<2;++pass)
+        for (const auto &v:basis)
+        {
+            const double coefficient=Dot(direction,v);
+            for (int j=0;j<direction.size();++j) direction[j]-=coefficient*v[j];
+        }
+    const double norm=std::sqrt(squaredNorm),independent=Length(direction);
+    if (geometry) *geometry={static_cast<int>(basis.size()),norm,independent,independent/norm};
+    if (independent<=minimumNorm || (!basis.empty() && independent<=1e-4*norm)) return false;
+    // Preserve the original arithmetic path when no directions are protected.
+    const double denominator=protectedFields.empty()?squaredNorm:Dot(field,direction);
+    if (!(denominator>0.) || !std::isfinite(denominator)) return false;
+    for (int i = 0; i < n; ++i) covector[i] = Dot(columns[i],direction)/denominator;
     for (int i = 0; i < n; ++i)
         for (int j = 0; j < defect.size(); ++j)
         {

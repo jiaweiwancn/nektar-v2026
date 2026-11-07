@@ -447,6 +447,47 @@ int main(int argc, char **argv)
     const auto beforeSmall=response;
     Check(!R::UpdateSecantActions(response,{{1.}},{1e-9},{1e-8},1e-6) && response==beforeSmall,
           "a below-signal secant changed the response model");
+    // Correlated direction queries must retain earlier independently known
+    // actions. Use a nonorthogonal field basis so coefficient-Euclidean
+    // protection cannot pass in place of the declared physical field metric.
+    const R::Matrix measuredBasis{{1.,0.,0.},{.3,1.,0.},{0.,.2,1.}};
+    const R::Matrix queries{{1.,0.,0.},{1.,.01,0.},{1.,.01,.03}};
+    auto fieldOf=[&](const R::Vector &z) {
+        R::Vector field(3);
+        for (int i=0;i<3;++i) for (int j=0;j<3;++j) field[j]+=z[i]*measuredBasis[i][j];
+        return field;
+    };
+    auto knownAction=[&](const R::Vector &z) {
+        const auto d=fieldOf(z);
+        return R::Vector{2*d[0]-3*d[1]+.5*d[2],-d[0]+4*d[1]+2*d[2]};
+    };
+    auto actionOf=[](const R::Matrix &a,const R::Vector &z) {
+        R::Vector value(2);
+        for (int i=0;i<3;++i) for (int j=0;j<2;++j) value[j]+=z[i]*a[i][j];
+        return value;
+    };
+    R::Matrix protectedActions(3,R::Vector(2)),unprotected=protectedActions,protectedFields;
+    for (int i=0;i<queries.size();++i)
+    {
+        R::SecantActionGeometry geometry;
+        Check(R::UpdateSecantActions(protectedActions,measuredBasis,queries[i],knownAction(queries[i]),
+              1e-8,protectedFields,&geometry),"independent protected action was rejected");
+        Check(geometry.protectedRank==i && geometry.relativeIndependence>1e-4,
+              "protected action rank/signal accounting differs");
+        Check(R::UpdateSecantActions(unprotected,measuredBasis,queries[i],knownAction(queries[i]),1e-8),
+              "unprotected comparison update failed");
+        protectedFields.push_back(fieldOf(queries[i]));
+        for (int k=0;k<=i;++k)
+        {
+            const auto actual=actionOf(protectedActions,queries[k]),expected=knownAction(queries[k]);
+            for (int j=0;j<2;++j) Close(actual[j],expected[j]);
+        }
+    }
+    Check(std::abs(actionOf(unprotected,queries[0])[0]-knownAction(queries[0])[0])>1e-4,
+          "correlated-action check did not expose destructive rank-one interference");
+    const auto protectedBefore=protectedActions;
+    Check(!R::UpdateSecantActions(protectedActions,measuredBasis,queries[0],{7.,8.},1e-8,protectedFields) &&
+          protectedActions==protectedBefore,"dependent action amplified inconsistent measurement noise");
     // Identical active observations must supply the same next field witnesses
     // even when an equivalent optimization face reorders or repeats its rows.
     const std::vector<R::WitnessKey> witnesses{{5,0,3},{3,0,3},{2,2,3},{4,0,4},{2,2,3}};
