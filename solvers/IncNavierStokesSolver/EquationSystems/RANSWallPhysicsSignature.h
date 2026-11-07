@@ -7,7 +7,10 @@
 namespace Nektar
 {
 // Shared byte-for-byte native physical identity, also used for immutable
-// checkpoint replays. Only the named projection resource controls are omitted.
+// checkpoint replays. Only the named projection resource parameters are omitted.
+// The finite-QP numerical backend is a SolverInfo execution control, recorded
+// in PimpleKBoundControls: it solves the same raw-centered mass QP. The floor,
+// inventory, metric and mathematical correction policy retain strict identity.
 inline std::string RANSWallPhysicsSignature(const RANSWallEvolutionPatch &patch,
     const LibUtilities::SessionReaderSharedPtr &session,double eta,bool neutral,
     double ustar,const std::array<double,2> &direction,bool chartFunctions)

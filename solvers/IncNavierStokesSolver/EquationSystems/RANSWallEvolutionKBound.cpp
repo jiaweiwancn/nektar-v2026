@@ -17,7 +17,8 @@ namespace J=RANSWallSolveJson;
 bool RANSWallEvolutionPatch::PimpleKBoundWorkParameter(const std::string &name)
 {
     // Only resource/telemetry controls. Floor, metric, inventory, physical
-    // parameters and actual algorithm choices remain in their native signature.
+    // parameters and mathematical correction policies remain in their native
+    // signature. The finite-QP numerical backend is separately reported.
     return name=="RANSWALLPIMPLEKBOUNDMAXADD" || name=="RANSWALLPIMPLEKBOUNDMAXTOTAL" ||
         name=="RANSWALLPIMPLEKBOUNDMAXSEPARATIONS" || name=="RANSWALLPIMPLEKBOUNDMAXSECONDS";
 }
@@ -26,8 +27,9 @@ std::string RANSWallEvolutionPatch::PimpleKBoundControls() const
     return J::Object({{"schema","1"},{"per_add_completed_work",J::Number(m_kBoundMaxAdd)},
         {"total_completed_work",J::Number(m_kBoundMaxTotal)},{"separation_passes",J::Number(m_kBoundMaxSeparations)},
         {"wall_seconds",J::Number(m_kBoundMaxSeconds)},{"trace",J::Quote(m_kBoundTrace)},
+        {"finite_qp_solver",J::Quote(m_kBoundSolver)},{"finite_qp_version",J::Quote(m_kBoundSolver=="RetainedPool"?"retained-pool-v1":"working-set-v1")},
         {"trace_file",J::Quote(m_kBoundTraceFile)},{"dump_file",J::Quote(m_kBoundDumpFile)},
-        {"mathematics",J::Quote("unchanged normalized mass-whitened two-pass-MGS working-set algorithm; resource limits are not physical parameters")}});
+        {"mathematics",J::Quote("same raw-centered physical mass QP and constraints; finite-QP solver implementation and work controls are recorded separately from physical checkpoint identity")}});
 }
 
 std::string RANSWallEvolutionPatch::PimpleKBoundSignature() const
@@ -158,6 +160,7 @@ RANSWallEvolutionPatch::KBoundResult RANSWallEvolutionPatch::ApplyPimpleKBound(
             {
                 projectionMass=PicardKMass(rows);
                 RANSWallKBound::Controls controls{m_kBoundMaxAdd,m_kBoundMaxTotal,std::max(.000001,m_kBoundMaxSeconds-seconds())};
+                controls.retainedPool=m_kBoundSolver=="RetainedPool";
                 auto event=[&](const RANSWallKBound::Event &e)
                 {
                     auto identity=[&](int id)
@@ -185,12 +188,15 @@ RANSWallEvolutionPatch::KBoundResult RANSWallEvolutionPatch::ApplyPimpleKBound(
                 {"ground_minimum",J::Number(double(worst->value))},{"entering_family",J::Quote(cut.inventory)},
                 {"entering_coordinate",J::Numbers(cut.row.coordinate)},
                 {"last_completed_primal_objective",J::Number(projection->Objective())},{"seconds",J::Number(seconds())}}));
-            if(!projection->Add(row,lower-cut.row.Value(raw,offset[K()]),witnesses.size()-1))
-            {result.failure=projection->failure;break;}
+            const bool solved=projection->Add(row,lower-cut.row.Value(raw,offset[K()]),witnesses.size()-1);
             // Every subproblem is relative to the original k*, never to the
             // preceding attempted repair. Non-k coefficients are never written.
             result.state=raw;
             for(int i=0;i<rows.size();++i)result.state[rows[i]]+=projection->delta[i];
+            // A finite-pool Add may finish one working QP and exhaust its
+            // budget during re-entry. Return that last coherent primal with
+            // its own solved dual, not the previous external Add's state.
+            if(!solved){result.failure=projection->failure;break;}
         }
         if(!result.success && result.failure.empty())result.failure="k_bound_separation_limit";
     }
@@ -301,6 +307,10 @@ RANSWallEvolutionPatch::KBoundResult RANSWallEvolutionPatch::ApplyPimpleKBound(
         {"current_inventory",ScalarDomainJSON(finalDomain)},{"current_inventory_exception",J::Quote(finalDomainError)},
         {"ground_passed",J::Boolean(correctedGroundOK)},{"ground_floor_defect",J::Number(groundFloorDefect)},{"finite_pool_normalized_violation",J::Number(projection?projection->PoolViolation():0)},
         {"completed_primal_dual_coherent","true"},{"unfinished_working_set",J::Boolean(projection && !projection->workComplete)},
+        {"finite_pool_scans",J::Number(projection?projection->poolScans:0)},
+        {"finite_pool_reentries",J::Number(projection?projection->poolReentries:0)},
+        {"exact_cut_reuses",J::Number(projection?projection->reusedCuts:0)},
+        {"finite_pool_complete",J::Boolean(projection && projection->poolComplete)},
         {"last_completed_add",J::Number(projection?projection->solvedAdd:0)},{"adds",J::Number(projection?projection->adds:0)},
         {"maximum_work_one_add",J::Number(projection?projection->maximumAddIterations:0)},
         {"work_guard_checks",J::Number(projection?projection->workChecks:0)},

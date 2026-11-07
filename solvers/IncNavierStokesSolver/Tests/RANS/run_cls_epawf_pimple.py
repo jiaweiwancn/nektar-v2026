@@ -36,7 +36,7 @@ def bound_work_command(controls):
 
 
 def prepare(output, dt, steps, diagnostic=False, verify=False, restart=None,
-            checkpoint=False, reject_step=0, k_bound="Off", floor_relative=None, snapshots=False, budget_time=-1., hard_reject_step=0, inventory="LegacyV1", wall_policy="Upstream", bound_work=None):
+            checkpoint=False, reject_step=0, k_bound="Off", floor_relative=None, snapshots=False, budget_time=-1., hard_reject_step=0, inventory="LegacyV1", wall_policy="Upstream", bound_work=None, bound_solver='WorkingSet'):
     output.mkdir(parents=True, exist_ok=False)
     xml = session(ORIGINAL, output/'case.xml', 'outer6')
     root = ET.parse(xml).getroot()
@@ -59,6 +59,8 @@ def prepare(output, dt, steps, diagnostic=False, verify=False, restart=None,
     set_info(root, 'RANSWallTransition', wall_policy)
     set_info(root, 'RANSWallPimpleKBound', k_bound)
     set_info(root, 'RANSWallPimpleKInventory', inventory)
+    require(bound_solver in ('WorkingSet','RetainedPool'),'unknown finite-QP backend')
+    if bound_solver!='WorkingSet':set_info(root,'RANSWallPimpleKBoundSolver',bound_solver)
     set_info(root, 'RANSWallPimpleSnapshots', 'On' if snapshots else 'Off')
     if floor_relative is not None:set_parameter(root, 'RANSWallPimpleKFloorRelative', floor_relative)
     if budget_time>=0:set_parameter(root, 'RANSWallPimpleBudgetTime', budget_time)
@@ -98,6 +100,10 @@ def check_report(report, restarting=False):
             require(row['additional_correction_or_restoration_solves']==0 and row.get('bound_calls',0)==0,'Off correction work')
         else:
             require(row['bound_calls']==1 and row['additional_correction_or_restoration_solves']==row['bound_kkt_solves'],'bound accounting')
+            b=row['k_bound']
+            if b.get('work_controls',{}).get('finite_qp_solver')=='RetainedPool' and b['activations']:
+                require(b['finite_pool_complete'] and b['primal_floor_defect']==0 and b['ground_floor_defect']==0,
+                    'retained finite QP or physical floor was not completed')
         require(max(row['corrected_continuity_gauge']) < 1e-10 and
                 row['boundary_defect'] < 1e-13 and row['momentum_splitting_identity_defect'] < 1e-9,
                 'flow constraints/identity failed')
@@ -119,6 +125,7 @@ def main():
     p.add_argument('--k-bound',choices=('Off','MassProjection'),default='Off')
     p.add_argument('--wall-policy',choices=('Upstream','UniformEPFlat'),default='Upstream')
     p.add_argument('--inventory',choices=('LegacyV1','ConstitutiveV2','ConstitutiveV3'),default='LegacyV1')
+    p.add_argument('--bound-solver',choices=('WorkingSet','RetainedPool'),default='WorkingSet')
     p.add_argument('--floor-relative',type=float)
     p.add_argument('--snapshots',action='store_true')
     p.add_argument('--budget-time',type=float,default=-1.)
@@ -149,7 +156,7 @@ def main():
         require(a.output.is_relative_to(Path('/media/jay/新加卷/nektar-v2026-runs')), 'heavy run storage')
     xml = prepare(a.output, a.dt, a.steps, a.diagnostic, a.verify,
                   a.restart.resolve() if a.restart else None, a.checkpoint, a.reject_step,
-                  a.k_bound,a.floor_relative,a.snapshots,a.budget_time,a.hard_reject_step,a.inventory,a.wall_policy,bound_work_arguments(a))
+                  a.k_bound,a.floor_relative,a.snapshots,a.budget_time,a.hard_reject_step,a.inventory,a.wall_policy,bound_work_arguments(a),a.bound_solver)
     require(a.checkpoint_interval>=0,'negative checkpoint interval')
     if a.checkpoint_interval:
         require(a.checkpoint,'checkpoint interval requires checkpoint output')
@@ -159,7 +166,7 @@ def main():
         wall_policy=a.wall_policy, actual_initial_sha256=None, archived_xml_sha256=sha(ORIGINAL), xml_sha256=sha(xml), expected_h0_sha256=H0 if a.wall_policy=='Upstream' else None,
         ranks=1, threads=THREADS, dt=a.dt, requested_steps=a.steps,
         qualification='R2DiagnosticV1; outside-box states are not physically qualified M8' if a.diagnostic else 'R2LocalV1 strict',
-        status='prepared', projection_work_controls=bound_work_arguments(a))
+        status='prepared', projection_work_controls=bound_work_arguments(a),bound_solver=a.bound_solver)
     if not a.prepare_only:
         a.solver = a.solver.resolve(strict=True)
         manifest['executable'] = identity(a.solver)

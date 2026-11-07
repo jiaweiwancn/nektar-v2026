@@ -495,6 +495,7 @@ private:
     int m_kBoundMaxAdd=2000,m_kBoundMaxTotal=2000,m_kBoundMaxSeparations=2000;
     double m_kBoundMaxSeconds=900.;
     std::string m_kBoundTrace="Summary",m_kBoundTraceFile="None",m_kBoundDumpFile="None";
+    std::string m_kBoundSolver="WorkingSet";
     mutable int m_liftCalls=0,m_liftIterations=0;
     mutable std::vector<std::string> m_pimpleRecords;
     std::array<double,3> m_picardRelaxation{{1.,.5,.5}};

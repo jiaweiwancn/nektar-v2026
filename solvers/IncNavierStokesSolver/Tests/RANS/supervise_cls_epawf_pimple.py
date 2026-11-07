@@ -20,6 +20,7 @@ def main():
     p.add_argument('--height-case',choices=list('ABCDEFGH'))
     p.add_argument('--upstream-case',choices=('U05-graded','U05-one','U20-graded','U20-one'))
     p.add_argument('--inventory',choices=('ConstitutiveV2','ConstitutiveV3'),default='ConstitutiveV2')
+    p.add_argument('--bound-solver',choices=('WorkingSet','RetainedPool'),default='WorkingSet')
     p.add_argument('--targets',type=int,nargs='+',default=[32,160,800,1600,3200,8000])
     p.add_argument('--block-steps',type=int,default=16);p.add_argument('--timeout',type=float,default=7200)
     p.add_argument('--checkpoint',type=Path);p.add_argument('--prefix-report',type=Path)
@@ -29,7 +30,7 @@ def main():
     ownership=a.output/'supervisor';ownership.mkdir(exist_ok=True);lock=CampaignLock(ownership)
     root=a.output/'trajectory';driver=Path(__file__).with_name('continue_cls_epawf_pimple.py')
     base=[sys.executable,'-B',str(driver),'--solver',str(a.solver.resolve()),'--output',str(root),
-        '--inventory',a.inventory,'--wall-policy',a.wall_policy,'--block-steps',str(a.block_steps),'--timeout',str(a.timeout),
+        '--inventory',a.inventory,'--bound-solver',a.bound_solver,'--wall-policy',a.wall_policy,'--block-steps',str(a.block_steps),'--timeout',str(a.timeout),
         '--targets',*map(str,a.targets),*bound_work_command(bound_work_arguments(a))]
     if a.height_case:base += ['--height-case',a.height_case]
     if a.upstream_case:base += ['--upstream-case',a.upstream_case]

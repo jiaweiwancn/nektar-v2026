@@ -26,7 +26,7 @@ WORK=dict(add=2000,total=20000,separations=2000,seconds=900)
 
 
 def case_xml(case,folder,steps,dt=.000625,restart=None,normal=16,hard_reject=0,outer_refined=False,
-             inventory='ConstitutiveV2',wall_policy=None):
+             inventory='ConstitutiveV2',wall_policy=None,bound_solver='WorkingSet'):
     upstream=case in UPSTREAM_CASES or case in UPSTREAM_BRIDGES
     H,partition,sampler,tail=({**UPSTREAM_CASES,**UPSTREAM_BRIDGES} if upstream else CASES)[case]
     wall_policy=wall_policy or ('Upstream' if upstream else 'UniformEPFlat')
@@ -34,7 +34,7 @@ def case_xml(case,folder,steps,dt=.000625,restart=None,normal=16,hard_reject=0,o
         require(wall_policy=='Upstream' and inventory=='ConstitutiveV3','new Upstream family requires branch-complete inventory')
         require(tail==H,'every new Upstream physical case requires z_m=H')
     xml=prepare(folder,dt,steps,True,restart=restart,checkpoint=True,k_bound='MassProjection',floor_relative=1e-8,
-        snapshots=True,inventory=inventory,wall_policy=wall_policy,bound_work=WORK,hard_reject_step=hard_reject)
+        snapshots=True,inventory=inventory,wall_policy=wall_policy,bound_work=WORK,hard_reject_step=hard_reject,bound_solver=bound_solver)
     root=ET.parse(xml).getroot()
     knots=KN if partition=='graded' else [z for z in KN if z==0 or z>=H]
     require(not outer_refined or case in ('G','H','U05-graded','U05-one'),'focused outer refinement is declared only for the H=.5 pair')
@@ -53,7 +53,7 @@ def case_xml(case,folder,steps,dt=.000625,restart=None,normal=16,hard_reject=0,o
         'UpstreamHeightV1'+('OuterHalves' if outer_refined else '') if upstream else
         'HeightSamplerOuterHalvesV1' if outer_refined else 'HeightSamplerV1')
     write_json(folder/'definition.json',dict(family=family,
-        case=case,wall_policy=wall_policy,inventory=inventory,H=H,h=.1,Z=4,z_m=tail,
+        case=case,wall_policy=wall_policy,inventory=inventory,bound_solver=bound_solver,H=H,h=.1,Z=4,z_m=tail,
         temporal_coupling='PimpleSingleSweep',native_order=1,relaxation=1,eta=0,prescribed_forcing=0,k_floor_relative=1e-8,
         K_sampling=sampler,z_K=1. if sampler=='Point' else None,placeholder=H/2 if sampler!='Point' else None,
         K_functional_version='ColumnAverage-v1:physical-dz/H:fixed-native-panel-Gauss8:global-CG-row' if sampler=='ColumnAverage' else 'Point',
@@ -68,6 +68,7 @@ def main():
     p.add_argument('--solver',type=Path,required=True);p.add_argument('--probe',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True);p.add_argument('--cases',nargs='+',choices=list(CASES)+list(UPSTREAM_CASES)+list(UPSTREAM_BRIDGES),default=list(CASES))
     p.add_argument('--inventory',choices=('ConstitutiveV2','ConstitutiveV3'),default='ConstitutiveV2')
+    p.add_argument('--bound-solver',choices=('WorkingSet','RetainedPool'),default='WorkingSet')
     p.add_argument('--workers',type=int,default=4);p.add_argument('--steps',type=int,default=32)
     p.add_argument('--dt',type=float,default=.000625);p.add_argument('--normal-order',type=int,default=16)
     p.add_argument('--outer-refined',action='store_true',help='G/H only: add outer knots .75 and 1.5; retain all knots above 2')
@@ -97,7 +98,7 @@ def main():
         root=a.output/case
         if a.resume and (root/'result.json').exists():return load(root/'result.json')
         require(not root.exists(),'incomplete case requires actual process/checkpoint reconciliation, not an unchanged retry: '+case)
-        root.mkdir();init=root/'initial';xml=case_xml(case,init,0,a.dt,normal=a.normal_order,outer_refined=a.outer_refined,inventory=a.inventory)
+        root.mkdir();init=root/'initial';xml=case_xml(case,init,0,a.dt,normal=a.normal_order,outer_refined=a.outer_refined,inventory=a.inventory,bound_solver=a.bound_solver)
         receipt=native(solver,xml,init);report=load(init/'case.evolution.json')
         result=dict(case=case,definition=load(init/'definition.json'),initial_receipt=receipt,status='initialization_rejected',initial_failure=report.get('failure'))
         if report.get('initialization_complete') is False or receipt['exit_code']:
@@ -108,7 +109,7 @@ def main():
         checks=root/'sampling';checks.mkdir();write_json(checks/'input.json',dict(operation='sampling_checks',state=report['state'],history=report['state'],time=0.,alpha=0.,require_history_h0=False,inner_stress_model='SaturatedR2'))
         test=native(probe,xml,checks,('input.json','result.json'),1800);require(test['exit_code']==0,'sampling verification failed: '+case)
         result['sampling_checks']=load(checks/'result.json')
-        trajectory=root/'trajectory';xml=case_xml(case,trajectory,a.steps,a.dt,restart=Path(report['checkpoint']),normal=a.normal_order,outer_refined=a.outer_refined,inventory=a.inventory)
+        trajectory=root/'trajectory';xml=case_xml(case,trajectory,a.steps,a.dt,restart=Path(report['checkpoint']),normal=a.normal_order,outer_refined=a.outer_refined,inventory=a.inventory,bound_solver=a.bound_solver)
         receipt=native(solver,xml,trajectory,timeout=14400);e=load(trajectory/'case.evolution.json')
         check_report(e,True);result.update(status='completed' if not e['failure'] and e['steps']==a.steps else 'numerically_rejected',
             failure=e['failure'],steps=e['steps'],time=e['time'],trajectory_receipt=receipt,final=e.get('height_comparison_final'),

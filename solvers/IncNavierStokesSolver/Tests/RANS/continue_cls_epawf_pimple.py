@@ -185,6 +185,7 @@ def main():
     p.add_argument('--height-case',choices=list('ABCDEFGH'))
     p.add_argument('--upstream-case',choices=('U05-graded','U05-one','U20-graded','U20-one'))
     p.add_argument('--inventory',choices=('LegacyV1','ConstitutiveV2','ConstitutiveV3'),default='LegacyV1')
+    p.add_argument('--bound-solver',choices=('WorkingSet','RetainedPool'),default='WorkingSet')
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--targets', type=int, nargs='+', default=[32,160,800,1600,3200,8000])
     p.add_argument('--block-steps', type=int, default=16)
@@ -204,6 +205,7 @@ def main():
         progress = load(a.output/'progress.json'); a.checkpoint = Path(progress['checkpoint']) if progress['checkpoint'] else None
         require(progress['status']!='numerically_rejected','numerical rejection is terminal; use a separately identified follow-up')
         require(progress.get('inventory','LegacyV1')==a.inventory,'inventory differs from campaign')
+        require(progress.get('bound_solver','WorkingSet')==a.bound_solver,'finite-QP backend differs from campaign')
         require(progress.get('wall_policy','Upstream')==a.wall_policy,'wall policy differs from campaign')
         require(progress.get('height_case')==a.height_case,'height case differs from campaign')
         require(progress.get('upstream_case')==a.upstream_case,'Upstream case differs from campaign')
@@ -269,7 +271,7 @@ def main():
                 prefix_campaign=str(a.prefix_campaign.resolve()) if a.prefix_campaign else None,
                 prefix_steps=info['steps'], prefix_integral=integral, requested_targets=a.targets, completed_targets=[], segments=[])
     progress.update(pid=os.getpid(), host=socket.gethostname(), started_unix=time.time(),
-                    projection_work_controls=bound_work_arguments(a),height_case=a.height_case,upstream_case=a.upstream_case,
+                    projection_work_controls=bound_work_arguments(a),bound_solver=a.bound_solver,height_case=a.height_case,upstream_case=a.upstream_case,
                     case_family='UpstreamHeightV1' if a.upstream_case else ('HeightSamplerV1' if a.height_case else 'LegacyOuter6'),
                     process_start=Path('/proc/self/stat').read_text().split()[21], executable=str(executable),
                     executable_sha256=pinned['sha256'], source_revision=subprocess.check_output(['git','-C',str(Path(__file__).resolve().parents[4]),'rev-parse','HEAD'],text=True).strip())
@@ -302,11 +304,11 @@ def main():
                 require(not bound_work_arguments(a) or bound_work_arguments(a)==WORK,'height continuation uses its validated explicit controls')
                 if a.upstream_case:require(bound_work_arguments(a)==WORK,'new Upstream continuation requires explicit validated projection controls')
                 xml=case_xml(a.upstream_case or a.height_case,directory,end-start,.000625,
-                    restart=Path(progress['checkpoint']) if progress['checkpoint'] else None,inventory=a.inventory,wall_policy=a.wall_policy)
+                    restart=Path(progress['checkpoint']) if progress['checkpoint'] else None,inventory=a.inventory,wall_policy=a.wall_policy,bound_solver=a.bound_solver)
             else:
                 xml = prepare(directory, .000625, end-start, True, restart=Path(progress['checkpoint']) if progress['checkpoint'] else None,
                               checkpoint=True, k_bound='MassProjection', floor_relative=1e-8, snapshots=True,inventory=a.inventory,wall_policy=a.wall_policy,
-                              bound_work=bound_work_arguments(a))
+                              bound_work=bound_work_arguments(a),bound_solver=a.bound_solver)
             tree=ET.parse(xml).getroot(); set_parameter(tree,'IO_CheckSteps',1); write(tree,xml)
             if a.height_case or a.upstream_case:
                 progress['case_definition']=load(directory/'definition.json')
@@ -373,6 +375,8 @@ def main():
                 if report.get('initialization_complete') is False:
                     save(status='numerically_rejected',failure=report['failure'],exit_code=child.returncode);return
                 check_report(report,start>0)
+                require(report['initial_k_bound_check'].get('work_controls',{}).get('finite_qp_solver','WorkingSet')==a.bound_solver,
+                    'native runtime did not use the recorded finite-QP backend')
                 require(report['steps']==progress['accepted_steps'], 'report/checkpoint count differs')
                 for record,audit in zip(local,report['state_audits'][1:]):record['audit']=audit
                 with gzip.open(directory/'accepted-metrics.json.gz','wt') as f: json.dump(local,f,separators=(',',':'))

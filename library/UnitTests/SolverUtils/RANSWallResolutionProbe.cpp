@@ -548,13 +548,32 @@ int main(int argc,char **argv)
                     {"corrected",J::Number(row.Value(bounded.state,patch.offset[patch.K()]))}}));
             }
             const auto domain=patch.ScalarDomain(bounded.state,time,data,true);
-            std::string auditFailure;
-            if(bounded.success)try{patch.CompleteRestrictedAudit(bounded.state,history,alpha,time,data);}
+            std::string auditFailure;RANSWallEvolutionPatch::Diagnostic completeAudit;
+            bool hardAdmissible=false;std::vector<std::string> hardReasons;
+            if(bounded.success)try
+            {
+                completeAudit=patch.CompleteRestrictedAudit(bounded.state,history,alpha,time,data);
+                const double K0=p.model.Q()*us*us;
+                auto reject=[&](bool valid,const std::string &reason){if(!valid)hardReasons.push_back(J::Quote(reason));};
+                reject(completeAudit.at("r2_scalar_domain")[0]==1,"complete_scalar_domain_exit");
+                reject(completeAudit.at("admissible")[0]==1,"sampled_scalar_or_sampler_inadmissibility");
+                for(const std::string name:{"source_volume_inner","source_volume_outer","physical_sample_K","physical_sample_outer",
+                    "prescribed_source_inner","mass_volume","interface_inner","interface_outer","reconstruction_dense","reconstruction_native"})
+                {const auto &row=completeAudit.at(name);reject(!row[0] || row[3]>=-1e-10*K0,"covariance:"+name);}
+                const auto repair=completeAudit.find("robust_source");
+                reject(repair==completeAudit.end() || repair->second[6]>=.5,"lambda_applicability_exit");
+                const auto &cov=completeAudit.at("r2_covariance");
+                reject(cov[0]>=-1e-10*K0 && cov[1]>=-1e-10*K0 && completeAudit.at("r2_scalar_domain")[8]>=.5,
+                    "PIMPLE_hard_covariance_or_normalization_exit");
+                hardAdmissible=hardReasons.empty();
+            }
                 catch(const std::exception &error){auditFailure=error.what();}
             std::ofstream out(argv[3]);out<<J::Object({{"operation",J::Quote("k_bound")},
                 {"replay_context",replayContext},{"history_sha256",J::Quote(RANSWallR3::Hash(history))},
                 {"initialization_lift_calls_iterations",J::Numbers(patch.InitializationWork())},{"pre_k_inventory",patch.ScalarDomainJSON(preDomain)},{"witness_values",J::List(witnessValues)},
                 {"scalar_domain",patch.ScalarDomainJSON(domain,true)},{"complete_audit_failure",J::Quote(auditFailure)},
+                {"complete_hard_admissible",J::Boolean(hardAdmissible)},{"complete_hard_reasons",J::List(hardReasons)},
+                {"complete_audit",Maps(completeAudit)},
                 {"complete_audit_context",patch.ConstitutiveFailureContext().empty()?"null":patch.ConstitutiveFailureContext()},{"offsets",J::Numbers(patch.offset)},{"k_bound",bounded.report},
                 {"quadrature_correction_mass_norm",J::Number(std::sqrt(square))},{"quadrature_correction_integral",J::Number(integral)},
                 {"shared_cg_jump",J::Number(jump)},{"raw_native_ground_node_minimum",J::Number(nodeMinimum)},

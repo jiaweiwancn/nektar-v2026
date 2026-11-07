@@ -32,6 +32,7 @@ struct Controls
 {
     int maximumPerAdd=2000,maximumTotal=2000;
     double maximumSeconds=900.;
+    bool retainedPool=false;
 };
 struct Event
 {
@@ -42,14 +43,16 @@ struct Event
 
 // Small serial consistent-mass projection. The original whitening, normalized
 // rows, two-pass MGS, tolerances and working-set updates are retained.
-// Optimize solves its WORKING SET. The physical separation wrapper must rescan
+// Legacy Optimize solves its WORKING SET. The physical separation wrapper must rescan
 // all inactive cuts, including rows that previously left. A zero working-set
 // primal-dual gap is not a certificate for an infeasible accumulated pool.
+// RetainedPool additionally resolves the complete accumulated finite QP before
+// returning to the expensive state-dependent physical separation wrapper.
 class Projection
 {
 public:
     using Clock=std::chrono::steady_clock;
-    struct Cut {Vector row;double rhs;int witness;std::string rowIdentity,constraintIdentity;};
+    struct Cut {Vector row;double rhs;int witness;std::string rowIdentity,constraintIdentity;Vector physicalRow;double physicalRhs=0.;};
     explicit Projection(const Matrix &mass):Projection(mass,Controls{}){}
     Projection(const Matrix &mass,const Controls &limits,std::function<void(const Event&)> sink={}):
         lower(mass),n(mass.size()),y(n),delta(n),controls(limits),trace(std::move(sink)),started(Clock::now())
@@ -91,14 +94,48 @@ public:
             ++repeatedConstraints;
             if(std::none_of(active.begin(),active.end(),[&](int id){return cuts[id].constraintIdentity==identity;}))++rediscoveredConstraints;
         }
-        Vector a=row;for(int i=0;i<n;++i){for(int j=0;j<i;++j)a[i]-=lower[i][j]*a[j];a[i]/=lower[i][i];}
+        int reuse=-1;
+        if(controls.retainedPool)for(int i=0;i<cuts.size();++i)
+            if(cuts[i].physicalRhs==rhs && cuts[i].physicalRow==row){reuse=i;break;}
+        Vector a;
+        if(reuse<0)
+        {
+        a=row;for(int i=0;i<n;++i){for(int j=0;j<i;++j)a[i]-=lower[i][j]*a[j];a[i]/=lower[i][i];}
         ++massFactorApplications;
         const double scale=Norm(a);
         if(!(scale>0)){failure="incompatible_prescribed_k_floor";Emit("invalid_row");return false;}
         for(auto &x:a)x/=scale;
-        cuts.push_back({a,rhs/scale,witness,rowIdentity,identity});entering=cuts.size()-1;
-        active.push_back(entering);lambda.push_back(0.);Emit("add");
-        const auto before=Clock::now();const bool ok=Optimize();
+        cuts.push_back({a,rhs/scale,witness,rowIdentity,identity,controls.retainedPool?row:Vector{},rhs});reuse=cuts.size()-1;
+        }
+        else ++reusedCuts;
+        entering=reuse;
+        if(std::find(active.begin(),active.end(),entering)==active.end())
+        {active.push_back(entering);lambda.push_back(0.);}
+        else if(!controls.retainedPool)
+            throw std::logic_error("legacy projection unexpectedly reused a cut");
+        Emit("add");
+        const auto before=Clock::now();bool ok=false;poolComplete=false;
+        for(;;)
+        {
+            if(!Optimize())break;
+            if(!controls.retainedPool){ok=true;break;}
+            ++poolScans;int worst=-1;double maximum=0.;
+            // This algebraic tolerance is much smaller than the physical
+            // reserve. Native physical inventory/ground checks still decide
+            // acceptance and are never relaxed by a finite-QP certificate.
+            for(int i=0;i<cuts.size();++i)
+            {
+                const double tolerance=64*std::numeric_limits<double>::epsilon()*
+                    std::max({Norm(y),std::abs(cuts[i].rhs),1e-30});
+                const double violation=cuts[i].rhs-Dot(cuts[i].row,y)-tolerance;
+                if(violation>maximum){maximum=violation;worst=i;}
+            }
+            if(worst<0){ok=true;poolComplete=true;break;}
+            entering=worst;
+            if(std::find(active.begin(),active.end(),worst)!=active.end())
+            {failure="k_bound_active_pool_numerical_violation";Emit("active_pool_violation");break;}
+            ++poolReentries;active.push_back(worst);lambda.push_back(0.);workComplete=false;Emit("pool_reentry");
+        }
         algebraSeconds+=std::chrono::duration<double>(Clock::now()-before).count();
         maximumAddIterations=std::max(maximumAddIterations,localIterations);return ok;
     }
@@ -180,7 +217,8 @@ public:
     int iterations=0,localIterations=0,maximumAddIterations=0,workChecks=0,totalLimitChecks=0,addLimitChecks=0,timeLimitChecks=0;
     int adds=0,solvedAdd=0,entering=-1,massFactorApplications=0,kktSolves=0,dependentEntries=0,maximumActive=0;
     int repeatedRows=0,repeatedConstraints=0,rediscoveredConstraints=0,repeatedWorkingSets=0;
-    bool workComplete=true;
+    int poolScans=0,poolReentries=0,reusedCuts=0;
+    bool workComplete=true,poolComplete=false;
     double minimumObservedQR=1.,lastQRMin=0,lastQRMax=0,algebraSeconds=0,factorizationSeconds=0;
     Controls controls;std::string failure;
     std::map<std::string,int> rowVisits,constraintVisits,workingSetVisits;

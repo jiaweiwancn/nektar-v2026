@@ -233,6 +233,8 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         m_kBoundMaxSeparations>0 && m_kBoundMaxSeparations<=1000000 && std::isfinite(m_kBoundMaxSeconds) && m_kBoundMaxSeconds>0,
         "invalid finite k-bound work controls");
     session->LoadSolverInfo("RANSWallPimpleKBoundTrace",m_kBoundTrace,"Summary");
+    session->LoadSolverInfo("RANSWallPimpleKBoundSolver",m_kBoundSolver,"WorkingSet");
+    Require(m_kBoundSolver=="WorkingSet" || m_kBoundSolver=="RetainedPool","invalid k-bound finite-QP solver");
     session->LoadSolverInfo("RANSWallPimpleKBoundTraceFile",m_kBoundTraceFile,"None");
     session->LoadSolverInfo("RANSWallPimpleKBoundDumpFile",m_kBoundDumpFile,"None");
     Require(m_kBoundTrace=="Off" || m_kBoundTrace=="Summary" || m_kBoundTrace=="Full","invalid k-bound trace selector");

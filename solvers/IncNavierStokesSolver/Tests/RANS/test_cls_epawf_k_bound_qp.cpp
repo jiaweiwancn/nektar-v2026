@@ -63,5 +63,25 @@ int main()
     Check(std::abs(more.delta[0]-1.5)<1e-12 && more.maximumAddIterations==2 && more.iterations==3,"per-add completed work accounting");
     Check(more.Add({1.,1.},3.,2),"identical constraint regression");
     Check(more.repeatedRows==1 && more.repeatedConstraints==1,"duplicate telemetry");
+    Controls pooled;pooled.retainedPool=true;pooled.maximumTotal=100;
+    Projection full(Matrix{{1.,0.},{0.,1.}},pooled);
+    Check(full.Add({1.,0.},1.,0) && full.Add({1.,1.},3.,1) && full.Add({0.,1.},3.,2),"retained finite QP failed");
+    Check(full.poolComplete && full.poolReentries==1 && full.PoolViolation()<1e-13,"inactive finite-pool cut was not restored internally");
+    Check(std::abs(full.delta[0]-1.)<1e-12 && std::abs(full.delta[1]-3.)<1e-12,"retained pool minimizer");
+    const auto count=full.cuts.size();
+    Check(full.Add({1.,0.},1.,3) && full.cuts.size()==count && full.reusedCuts==1,"identical inequality was not reused");
+    Check(full.Add({1.,1e-6},1.000004,4) && full.cuts.size()==count+1,"distinct nearly parallel cut was discarded");
+    Check(full.PoolViolation()<1e-13 && full.Stationarity()<1e-12 && full.DualViolation()<1e-13,"retained pool KKT/feasibility");
+    Controls exhausted=pooled;exhausted.maximumTotal=1;
+    Projection stopped(Matrix{{1.,0.},{0.,1.}},exhausted);
+    Check(stopped.Add({1.,0.},1.,0) && !stopped.Add({0.,1.},2.,1),"finite-pool budget not enforced");
+    Check(stopped.delta==Vector({1.,0.}) && stopped.totalLimitChecks==1 && !stopped.poolComplete,"finite-pool failed snapshot incoherent");
+    Controls mid=pooled;mid.maximumTotal=4;
+    Projection interrupted(Matrix{{1.,0.},{0.,1.}},mid);
+    Check(interrupted.Add({1.,0.},1.,0) && interrupted.Add({1.,1.},3.,1),"finite-pool interrupted prefix");
+    Check(!interrupted.Add({0.,1.},3.,2) && interrupted.solvedAdd==3 && !interrupted.workComplete && !interrupted.poolComplete,
+        "finite-pool inner re-entry did not exhaust the declared budget");
+    Check(std::abs(interrupted.delta[0])<1e-12 && std::abs(interrupted.delta[1]-3.)<1e-12 &&
+        interrupted.Stationarity()<1e-12 && interrupted.PoolViolation()>.9,"inner failure did not retain its latest coherent primal/dual");
     std::cout<<"Mass-metric positivity QP checks passed\n";
 }
