@@ -77,6 +77,7 @@ def prepare(args):
                 set_info(root, "RANSWallReducedResponseCache", "On" if getattr(args, "reduced_response_cache", False) else "Off")
                 set_info(root, "RANSWallReducedInteriorSourceAnchor", "On" if getattr(args, "reduced_interior_source_anchor", False) else "Off")
                 set_info(root, "RANSWallReducedFastDestruction", "On" if getattr(args, "reduced_fast_destruction", False) else "Off")
+                set_info(root, "RANSWallReducedReferenceBranchReuse", "On" if getattr(args, "reduced_reference_branch_reuse", False) else "Off")
                 for key, value in {"Basis": args.reduced_basis, "Radius": args.reduced_radius,
                                    "MaximumRadius": getattr(args, "reduced_maximum_radius", 1.),
                                    "MaximumBasis": getattr(args, "reduced_maximum_basis", 32),
@@ -178,6 +179,8 @@ def main():
                         help="Up to four checked secant response updates between fresh response models (default off)")
     parser.add_argument("--reduced-directional-refresh-updates", type=int, default=0,
                         help="Up to four measured direction-action refreshes before re-solving a reused constrained model")
+    parser.add_argument("--reduced-reference-branch-reuse", action="store_true",
+                        help="Retain historical response models across full/mixed reference-weight switches, with current-branch and independent same-k checks")
     parser.add_argument("--reduced-fast-destruction", action="store_true",
                         help="Use the shared value-only inner destruction kernel in the numerical source model")
     parser.add_argument("--reduced-basis", type=int, default=10)
@@ -227,6 +230,8 @@ def main():
     require(0 <= args.reduced_directional_refresh_updates <= 4 and
             (not args.reduced_directional_refresh_updates or args.reduced_response_reuse_updates > 0),
             "direction-action refresh requires response reuse and a budget from zero to four")
+    require(not args.reduced_reference_branch_reuse or args.reduced_directional_refresh_updates > 0,
+            "reference-branch reuse requires a positive direction-action refresh budget")
     require(math.isfinite(args.reduced_maximum_radius) and
             0 < args.reduced_radius <= args.reduced_maximum_radius,
             "reduced radii must be finite, positive and ordered")

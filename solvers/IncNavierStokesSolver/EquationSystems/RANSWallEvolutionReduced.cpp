@@ -45,6 +45,14 @@ Vector HNorms(Vector n, int k)
     n.at(k) = 0.;
     return n;
 }
+bool CompatibleReferenceBranches(const std::string &a,const std::string &b)
+{
+    if (a.empty() || a.size()!=b.size()) return false;
+    for (int i=0;i<a.size();++i)
+        if (a[i]!=b[i] && !((a[i]=='E' && b[i]=='M') || (a[i]=='M' && b[i]=='E')))
+            return false;
+    return true;
+}
 void Apply(Vector &state, const std::vector<int> &rows, const Vector &step,
            double fraction = 1.)
 {
@@ -565,12 +573,14 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         {"response_field_preconditioner_reuse",J::Boolean(m_reducedResponseCache)},
         {"response_chord_update_budget",J::Number(m_reducedResponseReuseUpdates)},
         {"directional_refresh_budget",J::Number(m_reducedDirectionalRefreshUpdates)},
+        {"reference_branch_reuse",J::Boolean(m_reducedReferenceBranchReuse)},
+        {"reference_branch_reuse_policy",J::Quote("only finite-step E/M reference-weight switches; historical model, not a derivative on the old branch; current probes must agree with the current branch and an independent same-k response")},
         {"directional_refresh_policy",J::Quote("optional same-base measured action interpolation before re-solving the residual and individual qualification model; not a derivative certificate")},
         {"response_chord_tight_checks","true"},
         {"response_chord_check_accuracy_limit",J::Number(std::min(tolerance,m_reducedHTolerance))},
         {"response_chord_bound_error_version",J::Number(2)},
         {"response_chord_observation_units",J::Quote("OuterBound::Action already divides by normalization scale and qualification width")},
-        {"response_chord_policy",J::Quote("opt-in historical response secants; fresh two-size signed direction checks; every actual trial converges original H; fresh model after failure, branch change, enlargement or age limit")},
+        {"response_chord_policy",J::Quote("opt-in historical response secants; fresh two-size signed direction checks; every actual trial converges original H; fresh after failure, unsupported branch change, enlargement or age limit; optional E/M history bridge requires an independent current same-k check")},
         {"response_preconditioner_policy",J::Quote("probe-only separate base velocity/pressure and epsilon factors; original H convergence required; fresh-operator retry on failure; canonical check and actual trials use current operators")},
         {"initial_basis_budget", J::Number(m_reducedBasis)},
         {"initial_restoration_weight", J::Number(m_reducedRestorationWeight)},
@@ -700,6 +710,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
     std::vector<OuterBound> activeWitnesses;
     std::vector<Column> chordColumns;
     int chordAge=0, chordOrigin=-1;
+    bool chordReferenceBridged=false;
     int directionRefreshes=0;
     int modelPacketSerial=0;
     std::string chordBranches;
@@ -1007,6 +1018,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             }
             emit("response_chord_reused",{{"dimension",J::Number(columns.size())},
                 {"age",J::Number(chordAge)}, {"origin_iteration",J::Number(chordOrigin)},
+                {"reference_branch_bridged",J::Boolean(chordReferenceBridged)},
                 {"scope",J::Quote("secant model, not current per-column derivative verification; original direction checks and controlled actual H trials required")}});
         }
         for (int seedId = 0; !chordReuse && seedId < seeds.size(); ++seedId)
@@ -1769,6 +1781,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
               {"response_model_kind",J::Quote(chordReuse?"historical_secant":"fresh_two_size_responses")},
               {"response_model_age",J::Number(chordReuse?chordAge:0)},
               {"directional_refreshes",J::Number(directionRefreshes)},
+              {"reference_branch_bridged",J::Boolean(chordReuse && chordReferenceBridged)},
               {"gradient_scope",J::Quote(chordReuse?"secant model, not current first-order certificate":"fresh measured original reduced gradient")},
               {"residual_weight", J::Number(residualWeight)},
               {"restoration_balance", J::Number(restorationWeight)},
@@ -1909,6 +1922,54 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             const double modelRelativeError=dualNorm(modelError)/scale;
             const double coarseSlope=(coarse.merit*coarse.merit-base.merit*base.merit)/(2.*f);
             const double halfSlope=(fine.merit*fine.merit-base.merit*base.merit)/f;
+            bool canonicalBranchOK=true;
+            if (chordReferenceBridged)
+            {
+                // This is a repeat at EXACTLY the same prescribed k, reached
+                // from the other converged response. A partially converged H
+                // response or a different local Y(k) is never a valid action.
+                auto alternate=coarse.response.state;
+                for (int j=offset[K()];j<offset[Epsilon()];++j)
+                    alternate[j]=fine.response.state[j];
+                const auto canonical=evaluate(alternate,chordAccuracy,m_reducedHUpdates,
+                                              "canonical_reference_branch_response");
+                double residualDifference=1e300,stateDifference=1e300,observationDifference=1e300;
+                bool sameK=false,sameBranch=false;
+                if (canonical.valid)
+                {
+                    sameK=true;
+                    for (int j=offset[K()];j<offset[Epsilon()];++j)
+                        sameK=sameK && canonical.response.state[j]==fine.response.state[j];
+                    if (!sameK) throw std::logic_error("canonical non-k response changed prescribed k");
+                    auto dr=canonical.r,dy=canonical.domain.effectiveState,trace=canonical.domain.traceState;
+                    for (int j=0;j<dimension;++j) dr[j]-=fine.r[j];
+                    for (int j=0;j<Size();++j)
+                    { dy[j]-=fine.domain.effectiveState[j];trace[j]-=fine.domain.traceState[j]; }
+                    residualDifference=dualNorm(dr)/(.5*f*scale);
+                    stateDifference=Length(dy)/std::max(1.,Length(fine.domain.effectiveState));
+                    observationDifference=0.;
+                    for (const auto &b:base.bounds)
+                    {
+                        const double observed=b.Action(b.projected?ht:hs,offset[b.block]);
+                        observationDifference=std::max(observationDifference,
+                            std::abs(b.Action(b.projected?trace:dy,offset[b.block]))/
+                            (.5*f*std::max(1.,std::abs(observed))));
+                    }
+                    sameBranch=canonical.domain.profileBranches==fine.domain.profileBranches;
+                }
+                canonicalBranchOK=canonical.valid && sameK && sameBranch &&
+                    residualDifference<=.01 && observationDifference<=.01 && stateDifference<=1e-7;
+                emit("reference_branch_canonical_check",{{"purpose",J::Quote(purpose)},
+                    {"converged",J::Boolean(canonical.valid)}, {"passed",J::Boolean(canonicalBranchOK)},
+                    {"failure",J::Quote(canonical.response.failure)},
+                    {"required",J::Number(chordAccuracy)}, {"attained",J::Number(canonical.response.error)},
+                    {"k_coefficients_fixed",J::Boolean(sameK)}, {"same_selected_branch",J::Boolean(sameBranch)},
+                    {"relative_action_difference",J::Number(residualDifference)},
+                    {"relative_observation_difference",J::Number(observationDifference)},
+                    {"relative_state_difference",J::Number(stateDifference)},
+                    {"history_sha256",J::Quote(RANSWallR3::Hash(history))},
+                    {"scope",J::Quote("independent converged solve at the identical k; no physical/history advancement")}});
+            }
             auto errorWitness=[&](int id) {
                 if (id<0) return J::Object({});
                 const auto &b=base.bounds[id];
@@ -1931,7 +1992,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
             };
             const bool branchChange=coarse.domain.profileBranches!=base.domain.profileBranches ||
                                     fine.domain.profileBranches!=base.domain.profileBranches;
-            const bool accurate=!branchChange && twoSizeError<=.03 && observationTwoSize<=.05;
+            const bool accurate=!branchChange && canonicalBranchOK && twoSizeError<=.03 && observationTwoSize<=.05;
             // In bound-width units, a small raw observation discrepancy can
             // still be large enough to change the active qualification face.
             // A reliable measured action supplies new direction-selection
@@ -1965,6 +2026,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 {"half_merit_slope",J::Number(halfSlope)},
                 {"model_consistent_in_bound_units",J::Boolean(modelConsistent)},
                 {"directional_refreshes",J::Number(directionRefreshes)},
+                {"reference_branch_bridged",J::Boolean(chordReferenceBridged)},
+                {"canonical_branch_check_passed",J::Boolean(canonicalBranchOK)},
                 {"profile_branch_change",J::Boolean(branchChange)}});
             if (m_reducedDirectionalRefreshUpdates && !modelConsistent && accurate &&
                 boundScaledTwoSize<=.05 && directionRefreshes<m_reducedDirectionalRefreshUpdates)
@@ -2796,13 +2859,17 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                 {
                     try
                     {
+                        const bool previousReferenceBridge=chordReuse && chordReferenceBridged;
                         chordColumns.clear();
+                        const bool sameReference=trial.domain.profileBranches==base.domain.profileBranches;
+                        const bool bridgeReference=!sameReference && m_reducedReferenceBranchReuse &&
+                            CompatibleReferenceBranches(base.domain.profileBranches,trial.domain.profileBranches);
                         // A secant model is temporary search information, never
                         // a partially equilibrated Y(k). Only converged actual
                         // endpoints supply changes, and each reused direction
                         // must pass new original-operator checks above.
                         if (!restore && trial.violation<1e-8 &&
-                            trial.domain.profileBranches==base.domain.profileBranches &&
+                            (sameReference || bridgeReference) &&
                             (!chordReuse || chordAge<m_reducedResponseReuseUpdates) &&
                             dualNorm(error)<.2*std::max(1.,base.merit))
                         {
@@ -2856,8 +2923,27 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
                                     chordColumns.push_back(std::move(column));
                                 }
                                 chordAge=chordReuse?chordAge+1:1;
+                                chordReferenceBridged=previousReferenceBridge || bridgeReference;
                                 if (!chordReuse) chordOrigin=iterations;
                                 chordBranches=trial.domain.profileBranches;
+                                if (bridgeReference)
+                                {
+                                    std::vector<std::string> switches;
+                                    std::vector<RANSWallCoordinate> anchors;
+                                    for (const auto &ray:m_rays) anchors.push_back(ray.coordinate);
+                                    for (const auto &point:m_traceScalarAnchors)
+                                    { anchors.push_back(point);anchors.push_back(point); }
+                                    const auto &before=base.domain.profileBranches;
+                                    const auto &after=trial.domain.profileBranches;
+                                    for (int j=0;j<before.size();++j) if (before[j]!=after[j])
+                                        switches.push_back(J::Object({{"index",J::Number(j)},
+                                            {"anchor",J::Numbers(anchors.at(j))},
+                                            {"before",J::Quote(before.substr(j,1))}, {"after",J::Quote(after.substr(j,1))}}));
+                                    emit("response_reference_branch_bridge",{{"before_pattern",J::Quote(before)},
+                                        {"after_pattern",J::Quote(after)}, {"switches",J::List(switches)},
+                                        {"next_age",J::Number(chordAge)},
+                                        {"scope",J::Quote("retain an approximate historical model only; no old-branch derivative claim; mandatory current-branch action and independent same-k checks before actual trials")}});
+                                }
                             }
                             emit("response_chord_secant",{{"updated",J::Boolean(updated)},
                                 {"next_age",J::Number(chordAge)},

@@ -177,6 +177,28 @@ def check(directory):
                     r["bound_scaled_observation_model_error"] <= .1
                     for r in chord_checks if r["passed"]),
                 "a reused direction bypassed the bound-scaled model agreement gate")
+    branch_bridges = [r for r in records if r["event"] == "response_reference_branch_bridge"]
+    branch_canonical = [r for r in records if r["event"] == "reference_branch_canonical_check"]
+    require(protocol.get("reference_branch_reuse", False) or not branch_bridges and not branch_canonical,
+            "reference branches were bridged without their explicit selector")
+    require(all(r["switches"] and len(r["before_pattern"]) == len(r["after_pattern"]) and
+                len(r["switches"]) == sum(a != b for a, b in zip(r["before_pattern"], r["after_pattern"])) and
+                all(a == b or {a, b} == {"E", "M"} for a, b in
+                    zip(r["before_pattern"], r["after_pattern"])) and
+                all({s["before"], s["after"]} == {"E", "M"} and len(s["anchor"]) == 3
+                    for s in r["switches"]) for r in branch_bridges),
+            "a baseline/cap switch was silently treated as a reference-weight switch")
+    require(all(r["converged"] and r["attained"] <= r["required"] and
+                r["k_coefficients_fixed"] and r["same_selected_branch"] and
+                r["relative_action_difference"] <= .01 and
+                r["relative_observation_difference"] <= .01 and r["relative_state_difference"] <= 1e-7
+                for r in branch_canonical if r["passed"]),
+            "a bridged reference response bypassed independent same-k equilibration")
+    for row in [r for r in chord_checks if r["passed"] and r.get("reference_branch_bridged")]:
+        matching = [r for r in branch_canonical if r["iteration"] == row["iteration"] and
+                    r["purpose"] == row["purpose"] and r["seconds"] < row["seconds"]]
+        require(matching and matching[-1]["passed"] and row["canonical_branch_check_passed"],
+                "a reference-branch direction bypassed its canonical same-k response check")
     for trial in [r for r in trials if r["accepted"]]:
         model = [r for r in directions if r["iteration"] == trial["iteration"] and
                  r["seconds"] < trial["seconds"]][-1]

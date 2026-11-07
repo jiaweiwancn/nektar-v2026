@@ -51,6 +51,7 @@ def collect(directory):
                   "source_derivative_precision", "response_chord_reused", "response_chord_direction_check",
                   "response_chord_secant", "response_chord_discarded", "response_chord_base_accuracy",
                   "response_direction_refreshed", "response_direction_refresh_failed",
+                  "response_reference_branch_bridge", "reference_branch_canonical_check",
                   "restricted_destruction_value_check")]
     checks = [compact(r) for r in rows if r["event"] == "response_check"]
     for row in checks:
