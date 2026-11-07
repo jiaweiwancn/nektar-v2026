@@ -4,6 +4,7 @@
 import argparse
 import collections
 import datetime
+import hashlib
 from pathlib import Path
 from run_cls_epawf_picard import load,write_json,sha,state_hash,require
 
@@ -30,6 +31,15 @@ def main():
     def artifact(path,role):
         path=path.resolve();record=dict(path=str(path),sha256=sha(path),bytes=path.stat().st_size,role=role)
         index[str(path)]=record;return record
+    def snapshot_json(path,name,role):
+        # Atomic live monitors keep changing. Index the bytes actually read,
+        # not a hash of a subsequently replaced live pathname.
+        payload=path.read_bytes();digest=hashlib.sha256(payload).hexdigest()
+        folder=r/'evidence-inputs';folder.mkdir(exist_ok=True);target=folder/(name+'-'+digest+'.json')
+        if not target.exists():
+            with target.open('xb') as stream:stream.write(payload)
+        require(target.read_bytes()==payload,'immutable evidence snapshot differs')
+        artifact(target,role);return load(target)
     comparison=load(r/'comparison.json');budgets=load(r/'discrete-budget/summary.json')
     out=dict(schema=1,captured_UTC=datetime.datetime.now(datetime.timezone.utc).isoformat(),experiment=str(r),
         base='de3e0a1d6d9e24860a1957a1baa9505a97f47ec7',production_source=load(r/'screening/progress.json')['source'],
@@ -133,27 +143,28 @@ def main():
             artifact(f,'preserved terminal attempt; diagnostic replay prepared, not executed')
     monitor=r/'pair-monitor/summary.json'
     if monitor.exists():
-        m=load(monitor);out['continuation_windows']={}
+        m=snapshot_json(monitor,'upstream-monitor','immutable read-only fixed-window monitor snapshot; no governing solves')
+        out['continuation_pairs']=m['paired'];out['continuation_windows']={}
         for c,v in m['cases'].items():
             work=dict(v['work']);work.pop('increments',None)
             out['continuation_windows'][c]={**{k:v[k] for k in ('status','accepted_steps','accepted_time','completed_targets',
                 'next_target','failure','initial_bulk_u','flow_through_time','H_over_ustar','fixed_time_windows')},'work':work,
                 'observations':{n:compact_observation(q) for n,q in v['observations'].items() if int(float(n)) in (64,80,160) or int(float(n))%80==0}}
-        artifact(monitor,'read-only fixed physical-window monitor; no governing solves')
     uniform=r.parent/'cls-epawf-height-sampler-20261107/pair-monitor/summary.json'
     if uniform.exists():
-        m=load(uniform);out['existing_uniform_observations']={}
+        m=snapshot_json(uniform,'uniform-monitor','immutable existing Uniform G/H monitor snapshot; runtime/policy unchanged')
+        out['existing_uniform_observations']={}
         for c,v in m['cases'].items():
             latest=sorted(v['observations'],key=float)[-2:]
             out['existing_uniform_observations'][c]={k:v[k] for k in ('status','accepted_steps','accepted_time','flow_through_time','H_over_ustar')}
             out['existing_uniform_observations'][c].update(observations={n:compact_observation(v['observations'][n]) for n in latest},
                 fixed_time_windows=v['fixed_time_windows'][-3:],activations=v['work']['activations'],correction_integral=v['work']['correction_integral'])
-        artifact(uniform,'read-only existing Uniform G/H context; frozen runtime and physical policy unchanged')
     for n in ('source-validation.json','probe-entry-build.log','build-reviewed.log','reviewed-followup.log'):
         f=r/n
         if f.exists():artifact(f,'tested source content or focused Linux build/verification log')
     f=r/'continuation-budgets.json'
-    if f.exists():out['continuation_budgets']=load(f);artifact(f,'accepted-step-only cumulative and fixed-window correction rates')
+    if f.exists():out['continuation_budgets']=snapshot_json(f,'correction-windows','immutable accepted-only fixed-window correction budgets')
+    out['evidence_collector_sha256']=sha(Path(__file__))
     if a.status:
         out['latest_status']=compact_status(load(a.status));artifact(a.status,'dated full live process/ledger/checkpoint snapshot')
         write_json(a.output/'latest-status.json',out['latest_status'])
