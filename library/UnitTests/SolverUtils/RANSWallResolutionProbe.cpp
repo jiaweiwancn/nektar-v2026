@@ -5,6 +5,8 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionResolution.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallPhysicsSignature.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallTimeIntegration.h>
 #include <LibUtilities/Communication/CommSerial.h>
 #include <SpatialDomains/MeshGraphIO.h>
 #include <boost/property_tree/json_parser.hpp>
@@ -179,9 +181,49 @@ int main(int argc,char **argv)
         for(const std::string name:{"BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter"})
             Require(!serial->DefinesFunction(name),"R3 resolution input must retain unforced physical data");
         double us=0;serial->LoadParameter("RANSWallFrictionVelocity",us,.4);
-        const auto rawReference=patch.NeutralReference(us,{1.,0.});RANSWallEvolutionData data(2);
-        data.fixedBoundary=patch.FixedReferenceBoundary(rawReference);
-        const auto reference=patch.Lift(rawReference,0,data);patch.SetReference(reference,data,0,0);
+        RANSWallEvolutionData data(2);Vector reference;std::string replayContext="null";
+        if(packet.get_optional<std::string>("native_checkpoint"))
+        {
+            Require(packet.get<std::string>("operation")=="k_bound" && !packet.get<bool>("projection_only",false),
+                "native replay requires the ordinary production entry guard");
+            const auto checkpointPath=packet.get<std::string>("native_checkpoint");
+            Require(RANSWallR3::HashFile(checkpointPath+"/State.bin")==packet.get<std::string>("checkpoint_sha256"),"archived checkpoint SHA256 differs");
+            double dt,eta,dx,dy;serial->LoadParameter("TimeStep",dt);serial->LoadParameter("RANSWallEta",eta,0.);
+            serial->LoadParameter("RANSWallDirectionX",dx,1.);serial->LoadParameter("RANSWallDirectionY",dy,0.);
+            std::string mode,coordinates;serial->LoadSolverInfo("RANSWallReference",mode,"Neutral");
+            serial->LoadSolverInfo("RANSWallFunctionCoordinates",coordinates,"Physical");
+            Require(mode=="Neutral" && eta==0,"native replay requires the archived unforced neutral eta=0 configuration");
+            const auto signature=RANSWallPhysicsSignature(patch,serial,eta,true,us,{dx,dy},coordinates=="Chart");
+            Require(signature==packet.get<std::string>("native_signature"),"native replay physical signature differs from archived report");
+            const auto checkpoint=RANSWallTimeIntegration::ReadCheckpoint(checkpointPath,signature,1,dt,patch.Size(),patch.DifferentialSize());
+            reference=checkpoint.fixedReference;
+            for(const auto &item:packet.get_child("fixed_external_coefficients"))
+            {auto it=item.second.begin();const int row=int(it->second.get_value<double>());++it;data.fixedBoundary[row]=it->second.get_value<double>();}
+            const auto keys=patch.FixedReferenceBoundary(reference);Require(keys.size()==data.fixedBoundary.size(),"archived essential row inventory differs");
+            double boundaryDefect=0.;const auto matching=patch.DissipationTrace(reference,0,data);
+            for(auto [row,value]:data.fixedBoundary)
+            {
+                Require(keys.count(row),"archived essential row absent from native geometry");
+                const bool trace=row>=patch.offset[patch.Epsilon()] && row<patch.offset[patch.InnerPressure()] && matching[0].count(row-patch.offset[patch.Epsilon()]);
+                if(!trace)boundaryDefect=std::max(boundaryDefect,std::abs(checkpoint.coupledState[row]-value));
+            }
+            Require(boundaryDefect==0.,"archived accepted native state disagrees with external data");
+            patch.RestoreReference(reference,checkpoint.fixedDefect,checkpoint.eta,data,0.);
+            Require(RANSWallR3::Hash(Read(packet,"committed"))==RANSWallR3::Hash(checkpoint.coupledState),"raw packet is not based on archived accepted state");
+            Require(std::abs(packet.get<double>("time")-(checkpoint.integration.time+dt))<1e-14,"native replay physical time differs");
+            Require(std::abs(packet.get<double>("alpha")-1/dt)<1e-10,"native replay alpha differs");
+            Require(patch.InitializationWork()==Vector({0.,0.}),"native immutable replay called Lift");
+            replayContext=J::Object({{"physical_signature_matches","true"},{"checkpoint_sha256",J::Quote(packet.get<std::string>("checkpoint_sha256"))},
+                {"accepted_steps",J::Number(checkpoint.integration.steps)},{"accepted_time",J::Number(checkpoint.integration.time)},
+                {"fixed_reference_sha256",J::Quote(RANSWallR3::Hash(reference))},{"external_boundary_defect",J::Number(boundaryDefect)},
+                {"initialization_lift_calls_iterations",J::Numbers(patch.InitializationWork())},{"new_initial_state_constructed","false"},
+                {"history_policy",J::Quote("exact archived full implicit-callback history; not reconstructed from pre-k or the accepted solution")}});
+        }
+        else
+        {
+            const auto rawReference=patch.NeutralReference(us,{1.,0.});data.fixedBoundary=patch.FixedReferenceBoundary(rawReference);
+            reference=patch.Lift(rawReference,0,data);patch.SetReference(reference,data,0,0);
+        }
         auto history=Read(packet,"history");auto state=Read(packet,"state");std::string transfer="null";
         if(packet.get_optional<std::string>("transfer_source_xml"))
         {
@@ -294,6 +336,15 @@ int main(int argc,char **argv)
                     nodeMinimum=std::min(nodeMinimum,field->ElementPoint(chosen,{el.lower[0]+(z[i]+1)*(el.upper[0]-el.lower[0])/2,0,0}).Value(state,patch.offset[patch.K()]));
             }
             const auto preDomain=patch.ScalarDomain(pre,time,data,false,true);
+            if(packet.get_optional<std::string>("native_checkpoint"))
+            {
+                Require(preDomain.admissible,"archived pre-k state is incompatible with current production entry: "+preDomain.failure);
+                std::vector<int> free;for(int i=0;i<patch.size[patch.K()];++i)
+                    if(!data.fixedBoundary.count(patch.offset[patch.K()]+i))free.push_back(patch.offset[patch.K()]+i);
+                const auto expected=Read(packet,"transport_rows");Require(free.size()==expected.size(),"archived free-row size differs");
+                for(int i=0;i<free.size();++i)Require(free[i]==expected[i],"archived free-row order differs");
+                Require(RANSWallR3::Hash(state)==packet.get<std::string>("raw_sha256"),"archived raw coefficient vector differs");
+            }
             const auto bounded=patch.ApplyPimpleKBound(state,pre,time,data,packet.get<bool>("projection_only",false));
             double nonK=0,essential=0;
             for(int i=0;i<patch.Size();++i)if(i<patch.offset[patch.K()] || i>=patch.offset[patch.Epsilon()])nonK=std::max(nonK,std::abs(state[i]-bounded.state[i]));
@@ -323,7 +374,8 @@ int main(int argc,char **argv)
             if(bounded.success)try{patch.CompleteRestrictedAudit(bounded.state,history,alpha,time,data);}
                 catch(const std::exception &error){auditFailure=error.what();}
             std::ofstream out(argv[3]);out<<J::Object({{"operation",J::Quote("k_bound")},
-                {"pre_k_inventory",patch.ScalarDomainJSON(preDomain)},{"witness_values",J::List(witnessValues)},
+                {"replay_context",replayContext},{"history_sha256",J::Quote(RANSWallR3::Hash(history))},
+                {"initialization_lift_calls_iterations",J::Numbers(patch.InitializationWork())},{"pre_k_inventory",patch.ScalarDomainJSON(preDomain)},{"witness_values",J::List(witnessValues)},
                 {"scalar_domain",patch.ScalarDomainJSON(domain,true)},{"complete_audit_failure",J::Quote(auditFailure)},
                 {"complete_audit_context",patch.ConstitutiveFailureContext().empty()?"null":patch.ConstitutiveFailureContext()},{"offsets",J::Numbers(patch.offset)},{"k_bound",bounded.report},
                 {"quadrature_correction_mass_norm",J::Number(std::sqrt(square))},{"quadrature_correction_integral",J::Number(integral)},

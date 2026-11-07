@@ -11,6 +11,9 @@ target_include_directories(RANSReducedModelChecks PRIVATE ${RANS_SOURCE_ROOT}/so
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     target_compile_options(RANSReducedModelChecks PRIVATE -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror)
 endif()
+target_sources(RANSWallResolutionProbe PRIVATE
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallTimeIntegration.cpp
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSHistory.cpp)
 add_executable(RANSKBoundQPChecks test_cls_epawf_k_bound_qp.cpp)
 target_include_directories(RANSKBoundQPChecks PRIVATE ${RANS_SOURCE_ROOT}/solvers)
 enable_testing()

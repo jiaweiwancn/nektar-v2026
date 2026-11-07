@@ -186,6 +186,8 @@ public:
         const RANSWallEvolutionData &data,const RANSWallCoordinate &unregistered) const;
     const std::string &PimpleKBoundMode() const { return m_pimpleKBound; }
     std::string PimpleKBoundSignature() const;
+    std::string PimpleKBoundControls() const;
+    static bool PimpleKBoundWorkParameter(const std::string &name);
     struct KBoundResult
     {
         Vector state;
@@ -457,6 +459,9 @@ private:
     std::string m_pimpleKInventory="LegacyV1";
     double m_pimpleKFloorRelative=1e-8,m_pimpleBudgetTime=-1.;
     bool m_pimpleSnapshots=false;
+    int m_kBoundMaxAdd=2000,m_kBoundMaxTotal=2000,m_kBoundMaxSeparations=2000;
+    double m_kBoundMaxSeconds=900.;
+    std::string m_kBoundTrace="Summary",m_kBoundTraceFile="None",m_kBoundDumpFile="None";
     mutable int m_liftCalls=0,m_liftIterations=0;
     mutable std::vector<std::string> m_pimpleRecords;
     std::array<double,3> m_picardRelaxation{{1.,.5,.5}};

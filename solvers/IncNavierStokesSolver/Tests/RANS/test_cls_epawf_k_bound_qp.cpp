@@ -37,5 +37,27 @@ int main()
     Check(rediscovered==1 && std::abs(leaving.delta[0]-1.)<1e-12 && std::abs(leaving.delta[1]-3.)<1e-12,"full separation did not recover (1,3)");
     for(int i=0;i<3;++i)Check(Dot(inventory[i],leaving.delta)>=lower[i]-1e-12,"inactive inventory violation");
     Check(leaving.Stationarity()<1e-12 && leaving.Complementarity()<1e-12,"rediscovered KKT diagnostics");
+    Controls total;total.maximumTotal=1;
+    Projection limited(Matrix{{1.,0.},{0.,1.}},total);
+    Check(limited.Add({1.,0.},1.,0),"budget first solve");
+    const auto saved=limited.delta;
+    Check(!limited.Add({0.,1.},2.,1),"total work limit not enforced");
+    Check(limited.iterations==1 && limited.totalLimitChecks==1 && limited.kktSolves==1,"completed/rejected total work counts");
+    Check(limited.delta==saved && limited.solvedAdd==1 && !limited.workComplete,"failed result lost completed primal snapshot");
+    Check(limited.solvedActive.size()==1 && limited.active.size()==2,"unfinished working set not separated");
+    Check(limited.Stationarity()<1e-14 && limited.Complementarity()<1e-14 && limited.PoolViolation()>1.,"failed diagnostics do not describe last completed primal/dual");
+    Check(std::abs(limited.Objective()-limited.DualObjective())<1e-14 && limited.DualViolation()==0,"coherent dual snapshot");
+    Controls add;add.maximumPerAdd=1;add.maximumTotal=20;
+    Projection perAdd(Matrix{{1.,0.},{0.,1.}},add);
+    Check(perAdd.Add({1.,0.},1.,0),"per-add first solve");
+    Check(!perAdd.Add({1.,1.},3.,1),"per-add limit not enforced");
+    Check(perAdd.iterations==2 && perAdd.addLimitChecks==1 && perAdd.totalLimitChecks==0,"per-add/cumulative work confused");
+    Check(perAdd.delta==Vector({1.,0.}) && perAdd.Stationarity()<1e-14,"per-add failure incoherent");
+    Controls generous;generous.maximumPerAdd=20;generous.maximumTotal=100;
+    Projection more(Matrix{{1.,0.},{0.,1.}},generous);
+    Check(more.Add({1.,0.},1.,0) && more.Add({1.,1.},3.,1),"generous controls changed a finite solve");
+    Check(std::abs(more.delta[0]-1.5)<1e-12 && more.maximumAddIterations==2 && more.iterations==3,"per-add completed work accounting");
+    Check(more.Add({1.,1.},3.,2),"identical constraint regression");
+    Check(more.repeatedRows==1 && more.repeatedConstraints==1,"duplicate telemetry");
     std::cout<<"Mass-metric positivity QP checks passed\n";
 }

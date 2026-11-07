@@ -214,6 +214,18 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     Require(m_pimpleKInventory=="LegacyV1" || (PimpleKBoundEnabled() && m_pimpleKInventory=="ConstitutiveV2"),"invalid PIMPLE k inventory policy");
     session->LoadParameter("RANSWallPimpleKFloorRelative",m_pimpleKFloorRelative,1e-8);
     Require(std::isfinite(m_pimpleKFloorRelative) && m_pimpleKFloorRelative>0 && m_pimpleKFloorRelative<=1.,"invalid k floor relative to K0");
+    session->LoadParameter("RANSWallPimpleKBoundMaxAdd",m_kBoundMaxAdd,2000);
+    session->LoadParameter("RANSWallPimpleKBoundMaxTotal",m_kBoundMaxTotal,2000);
+    session->LoadParameter("RANSWallPimpleKBoundMaxSeparations",m_kBoundMaxSeparations,ConstitutiveKInventory()?2000:500);
+    session->LoadParameter("RANSWallPimpleKBoundMaxSeconds",m_kBoundMaxSeconds,900.);
+    Require(m_kBoundMaxAdd>0 && m_kBoundMaxAdd<=1000000 && m_kBoundMaxTotal>0 && m_kBoundMaxTotal<=1000000 &&
+        m_kBoundMaxSeparations>0 && m_kBoundMaxSeparations<=1000000 && std::isfinite(m_kBoundMaxSeconds) && m_kBoundMaxSeconds>0,
+        "invalid finite k-bound work controls");
+    session->LoadSolverInfo("RANSWallPimpleKBoundTrace",m_kBoundTrace,"Summary");
+    session->LoadSolverInfo("RANSWallPimpleKBoundTraceFile",m_kBoundTraceFile,"None");
+    session->LoadSolverInfo("RANSWallPimpleKBoundDumpFile",m_kBoundDumpFile,"None");
+    Require(m_kBoundTrace=="Off" || m_kBoundTrace=="Summary" || m_kBoundTrace=="Full","invalid k-bound trace selector");
+    Require(m_kBoundTrace!="Full" || m_kBoundTraceFile!="None","Full k-bound trace requires an explicit file");
     std::string snapshots;session->LoadSolverInfo("RANSWallPimpleSnapshots",snapshots,"Off");
     Require(snapshots=="Off" || snapshots=="On","invalid PIMPLE snapshot selector");
     m_pimpleSnapshots=snapshots=="On" || PimpleKBoundEnabled();

@@ -259,6 +259,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
                     out<<J::Object({{"schema","1"},{"time",J::Number(time)},{"alpha",J::Number(alpha)},
                         {"committed",J::Numbers(base)},{"post_flow",J::Numbers(flowState)},{"pre_k",J::Numbers(preScalar)},
                         {"raw",J::Numbers(raw)},{"corrected",J::Numbers(s)},{"history",J::Numbers(history)},
+                        {"fixed_reference",J::Numbers(m_reference)},{"fixed_external_coefficients",J::Constraints(data.fixedBoundary)},
+                        {"reference_constraints",J::Constraints(m_referenceConstraints)},{"projection_work_controls",PimpleKBoundControls()},
                         {"transport_rows",J::Numbers(block.rows)},{"transport_residual",J::Numbers(block.residual)},
                         {"raw_increment",J::Numbers(delta)},{"raw_linear_residual",J::Numbers(linear)},
                         {"matrix_file",J::Quote(std::filesystem::absolute(matrix).string())},

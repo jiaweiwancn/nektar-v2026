@@ -6,6 +6,7 @@
 #include <IncNavierStokesSolver/EquationSystems/IncNavierStokes.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallPhysicsSignature.h>
 #include <LibUtilities/Communication/CommSerial.h>
 #include <LibUtilities/BasicUtils/FieldIO.h>
 #include <SpatialDomains/MeshGraphIO.h>
@@ -208,17 +209,7 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
 }
 std::string RANSEquilibriumWallEvolution::PhysicsSignature() const
 {
-    std::ostringstream s;s<<std::setprecision(17)<<m_patch->Signature()<<":eta="<<m_eta<<":neutral="<<m_neutral<<":us="<<m_ustar<<":direction="<<m_direction[0]<<','<<m_direction[1]<<":chart_functions="<<m_chartFunctions;
-    if(!m_neutral && m_patch->CappedDestruction() && !m_patch->Mapped() && !m_patch->TransitionEnabled())
-        s<<":capped_initial_trace=1";
-    if(m_patch->PimpleSingleSweep())s<<":temporal_coupling=PimpleSingleSweep"<<m_patch->PimpleKBoundSignature();
-    for(const auto &[name,value]:m_serialSession->GetParameters())
-        if(name!="NUMSTEPS" && name!="IO_CHECKSTEPS" && name!="IO_INFOSTEPS" && name!="IO_TIMER_LEVEL" && name!="RANSWALLOWNERSHIPSHIFT" && name!="RANSWALLPIMPLEREJECTSTEP" && name!="RANSWALLPIMPLEHARDAUDITREJECTSTEP" && name!="RANSWALLPIMPLEKFLOORRELATIVE" && name!="RANSWALLPIMPLEBUDGETTIME")s<<'|'<<name<<'='<<value;
-    const std::vector<std::string> names{"InitialConditionsInner","InitialConditionsOuter","InitialPerturbationInner","InitialPerturbationOuter","BoundaryValuesInner","BoundaryValuesOuter",
-        "BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter","ExactSolutionInner","ExactSolutionOuter"};
-    for(const auto &name:names)for(const auto &variable:m_session->GetVariables())if(m_serialSession->DefinesFunction(name,variable))
-        s<<'|'<<name<<'/'<<variable<<'='<<m_serialSession->GetFunction(name,variable)->GetExpression();
-    return s.str();
+    return RANSWallPhysicsSignature(*m_patch,m_serialSession,m_eta,m_neutral,m_ustar,m_direction,m_chartFunctions);
 }
 void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
 {
@@ -855,6 +846,7 @@ void RANSEquilibriumWallEvolution::WriteReport() const
        <<",\"temporal_coupling\":"<<Quoted(m_patch->TemporalCouplingName())
        <<",\"k_bound_mode\":"<<Quoted(m_patch->PimpleKBoundMode())
        <<",\"k_bound_signature\":"<<Quoted(m_patch->PimpleKBoundSignature())
+       <<",\"k_bound_work_controls\":"<<m_patch->PimpleKBoundControls()
        <<",\"implicit_callback_count\":"<<m_implicitCallbacks
        <<",\"initialization_lift_calls_iterations\":"<<RANSWallSolveJson::Numbers(m_patch->InitializationWork())
        <<",\"pimple_attempts\":"<<RANSWallSolveJson::List(m_patch->PimpleRecords());
