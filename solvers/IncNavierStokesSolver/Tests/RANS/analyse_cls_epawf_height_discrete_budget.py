@@ -15,9 +15,10 @@ from run_cls_epawf_picard import load,run,require,write_json,sha,THREADS
 
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True)
-    p.add_argument('--probe',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args()
+    p.add_argument('--probe',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
+    p.add_argument('--cases',nargs='+',default=list('ABCDEFGH'));a=p.parse_args()
     a.output.mkdir(parents=True,exist_ok=True);os.environ.update(THREADS);out={}
-    for case in 'ABCDEFGH':
+    for case in a.cases:
         root=a.root/'screening'/case
         if not (root/'result.json').exists():continue
         initial=load(root/'initial/case.evolution.json');folder=a.output/case;folder.mkdir(exist_ok=True)
@@ -63,7 +64,7 @@ def main():
         initial_k=np.array(initial['state'])[offset:offset+size];final_k=np.array(report['state'])[offset:offset+size]
         endpoint=ell@(final_k-initial_k)
         require(max(abs(endpoint-totals['actual']),default=0.)<1e-12,'step budget did not telescope to physical band storage')
-        out[case]=dict(bands=[dict(name=b['name'],lower=b['lower'],upper=b['upper']) for b in bands],steps=steps,totals={k:v.tolist() for k,v in totals.items()},
+        out[case]=dict(bands=[dict(name=b['name'],lower=b['lower'],upper=b['upper'],x_region=b.get('x_region','all'),x_bounds=b.get('x_bounds')) for b in bands],steps=steps,totals={k:v.tolist() for k,v in totals.items()},
             initialized_weak_components=initial_components,initialized_projected_band_rates=(-dual@component_sum).tolist(),
             endpoint_integral_change=endpoint.tolist(),production_governing_solves=0,diagnostic_k_transport_solves=mass['diagnostic_k_solves'],
             mass_source='native PicardKMass on identical free rows; saved matrix is A_k, not M_ff',

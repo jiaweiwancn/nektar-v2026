@@ -121,6 +121,10 @@ std::string RANSWallEvolutionPatch::HeightComparison(const Vector &s,const Vecto
     const auto analytic=Profile(K0,{0,0,0},1);const auto &ref=analytic->Reference();const auto &wall=analytic->Original();
     const double z0=H*std::exp(-kap*ref.matchingVelocity/us);
     const auto raw=Residual(s,history,0.,time,data,false,true);const auto constraints=Constraints(s,time,data);
+    auto traceTarget=s;double matchingTraceDefect=0;
+    for(auto [row,value]:constraints)traceTarget[row]=value;
+    for(int id:m_traceIds)matchingTraceDefect=std::max(matchingTraceDefect,
+        std::abs(s[offset[Epsilon()]+id]-traceTarget[offset[Epsilon()]+id]));
     const auto scaled=Norms(raw,constraints,us);Vector dimensional,common;
     for(int b=0;b<4;++b)
     {
@@ -156,7 +160,7 @@ std::string RANSWallEvolutionPatch::HeightComparison(const Vector &s,const Vecto
         }
     }
     for(auto &e:errors)e=std::sqrt(e);
-    for(double x:(ProspectiveKInventory()?Vector{-3.5,-2.625,-1.,1.6}:Vector{-3.5,-1.,1.6}))
+    for(double x:ComparisonProfileAbscissae())
     {
         auto anchor=RANSWallCoordinate{x,0,0};const auto profile=StateProfile(s,anchor,time,data);const auto normal=WallNormalization(s,anchor,*profile);
         const auto row=SampleKRow(anchor);std::vector<std::string> values;
@@ -173,6 +177,9 @@ std::string RANSWallEvolutionPatch::HeightComparison(const Vector &s,const Vecto
         profiles.push_back(J::Object({{"x",J::Number(x)},{"K",J::Number(profile->K())},{"chi",J::Number(profile->Reference().weight)},
             {"cutoff",J::Number(profile->Reference().cutoff)},{"B",J::Number(normal.b)},{"m",J::Number(normal.m)},{"lambda",J::Number(normal.lambda)},
             {"functional_ids",J::Numbers(row.ids)},{"functional_phi",J::Numbers(row.phi)},{"column_average",J::Boolean(row.columnAverage)},
+            {"epsilon_H_retained",J::Number(Point(Epsilon(),{x,0,H},1).Value(s,offset[Epsilon()]))},
+            {"epsilon_H_refreshed_projected",J::Number(Point(Epsilon(),{x,0,H},1).Value(traceTarget,offset[Epsilon()]))},
+            {"epsilon_H_unprojected",J::Number(normal.lambda*profile->Dissipation(H))},
             {"profile_columns",J::Quote("z,z/H,u,u_reference,du_dz,du_reference_dz,k,[outer epsilon]")},{"profile",J::List(values)}}));
     }
     auto components=ResidualResolutionComponents(s,history,0.,time,data,false);
@@ -196,6 +203,7 @@ std::string RANSWallEvolutionPatch::HeightComparison(const Vector &s,const Vecto
         {"invalid_production_diagnostic_points",J::List(invalid)},{"representation_L2_velocity_gradient_production_referenceProduction",J::Numbers(errors)},
         {"common_samples",J::Object(physical)},{"profiles",J::List(profiles)},{"fixed_bands",PhysicalKBands(s,time,data)},
         {"mean_wall_stress",J::Number(tau/area)},{"native_degrees_of_freedom",J::Numbers(size)},
+        {"matching_trace_defect",J::Number(matchingTraceDefect)},
         {"weak_k_component_loads",J::Object(loads)},{"state_unchanged","true"},{"governing_solves","0"}});
 }
 

@@ -21,8 +21,8 @@ def main():
         r=load(path);q0=r.get('initialization');out['cases'][c]=case=dict(status=r['status'],failure=r.get('failure'),definition=r['definition'])
         if not q0:continue
         epath=a.screening/c/'trajectory/case.evolution.json';e=load(epath);initial[c]=q0;states[c]={0:q0}
-        states[c].update({int(n):load(v['path']) for n,v in r['observations'].items() if v['exit_code']==0})
-        if e.get('height_comparison_final'):states[c][e['steps']]=e['height_comparison_final']
+        states[c].update({int(n):load(Path(v['path'])) for n,v in r['observations'].items() if v['exit_code']==0})
+        if e.get('height_comparison_final'):states[c][int(e['steps'])]=e['height_comparison_final']
         case.update(steps=e['steps'],time=e['time'],native_report=dict(path=str(epath),sha256=sha(epath)),
             actual_h0_sha256=r['actual_h0_sha256'],native_history_hashes=r['initial_native_history_hashes'],
             initialization=compact_diagnostic(q0),initial_error_to_own_reference=differences(q0,q0,True),
@@ -42,7 +42,7 @@ def main():
         for c,u in [('U05-graded','G'),('U05-one','H'),('U20-graded','C'),('U20-one','D')]:
             if c not in states:continue
             r=load(a.uniform_screening/u/'result.json');q0=r['initialization'];uniform={0:q0}
-            for n,v in r['observations'].items():uniform[int(n)]=load(v['path'])
+            for n,v in r['observations'].items():uniform[int(n)]=load(Path(v['path']))
             out['policy_comparisons'][c+':'+u]={str(n):dict(time=states[c][n]['time'],fields=differences(states[c][n],uniform[n]),
                 evolutionary_difference=evolution_difference(states[c][n],initial[c],uniform[n],q0)) for n in sorted(states[c].keys() & uniform.keys())}
     write_json(a.output,out);print(a.output)

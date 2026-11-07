@@ -147,6 +147,9 @@ std::string RANSWallEvolutionPatch::BranchCoverageDiagnostic(const Vector &s,dou
 {
     Require(m_dimension==2 && !Mapped(),"branch diagnostic requires flat serial pilot");
     const auto hash=RANSWallR3::Hash(s);std::vector<std::string> output;
+    const auto declared=ScalarDomain(s,time,data,true,true);
+    std::set<RANSWallCoordinate> declaredPoints;
+    for(const auto &o:declared.observations)if(o.block==K() && !o.functional)declaredPoints.insert(o.coordinate);
     for(auto p:anchors)
     {
         p[2]=0;const auto sampling=SampleKRow(p);const double k=sampling.Value(s,offset[K()]);
@@ -168,7 +171,8 @@ std::string RANSWallEvolutionPatch::BranchCoverageDiagnostic(const Vector &s,dou
             for(const auto &q:NormalizationRows(p,*profile))
             {
                 const double value=q.Value(s,offset[K()]);minimum=std::min(minimum,value);
-                rows.push_back(J::Object({{"coordinate",J::Numbers(q.coordinate)},{"k",J::Number(value)}}));
+                rows.push_back(J::Object({{"coordinate",J::Numbers(q.coordinate)},{"k",J::Number(value)},
+                    {"visited_by_selected_inventory",J::Boolean(declaredPoints.count(q.coordinate))}}));
             }
             profiles.push_back(J::Object({{"branch",J::Quote(name)},{"chi",J::Number(profile->Reference().weight)},
                 {"cutoff",J::Number(profile->Reference().cutoff)},{"minimum",J::Number(minimum)},{"rows",J::List(rows)}}));
@@ -220,6 +224,7 @@ std::string RANSWallEvolutionPatch::BranchCoverageDiagnostic(const Vector &s,dou
     }
     Require(hash==RANSWallR3::Hash(s),"branch readback changed coefficients");
     return J::Object({{"state_sha256",J::Quote(hash)},{"anchors",J::List(output)},
+        {"selected_inventory",ScalarDomainJSON(declared)},
         {"initialization_work",J::Numbers(InitializationWork())},{"governing_solves","0"},
         {"scope",J::Quote("read-only profile reachability and vertical-panel extrema; no normalization, repair, Lift, restart conversion or history advance")}});
 }
@@ -422,7 +427,7 @@ std::string RANSWallEvolutionPatch::CheckConstitutiveCoverage(const Vector &s,do
     const RANSWallEvolutionData &data,const RANSWallCoordinate &unregistered) const
 {
     const auto domain=ScalarDomain(s,time,data,true);
-    Require(ConstitutiveKInventory() && domain.admissible,"coverage check requires admissible ConstitutiveV2 state");
+    Require(ConstitutiveKInventory() && domain.admissible,"coverage check requires admissible "+m_pimpleKInventory+" state");
     const auto audit=CompleteRestrictedAudit(s,s,0.,time,data);
     bool caught=false;std::string reason;
     {

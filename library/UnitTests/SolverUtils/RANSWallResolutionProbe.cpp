@@ -198,6 +198,21 @@ int main(int argc,char **argv)
             const auto signature=RANSWallPhysicsSignature(patch,serial,eta,true,us,{dx,dy},coordinates=="Chart");
             Require(signature==packet.get<std::string>("native_signature"),"native replay physical signature differs from archived report");
             const auto checkpoint=RANSWallTimeIntegration::ReadCheckpoint(checkpointPath,signature,1,dt,patch.Size(),patch.DifferentialSize());
+            bool tailIdentityRejected=false;
+            if(packet.get<bool>("test_tail_identity_only",false))
+            {
+                // Pure reader-contract test. No altered profile, simulation,
+                // reference or history is constructed; all real cases keep z_m=H.
+                double tail;serial->LoadParameter("RANSWallTailStart",tail);
+                double changed=tail*1.01;serial->SetParameter("RANSWallTailStart",changed);
+                const auto incompatible=RANSWallPhysicsSignature(patch,serial,eta,true,us,{dx,dy},coordinates=="Chart");
+                serial->SetParameter("RANSWallTailStart",tail);
+                Require(RANSWallPhysicsSignature(patch,serial,eta,true,us,{dx,dy},coordinates=="Chart")==signature,
+                    "reader identity test did not restore session parameter");
+                try{RANSWallTimeIntegration::ReadCheckpoint(checkpointPath,incompatible,1,dt,patch.Size(),patch.DifferentialSize());}
+                catch(const std::exception &e){tailIdentityRejected=std::string(e.what()).find("signature mismatch")!=std::string::npos;}
+                Require(tailIdentityRejected,"tail parameter did not protect checkpoint compatibility");
+            }
             reference=checkpoint.fixedReference;
             for(const auto &item:packet.get_child("fixed_external_coefficients"))
             {auto it=item.second.begin();const int row=int(it->second.get_value<double>());++it;data.fixedBoundary[row]=it->second.get_value<double>();}
@@ -240,6 +255,7 @@ int main(int argc,char **argv)
             replayContext=J::Object({{"physical_signature_matches","true"},{"checkpoint_sha256",J::Quote(packet.get<std::string>("checkpoint_sha256"))},
                 {"accepted_steps",J::Number(checkpoint.integration.steps)},{"accepted_time",J::Number(checkpoint.integration.time)},
                 {"fixed_reference_sha256",J::Quote(RANSWallR3::Hash(reference))},{"external_boundary_defect",J::Number(boundaryDefect)},
+                {"tail_identity_only_rejected",J::Boolean(tailIdentityRejected)},
                 {"initialization_lift_calls_iterations",J::Numbers(patch.InitializationWork())},{"new_initial_state_constructed","false"},
                 {"formed_callback_history_sha256",formedHistory.empty()?"null":J::Quote(RANSWallR3::Hash(formedHistory))},
                 {"history_policy",J::Quote(formedHistory.empty()?"exact archived full implicit-callback history":
@@ -288,6 +304,25 @@ int main(int argc,char **argv)
             for(double x:xs)anchors.push_back({x,0,0});
             std::vector<std::pair<std::string,std::string>> report{{"state",patch.BranchCoverageDiagnostic(state,time,data,anchors)},
                 {"native_replay_context",replayContext}};
+            if(packet.get<bool>("compare_prospective_inventory_only",false))
+            {
+                // A read-only counterfactual inventory check, not a checkpoint
+                // reader or migration. The archived patch above has already
+                // checked its own signature, boundary values and native slots.
+                // This second patch only evaluates the same saved coefficients:
+                // no Lift, normalization, transport solve or history advance.
+                Require(packet.get_optional<std::string>("native_checkpoint").is_initialized(),
+                    "inventory counterfactual requires the verified native archive");
+                std::string saved;serial->LoadSolverInfo("RANSWallPimpleKInventory",saved,"LegacyV1");
+                serial->SetSolverInfo("RANSWallPimpleKInventory","ConstitutiveV3");
+                RANSWallEvolutionPatch prospective(serial,graph,world->GetComm(),p,LoadRANSWallNormalMap(serial,2,p.geometry.height));
+                serial->SetSolverInfo("RANSWallPimpleKInventory",saved);
+                const auto checked=prospective.ScalarDomain(state,time,data,true,true);
+                Require(prospective.InitializationWork()==Vector({0.,0.}),"inventory counterfactual called Lift");
+                report.push_back({"prospective_inventory_only",RANSWallEvolutionPatch::ScalarDomainJSON(checked)});
+                report.push_back({"prospective_inventory_scope",J::Quote(
+                    "read-only V3 constraint enumeration on the original archived coefficients/data; no compatible restart claimed")});
+            }
             if(packet.get_child_optional("compare_state"))
             {
                 const auto compare=Read(packet,"compare_state");Require(compare.size()==state.size(),"comparison shape differs");

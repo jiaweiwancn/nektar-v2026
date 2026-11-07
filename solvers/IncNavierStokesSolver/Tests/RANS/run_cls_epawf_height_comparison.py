@@ -21,13 +21,14 @@ KN= [0.,.01,.1,.25,.5,1.,2.]+[2+j/3 for j in range(1,7)]
 CASES=dict(A=(2.,'graded','Point',1.),B=(2.,'graded','Point',2.),C=(2.,'graded','ColumnAverage',2.),D=(2.,'one','ColumnAverage',2.),
            E=(1.,'graded','ColumnAverage',1.),F=(1.,'one','ColumnAverage',1.),G=(.5,'graded','ColumnAverage',.5),H=(.5,'one','ColumnAverage',.5))
 UPSTREAM_CASES={'U05-graded':CASES['G'],'U05-one':CASES['H'],'U20-graded':CASES['C'],'U20-one':CASES['D']}
+UPSTREAM_BRIDGES={'U20-point':(2.,'graded','Point',2.)}
 WORK=dict(add=2000,total=20000,separations=2000,seconds=900)
 
 
 def case_xml(case,folder,steps,dt=.000625,restart=None,normal=16,hard_reject=0,outer_refined=False,
              inventory='ConstitutiveV2',wall_policy=None):
-    upstream=case in UPSTREAM_CASES
-    H,partition,sampler,tail=(UPSTREAM_CASES if upstream else CASES)[case]
+    upstream=case in UPSTREAM_CASES or case in UPSTREAM_BRIDGES
+    H,partition,sampler,tail=({**UPSTREAM_CASES,**UPSTREAM_BRIDGES} if upstream else CASES)[case]
     wall_policy=wall_policy or ('Upstream' if upstream else 'UniformEPFlat')
     if upstream:
         require(wall_policy=='Upstream' and inventory=='ConstitutiveV3','new Upstream family requires branch-complete inventory')
@@ -48,8 +49,12 @@ def case_xml(case,folder,steps,dt=.000625,restart=None,normal=16,hard_reject=0,o
         for e in root.findall('./CONDITIONS/FUNCTION[@NAME="InitialPerturbationOuter"]/E'):
             if e.get('VAR')=='eps_tilde':e.set('VALUE',e.get('VALUE').replace('(y-(2.0))/(2.0)','(y-RANSWallHeight)/(4-RANSWallHeight)'))
     write(root,xml)
-    write_json(folder/'definition.json',dict(family=('UpstreamHeightV1' if upstream else 'HeightSamplerV1')+('OuterHalves' if outer_refined else ''),
+    family=('UpstreamPointBridgeV1' if case in UPSTREAM_BRIDGES else
+        'UpstreamHeightV1'+('OuterHalves' if outer_refined else '') if upstream else
+        'HeightSamplerOuterHalvesV1' if outer_refined else 'HeightSamplerV1')
+    write_json(folder/'definition.json',dict(family=family,
         case=case,wall_policy=wall_policy,inventory=inventory,H=H,h=.1,Z=4,z_m=tail,
+        temporal_coupling='PimpleSingleSweep',native_order=1,relaxation=1,eta=0,prescribed_forcing=0,k_floor_relative=1e-8,
         K_sampling=sampler,z_K=1. if sampler=='Point' else None,placeholder=H/2 if sampler!='Point' else None,
         K_functional_version='ColumnAverage-v1:physical-dz/H:fixed-native-panel-Gauss8:global-CG-row' if sampler=='ColumnAverage' else 'Point',
         transition=dict(start=-3,end=-2.25,baseline_start=-2,sensor_heights=[2.5,3.5],chi_enable=1),
@@ -61,7 +66,7 @@ def case_xml(case,folder,steps,dt=.000625,restart=None,normal=16,hard_reject=0,o
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--solver',type=Path,required=True);p.add_argument('--probe',type=Path,required=True)
-    p.add_argument('--output',type=Path,required=True);p.add_argument('--cases',nargs='+',choices=list(CASES)+list(UPSTREAM_CASES),default=list(CASES))
+    p.add_argument('--output',type=Path,required=True);p.add_argument('--cases',nargs='+',choices=list(CASES)+list(UPSTREAM_CASES)+list(UPSTREAM_BRIDGES),default=list(CASES))
     p.add_argument('--inventory',choices=('ConstitutiveV2','ConstitutiveV3'),default='ConstitutiveV2')
     p.add_argument('--workers',type=int,default=4);p.add_argument('--steps',type=int,default=32)
     p.add_argument('--dt',type=float,default=.000625);p.add_argument('--normal-order',type=int,default=16)

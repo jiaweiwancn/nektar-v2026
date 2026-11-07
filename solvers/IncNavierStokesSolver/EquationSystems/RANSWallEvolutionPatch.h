@@ -11,6 +11,7 @@
 #include <SolverUtils/Turbulence/EquilibriumAWFTransition.h>
 #include <SolverUtils/Turbulence/RANSRobustVariant.h>
 #include <SolverUtils/Turbulence/RANSWallInnerStress.h>
+#include <algorithm>
 #include <set>
 
 namespace Nektar
@@ -183,8 +184,15 @@ public:
     Diagnostic PhysicalSamples(const Vector &state,double time,const RANSWallEvolutionData &data) const;
     bool PimpleKBoundEnabled() const { return m_pimpleKBound!="Off"; }
     static Vector ContinuationProfileAbscissae(){return {-3.,-1.,0.,1.,1.6};}
+    Vector ComparisonProfileAbscissae() const
+    {return ProspectiveKInventory()?Vector{-3.5,-2.625,-1.,1.6}:Vector{-3.5,-1.,1.6};}
     Vector ConstitutiveReportingAbscissae() const
-    { return ProspectiveKInventory()?Vector{-3.5,-3.,-2.625,-1.,0.,1.,1.6}:ContinuationProfileAbscissae(); }
+    {
+        auto values=ContinuationProfileAbscissae();
+        if(ProspectiveKInventory())for(double x:ComparisonProfileAbscissae())
+            if(std::find(values.begin(),values.end(),x)==values.end())values.push_back(x);
+        return values;
+    }
     bool ConstitutiveKInventory() const { return PimpleKBoundEnabled() &&
         (m_pimpleKInventory=="ConstitutiveV2" || m_pimpleKInventory=="ConstitutiveV3"); }
     bool ProspectiveKInventory() const { return PimpleKBoundEnabled() && m_pimpleKInventory=="ConstitutiveV3"; }

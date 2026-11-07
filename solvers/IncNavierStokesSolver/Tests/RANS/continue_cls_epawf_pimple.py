@@ -300,6 +300,7 @@ def main():
                     (a.height_case and a.wall_policy=='UniformEPFlat' and a.inventory in ('ConstitutiveV2','ConstitutiveV3')),
                     'height continuation requires its declared policy')
                 require(not bound_work_arguments(a) or bound_work_arguments(a)==WORK,'height continuation uses its validated explicit controls')
+                if a.upstream_case:require(bound_work_arguments(a)==WORK,'new Upstream continuation requires explicit validated projection controls')
                 xml=case_xml(a.upstream_case or a.height_case,directory,end-start,.000625,
                     restart=Path(progress['checkpoint']) if progress['checkpoint'] else None,inventory=a.inventory,wall_policy=a.wall_policy)
             else:

@@ -22,7 +22,7 @@ def main():
     require(sha(report)==REPORT_SHA and sha(cp/'State.bin')==CP_SHA,'immutable terminal artifact differs')
     e=load(report);checkpoint=header(cp,True);require(checkpoint['steps']==103 and e['steps']==103,'wrong historical frontier')
     accepted=checkpoint['coupled_state'];rejected=e['rejected_state'];offset=e['offsets'];k=int(offset[2]);end=int(offset[3])
-    require(accepted[k:end]==rejected[k:end],'flow changed k coefficients: investigate a different mechanism')
+    require(state_hash(accepted[k:end])==state_hash(rejected[k:end]),'flow changed k coefficients: investigate a different mechanism')
     attempt=e['pimple_attempts'][-1]
     # last_stage_history was transactionally rolled back. Ask the native GLM
     # to form the callback from the exact saved slots, then abort before any
@@ -30,7 +30,8 @@ def main():
     shutil.copytree(cp,a.output/'checkpoint103');shutil.copy2(a.segment/'case.xml',a.output/'case.xml')
     boundary=load(a.boundary_report)['fixed_external_coefficients']
     request=dict(operation='branch_coverage',state=accepted,compare_state=rejected,committed=accepted,
-        form_native_callback_history=True,expected_history_sha256=attempt['history_sha256'],time=attempt['time'],alpha=attempt['alpha'],
+        form_native_callback_history=True,test_tail_identity_only=True,compare_prospective_inventory_only=True,
+        expected_history_sha256=attempt['history_sha256'],time=attempt['time'],alpha=attempt['alpha'],
         native_checkpoint=str((a.output/'checkpoint103').resolve()),checkpoint_sha256=CP_SHA,native_signature=e['signature'],
         fixed_external_coefficients=boundary,projection_only=False,require_history_h0=False,
         inner_stress_model='SaturatedR2',stations=[-3.5,-2.625,-1.,1.6])
@@ -43,12 +44,21 @@ def main():
         receipt=receipt,governing_solves=0,old_tail_evolved=False,checkpoint_migration=False)
     write_json(a.output/'manifest.json',manifest);require(receipt['exit_code']==0,'read-only replay failed')
     r=load(a.output/'result.json');require(r['k_coefficient_difference']==0,'replayed flow changed k')
+    require(r['state']['selected_inventory']['admissible'] and not r['compare']['selected_inventory']['admissible'],
+        'old-policy inventory/audit gap was not reproduced')
+    require(not r['prospective_inventory_only']['admissible'] and
+        r['prospective_inventory_only']['failure']=='negative_inner_k',
+        'V3 did not detect inadmissible k on the unchanged accepted archive')
+    manifest['v3_read_only_inventory']=r['prospective_inventory_only']
     before=r['state']['anchors'][0];after=r['compare']['anchors'][0]
     manifest.update(before=before,after=after,result_sha256=sha(a.output/'result.json'))
     require(before['chi']==0 and after['chi']>0,'archived gate switch was not reproduced')
     branches={v['branch']:v for v in before['profiles']}
     require(branches['current']['minimum']>=0 and branches['prospective_active']['minimum']<0,
         'prospective branch did not expose the saved old-acceptance gap')
+    first=next(q for q in branches['prospective_active']['rows'] if q['k']<0)
+    require(not first['visited_by_selected_inventory'],'old policy already protected the failing prospective point')
+    manifest['first_missing_negative_row']=first
     write_json(a.output/'manifest.json',manifest);print(a.output/'manifest.json')
 
 if __name__=='__main__':main()

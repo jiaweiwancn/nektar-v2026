@@ -38,7 +38,12 @@ def main():
                 # receipt checkpoint's parent is the native segment directory.
                 if not path.exists():continue
                 if step in states[c]:continue
-                with gzip.open(path,'rt') as stream:d=json.load(stream,parse_int=float)
+                try:
+                    with gzip.open(path,'rt') as stream:d=json.load(stream,parse_int=float)
+                except (EOFError,OSError,json.JSONDecodeError):
+                    # The driver writes gzip before removing the complete
+                    # original. Observe only completed immutable payloads.
+                    continue
                 require(d['steps']==step,'native block identity differs')
                 q=d['height_comparison_final'];require(abs(q['time']-d['time'])<1e-13,'diagnostic time differs')
                 states[c][step]=q;digests[str(path)]=sha(path)
