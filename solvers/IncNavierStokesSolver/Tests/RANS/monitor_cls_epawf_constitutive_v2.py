@@ -31,7 +31,8 @@ def main():
         except (FileNotFoundError,json.JSONDecodeError):
             time.sleep(5);continue
         accepted=int(progress['accepted_steps'])
-        candidates=[v for v in range(32,accepted+1,32) if v not in done]
+        first=(int(progress.get('prefix_steps',0))//32+1)*32
+        candidates=[v for v in range(first,accepted+1,32) if v not in done]
         terminal=progress['status'] in ('numerically_rejected','targets_completed')
         if terminal and accepted and accepted not in done:candidates.append(accepted)
         if not candidates:

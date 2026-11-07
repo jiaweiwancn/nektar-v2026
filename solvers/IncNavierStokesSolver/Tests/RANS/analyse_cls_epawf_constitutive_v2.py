@@ -10,7 +10,7 @@ import shutil
 import time
 from run_cls_epawf_picard import load,run,require,write_json,state_hash,H0,sha
 from run_cls_epawf_pimple import identity
-from continue_cls_epawf_pimple import header
+from continue_cls_epawf_pimple import header,prefix_budget
 from compare_cls_epawf_pimple import differences
 
 
@@ -32,7 +32,15 @@ def main():
     p.add_argument('--steps',type=int,nargs='+',default=[4,8,12,16,32])
     a=p.parse_args();a.output=a.output.resolve();a.output.mkdir(parents=True,exist_ok=False)
     root=a.campaign.resolve()/'trajectory';progress=load(root/'progress.json')
-    text=(root/'steps.jsonl').read_text();lines=text.splitlines();records={}
+    records={}
+    if progress.get('prefix_campaign'):
+        prefix=Path(progress['prefix_campaign']);old=load(prefix/'progress.json')
+        require(old['accepted_steps']==progress['prefix_steps'] and
+                old['cumulative_bound_integral']==progress['prefix_integral'],'analysis prefix identity differs')
+        prefix_budget(prefix,dict(steps=old['accepted_steps'],sha256=old['checkpoint_sha256']))
+        for line in (prefix/'steps.jsonl').read_text().splitlines():
+            r=json.loads(line);require(r['global_step'] not in records,'duplicate prefix record');records[r['global_step']]=r
+    text=(root/'steps.jsonl').read_text();lines=text.splitlines()
     if text and not text.endswith('\n'):lines=lines[:-1]
     for line in lines:
         r=json.loads(line);require(r['global_step'] not in records,'duplicate accepted ledger entry');records[r['global_step']]=r
