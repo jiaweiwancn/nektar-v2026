@@ -7,7 +7,7 @@ import math
 from pathlib import Path
 import json
 from run_cls_epawf_picard import load,write_json,require,sha
-from run_cls_epawf_height_comparison import CASES
+from run_cls_epawf_height_comparison import CASES,KN,X
 
 
 def norm(weights,values):return math.sqrt(max(0.,math.fsum(w*x*x for w,x in zip(weights,values))))
@@ -41,6 +41,27 @@ def independent_reference(native):
 
 def compact_diagnostic(q):
     return {k:v for k,v in q.items() if k not in ('common_samples','weak_k_component_loads')}
+
+
+def dense_column(q,target=1.6):
+    """Interpolate actual native GL16 samples within each cubic reporting panel.
+
+    All inner native interfaces are in KN. This draws the represented field,
+    rather than straight segments between the sparse engineering probes.
+    """
+    import numpy as np
+    gx,_=np.polynomial.legendre.leggauss(8);gz,_=np.polynomial.legendre.leggauss(16)
+    xs=[a+(x+1)*(b-a)/2 for a,b in zip(X,X[1:]) for x in gx];column=min(range(len(xs)),key=lambda i:abs(xs[i]-target))
+    nz=16*(len(KN)-1);samples=q['common_samples'];require(len(samples['u'])==len(xs)*nz,'native common column layout changed')
+    u=np.array(samples['u']).reshape((len(xs),nz))[column];k=np.array(samples['k']).reshape((len(xs),nz))[column]
+    result=[[] for _ in range(6)];H=q['H'];us=.4;K0=q['reference']['K0'];ell=q['reference']['velocity_scale'];slope=.09*2.55*math.sqrt(K0)
+    for panel,(a,b) in enumerate(zip(KN,KN[1:])):
+        if b>H+1e-12:continue
+        z=a+(gz+1)*(b-a)/2;dense=np.linspace(a,b,32)
+        up=np.polynomial.Legendre.fit(z,u[16*panel:16*(panel+1)],3,domain=[a,b]);kp=np.polynomial.Legendre.fit(z,k[16*panel:16*(panel+1)],3,domain=[a,b])
+        values=[dense,kp(dense),up(dense),up.deriv()(dense),us*us/slope*np.log1p(dense/ell),us*us/(slope*(dense+ell))]
+        for dst,src in zip(result,values):dst.extend(src)
+    return xs[column],result
 
 
 def attempts_summary(attempts,through):
@@ -145,26 +166,27 @@ def main():
             for c in pair:
                 for step in (0,max(states[c])):
                     if step not in states[c]:continue
-                    q=states[c][step];p=min(q['profiles'],key=lambda p:abs(p['x']-1.6));rows=p['profile'];H=q['H']
+                    q=states[c][step];x,rows=dense_column(q);H=q['H']
                     for line,scale in zip(axes,[1,H]):
-                        for ax,index in zip(line,[6,2,4]):
-                            ax.plot([v[index] for v in rows if v[0]<=H],[v[0]/scale for v in rows if v[0]<=H],label=f'{c} t={q["time"]:.3g}')
-                p=states[c][0]['profiles'][-1];rows=p['profile'];H=states[c][0]['H']
+                        for ax,index in zip(line,[1,2,3]):
+                            ax.plot(rows[index],[z/scale for z in rows[0]],label=f'{c} t={q["time"]:.3g}')
+                q=states[c][0];x,rows=dense_column(q);H=q['H']
                 for line,scale in zip(axes,[1,H]):
-                    line[1].plot([v[3] for v in rows if v[0]<=H],[v[0]/scale for v in rows if v[0]<=H],':',color='black')
-                    line[2].plot([v[5] for v in rows if v[0]<=H],[v[0]/scale for v in rows if v[0]<=H],':',color='black')
+                    line[1].plot(rows[4],[z/scale for z in rows[0]],':',color='black')
+                    line[2].plot(rows[5],[z/scale for z in rows[0]],':',color='black')
             for line,ylabel in zip(axes,['physical z','z/H']):
                 line[0].set(xlabel='transported k',ylabel=ylabel);line[1].set(xlabel='velocity u',ylabel=ylabel)
                 line[2].set(xlabel='represented du/dz',ylabel=ylabel,xscale='symlog')
             axes[0,0].set_ylim(0,.1);axes[0,0].legend(fontsize=8)
+            fig.suptitle(f'Native cubic column, x={x:.6g}; dotted: analytical reference')
             fig.savefig(a.output/('profiles-'+''.join(pair)+'.png'),dpi=160);plt.close(fig)
             fig,axes=plt.subplots(1,2,figsize=(9,4),layout='constrained')
             for c in pair:
                 p0=states[c][0]['profiles'][-1];e0={v[0]:v[7] for v in p0['profile'] if len(v)>7}
                 for step in (0,max(states[c])):
                     q=states[c][step];p=q['profiles'][-1];rows=[v for v in p['profile'] if len(v)>7]
-                    axes[0].plot([v[7] for v in rows],[v[0] for v in rows],label=f'{c} t={q["time"]:.3g}')
-                    if step:axes[1].plot([v[7]-e0[v[0]] for v in rows],[v[0] for v in rows],label=c)
+                    axes[0].plot([v[7] for v in rows],[v[0] for v in rows],'o-',label=f'{c} t={q["time"]:.3g}')
+                    if step:axes[1].plot([v[7]-e0[v[0]] for v in rows],[v[0] for v in rows],'o-',label=c)
             axes[0].set(xlabel='transported outer epsilon',ylabel='physical z');axes[1].set(xlabel='epsilon change from actual h0',ylabel='physical z')
             axes[0].axhline(2,color='grey',linestyle=':');axes[0].legend(fontsize=8);fig.savefig(a.output/('epsilon-'+''.join(pair)+'.png'),dpi=160);plt.close(fig)
         fig,axes=plt.subplots(1,2,figsize=(10,4),layout='constrained')
