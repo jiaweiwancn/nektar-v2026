@@ -1,5 +1,10 @@
 # ConstitutiveV2: complete declared k coverage and fresh continuation
 
+Subsequent [projection-budget repair](cls-epawf-pimple-projection-budget-repair.md):
+the exact attempt-73 candidate completes with 2220 KKT solves under a larger
+total allowance, and native continuation passes the former rejection time.
+The original terminal experiment and the historical evidence below are preserved.
+
 Follow-up, 2026-11-07: the original Upstream campaign subsequently accepted
 72 steps to T=.045, then attempt 73 hit the active-set iteration limit with
 a remaining negative ground value. It stopped without numerical retry. The

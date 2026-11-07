@@ -1,5 +1,10 @@
 # Uniform EP flat control and the inherited AWF depletion
 
+Follow-up: the [projection-budget repair](cls-epawf-pimple-projection-budget-repair.md)
+reproduces the original terminal candidate exactly, repairs it without changing
+the physical model, and records later live status of this independent uniform
+control. The historical snapshot below is preserved.
+
 The uniform-EP control has completed **32 physical steps to T=.02**, with
 **no positivity-correction activation or supplied k**. The inherited Upstream
 case loses 82.5% of its first-cell integrated k by that time; the control gains
