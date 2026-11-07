@@ -561,7 +561,13 @@ void RANSWallEvolutionPatch::DiagnosePicardK(
     };
     if (active.empty())
         shape(0., inward);
-    shape(m_parameters.geometry.sampleHeight, sampled);
+    const auto sampleRow=SampleKRow({1.57,0.,0.});
+    for(int j=0;j<sampleRow.ids.size();++j)
+    {
+        const auto id=offset[K()]+sampleRow.ids[j];
+        const auto col=std::lower_bound(frozen.rows.begin(),frozen.rows.end(),id);
+        if(col!=frozen.rows.end() && *col==id)sampled[col-frozen.rows.begin()]=sampleRow.phi[j];
+    }
     shape(.04, normalization);
     std::vector<std::pair<std::string, Vector>> directions{
         {"ground_inward", inward},
