@@ -226,6 +226,9 @@ public:
     bool ColumnAverageK() const {return m_kSampling=="ColumnAverage";}
     bool HeightComparisonEnabled() const {return m_heightComparison;}
     RANSWallGlobalPoint SampleKRow(const RANSWallCoordinate &anchor) const;
+    // Exact physical mass restricted to the supplied global free-k rows.
+    // Read-only access also supports native functional/projection verification.
+    WallMatrix PicardKMass(const std::vector<int> &rows) const;
     std::string HeightComparison(const Vector &state,const Vector &history,double time,
         const RANSWallEvolutionData &data) const;
     std::string PhysicalKBands(const Vector &state,double time,const RANSWallEvolutionData &data,
@@ -367,7 +370,6 @@ private:
         const RANSWallEvolutionData &data,const std::vector<int> &rows) const;
     Vector PicardKResidual(const Vector &state,const Vector &history,double alpha,double time,
         const RANSWallEvolutionData &data,const std::vector<int> &rows) const;
-    WallMatrix PicardKMass(const std::vector<int> &rows) const;
     void DiagnosePicardK(const Vector &state,const Vector &history,double alpha,double time,
         const RANSWallEvolutionData &data,const std::map<int,double> &external) const;
     struct ScalarLocation
