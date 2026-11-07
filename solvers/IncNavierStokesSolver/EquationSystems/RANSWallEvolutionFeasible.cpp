@@ -347,7 +347,7 @@ std::string RANSWallEvolutionPatch::ScalarDomainJSON(const ScalarDomainResult &d
     std::vector<std::pair<std::string,std::string>> fields{
         {"admissible",J::Boolean(d.admissible)},{"scope",J::Quote("declared finite scalar evaluation sets only")},
         {"phase",J::Quote(d.phase)},{"failure",J::Quote(d.failure)},{"minimum_dimensionless_margin",J::Number(d.minimumMargin)},
-        {"limiting_inventory",J::Quote(d.limitingInventory)},{"limiting_point",J::Numbers(d.limitingPoint)},
+        {"limiting_functional_kind",J::Quote(d.limitingFunctional?"ColumnAverage":"Point")},{"limiting_inventory",J::Quote(d.limitingInventory)},{"limiting_point",J::Numbers(d.limitingPoint)},
         {"minimum_inner_k",J::Number(d.minimumInnerK)},{"minimum_outer_k",J::Number(d.minimumOuterK)},
         {"minimum_outer_epsilon",J::Number(d.minimumOuterEpsilon)},{"minimum_sampled_K",J::Number(d.minimumSampledK)},
         {"minimum_projected_trace_epsilon",J::Number(d.minimumTraceEpsilon)},
@@ -361,7 +361,7 @@ std::string RANSWallEvolutionPatch::ScalarDomainJSON(const ScalarDomainResult &d
             {"inventory",J::Quote(p.inventory)},{"coordinate",J::Numbers(p.coordinate)},
             {"geometry",J::Number(p.geometry)},{"block",J::Number(p.block)},{"side",J::Number(p.side)},
             {"value",J::Number(p.value)},{"scale",J::Number(p.scale)},{"weight",J::Number(p.weight)},
-            {"strict",J::Boolean(p.strict)},{"dependent_trace",J::Boolean(p.dependentTrace)}}));
+            {"functional_kind",J::Quote(p.functional?"ColumnAverage":"Point")},{"strict",J::Boolean(p.strict)},{"dependent_trace",J::Boolean(p.dependentTrace)}}));
         fields.push_back({"observations",J::List(points)});
         fields.push_back({"effective_state",J::Numbers(d.effectiveState)});
         fields.push_back({"trace_target_state",J::Numbers(d.traceState)});

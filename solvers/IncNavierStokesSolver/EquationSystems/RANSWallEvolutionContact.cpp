@@ -26,7 +26,7 @@ std::string RANSWallEvolutionPatch::PhysicalKBands(const Vector &s,double time,
     const auto z=rule->GetZ(),w=rule->GetW();
     for(auto [name,top]:std::vector<std::pair<std::string,double>>{{"z_le_0.01",.01},{"z_le_0.1",.1},{"wall_layer",H},{"first_element",first},{"global",upper[2]}})
     {
-        Vector sums(6); // k, correction signed/positive/negative, production, destruction
+        Vector sums(6);std::vector<std::string> invalid; // k, correction signed/positive/negative, production, destruction
         for(const auto &ray:m_rays)
         {
             auto knots=panels;knots.insert(top);
@@ -48,7 +48,9 @@ std::string RANSWallEvolutionPatch::PhysicalKBands(const Vector &s,double time,
                 {
                     auto p=ray.coordinate;p[2]=qp.r;const auto q=Point(K(),p);RANSTensor G{};
                     for(int a=0;a<m_dimension;++a)G[PhysicalAxis(a)]=Point(a,p).Gradient(s,offset[a]);
-                    const auto law=InnerStress(q.Value(s,offset[K()]),profile->Original().EddyViscosity(qp.r),G);
+                    const double kval=q.Value(s,offset[K()]);
+                    if(!(kval>=0 && std::isfinite(kval))){invalid.push_back(J::Object({{"point",J::Numbers(p)},{"k",J::Number(kval)}}));continue;}
+                    const auto law=InnerStress(kval,profile->Original().EddyViscosity(qp.r),G);
                     const auto src=WallSource(s,p,law.production,*profile,&normal);const double weight=ray.weight*qp.weight*qp.jacobian;
                     sums[4]+=weight*law.production;sums[5]+=weight*(law.production-src.kSource);
                 }
@@ -63,6 +65,7 @@ std::string RANSWallEvolutionPatch::PhysicalKBands(const Vector &s,double time,
                             auto p=ray.coordinate;p[2]=a+(z[j]+1)*(*b-a)/2;RANSTensor G{};
                             for(int k=0;k<m_dimension;++k)G[PhysicalAxis(k)]=Point(k,p).Gradient(s,offset[k]);
                             const double k=Point(K(),p).Value(s,offset[K()]),e=Point(Epsilon(),p).Value(s,offset[Epsilon()]);
+                            if(!(k>0 && e>0)){invalid.push_back(J::Object({{"point",J::Numbers(p)},{"k",J::Number(k)},{"epsilon",J::Number(e)}}));continue;}
                             const auto law=OuterClosure(k,e,G,p);const double weight=ray.weight*w[j]*(*b-a)/2;
                             sums[4]+=weight*law.production;sums[5]+=weight*e;
                         }
@@ -73,8 +76,8 @@ std::string RANSWallEvolutionPatch::PhysicalKBands(const Vector &s,double time,
         output.push_back(J::Object({{"name",J::Quote(name)},{"lower","0"},{"upper",J::Number(top)},
             {"k_integral",J::Number(sums[0])},{"correction_signed",J::Number(sums[1])},
             {"correction_positive",J::Number(sums[2])},{"correction_negative",J::Number(sums[3])},
-            {"correction_absolute",J::Number(sums[2]-sums[3])},{"production",change?"null":J::Number(sums[4])},
-            {"destruction",change?"null":J::Number(sums[5])}}));
+            {"correction_absolute",J::Number(sums[2]-sums[3])},{"production",change || !invalid.empty()?"null":J::Number(sums[4])},
+            {"destruction",change || !invalid.empty()?"null":J::Number(sums[5])},{"invalid_diagnostic_points",J::List(invalid)}}));
     }
     return J::Object({{"regions",J::List(output)},{"quadrature",J::Quote("physical native panels split exactly at each band edge; GL16; source retains roughness/cutoff/geometric panels")}});
 }
@@ -99,7 +102,7 @@ std::string RANSWallEvolutionPatch::HeightComparison(const Vector &s,const Vecto
     const auto rule=LibUtilities::PointsManager()[LibUtilities::PointsKey(16,LibUtilities::eGaussGaussLegendre)];
     const auto z=rule->GetZ(),w=rule->GetW();
     const Vector knots{0,.01,.1,.25,.5,1,2,2+1./3,2+2./3,3,3+1./3,3+2./3,4};
-    Vector errors(4); // velocity value, gradient, production, analytical production scale
+    Vector errors(4);std::vector<std::string> invalid; // velocity value, gradient, production, analytical production scale
     for(const auto &ray:m_rays)for(int panel=1;panel<knots.size();++panel)for(int j=0;j<16;++j)
     {
         auto p=ray.coordinate;p[2]=knots[panel-1]+(z[j]+1)*(knots[panel]-knots[panel-1])/2;
@@ -115,7 +118,9 @@ std::string RANSWallEvolutionPatch::HeightComparison(const Vector &s,const Vecto
         if(r<H)
         {
             RANSTensor G{};for(int a=0;a<m_dimension;++a)G[PhysicalAxis(a)]=Point(a,p).Gradient(s,offset[a]);
-            const double production=InnerStress(k,analytic->Original().EddyViscosity(r),G).production,P0=analytic->ReferenceProduction(r);
+            if(k<0){invalid.push_back(J::Object({{"point",J::Numbers(p)},{"k",J::Number(k)}}));continue;}
+            const auto current=StateProfile(s,ray.coordinate,time,data);
+            const double production=InnerStress(k,current->Original().EddyViscosity(r),G).production,P0=analytic->ReferenceProduction(r);
             errors[2]+=weight*(production-P0)*(production-P0);errors[3]+=weight*P0*P0;
         }
     }
@@ -157,7 +162,7 @@ std::string RANSWallEvolutionPatch::HeightComparison(const Vector &s,const Vecto
             {"Re_H",J::Number(ref.reynolds)},{"intrinsic_chi",J::Number(ref.weight)}})},
         {"scaled_native_spatial_blocks",J::Numbers(scaled)},{"dimensional_mass_dual_spatial_first4",J::Numbers(dimensional)},
         {"common_normalized_spatial_first4",J::Numbers(common)},{"common_scales_U_K_E_H_V",J::Numbers(Vector{us,K0,us*us*us/(kap*2),2,24})},
-        {"representation_L2_velocity_gradient_production_referenceProduction",J::Numbers(errors)},
+        {"invalid_production_diagnostic_points",J::List(invalid)},{"representation_L2_velocity_gradient_production_referenceProduction",J::Numbers(errors)},
         {"common_samples",J::Object(physical)},{"profiles",J::List(profiles)},{"fixed_bands",PhysicalKBands(s,time,data)},
         {"mean_wall_stress",J::Number(tau/area)},{"native_degrees_of_freedom",J::Numbers(size)},
         {"weak_k_component_loads",J::Object(loads)},{"state_unchanged","true"},{"governing_solves","0"}});

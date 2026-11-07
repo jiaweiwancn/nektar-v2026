@@ -201,6 +201,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     session->LoadSolverInfo("RANSWallNonlinearPolicy",m_nonlinearPolicy,"Legacy");
     session->LoadSolverInfo("RANSWallTemporalCoupling",m_temporalCoupling,"ConvergedStage");
     Require(m_temporalCoupling=="ConvergedStage" || PimpleSingleSweep(),"unknown temporal coupling mode");
+    Require(!ColumnAverageK() || PimpleSingleSweep(),"ColumnAverage K is supported only by the PIMPLE pilot");
     if(PimpleSingleSweep())
     {
         Require(m_nonlinearPolicy=="Legacy" && m_comm->GetSize()==1 && m_dimension==2 && !Mapped(),
@@ -492,6 +493,7 @@ RANSWallGlobalPoint RANSWallEvolutionPatch::SampleKRow(const RANSWallCoordinate 
     auto anchor=point;anchor[2]=0;
     const auto old=m_kSamplingRows.find(anchor);if(old!=m_kSamplingRows.end())return old->second;
     const double H=m_parameters.geometry.height;
+    if(m_kSamplingRows.size()>4096)m_kSamplingRows.clear();
     std::set<double> panels{0,H};for(const auto &e:fields[K()]->Elements())
         for(double z:{e.lower[2],e.upper[2]})if(z>0 && z<H)panels.insert(z);
     const auto rule=LibUtilities::PointsManager()[LibUtilities::PointsKey(8,LibUtilities::eGaussGaussLegendre)];
