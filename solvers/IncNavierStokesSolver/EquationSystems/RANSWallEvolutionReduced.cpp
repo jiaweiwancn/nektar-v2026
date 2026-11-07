@@ -573,6 +573,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveReducedPicard(
         {"response_field_preconditioner_reuse",J::Boolean(m_reducedResponseCache)},
         {"response_chord_update_budget",J::Number(m_reducedResponseReuseUpdates)},
         {"directional_refresh_budget",J::Number(m_reducedDirectionalRefreshUpdates)},
+        {"directional_refresh_limit",J::Number(16)},
         {"protected_direction_refresh","true"},
         {"directional_refresh_minimum_independence",J::Number(1e-4)},
         {"reference_branch_reuse",J::Boolean(m_reducedReferenceBranchReuse)},

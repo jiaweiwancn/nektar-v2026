@@ -178,7 +178,7 @@ def main():
     parser.add_argument("--reduced-response-reuse-updates", type=int, default=0,
                         help="Up to four checked secant response updates between fresh response models (default off)")
     parser.add_argument("--reduced-directional-refresh-updates", type=int, default=0,
-                        help="Up to four measured direction-action refreshes before re-solving a reused constrained model")
+                        help="Up to sixteen protected measured direction-action refreshes before re-solving a reused constrained model")
     parser.add_argument("--reduced-reference-branch-reuse", action="store_true",
                         help="Retain historical response models across full/mixed reference-weight switches, with current-branch and independent same-k checks")
     parser.add_argument("--reduced-fast-destruction", action="store_true",
@@ -227,9 +227,9 @@ def main():
     require(0 <= args.reduced_response_reuse_updates <= 4 and
             (not args.reduced_response_reuse_updates or args.reduced),
             "response reuse requires --reduced and a budget from zero to four")
-    require(0 <= args.reduced_directional_refresh_updates <= 4 and
+    require(0 <= args.reduced_directional_refresh_updates <= 16 and
             (not args.reduced_directional_refresh_updates or args.reduced_response_reuse_updates > 0),
-            "direction-action refresh requires response reuse and a budget from zero to four")
+            "direction-action refresh requires response reuse and a budget from zero to sixteen")
     require(not args.reduced_reference_branch_reuse or args.reduced_directional_refresh_updates > 0,
             "reference-branch reuse requires a positive direction-action refresh budget")
     require(math.isfinite(args.reduced_maximum_radius) and

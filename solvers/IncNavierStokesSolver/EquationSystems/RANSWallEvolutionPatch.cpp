@@ -341,7 +341,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
                 m_reducedSourceRefinements>=0 && m_reducedSourceRefinements<=3 &&
                 m_reducedResponseReuseUpdates>=0 && m_reducedResponseReuseUpdates<=4 &&
                 (!m_reducedResponseReuseUpdates || m_picardReduced) &&
-                m_reducedDirectionalRefreshUpdates>=0 && m_reducedDirectionalRefreshUpdates<=4 &&
+                m_reducedDirectionalRefreshUpdates>=0 && m_reducedDirectionalRefreshUpdates<=16 &&
                 (!m_reducedDirectionalRefreshUpdates || m_reducedResponseReuseUpdates>0) &&
                 (!m_reducedReferenceBranchReuse || m_reducedDirectionalRefreshUpdates>0) &&
                 (!m_reducedSourceRefinements || m_reducedSourceRay) &&

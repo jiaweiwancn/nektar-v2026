@@ -162,7 +162,9 @@ def check(directory):
                         "qualification action error applies its physical bound scaling more than once")
     direction_refreshes = [r for r in records if r["event"] == "response_direction_refreshed"]
     refresh_budget = protocol.get("directional_refresh_budget", 0)
-    require(0 <= refresh_budget <= 4 and (refresh_budget or not direction_refreshes),
+    refresh_limit = protocol.get("directional_refresh_limit", 4)
+    require(refresh_limit in (4, 16) and (refresh_limit == 4 or protocol.get("protected_direction_refresh")) and
+            0 <= refresh_budget <= refresh_limit and (refresh_budget or not direction_refreshes),
             "direction-action refreshes lack a declared bounded budget")
     require(all(1 <= r["refresh"] <= r["budget"] == refresh_budget and
                 r["before_state_sha256"] == r["state_sha256"] and
