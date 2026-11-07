@@ -1,5 +1,5 @@
 {
-  "captured_UTC": "2026-11-07T18:08:52.158234+00:00",
+  "captured_UTC": "2026-11-07T18:13:19.779749+00:00",
   "root": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-u05-graded-projection-repair-20261108",
   "base": "a0ccc1c7febc3ed18efb5f4e5fc6d1116778f22f",
   "source": {
@@ -320,23 +320,23 @@
   "campaigns": {
     "repaired_graded": {
       "status": "running",
-      "accepted_steps": 69.0,
-      "accepted_time": 0.043125000000000024,
+      "accepted_steps": 70.0,
+      "accepted_time": 0.043750000000000025,
       "checkpoint_copy": {
         "order": 1,
-        "steps": 69,
-        "time": 0.043125000000000024,
+        "steps": 70,
+        "time": 0.043750000000000025,
         "dt": 0.000625,
-        "sha256": "13f60231facc84786015ae485e0fd9a32f08941971f5dcd0d3f375e5d2c13bd6"
+        "sha256": "252601fa8afba33be3505dc02b2a40f802353b55e224b59b05326d38b322cdd6"
       },
-      "original_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-u05-graded-projection-repair-20261108/repaired-campaign/trajectory/steps-000066-000069/checkpoint.3",
-      "checkpoint_sha256": "13f60231facc84786015ae485e0fd9a32f08941971f5dcd0d3f375e5d2c13bd6",
+      "original_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-u05-graded-projection-repair-20261108/repaired-campaign/trajectory/steps-000070-000073/checkpoint",
+      "checkpoint_sha256": "252601fa8afba33be3505dc02b2a40f802353b55e224b59b05326d38b322cdd6",
       "completed_targets": [
         65.0
       ],
       "next_target": 80.0,
       "failure": null,
-      "cumulative_bound_integral": 0.006076794392100046,
+      "cumulative_bound_integral": 0.00629310164060116,
       "bound_solver": "RetainedPool",
       "backend_recorded_in_progress": true,
       "driver": {
@@ -3176,6 +3176,549 @@
             9.164896489291528e-17,
             0.0038761143017894918
           ]
+        },
+        {
+          "global_step": 70,
+          "time": 0.043750000000000025,
+          "solve_counts": {
+            "outer_sweeps": 1,
+            "momentum_predictor_solves": 1,
+            "pressure_system_solves": 1,
+            "epsilon_transport_solves": 1,
+            "k_transport_solves": 1,
+            "bound_calls": 1,
+            "additional_governing_equation_solves": 0
+          },
+          "k_linear_residual": 1.1102230246251565e-16,
+          "k_corrected_residual": 0.14621884729795945,
+          "added_frozen_residual": 0.1462188472979594,
+          "storage_reaction": 0.05990172305853018,
+          "raw_mass_norm": 0.002658580526747272,
+          "bound_mass_norm": 0.0013919894176871686,
+          "correction_raw_ratio": 0.5235836957664939,
+          "integral": 0.00021630724850111427,
+          "corrected_minimum": {
+            "value": 5.105339302043012e-09,
+            "functional_kind": "Point",
+            "coordinate": [
+              -1.8333333333333335,
+              0,
+              0.00989531431561947
+            ],
+            "geometry": 2,
+            "inventory": "constitutive_baseline_normalization_ray"
+          },
+          "ground": {
+            "admissible": true,
+            "minimum": 5.1054436124555475e-09,
+            "arithmetic_scale": 2.9658008890028874e-17,
+            "point": [
+              -3.5445797904799488,
+              0,
+              0
+            ],
+            "geometry": 0,
+            "extrema_checked": 20
+          },
+          "kkt_solves": 1959,
+          "pool_reentries": 320,
+          "inventory_rebuilds": 347,
+          "mass_factor_applications": 1692,
+          "finite_pool_complete": true,
+          "physical_floor_defect": 0,
+          "ground_floor_defect": 0,
+          "physical_correction_bands": {
+            "regions": [
+              {
+                "name": "z_le_0.01",
+                "x_region": "all",
+                "x_bounds": [
+                  -4,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0018884754732496915,
+                "correction_signed": 0.00014301136836864588,
+                "correction_positive": 0.0001517728965925415,
+                "correction_negative": -8.761528223895605e-06,
+                "correction_absolute": 0.0001605344248164371,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.01",
+                "x_region": "upstream_plateau",
+                "x_bounds": [
+                  -4,
+                  -3
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0010218546378082654,
+                "correction_signed": 5.2625520450540796e-05,
+                "correction_positive": 5.325107207659022e-05,
+                "correction_negative": -6.2555162604942e-07,
+                "correction_absolute": 5.387662370263964e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.01",
+                "x_region": "transition",
+                "x_bounds": [
+                  -3,
+                  -2.25
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 4.069508080985061e-06,
+                "correction_signed": 5.058642694535255e-06,
+                "correction_positive": 7.688034463431085e-06,
+                "correction_negative": -2.6293917688958343e-06,
+                "correction_absolute": 1.0317426232326919e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.01",
+                "x_region": "trace_buffer",
+                "x_bounds": [
+                  -2.25,
+                  -2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 2.6862298337626474e-07,
+                "correction_signed": 1.8824301068983857e-06,
+                "correction_positive": 2.043004556917171e-06,
+                "correction_negative": -1.605744500187853e-07,
+                "correction_absolute": 2.203579006935956e-06,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.01",
+                "x_region": "downstream",
+                "x_bounds": [
+                  -2,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0008622827043770639,
+                "correction_signed": 8.344477511667123e-05,
+                "correction_positive": 8.879078549560276e-05,
+                "correction_negative": -5.346010378931556e-06,
+                "correction_absolute": 9.413679587453432e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.1",
+                "x_region": "all",
+                "x_bounds": [
+                  -4,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.1,
+                "k_integral": 0.2000698648049732,
+                "correction_signed": 0.00022793276742862176,
+                "correction_positive": 0.0002922190544272595,
+                "correction_negative": -6.428628699863757e-05,
+                "correction_absolute": 0.00035650534142589707,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.1",
+                "x_region": "upstream_plateau",
+                "x_bounds": [
+                  -4,
+                  -3
+                ],
+                "lower": 0,
+                "upper": 0.1,
+                "k_integral": 0.041363145569126666,
+                "correction_signed": 5.139214031652646e-05,
+                "correction_positive": 5.51052896999331e-05,
+                "correction_negative": -3.7131493834066234e-06,
+                "correction_absolute": 5.881843908333972e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.1",
+                "x_region": "transition",
+                "x_bounds": [
+                  -3,
+                  -2.25
+                ],
+                "lower": 0,
+                "upper": 0.1,
+                "k_integral": 0.023783683014203968,
+                "correction_signed": 1.5604324609868734e-05,
+                "correction_positive": 2.5614339079536566e-05,
+                "correction_negative": -1.0010014469667827e-05,
+                "correction_absolute": 3.5624353549204395e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.1",
+                "x_region": "trace_buffer",
+                "x_bounds": [
+                  -2.25,
+                  -2
+                ],
+                "lower": 0,
+                "upper": 0.1,
+                "k_integral": 0.007625827989416857,
+                "correction_signed": 6.255130870006997e-06,
+                "correction_positive": 9.021460005258637e-06,
+                "correction_negative": -2.7663291352516387e-06,
+                "correction_absolute": 1.1787789140510276e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.1",
+                "x_region": "downstream",
+                "x_bounds": [
+                  -2,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.1,
+                "k_integral": 0.12729720823222582,
+                "correction_signed": 0.00015468117163221963,
+                "correction_positive": 0.0002024779656425312,
+                "correction_negative": -4.7796794010311494e-05,
+                "correction_absolute": 0.0002502747596528427,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "wall_layer",
+                "x_region": "all",
+                "x_bounds": [
+                  -4,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.5,
+                "k_integral": 1.388266478558579,
+                "correction_signed": 0.00021661922731378223,
+                "correction_positive": 0.00030456983254172277,
+                "correction_negative": -8.795060522794051e-05,
+                "correction_absolute": 0.0003925204377696633,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "wall_layer",
+                "x_region": "upstream_plateau",
+                "x_bounds": [
+                  -4,
+                  -3
+                ],
+                "lower": 0,
+                "upper": 0.5,
+                "k_integral": 0.2440004603578849,
+                "correction_signed": 5.155645573969156e-05,
+                "correction_positive": 5.564154529534522e-05,
+                "correction_negative": -4.085089555653626e-06,
+                "correction_absolute": 5.972663485099884e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "wall_layer",
+                "x_region": "transition",
+                "x_bounds": [
+                  -3,
+                  -2.25
+                ],
+                "lower": 0,
+                "upper": 0.5,
+                "k_integral": 0.17178670268118146,
+                "correction_signed": 1.4199390203362537e-05,
+                "correction_positive": 2.723729710072719e-05,
+                "correction_negative": -1.303790689736465e-05,
+                "correction_absolute": 4.027520399809184e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "wall_layer",
+                "x_region": "trace_buffer",
+                "x_bounds": [
+                  -2.25,
+                  -2
+                ],
+                "lower": 0,
+                "upper": 0.5,
+                "k_integral": 0.05669986992931983,
+                "correction_signed": 5.672583643499041e-06,
+                "correction_positive": 9.610868733322429e-06,
+                "correction_negative": -3.938285089823381e-06,
+                "correction_absolute": 1.3549153823145809e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "wall_layer",
+                "x_region": "downstream",
+                "x_bounds": [
+                  -2,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.5,
+                "k_integral": 0.9157794455901892,
+                "correction_signed": 0.00014519079772722904,
+                "correction_positive": 0.00021208012141232815,
+                "correction_negative": -6.688932368509898e-05,
+                "correction_absolute": 0.00027896944509742713,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "first_element",
+                "x_region": "all",
+                "x_bounds": [
+                  -4,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0018884754732496915,
+                "correction_signed": 0.00014301136836864588,
+                "correction_positive": 0.0001517728965925415,
+                "correction_negative": -8.761528223895605e-06,
+                "correction_absolute": 0.0001605344248164371,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "first_element",
+                "x_region": "upstream_plateau",
+                "x_bounds": [
+                  -4,
+                  -3
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0010218546378082654,
+                "correction_signed": 5.2625520450540796e-05,
+                "correction_positive": 5.325107207659022e-05,
+                "correction_negative": -6.2555162604942e-07,
+                "correction_absolute": 5.387662370263964e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "first_element",
+                "x_region": "transition",
+                "x_bounds": [
+                  -3,
+                  -2.25
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 4.069508080985061e-06,
+                "correction_signed": 5.058642694535255e-06,
+                "correction_positive": 7.688034463431085e-06,
+                "correction_negative": -2.6293917688958343e-06,
+                "correction_absolute": 1.0317426232326919e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "first_element",
+                "x_region": "trace_buffer",
+                "x_bounds": [
+                  -2.25,
+                  -2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 2.6862298337626474e-07,
+                "correction_signed": 1.8824301068983857e-06,
+                "correction_positive": 2.043004556917171e-06,
+                "correction_negative": -1.605744500187853e-07,
+                "correction_absolute": 2.203579006935956e-06,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "first_element",
+                "x_region": "downstream",
+                "x_bounds": [
+                  -2,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0008622827043770639,
+                "correction_signed": 8.344477511667123e-05,
+                "correction_positive": 8.879078549560276e-05,
+                "correction_negative": -5.346010378931556e-06,
+                "correction_absolute": 9.413679587453432e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "global",
+                "x_region": "all",
+                "x_bounds": [
+                  -4,
+                  2
+                ],
+                "lower": 0,
+                "upper": 4,
+                "k_integral": 12.108325436502986,
+                "correction_signed": 0.00021630724850111495,
+                "correction_positive": 0.0003049065099396199,
+                "correction_negative": -8.859926143850527e-05,
+                "correction_absolute": 0.00039350577137812516,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "global",
+                "x_region": "upstream_plateau",
+                "x_bounds": [
+                  -4,
+                  -3
+                ],
+                "lower": 0,
+                "upper": 4,
+                "k_integral": 2.030688917729854,
+                "correction_signed": 5.1560986852864564e-05,
+                "correction_positive": 5.565623447290999e-05,
+                "correction_negative": -4.095247620045471e-06,
+                "correction_absolute": 5.975148209295546e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "global",
+                "x_region": "transition",
+                "x_bounds": [
+                  -3,
+                  -2.25
+                ],
+                "lower": 0,
+                "upper": 4,
+                "k_integral": 1.5117974432285752,
+                "correction_signed": 1.4160648150596232e-05,
+                "correction_positive": 2.7281547162727018e-05,
+                "correction_negative": -1.3120899012130788e-05,
+                "correction_absolute": 4.0402446174857806e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "global",
+                "x_region": "trace_buffer",
+                "x_bounds": [
+                  -2.25,
+                  -2
+                ],
+                "lower": 0,
+                "upper": 4,
+                "k_integral": 0.5033587338528284,
+                "correction_signed": 5.656519494677255e-06,
+                "correction_positive": 9.626931163643398e-06,
+                "correction_negative": -3.970411668966134e-06,
+                "correction_absolute": 1.3597342832609532e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "global",
+                "x_region": "downstream",
+                "x_bounds": [
+                  -2,
+                  2
+                ],
+                "lower": 0,
+                "upper": 4,
+                "k_integral": 8.062480341691678,
+                "correction_signed": 0.00014492909400297594,
+                "correction_positive": 0.0002123417971403395,
+                "correction_negative": -6.741270313736296e-05,
+                "correction_absolute": 0.00027975450027770246,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              }
+            ],
+            "quadrature": "physical native panels split exactly at each band edge; GL16; source retains roughness/cutoff/geometric panels"
+          },
+          "correction_seconds": 445.244465421,
+          "refreshed_trace_defect": 0.001122272021289037,
+          "refreshed_stage_residual_block_norms": [
+            0.032490077584273115,
+            0.001170777037982358,
+            5.007159709399623,
+            8.174263163757339e-05,
+            1.256166755488561e-16,
+            1.8825998554577648e-16,
+            5.793705359219413e-17,
+            0.0038626665754735163
+          ]
         }
       ],
       "prefix_integral": 0.005024866793258327,
@@ -3235,24 +3778,24 @@
     },
     "upstream_one": {
       "status": "running",
-      "accepted_steps": 446.0,
-      "accepted_time": 0.27874999999999683,
+      "accepted_steps": 456.0,
+      "accepted_time": 0.2849999999999967,
       "checkpoint_copy": {
         "order": 1,
-        "steps": 446,
-        "time": 0.27874999999999683,
+        "steps": 456,
+        "time": 0.2849999999999967,
         "dt": 0.000625,
-        "sha256": "318a9d5cd4b0023998b8a7d5a480ce500e9b8e9957d8dee4eb93ee7669ba257e"
+        "sha256": "3f6c8f1bbb92cf8e5e644a344e2716c88478687714ab4b3227216afaa2e1a569"
       },
-      "original_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/selected-U05-one/trajectory/steps-000441-000448/checkpoint.2",
-      "checkpoint_sha256": "318a9d5cd4b0023998b8a7d5a480ce500e9b8e9957d8dee4eb93ee7669ba257e",
+      "original_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/selected-U05-one/trajectory/steps-000449-000456/checkpoint.3",
+      "checkpoint_sha256": "3f6c8f1bbb92cf8e5e644a344e2716c88478687714ab4b3227216afaa2e1a569",
       "completed_targets": [
         80.0,
         160.0
       ],
       "next_target": 800.0,
       "failure": null,
-      "cumulative_bound_integral": 0.4820508217744868,
+      "cumulative_bound_integral": 0.49349498532713126,
       "bound_solver": "WorkingSet",
       "backend_recorded_in_progress": false,
       "driver": {
@@ -3262,10 +3805,10 @@
         "cwd": "/home/jay"
       },
       "native": {
-        "pid": 177743,
-        "start": "20242376",
+        "pid": 178560,
+        "start": "20287099",
         "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/selected-U05-one/trajectory/runtime/IncNavierStokesSolver",
-        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/selected-U05-one/trajectory/steps-000441-000448"
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/selected-U05-one/trajectory/steps-000457-000464"
       },
       "native_matches": true,
       "driver_command": [
@@ -3319,7 +3862,7 @@
             "fd": "3"
           },
           {
-            "pid": 177743,
+            "pid": 178560,
             "fd": "3"
           }
         ],
@@ -3371,18 +3914,18 @@
       ]
     },
     "uniform_G": {
-      "status": "running",
-      "accepted_steps": 1271.0,
-      "accepted_time": 0.7943749999999858,
+      "status": "between_blocks",
+      "accepted_steps": 1280.0,
+      "accepted_time": 0.7999999999999857,
       "checkpoint_copy": {
         "order": 1,
-        "steps": 1271,
-        "time": 0.7943749999999858,
+        "steps": 1280,
+        "time": 0.7999999999999857,
         "dt": 0.000625,
-        "sha256": "a7c6f4b29739fee15b952f00923c7339b6d3353826513257ce571f34adbf1fd2"
+        "sha256": "f9d29f6ec5ed41a8e9ae2405d2bf928cfdfa1ceedb05e821727db55050660cba"
       },
-      "original_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-G/trajectory/steps-001265-001272/checkpoint",
-      "checkpoint_sha256": "a7c6f4b29739fee15b952f00923c7339b6d3353826513257ce571f34adbf1fd2",
+      "original_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-G/trajectory/steps-001273-001280/checkpoint.3",
+      "checkpoint_sha256": "f9d29f6ec5ed41a8e9ae2405d2bf928cfdfa1ceedb05e821727db55050660cba",
       "completed_targets": [
         32.0,
         80.0,
@@ -3400,13 +3943,8 @@
         "executable": "/usr/bin/python3.10",
         "cwd": "/home/jay"
       },
-      "native": {
-        "pid": 177541,
-        "start": "20237671",
-        "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-G/trajectory/runtime/IncNavierStokesSolver",
-        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-G/trajectory/steps-001265-001272"
-      },
-      "native_matches": true,
+      "native": null,
+      "native_matches": false,
       "driver_command": [
         "/usr/bin/python3",
         "-B",
@@ -3446,19 +3984,12 @@
         "--prefix-report",
         "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/focused/G/whole4/case.evolution.json"
       ],
-      "native_command": [
-        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-G/trajectory/runtime/IncNavierStokesSolver",
-        "case.xml"
-      ],
+      "native_command": null,
       "campaign_lock": {
         "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-G/trajectory/.campaign.lock",
         "inherited_by": [
           {
             "pid": 141043,
-            "fd": "3"
-          },
-          {
-            "pid": 177541,
             "fd": "3"
           }
         ],
@@ -3509,17 +4040,17 @@
     },
     "uniform_H": {
       "status": "running",
-      "accepted_steps": 1623.0,
-      "accepted_time": 1.0143749999999836,
+      "accepted_steps": 1633.0,
+      "accepted_time": 1.0206249999999846,
       "checkpoint_copy": {
         "order": 1,
-        "steps": 1623,
-        "time": 1.0143749999999836,
+        "steps": 1633,
+        "time": 1.0206249999999846,
         "dt": 0.000625,
-        "sha256": "1f15f01117384598e732f66b830c69fad726b484ff6801d5aa4293cd6dd902b9"
+        "sha256": "9e81b493c15776a156722a0e5f1ff2e9abd664be41050dbe3f50cff0e636c839"
       },
-      "original_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-H/trajectory/steps-001617-001624/checkpoint",
-      "checkpoint_sha256": "1f15f01117384598e732f66b830c69fad726b484ff6801d5aa4293cd6dd902b9",
+      "original_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-H/trajectory/steps-001633-001640/checkpoint",
+      "checkpoint_sha256": "9e81b493c15776a156722a0e5f1ff2e9abd664be41050dbe3f50cff0e636c839",
       "completed_targets": [
         32.0,
         80.0,
@@ -3529,7 +4060,7 @@
       ],
       "next_target": 3200.0,
       "failure": null,
-      "cumulative_bound_integral": 0.37575315544570537,
+      "cumulative_bound_integral": 0.3787687589766241,
       "bound_solver": "WorkingSet",
       "backend_recorded_in_progress": false,
       "driver": {
@@ -3539,10 +4070,10 @@
         "cwd": "/home/jay"
       },
       "native": {
-        "pid": 177742,
-        "start": "20242375",
+        "pid": 178486,
+        "start": "20283983",
         "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-H/trajectory/runtime/IncNavierStokesSolver",
-        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-H/trajectory/steps-001617-001624"
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-H/trajectory/steps-001633-001640"
       },
       "native_matches": true,
       "driver_command": [
@@ -3596,7 +4127,7 @@
             "fd": "3"
           },
           {
-            "pid": 177742,
+            "pid": 178486,
             "fd": "3"
           }
         ],

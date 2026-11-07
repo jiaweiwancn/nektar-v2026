@@ -185,9 +185,9 @@ The production continuation is **separate**:
 ```
 
 It starts from accepted step 64, preserves the old terminal experiment, and
-has accepted step 69 at **T=.043125**, beyond the failed time .040625.
+has accepted step 70 at **T=.04375**, beyond the failed time .040625.
 The checkpoint SHA256 is
-`13f60231facc84786015ae485e0fd9a32f08941971f5dcd0d3f375e5d2c13bd6`.
+`252601fa8afba33be3505dc02b2a40f802353b55e224b59b05326d38b322cdd6`.
 The dated compact evidence gives the subsequently observed frontier and
 checkpoint. Targets are 65,80,160,800,1600,3200,8000 steps
 (T=.040625,.05,.1,.5,1,2,5), with four-step blocks and explicit 7200-second
@@ -195,9 +195,10 @@ native block timeouts. The prefix correction budget .005024866793258327 is
 carried once, not re-added at every restart. Numerical rejection remains
 terminal; the supervisor only recovers infrastructure interruptions.
 
-At the 2026-11-08 02:08 China-time capture, the new driver, supervisor and
+At the 2026-11-08 02:13 China-time capture, the new driver, supervisor and
 native-child identities and inherited campaign lock were valid. Step 65 and
-the next four-step block completed successfully. The next automatic milestone
+the next four-step block completed successfully; step 70 was observed in the
+following active block. The next automatic milestone
 is step 80 (T=.05), followed by step 160 (T=.1); those targets are not yet
 reported complete. Supervisor PID 175843 and driver PID 175844 are recorded
 with Linux process start tokens; native PIDs change at block boundaries.
@@ -209,8 +210,9 @@ with Linux process start tokens; native PIDs change at block boundaries.
 | 67 | .041875 | 169.80 | .5141 | .000210794 |
 | 68 | .042500 | 587.32 | .5174 | .000212602 |
 | 69 | .043125 | 71.22 | .5205 | .000214388 |
+| 70 | .043750 | 445.24 | .5236 | .000216307 |
 
-All five corrections pass the retained/current finite inventory and continuous
+All six corrections pass the retained/current finite inventory and continuous
 ground checks. Correction remains persistent and the cost is uneven; this is
 a demonstrated repair of attempt 65, not a guarantee that later attempts will
 fit the same bounded work allowance. The completed four-step block took
@@ -218,8 +220,8 @@ fit the same bounded work allowance. The completed four-step block took
 recent average, reaching step 80 would take about one more hour, subject to
 changing projection cost. The supervisor remains durable and checkpointed.
 
-The cumulative signed correction integral is .00607679439210, including the
-prefix once; .00105192759884 was supplied in steps 65--69. These are physical
+The cumulative signed correction integral is .00629310164060, including the
+prefix once; .00126823484734 was supplied in steps 65--70. These are physical
 integrals, whereas the .51--.52 ratios above compare mass norms of increments,
 not fractions of the total turbulent energy. Positive and negative
 redistribution and fixed z<=.01/.1 bands are retained in the compact evidence.
@@ -241,9 +243,9 @@ status. No running executable or library was rebuilt or replaced in place.
 | Independent experiment at the same capture | Accepted step | T | Status |
 |---|---:|---:|---|
 | Original U05-graded terminal | 64 | .04 | numerically rejected; preserved |
-| Existing Upstream U05-one | 446 | .278750 | running |
-| Existing Uniform G | 1271 | .794375 | running |
-| Existing Uniform H | 1623 | 1.014375 | running |
+| Existing Upstream U05-one | 456 | .285000 | running |
+| Existing Uniform G | 1280 | .800000 | supervised, between blocks |
+| Existing Uniform H | 1633 | 1.020625 | running |
 
 Uniform G's cumulative bound integral is zero at this snapshot. Uniform H has
 activated bounding; its current cumulative budget is in the dated evidence.
