@@ -136,7 +136,9 @@ def main():
     out['native_attempt73']=dict(time=native['time'],steps=native['steps'],attempt={k:v for k,v in attempt.items() if k!='k_bound'},
         startup=native['initial_k_bound_check'],signature=native['signature'],last_audit=native['state_audits'][-1])
     out['current_campaign_progress']=load(r/'repaired-campaign/trajectory/progress.json')
-    out['native_corrector_checks']=load(r/'native-corrector-checks/summary.json')['status']
+    corrector=load(r/'native-corrector-checks-h0/summary.json')
+    require(corrector['actual_initial_sha256']==state_hash(baseline['accepted_states'][0]),'no-op fixture used final state instead of actual h0')
+    out['native_corrector_checks']=dict(status=corrector['status'],actual_initial_sha256=corrector['actual_initial_sha256'])
     for path,role in ((r/'replay-total20000/archived-packet.json','immutable original failed packet'),
         (r/'native-inputs/checkpoint72/State.bin','native restart with all histories'),
         (r/'replay-total20000/projection-pool.json','complete accumulated finite pool and coherent primal/dual'),

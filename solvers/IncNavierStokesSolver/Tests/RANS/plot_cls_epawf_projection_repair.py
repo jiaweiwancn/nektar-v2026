@@ -41,22 +41,29 @@ def main():
         f=a.uniform/f'uniform-monitor/step-{step:06d}/summary.json'
         if f.exists():
             d=load(f);milestones.append((d['states']['step'+str(step)],d))
-    fig,ax=plt.subplots(2,2,figsize=(10,7),layout='constrained')
+    fig,ax=plt.subplots(2,3,figsize=(14,7),layout='constrained')
     states=[('h0',milestones[0][1]['states']['initial'])]+[(f"T={s['time']:.3g}",s) for s,_ in milestones]
     for label,s in states:
         profile=[v for v in s['profiles'] if abs(v['coordinate'][0]-1.6)<1e-10]
         z=[v['coordinate'][2] for v in profile]
         ax[0,0].plot([v['u_v_k_outer_epsilon'][2] for v in profile],z,'o-',ms=3,label=label)
         ax[0,1].plot([v['u_v_k_outer_epsilon'][0] for v in profile],z,'o-',ms=3,label=label)
-    for axis in ax[0]:axis.set_ylim(0,.05);axis.legend(fontsize=8);axis.set_ylabel('Height z');axis.grid(alpha=.25)
+        outer=[v for v in profile if len(v['u_v_k_outer_epsilon'])==4]
+        ax[0,2].plot([v['u_v_k_outer_epsilon'][3] for v in outer],[v['coordinate'][2] for v in outer],'o-',ms=3,label=label)
+    for axis in ax[0,:2]:axis.set_ylim(0,.05)
+    for axis in ax[0]:axis.legend(fontsize=8);axis.set_ylabel('Height z');axis.grid(alpha=.25)
     ax[0,0].set_xlabel('k at x=1.60');ax[0,1].set_xlabel('Velocity u at x=1.60')
+    ax[0,1].set_xlim(0,2.6);ax[0,2].set_xlabel('Outer epsilon at x=1.60')
     t=[s['time'] for _,s in states];near0=states[0][1]['near_k_integral'];stress0=states[0][1]['mean_wall_stress']
     ax[1,0].plot(t,[100*(s['near_k_integral']/near0-1) for _,s in states],'o-',label='First-cell integrated k')
     ax[1,0].plot(t,[100*(s['mean_wall_stress']/stress0-1) for _,s in states],'o-',label='Mean wall stress')
     ax[1,0].set(xlabel='Physical time',ylabel='Change from own initialized h0 (%)');ax[1,0].legend(fontsize=8)
     for i,label in ((0,'u'),(2,'k'),(3,'epsilon')):
         ax[1,1].semilogy(t,[s['spatial_block_norms'][i] for _,s in states],'o-',label=label)
-    ax[1,1].set(xlabel='Physical time',ylabel='Original spatial residual block (native units)');ax[1,1].legend(fontsize=8)
+    ax[1,1].set(xlabel='Physical time',ylabel='Scaled mass-dual spatial residual');ax[1,1].legend(fontsize=8)
+    global0=states[0][1]['global_k_integral']
+    ax[1,2].plot(t,[100*(s['global_k_integral']/global0-1) for _,s in states],'o-')
+    ax[1,2].set(xlabel='Physical time',ylabel='Global integrated k change from h0 (%)')
     for axis in ax[1]:axis.grid(alpha=.25)
     fig.suptitle('Independent UniformEPFlat control: unchanged frozen runtime, no bounding')
     fig.savefig(a.output/'uniform-continuation.png',dpi=180);plt.close(fig)
