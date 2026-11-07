@@ -19,6 +19,45 @@ The R2 projected map could be stationary in its frozen A_k^T Mff^-1 A_k
 metric at ground contact while its original k residual stayed nonzero. R3
 therefore scores the original reduced residual, not that projected-map defect.
 No full all-field Jacobian or hidden coupled direction solver was added.
+[Compact completed-result index](cls-epawf-segregated-picard-r3-evidence/native/latest-completed-summary.json)
+separates original-h0 tests, saved-guess diagnostics, qualification and physical
+acceptance and links each result to its producing build and native receipt.
+
+## Verified linear trials before optional source work (3a85fa5)
+
+The completed 4f3f768 experiment below obtains accurate current linear
+directions after five measurements, but optional source refinements request
+four more before any actual trial. It uses fewer controlled H solves than its
+control yet takes longer overall. Source proposal refinement should have an
+inexact work policy too; accurate local predictions alone are not actual
+nonlinear progress.
+
+Commit `3a85fa59a77fc4dea6ad1269fe257cca16d9572d` adds opt-in
+`RANSWallReducedPreferVerifiedLinear` /
+`--reduced-prefer-verified-linear`, default Off. When an inaccurate optional
+source proposal supplies a reliable new current response, the backend keeps
+that measurement, re-solves the constrained reduced model and independently
+checks its new linear direction. It then tries actual equilibrated nonlinear
+trials before further optional source Gauss–Newton work. The complete nonlinear
+destruction ray prediction is retained. Failed actual trials still permit
+fresh response models; the preference resets after a k update or fresh model.
+No inaccurate source proposal is used, no H accuracy check is bypassed, and
+the original complete residual, qualification, ground constraints and actual
+displacement bound remain authoritative.
+
+The four-worker Linux build passes in **134.51s**, with all six focused CTests
+passing in **38.25s**, test concurrency one. Exact helper/test hashes retain the
+ff1c4fc standalone sanitizer evidence; the new orchestration has no full-solver
+sanitizer claim. Input preparation accepts the complete option combination and
+rejects missing measured refreshes or source refinements. Same-image original-h0
+Off/On runs are in progress. `check_cls_epawf_verified_linear_trials.py` requires
+an actually accepted qualified reduced correction after the measured response,
+a re-solved independently checked direction, retained nonlinear destruction
+ray evaluation, complete original readback/history checks, and matched prefix
+states. It does not label operator checks as M8 convergence.
+[Build and identities](cls-epawf-segregated-picard-r3-evidence/native/build-validation-3a85fa5.json),
+[native commands and allocation](cls-epawf-segregated-picard-r3-evidence/native/verified-linear-native-launch.json),
+[Mac input checks only](cls-epawf-segregated-picard-r3-evidence/native/verified-linear-input-checks.json).
 
 ## Current-base action preservation (ff1c4fc)
 
@@ -102,8 +141,8 @@ reference-weight reuse differs; both use the protected calibration. They keep
 the original 2,165-unknown alpha-400/time-.0025 target and tolerance 2e-12.
 `check_cls_epawf_protected_actions.py` additionally requires at least two actual
 current-base measurements, retained-action checks, and an accepted qualified
-original-start correction selected with those responses. Native outcomes are
-pending; passing the helper is not a convergence result.
+original-start correction selected with those responses. Passing the helper
+is not a convergence result; the completed four-measurement outcome is below.
 [Exact native commands and allocation](cls-epawf-segregated-picard-r3-evidence/native/protected-actions-native-launch.json).
 
 The four-measurement native attempt subsequently confirms preservation but
@@ -116,6 +155,16 @@ within **6.38e-11**; two-size action uncertainty is **7.73e-7**. The guard
 correctly rebuilds fresh responses rather than accepting the incomplete model.
 Thus action interference was real, but its repair alone does not make four
 current measurements sufficient for this 96-dimensional model.
+Both three-update native runs have now completed. The enabled endpoint is
+**41.1510196800**, versus control **41.1742337091**, after the rejected historical
+model was replaced with fresh responses. The enabled run's **614** H solves
+all converge (2,203 flow/epsilon solves each); complete qualification, exact
+independent residual readback, and zero-step accepted-state/history checks
+pass. Its focused **actual bridged-use assertion fails**, as intended. The
+slightly lower terminal residual after fallback is not counted as successful
+historical-model use.
+[Preserved four-measurement failed use check](cls-epawf-segregated-picard-r3-evidence/native/protected-four-failed-use-check.json),
+[completed histories and independent audits](cls-epawf-segregated-picard-r3-evidence/native/followup-completed-review.json).
 
 Commit `4f3f7684360387e50cb7957244fc4b838de15ecd` allows an explicitly bounded
 budget of up to sixteen protected measurements, still default Off. It changes
@@ -128,10 +177,41 @@ native rerun requests sixteen measurements with the same original fixture.
 The four-worker build passes in **66.60s** and all six focused CTests pass in
 **39.27s**, with test concurrency one. Independent hashes confirm that the
 helper and known-answer test are identical to their passing ff1c4fc sanitizer
-versions. Native outcomes remain pending.
+versions.
 [Input preparation and range guards](cls-epawf-segregated-picard-r3-evidence/native/protected-expansion-input-checks.json),
 [producing build and reused sanitizer provenance](cls-epawf-segregated-picard-r3-evidence/native/build-validation-4f3f768.json),
 [matched original-h0 commands and allocation](cls-epawf-segregated-picard-r3-evidence/native/protected-expansion-native-launch.json).
+
+The completed expanded-budget native test **passes its actual-use assertions**.
+Nine protected measurements are used in a rank-96 response space. The selected
+source-refined direction has residual-action error **0.00568764**, individual
+bound-scaled observation error **0.0325262**, and two-size discrepancy
+**6.75e-7**. Predicted merit slope **-873.1686** agrees with measured slopes
+**-872.8575/-872.8585**; independent same-k H solves pass on the current branch.
+The initial and first two numerical states match the control bit for bit.
+
+The actual full step lowers residual to **35.07895** but creates normalized
+gradient violation **0.601874**, despite a nearly feasible affine prediction;
+it is rejected. The accepted half-step gives **49.2816311106 → 41.2760082402**,
+versus predicted **40.7807333085**, with zero inventory violation. Its actual
+displacement **0.6468863** is within radius **1.296**. Ground minimum is
+**0.1637989**, gradient departure **0.0009975411**, and epsilon lower ratio
+**0.9809272267**; complete qualification passes. Thus local action predictions
+are accurate enough for direction selection, while finite-step qualification
+curvature still requires actual scans and backtracking.
+
+All **447** H evaluations converge (1,784 flow and epsilon solves each), versus
+control **598** (2,129 each). Fresh original residual norms match bit for bit,
+and accepted physical state/history are preserved at **0 steps/time 0**. The
+control endpoint is slightly lower, **41.1742337091**. Native target times are
+**3,399.70s enabled versus 3,004.90s control** in this concurrent fixture: fewer
+H solves do not establish a speedup. This is successful reduced-direction use,
+not successful M8 convergence. A longer original-h0 three-step attempt was
+launched after this actual qualified correction; it remains in progress.
+[Passing actual-use receipt](cls-epawf-segregated-picard-r3-evidence/native/protected-expansion-comparison-receipt.json),
+[retained-action assertions](cls-epawf-segregated-picard-r3-evidence/native/protected-expansion-action-checks.json),
+[matched original-start corrections](cls-epawf-segregated-picard-r3-evidence/native/protected-expansion-reference-branch-checks.json),
+[longer native attempt command](cls-epawf-segregated-picard-r3-evidence/native/protected-expansion-original160-3step-launch.json).
 
 The source-stencil recovery also now has independently read original-start
 evidence: at numerical update five, five columns require eleven stencil

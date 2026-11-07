@@ -1,0 +1,16 @@
+{
+  "command": [
+    "python3",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-source/solvers/IncNavierStokesSolver/Tests/RANS/check_cls_epawf_protected_actions.py",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/protected-actions-enabled",
+    "--control",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/protected-actions-control"
+  ],
+  "exit_code": 1,
+  "seconds": 0.7684371700161137,
+  "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/protected-actions-comparison.log",
+  "log_sha256": "167d1167ddb42bf9f6de2cfa98978c3947dca4d5e1eb343b1b016005efd2082f",
+  "utc": "2026-11-07T02:48:12.703818+00:00",
+  "scope": "Four protected same-base measurements preserve prior actions, but no accepted bridged direction passes the 0.1 observation gate; failed feature-use assertion intentionally preserved. Generic operator, full readback and failed-stage history checks pass separately.",
+  "failure_tail": "Traceback (most recent call last):\n  File \"/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-source/solvers/IncNavierStokesSolver/Tests/RANS/check_cls_epawf_reference_branch_reuse.py\", line 84, in <module>\n    main()\n  File \"/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-source/solvers/IncNavierStokesSolver/Tests/RANS/check_cls_epawf_reference_branch_reuse.py\", line 49, in main\n    require(used, \"no current-branch checked historical direction produced an actual original-start correction\")\n  File \"/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-source/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py\", line 30, in require\n    raise ValueError(message)\nValueError: no current-branch checked historical direction produced an actual original-start correction\nTraceback (most recent call last):\n  File \"/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-source/solvers/IncNavierStokesSolver/Tests/RANS/check_cls_epawf_protected_actions.py\", line 52, in <module>\n    main()\n  File \"/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-source/solvers/IncNavierStokesSolver/Tests/RANS/check_cls_epawf_protected_actions.py\", line 21, in main\n    subprocess.run([sys.executable, str(directory / \"check_cls_epawf_reference_branch_reuse.py\"),\n  File \"/usr/lib/python3.10/subprocess.py\", line 526, in run\n    raise CalledProcessError(retcode, process.args,\nsubprocess.CalledProcessError: Command '['/usr/bin/python3', '/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/continuation-source/solvers/IncNavierStokesSolver/Tests/RANS/check_cls_epawf_reference_branch_reuse.py', '/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/protected-actions-enabled', '--control', '/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-segregated-picard-r3/protected-actions-control']' returned non-zero exit status 1.\n"
+}

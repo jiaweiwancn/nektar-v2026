@@ -1,6 +1,6 @@
 {
   "status": "native_development_in_progress_original_m8_unresolved",
-  "producing_code_commit": "4f3f7684360387e50cb7957244fc4b838de15ecd",
+  "producing_code_commit": "3a85fa59a77fc4dea6ad1269fe257cca16d9572d",
   "native_m8": {
     "status": "Completed original-h0 twelve-update control reaches13.462175000498513 with full qualification but no first-stage convergence; protected current-action original-start comparisons continue",
     "qualified_first_stage": false,
@@ -62,10 +62,9 @@
       "direction-refresh-v2-original160-3step",
       "reference-branch-enabled",
       "reference-branch-control",
-      "protected-actions-control",
-      "protected-actions-enabled",
-      "protected-expansion-control",
-      "protected-expansion-enabled"
+      "protected-expansion-original160-3step",
+      "verified-linear-control",
+      "verified-linear-enabled"
     ],
     "incomplete_original_start_followup": {
       "case": "response-cache-original-3step",
@@ -635,7 +634,7 @@
       "build_passed": true,
       "focused_ctests_passed": 6,
       "standalone_asan_ubsan_passed": true,
-      "status": "four_measurements_preserve_actions_but_fail_observation_accuracy; expanded_budget_native_rerun_pending",
+      "status": "four_measurement_actual_bridged_use_assertion_failed; action_preservation_and_generic_checks_passed; expanded_native_rerun_active",
       "diagnostic": "Accurate non-k solves and two-size actions; unprotected rank-one current-action refreshes overwrite correlated earlier measurements",
       "diagnostic_evidence": "native/current-direction-interference.json",
       "native_launch": "native/protected-actions-native-launch.json",
@@ -644,7 +643,17 @@
       "four_measurement_residual_model_error": 0.02188194194943436,
       "four_measurement_observation_model_error": 0.1415631394674602,
       "preserved_residual_defect": 2.1481380127022748e-15,
-      "preserved_state_defect": 6.375528292290968e-11
+      "preserved_state_defect": 6.375528292290968e-11,
+      "native_receipt": "native/protected-four-failed-use-check.json",
+      "terminal_original_norm": 41.151019680008325,
+      "control_original_norm": 41.17423370912804,
+      "accepted_physical_steps": 0,
+      "accepted_time": 0,
+      "qualified": true,
+      "original_readback_exact": true,
+      "accepted_state_and_history_preserved": true,
+      "controlled_H_evaluations": 614,
+      "all_H_converged": true
     },
     "expanded_protected_budget": {
       "code": "4f3f7684360387e50cb7957244fc4b838de15ecd",
@@ -652,13 +661,43 @@
       "default_budget": 0,
       "all_original_accuracy_and_acceptance_limits_unchanged": true,
       "input_checks": "native/protected-expansion-input-checks.json",
-      "status": "build_and_six_ctests_passed; matched_original_h0_native_tests_running",
+      "status": "passed_protected_current_actions_not_m8_convergence",
       "build": "native/build-validation-4f3f768.json",
       "native_launch": "native/protected-expansion-native-launch.json",
       "build_seconds": 66.59712394600501,
       "focused_ctests_passed": 6,
       "ctest_seconds": 39.26926010099123,
-      "sanitizer_scope": "Exact unchanged helper and unit test reuse independently hashed ff1c4fc standalone ASan/UBSan evidence"
+      "sanitizer_scope": "Exact unchanged helper and unit test reuse independently hashed ff1c4fc standalone ASan/UBSan evidence",
+      "native_receipt": "native/protected-expansion-comparison-receipt.json",
+      "actual_original_start_correction": {
+        "from_residual": 49.28163111055679,
+        "to_residual": 41.27600824015673,
+        "control_terminal_residual": 41.17423370912804,
+        "qualified": true,
+        "numeric_updates": 3,
+        "physical_steps": 0,
+        "accepted_time": 0,
+        "original_readback_exact": true,
+        "accepted_state_and_history_preserved": true
+      },
+      "controlled_H_evaluations": 447,
+      "control_H_evaluations": 598,
+      "flow_epsilon_solves_each": 1784,
+      "control_flow_epsilon_solves_each": 2129,
+      "target_seconds": 3399.695919354999,
+      "control_target_seconds": 3004.896286214993,
+      "current_measurements": 9
+    },
+    "verified_linear_policy": {
+      "code": "3a85fa59a77fc4dea6ad1269fe257cca16d9572d",
+      "status": "build_and_six_ctests_passed; same_image_original_h0_native_tests_running",
+      "default": "Off",
+      "scope": "After measuring inaccurate optional source proposal, re-solve and independently verify constrained linear reduced direction before actual nonlinear trials; nonlinear destruction ray and original acceptance retained",
+      "build_seconds": 134.5106846190174,
+      "ctest_seconds": 38.25249536600313,
+      "input_checks": "native/verified-linear-input-checks.json",
+      "build": "native/build-validation-3a85fa5.json",
+      "native_launch": "native/verified-linear-native-launch.json"
     }
   },
   "latest_diagnostic_correction": {

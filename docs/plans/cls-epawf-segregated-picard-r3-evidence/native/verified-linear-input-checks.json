@@ -1,0 +1,61 @@
+{
+  "scope": "Mac input/combination guards only; not native numerical validation",
+  "utc": "2026-11-07T03:34:01.270512+00:00",
+  "producing_code_commit": "3a85fa59a77fc4dea6ad1269fe257cca16d9572d",
+  "status": "passed_input_preparation_only",
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "/private/tmp/nektar-picard-r3/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py",
+        "--prepare-only",
+        "--reduced-prefer-verified-linear",
+        "--output",
+        "/private/tmp/picard-r3-verified-linear-input-valid",
+        "--reduced",
+        "--reduced-response-reuse-updates",
+        "2",
+        "--reduced-directional-refresh-updates",
+        "16",
+        "--reduced-source-ray",
+        "--reduced-source-refinements",
+        "1"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "python3",
+        "/private/tmp/nektar-picard-r3/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py",
+        "--prepare-only",
+        "--reduced-prefer-verified-linear",
+        "--output",
+        "/private/tmp/picard-r3-verified-linear-input-no_source",
+        "--reduced",
+        "--reduced-response-reuse-updates",
+        "2",
+        "--reduced-directional-refresh-updates",
+        "16"
+      ],
+      "exit_code": 1,
+      "output": "Traceback (most recent call last):\n  File \"/private/tmp/nektar-picard-r3/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py\", line 351, in <module>\n    raise SystemExit(main())\n  File \"/private/tmp/nektar-picard-r3/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py\", line 238, in main\n    require(not args.reduced_prefer_verified_linear or\n  File \"/private/tmp/nektar-picard-r3/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py\", line 30, in require\n    raise ValueError(message)\nValueError: verified-linear preference requires measured response refreshes and source refinements\n"
+    },
+    {
+      "command": [
+        "python3",
+        "/private/tmp/nektar-picard-r3/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py",
+        "--prepare-only",
+        "--reduced-prefer-verified-linear",
+        "--output",
+        "/private/tmp/picard-r3-verified-linear-input-no_refresh",
+        "--reduced",
+        "--reduced-source-ray",
+        "--reduced-source-refinements",
+        "1"
+      ],
+      "exit_code": 1,
+      "output": "Traceback (most recent call last):\n  File \"/private/tmp/nektar-picard-r3/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py\", line 351, in <module>\n    raise SystemExit(main())\n  File \"/private/tmp/nektar-picard-r3/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py\", line 238, in main\n    require(not args.reduced_prefer_verified_linear or\n  File \"/private/tmp/nektar-picard-r3/solvers/IncNavierStokesSolver/Tests/RANS/run_cls_epawf_picard.py\", line 30, in require\n    raise ValueError(message)\nValueError: verified-linear preference requires measured response refreshes and source refinements\n"
+    }
+  ]
+}
