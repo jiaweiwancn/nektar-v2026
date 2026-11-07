@@ -1,0 +1,3661 @@
+{
+  "captured_UTC": "2026-11-07T18:08:52.158234+00:00",
+  "root": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-u05-graded-projection-repair-20261108",
+  "base": "a0ccc1c7febc3ed18efb5f4e5fc6d1116778f22f",
+  "source": {
+    "source_revision": "faef649474071996a621028650a4c88fbb8b6900",
+    "tracked_blobs_verified": 5851.0,
+    "frozen_cpp_hashes_match": true,
+    "source_status": "",
+    "captured_UTC": "2026-11-07T17:38:26.641750+00:00"
+  },
+  "checkpoint_compatibility": "unchanged physical mass metric, floor/reserve, V3 constraint policy, equations, dt and history; versioned finite-QP numerical backend separately recorded",
+  "scope": "declared V3 physical inventory plus continuous ground; not global volume positivity",
+  "replays": {
+    "replay-original": {
+      "success": false,
+      "failure": "k_bound_algebra_wall_time_limit",
+      "result_sha256": "3e384c56db0486cf0b3466bb384e4f01bb18ab38d382ee5732ef3d5d5366ca83",
+      "pool_sha256": "7b22c2bf7eff54d0e0a6966d5af7cd2654fe648bd95eb8c1dfeba47588d1e917",
+      "mass_sha256": "5251decc28e900e053e98d98d1f0aeae92a73aed8463d397c39aa806748c9471",
+      "physical_objective": 9.566326468317854e-07,
+      "finite_pool_dual_objective": 9.56632646831786e-07,
+      "physical_primal_dual_gap": -6.352747104407253e-22,
+      "independent_stationarity": 3.5237683360909074e-19,
+      "independent_pool_normalized_violation": 2.7857887031261866e-13,
+      "independent_dual_violation": 0.0,
+      "independent_complementarity": 3.859038720011656e-22,
+      "raw_linear_residual_max": 1.6653345369377348e-16,
+      "corrected_frozen_residual_max": 0.1466926190331759,
+      "added_frozen_residual_max": 0.146692619033176,
+      "storage_reaction_max": 0.05638885969326973,
+      "added_frozen_residual_mass_dual": 10.001355658165435,
+      "storage_reaction_mass_dual": 2.213133333484167,
+      "raw_step_mass_norm": 0.002727905136291312,
+      "correction_mass_norm": 0.0013832083334276045,
+      "accepted_step_mass_norm": 0.0023509768126040507,
+      "correction_integral": 0.00020596329049771056,
+      "increment_identity_defect": 8.673617379884035e-19,
+      "hard_audit": null,
+      "kkt_describes_full_pool": false,
+      "work_and_feasibility": {
+        "success": false,
+        "failure": "k_bound_algebra_wall_time_limit",
+        "work_controls": {
+          "schema": 1.0,
+          "per_add_completed_work": 2000.0,
+          "total_completed_work": 20000.0,
+          "separation_passes": 2000.0,
+          "wall_seconds": 900.0,
+          "trace": "Full",
+          "trace_file": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-u05-graded-projection-repair-20261108/replay-original/trace.jsonl",
+          "dump_file": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-u05-graded-projection-repair-20261108/replay-original/pool.json",
+          "mathematics": "unchanged normalized mass-whitened two-pass-MGS working-set algorithm; resource limits are not physical parameters"
+        },
+        "separation_passes": 1297.0,
+        "inventory_rebuilds": 569.0,
+        "active_set_iterations": 2551.0,
+        "kkt_solves": 2551.0,
+        "maximum_work_one_add": 8.0,
+        "mass_factorizations": 1.0,
+        "mass_factor_applications": 2593.0,
+        "seconds_total": 901.72465889,
+        "seconds_algebra": 18.574294907000013,
+        "seconds_inventory": 759.6197769759998,
+        "floor": 5.105080130598862e-09,
+        "arithmetic_reserve": 4.643043330905913e-13,
+        "raw_minimum": {
+          "value": -0.031878482805971414,
+          "functional_kind": "Point",
+          "coordinate": [
+            -3.5475062549188188,
+            0.0,
+            4.961421634220989e-07
+          ],
+          "geometry": 0.0,
+          "inventory": "constitutive_baseline_normalization_ray:pre_k"
+        },
+        "corrected_minimum": {
+          "value": 5.094573444001616e-09,
+          "functional_kind": "Point",
+          "coordinate": [
+            -1.5087835422727391,
+            0.0,
+            0.0004918236343469778
+          ],
+          "geometry": 2.0,
+          "inventory": "constitutive_baseline_normalization_ray:moving"
+        },
+        "raw_ground": {
+          "admissible": false,
+          "minimum": -0.03221079439398426,
+          "arithmetic_scale": 3.212979213412581e-17,
+          "point": [
+            -3.561981341898869,
+            0.0,
+            0.0
+          ],
+          "geometry": 0.0,
+          "extrema_checked": 19.0
+        },
+        "corrected_ground": {
+          "admissible": true,
+          "minimum": 5.105391634722796e-09,
+          "arithmetic_scale": 2.9553006961921694e-17,
+          "point": [
+            1.54116219110282,
+            0.0,
+            0.0
+          ],
+          "geometry": 4.0,
+          "extrema_checked": 20.0
+        },
+        "primal_floor_defect": 1.0506686597245454e-11,
+        "ground_floor_defect": 0.0,
+        "stationarity_mass_dual": 3.895780596070848e-19,
+        "complementarity": 3.0872309760093247e-22,
+        "dual_feasibility_defect": 0.0,
+        "primal_dual_gap_working_set": 6.352747104407253e-22,
+        "finite_pool_normalized_violation": 2.7857884320756435e-13,
+        "raw_sha256": "17a7a306373898d129f06e7c7a0815ce99608d708fb02d3f07f2d78f983ae659",
+        "corrected_sha256": "3ace3ecf5e46c2e24819511ba6ac014100f24dc6a3ff1831d3bf4372f365f719"
+      }
+    },
+    "replay-pool-v1": {
+      "success": true,
+      "failure": "",
+      "result_sha256": "1a39892bdc4a368b3bc007253bbe4e7e18e8a249184af47d956042b420b58eab",
+      "pool_sha256": "016764344ba70491d530fd1006a9fff19feda56166762e179925bbb8d0f6fc21",
+      "mass_sha256": "5251decc28e900e053e98d98d1f0aeae92a73aed8463d397c39aa806748c9471",
+      "physical_objective": 9.565776693250109e-07,
+      "finite_pool_dual_objective": 9.565776693250117e-07,
+      "physical_primal_dual_gap": -8.470329472543003e-22,
+      "independent_stationarity": 4.366906984965439e-19,
+      "independent_pool_normalized_violation": 2.168404344971009e-19,
+      "independent_dual_violation": 0.0,
+      "independent_complementarity": 3.8986015105010913e-22,
+      "raw_linear_residual_max": 1.6653345369377348e-16,
+      "corrected_frozen_residual_max": 0.1466924733640827,
+      "added_frozen_residual_max": 0.14669247336408278,
+      "storage_reaction_max": 0.056388859709599094,
+      "added_frozen_residual_mass_dual": 10.001318539826034,
+      "storage_reaction_mass_dual": 2.2130697383824263,
+      "raw_step_mass_norm": 0.002727905136291312,
+      "correction_mass_norm": 0.0013831685864890157,
+      "accepted_step_mass_norm": 0.0023509861536050104,
+      "correction_integral": 0.00020583114571893628,
+      "increment_identity_defect": 8.673617379884035e-19,
+      "hard_audit": true,
+      "kkt_describes_full_pool": true,
+      "work_and_feasibility": {
+        "success": true,
+        "failure": "",
+        "work_controls": {
+          "schema": 1.0,
+          "per_add_completed_work": 2000.0,
+          "total_completed_work": 20000.0,
+          "separation_passes": 2000.0,
+          "wall_seconds": 900.0,
+          "trace": "Full",
+          "finite_qp_solver": "RetainedPool",
+          "finite_qp_version": "retained-pool-v1",
+          "trace_file": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-u05-graded-projection-repair-20261108/replay-pool-v1/trace.jsonl",
+          "dump_file": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-u05-graded-projection-repair-20261108/replay-pool-v1/pool.json",
+          "mathematics": "same raw-centered physical mass QP and constraints; finite-QP solver implementation and work controls are recorded separately from physical checkpoint identity"
+        },
+        "separation_passes": 492.0,
+        "inventory_rebuilds": 182.0,
+        "active_set_iterations": 1444.0,
+        "kkt_solves": 1423.0,
+        "maximum_work_one_add": 30.0,
+        "finite_pool_scans": 743.0,
+        "finite_pool_reentries": 252.0,
+        "exact_cut_reuses": 0.0,
+        "finite_pool_complete": true,
+        "mass_factorizations": 1.0,
+        "mass_factor_applications": 1234.0,
+        "seconds_total": 196.851890178,
+        "seconds_algebra": 7.157451142999997,
+        "seconds_inventory": 160.19306511600004,
+        "floor": 5.105080130598862e-09,
+        "arithmetic_reserve": 4.643043330905913e-13,
+        "raw_minimum": {
+          "value": -0.031878482805971414,
+          "functional_kind": "Point",
+          "coordinate": [
+            -3.5475062549188188,
+            0.0,
+            4.961421634220989e-07
+          ],
+          "geometry": 0.0,
+          "inventory": "constitutive_baseline_normalization_ray:pre_k"
+        },
+        "corrected_minimum": {
+          "value": 5.105326351238607e-09,
+          "functional_kind": "Point",
+          "coordinate": [
+            -1.5001731253449384,
+            0.0,
+            0.008631923436226166
+          ],
+          "geometry": 2.0,
+          "inventory": "constitutive_baseline_normalization_ray"
+        },
+        "raw_ground": {
+          "admissible": false,
+          "minimum": -0.03221079439398426,
+          "arithmetic_scale": 3.212979213412581e-17,
+          "point": [
+            -3.561981341898869,
+            0.0,
+            0.0
+          ],
+          "geometry": 0.0,
+          "extrema_checked": 19.0
+        },
+        "corrected_ground": {
+          "admissible": true,
+          "minimum": 5.105491805225386e-09,
+          "arithmetic_scale": 2.971039057798854e-17,
+          "point": [
+            -3.5462772073327864,
+            0.0,
+            0.0
+          ],
+          "geometry": 0.0,
+          "extrema_checked": 18.0
+        },
+        "primal_floor_defect": 0.0,
+        "ground_floor_defect": 0.0,
+        "stationarity_mass_dual": 4.95043864301948e-19,
+        "complementarity": 1.9493007552505457e-22,
+        "dual_feasibility_defect": 0.0,
+        "primal_dual_gap_working_set": 0.0,
+        "finite_pool_normalized_violation": 2.168404344971009e-19,
+        "raw_sha256": "17a7a306373898d129f06e7c7a0815ce99608d708fb02d3f07f2d78f983ae659",
+        "corrected_sha256": "6422e958e78f75ea76c5591c898b7e8beabb46722141a80cf0443ada919168a1"
+      }
+    }
+  },
+  "tests": {
+    "native-first": {
+      "phase": "first",
+      "status": "passed",
+      "production_governing_solves": 0.0,
+      "note": "independent verification trajectories; scheduled equation counts checked in every native report",
+      "native_receipt": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-u05-graded-projection-repair-20261108/pool-v1/solver/IncNavierStokesSolver",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-u05-graded-projection-repair-20261108/native-first/step65/case.xml"
+        ],
+        "exit_code": 0.0,
+        "seconds": 253.74740144400857,
+        "log_sha256": "5eeeabc97dc19d246b3b00ae833bed3b0f44265a32b1203b160130d091bbd43c"
+      },
+      "startup_unchanged": true,
+      "raw_frozen_system_history_exact": true,
+      "one_sweep_verified": true,
+      "native_step65_checkpoint": {
+        "order": 1.0,
+        "steps": 65.0,
+        "time": 0.04062500000000002,
+        "dt": 0.000625,
+        "sha256": "d282f3e5812f363e22085d134b61bccf5a55bdfb7e376717e591256294de2830"
+      },
+      "native_projection_mass_difference": 0.0,
+      "native_projection_exact": true,
+      "test_governing_solves_per_equation": 1.0,
+      "step65_counts": {
+        "outer_sweeps": 1.0,
+        "momentum_predictor_solves": 1.0,
+        "pressure_system_solves": 1.0,
+        "epsilon_transport_solves": 1.0,
+        "k_transport_solves": 1.0,
+        "bound_calls": 1.0,
+        "additional_governing_equation_solves": 0.0,
+        "scheduled_complete": true
+      }
+    },
+    "native-earlier": {
+      "phase": "earlier",
+      "status": "passed",
+      "production_governing_solves": 0.0,
+      "note": "independent verification trajectories; scheduled equation counts checked in every native report",
+      "legacy_exact": true,
+      "earlier_pool_mass_difference": 0.0,
+      "earlier_pool_exact": true,
+      "test_governing_solves_per_equation": 3.0
+    },
+    "native-transactions": {
+      "phase": "transactions",
+      "status": "passed",
+      "production_governing_solves": 0.0,
+      "note": "independent verification trajectories; scheduled equation counts checked in every native report",
+      "restart_exact": true,
+      "rollback_exact": true,
+      "rejection_time_history_preserved": true,
+      "test_governing_solves_per_equation": 5.0,
+      "accepted_checkpoint": {
+        "order": 1.0,
+        "steps": 65.0,
+        "time": 0.04062500000000002,
+        "dt": 0.000625,
+        "sha256": "d282f3e5812f363e22085d134b61bccf5a55bdfb7e376717e591256294de2830"
+      }
+    },
+    "interrupted_finite_pool": {
+      "latest_completed_primal_matches_returned_state": true,
+      "objective_defect": 0.0,
+      "failure": "k_bound_total_active_set_limit",
+      "last_completed_add": 57.0,
+      "adds": 57.0,
+      "iterations": 75.0,
+      "finite_pool_complete": false,
+      "unfinished_working_set": true,
+      "accepted_step": false,
+      "governing_solves": 0.0
+    },
+    "ctest": "Internal ctest changing into directory: /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-u05-graded-projection-repair-20261108/build\nTest project /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-u05-graded-projection-repair-20261108/build\n    Start 1: RANSKBoundQPChecks\n1/2 Test #1: RANSKBoundQPChecks ...............   Passed    0.01 sec\n    Start 4: RANSHistoryRejectionChecks\n2/2 Test #4: RANSHistoryRejectionChecks .......   Passed    0.06 sec\n\n100% tests passed, 0 tests failed out of 2\n\nTotal Test time (real) =   0.07 sec\n"
+  },
+  "campaigns": {
+    "repaired_graded": {
+      "status": "running",
+      "accepted_steps": 69.0,
+      "accepted_time": 0.043125000000000024,
+      "checkpoint_copy": {
+        "order": 1,
+        "steps": 69,
+        "time": 0.043125000000000024,
+        "dt": 0.000625,
+        "sha256": "13f60231facc84786015ae485e0fd9a32f08941971f5dcd0d3f375e5d2c13bd6"
+      },
+      "original_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-u05-graded-projection-repair-20261108/repaired-campaign/trajectory/steps-000066-000069/checkpoint.3",
+      "checkpoint_sha256": "13f60231facc84786015ae485e0fd9a32f08941971f5dcd0d3f375e5d2c13bd6",
+      "completed_targets": [
+        65.0
+      ],
+      "next_target": 80.0,
+      "failure": null,
+      "cumulative_bound_integral": 0.006076794392100046,
+      "bound_solver": "RetainedPool",
+      "backend_recorded_in_progress": true,
+      "driver": {
+        "pid": 175844,
+        "start": "20078924",
+        "executable": "/usr/bin/python3.10",
+        "cwd": "/home/jay"
+      },
+      "native": {
+        "pid": 177428,
+        "start": "20228677",
+        "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-u05-graded-projection-repair-20261108/repaired-campaign/trajectory/runtime/IncNavierStokesSolver",
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-u05-graded-projection-repair-20261108/repaired-campaign/trajectory/steps-000070-000073"
+      },
+      "native_matches": true,
+      "driver_command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-u05-graded-projection-repair-20261108/source/solvers/IncNavierStokesSolver/Tests/RANS/continue_cls_epawf_pimple.py",
+        "--solver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-u05-graded-projection-repair-20261108/pool-v1/solver/IncNavierStokesSolver",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-u05-graded-projection-repair-20261108/repaired-campaign/trajectory",
+        "--inventory",
+        "ConstitutiveV3",
+        "--bound-solver",
+        "RetainedPool",
+        "--wall-policy",
+        "Upstream",
+        "--block-steps",
+        "4",
+        "--timeout",
+        "7200.0",
+        "--targets",
+        "65",
+        "80",
+        "160",
+        "800",
+        "1600",
+        "3200",
+        "8000",
+        "--bound-max-add",
+        "2000",
+        "--bound-max-total",
+        "20000",
+        "--bound-max-separations",
+        "2000",
+        "--bound-max-seconds",
+        "900.0",
+        "--upstream-case",
+        "U05-graded",
+        "--checkpoint",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-u05-graded-projection-repair-20261108/restart64",
+        "--prefix-report",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-u05-graded-projection-repair-20261108/prefix64.evolution.json",
+        "--prefix-campaign",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/selected-U05-graded/trajectory"
+      ],
+      "native_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-u05-graded-projection-repair-20261108/repaired-campaign/trajectory/runtime/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "campaign_lock": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-u05-graded-projection-repair-20261108/repaired-campaign/trajectory/.campaign.lock",
+        "inherited_by": [
+          {
+            "pid": 175844,
+            "fd": "3"
+          },
+          {
+            "pid": 177428,
+            "fd": "3"
+          }
+        ],
+        "kernel_locks": [
+          "15: FLOCK  ADVISORY  WRITE 175844 08:02:6181833 0 EOF"
+        ]
+      },
+      "executable_sha256": "c016c85792ee2d41a72ade53ed88afabff93623c434d01bf701f1db168dd6525",
+      "source_revision": "faef649474071996a621028650a4c88fbb8b6900",
+      "supervisor_matches": true,
+      "supervisor_command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-u05-graded-projection-repair-20261108/source/solvers/IncNavierStokesSolver/Tests/RANS/supervise_cls_epawf_pimple.py",
+        "--solver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-u05-graded-projection-repair-20261108/pool-v1/solver/IncNavierStokesSolver",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-u05-graded-projection-repair-20261108/repaired-campaign",
+        "--wall-policy",
+        "Upstream",
+        "--upstream-case",
+        "U05-graded",
+        "--inventory",
+        "ConstitutiveV3",
+        "--bound-solver",
+        "RetainedPool",
+        "--checkpoint",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-u05-graded-projection-repair-20261108/restart64",
+        "--prefix-report",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-u05-graded-projection-repair-20261108/prefix64.evolution.json",
+        "--prefix-campaign",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/selected-U05-graded/trajectory",
+        "--targets",
+        "65",
+        "80",
+        "160",
+        "800",
+        "1600",
+        "3200",
+        "8000",
+        "--block-steps",
+        "4",
+        "--timeout",
+        "7200",
+        "--bound-max-add",
+        "2000",
+        "--bound-max-total",
+        "20000",
+        "--bound-max-separations",
+        "2000",
+        "--bound-max-seconds",
+        "900"
+      ],
+      "accepted_step_records": [
+        {
+          "global_step": 65,
+          "time": 0.04062500000000002,
+          "solve_counts": {
+            "outer_sweeps": 1,
+            "momentum_predictor_solves": 1,
+            "pressure_system_solves": 1,
+            "epsilon_transport_solves": 1,
+            "k_transport_solves": 1,
+            "bound_calls": 1,
+            "additional_governing_equation_solves": 0
+          },
+          "k_linear_residual": 1.1102230246251565e-16,
+          "k_corrected_residual": 0.1466924733640827,
+          "added_frozen_residual": 0.14669247336408275,
+          "storage_reaction": 0.05638885970959911,
+          "raw_mass_norm": 0.0027279051362913156,
+          "bound_mass_norm": 0.001383168586489016,
+          "correction_raw_ratio": 0.5070442399509109,
+          "integral": 0.00020583114571893617,
+          "corrected_minimum": {
+            "value": 5.105326351238607e-09,
+            "functional_kind": "Point",
+            "coordinate": [
+              -1.5001731253449384,
+              0,
+              0.008631923436226166
+            ],
+            "geometry": 2,
+            "inventory": "constitutive_baseline_normalization_ray"
+          },
+          "ground": {
+            "admissible": true,
+            "minimum": 5.105491805225386e-09,
+            "arithmetic_scale": 2.971039057798854e-17,
+            "point": [
+              -3.5462772073327864,
+              0,
+              0
+            ],
+            "geometry": 0,
+            "extrema_checked": 18
+          },
+          "kkt_solves": 1423,
+          "pool_reentries": 252,
+          "inventory_rebuilds": 182,
+          "mass_factor_applications": 1234,
+          "finite_pool_complete": true,
+          "physical_floor_defect": 0,
+          "ground_floor_defect": 0,
+          "physical_correction_bands": {
+            "regions": [
+              {
+                "name": "z_le_0.01",
+                "x_region": "all",
+                "x_bounds": [
+                  -4,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0019934674410088003,
+                "correction_signed": 0.00013550745041273097,
+                "correction_positive": 0.00014782334873817695,
+                "correction_negative": -1.2315898325445948e-05,
+                "correction_absolute": 0.0001601392470636229,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.01",
+                "x_region": "upstream_plateau",
+                "x_bounds": [
+                  -4,
+                  -3
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0011161372766585397,
+                "correction_signed": 4.60112090018766e-05,
+                "correction_positive": 5.0326759043245994e-05,
+                "correction_negative": -4.315550041369391e-06,
+                "correction_absolute": 5.464230908461539e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.01",
+                "x_region": "transition",
+                "x_bounds": [
+                  -3,
+                  -2.25
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 1.1913926158723184e-05,
+                "correction_signed": 4.786589833794844e-06,
+                "correction_positive": 7.294584373889593e-06,
+                "correction_negative": -2.50799454009475e-06,
+                "correction_absolute": 9.802578913984344e-06,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.01",
+                "x_region": "trace_buffer",
+                "x_bounds": [
+                  -2.25,
+                  -2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 6.869220462635721e-07,
+                "correction_signed": 1.6994246724539577e-06,
+                "correction_positive": 1.8605781785507087e-06,
+                "correction_negative": -1.611535060967517e-07,
+                "correction_absolute": 2.0217316846474603e-06,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.01",
+                "x_region": "downstream",
+                "x_bounds": [
+                  -2,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0008647293161452754,
+                "correction_signed": 8.301022690460549e-05,
+                "correction_positive": 8.834142714249053e-05,
+                "correction_negative": -5.331200237885056e-06,
+                "correction_absolute": 9.367262738037558e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.1",
+                "x_region": "all",
+                "x_bounds": [
+                  -4,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.1,
+                "k_integral": 0.20665148246554402,
+                "correction_signed": 0.00021698524400326404,
+                "correction_positive": 0.00028123554995385385,
+                "correction_negative": -6.425030595058982e-05,
+                "correction_absolute": 0.00034548585590444365,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.1",
+                "x_region": "upstream_plateau",
+                "x_bounds": [
+                  -4,
+                  -3
+                ],
+                "lower": 0,
+                "upper": 0.1,
+                "k_integral": 0.04227509543501501,
+                "correction_signed": 4.666996361550552e-05,
+                "correction_positive": 5.391195836655324e-05,
+                "correction_negative": -7.241994751047701e-06,
+                "correction_absolute": 6.115395311760093e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.1",
+                "x_region": "transition",
+                "x_bounds": [
+                  -3,
+                  -2.25
+                ],
+                "lower": 0,
+                "upper": 0.1,
+                "k_integral": 0.024685867336483595,
+                "correction_signed": 1.5399615584713466e-05,
+                "correction_positive": 2.5078809491640077e-05,
+                "correction_negative": -9.679193906926625e-06,
+                "correction_absolute": 3.47580033985667e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.1",
+                "x_region": "trace_buffer",
+                "x_bounds": [
+                  -2.25,
+                  -2
+                ],
+                "lower": 0,
+                "upper": 0.1,
+                "k_integral": 0.007930600969851747,
+                "correction_signed": 5.686012927813523e-06,
+                "correction_positive": 8.222831174598344e-06,
+                "correction_negative": -2.536818246784816e-06,
+                "correction_absolute": 1.075964942138316e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.1",
+                "x_region": "downstream",
+                "x_bounds": [
+                  -2,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.1,
+                "k_integral": 0.13175991872419346,
+                "correction_signed": 0.0001492296518752317,
+                "correction_positive": 0.00019402195092106246,
+                "correction_negative": -4.479229904583071e-05,
+                "correction_absolute": 0.00023881424996689317,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "wall_layer",
+                "x_region": "all",
+                "x_bounds": [
+                  -4,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.5,
+                "k_integral": 1.398833156597217,
+                "correction_signed": 0.00020613047363374174,
+                "correction_positive": 0.0002928394571921786,
+                "correction_negative": -8.670898355843718e-05,
+                "correction_absolute": 0.0003795484407506158,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "wall_layer",
+                "x_region": "upstream_plateau",
+                "x_bounds": [
+                  -4,
+                  -3
+                ],
+                "lower": 0,
+                "upper": 0.5,
+                "k_integral": 0.24520876028186694,
+                "correction_signed": 4.658220191080197e-05,
+                "correction_positive": 5.446642519573943e-05,
+                "correction_negative": -7.8842232849374e-06,
+                "correction_absolute": 6.235064848067683e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "wall_layer",
+                "x_region": "transition",
+                "x_bounds": [
+                  -3,
+                  -2.25
+                ],
+                "lower": 0,
+                "upper": 0.5,
+                "k_integral": 0.17324588561093643,
+                "correction_signed": 1.3985709385543394e-05,
+                "correction_positive": 2.6664982414685346e-05,
+                "correction_negative": -1.2679273029141964e-05,
+                "correction_absolute": 3.934425544382731e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "wall_layer",
+                "x_region": "trace_buffer",
+                "x_bounds": [
+                  -2.25,
+                  -2
+                ],
+                "lower": 0,
+                "upper": 0.5,
+                "k_integral": 0.05720970003922126,
+                "correction_signed": 5.1549050251213064e-06,
+                "correction_positive": 8.760194703501491e-06,
+                "correction_negative": -3.605289678380175e-06,
+                "correction_absolute": 1.2365484381881667e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "wall_layer",
+                "x_region": "downstream",
+                "x_bounds": [
+                  -2,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.5,
+                "k_integral": 0.9231688106651953,
+                "correction_signed": 0.00014040765731227492,
+                "correction_positive": 0.00020294785487825283,
+                "correction_negative": -6.25401975659776e-05,
+                "correction_absolute": 0.0002654880524442304,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "first_element",
+                "x_region": "all",
+                "x_bounds": [
+                  -4,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0019934674410088003,
+                "correction_signed": 0.00013550745041273097,
+                "correction_positive": 0.00014782334873817695,
+                "correction_negative": -1.2315898325445948e-05,
+                "correction_absolute": 0.0001601392470636229,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "first_element",
+                "x_region": "upstream_plateau",
+                "x_bounds": [
+                  -4,
+                  -3
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0011161372766585397,
+                "correction_signed": 4.60112090018766e-05,
+                "correction_positive": 5.0326759043245994e-05,
+                "correction_negative": -4.315550041369391e-06,
+                "correction_absolute": 5.464230908461539e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "first_element",
+                "x_region": "transition",
+                "x_bounds": [
+                  -3,
+                  -2.25
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 1.1913926158723184e-05,
+                "correction_signed": 4.786589833794844e-06,
+                "correction_positive": 7.294584373889593e-06,
+                "correction_negative": -2.50799454009475e-06,
+                "correction_absolute": 9.802578913984344e-06,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "first_element",
+                "x_region": "trace_buffer",
+                "x_bounds": [
+                  -2.25,
+                  -2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 6.869220462635721e-07,
+                "correction_signed": 1.6994246724539577e-06,
+                "correction_positive": 1.8605781785507087e-06,
+                "correction_negative": -1.611535060967517e-07,
+                "correction_absolute": 2.0217316846474603e-06,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "first_element",
+                "x_region": "downstream",
+                "x_bounds": [
+                  -2,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0008647293161452754,
+                "correction_signed": 8.301022690460549e-05,
+                "correction_positive": 8.834142714249053e-05,
+                "correction_negative": -5.331200237885056e-06,
+                "correction_absolute": 9.367262738037558e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "global",
+                "x_region": "all",
+                "x_bounds": [
+                  -4,
+                  2
+                ],
+                "lower": 0,
+                "upper": 4,
+                "k_integral": 12.118985964889086,
+                "correction_signed": 0.0002058311457189368,
+                "correction_positive": 0.0002931557507504766,
+                "correction_negative": -8.732460503154049e-05,
+                "correction_absolute": 0.0003804803557820171,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "global",
+                "x_region": "upstream_plateau",
+                "x_bounds": [
+                  -4,
+                  -3
+                ],
+                "lower": 0,
+                "upper": 4,
+                "k_integral": 2.031912089893123,
+                "correction_signed": 4.657978182017912e-05,
+                "correction_positive": 5.448158528795424e-05,
+                "correction_negative": -7.901803467775095e-06,
+                "correction_absolute": 6.238338875572934e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "global",
+                "x_region": "transition",
+                "x_bounds": [
+                  -3,
+                  -2.25
+                ],
+                "lower": 0,
+                "upper": 4,
+                "k_integral": 1.5132651185264128,
+                "correction_signed": 1.3946719929290394e-05,
+                "correction_positive": 2.670822510414008e-05,
+                "correction_negative": -1.276150517484971e-05,
+                "correction_absolute": 3.946973027898979e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "global",
+                "x_region": "trace_buffer",
+                "x_bounds": [
+                  -2.25,
+                  -2
+                ],
+                "lower": 0,
+                "upper": 4,
+                "k_integral": 0.5038740185185618,
+                "correction_signed": 5.1402593517652945e-06,
+                "correction_positive": 8.774838810089761e-06,
+                "correction_negative": -3.634579458324459e-06,
+                "correction_absolute": 1.240941826841422e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "global",
+                "x_region": "downstream",
+                "x_bounds": [
+                  -2,
+                  2
+                ],
+                "lower": 0,
+                "upper": 4,
+                "k_integral": 8.069934737950991,
+                "correction_signed": 0.00014016438461770132,
+                "correction_positive": 0.000203191101548293,
+                "correction_negative": -6.302671693059134e-05,
+                "correction_absolute": 0.00026621781847888435,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              }
+            ],
+            "quadrature": "physical native panels split exactly at each band edge; GL16; source retains roughness/cutoff/geometric panels"
+          },
+          "correction_seconds": 207.46128271,
+          "refreshed_trace_defect": 0.0011507608108258377,
+          "refreshed_stage_residual_block_norms": [
+            0.035436373973924004,
+            0.0010090340347372827,
+            5.0007106434373405,
+            8.0506661185542e-05,
+            1.4453390151246664e-16,
+            2.106637957478551e-16,
+            1.1180834903756763e-17,
+            0.003960720071446004
+          ]
+        },
+        {
+          "global_step": 66,
+          "time": 0.04125000000000002,
+          "solve_counts": {
+            "outer_sweeps": 1,
+            "momentum_predictor_solves": 1,
+            "pressure_system_solves": 1,
+            "epsilon_transport_solves": 1,
+            "k_transport_solves": 1,
+            "bound_calls": 1,
+            "additional_governing_equation_solves": 0
+          },
+          "k_linear_residual": 1.1102230246251565e-16,
+          "k_corrected_residual": 0.1466098253787281,
+          "added_frozen_residual": 0.1466098253787281,
+          "storage_reaction": 0.05705162069946487,
+          "raw_mass_norm": 0.0027129796033878717,
+          "bound_mass_norm": 0.001385590820030825,
+          "correction_raw_ratio": 0.5107265894297727,
+          "integral": 0.00020831172557151642,
+          "corrected_minimum": {
+            "value": 5.105343532962681e-09,
+            "functional_kind": "Point",
+            "coordinate": [
+              -1.8333333333333335,
+              0,
+              0.009894679670753807
+            ],
+            "geometry": 2,
+            "inventory": "constitutive_baseline_normalization_ray"
+          },
+          "ground": {
+            "admissible": true,
+            "minimum": 5.105485361000205e-09,
+            "arithmetic_scale": 2.968828351897992e-17,
+            "point": [
+              -3.5455614341665926,
+              0,
+              0
+            ],
+            "geometry": 0,
+            "extrema_checked": 18
+          },
+          "kkt_solves": 2068,
+          "pool_reentries": 506,
+          "inventory_rebuilds": 188,
+          "mass_factor_applications": 1620,
+          "finite_pool_complete": true,
+          "physical_floor_defect": 0,
+          "ground_floor_defect": 0,
+          "physical_correction_bands": {
+            "regions": [
+              {
+                "name": "z_le_0.01",
+                "x_region": "all",
+                "x_bounds": [
+                  -4,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0019686113500132843,
+                "correction_signed": 0.00013728065627348734,
+                "correction_positive": 0.00014857869585360926,
+                "correction_negative": -1.1298039580121858e-05,
+                "correction_absolute": 0.00015987673543373112,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.01",
+                "x_region": "upstream_plateau",
+                "x_bounds": [
+                  -4,
+                  -3
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0010937754107612436,
+                "correction_signed": 4.754214136606658e-05,
+                "correction_positive": 5.082348485279273e-05,
+                "correction_negative": -3.281343486726143e-06,
+                "correction_absolute": 5.410482833951887e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.01",
+                "x_region": "transition",
+                "x_bounds": [
+                  -3,
+                  -2.25
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 1.0079457152017706e-05,
+                "correction_signed": 4.828104169100872e-06,
+                "correction_positive": 7.3464236180171156e-06,
+                "correction_negative": -2.5183194489162448e-06,
+                "correction_absolute": 9.86474306693336e-06,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.01",
+                "x_region": "trace_buffer",
+                "x_bounds": [
+                  -2.25,
+                  -2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 6.100441644824411e-07,
+                "correction_signed": 1.800803323235596e-06,
+                "correction_positive": 1.9605329189107987e-06,
+                "correction_negative": -1.597295956752036e-07,
+                "correction_absolute": 2.1202625145860024e-06,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.01",
+                "x_region": "downstream",
+                "x_bounds": [
+                  -2,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0008641464379355404,
+                "correction_signed": 8.310960741508432e-05,
+                "correction_positive": 8.844825446388858e-05,
+                "correction_negative": -5.338647048804271e-06,
+                "correction_absolute": 9.378690151269285e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.1",
+                "x_region": "all",
+                "x_bounds": [
+                  -4,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.1,
+                "k_integral": 0.20532583900977813,
+                "correction_signed": 0.00021957802101782228,
+                "correction_positive": 0.0002833996913590971,
+                "correction_negative": -6.382167034127489e-05,
+                "correction_absolute": 0.00034722136170037195,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.1",
+                "x_region": "upstream_plateau",
+                "x_bounds": [
+                  -4,
+                  -3
+                ],
+                "lower": 0,
+                "upper": 0.1,
+                "k_integral": 0.04208863160198427,
+                "correction_signed": 4.7761721331265144e-05,
+                "correction_positive": 5.3770991928032e-05,
+                "correction_negative": -6.009270596766855e-06,
+                "correction_absolute": 5.978026252479885e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.1",
+                "x_region": "transition",
+                "x_bounds": [
+                  -3,
+                  -2.25
+                ],
+                "lower": 0,
+                "upper": 0.1,
+                "k_integral": 0.02450417697700957,
+                "correction_signed": 1.537507025875248e-05,
+                "correction_positive": 2.5062859359146142e-05,
+                "correction_negative": -9.687789100393647e-06,
+                "correction_absolute": 3.4750648459539786e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.1",
+                "x_region": "trace_buffer",
+                "x_bounds": [
+                  -2.25,
+                  -2
+                ],
+                "lower": 0,
+                "upper": 0.1,
+                "k_integral": 0.007869404364725668,
+                "correction_signed": 6.040135409097828e-06,
+                "correction_positive": 8.726143395050832e-06,
+                "correction_negative": -2.6860079859530068e-06,
+                "correction_absolute": 1.1412151381003839e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.1",
+                "x_region": "downstream",
+                "x_bounds": [
+                  -2,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.1,
+                "k_integral": 0.13086362606605892,
+                "correction_signed": 0.0001504010940187069,
+                "correction_positive": 0.00019583969667686833,
+                "correction_negative": -4.5438602658161427e-05,
+                "correction_absolute": 0.00024127829933502976,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "wall_layer",
+                "x_region": "all",
+                "x_bounds": [
+                  -4,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.5,
+                "k_integral": 1.396707337738185,
+                "correction_signed": 0.00020861406437453528,
+                "correction_positive": 0.00029513260104536526,
+                "correction_negative": -8.651853667082986e-05,
+                "correction_absolute": 0.0003816511377161951,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "wall_layer",
+                "x_region": "upstream_plateau",
+                "x_bounds": [
+                  -4,
+                  -3
+                ],
+                "lower": 0,
+                "upper": 0.5,
+                "k_integral": 0.2449642087484221,
+                "correction_signed": 4.773246808329162e-05,
+                "correction_positive": 5.427787459866897e-05,
+                "correction_negative": -6.545406515377369e-06,
+                "correction_absolute": 6.082328111404634e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "wall_layer",
+                "x_region": "transition",
+                "x_bounds": [
+                  -3,
+                  -2.25
+                ],
+                "lower": 0,
+                "upper": 0.5,
+                "k_integral": 0.17295227242965727,
+                "correction_signed": 1.3969964769837197e-05,
+                "correction_positive": 2.6647044605771467e-05,
+                "correction_negative": -1.2677079835934271e-05,
+                "correction_absolute": 3.932412444170574e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "wall_layer",
+                "x_region": "trace_buffer",
+                "x_bounds": [
+                  -2.25,
+                  -2
+                ],
+                "lower": 0,
+                "upper": 0.5,
+                "k_integral": 0.05710726867702081,
+                "correction_signed": 5.475356046716044e-06,
+                "correction_positive": 9.297574981141219e-06,
+                "correction_negative": -3.822218934425186e-06,
+                "correction_absolute": 1.3119793915566404e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "wall_layer",
+                "x_region": "downstream",
+                "x_bounds": [
+                  -2,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.5,
+                "k_integral": 0.9216835878830835,
+                "correction_signed": 0.00014143627547469106,
+                "correction_positive": 0.00020491010685978398,
+                "correction_negative": -6.347383138509295e-05,
+                "correction_absolute": 0.00026838393824487694,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "first_element",
+                "x_region": "all",
+                "x_bounds": [
+                  -4,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0019686113500132843,
+                "correction_signed": 0.00013728065627348734,
+                "correction_positive": 0.00014857869585360926,
+                "correction_negative": -1.1298039580121858e-05,
+                "correction_absolute": 0.00015987673543373112,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "first_element",
+                "x_region": "upstream_plateau",
+                "x_bounds": [
+                  -4,
+                  -3
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0010937754107612436,
+                "correction_signed": 4.754214136606658e-05,
+                "correction_positive": 5.082348485279273e-05,
+                "correction_negative": -3.281343486726143e-06,
+                "correction_absolute": 5.410482833951887e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "first_element",
+                "x_region": "transition",
+                "x_bounds": [
+                  -3,
+                  -2.25
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 1.0079457152017706e-05,
+                "correction_signed": 4.828104169100872e-06,
+                "correction_positive": 7.3464236180171156e-06,
+                "correction_negative": -2.5183194489162448e-06,
+                "correction_absolute": 9.86474306693336e-06,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "first_element",
+                "x_region": "trace_buffer",
+                "x_bounds": [
+                  -2.25,
+                  -2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 6.100441644824411e-07,
+                "correction_signed": 1.800803323235596e-06,
+                "correction_positive": 1.9605329189107987e-06,
+                "correction_negative": -1.597295956752036e-07,
+                "correction_absolute": 2.1202625145860024e-06,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "first_element",
+                "x_region": "downstream",
+                "x_bounds": [
+                  -2,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0008641464379355404,
+                "correction_signed": 8.310960741508432e-05,
+                "correction_positive": 8.844825446388858e-05,
+                "correction_negative": -5.338647048804271e-06,
+                "correction_absolute": 9.378690151269285e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "global",
+                "x_region": "all",
+                "x_bounds": [
+                  -4,
+                  2
+                ],
+                "lower": 0,
+                "upper": 4,
+                "k_integral": 12.116841803081446,
+                "correction_signed": 0.00020831172557151577,
+                "correction_positive": 0.00029545241213376405,
+                "correction_negative": -8.714068656224851e-05,
+                "correction_absolute": 0.00038259309869601255,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "global",
+                "x_region": "upstream_plateau",
+                "x_bounds": [
+                  -4,
+                  -3
+                ],
+                "lower": 0,
+                "upper": 4,
+                "k_integral": 2.0316646674054586,
+                "correction_signed": 4.7731661404392966e-05,
+                "correction_positive": 5.429173918259862e-05,
+                "correction_negative": -6.5600777782056636e-06,
+                "correction_absolute": 6.085181696080428e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "global",
+                "x_region": "transition",
+                "x_bounds": [
+                  -3,
+                  -2.25
+                ],
+                "lower": 0,
+                "upper": 4,
+                "k_integral": 1.512969808492903,
+                "correction_signed": 1.3931217999297075e-05,
+                "correction_positive": 2.66902338685329e-05,
+                "correction_negative": -1.2759015869235834e-05,
+                "correction_absolute": 3.9449249737768735e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "global",
+                "x_region": "trace_buffer",
+                "x_bounds": [
+                  -2.25,
+                  -2
+                ],
+                "lower": 0,
+                "upper": 4,
+                "k_integral": 0.5037705132731236,
+                "correction_signed": 5.459781859210858e-06,
+                "correction_positive": 9.313147502541411e-06,
+                "correction_negative": -3.853365643330557e-06,
+                "correction_absolute": 1.3166513145871968e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "global",
+                "x_region": "downstream",
+                "x_bounds": [
+                  -2,
+                  2
+                ],
+                "lower": 0,
+                "upper": 4,
+                "k_integral": 8.06843681391,
+                "correction_signed": 0.00014118906430861565,
+                "correction_positive": 0.00020515729158009224,
+                "correction_negative": -6.396822727147644e-05,
+                "correction_absolute": 0.0002691255188515687,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              }
+            ],
+            "quadrature": "physical native panels split exactly at each band edge; GL16; source retains roughness/cutoff/geometric panels"
+          },
+          "correction_seconds": 224.696706523,
+          "refreshed_trace_defect": 0.001145001156180117,
+          "refreshed_stage_residual_block_norms": [
+            0.033434549749867315,
+            0.00102722729029811,
+            5.001220344708111,
+            8.07421479450594e-05,
+            1.3724984028214302e-16,
+            1.7975754111950025e-16,
+            5.7598240413292415e-18,
+            0.00394089633436242
+          ]
+        },
+        {
+          "global_step": 67,
+          "time": 0.04187500000000002,
+          "solve_counts": {
+            "outer_sweeps": 1,
+            "momentum_predictor_solves": 1,
+            "pressure_system_solves": 1,
+            "epsilon_transport_solves": 1,
+            "k_transport_solves": 1,
+            "bound_calls": 1,
+            "additional_governing_equation_solves": 0
+          },
+          "k_linear_residual": 1.1102230246251565e-16,
+          "k_corrected_residual": 0.14649999478400283,
+          "added_frozen_residual": 0.14649999478400294,
+          "storage_reaction": 0.05807297822815674,
+          "raw_mass_norm": 0.0026987833415440298,
+          "bound_mass_norm": 0.0013875036555882588,
+          "correction_raw_ratio": 0.5141219134672883,
+          "integral": 0.0002107944481233633,
+          "corrected_minimum": {
+            "value": 5.10534717999197e-09,
+            "functional_kind": "Point",
+            "coordinate": [
+              -1.8333333333333335,
+              0,
+              0.009894838299428027
+            ],
+            "geometry": 2,
+            "inventory": "constitutive_baseline_normalization_ray"
+          },
+          "ground": {
+            "admissible": true,
+            "minimum": 5.105433751292893e-09,
+            "arithmetic_scale": 2.954952474048758e-17,
+            "point": [
+              1.5410485029379057,
+              0,
+              0
+            ],
+            "geometry": 4,
+            "extrema_checked": 19
+          },
+          "kkt_solves": 1528,
+          "pool_reentries": 325,
+          "inventory_rebuilds": 156,
+          "mass_factor_applications": 1259,
+          "finite_pool_complete": true,
+          "physical_floor_defect": 0,
+          "ground_floor_defect": 0,
+          "physical_correction_bands": {
+            "regions": [
+              {
+                "name": "z_le_0.01",
+                "x_region": "all",
+                "x_bounds": [
+                  -4,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0019462240429493644,
+                "correction_signed": 0.00013912796631791147,
+                "correction_positive": 0.00014954813646461966,
+                "correction_negative": -1.0420170146708189e-05,
+                "correction_absolute": 0.00015996830661132785,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.01",
+                "x_region": "upstream_plateau",
+                "x_bounds": [
+                  -4,
+                  -3
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0010736933504826508,
+                "correction_signed": 4.918686625691368e-05,
+                "correction_positive": 5.1557927893151076e-05,
+                "correction_negative": -2.371061636237403e-06,
+                "correction_absolute": 5.392898952938848e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.01",
+                "x_region": "transition",
+                "x_bounds": [
+                  -3,
+                  -2.25
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 8.381496149581663e-06,
+                "correction_signed": 4.890972294222442e-06,
+                "correction_positive": 7.4450042831134044e-06,
+                "correction_negative": -2.5540319888909622e-06,
+                "correction_absolute": 9.999036272004367e-06,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.01",
+                "x_region": "trace_buffer",
+                "x_bounds": [
+                  -2.25,
+                  -2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 5.106406435143779e-07,
+                "correction_signed": 1.8020264158911442e-06,
+                "correction_positive": 1.9612800223327306e-06,
+                "correction_negative": -1.5925360644158578e-07,
+                "correction_absolute": 2.1205336287743163e-06,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.01",
+                "x_region": "downstream",
+                "x_bounds": [
+                  -2,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0008636385556736205,
+                "correction_signed": 8.324810135088431e-05,
+                "correction_positive": 8.858392426602255e-05,
+                "correction_negative": -5.335822915138233e-06,
+                "correction_absolute": 9.391974718116078e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.1",
+                "x_region": "all",
+                "x_bounds": [
+                  -4,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.1,
+                "k_integral": 0.20400522163927207,
+                "correction_signed": 0.0002221615268624066,
+                "correction_positive": 0.00028591463271765573,
+                "correction_negative": -6.375310585524904e-05,
+                "correction_absolute": 0.0003496677385729048,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.1",
+                "x_region": "upstream_plateau",
+                "x_bounds": [
+                  -4,
+                  -3
+                ],
+                "lower": 0,
+                "upper": 0.1,
+                "k_integral": 0.041904443213905865,
+                "correction_signed": 4.893897852996267e-05,
+                "correction_positive": 5.408390738459559e-05,
+                "correction_negative": -5.1449288546329135e-06,
+                "correction_absolute": 5.922883623922851e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.1",
+                "x_region": "transition",
+                "x_bounds": [
+                  -3,
+                  -2.25
+                ],
+                "lower": 0,
+                "upper": 0.1,
+                "k_integral": 0.024323107722468602,
+                "correction_signed": 1.541920411321916e-05,
+                "correction_positive": 2.517762634943348e-05,
+                "correction_negative": -9.758422236214324e-06,
+                "correction_absolute": 3.4936048585647806e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.1",
+                "x_region": "trace_buffer",
+                "x_bounds": [
+                  -2.25,
+                  -2
+                ],
+                "lower": 0,
+                "upper": 0.1,
+                "k_integral": 0.007808278873741207,
+                "correction_signed": 6.0144697557109125e-06,
+                "correction_positive": 8.683978365563455e-06,
+                "correction_negative": -2.6695086098525474e-06,
+                "correction_absolute": 1.1353486975416002e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.1",
+                "x_region": "downstream",
+                "x_bounds": [
+                  -2,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.1,
+                "k_integral": 0.12996939182915623,
+                "correction_signed": 0.00015178887446351392,
+                "correction_positive": 0.00019796912061806316,
+                "correction_negative": -4.618024615454927e-05,
+                "correction_absolute": 0.0002441493667726124,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "wall_layer",
+                "x_region": "all",
+                "x_bounds": [
+                  -4,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.5,
+                "k_integral": 1.39458812715266,
+                "correction_signed": 0.0002110994915156383,
+                "correction_positive": 0.0002978148835116953,
+                "correction_negative": -8.671539199605721e-05,
+                "correction_absolute": 0.0003845302755077525,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "wall_layer",
+                "x_region": "upstream_plateau",
+                "x_bounds": [
+                  -4,
+                  -3
+                ],
+                "lower": 0,
+                "upper": 0.5,
+                "k_integral": 0.24472126274623257,
+                "correction_signed": 4.897200304172972e-05,
+                "correction_positive": 5.458741662238949e-05,
+                "correction_negative": -5.615413580659783e-06,
+                "correction_absolute": 6.0202830203049276e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "wall_layer",
+                "x_region": "transition",
+                "x_bounds": [
+                  -3,
+                  -2.25
+                ],
+                "lower": 0,
+                "upper": 0.5,
+                "k_integral": 0.17265955046601833,
+                "correction_signed": 1.4016594472523622e-05,
+                "correction_positive": 2.6767755677937332e-05,
+                "correction_negative": -1.275116120541371e-05,
+                "correction_absolute": 3.9518916883351046e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "wall_layer",
+                "x_region": "trace_buffer",
+                "x_bounds": [
+                  -2.25,
+                  -2
+                ],
+                "lower": 0,
+                "upper": 0.5,
+                "k_integral": 0.05700504511763065,
+                "correction_signed": 5.453272610655343e-06,
+                "correction_positive": 9.251785541372767e-06,
+                "correction_negative": -3.798512930717429e-06,
+                "correction_absolute": 1.3050298472090197e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "wall_layer",
+                "x_region": "downstream",
+                "x_bounds": [
+                  -2,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.5,
+                "k_integral": 0.9202022688227712,
+                "correction_signed": 0.0001426576213907296,
+                "correction_positive": 0.00020720792566999603,
+                "correction_negative": -6.455030427926624e-05,
+                "correction_absolute": 0.00027175822994926225,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "first_element",
+                "x_region": "all",
+                "x_bounds": [
+                  -4,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0019462240429493644,
+                "correction_signed": 0.00013912796631791147,
+                "correction_positive": 0.00014954813646461966,
+                "correction_negative": -1.0420170146708189e-05,
+                "correction_absolute": 0.00015996830661132785,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "first_element",
+                "x_region": "upstream_plateau",
+                "x_bounds": [
+                  -4,
+                  -3
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0010736933504826508,
+                "correction_signed": 4.918686625691368e-05,
+                "correction_positive": 5.1557927893151076e-05,
+                "correction_negative": -2.371061636237403e-06,
+                "correction_absolute": 5.392898952938848e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "first_element",
+                "x_region": "transition",
+                "x_bounds": [
+                  -3,
+                  -2.25
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 8.381496149581663e-06,
+                "correction_signed": 4.890972294222442e-06,
+                "correction_positive": 7.4450042831134044e-06,
+                "correction_negative": -2.5540319888909622e-06,
+                "correction_absolute": 9.999036272004367e-06,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "first_element",
+                "x_region": "trace_buffer",
+                "x_bounds": [
+                  -2.25,
+                  -2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 5.106406435143779e-07,
+                "correction_signed": 1.8020264158911442e-06,
+                "correction_positive": 1.9612800223327306e-06,
+                "correction_negative": -1.5925360644158578e-07,
+                "correction_absolute": 2.1205336287743163e-06,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "first_element",
+                "x_region": "downstream",
+                "x_bounds": [
+                  -2,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0008636385556736205,
+                "correction_signed": 8.324810135088431e-05,
+                "correction_positive": 8.858392426602255e-05,
+                "correction_negative": -5.335822915138233e-06,
+                "correction_absolute": 9.391974718116078e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "global",
+                "x_region": "all",
+                "x_bounds": [
+                  -4,
+                  2
+                ],
+                "lower": 0,
+                "upper": 4,
+                "k_integral": 12.114704034589737,
+                "correction_signed": 0.00021079444812336336,
+                "correction_positive": 0.0002981392622379562,
+                "correction_negative": -8.734481411459344e-05,
+                "correction_absolute": 0.0003854840763525496,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "global",
+                "x_region": "upstream_plateau",
+                "x_bounds": [
+                  -4,
+                  -3
+                ],
+                "lower": 0,
+                "upper": 4,
+                "k_integral": 2.0314187980406646,
+                "correction_signed": 4.897291371581156e-05,
+                "correction_positive": 5.460119566371591e-05,
+                "correction_negative": -5.628281947904416e-06,
+                "correction_absolute": 6.0229477611620326e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "global",
+                "x_region": "transition",
+                "x_bounds": [
+                  -3,
+                  -2.25
+                ],
+                "lower": 0,
+                "upper": 4,
+                "k_integral": 1.5126753888121993,
+                "correction_signed": 1.3977916526772762e-05,
+                "correction_positive": 2.681110783482875e-05,
+                "correction_negative": -1.2833191308055991e-05,
+                "correction_absolute": 3.964429914288474e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "global",
+                "x_region": "trace_buffer",
+                "x_bounds": [
+                  -2.25,
+                  -2
+                ],
+                "lower": 0,
+                "upper": 4,
+                "k_integral": 0.5036672073680747,
+                "correction_signed": 5.437797205308189e-06,
+                "correction_positive": 9.267259291182153e-06,
+                "correction_negative": -3.8294620858739795e-06,
+                "correction_absolute": 1.3096721377056132e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "global",
+                "x_region": "downstream",
+                "x_bounds": [
+                  -2,
+                  2
+                ],
+                "lower": 0,
+                "upper": 4,
+                "k_integral": 8.066942640368797,
+                "correction_signed": 0.00014240582067547069,
+                "correction_positive": 0.00020745969944822987,
+                "correction_negative": -6.505387877275887e-05,
+                "correction_absolute": 0.0002725135782209887,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              }
+            ],
+            "quadrature": "physical native panels split exactly at each band edge; GL16; source retains roughness/cutoff/geometric panels"
+          },
+          "correction_seconds": 169.799806004,
+          "refreshed_trace_defect": 0.0011375867520309335,
+          "refreshed_stage_residual_block_norms": [
+            0.032878841810785875,
+            0.0010522520874923955,
+            5.00301344783841,
+            8.097093123909744e-05,
+            1.2696873020564083e-16,
+            1.5340232759533945e-16,
+            3.625301014248405e-17,
+            0.003915377235123709
+          ]
+        },
+        {
+          "global_step": 68,
+          "time": 0.042500000000000024,
+          "solve_counts": {
+            "outer_sweeps": 1,
+            "momentum_predictor_solves": 1,
+            "pressure_system_solves": 1,
+            "epsilon_transport_solves": 1,
+            "k_transport_solves": 1,
+            "bound_calls": 1,
+            "additional_governing_equation_solves": 0
+          },
+          "k_linear_residual": 5.551115123125783e-17,
+          "k_corrected_residual": 0.14641288070005434,
+          "added_frozen_residual": 0.14641288070005432,
+          "storage_reaction": 0.05866284530527033,
+          "raw_mass_norm": 0.0026849385537014887,
+          "bound_mass_norm": 0.0013890973636667618,
+          "correction_raw_ratio": 0.5173665377748535,
+          "integral": 0.00021260220022289734,
+          "corrected_minimum": {
+            "value": 5.105351381460338e-09,
+            "functional_kind": "Point",
+            "coordinate": [
+              -1.8407312949501626,
+              0,
+              0.009894997133793118
+            ],
+            "geometry": 2,
+            "inventory": "constitutive_baseline_normalization_ray"
+          },
+          "ground": {
+            "admissible": true,
+            "minimum": 5.105430831685097e-09,
+            "arithmetic_scale": 2.954804669738338e-17,
+            "point": [
+              1.5410002406909258,
+              0,
+              0
+            ],
+            "geometry": 4,
+            "extrema_checked": 20
+          },
+          "kkt_solves": 2941,
+          "pool_reentries": 660,
+          "inventory_rebuilds": 497,
+          "mass_factor_applications": 2340,
+          "finite_pool_complete": true,
+          "physical_floor_defect": 0,
+          "ground_floor_defect": 0,
+          "physical_correction_bands": {
+            "regions": [
+              {
+                "name": "z_le_0.01",
+                "x_region": "all",
+                "x_bounds": [
+                  -4,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0019253671388911636,
+                "correction_signed": 0.00014029584201559332,
+                "correction_positive": 0.00015018418285681558,
+                "correction_negative": -9.888340841222278e-06,
+                "correction_absolute": 0.00016007252369803785,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.01",
+                "x_region": "upstream_plateau",
+                "x_bounds": [
+                  -4,
+                  -3
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0010549604782250815,
+                "correction_signed": 5.019291481444065e-05,
+                "correction_positive": 5.200181675220646e-05,
+                "correction_negative": -1.808901937765807e-06,
+                "correction_absolute": 5.381071868997227e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.01",
+                "x_region": "transition",
+                "x_bounds": [
+                  -3,
+                  -2.25
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 6.823999970757854e-06,
+                "correction_signed": 4.9527760354511245e-06,
+                "correction_positive": 7.5323936282156845e-06,
+                "correction_negative": -2.5796175927645613e-06,
+                "correction_absolute": 1.0112011220980246e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.01",
+                "x_region": "trace_buffer",
+                "x_bounds": [
+                  -2.25,
+                  -2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 4.221184505103675e-07,
+                "correction_signed": 1.8255228443615768e-06,
+                "correction_positive": 1.9853010457945543e-06,
+                "correction_negative": -1.597782014329773e-07,
+                "correction_absolute": 2.1450792472275315e-06,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.01",
+                "x_region": "downstream",
+                "x_bounds": [
+                  -2,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0008631605422448154,
+                "correction_signed": 8.332462832133992e-05,
+                "correction_positive": 8.866467143059888e-05,
+                "correction_negative": -5.340043109258935e-06,
+                "correction_absolute": 9.400471453985781e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.1",
+                "x_region": "all",
+                "x_bounds": [
+                  -4,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.1,
+                "k_integral": 0.20268898321383935,
+                "correction_signed": 0.00022407077027640767,
+                "correction_positive": 0.00028808862193817683,
+                "correction_negative": -6.401785166176906e-05,
+                "correction_absolute": 0.00035210647359994586,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.1",
+                "x_region": "upstream_plateau",
+                "x_bounds": [
+                  -4,
+                  -3
+                ],
+                "lower": 0,
+                "upper": 0.1,
+                "k_integral": 0.041722061172101726,
+                "correction_signed": 4.965037883322058e-05,
+                "correction_positive": 5.4355607585504035e-05,
+                "correction_negative": -4.7052287522834625e-06,
+                "correction_absolute": 5.90608363377875e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.1",
+                "x_region": "transition",
+                "x_bounds": [
+                  -3,
+                  -2.25
+                ],
+                "lower": 0,
+                "upper": 0.1,
+                "k_integral": 0.024142699055435354,
+                "correction_signed": 1.552633323170458e-05,
+                "correction_positive": 2.539408994814368e-05,
+                "correction_negative": -9.867756716439119e-06,
+                "correction_absolute": 3.5261846664582804e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.1",
+                "x_region": "trace_buffer",
+                "x_bounds": [
+                  -2.25,
+                  -2
+                ],
+                "lower": 0,
+                "upper": 0.1,
+                "k_integral": 0.007747308746136582,
+                "correction_signed": 6.0717672459127785e-06,
+                "correction_positive": 8.761942985026828e-06,
+                "correction_negative": -2.6901757391140503e-06,
+                "correction_absolute": 1.1452118724140878e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.1",
+                "x_region": "downstream",
+                "x_bounds": [
+                  -2,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.1,
+                "k_integral": 0.1290769142401657,
+                "correction_signed": 0.00015282229096556967,
+                "correction_positive": 0.00019957698141950204,
+                "correction_negative": -4.6754690453932445e-05,
+                "correction_absolute": 0.00024633167187343446,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "wall_layer",
+                "x_region": "all",
+                "x_bounds": [
+                  -4,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.5,
+                "k_integral": 1.392474882241603,
+                "correction_signed": 0.0002129099672045014,
+                "correction_positive": 0.00030015400511009715,
+                "correction_negative": -8.724403790559547e-05,
+                "correction_absolute": 0.00038739804301569263,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "wall_layer",
+                "x_region": "upstream_plateau",
+                "x_bounds": [
+                  -4,
+                  -3
+                ],
+                "lower": 0,
+                "upper": 0.5,
+                "k_integral": 0.24447955236936875,
+                "correction_signed": 4.972265746563543e-05,
+                "correction_positive": 5.4874174335775434e-05,
+                "correction_negative": -5.1515168701399935e-06,
+                "correction_absolute": 6.002569120591543e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "wall_layer",
+                "x_region": "transition",
+                "x_bounds": [
+                  -3,
+                  -2.25
+                ],
+                "lower": 0,
+                "upper": 0.5,
+                "k_integral": 0.17236772736702255,
+                "correction_signed": 1.411768517808076e-05,
+                "correction_positive": 2.7000756149376998e-05,
+                "correction_negative": -1.2883070971296255e-05,
+                "correction_absolute": 3.988382712067325e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "wall_layer",
+                "x_region": "trace_buffer",
+                "x_bounds": [
+                  -2.25,
+                  -2
+                ],
+                "lower": 0,
+                "upper": 0.5,
+                "k_integral": 0.056903075517486204,
+                "correction_signed": 5.506066999494232e-06,
+                "correction_positive": 9.33430630173887e-06,
+                "correction_negative": -3.82823930224464e-06,
+                "correction_absolute": 1.3162545603983509e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "wall_layer",
+                "x_region": "downstream",
+                "x_bounds": [
+                  -2,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.5,
+                "k_integral": 0.9187245269877276,
+                "correction_signed": 0.00014356355756129085,
+                "correction_positive": 0.00020894476832320548,
+                "correction_negative": -6.538121076191462e-05,
+                "correction_absolute": 0.0002743259790851201,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "first_element",
+                "x_region": "all",
+                "x_bounds": [
+                  -4,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0019253671388911636,
+                "correction_signed": 0.00014029584201559332,
+                "correction_positive": 0.00015018418285681558,
+                "correction_negative": -9.888340841222278e-06,
+                "correction_absolute": 0.00016007252369803785,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "first_element",
+                "x_region": "upstream_plateau",
+                "x_bounds": [
+                  -4,
+                  -3
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0010549604782250815,
+                "correction_signed": 5.019291481444065e-05,
+                "correction_positive": 5.200181675220646e-05,
+                "correction_negative": -1.808901937765807e-06,
+                "correction_absolute": 5.381071868997227e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "first_element",
+                "x_region": "transition",
+                "x_bounds": [
+                  -3,
+                  -2.25
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 6.823999970757854e-06,
+                "correction_signed": 4.9527760354511245e-06,
+                "correction_positive": 7.5323936282156845e-06,
+                "correction_negative": -2.5796175927645613e-06,
+                "correction_absolute": 1.0112011220980246e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "first_element",
+                "x_region": "trace_buffer",
+                "x_bounds": [
+                  -2.25,
+                  -2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 4.221184505103675e-07,
+                "correction_signed": 1.8255228443615768e-06,
+                "correction_positive": 1.9853010457945543e-06,
+                "correction_negative": -1.597782014329773e-07,
+                "correction_absolute": 2.1450792472275315e-06,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "first_element",
+                "x_region": "downstream",
+                "x_bounds": [
+                  -2,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0008631605422448154,
+                "correction_signed": 8.332462832133992e-05,
+                "correction_positive": 8.866467143059888e-05,
+                "correction_negative": -5.340043109258935e-06,
+                "correction_absolute": 9.400471453985781e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "global",
+                "x_region": "all",
+                "x_bounds": [
+                  -4,
+                  2
+                ],
+                "lower": 0,
+                "upper": 4,
+                "k_integral": 12.112572017677707,
+                "correction_signed": 0.00021260220022289663,
+                "correction_positive": 0.00030048289097119046,
+                "correction_negative": -8.788069074829219e-05,
+                "correction_absolute": 0.00038836358171948266,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "global",
+                "x_region": "upstream_plateau",
+                "x_bounds": [
+                  -4,
+                  -3
+                ],
+                "lower": 0,
+                "upper": 4,
+                "k_integral": 2.0311741125239218,
+                "correction_signed": 4.972465059966507e-05,
+                "correction_positive": 5.488836958924921e-05,
+                "correction_negative": -5.163718989584134e-06,
+                "correction_absolute": 6.005208857883335e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "global",
+                "x_region": "transition",
+                "x_bounds": [
+                  -3,
+                  -2.25
+                ],
+                "lower": 0,
+                "upper": 4,
+                "k_integral": 1.5123818667223645,
+                "correction_signed": 1.407884071888475e-05,
+                "correction_positive": 2.704456008246346e-05,
+                "correction_negative": -1.2965719363578739e-05,
+                "correction_absolute": 4.00102794460422e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "global",
+                "x_region": "trace_buffer",
+                "x_bounds": [
+                  -2.25,
+                  -2
+                ],
+                "lower": 0,
+                "upper": 4,
+                "k_integral": 0.5035641466357665,
+                "correction_signed": 5.4904674179841516e-06,
+                "correction_positive": 9.349904214455707e-06,
+                "correction_negative": -3.85943679647155e-06,
+                "correction_absolute": 1.3209341010927258e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "global",
+                "x_region": "downstream",
+                "x_bounds": [
+                  -2,
+                  2
+                ],
+                "lower": 0,
+                "upper": 4,
+                "k_integral": 8.065451891795721,
+                "correction_signed": 0.00014330824148636297,
+                "correction_positive": 0.00020920005708502084,
+                "correction_negative": -6.589181559865796e-05,
+                "correction_absolute": 0.0002750918726836788,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              }
+            ],
+            "quadrature": "physical native panels split exactly at each band edge; GL16; source retains roughness/cutoff/geometric panels"
+          },
+          "correction_seconds": 587.315219716,
+          "refreshed_trace_defect": 0.0011336404808238304,
+          "refreshed_stage_residual_block_norms": [
+            0.032720292284114424,
+            0.0010896255563239247,
+            5.00497001912411,
+            8.121937985110613e-05,
+            1.161565785368849e-16,
+            1.498630777201922e-16,
+            2.2700482986415246e-17,
+            0.0039017948508173425
+          ]
+        },
+        {
+          "global_step": 69,
+          "time": 0.043125000000000024,
+          "solve_counts": {
+            "outer_sweeps": 1,
+            "momentum_predictor_solves": 1,
+            "pressure_system_solves": 1,
+            "epsilon_transport_solves": 1,
+            "k_transport_solves": 1,
+            "bound_calls": 1,
+            "additional_governing_equation_solves": 0
+          },
+          "k_linear_residual": 1.3877787807814457e-16,
+          "k_corrected_residual": 0.1463218198046946,
+          "added_frozen_residual": 0.14632181980469453,
+          "storage_reaction": 0.059194635424783676,
+          "raw_mass_norm": 0.002671599764363254,
+          "bound_mass_norm": 0.0013905815235725947,
+          "correction_raw_ratio": 0.5205051827454493,
+          "integral": 0.00021438807920500544,
+          "corrected_minimum": {
+            "value": 5.1054412888775195e-09,
+            "functional_kind": "Point",
+            "coordinate": [
+              -3,
+              0,
+              0.002920866049033024
+            ],
+            "geometry": 0,
+            "inventory": "trace_baseline_normalization_ray"
+          },
+          "ground": {
+            "admissible": true,
+            "minimum": 5.105489790442536e-09,
+            "arithmetic_scale": 2.96640678097618e-17,
+            "point": [
+              -3.5447763810856543,
+              0,
+              0
+            ],
+            "geometry": 0,
+            "extrema_checked": 20
+          },
+          "kkt_solves": 980,
+          "pool_reentries": 176,
+          "inventory_rebuilds": 66,
+          "mass_factor_applications": 854,
+          "finite_pool_complete": true,
+          "physical_floor_defect": 0,
+          "ground_floor_defect": 0,
+          "physical_correction_bands": {
+            "regions": [
+              {
+                "name": "z_le_0.01",
+                "x_region": "all",
+                "x_bounds": [
+                  -4,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0019061302569571628,
+                "correction_signed": 0.00014162826447170762,
+                "correction_positive": 0.00015089579723781047,
+                "correction_negative": -9.267532766102927e-06,
+                "correction_absolute": 0.00016016333000391341,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.01",
+                "x_region": "upstream_plateau",
+                "x_bounds": [
+                  -4,
+                  -3
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0010377261850655756,
+                "correction_signed": 5.142300826702338e-05,
+                "correction_positive": 5.257948240911045e-05,
+                "correction_negative": -1.156474142087062e-06,
+                "correction_absolute": 5.373595655119751e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.01",
+                "x_region": "transition",
+                "x_bounds": [
+                  -3,
+                  -2.25
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 5.378226447559443e-06,
+                "correction_signed": 4.994007468746052e-06,
+                "correction_positive": 7.60339875467527e-06,
+                "correction_negative": -2.6093912859292193e-06,
+                "correction_absolute": 1.021279004060449e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.01",
+                "x_region": "trace_buffer",
+                "x_bounds": [
+                  -2.25,
+                  -2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 3.1940427631342523e-07,
+                "correction_signed": 1.8238548866545477e-06,
+                "correction_positive": 1.984364356494996e-06,
+                "correction_negative": -1.6050946984044804e-07,
+                "correction_absolute": 2.1448738263354442e-06,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.01",
+                "x_region": "downstream",
+                "x_bounds": [
+                  -2,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0008627064411677133,
+                "correction_signed": 8.338739384928361e-05,
+                "correction_positive": 8.872855171752981e-05,
+                "correction_negative": -5.341157868246193e-06,
+                "correction_absolute": 9.4069709585776e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.1",
+                "x_region": "all",
+                "x_bounds": [
+                  -4,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.1,
+                "k_integral": 0.20137712295531468,
+                "correction_signed": 0.00022592857236516036,
+                "correction_positive": 0.0002900230268437203,
+                "correction_negative": -6.409445447855977e-05,
+                "correction_absolute": 0.0003541174813222801,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.1",
+                "x_region": "upstream_plateau",
+                "x_bounds": [
+                  -4,
+                  -3
+                ],
+                "lower": 0,
+                "upper": 0.1,
+                "k_integral": 0.04154162777371346,
+                "correction_signed": 5.0513533335575304e-05,
+                "correction_positive": 5.4705473818367346e-05,
+                "correction_negative": -4.191940482792039e-06,
+                "correction_absolute": 5.889741430115939e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.1",
+                "x_region": "transition",
+                "x_bounds": [
+                  -3,
+                  -2.25
+                ],
+                "lower": 0,
+                "upper": 0.1,
+                "k_integral": 0.023962932092525906,
+                "correction_signed": 1.562353089141852e-05,
+                "correction_positive": 2.5580938381524824e-05,
+                "correction_negative": -9.9574074901063e-06,
+                "correction_absolute": 3.5538345871631124e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.1",
+                "x_region": "trace_buffer",
+                "x_bounds": [
+                  -2.25,
+                  -2
+                ],
+                "lower": 0,
+                "upper": 0.1,
+                "k_integral": 0.007686407117065521,
+                "correction_signed": 6.039135921101921e-06,
+                "correction_positive": 8.711591417012428e-06,
+                "correction_negative": -2.672455495910511e-06,
+                "correction_absolute": 1.138404691292294e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "z_le_0.1",
+                "x_region": "downstream",
+                "x_bounds": [
+                  -2,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.1,
+                "k_integral": 0.12818615597200975,
+                "correction_signed": 0.00015375237221706463,
+                "correction_positive": 0.00020102502322681538,
+                "correction_negative": -4.727265100975089e-05,
+                "correction_absolute": 0.0002482976742365663,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "wall_layer",
+                "x_region": "all",
+                "x_bounds": [
+                  -4,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.5,
+                "k_integral": 1.3903676291470974,
+                "correction_signed": 0.00021469777629253884,
+                "correction_positive": 0.0003022298586741123,
+                "correction_negative": -8.753208238157326e-05,
+                "correction_absolute": 0.00038976194105568555,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "wall_layer",
+                "x_region": "upstream_plateau",
+                "x_bounds": [
+                  -4,
+                  -3
+                ],
+                "lower": 0,
+                "upper": 0.5,
+                "k_integral": 0.24423927805740334,
+                "correction_signed": 5.063469692018676e-05,
+                "correction_positive": 5.5240336185962735e-05,
+                "correction_negative": -4.605639265775947e-06,
+                "correction_absolute": 5.9845975451738684e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "wall_layer",
+                "x_region": "transition",
+                "x_bounds": [
+                  -3,
+                  -2.25
+                ],
+                "lower": 0,
+                "upper": 0.5,
+                "k_integral": 0.17207681006147438,
+                "correction_signed": 1.4207426811938472e-05,
+                "correction_positive": 2.7200023319542343e-05,
+                "correction_negative": -1.2992596507603854e-05,
+                "correction_absolute": 4.0192619827146197e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "wall_layer",
+                "x_region": "trace_buffer",
+                "x_bounds": [
+                  -2.25,
+                  -2
+                ],
+                "lower": 0,
+                "upper": 0.5,
+                "k_integral": 0.05680128037907457,
+                "correction_signed": 5.477560727966156e-06,
+                "correction_positive": 9.279781093723588e-06,
+                "correction_negative": -3.8022203657574277e-06,
+                "correction_absolute": 1.3082001459481015e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "wall_layer",
+                "x_region": "downstream",
+                "x_bounds": [
+                  -2,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.5,
+                "k_integral": 0.9172502606491435,
+                "correction_signed": 0.0001443780918324478,
+                "correction_positive": 0.00021050971807488352,
+                "correction_negative": -6.613162624243594e-05,
+                "correction_absolute": 0.00027664134431731944,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "first_element",
+                "x_region": "all",
+                "x_bounds": [
+                  -4,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0019061302569571628,
+                "correction_signed": 0.00014162826447170762,
+                "correction_positive": 0.00015089579723781047,
+                "correction_negative": -9.267532766102927e-06,
+                "correction_absolute": 0.00016016333000391341,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "first_element",
+                "x_region": "upstream_plateau",
+                "x_bounds": [
+                  -4,
+                  -3
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0010377261850655756,
+                "correction_signed": 5.142300826702338e-05,
+                "correction_positive": 5.257948240911045e-05,
+                "correction_negative": -1.156474142087062e-06,
+                "correction_absolute": 5.373595655119751e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "first_element",
+                "x_region": "transition",
+                "x_bounds": [
+                  -3,
+                  -2.25
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 5.378226447559443e-06,
+                "correction_signed": 4.994007468746052e-06,
+                "correction_positive": 7.60339875467527e-06,
+                "correction_negative": -2.6093912859292193e-06,
+                "correction_absolute": 1.021279004060449e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "first_element",
+                "x_region": "trace_buffer",
+                "x_bounds": [
+                  -2.25,
+                  -2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 3.1940427631342523e-07,
+                "correction_signed": 1.8238548866545477e-06,
+                "correction_positive": 1.984364356494996e-06,
+                "correction_negative": -1.6050946984044804e-07,
+                "correction_absolute": 2.1448738263354442e-06,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "first_element",
+                "x_region": "downstream",
+                "x_bounds": [
+                  -2,
+                  2
+                ],
+                "lower": 0,
+                "upper": 0.01,
+                "k_integral": 0.0008627064411677133,
+                "correction_signed": 8.338739384928361e-05,
+                "correction_positive": 8.872855171752981e-05,
+                "correction_negative": -5.341157868246193e-06,
+                "correction_absolute": 9.4069709585776e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "global",
+                "x_region": "all",
+                "x_bounds": [
+                  -4,
+                  2
+                ],
+                "lower": 0,
+                "upper": 4,
+                "k_integral": 12.110445781213725,
+                "correction_signed": 0.00021438807920500514,
+                "correction_positive": 0.00030256260682862113,
+                "correction_negative": -8.817452762361646e-05,
+                "correction_absolute": 0.0003907371344522376,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "global",
+                "x_region": "upstream_plateau",
+                "x_bounds": [
+                  -4,
+                  -3
+                ],
+                "lower": 0,
+                "upper": 4,
+                "k_integral": 2.030930812232742,
+                "correction_signed": 5.06380380911245e-05,
+                "correction_positive": 5.52549825687532e-05,
+                "correction_negative": -4.616944477628655e-06,
+                "correction_absolute": 5.987192704638185e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "global",
+                "x_region": "transition",
+                "x_bounds": [
+                  -3,
+                  -2.25
+                ],
+                "lower": 0,
+                "upper": 4,
+                "k_integral": 1.5120892498101428,
+                "correction_signed": 1.4168376747626622e-05,
+                "correction_positive": 2.724416620746617e-05,
+                "correction_negative": -1.3075789459839534e-05,
+                "correction_absolute": 4.0319955667305706e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "global",
+                "x_region": "trace_buffer",
+                "x_bounds": [
+                  -2.25,
+                  -2
+                ],
+                "lower": 0,
+                "upper": 4,
+                "k_integral": 0.5034612522384803,
+                "correction_signed": 5.462074897705068e-06,
+                "correction_positive": 9.295265267372582e-06,
+                "correction_negative": -3.83319036966753e-06,
+                "correction_absolute": 1.3128455637040112e-05,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              },
+              {
+                "name": "global",
+                "x_region": "downstream",
+                "x_bounds": [
+                  -2,
+                  2
+                ],
+                "lower": 0,
+                "upper": 4,
+                "k_integral": 8.063964466932317,
+                "correction_signed": 0.00014411958946854934,
+                "correction_positive": 0.00021076819278502957,
+                "correction_negative": -6.664860331648065e-05,
+                "correction_absolute": 0.00027741679610151024,
+                "production": null,
+                "coefficient_integral_row": null,
+                "destruction": null,
+                "invalid_diagnostic_points": []
+              }
+            ],
+            "quadrature": "physical native panels split exactly at each band edge; GL16; source retains roughness/cutoff/geometric panels"
+          },
+          "correction_seconds": 71.220510162,
+          "refreshed_trace_defect": 0.0011261791685147904,
+          "refreshed_stage_residual_block_norms": [
+            0.0325717605244211,
+            0.0011294505497866404,
+            5.0063843509994514,
+            8.148295444231403e-05,
+            9.126123219559284e-17,
+            1.8832426455988902e-16,
+            9.164896489291528e-17,
+            0.0038761143017894918
+          ]
+        }
+      ],
+      "prefix_integral": 0.005024866793258327,
+      "prefix_counted_once": true,
+      "completed_block_alpha_zero": {
+        "time": 0.043125000000000024,
+        "mean_wall_stress": 0.017337924662057313,
+        "dimensional_spatial_blocks": [
+          1.9434858031470552,
+          0.21154723084789667,
+          10.69028109034088,
+          0.1985923170803733
+        ],
+        "common_normalized_spatial_blocks": [
+          4.958904729222332,
+          0.5397737209126124,
+          21.372284411125708,
+          3.9463073037240077
+        ],
+        "refreshed_matching_defect": 0.0011261791685147904,
+        "qualification": false
+      }
+    },
+    "original_graded_terminal": {
+      "status": "numerically_rejected",
+      "accepted_steps": 64.0,
+      "accepted_time": 0.04000000000000002,
+      "checkpoint_copy": {
+        "order": 1,
+        "steps": 64,
+        "time": 0.04000000000000002,
+        "dt": 0.000625,
+        "sha256": "4a953092ce4e85c6a6fec9c172ce5eee83bf820c8b0600762637afd106a9abe0"
+      },
+      "original_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/selected-U05-graded/trajectory/steps-000057-000064/checkpoint.3",
+      "checkpoint_sha256": "4a953092ce4e85c6a6fec9c172ce5eee83bf820c8b0600762637afd106a9abe0",
+      "completed_targets": [],
+      "next_target": 80.0,
+      "failure": "EP-AWF patch: PIMPLE k corrector failed: k_bound_algebra_wall_time_limit",
+      "cumulative_bound_integral": 0.005024866793258327,
+      "bound_solver": "WorkingSet",
+      "backend_recorded_in_progress": false,
+      "driver": null,
+      "native": null,
+      "native_matches": false,
+      "driver_command": null,
+      "native_command": null,
+      "campaign_lock": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/selected-U05-graded/trajectory/.campaign.lock",
+        "inherited_by": [],
+        "kernel_locks": []
+      },
+      "executable_sha256": "255190519d8dc7e9fa66e6fdf91acdc802d9562541a9b1d245f7c6d83fb7afbd",
+      "source_revision": "5e524ca2a3fc548a120e7bbe5c2142e5432524ad",
+      "supervisor_matches": false,
+      "supervisor_command": null
+    },
+    "upstream_one": {
+      "status": "running",
+      "accepted_steps": 446.0,
+      "accepted_time": 0.27874999999999683,
+      "checkpoint_copy": {
+        "order": 1,
+        "steps": 446,
+        "time": 0.27874999999999683,
+        "dt": 0.000625,
+        "sha256": "318a9d5cd4b0023998b8a7d5a480ce500e9b8e9957d8dee4eb93ee7669ba257e"
+      },
+      "original_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/selected-U05-one/trajectory/steps-000441-000448/checkpoint.2",
+      "checkpoint_sha256": "318a9d5cd4b0023998b8a7d5a480ce500e9b8e9957d8dee4eb93ee7669ba257e",
+      "completed_targets": [
+        80.0,
+        160.0
+      ],
+      "next_target": 800.0,
+      "failure": null,
+      "cumulative_bound_integral": 0.4820508217744868,
+      "bound_solver": "WorkingSet",
+      "backend_recorded_in_progress": false,
+      "driver": {
+        "pid": 162934,
+        "start": "19154228",
+        "executable": "/usr/bin/python3.10",
+        "cwd": "/home/jay"
+      },
+      "native": {
+        "pid": 177743,
+        "start": "20242376",
+        "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/selected-U05-one/trajectory/runtime/IncNavierStokesSolver",
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/selected-U05-one/trajectory/steps-000441-000448"
+      },
+      "native_matches": true,
+      "driver_command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/source/solvers/IncNavierStokesSolver/Tests/RANS/continue_cls_epawf_pimple.py",
+        "--solver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/screening/runtime/IncNavierStokesSolver",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/selected-U05-one/trajectory",
+        "--inventory",
+        "ConstitutiveV3",
+        "--wall-policy",
+        "Upstream",
+        "--block-steps",
+        "8",
+        "--timeout",
+        "7200.0",
+        "--targets",
+        "32",
+        "80",
+        "160",
+        "800",
+        "1600",
+        "3200",
+        "8000",
+        "--bound-max-add",
+        "2000",
+        "--bound-max-total",
+        "20000",
+        "--bound-max-separations",
+        "2000",
+        "--bound-max-seconds",
+        "900.0",
+        "--upstream-case",
+        "U05-one",
+        "--checkpoint",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/screening/U05-one/trajectory/checkpoint.4",
+        "--prefix-report",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/screening/U05-one/trajectory/case.evolution.json"
+      ],
+      "native_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/selected-U05-one/trajectory/runtime/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "campaign_lock": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/selected-U05-one/trajectory/.campaign.lock",
+        "inherited_by": [
+          {
+            "pid": 162934,
+            "fd": "3"
+          },
+          {
+            "pid": 177743,
+            "fd": "3"
+          }
+        ],
+        "kernel_locks": [
+          "23: FLOCK  ADVISORY  WRITE 162934 08:02:6168734 0 EOF"
+        ]
+      },
+      "executable_sha256": "255190519d8dc7e9fa66e6fdf91acdc802d9562541a9b1d245f7c6d83fb7afbd",
+      "source_revision": "5e524ca2a3fc548a120e7bbe5c2142e5432524ad",
+      "supervisor_matches": true,
+      "supervisor_command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/source/solvers/IncNavierStokesSolver/Tests/RANS/supervise_cls_epawf_pimple.py",
+        "--solver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/screening/runtime/IncNavierStokesSolver",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/selected-U05-one",
+        "--inventory",
+        "ConstitutiveV3",
+        "--wall-policy",
+        "Upstream",
+        "--upstream-case",
+        "U05-one",
+        "--checkpoint",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/screening/U05-one/trajectory/checkpoint.4",
+        "--prefix-report",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/screening/U05-one/trajectory/case.evolution.json",
+        "--targets",
+        "32",
+        "80",
+        "160",
+        "800",
+        "1600",
+        "3200",
+        "8000",
+        "--block-steps",
+        "8",
+        "--timeout",
+        "7200",
+        "--bound-max-add",
+        "2000",
+        "--bound-max-total",
+        "20000",
+        "--bound-max-separations",
+        "2000",
+        "--bound-max-seconds",
+        "900"
+      ]
+    },
+    "uniform_G": {
+      "status": "running",
+      "accepted_steps": 1271.0,
+      "accepted_time": 0.7943749999999858,
+      "checkpoint_copy": {
+        "order": 1,
+        "steps": 1271,
+        "time": 0.7943749999999858,
+        "dt": 0.000625,
+        "sha256": "a7c6f4b29739fee15b952f00923c7339b6d3353826513257ce571f34adbf1fd2"
+      },
+      "original_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-G/trajectory/steps-001265-001272/checkpoint",
+      "checkpoint_sha256": "a7c6f4b29739fee15b952f00923c7339b6d3353826513257ce571f34adbf1fd2",
+      "completed_targets": [
+        32.0,
+        80.0,
+        160.0,
+        800.0
+      ],
+      "next_target": 1600.0,
+      "failure": null,
+      "cumulative_bound_integral": 0.0,
+      "bound_solver": "WorkingSet",
+      "backend_recorded_in_progress": false,
+      "driver": {
+        "pid": 141043,
+        "start": "16261332",
+        "executable": "/usr/bin/python3.10",
+        "cwd": "/home/jay"
+      },
+      "native": {
+        "pid": 177541,
+        "start": "20237671",
+        "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-G/trajectory/runtime/IncNavierStokesSolver",
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-G/trajectory/steps-001265-001272"
+      },
+      "native_matches": true,
+      "driver_command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/source/solvers/IncNavierStokesSolver/Tests/RANS/continue_cls_epawf_pimple.py",
+        "--solver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/screening/runtime/IncNavierStokesSolver",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-G/trajectory",
+        "--inventory",
+        "ConstitutiveV2",
+        "--wall-policy",
+        "UniformEPFlat",
+        "--block-steps",
+        "8",
+        "--timeout",
+        "7200.0",
+        "--targets",
+        "32",
+        "80",
+        "160",
+        "800",
+        "1600",
+        "3200",
+        "8000",
+        "--bound-max-add",
+        "2000",
+        "--bound-max-total",
+        "20000",
+        "--bound-max-separations",
+        "2000",
+        "--bound-max-seconds",
+        "900.0",
+        "--height-case",
+        "G",
+        "--checkpoint",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/focused/G/whole4/checkpoint",
+        "--prefix-report",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/focused/G/whole4/case.evolution.json"
+      ],
+      "native_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-G/trajectory/runtime/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "campaign_lock": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-G/trajectory/.campaign.lock",
+        "inherited_by": [
+          {
+            "pid": 141043,
+            "fd": "3"
+          },
+          {
+            "pid": 177541,
+            "fd": "3"
+          }
+        ],
+        "kernel_locks": [
+          "31: FLOCK  ADVISORY  WRITE 141043 08:02:6148654 0 EOF"
+        ]
+      },
+      "executable_sha256": "aa1071c74de72601f47c97ed413995434e1496dba07095ee970ac361825cb98d",
+      "source_revision": "71355155f8c782ffa68f718195d4c1ad8997032a",
+      "supervisor_matches": true,
+      "supervisor_command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/source/solvers/IncNavierStokesSolver/Tests/RANS/supervise_cls_epawf_pimple.py",
+        "--solver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/screening/runtime/IncNavierStokesSolver",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-G",
+        "--wall-policy",
+        "UniformEPFlat",
+        "--height-case",
+        "G",
+        "--checkpoint",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/focused/G/whole4/checkpoint",
+        "--prefix-report",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/focused/G/whole4/case.evolution.json",
+        "--targets",
+        "32",
+        "80",
+        "160",
+        "800",
+        "1600",
+        "3200",
+        "8000",
+        "--block-steps",
+        "8",
+        "--timeout",
+        "7200",
+        "--bound-max-add",
+        "2000",
+        "--bound-max-total",
+        "20000",
+        "--bound-max-separations",
+        "2000",
+        "--bound-max-seconds",
+        "900"
+      ]
+    },
+    "uniform_H": {
+      "status": "running",
+      "accepted_steps": 1623.0,
+      "accepted_time": 1.0143749999999836,
+      "checkpoint_copy": {
+        "order": 1,
+        "steps": 1623,
+        "time": 1.0143749999999836,
+        "dt": 0.000625,
+        "sha256": "1f15f01117384598e732f66b830c69fad726b484ff6801d5aa4293cd6dd902b9"
+      },
+      "original_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-H/trajectory/steps-001617-001624/checkpoint",
+      "checkpoint_sha256": "1f15f01117384598e732f66b830c69fad726b484ff6801d5aa4293cd6dd902b9",
+      "completed_targets": [
+        32.0,
+        80.0,
+        160.0,
+        800.0,
+        1600.0
+      ],
+      "next_target": 3200.0,
+      "failure": null,
+      "cumulative_bound_integral": 0.37575315544570537,
+      "bound_solver": "WorkingSet",
+      "backend_recorded_in_progress": false,
+      "driver": {
+        "pid": 141311,
+        "start": "16272871",
+        "executable": "/usr/bin/python3.10",
+        "cwd": "/home/jay"
+      },
+      "native": {
+        "pid": 177742,
+        "start": "20242375",
+        "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-H/trajectory/runtime/IncNavierStokesSolver",
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-H/trajectory/steps-001617-001624"
+      },
+      "native_matches": true,
+      "driver_command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/source/solvers/IncNavierStokesSolver/Tests/RANS/continue_cls_epawf_pimple.py",
+        "--solver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/screening/runtime/IncNavierStokesSolver",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-H/trajectory",
+        "--inventory",
+        "ConstitutiveV2",
+        "--wall-policy",
+        "UniformEPFlat",
+        "--block-steps",
+        "8",
+        "--timeout",
+        "7200.0",
+        "--targets",
+        "32",
+        "80",
+        "160",
+        "800",
+        "1600",
+        "3200",
+        "8000",
+        "--bound-max-add",
+        "2000",
+        "--bound-max-total",
+        "20000",
+        "--bound-max-separations",
+        "2000",
+        "--bound-max-seconds",
+        "900.0",
+        "--height-case",
+        "H",
+        "--checkpoint",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/focused/H/whole4/checkpoint",
+        "--prefix-report",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/focused/H/whole4/case.evolution.json"
+      ],
+      "native_command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-H/trajectory/runtime/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "campaign_lock": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-H/trajectory/.campaign.lock",
+        "inherited_by": [
+          {
+            "pid": 141311,
+            "fd": "3"
+          },
+          {
+            "pid": 177742,
+            "fd": "3"
+          }
+        ],
+        "kernel_locks": [
+          "28: FLOCK  ADVISORY  WRITE 141311 08:02:6148847 0 EOF"
+        ]
+      },
+      "executable_sha256": "aa1071c74de72601f47c97ed413995434e1496dba07095ee970ac361825cb98d",
+      "source_revision": "71355155f8c782ffa68f718195d4c1ad8997032a",
+      "supervisor_matches": true,
+      "supervisor_command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/source/solvers/IncNavierStokesSolver/Tests/RANS/supervise_cls_epawf_pimple.py",
+        "--solver",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/screening/runtime/IncNavierStokesSolver",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-H",
+        "--wall-policy",
+        "UniformEPFlat",
+        "--height-case",
+        "H",
+        "--checkpoint",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/focused/H/whole4/checkpoint",
+        "--prefix-report",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/focused/H/whole4/case.evolution.json",
+        "--targets",
+        "32",
+        "80",
+        "160",
+        "800",
+        "1600",
+        "3200",
+        "8000",
+        "--block-steps",
+        "8",
+        "--timeout",
+        "7200",
+        "--bound-max-add",
+        "2000",
+        "--bound-max-total",
+        "20000",
+        "--bound-max-separations",
+        "2000",
+        "--bound-max-seconds",
+        "900"
+      ]
+    }
+  },
+  "cross_pools": {
+    "replay-original": {
+      "replay-original": 2.7857883643130077e-13,
+      "replay-pool-v1": 6.423325564083534e-07
+    },
+    "replay-pool-v1": {
+      "replay-original": 2.499219313845233e-07,
+      "replay-pool-v1": 6.505213034913027e-19
+    }
+  },
+  "between_replay_mass_difference": 7.900418155273498e-06,
+  "cut_pool_interpretation": "Each replay retains every cut it discovers. Resolving the finite QP changes subsequent moving-cut discovery; the failed old pool is not native checkpoint history."
+}

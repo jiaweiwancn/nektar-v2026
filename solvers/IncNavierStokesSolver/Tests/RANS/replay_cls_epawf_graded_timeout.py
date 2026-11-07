@@ -22,6 +22,8 @@ def main():
     p.add_argument('--probe',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
     p.add_argument('--finite-solver',choices=('WorkingSet','RetainedPool'),default='RetainedPool')
     p.add_argument('--seconds',type=float,default=900.);p.add_argument('--full-trace',action='store_true')
+    p.add_argument('--total',type=int,default=20000);p.add_argument('--per-add',type=int,default=2000)
+    p.add_argument('--separations',type=int,default=2000)
     p.add_argument('--prepare-only',action='store_true');a=p.parse_args();os.environ.update(THREADS)
     a.output=a.output.resolve();a.output.mkdir(parents=True,exist_ok=False)
     require(sha(a.archive/'attempt.json')==PACKET and sha(a.archive/'checkpoint/State.bin')==CHECKPOINT,'saved failure identities differ')
@@ -35,14 +37,16 @@ def main():
     set_info(tree,'RANSWallPimpleKBoundTrace','Full' if a.full_trace else 'Summary')
     set_info(tree,'RANSWallPimpleKBoundTraceFile',str(a.output/'trace.jsonl'))
     set_info(tree,'RANSWallPimpleKBoundDumpFile',str(a.output/'pool.json'))
-    set_parameter(tree,'RANSWallPimpleKBoundMaxSeconds',a.seconds);write(tree,a.output/'case.xml')
+    for name,value in {'Seconds':a.seconds,'Total':a.total,'Add':a.per_add,'Separations':a.separations}.items():
+        set_parameter(tree,'RANSWallPimpleKBoundMax'+name,value)
+    write(tree,a.output/'case.xml')
     request=load(a.archive/'replay-input.json');request['native_checkpoint']=str(a.output/'checkpoint64')
     request['witnesses']=[q['k_bound'][name]['coordinate'] for name in ('raw_minimum','corrected_minimum')]
     write_json(a.output/'input.json',request)
     manifest=dict(status='prepared',archive=str(a.archive.resolve()),packet_sha256=PACKET,checkpoint_sha256=CHECKPOINT,
         raw_sha256=RAW,history_sha256=HISTORY,transport_A_sha256=q['matrix_sha256'],
         projection_metric='reconstructed native PicardKMass Mff on saved free rows, not transport A_k',
-        finite_solver=a.finite_solver,controls=dict(per_add=2000,total=20000,separations=2000,seconds=a.seconds),
+        finite_solver=a.finite_solver,controls=dict(per_add=a.per_add,total=a.total,separations=a.separations,seconds=a.seconds),
         xml_sha256=sha(a.output/'case.xml'),input_sha256=sha(a.output/'input.json'),governing_solves=0,ranks=1,threads=THREADS)
     write_json(a.output/'manifest.json',manifest)
     if a.prepare_only:return
