@@ -16,16 +16,18 @@ from run_cls_epawf_picard import load,run,require,write_json,sha,THREADS
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True)
     p.add_argument('--probe',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args()
-    a.output.mkdir(parents=True,exist_ok=False);os.environ.update(THREADS);out={}
+    a.output.mkdir(parents=True,exist_ok=True);os.environ.update(THREADS);out={}
     for case in 'ABCDEFGH':
         root=a.root/'screening'/case
         if not (root/'result.json').exists():continue
-        initial=load(root/'initial/case.evolution.json');folder=a.output/case;folder.mkdir()
-        write_json(folder/'input.json',dict(operation='contact',state=initial['state'],history=initial['state'],time=0.,alpha=0.,h=[],export_mass=True,
-            require_history_h0=False,inner_stress_model='SaturatedR2'))
-        rc=run([str(a.probe),str(root/'initial/case.xml'),'input.json','mass-and-bands.json'],folder,'probe.log',1800);write_json(folder/'receipt.json',rc)
-        require(rc['exit_code']==0,'physical mass/band-row replay failed '+case)
-        mass=load(folder/'mass-and-bands.json');M=np.array(mass['free_k_mass']);rows=np.array(mass['free_k_rows'],dtype=int)
+        initial=load(root/'initial/case.evolution.json');folder=a.output/case;folder.mkdir(exist_ok=True)
+        if not (folder/'mass-and-bands.json').exists():
+            write_json(folder/'input.json',dict(operation='contact',state=initial['state'],history=initial['state'],time=0.,alpha=0.,h=[],export_mass=True,
+                require_history_h0=False,inner_stress_model='SaturatedR2'))
+            rc=run([str(a.probe),str(root/'initial/case.xml'),'input.json','mass-and-bands.json'],folder,'probe.log',1800);write_json(folder/'receipt.json',rc)
+            require(rc['exit_code']==0,'physical mass/band-row replay failed '+case)
+        mass=load(folder/'mass-and-bands.json');require(mass['state_sha256']==initial['height_comparison_final']['state_sha256'],'cached mass replay belongs to a different case')
+        M=np.array(mass['free_k_mass']);rows=np.array(mass['free_k_rows'],dtype=int)
         offset=int(mass['offsets'][2]);size=int(mass['offsets'][3])-offset;index=rows-offset;factor=cho_factor(M,lower=True)
         bands=mass['fixed_physical_band_rows']['regions'];ell=np.array([b['coefficient_integral_row'] for b in bands]);free=ell[:,index]
         dual=cho_solve(factor,free.T).T

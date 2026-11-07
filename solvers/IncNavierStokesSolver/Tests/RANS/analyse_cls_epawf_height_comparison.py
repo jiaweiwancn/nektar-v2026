@@ -88,6 +88,10 @@ def main():
             actual_h0_sha256=result['actual_h0_sha256'],initial_checkpoint=result['native_h0_checkpoint'],accepted_checkpoint=result['accepted_checkpoint'],
             initial=compact_diagnostic(initial),initial_error_to_own_analytic= differences(initial,initial,True),observations={},qualification_events=result['qualification_events'],
             total_execution_seconds=result['trajectory_receipt']['seconds'])
+        native=load(s/case/'trajectory/case.evolution.json')
+        keys=('admissible','r2_qualified','r2_covariance','r2_scalar_domain','inner_stress','inner_constitutive_modification','wall_sources','interface','strong_continuity')
+        q['native_audits']={phase:{k:audit[k] for k in keys} for phase,audit in [('initial',native['state_audits'][0]),('final',native['state_audits'][-1])]}
+        q['initialization_work']=native['initialization_lift_calls_iterations'];q['native_zero_step_wall_seconds']=result['initial_receipt']['seconds']
         for step,packet in result['observations'].items():states[case][int(step)]=load(Path(packet['path']))
         if result.get('final'):states[case][int(result['steps'])]=result['final']
         for step,d in states[case].items():
