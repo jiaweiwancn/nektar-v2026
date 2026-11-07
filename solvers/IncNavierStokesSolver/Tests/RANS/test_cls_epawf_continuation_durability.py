@@ -11,6 +11,7 @@ from unittest.mock import patch
 
 from continue_cls_epawf_pimple import CampaignLock,StepLedger,process_identity,assert_native_stopped,load_progress,prefix_budget
 from run_cls_epawf_picard import require
+from capture_cls_epawf_projection_repair import identity_matches
 
 
 def fails(fn,word):
@@ -22,6 +23,9 @@ def fails(fn,word):
 
 def main():
     require(sys.platform=='linux','authoritative durability checks run on Linux')
+    require(identity_matches(dict(pid=7,start='token'),dict(pid=7.,start='token')),'numeric JSON PID identity mismatch')
+    require(not identity_matches(dict(pid=7,start='other'),dict(pid=7.,start='token')) and
+            not identity_matches(None,dict(pid=7.)),'stale/dead process matched')
     with tempfile.TemporaryDirectory(prefix='pimple-lock-') as folder:
         root=Path(folder);lock=CampaignLock(root)
         fails(lambda:CampaignLock(root),'campaign lock held')

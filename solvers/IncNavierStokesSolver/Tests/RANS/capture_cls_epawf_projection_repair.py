@@ -14,6 +14,14 @@ from run_cls_epawf_picard import load,require,sha,write_json,THREADS
 from continue_cls_epawf_pimple import header,process_identity,load_progress
 
 
+def identity_matches(actual,expected):
+    # Native JSON readers preserve binary64 vector signs by parsing integers
+    # as floats. PID identity is numerical; start tokens/paths are textual.
+    return actual is not None and all(
+        int(actual[k])==int(v) if k=='pid' else str(actual.get(k))==str(v)
+        for k,v in expected.items())
+
+
 def snapshot(campaign,output):
     """A rotating pathname is evidence only after a hash-validated copy."""
     for attempt in range(20):
@@ -33,7 +41,7 @@ def snapshot(campaign,output):
                 if expected:
                     actual=process_identity(expected['pid'])
                     identities[name]=dict(recorded=expected,actual=actual,
-                        matches=actual is not None and all(str(actual.get(k))==str(v) for k,v in expected.items()))
+                        matches=identity_matches(actual,expected))
             return dict(progress=progress,status=status,processes=identities,
                 archived_checkpoint=dict(path=str(output),**receipt))
         except FileNotFoundError:
