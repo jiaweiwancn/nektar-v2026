@@ -11,9 +11,6 @@ target_include_directories(RANSReducedModelChecks PRIVATE ${RANS_SOURCE_ROOT}/so
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     target_compile_options(RANSReducedModelChecks PRIVATE -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror)
 endif()
-target_sources(RANSWallResolutionProbe PRIVATE
-    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallTimeIntegration.cpp
-    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSHistory.cpp)
 add_executable(RANSKBoundQPChecks test_cls_epawf_k_bound_qp.cpp)
 target_include_directories(RANSKBoundQPChecks PRIVATE ${RANS_SOURCE_ROOT}/solvers)
 enable_testing()
@@ -179,6 +176,9 @@ foreach(rans_r3_probe RANSNonpressureActionProbe RANSWallResolutionProbe)
         target_compile_options(${rans_r3_probe} PRIVATE -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror)
     endif()
 endforeach()
+target_sources(RANSWallResolutionProbe PRIVATE
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallTimeIntegration.cpp
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSHistory.cpp)
 add_executable(RANSDurableProgressProbe ${RANS_SOURCE_ROOT}/docs/plans/cls-epawf-revised-evidence/m8-r3/durable-probe.cpp)
 target_include_directories(RANSDurableProgressProbe PRIVATE ${RANS_SOURCE_ROOT}/solvers ${RANS_SOURCE_ROOT}/library)
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
