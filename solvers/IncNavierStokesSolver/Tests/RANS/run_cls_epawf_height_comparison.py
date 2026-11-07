@@ -23,13 +23,15 @@ CASES=dict(A=(2.,'graded','Point',1.),B=(2.,'graded','Point',2.),C=(2.,'graded',
 WORK=dict(add=2000,total=20000,separations=2000,seconds=900)
 
 
-def case_xml(case,folder,steps,dt=.000625,restart=None,normal=16,hard_reject=0):
+def case_xml(case,folder,steps,dt=.000625,restart=None,normal=16,hard_reject=0,outer_refined=False):
     H,partition,sampler,tail=CASES[case]
     xml=prepare(folder,dt,steps,True,restart=restart,checkpoint=True,k_bound='MassProjection',floor_relative=1e-8,
         snapshots=True,inventory='ConstitutiveV2',wall_policy='UniformEPFlat',bound_work=WORK,hard_reject_step=hard_reject)
     root=ET.parse(xml).getroot()
     knots=KN if partition=='graded' else [z for z in KN if z==0 or z>=H]
-    if partition=='one':tensor_mesh(root,knots,3,2,6.,1.,points=[8,8],xknots=X)
+    require(not outer_refined or case in ('G','H'),'focused outer refinement is declared only for the H=.5 pair')
+    if outer_refined:knots=sorted(set(knots+[.75,1.5]))
+    if partition=='one' or outer_refined:tensor_mesh(root,knots,3,2,6.,1.,points=[8,8],xknots=X)
     for key,value in dict(RANSWallHeight=H,RANSWallSampleHeight=1. if sampler=='Point' else H/2,RANSWallTailStart=tail,
         RANSWallNormalOrder=normal,IO_CheckSteps=8).items():set_parameter(root,key,value)
     for key,value in dict(RANSWallKSampling=sampler,RANSWallComparison='HeightV1',RANSWallComparisonCase=case).items():set_info(root,key,value)
@@ -39,7 +41,7 @@ def case_xml(case,folder,steps,dt=.000625,restart=None,normal=16,hard_reject=0):
         for e in root.findall('./CONDITIONS/FUNCTION[@NAME="InitialPerturbationOuter"]/E'):
             if e.get('VAR')=='eps_tilde':e.set('VALUE',e.get('VALUE').replace('(y-(2.0))/(2.0)','(y-RANSWallHeight)/(4-RANSWallHeight)'))
     write(root,xml)
-    write_json(folder/'definition.json',dict(family='HeightSamplerV1',case=case,H=H,h=.1,Z=4,z_m=tail,
+    write_json(folder/'definition.json',dict(family='HeightSamplerOuterHalvesV1' if outer_refined else 'HeightSamplerV1',case=case,H=H,h=.1,Z=4,z_m=tail,
         K_sampling=sampler,z_K=1. if sampler=='Point' else None,placeholder=H/2 if sampler!='Point' else None,
         radial_knots=knots,tangential_knots=X,velocity_scalar_degree=3,pressure_degree=1,source_normal_order=normal,
         work=WORK,dt=dt,steps=steps,xml_sha256=sha(xml),zero_perturbation_functions_retained=True))
@@ -52,6 +54,7 @@ def main():
     p.add_argument('--output',type=Path,required=True);p.add_argument('--cases',nargs='+',choices=list(CASES),default=list(CASES))
     p.add_argument('--workers',type=int,default=4);p.add_argument('--steps',type=int,default=32)
     p.add_argument('--dt',type=float,default=.000625);p.add_argument('--normal-order',type=int,default=16)
+    p.add_argument('--outer-refined',action='store_true',help='G/H only: add outer knots .75 and 1.5; retain all knots above 2')
     p.add_argument('--resume',action='store_true');a=p.parse_args();require(sys.platform=='linux','Linux authoritative')
     require(1<=a.workers<=4 and a.steps>=0,'bounded suite controls');a.output=a.output.resolve();a.output.mkdir(parents=True,exist_ok=a.resume)
     os.environ.update(THREADS);(a.output/'tmp').mkdir(exist_ok=True);os.environ['TMPDIR']=str(a.output/'tmp')
@@ -78,7 +81,7 @@ def main():
         root=a.output/case
         if a.resume and (root/'result.json').exists():return load(root/'result.json')
         require(not root.exists(),'incomplete case requires actual process/checkpoint reconciliation, not an unchanged retry: '+case)
-        root.mkdir();init=root/'initial';xml=case_xml(case,init,0,a.dt,normal=a.normal_order)
+        root.mkdir();init=root/'initial';xml=case_xml(case,init,0,a.dt,normal=a.normal_order,outer_refined=a.outer_refined)
         receipt=native(solver,xml,init);report=load(init/'case.evolution.json')
         result=dict(case=case,definition=load(init/'definition.json'),initial_receipt=receipt,status='initialization_rejected',initial_failure=report.get('failure'))
         if report.get('initialization_complete') is False or receipt['exit_code']:
@@ -89,7 +92,7 @@ def main():
         checks=root/'sampling';checks.mkdir();write_json(checks/'input.json',dict(operation='sampling_checks',state=report['state'],history=report['state'],time=0.,alpha=0.,require_history_h0=False,inner_stress_model='SaturatedR2'))
         test=native(probe,xml,checks,('input.json','result.json'),1800);require(test['exit_code']==0,'sampling verification failed: '+case)
         result['sampling_checks']=load(checks/'result.json')
-        trajectory=root/'trajectory';xml=case_xml(case,trajectory,a.steps,a.dt,restart=Path(report['checkpoint']),normal=a.normal_order)
+        trajectory=root/'trajectory';xml=case_xml(case,trajectory,a.steps,a.dt,restart=Path(report['checkpoint']),normal=a.normal_order,outer_refined=a.outer_refined)
         receipt=native(solver,xml,trajectory,timeout=14400);e=load(trajectory/'case.evolution.json')
         check_report(e,True);result.update(status='completed' if not e['failure'] and e['steps']==a.steps else 'numerically_rejected',
             failure=e['failure'],steps=e['steps'],time=e['time'],trajectory_receipt=receipt,final=e.get('height_comparison_final'),
