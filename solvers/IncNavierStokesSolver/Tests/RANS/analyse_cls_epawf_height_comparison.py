@@ -44,7 +44,9 @@ def compact_diagnostic(q):
 
 
 def attempts_summary(attempts,through):
-    attempts=[a for a in attempts if a.get('numerically_accepted',False) and a['time']<=through+1e-13]
+    # Native attempt reports describe scheduled work; acceptance is the
+    # independently committed physical-time frontier supplied by the caller.
+    attempts=[a for a in attempts if not a['failure'] and a['scheduled_complete'] and a['time']<=through+1e-13]
     bands={};increments=[];solves={}
     for a in attempts:
         for k in ('outer_sweeps','momentum_predictor_solves','pressure_system_solves','epsilon_transport_solves','k_transport_solves','bound_calls','additional_governing_equation_solves'):
@@ -54,11 +56,13 @@ def attempts_summary(attempts,through):
         for r in (b.get('physical_bands') or {}).get('regions',[]):
             acc=bands.setdefault(r['name'],dict(lower=r['lower'],upper=r['upper'],signed=0.,positive=0.,negative=0.,absolute=0.))
             for k in ('signed','positive','negative','absolute'):acc[k]+=r['correction_'+k]
-        increments.append({k:a[k] for k in a if k in ('time','raw_state_sha256','corrected_state_sha256','k_raw_step_mass_norm','k_corrected_step_mass_norm','k_raw_linear_residual','k_added_frozen_residual','k_bound_storage_residual','refreshed_trace_defect','refreshed_original_block_norms','seconds')})
+        increments.append(dict({k:a[k] for k in a if k in ('time','k_frozen_linear_residual','k_corrected_frozen_linear_residual','k_added_frozen_residual','k_added_storage_residual','refreshed_trace_defect','refreshed_original_block_norms','seconds')},
+            raw_sha256=b.get('raw_sha256'),corrected_sha256=b.get('corrected_sha256'),raw_step_mass_norm=b.get('mass_norm_raw_step'),
+            correction_mass_norm=b.get('mass_norm_correction'),correction_to_step_ratio=b.get('correction_to_step_ratio')))
     return dict(accepted_steps=len(attempts),solves=solves,activations=sum(a.get('bound_activations',0) for a in attempts),
         seconds=sum(a['seconds'] for a in attempts),correction_integral=sum(a.get('k_bound',{}).get('integral_total',0.) for a in attempts),
         correction_mass_norm_sum=sum(a.get('k_bound',{}).get('mass_norm_correction',0.) for a in attempts),
-        maximum_correction_raw_increment_ratio=max((a.get('k_bound',{}).get('correction_over_raw_step',0.) for a in attempts),default=0.),
+        maximum_correction_raw_increment_ratio=max((a.get('k_bound',{}).get('correction_to_step_ratio',0.) for a in attempts),default=0.),
         fixed_band_correction_totals=bands,increments=increments)
 
 
