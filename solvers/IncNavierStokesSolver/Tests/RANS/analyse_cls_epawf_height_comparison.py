@@ -26,6 +26,14 @@ def differences(a,b,reference=False):
     return out
 
 
+def evolution_difference(a,a0,b,b0):
+    def increment(q,q0):
+        s=q['common_samples'];s0=q0['common_samples'];copy={k:s[k] for k in ('weights','epsilon_weights')}
+        for name in ('u','v','k','epsilon','pressure'):copy[name]=[x-y for x,y in zip(s[name],s0[name])]
+        return dict(common_samples=copy)
+    return differences(increment(a,a0),increment(b,b0))
+
+
 def independent_reference(native):
     out=[];us=.4;nu=1.5e-5;h=.1
     for row in native['rows']:
@@ -119,6 +127,9 @@ def main():
             if step==0:continue
             row=dict(diagnostic=compact_diagnostic(d),drift_from_actual_h0=differences(d,initial),error_to_own_analytic=differences(d,d,True),
                      work=attempts_summary(result['attempts'],d['time']))
+            scales=dict(u=.4*math.sqrt(24),v=.4*math.sqrt(24),k=.51050801305988613*math.sqrt(24),
+                        epsilon=(.4**3/.4405539051866587/2)*math.sqrt(12),pressure=.16*math.sqrt(24))
+            row['common_normalized_drift']={k:row['drift_from_actual_h0'][k]/scale for k,scale in scales.items()}
             # Source estimates are time integrals of sampled physical rates.
             # They are explicitly separate from exact discrete correction sums.
             estimates={};old=initial
@@ -138,9 +149,14 @@ def main():
             out['paired_differences'][first+'-'+second]={str(step):differences(states[first][step],states[second][step]) for step in states[first].keys() & states[second].keys()}
     for first,second in [('C','E'),('E','G'),('D','F'),('F','H')]:
         if first in states and second in states:
+            a0,b0=states[first][0]['common_samples'],states[second][0]['common_samples'];w=a0['weights']
+            reference=[x-y for x,y in zip(a0['reference_u'],b0['reference_u'])]
+            representation=[(x-x0)-(y-y0) for x,x0,y,y0 in zip(a0['u'],a0['reference_u'],b0['u'],b0['reference_u'])]
             out['cross_height_differences'][first+'-'+second]=dict(
-                reference_velocity_offset=norm(states[first][0]['common_samples']['weights'],[x-y for x,y in zip(states[first][0]['common_samples']['reference_u'],states[second][0]['common_samples']['reference_u'])]),
-                represented={str(step):differences(states[first][step],states[second][step]) for step in states[first].keys() & states[second].keys()})
+                reference_velocity_offset=norm(w,reference),initial_representation_error_difference=norm(w,representation),
+                u_squared_cross_term=2*math.fsum(v*x*y for v,x,y in zip(w,reference,representation)),
+                represented={str(step):differences(states[first][step],states[second][step]) for step in states[first].keys() & states[second].keys()},
+                evolution_only={str(step):evolution_difference(states[first][step],states[first][0],states[second][step],states[second][0]) for step in states[first].keys() & states[second].keys()})
     if a.compare_to:
         out['cross_suite_comparison']=dict(kind=a.comparison_kind,other_suite=str(a.compare_to.resolve()),cases={})
         for case,by_step in states.items():
