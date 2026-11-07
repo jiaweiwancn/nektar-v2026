@@ -1,33 +1,33 @@
 {
   "status": "native_development_in_progress_original_m8_unresolved",
-  "producing_code_commit": "e9bbda5382ee45bc69739b8649493330b38b82a7",
+  "producing_code_commit": "ff1c4fc5ac2ce75279f821dd944dcd8a97648bbc",
   "native_m8": {
-    "status": "Completed original-h0 eight-update follow-up improves residual to17.75292474315745 and passes qualification, but does not converge; corrected direction-action refresh tests and longer original-start attempts continue",
+    "status": "Completed original-h0 twelve-update control reaches13.462175000498513 with full qualification but no first-stage convergence; protected current-action original-start comparisons continue",
     "qualified_first_stage": false,
     "accepted_physical_steps": 0,
     "final_time": 0,
-    "current_original_start_case": "source-anchor-original160",
+    "current_original_start_case": "current-original160-3step",
     "original_alpha": 400,
     "time_target": 0.0025,
     "original_tolerance": 2e-12,
     "progress_utc": "2026-11-06T20:35:43.934762+00:00",
     "original_start_completed_evidence": "native/followup-completed-review.json",
     "original_start_result": {
-      "numerical_updates": 8,
-      "full_residual": 17.75292474315745,
+      "numerical_updates": 12,
+      "full_residual": 13.462175000498513,
       "original_norms": [
-        4.3855440333635773e-10,
-        1.4659981788211078e-09,
-        17.75292474315745,
-        7.288724146895236e-12,
-        7.706198517896237e-16,
-        7.964749054680477e-16,
-        2.0498197323554065e-17,
-        2.985309381877176e-16
+        1.0222610020166085e-09,
+        1.7874472941997449e-09,
+        13.462175000498513,
+        5.243927375035104e-12,
+        7.8132044166733085e-16,
+        7.052141126392962e-16,
+        1.3383120566617942e-17,
+        2.1494227549515668e-16
       ],
-      "gradient_departure": 0.0009999992022979853,
-      "minimum_outer_epsilon_ratio": 0.9800000240728397,
-      "ground_minimum": 0.013876089137657099,
+      "gradient_departure": 0.000999999041217059,
+      "minimum_outer_epsilon_ratio": 0.9800122691316719,
+      "ground_minimum": 3.919479124727651e-05,
       "qualified": true,
       "algebraic_root": false,
       "accepted_state_and_history_preserved": true,
@@ -50,10 +50,9 @@
         "native_stage_completed": false
       }
     },
-    "latest_completed_original_start_case": "source-anchor-original160",
+    "latest_completed_original_start_case": "current-original160-3step",
     "running_original_start_case": "direction-refresh-v2-original160-3step",
     "running_original_start_cases": [
-      "current-original160-3step",
       "radius-cap4-original-3step",
       "radius-query-original-cap4-3step",
       "source-precision-original160-3step",
@@ -62,7 +61,9 @@
       "destruction-value-original160-3step",
       "direction-refresh-v2-original160-3step",
       "reference-branch-enabled",
-      "reference-branch-control"
+      "reference-branch-control",
+      "protected-actions-control",
+      "protected-actions-enabled"
     ],
     "incomplete_original_start_followup": {
       "case": "response-cache-original-3step",
@@ -563,11 +564,19 @@
       "accepted_physical_steps": 0,
       "accepted_time": 0,
       "original_readback_exact": true,
-      "receipt": "native/source-precision-direction-check-receipt.json"
+      "receipt": "native/source-precision-direction-check-receipt.json",
+      "original_start_checkpoint": {
+        "evidence": "native/source-precision-original-point5-review.json",
+        "full_residual": 18.259333948661627,
+        "qualified": true,
+        "original_norms_bitwise_identical": true,
+        "physical_acceptance_inferred": false,
+        "scope": "In-flight point only; no completed-stage history receipt"
+      }
     },
     "reference_branch_reuse": {
       "code": "e9bbda5382ee45bc69739b8649493330b38b82a7",
-      "status": "running_matched_original_start_three_update_tests",
+      "status": "first_historical_attempt_rejected_current_action_checks_and_rebuilt_fresh; native_three_update_runs_continuing",
       "build_passed": true,
       "focused_ctests_passed": 6,
       "diagnosis": "Literal E/M reference-weight changes discard otherwise usable response history in the early original-start prefix; no baseline/cap changes observed there",
@@ -595,6 +604,19 @@
       "numerical_updates_requested": 8,
       "launch": "native/direction-refresh-v2-full504-at3p896-launch.json",
       "physical_acceptance_inferred": false
+    },
+    "protected_current_actions": {
+      "code": "ff1c4fc5ac2ce75279f821dd944dcd8a97648bbc",
+      "native_checker_commit": "46b8a24",
+      "build_passed": true,
+      "focused_ctests_passed": 6,
+      "standalone_asan_ubsan_passed": true,
+      "status": "running_matched_original_start_three_update_tests",
+      "diagnostic": "Accurate non-k solves and two-size actions; unprotected rank-one current-action refreshes overwrite correlated earlier measurements",
+      "diagnostic_evidence": "native/current-direction-interference.json",
+      "native_launch": "native/protected-actions-native-launch.json",
+      "build": "native/build-validation-ff1c4fc.json",
+      "scope": "No M8 convergence inferred from helper or direction interpolation checks"
     }
   },
   "latest_diagnostic_correction": {

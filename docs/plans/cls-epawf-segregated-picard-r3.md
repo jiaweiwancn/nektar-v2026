@@ -20,6 +20,78 @@ metric at ground contact while its original k residual stayed nonzero. R3
 therefore scores the original reduced residual, not that projected-map defect.
 No full all-field Jacobian or hidden coupled direction solver was added.
 
+## Current-base action preservation (ff1c4fc)
+
+The completed original-h0 control `current-original160-3step` now reaches
+**13.4621750005** after twelve numerical updates. All 3,936 controlled non-k
+evaluations converge, using 15,400 sequential flow and epsilon solves each.
+A fresh process reproduces every original residual norm bit. Ground minimum
+is **3.91948e-5**, gradient departure **0.0009999990412**, and actual epsilon
+lower ratio **0.9800122691**; complete qualification passes. The stage still
+fails the original residual tolerance, accepts **zero physical steps**, and
+preserves accepted state and every physical-history slot. This supersedes the
+17.7529 eight-update result as the best completed original-start result in this
+collection; numerical updates are not physical steps.
+[Completed original-start readback and rejection evidence](cls-epawf-segregated-picard-r3-evidence/native/followup-completed-review.json).
+
+The first e9bbda5 reference-bridge attempt exposes a concrete direction-model
+defect at original-start numerical point two (residual **49.2816311106**).
+Independent same-k H solves converge near 1e-12 and agree, and two-size
+direction errors stay between **4.3e-7 and 1.56e-5**. Yet the current-direction
+model error grows **0.04018, 0.04346, 0.09588, 0.20879, 0.44902** across four
+rank-one refreshes. Each newest action is interpolated near machine precision,
+but subsequent correlated directions lose earlier measurements. The guard
+correctly discards that history and rebuilds fresh responses; no accepted
+bridged direction or M8 success is inferred from this failed cache attempt.
+
+A separate one-thread reconstruction reads only the small matrix/vector
+prefixes of the native affine packets, solves their recorded active faces,
+and reproduces all five displacement norms within **1.6e-15**. Successive new
+direction components outside the earlier span are only **1.34%, 1.09%, 0.0943%
+and 1.07%**. This quantitatively supports interference between correlated
+rank-one calibrations; it is not a reduced stationarity or infeasibility claim.
+[Independent native direction reconstruction](cls-epawf-segregated-picard-r3-evidence/native/current-direction-interference.json).
+
+Commit `ff1c4fc5ac2ce75279f821dd944dcd8a97648bbc` replaces that same-base refresh
+with a protected multi-secant update in the actual k coefficient-field metric.
+Two-pass orthogonalization removes previously measured directions from the
+new update covector, preserving all their residual, non-k-state and projected
+trace actions. A relative independent component below 1e-4 is rejected without
+changing the model. Every interpolation and retained-action defect is checked;
+scratch measurements are cleared after an actual k update or a fresh model.
+The response basis, exact independent k action, qualification cuts, actual
+radius bound, tight two-size/current-branch checks, and physical acceptance
+authority remain intact. Endpoint secants from different states are not treated
+as exact protected derivatives.
+
+The four-worker Linux build passes in **88.55s**, all six focused CTests pass
+in **40.52s** at concurrency one, and a fresh standalone ASan/UBSan run passes
+in **9.07s** after **25.88s** compilation. Its new known-answer test uses a
+nonorthogonal field basis and correlated queries: the old update loses an
+earlier independently known action, the protected update retains all actions,
+and a dependent inconsistent query leaves the model unchanged. Sanitizer scope
+is this helper and its tests, not the full solver or installed dependencies.
+[Build, sanitizer commands and immutable identities](cls-epawf-segregated-picard-r3-evidence/native/build-validation-ff1c4fc.json).
+
+Matched original-h0 native reruns use unique `protected-actions-control` and
+`protected-actions-enabled` directories and the same producing image. Only
+reference-weight reuse differs; both use the protected calibration. They keep
+the original 2,165-unknown alpha-400/time-.0025 target and tolerance 2e-12.
+`check_cls_epawf_protected_actions.py` additionally requires at least two actual
+current-base measurements, retained-action checks, and an accepted qualified
+original-start correction selected with those responses. Native outcomes are
+pending; passing the helper is not a convergence result.
+[Exact native commands and allocation](cls-epawf-segregated-picard-r3-evidence/native/protected-actions-native-launch.json).
+
+The source-stencil recovery also now has independently read original-start
+evidence: at numerical update five, five columns require eleven stencil
+halvings, reducing the source derivative discrepancy from **0.05170 to 0.02507**
+below the unchanged 0.03 limit. The resulting checkpoint residual is
+**18.2593339487**, with complete qualification and bitwise fresh original norm
+agreement. This remains an in-flight checkpoint, not a completed-stage history
+receipt or physical acceptance.
+[Original-start stencil recovery and separate-process audit](cls-epawf-segregated-picard-r3-evidence/native/source-precision-original-point5-review.json).
+
 ## Guarded reference-weight history bridge (e9bbda5)
 
 The early original-start reuse control makes 8, 3 and 7 E/M profile-weight
@@ -69,8 +141,8 @@ The longer original-start and complete-space attempts continue independently.
 
 ## Current follow-up: measured action refresh and full-space progress
 
-The original first stage is still unresolved. The latest completed original-h0
-eight-update run reaches residual **17.7529247432**, improving the earlier
+The original first stage is still unresolved. The earlier completed original-h0
+eight-update run reaches residual **17.7529247432**, improving the preceding
 18-update control's **19.1747990683**. Original qualification passes: gradient
 departure **0.0009999992023**, epsilon lower ratio **0.9800000241**, and continuous
 ground minimum **0.0138760891**. A fresh process reproduces the original norms;
