@@ -182,6 +182,7 @@ def main():
     p.add_argument('--prefix-campaign',type=Path)
     p.add_argument('--from-h0',action='store_true')
     p.add_argument('--wall-policy',choices=('Upstream','UniformEPFlat'),default='Upstream')
+    p.add_argument('--height-case',choices=list('ABCDEFGH'))
     p.add_argument('--inventory',choices=('LegacyV1','ConstitutiveV2'),default='LegacyV1')
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--targets', type=int, nargs='+', default=[32,160,800,1600,3200,8000])
@@ -201,6 +202,7 @@ def main():
         require(progress['status']!='numerically_rejected','numerical rejection is terminal; use a separately identified follow-up')
         require(progress.get('inventory','LegacyV1')==a.inventory,'inventory differs from campaign')
         require(progress.get('wall_policy','Upstream')==a.wall_policy,'wall policy differs from campaign')
+        require(progress.get('height_case')==a.height_case,'height case differs from campaign')
         require(progress.get('projection_work_controls',{})==bound_work_arguments(a),'projection work controls differ from recorded campaign')
         assert_native_stopped(progress)
         old_stat=Path('/proc')/str(int(progress['pid']))/'stat'
@@ -263,7 +265,7 @@ def main():
                 prefix_campaign=str(a.prefix_campaign.resolve()) if a.prefix_campaign else None,
                 prefix_steps=info['steps'], prefix_integral=integral, requested_targets=a.targets, completed_targets=[], segments=[])
     progress.update(pid=os.getpid(), host=socket.gethostname(), started_unix=time.time(),
-                    projection_work_controls=bound_work_arguments(a),
+                    projection_work_controls=bound_work_arguments(a),height_case=a.height_case,
                     process_start=Path('/proc/self/stat').read_text().split()[21], executable=str(executable),
                     executable_sha256=pinned['sha256'], source_revision=subprocess.check_output(['git','-C',str(Path(__file__).resolve().parents[4]),'rev-parse','HEAD'],text=True).strip())
     def save(**changes):
@@ -287,9 +289,15 @@ def main():
                 suffix=1
                 while Path(str(directory)+f'-attempt{suffix}').exists(): suffix+=1
                 directory=Path(str(directory)+f'-attempt{suffix}')
-            xml = prepare(directory, .000625, end-start, True, restart=Path(progress['checkpoint']) if progress['checkpoint'] else None,
-                          checkpoint=True, k_bound='MassProjection', floor_relative=1e-8, snapshots=True,inventory=a.inventory,wall_policy=a.wall_policy,
-                          bound_work=bound_work_arguments(a))
+            if a.height_case:
+                from run_cls_epawf_height_comparison import case_xml,WORK
+                require(a.wall_policy=='UniformEPFlat' and a.inventory=='ConstitutiveV2','height continuation requires its declared policy')
+                require(not bound_work_arguments(a) or bound_work_arguments(a)==WORK,'height continuation uses its validated explicit controls')
+                xml=case_xml(a.height_case,directory,end-start,.000625,restart=Path(progress['checkpoint']) if progress['checkpoint'] else None)
+            else:
+                xml = prepare(directory, .000625, end-start, True, restart=Path(progress['checkpoint']) if progress['checkpoint'] else None,
+                              checkpoint=True, k_bound='MassProjection', floor_relative=1e-8, snapshots=True,inventory=a.inventory,wall_policy=a.wall_policy,
+                              bound_work=bound_work_arguments(a))
             tree=ET.parse(xml).getroot(); set_parameter(tree,'IO_CheckSteps',1); write(tree,xml)
             command=[str(executable),'case.xml']; started=time.monotonic()
             child=subprocess.Popen(command,cwd=directory,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,

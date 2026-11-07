@@ -17,6 +17,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--solver',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
     p.add_argument('--wall-policy',choices=('Upstream','UniformEPFlat'),default='Upstream')
+    p.add_argument('--height-case',choices=list('ABCDEFGH'))
     p.add_argument('--targets',type=int,nargs='+',default=[32,160,800,1600,3200,8000])
     p.add_argument('--block-steps',type=int,default=16);p.add_argument('--timeout',type=float,default=7200)
     p.add_argument('--checkpoint',type=Path);p.add_argument('--prefix-report',type=Path)
@@ -28,6 +29,7 @@ def main():
     base=[sys.executable,'-B',str(driver),'--solver',str(a.solver.resolve()),'--output',str(root),
         '--inventory','ConstitutiveV2','--wall-policy',a.wall_policy,'--block-steps',str(a.block_steps),'--timeout',str(a.timeout),
         '--targets',*map(str,a.targets),*bound_work_command(bound_work_arguments(a))]
+    if a.height_case:base += ['--height-case',a.height_case]
     retries=0
     while True:
         try:progress=load_progress(root/'progress.json') if root.exists() else {}
