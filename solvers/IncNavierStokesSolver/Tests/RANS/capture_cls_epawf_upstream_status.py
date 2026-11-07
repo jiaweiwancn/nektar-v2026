@@ -11,6 +11,27 @@ from pathlib import Path
 from continue_cls_epawf_pimple import header,load_progress,process_identity,atomic
 from run_cls_epawf_picard import load,sha
 
+def process_command(identity):
+    if not identity:return None
+    try:return [v.decode() for v in (Path('/proc')/str(identity['pid'])/'cmdline').read_bytes().split(b'\0') if v]
+    except FileNotFoundError:return None
+
+def lock_record(path,identities):
+    record=dict(path=str(path),inherited_by=[])
+    if not path.exists():return record
+    inode=str(path.stat().st_ino)
+    record['kernel_locks']=[line for line in Path('/proc/locks').read_text().splitlines()
+        if any(word.endswith(':'+inode) for word in line.split())]
+    for identity in identities:
+        if not identity:continue
+        try:
+            for fd in (Path('/proc')/str(identity['pid'])/'fd').iterdir():
+                try:
+                    if fd.resolve()==path:record['inherited_by'].append(dict(pid=identity['pid'],fd=fd.name))
+                except FileNotFoundError:pass
+        except FileNotFoundError:pass
+    return record
+
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True);a=p.parse_args();a.output.mkdir(parents=True,exist_ok=False)
@@ -43,6 +64,14 @@ def main():
         record=dict(progress=progress,checkpoint_copy=receipt,driver_identity=driver,native_identity=native,
             driver_matches=bool(driver and str(driver['start'])==str(progress.get('process_start'))),
             native_matches=(native==identity if identity else bool(native and native['executable']==progress.get('executable'))))
+        record['driver_command']=process_command(driver);record['native_command']=process_command(native)
+        record['campaign_lock']=lock_record(path/'.campaign.lock',[driver,native])
+        supervisor_file=path.parent/'status.json'
+        if supervisor_file.exists():
+            supervisor=load(supervisor_file);expected=supervisor.get('supervisor_identity')
+            actual=process_identity(expected['pid']) if expected else None
+            record.update(supervisor_status=supervisor,supervisor_matches=bool(actual and actual==expected),
+                supervisor_command=process_command(actual),supervisor_lock=lock_record(path.parent/'supervisor/.campaign.lock',[actual]))
         if native:
             try:
                 env=(Path('/proc')/str(native['pid'])/'environ').read_bytes().split(b'\0')

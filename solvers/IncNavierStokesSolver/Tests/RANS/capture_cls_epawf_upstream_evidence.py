@@ -5,7 +5,7 @@ import argparse
 import collections
 import datetime
 from pathlib import Path
-from run_cls_epawf_picard import load,write_json,sha,state_hash
+from run_cls_epawf_picard import load,write_json,sha,state_hash,require
 
 def compact_status(status):
     """Keep process/checkpoint identities; index the full durable ledger on Linux."""
@@ -152,9 +152,20 @@ def main():
     for n in ('source-validation.json','probe-entry-build.log','build-reviewed.log','reviewed-followup.log'):
         f=r/n
         if f.exists():artifact(f,'tested source content or focused Linux build/verification log')
+    f=r/'continuation-budgets.json'
+    if f.exists():out['continuation_budgets']=load(f);artifact(f,'accepted-step-only cumulative and fixed-window correction rates')
     if a.status:
         out['latest_status']=compact_status(load(a.status));artifact(a.status,'dated full live process/ledger/checkpoint snapshot')
         write_json(a.output/'latest-status.json',out['latest_status'])
+        for f in a.status.parent.glob('*/checkpoint/State.bin'):artifact(f,'immutable accepted frontier copy from this dated observation')
+    out['historical_terminal_checkpoints']={}
+    for n,f,expected in (
+        ('72',r.parent/'cls-epawf-uniform-ep-flat-20261106/upstream-terminal/checkpoint-last-accepted/State.bin',
+            '0ebcf803b486d63c42d6ed93db08efd4208d87b98e90dd918e139a77f8c26510'),
+        ('103',r.parent/'cls-epawf-height-sampler-20261107/status-final/upstream-checkpoint/State.bin',
+            '11d1c23373ed98a3f79c7ce6f242c23883398a3e369e1210e34a81a1c42445e9')):
+        require(sha(f)==expected,'historical terminal checkpoint changed')
+        out['historical_terminal_checkpoints'][n]=artifact(f,'unchanged historical terminal checkpoint; no new old-tail continuation')
     write_json(a.output/'native.json',out);write_json(a.output/'artifact-index.json',dict(root=str(r),artifacts=list(index.values()),
         per_step_packets='screening/<case>/trajectory/pimple-states/*.json: recoverable raw/corrected/pre-k/history plus A_k path/hash; A_k is not M_ff',
         mass='discrete-budget/<case>/mass-and-bands.json: native PicardKMass and identical free rows',
