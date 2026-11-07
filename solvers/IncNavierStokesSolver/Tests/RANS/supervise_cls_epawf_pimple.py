@@ -20,6 +20,7 @@ def main():
     p.add_argument('--targets',type=int,nargs='+',default=[32,160,800,1600,3200,8000])
     p.add_argument('--block-steps',type=int,default=16);p.add_argument('--timeout',type=float,default=7200)
     p.add_argument('--checkpoint',type=Path);p.add_argument('--prefix-report',type=Path)
+    p.add_argument('--prefix-campaign',type=Path)
     add_bound_work_arguments(p)
     a=p.parse_args();a.output=a.output.resolve();a.output.mkdir(parents=True,exist_ok=True)
     ownership=a.output/'supervisor';ownership.mkdir(exist_ok=True);lock=CampaignLock(ownership)
@@ -56,6 +57,7 @@ def main():
         elif a.checkpoint:
             require(a.prefix_report is not None,'checkpoint continuation requires a native prefix report')
             initial=['--checkpoint',str(a.checkpoint.resolve()),'--prefix-report',str(a.prefix_report.resolve())]
+            if a.prefix_campaign:initial+=['--prefix-campaign',str(a.prefix_campaign.resolve())]
         else:
             require(a.prefix_report is None,'prefix report without checkpoint')
             initial=['--from-h0']

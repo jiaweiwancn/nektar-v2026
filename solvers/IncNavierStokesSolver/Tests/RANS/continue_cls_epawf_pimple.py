@@ -135,6 +135,24 @@ def header(checkpoint, full=False):
     return result
 
 
+def prefix_budget(campaign, receipt):
+    """Read an immutable prefix ledger; never repair or rewrite its source."""
+    progress=load(campaign/'progress.json')
+    require(progress['accepted_steps']==receipt['steps'] and progress['checkpoint_sha256']==receipt['sha256'],
+            'prefix ledger/checkpoint identity differs')
+    records={}
+    for line in (campaign/'steps.jsonl').read_text().splitlines():
+        row=json.loads(line);step=row['global_step']
+        require(step not in records,'duplicate prefix ledger record')
+        records[step]=row
+    start=int(progress.get('prefix_steps',0));end=int(receipt['steps'])
+    require(sorted(records)==list(range(start+1,end+1)),'prefix ledger is not contiguous')
+    require(records[end]['checkpoint_sha256']==receipt['sha256'],'prefix last record differs')
+    amount=progress.get('prefix_integral',0.)+sum(records[n]['attempt'].get('k_bound',{}).get('integral_total',0.) for n in sorted(records))
+    require(abs(amount-progress['cumulative_bound_integral'])<1e-15,'prefix correction budget differs')
+    return amount
+
+
 def freeze(executable, output):
     output.mkdir(parents=True, exist_ok=False); lib = output/'lib'; lib.mkdir()
     before = identity(executable); shutil.copy2(executable, output/executable.name)
@@ -161,6 +179,7 @@ def main():
     p.add_argument('--solver', type=Path, required=True)
     p.add_argument('--checkpoint', type=Path)
     p.add_argument('--prefix-report', type=Path)
+    p.add_argument('--prefix-campaign',type=Path)
     p.add_argument('--from-h0',action='store_true')
     p.add_argument('--wall-policy',choices=('Upstream','UniformEPFlat'),default='Upstream')
     p.add_argument('--inventory',choices=('LegacyV1','ConstitutiveV2'),default='LegacyV1')
@@ -237,9 +256,11 @@ def main():
             require(prefix.get('wall_policy','Upstream')==('UniformEPFlat-v1' if a.wall_policy=='UniformEPFlat' else 'Upstream'),'wrong prefix wall policy')
             require(prefix['k_bound_mode'] == 'MassProjection', 'wrong prefix mode')
             integral = sum(v.get('k_bound',{}).get('integral_total',0.) for v in prefix['pimple_attempts'] if v['time']<=info['time']+1e-13)
+            if a.prefix_campaign:integral=prefix_budget(a.prefix_campaign.resolve(),info)
             progress = dict(schema=2, status='starting', checkpoint=str(a.checkpoint), accepted_steps=info['steps'],
                 accepted_time=info['time'], dt=info['dt'], cumulative_bound_integral=integral,inventory=a.inventory,wall_policy=a.wall_policy,
                 prefix_report=str(a.prefix_report.resolve()), prefix_report_sha256=sha(a.prefix_report),
+                prefix_campaign=str(a.prefix_campaign.resolve()) if a.prefix_campaign else None,
                 prefix_steps=info['steps'], prefix_integral=integral, requested_targets=a.targets, completed_targets=[], segments=[])
     progress.update(pid=os.getpid(), host=socket.gethostname(), started_unix=time.time(),
                     projection_work_controls=bound_work_arguments(a),

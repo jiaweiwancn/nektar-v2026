@@ -9,7 +9,7 @@ import sys
 import tempfile
 from unittest.mock import patch
 
-from continue_cls_epawf_pimple import CampaignLock,StepLedger,process_identity,assert_native_stopped,load_progress
+from continue_cls_epawf_pimple import CampaignLock,StepLedger,process_identity,assert_native_stopped,load_progress,prefix_budget
 from run_cls_epawf_picard import require
 
 
@@ -46,6 +46,9 @@ def main():
             require(ledger.budget(prefix,5)==.375,'recovery duplicated correction budget')
         require(len(path.read_text().splitlines())==1,'duplicate accepted-step record')
         fails(lambda:ledger.append(dict(record,checkpoint_sha256='conflict')),'identity conflict')
+        (root/'progress.json').write_text(json.dumps(dict(prefix,accepted_steps=5,checkpoint_sha256='real-checkpoint-sha',cumulative_bound_integral=.375)))
+        require(prefix_budget(root,dict(steps=5,sha256='real-checkpoint-sha'))==.375,'prefix budget lost prior segments')
+        fails(lambda:prefix_budget(root,dict(steps=5,sha256='wrong')),'identity differs')
         # A duplicate old journal line and incomplete final write are repaired
         # deterministically, without admitting an incomplete accepted step.
         with path.open('a') as stream:stream.write(json.dumps(record)+'\n'+ '{"global_step":6')
