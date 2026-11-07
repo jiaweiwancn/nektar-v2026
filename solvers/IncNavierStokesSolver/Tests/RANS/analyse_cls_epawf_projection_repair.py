@@ -64,8 +64,11 @@ def main():
     out['finite_qp']=dict(size=n,cuts=len(rhs),active=len(active),mass_sha256=d['mass_sha256'],cuts_sha256=d['cuts_sha256'],
         physical_rows_reconstruct_whitening_max=white_error,physical_objective=objective,dual_objective=dual_objective,
         primal_dual_gap=objective-dual_objective,scaled_gap=abs(objective-dual_objective)/scale,
+        relative_objective_gap=abs(objective-dual_objective)/objective,
         normalized_row_primal_violation=float(max(0.,np.max(-slack))),stationarity=stationarity,
         stationarity_over_K0=stationarity/b['K0'],complementarity=complementarity,
+        stationarity_over_correction_norm=stationarity/float(np.linalg.norm(y)),
+        complementarity_over_objective=complementarity/objective,
         scaled_complementarity=complementarity/scale,dual_violation=float(max(0.,-np.min(dual))),
         final_physical_inventory_violation=b['primal_floor_defect'],final_ground_violation=b['ground_floor_defect'],
         physical_quadrature_mass_norm=result['quadrature_correction_mass_norm'],physical_integral=b['integral_total'])

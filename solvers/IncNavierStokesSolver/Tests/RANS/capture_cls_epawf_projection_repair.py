@@ -23,7 +23,7 @@ def snapshot(campaign,output):
         try:
             shutil.copytree(Path(progress['checkpoint']),temporary)
             receipt=header(temporary)
-            if receipt['sha256']!=progress['checkpoint_sha256'] or receipt['steps']!=progress['accepted_steps']:
+            if receipt['sha256']!=progress['checkpoint_sha256'] or receipt['steps']!=progress['accepted_steps'] or receipt['time']!=progress['accepted_time']:
                 time.sleep(.05);continue
             os.replace(temporary,output)
             identities={}
@@ -53,13 +53,17 @@ def main():
         threads=THREADS,ranks=1,repair_verification=load(r/'repair-verification.json'),
         repaired=snapshot(r/'repaired-campaign',a.output/'repaired-checkpoint'),
         uniform=snapshot(u/'uniform-campaign',a.output/'uniform-checkpoint'),uniform_milestones=[],
-        numerical_source_sha256={})
+        numerical_source_sha256={},orchestration_source_sha256={})
     core=r/'source/solvers/IncNavierStokesSolver/EquationSystems'
     for name in ('RANSWallKBoundProjection.h','RANSWallEvolutionKBound.cpp','RANSWallPhysicsSignature.h',
                  'RANSWallEvolutionPimple.cpp','RANSWallEvolutionPatch.h','RANSWallEvolutionPatch.cpp',
                  'RANSEquilibriumWallEvolution.cpp','RANSWallEvolutionFeasible.cpp','RANSWallEvolutionContact.cpp',
                  'RANSWallTimeIntegration.cpp','RANSHistory.cpp'):
         out['numerical_source_sha256'][name]=sha(core/name)
+    for name in ('run_cls_epawf_pimple.py','continue_cls_epawf_pimple.py','supervise_cls_epawf_pimple.py',
+                 'monitor_cls_epawf_constitutive_v2.py','replay_cls_epawf_projection_limit.py',
+                 'analyse_cls_epawf_projection_repair.py','capture_cls_epawf_projection_repair.py'):
+        out['orchestration_source_sha256'][name]=sha(Path(__file__).with_name(name))
     out['runtimes']={}
     for name,folder in (('repaired',r/'repaired-campaign/trajectory/runtime'),('uniform',u/'uniform-campaign/trajectory/runtime'),
                          ('probe',r/'probe-budget-runtime')):
