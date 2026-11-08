@@ -252,7 +252,7 @@ public:
     // Read-only access also supports native functional/projection verification.
     WallMatrix PicardKMass(const std::vector<int> &rows) const;
     std::string HeightComparison(const Vector &state,const Vector &history,double time,
-        const RANSWallEvolutionData &data) const;
+        const RANSWallEvolutionData &data,const Vector &reportingBreakpoints={}) const;
     std::string PhysicalKBands(const Vector &state,double time,const RANSWallEvolutionData &data,
         const Vector *correction=nullptr,bool exportIntegralRows=false) const;
     std::array<double,2> Forcing(const Vector &state,const RANSWallCoordinate &point,double time,

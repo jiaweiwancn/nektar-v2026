@@ -150,9 +150,13 @@ std::string RANSWallEvolutionPatch::PhysicalKBands(const Vector &s,double time,
 }
 
 std::string RANSWallEvolutionPatch::HeightComparison(const Vector &s,const Vector &history,double time,
-    const RANSWallEvolutionData &data) const
+    const RANSWallEvolutionData &data,const Vector &reportingBreakpoints) const
 {
     const auto hash=RANSWallR3::Hash(s);const double H=m_parameters.geometry.height,us=m_robustUstar;
+    // Read-only cross-mesh comparisons can supply a common physical partition.
+    // These reporting panels never change source quadrature or the step map.
+    for(double r:reportingBreakpoints)
+        Require(std::isfinite(r) && r>=0 && r<=upper[2],"diagnostic reporting breakpoint outside physical domain");
     const double K0=m_parameters.model.Q()*us*us,kap=m_parameters.model.Kappa();
     const auto analytic=Profile(K0,{0,0,0},1);const auto &ref=analytic->Reference();const auto &wall=analytic->Original();
     const double z0=H*std::exp(-kap*ref.matchingVelocity/us);
@@ -172,7 +176,12 @@ std::string RANSWallEvolutionPatch::HeightComparison(const Vector &s,const Vecto
     std::map<std::string,Vector> samples;std::vector<std::string> profiles;
     const auto rule=LibUtilities::PointsManager()[LibUtilities::PointsKey(16,LibUtilities::eGaussGaussLegendre)];
     const auto z=rule->GetZ(),w=rule->GetW();
-    const Vector knots{0,.01,.1,.25,.5,1,2,2+1./3,2+2./3,3,3+1./3,3+2./3,4};
+    Vector knots{0,.01,.1,.25,.5,1,2,2+1./3,2+2./3,3,3+1./3,3+2./3,4};
+    if(!reportingBreakpoints.empty())
+    {
+        knots.insert(knots.end(),reportingBreakpoints.begin(),reportingBreakpoints.end());
+        std::sort(knots.begin(),knots.end());knots.erase(std::unique(knots.begin(),knots.end()),knots.end());
+    }
     Vector errors(4),kErrors(2);std::vector<std::string> invalid; // velocity value, gradient, production, analytical production scale
     for(const auto &ray:m_rays)for(int panel=1;panel<knots.size();++panel)for(int j=0;j<16;++j)
     {
@@ -191,12 +200,24 @@ std::string RANSWallEvolutionPatch::HeightComparison(const Vector &s,const Vecto
         samples["x"].push_back(p[0]);samples["z"].push_back(r);
         kErrors[0]+=weight*(k-k0)*(k-k0);kErrors[1]+=weight*(kg-kg0)*(kg-kg0);
         samples["pressure"].push_back(Point(r<H?InnerPressure():OuterPressure(),p).Value(s,offset[r<H?InnerPressure():OuterPressure()]));
-        if(r>=2){samples["epsilon_weights"].push_back(weight);samples["epsilon"].push_back(Point(Epsilon(),p).Value(s,offset[Epsilon()]));samples["reference_epsilon"].push_back(us*us*us/(kap*r));}
+        if(r>=2)
+        {
+            const double epsilon=Point(Epsilon(),p).Value(s,offset[Epsilon()]);
+            samples["epsilon_weights"].push_back(weight);samples["epsilon"].push_back(epsilon);samples["reference_epsilon"].push_back(us*us*us/(kap*r));
+            if(!reportingBreakpoints.empty() && !(std::isfinite(epsilon) && epsilon>0))
+                invalid.push_back(J::Object({{"point",J::Numbers(p)},{"epsilon",J::Number(epsilon)},
+                    {"reason",J::Quote("optional_reporting_nonpositive_or_nonfinite_outer_epsilon")}}));
+        }
         const auto g=uv.Gradient(s,offset[0]);errors[0]+=weight*((u-u0)*(u-u0)+v*v);errors[1]+=weight*(g[2]-g0)*(g[2]-g0);
+        if(!std::isfinite(k) || (r<H?k<0:k<=0))
+        {
+            invalid.push_back(J::Object({{"point",J::Numbers(p)},{"k",J::Number(k)},
+                {"reason",J::Quote("reporting_inadmissible_local_k")}}));
+            if(r<H)continue; // Never evaluate a constitutive law at this query.
+        }
         if(r<H)
         {
             RANSTensor G{};for(int a=0;a<m_dimension;++a)G[PhysicalAxis(a)]=Point(a,p).Gradient(s,offset[a]);
-            if(k<0){invalid.push_back(J::Object({{"point",J::Numbers(p)},{"k",J::Number(k)}}));continue;}
             const auto current=StateProfile(s,ray.coordinate,time,data);
             const double production=InnerStress(k,current->Original().EddyViscosity(r),G).production,P0=analytic->ReferenceProduction(r);
             errors[2]+=weight*(production-P0)*(production-P0);errors[3]+=weight*P0*P0;
@@ -269,6 +290,7 @@ std::string RANSWallEvolutionPatch::HeightComparison(const Vector &s,const Vecto
             {"Re_H",J::Number(ref.reynolds)},{"intrinsic_chi",AcceptedAWF()?"null":J::Number(ref.weight)},{"reference_k_ground",J::Number(AcceptedAWF()?analytic->ReferenceK(0):K0)}})},
         {"scaled_native_spatial_blocks",J::Numbers(scaled)},{"dimensional_mass_dual_spatial_first4",J::Numbers(dimensional)},
         {"common_normalized_spatial_first4",J::Numbers(common)},{"common_scales_U_K_E_H_V",J::Numbers(Vector{us,K0,us*us*us/(kap*2),2,24})},
+        {"common_reporting_knots",J::Numbers(knots)},{"common_reporting_queries_valid",J::Boolean(invalid.empty())},
         {"invalid_production_diagnostic_points",J::List(invalid)},{"representation_L2_velocity_gradient_production_referenceProduction",J::Numbers(errors)},
         {"representation_L2_k_gradient",J::Numbers(kErrors)},{"wall_formulation",FormulationMetadata()},
         {"common_samples",J::Object(physical)},{"profiles",J::List(profiles)},{"fixed_bands",PhysicalKBands(s,time,data)},

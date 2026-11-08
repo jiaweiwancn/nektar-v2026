@@ -480,7 +480,8 @@ int main(int argc,char **argv)
         {
             const double time=packet.get<double>("time");
             Require(patch.ScalarDomain(state,time,data).admissible,"height replay outside hard scalar domain");
-            std::ofstream out(argv[3]);out<<patch.HeightComparison(state,history,time,data)<<'\n';
+            const auto reporting=packet.get_child_optional("reporting_breakpoints")?Read(packet,"reporting_breakpoints"):Vector{};
+            std::ofstream out(argv[3]);out<<patch.HeightComparison(state,history,time,data,reporting)<<'\n';
             Require(out.good(),"height replay write failed");world->Finalise();return 0;
         }
         if(packet.get<std::string>("operation","")=="contact")
