@@ -24,6 +24,24 @@ def report(path):
     return load(path)
 
 
+def valid_common_query(q):
+    return bool(q and q.get('common_samples')) and q.get('valid') is not False and \
+        q.get('common_reporting_queries_valid') is not False
+
+
+def comparison_states(result):
+    """Invalid optional queries cannot enter a cross-suite field comparison."""
+    initial=result.get('initialization')
+    if not valid_common_query(initial):return {}
+    states={0:initial}
+    if valid_common_query(result.get('final')):states[int(result['steps'])]=result['final']
+    for n,entry in result.get('snapshots',{}).items():
+        if entry['exit_code']==0:
+            q=load(Path(entry['path']))
+            if valid_common_query(q):states[int(n)]=q
+    return states
+
+
 def compact(q):
     vectors=('same_state_accepted_source_load','same_state_calibrated_EP_source_load')
     d={k:v for k,v in q.items() if k not in ('common_samples','weak_k_component_loads',*vectors)}
@@ -141,7 +159,7 @@ def main():
         result=load(path);initial=result.get('initialization');row={k:v for k,v in result.items() if k not in ('initialization','final','snapshots')}
         out['cases'][case]=row
         if not initial or not result.get('actual_h0_sha256'):continue
-        if not initial.get('common_samples') or initial.get('valid') is False:
+        if not valid_common_query(initial):
             row['invalid_optional_initial_query']=initial
             continue
         states[case]={0:initial};row['initial']=compact(initial);row['actual_h0_error_to_own_reference']=reference_errors(initial)
@@ -151,11 +169,11 @@ def main():
             file=Path(entry['path'])
             if entry['exit_code']==0 and file.exists():
                 d=load(file)
-                if d.get('common_samples') and d.get('valid') is not False:states[case][int(step)]=d
+                if valid_common_query(d):states[case][int(step)]=d
                 else:row.setdefault('invalid_optional_queries',[]).append(dict(entry,payload=d))
             else:row.setdefault('invalid_optional_queries',[]).append(entry)
         if result.get('final'):
-            if result['final'].get('common_samples') and result['final'].get('valid') is not False:
+            if valid_common_query(result['final']):
                 states[case][int(result['steps'])]=result['final']
             else:row.setdefault('invalid_optional_queries',[]).append(dict(time=result.get('time'),payload=result['final']))
         row['observations']={};attempts=native.get(case,{}).get('pimple_attempts',[])
@@ -186,13 +204,8 @@ def main():
             f=a.compare_suite/case/'result.json'
             if not f.exists():continue
             result=load(f)
-            if not result.get('initialization',{}).get('common_samples'):continue
-            other={0:result['initialization']}
-            if result.get('final',{}).get('common_samples'):other[int(result['steps'])]=result['final']
-            for n,entry in result.get('snapshots',{}).items():
-                if entry['exit_code']==0:
-                    d=load(Path(entry['path']))
-                    if d.get('common_samples'):other[int(n)]=d
+            other=comparison_states(result)
+            if not other:continue
             out['cross_suite'][case]=dict(other=str(a.compare_suite.resolve()),
                 same_actual_h0=result['actual_h0_sha256']==out['cases'][case]['actual_h0_sha256'],
                 common_times={str(q['time']):differences(q,next(v for v in other.values() if abs(v['time']-q['time'])<1e-12))
@@ -218,7 +231,8 @@ def main():
                         for axis,field in zip(line,('k','u','du_dz','dk_dz')):axis.plot(ref[field],[z/scale for z in v['z']],':',color='black')
                 for line,label in zip(axes,('physical z','z/H')):
                     for axis,field in zip(line,('transported k','velocity u','du/dz','dk/dz')):axis.set(xlabel=field,ylabel=label)
-                axes[0,0].set_ylim(0,.1);axes[0,2].set_xscale('symlog');axes[1,2].set_xscale('symlog');axes[0,0].legend(fontsize=7)
+                for axis in axes[0]:axis.set_ylim(0,.1)
+                axes[0,2].set_xscale('symlog');axes[1,2].set_xscale('symlog');axes[0,0].legend(fontsize=7)
                 fig.suptitle(f'Actual native cubic fields, x={x:.6g}; dotted: accepted analytical reference')
                 fig.savefig(a.output/(pair[0]+'-profiles-x'+str(station)+'.png'),dpi=160);plt.close(fig)
         fig,axes=plt.subplots(1,3,figsize=(13,4),layout='constrained')

@@ -1,0 +1,101 @@
+{
+  "captured_UTC": "2026-11-08T10:43:43.678681+00:00",
+  "status": "numerically_rejected",
+  "last_accepted_step": 120,
+  "last_accepted_time": 0.07500000000000005,
+  "attempted_step": 121,
+  "attempted_time": 0.07562500000000005,
+  "failure": "accepted AWF hard audit exit; candidate/history retained: accepted_awf_covariance_or_budget_exit",
+  "native_report": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/faithful-2G-campaign/trajectory/steps-000121-000128/case.evolution.json",
+    "sha256": "f1888946f83deeca2d9fd4c26143ef69a3b970cdd5d266319dee7f0e8e060e3c"
+  },
+  "checkpoint": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/faithful-2G-campaign/observations/terminal-attempt-000121/checkpoint-last-accepted",
+    "sha256": "b299e304e25dfe2918286a48cae42c8de894982e3b6f6b1b31884c54c2f53b5e"
+  },
+  "raw_or_corrected_rejected_coupled_sha256": "462a11f87b020e3be3d01fe665e3ca9e5ccfe5d27292208c39e9a76402272db8",
+  "rollback": {
+    "coupled_state_exact": true,
+    "native_history_exact": true,
+    "native_history_times_exact": true,
+    "time_exact": true
+  },
+  "hard_audit": {
+    "accepted_awf_covariance": [
+      0.13614268626861198,
+      -0.01068847809493649
+    ],
+    "accepted_awf_hard_admissible": [
+      0.0
+    ],
+    "accepted_awf_inner_minimum_point": [
+      2.0,
+      0.0,
+      0.1,
+      0.5400234273835163,
+      0.5105080130598861,
+      0.018551219405940428,
+      0.31461169338599354,
+      0.3600156182556775,
+      0.13614268626861198
+    ],
+    "accepted_awf_outer_minimum_point": [
+      -3.0,
+      0.0,
+      3.7347166364278097,
+      0.5105894331040693,
+      0.03892415740894865,
+      -0.01068847809493649
+    ],
+    "accepted_awf_reference_departure": [
+      0.3981717499259945,
+      0.9997711882961328,
+      1.0001926306991191,
+      0.9994923302072624,
+      1.0008113544742687,
+      0.9999577345699127,
+      1.00003471220028
+    ],
+    "accepted_awf_scalar_domain": [
+      1.0,
+      0.9994923302072621,
+      0.5104836331931287,
+      0.51039120285158,
+      0.03631791663093067,
+      0.5104864362191511,
+      0.07263122831014401,
+      5.909279212957162,
+      0.0
+    ],
+    "accepted_awf_sources": [
+      5.1701519105669576,
+      5.150690075970982,
+      0.0,
+      0.013842009833511946,
+      0.01946183459597517
+    ]
+  },
+  "last_attempt_solve_counts": {
+    "outer_sweeps": 1.0,
+    "momentum_predictor_solves": 1.0,
+    "pressure_system_solves": 1.0,
+    "epsilon_transport_solves": 1.0,
+    "k_transport_solves": 1.0,
+    "bound_calls": 1.0
+  },
+  "bound_activations": 0.0,
+  "rejected_attempt_packets": [
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/faithful-2G-campaign/trajectory/steps-000121-000128/pimple-states/k-t0.075625000000000053-e37a137ff309.json",
+      "sha256": "ec788d0bbd34dfa8576fa6e920347eb5a1feb81b049b06e5128c4c6f85e2bba1",
+      "bytes": 351680
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/faithful-2G-campaign/trajectory/steps-000121-000128/pimple-states/k-t0.075625000000000053-e37a137ff309.matrix.bin",
+      "sha256": "798265306b383227b92dbb18bb50fd5e65c68282199084f8315f32d38e80a3b9",
+      "bytes": 2032128
+    }
+  ],
+  "native_still_alive": null
+}

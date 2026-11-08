@@ -1,0 +1,124 @@
+{
+  "status": "numerically_rejected",
+  "case": "Accepted-AWF-2G:cutoff-v1",
+  "companion": "faithful",
+  "accepted_steps": 157,
+  "accepted_time": 0.09812500000000007,
+  "attempted_step": 158,
+  "attempted_time": 0.09875000000000007,
+  "failure": "accepted AWF hard audit exit; candidate/history retained: accepted_awf_covariance_or_budget_exit",
+  "reasons": [
+    "accepted_awf_covariance_or_budget_exit",
+    "accepted_awf_inner_minimum_point:[2,0,1,0.51117308706221287,0.51050801305988613,0.17715062527313757,0.23483843684312963,0.34078205804147527,0.17287738823995977]",
+    "accepted_awf_outer_minimum_point:[-3,0,3.6880433085817326,0.51043766893201925,0.039362177456981222,-0.011383940217260358]"
+  ],
+  "audit": {
+    "accepted_awf_covariance": [
+      0.17287738823995977,
+      -0.011383940217260358
+    ],
+    "accepted_awf_hard_admissible": [
+      0.0
+    ],
+    "accepted_awf_inner_minimum_point": [
+      2.0,
+      0.0,
+      1.0,
+      0.5111730870622129,
+      0.5105080130598861,
+      0.17715062527313757,
+      0.23483843684312963,
+      0.34078205804147527,
+      0.17287738823995977
+    ],
+    "accepted_awf_outer_minimum_point": [
+      -3.0,
+      0.0,
+      3.6880433085817326,
+      0.5104376689320193,
+      0.03936217745698122,
+      -0.011383940217260358
+    ],
+    "accepted_awf_reference_departure": [
+      0.3260068616804272,
+      0.9998409498311245,
+      1.0002010393397003,
+      0.9992898522595888,
+      1.0009645546558026,
+      0.9998751667763401,
+      1.000062536048712
+    ],
+    "accepted_awf_scalar_domain": [
+      1.0,
+      0.9992898522595888,
+      0.5104442846989117,
+      0.5104268166741966,
+      0.03631791663093067,
+      0.5104442846989117,
+      0.07262223250960431,
+      5.9092784611123905,
+      0.0
+    ],
+    "accepted_awf_sources": [
+      5.151450840108441,
+      5.15068310047574,
+      0.0,
+      0.013813740599395979,
+      0.0007677396327014918
+    ],
+    "admissible": [
+      1.0
+    ],
+    "interface": [
+      6.000000000000001,
+      -0.4504299879280523,
+      0.002363774314876567,
+      0.003718351561483508,
+      0.012433880622077176,
+      0.00015373411860596504,
+      -3.978251702435392e-16,
+      0.0025979441412610155
+    ],
+    "strong_continuity": [
+      0.002109711876364576,
+      0.02220143084779302,
+      5.195399401761603e-16,
+      5.325699373392794e-16,
+      -3.8025550629420434e-15
+    ]
+  },
+  "last_accepted_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-refined-2G/observations/terminal-attempt-000158/checkpoint-last-accepted",
+  "checkpoint_sha256": "71cd4936f6f0580f928ac362cf6d0b43ea26e2d482c29e9ed55b1a2333fa0e5d",
+  "native_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-refined-2G/observations/terminal-attempt-000158/native-failure.evolution.json",
+  "native_report_sha256": "2561c76cb63c33c70b50cd30d9e4a65d3649061b70b74275180669d019dc6c89",
+  "rejected_state_sha256": "6e958b7b7ef9ef2fc64d00568fae232bfa26298aeeb43d76776912c724cf96e9",
+  "native_history_sha256": [
+    "3da494bc03198d86d914bb0205494ffbdaa31f7cfddaca40d2dc674649a5baea",
+    "16d9418a34ec1c61edc2ad9b1be5daa4ff3694dfcc5077b8ecfd4d8185b646d2"
+  ],
+  "rollback": {
+    "coupled_state_exact": true,
+    "native_histories_exact": true,
+    "history_times_exact": true,
+    "time_exact": true
+  },
+  "solves": {
+    "outer_sweeps": 1.0,
+    "momentum_predictor_solves": 1.0,
+    "pressure_system_solves": 1.0,
+    "epsilon_transport_solves": 1.0,
+    "k_transport_solves": 1.0,
+    "bound_calls": 1.0,
+    "bound_activations": 0.0,
+    "additional_governing_equation_solves": 0.0
+  },
+  "raw_frozen_linear_residual": 4.404571325722362e-19,
+  "frozen_packet": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-refined-2G/trajectory/steps-000153-000160/pimple-states/k-t0.098750000000000074-fd9264235024.json",
+    "sha256": "8530aea6f76a66a147760446b06e6dba863f0ceb249fbf6e945a2200e1b5022f",
+    "transport_matrix_path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-refined-2G/trajectory/steps-000153-000160/pimple-states/k-t0.098750000000000074-fd9264235024.matrix.bin",
+    "transport_matrix_sha256": "2ae289c386305a5934cbdfbc3135b7fd93178a448cfa1956a40e9fde47ee9149"
+  },
+  "timestamp_UTC": "2026-11-08T11:32:29.853336+00:00",
+  "unchanged_numerical_retry": false
+}

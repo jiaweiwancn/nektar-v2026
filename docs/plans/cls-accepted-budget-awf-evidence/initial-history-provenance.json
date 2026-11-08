@@ -1,0 +1,174 @@
+{
+  "schema": 1,
+  "status": "passed",
+  "started_UTC": "2026-11-08T12:01:35.855066+00:00",
+  "purpose": "repeated native initialization and exact first implicit callback-history identity; not an original production step0 checkpoint",
+  "native_solver": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/runtime-v4/solver/IncNavierStokesSolver",
+  "native_solver_sha256": "db73039aad11327b9ea4deefa5da890b73041eef8d0aa4eb4cfb7e8a6ba1534b",
+  "diagnostic_probe": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/runtime-diagnostic-v6/probe/RANSWallResolutionProbe",
+  "diagnostic_probe_sha256": "fb1c7f01bd2d53acd41e4a8f7bb56fa0834ac676cc167ffec890238bf975d5ce",
+  "rank": 1,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "production_governing_solves": 0,
+  "diagnostic_governing_solves": 0,
+  "physical_time_advances": 0,
+  "repeated_native_initializations": 1,
+  "original_production_step0_checkpoints_created": 0,
+  "repeated_initialization": {
+    "output": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/initial-history-replication/refined-regularized-2G",
+    "receipt": {
+      "command": [
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/runtime-v4/solver/IncNavierStokesSolver",
+        "case.xml"
+      ],
+      "exit_code": 0,
+      "seconds": 21.618514611036517,
+      "log_sha256": "68792d54733fdb40cb38a6709ff8b7e5bb293c4bb86816b60beaccc53c00d46a"
+    },
+    "reason": "Faithful cutoff-v1 refinement improves reference preservation and delays Original outer covariance failure, but accepts157steps toT=.098125 and rejects158 atT=.09875, x=-3,z=3.6880433086, covariance -0.0113839402173. New fresh-h0 refined companion changes only the explicit existing outer regularization; Linear inner stress, budget source, floor and step schedule remain.",
+    "signature_matches": true,
+    "actual_native_h0_matches_first_block_bitwise": true,
+    "h0_sha256": "176dd38e7136e0341926cb7ee7302041fad27c8f983764504ed586cb2940d8d4",
+    "checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/initial-history-replication/refined-regularized-2G/checkpoint",
+    "checkpoint_sha256": "153e4932907feaea80b4f08a7bfa8c11af5145b8d55f9dc3778e39a98ac8c883",
+    "native_history_sha256": [
+      "fdd58e8765bcbb7adeb6edc009b0c6811baa64fcfdc77ab3124f220c3a075e14",
+      "16d9418a34ec1c61edc2ad9b1be5daa4ff3694dfcc5077b8ecfd4d8185b646d2"
+    ],
+    "native_history_times_sha256": "d9ee3f7a5f17f350f618a126baa5137d38c609c75164ac9fc5645b1722985846",
+    "initialization_lift_calls_iterations": [
+      2.0,
+      2.0
+    ],
+    "implicit_callbacks": 0,
+    "physical_commits": 0
+  },
+  "contexts": {
+    "faithful-2G-campaign": {
+      "first_block_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/faithful-2G-campaign/trajectory/steps-000001-000008/case.evolution.json.gz",
+      "first_block_report_sha256": "9f71663c6ea151532734b48130902e57035b02d805515035cdcfa28d15b91cb2",
+      "saved_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/initial-history-replication/faithful-2G-campaign-callback/case.evolution.json.gz",
+      "actual_step1_packet": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/faithful-2G-campaign/trajectory/steps-000001-000008/pimple-states/k-t0.00062500000000000001-aa690d75af76.json",
+      "actual_step1_packet_sha256": "02264ac1441c94a7d9e3c80a32b295f021828ca98ddd9ffaeb32b6bd191c08e6",
+      "saved_step1_packet": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/initial-history-replication/faithful-2G-campaign-callback/k-t0.00062500000000000001-aa690d75af76.json",
+      "source_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/native-transactions-v4/initial/checkpoint",
+      "verified_checkpoint_copy": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/initial-history-replication/faithful-2G-campaign-callback/checkpoint",
+      "checkpoint_sha256": "680fe08bdcf94881b141971f25700f72a0ef28d3f8c8a0b690f52736e2e26d0b",
+      "checkpoint_origin": "earlier independent native zero-step verification initialization; not production step0 checkpoint",
+      "actual_h0_sha256": "36ddd501981b449544d3f67d60a82383088e10f98f6746e3f680761c1abf9605",
+      "callback_history_sha256": "aa690d75af76e6ed9f606a2c1d2b41dc4e35658eb457ad84a9fc9a4faeed2535",
+      "numeric_history_minus_h0_maximum": 0.0,
+      "binary_history_minus_h0_coefficients": 12,
+      "native_callback_matches_actual_step1_history_bitwise": true,
+      "free_rows": 504,
+      "free_rows_sha256": "4f608a6d0dab593a0d00f73b0969d197890afef939be975be10543cb3e36540e",
+      "fixed_external_rows": 344,
+      "packet_input_sha256": "b1d214a556cdc498658dd7a6d61782674566f04b58091e66fdf03f61796eee41",
+      "probe_receipt": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/runtime-diagnostic-v6/probe/RANSWallResolutionProbe",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/faithful-2G-campaign/trajectory/steps-000001-000008/case.xml",
+          "input.json",
+          "result.json"
+        ],
+        "exit_code": 0,
+        "seconds": 9.187752383993939,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "probe_output": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/initial-history-replication/faithful-2G-campaign-callback/result.json",
+      "probe_output_sha256": "3642ea7d319b9ca5ab13f5eb09808ea5c548a811749d790e58b2951b1514b27a",
+      "replay_context": {
+        "physical_signature_matches": true,
+        "checkpoint_sha256": "680fe08bdcf94881b141971f25700f72a0ef28d3f8c8a0b690f52736e2e26d0b",
+        "accepted_steps": 0.0,
+        "accepted_time": 0.0,
+        "fixed_reference_sha256": "709764618b49c650686f756bf2eb5db1a570e8f257c23fbce1ad69354074eb6e",
+        "external_boundary_defect": 0.0,
+        "tail_identity_only_rejected": false,
+        "initialization_lift_calls_iterations": [
+          0.0,
+          0.0
+        ],
+        "new_initial_state_constructed": false,
+        "strict_spatial_readback": false,
+        "native_history_sha256": [],
+        "native_history_times_sha256": null,
+        "native_history_advanced": false,
+        "governing_solves": 0.0,
+        "formed_callback_history_sha256": "aa690d75af76e6ed9f606a2c1d2b41dc4e35658eb457ad84a9fc9a4faeed2535",
+        "history_policy": "native archived GLM slots; capture callback then abort before governing solves; recorded SHA256 matched; local snapshot restored"
+      },
+      "governing_solves": 0,
+      "physical_commits": 0,
+      "checkpoint_unchanged": true,
+      "history_policy": "exact saved native GLM slots restored; callback captured then deliberately aborted before governing solve; matched real step1 history SHA; local integration snapshot restored"
+    },
+    "selected-refined-regularized-2G": {
+      "first_block_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-refined-regularized-2G/trajectory/steps-000001-000008/case.evolution.json.gz",
+      "first_block_report_sha256": "1ad777950ce8e06814213e3a136b1f4df9f22df5a2fa629cea148f0a113e7753",
+      "saved_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/initial-history-replication/selected-refined-regularized-2G-callback/case.evolution.json.gz",
+      "actual_step1_packet": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-refined-regularized-2G/trajectory/steps-000001-000008/pimple-states/k-t0.00062500000000000001-54a8578a0d1d.json",
+      "actual_step1_packet_sha256": "76dee7f21bbdb9b146f3a71c09c43b766e0bef3fff549db2fb07c55dba69560a",
+      "saved_step1_packet": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/initial-history-replication/selected-refined-regularized-2G-callback/k-t0.00062500000000000001-54a8578a0d1d.json",
+      "source_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/initial-history-replication/refined-regularized-2G/checkpoint",
+      "verified_checkpoint_copy": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/initial-history-replication/selected-refined-regularized-2G-callback/checkpoint",
+      "checkpoint_sha256": "153e4932907feaea80b4f08a7bfa8c11af5145b8d55f9dc3778e39a98ac8c883",
+      "checkpoint_origin": "new repeated native zero-step initialization; not production step0 checkpoint",
+      "actual_h0_sha256": "176dd38e7136e0341926cb7ee7302041fad27c8f983764504ed586cb2940d8d4",
+      "callback_history_sha256": "54a8578a0d1d3acac345427f0e377d8fd790aece8e8a256746d212974bb1f96b",
+      "numeric_history_minus_h0_maximum": 0.0,
+      "binary_history_minus_h0_coefficients": 17,
+      "native_callback_matches_actual_step1_history_bitwise": true,
+      "free_rows": 672,
+      "free_rows_sha256": "f56360381f04618fbcbe8e15ec789fb9085ca407894768500d6b968b2e083545",
+      "fixed_external_rows": 416,
+      "packet_input_sha256": "aec3f564ef71eb3e3d123fc86298928c95612b3d8964c19451273c634f8117f9",
+      "probe_receipt": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/runtime-diagnostic-v6/probe/RANSWallResolutionProbe",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-refined-regularized-2G/trajectory/steps-000001-000008/case.xml",
+          "input.json",
+          "result.json"
+        ],
+        "exit_code": 0,
+        "seconds": 5.6800929240416735,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "probe_output": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/initial-history-replication/selected-refined-regularized-2G-callback/result.json",
+      "probe_output_sha256": "f41b31da020da09f5dd7b80a49adcc6de4755e90cffaa1bf1fc5a3530d1cea05",
+      "replay_context": {
+        "physical_signature_matches": true,
+        "checkpoint_sha256": "153e4932907feaea80b4f08a7bfa8c11af5145b8d55f9dc3778e39a98ac8c883",
+        "accepted_steps": 0.0,
+        "accepted_time": 0.0,
+        "fixed_reference_sha256": "e0bb0399b224a54d017ade3ec51933b2daedd475e069131ac3217dcedd3b60e3",
+        "external_boundary_defect": 0.0,
+        "tail_identity_only_rejected": false,
+        "initialization_lift_calls_iterations": [
+          0.0,
+          0.0
+        ],
+        "new_initial_state_constructed": false,
+        "strict_spatial_readback": false,
+        "native_history_sha256": [],
+        "native_history_times_sha256": null,
+        "native_history_advanced": false,
+        "governing_solves": 0.0,
+        "formed_callback_history_sha256": "54a8578a0d1d3acac345427f0e377d8fd790aece8e8a256746d212974bb1f96b",
+        "history_policy": "native archived GLM slots; capture callback then abort before governing solves; recorded SHA256 matched; local snapshot restored"
+      },
+      "governing_solves": 0,
+      "physical_commits": 0,
+      "checkpoint_unchanged": true,
+      "history_policy": "exact saved native GLM slots restored; callback captured then deliberately aborted before governing solve; matched real step1 history SHA; local integration snapshot restored"
+    }
+  },
+  "completed_UTC": "2026-11-08T12:02:16.939330+00:00"
+}

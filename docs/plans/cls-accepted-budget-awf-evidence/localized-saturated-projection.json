@@ -1,0 +1,74 @@
+{
+  "status": "passed",
+  "case": "Accepted-AWF-05O",
+  "companion": "regularized-saturated",
+  "production_governing_solves": 0.0,
+  "test_governing_solves_per_equation": 0.0,
+  "ranks": 1.0,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "steps_are": "independent verification trajectories, not hidden production work",
+  "endpoint_sampling": {
+    "endpoint_sampling_error": 2.220446049250313e-16,
+    "exact_global_row_error": 2.220446049250313e-16,
+    "nonuniform_profile_K_error": 2.220446049250313e-16,
+    "dependent_epsilon_H_error": 4.440892098500626e-16,
+    "chi": null,
+    "governing_solves": 0.0
+  },
+  "active_projection_diagnostic": {
+    "success": true,
+    "native_step_accepted": false,
+    "governing_solves": 0.0,
+    "complete_hard_admissible": true,
+    "complete_hard_reasons": [],
+    "complete_audit_failure": "",
+    "raw_minimum": {
+      "value": -5.10508013051858e-06,
+      "functional_kind": "Point",
+      "coordinate": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "geometry": 3.0,
+      "inventory": "reconstruction_dense"
+    },
+    "corrected_minimum": {
+      "value": 5.105544452285034e-09,
+      "functional_kind": "Point",
+      "coordinate": [
+        5.619419859992369e-16,
+        0.0,
+        0.0
+      ],
+      "geometry": 3.0,
+      "inventory": "continuous_ground_extremum"
+    },
+    "non_k_exact": true,
+    "prescribed_k_exact": true,
+    "shared_cg_jump": 1.3877787807814457e-16,
+    "mass_norm": 8.867469610895262e-07,
+    "stationarity_mass_dual": 0.0,
+    "complementarity": 9.388798648993215e-29,
+    "interpretation": "QP positivity feasibility is separate from linear-stress covariance/hard-audit qualification"
+  },
+  "same_state_native_frozen_load_agreement": 2.6827905131796004e-16,
+  "diagnostic_k_solves": 0.0,
+  "accepted_checkpoint": {
+    "order": 1.0,
+    "steps": 0.0,
+    "time": 0.0,
+    "dt": 0.000625,
+    "sha256": "84cfc34c47cd5a4a43cbb17066d0f75a586fba423a7ecce6c01ad343ea9ed8f6"
+  },
+  "solver_sha256": "db73039aad11327b9ea4deefa5da890b73041eef8d0aa4eb4cfb7e8a6ba1534b",
+  "native_summary_path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/native-constitutive-saturated-v6/summary.json",
+  "native_summary_sha256": "e1b23f5e82c233da037d7523c31a5d3a47ba26d22b056e51af79c933e6752f7b"
+}

@@ -1,0 +1,623 @@
+{
+  "schema": 1.0,
+  "source_revision": "e0d599bc539b64045f87662d87be31a30fa6b4f3",
+  "scope": "source-only counterfactual on identical retained native coefficients; no separately evolved EP case, no PDE solve or native time/history commit",
+  "coefficients_are": "native global dual test-function loads, not nodal source values or field coefficients",
+  "constant_test_definition": "exact native Modified_A tensor constant coefficients from exported local/global IDs and signs; local indices<2 in both axes are sign, remaining modes zero",
+  "integral_convention": "full constant-test contraction includes prescribed test rows and equals the native source quadrature integral; free-vertex contraction is a different test, not that whole-layer mean",
+  "Euclidean_norm_convention": "coordinate-dependent dual-vector Euclidean norm; NOT a physical mass-dual norm",
+  "governing_equation_solves": 0.0,
+  "physical_time_steps": 0.0,
+  "k_global_size": 592.0,
+  "k_free_count": 504.0,
+  "actual_h0_native_history_hashes": [
+    "750d7b0003e63b5bf3ec9b48adda836aad81c10d6f02e17132fce1366216b91c",
+    "af06c95b066477742f815814f36b6c986ceca43765bc7b5fa978052ec736844f"
+  ],
+  "actual_h0_native_history_times": [
+    0.0,
+    0.000625
+  ],
+  "JSON_integer_parser": "parse_int=float preserves native -0 literals as signed binary64 zeros",
+  "quadrature_check": {
+    "selected_state_sha256": "36ddd501981b449544d3f67d60a82383088e10f98f6746e3f680761c1abf9605",
+    "selected_history_sha256": "36ddd501981b449544d3f67d60a82383088e10f98f6746e3f680761c1abf9605",
+    "time": 0.0,
+    "alpha": 0.0,
+    "source_order_from": 16.0,
+    "source_order_to": 32.0,
+    "probe_reference_initialization_work": [
+      1.0,
+      1.0
+    ],
+    "selected_state_modified": false,
+    "external_boundary_and_full_residual_equivalence_claim": false,
+    "boundary_note": "The diagnostic 32-point session prepares its own reference/external traces; comparison is source-only on the unchanged actual native coefficients, not a restart or full residual/boundary equivalence test",
+    "source16_report": "/media/jay/新加卷/nektar-v2026-runs/cls-accepted-budget-awf-20261108/faithful-2G-campaign/trajectory/steps-000001-000008/case.evolution.json.gz",
+    "source32_report": "/media/jay/新加卷/nektar-v2026-runs/cls-accepted-budget-awf-20261108/source-counterfactual-native-v2/quadrature32/result.json",
+    "fields": {
+      "accepted_source": {
+        "max_free_coefficient_difference": 1.249000902703301e-16,
+        "max_free_difference_over_physical_budget": 2.4249121156828382e-17,
+        "free_coordinate_l2_difference": 2.472026239410527e-16,
+        "constant_test_integral_difference": -3.798366786031404e-16
+      },
+      "calibrated_EP_source": {
+        "max_free_coefficient_difference": 3.0357660829594124e-17,
+        "max_free_difference_over_physical_budget": 5.8938836145068985e-18,
+        "free_coordinate_l2_difference": 5.719139287047003e-17,
+        "constant_test_integral_difference": 1.0104764247564901e-16
+      },
+      "EP_minus_accepted": {
+        "max_free_coefficient_difference": 1.1796119636642288e-16,
+        "max_free_difference_over_physical_budget": 2.2901947759226806e-17,
+        "free_coordinate_l2_difference": 2.3536001670656482e-16,
+        "constant_test_integral_difference": 4.864544097399337e-16
+      }
+    },
+    "physical_reference_production_budget": 5.150705852907132
+  },
+  "captured_UTC": "2026-11-08T10:37:18.647612+00:00",
+  "diagnostic_native_probe_invocations": 1,
+  "probe_sha256": "ce4687ced48ec170ac60adfdb75de9d40a109411c05e43604aa16d8f1e6f8c80",
+  "probe_seconds": 9.25340709000011,
+  "mass_dual_norm_computed": true,
+  "source_model": "CLSCalibratedBudgetAWF, Ck=0; counterfactual source only uses EC-P_A0 redistribution with identical transported fields/viscosity/cutoff/endpoint K",
+  "scalar_integral_units": "m^4/s^3 per unit span for integral over dx dz; volume mean m^2/s^3; test functions dimensionless",
+  "native_free_rows_verified_against_step1_and_step32_transport_packets": true,
+  "states": [
+    {
+      "label": "actual_native_h0",
+      "time": 0.0,
+      "state_sha256": "36ddd501981b449544d3f67d60a82383088e10f98f6746e3f680761c1abf9605",
+      "report_path": "/media/jay/新加卷/nektar-v2026-runs/cls-accepted-budget-awf-20261108/faithful-2G-campaign/trajectory/steps-000001-000008/case.evolution.json.gz",
+      "report_sha256": "9f71663c6ea151532734b48130902e57035b02d805515035cdcfa28d15b91cb2",
+      "accepted_statistics": {
+        "full_constant_test_integral": 0.042103444785512645,
+        "full_coefficient_signed_sum": 0.07426389111197952,
+        "free_vertex_test_contraction": 0.03508620398792725,
+        "free_coordinate_l2": 0.12324524765559024,
+        "free_max_abs": 0.06127139319603054,
+        "free_nonvertex_coordinate_l2": 0.037122084117675154,
+        "nonzero_free_modes_above_1e_minus_14": 171.0,
+        "nonzero_free_nonvertex_modes_above_1e_minus_14": 143.0
+      },
+      "calibrated_EP_statistics": {
+        "full_constant_test_integral": 0.04210344478551233,
+        "full_coefficient_signed_sum": 0.06866349113193913,
+        "free_vertex_test_contraction": 0.03508620398792697,
+        "free_coordinate_l2": 0.014061289317236152,
+        "free_max_abs": 0.005983654138536806,
+        "free_nonvertex_coordinate_l2": 0.007796476205529476,
+        "nonzero_free_modes_above_1e_minus_14": 171.0,
+        "nonzero_free_nonvertex_modes_above_1e_minus_14": 143.0
+      },
+      "difference_statistics": {
+        "full_constant_test_integral": -3.469446951953614e-16,
+        "full_coefficient_signed_sum": -0.005600399980040478,
+        "free_vertex_test_contraction": -2.7755575615628914e-16,
+        "free_coordinate_l2": 0.12581675949301102,
+        "free_max_abs": 0.05917268688353829,
+        "free_nonvertex_coordinate_l2": 0.03803415442565238,
+        "nonzero_free_modes_above_1e_minus_14": 171.0,
+        "nonzero_free_nonvertex_modes_above_1e_minus_14": 143.0
+      },
+      "source_component_identity_max_abs": 8.326672684688674e-16,
+      "full_native_production_integral": 5.192809297692645,
+      "full_native_destruction_integral": 5.150705852907132,
+      "native_vs_reporting_source_integral_difference": 2.0650148258027912e-14,
+      "largest_free_differences": [
+        {
+          "k_global_row": 1190.0,
+          "k_local_row": 6.0,
+          "kind": "vertex",
+          "accepted": 0.06127139319603054,
+          "calibrated_EP": 0.002098706312492245,
+          "difference": -0.05917268688353829
+        },
+        {
+          "k_global_row": 1192.0,
+          "k_local_row": 8.0,
+          "kind": "vertex",
+          "accepted": 0.0612713931960305,
+          "calibrated_EP": 0.002098706312492246,
+          "difference": -0.05917268688353825
+        },
+        {
+          "k_global_row": 1185.0,
+          "k_local_row": 1.0,
+          "kind": "vertex",
+          "accepted": 0.04084759546402032,
+          "calibrated_EP": 0.0013991375416614836,
+          "difference": -0.03944845792235884
+        },
+        {
+          "k_global_row": 1188.0,
+          "k_local_row": 4.0,
+          "kind": "vertex",
+          "accepted": 0.04084759546402033,
+          "calibrated_EP": 0.0013991375416614877,
+          "difference": -0.03944845792235884
+        },
+        {
+          "k_global_row": 1191.0,
+          "k_local_row": 7.0,
+          "kind": "vertex",
+          "accepted": -0.02639621893316467,
+          "calibrated_EP": 0.0059836541385367625,
+          "difference": 0.03237987307170143
+        },
+        {
+          "k_global_row": 1193.0,
+          "k_local_row": 9.0,
+          "kind": "vertex",
+          "accepted": -0.02639621893316455,
+          "calibrated_EP": 0.005983654138536806,
+          "difference": 0.03237987307170136
+        },
+        {
+          "k_global_row": 1189.0,
+          "k_local_row": 5.0,
+          "kind": "vertex",
+          "accepted": -0.01759747928877644,
+          "calibrated_EP": 0.003989102759024478,
+          "difference": 0.021586582047800916
+        },
+        {
+          "k_global_row": 1186.0,
+          "k_local_row": 2.0,
+          "kind": "vertex",
+          "accepted": -0.017597479288776443,
+          "calibrated_EP": 0.003989102759024459,
+          "difference": 0.021586582047800902
+        }
+      ],
+      "wall_layer_volume": 12.0,
+      "volume_mean_accepted_source": 0.0035086203987927203,
+      "volume_mean_EP_source": 0.0035086203987926942,
+      "full_native_counterfactual_reference_production_integral": 5.150705852907134
+    },
+    {
+      "label": "accepted_step32",
+      "time": 0.020000000000000007,
+      "state_sha256": "532a868ed93a9e376d2f24ad19825526c08106e69d646d2a0529aa850d605abe",
+      "report_path": "/media/jay/新加卷/nektar-v2026-runs/cls-accepted-budget-awf-20261108/faithful-2G-campaign/trajectory/steps-000025-000032/case.evolution.json.gz",
+      "report_sha256": "0e10e725f2c43d971c093240bceec21d6b0a142979a22fa39ec349266f909df4",
+      "accepted_statistics": {
+        "full_constant_test_integral": 0.019732379308874545,
+        "full_coefficient_signed_sum": 0.020429811210989492,
+        "free_vertex_test_contraction": 0.016048824609570245,
+        "free_coordinate_l2": 0.13822828234468304,
+        "free_max_abs": 0.0660395943883259,
+        "free_nonvertex_coordinate_l2": 0.03979621304018383,
+        "nonzero_free_modes_above_1e_minus_14": 266.0,
+        "nonzero_free_nonvertex_modes_above_1e_minus_14": 238.0
+      },
+      "calibrated_EP_statistics": {
+        "full_constant_test_integral": 0.019732379308874403,
+        "full_coefficient_signed_sum": 0.014829453414103912,
+        "free_vertex_test_contraction": 0.01604882460957006,
+        "free_coordinate_l2": 0.017480520385652457,
+        "free_max_abs": 0.0068679031116211774,
+        "free_nonvertex_coordinate_l2": 0.009465773287212391,
+        "nonzero_free_modes_above_1e_minus_14": 266.0,
+        "nonzero_free_nonvertex_modes_above_1e_minus_14": 238.0
+      },
+      "difference_statistics": {
+        "full_constant_test_integral": -1.249000902703301e-16,
+        "full_coefficient_signed_sum": -0.005600357796885542,
+        "free_vertex_test_contraction": -1.942890293094024e-16,
+        "free_coordinate_l2": 0.12581464397926545,
+        "free_max_abs": 0.05917169355035805,
+        "free_nonvertex_coordinate_l2": 0.038033508506798604,
+        "nonzero_free_modes_above_1e_minus_14": 266.0,
+        "nonzero_free_nonvertex_modes_above_1e_minus_14": 238.0
+      },
+      "source_component_identity_max_abs": 1.4432899320127035e-15,
+      "full_native_production_integral": 5.170352842621993,
+      "full_native_destruction_integral": 5.150620463313116,
+      "native_vs_reporting_source_integral_difference": 3.123890035539034e-14,
+      "largest_free_differences": [
+        {
+          "k_global_row": 1190.0,
+          "k_local_row": 6.0,
+          "kind": "vertex",
+          "accepted": 0.06602626619420836,
+          "calibrated_EP": 0.0068545726438503105,
+          "difference": -0.05917169355035805
+        },
+        {
+          "k_global_row": 1192.0,
+          "k_local_row": 8.0,
+          "kind": "vertex",
+          "accepted": 0.0660395943883259,
+          "calibrated_EP": 0.0068679031116211774,
+          "difference": -0.05917169127670473
+        },
+        {
+          "k_global_row": 1188.0,
+          "k_local_row": 4.0,
+          "kind": "vertex",
+          "accepted": 0.04401625466527192,
+          "calibrated_EP": 0.004568455634705686,
+          "difference": -0.039447799030566236
+        },
+        {
+          "k_global_row": 1185.0,
+          "k_local_row": 1.0,
+          "kind": "vertex",
+          "accepted": 0.044037865608493064,
+          "calibrated_EP": 0.004590081000555268,
+          "difference": -0.0394477846079378
+        },
+        {
+          "k_global_row": 1191.0,
+          "k_local_row": 7.0,
+          "kind": "vertex",
+          "accepted": -0.037034981008600885,
+          "calibrated_EP": -0.0046556416765687145,
+          "difference": 0.03237933933203217
+        },
+        {
+          "k_global_row": 1193.0,
+          "k_local_row": 9.0,
+          "kind": "vertex",
+          "accepted": -0.037004893559712225,
+          "calibrated_EP": -0.0046255554493661605,
+          "difference": 0.032379338110346066
+        },
+        {
+          "k_global_row": 1189.0,
+          "k_local_row": 5.0,
+          "kind": "vertex",
+          "accepted": -0.024689196535481565,
+          "calibrated_EP": -0.0031029685246683533,
+          "difference": 0.02158622801081321
+        },
+        {
+          "k_global_row": 1186.0,
+          "k_local_row": 2.0,
+          "kind": "vertex",
+          "accepted": -0.02466682223305789,
+          "calibrated_EP": -0.0030806019718429634,
+          "difference": 0.021586220261214928
+        }
+      ],
+      "wall_layer_volume": 12.0,
+      "volume_mean_accepted_source": 0.001644364942406212,
+      "volume_mean_EP_source": 0.0016443649424062003,
+      "full_native_counterfactual_reference_production_integral": 5.1506204633131185
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-accepted-budget-awf-20261108/source-counterfactual-native-v2/analysis.json",
+      "sha256": "8d0a59098e928d537d67b92a26bdabc72acaef5d81a3abb2d97223aca573b906",
+      "bytes": 232308,
+      "role": "complete native source vectors, free row mask and native constant representation"
+    },
+    {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-accepted-budget-awf-20261108/source-counterfactual-native-v2/analysis-script.py",
+      "sha256": "893efc34a83c9fe3744a95c08942a317210748c4247f6634804a30b437e6b442",
+      "bytes": 10263,
+      "role": "exact read-only extraction and one-probe orchestration script"
+    },
+    {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-accepted-budget-awf-20261108/source-counterfactual-native-v2/quadrature32/case.xml",
+      "sha256": "ec631c80334f0785889f7f8618746801f570b3f882afafab3ab9600223e65b70",
+      "bytes": 15720,
+      "role": "source-only normal-order32 session"
+    },
+    {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-accepted-budget-awf-20261108/source-counterfactual-native-v2/quadrature32/input.json",
+      "sha256": "903d4c68239cf615072d4b95678bd65ca4dc6f246a83e9b947903e9b57d1405a",
+      "bytes": 60512,
+      "role": "exact selected native h0 fields/history"
+    },
+    {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-accepted-budget-awf-20261108/source-counterfactual-native-v2/quadrature32/result.json",
+      "sha256": "6bc6310e4747e4b6eb6669b89c36be4445cf074353f6dfe756b4e8f882f81bac",
+      "bytes": 2503159,
+      "role": "native normal-order32 source loads and diagnostics"
+    },
+    {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-accepted-budget-awf-20261108/source-counterfactual-native-v2/quadrature32/receipt.json",
+      "sha256": "466d2971f05847f2662b0592254580cc0f61bc6a308a2261990569595cd66737",
+      "bytes": 1304,
+      "role": "diagnostic process and runtime receipt"
+    },
+    {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-accepted-budget-awf-20261108/runtime-v4/probe/identity.json",
+      "sha256": "53b548166cef6fb7023d1149b5b1afedd6f3c7f57e2837c6639153dc34d513c2",
+      "bytes": 25070,
+      "role": "frozen resolution-probe linked closure"
+    },
+    {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-accepted-budget-awf-20261108/source-counterfactual-native-v1/guard-stop.json",
+      "sha256": "77caf367405462997db2f6d7f9cdff7e6b55f84a70cd6a489c843fffd27352b5",
+      "bytes": 578,
+      "role": "strict guard stopped default-parser signed-zero loss before a probe"
+    },
+    {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-accepted-budget-awf-20261108/faithful-2G-campaign/trajectory/steps-000001-000008/case.evolution.json.gz",
+      "sha256": "9f71663c6ea151532734b48130902e57035b02d805515035cdcfa28d15b91cb2",
+      "bytes": 1149220,
+      "role": "immutable completed native coupled report"
+    },
+    {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-accepted-budget-awf-20261108/faithful-2G-campaign/trajectory/steps-000025-000032/case.evolution.json.gz",
+      "sha256": "0e10e725f2c43d971c093240bceec21d6b0a142979a22fa39ec349266f909df4",
+      "bytes": 1602284,
+      "role": "immutable completed native coupled report"
+    },
+    {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-accepted-budget-awf-20261108/source-counterfactual-native-v2/mass-dual-analysis.json",
+      "sha256": "bb6f491e300820e2657365acf215ab85578c58eb2b1fff12e4b57193ca7bf50f",
+      "bytes": 630549,
+      "role": "complete physical dual norms, native free Riesz coefficients and x=1.6 rate columns"
+    },
+    {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-accepted-budget-awf-20261108/native-constitutive-v6/mass-accounting/result.json",
+      "sha256": "f4901df8ee2222f6ece105432c1592c54440f3b09d3e5c6fbf4cb38bbbd26edc",
+      "bytes": 793728,
+      "role": "actual native consistent PicardKMass from existing h=[] no-PDE diagnostic"
+    },
+    {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-accepted-budget-awf-20261108/source-counterfactual-native-v2/native-source-rates.png",
+      "sha256": "00e608af4a422497e5d4e4974daaa5f5b0f4e84231fbadd08db793cee6a62921",
+      "bytes": 214023,
+      "role": "source/diffusion physical-rate or basis-labelled weak-mode plot"
+    },
+    {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-accepted-budget-awf-20261108/source-counterfactual-native-v2/native-source-weak-modes.png",
+      "sha256": "949f51523a3bcf65d0c1a05dd24e3a3700e2ccc6e4c24f8a081ee600b01c4b5f",
+      "bytes": 91174,
+      "role": "source/diffusion physical-rate or basis-labelled weak-mode plot"
+    },
+    {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-accepted-budget-awf-20261108/source-counterfactual-native-v2/mass-dual-script.py",
+      "sha256": "123d6761ceb9234f9bc6b4f9172adc2901f3ca72670cedd903682655a6c7aa81",
+      "bytes": 10770,
+      "role": "exact one-thread physical mass-dual and plot analysis script"
+    },
+    {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-accepted-budget-awf-20261108/source-counterfactual-native-v2/mass-dual-interpolation-check.json",
+      "sha256": "f750ede225d84226926251e25faf0ca8ecf8ccf844bfe6f9e80fe31293a5eda4",
+      "bytes": 207,
+      "role": "diagnostic column continuity check against native signed CG connectivity"
+    }
+  ],
+  "physical_mass_dual": {
+    "definition": "sqrt(L_f^T M_ff^-1 L_f) with actual native consistent PicardKMass and exact essential-eliminated free rows",
+    "mass_source": "/media/jay/新加卷/nektar-v2026-runs/cls-accepted-budget-awf-20261108/native-constitutive-v6/mass-accounting/result.json",
+    "mass_source_sha256": "f4901df8ee2222f6ece105432c1592c54440f3b09d3e5c6fbf4cb38bbbd26edc",
+    "mass_is_transport_A": false,
+    "common_normalization_K0_times_ustar_over2_times_sqrt24": 0.5001936566395248,
+    "common_scales": {
+      "K0": 0.5105080130598861,
+      "ustar": 0.4,
+      "height": 2.0,
+      "volume": 24.0
+    },
+    "mass_cholesky_factorizations": 1,
+    "physical_spatial_terms": [
+      "inner_momentum_stress",
+      "outer_momentum_stress",
+      "conservative_advection",
+      "k_diffusion",
+      "epsilon_diffusion",
+      "inner_k_production",
+      "inner_k_destruction",
+      "outer_k_production",
+      "outer_k_destruction",
+      "epsilon_production",
+      "epsilon_destruction",
+      "epsilon_yap",
+      "prescribed_scalar_source",
+      "roughness_force",
+      "prescribed_body",
+      "continuity",
+      "gauge"
+    ],
+    "diagnostic_aliases_excluded": true,
+    "net_destruction_counted_once": true,
+    "governing_equation_solves": 0,
+    "native_probe_invocations": 0,
+    "physical_time_steps": 0,
+    "quadrature_mass_dual_difference": {
+      "accepted_source": {
+        "mass_dual_norm": 1.6578157915557322e-14,
+        "common_normalized": 3.3143478921614404e-14
+      },
+      "calibrated_EP_source": {
+        "mass_dual_norm": 3.886402508798023e-15,
+        "common_normalized": 7.769795672556563e-15
+      }
+    },
+    "diagnostic_mass_factor_applications": 28,
+    "states": [
+      {
+        "label": "actual_native_h0",
+        "time": 0.0,
+        "state_sha256": "36ddd501981b449544d3f67d60a82383088e10f98f6746e3f680761c1abf9605",
+        "quantities": {
+          "accepted_inner_source": {
+            "mass_dual_norm": 1.9469060038635206,
+            "common_normalized": 3.892304466521054,
+            "full_constant_test_load": 0.042103444785512645,
+            "mass_application_residual": 3.469446951953614e-17
+          },
+          "calibrated_EP_inner_source": {
+            "mass_dual_norm": 0.5911246220024085,
+            "common_normalized": 1.1817915204558762,
+            "full_constant_test_load": 0.04210344478551233,
+            "mass_application_residual": 7.15573433840433e-18
+          },
+          "EP_minus_accepted_source": {
+            "mass_dual_norm": 1.7901379168553868,
+            "common_normalized": 3.5788896822125995,
+            "full_constant_test_load": -3.469446951953614e-16,
+            "mass_application_residual": 2.7755575615628914e-17
+          },
+          "diffusion_residual": {
+            "mass_dual_norm": 2.4707376405212647,
+            "common_normalized": 4.939562123039586,
+            "full_constant_test_load": -2.7755575615628914e-16,
+            "mass_application_residual": 4.85722573273506e-17
+          },
+          "inner_production_residual": {
+            "mass_dual_norm": 4.881487263405424,
+            "common_normalized": 9.759194661125765,
+            "full_constant_test_load": -5.192809297692645,
+            "mass_application_residual": 5.551115123125783e-17
+          },
+          "inner_EC_residual": {
+            "mass_dual_norm": 4.086860277954819,
+            "common_normalized": 8.170555991077077,
+            "full_constant_test_load": 5.150705852907132,
+            "mass_application_residual": 1.1102230246251565e-16
+          },
+          "inner_reference_production_load": {
+            "mass_dual_norm": 4.762016627707288,
+            "common_normalized": 9.520345899026738,
+            "full_constant_test_load": 5.150705852907134,
+            "mass_application_residual": 1.1102230246251565e-16
+          },
+          "advection_residual": {
+            "mass_dual_norm": 6.795946225890615e-14,
+            "common_normalized": 1.3586630169499048e-13,
+            "full_constant_test_load": -1.4925127106435454e-14,
+            "mass_application_residual": 1.8932661725304283e-29
+          },
+          "outer_production_residual": {
+            "mass_dual_norm": 0.1740858821006253,
+            "common_normalized": 0.34803696486315905,
+            "full_constant_test_load": -0.6041678627552978,
+            "mass_application_residual": 6.938893903907228e-18
+          },
+          "outer_destruction_residual": {
+            "mass_dual_norm": 0.17408613436230796,
+            "common_normalized": 0.3480374691911914,
+            "full_constant_test_load": 0.6041679372014812,
+            "mass_application_residual": 6.938893903907228e-18
+          },
+          "total_original_spatial_residual": {
+            "mass_dual_norm": 1.4128648871202838,
+            "common_normalized": 2.8246357553040604,
+            "full_constant_test_load": -0.042103370339345754,
+            "mass_application_residual": 2.7755575615628914e-17
+          },
+          "diffusion_minus_accepted_inner_source": {
+            "mass_dual_norm": 1.4128648875500533,
+            "common_normalized": 2.8246357561632665,
+            "full_constant_test_load": -0.04210344478551294,
+            "mass_application_residual": 4.163336342344337e-17
+          },
+          "source_only_EP_counterfactual_spatial_residual": {
+            "mass_dual_norm": 2.358109821305591,
+            "common_normalized": 4.714393695330313,
+            "full_constant_test_load": -0.042103370339346025,
+            "mass_application_residual": 5.204170427930421e-17
+          }
+        },
+        "native_reported_spatial_mass_dual_K": 1.4128648871202714,
+        "native_norm_agreement": 1.2434497875801753e-14,
+        "source_diffusion_cancellation_ratio": 0.7256975348302928,
+        "column_scope": "native free-space Riesz representations with zero essential k rate; frozen flow/epsilon; not pointwise constitutive sources or a coupled temporal solve",
+        "source_residual_signs": "spatial residual +diffusion -production +net_destruction; rate is -Mff^-1 residual; accepted source supplied as +P-EC"
+      },
+      {
+        "label": "accepted_step32",
+        "time": 0.020000000000000007,
+        "state_sha256": "532a868ed93a9e376d2f24ad19825526c08106e69d646d2a0529aa850d605abe",
+        "quantities": {
+          "accepted_inner_source": {
+            "mass_dual_norm": 2.0512702107483016,
+            "common_normalized": 4.100952068303804,
+            "full_constant_test_load": 0.019732379308874545,
+            "mass_application_residual": 9.020562075079397e-17
+          },
+          "calibrated_EP_inner_source": {
+            "mass_dual_norm": 0.49303643655701473,
+            "common_normalized": 0.9856911018612377,
+            "full_constant_test_load": 0.019732379308874403,
+            "mass_application_residual": 1.9081958235744878e-17
+          },
+          "EP_minus_accepted_source": {
+            "mass_dual_norm": 1.7901077814768442,
+            "common_normalized": 3.578829434790141,
+            "full_constant_test_load": -1.249000902703301e-16,
+            "mass_application_residual": 1.3877787807814457e-17
+          },
+          "diffusion_residual": {
+            "mass_dual_norm": 2.0764183388136535,
+            "common_normalized": 4.151228851568721,
+            "full_constant_test_load": 4.163336342344337e-16,
+            "mass_application_residual": 4.163336342344337e-17
+          },
+          "inner_production_residual": {
+            "mass_dual_norm": 4.8490447027514065,
+            "common_normalized": 9.694334660957075,
+            "full_constant_test_load": -5.170352842621993,
+            "mass_application_residual": 1.1102230246251565e-16
+          },
+          "inner_EC_residual": {
+            "mass_dual_norm": 4.08679144242792,
+            "common_normalized": 8.17041837332446,
+            "full_constant_test_load": 5.150620463313116,
+            "mass_application_residual": 1.1102230246251565e-16
+          },
+          "inner_reference_production_load": {
+            "mass_dual_norm": 4.7619364211110895,
+            "common_normalized": 9.520185547940446,
+            "full_constant_test_load": 5.1506204633131185,
+            "mass_application_residual": 1.1102230246251565e-16
+          },
+          "advection_residual": {
+            "mass_dual_norm": 0.005007840306791999,
+            "common_normalized": 0.010011802909369974,
+            "full_constant_test_load": -4.6674903525500966e-15,
+            "mass_application_residual": 4.590918574118308e-19
+          },
+          "outer_production_residual": {
+            "mass_dual_norm": 0.17399228425163615,
+            "common_normalized": 0.34784984164048965,
+            "full_constant_test_load": -0.6038446667290429,
+            "mass_application_residual": 1.0408340855860843e-17
+          },
+          "outer_destruction_residual": {
+            "mass_dual_norm": 0.17408729601408832,
+            "common_normalized": 0.34803979159525417,
+            "full_constant_test_load": 0.6041707088436961,
+            "mass_application_residual": 6.938893903907228e-18
+          },
+          "total_original_spatial_residual": {
+            "mass_dual_norm": 0.09218782848747176,
+            "common_normalized": 0.1843042734824382,
+            "full_constant_test_load": -0.01940633719422883,
+            "mass_application_residual": 1.3010426069826053e-18
+          },
+          "diffusion_minus_accepted_inner_source": {
+            "mass_dual_norm": 0.09226453787542171,
+            "common_normalized": 0.18445763286021463,
+            "full_constant_test_load": -0.01973237930887414,
+            "mass_application_residual": 1.734723475976807e-18
+          },
+          "source_only_EP_counterfactual_spatial_residual": {
+            "mass_dual_norm": 1.8268232617704683,
+            "common_normalized": 3.6522319656024895,
+            "full_constant_test_load": -0.01940633719422838,
+            "mass_application_residual": 2.7755575615628914e-17
+          }
+        },
+        "native_reported_spatial_mass_dual_K": 0.092187828487474,
+        "native_norm_agreement": 2.248201624865942e-15,
+        "source_diffusion_cancellation_ratio": 0.04497922184604031,
+        "column_scope": "native free-space Riesz representations with zero essential k rate; frozen flow/epsilon; not pointwise constitutive sources or a coupled temporal solve",
+        "source_residual_signs": "spatial residual +diffusion -production +net_destruction; rate is -Mff^-1 residual; accepted source supplied as +P-EC"
+      }
+    ],
+    "interpretation": "The continuum reference balances every test, but actual projected native h0 retains a substantial mass-dual diffusion/source defect. It decreases under evolution by T=.02. A small full constant-test source difference does not imply equal free-mode equations. No steady-original-equation or temporal-accuracy claim.",
+    "column_interpolation_shared_trace_max_jump": 0.0
+  }
+}

@@ -1,0 +1,3197 @@
+{
+  "schema": 1.0,
+  "captured_UTC": "2026-11-08T10:40:47.901319+00:00",
+  "family": "AcceptedAWFV1",
+  "specification_sha256": "9998548d33bd2ca856bb6cc85551c82b86d3b499fd54ae8dc9ba26453450fdbf",
+  "suite": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/perturbation-2G",
+  "cases": {
+    "Accepted-AWF-2G": {
+      "case": "Accepted-AWF-2G",
+      "definition": {
+        "family": "AcceptedAWFV1",
+        "case": "Accepted-AWF-2G",
+        "formulation": "CLSCalibratedBudgetAWF",
+        "formulation_version": "accepted-appendix-v1",
+        "case_identity": "Accepted-AWF-2G",
+        "inner_refinement": "none",
+        "focused_refinement_knots": [],
+        "appendix_sha256": "9998548d33bd2ca856bb6cc85551c82b86d3b499fd54ae8dc9ba26453450fdbf",
+        "wall_policy": "CLSCalibratedBudgetAWF",
+        "companion": "faithful",
+        "companion_reason": "",
+        "model_choices": {
+          "outer_variant": "Original",
+          "inner_stress": "Linear",
+          "cubic_beta": 1.0,
+          "regularization_gamma": 0.0,
+          "regularization_scale": 0.0
+        },
+        "H": 2.0,
+        "z_K": 2.0,
+        "z_m": 2.0,
+        "h": 0.1,
+        "Z": 4.0,
+        "molecular_nu": 1.5e-05,
+        "friction_velocity": 0.4,
+        "K_sampling": "InterfaceTrace",
+        "K_functional_version": "InterfaceTrace-v1:common-CG-matching-face:physical-local-H",
+        "source": "P_h-E_C(K); prescribed redistribution exactly zero",
+        "scalar_source_split": "frozen K/viscosity/cutoff/E_C; signed source; no local reaction rate",
+        "outer_equations": "original high-Re CLS/Yap; no molecular outer diffusion",
+        "inner_viscosity": "nu+nu_tA",
+        "wall_coefficients": "derived from selected CLS q_star/kappa: c_mu=q_star^-2; c_length=kappa*q_star^1.5",
+        "chi": null,
+        "capped_normalization": null,
+        "reference": "native projection of nonconstant diffusion-balanced k_w,0",
+        "temporal_coupling": "PimpleSingleSweep",
+        "native_order": 1.0,
+        "dt": 0.000625,
+        "steps": 0.0,
+        "relaxation": 1.0,
+        "eta": 0.0,
+        "prescribed_forcing": 0.0,
+        "radial_knots": [
+          0.0,
+          0.01,
+          0.1,
+          0.25,
+          0.5,
+          1.0,
+          2.0,
+          2.3333333333333335,
+          2.6666666666666665,
+          3.0,
+          3.333333333333333,
+          3.666666666666667,
+          4.0
+        ],
+        "tangential_knots": [
+          -4.0,
+          -3.0,
+          -2.0,
+          -1.0,
+          1.0,
+          2.0
+        ],
+        "velocity_scalar_degree": 3.0,
+        "pressure_degree": 1.0,
+        "tensor_unknown_estimate": 2165.0,
+        "tensor_field_size_estimates": [
+          592.0,
+          592.0,
+          592.0,
+          304.0,
+          42.0,
+          42.0
+        ],
+        "native_points": [
+          8.0,
+          8.0
+        ],
+        "source_normal_order": 16.0,
+        "source_tangential_order": 8.0,
+        "inventory": "AcceptedBudgetV1",
+        "bound_solver": "RetainedPool",
+        "k_floor_relative": 1e-08,
+        "work": {
+          "add": 2000.0,
+          "total": 20000.0,
+          "separations": 2000.0,
+          "seconds": 900.0
+        },
+        "perturbation": {
+          "amplitude": 0.001,
+          "scale": "K0",
+          "shape": "sin(pi*(x-xmin)/(xmax-xmin))^2*(1-3*(z/H)^2+2*(z/H)^3) on inner layer; zero outside",
+          "endpoint_and_external_compatible": true,
+          "maximum_relative_amplitude": 0.001
+        },
+        "xml_sha256": "11a2b339b53f361f7cc24630f20538352516abba47c6bcf7ccc1e2cab0e97ff5",
+        "fresh_native_initialization": true,
+        "restart": null,
+        "zero_prescribed_perturbation_functions_retained": true
+      },
+      "initial_receipt": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/perturbation-2G/runtime/IncNavierStokesSolver",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/perturbation-2G/Accepted-AWF-2G/initial/case.xml"
+        ],
+        "exit_code": 0.0,
+        "seconds": 15.737185260979459,
+        "log_sha256": "99c578ed2db9e89cea38f71d491886ce3749a7e364db9679bacdaa596fcdb91b"
+      },
+      "status": "numerical_trajectory_completed",
+      "initial_failure": "",
+      "initial_native_report_sha256": "ca72a6960530cf4345eeeeb0769b74cc77102f1fb97fa2d4b91623d3cd2a8daf",
+      "initialization_complete": null,
+      "initial_candidate_sha256": "3f9c47e4c802d2dc0be1e805ee8536858096ed03cf153943c9e4ba518667f753",
+      "initial_candidate_history_hashes": [
+        "23451397b9a681f2819c108e0fb946e0f1c8eb3b3696cd30031fce4cc027843d",
+        "af06c95b066477742f815814f36b6c986ceca43765bc7b5fa978052ec736844f"
+      ],
+      "actual_h0_sha256": "3f9c47e4c802d2dc0be1e805ee8536858096ed03cf153943c9e4ba518667f753",
+      "initial_native_history_hashes": [
+        "23451397b9a681f2819c108e0fb946e0f1c8eb3b3696cd30031fce4cc027843d",
+        "af06c95b066477742f815814f36b6c986ceca43765bc7b5fa978052ec736844f"
+      ],
+      "initial_native_history_times": [
+        0.0,
+        0.000625
+      ],
+      "native_h0_checkpoint": {
+        "order": 1.0,
+        "steps": 0.0,
+        "time": 0.0,
+        "dt": 0.000625,
+        "sha256": "38ca2a0d78055d7861112a939b6a551bd9de752d1555b6f837fe5114c0fd21f4"
+      },
+      "initialization_work": [
+        3.0,
+        3.0
+      ],
+      "trajectory_receipt": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/perturbation-2G/runtime/IncNavierStokesSolver",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/perturbation-2G/Accepted-AWF-2G/trajectory/case.xml"
+        ],
+        "exit_code": 0.0,
+        "seconds": 412.8562334989838,
+        "log_sha256": "758a5c5e4a8c86b59e22fc23fbb13d9ee9e507bcb441d89b6b7f1f2c4b915e04"
+      },
+      "steps": 32.0,
+      "time": 0.020000000000000007,
+      "failure": "",
+      "accepted_checkpoint": {
+        "order": 1.0,
+        "steps": 32.0,
+        "time": 0.020000000000000007,
+        "dt": 0.000625,
+        "sha256": "20795bd644d0c8fe2f76230a149097a0f179da7a429bd9f5a41482d8dce70211"
+      },
+      "implicit_callbacks": 32.0,
+      "correction_integral": 0.0,
+      "initial": {
+        "schema": 1.0,
+        "state_sha256": "3f9c47e4c802d2dc0be1e805ee8536858096ed03cf153943c9e4ba518667f753",
+        "time": 0.0,
+        "K_sampling": "InterfaceTrace",
+        "H": 2.0,
+        "h": 0.1,
+        "z_K": 2.0,
+        "z_m": 2.0,
+        "Z": 4.0,
+        "reference": {
+          "K0": 0.5105080130598861,
+          "q_star": 3.1906750816242875,
+          "kappa": 0.4405539051866587,
+          "U_H": 5.3797062303890275,
+          "traction": 0.16000000000000003,
+          "z0_c": 0.005342939598684074,
+          "J0": 33.623163939931416,
+          "velocity_scale": 0.005357251333829887,
+          "cutoff": 0.014755594641344657,
+          "budget_ratio": 5.909280150953167,
+          "Re_H": 95266.45794797626,
+          "intrinsic_chi": null,
+          "reference_k_ground": 1.0229104394926016
+        },
+        "scaled_native_spatial_blocks": [
+          9.866446693080315,
+          0.001225389587592373,
+          2.824637166063756,
+          0.0008884062710680557,
+          4.692298769597915e-16,
+          6.069525863692931e-17,
+          1.0282979979667204e-16,
+          0.0
+        ],
+        "dimensional_mass_dual_spatial_first4": [
+          3.866841595586759,
+          0.0004802526761153323,
+          1.4128655927733347,
+          4.4707785355095705e-05
+        ],
+        "common_normalized_spatial_first4": [
+          9.866446693080317,
+          0.001225389587592373,
+          2.824637166063756,
+          0.0008884062710680558
+        ],
+        "common_scales_U_K_E_H_V": [
+          0.4,
+          0.5105080130598861,
+          0.07263583326186134,
+          2.0,
+          24.0
+        ],
+        "invalid_production_diagnostic_points": [],
+        "representation_L2_velocity_gradient_production_referenceProduction": [
+          0.009212869965000797,
+          3.5906016395525118,
+          1.2870810617535224,
+          4.816549199802114
+        ],
+        "representation_L2_k_gradient": [
+          0.005677961982036827,
+          2.052599444121305
+        ],
+        "wall_formulation": {
+          "formulation": "CLSCalibratedBudgetAWF",
+          "version": "accepted-appendix-v1",
+          "specification_sha256": "9998548d33bd2ca856bb6cc85551c82b86d3b499fd54ae8dc9ba26453450fdbf",
+          "c_mu_wall": 0.09822789532821126,
+          "c_length_wall": 2.5108624752197968,
+          "smooth_intercept": 10.7,
+          "K_functional": "InterfaceTrace-v1:common-CG-matching-face:physical-local-H",
+          "source_policy": "P_h-E_C(K):frozen-prescribed-sink:no-local-reaction",
+          "chi": null,
+          "cap": null,
+          "normalization": null,
+          "prescribed_redistribution": 0.0,
+          "reference": "Q_J-integral:nonconstant-inner-k:physical-diffusion:constant-stored-inner-pi",
+          "stress": "Linear",
+          "outer_variant": "Original",
+          "outer_molecular_diffusion": false,
+          "inner_molecular_diffusion": true,
+          "scope": "serial-flat2D-PimpleSingleSweep; curved kernel only"
+        },
+        "fixed_bands": {
+          "regions": [
+            {
+              "name": "z_le_0.01",
+              "x_region": "all",
+              "x_bounds": [
+                -4.0,
+                2.0
+              ],
+              "lower": 0.0,
+              "upper": 0.01,
+              "k_integral": 0.055451902315551055,
+              "correction_signed": 0.0,
+              "correction_positive": 0.0,
+              "correction_negative": 0.0,
+              "correction_absolute": 0.0,
+              "production": 1.024218142242101,
+              "coefficient_integral_row": null,
+              "destruction": 0.590711537100687,
+              "invalid_diagnostic_points": []
+            },
+            {
+              "name": "z_le_0.1",
+              "x_region": "all",
+              "x_bounds": [
+                -4.0,
+                2.0
+              ],
+              "lower": 0.0,
+              "upper": 0.1,
+              "k_integral": 0.38009062318466325,
+              "correction_signed": 0.0,
+              "correction_positive": 0.0,
+              "correction_negative": 0.0,
+              "correction_absolute": 0.0,
+              "production": 2.6441038731926585,
+              "coefficient_integral_row": null,
+              "destruction": 2.5395357338786075,
+              "invalid_diagnostic_points": []
+            },
+            {
+              "name": "wall_layer",
+              "x_region": "all",
+              "x_bounds": [
+                -4.0,
+                2.0
+              ],
+              "lower": 0.0,
+              "upper": 2.0,
+              "k_integral": 6.23373494190141,
+              "correction_signed": 0.0,
+              "correction_positive": 0.0,
+              "correction_negative": 0.0,
+              "correction_absolute": 0.0,
+              "production": 5.192809297692654,
+              "coefficient_integral_row": null,
+              "destruction": 5.150705852907162,
+              "invalid_diagnostic_points": []
+            },
+            {
+              "name": "first_element",
+              "x_region": "all",
+              "x_bounds": [
+                -4.0,
+                2.0
+              ],
+              "lower": 0.0,
+              "upper": 0.01,
+              "k_integral": 0.055451902315551055,
+              "correction_signed": 0.0,
+              "correction_positive": 0.0,
+              "correction_negative": 0.0,
+              "correction_absolute": 0.0,
+              "production": 1.024218142242101,
+              "coefficient_integral_row": null,
+              "destruction": 0.590711537100687,
+              "invalid_diagnostic_points": []
+            },
+            {
+              "name": "global",
+              "x_region": "all",
+              "x_bounds": [
+                -4.0,
+                2.0
+              ],
+              "lower": 0.0,
+              "upper": 4.0,
+              "k_integral": 12.359831098620058,
+              "correction_signed": 0.0,
+              "correction_positive": 0.0,
+              "correction_negative": 0.0,
+              "correction_absolute": 0.0,
+              "production": 5.796977160447952,
+              "coefficient_integral_row": null,
+              "destruction": 5.7548737901086335,
+              "invalid_diagnostic_points": []
+            }
+          ],
+          "quadrature": "physical native panels split exactly at each band edge; GL16; source retains roughness/cutoff/geometric panels"
+        },
+        "mean_wall_stress": 0.16170714745607762,
+        "native_degrees_of_freedom": [
+          592.0,
+          592.0,
+          592.0,
+          304.0,
+          42.0,
+          42.0,
+          1.0
+        ],
+        "matching_trace_defect": 0.0,
+        "state_unchanged": true,
+        "governing_solves": 0.0,
+        "weak_load_vector_receipt": {
+          "conservative_advection": {
+            "coefficients": 592.0,
+            "maximum_abs": 1.8625831828787158,
+            "nonzero_modes": 592.0,
+            "interpretation": "coefficient load diagnostic; not a physical norm"
+          },
+          "constraint_replacement": {
+            "coefficients": 592.0,
+            "maximum_abs": 1.862605990277056,
+            "nonzero_modes": 88.0,
+            "interpretation": "coefficient load diagnostic; not a physical norm"
+          },
+          "continuity": {
+            "coefficients": 592.0,
+            "maximum_abs": 0.0,
+            "nonzero_modes": 0.0,
+            "interpretation": "coefficient load diagnostic; not a physical norm"
+          },
+          "diagnostic_inner_Eplus": {
+            "coefficients": 592.0,
+            "maximum_abs": 0.39912696136356063,
+            "nonzero_modes": 304.0,
+            "interpretation": "coefficient load diagnostic; not a physical norm"
+          },
+          "diagnostic_inner_minus_Cplus": {
+            "coefficients": 592.0,
+            "maximum_abs": 0.0,
+            "nonzero_modes": 0.0,
+            "interpretation": "coefficient load diagnostic; not a physical norm"
+          },
+          "diagnostic_outer_cancelled_epsilon_production": {
+            "coefficients": 592.0,
+            "maximum_abs": 0.0,
+            "nonzero_modes": 0.0,
+            "interpretation": "coefficient load diagnostic; not a physical norm"
+          },
+          "diagnostic_outer_cancelled_k_production": {
+            "coefficients": 592.0,
+            "maximum_abs": 0.031236316993447824,
+            "nonzero_modes": 304.0,
+            "interpretation": "coefficient load diagnostic; not a physical norm"
+          },
+          "diagnostic_outer_cancelled_momentum": {
+            "coefficients": 592.0,
+            "maximum_abs": 0.0,
+            "nonzero_modes": 0.0,
+            "interpretation": "coefficient load diagnostic; not a physical norm"
+          },
+          "diagnostic_time_mass_extended_subtraction": {
+            "coefficients": 592.0,
+            "maximum_abs": 0.0,
+            "nonzero_modes": 0.0,
+            "interpretation": "coefficient load diagnostic; not a physical norm"
+          },
+          "epsilon_destruction": {
+            "coefficients": 592.0,
+            "maximum_abs": 0.0,
+            "nonzero_modes": 0.0,
+            "interpretation": "coefficient load diagnostic; not a physical norm"
+          },
+          "epsilon_diffusion": {
+            "coefficients": 592.0,
+            "maximum_abs": 0.0,
+            "nonzero_modes": 0.0,
+            "interpretation": "coefficient load diagnostic; not a physical norm"
+          },
+          "epsilon_production": {
+            "coefficients": 592.0,
+            "maximum_abs": 0.0,
+            "nonzero_modes": 0.0,
+            "interpretation": "coefficient load diagnostic; not a physical norm"
+          },
+          "epsilon_yap": {
+            "coefficients": 592.0,
+            "maximum_abs": 0.0,
+            "nonzero_modes": 0.0,
+            "interpretation": "coefficient load diagnostic; not a physical norm"
+          },
+          "gauge": {
+            "coefficients": 592.0,
+            "maximum_abs": 0.0,
+            "nonzero_modes": 0.0,
+            "interpretation": "coefficient load diagnostic; not a physical norm"
+          },
+          "inner_k_destruction": {
+            "coefficients": 592.0,
+            "maximum_abs": 0.39912696136356063,
+            "nonzero_modes": 304.0,
+            "interpretation": "coefficient load diagnostic; not a physical norm"
+          },
+          "inner_k_production": {
+            "coefficients": 592.0,
+            "maximum_abs": 0.3727307424303965,
+            "nonzero_modes": 304.0,
+            "interpretation": "coefficient load diagnostic; not a physical norm"
+          },
+          "inner_momentum_stress": {
+            "coefficients": 592.0,
+            "maximum_abs": 0.0,
+            "nonzero_modes": 0.0,
+            "interpretation": "coefficient load diagnostic; not a physical norm"
+          },
+          "k_diffusion": {
+            "coefficients": 592.0,
+            "maximum_abs": 0.068544590269191,
+            "nonzero_modes": 592.0,
+            "interpretation": "coefficient load diagnostic; not a physical norm"
+          },
+          "legacy_spatial": {
+            "coefficients": 592.0,
+            "maximum_abs": 1.8626059902770584,
+            "nonzero_modes": 592.0,
+            "interpretation": "coefficient load diagnostic; not a physical norm"
+          },
+          "legacy_stage": {
+            "coefficients": 592.0,
+            "maximum_abs": 1.8626059902770584,
+            "nonzero_modes": 592.0,
+            "interpretation": "coefficient load diagnostic; not a physical norm"
+          },
+          "outer_k_destruction": {
+            "coefficients": 592.0,
+            "maximum_abs": 0.03123639988913969,
+            "nonzero_modes": 304.0,
+            "interpretation": "coefficient load diagnostic; not a physical norm"
+          },
+          "outer_k_production": {
+            "coefficients": 592.0,
+            "maximum_abs": 0.031236316993447824,
+            "nonzero_modes": 304.0,
+            "interpretation": "coefficient load diagnostic; not a physical norm"
+          },
+          "outer_momentum_stress": {
+            "coefficients": 592.0,
+            "maximum_abs": 0.0,
+            "nonzero_modes": 0.0,
+            "interpretation": "coefficient load diagnostic; not a physical norm"
+          },
+          "prescribed_body": {
+            "coefficients": 592.0,
+            "maximum_abs": 0.0,
+            "nonzero_modes": 0.0,
+            "interpretation": "coefficient load diagnostic; not a physical norm"
+          },
+          "prescribed_scalar_source": {
+            "coefficients": 592.0,
+            "maximum_abs": 0.0,
+            "nonzero_modes": 0.0,
+            "interpretation": "coefficient load diagnostic; not a physical norm"
+          },
+          "roughness_force": {
+            "coefficients": 592.0,
+            "maximum_abs": 0.0,
+            "nonzero_modes": 0.0,
+            "interpretation": "coefficient load diagnostic; not a physical norm"
+          },
+          "spatial_sum": {
+            "coefficients": 592.0,
+            "maximum_abs": 1.862605990277056,
+            "nonzero_modes": 592.0,
+            "interpretation": "coefficient load diagnostic; not a physical norm"
+          },
+          "time_mass": {
+            "coefficients": 592.0,
+            "maximum_abs": 0.0,
+            "nonzero_modes": 0.0,
+            "interpretation": "coefficient load diagnostic; not a physical norm"
+          },
+          "total_constrained": {
+            "coefficients": 592.0,
+            "maximum_abs": 0.014995857557116077,
+            "nonzero_modes": 504.0,
+            "interpretation": "coefficient load diagnostic; not a physical norm"
+          },
+          "total_unmasked": {
+            "coefficients": 592.0,
+            "maximum_abs": 1.862605990277056,
+            "nonzero_modes": 592.0,
+            "interpretation": "coefficient load diagnostic; not a physical norm"
+          }
+        },
+        "same_state_source_load_receipts": {
+          "same_state_accepted_source_load": {
+            "coefficients": 592.0,
+            "maximum_abs": 0.06127139319603054,
+            "nonzero_modes": 304.0,
+            "interpretation": "native all-mode signed source loads; full vectors retained in the native artifact"
+          },
+          "same_state_calibrated_EP_source_load": {
+            "coefficients": 592.0,
+            "maximum_abs": 0.005983654138536806,
+            "nonzero_modes": 304.0,
+            "interpretation": "native all-mode signed source loads; full vectors retained in the native artifact"
+          }
+        },
+        "profile_summaries": [
+          {
+            "x": -3.5,
+            "K": 0.5105080130598861,
+            "chi": null,
+            "cutoff": 0.014755594641344657,
+            "B": null,
+            "m": null,
+            "lambda": null,
+            "column_average": false,
+            "epsilon_H_retained": 0.07263583326186132,
+            "epsilon_H_refreshed_projected": 0.07263583326186132,
+            "epsilon_H_unprojected": 0.07263583326186132,
+            "profile_columns": "z,z/H,u,u_reference,du_dz,du_reference_dz,k,k_reference,dk_dz,dk_reference_dz,stored_pi,mechanical_p,epsilon",
+            "physical_profile_rows_retained_in_full_analysis": 16,
+            "ground_row": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              171.28847699756815,
+              169.48017914331763,
+              1.0116728293613018,
+              1.0229104394926016,
+              8.031958388744418e-13,
+              0.0,
+              -0.03743725429105832,
+              -0.7118858071985927,
+              9.845192285011446
+            ],
+            "highest_row": [
+              4.0,
+              2.0,
+              6.009047768302546,
+              6.009047768302546,
+              0.22698697894311506,
+              0.22698697894331663,
+              0.5105080130598861,
+              0.5105080130598861,
+              -1.7517199109641843e-14,
+              0.0,
+              0.03743725429105832,
+              -0.3029014210821991,
+              0.03631791663093067
+            ]
+          },
+          {
+            "x": -1.0,
+            "K": 0.5105080130598861,
+            "chi": null,
+            "cutoff": 0.014755594641344657,
+            "B": null,
+            "m": null,
+            "lambda": null,
+            "column_average": false,
+            "epsilon_H_retained": 0.07263583326186132,
+            "epsilon_H_refreshed_projected": 0.07263583326186132,
+            "epsilon_H_unprojected": 0.07263583326186132,
+            "profile_columns": "z,z/H,u,u_reference,du_dz,du_reference_dz,k,k_reference,dk_dz,dk_reference_dz,stored_pi,mechanical_p,epsilon",
+            "physical_profile_rows_retained_in_full_analysis": 16,
+            "ground_row": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              171.28847699756818,
+              169.48017914331763,
+              1.0121479366098165,
+              1.0229104394926016,
+              8.072817588022918e-13,
+              0.0,
+              -0.03743725429105832,
+              -0.7122025453642693,
+              9.845192285011446
+            ],
+            "highest_row": [
+              4.0,
+              2.0,
+              6.009047768302546,
+              6.009047768302546,
+              0.22698697894311506,
+              0.22698697894331663,
+              0.5105080130598861,
+              0.5105080130598861,
+              -1.7517199129670457e-14,
+              0.0,
+              0.03743725429105832,
+              -0.3029014210821991,
+              0.03631791663093067
+            ]
+          },
+          {
+            "x": 1.6,
+            "K": 0.5105080130598861,
+            "chi": null,
+            "cutoff": 0.014755594641344657,
+            "B": null,
+            "m": null,
+            "lambda": null,
+            "column_average": false,
+            "epsilon_H_retained": 0.07263583326186132,
+            "epsilon_H_refreshed_projected": 0.07263583326186132,
+            "epsilon_H_unprojected": 0.07263583326186132,
+            "profile_columns": "z,z/H,u,u_reference,du_dz,du_reference_dz,k,k_reference,dk_dz,dk_reference_dz,stored_pi,mechanical_p,epsilon",
+            "physical_profile_rows_retained_in_full_analysis": 16,
+            "ground_row": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              171.28847699756815,
+              169.48017914331763,
+              1.0116605179267812,
+              1.0229104394926016,
+              8.132584380016662e-13,
+              0.0,
+              -0.03743725429105832,
+              -0.7118775995755791,
+              9.845192285011446
+            ],
+            "highest_row": [
+              4.0,
+              2.0,
+              6.009047768302546,
+              6.009047768302546,
+              0.22698697894311506,
+              0.22698697894331663,
+              0.5105080130598861,
+              0.5105080130598861,
+              -1.751719910781189e-14,
+              0.0,
+              0.03743725429105832,
+              -0.3029014210821991,
+              0.03631791663093067
+            ]
+          }
+        ],
+        "independent_vertical_polynomial_minima_summary": {
+          "scope": "read-only profile reachability and vertical-panel extrema; no normalization, repair, Lift, restart conversion or history advance",
+          "state_sha256": "3f9c47e4c802d2dc0be1e805ee8536858096ed03cf153943c9e4ba518667f753",
+          "selected_inventory": {
+            "admissible": true,
+            "scope": "declared finite scalar evaluation sets only",
+            "phase": "k_inventory_complete",
+            "failure": "",
+            "minimum_dimensionless_margin": 0.9999923453025348,
+            "limiting_functional_kind": "Point",
+            "limiting_inventory": "reconstruction_native",
+            "limiting_point": [
+              -4.0,
+              0.0,
+              2.3333333333333335
+            ],
+            "minimum_inner_k": 0.5105080130598861,
+            "minimum_outer_k": 0.5105080130598851,
+            "minimum_outer_epsilon": 0.03631791663093067,
+            "minimum_sampled_K": 0.5105080130598861,
+            "minimum_projected_trace_epsilon": 1e+300,
+            "minimum_b": null,
+            "minimum_lambda": null,
+            "normalization_applicable": false,
+            "minimum_budget_ratio": 5.909280150953167,
+            "maximum_budget_relative_defect": 0.0,
+            "cutoff_range": [
+              0.014755594641344657,
+              0.014755594641344657
+            ],
+            "inventory_counts": {
+              "budget_awf_reporting_volume": 11520.0,
+              "constitutive_budget_awf_ray": 86848.0,
+              "constitutive_budget_reporting_source_ray": 234624.0,
+              "constitutive_matching_K": 236.0,
+              "interface_inner": 40.0,
+              "interface_outer": 80.0,
+              "mass_volume": 5760.0,
+              "matching_trace_nodes": 80.0,
+              "physical_matching_transfer": 302.0,
+              "physical_sampled_K": 387.0,
+              "prescribed_source_inner": 14720.0,
+              "reconstruction_dense": 9930.0,
+              "reconstruction_native": 5760.0,
+              "source_volume_outer": 3840.0,
+              "trace_budget_awf_ray": 13248.0,
+              "volume_normalization_ray": 14720.0
+            }
+          },
+          "anchors": 3,
+          "vertical_panels": 24,
+          "minimum_vertical_panel": {
+            "z_bounds": [
+              1.0,
+              2.0
+            ],
+            "minimum": 0.5105080130598861,
+            "z": 2.0,
+            "native_evaluation": 0.5105080130598861,
+            "arithmetic_error_estimate": 1.7180272045223192e-13,
+            "x": -3.5
+          },
+          "profile_ray_rows": 1104,
+          "minimum_profile_ray": {
+            "coordinate": [
+              1.6,
+              0.0,
+              1.99679170541096
+            ],
+            "k": 0.5105080143327422,
+            "visited_by_selected_inventory": true
+          },
+          "unregistered_profile_ray_rows": 0
+        }
+      },
+      "actual_h0_error_to_own_reference": {
+        "u": 0.009212869965000816,
+        "k": 0.005677961982036825,
+        "epsilon": 3.718360571474658e-07,
+        "v": 0.0,
+        "velocity": 0.009212869965000816
+      },
+      "observations": {
+        "8": {
+          "time": 0.005,
+          "diagnostic": {
+            "schema": 1.0,
+            "state_sha256": "106c073250dd2188d08f1f5463bd8604ae945d6a07f141d5340d59a9c2f726a3",
+            "time": 0.005,
+            "K_sampling": "InterfaceTrace",
+            "H": 2.0,
+            "h": 0.1,
+            "z_K": 2.0,
+            "z_m": 2.0,
+            "Z": 4.0,
+            "reference": {
+              "K0": 0.5105080130598861,
+              "q_star": 3.1906750816242875,
+              "kappa": 0.4405539051866587,
+              "U_H": 5.3797062303890275,
+              "traction": 0.16000000000000003,
+              "z0_c": 0.005342939598684074,
+              "J0": 33.623163939931416,
+              "velocity_scale": 0.005357251333829887,
+              "cutoff": 0.014755594641344657,
+              "budget_ratio": 5.909280150953167,
+              "Re_H": 95266.45794797626,
+              "intrinsic_chi": null,
+              "reference_k_ground": 1.0229104394926016
+            },
+            "scaled_native_spatial_blocks": [
+              1.3345991244665845,
+              0.008237865163885553,
+              0.543767358786133,
+              0.0030109053620338785,
+              8.979493045302945e-16,
+              8.465239959754877e-16,
+              7.623296525288702e-18,
+              2.6383479167033113e-06
+            ],
+            "dimensional_mass_dual_spatial_first4": [
+              0.5230538985773294,
+              0.0032285705954189646,
+              0.27198898355245227,
+              0.00015151954126627905
+            ],
+            "common_normalized_spatial_first4": [
+              1.3345991244665845,
+              0.008237865163885553,
+              0.543767358786133,
+              0.003010905362033879
+            ],
+            "common_scales_U_K_E_H_V": [
+              0.4,
+              0.5105080130598861,
+              0.07263583326186134,
+              2.0,
+              24.0
+            ],
+            "invalid_production_diagnostic_points": [],
+            "representation_L2_velocity_gradient_production_referenceProduction": [
+              0.010673372151945634,
+              2.2607531320215295,
+              0.6929245106268087,
+              4.816549199802114
+            ],
+            "representation_L2_k_gradient": [
+              0.006049313576490125,
+              1.5349197854705583
+            ],
+            "wall_formulation": {
+              "formulation": "CLSCalibratedBudgetAWF",
+              "version": "accepted-appendix-v1",
+              "specification_sha256": "9998548d33bd2ca856bb6cc85551c82b86d3b499fd54ae8dc9ba26453450fdbf",
+              "c_mu_wall": 0.09822789532821126,
+              "c_length_wall": 2.5108624752197968,
+              "smooth_intercept": 10.7,
+              "K_functional": "InterfaceTrace-v1:common-CG-matching-face:physical-local-H",
+              "source_policy": "P_h-E_C(K):frozen-prescribed-sink:no-local-reaction",
+              "chi": null,
+              "cap": null,
+              "normalization": null,
+              "prescribed_redistribution": 0.0,
+              "reference": "Q_J-integral:nonconstant-inner-k:physical-diffusion:constant-stored-inner-pi",
+              "stress": "Linear",
+              "outer_variant": "Original",
+              "outer_molecular_diffusion": false,
+              "inner_molecular_diffusion": true,
+              "scope": "serial-flat2D-PimpleSingleSweep; curved kernel only"
+            },
+            "fixed_bands": {
+              "regions": [
+                {
+                  "name": "z_le_0.01",
+                  "x_region": "all",
+                  "x_bounds": [
+                    -4.0,
+                    2.0
+                  ],
+                  "lower": 0.0,
+                  "upper": 0.01,
+                  "k_integral": 0.05524127854165268,
+                  "correction_signed": 0.0,
+                  "correction_positive": 0.0,
+                  "correction_negative": 0.0,
+                  "correction_absolute": 0.0,
+                  "production": 0.9737173166465546,
+                  "coefficient_integral_row": null,
+                  "destruction": 0.5907071381514345,
+                  "invalid_diagnostic_points": []
+                },
+                {
+                  "name": "z_le_0.1",
+                  "x_region": "all",
+                  "x_bounds": [
+                    -4.0,
+                    2.0
+                  ],
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "k_integral": 0.3800956741760338,
+                  "correction_signed": 0.0,
+                  "correction_positive": 0.0,
+                  "correction_negative": 0.0,
+                  "correction_absolute": 0.0,
+                  "production": 2.6148100146740774,
+                  "coefficient_integral_row": null,
+                  "destruction": 2.539516594437103,
+                  "invalid_diagnostic_points": []
+                },
+                {
+                  "name": "wall_layer",
+                  "x_region": "all",
+                  "x_bounds": [
+                    -4.0,
+                    2.0
+                  ],
+                  "lower": 0.0,
+                  "upper": 2.0,
+                  "k_integral": 6.233853445111901,
+                  "correction_signed": 0.0,
+                  "correction_positive": 0.0,
+                  "correction_negative": 0.0,
+                  "correction_absolute": 0.0,
+                  "production": 5.172029806526871,
+                  "coefficient_integral_row": null,
+                  "destruction": 5.150666911708443,
+                  "invalid_diagnostic_points": []
+                },
+                {
+                  "name": "first_element",
+                  "x_region": "all",
+                  "x_bounds": [
+                    -4.0,
+                    2.0
+                  ],
+                  "lower": 0.0,
+                  "upper": 0.01,
+                  "k_integral": 0.05524127854165268,
+                  "correction_signed": 0.0,
+                  "correction_positive": 0.0,
+                  "correction_negative": 0.0,
+                  "correction_absolute": 0.0,
+                  "production": 0.9737173166465546,
+                  "coefficient_integral_row": null,
+                  "destruction": 0.5907071381514345,
+                  "invalid_diagnostic_points": []
+                },
+                {
+                  "name": "global",
+                  "x_region": "all",
+                  "x_bounds": [
+                    -4.0,
+                    2.0
+                  ],
+                  "lower": 0.0,
+                  "upper": 4.0,
+                  "k_integral": 12.3599488584801,
+                  "correction_signed": 0.0,
+                  "correction_positive": 0.0,
+                  "correction_negative": 0.0,
+                  "correction_absolute": 0.0,
+                  "production": 5.776076262090753,
+                  "coefficient_integral_row": null,
+                  "destruction": 5.754835165039315,
+                  "invalid_diagnostic_points": []
+                }
+              ],
+              "quadrature": "physical native panels split exactly at each band edge; GL16; source retains roughness/cutoff/geometric panels"
+            },
+            "mean_wall_stress": 0.1522462000583433,
+            "native_degrees_of_freedom": [
+              592.0,
+              592.0,
+              592.0,
+              304.0,
+              42.0,
+              42.0,
+              1.0
+            ],
+            "matching_trace_defect": 1.9163859936444094e-07,
+            "state_unchanged": true,
+            "governing_solves": 0.0,
+            "weak_load_vector_receipt": {
+              "conservative_advection": {
+                "coefficients": 592.0,
+                "maximum_abs": 1.86258845897696,
+                "nonzero_modes": 592.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "constraint_replacement": {
+                "coefficients": 592.0,
+                "maximum_abs": 1.8626169496656038,
+                "nonzero_modes": 88.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "continuity": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "diagnostic_inner_Eplus": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.39912425500026494,
+                "nonzero_modes": 304.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "diagnostic_inner_minus_Cplus": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "diagnostic_outer_cancelled_epsilon_production": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "diagnostic_outer_cancelled_k_production": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.031233117481654214,
+                "nonzero_modes": 304.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "diagnostic_outer_cancelled_momentum": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "diagnostic_time_mass_extended_subtraction": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "epsilon_destruction": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "epsilon_diffusion": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "epsilon_production": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "epsilon_yap": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "gauge": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "inner_k_destruction": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.39912425500026494,
+                "nonzero_modes": 304.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "inner_k_production": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.36292658072449047,
+                "nonzero_modes": 304.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "inner_momentum_stress": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "k_diffusion": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.06693500479695977,
+                "nonzero_modes": 592.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "legacy_spatial": {
+                "coefficients": 592.0,
+                "maximum_abs": 1.8626169496656029,
+                "nonzero_modes": 592.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "legacy_stage": {
+                "coefficients": 592.0,
+                "maximum_abs": 1.8626169496656029,
+                "nonzero_modes": 592.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "outer_k_destruction": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.031236424158680977,
+                "nonzero_modes": 304.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "outer_k_production": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.031233117481654214,
+                "nonzero_modes": 304.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "outer_momentum_stress": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "prescribed_body": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "prescribed_scalar_source": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "roughness_force": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "spatial_sum": {
+                "coefficients": 592.0,
+                "maximum_abs": 1.8626169496656038,
+                "nonzero_modes": 592.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "time_mass": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "total_constrained": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.004298241304212469,
+                "nonzero_modes": 504.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "total_unmasked": {
+                "coefficients": 592.0,
+                "maximum_abs": 1.8626169496656038,
+                "nonzero_modes": 592.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              }
+            },
+            "same_state_source_load_receipts": {
+              "same_state_accepted_source_load": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.06548847757868781,
+                "nonzero_modes": 304.0,
+                "interpretation": "native all-mode signed source loads; full vectors retained in the native artifact"
+              },
+              "same_state_calibrated_EP_source_load": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.006316257989158139,
+                "nonzero_modes": 304.0,
+                "interpretation": "native all-mode signed source loads; full vectors retained in the native artifact"
+              }
+            },
+            "profile_summaries": [
+              {
+                "x": -3.5,
+                "K": 0.5105046439516899,
+                "chi": null,
+                "cutoff": 0.014755592009906844,
+                "B": null,
+                "m": null,
+                "lambda": null,
+                "column_average": false,
+                "epsilon_H_retained": 0.07263519266583499,
+                "epsilon_H_refreshed_projected": 0.07263511422042344,
+                "epsilon_H_unprojected": 0.07263511422052066,
+                "profile_columns": "z,z/H,u,u_reference,du_dz,du_reference_dz,k,k_reference,dk_dz,dk_reference_dz,stored_pi,mechanical_p,epsilon",
+                "physical_profile_rows_retained_in_full_analysis": 16,
+                "ground_row": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  159.94823014474852,
+                  169.48017914331763,
+                  1.023427934224525,
+                  1.0229104394926016,
+                  -6.482780828746148,
+                  0.0,
+                  -0.03541456201093543,
+                  -0.717699851493952,
+                  9.845096580571452
+                ],
+                "highest_row": [
+                  4.0,
+                  2.0,
+                  6.009047768302546,
+                  6.009047768302546,
+                  0.22698084301806085,
+                  0.22698697894331663,
+                  0.5105080130598861,
+                  0.5105080130598861,
+                  -2.868290673498523e-08,
+                  0.0,
+                  0.03780041751266558,
+                  -0.30253825786059185,
+                  0.03631791663093067
+                ]
+              },
+              {
+                "x": -1.0,
+                "K": 0.5105057603182295,
+                "chi": null,
+                "cutoff": 0.014755592881844646,
+                "B": null,
+                "m": null,
+                "lambda": null,
+                "column_average": false,
+                "epsilon_H_retained": 0.07263540509744187,
+                "epsilon_H_refreshed_projected": 0.0726353524772821,
+                "epsilon_H_unprojected": 0.0726353524772821,
+                "profile_columns": "z,z/H,u,u_reference,du_dz,du_reference_dz,k,k_reference,dk_dz,dk_reference_dz,stored_pi,mechanical_p,epsilon",
+                "physical_profile_rows_retained_in_full_analysis": 16,
+                "ground_row": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  161.17517189038287,
+                  169.48017914331763,
+                  1.022472356366422,
+                  1.0229104394926016,
+                  -5.740118452435795,
+                  0.0,
+                  -0.037417298263340636,
+                  -0.7190655358409552,
+                  9.845128292561256
+                ],
+                "highest_row": [
+                  4.0,
+                  2.0,
+                  6.009047768302546,
+                  6.009047768302546,
+                  0.2269546979850885,
+                  0.22698697894331663,
+                  0.5105080130598861,
+                  0.5105080130598861,
+                  1.160357509083797e-07,
+                  0.0,
+                  0.03743485175796034,
+                  -0.30290382361529705,
+                  0.03631791663093067
+                ]
+              },
+              {
+                "x": 1.6,
+                "K": 0.5105046052754779,
+                "chi": null,
+                "cutoff": 0.014755591979698798,
+                "B": null,
+                "m": null,
+                "lambda": null,
+                "column_average": false,
+                "epsilon_H_retained": 0.07263518177861786,
+                "epsilon_H_refreshed_projected": 0.07263510596606293,
+                "epsilon_H_unprojected": 0.07263510596618532,
+                "profile_columns": "z,z/H,u,u_reference,du_dz,du_reference_dz,k,k_reference,dk_dz,dk_reference_dz,stored_pi,mechanical_p,epsilon",
+                "physical_profile_rows_retained_in_full_analysis": 16,
+                "ground_row": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  159.3412908549714,
+                  169.48017914331763,
+                  1.0237355655388214,
+                  1.0229104394926016,
+                  -6.757700729160162,
+                  0.0,
+                  -0.03966812675866459,
+                  -0.7221585037845455,
+                  9.845095481918849
+                ],
+                "highest_row": [
+                  4.0,
+                  2.0,
+                  6.009047768302546,
+                  6.009047768302546,
+                  0.2269814114617133,
+                  0.22698697894331663,
+                  0.5105080130598861,
+                  0.5105080130598861,
+                  7.197237429685147e-08,
+                  0.0,
+                  0.03707707495768604,
+                  -0.3032616004155714,
+                  0.03631791663093067
+                ]
+              }
+            ],
+            "independent_vertical_polynomial_minima_summary": {
+              "scope": "read-only profile reachability and vertical-panel extrema; no normalization, repair, Lift, restart conversion or history advance",
+              "state_sha256": "106c073250dd2188d08f1f5463bd8604ae945d6a07f141d5340d59a9c2f726a3",
+              "selected_inventory": {
+                "admissible": true,
+                "scope": "declared finite scalar evaluation sets only",
+                "phase": "k_inventory_complete",
+                "failure": "",
+                "minimum_dimensionless_margin": 0.9999904083272642,
+                "limiting_functional_kind": "Point",
+                "limiting_inventory": "reconstruction_dense",
+                "limiting_point": [
+                  -3.625,
+                  0.0,
+                  2.0
+                ],
+                "minimum_inner_k": 0.5105043312034467,
+                "minimum_outer_k": 0.5105043312034467,
+                "minimum_outer_epsilon": 0.03631791663093067,
+                "minimum_sampled_K": 0.5105043312034467,
+                "minimum_projected_trace_epsilon": 1e+300,
+                "minimum_b": null,
+                "minimum_lambda": null,
+                "normalization_applicable": false,
+                "minimum_budget_ratio": 5.909280150953167,
+                "maximum_budget_relative_defect": 0.0,
+                "cutoff_range": [
+                  0.014755591765634743,
+                  0.014755594641344657
+                ],
+                "inventory_counts": {
+                  "budget_awf_reporting_volume": 11520.0,
+                  "constitutive_budget_awf_ray": 88688.0,
+                  "constitutive_budget_reporting_source_ray": 238384.0,
+                  "constitutive_matching_K": 241.0,
+                  "interface_inner": 40.0,
+                  "interface_outer": 80.0,
+                  "mass_volume": 5760.0,
+                  "matching_trace_nodes": 80.0,
+                  "physical_matching_transfer": 302.0,
+                  "physical_sampled_K": 392.0,
+                  "prescribed_source_inner": 14720.0,
+                  "reconstruction_dense": 9930.0,
+                  "reconstruction_native": 5760.0,
+                  "source_volume_outer": 3840.0,
+                  "trace_budget_awf_ray": 13248.0,
+                  "volume_normalization_ray": 14720.0
+                }
+              },
+              "anchors": 3,
+              "vertical_panels": 24,
+              "minimum_vertical_panel": {
+                "z_bounds": [
+                  1.0,
+                  2.0
+                ],
+                "minimum": 0.5105046051549801,
+                "z": 1.9992004354564405,
+                "native_evaluation": 0.51050460515498,
+                "arithmetic_error_estimate": 1.7180093238794222e-13,
+                "x": 1.6
+              },
+              "profile_ray_rows": 1104,
+              "minimum_profile_ray": {
+                "coordinate": [
+                  1.6,
+                  0.0,
+                  1.996791730078818
+                ],
+                "k": 0.5105046062575598,
+                "visited_by_selected_inventory": true
+              },
+              "unregistered_profile_ray_rows": 0
+            }
+          },
+          "drift_from_actual_h0": {
+            "u": 0.005415217183568657,
+            "v": 2.2992382582861092e-05,
+            "k": 0.002407791456461546,
+            "epsilon": 5.672065071615149e-07,
+            "common_gauge_shift": 5.621845741562827e-18,
+            "pressure": 0.0032334485535389485
+          },
+          "common_normalized_drift": {
+            "u": 0.002763441447103049,
+            "v": 1.1733251103930176e-05,
+            "k": 0.0009627436991656105,
+            "epsilon": 2.25423743963405e-06,
+            "pressure": 0.004125155763391021
+          },
+          "error_to_own_reference": {
+            "u": 0.01067334738703242,
+            "k": 0.006049313576490133,
+            "epsilon": 6.193404354009297e-07,
+            "v": 2.2992382582861092e-05,
+            "velocity": 0.010673372151945635
+          },
+          "exact_discrete_work_and_correction": {
+            "accepted_steps": 8.0,
+            "solves": {
+              "outer_sweeps": 8.0,
+              "momentum_predictor_solves": 8.0,
+              "pressure_system_solves": 8.0,
+              "epsilon_transport_solves": 8.0,
+              "k_transport_solves": 8.0,
+              "bound_calls": 8.0,
+              "additional_governing_equation_solves": 0.0
+            },
+            "activations": 0.0,
+            "seconds": 62.368470102,
+            "correction_integral": 0.0,
+            "correction_mass_norm_sum": 0.0,
+            "maximum_correction_raw_increment_ratio": 0.0,
+            "fixed_band_correction_totals": {
+              "z_le_0.01": {
+                "lower": 0.0,
+                "upper": 0.01,
+                "x_bounds": [
+                  -4.0,
+                  2.0
+                ],
+                "signed": 0.0,
+                "positive": 0.0,
+                "negative": 0.0,
+                "absolute": 0.0
+              },
+              "z_le_0.1": {
+                "lower": 0.0,
+                "upper": 0.1,
+                "x_bounds": [
+                  -4.0,
+                  2.0
+                ],
+                "signed": 0.0,
+                "positive": 0.0,
+                "negative": 0.0,
+                "absolute": 0.0
+              },
+              "wall_layer": {
+                "lower": 0.0,
+                "upper": 2.0,
+                "x_bounds": [
+                  -4.0,
+                  2.0
+                ],
+                "signed": 0.0,
+                "positive": 0.0,
+                "negative": 0.0,
+                "absolute": 0.0
+              },
+              "first_element": {
+                "lower": 0.0,
+                "upper": 0.01,
+                "x_bounds": [
+                  -4.0,
+                  2.0
+                ],
+                "signed": 0.0,
+                "positive": 0.0,
+                "negative": 0.0,
+                "absolute": 0.0
+              },
+              "global": {
+                "lower": 0.0,
+                "upper": 4.0,
+                "x_bounds": [
+                  -4.0,
+                  2.0
+                ],
+                "signed": 0.0,
+                "positive": 0.0,
+                "negative": 0.0,
+                "absolute": 0.0
+              }
+            },
+            "individual_increments_retained_in_full_analysis": 8,
+            "last_increment": {
+              "k_frozen_linear_residual": 1.1709383462843448e-17,
+              "k_corrected_frozen_linear_residual": 1.1709383462843448e-17,
+              "k_added_frozen_residual": 0.0,
+              "k_added_storage_residual": 0.0,
+              "refreshed_trace_defect": 1.9163859936444094e-07,
+              "refreshed_original_block_norms": [
+                0.0018145048232364603,
+                0.0007245429043013167,
+                4.6459142643820245e-06,
+                1.3136766017087414e-06,
+                8.979493045302945e-16,
+                8.465239959754877e-16,
+                7.623296525288702e-18,
+                2.6383479167033113e-06
+              ],
+              "time": 0.005,
+              "seconds": 7.849913503,
+              "raw_sha256": "106c073250dd2188d08f1f5463bd8604ae945d6a07f141d5340d59a9c2f726a3",
+              "corrected_sha256": "106c073250dd2188d08f1f5463bd8604ae945d6a07f141d5340d59a9c2f726a3",
+              "raw_step_mass_norm": 0.00016999300548638374,
+              "correction_mass_norm": 0.0,
+              "correction_to_step_ratio": 0.0,
+              "accepted_step_mass_norm": 0.00016999300548638374,
+              "raw_bound_inner_product": 0.0,
+              "increment_norm_identity_defect": 0.0
+            },
+            "maximum_raw_step_mass_norm": 0.00060476226915027,
+            "maximum_bound_mass_norm": 0.0
+          },
+          "sampled_physical_time_integrals": {
+            "z_le_0.01:all": {
+              "start": 0.0,
+              "end": 0.005,
+              "production": 0.004994838647221639,
+              "destruction": 0.002953546688130304,
+              "valid": true
+            },
+            "z_le_0.1:all": {
+              "start": 0.0,
+              "end": 0.005,
+              "production": 0.01314728471966684,
+              "destruction": 0.012697630820789277,
+              "valid": true
+            },
+            "wall_layer:all": {
+              "start": 0.0,
+              "end": 0.005,
+              "production": 0.025912097760548813,
+              "destruction": 0.025753431911539015,
+              "valid": true
+            },
+            "first_element:all": {
+              "start": 0.0,
+              "end": 0.005,
+              "production": 0.004994838647221639,
+              "destruction": 0.002953546688130304,
+              "valid": true
+            },
+            "global:all": {
+              "start": 0.0,
+              "end": 0.005,
+              "production": 0.028932633556346767,
+              "destruction": 0.02877427238786987,
+              "valid": true
+            }
+          },
+          "elapsed_wall_times": 0.001,
+          "elapsed_flow_through_times": 0.004256952009467261
+        },
+        "16": {
+          "time": 0.01,
+          "diagnostic": {
+            "schema": 1.0,
+            "state_sha256": "30a39a86f71aec8879a16e91a21c43c47c932596afe89d0b7a5336440fc5cbf8",
+            "time": 0.01,
+            "K_sampling": "InterfaceTrace",
+            "H": 2.0,
+            "h": 0.1,
+            "z_K": 2.0,
+            "z_m": 2.0,
+            "Z": 4.0,
+            "reference": {
+              "K0": 0.5105080130598861,
+              "q_star": 3.1906750816242875,
+              "kappa": 0.4405539051866587,
+              "U_H": 5.3797062303890275,
+              "traction": 0.16000000000000003,
+              "z0_c": 0.005342939598684074,
+              "J0": 33.623163939931416,
+              "velocity_scale": 0.005357251333829887,
+              "cutoff": 0.014755594641344657,
+              "budget_ratio": 5.909280150953167,
+              "Re_H": 95266.45794797626,
+              "intrinsic_chi": null,
+              "reference_k_ground": 1.0229104394926016
+            },
+            "scaled_native_spatial_blocks": [
+              0.6702763200904573,
+              0.014178236025270022,
+              0.31166929239216845,
+              0.0037218128526709813,
+              7.783732153818725e-16,
+              7.372842133728309e-16,
+              2.8290900438293625e-17,
+              1.8898192525996352e-06
+            ],
+            "dimensional_mass_dual_spatial_first4": [
+              0.2626935953427248,
+              0.005556710994345258,
+              0.15589500302389198,
+              0.00018729495228462224
+            ],
+            "common_normalized_spatial_first4": [
+              0.6702763200904575,
+              0.014178236025270024,
+              0.3116692923921685,
+              0.0037218128526709817
+            ],
+            "common_scales_U_K_E_H_V": [
+              0.4,
+              0.5105080130598861,
+              0.07263583326186134,
+              2.0,
+              24.0
+            ],
+            "invalid_production_diagnostic_points": [],
+            "representation_L2_velocity_gradient_production_referenceProduction": [
+              0.011413553796276402,
+              2.1855627845880488,
+              0.6671580738811994,
+              4.816549199802114
+            ],
+            "representation_L2_k_gradient": [
+              0.006410416320571087,
+              1.5263529848606534
+            ],
+            "wall_formulation": {
+              "formulation": "CLSCalibratedBudgetAWF",
+              "version": "accepted-appendix-v1",
+              "specification_sha256": "9998548d33bd2ca856bb6cc85551c82b86d3b499fd54ae8dc9ba26453450fdbf",
+              "c_mu_wall": 0.09822789532821126,
+              "c_length_wall": 2.5108624752197968,
+              "smooth_intercept": 10.7,
+              "K_functional": "InterfaceTrace-v1:common-CG-matching-face:physical-local-H",
+              "source_policy": "P_h-E_C(K):frozen-prescribed-sink:no-local-reaction",
+              "chi": null,
+              "cap": null,
+              "normalization": null,
+              "prescribed_redistribution": 0.0,
+              "reference": "Q_J-integral:nonconstant-inner-k:physical-diffusion:constant-stored-inner-pi",
+              "stress": "Linear",
+              "outer_variant": "Original",
+              "outer_molecular_diffusion": false,
+              "inner_molecular_diffusion": true,
+              "scope": "serial-flat2D-PimpleSingleSweep; curved kernel only"
+            },
+            "fixed_bands": {
+              "regions": [
+                {
+                  "name": "z_le_0.01",
+                  "x_region": "all",
+                  "x_bounds": [
+                    -4.0,
+                    2.0
+                  ],
+                  "lower": 0.0,
+                  "upper": 0.01,
+                  "k_integral": 0.05517890454864476,
+                  "correction_signed": 0.0,
+                  "correction_positive": 0.0,
+                  "correction_negative": 0.0,
+                  "correction_absolute": 0.0,
+                  "production": 0.9649961457255664,
+                  "coefficient_integral_row": null,
+                  "destruction": 0.5907045309046084,
+                  "invalid_diagnostic_points": []
+                },
+                {
+                  "name": "z_le_0.1",
+                  "x_region": "all",
+                  "x_bounds": [
+                    -4.0,
+                    2.0
+                  ],
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "k_integral": 0.38008635773149757,
+                  "correction_signed": 0.0,
+                  "correction_positive": 0.0,
+                  "correction_negative": 0.0,
+                  "correction_absolute": 0.0,
+                  "production": 2.607885242374944,
+                  "coefficient_integral_row": null,
+                  "destruction": 2.539505250536492,
+                  "invalid_diagnostic_points": []
+                },
+                {
+                  "name": "wall_layer",
+                  "x_region": "all",
+                  "x_bounds": [
+                    -4.0,
+                    2.0
+                  ],
+                  "lower": 0.0,
+                  "upper": 2.0,
+                  "k_integral": 6.233952352209981,
+                  "correction_signed": 0.0,
+                  "correction_positive": 0.0,
+                  "correction_negative": 0.0,
+                  "correction_absolute": 0.0,
+                  "production": 5.1707847650601995,
+                  "coefficient_integral_row": null,
+                  "destruction": 5.150643831354978,
+                  "invalid_diagnostic_points": []
+                },
+                {
+                  "name": "first_element",
+                  "x_region": "all",
+                  "x_bounds": [
+                    -4.0,
+                    2.0
+                  ],
+                  "lower": 0.0,
+                  "upper": 0.01,
+                  "k_integral": 0.05517890454864476,
+                  "correction_signed": 0.0,
+                  "correction_positive": 0.0,
+                  "correction_negative": 0.0,
+                  "correction_absolute": 0.0,
+                  "production": 0.9649961457255664,
+                  "coefficient_integral_row": null,
+                  "destruction": 0.5907045309046084,
+                  "invalid_diagnostic_points": []
+                },
+                {
+                  "name": "global",
+                  "x_region": "all",
+                  "x_bounds": [
+                    -4.0,
+                    2.0
+                  ],
+                  "lower": 0.0,
+                  "upper": 4.0,
+                  "k_integral": 12.360046763680401,
+                  "correction_signed": 0.0,
+                  "correction_positive": 0.0,
+                  "correction_negative": 0.0,
+                  "correction_absolute": 0.0,
+                  "production": 5.774742413903805,
+                  "coefficient_integral_row": null,
+                  "destruction": 5.75481280484629,
+                  "invalid_diagnostic_points": []
+                }
+              ],
+              "quadrature": "physical native panels split exactly at each band edge; GL16; source retains roughness/cutoff/geometric panels"
+            },
+            "mean_wall_stress": 0.15485043195650824,
+            "native_degrees_of_freedom": [
+              592.0,
+              592.0,
+              592.0,
+              304.0,
+              42.0,
+              42.0,
+              1.0
+            ],
+            "matching_trace_defect": 1.3726859612688252e-07,
+            "state_unchanged": true,
+            "governing_solves": 0.0,
+            "weak_load_vector_receipt": {
+              "conservative_advection": {
+                "coefficients": 592.0,
+                "maximum_abs": 1.8625941003296047,
+                "nonzero_modes": 592.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "constraint_replacement": {
+                "coefficients": 592.0,
+                "maximum_abs": 1.8626224839766365,
+                "nonzero_modes": 88.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "continuity": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "diagnostic_inner_Eplus": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.3991227409221968,
+                "nonzero_modes": 304.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "diagnostic_inner_minus_Cplus": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "diagnostic_outer_cancelled_epsilon_production": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "diagnostic_outer_cancelled_k_production": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.031230163649178903,
+                "nonzero_modes": 304.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "diagnostic_outer_cancelled_momentum": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "diagnostic_time_mass_extended_subtraction": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "epsilon_destruction": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "epsilon_diffusion": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "epsilon_production": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "epsilon_yap": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "gauge": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "inner_k_destruction": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.3991227409221968,
+                "nonzero_modes": 304.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "inner_k_production": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.3618403277423294,
+                "nonzero_modes": 304.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "inner_momentum_stress": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "k_diffusion": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.06694289376454554,
+                "nonzero_modes": 592.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "legacy_spatial": {
+                "coefficients": 592.0,
+                "maximum_abs": 1.862622483976637,
+                "nonzero_modes": 592.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "legacy_stage": {
+                "coefficients": 592.0,
+                "maximum_abs": 1.862622483976637,
+                "nonzero_modes": 592.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "outer_k_destruction": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.031236475643724084,
+                "nonzero_modes": 304.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "outer_k_production": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0312301636491789,
+                "nonzero_modes": 304.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "outer_momentum_stress": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "prescribed_body": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "prescribed_scalar_source": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "roughness_force": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "spatial_sum": {
+                "coefficients": 592.0,
+                "maximum_abs": 1.8626224839766365,
+                "nonzero_modes": 592.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "time_mass": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "total_constrained": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.003761128213518705,
+                "nonzero_modes": 504.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "total_unmasked": {
+                "coefficients": 592.0,
+                "maximum_abs": 1.8626224839766365,
+                "nonzero_modes": 592.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              }
+            },
+            "same_state_source_load_receipts": {
+              "same_state_accepted_source_load": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.06637076244073654,
+                "nonzero_modes": 304.0,
+                "interpretation": "native all-mode signed source loads; full vectors retained in the native artifact"
+              },
+              "same_state_calibrated_EP_source_load": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.007198817858680276,
+                "nonzero_modes": 304.0,
+                "interpretation": "native all-mode signed source loads; full vectors retained in the native artifact"
+              }
+            },
+            "profile_summaries": [
+              {
+                "x": -3.5,
+                "K": 0.5105024954574968,
+                "chi": null,
+                "cutoff": 0.014755590331823085,
+                "B": null,
+                "m": null,
+                "lambda": null,
+                "column_average": false,
+                "epsilon_H_retained": 0.07263469651455885,
+                "epsilon_H_refreshed_projected": 0.07263465568588894,
+                "epsilon_H_unprojected": 0.0726346556861309,
+                "profile_columns": "z,z/H,u,u_reference,du_dz,du_reference_dz,k,k_reference,dk_dz,dk_reference_dz,stored_pi,mechanical_p,epsilon",
+                "physical_profile_rows_retained_in_full_analysis": 16,
+                "ground_row": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  163.09662680526515,
+                  169.48017914331763,
+                  1.0259461450303724,
+                  1.0229104394926016,
+                  -7.543796831857286,
+                  0.0,
+                  -0.03165008385899194,
+                  -0.7156141805459069,
+                  9.845035549608774
+                ],
+                "highest_row": [
+                  4.0,
+                  2.0,
+                  6.009047768302546,
+                  6.009047768302546,
+                  0.22697317908265618,
+                  0.22698697894331663,
+                  0.5105080130598861,
+                  0.5105080130598861,
+                  -7.40416330338798e-08,
+                  0.0,
+                  0.03845686163748784,
+                  -0.30188181373576956,
+                  0.03631791663093067
+                ]
+              },
+              {
+                "x": -1.0,
+                "K": 0.5105044045512083,
+                "chi": null,
+                "cutoff": 0.014755591822923013,
+                "B": null,
+                "m": null,
+                "lambda": null,
+                "column_average": false,
+                "epsilon_H_retained": 0.07263508626772584,
+                "epsilon_H_refreshed_projected": 0.07263506312731464,
+                "epsilon_H_unprojected": 0.07263506312731464,
+                "profile_columns": "z,z/H,u,u_reference,du_dz,du_reference_dz,k,k_reference,dk_dz,dk_reference_dz,stored_pi,mechanical_p,epsilon",
+                "physical_profile_rows_retained_in_full_analysis": 16,
+                "ground_row": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  163.948064817567,
+                  169.48017914331763,
+                  1.0245262260625938,
+                  1.0229104394926016,
+                  -6.664378834968223,
+                  0.0,
+                  -0.03745786391916253,
+                  -0.7204753479608917,
+                  9.845089780062239
+                ],
+                "highest_row": [
+                  4.0,
+                  2.0,
+                  6.009047768302546,
+                  6.009047768302546,
+                  0.22692279217049732,
+                  0.22698697894331663,
+                  0.5105080130598861,
+                  0.5105080130598861,
+                  2.9172907723390473e-07,
+                  0.0,
+                  0.037423995151657535,
+                  -0.30291468022159984,
+                  0.03631791663093067
+                ]
+              },
+              {
+                "x": 1.6,
+                "K": 0.5105026326599105,
+                "chi": null,
+                "cutoff": 0.01475559043898531,
+                "B": null,
+                "m": null,
+                "lambda": null,
+                "column_average": false,
+                "epsilon_H_retained": 0.07263472034921964,
+                "epsilon_H_refreshed_projected": 0.07263468496774135,
+                "epsilon_H_unprojected": 0.07263468496801737,
+                "profile_columns": "z,z/H,u,u_reference,du_dz,du_reference_dz,k,k_reference,dk_dz,dk_reference_dz,stored_pi,mechanical_p,epsilon",
+                "physical_profile_rows_retained_in_full_analysis": 16,
+                "ground_row": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  162.62750497651507,
+                  169.48017914331763,
+                  1.0260744622227962,
+                  1.0229104394926016,
+                  -7.83092905927948,
+                  0.0,
+                  -0.04388682922731327,
+                  -0.7279364707091773,
+                  9.845039447030382
+                ],
+                "highest_row": [
+                  4.0,
+                  2.0,
+                  6.009047768302546,
+                  6.009047768302546,
+                  0.22697568098019177,
+                  0.22698697894331663,
+                  0.5105080130598861,
+                  0.5105080130598861,
+                  2.07676594450845e-07,
+                  0.0,
+                  0.03641077200007977,
+                  -0.30392790337317765,
+                  0.03631791663093067
+                ]
+              }
+            ],
+            "independent_vertical_polynomial_minima_summary": {
+              "scope": "read-only profile reachability and vertical-panel extrema; no normalization, repair, Lift, restart conversion or history advance",
+              "state_sha256": "30a39a86f71aec8879a16e91a21c43c47c932596afe89d0b7a5336440fc5cbf8",
+              "selected_inventory": {
+                "admissible": true,
+                "scope": "declared finite scalar evaluation sets only",
+                "phase": "k_inventory_complete",
+                "failure": "",
+                "minimum_dimensionless_margin": 0.9999824695216736,
+                "limiting_functional_kind": "Point",
+                "limiting_inventory": "physical_matching_transfer",
+                "limiting_point": [
+                  -3.6666666666666665,
+                  0.0,
+                  2.0
+                ],
+                "minimum_inner_k": 0.5105018060017346,
+                "minimum_outer_k": 0.5105018060017346,
+                "minimum_outer_epsilon": 0.03631791663093067,
+                "minimum_sampled_K": 0.5105018060017346,
+                "minimum_projected_trace_epsilon": 1e+300,
+                "minimum_b": null,
+                "minimum_lambda": null,
+                "normalization_applicable": false,
+                "minimum_budget_ratio": 5.909280150953167,
+                "maximum_budget_relative_defect": 0.0,
+                "cutoff_range": [
+                  0.014755589793322083,
+                  0.014755594641344657
+                ],
+                "inventory_counts": {
+                  "budget_awf_reporting_volume": 11520.0,
+                  "constitutive_budget_awf_ray": 88688.0,
+                  "constitutive_budget_reporting_source_ray": 238384.0,
+                  "constitutive_matching_K": 241.0,
+                  "interface_inner": 40.0,
+                  "interface_outer": 80.0,
+                  "mass_volume": 5760.0,
+                  "matching_trace_nodes": 80.0,
+                  "physical_matching_transfer": 302.0,
+                  "physical_sampled_K": 392.0,
+                  "prescribed_source_inner": 14720.0,
+                  "reconstruction_dense": 9930.0,
+                  "reconstruction_native": 5760.0,
+                  "source_volume_outer": 3840.0,
+                  "trace_budget_awf_ray": 13248.0,
+                  "volume_normalization_ray": 14720.0
+                }
+              },
+              "anchors": 3,
+              "vertical_panels": 24,
+              "minimum_vertical_panel": {
+                "z_bounds": [
+                  1.0,
+                  2.0
+                ],
+                "minimum": 0.5105024954574968,
+                "z": 2.0,
+                "native_evaluation": 0.5105024954574968,
+                "arithmetic_error_estimate": 1.7180093415044527e-13,
+                "x": -3.5
+              },
+              "profile_ray_rows": 1104,
+              "minimum_profile_ray": {
+                "coordinate": [
+                  -3.5,
+                  0.0,
+                  1.9967917453512374
+                ],
+                "k": 0.510502526220278,
+                "visited_by_selected_inventory": true
+              },
+              "unregistered_profile_ray_rows": 0
+            }
+          },
+          "drift_from_actual_h0": {
+            "u": 0.006774626559972667,
+            "v": 4.487624571395809e-05,
+            "k": 0.0032387503907031776,
+            "epsilon": 1.424933695351841e-06,
+            "common_gauge_shift": 6.770652188861319e-18,
+            "pressure": 0.008640969251741926
+          },
+          "common_normalized_drift": {
+            "u": 0.003457162139549903,
+            "v": 2.2900813243949566e-05,
+            "k": 0.0012949985861325118,
+            "epsilon": 5.663085392184237e-06,
+            "pressure": 0.011023940390545148
+          },
+          "error_to_own_reference": {
+            "u": 0.011413465572869017,
+            "k": 0.006410416320571089,
+            "epsilon": 1.4273741753602096e-06,
+            "v": 4.487624571395809e-05,
+            "velocity": 0.011413553796276411
+          },
+          "exact_discrete_work_and_correction": {
+            "accepted_steps": 16.0,
+            "solves": {
+              "outer_sweeps": 16.0,
+              "momentum_predictor_solves": 16.0,
+              "pressure_system_solves": 16.0,
+              "epsilon_transport_solves": 16.0,
+              "k_transport_solves": 16.0,
+              "bound_calls": 16.0,
+              "additional_governing_equation_solves": 0.0
+            },
+            "activations": 0.0,
+            "seconds": 130.491344126,
+            "correction_integral": 0.0,
+            "correction_mass_norm_sum": 0.0,
+            "maximum_correction_raw_increment_ratio": 0.0,
+            "fixed_band_correction_totals": {
+              "z_le_0.01": {
+                "lower": 0.0,
+                "upper": 0.01,
+                "x_bounds": [
+                  -4.0,
+                  2.0
+                ],
+                "signed": 0.0,
+                "positive": 0.0,
+                "negative": 0.0,
+                "absolute": 0.0
+              },
+              "z_le_0.1": {
+                "lower": 0.0,
+                "upper": 0.1,
+                "x_bounds": [
+                  -4.0,
+                  2.0
+                ],
+                "signed": 0.0,
+                "positive": 0.0,
+                "negative": 0.0,
+                "absolute": 0.0
+              },
+              "wall_layer": {
+                "lower": 0.0,
+                "upper": 2.0,
+                "x_bounds": [
+                  -4.0,
+                  2.0
+                ],
+                "signed": 0.0,
+                "positive": 0.0,
+                "negative": 0.0,
+                "absolute": 0.0
+              },
+              "first_element": {
+                "lower": 0.0,
+                "upper": 0.01,
+                "x_bounds": [
+                  -4.0,
+                  2.0
+                ],
+                "signed": 0.0,
+                "positive": 0.0,
+                "negative": 0.0,
+                "absolute": 0.0
+              },
+              "global": {
+                "lower": 0.0,
+                "upper": 4.0,
+                "x_bounds": [
+                  -4.0,
+                  2.0
+                ],
+                "signed": 0.0,
+                "positive": 0.0,
+                "negative": 0.0,
+                "absolute": 0.0
+              }
+            },
+            "individual_increments_retained_in_full_analysis": 16,
+            "last_increment": {
+              "k_frozen_linear_residual": 7.15573433840433e-18,
+              "k_corrected_frozen_linear_residual": 7.15573433840433e-18,
+              "k_added_frozen_residual": 0.0,
+              "k_added_storage_residual": 0.0,
+              "refreshed_trace_defect": 1.3726859612688252e-07,
+              "refreshed_original_block_norms": [
+                0.0010181433020475502,
+                0.0004375620221095157,
+                2.220662544007477e-06,
+                1.3140670931800839e-06,
+                7.783732153818725e-16,
+                7.372842133728309e-16,
+                2.8290900438293625e-17,
+                1.8898192525996352e-06
+              ],
+              "time": 0.01,
+              "seconds": 10.601291482,
+              "raw_sha256": "30a39a86f71aec8879a16e91a21c43c47c932596afe89d0b7a5336440fc5cbf8",
+              "corrected_sha256": "30a39a86f71aec8879a16e91a21c43c47c932596afe89d0b7a5336440fc5cbf8",
+              "raw_step_mass_norm": 9.743430297536945e-05,
+              "correction_mass_norm": 0.0,
+              "correction_to_step_ratio": 0.0,
+              "accepted_step_mass_norm": 9.743430297536945e-05,
+              "raw_bound_inner_product": 0.0,
+              "increment_norm_identity_defect": 0.0
+            },
+            "maximum_raw_step_mass_norm": 0.00060476226915027,
+            "maximum_bound_mass_norm": 0.0
+          },
+          "sampled_physical_time_integrals": {
+            "z_le_0.01:all": {
+              "start": 0.0,
+              "end": 0.01,
+              "production": 0.009841622303151942,
+              "destruction": 0.005907075860770411,
+              "valid": true
+            },
+            "z_le_0.1:all": {
+              "start": 0.0,
+              "end": 0.01,
+              "production": 0.026204022862289393,
+              "destruction": 0.025395185433223263,
+              "valid": true
+            },
+            "wall_layer:all": {
+              "start": 0.0,
+              "end": 0.01,
+              "production": 0.05176913418951649,
+              "destruction": 0.051506708769197565,
+              "valid": true
+            },
+            "first_element:all": {
+              "start": 0.0,
+              "end": 0.01,
+              "production": 0.009841622303151942,
+              "destruction": 0.005907075860770411,
+              "valid": true
+            },
+            "global:all": {
+              "start": 0.0,
+              "end": 0.01,
+              "production": 0.057809680246333164,
+              "destruction": 0.057548392312583886,
+              "valid": true
+            }
+          },
+          "elapsed_wall_times": 0.002,
+          "elapsed_flow_through_times": 0.008513904018934522
+        },
+        "32": {
+          "time": 0.020000000000000007,
+          "diagnostic": {
+            "schema": 1.0,
+            "state_sha256": "54fe741aee944f8a38a7c8bee61ed78486e82a46f31a518bd507269ed632af3d",
+            "time": 0.020000000000000007,
+            "K_sampling": "InterfaceTrace",
+            "H": 2.0,
+            "h": 0.1,
+            "z_K": 2.0,
+            "z_m": 2.0,
+            "Z": 4.0,
+            "reference": {
+              "K0": 0.5105080130598861,
+              "q_star": 3.1906750816242875,
+              "kappa": 0.4405539051866587,
+              "U_H": 5.3797062303890275,
+              "traction": 0.16000000000000003,
+              "z0_c": 0.005342939598684074,
+              "J0": 33.623163939931416,
+              "velocity_scale": 0.005357251333829887,
+              "cutoff": 0.014755594641344657,
+              "budget_ratio": 5.909280150953167,
+              "Re_H": 95266.45794797626,
+              "intrinsic_chi": null,
+              "reference_k_ground": 1.0229104394926016
+            },
+            "scaled_native_spatial_blocks": [
+              0.31385001220622144,
+              0.017113198845156753,
+              0.18432319750415468,
+              0.003418797725278551,
+              9.1990341872634e-16,
+              8.198579322119276e-16,
+              1.3891340334970522e-17,
+              1.223293748338097e-06
+            ],
+            "dimensional_mass_dual_spatial_first4": [
+              0.12300358170744238,
+              0.006706976805987265,
+              0.09219729416309246,
+              0.00017204614583650794
+            ],
+            "common_normalized_spatial_first4": [
+              0.3138500122062215,
+              0.017113198845156757,
+              0.18432319750415468,
+              0.0034187977252785515
+            ],
+            "common_scales_U_K_E_H_V": [
+              0.4,
+              0.5105080130598861,
+              0.07263583326186134,
+              2.0,
+              24.0
+            ],
+            "invalid_production_diagnostic_points": [],
+            "representation_L2_velocity_gradient_production_referenceProduction": [
+              0.01215011596119701,
+              2.1486133277498944,
+              0.6554632989279795,
+              4.816549199802114
+            ],
+            "representation_L2_k_gradient": [
+              0.006852140744995915,
+              1.5609539648239754
+            ],
+            "wall_formulation": {
+              "formulation": "CLSCalibratedBudgetAWF",
+              "version": "accepted-appendix-v1",
+              "specification_sha256": "9998548d33bd2ca856bb6cc85551c82b86d3b499fd54ae8dc9ba26453450fdbf",
+              "c_mu_wall": 0.09822789532821126,
+              "c_length_wall": 2.5108624752197968,
+              "smooth_intercept": 10.7,
+              "K_functional": "InterfaceTrace-v1:common-CG-matching-face:physical-local-H",
+              "source_policy": "P_h-E_C(K):frozen-prescribed-sink:no-local-reaction",
+              "chi": null,
+              "cap": null,
+              "normalization": null,
+              "prescribed_redistribution": 0.0,
+              "reference": "Q_J-integral:nonconstant-inner-k:physical-diffusion:constant-stored-inner-pi",
+              "stress": "Linear",
+              "outer_variant": "Original",
+              "outer_molecular_diffusion": false,
+              "inner_molecular_diffusion": true,
+              "scope": "serial-flat2D-PimpleSingleSweep; curved kernel only"
+            },
+            "fixed_bands": {
+              "regions": [
+                {
+                  "name": "z_le_0.01",
+                  "x_region": "all",
+                  "x_bounds": [
+                    -4.0,
+                    2.0
+                  ],
+                  "lower": 0.0,
+                  "upper": 0.01,
+                  "k_integral": 0.05510212030712473,
+                  "correction_signed": 0.0,
+                  "correction_positive": 0.0,
+                  "correction_negative": 0.0,
+                  "correction_absolute": 0.0,
+                  "production": 0.956336696398932,
+                  "coefficient_integral_row": null,
+                  "destruction": 0.5907041967364242,
+                  "invalid_diagnostic_points": []
+                },
+                {
+                  "name": "z_le_0.1",
+                  "x_region": "all",
+                  "x_bounds": [
+                    -4.0,
+                    2.0
+                  ],
+                  "lower": 0.0,
+                  "upper": 0.1,
+                  "k_integral": 0.3801376605530255,
+                  "correction_signed": 0.0,
+                  "correction_positive": 0.0,
+                  "correction_negative": 0.0,
+                  "correction_absolute": 0.0,
+                  "production": 2.602917182295237,
+                  "coefficient_integral_row": null,
+                  "destruction": 2.5395037966004828,
+                  "invalid_diagnostic_points": []
+                },
+                {
+                  "name": "wall_layer",
+                  "x_region": "all",
+                  "x_bounds": [
+                    -4.0,
+                    2.0
+                  ],
+                  "lower": 0.0,
+                  "upper": 2.0,
+                  "k_integral": 6.234142161088071,
+                  "correction_signed": 0.0,
+                  "correction_positive": 0.0,
+                  "correction_negative": 0.0,
+                  "correction_absolute": 0.0,
+                  "production": 5.170359800804506,
+                  "coefficient_integral_row": null,
+                  "destruction": 5.150640873170023,
+                  "invalid_diagnostic_points": []
+                },
+                {
+                  "name": "first_element",
+                  "x_region": "all",
+                  "x_bounds": [
+                    -4.0,
+                    2.0
+                  ],
+                  "lower": 0.0,
+                  "upper": 0.01,
+                  "k_integral": 0.05510212030712473,
+                  "correction_signed": 0.0,
+                  "correction_positive": 0.0,
+                  "correction_negative": 0.0,
+                  "correction_absolute": 0.0,
+                  "production": 0.956336696398932,
+                  "coefficient_integral_row": null,
+                  "destruction": 0.5907041967364242,
+                  "invalid_diagnostic_points": []
+                },
+                {
+                  "name": "global",
+                  "x_region": "all",
+                  "x_bounds": [
+                    -4.0,
+                    2.0
+                  ],
+                  "lower": 0.0,
+                  "upper": 4.0,
+                  "k_integral": 12.360234674005897,
+                  "correction_signed": 0.0,
+                  "correction_positive": 0.0,
+                  "correction_negative": 0.0,
+                  "correction_absolute": 0.0,
+                  "production": 5.774204535127214,
+                  "coefficient_integral_row": null,
+                  "destruction": 5.7548116829362606,
+                  "invalid_diagnostic_points": []
+                }
+              ],
+              "quadrature": "physical native panels split exactly at each band edge; GL16; source retains roughness/cutoff/geometric panels"
+            },
+            "mean_wall_stress": 0.15589692076965525,
+            "native_degrees_of_freedom": [
+              592.0,
+              592.0,
+              592.0,
+              304.0,
+              42.0,
+              42.0,
+              1.0
+            ],
+            "matching_trace_defect": 8.885496073456338e-08,
+            "state_unchanged": true,
+            "governing_solves": 0.0,
+            "weak_load_vector_receipt": {
+              "conservative_advection": {
+                "coefficients": 592.0,
+                "maximum_abs": 1.862605351546249,
+                "nonzero_modes": 592.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "constraint_replacement": {
+                "coefficients": 592.0,
+                "maximum_abs": 1.8626346194436338,
+                "nonzero_modes": 88.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "continuity": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "diagnostic_inner_Eplus": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.3991230691972839,
+                "nonzero_modes": 304.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "diagnostic_inner_minus_Cplus": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "diagnostic_outer_cancelled_epsilon_production": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "diagnostic_outer_cancelled_k_production": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.031224303275215665,
+                "nonzero_modes": 304.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "diagnostic_outer_cancelled_momentum": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "diagnostic_time_mass_extended_subtraction": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "epsilon_destruction": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "epsilon_diffusion": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "epsilon_production": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "epsilon_yap": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "gauge": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "inner_k_destruction": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.3991230691972839,
+                "nonzero_modes": 304.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "inner_k_production": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.3621158143209981,
+                "nonzero_modes": 304.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "inner_momentum_stress": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "k_diffusion": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.06701340237878939,
+                "nonzero_modes": 592.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "legacy_spatial": {
+                "coefficients": 592.0,
+                "maximum_abs": 1.8626346194436316,
+                "nonzero_modes": 592.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "legacy_stage": {
+                "coefficients": 592.0,
+                "maximum_abs": 1.8626346194436316,
+                "nonzero_modes": 592.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "outer_k_destruction": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0312366311498377,
+                "nonzero_modes": 304.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "outer_k_production": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.031224303275215665,
+                "nonzero_modes": 304.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "outer_momentum_stress": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "prescribed_body": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "prescribed_scalar_source": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "roughness_force": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "spatial_sum": {
+                "coefficients": 592.0,
+                "maximum_abs": 1.8626346194436338,
+                "nonzero_modes": 592.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "time_mass": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0,
+                "nonzero_modes": 0.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "total_constrained": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.004384682300180853,
+                "nonzero_modes": 504.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              },
+              "total_unmasked": {
+                "coefficients": 592.0,
+                "maximum_abs": 1.8626346194436338,
+                "nonzero_modes": 592.0,
+                "interpretation": "coefficient load diagnostic; not a physical norm"
+              }
+            },
+            "same_state_source_load_receipts": {
+              "same_state_accepted_source_load": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0660395091193347,
+                "nonzero_modes": 304.0,
+                "interpretation": "native all-mode signed source loads; full vectors retained in the native artifact"
+              },
+              "same_state_calibrated_EP_source_load": {
+                "coefficients": 592.0,
+                "maximum_abs": 0.0068675981064928535,
+                "nonzero_modes": 304.0,
+                "interpretation": "native all-mode signed source loads; full vectors retained in the native artifact"
+              }
+            },
+            "profile_summaries": [
+              {
+                "x": -3.5,
+                "K": 0.510501600478006,
+                "chi": null,
+                "cutoff": 0.014755589632797227,
+                "B": null,
+                "m": null,
+                "lambda": null,
+                "column_average": false,
+                "epsilon_H_retained": 0.07263445853375375,
+                "epsilon_H_refreshed_projected": 0.07263446467854699,
+                "epsilon_H_unprojected": 0.07263446467874331,
+                "profile_columns": "z,z/H,u,u_reference,du_dz,du_reference_dz,k,k_reference,dk_dz,dk_reference_dz,stored_pi,mechanical_p,epsilon",
+                "physical_profile_rows_retained_in_full_analysis": 16,
+                "ground_row": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  164.38242206714432,
+                  169.48017914331763,
+                  1.0268387252451747,
+                  1.0229104394926016,
+                  -8.17924412631726,
+                  0.0,
+                  -0.030105165029922727,
+                  -0.7146643151933726,
+                  9.845010126508098
+                ],
+                "highest_row": [
+                  4.0,
+                  2.0,
+                  6.009047768302546,
+                  6.009047768302546,
+                  0.22694217966248298,
+                  0.22698697894331663,
+                  0.5105080130598861,
+                  0.5105080130598861,
+                  -2.1176837838237748e-07,
+                  0.0,
+                  0.03872052312774119,
+                  -0.3016181522455162,
+                  0.03631791663093067
+                ]
+              },
+              {
+                "x": -1.0,
+                "K": 0.5105043422246704,
+                "chi": null,
+                "cutoff": 0.014755591774242847,
+                "B": null,
+                "m": null,
+                "lambda": null,
+                "column_average": false,
+                "epsilon_H_retained": 0.07263503744395784,
+                "epsilon_H_refreshed_projected": 0.07263504982549446,
+                "epsilon_H_unprojected": 0.07263504982549446,
+                "profile_columns": "z,z/H,u,u_reference,du_dz,du_reference_dz,k,k_reference,dk_dz,dk_reference_dz,stored_pi,mechanical_p,epsilon",
+                "physical_profile_rows_retained_in_full_analysis": 16,
+                "ground_row": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  165.0660345767087,
+                  169.48017914331763,
+                  1.025092865782857,
+                  1.0229104394926016,
+                  -7.2196666082931795,
+                  0.0,
+                  -0.03749090451598764,
+                  -0.7208861483712258,
+                  9.84508800958904
+                ],
+                "highest_row": [
+                  4.0,
+                  2.0,
+                  6.009047768302546,
+                  6.009047768302546,
+                  0.22683657049651265,
+                  0.22698697894331663,
+                  0.5105080130598861,
+                  0.5105080130598861,
+                  1.012872128422617e-06,
+                  0.0,
+                  0.03740407947310405,
+                  -0.30293459590015337,
+                  0.03631791663093067
+                ]
+              },
+              {
+                "x": 1.6,
+                "K": 0.5105019996155814,
+                "chi": null,
+                "cutoff": 0.014755589944544673,
+                "B": null,
+                "m": null,
+                "lambda": null,
+                "column_average": false,
+                "epsilon_H_retained": 0.07263454327861775,
+                "epsilon_H_refreshed_projected": 0.07263454986283324,
+                "epsilon_H_unprojected": 0.0726345498630496,
+                "profile_columns": "z,z/H,u,u_reference,du_dz,du_reference_dz,k,k_reference,dk_dz,dk_reference_dz,stored_pi,mechanical_p,epsilon",
+                "physical_profile_rows_retained_in_full_analysis": 16,
+                "ground_row": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  163.93824827251896,
+                  169.48017914331763,
+                  1.0266458026250407,
+                  1.0229104394926016,
+                  -8.48261633062795,
+                  0.0,
+                  -0.0455740246542719,
+                  -0.7300045597376323,
+                  9.845021464547203
+                ],
+                "highest_row": [
+                  4.0,
+                  2.0,
+                  6.009047768302546,
+                  6.009047768302546,
+                  0.22695941404187922,
+                  0.22698697894331663,
+                  0.5105080130598861,
+                  0.5105080130598861,
+                  8.082023654939538e-07,
+                  0.0,
+                  0.03617725180043626,
+                  -0.30416142357282117,
+                  0.03631791663093067
+                ]
+              }
+            ],
+            "independent_vertical_polynomial_minima_summary": {
+              "scope": "read-only profile reachability and vertical-panel extrema; no normalization, repair, Lift, restart conversion or history advance",
+              "state_sha256": "54fe741aee944f8a38a7c8bee61ed78486e82a46f31a518bd507269ed632af3d",
+              "selected_inventory": {
+                "admissible": true,
+                "scope": "declared finite scalar evaluation sets only",
+                "phase": "k_inventory_complete",
+                "failure": "",
+                "minimum_dimensionless_margin": 0.99997683749874,
+                "limiting_functional_kind": "Point",
+                "limiting_inventory": "physical_matching_transfer",
+                "limiting_point": [
+                  -3.6666666666666665,
+                  0.0,
+                  2.0
+                ],
+                "minimum_inner_k": 0.5105001078260063,
+                "minimum_outer_k": 0.5105001078260063,
+                "minimum_outer_epsilon": 0.03631791663093067,
+                "minimum_sampled_K": 0.5105001078260063,
+                "minimum_projected_trace_epsilon": 1e+300,
+                "minimum_b": null,
+                "minimum_lambda": null,
+                "normalization_applicable": false,
+                "minimum_budget_ratio": 5.909280150953167,
+                "maximum_budget_relative_defect": 0.0,
+                "cutoff_range": [
+                  0.01475558846695633,
+                  0.014755594641344657
+                ],
+                "inventory_counts": {
+                  "budget_awf_reporting_volume": 11520.0,
+                  "constitutive_budget_awf_ray": 88688.0,
+                  "constitutive_budget_reporting_source_ray": 238384.0,
+                  "constitutive_matching_K": 241.0,
+                  "interface_inner": 40.0,
+                  "interface_outer": 80.0,
+                  "mass_volume": 5760.0,
+                  "matching_trace_nodes": 80.0,
+                  "physical_matching_transfer": 302.0,
+                  "physical_sampled_K": 392.0,
+                  "prescribed_source_inner": 14720.0,
+                  "reconstruction_dense": 9930.0,
+                  "reconstruction_native": 5760.0,
+                  "source_volume_outer": 3840.0,
+                  "trace_budget_awf_ray": 13248.0,
+                  "volume_normalization_ray": 14720.0
+                }
+              },
+              "anchors": 3,
+              "vertical_panels": 24,
+              "minimum_vertical_panel": {
+                "z_bounds": [
+                  1.0,
+                  2.0
+                ],
+                "minimum": 0.5105011483270289,
+                "z": 1.9550994360987273,
+                "native_evaluation": 0.5105011483270289,
+                "arithmetic_error_estimate": 1.7179991182853685e-13,
+                "x": 1.6
+              },
+              "profile_ray_rows": 1104,
+              "minimum_profile_ray": {
+                "coordinate": [
+                  1.6,
+                  0.0,
+                  1.9593276541883093
+                ],
+                "k": 0.5105011561005258,
+                "visited_by_selected_inventory": true
+              },
+              "unregistered_profile_ray_rows": 0
+            }
+          },
+          "drift_from_actual_h0": {
+            "u": 0.007972181653587236,
+            "v": 0.0001074857717764511,
+            "k": 0.004049555947508873,
+            "epsilon": 3.17286013630642e-06,
+            "common_gauge_shift": 4.282129665768574e-18,
+            "pressure": 0.010795096620300676
+          },
+          "common_normalized_drift": {
+            "u": 0.004068286914180453,
+            "v": 5.4851103221156375e-05,
+            "k": 0.0016191952431844905,
+            "epsilon": 1.2609834371924175e-05,
+            "pressure": 0.013772124189468677
+          },
+          "error_to_own_reference": {
+            "u": 0.012149640516467953,
+            "k": 0.006852140744995925,
+            "epsilon": 3.172309822139541e-06,
+            "v": 0.0001074857717764511,
+            "velocity": 0.012150115961196998
+          },
+          "exact_discrete_work_and_correction": {
+            "accepted_steps": 32.0,
+            "solves": {
+              "outer_sweeps": 32.0,
+              "momentum_predictor_solves": 32.0,
+              "pressure_system_solves": 32.0,
+              "epsilon_transport_solves": 32.0,
+              "k_transport_solves": 32.0,
+              "bound_calls": 32.0,
+              "additional_governing_equation_solves": 0.0
+            },
+            "activations": 0.0,
+            "seconds": 270.562108607,
+            "correction_integral": 0.0,
+            "correction_mass_norm_sum": 0.0,
+            "maximum_correction_raw_increment_ratio": 0.0,
+            "fixed_band_correction_totals": {
+              "z_le_0.01": {
+                "lower": 0.0,
+                "upper": 0.01,
+                "x_bounds": [
+                  -4.0,
+                  2.0
+                ],
+                "signed": 0.0,
+                "positive": 0.0,
+                "negative": 0.0,
+                "absolute": 0.0
+              },
+              "z_le_0.1": {
+                "lower": 0.0,
+                "upper": 0.1,
+                "x_bounds": [
+                  -4.0,
+                  2.0
+                ],
+                "signed": 0.0,
+                "positive": 0.0,
+                "negative": 0.0,
+                "absolute": 0.0
+              },
+              "wall_layer": {
+                "lower": 0.0,
+                "upper": 2.0,
+                "x_bounds": [
+                  -4.0,
+                  2.0
+                ],
+                "signed": 0.0,
+                "positive": 0.0,
+                "negative": 0.0,
+                "absolute": 0.0
+              },
+              "first_element": {
+                "lower": 0.0,
+                "upper": 0.01,
+                "x_bounds": [
+                  -4.0,
+                  2.0
+                ],
+                "signed": 0.0,
+                "positive": 0.0,
+                "negative": 0.0,
+                "absolute": 0.0
+              },
+              "global": {
+                "lower": 0.0,
+                "upper": 4.0,
+                "x_bounds": [
+                  -4.0,
+                  2.0
+                ],
+                "signed": 0.0,
+                "positive": 0.0,
+                "negative": 0.0,
+                "absolute": 0.0
+              }
+            },
+            "individual_increments_retained_in_full_analysis": 32,
+            "last_increment": {
+              "k_frozen_linear_residual": 8.809142651444724e-19,
+              "k_corrected_frozen_linear_residual": 8.809142651444724e-19,
+              "k_added_frozen_residual": 0.0,
+              "k_added_storage_residual": 0.0,
+              "refreshed_trace_defect": 8.885496073456338e-08,
+              "refreshed_original_block_norms": [
+                0.00038802336868755323,
+                0.00015265866817759354,
+                1.1448239882192854e-06,
+                1.0139603005014597e-06,
+                9.1990341872634e-16,
+                8.198579322119276e-16,
+                1.3891340334970522e-17,
+                1.223293748338097e-06
+              ],
+              "time": 0.020000000000000007,
+              "seconds": 10.698318641,
+              "raw_sha256": "54fe741aee944f8a38a7c8bee61ed78486e82a46f31a518bd507269ed632af3d",
+              "corrected_sha256": "54fe741aee944f8a38a7c8bee61ed78486e82a46f31a518bd507269ed632af3d",
+              "raw_step_mass_norm": 5.762335214142909e-05,
+              "correction_mass_norm": 0.0,
+              "correction_to_step_ratio": 0.0,
+              "accepted_step_mass_norm": 5.762335214142909e-05,
+              "raw_bound_inner_product": 0.0,
+              "increment_norm_identity_defect": 0.0
+            },
+            "maximum_raw_step_mass_norm": 0.00060476226915027,
+            "maximum_bound_mass_norm": 0.0
+          },
+          "sampled_physical_time_integrals": {
+            "z_le_0.01:all": {
+              "start": 0.0,
+              "end": 0.020000000000000007,
+              "production": 0.019448286513774442,
+              "destruction": 0.011814119498975578,
+              "valid": true
+            },
+            "z_le_0.1:all": {
+              "start": 0.0,
+              "end": 0.020000000000000007,
+              "production": 0.052258034985640314,
+              "destruction": 0.05079023066890816,
+              "valid": true
+            },
+            "wall_layer:all": {
+              "start": 0.0,
+              "end": 0.020000000000000007,
+              "production": 0.10347485701884006,
+              "destruction": 0.1030131322918226,
+              "valid": true
+            },
+            "first_element:all": {
+              "start": 0.0,
+              "end": 0.020000000000000007,
+              "production": 0.019448286513774442,
+              "destruction": 0.011814119498975578,
+              "valid": true
+            },
+            "global:all": {
+              "start": 0.0,
+              "end": 0.020000000000000007,
+              "production": 0.1155544149914883,
+              "destruction": 0.11509651475149668,
+              "valid": true
+            }
+          },
+          "elapsed_wall_times": 0.004000000000000002,
+          "elapsed_flow_through_times": 0.017027808037869047
+        }
+      },
+      "initial_flow_through_time": 1.1745492993297166,
+      "wall_time_scale": 5.0
+    }
+  },
+  "one_graded": {},
+  "cross_height": {},
+  "normalization": "dimensional physical L2 and common U=.4,K=K0,H=2,V=24,outerV=12; epsilon z>=2; one pressure gauge",
+  "budget_units": "repair budgets are integrals of k; sampled production/destruction are rates integrated over physical time",
+  "caveat": "finite-inventory/ground admissibility and survival do not establish global positivity, temporal accuracy or steady convergence",
+  "cross_suite": {
+    "Accepted-AWF-2G": {
+      "other": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/combined-faithful-suite",
+      "same_actual_h0": false,
+      "common_times": {
+        "0.0": {
+          "u": 0.0,
+          "v": 0.0,
+          "k": 0.0006599962985341361,
+          "epsilon": 0.0,
+          "common_gauge_shift": 0.0,
+          "pressure": 0.0
+        },
+        "0.005": {
+          "u": 1.7793477370823825e-09,
+          "v": 2.6275106647205603e-10,
+          "k": 0.0006594159281374404,
+          "epsilon": 3.7021351108021484e-08,
+          "common_gauge_shift": 4.712632962145545e-18,
+          "pressure": 2.120099093675107e-07
+        },
+        "0.01": {
+          "u": 6.251410942436769e-09,
+          "v": 8.515374296080195e-10,
+          "k": 0.0006588287924591104,
+          "epsilon": 7.60550975992069e-08,
+          "common_gauge_shift": 1.18560033254133e-18,
+          "pressure": 4.1337223578208655e-07
+        },
+        "0.020000000000000007": {
+          "u": 2.0338763597039522e-08,
+          "v": 3.1799572185023852e-09,
+          "k": 0.0006576389326598,
+          "epsilon": 1.5427592009862928e-07,
+          "common_gauge_shift": 1.2571829512514694e-17,
+          "pressure": 7.523499250524657e-07
+        }
+      }
+    }
+  },
+  "full_analysis_artifact": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/analysis-perturbation/native.json",
+    "sha256": "364dd68ce353285d5acdf43bec243f64a554580dab707fa28b5ad8ed0377edad",
+    "bytes": 1863318
+  },
+  "compaction": "full fields/profiles, per-step hashes and inventories remain indexed on Linux; this file retains numerical summaries",
+  "plots": [
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/analysis-perturbation/Accepted-AWF-2G-profiles-x-3.5.png",
+      "sha256": "9406139df3f67f2fcacacdf1dc894606c1aba8b969a9f228a96474abb744811f",
+      "bytes": 220136
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/analysis-perturbation/Accepted-AWF-2G-profiles-x1.6.png",
+      "sha256": "c6303eb74959d398ce64a7b2069018e7c3964a35a09fb233738781b336b4d956",
+      "bytes": 220546
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/analysis-perturbation/fixed-bands-wall-stress.png",
+      "sha256": "1c4689a88cab41e977abb16c51e51f893c53eb275b81a4dfad908a5f1ffc1ccb",
+      "bytes": 118341
+    }
+  ]
+}

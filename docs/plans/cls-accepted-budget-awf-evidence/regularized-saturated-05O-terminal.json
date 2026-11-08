@@ -1,0 +1,116 @@
+{
+  "captured_UTC": "2026-11-08T11:24:41.409892+00:00",
+  "status": "numerically_rejected",
+  "last_accepted_step": 161,
+  "last_accepted_time": 0.10062500000000008,
+  "attempted_step": 162,
+  "attempted_time": 0.10125000000000008,
+  "failure": "accepted AWF hard audit exit; candidate/history retained: accepted_awf_covariance_or_budget_exit",
+  "native_report": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-regularized-saturated-05O/trajectory/steps-000161-000168/case.evolution.json",
+    "sha256": "ba83e5d741f7a17d89c4547617bb7c2adfcad05e8f717b548da63f48458b1f07"
+  },
+  "checkpoint": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-regularized-saturated-05O/observations/terminal-attempt-000162/checkpoint-last-accepted",
+    "sha256": "40c17cdcebf359fd29abc871b754a0b8a8aedcab04e14d025d60057f2e19ed58"
+  },
+  "rejected_coupled_sha256": "84dd65d4741c116eb101069ee0509675206c06612797e1b0f7dfbb78af4ed43a",
+  "rollback": {
+    "coupled_state_exact": true,
+    "native_history_exact": true,
+    "native_history_times_exact": true,
+    "time_exact": true
+  },
+  "restart": {
+    "prefix_state_exact": true,
+    "startup_bound_activations": 0.0,
+    "accepted_native_steps_after_restart": 1.0
+  },
+  "hard_audit": {
+    "accepted_awf_covariance": [
+      0.09148693481995962,
+      -0.00012415558093128998
+    ],
+    "accepted_awf_hard_admissible": [
+      0.0
+    ],
+    "accepted_awf_inner_minimum_point": [
+      -3.75,
+      0.0,
+      0.5,
+      0.5185941679547058,
+      0.5185941679547058,
+      0.08974289558799231,
+      0.3999056073189328,
+      0.3457294453031372,
+      0.09148693481995962
+    ],
+    "accepted_awf_outer_minimum_point": [
+      1.0,
+      0.0,
+      0.5,
+      0.5100564605342217,
+      0.2903016740936824,
+      -0.00012415558093128998
+    ],
+    "accepted_awf_reference_departure": [
+      1.181477501785349,
+      0.9954891575498118,
+      1.0158548111514973,
+      0.9963953947679347,
+      1.023925699378415,
+      0.9976948409003107,
+      1.0158548111514973
+    ],
+    "accepted_awf_scalar_domain": [
+      1.0,
+      0.48100580942665483,
+      0.2455573200406638,
+      0.5082051918434144,
+      0.03631791663093067,
+      0.5093312108681168,
+      0.28954169477981445,
+      4.530671225926336,
+      0.0
+    ],
+    "accepted_awf_sources": [
+      5.474427892607085,
+      3.9697398440042493,
+      0.0,
+      0.006551603133723731,
+      1.5046880486028353
+    ]
+  },
+  "last_attempt_solve_counts": {
+    "outer_sweeps": 1.0,
+    "momentum_predictor_solves": 1.0,
+    "pressure_system_solves": 1.0,
+    "epsilon_transport_solves": 1.0,
+    "k_transport_solves": 1.0,
+    "bound_calls": 1.0
+  },
+  "bound_activations": 0.0,
+  "rejected_attempt_packets": [
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-regularized-saturated-05O/trajectory/steps-000161-000168/pimple-states/k-t0.10062500000000008-2def9370b29a.json",
+      "sha256": "78db12ec42e42d658b63a0225816af6c0e38136c7af118595160b88a6e6a264f",
+      "bytes": 291961
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-regularized-saturated-05O/trajectory/steps-000161-000168/pimple-states/k-t0.10062500000000008-2def9370b29a.matrix.bin",
+      "sha256": "81dde6b24b831b4da826dc5ebafc280f6486dfcd33afacf62b747411dc99407c",
+      "bytes": 1143072
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-regularized-saturated-05O/trajectory/steps-000161-000168/pimple-states/k-t0.10125000000000008-2b162d4c7e55.json",
+      "sha256": "42414e55527379323591b34ea1ddeb9508a656ec3f939a0c6aba467a8f1ca7a3",
+      "bytes": 292103
+    },
+    {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-regularized-saturated-05O/trajectory/steps-000161-000168/pimple-states/k-t0.10125000000000008-2b162d4c7e55.matrix.bin",
+      "sha256": "ec37da51a04718f5e167c48016da807126785baec097b7f49f7f5392bc2f6c51",
+      "bytes": 1143072
+    }
+  ],
+  "native_still_alive": null
+}

@@ -1,0 +1,2616 @@
+{
+  "schema": 1,
+  "captured_UTC": "2026-11-08T11:34:03.454199+00:00",
+  "production_governing_solves_added": 0,
+  "script_sha256": "d3db95b6593d7efaccdf93e9a46e9b93d8d6acdfd687b12925dc1efcf0a230b5",
+  "native_vector_columns": {
+    "inner_stress": [
+      "active_physical_volume",
+      "positive_k_volume",
+      "minimum_a_over_c",
+      "maximum_a_over_c",
+      "zero_k_volume",
+      "minimum_turbulent_radial_tangent"
+    ],
+    "inner_stress_max_ratio_point": [
+      "x",
+      "y",
+      "z",
+      "local_k",
+      "representative_K",
+      "nu_tA",
+      "strain_norm",
+      "a_over_c",
+      "t",
+      "radial_tangent"
+    ],
+    "inner_constitutive_modification": [
+      "stress_work_difference_from_same_state_Linear",
+      "production_difference_from_same_state_Linear",
+      "work_minus_production"
+    ],
+    "constitutive_modification": [
+      "stress_work_difference_from_same_state_Original_outer",
+      "production_difference_from_same_state_Original_outer",
+      "work_minus_production"
+    ],
+    "interface": [
+      "physical_measure",
+      "integrated_pi_minus_p",
+      "normal_traction_jump_RMS",
+      "full_traction_jump_RMS",
+      "normal_traction_jump_max",
+      "k_diffusive_flux_jump_RMS",
+      "net_normal_flow",
+      "integrated_normal_traction_jump"
+    ],
+    "strong_continuity": [
+      "inner_divergence_L2",
+      "outer_divergence_L2",
+      "inner_divergence_integral",
+      "outer_divergence_integral",
+      "net_boundary_flux"
+    ],
+    "accepted_awf_covariance": [
+      "inner_minimum_eigenvalue",
+      "outer_minimum_eigenvalue"
+    ],
+    "accepted_awf_sources": [
+      "inner_production_integral",
+      "E_C_integral",
+      "redistribution_integral",
+      "molecular_work_integral",
+      "production_minus_E_C"
+    ]
+  },
+  "cases": {
+    "primary-05G": {
+      "initial": {
+        "time": 0.0,
+        "state_classification": "accepted_native_state",
+        "native_audit": {
+          "inner_stress": null,
+          "inner_stress_max_ratio_point": null,
+          "inner_constitutive_modification": null,
+          "constitutive_modification": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "interface": [
+            6.000000000000001,
+            -0.4492470514926998,
+            3.3775334463292374e-15,
+            1.5588197103460514e-14,
+            3.3861802251067274e-15,
+            2.7891856405679304e-15,
+            0.0,
+            -2.0264838699455635e-14
+          ],
+          "strong_continuity": [
+            2.14833470138437e-15,
+            2.3209930275342174e-15,
+            3.3132301612744087e-16,
+            8.107572387817832e-16,
+            1.1518563880486e-15
+          ],
+          "accepted_awf_scalar_domain": [
+            1.0,
+            0.9963953947679346,
+            0.5105074048156665,
+            0.5105080130598852,
+            0.03631791663093067,
+            0.5105080130598861,
+            0.2905433330474453,
+            4.531094243588623,
+            0.0
+          ],
+          "accepted_awf_covariance": [
+            0.1284924890045712,
+            0.1745726079870195
+          ],
+          "accepted_awf_sources": [
+            3.9914403575469146,
+            3.949437671652979,
+            0.0,
+            0.013952492266878105,
+            0.04200268589393552
+          ],
+          "accepted_awf_hard_admissible": [
+            1.0
+          ]
+        },
+        "inner_saturation_applicable": false,
+        "evaluated_inner_volume": null,
+        "active_inner_volume_fraction": null,
+        "selected_operator": {
+          "wall_policy": "CLSCalibratedBudgetAWF",
+          "outer_variant": "Original",
+          "inner_stress": "Linear",
+          "chi": null,
+          "destruction_cap": null,
+          "redistribution": "zero"
+        },
+        "source_native_report": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/primary-05G/Accepted-AWF-05G/initial/case.evolution.json",
+          "sha256": "0c0f9437bfbb338bf2b723d09bbca05778bbb6bf50691c54bf3d4628256a4568"
+        },
+        "alpha_zero_residual_interpretation": "selected case operator at retained fields; not a counterfactual faithful Original/Linear operator",
+        "coupled_state_sha256": "d3196e7ae771967a897225c93a8890229d9881f9fb1d3d741014f52cec6c8f8c",
+        "selected_operator_alpha_zero_dimensional_blocks": [
+          3.8678744387462007,
+          0.03908564198271863,
+          1.4061454090859018,
+          0.013198495313290788
+        ],
+        "selected_operator_alpha_zero_native_scaled_blocks": [
+          2.4672705114797027,
+          0.024932260189261674,
+          0.702800500576555,
+          0.012391214467678149,
+          1.5622667607647457e-16,
+          6.426111647679836e-17,
+          9.444417361885447e-18,
+          0.0
+        ]
+      },
+      "final": {
+        "time": 0.07437500000000005,
+        "state_classification": "accepted_native_state",
+        "native_audit": {
+          "inner_stress": null,
+          "inner_stress_max_ratio_point": null,
+          "inner_constitutive_modification": null,
+          "constitutive_modification": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "interface": [
+            6.000000000000001,
+            -0.44795743099411484,
+            0.001222327399893378,
+            0.00329288537319623,
+            0.0025978697102643222,
+            0.00013572925547307584,
+            -1.962778626695555e-16,
+            0.006848847253370358
+          ],
+          "strong_continuity": [
+            0.012996262330692046,
+            0.028770400623957065,
+            1.403304894704617e-16,
+            1.0068444401228923e-15,
+            1.1519079191003546e-15
+          ],
+          "accepted_awf_scalar_domain": [
+            1.0,
+            0.9963953947679347,
+            0.5105008511266114,
+            0.5104035685143292,
+            0.03631791663093067,
+            0.5105080130598861,
+            0.2905433330474453,
+            4.531092201940806,
+            0.0
+          ],
+          "accepted_awf_covariance": [
+            0.12696582578627957,
+            0.009621953002396252
+          ],
+          "accepted_awf_sources": [
+            3.9696207250221573,
+            3.9496760062732243,
+            0.0,
+            0.013733053329584698,
+            0.019944718748933
+          ],
+          "accepted_awf_hard_admissible": [
+            1.0
+          ]
+        },
+        "inner_saturation_applicable": false,
+        "evaluated_inner_volume": null,
+        "active_inner_volume_fraction": null,
+        "selected_operator": {
+          "wall_policy": "CLSCalibratedBudgetAWF",
+          "outer_variant": "Original",
+          "inner_stress": "Linear",
+          "chi": null,
+          "destruction_cap": null,
+          "redistribution": "zero"
+        },
+        "source_native_report": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/primary-05G/Accepted-AWF-05G/trajectory/case.evolution.json",
+          "sha256": "31d86d6df4dc38bafb1cd34a351c2854241a65cf2f6686b5e5c77c17ff780e19"
+        },
+        "alpha_zero_residual_interpretation": "selected case operator at retained fields; not a counterfactual faithful Original/Linear operator",
+        "coupled_state_sha256": "730f5b7e82c94def5439cde72087ea690e20e57898d33db32369a53b67cb5331",
+        "selected_operator_alpha_zero_dimensional_blocks": [
+          0.33478311907405756,
+          0.0686659184995911,
+          0.05336931256879767,
+          0.0021114666796867164
+        ],
+        "selected_operator_alpha_zero_native_scaled_blocks": [
+          0.2135541188095998,
+          0.043801162250920324,
+          0.026674324964130545,
+          0.0019823196393461457,
+          1.2566437952042323e-16,
+          2.357951455218917e-16,
+          1.3933691982333237e-17,
+          7.198801236917487e-06
+        ]
+      },
+      "final_native_failure": "accepted AWF hard audit exit; candidate/history retained: accepted_awf_covariance_or_budget_exit",
+      "rejected_candidate": {
+        "time": 0.07500000000000005,
+        "native_audit": {
+          "inner_stress": null,
+          "inner_stress_max_ratio_point": null,
+          "inner_constitutive_modification": null,
+          "constitutive_modification": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "interface": [
+            6.000000000000001,
+            -0.4479570124890036,
+            0.001221983007431306,
+            0.003292203665369145,
+            0.0025993017147356023,
+            0.00013409629891190543,
+            -1.9598605981922639e-16,
+            0.006843180950426924
+          ],
+          "strong_continuity": [
+            0.013012177788189435,
+            0.030769069118576263,
+            1.402462096922099e-16,
+            1.0075556301612307e-15,
+            1.151912459462364e-15
+          ],
+          "accepted_awf_scalar_domain": [
+            1.0,
+            0.9963953947679347,
+            0.5105006567088526,
+            0.5103957398384676,
+            0.03631791663093067,
+            0.5105080130598861,
+            0.2905433330474453,
+            4.531092192253379,
+            0.0
+          ],
+          "accepted_awf_covariance": [
+            0.1269669399701972,
+            -0.003174404073876383
+          ],
+          "accepted_awf_sources": [
+            3.96962174417162,
+            3.949673257101627,
+            0.0,
+            0.013732201740473612,
+            0.01994848706999308
+          ],
+          "accepted_awf_hard_admissible": [
+            0.0
+          ]
+        },
+        "coupled_state_sha256": "6a5ea711b79bb7c84cb9aed81a27fe7b13e2779a5b2910ec24c943dade11c582",
+        "state_classification": "rejected_candidate; no alpha-zero residual inferred from accepted fields"
+      }
+    },
+    "primary-05O": {
+      "initial": {
+        "time": 0.0,
+        "state_classification": "accepted_native_state",
+        "native_audit": {
+          "inner_stress": null,
+          "inner_stress_max_ratio_point": null,
+          "inner_constitutive_modification": null,
+          "constitutive_modification": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "interface": [
+            6.000000000000001,
+            -0.4492470514926998,
+            3.2722788840714667e-15,
+            3.568015072940348e-15,
+            3.2751579226442118e-15,
+            1.8530896718173158e-15,
+            0.0,
+            -1.9633533318803694e-14
+          ],
+          "strong_continuity": [
+            1.1487584204465899e-14,
+            2.3209984132355693e-15,
+            2.1121054557967775e-15,
+            8.107505755616633e-16,
+            3.649858193455202e-15
+          ],
+          "accepted_awf_scalar_domain": [
+            1.0,
+            0.9963953947679346,
+            0.5105080130598861,
+            0.5105080130598846,
+            0.03631791663093067,
+            0.5105080130598861,
+            0.2905433330474453,
+            4.531094243588623,
+            0.0
+          ],
+          "accepted_awf_covariance": [
+            0.04328724589107025,
+            0.17457260798702912
+          ],
+          "accepted_awf_sources": [
+            5.666301032918282,
+            3.949437671652989,
+            0.0,
+            0.006580996651736062,
+            1.7168633612652933
+          ],
+          "accepted_awf_hard_admissible": [
+            1.0
+          ]
+        },
+        "inner_saturation_applicable": false,
+        "evaluated_inner_volume": null,
+        "active_inner_volume_fraction": null,
+        "selected_operator": {
+          "wall_policy": "CLSCalibratedBudgetAWF",
+          "outer_variant": "Original",
+          "inner_stress": "Linear",
+          "chi": null,
+          "destruction_cap": null,
+          "redistribution": "zero"
+        },
+        "source_native_report": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/primary-05O/Accepted-AWF-05O/initial/case.evolution.json",
+          "sha256": "e1372c9b25dce280b40afdee49329b8f14c9070b4362b7412b3e2fcb3bdfc8fb"
+        },
+        "alpha_zero_residual_interpretation": "selected case operator at retained fields; not a counterfactual faithful Original/Linear operator",
+        "coupled_state_sha256": "1a6d43cac5a0a3ea304dd0526dac846a7b5f63d3074916d86ba759ca27d0d2ce",
+        "selected_operator_alpha_zero_dimensional_blocks": [
+          1.8601772185413346,
+          0.038312425834569896,
+          3.165668323521131,
+          0.013198495313326323
+        ],
+        "selected_operator_alpha_zero_native_scaled_blocks": [
+          1.186584639733318,
+          0.024439034922635463,
+          1.5822213464227004,
+          0.012391214467711511,
+          9.539834552619907e-16,
+          6.426015338051854e-17,
+          9.444417361885447e-18,
+          0.0
+        ]
+      },
+      "final": {
+        "time": 0.053750000000000034,
+        "state_classification": "accepted_native_state",
+        "native_audit": {
+          "inner_stress": null,
+          "inner_stress_max_ratio_point": null,
+          "inner_constitutive_modification": null,
+          "constitutive_modification": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "interface": [
+            6.000000000000001,
+            -0.2772317116971604,
+            0.03142437339177195,
+            0.18523221988425684,
+            0.18287085917159246,
+            0.17226221893311525,
+            -1.751257559107211e-15,
+            0.018567763234091882
+          ],
+          "strong_continuity": [
+            0.08006877176910755,
+            0.06297092269379881,
+            3.550762114890027e-16,
+            2.542659447028658e-15,
+            3.649903924406201e-15
+          ],
+          "accepted_awf_scalar_domain": [
+            1.0,
+            0.7135863664809192,
+            0.3642915580987978,
+            0.5097607109542754,
+            0.03631791663093067,
+            0.5105080130598861,
+            0.2905433330474453,
+            4.530349356081659,
+            0.0
+          ],
+          "accepted_awf_covariance": [
+            0.023212572068853327,
+            0.010537763452562715
+          ],
+          "accepted_awf_sources": [
+            5.70391173688621,
+            4.085584526246254,
+            0.0,
+            0.006574461862794893,
+            1.618327210639956
+          ],
+          "accepted_awf_hard_admissible": [
+            1.0
+          ]
+        },
+        "inner_saturation_applicable": false,
+        "evaluated_inner_volume": null,
+        "active_inner_volume_fraction": null,
+        "selected_operator": {
+          "wall_policy": "CLSCalibratedBudgetAWF",
+          "outer_variant": "Original",
+          "inner_stress": "Linear",
+          "chi": null,
+          "destruction_cap": null,
+          "redistribution": "zero"
+        },
+        "source_native_report": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/primary-05O/Accepted-AWF-05O/trajectory/case.evolution.json",
+          "sha256": "6f115766f1e8873c07e82be4e2b69350bc29a6d8ec44a384fa4f78566088368e"
+        },
+        "alpha_zero_residual_interpretation": "selected case operator at retained fields; not a counterfactual faithful Original/Linear operator",
+        "coupled_state_sha256": "dcfc83537cecef28e5500f03bb13330a119907b3b7480732ae5ce75c3e4ce868",
+        "selected_operator_alpha_zero_dimensional_blocks": [
+          0.7813783155813648,
+          0.13549257765470185,
+          2.0714059261288607,
+          0.0434331815418365
+        ],
+        "selected_operator_alpha_zero_native_scaled_blocks": [
+          0.4984318149087891,
+          0.08642908312199099,
+          1.0353019768609657,
+          0.04077660784230023,
+          2.165851470437285e-16,
+          2.0722776461145716e-16,
+          7.750351467376847e-18,
+          0.00089460415066226
+        ]
+      },
+      "final_native_failure": "accepted AWF hard audit exit; candidate/history retained: accepted_awf_covariance_or_budget_exit",
+      "rejected_candidate": {
+        "time": 0.054375000000000034,
+        "native_audit": {
+          "inner_stress": null,
+          "inner_stress_max_ratio_point": null,
+          "inner_constitutive_modification": null,
+          "constitutive_modification": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "interface": [
+            6.000000000000001,
+            -0.2770198698857291,
+            0.03149292722029692,
+            0.18605254466428872,
+            0.18322805713337242,
+            0.17308388837735494,
+            -1.7393313352098705e-15,
+            0.01854015918865714
+          ],
+          "strong_continuity": [
+            0.08070294877518507,
+            0.06463456765724493,
+            3.6591823321385775e-16,
+            2.5327676903915037e-15,
+            3.6499083864753155e-15
+          ],
+          "accepted_awf_scalar_domain": [
+            1.0,
+            0.7100619322404844,
+            0.3624923061775532,
+            0.5097823821361286,
+            0.03631791663093067,
+            0.5105080130598861,
+            0.2905433330474453,
+            4.530355852972536,
+            0.0
+          ],
+          "accepted_awf_covariance": [
+            0.022207849285632575,
+            -0.001977364367235751
+          ],
+          "accepted_awf_sources": [
+            5.703361429800534,
+            4.084515167375515,
+            0.0,
+            0.006574166435220801,
+            1.618846262425019
+          ],
+          "accepted_awf_hard_admissible": [
+            0.0
+          ]
+        },
+        "coupled_state_sha256": "81d66e4ed92e63b584d233d528b12496eac1abd32a1518d07c7638be6b0b1a65",
+        "state_classification": "rejected_candidate; no alpha-zero residual inferred from accepted fields"
+      }
+    },
+    "primary-2O": {
+      "initial": {
+        "time": 0.0,
+        "state_classification": "initialization_rejected_candidate",
+        "native_audit": {
+          "inner_stress": null,
+          "inner_stress_max_ratio_point": null,
+          "inner_constitutive_modification": null,
+          "constitutive_modification": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "interface": [
+            6.000000000000001,
+            -0.4492470514926998,
+            2.455595862255389e-14,
+            2.6054844233401767e-14,
+            2.4591439995447217e-14,
+            5.310337594473745e-15,
+            0.0,
+            -1.4733566493840533e-13
+          ],
+          "strong_continuity": [
+            3.1237357372192095e-14,
+            4.202336725134382e-16,
+            1.155651165216163e-14,
+            1.3675577120825627e-16,
+            7.494005416219807e-16
+          ],
+          "accepted_awf_scalar_domain": [
+            1.0,
+            0.9999923453025348,
+            0.5105080130598861,
+            0.5105080130598847,
+            0.03631791663093067,
+            0.5105080130598861,
+            0.07263583326186132,
+            5.909280150953167,
+            0.0
+          ],
+          "accepted_awf_covariance": [
+            -0.08491550818430779,
+            0.1777343943454361
+          ],
+          "accepted_awf_sources": [
+            9.873450392755185,
+            5.150705852907174,
+            0.0,
+            0.003244478007952111,
+            4.722744539848011
+          ],
+          "accepted_awf_hard_admissible": [
+            0.0
+          ]
+        },
+        "inner_saturation_applicable": false,
+        "evaluated_inner_volume": null,
+        "active_inner_volume_fraction": null,
+        "selected_operator": {
+          "wall_policy": "CLSCalibratedBudgetAWF",
+          "outer_variant": "Original",
+          "inner_stress": "Linear",
+          "chi": null,
+          "destruction_cap": null,
+          "redistribution": "zero"
+        },
+        "source_native_report": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/primary-2O/Accepted-AWF-2O/initial/case.evolution.json",
+          "sha256": "91869f382acb063260ad7f692814998529591de88c4ead5f6f799e1012c50be1"
+        },
+        "alpha_zero_residual_interpretation": "selected case operator at retained fields; not a counterfactual faithful Original/Linear operator",
+        "coupled_state_sha256": "2c34840f881d81d95d035d4b6b26c94bebe6473768003bc148539892a5d59c54",
+        "selected_operator_alpha_zero_dimensional_blocks": null,
+        "selected_operator_alpha_zero_native_scaled_blocks": null
+      },
+      "final": {
+        "time": 0.0,
+        "state_classification": "initialization_rejected_candidate",
+        "native_audit": {
+          "inner_stress": null,
+          "inner_stress_max_ratio_point": null,
+          "inner_constitutive_modification": null,
+          "constitutive_modification": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "interface": [
+            6.000000000000001,
+            -0.4492470514926998,
+            2.455595862255389e-14,
+            2.6054844233401767e-14,
+            2.4591439995447217e-14,
+            5.310337594473745e-15,
+            0.0,
+            -1.4733566493840533e-13
+          ],
+          "strong_continuity": [
+            3.1237357372192095e-14,
+            4.202336725134382e-16,
+            1.155651165216163e-14,
+            1.3675577120825627e-16,
+            7.494005416219807e-16
+          ],
+          "accepted_awf_scalar_domain": [
+            1.0,
+            0.9999923453025348,
+            0.5105080130598861,
+            0.5105080130598847,
+            0.03631791663093067,
+            0.5105080130598861,
+            0.07263583326186132,
+            5.909280150953167,
+            0.0
+          ],
+          "accepted_awf_covariance": [
+            -0.08491550818430779,
+            0.1777343943454361
+          ],
+          "accepted_awf_sources": [
+            9.873450392755185,
+            5.150705852907174,
+            0.0,
+            0.003244478007952111,
+            4.722744539848011
+          ],
+          "accepted_awf_hard_admissible": [
+            0.0
+          ]
+        },
+        "inner_saturation_applicable": false,
+        "evaluated_inner_volume": null,
+        "active_inner_volume_fraction": null,
+        "selected_operator": {
+          "wall_policy": "CLSCalibratedBudgetAWF",
+          "outer_variant": "Original",
+          "inner_stress": "Linear",
+          "chi": null,
+          "destruction_cap": null,
+          "redistribution": "zero"
+        },
+        "source_native_report": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/primary-2O/Accepted-AWF-2O/initial/case.evolution.json",
+          "sha256": "91869f382acb063260ad7f692814998529591de88c4ead5f6f799e1012c50be1"
+        },
+        "alpha_zero_residual_interpretation": "selected case operator at retained fields; not a counterfactual faithful Original/Linear operator",
+        "coupled_state_sha256": "2c34840f881d81d95d035d4b6b26c94bebe6473768003bc148539892a5d59c54",
+        "selected_operator_alpha_zero_dimensional_blocks": null,
+        "selected_operator_alpha_zero_native_scaled_blocks": null
+      },
+      "final_native_failure": "accepted AWF hard audit exit; candidate/history retained: accepted_awf_covariance_or_budget_exit",
+      "rejected_candidate": {
+        "time": 0.0,
+        "native_audit": {
+          "inner_stress": null,
+          "inner_stress_max_ratio_point": null,
+          "inner_constitutive_modification": null,
+          "constitutive_modification": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "interface": [
+            6.000000000000001,
+            -0.4492470514926998,
+            2.455595862255389e-14,
+            2.6054844233401767e-14,
+            2.4591439995447217e-14,
+            5.310337594473745e-15,
+            0.0,
+            -1.4733566493840533e-13
+          ],
+          "strong_continuity": [
+            3.1237357372192095e-14,
+            4.202336725134382e-16,
+            1.155651165216163e-14,
+            1.3675577120825627e-16,
+            7.494005416219807e-16
+          ],
+          "accepted_awf_scalar_domain": [
+            1.0,
+            0.9999923453025348,
+            0.5105080130598861,
+            0.5105080130598847,
+            0.03631791663093067,
+            0.5105080130598861,
+            0.07263583326186132,
+            5.909280150953167,
+            0.0
+          ],
+          "accepted_awf_covariance": [
+            -0.08491550818430779,
+            0.1777343943454361
+          ],
+          "accepted_awf_sources": [
+            9.873450392755185,
+            5.150705852907174,
+            0.0,
+            0.003244478007952111,
+            4.722744539848011
+          ],
+          "accepted_awf_hard_admissible": [
+            0.0
+          ]
+        },
+        "coupled_state_sha256": "2c34840f881d81d95d035d4b6b26c94bebe6473768003bc148539892a5d59c54",
+        "state_classification": "rejected_candidate; no alpha-zero residual inferred from accepted fields"
+      }
+    },
+    "regularized-saturated-2G": {
+      "initial": {
+        "time": 0.0,
+        "state_classification": "accepted_native_state",
+        "native_audit": {
+          "inner_stress": [
+            0.01766844082359508,
+            12.000000000000098,
+            0.31370145831816615,
+            0.8715596180805844,
+            0.0,
+            0.0009291426914616399
+          ],
+          "inner_stress_max_ratio_point": [
+            -1.2372337950418355,
+            0.0,
+            0.09993196990078938,
+            0.5401633351431679,
+            0.5105080130598861,
+            0.018539231035589437,
+            16.929308778584442,
+            0.8715596180805844,
+            0.30975023739935675,
+            0.01296289431685989
+          ],
+          "inner_constitutive_modification": [
+            -0.00020319854067620756,
+            -0.000203198540676206,
+            -1.5449880957918438e-18
+          ],
+          "constitutive_modification": [
+            3.1268909288080157e-09,
+            3.1268909328901095e-09,
+            -4.082093723147645e-18
+          ],
+          "interface": [
+            6.000000000000001,
+            -0.4492470514926998,
+            2.454173946164591e-14,
+            7.532821075623116e-14,
+            2.4591439995447217e-14,
+            6.273317346126612e-15,
+            0.0,
+            -1.4725040149941888e-13
+          ],
+          "strong_continuity": [
+            3.1254809683289523e-15,
+            4.2023379161729485e-16,
+            1.001312733746086e-15,
+            1.367551862972385e-16,
+            4.718447854656915e-16
+          ],
+          "accepted_awf_scalar_domain": [
+            1.0,
+            0.9999923453025348,
+            0.5105080130598861,
+            0.5105080130598851,
+            0.03631791663093067,
+            0.5105080130598861,
+            0.07263583326186132,
+            5.909280150953167,
+            0.0
+          ],
+          "accepted_awf_covariance": [
+            0.140708152573423,
+            0.17766693432933217
+          ],
+          "accepted_awf_sources": [
+            5.192606099151976,
+            5.150705852907162,
+            0.0,
+            0.014062131738904585,
+            0.04190024624481392
+          ],
+          "accepted_awf_hard_admissible": [
+            1.0
+          ]
+        },
+        "inner_saturation_applicable": true,
+        "evaluated_inner_volume": 12.000000000000098,
+        "active_inner_volume_fraction": 0.0014723700686329114,
+        "selected_operator": {
+          "wall_policy": "CLSCalibratedBudgetAWF",
+          "outer_variant": "Regularized",
+          "inner_stress": "SaturatedR2",
+          "chi": null,
+          "destruction_cap": null,
+          "redistribution": "zero"
+        },
+        "source_native_report": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/regularized-saturated-2G/Accepted-AWF-2G/initial/case.evolution.json",
+          "sha256": "df5500f72c856d92cfb980c754c58cdf5ef074a5982807152a3cf0cfbf674f8a"
+        },
+        "alpha_zero_residual_interpretation": "selected case operator at retained fields; not a counterfactual faithful Original/Linear operator",
+        "coupled_state_sha256": "36ddd501981b449544d3f67d60a82383088e10f98f6746e3f680761c1abf9605",
+        "selected_operator_alpha_zero_dimensional_blocks": [
+          3.867373642753922,
+          0.0004802526761156419,
+          1.4127662909286849,
+          4.53688138162914e-05
+        ],
+        "selected_operator_alpha_zero_native_scaled_blocks": [
+          9.867804238995568,
+          0.0012253895875931628,
+          2.8244386392665213,
+          0.000901541831812484,
+          4.692298769597915e-16,
+          6.069525863692931e-17,
+          1.0282979979667204e-16,
+          0.0
+        ]
+      },
+      "final": {
+        "time": 0.020000000000000007,
+        "state_classification": "accepted_native_state",
+        "native_audit": {
+          "inner_stress": [
+            0.0005869702439959762,
+            11.9999999999999,
+            0.31464256061512397,
+            0.8617951083380807,
+            0.0,
+            0.0009291341501115762
+          ],
+          "inner_stress_max_ratio_point": [
+            -3.980144928248768,
+            0.0,
+            0.09993197042704803,
+            0.540996918617951,
+            0.5105068498412997,
+            0.018539209913341077,
+            16.76549325349693,
+            0.8617951083380807,
+            0.3077047125458122,
+            0.01361146431919245
+          ],
+          "inner_constitutive_modification": [
+            -2.654907186954117e-06,
+            -2.6549071869541104e-06,
+            -6.776263578034403e-21
+          ],
+          "constitutive_modification": [
+            -0.00019271134970600437,
+            -0.00019271134970600532,
+            9.486769009248164e-19
+          ],
+          "interface": [
+            6.000000000000001,
+            -0.44757324863837133,
+            0.00027050801835286136,
+            0.00220683428951467,
+            0.0017276708546410946,
+            1.1967785997656362e-05,
+            -4.4140522713800976e-16,
+            5.718675111612183e-05
+          ],
+          "strong_continuity": [
+            0.010619382153216648,
+            0.00012447213702400533,
+            5.646804435177101e-16,
+            5.780686813208653e-16,
+            4.718448410366532e-16
+          ],
+          "accepted_awf_scalar_domain": [
+            1.0,
+            0.9999739919674124,
+            0.5104991614858241,
+            0.5104991614858241,
+            0.03631791663093067,
+            0.5104991614858241,
+            0.07263394414674283,
+            5.909280150953167,
+            0.0
+          ],
+          "accepted_awf_covariance": [
+            0.1392895848591767,
+            0.17614257137256084
+          ],
+          "accepted_awf_sources": [
+            5.1702090735013675,
+            5.150606877573358,
+            0.0,
+            0.013979757922214526,
+            0.019602195928009714
+          ],
+          "accepted_awf_hard_admissible": [
+            1.0
+          ]
+        },
+        "inner_saturation_applicable": true,
+        "evaluated_inner_volume": 11.9999999999999,
+        "active_inner_volume_fraction": 4.8914186999665094e-05,
+        "selected_operator": {
+          "wall_policy": "CLSCalibratedBudgetAWF",
+          "outer_variant": "Regularized",
+          "inner_stress": "SaturatedR2",
+          "chi": null,
+          "destruction_cap": null,
+          "redistribution": "zero"
+        },
+        "source_native_report": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/regularized-saturated-2G/Accepted-AWF-2G/trajectory/case.evolution.json",
+          "sha256": "f31bfd0b2354b16bdcb9b5ab9ad02e0db0b84add96a71b5581f5e8f859512c22"
+        },
+        "alpha_zero_residual_interpretation": "selected case operator at retained fields; not a counterfactual faithful Original/Linear operator",
+        "coupled_state_sha256": "6db966e4137a907890f582cdefa3c4ff845dea08b40db52a9aabd07cf9d0c4c7",
+        "selected_operator_alpha_zero_dimensional_blocks": [
+          0.1232171176519558,
+          0.006703791352917078,
+          0.09217773595510015,
+          4.248977287586876e-05
+        ],
+        "selected_operator_alpha_zero_native_scaled_blocks": [
+          0.31439486023309765,
+          0.017105070996592652,
+          0.18428409623261174,
+          0.0008443312586244381,
+          9.49246856908392e-16,
+          8.242809287133807e-16,
+          1.2027867851011062e-17,
+          8.769308315492916e-07
+        ]
+      },
+      "final_native_failure": ""
+    },
+    "regularized-saturated-2O": {
+      "initial": {
+        "time": 0.0,
+        "state_classification": "accepted_native_state",
+        "native_audit": {
+          "inner_stress": [
+            5.573436038940499,
+            12.000000000000016,
+            0.021122459148209555,
+            1.754161021475274,
+            0.0,
+            0.0007363789301592002
+          ],
+          "inner_stress_max_ratio_point": [
+            -3.980144928248768,
+            0.0,
+            0.5064148487117432,
+            0.5298848106434184,
+            0.5105080130598861,
+            0.09017027889626186,
+            6.872207354649204,
+            1.754161021475274,
+            0.35265787266349374,
+            0.000764062843839294
+          ],
+          "inner_constitutive_modification": [
+            -2.8726587029109156,
+            -2.872658702910916,
+            4.440892098500626e-16
+          ],
+          "constitutive_modification": [
+            3.1268909420588904e-09,
+            3.126890941340671e-09,
+            7.1821941918386755e-19
+          ],
+          "interface": [
+            6.000000000000001,
+            -0.4492470514926998,
+            2.455595862255389e-14,
+            5.832159095984015e-14,
+            2.4591439995447217e-14,
+            5.310337594473745e-15,
+            0.0,
+            -1.4733566493840533e-13
+          ],
+          "strong_continuity": [
+            3.1237357372192095e-14,
+            4.202336725134382e-16,
+            1.155651165216163e-14,
+            1.3675577120825627e-16,
+            7.494005416219807e-16
+          ],
+          "accepted_awf_scalar_domain": [
+            1.0,
+            0.9999923453025348,
+            0.5105080130598861,
+            0.5105080130598847,
+            0.03631791663093067,
+            0.5105080130598861,
+            0.07263583326186132,
+            5.909280150953167,
+            0.0
+          ],
+          "accepted_awf_covariance": [
+            0.10372933825343009,
+            0.17766693432917016
+          ],
+          "accepted_awf_sources": [
+            7.00079168984425,
+            5.150705852907174,
+            0.0,
+            0.003244478007952111,
+            1.850085836937076
+          ],
+          "accepted_awf_hard_admissible": [
+            1.0
+          ]
+        },
+        "inner_saturation_applicable": true,
+        "evaluated_inner_volume": 12.000000000000016,
+        "active_inner_volume_fraction": 0.46445300324504096,
+        "selected_operator": {
+          "wall_policy": "CLSCalibratedBudgetAWF",
+          "outer_variant": "Regularized",
+          "inner_stress": "SaturatedR2",
+          "chi": null,
+          "destruction_cap": null,
+          "redistribution": "zero"
+        },
+        "source_native_report": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/regularized-saturated-2O/Accepted-AWF-2O/initial/case.evolution.json",
+          "sha256": "2a7f784ae9833e69848a6da275ea1fd355f08ae659014f05f9d3a8d33cca7f0f"
+        },
+        "alpha_zero_residual_interpretation": "selected case operator at retained fields; not a counterfactual faithful Original/Linear operator",
+        "coupled_state_sha256": "2c34840f881d81d95d035d4b6b26c94bebe6473768003bc148539892a5d59c54",
+        "selected_operator_alpha_zero_dimensional_blocks": [
+          1.4643673884894965,
+          0.00047233053840655027,
+          2.3580279069475925,
+          4.5368813714322916e-05
+        ],
+        "selected_operator_alpha_zero_native_scaled_blocks": [
+          3.736409268511677,
+          0.001205175842739688,
+          4.714229930042786,
+          0.0009015418297862275,
+          5.176822051610012e-15,
+          6.069544295374979e-17,
+          3.777766944754179e-17,
+          0.0
+        ]
+      },
+      "final": {
+        "time": 0.020000000000000007,
+        "state_classification": "accepted_native_state",
+        "native_audit": {
+          "inner_stress": [
+            5.547419341415664,
+            12.000000000000007,
+            0.009803935908146703,
+            1.7521054920619732,
+            0.0,
+            0.0007436667844259259
+          ],
+          "inner_stress_max_ratio_point": [
+            -3.980144928248768,
+            0.0,
+            0.5058276652219814,
+            0.532113722368864,
+            0.5116939342129851,
+            0.09017145290831598,
+            6.892938177170736,
+            1.7521054920619732,
+            0.3541350849345918,
+            0.00077196615550501
+          ],
+          "inner_constitutive_modification": [
+            -2.8189843818928066,
+            -2.8189843818928084,
+            1.7763568394002505e-15
+          ],
+          "constitutive_modification": [
+            -0.013375878829845114,
+            -0.013375878829845126,
+            1.214306433183765e-17
+          ],
+          "interface": [
+            6.000000000000001,
+            -0.2653728782758211,
+            0.02583724835350423,
+            0.13964511162929394,
+            0.1627976661560408,
+            0.0881081475617416,
+            -5.728405895249686e-15,
+            0.003301573221575433
+          ],
+          "strong_continuity": [
+            0.02638026154407967,
+            0.011069290571936998,
+            5.8248761716783726e-15,
+            5.857685031706396e-15,
+            7.494005831760232e-16
+          ],
+          "accepted_awf_scalar_domain": [
+            1.0,
+            0.9589958879859296,
+            0.4895750853082981,
+            0.510482429932924,
+            0.03631791663093067,
+            0.5105080130598861,
+            0.07263583326186132,
+            5.908652040775145,
+            0.0
+          ],
+          "accepted_awf_covariance": [
+            0.10314823941436735,
+            0.05464342156699209
+          ],
+          "accepted_awf_sources": [
+            7.113951359560289,
+            5.298649536081012,
+            0.0,
+            0.003244308365010154,
+            1.8153018234792775
+          ],
+          "accepted_awf_hard_admissible": [
+            1.0
+          ]
+        },
+        "inner_saturation_applicable": true,
+        "evaluated_inner_volume": 12.000000000000007,
+        "active_inner_volume_fraction": 0.46228494511797175,
+        "selected_operator": {
+          "wall_policy": "CLSCalibratedBudgetAWF",
+          "outer_variant": "Regularized",
+          "inner_stress": "SaturatedR2",
+          "chi": null,
+          "destruction_cap": null,
+          "redistribution": "zero"
+        },
+        "source_native_report": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/regularized-saturated-2O/Accepted-AWF-2O/trajectory/case.evolution.json",
+          "sha256": "7b8eb78ced70a598ca937d3e72a21052c949243c68ba3f041b4dacbfebd87968"
+        },
+        "alpha_zero_residual_interpretation": "selected case operator at retained fields; not a counterfactual faithful Original/Linear operator",
+        "coupled_state_sha256": "7a8c5864477553bf1f9f9929d28346481d4b09f6103c5b15dfcd484544487b46",
+        "selected_operator_alpha_zero_dimensional_blocks": [
+          0.9503900882000367,
+          0.12231414720699811,
+          2.253916378437215,
+          0.043183221979046366
+        ],
+        "selected_operator_alpha_zero_native_scaled_blocks": [
+          2.4249695548841554,
+          0.3120908843550141,
+          4.506087489353244,
+          0.8581110629031864,
+          6.367091325697479e-16,
+          7.443090022200199e-16,
+          1.5924219408380843e-17,
+          0.0016281320574195338
+        ]
+      },
+      "final_native_failure": ""
+    },
+    "regularized-05G": {
+      "initial": {
+        "time": 0.0,
+        "state_classification": "accepted_native_state",
+        "native_audit": {
+          "inner_stress": null,
+          "inner_stress_max_ratio_point": null,
+          "inner_constitutive_modification": null,
+          "constitutive_modification": [
+            0.0001513369954847382,
+            0.0001513369954847399,
+            -1.7076184216646695e-18
+          ],
+          "interface": [
+            6.000000000000001,
+            -0.4492470514926998,
+            3.3775334463292374e-15,
+            2.1547316371966393e-14,
+            3.3861802251067274e-15,
+            2.7891856405679304e-15,
+            0.0,
+            -2.0264838699455635e-14
+          ],
+          "strong_continuity": [
+            2.14833470138437e-15,
+            2.3209930275342174e-15,
+            3.3132301612744087e-16,
+            8.107572387817832e-16,
+            1.1518563880486e-15
+          ],
+          "accepted_awf_scalar_domain": [
+            1.0,
+            0.9963953947679346,
+            0.5105074048156665,
+            0.5105080130598852,
+            0.03631791663093067,
+            0.5105080130598861,
+            0.2905433330474453,
+            4.531094243588623,
+            0.0
+          ],
+          "accepted_awf_covariance": [
+            0.1284924890045712,
+            0.16674988106705074
+          ],
+          "accepted_awf_sources": [
+            3.9914403575469146,
+            3.949437671652979,
+            0.0,
+            0.013952492266878105,
+            0.04200268589393552
+          ],
+          "accepted_awf_hard_admissible": [
+            1.0
+          ]
+        },
+        "inner_saturation_applicable": false,
+        "evaluated_inner_volume": null,
+        "active_inner_volume_fraction": null,
+        "selected_operator": {
+          "wall_policy": "CLSCalibratedBudgetAWF",
+          "outer_variant": "Regularized",
+          "inner_stress": "Linear",
+          "chi": null,
+          "destruction_cap": null,
+          "redistribution": "zero"
+        },
+        "source_native_report": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/regularized-05G/Accepted-AWF-05G/initial/case.evolution.json",
+          "sha256": "ed9697e281b3318d0f590533a96bc5f618ed38d9d0db411ae4f9822320f20760"
+        },
+        "alpha_zero_residual_interpretation": "selected case operator at retained fields; not a counterfactual faithful Original/Linear operator",
+        "coupled_state_sha256": "d3196e7ae771967a897225c93a8890229d9881f9fb1d3d741014f52cec6c8f8c",
+        "selected_operator_alpha_zero_dimensional_blocks": [
+          3.8689711375371414,
+          0.03908564198271841,
+          1.4061524227788293,
+          0.013599703017096891
+        ],
+        "selected_operator_alpha_zero_native_scaled_blocks": [
+          2.4679700824274455,
+          0.02493226018926153,
+          0.7028040060652964,
+          0.012767882457925483,
+          1.5622667607647457e-16,
+          6.426111647679836e-17,
+          9.444417361885447e-18,
+          0.0
+        ]
+      },
+      "final": {
+        "time": 0.10000000000000007,
+        "state_classification": "accepted_native_state",
+        "native_audit": {
+          "inner_stress": null,
+          "inner_stress_max_ratio_point": null,
+          "inner_constitutive_modification": null,
+          "constitutive_modification": [
+            -0.0005706339570032962,
+            -0.0005706339570032954,
+            -8.673617379884035e-19
+          ],
+          "interface": [
+            6.000000000000001,
+            -0.4485201718680814,
+            0.0011723298966574416,
+            0.005497567915517281,
+            0.0017473524502836235,
+            0.00016113747967459721,
+            -1.967445778234926e-16,
+            0.006731856515945128
+          ],
+          "strong_continuity": [
+            0.013543694415721567,
+            0.0018660485109896435,
+            1.3997981783029842e-16,
+            1.0087436389510982e-15,
+            1.1518566707921135e-15
+          ],
+          "accepted_awf_scalar_domain": [
+            1.0,
+            0.9963953947679347,
+            0.5104007502527702,
+            0.5103669596708814,
+            0.03631791663093067,
+            0.5104007502527702,
+            0.29045176830980324,
+            4.531094242635553,
+            0.0
+          ],
+          "accepted_awf_covariance": [
+            0.12698240048068193,
+            0.16162362887217413
+          ],
+          "accepted_awf_sources": [
+            3.9691819437709115,
+            3.94869216232627,
+            0.0,
+            0.013704894433217273,
+            0.02048978144464142
+          ],
+          "accepted_awf_hard_admissible": [
+            1.0
+          ]
+        },
+        "inner_saturation_applicable": false,
+        "evaluated_inner_volume": null,
+        "active_inner_volume_fraction": null,
+        "selected_operator": {
+          "wall_policy": "CLSCalibratedBudgetAWF",
+          "outer_variant": "Regularized",
+          "inner_stress": "Linear",
+          "chi": null,
+          "destruction_cap": null,
+          "redistribution": "zero"
+        },
+        "source_native_report": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/regularized-05G/Accepted-AWF-05G/trajectory/case.evolution.json",
+          "sha256": "3440f9655cd7daab4535dc8e0e93a5c89673bfc9c9f8611f756f74fa2d4b1cae"
+        },
+        "alpha_zero_residual_interpretation": "selected case operator at retained fields; not a counterfactual faithful Original/Linear operator",
+        "coupled_state_sha256": "20efc4708b5bcee738bc2cf5ca20ab556dba5605857539d4496aa2f9ce4b89d1",
+        "selected_operator_alpha_zero_dimensional_blocks": [
+          0.023915759776508307,
+          0.003967746113533249,
+          0.04305750016672597,
+          0.0011770116081226826
+        ],
+        "selected_operator_alpha_zero_native_scaled_blocks": [
+          0.015255575068599895,
+          0.0025309774497571645,
+          0.02152041494088572,
+          0.0011050201497217883,
+          1.266755874042075e-16,
+          2.1781977723719907e-16,
+          5.4633625097902364e-18,
+          4.920725947810051e-06
+        ]
+      },
+      "final_native_failure": ""
+    },
+    "regularized-05O": {
+      "initial": {
+        "time": 0.0,
+        "state_classification": "accepted_native_state",
+        "native_audit": {
+          "inner_stress": null,
+          "inner_stress_max_ratio_point": null,
+          "inner_constitutive_modification": null,
+          "constitutive_modification": [
+            0.00015133699548443326,
+            0.00015133699548443598,
+            -2.710505431213761e-18
+          ],
+          "interface": [
+            6.000000000000001,
+            -0.4492470514926998,
+            3.2722788840714667e-15,
+            7.99362670543897e-15,
+            3.2751579226442118e-15,
+            1.8530896718173158e-15,
+            0.0,
+            -1.9633533318803694e-14
+          ],
+          "strong_continuity": [
+            1.1487584204465899e-14,
+            2.3209984132355693e-15,
+            2.1121054557967775e-15,
+            8.107505755616633e-16,
+            3.649858193455202e-15
+          ],
+          "accepted_awf_scalar_domain": [
+            1.0,
+            0.9963953947679346,
+            0.5105080130598861,
+            0.5105080130598846,
+            0.03631791663093067,
+            0.5105080130598861,
+            0.2905433330474453,
+            4.531094243588623,
+            0.0
+          ],
+          "accepted_awf_covariance": [
+            0.04328724589107025,
+            0.166749881067088
+          ],
+          "accepted_awf_sources": [
+            5.666301032918282,
+            3.949437671652989,
+            0.0,
+            0.006580996651736062,
+            1.7168633612652933
+          ],
+          "accepted_awf_hard_admissible": [
+            1.0
+          ]
+        },
+        "inner_saturation_applicable": false,
+        "evaluated_inner_volume": null,
+        "active_inner_volume_fraction": null,
+        "selected_operator": {
+          "wall_policy": "CLSCalibratedBudgetAWF",
+          "outer_variant": "Regularized",
+          "inner_stress": "Linear",
+          "chi": null,
+          "destruction_cap": null,
+          "redistribution": "zero"
+        },
+        "source_native_report": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/regularized-05O/Accepted-AWF-05O/initial/case.evolution.json",
+          "sha256": "789fafcab89f09c260ead33cf3c10c47f13eb699cb4008d3580418c3e8ba833d"
+        },
+        "alpha_zero_residual_interpretation": "selected case operator at retained fields; not a counterfactual faithful Original/Linear operator",
+        "coupled_state_sha256": "1a6d43cac5a0a3ea304dd0526dac846a7b5f63d3074916d86ba759ca27d0d2ce",
+        "selected_operator_alpha_zero_dimensional_blocks": [
+          1.8828372626072787,
+          0.038312425834569584,
+          3.165856990025855,
+          0.013599703017139489
+        ],
+        "selected_operator_alpha_zero_native_scaled_blocks": [
+          1.2010392088766888,
+          0.024439034922635265,
+          1.5823156431526864,
+          0.012767882457965478,
+          9.539834552619907e-16,
+          6.426015338051854e-17,
+          9.444417361885447e-18,
+          0.0
+        ]
+      },
+      "final": {
+        "time": 0.09187500000000007,
+        "state_classification": "accepted_native_state",
+        "native_audit": {
+          "inner_stress": null,
+          "inner_stress_max_ratio_point": null,
+          "inner_constitutive_modification": null,
+          "constitutive_modification": [
+            -0.04898730669671919,
+            -0.04898730669671889,
+            -2.983724378680108e-16
+          ],
+          "interface": [
+            6.000000000000001,
+            -0.34319081861676815,
+            0.0235461995419854,
+            0.20863011562391434,
+            0.13310667531198714,
+            0.20692104382449264,
+            -1.7478423222638817e-15,
+            0.005442703417283754
+          ],
+          "strong_continuity": [
+            0.10150998368895413,
+            0.048291951302985844,
+            3.565940945304824e-16,
+            2.5361164483833634e-15,
+            3.649864039344629e-15
+          ],
+          "accepted_awf_scalar_domain": [
+            1.0,
+            0.5367246177667775,
+            0.27400221817644443,
+            0.5089489890370172,
+            0.03631791663093067,
+            0.5105080130598861,
+            0.2905433330474453,
+            4.5305704779027565,
+            0.0
+          ],
+          "accepted_awf_covariance": [
+            0.00047557475482157274,
+            0.01412677297558168
+          ],
+          "accepted_awf_sources": [
+            5.636509770228514,
+            3.9991880365236443,
+            0.0,
+            0.006546554998164094,
+            1.6373217337048698
+          ],
+          "accepted_awf_hard_admissible": [
+            1.0
+          ]
+        },
+        "inner_saturation_applicable": false,
+        "evaluated_inner_volume": null,
+        "active_inner_volume_fraction": null,
+        "selected_operator": {
+          "wall_policy": "CLSCalibratedBudgetAWF",
+          "outer_variant": "Regularized",
+          "inner_stress": "Linear",
+          "chi": null,
+          "destruction_cap": null,
+          "redistribution": "zero"
+        },
+        "source_native_report": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/regularized-05O/Accepted-AWF-05O/trajectory/case.evolution.json",
+          "sha256": "34abb4d4bf9b09ecf0e1d33ab7236f808d85dde53f22488c53aef98e17c7360c"
+        },
+        "alpha_zero_residual_interpretation": "selected case operator at retained fields; not a counterfactual faithful Original/Linear operator",
+        "coupled_state_sha256": "1535dd77220d2d6d6301526efdcc87680b3f6b603bf2d57b8b39dae9d1fe5c39",
+        "selected_operator_alpha_zero_dimensional_blocks": [
+          0.5316302267254136,
+          0.12169482734866795,
+          1.6989049251370179,
+          0.03368210775280139
+        ],
+        "selected_operator_alpha_zero_native_scaled_blocks": [
+          0.3391205175305718,
+          0.07762766441154476,
+          0.8491235857282021,
+          0.031621954698739504,
+          9.24255422788076e-17,
+          1.809303506209057e-16,
+          6.2468679860004635e-18,
+          0.0014140193750082184
+        ]
+      },
+      "final_native_failure": "accepted AWF hard audit exit; candidate/history retained: accepted_awf_covariance_or_budget_exit",
+      "rejected_candidate": {
+        "time": 0.09250000000000007,
+        "native_audit": {
+          "inner_stress": null,
+          "inner_stress_max_ratio_point": null,
+          "inner_constitutive_modification": null,
+          "constitutive_modification": [
+            -0.04907360810753945,
+            -0.04907360810753947,
+            2.0816681711721685e-17
+          ],
+          "interface": [
+            6.000000000000001,
+            -0.3433403433530901,
+            0.02357570947350025,
+            0.2088100105492778,
+            0.13334345485342058,
+            0.20731003433259937,
+            -1.7459720735163442e-15,
+            0.005455122298557589
+          ],
+          "strong_continuity": [
+            0.10187744231342341,
+            0.048423789531275636,
+            3.5865407865820487e-16,
+            2.5353216270763735e-15,
+            3.649864073482108e-15
+          ],
+          "accepted_awf_scalar_domain": [
+            1.0,
+            0.5344356189613061,
+            0.27283366594436675,
+            0.5089271858147244,
+            0.03631791663093067,
+            0.5105080130598861,
+            0.2905433330474453,
+            4.530571918541999,
+            0.0
+          ],
+          "accepted_awf_covariance": [
+            -5.3049015684814016e-05,
+            0.01367265421309194
+          ],
+          "accepted_awf_sources": [
+            5.635719951523696,
+            3.997899490025727,
+            0.0,
+            0.006546145748828576,
+            1.6378204614979692
+          ],
+          "accepted_awf_hard_admissible": [
+            0.0
+          ]
+        },
+        "coupled_state_sha256": "495ef7bef91f66b261a185b939cf150d8e1a864c51783f960c2d4042f953ab90",
+        "state_classification": "rejected_candidate; no alpha-zero residual inferred from accepted fields"
+      }
+    },
+    "regularized-saturated-05G": {
+      "initial": {
+        "time": 0.0,
+        "state_classification": "accepted_native_state",
+        "native_audit": {
+          "inner_stress": [
+            0.02418282758553989,
+            3.000000000000006,
+            0.3246147435274927,
+            0.8941086303332626,
+            0.0,
+            0.0009291426914616399
+          ],
+          "inner_stress_max_ratio_point": [
+            -1.2372337950418355,
+            0.0,
+            0.09993196990078938,
+            0.5261814207500201,
+            0.5105080130598861,
+            0.018539231035589437,
+            16.91775847338617,
+            0.8941086303332626,
+            0.30696281294634037,
+            0.011580769626588223
+          ],
+          "inner_constitutive_modification": [
+            -0.00042485121859978683,
+            -0.00042485121859978667,
+            -1.6263032587282567e-19
+          ],
+          "constitutive_modification": [
+            0.0001513369954847382,
+            0.0001513369954847399,
+            -1.7076184216646695e-18
+          ],
+          "interface": [
+            6.000000000000001,
+            -0.4492470514926998,
+            3.3775334463292374e-15,
+            2.1547316371966393e-14,
+            3.3861802251067274e-15,
+            2.7891856405679304e-15,
+            0.0,
+            -2.0264838699455635e-14
+          ],
+          "strong_continuity": [
+            2.14833470138437e-15,
+            2.3209930275342174e-15,
+            3.3132301612744087e-16,
+            8.107572387817832e-16,
+            1.1518563880486e-15
+          ],
+          "accepted_awf_scalar_domain": [
+            1.0,
+            0.9963953947679346,
+            0.5105074048156665,
+            0.5105080130598852,
+            0.03631791663093067,
+            0.5105080130598861,
+            0.2905433330474453,
+            4.531094243588623,
+            0.0
+          ],
+          "accepted_awf_covariance": [
+            0.1333973768088365,
+            0.16674988106705074
+          ],
+          "accepted_awf_sources": [
+            3.9910155063283144,
+            3.949437671652979,
+            0.0,
+            0.013952492266878105,
+            0.04157783467533527
+          ],
+          "accepted_awf_hard_admissible": [
+            1.0
+          ]
+        },
+        "inner_saturation_applicable": true,
+        "evaluated_inner_volume": 3.000000000000006,
+        "active_inner_volume_fraction": 0.00806094252851328,
+        "selected_operator": {
+          "wall_policy": "CLSCalibratedBudgetAWF",
+          "outer_variant": "Regularized",
+          "inner_stress": "SaturatedR2",
+          "chi": null,
+          "destruction_cap": null,
+          "redistribution": "zero"
+        },
+        "source_native_report": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/regularized-saturated-05G/Accepted-AWF-05G/initial/case.evolution.json",
+          "sha256": "1d89f7ae0528486e69172195ba2567dfdeb0e32af43fcbc65c7dde1bda3b52ee"
+        },
+        "alpha_zero_residual_interpretation": "selected case operator at retained fields; not a counterfactual faithful Original/Linear operator",
+        "coupled_state_sha256": "d3196e7ae771967a897225c93a8890229d9881f9fb1d3d741014f52cec6c8f8c",
+        "selected_operator_alpha_zero_dimensional_blocks": [
+          3.8701026165245973,
+          0.03908564198271841,
+          1.4059496313618747,
+          0.013599703017096891
+        ],
+        "selected_operator_alpha_zero_native_scaled_blocks": [
+          2.468691839243578,
+          0.02493226018926153,
+          0.7027026496135187,
+          0.012767882457925483,
+          1.5622667607647457e-16,
+          6.426111647679836e-17,
+          9.444417361885447e-18,
+          0.0
+        ]
+      },
+      "final": {
+        "time": 0.10000000000000007,
+        "state_classification": "accepted_native_state",
+        "native_audit": {
+          "inner_stress": [
+            0.0009678247978170074,
+            3.0000000000000013,
+            0.3240342722578149,
+            0.882558529678205,
+            0.0,
+            0.0009290399686037355
+          ],
+          "inner_stress_max_ratio_point": [
+            -3.980144928248768,
+            0.0,
+            0.09993196989214093,
+            0.5269010711061406,
+            0.5105080321760834,
+            0.01853923138270978,
+            16.722053717753685,
+            0.882558529678205,
+            0.30477366578591003,
+            0.012269253944365573
+          ],
+          "inner_constitutive_modification": [
+            -6.203346552147564e-06,
+            -6.20334655214754e-06,
+            -2.371692252312041e-20
+          ],
+          "constitutive_modification": [
+            -0.0005706257508930907,
+            -0.0005706257508930966,
+            5.854691731421724e-18
+          ],
+          "interface": [
+            6.000000000000001,
+            -0.4485202504112572,
+            0.0011723350270154184,
+            0.005497449569511787,
+            0.0017474093149289494,
+            0.00016113781038430624,
+            -1.964557395884789e-16,
+            0.0067318602566343285
+          ],
+          "strong_continuity": [
+            0.013539009204545222,
+            0.0018660509532248504,
+            1.4018183518821857e-16,
+            1.0085056677742632e-15,
+            1.1518566707826872e-15
+          ],
+          "accepted_awf_scalar_domain": [
+            1.0,
+            0.9963953947679347,
+            0.5104007442909985,
+            0.510366963455662,
+            0.03631791663093067,
+            0.5104007442909985,
+            0.2904517632208067,
+            4.531094242584969,
+            0.0
+          ],
+          "accepted_awf_covariance": [
+            0.13197257860538678,
+            0.1616237316763418
+          ],
+          "accepted_awf_sources": [
+            3.969175692451209,
+            3.9486920522133664,
+            0.0,
+            0.013704886261372794,
+            0.02048364023784277
+          ],
+          "accepted_awf_hard_admissible": [
+            1.0
+          ]
+        },
+        "inner_saturation_applicable": true,
+        "evaluated_inner_volume": 3.0000000000000013,
+        "active_inner_volume_fraction": 0.0003226082659390023,
+        "selected_operator": {
+          "wall_policy": "CLSCalibratedBudgetAWF",
+          "outer_variant": "Regularized",
+          "inner_stress": "SaturatedR2",
+          "chi": null,
+          "destruction_cap": null,
+          "redistribution": "zero"
+        },
+        "source_native_report": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/regularized-saturated-05G/Accepted-AWF-05G/trajectory/case.evolution.json",
+          "sha256": "5b346d0f27d51354772e72ccced0b34313797357a44e19346c4bc584d9caa619"
+        },
+        "alpha_zero_residual_interpretation": "selected case operator at retained fields; not a counterfactual faithful Original/Linear operator",
+        "coupled_state_sha256": "f1e5c23837ca9d94bacc86231469f4076ae3d07543bd5827e62f36967eb74305",
+        "selected_operator_alpha_zero_dimensional_blocks": [
+          0.0239222514518076,
+          0.003969234127628468,
+          0.04307309527464439,
+          0.0011769788981677472
+        ],
+        "selected_operator_alpha_zero_native_scaled_blocks": [
+          0.01525971603007362,
+          0.002531926636023663,
+          0.021528209475918013,
+          0.0011049894404585572,
+          1.0169387964393242e-16,
+          1.7931664885712781e-16,
+          9.402065714522732e-18,
+          4.920914064304413e-06
+        ]
+      },
+      "final_native_failure": ""
+    },
+    "regularized-saturated-05O": {
+      "initial": {
+        "time": 0.0,
+        "state_classification": "accepted_native_state",
+        "native_audit": {
+          "inner_stress": [
+            1.1842357048593413,
+            2.9999999999999982,
+            0.027750189737208737,
+            1.2502624602021006,
+            0.0,
+            0.0009291426914616399
+          ],
+          "inner_stress_max_ratio_point": [
+            -1.2372337950418355,
+            0.0,
+            0.13363205001928632,
+            0.5600823300939219,
+            0.5105080130598861,
+            0.024477911796112282,
+            19.071613563870795,
+            1.2502624602021006,
+            0.36552757659345775,
+            0.00257656946791789
+          ],
+          "inner_constitutive_modification": [
+            -0.6435076938634341,
+            -0.6435076938634341,
+            0.0
+          ],
+          "constitutive_modification": [
+            0.00015133699548443326,
+            0.00015133699548443598,
+            -2.710505431213761e-18
+          ],
+          "interface": [
+            6.000000000000001,
+            -0.4492470514926998,
+            3.2722788840714667e-15,
+            7.99362670543897e-15,
+            3.2751579226442118e-15,
+            1.8530896718173158e-15,
+            0.0,
+            -1.9633533318803694e-14
+          ],
+          "strong_continuity": [
+            1.1487584204465899e-14,
+            2.3209984132355693e-15,
+            2.1121054557967775e-15,
+            8.107505755616633e-16,
+            3.649858193455202e-15
+          ],
+          "accepted_awf_scalar_domain": [
+            1.0,
+            0.9963953947679346,
+            0.5105080130598861,
+            0.5105080130598846,
+            0.03631791663093067,
+            0.5105080130598861,
+            0.2905433330474453,
+            4.531094243588623,
+            0.0
+          ],
+          "accepted_awf_covariance": [
+            0.1147130341430862,
+            0.166749881067088
+          ],
+          "accepted_awf_sources": [
+            5.022793339054862,
+            3.949437671652989,
+            0.0,
+            0.006580996651736062,
+            1.0733556674018727
+          ],
+          "accepted_awf_hard_admissible": [
+            1.0
+          ]
+        },
+        "inner_saturation_applicable": true,
+        "evaluated_inner_volume": 2.9999999999999982,
+        "active_inner_volume_fraction": 0.394745234953114,
+        "selected_operator": {
+          "wall_policy": "CLSCalibratedBudgetAWF",
+          "outer_variant": "Regularized",
+          "inner_stress": "SaturatedR2",
+          "chi": null,
+          "destruction_cap": null,
+          "redistribution": "zero"
+        },
+        "source_native_report": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/regularized-saturated-05O/Accepted-AWF-05O/initial/case.evolution.json",
+          "sha256": "5da1f7ef81d1fecf230a21ec012febfe5218ca8ed8e9e3d4f2f797e9bdc5f820"
+        },
+        "alpha_zero_residual_interpretation": "selected case operator at retained fields; not a counterfactual faithful Original/Linear operator",
+        "coupled_state_sha256": "1a6d43cac5a0a3ea304dd0526dac846a7b5f63d3074916d86ba759ca27d0d2ce",
+        "selected_operator_alpha_zero_dimensional_blocks": [
+          1.6856417801596624,
+          0.0383124258345694,
+          2.68158899105572,
+          0.013599703017139489
+        ],
+        "selected_operator_alpha_zero_native_scaled_blocks": [
+          1.0752505860697574,
+          0.024439034922635147,
+          1.3402753890720889,
+          0.012767882457965478,
+          9.539834552619907e-16,
+          6.426015338051854e-17,
+          9.444417361885447e-18,
+          0.0
+        ]
+      },
+      "final": {
+        "time": 0.10000000000000007,
+        "state_classification": "accepted_native_state",
+        "native_audit": {
+          "inner_stress": [
+            1.117308259490296,
+            2.9999999999999933,
+            0.07848290923130202,
+            1.4447791290625673,
+            0.0,
+            0.0009284758363878053
+          ],
+          "inner_stress_max_ratio_point": [
+            1.0198550717512318,
+            0.0,
+            0.4991972890080828,
+            0.5088303802918994,
+            0.5108603855065691,
+            0.08892909289789752,
+            5.51111370285952,
+            1.4447791290625673,
+            0.3365200799634624,
+            0.0035393521356394597
+          ],
+          "inner_constitutive_modification": [
+            -0.154659667503514,
+            -0.15465966750351418,
+            1.6653345369377348e-16
+          ],
+          "constitutive_modification": [
+            -0.050973339903659126,
+            -0.050973339903658973,
+            -1.5265566588595902e-16
+          ],
+          "interface": [
+            6.000000000000001,
+            -0.334485015268849,
+            0.024166925885529402,
+            0.14258546307805164,
+            0.13937572738629778,
+            0.19906276578206525,
+            -1.741011848577223e-15,
+            0.007256596932324446
+          ],
+          "strong_continuity": [
+            0.1085589028969101,
+            0.05058663174910071,
+            3.6613507364835485e-16,
+            2.5240989798470134e-15,
+            3.649863053097986e-15
+          ],
+          "accepted_awf_scalar_domain": [
+            1.0,
+            0.4854872437850559,
+            0.24784512819062945,
+            0.5083242371495481,
+            0.03631791663093067,
+            0.5095759687312237,
+            0.28975095710473187,
+            4.530668883271827,
+            0.0
+          ],
+          "accepted_awf_covariance": [
+            0.09157835078001614,
+            0.001174138068665398
+          ],
+          "accepted_awf_sources": [
+            5.47314903029589,
+            3.972131434719728,
+            0.0,
+            0.006552194443709743,
+            1.5010175955761618
+          ],
+          "accepted_awf_hard_admissible": [
+            1.0
+          ]
+        },
+        "inner_saturation_applicable": true,
+        "evaluated_inner_volume": 2.9999999999999933,
+        "active_inner_volume_fraction": 0.3724360864967662,
+        "selected_operator": {
+          "wall_policy": "CLSCalibratedBudgetAWF",
+          "outer_variant": "Regularized",
+          "inner_stress": "SaturatedR2",
+          "chi": null,
+          "destruction_cap": null,
+          "redistribution": "zero"
+        },
+        "source_native_report": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/regularized-saturated-05O/Accepted-AWF-05O/trajectory/case.evolution.json",
+          "sha256": "778c4aeede79510c9865804638bf95f4f3d5f73147482659d651324b98af78d9"
+        },
+        "alpha_zero_residual_interpretation": "selected case operator at retained fields; not a counterfactual faithful Original/Linear operator",
+        "coupled_state_sha256": "ecd7a0f631951a7d53447aaace891c84c08ae3a20dd81363f3a6405829050e3d",
+        "selected_operator_alpha_zero_dimensional_blocks": [
+          0.5607152892360211,
+          0.11592491182734756,
+          1.6136945645469454,
+          0.039450536880297545
+        ],
+        "selected_operator_alpha_zero_native_scaled_blocks": [
+          0.35767352854305634,
+          0.07394710480576357,
+          0.8065349005964548,
+          0.03703756009645698,
+          1.5282756819040594e-16,
+          1.808578790111042e-16,
+          4.2351647362715007e-19,
+          0.001351987655832405
+        ]
+      },
+      "final_native_failure": ""
+    },
+    "faithful-2G": {
+      "initial": {
+        "time": 0.0,
+        "state_classification": "accepted_native_state",
+        "native_audit": {
+          "inner_stress": null,
+          "inner_stress_max_ratio_point": null,
+          "inner_constitutive_modification": null,
+          "constitutive_modification": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "interface": [
+            6.000000000000001,
+            -0.4492470514926998,
+            2.454173946164591e-14,
+            3.6532192117871527e-14,
+            2.4591439995447217e-14,
+            6.273317346126612e-15,
+            0.0,
+            -1.4725040149941888e-13
+          ],
+          "strong_continuity": [
+            3.1254809683289523e-15,
+            4.2023379161729485e-16,
+            1.001312733746086e-15,
+            1.367551862972385e-16,
+            4.718447854656915e-16
+          ],
+          "accepted_awf_scalar_domain": [
+            1.0,
+            0.9999923453025348,
+            0.5105080130598861,
+            0.5105080130598851,
+            0.03631791663093067,
+            0.5105080130598861,
+            0.07263583326186132,
+            5.909280150953167,
+            0.0
+          ],
+          "accepted_awf_covariance": [
+            0.13765785560131188,
+            0.177734394345485
+          ],
+          "accepted_awf_sources": [
+            5.192809297692654,
+            5.150705852907162,
+            0.0,
+            0.014062131738904585,
+            0.042103444785491995
+          ],
+          "accepted_awf_hard_admissible": [
+            1.0
+          ]
+        },
+        "inner_saturation_applicable": false,
+        "evaluated_inner_volume": null,
+        "active_inner_volume_fraction": null,
+        "selected_operator": {
+          "wall_policy": "CLSCalibratedBudgetAWF",
+          "outer_variant": "Original",
+          "inner_stress": "Linear",
+          "chi": null,
+          "destruction_cap": null,
+          "redistribution": "zero"
+        },
+        "source_native_report": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/faithful-2G-campaign/trajectory/steps-000001-000008/case.evolution.json.gz",
+          "sha256": "9f71663c6ea151532734b48130902e57035b02d805515035cdcfa28d15b91cb2"
+        },
+        "alpha_zero_residual_interpretation": "selected case operator at retained fields; not a counterfactual faithful Original/Linear operator",
+        "coupled_state_sha256": "36ddd501981b449544d3f67d60a82383088e10f98f6746e3f680761c1abf9605",
+        "selected_operator_alpha_zero_dimensional_blocks": [
+          3.866841595586759,
+          0.0004802526761153323,
+          1.4128648871202714,
+          4.4707785355095705e-05
+        ],
+        "selected_operator_alpha_zero_native_scaled_blocks": [
+          9.866446693080315,
+          0.001225389587592373,
+          2.8246357553040355,
+          0.0008884062710680557,
+          4.692298769597915e-16,
+          6.069525863692931e-17,
+          1.0282979979667204e-16,
+          0.0
+        ]
+      },
+      "final": {
+        "time": 0.07500000000000005,
+        "state_classification": "accepted_native_state",
+        "native_audit": {
+          "inner_stress": null,
+          "inner_stress_max_ratio_point": null,
+          "inner_constitutive_modification": null,
+          "constitutive_modification": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "interface": [
+            6.000000000000001,
+            -0.4475261393492938,
+            0.0008183998389294409,
+            0.0026757258505059884,
+            0.003951784590271401,
+            0.00012285697147948346,
+            -4.422561246730859e-16,
+            0.0007848160345549105
+          ],
+          "strong_continuity": [
+            0.013050219997066782,
+            0.029760183175798854,
+            5.654190562477159e-16,
+            5.78711517819198e-16,
+            4.718989502900365e-16
+          ],
+          "accepted_awf_scalar_domain": [
+            1.0,
+            0.9995207497684528,
+            0.5104838548320298,
+            0.5103992869305771,
+            0.03631791663093067,
+            0.5104872102730964,
+            0.07263139350860554,
+            5.909279242604548,
+            0.0
+          ],
+          "accepted_awf_covariance": [
+            0.13614139819619836,
+            0.0023839227694724824
+          ],
+          "accepted_awf_sources": [
+            5.170152514569641,
+            5.150690085352576,
+            0.0,
+            0.013842854473069975,
+            0.019462429217065313
+          ],
+          "accepted_awf_hard_admissible": [
+            1.0
+          ]
+        },
+        "inner_saturation_applicable": false,
+        "evaluated_inner_volume": null,
+        "active_inner_volume_fraction": null,
+        "selected_operator": {
+          "wall_policy": "CLSCalibratedBudgetAWF",
+          "outer_variant": "Original",
+          "inner_stress": "Linear",
+          "chi": null,
+          "destruction_cap": null,
+          "redistribution": "zero"
+        },
+        "source_native_report": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/faithful-2G-campaign/trajectory/steps-000121-000128/case.evolution.json",
+          "sha256": "f1888946f83deeca2d9fd4c26143ef69a3b970cdd5d266319dee7f0e8e060e3c"
+        },
+        "alpha_zero_residual_interpretation": "selected case operator at retained fields; not a counterfactual faithful Original/Linear operator",
+        "coupled_state_sha256": "26be95abd6d66e7fc7aab6232cf0ad9b5a72de3371a302b44839a13d541a593b",
+        "selected_operator_alpha_zero_dimensional_blocks": [
+          0.34447876534977184,
+          0.07184141917346358,
+          0.053031236541094186,
+          0.0010554104424114045
+        ],
+        "selected_operator_alpha_zero_native_scaled_blocks": [
+          0.8789554190946659,
+          0.18330710351290183,
+          0.10602140958239355,
+          0.02097248271507444,
+          7.734116900561549e-16,
+          8.093476935681882e-16,
+          1.1011428314305903e-17,
+          9.802558751715996e-06
+        ]
+      },
+      "final_native_failure": "accepted AWF hard audit exit; candidate/history retained: accepted_awf_covariance_or_budget_exit",
+      "rejected_candidate": {
+        "time": 0.07562500000000005,
+        "native_audit": {
+          "inner_stress": null,
+          "inner_stress_max_ratio_point": null,
+          "inner_constitutive_modification": null,
+          "constitutive_modification": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "interface": [
+            6.000000000000001,
+            -0.44757021391215157,
+            0.0008320188514063614,
+            0.0026817228730072903,
+            0.003956245297003058,
+            0.00012368432488607534,
+            -4.427143694975505e-16,
+            0.0008131956451284277
+          ],
+          "strong_continuity": [
+            0.013066156842588338,
+            0.03182196128437224,
+            5.652161918568484e-16,
+            5.793503527149951e-16,
+            4.719037069104377e-16
+          ],
+          "accepted_awf_scalar_domain": [
+            1.0,
+            0.9994923302072621,
+            0.5104836331931287,
+            0.51039120285158,
+            0.03631791663093067,
+            0.5104864362191511,
+            0.07263122831014401,
+            5.909279212957162,
+            0.0
+          ],
+          "accepted_awf_covariance": [
+            0.13614268626861198,
+            -0.01068847809493649
+          ],
+          "accepted_awf_sources": [
+            5.1701519105669576,
+            5.150690075970982,
+            0.0,
+            0.013842009833511946,
+            0.01946183459597517
+          ],
+          "accepted_awf_hard_admissible": [
+            0.0
+          ]
+        },
+        "coupled_state_sha256": "462a11f87b020e3be3d01fe665e3ca9e5ccfe5d27292208c39e9a76402272db8",
+        "state_classification": "rejected_candidate; no alpha-zero residual inferred from accepted fields"
+      }
+    },
+    "selected-regSat-05O-terminal": {
+      "initial": {
+        "time": 0.0,
+        "state_classification": "accepted_native_state",
+        "native_audit": {
+          "inner_stress": [
+            1.1842357048593413,
+            2.9999999999999982,
+            0.027750189737208737,
+            1.2502624602021006,
+            0.0,
+            0.0009291426914616399
+          ],
+          "inner_stress_max_ratio_point": [
+            -1.2372337950418355,
+            0.0,
+            0.13363205001928632,
+            0.5600823300939219,
+            0.5105080130598861,
+            0.024477911796112282,
+            19.071613563870795,
+            1.2502624602021006,
+            0.36552757659345775,
+            0.00257656946791789
+          ],
+          "inner_constitutive_modification": [
+            -0.6435076938634341,
+            -0.6435076938634341,
+            0.0
+          ],
+          "constitutive_modification": [
+            0.00015133699548443326,
+            0.00015133699548443598,
+            -2.710505431213761e-18
+          ],
+          "interface": [
+            6.000000000000001,
+            -0.4492470514926998,
+            3.2722788840714667e-15,
+            7.99362670543897e-15,
+            3.2751579226442118e-15,
+            1.8530896718173158e-15,
+            0.0,
+            -1.9633533318803694e-14
+          ],
+          "strong_continuity": [
+            1.1487584204465899e-14,
+            2.3209984132355693e-15,
+            2.1121054557967775e-15,
+            8.107505755616633e-16,
+            3.649858193455202e-15
+          ],
+          "accepted_awf_scalar_domain": [
+            1.0,
+            0.9963953947679346,
+            0.5105080130598861,
+            0.5105080130598846,
+            0.03631791663093067,
+            0.5105080130598861,
+            0.2905433330474453,
+            4.531094243588623,
+            0.0
+          ],
+          "accepted_awf_covariance": [
+            0.1147130341430862,
+            0.166749881067088
+          ],
+          "accepted_awf_sources": [
+            5.022793339054862,
+            3.949437671652989,
+            0.0,
+            0.006580996651736062,
+            1.0733556674018727
+          ],
+          "accepted_awf_hard_admissible": [
+            1.0
+          ]
+        },
+        "inner_saturation_applicable": true,
+        "evaluated_inner_volume": 2.9999999999999982,
+        "active_inner_volume_fraction": 0.394745234953114,
+        "selected_operator": {
+          "wall_policy": "CLSCalibratedBudgetAWF",
+          "outer_variant": "Regularized",
+          "inner_stress": "SaturatedR2",
+          "chi": null,
+          "destruction_cap": null,
+          "redistribution": "zero"
+        },
+        "source_native_report": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/regularized-saturated-05O/Accepted-AWF-05O/initial/case.evolution.json",
+          "sha256": "5da1f7ef81d1fecf230a21ec012febfe5218ca8ed8e9e3d4f2f797e9bdc5f820"
+        },
+        "alpha_zero_residual_interpretation": "selected case operator at retained fields; not a counterfactual faithful Original/Linear operator",
+        "coupled_state_sha256": "1a6d43cac5a0a3ea304dd0526dac846a7b5f63d3074916d86ba759ca27d0d2ce",
+        "selected_operator_alpha_zero_dimensional_blocks": [
+          1.6856417801596624,
+          0.0383124258345694,
+          2.68158899105572,
+          0.013599703017139489
+        ],
+        "selected_operator_alpha_zero_native_scaled_blocks": [
+          1.0752505860697574,
+          0.024439034922635147,
+          1.3402753890720889,
+          0.012767882457965478,
+          9.539834552619907e-16,
+          6.426015338051854e-17,
+          9.444417361885447e-18,
+          0.0
+        ]
+      },
+      "final": {
+        "time": 0.10062500000000008,
+        "state_classification": "accepted_native_state",
+        "native_audit": {
+          "inner_stress": [
+            1.113605052132879,
+            2.9999999999999964,
+            0.07850758026927324,
+            1.4479788033342886,
+            0.0,
+            0.0009283598824086322
+          ],
+          "inner_stress_max_ratio_point": [
+            1.0198550717512318,
+            0.0,
+            0.4991975615928483,
+            0.5086742112332557,
+            0.510709635346049,
+            0.088916006762028,
+            5.522436304333974,
+            1.4479788033342886,
+            0.33645963749891844,
+            0.0034826662464511665
+          ],
+          "inner_constitutive_modification": [
+            -0.15331677156806622,
+            -0.1533167715680673,
+            1.0824674490095276e-15
+          ],
+          "constitutive_modification": [
+            -0.0510790357867245,
+            -0.051079035786724514,
+            1.3877787807814457e-17
+          ],
+          "interface": [
+            6.000000000000001,
+            -0.334522969961689,
+            0.02420418445547172,
+            0.14251323452571207,
+            0.1397390812767978,
+            0.19945566032621734,
+            -1.7377592420597665e-15,
+            0.007291064858378195
+          ],
+          "strong_continuity": [
+            0.1089798417748133,
+            0.0507479546503728,
+            3.6526771191036644e-16,
+            2.5244293226964425e-15,
+            3.649863082920687e-15
+          ],
+          "accepted_awf_scalar_domain": [
+            1.0,
+            0.4832376541903176,
+            0.24669669467641941,
+            0.5082649254869742,
+            0.03631791663093067,
+            0.509453305973312,
+            0.28964608208738296,
+            4.530670066258962,
+            0.0
+          ],
+          "accepted_awf_covariance": [
+            0.09153217149077855,
+            0.00052388419396035
+          ],
+          "accepted_awf_sources": [
+            5.473795743749402,
+            3.9709335286956238,
+            0.0,
+            0.006551899042388068,
+            1.5028622150537778
+          ],
+          "accepted_awf_hard_admissible": [
+            1.0
+          ]
+        },
+        "inner_saturation_applicable": true,
+        "evaluated_inner_volume": 2.9999999999999964,
+        "active_inner_volume_fraction": 0.3712016840442935,
+        "selected_operator": {
+          "wall_policy": "CLSCalibratedBudgetAWF",
+          "outer_variant": "Regularized",
+          "inner_stress": "SaturatedR2",
+          "chi": null,
+          "destruction_cap": null,
+          "redistribution": "zero"
+        },
+        "source_native_report": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-regularized-saturated-05O/trajectory/steps-000161-000168/case.evolution.json",
+          "sha256": "ba83e5d741f7a17d89c4547617bb7c2adfcad05e8f717b548da63f48458b1f07"
+        },
+        "alpha_zero_residual_interpretation": "selected case operator at retained fields; not a counterfactual faithful Original/Linear operator",
+        "coupled_state_sha256": "8577949add82dfacf81e06b585e67338f7cf19a4bcb007471accd8d11a0641e8",
+        "selected_operator_alpha_zero_dimensional_blocks": [
+          0.559440643934044,
+          0.11610314893117686,
+          1.6099734993249528,
+          0.03985261917045616
+        ],
+        "selected_operator_alpha_zero_native_scaled_blocks": [
+          0.35686044765949393,
+          0.07406080010722536,
+          0.8046750883154513,
+          0.03741504917932186,
+          1.6331990418998074e-16,
+          1.7312126979693641e-16,
+          7.263307522705624e-18,
+          0.001350590387507432
+        ]
+      },
+      "final_native_failure": "accepted AWF hard audit exit; candidate/history retained: accepted_awf_covariance_or_budget_exit",
+      "rejected_candidate": {
+        "time": 0.10125000000000008,
+        "native_audit": {
+          "inner_stress": [
+            1.1122244585060865,
+            2.9999999999999987,
+            0.07853084227369671,
+            1.4511693051847565,
+            0.0,
+            0.000928244547165436
+          ],
+          "inner_stress_max_ratio_point": [
+            1.0198550717512318,
+            0.0,
+            0.4991978339129621,
+            0.5085183034416315,
+            0.510559098168893,
+            0.0889029371892766,
+            5.533721580034471,
+            1.4511693051847565,
+            0.3363985419665081,
+            0.0034270459646279835
+          ],
+          "inner_constitutive_modification": [
+            -0.15199119554088866,
+            -0.1519911955408895,
+            8.326672684688674e-16
+          ],
+          "constitutive_modification": [
+            -0.05118404381791543,
+            -0.051184043817915734,
+            3.0531133177191805e-16
+          ],
+          "interface": [
+            6.000000000000001,
+            -0.33456172360480174,
+            0.024241178929094765,
+            0.1424405728455738,
+            0.14010080074867615,
+            0.19984508835442977,
+            -1.7220654156130388e-15,
+            0.007325865305191395
+          ],
+          "strong_continuity": [
+            0.10939797075238827,
+            0.05090896517331609,
+            3.887948990533019e-16,
+            2.514257151831633e-15,
+            3.649863111795936e-15
+          ],
+          "accepted_awf_scalar_domain": [
+            1.0,
+            0.48100580942665483,
+            0.2455573200406638,
+            0.5082051918434144,
+            0.03631791663093067,
+            0.5093312108681168,
+            0.28954169477981445,
+            4.530671225926336,
+            0.0
+          ],
+          "accepted_awf_covariance": [
+            0.09148693481995962,
+            -0.00012415558093128998
+          ],
+          "accepted_awf_sources": [
+            5.474427892607085,
+            3.9697398440042493,
+            0.0,
+            0.006551603133723731,
+            1.5046880486028353
+          ],
+          "accepted_awf_hard_admissible": [
+            0.0
+          ]
+        },
+        "coupled_state_sha256": "84dd65d4741c116eb101069ee0509675206c06612797e1b0f7dfbb78af4ed43a",
+        "state_classification": "rejected_candidate; no alpha-zero residual inferred from accepted fields"
+      }
+    }
+  },
+  "caveat": "Native stress-work counterfactuals use identical fields; selected-operator residuals are not faithful-operator residuals for companions. None means inapplicable or absent, never an inferred zero."
+}

@@ -1,0 +1,1248 @@
+{
+  "schema": 1,
+  "captured_UTC": "2026-11-08T10:39:08.861599+00:00",
+  "status": "passed",
+  "scope": "read-only diagnostic changes; production step map/runtime-v4 unchanged",
+  "build_v5": {
+    "started_UTC": "2026-11-08T10:19:22.913817+00:00",
+    "completed_UTC": "2026-11-08T10:23:00.728829+00:00",
+    "source_revision": "b249efe3a689ea762904113e361e7d7f7e1333dc",
+    "source_status": "",
+    "source_branch": "codex/cls-epawf-pimple-one-sweep",
+    "all_tracked_blobs_verified": 5866,
+    "changed_diagnostic_sources_sha256": {
+      "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h": "5d03468c6cb53aaa1869a1d9f9912a6885b63304fd3736a1d419bc3ee319042d",
+      "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionContact.cpp": "2e9dd4354565c9d5fae4105de4fbe32cf601b942c935945a45197681d0434253",
+      "library/UnitTests/SolverUtils/RANSWallResolutionProbe.cpp": "9783463786d6c5f511fe72f49e654581b1e444b09fe1368b38196b29ed94b999"
+    },
+    "commands": [
+      [
+        "git",
+        "clone",
+        "--local",
+        "--no-hardlinks",
+        "--single-branch",
+        "--branch",
+        "codex/cls-epawf-pimple-one-sweep",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/source",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/diagnostic-source-v5"
+      ],
+      [
+        "git",
+        "-C",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/diagnostic-source-v5",
+        "fetch",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/diagnostic.bundle",
+        "HEAD"
+      ],
+      [
+        "git",
+        "-C",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/diagnostic-source-v5",
+        "merge",
+        "--ff-only",
+        "FETCH_HEAD"
+      ],
+      [
+        "cmake",
+        "-S",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/diagnostic-source-v5/solvers/IncNavierStokesSolver/Tests/RANS",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/diagnostic-build-v5",
+        "-DRANS_BUILD_SOLVER=ON",
+        "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DCMAKE_CXX_FLAGS=-fno-fast-math -ffp-contract=off -D_GLIBCXX_ASSERTIONS"
+      ],
+      [
+        "cmake",
+        "--build",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/diagnostic-build-v5",
+        "--parallel",
+        "4",
+        "--target",
+        "RANSWallResolutionProbe"
+      ]
+    ],
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    },
+    "ranks": 1,
+    "build_parallelism": 4,
+    "configure_seconds": 12.347788269020384,
+    "build_seconds": 131.2575230160146,
+    "numerical_map_change": false,
+    "governing_solves": 0,
+    "initialization_lift_calls": 0,
+    "primary_runtime_v4_modified": false,
+    "frozen_executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/runtime-diagnostic-v5/probe/RANSWallResolutionProbe",
+    "frozen_executable_sha256": "4dcf61b1b9859da352b82c38083efe65fc781606f558b19dc91980ce0250d699"
+  },
+  "build_v6": {
+    "started_UTC": "2026-11-08T10:29:14.483114+00:00",
+    "completed_UTC": "2026-11-08T10:30:12.041642+00:00",
+    "source_revision": "436f0e33b54b2689f76d1273b440f4218107f60e",
+    "source_status": "",
+    "source_branch": "codex/cls-epawf-pimple-one-sweep",
+    "all_tracked_blobs_verified": 5866,
+    "changed_diagnostic_sources_sha256": {
+      "library/UnitTests/SolverUtils/RANSWallResolutionProbe.cpp": "2b9765246a5fe1017b52fe284371d6083fc4ffb31d5c9f3296e33721907c9034"
+    },
+    "commands": [
+      [
+        "git",
+        "-C",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/diagnostic-source-v5",
+        "fetch",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/diagnostic-v6.bundle",
+        "HEAD"
+      ],
+      [
+        "git",
+        "-C",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/diagnostic-source-v5",
+        "merge",
+        "--ff-only",
+        "FETCH_HEAD"
+      ],
+      [
+        "cmake",
+        "--build",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/diagnostic-build-v5",
+        "--parallel",
+        "4",
+        "--target",
+        "RANSWallResolutionProbe"
+      ]
+    ],
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    },
+    "ranks": 1,
+    "build_parallelism": 4,
+    "build_seconds": 32.87089184799697,
+    "numerical_map_change": false,
+    "governing_solves": 0,
+    "primary_runtime_v4_modified": false,
+    "diagnostic_runtime_v5_modified": false,
+    "frozen_executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/runtime-diagnostic-v6/probe/RANSWallResolutionProbe",
+    "frozen_executable_sha256": "fb1c7f01bd2d53acd41e4a8f7bb56fa0834ac676cc167ffec890238bf975d5ce"
+  },
+  "warnings_as_errors": {
+    "command": [
+      "/usr/bin/c++",
+      "-DENABLE_NEKTAR_EXCEPTIONS",
+      "-DNEKTAR_MEMORY_POOL_ENABLED",
+      "-DNEKTAR_MPI_TYPE=0",
+      "-DNEKTAR_USE_MPI",
+      "-DNEKTAR_USE_SCOTCH",
+      "-DTIXML_USE_STL",
+      "-I/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/diagnostic-source-v5/library",
+      "-I/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/diagnostic-source-v5/solvers",
+      "-isystem",
+      "/home/jay/.local/opt/nektar-v2026-mpi/include/nektar++",
+      "-isystem",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/diagnostic-source-v5/solvers/IncNavierStokesSolver/Tests/RANS/include/nektar++",
+      "-isystem",
+      "/usr/lib/x86_64-linux-gnu/openmpi/include",
+      "-isystem",
+      "/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi",
+      "-isystem",
+      "/usr/include/scotch",
+      "-isystem",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-4/dependencies/fftw3-dev/usr/include",
+      "-fno-fast-math",
+      "-ffp-contract=off",
+      "-D_GLIBCXX_ASSERTIONS",
+      "-O3",
+      "-DNDEBUG",
+      "-DNEKTAR_USE_MPI",
+      "-pthread",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-sign-compare",
+      "-Werror",
+      "-std=gnu++17",
+      "-Werror",
+      "-fsyntax-only",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/diagnostic-source-v5/library/UnitTests/SolverUtils/RANSWallResolutionProbe.cpp"
+    ],
+    "exit_code": 0,
+    "seconds": 14.248378038988449,
+    "source_sha256": "2b9765246a5fe1017b52fe284371d6083fc4ffb31d5c9f3296e33721907c9034",
+    "log_sha256": "1889cdb39bdf9d3fd6d7ed16a2cff098e22f9ae5a2e920037b77bfab50f9acca",
+    "objects_written": false,
+    "source_revision": "436f0e33b54b2689f76d1273b440f4218107f60e"
+  },
+  "strict_native_readback": {
+    "cases": {
+      "coarse-h0": {
+        "original_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/native-focused-v4/initial/checkpoint",
+        "checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/diagnostic-reporting-v6/coarse-h0/checkpoint",
+        "checkpoint_sha256": "680fe08bdcf94881b141971f25700f72a0ef28d3f8c8a0b690f52736e2e26d0b",
+        "xml": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/diagnostic-reporting-v6/coarse-h0/case.xml",
+        "xml_sha256": "0c4c6faf9d3b7ce08e9538620d98fb362f951bd073adf5981a34e5be3736e18b",
+        "steps": 0,
+        "time": 0.0,
+        "state_sha256": "36ddd501981b449544d3f67d60a82383088e10f98f6746e3f680761c1abf9605",
+        "native_history_sha256": [
+          "750d7b0003e63b5bf3ec9b48adda836aad81c10d6f02e17132fce1366216b91c",
+          "af06c95b066477742f815814f36b6c986ceca43765bc7b5fa978052ec736844f"
+        ],
+        "native_history_times_sha256": "d9ee3f7a5f17f350f618a126baa5137d38c609c75164ac9fc5645b1722985846",
+        "default_v4_v5_exact": true,
+        "strict_default_v6_physical_exact": true,
+        "strict_reference_initialization_lift_calls_iterations": [
+          0,
+          0
+        ],
+        "generic_reference_initialization": "v4/v5 constructs diagnostic comparison reference with Lift; selected retained state unchanged",
+        "original_spatial_residual_dimensional": [
+          3.866841595586759,
+          0.0004802526761153323,
+          1.4128648871202714,
+          4.4707785355095705e-05
+        ],
+        "complete_query_valid": true,
+        "knots": [
+          0,
+          0.0025,
+          0.005,
+          0.01,
+          0.02,
+          0.04,
+          0.1,
+          0.25,
+          0.5,
+          1,
+          2,
+          2.3333333333333335,
+          2.6666666666666665,
+          3,
+          3.3333333333333335,
+          3.6666666666666665,
+          4
+        ],
+        "common_output": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/diagnostic-reporting-v6/coarse-h0/strict-common-v6/result.json",
+        "own_reference_error": {
+          "u": 0.00921286999187564,
+          "k": 0.005638799214222889,
+          "epsilon": 3.718360571474658e-07
+        },
+        "representation_L2_velocity_gradient_production_referenceProduction": [
+          0.009212869991875634,
+          3.5906016482303618,
+          1.2870810624376734,
+          4.816549199984595
+        ],
+        "representation_L2_k_gradient": [
+          0.005638799214222883,
+          2.0533846695007534
+        ],
+        "dimensional_mass_dual_spatial_first4": [
+          3.866841595586759,
+          0.0004802526761153323,
+          1.4128648871202714,
+          4.4707785355095705e-05
+        ],
+        "common_normalized_spatial_first4": [
+          9.866446693080317,
+          0.001225389587592373,
+          2.8246357553040355,
+          0.0008884062710680558
+        ],
+        "mean_wall_stress": 0.16170714745607762,
+        "matching_trace_defect": 0,
+        "fixed_physical_bands": {
+          "regions": [
+            {
+              "name": "z_le_0.01",
+              "x_region": "all",
+              "x_bounds": [
+                -4,
+                2
+              ],
+              "lower": 0,
+              "upper": 0.01,
+              "k_integral": 0.055436590318047575,
+              "correction_signed": 0,
+              "correction_positive": 0,
+              "correction_negative": 0,
+              "correction_absolute": 0,
+              "production": 1.024218142242101,
+              "coefficient_integral_row": null,
+              "destruction": 0.590711537100687,
+              "invalid_diagnostic_points": []
+            },
+            {
+              "name": "z_le_0.1",
+              "x_region": "all",
+              "x_bounds": [
+                -4,
+                2
+              ],
+              "lower": 0,
+              "upper": 0.1,
+              "k_integral": 0.37993787263035095,
+              "correction_signed": 0,
+              "correction_positive": 0,
+              "correction_negative": 0,
+              "correction_absolute": 0,
+              "production": 2.6441038731926585,
+              "coefficient_integral_row": null,
+              "destruction": 2.5395357338786075,
+              "invalid_diagnostic_points": []
+            },
+            {
+              "name": "wall_layer",
+              "x_region": "all",
+              "x_bounds": [
+                -4,
+                2
+              ],
+              "lower": 0,
+              "upper": 2,
+              "k_integral": 6.2322037039658005,
+              "correction_signed": 0,
+              "correction_positive": 0,
+              "correction_negative": 0,
+              "correction_absolute": 0,
+              "production": 5.192809297692654,
+              "coefficient_integral_row": null,
+              "destruction": 5.150705852907162,
+              "invalid_diagnostic_points": []
+            },
+            {
+              "name": "first_element",
+              "x_region": "all",
+              "x_bounds": [
+                -4,
+                2
+              ],
+              "lower": 0,
+              "upper": 0.01,
+              "k_integral": 0.055436590318047575,
+              "correction_signed": 0,
+              "correction_positive": 0,
+              "correction_negative": 0,
+              "correction_absolute": 0,
+              "production": 1.024218142242101,
+              "coefficient_integral_row": null,
+              "destruction": 0.590711537100687,
+              "invalid_diagnostic_points": []
+            },
+            {
+              "name": "global",
+              "x_region": "all",
+              "x_bounds": [
+                -4,
+                2
+              ],
+              "lower": 0,
+              "upper": 4,
+              "k_integral": 12.358299860684456,
+              "correction_signed": 0,
+              "correction_positive": 0,
+              "correction_negative": 0,
+              "correction_absolute": 0,
+              "production": 5.796977160447952,
+              "coefficient_integral_row": null,
+              "destruction": 5.7548737901086335,
+              "invalid_diagnostic_points": []
+            }
+          ],
+          "quadrature": "physical native panels split exactly at each band edge; GL16; source retains roughness/cutoff/geometric panels"
+        },
+        "weak_source_receipts": {
+          "inner_k_production": {
+            "coefficients": 592,
+            "max_abs": 0.3727307424303965
+          },
+          "inner_k_destruction": {
+            "coefficients": 592,
+            "max_abs": 0.39912696136356063
+          },
+          "k_diffusion": {
+            "coefficients": 592,
+            "max_abs": 0.06854457716739165
+          },
+          "total_constrained": {
+            "coefficients": 592,
+            "max_abs": 0.014968895320588482
+          }
+        }
+      },
+      "coarse-T002": {
+        "original_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/faithful-2G-campaign/trajectory/steps-000025-000032/checkpoint.3",
+        "checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/diagnostic-reporting-v6/coarse-T002/checkpoint",
+        "checkpoint_sha256": "0319ca9da10dfb572b2a3ddc84358b3a644095fb1afc9d990976af93e9450d05",
+        "xml": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/diagnostic-reporting-v6/coarse-T002/case.xml",
+        "xml_sha256": "c9b906d80c0d42188002e48e20ca4712e6d34d063da6d48950d29cf81f7f791f",
+        "steps": 32,
+        "time": 0.020000000000000007,
+        "state_sha256": "532a868ed93a9e376d2f24ad19825526c08106e69d646d2a0529aa850d605abe",
+        "native_history_sha256": [
+          "fc805bef06720ab18b704d8b1a3d225841b131be44b08a317fc2fc60af18ad45",
+          "af06c95b066477742f815814f36b6c986ceca43765bc7b5fa978052ec736844f"
+        ],
+        "native_history_times_sha256": "948f00fbe1915d9d55391a083d28b87ccee94651f34843d4bdbcc3d431973b9d",
+        "default_v4_v5_exact": true,
+        "strict_default_v6_physical_exact": true,
+        "strict_reference_initialization_lift_calls_iterations": [
+          0,
+          0
+        ],
+        "generic_reference_initialization": "v4/v5 constructs diagnostic comparison reference with Lift; selected retained state unchanged",
+        "original_spatial_residual_dimensional": [
+          0.12300341522805121,
+          0.006706984990004598,
+          0.092187828487474,
+          0.0001669133953265906
+        ],
+        "complete_query_valid": true,
+        "knots": [
+          0,
+          0.0025,
+          0.005,
+          0.01,
+          0.02,
+          0.04,
+          0.1,
+          0.25,
+          0.5,
+          1,
+          2,
+          2.3333333333333335,
+          2.6666666666666665,
+          3,
+          3.3333333333333335,
+          3.6666666666666665,
+          4
+        ],
+        "common_output": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/diagnostic-reporting-v6/coarse-T002/strict-common-v6/result.json",
+        "own_reference_error": {
+          "u": 0.012149639786979008,
+          "k": 0.006804681525477153,
+          "epsilon": 3.102218666102966e-06
+        },
+        "drift_from_actual_h0": {
+          "u": 0.007972180514026424,
+          "v": 0.00010748588183873793,
+          "k": 0.00404946542841287,
+          "epsilon": 3.109736363647855e-06,
+          "common_gauge_shift": -8.291810201560393e-18,
+          "pressure": 0.010794678758104305
+        },
+        "representation_L2_velocity_gradient_production_referenceProduction": [
+          0.01215011523271026,
+          2.148613453618683,
+          0.6554618865111744,
+          4.816549199984595
+        ],
+        "representation_L2_k_gradient": [
+          0.0068046815254771695,
+          1.5620340654792977
+        ],
+        "dimensional_mass_dual_spatial_first4": [
+          0.12300341522805121,
+          0.006706984990004598,
+          0.092187828487474,
+          0.0001669133953265906
+        ],
+        "common_normalized_spatial_first4": [
+          0.31384958742542873,
+          0.01711321972710104,
+          0.1843042734824427,
+          0.003316802788499188
+        ],
+        "mean_wall_stress": 0.15589670349419935,
+        "matching_trace_defect": 8.848252147251555e-08,
+        "fixed_physical_bands": {
+          "regions": [
+            {
+              "name": "z_le_0.01",
+              "x_region": "all",
+              "x_bounds": [
+                -4,
+                2
+              ],
+              "lower": 0,
+              "upper": 0.01,
+              "k_integral": 0.0550868257257491,
+              "correction_signed": 0,
+              "correction_positive": 0,
+              "correction_negative": 0,
+              "correction_absolute": 0,
+              "production": 0.9563353815753064,
+              "coefficient_integral_row": null,
+              "destruction": 0.5907018911591659,
+              "invalid_diagnostic_points": []
+            },
+            {
+              "name": "z_le_0.1",
+              "x_region": "all",
+              "x_bounds": [
+                -4,
+                2
+              ],
+              "lower": 0,
+              "upper": 0.1,
+              "k_integral": 0.3799850659827673,
+              "correction_signed": 0,
+              "correction_positive": 0,
+              "correction_negative": 0,
+              "correction_absolute": 0,
+              "production": 2.6029136427987214,
+              "coefficient_integral_row": null,
+              "destruction": 2.539493765238018,
+              "invalid_diagnostic_points": []
+            },
+            {
+              "name": "wall_layer",
+              "x_region": "all",
+              "x_bounds": [
+                -4,
+                2
+              ],
+              "lower": 0,
+              "upper": 2,
+              "k_integral": 6.232611823378074,
+              "correction_signed": 0,
+              "correction_positive": 0,
+              "correction_negative": 0,
+              "correction_absolute": 0,
+              "production": 5.170352842621992,
+              "coefficient_integral_row": null,
+              "destruction": 5.150620463313149,
+              "invalid_diagnostic_points": []
+            },
+            {
+              "name": "first_element",
+              "x_region": "all",
+              "x_bounds": [
+                -4,
+                2
+              ],
+              "lower": 0,
+              "upper": 0.01,
+              "k_integral": 0.0550868257257491,
+              "correction_signed": 0,
+              "correction_positive": 0,
+              "correction_negative": 0,
+              "correction_absolute": 0,
+              "production": 0.9563353815753064,
+              "coefficient_integral_row": null,
+              "destruction": 0.5907018911591659,
+              "invalid_diagnostic_points": []
+            },
+            {
+              "name": "global",
+              "x_region": "all",
+              "x_bounds": [
+                -4,
+                2
+              ],
+              "lower": 0,
+              "upper": 4,
+              "k_integral": 12.358703782864767,
+              "correction_signed": 0,
+              "correction_positive": 0,
+              "correction_negative": 0,
+              "correction_absolute": 0,
+              "production": 5.774197511082061,
+              "coefficient_integral_row": null,
+              "destruction": 5.754791172156837,
+              "invalid_diagnostic_points": []
+            }
+          ],
+          "quadrature": "physical native panels split exactly at each band edge; GL16; source retains roughness/cutoff/geometric panels"
+        },
+        "weak_source_receipts": {
+          "inner_k_production": {
+            "coefficients": 592,
+            "max_abs": 0.36211535371309733
+          },
+          "inner_k_destruction": {
+            "coefficients": 592,
+            "max_abs": 0.39912026260568084
+          },
+          "k_diffusion": {
+            "coefficients": 592,
+            "max_abs": 0.06701355519836052
+          },
+          "total_constrained": {
+            "coefficients": 592,
+            "max_abs": 0.004358188999905588
+          }
+        }
+      },
+      "refined-h0": {
+        "original_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/refined-2G/Accepted-AWF-2G/initial/checkpoint",
+        "checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/diagnostic-reporting-v6/refined-h0/checkpoint",
+        "checkpoint_sha256": "8474c1fd73894e3d187b14bb1e1b9276259ca4765ccd9554561080ff70f759d6",
+        "xml": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/diagnostic-reporting-v6/refined-h0/case.xml",
+        "xml_sha256": "2f0f331832279eec2bd2c73b56fd049f703fec4e24c6355d438f873ea871ba93",
+        "steps": 0,
+        "time": 0.0,
+        "state_sha256": "176dd38e7136e0341926cb7ee7302041fad27c8f983764504ed586cb2940d8d4",
+        "native_history_sha256": [
+          "fdd58e8765bcbb7adeb6edc009b0c6811baa64fcfdc77ab3124f220c3a075e14",
+          "16d9418a34ec1c61edc2ad9b1be5daa4ff3694dfcc5077b8ecfd4d8185b646d2"
+        ],
+        "native_history_times_sha256": "d9ee3f7a5f17f350f618a126baa5137d38c609c75164ac9fc5645b1722985846",
+        "default_v4_v5_exact": true,
+        "strict_default_v6_physical_exact": true,
+        "strict_reference_initialization_lift_calls_iterations": [
+          0,
+          0
+        ],
+        "generic_reference_initialization": "v4/v5 constructs diagnostic comparison reference with Lift; selected retained state unchanged",
+        "original_spatial_residual_dimensional": [
+          0.20843862050211848,
+          0.0004802526766179683,
+          0.19735692899795726,
+          4.470778525187752e-05
+        ],
+        "complete_query_valid": true,
+        "knots": [
+          0,
+          0.0025,
+          0.005,
+          0.01,
+          0.02,
+          0.04,
+          0.1,
+          0.25,
+          0.5,
+          1,
+          2,
+          2.3333333333333335,
+          2.6666666666666665,
+          3,
+          3.3333333333333335,
+          3.6666666666666665,
+          4
+        ],
+        "common_output": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/diagnostic-reporting-v6/refined-h0/strict-common-v6/result.json",
+        "own_reference_error": {
+          "u": 0.0015147083638164186,
+          "k": 0.00013558860818061643,
+          "epsilon": 3.718360571474658e-07
+        },
+        "representation_L2_velocity_gradient_production_referenceProduction": [
+          0.0015147083638164173,
+          0.15413599508720563,
+          0.049383726550961744,
+          4.816549199984595
+        ],
+        "representation_L2_k_gradient": [
+          0.00013558860818061643,
+          0.06668827697869316
+        ],
+        "dimensional_mass_dual_spatial_first4": [
+          0.20843862050211848,
+          0.0004802526766179683,
+          0.19735692899795726,
+          4.470778525187752e-05
+        ],
+        "common_normalized_spatial_first4": [
+          0.5318419405414736,
+          0.0012253895888748748,
+          0.3945610392660112,
+          0.0008884062690169659
+        ],
+        "mean_wall_stress": 0.15959301423059788,
+        "matching_trace_defect": 0,
+        "fixed_physical_bands": {
+          "regions": [
+            {
+              "name": "z_le_0.01",
+              "x_region": "all",
+              "x_bounds": [
+                -4,
+                2
+              ],
+              "lower": 0,
+              "upper": 0.01,
+              "k_integral": 0.0556027788409624,
+              "correction_signed": 0,
+              "correction_positive": 0,
+              "correction_negative": 0,
+              "correction_absolute": 0,
+              "production": 0.9092708905033294,
+              "coefficient_integral_row": null,
+              "destruction": 0.590711537100688,
+              "invalid_diagnostic_points": []
+            },
+            {
+              "name": "z_le_0.1",
+              "x_region": "all",
+              "x_bounds": [
+                -4,
+                2
+              ],
+              "lower": 0,
+              "upper": 0.1,
+              "k_integral": 0.37967822367724036,
+              "correction_signed": 0,
+              "correction_positive": 0,
+              "correction_negative": 0,
+              "correction_absolute": 0,
+              "production": 2.5875916139082715,
+              "coefficient_integral_row": null,
+              "destruction": 2.5395357338786106,
+              "invalid_diagnostic_points": []
+            },
+            {
+              "name": "wall_layer",
+              "x_region": "all",
+              "x_bounds": [
+                -4,
+                2
+              ],
+              "lower": 0,
+              "upper": 2,
+              "k_integral": 6.232204338184062,
+              "correction_signed": 0,
+              "correction_positive": 0,
+              "correction_negative": 0,
+              "correction_absolute": 0,
+              "production": 5.151165576327425,
+              "coefficient_integral_row": null,
+              "destruction": 5.150705852907159,
+              "invalid_diagnostic_points": []
+            },
+            {
+              "name": "first_element",
+              "x_region": "all",
+              "x_bounds": [
+                -4,
+                2
+              ],
+              "lower": 0,
+              "upper": 0.0025,
+              "k_integral": 0.015149917787508571,
+              "correction_signed": 0,
+              "correction_positive": 0,
+              "correction_negative": 0,
+              "correction_absolute": 0,
+              "production": 0.3295071944573647,
+              "coefficient_integral_row": null,
+              "destruction": 0.1476778842751721,
+              "invalid_diagnostic_points": []
+            },
+            {
+              "name": "global",
+              "x_region": "all",
+              "x_bounds": [
+                -4,
+                2
+              ],
+              "lower": 0,
+              "upper": 4,
+              "k_integral": 12.358300494902682,
+              "correction_signed": 0,
+              "correction_positive": 0,
+              "correction_negative": 0,
+              "correction_absolute": 0,
+              "production": 5.755333439082701,
+              "coefficient_integral_row": null,
+              "destruction": 5.754873790108627,
+              "invalid_diagnostic_points": []
+            }
+          ],
+          "quadrature": "physical native panels split exactly at each band edge; GL16; source retains roughness/cutoff/geometric panels"
+        },
+        "weak_source_receipts": {
+          "inner_k_production": {
+            "coefficients": 784,
+            "max_abs": 0.1894419150183513
+          },
+          "inner_k_destruction": {
+            "coefficients": 784,
+            "max_abs": 0.19966662245940014
+          },
+          "k_diffusion": {
+            "coefficients": 784,
+            "max_abs": 0.033056820691877535
+          },
+          "total_constrained": {
+            "coefficients": 784,
+            "max_abs": 0.0003399463664837273
+          }
+        }
+      },
+      "refined-T002": {
+        "original_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/refined-2G/Accepted-AWF-2G/trajectory/checkpoint.4",
+        "checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/diagnostic-reporting-v6/refined-T002/checkpoint",
+        "checkpoint_sha256": "90afb09d8e66e63b1bb2a0b2a2c7c2875376bf3dfce092291de95ce9ef5a7d33",
+        "xml": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/diagnostic-reporting-v6/refined-T002/case.xml",
+        "xml_sha256": "98143d72f536ba4f6749260fb2f98ef40e95246fa194e56379065e015bb114d9",
+        "steps": 32,
+        "time": 0.020000000000000007,
+        "state_sha256": "c13c8e54d4917a349a50a034b756e9ac146fa33c5e1cd4e09f8c59ab5003091f",
+        "native_history_sha256": [
+          "7d29416e50b4cd8e71829b07bbad74ef6175df8dfa28bec3a46328d5c915eb5f",
+          "16d9418a34ec1c61edc2ad9b1be5daa4ff3694dfcc5077b8ecfd4d8185b646d2"
+        ],
+        "native_history_times_sha256": "948f00fbe1915d9d55391a083d28b87ccee94651f34843d4bdbcc3d431973b9d",
+        "default_v4_v5_exact": true,
+        "strict_default_v6_physical_exact": true,
+        "strict_reference_initialization_lift_calls_iterations": [
+          0,
+          0
+        ],
+        "generic_reference_initialization": "v4/v5 constructs diagnostic comparison reference with Lift; selected retained state unchanged",
+        "original_spatial_residual_dimensional": [
+          0.024035903994991312,
+          0.0006076670188018683,
+          0.005017850971745815,
+          0.00016869086129349457
+        ],
+        "complete_query_valid": true,
+        "knots": [
+          0,
+          0.0025,
+          0.005,
+          0.01,
+          0.02,
+          0.04,
+          0.1,
+          0.25,
+          0.5,
+          1,
+          2,
+          2.3333333333333335,
+          2.6666666666666665,
+          3,
+          3.3333333333333335,
+          3.6666666666666665,
+          4
+        ],
+        "common_output": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/diagnostic-reporting-v6/refined-T002/strict-common-v6/result.json",
+        "own_reference_error": {
+          "u": 0.0015713759624567684,
+          "k": 0.0002186069456378497,
+          "epsilon": 3.1123471079818947e-06
+        },
+        "drift_from_actual_h0": {
+          "u": 0.0010085862948255601,
+          "v": 1.5056420873947382e-05,
+          "k": 0.00017128922795334254,
+          "epsilon": 3.1198154548561577e-06,
+          "common_gauge_shift": 9.831601953691902e-18,
+          "pressure": 0.00043543907004439745
+        },
+        "representation_L2_velocity_gradient_production_referenceProduction": [
+          0.0015714480937009865,
+          0.12469863094437912,
+          0.03973563945481638,
+          4.816549199984595
+        ],
+        "representation_L2_k_gradient": [
+          0.00021860694563784986,
+          0.053074544564909246
+        ],
+        "dimensional_mass_dual_spatial_first4": [
+          0.024035903994991312,
+          0.0006076670188018683,
+          0.005017850971745815,
+          0.00016869086129349457
+        ],
+        "common_normalized_spatial_first4": [
+          0.061328854473179616,
+          0.0015504938849820926,
+          0.010031816487752936,
+          0.0033521235251240357
+        ],
+        "mean_wall_stress": 0.1595615831549087,
+        "matching_trace_defect": 8.947043084596266e-08,
+        "fixed_physical_bands": {
+          "regions": [
+            {
+              "name": "z_le_0.01",
+              "x_region": "all",
+              "x_bounds": [
+                -4,
+                2
+              ],
+              "lower": 0,
+              "upper": 0.01,
+              "k_integral": 0.055602816791127954,
+              "correction_signed": 0,
+              "correction_positive": 0,
+              "correction_negative": 0,
+              "correction_absolute": 0,
+              "production": 0.9090118134357932,
+              "coefficient_integral_row": null,
+              "destruction": 0.5907020618601935,
+              "invalid_diagnostic_points": []
+            },
+            {
+              "name": "z_le_0.1",
+              "x_region": "all",
+              "x_bounds": [
+                -4,
+                2
+              ],
+              "lower": 0,
+              "upper": 0.1,
+              "k_integral": 0.37966011596388294,
+              "correction_signed": 0,
+              "correction_positive": 0,
+              "correction_negative": 0,
+              "correction_absolute": 0,
+              "production": 2.5844448145625374,
+              "coefficient_integral_row": null,
+              "destruction": 2.5394945079430618,
+              "invalid_diagnostic_points": []
+            },
+            {
+              "name": "wall_layer",
+              "x_region": "all",
+              "x_bounds": [
+                -4,
+                2
+              ],
+              "lower": 0,
+              "upper": 2,
+              "k_integral": 6.23221808936762,
+              "correction_signed": 0,
+              "correction_positive": 0,
+              "correction_negative": 0,
+              "correction_absolute": 0,
+              "production": 5.151472645379412,
+              "coefficient_integral_row": null,
+              "destruction": 5.150621974424233,
+              "invalid_diagnostic_points": []
+            },
+            {
+              "name": "first_element",
+              "x_region": "all",
+              "x_bounds": [
+                -4,
+                2
+              ],
+              "lower": 0,
+              "upper": 0.0025,
+              "k_integral": 0.015150124570330282,
+              "correction_signed": 0,
+              "correction_positive": 0,
+              "correction_negative": 0,
+              "correction_absolute": 0,
+              "production": 0.32943467699883733,
+              "coefficient_integral_row": null,
+              "destruction": 0.14767551546504956,
+              "invalid_diagnostic_points": []
+            },
+            {
+              "name": "global",
+              "x_region": "all",
+              "x_bounds": [
+                -4,
+                2
+              ],
+              "lower": 0,
+              "upper": 4,
+              "k_integral": 12.35831025839778,
+              "correction_signed": 0,
+              "correction_positive": 0,
+              "correction_negative": 0,
+              "correction_absolute": 0,
+              "production": 5.755337336142677,
+              "coefficient_integral_row": null,
+              "destruction": 5.754792786452777,
+              "invalid_diagnostic_points": []
+            }
+          ],
+          "quadrature": "physical native panels split exactly at each band edge; GL16; source retains roughness/cutoff/geometric panels"
+        },
+        "weak_source_receipts": {
+          "inner_k_production": {
+            "coefficients": 784,
+            "max_abs": 0.18934306908708556
+          },
+          "inner_k_destruction": {
+            "coefficients": 784,
+            "max_abs": 0.1996633533239789
+          },
+          "k_diffusion": {
+            "coefficients": 784,
+            "max_abs": 0.032843859173207895
+          },
+          "total_constrained": {
+            "coefficients": 784,
+            "max_abs": 0.00010541111802209006
+          }
+        }
+      }
+    },
+    "default_v4_v5_exact_all": true,
+    "strict_vs_generic_default_physical_outputs_exact_all": true,
+    "strict_initialization_work": [
+      0,
+      0
+    ],
+    "generic_initialization_work": [
+      1,
+      1
+    ],
+    "native_history": "all actual checkpoint slots/differential state/time labels independently matched; no native history reconstruction or advance",
+    "query_count": 25,
+    "query_seconds": 122.85291074006818,
+    "rejected_inputs": {
+      "checkpoint_hash": {
+        "exit_code": 1,
+        "reason": "EP-AWF patch: archived checkpoint SHA256 differs"
+      },
+      "physical_signature": {
+        "exit_code": 1,
+        "reason": "EP-AWF patch: native replay physical signature differs from archived report"
+      },
+      "state": {
+        "exit_code": 1,
+        "reason": "EP-AWF patch: strict native spatial state differs from checkpoint"
+      },
+      "history_slot": {
+        "exit_code": 1,
+        "reason": "EP-AWF patch: native history slot differs from checkpoint"
+      },
+      "history_time": {
+        "exit_code": 1,
+        "reason": "EP-AWF patch: native history time labels differ from checkpoint"
+      },
+      "history_waiver": {
+        "exit_code": 1,
+        "reason": "EP-AWF patch: strict native spatial readback forbids transfer, history waivers and callback construction"
+      },
+      "physical_time": {
+        "exit_code": 1,
+        "reason": "EP-AWF patch: strict native spatial readback requires alpha=0 and exact checkpoint time"
+      },
+      "alpha": {
+        "exit_code": 1,
+        "reason": "EP-AWF patch: strict native spatial readback requires alpha=0 and exact checkpoint time"
+      },
+      "reporting_domain": {
+        "exit_code": 1,
+        "reason": "EP-AWF patch: diagnostic reporting breakpoint outside physical domain"
+      }
+    },
+    "same_quadrature_comparison": {
+      "h0": {
+        "u": 0.009087498669038041,
+        "v": 0.0,
+        "k": 0.005637169318318104,
+        "epsilon": 0.0,
+        "common_gauge_shift": 0.0,
+        "pressure": 0.0
+      },
+      "T002": {
+        "u": 0.012151977350230003,
+        "v": 0.00011033161053700848,
+        "k": 0.006844513361513176,
+        "epsilon": 8.138947260003903e-08,
+        "common_gauge_shift": -1.812303674897769e-17,
+        "pressure": 0.010847526943697776
+      }
+    },
+    "evolution_difference_T002": {
+      "u": 0.007766938257471892,
+      "v": 0.00011033161053700848,
+      "k": 0.004027150135424613,
+      "epsilon": 8.138947260003903e-08,
+      "common_gauge_shift": -1.812303674897769e-17,
+      "pressure": 0.010847526943697776
+    }
+  },
+  "focused_constitutive": {
+    "status": "passed",
+    "endpoint_sampling": {
+      "endpoint_sampling_error": 2.220446049250313e-16,
+      "exact_global_row_error": 2.220446049250313e-16,
+      "nonuniform_profile_K_error": 2.220446049250313e-16,
+      "dependent_epsilon_H_error": 1.6653345369377348e-16,
+      "chi": null,
+      "governing_solves": 0.0
+    },
+    "active_projection_diagnostic": {
+      "success": true,
+      "native_step_accepted": false,
+      "governing_solves": 0,
+      "complete_hard_admissible": false,
+      "complete_hard_reasons": [
+        "covariance:source_volume_inner",
+        "covariance:prescribed_source_inner",
+        "covariance:mass_volume",
+        "covariance:reconstruction_dense",
+        "covariance:reconstruction_native",
+        "PIMPLE_hard_covariance_or_normalization_exit"
+      ],
+      "complete_audit_failure": "",
+      "raw_minimum": {
+        "value": -5.105080130574091e-06,
+        "functional_kind": "Point",
+        "coordinate": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "geometry": 3.0,
+        "inventory": "reconstruction_dense"
+      },
+      "corrected_minimum": {
+        "value": 5.105544455286925e-09,
+        "functional_kind": "Point",
+        "coordinate": [
+          3.7112240364178817e-16,
+          0.0,
+          0.0
+        ],
+        "geometry": 3.0,
+        "inventory": "continuous_ground_extremum"
+      },
+      "non_k_exact": true,
+      "prescribed_k_exact": true,
+      "shared_cg_jump": 2.220446049250313e-16,
+      "mass_norm": 1.2702631740297458e-07,
+      "stationarity_mass_dual": 0.0,
+      "complementarity": 0.0,
+      "interpretation": "QP positivity feasibility is separate from linear-stress covariance/hard-audit qualification"
+    },
+    "consistent_mass_native_frozen_load_agreement": 3.0644974405302783e-16,
+    "production_governing_solves": 0,
+    "diagnostic_k_solves": 0,
+    "projection_counters": {
+      "calls": 1,
+      "activations": 1,
+      "separation_passes": 2,
+      "active_set_iterations": 1,
+      "kkt_solves": 1
+    },
+    "finite_pool_complete": true,
+    "primal_floor_defect": 0,
+    "ground_floor_defect": 0,
+    "limitation": "The localized positivity repair passes its QP checks, while the artificially near-zero-k state correctly fails the retained linear-stress covariance hard audit. It is not an accepted physical state.",
+    "historical_global_stress_fixture": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/native-focused-v4/negative-projection/result.json",
+      "sha256": "c0b34713bbaa573134cc6f7ecff61958020c24ec7a44b58d27bff62884ead872",
+      "success": false,
+      "failure": "k_bound_separation_limit",
+      "interpretation": "60 successive global -0.05 perturbations; preserved failed diagnostic, not a production trajectory failure"
+    }
+  },
+  "nonzero_correction_algebra": {
+    "schema": 1,
+    "captured_UTC": "2026-11-08T10:35:02.131633+00:00",
+    "interpretation": "Algebra-only accounting: the localized projection delta is applied as a test vector to a separately retained first-step frozen A_k. It is not that step's raw/corrected governing candidate and is not an accepted physical state.",
+    "source_revision": "436f0e33b54b2689f76d1273b440f4218107f60e",
+    "projection_packet": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/native-constitutive-v6/negative-projection/result.json",
+    "projection_packet_sha256": "00fd206825c6a513ef612a3567d1d4bf0862880f6ba393e98c8185a5746c785c",
+    "mass_packet": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/native-constitutive-v6/mass-accounting/result.json",
+    "mass_packet_sha256": "f4901df8ee2222f6ece105432c1592c54440f3b09d3e5c6fbf4cb38bbbd26edc",
+    "frozen_step_packet": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/native-transactions-v4/whole2/pimple-states/k-t0.00062500000000000001-aa690d75af76.json",
+    "frozen_step_packet_sha256": "8282b0843e35801213f55d467e72a6c14bbbd55b556e34b31dd42761a877fc80",
+    "A_file": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/native-transactions-v4/whole2/pimple-states/k-t0.00062500000000000001-aa690d75af76.matrix.bin",
+    "A_sha256": "2084dbd7041e413dc657fd724dc9a47e61514a2ff14752ac3ee9d23eb7c86bc0",
+    "native_consistent_Mff_source": "PicardKMass restricted to exactly matching free global k rows; Mff distinct from A_k",
+    "mass_sha256": "5251decc28e900e053e98d98d1f0aeae92a73aed8463d397c39aa806748c9471",
+    "alpha": 1600,
+    "raw_governing_linear_residual_max": 4.85722573273506e-17,
+    "added_A_delta_max": 2.8016487733847103e-06,
+    "storage_alpha_M_delta_max": 2.5260429014780007e-06,
+    "nonstorage_L_delta_max": 4.882763603582502e-07,
+    "algebraically_modified_frozen_residual_max": 2.8016487733945744e-06,
+    "identity_defect_max": 5.276591744920664e-17,
+    "correction_mass_norm": 1.2702631740297465e-07,
+    "correction_integral": 3.128960322645631e-09,
+    "projection_primal_objective": 8.067842656475437e-15,
+    "stationarity_mass_dual": 0,
+    "complementarity": 0,
+    "dual_feasibility_defect": 0,
+    "additional_governing_solves": 0,
+    "diagnostic_k_solves": 0
+  },
+  "artifacts": {
+    "root": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108",
+    "reporting": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/diagnostic-reporting-v6",
+    "strict_suite_summary_sha256": "b91bd1503d0fa12802c79ceb2cbacd87493ce11963aa2bc6b2a362a2d298caa6",
+    "v5_identity_sha256": "a24cffdf21fda703c330f24b457bfe3aef25fea64e4d4a90e9062047a510b7db",
+    "v6_identity_sha256": "59df817f12372d73656668e9d5eef4730fe807574ff3c22e300010a2b00ee25b",
+    "constitutive_summary_sha256": "bafcd2a4677365957bb6c9a588b7e420251c0c92186d9782d46f0c880ceb4c5b",
+    "figures": [
+      {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/diagnostic-reporting-v6/coarse-refined-near-wall.png",
+        "sha256": "28316a1b874031d5ec9eba88d586836233aeea217bfb145d39c57497bc122905"
+      },
+      {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/diagnostic-reporting-v6/coarse-refined-near-wall.pdf",
+        "sha256": "7357e1da604e7299ea0d32c9674f9a2b5748234d26cac35c7411ed1d81454eb0"
+      }
+    ]
+  },
+  "interpretation": "Near-wall refinement materially reduces represented gradients/production errors and drift over T=.02 under the same accepted-AWF policy; this short representation check does not establish temporal accuracy or long-time convergence.",
+  "harness_early_failure_reporting": {
+    "status": "passed",
+    "captured_UTC": "2026-11-08T10:38:11.178448+00:00",
+    "script_sha256": "3f9440bf19a071580b24eb61b7e725a79617fbfd38377c61ede087c3d37361d9",
+    "tests": [
+      {
+        "case": "fresh",
+        "command": [
+          "python3",
+          "-B",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/source/solvers/IncNavierStokesSolver/Tests/RANS/test_cls_accepted_awf_native.py",
+          "--solver",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/runtime-v4/solver/IncNavierStokesSolver",
+          "--probe",
+          "/bin/false",
+          "--phase",
+          "constitutive",
+          "--output",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/native-failure-reporting-test-v2"
+        ],
+        "exit_code": 1,
+        "seconds": 16.555054806987755,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/native-failure-reporting-v2-fresh.log",
+        "log_sha256": "872570f3580a380f550afb7c9ebb68b911e24904daa5eee644ceb5805d25817c"
+      },
+      {
+        "case": "pre-existing",
+        "command": [
+          "python3",
+          "-B",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/source/solvers/IncNavierStokesSolver/Tests/RANS/test_cls_accepted_awf_native.py",
+          "--solver",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/runtime-v4/solver/IncNavierStokesSolver",
+          "--probe",
+          "/bin/false",
+          "--phase",
+          "constitutive",
+          "--output",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/native-failure-reporting-preexisting-v2"
+        ],
+        "exit_code": 1,
+        "seconds": 0.16543909400934353,
+        "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/native-failure-reporting-v2-pre-existing.log",
+        "log_sha256": "9937d7e457ed6c092b7361ae24b941a1ef2c7291ac05d4645f3ed13d98b6a91f"
+      }
+    ],
+    "fresh_early_failure_summary": "test_failed",
+    "reason": "read-only native constitutive check failed: endpoint-sampling",
+    "pre_existing_summary_unchanged": true,
+    "production_governing_solves": 0,
+    "diagnostic_governing_solves": 0,
+    "old_v1_failure_preserved": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/native-failure-reporting-test"
+  }
+}

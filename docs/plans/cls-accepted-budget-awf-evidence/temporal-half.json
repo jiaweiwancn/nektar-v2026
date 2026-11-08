@@ -1,0 +1,112 @@
+{
+  "schema": 1,
+  "purpose": "one targeted two-level short-time sensitivity check, not an order study or a failed-campaign retry",
+  "source_revision": "e0d599bc539b64045f87662d87be31a30fa6b4f3",
+  "solver_sha256": "db73039aad11327b9ea4deefa5da890b73041eef8d0aa4eb4cfb7e8a6ba1534b",
+  "dt": 0.0003125,
+  "baseline_dt": 0.000625,
+  "accepted_steps": 64.0,
+  "final_time": 0.02000000000000001,
+  "failure": "",
+  "actual_h0_sha256": "36ddd501981b449544d3f67d60a82383088e10f98f6746e3f680761c1abf9605",
+  "native_h0_checkpoint": {
+    "order": 1.0,
+    "steps": 0.0,
+    "time": 0.0,
+    "dt": 0.0003125,
+    "sha256": "b1843ad3864d25dac58fdcb116c3bc39fe7e248f2ec9dbc5550a97f0b063b43d"
+  },
+  "accepted_checkpoint": {
+    "order": 1.0,
+    "steps": 64.0,
+    "time": 0.02000000000000001,
+    "dt": 0.0003125,
+    "sha256": "46a42922c487e6f9f08f7370ed75e1b7f7a69351b9e5d24c46ff1bdbe4a143eb"
+  },
+  "final_state_sha256": "164172ab4809a04eed2c51deb71b0931cffbd6ec24f7aeaf14a1be81cd45ae0b",
+  "native_history_sha256": [
+    "1e2ef3dfd896c225fc3ba4dd70a54c5b327bdc46a8fc95841f50e8c33efcc6ee",
+    "af06c95b066477742f815814f36b6c986ceca43765bc7b5fa978052ec736844f"
+  ],
+  "implicit_callbacks": 64.0,
+  "solve_counts": {
+    "outer_sweeps": 64.0,
+    "momentum_predictor_solves": 64.0,
+    "pressure_system_solves": 64.0,
+    "epsilon_transport_solves": 64.0,
+    "k_transport_solves": 64.0,
+    "bound_calls": 64.0,
+    "bound_activations": 0.0,
+    "additional_governing_equation_solves": 0.0
+  },
+  "matched_physical_comparison": {
+    "other": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/combined-faithful-suite",
+    "same_actual_h0": true,
+    "common_times": {
+      "0.0": {
+        "u": 0.0,
+        "v": 0.0,
+        "k": 0.0,
+        "epsilon": 0.0,
+        "common_gauge_shift": 0.0,
+        "pressure": 0.0
+      },
+      "0.005": {
+        "u": 7.093040848945883e-05,
+        "v": 7.849174993671071e-07,
+        "k": 3.496225684011533e-05,
+        "epsilon": 3.393081027457021e-08,
+        "common_gauge_shift": -2.1088902734544335e-19,
+        "pressure": 0.00010267551462038174
+      },
+      "0.01": {
+        "u": 4.984327304755688e-05,
+        "v": 7.373818894247511e-07,
+        "k": 2.6688071345829055e-05,
+        "epsilon": 7.627239649039369e-08,
+        "common_gauge_shift": -1.615503831015648e-18,
+        "pressure": 0.0002457748475378708
+      },
+      "0.02000000000000001": {
+        "u": 2.311731432120634e-05,
+        "v": 3.9175855137320684e-07,
+        "k": 1.5983610207171307e-05,
+        "epsilon": 1.2546626932916284e-07,
+        "common_gauge_shift": 1.5032641230716375e-17,
+        "pressure": 6.131172476789144e-05
+      }
+    }
+  },
+  "final_scalar_inventory": [
+    1.0,
+    0.9999763249360075,
+    0.5104999554913191,
+    0.5104999554913191,
+    0.03631791663093067,
+    0.5104999554913191,
+    0.07263411360386071,
+    5.909280150953167,
+    0.0
+  ],
+  "final_covariance": [
+    0.13620009820102155,
+    0.17497280377881663
+  ],
+  "maximum_continuity_gauge": 2.1534209539533708e-16,
+  "maximum_boundary_defect": 0.0,
+  "last_refreshed_matching_defect": 4.51035866427396e-08,
+  "runtime_receipt": {
+    "command": [
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/temporal-half-2G/runtime/IncNavierStokesSolver",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/temporal-half-2G/Accepted-AWF-2G/trajectory/case.xml"
+    ],
+    "exit_code": 0.0,
+    "seconds": 806.7646834999905,
+    "log_sha256": "79d31025352d02bc9ffc55eda85e60558cf6b7a0e7604579dc99089e0846f4c3"
+  },
+  "artifacts": {
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/analysis-temporal-half/native.json": "8b3de7f10ab7f3632f2ff2fd8f1041a71ceabe755ae82d697314df2419272f17",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/temporal-half-2G/Accepted-AWF-2G/trajectory/case.evolution.json": "917892d9ad98c865e81a8b7e0194108a88217152d66ae92f327aea28796981b3",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/temporal-half-2G/Accepted-AWF-2G/trajectory/case.xml": "939f22cd2ed172c2f73917221d064725a3c50b3d1179c31899455259275d8b72"
+  }
+}

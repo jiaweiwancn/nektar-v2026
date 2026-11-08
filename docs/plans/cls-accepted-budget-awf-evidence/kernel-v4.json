@@ -1,0 +1,1168 @@
+{
+  "schema": 1,
+  "status": "passed",
+  "captured_UTC": "2026-11-08T10:08:16.784008+00:00",
+  "host": "jay-Super-Server",
+  "source_revision": "e0d599bc539b64045f87662d87be31a30fa6b4f3",
+  "source_status": [],
+  "specification_sha256": {
+    "docs/literature/accepted_awf_appendix.tex": "9998548d33bd2ca856bb6cc85551c82b86d3b499fd54ae8dc9ba26453450fdbf",
+    "docs/literature/cls_neutral_abl_equilibrium_awf_note_revised.tex": "d35e437c2f2f8b25a46f7a3f285c6f1ad8b48d7b554aa1d161315f59eeb6de0f"
+  },
+  "source_sha256": {
+    "docs/literature/accepted_awf_appendix.tex": "9998548d33bd2ca856bb6cc85551c82b86d3b499fd54ae8dc9ba26453450fdbf",
+    "docs/literature/cls_neutral_abl_equilibrium_awf_note_revised.tex": "d35e437c2f2f8b25a46f7a3f285c6f1ad8b48d7b554aa1d161315f59eeb6de0f",
+    "solvers/IncNavierStokesSolver/Tests/RANS/validate_cls_accepted_awf_kernel.py": "d6c68203bec78c2b9008b0ee3283ad135e6403750e4923f26001476e1984816f",
+    "library/SolverUtils/Turbulence/EquilibriumAWFProfiles.h": "f86d2ee2877fd538e19d872bf7849ff11677f4002d29a6aeeb1023c986bb00f8",
+    "library/SolverUtils/Turbulence/EquilibriumAWFProfiles.cpp": "b7c047c125f8b01addab17b4214be052c1b397f83b8fd38304c6308e6f89d836",
+    "library/SolverUtils/Turbulence/AnalyticalWallFunction.cpp": "5baf29819fed6b81ad1b042bc09258a3e0779d15de13076b688bf32f80ddcf7e",
+    "library/UnitTests/SolverUtils/RANSAcceptedAWFProbe.cpp": "f972d96169ff0500f518e04bd23234193c1e12f50d83e8820bfea924b2993831"
+  },
+  "thread_environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "ranks": 1,
+  "scope": "calibrated flat analytical reference and metric-weighted frozen scalar columns; no native time evolution or curved PIMPLE claim",
+  "checks": 10827,
+  "executable_sha256": "79b28f015bb55571123349258aa5dd35f45432defaa53dcc21a6b496fa8f1533",
+  "expected_rejections": {
+    "inadmissible_budget": {
+      "status": "inapplicable",
+      "reason": "CLSCalibratedBudgetAWF cutoff_budget_inadmissible; no cutoff clipping",
+      "checks_completed": 0
+    },
+    "invalid_stretch": {
+      "status": "inapplicable",
+      "reason": "Invalid EP-AWF normal-ray metric",
+      "checks_completed": 0
+    },
+    "positive_J_invalid_stretches": {
+      "status": "inapplicable",
+      "reason": "Invalid EP-AWF normal-ray metric",
+      "checks_completed": 0
+    }
+  },
+  "smooth_reference": "cutoff exists, but stationary-reference positivity qualification fails; no clipping",
+  "curved_limitations": [
+    "positive local principal stretches do not establish global normal-map injectivity",
+    "frozen normal-column balance omits actual terrain production, advection and tangential diffusion",
+    "full mapped momentum/continuity, curvature/normal-motion traction, surface normals and conservative fluxes require separate native support",
+    "endpoint K must select the actual matching face and local physical H for future varying-height geometry",
+    "no general volume-positivity theorem or curved time-dependent validation follows"
+  ],
+  "native_invocations": 17,
+  "native_invocation_seconds": 1.695472589082783,
+  "native_orders": [
+    16,
+    32
+  ],
+  "governing_equation_solves": 0,
+  "physical_time_steps": 0,
+  "maximum_native_weak_residual": 2.569609970767481e-16,
+  "maximum_native_scaled_error": 3.51425830040543e-13,
+  "maximum_scaled_rough_closed_integral_difference": 2.9276350031711637e-15,
+  "native_refinement_maxima": {
+    "native_quad_cutoff": 0.0,
+    "native_quad_weak": 9.209905079184972e-17,
+    "native_quad_ground_k": 4.324279223010173e-16
+  },
+  "cases_order16": [
+    {
+      "geometry": {
+        "height": 2,
+        "roughness": 0.1,
+        "molecular_nu": 1.5e-05,
+        "sample_height": 2,
+        "tail_start": 2,
+        "kappa1": 0,
+        "kappa2": 0,
+        "minimum_stretch": 0.1
+      },
+      "model": {
+        "q": 3.1906750816242875,
+        "kappa": 0.4405539051866587,
+        "sigma_k": 1
+      },
+      "wall": {
+        "cMu": 0.09822789532821126,
+        "cLength": 2.5108624752197968,
+        "smoothIntercept": 10.7
+      },
+      "reference": {
+        "K": 0.5105080130598861,
+        "friction_velocity": 0.4,
+        "traction": 0.16000000000000003,
+        "matching_velocity": 5.3797062303890275,
+        "numerator": 0.14527166652372264,
+        "production_budget": 0.8584509754845219,
+        "minimum_budget": 0.14527166652372264,
+        "lambda": 5.909280150953167,
+        "cutoff": 0.014755594641344657,
+        "cutoff_iterations": 0,
+        "budget_residual": 0,
+        "J0": 33.623163939931416,
+        "J1": 9.02043021217897,
+        "J2": 5994.847337819454,
+        "production_weight": 33.533241229864124,
+        "a": 0.1762215620746635,
+        "zv": -0.005272131216726143,
+        "d": 0.0009440631984740773,
+        "aerodynamic_z0": 0.005342939598684074,
+        "ground_k": 1.0229104394926016,
+        "rough_sufficient_positive": true,
+        "flat_energy_lhs": 0.8607529968622446,
+        "flat_energy_rhs": 0.8607529968622446
+      },
+      "weak_modes": [
+        {
+          "degree": 0,
+          "diffusion": 0,
+          "source": 5.438515658550369e-18,
+          "residual": 5.438515658550369e-18,
+          "forced_accepted_source": 0.054691928357523005,
+          "forced_calibrated_ep_source": 0.054691928357523
+        },
+        {
+          "degree": 1,
+          "diffusion": 0.0036004201172840137,
+          "source": -0.0036004201172839694,
+          "residual": 4.436165654654947e-17,
+          "forced_accepted_source": 0.019999933562998447,
+          "forced_calibrated_ep_source": 0.023600353680282415
+        },
+        {
+          "degree": 2,
+          "diffusion": -0.008475434684869138,
+          "source": 0.008475434684869153,
+          "residual": 1.7055008392965337e-17,
+          "forced_accepted_source": -0.005333142558858668,
+          "forced_calibrated_ep_source": -0.013808577243727822
+        },
+        {
+          "degree": 3,
+          "diffusion": 0.013905243695228352,
+          "source": -0.013905243695228338,
+          "residual": 1.2854572007531262e-17,
+          "forced_accepted_source": -0.004129702550363802,
+          "forced_calibrated_ep_source": 0.009775541144864536
+        },
+        {
+          "degree": 4,
+          "diffusion": -0.019453288658186275,
+          "source": 0.01945328865818631,
+          "residual": 3.429636403432662e-17,
+          "forced_accepted_source": 0.012319838722048185,
+          "forced_calibrated_ep_source": -0.007133449936138126
+        },
+        {
+          "degree": 5,
+          "diffusion": 0.02483049266542367,
+          "source": -0.024830492665423642,
+          "residual": 2.5826034561783617e-17,
+          "forced_accepted_source": -0.019483327750752132,
+          "forced_calibrated_ep_source": 0.005347164914671512
+        }
+      ],
+      "sampled_reference_positive": true,
+      "sampled_reference_nonincreasing": true,
+      "name": "flat_H2",
+      "reference_endpoint_fluxes": [
+        0,
+        0
+      ],
+      "native_independent_forced_source_modes": [
+        {
+          "degree": 0,
+          "accepted": 0.054691928357523,
+          "calibrated_ep": 0.05469192835752302
+        },
+        {
+          "degree": 1,
+          "accepted": 0.019999933562998413,
+          "calibrated_ep": 0.023600353680282404
+        },
+        {
+          "degree": 2,
+          "accepted": -0.005333142558858626,
+          "calibrated_ep": -0.013808577243727822
+        },
+        {
+          "degree": 3,
+          "accepted": -0.004129702550363859,
+          "calibrated_ep": 0.009775541144864544
+        },
+        {
+          "degree": 4,
+          "accepted": 0.012319838722048256,
+          "calibrated_ep": -0.007133449936138135
+        },
+        {
+          "degree": 5,
+          "accepted": -0.019483327750752212,
+          "calibrated_ep": 0.005347164914671519
+        }
+      ]
+    },
+    {
+      "geometry": {
+        "height": 0.5,
+        "roughness": 0.1,
+        "molecular_nu": 1.5e-05,
+        "sample_height": 0.5,
+        "tail_start": 0.5,
+        "kappa1": 0,
+        "kappa2": 0,
+        "minimum_stretch": 0.1
+      },
+      "model": {
+        "q": 3.1906750816242875,
+        "kappa": 0.4405539051866587,
+        "sigma_k": 1
+      },
+      "wall": {
+        "cMu": 0.09822789532821126,
+        "cLength": 2.5108624752197968,
+        "smoothIntercept": 10.7
+      },
+      "reference": {
+        "K": 0.5105080130598861,
+        "friction_velocity": 0.4,
+        "traction": 0.16000000000000003,
+        "matching_velocity": 4.128270816644429,
+        "numerator": 0.14527166652372264,
+        "production_budget": 0.6582396119421656,
+        "minimum_budget": 0.14527166652372264,
+        "lambda": 4.531094243588623,
+        "cutoff": 0.01463643334436998,
+        "cutoff_iterations": 0,
+        "budget_residual": 0,
+        "J0": 25.801692604027675,
+        "J1": 1.3324672231417554,
+        "J2": 5947.1841691226455,
+        "production_weight": 25.712484841490834,
+        "a": 0.1762215620746635,
+        "zv": -0.005272131216726143,
+        "d": 0.0009440631984740773,
+        "aerodynamic_z0": 0.005300459545885667,
+        "ground_k": 0.9942980290880846,
+        "rough_sufficient_positive": true,
+        "flat_energy_lhs": 0.6605233306631088,
+        "flat_energy_rhs": 0.6605233306631088
+      },
+      "weak_modes": [
+        {
+          "degree": 0,
+          "diffusion": 0,
+          "source": -3.198637573339828e-17,
+          "residual": -3.198637573339828e-17,
+          "forced_accepted_source": 0.049403299799137844,
+          "forced_calibrated_ep_source": 0.04940329979913788
+        },
+        {
+          "degree": 1,
+          "diffusion": 0.01007779732145044,
+          "source": -0.010077797321450423,
+          "residual": 1.8074836061459515e-17,
+          "forced_accepted_source": -0.029027280591487927,
+          "forced_calibrated_ep_source": -0.018949483270037502
+        },
+        {
+          "degree": 2,
+          "diffusion": -0.021338262447358192,
+          "source": 0.021338262447358175,
+          "residual": -1.7677577609197248e-17,
+          "forced_accepted_source": 0.03580846175821863,
+          "forced_calibrated_ep_source": 0.014470199310860453
+        },
+        {
+          "degree": 3,
+          "diffusion": 0.031470333445006264,
+          "source": -0.031470333445006264,
+          "residual": -2.7206698265808127e-18,
+          "forced_accepted_source": -0.04242725466416381,
+          "forced_calibrated_ep_source": -0.010956921219157544
+        },
+        {
+          "degree": 4,
+          "diffusion": -0.03939986757371771,
+          "source": 0.0393998675737177,
+          "residual": -1.0933501283158509e-17,
+          "forced_accepted_source": 0.047558518869147276,
+          "forced_calibrated_ep_source": 0.00815865129542957
+        },
+        {
+          "degree": 5,
+          "diffusion": 0.044701147280675466,
+          "source": -0.04470114728067545,
+          "residual": 1.463672932855431e-17,
+          "forced_accepted_source": -0.050689717315719834,
+          "forced_calibrated_ep_source": -0.005988570035044382
+        }
+      ],
+      "sampled_reference_positive": true,
+      "sampled_reference_nonincreasing": true,
+      "name": "flat_H05",
+      "reference_endpoint_fluxes": [
+        0,
+        0
+      ],
+      "native_independent_forced_source_modes": [
+        {
+          "degree": 0,
+          "accepted": 0.049403299799138,
+          "calibrated_ep": 0.04940329979913794
+        },
+        {
+          "degree": 1,
+          "accepted": -0.029027280591488097,
+          "calibrated_ep": -0.018949483270037537
+        },
+        {
+          "degree": 2,
+          "accepted": 0.03580846175821879,
+          "calibrated_ep": 0.01447019931086047
+        },
+        {
+          "degree": 3,
+          "accepted": -0.04242725466416398,
+          "calibrated_ep": -0.010956921219157563
+        },
+        {
+          "degree": 4,
+          "accepted": 0.04755851886914743,
+          "calibrated_ep": 0.008158651295429588
+        },
+        {
+          "degree": 5,
+          "accepted": -0.05068971731571997,
+          "calibrated_ep": -0.005988570035044402
+        }
+      ]
+    },
+    {
+      "geometry": {
+        "height": 2,
+        "roughness": 0,
+        "molecular_nu": 1.5e-05,
+        "sample_height": 2,
+        "tail_start": 2,
+        "kappa1": 0,
+        "kappa2": 0,
+        "minimum_stretch": 0.1
+      },
+      "model": {
+        "q": 3.1906750816242875,
+        "kappa": 0.4405539051866587,
+        "sigma_k": 1
+      },
+      "wall": {
+        "cMu": 0.09822789532821126,
+        "cLength": 2.5108624752197968,
+        "smoothIntercept": 10.7
+      },
+      "reference": {
+        "K": 0.5105080130598861,
+        "friction_velocity": 0.4,
+        "traction": 0.16000000000000003,
+        "matching_velocity": 11.534150539284129,
+        "numerator": 0.14527166652372264,
+        "production_budget": 1.3168247749306248,
+        "minimum_budget": 0.14527166652372264,
+        "lambda": 9.064567141284838,
+        "cutoff": 0.0006289744257189159,
+        "cutoff_iterations": 0,
+        "budget_residual": 0,
+        "J0": 72.08844087052579,
+        "J1": 11.357724219731795,
+        "J2": 1376664.873319885,
+        "production_weight": 51.438467770727506,
+        "a": 0.1762215620746635,
+        "zv": 0.00022463310236312396,
+        "d": -2.458519619210749e-05,
+        "aerodynamic_z0": 6.080701580150705e-06,
+        "ground_k": -0.30406769418146273,
+        "rough_sufficient_positive": false,
+        "flat_energy_lhs": 1.845464086285461,
+        "flat_energy_rhs": 1.8454640862854608
+      },
+      "weak_modes": [
+        {
+          "degree": 0,
+          "diffusion": 0,
+          "source": -1.5093287112828147e-16,
+          "residual": -1.5093287112828147e-16,
+          "forced_accepted_source": 0.06636639985789854,
+          "forced_calibrated_ep_source": 0.06636639985789869
+        },
+        {
+          "degree": 1,
+          "diffusion": -7.231411779152707e-05,
+          "source": 7.231411779139369e-05,
+          "residual": -1.3339255509606503e-16,
+          "forced_accepted_source": 0.022808186505566458,
+          "forced_calibrated_ep_source": 0.022735872387775063
+        },
+        {
+          "degree": 2,
+          "diffusion": 0.00019324456095861162,
+          "source": -0.00019324456095878707,
+          "residual": -1.7544466381536235e-16,
+          "forced_accepted_source": -0.01705543226606036,
+          "forced_calibrated_ep_source": -0.01686218770510157
+        },
+        {
+          "degree": 3,
+          "diffusion": -0.0003549013406846186,
+          "source": 0.00035490134068451664,
+          "residual": -1.0196984959697213e-16,
+          "forced_accepted_source": 0.015364258137152116,
+          "forced_calibrated_ep_source": 0.0150093567964676
+        },
+        {
+          "degree": 4,
+          "diffusion": 0.0005520319187225342,
+          "source": -0.0005520319187226516,
+          "residual": -1.1750353387710954e-16,
+          "forced_accepted_source": -0.014171835314672173,
+          "forced_calibrated_ep_source": -0.013619803395949521
+        },
+        {
+          "degree": 5,
+          "diffusion": -0.0007807036241860139,
+          "source": 0.0007807036241858767,
+          "residual": -1.3710969962808643e-16,
+          "forced_accepted_source": 0.013289070617141557,
+          "forced_calibrated_ep_source": 0.01250836699295568
+        }
+      ],
+      "sampled_reference_positive": false,
+      "sampled_reference_nonincreasing": false,
+      "name": "smooth_H2",
+      "reference_endpoint_fluxes": [
+        0,
+        0
+      ],
+      "native_independent_forced_source_modes": [
+        {
+          "degree": 0,
+          "accepted": 0.06636639985789879,
+          "calibrated_ep": 0.06636639985789873
+        },
+        {
+          "degree": 1,
+          "accepted": 0.022808186505566166,
+          "calibrated_ep": 0.02273587238777502
+        },
+        {
+          "degree": 2,
+          "accepted": -0.017055432266060058,
+          "calibrated_ep": -0.01686218770510154
+        },
+        {
+          "degree": 3,
+          "accepted": 0.0153642581371518,
+          "calibrated_ep": 0.01500935679646757
+        },
+        {
+          "degree": 4,
+          "accepted": -0.014171835314671853,
+          "calibrated_ep": -0.013619803395949504
+        },
+        {
+          "degree": 5,
+          "accepted": 0.01328907061714123,
+          "calibrated_ep": 0.012508366992955664
+        }
+      ]
+    },
+    {
+      "geometry": {
+        "height": 2,
+        "roughness": 0.1,
+        "molecular_nu": 1.5e-05,
+        "sample_height": 2,
+        "tail_start": 2,
+        "kappa1": 0.1,
+        "kappa2": 0,
+        "minimum_stretch": 0.1
+      },
+      "model": {
+        "q": 3.1906750816242875,
+        "kappa": 0.4405539051866587,
+        "sigma_k": 1
+      },
+      "wall": {
+        "cMu": 0.09822789532821126,
+        "cLength": 2.5108624752197968,
+        "smoothIntercept": 10.7
+      },
+      "reference": {
+        "K": 0.5105080130598861,
+        "friction_velocity": 0.4,
+        "traction": 0.16000000000000003,
+        "matching_velocity": 5.3797062303890275,
+        "numerator": 0.14527166652372264,
+        "production_budget": 0.8870380882863332,
+        "minimum_budget": 0.15979883317609492,
+        "lambda": 6.106063966310191,
+        "cutoff": 0.014792183273769513,
+        "cutoff_iterations": 53,
+        "budget_residual": 1.1102230246251565e-16,
+        "J0": 33.623163939931416,
+        "J1": 9.02043021217897,
+        "J2": 5994.847337819454,
+        "production_weight": 33.533241229864124,
+        "a": 0.1762215620746635,
+        "zv": -0.005272131216726143,
+        "d": 0.0009440631984740773,
+        "aerodynamic_z0": 0.005342939598684074,
+        "ground_k": 1.0269670087144094,
+        "rough_sufficient_positive": false,
+        "flat_energy_lhs": 0.8607529968622446,
+        "flat_energy_rhs": 0.8607529968622446
+      },
+      "weak_modes": [
+        {
+          "degree": 0,
+          "diffusion": 0,
+          "source": -1.6637734155112757e-16,
+          "residual": -1.6637734155112757e-16,
+          "forced_accepted_source": 0.06252115656130337,
+          "forced_calibrated_ep_source": 0.06252115656130354
+        },
+        {
+          "degree": 1,
+          "diffusion": 0.003752814898360817,
+          "source": -0.0037528148983609557,
+          "residual": -1.3867030489384327e-16,
+          "forced_accepted_source": 0.023110066612285284,
+          "forced_calibrated_ep_source": 0.02686288151064624
+        },
+        {
+          "degree": 2,
+          "diffusion": -0.00869674725578422,
+          "source": 0.008696747255784065,
+          "residual": -1.5358231993025523e-16,
+          "forced_accepted_source": -0.004962141096413373,
+          "forced_calibrated_ep_source": -0.013658888352197439
+        },
+        {
+          "degree": 3,
+          "diffusion": 0.014165194896723817,
+          "source": -0.014165194896723972,
+          "residual": -1.5353149795341997e-16,
+          "forced_accepted_source": -0.004411521515597778,
+          "forced_calibrated_ep_source": 0.009753673381126194
+        },
+        {
+          "degree": 4,
+          "diffusion": -0.019735158798581162,
+          "source": 0.01973515879858101,
+          "residual": -1.5003664001304873e-16,
+          "forced_accepted_source": 0.012619897081638132,
+          "forced_calibrated_ep_source": -0.007115261716942879
+        },
+        {
+          "degree": 5,
+          "diffusion": 0.0251231793921939,
+          "source": -0.025123179392194037,
+          "residual": -1.3513563640495108e-16,
+          "forced_accepted_source": -0.01979074671598957,
+          "forced_calibrated_ep_source": 0.005332432676204463
+        }
+      ],
+      "sampled_reference_positive": true,
+      "sampled_reference_nonincreasing": true,
+      "name": "curved_positive",
+      "reference_endpoint_fluxes": [
+        0,
+        1.1102230246251565e-16
+      ],
+      "native_independent_forced_source_modes": [
+        {
+          "degree": 0,
+          "accepted": 0.06252115656130362,
+          "calibrated_ep": 0.06252115656130357
+        },
+        {
+          "degree": 1,
+          "accepted": 0.023110066612284992,
+          "calibrated_ep": 0.026862881510646225
+        },
+        {
+          "degree": 2,
+          "accepted": -0.004962141096413075,
+          "calibrated_ep": -0.013658888352197435
+        },
+        {
+          "degree": 3,
+          "accepted": -0.004411521515598086,
+          "calibrated_ep": 0.009753673381126197
+        },
+        {
+          "degree": 4,
+          "accepted": 0.012619897081638446,
+          "calibrated_ep": -0.007115261716942885
+        },
+        {
+          "degree": 5,
+          "accepted": -0.01979074671598989,
+          "calibrated_ep": 0.005332432676204468
+        }
+      ]
+    },
+    {
+      "geometry": {
+        "height": 2,
+        "roughness": 0.1,
+        "molecular_nu": 1.5e-05,
+        "sample_height": 2,
+        "tail_start": 2,
+        "kappa1": -0.1,
+        "kappa2": 0,
+        "minimum_stretch": 0.1
+      },
+      "model": {
+        "q": 3.1906750816242875,
+        "kappa": 0.4405539051866587,
+        "sigma_k": 1
+      },
+      "wall": {
+        "cMu": 0.09822789532821126,
+        "cLength": 2.5108624752197968,
+        "smoothIntercept": 10.7
+      },
+      "reference": {
+        "K": 0.5105080130598861,
+        "friction_velocity": 0.4,
+        "traction": 0.16000000000000003,
+        "matching_velocity": 5.3797062303890275,
+        "numerator": 0.14527166652372264,
+        "production_budget": 0.8298638626827106,
+        "minimum_budget": 0.13074449987135037,
+        "lambda": 5.7124963355961444,
+        "cutoff": 0.01471904268324326,
+        "cutoff_iterations": 53,
+        "budget_residual": 2.220446049250313e-16,
+        "J0": 33.623163939931416,
+        "J1": 9.02043021217897,
+        "J2": 5994.847337819454,
+        "production_weight": 33.533241229864124,
+        "a": 0.1762215620746635,
+        "zv": -0.005272131216726143,
+        "d": 0.0009440631984740773,
+        "aerodynamic_z0": 0.005342939598684074,
+        "ground_k": 1.0187698274334802,
+        "rough_sufficient_positive": false,
+        "flat_energy_lhs": 0.8607529968622446,
+        "flat_energy_rhs": 0.8607529968622446
+      },
+      "weak_modes": [
+        {
+          "degree": 0,
+          "diffusion": 0,
+          "source": -2.0622479504530147e-16,
+          "residual": -2.0622479504530147e-16,
+          "forced_accepted_source": 0.04686270015374225,
+          "forced_calibrated_ep_source": 0.046862700153742456
+        },
+        {
+          "degree": 1,
+          "diffusion": 0.0034480174462644484,
+          "source": -0.0034480174462646353,
+          "residual": -1.8694737123907575e-16,
+          "forced_accepted_source": 0.016889808403653964,
+          "forced_calibrated_ep_source": 0.020337825849918598
+        },
+        {
+          "degree": 2,
+          "diffusion": -0.008254098667330663,
+          "source": 0.008254098667330467,
+          "residual": -1.9715200067112193e-16,
+          "forced_accepted_source": -0.005704167467927745,
+          "forced_calibrated_ep_source": -0.01395826613525821
+        },
+        {
+          "degree": 3,
+          "diffusion": 0.013645246264077562,
+          "source": -0.013645246264077761,
+          "residual": -1.9845812547578806e-16,
+          "forced_accepted_source": -0.0038478373554748767,
+          "forced_calibrated_ep_source": 0.009797408908602884
+        },
+        {
+          "degree": 4,
+          "diffusion": -0.019171342924465054,
+          "source": 0.019171342924464874,
+          "residual": -1.7936261471288711e-16,
+          "forced_accepted_source": 0.012019704769131495,
+          "forced_calibrated_ep_source": -0.007151638155333379
+        },
+        {
+          "degree": 5,
+          "diffusion": 0.024537695234643084,
+          "source": -0.024537695234643293,
+          "residual": -2.0936282763873992e-16,
+          "forced_accepted_source": -0.019175798081504727,
+          "forced_calibrated_ep_source": 0.005361897153138565
+        }
+      ],
+      "sampled_reference_positive": true,
+      "sampled_reference_nonincreasing": true,
+      "name": "curved_negative",
+      "reference_endpoint_fluxes": [
+        0,
+        2.220446049250313e-16
+      ],
+      "native_independent_forced_source_modes": [
+        {
+          "degree": 0,
+          "accepted": 0.04686270015374237,
+          "calibrated_ep": 0.04686270015374248
+        },
+        {
+          "degree": 1,
+          "accepted": 0.016889808403653804,
+          "calibrated_ep": 0.020337825849918584
+        },
+        {
+          "degree": 2,
+          "accepted": -0.005704167467927578,
+          "calibrated_ep": -0.013958266135258208
+        },
+        {
+          "degree": 3,
+          "accepted": -0.003847837355475054,
+          "calibrated_ep": 0.00979740890860289
+        },
+        {
+          "degree": 4,
+          "accepted": 0.012019704769131681,
+          "calibrated_ep": -0.007151638155333386
+        },
+        {
+          "degree": 5,
+          "accepted": -0.01917579808150492,
+          "calibrated_ep": 0.00536189715313857
+        }
+      ]
+    },
+    {
+      "geometry": {
+        "height": 2,
+        "roughness": 0.1,
+        "molecular_nu": 1.5e-05,
+        "sample_height": 2,
+        "tail_start": 2,
+        "kappa1": 0.12,
+        "kappa2": -0.06,
+        "minimum_stretch": 0.1
+      },
+      "model": {
+        "q": 3.1906750816242875,
+        "kappa": 0.4405539051866587,
+        "sigma_k": 1
+      },
+      "wall": {
+        "cMu": 0.09822789532821126,
+        "cLength": 2.5108624752197968,
+        "smoothIntercept": 10.7
+      },
+      "reference": {
+        "K": 0.5105080130598861,
+        "friction_velocity": 0.4,
+        "traction": 0.16000000000000003,
+        "matching_velocity": 5.3797062303890275,
+        "numerator": 0.14527166652372264,
+        "production_budget": 0.8735225330864455,
+        "minimum_budget": 0.15259335851651826,
+        "lambda": 6.013027550308997,
+        "cutoff": 0.014776408356599258,
+        "cutoff_iterations": 53,
+        "budget_residual": -1.1102230246251565e-16,
+        "J0": 33.623163939931416,
+        "J1": 9.02043021217897,
+        "J2": 5994.847337819454,
+        "production_weight": 33.533241229864124,
+        "a": 0.1762215620746635,
+        "zv": -0.005272131216726143,
+        "d": 0.0009440631984740773,
+        "aerodynamic_z0": 0.005342939598684074,
+        "ground_k": 1.025122739031064,
+        "rough_sufficient_positive": false,
+        "flat_energy_lhs": 0.8607529968622446,
+        "flat_energy_rhs": 0.8607529968622446
+      },
+      "weak_modes": [
+        {
+          "degree": 0,
+          "diffusion": 0,
+          "source": 7.892922032670046e-17,
+          "residual": 7.892922032670046e-17,
+          "forced_accepted_source": 0.05859085884533301,
+          "forced_calibrated_ep_source": 0.05859085884533293
+        },
+        {
+          "degree": 1,
+          "diffusion": 0.0036806166988367825,
+          "source": -0.0036806166988367127,
+          "residual": 6.964728408798485e-17,
+          "forced_accepted_source": 0.021447265132193607,
+          "forced_calibrated_ep_source": 0.025127881831030322
+        },
+        {
+          "degree": 2,
+          "diffusion": -0.008597177618978033,
+          "source": 0.008597177618978094,
+          "residual": 6.034940342597439e-17,
+          "forced_accepted_source": -0.005225380004142665,
+          "forced_calibrated_ep_source": -0.013822557623120759
+        },
+        {
+          "degree": 3,
+          "diffusion": 0.014050434819263356,
+          "source": -0.014050434819263253,
+          "residual": 1.0168630531787876e-16,
+          "forced_accepted_source": -0.004291807140466677,
+          "forced_calibrated_ep_source": 0.009758627678796575
+        },
+        {
+          "degree": 4,
+          "diffusion": -0.019611967093850026,
+          "source": 0.019611967093850102,
+          "residual": 7.818622322925545e-17,
+          "forced_accepted_source": 0.012489409595425379,
+          "forced_calibrated_ep_source": -0.007122557498424724
+        },
+        {
+          "degree": 5,
+          "diffusion": 0.02499606530223508,
+          "source": -0.024996065302234995,
+          "residual": 8.169463369678276e-17,
+          "forced_accepted_source": -0.019657726220939607,
+          "forced_calibrated_ep_source": 0.005338339081295388
+        }
+      ],
+      "sampled_reference_positive": true,
+      "sampled_reference_nonincreasing": true,
+      "name": "curved_mixed",
+      "reference_endpoint_fluxes": [
+        0,
+        -1.1102230246251565e-16
+      ],
+      "native_independent_forced_source_modes": [
+        {
+          "degree": 0,
+          "accepted": 0.05859085884533301,
+          "calibrated_ep": 0.05859085884533295
+        },
+        {
+          "degree": 1,
+          "accepted": 0.021447265132193572,
+          "calibrated_ep": 0.02512788183103031
+        },
+        {
+          "degree": 2,
+          "accepted": -0.005225380004142625,
+          "calibrated_ep": -0.013822557623120759
+        },
+        {
+          "degree": 3,
+          "accepted": -0.004291807140466732,
+          "calibrated_ep": 0.009758627678796584
+        },
+        {
+          "degree": 4,
+          "accepted": 0.012489409595425445,
+          "calibrated_ep": -0.007122557498424734
+        },
+        {
+          "degree": 5,
+          "accepted": -0.019657726220939687,
+          "calibrated_ep": 0.005338339081295395
+        }
+      ]
+    },
+    {
+      "geometry": {
+        "height": 0.5,
+        "roughness": 0.1,
+        "molecular_nu": 1.5e-05,
+        "sample_height": 0.5,
+        "tail_start": 0.5,
+        "kappa1": 0,
+        "kappa2": 0,
+        "minimum_stretch": 0.1
+      },
+      "model": {
+        "q": 3.1906750816242875,
+        "kappa": 0.4405539051866587,
+        "sigma_k": 1
+      },
+      "wall": {
+        "cMu": 0.09822789532821126,
+        "cLength": 2.5108624752197968,
+        "smoothIntercept": 10.7
+      },
+      "reference": {
+        "K": 0.7,
+        "friction_velocity": 0.46839012432040633,
+        "traction": 0.2193893085608857,
+        "matching_velocity": 4.821921275624142,
+        "numerator": 0.23325133270096163,
+        "production_budget": 1.0547830169743506,
+        "minimum_budget": 0.23325133270096163,
+        "lambda": 4.5220878473034425,
+        "cutoff": 0.014768850267830832,
+        "cutoff_iterations": 0,
+        "budget_residual": 0,
+        "J0": 21.97883437098278,
+        "J1": 1.1376775698743058,
+        "J2": 4286.793155456317,
+        "production_weight": 21.914532473650937,
+        "a": 0.20635109842021956,
+        "zv": -0.005346965054120227,
+        "d": 0.0011183521121322377,
+        "aerodynamic_z0": 0.005361541269210022,
+        "ground_k": 1.3624118446061901,
+        "rough_sufficient_positive": true,
+        "flat_energy_lhs": 1.0578779745942044,
+        "flat_energy_rhs": 1.0578779745942046
+      },
+      "weak_modes": [
+        {
+          "degree": 0,
+          "diffusion": 0,
+          "source": -1.1435858822509926e-17,
+          "residual": -1.1435858822509926e-17,
+          "forced_accepted_source": 0.06739687425660408,
+          "forced_calibrated_ep_source": 0.0673968742566041
+        },
+        {
+          "degree": 1,
+          "diffusion": 0.01628413488969497,
+          "source": -0.016284134889694938,
+          "residual": 3.3261289772781866e-17,
+          "forced_accepted_source": -0.044120565421053054,
+          "forced_calibrated_ep_source": -0.02783643053135812
+        },
+        {
+          "degree": 2,
+          "diffusion": -0.03444630798222883,
+          "source": 0.034446307982228835,
+          "residual": 4.587530442329291e-18,
+          "forced_accepted_source": 0.05511298460607834,
+          "forced_calibrated_ep_source": 0.020666676623849505
+        },
+        {
+          "degree": 3,
+          "diffusion": 0.05075140856052087,
+          "source": -0.05075140856052088,
+          "residual": -2.40896170199123e-18,
+          "forced_accepted_source": -0.06620666946804996,
+          "forced_calibrated_ep_source": -0.015455260907529078
+        },
+        {
+          "degree": 4,
+          "diffusion": -0.0634698895095694,
+          "source": 0.06346988950956935,
+          "residual": -4.8721335126067356e-17,
+          "forced_accepted_source": 0.07493226615141288,
+          "forced_calibrated_ep_source": 0.011462376641843526
+        },
+        {
+          "degree": 5,
+          "diffusion": 0.07192327552983709,
+          "source": -0.07192327552983713,
+          "residual": -5.368156006518854e-17,
+          "forced_accepted_source": -0.08035084465583142,
+          "forced_calibrated_ep_source": -0.00842756912599429
+        }
+      ],
+      "sampled_reference_positive": true,
+      "sampled_reference_nonincreasing": true,
+      "name": "current_K",
+      "reference_endpoint_fluxes": [
+        0,
+        0
+      ],
+      "native_independent_forced_source_modes": [
+        {
+          "degree": 0,
+          "accepted": 0.06739687425660448,
+          "calibrated_ep": 0.06739687425660444
+        },
+        {
+          "degree": 1,
+          "accepted": -0.04412056542105335,
+          "calibrated_ep": -0.027836430531358303
+        },
+        {
+          "degree": 2,
+          "accepted": 0.05511298460607859,
+          "calibrated_ep": 0.02066667662384963
+        },
+        {
+          "degree": 3,
+          "accepted": -0.06620666946805018,
+          "calibrated_ep": -0.015455260907529174
+        },
+        {
+          "degree": 4,
+          "accepted": 0.07493226615141307,
+          "calibrated_ep": 0.011462376641843595
+        },
+        {
+          "degree": 5,
+          "accepted": -0.0803508446558316,
+          "calibrated_ep": -0.008427569125994345
+        }
+      ]
+    }
+  ],
+  "old_campaign_observation_UTC": "2026-11-08T10:09:22.574545+00:00",
+  "old_campaigns": {
+    "repaired_graded": {
+      "status": "running",
+      "accepted_steps": 261.0,
+      "accepted_time": 0.16312499999999927,
+      "next_target": 800.0,
+      "failure": null,
+      "checkpoint_copy": "/media/jay/新加卷/nektar-v2026-runs/cls-accepted-budget-awf-20261108/observations/old-campaigns-during-new-runs-checkpoints/repaired_graded/checkpoint",
+      "checkpoint_sha256": "4512255f353643a67669d17f17024ef6782241baaa5c9cdc5f3cc7ebf8592115",
+      "driver_matches": true,
+      "native_matches": true,
+      "supervisor_matches": true,
+      "executable_sha256": "c016c85792ee2d41a72ade53ed88afabff93623c434d01bf701f1db168dd6525",
+      "executable_verified": true,
+      "frozen_library_mismatches": [],
+      "computational_threads": {
+        "NUMEXPR_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1"
+      }
+    },
+    "upstream_one": {
+      "status": "running",
+      "accepted_steps": 2576.0,
+      "accepted_time": 1.6100000000000767,
+      "next_target": 3200.0,
+      "failure": null,
+      "checkpoint_copy": "/media/jay/新加卷/nektar-v2026-runs/cls-accepted-budget-awf-20261108/observations/old-campaigns-during-new-runs-checkpoints/upstream_one/checkpoint",
+      "checkpoint_sha256": "c83c2b226e722da7109dce03e44c9c2f2bde56fcc34b0508f60baa83177c3aeb",
+      "driver_matches": true,
+      "native_matches": true,
+      "supervisor_matches": true,
+      "executable_sha256": "255190519d8dc7e9fa66e6fdf91acdc802d9562541a9b1d245f7c6d83fb7afbd",
+      "executable_verified": true,
+      "frozen_library_mismatches": [],
+      "computational_threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      }
+    },
+    "uniform_G": {
+      "status": "running",
+      "accepted_steps": 3073.0,
+      "accepted_time": 1.9206250000001253,
+      "next_target": 3200.0,
+      "failure": null,
+      "checkpoint_copy": "/media/jay/新加卷/nektar-v2026-runs/cls-accepted-budget-awf-20261108/observations/old-campaigns-during-new-runs-checkpoints/uniform_G/checkpoint",
+      "checkpoint_sha256": "384daeebb76c43db4eafdd5bb2e3f74149aa3fb2f07d3888826d177d4ac80118",
+      "driver_matches": true,
+      "native_matches": true,
+      "supervisor_matches": true,
+      "executable_sha256": "aa1071c74de72601f47c97ed413995434e1496dba07095ee970ac361825cb98d",
+      "executable_verified": true,
+      "frozen_library_mismatches": [],
+      "computational_threads": {
+        "NUMEXPR_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1"
+      }
+    },
+    "uniform_H": {
+      "status": "running",
+      "accepted_steps": 3938.0,
+      "accepted_time": 2.461250000000046,
+      "next_target": 8000.0,
+      "failure": null,
+      "checkpoint_copy": "/media/jay/新加卷/nektar-v2026-runs/cls-accepted-budget-awf-20261108/observations/old-campaigns-during-new-runs-checkpoints/uniform_H/checkpoint",
+      "checkpoint_sha256": "d0415b0a1dc65894e9c6d1d256b5f6cc8c2a45e1c436f5552984b9f459b59935",
+      "driver_matches": true,
+      "native_matches": true,
+      "supervisor_matches": true,
+      "executable_sha256": "aa1071c74de72601f47c97ed413995434e1496dba07095ee970ac361825cb98d",
+      "executable_verified": true,
+      "frozen_library_mismatches": [],
+      "computational_threads": {
+        "NUMEXPR_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1"
+      }
+    }
+  },
+  "artifacts": [
+    {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-accepted-budget-awf-20261108/kernel-native-v4/validation.json",
+      "sha256": "efc6ce84bbf02cd3869f7c93be41dbc93ee18179735f4a18c1a3c0691439872f",
+      "bytes": 151178,
+      "role": "full authoritative independent oracle receipt"
+    },
+    {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-accepted-budget-awf-20261108/runtime-v4/kernel/identity.json",
+      "sha256": "34e9620b4eb7447f6cac6fd896c10de8b88328bb5e78efa9c0cd2ec38c4d9dc5",
+      "bytes": 3741,
+      "role": "frozen kernel executable/library closure"
+    },
+    {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-accepted-budget-awf-20261108/observations/old-campaigns-during-new-runs.json",
+      "sha256": "a6dec57ec1dabf6c639ea8d9b0c08d62344bc74d7cdbd7f9d6be11354fbaf1c5",
+      "bytes": 27772,
+      "role": "read-only existing-campaign observation"
+    },
+    {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-accepted-budget-awf-20261108/observations/old-campaigns-during-new-runs-checkpoints/repaired_graded/checkpoint/State.bin",
+      "sha256": "4512255f353643a67669d17f17024ef6782241baaa5c9cdc5f3cc7ebf8592115",
+      "bytes": 138788,
+      "role": "immutable existing accepted checkpoint copy"
+    },
+    {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-accepted-budget-awf-20261108/observations/old-campaigns-during-new-runs-checkpoints/upstream_one/checkpoint/State.bin",
+      "sha256": "c83c2b226e722da7109dce03e44c9c2f2bde56fcc34b0508f60baa83177c3aeb",
+      "bytes": 112017,
+      "role": "immutable existing accepted checkpoint copy"
+    },
+    {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-accepted-budget-awf-20261108/observations/old-campaigns-during-new-runs-checkpoints/uniform_G/checkpoint/State.bin",
+      "sha256": "384daeebb76c43db4eafdd5bb2e3f74149aa3fb2f07d3888826d177d4ac80118",
+      "bytes": 138861,
+      "role": "immutable existing accepted checkpoint copy"
+    },
+    {
+      "path": "/media/jay/新加卷/nektar-v2026-runs/cls-accepted-budget-awf-20261108/observations/old-campaigns-during-new-runs-checkpoints/uniform_H/checkpoint/State.bin",
+      "sha256": "d0415b0a1dc65894e9c6d1d256b5f6cc8c2a45e1c436f5552984b9f459b59935",
+      "bytes": 112090,
+      "role": "immutable existing accepted checkpoint copy"
+    }
+  ],
+  "prior_oracle_receipt": "kernel-native-v1 retained; zero-budget-residual scaling bug in oracle only corrected using physical production scale in v2/v4; no native/model/acceptance change"
+}

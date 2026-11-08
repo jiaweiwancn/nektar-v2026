@@ -17,8 +17,11 @@ from run_cls_epawf_picard import THREADS,load,require,run,write_json,state_hash,
 from run_cls_epawf_pimple import identity
 from continue_cls_epawf_pimple import atomic,header
 
+_created_output=None
+
 
 def main():
+    global _created_output
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--solver',type=Path,required=True)
     p.add_argument('--probe',type=Path);p.add_argument('--output',type=Path,required=True)
     p.add_argument('--case',choices=tuple(CASES),default='Accepted-AWF-2G')
@@ -26,11 +29,13 @@ def main():
     p.add_argument('--companion',choices=COMPANIONS,default='faithful');p.add_argument('--companion-reason',default='')
     p.add_argument('--perturbation',type=float,default=0.);a=p.parse_args()
     require(platform.system()=='Linux','authoritative native tests run on Linux');os.environ.update(THREADS)
-    a.output=a.output.resolve();a.output.mkdir(parents=True,exist_ok=False);a.solver=a.solver.resolve()
+    a.output=a.output.resolve();a.output.mkdir(parents=True,exist_ok=False)
+    _created_output=a.output;a.solver=a.solver.resolve()
     summary=dict(status='started',case=a.case,companion=a.companion,solver=identity(a.solver),
         production_governing_solves=0,test_governing_solves_per_equation=0,ranks=1,threads=THREADS,
         steps_are='independent verification trajectories, not hidden production work')
     def save(**values):summary.update(values);atomic(a.output/'summary.json',summary)
+    save()
     def native(name,steps,cp=None,reject=0,mutate=None,case=None,companion=None):
         directory=a.output/name;xml=case_xml(case or a.case,directory,steps,restart=cp,
             companion=companion or a.companion,companion_reason=a.companion_reason or 'verification-only incompatible model',
@@ -150,4 +155,15 @@ def main():
     print(a.output/'summary.json')
 
 
-if __name__=='__main__':main()
+if __name__=='__main__':
+    try:main()
+    except Exception as error:
+        # A focused-check failure must not leave its progress labelled started.
+        # Preserve every candidate/result; only publish the test's terminal status.
+        if _created_output is not None:
+            output=_created_output
+            summary=output/'summary.json'
+            previous=load(summary) if summary.exists() else {}
+            previous.update(status='test_failed',failure=str(error))
+            atomic(summary,previous)
+        raise
