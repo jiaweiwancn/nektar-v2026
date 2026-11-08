@@ -1,5 +1,17 @@
 # CLS-calibrated budget AWF: implementation and native evolution
 
+**2026-11-09 follow-up:** the [covariance-stage and failure-horizon report](cls-accepted-awf-covariance.md)
+adds strict immutable intermediate-stage readback, independent tensor/tangent
+verification, full same-state Original-operator comparisons, and completed
+fresh faithful controls. Half-dt rejects at T=.090625; outer pressure p2 rejects
+at T=.109375, compared with the archived refined baseline T=.09875. Both first
+lose outer covariance after flow with unchanged turbulence coefficients.
+The cutoff-refined Regularized/Linear continuation remains running, without
+bounding; the latest verified dated table and checkpoint identities are in
+that report and its [native evidence](cls-accepted-budget-awf-evidence/covariance/native.json).
+The preceding implementation and historical campaign snapshots below remain
+preserved. These new results do not establish steady or temporal convergence.
+
 Branch `codex/cls-epawf-pimple-one-sweep`, 2026-11-08. Inspected local and
 remote base: `bc33b7e511fc599e5be98200b5afb0f9def0ce09`; no reset or checkpoint
 migration. The model implementation and authoritative production build are
