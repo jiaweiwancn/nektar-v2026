@@ -51,6 +51,20 @@ def main():
             require(d['model_choices']==base['model_choices'] and d['z_K']==d['z_m']==base['H'] and
                 d['tensor_unknown_estimate']<=3000 and d['inner_refinement']=='cutoff-v1','focused representation changed model or pilot scope')
         rejects(lambda:case_xml('Accepted-AWF-05O',root/'hidden-refinement',0,inner_refinement='cutoff-v1'),'graded follow-up')
+        xml=case_xml('Accepted-AWF-2G',root/'outer-pressure-p2',0,inner_refinement='cutoff-v1',outer_refinement='pressure-p2-v1',checkpoint_every=1)
+        d=load(xml.parent/'definition.json');tree=ET.parse(xml).getroot()
+        require(d['tensor_unknown_estimate']==2866 and d['pressure_degree']==dict(inner=1,outer=2),
+            'outer pressure control changed pilot estimate or pressure degrees')
+        require(d['radial_knots']==sorted(set(definitions['Accepted-AWF-2G']['radial_knots']+[.0025,.005,.02,.04])) and
+            d['model_choices']==definitions['Accepted-AWF-2G']['model_choices'],'outer pressure control changed mesh or constitutive model')
+        rows=tree.findall('./EXPANSIONS/E[@FIELDS="p"]')
+        require(tree.find('./GEOMETRY/DOMAIN').text=='C[1,2]' and
+            tree.find('./EXPANSIONS/E').get('COMPOSITE')=='C[1,2]',
+            'regional expansions must use composites declared in DOMAIN')
+        require([(row.get('COMPOSITE'),row.get('NUMMODES')) for row in rows]==[('C[1]','2,2'),('C[2]','3,3')],
+            'regional pressure expansion did not preserve inner p1 and select outer p2')
+        require(parameters(tree)['IO_CHECKSTEPS']=='1','focused control lacks exact last-accepted checkpoints')
+        rejects(lambda:case_xml('Accepted-AWF-05G',root/'hidden-outer-control',0,outer_refinement='pressure-p2-v1'),'cutoff-resolved H2')
         rejects(lambda:case_xml('Accepted-AWF-2G',root/'hidden-fallback',0,companion='regularized'),'preserved faithful-model blocker')
     minimal=dict(temporal_coupling='PimpleSingleSweep',order=1,wall_policy=FORMULATION,eta=0.,
         k_bound_mode='MassProjection',inner_stress_model='Linear',implicit_callback_count=1,stage_audits=[],

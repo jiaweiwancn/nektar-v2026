@@ -85,7 +85,8 @@ const std::vector<std::string> &RANSWallResolutionSpatialTerms()
 }
 
 RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::ResidualResolutionComponents(
-    const Vector &state,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data,bool anchored) const
+    const Vector &state,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data,bool anchored,
+    bool originalOuterCounterfactual) const
 {
     Require(m_comm->GetSize()==1 && m_dimension==2 && !Mapped() && ((m_transitionEnabled && m_cappedDestruction) || AcceptedAWF()),
         "R3 residual-resolution audit requires serial flat2D Upstream+Capped");
@@ -128,11 +129,13 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
         }
         else
         {
-            epsilon=q.e.Value(s,offset[Epsilon()]);const auto c=OuterClosure(k,epsilon,G,q.v.coordinate);
+            epsilon=q.e.Value(s,offset[Epsilon()]);const auto c=originalOuterCounterfactual?
+                EvaluateRANSClosure(m_parameters.model.Model(),k,epsilon,G,Distance(q.v.coordinate),m_parameters.model.Parameters(),0):
+                OuterClosure(k,epsilon,G,q.v.coordinate);
             dk=c.kDiffusion;de=c.epsilonDiffusion;sk=c.kSource+data.outerKSource(q.v.coordinate,time);
             se=c.epsilonSource+data.outerEpsilonSource(q.v.coordinate,time);
             const double distance=Distance(q.v.coordinate),kap=m_parameters.model.Kappa();
-            const double gamma=m_regularizationGamma+m_regularizationScale*kap*m_robustUstar*distance;
+            const double gamma=originalOuterCounterfactual?0:m_regularizationGamma+m_regularizationScale*kap*m_robustUstar*distance;
             const double shear=m_robustUstar/(kap*distance);long double stableProduction=0;
             for(int a=0;a<3;++a)for(int b=0;b<3;++b)
             {

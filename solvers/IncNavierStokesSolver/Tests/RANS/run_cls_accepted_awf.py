@@ -47,9 +47,10 @@ def model_choices(companion='faithful'):
 
 
 def case_xml(case,folder,steps,dt=.000625,restart=None,normal=16,hard_reject=0,
-             companion='faithful',companion_reason='',perturbation=0.,verify=False,inner_refinement='none'):
+             companion='faithful',companion_reason='',perturbation=0.,verify=False,inner_refinement='none',outer_refinement='none',checkpoint_every=8):
     require(case in CASES and int(steps)==steps and steps>=0 and dt>0,'invalid accepted-AWF case/step controls')
     require(math.isfinite(perturbation) and abs(perturbation)<=.05,'small admissible perturbation amplitude required')
+    require(int(checkpoint_every)==checkpoint_every and checkpoint_every>0,'positive checkpoint reporting interval required')
     require(companion=='faithful' or companion_reason.strip(),'a companion must identify the preserved faithful-model blocker')
     require(sha(SPEC)==SPEC_SHA256,'approved accepted-AWF appendix differs; version the changed specification explicitly')
     folder=Path(folder);folder.mkdir(parents=True,exist_ok=False)
@@ -60,10 +61,28 @@ def case_xml(case,folder,steps,dt=.000625,restart=None,normal=16,hard_reject=0,
     require(inner_refinement=='none' or partition=='graded','cutoff-v1 is a separately named graded follow-up')
     added=[z for z in (.0025,.005,.02,.04) if z<H] if inner_refinement=='cutoff-v1' else []
     if added:knots=sorted(set(knots+added))
+    require(outer_refinement in ('none','pressure-p2-v1'),'unknown focused outer refinement')
+    require(outer_refinement=='none' or (case=='Accepted-AWF-2G' and inner_refinement=='cutoff-v1'),
+        'pressure-p2-v1 preserves the cutoff-resolved H2 graded inner representation')
+    outer_added=[]
+    if outer_added:knots=sorted(set(knots+outer_added))
     nx=len(X)-1;ni=sum(z<=H for z in knots[1:]);no=len(knots)-1-ni
     sizes=[(3*nx+1)*(3*(ni+no)+1)]*3+[(3*nx+1)*(3*no+1),(nx+1)*(ni+1),(nx+1)*(no+1)]
+    if outer_refinement=='pressure-p2-v1':sizes[-1]=(2*nx+1)*(2*no+1)
     require(sum(sizes)+1<=3000,'declared case exceeds the serial dense pilot size limit')
     tensor_mesh(root,knots,3,2,6.,1.,points=[8,8],xknots=X)
+    if outer_refinement=='pressure-p2-v1':
+        from copy import deepcopy
+        composites=root.find('./GEOMETRY/COMPOSITE')
+        ET.SubElement(composites,'C',{'ID':'1'}).text=f'Q[0-{nx*ni-1}]'
+        ET.SubElement(composites,'C',{'ID':'2'}).text=f'Q[{nx*ni}-{nx*(ni+no)-1}]'
+        # Expansion composites must be members of DOMAIN. Referencing new
+        # subcomposites outside the old C[0] domain is invalid in MeshGraph.
+        root.find('./GEOMETRY/DOMAIN').text='C[1,2]'
+        root.find('./EXPANSIONS/E').set('COMPOSITE','C[1,2]')
+        pressure=root.find('./EXPANSIONS/E[@FIELDS="p"]');pressure.set('COMPOSITE','C[1]')
+        outer_pressure=deepcopy(pressure);outer_pressure.set('COMPOSITE','C[2]');outer_pressure.set('NUMMODES','3,3')
+        root.find('EXPANSIONS').append(outer_pressure)
     root.find('./CONDITIONS/TIMEINTEGRATIONSCHEME/ORDER').text='1'
     for key,value in {
         'RANSWallFormulation':FORMULATION,'RANSWallTransition':'Fixed',
@@ -90,7 +109,7 @@ def case_xml(case,folder,steps,dt=.000625,restart=None,normal=16,hard_reject=0,
         'RANSWallRegularizationScale':choices['regularization_scale'],
         'RANSWallPimpleKFloorRelative':1e-8,'RANSWallNormalOrder':normal,'RANSWallTangentialOrder':8,
         'RANSWallAcceptedKAmplitude':perturbation,'RANSWallPimpleHardAuditRejectStep':hard_reject,
-        'RANSWallPimpleRejectStep':0,'RANSWallDiagnostics':1,'IO_CheckSteps':8,
+        'RANSWallPimpleRejectStep':0,'RANSWallDiagnostics':1,'IO_CheckSteps':checkpoint_every,
         'Slope':'Kappa*sqrt(K0/Qstar)',
         'E0':'(K0/Qstar)^1.5/(Kappa*RANSWallHeight)',
         'YapScale':'K0^1.5/(2.5*E0)'}.items():set_parameter(root,key,value)
@@ -103,7 +122,9 @@ def case_xml(case,folder,steps,dt=.000625,restart=None,normal=16,hard_reject=0,
             if e.get('VAR')=='eps_tilde':e.set('VALUE',e.get('VALUE').replace('(y-(2.0))/(2.0)','(y-RANSWallHeight)/(4-RANSWallHeight)'))
     write(root,xml)
     definition=dict(family=FAMILY,case=case,formulation=FORMULATION,formulation_version='accepted-appendix-v1',
-        case_identity=case+(':'+inner_refinement if inner_refinement!='none' else ''),inner_refinement=inner_refinement,
+        case_identity=case+(':'+inner_refinement if inner_refinement!='none' else '')+(':'+outer_refinement if outer_refinement!='none' else ''),inner_refinement=inner_refinement,
+        outer_refinement=outer_refinement,focused_outer_refinement_knots=outer_added,
+        checkpoint_reporting_interval=checkpoint_every,
         focused_refinement_knots=added,
         appendix_sha256=SPEC_SHA256,wall_policy=FORMULATION,companion=companion,companion_reason=companion_reason,
         model_choices=choices,H=H,z_K=H,z_m=H,h=.1,Z=4.,molecular_nu=1.5e-5,friction_velocity=.4,
@@ -113,7 +134,7 @@ def case_xml(case,folder,steps,dt=.000625,restart=None,normal=16,hard_reject=0,
         wall_coefficients='derived from selected CLS q_star/kappa: c_mu=q_star^-2; c_length=kappa*q_star^1.5',
         chi=None,capped_normalization=None,reference='native projection of nonconstant diffusion-balanced k_w,0',
         temporal_coupling='PimpleSingleSweep',native_order=1,dt=dt,steps=int(steps),relaxation=1.,eta=0.,prescribed_forcing=0.,
-        radial_knots=knots,tangential_knots=X,velocity_scalar_degree=3,pressure_degree=1,
+        radial_knots=knots,tangential_knots=X,velocity_scalar_degree=3,pressure_degree=1 if outer_refinement=='none' else dict(inner=1,outer=2),
         tensor_unknown_estimate=sum(sizes)+1,tensor_field_size_estimates=sizes,
         native_points=[8,8],source_normal_order=normal,source_tangential_order=8,
         inventory=INVENTORY,bound_solver='RetainedPool',k_floor_relative=1e-8,work=WORK,
@@ -177,6 +198,8 @@ def main():
     p.add_argument('--steps',type=int,default=32);p.add_argument('--dt',type=float,default=.000625)
     p.add_argument('--normal-order',type=int,default=16);p.add_argument('--perturbation',type=float,default=0.)
     p.add_argument('--inner-refinement',choices=REFINEMENTS,default='none')
+    p.add_argument('--outer-refinement',choices=('none','pressure-p2-v1'),default='none')
+    p.add_argument('--checkpoint-every',type=int,default=8)
     p.add_argument('--timeout',type=float,default=14400);p.add_argument('--prepare-only',action='store_true')
     p.add_argument('--verify',action='store_true');a=p.parse_args();os.environ.update(THREADS)
     require(a.steps>=0 and a.dt>0 and a.timeout>0,'invalid fixed-step controls')
@@ -188,7 +211,7 @@ def main():
     if a.prepare_only:
         for case in a.cases:
             xml=case_xml(case,a.output/case,a.steps,a.dt,normal=a.normal_order,companion=a.companion,
-                companion_reason=a.companion_reason,perturbation=a.perturbation,verify=a.verify,inner_refinement=a.inner_refinement)
+                companion_reason=a.companion_reason,perturbation=a.perturbation,verify=a.verify,inner_refinement=a.inner_refinement,outer_refinement=a.outer_refinement,checkpoint_every=a.checkpoint_every)
             summary['cases'][case]=load(xml.parent/'definition.json')
         write_json(a.output/'manifest.json',summary);return
     require(platform.system()=='Linux' and a.solver,'authoritative native execution requires Linux and --solver')
@@ -211,7 +234,7 @@ def main():
     for case in a.cases:
         base=a.output/case;base.mkdir();initial=base/'initial'
         xml=case_xml(case,initial,0,a.dt,normal=a.normal_order,companion=a.companion,
-            companion_reason=a.companion_reason,perturbation=a.perturbation,inner_refinement=a.inner_refinement)
+            companion_reason=a.companion_reason,perturbation=a.perturbation,inner_refinement=a.inner_refinement,outer_refinement=a.outer_refinement,checkpoint_every=a.checkpoint_every)
         receipt=native(solver,xml,initial);reportfile=initial/'case.evolution.json'
         result=dict(case=case,definition=load(initial/'definition.json'),initial_receipt=receipt,status='initialization_rejected')
         summary['cases'][case]=result
@@ -238,7 +261,7 @@ def main():
             atomic(base/'result.json',result);atomic(a.output/'manifest.json',summary);continue
         trajectory=base/'trajectory';txml=case_xml(case,trajectory,a.steps,a.dt,restart=cp,
             normal=a.normal_order,companion=a.companion,companion_reason=a.companion_reason,
-            perturbation=a.perturbation,verify=a.verify,inner_refinement=a.inner_refinement)
+            perturbation=a.perturbation,verify=a.verify,inner_refinement=a.inner_refinement,outer_refinement=a.outer_refinement,checkpoint_every=a.checkpoint_every)
         rc=native(solver,txml,trajectory);nativefile=trajectory/'case.evolution.json'
         result['trajectory_receipt']=rc
         if not nativefile.exists():

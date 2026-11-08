@@ -1,0 +1,16 @@
+{
+  "version": "AcceptedAWFExploratoryWindowsV1",
+  "declared_date_Asia_Shanghai": "2026-11-08",
+  "primary_physical_window": 0.5,
+  "required_consecutive_windows": 3,
+  "secondary_drift_windows": [0.1, 0.2],
+  "common_normalization": {"U": 0.4, "K": 0.5105080130598861, "H": 2.0, "volume": 24.0, "outer_epsilon_volume": 12.0, "epsilon": 0.07263583326186134, "pressure": 0.16},
+  "normalized_window_L2_change_maximum": {"u": 0.0001, "v": 0.0001, "k": 0.0001, "epsilon": 0.001, "pressure": 0.001},
+  "normalized_selected_spatial_residual_maximum_each_block": 0.001,
+  "relative_wall_stress_window_change_maximum": 0.0005,
+  "relative_matching_defect_maximum": 0.00001,
+  "bound_supply_per_time_relative_to_K0_volume_per_wall_time_maximum": 0.00001,
+  "scope": "Exploratory scientific classification only. No production gate or tolerance changes. Window changes must persist and full residuals must be small for a steady claim; stable fluctuation statistics are needed for a stationary-unsteady claim.",
+  "discretization_context": "Cutoff-v1 reference errors and coarse/fine differences in the existing report motivate a stringent drift screen, not a proof of continuum accuracy. Residuals are reported dimensionally and with fixed H=2 normalization. Reference error remains separate from time-window drift.",
+  "window_sensitivity": "Compare primary adjacent .5 windows and combined 1.0 windows once available. Secondary .1/.2 windows diagnose current drift without authorizing an early persistent-settling claim."
+}

@@ -272,7 +272,14 @@ public:
     ResidualResolutionResult ResidualResolution(const Vector &state,const Vector &history,
         double alpha,double time,const RANSWallEvolutionData &data,bool anchored=false) const;
     ResidualResolutionResult ResidualResolutionComponents(const Vector &state,const Vector &history,
-        double alpha,double time,const RANSWallEvolutionData &data,bool anchored=false) const;
+        double alpha,double time,const RANSWallEvolutionData &data,bool anchored=false,
+        bool originalOuterCounterfactual=false) const;
+    /** Read-only constitutive inventory and one-sided tensor witnesses. No
+     * lift, correction, governing solve or change to the selected model. */
+    std::string ConstitutiveStateDiagnostic(const Vector &state,double time,
+        const RANSWallEvolutionData &data,const std::vector<RANSWallCoordinate> &witnesses) const;
+    std::string CompareOuterOperators(const Vector &state,double time,
+        const RANSWallEvolutionData &data) const;
     /** Optional accepted-state audit. Entries are documented in the M7 guide.
      * Sampled admissibility is not a certificate over the entire polynomial. */
     Diagnostic Audit(const Vector &state,const Vector &history,double alpha,double time,

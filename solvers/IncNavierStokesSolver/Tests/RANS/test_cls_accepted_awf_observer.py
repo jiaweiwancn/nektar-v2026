@@ -3,7 +3,7 @@
 """Focused observer identity, crash-window and signed-budget checks."""
 from pathlib import Path
 import tempfile
-from observe_cls_accepted_awf import MetricLedger,budget
+from observe_cls_accepted_awf import MetricLedger,budget,window_statistics
 from run_cls_epawf_picard import require
 
 
@@ -32,6 +32,16 @@ def main():
         try:repaired.append(conflict)
         except ValueError as error:require('conflicting' in str(error),'unexpected conflict rejection')
         else:raise AssertionError('accepted checkpoint identity conflict was hidden')
+    observations={n:dict(diagnostic=dict(mean_wall_stress=float(n),fixed_bands=dict(regions=[dict(
+        name='fixed',x_region='all',k_integral=2.+n,production=3.+n,destruction=1.)]))) for n in (0,1,2)}
+    window=window_statistics(observations,0,2,.25)
+    require(window['sample_count']==3 and window['maximum_sample_gap']==.25 and
+        window['wall_stress']['mean']==1. and abs(window['wall_stress']['rms_fluctuation']-2**-.5)<1e-15,
+        'physical window moments or time weights differ')
+    band=window['fixed_bands']['fixed:all']
+    require(band['k_integral']['mean']==3. and band['production_time_integral_estimate']==2. and
+        band['destruction_time_integral_estimate']==.5,'sampled source rates confused with integrated amounts')
+    require(window_statistics(observations,0,3,.25) is None,'missing physical endpoint hidden')
     print('accepted-AWF observer idempotence, partial write, identity and signed/rate accounting passed')
 
 

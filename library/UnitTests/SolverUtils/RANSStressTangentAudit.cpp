@@ -3,6 +3,7 @@
 // Copyright (c) 2026 Nektar++ contributors.
 ///////////////////////////////////////////////////////////////////////////////
 #include <SolverUtils/Turbulence/RANSModels.h>
+#include <SolverUtils/Turbulence/RANSRobustVariant.h>
 #include <algorithm>
 #include <cmath>
 #include <fstream>
@@ -55,8 +56,57 @@ Minimum Probe(RANSModel model,double k,double eps,double eta,double nu,double sh
     return result;
 }
 }
+// General frozen-k/epsilon physical one-sided work scan. This is a finite
+// x-z incompressible rank-one scan, not a global coupled stability theorem.
+int General(const char *inputPath,const char *outputPath)
+{
+    std::ifstream input(inputPath);std::ofstream out(outputPath);
+    if(!input || !out)throw std::runtime_error("cannot open general tangent files");
+    std::string line;std::getline(input,line);
+    if(line!="id,distance,k,epsilon,beta,gamma,reference_shear,g00,g01,g02,g10,g11,g12,g20,g21,g22")
+        throw std::runtime_error("unexpected general tangent CSV header");
+    out<<std::setprecision(17)<<"id,h,min_work,angle,side,base_strain,base_rotation,trial_strain,trial_rotation,nut,c_mu";
+    for(int a=0;a<3;++a)for(int b=0;b<3;++b){out<<",R"<<a<<b;}
+    out<<'\n';
+    while(std::getline(input,line))
+    {
+        if(line.empty()){continue;}
+        const auto row=Split(line);if(row.size()!=16){throw std::runtime_error("general tangent row shape differs");}
+        const double distance=std::stod(row[1]),k=std::stod(row[2]),epsilon=std::stod(row[3]);
+        RANSRobustVariant variant;variant.beta=std::stod(row[4]);variant.gamma=std::stod(row[5]);
+        variant.referenceStrain[0][2]=variant.referenceStrain[2][0]=std::stod(row[6]);
+        RANSTensor g{};double scale=1;for(int a=0;a<3;++a)for(int b=0;b<3;++b){g[a][b]=std::stod(row[7+3*a+b]);scale=std::max(scale,std::abs(g[a][b]));}
+        auto closure=[&](const RANSTensor &v){return EvaluateRANSRobustClosure(RANSModel::CLSHighRe,k,epsilon,v,distance,{},0,variant);};
+        const auto base=closure(g);
+        for(double relative:{1e-5,1e-6,1e-7})
+        {
+            const double h=relative*scale;Minimum minimum;RANSClosureValues critical{};
+            for(int step=0;step<=720;++step)
+            {
+                const double angle=std::acos(-1.)*step/720;
+                const RANSVector n{std::cos(angle),0,std::sin(angle)},a{-std::sin(angle),0,std::cos(angle)};
+                for(int side:{-1,1})
+                {
+                    auto trial=g;for(int i=0;i<3;++i)for(int j=0;j<3;++j)trial[i][j]+=side*h*a[i]*n[j];
+                    const auto c=closure(trial);double work=0;
+                    for(int i=0;i<3;++i)for(int j=0;j<3;++j)work-=a[i]*n[j]*(c.reynoldsStress[i][j]-base.reynoldsStress[i][j])/(side*h);
+                    if(work<minimum.value){minimum={work,angle,side};critical=c;}
+                }
+            }
+            out<<row[0]<<','<<h<<','<<minimum.value<<','<<minimum.angle<<','<<minimum.side<<','
+                <<base.strainInvariant<<','<<base.rotationInvariant<<','<<critical.strainInvariant<<','<<critical.rotationInvariant<<','<<base.eddyViscosity<<','<<base.cMu;
+            for(const auto &v:base.reynoldsStress)for(double x:v){out<<','<<x;}
+            out<<'\n';
+        }
+    }
+    if(!out){throw std::runtime_error("general tangent write failed");}
+    return 0;
+}
+
 int main(int argc,char **argv)
 {
+    if(argc==4 && std::string(argv[1])=="--general")
+    {try{return General(argv[2],argv[3]);}catch(const std::exception &e){std::cerr<<e.what()<<'\n';return 1;}}
     if (argc!=5)
     {
         std::cerr << "Usage: RANSStressTangentAudit standard|cls resolved_nu input.csv output.csv\n"

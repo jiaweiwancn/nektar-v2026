@@ -186,13 +186,34 @@ int main(int argc,char **argv)
         double us=0;serial->LoadParameter("RANSWallFrictionVelocity",us,.4);
         RANSWallEvolutionData data(2);Vector reference,formedHistory;std::string replayContext="null";
         const auto operation=packet.get<std::string>("operation","");
+        const bool archivedStages=operation=="archived_stages";
+        Tree archived;
+        if(archivedStages)
+        {
+            Require(packet.get_optional<std::string>("native_checkpoint").is_initialized(),"archived stages require a compatible native checkpoint");
+            const auto file=packet.get<std::string>("archived_packet");
+            Require(RANSWallR3::HashFile(file)==packet.get<std::string>("archived_packet_sha256"),"archived stage packet SHA256 differs");
+            boost::property_tree::read_json(file,archived);
+            for(const std::string name:{"committed","post_flow","pre_k","raw","corrected"})
+            {
+                const auto values=Read(archived,name);
+                Require(values.size()==patch.Size() && RANSWallR3::Hash(values)==packet.get<std::string>("stage_hashes."+name),"archived stage vector SHA256 differs: "+name);
+                Maximum(values);
+            }
+            Require(RANSWallR3::Hash(Read(packet,"state"))==RANSWallR3::Hash(Read(archived,"committed")),"archived diagnostic state placeholder differs from committed checkpoint");
+            for(const std::string name:{"committed","history","fixed_reference"})
+                Require(RANSWallR3::Hash(Read(packet,name))==RANSWallR3::Hash(Read(archived,name)),"archived stage context differs: "+name);
+            Require(RANSWallR3::Hash(Read(packet,"history"))==packet.get<std::string>("expected_history_sha256"),"archived callback history SHA256 differs");
+            Require(packet.get<double>("time")==archived.get<double>("time") && packet.get<double>("alpha")==archived.get<double>("alpha"),"archived attempt time/alpha differs");
+            Require(RANSWallR3::HashFile(archived.get<std::string>("matrix_file"))==archived.get<std::string>("matrix_sha256"),"archived frozen transport matrix SHA256 differs");
+        }
         const bool strictSpatialReadback=packet.get_optional<std::string>("native_checkpoint") &&
-            patch.AcceptedAWF() && (operation=="accepted_awf" || operation=="height_comparison");
+            patch.AcceptedAWF() && (operation=="accepted_awf" || operation=="height_comparison" || operation=="selected_original_operator");
         if(packet.get_optional<std::string>("native_checkpoint"))
         {
-            Require((operation=="k_bound" || operation=="branch_coverage" || strictSpatialReadback) && !packet.get<bool>("projection_only",false),
+            Require((operation=="k_bound" || operation=="branch_coverage" || archivedStages || strictSpatialReadback) && !packet.get<bool>("projection_only",false),
                 "native replay requires the ordinary production entry guard");
-            Require(!strictSpatialReadback || (!packet.get_optional<std::string>("transfer_source_xml") &&
+            Require(!(strictSpatialReadback || archivedStages) || (!packet.get_optional<std::string>("transfer_source_xml") &&
                 !packet.get_optional<bool>("require_history_h0") && !packet.get<bool>("form_native_callback_history",false)),
                 "strict native spatial readback forbids transfer, history waivers and callback construction");
             const auto checkpointPath=packet.get<std::string>("native_checkpoint");
@@ -221,14 +242,22 @@ int main(int argc,char **argv)
                 Require(tailIdentityRejected,"tail parameter did not protect checkpoint compatibility");
             }
             reference=checkpoint.fixedReference;
+            if(archivedStages)
+            {
+                Require(RANSWallR3::Hash(reference)==RANSWallR3::Hash(Read(archived,"fixed_reference")),"archived fixed reference differs from checkpoint");
+                std::map<int,double> saved;
+                for(const auto &item:archived.get_child("fixed_external_coefficients"))
+                {auto it=item.second.begin();const int row=int(it->second.get_value<double>());++it;Require(!saved.count(row),"duplicate archived external row");saved[row]=it->second.get_value<double>();}
+                Require(saved==patch.FixedReferenceBoundary(reference),"archived external coefficients differ from saved native reference");
+            }
             const auto keys=patch.FixedReferenceBoundary(reference);
-            if(strictSpatialReadback)data.fixedBoundary=keys;
+            if(strictSpatialReadback || archivedStages)data.fixedBoundary=keys;
             if(packet.get_child_optional("fixed_external_coefficients"))
             {
                 std::map<int,double> archived;
                 for(const auto &item:packet.get_child("fixed_external_coefficients"))
                 {auto it=item.second.begin();const int row=int(it->second.get_value<double>());++it;Require(!archived.count(row),"duplicate archived essential row");archived[row]=it->second.get_value<double>();}
-                if(strictSpatialReadback)Require(archived==keys,"saved-reference boundary data differ from archived external data");
+                if(strictSpatialReadback || archivedStages)Require(archived==keys,"saved-reference boundary data differ from archived external data");
                 else data.fixedBoundary=archived;
             }
             Require(keys.size()==data.fixedBoundary.size(),"archived essential row inventory differs");
@@ -253,6 +282,9 @@ int main(int argc,char **argv)
                     "strict native spatial state differs from checkpoint");
                 Require(RANSWallR3::Hash(Read(packet,"history"))==RANSWallR3::Hash(checkpoint.coupledState),
                     "alpha=0 API storage placeholder differs from retained coupled state");
+            }
+            if(strictSpatialReadback || archivedStages)
+            {
                 Require(RANSWallR3::Hash(Read(packet,"native_differential_state"))==RANSWallR3::Hash(checkpoint.integration.state),
                     "native differential state differs from checkpoint");
                 const auto &savedHistory=packet.get_child("native_history");
@@ -267,15 +299,15 @@ int main(int argc,char **argv)
                 Require(RANSWallR3::Hash(Read(packet,"native_history_times"))==RANSWallR3::Hash(checkpoint.integration.times),
                     "native history time labels differ from checkpoint");
             }
-            else
+            if(!strictSpatialReadback)
             {
                 Require(RANSWallR3::Hash(Read(packet,"committed"))==RANSWallR3::Hash(checkpoint.coupledState),"raw packet is not based on archived accepted state");
                 Require(std::abs(packet.get<double>("time")-(checkpoint.integration.time+dt))<1e-14,"native replay physical time differs");
                 Require(std::abs(packet.get<double>("alpha")-1/dt)<1e-10,"native replay alpha differs");
             }
-            if(packet.get<bool>("form_native_callback_history",false))
+            if(archivedStages || packet.get<bool>("form_native_callback_history",false))
             {
-                Require(packet.get<std::string>("operation")=="branch_coverage","history-only replay is a forensic operation");
+                Require(archivedStages || operation=="branch_coverage","history-only replay is a forensic operation");
                 struct HistoryCaptured {};
                 RANSWallTimeIntegration integration(1,dt,
                     [&](const Vector &h,double t,double lambda)->Vector
@@ -294,6 +326,12 @@ int main(int argc,char **argv)
                 const auto restored=integration.Capture();
                 Require(restored.time==checkpoint.integration.time && restored.steps==checkpoint.integration.steps &&
                     restored.history==checkpoint.integration.history,"forensic history formation did not roll back");
+                Require(RANSWallR3::Hash(restored.state)==RANSWallR3::Hash(checkpoint.integration.state) &&
+                    RANSWallR3::Hash(restored.times)==RANSWallR3::Hash(checkpoint.integration.times),
+                    "forensic callback changed native state/time-label bits");
+                for(int slot=0;slot<restored.history.size();++slot)
+                    Require(RANSWallR3::Hash(restored.history[slot])==RANSWallR3::Hash(checkpoint.integration.history[slot]),
+                        "forensic callback changed native history bits");
             }
             Require(patch.InitializationWork()==Vector({0.,0.}),"native immutable replay called Lift");
             replayContext=J::Object({{"physical_signature_matches","true"},{"checkpoint_sha256",J::Quote(packet.get<std::string>("checkpoint_sha256"))},
@@ -303,7 +341,7 @@ int main(int argc,char **argv)
                 {"initialization_lift_calls_iterations",J::Numbers(patch.InitializationWork())},{"new_initial_state_constructed","false"},
                 {"strict_spatial_readback",J::Boolean(strictSpatialReadback)},
                 {"native_history_sha256",J::List(nativeHistoryHashes)},
-                {"native_history_times_sha256",strictSpatialReadback?J::Quote(RANSWallR3::Hash(checkpoint.integration.times)):"null"},
+                {"native_history_times_sha256",(strictSpatialReadback || archivedStages)?J::Quote(RANSWallR3::Hash(checkpoint.integration.times)):"null"},
                 {"native_history_advanced","false"},{"governing_solves","0"},
                 {"formed_callback_history_sha256",formedHistory.empty()?"null":J::Quote(RANSWallR3::Hash(formedHistory))},
                 {"history_policy",J::Quote(strictSpatialReadback?"complete native GLM state, slots and time labels verified; alpha=0 API storage placeholder is retained coupled state":formedHistory.empty()?"exact archived full implicit-callback history":
@@ -343,8 +381,41 @@ int main(int argc,char **argv)
         }
         Require(state.size()==patch.Size() && history.size()==patch.Size(),"packet coefficient size differs");
         const bool historyMatch=std::memcmp(history.data(),reference.data(),history.size()*sizeof(double))==0;
-        Require(strictSpatialReadback || !packet.get<bool>("require_history_h0",true) || historyMatch,"packet history differs from rebuilt native h0");
+        Require(strictSpatialReadback || archivedStages || !packet.get<bool>("require_history_h0",true) || historyMatch,"packet history differs from rebuilt native h0");
         const double time=packet.get<double>("time"),alpha=packet.get<double>("alpha");
+        if(archivedStages || operation=="selected_original_operator")
+        {
+            Require(patch.InitializationWork()==Vector({0.,0.}),"immutable diagnostic called initialization Lift");
+            std::vector<RANSWallCoordinate> witnesses;
+            for(const auto &q:packet.get_child("witnesses")){RANSWallCoordinate point{};int axis=0;for(const auto &x:q.second){Require(axis<3,"witness shape differs");point[axis++]=x.second.get_value<double>();}Require(axis==3,"witness shape differs");witnesses.push_back(point);}
+            std::vector<std::pair<std::string,std::string>> diagnostics;
+            if(archivedStages)for(const std::string name:{"committed","post_flow","pre_k","raw","corrected"})
+            {
+                const auto values=Read(archived,name);const auto hash=RANSWallR3::Hash(values);
+                diagnostics.push_back({name,patch.ConstitutiveStateDiagnostic(values,time,data,witnesses)});
+                Require(hash==RANSWallR3::Hash(values),"archived stage coefficients changed");
+            }
+            else
+            {
+                diagnostics.push_back({"selected_state",patch.ConstitutiveStateDiagnostic(state,time,data,witnesses)});
+                diagnostics.push_back({"operators",patch.CompareOuterOperators(state,time,data)});
+                const auto panels=packet.get_child_optional("reporting_breakpoints")?Read(packet,"reporting_breakpoints"):Vector{};
+                diagnostics.push_back({"physical",patch.HeightComparison(state,state,time,data,panels)});
+                if(packet.get<bool>("export_k_mass",false))
+                {
+                    const auto constraints=patch.Constraints(state,time,data);std::vector<int> free;
+                    for(int i=0;i<patch.size[patch.K()];++i)
+                        if(!constraints.count(patch.offset[patch.K()]+i))free.push_back(patch.offset[patch.K()]+i);
+                    diagnostics.push_back({"native_free_k_mass",J::Object({{"rows",J::Numbers(free)},
+                        {"matrix",J::Rows(patch.PicardKMass(free))},{"governing_solves","0"}})});
+                }
+            }
+            std::ofstream out(argv[3]);out<<J::Object({{"operation",J::Quote(operation)},
+                {"native_replay_context",replayContext},{"diagnostics",J::Object(diagnostics)},
+                {"physical_time",J::Number(time)},{"governing_solves","0"},{"physical_commits","0"},
+                {"native_history_advanced","false"},{"initialization_work",J::Numbers(patch.InitializationWork())}})<<'\n';
+            Require(out.good(),"immutable diagnostic write failed");world->Finalise();return 0;
+        }
         if(packet.get<std::string>("operation","")=="branch_coverage")
         {
             std::vector<RANSWallCoordinate> anchors;

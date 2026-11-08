@@ -3,6 +3,9 @@
 // Copyright (c) 2026 Nektar++ contributors.
 ///////////////////////////////////////////////////////////////////////////////
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionResolution.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
 #include <algorithm>
 #include <cmath>
 #include <limits>
@@ -283,4 +286,189 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
     result["energy"]=energy;result["roughness"]=RoughnessBudget(s,time,data);
     return result;
 }
+namespace
+{
+namespace CJ=RANSWallSolveJson;
+using CV=RANSWallAlgebra::Vector;
+struct Spectrum { CV eigenvalues; RANSTensor vectors{}; };
+Spectrum CovarianceSpectrum(RANSTensor a)
+{
+    RANSTensor v{};for(int i=0;i<3;++i)v[i][i]=1;
+    for(int step=0;step<64;++step)
+    {
+        int p=0,q=1;for(int i=0;i<3;++i)for(int j=i+1;j<3;++j)if(std::abs(a[i][j])>std::abs(a[p][q])){p=i;q=j;}
+        if(std::abs(a[p][q])<1e-16*std::max({1.,std::abs(a[0][0]),std::abs(a[1][1]),std::abs(a[2][2])}))break;
+        const double theta=.5*std::atan2(2*a[p][q],a[q][q]-a[p][p]),c=std::cos(theta),s=std::sin(theta);
+        const double pp=c*c*a[p][p]-2*s*c*a[p][q]+s*s*a[q][q],qq=s*s*a[p][p]+2*s*c*a[p][q]+c*c*a[q][q];
+        for(int k=0;k<3;++k)
+        {
+            if(k!=p && k!=q){const double x=a[k][p],y=a[k][q];a[k][p]=a[p][k]=c*x-s*y;a[k][q]=a[q][k]=s*x+c*y;}
+            const double x=v[k][p],y=v[k][q];v[k][p]=c*x-s*y;v[k][q]=s*x+c*y;
+        }
+        a[p][p]=pp;a[q][q]=qq;a[p][q]=a[q][p]=0;
+    }
+    std::array<int,3> order{0,1,2};std::sort(order.begin(),order.end(),[&](int i,int j){return a[i][i]<a[j][j];});
+    Spectrum out;for(int j:order)out.eigenvalues.push_back(a[j][j]);
+    for(int i=0;i<3;++i)for(int j=0;j<3;++j)out.vectors[i][j]=v[i][order[j]];
+    return out;
+}
+std::string TensorJSON(const RANSTensor &a)
+{std::vector<std::string> rows;for(const auto &r:a)rows.push_back(CJ::Numbers(r));return CJ::List(rows);}
+std::string EvaluationRowJSON(const RANSWallGlobalPoint &p)
+{return CJ::Object({{"geometry",CJ::Number(p.geometry)},{"element",CJ::Number(p.element)},
+    {"ids",CJ::Numbers(p.ids)},{"phi",CJ::Numbers(p.phi)},{"constant",CJ::Numbers(p.constant)},
+    {"derivative",CJ::List({CJ::Numbers(p.derivative[0]),CJ::Numbers(p.derivative[1]),CJ::Numbers(p.derivative[2])})}});}
+std::string LawJSON(const RANSClosureValues &c,double k,const RANSTensor &g,const std::string &remainder="regularization")
+{
+    const bool inner=remainder=="inner_stress_remainder";
+    const auto eig=CovarianceSpectrum(c.reynoldsStress);RANSVector direction{};
+    for(int a=0;a<3;++a)direction[a]=eig.vectors[a][0];
+    RANSTensor iso{},linear{},reg{};
+    for(int a=0;a<3;++a)for(int b=0;b<3;++b)
+    {iso[a][b]=a==b?2*k/3:0;linear[a][b]=-c.eddyViscosity*(g[a][b]+g[b][a]);
+     reg[a][b]=c.reynoldsStress[a][b]-iso[a][b]-linear[a][b]-c.quadraticStress[a][b]-c.cubicStress[a][b];}
+    std::vector<std::pair<std::string,std::string>> terms,projections;
+    for(const auto &[name,tensor]:std::map<std::string,RANSTensor>{{"isotropic",iso},{"linear",linear},{"quadratic",c.quadraticStress},{"cubic",c.cubicStress},{remainder,reg}})
+    {double value=0;for(int a=0;a<3;++a)for(int b=0;b<3;++b)value+=direction[a]*tensor[a][b]*direction[b];terms.push_back({name,TensorJSON(tensor)});projections.push_back({name,CJ::Number(value)});}
+    return CJ::Object({{"tensor",TensorJSON(c.reynoldsStress)},{"eigenvalues",CJ::Numbers(eig.eigenvalues)},
+        {"critical_eigenvector",CJ::Numbers(direction)},{"terms",CJ::Object(terms)},
+        {"critical_term_contractions",CJ::Object(projections)},{"c_mu",CJ::Number(c.cMu)},
+        {"eddy_viscosity",CJ::Number(c.eddyViscosity)},{"strain_invariant",CJ::Number(c.strainInvariant)},
+        {"rotation_invariant",CJ::Number(c.rotationInvariant)},{"invariant_branch",CJ::Quote(inner?"not_applicable_to_inner_law":(c.strainInvariant>=c.rotationInvariant?"strain":"rotation"))},
+        {"production",CJ::Number(c.production)},{"k_source",CJ::Number(c.kSource)},
+        {"epsilon_production",inner?"null":CJ::Number(c.epsilonProduction)},{"epsilon_source",inner?"null":CJ::Number(c.epsilonSource)},
+        {"yap",inner?"null":CJ::Number(c.yap)},{"k_diffusion",CJ::Number(c.kDiffusion)},{"epsilon_diffusion",inner?"null":CJ::Number(c.epsilonDiffusion)}});
+}
+}
+std::string RANSWallEvolutionPatch::ConstitutiveStateDiagnostic(const Vector &s,double time,
+    const RANSWallEvolutionData &data,const std::vector<RANSWallCoordinate> &witnesses) const
+{
+    namespace J=RANSWallSolveJson;Require(AcceptedAWF() && !Mapped() && m_dimension==2,"constitutive forensic scope is accepted AWF flat2D");
+    const auto before=RANSWallR3::Hash(s);const auto domain=ScalarDomain(s,time,data,true);
+    if(!domain.admissible)return J::Object({{"scalar_budget",ScalarDomainJSON(domain)}, {"covariance_evaluated","false"},{"state_sha256",J::Quote(before)}});
+    Refresh(s,time,&data);double minimum[4]={1e300,1e300,1e300,1e300};std::string minima[4]={"null","null","null","null"};std::map<std::string,int> counts;
+    auto evaluate=[&](const RANSWallGlobalPoint &v,bool inner,const std::string &family,bool retain,double epsilonOverride=std::numeric_limits<double>::quiet_NaN())
+    {
+        RANSTensor g{};for(int a=0;a<m_dimension;++a)g[PhysicalAxis(a)]=v.Gradient(s,offset[a]);
+        const double k=v.Value(s,offset[K()]);const auto profile=StateProfile(s,v.coordinate,time,data);
+        RANSWallGlobalPoint e;
+        if(!inner)
+        {
+            e=Point(Epsilon(),v.coordinate,std::abs(v.coordinate[2]-m_parameters.geometry.height)<1e-11?1:0);
+            for(int j=0;j<fields[Epsilon()]->Elements().size();++j)
+                if(fields[Epsilon()]->Elements()[j].geometry==v.geometry){e=fields[Epsilon()]->ElementPoint(j,v.coordinate);break;}
+        }
+        const double retainedEpsilon=inner?profile->Dissipation(Distance(v.coordinate)):e.Value(s,offset[Epsilon()]);
+        const double epsilon=std::isfinite(epsilonOverride)?epsilonOverride:retainedEpsilon;
+        RANSClosureValues c{},original{},regularized{};
+        if(inner)
+        {
+            const double nt=profile->Original().EddyViscosity(Distance(v.coordinate));const auto wall=InnerStress(k,nt,g);
+            c.reynoldsStress=wall.reynoldsStress;c.production=wall.production;c.eddyViscosity=nt;
+            c.cMu=profile->Original().Parameters().cMu;double ss=0,oo=0;
+            for(int a=0;a<3;++a)for(int b=0;b<3;++b){ss+=std::pow(g[a][b]+g[b][a],2);oo+=std::pow(g[a][b]-g[b][a],2);}
+            c.strainInvariant=k/epsilon*std::sqrt(ss/2);c.rotationInvariant=k/epsilon*std::sqrt(oo/2);
+            for(int a=0;a<3;++a)for(int b=0;b<3;++b)c.divergence+=a==b?g[a][b]:0;
+            c.kSource=c.production-epsilon;c.kDiffusion=m_parameters.geometry.molecularNu+nt/m_parameters.model.Parameters().sigmaK;
+        }
+        else
+        {
+            c=OuterClosure(k,epsilon,g,v.coordinate);original=EvaluateRANSClosure(m_parameters.model.Model(),k,epsilon,g,Distance(v.coordinate),m_parameters.model.Parameters(),0);
+            RANSRobustVariant variant;variant.beta=.4;variant.gamma=m_parameters.model.Kappa()*m_robustUstar*Distance(v.coordinate);
+            const double shear=m_robustUstar/(m_parameters.model.Kappa()*Distance(v.coordinate));
+            for(int a=0;a<3;++a)for(int b=0;b<3;++b)variant.referenceStrain[a][b]=shear*(m_referenceFlow[a]*m_referenceNormal[b]+m_referenceNormal[a]*m_referenceFlow[b]);
+            regularized=EvaluateRANSRobustClosure(m_parameters.model.Model(),k,epsilon,g,Distance(v.coordinate),m_parameters.model.Parameters(),0,variant);
+        }
+        const double eigen=CovarianceSpectrum(c.reynoldsStress).eigenvalues[0];const int region=inner?0:1;++counts[family];
+        const double originalEigen=inner?1e300:CovarianceSpectrum(original.reynoldsStress).eigenvalues[0];
+        const double regularizedEigen=inner?1e300:CovarianceSpectrum(regularized.reynoldsStress).eigenvalues[0];
+        if(!retain && eigen>=minimum[region] && originalEigen>=minimum[2] && regularizedEigen>=minimum[3])return std::string("null");
+        const auto kr=SampleKRow(v.coordinate);const auto epsH=Point(Epsilon(),{v.coordinate[0],0,m_parameters.geometry.height},1);
+        const bool rowInner=v.element>=0 && fields[0]->Elements().at(v.element).upper[2]<=m_parameters.geometry.height+1e-12;
+        const auto item=J::Object({{"coordinate",J::Numbers(v.coordinate)},{"geometry",J::Number(v.geometry)},
+            {"element",J::Number(v.element)},{"inner",J::Boolean(inner)},{"inventory",J::Quote(family)},
+            {"gradient_element_region",J::Quote(rowInner?"inner":"outer")},
+            {"constitutive_region",J::Quote(inner?"inner":"outer")},
+            {"gradient_region_matches_law",J::Boolean(rowInner==inner)},
+            {"k",J::Number(k)},{"epsilon",J::Number(epsilon)},{"epsilon_retained",J::Number(retainedEpsilon)},
+            {"epsilon_semantics",J::Quote(std::isfinite(epsilonOverride)?"refreshed dependent-target audit row":"actual retained field; inner epsilon dependent")},{"endpoint_K",J::Number(profile->K())},
+            {"cutoff",J::Number(profile->Reference().cutoff)},{"budget_ratio",J::Number(profile->Reference().productionBudget/profile->Reference().minimumBudget)},
+            {"velocity_gradient",TensorJSON(g)},{"divergence",J::Number(c.divergence)},
+            {"velocity_evaluation_row",EvaluationRowJSON(v)},{"epsilon_evaluation_row",inner?"null":EvaluationRowJSON(e)},
+            {"endpoint_evaluation_row",EvaluationRowJSON(kr)},{"epsilon_H_retained",J::Number(epsH.Value(s,offset[Epsilon()]))},
+            {"epsilon_H_refreshed_projected",domain.traceState.empty()?"null":J::Number(epsH.Value(domain.traceState,offset[Epsilon()]))},
+            {"epsilon_H_current_unprojected",J::Number(profile->Dissipation(m_parameters.geometry.height))},
+            {"selected",LawJSON(c,k,g,inner?"inner_stress_remainder":"regularization")},{"same_state_Original",inner?"null":LawJSON(original,k,g)},
+            {"same_state_Regularized",inner?"null":LawJSON(regularized,k,g)}});
+        if(eigen<minimum[region]){minimum[region]=eigen;minima[region]=item;}
+        if(originalEigen<minimum[2]){minimum[2]=originalEigen;minima[2]=item;}
+        if(regularizedEigen<minimum[3]){minimum[3]=regularizedEigen;minima[3]=item;}return item;
+    };
+    for(const auto &point:domain.observations)
+    {
+        if(point.block!=K() && !point.dependentTrace)continue;
+        evaluate(RestrictedGradientRow(point),RestrictedInner(point),point.inventory,false,
+            point.dependentTrace?point.value:std::numeric_limits<double>::quiet_NaN());
+    }
+    const auto nativeInner=minima[0],nativeOuter=minima[1];
+    std::vector<std::string> neighbors;
+    for(const auto &point:witnesses)for(int j=0;j<fields[0]->Elements().size();++j)
+    {
+        const auto &element=fields[0]->Elements()[j];bool contains=true;
+        for(int a:{0,2})contains=contains && point[a]>=element.lower[a]-1e-12 && point[a]<=element.upper[a]+1e-12;
+        if(contains)neighbors.push_back(evaluate(fields[0]->ElementPoint(j,point),element.upper[2]<=m_parameters.geometry.height+1e-12,"explicit_one_sided_witness",true));
+    }
+    Require(before==RANSWallR3::Hash(s),"forensic tensor diagnostic changed selected coefficients");
+    std::vector<std::pair<std::string,std::string>> inventory;for(auto [name,n]:counts)inventory.push_back({name,J::Number(n)});
+    return J::Object({{"state_sha256",J::Quote(before)},{"scalar_budget",ScalarDomainJSON(domain)},
+        {"minimum_inner",nativeInner},{"minimum_outer",nativeOuter},
+        {"minimum_with_explicit_neighbors_inner",minima[0]},{"minimum_with_explicit_neighbors_outer",minima[1]},
+        {"minimum_same_state_Original_outer",minima[2]},{"minimum_same_state_Regularized_outer",minima[3]},{"one_sided_witnesses",J::List(neighbors)},
+        {"inventory_counts",J::Object(inventory)},{"offsets",J::Numbers(offset)},
+        {"same_state_Regularized_definition",J::Quote("beta=.4; gamma=kappa*u_star*wall_distance; incoming reference strain; same diffusion and fields")},
+        {"semantics",J::Quote("refreshed same-stage tensors; physical gradients on identified native elements; no averaging, lifting or acceptance waiver")},
+        {"governing_solves","0"},{"physical_commits","0"},{"selected_state_unchanged","true"}});
+}
+
+std::string RANSWallEvolutionPatch::CompareOuterOperators(const Vector &s,double time,const RANSWallEvolutionData &data) const
+{
+    namespace J=RANSWallSolveJson;const auto before=RANSWallR3::Hash(s);
+    Require(ScalarDomain(s,time,data).admissible,"operator counterfactual outside scalar/budget domain");
+    const auto selected=ResidualResolutionComponents(s,s,0,time,data,false,false);
+    const auto original=ResidualResolutionComponents(s,s,0,time,data,false,true);
+    const auto &a=selected.terms.at("total_constrained"),&b=original.terms.at("total_constrained");
+    Vector delta(Size());for(int i=0;i<Size();++i)delta[i]=a[i]-b[i];
+    const auto native=Residual(s,s,0,time,data,false,true);double nativeDifference=0,otherDifference=0;
+    for(int i=0;i<Size();++i)nativeDifference=std::max(nativeDifference,std::abs(a[i]-native[i]));
+    Require(nativeDifference<1e-9,"selected assembled operator differs from full native residual");
+    for(const auto &name:RANSWallResolutionSpatialTerms())
+        if(name!="outer_momentum_stress" && name!="outer_k_production" && name!="epsilon_production")
+            for(int i=0;i<Size();++i)otherDifference=std::max(otherDifference,std::abs(selected.terms.at(name)[i]-original.terms.at(name)[i]));
+    Require(otherDifference==0.,"outer counterfactual changed an unrelated physical term");
+    if(m_variantName=="Original")Require(RANSWallAlgebra::Maximum(delta)==0.,"Original same-state operator counterfactual is not an exact no-op");
+    const double us=m_robustUstar,H=m_parameters.geometry.height,K0=m_parameters.model.Q()*us*us;
+    std::vector<std::string> outputs;const auto na=Norms(a,selected.constraints,us),nb=Norms(b,selected.constraints,us),nd=Norms(delta,selected.constraints,us);
+    for(int block=0;block<InnerPressure();++block)
+    {
+        Vector rows,la,lb,ld;for(int i=0;i<size[block];++i)if(!selected.constraints.count(offset[block]+i))
+        {rows.push_back(offset[block]+i);la.push_back(a[offset[block]+i]);lb.push_back(b[offset[block]+i]);ld.push_back(delta[offset[block]+i]);}
+        const double scale=block<m_dimension?us:(block==K()?K0:us*us*us/(m_parameters.model.Kappa()*H));
+        const double factor=scale*us/H*std::sqrt(m_volumes[block]);
+        const double common=(block<m_dimension?us:(block==K()?K0:us*us*us/(m_parameters.model.Kappa()*2)))*us/2*std::sqrt(block==Epsilon()?12.:24.);
+        outputs.push_back(J::Object({{"block",J::Number(block)},{"free_rows",J::Numbers(rows)},{"selected_load",J::Numbers(la)},
+            {"same_state_Original_load",J::Numbers(lb)},{"difference_load",J::Numbers(ld)},
+            {"mass_dual_dimensional",J::Numbers(Vector{na[block]*factor,nb[block]*factor,nd[block]*factor})},
+            {"common_normalization",J::Number(common)},{"common_normalized",J::Numbers(Vector{na[block]*factor/common,nb[block]*factor/common,nd[block]*factor/common})}}));
+    }
+    Vector constraintsA, constraintsB;for(int i=offset[InnerPressure()];i<Size();++i){constraintsA.push_back(a[i]);constraintsB.push_back(b[i]);}
+    Require(before==RANSWallR3::Hash(s),"operator diagnostic changed retained fields");
+    return J::Object({{"state_sha256",J::Quote(before)},{"selected_outer",J::Quote(m_variantName)},
+        {"counterfactual_outer",J::Quote("Original")},{"alpha","0"},{"blocks",J::List(outputs)},
+        {"selected_native_residual_maximum_difference",J::Number(nativeDifference)},
+        {"unaffected_physical_term_maximum_difference",J::Number(otherDifference)},
+        {"selected_continuity_gauge_loads",J::Numbers(constraintsA)},{"counterfactual_continuity_gauge_loads",J::Numbers(constraintsB)},
+        {"mass_factor_applications",J::Number(3*Gauge())},{"governing_solves","0"},{"native_history_advanced","false"},
+        {"legacy_name_semantics",J::Quote("refreshed_original_block_norms means selected uncancelled operator, not Original-CLS counterfactual")}});
+}
+
 }

@@ -9,11 +9,12 @@ import argparse
 import datetime
 from itertools import combinations
 import json
+import math
 import os
 from pathlib import Path
 import time
 
-from analyse_cls_accepted_awf import compact,differences,reference_errors,normalized,report,band_key
+from analyse_cls_accepted_awf import compact,differences,reference_errors,normalized,report,band_key,valid_common_query
 from continue_cls_epawf_pimple import CampaignLock,atomic,load_progress,process_identity
 from run_cls_epawf_picard import load,require,sha
 
@@ -90,11 +91,43 @@ def budget(records,first,last,dt):
     return out
 
 
+def window_statistics(observations,first,last,dt):
+    """Time-weighted sampled statistics; these are not exact step budgets.
+
+    Source integrals use trapezoidal physical rates on immutable reporting
+    samples.  The separate budget() result remains the exact algebraic repair.
+    """
+    rows=[(n,o['diagnostic']) for n,o in sorted(observations.items())
+        if first<=n<=last and 'diagnostic' in o]
+    if not rows or rows[0][0]!=first or rows[-1][0]!=last:return None
+    duration=(last-first)*dt
+    def moments(values):
+        mean=sum((b-a)*dt*(x+y)/2 for (a,x),(b,y) in zip(values,values[1:]))/duration
+        square=sum((b-a)*dt*(x*x+y*y)/2 for (a,x),(b,y) in zip(values,values[1:]))/duration
+        return dict(mean=mean,rms_fluctuation=math.sqrt(max(0.,square-mean*mean)),
+            minimum=min(v for _,v in values),maximum=max(v for _,v in values))
+    bands={};names=set.intersection(*[{band_key(b) for b in d['fixed_bands']['regions']} for _,d in rows])
+    for name in sorted(names):
+        values=[(n,next(b for b in d['fixed_bands']['regions'] if band_key(b)==name)) for n,d in rows]
+        entry=bands[name]=dict(k_integral=moments([(n,b['k_integral']) for n,b in values]))
+        for key in ('production','destruction'):
+            if all(b.get(key) is not None for _,b in values):
+                entry[key+'_time_integral_estimate']=sum((m-n)*dt*(x[key]+y[key])/2
+                    for (n,x),(m,y) in zip(values,values[1:]))
+    return dict(sample_count=len(rows),maximum_sample_gap=max(b-a for (a,_),(b,_) in zip(rows,rows[1:]))*dt,
+        wall_stress=moments([(n,d['mean_wall_stress']) for n,d in rows]),fixed_bands=bands,
+        interpretation='trapezoidal physical-time sampled means, fluctuations and source amounts; separate from exact discrete bound supply and from local conservative flux balances')
+
+
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--cases',nargs='+',required=True)
     p.add_argument('--campaigns',nargs='+',type=Path,required=True);p.add_argument('--initial-reports',nargs='+',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True);p.add_argument('--once',action='store_true')
-    p.add_argument('--interval',type=float,default=15.);a=p.parse_args()
+    p.add_argument('--interval',type=float,default=15.)
+    p.add_argument('--windows',type=float,nargs='+',default=[.02,.05,.1],
+        help='fixed physical reporting windows; scientific criteria remain separate from solver acceptance')
+    a=p.parse_args();require(all(w>0 for w in a.windows),'positive physical windows required')
+    horizon=max(a.windows)+.02
     require(len(a.cases)==len(a.campaigns)==len(a.initial_reports) and len(set(a.cases))==len(a.cases),'case/initial/campaign inventory differs')
     require(1<=a.interval<=60,'bounded observer period required')
     a.output.mkdir(parents=True,exist_ok=True);lock=CampaignLock(a.output);states={};initial={};metrics={};digests={};cursors={};prefix_done=set();report_paths={}
@@ -106,7 +139,7 @@ def main():
     for case,path in zip(a.cases,a.initial_reports):
         require(Path(case).name==case and case not in ('.','..'),'case identifier must be one filename component')
         d=report(path);require(d['wall_policy']=='CLSCalibratedBudgetAWF','observer requires explicit new wall formulation')
-        if not d.get('accepted_awf_initial',{}).get('common_samples'):
+        if not valid_common_query(d.get('accepted_awf_initial')):
             atomic(a.output/'summary.json',dict(status='initial_diagnostic_unavailable',case=case,
                 query=d.get('accepted_awf_initial'),production_governing_solves=0,
                 interpretation='optional observer stopped; native campaign outcome remains in its own progress record'))
@@ -114,6 +147,9 @@ def main():
         initial[case]=d['accepted_awf_initial'];states[case]={0:initial[case]};report_paths[case]={}
         prior=previous.get('cases',{}).get(case,{})
         observations[case]={int(n):v for n,v in prior.get('observations',{}).items()};windows[case]=prior.get('fixed_physical_windows',{})
+        observations[case].setdefault(0,dict(time=initial[case]['time'],diagnostic=compact(initial[case]),
+            actual_native_h0=True,drift_from_actual_h0=differences(initial[case],initial[case]),
+            error_to_own_reference=reference_errors(initial[case])))
         metrics[case]=MetricLedger(a.output/(case+'-steps.jsonl'));digests[str(path)]=sha(path)
     while True:
         result=dict(schema=1,captured_UTC=datetime.datetime.now(datetime.timezone.utc).isoformat(),status='observing',
@@ -135,7 +171,7 @@ def main():
                     if t['time'] not in accepted:continue
                     n=round(t['time']/dt)
                     ledger.append(step_metric(n,t,dict(kind='immutable_native_prefix_report',sha256=prefix_hash,native_step=n)))
-                if prefix_report.get('accepted_awf_final',{}).get('common_samples'):
+                if valid_common_query(prefix_report.get('accepted_awf_final')):
                     n=int(prefix_report['steps']);s=prefix_report['accepted_awf_final'];states[case][n]=s;report_paths[case][n]=prefix_file
                     digests[str(prefix_file)]=prefix_hash
                     if n not in observations[case]:
@@ -159,7 +195,8 @@ def main():
                         require(counts==(1,1,1,1,1,1) and t['additional_governing_equation_solves']==0,'changed production solve schedule')
                         ledger.append(step_metric(n,t,dict(kind='native_checkpoint',sha256=rec['checkpoint_sha256'])));cursor=f.tell()
             cursors[case]=cursor
-            keep_from=max(0,front-round(.12/dt))
+            require(all(abs(round(w/dt)*dt-w)<1e-12 for w in a.windows),'window is not an integer number of native steps')
+            keep_from=max(0,front-round(horizon/dt))
             for seg in q['segments']:
                 n=int(seg['end_step']);f=Path(seg['checkpoint']).parent/'case.evolution.json.gz'
                 if n>160 and n%32 and n%80 and n not in q['requested_targets']:continue
@@ -167,7 +204,7 @@ def main():
                 if n in states[case] or (n in observations[case] and n<keep_from) or not f.exists():continue
                 try:d=report(f)
                 except (OSError,EOFError,json.JSONDecodeError):continue
-                if not d.get('accepted_awf_final',{}).get('common_samples'):
+                if not valid_common_query(d.get('accepted_awf_final')):
                     observations[case][n]=dict(time=d['time'],invalid_optional_query=d.get('accepted_awf_final'))
                     continue
                 require(d['steps']==n and abs(d['accepted_awf_final']['time']-d['time'])<1e-13,'completed native block identity differs')
@@ -177,19 +214,21 @@ def main():
                         drift_from_actual_h0=change,common_normalized_drift=normalized(change),
                         error_to_own_reference=reference_errors(s),
                         cumulative_correction=budget(ledger.records,0,n,dt))
-                for duration in (.02,.05,.1):
+                for duration in a.windows:
                     steps=round(duration/dt);old=n-steps
                     if old not in states[case]:continue
                     before=states[case][old];require(abs(s['time']-before['time']-duration)<1e-11,'fixed physical window differs')
                     windows[case][str(old)+'-'+str(n)]=dict(start=before['time'],end=s['time'],duration=duration,
                         dimensional_field_change=differences(s,before),
+                        common_normalized_field_change=normalized(differences(s,before)),
                         wall_stress_change=s['mean_wall_stress']-before['mean_wall_stress'],
+                        sampled_statistics=window_statistics(observations[case],old,n,dt),
                         exact_correction_budget=budget(ledger.records,old,n,dt))
                 # Bound peak memory even when first observing an already long
                 # campaign. Completed compact observations/windows remain.
                 for old in list(states[case]):
-                    if old and old<n-round(.12/dt):del states[case][old]
-            oldest=max(0,max(states[case])-round(.12/dt))
+                    if old and old<n-round(horizon/dt):del states[case][old]
+            oldest=max(0,max(states[case])-round(horizon/dt))
             for n in list(states[case]):
                 if n and n<oldest:del states[case][n]
             source=initial[case]['common_samples'];bulk=sum(w*u for w,u in zip(source['weights'],source['u']))/sum(source['weights']);flow=6/bulk
