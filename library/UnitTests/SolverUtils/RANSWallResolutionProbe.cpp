@@ -117,6 +117,7 @@ struct TraceRates
 TraceRates QuietTraceRate(const RANSWallEvolutionPatch &patch,const Vector &state,const Vector &kRate,
     double time,const RANSWallEvolutionData &data)
 {
+    Require(!patch.AcceptedAWF(),"legacy quiet-chi trace derivative is unsupported for accepted AWF");
     TraceRates result;result.epsilonBoundary.assign(patch.size[patch.Epsilon()],0.);
     const double H=patch.Parameters().geometry.height,delta=patch.RobustParameters()[3];
     const auto field=patch.fields[patch.Epsilon()];
@@ -178,7 +179,7 @@ int main(int argc,char **argv)
         serial->LoadParameter("RANSWallSampleHeight",p.geometry.sampleHeight,1.);serial->LoadParameter("RANSWallTailStart",p.geometry.tailStart,1.);
         serial->LoadParameter("RANSWallTangentialOrder",p.tangentialOrder,8);serial->LoadParameter("RANSWallNormalOrder",p.normalOrder,16);
         RANSWallEvolutionPatch patch(serial,graph,world->GetComm(),p,LoadRANSWallNormalMap(serial,2,p.geometry.height));
-        Require(patch.Dimension()==2 && !patch.Mapped() && world->GetComm()->GetSize()==1 && patch.TransitionEnabled(),"bounded R3 resolution scope is serial flat2D Upstream");
+        Require(patch.Dimension()==2 && !patch.Mapped() && world->GetComm()->GetSize()==1 && patch.MatchingEnabled(),"resolution scope is a supported serial flat2D wall formulation");
         Require(patch.InnerStressName()==packet.get<std::string>("inner_stress_model"),"packet law differs from session");
         for(const std::string name:{"BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter"})
             Require(!serial->DefinesFunction(name),"R3 resolution input must retain unforced physical data");
@@ -361,6 +362,30 @@ int main(int argc,char **argv)
         }
         if(packet.get<std::string>("operation","")=="sampling_checks")
         {
+            if(patch.AcceptedAWF())
+            {
+                const double H=p.geometry.height;auto polynomial=state;
+                const auto coefficients=patch.fields[patch.K()]->Project([&](const RANSWallCoordinate &x)
+                    {return 1+.02*x[0]+.1*x[2]+.03*x[2]*x[2]/(H*H);});
+                std::copy(coefficients.begin(),coefficients.end(),polynomial.begin()+patch.offset[patch.K()]);
+                double endpointError=0,rowError=0,profileError=0,traceError=0;
+                for(double x:{-3.5,-1.,1.6})
+                {
+                    const double expected=1+.02*x+.1*H+.03;const RANSWallCoordinate anchor{x,0,0};
+                    const auto row=patch.SampleKRow(anchor);const double got=patch.SampleK(polynomial,anchor);
+                    endpointError=std::max(endpointError,std::abs(got-expected));
+                    long double direct=0;for(int i=0;i<row.ids.size();++i)direct+=(long double)row.phi[i]*polynomial[patch.offset[patch.K()]+row.ids[i]];
+                    rowError=std::max(rowError,std::abs(got-double(direct)));
+                    profileError=std::max(profileError,std::abs(patch.StateProfile(polynomial,anchor,0,data)->K()-expected));
+                    traceError=std::max(traceError,std::abs(patch.DependentEpsilon(polynomial,{x,0,H},0,data)-
+                        std::pow(expected/p.model.Q(),1.5)/(p.model.Kappa()*H)));
+                }
+                Require(std::max({endpointError,rowError,profileError,traceError})<1e-11,"accepted endpoint functional/dependent consumer mismatch");
+                std::ofstream out(argv[3]);out<<J::Object({{"endpoint_sampling_error",J::Number(endpointError)},
+                    {"exact_global_row_error",J::Number(rowError)},{"nonuniform_profile_K_error",J::Number(profileError)},
+                    {"dependent_epsilon_H_error",J::Number(traceError)},{"chi","null"},{"governing_solves","0"}})<<'\n';
+                Require(out.good(),"accepted sampler check write failed");world->Finalise();return 0;
+            }
             const double H=p.geometry.height;auto polynomial=reference;
             const auto values=patch.fields[patch.K()]->Project([&](const RANSWallCoordinate &x){return 1+.02*x[0]+.1*x[2]+.03*x[2]*x[2]/(H*H)+.005*std::pow(x[2]/H,3);});
             std::copy(values.begin(),values.end(),polynomial.begin()+patch.offset[patch.K()]);
@@ -451,7 +476,7 @@ int main(int argc,char **argv)
                 {"positive_K_negative_local_rejected","true"},{"local_failure",J::Quote(bad.failure)}})<<'\n';
             Require(out.good(),"sampling check write failed");world->Finalise();return 0;
         }
-        if(packet.get<std::string>("operation","")=="height_comparison")
+        if(packet.get<std::string>("operation","")=="height_comparison" || packet.get<std::string>("operation","")=="accepted_awf")
         {
             const double time=packet.get<double>("time");
             Require(patch.ScalarDomain(state,time,data).admissible,"height replay outside hard scalar domain");
@@ -493,7 +518,12 @@ int main(int argc,char **argv)
             Vector pre=packet.get_child_optional("pre_k")?Read(packet,"pre_k"):history;
             const auto fixture=packet.get<std::string>("fixture","");
             double nodeMinimum=1e300;
-            if(!fixture.empty())
+            if(fixture=="accepted_negative")
+            {
+                Require(patch.AcceptedAWF(),"accepted negative fixture needs its own formulation");
+                pre=state;for(int i=0;i<60;++i)state=patch.AcceptedPerturbation(state,-.05);
+            }
+            else if(!fixture.empty())
             {
                 const double K0=p.model.Q()*us*us;auto field=patch.fields[patch.K()];
                 int chosen=-1;for(int i=0;i<field->Elements().size();++i)if(field->Elements()[i].geometry==4)chosen=i;
@@ -555,15 +585,17 @@ int main(int argc,char **argv)
                 completeAudit=patch.CompleteRestrictedAudit(bounded.state,history,alpha,time,data);
                 const double K0=p.model.Q()*us*us;
                 auto reject=[&](bool valid,const std::string &reason){if(!valid)hardReasons.push_back(J::Quote(reason));};
-                reject(completeAudit.at("r2_scalar_domain")[0]==1,"complete_scalar_domain_exit");
+                reject(completeAudit.at(patch.AcceptedAWF()?"accepted_awf_scalar_domain":"r2_scalar_domain")[0]==1,"complete_scalar_domain_exit");
                 reject(completeAudit.at("admissible")[0]==1,"sampled_scalar_or_sampler_inadmissibility");
                 for(const std::string name:{"source_volume_inner","source_volume_outer","physical_sample_K","physical_sample_outer",
                     "prescribed_source_inner","mass_volume","interface_inner","interface_outer","reconstruction_dense","reconstruction_native"})
                 {const auto &row=completeAudit.at(name);reject(!row[0] || row[3]>=-1e-10*K0,"covariance:"+name);}
                 const auto repair=completeAudit.find("robust_source");
                 reject(repair==completeAudit.end() || repair->second[6]>=.5,"lambda_applicability_exit");
-                const auto &cov=completeAudit.at("r2_covariance");
-                reject(cov[0]>=-1e-10*K0 && cov[1]>=-1e-10*K0 && completeAudit.at("r2_scalar_domain")[8]>=.5,
+                const auto &cov=completeAudit.at(patch.AcceptedAWF()?"accepted_awf_covariance":"r2_covariance");
+                const bool sourceValid=patch.AcceptedAWF()?completeAudit.at("accepted_awf_hard_admissible")[0]==1 && completeAudit.at("accepted_awf_scalar_domain")[8]<=1e-10:
+                    completeAudit.at("r2_scalar_domain")[8]>=.5;
+                reject(cov[0]>=-1e-10*K0 && cov[1]>=-1e-10*K0 && sourceValid,
                     "PIMPLE_hard_covariance_or_normalization_exit");
                 hardAdmissible=hardReasons.empty();
             }
@@ -616,7 +648,7 @@ int main(int argc,char **argv)
         for(const auto &key:RANSWallResolutionSpatialTerms()){keys.push_back(J::Quote(key));}
         const auto &control=patch.TransitionControls();const auto distances=patch.TransitionDistances();
         const auto output=J::Object({{"schema","1"},{"scope",J::Quote("R3 fixed-state arithmetic/component/mass-contact diagnostic only; no solver, trajectory, field repair or root inference")},
-            {"dimension","2"},{"ranks","1"},{"mapped","false"},{"wall_policy",J::Quote(patch.WallPolicyName())},{"upstream_transition",J::Boolean(!patch.UniformEPFlat())},{"chi",J::Number(p.chi)},{"eta","0"},
+            {"dimension","2"},{"ranks","1"},{"mapped","false"},{"wall_policy",J::Quote(patch.WallPolicyName())},{"upstream_transition",J::Boolean(patch.TransitionEnabled() && !patch.UniformEPFlat())},{"chi",patch.AcceptedAWF()?"null":J::Number(p.chi)},{"eta","0"},
             {"inner_stress_model",J::Quote(patch.InnerStressName())},{"model_variant",J::Quote(patch.VariantName())},
             {"robust_parameters",J::Numbers(patch.RobustParameters())},{"robust_reference_flow",J::Numbers(patch.RobustReferenceFlow())},
             {"robust_reference_normal",J::Numbers(patch.RobustReferenceNormal())},{"map_parameters",J::Numbers(MapParameters(patch.Mapping()))},

@@ -1,0 +1,771 @@
+% Appendix fragment for cls_neutral_abl_equilibrium_awf_note_revised.tex.
+% Insert after the existing appendices and before \begin{thebibliography}:
+%   \input{accepted_awf_appendix}
+% The main note already calls \appendix. Do not call it again here.
+% Uses the main note's macros, theorem environments, labels and bibliography.
+
+\section{AWF with CLS-compatible coefficients, a budget-determined cutoff,
+and a nonconstant inner kinetic-energy profile}
+\label{app:accepted-awf}
+
+This appendix defines the accepted alternative to the constant-inner-$k$
+EP-AWF construction. The objective is to preserve the standard neutral
+CLS equilibrium in the outer region while allowing the kinetic energy
+to vary inside the modeled wall layer. The AWF viscosity coefficients
+are calibrated to that outer equilibrium, dissipation retains the
+budget-determined cutoff, and the prescribed redistribution $C_k^w$
+is removed. Ordinary diffusion of the transported inner $k$ then
+balances the local difference between production and dissipation.
+The outer CLS model, including its Yap correction, is unchanged.
+
+The original CLS and rough-wall AWF supply the constitutive and
+wall-model starting points \cite{CLS1996,SCI2006}. The coefficient
+calibration, budget cutoff, retained inner transport, and curved
+completion specified here are modifications of that combination.
+When this variant is selected, the definitions below replace the
+original wall coefficients, interior sampling choice, and
+$\chi$-dependent source policy used elsewhere in the note.
+
+\subsection{Scope, endpoint sampling, and coefficient calibration}
+\label{app:accepted-awf-coefficients}
+
+Use the high-Re outer equation convention of
+\cref{sec:derivation}: molecular momentum and scalar diffusion are
+omitted in the outer analytical reference, while $\nu>0$ is retained
+in the AWF. This is a statement about the selected equations, not an
+assertion that the same profiles solve a finite-Re outer system.
+The transported inner turbulence variable is $k$; inner
+dissipation is a dependent total $k$ sink. No inner CLS dissipation
+transport equation is introduced.
+
+The accepted sampling and tail-matching heights are
+\begin{equation}
+ \boxed{z_K=z_m=H,\qquad
+ K=k_w(H)=k_o(H)>0.}
+ \label{eq:accepted-sampling}
+\end{equation}
+The subscripts $w,o$ distinguish the modeled wall layer and outer
+region. At each positive current $K$, define the counterfactual
+reference scales
+\begin{equation}
+ \ust(K)=\sqrt{\frac{K}{\qs}},\qquad
+ t_0(K)=\frac{K}{\qs},\qquad
+ \Aref(K)=\frac{\ust(K)^3}{\kc}.
+ \label{eq:accepted-reference-scales}
+\end{equation}
+These are reference scales. In a developing, forced, or separated
+flow, $t_0(K)$ is not imposed as the actual wall traction.
+Arguments $K$ are suppressed below when all quantities use the same
+sample. A fixed inlet reference is obtained by setting $K=K_0$.
+
+The outer constants are the roots derived in
+\cref{eq:qroot,eq:kappaeq},
+\begin{equation}
+ \begin{gathered}
+ C(\qs)\qs^2=1,\qquad
+ \frac{\qs\kc^2}{1.3}
+ +H_Y\!\left(\frac{\kc\qs^{3/2}}{2.5}\right)=0.48,\\
+ \qs=3.190675081624288,\qquad
+ \kc=0.440553905186659,\qquad
+ \Cs=\qs^{-2}=0.0982278953282113.
+ \end{gathered}
+ \label{eq:accepted-cls-constants}
+\end{equation}
+Here $C$ and $H_Y$ retain the definitions of the original high-Re CLS
+closure and its Yap correction. Matching the dissipation coefficient
+and the asymptotic auxiliary-viscosity slope gives
+\begin{equation}
+ \boxed{\begin{aligned}
+ c_\ell^w&=\kc\qs^{3/2}=2.510862475219797,\\
+ c_\mu^w&=\Cs=\qs^{-2}=0.0982278953282113,\\
+ \alpha&=c_\mu^wc_\ell^w
+       =\frac{\kc}{\sqrt{\qs}}=0.246636736399424.
+ \end{aligned}}
+ \label{eq:accepted-coefficients}
+\end{equation}
+Indeed, with $a:=\alpha\sqrt K$,
+\begin{equation}
+ \boxed{a=\kc\ust,\qquad
+ \frac{K^{3/2}}{c_\ell^w}=\Aref
+ =\frac{t_0^2}{a}.}
+ \label{eq:accepted-calibration-identities}
+\end{equation}
+The choice of $c_\ell^w$ matches the outer dissipation tail exactly.
+The additional choice of $c_\mu^w$ matches the viscosity slope;
+conservative interface matching by itself does not require equality
+of these slopes.
+
+Retain the original intercept correlation $b(K,h,\nu)$ in
+\cref{eq:brough}, including $b=10.7$ for $h=0$. Define
+\begin{equation}
+ z_v=\frac{\nu b}{\sqrt K},\qquad
+ \nu_{t,A}(z)=a\max(z-z_v,0),\qquad
+ D_A=\nu+\nu_{t,A},\qquad
+ D_{k,w}=\nu+\frac{\nu_{t,A}}{\sigma_k}.
+ \label{eq:accepted-viscosities}
+\end{equation}
+The CLS choice $\sigma_k=1$ gives $D_{k,w}=D_A$.
+These auxiliary coefficients depend on sampled $K$, while the
+transported field $k_w(z)$ can vary. Substituting $k_w(z)$ for $K$
+in the viscosity or dissipation law would define a different model.
+
+\subsection{Momentum, production, and the outer velocity anchor}
+\label{app:accepted-awf-momentum}
+
+The analytical form of the AWF momentum reconstruction is retained,
+with all integrals evaluated using the calibrated $D_A$. Put
+$L_h(z)=\max(z-h,0)$ and
+\begin{equation}
+ J_0(z)=\int_0^z\frac{\dd s}{D_A(s)},\qquad
+ J_1(z)=\int_0^z\frac{L_h(s)}{D_A(s)}\,\dd s,\qquad
+ J_2(z)=\int_0^z\frac{\dd s}{D_A(s)^2}.
+ \label{eq:accepted-J}
+\end{equation}
+For scalar tangential forcing $F$, the flat quasi-steady reduction is
+\begin{equation}
+ \begin{aligned}
+ t_A&=\frac{U_H-FJ_1(H)}{J_0(H)},\qquad
+ U_A(z)=t_AJ_0(z)+FJ_1(z),\\
+ P_A(z)&=\nu_{t,A}(z)
+       \left[\frac{t_A+FL_h(z)}{D_A(z)}\right]^2.
+ \end{aligned}
+ \label{eq:accepted-forced-awf}
+\end{equation}
+Thus no slip, the original forcing cutoff at $h$, and the explicit
+pressure-gradient response retain their analytical form. Their
+numerical values change with the new viscosity coefficients.
+The vector form follows \cref{eq:3d}.
+
+At the counterfactual zero-forcing reference, choose
+\begin{equation}
+ U_{H,0}=t_0J_0(H),\qquad
+ U_{w,0}(z)=t_0J_0(z),\qquad
+ p_{A,0}(z)=t_0^2\frac{\nu_{t,A}(z)}{D_A(z)^2}.
+ \label{eq:accepted-reference-production}
+\end{equation}
+The resulting integrated reference production is
+\begin{equation}
+ \boxed{\mathcal P_0:=\int_0^H p_{A,0}(z)\,\dd z
+ =t_0^2[J_0(H)-\nu J_2(H)]=HP_0.}
+ \label{eq:accepted-production-budget}
+\end{equation}
+$P_0$ remains the height mean used in the main note; $p_{A,0}$ is
+pointwise reference production. Neither is the production of a
+general current terrain flow.
+
+For $z\geq H$, preserve the standard outer CLS branch
+\begin{equation}
+ \boxed{\begin{aligned}
+ U_{o,0}(z)&=t_0J_0(H)+\frac{\ust}{\kc}\ln\frac zH,\\
+ k_{o,0}(z)&=K,\qquad
+ \eps_{o,0}(z)=\frac{\Aref}{z},\qquad
+ \nu_{t,o,0}(z)=\kc\ust z.
+ \end{aligned}}
+ \label{eq:accepted-outer-reference}
+\end{equation}
+The outer velocity offset has been used to satisfy the AWF anchor.
+Its aerodynamic intercept is therefore
+\begin{equation}
+ z_{0,c}=H\exp[-\kc\ust J_0(H)].
+ \label{eq:accepted-aerodynamic-intercept}
+\end{equation}
+Retaining the same sand-grain $h$ while changing the AWF coefficients
+generally changes this intercept. A separately prescribed $z_{0,c}$
+requires an additional momentum/intercept calibration.
+
+\subsection{Budget-determined dissipation and admissibility}
+\label{app:accepted-awf-cutoff}
+
+Use the continuous positive dissipation distribution
+\begin{equation}
+ \boxed{E_w(z)=\ECw(z)=\frac{\Aref}{\max(z,z_c)},
+ \qquad C_k^w(z)=0.}
+ \label{eq:accepted-dissipation}
+\end{equation}
+The required tail begins no later than $H$, so $0<z_c\leq H$.
+Its integral is
+\begin{equation}
+ \int_0^H\ECw(z)\,\dd z
+ =\Aref\left(1+\ln\frac H{z_c}\right).
+ \label{eq:accepted-dissipation-integral}
+\end{equation}
+The standard outer reference has zero $k$ gradient. Together with
+zero modeled ground $k$ flux, conservative matching therefore
+requires
+\begin{equation}
+ \boxed{\int_0^H\ECw\,\dd z=\mathcal P_0.}
+ \label{eq:accepted-budget-condition}
+\end{equation}
+Combining the preceding identities gives
+\begin{equation}
+ \boxed{z_c=H\exp(1-\Lambda),\qquad
+ \Lambda=\frac{\mathcal P_0}{\Aref}
+ =\frac{t_0^2[J_0(H)-\nu J_2(H)]}{\Aref}.}
+ \label{eq:accepted-cutoff}
+\end{equation}
+The left side of \cref{eq:accepted-dissipation-integral} decreases
+strictly with $z_c$, tends to infinity as $z_c\downarrow0$, and equals
+$\Aref$ at $z_c=H$. Consequently,
+\begin{equation}
+ \boxed{0<z_c\leq H\quad\Longleftrightarrow\quad\Lambda\geq1,}
+ \label{eq:accepted-cutoff-gate}
+\end{equation}
+and the admissible cutoff is unique. This is the $z_m=H$
+specialization of \cref{eq:hp-gate}. If the gate fails, this
+monotone cutoff family cannot meet both the budget and outer trace.
+Clipping $z_c$ to $H$ would not preserve the budget.
+
+The original molecular cutoff
+$z_{\eps,A}=2c_\ell^w\nu/\sqrt K$ is replaced by
+\cref{eq:accepted-cutoff}. The plateau is now $\Aref/z_c$.
+It cannot simultaneously remain $2\nu K/z_c^2$: imposing both
+plateau formulas would force the original molecular cutoff again.
+Thus the cutoff change is an explicit change of the inner
+dissipation model.
+
+\subsection{Derivation of the nonconstant inner reference}
+\label{app:accepted-awf-inner-k}
+
+Retain the inner transport equation with its physical production
+and prescribed dissipation,
+\begin{equation}
+ \partial_t k_w+\bm U_w\cdot\nabla k_w
+ =\nabla\cdot(D_{k,w}\nabla k_w)+P_A-\ECw.
+ \label{eq:accepted-k-transport}
+\end{equation}
+For the steady, parallel flat reference this reduces to
+\begin{equation}
+ (D_{k,w}k_{w,0}')'=\ECw-p_{A,0},\qquad
+ D_{k,w}(0)k_{w,0}'(0)=0,\qquad k_{w,0}(H)=K.
+ \label{eq:accepted-k-bvp}
+\end{equation}
+Define the cumulative source defect
+\begin{equation}
+ Q_0(z)=\int_0^z[\ECw(s)-p_{A,0}(s)]\,\dd s.
+ \label{eq:accepted-Q}
+\end{equation}
+Two integrations give the unique solution for the prescribed
+positive diffusivity,
+\begin{equation}
+ \boxed{D_{k,w}(z)k_{w,0}'(z)=Q_0(z),\qquad
+ k_{w,0}(z)=K-\int_z^H\frac{Q_0(s)}{D_{k,w}(s)}\,\dd s.}
+ \label{eq:accepted-k-profile}
+\end{equation}
+The quantity $Q_0$ is the gradient flux inside the diffusion
+operator; the physical upward diffusive flux is $-Q_0$.
+The cutoff budget gives
+\begin{equation}
+ Q_0(0)=Q_0(H)=0,\qquad k_{w,0}'(H)=0.
+ \label{eq:accepted-endpoint-fluxes}
+\end{equation}
+Conversely, these two zero endpoint fluxes imply
+\cref{eq:accepted-budget-condition} by integration of the $k$
+equation. Allowing a variable $k_w$ supplies local diffusion; it
+does not remove the integrated compatibility requirement.
+
+No additional value of $k_w(0)$ is prescribed. It follows from
+\cref{eq:accepted-k-profile}. This is a modeled rough-wall layer,
+not a viscous-sublayer resolution with an independently imposed
+$k(0)=0$. The formula defines a stationary reference and an
+initialization; during a general flow, $k_w$ is evolved by
+\cref{eq:accepted-k-transport}, rather than reset to this profile.
+
+For every sufficiently regular test function $\phi$, integration
+by parts yields
+\begin{equation}
+ \boxed{-\int_0^H D_{k,w}k_{w,0}'\phi'\,\dd z
+ +\int_0^H(p_{A,0}-\ECw)\phi\,\dd z=0.}
+ \label{eq:accepted-weak-equilibrium}
+\end{equation}
+Thus the nonconstant reference balances every continuum test
+moment. The higher-mode obstruction in \cref{sec:hp-source}
+assumed constant inner $k$, for which the diffusion term vanished.
+Finite-dimensional projection and numerical differentiation can
+still leave a discrete residual; continuum balance alone does not
+establish exact spectral/$hp$ preservation.
+
+\subsection{Closed formulas and positivity on the rough branch}
+\label{app:accepted-awf-rough}
+
+Suppose $z_v\leq0$ and define
+\begin{equation}
+ d=\nu-az_v\geq\nu,\qquad D_A(z)=d+az.
+ \label{eq:accepted-rough-D}
+\end{equation}
+Then
+\begin{equation}
+ \begin{aligned}
+ J_0(z)&=\frac1a\ln\frac{d+az}{d},&
+ J_2(z)&=\frac1a\left(\frac1d-\frac1{d+az}\right),\\
+ p_{A,0}(z)&=t_0^2\frac{d+az-\nu}{(d+az)^2}.&&
+ \end{aligned}
+ \label{eq:accepted-rough-integrals}
+\end{equation}
+Using $\Aref=t_0^2/a$, the cumulative production is
+\begin{equation}
+ \int_0^z p_{A,0}(s)\,\dd s
+ =\Aref\left[
+ \ln\frac{d+az}{d}
+ -\nu\left(\frac1d-\frac1{d+az}\right)\right].
+ \label{eq:accepted-rough-production-integral}
+\end{equation}
+In particular, with $\zeta_H=aH/d$ and $\beta=\nu/d$,
+\begin{equation}
+ \Lambda=\ln(1+\zeta_H)
+          -\frac{\beta\zeta_H}{1+\zeta_H}.
+ \label{eq:accepted-rough-Lambda}
+\end{equation}
+The cumulative dissipation is $\Aref R_c(z)$, where
+\begin{equation}
+ R_c(z)=\begin{cases}
+ z/z_c,&0\leq z\leq z_c,\\
+ 1+\ln(z/z_c),&z_c\leq z\leq H.
+ \end{cases}
+ \label{eq:accepted-Rc}
+\end{equation}
+Hence an elementary expression for the flux is
+\begin{equation}
+ Q_0(z)=\Aref\left[
+ R_c(z)-\ln\frac{d+az}{d}
+ +\nu\left(\frac1d-\frac1{d+az}\right)\right].
+ \label{eq:accepted-rough-Q}
+\end{equation}
+Together with \cref{eq:accepted-k-profile}, this provides an exact
+analytical representation of the inner reference.
+
+\paragraph{A closed primitive for the kinetic energy.}
+For the selected $\sigma_k=1$, set
+$\zeta=az/d$, $\zeta_c=az_c/d$, and define
+\begin{align}
+ \mathcal F_< (\zeta)
+ &=\frac{\zeta-\ln(1+\zeta)}{\zeta_c}
+   -\frac12\ln^2(1+\zeta)
+   +\beta\left[\ln(1+\zeta)+\frac1{1+\zeta}-1\right],
+ \label{eq:accepted-primitive-lower}\\
+ \mathcal G(\zeta)
+ &=\left[1+\ln\frac{\zeta}{\zeta_c}+\beta\right]\ln(1+\zeta)
+   +\operatorname{Li}_2(-\zeta)
+   -\frac12\ln^2(1+\zeta)+\frac{\beta}{1+\zeta},
+ \quad \zeta>0.
+ \label{eq:accepted-primitive-upper}
+\end{align}
+The real dilogarithm is defined here by
+$\operatorname{Li}_2(-\zeta)=-\int_0^\zeta\ln(1+s)\,\dd s/s$.
+Join the primitives continuously:
+\begin{equation}
+ \mathcal F(\zeta)=
+ \begin{cases}
+ \mathcal F_< (\zeta),&0\leq\zeta\leq\zeta_c,\\
+ \mathcal F_< (\zeta_c)+\mathcal G(\zeta)-\mathcal G(\zeta_c),
+ &\zeta_c\leq\zeta\leq\zeta_H.
+ \end{cases}
+ \label{eq:accepted-primitive-joined}
+\end{equation}
+Direct differentiation of these expressions gives
+$\mathcal F'(\zeta)=Q_0(d\zeta/a)/[\Aref(1+\zeta)]$.
+Therefore the closed profile is
+\begin{equation}
+ \boxed{k_{w,0}(z)=K+\frac{\Aref}{a}
+ \left[\mathcal F\!\left(\frac{az}{d}\right)
+       -\mathcal F(\zeta_H)\right].}
+ \label{eq:accepted-k-closed}
+\end{equation}
+The integral form \cref{eq:accepted-k-profile} remains applicable
+to other viscosity segments and positive diffusivities.
+
+\paragraph{The sign of the local imbalance.}
+For every $z\geq z_c>0$ on this rough branch,
+\begin{equation}
+ \boxed{\ECw(z)-p_{A,0}(z)
+ =\frac{\Aref[(d+\nu)az+d^2]}{z(d+az)^2}>0.}
+ \label{eq:accepted-tail-defect}
+\end{equation}
+This strict inequality concerns the $1/z$ tail. It does not imply
+positive imbalance throughout the plateau. In fact, the budget
+requires a compensating region of negative imbalance.
+
+\begin{proposition}[A positive rough-wall reference]
+Assume $z_v\leq0$, $d\geq2\nu$, and $\Lambda\geq1$.
+Then $\ECw-p_{A,0}$ has exactly one zero in $(0,z_c)$,
+changing from negative to positive. For every positive $D_{k,w}$,
+\begin{equation}
+ Q_0(z)<0\quad(0<z<H),\qquad
+ k_{w,0}'(z)<0\quad(0<z<H),\qquad
+ k_{w,0}(z)>K>0\quad(0\leq z<H).
+ \label{eq:accepted-positivity}
+\end{equation}
+\end{proposition}
+\begin{proof}
+The reference production satisfies
+\[
+ p_{A,0}'(z)=
+ \frac{a t_0^2[2\nu-(d+az)]}{(d+az)^3}\leq0,
+\]
+and is strictly decreasing for $z>0$. On the dissipation plateau,
+$\Aref/z_c-p_{A,0}$ is therefore strictly increasing and is
+positive at $z_c$ by \cref{eq:accepted-tail-defect}.
+Its initial value must be negative, since otherwise the total
+integral could not vanish. It crosses zero exactly once, after
+which the defect remains positive up to $H$. Its cumulative
+integral first decreases and then increases to $Q_0(H)=0$, so
+$Q_0<0$ in the interior. The profile and monotonicity statements
+follow from \cref{eq:accepted-k-profile}.
+\end{proof}
+The condition $d\geq2\nu$ is sufficient, not necessary.
+For other intercepts, including a smooth-wall viscosity segment,
+the budget construction remains defined when its gate holds, but
+positivity must be assessed from the resulting profile.
+
+The rough-branch velocity anchor also gives the useful identities
+\begin{equation}
+ \boxed{z_{0,c}=\frac{dH}{aH+d},\qquad
+ z_c=\ee z_{0,c}
+ \exp\!\left[\nu\left(\frac1d-\frac1{aH+d}\right)\right].}
+ \label{eq:accepted-roughness-cutoff}
+\end{equation}
+Even with the calibrated slope, $z_{0,c}$ retains a finite-height
+dependence. For $aH\gg d$, it tends to $d/a$.
+
+\subsection{Conservative matching and normal pressure balance}
+\label{app:accepted-awf-matching}
+
+The inner momentum reference and the outer profile in
+\cref{eq:accepted-outer-reference} satisfy
+\begin{equation}
+ \begin{gathered}
+ U_{w,0}(0)=0,\qquad U_{w,0}(H)=U_{o,0}(H),\\
+ D_A(H)U_{w,0}'(H)
+ =\nu_{t,o,0}(H)U_{o,0}'(H)=t_0.
+ \end{gathered}
+ \label{eq:accepted-momentum-match}
+\end{equation}
+The calibrated coefficients match the viscosity slope, not the
+finite-height viscosities: on the rough branch,
+$D_A(H)=aH+d$ while $\nu_{t,o,0}(H)=aH$.
+The velocity derivatives therefore need not coincide.
+
+The turbulence matching conditions are
+\begin{equation}
+ \boxed{\begin{aligned}
+ k_{w,0}(H)&=k_{o,0}(H)=K,\\
+ D_{k,w}(H)k_{w,0}'(H)
+ &=D_{k,o}(H)k_{o,0}'(H)=0,\\
+ \ECw(H)&=\eps_{o,0}(H)=\frac{\Aref}{H}.
+ \end{aligned}}
+ \label{eq:accepted-turbulence-match}
+\end{equation}
+Here $D_{k,o}=\nu_t^{CLS}/\sigma_k$ on the declared outer branch.
+Inner dissipation is dependent, so the outer dissipation equation
+receives its single trace. No additional dissipation-flux condition
+is imposed. In the limiting case $z_c=H$, even the one-sided
+dissipation derivatives differ, while the required trace still
+matches.
+
+With the full-strain inner stress completion of
+\cref{eq:curve-inner-stress}, the parallel inner normal stress is
+$R_{zz,w}=2k_w/3$. Its normal momentum balance therefore requires
+\begin{equation}
+ \frac{\dd}{\dd z}\left(
+ \frac{p_w}{\rho}+gz+\frac23 k_{w,0}\right)=0.
+ \label{eq:accepted-inner-pressure}
+\end{equation}
+Mechanical pressure inside this layer is generally not hydrostatic.
+Since $R_{zz,o}=0.52K$ at the outer reference, continuity of total
+normal traction gives
+\begin{equation}
+ \boxed{\frac{p_w(H)-p_o(H)}{\rho}
+ =\left(0.52-\frac23\right)K=-\frac{11}{75}K.}
+ \label{eq:accepted-pressure-jump}
+\end{equation}
+The interface offset is unchanged from the full-strain EP-AWF
+completion because the matching value is still $K$; the interior
+pressure distribution changes with $k_{w,0}(z)$.
+When a reduced pressure is stored, recover the mechanical pressure
+consistently before evaluating the AWF pressure forcing.
+
+The flat reference also retains the integrated mechanical-energy
+identity
+\begin{equation}
+ t_0 U_{H,0}
+ =\nu\int_0^H[U_{w,0}'(z)]^2\,\dd z
+  +\int_0^H p_{A,0}(z)\,\dd z
+ =\nu t_0^2J_2(H)+\int_0^H\ECw(z)\,\dd z.
+ \label{eq:accepted-energy}
+\end{equation}
+The nonzero internal $k$ flux redistributes energy within the layer;
+it contributes no net flux at the two reference endpoints.
+
+\subsection{Distinction from EP-AWF with unit equilibrium weight}
+\label{app:accepted-awf-versus-ep}
+
+To isolate the transport difference, compare the two constructions
+at identical $K,h,H,\nu$, viscosity coefficients, and budget cutoff.
+At $\chi=1$, the EP-AWF has
+\begin{equation}
+ E_w^{EP}=\ECw,\qquad
+ C_{k,EP}^w=\ECw-p_{A,0},\qquad
+ S_{k,w}^{EP}=P_A-p_{A,0}.
+ \label{eq:accepted-ep-comparison}
+\end{equation}
+At the flat reference, $P_A=p_{A,0}$ and this source vanishes
+pointwise, permitting constant inner $k=K$. The accepted alternative
+instead uses
+\begin{equation}
+ E_w=\ECw,\qquad C_k^w=0,\qquad
+ S_{k,w}=P_A-\ECw.
+ \label{eq:accepted-source-comparison}
+\end{equation}
+Its reference source is generally nonzero and is balanced by
+$\partial_z(D_{k,w}k_{w,0}')$.
+
+Both sources have the same layer integral,
+\begin{equation}
+ \int_0^H S_{k,w}\,\dd z
+ =\int_0^H S_{k,w}^{EP}\,\dd z
+ =\int_0^H(P_A-p_{A,0})\,\dd z,
+ \label{eq:accepted-equal-integrated-sources}
+\end{equation}
+but their local balances and inner kinetic-energy fields differ.
+On the reference, EP-AWF carries the physical redistribution flux
+$-Q_0$ through its prescribed correction; the accepted model carries
+the same flux through ordinary diffusion of its nonconstant $k$.
+This reference identity does not make their evolving dynamics
+equivalent. In addition, comparison with an EP-AWF that retains the
+original coefficients must account separately for the changed
+momentum reconstruction.
+
+Setting the old switch to $\chi=0$ does not select the present
+variant: it restores the original-cutoff dissipation $\EAw$ through
+\cref{eq:blend}. The accepted model retains $\ECw$ while removing
+$C_k^w$. Consequently the spatial fade to the original AWF in
+\cref{sec:transition} is not part of this variant.
+
+\subsection{A specified extension to curved terrain}
+\label{app:accepted-awf-curved}
+
+The accepted scalar policy can be used with the conservative curved
+patch of \cref{sec:curved}. To make that extension definite, adopt
+the note's metric-weighted reference budget, together with
+$r_K=r_m=H$, $K=k|_{\Gamma_H}$, the calibrated viscosity, and
+$C_k^w=0$. This is an explicit extension of the flat model; the
+flat matching theorem does not by itself select a unique curved
+calibration or establish an equilibrium over a hill.
+
+Retain the plus curvature convention
+\begin{equation}
+ \bm x(\bm\xi,r)=\bm X(\bm\xi)+r\bm n(\bm\xi),\qquad
+ \mathsf B=\nabla_\Gamma\bm n,\qquad
+ \mathsf A=I_T+r\mathsf B,\qquad J=\det_T\mathsf A.
+ \label{eq:accepted-curved-map}
+\end{equation}
+Here $r$ is physical normal distance and $\dd V=J\,\dd S_w\,\dd r$.
+All principal stretches $1+r\kappa_i$ must stay positive, and
+the normal map must be globally one-to-one. Positive local $J$
+alone does not guarantee unique normal projection.
+
+\paragraph{Reference cutoff in the physical volume measure.}
+Define
+\begin{equation}
+ \boxed{\begin{aligned}
+ E_w(r)&=\ECw(r)=\frac{\Aref(K)}{\max(r,r_c)},\\
+ \int_0^H J(r)\ECw(r)\,\dd r
+ &=\mathcal P_J:=\int_0^H J(r)p_{A,0}(r;K)\,\dd r,\\
+ p_{A,0}(r;K)&=t_0(K)^2
+              \frac{\nu_{t,A}(r;K)}{D_A(r;K)^2}.
+ \end{aligned}}
+ \label{eq:accepted-curved-budget}
+\end{equation}
+The reference kernel remains counterfactual flat, parallel,
+zero-forcing production at the current $K$. It is not replaced
+by actual terrain production.
+For $\mathcal B(c)=\int_0^H J(r)\Aref/\max(r,c)\,\dd r$,
+\begin{equation}
+ \mathcal B'(c)=-\frac{\Aref}{c^2}\int_0^cJ(r)\,\dd r<0,
+ \qquad \lim_{c\downarrow0}\mathcal B(c)=+\infty.
+ \label{eq:accepted-curved-monotonicity}
+\end{equation}
+Therefore a unique $0<r_c\leq H$ exists exactly when
+\begin{equation}
+ \boxed{\mathcal P_J\geq
+ \frac{\Aref}{H}\int_0^HJ(r)\,\dd r.}
+ \label{eq:accepted-curved-gate}
+\end{equation}
+At a fixed footpoint on a three-dimensional surface,
+$J=(1+\kappa_1r)(1+\kappa_2r)$. Direct integration gives
+\begin{equation}
+ \begin{aligned}
+ \frac{\mathcal B(c)}{\Aref}
+ &=1+\ln\frac Hc
+ +(\kappa_1+\kappa_2)\left(H-\frac c2\right)\\
+ &\quad+\kappa_1\kappa_2
+       \left(\frac{H^2}{2}-\frac{c^2}{6}\right).
+ \end{aligned}
+ \label{eq:accepted-curved-budget-explicit}
+\end{equation}
+The curved cutoff thus requires one monotone scalar root solve.
+The exponential formula is recovered when $J=1$.
+
+\paragraph{Actual inner flow and transport.}
+Write $\bm U=\bm u_t+w\bm n$ and
+$\bm v=\mathsf A^{-1}\bm u_t$. The inner equation is
+\begin{equation}
+ \boxed{\begin{aligned}
+ J\partial_t k
+ &+\partial_r\{J(wk-D_{k,w}\partial_rk)\}\\
+ &+\operatorname{div}_\Gamma\left\{
+ J[\bm v k-D_{k,w}\mathsf A^{-1}\mathsf A^{-T}
+                         \nabla_\Gamma k]\right\}
+ =J(P_A-\ECw).
+ \end{aligned}}
+ \label{eq:accepted-curved-k}
+\end{equation}
+Use the full continuity and momentum equations
+\cref{eq:curve-continuity,eq:curve-momentum}, the stated roughness
+force in \cref{eq:curve-rough-force}, and the inner completion
+\begin{equation}
+ \begin{gathered}
+ \R_A=\tfrac23k\I-\nu_{t,A}\Sm_w,\qquad
+ \mathsf T_w=-\left(\frac{p_w}{\rho}+\tfrac23k\right)\I
+              +D_A\Sm_w,\\
+ P_A=-\R_A:\nabla\bm U
+     =\tfrac12\nu_{t,A}\Sm_w:\Sm_w
+ \quad\text{for }\nabla\cdot\bm U=0.
+ \end{gathered}
+ \label{eq:accepted-curved-stress}
+\end{equation}
+The isotropic stress uses local transported $k$, not sampled $K$.
+For a weakly incompressible discrete field, the production
+convention discussed after \cref{eq:curve-inner-stress} retains
+the corresponding $-(2k/3)\nabla\cdot\bm U$ contribution when
+required by the discrete stress-work balance.
+
+The base-normal tangential traction contains curvature and normal
+motion,
+\begin{equation}
+ \bm t_A=D_A\left[
+ \partial_r\bm u_t+\mathsf A^{-T}\nabla_\Gamma w
+ -\mathsf B\mathsf A^{-1}\bm u_t\right].
+ \label{eq:accepted-curved-traction}
+\end{equation}
+Normal momentum must likewise retain curvature acceleration and
+pressure balance. Merely weighting independent flat momentum
+columns by $J$ does not supply these terms. General curved and
+developing flow uses the coupled patch solve of \cref{sec:curved}.
+
+The reference budget preserves the actual non-equilibrium source:
+\begin{equation}
+ \int_0^H J(P_A-\ECw)\,\dd r
+ =\int_0^H J(P_A-p_{A,0})\,\dd r.
+ \label{eq:accepted-curved-actual-budget}
+\end{equation}
+This quantity need not vanish; storage, tangential transport, and
+interface flux balance it. Determining the cutoff from actual
+$P_A$ instead of $p_{A,0}$ would impose a different energy budget.
+
+An auxiliary frozen normal-column construction can still be written,
+\begin{equation}
+ \begin{aligned}
+ Q_J(r)&=\int_0^rJ(s)[\ECw(s)-p_{A,0}(s)]\,\dd s,\\
+ k_{\rm col}(r)&=K-\int_r^H
+            \frac{Q_J(s)}{J(s)D_{k,w}(s)}\,\dd s.
+ \end{aligned}
+ \label{eq:accepted-curved-column}
+\end{equation}
+It balances only the reference source and normal diffusion.
+It is not an exact terrain-flow equilibrium, since actual
+production, advection, and tangential diffusion generally differ.
+Its zero base-normal endpoint flux also does not establish zero
+flux through an arbitrary sloping matching surface.
+
+\paragraph{Interface conditions.}
+Retain the common velocity, total traction, and mass flux in
+\cref{eq:curve-momentum-interface,eq:curve-massflux}, together with
+the common $k$ trace and advective--diffusive flux in
+\cref{eq:curve-k-interface}. For varying $H(\bm\xi)$, these use
+\begin{equation}
+ \bm N_H=\frac{\bm n-\mathsf A_H^{-T}\nabla_\Gamma H}
+ {\sqrt{1+|\mathsf A_H^{-T}\nabla_\Gamma H|^2}}.
+ \label{eq:accepted-curved-interface-normal}
+\end{equation}
+Surface derivatives in the mapped equations are taken at fixed
+$r$ before restriction to $H$; in particular,
+$\nabla_\Gamma K=(\nabla_\Gamma k)|_H
++(\partial_rk)|_H\nabla_\Gamma H$.
+The outer dissipation equation receives only
+\begin{equation}
+ \eps_{o,H}=\ECw(H)=\frac{\Aref(K)}{H}.
+ \label{eq:accepted-curved-epsilon-trace}
+\end{equation}
+The full normal-traction condition replaces the flat pressure
+offset over terrain. There is no independently solved inner
+dissipation equation or additional prescribed dissipation flux.
+
+\subsection{Illustrative reference and implementation implications}
+\label{app:accepted-awf-example}
+
+For a flat reference with
+\begin{equation}
+ \ust=0.4\units{m\,s^{-1}},\quad
+ \nu=1.5\times10^{-5}\units{m^2\,s^{-1}},\quad
+ h=0.1\units{m},\quad H=2\units{m},\quad z_K=z_m=H,
+ \label{eq:accepted-example-inputs}
+\end{equation}
+the unchanged roughness correlation and calibrated coefficients give
+the values in \cref{tab:accepted-reference}. They evaluate the
+analytical construction; they are not a solver-validation result.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}lll@{}}
+\toprule
+Quantity & Value & Units\\
+\midrule
+$K$ & $0.5105080131$ & $\mathrm{m^2\,s^{-2}}$\\
+$z_v$ & $-0.0052721312$ & $\mathrm m$\\
+$a$ & $0.1762215621$ & $\mathrm{m\,s^{-1}}$\\
+$d$ & $0.0009440632$ & $\mathrm{m^2\,s^{-1}}$\\
+$\mathcal P_0$ & $0.8584509755$ & $\mathrm{m^3\,s^{-3}}$\\
+$z_c$ & $0.0147555946$ & $\mathrm m$\\
+$U_{H,0}$ & $5.3797062304$ & $\mathrm{m\,s^{-1}}$\\
+$z_{0,c}$ & $0.0053429396$ & $\mathrm m$\\
+$k_{w,0}(0)$ & $1.0229104395$ & $\mathrm{m^2\,s^{-2}}$\\
+$k_{w,0}(0.1\units m)$ & $0.5447982810$ & $\mathrm{m^2\,s^{-2}}$\\
+$k_{w,0}(1\units m)$ & $0.5111909311$ & $\mathrm{m^2\,s^{-2}}$\\
+\bottomrule
+\end{tabular}
+\caption{Accepted flat-wall reference with endpoint sampling.
+The outer kinetic energy remains $K$, while ordinary diffusion
+supports the larger inner values.}
+\label{tab:accepted-reference}
+\end{table}
+
+Here $d>2\nu$, so the positivity proposition applies. In particular,
+$\ECw(0)\simeq9.84519\units{m^2\,s^{-3}}$ is smaller than
+$p_{A,0}(0)\simeq26.68598\units{m^2\,s^{-3}}$.
+The defect changes sign near $z=0.00931273\units m$ and remains
+positive thereafter, while its full-layer integral is zero.
+These signs refer to the accepted budget cutoff; retaining the
+original molecular cutoff would give a different imbalance.
+
+Implementation should evaluate $K$ from the common matching trace,
+construct $D_A$ with the calibrated coefficients, and determine
+the cutoff from reference production at that same $K$.
+Actual production is used in \cref{eq:accepted-k-transport} or
+\cref{eq:accepted-curved-k}. Initialize a flat reference with
+\cref{eq:accepted-k-profile}, retain zero modeled ground $k$ flux,
+and couple the matching value and conservative flux to outer CLS.
+Do not reintroduce the EP redistribution while using this profile.
+Quadrature should resolve each active viscosity, forcing, and
+dissipation breakpoint, and the full assembled reference residual
+must be checked with the actual interface and pressure operators.
+
+The derivation establishes continuum compatibility with the
+standard outer CLS equilibrium on flat, undisturbed terrain and
+specifies a conservative curved extension. It does not require
+the outer flow over a hill to remain logarithmic. The positive
+flat reference is also not a positivity or stability theorem for
+the evolving equations: a sink controlled by sampled $K$ can
+remain positive as local $k_w$ decreases, and the constitutive
+limitations of the unchanged outer CLS model identified in
+\cref{sec:stability} remain. Any active robustness modification
+must be assessed against this reference and declared separately.

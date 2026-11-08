@@ -134,10 +134,10 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
             if (!flow)
             {
                 double rate = 0.;
-                WallSource(s, q.v.coordinate, law.production, *ray->profile,
+                const auto source=WallSource(s, q.v.coordinate, law.production, *ray->profile,
                            &ray->destruction, &rate);
                 addScalar(q.v, u, q.weight, nu + nt / model.sigmaK, rate,
-                          law.production +
+                          (AcceptedAWF()?source.kSource:law.production) +
                               data.innerKSource(q.v.coordinate, time));
                 return;
             }

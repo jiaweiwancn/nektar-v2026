@@ -101,10 +101,23 @@ double EquilibriumAWFProfileWeight(double spatial, const std::array<double, 7> &
                    (1-Gate(reynolds, c.reynoldsOff, c.reynoldsOn))*state;
 }
 
+AWFParameters CalibratedAWFParameters(const RANSNeutralReference &model)
+{
+    if (model.Model() != RANSModel::CLSHighRe)
+        throw std::invalid_argument("CLS-calibrated AWF requires a CLS reference");
+    AWFParameters wall;
+    const long double q = model.Q();
+    wall.cMu = Cast(1/(q*q));
+    wall.cLength = Cast(static_cast<long double>(model.Kappa())*q*std::sqrt(q));
+    wall.Validate();
+    return wall;
+}
+
 EquilibriumAWFProfiles::EquilibriumAWFProfiles(const AWFProfileGeometry &geometry, double k,
     const RANSNeutralReference &model, const AWFNormalMetric &metric,
     const AWFProfileOptions &options, const AWFParameters &wall)
     : m_geometry(geometry), m_metric(metric), m_options(options),
+      m_sigmaK(model.Parameters().sigmaK),
       m_original(LegacyGeometry(geometry), k, wall)
 {
     metric.Validate(geometry.height);
@@ -115,6 +128,24 @@ EquilibriumAWFProfiles::EquilibriumAWFProfiles(const AWFProfileGeometry &geometr
     if (options.failurePolicy != AWFFailurePolicy::UseOriginal &&
         options.failurePolicy != AWFFailurePolicy::RequirePreservation)
         throw std::invalid_argument("Unknown EP-AWF failure policy");
+    if (options.formulation != AWFProfileFormulation::LegacyEPAWF && !AcceptedAWF())
+        throw std::invalid_argument("Unknown AWF profile formulation");
+    if (AcceptedAWF())
+    {
+        const auto calibrated = CalibratedAWFParameters(model);
+        const auto same = [](double a, double b) {
+            return std::abs(a-b) <= 64*std::numeric_limits<double>::epsilon()*
+                                      std::max(std::abs(a), std::abs(b));
+        };
+        if (geometry.sampleHeight != geometry.height || geometry.tailStart != geometry.height)
+            throw std::invalid_argument("CLSCalibratedBudgetAWF requires endpoint z_K=z_m=H");
+        if (options.requestedWeight != 1 ||
+            options.failurePolicy != AWFFailurePolicy::RequirePreservation)
+            throw std::invalid_argument("CLSCalibratedBudgetAWF has no chi or fallback policy");
+        if (!same(wall.cMu, calibrated.cMu) || !same(wall.cLength, calibrated.cLength) ||
+            wall.smoothIntercept != calibrated.smoothIntercept)
+            throw std::invalid_argument("CLSCalibratedBudgetAWF requires explicit calibrated wall parameters");
+    }
     for (double r : options.physicalBreakpoints)
     {
         Finite(r);
@@ -130,6 +161,62 @@ EquilibriumAWFProfiles::EquilibriumAWFProfiles(const AWFProfileGeometry &geometr
     ref.numerator = Cast(std::pow(static_cast<long double>(ref.frictionVelocity), 3)/model.Kappa());
     Positive(ref.numerator);
     ref.reynolds = Cast(static_cast<long double>(geometry.height)*std::sqrt(k)/geometry.molecularNu);
+    if (AcceptedAWF())
+    {
+        // The new model has a budget applicability condition, not the legacy
+        // chi/transition Reynolds gate. Re remains a reported scale only.
+        // On a flat column the native closed AWF moment avoids cancellation
+        // in J0-nu*J2 and fixes the counterfactual production budget directly.
+        ref.productionBudget = metric.kappa1 == 0 && metric.kappa2 == 0 ?
+            Cast(static_cast<long double>(ref.traction)*ref.traction*
+                 m_original.Integrals().productionWeight) :
+            Integrate([&](double r) { return ReferenceProduction(r); }, geometry.height, 0);
+        ref.minimumBudget = CorrectedIntegral(geometry.height, geometry.height);
+        ref.margin = Cast((static_cast<long double>(ref.productionBudget)-ref.minimumBudget)/ref.minimumBudget);
+        if (ref.productionBudget < ref.minimumBudget)
+            throw std::domain_error("CLSCalibratedBudgetAWF cutoff_budget_inadmissible; no cutoff clipping");
+        if (metric.kappa1 == 0 && metric.kappa2 == 0)
+        {
+            const long double lambda = static_cast<long double>(ref.productionBudget)/ref.numerator;
+            ref.cutoff = Cast(static_cast<long double>(geometry.height)*std::exp(1-lambda));
+        }
+        else
+        {
+            // The explicit metric-weighted dissipation integral is strictly
+            // decreasing in c. A log bracket retains positive trial cutoffs.
+            const double highStart = std::log(geometry.height);
+            double smallest = std::max(std::numeric_limits<double>::denorm_min(),
+                                      ref.numerator/std::numeric_limits<double>::max());
+            if (static_cast<long double>(ref.numerator)/smallest > std::numeric_limits<double>::max())
+                smallest = std::nextafter(smallest, std::numeric_limits<double>::infinity());
+            double lowLimit = std::log(smallest);
+            while (std::exp(lowLimit) == 0 ||
+                   static_cast<long double>(ref.numerator)/std::exp(lowLimit) > std::numeric_limits<double>::max())
+                lowLimit = std::nextafter(lowLimit, std::numeric_limits<double>::infinity());
+            double low = highStart, high = highStart, span = 1;
+            while (BudgetDifference(std::exp(low)) < 0 && low > lowLimit)
+            { low = std::max(lowLimit, highStart-span); span *= 2; }
+            if (BudgetDifference(std::exp(low)) < 0)
+                throw std::range_error("CLSCalibratedBudgetAWF cutoff_unrepresentable");
+            for (int it = 0; it < 192; ++it)
+            {
+                const double mid = low+(high-low)/2;
+                if (mid == low || mid == high) break;
+                ++ref.cutoffIterations;
+                if (BudgetDifference(std::exp(mid)) > 0) low = mid;
+                else high = mid;
+            }
+            ref.cutoff = std::exp(low+(high-low)/2);
+        }
+        if (!(ref.cutoff > 0 && ref.cutoff <= geometry.height))
+            throw std::range_error("CLSCalibratedBudgetAWF cutoff_unrepresentable");
+        Corrected(0, ref.cutoff); // Reject an unrepresentable plateau, never floor it.
+        ref.weight = 1; // Internal solved-cutoff flag; not a physical chi.
+        ref.reason = AWFFallbackReason::Active;
+        ref.budgetResidual = BudgetDifference(ref.cutoff);
+        m_quadrature = MakeQuadrature(geometry.height, ref.cutoff);
+        return;
+    }
     ref.productionBudget = Integrate([&](double r) { return ReferenceProduction(r); },
                                      geometry.height, 0);
     ref.minimumBudget = Integrate([&](double r) { return Corrected(r, geometry.tailStart); },
@@ -226,6 +313,8 @@ void EquilibriumAWFProfiles::CheckHeight(double r) const
 }
 EquilibriumAWFProfiles EquilibriumAWFProfiles::Reweighted(double weight) const
 {
+    if (AcceptedAWF())
+        throw std::invalid_argument("CLSCalibratedBudgetAWF has no chi reweighting");
     Finite(weight);
     if (!(weight>0 && weight<=1 && m_reference.weight>0))
         throw std::invalid_argument("Reweighting requires an admissible active cutoff and 0<chi<=1");
@@ -270,23 +359,24 @@ void EquilibriumAWFProfiles::GaussRule()
     }
 }
 std::vector<AWFProfileQuadraturePoint> EquilibriumAWFProfiles::MakeQuadrature(
-    double upper, double cutoff) const
+    double upper, double cutoff, double lower) const
 {
-    CheckHeight(upper);
-    if (upper == 0) return {};
-    std::vector<double> breaks{0, upper};
+    CheckHeight(upper); CheckHeight(lower);
+    if (lower > upper) throw std::invalid_argument("Reversed AWF integration interval");
+    if (upper == lower) return {};
+    std::vector<double> breaks{lower, upper};
     for (double r : m_options.physicalBreakpoints)
-        if (r > 0 && r < upper) breaks.push_back(r);
+        if (r > lower && r < upper) breaks.push_back(r);
     for (double r : {m_geometry.roughness, m_original.ViscosityInterceptHeight(),
                      m_original.DissipationCutoff(), m_geometry.tailStart, cutoff})
-        if (r > 0 && r < upper) breaks.push_back(r);
+        if (r > lower && r < upper) breaks.push_back(r);
     const auto &p = m_original.Parameters();
     long double r = std::min(static_cast<long double>(m_geometry.tailStart),
         static_cast<long double>(m_geometry.molecularNu)/
         (p.cMu*p.cLength*std::sqrt(static_cast<long double>(K()))));
     if (cutoff > 0) r = std::min(r, static_cast<long double>(cutoff));
     for (int j = 0; j < 4096 && r < upper; ++j, r *= 2)
-        if (r > 0 && Cast(r) > 0) breaks.push_back(Cast(r));
+        if (r > lower && Cast(r) > lower) breaks.push_back(Cast(r));
     std::sort(breaks.begin(), breaks.end());
     breaks.erase(std::unique(breaks.begin(), breaks.end()), breaks.end());
     std::vector<AWFProfileQuadraturePoint> result;
@@ -325,8 +415,28 @@ double EquilibriumAWFProfiles::Corrected(double r, double cutoff) const
     CheckHeight(r); Positive(cutoff);
     return Cast(static_cast<long double>(m_reference.numerator)/std::max(r, cutoff));
 }
+double EquilibriumAWFProfiles::CorrectedIntegral(double upper, double cutoff) const
+{
+    CheckHeight(upper); Positive(cutoff);
+    const long double r = upper, c = cutoff;
+    const long double s = static_cast<long double>(m_metric.kappa1)+m_metric.kappa2;
+    const long double p = static_cast<long double>(m_metric.kappa1)*m_metric.kappa2;
+    const long double integral = r <= c ? (r+s*r*r/2+p*r*r*r/3)/c :
+        1+std::log(r/c)+s*(r-c/2)+p*(r*r/2-c*c/6);
+    return Cast(static_cast<long double>(m_reference.numerator)*integral);
+}
+double EquilibriumAWFProfiles::DissipationBudget(double cutoff) const
+{
+    Positive(cutoff);
+    if (cutoff > m_geometry.height)
+        throw std::invalid_argument("AWF budget cutoff outside (0,H]");
+    return CorrectedIntegral(m_geometry.height, cutoff);
+}
 double EquilibriumAWFProfiles::BudgetDifference(double cutoff) const
 {
+    if (AcceptedAWF())
+        return Cast(static_cast<long double>(CorrectedIntegral(m_geometry.height, cutoff))-
+                    m_reference.productionBudget);
     return Integrate([&](double r) { return Corrected(r, cutoff)-ReferenceProduction(r); },
                      m_geometry.height, cutoff);
 }
@@ -340,6 +450,13 @@ double EquilibriumAWFProfiles::Production(double r, const AWFVector &u, const AW
 }
 double EquilibriumAWFProfiles::ReferenceProduction(double r) const
 {
+    if (AcceptedAWF())
+    {
+        CheckHeight(r);
+        const long double d = m_original.TotalViscosity(r);
+        return Cast(static_cast<long double>(m_reference.traction)*m_reference.traction*
+                    m_original.EddyViscosity(r)/(d*d));
+    }
     // Same arithmetic path as actual production at the reference, so its
     // all-mode cancellation is pointwise before any source quadrature.
     return Production(r, {m_reference.matchingVelocity, 0}, {0, 0});
@@ -347,6 +464,12 @@ double EquilibriumAWFProfiles::ReferenceProduction(double r) const
 AWFProfileValues EquilibriumAWFProfiles::AtProduction(double r, double production) const
 {
     CheckHeight(r); Finite(production);
+    if (AcceptedAWF())
+    {
+        const double e = Corrected(r, m_reference.cutoff);
+        return {production, ReferenceProduction(r), e, 0,
+                Cast(static_cast<long double>(production)-e)};
+    }
     const double original = m_original.OriginalDissipation(r), p0 = ReferenceProduction(r);
     const double chi = m_reference.weight;
     if (chi == 0) return {production, p0, original, 0, Cast(static_cast<long double>(production)-original)};
@@ -366,10 +489,42 @@ double EquilibriumAWFProfiles::Dissipation(double r) const
 double EquilibriumAWFProfiles::RedistributionFlux(double r) const
 {
     CheckHeight(r);
+    if (AcceptedAWF()) return 0;
     if (m_reference.weight == 0 || r == 0) return 0;
     return Cast(static_cast<long double>(m_reference.weight)/m_metric.Jacobian(r)*
         Integrate([&](double z) { return Corrected(z, m_reference.cutoff)-ReferenceProduction(z); },
                   r, m_reference.cutoff));
+}
+double EquilibriumAWFProfiles::ReferenceKDiffusivity(double r) const
+{
+    CheckHeight(r);
+    return Cast(static_cast<long double>(m_geometry.molecularNu)+m_original.EddyViscosity(r)/m_sigmaK);
+}
+double EquilibriumAWFProfiles::ReferenceKFlux(double r) const
+{
+    CheckHeight(r);
+    if (!AcceptedAWF() || r == 0) return 0;
+    const double production = m_metric.kappa1 == 0 && m_metric.kappa2 == 0 ?
+        Cast(static_cast<long double>(m_reference.traction)*m_reference.traction*
+             m_original.Integrals(r).productionWeight) :
+        Integrate([&](double z) { return ReferenceProduction(z); }, r, m_reference.cutoff);
+    return Cast(static_cast<long double>(CorrectedIntegral(r, m_reference.cutoff))-production);
+}
+double EquilibriumAWFProfiles::ReferenceKGradient(double r) const
+{
+    CheckHeight(r);
+    if (!AcceptedAWF()) return 0;
+    return Cast(static_cast<long double>(ReferenceKFlux(r))/
+                (static_cast<long double>(m_metric.Jacobian(r))*ReferenceKDiffusivity(r)));
+}
+double EquilibriumAWFProfiles::ReferenceK(double r) const
+{
+    CheckHeight(r);
+    if (!AcceptedAWF() || r == m_geometry.height) return K();
+    long double integral = 0;
+    for (const auto &q : MakeQuadrature(m_geometry.height, m_reference.cutoff, r))
+        integral += static_cast<long double>(q.weight)*ReferenceKGradient(q.r);
+    return Cast(static_cast<long double>(K())-integral);
 }
 std::vector<double> EquilibriumAWFProfiles::RayLoads(
     const std::vector<std::vector<double>> &basis, const std::vector<double> &samples) const

@@ -135,25 +135,27 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         int diagnostics=0;m_session->LoadParameter("RANSWallDiagnostics",diagnostics,0);
         Require(diagnostics==0 || diagnostics==1,"RANSWallDiagnostics must be 0 or 1");m_diagnostics=diagnostics;
         std::string rangeGuard;m_session->LoadSolverInfo("RANSWallPhysicalRangeGuard",rangeGuard,"Off");
-        Require(rangeGuard=="Off" || rangeGuard=="R1LocalV1" || rangeGuard=="R1DiagnosticV1" || rangeGuard=="R2LocalV1" || (m_patch->PimpleSingleSweep() && rangeGuard=="R2DiagnosticV1"),"unknown physical-range guard");
+        Require(rangeGuard=="Off" || rangeGuard=="R1LocalV1" || rangeGuard=="R1DiagnosticV1" || rangeGuard=="R2LocalV1" || (m_patch->PimpleSingleSweep() && rangeGuard=="R2DiagnosticV1") ||
+            (m_patch->AcceptedAWF() && rangeGuard=="AcceptedAWFDiagnosticV1"),"unknown physical-range guard");
+        Require(!m_patch->AcceptedAWF() || rangeGuard=="AcceptedAWFDiagnosticV1","accepted AWF requires its explicit model-aware hard audit");
         m_rangeGuardName=rangeGuard;m_r2RangeGuard=rangeGuard=="R2LocalV1" || rangeGuard=="R2DiagnosticV1";
-        m_physicalRangeGuard=rangeGuard!="Off";m_diagnosticRangeContinuation=rangeGuard=="R1DiagnosticV1" || rangeGuard=="R2DiagnosticV1";
+        m_physicalRangeGuard=rangeGuard!="Off";m_diagnosticRangeContinuation=rangeGuard=="R1DiagnosticV1" || rangeGuard=="R2DiagnosticV1" || rangeGuard=="AcceptedAWFDiagnosticV1";
         if(m_physicalRangeGuard)
         {
             const auto robust=m_patch->RobustParameters();
             Require(m_diagnostics && m_eta==0 && m_session->GetComm()->GetSize()==1,
                 "R1 applicability guard requires serial unanchored state diagnostics");
-            Require(m_patch->VariantName()=="Regularized" && robust==Vector({.4,0,.2,.1,0,1,1}),
+            Require(m_patch->AcceptedAWF() || (m_patch->VariantName()=="Regularized" && robust==Vector({.4,0,.2,.1,0,1,1})),
                 "R1 applicability guard is declared only for beta=.4 GammaScale=1 and the unchanged linear capped source");
         }
         Require(m_eta==0 || (m_neutral && m_eta==1 && m_patch->Mapping().PlanarConstantHeight()),"eta=1 is restricted to isolated flat neutral verification");
-        Require(!m_patch->TransitionEnabled() || m_eta==0,"every upstream transition/terrain run requires eta=0");
+        Require(!m_patch->MatchingEnabled() || m_eta==0,"every transition/budget AWF run requires eta=0");
         Require(m_session->DefinesTimeIntScheme(),"evolution requires an explicit native IMEX time-integration declaration");
         const auto scheme=m_session->GetTimeIntScheme();
         Require(scheme.method=="IMEX" && scheme.variant.empty() && (scheme.order==1 || scheme.order==2),"evolution supports native IMEX orders 1/2, empty variant");m_order=scheme.order;
         if(m_patch->PimpleSingleSweep())
         {
-            Require(m_order==1 && m_eta==0 && !m_condensed && m_diagnostics && m_r2RangeGuard,
+            Require(m_order==1 && m_eta==0 && !m_condensed && m_diagnostics && (m_r2RangeGuard || m_patch->AcceptedAWF()),
                 "PimpleSingleSweep requires native IMEX1, eta=0, no condensation and complete R2 diagnostics");
             m_session->LoadParameter("RANSWallPimpleRejectStep",m_pimpleRejectStep,0);
             m_session->LoadParameter("RANSWallPimpleHardAuditRejectStep",m_pimpleHardAuditRejectStep,0);
@@ -217,9 +219,9 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
     {
         (void)dump;m_state=m_neutral?m_patch->NeutralReference(m_ustar,m_direction):m_patch->Project(Functions("InitialConditions"),m_time);
         if(m_neutral)m_data.fixedBoundary=m_patch->FixedReferenceBoundary(m_state);
-        else if(m_patch->Mapped() || m_patch->TransitionEnabled() || m_patch->CappedDestruction())
+        else if(m_patch->Mapped() || m_patch->MatchingEnabled() || m_patch->CappedDestruction())
             m_state=m_patch->Lift(m_state,m_time,m_data);
-        if(m_neutral && m_patch->TransitionEnabled())m_state=m_patch->Lift(m_state,m_time,m_data);
+        if(m_neutral && m_patch->MatchingEnabled())m_state=m_patch->Lift(m_state,m_time,m_data);
         m_patch->SetReference(m_state,m_data,m_time,m_eta);m_initial=m_state;
         const auto residualStart=std::chrono::steady_clock::now();
         m_rawNorms=m_patch->Norms(m_patch->Residual(m_state,m_state,0,m_time,m_data,false),m_patch->Constraints(m_state,m_time,m_data),m_ustar);
@@ -242,6 +244,11 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
         }
         else
         {
+            if(m_patch->AcceptedAWF())
+            {
+                double amplitude;m_session->LoadParameter("RANSWallAcceptedKAmplitude",amplitude,0.);
+                if(amplitude!=0)m_state=m_patch->Lift(m_patch->AcceptedPerturbation(m_state,amplitude),m_time,m_data);
+            }
             // Perturb the state after freezing the neutral reference/defect.
             // This never changes the reference, wall model or boundary data.
             if(m_serialSession->DefinesFunction("InitialPerturbationInner") || m_serialSession->DefinesFunction("InitialPerturbationOuter"))
@@ -322,7 +329,7 @@ RANSEquilibriumWallEvolution::Vector RANSEquilibriumWallEvolution::Implicit(cons
 void RANSEquilibriumWallEvolution::RecordAudit(const Vector &state,const Vector &history,double alpha,double time)
 {
     RANSWallEvolutionPatch::Diagnostic audit;
-    try{audit=m_r2RangeGuard?m_patch->CompleteRestrictedAudit(state,history,alpha,time,alpha?m_implicitData:m_data):
+    try{audit=(m_r2RangeGuard || m_patch->AcceptedAWF())?m_patch->CompleteRestrictedAudit(state,history,alpha,time,alpha?m_implicitData:m_data):
         m_patch->Audit(state,history,alpha,time,alpha?m_implicitData:m_data,m_ustar,m_physicalRangeGuard);}
     catch(const std::exception &error)
     {
@@ -335,6 +342,32 @@ void RANSEquilibriumWallEvolution::RecordAudit(const Vector &state,const Vector 
                 "; witness="+m_patch->ConstitutiveFailureContext());
         }
         throw;
+    }
+    if(m_patch->AcceptedAWF())
+    {
+        const auto &domain=audit.at("accepted_awf_scalar_domain");
+        std::vector<std::string> reasons;
+        if(domain[0]!=1)
+        {reasons.push_back("accepted_awf_scalar_or_budget_domain_exit");reasons.push_back(m_patch->ConstitutiveFailureContext());}
+        if(domain[0]==1)
+        {
+            const auto &cov=audit.at("accepted_awf_covariance");
+            if(audit.at("admissible")[0]!=1)reasons.push_back("accepted_awf_sample_admissibility_exit");
+            if(audit.at("accepted_awf_hard_admissible")[0]!=1)reasons.push_back("accepted_awf_covariance_or_budget_exit");
+            if(domain[8]>1e-10)reasons.push_back("accepted_awf_reference_budget_residual");
+            if(!reasons.empty())
+                for(const auto name:{"accepted_awf_inner_minimum_point","accepted_awf_outer_minimum_point"})
+                    if(audit.count(name))reasons.push_back(name+std::string(":")+RANSWallSolveJson::Numbers(audit.at(name)));
+            (void)cov;
+        }
+        const bool forced=alpha>0 && m_pimpleHardAuditRejectStep>0 && m_integrator->Steps()+1==m_pimpleHardAuditRejectStep;
+        if(forced)reasons.push_back("deliberate_PIMPLE_hard_audit_rejection");
+        if(!reasons.empty())
+        {
+            m_rejectedState=state;m_rangeEvents.push_back({time,alpha,state,history,audit,reasons,true});
+            throw std::runtime_error("accepted AWF hard audit exit; candidate/history retained: "+reasons.front());
+        }
+        m_stateAudits.push_back(std::move(audit));m_auditTimes.push_back(time);m_acceptedStates.push_back(state);return;
     }
     if(m_physicalRangeGuard)
     {
@@ -838,9 +871,9 @@ void RANSEquilibriumWallEvolution::WriteReport() const
     const auto snapshot=m_integrator->Capture();
     out<<"{\"schema\":1,\"native_time_map\":true,\"dimension\":"<<m_patch->Dimension()<<",\"ranks\":"<<m_session->GetComm()->GetSize()
        <<",\"time\":"<<m_time<<",\"dt\":"<<m_timestep<<",\"steps\":"<<snapshot.steps<<",\"order\":"<<m_order
-       <<",\"chi\":"<<m_patch->Parameters().chi<<",\"eta\":"<<m_eta<<",\"neutral_reference\":"<<(m_neutral?"true":"false")
+       <<",\"chi\":"<<(m_patch->AcceptedAWF()?"null":RANSWallSolveJson::Number(m_patch->Parameters().chi))<<",\"eta\":"<<m_eta<<",\"neutral_reference\":"<<(m_neutral?"true":"false")
        <<",\"condensed\":"<<(m_condensed?"true":"false")<<",\"checkpoint\":"<<Quoted(m_lastCheckpoint)<<",\"signature\":"<<Quoted(m_signature);
-    out<<",\"wall_policy\":"<<Quoted(m_patch->WallPolicyName())
+    out<<",\"wall_formulation\":"<<m_patch->FormulationMetadata()<<",\"wall_policy\":"<<Quoted(m_patch->WallPolicyName())
        <<",\"inner_stress_model\":"<<Quoted(m_patch->InnerStressName())
        <<",\"nonlinear_policy\":"<<Quoted(m_patch->NonlinearPolicyName())
        <<",\"temporal_coupling\":"<<Quoted(m_patch->TemporalCouplingName())
@@ -854,8 +887,15 @@ void RANSEquilibriumWallEvolution::WriteReport() const
     for(const auto &[name,values]:m_physicalSamples){if(sampleCount++)out<<',';out<<Quoted(name)<<':';Write(out,values);}out<<'}';
     if(m_patch->HeightComparisonEnabled() && !m_acceptedStates.empty())
     {
-        out<<",\"height_comparison_initial\":"<<m_patch->HeightComparison(m_acceptedStates.front(),m_acceptedStates.front(),m_auditTimes.front(),m_data);
-        out<<",\"height_comparison_final\":"<<m_patch->HeightComparison(m_state,m_state,m_time,m_data);
+        const auto comparison=[&](const Vector &s,double t)
+        {
+            if(!m_patch->AcceptedAWF())return m_patch->HeightComparison(s,s,t,m_data);
+            try{return m_patch->HeightComparison(s,s,t,m_data);}
+            catch(const std::exception &error){return RANSWallSolveJson::Object({{"valid","false"},
+                {"failure",Quoted(error.what())},{"state_sha256",Quoted(RANSWallR3::Hash(s))},{"governing_solves","0"}});}
+        };
+        out<<(m_patch->AcceptedAWF()?",\"accepted_awf_initial\":":",\"height_comparison_initial\":")<<comparison(m_acceptedStates.front(),m_auditTimes.front());
+        out<<(m_patch->AcceptedAWF()?",\"accepted_awf_final\":":",\"height_comparison_final\":")<<comparison(m_state,m_time);
     }
     if(!m_initialKBoundCheck.empty())out<<",\"initial_k_bound_check\":"<<m_initialKBoundCheck;
     if(!m_initialScalarDomain.empty())out<<",\"initial_scalar_domain\":"<<m_initialScalarDomain;
@@ -903,11 +943,14 @@ void RANSEquilibriumWallEvolution::WriteReport() const
         {
             out<<",\"physical_range_guard\":"<<Quoted(m_rangeGuardName)
                <<",\"diagnostic_range_continuation\":"<<(m_diagnosticRangeContinuation?"true":"false")
-               <<",\"physical_range_inventory\":{\"source_samplers_interfaces_mass_body\":true,\"native_GLL\":true,"
+               <<",\"physical_range_inventory\":";
+            if(m_patch->AcceptedAWF())out<<"{\"source_samplers_interfaces_mass_body\":true,\"native_GLL\":true,\"covariance_tolerance_over_K0\":1e-10,\"profile_budget_gate\":true,\"lambda_minimum\":null,\"reference_qualification_box\":null}";
+            else out<<"{\"source_samplers_interfaces_mass_body\":true,\"native_GLL\":true,"
                  "\"inner_dense_points_per_axis\":\"2*p+7\",\"outer_dense_points_per_axis\":\"2*p+3\","
                  "\"covariance_tolerance_over_K0\":1e-10,\"lambda_minimum\":0.5,"
                  "\"restricted_gradient_radius\":0.001,\"restricted_k_ratio\":[0.99,1.01],\"restricted_epsilon_ratio\":[0.98,1.02]}"
-               <<",\"physical_range_events\":[";
+               ;
+            out<<",\"physical_range_events\":[";
             for(int e=0;e<m_rangeEvents.size();++e)
             {
                 if(e)out<<',';

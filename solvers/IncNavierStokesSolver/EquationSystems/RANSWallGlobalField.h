@@ -85,7 +85,8 @@ public:
      * columns. Variable horizontal areas enter the physical 1D measure.
      */
     Vector RadialProject(const std::function<double(double)> &function,
-                         const std::vector<std::array<double,3>> &constraints) const;
+        const std::vector<std::array<double,3>> &constraints,
+        const std::vector<double> &physicalBreakpoints={}) const;
 
     /** Independent diagnostic through full native BwdTrans/PhysDeriv and
      * standard physical interpolation, not the fast tensor evaluation rows.

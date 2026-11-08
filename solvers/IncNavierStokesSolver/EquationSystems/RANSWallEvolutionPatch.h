@@ -71,7 +71,10 @@ public:
     double DependentEpsilon(const Vector &state,const RANSWallCoordinate &chart,double time,
         const RANSWallEvolutionData &data) const;
     bool UniformEPFlat() const { return m_uniformEP; }
-    std::string WallPolicyName() const { return m_uniformEP?"UniformEPFlat-v1":(m_transitionEnabled?"Upstream":"Fixed"); }
+    bool AcceptedAWF() const { return m_formulation=="CLSCalibratedBudgetAWF"; }
+    const std::string &FormulationName() const { return m_formulation; }
+    bool MatchingEnabled() const { return m_transitionEnabled || AcceptedAWF(); }
+    std::string WallPolicyName() const { return AcceptedAWF()?m_formulation:(m_uniformEP?"UniformEPFlat-v1":(m_transitionEnabled?"Upstream":"Fixed")); }
     bool TransitionEnabled() const { return m_transitionEnabled; }
     const SolverUtils::AWFTransitionControls &TransitionControls() const { return m_transition; }
     const Vector &TransitionReference() const { return m_transitionReference; }
@@ -138,12 +141,14 @@ public:
     struct ScalarDomainResult
     {
         bool admissible=false;
+        bool normalizationApplicable=true;
         std::string phase,failure,limitingInventory,profileBranches;
         RANSWallCoordinate limitingPoint{};
         std::shared_ptr<RANSWallGlobalPoint> limitingFunctional;
         double minimumMargin=1e300,minimumInnerK=1e300,minimumOuterK=1e300,
             minimumOuterEpsilon=1e300,minimumSampledK=1e300,minimumTraceEpsilon=1e300,
             minimumB=1,minimumLambda=1,minimumCutoff=1e300,maximumCutoff=-1e300;
+        double minimumBudgetRatio=1e300,maximumBudgetRelativeDefect=0.;
         std::map<std::string,int> counts;
         Vector effectiveState,traceState;
         std::vector<ScalarObservation> observations;
@@ -194,7 +199,7 @@ public:
         return values;
     }
     bool ConstitutiveKInventory() const { return PimpleKBoundEnabled() &&
-        (m_pimpleKInventory=="ConstitutiveV2" || m_pimpleKInventory=="ConstitutiveV3"); }
+        (m_pimpleKInventory=="ConstitutiveV2" || m_pimpleKInventory=="ConstitutiveV3" || m_pimpleKInventory=="AcceptedBudgetV1"); }
     bool ProspectiveKInventory() const { return PimpleKBoundEnabled() && m_pimpleKInventory=="ConstitutiveV3"; }
     std::string BranchCoverageDiagnostic(const Vector &state,double time,
         const RANSWallEvolutionData &data,const std::vector<RANSWallCoordinate> &anchors) const;
@@ -238,7 +243,10 @@ public:
     std::vector<int> CondensableVelocity(const std::map<int,double> &constraints) const;
     double SampleK(const Vector &state,const RANSWallCoordinate &point) const;
     bool ColumnAverageK() const {return m_kSampling=="ColumnAverage";}
-    bool HeightComparisonEnabled() const {return m_heightComparison;}
+    bool HeightComparisonEnabled() const {return m_heightComparison || m_acceptedComparison;}
+    bool AcceptedComparisonEnabled() const {return m_acceptedComparison;}
+    Vector AcceptedPerturbation(const Vector &state,double amplitude) const;
+    std::string FormulationMetadata() const;
     RANSWallGlobalPoint SampleKRow(const RANSWallCoordinate &anchor) const;
     // Exact physical mass restricted to the supplied global free-k rows.
     // Read-only access also supports native functional/projection verification.
@@ -414,7 +422,7 @@ private:
     mutable std::set<RANSWallCoordinate> m_coveredKLocations;
     mutable std::set<RANSWallCoordinate> m_coveredKFunctionals;
     std::string m_kSampling="Point";
-    bool m_heightComparison=false;
+    bool m_heightComparison=false,m_acceptedComparison=false;
     mutable std::map<RANSWallCoordinate,RANSWallGlobalPoint> m_kSamplingRows;
     Vector SolveScalarFeasible(Vector state,const Vector &history,double alpha,
         double time,const RANSWallEvolutionData &data,bool condensed,int &iterations,
@@ -447,6 +455,8 @@ private:
     SolverUtils::RANSWallNormalMap m_mapping;
     int m_ownershipShift=0;
     SolverUtils::AWFProfileOptions m_options;
+    std::string m_formulation="EPAWF";
+    SolverUtils::AWFParameters m_wallParameters;
     std::string m_variantName="Original";
     SolverUtils::RANSRobustVariant m_robust;
     SolverUtils::RANSCappedDestructionControls m_destruction;

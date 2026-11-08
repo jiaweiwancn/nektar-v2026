@@ -466,7 +466,7 @@ std::array<double,4> RANSWallGlobalField::NativeEvaluate(
 
 RANSWallGlobalField::Vector RANSWallGlobalField::RadialProject(
     const std::function<double(double)> &function,
-    const std::vector<std::array<double,3>> &constraints) const
+    const std::vector<std::array<double,3>> &constraints,const std::vector<double> &physicalBreakpoints) const
 {
     Require(static_cast<bool>(function),"missing radial projection function");
     using IntervalKey=std::pair<double,double>;
@@ -529,6 +529,8 @@ RANSWallGlobalField::Vector RANSWallGlobalField::RadialProject(
     {
         const auto &interval=item.second;const auto basis=m_elementBasis[interval.element][m_dimension-1];
         std::set<double> panels{interval.lower,interval.upper};
+        for(double r:physicalBreakpoints)
+        {Require(std::isfinite(r),"nonfinite radial integration breakpoint");if(r>interval.lower && r<interval.upper)panels.insert(r);}
         double r=1e-4;int guard=0;
         while(r<interval.upper)
         {

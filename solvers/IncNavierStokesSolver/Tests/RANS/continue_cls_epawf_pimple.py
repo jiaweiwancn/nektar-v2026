@@ -181,10 +181,15 @@ def main():
     p.add_argument('--prefix-report', type=Path)
     p.add_argument('--prefix-campaign',type=Path)
     p.add_argument('--from-h0',action='store_true')
-    p.add_argument('--wall-policy',choices=('Upstream','UniformEPFlat'),default='Upstream')
+    p.add_argument('--wall-policy',choices=('Upstream','UniformEPFlat','CLSCalibratedBudgetAWF'),default='Upstream')
     p.add_argument('--height-case',choices=list('ABCDEFGH'))
     p.add_argument('--upstream-case',choices=('U05-graded','U05-one','U20-graded','U20-one'))
-    p.add_argument('--inventory',choices=('LegacyV1','ConstitutiveV2','ConstitutiveV3'),default='LegacyV1')
+    p.add_argument('--accepted-awf-case',choices=('Accepted-AWF-2G','Accepted-AWF-05G','Accepted-AWF-05O','Accepted-AWF-2O'))
+    p.add_argument('--accepted-awf-companion',choices=('faithful','regularized','saturated','regularized-saturated'),default='faithful')
+    p.add_argument('--accepted-awf-companion-reason',default='')
+    p.add_argument('--accepted-awf-perturbation',type=float,default=0.)
+    p.add_argument('--inner-refinement','--accepted-awf-inner-refinement',dest='accepted_awf_inner_refinement',choices=('none','cutoff-v1'),default='none')
+    p.add_argument('--inventory',choices=('LegacyV1','ConstitutiveV2','ConstitutiveV3','AcceptedBudgetV1'),default='LegacyV1')
     p.add_argument('--bound-solver',choices=('WorkingSet','RetainedPool'),default='WorkingSet')
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--targets', type=int, nargs='+', default=[32,160,800,1600,3200,8000])
@@ -195,8 +200,17 @@ def main():
     a = p.parse_args(); a.output = a.output.resolve()
     a.checkpoint = a.checkpoint.resolve() if a.checkpoint else None
     require(1 <= a.block_steps <= 64 and a.timeout > 0, 'invalid block controls')
-    require(not (a.height_case and a.upstream_case),'choose one declared comparison family')
+    require(sum(bool(x) for x in (a.height_case,a.upstream_case,a.accepted_awf_case))<=1,'choose one declared comparison family')
     if a.upstream_case:require(a.wall_policy=='Upstream' and a.inventory=='ConstitutiveV3','Upstream family policy mismatch')
+    if a.accepted_awf_case:
+        from run_cls_accepted_awf import WORK,check_report as accepted_check_report
+        require(a.wall_policy=='CLSCalibratedBudgetAWF' and a.inventory=='AcceptedBudgetV1' and
+            a.bound_solver=='RetainedPool' and bound_work_arguments(a)==WORK,'accepted-AWF family/method controls mismatch')
+        require(a.accepted_awf_companion=='faithful' or a.accepted_awf_companion_reason.strip(),'companion needs its preserved faithful blocker')
+        require(a.accepted_awf_inner_refinement=='none' or a.accepted_awf_case.endswith('G'),'focused cutoff refinement requires a graded accepted-AWF case')
+    else:
+        require(a.wall_policy!='CLSCalibratedBudgetAWF' and a.inventory!='AcceptedBudgetV1','accepted model requires its declared case family')
+        require(a.accepted_awf_companion=='faithful' and a.accepted_awf_perturbation==0. and a.accepted_awf_inner_refinement=='none','accepted model controls on another case family')
     os.environ.update(THREADS); os.environ['TMPDIR'] = str(a.output/'tmp')
     if not a.resume:a.output.mkdir(parents=True,exist_ok=False)
     lock=CampaignLock(a.output)
@@ -209,6 +223,11 @@ def main():
         require(progress.get('wall_policy','Upstream')==a.wall_policy,'wall policy differs from campaign')
         require(progress.get('height_case')==a.height_case,'height case differs from campaign')
         require(progress.get('upstream_case')==a.upstream_case,'Upstream case differs from campaign')
+        require(progress.get('accepted_awf_case')==a.accepted_awf_case,'accepted-AWF case differs from campaign')
+        require(progress.get('accepted_awf_companion','faithful')==a.accepted_awf_companion,'accepted-AWF companion differs from campaign')
+        require(progress.get('accepted_awf_perturbation',0.)==a.accepted_awf_perturbation,'accepted-AWF initialization differs from campaign')
+        require(progress.get('accepted_awf_inner_refinement','none')==a.accepted_awf_inner_refinement,'accepted-AWF inner mesh policy differs from campaign')
+        if a.accepted_awf_case:require(progress.get('accepted_awf_companion_reason','')==a.accepted_awf_companion_reason,'companion provenance differs from campaign')
         require(progress.get('projection_work_controls',{})==bound_work_arguments(a),'projection work controls differ from recorded campaign')
         assert_native_stopped(progress)
         old_stat=Path('/proc')/str(int(progress['pid']))/'stat'
@@ -261,7 +280,13 @@ def main():
             require(a.checkpoint and a.prefix_report,'restart needs real checkpoint and prefix report')
             prefix = load(a.prefix_report); info = header(a.checkpoint)
             require(info['order'] == 1 and info['dt'] == .000625 and prefix['steps'] == info['steps'], 'incompatible primary restart')
-            require(prefix.get('wall_policy','Upstream')==('UniformEPFlat-v1' if a.wall_policy=='UniformEPFlat' else 'Upstream'),'wrong prefix wall policy')
+            expected_policy='CLSCalibratedBudgetAWF' if a.accepted_awf_case else ('UniformEPFlat-v1' if a.wall_policy=='UniformEPFlat' else 'Upstream')
+            require(prefix.get('wall_policy','Upstream')==expected_policy,'wrong prefix wall policy')
+            if a.accepted_awf_case:
+                from run_cls_accepted_awf import check_report as accepted_check_report,model_choices
+                accepted_check_report(prefix,True)
+                require(prefix['model_variant']==model_choices(a.accepted_awf_companion)['outer_variant'] and
+                    prefix['inner_stress_model']==model_choices(a.accepted_awf_companion)['inner_stress'],'wrong prefix companion')
             require(prefix['k_bound_mode'] == 'MassProjection', 'wrong prefix mode')
             integral = sum(v.get('k_bound',{}).get('integral_total',0.) for v in prefix['pimple_attempts'] if v['time']<=info['time']+1e-13)
             if a.prefix_campaign:integral=prefix_budget(a.prefix_campaign.resolve(),info)
@@ -272,7 +297,10 @@ def main():
                 prefix_steps=info['steps'], prefix_integral=integral, requested_targets=a.targets, completed_targets=[], segments=[])
     progress.update(pid=os.getpid(), host=socket.gethostname(), started_unix=time.time(),
                     projection_work_controls=bound_work_arguments(a),bound_solver=a.bound_solver,height_case=a.height_case,upstream_case=a.upstream_case,
-                    case_family='UpstreamHeightV1' if a.upstream_case else ('HeightSamplerV1' if a.height_case else 'LegacyOuter6'),
+                    accepted_awf_case=a.accepted_awf_case,accepted_awf_companion=a.accepted_awf_companion,
+                    accepted_awf_companion_reason=a.accepted_awf_companion_reason,accepted_awf_perturbation=a.accepted_awf_perturbation,
+                    accepted_awf_inner_refinement=a.accepted_awf_inner_refinement,
+                    case_family='AcceptedAWFV1' if a.accepted_awf_case else ('UpstreamHeightV1' if a.upstream_case else ('HeightSamplerV1' if a.height_case else 'LegacyOuter6')),
                     process_start=Path('/proc/self/stat').read_text().split()[21], executable=str(executable),
                     executable_sha256=pinned['sha256'], source_revision=subprocess.check_output(['git','-C',str(Path(__file__).resolve().parents[4]),'rev-parse','HEAD'],text=True).strip())
     def save(**changes):
@@ -296,7 +324,13 @@ def main():
                 suffix=1
                 while Path(str(directory)+f'-attempt{suffix}').exists(): suffix+=1
                 directory=Path(str(directory)+f'-attempt{suffix}')
-            if a.height_case or a.upstream_case:
+            if a.accepted_awf_case:
+                from run_cls_accepted_awf import case_xml
+                xml=case_xml(a.accepted_awf_case,directory,end-start,.000625,
+                    restart=Path(progress['checkpoint']) if progress['checkpoint'] else None,
+                    companion=a.accepted_awf_companion,companion_reason=a.accepted_awf_companion_reason,
+                    perturbation=a.accepted_awf_perturbation,inner_refinement=a.accepted_awf_inner_refinement)
+            elif a.height_case or a.upstream_case:
                 from run_cls_epawf_height_comparison import case_xml,WORK
                 require((a.upstream_case and a.wall_policy=='Upstream' and a.inventory=='ConstitutiveV3') or
                     (a.height_case and a.wall_policy=='UniformEPFlat' and a.inventory in ('ConstitutiveV2','ConstitutiveV3')),
@@ -310,7 +344,7 @@ def main():
                               checkpoint=True, k_bound='MassProjection', floor_relative=1e-8, snapshots=True,inventory=a.inventory,wall_policy=a.wall_policy,
                               bound_work=bound_work_arguments(a),bound_solver=a.bound_solver)
             tree=ET.parse(xml).getroot(); set_parameter(tree,'IO_CheckSteps',1); write(tree,xml)
-            if a.height_case or a.upstream_case:
+            if a.height_case or a.upstream_case or a.accepted_awf_case:
                 progress['case_definition']=load(directory/'definition.json')
             command=[str(executable),'case.xml']; started=time.monotonic()
             child=subprocess.Popen(command,cwd=directory,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,
@@ -374,7 +408,8 @@ def main():
                 report=load(report_file)
                 if report.get('initialization_complete') is False:
                     save(status='numerically_rejected',failure=report['failure'],exit_code=child.returncode);return
-                check_report(report,start>0)
+                if a.accepted_awf_case:accepted_check_report(report,start>0,progress['case_definition'])
+                else:check_report(report,start>0)
                 require(report['initial_k_bound_check'].get('work_controls',{}).get('finite_qp_solver','WorkingSet')==a.bound_solver,
                     'native runtime did not use the recorded finite-QP backend')
                 require(report['steps']==progress['accepted_steps'], 'report/checkpoint count differs')

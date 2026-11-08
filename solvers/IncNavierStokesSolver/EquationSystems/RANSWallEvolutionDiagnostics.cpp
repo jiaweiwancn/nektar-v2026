@@ -242,10 +242,12 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
             repair[7]=std::max(repair[7],point.rate);
         }
     }
-    m_comm->AllReduce(wall,LibUtilities::ReduceSum);result["wall_sources"]=wall;
+    m_comm->AllReduce(wall,LibUtilities::ReduceSum);
+    if(AcceptedAWF())result["accepted_awf_sources"]={wall[3],wall[1],wall[2],wall[4],wall[3]-wall[1]};
+    else result["wall_sources"]=wall;
     for(int i=0;i<6;++i)m_comm->AllReduce(repair[i],LibUtilities::ReduceSum);
     m_comm->AllReduce(repair[6],LibUtilities::ReduceMin);m_comm->AllReduce(repair[7],LibUtilities::ReduceMax);
-    result["robust_source"]=repair;
+    if(!AcceptedAWF())result["robust_source"]=repair;
     if(saturated)
     {
         for(int i:{0,1,4})m_comm->AllReduce(innerLaw[i],LibUtilities::ReduceSum);

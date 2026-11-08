@@ -37,7 +37,8 @@ std::string RANSWallEvolutionPatch::PimpleKBoundSignature() const
     if(!PimpleKBoundEnabled())return ""; // Preserve Off checkpoint signatures.
     const double K0=m_parameters.model.Q()*m_robustUstar*m_robustUstar;
     std::ostringstream out;out<<std::setprecision(17)<<":k_bound="<<m_pimpleKBound
-        <<(ProspectiveKInventory()?":version=MassQR-ConstitutiveV3:metric=physical_consistent_Mff:constraints=shared_Q0_union_permitted_Qpositive_reporting_contact_retained_cuts_cubic_ground":
+        <<(AcceptedAWF()?":version=MassQR-AcceptedBudgetV1:metric=physical_consistent_Mff:constraints=endpoint_K_budget_profiles_shared_constitutive_reporting_contact_retained_cuts_cubic_ground":
+           ProspectiveKInventory()?":version=MassQR-ConstitutiveV3:metric=physical_consistent_Mff:constraints=shared_Q0_union_permitted_Qpositive_reporting_contact_retained_cuts_cubic_ground":
            ConstitutiveKInventory()?":version=MassQR-ConstitutiveV2:metric=physical_consistent_Mff:constraints=shared_constitutive_all_profiles_contact_rays_retained_cuts_cubic_ground":
             ":version=MassQR-v1:metric=physical_consistent_Mff:constraints=static_preK_rays_moving_witnesses_cubic_ground")
         <<":floor_relative="<<m_pimpleKFloorRelative<<":K0="<<K0<<":floor="<<K0*m_pimpleKFloorRelative
@@ -210,6 +211,9 @@ RANSWallEvolutionPatch::KBoundResult RANSWallEvolutionPatch::ApplyPimpleKBound(
     Vector step(size[K()]);for(int i=0;i<size[K()];++i)step[i]=raw[offset[K()]+i]-preK[offset[K()]+i];
     const auto stepLoad=Multiply(m_mass[K()],step);
     const double stepNorm=std::sqrt(std::max(0.,RANSWallKBound::Dot(step,stepLoad)));
+    auto acceptedStep=step;for(int i=0;i<acceptedStep.size();++i)acceptedStep[i]+=change[i];
+    const double acceptedNorm=std::sqrt(std::max(0.,RANSWallKBound::Dot(acceptedStep,Multiply(m_mass[K()],acceptedStep))));
+    const double cross=RANSWallKBound::Dot(step,load);
     result.integral=RANSWallKBound::Dot(m_constants[K()],load);
     Vector integrals(5);double nearHeight=1e300;
     for(const auto &el:fields[K()]->Elements())if(el.lower[2]==0)nearHeight=std::min(nearHeight,el.upper[2]);
@@ -285,7 +289,7 @@ RANSWallEvolutionPatch::KBoundResult RANSWallEvolutionPatch::ApplyPimpleKBound(
     std::string bands="null";
     if(HeightComparisonEnabled() && result.success)
     {Vector full(raw.size());for(int i=0;i<full.size();++i)full[i]=result.state[i]-raw[i];bands=PhysicalKBands(result.state,time,data,&full);}
-    result.report=J::Object({{"physical_bands",bands},{"mode",J::Quote(m_pimpleKBound)},{"algorithm",J::Quote(ProspectiveKInventory()?"MassQR-ConstitutiveV3":ConstitutiveKInventory()?"MassQR-ConstitutiveV2":"MassQR-v1")},
+    result.report=J::Object({{"physical_bands",bands},{"mode",J::Quote(m_pimpleKBound)},{"algorithm",J::Quote(AcceptedAWF()?"MassQR-AcceptedBudgetV1":ProspectiveKInventory()?"MassQR-ConstitutiveV3":ConstitutiveKInventory()?"MassQR-ConstitutiveV2":"MassQR-v1")},
         {"inventory_policy",J::Quote(m_pimpleKInventory)},{"projection_only",J::Boolean(projectionOnly)},
         {"work_controls",PimpleKBoundControls()},{"telemetry_schema","1"},
         {"separation_passes",J::Number(separations)},{"inventory_rebuilds",J::Number(inventoryRebuilds)},
@@ -297,11 +301,13 @@ RANSWallEvolutionPatch::KBoundResult RANSWallEvolutionPatch::ApplyPimpleKBound(
         {"raw_ground",rawGround},{"corrected_ground",correctedGround},
         {"raw_sha256",J::Quote(RANSWallR3::Hash(raw))},{"corrected_sha256",J::Quote(RANSWallR3::Hash(result.state))},
         {"mass_norm_correction",J::Number(massNorm)},{"mass_norm_raw_step",J::Number(stepNorm)},
+        {"mass_norm_accepted_step",J::Number(acceptedNorm)},{"mass_inner_product_raw_bound",J::Number(cross)},
+        {"mass_norm_increment_identity_defect",J::Number(acceptedNorm*acceptedNorm-stepNorm*stepNorm-massNorm*massNorm-2*cross)},
         {"correction_to_step_ratio_defined",J::Boolean(stepNorm>0.)},{"correction_to_step_ratio",J::Number(stepNorm>0?massNorm/stepNorm:0.)},{"integral_total",J::Number(result.integral)},
         {"integrals_inner_outer_near_positive_negative",J::Numbers(integrals)},{"near_ground_height",J::Number(nearHeight)},
         {"active_constraints",J::List(active)},{"active_set_iterations",J::Number(result.iterations)},
         {"mass_factorizations",J::Number(projection?1:0)},{"mass_factor_applications",J::Number(result.massFactorApplications)},
-        {"mass_matrix_applications","2"},{"kkt_solves",J::Number(result.kktSolves)},{"governing_equation_solves","0"},
+        {"mass_matrix_applications","3"},{"kkt_solves",J::Number(result.kktSolves)},{"governing_equation_solves","0"},
         {"primal_floor_defect",J::Number(fullPrimal)},{"active_row_floor_defect",J::Number(std::max(0.,primal))},
         {"current_inventory_passed",J::Boolean(finalDomain.admissible && finalDomainError.empty())},
         {"current_inventory",ScalarDomainJSON(finalDomain)},{"current_inventory_exception",J::Quote(finalDomainError)},

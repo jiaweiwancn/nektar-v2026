@@ -91,6 +91,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::PressureDirectionalAction
     PressureDirection(direction,Size(),DifferentialSize());
     Require(static_cast<int>(state.size())==Size(),"pressure action state has wrong size");
     const auto constraints=Constraints(state,time,data);
+    if(AcceptedAWF())return AffinePressureAction(direction,imposeConstraints?constraints:std::map<int,double>{},region);
     auto s=m_transitionEnabled?ExternalLift(state,time,data):state;
     if(!m_transitionEnabled)for(auto [row,value]:constraints)s[row]=value;
     auto result=AffinePressureAction(direction,imposeConstraints?constraints:std::map<int,double>{},region);

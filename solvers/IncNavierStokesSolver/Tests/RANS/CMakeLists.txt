@@ -29,6 +29,16 @@ add_library(RANSKernels STATIC
     ${RANS_SOURCE_ROOT}/library/SolverUtils/Turbulence/RANSWallGeometry.cpp
     ${RANS_SOURCE_ROOT}/library/SolverUtils/Turbulence/RANSWallNormalMap.cpp)
 target_compile_definitions(RANSKernels PRIVATE SOLVER_UTILS_EXPORTS)
+add_executable(RANSAcceptedAWFProbe
+    ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSAcceptedAWFProbe.cpp)
+target_link_libraries(RANSAcceptedAWFProbe RANSKernels)
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(RANSAcceptedAWFProbe PRIVATE -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror)
+endif()
+add_test(NAME RANSAcceptedAWFKernel COMMAND RANSAcceptedAWFProbe
+    --output ${CMAKE_CURRENT_BINARY_DIR}/rans-accepted-awf-kernel.json)
+set_tests_properties(RANSAcceptedAWFKernel PROPERTIES PROCESSORS 1 TIMEOUT 180
+    ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
 add_executable(RANSWallLayerProbe
     ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSWallLayerProbe.cpp)
 add_executable(RANSRobustVariantProbe
@@ -398,6 +408,12 @@ add_test(NAME RANSObservationKernels COMMAND RANSObservationKernelProbe
 set_tests_properties(RANSObservationKernels PROPERTIES
     PROCESSORS 1 TIMEOUT 120 ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
 find_package(Python3 QUIET COMPONENTS Interpreter)
+if(Python3_Interpreter_FOUND)
+    add_test(NAME RANSAcceptedAWFCases COMMAND ${Python3_EXECUTABLE} -B
+        ${CMAKE_CURRENT_LIST_DIR}/test_cls_accepted_awf_cases.py)
+    set_tests_properties(RANSAcceptedAWFCases PROPERTIES PROCESSORS 1 TIMEOUT 60
+        ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
+endif()
 add_test(NAME RANSEquilibriumProfilesNative COMMAND RANSEquilibriumProfilesProbe
     --output ${CMAKE_CURRENT_BINARY_DIR}/rans-equilibrium-profiles.json)
 set_tests_properties(RANSEquilibriumProfilesNative PROPERTIES

@@ -45,6 +45,14 @@ SOLVER_UTILS_EXPORT double EquilibriumAWFProfileWeight(
     double spatialWeight, const std::array<double, 7> &sensors,
     double budgetMargin, double reynolds, const AWFProfileSwitch &controls = {});
 
+/** Wall-source formulation, independent of the outer constitutive variant. */
+enum class AWFProfileFormulation { LegacyEPAWF, CLSCalibratedBudgetAWF };
+
+/** Separate auxiliary-wall parameters derived from the selected CLS reference.
+ * Keeping this explicit prevents factories from silently retaining the legacy
+ * 0.09/2.55 wall coefficients for the calibrated formulation. */
+SOLVER_UTILS_EXPORT AWFParameters CalibratedAWFParameters(const RANSNeutralReference &model);
+
 struct AWFProfileOptions
 {
     double requestedWeight = 1, minimumReynolds = 100;
@@ -53,6 +61,7 @@ struct AWFProfileOptions
     // Additional physical mesh interfaces: the cutoff and every source load
     // must integrate over these same panels when the wall spans elements.
     std::vector<double> physicalBreakpoints;
+    AWFProfileFormulation formulation = AWFProfileFormulation::LegacyEPAWF;
 };
 
 struct AWFProfileQuadraturePoint
@@ -93,6 +102,9 @@ public:
     const AWFProfileGeometry &Geometry() const { return m_geometry; }
     const AWFNormalMetric &Metric() const { return m_metric; }
     const AWFProfileOptions &Options() const { return m_options; }
+    AWFProfileFormulation Formulation() const { return m_options.formulation; }
+    bool AcceptedAWF() const
+    { return Formulation() == AWFProfileFormulation::CLSCalibratedBudgetAWF; }
     const AnalyticalWallFunction &Original() const { return m_original; }
     const AWFProfileReference &Reference() const { return m_reference; }
     const std::vector<AWFProfileQuadraturePoint> &Quadrature() const { return m_quadrature; }
@@ -106,6 +118,18 @@ public:
     AWFProfileValues Evaluate(double r, const AWFVector &velocity, const AWFVector &forcing) const;
     double Dissipation(double r) const;
     double RedistributionFlux(double r) const; // includes chi, normal component in physical coordinates
+    /** Stationary reference only; never a field-restoration operation.
+     * For accepted AWF, ReferenceKFlux is Q_J=J D_k k'_ref, so the physical
+     * upward normal diffusive flux is -Q_J/J. With J=1 it is appendix Q_0.
+     * Legacy EP references retain constant k and zero ordinary diffusion.
+     * A nonpositive auxiliary reference is returned without clipping: cutoff
+     * applicability and qualification of that reference are separate checks. */
+    double ReferenceK(double r) const;
+    double ReferenceKGradient(double r) const;
+    double ReferenceKFlux(double r) const;
+    double ReferenceKDiffusivity(double r) const;
+    // Metric-weighted corrected-dissipation integral at an independent cutoff.
+    double DissipationBudget(double cutoff) const;
     // Reuse an already qualified cutoff when only the ray-constant weight
     // changes. A zero weight is constructed separately from the baseline,
     // whose quadrature must not require or retain an inadmissible cutoff.
@@ -118,14 +142,17 @@ public:
 private:
     void CheckHeight(double r) const;
     void GaussRule();
-    std::vector<AWFProfileQuadraturePoint> MakeQuadrature(double upper, double cutoff) const;
+    std::vector<AWFProfileQuadraturePoint> MakeQuadrature(double upper, double cutoff,
+                                                       double lower = 0) const;
     double Integrate(const std::function<double(double)> &function,
                      double upper, double cutoff) const;
     double Corrected(double r, double cutoff) const;
+    double CorrectedIntegral(double upper, double cutoff) const;
     double BudgetDifference(double cutoff) const;
     AWFProfileGeometry m_geometry;
     AWFNormalMetric m_metric;
     AWFProfileOptions m_options;
+    double m_sigmaK = 1;
     AnalyticalWallFunction m_original;
     AWFProfileReference m_reference;
     std::vector<double> m_gaussPoints, m_gaussWeights;

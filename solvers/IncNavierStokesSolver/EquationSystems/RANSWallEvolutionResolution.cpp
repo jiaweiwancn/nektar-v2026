@@ -87,7 +87,7 @@ const std::vector<std::string> &RANSWallResolutionSpatialTerms()
 RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::ResidualResolutionComponents(
     const Vector &state,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data,bool anchored) const
 {
-    Require(m_comm->GetSize()==1 && m_dimension==2 && !Mapped() && m_transitionEnabled && m_cappedDestruction,
+    Require(m_comm->GetSize()==1 && m_dimension==2 && !Mapped() && ((m_transitionEnabled && m_cappedDestruction) || AcceptedAWF()),
         "R3 residual-resolution audit requires serial flat2D Upstream+Capped");
     Require(state.size()==Size() && history.size()==Size() && alpha>=0 && m_eta==0,
         "R3 residual-resolution audit requires frozen unanchored valid state/history");
@@ -110,16 +110,20 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
             const double nt=profile->Original().EddyViscosity(Distance(q.v.coordinate));
             const auto law=InnerStress(k,nt,G);stress=RANSWallInnerMeanStress(law,m_parameters.geometry.molecularNu,pi);
             dk=m_parameters.geometry.molecularNu+nt/m_parameters.model.Parameters().sigmaK;
-            const auto pre=profile->AtProduction(Distance(q.v.coordinate),law.production);
-            const auto repaired=EvaluateRANSCappedDestructionPoint(k,profile->K(),pre.dissipation,
-                pre.dissipation-pre.redistribution,normalization->b,normalization->m,m_destruction);
             const auto actual=WallSource(s,q.v.coordinate,law.production,*profile,normalization);
+            double destruction=actual.dissipation-actual.redistribution;
+            if(m_cappedDestruction)
+            {
+                const auto pre=profile->AtProduction(Distance(q.v.coordinate),law.production);
+                destruction=EvaluateRANSCappedDestructionPoint(k,profile->K(),pre.dissipation,
+                    pre.dissipation-pre.redistribution,normalization->b,normalization->m,m_destruction).destruction;
+            }
             sk=actual.kSource+data.innerKSource(q.v.coordinate,time);
             load("inner_k_production",K(),q.v,-law.production,{},q.weight);
-            load("inner_k_destruction",K(),q.v,repaired.destruction,{},q.weight);
+            load("inner_k_destruction",K(),q.v,destruction,{},q.weight);
             // These auxiliary E and -C loads are NEVER in the physical sum.
-            load("diagnostic_inner_Eplus",K(),q.v,repaired.dissipation,{},q.weight);
-            load("diagnostic_inner_minus_Cplus",K(),q.v,-repaired.redistribution,{},q.weight);
+            load("diagnostic_inner_Eplus",K(),q.v,actual.dissipation,{},q.weight);
+            load("diagnostic_inner_minus_Cplus",K(),q.v,-actual.redistribution,{},q.weight);
             load("prescribed_scalar_source",K(),q.v,-data.innerKSource(q.v.coordinate,time),{},q.weight);
         }
         else

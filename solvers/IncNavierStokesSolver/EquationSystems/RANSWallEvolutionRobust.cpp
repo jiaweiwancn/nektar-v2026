@@ -33,6 +33,7 @@ void RANSWallEvolutionPatch::InitialiseRobust(const LibUtilities::SessionReaderS
     session->LoadSolverInfo("RANSWallDestruction",destruction,selected?"Capped":"Original");
     Require(destruction=="Original" || destruction=="Capped","unknown inner destruction selection");
     m_cappedDestruction=destruction=="Capped";
+    Require(!AcceptedAWF() || !m_cappedDestruction,"accepted budget AWF has no capped-destruction normalization");
     session->LoadSolverInfo("RANSWallDestructionSmoothing",smoothing,"Linear");
     Require(smoothing=="Linear" || smoothing=="C2","unknown destruction limiter shape");
     m_destruction.smooth=smoothing=="C2";
@@ -87,6 +88,7 @@ RANSClosureValues RANSWallEvolutionPatch::OuterClosure(double k,double epsilon,
 RANSCappedDestructionValues RANSWallEvolutionPatch::WallNormalization(const Vector &s,
     const RANSWallCoordinate &p,const EquilibriumAWFProfiles &profile) const
 {
+    Require(!AcceptedAWF(),"capped normalization is not part of CLSCalibratedBudgetAWF");
     RANSCappedDestructionInput input;input.sampledK=profile.K();
     // Every rank evaluates the complete ray. Ownership is applied only when
     // assembling its volume loads, never to the nonlocal normalization.

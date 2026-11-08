@@ -128,7 +128,7 @@ std::vector<RANSWallCoordinate> RANSWallEvolutionPatch::ConstitutiveAnchors(cons
         for(const auto &p:Surface(b,axis,axis==2?(side<0?0.:upper[2]):(side<0?lower[0]:upper[0]),side,order))add(p.test.coordinate);
     for(const auto &p:WallTraceR4(state))add(p.row.coordinate);
     for(const auto &p:additional)add(p);
-    if(ProspectiveKInventory())for(const auto &[p,w]:PhysicalBandRays())add(p);
+    if(ProspectiveKInventory() || AcceptedAWF())for(const auto &[p,w]:PhysicalBandRays())add(p);
     for(double x:ConstitutiveReportingAbscissae())if(x>=lower[0] && x<=upper[0])add({x,0,0});
     return {anchors.begin(),anchors.end()};
 }
@@ -154,7 +154,7 @@ std::string RANSWallEvolutionPatch::BranchCoverageDiagnostic(const Vector &s,dou
     {
         p[2]=0;const auto sampling=SampleKRow(p);const double k=sampling.Value(s,offset[K()]);
         Require(k>0 && std::isfinite(k),"branch diagnostic sampled K is inadmissible");
-        for(double z:{m_sensorA,m_sensorB})
+        if(!AcceptedAWF())for(double z:{m_sensorA,m_sensorB})
         {
             auto q=p;q[2]=z;
             Require(Point(K(),q).Value(s,offset[K()])>0 && Point(Epsilon(),q).Value(s,offset[Epsilon()])>0,
@@ -162,9 +162,10 @@ std::string RANSWallEvolutionPatch::BranchCoverageDiagnostic(const Vector &s,dou
         }
         const auto base=Profile(k,p,0),current=StateProfile(s,p,time,data);
         std::string reason;const auto active=ProspectiveActiveProfile(s,p,reason);
-        const auto gates=Transition(s,p,time,data);std::vector<std::string> profiles,panels;
-        for(auto [name,profile]:std::vector<std::pair<std::string,std::shared_ptr<EquilibriumAWFProfiles>>>{
-            {"baseline",base},{"current",current},{"prospective_active",active}})
+        const auto gates=AcceptedAWF()?AWFTransitionValues{}:Transition(s,p,time,data);std::vector<std::string> profiles,panels;
+        const auto selectedProfiles=AcceptedAWF()?std::vector<std::pair<std::string,std::shared_ptr<EquilibriumAWFProfiles>>>{{"budget_awf",current}}:
+            std::vector<std::pair<std::string,std::shared_ptr<EquilibriumAWFProfiles>>>{{"baseline",base},{"current",current},{"prospective_active",active}};
+        for(auto [name,profile]:selectedProfiles)
         {
             if(!profile)continue;
             std::vector<std::string> rows;double minimum=1e300;
@@ -174,7 +175,7 @@ std::string RANSWallEvolutionPatch::BranchCoverageDiagnostic(const Vector &s,dou
                 rows.push_back(J::Object({{"coordinate",J::Numbers(q.coordinate)},{"k",J::Number(value)},
                     {"visited_by_selected_inventory",J::Boolean(declaredPoints.count(q.coordinate))}}));
             }
-            profiles.push_back(J::Object({{"branch",J::Quote(name)},{"chi",J::Number(profile->Reference().weight)},
+            profiles.push_back(J::Object({{"branch",J::Quote(name)},{"chi",AcceptedAWF()?"null":J::Number(profile->Reference().weight)},
                 {"cutoff",J::Number(profile->Reference().cutoff)},{"minimum",J::Number(minimum)},{"rows",J::List(rows)}}));
         }
         double positiveQuadratureDefect=0.;
@@ -215,9 +216,9 @@ std::string RANSWallEvolutionPatch::BranchCoverageDiagnostic(const Vector &s,dou
                 {"native_evaluation",J::Number(nativeMinimum)},{"arithmetic_error_estimate",J::Number(double(error))}}));
         }
         output.push_back(J::Object({{"anchor",J::Numbers(p)},{"K",J::Number(k)},{"column_average",J::Boolean(sampling.columnAverage)},
-            {"chi",J::Number(gates.chi)},{"spatial",J::Number(gates.spatial)},{"state",J::Number(gates.state)},
-            {"d2",J::Number(gates.d2)},{"admissibility",J::Number(gates.admissibility)},
-            {"margin_gate",J::Number(gates.marginGate)},{"reynolds_gate",J::Number(gates.reynoldsGate)},
+            {"chi",AcceptedAWF()?"null":J::Number(gates.chi)},{"spatial",AcceptedAWF()?"null":J::Number(gates.spatial)},{"state",AcceptedAWF()?"null":J::Number(gates.state)},
+            {"d2",AcceptedAWF()?"null":J::Number(gates.d2)},{"admissibility",AcceptedAWF()?"null":J::Number(gates.admissibility)},
+            {"margin_gate",AcceptedAWF()?"null":J::Number(gates.marginGate)},{"reynolds_gate",AcceptedAWF()?"null":J::Number(gates.reynoldsGate)},
             {"margin",J::Number(base->Reference().margin)},{"reynolds",J::Number(base->Reference().reynolds)},
             {"prospective_reason",J::Quote(reason)},{"positive_chi_quadrature_defect",J::Number(positiveQuadratureDefect)},
             {"profiles",J::List(profiles)},{"vertical_cubic_panels",J::List(panels)}}));
@@ -244,6 +245,25 @@ void RANSWallEvolutionPatch::InitialiseScalarLocations() const
         if(!inner)add(name,Point(Epsilon(),v.coordinate,Same(v.coordinate[2],m_parameters.geometry.height)?1:0),Epsilon(),true,side);
     };
     for(const auto &q:Quadrature(0))pair("mass_volume",q,q.coordinate[2]<m_parameters.geometry.height);
+    if(AcceptedAWF())
+    {
+        // Fixed physical reporting quadrature uses these exact vertical
+        // panels and tangential rays, including partial-element band edges.
+        // Positive interface K never waives a local transported-k check.
+        std::set<double> panels{0.,.01,.1,m_parameters.geometry.height,upper[2]};
+        for(const auto &el:fields[K()]->Elements())for(double z:{el.lower[2],el.upper[2]})panels.insert(z);
+        const auto rule=LibUtilities::PointsManager()[LibUtilities::PointsKey(16,LibUtilities::eGaussGaussLegendre)];
+        for(const auto &[anchor,weight]:PhysicalBandRays())
+        {
+            (void)weight;
+            for(auto b=std::next(panels.begin());b!=panels.end();++b)
+            {
+                const double a=*std::prev(b);
+                for(int i=0;i<16;++i)
+                {auto p=anchor;p[2]=a+(rule->GetZ()[i]+1)*(*b-a)/2;pair("budget_awf_reporting_volume",Point(K(),p),p[2]<m_parameters.geometry.height);}
+            }
+        }
+    }
     for(const auto &q:m_bodyInner)pair("prescribed_source_inner",q.v,true);
     for(const auto &q:m_outer)pair("source_volume_outer",q.v,false);
     for(const auto &face:Surface(0,2,m_parameters.geometry.height,1,8))
@@ -288,7 +308,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::ScalarDomain(
     const Vector &state,double time,const RANSWallEvolutionData &data,bool retain,bool kInventoryOnly,
     const std::vector<RANSWallCoordinate> &additionalAnchors) const
 {
-    ScalarDomainResult result;result.phase="coefficients";
+    ScalarDomainResult result;result.phase="coefficients";result.normalizationApplicable=!AcceptedAWF();
     const double us=m_robustUstar,K0=m_parameters.model.Q()*us*us;
     const double E0=us*us*us/(m_parameters.model.Kappa()*m_parameters.geometry.height);
     auto check=[&](const std::string &name,const RANSWallGlobalPoint &q,int block,bool strict,
@@ -342,11 +362,18 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::ScalarDomain(
         {
             result.minimumCutoff=std::min(result.minimumCutoff,profile->Reference().cutoff);
             result.maximumCutoff=std::max(result.maximumCutoff,profile->Reference().cutoff);
-            result.profileBranches.push_back(profile->Reference().weight==0?'B':profile->Reference().weight==1?'E':'M');
+            result.profileBranches.push_back(AcceptedAWF()?'A':profile->Reference().weight==0?'B':profile->Reference().weight==1?'E':'M');
+            result.minimumBudgetRatio=std::min(result.minimumBudgetRatio,profile->Reference().productionBudget/profile->Reference().minimumBudget);
+            result.maximumBudgetRelativeDefect=std::max(result.maximumBudgetRelativeDefect,
+                std::abs(profile->Reference().budgetResidual)/std::max(1e-300,profile->Reference().productionBudget));
             const auto rows=NormalizationRows(p,*profile);int i=0;
             for(const auto &q:profile->Quadrature())
                 if(!check(name,rows[i++],K(),false,result.effectiveState,0,false,
                     source?horizontalWeight*q.weight*q.jacobian:0.))return false;
+            if(AcceptedAWF())for(double top:{.01,.1,m_parameters.geometry.height})if(top<=m_parameters.geometry.height)
+                for(const auto &q:profile->IntegrationQuadrature(top,{.01,.1}))
+                {auto point=p;point[2]=q.r/m_mapping.At(p).scale;
+                 if(!check("constitutive_budget_reporting_source_ray",Point(K(),point),K(),false,result.effectiveState))return false;}
             pending.push_back({p,profile,source});return true;
         };
         // Check every physical k BEFORE calling WallNormalization or a
@@ -356,9 +383,9 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::ScalarDomain(
                     "volume_normalization_ray",true,r.weight))return result;
         for(const auto &p:m_traceScalarAnchors)
         {
-            if(!ray(p,Profile(SampleK(result.effectiveState,p),p,0),"trace_baseline_normalization_ray",false,0))return result;
+            if(!AcceptedAWF() && !ray(p,Profile(SampleK(result.effectiveState,p),p,0),"trace_baseline_normalization_ray",false,0))return result;
             if(!ray(p,StateProfile(result.effectiveState,p,time,data),
-                    "trace_current_normalization_ray",false,0))return result;
+                    AcceptedAWF()?"trace_budget_awf_ray":"trace_current_normalization_ray",false,0))return result;
         }
         if(ConstitutiveKInventory())
         {
@@ -381,8 +408,8 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::ScalarDomain(
             }
             for(const auto &p:anchors)
             {
-                if(!ray(p,Profile(SampleK(result.effectiveState,p),p,0),"constitutive_baseline_normalization_ray",false,0) ||
-                   !ray(p,StateProfile(result.effectiveState,p,time,data),"constitutive_current_normalization_ray",false,0))return result;
+                if(!AcceptedAWF() && !ray(p,Profile(SampleK(result.effectiveState,p),p,0),"constitutive_baseline_normalization_ray",false,0))return result;
+                if(!ray(p,StateProfile(result.effectiveState,p,time,data),AcceptedAWF()?"constitutive_budget_awf_ray":"constitutive_current_normalization_ray",false,0))return result;
                 if(ProspectiveKInventory())
                 {
                     // Only positivity constraints: never normalize this
@@ -410,7 +437,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::ScalarDomain(
         // it is NEVER substituted into that coupled residual/Newton iterate.
         result.traceState=result.effectiveState;
         for(auto [row,value]:Constraints(state,time,data))result.traceState[row]=value;
-        if(!m_transitionEnabled && !PimpleSingleSweep())result.effectiveState=result.traceState;
+        if(!MatchingEnabled() && !PimpleSingleSweep())result.effectiveState=result.traceState;
         for(const auto &point:m_scalarLocations)if(point.block==Epsilon())
         {
             if(!check("actual_lifted_outer_epsilon",point.row,Epsilon(),true,result.effectiveState,point.side))return result;
@@ -432,7 +459,7 @@ std::string RANSWallEvolutionPatch::CheckConstitutiveCoverage(const Vector &s,do
     bool caught=false;std::string reason;
     {
         CoverageScope coverage(m_assertKCoverage,true);
-        try{WallNormalization(s,unregistered,*StateProfile(s,unregistered,time,data));}
+        try{if(AcceptedAWF())(void)SampleK(s,unregistered);else WallNormalization(s,unregistered,*StateProfile(s,unregistered,time,data));}
         catch(const std::exception &error){reason=error.what();caught=reason.find("unprotected constitutive k evaluation")!=std::string::npos;}
     }
     Require(caught,"coverage tripwire failed to reject an undeclared consumer");
@@ -451,7 +478,9 @@ std::string RANSWallEvolutionPatch::ScalarDomainJSON(const ScalarDomainResult &d
         {"minimum_inner_k",J::Number(d.minimumInnerK)},{"minimum_outer_k",J::Number(d.minimumOuterK)},
         {"minimum_outer_epsilon",J::Number(d.minimumOuterEpsilon)},{"minimum_sampled_K",J::Number(d.minimumSampledK)},
         {"minimum_projected_trace_epsilon",J::Number(d.minimumTraceEpsilon)},
-        {"minimum_b",J::Number(d.minimumB)},{"minimum_lambda",J::Number(d.minimumLambda)},
+        {"minimum_b",d.normalizationApplicable?J::Number(d.minimumB):"null"},{"minimum_lambda",d.normalizationApplicable?J::Number(d.minimumLambda):"null"},
+        {"normalization_applicable",J::Boolean(d.normalizationApplicable)},
+        {"minimum_budget_ratio",J::Number(d.minimumBudgetRatio)},{"maximum_budget_relative_defect",J::Number(d.maximumBudgetRelativeDefect)},
         {"cutoff_range",J::Numbers(Vector{d.minimumCutoff,d.maximumCutoff})},
         {"inventory_counts",J::Object(counts)},{"profile_branch_pattern",J::Quote(d.profileBranches)}};
     if(locations)
@@ -2036,6 +2065,13 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
     const Vector &state,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data,bool rangesOnly) const
 {
     const auto domain=ScalarDomain(state,time,data,true);Diagnostic audit;
+    if(AcceptedAWF())
+    {
+        audit["accepted_awf_scalar_domain"]={domain.admissible?1.:0.,domain.minimumMargin,domain.minimumInnerK,
+            domain.minimumOuterK,domain.minimumOuterEpsilon,domain.minimumSampledK,domain.minimumTraceEpsilon,
+            domain.minimumBudgetRatio,domain.maximumBudgetRelativeDefect};
+        if(!domain.admissible){audit["admissible"]={0};return audit;}
+    }
     audit["r2_scalar_domain"]={domain.admissible?1.:0.,domain.minimumMargin,domain.minimumInnerK,
         domain.minimumOuterK,domain.minimumOuterEpsilon,domain.minimumSampledK,
         domain.minimumTraceEpsilon,domain.minimumB,domain.minimumLambda};
@@ -2088,7 +2124,19 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
     if(rangesOnly || GroundSafeguard() || PimpleSingleSweep())audit["r4_outer_gradient_witness"]=gradientPoint;
     audit["r2_outer_range"]=outer;audit["r2_covariance"]={innerCov,outerCov};
     audit["r2_inner_minimum_point"]=innerPoint;audit["r2_outer_minimum_point"]=outerPoint;
-    audit["r2_qualified"]={box && covariance && domain.minimumLambda>=.5?1.:0.};
+    if(AcceptedAWF())
+    {
+        audit.erase("r2_scalar_domain");audit.erase("robust_source");
+        audit["accepted_awf_scalar_domain"]={1,domain.minimumMargin,domain.minimumInnerK,
+            domain.minimumOuterK,domain.minimumOuterEpsilon,domain.minimumSampledK,domain.minimumTraceEpsilon,
+            domain.minimumBudgetRatio,domain.maximumBudgetRelativeDefect};
+        audit["accepted_awf_covariance"]=audit.at("r2_covariance");audit.erase("r2_covariance");
+        audit["accepted_awf_inner_minimum_point"]=audit.at("r2_inner_minimum_point");audit.erase("r2_inner_minimum_point");
+        audit["accepted_awf_outer_minimum_point"]=audit.at("r2_outer_minimum_point");audit.erase("r2_outer_minimum_point");
+        audit["accepted_awf_reference_departure"]=audit.at("r2_outer_range");audit.erase("r2_outer_range");
+        audit["accepted_awf_hard_admissible"]={covariance && domain.minimumBudgetRatio>=1.?1.:0.};
+    }
+    else audit["r2_qualified"]={box && covariance && domain.minimumLambda>=.5?1.:0.};
     return audit;
 }
 } // namespace Nektar
