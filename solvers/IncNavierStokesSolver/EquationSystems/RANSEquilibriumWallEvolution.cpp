@@ -978,7 +978,7 @@ void RANSEquilibriumWallEvolution::WriteReport() const
             out<<",\"physical_range_guard\":"<<Quoted(m_rangeGuardName)
                <<",\"diagnostic_range_continuation\":"<<(m_diagnosticRangeContinuation?"true":"false")
                <<",\"physical_range_inventory\":";
-            if(m_patch->AcceptedAWF())out<<"{\"source_samplers_interfaces_mass_body\":true,\"native_GLL\":true,\"covariance_tolerance_over_K0\":1e-10,\"profile_budget_gate\":true,\"lambda_minimum\":null,\"reference_qualification_box\":null}";
+            if(m_patch->ModelAwareAudit())out<<"{\"source_samplers_interfaces_mass_body\":true,\"native_GLL\":true,\"covariance_tolerance_over_K0\":1e-10,\"profile_budget_gate\":true,\"lambda_minimum\":null,\"reference_qualification_box\":null}";
             else out<<"{\"source_samplers_interfaces_mass_body\":true,\"native_GLL\":true,"
                  "\"inner_dense_points_per_axis\":\"2*p+7\",\"outer_dense_points_per_axis\":\"2*p+3\","
                  "\"covariance_tolerance_over_K0\":1e-10,\"lambda_minimum\":0.5,"

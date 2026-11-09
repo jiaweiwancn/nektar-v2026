@@ -222,7 +222,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
             WallMatrix mass(ids.size(),Vector(ids.size()));
             for(int i=0;i<ids.size();++i)for(int j=0;j<ids.size();++j)
                 mass[i][j]=m_mass[K()][ids[i]][ids[j]];
-            const auto inverse=RANSWallAlgebra::Factor(mass).Apply(load);
+            const auto inverse=Factor(mass).Apply(load);
             long double square=0;for(int i=0;i<load.size();++i)square+=(long double)load[i]*inverse[i];
             dual[group]=std::sqrt(std::max(0.L,square))/(K0*ustar/m_parameters.geometry.height*std::sqrt(m_volumes[K()]));
         }

@@ -46,13 +46,16 @@ def case_xml(folder,model,policy,wall,steps=16,dt=.0001,restart=None,cache='Off'
         'RANSWallDiagnostics':1,'IO_CheckSteps':1,'RANSWallPimpleRejectStep':reject,'RANSWallPimpleHardAuditRejectStep':0,
         'RANSWallPicardFlowRelaxation':1.,'RANSWallPicardKRelaxation':1.,'RANSWallPicardEpsilonRelaxation':1.,
         'RANSWallPicardPseudoAlpha':0.,'RANSWallCubicBeta':1.,'RANSWallRegularizationGamma':0.,'RANSWallRegularizationScale':0.,
-        'RANSWallAcceptedKAmplitude':perturb}
+        'RANSWallAcceptedKAmplitude':perturb if wall=='Accepted' else 0.}
     for key,value in params.items():set_parameter(root,key,value)
     # Initial perturbation functions of the CLS archive are not part of this
     # reference definition. A separately declared native inner-k perturbation
     # uses fixed external and interface traces when requested.
     for function in list(root.findall('./CONDITIONS/FUNCTION')):
         if function.get('NAME','').startswith('InitialPerturbation'):root.find('CONDITIONS').remove(function)
+    if perturb and wall=='EP':
+        function=ET.SubElement(root.find('CONDITIONS'),'FUNCTION',{'NAME':'InitialPerturbationInner'})
+        ET.SubElement(function,'E',{'VAR':'k','VALUE':str(perturb)+'*K0*sin(3.141592653589793*(x+1)/2)^2*(1-3*(y/RANSWallHeight)^2+2*(y/RANSWallHeight)^3)'})
     write(root,xml)
     return xml
 
