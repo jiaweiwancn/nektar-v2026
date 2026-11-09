@@ -1,5 +1,9 @@
 # Native campaign runtime diagnosis
 
+The [later exact-reuse results](#exact-reuse-update) use a corrected uncached
+audit reference and include validated production handoffs. The original timing
+study below remains preserved as historical evidence.
+
 2026-11-09, Asia/Shanghai. Branch `codex/cls-epawf-pimple-one-sweep`; inspected/fetched base `35c0c93b22ea6b1905875a93c5f6b36a7180ce3c`. Timing implementation: `9596389009e73a7ef2930393c7bbed41b6645b8b`. The later Python/report changes add a timing-disabled control and correct a derived work-field alias; they do not change C++ or the frozen image. [Compact evidence](cls-awf-campaign-timing-evidence/native.json) and [artifact index](cls-awf-campaign-timing-evidence/artifact-index.json) retain the precise source hashes, checkpoints, runtime and commands.
 
 Admissibility inventories and constitutive audits dominate this serial pilot. Their exclusive CPU time accounts for 71–76% of the entire native block, including startup/output. All four governing-equation factorizations/solves together consume 0.014–0.055 CPU-seconds per step. Matrix assembly and pressure construction are also small. No production executable, library, XML, work limit, physical parameter or acceptance check was changed.
@@ -141,3 +145,168 @@ python3 -B "$TOOLS/analyze_cls_awf_campaign_timing.py" "$NEW" \
 ```
 
 To capture a newer completed production block instead, repeat `--campaign name=/absolute/trajectory` in a fresh output invocation without `--solver`, then run the replay command. That measures a newer state, not the exact archived timing fixture. The current analysis is for the retained state/time/configurations, not a universal performance guarantee.
+
+<a id="exact-reuse-update"></a>
+
+## Corrected-audit exact reuse (2026-11-09)
+
+The new performance reference is the separately frozen **corrected uncached**
+`NativeElementSideV2` implementation (`8a3ff79`), not the old interface rejection.
+Cache implementation `232b663` is opt-in through
+`RANSWallEvaluationReuse=ExactStepV1`; `Off` remains the default and forced
+verification path. Compiler/arithmetic flags and the complete dependency
+closure match the reference. No physical selector, equation, timestep, field
+relaxation, inventory, floor or projection work limit changes.
+
+Fixed reconstruction/surface rows and geometry-to-element maps belong to an
+immutable patch catalog. Numerical row reuse keys include field/block, native
+geometry/element, actual radial side and exact coordinate bits; observation
+membership, ordering and witness ties remain intact. Moving rows are scoped to
+one evaluation transaction. The implementation bounds four exact full-state
+contexts, 524288 moving rows, 4096 owned profiles and 32 domain-query keys per
+state. No campaign-long moving-coordinate table is accumulated.
+
+The implicit callback owns the short-lived context through its final acceptance
+audit. Full state bytes, exact time, immutable-data generation/fixed-boundary
+bytes, coverage flags and ordered additional anchors identify scalar-domain
+requests. Cached results retain observations, phase/count outputs, effective and
+trace states and both coverage inventories. Failures are recomputed. K-only
+validation can supply the safe prefix for full completion; normalization still
+follows required k-domain checks. Residual keys also contain full callback
+history, alpha, anchoring, regional and constraint options. A residual hit
+refreshes dependent ray state before returning.
+
+Only the accepted budget formulation has an additional proven scalar dependency
+reuse: with identical complete k/epsilon coefficient bytes, its scalar inventory
+and dependent trace are independent of changed U/p. Full state contexts remain
+distinct and both returned full states are rebound to the current candidate.
+Every coefficient is checked finite before this reuse. This rule is disabled
+for state-dependent transition/capped paths. Tensor/gradient hard audits still
+evaluate the actual current velocity. Legacy normalization reuse instead keys
+the exact full state and owned immutable profile/branch/quadrature, anchor and
+coverage context; sampled K alone is insufficient.
+
+Two final native contract fixtures each pass 34 compared cached/uncached queries,
+including changed non-k versus scalar fields, signed zero, time, generation,
+external data, history, alpha/options, flags, anchors, foreign data, radial sides,
+tangential geometries and the unregistered-consumer tripwire. Native acceptance,
+genuine covariance rejection, active-bound rollback and the repaired interface
+case preserve complete stage/history bits. The focused durability, handoff,
+projection-helper and timing tests are indexed with the numerical evidence.
+
+Three alternating eight-step pairs per representative case give the following
+paired medians. Each pair includes report parsing/checks/compression and keeps
+native checkpoint and dense attempt-packet writes enabled. Full receipts retain
+all individual timings, exclusive costs, CPU and RSS, not just these ratios.
+
+| Case | Median replay-driver speedup | Median native CPU speedup |
+|---|---:|---:|
+| Refined H2 Regularized/Linear | 1.70x | 1.84x |
+| Active-bound Upstream one element | 1.86x | 1.98x |
+
+The roughly 2x H2 eight-step end-to-end target was not fully met. The result is
+still a material reduction, with remaining complete covariance evaluation,
+large inventory bookkeeping and durable output visible in the subtimers.
+The first 65536-row prototype churned its table; bounded larger storage and
+avoiding row copies fixed that measured deficiency. That prototype and its
+interrupted diagnostic benchmarks remain indexed separately, not reported as
+numerical rejections.
+
+Thirty-two-step and four-eight-step comparisons retain every hard per-step
+check and checkpoint. Their governing vectors, pressure/gauge, correction
+results and native payloads are compared exactly. Cache peaks are bounded per
+step rather than growing with the number of moving coordinates encountered
+across a block. The final block timings, cold/continued costs and checkpoint
+proofs are in the [new evidence](cls-accepted-budget-awf-evidence/audit-cache-temporal/native.json).
+No 64-step experiment or selective-packet-output change was needed.
+
+Validated adoption uses a separate successor root and frozen library closure.
+It re-audits the actual accepted parent checkpoint, compares isolated uncached
+and cached restart steps, retires only the identified old owners at a completed
+native boundary, and observes the first successor checkpoint matching the
+isolated result. The successor supervisor retains the parent campaign lock;
+a handoff receipt/seal prevents ordinary stale-source resume. Native coefficients,
+all GLM slots/time labels, physical signature and dt are preserved. Old runtime
+files and campaign evidence remain intact. Actual handoffs/frontiers, rather
+than planned future times, are recorded in
+[latest-status.json](cls-accepted-budget-awf-evidence/audit-cache-temporal/latest-status.json).
+
+The final H2 32-step block costs 358.25 replay-driver seconds versus 463.20
+for four eight-step blocks (22.7% less). The active legacy case costs
+452.21 versus 554.94 seconds (18.5% less). Peak RSS is respectively
+1543896/1525788 KiB for H2 and 1106724/1088100 KiB for the active case
+(32-step/four-eight-step maximum). The eight-step H2 cached median RSS is
+1516676 KiB versus 654616 KiB with reuse Off. Faster exact reuse therefore
+uses appreciably more memory; its bounded storage is not free.
+
+The long H2 block peaks at 437613 moving rows, four states and 625 profiles;
+the active case peaks at 375849 rows, four states and 1142 profiles. Both stay
+below the configured caps, with zero moving-row table evictions in these
+32-step tests. The legacy normalization cache computes 41671 of 887103
+requests, reusing 845432. A separate heavy Uniform-G audit replay gives
+2.08x driver/2.47x CPU speedup with identical states, audits and histories.
+
+Paired-median **exclusive CPU seconds per physical step** isolate the largest
+changed work. These per-group medians describe the runs; individual complete
+timing trees, rather than sums of separate medians, satisfy the partition test.
+
+| Work | H2 Off | H2 ExactStepV1 | Active legacy Off | Active legacy ExactStepV1 |
+|---|---:|---:|---:|---:|
+| Scalar inventory computation | 11.648 | 3.570 | 8.012 | 3.623 |
+| Complete audit, excluding children | 2.671 | 1.979 | 2.692 | 2.035 |
+| Physical/reconstruction audit, excluding children | .457 | .360 | 9.284 | 2.512 |
+| Residual, excluding children | .598 | .400 | .552 | .334 |
+| Constitutive refresh | .193 | .169 | .487 | .174 |
+
+The H2 median inclusive physical-step CPU drops from 17.001 to 8.526 seconds.
+Its optimized equation costs remain small: flow assembly .283 CPU s/step,
+momentum factor/solve/validation .0483, pressure construction including mass
+factor .1227, pressure solve .00049, epsilon assembly/solve .00823/.00125,
+and k assembly/solve .06695/.00912. Bound-call inclusive CPU is 1.523 seconds,
+mostly required inventory work even though bounding is inactive. Complete
+audit inclusive CPU is 2.531 seconds. These inclusive numbers overlap with
+their child costs and must not be added to the exclusive table.
+
+`performance.timing_statistics` retains cold-restart overhead outside physical
+steps, first physical-step versus continued-step wall costs, all major timers
+and individual alternating pair receipts. Native wall/process CPU, replay-driver
+wall including report compression, and operational production block receipts
+are distinct measurements. Cached H2 medians are 10.43 seconds for the first
+physical step, 9.87 for continued steps and 22.25 outside physical steps per
+eight-step restart block. The active case gives 14.54, 13.41 and 18.07 seconds
+respectively. The first successor block receipts measure 326.00,
+241.36 and 238.10 seconds for 32 steps of H2, H=.5 Linear and H=.5 Saturated;
+their final gzip is outside that existing receipt timer. These different-state
+operational measurements are not substituted for the controlled paired speedup.
+
+Reproduction uses fresh output directories and the frozen images; it does not
+pause or resume a production campaign:
+
+```bash
+source /home/jay/.local/opt/nektar-v2026-mpi/env.sh
+export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
+export BLIS_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 NUMEXPR_NUM_THREADS=1
+R=/media/jay/新加卷/nektar-v2026-runs/cls-awf-audit-cache-temporal-20261109
+P=/media/jay/新加卷/nektar-v2026-runs/cls-awf-campaign-timing-20261109
+S="$R/source/solvers/IncNavierStokesSolver/Tests/RANS"
+python3 "$S/verify_cls_awf_evaluation_reuse.py" \
+  --probe "$R/runtime-cache-final/probe/RANSWallResolutionProbe" \
+  --fixtures "$P/replays" --interface-xml "$R/cache-contract-final/interface.xml" \
+  --output "$R/reproduce-cache-contract"
+python3 "$S/benchmark_cls_awf_evaluation_reuse.py" \
+  --fixtures "$P/replays" \
+  --reference-solver "$R/runtime-audit-uncached/solver/IncNavierStokesSolver" \
+  --optimized-solver "$R/runtime-cache-final/solver/IncNavierStokesSolver" \
+  --reference-results "$R/benchmarks-v1" --pairs 3 --long-blocks \
+  --output "$R/reproduce-cache-benchmarks" --timeout 7200
+python3 "$S/verify_cls_awf_checkpoint_equivalence.py" \
+  --benchmarks "$R/reproduce-cache-benchmarks" \
+  --reference-results "$R/benchmarks-v1" \
+  --output "$R/reproduce-checkpoint-equivalence.json"
+```
+
+The isolated authoritative build additionally uses
+`-DRANS_PREBUILT_SPATIAL_LIBRARY=$R/dependency/libSpatialDomains.so.5.9.0`;
+its exact dependency SHA and frozen linked-library closure are indexed.
+No fast-math/FP-contract flag, inventory, physical timestep, work limit or
+output-durability change is included in these measurements.

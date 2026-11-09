@@ -1,5 +1,9 @@
 # Calibrated budget AWF: covariance stages and controlled continuation
 
+See the [NativeElementSideV2 update](#native-element-side-v2-update) for the
+corrected interpretation of interface witnesses. The original bulk failures
+and archived V1 receipts below remain preserved.
+
 2026-11-09, Asia/Shanghai. Work remains on
 `codex/cls-epawf-pimple-one-sweep`. The inspected Mac and fetched remote base was
 `310ebe427f575f74c9ef1ea240ad5afa1acc45f7`; no branch reset, checkpoint migration,
@@ -428,3 +432,63 @@ restart rules and native covariance/tangent/neutral-reference tests. It would
 not establish coupled stability by construction. The current controls must
 first establish how much the observed failure depends on the pressure space
 and time update.
+
+<a id="native-element-side-v2-update"></a>
+
+## NativeElementSideV2 correction (2026-11-09)
+
+The former endpoint observation mixed two sides: its native row was H-minus,
+but `physical_sampled_K` had side=0 and selected the outer law. Both the static
+and moving registrations now carry H-minus explicitly. A shared resolver uses
+the recorded native geometry/element to determine the physical region and
+validate the radial side. Production and forensic calculations use that same
+provenance for velocity derivatives, local k, epsilon and constitutive law.
+Explicit H-plus matching observations and both tangential neighbors remain.
+There is no averaging of one-sided gradients.
+
+Audit-only commit `8a3ff79` was built and frozen independently of the cache
+implementation. A fitted polynomial test has common U/k traces, vertical
+slopes .1/.3, and tangential slopes .01/.02 at x=-3. All four neighboring rows,
+151 static endpoint samples and 390 moving samples select the expected side;
+239 explicit H-plus observations remain outer. Four inconsistent-side inputs
+are rejected. Maximum polynomial error is 1.31e-15.
+
+Complete zero-PDE re-audits, not just the old local witness, give:
+
+| Immutable terminal candidate | Corrected inner minimum | Corrected outer minimum | V2 interpretation |
+|---|---:|---:|---|
+| H=.5 Regularized/Saturated one element, attempt 162 | .091486935 | .076525677 | Historical V1 rejection was false |
+| H2 Saturated inner / Original outer, attempt 32 | .103017647 | -.00162046549 | Genuine H-plus outer failure remains |
+| H=.5 Linear inner / Regularized outer, attempt 148 | -.0000530490157 | .071802149 | Genuine inner failure remains |
+| Faithful cutoff-refined H2, attempt 158 | .172877388 | -.0113839402 | Genuine upper-outer failure remains |
+| Faithful coarse H2, attempt 121 | .136142686 | -.0106884781 | Genuine upper-outer failure remains |
+
+The completed faithful half-dt control also retains its genuine negative bulk
+witness: at attempted T=.090625 its outer minimum is -.00487434613 at
+x=-3,z=3.70833333, geometry 75, with outer gradient and outer law paired.
+Independently reconstructed tensors/eigenvalues agree with native
+rows. No archived coefficients, histories, reference, matrix or checkpoint
+bytes were changed. Historical V1 rejection receipts remain intact.
+
+Native restart of the false-rejected one-element case from its actual step-161
+checkpoint accepts step 162 at T=.10125. Committed, post-flow, pre-k, raw,
+corrected, callback-history and reference vectors are bitwise identical to the
+old attempt. The acceptance difference comes from the complete corrected audit.
+This is a short repair validation, not a new long one-element campaign.
+
+Older short runs saved only periodic checkpoints. Their separate
+`archived_report_stages` reader binds an immutable terminal native report and
+packet to a compatible periodic parent checkpoint in the report's accepted-state
+lineage. It reads the actual recorded final native GLM slots, reproduces the
+saved callback history, and checks rollback before evaluating the stages. It
+explicitly reports the parent and final steps; it neither invents the missing
+final checkpoint nor offers a restart/migration path. The ordinary exact-CP
+spatial reader and `archived_stages` contracts remain strict. Corrupted report,
+history and signature inputs are rejected.
+
+Audit revision is execution/acceptance provenance, separate from the unchanged
+physical checkpoint signature. A runtime handoff must re-audit the exact parent
+checkpoint, preserve every coefficient/history/time bit, and demonstrate an
+isolated equivalent restart step. No checkpoint signature or payload is edited.
+Full receipts and source identities are in the
+[audit/cache/temporal evidence](cls-accepted-budget-awf-evidence/audit-cache-temporal/native.json).

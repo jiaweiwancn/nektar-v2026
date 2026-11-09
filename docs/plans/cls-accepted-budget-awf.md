@@ -1,5 +1,10 @@
 # CLS-calibrated budget AWF: implementation and native evolution
 
+**Latest 2026-11-09 update:** the [corrected audit, exact reuse, temporal study
+and runtime handoffs](#audit-cache-temporal-update) supersede the earlier status
+snapshots below. The selected H2 run has been analyzed through T=2 and remains
+a transient; finite-horizon time accuracy through .05 passes its declared screen.
+
 **2026-11-09 timing diagnosis:** [native campaign profiling](cls-awf-campaign-timing.md)
 replays six completed eight-step blocks with bitwise field/history equality.
 Inventories and constitutive audits consume 71–76% of native CPU; all four
@@ -603,3 +608,226 @@ the supervisor does not automatically retry an unchanged rejected step.
 The reproduction companion reason is deliberately a new case identity, not
 an instruction to load any retained campaign checkpoint. Existing supervisors
 retain their exact original reason/configuration and immutable launch receipts.
+
+<a id="audit-cache-temporal-update"></a>
+
+## Corrected audit, exact evaluation reuse and temporal study — 2026-11-09
+
+This update starts from reviewed `726f153` on the same branch. Audit-only
+`8a3ff79` and cache implementation `232b663` are separately attributable.
+The compiled-source [manifest](cls-accepted-budget-awf-evidence/audit-cache-temporal/source-runtime.json)
+maps every changed Linux compiled file to the Mac commit: the isolated Linux
+Git HEAD initially remained at the reviewed base with those synchronized files.
+The frozen executable/library hashes, rather than that dirty checkout's HEAD
+alone, identify each actual runtime. All numerical results below are Linux
+results, rank one with computational library threads one; build parallelism was
+four and the existing worker guards remained active. Shared installations and
+old runtime closures were not overwritten.
+
+The endpoint covariance audit previously combined an H-minus gradient with an
+outer constitutive law. Both sampler registrations and the shared native-element
+resolver are corrected in `NativeElementSideV2`. Complete archived re-audits
+clear the H=.5 Regularized/Saturated one-element attempt 162; a native restart
+accepts it at T=.10125 with identical pre-gate stage vectors. Genuine faithful
+upper-outer failures, the H2 Saturated/Original H-plus failure and the H=.5
+Linear-inner failure remain failures. See the [covariance report](cls-accepted-awf-covariance.md)
+for complete minima, witnesses and strict archived-reader checks. Historical
+rejection receipts remain unchanged.
+
+`RANSWallEvaluationReuse=ExactStepV1` is opt-in. It reuses exact native geometry,
+row, state, time and option identities within a bounded evaluation transaction;
+`Off` is the corrected uncached reference. Neither inventory membership nor any
+hard acceptance gate is removed. Three alternating eight-step pairs per case,
+all per-step native payloads and 32-versus-four-eight-step comparisons are
+bitwise equal, including every GLM history slot and time label. Active bounding,
+moving inventories, genuine rejection/rollback, the corrected interface witness
+and a heavy legacy audit are covered. Focused native projection/timing tests
+and Linux durability/handoff tests pass. The [timing report](cls-awf-campaign-timing.md)
+records median replay-driver speedups of 1.70x for H2 and 1.86x for the active
+legacy case, with the memory tradeoff and remaining expensive audits stated.
+
+The approved equations and time map remain unchanged: endpoint K=k(H),
+z_K=z_m=H, complete signed P_h-E_C source, zero redistribution/forcing,
+the selected molecular/high-Re equations, one U/p/epsilon/k solve and one logical
+final bound call per step. No floor, reserve, tolerance, bound work limit,
+relaxation or production dt changed.
+
+### Existing long-run checkpoints
+
+Immutable readbacks at T=0,.5,1,1.5,2 restore each saved reference/history and
+evaluate alpha=0 without Lift, trace replacement, governing solves or commits.
+The T=2 receipt also binds the last old boundary to its actual native report,
+ledger and completed handoff, because retirement preceded the old driver's
+segment-summary append. This does not invent a checkpoint or modify the strict
+native reader.
+
+The previously declared .5-unit window policy is unchanged: normalized U/W/k
+changes <=1e-4, epsilon/pressure <=1e-3, every selected residual block <=1e-3,
+traction change <=5e-4 of reference, relative matching <=1e-5 and negligible
+correction supply, persisting for three windows. Common physical quadrature and
+one pressure gauge across both regional spaces are used.
+
+| Physical window | U change | W change | k change | Outer epsilon change | Pressure change |
+|---|---:|---:|---:|---:|---:|
+| .5 to 1 | 1.712e-4 | 9.439e-5 | 2.885e-4 | 6.001e-6 | 1.155e-3 |
+| 1 to 1.5 | 1.647e-4 | 1.039e-4 | 2.636e-4 | 1.815e-6 | 1.236e-3 |
+| 1.5 to 2 | 1.470e-4 | 9.587e-5 | 2.693e-4 | 1.508e-6 | 1.172e-3 |
+
+| T | Selected alpha=0 residual U/W/k/epsilon, common normalization | Mean wall traction |
+|---:|---|---:|
+| .5 | .002652 / .001567 / .003247 / .0001318 | .15957613 |
+| 1 | .001913 / .001246 / .002682 / .00001409 | .15957684 |
+| 1.5 | .001577 / .000950 / .002849 / .00001598 | .15957972 |
+| 2 | .001494 / .000911 / .002697 / .00001470 | .15958542 |
+
+Classification: **continuing transient**, without bound supply. The three late
+windows fail the field/residual screen; a 1-unit window also shows drift.
+Nearly constant traction does not establish steady convergence. At T=2 its
+reference error is -.2591%, matching mismatch is 2.17e-9, and covariance margins
+are .172654 inner/.175910 outer. The continuous ground minimum is 1.006780 and
+the endpoint-K inventory minimum is .51048079; this is not a near-floor state.
+
+Strong divergence L2 grows to .009543 inner/.0001650 outer despite weak
+continuity/gauge loads near roundoff. Full traction-jump RMS is .0025077,
+normal traction RMS .00031594 and k-flux RMS .00018430. The common-gauge mean
+pressure jump is -.0748282; the recovered nonpressure normal-stress jump is
+-.0747970, leaving mean normal-traction mismatch 3.12e-5. These quantities are
+separate from pressure continuity and from temporal error.
+
+Global integrated k changes from 12.35830050 at native h0 to 12.35886173 at T=2;
+z<=.01 changes .05560278 to .05568663 and z<=.1 changes .37967822 to .38006876.
+At T=2 instantaneous global production/destruction rates are 5.75506146 and
+5.75474676; inner rates are 5.15117100 and 5.15058871. These are rates, not
+window-integrated storage changes. Complete weak component loads/mass-dual
+norms, physical-band diagnostics and exact zero signed/absolute correction
+budgets remain separately indexed. Partial elements are integrated at the
+fixed physical band boundaries.
+
+Same-field Original counterfactuals remain read-only. At T=2 the dimensional
+mass-dual differences in U/W/k/epsilon are .00223366/.00092699/.000065900/
+.0000119632; continuity and gauge loads are exactly unchanged. Both affected
+momentum stress and scalar production terms are recomputed. The counterfactual
+covariance minimum on this Regularized trajectory is still positive (.175329),
+which does not undo the separate faithful trajectories' genuine failures.
+Legacy `refreshed_original_block_norms` continues to mean the selected
+uncancelled operator, not a changed-model counterfactual.
+
+The initial bulk velocity is 5.1083412, giving a 6-unit flow-through time
+1.1745496. H/u*=5, so T=2 spans .4 wall scales and 1.703 flow-throughs. This
+remains a short physical horizon for a steady-state claim.
+
+![Fixed-window changes and selected residuals](cls-accepted-budget-awf-evidence/audit-cache-temporal/long-window-trends.png)
+
+![Actual native h0, analytical reference and retained profiles](cls-accepted-budget-awf-evidence/audit-cache-temporal/long-run-profiles.png)
+
+### Finite-horizon time accuracy
+
+The [temporal report](cls-accepted-awf-temporal.md) applies targets committed
+before running dt=.00125/.000625/.0003125 to common T=.05. Native physical h0
+matches exactly; startup histories belong to each dt. The existing middle
+trajectory is reused. Late observed field orders lie near one; at .05 the
+U/W/k/epsilon/pressure orders are .994/1.048/.983/.945/1.070. Their normalized
+middle-step Richardson estimates are 2.13e-6/1.35e-7/4.12e-7/1.29e-7/4.41e-6,
+all within the declared budgets. A targeted additional dt=.00015625 run only
+to .02 resolves early traction nonasymptotics: finer-triplet orders .887/.863
+and current-dt relative error estimates 2.05e-7/8.35e-7 at .01/.02.
+
+Thus dt=.000625 meets this finite-horizon selected-model accuracy screen.
+It does not certify accumulated T=5 time error, spatial accuracy or faithful
+Original-CLS evolution. No late local-window IVP is needed yet to interpret the
+observed transient, and no production timestep/checkpoint fingerprint was edited.
+
+### Controlled runtime handoff and durable status
+
+The three useful budget graded campaigns were individually stopped only after
+an accepted native block boundary. Complete corrected audits pass; isolated
+uncached and cached restart steps have identical payloads/stages/histories.
+Successor roots retain the parent lock and seal, use frozen final runtime
+`177ce5e54e7de514fa019122e46d3a5d709455cd091bd3023fbfa745c48c9bfc`,
+and observe the first real successor checkpoint equal to that isolated restart.
+The probe SHA256 is
+`4130cea9d57de9f25264c581716b73a9253ffa540d067d38b1c31e94e8f7b6b7`.
+Old runtime files, reports and checkpoint lineage remain preserved.
+
+An actual post-launch [lock check](cls-accepted-budget-awf-evidence/audit-cache-temporal/handoff-locks.json)
+confirms that all three successor supervisors retain their parent campaign lock;
+attempting a second owner is excluded.
+
+| Campaign | Parent step / T | First successor checkpoint SHA256 prefix |
+|---|---|---|
+| Refined H2 Regularized/Linear | 3200 / 2 | 4a113f88f25a9978 |
+| H=.5 graded Regularized/Linear | 4368 / 2.73 | 408c70b0e3211037 |
+| H=.5 graded Regularized/Saturated | 4288 / 2.68 | 4030a6e55316a9ce |
+
+Handoff setup exposed a JSON-float PID lookup and lock-release visibility race;
+both are bounded and tested. An observer then encountered a progress-file
+visibility gap after successful launch. Its separate observation-only completion
+verified the live sealed successors and first checkpoint hashes, without any
+second launch, signal or PDE replay. These were infrastructure receipts, not
+numerical rejections. All three successors have completed a full 32-step block
+and continue toward T=5. Existing Uniform G/H and Upstream-one runtimes are
+unchanged.
+
+<!-- BEGIN AUDIT CACHE TEMPORAL STATUS -->
+Observed 2026-11-09T13:24:57.363292+08:00 (Asia/Shanghai).
+
+| Campaign | Accepted step | Accepted T | Actual status | Next target |
+|---|---:|---:|---|---:|
+| Budget H2 cutoff-v1 graded, Regularized/Linear | 3341 | 2.088125 | running | T=5 |
+| Budget H=.5 graded, Regularized/Linear | 4555 | 2.846875 | running | T=5 |
+| Budget H=.5 graded, Regularized/Saturated | 4480 | 2.800000 | running; last native child ended | T=5 |
+| Existing Uniform G (unchanged runtime) | 5073 | 3.170625 | running | T=5 |
+| Existing Uniform H (unchanged runtime) | 6480 | 4.050000 | running; last native child ended | T=5 |
+| Existing Upstream one element (unchanged runtime) | 4849 | 3.030625 | running | T=5 |
+<!-- END AUDIT CACHE TEMPORAL STATUS -->
+
+Every listed time is observed, not a forecast. Full supervisor/driver/native
+start tokens, checkpoint/state/all-history hashes, immutable status-checkpoint
+copies and next integer targets are in
+[latest-status.json](cls-accepted-budget-awf-evidence/audit-cache-temporal/latest-status.json).
+Heavy data reside under
+`/media/jay/新加卷/nektar-v2026-runs/cls-awf-audit-cache-temporal-20261109`;
+the [artifact index](cls-accepted-budget-awf-evidence/audit-cache-temporal/artifact-index.json)
+locates retained matrices, packets, complete fields, readbacks and library
+manifests. Historical terminal runs remain terminal.
+
+These statuses mean hard numerical acceptance for the declared selected model.
+They do not assert qualification inside the old narrow R2 reference box or a
+fully converged original nonlinear-stage root.
+
+Continue the refined Regularized/Linear H2 campaign and evaluate subsequent
+fixed .5-unit windows. The next scientific gate is persistence of small full
+spatial residuals and common-window changes, including the increasing inner
+strong-divergence diagnostic. If a late steady candidate emerges, a short
+same-state late-window dt check is the smallest useful temporal follow-up.
+The early result does not justify a new long dt sweep, a universal stress
+limiter or a new one-element campaign.
+
+Reproduce the long-state readbacks using unused output directories:
+
+```bash
+source /home/jay/.local/opt/nektar-v2026-mpi/env.sh
+export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
+export BLIS_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 NUMEXPR_NUM_THREADS=1
+R=/media/jay/新加卷/nektar-v2026-runs/cls-awf-audit-cache-temporal-20261109
+O=/media/jay/新加卷/nektar-v2026-runs/cls-accepted-budget-awf-20261108
+S="$R/source/solvers/IncNavierStokesSolver/Tests/RANS"
+export LD_LIBRARY_PATH="$R/runtime-cache-final/probe/lib"
+python3 "$S/read_cls_accepted_operators.py" \
+  --probe "$R/runtime-cache-final/probe/RANSWallResolutionProbe" \
+  --old-root "$O" --steps 0 800 1600 2400 3200 \
+  --handoff "$R/handoff-budget-h2-v2" \
+  --reuse "$R/operators-through-T2-verified" \
+  --output "$R/reproduce-long-operators"
+python3 "$S/analyse_cls_awf_long_windows.py" \
+  --operators "$R/reproduce-long-operators" \
+  --policy "$R/source/docs/plans/cls-accepted-budget-awf-evidence/covariance/convergence-policy.json" \
+  --campaign "$O/selected-refined-regularized-2G/trajectory" \
+  --output "$R/reproduce-long-windows"
+```
+
+`--reuse` accepts only identical probe and native checkpoint hashes. Remove it
+to recompute the zero-PDE diagnostics. Actual native launch commands and
+the separate handoff/restart-verification commands are retained in each
+`handoff-*/handoff.json` and its indexed receipts; they are not instructions
+to launch another owner of the running campaign.
