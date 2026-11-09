@@ -13,6 +13,8 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 endif()
 add_executable(RANSKBoundQPChecks test_cls_epawf_k_bound_qp.cpp)
 target_include_directories(RANSKBoundQPChecks PRIVATE ${RANS_SOURCE_ROOT}/solvers)
+add_executable(RANSWallTimingChecks test_rans_wall_timing.cpp)
+target_include_directories(RANSWallTimingChecks PRIVATE ${RANS_SOURCE_ROOT}/solvers)
 enable_testing()
 add_test(NAME RANSKBoundQPChecks COMMAND RANSKBoundQPChecks)
 add_test(NAME RANSReducedModelChecks COMMAND RANSReducedModelChecks)
@@ -219,6 +221,16 @@ target_link_libraries(RANSConstitutiveProbe RANSKernels)
 target_link_libraries(RANSEquilibriumProfilesProbe RANSKernels ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
 option(RANS_BUILD_SOLVER "Build the complete incompressible solver in isolation" OFF)
 if(RANS_BUILD_SOLVER)
+    set(RANS_PREBUILT_SPATIAL_LIBRARY "" CACHE FILEPATH
+        "Optional isolated, source-compatible SpatialDomains library")
+    if(RANS_PREBUILT_SPATIAL_LIBRARY)
+        if(NOT EXISTS "${RANS_PREBUILT_SPATIAL_LIBRARY}")
+            message(FATAL_ERROR "RANS_PREBUILT_SPATIAL_LIBRARY does not exist")
+        endif()
+        add_library(RANSSpatialDomains SHARED IMPORTED)
+        set_target_properties(RANSSpatialDomains PROPERTIES
+            IMPORTED_LOCATION "${RANS_PREBUILT_SPATIAL_LIBRARY}")
+    else()
     # Build the source SpatialDomains library in isolation too: terrain normals
     # depend on full-precision XML curve partitioning, which older installations
     # round. Use the production base list and installed dependency configuration.
@@ -247,11 +259,17 @@ if(RANS_BUILD_SOLVER)
     set_target_properties(RANSSpatialDomains PROPERTIES OUTPUT_NAME SpatialDomains
         VERSION ${NEKTAR++_VERSION} SOVERSION ${NEKTAR++_VERSION}
         LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/geometry-lib)
+    endif()
     # Imported SpatialDomains exposes its partitioner dependencies. Retain those
     # while replacing only that library, rather than loading two copies.
     get_target_property(rans_spatial_dependencies SpatialDomains INTERFACE_LINK_LIBRARIES)
-    target_link_libraries(RANSSpatialDomains StdRegions ${rans_spatial_dependencies}
-        ${NEKTAR++_TP_LIBRARIES})
+    if(RANS_PREBUILT_SPATIAL_LIBRARY)
+        target_link_libraries(RANSSpatialDomains INTERFACE StdRegions ${rans_spatial_dependencies}
+            ${NEKTAR++_TP_LIBRARIES})
+    else()
+        target_link_libraries(RANSSpatialDomains StdRegions ${rans_spatial_dependencies}
+            ${NEKTAR++_TP_LIBRARIES})
+    endif()
     set(RANS_SOLVER_ROOT ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver)
     # Use the production source list so registrations and legacy paths match
     # the normal executable. No shared installation is overwritten.
@@ -408,6 +426,11 @@ add_test(NAME RANSObservationKernels COMMAND RANSObservationKernelProbe
 set_tests_properties(RANSObservationKernels PROPERTIES
     PROCESSORS 1 TIMEOUT 120 ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
 find_package(Python3 QUIET COMPONENTS Interpreter)
+if(Python3_Interpreter_FOUND)
+    add_test(NAME RANSWallTimingChecks COMMAND ${Python3_EXECUTABLE} -B
+        ${CMAKE_CURRENT_LIST_DIR}/test_rans_wall_timing.py $<TARGET_FILE:RANSWallTimingChecks>)
+    set_tests_properties(RANSWallTimingChecks PROPERTIES PROCESSORS 1 TIMEOUT 30)
+endif()
 if(Python3_Interpreter_FOUND)
     add_test(NAME RANSAcceptedAWFCases COMMAND ${Python3_EXECUTABLE} -B
         ${CMAKE_CURRENT_LIST_DIR}/test_cls_accepted_awf_cases.py)

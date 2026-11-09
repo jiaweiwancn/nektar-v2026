@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2026 Nektar++ contributors.
 ///////////////////////////////////////////////////////////////////////////////
+#include <IncNavierStokesSolver/EquationSystems/RANSWallTiming.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
 #include <LibUtilities/Foundations/ManagerAccess.h>
@@ -38,6 +39,7 @@ void Add(Vector &r,int offset,const RANSWallGlobalPoint &q,double value,
 }
 RANSWallEvolutionPatch::Factor::Factor(const WallMatrix &a):n(a.size()),lu(n*n),pivots(n)
 {
+    RANSWallTiming::Scope timing("dense.factorization");
     if(n<=0 || std::any_of(a.begin(),a.end(),[&](const auto &row){return row.size()!=a.size();}))
         throw std::logic_error("evolution factor matrix shape mismatch");
     for(int i=0;i<n;++i)for(int j=0;j<n;++j)lu[i+n*j]=a[i][j];
@@ -47,6 +49,7 @@ RANSWallEvolutionPatch::Factor::Factor(const WallMatrix &a):n(a.size()),lu(n*n),
 }
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Factor::Apply(Vector rhs,bool transpose) const
 {
+    RANSWallTiming::Scope timing("dense.triangular_solve");
     if(rhs.size()!=static_cast<std::size_t>(n))
         throw std::logic_error("evolution factor right-hand side shape mismatch");
     auto pivot=pivots;
@@ -605,6 +608,7 @@ std::array<double,2> RANSWallEvolutionPatch::Forcing(const Vector &s,const RANSW
 }
 void RANSWallEvolutionPatch::Refresh(const Vector &s,double time,const RANSWallEvolutionData *data) const
 {
+    RANSWallTiming::Scope timing("constitutive.refresh");
     for(auto &ray:m_rays)
     {
         const double k=ray.sample.Value(s,offset[K()]);
@@ -749,6 +753,7 @@ std::map<int,double> RANSWallEvolutionPatch::FixedReferenceBoundary(const Vector
 }
 std::map<int,double> RANSWallEvolutionPatch::Constraints(const Vector &state,double time,const RANSWallEvolutionData &data) const
 {
+    RANSWallTiming::Scope timing("matching.constraints");
     if(MatchingEnabled())
     {
         auto fixed=ExternalConstraints(time,data);auto s=ExternalLift(state,time,data);
@@ -783,6 +788,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Lift(const Vector &state,
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Residual(const Vector &state,const Vector &history,double alpha,double time,
     const RANSWallEvolutionData &data,bool anchored,bool imposeConstraints,int region) const
 {
+    RANSWallTiming::Scope timing("residual");
     if(m_solveDiagnostics){m_solveResidualException.clear();m_solveInvalidContext.clear();}
     Require(state.size()==static_cast<size_t>(Size()) && history.size()==state.size() && alpha>=0,"invalid evolution stage state/history");
     const auto constraints=Constraints(state,time,data);auto s=MatchingEnabled()?ExternalLift(state,time,data):state;
@@ -872,6 +878,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Residual(const Vector &st
 }
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Norms(const Vector &r,const std::map<int,double> &constraints,double us) const
 {
+    RANSWallTiming::Scope timing("residual.mass_dual_norms");
     Vector norms;const double K0=m_parameters.model.Q()*us*us,E0=us*us*us/(m_parameters.model.Kappa()*m_parameters.geometry.height);
     for(int b=0;b<Gauge();++b)
     {

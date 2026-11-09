@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2026 Nektar++ contributors.
 ///////////////////////////////////////////////////////////////////////////////
+#include <IncNavierStokesSolver/EquationSystems/RANSWallTiming.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionResolution.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
@@ -37,6 +38,7 @@ double MinimumEigenvalue(RANSTensor a)
 RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s,const Vector &history,
     double alpha,double time,const RANSWallEvolutionData &data,double ustar,bool constitutiveReconstruction) const
 {
+    RANSWallTiming::Scope timing("audit.physical");
     if(ConstitutiveKInventory() && !m_assertKCoverage)
     {
         const auto domain=ScalarDomain(s,time,data);

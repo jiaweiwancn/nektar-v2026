@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2026 Nektar++ contributors.
 ///////////////////////////////////////////////////////////////////////////////
+#include <IncNavierStokesSolver/EquationSystems/RANSWallTiming.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallEvolution.h>
 #include <IncNavierStokesSolver/EquationSystems/IncNavierStokes.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
@@ -63,6 +64,7 @@ std::vector<RANSWallEvolutionFunction> RANSEquilibriumWallEvolution::Functions(c
 }
 void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
 {
+    RANSWallTiming::Scope timing("startup.object");
     try
     {
         (void)declareFields;EquationSystem::v_InitObject(false);
@@ -215,6 +217,7 @@ std::string RANSEquilibriumWallEvolution::PhysicsSignature() const
 }
 void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
 {
+    RANSWallTiming::Scope timing("startup.initialize");
     try
     {
         (void)dump;m_state=m_neutral?m_patch->NeutralReference(m_ustar,m_direction):m_patch->Project(Functions("InitialConditions"),m_time);
@@ -298,6 +301,7 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
 }
 RANSEquilibriumWallEvolution::Vector RANSEquilibriumWallEvolution::Implicit(const Vector &history,double time,double lambda)
 {
+    RANSWallTiming::Scope timing("native.implicit");
     ++m_implicitCallbacks;
     auto fullHistory=m_state;std::copy(history.begin(),history.end(),fullHistory.begin());int iterations=0;
     Vector candidate;
@@ -328,6 +332,7 @@ RANSEquilibriumWallEvolution::Vector RANSEquilibriumWallEvolution::Implicit(cons
 }
 void RANSEquilibriumWallEvolution::RecordAudit(const Vector &state,const Vector &history,double alpha,double time)
 {
+    RANSWallTiming::Scope timing("native.acceptance_audit");
     RANSWallEvolutionPatch::Diagnostic audit;
     try{audit=(m_r2RangeGuard || m_patch->AcceptedAWF())?m_patch->CompleteRestrictedAudit(state,history,alpha,time,alpha?m_implicitData:m_data):
         m_patch->Audit(state,history,alpha,time,alpha?m_implicitData:m_data,m_ustar,m_physicalRangeGuard);}
@@ -434,17 +439,21 @@ void RANSEquilibriumWallEvolution::RecordAudit(const Vector &state,const Vector 
 }
 RANSEquilibriumWallEvolution::Vector RANSEquilibriumWallEvolution::Explicit(const Vector &state,double time)
 {
+    RANSWallTiming::Scope timing("native.explicit");
     auto full=m_state;std::copy(state.begin(),state.end(),full.begin());const auto derivative=m_patch->ExplicitBody(full,time,m_data);
     m_explicitAudits.push_back({time,Maximum(derivative)});return derivative;
 }
 void RANSEquilibriumWallEvolution::v_DoSolve()
 {
+    RANSWallTiming::Scope timing("native.solve_block");
     if(m_stageTest=="ExactTargetR3" || m_stageTest=="JacobianBenchmarkR3" || m_stageTest=="DirectionExperimentR4" || m_stageTest=="DirectionExperimentR5"){RunR3StageTest();return;}
     if(m_stageTest!="Off"){RunRestrictedStageTest();return;}
     try
     {
         for(int step=0;step<m_steps;++step)
         {
+            RANSWallTiming::Context timingContext(m_integrator->Steps()+1,m_time+m_timestep);
+            RANSWallTiming::Scope stepTiming("native.step");
             // Native GLM work after the implicit callback can still fail
             // (e.g. a nonfinite explicit evaluation). Keep the coupled state
             // and accepted diagnostics transactional as well as native history.
@@ -454,7 +463,7 @@ void RANSEquilibriumWallEvolution::v_DoSolve()
             const double committedStageTime=m_stageTime,committedStageAlpha=m_stageAlpha;
             const auto stages=m_stageAudits.size(),audits=m_stateAudits.size(),states=m_acceptedStates.size(),times=m_auditTimes.size();
             Vector diff;
-            try{diff=m_integrator->Advance();}
+            try{RANSWallTiming::Scope advanceTiming("native.advance");diff=m_integrator->Advance();}
             catch(...)
             {
                 if(single)
@@ -763,6 +772,7 @@ void RANSEquilibriumWallEvolution::RunRestrictedStageTest()
 }
 void RANSEquilibriumWallEvolution::Checkpoint()
 {
+    RANSWallTiming::Scope timing("io.checkpoint");
     int bad=0;
     if(m_session->GetComm()->GetRank()==0)
     {
@@ -778,6 +788,7 @@ void RANSEquilibriumWallEvolution::Checkpoint()
 }
 void RANSEquilibriumWallEvolution::UpdateFields()
 {
+    RANSWallTiming::Scope timing("output.project_fields");
     const int dim=m_patch->Dimension();
     for(int a=0;a<dim;++a)
     {
@@ -812,6 +823,7 @@ void RANSEquilibriumWallEvolution::v_EvaluateExactSolution(unsigned int field,Ar
 }
 void RANSEquilibriumWallEvolution::v_Output()
 {
+    RANSWallTiming::Scope timing("output.fields_and_report");
     if(m_session->GetComm()->GetRank()!=0)return;
     auto io=LibUtilities::FieldIO::CreateDefault(m_serialSession);
     auto save=[&](const std::string &name,const std::shared_ptr<RANSWallGlobalField> &native,const Vector &values)
@@ -866,6 +878,7 @@ void RANSEquilibriumWallEvolution::WriteMappedField(const std::string &name,cons
 }
 void RANSEquilibriumWallEvolution::WriteReport() const
 {
+    RANSWallTiming::Scope timing("output.report");
     // No collective calls here: only rank zero writes already assembled state.
     std::ofstream out(m_sessionName+".evolution.json");out<<std::setprecision(17);
     const auto snapshot=m_integrator->Capture();
@@ -889,6 +902,7 @@ void RANSEquilibriumWallEvolution::WriteReport() const
     {
         const auto comparison=[&](const Vector &s,double t)
         {
+            RANSWallTiming::Scope comparisonTiming("output.comparison_analysis");
             if(!m_patch->AcceptedAWF())return m_patch->HeightComparison(s,s,t,m_data);
             try{return m_patch->HeightComparison(s,s,t,m_data);}
             catch(const std::exception &error){return RANSWallSolveJson::Object({{"valid","false"},

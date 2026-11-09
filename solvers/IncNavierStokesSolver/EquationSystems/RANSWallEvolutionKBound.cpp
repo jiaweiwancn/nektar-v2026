@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MIT
+#include <IncNavierStokesSolver/EquationSystems/RANSWallTiming.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallKBoundProjection.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionResolution.h>
@@ -49,6 +50,7 @@ std::string RANSWallEvolutionPatch::PimpleKBoundSignature() const
 RANSWallEvolutionPatch::KBoundResult RANSWallEvolutionPatch::ApplyPimpleKBound(
     const Vector &raw,const Vector &preK,double time,const RANSWallEvolutionData &data,bool projectionOnly) const
 {
+    RANSWallTiming::Scope timing("k.bound");
     Require(raw.size()==Size() && preK.size()==raw.size(),"k-bound state shape differs");
     KBoundResult result;result.state=raw;
     if(!PimpleKBoundEnabled())

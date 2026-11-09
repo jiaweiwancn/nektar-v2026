@@ -32,6 +32,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <IncNavierStokesSolver/EquationSystems/RANSWallTiming.h>
 #include <LibUtilities/BasicUtils/SessionReader.h>
 #include <SolverUtils/Driver.h>
 #include <SpatialDomains/MeshGraphIO.h>
@@ -44,6 +45,7 @@ using namespace Nektar::SolverUtils;
 
 int main(int argc, char *argv[])
 {
+    RANSWallTiming::Scope timing("process");
     LibUtilities::SessionReaderSharedPtr session;
     SpatialDomains::MeshGraphSharedPtr graph;
     string vDriverModule;

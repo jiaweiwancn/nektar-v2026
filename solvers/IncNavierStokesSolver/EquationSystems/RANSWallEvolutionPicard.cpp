@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2026 Nektar++ contributors.
 ///////////////////////////////////////////////////////////////////////////////
+#include <IncNavierStokesSolver/EquationSystems/RANSWallTiming.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
@@ -60,6 +61,7 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
     double time, const RANSWallEvolutionData &data,
     const std::map<int, double> &external) const
 {
+    RANSWallTiming::Scope timing(block==0?"flow.assembly":block==Epsilon()?"epsilon.assembly":"k.assembly");
     const bool flow = block == 0;
     PicardBlock system;
     std::vector<int> index(Size(), -1);

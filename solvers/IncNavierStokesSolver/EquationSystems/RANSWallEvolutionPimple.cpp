@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2026 Nektar++ contributors.
 ///////////////////////////////////////////////////////////////////////////////
+#include <IncNavierStokesSolver/EquationSystems/RANSWallTiming.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionResolution.h>
@@ -24,6 +25,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
     Vector s, const Vector &history, double alpha, double time,
     const RANSWallEvolutionData &data, int &iterations) const
 {
+    RANSWallTiming::Scope timing("pimple.sweep");
     Require(s.size()==Size() && history.size()==s.size() &&
         std::isfinite(alpha) && alpha>0 && std::isfinite(time),"invalid PIMPLE stage input");
     const auto start=std::chrono::steady_clock::now();
@@ -62,6 +64,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
     };
     auto check=[&](const Vector &q,const char *phase)
     {
+        RANSWallTiming::Scope checkTiming(std::string("pimple.check.")+phase);
         Require(std::all_of(q.begin(),q.end(),[](double x){return std::isfinite(x);}),"PIMPLE nonfinite state");
         const auto domain=ScalarDomain(q,time,data);
         bool ground=false;const auto wall=WallTraceJSON(q,ground);
@@ -79,6 +82,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
         check(s,"input");
         iterations=1;
         const auto base=s;
+        RANSWallTiming::Scope flowTiming("flow.total");
         const auto flow=AssemblePicardBlock(0,s,history,alpha,time,data,external);
         const int nv=std::lower_bound(flow.rows.begin(),flow.rows.end(),DifferentialSize())-flow.rows.begin();
         const int np=flow.rows.size()-nv;
@@ -95,12 +99,18 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
         for(int i=0;i<np;++i)std::copy_n(flow.matrix[nv+i].begin(),nv,d[i].begin());
         Vector rhs(nv);
         for(int i=0;i<nv;++i)rhs[i]=-flow.residual[i];
-        ++momentumAttempts;const Factor momentumFactor(a),mass(m);
+        ++momentumAttempts;
+        RANSWallTiming::Scope momentumFactorTiming("momentum.factorize");
+        const Factor momentumFactor(a);momentumFactorTiming.Stop();
+        RANSWallTiming::Scope massFactorTiming("pressure.mass_factorize");
+        const Factor mass(m);massFactorTiming.Stop();
+        RANSWallTiming::Scope predictorTiming("momentum.solve_validate");
         const auto predictor=momentumFactor.Apply(rhs);
         auto predictorDefect=Multiply(a,predictor);
         for(int i=0;i<nv;++i)predictorDefect[i]-=rhs[i];
         Require(Maximum(predictorDefect)<=1e-10*std::max(1.,Maximum(rhs)),"PIMPLE predictor linear residual");
-        ++momentum;
+        ++momentum;predictorTiming.Stop();
+        RANSWallTiming::Scope pressureBuildTiming("pressure.build");
         // B = (alpha M_free)^-1. This is never a full momentum inverse.
         WallMatrix bg(np,Vector(nv)),schur(np,Vector(np));
         for(int j=0;j<np;++j)
@@ -113,11 +123,14 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
         }
         auto pressureRhs=Multiply(d,predictor);
         for(int i=0;i<np;++i)pressureRhs[i]+=flow.residual[nv+i];
+        pressureBuildTiming.Stop();
+        RANSWallTiming::Scope pressureSolveTiming("pressure.solve_validate");
         ++pressureAttempts;const auto dz=Factor(schur).Apply(pressureRhs);
         auto pressureDefect=Multiply(schur,dz);
         for(int i=0;i<np;++i)pressureDefect[i]-=pressureRhs[i];
         Require(Maximum(pressureDefect)<=1e-10*std::max(1.,Maximum(pressureRhs)),"PIMPLE pressure linear residual");
-        ++pressure;
+        ++pressure;pressureSolveTiming.Stop();
+        RANSWallTiming::Scope correctionTiming("flow.correction_validate");
         Vector bGz(nv),Gz=Multiply(g,dz),du=predictor;
         for(int i=0;i<nv;++i)for(int j=0;j<np;++j)bGz[i]+=bg[j][i]*dz[j];
         for(int i=0;i<nv;++i){du[i]-=bGz[i];s[flow.rows[i]]+=du[i];}
@@ -173,7 +186,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
             put("verification_extra_mass_inverse_applications","1");
             put("verification_pressure_action_dt_absolute_relative",J::List(actions));
         }
-        check(s,"flow");
+        check(s,"flow");correctionTiming.Stop();flowTiming.Stop();
         const auto flowState=s;
         auto budget=[&](const char *phase,const Vector &q)
         {
@@ -188,6 +201,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
         };
         auto scalar=[&](int b)
         {
+            RANSWallTiming::Scope scalarTiming(b==Epsilon()?"epsilon.total":"k.total");
             const auto block=AssemblePicardBlock(b,s,history,alpha,time,data,external);
             // Same-state consistency verifies actual signed source/rate and
             // physical mass/history. No transport solve occurs in this check.
@@ -197,11 +211,12 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
             Require(Maximum(agreement)<1e-9*std::max(1.,Maximum(original)),"PIMPLE scalar source/storage mismatch");
             auto rhs=block.residual;for(auto &x:rhs)x=-x;
             if(b==Epsilon())++epsilonAttempts;else ++kAttempts;
+            RANSWallTiming::Scope scalarSolveTiming(b==Epsilon()?"epsilon.solve_validate":"k.solve_validate");
             const auto delta=Factor(block.matrix).Apply(rhs);
             auto linear=Multiply(block.matrix,delta);
             for(int i=0;i<linear.size();++i)linear[i]-=rhs[i];
             Require(Maximum(linear)<1e-10*std::max(1.,Maximum(rhs)),"PIMPLE scalar linear residual");
-            if(b==Epsilon())++epsilon;else ++k;
+            if(b==Epsilon())++epsilon;else ++k;scalarSolveTiming.Stop();
             double traceColumns=0,traceMass=0,traceStorage=0,imposed=0;
             for(int i=0;i<block.rows.size();++i)
             {
@@ -237,6 +252,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
                     boundActivations+=bounded.activated?1:0;boundIterations+=bounded.iterations;
                     boundMass+=bounded.massFactorApplications;boundKKT+=bounded.kktSolves;
                     put("k_bound",bounded.report);
+                    RANSWallTiming::Scope boundAccountingTiming("k.bound_accounting");
                     Vector dk(block.rows.size());for(int i=0;i<dk.size();++i)dk[i]=s[block.rows[i]]-raw[block.rows[i]];
                     const auto added=Multiply(block.matrix,dk),storage=Multiply(PicardKMass(block.rows),dk);
                     auto corrected=linear;for(int i=0;i<corrected.size();++i)corrected[i]+=added[i];
@@ -248,6 +264,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
                 }
                 if(m_pimpleSnapshots)
                 {
+                    RANSWallTiming::Scope snapshotTiming("io.attempt_snapshot");
                     std::filesystem::create_directories(m_pimpleSnapshotDirectory);
                     const auto stem=(std::filesystem::path(m_pimpleSnapshotDirectory)/
                         ("k-t"+J::Number(time)+"-"+RANSWallR3::Hash(history).substr(0,12))).string();
@@ -277,6 +294,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
         };
         scalar(Epsilon()); // corrected flow, old k and epsilon; target evaluated once in assembly
         scalar(K());       // corrected flow and freshly solved epsilon; inner rate, not rate bound
+        RANSWallTiming::Scope finalTiming("pimple.final_refresh_diagnostics");
         Refresh(s,time,&data);
         const auto target=Constraints(s,time,data);double refreshed=0;
         for(int id:m_traceIds)refreshed=std::max(refreshed,std::abs(s[offset[Epsilon()]+id]-target.at(offset[Epsilon()]+id)));
@@ -284,7 +302,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
         const auto norms=Norms(Residual(s,history,alpha,time,data),target,m_robustUstar);
         put("refreshed_original_block_norms",J::Numbers(norms));
         m_lastFeasibleState=s;
-        publish(true,"");return s;
+        finalTiming.Stop();publish(true,"");return s;
     }
     catch(const std::exception &error){m_lastFeasibleState=s;publish(false,error.what());throw;}
 }
@@ -292,6 +310,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
 RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::PhysicalSamples(
     const Vector &s,double time,const RANSWallEvolutionData &data) const
 {
+    RANSWallTiming::Scope timing("native.physical_samples");
     Diagnostic result;
     for(int b=0;b<Gauge();++b)
     {

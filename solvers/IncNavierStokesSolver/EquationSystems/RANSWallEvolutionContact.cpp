@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MIT
+#include <IncNavierStokesSolver/EquationSystems/RANSWallTiming.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionResolution.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallKBoundProjection.h>
@@ -152,6 +153,7 @@ std::string RANSWallEvolutionPatch::PhysicalKBands(const Vector &s,double time,
 std::string RANSWallEvolutionPatch::HeightComparison(const Vector &s,const Vector &history,double time,
     const RANSWallEvolutionData &data,const Vector &reportingBreakpoints) const
 {
+    RANSWallTiming::Scope timing("output.physical_comparison");
     const auto hash=RANSWallR3::Hash(s);const double H=m_parameters.geometry.height,us=m_robustUstar;
     // Read-only cross-mesh comparisons can supply a common physical partition.
     // These reporting panels never change source quadrature or the step map.

@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2026 Nektar++ contributors.
 ///////////////////////////////////////////////////////////////////////////////
+#include <IncNavierStokesSolver/EquationSystems/RANSWallTiming.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
@@ -308,6 +309,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::ScalarDomain(
     const Vector &state,double time,const RANSWallEvolutionData &data,bool retain,bool kInventoryOnly,
     const std::vector<RANSWallCoordinate> &additionalAnchors) const
 {
+    RANSWallTiming::Scope timing("domain.scalar");
     ScalarDomainResult result;result.phase="coefficients";result.normalizationApplicable=!AcceptedAWF();
     const double us=m_robustUstar,K0=m_parameters.model.Q()*us*us;
     const double E0=us*us*us/(m_parameters.model.Kappa()*m_parameters.geometry.height);
@@ -2064,6 +2066,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveScalarFeasibleR3(
 RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAudit(
     const Vector &state,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data,bool rangesOnly) const
 {
+    RANSWallTiming::Scope timing("audit.complete");
     const auto domain=ScalarDomain(state,time,data,true);Diagnostic audit;
     if(AcceptedAWF())
     {
