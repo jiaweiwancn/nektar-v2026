@@ -1,0 +1,395 @@
+{
+  "captured_Asia_Shanghai": "2026-11-09T21:35:23.836545+08:00",
+  "source_revision": "211ab2dc16de5d0e8f321a727dbce7dcb85b7379",
+  "source_status": "?? solvers/IncNavierStokesSolver/Tests/RANS/__pycache__/\n",
+  "target_time": 6.0,
+  "target_step": 9600,
+  "observation_times": [
+    5.0,
+    5.5,
+    6.0
+  ],
+  "dt": 0.000625,
+  "scientific_criteria_changed": false,
+  "governing_schedule": "one U predictor, one pressure/gauge, one outer epsilon, one k, one logical final bound per accepted step",
+  "cases": {
+    "regularized-linear": {
+      "status": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-05-to-T6-20261109/regularized-linear/trajectory",
+        "status": "running",
+        "accepted_steps": 8018,
+        "accepted_time": 5.011250000000257,
+        "checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-05-to-T6-20261109/regularized-linear/trajectory/steps-008001-008032/checkpoint.2",
+        "checkpoint_sha256": "e621659c0dcfa12b27d83483ed546ae5167c11c474397c6bf268991a41daa3a6",
+        "coupled_state_sha256": "bf80b7ef1f618bac28805ccff92866090821974cbf4e00b3cd860c8b14438440",
+        "immutable_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-05-to-T6-20261109/evidence/checkpoints/regularized-linear/8018-e621659c0dcfa12b27d83483ed546ae5167c11c474397c6bf268991a41daa3a6",
+        "native_history_sha256": [
+          "a479006e9c70a46b19dbfd26de96c5af1ea0206764112b703a38c171dc4123ed",
+          "3f1f6f76c52276c865bae097486a0ce164cd509c98c6410b677f516084ad7c3c"
+        ],
+        "native_history_times_sha256": "172c97315d345da134bd7a6a571123f11ebbfa6b276f15340b2276f211697b7b",
+        "source_progress_sha256": "8b205683e4d55aedf3448f4c3451aa79956214bd42241484ca232d1c1f34b690",
+        "driver_identity": {
+          "pid": 344578,
+          "start": "35885119",
+          "executable": "/usr/bin/python3.10",
+          "cwd": "/home/jay"
+        },
+        "native_identity": {
+          "pid": 344663,
+          "start": "35886261",
+          "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-05-to-T6-20261109/regularized-linear/trajectory/runtime/IncNavierStokesSolver",
+          "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-05-to-T6-20261109/regularized-linear/trajectory/steps-008001-008032"
+        },
+        "supervisor_identity": {
+          "pid": 344576,
+          "start": "35885025",
+          "executable": "/usr/bin/python3.10",
+          "cwd": "/home/jay"
+        },
+        "supervisor_start_matches": true,
+        "native_identity_matches": true,
+        "driver_start_matches": true,
+        "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-05-to-T6-20261109/regularized-linear/trajectory/runtime/IncNavierStokesSolver",
+        "executable_sha256": "177ce5e54e7de514fa019122e46d3a5d709455cd091bd3023fbfa745c48c9bfc",
+        "library_manifest": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-05-to-T6-20261109/regularized-linear/trajectory/runtime/identity.json",
+        "library_manifest_sha256": "88c1c3e3b166bf48a6383de0afa2c5dce04ba378a14b7652c1e4cf96b9d78f88",
+        "next_target_step": 9600,
+        "next_target_time": 6.0,
+        "completed_targets": [],
+        "recorded_successor_completed_targets": [],
+        "failure": null,
+        "prefix_steps": 8000,
+        "cumulative_bound_integral": 0.0,
+        "audit_revision": "NativeElementSideV2",
+        "evaluation_reuse": "ExactStepV1",
+        "handoff": null
+      },
+      "validation": {
+        "parent_checkpoint_sha256": "54f28fea7ac1f8fa532849cfae926bdbadad7c69ebc542e3489dc4fc5078ec6b",
+        "parent_state_sha256": "502c6bb3307c11e11e5fd1617c9a3c3fa10e58e86ba9f0ca52b7e34cf7d531ce",
+        "parent_native_history_sha256": [
+          "85483d441b0bafa177ab5dc938583859105b3df1110bb883ada983f1894dd1c3",
+          "3f1f6f76c52276c865bae097486a0ce164cd509c98c6410b677f516084ad7c3c"
+        ],
+        "parent_native_history_times_sha256": "24aca8944d17339c1d00686d24f7ed4d1197e944a7fc71e5a57e86e5736f1b2b",
+        "expected_first_successor_checkpoint_sha256": "e3be9bbb242a802013e79e0aa605a41f771fbf97f2b4d3ddff3ce3370ab7cf62",
+        "startup_bound_inactive": true,
+        "startup_committed_state_unchanged": true,
+        "verification_governing_sweeps": 1.0,
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-05-to-T6-20261109/source/solvers/IncNavierStokesSolver/Tests/RANS/supervise_cls_epawf_pimple.py",
+          "--solver",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-audit-cache-temporal-20261109/handoff-budget-05-linear-v2/trajectory/runtime/IncNavierStokesSolver",
+          "--output",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-05-to-T6-20261109/regularized-linear",
+          "--wall-policy",
+          "CLSCalibratedBudgetAWF",
+          "--accepted-awf-case",
+          "Accepted-AWF-05G",
+          "--accepted-awf-companion",
+          "regularized",
+          "--accepted-awf-companion-reason",
+          "Faithful05O accepts86steps toT=.05375, then Original outer covariance fails at x=-3,z=3.75 with eigenvalue -0.001977364367 at attemptT=.054375. Inner Linear covariance remains positive. Matched companion changes only existing outer regularization; Linear inner stress and budget AWF source remain.",
+          "--inventory",
+          "AcceptedBudgetV1",
+          "--bound-solver",
+          "RetainedPool",
+          "--checkpoint",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-05-to-T6-20261109/regularized-linear/parent/checkpoint",
+          "--prefix-report",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-05-to-T6-20261109/regularized-linear/parent/prefix.evolution.json",
+          "--targets",
+          "9600",
+          "--block-steps",
+          "32",
+          "--timeout",
+          "7200.0",
+          "--bound-max-add",
+          "2000",
+          "--bound-max-total",
+          "20000",
+          "--bound-max-separations",
+          "2000",
+          "--bound-max-seconds",
+          "900",
+          "--prefix-campaign",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-audit-cache-temporal-20261109/handoff-budget-05-linear-v2/trajectory",
+          "--inner-refinement",
+          "none",
+          "--evaluation-reuse",
+          "ExactStepV1",
+          "--audit-revision",
+          "NativeElementSideV2"
+        ]
+      },
+      "parent_locked_by_successor": true,
+      "observed_new_steps": 18,
+      "solve_counts": {
+        "outer_sweeps": 18,
+        "momentum_predictor_solves": 18,
+        "pressure_system_solves": 18,
+        "epsilon_transport_solves": 18,
+        "k_transport_solves": 18,
+        "bound_calls": 18
+      },
+      "additional_governing_solves": 0,
+      "bound_activations": 0,
+      "handoff_receipt": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-05-to-T6-20261109/regularized-linear/handoff.json",
+        "sha256": "83fcf3d0f7b45780f78a708eb066be733ef3f884c4c58623cbff1515722b9f8e"
+      }
+    },
+    "regularized-saturated": {
+      "status": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-05-to-T6-20261109/regularized-saturated/trajectory",
+        "status": "running",
+        "accepted_steps": 8020,
+        "accepted_time": 5.012500000000258,
+        "checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-05-to-T6-20261109/regularized-saturated/trajectory/steps-008001-008032/checkpoint.1",
+        "checkpoint_sha256": "e9ec523aa51ad595edb4271a8999565f1f3648c31e2b04c032c8c3f8230127f2",
+        "coupled_state_sha256": "08d4c4e283198ef7aefc7a74ccd8b0c989b219f2f436ed4f2e2f807d2f82a08f",
+        "immutable_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-05-to-T6-20261109/evidence/checkpoints/regularized-saturated/8020-e9ec523aa51ad595edb4271a8999565f1f3648c31e2b04c032c8c3f8230127f2",
+        "native_history_sha256": [
+          "04937e435530b0b1961b9e681e7f3f8ddaa8c48d3ba5014b7b584993d8f85f20",
+          "3f1f6f76c52276c865bae097486a0ce164cd509c98c6410b677f516084ad7c3c"
+        ],
+        "native_history_times_sha256": "1d5e06223ee7f3accf09145c28bd3aeb393f7b0cadbc3c6550b7eceac0679ede",
+        "source_progress_sha256": "c4ba5d6f33a2e023f57a7a0f00dcda452a32d08a28f61fc0469058df6d8c5c14",
+        "driver_identity": {
+          "pid": 344586,
+          "start": "35885140",
+          "executable": "/usr/bin/python3.10",
+          "cwd": "/home/jay"
+        },
+        "native_identity": {
+          "pid": 344667,
+          "start": "35886316",
+          "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-05-to-T6-20261109/regularized-saturated/trajectory/runtime/IncNavierStokesSolver",
+          "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-05-to-T6-20261109/regularized-saturated/trajectory/steps-008001-008032"
+        },
+        "supervisor_identity": {
+          "pid": 344577,
+          "start": "35885094",
+          "executable": "/usr/bin/python3.10",
+          "cwd": "/home/jay"
+        },
+        "supervisor_start_matches": true,
+        "native_identity_matches": true,
+        "driver_start_matches": true,
+        "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-05-to-T6-20261109/regularized-saturated/trajectory/runtime/IncNavierStokesSolver",
+        "executable_sha256": "177ce5e54e7de514fa019122e46d3a5d709455cd091bd3023fbfa745c48c9bfc",
+        "library_manifest": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-05-to-T6-20261109/regularized-saturated/trajectory/runtime/identity.json",
+        "library_manifest_sha256": "36aee575366fb65d6f09a5c4d127487e4b3d7b6d74dceadd60fdb3a2ff90b0d5",
+        "next_target_step": 9600,
+        "next_target_time": 6.0,
+        "completed_targets": [],
+        "recorded_successor_completed_targets": [],
+        "failure": null,
+        "prefix_steps": 8000,
+        "cumulative_bound_integral": 0.0,
+        "audit_revision": "NativeElementSideV2",
+        "evaluation_reuse": "ExactStepV1",
+        "handoff": null
+      },
+      "validation": {
+        "parent_checkpoint_sha256": "1e7912e26bfdcfd3219b7c96626c361b49b7910023207e28eda0d8487200a61d",
+        "parent_state_sha256": "8c1ed87b2e55252136ffc1d34a3c6e93d51f0e85f08edca2f73606d0f3bde2a3",
+        "parent_native_history_sha256": [
+          "e978a4f1ad282cdce6a66e4dd3ce322347ce08b41e5ea7432bd6798e26f1fe8f",
+          "3f1f6f76c52276c865bae097486a0ce164cd509c98c6410b677f516084ad7c3c"
+        ],
+        "parent_native_history_times_sha256": "24aca8944d17339c1d00686d24f7ed4d1197e944a7fc71e5a57e86e5736f1b2b",
+        "expected_first_successor_checkpoint_sha256": "6838433d2507ea0307df1106216d144856e3576e964b05f8da749b300beb1722",
+        "startup_bound_inactive": true,
+        "startup_committed_state_unchanged": true,
+        "verification_governing_sweeps": 1.0,
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-05-to-T6-20261109/source/solvers/IncNavierStokesSolver/Tests/RANS/supervise_cls_epawf_pimple.py",
+          "--solver",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-audit-cache-temporal-20261109/handoff-budget-05-saturated-v2/trajectory/runtime/IncNavierStokesSolver",
+          "--output",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-05-to-T6-20261109/regularized-saturated",
+          "--wall-policy",
+          "CLSCalibratedBudgetAWF",
+          "--accepted-awf-case",
+          "Accepted-AWF-05G",
+          "--accepted-awf-companion",
+          "regularized-saturated",
+          "--accepted-awf-companion-reason",
+          "Faithful05cases encounter Original outer covariance; regularized-outer-only05O then accepts147steps toT=.091875 and fails Linear inner covariance at x=1,z=.5, eigenvalue -5.30490156848e-5 at attemptedT=.0925. Explicit matched companion retains outer regularization and selects SaturatedR2 inner stress, without changing budget source, floor, or governing schedule.",
+          "--inventory",
+          "AcceptedBudgetV1",
+          "--bound-solver",
+          "RetainedPool",
+          "--checkpoint",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-05-to-T6-20261109/regularized-saturated/parent/checkpoint",
+          "--prefix-report",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-05-to-T6-20261109/regularized-saturated/parent/prefix.evolution.json",
+          "--targets",
+          "9600",
+          "--block-steps",
+          "32",
+          "--timeout",
+          "7200.0",
+          "--bound-max-add",
+          "2000",
+          "--bound-max-total",
+          "20000",
+          "--bound-max-separations",
+          "2000",
+          "--bound-max-seconds",
+          "900",
+          "--prefix-campaign",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-audit-cache-temporal-20261109/handoff-budget-05-saturated-v2/trajectory",
+          "--inner-refinement",
+          "none",
+          "--evaluation-reuse",
+          "ExactStepV1",
+          "--audit-revision",
+          "NativeElementSideV2"
+        ]
+      },
+      "parent_locked_by_successor": true,
+      "observed_new_steps": 20,
+      "solve_counts": {
+        "outer_sweeps": 20,
+        "momentum_predictor_solves": 20,
+        "pressure_system_solves": 20,
+        "epsilon_transport_solves": 20,
+        "k_transport_solves": 20,
+        "bound_calls": 20
+      },
+      "additional_governing_solves": 0,
+      "bound_activations": 0,
+      "handoff_receipt": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-05-to-T6-20261109/regularized-saturated/handoff.json",
+        "sha256": "8f6ec5cf0d90731b666ec3deaf787b3176592438db033d82efd67a5fcb851e39"
+      }
+    }
+  },
+  "other_campaigns": {
+    "BudgetH2": {
+      "status": "running",
+      "accepted_steps": 6381.0,
+      "accepted_time": 3.988124999999742,
+      "checkpoint_sha256": "32a716c238a64a9567a7bbf500f3d360d384ce8de037cbc5cdd8b1bd045357f4",
+      "executable_sha256": "177ce5e54e7de514fa019122e46d3a5d709455cd091bd3023fbfa745c48c9bfc",
+      "next_target": 8000.0
+    },
+    "UniformG": {
+      "status": "running",
+      "accepted_steps": 5933.0,
+      "accepted_time": 3.708124999999798,
+      "checkpoint_sha256": "e921caec9b5788e55a98ba439abee4ae7fe8ff58d46d98dc13f7daebca1314bd",
+      "executable_sha256": "aa1071c74de72601f47c97ed413995434e1496dba07095ee970ac361825cb98d",
+      "next_target": 8000.0
+    },
+    "UniformH": {
+      "status": "running",
+      "accepted_steps": 7578.0,
+      "accepted_time": 4.736250000000116,
+      "checkpoint_sha256": "604e32a9c7a0a552e17c2af7cb819874f7708589fff69ffceb77317964570ef3",
+      "executable_sha256": "aa1071c74de72601f47c97ed413995434e1496dba07095ee970ac361825cb98d",
+      "next_target": 8000.0
+    },
+    "UpstreamOne": {
+      "status": "running",
+      "accepted_steps": 5822.0,
+      "accepted_time": 3.6387499999998116,
+      "checkpoint_sha256": "91a9ca88a9375f88b3f2360d9df2204a0de72e95c02c7408ffa9028403582d17",
+      "executable_sha256": "255190519d8dc7e9fa66e6fdf91acdc802d9562541a9b1d245f7c6d83fb7afbd",
+      "next_target": 8000.0
+    }
+  },
+  "observed_native_compiler_threads": 18,
+  "computational_thread_environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "disk_free_bytes": 1545166192640,
+  "guards": {
+    "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-05-to-T6-20261109/extension-guards.log",
+    "sha256": "fad4ef04707af41f691807957fcd21ca45a873891d899b776d767c7cca29f4f9",
+    "passed": true
+  },
+  "first_completed_blocks_observed_Asia_Shanghai": "2026-11-09T21:38:24.286454+08:00",
+  "first_completed_blocks": {
+    "regularized-linear": {
+      "accepted_step": 8032,
+      "accepted_time": 5.020000000000262,
+      "native_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-05-to-T6-20261109/evidence/first-block-regularized-linear/checkpoint",
+      "checkpoint_sha256": "93fbb01b71765fae66ef6b57c1eaf877ec3139dac1fe52fd6fcfca18a194ca74",
+      "state_sha256": "eae90135a128982faea2336ddc541da47729b060bc2a521f3e4ba936bd50002a",
+      "native_history_sha256": [
+        "684ce7b6e96e14a2af633b02d213d19c3e83e7c12b06df234206d78030750fba",
+        "3f1f6f76c52276c865bae097486a0ce164cd509c98c6410b677f516084ad7c3c"
+      ],
+      "native_history_times_sha256": "d683710ed72668b6fea3223f1c94a75bc0439ebc0efd61e4e4c3355684c6e87d",
+      "production_solve_counts": {
+        "outer_sweeps": 32,
+        "momentum_predictor_solves": 32,
+        "pressure_system_solves": 32,
+        "epsilon_transport_solves": 32,
+        "k_transport_solves": 32,
+        "bound_calls": 32
+      },
+      "implicit_callback_count": 32,
+      "additional_governing_solves": 0,
+      "bound_activations": 0.0,
+      "block_wall_seconds": 263.28617627196945,
+      "selected_spatial_blocks_common": [
+        0.00011174873258896115,
+        6.096624623757757e-05,
+        0.0006106255063993302,
+        0.0002929321771875593
+      ],
+      "matching_defect": 1.1605341908825506e-07,
+      "next_target_step": 9600,
+      "next_target_time": 6.0,
+      "status": "running"
+    },
+    "regularized-saturated": {
+      "accepted_step": 8032,
+      "accepted_time": 5.020000000000262,
+      "native_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-05-to-T6-20261109/evidence/first-block-regularized-saturated/checkpoint",
+      "checkpoint_sha256": "7fc8009a0598333cdb8cff9bca1f69511b83a7111a1ec753a40cc86f51a9092d",
+      "state_sha256": "46207fb4f11f240f41a0e086f55901bb3a0fa8366053bf5cb1f087b8b7c86b32",
+      "native_history_sha256": [
+        "b40ce0c193606ec87b9e311ce6d9c48f00c884adf7a1c2a1328c5b75aa7cb226",
+        "3f1f6f76c52276c865bae097486a0ce164cd509c98c6410b677f516084ad7c3c"
+      ],
+      "native_history_times_sha256": "d683710ed72668b6fea3223f1c94a75bc0439ebc0efd61e4e4c3355684c6e87d",
+      "production_solve_counts": {
+        "outer_sweeps": 32,
+        "momentum_predictor_solves": 32,
+        "pressure_system_solves": 32,
+        "epsilon_transport_solves": 32,
+        "k_transport_solves": 32,
+        "bound_calls": 32
+      },
+      "implicit_callback_count": 32,
+      "additional_governing_solves": 0,
+      "bound_activations": 0.0,
+      "block_wall_seconds": 246.41706728900317,
+      "selected_spatial_blocks_common": [
+        0.00011185452387968391,
+        6.102122636999773e-05,
+        0.0006111033274220863,
+        0.00029326345008886634
+      ],
+      "matching_defect": 1.1616782439943449e-07,
+      "next_target_step": 9600,
+      "next_target_time": 6.0,
+      "status": "running"
+    }
+  }
+}

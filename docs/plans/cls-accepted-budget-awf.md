@@ -1,5 +1,10 @@
 # CLS-calibrated budget AWF: implementation and native evolution
 
+**T=6 continuation, 2026-11-09:** both H=.5 graded Regularized companions
+have [restarted from their completed T=5 native checkpoints](cls-awf-05-continuation-to-six.md).
+The next target is step 9600/T=6, with the existing method, runtime and steady
+criteria preserved. This is an observed restart, not a steady-convergence claim.
+
 **20:49 steady check, 2026-11-09:** both H=.5 graded budget campaigns completed
 T=5 without correction in the assessed windows. Each passes its latest common
 half-unit window, but only one of three inspected windows qualifies. No one of

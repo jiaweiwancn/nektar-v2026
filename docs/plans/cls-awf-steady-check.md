@@ -1,5 +1,10 @@
 # Steady-convergence assessment of the six campaigns
 
+**Later continuation:** the H=.5 graded pair has now
+[restarted from T=5 toward next target T=6](cls-awf-05-continuation-to-six.md).
+This does not change the dated assessment below or establish that the added
+windows pass the unchanged persistence criteria.
+
 2026-11-09, Asia/Shanghai; native evidence captured 20:48:50–20:49:14.
 **None yet meets the complete declared persistence screen.** The two H=.5
 budget-AWF runs have successfully completed T=5 and are the closest: their
@@ -175,9 +180,10 @@ screen is not silently substituted for the supplied common screen.
 The smallest useful continuation assessment is two more half-unit windows for
 the H=.5 graded budget pair, with full-outer-epsilon changes. If those windows
 also pass, the existing persistence requirement could be met around T=6;
-this is a conditional target, not an observed result or a newly launched run.
-Both completed cases remain at their authorized T=5 endpoints. The other four
-supervisors continue unchanged.
+this is conditional, not an observed steady result. Following authorization,
+both cases have now [restarted from their exact T=5 checkpoints toward T=6](cls-awf-05-continuation-to-six.md),
+with unchanged histories, runtimes and criteria. The completed parent campaigns
+are preserved; the other four supervisors continue unchanged.
 
 Re-run the read-only checker on Linux with the same policy and explicit
 campaign paths, using an unused output directory:
