@@ -103,8 +103,8 @@ double EquilibriumAWFProfileWeight(double spatial, const std::array<double, 7> &
 
 AWFParameters CalibratedAWFParameters(const RANSNeutralReference &model)
 {
-    if (model.Model() != RANSModel::CLSHighRe)
-        throw std::invalid_argument("CLS-calibrated AWF requires a CLS reference");
+    if (model.Model() != RANSModel::CLSHighRe && !model.NewModel())
+        throw std::invalid_argument("Compatible AWF requires a resolved CLS/A93/A95/E94E95 reference");
     AWFParameters wall;
     const long double q = model.Q();
     wall.cMu = Cast(1/(q*q));
@@ -121,6 +121,19 @@ EquilibriumAWFProfiles::EquilibriumAWFProfiles(const AWFProfileGeometry &geometr
       m_original(LegacyGeometry(geometry), k, wall)
 {
     metric.Validate(geometry.height);
+    if(model.NewModel())
+    {
+        if(metric.kappa1!=0 || metric.kappa2!=0)
+            throw std::invalid_argument("New-model curved AWF kernel unsupported in first qualification");
+        const bool accepted=model.WallFormulation()==RANSWallFormulation::AcceptedBudgetAWF;
+        if(options.formulation!=(accepted?AWFProfileFormulation::AcceptedBudgetAWF:AWFProfileFormulation::LegacyEPAWF) ||
+           geometry.molecularNu!=model.MolecularNu())
+            throw std::invalid_argument("AWF formulation/viscosity differs from resolved physics descriptor");
+        if(!accepted && (wall.cMu!=.09 || wall.cLength!=2.55 || wall.smoothIntercept!=10.7))
+            throw std::invalid_argument("Principal EP-AWF requires original SCI wall calibration");
+    }
+    else if(options.formulation==AWFProfileFormulation::AcceptedBudgetAWF)
+        throw std::invalid_argument("AcceptedBudgetAWF requires its resolved A93/A95/E94E95 descriptor");
     Finite(options.requestedWeight); Positive(options.minimumReynolds);
     if (!(options.requestedWeight >= 0 && options.requestedWeight <= 1 &&
           options.quadratureOrder >= 2 && options.quadratureOrder <= 128))

@@ -171,6 +171,9 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
         ADD_NEKTAR_EXECUTABLE(RANSConstitutiveProbe COMPONENT tests DEPENDS SolverUtils
             SOURCES ${CMAKE_SOURCE_DIR}/library/UnitTests/SolverUtils/RANSConstitutiveProbe.cpp)
         TARGET_COMPILE_DEFINITIONS(RANSConstitutiveProbe PRIVATE ENABLE_NEKTAR_EXCEPTIONS)
+        ADD_NEKTAR_EXECUTABLE(RANSNewModelsProbe COMPONENT tests DEPENDS SolverUtils
+            SOURCES ${CMAKE_SOURCE_DIR}/library/UnitTests/SolverUtils/RANSNewModelsProbe.cpp)
+        TARGET_COMPILE_DEFINITIONS(RANSNewModelsProbe PRIVATE ENABLE_NEKTAR_EXCEPTIONS)
         ADD_NEKTAR_EXECUTABLE(RANSEquilibriumProfilesProbe COMPONENT tests DEPENDS SolverUtils
             SOURCES ${CMAKE_SOURCE_DIR}/library/UnitTests/SolverUtils/RANSEquilibriumProfilesProbe.cpp)
         TARGET_COMPILE_DEFINITIONS(RANSEquilibriumProfilesProbe PRIVATE ENABLE_NEKTAR_EXCEPTIONS)

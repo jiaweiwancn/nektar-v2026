@@ -8,12 +8,18 @@
 
 #include <SolverUtils/SolverUtilsDeclspec.h>
 #include <array>
+#include <string>
 
 namespace Nektar::SolverUtils
 {
 using RANSVector = std::array<double, 3>;
 using RANSTensor = std::array<RANSVector, 3>;
-enum class RANSModel { StandardKEpsilon, CLSHighRe };
+enum class RANSModel { StandardKEpsilon, CLSHighRe, A93, A95, E94E95 };
+enum class RANSKappaPolicy { Natural, Prescribed };
+enum class RANSWallFormulation { EPAWF, AcceptedBudgetAWF };
+SOLVER_UTILS_EXPORT bool IsNewRANSModel(RANSModel model);
+SOLVER_UTILS_EXPORT const char *RANSModelName(RANSModel model);
+SOLVER_UTILS_EXPORT RANSModel ParseRANSModel(const std::string &name);
 
 struct SOLVER_UTILS_EXPORT RANSParameters
 {
@@ -42,7 +48,10 @@ SOLVER_UTILS_EXPORT std::array<double, 7> CLSCubicCoefficients(double cMu);
  * epsilon is the transported modified dissipation in the high-Re outer limit,
  * equal to the k sink here. No damping, floors, production/realizability clips,
  * low-Re E term, or dissipation split is enabled by this evaluator.
- * resolvedNu affects ONLY diffusion. Physical AWF viscosity is separate.
+ * resolvedNu affects ONLY diffusion for legacy models. For A93/A95/E94E95,
+ * resolve parameters using RANSResolvedModel: tensors are physical half-scaled,
+ * invariants/nonlinear tensors use deviatoric strain, production contracts full
+ * R with raw A, and resolvedNu must be zero (high-Re outer equations).
  */
 SOLVER_UTILS_EXPORT RANSClosureValues EvaluateRANSClosure(
     RANSModel model, double k, double epsilon, const RANSTensor &gradient,
@@ -70,9 +79,21 @@ struct NeutralABLValues
     double epsilonGradient, epsilonGradientFlux, shearStress;
 };
 
+/** Immutable resolved physics descriptor. The historical type name is retained
+ * for CLS source/ABI naming; RANSResolvedModel is the preferred new-model name.
+ * New models use total epsilon, high-Re outer diffusion, finite physical inner
+ * viscosity, DeviatoricStrainV1 and no constitutive/source regularization.
+ */
 class SOLVER_UTILS_EXPORT RANSNeutralReference
 {
 public:
+    static RANSNeutralReference Resolve(RANSModel model, RANSKappaPolicy policy,
+        double prescribedKappa, RANSWallFormulation wall, double molecularNu);
+    bool NewModel() const { return IsNewRANSModel(m_model); }
+    RANSKappaPolicy KappaPolicy() const { return m_policy; }
+    RANSWallFormulation WallFormulation() const { return m_wall; }
+    double MolecularNu() const { return m_molecularNu; }
+    std::string Signature() const;
     static RANSNeutralReference Standard(const RANSParameters &parameters = {});
     static RANSNeutralReference CLS(const RANSParameters &parameters = {});
     RANSModel Model() const { return m_model; }
@@ -97,6 +118,14 @@ private:
     RANSModel m_model;
     RANSParameters m_parameters;
     double m_q, m_kappa, m_cmu;
+    RANSKappaPolicy m_policy = RANSKappaPolicy::Natural;
+    RANSWallFormulation m_wall = RANSWallFormulation::EPAWF;
+    double m_molecularNu = 0;
+
 };
+using RANSResolvedModel = RANSNeutralReference;
+SOLVER_UTILS_EXPORT RANSClosureValues EvaluateRANSClosure(
+    const RANSResolvedModel &model, double k, double epsilon,
+    const RANSTensor &gradient, double wallDistance);
 } // namespace Nektar::SolverUtils
 #endif

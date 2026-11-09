@@ -1,6 +1,6 @@
 # A93 / A95 / E94E95: first implementation and qualification
 
-Status: preparation; no new-model qualification claimed yet.
+Status: baseline complete; kernel implementation under independent verification.
 
 ## Reproducible workspace and specification provenance
 
@@ -159,3 +159,7 @@ Workspace/specification audit completed. Linux baseline build and short control
 are the current gate; results and exact reproduction commands will be added
 before numerical implementation edits. No new-model build, numerical pass,
 long-time stability, terrain/physical, 3D/MPI or temporal-order claim is made.
+
+The two unchanged combined-note executable listings pass on Linux: all interval/exact-sign certificates, and 873 wall assertions over 22 cases. The isolated baseline external build succeeds with explicit Nektar++_DIR=`/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake`, Release, `-fno-fast-math -ffp-contract=off -D_GLIBCXX_ASSERTIONS`, eight workers. Existing kernel oracle, accepted-AWF probe and profile-branch checks pass before numerical edits. The new Linux worktree has NTFS executable-bit differences only: `git -c core.filemode=false status --porcelain` is empty. No content is reset to hide these differences.
+
+Baseline native CLS control passes two serial steps at dt=0.000625, UniformEPFlat, diagnostic R2 guard, with its existing SaturatedR2/regularized controls unchanged. The private ELF/library snapshot and baseline.json are under `baseline/`. Numerical implementation edits began only after this result was observed.

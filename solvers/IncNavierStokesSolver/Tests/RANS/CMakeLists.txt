@@ -576,3 +576,20 @@ if(RANS_BUILD_SOLVER)
     set_property(TEST ${rans_all_tests} APPEND PROPERTY ENVIRONMENT
         "LD_LIBRARY_PATH=${CMAKE_CURRENT_BINARY_DIR}/geometry-lib:$ENV{LD_LIBRARY_PATH}")
 endif()
+
+# Original A93/A95/E94E95 descriptor, constitutive and wall sampling adapter.
+add_executable(RANSNewModelsProbe
+    ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSNewModelsProbe.cpp)
+target_link_libraries(RANSNewModelsProbe RANSKernels)
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(RANSNewModelsProbe PRIVATE -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror)
+endif()
+find_package(Python3 QUIET COMPONENTS Interpreter)
+if(Python3_Interpreter_FOUND)
+    add_test(NAME RANSNewModelsIndependentOracle COMMAND ${Python3_EXECUTABLE} -B
+        ${CMAKE_CURRENT_LIST_DIR}/validate_a93_a95_e94e95.py
+        --probe $<TARGET_FILE:RANSNewModelsProbe>
+        --output ${CMAKE_CURRENT_BINARY_DIR}/a93-a95-e94e95-kernels.json)
+    set_tests_properties(RANSNewModelsIndependentOracle PROPERTIES PROCESSORS 1 TIMEOUT 600
+        ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
+endif()

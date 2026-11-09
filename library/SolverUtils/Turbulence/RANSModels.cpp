@@ -9,6 +9,8 @@
 #include <functional>
 #include <limits>
 #include <stdexcept>
+#include <sstream>
+#include <iomanip>
 
 namespace Nektar::SolverUtils
 {
@@ -105,10 +107,120 @@ std::array<double, 7> CLSCubicCoefficients(double cmu)
             Cast(-5.0L*square),Cast(5.0L*square)};
 }
 
+bool IsNewRANSModel(RANSModel m)
+{ return m==RANSModel::A93 || m==RANSModel::A95 || m==RANSModel::E94E95; }
+const char *RANSModelName(RANSModel m)
+{
+    switch(m)
+    {
+        case RANSModel::StandardKEpsilon:return "StandardKEpsilon";
+        case RANSModel::CLSHighRe:return "CLSHighRe";
+        case RANSModel::A93:return "A93";
+        case RANSModel::A95:return "A95";
+        case RANSModel::E94E95:return "E94E95";
+    }
+    throw std::invalid_argument("Unknown RANS model identity");
+}
+RANSModel ParseRANSModel(const std::string &name)
+{
+    for(auto m:{RANSModel::StandardKEpsilon,RANSModel::CLSHighRe,RANSModel::A93,RANSModel::A95,RANSModel::E94E95})
+        if(name==RANSModelName(m))return m;
+    throw std::invalid_argument("Unknown RANS model identity: "+name);
+}
+namespace
+{
+// Symmetric Jacobi eigenvalue evaluation. Avoid acos-domain clipping and any
+// coefficient continuation at repeated eigenvalues. Forward values only.
+Real LargestStrainEigenvalue(Matrix a)
+{
+    for(int iteration=0;iteration<64;++iteration)
+    {
+        int p=0,q=1;
+        for(int i=0;i<3;++i)for(int j=i+1;j<3;++j)
+            if(std::abs(a[i][j])>std::abs(a[p][q])){p=i;q=j;}
+        if(a[p][q]==0)break;
+        const Real angle=.5L*std::atan2(2*a[p][q],a[q][q]-a[p][p]);
+        const Real c=std::cos(angle),v=std::sin(angle);
+        const Real pp=c*c*a[p][p]-2*c*v*a[p][q]+v*v*a[q][q];
+        const Real qq=v*v*a[p][p]+2*c*v*a[p][q]+c*c*a[q][q];
+        for(int i=0;i<3;++i)if(i!=p && i!=q)
+        {const Real x=a[i][p],y=a[i][q];a[i][p]=a[p][i]=c*x-v*y;a[i][q]=a[q][i]=v*x+c*y;}
+        a[p][p]=pp;a[q][q]=qq;a[p][q]=a[q][p]=0;
+    }
+    return std::max({a[0][0],a[1][1],a[2][2]});
+}
+RANSClosureValues NewClosure(RANSModel model,double k,double epsilon,
+    const RANSTensor &gradient,const RANSParameters &p,double nu)
+{
+    Positive(k,"RANS k must be finite and positive");
+    Positive(epsilon,"RANS total epsilon must be finite and positive");p.Validate();
+    const bool e=model==RANSModel::E94E95;
+    if(nu!=0 || p.yapCoefficient!=0 || p.sigmaK!=1 ||
+       p.cEpsilon1!=(e?.43:1.44) || p.cEpsilon2!=(e?1.9:1.92))
+        throw std::invalid_argument("New closure requires resolved original high-Re coefficients and total epsilon");
+    const Real time=Real(k)/epsilon;
+    Matrix s{},o{};Real div=0,ss=0,oo=0;
+    for(int i=0;i<3;++i)for(int j=0;j<3;++j)Finite(gradient[i][j],"Nonfinite velocity gradient");
+    for(int i=0;i<3;++i)div+=gradient[i][i];
+    for(int i=0;i<3;++i)for(int j=0;j<3;++j)
+    {
+        // Unlike inherited CLS, these are tau*S_d and tau*Omega, without
+        // doubling. The isotropic raw-divergence production is retained below.
+        s[i][j]=time*((Real(gradient[i][j])+gradient[j][i])/2-(i==j?div/3:0));
+        o[i][j]=time*(Real(gradient[i][j])-gradient[j][i])/2;
+        ss+=s[i][j]*s[i][j];oo+=o[i][j]*o[i][j];
+    }
+    const Real eta=std::sqrt(2*ss),xi=std::sqrt(2*oo);
+    Real cmu,cq=0;
+    if(model==RANSModel::A93)cmu=(2.L/3)/(1.25L+eta+.9L*xi);
+    else
+    {
+        if(ss==0 && oo!=0)
+            throw std::domain_error("A95/E94E95 undefined scalar-viscosity limit at zero strain and nonzero rotation");
+        const Real invariant=ss==0?0:3*LargestStrainEigenvalue(s)*std::sqrt((ss+oo)/ss);
+        cmu=1/((e?4.L:6.5L)+invariant);
+        if(!e)
+        {
+            const Real radicand=1-9*cmu*cmu*ss;
+            if(radicand<0)throw std::domain_error("A95 negative square-root radicand; no constitutive clipping");
+            // radicand==0 is a forward value, not a smooth tangent promise.
+            cq=std::sqrt(radicand)/(1+6*std::sqrt(ss)*std::sqrt(oo));
+        }
+    }
+    RANSClosureValues result{};const Real nut=cmu*k*time;
+    result.cMu=Cast(cmu);result.eddyViscosity=Cast(nut);
+    result.strainInvariant=Cast(eta);result.rotationInvariant=Cast(xi);result.divergence=Cast(div);
+    const auto s2=Product(s,s),o2=Product(o,o),os=Product(o,s),so=Product(s,o);
+    Real production=0;
+    for(int i=0;i<3;++i)for(int j=0;j<3;++j)
+    {
+        const Real delta=i==j?1:0;
+        const Real q=model==RANSModel::A93?k/(1000+eta*eta*eta)*
+            (3*(s2[i][j]-ss*delta/3)-19*(o2[i][j]+oo*delta/3)+15*(os[i][j]-so[i][j])):
+            model==RANSModel::A95?2*cq*k*(os[i][j]-so[i][j]):0;
+        const Real r=2*Real(k)*delta/3-2*k*cmu*s[i][j]+q;
+        result.reynoldsStress[i][j]=Cast(r);result.quadraticStress[i][j]=Cast(q);
+        production-=r*gradient[i][j];
+    }
+    const Real scale=Real(epsilon)*epsilon/k;
+    const Real ep=e?std::max(.43L,eta/(eta+5))*eta*scale:Real(p.cEpsilon1)*epsilon/k*production;
+    const Real ed=Real(p.cEpsilon2)*scale;
+    result.production=Cast(production);result.kSource=Cast(production-epsilon);
+    result.epsilonProduction=Cast(ep);result.epsilonDestruction=Cast(ed);result.epsilonSource=Cast(ep-ed);
+    result.momentumDiffusion=Cast(nut);result.kDiffusion=Cast(nut/p.sigmaK);result.epsilonDiffusion=Cast(nut/p.sigmaEpsilon);
+    return result;
+}
+}
+
 static RANSClosureValues EvaluateRANSClosureSelected(
     RANSModel model, double k, double epsilon, const RANSTensor &gradient,
     double distance, const RANSParameters &p, double nu, int branch)
 {
+    if(IsNewRANSModel(model))
+    {
+        if(branch!=0)throw std::invalid_argument("A93/A95/E94E95 constitutive tangent action unsupported; forward one-sweep path only");
+        return NewClosure(model,k,epsilon,gradient,p,nu);
+    }
     p.Validate();
     Positive(k, "RANS k must be finite and positive");
     Positive(epsilon, "RANS dissipation must be finite and positive");
@@ -232,6 +344,43 @@ RANSNeutralReference RANSNeutralReference::CLS(const RANSParameters &p)
     });
     return {RANSModel::CLSHighRe,p,Cast(q),Cast(kap),Cast(Coefficient(q))};
 }
+
+RANSNeutralReference RANSNeutralReference::Resolve(RANSModel model,RANSKappaPolicy policy,
+    double prescribed,RANSWallFormulation wall,double molecularNu)
+{
+    if(!IsNewRANSModel(model))throw std::invalid_argument("Resolve requires A93, A95 or E94E95; retain legacy factories for legacy models");
+    if(policy!=RANSKappaPolicy::Natural && policy!=RANSKappaPolicy::Prescribed)
+        throw std::invalid_argument("Unknown kappa policy");
+    if(wall!=RANSWallFormulation::EPAWF && wall!=RANSWallFormulation::AcceptedBudgetAWF)
+        throw std::invalid_argument("Unknown wall formulation");
+    Positive(molecularNu,"Physical inner molecular viscosity must be positive");
+    const bool e=model==RANSModel::E94E95;
+    const Real q=model==RANSModel::A93?Root([](Real q){return (2.L/3)*q*q-1.9L*q-1.25L;}):
+        Root([&](Real q){return q*q-3/std::sqrt(2.L)*q-(e?4.L:6.5L);});
+    const Real delta=e?1.9L-.43L*q:.48L;
+    RANSParameters p;p.yapCoefficient=0;p.sigmaK=1;p.cEpsilon1=e?.43:1.44;p.cEpsilon2=e?1.9:1.92;
+    p.sigmaEpsilon=e?1.2:1.3;
+    Real kap=std::sqrt(Real(p.sigmaEpsilon)*delta/q);
+    if(policy==RANSKappaPolicy::Prescribed)
+    {Positive(prescribed,"Prescribed kappa must be positive");kap=prescribed;p.sigmaEpsilon=Cast(kap*kap*q/delta);}
+    RANSNeutralReference result(model,p,Cast(q),Cast(kap),Cast(1/(q*q)));
+    result.m_policy=policy;result.m_wall=wall;result.m_molecularNu=molecularNu;return result;
+}
+std::string RANSNeutralReference::Signature() const
+{
+    std::ostringstream s;s<<std::setprecision(17)<<RANSModelName(m_model)<<":OriginalHighRe-v1";
+    s<<":q="<<m_q<<":kappa="<<m_kappa<<":policy="<<(m_policy==RANSKappaPolicy::Natural?"Natural":"Prescribed")
+     <<":sigmaK="<<m_parameters.sigmaK<<":sigmaE="<<m_parameters.sigmaEpsilon
+     <<":Ceps1="<<m_parameters.cEpsilon1<<":Ceps2="<<m_parameters.cEpsilon2
+     <<":wall="<<(m_wall==RANSWallFormulation::EPAWF?"EPAWF:SCI-original-.09-2.55":"AcceptedBudgetAWF:compatible-q-kappa-v1")
+     <<":outerNu=0:innerNu="<<m_molecularNu<<":eps_tilde=TotalEpsilon:DeviatoricStrainV1"
+     <<":NoRegularization:NoYap:source="<<(m_model==RANSModel::E94E95?"C1(eta)*S*epsilon":"Ceps1*epsilon*P/k")
+     <<":wallSink="<<(m_wall==RANSWallFormulation::EPAWF?"P-Dpre:redistribution-once":"P-Ew(K):frozen-prescribed-zero-reaction");
+    return s.str();
+}
+RANSClosureValues EvaluateRANSClosure(const RANSResolvedModel &model,double k,double epsilon,
+    const RANSTensor &g,double distance)
+{return EvaluateRANSClosure(model.Model(),k,epsilon,g,distance,model.Parameters(),0);}
 
 NeutralABLValues RANSNeutralReference::AtHeight(double z,double u,double H,double U) const
 {

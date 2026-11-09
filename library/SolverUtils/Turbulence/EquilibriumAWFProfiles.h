@@ -46,7 +46,7 @@ SOLVER_UTILS_EXPORT double EquilibriumAWFProfileWeight(
     double budgetMargin, double reynolds, const AWFProfileSwitch &controls = {});
 
 /** Wall-source formulation, independent of the outer constitutive variant. */
-enum class AWFProfileFormulation { LegacyEPAWF, CLSCalibratedBudgetAWF };
+enum class AWFProfileFormulation { LegacyEPAWF, CLSCalibratedBudgetAWF, AcceptedBudgetAWF };
 
 /** Separate auxiliary-wall parameters derived from the selected CLS reference.
  * Keeping this explicit prevents factories from silently retaining the legacy
@@ -104,7 +104,8 @@ public:
     const AWFProfileOptions &Options() const { return m_options; }
     AWFProfileFormulation Formulation() const { return m_options.formulation; }
     bool AcceptedAWF() const
-    { return Formulation() == AWFProfileFormulation::CLSCalibratedBudgetAWF; }
+    { return Formulation() == AWFProfileFormulation::CLSCalibratedBudgetAWF ||
+             Formulation() == AWFProfileFormulation::AcceptedBudgetAWF; }
     const AnalyticalWallFunction &Original() const { return m_original; }
     const AWFProfileReference &Reference() const { return m_reference; }
     const std::vector<AWFProfileQuadraturePoint> &Quadrature() const { return m_quadrature; }
