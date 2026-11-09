@@ -144,7 +144,9 @@ def main():
     for pattern in ('**/summary.json','**/receipt.json','**/identity.json','**/handoff.json','*rollback*.json','temporal-policy.json',
                     'source-runtime.json','temporal-validation-final.json','per-step-checkpoint*.json','*.log'):
         for file in sorted(a.root.glob(pattern)):
-            if file.is_relative_to(a.output):continue
+            # The collector's redirected stdout changes after this index is
+            # written; it cannot be an immutable input to its own manifest.
+            if file.is_relative_to(a.output) or file==a.output.with_suffix('.log'):continue
             indices.append(dict(path=str(file),sha256=sha(file),bytes=file.stat().st_size))
     unique={r['path']:r for r in indices};atomic(a.output/'artifact-index.json',dict(root=str(a.root),
         indices=list(unique.values()),scope='Detailed receipts index every native packet/matrix, complete fields, checkpoint payload and library closure; these summaries do not replace native restart data.'))
