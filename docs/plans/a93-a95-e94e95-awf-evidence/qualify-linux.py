@@ -11,6 +11,7 @@ import json
 import os
 from pathlib import Path
 import platform
+import shutil
 import subprocess
 import sys
 import time
@@ -27,7 +28,7 @@ assert platform.system() == 'Linux'
 s = r/'source'
 t = s/'solvers/IncNavierStokesSolver/Tests/RANS'
 sys.path.insert(0, str(t))
-from run_cls_epawf_picard import THREADS, sha, state_hash
+from run_cls_epawf_picard import THREADS, sha, state_hash, readback
 from run_cls_epawf_pimple import identity
 from continue_cls_epawf_pimple import freeze, header
 from run_a93_a95_e94e95_matrix import run_case
@@ -132,6 +133,31 @@ def legacy_restart():
     return dict(bitwise_equal=True, reviewed_binary_source='99112a1cbb9c5448dd3de69f50600bf91465062b',
                 reviewed_runtime=identity(base_solver), payload=payload[0])
 extra('reviewed-CLS-checkpoint-continuation',legacy_restart)
+
+# This separate replay tool retains its legacy CLS scope. Native new-model
+# residuals above use the actual model-aware forward audit implementation.
+resolution=r/'runtime-qualified/RANSWallResolutionProbe'
+shutil.copy2(r/'build/RANSWallResolutionProbe',resolution)
+(r/'resolution-runtime-identity.json').write_text(json.dumps(identity(resolution),indent=2)+'\n')
+for label in ('cls-reviewed-whole4','cls-reviewed-restart2'):
+    def resolution_check(label=label):
+        folder=r/label;report=json.loads((folder/'case.evolution.json').read_text());manifest={}
+        from types import SimpleNamespace
+        norms=readback(SimpleNamespace(resolution_probe=resolution,timeout=120),folder,report['state'],report['last_stage_history'],report['last_stage_time'],report['last_stage_alpha'],manifest)
+        error=max(abs(x-y) for x,y in zip(norms,report['stage_audits'][-1][6:]))
+        assert error<1e-8, 'independent native CLS residual replay differs'
+        return dict(maximum_absolute_norm_difference=error,receipt_sha256=sha(folder/'readback.json'))
+    extra('legacy-resolution-'+label,resolution_check)
+for wall in ('EP','Accepted'):
+    def resolution_guard(wall=wall):
+        folder=r/'qualification-qualified'/('guard-resolution-'+wall);folder.mkdir(exist_ok=False)
+        shutil.copy2(r/'matrix-qualified'/('E94E95-Natural-'+wall)/'case.xml',folder/'case.xml')
+        (folder/'input.json').write_text('{}\n')
+        with (folder/'solver.log').open('w') as stream:
+            status=subprocess.run([str(resolution),'case.xml','input.json','output.json'],cwd=folder,stdout=stream,stderr=subprocess.STDOUT,timeout=120)
+        assert status.returncode!=0 and 'standalone CLS resolution replay does not support' in (folder/'solver.log').read_text()
+        return dict(rejected=True)
+    extra('unsupported-standalone-resolution-'+wall,resolution_guard)
 
 execute(['python3','-B',t/'collect_a93_a95_e94e95.py','--matrix',r/'matrix-qualified/matrix.json','--qualification',qpath,
          '--output',r/'matrix-qualified/compact-results.json'], 'collect-qualified.log')

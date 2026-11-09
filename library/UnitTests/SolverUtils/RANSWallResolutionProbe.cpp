@@ -173,6 +173,9 @@ int main(int argc,char **argv)
         std::vector<std::string> filenames{argv[1]};
         auto serial=LibUtilities::SessionReader::CreateInstance(1,args,filenames,LibUtilities::CommSerial::create(1,args));serial->InitSession();
         serial->SetSolverInfo("GlobalSysSoln","DirectFull");const auto graph=SpatialDomains::MeshGraphIO::Read(serial);
+        std::string requestedModel;serial->LoadSolverInfo("TurbulenceModel",requestedModel,"CLSHighRe");
+        Require(!IsNewRANSModel(ParseRANSModel(requestedModel)),
+            "standalone CLS resolution replay does not support A93/A95/E94E95; use native model-aware audits; action/replay extension unqualified");
         RANSWallPatchParameters p;
         serial->LoadParameter("RANSWallChi",p.chi,1.);serial->LoadParameter("RANSWallHeight",p.geometry.height,2.);
         serial->LoadParameter("RANSWallRoughness",p.geometry.roughness,.1);serial->LoadParameter("Kinvis",p.geometry.molecularNu,1.5e-5);
