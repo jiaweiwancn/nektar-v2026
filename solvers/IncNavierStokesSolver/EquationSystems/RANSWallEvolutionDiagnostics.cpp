@@ -408,7 +408,7 @@ std::string RANSWallEvolutionPatch::ConstitutiveStateDiagnostic(const Vector &s,
     {
         if(point.block!=K() && !point.dependentTrace)continue;
         const auto provenance=ResolveObservation(point);
-        evaluate(provenance.velocity,provenance.inner,point.inventory,false,
+        evaluate(*provenance.velocity,provenance.inner,point.inventory,false,
             point.dependentTrace?point.value:std::numeric_limits<double>::quiet_NaN());
     }
     const auto nativeInner=minima[0],nativeOuter=minima[1];
@@ -466,7 +466,7 @@ std::string RANSWallEvolutionPatch::InterfaceProvenanceChecks() const
         if(-3<el.lower[0]-1e-12 || -3>el.upper[0]+1e-12 || H<el.lower[2]-1e-12 || H>el.upper[2]+1e-12)continue;
         const bool inner=el.upper[2]<=H+1e-12;
         ScalarObservation q;q.coordinate={-3,0,H};q.block=K();q.geometry=el.geometry;q.side=inner?-1:1;
-        const auto provenance=ResolveObservation(q);const auto &v=provenance.velocity;
+        const auto provenance=ResolveObservation(q);const auto &v=*provenance.velocity;
         Require(v.element==e && v.geometry==el.geometry && provenance.inner==inner,"native one-sided identity changed");
         const auto gradient=v.Gradient(state,offset[0]);
         const double gx=el.upper[0]<=-3+1e-12?.01:.02,gz=inner?.1:.3;
@@ -528,6 +528,78 @@ std::string RANSWallEvolutionPatch::CompareOuterOperators(const Vector &s,double
         {"selected_continuity_gauge_loads",J::Numbers(constraintsA)},{"counterfactual_continuity_gauge_loads",J::Numbers(constraintsB)},
         {"mass_factor_applications",J::Number(3*Gauge())},{"governing_solves","0"},{"native_history_advanced","false"},
         {"legacy_name_semantics",J::Quote("refreshed_original_block_norms means selected uncancelled operator, not Original-CLS counterfactual")}});
+}
+
+std::string RANSWallEvolutionPatch::EvaluationReuseChecks(const Vector &state,const Vector &history,
+    double time,const RANSWallEvolutionData &data)
+{
+    namespace J=RANSWallSolveJson;
+    Require(!m_evaluation,"reuse verification needs an independent scope");
+    const bool saved=m_evaluationReuse;const auto stateHash=RANSWallR3::Hash(state),historyHash=RANSWallR3::Hash(history);
+    struct Restore {bool &value;bool old;~Restore(){value=old;}} restore{m_evaluationReuse,saved};
+    const auto drive=[&](bool enabled)
+    {
+        m_evaluationReuse=enabled;RANSWallEvolutionData input=data;
+        EvaluationScope scope(*this,input,time);std::vector<std::string> values;
+        const auto domain=[&](const Vector &s,double t,bool retain,bool only,const std::vector<RANSWallCoordinate> &anchors=std::vector<RANSWallCoordinate>{})
+        {values.push_back(ScalarDomainJSON(ScalarDomain(s,t,input,retain,only,anchors),retain));};
+        domain(state,time,true,true);domain(state,time,true,false);domain(state,time,true,false);
+        domain(state,time,false,false);
+        auto changed=state;auto zero=std::find(changed.begin(),changed.end(),0.);
+        Require(zero!=changed.end(),"reuse fixture needs an exact zero coefficient");*zero=std::signbit(*zero)?0.:-0.;
+        domain(changed,time,true,false);domain(changed,time,true,false);
+        auto flow=state,kstate=state,eps=state;
+        for(const auto &[block,increment]:std::array<std::pair<int,double>,3>{{{0,1e-7},{K(),1e-7},{Epsilon(),1e-8}}})
+        {
+            auto &test=block==0?flow:block==K()?kstate:eps;bool found=false;
+            for(int j=0;j<size[block];++j)if(!input.fixedBoundary.count(offset[block]+j))
+            {test[offset[block]+j]+=increment;found=true;break;}
+            Require(found,"reuse verification needs a free field coefficient");domain(test,time,true,false);
+        }
+        domain(flow,time,true,false);
+
+        domain(state,std::nextafter(time,1e300),true,false);domain(state,time,true,false);
+        ++input.generation;domain(state,time,true,false);
+        auto anchors=std::vector<RANSWallCoordinate>{{(lower[0]+upper[0])*.5+.0123456789,0,0}};
+        domain(state,time,true,true,anchors);domain(state,time,true,true,anchors);
+        domain(state,time,true,false);
+        {CoverageScope coverage(m_assertKCoverage,true);domain(state,time,true,false);domain(state,time,true,false);}
+        for(const auto &[axis,position,side]:std::array<std::tuple<int,double,int>,6>{{{2,0.,-1},{2,-0.,-1},
+            {2,m_parameters.geometry.height,-1},{2,m_parameters.geometry.height,1},{0,-3.,-1},{0,-3.,1}}})
+        {
+            const auto faces=Surface(0,axis,position,side,8);std::vector<std::string> rows;
+            for(const auto &face:faces)rows.push_back(J::Object({{"coordinate",J::Numbers(face.test.coordinate)},
+                {"geometry",J::Number(face.test.geometry)},{"element",J::Number(face.test.element)},
+                {"phi",J::Numbers(face.test.phi)},{"derivative",J::Rows(face.test.derivative)}}));
+            values.push_back(J::List(rows));
+        }
+        auto foreign=input;foreign.Touch();
+        values.push_back(ScalarDomainJSON(ScalarDomain(state,time,foreign,true),true));
+        domain(state,time,true,false);
+        if(!input.fixedBoundary.empty())
+        {input.fixedBoundary.begin()->second+=1e-7;domain(state,time,true,false);input=data;input.Touch();}
+        for(int repeat=0;repeat<2;++repeat)values.push_back(J::Numbers(Residual(state,history,1600.,time,input)));
+        auto h=history;h[0]+=1e-5;
+        values.push_back(J::Numbers(Residual(state,h,1600.,time,input)));
+        values.push_back(J::Numbers(Residual(state,history,800.,time,input,false,false,0)));
+        input.innerKSource=[](const RANSWallCoordinate&,double){return .001;};input.Touch();
+        values.push_back(J::Numbers(Residual(state,history,1600.,time,input)));
+        std::vector<std::pair<std::string,std::string>> audit;
+        for(const auto &[key,value]:CompleteRestrictedAudit(state,history,1600.,time,input))audit.push_back({key,J::Numbers(value)});
+        values.push_back(J::Object(audit));
+        values.push_back(CheckConstitutiveCoverage(state,time,input,{lower[0]+.123456789,0,m_parameters.geometry.height*.314159}));
+        return values;
+    };
+    const auto off=drive(false),on=drive(true);
+    Require(off.size()==on.size(),"evaluation verification query count differs");
+    for(int i=0;i<off.size();++i)Require(off[i]==on[i],"exact reuse changed query "+std::to_string(i));
+    Require(stateHash==RANSWallR3::Hash(state) && historyHash==RANSWallR3::Hash(history),"evaluation verification modified inputs");
+    Require(m_evaluationWork.domainHits>0 && m_evaluationWork.prefixHits>0 && m_evaluationWork.inputInvalidations>0 &&
+        m_evaluationWork.residualHits>0,"verification did not exercise cache hits and invalidation");
+    return J::Object({{"passed","true"},{"audit_revision",J::Quote(AuditRevision())},{"compared_queries",J::Number(off.size())},
+        {"state_sha256",J::Quote(stateHash)},{"history_sha256",J::Quote(historyHash)},
+        {"checks",J::Quote("exact state bytes including signed zero; time; data generation; external data; flags; ordered additional anchors; foreign data; history; alpha; residual options; coverage tripwire")},
+        {"reuse",EvaluationReuseJSON()},{"governing_solves","0"},{"physical_commits","0"}});
 }
 
 }

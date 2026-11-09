@@ -118,6 +118,7 @@ add_executable(RANSEquilibriumEvolutionProbe
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallPatch.cpp
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.cpp
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionEvaluation.cpp
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionTransition.cpp
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionRobust.cpp)
 target_include_directories(RANSEquilibriumEvolutionProbe PRIVATE ${RANS_SOURCE_ROOT}/solvers)
@@ -128,6 +129,7 @@ add_executable(RANSCurvedWallProbe
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallPatch.cpp
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.cpp
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionEvaluation.cpp
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionTransition.cpp
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionRobust.cpp)
 target_include_directories(RANSCurvedWallProbe PRIVATE ${RANS_SOURCE_ROOT}/solvers)
@@ -152,6 +154,7 @@ add_executable(RANSPressureActionProbe
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallPatch.cpp
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.cpp
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionEvaluation.cpp
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionTransition.cpp
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionRobust.cpp
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionActions.cpp
@@ -174,6 +177,7 @@ foreach(rans_r3_probe RANSNonpressureActionProbe RANSWallResolutionProbe)
         ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallPatch.cpp
         ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.cpp
         ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp
+        ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionEvaluation.cpp
         ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionTransition.cpp
         ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionRobust.cpp
         ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionActions.cpp
@@ -314,6 +318,7 @@ if(RANS_BUILD_SOLVER)
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSEquilibriumWallSystem.cpp
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallGlobalField.cpp
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallEvolutionPatch.cpp
+            ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallEvolutionEvaluation.cpp
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallEvolutionDiagnostics.cpp
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallEvolutionTransition.cpp
             ${RANS_SOLVER_ROOT}/./EquationSystems/RANSWallEvolutionRobust.cpp

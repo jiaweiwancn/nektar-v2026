@@ -263,6 +263,10 @@ std::array<RANSWallGlobalField::Vector,3> RANSWallGlobalField::RadialGradientDer
 }
 RANSWallGlobalPoint RANSWallGlobalField::Point(const Coordinate &coordinate,int side) const
 {
+    return ElementPoint(LocateElement(coordinate,side),coordinate);
+}
+int RANSWallGlobalField::LocateElement(const Coordinate &coordinate,int side) const
+{
     Require(side>=-1 && side<=1,"unknown radial sampling side");
     int selected=-1;
     for(std::size_t e=0;e<m_elements.size();++e)
@@ -278,7 +282,7 @@ RANSWallGlobalPoint RANSWallGlobalField::Point(const Coordinate &coordinate,int 
         if(selected<0 || element.geometry<m_elements[selected].geometry) selected=e;
     }
     Require(selected>=0,"physical sample not found on requested radial side");
-    return ElementPoint(selected,coordinate);
+    return selected;
 }
 std::vector<RANSWallGlobalPoint> RANSWallGlobalField::Quadrature(int order) const
 {

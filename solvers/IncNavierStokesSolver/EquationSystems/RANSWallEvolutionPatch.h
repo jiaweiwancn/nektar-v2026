@@ -6,12 +6,14 @@
 #define NEKTAR_RANS_WALL_EVOLUTION_PATCH_H
 #include <IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallPatch.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallSharedInventory.h>
 #include <LibUtilities/Communication/Comm.h>
 #include <SolverUtils/Turbulence/RANSWallNormalMap.h>
 #include <SolverUtils/Turbulence/EquilibriumAWFTransition.h>
 #include <SolverUtils/Turbulence/RANSRobustVariant.h>
 #include <SolverUtils/Turbulence/RANSWallInnerStress.h>
 #include <algorithm>
+#include <cstdint>
 #include <set>
 
 namespace Nektar
@@ -28,6 +30,11 @@ struct RANSWallEvolutionData
     RANSWallEvolutionFunction innerKSource,outerKSource,outerEpsilonSource;
     // Optional fixed native external traces, e.g. the stored neutral target.
     std::map<int,double> fixedBoundary;
+    // Callers changing a callable or its captured data inside an evaluation
+    // scope must advance this immutable-data generation. Scope-local reuse
+    // also compares fixed-boundary bytes and exact physical time.
+    std::uint64_t generation=0;
+    void Touch(){++generation;}
     explicit RANSWallEvolutionData(int dimension);
 };
 
@@ -39,10 +46,23 @@ struct RANSWallEvolutionData
  */
 class RANSWallEvolutionPatch
 {
+    struct EvaluationCache;
 public:
     using Vector=RANSWallAlgebra::Vector;
     using WallMatrix=RANSWallAlgebra::DenseMatrix;
     using Diagnostic=std::map<std::string,Vector>;
+    class EvaluationScope
+    {
+        const RANSWallEvolutionPatch &patch;
+        std::shared_ptr<EvaluationCache> previous;
+        bool owns=false;
+    public:
+        EvaluationScope(const RANSWallEvolutionPatch &,const RANSWallEvolutionData &,double);
+        ~EvaluationScope();
+        EvaluationScope(const EvaluationScope&)=delete;
+    };
+    std::string EvaluationReuseJSON() const;
+    std::string EvaluationReuseChecks(const Vector &,const Vector &,double,const RANSWallEvolutionData &);
     RANSWallEvolutionPatch(const LibUtilities::SessionReaderSharedPtr &serialSession,
         const SpatialDomains::MeshGraphSharedPtr &graph,
         const LibUtilities::CommSharedPtr &collective,const RANSWallPatchParameters &parameters,
@@ -141,7 +161,7 @@ public:
     static const char *AuditRevision() { return "NativeElementSideV2"; }
     struct ObservationProvenance
     {
-        RANSWallGlobalPoint velocity;
+        std::shared_ptr<const RANSWallGlobalPoint> velocity;
         bool inner=false;
         int radialSide=0;
     };
@@ -161,7 +181,14 @@ public:
         double minimumBudgetRatio=1e300,maximumBudgetRelativeDefect=0.;
         std::map<std::string,int> counts;
         Vector effectiveState,traceState;
-        std::vector<ScalarObservation> observations;
+        RANSWallSharedInventory<ScalarObservation> observations;
+        struct PendingProfile
+        {
+            RANSWallCoordinate anchor;
+            std::shared_ptr<SolverUtils::EquilibriumAWFProfiles> profile;
+            bool source=false;
+        };
+        std::vector<PendingProfile> pendingProfiles;
     };
     // Scalar evaluation domain only: covariance and the restricted outer
     // physical box are separate accepted-stage gates.
@@ -419,7 +446,7 @@ private:
         bool strict=false;
     };
     void InitialiseScalarLocations() const;
-    std::vector<ScalarLocation> ReconstructionLocations(int block,bool complete) const;
+    RANSWallSharedInventory<ScalarLocation> ReconstructionLocations(int block,bool complete) const;
     std::vector<RANSWallCoordinate> ConstitutiveAnchors(const Vector &state,
         const std::vector<RANSWallCoordinate> &additional) const;
     std::vector<std::pair<RANSWallCoordinate,double>> PhysicalBandRays() const;
@@ -441,6 +468,41 @@ private:
     std::string m_kSampling="Point";
     bool m_heightComparison=false,m_acceptedComparison=false;
     mutable std::map<RANSWallCoordinate,RANSWallGlobalPoint> m_kSamplingRows;
+    bool m_evaluationReuse=false;
+    mutable std::shared_ptr<EvaluationCache> m_evaluation;
+    mutable std::map<std::pair<int,bool>,RANSWallSharedInventory<ScalarLocation>> m_reconstructionCatalog;
+    mutable std::map<std::tuple<int,int,double,int,int>,std::vector<FacePoint>> m_surfaceCatalog;
+    mutable std::vector<std::map<int,int>> m_geometryCatalog;
+    struct EvaluationWork
+    {
+        std::uint64_t scopes=0,domainCalls=0,domainComputes=0,domainHits=0,prefixHits=0,
+            rowConstructs=0,rowHits=0,rowEvictions=0,reconstructionBuilds=0,reconstructionHits=0,
+            surfaceBuilds=0,surfaceHits=0,normalizationCalls=0,normalizationComputes=0,normalizationHits=0,
+            residualCalls=0,residualHits=0,constraintCalls=0,constraintHits=0,
+            stateEvictions=0,inputInvalidations=0,profileReuses=0,scalarFieldReuses=0,peakStates=0,peakRows=0,peakProfiles=0;
+    };
+    mutable EvaluationWork m_evaluationWork;
+    void PrepareEvaluation(const RANSWallEvolutionData &,double) const;
+    std::shared_ptr<const RANSWallGlobalPoint> EvaluationRow(int block,int element,const RANSWallCoordinate &) const;
+    int GeometryElement(int block,int geometry) const;
+    std::shared_ptr<const ScalarDomainResult> CachedDomain(const Vector &,double,const RANSWallEvolutionData &,bool,
+        const std::vector<RANSWallCoordinate> &) const;
+    void StoreDomain(const Vector &,double,const RANSWallEvolutionData &,bool,const std::vector<RANSWallCoordinate> &,
+        const ScalarDomainResult &) const;
+    void InvalidateCoverageToken() const;
+    ScalarDomainResult EvaluateScalarDomain(const Vector &,double,const RANSWallEvolutionData &,bool,bool,
+        const std::vector<RANSWallCoordinate> &) const;
+    std::shared_ptr<SolverUtils::EquilibriumAWFProfiles> EvaluationProfile(
+        const std::shared_ptr<SolverUtils::EquilibriumAWFProfiles> &,double) const;
+    std::shared_ptr<const SolverUtils::RANSCappedDestructionValues> CachedNormalization(const Vector &,
+        const RANSWallCoordinate &,const SolverUtils::EquilibriumAWFProfiles &) const;
+    void StoreNormalization(const Vector &,const RANSWallCoordinate &,const SolverUtils::EquilibriumAWFProfiles &,
+        const SolverUtils::RANSCappedDestructionValues &) const;
+    std::shared_ptr<const Vector> CachedResidual(const Vector &,const Vector &,double,double,
+        const RANSWallEvolutionData &,bool,bool,int) const;
+    void StoreResidual(const Vector &,const Vector &,double,double,const RANSWallEvolutionData &,bool,bool,int,const Vector &) const;
+    std::shared_ptr<const std::map<int,double>> CachedConstraints(const Vector &,double,const RANSWallEvolutionData &) const;
+    void StoreConstraints(const Vector &,double,const RANSWallEvolutionData &,const std::map<int,double> &) const;
     Vector SolveScalarFeasible(Vector state,const Vector &history,double alpha,
         double time,const RANSWallEvolutionData &data,bool condensed,int &iterations,
         double tolerance,int maximumIterations,bool scalarOnly=false) const;

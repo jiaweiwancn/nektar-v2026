@@ -85,10 +85,13 @@ private:
 };
 }
 
-std::vector<RANSWallEvolutionPatch::ScalarLocation>
+RANSWallSharedInventory<RANSWallEvolutionPatch::ScalarLocation>
 RANSWallEvolutionPatch::ReconstructionLocations(int block,bool complete) const
 {
-    std::vector<ScalarLocation> locations;
+    const auto key=std::make_pair(block,complete);
+    if(m_evaluationReuse){const auto old=m_reconstructionCatalog.find(key);
+        if(old!=m_reconstructionCatalog.end()){++m_evaluationWork.reconstructionHits;return old->second;}}
+    ++m_evaluationWork.reconstructionBuilds;RANSWallSharedInventory<ScalarLocation> locations;
     for(int e=0;e<fields[block]->Elements().size();++e)
     {
         const auto &el=fields[block]->Elements()[e];const auto exp=fields[block]->Field()->GetExp(e);
@@ -113,6 +116,7 @@ RANSWallEvolutionPatch::ReconstructionLocations(int block,bool complete) const
             }
         }
     }
+    if(m_evaluationReuse)m_reconstructionCatalog.emplace(key,locations);
     return locations;
 }
 
@@ -305,11 +309,11 @@ void RANSWallEvolutionPatch::InitialiseScalarLocations() const
     }
 }
 
-RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::ScalarDomain(
+RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScalarDomain(
     const Vector &state,double time,const RANSWallEvolutionData &data,bool retain,bool kInventoryOnly,
     const std::vector<RANSWallCoordinate> &additionalAnchors) const
 {
-    RANSWallTiming::Scope timing("domain.scalar");
+    RANSWallTiming::Scope timing("domain.compute");
     ScalarDomainResult result;result.phase="coefficients";result.normalizationApplicable=!AcceptedAWF();
     const double us=m_robustUstar,K0=m_parameters.model.Q()*us*us;
     const double E0=us*us*us/(m_parameters.model.Kappa()*m_parameters.geometry.height);
@@ -353,20 +357,18 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::ScalarDomain(
     };
     try
     {
+        const auto prefix=!kInventoryOnly?CachedDomain(state,time,data,true,additionalAnchors):nullptr;
+        if(prefix){result=*prefix;++m_evaluationWork.prefixHits;}
+        else
+        {
         Require(state.size()==static_cast<std::size_t>(Size()),"scalar-domain state size differs");
         for(double value:state)if(!std::isfinite(value)){result.failure="nonfinite_coefficient";return result;}
         InitialiseScalarLocations();
-        if(ConstitutiveKInventory()){m_coveredKLocations.clear();m_coveredKFunctionals.clear();}
+        if(ConstitutiveKInventory()){InvalidateCoverageToken();m_coveredKLocations.clear();m_coveredKFunctionals.clear();}
         result.effectiveState=ExternalLift(state,time,data);result.phase="fixed_fields_and_samplers";
         for(const auto &point:m_scalarLocations)
             if(!check(point.inventory,point.row,point.block,point.strict,result.effectiveState,point.side))return result;
-        struct Pending
-        {
-            RANSWallCoordinate anchor;
-            std::shared_ptr<EquilibriumAWFProfiles> profile;
-            bool source=false;
-        };
-        std::vector<Pending> pending;
+        auto &pending=result.pendingProfiles;
         result.phase="moving_ray_k_before_normalization";
         auto ray=[&](const RANSWallCoordinate &p,const std::shared_ptr<EquilibriumAWFProfiles> &profile,
                      const std::string &name,bool source,double horizontalWeight)
@@ -377,14 +379,18 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::ScalarDomain(
             result.minimumBudgetRatio=std::min(result.minimumBudgetRatio,profile->Reference().productionBudget/profile->Reference().minimumBudget);
             result.maximumBudgetRelativeDefect=std::max(result.maximumBudgetRelativeDefect,
                 std::abs(profile->Reference().budgetResidual)/std::max(1e-300,profile->Reference().productionBudget));
-            const auto rows=NormalizationRows(p,*profile);int i=0;
+            const double scale=m_mapping.At(p).scale;
             for(const auto &q:profile->Quadrature())
-                if(!check(name,rows[i++],K(),false,result.effectiveState,0,false,
+            {
+                auto point=p;point[2]=q.r/scale;
+                const auto row=EvaluationRow(K(),fields[K()]->LocateElement(point),point);
+                if(!check(name,*row,K(),false,result.effectiveState,0,false,
                     source?horizontalWeight*q.weight*q.jacobian:0.))return false;
+            }
             if(AcceptedAWF())for(double top:{.01,.1,m_parameters.geometry.height})if(top<=m_parameters.geometry.height)
                 for(const auto &q:profile->IntegrationQuadrature(top,{.01,.1}))
                 {auto point=p;point[2]=q.r/m_mapping.At(p).scale;
-                 if(!check("constitutive_budget_reporting_source_ray",Point(K(),point),K(),false,result.effectiveState))return false;}
+                 if(!check("constitutive_budget_reporting_source_ray",*EvaluationRow(K(),fields[K()]->LocateElement(point),point),K(),false,result.effectiveState))return false;}
             pending.push_back({p,profile,source});return true;
         };
         // Check every physical k BEFORE calling WallNormalization or a
@@ -429,15 +435,19 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::ScalarDomain(
                     std::string reason;
                     const auto active=ProspectiveActiveProfile(result.effectiveState,p,reason);
                     ++result.counts["prospective_branch_"+reason];
-                    if(active)for(const auto &q:NormalizationRows(p,*active))
-                        if(!check("constitutive_prospective_active_normalization_ray",q,K(),false,
-                                  result.effectiveState))return result;
+                    if(active)for(const auto &q:active->Quadrature())
+                    {auto point=p;point[2]=q.r/m_mapping.At(p).scale;
+                     if(!check("constitutive_prospective_active_normalization_ray",
+                         *EvaluationRow(K(),fields[K()]->LocateElement(point),point),K(),false,result.effectiveState))return result;}
                 }
             }
         }
-        if(kInventoryOnly){result.phase="k_inventory_complete";result.admissible=true;return result;}
-        result.phase="normalization_and_dependent_trace";
-        for(const auto &p:pending)if(m_cappedDestruction)
+        result.phase="k_inventory_complete";result.admissible=true;
+        StoreDomain(state,time,data,true,additionalAnchors,result);
+        }
+        if(kInventoryOnly)return result;
+        result.admissible=false;result.phase="normalization_and_dependent_trace";
+        for(const auto &p:result.pendingProfiles)if(m_cappedDestruction)
         {
             const auto n=WallNormalization(result.effectiveState,p.anchor,*p.profile);
             result.minimumB=std::min(result.minimumB,n.b);result.minimumLambda=std::min(result.minimumLambda,n.lambda);
@@ -931,22 +941,17 @@ bool RANSWallEvolutionPatch::RestrictedInner(const ScalarObservation &p) const
 
 RANSWallGlobalPoint RANSWallEvolutionPatch::RestrictedGradientRow(const ScalarObservation &p) const
 {
-    return ResolveObservation(p).velocity;
+    return *ResolveObservation(p).velocity;
 }
 
 RANSWallGlobalPoint RANSWallEvolutionPatch::GeometryPoint(int block,int geometry,
     const RANSWallCoordinate &coordinate) const
 {
-    for(int e=0;e<fields[block]->Elements().size();++e)
-        if(fields[block]->Elements()[e].geometry==geometry)
-        {
-            const auto &element=fields[block]->Elements()[e];
-            for(int a=0;a<3;++a)if(m_dimension==3 || a!=1)
-                Require(coordinate[a]>=element.lower[a]-1e-11 && coordinate[a]<=element.upper[a]+1e-11,
-                    "observation coordinate is outside its recorded native element");
-            return Transform(fields[block]->ElementPoint(e,coordinate));
-        }
-    throw std::runtime_error("observation geometry absent from requested native field");
+    const int e=GeometryElement(block,geometry);const auto &element=fields[block]->Elements()[e];
+    for(int a=0;a<3;++a)if(m_dimension==3 || a!=1)
+        Require(coordinate[a]>=element.lower[a]-1e-11 && coordinate[a]<=element.upper[a]+1e-11,
+            "observation coordinate is outside its recorded native element");
+    return *EvaluationRow(block,e,coordinate);
 }
 
 RANSWallEvolutionPatch::ObservationProvenance RANSWallEvolutionPatch::ResolveObservation(
@@ -957,8 +962,11 @@ RANSWallEvolutionPatch::ObservationProvenance RANSWallEvolutionPatch::ResolveObs
     // nominal coordinate; the mean itself remains an exact separate row.
     Require(p.geometry>=0 || (p.functional && p.functional->columnAverage),
         "point observation lost its native geometry provenance");
-    const auto v=p.geometry>=0?GeometryPoint(0,p.geometry,p.coordinate):Point(0,p.coordinate,p.side);
-    const auto &element=fields[0]->Elements().at(v.element);
+    const auto v=EvaluationRow(0,p.geometry>=0?GeometryElement(0,p.geometry):fields[0]->LocateElement(p.coordinate,p.side),p.coordinate);
+    const auto &element=fields[0]->Elements().at(v->element);
+    for(int a=0;a<3;++a)if(m_dimension==3 || a!=1)
+        Require(p.coordinate[a]>=element.lower[a]-1e-11 && p.coordinate[a]<=element.upper[a]+1e-11,
+            "observation coordinate is outside its recorded native element");
     const double H=m_parameters.geometry.height;
     const bool inner=element.upper[2]<=H+1e-11;
     Require(inner || element.lower[2]>=H-1e-11,"constitutive element crosses the fitted wall interface");
@@ -2105,6 +2113,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
     const Vector &state,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data,bool rangesOnly) const
 {
     RANSWallTiming::Scope timing("audit.complete");
+    EvaluationScope evaluation(*this,data,time);
     const auto domain=ScalarDomain(state,time,data,true);Diagnostic audit;
     if(AcceptedAWF())
     {
@@ -2128,10 +2137,10 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
     {
         if(p.block!=K() && !p.dependentTrace)continue;
         const double r=Distance(p.coordinate);const auto provenance=ResolveObservation(p);
-        const bool inner=provenance.inner;const auto &row=provenance.velocity;
+        const bool inner=provenance.inner;const auto &row=*provenance.velocity;
         RANSTensor G{};
         for(int a=0;a<m_dimension;++a)G[PhysicalAxis(a)]=row.Gradient(domain.effectiveState,offset[a]);
-        const double k=GeometryPoint(K(),row.geometry,p.coordinate).Value(domain.effectiveState,offset[K()]);
+        const double k=EvaluationRow(K(),GeometryElement(K(),row.geometry),p.coordinate)->Value(domain.effectiveState,offset[K()]);
         if(inner)
         {
             const auto profile=StateProfile(domain.effectiveState,p.coordinate,time,data);
@@ -2141,7 +2150,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
                 innerProvenance={double(row.geometry),double(row.element),double(provenance.radialSide),double(p.block)};}
             continue;
         }
-        const double epsilon=p.dependentTrace?p.value:GeometryPoint(Epsilon(),row.geometry,p.coordinate).Value(domain.effectiveState,offset[Epsilon()]);
+        const double epsilon=p.dependentTrace?p.value:EvaluationRow(Epsilon(),GeometryElement(Epsilon(),row.geometry),p.coordinate)->Value(domain.effectiveState,offset[Epsilon()]);
         const auto law=OuterClosure(k,epsilon,G,p.coordinate);const double cov=J::Eigenvalues(law.reynoldsStress)[0];
         if(cov<outerCov){outerCov=cov;outerPoint={p.coordinate[0],p.coordinate[1],p.coordinate[2],k,epsilon,cov};
             outerProvenance={double(row.geometry),double(row.element),double(provenance.radialSide),double(p.block)};}

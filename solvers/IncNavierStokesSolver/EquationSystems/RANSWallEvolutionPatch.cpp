@@ -104,7 +104,7 @@ RANSWallGlobalPoint RANSWallEvolutionPatch::Transform(RANSWallGlobalPoint q) con
     q.weight*=g.determinant;return q;
 }
 RANSWallGlobalPoint RANSWallEvolutionPatch::Point(int block,const RANSWallCoordinate &p,int side) const
-{return Transform(fields[block]->Point(p,side));}
+{return m_evaluation?*EvaluationRow(block,fields[block]->LocateElement(p,side),p):Transform(fields[block]->Point(p,side));}
 std::vector<RANSWallGlobalPoint> RANSWallEvolutionPatch::Quadrature(int block,int order) const
 {
     if(!order && Mapped())order=std::max(m_parameters.normalOrder,m_parameters.tangentialOrder);
@@ -114,6 +114,14 @@ std::vector<RANSWallEvolutionPatch::FacePoint> RANSWallEvolutionPatch::Surface(i
 {
     Require((axis==0 || axis==2 || (m_dimension==3 && axis==1)) && (side==-1 || side==1),"invalid chart face");
     if(!order)order=std::max(m_parameters.normalOrder,m_parameters.tangentialOrder);
+    const auto key=std::make_tuple(block,axis,position,side,order);
+    // Only exact native faces enter the lifetime catalog; moving surfaces do not.
+    bool fixed=false;if(m_evaluationReuse && order<=64)for(const auto &e:fields[block]->Elements())
+        if(position==(side<0?e.lower[axis]:e.upper[axis])){fixed=true;break;}
+    if(fixed){const auto old=m_surfaceCatalog.find(key);if(old!=m_surfaceCatalog.end() &&
+        (position!=0. || old->second.empty() || std::signbit(position)==std::signbit(old->second.front().test.coordinate[axis])))
+        {++m_evaluationWork.surfaceHits;return old->second;}}
+    ++m_evaluationWork.surfaceBuilds;
     const auto rule=LibUtilities::PointsManager()[LibUtilities::PointsKey(order,LibUtilities::eGaussGaussLegendre)];
     const auto z=rule->GetZ(),w=rule->GetW();std::vector<int> free;
     for(int a=0;a<3;++a)if(a!=axis && (m_dimension==3 || a!=1))free.push_back(a);
@@ -130,6 +138,7 @@ std::vector<RANSWallEvolutionPatch::FacePoint> RANSWallEvolutionPatch::Surface(i
             result.push_back({Transform(fields[block]->ElementPoint(e,p)),m_mapping.Cofactor(p,axis,side,footSide),weight});
         }
     }
+    if(fixed)m_surfaceCatalog.emplace(key,result);
     return result;
 }
 double RANSWallEvolutionPatch::DependentEpsilon(const Vector &s,const RANSWallCoordinate &p) const
@@ -238,6 +247,11 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     }
     session->LoadSolverInfo("RANSWallPimpleKBound",m_pimpleKBound,"Off");
     Require(m_pimpleKBound=="Off" || (PimpleSingleSweep() && m_pimpleKBound=="MassProjection"),"invalid PIMPLE k-bound mode");
+    std::string reuse;session->LoadSolverInfo("RANSWallEvaluationReuse",reuse,"Off");
+    Require(reuse=="Off" || reuse=="ExactStepV1","unknown exact evaluation reuse policy");
+    m_evaluationReuse=reuse=="ExactStepV1";
+    Require(!m_evaluationReuse || (m_dimension==2 && !Mapped() && PimpleSingleSweep()),
+        "ExactStepV1 is restricted to the serial flat2D one-sweep pilot");
     session->LoadSolverInfo("RANSWallPimpleKInventory",m_pimpleKInventory,"LegacyV1");
     Require(m_pimpleKInventory=="LegacyV1" || (PimpleKBoundEnabled() &&
         (m_pimpleKInventory=="ConstitutiveV2" || m_pimpleKInventory=="ConstitutiveV3" || (AcceptedAWF() && m_pimpleKInventory=="AcceptedBudgetV1"))),"invalid PIMPLE k inventory policy");
@@ -525,8 +539,7 @@ std::shared_ptr<EquilibriumAWFProfiles> RANSWallEvolutionPatch::Profile(double k
     auto &entry=m_profileCache[{chart[0],chart[1],k}];
     const int active=weight>0?1:0;
     if(!entry[active]){options.requestedWeight=active;entry[active]=construct();}
-    if(weight==0 || weight==1)return entry[active];
-    return std::make_shared<EquilibriumAWFProfiles>(entry[1]->Reweighted(weight));
+    return EvaluationProfile(entry[active],weight);
 }
 void RANSWallEvolutionPatch::Broadcast(Vector &value) const {m_comm->Bcast(value,0);}
 RANSWallGlobalPoint RANSWallEvolutionPatch::SampleKRow(const RANSWallCoordinate &point) const
@@ -753,13 +766,14 @@ std::map<int,double> RANSWallEvolutionPatch::FixedReferenceBoundary(const Vector
 }
 std::map<int,double> RANSWallEvolutionPatch::Constraints(const Vector &state,double time,const RANSWallEvolutionData &data) const
 {
-    RANSWallTiming::Scope timing("matching.constraints");
+    RANSWallTiming::Scope timing("matching.constraints");EvaluationScope evaluation(*this,data,time);
+    if(auto cached=CachedConstraints(state,time,data))return *cached;
     if(MatchingEnabled())
     {
         auto fixed=ExternalConstraints(time,data);auto s=ExternalLift(state,time,data);
         const auto trace=DissipationTrace(s,time,data);
         for(auto [id,value]:trace[0])fixed[offset[Epsilon()]+id]=value+trace[1].at(id);
-        return fixed;
+        StoreConstraints(state,time,data,fixed);return fixed;
     }
     auto fixed=ExternalConstraints(time,data);auto s=state;for(auto [row,value]:fixed)s[row]=value;
     const auto ep=fields[Epsilon()]->Boundary([&](const RANSWallCoordinate &p){const auto profile=Profile(SampleK(s,p),p);return WallDissipation(s,p,*profile);},
@@ -770,7 +784,7 @@ std::map<int,double> RANSWallEvolutionPatch::Constraints(const Vector &state,dou
         if(fixed.count(row))Require(std::abs(fixed[row]-value)<1e-9*std::max(1.,std::abs(value)),"incompatible epsilon corner data");
         fixed[row]=value;
     }
-    return fixed;
+    StoreConstraints(state,time,data,fixed);return fixed;
 }
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Lift(const Vector &state,double time,const RANSWallEvolutionData &data) const
 {
@@ -788,7 +802,9 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Lift(const Vector &state,
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Residual(const Vector &state,const Vector &history,double alpha,double time,
     const RANSWallEvolutionData &data,bool anchored,bool imposeConstraints,int region) const
 {
-    RANSWallTiming::Scope timing("residual");
+    RANSWallTiming::Scope timing("residual");EvaluationScope evaluation(*this,data,time);
+    if(auto cached=CachedResidual(state,history,alpha,time,data,anchored,imposeConstraints,region))
+    {Refresh(MatchingEnabled()?ExternalLift(state,time,data):state,time,&data);return *cached;}
     if(m_solveDiagnostics){m_solveResidualException.clear();m_solveInvalidContext.clear();}
     Require(state.size()==static_cast<size_t>(Size()) && history.size()==state.size() && alpha>=0,"invalid evolution stage state/history");
     const auto constraints=Constraints(state,time,data);auto s=MatchingEnabled()?ExternalLift(state,time,data):state;
@@ -874,7 +890,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Residual(const Vector &st
     }
     if(anchored && m_eta && region<0)for(int i=0;i<DifferentialSize();++i)r[i]-=m_eta*m_defect[i];
     if(imposeConstraints)for(auto [row,value]:constraints)r[row]=state[row]-value;
-    Maximum(r);return r;
+    Maximum(r);StoreResidual(state,history,alpha,time,data,anchored,imposeConstraints,region,r);return r;
 }
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Norms(const Vector &r,const std::map<int,double> &constraints,double us) const
 {
@@ -1472,6 +1488,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::ExplicitBody(const Vector
 }
 void RANSWallEvolutionPatch::SetReference(const Vector &ref,const RANSWallEvolutionData &data,double time,double eta)
 {
+    Require(!m_evaluation,"reference generation cannot change within an evaluation scope");
     Require(eta==0 || eta==1,"only fixed global eta=0 or eta=1 is supported");
     Require(!MatchingEnabled() || eta==0,"every upstream transition/terrain run requires eta=0");
     const auto raw=Residual(ref,ref,0,time,data,false);const auto norms=Norms(raw,Constraints(ref,time,data));

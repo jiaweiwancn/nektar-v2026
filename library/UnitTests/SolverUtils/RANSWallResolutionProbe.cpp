@@ -186,8 +186,80 @@ int main(int argc,char **argv)
         double us=0;serial->LoadParameter("RANSWallFrictionVelocity",us,.4);
         RANSWallEvolutionData data(2);Vector reference,formedHistory;std::string replayContext="null";
         const auto operation=packet.get<std::string>("operation","");
+        if(operation=="archived_report_stages")
+        {
+            // Older short runs retained only periodic checkpoints. This is a
+            // distinct read-only report/packet lineage contract, never a
+            // restart or a waiver of the exact-checkpoint spatial reader.
+            Require(patch.AcceptedAWF(),"archived native-report scope is accepted AWF");
+            const auto nativeFile=packet.get<std::string>("native_report");
+            Require(RANSWallR3::HashFile(nativeFile)==packet.get<std::string>("native_report_sha256"),"archived native report SHA256 differs");
+            Tree native,attempt;boost::property_tree::read_json(nativeFile,native);
+            const auto packetFile=packet.get<std::string>("archived_packet");
+            Require(RANSWallR3::HashFile(packetFile)==packet.get<std::string>("archived_packet_sha256"),"archived packet SHA256 differs");
+            boost::property_tree::read_json(packetFile,attempt);
+            Require(!native.get<std::string>("failure").empty(),"report bridge requires a terminal native report");
+            const auto &last=native.get_child("pimple_attempts").back().second;
+            Require(last.get<std::string>("k_snapshot_sha256")==packet.get<std::string>("archived_packet_sha256") &&
+                last.get<bool>("scheduled_complete"),"native report does not identify the completed attempted packet");
+            Require(RANSWallR3::HashFile(attempt.get<std::string>("matrix_file"))==attempt.get<std::string>("matrix_sha256"),"archived matrix SHA256 differs");
+            double dt,eta,dx,dy;serial->LoadParameter("TimeStep",dt);serial->LoadParameter("RANSWallEta",eta,0.);
+            serial->LoadParameter("RANSWallDirectionX",dx,1.);serial->LoadParameter("RANSWallDirectionY",dy,0.);
+            std::string mode,coordinates;serial->LoadSolverInfo("RANSWallReference",mode,"Neutral");serial->LoadSolverInfo("RANSWallFunctionCoordinates",coordinates,"Physical");
+            Require(mode=="Neutral" && eta==0,"archived report requires unforced native neutral data");
+            const auto signature=RANSWallPhysicsSignature(patch,serial,eta,true,us,{dx,dy},coordinates=="Chart");
+            Require(signature==native.get<std::string>("signature") && signature==packet.get<std::string>("native_signature"),"archived native-report physical signature differs");
+            const auto cpPath=packet.get<std::string>("native_checkpoint");
+            Require(RANSWallR3::HashFile(cpPath+"/State.bin")==packet.get<std::string>("checkpoint_sha256"),"parent native checkpoint SHA256 differs");
+            const auto cp=RANSWallTimeIntegration::ReadCheckpoint(cpPath,signature,1,dt,patch.Size(),patch.DifferentialSize());
+            const auto steps=native.get<std::size_t>("steps");const auto &states=native.get_child("accepted_states");
+            Require(!states.empty() && steps+1>=states.size(),"archived accepted-state lineage is incomplete");
+            const auto first=steps+1-states.size();Require(first<=cp.integration.steps && cp.integration.steps<=steps,"parent checkpoint is outside native report lineage");
+            auto parent=states.begin();std::advance(parent,cp.integration.steps-first);Vector parentState;
+            for(const auto &v:parent->second)parentState.push_back(v.second.get_value<double>());
+            Require(RANSWallR3::Hash(parentState)==RANSWallR3::Hash(cp.coupledState),"parent checkpoint differs from immutable native accepted-state lineage");
+            const auto committed=Read(attempt,"committed");Require(RANSWallR3::Hash(committed)==RANSWallR3::Hash(Read(native,"state")),"terminal native accepted state differs from packet committed state");
+            const double t=attempt.get<double>("time"),alpha=attempt.get<double>("alpha");
+            Require(std::abs(t-(native.get<double>("time")+dt))<1e-14 && std::abs(alpha-1/dt)<1e-10,"archived report attempted time/alpha differs");
+            Require(RANSWallR3::Hash(cp.fixedReference)==RANSWallR3::Hash(Read(attempt,"fixed_reference")),"packet fixed reference differs from parent checkpoint");
+            data.fixedBoundary=patch.FixedReferenceBoundary(cp.fixedReference);std::map<int,double> external;
+            for(const auto &item:attempt.get_child("fixed_external_coefficients"))
+            {auto it=item.second.begin();const int row=int(it->second.get_value<double>());++it;Require(external.emplace(row,it->second.get_value<double>()).second,"duplicate archived external row");}
+            Require(external==data.fixedBoundary,"archived report external data differ");data.fixedBoundary=external;
+            patch.RestoreReference(cp.fixedReference,cp.fixedDefect,cp.eta,data,0.);
+            auto snapshot=cp.integration;snapshot.steps=steps;snapshot.time=native.get<double>("time");
+            snapshot.state.assign(committed.begin(),committed.begin()+patch.DifferentialSize());snapshot.history.clear();
+            std::vector<std::string> historyHashes;
+            for(const auto &slot:native.get_child("native_history"))
+            {Vector values;for(const auto &v:slot.second)values.push_back(v.second.get_value<double>());snapshot.history.push_back(values);historyHashes.push_back(J::Quote(RANSWallR3::Hash(values)));}
+            snapshot.times=Read(native,"native_history_times");
+            Require(J::List(historyHashes)==packet.get<std::string>("native_history_hashes_json") &&
+                RANSWallR3::Hash(snapshot.times)==packet.get<std::string>("native_history_times_sha256"),"archived report native histories differ");
+            struct Captured {};
+            RANSWallTimeIntegration integration(1,dt,[&](const Vector &h,double callTime,double lambda)->Vector
+                {formedHistory=committed;std::copy(h.begin(),h.end(),formedHistory.begin());Require(std::abs(callTime-t)<1e-14 && std::abs(1/lambda-alpha)<1e-10,"report callback time differs");throw Captured{};},
+                [&](const Vector &v,double callTime){auto full=committed;std::copy(v.begin(),v.end(),full.begin());return patch.ExplicitBody(full,callTime,data);});
+            integration.Restore(snapshot);try{integration.Advance();}catch(const Captured&){}
+            Require(RANSWallR3::Hash(formedHistory)==RANSWallR3::Hash(Read(attempt,"history")),"archived report GLM history does not reproduce packet callback history");
+            const auto after=integration.Capture();Require(after.steps==snapshot.steps && after.time==snapshot.time &&
+                RANSWallR3::Hash(after.state)==RANSWallR3::Hash(snapshot.state) && RANSWallR3::Hash(after.times)==RANSWallR3::Hash(snapshot.times),"report history capture changed accepted state/time");
+            for(int slot=0;slot<snapshot.history.size();++slot)Require(RANSWallR3::Hash(after.history[slot])==RANSWallR3::Hash(snapshot.history[slot]),"report history capture changed native slots");
+            std::vector<RANSWallCoordinate> witnesses;
+            for(const auto &entry:packet.get_child("witnesses")){RANSWallCoordinate q{};int a=0;for(const auto &v:entry.second){Require(a<3,"report witness shape");q[a++]=v.second.get_value<double>();}Require(a==3,"report witness shape");witnesses.push_back(q);}
+            std::vector<std::pair<std::string,std::string>> diagnostics,audits;
+            for(const std::string name:{"committed","post_flow","pre_k","raw","corrected"})
+            {const auto values=Read(attempt,name);Require(values.size()==patch.Size() && RANSWallR3::Hash(values)==packet.get<std::string>("stage_hashes."+name),"archived report stage hash differs: "+name);
+                diagnostics.push_back({name,patch.ConstitutiveStateDiagnostic(values,t,data,witnesses)});audits.push_back({name,Maps(patch.CompleteRestrictedAudit(values,formedHistory,alpha,t,data))});}
+            Require(patch.InitializationWork()==Vector({0.,0.}),"report readback performed initialization lifting");
+            std::ofstream out(argv[3]);out<<J::Object({{"operation",J::Quote(operation)},{"audit_revision",J::Quote(patch.AuditRevision())},
+                {"parent_checkpoint_step",J::Number(cp.integration.steps)},{"last_native_accepted_step",J::Number(steps)},
+                {"lineage",J::Quote("immutable terminal native report accepted states, native GLM slots and callback packet; periodic parent checkpoint is not represented as the final checkpoint")},
+                {"diagnostics",J::Object(diagnostics)},{"complete_audits",J::Object(audits)},{"initialization_work",J::Numbers(patch.InitializationWork())},
+                {"native_history_sha256",J::List(historyHashes)},{"governing_solves","0"},{"physical_commits","0"},{"native_history_advanced","false"}})<<'\n';
+            Require(out.good(),"archived native-report diagnostic write failed");world->Finalise();return 0;
+        }
         if(operation=="interface_provenance")
-        {std::ofstream out(argv[3]);out<<patch.InterfaceProvenanceChecks()<<'\n';Require(out.good(),"interface fixture write failed");world->Finalise();return 0;}
+        {RANSWallEvolutionPatch::EvaluationScope evaluation(patch,data,0.);std::ofstream out(argv[3]);out<<patch.InterfaceProvenanceChecks()<<'\n';Require(out.good(),"interface fixture write failed");world->Finalise();return 0;}
         const bool archivedStages=operation=="archived_stages";
         Tree archived;
         if(archivedStages)
@@ -210,7 +282,7 @@ int main(int argc,char **argv)
             Require(RANSWallR3::HashFile(archived.get<std::string>("matrix_file"))==archived.get<std::string>("matrix_sha256"),"archived frozen transport matrix SHA256 differs");
         }
         const bool strictSpatialReadback=packet.get_optional<std::string>("native_checkpoint") &&
-            patch.AcceptedAWF() && (operation=="accepted_awf" || operation=="height_comparison" || operation=="selected_original_operator");
+            ((patch.AcceptedAWF() && (operation=="accepted_awf" || operation=="height_comparison" || operation=="selected_original_operator")) || operation=="evaluation_reuse_checks");
         if(packet.get_optional<std::string>("native_checkpoint"))
         {
             Require((operation=="k_bound" || operation=="branch_coverage" || archivedStages || strictSpatialReadback) && !packet.get<bool>("projection_only",false),
@@ -385,6 +457,9 @@ int main(int argc,char **argv)
         const bool historyMatch=std::memcmp(history.data(),reference.data(),history.size()*sizeof(double))==0;
         Require(strictSpatialReadback || archivedStages || !packet.get<bool>("require_history_h0",true) || historyMatch,"packet history differs from rebuilt native h0");
         const double time=packet.get<double>("time"),alpha=packet.get<double>("alpha");
+        if(operation=="evaluation_reuse_checks")
+        {std::ofstream out(argv[3]);out<<patch.EvaluationReuseChecks(state,history,time,data)<<'\n';Require(out.good(),"reuse verification write failed");world->Finalise();return 0;}
+        RANSWallEvolutionPatch::EvaluationScope evaluation(patch,data,time);
         if(archivedStages || operation=="selected_original_operator")
         {
             Require(patch.InitializationWork()==Vector({0.,0.}),"immutable diagnostic called initialization Lift");
@@ -401,6 +476,7 @@ int main(int argc,char **argv)
             else
             {
                 diagnostics.push_back({"selected_state",patch.ConstitutiveStateDiagnostic(state,time,data,witnesses)});
+                completeAudits.push_back({"selected_state",Maps(patch.CompleteRestrictedAudit(state,history,alpha,time,data))});
                 diagnostics.push_back({"operators",patch.CompareOuterOperators(state,time,data)});
                 const auto panels=packet.get_child_optional("reporting_breakpoints")?Read(packet,"reporting_breakpoints"):Vector{};
                 diagnostics.push_back({"physical",patch.HeightComparison(state,state,time,data,panels)});

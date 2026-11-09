@@ -263,6 +263,7 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
             m_integrator->Initialise(Vector(m_state.begin(),m_state.begin()+m_patch->DifferentialSize()),m_time);
         }
         m_historyReady=true;
+        RANSWallEvolutionPatch::EvaluationScope evaluation(*m_patch,m_data,m_time);
         if(m_patch->PimpleKBoundEnabled())
         {
             const auto bounded=m_patch->ApplyPimpleKBound(m_state,m_state,m_time,m_data);
@@ -302,6 +303,7 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
 RANSEquilibriumWallEvolution::Vector RANSEquilibriumWallEvolution::Implicit(const Vector &history,double time,double lambda)
 {
     RANSWallTiming::Scope timing("native.implicit");
+    RANSWallEvolutionPatch::EvaluationScope evaluation(*m_patch,m_implicitData,time);
     ++m_implicitCallbacks;
     auto fullHistory=m_state;std::copy(history.begin(),history.end(),fullHistory.begin());int iterations=0;
     Vector candidate;
@@ -888,6 +890,7 @@ void RANSEquilibriumWallEvolution::WriteReport() const
        <<",\"condensed\":"<<(m_condensed?"true":"false")<<",\"checkpoint\":"<<Quoted(m_lastCheckpoint)<<",\"signature\":"<<Quoted(m_signature);
     out<<",\"wall_formulation\":"<<m_patch->FormulationMetadata()<<",\"wall_policy\":"<<Quoted(m_patch->WallPolicyName())
        <<",\"audit_revision\":"<<Quoted(m_patch->AuditRevision())
+       <<",\"evaluation_reuse\":"<<m_patch->EvaluationReuseJSON()
        <<",\"inner_stress_model\":"<<Quoted(m_patch->InnerStressName())
        <<",\"nonlinear_policy\":"<<Quoted(m_patch->NonlinearPolicyName())
        <<",\"temporal_coupling\":"<<Quoted(m_patch->TemporalCouplingName())

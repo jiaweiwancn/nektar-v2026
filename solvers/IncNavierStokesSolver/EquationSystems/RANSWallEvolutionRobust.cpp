@@ -89,21 +89,23 @@ RANSCappedDestructionValues RANSWallEvolutionPatch::WallNormalization(const Vect
     const RANSWallCoordinate &p,const EquilibriumAWFProfiles &profile) const
 {
     Require(!AcceptedAWF(),"capped normalization is not part of CLSCalibratedBudgetAWF");
+    if(auto cached=CachedNormalization(s,p,profile))return *cached;
+    ++m_evaluationWork.normalizationComputes;
     RANSCappedDestructionInput input;input.sampledK=profile.K();
     // Every rank evaluates the complete ray. Ownership is applied only when
     // assembling its volume loads, never to the nonlocal normalization.
-    const auto rows=NormalizationRows(p,profile);
-    for(const auto &row:rows)
+    for(const auto &q:profile.Quadrature())
     {
-        const auto point=row.coordinate;
+        auto point=p;point[2]=q.r/m_mapping.At(p).scale;
+        const auto row=EvaluationRow(K(),fields[K()]->LocateElement(point),point);
         if(m_assertKCoverage)Require(m_coveredKLocations.count(point),
             "unprotected constitutive k evaluation: normalization ray");
-        const double k=row.Value(s,offset[K()]);input.k.push_back(k);
+        const double k=row->Value(s,offset[K()]);input.k.push_back(k);
         if(m_solveInvalidContext.empty() && (!std::isfinite(k) || k<0))
             m_solveInvalidContext=RANSWallSolveJson::Object({
                 {"operation",RANSWallSolveJson::Quote("complete_ray_capped_normalization")},
                 {"chart",RANSWallSolveJson::Numbers(point)},{"local_k",RANSWallSolveJson::Number(k)},
-                {"geometry",RANSWallSolveJson::Number(row.geometry)},
+                {"geometry",RANSWallSolveJson::Number(row->geometry)},
                 {"sampled_K",RANSWallSolveJson::Number(profile.K())},
                 {"ray_chart",RANSWallSolveJson::Numbers(p)}});
         Require(std::isfinite(k) && k>=0,"Capped destruction requires finite nonnegative transported k");
@@ -115,7 +117,8 @@ RANSCappedDestructionValues RANSWallEvolutionPatch::WallNormalization(const Vect
         input.preD.push_back(pre.dissipation-pre.redistribution);
         input.metricWeights.push_back(q.weight*q.jacobian);
     }
-    return EvaluateRANSCappedDestruction(input,m_destruction);
+    auto result=EvaluateRANSCappedDestruction(input,m_destruction);
+    StoreNormalization(s,p,profile,result);return result;
 }
 
 AWFProfileValues RANSWallEvolutionPatch::WallSource(const Vector &s,const RANSWallCoordinate &p,
