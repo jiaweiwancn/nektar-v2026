@@ -1,0 +1,22 @@
+{
+  "version": "AcceptedAWFFiniteHorizonTemporalV1",
+  "declared_date_Asia_Shanghai": "2026-11-09",
+  "declared_before_new_coarse_fine_execution": true,
+  "configuration": "H2 cutoff-v1 Regularized/Linear accepted budget AWF; identical spatial/physical data; native IMEX1 single sweep; corrected NativeElementSideV2 audit",
+  "dt": [0.00125, 0.000625, 0.0003125],
+  "horizon": 0.05,
+  "observation_times": [0.01, 0.02, 0.04, 0.05],
+  "expected_smooth_regime_order": 1,
+  "coherent_order_interval": [0.8, 1.2],
+  "coherent_late_observations": [0.02, 0.04, 0.05],
+  "near_zero_normalized_difference": 1e-11,
+  "middle_step_Richardson_error_maximum": {"u": 1e-4, "v": 1e-4, "k": 1e-4, "epsilon": 1e-3, "pressure": 1e-3},
+  "middle_step_relative_mean_traction_error_maximum": 1e-4,
+  "common_normalization": {"velocity": 0.4, "k": 0.5105080130598861, "epsilon": 0.07263583326186134, "pressure": 0.16, "volume": 24.0, "outer_epsilon_volume": 12.0},
+  "pressure_policy": "one common physical mean gauge over both regional pressure fields; retain their relative offset",
+  "accuracy_rationale": "Allocate <=0.01% of reference U/K scales and <=0.1% of epsilon/pressure scales to finite-horizon time error; traction allocation is 0.01% of reference .16. These are fixed output-accuracy budgets, below the observed roughly 0.1% field evolution and 0.265% traction/reference discrepancy of the cutoff-refined selected case. They are not rescaled by a nearly zero W or pressure field and do not certify spatial accuracy.",
+  "Richardson_policy": "Only for non-negligible coherent scaling. D_c=norm(q_2dt-q_dt), D_f=norm(q_dt-q_dt/2), p=log2(D_c/D_f), fine estimate=D_f/(2^p-1), middle estimate=2^p*D_f/(2^p-1). Otherwise report differences and an inconclusive order/error estimate.",
+  "classification": ["consistent expected order and within budget", "ordered but insufficient accuracy", "inconclusive", "rejected before common horizon"],
+  "separate_scientific_policy": "Existing AcceptedAWFExploratoryWindowsV1 steady-window thresholds remain unchanged; survival, small accepted increments and a splitting-identity residual are not temporal convergence.",
+  "limits": "Selected Regularized model, fixed spatial representation and finite horizon only; no qualification of faithful Original long-time evolution or accumulated T=5 error. No unconditional dt/4 run."
+}
