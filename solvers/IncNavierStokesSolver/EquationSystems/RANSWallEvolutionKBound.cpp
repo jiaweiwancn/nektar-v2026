@@ -351,6 +351,7 @@ RANSWallEvolutionPatch::KBoundResult RANSWallEvolutionPatch::ApplyPimpleKBound(
 std::string RANSWallEvolutionPatch::PimpleKRateBudget(const Vector &q,const Vector &history,
     double time,const RANSWallEvolutionData &data) const
 {
+    Require(!NewModels(),"CLS-specific scalar budget diagnostic unsupported for new models; use native residual groups");
     Require(ScalarDomain(q,time,data).admissible,"k-rate budget requires an admissible selected state");
     auto resolution=ResidualResolutionComponents(q,history,0.,time,data,false);
     // Components deliberately do not populate the independent native load.

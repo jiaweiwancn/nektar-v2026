@@ -193,6 +193,54 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
     const auto raw=Residual(s,history,alpha,time,data,false,false);
     const auto constraints=Constraints(s,time,data);
     result["coupled_norms"]=Norms(Residual(s,history,alpha,time,data),constraints,ustar);
+    if(NewModels())
+    {
+        // Partition the actual common-CG equations by basis support. A shared
+        // interface row is counted once; it is not a pointwise flux jump or
+        // an extra two-sided equation. No reference residual is subtracted.
+        const auto physical=Residual(s,history,alpha,time,data,false);
+        std::set<int> innerIds,outerIds;
+        for(const auto &q:Quadrature(K()))
+        {
+            auto &ids=q.coordinate[2]<m_parameters.geometry.height?innerIds:outerIds;
+            ids.insert(q.ids.begin(),q.ids.end());
+        }
+        Vector dual(3),largest(3),constantTest(3),count(3);
+        for(int group=0;group<3;++group)
+        {
+            std::vector<int> ids;Vector load;
+            for(int id=0;id<size[K()];++id)
+            {
+                const int kind=innerIds.count(id)&&outerIds.count(id)?2:innerIds.count(id)?0:1;
+                if(kind!=group || constraints.count(offset[K()]+id))continue;
+                ids.push_back(id);load.push_back(physical[offset[K()]+id]);
+                largest[group]=std::max(largest[group],std::abs(load.back()));
+                constantTest[group]+=m_constants[K()][id]*load.back();
+            }
+            count[group]=ids.size();
+            if(ids.empty())continue;
+            WallMatrix mass(ids.size(),Vector(ids.size()));
+            for(int i=0;i<ids.size();++i)for(int j=0;j<ids.size();++j)
+                mass[i][j]=m_mass[K()][ids[i]][ids[j]];
+            const auto inverse=RANSWallAlgebra::Factor(mass).Apply(load);
+            long double square=0;for(int i=0;i<load.size();++i)square+=(long double)load[i]*inverse[i];
+            dual[group]=std::sqrt(std::max(0.L,square))/(K0*ustar/m_parameters.geometry.height*std::sqrt(m_volumes[K()]));
+        }
+        result["native_k_inner_outer_shared_interface_dual"]=dual;
+        result["native_k_inner_outer_shared_interface_max_row"]=largest;
+        result["native_k_inner_outer_shared_interface_constant_test"]=constantTest;
+        result["native_k_inner_outer_shared_interface_row_counts"]=count;
+        double velocityJump=0,kJump=0;
+        for(const auto &f:Surface(0,2,m_parameters.geometry.height,1,8))
+        {
+            const auto &p=f.test.coordinate;
+            for(int a=0;a<m_dimension;++a)velocityJump=std::max(velocityJump,
+                std::abs(Point(a,p,-1).Value(s,offset[a])-Point(a,p,1).Value(s,offset[a])));
+            kJump=std::max(kJump,std::abs(Point(K(),p,-1).Value(s,offset[K()])-Point(K(),p,1).Value(s,offset[K()])));
+        }
+        double dependent=0;for(int id:m_traceIds)dependent=std::max(dependent,std::abs(physical[offset[Epsilon()]+id]));
+        result["common_velocity_k_dependent_epsilon_trace_defects"]={velocityJump,kJump,dependent};
+    }
     Vector balance(2*(m_dimension+1));
     for(int b=0;b<=K();++b)
     {
@@ -345,6 +393,7 @@ std::string LawJSON(const RANSClosureValues &c,double k,const RANSTensor &g,cons
 std::string RANSWallEvolutionPatch::ConstitutiveStateDiagnostic(const Vector &s,double time,
     const RANSWallEvolutionData &data,const std::vector<RANSWallCoordinate> &witnesses) const
 {
+    Require(!NewModels(),"CLS-specific diagnostic/action unsupported for A93/A95/E94E95; use native model-aware audits");
     namespace J=RANSWallSolveJson;Require(AcceptedAWF() && !Mapped() && m_dimension==2,"constitutive forensic scope is accepted AWF flat2D");
     const auto before=RANSWallR3::Hash(s);const auto domain=ScalarDomain(s,time,data,true);
     if(!domain.admissible)return J::Object({{"scalar_budget",ScalarDomainJSON(domain)}, {"covariance_evaluated","false"},{"state_sha256",J::Quote(before)}});

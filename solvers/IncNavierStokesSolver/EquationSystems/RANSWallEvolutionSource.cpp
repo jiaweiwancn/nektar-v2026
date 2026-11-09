@@ -14,6 +14,7 @@ namespace J=RANSWallSolveJson;
 std::string RANSWallEvolutionPatch::SourceBalanceDiagnostic(const Vector &s,double time,
     const RANSWallEvolutionData &data,const Vector &stations,const Vector &heights) const
 {
+    Require(!NewModels(),"CLS-specific diagnostic/action unsupported for A93/A95/E94E95; use native model-aware audits");
     Require(!AcceptedAWF(),"legacy chi/cap source diagnostic is unsupported for the accepted wall formulation; use accepted_awf readback");
     Require(Dimension()==2 && !Mapped(),"source diagnostic is restricted to the flat 2D pilot");
     const auto hash=RANSWallR3::Hash(s);const auto domain=ScalarDomain(s,time,data);

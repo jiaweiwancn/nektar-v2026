@@ -315,6 +315,7 @@ std::string RANSWallEvolutionPatch::PimpleContactDiagnostic(const Vector &s,doub
     const RANSWallEvolutionData &data,const Vector &steps,
     const std::vector<RANSWallCoordinate> &witnesses,bool exportMass,bool isolate) const
 {
+    Require(!NewModels(),"CLS-specific diagnostic/action unsupported for A93/A95/E94E95; use native model-aware audits");
     Require(PimpleSingleSweep() && ScalarDomain(s,time,data,false,false,witnesses).admissible,"contact diagnostic requires an admissible PIMPLE state");
     const auto hash=RANSWallR3::Hash(s);const auto ground=WallTraceR4(s);
     const auto worst=std::min_element(ground.begin(),ground.end(),[](const auto &a,const auto &b){return a.value<b.value;});

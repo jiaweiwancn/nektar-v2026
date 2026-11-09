@@ -508,6 +508,8 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
             "new models require one-sweep Original outer / Linear inner / Original source; nonlinear, regularized and bound-action routes unsupported");
         Require(AcceptedAWF()?transition=="Fixed":m_uniformEP,
             "new native EP model currently requires its UniformEPFlat plateau; accepted wall has no chi fade");
+        Require(m_actionPolicy=="Legacy" && m_pimpleBudgetTime<0 && !m_acceptedComparison && !m_heightComparison,
+            "CLS-specific action/budget/comparison routes unsupported for the new closures; use model-aware native audits");
     }
     if(SegregatedPicard() || PimpleSingleSweep())
         Require(m_dimension==2 && !Mapped() && (NewModels() || (((m_transitionEnabled && m_cappedDestruction) || (AcceptedAWF() && !m_cappedDestruction)) &&

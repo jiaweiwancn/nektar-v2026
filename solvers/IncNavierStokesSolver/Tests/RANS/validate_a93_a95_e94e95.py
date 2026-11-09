@@ -94,6 +94,8 @@ def closure_tests(p):
             c=p.closure(name,A,policy=policy)
             near([c['q'],c['kappa'],c['sigma']],[q,kap,sigma],'equilibrium_descriptor')
             near(c['production'],1.,'simple_shear_root')
+            near(np.array(c['R']).reshape(3,3),oracle(name,1.,1.,A)['R'],'complete_reference_covariance')
+            require(np.linalg.eigvalsh(np.array(c['R']).reshape(3,3))[0]>0,'positive_reference_covariance')
             near(kap*kap*q/sigma+c['eps_source'],0.,'outer_epsilon_balance')
             near(c['diffusion'],[c['nut'],c['nut'],c['nut']/sigma],'no_outer_molecular_diffusion')
             records.append(dict(model=name,policy=policy,q=q,kappa=kap,sigma=sigma))

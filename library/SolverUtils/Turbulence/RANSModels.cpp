@@ -369,6 +369,9 @@ RANSNeutralReference RANSNeutralReference::Resolve(RANSModel model,RANSKappaPoli
 std::string RANSNeutralReference::Signature() const
 {
     std::ostringstream s;s<<std::setprecision(17)<<RANSModelName(m_model)<<":OriginalHighRe-v1";
+    if(m_model==RANSModel::A93)s<<":Cmu=(2/3)/(1.25+eta+.9xi):Q=(3devS2-19devO2+15[O,S])/(1000+eta^3)";
+    else if(NewModel())s<<":A0="<<(m_model==RANSModel::A95?6.5:4.)<<":As=3lambdaMax(Sd)/norm(Sd):Q="
+        <<(m_model==RANSModel::A95?"2sqrt(1-9Cmu^2(s*tau)^2)[O,S]/(1+6sr*tau^2)":"0");
     s<<":q="<<m_q<<":kappa="<<m_kappa<<":policy="<<(m_policy==RANSKappaPolicy::Natural?"Natural":"Prescribed")
      <<":sigmaK="<<m_parameters.sigmaK<<":sigmaE="<<m_parameters.sigmaEpsilon
      <<":Ceps1="<<m_parameters.cEpsilon1<<":Ceps2="<<m_parameters.cEpsilon2

@@ -163,3 +163,25 @@ long-time stability, terrain/physical, 3D/MPI or temporal-order claim is made.
 The two unchanged combined-note executable listings pass on Linux: all interval/exact-sign certificates, and 873 wall assertions over 22 cases. The isolated baseline external build succeeds with explicit Nektar++_DIR=`/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake`, Release, `-fno-fast-math -ffp-contract=off -D_GLIBCXX_ASSERTIONS`, eight workers. Existing kernel oracle, accepted-AWF probe and profile-branch checks pass before numerical edits. The new Linux worktree has NTFS executable-bit differences only: `git -c core.filemode=false status --porcelain` is empty. No content is reset to hide these differences.
 
 Baseline native CLS control passes two serial steps at dt=0.000625, UniformEPFlat, diagnostic R2 guard, with its existing SaturatedR2/regularized controls unchanged. The private ELF/library snapshot and baseline.json are under `baseline/`. Numerical implementation edits began only after this result was observed.
+
+The independent production-kernel suite at `ff915d3` passes 1326 checks on Linux.
+Its first run identified a test classification error: a pure strain A95 state
+with tau=1.2/.7 lies outside the printed square-root domain. The corrected
+harness requires that rejection, instead of changing the closure. Both original
+and corrected reports remain in the Linux experiment. All stated adverse
+covariance/ellipticity/production and smooth-reference controls retain their
+prescribed mathematical signs.
+
+Native new-model audit schema reuses the established `accepted_awf_*` keys for
+model-aware scalar, budget and covariance checks, including EP wall cases. The
+`resolved_physics` and `wall_formulation` metadata identify the actual model;
+these keys do not select the accepted wall equations. New diagnostics partition
+the actual common-CG k equations into inner-only basis support, outer-only
+support and shared interface rows. A shared weak conservation row is counted
+once; reconstructed pointwise traction/flux jumps remain separate diagnostics.
+All three restricted dual norms use the full k volume and K0*u*/H scaling.
+The ordinary `coupled_norms` order in 2D is u, vertical velocity, k, outer total
+epsilon, inner continuity, outer continuity, pressure gauge, constraint maximum.
+CLS-specific nonlinear/source-forensic and counterfactual-regularization routes
+are explicitly rejected for the new closures; primary native audits use actual
+closure source outputs and complete 3D covariances.
