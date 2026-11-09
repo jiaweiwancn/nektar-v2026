@@ -352,13 +352,11 @@ std::string RANSWallEvolutionPatch::ConstitutiveStateDiagnostic(const Vector &s,
     auto evaluate=[&](const RANSWallGlobalPoint &v,bool inner,const std::string &family,bool retain,double epsilonOverride=std::numeric_limits<double>::quiet_NaN())
     {
         RANSTensor g{};for(int a=0;a<m_dimension;++a)g[PhysicalAxis(a)]=v.Gradient(s,offset[a]);
-        const double k=v.Value(s,offset[K()]);const auto profile=StateProfile(s,v.coordinate,time,data);
+        const double k=GeometryPoint(K(),v.geometry,v.coordinate).Value(s,offset[K()]);const auto profile=StateProfile(s,v.coordinate,time,data);
         RANSWallGlobalPoint e;
         if(!inner)
         {
-            e=Point(Epsilon(),v.coordinate,std::abs(v.coordinate[2]-m_parameters.geometry.height)<1e-11?1:0);
-            for(int j=0;j<fields[Epsilon()]->Elements().size();++j)
-                if(fields[Epsilon()]->Elements()[j].geometry==v.geometry){e=fields[Epsilon()]->ElementPoint(j,v.coordinate);break;}
+            e=GeometryPoint(Epsilon(),v.geometry,v.coordinate);
         }
         const double retainedEpsilon=inner?profile->Dissipation(Distance(v.coordinate)):e.Value(s,offset[Epsilon()]);
         const double epsilon=std::isfinite(epsilonOverride)?epsilonOverride:retainedEpsilon;
@@ -409,7 +407,8 @@ std::string RANSWallEvolutionPatch::ConstitutiveStateDiagnostic(const Vector &s,
     for(const auto &point:domain.observations)
     {
         if(point.block!=K() && !point.dependentTrace)continue;
-        evaluate(RestrictedGradientRow(point),RestrictedInner(point),point.inventory,false,
+        const auto provenance=ResolveObservation(point);
+        evaluate(provenance.velocity,provenance.inner,point.inventory,false,
             point.dependentTrace?point.value:std::numeric_limits<double>::quiet_NaN());
     }
     const auto nativeInner=minima[0],nativeOuter=minima[1];
@@ -422,7 +421,7 @@ std::string RANSWallEvolutionPatch::ConstitutiveStateDiagnostic(const Vector &s,
     }
     Require(before==RANSWallR3::Hash(s),"forensic tensor diagnostic changed selected coefficients");
     std::vector<std::pair<std::string,std::string>> inventory;for(auto [name,n]:counts)inventory.push_back({name,J::Number(n)});
-    return J::Object({{"state_sha256",J::Quote(before)},{"scalar_budget",ScalarDomainJSON(domain)},
+    return J::Object({{"audit_revision",J::Quote(AuditRevision())},{"state_sha256",J::Quote(before)},{"scalar_budget",ScalarDomainJSON(domain)},
         {"minimum_inner",nativeInner},{"minimum_outer",nativeOuter},
         {"minimum_with_explicit_neighbors_inner",minima[0]},{"minimum_with_explicit_neighbors_outer",minima[1]},
         {"minimum_same_state_Original_outer",minima[2]},{"minimum_same_state_Regularized_outer",minima[3]},{"one_sided_witnesses",J::List(neighbors)},
@@ -430,6 +429,64 @@ std::string RANSWallEvolutionPatch::ConstitutiveStateDiagnostic(const Vector &s,
         {"same_state_Regularized_definition",J::Quote("beta=.4; gamma=kappa*u_star*wall_distance; incoming reference strain; same diffusion and fields")},
         {"semantics",J::Quote("refreshed same-stage tensors; physical gradients on identified native elements; no averaging, lifting or acceptance waiver")},
         {"governing_solves","0"},{"physical_commits","0"},{"selected_state_unchanged","true"}});
+}
+
+std::string RANSWallEvolutionPatch::InterfaceProvenanceChecks() const
+{
+    namespace J=RANSWallSolveJson;
+    Require(AcceptedAWF() && !Mapped() && m_dimension==2,"fitted-interface fixture requires accepted flat2D");
+    const double H=m_parameters.geometry.height,K0=m_parameters.model.Q()*m_robustUstar*m_robustUstar;
+    std::vector<RANSWallEvolutionFunction> functions{
+        [H](const RANSWallCoordinate &p,double){return (p[0]<=-3?.01:.02)*(p[0]+3)+(p[2]<=H?.1*p[2]:.1*H+.3*(p[2]-H));},
+        [](const RANSWallCoordinate&,double){return 0.;},
+        [H,K0](const RANSWallCoordinate &p,double){return K0+(p[2]<=H?.01:.02)*(p[2]-H);},
+        [](const RANSWallCoordinate&,double){return .1;},
+        [](const RANSWallCoordinate&,double){return 0.;},
+        [](const RANSWallCoordinate&,double){return 0.;}};
+    const auto state=Project(functions,0.);const auto hash=RANSWallR3::Hash(state);
+    RANSWallEvolutionData data(2);data.fixedBoundary=FixedReferenceBoundary(state);
+    const auto domain=ScalarDomain(state,0.,data,true);
+    Require(domain.admissible,"interface fixture scalar domain: "+domain.failure);
+    int statics=0,dynamics=0,outer=0;double error=0;std::vector<std::string> rows;
+    InitialiseScalarLocations();
+    for(const auto &p:m_scalarLocations)if(p.inventory=="physical_sampled_K")
+    {ScalarObservation q;q.coordinate=p.row.coordinate;q.block=p.block;q.geometry=p.row.geometry;q.side=p.side;
+     const auto v=ResolveObservation(q);Require(q.side==-1 && v.inner,"static endpoint sampler is not H-minus");++statics;}
+    for(const auto &p:domain.observations)
+    {
+        if(p.inventory=="physical_sampled_K")
+        {const auto v=ResolveObservation(p);Require(p.side==-1 && v.inner,"dynamic endpoint sampler is not H-minus");++dynamics;}
+        if(p.inventory=="constitutive_matching_K")
+        {const auto v=ResolveObservation(p);Require(p.side==1 && !v.inner,"explicit H-plus matching observation lost");++outer;}
+    }
+    int neighbors=0,rejected=0;
+    for(int e=0;e<fields[0]->Elements().size();++e)
+    {
+        const auto &el=fields[0]->Elements()[e];
+        if(-3<el.lower[0]-1e-12 || -3>el.upper[0]+1e-12 || H<el.lower[2]-1e-12 || H>el.upper[2]+1e-12)continue;
+        const bool inner=el.upper[2]<=H+1e-12;
+        ScalarObservation q;q.coordinate={-3,0,H};q.block=K();q.geometry=el.geometry;q.side=inner?-1:1;
+        const auto provenance=ResolveObservation(q);const auto &v=provenance.velocity;
+        Require(v.element==e && v.geometry==el.geometry && provenance.inner==inner,"native one-sided identity changed");
+        const auto gradient=v.Gradient(state,offset[0]);
+        const double gx=el.upper[0]<=-3+1e-12?.01:.02,gz=inner?.1:.3;
+        const auto kr=GeometryPoint(K(),el.geometry,q.coordinate);
+        const double value=kr.Value(state,offset[K()]);
+        error=std::max({error,std::abs(gradient[0]-gx),std::abs(gradient[2]-gz),std::abs(value-K0),std::abs(v.Value(state)-.1*H)});
+        rows.push_back(J::Object({{"geometry",J::Number(v.geometry)},{"element",J::Number(v.element)},
+            {"side",J::Number(provenance.radialSide)},{"inner",J::Boolean(inner)},
+            {"gradient",J::Numbers(gradient)},{"k",J::Number(value)}}));
+        q.side=-q.side;try{ResolveObservation(q);}catch(const std::exception&){++rejected;}
+        ++neighbors;
+    }
+    Require(neighbors==4 && rejected==4 && statics>0 && dynamics>=statics && outer>0 && error<2e-10,
+        "fitted-interface polynomial/provenance fixture failed");
+    Require(hash==RANSWallR3::Hash(state) && InitializationWork()==Vector({0.,0.}),"interface fixture changed fields or called Lift");
+    return J::Object({{"audit_revision",J::Quote(AuditRevision())},{"passed","true"},
+        {"static_Hminus_samples",J::Number(statics)},{"dynamic_Hminus_samples",J::Number(dynamics)},
+        {"Hplus_matching_samples",J::Number(outer)},{"tangential_radial_neighbors",J::List(rows)},
+        {"incompatible_side_rejections",J::Number(rejected)},{"polynomial_error",J::Number(error)},
+        {"state_sha256",J::Quote(hash)},{"governing_solves","0"},{"physical_commits","0"},{"initialization_lift_calls","0"}});
 }
 
 std::string RANSWallEvolutionPatch::CompareOuterOperators(const Vector &s,double time,const RANSWallEvolutionData &data) const

@@ -297,7 +297,7 @@ void RANSWallEvolutionPatch::InitialiseScalarLocations() const
         p[2]=m_parameters.geometry.height;
         pair("physical_matching_transfer",Point(K(),p,1),false,1);
         p[2]=m_parameters.geometry.sampleHeight/scale;
-        add("physical_sampled_K",SampleKRow(p),K(),true);
+        add("physical_sampled_K",SampleKRow(p),K(),true,AcceptedAWF()?-1:0);
         if(m_transitionEnabled)for(double r:{m_sensorA,m_sensorB})
         {
             p[2]=r/scale;pair("physical_sensor_transfer",Point(K(),p),false);
@@ -316,6 +316,15 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::ScalarDomain(
     auto check=[&](const std::string &name,const RANSWallGlobalPoint &q,int block,bool strict,
                    const Vector &values,int side=0,bool dependent=false,double weight=0.)
     {
+        // Endpoint samplers and every native interface row carry their own
+        // element. Resolve radial provenance once; a zero selector must not
+        // turn an H-minus derivative into an outer constitutive observation.
+        if(!q.columnAverage && Same(Distance(q.coordinate),m_mapping.At(q.coordinate).height))
+        {
+            ScalarObservation provenance;provenance.coordinate=q.coordinate;
+            provenance.block=block;provenance.geometry=q.geometry;provenance.side=side;
+            side=ResolveObservation(provenance).radialSide;
+        }
         const double value=q.Value(values,offset[block]);
         if(ConstitutiveKInventory() && block==K())
         {if(q.columnAverage){auto a=q.coordinate;a[2]=0;m_coveredKFunctionals.insert(a);}else m_coveredKLocations.insert(q.coordinate);}
@@ -398,7 +407,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::ScalarDomain(
             {
                 const double scale=m_mapping.At(p).scale;
                 p[2]=m_parameters.geometry.sampleHeight/scale;
-                if(!check("physical_sampled_K",SampleKRow(p),K(),true,result.effectiveState))return result;
+                if(!check("physical_sampled_K",SampleKRow(p),K(),true,result.effectiveState,AcceptedAWF()?-1:0))return result;
                 p[2]=m_parameters.geometry.height;
                 if(!check("constitutive_matching_K",Point(K(),p,1),K(),true,result.effectiveState,1))return result;
                 if(m_transitionEnabled)for(double r:{m_sensorA,m_sensorB})
@@ -917,17 +926,46 @@ std::string RANSWallEvolutionPatch::WallTraceJSON(const Vector &state,bool &admi
 
 bool RANSWallEvolutionPatch::RestrictedInner(const ScalarObservation &p) const
 {
-    const double r=Distance(p.coordinate),H=m_mapping.At(p.coordinate).height;
-    return r<H-1e-11 || (Same(r,H) && p.side<0);
+    return ResolveObservation(p).inner;
 }
 
 RANSWallGlobalPoint RANSWallEvolutionPatch::RestrictedGradientRow(const ScalarObservation &p) const
 {
-    // Keep the one-sided native element gradient even at a shared endpoint.
-    for(int e=0;e<fields[0]->Elements().size();++e)
-        if(fields[0]->Elements()[e].geometry==p.geometry)
-            return Transform(fields[0]->ElementPoint(e,p.coordinate));
-    return Point(0,p.coordinate,p.side);
+    return ResolveObservation(p).velocity;
+}
+
+RANSWallGlobalPoint RANSWallEvolutionPatch::GeometryPoint(int block,int geometry,
+    const RANSWallCoordinate &coordinate) const
+{
+    for(int e=0;e<fields[block]->Elements().size();++e)
+        if(fields[block]->Elements()[e].geometry==geometry)
+        {
+            const auto &element=fields[block]->Elements()[e];
+            for(int a=0;a<3;++a)if(m_dimension==3 || a!=1)
+                Require(coordinate[a]>=element.lower[a]-1e-11 && coordinate[a]<=element.upper[a]+1e-11,
+                    "observation coordinate is outside its recorded native element");
+            return Transform(fields[block]->ElementPoint(e,coordinate));
+        }
+    throw std::runtime_error("observation geometry absent from requested native field");
+}
+
+RANSWallEvolutionPatch::ObservationProvenance RANSWallEvolutionPatch::ResolveObservation(
+    const ScalarObservation &p) const
+{
+    // A column functional has no single native element. Its pre-existing
+    // representative covariance query is explicitly resolved at the declared
+    // nominal coordinate; the mean itself remains an exact separate row.
+    Require(p.geometry>=0 || (p.functional && p.functional->columnAverage),
+        "point observation lost its native geometry provenance");
+    const auto v=p.geometry>=0?GeometryPoint(0,p.geometry,p.coordinate):Point(0,p.coordinate,p.side);
+    const auto &element=fields[0]->Elements().at(v.element);
+    const double H=m_parameters.geometry.height;
+    const bool inner=element.upper[2]<=H+1e-11;
+    Require(inner || element.lower[2]>=H-1e-11,"constitutive element crosses the fitted wall interface");
+    const bool atInterface=Same(Distance(p.coordinate),m_mapping.At(p.coordinate).height);
+    const int side=atInterface?(inner?-1:1):0;
+    Require(!atInterface || p.side==0 || p.side==side,"observation radial side disagrees with its native element");
+    return {v,inner,side};
 }
 
 double RANSWallEvolutionPatch::OuterBound::Action(const Vector &step,int offset) const
@@ -2085,26 +2123,28 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
         domain.minimumOuterEpsilon,domain.minimumSampledK,domain.minimumTraceEpsilon,domain.minimumB,domain.minimumLambda};
     const double K0=m_parameters.model.Q()*m_robustUstar*m_robustUstar;
     Vector outer{0,1e300,-1e300,1e300,-1e300,domain.minimumSampledK/K0,-1e300};
-    double innerCov=1e300,outerCov=1e300;Vector innerPoint,outerPoint,gradientPoint;
+    double innerCov=1e300,outerCov=1e300;Vector innerPoint,outerPoint,gradientPoint,innerProvenance,outerProvenance;
     for(const auto &p:domain.observations)
     {
         if(p.block!=K() && !p.dependentTrace)continue;
-        const double r=Distance(p.coordinate);const bool inner=RestrictedInner(p);
-        const auto row=RestrictedGradientRow(p);
+        const double r=Distance(p.coordinate);const auto provenance=ResolveObservation(p);
+        const bool inner=provenance.inner;const auto &row=provenance.velocity;
         RANSTensor G{};
         for(int a=0;a<m_dimension;++a)G[PhysicalAxis(a)]=row.Gradient(domain.effectiveState,offset[a]);
-        const double k=Point(K(),p.coordinate,p.side).Value(domain.effectiveState,offset[K()]);
+        const double k=GeometryPoint(K(),row.geometry,p.coordinate).Value(domain.effectiveState,offset[K()]);
         if(inner)
         {
             const auto profile=StateProfile(domain.effectiveState,p.coordinate,time,data);
             const double nt=profile->Original().EddyViscosity(r);const auto law=InnerStress(k,nt,G);
             const double cov=J::Eigenvalues(law.reynoldsStress)[0];
-            if(cov<innerCov){innerCov=cov;innerPoint={p.coordinate[0],p.coordinate[1],p.coordinate[2],k,profile->K(),nt,law.a,law.c,cov};}
+            if(cov<innerCov){innerCov=cov;innerPoint={p.coordinate[0],p.coordinate[1],p.coordinate[2],k,profile->K(),nt,law.a,law.c,cov};
+                innerProvenance={double(row.geometry),double(row.element),double(provenance.radialSide),double(p.block)};}
             continue;
         }
-        const double epsilon=p.dependentTrace?p.value:Point(Epsilon(),p.coordinate,Same(r,m_mapping.At(p.coordinate).height)?1:0).Value(domain.effectiveState,offset[Epsilon()]);
+        const double epsilon=p.dependentTrace?p.value:GeometryPoint(Epsilon(),row.geometry,p.coordinate).Value(domain.effectiveState,offset[Epsilon()]);
         const auto law=OuterClosure(k,epsilon,G,p.coordinate);const double cov=J::Eigenvalues(law.reynoldsStress)[0];
-        if(cov<outerCov){outerCov=cov;outerPoint={p.coordinate[0],p.coordinate[1],p.coordinate[2],k,epsilon,cov};}
+        if(cov<outerCov){outerCov=cov;outerPoint={p.coordinate[0],p.coordinate[1],p.coordinate[2],k,epsilon,cov};
+            outerProvenance={double(row.geometry),double(row.element),double(provenance.radialSide),double(p.block)};}
         const double g0=m_robustUstar/(m_parameters.model.Kappa()*r);
         const double e0=m_robustUstar*m_robustUstar*m_robustUstar/(m_parameters.model.Kappa()*r);
         for(int a=0;a<3;++a)for(int b=0;b<3;++b)
@@ -2127,6 +2167,8 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
     if(rangesOnly || GroundSafeguard() || PimpleSingleSweep())audit["r4_outer_gradient_witness"]=gradientPoint;
     audit["r2_outer_range"]=outer;audit["r2_covariance"]={innerCov,outerCov};
     audit["r2_inner_minimum_point"]=innerPoint;audit["r2_outer_minimum_point"]=outerPoint;
+    audit["native_inner_minimum_geometry_element_side_block"]=innerProvenance;
+    audit["native_outer_minimum_geometry_element_side_block"]=outerProvenance;
     if(AcceptedAWF())
     {
         audit.erase("r2_scalar_domain");audit.erase("robust_source");

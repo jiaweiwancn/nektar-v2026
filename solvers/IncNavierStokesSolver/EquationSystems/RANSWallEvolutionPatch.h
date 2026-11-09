@@ -138,6 +138,16 @@ public:
         bool strict=false,dependentTrace=false;
         std::shared_ptr<RANSWallGlobalPoint> functional;
     };
+    static const char *AuditRevision() { return "NativeElementSideV2"; }
+    struct ObservationProvenance
+    {
+        RANSWallGlobalPoint velocity;
+        bool inner=false;
+        int radialSide=0;
+    };
+    ObservationProvenance ResolveObservation(const ScalarObservation &point) const;
+    RANSWallGlobalPoint GeometryPoint(int block,int geometry,const RANSWallCoordinate &coordinate) const;
+    std::string InterfaceProvenanceChecks() const;
     struct ScalarDomainResult
     {
         bool admissible=false;

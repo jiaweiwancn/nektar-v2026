@@ -186,6 +186,8 @@ int main(int argc,char **argv)
         double us=0;serial->LoadParameter("RANSWallFrictionVelocity",us,.4);
         RANSWallEvolutionData data(2);Vector reference,formedHistory;std::string replayContext="null";
         const auto operation=packet.get<std::string>("operation","");
+        if(operation=="interface_provenance")
+        {std::ofstream out(argv[3]);out<<patch.InterfaceProvenanceChecks()<<'\n';Require(out.good(),"interface fixture write failed");world->Finalise();return 0;}
         const bool archivedStages=operation=="archived_stages";
         Tree archived;
         if(archivedStages)
@@ -388,11 +390,12 @@ int main(int argc,char **argv)
             Require(patch.InitializationWork()==Vector({0.,0.}),"immutable diagnostic called initialization Lift");
             std::vector<RANSWallCoordinate> witnesses;
             for(const auto &q:packet.get_child("witnesses")){RANSWallCoordinate point{};int axis=0;for(const auto &x:q.second){Require(axis<3,"witness shape differs");point[axis++]=x.second.get_value<double>();}Require(axis==3,"witness shape differs");witnesses.push_back(point);}
-            std::vector<std::pair<std::string,std::string>> diagnostics;
+            std::vector<std::pair<std::string,std::string>> diagnostics,completeAudits;
             if(archivedStages)for(const std::string name:{"committed","post_flow","pre_k","raw","corrected"})
             {
                 const auto values=Read(archived,name);const auto hash=RANSWallR3::Hash(values);
                 diagnostics.push_back({name,patch.ConstitutiveStateDiagnostic(values,time,data,witnesses)});
+                completeAudits.push_back({name,Maps(patch.CompleteRestrictedAudit(values,Read(archived,"history"),alpha,time,data))});
                 Require(hash==RANSWallR3::Hash(values),"archived stage coefficients changed");
             }
             else
@@ -411,7 +414,8 @@ int main(int argc,char **argv)
                 }
             }
             std::ofstream out(argv[3]);out<<J::Object({{"operation",J::Quote(operation)},
-                {"native_replay_context",replayContext},{"diagnostics",J::Object(diagnostics)},
+                {"native_replay_context",replayContext},{"audit_revision",J::Quote(patch.AuditRevision())},
+                {"diagnostics",J::Object(diagnostics)},{"complete_audits",J::Object(completeAudits)},
                 {"physical_time",J::Number(time)},{"governing_solves","0"},{"physical_commits","0"},
                 {"native_history_advanced","false"},{"initialization_work",J::Numbers(patch.InitializationWork())}})<<'\n';
             Require(out.good(),"immutable diagnostic write failed");world->Finalise();return 0;
