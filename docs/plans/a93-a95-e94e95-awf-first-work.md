@@ -39,8 +39,9 @@ from the model names. SHA-256:
 | accepted_awf_appendix_A93_A95_E94_E95.tex | 17c7d6a241ecf8f929c9232ef34e3a6f48823cae2c0b9357911a377d28768a40 |
 
 See `a93-a95-e94e95-awf-evidence/specifications.json` for source paths and sizes.
-The two `a93_a95_e94e95_note_*.py` scripts in the RANS test directory are exact
-extractions of the combined note's executable listings. They are mathematical
+The two `a93_a95_e94e95_note_*.py` scripts in the RANS test directory are
+extracted from the combined note's executable listings; only end-of-file
+whitespace is normalized. They are mathematical
 oracles, not evidence of a native solver implementation.
 
 ## Implementation contract
