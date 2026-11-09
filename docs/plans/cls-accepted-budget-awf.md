@@ -1,5 +1,12 @@
 # CLS-calibrated budget AWF: implementation and native evolution
 
+**20:49 steady check, 2026-11-09:** both H=.5 graded budget campaigns completed
+T=5 without correction in the assessed windows. Each passes its latest common
+half-unit window, but only one of three inspected windows qualifies. No one of
+the six campaigns yet meets the complete persistence screen. See the
+[steady-convergence assessment](cls-awf-steady-check.md) for spatial residuals,
+window changes, correction budgets and the separate reference-traction error.
+
 **Latest 2026-11-09 update:** the [corrected audit, exact reuse, temporal study
 and runtime handoffs](#audit-cache-temporal-update) supersede the earlier status
 snapshots below. The selected H2 run has been analyzed through T=2 and remains
