@@ -1,0 +1,2636 @@
+{
+  "schema": 1,
+  "tested_source": "1950dedf4e04a903a3e919b64bc3ce7a25c25358",
+  "ranks": 1,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "scope": "bounded serial flat2D native one-sweep; native polynomial reference is not a roundoff equilibrium",
+  "matrix_sha256": "267cbce807d5f4eaa81241882200a20c5534ed3c15d928b71febda9845c8ed62",
+  "cases": [
+    {
+      "model": "E94E95",
+      "kappa_policy": "Natural",
+      "wall": "EP",
+      "dt": 0.0001,
+      "accepted_steps": 16,
+      "time": 0.0016000000000000005,
+      "independent_analytical_reference": {
+        "q": 3.324506456314175,
+        "kappa": 0.41208747162475573,
+        "sigma_epsilon": 1.2,
+        "friction_velocity": 0.4,
+        "physical_nu": 1.5e-05,
+        "H": 2.0,
+        "roughness_input": 0.1,
+        "K": 0.5319210330102679,
+        "epsilon_H": 0.07765341633375111,
+        "velocity_H": 5.661338539787171,
+        "aerodynamic_z0": 0.005861970133606252
+      },
+      "bounded_integration_pass": true,
+      "checks": {
+        "unanchored": true,
+        "exactly_one_sweep": true,
+        "no_bound_correction": true,
+        "same_state_sources": true,
+        "compatible_stage_constraints": true,
+        "positive_covariance": true,
+        "independent_full_native_tensor_witness": true,
+        "independent_reference_pressure_offset": true
+      },
+      "failure": "",
+      "initial_native_spatial_residual": [
+        0.49048179359730704,
+        3.4520091337972475e-15,
+        0.019203175796434744,
+        0.00169986935128638,
+        2.3844177398204567e-16,
+        4.3370848468126894e-17,
+        0,
+        0
+      ],
+      "initial_k_inner_outer_shared_interface": [
+        0.019172326576572953,
+        1.6170639774848756e-05,
+        0.00026231804861124545
+      ],
+      "final_stage_residual": [
+        0.00037567093556928956,
+        1.675106381609385e-05,
+        1.0542405299573613e-06,
+        2.4256183789693294e-07,
+        5.530367939965313e-20,
+        2.2778149799743105e-21,
+        1.3441684953986697e-20,
+        9.229801254896493e-07
+      ],
+      "final_k_inner_outer_shared_interface": [
+        1.054207055485559e-06,
+        7.585241903995086e-09,
+        3.3571050945326045e-08
+      ],
+      "drift_at_1_2_8_16": [
+        [
+          0.0001,
+          1,
+          0.0007278143689907262,
+          -0.0,
+          8.868832372083694e-06,
+          7.057684536288905e-08,
+          3.2319893557269696e-07,
+          3.31210780952646e-08,
+          0.0007278143689907262,
+          0.0002826175114165456
+        ],
+        [
+          0.0002,
+          2,
+          0.0007350694709550835,
+          -0.0,
+          1.7182977588604196e-05,
+          1.414337337463924e-07,
+          6.198228540247579e-07,
+          6.872948595803837e-08,
+          0.0007350694709550835,
+          0.00028367931606216896
+        ],
+        [
+          0.0008000000000000001,
+          8,
+          0.0007147469406197716,
+          -0.0,
+          6.023526962113646e-05,
+          5.596655432059867e-07,
+          2.233542795833759e-06,
+          2.9131096897629584e-07,
+          0.0007147469406197716,
+          0.00027794354802621496
+        ],
+        [
+          0.0016000000000000005,
+          16,
+          0.0006868023579031276,
+          -0.0,
+          0.00010643433921397415,
+          1.09859530852855e-06,
+          4.457382636223997e-06,
+          5.996529515470009e-07,
+          0.0006868023579031276,
+          0.00027019744549876696
+        ]
+      ],
+      "covariance_minima": [
+        0.18527770616220327,
+        0.19458871923132579
+      ],
+      "minimum_inner_k": 0.531862905141698,
+      "minimum_outer_k": 0.53191951284736,
+      "minimum_outer_epsilon": 0.03882670816687558,
+      "native_full_tensor_independent_relative_errors": {
+        "inner": 0.0,
+        "outer": 5.2179879894114136e-17
+      },
+      "native_raw_divergence_at_covariance_witness": {
+        "inner": 0.00105486745444321,
+        "outer": 6.156182137330291e-07
+      },
+      "native_inner_full_covariance": [
+        0.3545768439058795,
+        0,
+        -0.1693177257737321,
+        0,
+        0.35461402200684544,
+        0,
+        -0.1693177257737321,
+        0,
+        0.35461402200684544
+      ],
+      "native_outer_full_covariance": [
+        0.354613616213993,
+        0,
+        -0.16002520132701717,
+        0,
+        0.35461422490327166,
+        0,
+        -0.16002520132701717,
+        0,
+        0.35461422490327166
+      ],
+      "reference_Pi_inner_minus_outer": {
+        "native": 0.0,
+        "independent": 0.0
+      },
+      "bound_correction_budgets": {
+        "calls": 0,
+        "signed_integral": 0.0,
+        "absolute_integral": 0.0
+      },
+      "minimum_budget_ratio": 5.816030460723373,
+      "maximum_budget_relative_defect": 1.6076897455090394e-16,
+      "raw_divergence_relative_reference_shear": 0.00021836580730137976,
+      "pointwise_interface_diagnostic": [
+        2,
+        -1.2688317708349105e-06,
+        2.8918943195470345e-05,
+        0.0003054956488047193,
+        6.581248576592591e-05,
+        9.039915398299245e-06,
+        -7.5014223808131e-17,
+        1.2645647486231318e-06
+      ],
+      "common_velocity_k_dependent_epsilon_trace": [
+        8.881784197001252e-16,
+        0,
+        7.167255995242563e-08
+      ],
+      "max_refreshed_epsilon_trace_defect": 9.617375204811626e-08,
+      "report_sha256": "c519df8ada67fa9d58231d03ffe7a2bf1661c9abd158e62f662babaffc2fed5f",
+      "xml_sha256": "80c03f2a5a9cc7799f67c1058b3845b268410b81003746baeca8e2536c73421e",
+      "report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/matrix-qualified/E94E95-Natural-EP/case.evolution.json"
+    },
+    {
+      "model": "E94E95",
+      "kappa_policy": "Natural",
+      "wall": "Accepted",
+      "dt": 0.0001,
+      "accepted_steps": 16,
+      "time": 0.0016000000000000005,
+      "independent_analytical_reference": {
+        "q": 3.324506456314175,
+        "kappa": 0.41208747162475573,
+        "sigma_epsilon": 1.2,
+        "friction_velocity": 0.4,
+        "physical_nu": 1.5e-05,
+        "H": 2.0,
+        "roughness_input": 0.1,
+        "K": 0.5319210330102679,
+        "epsilon_H": 0.07765341633375111,
+        "velocity_H": 5.748534607381106,
+        "aerodynamic_z0": 0.0053583427014699475
+      },
+      "bounded_integration_pass": true,
+      "checks": {
+        "unanchored": true,
+        "exactly_one_sweep": true,
+        "no_bound_correction": true,
+        "same_state_sources": true,
+        "compatible_stage_constraints": true,
+        "positive_covariance": true,
+        "independent_full_native_tensor_witness": true,
+        "independent_reference_pressure_offset": true
+      },
+      "failure": "",
+      "initial_native_spatial_residual": [
+        0.490433921719345,
+        4.2655225557796354e-15,
+        0.3712921556014947,
+        0.001699869352317466,
+        2.3963433591505e-16,
+        4.337158290331966e-17,
+        0,
+        0
+      ],
+      "initial_k_inner_outer_shared_interface": [
+        0.37128904152610953,
+        1.617064013573249e-05,
+        0.00029062704282680494
+      ],
+      "final_stage_residual": [
+        0.000376742441275768,
+        1.6769075495230843e-05,
+        1.3204323983219425e-06,
+        2.7216005058320055e-07,
+        8.246385297006488e-20,
+        2.635049193748419e-21,
+        1.7618947047379486e-20,
+        1.3216920515893277e-06
+      ],
+      "final_k_inner_outer_shared_interface": [
+        1.3203854998411985e-06,
+        9.708992154925271e-09,
+        4.943768162298505e-08
+      ],
+      "drift_at_1_2_8_16": [
+        [
+          0.0001,
+          1,
+          0.0007277479495095425,
+          -0.0,
+          8.876999140682544e-06,
+          7.057317800627057e-08,
+          3.3294657996602077e-06,
+          3.312108105799552e-08,
+          0.0007277479495095425,
+          0.0002826636407858642
+        ],
+        [
+          0.0002,
+          2,
+          0.0007350888147296387,
+          -0.0,
+          1.7203429991055543e-05,
+          1.414375229629077e-07,
+          5.587075196749979e-06,
+          7.154162867364098e-08,
+          0.0007350888147296387,
+          0.00028379052117613124
+        ],
+        [
+          0.0008000000000000001,
+          8,
+          0.0007152092737716226,
+          -0.0,
+          6.0377534512850276e-05,
+          5.598845676574305e-07,
+          1.4395201641739288e-05,
+          3.187709277600999e-07,
+          0.0007152092737716226,
+          0.00027843107962247934
+        ],
+        [
+          0.0016000000000000005,
+          16,
+          0.0006876205896350707,
+          -0.0,
+          0.00010679550359734287,
+          1.0993769290323641e-06,
+          2.1823385679137896e-05,
+          6.479347707070897e-07,
+          0.0006876205896350707,
+          0.0002711383109066011
+        ]
+      ],
+      "covariance_minima": [
+        0.1890350342013575,
+        0.1945887195269503
+      ],
+      "minimum_inner_k": 0.5319188831158062,
+      "minimum_outer_k": 0.5319188831158062,
+      "minimum_outer_epsilon": 0.03882670816687558,
+      "native_full_tensor_independent_relative_errors": {
+        "inner": 0.0,
+        "outer": 5.2179879894114136e-17
+      },
+      "native_raw_divergence_at_covariance_witness": {
+        "inner": 0.00020548539427537408,
+        "outer": 6.160377261568626e-07
+      },
+      "native_inner_full_covariance": [
+        0.3550546531924426,
+        0,
+        -0.1660536655813355,
+        0,
+        0.3551227533550719,
+        0,
+        -0.1660536655813355,
+        0,
+        0.3551227533550719
+      ],
+      "native_outer_full_covariance": [
+        0.354613615937466,
+        0,
+        -0.16002520096226047,
+        0,
+        0.35461422504153517,
+        0,
+        -0.16002520096226047,
+        0,
+        0.35461422504153517
+      ],
+      "reference_Pi_inner_minus_outer": {
+        "native": 0.0,
+        "independent": 0.0
+      },
+      "bound_correction_budgets": {
+        "calls": 0,
+        "signed_integral": 0.0,
+        "absolute_integral": 0.0
+      },
+      "minimum_budget_ratio": 5.9053557268014245,
+      "maximum_budget_relative_defect": 0,
+      "raw_divergence_relative_reference_shear": 0.00021860786874723482,
+      "pointwise_interface_diagnostic": [
+        2,
+        -1.2810361616912901e-06,
+        2.9242071554598935e-05,
+        0.0003030559926822192,
+        6.634797559967875e-05,
+        1.504304099138188e-05,
+        -7.550067549148364e-17,
+        1.2764904302087671e-06
+      ],
+      "common_velocity_k_dependent_epsilon_trace": [
+        0,
+        0,
+        1.0263390314707577e-07
+      ],
+      "max_refreshed_epsilon_trace_defect": 1.3460272880669313e-07,
+      "report_sha256": "9c94a46b64f0f8eaff228f61b71f07e34576d0ed11efac21ade677ab21b0ec4b",
+      "xml_sha256": "92e8176d15f1ac978192aa6963eb88dba0e75e4e2d480ad560e5a252fac81ce9",
+      "report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/matrix-qualified/E94E95-Natural-Accepted/case.evolution.json"
+    },
+    {
+      "model": "E94E95",
+      "kappa_policy": "Prescribed",
+      "wall": "EP",
+      "dt": 0.0001,
+      "accepted_steps": 16,
+      "time": 0.0016000000000000005,
+      "independent_analytical_reference": {
+        "q": 3.324506456314175,
+        "kappa": 0.41,
+        "sigma_epsilon": 1.1878733446660716,
+        "friction_velocity": 0.4,
+        "physical_nu": 1.5e-05,
+        "H": 2.0,
+        "roughness_input": 0.1,
+        "K": 0.5319210330102679,
+        "epsilon_H": 0.0780487804878049,
+        "velocity_H": 5.661338539787171,
+        "aerodynamic_z0": 0.006037744145023552
+      },
+      "bounded_integration_pass": true,
+      "checks": {
+        "unanchored": true,
+        "exactly_one_sweep": true,
+        "no_bound_correction": true,
+        "same_state_sources": true,
+        "compatible_stage_constraints": true,
+        "positive_covariance": true,
+        "independent_full_native_tensor_witness": true,
+        "independent_reference_pressure_offset": true
+      },
+      "failure": "",
+      "initial_native_spatial_residual": [
+        0.49048179359214666,
+        2.8183831897517925e-15,
+        0.019203175711741224,
+        0.001708524059866474,
+        2.384426252583186e-16,
+        4.359254215474079e-17,
+        0,
+        0
+      ],
+      "initial_k_inner_outer_shared_interface": [
+        0.019172326577459403,
+        1.6252970848718932e-05,
+        0.00026231718486226295
+      ],
+      "final_stage_residual": [
+        0.0003743725929422183,
+        1.6658447679841415e-05,
+        1.054893829336802e-06,
+        2.438232297107291e-07,
+        6.40696906288116e-20,
+        4.2471160598363776e-21,
+        1.4020711382773816e-20,
+        9.235523723839686e-07
+      ],
+      "final_k_inner_outer_shared_interface": [
+        1.0548602845443207e-06,
+        7.609994856229182e-09,
+        3.3574771088066457e-08
+      ],
+      "drift_at_1_2_8_16": [
+        [
+          0.0001,
+          1,
+          0.0007278163032729219,
+          -0.0,
+          8.868836786475644e-06,
+          7.057636681278426e-08,
+          3.2319900019873437e-07,
+          3.32852912234404e-08,
+          0.0007278163032729219,
+          0.0002825970998913442
+        ],
+        [
+          0.0002,
+          2,
+          0.0007350697155704282,
+          -0.0,
+          1.7182988093169516e-05,
+          1.4143259231393193e-07,
+          6.198230483768576e-07,
+          6.903487709400681e-08,
+          0.0007350697155704282,
+          0.00028364111235960323
+        ],
+        [
+          0.0008000000000000001,
+          8,
+          0.0007147408355020286,
+          -0.0,
+          6.02353515777985e-05,
+          5.59654064535268e-07,
+          2.2335447884943027e-06,
+          2.922473999697679e-07,
+          0.0007147408355020286,
+          0.0002778343603298325
+        ],
+        [
+          0.0016000000000000005,
+          16,
+          0.0006867824070584441,
+          -0.0,
+          0.00010643460382152459,
+          1.0985488917970287e-06,
+          4.457388099479266e-06,
+          6.010107580128262e-07,
+          0.0006867824070584441,
+          0.00027000235638056187
+        ]
+      ],
+      "covariance_minima": [
+        0.18527770615657635,
+        0.19458871849125686
+      ],
+      "minimum_inner_k": 0.5318629051443688,
+      "minimum_outer_k": 0.5319195123331246,
+      "minimum_outer_epsilon": 0.03902439024390245,
+      "native_full_tensor_independent_relative_errors": {
+        "inner": 0.0,
+        "outer": 5.2179879894114136e-17
+      },
+      "native_raw_divergence_at_covariance_witness": {
+        "inner": 0.0010548676334021477,
+        "outer": 6.158995756554514e-07
+      },
+      "native_inner_full_covariance": [
+        0.3545768438995722,
+        0,
+        -0.16931772577620505,
+        0,
+        0.35461402200684544,
+        0,
+        -0.16931772577620505,
+        0,
+        0.35461402200684544
+      ],
+      "native_outer_full_covariance": [
+        0.35461361808505387,
+        0,
+        -0.16002520253485394,
+        0,
+        0.3546142239677412,
+        0,
+        -0.16002520253485394,
+        0,
+        0.3546142239677412
+      ],
+      "reference_Pi_inner_minus_outer": {
+        "native": 0.0,
+        "independent": 0.0
+      },
+      "bound_correction_budgets": {
+        "calls": 0,
+        "signed_integral": 0.0,
+        "absolute_integral": 0.0
+      },
+      "minimum_budget_ratio": 5.786568758071734,
+      "maximum_budget_relative_defect": 1.885816552534666e-16,
+      "raw_divergence_relative_reference_shear": 0.00021729717414118016,
+      "pointwise_interface_diagnostic": [
+        2,
+        -1.268255148140519e-06,
+        2.8827142149165963e-05,
+        0.0003049281472239479,
+        6.559187139593137e-05,
+        9.00527475598921e-06,
+        -7.493707101803696e-17,
+        1.2640136397893434e-06
+      ],
+      "common_velocity_k_dependent_epsilon_trace": [
+        8.881784197001252e-16,
+        0,
+        7.208213638118782e-08
+      ],
+      "max_refreshed_epsilon_trace_defect": 9.666792085880584e-08,
+      "report_sha256": "0377716e7c531df2c19137a8b73c47e9fe8a2d75ea09287d57ad65bd546219e3",
+      "xml_sha256": "24a0c29f8b54902fd12d3f1384fa6357ff4b998c0cf49bc63ae7aa1d98e6b44f",
+      "report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/matrix-qualified/E94E95-Prescribed-EP/case.evolution.json"
+    },
+    {
+      "model": "E94E95",
+      "kappa_policy": "Prescribed",
+      "wall": "Accepted",
+      "dt": 0.0001,
+      "accepted_steps": 16,
+      "time": 0.0016000000000000005,
+      "independent_analytical_reference": {
+        "q": 3.324506456314175,
+        "kappa": 0.41,
+        "sigma_epsilon": 1.1878733446660716,
+        "friction_velocity": 0.4,
+        "physical_nu": 1.5e-05,
+        "H": 2.0,
+        "roughness_input": 0.1,
+        "K": 0.5319210330102679,
+        "epsilon_H": 0.0780487804878049,
+        "velocity_H": 5.777718760614357,
+        "aerodynamic_z0": 0.0053588035394439406
+      },
+      "bounded_integration_pass": true,
+      "checks": {
+        "unanchored": true,
+        "exactly_one_sweep": true,
+        "no_bound_correction": true,
+        "same_state_sources": true,
+        "compatible_stage_constraints": true,
+        "positive_covariance": true,
+        "independent_full_native_tensor_witness": true,
+        "independent_reference_pressure_offset": true
+      },
+      "failure": "",
+      "initial_native_spatial_residual": [
+        0.4904179051453982,
+        3.0271689168598473e-15,
+        0.373087726709329,
+        0.0017085240564545144,
+        2.406936528133046e-16,
+        4.359193688053063e-17,
+        0,
+        0
+      ],
+      "initial_k_inner_outer_shared_interface": [
+        0.3730845957037569,
+        1.6252971227645365e-05,
+        0.00029211048059421595
+      ],
+      "final_stage_residual": [
+        0.0003758342566470571,
+        1.668428931676386e-05,
+        1.335767826574205e-06,
+        2.7418729227162353e-07,
+        7.750231392584704e-20,
+        2.3910825976916254e-21,
+        2.0638156283198037e-20,
+        1.3303331598433703e-06
+      ],
+      "final_k_inner_outer_shared_interface": [
+        1.3357206975793049e-06,
+        9.778538773305032e-09,
+        5.0029051308673845e-08
+      ],
+      "drift_at_1_2_8_16": [
+        [
+          0.0001,
+          1,
+          0.0007277276111814814,
+          -0.0,
+          8.879692586734126e-06,
+          7.057145037885647e-08,
+          3.351920897541671e-06,
+          3.328529491093605e-08,
+          0.0007277276111814814,
+          0.0002826583110344315
+        ],
+        [
+          0.0002,
+          2,
+          0.000735095739638608,
+          -0.0,
+          1.721017813045782e-05,
+          1.4143745025426732e-07,
+          5.625360820224046e-06,
+          7.18937171715902e-08,
+          0.000735095739638608,
+          0.00028378515655362016
+        ],
+        [
+          0.0008000000000000001,
+          8,
+          0.0007153628175437503,
+          -0.0,
+          6.0424530698038794e-05,
+          5.599428640684098e-07,
+          1.4497833252818029e-05,
+          3.202061449062799e-07,
+          0.0007153628175437503,
+          0.00027845866683983447
+        ],
+        [
+          0.0016000000000000005,
+          16,
+          0.0006878861672266134,
+          -0.0,
+          0.00010691507255433731,
+          1.0995789882442898e-06,
+          2.198880253833694e-05,
+          6.502807888563585e-07,
+          0.0006878861672266134,
+          0.000271205046658874
+        ]
+      ],
+      "covariance_minima": [
+        0.18904055958432578,
+        0.19458871886631915
+      ],
+      "minimum_inner_k": 0.5319188705013793,
+      "minimum_outer_k": 0.5319188705013793,
+      "minimum_outer_epsilon": 0.03902439024390245,
+      "native_full_tensor_independent_relative_errors": {
+        "inner": 0.0,
+        "outer": 5.2179879894114136e-17
+      },
+      "native_raw_divergence_at_covariance_witness": {
+        "inner": 0.00020555461535113018,
+        "outer": 6.164541116178702e-07
+      },
+      "native_inner_full_covariance": [
+        0.355060255502399,
+        0,
+        -0.1660535814692867,
+        0,
+        0.355128033521057,
+        0,
+        -0.1660535814692867,
+        0,
+        0.355128033521057
+      ],
+      "native_outer_full_covariance": [
+        0.354613617721376,
+        0,
+        -0.1600252020688717,
+        0,
+        0.35461422414958016,
+        0,
+        -0.1600252020688717,
+        0,
+        0.35461422414958016
+      ],
+      "reference_Pi_inner_minus_outer": {
+        "native": 0.0,
+        "independent": 0.0
+      },
+      "bound_correction_budgets": {
+        "calls": 0,
+        "signed_integral": 0.0,
+        "absolute_integral": 0.0
+      },
+      "minimum_budget_ratio": 5.905185190719858,
+      "maximum_budget_relative_defect": 0,
+      "raw_divergence_relative_reference_shear": 0.00021761781205958876,
+      "pointwise_interface_diagnostic": [
+        2,
+        -1.2845311140877833e-06,
+        2.925404189076633e-05,
+        0.0003016730250120857,
+        6.62984336412542e-05,
+        1.5067157781075848e-05,
+        -7.581558645940502e-17,
+        1.2799205861852945e-06
+      ],
+      "common_velocity_k_dependent_epsilon_trace": [
+        0,
+        0,
+        1.0383088076826308e-07
+      ],
+      "max_refreshed_epsilon_trace_defect": 1.3599591494606325e-07,
+      "report_sha256": "0ce4acecbcc3b54f9c69e9a5e1907b875f87ca2be97e3f53cd2e37ad59100fdd",
+      "xml_sha256": "d6d77229537e900eac2a2086189ca6552d66b7c365fa15e8c2c540fa1b72be7f",
+      "report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/matrix-qualified/E94E95-Prescribed-Accepted/case.evolution.json"
+    },
+    {
+      "model": "A95",
+      "kappa_policy": "Natural",
+      "wall": "EP",
+      "dt": 0.0001,
+      "accepted_steps": 16,
+      "time": 0.0016000000000000005,
+      "independent_analytical_reference": {
+        "q": 3.8220004260766363,
+        "kappa": 0.404060995298521,
+        "sigma_epsilon": 1.3,
+        "friction_velocity": 0.4,
+        "physical_nu": 1.5e-05,
+        "H": 2.0,
+        "roughness_input": 0.1,
+        "K": 0.6115200681722618,
+        "epsilon_H": 0.07919596390727679,
+        "velocity_H": 5.275606300625084,
+        "aerodynamic_z0": 0.009696215240313479
+      },
+      "bounded_integration_pass": true,
+      "checks": {
+        "unanchored": true,
+        "exactly_one_sweep": true,
+        "no_bound_correction": true,
+        "same_state_sources": true,
+        "compatible_stage_constraints": true,
+        "positive_covariance": true,
+        "independent_full_native_tensor_witness": true,
+        "independent_reference_pressure_offset": true
+      },
+      "failure": "",
+      "initial_native_spatial_residual": [
+        0.48956010346326045,
+        0.0002654553927402715,
+        0.01552635832867404,
+        0.0015737460415770348,
+        2.2143634764410987e-16,
+        4.4232846696464284e-17,
+        9.757819552369537e-17,
+        0
+      ],
+      "initial_k_inner_outer_shared_interface": [
+        0.015501254393607378,
+        1.5219986071310733e-05,
+        0.00021276820884957634
+      ],
+      "final_stage_residual": [
+        0.00034401194959219835,
+        0.00010123562744254047,
+        6.849674155172308e-07,
+        2.1732622235716903e-07,
+        5.0557069343341925e-20,
+        2.8664798923190468e-21,
+        1.0028870095490914e-16,
+        7.407433810047889e-07
+      ],
+      "final_k_inner_outer_shared_interface": [
+        6.849395625054142e-07,
+        5.884430049121635e-09,
+        2.135303020145997e-08
+      ],
+      "drift_at_1_2_8_16": [
+        [
+          0.0001,
+          1,
+          0.0007282746328549238,
+          -0.0,
+          8.816744530945905e-06,
+          7.07667829395551e-08,
+          2.600958744745836e-07,
+          3.076973838418313e-08,
+          0.0007282746328549238,
+          0.00028192385873754847
+        ],
+        [
+          0.0002,
+          2,
+          0.0007348879265771804,
+          -0.0,
+          1.7062419584804737e-05,
+          1.4171409409888704e-07,
+          4.985021170808879e-07,
+          6.320235519195742e-08,
+          0.0007348879265771804,
+          0.00028299982552203276
+        ],
+        [
+          0.0008000000000000001,
+          8,
+          0.0007123097867710773,
+          -0.0,
+          5.949791924221295e-05,
+          5.603158148799292e-07,
+          1.8040710881104969e-06,
+          2.614727275976566e-07,
+          0.0007123097867710773,
+          0.000278675023534339
+        ],
+        [
+          0.0016000000000000005,
+          16,
+          0.0006827309682052753,
+          -0.0,
+          0.00010464242115021097,
+          1.1031326853107374e-06,
+          3.6211337025236413e-06,
+          5.256455279032984e-07,
+          0.0006827309682052753,
+          0.0002746167211969781
+        ]
+      ],
+      "covariance_minima": [
+        0.23834115978310152,
+        0.17727060362704128
+      ],
+      "minimum_inner_k": 0.611465986641931,
+      "minimum_outer_k": 0.611518656596215,
+      "minimum_outer_epsilon": 0.039597981953638395,
+      "native_full_tensor_independent_relative_errors": {
+        "inner": 0.0,
+        "outer": 1.8155136395497862e-16
+      },
+      "native_raw_divergence_at_covariance_witness": {
+        "inner": 0.0010431909287595732,
+        "outer": 6.824882106241635e-07
+      },
+      "native_inner_full_covariance": [
+        0.40764061147203784,
+        0,
+        -0.16931916752899648,
+        0,
+        0.4076800454481746,
+        0,
+        -0.16931916752899648,
+        0,
+        0.4076800454481746
+      ],
+      "native_outer_full_covariance": [
+        0.5734461577830411,
+        0,
+        -0.1600313078753097,
+        0,
+        0.40768026601056817,
+        0,
+        -0.1600313078753097,
+        0,
+        0.24191371255091457
+      ],
+      "reference_Pi_inner_minus_outer": {
+        "native": -0.1657775908151359,
+        "independent": -0.16577759081513593
+      },
+      "bound_correction_budgets": {
+        "calls": 0,
+        "signed_integral": 0.0,
+        "absolute_integral": 0.0
+      },
+      "minimum_budget_ratio": 5.3152608610227245,
+      "maximum_budget_relative_defect": 8.578631157561017e-17,
+      "raw_divergence_relative_reference_shear": 0.00021002123290898524,
+      "pointwise_interface_diagnostic": [
+        2,
+        -0.33163924861314253,
+        3.6447234694830856e-05,
+        0.00033850346465028465,
+        0.0001074954027778241,
+        8.185931128303642e-06,
+        -6.826875781866317e-17,
+        -2.4458222202288946e-06
+      ],
+      "common_velocity_k_dependent_epsilon_trace": [
+        0,
+        0,
+        5.866388606660944e-08
+      ],
+      "max_refreshed_epsilon_trace_defect": 7.953841693348482e-08,
+      "report_sha256": "8c173b8ec2f2ac03fb892675038d1c0b28a7fc1f7650a2c6651356f0a2f301c3",
+      "xml_sha256": "ad8e3260e57ad642cefb8fd238657f24360470bd0c5abed26bd8ec7b533ad471",
+      "report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/matrix-qualified/A95-Natural-EP/case.evolution.json"
+    },
+    {
+      "model": "A95",
+      "kappa_policy": "Natural",
+      "wall": "Accepted",
+      "dt": 0.0001,
+      "accepted_steps": 16,
+      "time": 0.0016000000000000005,
+      "independent_analytical_reference": {
+        "q": 3.8220004260766363,
+        "kappa": 0.404060995298521,
+        "sigma_epsilon": 1.3,
+        "friction_velocity": 0.4,
+        "physical_nu": 1.5e-05,
+        "H": 2.0,
+        "roughness_input": 0.1,
+        "K": 0.6115200681722618,
+        "epsilon_H": 0.07919596390727679,
+        "velocity_H": 5.856369601962736,
+        "aerodynamic_z0": 0.005392861496996186
+      },
+      "bounded_integration_pass": true,
+      "checks": {
+        "unanchored": true,
+        "exactly_one_sweep": true,
+        "no_bound_correction": true,
+        "same_state_sources": true,
+        "compatible_stage_constraints": true,
+        "positive_covariance": true,
+        "independent_full_native_tensor_witness": true,
+        "independent_reference_pressure_offset": true
+      },
+      "failure": "",
+      "initial_native_spatial_residual": [
+        0.48924545630300237,
+        0.0002654553920526777,
+        0.3254990371043702,
+        0.0015737460440302478,
+        2.449444016205958e-16,
+        4.423310262637409e-17,
+        9.757819552369537e-17,
+        0
+      ],
+      "initial_k_inner_outer_shared_interface": [
+        0.32549623210017264,
+        1.5219986075862475e-05,
+        0.00025792968274040734
+      ],
+      "final_stage_residual": [
+        0.00035145567752815964,
+        0.00010193289316180492,
+        1.0431176482531295e-06,
+        2.432351855566138e-07,
+        3.8602283580620144e-20,
+        2.5851500860738704e-21,
+        1.6263032587282563e-17,
+        1.180937955146787e-06
+      ],
+      "final_k_inner_outer_shared_interface": [
+        1.0430789581747782e-06,
+        7.997420542935485e-09,
+        3.8978604126567065e-08
+      ],
+      "drift_at_1_2_8_16": [
+        [
+          0.0001,
+          1,
+          0.0007278474041322623,
+          -0.0,
+          8.873114235354172e-06,
+          7.074478743960955e-08,
+          2.958362613797866e-06,
+          3.0769746507489284e-08,
+          0.0007278474041322623,
+          0.00028225037253766657
+        ],
+        [
+          0.0002,
+          2,
+          0.0007350976170217016,
+          -0.0,
+          1.7203584504062827e-05,
+          1.4174635876623975e-07,
+          4.978504623449739e-06,
+          6.604141194660266e-08,
+          0.0007350976170217016,
+          0.00028371308125980986
+        ],
+        [
+          0.0008000000000000001,
+          8,
+          0.0007156696156455863,
+          -0.0,
+          6.0479018206103334e-05,
+          5.618071812742433e-07,
+          1.2902620549928469e-05,
+          2.9011645549510877e-07,
+          0.0007156696156455863,
+          0.0002816370061229729
+        ],
+        [
+          0.0016000000000000005,
+          16,
+          0.0006887464254404745,
+          -0.0,
+          0.0001071230042838876,
+          1.1083949975107994e-06,
+          1.961643959365377e-05,
+          5.788669879689138e-07,
+          0.0006887464254404745,
+          0.0002802566335321603
+        ]
+      ],
+      "covariance_minima": [
+        0.24212656909962577,
+        0.17727060401307687
+      ],
+      "minimum_inner_k": 0.6115178643417342,
+      "minimum_outer_k": 0.6115178643417342,
+      "minimum_outer_epsilon": 0.039597981953638395,
+      "native_full_tensor_independent_relative_errors": {
+        "inner": 0.0,
+        "outer": 4.538784098874461e-17
+      },
+      "native_raw_divergence_at_covariance_witness": {
+        "inner": 0.00020547588128638132,
+        "outer": 6.851756310283045e-07
+      },
+      "native_inner_full_covariance": [
+        0.4081459254089099,
+        0,
+        -0.16605273936716802,
+        0,
+        0.40821269823732004,
+        0,
+        -0.16605273936716802,
+        0,
+        0.40821269823732004
+      ],
+      "native_outer_full_covariance": [
+        0.5734461570898927,
+        0,
+        -0.16003130696245418,
+        0,
+        0.40768026687907244,
+        0,
+        -0.16003130696245418,
+        0,
+        0.24191371237555986
+      ],
+      "reference_Pi_inner_minus_outer": {
+        "native": -0.1657775908151359,
+        "independent": -0.16577759081513593
+      },
+      "bound_correction_budgets": {
+        "calls": 0,
+        "signed_integral": 0.0,
+        "absolute_integral": 0.0
+      },
+      "minimum_budget_ratio": 5.898709634200317,
+      "maximum_budget_relative_defect": 0,
+      "raw_divergence_relative_reference_shear": 0.00021163704086284846,
+      "pointwise_interface_diagnostic": [
+        2,
+        -0.3316395626715449,
+        3.833830151871915e-05,
+        0.00032144514240807644,
+        0.00011132094744858989,
+        1.5131521126821323e-05,
+        -7.72987676198269e-17,
+        -2.284200017030603e-06
+      ],
+      "common_velocity_k_dependent_epsilon_trace": [
+        8.881784197001252e-16,
+        0,
+        9.352551967253819e-08
+      ],
+      "max_refreshed_epsilon_trace_defect": 1.2205855139113544e-07,
+      "report_sha256": "00b3b646b4f3585a99edad11dda5144e08a563719fee64d45a3a72253e9b28ec",
+      "xml_sha256": "29ac13765e5c4fe97ff9053de5fc08b637a36ef3ca8c67984140f0e6fb065b42",
+      "report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/matrix-qualified/A95-Natural-Accepted/case.evolution.json"
+    },
+    {
+      "model": "A95",
+      "kappa_policy": "Prescribed",
+      "wall": "EP",
+      "dt": 0.0001,
+      "accepted_steps": 16,
+      "time": 0.0016000000000000005,
+      "independent_analytical_reference": {
+        "q": 3.8220004260766363,
+        "kappa": 0.41,
+        "sigma_epsilon": 1.3384963992155885,
+        "friction_velocity": 0.4,
+        "physical_nu": 1.5e-05,
+        "H": 2.0,
+        "roughness_input": 0.1,
+        "K": 0.6115200681722618,
+        "epsilon_H": 0.0780487804878049,
+        "velocity_H": 5.275606300625084,
+        "aerodynamic_z0": 0.00896569834999483
+      },
+      "bounded_integration_pass": true,
+      "checks": {
+        "unanchored": true,
+        "exactly_one_sweep": true,
+        "no_bound_correction": true,
+        "same_state_sources": true,
+        "compatible_stage_constraints": true,
+        "positive_covariance": true,
+        "independent_full_native_tensor_witness": true,
+        "independent_reference_pressure_offset": true
+      },
+      "failure": "",
+      "initial_native_spatial_residual": [
+        0.48956010348133705,
+        0.0002654553941170399,
+        0.015526358530637288,
+        0.001550949736389011,
+        2.214640172416721e-16,
+        4.359170058093776e-17,
+        9.757819552369537e-17,
+        0
+      ],
+      "initial_k_inner_outer_shared_interface": [
+        0.015501254393508225,
+        1.4999518879702295e-05,
+        0.00021277052192632763
+      ],
+      "final_stage_residual": [
+        0.00034768191577010755,
+        0.00010250270689095035,
+        6.837182040907596e-07,
+        2.1383777014700704e-07,
+        8.932167101141061e-20,
+        3.2907769626970672e-21,
+        4.607859233063393e-17,
+        7.393911513855673e-07
+      ],
+      "final_k_inner_outer_shared_interface": [
+        6.836906334075506e-07,
+        5.827654688057502e-09,
+        2.1351088428870948e-08
+      ],
+      "drift_at_1_2_8_16": [
+        [
+          0.0001,
+          1,
+          0.0007282690866543455,
+          -0.0,
+          8.816731860009593e-06,
+          7.076788288388416e-08,
+          2.6009572481767283e-07,
+          3.0334237182283116e-08,
+          0.0007282690866543455,
+          0.0002819818103680423
+        ],
+        [
+          0.0002,
+          2,
+          0.0007348869335583011,
+          -0.0,
+          1.70623883985431e-05,
+          1.4171658573419297e-07,
+          4.985016662897127e-07,
+          6.238118653542962e-08,
+          0.0007348869335583011,
+          0.00028311406287989
+        ],
+        [
+          0.0008000000000000001,
+          8,
+          0.0007123285399958259,
+          -0.0,
+          5.949765984165426e-05,
+          5.60368692698168e-07,
+          1.8040664660708762e-06,
+          2.588257480901221e-07,
+          0.0007123285399958259,
+          0.0002790483132378774
+        ],
+        [
+          0.0016000000000000005,
+          16,
+          0.000682796061948576,
+          -0.0,
+          0.00010464158162438451,
+          1.1034063065089352e-06,
+          3.6211210768321435e-06,
+          5.215087813023873e-07,
+          0.000682796061948576,
+          0.0002753274218295348
+        ]
+      ],
+      "covariance_minima": [
+        0.2383411598000386,
+        0.1772706038235886
+      ],
+      "minimum_inner_k": 0.6114659866356065,
+      "minimum_outer_k": 0.6115186579836637,
+      "minimum_outer_epsilon": 0.03902439024390245,
+      "native_full_tensor_independent_relative_errors": {
+        "inner": 0.0,
+        "outer": 9.077568197748931e-17
+      },
+      "native_raw_divergence_at_covariance_witness": {
+        "inner": 0.0010431904212477704,
+        "outer": 6.81495719684676e-07
+      },
+      "native_inner_full_covariance": [
+        0.4076406114912225,
+        0,
+        -0.16931916752165274,
+        0,
+        0.4076800454481746,
+        0,
+        -0.16931916752165274,
+        0,
+        0.4076800454481746
+      ],
+      "native_outer_full_covariance": [
+        0.5734461540559848,
+        0,
+        -0.1600313078429736,
+        0,
+        0.40768026892699494,
+        0,
+        -0.1600313078429736,
+        0,
+        0.24191371336154413
+      ],
+      "reference_Pi_inner_minus_outer": {
+        "native": -0.1657775908151359,
+        "independent": -0.16577759081513593
+      },
+      "bound_correction_budgets": {
+        "calls": 0,
+        "signed_integral": 0.0,
+        "absolute_integral": 0.0
+      },
+      "minimum_budget_ratio": 5.3933860936249935,
+      "maximum_budget_relative_defect": 9.682100637373228e-17,
+      "raw_divergence_relative_reference_shear": 0.00021296014556750092,
+      "pointwise_interface_diagnostic": [
+        2,
+        -0.33164026269488506,
+        3.682771024460339e-05,
+        0.00034036055047729276,
+        0.00010867238390016576,
+        8.275936077860693e-06,
+        -6.852799953135974e-17,
+        -2.458289534030109e-06
+      ],
+      "common_velocity_k_dependent_epsilon_trace": [
+        8.881784197001252e-16,
+        0,
+        5.770857766911747e-08
+      ],
+      "max_refreshed_epsilon_trace_defect": 7.837595093762586e-08,
+      "report_sha256": "5bd44690c2ba749e8aa6fa505f2c7b6145576c525a5cea8ae67f4df118944797",
+      "xml_sha256": "6b33efd9ea18b4fedff40fac73ca14b5cb0cd88d1202aaa50e8bbe4c93c00b98",
+      "report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/matrix-qualified/A95-Prescribed-EP/case.evolution.json"
+    },
+    {
+      "model": "A95",
+      "kappa_policy": "Prescribed",
+      "wall": "Accepted",
+      "dt": 0.0001,
+      "accepted_steps": 16,
+      "time": 0.0016000000000000005,
+      "independent_analytical_reference": {
+        "q": 3.8220004260766363,
+        "kappa": 0.41,
+        "sigma_epsilon": 1.3384963992155885,
+        "friction_velocity": 0.4,
+        "physical_nu": 1.5e-05,
+        "H": 2.0,
+        "roughness_input": 0.1,
+        "K": 0.6115200681722618,
+        "epsilon_H": 0.0780487804878049,
+        "velocity_H": 5.771779803076774,
+        "aerodynamic_z0": 0.005391524380679066
+      },
+      "bounded_integration_pass": true,
+      "checks": {
+        "unanchored": true,
+        "exactly_one_sweep": true,
+        "no_bound_correction": true,
+        "same_state_sources": true,
+        "compatible_stage_constraints": true,
+        "positive_covariance": true,
+        "independent_full_native_tensor_witness": true,
+        "independent_reference_pressure_offset": true
+      },
+      "failure": "",
+      "initial_native_spatial_residual": [
+        0.4892912145469681,
+        0.00026545539365469456,
+        0.3210296693416522,
+        0.0015509497357740437,
+        2.4067110378596883e-16,
+        4.3592148484384985e-17,
+        9.757819552369537e-17,
+        0
+      ],
+      "initial_k_inner_outer_shared_interface": [
+        0.32102690779841203,
+        1.4999518854564946e-05,
+        0.0002541840335771205
+      ],
+      "final_stage_residual": [
+        0.00035401794608565517,
+        0.00010309525461300631,
+        1.0090817679025757e-06,
+        2.3825342867780487e-07,
+        1.2124796891609616e-19,
+        1.6756826695399628e-21,
+        1.3552527156068802e-17,
+        1.1590265068495919e-06
+      ],
+      "final_k_inner_outer_shared_interface": [
+        1.0090435749938118e-06,
+        7.836414577663857e-09,
+        3.766658282719225e-08
+      ],
+      "drift_at_1_2_8_16": [
+        [
+          0.0001,
+          1,
+          0.0007279049466858097,
+          -0.0,
+          8.865460781968708e-06,
+          7.074939174685935e-08,
+          2.902084728301836e-06,
+          3.033424550585559e-08,
+          0.0007279049466858097,
+          0.00028226543360440495
+        ],
+        [
+          0.0002,
+          2,
+          0.0007350774980702674,
+          -0.0,
+          1.718437834583996e-05,
+          1.4174576175036736e-07,
+          4.882274622581264e-06,
+          6.511186248421738e-08,
+          0.0007350774980702674,
+          0.0002837340536604098
+        ],
+        [
+          0.0008000000000000001,
+          8,
+          0.0007152338674724941,
+          -0.0,
+          6.034487550234249e-05,
+          5.616617545089192e-07,
+          1.2642673288683036e-05,
+          2.8627863260633377e-07,
+          0.0007152338674724941,
+          0.0002816215187463213
+        ],
+        [
+          0.0016000000000000005,
+          16,
+          0.0006879979207330427,
+          -0.0,
+          0.0001067810507854731,
+          1.1079618746217764e-06,
+          1.9196219273343427e-05,
+          5.722745146672279e-07,
+          0.0006879979207330427,
+          0.00028022465175643596
+        ]
+      ],
+      "covariance_minima": [
+        0.24211029651880267,
+        0.17727060416727447
+      ],
+      "minimum_inner_k": 0.6115179010527847,
+      "minimum_outer_k": 0.6115179010527847,
+      "minimum_outer_epsilon": 0.03902439024390245,
+      "native_full_tensor_independent_relative_errors": {
+        "inner": 0.0,
+        "outer": 9.077568197748922e-17
+      },
+      "native_raw_divergence_at_covariance_witness": {
+        "inner": 0.00020527423352263737,
+        "outer": 6.838017910910541e-07
+      },
+      "native_inner_full_covariance": [
+        0.40812943939239127,
+        0,
+        -0.16605298331599463,
+        0,
+        0.40819712717505574,
+        0,
+        -0.16605298331599463,
+        0,
+        0.40819712717505574
+      ],
+      "native_outer_full_covariance": [
+        0.5734461534620979,
+        0,
+        -0.1600313070272642,
+        0,
+        0.4076802696832112,
+        0,
+        -0.1600313070272642,
+        0,
+        0.24191371319921579
+      ],
+      "reference_Pi_inner_minus_outer": {
+        "native": -0.1657775908151359,
+        "independent": -0.16577759081513593
+      },
+      "bound_correction_budgets": {
+        "calls": 0,
+        "signed_integral": 0.0,
+        "absolute_integral": 0.0
+      },
+      "minimum_budget_ratio": 5.899201342444344,
+      "maximum_budget_relative_defect": 0,
+      "raw_divergence_relative_reference_shear": 0.00021437184536468227,
+      "pointwise_interface_diagnostic": [
+        2,
+        -0.3316405220080363,
+        3.845966153912308e-05,
+        0.0003255982104877581,
+        0.00011198397755690648,
+        1.5061722637361161e-05,
+        -7.58042110716212e-17,
+        -2.310724790069462e-06
+      ],
+      "common_velocity_k_dependent_epsilon_trace": [
+        8.881784197001252e-16,
+        0,
+        9.046060541265111e-08
+      ],
+      "max_refreshed_epsilon_trace_defect": 1.1850085964576487e-07,
+      "report_sha256": "844dbef86015b2094908a35e16e38f3d8be05c3b138820f50eec3d70b33a3aa2",
+      "xml_sha256": "b24e37daaa4cdfa4122d0b3b9c565b698ed9ca42250bd91ecc3b42ac79635919",
+      "report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/matrix-qualified/A95-Prescribed-Accepted/case.evolution.json"
+    },
+    {
+      "model": "A93",
+      "kappa_policy": "Natural",
+      "wall": "EP",
+      "dt": 0.0001,
+      "accepted_steps": 16,
+      "time": 0.0016000000000000005,
+      "independent_analytical_reference": {
+        "q": 3.401265417397168,
+        "kappa": 0.42832362870822016,
+        "sigma_epsilon": 1.3,
+        "friction_velocity": 0.4,
+        "physical_nu": 1.5e-05,
+        "H": 2.0,
+        "roughness_input": 0.1,
+        "K": 0.5442024667835469,
+        "epsilon_H": 0.07470986388611972,
+        "velocity_H": 5.596331520559353,
+        "aerodynamic_z0": 0.004994313167748109
+      },
+      "bounded_integration_pass": true,
+      "checks": {
+        "unanchored": true,
+        "exactly_one_sweep": true,
+        "no_bound_correction": true,
+        "same_state_sources": true,
+        "compatible_stage_constraints": true,
+        "positive_covariance": true,
+        "independent_full_native_tensor_witness": true,
+        "independent_reference_pressure_offset": true
+      },
+      "failure": "",
+      "initial_native_spatial_residual": [
+        0.49032760957037524,
+        0.0006755418187856811,
+        0.01854670217362219,
+        0.0015323945612124483,
+        2.359697788827886e-16,
+        4.172748686059313e-17,
+        1.0842021724855043e-17,
+        0
+      ],
+      "initial_k_inner_outer_shared_interface": [
+        0.01851687303215577,
+        1.2975335732831339e-05,
+        0.00025351332968641215
+      ],
+      "final_stage_residual": [
+        0.0005210488838178254,
+        0.00031694986750846867,
+        9.773084790350965e-07,
+        1.8595931464960217e-07,
+        6.486172167219865e-20,
+        5.359234725619544e-21,
+        4.743384504624081e-18,
+        8.857198680200225e-07
+      ],
+      "final_k_inner_outer_shared_interface": [
+        9.772822912398687e-07,
+        5.993111273373613e-09,
+        3.177847609227386e-08
+      ],
+      "drift_at_1_2_8_16": [
+        [
+          0.0001,
+          1,
+          0.0007278111734826428,
+          -0.0,
+          8.86026552776284e-06,
+          7.17046783041469e-08,
+          3.1191086407831736e-07,
+          2.9750336929040334e-08,
+          0.0007278111734826428,
+          0.0002849387098399031
+        ],
+        [
+          0.0002,
+          2,
+          0.0007350679987485183,
+          -0.0,
+          1.716338266777834e-05,
+          1.4339867942733694e-07,
+          5.981114611417868e-07,
+          6.228669904331999e-08,
+          0.0007350679987485183,
+          0.0002851533093910765
+        ],
+        [
+          0.0008000000000000001,
+          8,
+          0.0007146537175605313,
+          -0.0,
+          6.0119990208659383e-05,
+          5.703896063541001e-07,
+          2.156686465030499e-06,
+          2.784237899420312e-07,
+          0.0007146537175605313,
+          0.0002838383884408897
+        ],
+        [
+          0.0016000000000000005,
+          16,
+          0.0006861701508083258,
+          -0.0,
+          0.00010616208238669067,
+          1.1551726510460038e-06,
+          4.308102545381306e-06,
+          6.300726249022117e-07,
+          0.0006861701508083258,
+          0.0002982541017604614
+        ]
+      ],
+      "covariance_minima": [
+        0.1934648465481153,
+        0.20756853953908155
+      ],
+      "minimum_inner_k": 0.5441450199965702,
+      "minimum_outer_k": 0.544200972360973,
+      "minimum_outer_epsilon": 0.03735493194305985,
+      "native_full_tensor_independent_relative_errors": {
+        "inner": 0.0,
+        "outer": 0.0
+      },
+      "native_raw_divergence_at_covariance_witness": {
+        "inner": 0.001053004468611959,
+        "outer": 0.00010200553800481791
+      },
+      "native_inner_full_covariance": [
+        0.36276410417586535,
+        0,
+        -0.16931802676059246,
+        0,
+        0.3628016445223646,
+        0,
+        -0.16931802676059246,
+        0,
+        0.3628016445223646
+      ],
+      "native_outer_full_covariance": [
+        0.41928968405869665,
+        0,
+        -0.16001166550370413,
+        0,
+        0.3406153161996337,
+        0,
+        -0.16001166550370413,
+        0,
+        0.3284999333087634
+      ],
+      "reference_Pi_inner_minus_outer": {
+        "native": -0.03432482060604741,
+        "independent": -0.034324820606047454
+      },
+      "bound_correction_budgets": {
+        "calls": 0,
+        "signed_integral": 0.0,
+        "absolute_integral": 0.0
+      },
+      "minimum_budget_ratio": 5.975968530519301,
+      "maximum_budget_relative_defect": 1.3813682346138618e-16,
+      "raw_divergence_relative_reference_shear": 0.00022783609904232301,
+      "pointwise_interface_diagnostic": [
+        2,
+        -0.06841268381098668,
+        5.8937339868542985e-05,
+        0.0002527711097284677,
+        0.00015496616014981646,
+        9.28795552502972e-06,
+        -7.478188531767711e-17,
+        7.482025563370671e-06
+      ],
+      "common_velocity_k_dependent_epsilon_trace": [
+        8.881784197001252e-16,
+        0,
+        6.617201078100779e-08
+      ],
+      "max_refreshed_epsilon_trace_defect": 8.930844149824572e-08,
+      "report_sha256": "f1d1b0e88818e742387754b49da1992f29128a15b2d6e9e50173848d39e6200b",
+      "xml_sha256": "98b87f1006dfd8d93b6e750c2aa13a34c1d011de22ea19366b1169efe6f1a36c",
+      "report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/matrix-qualified/A93-Natural-EP/case.evolution.json"
+    },
+    {
+      "model": "A93",
+      "kappa_policy": "Natural",
+      "wall": "Accepted",
+      "dt": 0.0001,
+      "accepted_steps": 16,
+      "time": 0.0016000000000000005,
+      "independent_analytical_reference": {
+        "q": 3.401265417397168,
+        "kappa": 0.42832362870822016,
+        "sigma_epsilon": 1.3,
+        "friction_velocity": 0.4,
+        "physical_nu": 1.5e-05,
+        "H": 2.0,
+        "roughness_input": 0.1,
+        "K": 0.5442024667835469,
+        "epsilon_H": 0.07470986388611972,
+        "velocity_H": 5.530299050340805,
+        "aerodynamic_z0": 0.005360236336992246
+      },
+      "bounded_integration_pass": true,
+      "checks": {
+        "unanchored": true,
+        "exactly_one_sweep": true,
+        "no_bound_correction": true,
+        "same_state_sources": true,
+        "compatible_stage_constraints": true,
+        "positive_covariance": true,
+        "independent_full_native_tensor_witness": true,
+        "independent_reference_pressure_offset": true
+      },
+      "failure": "",
+      "initial_native_spatial_residual": [
+        0.4903638112818651,
+        0.000675541820085825,
+        0.34920985443239605,
+        0.0015323945612598598,
+        2.3075299785610927e-16,
+        4.172729062943202e-17,
+        1.0842021724855043e-17,
+        0
+      ],
+      "initial_k_inner_outer_shared_interface": [
+        0.3492069267234943,
+        1.2975337243515066e-05,
+        0.00027331607655311287
+      ],
+      "final_stage_residual": [
+        0.0005200664749273895,
+        0.00031658940874640574,
+        1.1547877258158202e-06,
+        2.250522154992921e-07,
+        8.813906359935848e-20,
+        4.0517758949869746e-21,
+        8.809142651444722e-18,
+        1.2293435482211815e-06
+      ],
+      "final_k_inner_outer_shared_interface": [
+        1.1547502224279297e-06,
+        7.621809688845277e-09,
+        4.384535980723582e-08
+      ],
+      "drift_at_1_2_8_16": [
+        [
+          0.0001,
+          1,
+          0.000727860966145395,
+          -0.0,
+          8.853832478533467e-06,
+          7.170726633185899e-08,
+          3.0896969949274796e-06,
+          2.975033080090702e-08,
+          0.000727860966145395,
+          0.0002849017037360086
+        ],
+        [
+          0.0002,
+          2,
+          0.0007350422110680235,
+          -0.0,
+          1.7147287364052022e-05,
+          1.433955022741131e-07,
+          5.182647968648998e-06,
+          6.485771541691352e-08,
+          0.0007350422110680235,
+          0.0002850837734170431
+        ],
+        [
+          0.0008000000000000001,
+          8,
+          0.0007142492355926422,
+          -0.0,
+          6.000828245505687e-05,
+          5.702274124447978e-07,
+          1.3334723747235225e-05,
+          3.017421129803292e-07,
+          0.0007142492355926422,
+          0.00028358354047282856
+        ],
+        [
+          0.0016000000000000005,
+          16,
+          0.0006854437060774629,
+          -0.0,
+          0.00010587969770369074,
+          1.154583082625506e-06,
+          2.01496222661216e-05,
+          6.647105851898603e-07,
+          0.0006854437060774629,
+          0.00029779927906452096
+        ]
+      ],
+      "covariance_minima": [
+        0.1971828711630428,
+        0.2075685425104445
+      ],
+      "minimum_inner_k": 0.5442004131850402,
+      "minimum_outer_k": 0.5442004131850402,
+      "minimum_outer_epsilon": 0.03735493194305985,
+      "native_full_tensor_independent_relative_errors": {
+        "inner": 0.0,
+        "outer": 1.0200459317898873e-16
+      },
+      "native_raw_divergence_at_covariance_witness": {
+        "inner": 0.0002050608167336282,
+        "outer": 0.00010198605678336984
+      },
+      "native_inner_full_covariance": [
+        0.3632017677332812,
+        0,
+        -0.16605421152257485,
+        0,
+        0.3632724051500258,
+        0,
+        -0.16605421152257485,
+        0,
+        0.3632724051500258
+      ],
+      "native_outer_full_covariance": [
+        0.4192896930792299,
+        0,
+        -0.16001166292265892,
+        0,
+        0.3406153115642499,
+        0,
+        -0.16001166292265892,
+        0,
+        0.32849992892361396
+      ],
+      "reference_Pi_inner_minus_outer": {
+        "native": -0.03432482060604741,
+        "independent": -0.034324820606047454
+      },
+      "bound_correction_budgets": {
+        "calls": 0,
+        "signed_integral": 0.0,
+        "absolute_integral": 0.0
+      },
+      "minimum_budget_ratio": 5.9056484749692055,
+      "maximum_budget_relative_defect": 0,
+      "raw_divergence_relative_reference_shear": 0.00022763865155644037,
+      "pointwise_interface_diagnostic": [
+        2,
+        -0.0684128000683822,
+        5.882547322033282e-05,
+        0.0002547918761479614,
+        0.0001545229708246887,
+        1.4966194723970608e-05,
+        -7.269010767593056e-17,
+        7.46781862064583e-06
+      ],
+      "common_velocity_k_dependent_epsilon_trace": [
+        0,
+        0,
+        9.184408915688391e-08
+      ],
+      "max_refreshed_epsilon_trace_defect": 1.216194871894727e-07,
+      "report_sha256": "6dd5012adc8d20d95a928c913903af94b98e94592635c4053c0e5ba79e4b3484",
+      "xml_sha256": "bf7873b0f1b007e2698886910ce08b4f25e8beac2b22b8ebc6c11c4d55dd55dc",
+      "report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/matrix-qualified/A93-Natural-Accepted/case.evolution.json"
+    },
+    {
+      "model": "A93",
+      "kappa_policy": "Prescribed",
+      "wall": "EP",
+      "dt": 0.0001,
+      "accepted_steps": 16,
+      "time": 0.0016000000000000005,
+      "independent_analytical_reference": {
+        "q": 3.401265417397168,
+        "kappa": 0.41,
+        "sigma_epsilon": 1.1911514930509663,
+        "friction_velocity": 0.4,
+        "physical_nu": 1.5e-05,
+        "H": 2.0,
+        "roughness_input": 0.1,
+        "K": 0.5442024667835469,
+        "epsilon_H": 0.0780487804878049,
+        "velocity_H": 5.596331520559353,
+        "aerodynamic_z0": 0.006453758349589794
+      },
+      "bounded_integration_pass": true,
+      "checks": {
+        "unanchored": true,
+        "exactly_one_sweep": true,
+        "no_bound_correction": true,
+        "same_state_sources": true,
+        "compatible_stage_constraints": true,
+        "positive_covariance": true,
+        "independent_full_native_tensor_witness": true,
+        "independent_reference_pressure_offset": true
+      },
+      "failure": "",
+      "initial_native_spatial_residual": [
+        0.4903276095732201,
+        0.0006755418203179885,
+        0.018546701494185296,
+        0.0016008799915483794,
+        2.359711801487016e-16,
+        4.3591829482492135e-17,
+        1.0842021724855043e-17,
+        0
+      ],
+      "initial_k_inner_outer_shared_interface": [
+        0.018516873030928107,
+        1.3555226528900208e-05,
+        0.0002535072461045597
+      ],
+      "final_stage_residual": [
+        0.0005036331640132266,
+        0.0003041003124097559,
+        9.822215026365884e-07,
+        1.9387134966199955e-07,
+        1.0320741003384832e-19,
+        3.953046842817426e-21,
+        4.743384504624081e-18,
+        8.901754865678935e-07
+      ],
+      "final_k_inner_outer_shared_interface": [
+        9.821951358430205e-07,
+        6.158273333506937e-09,
+        3.1817697799584875e-08
+      ],
+      "drift_at_1_2_8_16": [
+        [
+          0.0001,
+          1,
+          0.000727827742384055,
+          -0.0,
+          8.860303929804289e-06,
+          7.17054482713578e-08,
+          3.119114131858169e-07,
+          3.1043740666190764e-08,
+          0.000727827742384055,
+          0.00028476456365800163
+        ],
+        [
+          0.0002,
+          2,
+          0.0007350672469424262,
+          -0.0,
+          1.716346680829423e-05,
+          1.4340585585524674e-07,
+          5.981131054911861e-07,
+          6.466777288934177e-08,
+          0.0007350672469424262,
+          0.0002848524035202825
+        ],
+        [
+          0.0008000000000000001,
+          8,
+          0.0007145994519789497,
+          -0.0,
+          6.012051186400567e-05,
+          5.69924319262982e-07,
+          2.1567029244619553e-06,
+          2.8517424524275625e-07,
+          0.0007145994519789497,
+          0.00028239789469571014
+        ],
+        [
+          0.0016000000000000005,
+          16,
+          0.000686036497469339,
+          -0.0,
+          0.00010616365402412283,
+          1.1517976149566227e-06,
+          4.308146543955461e-06,
+          6.379878936049221e-07,
+          0.000686036497469339,
+          0.0002945959843938129
+        ]
+      ],
+      "covariance_minima": [
+        0.1934648465055567,
+        0.20756912332916605
+      ],
+      "minimum_inner_k": 0.5441450200178497,
+      "minimum_outer_k": 0.5442009681451128,
+      "minimum_outer_epsilon": 0.03902439024390245,
+      "native_full_tensor_independent_relative_errors": {
+        "inner": 0.0,
+        "outer": 1.0200459317898873e-16
+      },
+      "native_raw_divergence_at_covariance_witness": {
+        "inner": 0.0010530056801006567,
+        "outer": 0.00010207341515624209
+      },
+      "native_inner_full_covariance": [
+        0.36276410413267496,
+        0,
+        -0.16931802678155342,
+        0,
+        0.3628016445223646,
+        0,
+        -0.16931802678155342,
+        0,
+        0.3628016445223646
+      ],
+      "native_outer_full_covariance": [
+        0.419291664622452,
+        0,
+        -0.16001116334146334,
+        0,
+        0.3406143086812901,
+        0,
+        -0.16001116334146334,
+        0,
+        0.3284989602633517
+      ],
+      "reference_Pi_inner_minus_outer": {
+        "native": -0.03432482060604741,
+        "independent": -0.034324820606047454
+      },
+      "bound_correction_budgets": {
+        "calls": 0,
+        "signed_integral": 0.0,
+        "absolute_integral": 0.0
+      },
+      "minimum_budget_ratio": 5.72031737988003,
+      "maximum_budget_relative_defect": 1.4995202260341378e-16,
+      "raw_divergence_relative_reference_shear": 0.00021836869393101005,
+      "pointwise_interface_diagnostic": [
+        2,
+        -0.06842149816839506,
+        5.691101450131164e-05,
+        0.00024977868644892204,
+        0.0001497588143082318,
+        8.983477829027407e-06,
+        -7.407173752691053e-17,
+        7.453999922306874e-06
+      ],
+      "common_velocity_k_dependent_epsilon_trace": [
+        8.881784197001252e-16,
+        0,
+        6.947711114676245e-08
+      ],
+      "max_refreshed_epsilon_trace_defect": 9.333827699024164e-08,
+      "report_sha256": "f33762f641f8d75da9b64c63d1116e7e1e58f15b26d2345687f1df1c4d1228ad",
+      "xml_sha256": "405e9afc6d6f407d109792e84b91b9a9ffe7114d19c1ad8fbcf4dbdd157ef40a",
+      "report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/matrix-qualified/A93-Prescribed-EP/case.evolution.json"
+    },
+    {
+      "model": "A93",
+      "kappa_policy": "Prescribed",
+      "wall": "Accepted",
+      "dt": 0.0001,
+      "accepted_steps": 16,
+      "time": 0.0016000000000000005,
+      "independent_analytical_reference": {
+        "q": 3.401265417397168,
+        "kappa": 0.41,
+        "sigma_epsilon": 1.1911514930509663,
+        "friction_velocity": 0.4,
+        "physical_nu": 1.5e-05,
+        "H": 2.0,
+        "roughness_input": 0.1,
+        "K": 0.5442024667835469,
+        "epsilon_H": 0.0780487804878049,
+        "velocity_H": 5.776749852331344,
+        "aerodynamic_z0": 0.005364128176902348
+      },
+      "bounded_integration_pass": true,
+      "checks": {
+        "unanchored": true,
+        "exactly_one_sweep": true,
+        "no_bound_correction": true,
+        "same_state_sources": true,
+        "compatible_stage_constraints": true,
+        "positive_covariance": true,
+        "independent_full_native_tensor_witness": true,
+        "independent_reference_pressure_offset": true
+      },
+      "failure": "",
+      "initial_native_spatial_residual": [
+        0.4902287742216224,
+        0.0006755418197930556,
+        0.364033373549865,
+        0.0016008799940214816,
+        2.406888577301584e-16,
+        4.3591904358235133e-17,
+        1.0842021724855043e-17,
+        0
+      ],
+      "initial_k_inner_outer_shared_interface": [
+        0.364030306102266,
+        1.3555227970010602e-05,
+        0.00028556193721159803
+      ],
+      "final_stage_residual": [
+        0.0005057728238438766,
+        0.00030488582965809073,
+        1.2753986066499145e-06,
+        2.428041949053945e-07,
+        6.25033720908906e-20,
+        5.3062515224099895e-21,
+        2.0328790734103205e-17,
+        1.3001992566906598e-06
+      ],
+      "final_k_inner_outer_shared_interface": [
+        1.275359125544448e-06,
+        8.114675813231346e-09,
+        4.854112330820861e-08
+      ],
+      "drift_at_1_2_8_16": [
+        [
+          0.0001,
+          1,
+          0.0007276909004875866,
+          -0.0,
+          8.877276354817343e-06,
+          7.169807109926235e-08,
+          3.2738741514165454e-06,
+          3.104375252909258e-08,
+          0.0007276909004875866,
+          0.0002848607519691056
+        ],
+        [
+          0.0002,
+          2,
+          0.0007351134158758202,
+          -0.0,
+          1.720597305629177e-05,
+          1.4341356620448493e-07,
+          5.496543526379153e-06,
+          6.764170969538634e-08,
+          0.0007351134158758202,
+          0.00028507165138059196
+        ],
+        [
+          0.0008000000000000001,
+          8,
+          0.0007155837799236684,
+          -0.0,
+          6.041615735137159e-05,
+          5.703726389054094e-07,
+          1.4176621065493589e-05,
+          3.1261404062977194e-07,
+          0.0007155837799236684,
+          0.0002833105829948385
+        ],
+        [
+          0.0016000000000000005,
+          16,
+          0.0006877803571899302,
+          -0.0,
+          0.00010691376456144382,
+          1.1534259164484885e-06,
+          2.1505363612794105e-05,
+          6.79986109907145e-07,
+          0.0006877803571899302,
+          0.0002962380377298121
+        ]
+      ],
+      "covariance_minima": [
+        0.19722874637087218,
+        0.20756911628788804
+      ],
+      "minimum_inner_k": 0.5442003069549591,
+      "minimum_outer_k": 0.5442003069549591,
+      "minimum_outer_epsilon": 0.03902439024390245,
+      "native_full_tensor_independent_relative_errors": {
+        "inner": 0.0,
+        "outer": 0.0
+      },
+      "native_raw_divergence_at_covariance_witness": {
+        "inner": 0.00020565470468586654,
+        "outer": 0.00010211949760228165
+      },
+      "native_inner_full_covariance": [
+        0.3632483442801578,
+        0,
+        -0.16605350013899353,
+        0,
+        0.3633161556626188,
+        0,
+        -0.16605350013899353,
+        0,
+        0.3633161556626188
+      ],
+      "native_outer_full_covariance": [
+        0.4192916441540304,
+        0,
+        -0.16001116947951524,
+        0,
+        0.3406143192440166,
+        0,
+        -0.16001116947951524,
+        0,
+        0.3284989701690467
+      ],
+      "reference_Pi_inner_minus_outer": {
+        "native": -0.03432482060604741,
+        "independent": -0.034324820606047454
+      },
+      "bound_correction_budgets": {
+        "calls": 0,
+        "signed_integral": 0.0,
+        "absolute_integral": 0.0
+      },
+      "minimum_budget_ratio": 5.904209001834056,
+      "maximum_budget_relative_defect": 0,
+      "raw_divergence_relative_reference_shear": 0.00021887086957016554,
+      "pointwise_interface_diagnostic": [
+        2,
+        -0.0684211990991493,
+        5.7222775540969764e-05,
+        0.00024466463098447877,
+        0.00015097422181753473,
+        1.5169761527268353e-05,
+        -7.580154755004877e-17,
+        7.4946699860121945e-06
+      ],
+      "common_velocity_k_dependent_epsilon_trace": [
+        8.881784197001252e-16,
+        0,
+        1.014789663758564e-07
+      ],
+      "max_refreshed_epsilon_trace_defect": 1.328976757808409e-07,
+      "report_sha256": "8c1364706d4cc11a5bc000907545cbcf4aa4be78033f625e7ae6c0e159c87741",
+      "xml_sha256": "b869f3de966965ea82a7cee717d0414d2debdbd4349cc887a8cee8cdd790ff4e",
+      "report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/matrix-qualified/A93-Prescribed-Accepted/case.evolution.json"
+    }
+  ],
+  "bounded_matrix_pass": true,
+  "continuation_controls": [
+    {
+      "name": "compatible-restart-Accepted",
+      "status": "pass",
+      "result": {
+        "bitwise_equal": true,
+        "steps": 16
+      }
+    },
+    {
+      "name": "complete-rollback-Accepted",
+      "status": "pass",
+      "result": {
+        "coupled_and_native_history_bitwise_equal": true
+      }
+    },
+    {
+      "name": "cache-on-off-Accepted",
+      "status": "pass",
+      "result": {
+        "bitwise_equal": true
+      }
+    },
+    {
+      "name": "time-refinement-Accepted",
+      "status": "pass",
+      "result": {
+        "common_time": 0.0015999999999999992,
+        "physical_L2_difference": {
+          "values_0": 2.419529211016798e-07,
+          "values_1": 2.511054451322314e-09,
+          "values_2": 9.338466923737376e-08,
+          "values_3": 1.0520457635793404e-09,
+          "values_4": 2.7827767766916986e-07,
+          "values_5": 2.085281293758349e-07
+        },
+        "drift": [
+          0.0015999999999999992,
+          32,
+          0.0006874424808933683,
+          -0.0,
+          0.00010731832379243166,
+          1.10013555094647e-06,
+          2.198122309088716e-05,
+          6.547104512043557e-07,
+          0.0006874424808933683,
+          0.00026996611025848085
+        ]
+      }
+    },
+    {
+      "name": "spatial-quadrature-refinement-Accepted",
+      "status": "pass",
+      "result": {
+        "coarse_initial_residual": [
+          0.490433921719345,
+          4.2655225557796354e-15,
+          0.3712921556014947,
+          0.001699869352317466,
+          2.3963433591505e-16,
+          4.337158290331966e-17,
+          0,
+          0
+        ],
+        "fine_initial_residual": [
+          0.2048065986033461,
+          5.5454988657124385e-15,
+          0.0967700268177728,
+          0.00040902801045283296,
+          1.1250747290460352e-16,
+          2.1288805044520043e-17,
+          0,
+          0
+        ],
+        "residual_ratios": [
+          0.4176028401243999,
+          null,
+          0.26063041019814975,
+          0.24062320430402306,
+          null,
+          null,
+          null,
+          null
+        ],
+        "coarse_drift": [
+          0.0016000000000000005,
+          16,
+          0.0006876205896350707,
+          -0.0,
+          0.00010679550359734287,
+          1.0993769290323641e-06,
+          2.1823385679137896e-05,
+          6.479347707070897e-07,
+          0.0006876205896350707,
+          0.0002711383109066011
+        ],
+        "fine_drift": [
+          0.0016000000000000005,
+          16,
+          4.4469362870006535e-05,
+          -0.0,
+          2.2572704103596577e-05,
+          1.0562857347463421e-07,
+          4.5785896470560066e-06,
+          1.0209042839725144e-07,
+          4.4469362870006535e-05,
+          1.7734072948970744e-05
+        ]
+      }
+    },
+    {
+      "name": "mild-admissible-perturbation-Accepted",
+      "status": "pass",
+      "result": {
+        "steps": 8,
+        "amplitude_over_K0": 0.005,
+        "drift": [
+          0.0008000000000000001,
+          8,
+          0.0017933307966294832,
+          -0.0,
+          6.037754696912174e-05,
+          5.59866391351868e-07,
+          0.0017933307966294832,
+          2.64271212966666e-07,
+          0.0007152773182989882,
+          0.00027822429010443525
+        ],
+        "accepted_endpoint_kernel_unchanged": true
+      }
+    },
+    {
+      "name": "compatible-restart-EP",
+      "status": "pass",
+      "result": {
+        "bitwise_equal": true,
+        "steps": 16
+      }
+    },
+    {
+      "name": "complete-rollback-EP",
+      "status": "pass",
+      "result": {
+        "coupled_and_native_history_bitwise_equal": true
+      }
+    },
+    {
+      "name": "cache-on-off-EP",
+      "status": "pass",
+      "result": {
+        "bitwise_equal": true
+      }
+    },
+    {
+      "name": "time-refinement-EP",
+      "status": "pass",
+      "result": {
+        "common_time": 0.0015999999999999992,
+        "physical_L2_difference": {
+          "values_0": 2.418914256634286e-07,
+          "values_1": 2.5138593139291032e-09,
+          "values_2": 2.0802745842746973e-08,
+          "values_3": 7.872430651835741e-10,
+          "values_4": 2.772344881970924e-07,
+          "values_5": 2.0962158979795913e-07
+        },
+        "drift": [
+          0.0015999999999999992,
+          32,
+          0.0006866229632796856,
+          -0.0,
+          0.00010695803347333036,
+          1.0993699516964936e-06,
+          4.461381292157941e-06,
+          6.033032792252816e-07,
+          0.0006866229632796856,
+          0.00026901786768776694
+        ]
+      }
+    },
+    {
+      "name": "spatial-quadrature-refinement-EP",
+      "status": "pass",
+      "result": {
+        "coarse_initial_residual": [
+          0.49048179359730704,
+          3.4520091337972475e-15,
+          0.019203175796434744,
+          0.00169986935128638,
+          2.3844177398204567e-16,
+          4.3370848468126894e-17,
+          0,
+          0
+        ],
+        "fine_initial_residual": [
+          0.2048232186273815,
+          3.51825639659383e-15,
+          0.008818470684832524,
+          0.0004090280127406479,
+          1.1042039137912195e-16,
+          2.128881108682164e-17,
+          0,
+          0
+        ],
+        "residual_ratios": [
+          0.41759596645812397,
+          null,
+          0.459219390496324,
+          0.24062320579585425,
+          null,
+          null,
+          null,
+          null
+        ],
+        "coarse_drift": [
+          0.0016000000000000005,
+          16,
+          0.0006868023579031276,
+          -0.0,
+          0.00010643433921397415,
+          1.09859530852855e-06,
+          4.457382636223997e-06,
+          5.996529515470009e-07,
+          0.0006868023579031276,
+          0.00027019744549876696
+        ],
+        "fine_drift": [
+          0.0016000000000000005,
+          16,
+          4.432250849902256e-05,
+          -0.0,
+          2.241688453943242e-05,
+          1.055277548848121e-07,
+          1.091359048746191e-06,
+          1.0264906493437004e-07,
+          4.432250849902256e-05,
+          1.7587624628248945e-05
+        ]
+      }
+    },
+    {
+      "name": "mild-admissible-perturbation-EP",
+      "status": "pass",
+      "result": {
+        "steps": 8,
+        "amplitude_over_K0": 0.005,
+        "drift": [
+          0.0008000000000000001,
+          8,
+          0.0017932665200139568,
+          -0.0,
+          6.0235282200974e-05,
+          5.596470885584514e-07,
+          0.0017932665200139568,
+          2.6384649313270175e-07,
+          0.0007148160168682623,
+          0.0002777335702312314
+        ],
+        "accepted_endpoint_kernel_unchanged": null
+      }
+    },
+    {
+      "name": "changed-model-restart-rejection",
+      "status": "pass",
+      "result": {
+        "rejected": true
+      }
+    },
+    {
+      "name": "changed-calibration-restart-rejection",
+      "status": "pass",
+      "result": {
+        "rejected": true
+      }
+    },
+    {
+      "name": "changed-wall-restart-rejection",
+      "status": "pass",
+      "result": {
+        "rejected": true
+      }
+    },
+    {
+      "name": "unsupported-nonlinear",
+      "status": "pass",
+      "result": {
+        "rejected": true
+      }
+    },
+    {
+      "name": "unsupported-inner-stress",
+      "status": "pass",
+      "result": {
+        "rejected": true
+      }
+    },
+    {
+      "name": "unsupported-regularized",
+      "status": "pass",
+      "result": {
+        "rejected": true
+      }
+    },
+    {
+      "name": "native-EP-switch-and-baseline",
+      "status": "pass",
+      "result": {
+        "steps": 2,
+        "dt": 1e-06,
+        "reason": "baseline prescribed sink is stiff on its molecular cutoff; structural switch test, not an equilibrium claim",
+        "unanchored": true,
+        "chi_plateau_transition_baseline": true,
+        "report_sha256": "1bf2474125f40dfbaf64a14b035b10edceb73dbf3c6f90f714e6e289cb3bc343"
+      }
+    },
+    {
+      "name": "unsupported-curved",
+      "status": "pass",
+      "result": {
+        "rejected": true,
+        "ranks": 1
+      }
+    },
+    {
+      "name": "unsupported-3D",
+      "status": "pass",
+      "result": {
+        "rejected": true,
+        "ranks": 1
+      }
+    },
+    {
+      "name": "unsupported-MPI",
+      "status": "pass",
+      "result": {
+        "rejected": true,
+        "ranks": 2
+      }
+    },
+    {
+      "name": "A95-current-gradient-cache-on-off",
+      "status": "pass",
+      "result": {
+        "bitwise_equal": true,
+        "model": "A95",
+        "wall": "Accepted",
+        "steps": 16
+      }
+    },
+    {
+      "name": "reviewed-CLS-checkpoint-continuation",
+      "status": "pass",
+      "result": {
+        "bitwise_equal": true,
+        "reviewed_binary_source": "99112a1cbb9c5448dd3de69f50600bf91465062b",
+        "reviewed_runtime": {
+          "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/baseline/runtime/IncNavierStokesSolver",
+          "sha256": "bfcd880feb0344fd0b5bb5a41c1d783d594f636f62880961c016e7d998175c17",
+          "ldd": "\tlinux-vdso.so.1 (0x00007ffd5f0f2000)\n\tlibSpatialDomains.so.5.9.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libSpatialDomains.so.5.9.0 (0x0000714469c00000)\n\tlibSolverUtils.so.5.9.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libSolverUtils.so.5.9.0 (0x0000714469600000)\n\tlibFieldUtils.so.5.9.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libFieldUtils.so.5.9.0 (0x0000714469200000)\n\tlibmpi_cxx.so.40 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libmpi_cxx.so.40 (0x000071446a802000)\n\tlibmpi.so.40 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libmpi.so.40 (0x000071446a6c9000)\n\tlibGlobalMapping.so.5.9.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libGlobalMapping.so.5.9.0 (0x000071446a634000)\n\tlibMultiRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libMultiRegions.so.5.9.0 (0x0000714468e00000)\n\tlibLocalRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libLocalRegions.so.5.9.0 (0x0000714468a00000)\n\tlibStdRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libStdRegions.so.5.9.0 (0x0000714468600000)\n\tlibLibUtilities.so.5.9.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libLibUtilities.so.5.9.0 (0x0000714468000000)\n\tliblapack.so.3 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/liblapack.so.3 (0x0000714467800000)\n\tlibblas.so.3 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libblas.so.3 (0x0000714469f9e000)\n\tlibstdc++.so.6 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libstdc++.so.6 (0x0000714467400000)\n\tlibm.so.6 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libm.so.6 (0x0000714469eb7000)\n\tlibgcc_s.so.1 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libgcc_s.so.1 (0x0000714469e97000)\n\tlibc.so.6 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libc.so.6 (0x0000714467000000)\n\tlibptscotch-6.1.so => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libptscotch-6.1.so (0x0000714469b2d000)\n\tlibz.so.1 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libz.so.1 (0x0000714469e7b000)\n\tlibboost_program_options.so.1.74.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libboost_program_options.so.1.74.0 (0x0000714469e36000)\n\tlibopen-pal.so.40 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libopen-pal.so.40 (0x0000714469a7a000)\n\tlibopen-rte.so.40 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libopen-rte.so.40 (0x0000714468d43000)\n\tlibhwloc.so.15 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libhwloc.so.15 (0x0000714468ce7000)\n\tlibCollections.so.5.9.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libCollections.so.5.9.0 (0x000071446848d000)\n\tlibfftw3.so.3 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libfftw3.so.3 (0x0000714466c00000)\n\tlibboost_iostreams.so.1.74.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libboost_iostreams.so.1.74.0 (0x0000714469e1e000)\n\tlibopenblas.so.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libopenblas.so.0 (0x00007144647b0000)\n\tlibgfortran.so.5 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libgfortran.so.5 (0x0000714464400000)\n\t/lib64/ld-linux-x86-64.so.2 (0x000071446a81e000)\n\tlibptscotcherr-6.1.so => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libptscotcherr-6.1.so (0x0000714469e19000)\n\tlibbz2.so.1.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libbz2.so.1.0 (0x0000714469a67000)\n\tliblzma.so.5 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/liblzma.so.5 (0x00007144695d5000)\n\tlibevent_core-2.1.so.7 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libevent_core-2.1.so.7 (0x0000714468cb2000)\n\tlibevent_pthreads-2.1.so.7 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libevent_pthreads-2.1.so.7 (0x0000714469e12000)\n\tlibudev.so.1 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libudev.so.1 (0x0000714468c88000)\n\tlibMatrixFreeOps.so.5.9.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libMatrixFreeOps.so.5.9.0 (0x0000714461600000)\n\tlibzstd.so.1 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libzstd.so.1 (0x0000714468931000)\n\tlibquadmath.so.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libquadmath.so.0 (0x0000714468c40000)\n",
+          "libraries": {
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/runtime-qualified/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+            "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01"
+          }
+        },
+        "payload": {
+          "state": "bd82647216aafe966184c5e8d8f71f165db426f50a3c899238f034ed20bbb8fd",
+          "history": [
+            "b05b1fc18359e6aefdde6f1696e7fe8a7e1ca00945bfe5f6de4410ccce564a60",
+            "af06c95b066477742f815814f36b6c986ceca43765bc7b5fa978052ec736844f"
+          ],
+          "times": [
+            0.0025,
+            0.000625
+          ],
+          "time": 0.0025,
+          "steps": 4
+        }
+      }
+    },
+    {
+      "name": "legacy-resolution-cls-reviewed-whole4",
+      "status": "pass",
+      "result": {
+        "maximum_absolute_norm_difference": 0.0,
+        "receipt_sha256": "d1955c8d09da8d068df3a2f143cfa60cadd85b6dd8eb55606c987da7b474c24b"
+      }
+    },
+    {
+      "name": "legacy-resolution-cls-reviewed-restart2",
+      "status": "pass",
+      "result": {
+        "maximum_absolute_norm_difference": 0.0,
+        "receipt_sha256": "fbc6c6d576861f5dd6533f9fe6f636028913bb9ac986116bac476d01edb78669"
+      }
+    },
+    {
+      "name": "unsupported-standalone-resolution-EP",
+      "status": "pass",
+      "result": {
+        "rejected": true
+      }
+    },
+    {
+      "name": "unsupported-standalone-resolution-Accepted",
+      "status": "pass",
+      "result": {
+        "rejected": true
+      }
+    }
+  ],
+  "continuation_status": "pass"
+}
