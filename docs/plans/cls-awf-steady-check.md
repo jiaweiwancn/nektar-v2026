@@ -82,6 +82,81 @@ The observation supports investigating a bounded fixed point for Uniform H;
 three-window original-equation or bounded fixed-point convergence is not
 established. No statistical-stationarity claim is made for Upstream-one.
 
+## Why the one-element k residuals are large
+
+These are the earlier capped CLS–EP-AWF cases, with column-average K. Their
+selected spatial residual excludes the post-transport positivity correction.
+The corrector preserves admissibility of the declared inventory while changing
+the numerical step map; it does not make the corrected field solve the original
+k equation.
+
+The residual measure is the actual consistent-mass dual norm on free k rows:
+
+\[
+\widehat R_k=\frac{\sqrt{r_f^T M_{ff}^{-1}r_f}}
+ {K_0(u_*/H_{\rm ref})\sqrt V},\qquad
+H_{\rm ref}=2,\quad V=24.
+\]
+
+The denominator is .5001936566, fixed independently of current k. Uniform H
+has dimensional norm 1.2785437 and normalized norm 2.5560974; Upstream-one has
+4.3074891 and 8.6116428. No division by the approximately 5.1e-9 contact value
+causes these large numbers. The H-dependent native norms are .6390 and 2.1529;
+the common scaling multiplies both by four, preserving the large imbalance.
+
+A zero-PDE same-state decomposition uses the archived **PicardKMass** M_ff,
+not the frozen transport matrix. Both mass exports have 378 free rows and the
+same offsets as their corresponding current native reports. Component loads
+sum exactly to the retained free residual, mass-inverse errors are below
+1.2e-15, and reconstructed norms match the independent native values at roundoff.
+The [component evidence](cls-accepted-budget-awf-evidence/steady-check-20261109/k-residual-components.json)
+contains all source/mass hashes and component norms.
+
+To expose cancellation across modes, let
+\(c_j=r_j^TM_{ff}^{-1}r/\|r\|_{M^{-1}}\). These signed projections sum to the
+dimensional residual norm; separate component norms cannot simply be added.
+
+| Contribution along the total residual | Uniform H | Upstream one |
+|---|---:|---:|
+| Inner destruction | +4.5272 | +5.6163 |
+| Inner production | -1.5319 | -.7362 |
+| k diffusion | -1.6858 | -.5859 |
+| Advection and outer source terms combined | -.03093 | +.01333 |
+| Total | 1.27854 | 4.30749 |
+
+Thus inner destruction is the main uncancelled contribution, partly opposed
+by production and diffusion. Even approximate column-integral balance does
+not balance every free polynomial test mode. Both cases use one ordinary cubic
+over [0,.5]. The controlled initial state already has ground gradient 32.2468
+against analytical 181.9194, and production .89897 against reference 28.61069.
+Saturation is inactive at that initial point. With chi=1 the point source is
+about -27.7117; with chi=0 it is about -1335.092. The previous 16-versus-32
+source-quadrature test changed the initial free source load by only about
+2.36e-6 relatively, separating this representation error from initial integration
+error. These initial point-source values are distinct from integrated late-state
+rates and from the residual norm.
+
+At T=4.665, Uniform H still has chi=1 at x=-3.5,-1,1.6. At T=3.575,
+Upstream-one has chi=0 at x=-3.5,-2.625,-1,1.6: EP is inactive even at the
+upstream sample. The source there uses the original-AWF branch,
+which has the much stronger near-wall destruction. Stress regularization and
+SaturatedR2 do not enforce balance between actual production and the selected
+destruction law.
+
+At the saved steps the raw k linear residuals are 3.89e-16 and 4.44e-16, but
+the raw ground minima are -.0030643 and -.0094988. The corrector raises them
+to the prescribed floor. If b is its coefficient correction, the exact frozen
+linear residual changes by A_k b. The measured post-correction maximum-row
+residuals are .167934 and .460129, agreeing with the added A_k b values;
+the distinct storage-only contributions are .158559 and .356565. These are
+different metrics from the mass-dual spatial norm. A successful raw linear
+solve therefore coexists with a large corrected-equation imbalance.
+
+The evidence establishes current destruction-dominated weak imbalance and
+sustained correction support. It does not apportion every long-time change
+between temporal splitting and spatial representation, or turn an almost
+stationary corrected field into a steady solution of the unmodified equations.
+
 ## Scope and next check
 
 Window differences use the archived common physical quadrature and one mean

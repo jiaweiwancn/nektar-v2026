@@ -1,0 +1,136 @@
+{
+  "UniformH": {
+    "time": 4.66500000000008,
+    "consistent_mass": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/discrete-budgets/H/mass-and-bands.json",
+    "mass_sha256": "1c309b26cfe36509ceaf7527db11e424e726b780e9945964eb960ac7609cb163",
+    "report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-steady-check-20261109-final/UniformH/step-007464/case.evolution.json.gz",
+    "report_sha256": "c2c074cfebc63799219cae1cacf4550b3a171b1ede42f541f6ae2146c758e2ed",
+    "free_rows": 378,
+    "mass_solve_error": 6.938893903907228e-17,
+    "component_sum_error": 0.0,
+    "dimensional_mass_dual_norm": 1.2785437148001109,
+    "normalized_norm": 2.5560974191272514,
+    "normalization_denominator": 0.5001936566395244,
+    "components": {
+      "conservative_advection": {
+        "mass_dual_norm": 0.7809889092441307,
+        "along_total_residual": -0.021127415437339193,
+        "projected_integral_k_rate": -0.2494965666921266
+      },
+      "k_diffusion": {
+        "mass_dual_norm": 2.3336826429914033,
+        "along_total_residual": -1.6857946229557499,
+        "projected_integral_k_rate": 0.019712851916341527
+      },
+      "inner_k_production": {
+        "mass_dual_norm": 4.562287081289413,
+        "along_total_residual": -1.5318968368999546,
+        "projected_integral_k_rate": 5.761316025379737
+      },
+      "inner_k_destruction": {
+        "mass_dual_norm": 5.396832177979075,
+        "along_total_residual": 4.527165022076907,
+        "projected_integral_k_rate": -5.780532320400835
+      },
+      "outer_k_production": {
+        "mass_dual_norm": 0.3954171862420827,
+        "along_total_residual": 0.01284322906951618,
+        "projected_integral_k_rate": 1.5508929927283046
+      },
+      "outer_k_destruction": {
+        "mass_dual_norm": 0.4923062850963626,
+        "along_total_residual": -0.022645661053268488,
+        "projected_integral_k_rate": -1.8352632243036977
+      },
+      "prescribed_scalar_source": {
+        "mass_dual_norm": 0.0,
+        "along_total_residual": 0.0,
+        "projected_integral_k_rate": 0.0
+      }
+    },
+    "projected_total_integral_k_rate": -0.5333702413722714,
+    "physical_global_band": {
+      "name": "global",
+      "lower": 0.0,
+      "upper": 4.0,
+      "k_integral": 12.530227004464114,
+      "correction_signed": 0.0,
+      "correction_positive": 0.0,
+      "correction_negative": 0.0,
+      "correction_absolute": 0.0,
+      "production": 7.520497920707701,
+      "destruction": 7.750485716072383,
+      "invalid_diagnostic_points": []
+    }
+  },
+  "UpstreamOne": {
+    "time": 3.5749999999998243,
+    "consistent_mass": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/discrete-budget/U05-one/mass-and-bands.json",
+    "mass_sha256": "8d84492fbcedad2d996ea1e65af421154ca912cb1df2701cc5ab6aa46f62e0d8",
+    "report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-steady-check-20261109-final/UpstreamOne/step-005720/case.evolution.json.gz",
+    "report_sha256": "d82f2ba6aa4e7c152dc1bf2fa72b7ea84a8ff54bb64ee0b54199e57d27232896",
+    "free_rows": 378,
+    "mass_solve_error": 1.1102230246251565e-15,
+    "component_sum_error": 0.0,
+    "dimensional_mass_dual_norm": 4.3074891155814505,
+    "normalized_norm": 8.611642827541367,
+    "normalization_denominator": 0.5001936566395245,
+    "components": {
+      "conservative_advection": {
+        "mass_dual_norm": 0.7690470083452027,
+        "along_total_residual": 0.016619412905302052,
+        "projected_integral_k_rate": 0.4153995237685655
+      },
+      "k_diffusion": {
+        "mass_dual_norm": 0.8675752652351352,
+        "along_total_residual": -0.5858606504305155,
+        "projected_integral_k_rate": 0.046443931640766246
+      },
+      "inner_k_production": {
+        "mass_dual_norm": 2.5594482375012193,
+        "along_total_residual": -0.7362420096977333,
+        "projected_integral_k_rate": 3.0561639522243533
+      },
+      "inner_k_destruction": {
+        "mass_dual_norm": 6.131681504015225,
+        "along_total_residual": 5.616258314055786,
+        "projected_integral_k_rate": -5.170888321968112
+      },
+      "outer_k_production": {
+        "mass_dual_norm": 0.3904884997671467,
+        "along_total_residual": 0.007551772334584506,
+        "projected_integral_k_rate": 1.5950037772040127
+      },
+      "outer_k_destruction": {
+        "mass_dual_norm": 0.4161460601349713,
+        "along_total_residual": -0.010837723585970684,
+        "projected_integral_k_rate": -1.660415583931515
+      },
+      "prescribed_scalar_source": {
+        "mass_dual_norm": 0.0,
+        "along_total_residual": 0.0,
+        "projected_integral_k_rate": 0.0
+      }
+    },
+    "projected_total_integral_k_rate": -1.7182927210619308,
+    "physical_global_band": {
+      "name": "global",
+      "x_region": "all",
+      "x_bounds": [
+        -4.0,
+        2.0
+      ],
+      "lower": 0.0,
+      "upper": 4.0,
+      "k_integral": 11.795643345292053,
+      "correction_signed": 0.0,
+      "correction_positive": 0.0,
+      "correction_negative": 0.0,
+      "correction_absolute": 0.0,
+      "production": 4.798495631330982,
+      "coefficient_integral_row": null,
+      "destruction": 7.045490854166439,
+      "invalid_diagnostic_points": []
+    }
+  }
+}
