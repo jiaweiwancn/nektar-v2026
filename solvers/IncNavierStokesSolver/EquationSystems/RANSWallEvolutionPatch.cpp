@@ -506,8 +506,8 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         Require(PimpleSingleSweep() && !m_cappedDestruction && m_variantName=="Original" &&
             m_innerStress==RANSWallInnerStressModel::Linear && !PimpleKBoundEnabled(),
             "new models require one-sweep Original outer / Linear inner / Original source; nonlinear, regularized and bound-action routes unsupported");
-        Require(AcceptedAWF()?transition=="Fixed":m_uniformEP,
-            "new native EP model currently requires its UniformEPFlat plateau; accepted wall has no chi fade");
+        Require(AcceptedAWF()?transition=="Fixed":(m_uniformEP || transition=="Upstream"),
+            "new native EP model requires its flat plateau or declared Upstream switch; accepted wall has no chi fade");
         Require(m_actionPolicy=="Legacy" && m_pimpleBudgetTime<0 && !m_acceptedComparison && !m_heightComparison,
             "CLS-specific action/budget/comparison routes unsupported for the new closures; use model-aware native audits");
     }

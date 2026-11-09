@@ -71,7 +71,7 @@ def run_case(solver,folder,model,policy,wall,**kwargs):
     if report.exists():
         r=json.loads(report.read_text());row['report_sha256']=sha(report)
         row.update(accepted_steps=r.get('steps',0),time=r.get('time',0.),failure=r.get('failure','initialization incomplete'),initial_residual=r.get('raw_reference_norms'),
-            final_stage_norms=r.get('stage_audits',[])[-1:] ,initial_state_sha256=state_hash(r.get('accepted_states',[r.get('initial',[])])[0]),
+            final_stage_norms=r.get('stage_audits',[])[-1:] ,initial_state_sha256=state_hash((r.get('accepted_states') or [r.get('initial',[])])[0]),
             state_sha256=state_hash(r.get('state',[])),history=r.get('native_history'),physics_signature=r.get('signature'),
             state_audits=r.get('state_audits'),step_diagnostics=[{k:v for k,v in s.items() if k in ('time','refreshed_original_block_norms','refreshed_trace_defect',
                 'corrected_continuity_gauge','momentum_splitting_identity_defect','epsilon_same_state_source_storage_defect','k_same_state_source_storage_defect','bound_calls','k_bound')} for s in r.get('pimple_attempts',[])])

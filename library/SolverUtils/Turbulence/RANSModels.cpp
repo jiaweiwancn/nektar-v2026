@@ -189,6 +189,7 @@ RANSClosureValues NewClosure(RANSModel model,double k,double epsilon,
     }
     RANSClosureValues result{};const Real nut=cmu*k*time;
     result.cMu=Cast(cmu);result.eddyViscosity=Cast(nut);
+    if(!(result.eddyViscosity>0))throw std::range_error("New-model eddy viscosity underflow; no coefficient floor");
     result.strainInvariant=Cast(eta);result.rotationInvariant=Cast(xi);result.divergence=Cast(div);
     const auto s2=Product(s,s),o2=Product(o,o),os=Product(o,s),so=Product(s,o);
     Real production=0;

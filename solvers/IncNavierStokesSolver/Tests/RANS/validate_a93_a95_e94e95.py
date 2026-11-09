@@ -125,6 +125,7 @@ def closure_tests(p):
         if name=='A93':require(rotation['ok'] and np.array(rotation['R']).reshape(3,3)[1,1]<0,'A93 covariance negative control')
         else:require(not rotation['ok'],'pure rotation must be rejected')
         require(not p.closure(name,np.zeros((3,3)),k=0)['ok'],'nonpositive k rejection')
+        require(not p.closure(name,np.zeros((3,3)),k=1e-240,e=1e-120)['ok'],'unrepresentable eddy viscosity rejected without a floor')
         guard=p.query('tangent '+name+' Natural EP .000015 1 1 0 0 1 0 0 0 0 0 0')
         require(not guard['ok'] and 'unsupported' in guard['error'].lower(),'unsupported tangent guard')
     boundary=6.5/(3*(math.sqrt(5.42)-1))

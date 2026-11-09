@@ -86,10 +86,17 @@ def main():
             return dict(coarse_initial_residual=coarse,fine_initial_residual=fine,
                 residual_ratios=[y/x if x>1e-12 else None for x,y in zip(coarse,fine)],coarse_drift=whole['step_audits'][-1],fine_drift=r['step_audits'][-1])
         record('spatial-quadrature-refinement-'+wall,spatial)
-        def perturb(wall=wall):
+        def perturb(wall=wall,whole=whole):
             row,r=control('perturbed-'+wall,wall=wall,steps=8,perturb=.005)
             check(row['status']=='pass','mild positive inner-k perturbation rejected')
-            return dict(steps=r['steps'],amplitude_over_K0=.005,drift=r['step_audits'][-1])
+            endpoint_check=None
+            if wall=='Accepted':
+                original=whole['pimple_attempts'][0]['input_domain'];changed=r['pimple_attempts'][0]['input_domain']
+                check(original['minimum_sampled_K']==changed['minimum_sampled_K'] and original['cutoff_range']==changed['cutoff_range'],
+                    'interior perturbation changed accepted endpoint kernel/cutoff')
+                check(whole['accepted_states'][0]!=r['accepted_states'][0],'interior perturbation was not applied')
+                endpoint_check=True
+            return dict(steps=r['steps'],amplitude_over_K0=.005,drift=r['step_audits'][-1],accepted_endpoint_kernel_unchanged=endpoint_check)
         record('mild-admissible-perturbation-'+wall,perturb)
     # Signature and execution guards are checked using valid reference cases;
     # failures must identify the requested unsupported combination explicitly.
@@ -111,6 +118,19 @@ def main():
             text=(folder/'solver.log').read_text();check(r.returncode!=0 and reason in text,('guard rejection reason',label,text[-400:]))
             return dict(rejected=True)
         record('unsupported-'+label,guard)
+    def ep_switch():
+        from cls_epawf_m4_cases import tensor_mesh
+        folder=a.output/'ep-native-switch'
+        xml=case_xml(folder,'E94E95','Natural','EP',steps=2,dt=1e-6,descriptor_probe=a.descriptor_probe)
+        root=ET.parse(xml).getroot()
+        knots=[0.,.0025,.005,.01,.02,.04,.1,.25,.5,1.,2.,2.25,2.5,3.,3.5,4.]
+        tensor_mesh(root,knots,3,2,3.,1.,points=[8,8],xknots=[-4.,-3.,-2.25,-2.,-1.])
+        set_info(root,'RANSWallTransition','Upstream');write(root,xml)
+        with (folder/'solver.log').open('w') as f:r=subprocess.run([str(a.solver),'case.xml'],cwd=folder,stdout=f,stderr=subprocess.STDOUT,env=dict(os.environ,**THREADS),timeout=600)
+        report=load(folder/'case.evolution.json')
+        check(r.returncode==0 and report.get('steps')==2 and not report.get('failure'),'native EP switch control rejected')
+        return dict(steps=2,dt=1e-6,reason='baseline prescribed sink is stiff on its molecular cutoff; structural switch test, not an equilibrium claim',unanchored=True,chi_plateau_transition_baseline=True,report_sha256=sha(folder/'case.evolution.json'))
+    record('native-EP-switch-and-baseline',ep_switch)
     for label in ('curved','3D','MPI'):
         def geometry_guard(label=label):
             folder=a.output/('guard-'+label);xml=case_xml(folder,'E94E95','Natural','Accepted',steps=0,descriptor_probe=a.descriptor_probe)

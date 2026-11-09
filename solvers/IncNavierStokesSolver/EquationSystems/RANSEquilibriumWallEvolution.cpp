@@ -26,7 +26,16 @@ using namespace RANSWallAlgebra;
 namespace
 {
 void Write(std::ostream &out,const Vector &v)
-{out<<'[';for(int i=0;i<v.size();++i){if(i)out<<',';out<<v[i];}out<<']';}
+{
+    out<<'[';for(int i=0;i<v.size();++i)
+    {
+        if(i)out<<',';
+        // JSON integer -0 loses its sign in common readers. State/history
+        // receipts must preserve binary64 signed zeros for rollback checks.
+        if(v[i]==0. && std::signbit(v[i]))out<<"-0.0";else out<<v[i];
+    }
+    out<<']';
+}
 void WriteRows(std::ostream &out,const std::vector<Vector> &v)
 {out<<'[';for(int i=0;i<v.size();++i){if(i)out<<',';Write(out,v[i]);}out<<']';}
 std::string Quoted(const std::string &value)

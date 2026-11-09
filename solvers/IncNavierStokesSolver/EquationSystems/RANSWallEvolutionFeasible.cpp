@@ -479,8 +479,12 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
                 for(int a=0;a<m_dimension;++a)g[PhysicalAxis(a)]=row.Gradient(result.effectiveState,offset[a]);
                 const double k=EvaluationRow(K(),GeometryElement(K(),row.geometry),p.coordinate)->Value(result.effectiveState,offset[K()]);
                 const double ep=p.dependentTrace?p.value:EvaluationRow(Epsilon(),GeometryElement(Epsilon(),row.geometry),p.coordinate)->Value(result.effectiveState,offset[Epsilon()]);
-                result.limitingPoint=p.coordinate;
-                (void)OuterClosure(k,ep,g,p.coordinate);
+                try{(void)OuterClosure(k,ep,g,p.coordinate);}
+                catch(...)
+                {
+                    result.limitingPoint=p.coordinate;result.limitingInventory="current_velocity_constitutive_domain";
+                    throw;
+                }
             }
         }
         result.phase="complete";result.admissible=true;return result;
@@ -2151,6 +2155,8 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
     const double K0=m_parameters.model.Q()*m_robustUstar*m_robustUstar;
     Vector outer{0,1e300,-1e300,1e300,-1e300,domain.minimumSampledK/K0,-1e300};
     double innerCov=1e300,outerCov=1e300;Vector innerPoint,outerPoint,gradientPoint,innerProvenance,outerProvenance;
+    Vector innerTensor,outerTensor,innerGradient,outerGradient;
+    auto flatten=[](const RANSTensor &a){Vector v;for(const auto &row:a)for(double x:row)v.push_back(x);return v;};
     for(const auto &p:domain.observations)
     {
         if(p.block!=K() && !p.dependentTrace)continue;
@@ -2165,13 +2171,15 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
             const double nt=profile->Original().EddyViscosity(r);const auto law=InnerStress(k,nt,G);
             const double cov=J::Eigenvalues(law.reynoldsStress)[0];
             if(cov<innerCov){innerCov=cov;innerPoint={p.coordinate[0],p.coordinate[1],p.coordinate[2],k,profile->K(),nt,law.a,law.c,cov};
-                innerProvenance={double(row.geometry),double(row.element),double(provenance.radialSide),double(p.block)};}
+                innerProvenance={double(row.geometry),double(row.element),double(provenance.radialSide),double(p.block)};
+                if(NewModels()){innerTensor=flatten(law.reynoldsStress);innerGradient=flatten(G);}}
             continue;
         }
         const double epsilon=p.dependentTrace?p.value:EvaluationRow(Epsilon(),GeometryElement(Epsilon(),row.geometry),p.coordinate)->Value(domain.effectiveState,offset[Epsilon()]);
         const auto law=OuterClosure(k,epsilon,G,p.coordinate);const double cov=J::Eigenvalues(law.reynoldsStress)[0];
         if(cov<outerCov){outerCov=cov;outerPoint={p.coordinate[0],p.coordinate[1],p.coordinate[2],k,epsilon,cov};
-            outerProvenance={double(row.geometry),double(row.element),double(provenance.radialSide),double(p.block)};}
+            outerProvenance={double(row.geometry),double(row.element),double(provenance.radialSide),double(p.block)};
+            if(NewModels()){outerTensor=flatten(law.reynoldsStress);outerGradient=flatten(G);}}
         const double g0=m_robustUstar/(m_parameters.model.Kappa()*r);
         const double e0=m_robustUstar*m_robustUstar*m_robustUstar/(m_parameters.model.Kappa()*r);
         for(int a=0;a<3;++a)for(int b=0;b<3;++b)
@@ -2196,6 +2204,13 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
     audit["r2_inner_minimum_point"]=innerPoint;audit["r2_outer_minimum_point"]=outerPoint;
     audit["native_inner_minimum_geometry_element_side_block"]=innerProvenance;
     audit["native_outer_minimum_geometry_element_side_block"]=outerProvenance;
+    if(NewModels())
+    {
+        audit["native_inner_covariance_tensor_row_major"]=innerTensor;
+        audit["native_outer_covariance_tensor_row_major"]=outerTensor;
+        audit["native_inner_covariance_witness_gradient_row_major"]=innerGradient;
+        audit["native_outer_covariance_witness_gradient_row_major"]=outerGradient;
+    }
     if(ModelAwareAudit())
     {
         audit.erase("r2_scalar_domain");audit.erase("robust_source");
