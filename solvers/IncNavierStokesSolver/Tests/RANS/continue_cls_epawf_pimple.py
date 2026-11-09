@@ -22,7 +22,7 @@ import threading
 import time
 import xml.etree.ElementTree as ET
 
-from run_cls_epawf_picard import THREADS, load, require, sha, state_hash, write_json, set_parameter, write
+from run_cls_epawf_picard import THREADS, load, require, sha, state_hash, write_json, set_parameter, set_info, write
 from run_cls_epawf_pimple import prepare, identity, check_report, add_bound_work_arguments, bound_work_arguments
 
 
@@ -177,6 +177,8 @@ def freeze(executable, output):
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--solver', type=Path, required=True)
+    p.add_argument('--evaluation-reuse',choices=('Off','ExactStepV1'),default='Off')
+    p.add_argument('--audit-revision',choices=('NativeElementSideV2',))
     p.add_argument('--checkpoint', type=Path)
     p.add_argument('--prefix-report', type=Path)
     p.add_argument('--prefix-campaign',type=Path)
@@ -213,11 +215,14 @@ def main():
         require(a.accepted_awf_companion=='faithful' and a.accepted_awf_perturbation==0. and a.accepted_awf_inner_refinement=='none','accepted model controls on another case family')
     os.environ.update(THREADS); os.environ['TMPDIR'] = str(a.output/'tmp')
     if not a.resume:a.output.mkdir(parents=True,exist_ok=False)
+    require(not (a.output/'runtime-handoff.json').exists(),'campaign sealed by a validated runtime handoff; use its recorded successor')
     lock=CampaignLock(a.output)
     ledger=StepLedger(a.output/'steps.jsonl')
     if a.resume:
         progress = load(a.output/'progress.json'); a.checkpoint = Path(progress['checkpoint']) if progress['checkpoint'] else None
         require(progress['status']!='numerically_rejected','numerical rejection is terminal; use a separately identified follow-up')
+        require(progress.get('evaluation_reuse','Off')==a.evaluation_reuse,'evaluation reuse differs from campaign')
+        require(progress.get('audit_revision')==a.audit_revision,'audit revision differs from campaign')
         require(progress.get('inventory','LegacyV1')==a.inventory,'inventory differs from campaign')
         require(progress.get('bound_solver','WorkingSet')==a.bound_solver,'finite-QP backend differs from campaign')
         require(progress.get('wall_policy','Upstream')==a.wall_policy,'wall policy differs from campaign')
@@ -296,6 +301,7 @@ def main():
                 prefix_campaign=str(a.prefix_campaign.resolve()) if a.prefix_campaign else None,
                 prefix_steps=info['steps'], prefix_integral=integral, requested_targets=a.targets, completed_targets=[], segments=[])
     progress.update(pid=os.getpid(), host=socket.gethostname(), started_unix=time.time(),
+                    evaluation_reuse=a.evaluation_reuse,audit_revision=a.audit_revision,
                     projection_work_controls=bound_work_arguments(a),bound_solver=a.bound_solver,height_case=a.height_case,upstream_case=a.upstream_case,
                     accepted_awf_case=a.accepted_awf_case,accepted_awf_companion=a.accepted_awf_companion,
                     accepted_awf_companion_reason=a.accepted_awf_companion_reason,accepted_awf_perturbation=a.accepted_awf_perturbation,
@@ -311,6 +317,8 @@ def main():
     save()
     try:
         while progress['accepted_steps'] < max(a.targets):
+            if (a.output/'stop-after-block.json').exists():
+                save(status='stopped_at_checkpoint',stop_request_sha256=sha(a.output/'stop-after-block.json'));return
             verify_identity()
             workers = subprocess.check_output(['ps','-eo','comm=,nlwp='],text=True)
             count = sum(int(x.split()[-1]) for x in workers.splitlines() if x.split()[0] in ('IncNavierStokes','cc1plus','RANSWallResolut'))
@@ -343,7 +351,8 @@ def main():
                 xml = prepare(directory, .000625, end-start, True, restart=Path(progress['checkpoint']) if progress['checkpoint'] else None,
                               checkpoint=True, k_bound='MassProjection', floor_relative=1e-8, snapshots=True,inventory=a.inventory,wall_policy=a.wall_policy,
                               bound_work=bound_work_arguments(a),bound_solver=a.bound_solver)
-            tree=ET.parse(xml).getroot(); set_parameter(tree,'IO_CheckSteps',1); write(tree,xml)
+            tree=ET.parse(xml).getroot();set_info(tree,'RANSWallEvaluationReuse',a.evaluation_reuse)
+            set_parameter(tree,'IO_CheckSteps',1);write(tree,xml)
             if a.height_case or a.upstream_case or a.accepted_awf_case:
                 progress['case_definition']=load(directory/'definition.json')
             command=[str(executable),'case.xml']; started=time.monotonic()
@@ -406,6 +415,8 @@ def main():
             report_file=directory/'case.evolution.json'
             if report_file.exists():
                 report=load(report_file)
+                if a.audit_revision:require(report.get('audit_revision')==a.audit_revision,'native audit revision differs')
+                require(report.get('evaluation_reuse',{}).get('mode','Off')==a.evaluation_reuse,'native evaluation reuse differs')
                 if report.get('initialization_complete') is False:
                     save(status='numerically_rejected',failure=report['failure'],exit_code=child.returncode);return
                 if a.accepted_awf_case:accepted_check_report(report,start>0,progress['case_definition'])

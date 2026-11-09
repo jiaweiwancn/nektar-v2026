@@ -28,6 +28,8 @@ def main():
     p.add_argument('--bound-solver',choices=('WorkingSet','RetainedPool'),default='WorkingSet')
     p.add_argument('--targets',type=int,nargs='+',default=[32,160,800,1600,3200,8000])
     p.add_argument('--block-steps',type=int,default=16);p.add_argument('--timeout',type=float,default=7200)
+    p.add_argument('--evaluation-reuse',choices=('Off','ExactStepV1'),default='Off')
+    p.add_argument('--audit-revision',choices=('NativeElementSideV2',))
     p.add_argument('--checkpoint',type=Path);p.add_argument('--prefix-report',type=Path)
     p.add_argument('--prefix-campaign',type=Path)
     add_bound_work_arguments(p)
@@ -46,6 +48,8 @@ def main():
     base=[sys.executable,'-B',str(driver),'--solver',str(a.solver.resolve()),'--output',str(root),
         '--inventory',a.inventory,'--bound-solver',a.bound_solver,'--wall-policy',a.wall_policy,'--block-steps',str(a.block_steps),'--timeout',str(a.timeout),
         '--targets',*map(str,a.targets),*bound_work_command(bound_work_arguments(a))]
+    base+=['--evaluation-reuse',a.evaluation_reuse]
+    if a.audit_revision:base+=['--audit-revision',a.audit_revision]
     if a.height_case:base += ['--height-case',a.height_case]
     if a.upstream_case:base += ['--upstream-case',a.upstream_case]
     if a.accepted_awf_case:
@@ -59,6 +63,9 @@ def main():
         except (FileNotFoundError,json.JSONDecodeError):
             atomic(a.output/'status.json',dict(status='waiting_for_progress_publication',process_identity=process_identity(os.getpid())))
             time.sleep(5);continue
+        if progress:
+            require(progress.get('evaluation_reuse','Off')==a.evaluation_reuse and progress.get('audit_revision')==a.audit_revision,
+                'supervisor audit/reuse execution identity differs')
         if progress and (a.accepted_awf_case or progress.get('accepted_awf_case')):
             require(progress.get('accepted_awf_case')==a.accepted_awf_case and
                 progress.get('accepted_awf_companion','faithful')==a.accepted_awf_companion and
@@ -69,7 +76,7 @@ def main():
                 progress.get('bound_solver')==a.bound_solver and
                 progress.get('projection_work_controls')==bound_work_arguments(a),
                 'accepted-AWF supervisor configuration differs from the existing campaign')
-        if progress.get('status') in ('numerically_rejected','targets_completed'):
+        if progress.get('status') in ('numerically_rejected','targets_completed','stopped_at_checkpoint'):
             atomic(a.output/'status.json',dict(status=progress['status'],progress=str(root/'progress.json'),
                 accepted_steps=progress['accepted_steps'],accepted_time=progress['accepted_time'],
                 checkpoint=progress['checkpoint'],next_target=progress.get('next_target'),
@@ -110,7 +117,7 @@ def main():
                         supervisor_identity=process_identity(os.getpid())))
                 time.sleep(5)
         progress=load_progress(root/'progress.json')
-        if progress.get('status') in ('numerically_rejected','targets_completed'):continue
+        if progress.get('status') in ('numerically_rejected','targets_completed','stopped_at_checkpoint'):continue
         retries+=1
         if retries>3:
             atomic(a.output/'status.json',dict(status='infrastructure_interrupted',progress=progress,
