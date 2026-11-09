@@ -1,5 +1,12 @@
 # CLS-calibrated budget AWF: implementation and native evolution
 
+**2026-11-09 timing diagnosis:** [native campaign profiling](cls-awf-campaign-timing.md)
+replays six completed eight-step blocks with bitwise field/history equality.
+Inventories and constitutive audits consume 71–76% of native CPU; all four
+direct equation solves together cost .014–.055 CPU s/step. Six production
+campaigns remain unchanged and running; dated frontiers and hashes are in
+[the timing evidence](cls-awf-campaign-timing-evidence/native.json).
+
 **2026-11-09 follow-up:** the [covariance-stage and failure-horizon report](cls-accepted-awf-covariance.md)
 adds strict immutable intermediate-stage readback, independent tensor/tangent
 verification, full same-state Original-operator comparisons, and completed

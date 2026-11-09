@@ -1,0 +1,1719 @@
+{
+  "schema": 1,
+  "captured_UTC": "2026-11-09T01:55:41.225765+00:00",
+  "units": "seconds per accepted step unless stated",
+  "cases": {
+    "BudgetH05Linear": {
+      "start_step": 3568,
+      "end_step": 3576,
+      "physical_steps": 8,
+      "bitwise_state_and_history_equal": true,
+      "additive_seconds_per_step": {
+        "wall": {
+          "Flow stage": 1.4733993518750002,
+          "Epsilon stage": 1.02285395025,
+          "K stage excluding bound": 2.1426899522499987,
+          "Final K bound": 4.226958962875001,
+          "Other sweep checks": 1.234938315,
+          "Acceptance audit and other step work": 4.0880217776249985,
+          "Block startup, reports, output": 3.6788300411242787
+        },
+        "cpu": {
+          "Flow stage": 1.303242,
+          "Epsilon stage": 1.017172,
+          "K stage excluding bound": 1.128136875,
+          "Final K bound": 4.20755825,
+          "Other sweep checks": 1.1718195000000007,
+          "Acceptance audit and other step work": 3.8409722499999983,
+          "Block startup, reports, output": 1.7698268750000015
+        }
+      },
+      "nested_equation_seconds_per_step": {
+        "wall": {
+          "Flow assembly": 0.20089923349999997,
+          "Momentum factorization and solve": 0.022339475375,
+          "Pressure mass factor and construction": 0.18422499325000002,
+          "Pressure factorization and solve": 0.0003602015,
+          "Epsilon assembly": 0.01106625875,
+          "Epsilon factorization and solve": 0.0018385146250000002,
+          "K assembly": 0.06286376875,
+          "K factorization and solve": 0.011142158125000001
+        },
+        "cpu": {
+          "Flow assembly": 0.20083937500000001,
+          "Momentum factorization and solve": 0.022292624999999996,
+          "Pressure mass factor and construction": 0.054664875,
+          "Pressure factorization and solve": 0.00032737500000000003,
+          "Epsilon assembly": 0.0110575,
+          "Epsilon factorization and solve": 0.00183825,
+          "K assembly": 0.06281075,
+          "K factorization and solve": 0.004703499999999999
+        }
+      },
+      "production_recent_seconds_per_step": 15.555364184469,
+      "production_recent_steps": 32.0,
+      "python_report_seconds_per_step": {
+        "python_report_load_seconds": 0.04523474699817598,
+        "python_report_checks_seconds": 1.3975499314256012e-05,
+        "python_report_gzip_seconds": 0.9389237213763408
+      },
+      "domain_scans_per_step": 9.0,
+      "domain_scan_seconds_per_step": 8.462624071125001,
+      "complete_audit_seconds_per_step": 3.7517745173750003,
+      "checkpoint_seconds_per_step": 0.13425987987500002,
+      "snapshot_seconds_per_step": 1.059105467125,
+      "block_initialization_seconds": 9.785220856,
+      "block_report_seconds": 6.041321122,
+      "bound_work": [
+        {
+          "activations": 0,
+          "active_set_iterations": 0,
+          "separation_passes": 1,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 0,
+          "kkt_solves": 0,
+          "seconds_total": 3.238903741,
+          "seconds_algebra": 0,
+          "seconds_factorization": 0,
+          "seconds_separation": 0.009235714,
+          "seconds_inventory": 3.0904074
+        },
+        {
+          "activations": 0,
+          "active_set_iterations": 0,
+          "separation_passes": 1,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 0,
+          "kkt_solves": 0,
+          "seconds_total": 4.374002336,
+          "seconds_algebra": 0,
+          "seconds_factorization": 0,
+          "seconds_separation": 0.013544969,
+          "seconds_inventory": 4.012135188
+        },
+        {
+          "activations": 0,
+          "active_set_iterations": 0,
+          "separation_passes": 1,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 0,
+          "kkt_solves": 0,
+          "seconds_total": 3.580623424,
+          "seconds_algebra": 0,
+          "seconds_factorization": 0,
+          "seconds_separation": 0.015116401,
+          "seconds_inventory": 3.351212628
+        },
+        {
+          "activations": 0,
+          "active_set_iterations": 0,
+          "separation_passes": 1,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 0,
+          "kkt_solves": 0,
+          "seconds_total": 4.47676082,
+          "seconds_algebra": 0,
+          "seconds_factorization": 0,
+          "seconds_separation": 0.016718754,
+          "seconds_inventory": 4.086975523
+        },
+        {
+          "activations": 0,
+          "active_set_iterations": 0,
+          "separation_passes": 1,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 0,
+          "kkt_solves": 0,
+          "seconds_total": 4.686746431,
+          "seconds_algebra": 0,
+          "seconds_factorization": 0,
+          "seconds_separation": 0.015337761,
+          "seconds_inventory": 4.246062341
+        },
+        {
+          "activations": 0,
+          "active_set_iterations": 0,
+          "separation_passes": 1,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 0,
+          "kkt_solves": 0,
+          "seconds_total": 4.508841637,
+          "seconds_algebra": 0,
+          "seconds_factorization": 0,
+          "seconds_separation": 0.019891699,
+          "seconds_inventory": 4.138124591
+        },
+        {
+          "activations": 0,
+          "active_set_iterations": 0,
+          "separation_passes": 1,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 0,
+          "kkt_solves": 0,
+          "seconds_total": 4.317642416,
+          "seconds_algebra": 0,
+          "seconds_factorization": 0,
+          "seconds_separation": 0.03178957,
+          "seconds_inventory": 3.947609964
+        },
+        {
+          "activations": 0,
+          "active_set_iterations": 0,
+          "separation_passes": 1,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 0,
+          "kkt_solves": 0,
+          "seconds_total": 3.663215122,
+          "seconds_algebra": 0,
+          "seconds_factorization": 0,
+          "seconds_separation": 0.018606111,
+          "seconds_inventory": 3.413270284
+        }
+      ],
+      "capture_manifest": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/BudgetH05Linear/capture.json",
+      "result_manifest": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/BudgetH05Linear/result.json",
+      "native_process_cpu_seconds_per_step": 14.43872775,
+      "named_nested_timers": {
+        "step/matching.constraints": {
+          "calls": 144,
+          "wall_per_step": 0.009267858750000002,
+          "cpu_per_step": 0.009238999999999995,
+          "exclusive_cpu_per_step": 0.009238999999999995
+        },
+        "step/domain.scalar": {
+          "calls": 72,
+          "wall_per_step": 8.462624071125001,
+          "cpu_per_step": 8.441697750000001,
+          "exclusive_cpu_per_step": 8.439195250000003
+        },
+        "step/constitutive.refresh": {
+          "calls": 112,
+          "wall_per_step": 0.17635656899999996,
+          "cpu_per_step": 0.17627825,
+          "exclusive_cpu_per_step": 0.17627825
+        },
+        "step/residual": {
+          "calls": 64,
+          "wall_per_step": 0.48621634775000006,
+          "cpu_per_step": 0.485986875,
+          "exclusive_cpu_per_step": 0.4818351250000001
+        },
+        "step/pimple.sweep": {
+          "calls": 8,
+          "wall_per_step": 10.10084053225,
+          "cpu_per_step": 8.827928625,
+          "exclusive_cpu_per_step": 0.00570637499999993
+        },
+        "step/audit.physical": {
+          "calls": 8,
+          "wall_per_step": 0.569958035625,
+          "cpu_per_step": 0.53143075,
+          "exclusive_cpu_per_step": 0.35389887500000006
+        },
+        "step/audit.complete": {
+          "calls": 8,
+          "wall_per_step": 3.719807102625,
+          "cpu_per_step": 3.6803327500000007,
+          "exclusive_cpu_per_step": 2.1790691250000003
+        },
+        "step/native.acceptance_audit": {
+          "calls": 8,
+          "wall_per_step": 3.7517745173750003,
+          "cpu_per_step": 3.712291,
+          "exclusive_cpu_per_step": 0.031958249999999966
+        },
+        "step/native.step": {
+          "calls": 8,
+          "wall_per_step": 14.188862309874999,
+          "cpu_per_step": 12.668900874999999,
+          "exclusive_cpu_per_step": 0.005697874999999852
+        }
+      },
+      "direct_equation_solve_cpu_seconds_per_step": 0.029161749999999997,
+      "inventory_audit_exclusive_cpu_seconds_per_step": 10.972163250000003,
+      "governing_schedule_and_history_verified": true
+    },
+    "BudgetH05Saturated": {
+      "start_step": 3488,
+      "end_step": 3496,
+      "physical_steps": 8,
+      "bitwise_state_and_history_equal": true,
+      "additive_seconds_per_step": {
+        "wall": {
+          "Flow stage": 1.445211929,
+          "Epsilon stage": 0.9142173221250001,
+          "K stage excluding bound": 1.6234474744999998,
+          "Final K bound": 3.914400891375,
+          "Other sweep checks": 1.1265622074999992,
+          "Acceptance audit and other step work": 3.832750423624999,
+          "Block startup, reports, output": 4.25406116075013
+        },
+        "cpu": {
+          "Flow stage": 1.2094221250000001,
+          "Epsilon stage": 0.91405075,
+          "K stage excluding bound": 1.059303250000001,
+          "Final K bound": 3.8962769999999995,
+          "Other sweep checks": 1.0897358749999997,
+          "Acceptance audit and other step work": 3.657207999999997,
+          "Block startup, reports, output": 1.9793282500000018
+        }
+      },
+      "nested_equation_seconds_per_step": {
+        "wall": {
+          "Flow assembly": 0.19286231662500003,
+          "Momentum factorization and solve": 0.02353160625,
+          "Pressure mass factor and construction": 0.280210376875,
+          "Pressure factorization and solve": 0.00032041487499999996,
+          "Epsilon assembly": 0.010499761875000001,
+          "Epsilon factorization and solve": 0.0020400023749999998,
+          "K assembly": 0.0544115765,
+          "K factorization and solve": 0.004584229
+        },
+        "cpu": {
+          "Flow assembly": 0.19282624999999998,
+          "Momentum factorization and solve": 0.021514625,
+          "Pressure mass factor and construction": 0.06131774999999999,
+          "Pressure factorization and solve": 0.000306875,
+          "Epsilon assembly": 0.010499500000000002,
+          "Epsilon factorization and solve": 0.0020362500000000003,
+          "K assembly": 0.054363625,
+          "K factorization and solve": 0.004556500000000001
+        }
+      },
+      "production_recent_seconds_per_step": 15.123388996749782,
+      "production_recent_steps": 32.0,
+      "python_report_seconds_per_step": {
+        "python_report_load_seconds": 0.08992756462248508,
+        "python_report_checks_seconds": 0.002500159498595167,
+        "python_report_gzip_seconds": 0.3806617375012138
+      },
+      "domain_scans_per_step": 9.0,
+      "domain_scan_seconds_per_step": 7.92748775775,
+      "complete_audit_seconds_per_step": 3.60823816725,
+      "checkpoint_seconds_per_step": 0.072675558875,
+      "snapshot_seconds_per_step": 0.5947228302500001,
+      "block_initialization_seconds": 10.324770971,
+      "block_report_seconds": 9.093467423,
+      "bound_work": [
+        {
+          "activations": 0,
+          "active_set_iterations": 0,
+          "separation_passes": 1,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 0,
+          "kkt_solves": 0,
+          "seconds_total": 3.683611895,
+          "seconds_algebra": 0,
+          "seconds_factorization": 0,
+          "seconds_separation": 0.009346228,
+          "seconds_inventory": 3.423368841
+        },
+        {
+          "activations": 0,
+          "active_set_iterations": 0,
+          "separation_passes": 1,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 0,
+          "kkt_solves": 0,
+          "seconds_total": 4.192900789,
+          "seconds_algebra": 0,
+          "seconds_factorization": 0,
+          "seconds_separation": 0.010979121,
+          "seconds_inventory": 3.865855366
+        },
+        {
+          "activations": 0,
+          "active_set_iterations": 0,
+          "separation_passes": 1,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 0,
+          "kkt_solves": 0,
+          "seconds_total": 3.791415523,
+          "seconds_algebra": 0,
+          "seconds_factorization": 0,
+          "seconds_separation": 0.016427591,
+          "seconds_inventory": 3.508957455
+        },
+        {
+          "activations": 0,
+          "active_set_iterations": 0,
+          "separation_passes": 1,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 0,
+          "kkt_solves": 0,
+          "seconds_total": 3.787576438,
+          "seconds_algebra": 0,
+          "seconds_factorization": 0,
+          "seconds_separation": 0.012682398,
+          "seconds_inventory": 3.515554644
+        },
+        {
+          "activations": 0,
+          "active_set_iterations": 0,
+          "separation_passes": 1,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 0,
+          "kkt_solves": 0,
+          "seconds_total": 3.854416072,
+          "seconds_algebra": 0,
+          "seconds_factorization": 0,
+          "seconds_separation": 0.013338955,
+          "seconds_inventory": 3.582816656
+        },
+        {
+          "activations": 0,
+          "active_set_iterations": 0,
+          "separation_passes": 1,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 0,
+          "kkt_solves": 0,
+          "seconds_total": 3.52690805,
+          "seconds_algebra": 0,
+          "seconds_factorization": 0,
+          "seconds_separation": 0.013513652,
+          "seconds_inventory": 3.286190391
+        },
+        {
+          "activations": 0,
+          "active_set_iterations": 0,
+          "separation_passes": 1,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 0,
+          "kkt_solves": 0,
+          "seconds_total": 3.865812657,
+          "seconds_algebra": 0,
+          "seconds_factorization": 0,
+          "seconds_separation": 0.016372233,
+          "seconds_inventory": 3.6297407489999998
+        },
+        {
+          "activations": 0,
+          "active_set_iterations": 0,
+          "separation_passes": 1,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 0,
+          "kkt_solves": 0,
+          "seconds_total": 3.883678129,
+          "seconds_algebra": 0,
+          "seconds_factorization": 0,
+          "seconds_separation": 0.014498982,
+          "seconds_inventory": 3.594747189
+        }
+      ],
+      "capture_manifest": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/BudgetH05Saturated/capture.json",
+      "result_manifest": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/BudgetH05Saturated/result.json",
+      "native_process_cpu_seconds_per_step": 13.80532525,
+      "named_nested_timers": {
+        "step/matching.constraints": {
+          "calls": 144,
+          "wall_per_step": 0.008146975749999999,
+          "cpu_per_step": 0.008097125000000004,
+          "exclusive_cpu_per_step": 0.008097125000000004
+        },
+        "step/domain.scalar": {
+          "calls": 72,
+          "wall_per_step": 7.92748775775,
+          "cpu_per_step": 7.924939,
+          "exclusive_cpu_per_step": 7.922944875000002
+        },
+        "step/constitutive.refresh": {
+          "calls": 112,
+          "wall_per_step": 0.1474114355,
+          "cpu_per_step": 0.14739125,
+          "exclusive_cpu_per_step": 0.14739125
+        },
+        "step/residual": {
+          "calls": 64,
+          "wall_per_step": 0.4757046153750001,
+          "cpu_per_step": 0.45309575,
+          "exclusive_cpu_per_step": 0.4494400000000001
+        },
+        "step/pimple.sweep": {
+          "calls": 8,
+          "wall_per_step": 9.0238398245,
+          "cpu_per_step": 8.168789,
+          "exclusive_cpu_per_step": 0.003071624999999578
+        },
+        "step/audit.physical": {
+          "calls": 8,
+          "wall_per_step": 0.5789386719999999,
+          "cpu_per_step": 0.5164603750000001,
+          "exclusive_cpu_per_step": 0.3397365
+        },
+        "step/audit.complete": {
+          "calls": 8,
+          "wall_per_step": 3.5813358433749998,
+          "cpu_per_step": 3.5179147500000005,
+          "exclusive_cpu_per_step": 2.0616814999999997
+        },
+        "step/native.acceptance_audit": {
+          "calls": 8,
+          "wall_per_step": 3.60823816725,
+          "cpu_per_step": 3.5446915,
+          "exclusive_cpu_per_step": 0.02677674999999996
+        },
+        "step/native.step": {
+          "calls": 8,
+          "wall_per_step": 12.856590248124999,
+          "cpu_per_step": 11.825996999999997,
+          "exclusive_cpu_per_step": 0.0037268749999996853
+        }
+      },
+      "direct_equation_solve_cpu_seconds_per_step": 0.028414250000000002,
+      "inventory_audit_exclusive_cpu_seconds_per_step": 10.324362875000002,
+      "governing_schedule_and_history_verified": true
+    },
+    "BudgetH2": {
+      "start_step": 2576,
+      "end_step": 2584,
+      "physical_steps": 8,
+      "bitwise_state_and_history_equal": true,
+      "additive_seconds_per_step": {
+        "wall": {
+          "Flow stage": 1.888721866,
+          "Epsilon stage": 1.097709133125,
+          "K stage excluding bound": 2.8171988748749994,
+          "Final K bound": 4.41523015125,
+          "Other sweep checks": 1.328697479875001,
+          "Acceptance audit and other step work": 4.609073456125001,
+          "Block startup, reports, output": 3.9095577338702157
+        },
+        "cpu": {
+          "Flow stage": 1.531982625,
+          "Epsilon stage": 1.068250125,
+          "K stage excluding bound": 1.2822026249999992,
+          "Final K bound": 4.402634375,
+          "Other sweep checks": 1.2515596250000014,
+          "Acceptance audit and other step work": 4.293818250000001,
+          "Block startup, reports, output": 2.330282499999999
+        }
+      },
+      "nested_equation_seconds_per_step": {
+        "wall": {
+          "Flow assembly": 0.24288628912500004,
+          "Momentum factorization and solve": 0.04579897325000001,
+          "Pressure mass factor and construction": 0.45089667237500003,
+          "Pressure factorization and solve": 0.00030236050000000006,
+          "Epsilon assembly": 0.007360003,
+          "Epsilon factorization and solve": 0.00086029975,
+          "K assembly": 0.06100977237500001,
+          "K factorization and solve": 0.0078499695
+        },
+        "cpu": {
+          "Flow assembly": 0.24274487500000003,
+          "Momentum factorization and solve": 0.04572325,
+          "Pressure mass factor and construction": 0.1244545,
+          "Pressure factorization and solve": 0.00030225,
+          "Epsilon assembly": 0.007359875,
+          "Epsilon factorization and solve": 0.00086025,
+          "K assembly": 0.061002,
+          "K factorization and solve": 0.007849624999999999
+        }
+      },
+      "production_recent_seconds_per_step": 19.74474775121962,
+      "production_recent_steps": 32.0,
+      "python_report_seconds_per_step": {
+        "python_report_load_seconds": 0.019230332123697735,
+        "python_report_checks_seconds": 1.2854252418037504e-05,
+        "python_report_gzip_seconds": 0.39490567487519
+      },
+      "domain_scans_per_step": 9.0,
+      "domain_scan_seconds_per_step": 9.316420985625001,
+      "complete_audit_seconds_per_step": 4.246184617125,
+      "checkpoint_seconds_per_step": 0.16525058487500002,
+      "snapshot_seconds_per_step": 1.6207332595000001,
+      "block_initialization_seconds": 12.177668075,
+      "block_report_seconds": 8.16683627,
+      "bound_work": [
+        {
+          "activations": 0,
+          "active_set_iterations": 0,
+          "separation_passes": 1,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 0,
+          "kkt_solves": 0,
+          "seconds_total": 4.213680149,
+          "seconds_algebra": 0,
+          "seconds_factorization": 0,
+          "seconds_separation": 0.012164074,
+          "seconds_inventory": 4.007303714
+        },
+        {
+          "activations": 0,
+          "active_set_iterations": 0,
+          "separation_passes": 1,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 0,
+          "kkt_solves": 0,
+          "seconds_total": 4.268436082,
+          "seconds_algebra": 0,
+          "seconds_factorization": 0,
+          "seconds_separation": 0.010664256,
+          "seconds_inventory": 4.059732916
+        },
+        {
+          "activations": 0,
+          "active_set_iterations": 0,
+          "separation_passes": 1,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 0,
+          "kkt_solves": 0,
+          "seconds_total": 4.273921306,
+          "seconds_algebra": 0,
+          "seconds_factorization": 0,
+          "seconds_separation": 0.011037251,
+          "seconds_inventory": 4.069665472
+        },
+        {
+          "activations": 0,
+          "active_set_iterations": 0,
+          "separation_passes": 1,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 0,
+          "kkt_solves": 0,
+          "seconds_total": 4.315494059,
+          "seconds_algebra": 0,
+          "seconds_factorization": 0,
+          "seconds_separation": 0.011147806,
+          "seconds_inventory": 4.090894489
+        },
+        {
+          "activations": 0,
+          "active_set_iterations": 0,
+          "separation_passes": 1,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 0,
+          "kkt_solves": 0,
+          "seconds_total": 4.456291989,
+          "seconds_algebra": 0,
+          "seconds_factorization": 0,
+          "seconds_separation": 0.011268941,
+          "seconds_inventory": 4.219685417
+        },
+        {
+          "activations": 0,
+          "active_set_iterations": 0,
+          "separation_passes": 1,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 0,
+          "kkt_solves": 0,
+          "seconds_total": 4.402298011,
+          "seconds_algebra": 0,
+          "seconds_factorization": 0,
+          "seconds_separation": 0.011144347,
+          "seconds_inventory": 4.127071653
+        },
+        {
+          "activations": 0,
+          "active_set_iterations": 0,
+          "separation_passes": 1,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 0,
+          "kkt_solves": 0,
+          "seconds_total": 4.407340906,
+          "seconds_algebra": 0,
+          "seconds_factorization": 0,
+          "seconds_separation": 0.011662967,
+          "seconds_inventory": 4.169631346
+        },
+        {
+          "activations": 0,
+          "active_set_iterations": 0,
+          "separation_passes": 1,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 0,
+          "kkt_solves": 0,
+          "seconds_total": 4.421264476,
+          "seconds_algebra": 0,
+          "seconds_factorization": 0,
+          "seconds_separation": 0.013842374,
+          "seconds_inventory": 4.168336159
+        }
+      ],
+      "capture_manifest": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/BudgetH2/capture.json",
+      "result_manifest": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/BudgetH2/result.json",
+      "native_process_cpu_seconds_per_step": 16.160730125,
+      "named_nested_timers": {
+        "step/matching.constraints": {
+          "calls": 144,
+          "wall_per_step": 0.005735177499999999,
+          "cpu_per_step": 0.005711249999999998,
+          "exclusive_cpu_per_step": 0.005711249999999998
+        },
+        "step/domain.scalar": {
+          "calls": 72,
+          "wall_per_step": 9.316420985625001,
+          "cpu_per_step": 9.272786124999998,
+          "exclusive_cpu_per_step": 9.271291125
+        },
+        "step/constitutive.refresh": {
+          "calls": 112,
+          "wall_per_step": 0.14569221300000007,
+          "cpu_per_step": 0.14563162499999993,
+          "exclusive_cpu_per_step": 0.14563162499999993
+        },
+        "step/residual": {
+          "calls": 64,
+          "wall_per_step": 0.5229230537499999,
+          "cpu_per_step": 0.48168225000000015,
+          "exclusive_cpu_per_step": 0.47843275
+        },
+        "step/pimple.sweep": {
+          "calls": 8,
+          "wall_per_step": 11.547557505125,
+          "cpu_per_step": 9.536629375,
+          "exclusive_cpu_per_step": 0.0031367499999999104
+        },
+        "step/audit.physical": {
+          "calls": 8,
+          "wall_per_step": 0.6374421917499999,
+          "cpu_per_step": 0.581259375,
+          "exclusive_cpu_per_step": 0.400389875
+        },
+        "step/audit.complete": {
+          "calls": 8,
+          "wall_per_step": 4.2279707025,
+          "cpu_per_step": 4.154132125,
+          "exclusive_cpu_per_step": 2.503498625
+        },
+        "step/native.acceptance_audit": {
+          "calls": 8,
+          "wall_per_step": 4.246184617125,
+          "cpu_per_step": 4.17231025,
+          "exclusive_cpu_per_step": 0.018178125000000156
+        },
+        "step/native.step": {
+          "calls": 8,
+          "wall_per_step": 16.156630961250002,
+          "cpu_per_step": 13.830447625000001,
+          "exclusive_cpu_per_step": 0.005835374999999976
+        }
+      },
+      "direct_equation_solve_cpu_seconds_per_step": 0.054735374999999996,
+      "inventory_audit_exclusive_cpu_seconds_per_step": 12.175179625,
+      "governing_schedule_and_history_verified": true
+    },
+    "UniformG": {
+      "start_step": 4656,
+      "end_step": 4664,
+      "physical_steps": 8,
+      "bitwise_state_and_history_equal": true,
+      "additive_seconds_per_step": {
+        "wall": {
+          "Flow stage": 1.8875316996249998,
+          "Epsilon stage": 1.400692145125,
+          "K stage excluding bound": 3.122333521125,
+          "Final K bound": 3.7602235902500003,
+          "Other sweep checks": 1.6331491051249998,
+          "Acceptance audit and other step work": 19.314748502875002,
+          "Block startup, reports, output": 4.85547638787175
+        },
+        "cpu": {
+          "Flow stage": 1.583416875,
+          "Epsilon stage": 1.3879627500000002,
+          "K stage excluding bound": 1.463112625,
+          "Final K bound": 3.74839625,
+          "Other sweep checks": 1.532781625000002,
+          "Acceptance audit and other step work": 19.112858374999995,
+          "Block startup, reports, output": 3.7352782500000004
+        }
+      },
+      "nested_equation_seconds_per_step": {
+        "wall": {
+          "Flow assembly": 0.220133472875,
+          "Momentum factorization and solve": 0.021034033625,
+          "Pressure mass factor and construction": 0.33123963187499994,
+          "Pressure factorization and solve": 0.00025781112500000003,
+          "Epsilon assembly": 0.139092883,
+          "Epsilon factorization and solve": 0.00638307775,
+          "K assembly": 0.114181875875,
+          "K factorization and solve": 0.0041107240000000005
+        },
+        "cpu": {
+          "Flow assembly": 0.22011387500000001,
+          "Momentum factorization and solve": 0.020980375000000002,
+          "Pressure mass factor and construction": 0.057462875,
+          "Pressure factorization and solve": 0.00025337499999999997,
+          "Epsilon assembly": 0.13100375,
+          "Epsilon factorization and solve": 0.002003625,
+          "K assembly": 0.11415775,
+          "K factorization and solve": 0.004108625
+        }
+      },
+      "production_recent_seconds_per_step": 34.54648880143759,
+      "production_recent_steps": 32.0,
+      "python_report_seconds_per_step": {
+        "python_report_load_seconds": 0.0514582523755962,
+        "python_report_checks_seconds": 8.596623956691474e-06,
+        "python_report_gzip_seconds": 0.26387307413097005
+      },
+      "domain_scans_per_step": 9.0,
+      "domain_scan_seconds_per_step": 8.271758042625,
+      "complete_audit_seconds_per_step": 18.763064315,
+      "checkpoint_seconds_per_step": 0.051687619250000004,
+      "snapshot_seconds_per_step": 1.700344509625,
+      "block_initialization_seconds": 25.818374461,
+      "block_report_seconds": 4.630936602,
+      "bound_work": [
+        {
+          "activations": 0,
+          "active_set_iterations": 0,
+          "separation_passes": 1,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 0,
+          "kkt_solves": 0,
+          "seconds_total": 3.805046711,
+          "seconds_algebra": 0,
+          "seconds_factorization": 0,
+          "seconds_separation": 0.089125588,
+          "seconds_inventory": 3.0643195730000006
+        },
+        {
+          "activations": 0,
+          "active_set_iterations": 0,
+          "separation_passes": 1,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 0,
+          "kkt_solves": 0,
+          "seconds_total": 3.387034478,
+          "seconds_algebra": 0,
+          "seconds_factorization": 0,
+          "seconds_separation": 0.037154873,
+          "seconds_inventory": 2.8157653380000003
+        },
+        {
+          "activations": 0,
+          "active_set_iterations": 0,
+          "separation_passes": 1,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 0,
+          "kkt_solves": 0,
+          "seconds_total": 3.965747189,
+          "seconds_algebra": 0,
+          "seconds_factorization": 0,
+          "seconds_separation": 0.061269242,
+          "seconds_inventory": 3.1291475249999996
+        },
+        {
+          "activations": 0,
+          "active_set_iterations": 0,
+          "separation_passes": 1,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 0,
+          "kkt_solves": 0,
+          "seconds_total": 3.416199947,
+          "seconds_algebra": 0,
+          "seconds_factorization": 0,
+          "seconds_separation": 0.037676932,
+          "seconds_inventory": 2.821543492
+        },
+        {
+          "activations": 0,
+          "active_set_iterations": 0,
+          "separation_passes": 1,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 0,
+          "kkt_solves": 0,
+          "seconds_total": 3.552965623,
+          "seconds_algebra": 0,
+          "seconds_factorization": 0,
+          "seconds_separation": 0.040789508,
+          "seconds_inventory": 2.952368644
+        },
+        {
+          "activations": 0,
+          "active_set_iterations": 0,
+          "separation_passes": 1,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 0,
+          "kkt_solves": 0,
+          "seconds_total": 3.831444475,
+          "seconds_algebra": 0,
+          "seconds_factorization": 0,
+          "seconds_separation": 0.044007808,
+          "seconds_inventory": 3.1426106760000003
+        },
+        {
+          "activations": 0,
+          "active_set_iterations": 0,
+          "separation_passes": 1,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 0,
+          "kkt_solves": 0,
+          "seconds_total": 3.604721765,
+          "seconds_algebra": 0,
+          "seconds_factorization": 0,
+          "seconds_separation": 0.036979573,
+          "seconds_inventory": 2.957099312
+        },
+        {
+          "activations": 0,
+          "active_set_iterations": 0,
+          "separation_passes": 1,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 0,
+          "kkt_solves": 0,
+          "seconds_total": 3.673275181,
+          "seconds_algebra": 0,
+          "seconds_factorization": 0,
+          "seconds_separation": 0.037378172,
+          "seconds_inventory": 3.024531175
+        }
+      ],
+      "capture_manifest": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/UniformG/capture.json",
+      "result_manifest": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/UniformG/result.json",
+      "native_process_cpu_seconds_per_step": 32.56380675,
+      "named_nested_timers": {
+        "step/matching.constraints": {
+          "calls": 144,
+          "wall_per_step": 1.5102349393750005,
+          "cpu_per_step": 1.5098827499999992,
+          "exclusive_cpu_per_step": 1.5098827499999992
+        },
+        "step/domain.scalar": {
+          "calls": 72,
+          "wall_per_step": 8.271758042625,
+          "cpu_per_step": 8.2529215,
+          "exclusive_cpu_per_step": 7.762321125
+        },
+        "step/constitutive.refresh": {
+          "calls": 112,
+          "wall_per_step": 0.6095313576250001,
+          "cpu_per_step": 0.6093805,
+          "exclusive_cpu_per_step": 0.6093805
+        },
+        "step/residual": {
+          "calls": 64,
+          "wall_per_step": 1.6314204431249997,
+          "cpu_per_step": 1.6034618749999996,
+          "exclusive_cpu_per_step": 0.6500057499999998
+        },
+        "step/pimple.sweep": {
+          "calls": 8,
+          "wall_per_step": 11.80393006125,
+          "cpu_per_step": 9.715670125,
+          "exclusive_cpu_per_step": 0.0033450000000001534
+        },
+        "step/audit.physical": {
+          "calls": 8,
+          "wall_per_step": 16.572960700875,
+          "cpu_per_step": 16.49956925,
+          "exclusive_cpu_per_step": 15.734505999999998
+        },
+        "step/audit.complete": {
+          "calls": 8,
+          "wall_per_step": 18.758363093625,
+          "cpu_per_step": 18.663560250000003,
+          "exclusive_cpu_per_step": 1.1475498749999997
+        },
+        "step/native.acceptance_audit": {
+          "calls": 8,
+          "wall_per_step": 18.763064315,
+          "cpu_per_step": 18.664379375,
+          "exclusive_cpu_per_step": 0.0008191249999995875
+        },
+        "step/native.step": {
+          "calls": 8,
+          "wall_per_step": 31.118678564125002,
+          "cpu_per_step": 28.828528499999997,
+          "exclusive_cpu_per_step": 0.0031981250000003847
+        }
+      },
+      "direct_equation_solve_cpu_seconds_per_step": 0.027346000000000006,
+      "inventory_audit_exclusive_cpu_seconds_per_step": 24.644377,
+      "governing_schedule_and_history_verified": true
+    },
+    "UniformH": {
+      "start_step": 5952,
+      "end_step": 5960,
+      "physical_steps": 8,
+      "bitwise_state_and_history_equal": true,
+      "additive_seconds_per_step": {
+        "wall": {
+          "Flow stage": 1.44805734375,
+          "Epsilon stage": 1.151594262875,
+          "K stage excluding bound": 2.3102317796250014,
+          "Final K bound": 3.6218735085,
+          "Other sweep checks": 1.21598375525,
+          "Acceptance audit and other step work": 12.89674924725,
+          "Block startup, reports, output": 3.4168746374975534
+        },
+        "cpu": {
+          "Flow stage": 1.25278425,
+          "Epsilon stage": 1.14885075,
+          "K stage excluding bound": 1.1874763750000015,
+          "Final K bound": 3.6213867499999997,
+          "Other sweep checks": 1.1876252499999982,
+          "Acceptance audit and other step work": 12.786039875000002,
+          "Block startup, reports, output": 2.857855624999999
+        }
+      },
+      "nested_equation_seconds_per_step": {
+        "wall": {
+          "Flow assembly": 0.191519293,
+          "Momentum factorization and solve": 0.017749569000000003,
+          "Pressure mass factor and construction": 0.17985636337500002,
+          "Pressure factorization and solve": 0.000103719125,
+          "Epsilon assembly": 0.111237270375,
+          "Epsilon factorization and solve": 0.001742465125,
+          "K assembly": 0.09761866024999999,
+          "K factorization and solve": 0.0021232391250000002
+        },
+        "cpu": {
+          "Flow assembly": 0.166761375,
+          "Momentum factorization and solve": 0.009602874999999999,
+          "Pressure mass factor and construction": 0.024570250000000002,
+          "Pressure factorization and solve": 0.0001035,
+          "Epsilon assembly": 0.10868262499999999,
+          "Epsilon factorization and solve": 0.0017426250000000003,
+          "K assembly": 0.09760375000000002,
+          "K factorization and solve": 0.0020935
+        }
+      },
+      "production_recent_seconds_per_step": 27.47664182896915,
+      "production_recent_steps": 32.0,
+      "python_report_seconds_per_step": {
+        "python_report_load_seconds": 0.0798417178739328,
+        "python_report_checks_seconds": 9.450501238461584e-06,
+        "python_report_gzip_seconds": 0.10565493725152919
+      },
+      "domain_scans_per_step": 9.0,
+      "domain_scan_seconds_per_step": 6.774154682250003,
+      "complete_audit_seconds_per_step": 12.45567772575,
+      "checkpoint_seconds_per_step": 0.076263886375,
+      "snapshot_seconds_per_step": 1.1204122645000003,
+      "block_initialization_seconds": 18.850052066,
+      "block_report_seconds": 3.864453208,
+      "bound_work": [
+        {
+          "activations": 1,
+          "active_set_iterations": 22,
+          "separation_passes": 18,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 34,
+          "kkt_solves": 22,
+          "seconds_total": 3.430683031,
+          "seconds_algebra": 0.007392233,
+          "seconds_factorization": 0.016752892,
+          "seconds_separation": 0.49719685399999997,
+          "seconds_inventory": 2.444527325
+        },
+        {
+          "activations": 1,
+          "active_set_iterations": 22,
+          "separation_passes": 18,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 34,
+          "kkt_solves": 22,
+          "seconds_total": 4.006741045,
+          "seconds_algebra": 0.007665703999999999,
+          "seconds_factorization": 0.01668903,
+          "seconds_separation": 0.75613224,
+          "seconds_inventory": 2.638435595
+        },
+        {
+          "activations": 1,
+          "active_set_iterations": 22,
+          "separation_passes": 18,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 34,
+          "kkt_solves": 22,
+          "seconds_total": 3.528186954,
+          "seconds_algebra": 0.007246608000000001,
+          "seconds_factorization": 0.016721961,
+          "seconds_separation": 0.5090674789999999,
+          "seconds_inventory": 2.495863281
+        },
+        {
+          "activations": 1,
+          "active_set_iterations": 22,
+          "separation_passes": 18,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 34,
+          "kkt_solves": 22,
+          "seconds_total": 3.528511776,
+          "seconds_algebra": 0.007677153,
+          "seconds_factorization": 0.018774003,
+          "seconds_separation": 0.5380860390000001,
+          "seconds_inventory": 2.478116433
+        },
+        {
+          "activations": 1,
+          "active_set_iterations": 22,
+          "separation_passes": 18,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 34,
+          "kkt_solves": 22,
+          "seconds_total": 3.423930192,
+          "seconds_algebra": 0.007368629000000001,
+          "seconds_factorization": 0.016693353,
+          "seconds_separation": 0.511191342,
+          "seconds_inventory": 2.4752594
+        },
+        {
+          "activations": 1,
+          "active_set_iterations": 22,
+          "separation_passes": 18,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 34,
+          "kkt_solves": 22,
+          "seconds_total": 3.485952391,
+          "seconds_algebra": 0.007263346999999999,
+          "seconds_factorization": 0.016718324,
+          "seconds_separation": 0.5378146239999999,
+          "seconds_inventory": 2.486983735
+        },
+        {
+          "activations": 1,
+          "active_set_iterations": 22,
+          "separation_passes": 18,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 34,
+          "kkt_solves": 22,
+          "seconds_total": 3.489120863,
+          "seconds_algebra": 0.0072900429999999995,
+          "seconds_factorization": 0.016684253,
+          "seconds_separation": 0.536504079,
+          "seconds_inventory": 2.493751827
+        },
+        {
+          "activations": 1,
+          "active_set_iterations": 22,
+          "separation_passes": 18,
+          "inventory_rebuilds": 1,
+          "mass_factor_applications": 34,
+          "kkt_solves": 22,
+          "seconds_total": 3.456403212,
+          "seconds_algebra": 0.007414956,
+          "seconds_factorization": 0.016756628,
+          "seconds_separation": 0.5269080309999999,
+          "seconds_inventory": 2.468485274
+        }
+      ],
+      "capture_manifest": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/UniformH/capture.json",
+      "result_manifest": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/UniformH/result.json",
+      "native_process_cpu_seconds_per_step": 24.042018875,
+      "named_nested_timers": {
+        "step/matching.constraints": {
+          "calls": 144,
+          "wall_per_step": 1.2333048223750005,
+          "cpu_per_step": 1.2330132500000004,
+          "exclusive_cpu_per_step": 1.2330132500000004
+        },
+        "step/domain.scalar": {
+          "calls": 72,
+          "wall_per_step": 6.774154682250003,
+          "cpu_per_step": 6.750748999999998,
+          "exclusive_cpu_per_step": 6.35041425
+        },
+        "step/constitutive.refresh": {
+          "calls": 112,
+          "wall_per_step": 0.472225252875,
+          "cpu_per_step": 0.472208,
+          "exclusive_cpu_per_step": 0.472208
+        },
+        "step/residual": {
+          "calls": 64,
+          "wall_per_step": 1.3105460773750002,
+          "cpu_per_step": 1.3041085000000003,
+          "exclusive_cpu_per_step": 0.524598
+        },
+        "step/pimple.sweep": {
+          "calls": 8,
+          "wall_per_step": 9.74774065,
+          "cpu_per_step": 8.398123374999999,
+          "exclusive_cpu_per_step": 0.001758999999999955
+        },
+        "step/audit.physical": {
+          "calls": 8,
+          "wall_per_step": 10.71581628675,
+          "cpu_per_step": 10.703818250000001,
+          "exclusive_cpu_per_step": 10.098050875
+        },
+        "step/audit.complete": {
+          "calls": 8,
+          "wall_per_step": 12.45516633425,
+          "cpu_per_step": 12.426780875,
+          "exclusive_cpu_per_step": 0.9177379999999999
+        },
+        "step/native.acceptance_audit": {
+          "calls": 8,
+          "wall_per_step": 12.45567772575,
+          "cpu_per_step": 12.427288625,
+          "exclusive_cpu_per_step": 0.00050775000000014
+        },
+        "step/native.step": {
+          "calls": 8,
+          "wall_per_step": 22.64448989725,
+          "cpu_per_step": 21.18416325,
+          "exclusive_cpu_per_step": 0.0016941249999997687
+        }
+      },
+      "direct_equation_solve_cpu_seconds_per_step": 0.013542499999999997,
+      "inventory_audit_exclusive_cpu_seconds_per_step": 17.366203125,
+      "governing_schedule_and_history_verified": true
+    },
+    "UpstreamOne": {
+      "start_step": 4392,
+      "end_step": 4400,
+      "physical_steps": 8,
+      "bitwise_state_and_history_equal": true,
+      "additive_seconds_per_step": {
+        "wall": {
+          "Flow stage": 1.4240183017499999,
+          "Epsilon stage": 1.15366958825,
+          "K stage excluding bound": 2.4930955308749994,
+          "Final K bound": 5.46444908675,
+          "Other sweep checks": 1.3195426473749992,
+          "Acceptance audit and other step work": 13.738949720499999,
+          "Block startup, reports, output": 3.4173647831193144
+        },
+        "cpu": {
+          "Flow stage": 1.3016088749999999,
+          "Epsilon stage": 1.1362825,
+          "K stage excluding bound": 1.2146805,
+          "Final K bound": 5.463173125,
+          "Other sweep checks": 1.2557808750000001,
+          "Acceptance audit and other step work": 13.567876250000001,
+          "Block startup, reports, output": 3.2172400000000003
+        }
+      },
+      "nested_equation_seconds_per_step": {
+        "wall": {
+          "Flow assembly": 0.2024477895,
+          "Momentum factorization and solve": 0.047020966875,
+          "Pressure mass factor and construction": 0.088904592,
+          "Pressure factorization and solve": 0.000128799625,
+          "Epsilon assembly": 0.102997061375,
+          "Epsilon factorization and solve": 0.00430748225,
+          "K assembly": 0.088912821,
+          "K factorization and solve": 0.016430170375
+        },
+        "cpu": {
+          "Flow assembly": 0.191782625,
+          "Momentum factorization and solve": 0.010959749999999999,
+          "Pressure mass factor and construction": 0.025573125000000002,
+          "Pressure factorization and solve": 0.00011137499999999998,
+          "Epsilon assembly": 0.10298587499999999,
+          "Epsilon factorization and solve": 0.00200225,
+          "K assembly": 0.08889799999999999,
+          "K factorization and solve": 0.0024769999999999996
+        }
+      },
+      "production_recent_seconds_per_step": 31.297505909747997,
+      "production_recent_steps": 32.0,
+      "python_report_seconds_per_step": {
+        "python_report_load_seconds": 0.030669193496578373,
+        "python_report_checks_seconds": 1.2703370884992182e-05,
+        "python_report_gzip_seconds": 0.3232494243711699
+      },
+      "domain_scans_per_step": 11.0,
+      "domain_scan_seconds_per_step": 7.885879731749999,
+      "complete_audit_seconds_per_step": 13.251984177,
+      "checkpoint_seconds_per_step": 0.05101129149999999,
+      "snapshot_seconds_per_step": 1.284355685625,
+      "block_initialization_seconds": 20.743638302,
+      "block_report_seconds": 3.974659046,
+      "bound_work": [
+        {
+          "activations": 1,
+          "active_set_iterations": 57,
+          "separation_passes": 36,
+          "inventory_rebuilds": 3,
+          "mass_factor_applications": 70,
+          "kkt_solves": 56,
+          "seconds_total": 5.788480474,
+          "seconds_algebra": 0.024434359999999995,
+          "seconds_factorization": 0.016710705,
+          "seconds_separation": 1.366659323,
+          "seconds_inventory": 3.6461744580000004
+        },
+        {
+          "activations": 1,
+          "active_set_iterations": 57,
+          "separation_passes": 36,
+          "inventory_rebuilds": 3,
+          "mass_factor_applications": 70,
+          "kkt_solves": 56,
+          "seconds_total": 5.459089672,
+          "seconds_algebra": 0.023633331999999996,
+          "seconds_factorization": 0.016697565,
+          "seconds_separation": 1.394789111,
+          "seconds_inventory": 3.3904168830000003
+        },
+        {
+          "activations": 1,
+          "active_set_iterations": 57,
+          "separation_passes": 36,
+          "inventory_rebuilds": 3,
+          "mass_factor_applications": 70,
+          "kkt_solves": 56,
+          "seconds_total": 5.286757914,
+          "seconds_algebra": 0.023043651000000005,
+          "seconds_factorization": 0.016742367,
+          "seconds_separation": 1.2390280169999999,
+          "seconds_inventory": 3.379516292
+        },
+        {
+          "activations": 1,
+          "active_set_iterations": 63,
+          "separation_passes": 39,
+          "inventory_rebuilds": 3,
+          "mass_factor_applications": 76,
+          "kkt_solves": 60,
+          "seconds_total": 5.272417035,
+          "seconds_algebra": 0.025468694999999993,
+          "seconds_factorization": 0.016688246,
+          "seconds_separation": 1.326126198,
+          "seconds_inventory": 3.3384847630000003
+        },
+        {
+          "activations": 1,
+          "active_set_iterations": 63,
+          "separation_passes": 39,
+          "inventory_rebuilds": 3,
+          "mass_factor_applications": 76,
+          "kkt_solves": 60,
+          "seconds_total": 5.281674507,
+          "seconds_algebra": 0.025091442000000005,
+          "seconds_factorization": 0.016710008,
+          "seconds_separation": 1.3805306130000001,
+          "seconds_inventory": 3.322071409
+        },
+        {
+          "activations": 1,
+          "active_set_iterations": 63,
+          "separation_passes": 39,
+          "inventory_rebuilds": 3,
+          "mass_factor_applications": 76,
+          "kkt_solves": 60,
+          "seconds_total": 5.36981456,
+          "seconds_algebra": 0.025363296,
+          "seconds_factorization": 0.016724009,
+          "seconds_separation": 1.3182687570000002,
+          "seconds_inventory": 3.456769501
+        },
+        {
+          "activations": 1,
+          "active_set_iterations": 63,
+          "separation_passes": 39,
+          "inventory_rebuilds": 3,
+          "mass_factor_applications": 76,
+          "kkt_solves": 61,
+          "seconds_total": 5.19858365,
+          "seconds_algebra": 0.024701970999999996,
+          "seconds_factorization": 0.016690279,
+          "seconds_separation": 1.3192704910000006,
+          "seconds_inventory": 3.3151689810000002
+        },
+        {
+          "activations": 1,
+          "active_set_iterations": 63,
+          "separation_passes": 39,
+          "inventory_rebuilds": 3,
+          "mass_factor_applications": 76,
+          "kkt_solves": 61,
+          "seconds_total": 5.229544993,
+          "seconds_algebra": 0.025134071000000004,
+          "seconds_factorization": 0.017089117,
+          "seconds_separation": 1.3728952490000004,
+          "seconds_inventory": 3.306876207
+        }
+      ],
+      "capture_manifest": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/UpstreamOne/capture.json",
+      "result_manifest": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/UpstreamOne/result.json",
+      "native_process_cpu_seconds_per_step": 27.156642125,
+      "named_nested_timers": {
+        "step/matching.constraints": {
+          "calls": 144,
+          "wall_per_step": 1.1952322041249996,
+          "cpu_per_step": 1.193849625,
+          "exclusive_cpu_per_step": 1.193849625
+        },
+        "step/domain.scalar": {
+          "calls": 88,
+          "wall_per_step": 7.885879731749999,
+          "cpu_per_step": 7.874340125,
+          "exclusive_cpu_per_step": 7.484041875000002
+        },
+        "step/constitutive.refresh": {
+          "calls": 112,
+          "wall_per_step": 0.4518308886249999,
+          "cpu_per_step": 0.45179675,
+          "exclusive_cpu_per_step": 0.45179675
+        },
+        "step/residual": {
+          "calls": 64,
+          "wall_per_step": 1.244758823,
+          "cpu_per_step": 1.2369740000000005,
+          "exclusive_cpu_per_step": 0.49633512499999993
+        },
+        "step/pimple.sweep": {
+          "calls": 8,
+          "wall_per_step": 11.854775154999999,
+          "cpu_per_step": 10.371525875,
+          "exclusive_cpu_per_step": 0.002192000000000194
+        },
+        "step/audit.physical": {
+          "calls": 8,
+          "wall_per_step": 9.82313399625,
+          "cpu_per_step": 9.788619375000001,
+          "exclusive_cpu_per_step": 9.212237875000001
+        },
+        "step/audit.complete": {
+          "calls": 8,
+          "wall_per_step": 13.251273697375002,
+          "cpu_per_step": 13.210193875,
+          "exclusive_cpu_per_step": 2.5505616249999994
+        },
+        "step/native.acceptance_audit": {
+          "calls": 8,
+          "wall_per_step": 13.251984177,
+          "cpu_per_step": 13.210899625,
+          "exclusive_cpu_per_step": 0.0007057500000002825
+        },
+        "step/native.step": {
+          "calls": 8,
+          "wall_per_step": 25.593724875499998,
+          "cpu_per_step": 23.939402125,
+          "exclusive_cpu_per_step": 0.0020543750000001637
+        }
+      },
+      "direct_equation_solve_cpu_seconds_per_step": 0.015550375,
+      "inventory_audit_exclusive_cpu_seconds_per_step": 19.246841375000002,
+      "governing_schedule_and_history_verified": true
+    }
+  },
+  "provenance": {
+    "linux_git_base": "35c0c93b22ea6b1905875a93c5f6b36a7180ce3c",
+    "implementation_commit": "9596389009e73a7ef2930393c7bbed41b6645b8b",
+    "source_hashes": {
+      "solvers/IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallEvolution.cpp": "ec3d819bd0a0fc56bcba1c59b911c10b18c42f39c3bd865c558cd43a66fe98c4",
+      "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionContact.cpp": "17bef296829cc8d14439460c41af3ed5f9b1b051de23f76334e132a1a32376d3",
+      "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionDiagnostics.cpp": "9ee0425ff9700a8437341eefe0d01e5db0d4b49b167a9cf791a3e703df7ebdba",
+      "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionFeasible.cpp": "9ecbc7844c40c3477a0eebb18c3d3172b21b5c06e805f423d571bfa1a9ee063b",
+      "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionKBound.cpp": "a68e0577b46fa809a4cd47fc3a739289417b180ed8cfcd141fd911a3d5fe89a1",
+      "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp": "1ed4b6916e1de69013ac0713e79e88531048dee22b74d83aae47269ba6d241e5",
+      "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPicard.cpp": "24bf9345e72f14c455cfc2a34ae8b96a1717381acee4d5ae041cdea6d26905ab",
+      "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPimple.cpp": "d96e79fd6786f64280d5e0cbeec7dea9699759f681fd0f6934c2cb90a84465ab",
+      "solvers/IncNavierStokesSolver/IncNavierStokesSolver.cpp": "c792a17ac37a6ae4485950b805cf999ef84f4900277e1715f325d3593f2251cf",
+      "solvers/IncNavierStokesSolver/Tests/RANS/CMakeLists.txt": "9d1fbb73c6ab46c987282aa55080ae3fb972d34eaeebcb20622bc6ab3b4d95ac",
+      "solvers/IncNavierStokesSolver/EquationSystems/RANSWallTiming.h": "6e3021e01cda35d1f9fbaa70383dfd75f0ab5a1207b76d6ba2db21ccc7be88ae",
+      "solvers/IncNavierStokesSolver/Tests/RANS/analyze_cls_awf_campaign_timing.py": "9a8cbb0365f2cbaef522e0cacec5b2d6ad64599f8b253c5d0ad8d05133dc9ac0",
+      "solvers/IncNavierStokesSolver/Tests/RANS/profile_cls_awf_campaign.py": "faca24e78a7947136c7fc3522e3a5a36455af2acfc3cb474f5146e36bb7baeba",
+      "solvers/IncNavierStokesSolver/Tests/RANS/test_rans_wall_timing.cpp": "dcdc6bfbec963ea5ceb9b750989e1bc1702e5c80fc8958c46de1a8cfb210adea",
+      "solvers/IncNavierStokesSolver/Tests/RANS/test_rans_wall_timing.py": "06d1e39efa95fcdcdde8d62d29226c0340a4a03d5dac97433bc901b6f1f21a88"
+    },
+    "source_status": " M solvers/IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallEvolution.cpp\n M solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionContact.cpp\n M solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionDiagnostics.cpp\n M solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionFeasible.cpp\n M solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionKBound.cpp\n M solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp\n M solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPicard.cpp\n M solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPimple.cpp\n M solvers/IncNavierStokesSolver/IncNavierStokesSolver.cpp\n M solvers/IncNavierStokesSolver/Tests/RANS/CMakeLists.txt\n?? solvers/IncNavierStokesSolver/._IncNavierStokesSolver.cpp\n?? solvers/IncNavierStokesSolver/EquationSystems/._RANSEquilibriumWallEvolution.cpp\n?? solvers/IncNavierStokesSolver/EquationSystems/._RANSWallEvolutionFeasible.cpp\n?? solvers/IncNavierStokesSolver/EquationSystems/._RANSWallEvolutionKBound.cpp\n?? solvers/IncNavierStokesSolver/EquationSystems/._RANSWallEvolutionPatch.cpp\n?? solvers/IncNavierStokesSolver/EquationSystems/._RANSWallEvolutionPicard.cpp\n?? solvers/IncNavierStokesSolver/EquationSystems/._RANSWallEvolutionPimple.cpp\n?? solvers/IncNavierStokesSolver/EquationSystems/._RANSWallTiming.h\n?? solvers/IncNavierStokesSolver/EquationSystems/RANSWallTiming.h\n?? solvers/IncNavierStokesSolver/Tests/RANS/._CMakeLists.txt\n?? solvers/IncNavierStokesSolver/Tests/RANS/analyze_cls_awf_campaign_timing.py\n?? solvers/IncNavierStokesSolver/Tests/RANS/profile_cls_awf_campaign.py\n?? solvers/IncNavierStokesSolver/Tests/RANS/test_rans_wall_timing.cpp\n?? solvers/IncNavierStokesSolver/Tests/RANS/test_rans_wall_timing.py\n",
+    "compiler": "g++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0",
+    "cmake_cache_sha256": "7f97327054c62db522d54f5cdd6e126af2931d3680976bd0e694dcfe295316f1",
+    "geometry_sha256": "bf3ec4e230c6b124a2c03c6ae596f34fece0c3ac88386bf1b272c01a0375508e",
+    "build_parallelism": 4,
+    "native_rank": 1,
+    "native_library_threads": 1,
+    "source_note": "compiled C++ bytes exactly match 9596389; replay Python adds a timing-disabled control afterward"
+  },
+  "runtime": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/IncNavierStokesSolver",
+    "sha256": "5201b9ad007d63d4c6f25380c18c7bd2063b93c378933f108053f50afc011022",
+    "ldd": "\tlinux-vdso.so.1 (0x00007ffdcb1d9000)\n\tlibSpatialDomains.so.5.9.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libSpatialDomains.so.5.9.0 (0x0000740e73e00000)\n\tlibSolverUtils.so.5.9.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libSolverUtils.so.5.9.0 (0x0000740e73800000)\n\tlibFieldUtils.so.5.9.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libFieldUtils.so.5.9.0 (0x0000740e73400000)\n\tlibmpi_cxx.so.40 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libmpi_cxx.so.40 (0x0000740e74973000)\n\tlibmpi.so.40 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libmpi.so.40 (0x0000740e7483a000)\n\tlibGlobalMapping.so.5.9.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libGlobalMapping.so.5.9.0 (0x0000740e7416b000)\n\tlibMultiRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libMultiRegions.so.5.9.0 (0x0000740e73000000)\n\tlibLocalRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libLocalRegions.so.5.9.0 (0x0000740e72c00000)\n\tlibStdRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libStdRegions.so.5.9.0 (0x0000740e72800000)\n\tlibLibUtilities.so.5.9.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libLibUtilities.so.5.9.0 (0x0000740e72200000)\n\tliblapack.so.3 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/liblapack.so.3 (0x0000740e71a00000)\n\tlibblas.so.3 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libblas.so.3 (0x0000740e74109000)\n\tlibstdc++.so.6 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libstdc++.so.6 (0x0000740e71600000)\n\tlibm.so.6 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libm.so.6 (0x0000740e74022000)\n\tlibgcc_s.so.1 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libgcc_s.so.1 (0x0000740e74816000)\n\tlibc.so.6 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libc.so.6 (0x0000740e71200000)\n\tlibptscotch-6.1.so => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libptscotch-6.1.so (0x0000740e73d2d000)\n\tlibz.so.1 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libz.so.1 (0x0000740e73d11000)\n\tlibboost_program_options.so.1.74.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libboost_program_options.so.1.74.0 (0x0000740e73ccc000)\n\tlibopen-pal.so.40 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libopen-pal.so.40 (0x0000740e72f4d000)\n\tlibopen-rte.so.40 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libopen-rte.so.40 (0x0000740e72e90000)\n\tlibhwloc.so.15 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libhwloc.so.15 (0x0000740e73c70000)\n\tlibCollections.so.5.9.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libCollections.so.5.9.0 (0x0000740e7268d000)\n\tlibfftw3.so.3 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libfftw3.so.3 (0x0000740e70e00000)\n\tlibboost_iostreams.so.1.74.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libboost_iostreams.so.1.74.0 (0x0000740e73c58000)\n\tlibopenblas.so.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libopenblas.so.0 (0x0000740e6e9b0000)\n\tlibgfortran.so.5 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libgfortran.so.5 (0x0000740e6e600000)\n\t/lib64/ld-linux-x86-64.so.2 (0x0000740e7498f000)\n\tlibptscotcherr-6.1.so => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libptscotcherr-6.1.so (0x0000740e7480d000)\n\tlibbz2.so.1.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libbz2.so.1.0 (0x0000740e73c45000)\n\tliblzma.so.5 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/liblzma.so.5 (0x0000740e737d5000)\n\tlibevent_core-2.1.so.7 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libevent_core-2.1.so.7 (0x0000740e72e5b000)\n\tlibevent_pthreads-2.1.so.7 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libevent_pthreads-2.1.so.7 (0x0000740e74806000)\n\tlibudev.so.1 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libudev.so.1 (0x0000740e72e31000)\n\tlibMatrixFreeOps.so.5.9.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libMatrixFreeOps.so.5.9.0 (0x0000740e6b800000)\n\tlibzstd.so.1 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libzstd.so.1 (0x0000740e72b31000)\n\tlibquadmath.so.0 => /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libquadmath.so.0 (0x0000740e72ae9000)\n",
+    "libraries": {
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libSpatialDomains.so.5.9.0": "bf3ec4e230c6b124a2c03c6ae596f34fece0c3ac88386bf1b272c01a0375508e",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/replays/runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01"
+    }
+  },
+  "live_campaigns": {
+    "BudgetH05Linear": {
+      "captured_UTC": "2026-11-09T01:55:41.259360+00:00",
+      "status": "running",
+      "accepted_steps": 3696,
+      "accepted_time": 2.310000000000076,
+      "next_target": 8000,
+      "checkpoint_source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-regularized-05G/trajectory/steps-003689-003696/checkpoint.3",
+      "checkpoint_copy": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/live-status-checkpoints/BudgetH05Linear",
+      "checkpoint_sha256": "5a832af708dafbec57f92ee623aea1cfd535c851a18515c91fd45b3ce5ae8e67",
+      "coupled_state_sha256": "d43d44ff8f221d8dd0ab6ef26f4c272e576ed6cdd7af7d993a9dd4c60258a4ec",
+      "native_history_sha256": [
+        "cbc4b7bc7fa77dcb832928b7df715895178241e6745586263b5ca8d60c17c820",
+        "3f1f6f76c52276c865bae097486a0ce164cd509c98c6410b677f516084ad7c3c"
+      ],
+      "native_history_times_sha256": "152034b73ba60afbbd69f4bfe62005356e14c09132853fc97b0654800dcd95d2",
+      "driver_identity": {
+        "pid": 226883,
+        "start": "26311046",
+        "executable": "/usr/bin/python3.10",
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-regularized-05G"
+      },
+      "native_identity": {
+        "pid": 301071,
+        "start": "31702227",
+        "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-regularized-05G/trajectory/runtime/IncNavierStokesSolver",
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-regularized-05G/trajectory/steps-003697-003704"
+      },
+      "native_matches": true,
+      "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-regularized-05G/trajectory/runtime/IncNavierStokesSolver",
+      "executable_sha256": "db73039aad11327b9ea4deefa5da890b73041eef8d0aa4eb4cfb7e8a6ba1534b",
+      "supervisor_identity": {
+        "pid": 226882,
+        "start": "26310999",
+        "executable": "/usr/bin/python3.10",
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-regularized-05G"
+      }
+    },
+    "BudgetH05Saturated": {
+      "captured_UTC": "2026-11-09T01:55:42.316225+00:00",
+      "status": "running",
+      "accepted_steps": 3614,
+      "accepted_time": 2.258750000000086,
+      "next_target": 8000,
+      "checkpoint_source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-regularized-saturated-05G/trajectory/steps-003609-003616/checkpoint.2",
+      "checkpoint_copy": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/live-status-checkpoints/BudgetH05Saturated",
+      "checkpoint_sha256": "3fe4b10dd5f2fec1aec65b9f7ed786a6186684ea209b553e6d25c5dc9c031909",
+      "coupled_state_sha256": "1c8e8283462afb0cb5cbeb6017902899b419c2979bd5f00270636e2ffd8781a9",
+      "native_history_sha256": [
+        "f41d805b92789fd94cd5a6c661b04d1a0c41ebe11dc14f78375973d2917cd377",
+        "3f1f6f76c52276c865bae097486a0ce164cd509c98c6410b677f516084ad7c3c"
+      ],
+      "native_history_times_sha256": "3759421a41bf4251ad39b596868cf3a06a57ddd909e8da8f4e8302a31ab197d0",
+      "driver_identity": {
+        "pid": 230464,
+        "start": "26478044",
+        "executable": "/usr/bin/python3.10",
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-regularized-saturated-05G"
+      },
+      "native_identity": {
+        "pid": 300950,
+        "start": "31693136",
+        "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-regularized-saturated-05G/trajectory/runtime/IncNavierStokesSolver",
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-regularized-saturated-05G/trajectory/steps-003609-003616"
+      },
+      "native_matches": true,
+      "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-regularized-saturated-05G/trajectory/runtime/IncNavierStokesSolver",
+      "executable_sha256": "db73039aad11327b9ea4deefa5da890b73041eef8d0aa4eb4cfb7e8a6ba1534b",
+      "supervisor_identity": {
+        "pid": 230463,
+        "start": "26477965",
+        "executable": "/usr/bin/python3.10",
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-regularized-saturated-05G"
+      }
+    },
+    "BudgetH2": {
+      "captured_UTC": "2026-11-09T01:55:43.228883+00:00",
+      "status": "running",
+      "accepted_steps": 2680,
+      "accepted_time": 1.6750000000000869,
+      "next_target": 3200,
+      "checkpoint_source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-refined-regularized-2G/trajectory/steps-002673-002680/checkpoint.3",
+      "checkpoint_copy": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/live-status-checkpoints/BudgetH2",
+      "checkpoint_sha256": "5075e02a660af67fd0ac7640a30135b45c9679cf77709f71dc3a64fb59066bbe",
+      "coupled_state_sha256": "1001630f793f53b50743094694a7a6ca077c261f15bbfc990c29cc5150c76fa5",
+      "native_history_sha256": [
+        "85ec1c8b13729aa72bc52f525bf63f5ad93b1a201d8c308e6e9fac0b36e9d071",
+        "16d9418a34ec1c61edc2ad9b1be5daa4ff3694dfcc5077b8ecfd4d8185b646d2"
+      ],
+      "native_history_times_sha256": "529dc04d34d2acb46d47ffa5b30fec8733a745764e825a1ebfb47919af3c4585",
+      "driver_identity": {
+        "pid": 229706,
+        "start": "26441787",
+        "executable": "/usr/bin/python3.10",
+        "cwd": "/home/jay"
+      },
+      "native_identity": {
+        "pid": 301037,
+        "start": "31702147",
+        "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-refined-regularized-2G/trajectory/runtime/IncNavierStokesSolver",
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-refined-regularized-2G/trajectory/steps-002681-002688"
+      },
+      "native_matches": true,
+      "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-accepted-budget-awf-20261108/selected-refined-regularized-2G/trajectory/runtime/IncNavierStokesSolver",
+      "executable_sha256": "db73039aad11327b9ea4deefa5da890b73041eef8d0aa4eb4cfb7e8a6ba1534b",
+      "supervisor_identity": {
+        "pid": 229705,
+        "start": "26441716",
+        "executable": "/usr/bin/python3.10",
+        "cwd": "/home/jay"
+      }
+    },
+    "UniformG": {
+      "captured_UTC": "2026-11-09T01:55:43.744928+00:00",
+      "status": "running",
+      "accepted_steps": 4720,
+      "accepted_time": 2.9499999999999487,
+      "next_target": 8000,
+      "checkpoint_source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-G/trajectory/steps-004713-004720/checkpoint.3",
+      "checkpoint_copy": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/live-status-checkpoints/UniformG",
+      "checkpoint_sha256": "99a9477c291da41018a437035311d160fafa947551269e18c9a0fbd46a1953d5",
+      "coupled_state_sha256": "192b74b8f0be8f7ee3e535e3186fd9f35e0b9220ce964b41739565dc6e34e2b3",
+      "native_history_sha256": [
+        "c5d24c68172867c7a59fb5c781645a9f7e7b8a6a0e05058a7d756ba705df09f6",
+        "3f1f6f76c52276c865bae097486a0ce164cd509c98c6410b677f516084ad7c3c"
+      ],
+      "native_history_times_sha256": "1524ec2ea9a098231d467ccdbd14c9804fcd7373430782d8418769276ce8fa3d",
+      "driver_identity": {
+        "pid": 141043,
+        "start": "16261332",
+        "executable": "/usr/bin/python3.10",
+        "cwd": "/home/jay"
+      },
+      "native_identity": {
+        "pid": 301016,
+        "start": "31702061",
+        "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-G/trajectory/runtime/IncNavierStokesSolver",
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-G/trajectory/steps-004721-004728"
+      },
+      "native_matches": true,
+      "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-G/trajectory/runtime/IncNavierStokesSolver",
+      "executable_sha256": "aa1071c74de72601f47c97ed413995434e1496dba07095ee970ac361825cb98d",
+      "supervisor_identity": {
+        "pid": 141042,
+        "start": "16261305",
+        "executable": "/usr/bin/python3.10",
+        "cwd": "/home/jay"
+      }
+    },
+    "UniformH": {
+      "captured_UTC": "2026-11-09T01:55:44.217225+00:00",
+      "status": "running",
+      "accepted_steps": 6030,
+      "accepted_time": 3.7687499999997858,
+      "next_target": 8000,
+      "checkpoint_source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-H/trajectory/steps-006025-006032/checkpoint.2",
+      "checkpoint_copy": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/live-status-checkpoints/UniformH",
+      "checkpoint_sha256": "b072510d3553625aab16895b3905eb713cbe96f5c0109963df8315b2e27c6b9b",
+      "coupled_state_sha256": "2612ab0ff1fb6fbeaafb1d2616bfca551542736b07deb2a80b8c6822a636378d",
+      "native_history_sha256": [
+        "4b66b7a21ef547d1b37fe09f717d0c55ac6897423de3bbf218af788600317ed8",
+        "35286664740e173fcc6a3fb3e36da4345f232547376927ec76539d48cb6f870c"
+      ],
+      "native_history_times_sha256": "818ba010c401164793df16bb35be6920a22277ab1364fbf5459eb0399a4aa42e",
+      "driver_identity": {
+        "pid": 141311,
+        "start": "16272871",
+        "executable": "/usr/bin/python3.10",
+        "cwd": "/home/jay"
+      },
+      "native_identity": {
+        "pid": 300830,
+        "start": "31685586",
+        "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-H/trajectory/runtime/IncNavierStokesSolver",
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-H/trajectory/steps-006025-006032"
+      },
+      "native_matches": true,
+      "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-H/trajectory/runtime/IncNavierStokesSolver",
+      "executable_sha256": "aa1071c74de72601f47c97ed413995434e1496dba07095ee970ac361825cb98d",
+      "supervisor_identity": {
+        "pid": 141310,
+        "start": "16272849",
+        "executable": "/usr/bin/python3.10",
+        "cwd": "/home/jay"
+      }
+    },
+    "UpstreamOne": {
+      "captured_UTC": "2026-11-09T01:55:44.357949+00:00",
+      "status": "running",
+      "accepted_steps": 4462,
+      "accepted_time": 2.7887499999999807,
+      "next_target": 8000,
+      "checkpoint_source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/selected-U05-one/trajectory/steps-004457-004464/checkpoint.2",
+      "checkpoint_copy": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/live-status-checkpoints/UpstreamOne",
+      "checkpoint_sha256": "4351c1e371bd13fdc8aaaf49f28db2ba4c059e047d9c8c513eb421dbb0116783",
+      "coupled_state_sha256": "23e6ec84081234682b80f34696fd791ebf0a21f7ec2c58e2e85f094778f0f670",
+      "native_history_sha256": [
+        "847de2e6f4d6ae5f3084aee6d8c152175ae878b44068f30f5ae0c6cc2d739f07",
+        "35286664740e173fcc6a3fb3e36da4345f232547376927ec76539d48cb6f870c"
+      ],
+      "native_history_times_sha256": "f6b23afa3b92aee5be4a41e791412a38947c66e6b5fdc6b8bdc492399b50694a",
+      "driver_identity": {
+        "pid": 162934,
+        "start": "19154228",
+        "executable": "/usr/bin/python3.10",
+        "cwd": "/home/jay"
+      },
+      "native_identity": {
+        "pid": 300791,
+        "start": "31683520",
+        "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/selected-U05-one/trajectory/runtime/IncNavierStokesSolver",
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/selected-U05-one/trajectory/steps-004457-004464"
+      },
+      "native_matches": true,
+      "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/selected-U05-one/trajectory/runtime/IncNavierStokesSolver",
+      "executable_sha256": "255190519d8dc7e9fa66e6fdf91acdc802d9562541a9b1d245f7c6d83fb7afbd",
+      "supervisor_identity": {
+        "pid": 162923,
+        "start": "19154096",
+        "executable": "/usr/bin/python3.10",
+        "cwd": "/home/jay"
+      }
+    }
+  },
+  "timing_disabled_control": {
+    "case": "BudgetH2",
+    "native_wall_seconds": 149.49101253098343,
+    "child_cpu_seconds": 130.50339300000002,
+    "bitwise_state_and_history_equal": true,
+    "timed_native_wall_seconds": 160.52950956096174,
+    "timed_process_cpu_seconds": 129.285841,
+    "scope": "single matched block; CPU within run-to-run variation, wall time includes variable filesystem/wait costs; no formal overhead bound"
+  },
+  "validation": {
+    "focused_native_tests": [
+      "RANSWallTimingChecks",
+      "RANSKBoundQPChecks"
+    ],
+    "passed": true,
+    "bitwise_verified_timed_steps": 48,
+    "bitwise_verified_untimed_steps": 8,
+    "governing_solves_per_replay_step": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "logical_bound_calls_per_step": 1,
+    "production_campaign_modifications": 0,
+    "per_step_callback_history_incoming_raw_corrected_hashes_equal": true,
+    "per_step_hash_receipt": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/step-hash-validation.json"
+  },
+  "heavy_root": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109",
+  "reproduction": "profile_cls_awf_campaign.py captures completed eight-step blocks; no production path is mutated",
+  "artifact_index": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-campaign-timing-20261109/artifact-index.json",
+    "sha256": "8677b4847bbddf4733d6abf057fe6f9d799a15b61a801fd0f1ffe3716a3f56af",
+    "files": 256
+  }
+}

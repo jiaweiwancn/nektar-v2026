@@ -47,7 +47,8 @@ def summarize(directory):
         snapshot_seconds_per_step=value('io.attempt_snapshot'),
         block_initialization_seconds=sum(value(name,section='block_overhead')*n for name in ('startup.object','startup.initialize')),
         block_report_seconds=value('output.report',section='block_overhead')*n,
-        bound_work=r['bound_work'],capture_manifest=str(directory/'capture.json'),result_manifest=str(directory/'result.json'))
+        bound_work=[{k:v for k,v in w.items() if v is not None} for w in r['bound_work']],
+        capture_manifest=str(directory/'capture.json'),result_manifest=str(directory/'result.json'))
 
 
 def main():

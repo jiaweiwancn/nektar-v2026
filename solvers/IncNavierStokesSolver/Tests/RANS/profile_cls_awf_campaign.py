@@ -15,6 +15,7 @@ import json
 import os
 from pathlib import Path
 import platform
+import resource
 import shutil
 import subprocess
 import time
@@ -22,7 +23,7 @@ import xml.etree.ElementTree as ET
 
 from continue_cls_epawf_pimple import atomic, freeze, header
 from run_cls_epawf_picard import THREADS, load, require, sha, state_hash, set_info, set_parameter, write
-from run_cls_epawf_pimple import check_report
+from run_cls_epawf_pimple import check_report, identity
 
 
 def fingerprint(checkpoint):
@@ -93,8 +94,8 @@ def capture(campaign,output):
     atomic(output/'capture.json',result);return result
 
 
-def replay(directory,solver,timeout):
-    capture=load(directory/'capture.json');run=directory/'timed';run.mkdir(exist_ok=False)
+def replay(directory,solver,timeout,timed=True):
+    capture=load(directory/'capture.json');run=directory/('timed' if timed else 'untimed');run.mkdir(exist_ok=False)
     root=ET.parse(directory/'production.xml').getroot()
     # Only restart/output paths and the completed block length change. No
     # physical selector, inventory, work control, quadrature or source changes.
@@ -104,13 +105,21 @@ def replay(directory,solver,timeout):
     set_parameter(root,'NumSteps',capture['segment']['end_step']-capture['segment']['start_step'])
     write(root,run/'case.xml')
     trace=run/'timing.jsonl';env=dict(os.environ,**THREADS,NEKTAR_RANS_TIMING_FILE=str(trace))
+    if not timed:env.pop('NEKTAR_RANS_TIMING_FILE',None)
+    # RUSAGE_CHILDREN is process-wide. Use it only for the single-child
+    # untimed control; timed concurrent replays use native per-process clocks.
+    usage=resource.getrusage(resource.RUSAGE_CHILDREN) if not timed else None
     started=time.monotonic()
     with (run/'solver.log').open('w') as stream:
         result=subprocess.run([str(solver),'case.xml'],cwd=run,env=env,stdout=stream,stderr=subprocess.STDOUT,timeout=timeout)
     native_seconds=time.monotonic()-started
     receipt=dict(exit_code=result.returncode,native_wall_seconds=native_seconds,
                  log_sha256=sha(run/'solver.log'),xml_sha256=sha(run/'case.xml'))
-    atomic(directory/'result.json',receipt)
+    if usage:
+        after=resource.getrusage(resource.RUSAGE_CHILDREN)
+        receipt['child_cpu_seconds']=after.ru_utime+after.ru_stime-usage.ru_utime-usage.ru_stime
+    result_path=directory/('result.json' if timed else 'result-untimed.json')
+    atomic(result_path,receipt)
     require(result.returncode==0,'native timing replay failed: '+str(directory))
     # Reading/parsing the full report is outside the native process timer.
     started=time.monotonic();report=load(run/'case.evolution.json');receipt['python_report_load_seconds']=time.monotonic()-started
@@ -126,17 +135,19 @@ def replay(directory,solver,timeout):
              native_history_times_sha256=state_hash(report['native_history_times']))
     require(got==capture['expected'],'timed state/history differ from production block')
     receipt['bitwise_production_state_and_all_native_histories_equal']=True
-    receipt['final']=got;receipt['timing']=timing_summary(trace);receipt['trace_sha256']=sha(trace)
+    receipt['final']=got
+    if timed:receipt['timing']=timing_summary(trace);receipt['trace_sha256']=sha(trace)
+    else:require(not trace.exists(),'untimed control unexpectedly wrote a trace')
     receipt['attempts']=[{k:r.get(k) for k in ('time','seconds','outer_sweeps','momentum_predictor_solves',
         'pressure_system_solves','epsilon_transport_solves','k_transport_solves','bound_calls','bound_activations',
         'bound_active_set_iterations','additional_governing_equation_solves')} for r in report['pimple_attempts']]
     receipt['bound_work']=[{k:r['k_bound'].get(k) for k in ('activations','active_set_iterations',
-        'separations','inventory_rebuilds','mass_factor_applications','kkt_solves','seconds_total','seconds_algebra',
+        'separation_passes','inventory_rebuilds','mass_factor_applications','kkt_solves','seconds_total','seconds_algebra',
         'seconds_factorization','seconds_separation','seconds_inventory')} for r in report['pimple_attempts']]
     started=time.monotonic()
     with (run/'case.evolution.json').open('rb') as source,gzip.open(run/'case.evolution.json.gz','wb') as target:shutil.copyfileobj(source,target)
     receipt['python_report_gzip_seconds']=time.monotonic()-started
-    (run/'case.evolution.json').unlink();atomic(directory/'result.json',receipt)
+    (run/'case.evolution.json').unlink();atomic(result_path,receipt)
     return receipt
 
 
@@ -145,6 +156,7 @@ def main():
     p.add_argument('--output',type=Path,required=True)
     p.add_argument('--campaign',action='append',default=[],help='name=/absolute/campaign/path')
     p.add_argument('--solver',type=Path)
+    p.add_argument('--untimed-control',help='Replay an already captured case with the same frozen binary, timing disabled')
     p.add_argument('--parallel',type=int,default=1,choices=(1,2))
     p.add_argument('--timeout',type=float,default=1800)
     a=p.parse_args();require(platform.system()=='Linux','Linux authoritative timings required')
@@ -152,6 +164,15 @@ def main():
     for spec in a.campaign:
         name,path=spec.split('=',1);require(Path(name).name==name,'unsafe case name')
         capture(Path(path),a.output/name)
+    if a.untimed_control:
+        require(not a.solver and not a.campaign,'untimed control uses the existing frozen runtime/capture')
+        require(Path(a.untimed_control).name==a.untimed_control,'unsafe control case name')
+        solver=a.output/'runtime/IncNavierStokesSolver';pinned=load(a.output/'runtime/identity.json')['frozen']
+        os.environ['LD_LIBRARY_PATH']=str(a.output/'runtime/lib')
+        require(sha(solver)==pinned['sha256'],'frozen control executable changed')
+        require(identity(solver)['libraries']==pinned['libraries'],'frozen control library closure changed')
+        replay(a.output/a.untimed_control,solver,a.timeout,False)
+        return
     if a.solver:
         solver,pinned=freeze(a.solver.resolve(),a.output/'runtime')
         cases=sorted(d for d in a.output.iterdir() if (d/'capture.json').exists())
