@@ -345,7 +345,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
         else result.minimumOuterEpsilon=std::min(result.minimumOuterEpsilon,value);
         if(margin<result.minimumMargin || !std::isfinite(value))
         {result.minimumMargin=margin;result.limitingPoint=q.coordinate;result.limitingInventory=name;result.limitingFunctional=q.columnAverage?std::make_shared<RANSWallGlobalPoint>(q):nullptr;}
-        if(retain)result.observations.push_back({name,q.coordinate,block,q.geometry,side,value,scale,weight,strict,dependent,
+        if(retain || NewModels())result.observations.push_back({name,q.coordinate,block,q.geometry,side,value,scale,weight,strict,dependent,
             q.columnAverage?std::make_shared<RANSWallGlobalPoint>(q):nullptr});
         if(!std::isfinite(value) || (strict?value<=0:value<0))
         {
@@ -464,6 +464,24 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
             if(!check("actual_lifted_outer_epsilon",point.row,Epsilon(),true,result.effectiveState,point.side))return result;
             if(Same(point.row.coordinate[2],m_parameters.geometry.height) &&
                 !check("projected_dependent_trace",point.row,Epsilon(),true,result.traceState,1,true))return result;
+        }
+        if(NewModels())
+        {
+            result.phase="current_velocity_constitutive_domain";
+            // This check depends on current U, not just k/epsilon. Do not share
+            // it across scalar-only cache keys. Use native element-side rows.
+            for(const auto &p:result.observations)
+            {
+                if(p.block!=K() && !p.dependentTrace)continue;
+                const auto provenance=ResolveObservation(p);
+                if(provenance.inner)continue;
+                const auto &row=*provenance.velocity;RANSTensor g{};
+                for(int a=0;a<m_dimension;++a)g[PhysicalAxis(a)]=row.Gradient(result.effectiveState,offset[a]);
+                const double k=EvaluationRow(K(),GeometryElement(K(),row.geometry),p.coordinate)->Value(result.effectiveState,offset[K()]);
+                const double ep=p.dependentTrace?p.value:EvaluationRow(Epsilon(),GeometryElement(Epsilon(),row.geometry),p.coordinate)->Value(result.effectiveState,offset[Epsilon()]);
+                result.limitingPoint=p.coordinate;
+                (void)OuterClosure(k,ep,g,p.coordinate);
+            }
         }
         result.phase="complete";result.admissible=true;return result;
     }
@@ -2115,7 +2133,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
     RANSWallTiming::Scope timing("audit.complete");
     EvaluationScope evaluation(*this,data,time);
     const auto domain=ScalarDomain(state,time,data,true);Diagnostic audit;
-    if(AcceptedAWF())
+    if(ModelAwareAudit())
     {
         audit["accepted_awf_scalar_domain"]={domain.admissible?1.:0.,domain.minimumMargin,domain.minimumInnerK,
             domain.minimumOuterK,domain.minimumOuterEpsilon,domain.minimumSampledK,domain.minimumTraceEpsilon,
@@ -2178,7 +2196,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
     audit["r2_inner_minimum_point"]=innerPoint;audit["r2_outer_minimum_point"]=outerPoint;
     audit["native_inner_minimum_geometry_element_side_block"]=innerProvenance;
     audit["native_outer_minimum_geometry_element_side_block"]=outerProvenance;
-    if(AcceptedAWF())
+    if(ModelAwareAudit())
     {
         audit.erase("r2_scalar_domain");audit.erase("robust_source");
         audit["accepted_awf_scalar_domain"]={1,domain.minimumMargin,domain.minimumInnerK,

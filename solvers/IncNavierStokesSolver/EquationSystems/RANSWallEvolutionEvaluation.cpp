@@ -154,7 +154,7 @@ std::shared_ptr<const RANSWallEvolutionPatch::ScalarDomainResult> RANSWallEvolut
     PrepareEvaluation(data,time);auto &c=*m_evaluation;auto &entry=c.Find(s,m_evaluationWork);
     const auto key=DomainKey(only,m_assertKCoverage,anchors);
     auto it=entry.domains.find(key);
-    if(it==entry.domains.end() && AcceptedAWF() && !m_transitionEnabled && !m_cappedDestruction &&
+    if(it==entry.domains.end() && !NewModels() && AcceptedAWF() && !m_transitionEnabled && !m_cappedDestruction &&
         s.size()==std::size_t(Size()) && std::all_of(s.begin(),s.end(),[](double x){return std::isfinite(x);}))
     {
         // The accepted-AWF scalar inventory and dependent trace are functions

@@ -100,7 +100,11 @@ def closure_tests(p):
         gradients=[np.zeros((3,3)),np.diag([1,1,-2]),np.diag([1,-.5,-.5])]
         gradients += [dev(rng.normal(size=(3,3)))*.3 for _ in range(12)]
         for A in gradients:
-            expected=oracle(name,1.2,.7,A);actual=p.closure(name,A,1.2,.7)
+            actual=p.closure(name,A,1.2,.7)
+            try:expected=oracle(name,1.2,.7,A)
+            except ValueError:
+                require(not actual['ok'],'independent domain rejection agrees')
+                continue
             require(actual['ok'],('admissible tensor rejected',name,A,actual))
             for key,val in expected.items():near(np.array(actual[key]).reshape(val.shape) if isinstance(val,np.ndarray) else actual[key],val,'tensor_'+key)
             R=np.array(actual['R']).reshape(3,3)

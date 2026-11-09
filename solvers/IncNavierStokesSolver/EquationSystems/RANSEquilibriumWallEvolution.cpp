@@ -122,8 +122,21 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         m_session->LoadParameter("RANSWallTangentialOrder",parameters.tangentialOrder,8);
         m_session->LoadParameter("RANSWallNormalOrder",parameters.normalOrder,16);
         std::string model;m_session->LoadSolverInfo("TurbulenceModel",model,"CLSHighRe");
-        Require(model=="CLSHighRe" || model=="StandardKEpsilon","invalid evolution turbulence model");
-        if(model=="StandardKEpsilon")parameters.model=SolverUtils::RANSNeutralReference::Standard();
+        const auto closure=SolverUtils::ParseRANSModel(model);
+        if(SolverUtils::IsNewRANSModel(closure))
+        {
+            std::string policy,wall;
+            m_session->LoadSolverInfo("RANSKappaPolicy",policy,"Natural");
+            m_session->LoadSolverInfo("RANSWallFormulation",wall,"EPAWF");
+            Require(policy=="Natural" || policy=="Prescribed","unknown new-model kappa policy");
+            Require(wall=="EPAWF" || wall=="AcceptedBudgetAWF","new model requires its separately named wall formulation");
+            double kap;m_session->LoadParameter("RANSKappa",kap,.41);
+            parameters.model=SolverUtils::RANSResolvedModel::Resolve(closure,
+                policy=="Natural"?SolverUtils::RANSKappaPolicy::Natural:SolverUtils::RANSKappaPolicy::Prescribed,
+                kap,wall=="EPAWF"?SolverUtils::RANSWallFormulation::EPAWF:SolverUtils::RANSWallFormulation::AcceptedBudgetAWF,
+                parameters.geometry.molecularNu);
+        }
+        else if(closure==SolverUtils::RANSModel::StandardKEpsilon)parameters.model=SolverUtils::RANSNeutralReference::Standard();
         m_patch=std::make_shared<RANSWallEvolutionPatch>(m_serialSession,graph,m_session->GetComm(),parameters,
             LoadRANSWallNormalMap(m_session,dim,parameters.geometry.height));
         std::string coordinates;m_session->LoadSolverInfo("RANSWallFunctionCoordinates",coordinates,"Physical");
@@ -138,16 +151,18 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         Require(diagnostics==0 || diagnostics==1,"RANSWallDiagnostics must be 0 or 1");m_diagnostics=diagnostics;
         std::string rangeGuard;m_session->LoadSolverInfo("RANSWallPhysicalRangeGuard",rangeGuard,"Off");
         Require(rangeGuard=="Off" || rangeGuard=="R1LocalV1" || rangeGuard=="R1DiagnosticV1" || rangeGuard=="R2LocalV1" || (m_patch->PimpleSingleSweep() && rangeGuard=="R2DiagnosticV1") ||
-            (m_patch->AcceptedAWF() && rangeGuard=="AcceptedAWFDiagnosticV1"),"unknown physical-range guard");
-        Require(!m_patch->AcceptedAWF() || rangeGuard=="AcceptedAWFDiagnosticV1","accepted AWF requires its explicit model-aware hard audit");
+            (m_patch->AcceptedAWF() && rangeGuard=="AcceptedAWFDiagnosticV1") ||
+            (m_patch->NewModels() && rangeGuard=="NewModelDiagnosticV1"),"unknown physical-range guard");
+        Require(!m_patch->NewModels() || rangeGuard=="NewModelDiagnosticV1","new models require their explicit hard audit");
+        Require(!m_patch->AcceptedAWF() || m_patch->NewModels() || rangeGuard=="AcceptedAWFDiagnosticV1","accepted AWF requires its explicit model-aware hard audit");
         m_rangeGuardName=rangeGuard;m_r2RangeGuard=rangeGuard=="R2LocalV1" || rangeGuard=="R2DiagnosticV1";
-        m_physicalRangeGuard=rangeGuard!="Off";m_diagnosticRangeContinuation=rangeGuard=="R1DiagnosticV1" || rangeGuard=="R2DiagnosticV1" || rangeGuard=="AcceptedAWFDiagnosticV1";
+        m_physicalRangeGuard=rangeGuard!="Off";m_diagnosticRangeContinuation=rangeGuard=="R1DiagnosticV1" || rangeGuard=="R2DiagnosticV1" || rangeGuard=="AcceptedAWFDiagnosticV1" || rangeGuard=="NewModelDiagnosticV1";
         if(m_physicalRangeGuard)
         {
             const auto robust=m_patch->RobustParameters();
             Require(m_diagnostics && m_eta==0 && m_session->GetComm()->GetSize()==1,
                 "R1 applicability guard requires serial unanchored state diagnostics");
-            Require(m_patch->AcceptedAWF() || (m_patch->VariantName()=="Regularized" && robust==Vector({.4,0,.2,.1,0,1,1})),
+            Require(m_patch->ModelAwareAudit() || (m_patch->VariantName()=="Regularized" && robust==Vector({.4,0,.2,.1,0,1,1})),
                 "R1 applicability guard is declared only for beta=.4 GammaScale=1 and the unchanged linear capped source");
         }
         Require(m_eta==0 || (m_neutral && m_eta==1 && m_patch->Mapping().PlanarConstantHeight()),"eta=1 is restricted to isolated flat neutral verification");
@@ -157,7 +172,7 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         Require(scheme.method=="IMEX" && scheme.variant.empty() && (scheme.order==1 || scheme.order==2),"evolution supports native IMEX orders 1/2, empty variant");m_order=scheme.order;
         if(m_patch->PimpleSingleSweep())
         {
-            Require(m_order==1 && m_eta==0 && !m_condensed && m_diagnostics && (m_r2RangeGuard || m_patch->AcceptedAWF()),
+            Require(m_order==1 && m_eta==0 && !m_condensed && m_diagnostics && (m_r2RangeGuard || m_patch->ModelAwareAudit()),
                 "PimpleSingleSweep requires native IMEX1, eta=0, no condensation and complete R2 diagnostics");
             m_session->LoadParameter("RANSWallPimpleRejectStep",m_pimpleRejectStep,0);
             m_session->LoadParameter("RANSWallPimpleHardAuditRejectStep",m_pimpleHardAuditRejectStep,0);
@@ -336,7 +351,7 @@ void RANSEquilibriumWallEvolution::RecordAudit(const Vector &state,const Vector 
 {
     RANSWallTiming::Scope timing("native.acceptance_audit");
     RANSWallEvolutionPatch::Diagnostic audit;
-    try{audit=(m_r2RangeGuard || m_patch->AcceptedAWF())?m_patch->CompleteRestrictedAudit(state,history,alpha,time,alpha?m_implicitData:m_data):
+    try{audit=(m_r2RangeGuard || m_patch->ModelAwareAudit())?m_patch->CompleteRestrictedAudit(state,history,alpha,time,alpha?m_implicitData:m_data):
         m_patch->Audit(state,history,alpha,time,alpha?m_implicitData:m_data,m_ustar,m_physicalRangeGuard);}
     catch(const std::exception &error)
     {
@@ -350,7 +365,7 @@ void RANSEquilibriumWallEvolution::RecordAudit(const Vector &state,const Vector 
         }
         throw;
     }
-    if(m_patch->AcceptedAWF())
+    if(m_patch->ModelAwareAudit())
     {
         const auto &domain=audit.at("accepted_awf_scalar_domain");
         std::vector<std::string> reasons;
@@ -888,6 +903,7 @@ void RANSEquilibriumWallEvolution::WriteReport() const
        <<",\"time\":"<<m_time<<",\"dt\":"<<m_timestep<<",\"steps\":"<<snapshot.steps<<",\"order\":"<<m_order
        <<",\"chi\":"<<(m_patch->AcceptedAWF()?"null":RANSWallSolveJson::Number(m_patch->Parameters().chi))<<",\"eta\":"<<m_eta<<",\"neutral_reference\":"<<(m_neutral?"true":"false")
        <<",\"condensed\":"<<(m_condensed?"true":"false")<<",\"checkpoint\":"<<Quoted(m_lastCheckpoint)<<",\"signature\":"<<Quoted(m_signature);
+    if(m_patch->NewModels())out<<",\"resolved_physics\":"<<Quoted(m_patch->Parameters().model.Signature());
     out<<",\"wall_formulation\":"<<m_patch->FormulationMetadata()<<",\"wall_policy\":"<<Quoted(m_patch->WallPolicyName())
        <<",\"audit_revision\":"<<Quoted(m_patch->AuditRevision())
        <<",\"evaluation_reuse\":"<<m_patch->EvaluationReuseJSON()

@@ -277,6 +277,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::ExternalLift(const Vector
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::DirectionalAction(const Vector &state,
     const Vector &direction,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data,double h) const
 {
+    Require(!NewModels(),"new-model coupled directional/nonlinear action unsupported");
     Require(direction.size()==state.size() && h>0 && std::isfinite(h),"invalid directional action");
     auto plus=state,minus=state;
     for(int i=0;i<Size();++i){plus[i]+=h*direction[i];minus[i]-=h*direction[i];}

@@ -69,8 +69,7 @@ RANSClosureValues RANSWallEvolutionPatch::OuterClosure(double k,double epsilon,
     const RANSTensor &gradient,const RANSWallCoordinate &p) const
 {
     if(m_assertKCoverage)Require(m_coveredKLocations.count(p),"unprotected constitutive k evaluation: outer closure");
-    if(m_variantName=="Original")return EvaluateRANSClosure(m_parameters.model.Model(),k,epsilon,
-        gradient,Distance(p),m_parameters.model.Parameters(),0);
+    if(m_variantName=="Original")return EvaluateRANSClosure(m_parameters.model,k,epsilon,gradient,Distance(p));
     auto variant=m_robust;
     const double r=Distance(p),kap=m_parameters.model.Kappa();
     variant.gamma=m_regularizationGamma+m_regularizationScale*kap*m_robustUstar*r;

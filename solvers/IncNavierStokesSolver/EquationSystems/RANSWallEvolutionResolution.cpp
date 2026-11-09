@@ -88,7 +88,7 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
     const Vector &state,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data,bool anchored,
     bool originalOuterCounterfactual) const
 {
-    Require(m_comm->GetSize()==1 && m_dimension==2 && !Mapped() && ((m_transitionEnabled && m_cappedDestruction) || AcceptedAWF()),
+    Require(m_comm->GetSize()==1 && m_dimension==2 && !Mapped() && ((m_transitionEnabled && m_cappedDestruction) || ModelAwareAudit()),
         "R3 residual-resolution audit requires serial flat2D Upstream+Capped");
     Require(state.size()==Size() && history.size()==Size() && alpha>=0 && m_eta==0,
         "R3 residual-resolution audit requires frozen unanchored valid state/history");
@@ -146,6 +146,10 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
                 cancelled[a][b]=B-(a==b?pi:0);
                 stableProduction+=(B-(a==b?(long double)2*k/3:0))*G[a][b];
             }
+            if(NewModels())
+            {
+                cancelled=stress;stableProduction=c.production;
+            }
             load("outer_k_production",K(),q.v,-c.production,{},q.weight);
             load("outer_k_destruction",K(),q.v,epsilon,{},q.weight);
             load("epsilon_production",Epsilon(),q.e,-c.epsilonProduction,{},q.weight);
@@ -155,7 +159,7 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
             load("prescribed_scalar_source",Epsilon(),q.e,-data.outerEpsilonSource(q.v.coordinate,time),{},q.weight);
             load("diagnostic_outer_cancelled_k_production",K(),q.v,-static_cast<double>(stableProduction),{},q.weight);
             load("diagnostic_outer_cancelled_epsilon_production",Epsilon(),q.e,
-                -static_cast<double>((long double)m_parameters.model.Parameters().cEpsilon1*epsilon/k*stableProduction),{},q.weight);
+                -(NewModels()?c.epsilonProduction:static_cast<double>((long double)m_parameters.model.Parameters().cEpsilon1*epsilon/k*stableProduction)),{},q.weight);
         }
         for(int a=0;a<m_dimension;++a)
         {

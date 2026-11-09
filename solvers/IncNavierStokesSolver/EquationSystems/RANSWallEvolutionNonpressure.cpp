@@ -364,6 +364,7 @@ RANSWallEvolutionPatch::WallMatrix RANSWallEvolutionPatch::AssembleNonpressureR3
     const Vector &state,double time,const RANSWallEvolutionData &data,bool imposeConstraints,
     int region,std::vector<std::string> *metadata,const std::vector<int> *freeK) const
 {
+    Require(!NewModels(),"A93/A95/E94E95 nonpressure tangent/action unsupported; use forward one-sweep path");
     const auto started=Clock::now();
     Require(m_dimension==2 && !Mapped() && m_transitionEnabled && m_cappedDestruction && Size()<=3000,
         "R3 nonpressure actions require the declared flat2D Upstream+Capped dense patch");

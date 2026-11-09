@@ -91,9 +91,11 @@ public:
     double DependentEpsilon(const Vector &state,const RANSWallCoordinate &chart,double time,
         const RANSWallEvolutionData &data) const;
     bool UniformEPFlat() const { return m_uniformEP; }
-    bool AcceptedAWF() const { return m_formulation=="CLSCalibratedBudgetAWF"; }
+    bool AcceptedAWF() const { return m_formulation=="CLSCalibratedBudgetAWF" || m_formulation=="AcceptedBudgetAWF"; }
+    bool NewModels() const { return m_parameters.model.NewModel(); }
+    bool ModelAwareAudit() const { return AcceptedAWF() || NewModels(); }
     const std::string &FormulationName() const { return m_formulation; }
-    bool MatchingEnabled() const { return m_transitionEnabled || AcceptedAWF(); }
+    bool MatchingEnabled() const { return m_transitionEnabled || AcceptedAWF() || NewModels(); }
     std::string WallPolicyName() const { return AcceptedAWF()?m_formulation:(m_uniformEP?"UniformEPFlat-v1":(m_transitionEnabled?"Upstream":"Fixed")); }
     bool TransitionEnabled() const { return m_transitionEnabled; }
     const SolverUtils::AWFTransitionControls &TransitionControls() const { return m_transition; }

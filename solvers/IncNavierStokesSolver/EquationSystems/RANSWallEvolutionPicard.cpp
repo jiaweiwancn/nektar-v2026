@@ -139,7 +139,7 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
                 const auto source=WallSource(s, q.v.coordinate, law.production, *ray->profile,
                            &ray->destruction, &rate);
                 addScalar(q.v, u, q.weight, nu + nt / model.sigmaK, rate,
-                          (AcceptedAWF()?source.kSource:law.production) +
+                          (!m_cappedDestruction?source.kSource:law.production) +
                               data.innerKSource(q.v.coordinate, time));
                 return;
             }

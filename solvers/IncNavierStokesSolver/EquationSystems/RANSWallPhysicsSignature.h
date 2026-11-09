@@ -6,6 +6,9 @@
 #include <sstream>
 namespace Nektar
 {
+// For new closures patch.Signature() contains the complete immutable resolved
+// descriptor (coefficients, kappa/wall policies, total-epsilon and extension).
+// Legacy CLS signature bytes are retained.
 // Shared byte-for-byte native physical identity, also used for immutable
 // checkpoint replays. Only the named projection resource parameters are omitted.
 // The finite-QP numerical backend is a SolverInfo execution control, recorded

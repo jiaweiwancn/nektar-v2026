@@ -17,6 +17,12 @@ namespace { bool Same(double a,double b){return std::abs(a-b)<1e-11;} }
 
 std::string RANSWallEvolutionPatch::FormulationMetadata() const
 {
+    if(NewModels())return J::Object({{"formulation",J::Quote(m_formulation)},
+        {"resolved_physics",J::Quote(m_parameters.model.Signature())},
+        {"specification_sha256",J::Quote(AcceptedAWF()?"17c7d6a241ecf8f929c9232ef34e3a6f48823cae2c0b9357911a377d28768a40":"056a85c2aea5ce4ca168caf561613e662416bb6b7d7177451ba5038d2cf68a64")},
+        {"c_mu_wall",J::Number(m_wallParameters.cMu)},{"c_length_wall",J::Number(m_wallParameters.cLength)},
+        {"source",J::Quote(AcceptedAWF()?"P_A-Ew(K):frozen-prescribed-zero-local-reaction":"P_A-Dpre:redistribution-once")},
+        {"scope",J::Quote("serial-flat2D-PimpleSingleSweep")}});
     if(!AcceptedAWF())return J::Object({{"formulation",J::Quote(m_formulation)}});
     return J::Object({{"formulation",J::Quote(m_formulation)},{"version",J::Quote("accepted-appendix-v1")},
         {"specification_sha256",J::Quote("9998548d33bd2ca856bb6cc85551c82b86d3b499fd54ae8dc9ba26453450fdbf")},
