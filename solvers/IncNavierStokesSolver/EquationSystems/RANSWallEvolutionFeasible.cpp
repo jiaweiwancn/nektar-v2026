@@ -314,7 +314,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
     const std::vector<RANSWallCoordinate> &additionalAnchors) const
 {
     RANSWallTiming::Scope timing("domain.compute");
-    ScalarDomainResult result;result.phase="coefficients";result.normalizationApplicable=!AcceptedAWF();
+    ScalarDomainResult result;result.phase="coefficients";result.normalizationApplicable=m_cappedDestruction || (!NewModels() && !AcceptedAWF());
     const double us=m_robustUstar,K0=m_parameters.model.Q()*us*us;
     const double E0=us*us*us/(m_parameters.model.Kappa()*m_parameters.geometry.height);
     auto check=[&](const std::string &name,const RANSWallGlobalPoint &q,int block,bool strict,

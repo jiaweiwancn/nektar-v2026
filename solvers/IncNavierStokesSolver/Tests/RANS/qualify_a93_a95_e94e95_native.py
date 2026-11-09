@@ -111,6 +111,22 @@ def main():
             text=(folder/'solver.log').read_text();check(r.returncode!=0 and reason in text,('guard rejection reason',label,text[-400:]))
             return dict(rejected=True)
         record('unsupported-'+label,guard)
+    for label in ('curved','3D','MPI'):
+        def geometry_guard(label=label):
+            folder=a.output/('guard-'+label);xml=case_xml(folder,'E94E95','Natural','Accepted',steps=0,descriptor_probe=a.descriptor_probe)
+            root=ET.parse(xml).getroot();command=[str(a.solver),'case.xml']
+            if label=='curved':
+                set_info(root,'RANSWallMap','Gaussian');set_parameter(root,'RANSWallMapAmplitude',.1)
+            elif label=='3D':
+                from cls_epawf_m4_cases import tensor_mesh
+                tensor_mesh(root,[0.,2.,4.],3,3,2.,1.,points=[6,6,6],xknots=[-1.,1.])
+            else:
+                command=['mpiexec','-n','2',str(a.solver),'case.xml']
+            write(root,xml)
+            with (folder/'solver.log').open('w') as f:r=subprocess.run(command,cwd=folder,stdout=f,stderr=subprocess.STDOUT,env=dict(os.environ,**THREADS),timeout=120)
+            text=(folder/'solver.log').read_text();check(r.returncode!=0 and ('serial flat 2D only' in text or 'serial flat 2D' in text),('geometry/execution guard',label,text[-500:]))
+            return dict(rejected=True,ranks=2 if label=='MPI' else 1)
+        record('unsupported-'+label,geometry_guard)
     results['status']='pass' if all(r['status']=='pass' for r in results['checks']) else 'fail';save()
     print(json.dumps(dict(status=results['status'],checks=[(r['name'],r['status']) for r in results['checks']])))
 if __name__=='__main__':main()
