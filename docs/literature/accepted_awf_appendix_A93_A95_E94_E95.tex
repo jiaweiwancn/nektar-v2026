@@ -1,0 +1,1053 @@
+% Appendix fragment for A93_A95_E94_E95_neutral_ABL_EP_AWF_combined.tex.
+% Insert after the existing appendices and before \begin{thebibliography}:
+%   \input{accepted_awf_appendix_A93_A95_E94_E95}
+% The main note already calls \appendix; do not call it again here.
+% Uses the main note's amsmath/amssymb/amsthm/bm/booktabs/natbib/cleveref
+% packages, proposition environment, and \eps, \ust, \dd, \Id, \R, \Smat.
+% Bibliography keys: Shih1993, Shih1995ASM, Shih1994EVM, Shih1995EVM,
+% and SCI2006. All labels introduced here have the unique prefix mawf:.
+% No document class, document environment, or bibliography is added.
+
+\section{AWF with coefficients compatible with A93, A95 and E94/E95,
+a budget-determined cutoff, and a nonconstant inner kinetic-energy profile}
+\label{mawf:appendix}
+
+This appendix specifies a modified analytical wall function for each of
+the three outer closures A93, A95 and E94/E95
+\citep{Shih1993,Shih1995ASM,Shih1994EVM,Shih1995EVM}.
+The objective is to retain its exact neutral outer equilibrium while
+allowing kinetic energy to vary inside the modeled wall layer.
+Two auxiliary coefficients are matched to the selected outer branch;
+the dissipation cutoff is determined by the reference energy budget;
+and the prescribed redistribution source is removed. Ordinary diffusion
+of the transported inner kinetic energy then balances the local
+production--dissipation difference.
+
+The rough-wall viscosity kernel and analytical momentum reconstruction
+start from the AWF of Suga, Craft and Iacovides \citep{SCI2006}.
+The compatible coefficients, endpoint sampling, budget cutoff and
+variable inner reference specified below are explicit modifications.
+Selecting this variant replaces the earlier wall-coefficient,
+sampling and \(\chi\)-dependent scalar-source choices. Its own
+dissipation law is retained with \(C_k^w=0\).
+
+\subsection{Scope, endpoint sampling, and compatible coefficients}
+\label{mawf:coefficients}
+
+Use the selected high-Re outer equations: molecular momentum and scalar
+diffusion are omitted from the outer analytical reference, and the
+E94/E95 dissipation denominator is reduced from
+\(k+\sqrt{\nu\eps}\) to \(k\) in that outer limit.
+The inner AWF retains the fixed physical \(\nu>0\) in its momentum,
+production and scalar-diffusion formulas. These are two declared
+equation regimes; the result is not an exact logarithmic solution of
+an unchanged finite-Re outer system.
+
+Only inner \(k_w\) is transported. Inner dissipation is a dependent
+total sink, and no inner dissipation transport equation is introduced.
+The inner stress uses the auxiliary linear viscosity specified below;
+the original A93/A95 nonlinear stress laws remain the outer closures.
+Coordinates are \(x\) streamwise, \(y\) spanwise, and \(z\) vertical.
+All stresses are per unit density.
+
+Let \(m\in\{93,95,E\}\) identify the outer model.
+Its neutral equilibrium ratio \(q_m=k_{o,0}/\ust^2\) is
+\begin{equation}
+ \boxed{
+ q_{93}=\frac{57+\sqrt{6249}}{40},\qquad
+ q_{95}=\frac{3+\sqrt{61}}{2\sqrt2},\qquad
+ q_E=\frac{3+\sqrt{41}}{2\sqrt2}.}
+ \label{mawf:q}
+\end{equation}
+These roots follow from \(C_{\mu,m}(q_m)q_m^2=1\) in simple shear.
+The nonlinear corrections of A93 and A95 have zero \(xz\) component
+there, but the full Reynolds shear is \(R_{xz,o,0}=-\ust^2\).
+
+The outer dissipation equation additionally requires
+\begin{equation}
+ \boxed{\kappa^2q_m=\sigma_{\eps,m}\Delta_m,\qquad
+ \Delta_{93}=\Delta_{95}=0.48,\qquad
+ \Delta_E=1.9-0.43q_E.}
+ \label{mawf:kappa}
+\end{equation}
+For E94/E95 the branch \(C_1=0.43\) is active at \(q_E\).
+Retaining the original outer coefficients means selecting
+\(\kappa_m=\sqrt{\sigma_{\eps,m}^{\rm orig}\Delta_m/q_m}\).
+A prescribed common \(\kappa\) instead requires the single outer
+replacement \(\sigma_{\eps,m}^{\rm eq}=\kappa^2q_m/\Delta_m\).
+The exact values implied by the printed coefficients are listed in
+\cref{mawf:outer-table}; they need not coincide with a nominal
+\(\kappa\) used in the original empirical calibration.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Outer choices. The last column is the required one-coefficient
+change when a common \(\kappa=0.41\) is selected.}
+\label{mawf:outer-table}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Model & \(q_m\) & original \(\sigma_\eps\)& compatible \(\kappa_m\)&
+\(\sigma_\eps^{\,0.41}\)\\
+\midrule
+A93 &3.401265417&1.3&0.428323629&1.191151493\\
+A95 &3.822000426&1.3&0.404060995&1.338496399\\
+E94/E95 &3.324506456&1.2&0.412087472&1.187873345\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Use endpoint sampling and tail matching:
+\begin{equation}
+ \boxed{z_K=z_m=H,\qquad K=k_w(H)=k_o(H)>0.}
+ \label{mawf:sampling}
+\end{equation}
+The subscripts \(w,o\) denote wall layer and outer region; subscript
+\(0\) denotes their steady flat reference. At each positive current
+sample \(K\), define counterfactual zero-forcing scales
+\begin{equation}
+ u_m(K)=\sqrt{\frac K{q_m}},\qquad
+ t_0(K)=\frac K{q_m},\qquad
+ A_{\eps,m}(K)=\frac{u_m(K)^3}{\kappa}.
+ \label{mawf:scales}
+\end{equation}
+At the chosen inlet reference \(K=q_m\ust^2\), \(u_m=\ust\).
+Away from that reference, \(t_0\) is not imposed as the actual
+wall traction. Model and sample arguments are suppressed below.
+
+Match the wall dissipation-tail amplitude and viscosity slope:
+\begin{equation}
+ \frac{K^{3/2}}{c_{\ell,m}^w}=\frac{u_m^3}{\kappa},\qquad
+ c_{\mu,m}^wc_{\ell,m}^w\sqrt K=\kappa u_m.
+\end{equation}
+The two compatible auxiliary coefficients and their product are
+\begin{equation}
+ \boxed{c_{\ell,m}^w=\kappa q_m^{3/2},\qquad
+ c_{\mu,m}^w=q_m^{-2},\qquad
+ \alpha_m=c_{\mu,m}^wc_{\ell,m}^w=\frac{\kappa}{\sqrt{q_m}}.}
+ \label{mawf:wall-coefficients}
+\end{equation}
+Consequently, with \(a=\alpha_m\sqrt K\),
+\begin{equation}
+ \boxed{a=\kappa u_m,\qquad
+ \frac{K^{3/2}}{c_{\ell,m}^w}=A_{\eps,m}=\frac{t_0^2}{a}.}
+ \label{mawf:identities}
+\end{equation}
+These two matching requirements uniquely determine the two auxiliary
+coefficients. Traction continuity by itself does not require
+equal inner and outer viscosity slopes.
+The auxiliary \(c_\mu^w\) is constant for the selected branch;
+it is not the current gradient-dependent outer \(C_\mu\).
+
+\begin{table}[htbp]
+\centering\small
+\caption{Compatible wall coefficients. Each row uses the same
+\(\kappa\) in the outer equations and the wall model.}
+\label{mawf:coefficient-table}
+\begin{tabular}{@{}llrrrr@{}}
+\toprule
+Model&outer choice&\(\kappa\)&\(c_\mu^w\)&\(c_\ell^w\)&\(\alpha\)\\
+\midrule
+A93&original&0.428323629&0.086440835&2.686784401&0.232247887\\
+A95&original&0.404060995&0.068457106&3.019138428&0.206681480\\
+E94/E95&original&0.412087472&0.090478551&2.497929531&0.226009045\\
+\midrule
+A93&common \(\kappa\)&0.410000000&0.086440835&2.571844117&0.222312353\\
+A95&common \(\kappa\)&0.410000000&0.068457106&3.063514593&0.209719344\\
+E94/E95&common \(\kappa\)&0.410000000&0.090478551&2.485276011&0.224864173\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Retain the original roughness-intercept correlation. With sand-grain
+roughness \(h_r\ge0\), define, for \(h_r>0\),
+\begin{equation}
+ h^*=\frac{h_r\sqrt K}{\nu},\quad x=\frac{h^*}{70},\quad
+ m_r=\max(0.5-0.4x^{0.7},\,1-0.79x^{-0.28}),\quad
+ b=10.7(1-x^{m_r});
+ \label{mawf:roughness}
+\end{equation}
+for \(h_r=0\), set \(b=10.7\). The wall coefficients are
+\begin{equation}
+ \begin{gathered}
+ z_v=\frac{\nu b}{\sqrt K},\qquad
+ \nu_{t,A}(z)=a(z-z_v)_+,\qquad D_A(z)=\nu+\nu_{t,A}(z),\\
+ D_{k,w}(z)=\nu+\frac{\nu_{t,A}(z)}{\sigma_k}=D_A(z).
+ \end{gathered}
+ \label{mawf:viscosity}
+\end{equation}
+Here \((r)_+=\max(r,0)\), and the last equality uses \(\sigma_k=1\)
+for all three models. These coefficients sample endpoint \(K\);
+local transported \(k_w(z)\) is allowed to vary. Substituting local
+\(k_w\) into the kernel would define a different model. Likewise,
+an interior sample or average cannot simply replace the endpoint
+sample once the inner reference is nonconstant.
+
+\subsection{Momentum, production, and the outer velocity anchor}
+\label{mawf:momentum}
+For a flat quasi-steady column, put
+\begin{equation}
+ L_h(z)=(z-h_r)_+,\quad
+ J_0(z)=\int_0^z\frac{\dd s}{D_A(s)},\quad
+ J_1(z)=\int_0^z\frac{L_h(s)}{D_A(s)}\,\dd s,\quad
+ J_2(z)=\int_0^z\frac{\dd s}{D_A(s)^2}.
+ \label{mawf:J}
+\end{equation}
+With prescribed constant tangential forcing \(F\), retain
+\begin{equation}
+ (D_AU_A')'=F\,\mathbf1_{\{z>h_r\}},\qquad
+ U_A(0)=0,\quad U_A(H)=U_H.
+ \label{mawf:momentum-bvp}
+\end{equation}
+Integration yields the original analytical form, now evaluated
+with the compatible viscosity:
+\begin{equation}
+ \boxed{\begin{aligned}
+ t_A&=\frac{U_H-FJ_1(H)}{J_0(H)},&
+ U_A(z)&=t_AJ_0(z)+FJ_1(z),\\
+ P_A(z)&=\nu_{t,A}(z)
+       \left|\frac{t_A+FL_h(z)}{D_A(z)}\right|^2 .
+ \end{aligned}}
+ \label{mawf:forced}
+\end{equation}
+The upper traction is \(T_H=t_A+FL_h(H)\), generally different
+from ground traction \(t_A\). The vector tangential form uses
+componentwise reconstruction and the Euclidean square in \(P_A\).
+The coordinates remain the physical Cartesian coordinates.
+
+At the counterfactual zero-forcing reference choose
+\begin{equation}
+ U_{H,0}=t_0J_0(H),\qquad U_{w,0}(z)=t_0J_0(z),\qquad
+ p_0(z)=t_0^2\frac{\nu_{t,A}(z)}{D_A(z)^2}.
+ \label{mawf:reference-production}
+\end{equation}
+Its integrated production is exactly
+\begin{equation}
+ \boxed{\mathcal P_0=\int_0^H p_0\,\dd z
+     =t_0^2[J_0(H)-\nu J_2(H)].}
+ \label{mawf:production-budget}
+\end{equation}
+Here \(p_0\) is pointwise reference production and
+\(\mathcal P_0/H\) is its height mean. Neither is the actual
+production of a general current flow. The molecular part of mean
+viscous dissipation is excluded from turbulent production; hence
+the term \(-\nu J_2\) must be retained.
+
+For \(z\ge H\), the compatible outer reference is
+\begin{equation}
+ \boxed{\begin{aligned}
+ U_{o,0}(z)&=t_0J_0(H)+\frac{u_m}{\kappa}\ln\frac zH,\\
+ k_{o,0}(z)&=K,\qquad
+ \eps_{o,0}(z)=\frac{A_{\eps,m}}z,\qquad
+ \nu_{t,o,0}(z)=az .
+ \end{aligned}}
+ \label{mawf:outer-reference}
+\end{equation}
+Its aerodynamic intercept is
+\begin{equation}
+ z_{0,m}=H\exp[-\kappa u_mJ_0(H)]=H\exp[-aJ_0(H)].
+ \label{mawf:z0}
+\end{equation}
+Keeping the same \(h_r\) after changing coefficients generally
+changes \(z_{0,m}\). A separately prescribed \(z_0\) requires
+\begin{equation}
+ J_0(H)=\frac{\ln(H/z_0)}{\kappa\ust}
+ \label{mawf:z0-calibration}
+\end{equation}
+at the selected inlet reference. A physical roughness input calibrated
+there is subsequently held fixed as the endpoint sample evolves.
+
+\subsection{Budget-determined dissipation and admissibility}
+\label{mawf:cutoff-section}
+Use a positive continuous dependent sink and no prescribed redistribution:
+\begin{equation}
+ \boxed{E_w(z)=\frac{A_{\eps,m}}{\max(z,z_c)},\qquad
+ C_k^w(z)=0,\qquad 0<z_c\le H.}
+ \label{mawf:dissipation}
+\end{equation}
+Its integral and upper trace are
+\begin{equation}
+ \int_0^HE_w\,\dd z=A_{\eps,m}\left(1+\ln\frac H{z_c}\right),
+ \qquad E_w(H)=\frac{A_{\eps,m}}H.
+ \label{mawf:dissipation-integral}
+\end{equation}
+Zero ground \(k\) flux and the constant outer reference require
+\(\int_0^H(E_w-p_0)\,\dd z=0\). Thus
+\begin{equation}
+ \boxed{\Lambda=\frac{\mathcal P_0}{A_{\eps,m}}
+       =a[J_0(H)-\nu J_2(H)],\qquad
+ z_c=H\exp(1-\Lambda).}
+ \label{mawf:cutoff}
+\end{equation}
+The integral in \cref{mawf:dissipation-integral} decreases strictly
+with \(z_c\), tends to infinity as \(z_c\downarrow0\), and equals
+\(A_{\eps,m}\) at \(z_c=H\). Therefore
+\begin{equation}
+ \boxed{\text{a unique }0<z_c\le H\text{ exists}
+        \quad\Longleftrightarrow\quad \Lambda\ge1.}
+ \label{mawf:gate}
+\end{equation}
+If the gate fails, this sink family cannot satisfy both the budget
+and the outer trace. Clipping \(z_c\) to \(H\) loses the budget.
+
+The original molecular cutoff
+\(z_{\eps,A}=2c_\ell^w\nu/\sqrt K\) is replaced by
+\cref{mawf:cutoff}. The plateau is \(A_{\eps,m}/z_c\).
+Imposing also \(E_w(0)=2\nu K/z_c^2\) would force the original
+molecular cutoff again. The replacement cutoff and plateau are
+explicit modifications of the dissipation law.
+The retained finite-viscosity contribution also gives
+\begin{equation}
+ \boxed{z_c=e\,z_{0,m}\exp[a\nu J_2(H)]>e\,z_{0,m},}
+ \label{mawf:cutoff-z0}
+\end{equation}
+and the mechanical-work budget
+\begin{equation}
+ t_0U_{H,0}
+ =\nu t_0^2J_2(H)+\int_0^Hp_0\,\dd z
+ =\nu t_0^2J_2(H)+\int_0^HE_w\,\dd z.
+ \label{mawf:work}
+\end{equation}
+
+\subsection{Nonconstant inner kinetic energy and every weak test mode}
+\label{mawf:inner-k}
+Retain the actual inner transport equation
+\begin{equation}
+ \partial_tk_w+\bm U_w\cdot\nabla k_w
+ =\nabla\cdot(D_{k,w}\nabla k_w)+P_A-E_w.
+ \label{mawf:k-transport}
+\end{equation}
+The steady parallel reference satisfies
+\begin{equation}
+ (D_{k,w}k_{w,0}')'=E_w-p_0,\qquad
+ D_{k,w}(0)k_{w,0}'(0)=0,\qquad k_{w,0}(H)=K.
+ \label{mawf:k-bvp}
+\end{equation}
+Define
+\begin{equation}
+ Q_0(z)=\int_0^z[E_w(s)-p_0(s)]\,\dd s.
+\end{equation}
+Two integrations give the unique reference profile
+\begin{equation}
+ \boxed{
+ D_{k,w}k_{w,0}'=Q_0,\qquad
+ k_{w,0}(z)=K-\int_z^H\frac{Q_0(s)}{D_{k,w}(s)}\,\dd s.}
+ \label{mawf:k-profile}
+\end{equation}
+The physical upward diffusive flux is \(-Q_0\).
+By definition \(Q_0(0)=0\), and the budget gives \(Q_0(H)=0\).
+Hence
+\begin{equation}
+ k_{w,0}(H)=K,\qquad
+ k_{w,0}'(0)=k_{w,0}'(H)=0.
+ \label{mawf:k-endpoints}
+\end{equation}
+The ground value is determined by \cref{mawf:k-profile};
+an additional \(k_w(0)=0\) generally overdetermines this reference.
+The upper zero flux follows from the cutoff budget rather than
+being an additional independent boundary condition on a fixed-cutoff
+inner problem.
+
+For any sufficiently regular test function \(\phi\),
+\begin{equation}
+ \boxed{
+ -\int_0^H D_{k,w}k_{w,0}'\phi'\,\dd z
+ +\int_0^H(p_0-E_w)\phi\,\dd z=0.}
+ \label{mawf:weak}
+\end{equation}
+Indeed, substitution reduces the left side to
+\(-[Q_0\phi]_0^H=0\). The constant test function expresses the
+budget; for nonconstant modes, ordinary diffusion cancels nonzero
+source moments. This is the mechanism required in a spectral/\(hp\)
+wall element.
+
+The analytical profile specifies a reference and an initialization;
+the evolving \(k_w\) is transported, not reset to this profile.
+Any equivalent prescribed redistribution flux from an earlier
+flux-form implementation is also removed. The physical flux
+\(-D_{k,w}\nabla k_w\) supplies the reference transport.
+The cutoff continues to use counterfactual \(p_0(K)\).
+For actual production,
+\begin{equation}
+ \int_0^H(P_A-E_w)\,\dd z=\int_0^H(P_A-p_0)\,\dd z
+ \label{mawf:actual-budget}
+\end{equation}
+need not vanish. Determining the cutoff from actual \(P_A\)
+would define a different model.
+
+\subsection{Closed rough-branch formulas and positivity}
+\label{mawf:rough}
+Assume \(z_v\le0\), and put
+\begin{equation}
+ d=\nu-az_v\ge\nu,\qquad D_A=d+az,\qquad
+ \zeta=\frac{az}{d},\quad L=\frac{aH}{d},\quad
+ \beta=\frac{\nu}{d}\in(0,1].
+ \label{mawf:rough-variables}
+\end{equation}
+Then
+\begin{align}
+ J_0(z)&=\frac1a\ln\frac{d+az}{d},&
+ J_2(z)&=\frac1a\left(\frac1d-\frac1{d+az}\right),\\
+ p_0(z)&=t_0^2\frac{d+az-\nu}{(d+az)^2},&
+ \int_0^zp_0\,\dd s
+ &=A_{\eps,m}\left[\ln\frac{d+az}{d}
+          -\nu\left(\frac1d-\frac1{d+az}\right)\right].
+ \label{mawf:rough-integrals}
+\end{align}
+Consequently,
+\begin{equation}
+ \boxed{\begin{gathered}
+ \Lambda=\ln(1+L)-\frac{\beta L}{1+L},\qquad
+ z_{0,m}=\frac{dH}{aH+d},\\
+ z_c=e\,z_{0,m}
+ \exp\left[\nu\left(\frac1d-\frac1{aH+d}\right)\right].
+ \end{gathered}}
+ \label{mawf:rough-cutoff}
+\end{equation}
+At a prescribed \(z_0<H\), the required rough-branch intercept is
+\begin{equation}
+ d=\frac{aH z_0}{H-z_0}.
+ \label{mawf:d-calibration}
+\end{equation}
+It must be attainable by the roughness correlation and the selected
+wall-layer geometry, normally \(h_r<H\).
+Equal viscosity slopes do not remove the finite intercept:
+\(D_A(H)=d+aH\), while the outer high-Re viscosity is \(aH\).
+
+Define
+\begin{equation}
+ R_c(z)=
+ \begin{cases}
+ z/z_c,&0\le z\le z_c,\\
+ 1+\ln(z/z_c),&z_c\le z\le H.
+ \end{cases}
+\end{equation}
+The cumulative defect is
+\begin{equation}
+ \boxed{Q_0(z)=A_{\eps,m}
+ \left[R_c(z)-\ln\frac{d+az}{d}
+       +\nu\left(\frac1d-\frac1{d+az}\right)\right].}
+ \label{mawf:rough-Q}
+\end{equation}
+
+\paragraph{Closed kinetic-energy primitive.}
+For \(c=az_c/d=L e^{1-\Lambda}\), set
+\begin{equation}
+ \mathcal F_<(\zeta)=
+ \frac{\zeta-\ln(1+\zeta)}c-\frac12\ln^2(1+\zeta)
+ +\beta\left[\ln(1+\zeta)+\frac1{1+\zeta}-1\right],
+\end{equation}
+and
+\begin{equation}
+ \begin{split}
+ \mathcal G(\zeta)
+ &=\left[1+\ln\frac{\zeta}{c}+\beta\right]\ln(1+\zeta)
+   +\operatorname{Li}_2(-\zeta)
+   -\frac12\ln^2(1+\zeta)+\frac{\beta}{1+\zeta},\\
+ \operatorname{Li}_2(-\zeta)
+ &=-\int_0^\zeta\frac{\ln(1+s)}s\,\dd s\qquad(\zeta\ge0).
+ \end{split}
+\end{equation}
+Join the primitives:
+\begin{equation}
+ \mathcal F(\zeta)=
+ \begin{cases}
+ \mathcal F_<(\zeta),&\zeta\le c,\\
+ \mathcal F_<(c)+\mathcal G(\zeta)-\mathcal G(c),&\zeta\ge c.
+ \end{cases}
+\end{equation}
+Since
+\(\mathcal F'(\zeta)=Q_0/[A_{\eps,m}(1+\zeta)]\),
+\begin{equation}
+ \boxed{k_{w,0}(z)=K+\frac{A_{\eps,m}}a
+  [\mathcal F(az/d)-\mathcal F(aH/d)],\qquad
+  \frac{A_{\eps,m}}a=\frac{u_m^2}{\kappa^2}.}
+ \label{mawf:k-closed}
+\end{equation}
+Definite quadrature of \cref{mawf:k-profile} is an equivalent
+evaluation. Near \(H\), it can avoid cancellation of close
+primitive values.
+
+\paragraph{A sufficient condition for monotone decrease.}
+For \(z\ge z_c>0\), direct simplification using
+\(A_{\eps,m}=t_0^2/a\) gives
+\begin{equation}
+ E_w-p_0
+ =\frac{A_{\eps,m}[(d+\nu)az+d^2]}{z(d+az)^2}>0.
+ \label{mawf:tail-defect}
+\end{equation}
+Moreover,
+\begin{equation}
+ p_0'(z)=\frac{a t_0^2[2\nu-(d+az)]}{(d+az)^3}.
+ \label{mawf:production-derivative}
+\end{equation}
+
+\begin{proposition}[Monotone positive rough reference]
+\label{mawf:monotone-proposition}
+If \(d\ge2\nu\), \(K>0\), and \(\Lambda\ge1\), then
+\begin{equation}
+ Q_0(z)<0,\qquad k_{w,0}'(z)<0,\qquad
+ k_{w,0}(z)>K>0\quad(0<z<H),
+\end{equation}
+and \(k_{w,0}(0)>K\).
+\end{proposition}
+\begin{proof}
+The production decreases strictly for \(z>0\).
+On the dissipation plateau, \(E_w-p_0\) therefore increases
+strictly, and its value at \(z_c\) is positive by
+\cref{mawf:tail-defect}. Its zero total integral forces one
+negative-to-positive crossing strictly inside \((0,z_c)\).
+The cumulative defect is negative until it returns to zero at
+\(H\), and \cref{mawf:k-profile} gives the result.
+This argument includes \(z_c=H\): the positive endpoint
+defect still forces a crossing below \(H\).
+\end{proof}
+The one-crossing argument works for any positive \(D_{k,w}\).
+The following stronger positivity statement uses specifically
+\(\sigma_k=1\), hence \(D_{k,w}=D_A\).
+
+\begin{proposition}[Positive reference on the whole rough branch]
+\label{mawf:positive-proposition}
+Assume the flat measure, constant physical \(\nu>0\),
+\(d\ge\nu\), \(K>0\), \(\Lambda\ge1\), \(D_{k,w}=D_A\),
+and \(A_{\eps,m}=t_0^2/a\). Then
+\begin{equation}
+ \boxed{k_{w,0}(z)>K\quad(0\le z<H),\qquad k_{w,0}(H)=K.}
+ \label{mawf:positive}
+\end{equation}
+When \(\nu\le d<2\nu\), the profile can initially increase
+before decreasing to \(K\); positivity does not require
+monotone decrease.
+\end{proposition}
+\begin{proof}
+Use \(L,\beta\) from \cref{mawf:rough-variables}, and set
+\begin{equation}
+ \begin{gathered}
+ G_\beta(x)=\ln(1+x)-\frac{\beta x}{1+x},\qquad
+ c=L e^{1-G_\beta(L)},\\
+ \Phi(x;c)=
+ \begin{cases}
+ x/c-G_\beta(x),&x\le c,\\
+ 1+\ln(x/c)-G_\beta(x),&x\ge c.
+ \end{cases}
+ \end{gathered}
+\end{equation}
+Here \(Q_0=A_{\eps,m}\Phi\), \(\Phi(0)=\Phi(L)=0\), and
+\begin{equation}
+ k_{w,0}(z)-K=\frac{A_{\eps,m}}a[F(az/d)-F(L)],
+ \qquad F(x)=\int_0^x\frac{\Phi(t;c)}{1+t}\,\dd t.
+ \label{mawf:positivity-F}
+\end{equation}
+On the tail,
+\(\Phi'=[1+(1+\beta)x]/[x(1+x)^2]>0\), so \(\Phi<0\)
+before its endpoint zero. On the plateau,
+\[
+ \Phi'=\frac1c-p_\beta(x),\qquad
+ p_\beta(x)=\frac{1+x-\beta}{(1+x)^2},\qquad
+ p_\beta'(x)=\frac{2\beta-1-x}{(1+x)^3}.
+\]
+Thus \(p_\beta\) decreases or has only one maximum.
+The allowed signs of \(\Phi\) are negative throughout the
+interior, or positive initially and then negative.
+This also holds when \(c=L\), since \(\Phi'(L)>0\).
+Consequently \(F\) has no interior minimum.
+
+For fixed \(\beta\), write \(I_\beta(L)=F(L)\) while accounting
+for \(c=c(L)\). Since
+\[
+ \frac{c'(L)}{c(L)}
+  =\frac{1+(1+\beta)L}{L(1+L)^2}>0,
+\]
+and \(\Phi(L)=0\), differentiation gives
+\begin{equation}
+ I_\beta'(L)=-\frac{c'(L)}{c(L)}
+ \left[\frac{c-\ln(1+c)}c+\ln\frac{1+L}{1+c}\right]<0.
+\end{equation}
+Let \(L_1\) be the unique \(G_\beta(L_1)=1\).
+At that lower admissible endpoint \(c=L_1\), and
+\(T=\ln(1+L_1)\) satisfies \(1<T<2\). Direct integration gives
+\begin{equation}
+ I_\beta(L_1)
+ =(2-T)\left(\frac{2-T}{2}-\frac T{L_1}\right)<0.
+\end{equation}
+The sign follows from
+\(\ln(1+L_1)>2L_1/(L_1+2)\); the derivative of this difference
+is \(L_1^2/[(1+L_1)(L_1+2)^2]>0\).
+Hence \(F(L)<0=F(0)\) for every admissible \(L\).
+The shape argument now gives \(F(x)>F(L)\) for \(x<L\),
+which proves \cref{mawf:positive}.
+\end{proof}
+The proof covers \(d=\nu,\Lambda=1\) algebraically.
+Whether such an endpoint is attainable with the original
+roughness correlation and \(h_r<H\) is a separate geometric
+admissibility check. The stronger proof is specific to the
+flat measure and \(D_{k,w}=D_A\); it is not automatically valid
+for another scalar diffusivity or a metric-weighted column.
+
+\paragraph{Why the cutoff gate is not a general positivity test.}
+On the smooth branch \(h_r=0\), set \(b=10.7\),
+\(x=az/\nu\), \(v=10.7\alpha_m\), and
+\(M=aH/\nu\). Let \(y_4=146.409759514\ldots\) solve
+\[
+ \ln(1+y_4)-\frac{y_4}{1+y_4}=4,
+\]
+and choose \(M=v+y_4\). Then \(\Lambda=4\) and
+\(c=az_c/\nu=M e^{-3}\). With
+\[
+ B(x)=
+ \begin{cases}
+ 0,&x\le v,\\
+ \ln(1+x-v)-(x-v)/(1+x-v),&x>v,
+ \end{cases}
+ \qquad
+ \widehat R_c(x)=
+ \begin{cases}x/c,&x\le c,\\1+\ln(x/c),&x\ge c,\end{cases}
+\]
+the exact ground value is
+\begin{equation}
+ \frac{k_{w,0}(0)}K
+ =1-\frac{1}{\kappa^2q_m}
+   \int_0^M\frac{\widehat R_c(x)-B(x)}{1+(x-v)_+}\,\dd x.
+ \label{mawf:smooth-counterexample}
+\end{equation}
+At common \(\kappa=0.41\), this gives
+\begin{center}
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+Model&A93&A95&E94/E95\\
+\midrule
+\(k_{w,0}(0)/K\)&\(-0.371380517\)&\(-0.080424984\)&\(-0.436121275\)\\
+\bottomrule
+\end{tabular}
+\end{center}
+The budget is admissible, but the stationary kinetic energy is
+inadmissible. Thus outside the rough positivity theorem,
+the computed profile needs a separate positivity check.
+
+\subsection{Conservative matching and normal pressure balance}
+\label{mawf:matching}
+At the flat reference,
+\begin{equation}
+ U_{w,0}(0)=0,\qquad U_{w,0}(H)=U_{o,0}(H),\qquad
+ D_A(H)U_{w,0}'(H)=\nu_{t,o,0}(H)U_{o,0}'(H)=t_0.
+ \label{mawf:traction}
+\end{equation}
+Viscosities and gradients need not be continuous.
+The inner Reynolds shear is
+\(-t_0\nu_{t,A}/D_A\), while outer Reynolds shear is \(-t_0\);
+the inner molecular contribution completes total-traction balance.
+
+Use local transported \(k_w\) in the isotropic inner stress.
+With \(\Smat_w=(\nabla\bm U_w+\nabla\bm U_w^T)/2\) and
+hydrostatic-reduced pressure \(\pi=p/\rho+gz\), the inner
+covariance and total stress are
+\begin{equation}
+ \R_w=\frac23k_w\Id-2\nu_{t,A}\Smat_w,\qquad
+ \bm T_w=-\left(\pi_w+\frac23k_w\right)\Id+2D_A\Smat_w .
+ \label{mawf:stress}
+\end{equation}
+The steady vertical balance and its solution are
+\begin{equation}
+ \left(\pi_{w,0}+\frac23k_{w,0}\right)'=0,\qquad
+ \boxed{\pi_{w,0}(z)=\pi_{o,0}+R_{zz,o,0}-\frac23k_{w,0}(z).}
+ \label{mawf:pressure}
+\end{equation}
+Here \(\pi_{o,0}\) and \(R_{zz,o,0}\) are constant in the
+outer reference. Define
+\begin{equation}
+ F_{93}=\frac{q_{93}^2}{1000+q_{93}^3},\qquad
+ B_{95}=
+ \frac{q_{95}^2\sqrt{1-9/(2q_{95}^2)}}{1+3q_{95}^2}.
+\end{equation}
+The original outer stresses give
+\begin{equation}
+ \boxed{\frac{\pi_{w,0}(H)-\pi_{o,0}}K
+ =\begin{cases}
+ -17F_{93}/3=-0.0630736219,&\text{A93},\\
+ -B_{95}=-0.2710910066,&\text{A95},\\
+ 0,&\text{E94/E95}.
+ \end{cases}}
+ \label{mawf:pressure-offset}
+\end{equation}
+Define \(\Delta\pi_H=\pi_{w,0}(H)-\pi_{o,0}\).
+Then \(\pi_{w,0}(z)=\pi_{o,0}+\Delta\pi_H
+-\frac23[k_{w,0}(z)-K]\).
+Even E94/E95 has a varying inner reduced mechanical pressure,
+despite its zero interface offset. A pressure variable that already
+includes isotropic turbulent stress must be translated consistently.
+
+The \(k\) value and diffusive flux match:
+\begin{equation}
+ k_w(H)=k_o(H)=K,\qquad
+ D_{k,w}(H)k_{w,0}'(H)
+ =\frac{\nu_{t,o,0}(H)}{\sigma_k}k_{o,0}'(H)=0.
+ \label{mawf:k-interface}
+\end{equation}
+For the evolving coupled system these are continuity and conservation
+conditions, not independent Dirichlet and Neumann prescriptions on
+an isolated outer equation. The outer dissipation equation receives
+only
+\begin{equation}
+ \eps_o(H)=E_w(H)=\frac{A_{\eps,m}}H .
+ \label{mawf:eps-interface}
+\end{equation}
+There is no additional two-sided dissipation-flux condition,
+because no inner dissipation equation is solved.
+When \(z_c=H\), the inner dissipation derivative is zero and the
+outer derivative is \(-A_{\eps,m}/H^2\); their traces still agree.
+
+\subsection{Distinction from the constant-inner-\texorpdfstring{\(k\)}{k} EP-AWF}
+\label{mawf:comparison}
+At identical sampled \(K\), \(h_r,H,\nu\), compatible coefficients
+and cutoff, the constant-inner-\(k\) construction uses
+\[
+ E_w=\frac{A_{\eps,m}}{\max(z,z_c)},\qquad
+ C_k^w=E_w-p_0,\qquad S_{k,w}^{\rm EP}=P_A-p_0.
+\]
+The modified construction uses
+\[
+ E_w=\frac{A_{\eps,m}}{\max(z,z_c)},\qquad
+ C_k^w=0,\qquad S_{k,w}=P_A-E_w.
+\]
+Both sources have the same layer integral, but their local
+balances differ. At the reference, the first uses prescribed
+redistribution to support constant \(k=K\); the second uses
+ordinary diffusion of \cref{mawf:k-profile}.
+The physical reference transport \(-Q_0\) is the same,
+while the evolving models are different.
+
+Setting the host's old switch to \(\chi=0\) does not select this
+variant when that switch also restores the original-cutoff
+dissipation. The present variant retains the budget cutoff
+while removing both the prescribed redistribution source and
+its equivalent auxiliary flux. Its scalar policy has no
+spatial \(\chi\) fade. The earlier bounded-redistribution
+positivity remedy would be a further model change if retained.
+
+\subsection{A specified extension to curved terrain}
+\label{mawf:curved}
+Use the conservative curved momentum completion with the new
+endpoint sample \(K=k|_{\Gamma_H}\), compatible coefficients,
+metric-weighted reference budget and \(C_k^w=0\).
+The equations are restated here so that the scalar replacement
+and roughness-force prescription are explicit.
+
+Let \(\bm n\) point from the ground into the fluid and use the
+normal map
+\begin{equation}
+ \bm x(\bm\xi,r)=\bm X(\bm\xi)+r\bm n(\bm\xi),\qquad
+ P=\Id-\bm n\otimes\bm n,\quad B_g=\nabla_\Gamma\bm n,\quad
+ A_g=I_T+rB_g,\quad J=\det_TA_g.
+ \label{mawf:map}
+\end{equation}
+The inverses of \(A_g\) act tangentially and are extended by zero
+normally. The principal stretches \(1+r\gamma_i\) must be
+positive, and the normal map must be globally one-to-one on
+\(0\le r\le H(\bm\xi)\). The volume measure is
+\(J\,\dd S_\Gamma\,\dd r\). Surface derivatives below are
+taken at fixed \(r\) before restriction to the interface.
+
+\paragraph{Reference cutoff in the volume measure.}
+Set
+\begin{equation}
+ E_w(r)=\frac{A_{\eps,m}(K)}{\max(r,r_c)},\qquad
+ p_0(r;K)=t_0(K)^2\frac{\nu_{t,A}(r;K)}{D_A(r;K)^2}.
+\end{equation}
+Use counterfactual zero-forcing production in
+\begin{equation}
+ \boxed{\int_0^H J(r)E_w(r)\,\dd r
+        =\mathcal P_J:=\int_0^H J(r)p_0(r;K)\,\dd r.}
+ \label{mawf:metric-budget}
+\end{equation}
+For \(\mathcal B(c)=A_{\eps,m}\int_0^H J/\max(r,c)\,\dd r\),
+\[
+ \mathcal B'(c)=-\frac{A_{\eps,m}}{c^2}\int_0^cJ\,\dd r<0,
+ \qquad \mathcal B(c)\longrightarrow+\infty\quad(c\downarrow0).
+\]
+Hence a unique \(0<r_c\le H\) exists exactly when
+\begin{equation}
+ \boxed{\mathcal P_J\ge
+        \frac{A_{\eps,m}}H\int_0^H J\,\dd r.}
+ \label{mawf:metric-gate}
+\end{equation}
+At a fixed footpoint, \(J=(1+\gamma_1r)(1+\gamma_2r)\), and
+\begin{equation}
+ \frac{\mathcal B(c)}{A_{\eps,m}}
+ =1+\ln\frac Hc
+ +(\gamma_1+\gamma_2)\left(H-\frac c2\right)
+ +\gamma_1\gamma_2\left(\frac{H^2}{2}-\frac{c^2}{6}\right).
+ \label{mawf:metric-explicit}
+\end{equation}
+One monotone scalar root solve replaces the flat exponential.
+
+\paragraph{Actual continuity, momentum, forcing and scalar transport.}
+Write \(\bm U_w=\bm u_t+w\bm n\) and
+\(\bm v=A_g^{-1}\bm u_t\). With Cartesian velocity components,
+\begin{equation}
+ \partial_r(Jw)+\operatorname{div}_\Gamma(J\bm v)=0,
+ \label{mawf:continuity}
+\end{equation}
+\begin{equation}
+ \begin{split}
+ J\partial_t\bm U_w
+ &+\partial_r\{J(w\bm U_w-T_w\bm n)\}\\
+ &+\operatorname{Div}_\Gamma
+   \{J(\bm U_w\otimes\bm v-T_wA_g^{-T})\}=J\bm f_w .
+ \end{split}
+ \label{mawf:curved-momentum}
+\end{equation}
+Here \(T_w\) is \cref{mawf:stress};
+the outer stress is \(T_o=-\pi_o\Id-\R_m\).
+The operator \(\operatorname{Div}_\Gamma\) takes the surface
+divergence of each Cartesian row. These fluxes already contain
+the geometric effects of stress and pressure.
+
+Retain the explicit roughness-force completion
+\begin{equation}
+ \begin{split}
+ a_r(r)&=\mathbf1_{\{r>h_r\}},\qquad
+ \bm f_w=\bm f_\pi+(1-a_r)\bm F_A,\\
+ \bm F_A&=\mathcal E_H^+P
+ \left[\operatorname{Div}_r(\bm u_{o,t}\otimes\bm u_{o,t})
+             +\nabla_r\pi_o-\bm f_\pi\right],
+ \qquad \bm u_{o,t}=P\bm U_o .
+ \end{split}
+ \label{mawf:rough-force}
+\end{equation}
+Here \(\bm f_\pi\) is the remaining body acceleration after the
+same hydrostatic-pressure convention used outside,
+\(\nabla_rf=A_g^{-T}\nabla_\Gamma f\), and
+\[
+ \operatorname{Div}_r Q
+ =J^{-1}\operatorname{Div}_\Gamma(JQA_g^{-T})
+ \quad\text{for }Q\bm n=0.
+\]
+The sampler \(\mathcal E_H^+\) takes one-sided outer values after
+derivatives at fixed \(r\) have been evaluated; extend the resulting
+\(\bm F_A\) constantly along each normal ray.
+Its work has no guaranteed drag sign and must be retained in
+energy accounting.
+
+The flat scalar reconstruction is the declared quasi-steady
+parallel-flow reduction of this completion: inner storage,
+normal advection, lateral viscous transport and the relevant
+\(\nabla_\parallel w\) contributions are neglected, and the
+remaining convection/pressure/body-force balance is replaced
+by the height-constant sample \(\bm F_A\).
+This also replaces the inner effective-pressure gradient by the
+sampled outer mechanical-pressure gradient; the discarded
+\(\nabla_\parallel(\pi_w+2k_w/3-\pi_o)\) is generally nonzero.
+Under those approximations
+\((D_A\bm U_\parallel')'=a_r\bm F_A\).
+For the curved or unsteady patch, use the full equation
+\cref{mawf:curved-momentum}, without additionally imposing that
+scalar reduction. All discarded terms vanish on the homogeneous
+zero-forcing reference.
+
+The modified actual inner \(k\) equation is
+\begin{equation}
+ \boxed{\begin{aligned}
+ J\partial_t k_w
+ &+\partial_r\{J(wk_w-D_{k,w}\partial_rk_w)\}\\
+ &+\operatorname{div}_\Gamma
+ \{J[\bm v k_w-D_{k,w}A_g^{-1}A_g^{-T}\nabla_\Gamma k_w]\}
+ =J(P_A-E_w).
+ \end{aligned}}
+ \label{mawf:curved-k}
+\end{equation}
+For incompressible flow,
+\[
+ P_A=2\nu_{t,A}\Smat_w:\Smat_w .
+\]
+The isotropic stress uses local \(k_w\), while the viscosity
+uses sampled \(K\). If incompressibility is enforced only weakly,
+the production contraction \(-\R_w:\nabla\bm U_w\) also contains
+\(-(2k_w/3)\nabla\cdot\bm U_w\); its treatment must agree with
+the discrete stress-work and pressure convention.
+The base-normal tangential traction is
+\begin{equation}
+ \bm t_A=D_A\left[
+ \partial_r\bm u_t+A_g^{-T}\nabla_\Gamma w-B_gA_g^{-1}\bm u_t
+ \right].
+ \label{mawf:curved-traction}
+\end{equation}
+Curvature, normal motion and normal pressure balance are thus
+retained in the full patch.
+
+The actual source budget remains
+\[
+ \int_0^HJ(P_A-E_w)\,\dd r
+ =\int_0^HJ(P_A-p_0)\,\dd r,
+\]
+which need not vanish. A frozen reference column can be defined by
+\begin{equation}
+ Q_J(r)=\int_0^rJ(s)[E_w(s)-p_0(s)]\,\dd s,\qquad
+ k_{\rm col}(r)=K-\int_r^H
+        \frac{Q_J(s)}{J(s)D_{k,w}(s)}\,\dd s.
+ \label{mawf:curved-column}
+\end{equation}
+Its base-normal endpoint fluxes vanish.
+The one-crossing proof for \(d\ge2\nu\) extends to this column
+for positive \(J,D_{k,w}\).
+The stronger whole-rough-branch proof is not automatically
+metric weighted. The column balances only the reference source
+and normal diffusion; it is not generally an equilibrium of
+the complete terrain-flow equations.
+
+\paragraph{Actual interface geometry and shared fluxes.}
+For variable \(H\), put
+\begin{equation}
+ \bm q_H=A_{g,H}^{-T}\nabla_\Gamma H,\qquad
+ \beta_H=\sqrt{1+|\bm q_H|^2},\qquad
+ \bm N_H=\frac{\bm n-\bm q_H}{\beta_H}.
+ \label{mawf:interface-normal}
+\end{equation}
+Use common velocity and total traction,
+\(\bm U_w=\bm U_o=\widehat{\bm U}\) and
+\(T_w\bm N_H=T_o\bm N_H\), with one conservative momentum
+flux and opposite orientations on the two sides.
+The mass flux per unit ground area is
+\(m_H=J_H(w-\bm u_t\cdot\bm q_H)\).
+At a common \(k\) trace \(\widehat k\), match
+\begin{equation}
+ J_H\beta_H(\bm U k-D_k\nabla k)\cdot\bm N_H
+ =m_H\widehat k-J_HD_k
+ \left[\partial_rk-\bm q_H\cdot A_{g,H}^{-T}\nabla_\Gamma k\right].
+ \label{mawf:curved-k-flux}
+\end{equation}
+Zero base-normal column flux alone does not establish zero flux
+through a tilted interface. Surface differentiation of the trace
+obeys
+\(\nabla_\Gamma K=(\nabla_\Gamma k_w)|_H+
+(\partial_rk_w)|_H\nabla_\Gamma H\).
+The outer dissipation trace is \(E_w(H)=A_{\eps,m}/H\).
+Full normal-traction matching replaces the flat pressure offset;
+there is still no independent inner dissipation-flux prescription.
+
+\subsection{Reference realizability, positivity, and stability limits}
+\label{mawf:stability}
+On a positive rough reference the smallest inner covariance
+eigenvalue is
+\begin{equation}
+ \lambda_{\min}(\R_{w,0})
+ =\frac23k_{w,0}-t_0\frac{\nu_{t,A}}{D_A}
+ >K\left(\frac23-\frac1{q_m}\right)>0.
+ \label{mawf:covariance}
+\end{equation}
+All three \(q_m\) exceed \(3/2\). Their original outer reference
+covariances are also positive definite. These are reference-state
+results, not global guarantees for forced or separated states.
+
+With endpoint \(K\), coefficients, cutoff and reference production
+held fixed, a wall-normal perturbation \(v=k_w-k_{w,0}\) obeys
+\[
+ v_t=(D_{k,w}v')',\qquad v(H)=0,\qquad D_{k,w}v'(0)=0,
+\]
+and
+\begin{equation}
+ \frac12\frac{\dd}{\dd t}\int_0^H v^2\,\dd z
+ =-\int_0^H D_{k,w}(v')^2\,\dd z\le0.
+ \label{mawf:scalar-stability}
+\end{equation}
+This conditional scalar estimate is separate from full coupled
+stability.
+
+Dynamic nonnegativity of actual \(k_w\) is not automatic:
+at a flat interior zero minimum, positive endpoint \(K\), and
+locally zero production and diffusion,
+\[
+ \partial_t k_w=-E_w(K)<0.
+\]
+Thus the positive rough reference does not make the evolving
+sampled-\(K\) sink positivity preserving. An additional source
+modification or numerical positivity device must be identified
+and checked separately if introduced.
+
+The wall changes do not alter the original outer constitutive
+domains or incremental momentum response. A93 can lose covariance
+realizability away from the reference, A95 retains its real-radicand
+restriction, and positive covariance in E94/E95 does not ensure
+positive incremental momentum diffusion. The previously established
+outer constitutive restrictions therefore remain relevant.
+
+\subsection{Illustrative references and implementation implications}
+\label{mawf:verification}
+Take
+\begin{equation}
+ \ust=0.4\ \mathrm{m\,s^{-1}},\quad
+ \nu=1.5\times10^{-5}\ \mathrm{m^2\,s^{-1}},\quad
+ h_r=0.1\ \mathrm m,\quad H=2\ \mathrm m,\quad z_K=z_m=H.
+ \label{mawf:inputs}
+\end{equation}
+Using the original roughness correlation gives
+\cref{mawf:numerical-table}. The same sand-grain input is retained,
+so aerodynamic roughness is an output rather than a common
+prescribed input.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Analytical rough references. \(K,k(0)\) are in
+\(\mathrm{m^2\,s^{-2}}\), and lengths are in metres.}
+\label{mawf:numerical-table}
+\begin{tabular}{@{}llrrrrr@{}}
+\toprule
+Model&\(\kappa\) choice&\(K\)&\(k(0)\)&\(\Lambda\)&\(z_c\)&\(z_{0,m}\)\\
+\midrule
+A93&original&0.54420247&1.08630845&5.90564847&0.01480928&0.00536024\\
+A95&original&0.61152007&1.22075495&5.89870963&0.01491240&0.00539286\\
+E94/E95&original&0.53192103&1.11770080&5.90535573&0.01481362&0.00535834\\
+\midrule
+A93&common \(0.41\)&0.54420247&1.13595953&5.90420900&0.01483061&0.00536413\\
+A95&common \(0.41\)&0.61152007&1.20319430&5.89920134&0.01490507&0.00539152\\
+E94/E95&common \(0.41\)&0.53192103&1.12369422&5.90518519&0.01481614&0.00535880\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+All six cases satisfy \(d\ge2\nu\) and \(\Lambda>1\), so their
+positive monotone profiles have an analytical guarantee.
+The interface pressure offsets are
+\(-0.034324820606\), \(-0.165777590815\), and \(0\)
+\(\mathrm{m^2\,s^{-2}}\), respectively.
+At fixed \(\ust\) these offsets do not change with \(\kappa\),
+because \(K=q_m\ust^2\) is unchanged; the inner pressure profile
+does change with \(k_w(z)\).
+
+Independent quadrature of the production and dissipation budgets,
+the cumulative defect, and the closed primitive agrees with the
+analytical expressions. Separately integrated source and diffusion
+moments for Legendre degrees \(0,\ldots,6\) give a maximum absolute
+weak residual of \(2.33\times10^{-16}\) across these cases;
+closed \(k\) versus quadrature differs by at most
+\(6.89\times10^{-15}\) in SI units. These are checks of the
+formulas, not CFD or terrain validation.
+
+The model-specific \(\kappa\) affects the viscosity slope,
+dissipation amplitude, cutoff and inner profile. A further useful
+identity is
+\[
+ \frac{\kappa^2[k_{w,0}(z)-K]}{u_m^2}
+ =\mathcal F(az/d)-\mathcal F(aH/d).
+\]
+At common \(\kappa,\ust,H,z_0,\nu\), if each roughness input
+is calibrated to the same \(z_0\), \cref{mawf:d-calibration}
+makes \(a,d\) identical. Then the zero-forcing wall velocity,
+production, sink and cumulative defect coincide across the models,
+and their \(k\) profiles differ only by \(K=q_m\ust^2\).
+Their forced responses can still differ through the calibrated
+\(h_r\) in the forcing cutoff.
+
+For a spectral/\(hp\) implementation, the exact continuum weak
+identity \cref{mawf:weak} does not by itself make a finite polynomial
+interpolant stationary. The ordinary diffusive flux, nonzero source
+moments and shared interface terms must be represented and integrated
+consistently. A local discrete wall solve using the same source,
+quadrature and boundary contract can supply a stationary discrete
+profile. Checking only the cell-mean energy budget is insufficient.
+
+The selected variant therefore consists of endpoint sampling,
+the two compatible coefficients, the budget cutoff and its plateau,
+retained finite-\(\nu\) transport with \(P_A-E_w\), and conservative
+velocity/stress/scalar coupling. Its exactness claim is the
+flat neutral reference of these specified equations. Positivity
+outside the rough theorem, global coupled stability and fully
+discrete preservation remain separate requirements.
