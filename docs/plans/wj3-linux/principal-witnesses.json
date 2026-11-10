@@ -1,0 +1,1536 @@
+{
+  "EP": {
+    "spatial-measure-L2": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj3-20261110/study-final/EP/spatial-measure-L2/result.json",
+      "sha256": "a68b7a1a8e12f57600b27c3ed1f88cdeca74e0eb13ba32a9253a92eb36757382",
+      "packet": {
+        "schema": "WJFiniteAuditV2",
+        "state_sha256": "5a39a1ff762746ff6e5f266bea0f480f3a200fcf83e6720e65e72ff2e798a5be",
+        "stage_context_sha256": "04dbccd8de2c0c9e54f0dad872fe8ae91c7aa2081501c9ba305a20f929f4849e",
+        "stage_history_sha256": "5a39a1ff762746ff6e5f266bea0f480f3a200fcf83e6720e65e72ff2e798a5be",
+        "phase": "startup_readback",
+        "time": 0.0,
+        "alpha_mass": 0.0,
+        "conditions": {
+          "inner_covariance": {
+            "passed": true,
+            "margins": [
+              0.3143578922216656
+            ]
+          },
+          "outer_covariance": {
+            "passed": true,
+            "margins": [
+              0.23856900214943497
+            ]
+          },
+          "principal_in_plane": {
+            "passed": true,
+            "margins": [
+              0.004132219015267454
+            ]
+          },
+          "principal_transverse": {
+            "passed": true,
+            "margins": [
+              0.9435637789156731
+            ]
+          },
+          "profile_budget": {
+            "passed": true,
+            "margins": [
+              1e-10
+            ]
+          },
+          "profile_gate": {
+            "passed": true,
+            "margins": [
+              2.0708034876389605
+            ]
+          },
+          "raw_work": {
+            "passed": true,
+            "margins": [
+              9.999888977697537e-12
+            ]
+          },
+          "root_branch": {
+            "passed": true,
+            "margins": [
+              2.2499586931945457,
+              30.61218460559776
+            ]
+          },
+          "root_residual": {
+            "passed": true,
+            "margins": [
+              9.999998821240742e-13
+            ]
+          },
+          "scalar_domain": {
+            "passed": true,
+            "margins": [
+              0.8466950351321795,
+              0.8466950351321795,
+              0.16364775247637042,
+              0.32729550495274085
+            ]
+          },
+          "scalar_viscosities": {
+            "passed": true,
+            "margins": [
+              0.19095893177316517,
+              0.1909589317733666
+            ]
+          }
+        },
+        "failure_categories": [],
+        "principal_witnesses": {
+          "in_plane": {
+            "geometry": 56.0,
+            "element": 56.0,
+            "region": "outer",
+            "side": 0.0,
+            "position": [
+              0.375,
+              0.0,
+              1.7000000000000002
+            ],
+            "k": 0.8466950351321795,
+            "epsilon": 0.19252673220222502,
+            "sampled_K": 0.8466950351321795,
+            "N": 4.050039883690087,
+            "covariance_eigenvalues": [
+              0.2385690020647656,
+              0.5644633567547863,
+              0.8903577114448069
+            ],
+            "nu_eff": 0.3246252584218567,
+            "nu_d": 0.3246302437333827,
+            "Praw": 0.19253014494734527,
+            "Pdev": 0.19253014494734533,
+            "raw_divergence": 7.049347000229189e-17,
+            "s_w_I4": [
+              5.735329598549591,
+              -5.735329598549591,
+              -2.96341171421377e-16
+            ],
+            "F_N": 30.613594878172222,
+            "root_residual": -6.938893903907228e-18,
+            "angle_radians": 1.7122001334339816,
+            "minimum_over_nu_eff": 0.004132219015267454,
+            "a_dot_xi": 0.0,
+            "minus_H_contract_dR": 0.0013414226656869067,
+            "replayed_over_nu_eff": 0.004132219015267452,
+            "xi": [
+              -0.14093304848037794,
+              0.0,
+              0.9900191290303574
+            ],
+            "polarization": [
+              -0.9900191290303574,
+              0.0,
+              -0.14093304848037794
+            ],
+            "raw_G_row_major": [
+              7.049347000229189e-17,
+              0.0,
+              0.7701196676137982,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "dR_row_major": [
+              -0.22193377985417795,
+              0.0,
+              -0.06309627842191522,
+              0.0,
+              1.8688933562599657e-17,
+              0.0,
+              -0.06309627842191522,
+              0.0,
+              0.22193377985417792
+            ],
+            "H_row_major": [
+              0.1395264139081369,
+              -0.0,
+              -0.9801378758460274,
+              -0.0,
+              0.0,
+              0.0,
+              0.01986212415397256,
+              -0.0,
+              -0.1395264139081369
+            ],
+            "normalization": "unit xi, unit a perpendicular to xi; -H:dR/nu_eff; fixed positive k and epsilon",
+            "search": "32 periodic angular brackets; 48 golden iterations per local minimum",
+            "scope": "finite NativeElementSideV2 spatial inventory; x-z propagation only"
+          },
+          "transverse": {
+            "geometry": 59.0,
+            "element": 59.0,
+            "region": "outer",
+            "side": 0.0,
+            "position": [
+              0.125,
+              0.0,
+              1.9
+            ],
+            "k": 0.8466950351321795,
+            "epsilon": 0.17226075985893427,
+            "sampled_K": 0.8466950351321795,
+            "N": 4.0499586931945455,
+            "covariance_eigenvalues": [
+              0.23857161534191001,
+              0.5644633567547863,
+              0.8903550981676626
+            ],
+            "nu_eff": 0.36282780902300177,
+            "nu_d": 0.3628220382354157,
+            "Praw": 0.17225759739595878,
+            "Pdev": 0.17225759739595878,
+            "raw_divergence": 0.0,
+            "s_w_I4": [
+              5.734943355211562,
+              -5.734943355211562,
+              0.0
+            ],
+            "F_N": 30.61218460559776,
+            "root_residual": -3.469446951953614e-18,
+            "angle_radians": 1.3316362727042745,
+            "minimum_over_nu_eff": 0.9435637789156731,
+            "a_dot_xi": 0.0,
+            "minus_H_contract_dR": 0.34235117857743774,
+            "replayed_over_nu_eff": 0.9435637789156732,
+            "xi": [
+              0.23688667131378657,
+              0.0,
+              0.9715372895333838
+            ],
+            "polarization": [
+              0.0,
+              1.0,
+              0.0
+            ],
+            "raw_G_row_major": [
+              0.0,
+              0.0,
+              0.6890312348837822,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "dR_row_major": [
+              0.0,
+              0.1320854798500274,
+              0.0,
+              0.1320854798500274,
+              0.0,
+              -0.3845868524587969,
+              0.0,
+              -0.3845868524587969,
+              0.0
+            ],
+            "H_row_major": [
+              0.0,
+              0.0,
+              0.0,
+              0.23688667131378657,
+              0.0,
+              0.9715372895333838,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "normalization": "unit xi, unit a perpendicular to xi; -H:dR/nu_eff; fixed positive k and epsilon",
+            "search": "analytic symmetric 2x2 eigenvalue in x-z propagation plane",
+            "scope": "finite NativeElementSideV2 spatial inventory; x-z propagation only"
+          }
+        }
+      }
+    },
+    "main-128-measure": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj3-20261110/study-final/EP/main-128-measure/result.json",
+      "sha256": "bd4be1ff75367e3a27e21db05a0d7519a3abbffd1e488fa0604748ad3adb928c",
+      "packet": {
+        "schema": "WJFiniteAuditV2",
+        "state_sha256": "bebde3b3ac3b8baff6f460ae333bcf37e2f39aa4fded8228c71eb74993c98b5f",
+        "stage_context_sha256": "2c426a6cfc8e8d00ff51aa317d8611903ece2a635ea903f5b686b67e59e3d626",
+        "stage_history_sha256": "3cb213b4b99e935d1f3cd983ef87ccb6f726b3274952f50ebf93c5bd793a17db",
+        "phase": "accepted_checkpoint_stage",
+        "time": 0.004095999999999992,
+        "alpha_mass": 31250.0,
+        "conditions": {
+          "inner_covariance": {
+            "passed": true,
+            "margins": [
+              0.313103032944886
+            ]
+          },
+          "outer_covariance": {
+            "passed": true,
+            "margins": [
+              0.23855815394588242
+            ]
+          },
+          "principal_in_plane": {
+            "passed": true,
+            "margins": [
+              0.004091492016623104
+            ]
+          },
+          "principal_transverse": {
+            "passed": true,
+            "margins": [
+              0.943550389689001
+            ]
+          },
+          "profile_budget": {
+            "passed": true,
+            "margins": [
+              1e-10
+            ]
+          },
+          "profile_gate": {
+            "passed": true,
+            "margins": [
+              2.0708034872741554
+            ]
+          },
+          "raw_work": {
+            "passed": true,
+            "margins": [
+              9.999888977697537e-12
+            ]
+          },
+          "root_branch": {
+            "passed": true,
+            "margins": [
+              2.2496381021692677,
+              30.606664370404737
+            ]
+          },
+          "root_residual": {
+            "passed": true,
+            "margins": [
+              9.999998821070772e-13
+            ]
+          },
+          "scalar_domain": {
+            "passed": true,
+            "margins": [
+              0.8466872957641108,
+              0.8466950218169826,
+              0.16364775247637042,
+              0.32729550495274085
+            ]
+          },
+          "scalar_viscosities": {
+            "passed": true,
+            "margins": [
+              0.1909590086341786,
+              0.1909589317733666
+            ]
+          }
+        },
+        "failure_categories": [],
+        "principal_witnesses": {
+          "in_plane": {
+            "geometry": 28.0,
+            "element": 28.0,
+            "region": "outer",
+            "side": 0.0,
+            "position": [
+              1.0,
+              0.0,
+              1.8
+            ],
+            "k": 0.8466950351321795,
+            "epsilon": 0.18183017333409082,
+            "sampled_K": 0.8466950351321795,
+            "N": 4.0503475108216955,
+            "covariance_eigenvalues": [
+              0.23855815386121293,
+              0.5644652522690968,
+              0.8903666641340491
+            ],
+            "nu_eff": 0.34368165402663353,
+            "nu_d": 0.3437273300353944,
+            "Praw": 0.18185550893191488,
+            "Pdev": 0.18185825687063165,
+            "raw_divergence": 4.868232249068892e-06,
+            "s_w_I4": [
+              5.736787977987689,
+              -5.736780529040038,
+              -2.167451231595651e-05
+            ],
+            "F_N": 30.618927353813735,
+            "root_residual": 0.0,
+            "angle_radians": 1.7122098268306378,
+            "minimum_over_nu_eff": 0.004091492016623104,
+            "a_dot_xi": 0.0,
+            "minus_H_contract_dR": 0.0014061707437098142,
+            "replayed_over_nu_eff": 0.004091492016623161,
+            "xi": [
+              -0.14094264512187157,
+              0.0,
+              0.9900177628639044
+            ],
+            "polarization": [
+              -0.9900177628639044,
+              0.0,
+              -0.14094264512187157
+            ],
+            "raw_G_row_major": [
+              4.868232249068892e-06,
+              0.0,
+              0.7274249554394011,
+              0.0,
+              0.0,
+              0.0,
+              2.3612101160632534e-07,
+              0.0,
+              0.0
+            ],
+            "dR_row_major": [
+              -0.23496630873352423,
+              0.0,
+              -0.06682078138982969,
+              0.0,
+              1.44663981683975e-06,
+              0.0,
+              -0.06682078138982969,
+              0.0,
+              0.2349648620937074
+            ],
+            "H_row_major": [
+              0.13953572221567648,
+              -0.0,
+              -0.9801351707860501,
+              -0.0,
+              0.0,
+              0.0,
+              0.01986482921394983,
+              -0.0,
+              -0.13953572221567648
+            ],
+            "normalization": "unit xi, unit a perpendicular to xi; -H:dR/nu_eff; fixed positive k and epsilon",
+            "search": "32 periodic angular brackets; 48 golden iterations per local minimum",
+            "scope": "finite NativeElementSideV2 spatial inventory; x-z propagation only"
+          },
+          "transverse": {
+            "geometry": 29.0,
+            "element": 29.0,
+            "region": "outer",
+            "side": 0.0,
+            "position": [
+              0.625,
+              0.0,
+              1.8
+            ],
+            "k": 0.8466950218169826,
+            "epsilon": 0.18183089410205602,
+            "sampled_K": 0.8466950526365872,
+            "N": 4.04979829686449,
+            "covariance_eigenvalues": [
+              0.23857457176932312,
+              0.5644677536329153,
+              0.8903477182317266
+            ],
+            "nu_eff": 0.3437530679113215,
+            "nu_d": 0.3437259567076664,
+            "Praw": 0.18180820752015528,
+            "Pdev": 0.18181459372943506,
+            "raw_divergence": 1.1313771396814249e-05,
+            "s_w_I4": [
+              5.734173448812772,
+              -5.734163576111576,
+              -5.0348386645644625e-05
+            ],
+            "F_N": 30.60938370757608,
+            "root_residual": -3.469446951953614e-18,
+            "angle_radians": 1.331631173728245,
+            "minimum_over_nu_eff": 0.943550389689001,
+            "a_dot_xi": 0.0,
+            "minus_H_contract_dR": 0.324348341184517,
+            "replayed_over_nu_eff": 0.943550389689001,
+            "xi": [
+              0.2368916251560583,
+              0.0,
+              0.9715360816412952
+            ],
+            "polarization": [
+              0.0,
+              1.0,
+              0.0
+            ],
+            "raw_G_row_major": [
+              6.125867329705653e-07,
+              0.0,
+              0.7272619926120601,
+              0.0,
+              0.0,
+              0.0,
+              3.1298789979353297e-07,
+              0.0,
+              1.0701184663843683e-05
+            ],
+            "dR_row_major": [
+              0.0,
+              0.12513059845083804,
+              0.0,
+              0.12513059845083804,
+              0.0,
+              -0.36436189936482927,
+              0.0,
+              -0.36436189936482927,
+              0.0
+            ],
+            "H_row_major": [
+              0.0,
+              0.0,
+              0.0,
+              0.2368916251560583,
+              0.0,
+              0.9715360816412952,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "normalization": "unit xi, unit a perpendicular to xi; -H:dR/nu_eff; fixed positive k and epsilon",
+            "search": "analytic symmetric 2x2 eigenvalue in x-z propagation plane",
+            "scope": "finite NativeElementSideV2 spatial inventory; x-z propagation only"
+          }
+        }
+      }
+    },
+    "cross-128-measure": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj3-20261110/study-final/EP/cross-128-measure/result.json",
+      "sha256": "613aa5fe33471da5f61af88410f45064fb3438569b819fa5503f7d7c54db7ce7",
+      "packet": {
+        "schema": "WJFiniteAuditV2",
+        "state_sha256": "cb4c1d650b79554680524ac6f30cecbcfdf1bf229b799e8d0f4c8400536411f8",
+        "stage_context_sha256": "e82f0a0ecc694b7b5c77abb962fd2023c31d6b37153140b20b756715834b8780",
+        "stage_history_sha256": "712f44be82d3bb37dc0c767366c4c0a81953d39ace5a8b1350f76aa96568f072",
+        "phase": "accepted_checkpoint_stage",
+        "time": 0.004095999999999992,
+        "alpha_mass": 31250.0,
+        "conditions": {
+          "inner_covariance": {
+            "passed": true,
+            "margins": [
+              0.3143558650803097
+            ]
+          },
+          "outer_covariance": {
+            "passed": true,
+            "margins": [
+              0.23856894551011568
+            ]
+          },
+          "principal_in_plane": {
+            "passed": true,
+            "margins": [
+              0.004132219943345747
+            ]
+          },
+          "principal_transverse": {
+            "passed": true,
+            "margins": [
+              0.9435635507819861
+            ]
+          },
+          "profile_budget": {
+            "passed": true,
+            "margins": [
+              1e-10
+            ]
+          },
+          "profile_gate": {
+            "passed": true,
+            "margins": [
+              2.0708034876315575
+            ]
+          },
+          "raw_work": {
+            "passed": true,
+            "margins": [
+              9.999888977697537e-12
+            ]
+          },
+          "root_branch": {
+            "passed": true,
+            "margins": [
+              2.24995835771496,
+              30.61218078846548
+            ]
+          },
+          "root_residual": {
+            "passed": true,
+            "margins": [
+              9.999998821222594e-13
+            ]
+          },
+          "scalar_domain": {
+            "passed": true,
+            "margins": [
+              0.8466944906698789,
+              0.8466950345620398,
+              0.16364775247637042,
+              0.32729550495274085
+            ]
+          },
+          "scalar_viscosities": {
+            "passed": true,
+            "margins": [
+              0.19095893437368935,
+              0.1909589317733666
+            ]
+          }
+        },
+        "failure_categories": [],
+        "principal_witnesses": {
+          "in_plane": {
+            "geometry": 56.0,
+            "element": 56.0,
+            "region": "outer",
+            "side": 0.0,
+            "position": [
+              1.0,
+              0.0,
+              1.7000000000000002
+            ],
+            "k": 0.8466950351321795,
+            "epsilon": 0.19252673220222502,
+            "sampled_K": 0.8466950351321795,
+            "N": 4.050039830621482,
+            "covariance_eigenvalues": [
+              0.23856894542544618,
+              0.5644634734495982,
+              0.8903576513893144
+            ],
+            "nu_eff": 0.3246252567228441,
+            "nu_d": 0.3246302437333827,
+            "Praw": 0.19252996129484737,
+            "Pdev": 0.19253014040640837,
+            "raw_divergence": 3.1731299978155603e-07,
+            "s_w_I4": [
+              5.735329493295607,
+              -5.7353297038048705,
+              -1.3339236639243395e-06
+            ],
+            "F_N": 30.613594274335703,
+            "root_residual": 0.0,
+            "angle_radians": 1.7121999329274806,
+            "minimum_over_nu_eff": 0.004132219943345747,
+            "a_dot_xi": 0.0,
+            "minus_H_contract_dR": 0.0013414229599438797,
+            "replayed_over_nu_eff": 0.004132219943345779,
+            "xi": [
+              -0.14093284997510366,
+              0.0,
+              0.9900191572883299
+            ],
+            "polarization": [
+              -0.9900191572883299,
+              0.0,
+              -0.14093284997510366
+            ],
+            "raw_G_row_major": [
+              3.1731299978155603e-07,
+              0.0,
+              0.7701196676137981,
+              0.0,
+              0.0,
+              0.0,
+              -7.066652436068335e-09,
+              0.0,
+              0.0
+            ],
+            "dR_row_major": [
+              -0.22193385058640389,
+              0.0,
+              -0.06309619009622693,
+              0.0,
+              8.412122310195753e-08,
+              0.0,
+              -0.06309619009622693,
+              0.0,
+              0.2219337664651808
+            ],
+            "H_row_major": [
+              0.13952622136659476,
+              -0.0,
+              -0.9801379317978949,
+              -0.0,
+              0.0,
+              0.0,
+              0.019862068202105076,
+              -0.0,
+              -0.13952622136659476
+            ],
+            "normalization": "unit xi, unit a perpendicular to xi; -H:dR/nu_eff; fixed positive k and epsilon",
+            "search": "32 periodic angular brackets; 48 golden iterations per local minimum",
+            "scope": "finite NativeElementSideV2 spatial inventory; x-z propagation only"
+          },
+          "transverse": {
+            "geometry": 59.0,
+            "element": 59.0,
+            "region": "outer",
+            "side": 0.0,
+            "position": [
+              1.0,
+              0.0,
+              1.9
+            ],
+            "k": 0.8466950351321795,
+            "epsilon": 0.17226075985893427,
+            "sampled_K": 0.8466950351321795,
+            "N": 4.04995835771496,
+            "covariance_eigenvalues": [
+              0.23857155493959234,
+              0.5644634991561228,
+              0.8903550161686439
+            ],
+            "nu_eff": 0.3628277970186209,
+            "nu_d": 0.3628220382354157,
+            "Praw": 0.17225737615483042,
+            "Pdev": 0.17225757171153852,
+            "raw_divergence": 3.464471267980995e-07,
+            "s_w_I4": [
+              5.734942689848221,
+              -5.734944020576882,
+              -1.6276294945162741e-06
+            ],
+            "F_N": 30.61218078846548,
+            "root_residual": 1.0408340855860843e-17,
+            "angle_radians": 1.3316360810215047,
+            "minimum_over_nu_eff": 0.9435635507819861,
+            "a_dot_xi": 0.0,
+            "minus_H_contract_dR": 0.3423510844772956,
+            "replayed_over_nu_eff": 0.9435635507819861,
+            "xi": [
+              0.23688685754074093,
+              0.0,
+              0.9715372441262726
+            ],
+            "polarization": [
+              0.0,
+              1.0,
+              0.0
+            ],
+            "raw_G_row_major": [
+              3.464471267980995e-07,
+              0.0,
+              0.6890312348837824,
+              0.0,
+              0.0,
+              0.0,
+              -3.9970531861891395e-08,
+              0.0,
+              0.0
+            ],
+            "dR_row_major": [
+              0.0,
+              0.13208542235341791,
+              0.0,
+              0.13208542235341791,
+              0.0,
+              -0.38458678487571757,
+              0.0,
+              -0.38458678487571757,
+              0.0
+            ],
+            "H_row_major": [
+              0.0,
+              0.0,
+              0.0,
+              0.23688685754074093,
+              0.0,
+              0.9715372441262726,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "normalization": "unit xi, unit a perpendicular to xi; -H:dR/nu_eff; fixed positive k and epsilon",
+            "search": "analytic symmetric 2x2 eigenvalue in x-z propagation plane",
+            "scope": "finite NativeElementSideV2 spatial inventory; x-z propagation only"
+          }
+        }
+      }
+    }
+  },
+  "Budget": {
+    "spatial-measure-L2": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj3-20261110/study-final/Budget/spatial-measure-L2/result.json",
+      "sha256": "9163d99863ab68caf75c89cb4237b8dde5e5148028650a40e278959cd7ecc7da",
+      "packet": {
+        "schema": "WJFiniteAuditV2",
+        "state_sha256": "49b23d07eb7861b1622b5347799bdc189c92655f817711d270d25b6b63472927",
+        "stage_context_sha256": "d3356b94ff638ed6a294893685ef074c32444fc95808554877d1a9c6cbbeb51e",
+        "stage_history_sha256": "49b23d07eb7861b1622b5347799bdc189c92655f817711d270d25b6b63472927",
+        "phase": "startup_readback",
+        "time": 0.0,
+        "alpha_mass": 0.0,
+        "conditions": {
+          "inner_covariance": {
+            "passed": true,
+            "margins": [
+              0.3144828877004546
+            ]
+          },
+          "outer_covariance": {
+            "passed": true,
+            "margins": [
+              0.23856900214943486
+            ]
+          },
+          "principal_in_plane": {
+            "passed": true,
+            "margins": [
+              0.004132219015267613
+            ]
+          },
+          "principal_transverse": {
+            "passed": true,
+            "margins": [
+              0.9435637789156732
+            ]
+          },
+          "profile_budget": {
+            "passed": true,
+            "margins": [
+              1e-10
+            ]
+          },
+          "profile_gate": {
+            "passed": true,
+            "margins": [
+              4.199322267149552
+            ]
+          },
+          "raw_work": {
+            "passed": true,
+            "margins": [
+              9.999944488848768e-12
+            ]
+          },
+          "root_branch": {
+            "passed": true,
+            "margins": [
+              2.2499586931945483,
+              30.612184605597808
+            ]
+          },
+          "root_residual": {
+            "passed": true,
+            "margins": [
+              9.99999882122337e-13
+            ]
+          },
+          "scalar_domain": {
+            "passed": true,
+            "margins": [
+              0.8466950351321795,
+              0.8466950351321751,
+              0.16364775247637042,
+              0.32729550495274085
+            ]
+          },
+          "scalar_viscosities": {
+            "passed": true,
+            "margins": [
+              0.19095893177316517,
+              0.1909589317733666
+            ]
+          }
+        },
+        "failure_categories": [],
+        "principal_witnesses": {
+          "in_plane": {
+            "geometry": 56.0,
+            "element": 56.0,
+            "region": "outer",
+            "side": 0.0,
+            "position": [
+              0.375,
+              0.0,
+              1.7000000000000002
+            ],
+            "k": 0.846695035132179,
+            "epsilon": 0.19252673220222502,
+            "sampled_K": 0.8466950351321795,
+            "N": 4.050039883690086,
+            "covariance_eigenvalues": [
+              0.2385690020647656,
+              0.5644633567547861,
+              0.8903577114448065
+            ],
+            "nu_eff": 0.3246252584218565,
+            "nu_d": 0.32463024373338234,
+            "Praw": 0.1925301449473452,
+            "Pdev": 0.19253014494734522,
+            "raw_divergence": 7.049347000229189e-17,
+            "s_w_I4": [
+              5.735329598549585,
+              -5.735329598549585,
+              -2.963411714213765e-16
+            ],
+            "F_N": 30.613594878172197,
+            "root_residual": 0.0,
+            "angle_radians": 1.7122001321820701,
+            "minimum_over_nu_eff": 0.004132219015267613,
+            "a_dot_xi": 0.0,
+            "minus_H_contract_dR": 0.0013414226656869623,
+            "replayed_over_nu_eff": 0.004132219015267625,
+            "xi": [
+              -0.14093304724096165,
+              0.0,
+              0.9900191292067931
+            ],
+            "polarization": [
+              -0.9900191292067931,
+              0.0,
+              -0.14093304724096165
+            ],
+            "raw_G_row_major": [
+              7.049347000229189e-17,
+              0.0,
+              0.7701196676137982,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "dR_row_major": [
+              -0.2219337790374947,
+              0.0,
+              -0.06309627758299795,
+              0.0,
+              1.8688933586394463e-17,
+              0.0,
+              -0.06309627758299795,
+              0.0,
+              0.22193377903749467
+            ],
+            "H_row_major": [
+              0.1395264127059567,
+              -0.0,
+              -0.980137876195377,
+              -0.0,
+              0.0,
+              0.0,
+              0.019862123804623127,
+              -0.0,
+              -0.1395264127059567
+            ],
+            "normalization": "unit xi, unit a perpendicular to xi; -H:dR/nu_eff; fixed positive k and epsilon",
+            "search": "32 periodic angular brackets; 48 golden iterations per local minimum",
+            "scope": "finite NativeElementSideV2 spatial inventory; x-z propagation only"
+          },
+          "transverse": {
+            "geometry": 59.0,
+            "element": 59.0,
+            "region": "outer",
+            "side": 0.0,
+            "position": [
+              0.125,
+              0.0,
+              1.9
+            ],
+            "k": 0.8466950351321804,
+            "epsilon": 0.17226075985893427,
+            "sampled_K": 0.8466950351321795,
+            "N": 4.049958693194548,
+            "covariance_eigenvalues": [
+              0.23857161534191013,
+              0.5644633567547869,
+              0.8903550981676637
+            ],
+            "nu_eff": 0.36282780902300216,
+            "nu_d": 0.3628220382354164,
+            "Praw": 0.17225759739595897,
+            "Pdev": 0.17225759739595897,
+            "raw_divergence": 0.0,
+            "s_w_I4": [
+              5.734943355211574,
+              -5.734943355211574,
+              0.0
+            ],
+            "F_N": 30.612184605597808,
+            "root_residual": -6.938893903907228e-18,
+            "angle_radians": 1.3316362727042748,
+            "minimum_over_nu_eff": 0.9435637789156732,
+            "a_dot_xi": 0.0,
+            "minus_H_contract_dR": 0.3423511785774382,
+            "replayed_over_nu_eff": 0.9435637789156734,
+            "xi": [
+              0.23688667131378635,
+              0.0,
+              0.9715372895333839
+            ],
+            "polarization": [
+              0.0,
+              1.0,
+              0.0
+            ],
+            "raw_G_row_major": [
+              0.0,
+              0.0,
+              0.6890312348837822,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "dR_row_major": [
+              0.0,
+              0.1320854798500278,
+              0.0,
+              0.1320854798500278,
+              0.0,
+              -0.3845868524587974,
+              0.0,
+              -0.3845868524587974,
+              0.0
+            ],
+            "H_row_major": [
+              0.0,
+              0.0,
+              0.0,
+              0.23688667131378635,
+              0.0,
+              0.9715372895333839,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "normalization": "unit xi, unit a perpendicular to xi; -H:dR/nu_eff; fixed positive k and epsilon",
+            "search": "analytic symmetric 2x2 eigenvalue in x-z propagation plane",
+            "scope": "finite NativeElementSideV2 spatial inventory; x-z propagation only"
+          }
+        }
+      }
+    },
+    "main-128-measure": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj3-20261110/study-final/Budget/main-128-measure/result.json",
+      "sha256": "f112844728a7c27a604440f68fd285353bbf6e8df724430c9e77299a0b6cbee8",
+      "packet": {
+        "schema": "WJFiniteAuditV2",
+        "state_sha256": "a42f35dd129fd395d8075afcd748246c15d934aee8b53c6e439abb9b2c4f223a",
+        "stage_context_sha256": "2cf1ca0539c639211cd85cbc0aaf924fd165c2acf86e7a21144e09729b4704ef",
+        "stage_history_sha256": "b06d83b9fe6d7e550a6879999aa5ba55774f815423401fe34a264d082aece949",
+        "phase": "accepted_checkpoint_stage",
+        "time": 0.004095999999999992,
+        "alpha_mass": 31250.0,
+        "conditions": {
+          "inner_covariance": {
+            "passed": true,
+            "margins": [
+              0.31441663324835495
+            ]
+          },
+          "outer_covariance": {
+            "passed": true,
+            "margins": [
+              0.2385581539506295
+            ]
+          },
+          "principal_in_plane": {
+            "passed": true,
+            "margins": [
+              0.004091492020918529
+            ]
+          },
+          "principal_transverse": {
+            "passed": true,
+            "margins": [
+              0.9435503896915542
+            ]
+          },
+          "profile_budget": {
+            "passed": true,
+            "margins": [
+              1e-10
+            ]
+          },
+          "profile_gate": {
+            "passed": true,
+            "margins": [
+              4.199322267149552
+            ]
+          },
+          "raw_work": {
+            "passed": true,
+            "margins": [
+              9.999888977697537e-12
+            ]
+          },
+          "root_branch": {
+            "passed": true,
+            "margins": [
+              2.2496381019244893,
+              30.606664367619906
+            ]
+          },
+          "root_residual": {
+            "passed": true,
+            "margins": [
+              9.999998821209856e-13
+            ]
+          },
+          "scalar_domain": {
+            "passed": true,
+            "margins": [
+              0.8466950177863973,
+              0.8466950050661465,
+              0.16364775247637042,
+              0.3272954948950526
+            ]
+          },
+          "scalar_viscosities": {
+            "passed": true,
+            "margins": [
+              0.19095900865428073,
+              0.1909589298173305
+            ]
+          }
+        },
+        "failure_categories": [],
+        "principal_witnesses": {
+          "in_plane": {
+            "geometry": 28.0,
+            "element": 28.0,
+            "region": "outer",
+            "side": 0.0,
+            "position": [
+              1.0,
+              0.0,
+              1.8
+            ],
+            "k": 0.84669503513218,
+            "epsilon": 0.18183017333409082,
+            "sampled_K": 0.8466950351321795,
+            "N": 4.050347510575792,
+            "covariance_eigenvalues": [
+              0.23855815386596,
+              0.56446525227543,
+              0.8903666641229702
+            ],
+            "nu_eff": 0.343681654018299,
+            "nu_d": 0.34372733003539485,
+            "Praw": 0.18185550890286203,
+            "Pdev": 0.18185825685075935,
+            "raw_divergence": 4.868248513268753e-06,
+            "s_w_I4": [
+              5.7367879774999375,
+              -5.736780529527806,
+              -2.1674584729833613e-05
+            ],
+            "F_N": 30.61892735101548,
+            "root_residual": 1.3877787807814457e-17,
+            "angle_radians": 1.7122098264733294,
+            "minimum_over_nu_eff": 0.004091492020918529,
+            "a_dot_xi": 0.0,
+            "minus_H_contract_dR": 0.0014061707451519523,
+            "replayed_over_nu_eff": 0.004091492020918528,
+            "xi": [
+              -0.1409426447681299,
+              0.0,
+              0.9900177629142645
+            ],
+            "polarization": [
+              -0.9900177629142645,
+              0.0,
+              -0.1409426447681299
+            ],
+            "raw_G_row_major": [
+              4.868248513268753e-06,
+              0.0,
+              0.7274249554394011,
+              0.0,
+              0.0,
+              0.0,
+              2.3609008755880102e-07,
+              0.0,
+              0.0
+            ],
+            "dR_row_major": [
+              -0.23496630849386685,
+              0.0,
+              -0.06682078113618914,
+              0.0,
+              1.4466446505240748e-06,
+              0.0,
+              -0.06682078113618914,
+              0.0,
+              0.23496486184921633
+            ],
+            "H_row_major": [
+              0.13953572187256383,
+              -0.0,
+              -0.9801351708857647,
+              -0.0,
+              0.0,
+              0.0,
+              0.019864829114235254,
+              -0.0,
+              -0.13953572187256383
+            ],
+            "normalization": "unit xi, unit a perpendicular to xi; -H:dR/nu_eff; fixed positive k and epsilon",
+            "search": "32 periodic angular brackets; 48 golden iterations per local minimum",
+            "scope": "finite NativeElementSideV2 spatial inventory; x-z propagation only"
+          },
+          "transverse": {
+            "geometry": 29.0,
+            "element": 29.0,
+            "region": "outer",
+            "side": 0.0,
+            "position": [
+              0.625,
+              0.0,
+              1.8
+            ],
+            "k": 0.8466950218170447,
+            "epsilon": 0.1818308941020745,
+            "sampled_K": 0.8466950222318017,
+            "N": 4.049798297040764,
+            "covariance_eigenvalues": [
+              0.2385745717691631,
+              0.5644677536219629,
+              0.8903477182429633
+            ],
+            "nu_eff": 0.3437530679045522,
+            "nu_d": 0.34372595670768186,
+            "Praw": 0.18180820755035454,
+            "Pdev": 0.18181459374369885,
+            "raw_divergence": 1.131374316562892e-05,
+            "s_w_I4": [
+              5.734173449375228,
+              -5.7341635762792595,
+              -5.03482610130909e-05
+            ],
+            "F_N": 30.609383710041474,
+            "root_residual": -6.938893903907228e-18,
+            "angle_radians": 1.3316311736887103,
+            "minimum_over_nu_eff": 0.9435503896915542,
+            "a_dot_xi": 0.0,
+            "minus_H_contract_dR": 0.32434834117900746,
+            "replayed_over_nu_eff": 0.943550389691554,
+            "xi": [
+              0.23689162519446758,
+              0.0,
+              0.9715360816319298
+            ],
+            "polarization": [
+              0.0,
+              1.0,
+              0.0
+            ],
+            "raw_G_row_major": [
+              6.125924560562339e-07,
+              0.0,
+              0.727261992635232,
+              0.0,
+              0.0,
+              0.0,
+              3.130004173242027e-07,
+              0.0,
+              1.0701150709572687e-05
+            ],
+            "dR_row_major": [
+              0.0,
+              0.12513059842813404,
+              0.0,
+              0.12513059842813404,
+              0.0,
+              -0.36436189936208174,
+              0.0,
+              -0.36436189936208174,
+              0.0
+            ],
+            "H_row_major": [
+              0.0,
+              0.0,
+              0.0,
+              0.23689162519446758,
+              0.0,
+              0.9715360816319298,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "normalization": "unit xi, unit a perpendicular to xi; -H:dR/nu_eff; fixed positive k and epsilon",
+            "search": "analytic symmetric 2x2 eigenvalue in x-z propagation plane",
+            "scope": "finite NativeElementSideV2 spatial inventory; x-z propagation only"
+          }
+        }
+      }
+    },
+    "cross-128-measure": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj3-20261110/study-final/Budget/cross-128-measure/result.json",
+      "sha256": "60da973055f6143122ade45ca98297c95b78a740e9f59f1a302525a5d16f0b13",
+      "packet": {
+        "schema": "WJFiniteAuditV2",
+        "state_sha256": "7f2853aa6fd5910f6ae1ecd14c6c9f491c8a316e9532669499b9019f1f6960fa",
+        "stage_context_sha256": "162ed94743fcc4642086a884bf4bf462c13a54e22419d54976c2d57d091c41d6",
+        "stage_history_sha256": "c38ebc9eba8a2457967568b13f71533ce5fe53a36110a646a12d2b4151d15d61",
+        "phase": "accepted_checkpoint_stage",
+        "time": 0.004095999999999992,
+        "alpha_mass": 31250.0,
+        "conditions": {
+          "inner_covariance": {
+            "passed": true,
+            "margins": [
+              0.3144756304049224
+            ]
+          },
+          "outer_covariance": {
+            "passed": true,
+            "margins": [
+              0.23856894551041913
+            ]
+          },
+          "principal_in_plane": {
+            "passed": true,
+            "margins": [
+              0.004132219943617695
+            ]
+          },
+          "principal_transverse": {
+            "passed": true,
+            "margins": [
+              0.9435635507823336
+            ]
+          },
+          "profile_budget": {
+            "passed": true,
+            "margins": [
+              1e-10
+            ]
+          },
+          "profile_gate": {
+            "passed": true,
+            "margins": [
+              4.199322267149552
+            ]
+          },
+          "raw_work": {
+            "passed": true,
+            "margins": [
+              9.999888977697537e-12
+            ]
+          },
+          "root_branch": {
+            "passed": true,
+            "margins": [
+              2.2499583577108995,
+              30.612180788419295
+            ]
+          },
+          "root_residual": {
+            "passed": true,
+            "margins": [
+              9.999998821231537e-13
+            ]
+          },
+          "scalar_domain": {
+            "passed": true,
+            "margins": [
+              0.8466950345283216,
+              0.8466950338723519,
+              0.16364775247637042,
+              0.32729550460266127
+            ]
+          },
+          "scalar_viscosities": {
+            "passed": true,
+            "margins": [
+              0.19095893437460038,
+              0.19095893170527117
+            ]
+          }
+        },
+        "failure_categories": [],
+        "principal_witnesses": {
+          "in_plane": {
+            "geometry": 56.0,
+            "element": 56.0,
+            "region": "outer",
+            "side": 0.0,
+            "position": [
+              1.0,
+              0.0,
+              1.7000000000000002
+            ],
+            "k": 0.846695035132179,
+            "epsilon": 0.19252673220222502,
+            "sampled_K": 0.8466950351321795,
+            "N": 4.050039830605941,
+            "covariance_eigenvalues": [
+              0.23856894542574963,
+              0.5644634734499913,
+              0.8903576513886172
+            ],
+            "nu_eff": 0.3246252567223464,
+            "nu_d": 0.32463024373338234,
+            "Praw": 0.19252996129291394,
+            "Pdev": 0.19253014040507863,
+            "raw_divergence": 3.173140692754066e-07,
+            "s_w_I4": [
+              5.735329493264782,
+              -5.735329703835684,
+              -1.3339281598807942e-06
+            ],
+            "F_N": 30.61359427415887,
+            "root_residual": 3.469446951953614e-18,
+            "angle_radians": 1.7121999328909503,
+            "minimum_over_nu_eff": 0.004132219943617695,
+            "a_dot_xi": 0.0,
+            "minus_H_contract_dR": 0.001341422960030085,
+            "replayed_over_nu_eff": 0.004132219943617668,
+            "xi": [
+              -0.14093284993893793,
+              0.0,
+              0.9900191572934782
+            ],
+            "polarization": [
+              -0.9900191572934782,
+              0.0,
+              -0.14093284993893793
+            ],
+            "raw_G_row_major": [
+              3.173140692754066e-07,
+              0.0,
+              0.7701196676137981,
+              0.0,
+              0.0,
+              0.0,
+              -7.068721602284389e-09,
+              0.0,
+              0.0
+            ],
+            "dR_row_major": [
+              -0.22193385056298628,
+              0.0,
+              -0.06309619007173665,
+              0.0,
+              8.412150663349492e-08,
+              0.0,
+              -0.06309619007173665,
+              0.0,
+              0.22193376644147966
+            ],
+            "H_row_major": [
+              0.13952622133151554,
+              -0.0,
+              -0.9801379318080887,
+              -0.0,
+              0.0,
+              0.0,
+              0.019862068191911195,
+              -0.0,
+              -0.13952622133151554
+            ],
+            "normalization": "unit xi, unit a perpendicular to xi; -H:dR/nu_eff; fixed positive k and epsilon",
+            "search": "32 periodic angular brackets; 48 golden iterations per local minimum",
+            "scope": "finite NativeElementSideV2 spatial inventory; x-z propagation only"
+          },
+          "transverse": {
+            "geometry": 59.0,
+            "element": 59.0,
+            "region": "outer",
+            "side": 0.0,
+            "position": [
+              1.0,
+              0.0,
+              1.9
+            ],
+            "k": 0.8466950351321804,
+            "epsilon": 0.17226075985893427,
+            "sampled_K": 0.8466950351321795,
+            "N": 4.049958357710899,
+            "covariance_eigenvalues": [
+              0.2385715549395892,
+              0.5644634991563914,
+              0.8903550161683802
+            ],
+            "nu_eff": 0.3628277970184759,
+            "nu_d": 0.3628220382354164,
+            "Praw": 0.1722573761541515,
+            "Pdev": 0.17225757171122766,
+            "raw_divergence": 3.464477788437797e-07,
+            "s_w_I4": [
+              5.734942689840175,
+              -5.734944020584952,
+              -1.6276325578684937e-06
+            ],
+            "F_N": 30.612180788419295,
+            "root_residual": -3.469446951953614e-18,
+            "angle_radians": 1.331636081021755,
+            "minimum_over_nu_eff": 0.9435635507823336,
+            "a_dot_xi": 0.0,
+            "minus_H_contract_dR": 0.34235108447728496,
+            "replayed_over_nu_eff": 0.9435635507823338,
+            "xi": [
+              0.2368868575404978,
+              0.0,
+              0.9715372441263319
+            ],
+            "polarization": [
+              0.0,
+              1.0,
+              0.0
+            ],
+            "raw_G_row_major": [
+              3.464477788437797e-07,
+              0.0,
+              0.6890312348837824,
+              0.0,
+              0.0,
+              0.0,
+              -3.997101593314091e-08,
+              0.0,
+              0.0
+            ],
+            "dR_row_major": [
+              0.0,
+              0.132085422353902,
+              0.0,
+              0.132085422353902,
+              0.0,
+              -0.3845867848757681,
+              0.0,
+              -0.3845867848757681,
+              0.0
+            ],
+            "H_row_major": [
+              0.0,
+              0.0,
+              0.0,
+              0.2368868575404978,
+              0.0,
+              0.9715372441263319,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "normalization": "unit xi, unit a perpendicular to xi; -H:dR/nu_eff; fixed positive k and epsilon",
+            "search": "analytic symmetric 2x2 eigenvalue in x-z propagation plane",
+            "scope": "finite NativeElementSideV2 spatial inventory; x-z propagation only"
+          }
+        }
+      }
+    }
+  }
+}

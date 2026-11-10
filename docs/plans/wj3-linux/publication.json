@@ -1,0 +1,67 @@
+{
+  "schema": "WJ3FinalArtifactBindingV1",
+  "linux_root": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj3-20261110",
+  "postprocess_receipts": [
+    {
+      "label": "collect",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj3-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/wj3_receipts.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj3-20261110",
+        "--collect"
+      ],
+      "exit_code": 0,
+      "seconds": 38.737701416015625,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj3-20261110/collect-publication.log",
+      "log_sha256": "bc7c95e1a33bbef11f0b71bbbb7d405695e04b958ba5540225c22f8ebe5771e4"
+    },
+    {
+      "label": "publish",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj3-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/publish_wj3.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj3-20261110",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj3-20261110/compact"
+      ],
+      "exit_code": 0,
+      "seconds": 17.11443257331848,
+      "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj3-20261110/publish-publication.log",
+      "log_sha256": "30ce0ff33d0cc63eb0d1ed4d9b634378921c5e9fa78b70068dbc58520f0d738c"
+    }
+  ],
+  "postprocess_receipts_sha256": "90bed1abc1bac508f0e53fb6ac58b8c5acf3a0ce1524c0699cbefd7cc14e3138",
+  "heavy_manifest_sha256": "87eb0a4a3602f924aa3a11cf0fe53c6f996fe8beca1088d5d2db8fc1daca5ede",
+  "compact_files": {
+    "Budget.json": "e7ded353edc307f3d1797cce5f13cdfab112f3b1e1c9c98a316a6247d43bc51d",
+    "EP.json": "e253cad6ac170217a49b6bc85b90bb85d0daf454b6b67a32c213e97876cccc9f",
+    "case-identities.csv": "d9184ad2c8293853d7efb18cfda8d1d93564a30cfc31e53819a6af8b04c9719d",
+    "command-receipts.json": "1d6987b2683b1cac12f800288f18dd347ff28d549a8c2e61850f908d6c0db681",
+    "drift.csv": "a978bda6e59004467df7f57c1df3f5e0b178938cdd37a7459e0dc0bc0bfc99fc",
+    "manifest.json": "7fe5f3a61a2bb419df8aeb44a3b0ca4d35dae1e15b199b61c1c2a868ed7836c8",
+    "principal-witnesses.json": "51be0c529f9e29f33a4c5e6fb69b66eabcc2387db4a1f571d622b440eab29439",
+    "receipt.json": "3f4b62b639621bc837b807ba31abc38d2e49f9f7fb21214f90fcbbb21319ee37",
+    "residuals.csv": "cf000b726929d57a71ba52f8453ab607f76944de699e905c310ef73db190ce67",
+    "spatial.csv": "714e8cd0593f2e448a622151701fd181a2c80966507b684f2560b7d1ae538412",
+    "temporal.csv": "d955df2e42294b821431d96add076f7b2a37454e0d41e1bc86ae999e0b2dd3f2",
+    "test-inventory.json": "e2daa31ff6f03b95df7f7483dd704c730463e4e6a9f4b6d2ac0e1f577fc16ce7"
+  },
+  "source_equivalence": {
+    "last_native_cpp_revision": "7e4e10ed8dac5cd017d62e33abc9d67530ce9ca2",
+    "current_revision": "ea51ceaf80696b698c356a7725151b7e7c62356f",
+    "changed_files": [
+      "docs/plans/wj3-contract.md",
+      "solvers/IncNavierStokesSolver/Tests/RANS/plot_wj3.py",
+      "solvers/IncNavierStokesSolver/Tests/RANS/publish_wj3.py",
+      "solvers/IncNavierStokesSolver/Tests/RANS/run_wj3_native.py",
+      "solvers/IncNavierStokesSolver/Tests/RANS/wj2_cases.py",
+      "solvers/IncNavierStokesSolver/Tests/RANS/wj3_measure.py",
+      "solvers/IncNavierStokesSolver/Tests/RANS/wj3_receipts.py"
+    ],
+    "cpp_inputs_unchanged": true
+  }
+}

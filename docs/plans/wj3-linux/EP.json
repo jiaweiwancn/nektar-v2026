@@ -1,0 +1,2648 @@
+{
+  "schema": "WJ3BoundedStudyV1",
+  "policy": "EP",
+  "source_revision": "7e4e10ed8dac5cd017d62e33abc9d67530ce9ca2",
+  "solver_sha256": "8dac6ba9d98639fca5de8952f8eb3a317d3dc5adabefc0fd0bd6108a3d5fee1e",
+  "probe_sha256": "39c5474e4fefdcf409e3338a90c0d4063fc55b965bb7a7c4be2a9d2608bdb2a3",
+  "scheduled_attempts": 408.0,
+  "attempt_limit": 500.0,
+  "ranks": 1.0,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "arithmetic_policy": "-ffp-contract=off -fno-fast-math",
+  "physical_duration_units": "seconds; dimensionless duration T*u*/H = T/2",
+  "spatial": [
+    {
+      "level": 0.0,
+      "unknowns": 639.0,
+      "raw_reference_norms": [
+        0.2684570888792649,
+        0.001848247052719482,
+        0.013013171986755872,
+        0.004010426498652716,
+        1.853477647261975e-16,
+        6.278144494437051e-17,
+        4.85722573273506e-17,
+        0.0
+      ],
+      "comparison": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj3-20261110/study-final/EP/spatial-measure-L0/result.json",
+        "sha256": "31c561d9fc7fb515c1441cd698a5b5bc864b940b0e830f8804fa902f398517e7",
+        "spatial_mass_dual_norms": [
+          0.2684570888792649,
+          0.001848247052719482,
+          0.013013171986755872,
+          0.004010426498652716,
+          1.853477647261975e-16,
+          6.278144494437051e-17,
+          4.85722573273506e-17,
+          0.0
+        ],
+        "completed_stage": null,
+        "state_sha256": "4473b854dc46834f0de4931266466dd62d097919b980a9ec5e73622edb9ce419",
+        "stage_history_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "field_errors": {
+          "continuum_error": {
+            "fields": {
+              "u": {
+                "L2": 0.00020709687559850585,
+                "sampled_Linf": 0.001052612284723864
+              },
+              "v": {
+                "L2": 0.0,
+                "sampled_Linf": 0.0
+              },
+              "k": {
+                "L2": 1.5700924586837752e-16,
+                "sampled_Linf": 1.1102230246251565e-16
+              },
+              "outer_epsilon": {
+                "L2": 3.4643273642428653e-06,
+                "sampled_Linf": 1.1368700974456747e-05
+              },
+              "reduced_pressure": {
+                "L2": 1.962615573354719e-17,
+                "sampled_Linf": 1.3877787807814457e-17
+              },
+              "mechanical_pressure": {
+                "L2": 1.5700924586837752e-16,
+                "sampled_Linf": 1.1102230246251565e-16
+              }
+            },
+            "overall_pressure_gauge_shift": -1.2458359327754923e-33
+          },
+          "initial_drift": {
+            "fields": {
+              "u": {
+                "L2": 0.0,
+                "sampled_Linf": 0.0
+              },
+              "v": {
+                "L2": 0.0,
+                "sampled_Linf": 0.0
+              },
+              "k": {
+                "L2": 0.0,
+                "sampled_Linf": 0.0
+              },
+              "outer_epsilon": {
+                "L2": 0.0,
+                "sampled_Linf": 0.0
+              },
+              "reduced_pressure": {
+                "L2": 0.0,
+                "sampled_Linf": 0.0
+              },
+              "mechanical_pressure": {
+                "L2": 0.0,
+                "sampled_Linf": 0.0
+              }
+            },
+            "overall_pressure_gauge_shift": 0.0
+          },
+          "initial_representation": {
+            "fields": {
+              "u": {
+                "L2": 0.00020709687559850585,
+                "sampled_Linf": 0.001052612284723864
+              },
+              "v": {
+                "L2": 0.0,
+                "sampled_Linf": 0.0
+              },
+              "k": {
+                "L2": 1.5700924586837752e-16,
+                "sampled_Linf": 1.1102230246251565e-16
+              },
+              "outer_epsilon": {
+                "L2": 3.4643273642428653e-06,
+                "sampled_Linf": 1.1368700974456747e-05
+              },
+              "reduced_pressure": {
+                "L2": 1.962615573354719e-17,
+                "sampled_Linf": 1.3877787807814457e-17
+              },
+              "mechanical_pressure": {
+                "L2": 1.5700924586837752e-16,
+                "sampled_Linf": 1.1102230246251565e-16
+              }
+            },
+            "overall_pressure_gauge_shift": -1.2458359327754923e-33
+          },
+          "interface": {
+            "traction_max": 5.0182080713057076e-14,
+            "k_flux_max": 0.0,
+            "k_value_max": 0.0,
+            "epsilon_trace_max": 0.0,
+            "pressure_jump_error": 2.7755575615628914e-17,
+            "sampled_K_range": [
+              0.8466950351321795,
+              0.8466950351321795
+            ],
+            "cutoff_range": [
+              0.015005743260176297,
+              0.015005743260176297
+            ]
+          },
+          "strong_divergence_sampled_Linf": 9.875455488084217e-15
+        },
+        "witness_replay": {
+          "in_plane": {
+            "complex_step_form": 0.003814612922690591,
+            "independent_local_minimum": 0.0038146129226908974,
+            "production_minimum": 0.0038146129226909573,
+            "angle": 1.7123035541194294,
+            "state_sha256": "4473b854dc46834f0de4931266466dd62d097919b980a9ec5e73622edb9ce419"
+          },
+          "transverse": {
+            "complex_step_form": 0.9435026807028785,
+            "independent_local_minimum": 0.9435026807028785,
+            "production_minimum": 0.9435026807028787,
+            "angle": 1.3314289945246383,
+            "state_sha256": "4473b854dc46834f0de4931266466dd62d097919b980a9ec5e73622edb9ce419"
+          }
+        },
+        "independent_loads": {
+          "quadrature_points": 11264.0,
+          "load_max_absolute_errors": {
+            "inner_k_production": 2.5673907444456745e-16,
+            "inner_k_destruction": 1.3877787807814457e-16,
+            "outer_k_production": 3.122502256758253e-17,
+            "outer_k_destruction": 3.469446951953614e-17,
+            "k_diffusion": 0.0,
+            "epsilon_diffusion": 5.074066167232161e-17,
+            "epsilon_production": 1.3877787807814457e-17,
+            "epsilon_destruction": 1.3877787807814457e-17
+          },
+          "extracted_states": 4.0
+        },
+        "independent_profiles": {
+          "continuum": {
+            "K": 0.8466950351321794,
+            "zv": -0.005393275866854202,
+            "d": 0.0010448941982935558,
+            "twice_nu": 3e-05,
+            "Lambda": 5.199322267149552,
+            "rough_proposition_hypotheses": true,
+            "Q0_endpoints": [
+              0.0,
+              0.0
+            ],
+            "ground_reference_k": 0.8466950351321794,
+            "pressure_jump": -0.2090605025017727,
+            "inner_covariance_lower_bound": 0.3144633567547862
+          },
+          "represented_max_absolute_errors": {
+            "velocity": 0.0010435786799893876,
+            "k": 1.1102230246251565e-16,
+            "outer_epsilon": 1.1096229621004872e-05,
+            "inner_pi": 1.3877787807814457e-17,
+            "outer_pi": 1.3877787807814457e-17,
+            "mechanical_pressure": 1.1102230246251565e-16
+          },
+          "interface": {
+            "shared_k_defect": 0.0,
+            "epsilon_trace_defect": 0.0,
+            "mechanical_jump_defect": 2.7755575615628914e-17,
+            "maximum_traction_jump": 5.0182080713057076e-14,
+            "maximum_k_flux_jump": 0.0
+          }
+        }
+      },
+      "first_step_pressure_adjustment": {
+        "fields": {
+          "u": {
+            "L2": 9.462261272333166e-08,
+            "sampled_Linf": 1.6168585557641002e-06
+          },
+          "v": {
+            "L2": 7.245607761957187e-10,
+            "sampled_Linf": 3.2619643240099094e-09
+          },
+          "k": {
+            "L2": 7.730957165799802e-09,
+            "sampled_Linf": 2.3944282534493766e-07
+          },
+          "outer_epsilon": {
+            "L2": 6.57697277748135e-10,
+            "sampled_Linf": 3.5289668132154617e-09
+          },
+          "reduced_pressure": {
+            "L2": 5.862138513910195e-05,
+            "sampled_Linf": 0.00014152107598634778
+          },
+          "mechanical_pressure": {
+            "L2": 5.862138662227367e-05,
+            "sampled_Linf": 0.00014152107598629227
+          }
+        },
+        "overall_pressure_gauge_shift": 1.3874823192499057e-17
+      },
+      "first_step_comparison": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj3-20261110/study-final/EP/spatial-first-measure-L0/result.json",
+        "sha256": "ad97c3512d1f7399fbeaba12c0e60ead41445b8ef8e9fd832acb0bc5f66d4340",
+        "spatial_mass_dual_norms": [
+          0.2676332050268633,
+          0.002049375946149416,
+          0.012912824608286145,
+          0.004009143296426649,
+          1.4019746162162292e-19,
+          1.5158872751858828e-21,
+          2.0816681711721685e-17,
+          0.0
+        ],
+        "completed_stage": [
+          3.95759754758366e-06,
+          1.0835071782532473e-06,
+          6.793365233167208e-09,
+          8.941368376863186e-09,
+          1.4019746162162292e-19,
+          1.5158872751858828e-21,
+          2.0816681711721685e-17,
+          0.0
+        ],
+        "state_sha256": "271ca147ccb54c6c2ec02e10b9cde10dcbf634905910e781a1d0f898d3fc66a7",
+        "stage_history_sha256": "0149a3192668d6540087bf202c9671c30885c8aa403d411c1cbf6540532d404f",
+        "field_errors": {
+          "continuum_error": {
+            "fields": {
+              "u": {
+                "L2": 0.00020709652210355466,
+                "sampled_Linf": 0.001052612284723864
+              },
+              "v": {
+                "L2": 7.245607761957187e-10,
+                "sampled_Linf": 3.2619643240099094e-09
+              },
+              "k": {
+                "L2": 7.730957166270428e-09,
+                "sampled_Linf": 2.3944282523391536e-07
+              },
+              "outer_epsilon": {
+                "L2": 3.4640122053684974e-06,
+                "sampled_Linf": 1.1368700974456747e-05
+              },
+              "reduced_pressure": {
+                "L2": 5.862138513910138e-05,
+                "sampled_Linf": 0.0001415210759863339
+              },
+              "mechanical_pressure": {
+                "L2": 5.862138662227367e-05,
+                "sampled_Linf": 0.00014152107598618124
+              }
+            },
+            "overall_pressure_gauge_shift": 1.3876437849054761e-17
+          },
+          "initial_drift": {
+            "fields": {
+              "u": {
+                "L2": 9.462261272333166e-08,
+                "sampled_Linf": 1.6168585557641002e-06
+              },
+              "v": {
+                "L2": 7.245607761957187e-10,
+                "sampled_Linf": 3.2619643240099094e-09
+              },
+              "k": {
+                "L2": 7.730957165799802e-09,
+                "sampled_Linf": 2.3944282534493766e-07
+              },
+              "outer_epsilon": {
+                "L2": 6.57697277748135e-10,
+                "sampled_Linf": 3.5289668132154617e-09
+              },
+              "reduced_pressure": {
+                "L2": 5.862138513910195e-05,
+                "sampled_Linf": 0.00014152107598634778
+              },
+              "mechanical_pressure": {
+                "L2": 5.862138662227367e-05,
+                "sampled_Linf": 0.00014152107598629227
+              }
+            },
+            "overall_pressure_gauge_shift": 1.3874823192499057e-17
+          },
+          "initial_representation": {
+            "fields": {
+              "u": {
+                "L2": 0.00020709687559850585,
+                "sampled_Linf": 0.001052612284723864
+              },
+              "v": {
+                "L2": 0.0,
+                "sampled_Linf": 0.0
+              },
+              "k": {
+                "L2": 1.5700924586837752e-16,
+                "sampled_Linf": 1.1102230246251565e-16
+              },
+              "outer_epsilon": {
+                "L2": 3.4643273642428653e-06,
+                "sampled_Linf": 1.1368700974456747e-05
+              },
+              "reduced_pressure": {
+                "L2": 1.962615573354719e-17,
+                "sampled_Linf": 1.3877787807814457e-17
+              },
+              "mechanical_pressure": {
+                "L2": 1.5700924586837752e-16,
+                "sampled_Linf": 1.1102230246251565e-16
+              }
+            },
+            "overall_pressure_gauge_shift": -1.2458359327754923e-33
+          },
+          "interface": {
+            "traction_max": 3.0994385560534354e-05,
+            "k_flux_max": 1.7248966620937695e-08,
+            "k_value_max": 0.0,
+            "epsilon_trace_max": 1.1102230246251565e-16,
+            "pressure_jump_error": 3.099539555015407e-05,
+            "sampled_K_range": [
+              0.8466950340680302,
+              0.8466950350464683
+            ],
+            "cutoff_range": [
+              0.015005743259612835,
+              0.015005743260130924
+            ]
+          },
+          "strong_divergence_sampled_Linf": 6.467454918946136e-06
+        },
+        "witness_replay": {
+          "in_plane": {
+            "complex_step_form": 0.0038146113751373265,
+            "independent_local_minimum": 0.003814611375135997,
+            "production_minimum": 0.0038146113751366556,
+            "angle": 1.7123035423521715,
+            "state_sha256": "271ca147ccb54c6c2ec02e10b9cde10dcbf634905910e781a1d0f898d3fc66a7"
+          },
+          "transverse": {
+            "complex_step_form": 0.943502618965226,
+            "independent_local_minimum": 0.943502618965226,
+            "production_minimum": 0.9435026189652254,
+            "angle": 1.3314290770359647,
+            "state_sha256": "271ca147ccb54c6c2ec02e10b9cde10dcbf634905910e781a1d0f898d3fc66a7"
+          }
+        }
+      }
+    },
+    {
+      "level": 1.0,
+      "unknowns": 1257.0,
+      "raw_reference_norms": [
+        0.11864610751737316,
+        0.0002694730679552845,
+        0.0027271405518417722,
+        0.0006059675444847196,
+        9.277985000389377e-17,
+        2.961575124007536e-17,
+        1.0408340855860843e-17,
+        0.0
+      ],
+      "comparison": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj3-20261110/study-final/EP/spatial-measure-L1/result.json",
+        "sha256": "f2cd3b49dc8159fb4d71e969fc07dc076d1f6c0d0c90fc265bf3d598e3bc83bc",
+        "spatial_mass_dual_norms": [
+          0.11864610751737316,
+          0.0002694730679552845,
+          0.0027271405518417722,
+          0.0006059675444847196,
+          9.277985000389377e-17,
+          2.961575124007536e-17,
+          1.0408340855860843e-17,
+          0.0
+        ],
+        "completed_stage": null,
+        "state_sha256": "5f44e0c42c0fea71093febd3ad4cf50cf1a2d783d6828fb36a23973f91bae150",
+        "stage_history_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "field_errors": {
+          "continuum_error": {
+            "fields": {
+              "u": {
+                "L2": 1.8823993330691396e-05,
+                "sampled_Linf": 0.00010422011786515029
+              },
+              "v": {
+                "L2": 0.0,
+                "sampled_Linf": 0.0
+              },
+              "k": {
+                "L2": 1.5700924586837752e-16,
+                "sampled_Linf": 1.1102230246251565e-16
+              },
+              "outer_epsilon": {
+                "L2": 1.4467243437021076e-07,
+                "sampled_Linf": 6.627507652123832e-07
+              },
+              "reduced_pressure": {
+                "L2": 1.962615573354719e-17,
+                "sampled_Linf": 1.3877787807814457e-17
+              },
+              "mechanical_pressure": {
+                "L2": 1.5700924586837752e-16,
+                "sampled_Linf": 1.1102230246251565e-16
+              }
+            },
+            "overall_pressure_gauge_shift": -1.2458359327754923e-33
+          },
+          "initial_drift": {
+            "fields": {
+              "u": {
+                "L2": 0.0,
+                "sampled_Linf": 0.0
+              },
+              "v": {
+                "L2": 0.0,
+                "sampled_Linf": 0.0
+              },
+              "k": {
+                "L2": 0.0,
+                "sampled_Linf": 0.0
+              },
+              "outer_epsilon": {
+                "L2": 0.0,
+                "sampled_Linf": 0.0
+              },
+              "reduced_pressure": {
+                "L2": 0.0,
+                "sampled_Linf": 0.0
+              },
+              "mechanical_pressure": {
+                "L2": 0.0,
+                "sampled_Linf": 0.0
+              }
+            },
+            "overall_pressure_gauge_shift": 0.0
+          },
+          "initial_representation": {
+            "fields": {
+              "u": {
+                "L2": 1.8823993330691396e-05,
+                "sampled_Linf": 0.00010422011786515029
+              },
+              "v": {
+                "L2": 0.0,
+                "sampled_Linf": 0.0
+              },
+              "k": {
+                "L2": 1.5700924586837752e-16,
+                "sampled_Linf": 1.1102230246251565e-16
+              },
+              "outer_epsilon": {
+                "L2": 1.4467243437021076e-07,
+                "sampled_Linf": 6.627507652123832e-07
+              },
+              "reduced_pressure": {
+                "L2": 1.962615573354719e-17,
+                "sampled_Linf": 1.3877787807814457e-17
+              },
+              "mechanical_pressure": {
+                "L2": 1.5700924586837752e-16,
+                "sampled_Linf": 1.1102230246251565e-16
+              }
+            },
+            "overall_pressure_gauge_shift": -1.2458359327754923e-33
+          },
+          "interface": {
+            "traction_max": 1.0419443086107094e-13,
+            "k_flux_max": 0.0,
+            "k_value_max": 0.0,
+            "epsilon_trace_max": 0.0,
+            "pressure_jump_error": 2.7755575615628914e-17,
+            "sampled_K_range": [
+              0.8466950351321795,
+              0.8466950351321795
+            ],
+            "cutoff_range": [
+              0.015005743260176297,
+              0.015005743260176297
+            ]
+          },
+          "strong_divergence_sampled_Linf": 5.763510328715693e-15
+        },
+        "witness_replay": {
+          "in_plane": {
+            "complex_step_form": 0.0040915248112811916,
+            "independent_local_minimum": 0.00409152481128317,
+            "production_minimum": 0.0040915248112820615,
+            "angle": 1.712213378249502,
+            "state_sha256": "5f44e0c42c0fea71093febd3ad4cf50cf1a2d783d6828fb36a23973f91bae150"
+          },
+          "transverse": {
+            "complex_step_form": 0.943557220284019,
+            "independent_local_minimum": 0.9435572202840188,
+            "production_minimum": 0.9435572202840188,
+            "angle": 1.3316140282847948,
+            "state_sha256": "5f44e0c42c0fea71093febd3ad4cf50cf1a2d783d6828fb36a23973f91bae150"
+          }
+        },
+        "independent_loads": {
+          "quadrature_points": 17088.0,
+          "load_max_absolute_errors": {
+            "inner_k_production": 9.71445146547012e-17,
+            "inner_k_destruction": 1.1102230246251565e-16,
+            "outer_k_production": 3.8163916471489756e-17,
+            "outer_k_destruction": 3.469446951953614e-17,
+            "k_diffusion": 0.0,
+            "epsilon_diffusion": 6.440160904563896e-17,
+            "epsilon_production": 1.3877787807814457e-17,
+            "epsilon_destruction": 1.5612511283791264e-17
+          },
+          "extracted_states": 4.0
+        },
+        "independent_profiles": {
+          "continuum": {
+            "K": 0.8466950351321794,
+            "zv": -0.005393275866854202,
+            "d": 0.0010448941982935558,
+            "twice_nu": 3e-05,
+            "Lambda": 5.199322267149552,
+            "rough_proposition_hypotheses": true,
+            "Q0_endpoints": [
+              0.0,
+              0.0
+            ],
+            "ground_reference_k": 0.8466950351321794,
+            "pressure_jump": -0.2090605025017727,
+            "inner_covariance_lower_bound": 0.3144633567547862
+          },
+          "represented_max_absolute_errors": {
+            "velocity": 0.00010317816999227958,
+            "k": 1.1102230246251565e-16,
+            "outer_epsilon": 6.353286760019117e-07,
+            "inner_pi": 1.3877787807814457e-17,
+            "outer_pi": 1.3877787807814457e-17,
+            "mechanical_pressure": 1.1102230246251565e-16
+          },
+          "interface": {
+            "shared_k_defect": 0.0,
+            "epsilon_trace_defect": 0.0,
+            "mechanical_jump_defect": 2.7755575615628914e-17,
+            "maximum_traction_jump": 1.0419443086107094e-13,
+            "maximum_k_flux_jump": 0.0
+          }
+        }
+      },
+      "first_step_pressure_adjustment": {
+        "fields": {
+          "u": {
+            "L2": 4.123055374945584e-08,
+            "sampled_Linf": 6.061266165091617e-07
+          },
+          "v": {
+            "L2": 1.3357697904620487e-10,
+            "sampled_Linf": 1.3777246580571233e-09
+          },
+          "k": {
+            "L2": 1.601579610067894e-09,
+            "sampled_Linf": 3.631135869763824e-08
+          },
+          "outer_epsilon": {
+            "L2": 9.910245361663936e-11,
+            "sampled_Linf": 5.429154625868904e-10
+          },
+          "reduced_pressure": {
+            "L2": 6.8239972419093744e-06,
+            "sampled_Linf": 2.2519739771634513e-05
+          },
+          "mechanical_pressure": {
+            "L2": 6.823997387937564e-06,
+            "sampled_Linf": 2.2519739771634513e-05
+          }
+        },
+        "overall_pressure_gauge_shift": -3.0507579043813216e-18
+      },
+      "first_step_comparison": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj3-20261110/study-final/EP/spatial-first-measure-L1/result.json",
+        "sha256": "cc1c5c61e19484719f16df51b9e6599a04a05fb0b6571605d9c8c0b1bbfa7dc0",
+        "spatial_mass_dual_norms": [
+          0.11661762863757993,
+          0.0003773215181921213,
+          0.0026750784084041096,
+          0.0006054528782510789,
+          1.9029699163287225e-20,
+          4.817475808130635e-22,
+          2.949029909160572e-17,
+          0.0
+        ],
+        "completed_stage": [
+          2.1352844312615537e-06,
+          1.5072331785895714e-06,
+          4.60600980701138e-10,
+          3.909741657354716e-09,
+          1.9029699163287225e-20,
+          4.817475808130635e-22,
+          2.949029909160572e-17,
+          0.0
+        ],
+        "state_sha256": "b0fdb8e999735f32acf86040af4cd6dcd4ead37b93828b78c93e888163b3e9f5",
+        "stage_history_sha256": "9109ea2b33a0fc9a86885eced9fb367575a3a1ff70a78dbc341b1c863f441676",
+        "field_errors": {
+          "continuum_error": {
+            "fields": {
+              "u": {
+                "L2": 1.882401251203631e-05,
+                "sampled_Linf": 0.00010422011786515029
+              },
+              "v": {
+                "L2": 1.3357697904620487e-10,
+                "sampled_Linf": 1.3777246580571233e-09
+              },
+              "k": {
+                "L2": 1.6015796101302812e-09,
+                "sampled_Linf": 3.631135858661594e-08
+              },
+              "outer_epsilon": {
+                "L2": 1.4464027130518923e-07,
+                "sampled_Linf": 6.627507652123832e-07
+              },
+              "reduced_pressure": {
+                "L2": 6.823997241908714e-06,
+                "sampled_Linf": 2.2519739771620636e-05
+              },
+              "mechanical_pressure": {
+                "L2": 6.823997387937565e-06,
+                "sampled_Linf": 2.251973977152349e-05
+              }
+            },
+            "overall_pressure_gauge_shift": -3.0507148909894688e-18
+          },
+          "initial_drift": {
+            "fields": {
+              "u": {
+                "L2": 4.123055374945584e-08,
+                "sampled_Linf": 6.061266165091617e-07
+              },
+              "v": {
+                "L2": 1.3357697904620487e-10,
+                "sampled_Linf": 1.3777246580571233e-09
+              },
+              "k": {
+                "L2": 1.601579610067894e-09,
+                "sampled_Linf": 3.631135869763824e-08
+              },
+              "outer_epsilon": {
+                "L2": 9.910245361663936e-11,
+                "sampled_Linf": 5.429154625868904e-10
+              },
+              "reduced_pressure": {
+                "L2": 6.8239972419093744e-06,
+                "sampled_Linf": 2.2519739771634513e-05
+              },
+              "mechanical_pressure": {
+                "L2": 6.823997387937564e-06,
+                "sampled_Linf": 2.2519739771634513e-05
+              }
+            },
+            "overall_pressure_gauge_shift": -3.0507579043813216e-18
+          },
+          "initial_representation": {
+            "fields": {
+              "u": {
+                "L2": 1.8823993330691396e-05,
+                "sampled_Linf": 0.00010422011786515029
+              },
+              "v": {
+                "L2": 0.0,
+                "sampled_Linf": 0.0
+              },
+              "k": {
+                "L2": 1.5700924586837752e-16,
+                "sampled_Linf": 1.1102230246251565e-16
+              },
+              "outer_epsilon": {
+                "L2": 1.4467243437021076e-07,
+                "sampled_Linf": 6.627507652123832e-07
+              },
+              "reduced_pressure": {
+                "L2": 1.962615573354719e-17,
+                "sampled_Linf": 1.3877787807814457e-17
+              },
+              "mechanical_pressure": {
+                "L2": 1.5700924586837752e-16,
+                "sampled_Linf": 1.1102230246251565e-16
+              }
+            },
+            "overall_pressure_gauge_shift": -1.2458359327754923e-33
+          },
+          "interface": {
+            "traction_max": 2.823989521463788e-06,
+            "k_flux_max": 1.7816757581599058e-09,
+            "k_value_max": 0.0,
+            "epsilon_trace_max": 5.551115123125783e-17,
+            "pressure_jump_error": 2.8227915113976376e-06,
+            "sampled_K_range": [
+              0.846695035064566,
+              0.8466950351267358
+            ],
+            "cutoff_range": [
+              0.015005743260140494,
+              0.015005743260173421
+            ]
+          },
+          "strong_divergence_sampled_Linf": 2.4245105292565644e-06
+        },
+        "witness_replay": {
+          "in_plane": {
+            "complex_step_form": 0.004091524537834261,
+            "independent_local_minimum": 0.004091524537834261,
+            "production_minimum": 0.00409152453783368,
+            "angle": 1.712213376186902,
+            "state_sha256": "b0fdb8e999735f32acf86040af4cd6dcd4ead37b93828b78c93e888163b3e9f5"
+          },
+          "transverse": {
+            "complex_step_form": 0.9435571975753553,
+            "independent_local_minimum": 0.9435571975753553,
+            "production_minimum": 0.9435571975753555,
+            "angle": 1.3316140478346103,
+            "state_sha256": "b0fdb8e999735f32acf86040af4cd6dcd4ead37b93828b78c93e888163b3e9f5"
+          }
+        }
+      }
+    },
+    {
+      "level": 2.0,
+      "unknowns": 2493.0,
+      "raw_reference_norms": [
+        0.029341095699644087,
+        5.44587466241099e-05,
+        0.0002791443389279287,
+        0.00013000946218307826,
+        4.6116388994514175e-17,
+        1.45845323675214e-17,
+        6.591949208711867e-17,
+        0.0
+      ],
+      "comparison": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj3-20261110/study-final/EP/spatial-measure-L2/result.json",
+        "sha256": "a68b7a1a8e12f57600b27c3ed1f88cdeca74e0eb13ba32a9253a92eb36757382",
+        "spatial_mass_dual_norms": [
+          0.029341095699644087,
+          5.44587466241099e-05,
+          0.0002791443389279287,
+          0.00013000946218307826,
+          4.6116388994514175e-17,
+          1.45845323675214e-17,
+          6.591949208711867e-17,
+          0.0
+        ],
+        "completed_stage": null,
+        "state_sha256": "5a39a1ff762746ff6e5f266bea0f480f3a200fcf83e6720e65e72ff2e798a5be",
+        "stage_history_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "field_errors": {
+          "continuum_error": {
+            "fields": {
+              "u": {
+                "L2": 1.2796757764264587e-06,
+                "sampled_Linf": 8.794754003726979e-06
+              },
+              "v": {
+                "L2": 0.0,
+                "sampled_Linf": 0.0
+              },
+              "k": {
+                "L2": 1.5700924586837752e-16,
+                "sampled_Linf": 1.1102230246251565e-16
+              },
+              "outer_epsilon": {
+                "L2": 7.752865144567184e-09,
+                "sampled_Linf": 3.541703427756282e-08
+              },
+              "reduced_pressure": {
+                "L2": 1.962615573354719e-17,
+                "sampled_Linf": 1.3877787807814457e-17
+              },
+              "mechanical_pressure": {
+                "L2": 1.5700924586837752e-16,
+                "sampled_Linf": 1.1102230246251565e-16
+              }
+            },
+            "overall_pressure_gauge_shift": -1.2458359327754923e-33
+          },
+          "initial_drift": {
+            "fields": {
+              "u": {
+                "L2": 0.0,
+                "sampled_Linf": 0.0
+              },
+              "v": {
+                "L2": 0.0,
+                "sampled_Linf": 0.0
+              },
+              "k": {
+                "L2": 0.0,
+                "sampled_Linf": 0.0
+              },
+              "outer_epsilon": {
+                "L2": 0.0,
+                "sampled_Linf": 0.0
+              },
+              "reduced_pressure": {
+                "L2": 0.0,
+                "sampled_Linf": 0.0
+              },
+              "mechanical_pressure": {
+                "L2": 0.0,
+                "sampled_Linf": 0.0
+              }
+            },
+            "overall_pressure_gauge_shift": 0.0
+          },
+          "initial_representation": {
+            "fields": {
+              "u": {
+                "L2": 1.2796757764264587e-06,
+                "sampled_Linf": 8.794754003726979e-06
+              },
+              "v": {
+                "L2": 0.0,
+                "sampled_Linf": 0.0
+              },
+              "k": {
+                "L2": 1.5700924586837752e-16,
+                "sampled_Linf": 1.1102230246251565e-16
+              },
+              "outer_epsilon": {
+                "L2": 7.752865144567184e-09,
+                "sampled_Linf": 3.541703427756282e-08
+              },
+              "reduced_pressure": {
+                "L2": 1.962615573354719e-17,
+                "sampled_Linf": 1.3877787807814457e-17
+              },
+              "mechanical_pressure": {
+                "L2": 1.5700924586837752e-16,
+                "sampled_Linf": 1.1102230246251565e-16
+              }
+            },
+            "overall_pressure_gauge_shift": -1.2458359327754923e-33
+          },
+          "interface": {
+            "traction_max": 2.0966561820046081e-13,
+            "k_flux_max": 0.0,
+            "k_value_max": 0.0,
+            "epsilon_trace_max": 0.0,
+            "pressure_jump_error": 2.7755575615628914e-17,
+            "sampled_K_range": [
+              0.8466950351321795,
+              0.8466950351321795
+            ],
+            "cutoff_range": [
+              0.015005743260176297,
+              0.015005743260176297
+            ]
+          },
+          "strong_divergence_sampled_Linf": 3.1657348183861123e-15
+        },
+        "witness_replay": {
+          "in_plane": {
+            "complex_step_form": 0.0041322190152685324,
+            "independent_local_minimum": 0.004132219015268115,
+            "production_minimum": 0.004132219015267454,
+            "angle": 1.71220012439071,
+            "state_sha256": "5a39a1ff762746ff6e5f266bea0f480f3a200fcf83e6720e65e72ff2e798a5be"
+          },
+          "transverse": {
+            "complex_step_form": 0.9435637789156738,
+            "independent_local_minimum": 0.9435637789156733,
+            "production_minimum": 0.9435637789156731,
+            "angle": 1.3316362727042708,
+            "state_sha256": "5a39a1ff762746ff6e5f266bea0f480f3a200fcf83e6720e65e72ff2e798a5be"
+          }
+        },
+        "independent_loads": {
+          "quadrature_points": 28736.0,
+          "load_max_absolute_errors": {
+            "inner_k_production": 6.938893903907228e-17,
+            "inner_k_destruction": 8.326672684688674e-17,
+            "outer_k_production": 1.3877787807814457e-17,
+            "outer_k_destruction": 2.0816681711721685e-17,
+            "k_diffusion": 0.0,
+            "epsilon_diffusion": 1.9300238626252311e-16,
+            "epsilon_production": 1.0842021724855044e-17,
+            "epsilon_destruction": 7.806255641895632e-18
+          },
+          "extracted_states": 4.0
+        },
+        "independent_profiles": {
+          "continuum": {
+            "K": 0.8466950351321794,
+            "zv": -0.005393275866854202,
+            "d": 0.0010448941982935558,
+            "twice_nu": 3e-05,
+            "Lambda": 5.199322267149552,
+            "rough_proposition_hypotheses": true,
+            "Q0_endpoints": [
+              0.0,
+              0.0
+            ],
+            "ground_reference_k": 0.8466950351321794,
+            "pressure_jump": -0.2090605025017727,
+            "inner_covariance_lower_bound": 0.3144633567547862
+          },
+          "represented_max_absolute_errors": {
+            "velocity": 8.707266283547455e-06,
+            "k": 1.1102230246251565e-16,
+            "outer_epsilon": 3.38934653398848e-08,
+            "inner_pi": 1.3877787807814457e-17,
+            "outer_pi": 1.3877787807814457e-17,
+            "mechanical_pressure": 1.1102230246251565e-16
+          },
+          "interface": {
+            "shared_k_defect": 0.0,
+            "epsilon_trace_defect": 0.0,
+            "mechanical_jump_defect": 2.7755575615628914e-17,
+            "maximum_traction_jump": 2.0966561820046081e-13,
+            "maximum_k_flux_jump": 0.0
+          }
+        }
+      },
+      "first_step_pressure_adjustment": {
+        "fields": {
+          "u": {
+            "L2": 9.778649997907219e-09,
+            "sampled_Linf": 1.8241924282236255e-07
+          },
+          "v": {
+            "L2": 2.2972857847084828e-11,
+            "sampled_Linf": 1.784428353563065e-10
+          },
+          "k": {
+            "L2": 1.5799108925953858e-10,
+            "sampled_Linf": 4.486704119344154e-09
+          },
+          "outer_epsilon": {
+            "L2": 2.1194814427531415e-11,
+            "sampled_Linf": 1.1440093317105493e-10
+          },
+          "reduced_pressure": {
+            "L2": 7.042682195426755e-07,
+            "sampled_Linf": 2.8055943556047034e-06
+          },
+          "mechanical_pressure": {
+            "L2": 7.04268231814341e-07,
+            "sampled_Linf": 2.8055943555214367e-06
+          }
+        },
+        "overall_pressure_gauge_shift": -1.75659756417225e-17
+      },
+      "first_step_comparison": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj3-20261110/study-final/EP/spatial-first-measure-L2/result.json",
+        "sha256": "c549ce87cdc3679433e2170bc0afd49bea8be435185b807218442b5bdd6842e8",
+        "spatial_mass_dual_norms": [
+          0.027658204187320127,
+          6.486371597392178e-05,
+          0.00026388856872280463,
+          0.0001295119916905329,
+          3.778283098350982e-21,
+          3.0572513228175088e-22,
+          1.6393136847980827e-16,
+          0.0
+        ],
+        "completed_stage": [
+          1.2203491901349088e-06,
+          7.196870898354097e-07,
+          5.5851569752307055e-11,
+          1.8578859312928303e-09,
+          3.778283098350982e-21,
+          3.0572513228175088e-22,
+          1.6393136847980827e-16,
+          0.0
+        ],
+        "state_sha256": "c618a500f8ff738b773bdd95b3bc852db7b77337db011f089d691bc1b6ed5fb0",
+        "stage_history_sha256": "e69f1d464ecc526acc4e171730741db945d33a0082c75464192586394d5660d1",
+        "field_errors": {
+          "continuum_error": {
+            "fields": {
+              "u": {
+                "L2": 1.2797107017850777e-06,
+                "sampled_Linf": 8.794754003726979e-06
+              },
+              "v": {
+                "L2": 2.2972857847084828e-11,
+                "sampled_Linf": 1.784428353563065e-10
+              },
+              "k": {
+                "L2": 1.5799108927296993e-10,
+                "sampled_Linf": 4.486704008321851e-09
+              },
+              "outer_epsilon": {
+                "L2": 7.748998100301593e-09,
+                "sampled_Linf": 3.541703427756282e-08
+              },
+              "reduced_pressure": {
+                "L2": 7.042682195423737e-07,
+                "sampled_Linf": 2.805594355590826e-06
+              },
+              "mechanical_pressure": {
+                "L2": 7.04268231814341e-07,
+                "sampled_Linf": 2.805594355410415e-06
+              }
+            },
+            "overall_pressure_gauge_shift": -1.7565984740709238e-17
+          },
+          "initial_drift": {
+            "fields": {
+              "u": {
+                "L2": 9.778649997907219e-09,
+                "sampled_Linf": 1.8241924282236255e-07
+              },
+              "v": {
+                "L2": 2.2972857847084828e-11,
+                "sampled_Linf": 1.784428353563065e-10
+              },
+              "k": {
+                "L2": 1.5799108925953858e-10,
+                "sampled_Linf": 4.486704119344154e-09
+              },
+              "outer_epsilon": {
+                "L2": 2.1194814427531415e-11,
+                "sampled_Linf": 1.1440093317105493e-10
+              },
+              "reduced_pressure": {
+                "L2": 7.042682195426755e-07,
+                "sampled_Linf": 2.8055943556047034e-06
+              },
+              "mechanical_pressure": {
+                "L2": 7.04268231814341e-07,
+                "sampled_Linf": 2.8055943555214367e-06
+              }
+            },
+            "overall_pressure_gauge_shift": -1.75659756417225e-17
+          },
+          "initial_representation": {
+            "fields": {
+              "u": {
+                "L2": 1.2796757764264587e-06,
+                "sampled_Linf": 8.794754003726979e-06
+              },
+              "v": {
+                "L2": 0.0,
+                "sampled_Linf": 0.0
+              },
+              "k": {
+                "L2": 1.5700924586837752e-16,
+                "sampled_Linf": 1.1102230246251565e-16
+              },
+              "outer_epsilon": {
+                "L2": 7.752865144567184e-09,
+                "sampled_Linf": 3.541703427756282e-08
+              },
+              "reduced_pressure": {
+                "L2": 1.962615573354719e-17,
+                "sampled_Linf": 1.3877787807814457e-17
+              },
+              "mechanical_pressure": {
+                "L2": 1.5700924586837752e-16,
+                "sampled_Linf": 1.1102230246251565e-16
+              }
+            },
+            "overall_pressure_gauge_shift": -1.2458359327754923e-33
+          },
+          "interface": {
+            "traction_max": 2.9743543962512664e-07,
+            "k_flux_max": 3.1018829476752037e-10,
+            "k_value_max": 0.0,
+            "epsilon_trace_max": 1.1102230246251565e-16,
+            "pressure_jump_error": 2.9645265994804326e-07,
+            "sampled_K_range": [
+              0.8466950351256617,
+              0.8466950351316551
+            ],
+            "cutoff_range": [
+              0.015005743260172847,
+              0.015005743260176039
+            ]
+          },
+          "strong_divergence_sampled_Linf": 7.296945356111007e-07
+        },
+        "witness_replay": {
+          "in_plane": {
+            "complex_step_form": 0.004132218982176872,
+            "independent_local_minimum": 0.004132218982178069,
+            "production_minimum": 0.0041322189821779215,
+            "angle": 1.712200124123525,
+            "state_sha256": "c618a500f8ff738b773bdd95b3bc852db7b77337db011f089d691bc1b6ed5fb0"
+          },
+          "transverse": {
+            "complex_step_form": 0.9435637682344477,
+            "independent_local_minimum": 0.9435637682344477,
+            "production_minimum": 0.9435637682344477,
+            "angle": 1.331636301826633,
+            "state_sha256": "c618a500f8ff738b773bdd95b3bc852db7b77337db011f089d691bc1b6ed5fb0"
+          }
+        }
+      }
+    }
+  ],
+  "spatial_quadrature": {
+    "source_order": [
+      16.0,
+      32.0
+    ],
+    "basis_points": [
+      8.0,
+      8.0
+    ],
+    "independent_source_order": 32.0,
+    "independent_outer_order": 24.0,
+    "observation_normal_orders": [
+      6.0,
+      10.0
+    ],
+    "source_norm_delta": [
+      2.868538739875248e-14,
+      5.848186518386811e-16,
+      3.0444397003392965e-16,
+      0.0,
+      -2.2754682126683922e-18,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "L2_integral_delta": {
+      "u": 6.388966300994482e-13,
+      "v": 0.0,
+      "k": -2.465190328815662e-32,
+      "outer_epsilon": 2.4825423953280272e-17,
+      "reduced_pressure": -3.0814879110195774e-33,
+      "mechanical_pressure": -2.465190328815662e-32
+    },
+    "absolute_floor": 1e-10
+  },
+  "spatial_rates": [
+    {
+      "from_level": 0.0,
+      "to_level": 1.0,
+      "factors": [
+        2.262670849441522,
+        6.85874498236007,
+        4.77172765370213,
+        6.618219961042558,
+        1.9977157186438526,
+        2.119866703209476,
+        4.666666666666667,
+        0.0
+      ],
+      "slopes_log2": [
+        1.178026731128909,
+        2.777944615265676,
+        2.2545117035809468,
+        2.7264432413983783,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "from_level": 1.0,
+      "to_level": 2.0,
+      "factors": [
+        4.043683601046036,
+        4.948205470376797,
+        9.769643053896512,
+        4.660949551744173,
+        2.0118628545467967,
+        2.0306274136034212,
+        0.15789473684210525,
+        0.0
+      ],
+      "slopes_log2": [
+        2.0156701176515233,
+        2.3069054083456155,
+        3.2883058524924644,
+        2.2206238978066186,
+        null,
+        null,
+        null,
+        null
+      ]
+    }
+  ],
+  "spatial_gate": "PASS",
+  "scouts": [
+    {
+      "dt": 1e-06,
+      "status": "admissible",
+      "seconds": 16.15557050704956,
+      "seconds_per_step": 4.03889262676239,
+      "initial_sha256": "5f44e0c42c0fea71093febd3ad4cf50cf1a2d783d6828fb36a23973f91bae150",
+      "initial_history_sha256": "3d7ecffc7e89e577aaf27dc34974dc834e553dd0239142b70624fc3dbc8d1037",
+      "native_initial_history_labels": [
+        0.0,
+        1e-06
+      ],
+      "native_dt_signature_sha256": "4461848141ebba74745dedf4ead3ca991b64e483f9de382c0d2eba776f3a9915",
+      "result": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj3-20261110/study-final/EP/scout-1e-06/case.evolution.json",
+      "accepted_steps": 4.0,
+      "last_accepted_sha256": "854d7f3e00eb7059c4e83c3a130c27b49a81303918fda46d4589d02962dc8020",
+      "failure": "",
+      "failed_candidate_sha256": null
+    },
+    {
+      "dt": 4e-06,
+      "status": "admissible",
+      "seconds": 15.249724388122559,
+      "seconds_per_step": 3.8124310970306396,
+      "initial_sha256": "5f44e0c42c0fea71093febd3ad4cf50cf1a2d783d6828fb36a23973f91bae150",
+      "initial_history_sha256": "3d7ecffc7e89e577aaf27dc34974dc834e553dd0239142b70624fc3dbc8d1037",
+      "native_initial_history_labels": [
+        0.0,
+        4e-06
+      ],
+      "native_dt_signature_sha256": "c723e90fe1cefe6fe1f726d7942e83f1770f8e05c0f7a42f8ab0b73fbbfa52b5",
+      "result": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj3-20261110/study-final/EP/scout-4e-06/case.evolution.json",
+      "accepted_steps": 4.0,
+      "last_accepted_sha256": "d203c1ce372f20fb2ab6f4e48d82eb223f8dda0b0f3c2aa8ad2407b14488b5ae",
+      "failure": "",
+      "failed_candidate_sha256": null
+    },
+    {
+      "dt": 1.6e-05,
+      "status": "admissible",
+      "seconds": 15.952232122421265,
+      "seconds_per_step": 3.988058030605316,
+      "initial_sha256": "5f44e0c42c0fea71093febd3ad4cf50cf1a2d783d6828fb36a23973f91bae150",
+      "initial_history_sha256": "3d7ecffc7e89e577aaf27dc34974dc834e553dd0239142b70624fc3dbc8d1037",
+      "native_initial_history_labels": [
+        0.0,
+        1.6e-05
+      ],
+      "native_dt_signature_sha256": "afcb682118b783dbe7729405acc82fefdd5fe13bb51d8837d7af4b1164c225a9",
+      "result": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj3-20261110/study-final/EP/scout-1.6e-05/case.evolution.json",
+      "accepted_steps": 4.0,
+      "last_accepted_sha256": "cccc19374d755fe738be0593c5ce6fae1b8dde9f34f0bff49cd7ba442d8fb11f",
+      "failure": "",
+      "failed_candidate_sha256": null
+    },
+    {
+      "dt": 6.4e-05,
+      "status": "admissible",
+      "seconds": 17.404048681259155,
+      "seconds_per_step": 4.351012170314789,
+      "initial_sha256": "5f44e0c42c0fea71093febd3ad4cf50cf1a2d783d6828fb36a23973f91bae150",
+      "initial_history_sha256": "3d7ecffc7e89e577aaf27dc34974dc834e553dd0239142b70624fc3dbc8d1037",
+      "native_initial_history_labels": [
+        0.0,
+        6.4e-05
+      ],
+      "native_dt_signature_sha256": "0770cb2d1969b48a769c6b88c130d09417d75029f92a072e346765cda48c5d6c",
+      "result": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj3-20261110/study-final/EP/scout-6.4e-05/case.evolution.json",
+      "accepted_steps": 4.0,
+      "last_accepted_sha256": "35f6a5ac4292dace584eb0542a1bd20ffb23c20eeccd51eff3a6f529ef7f453a",
+      "failure": "",
+      "failed_candidate_sha256": null
+    },
+    {
+      "dt": 0.000128,
+      "status": "admissible",
+      "seconds": 13.849257707595825,
+      "seconds_per_step": 3.4623144268989563,
+      "initial_sha256": "5f44e0c42c0fea71093febd3ad4cf50cf1a2d783d6828fb36a23973f91bae150",
+      "initial_history_sha256": "3d7ecffc7e89e577aaf27dc34974dc834e553dd0239142b70624fc3dbc8d1037",
+      "native_initial_history_labels": [
+        0.0,
+        0.000128
+      ],
+      "native_dt_signature_sha256": "5f158b2d17bda4b00e34bf344fd3bcf2533868bee9f78ececa34fdd253a3ac4d",
+      "result": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj3-20261110/study-final/EP/scout-0.000128/case.evolution.json",
+      "accepted_steps": 4.0,
+      "last_accepted_sha256": "41392b07d1c7f1fc48010ff9a57df2f8bbcf1b02a75767a125410445926eff07",
+      "failure": "",
+      "failed_candidate_sha256": null
+    }
+  ],
+  "frozen_design": {
+    "D": 0.000128,
+    "T": 0.004096,
+    "T_ustar_over_H": 0.002048,
+    "main_steps": [
+      32.0,
+      64.0,
+      128.0
+    ],
+    "main_dt": [
+      0.000128,
+      6.4e-05,
+      3.2e-05
+    ],
+    "mesh_unknowns": 1257.0,
+    "cross_mesh_level": 2.0,
+    "cross_mesh_unknowns": 2493.0,
+    "cross_mesh_steps": 128.0,
+    "measured_max_seconds_per_step": 4.351012170314789,
+    "estimated_remaining_seconds": 2818.204329431057,
+    "measured_fine_one_step_process_seconds": 12.34370470046997,
+    "practical_wall_seconds_per_policy": 3600.0,
+    "safety_factor_over_arithmetic_floor": 100.0,
+    "floor_policy": "terminal frozen matrix SVD and long-double residual, arithmetic evaluation sensitivity, accumulated using frozen history-map mass-norm amplification and safety100; no spatial/stage residual used as noise",
+    "pressure_policy": "common-time common overall gauge; algebraic first-step adjustment not required to scale with dt",
+    "frozen_before_main_utc": "2026-11-10T12:14:23Z",
+    "finer_temporal_mesh_open": false,
+    "cross_mesh_cost_estimator": "257 times measured 1257 scout step cost plus128 times measured 2493 full one-step process cost plus120 seconds observation reserve; choose2493 if below3600 seconds"
+  },
+  "scout_gate": "PASS",
+  "comparison_driver_revision": "cef0a5f08b5fb665a716bb8f0095854b724dfc6f",
+  "measurement_driver_sha256": "8404c3e0d0247dbbb37121c6d8e067a62dfd70e21055f146a8a9c235f6473cab",
+  "physical_comparison_sha256": "3e257168b67e7894cef5ee58c84fdd47b8693db757066809deffe5eef70430b8",
+  "main": [
+    {
+      "steps": 32.0,
+      "dt": 0.000128,
+      "comparison": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj3-20261110/study-final/EP/main-32-measure/result.json",
+        "sha256": "c38244315c5f4566daa831c27b4093ecec7832ad9228271eab3ddf851b736365",
+        "spatial_mass_dual_norms": [
+          0.0036252109669621772,
+          0.00011639797851312287,
+          0.0004429835364300162,
+          5.040473927292415e-05,
+          2.2426998986657783e-20,
+          1.320031011425411e-21,
+          3.122502256758253e-17,
+          0.0
+        ],
+        "completed_stage": [
+          1.232533021369923e-05,
+          8.938671983981541e-06,
+          5.4419349228672955e-09,
+          2.8769277693734092e-08,
+          2.2426998986657783e-20,
+          1.320031011425411e-21,
+          3.122502256758253e-17,
+          0.0
+        ],
+        "state_sha256": "a34839bd426742afbf721e95ba32718fdde6d24ec6a53eb08b37f17fef1e984b",
+        "stage_history_sha256": "a6b162cebf88c371dc576476f9445200946d1d8ed4269cc34d401ed1f42da69f",
+        "field_errors": {
+          "continuum_error": {
+            "fields": {
+              "u": {
+                "L2": 2.4187420930676966e-05,
+                "sampled_Linf": 0.00010422011786515029
+              },
+              "v": {
+                "L2": 1.9481929492974775e-07,
+                "sampled_Linf": 8.115261651532136e-07
+              },
+              "k": {
+                "L2": 1.4166485610425177e-06,
+                "sampled_Linf": 7.692440325390848e-06
+              },
+              "outer_epsilon": {
+                "L2": 1.5568682498798808e-07,
+                "sampled_Linf": 6.627507652123832e-07
+              },
+              "reduced_pressure": {
+                "L2": 1.3548997033105498e-06,
+                "sampled_Linf": 6.264307499555207e-06
+              },
+              "mechanical_pressure": {
+                "L2": 1.6528155235820145e-06,
+                "sampled_Linf": 6.264307499666229e-06
+              },
+              "velocity": {
+                "L2": 2.4188205510856467e-05,
+                "sampled_Linf": 0.00010422011786515029
+              }
+            },
+            "overall_pressure_gauge_shift": -4.211142584102346e-18
+          },
+          "initial_drift": {
+            "fields": {
+              "u": {
+                "L2": 1.5223208629582968e-05,
+                "sampled_Linf": 0.00011637427227872976
+              },
+              "v": {
+                "L2": 1.9481929492974775e-07,
+                "sampled_Linf": 8.115261651532136e-07
+              },
+              "k": {
+                "L2": 1.4166485610421795e-06,
+                "sampled_Linf": 7.69244032550187e-06
+              },
+              "outer_epsilon": {
+                "L2": 1.3231170216191228e-07,
+                "sampled_Linf": 7.5280085687357e-07
+              },
+              "reduced_pressure": {
+                "L2": 1.3548997033122164e-06,
+                "sampled_Linf": 6.264307499569085e-06
+              },
+              "mechanical_pressure": {
+                "L2": 1.6528155235818214e-06,
+                "sampled_Linf": 6.264307499555207e-06
+              },
+              "velocity": {
+                "L2": 1.5224455180317168e-05,
+                "sampled_Linf": 0.00011637427230693618
+              }
+            },
+            "overall_pressure_gauge_shift": -4.21116326361766e-18
+          },
+          "initial_representation": {
+            "fields": {
+              "u": {
+                "L2": 1.8823993330691396e-05,
+                "sampled_Linf": 0.00010422011786515029
+              },
+              "v": {
+                "L2": 0.0,
+                "sampled_Linf": 0.0
+              },
+              "k": {
+                "L2": 1.5700924586837752e-16,
+                "sampled_Linf": 1.1102230246251565e-16
+              },
+              "outer_epsilon": {
+                "L2": 1.4467243437021076e-07,
+                "sampled_Linf": 6.627507652123832e-07
+              },
+              "reduced_pressure": {
+                "L2": 1.962615573354719e-17,
+                "sampled_Linf": 1.3877787807814457e-17
+              },
+              "mechanical_pressure": {
+                "L2": 1.5700924586837752e-16,
+                "sampled_Linf": 1.1102230246251565e-16
+              },
+              "velocity": {
+                "L2": 1.8823993330691396e-05,
+                "sampled_Linf": 0.00010422011786515029
+              }
+            },
+            "overall_pressure_gauge_shift": -1.2458359327754923e-33
+          },
+          "interface": {
+            "traction_max": 6.839781356929309e-05,
+            "k_flux_max": 1.357822756678026e-06,
+            "k_value_max": 0.0,
+            "epsilon_trace_max": 5.551115123125783e-17,
+            "pressure_jump_error": 6.783836973028867e-06,
+            "sampled_K_range": [
+              0.8466950356917797,
+              0.8466950518681851
+            ],
+            "cutoff_range": [
+              0.015005743260472592,
+              0.015005743269038013
+            ]
+          },
+          "strong_divergence_sampled_Linf": 0.00048037199106897206
+        },
+        "witness_replay": {
+          "in_plane": {
+            "complex_step_form": 0.004091475723400812,
+            "independent_local_minimum": 0.00409147572340172,
+            "production_minimum": 0.004091475723401144,
+            "angle": 1.7122099151305663,
+            "state_sha256": "a34839bd426742afbf721e95ba32718fdde6d24ec6a53eb08b37f17fef1e984b"
+          },
+          "transverse": {
+            "complex_step_form": 0.9435494372963078,
+            "independent_local_minimum": 0.9435494372963078,
+            "production_minimum": 0.9435494372963082,
+            "angle": 1.3316311524488078,
+            "state_sha256": "a34839bd426742afbf721e95ba32718fdde6d24ec6a53eb08b37f17fef1e984b"
+          }
+        }
+      },
+      "arithmetic": {
+        "systems": {
+          "momentum": {
+            "size": 356.0,
+            "frozen_history_mass_norm_amplification": 1.0,
+            "sigma_min": 0.008550142542842165,
+            "sigma_max": 42.744299979464905,
+            "condition_2": 4999.249985048344,
+            "long_double_residual_2": 1.6341824110045316e-20,
+            "rounding_formation_reserve_2": 2.5516021132422468e-17,
+            "coefficient_error_estimate": 2.9861914966443662e-15,
+            "matrix_sha256": "3573726f98d9f255b83812310d7c7079e4ac2971f12c86d02170ad1b0566a5f0",
+            "packet_sha256": "521133c1fec151c53cfffc72dba844ba27e1cb685a2537b448bc0905cbe862a7"
+          },
+          "pressure": {
+            "size": 65.0,
+            "frozen_history_mass_norm_amplification": 1.0,
+            "sigma_min": 4.083806304909571e-06,
+            "sigma_max": 0.1726301051221946,
+            "condition_2": 42271.8640976331,
+            "long_double_residual_2": 1.9608575055685857e-24,
+            "rounding_formation_reserve_2": 8.686321541350433e-22,
+            "coefficient_error_estimate": 2.1318175903543246e-16,
+            "matrix_sha256": "3be2b146069c2be8c986e6536d7d825667f617fe55a0b38d437bc8d473c025ed",
+            "packet_sha256": "e755be732e5a2d27215b5f8e3486e6677218bdc406c6f9caecbf649d268c029d"
+          },
+          "k": {
+            "size": 180.0,
+            "frozen_history_mass_norm_amplification": 1.0,
+            "sigma_min": 0.007023156478214852,
+            "sigma_max": 42.691806343926174,
+            "condition_2": 6078.720654502288,
+            "long_double_residual_2": 1.4348032058381423e-21,
+            "rounding_formation_reserve_2": 7.748211787436573e-19,
+            "coefficient_error_estimate": 1.1052807727655875e-16,
+            "matrix_sha256": "1504f7ec12a58cba00a84c4f83538febc50a20c45ec03f7ff1d68b636b7c34bc",
+            "packet_sha256": "6fe88dd6aff4e92e6df7e5de0b56c220d066118cb43b242829e15bb99b0fb88d"
+          },
+          "epsilon": {
+            "size": 50.0,
+            "frozen_history_mass_norm_amplification": 1.0,
+            "sigma_min": 0.0798216138857264,
+            "sigma_max": 42.67630034190188,
+            "condition_2": 534.645921880229,
+            "long_double_residual_2": 2.4776075020990067e-22,
+            "rounding_formation_reserve_2": 2.4532305579580538e-20,
+            "coefficient_error_estimate": 3.104430632693782e-19,
+            "matrix_sha256": "a703a00f539de4155716832bbb38cd3a27c5094eb032067433ca963c4a0a478e",
+            "packet_sha256": "3b88c874c8741d51d24ff967e7f88b99c3803d723b2d865669fd91172fc9805e"
+          }
+        },
+        "estimated_comparison_floor": {
+          "u": 2.929405918191554e-12,
+          "v": 2.4269763913070198e-12,
+          "k": 1.4645229021206204e-13,
+          "outer_epsilon": 2.3781843108939523e-14,
+          "reduced_pressure": 4.3930000735143265e-13,
+          "mechanical_pressure": 5.918881035467396e-13,
+          "velocity": 3.8041600173359356e-12
+        },
+        "raw_one_step_physical_error_estimate": {
+          "u": 3.7921505178324155e-16,
+          "v": 3.7921505178324155e-16,
+          "k": 8.163553545474302e-18,
+          "outer_epsilon": 3.600878573170245e-20,
+          "reduced_pressure": 6.741399141531466e-17,
+          "mechanical_pressure": 6.741399141531466e-17
+        },
+        "safety_factor": 100.0,
+        "propagation": "terminal frozen-system uncertainty summed over N steps using terminal frozen history-map mass-norm amplification; factor2 for a pair of trajectories; finite diagnostic estimate, not a nonlinear perturbation theorem",
+        "accumulated_propagation_factors": [
+          32.0,
+          32.0,
+          32.0,
+          32.0,
+          32.0,
+          32.0
+        ],
+        "frozen_history_map_amplifications": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "excludes": [
+          "physical spatial residual",
+          "nonlinear one-sweep stage defect"
+        ],
+        "evaluation_sensitivity": [
+          3.552713678800501e-15,
+          4.235164736271502e-22,
+          6.661338147750939e-16,
+          1.6653345369377348e-16,
+          5.551115123125783e-17,
+          4.440892098500626e-16
+        ]
+      },
+      "result": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj3-20261110/study-final/EP/main-32/case.evolution.json"
+    },
+    {
+      "steps": 64.0,
+      "dt": 6.4e-05,
+      "comparison": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj3-20261110/study-final/EP/main-64-measure/result.json",
+        "sha256": "aab8009acc1500d8325f9e0c511b5a9406ca1bb8e7b96f5fec0c49b42384d6d1",
+        "spatial_mass_dual_norms": [
+          0.003554764373236357,
+          0.0001156870954727179,
+          0.00044317974480744454,
+          4.8523387756664555e-05,
+          2.2705303597533727e-20,
+          7.746236440021061e-22,
+          1.734723475976807e-18,
+          0.0
+        ],
+        "completed_stage": [
+          6.092464104606355e-06,
+          4.270870047509924e-06,
+          2.8117963457616455e-09,
+          1.3807161976839037e-08,
+          2.2705303597533727e-20,
+          7.746236440021061e-22,
+          1.734723475976807e-18,
+          0.0
+        ],
+        "state_sha256": "dbec36ea5034d3bbd10d904b831555d88e5946ec1f0afe859897f8e6bd2ff208",
+        "stage_history_sha256": "929aa6605a6304066f497713512e5a799f8b6aedc5291c256510807c1fac8b5b",
+        "field_errors": {
+          "continuum_error": {
+            "fields": {
+              "u": {
+                "L2": 2.4222909559654868e-05,
+                "sampled_Linf": 0.00010422011786515029
+              },
+              "v": {
+                "L2": 1.9547896455832947e-07,
+                "sampled_Linf": 8.170378362053224e-07
+              },
+              "k": {
+                "L2": 1.4230630311098303e-06,
+                "sampled_Linf": 7.723682239446639e-06
+              },
+              "outer_epsilon": {
+                "L2": 1.559487953176389e-07,
+                "sampled_Linf": 6.627507652123832e-07
+              },
+              "reduced_pressure": {
+                "L2": 1.344429766249853e-06,
+                "sampled_Linf": 6.203057168045455e-06
+              },
+              "mechanical_pressure": {
+                "L2": 1.646681019856984e-06,
+                "sampled_Linf": 6.203057168142599e-06
+              },
+              "velocity": {
+                "L2": 2.4223698304775923e-05,
+                "sampled_Linf": 0.00010422011786515029
+              }
+            },
+            "overall_pressure_gauge_shift": 1.0863561508005917e-18
+          },
+          "initial_drift": {
+            "fields": {
+              "u": {
+                "L2": 1.527960949281332e-05,
+                "sampled_Linf": 0.00011658590377283673
+              },
+              "v": {
+                "L2": 1.9547896455832947e-07,
+                "sampled_Linf": 8.170378362053224e-07
+              },
+              "k": {
+                "L2": 1.423063031109492e-06,
+                "sampled_Linf": 7.723682239557661e-06
+              },
+              "outer_epsilon": {
+                "L2": 1.3283627995163584e-07,
+                "sampled_Linf": 7.558858115819245e-07
+              },
+              "reduced_pressure": {
+                "L2": 1.3444297662514256e-06,
+                "sampled_Linf": 6.2030571680593326e-06
+              },
+              "mechanical_pressure": {
+                "L2": 1.6466810198567892e-06,
+                "sampled_Linf": 6.203057168031577e-06
+              },
+              "velocity": {
+                "L2": 1.5280859867116633e-05,
+                "sampled_Linf": 0.00011658590380204615
+              }
+            },
+            "overall_pressure_gauge_shift": 1.0863544964393666e-18
+          },
+          "initial_representation": {
+            "fields": {
+              "u": {
+                "L2": 1.8823993330691396e-05,
+                "sampled_Linf": 0.00010422011786515029
+              },
+              "v": {
+                "L2": 0.0,
+                "sampled_Linf": 0.0
+              },
+              "k": {
+                "L2": 1.5700924586837752e-16,
+                "sampled_Linf": 1.1102230246251565e-16
+              },
+              "outer_epsilon": {
+                "L2": 1.4467243437021076e-07,
+                "sampled_Linf": 6.627507652123832e-07
+              },
+              "reduced_pressure": {
+                "L2": 1.962615573354719e-17,
+                "sampled_Linf": 1.3877787807814457e-17
+              },
+              "mechanical_pressure": {
+                "L2": 1.5700924586837752e-16,
+                "sampled_Linf": 1.1102230246251565e-16
+              },
+              "velocity": {
+                "L2": 1.8823993330691396e-05,
+                "sampled_Linf": 0.00010422011786515029
+              }
+            },
+            "overall_pressure_gauge_shift": -1.2458359327754923e-33
+          },
+          "interface": {
+            "traction_max": 6.825729145901183e-05,
+            "k_flux_max": 1.3693736931917892e-06,
+            "k_value_max": 0.0,
+            "epsilon_trace_max": 1.6653345369377348e-16,
+            "pressure_jump_error": 6.7407351243276015e-06,
+            "sampled_K_range": [
+              0.846695035720669,
+              0.8466950523334225
+            ],
+            "cutoff_range": [
+              0.015005743260487904,
+              0.015005743269284342
+            ]
+          },
+          "strong_divergence_sampled_Linf": 0.00048137859436307197
+        },
+        "witness_replay": {
+          "in_plane": {
+            "complex_step_form": 0.004091486456818988,
+            "independent_local_minimum": 0.0040914864568186654,
+            "production_minimum": 0.004091486456818814,
+            "angle": 1.7122098496703948,
+            "state_sha256": "dbec36ea5034d3bbd10d904b831555d88e5946ec1f0afe859897f8e6bd2ff208"
+          },
+          "transverse": {
+            "complex_step_form": 0.9435500656836535,
+            "independent_local_minimum": 0.9435500656836537,
+            "production_minimum": 0.9435500656836535,
+            "angle": 1.3316311689665878,
+            "state_sha256": "dbec36ea5034d3bbd10d904b831555d88e5946ec1f0afe859897f8e6bd2ff208"
+          }
+        }
+      },
+      "arithmetic": {
+        "systems": {
+          "momentum": {
+            "size": 356.0,
+            "frozen_history_mass_norm_amplification": 1.0,
+            "sigma_min": 0.009866916011188968,
+            "sigma_max": 85.36304462140077,
+            "condition_2": 8651.44129377407,
+            "long_double_residual_2": 1.2990217371334344e-20,
+            "rounding_formation_reserve_2": 2.501721291836794e-17,
+            "coefficient_error_estimate": 2.5367808043927116e-15,
+            "matrix_sha256": "a186d6795efb8c745f85464d13f7267e7eb28ec022425800862105d1948b5c29",
+            "packet_sha256": "62cbd328daa9afef730559e3f3664b07926a6ee84618de4a3c0ede64275b8d85"
+          },
+          "pressure": {
+            "size": 65.0,
+            "frozen_history_mass_norm_amplification": 1.0,
+            "sigma_min": 2.041903152454667e-06,
+            "sigma_max": 0.17261194910075559,
+            "condition_2": 84534.83648000186,
+            "long_double_residual_2": 8.572321648831738e-25,
+            "rounding_formation_reserve_2": 3.2147141000902373e-22,
+            "coefficient_error_estimate": 1.578569687726965e-16,
+            "matrix_sha256": "8246664342366c0cc8e5362d938a43257ce39d999abd0eeb75ea3b5a4d611cf5",
+            "packet_sha256": "ca107a666c08eeb8cceb6a2936ddead617a7bac7b3ab3d54511bfb5c8d6062ef"
+          },
+          "k": {
+            "size": 180.0,
+            "frozen_history_mass_norm_amplification": 1.0,
+            "sigma_min": 0.00809832144460138,
+            "sigma_max": 85.3107072904124,
+            "condition_2": 10534.369112661421,
+            "long_double_residual_2": 1.351362797087281e-21,
+            "rounding_formation_reserve_2": 7.70524498829219e-19,
+            "coefficient_error_estimate": 9.531306788777386e-17,
+            "matrix_sha256": "8d8af57ffb38e2c652062732fecf8fbe8e1ac78554e25d0dfcde1230999bf570",
+            "packet_sha256": "b8aea3f75644521c7aea6490e371ad1464c6d2e74559e6b7ebf908dbe907ab81"
+          },
+          "epsilon": {
+            "size": 50.0,
+            "frozen_history_mass_norm_amplification": 1.0,
+            "sigma_min": 0.09398840779102527,
+            "sigma_max": 85.29522275403093,
+            "condition_2": 907.5079018646337,
+            "long_double_residual_2": 3.1729982721424247e-22,
+            "rounding_formation_reserve_2": 2.34128835100221e-20,
+            "coefficient_error_estimate": 2.5247989507385062e-19,
+            "matrix_sha256": "5d9399f135b36b3e6a6031dfa2f6a08d23d494683a3196327ca9702ce9091810",
+            "packet_sha256": "ecbe30a53f258f00bd0ca71c7a4eb12cea71519e2a0030555302f3fe078b13cf"
+          }
+        },
+        "estimated_comparison_floor": {
+          "u": 3.652592013371155e-12,
+          "v": 3.150162486486621e-12,
+          "k": 1.529128806606465e-13,
+          "outer_epsilon": 1.607577956877358e-14,
+          "reduced_pressure": 6.468105465837173e-13,
+          "mechanical_pressure": 7.880047784912427e-13,
+          "velocity": 4.823375592612535e-12
+        },
+        "raw_one_step_physical_error_estimate": {
+          "u": 2.461064395775271e-16,
+          "v": 2.461064395775271e-16,
+          "k": 7.03977986822621e-18,
+          "outer_epsilon": 2.928554546373651e-20,
+          "reduced_pressure": 4.991875658517957e-17,
+          "mechanical_pressure": 4.991875658517957e-17
+        },
+        "safety_factor": 100.0,
+        "propagation": "terminal frozen-system uncertainty summed over N steps using terminal frozen history-map mass-norm amplification; factor2 for a pair of trajectories; finite diagnostic estimate, not a nonlinear perturbation theorem",
+        "accumulated_propagation_factors": [
+          64.0,
+          64.0,
+          64.0,
+          64.0,
+          64.0,
+          64.0
+        ],
+        "frozen_history_map_amplifications": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "excludes": [
+          "physical spatial residual",
+          "nonlinear one-sweep stage defect"
+        ],
+        "evaluation_sensitivity": [
+          3.552713678800501e-15,
+          4.235164736271502e-22,
+          4.440892098500626e-16,
+          1.1102230246251565e-16,
+          5.551115123125783e-17,
+          3.3306690738754696e-16
+        ]
+      },
+      "result": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj3-20261110/study-final/EP/main-64/case.evolution.json"
+    },
+    {
+      "steps": 128.0,
+      "dt": 3.2e-05,
+      "comparison": {
+        "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj3-20261110/study-final/EP/main-128-measure/result.json",
+        "sha256": "bd4be1ff75367e3a27e21db05a0d7519a3abbffd1e488fa0604748ad3adb928c",
+        "spatial_mass_dual_norms": [
+          0.0035196213795095194,
+          0.00011534079082780036,
+          0.000443265878018158,
+          4.759011654931627e-05,
+          1.3852084305943264e-20,
+          1.130049047216601e-21,
+          2.42861286636753e-17,
+          0.0
+        ],
+        "completed_stage": [
+          3.0152409267574228e-06,
+          2.081010149035997e-06,
+          1.4264392299368087e-09,
+          6.761397836030181e-09,
+          1.3852084305943264e-20,
+          1.130049047216601e-21,
+          2.42861286636753e-17,
+          0.0
+        ],
+        "state_sha256": "bebde3b3ac3b8baff6f460ae333bcf37e2f39aa4fded8228c71eb74993c98b5f",
+        "stage_history_sha256": "3cb213b4b99e935d1f3cd983ef87ccb6f726b3274952f50ebf93c5bd793a17db",
+        "field_errors": {
+          "continuum_error": {
+            "fields": {
+              "u": {
+                "L2": 2.4240772893339564e-05,
+                "sampled_Linf": 0.00010422011786515029
+              },
+              "v": {
+                "L2": 1.9581718439735553e-07,
+                "sampled_Linf": 8.198261339471693e-07
+              },
+              "k": {
+                "L2": 1.4263111994295417e-06,
+                "sampled_Linf": 7.739368068526709e-06
+              },
+              "outer_epsilon": {
+                "L2": 1.560806426383172e-07,
+                "sampled_Linf": 6.627507652123832e-07
+              },
+              "reduced_pressure": {
+                "L2": 1.339276237071679e-06,
+                "sampled_Linf": 6.17748080698859e-06
+              },
+              "mechanical_pressure": {
+                "L2": 1.6437158318100267e-06,
+                "sampled_Linf": 6.17748080711349e-06
+              },
+              "velocity": {
+                "L2": 2.4241563786937746e-05,
+                "sampled_Linf": 0.00010422011786515029
+              }
+            },
+            "overall_pressure_gauge_shift": 1.044664593566694e-18
+          },
+          "initial_drift": {
+            "fields": {
+              "u": {
+                "L2": 1.5307950936743335e-05,
+                "sampled_Linf": 0.00011669183059126453
+              },
+              "v": {
+                "L2": 1.9581718439735553e-07,
+                "sampled_Linf": 8.198261339471693e-07
+              },
+              "k": {
+                "L2": 1.4263111994292033e-06,
+                "sampled_Linf": 7.739368068637731e-06
+              },
+              "outer_epsilon": {
+                "L2": 1.3309887639717657e-07,
+                "sampled_Linf": 7.574308049373979e-07
+              },
+              "reduced_pressure": {
+                "L2": 1.3392762370732066e-06,
+                "sampled_Linf": 6.1774808070024675e-06
+              },
+              "mechanical_pressure": {
+                "L2": 1.6437158318098308e-06,
+                "sampled_Linf": 6.1774808070024675e-06
+              },
+              "velocity": {
+                "L2": 1.5309203318639626e-05,
+                "sampled_Linf": 0.00011669183062107896
+              }
+            },
+            "overall_pressure_gauge_shift": 1.0446621120248564e-18
+          },
+          "initial_representation": {
+            "fields": {
+              "u": {
+                "L2": 1.8823993330691396e-05,
+                "sampled_Linf": 0.00010422011786515029
+              },
+              "v": {
+                "L2": 0.0,
+                "sampled_Linf": 0.0
+              },
+              "k": {
+                "L2": 1.5700924586837752e-16,
+                "sampled_Linf": 1.1102230246251565e-16
+              },
+              "outer_epsilon": {
+                "L2": 1.4467243437021076e-07,
+                "sampled_Linf": 6.627507652123832e-07
+              },
+              "reduced_pressure": {
+                "L2": 1.962615573354719e-17,
+                "sampled_Linf": 1.3877787807814457e-17
+              },
+              "mechanical_pressure": {
+                "L2": 1.5700924586837752e-16,
+                "sampled_Linf": 1.1102230246251565e-16
+              },
+              "velocity": {
+                "L2": 1.8823993330691396e-05,
+                "sampled_Linf": 0.00010422011786515029
+              }
+            },
+            "overall_pressure_gauge_shift": -1.2458359327754923e-33
+          },
+          "interface": {
+            "traction_max": 6.816823250804793e-05,
+            "k_flux_max": 1.3761600644718986e-06,
+            "k_value_max": 0.0,
+            "epsilon_trace_max": 1.6653345369377348e-16,
+            "pressure_jump_error": 6.72593985270864e-06,
+            "sampled_K_range": [
+              0.8466950357373023,
+              0.8466950525960839
+            ],
+            "cutoff_range": [
+              0.015005743260496703,
+              0.015005743269423442
+            ]
+          },
+          "strong_divergence_sampled_Linf": 0.0004818827904069759
+        },
+        "witness_replay": {
+          "in_plane": {
+            "complex_step_form": 0.004091492016623162,
+            "independent_local_minimum": 0.004091492016623464,
+            "production_minimum": 0.004091492016623104,
+            "angle": 1.712209817045276,
+            "state_sha256": "bebde3b3ac3b8baff6f460ae333bcf37e2f39aa4fded8228c71eb74993c98b5f"
+          },
+          "transverse": {
+            "complex_step_form": 0.9435503896890005,
+            "independent_local_minimum": 0.9435503896890005,
+            "production_minimum": 0.943550389689001,
+            "angle": 1.331631173728245,
+            "state_sha256": "bebde3b3ac3b8baff6f460ae333bcf37e2f39aa4fded8228c71eb74993c98b5f"
+          }
+        }
+      },
+      "arithmetic": {
+        "systems": {
+          "momentum": {
+            "size": 356.0,
+            "frozen_history_mass_norm_amplification": 1.0,
+            "sigma_min": 0.012099229149268281,
+            "sigma_max": 170.60092236665562,
+            "condition_2": 14100.148055876185,
+            "long_double_residual_2": 2.2273371688200582e-20,
+            "rounding_formation_reserve_2": 2.4767481012344356e-17,
+            "coefficient_error_estimate": 2.048870558462954e-15,
+            "matrix_sha256": "5bc79a1b70b2871c61ba02ec265d9706c74b26e497e702bc8670840ed4a10cca",
+            "packet_sha256": "5225f5e52b3735cff1c874e3322cfeb687d592efdbb8b3b3384bda9f89fd9270"
+          },
+          "pressure": {
+            "size": 65.0,
+            "frozen_history_mass_norm_amplification": 1.0,
+            "sigma_min": 1.02095157622815e-06,
+            "sigma_max": 0.17260304059080592,
+            "condition_2": 169060.9472669394,
+            "long_double_residual_2": 2.711450759443979e-25,
+            "rounding_formation_reserve_2": 1.4457753023941031e-22,
+            "coefficient_error_estimate": 1.41876146418707e-16,
+            "matrix_sha256": "1f4de9bacdc03969159726c4ca8767bcbe6dc63473e3b0aa6cf2d8f073f66129",
+            "packet_sha256": "3cbee68f32c249cf9cf2c5cbd7a10fa26015ce9404e11e33990bf6b2de6b67d0"
+          },
+          "k": {
+            "size": 180.0,
+            "frozen_history_mass_norm_amplification": 1.0,
+            "sigma_min": 0.010165098084077574,
+            "sigma_max": 170.54866303723844,
+            "condition_2": 16777.866935133934,
+            "long_double_residual_2": 1.704527424128274e-21,
+            "rounding_formation_reserve_2": 7.68366892184072e-19,
+            "coefficient_error_estimate": 7.575641801375495e-17,
+            "matrix_sha256": "181dd7a9f549efd820fd8dad36957accc3abdec9551e2f38735390857405fe4e",
+            "packet_sha256": "ca53be93e00ee0376911c8867be1929195563bb60fdafba41fa84c0e5eda5c42"
+          },
+          "epsilon": {
+            "size": 50.0,
+            "frozen_history_mass_norm_amplification": 1.0,
+            "sigma_min": 0.09283298991369406,
+            "sigma_max": 170.53318927619446,
+            "condition_2": 1836.9890858275442,
+            "long_double_residual_2": 1.308194071933851e-22,
+            "rounding_formation_reserve_2": 2.28730667364845e-20,
+            "coefficient_error_estimate": 2.477986130260846e-19,
+            "matrix_sha256": "81f100be91aae621e7d739dfbbe5861c8949005729a69f3e2411f5237ffca802",
+            "packet_sha256": "75de20e1895e80fcdec149581fdf9f94f0dfbc2cb16be48e2e09b7b45112461b"
+          }
+        },
+        "estimated_comparison_floor": {
+          "u": 5.303424262622718e-12,
+          "v": 4.54977994234878e-12,
+          "k": 2.374461132373947e-13,
+          "outer_epsilon": 3.213765860976899e-14,
+          "reduced_pressure": 1.1603242203666054e-12,
+          "mechanical_pressure": 1.3617991718053393e-12,
+          "velocity": 6.987618080088135e-12
+        },
+        "raw_one_step_physical_error_estimate": {
+          "u": 1.7772577665837914e-16,
+          "v": 1.7772577665837914e-16,
+          "k": 5.5953345982956324e-18,
+          "outer_epsilon": 2.874255609740171e-20,
+          "reduced_pressure": 4.486517683306552e-17,
+          "mechanical_pressure": 4.486517683306552e-17
+        },
+        "safety_factor": 100.0,
+        "propagation": "terminal frozen-system uncertainty summed over N steps using terminal frozen history-map mass-norm amplification; factor2 for a pair of trajectories; finite diagnostic estimate, not a nonlinear perturbation theorem",
+        "accumulated_propagation_factors": [
+          128.0,
+          128.0,
+          128.0,
+          128.0,
+          128.0,
+          128.0
+        ],
+        "frozen_history_map_amplifications": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "excludes": [
+          "physical spatial residual",
+          "nonlinear one-sweep stage defect"
+        ],
+        "evaluation_sensitivity": [
+          5.329070518200751e-15,
+          4.235164736271502e-22,
+          6.661338147750939e-16,
+          2.220446049250313e-16,
+          8.326672684688674e-17,
+          3.885780586188048e-16
+        ]
+      },
+      "result": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj3-20261110/study-final/EP/main-128/case.evolution.json"
+    }
+  ],
+  "temporal": {
+    "A": {
+      "fields": {
+        "u": {
+          "L2": 6.275942114505867e-08,
+          "sampled_Linf": 3.519453413147744e-07
+        },
+        "v": {
+          "L2": 2.5460191646376566e-09,
+          "sampled_Linf": 1.2207933693119379e-08
+        },
+        "k": {
+          "L2": 7.701003382999463e-09,
+          "sampled_Linf": 3.8574382132949836e-08
+        },
+        "outer_epsilon": {
+          "L2": 5.322034956086703e-10,
+          "sampled_Linf": 3.0849547083544593e-09
+        },
+        "reduced_pressure": {
+          "L2": 2.575332851601153e-08,
+          "sampled_Linf": 1.441174601410116e-07
+        },
+        "mechanical_pressure": {
+          "L2": 2.625248185727927e-08,
+          "sampled_Linf": 1.4411746018264497e-07
+        },
+        "velocity": {
+          "L2": 6.281104326509424e-08,
+          "sampled_Linf": 3.519454363048328e-07
+        }
+      },
+      "overall_pressure_gauge_shift": -5.2975106385489404e-18
+    },
+    "B": {
+      "fields": {
+        "u": {
+          "L2": 3.1580239654694975e-08,
+          "sampled_Linf": 1.7720162048817656e-07
+        },
+        "v": {
+          "L2": 1.3253929690847783e-09,
+          "sampled_Linf": 6.238985123064205e-09
+        },
+        "k": {
+          "L2": 3.917380733690133e-09,
+          "sampled_Linf": 1.952665062976422e-08
+        },
+        "outer_epsilon": {
+          "L2": 2.664600372092387e-10,
+          "sampled_Linf": 1.544993355473423e-09
+        },
+        "reduced_pressure": {
+          "L2": 1.2058684920936574e-08,
+          "sampled_Linf": 6.39727455454126e-08
+        },
+        "mechanical_pressure": {
+          "L2": 1.2335872549614576e-08,
+          "sampled_Linf": 6.39727455454126e-08
+        },
+        "velocity": {
+          "L2": 3.160804016655364e-08,
+          "sampled_Linf": 1.772016235182976e-07
+        }
+      },
+      "overall_pressure_gauge_shift": 4.169596455559893e-20
+    },
+    "rates": {
+      "u": {
+        "A": 6.275942114505867e-08,
+        "B": 3.1580239654694975e-08,
+        "comparison_floor": 5.303424262622718e-12,
+        "resolved": true,
+        "p": 0.9908099263223211
+      },
+      "v": {
+        "A": 2.5460191646376566e-09,
+        "B": 1.3253929690847783e-09,
+        "comparison_floor": 4.54977994234878e-12,
+        "resolved": true,
+        "p": 0.9418231075008663
+      },
+      "k": {
+        "A": 7.701003382999463e-09,
+        "B": 3.917380733690133e-09,
+        "comparison_floor": 2.374461132373947e-13,
+        "resolved": true,
+        "p": 0.9751570784939132
+      },
+      "outer_epsilon": {
+        "A": 5.322034956086703e-10,
+        "B": 2.664600372092387e-10,
+        "comparison_floor": 3.213765860976899e-14,
+        "resolved": true,
+        "p": 0.99805880767194
+      },
+      "reduced_pressure": {
+        "A": 2.575332851601153e-08,
+        "B": 1.2058684920936574e-08,
+        "comparison_floor": 1.1603242203666054e-12,
+        "resolved": true,
+        "p": 1.0946863265692366
+      },
+      "mechanical_pressure": {
+        "A": 2.625248185727927e-08,
+        "B": 1.2335872549614576e-08,
+        "comparison_floor": 1.3617991718053393e-12,
+        "resolved": true,
+        "p": 1.0895940537704962
+      },
+      "velocity": {
+        "A": 6.281104326509424e-08,
+        "B": 3.160804016655364e-08,
+        "comparison_floor": 6.987618080088135e-12,
+        "resolved": true,
+        "p": 0.990726647333653
+      }
+    }
+  },
+  "common_half_time": {
+    "time": 0.002048,
+    "A": {
+      "fields": {
+        "u": {
+          "L2": 9.19578850031392e-08,
+          "sampled_Linf": 6.12467075278289e-07
+        },
+        "v": {
+          "L2": 2.4620996897571407e-09,
+          "sampled_Linf": 1.3245052744960938e-08
+        },
+        "k": {
+          "L2": 8.533014846393464e-09,
+          "sampled_Linf": 5.6011731697225287e-08
+        },
+        "outer_epsilon": {
+          "L2": 9.73174075224224e-10,
+          "sampled_Linf": 5.6886152177693106e-09
+        },
+        "reduced_pressure": {
+          "L2": 6.659550306200659e-08,
+          "sampled_Linf": 2.554650507371582e-07
+        },
+        "mechanical_pressure": {
+          "L2": 6.683601490372905e-08,
+          "sampled_Linf": 2.554650507232804e-07
+        },
+        "velocity": {
+          "L2": 9.199083948487956e-08,
+          "sampled_Linf": 6.124670774832064e-07
+        }
+      },
+      "overall_pressure_gauge_shift": -1.432068196956763e-18
+    },
+    "B": {
+      "fields": {
+        "u": {
+          "L2": 4.6699738663894105e-08,
+          "sampled_Linf": 3.130616113011797e-07
+        },
+        "v": {
+          "L2": 1.204087227655741e-09,
+          "sampled_Linf": 6.038668395162051e-09
+        },
+        "k": {
+          "L2": 4.358353013153624e-09,
+          "sampled_Linf": 2.812485333514303e-08
+        },
+        "outer_epsilon": {
+          "L2": 4.959522515749416e-10,
+          "sampled_Linf": 2.9016831160078027e-09
+        },
+        "reduced_pressure": {
+          "L2": 3.40058666416095e-08,
+          "sampled_Linf": 1.2580743937380299e-07
+        },
+        "mechanical_pressure": {
+          "L2": 3.412786214755047e-08,
+          "sampled_Linf": 1.258074393599252e-07
+        },
+        "velocity": {
+          "L2": 4.671525893461161e-08,
+          "sampled_Linf": 3.130616126374558e-07
+        }
+      },
+      "overall_pressure_gauge_shift": 4.839540231252579e-18
+    }
+  },
+  "main_gate": "PASS",
+  "resolved_harness_failures": [
+    {
+      "reason": "'float' object cannot be interpreted as an integer",
+      "prior_driver_revision": "9b12a5a9641c0cc26864e5dfc9fab9c6408402f9"
+    }
+  ],
+  "cross_mesh": {
+    "comparison": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj3-20261110/study-final/EP/cross-128-measure/result.json",
+      "sha256": "613aa5fe33471da5f61af88410f45064fb3438569b819fa5503f7d7c54db7ce7",
+      "spatial_mass_dual_norms": [
+        9.32535989516899e-05,
+        2.5839324108470677e-06,
+        1.4542519037236262e-05,
+        7.170292289794661e-07,
+        1.160037145575415e-21,
+        3.9627924375777033e-22,
+        4.336808689942018e-18,
+        0.0
+      ],
+      "completed_stage": [
+        1.2100722829626423e-07,
+        8.574881904617608e-08,
+        1.279855198626532e-11,
+        1.4464113723799282e-10,
+        1.160037145575415e-21,
+        3.9627924375777033e-22,
+        4.336808689942018e-18,
+        0.0
+      ],
+      "state_sha256": "cb4c1d650b79554680524ac6f30cecbcfdf1bf229b799e8d0f4c8400536411f8",
+      "stage_history_sha256": "712f44be82d3bb37dc0c767366c4c0a81953d39ace5a8b1350f76aa96568f072",
+      "field_errors": {
+        "continuum_error": {
+          "fields": {
+            "u": {
+              "L2": 1.8495979464978176e-06,
+              "sampled_Linf": 8.794754003726979e-06
+            },
+            "v": {
+              "L2": 1.2679005527558633e-08,
+              "sampled_Linf": 4.489405877299994e-08
+            },
+            "k": {
+              "L2": 9.606178003781205e-08,
+              "sampled_Linf": 4.7533510605379803e-07
+            },
+            "outer_epsilon": {
+              "L2": 1.0112726359404578e-08,
+              "sampled_Linf": 3.541703427756282e-08
+            },
+            "reduced_pressure": {
+              "L2": 4.791742618160997e-08,
+              "sampled_Linf": 3.95967455131998e-07
+            },
+            "mechanical_pressure": {
+              "L2": 8.009321667669931e-08,
+              "sampled_Linf": 3.9596745522914253e-07
+            },
+            "velocity": {
+              "L2": 1.849641403318522e-06,
+              "sampled_Linf": 8.794754003726979e-06
+            }
+          },
+          "overall_pressure_gauge_shift": 1.5722960264889668e-17
+        },
+        "initial_drift": {
+          "fields": {
+            "u": {
+              "L2": 1.3361727983676936e-06,
+              "sampled_Linf": 1.0880805366930701e-05
+            },
+            "v": {
+              "L2": 1.2679005527558633e-08,
+              "sampled_Linf": 4.489405877299994e-08
+            },
+            "k": {
+              "L2": 9.606178003767282e-08,
+              "sampled_Linf": 4.7533510616482033e-07
+            },
+            "outer_epsilon": {
+              "L2": 8.346264375701739e-09,
+              "sampled_Linf": 4.425753441505975e-08
+            },
+            "reduced_pressure": {
+              "L2": 4.7917426184015124e-08,
+              "sampled_Linf": 3.959674551458758e-07
+            },
+            "mechanical_pressure": {
+              "L2": 8.009321667658799e-08,
+              "sampled_Linf": 3.959674551181202e-07
+            },
+            "velocity": {
+              "L2": 1.3362329528487616e-06,
+              "sampled_Linf": 1.0880805368104428e-05
+            }
+          },
+          "overall_pressure_gauge_shift": 1.5722959386010267e-17
+        },
+        "initial_representation": {
+          "fields": {
+            "u": {
+              "L2": 1.2796757764264587e-06,
+              "sampled_Linf": 8.794754003726979e-06
+            },
+            "v": {
+              "L2": 0.0,
+              "sampled_Linf": 0.0
+            },
+            "k": {
+              "L2": 1.5700924586837752e-16,
+              "sampled_Linf": 1.1102230246251565e-16
+            },
+            "outer_epsilon": {
+              "L2": 7.752865144567184e-09,
+              "sampled_Linf": 3.541703427756282e-08
+            },
+            "reduced_pressure": {
+              "L2": 1.962615573354719e-17,
+              "sampled_Linf": 1.3877787807814457e-17
+            },
+            "mechanical_pressure": {
+              "L2": 1.5700924586837752e-16,
+              "sampled_Linf": 1.1102230246251565e-16
+            },
+            "velocity": {
+              "L2": 1.2796757764264587e-06,
+              "sampled_Linf": 8.794754003726979e-06
+            }
+          },
+          "overall_pressure_gauge_shift": -1.2458359327754923e-33
+        },
+        "interface": {
+          "traction_max": 7.106530301698166e-06,
+          "k_flux_max": 1.0159183177179876e-07,
+          "k_value_max": 0.0,
+          "epsilon_trace_max": 2.220446049250313e-16,
+          "pressure_jump_error": 5.011237479146669e-07,
+          "sampled_K_range": [
+            0.846695035155208,
+            0.8466950354836501
+          ],
+          "cutoff_range": [
+            0.015005743260188506,
+            0.015005743260362423
+          ]
+        },
+        "strong_divergence_sampled_Linf": 4.410917612928339e-05
+      },
+      "witness_replay": {
+        "in_plane": {
+          "complex_step_form": 0.004132219943344796,
+          "independent_local_minimum": 0.0041322199433464,
+          "production_minimum": 0.004132219943345747,
+          "angle": 1.7121999244419195,
+          "state_sha256": "cb4c1d650b79554680524ac6f30cecbcfdf1bf229b799e8d0f4c8400536411f8"
+        },
+        "transverse": {
+          "complex_step_form": 0.943563550781986,
+          "independent_local_minimum": 0.9435635507819861,
+          "production_minimum": 0.9435635507819861,
+          "angle": 1.3316360810215058,
+          "state_sha256": "cb4c1d650b79554680524ac6f30cecbcfdf1bf229b799e8d0f4c8400536411f8"
+        }
+      }
+    },
+    "arithmetic": {
+      "systems": {
+        "momentum": {
+          "size": 716.0,
+          "frozen_history_mass_norm_amplification": 1.0,
+          "sigma_min": 0.015403473624153183,
+          "sigma_max": 99.39677341494577,
+          "condition_2": 6452.880424262757,
+          "long_double_residual_2": 2.717119168432936e-22,
+          "rounding_formation_reserve_2": 4.951974185582879e-19,
+          "coefficient_error_estimate": 3.216606478283044e-17,
+          "matrix_sha256": "f5a2ef25dc735985228eecfe750127079d420b8449ce7dddb118509588cd9c4b",
+          "packet_sha256": "7bf7cdc4448f6f976810509f8ad79b5ee2fd2d0c92fd856b30cde57b734ca931"
+        },
+        "pressure": {
+          "size": 125.0,
+          "frozen_history_mass_norm_amplification": 1.0,
+          "sigma_min": 5.196464224510393e-07,
+          "sigma_max": 0.12464285249250533,
+          "condition_2": 239860.88830285188,
+          "long_double_residual_2": 1.758794879840529e-26,
+          "rounding_formation_reserve_2": 6.710779565416472e-24,
+          "coefficient_error_estimate": 1.2947972358741329e-17,
+          "matrix_sha256": "bf366f3fcc7632912bbf54cb20cd71238bf3cbdf4ec17e85a9cc1786c95c7bea",
+          "packet_sha256": "55357086b7be33789de6b27ae16a743aec6988c65fcdcade11070624b4bc4b91"
+        },
+        "k": {
+          "size": 360.0,
+          "frozen_history_mass_norm_amplification": 1.0,
+          "sigma_min": 0.013403101930681985,
+          "sigma_max": 99.3518668316812,
+          "condition_2": 7412.602496460006,
+          "long_double_residual_2": 4.38627902161147e-23,
+          "rounding_formation_reserve_2": 4.5145566990429803e-20,
+          "coefficient_error_estimate": 3.371565031315595e-18,
+          "matrix_sha256": "f154711983041ed36bd682c87f9d920d9fa0261a30d7ddbf35cfb1370f277535",
+          "packet_sha256": "a9f65d88eea68be0bd999c224b0d8bc124002438d780adea3085be17ba0196e0"
+        },
+        "epsilon": {
+          "size": 98.0,
+          "frozen_history_mass_norm_amplification": 1.0,
+          "sigma_min": 0.09668432033507422,
+          "sigma_max": 99.33944786576902,
+          "condition_2": 1027.4618213324875,
+          "long_double_residual_2": 7.49437398000556e-25,
+          "rounding_formation_reserve_2": 2.6132417839066287e-22,
+          "coefficient_error_estimate": 2.7106113471182035e-21,
+          "matrix_sha256": "274a8d70c1a4911d15d3f39d7a6e858902198cb0544e53dc768236d7e7031a0b",
+          "packet_sha256": "e54e24c1b88db23d7367e2e5399feaf725066361ef78ca3889edcbfddbd4b18d"
+        }
+      },
+      "estimated_comparison_floor": {
+        "u": 5.147794266467142e-13,
+        "v": 1.379572393701522e-13,
+        "k": 6.766900193767897e-14,
+        "outer_epsilon": 2.3557078274002106e-14,
+        "reduced_pressure": 8.393159656100441e-14,
+        "mechanical_pressure": 1.663339604131967e-13,
+        "velocity": 5.329447044425465e-13
+      },
+      "raw_one_step_physical_error_estimate": {
+        "u": 5.388954553226879e-18,
+        "v": 5.388954553226879e-18,
+        "k": 1.9005092149718612e-19,
+        "outer_epsilon": 2.223200681827389e-22,
+        "reduced_pressure": 2.895254636493391e-18,
+        "mechanical_pressure": 2.895254636493391e-18
+      },
+      "safety_factor": 100.0,
+      "propagation": "terminal frozen-system uncertainty summed over N steps using terminal frozen history-map mass-norm amplification; factor2 for a pair of trajectories; finite diagnostic estimate, not a nonlinear perturbation theorem",
+      "accumulated_propagation_factors": [
+        128.0,
+        128.0,
+        128.0,
+        128.0,
+        128.0,
+        128.0
+      ],
+      "frozen_history_map_amplifications": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "excludes": [
+        "physical spatial residual",
+        "nonlinear one-sweep stage defect"
+      ],
+      "evaluation_sensitivity": [
+        2.6645352591003757e-15,
+        1.9852334701272664e-23,
+        4.440892098500626e-16,
+        1.6653345369377348e-16,
+        6.938893903907228e-17,
+        3.3306690738754696e-16
+      ]
+    },
+    "versus_main_finest": {
+      "fields": {
+        "u": {
+          "L2": 2.4672747942626403e-05,
+          "sampled_Linf": 9.542536386142331e-05
+        },
+        "v": {
+          "L2": 1.9359895355481442e-07,
+          "sampled_Linf": 7.771918236968424e-07
+        },
+        "k": {
+          "L2": 1.4264987144641705e-06,
+          "sampled_Linf": 7.511531569304175e-06
+        },
+        "outer_epsilon": {
+          "L2": 1.584198401509702e-07,
+          "sampled_Linf": 6.399230997045091e-07
+        },
+        "reduced_pressure": {
+          "L2": 1.3061198649315814e-06,
+          "sampled_Linf": 5.781513351856592e-06
+        },
+        "mechanical_pressure": {
+          "L2": 1.6169655943783023e-06,
+          "sampled_Linf": 5.781513351884348e-06
+        },
+        "velocity": {
+          "L2": 2.4673507484652292e-05,
+          "sampled_Linf": 9.542536386142331e-05
+        }
+      },
+      "overall_pressure_gauge_shift": 1.4678302598960603e-17
+    }
+  },
+  "transactions": {
+    "exact_16_plus_16": true,
+    "later_frozen_readback": true,
+    "rollback_exact": true,
+    "checkpoint_hashes": {
+      "State.bin": "ed0804a4835a224935bfbca759f73a1d347baaff3302f40f5f76074d8d30d31e"
+    },
+    "failed_candidate_sha256": "fffd3ae475228a50ccff7ed40292774e6bf7a82b78afad521fea28dca91ee620",
+    "rejected_result": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj3-20261110/study-final/EP/later-reject/case.evolution.json"
+  },
+  "heavy_summary": {
+    "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj3-20261110/study-final/EP/summary.json",
+    "sha256": "676b66f4bac42f27d414c20c0310d99cca885a51a4131259099bf28c7ec09d45"
+  }
+}
