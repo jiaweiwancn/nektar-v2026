@@ -7,6 +7,7 @@ SET(SOLVER_UTILS_SOURCES
   Turbulence/HITGenerator.cpp
   Turbulence/HITPlaneEvaluator.cpp
   Turbulence/RANSModels.cpp
+    Turbulence/WJEARSM.cpp
   Turbulence/RANSRobustVariant.cpp
   Turbulence/RANSWallInnerStress.cpp
   Turbulence/AnalyticalWallFunction.cpp
@@ -79,6 +80,7 @@ SET(SOLVER_UTILS_HEADERS
   Turbulence/HITPlaneEvaluator.h
   Turbulence/RANSWallStrip.h
   Turbulence/RANSModels.h
+  Turbulence/WJEARSM.h
   Turbulence/RANSRobustVariant.h
   Turbulence/RANSWallInnerStress.h
   Turbulence/AnalyticalWallFunction.h

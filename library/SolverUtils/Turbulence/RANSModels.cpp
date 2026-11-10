@@ -4,6 +4,7 @@
 // Copyright (c) 2026 Nektar++ contributors.
 ///////////////////////////////////////////////////////////////////////////////
 #include <SolverUtils/Turbulence/RANSModels.h>
+#include <SolverUtils/Turbulence/WJEARSM.h>
 #include <algorithm>
 #include <cmath>
 #include <functional>
@@ -109,6 +110,8 @@ static RANSClosureValues EvaluateRANSClosureSelected(
     RANSModel model, double k, double epsilon, const RANSTensor &gradient,
     double distance, const RANSParameters &p, double nu, int branch)
 {
+    if (model==RANSModel::WJHighRe)
+        throw std::invalid_argument("WJ requires WJParameters; legacy parameter/branch APIs are unsupported");
     p.Validate();
     Positive(k, "RANS k must be finite and positive");
     Positive(epsilon, "RANS dissipation must be finite and positive");
@@ -166,12 +169,18 @@ static RANSClosureValues EvaluateRANSClosureSelected(
             result.reynoldsStress[i][j]=Cast(stress);
             result.quadraticStress[i][j]=Cast(quadratic[i][j]);
             result.cubicStress[i][j]=Cast(cubic[i][j]);
+            const Real dev=stress-(i==j ? 2.0L*k/3.0L : 0.0L);
+            result.deviatoricStress[i][j]=Cast(dev);
+            result.anisotropy[i][j]=Cast(dev/k);
+            result.stressRemainder[i][j]=Cast(quadratic[i][j]+cubic[i][j]);
             production-=stress*gradient[i][j];
         }
     const Real epsScale=static_cast<Real>(epsilon)*epsilon/k;
     const Real ratio=model==RANSModel::CLSHighRe ?
         static_cast<Real>(k)*std::sqrt(static_cast<Real>(k))/(p.yapLength*epsilon*static_cast<Real>(distance)) : 0.0L;
     const Real y=model==RANSModel::CLSHighRe ? epsScale*Yap(ratio,p) : 0.0L;
+    result.scalarViscosity=Cast(nut);
+    result.productionDev=Cast(production+2.0L*k*divergence/3.0L);
     result.production=Cast(production);
     result.kSource=Cast(production-epsilon);
     result.epsilonProduction=Cast(static_cast<Real>(p.cEpsilon1)*epsilon/k*production);
@@ -191,10 +200,23 @@ RANSClosureValues EvaluateRANSClosure(
     return EvaluateRANSClosureSelected(model,k,epsilon,gradient,distance,p,nu,0);
 }
 
+RANSClosureValues EvaluateRANSClosure(RANSModel model, double k, double e,
+    const RANSTensor &g, double distance)
+{
+    if (model==RANSModel::WJHighRe)
+    {
+        Finite(distance, "Nonfinite common-kernel wall distance");
+        return RANSClosureKernel::WJ().Evaluate(k,e,g);
+    }
+    return EvaluateRANSClosure(model,k,e,g,distance,RANSParameters{},0);
+}
+
 RANSClosureValues EvaluateRANSClosureLinearization(
     RANSModel model,double k,double epsilon,const RANSTensor &gradient,
     double distance,const RANSParameters &p,double nu,bool strainBranch)
 {
+    if (model==RANSModel::WJHighRe)
+        throw std::invalid_argument("WJ has no bool strainBranch linearization; use ApplyWJClosureDirection");
     return EvaluateRANSClosureSelected(model,k,epsilon,gradient,distance,p,nu,strainBranch ? 1 : 2);
 }
 
@@ -233,16 +255,46 @@ RANSNeutralReference RANSNeutralReference::CLS(const RANSParameters &p)
     return {RANSModel::CLSHighRe,p,Cast(q),Cast(kap),Cast(Coefficient(q))};
 }
 
+RANSNeutralReference RANSNeutralReference::WJ() { return WJ(WJParameters::Defaults()); }
+RANSNeutralReference RANSNeutralReference::WJ(const WJParameters &p)
+{
+    p.Validate();
+    if (!(p.cEpsilon2>p.cEpsilon1))
+        throw std::invalid_argument("WJ neutral reference requires Ceps2 > Ceps1");
+    const Real c=WJParameters::Cstar, q=1/std::sqrt(c);
+    const Real kap=std::sqrt(p.sigmaEpsilon*(p.cEpsilon2-p.cEpsilon1)*c*std::sqrt(c)/p.cd);
+    RANSParameters transport;
+    transport.cMu=p.cd; transport.cEpsilon1=p.cEpsilon1; transport.cEpsilon2=p.cEpsilon2;
+    transport.sigmaK=p.sigmaK; transport.sigmaEpsilon=p.sigmaEpsilon;
+    transport.yapCoefficient=0;
+    RANSNeutralReference result{RANSModel::WJHighRe,transport,Cast(q),Cast(kap),Cast(c)};
+    result.m_scalarRatio=Cast(p.cd/c);
+    return result;
+}
+
 NeutralABLValues RANSNeutralReference::AtHeight(double z,double u,double H,double U) const
 {
     Positive(z,"Invalid reference height"); Positive(u,"Invalid friction velocity");
     Positive(H,"Invalid matching height"); Finite(U,"Invalid matching velocity");
     const Real star=u,eps=star*star*star/(m_kappa*static_cast<Real>(z));
-    return {Cast(U+star/m_kappa*(std::log(static_cast<Real>(z))-std::log(static_cast<Real>(H)))),
+    NeutralABLValues result{Cast(U+star/m_kappa*(std::log(static_cast<Real>(z))-std::log(static_cast<Real>(H)))),
             Cast(m_q*star*star),Cast(eps),Cast(m_kappa*star*z),
             Cast(star/(m_kappa*static_cast<Real>(z))),Cast(-eps/z),
-            Cast(-star*star*star*star/(m_parameters.sigmaEpsilon*static_cast<Real>(z))),
+            Cast(-m_scalarRatio*star*star*star*star/(m_parameters.sigmaEpsilon*static_cast<Real>(z))),
             Cast(star*star)};
+    RANSTensor gradient{};
+    gradient[0][2]=result.velocityGradient;
+    if (m_model!=RANSModel::WJHighRe)
+        result.covariance=EvaluateRANSClosure(m_model,result.k,result.epsilon,gradient,z,
+                                            m_parameters).reynoldsStress;
+    if (m_model==RANSModel::WJHighRe)
+    {
+        // Reference tensor is known independently of an off-reference solve.
+        result.covariance={{{result.k*(2.0/3+20.0/81),0,-u*u},
+                            {0,2*result.k/3,0},
+                            {-u*u,0,result.k*(2.0/3-20.0/81)}}};
+    }
+    return result;
 }
 
 NeutralABLValues RANSNeutralReference::StandardShifted(double height,double u,double z0) const

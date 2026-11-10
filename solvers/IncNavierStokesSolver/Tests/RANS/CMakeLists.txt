@@ -23,6 +23,7 @@ include_directories(${RANS_SOURCE_ROOT}/library)
 include_directories(SYSTEM ${NEKTAR++_INCLUDE_DIRS} ${NEKTAR++_TP_INCLUDE_DIRS})
 add_library(RANSKernels STATIC
     ${RANS_SOURCE_ROOT}/library/SolverUtils/Turbulence/RANSModels.cpp
+    ${RANS_SOURCE_ROOT}/library/SolverUtils/Turbulence/WJEARSM.cpp
     ${RANS_SOURCE_ROOT}/library/SolverUtils/Turbulence/RANSRobustVariant.cpp
     ${RANS_SOURCE_ROOT}/library/SolverUtils/Turbulence/RANSWallInnerStress.cpp
     ${RANS_SOURCE_ROOT}/library/SolverUtils/Turbulence/AnalyticalWallFunction.cpp
@@ -576,3 +577,28 @@ if(RANS_BUILD_SOLVER)
     set_property(TEST ${rans_all_tests} APPEND PROPERTY ENVIRONMENT
         "LD_LIBRARY_PATH=${CMAKE_CURRENT_BINARY_DIR}/geometry-lib:$ENV{LD_LIBRARY_PATH}")
 endif()
+
+# WJ-1 common-kernel probes: no native WJ PDE selection is enabled.
+add_executable(WJKernelProbe ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/WJKernelProbe.cpp)
+target_link_libraries(WJKernelProbe RANSKernels)
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(WJKernelProbe PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    set_source_files_properties(${RANS_SOURCE_ROOT}/library/SolverUtils/Turbulence/WJEARSM.cpp
+        PROPERTIES COMPILE_OPTIONS "-Wall;-Wextra;-Wpedantic;-Werror")
+endif()
+add_test(NAME WJKernelContracts COMMAND WJKernelProbe)
+if(Python3_Interpreter_FOUND)
+    execute_process(COMMAND ${Python3_EXECUTABLE} -c "import numpy, scipy, sympy"
+        RESULT_VARIABLE wj_dependencies OUTPUT_QUIET ERROR_QUIET)
+    if(wj_dependencies EQUAL 0)
+        add_test(NAME WJIndependentOracle COMMAND ${Python3_EXECUTABLE} -B
+            ${CMAKE_CURRENT_LIST_DIR}/validate_wj1.py --probe $<TARGET_FILE:WJKernelProbe>
+            --output ${CMAKE_CURRENT_BINARY_DIR}/wj1-oracle.json)
+        set_tests_properties(WJIndependentOracle PROPERTIES PROCESSORS 1 TIMEOUT 240
+            ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
+    else()
+        message(WARNING "WJIndependentOracle missing required NumPy, SciPy or SymPy")
+    endif()
+endif()
+set_tests_properties(WJKernelContracts PROPERTIES PROCESSORS 1 TIMEOUT 120
+    ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")

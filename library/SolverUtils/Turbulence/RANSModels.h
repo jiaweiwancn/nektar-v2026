@@ -13,7 +13,8 @@ namespace Nektar::SolverUtils
 {
 using RANSVector = std::array<double, 3>;
 using RANSTensor = std::array<RANSVector, 3>;
-enum class RANSModel { StandardKEpsilon, CLSHighRe };
+enum class RANSModel { StandardKEpsilon, CLSHighRe, WJHighRe };
+struct WJParameters;
 
 struct SOLVER_UTILS_EXPORT RANSParameters
 {
@@ -23,12 +24,25 @@ struct SOLVER_UTILS_EXPORT RANSParameters
     void Validate() const;
 };
 
+struct WJDiagnostics
+{
+    double n = 0, s = 0, w = 0, i4 = 0, i5 = 0, q = 0;
+    double rootResidual = 0, rootDerivative = 0;
+    std::array<double, 5> beta{}; // beta_1, beta_3, beta_4, beta_6, beta_9
+};
+
 struct RANSClosureValues
 {
     double cMu, eddyViscosity, strainInvariant, rotationInvariant, divergence;
     RANSTensor reynoldsStress, quadraticStress, cubicStress;
     double production, kSource, epsilonProduction, epsilonDestruction, yap;
     double epsilonSource, momentumDiffusion, kDiffusion, epsilonDiffusion;
+    // Generic stress split: R = 2k I/3 + deviatoricStress,
+    // deviatoricStress = -2 nu_eff dev(sym(G)) + stressRemainder for WJ.
+    // quadraticStress/cubicStress are CLS-specific and remain zero for WJ.
+    RANSTensor anisotropy{}, deviatoricStress{}, stressRemainder{};
+    double scalarViscosity = 0, productionDev = 0;
+    WJDiagnostics wj{};
 };
 
 SOLVER_UTILS_EXPORT double CLSCmu(double invariant);
@@ -46,8 +60,13 @@ SOLVER_UTILS_EXPORT std::array<double, 7> CLSCubicCoefficients(double cMu);
  */
 SOLVER_UTILS_EXPORT RANSClosureValues EvaluateRANSClosure(
     RANSModel model, double k, double epsilon, const RANSTensor &gradient,
-    double wallDistance, const RANSParameters &parameters = {},
+    double wallDistance, const RANSParameters &parameters,
     double resolvedNu = 0.0);
+
+// Model-aware omitted-parameters dispatch. WJ uses its distinct defaults.
+SOLVER_UTILS_EXPORT RANSClosureValues EvaluateRANSClosure(
+    RANSModel model, double k, double epsilon, const RANSTensor &gradient,
+    double wallDistance);
 
 /** Generalized-Jacobian probe only: choose the active max(strain,rotation)
  * branch at the base iterate, while differentiating that branch's invariant.
@@ -68,6 +87,7 @@ struct NeutralABLValues
 {
     double velocity, k, epsilon, eddyViscosity, velocityGradient;
     double epsilonGradient, epsilonGradientFlux, shearStress;
+    RANSTensor covariance{}; // Cartesian (x,y,z), retaining transverse yy
 };
 
 class SOLVER_UTILS_EXPORT RANSNeutralReference
@@ -75,6 +95,8 @@ class SOLVER_UTILS_EXPORT RANSNeutralReference
 public:
     static RANSNeutralReference Standard(const RANSParameters &parameters = {});
     static RANSNeutralReference CLS(const RANSParameters &parameters = {});
+    static RANSNeutralReference WJ();
+    static RANSNeutralReference WJ(const WJParameters &parameters);
     RANSModel Model() const { return m_model; }
     double Q() const { return m_q; }
     double Kappa() const { return m_kappa; }
@@ -97,6 +119,7 @@ private:
     RANSModel m_model;
     RANSParameters m_parameters;
     double m_q, m_kappa, m_cmu;
+    double m_scalarRatio = 1;
 };
 } // namespace Nektar::SolverUtils
 #endif

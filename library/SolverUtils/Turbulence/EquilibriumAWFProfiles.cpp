@@ -113,6 +113,23 @@ AWFParameters CalibratedAWFParameters(const RANSNeutralReference &model)
     return wall;
 }
 
+AWFParameters WJCalibratedAWFParameters(const RANSNeutralReference &model)
+{
+    if (model.Model()!=RANSModel::WJHighRe)
+        throw std::invalid_argument("WJ calibration requires a WJ reference");
+    return {model.Cmu(), Cast(static_cast<long double>(model.Kappa())*
+                std::pow(static_cast<long double>(model.Q()),1.5L)), 10.7};
+}
+EquilibriumAWFProfiles EquilibriumAWFProfiles::WJ(const AWFProfileGeometry &geometry,
+    double k, const RANSNeutralReference &model, const AWFProfileOptions &options,
+    const AWFNormalMetric &metric)
+{
+    if (options.formulation!=AWFProfileFormulation::WJCalibratedEPAWF &&
+        options.formulation!=AWFProfileFormulation::WJCalibratedBudgetAWF)
+        throw std::invalid_argument("WJ wall factory requires an explicit WJ source policy");
+    return {geometry,k,model,metric,options,WJCalibratedAWFParameters(model)};
+}
+
 EquilibriumAWFProfiles::EquilibriumAWFProfiles(const AWFProfileGeometry &geometry, double k,
     const RANSNeutralReference &model, const AWFNormalMetric &metric,
     const AWFProfileOptions &options, const AWFParameters &wall)
@@ -128,19 +145,21 @@ EquilibriumAWFProfiles::EquilibriumAWFProfiles(const AWFProfileGeometry &geometr
     if (options.failurePolicy != AWFFailurePolicy::UseOriginal &&
         options.failurePolicy != AWFFailurePolicy::RequirePreservation)
         throw std::invalid_argument("Unknown EP-AWF failure policy");
-    if (options.formulation != AWFProfileFormulation::LegacyEPAWF && !AcceptedAWF())
+    if (options.formulation != AWFProfileFormulation::LegacyEPAWF && !AcceptedAWF() && !WJCalibrated())
         throw std::invalid_argument("Unknown AWF profile formulation");
-    if (AcceptedAWF())
+    if ((model.Model()==RANSModel::WJHighRe)!=WJCalibrated())
+        throw std::invalid_argument("WJ outer reference requires an explicit WJ wall selection");
+    if (AcceptedAWF() || WJCalibrated())
     {
-        const auto calibrated = CalibratedAWFParameters(model);
+        const auto calibrated = WJCalibrated() ? WJCalibratedAWFParameters(model) : CalibratedAWFParameters(model);
         const auto same = [](double a, double b) {
             return std::abs(a-b) <= 64*std::numeric_limits<double>::epsilon()*
                                       std::max(std::abs(a), std::abs(b));
         };
-        if (geometry.sampleHeight != geometry.height || geometry.tailStart != geometry.height)
+        if (geometry.sampleHeight != geometry.height || (AcceptedAWF() && geometry.tailStart != geometry.height))
             throw std::invalid_argument("CLSCalibratedBudgetAWF requires endpoint z_K=z_m=H");
-        if (options.requestedWeight != 1 ||
-            options.failurePolicy != AWFFailurePolicy::RequirePreservation)
+        if (AcceptedAWF() && (options.requestedWeight != 1 ||
+            options.failurePolicy != AWFFailurePolicy::RequirePreservation))
             throw std::invalid_argument("CLSCalibratedBudgetAWF has no chi or fallback policy");
         if (!same(wall.cMu, calibrated.cMu) || !same(wall.cLength, calibrated.cLength) ||
             wall.smoothIntercept != calibrated.smoothIntercept)
@@ -161,7 +180,13 @@ EquilibriumAWFProfiles::EquilibriumAWFProfiles(const AWFProfileGeometry &geometr
     ref.numerator = Cast(std::pow(static_cast<long double>(ref.frictionVelocity), 3)/model.Kappa());
     Positive(ref.numerator);
     ref.reynolds = Cast(static_cast<long double>(geometry.height)*std::sqrt(k)/geometry.molecularNu);
-    if (AcceptedAWF())
+    if (WJCalibrated() && !AcceptedAWF() && options.requestedWeight==0)
+    {
+        // Direct calibrated baseline: never evaluate E_c or its gate/root.
+        m_quadrature=MakeQuadrature(geometry.height,0);
+        return;
+    }
+    if (AcceptedAWF() || WJCalibrated())
     {
         // The new model has a budget applicability condition, not the legacy
         // chi/transition Reynolds gate. Re remains a reported scale only.
@@ -171,10 +196,17 @@ EquilibriumAWFProfiles::EquilibriumAWFProfiles(const AWFProfileGeometry &geometr
             Cast(static_cast<long double>(ref.traction)*ref.traction*
                  m_original.Integrals().productionWeight) :
             Integrate([&](double r) { return ReferenceProduction(r); }, geometry.height, 0);
-        ref.minimumBudget = CorrectedIntegral(geometry.height, geometry.height);
+        ref.minimumBudget = CorrectedIntegral(geometry.height, geometry.tailStart);
         ref.margin = Cast((static_cast<long double>(ref.productionBudget)-ref.minimumBudget)/ref.minimumBudget);
-        if (ref.productionBudget < ref.minimumBudget)
-            throw std::domain_error("CLSCalibratedBudgetAWF cutoff_budget_inadmissible; no cutoff clipping");
+        const bool lowRe = !AcceptedAWF() && ref.reynolds < options.minimumReynolds;
+        if (ref.productionBudget < ref.minimumBudget || lowRe)
+        {
+            if (AcceptedAWF() || options.failurePolicy==AWFFailurePolicy::RequirePreservation)
+                throw std::domain_error("Calibrated AWF cutoff/regime inadmissible; no cutoff clipping");
+            ref.reason=lowRe ? AWFFallbackReason::OutsideHighReRegime : AWFFallbackReason::CutoffInadmissible;
+            m_quadrature=MakeQuadrature(geometry.height,0);
+            return; // Explicitly selected direct-baseline fallback, with weight=0.
+        }
         if (metric.kappa1 == 0 && metric.kappa2 == 0)
         {
             const long double lambda = static_cast<long double>(ref.productionBudget)/ref.numerator;
@@ -184,7 +216,7 @@ EquilibriumAWFProfiles::EquilibriumAWFProfiles(const AWFProfileGeometry &geometr
         {
             // The explicit metric-weighted dissipation integral is strictly
             // decreasing in c. A log bracket retains positive trial cutoffs.
-            const double highStart = std::log(geometry.height);
+            const double highStart = std::log(geometry.tailStart);
             double smallest = std::max(std::numeric_limits<double>::denorm_min(),
                                       ref.numerator/std::numeric_limits<double>::max());
             if (static_cast<long double>(ref.numerator)/smallest > std::numeric_limits<double>::max())
@@ -208,10 +240,10 @@ EquilibriumAWFProfiles::EquilibriumAWFProfiles(const AWFProfileGeometry &geometr
             }
             ref.cutoff = std::exp(low+(high-low)/2);
         }
-        if (!(ref.cutoff > 0 && ref.cutoff <= geometry.height))
+        if (!(ref.cutoff > 0 && ref.cutoff <= geometry.tailStart))
             throw std::range_error("CLSCalibratedBudgetAWF cutoff_unrepresentable");
         Corrected(0, ref.cutoff); // Reject an unrepresentable plateau, never floor it.
-        ref.weight = 1; // Internal solved-cutoff flag; not a physical chi.
+        ref.weight = AcceptedAWF() ? 1 : options.requestedWeight; // Budget has no physical chi.
         ref.reason = AWFFallbackReason::Active;
         ref.budgetResidual = BudgetDifference(ref.cutoff);
         m_quadrature = MakeQuadrature(geometry.height, ref.cutoff);
@@ -434,7 +466,7 @@ double EquilibriumAWFProfiles::DissipationBudget(double cutoff) const
 }
 double EquilibriumAWFProfiles::BudgetDifference(double cutoff) const
 {
-    if (AcceptedAWF())
+    if (AcceptedAWF() || WJCalibrated())
         return Cast(static_cast<long double>(CorrectedIntegral(m_geometry.height, cutoff))-
                     m_reference.productionBudget);
     return Integrate([&](double r) { return Corrected(r, cutoff)-ReferenceProduction(r); },
