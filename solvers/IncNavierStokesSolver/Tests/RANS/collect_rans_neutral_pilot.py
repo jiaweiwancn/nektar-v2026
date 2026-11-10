@@ -18,7 +18,7 @@ def main():
   for name in ('source-build.json','actual-loaded-libraries.json'):
    if (runtime/name).exists():
     dest=out/(("p5-" if runtime.parent==r else "first-")+name);dest.write_bytes((runtime/name).read_bytes())
- for key,path in [('frozen-boundary',base/'frozen-boundary-regression/results.json'),('interface-side',base/'interface-side-regression-v2/results.json'),('native-controls',r/'native-regression/qualification.json'),('validated-resume',r/'resume-cli-verification.json'),('ground-spectrum-domain',base/'ground-polynomial-unit.json'),('mathematical-reuse',base/'mathematical-evidence-reuse.json'),('extended-ctest',base/'extended-ctest.json'),('velocity-pressure',r/'velocity-pressure-response.json'),('streamwise',r/'streamwise-sensitivity-v2/results.json'),('selected-controls',r/'selected-controls/results.json'),('selected-quadrature',r/'selected-quadrature/results.json')]:
+ for key,path in [('frozen-boundary',base/'frozen-boundary-regression/results.json'),('interface-side',base/'interface-side-regression-v2/results.json'),('native-controls',r/'native-regression/qualification.json'),('validated-resume',r/'resume-cli-verification.json'),('ground-spectrum-domain',base/'ground-polynomial-unit.json'),('mathematical-reuse',base/'mathematical-evidence-reuse.json'),('extended-ctest',base/'extended-ctest.json'),('velocity-pressure',r/'velocity-pressure-response.json'),('streamwise',r/'streamwise-sensitivity-v2/results.json'),('selected-controls',r/'selected-controls/results.json'),('selected-quadrature',r/'selected-quadrature/results.json'),('nearwall-readonly',r/'nearwall-frozen-diagnosis/results.json'),('failure-contract',base/'collector-failure-contract.json')]:
   if path.exists():
    d=load(path)
    if key=='frozen-boundary':
@@ -76,6 +76,8 @@ def main():
     name=model+'-N-'+wall+'-space-'+str(T);f=r/'natural-schedule'/(name+'.json');result['required_evolved_space_comparisons'][name]=load(f)['status'] if f.exists() else 'not_completed'
  result['required_scalar_stage_observations']={label:actual.get(label,{}).get('read_only_scalar_stage_observations',{}).get('status','not_completed') for label in expected}
  result['required_natural_pilots']=gates;result['status']='pass' if all(v['status']=='pass' for v in result['verification'].values()) and all(v['status']=='pass' for v in gates.values()) and all(v=='pass' for v in result['required_evolved_space_comparisons'].values()) and all(v=='pass' for v in result['required_scalar_stage_observations'].values()) else 'incomplete_or_failed'
+ result['full_spatial_residual_consistency_status']='not fully demonstrated in evolved spaces; accepted inner-k and momentum dual norms require balanced near-wall/interface refinement; global h1/p5 frozen controls improve them but 3801 unknowns exceed the 3000 evolution guard'
+ result['temporal_scope']='all six natural configurations have dt/2 uncertainty checks at .0016 and .016; .1 is bounded integration with a finer E94E95 accepted-wall comparator, not a measured .1 temporal order'
  result['historical_epsilon_order_status']='eight previous observations remain unresolved; no retrospective threshold change';result['scope']='serial flat2D prescribed-reference bounded patch; no long-time, downstream ABL, curved/3D/MPI or physical validation claim'
  write_json(out/'summary.json',result);print(result['status']);return 0 if result['status']=='pass' else 1
 if __name__=='__main__':sys.exit(main())
