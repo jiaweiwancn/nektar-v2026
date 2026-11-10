@@ -115,7 +115,7 @@ def main():
         s=read(path);policies[policy]={k:s.get(k) for k in ('qualification','components','longer_interpretation','stationarity','ledger_totals','cost_design','mesh_inventory','arithmetic_envelope')}
         accounting,packets=native_accounting(s,policy);runs.extend(accounting);stages.update(packets)
         policies[policy]['read_only_reprocessing']=s.get('read_only_reprocessing')
-        policies[policy]['final_package_ledger_totals']=__import__('wj_immutable').Ledger(root,policy).totals()
+        policies[policy]['publication_snapshot_ledger_totals']=__import__('wj_immutable').Ledger(root,policy).totals()
         policies[policy]['heavy_summary']=dict(path=str(path),sha256=file_hash(path),bytes=path.stat().st_size)
         for group in ('horizontal','longer'):
             for key,trajectory in s.get(group,{}).items():
