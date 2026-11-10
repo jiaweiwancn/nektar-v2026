@@ -7,12 +7,13 @@ from rans_qualification import THREADS,write_json,coverage
 from rans_request_manifest import RequestManifest
 from qualify_rans_preservation import load
 from rans_preservation_oracle import Reference
+from rans_pilot_evidence import required_comparisons,epsilon_budget_gate
 import numpy,scipy
 
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 def compact_init(r):return {k:v for k,v in (r or {}).items() if k not in ('effective_initial','live_fixed_boundary')}
 def main():
- p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args();base=a.root.resolve();r=base/'p5';out=a.output;out.mkdir(parents=True,exist_ok=False)
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--comparison-directory',type=Path);a=p.parse_args();base=a.root.resolve();r=base/'p5';out=a.output;out.mkdir(parents=True,exist_ok=False)
  result=dict(schema='NeutralPilotEvidenceV1',source_start='1297301156c703fd1e4fe3b7776dc3676a5f3267',source_report=subprocess.check_output(['git','-c','core.filemode=false','-C',str(base/'source'),'rev-parse','HEAD'],text=True).strip(),environment=dict(python=sys.version,numpy=numpy.__version__,scipy=scipy.__version__,platform=platform.platform(),threads=THREADS,ranks=1),cases=[],verification={},failures=[])
  for runtime in (base/'runtime',r/'runtime'):
   for name in ('source-build.json','actual-loaded-libraries.json'):
@@ -60,7 +61,7 @@ def main():
     (out/(folder.name+'-failure.xml')).write_bytes((f.parent/'case.xml').read_bytes());result['failures'].append({k:witness[k] for k in ('label','target','failure','committed_time')})
   obs=folder/'scalar-observations/results.json'
   if obs.exists():
-   d=load(obs);row['read_only_scalar_stage_observations']={k:d[k] for k in ('status','scope','minimum','maximum','epsilon_weak_budgets','analytical_weak_balance','source_packet_sha256')};row['observer_receipt_sha256']=sha(obs)
+   d=load(obs);row['read_only_scalar_stage_observations']={k:d[k] for k in ('status','scope','minimum','maximum','epsilon_weak_budgets','analytical_weak_balance','source_packet_sha256')};row['observer_receipt_sha256']=sha(obs);row['read_only_scalar_stage_observations']['epsilon_budget_gate']=epsilon_budget_gate(d['epsilon_weak_budgets'],ref)
   row['status']=load(folder/'results.json').get('status') if (folder/'results.json').exists() else 'incomplete';result['cases'].append(row)
  first=base/'campaigns/E-N-EP-h0p5/T-0.0016/case.evolution.json'
  if first.exists():
@@ -74,13 +75,9 @@ def main():
  expected={('E' if model=='E94E95' else model)+'-N-'+wall+'-h0p5' for model in ('E94E95','A95','A93') for wall in ('EP','Accepted')};actual={x['label']:x for x in result['cases']};gates={}
  for label in sorted(expected):
   c=actual.get(label);milestones={m['target']:m for m in c['milestones']} if c else {};gates[label]=dict(status='pass' if all(t in milestones and milestones[t]['status']=='pass' for t in (.0016,.016,.05,.1)) else 'failed' if c and any(m['status']=='fail' for m in c['milestones']) else 'not_completed',completed_times=sorted(milestones))
- result['required_evolved_space_comparisons']={}
- for model in ('E','A95','A93'):
-  for wall in ('EP','Accepted'):
-   for T in (.0016,.016):
-    name=model+'-N-'+wall+'-space-'+str(T);f=r/'natural-schedule'/(name+'.json');result['required_evolved_space_comparisons'][name]=load(f)['status'] if f.exists() else 'not_completed'
- result['required_scalar_stage_observations']={label:actual.get(label,{}).get('read_only_scalar_stage_observations',{}).get('status','not_completed') for label in expected}
- result['required_natural_pilots']=gates;result['status']='pass' if all(v['status']=='pass' for v in result['verification'].values()) and all(v['status']=='pass' for v in gates.values()) and all(v=='pass' for v in result['required_evolved_space_comparisons'].values()) and all(v=='pass' for v in result['required_scalar_stage_observations'].values()) else 'incomplete_or_failed'
+ result['required_evolved_space_comparisons']=required_comparisons(r,a.comparison_directory)
+ result['required_scalar_stage_observations']={label:actual.get(label,{}).get('read_only_scalar_stage_observations',{}).get('status','not_completed') if actual.get(label,{}).get('read_only_scalar_stage_observations',{}).get('epsilon_budget_gate',{}).get('status')=='pass' else 'failed_or_missing_epsilon_budget' for label in expected}
+ result['required_natural_pilots']=gates;result['status']='pass' if all(v['status']=='pass' for v in result['verification'].values()) and all(v['status']=='pass' for v in gates.values()) and all(v.get('status')=='pass' and 'cases' in v for v in result['required_evolved_space_comparisons'].values()) and all(v=='pass' for v in result['required_scalar_stage_observations'].values()) else 'incomplete_or_failed'
  result['full_spatial_residual_consistency_status']='not fully demonstrated in evolved spaces; accepted inner-k and momentum dual norms require balanced near-wall/interface refinement; global h1/p5 frozen controls improve them but 3801 unknowns exceed the 3000 evolution guard'
  result['temporal_scope']='all six natural configurations have dt/2 uncertainty checks at .0016 and .016; .1 is bounded integration with a finer E94E95 accepted-wall comparator, not a measured .1 temporal order'
  result['historical_epsilon_order_status']='eight previous observations remain unresolved; no retrospective threshold change';result['scope']='serial flat2D prescribed-reference bounded patch; no long-time, downstream ABL, curved/3D/MPI or physical validation claim'

@@ -15,6 +15,7 @@ from qualify_rans_preservation import probe,replay_request,load
 from rans_qualification import THREADS,write_json,exact_vector_hash
 from rans_request_manifest import RequestManifest
 from rans_preservation_oracle import Reference,weak_balance
+from rans_pilot_evidence import epsilon_budget_gate
 
 def matrix(rows,n):
  data=[];ids=[];offset=[0]
@@ -63,7 +64,8 @@ def main():
   for event in report.get('physical_range_events',[]):
    if event.get('state'):observe(event['state'],event['time'],'rejected_candidate')
  weak=weak_balance(Reference(req['model'],req['policy'],req['wall']),packet)
- result=dict(status='pass' if not failure and weak['status']=='pass' else 'fail',analytical_weak_balance=weak,scope='fixed reference-quadrature and native face rows; extrema over all retained accepted states and reconstructed one-sweep scalar stages',minimum=minima,maximum=maxima,observations=records,failures=failure,
+ budget=epsilon_budget_gate(epsilon_weak_budgets,Reference(req['model'],req['policy'],req['wall']))
+ result=dict(status='pass' if not failure and weak['status']=='pass' and budget['status']=='pass' else 'fail',epsilon_budget_gate=budget,analytical_weak_balance=weak,scope='fixed reference-quadrature and native face rows; extrema over all retained accepted states and reconstructed one-sweep scalar stages',minimum=minima,maximum=maxima,observations=records,failures=failure,
   epsilon_weak_budgets=epsilon_weak_budgets,source_packet_sha256=__import__('hashlib').sha256((out/'packet.json').read_bytes()).hexdigest(),roundoff_floor=1e-12,mandatory_native_domain_audits_unchanged=True)
  write_json(out/'results.json',result)
  with (out/'packet.json').open('rb') as src,gzip.open(out/'native-basis.json.gz','wb',compresslevel=3) as dst:__import__('shutil').copyfileobj(src,dst)
