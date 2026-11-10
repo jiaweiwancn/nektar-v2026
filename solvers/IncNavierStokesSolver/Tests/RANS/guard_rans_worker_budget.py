@@ -26,7 +26,9 @@ while not (r/'worker-guard.stop').exists():
    fam.update(more)
   families.append((root,fam));covered.update(fam)
  external=sum(d['threads'] for pid,d in rows.items() if pid not in covered and relevant(d) and not d['state'].startswith(('T','Z')))
- allowed=4 if external<=16 else 3 if external<=24 else 2 if external<=40 else 1 if external<=48 else 0
+ # Each complete serial family reserves eight threads, including ORTE and
+ # its waiting Python parent. Keep sixteen of the 72 threads unallocated.
+ allowed=max(0,min(4,(56-external)//8))
  chosen=set()
  for root,fam in families[:allowed]:chosen.update(fam)
  elapsed=time.monotonic()-last_clock;last_clock=time.monotonic()
