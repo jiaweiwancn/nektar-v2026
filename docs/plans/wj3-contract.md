@@ -94,8 +94,9 @@ requires bitwise equality. Offline SVD inspects conditioning; long-double
 matvecs estimate linear backward errors. The declared comparison-floor estimate
 combines these conditioned errors, n*epsilon arithmetic formation reserve,
 physical-mass conversion, pressure-to-velocity correction propagation and
-measured alternative field-evaluation sensitivity. It accumulates 2*N terminal
-step estimates and applies safety factor 100 before interpreting rates.
+measured alternative field-evaluation sensitivity. It accumulates terminal step estimates using offline SVD analysis of the completed frozen history-to-state map in
+the native physical mass metric (at least unity), factor two for a pair
+of trajectories, and safety factor100 before interpreting rates.
 This is a finite short-trajectory numerical estimate, not a rigorous nonlinear
 perturbation bound. Spatial residuals and nonlinear stage defects are excluded
 from the arithmetic floor. Unresolved differences receive no observed order.

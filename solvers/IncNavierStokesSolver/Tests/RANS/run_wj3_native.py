@@ -206,7 +206,7 @@ class Study:
             cross_mesh_unknowns=2493 if cost*(257+8*128)<3600 else 639,cross_mesh_steps=128,
             measured_max_seconds_per_step=cost,estimated_remaining_seconds=cost*(224+128+32+1),
             practical_wall_seconds_per_policy=3600,safety_factor_over_arithmetic_floor=100,
-            floor_policy='terminal frozen matrix SVD and long-double residual, arithmetic evaluation sensitivity, accumulated 2*N and safety100; no spatial/stage residual used as noise',
+            floor_policy='terminal frozen matrix SVD and long-double residual, arithmetic evaluation sensitivity, accumulated using frozen history-map mass-norm amplification and safety100; no spatial/stage residual used as noise',
             pressure_policy='common-time common overall gauge; algebraic first-step adjustment not required to scale with dt',
             frozen_before_main_utc=time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),
             finer_temporal_mesh_open=cost*(257+8*128)>=3600,

@@ -11,7 +11,7 @@ from pathlib import Path
 import numpy as np
 from numpy.testing import assert_allclose
 from scipy.integrate import quad
-from scipy.linalg import svdvals
+from scipy.linalg import svd,svdvals
 from scipy.optimize import minimize_scalar
 from wj2_cases import normal_knots
 from test_wj2_native import wall,independent,QE,KAPPA,CSTAR
@@ -123,7 +123,7 @@ def replay_witnesses(packet):
 
 
 def arithmetic(report,measurement):
-    systems={};raw_floor=np.zeros(6);eps=np.finfo(float).eps
+    systems={};raw_floor=np.zeros(6);growth=np.ones(6);velocity_metric=1.;eps=np.finfo(float).eps
     for name in ('momentum','pressure','k','epsilon'):
         entry=report['pimple_attempts'][-1][name+'_arithmetic'];require(sha(Path(entry['path']))==entry['sha256'],'arithmetic packet changed')
         packet=load(Path(entry['path']));mt=packet['matrix'];metric=packet['mass_or_correction_map']
@@ -131,32 +131,48 @@ def arithmetic(report,measurement):
         A=np.fromfile(mt['path'],dtype='<f8').reshape(tuple(map(int,mt['shape'])))
         M=np.fromfile(metric['path'],dtype='<f8').reshape(tuple(map(int,metric['shape'])))
         x=np.array(packet['solution']);rhs=np.array(packet['rhs']);r=A.astype(np.longdouble)@x.astype(np.longdouble)-rhs.astype(np.longdouble)
-        singular=svdvals(A,check_finite=True);n=len(x);gamma=n*eps/(1-n*eps)
+        left,singular,right=svd(A,check_finite=True,full_matrices=False);n=len(x);gamma=n*eps/(1-n*eps)
         residual=float(np.linalg.norm(r));formation=gamma*float(np.linalg.norm(abs(A)@abs(x)+abs(rhs)))
         coefficient=(residual+formation)/singular[-1]
         if name=='pressure':
             # Pressure coefficient uncertainty also propagates through already
             # retained BG (transpose in this file) to velocity. Euclidean-to-
             # physical conversion is bounded with the native mass spectra.
-            amplification=float(svdvals(M,check_finite=True)[0]);velocity=coefficient*amplification
+            amplification=float(svdvals(M,check_finite=True)[0]);velocity=coefficient*amplification*velocity_metric
             raw_floor[0:2]+=velocity
-            raw_floor[4:6]+=coefficient
+            raw_floor[4:6]+=coefficient*math.sqrt(packet['physical_mass_operator_bound'])
         else:
             physical=coefficient*math.sqrt(max(np.linalg.eigvalsh(M)[-1],0))
-            if name=='momentum':raw_floor[:2]+=physical
+            if name=='momentum':
+                velocity_metric=math.sqrt(packet['physical_mass_operator_bound']);raw_floor[:2]+=physical
             else:raw_floor[2 if name=='k' else 3]+=physical
-        systems[name]=dict(size=n,sigma_min=float(singular[-1]),sigma_max=float(singular[0]),
+        amplification=1.
+        if name!='pressure':
+            inverse=(right.T/singular)@left.T  # offline SVD condition analysis only
+            free=np.array([i for i in range(n) if not (A[i,i]==1 and np.count_nonzero(A[i])==1)])
+            Mf=M[np.ix_(free,free)];lam,V=np.linalg.eigh(Mf)
+            require(min(lam)>0,'nonpositive native physical metric')
+            half=(V*np.sqrt(lam))@V.T;invhalf=(V/np.sqrt(lam))@V.T
+            transfer=half@inverse[np.ix_(free,free)]@(packet['alpha_mass']*Mf)@invhalf
+            amplification=max(1.,float(svdvals(transfer,check_finite=True)[0]))
+            indices=range(2) if name=='momentum' else [2 if name=='k' else 3]
+            for i in indices:growth[i]=max(growth[i],amplification)
+        systems[name]=dict(size=n,frozen_history_mass_norm_amplification=amplification,sigma_min=float(singular[-1]),sigma_max=float(singular[0]),
             condition_2=float(singular[0]/singular[-1]),long_double_residual_2=residual,
             rounding_formation_reserve_2=formation,coefficient_error_estimate=float(coefficient),
             matrix_sha256=mt['sha256'],packet_sha256=entry['sha256'])
-    # A declared diagnostic estimate, not a perturbation theorem: linear growth
-    # over N sequential sweeps, factor two for two compared trajectories and a
+    # A declared frozen-system diagnostic estimate, not a nonlinear theorem:
+    # mass-metric history-map propagation, factor two for compared trajectories,
     # 100x safety reserve. Evaluation sensitivity is measured independently.
-    N=int(report['steps']);floor=100*(2*N*raw_floor+np.sqrt(2)*np.array(measurement['arithmetic_evaluation_sensitivity']))
+    N=int(report['steps'])
+    growth[4:6]=max(growth[:4])
+    propagation=np.array([N if g<=1+1e-14 else math.expm1(N*math.log(g))/(g-1) for g in growth])
+    floor=100*(2*propagation*raw_floor+np.sqrt(2)*np.array(measurement['arithmetic_evaluation_sensitivity']))
     floor[5]+=2*floor[2]/3
     return dict(systems=systems,estimated_comparison_floor=dict(zip(FIELDS,map(float,floor))),
         raw_one_step_physical_error_estimate=dict(zip(FIELDS,map(float,raw_floor))),safety_factor=100,
-        propagation='2*N accumulated worst observed terminal frozen-system uncertainty; finite short-trajectory diagnostic estimate, not a rigorous nonlinear perturbation bound',
+        propagation='terminal frozen-system uncertainty summed over N steps using terminal frozen history-map mass-norm amplification; factor2 for a pair of trajectories; finite diagnostic estimate, not a nonlinear perturbation theorem',
+        accumulated_propagation_factors=propagation.tolist(),frozen_history_map_amplifications=growth.tolist(),
         excludes=['physical spatial residual','nonlinear one-sweep stage defect'],
         evaluation_sensitivity=measurement['arithmetic_evaluation_sensitivity'])
 

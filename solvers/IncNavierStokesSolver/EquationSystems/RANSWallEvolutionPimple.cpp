@@ -48,9 +48,15 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
             out.close();Require(out.good(),"passive arithmetic matrix write failed");
             return J::Object({{"path",J::Quote(std::filesystem::absolute(file).string())},{"sha256",J::Quote(RANSWallR3::HashFile(file))},
                 {"shape",J::Numbers(Vector{double(a.size()),double(a.empty()?0:a[0].size())})}});};
+        // Absolute row-sum bound for the native physical mass operator on
+        // these fields. The algebraic gauge has no physical L2 measure.
+        double massBound=0;
+        for(int row:rows)for(int b=0;b<Gauge();++b)if(row>=offset[b] && row<offset[b+1])
+        {double sum=0;for(double value:m_mass[b][row-offset[b]])sum+=std::abs(value);massBound=std::max(massBound,sum);}
         const auto file=stem+".json";std::ofstream out(file);
         out<<J::Object({{"schema",J::Quote("WJFrozenArithmeticV1")},{"time",J::Number(time)},{"alpha_mass",J::Number(alpha)},
-            {"history_sha256",J::Quote(RANSWallR3::Hash(history))},{"matrix",save(matrix,".matrix.bin")},
+            {"history_sha256",J::Quote(RANSWallR3::Hash(history))},{"physical_mass_operator_bound",J::Number(massBound)},
+            {"matrix",save(matrix,".matrix.bin")},
             {"mass_or_correction_map",save(mass,".metric.bin")},{"rows",J::Numbers(rows)},
             {"rhs",J::Numbers(rhs)},{"solution",J::Numbers(solution)},{"linear_residual",J::Numbers(defect)},
             {"additional_governing_solves","0"}})<<'\n';out.close();Require(out.good(),"passive arithmetic packet write failed");
