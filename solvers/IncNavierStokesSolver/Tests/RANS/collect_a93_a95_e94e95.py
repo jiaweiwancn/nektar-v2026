@@ -7,7 +7,7 @@ import json
 import math
 import sys
 from pathlib import Path
-from rans_qualification import dependencies,coverage,audited_extrema
+from rans_qualification import dependencies,coverage,audited_extrema,native_check_coverage
 dependencies("numpy","scipy")
 import numpy as np
 from validate_a93_a95_e94e95 import oracle,constants
@@ -84,7 +84,7 @@ def main():
     if a.qualification:
         q=json.loads(a.qualification.read_text());result['continuation_controls']=q['checks'];result['continuation_status']=q['status']
         wanted=q.get('expected_check_names')
-        result['continuation_coverage']=coverage(q['checks'],set(wanted or []),key=lambda x:x['name'])
+        result['continuation_coverage']=native_check_coverage(q['checks'],wanted)
         if not wanted or result['continuation_coverage']['status']!='pass':result['continuation_status']='fail'
     a.output.write_text(json.dumps(result,indent=2,allow_nan=False)+'\n')
     print(json.dumps(dict(bounded_matrix_pass=result['bounded_matrix_pass'],configurations=len(result['cases']))))

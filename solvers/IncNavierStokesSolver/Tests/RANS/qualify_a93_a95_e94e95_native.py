@@ -10,7 +10,7 @@ import subprocess
 import sys
 import xml.etree.ElementTree as ET
 sys.dont_write_bytecode=True
-from rans_qualification import coverage
+from rans_qualification import coverage,required_native_checks
 from run_a93_a95_e94e95_matrix import case_xml,run_case
 from run_cls_epawf_picard import THREADS,sha,state_hash,set_info,set_parameter,write
 from continue_cls_epawf_pimple import header
@@ -40,6 +40,7 @@ def physical_difference(a,b):
     for key in sorted(keys):
         index=key[7:];v=samples_a[key];other=samples_b[key];weights=samples_a['weights_'+index]
         check(len(v)==len(other)==len(weights),'physical sample lengths differ')
+        check(all(math.isfinite(x) for x in [*v,*other,*weights]) and all(w>0 for w in weights),'invalid physical samples/weights')
         for label in ('coordinates_','geometries_','weights_'):
             check(label+index in samples_a and samples_a[label+index]==samples_b.get(label+index),'physical coordinates/weights/identities differ')
         check(len(samples_a['coordinates_'+index])==3*len(v) and len(samples_a['geometries_'+index])==len(v),'invalid sample identity shape')
@@ -160,11 +161,7 @@ def main():
             text=(folder/'solver.log').read_text();check(r.returncode!=0 and ('serial flat 2D only' in text or 'serial flat 2D' in text),('geometry/execution guard',label,text[-500:]))
             return dict(rejected=True,ranks=2 if label=='MPI' else 1)
         record('unsupported-'+label,geometry_guard)
-    expected={prefix+'-'+wall for wall in ('Accepted','EP') for prefix in
-        ('compatible-restart','complete-rollback','cache-on-off','time-refinement','spatial-quadrature-refinement','mild-admissible-perturbation')}
-    expected.update(label+'-restart-rejection' for label in ('changed-model','changed-calibration','changed-wall'))
-    expected.update('unsupported-'+label for label in ('nonlinear','inner-stress','regularized','curved','3D','MPI'))
-    expected.add('native-EP-switch-and-baseline')
+    expected=required_native_checks()
     results['expected_check_names']=sorted(expected)
     results['coverage']=coverage(results['checks'],expected,key=lambda x:x['name'])
     results['status']='pass' if results['coverage']['status']=='pass' and all(r['status']=='pass' for r in results['checks']) else 'fail';save()

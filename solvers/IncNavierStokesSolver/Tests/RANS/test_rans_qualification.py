@@ -3,7 +3,7 @@
 """Failure-contract checks for scientific qualification receipts."""
 import copy
 import unittest
-from rans_qualification import coverage,compare_samples
+from rans_qualification import coverage,compare_samples,required_native_checks,native_check_coverage
 
 class FailureContract(unittest.TestCase):
     def setUp(self):
@@ -12,6 +12,9 @@ class FailureContract(unittest.TestCase):
         want={'a','b'}
         for names in (['a'],['a','b','b'],['a','b','c']):self.assertEqual(coverage([dict(name=x) for x in names],want,key=lambda x:x['name'])['status'],'fail')
         self.assertEqual(coverage([dict(name=x) for x in ('a','b')],want,key=lambda x:x['name'])['status'],'pass')
+    def test_cannot_remove_required_declaration(self):
+        names=required_native_checks();names.remove("complete-rollback-EP")
+        self.assertEqual(native_check_coverage([dict(name=x) for x in names],names)["status"],"fail")
     def test_reject_comparison_mismatch(self):
         for key,value in [('time',.0015),('grid',[[0,0,1]]),('grid_values',[[1,0,1,0,2]]),('grid_regions',[1,0]),('grid_weights',[1,2])]:
             b=copy.deepcopy(self.a);b[key]=value

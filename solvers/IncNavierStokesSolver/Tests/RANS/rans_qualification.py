@@ -70,7 +70,7 @@ def audited_extrema(report):
         t=times[n] if len(times)==len(states) else (report.get('time',0.)-dt*(len(states)-1-n))
         domain=a.get('accepted_awf_scalar_domain',[])
         for index,name in ((2,'inner_k'),(3,'outer_k'),(4,'outer_epsilon')):
-            if len(domain)>index:offer(name,domain[index],t,'accepted',a.get('scalar_minimum_point_'+str(index-2)))
+            if len(domain)>index:offer(name,domain[index],t,'accepted',a.get('scalar_minimum_point_'+str(index-2)), 'inner' if index==2 else 'outer')
         for side,name in enumerate(('inner_covariance','outer_covariance')):
             v=a.get('accepted_awf_covariance',[])
             if len(v)>side:
@@ -78,16 +78,38 @@ def audited_extrema(report):
                 provenance=a.get('native_'+('inner' if side==0 else 'outer')+'_minimum_geometry_element_side_block',[])
                 offer(name,v[side],t,'accepted',p[:3] or None,provenance[2] if provenance else None,provenance[0] if provenance else None)
         r=a.get('native_A95_radicand_range',[])
-        if r:offer('A95_radicand',r[0],t,'accepted',a.get('native_A95_minimum_radicand_point',[])[:3])
+        if r:
+            provenance=a.get('native_A95_minimum_radicand_geometry_element_side_block',[])
+            offer('A95_radicand',r[0],t,'accepted',a.get('native_A95_minimum_radicand_point',[])[:3],provenance[2] if provenance else None,provenance[0] if provenance else None)
+        budget=a.get('wall_cutoff_required_budget',[]);activity=a.get('wall_cutoff_activity',[])
+        if budget and activity and activity[0]>0:offer('required_cutoff_ratio',budget[1],t,'accepted',a.get('wall_cutoff_limiting_point'),'wall_profile')
     for step in report.get('pimple_attempts',[]):
         for phase,d in step.items():
             if not phase.endswith('_domain') or not isinstance(d,dict):continue
             t=step['time'];points=d.get('scalar_minimum_points_inner_k_outer_k_epsilon',[None]*3)
             for j,(name,key) in enumerate((('inner_k','minimum_inner_k'),('outer_k','minimum_outer_k'),('outer_epsilon','minimum_outer_epsilon'))):
-                offer(name,d.get(key),t,phase,points[j])
+                offer(name,d.get(key),t,phase,points[j],'inner' if j==0 else 'outer')
             for j,name in enumerate(('inner_covariance','outer_covariance')):
                 v=d.get('sampled_covariance_minima',[])
                 if v:offer(name,v[j],t,phase,d['covariance_minimum_points'][j],d['covariance_minimum_sides'][j],d['covariance_minimum_geometries'][j])
             offer('A95_radicand',d.get('minimum_A95_radicand'),t,phase,d.get('A95_radicand_minimum_point'),d.get('A95_radicand_side'),d.get('A95_radicand_geometry'))
             if d.get('required_cutoff_count',0)>0:offer('required_cutoff_ratio',d.get('minimum_required_budget_ratio'),t,phase,d.get('cutoff_limiting_point'))
     return dict(over_all_audited_states_and_stages=winners,final_state=states[-1] if states else None)
+
+def required_native_checks():
+    names={prefix+'-'+wall for wall in ('Accepted','EP') for prefix in
+        ('compatible-restart','complete-rollback','cache-on-off','time-refinement','spatial-quadrature-refinement','mild-admissible-perturbation')}
+    names.update(label+'-restart-rejection' for label in ('changed-model','changed-calibration','changed-wall'))
+    names.update('unsupported-'+label for label in ('nonlinear','inner-stress','regularized','curved','3D','MPI'))
+    names.add('native-EP-switch-and-baseline');return names
+
+def native_check_coverage(rows,declared):
+    base=required_native_checks()
+    extra={'A95-current-gradient-cache-on-off','reviewed-CLS-checkpoint-continuation',
+        'legacy-resolution-cls-reviewed-whole4','legacy-resolution-cls-reviewed-restart2',
+        'unsupported-standalone-resolution-EP','unsupported-standalone-resolution-Accepted'}
+    declared=set(declared or [])
+    result=coverage(rows,declared,key=lambda x:x['name'])
+    result['missing_required_declarations']=sorted(base-declared);result['unknown_declarations']=sorted(declared-(base|extra))
+    if result['missing_required_declarations'] or result['unknown_declarations']:result['status']='fail'
+    return result

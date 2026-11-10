@@ -593,7 +593,12 @@ set_tests_properties(RANSNativeDiagnosticChecks PROPERTIES PROCESSORS 1 TIMEOUT 
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     target_compile_options(RANSNewModelsProbe PRIVATE -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror)
 endif()
-find_package(Python3 QUIET COMPONENTS Interpreter)
+find_package(Python3 3.10 REQUIRED COMPONENTS Interpreter)
+execute_process(COMMAND ${Python3_EXECUTABLE} -c "import numpy, scipy"
+    RESULT_VARIABLE RANS_PYTHON_DEPENDENCY_STATUS ERROR_VARIABLE RANS_PYTHON_DEPENDENCY_ERROR)
+if(NOT RANS_PYTHON_DEPENDENCY_STATUS EQUAL 0)
+    message(FATAL_ERROR "RANS qualification requires NumPy and SciPy: ${RANS_PYTHON_DEPENDENCY_ERROR}")
+endif()
 if(Python3_Interpreter_FOUND)
     add_test(NAME RANSQualificationFailureContract COMMAND ${Python3_EXECUTABLE} -B ${CMAKE_CURRENT_LIST_DIR}/test_rans_qualification.py)
     set_tests_properties(RANSQualificationFailureContract PROPERTIES PROCESSORS 1 TIMEOUT 30)

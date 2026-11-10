@@ -33,7 +33,7 @@ from run_cls_epawf_pimple import identity
 from continue_cls_epawf_pimple import freeze, header
 from run_a93_a95_e94e95_matrix import run_case
 from compare_cls_epawf_pimple import same_history
-from rans_qualification import coverage,dependencies
+from rans_qualification import coverage,dependencies,required_native_checks,native_check_coverage
 dependencies("numpy","scipy")
 
 os.environ.update(THREADS)
@@ -99,12 +99,17 @@ execute(['python3','-B',t/'qualify_a93_a95_e94e95_native.py','--solver',solver,'
 
 # The gradient-dependent A95 admissibility cache deserves its own comparison.
 qpath = r/'qualification-qualified/qualification.json'
-q = json.loads(qpath.read_text())
+try:q = json.loads(qpath.read_text())
+except Exception as error:
+    if qpath.exists():shutil.copy2(qpath,r/'unparseable-qualification-original.json')
+    q=dict(schema=1,status='fail',checks=[],expected_check_names=sorted(required_native_checks()),failure=repr(error))
+    qpath.parent.mkdir(exist_ok=True);qpath.write_text(json.dumps(q,indent=2)+'\n')
+    record['required_failures'].append(dict(stage='continuation-report',reason=repr(error)));save()
 def extra(name, fn):
     if name not in q.setdefault('expected_check_names',[]):q['expected_check_names'].append(name)
     try: value=fn(); q['checks'].append(dict(name=name,status='pass',result=value))
     except Exception as error: q['checks'].append(dict(name=name,status='fail',failure=repr(error)))
-    q['coverage']=coverage(q['checks'],set(q['expected_check_names']),key=lambda x:x['name'])
+    q['coverage']=native_check_coverage(q['checks'],q['expected_check_names'])
     q['status']='pass' if q['coverage']['status']=='pass' and all(x['status']=='pass' for x in q['checks']) else 'fail'
     qpath.write_text(json.dumps(q,indent=2)+'\n')
 def a95_cache():
@@ -142,8 +147,11 @@ extra('reviewed-CLS-checkpoint-continuation',legacy_restart)
 # This separate replay tool retains its legacy CLS scope. Native new-model
 # residuals above use the actual model-aware forward audit implementation.
 resolution=r/'runtime-qualified/RANSWallResolutionProbe'
-shutil.copy2(r/'build/RANSWallResolutionProbe',resolution)
-(r/'resolution-runtime-identity.json').write_text(json.dumps(identity(resolution),indent=2)+'\n')
+try:
+    shutil.copy2(r/'build/RANSWallResolutionProbe',resolution)
+    (r/'resolution-runtime-identity.json').write_text(json.dumps(identity(resolution),indent=2)+'\n')
+except Exception as error:
+    record['required_failures'].append(dict(stage='legacy-resolution-runtime',reason=repr(error)));save()
 for label in ('cls-reviewed-whole4','cls-reviewed-restart2'):
     def resolution_check(label=label):
         folder=r/label;report=json.loads((folder/'case.evolution.json').read_text());manifest={}
