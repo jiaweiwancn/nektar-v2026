@@ -1,5 +1,11 @@
 # Steady-convergence assessment of the six campaigns
 
+**2026-11-10 update:** the [new exact-checkpoint assessment](cls-awf-steady-check-20261110.md)
+confirms three passing windows through T=6 for both H=.5 budget cases,
+including the full outer epsilon region. The dated findings below remain
+historical; the new report separates candidate discrete steady states from
+reference accuracy and correction-supported settling.
+
 **Later continuation:** the H=.5 graded pair has now
 [restarted from T=5 toward next target T=6](cls-awf-05-continuation-to-six.md).
 This does not change the dated assessment below or establish that the added

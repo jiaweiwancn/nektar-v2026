@@ -1,5 +1,10 @@
 # H=.5 graded budget-AWF continuation from T=5 to T=6
 
+**Completed 2026-11-10:** both successors reached step 9600/T=6 normally.
+The [steady-convergence follow-up](cls-awf-steady-check-20261110.md) confirms
+three passing windows with full-outer-epsilon checks and no bound supply.
+The launch and early running observations below remain preserved.
+
 2026-11-09, Asia/Shanghai. Both requested campaigns have restarted natively
 from their completed step-8000 checkpoints. Their **next production target is
 T=6, global step 9600**. Intermediate T=5.5 is a retained block endpoint.
