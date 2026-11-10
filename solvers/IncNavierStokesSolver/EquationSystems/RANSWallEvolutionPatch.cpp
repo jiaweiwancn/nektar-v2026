@@ -1636,7 +1636,7 @@ std::string RANSWallEvolutionPatch::Signature() const
     }
     if(ColumnAverageK())text<<":K-functional=ColumnAverage-v1:physical-dz/H:fixed-native-panel-Gauss8:global-CG-row";
     if(AcceptedAWF() || WJ())text<<":wall_formulation="<<FormulationMetadata();
-    if(WJ())text<<":model=WJHighRe:gradient=DevStrainRawWorkV1:epsilon=physical:pressure=pi=p/rho+2k/3:tensor=full3D:cubicN=2D:cd="<<m_parameters.wj.cd
+    if(WJ())text<<":model=WJHighRe:gradient=DevStrainRawWorkV1:epsilon=physical:pressure=pi=p/rho+2k/3:tensor=full3D:cubicN=2D:scalar_order=k_then_epsilon:cd="<<m_parameters.wj.cd
         <<":c1="<<m_parameters.wj.c1<<":c2="<<m_parameters.wj.c2<<":ce1="<<Epsilon1()<<":ce2="<<Epsilon2()<<":sigmaK="<<SigmaK()<<":sigmaE="<<m_parameters.wj.sigmaEpsilon;
     if(Mapped())text<<':'<<m_mapping.Signature();
     if(m_innerStress==RANSWallInnerStressModel::SaturatedR2)

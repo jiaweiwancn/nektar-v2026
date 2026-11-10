@@ -292,13 +292,27 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
             }
             check(s,name.c_str());
         };
-        scalar(Epsilon()); // corrected flow, old k and epsilon; target evaluated once in assembly
-        scalar(K());       // corrected flow and freshly solved epsilon; inner rate, not rate bound
+        if(WJ())
+        {
+            // The single WJ epsilon trace depends on endpoint K. Solve k
+            // first so the one epsilon solve retains the final trace and
+            // its physical mass columns. There is no post-solve lifting or
+            // nonlinear restoration. Both blocks freeze their actual input.
+            put("scalar_order",J::Quote("k_then_epsilon"));
+            scalar(K());scalar(Epsilon());
+        }
+        else
+        {
+            put("scalar_order",J::Quote("epsilon_then_k"));
+            scalar(Epsilon()); // legacy: corrected flow, old k/epsilon
+            scalar(K());       // legacy: freshly solved epsilon
+        }
         RANSWallTiming::Scope finalTiming("pimple.final_refresh_diagnostics");
         Refresh(s,time,&data);
         const auto target=Constraints(s,time,data);double refreshed=0;
         for(int id:m_traceIds)refreshed=std::max(refreshed,std::abs(s[offset[Epsilon()]+id]-target.at(offset[Epsilon()]+id)));
         put("refreshed_trace_defect",J::Number(refreshed));
+        if(WJ())Require(refreshed<1e-11,"WJ final endpoint-K epsilon trace was not retained");
         const auto norms=Norms(Residual(s,history,alpha,time,data),target,m_robustUstar);
         put("refreshed_original_block_norms",J::Numbers(norms));
         m_lastFeasibleState=s;

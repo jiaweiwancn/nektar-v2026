@@ -206,6 +206,8 @@ def main():
                 3,-2/15,-2/15,34/15,48/5],rtol=3e-12,atol=3e-12)
         for attempt in report['pimple_attempts']:
             require(attempt['scheduled_complete'],'incomplete scheduled attempt')
+            require(attempt['scalar_order']=='k_then_epsilon' and attempt['refreshed_trace_defect']<1e-11,
+                'WJ sweep did not retain its final endpoint-K epsilon trace')
             for key in ('momentum_predictor_solves','pressure_system_solves','epsilon_transport_solves','k_transport_solves','bound_calls'):
                 require(attempt[key]==1,'scheduled solve count differs: '+key)
             require(attempt['additional_governing_equation_solves']==0 and attempt['bound_activations']==0,'hidden solve or material baseline projection')
