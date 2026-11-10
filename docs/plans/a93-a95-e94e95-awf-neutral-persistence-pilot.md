@@ -79,3 +79,19 @@ this package.
 
 In progress. Gates, coverage, first failures and the next justified experiment
 will be completed after the bounded evolution work.
+
+### First p5 advance and diagnostic extension
+
+The first E94E95 EP h0/p5 advance failed at time zero with the inherited
+`WallTraceR4` cubic-only basis guard, before any governing solve. The frozen
+p studies did not exercise this stage check. Its raw report, initial field
+errors and native history are retained in `campaigns/E-N-EP-h0p5` under the new
+Linux root. This is an architectural qualification gap, not a continuum failure.
+
+The new-model p4/p5 continuous ground check uses the exact Modified_A polynomial
+and all stationary points, isolated recursively using Rolle partitions, including
+repeated roots. Endpoints are retained. Arithmetic uncertainty scales with the
+coefficient norm. The cubic CLS implementation is unchanged; other unsupported
+degrees remain rejected. Independent known-root and narrow-negative-well tests
+check this extension before a new runtime is frozen. The failed campaign is
+never resumed with changed source/runtime identities.

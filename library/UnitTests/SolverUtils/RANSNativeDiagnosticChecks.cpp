@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 #include <IncNavierStokesSolver/EquationSystems/RANSWallForwardDiagnostics.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallGroundPolynomial.h>
 #include <iostream>
 #include <iomanip>
 using namespace Nektar;
@@ -11,6 +12,24 @@ int main()
     {
         int checks=0;double worst=0;
         auto require=[&](bool ok){++checks;if(!ok)throw std::runtime_error("native diagnostic regression");};
+        namespace P=RANSWallGroundPolynomial;
+        for(const auto roots: {std::vector<long double>{-.7L,-.123L,.4L,.8L},std::vector<long double>{-.7L,.13L,.13L,.8L}})
+        {
+            P::Polynomial derivative{1};
+            for(auto root:roots)
+            {P::Polynomial next(derivative.size()+1);for(int j=0;j<int(derivative.size());++j){next[j]-=root*derivative[j];next[j+1]+=derivative[j];}derivative=next;}
+            for(double scale:{1e-16,1.,1e16})
+            {
+                auto coefficients=derivative;for(auto &v:coefficients)v*=scale;
+                const auto found=P::Roots(coefficients);
+                for(auto root:roots)require(std::any_of(found.begin(),found.end(),[&](auto x){return std::abs(x-root)<1e-14;}));
+            }
+        }
+        const long double location=.123456789L;
+        const P::Polynomial narrow{location*location-1e-12L,-2*location,1};
+        const auto roots=P::Roots(P::Derivative(narrow));require(roots.size()==1 && std::abs(roots[0]-location)<1e-18);
+        require(P::Value(narrow,roots[0])<0 && P::Value(narrow,-1)>0 && P::Value(narrow,1)>0);
+        require(P::Roots({0}).empty());require(P::Roots({.4L}).empty());
         const double c=std::cos(.37),s=std::sin(.37);
         const RANSTensor rotation{{{c,0,s},{0,1,0},{-s,0,c}}};
         for(const auto spectrum: {RANSVector{.2,1.,2.},RANSVector{0.,1.,2.},RANSVector{-1./3,2./3,5./3}})

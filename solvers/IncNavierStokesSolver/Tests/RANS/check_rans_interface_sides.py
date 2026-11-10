@@ -43,7 +43,7 @@ def main():
   result['checks'].append(dict(name='one-sided-values-gradients-pressure-traction',status='pass',packet={k:packet[k] for k in ('grid','grid_sides','grid_regions','grid_geometry_by_field','grid_values','grid_gradients','grid_traction','grid_inner_prescribed_epsilon')},independent_traction_max_error=error))
   bad=replay_request(base,[x],state=state);write_json(folder/'ambiguous.json',bad)
   with (folder/'ambiguous.log').open('w') as f:c=subprocess.run([str(exe),'case.xml','ambiguous.json','ambiguous-result.json'],cwd=folder,stdout=f,stderr=subprocess.STDOUT)
-  reason=load(folder/'ambiguous-result.json').get('failure','');assert c.returncode!=0 and 'explicit inner (-1) or outer (+1) side' in reason,reason
+  reason=load(folder/'ambiguous-result.json').get('failure','');assert c.returncode!=0 and 'ambiguous interface sample' in reason,reason
   result['checks'].append(dict(name='ambiguous-interface-rejected',status='pass',failure=reason,exit_code=c.returncode));result['status']='pass'
  except Exception as e:result['checks'].append(dict(name='interface-regression',status='fail',failure=repr(e)));result['status']='fail'
  write_json(out/'results.json',result);print(result['status']);return 0 if result['status']=='pass' else 1

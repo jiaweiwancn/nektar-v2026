@@ -3,6 +3,7 @@
 // Copyright (c) 2026 Nektar++ contributors.
 ///////////////////////////////////////////////////////////////////////////////
 #include <IncNavierStokesSolver/EquationSystems/RANSWallTiming.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallGroundPolynomial.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
@@ -955,10 +956,26 @@ RANSWallEvolutionPatch::WallTraceR4(const Vector &state) const
     {
         const auto &el=field.Elements()[e];
         if(el.lower[2]!=0.)continue;
-        Require(el.degree==3 && native->GetExp(e)->GetBasis(0)->GetBasisType()==LibUtilities::eModified_A &&
+        Require((el.degree==3 || (NewModels() && (el.degree==4 || el.degree==5))) && native->GetExp(e)->GetBasis(0)->GetBasisType()==LibUtilities::eModified_A &&
             native->GetExp(e)->GetBasis(1)->GetBasisType()==LibUtilities::eModified_A,
-            "R4 wall trace requires the frozen tensor cubic basis");
+            "continuous wall trace requires cubic, or qualified new-model p4/p5 Modified_A basis");
         const int start=native->GetCoeff_Offset(e);
+        if(el.degree!=3)
+        {
+            std::array<long double,6> coefficients{};
+            for(int j=0;j<=el.degree;++j)coefficients[j]=map->GetLocalToGlobalSign(start+j)*state[offset[K()]+map->GetLocalToGlobalMap(start+j)];
+            const auto polynomial=RANSWallGroundPolynomial::ModifiedA(coefficients);
+            auto points=RANSWallGroundPolynomial::Roots(RANSWallGroundPolynomial::Derivative(polynomial));
+            points.insert(points.end(),{-1,1});long double norm=0;for(auto c:coefficients)norm+=std::abs(c);
+            const long double error=512*std::numeric_limits<long double>::epsilon()*norm;
+            for(auto x:points)
+            {
+                const double physical=el.lower[0]+(x+1)*(el.upper[0]-el.lower[0])/2;
+                const auto value=x==-1?coefficients[0]:x==1?coefficients[1]:RANSWallGroundPolynomial::Value(polynomial,x);
+                extrema.push_back({field.ElementPoint(e,{physical,0,0}),value,x==-1 || x==1?0.L:error});
+            }
+            continue;
+        }
         std::array<long double,4> c{};
         for(int j=0;j<4;++j)
             c[j]=map->GetLocalToGlobalSign(start+j)*state[offset[K()]+map->GetLocalToGlobalMap(start+j)];
