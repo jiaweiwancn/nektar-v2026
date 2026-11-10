@@ -48,7 +48,7 @@ def main():
   row['epsilon_constant_test_budget']=epsilon_budget(packet,native,ref)
   row['configuration']={k:req[k] for k in ('model','policy','wall','descriptor')}
   row['status']='pass' if row['analytical_weak_balance']['status']=='pass' and row['epsilon_constant_test_budget']['status']=='pass' else 'fail'
-  write_json(destination/'analysis.json',row);rows.append(row);write_json(out/'results.json',dict(status='running',checks=rows));print(t,'pass',flush=True)
+  write_json(destination/'analysis.json',row);rows.append(row);write_json(out/'results.json',dict(status='running',checks=rows));print(t,row['status'],flush=True)
  status='pass' if all(x['status']=='pass' for x in rows) else 'fail'
  write_json(out/'results.json',dict(status=status,checks=rows,scope='sealed actual evolved fields; native alpha-zero term replay, fixed common tests, separate native stage residuals'));return 0 if status=='pass' else 1
 if __name__=='__main__':raise SystemExit(main())
