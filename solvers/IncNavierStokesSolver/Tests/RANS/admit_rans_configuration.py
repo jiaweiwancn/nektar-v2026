@@ -31,7 +31,7 @@ def validate_audit(path,campaign,config,times,common):
 
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--previous-root',type=Path,required=True);p.add_argument('--model',choices=('A93','A95','E94E95'),required=True);p.add_argument('--policy',choices=('Natural','Prescribed'),default='Natural');p.add_argument('--wall',choices=('EP','Accepted'),required=True);p.add_argument('--output',type=Path);a=p.parse_args();r=a.root.resolve();old=a.previous_root.resolve();os.environ.update(THREADS,LD_LIBRARY_PATH=str(r/'runtime/lib'),TMPDIR=str(r/'tmp'))
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--previous-root',type=Path,required=True);p.add_argument('--model',choices=('A93','A95','E94E95'),required=True);p.add_argument('--policy',choices=('Natural','Prescribed'),default='Natural');p.add_argument('--wall',choices=('EP','Accepted'),required=True);p.add_argument('--scalar-observer-root',type=Path);p.add_argument('--output',type=Path);a=p.parse_args();r=a.root.resolve();old=a.previous_root.resolve();os.environ.update(THREADS,LD_LIBRARY_PATH=str(r/'runtime/lib'),TMPDIR=str(r/'tmp'))
     tag=prefix(a.model,a.policy,a.wall);config=dict(model=a.model,policy=a.policy,wall=a.wall)
     first=old/'campaigns'/(tag+'-B5');req=load(first/'request-manifest.json')['request'];identity(req,config);config['descriptor']=req['descriptor']
     common=old/'diagnosis'/((a.model+'-'+a.policy+'-'+a.wall) if a.model!='E94E95' else 'initial-'+a.wall)/'common'
@@ -57,8 +57,8 @@ def main():
             endpoint=folder/('T-'+format(t,'.4f'));require(manifest.completed(endpoint),'missing_short_companion:'+member)
             metric=load(endpoint/'metrics.json');require(metric['status']=='pass' and abs(metric['time']-t)<1e-13,'short_endpoint_failed')
             reports.append(load(endpoint/'case.evolution.json'))
-        obs_path=folder/'scalar-observations/results.json'
-        if not obs_path.exists():obs_path=r/'reused-short-observers'/(tag+'-'+member)/'results.json'
+        obs_path=(a.scalar_observer_root/(tag+'-'+member)/'results.json') if a.scalar_observer_root else folder/'scalar-observations/results.json'
+        if not a.scalar_observer_root and not obs_path.exists():obs_path=r/'reused-short-observers'/(tag+'-'+member)/'results.json'
         obs=load(obs_path)
         with gzip.open(obs_path.parent/'native-basis.json.gz','rb') as stream:basis_bytes=stream.read()
         require(__import__('hashlib').sha256(basis_bytes).hexdigest()==obs['source_packet_sha256'],'scalar_basis_identity_mismatch')
