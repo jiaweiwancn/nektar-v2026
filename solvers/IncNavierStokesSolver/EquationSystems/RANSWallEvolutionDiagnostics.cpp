@@ -530,6 +530,85 @@ std::string RANSWallEvolutionPatch::CompareOuterOperators(const Vector &s,double
         {"legacy_name_semantics",J::Quote("refreshed_original_block_norms means selected uncancelled operator, not Original-CLS counterfactual")}});
 }
 
+std::string RANSWallEvolutionPatch::NeutralReferenceBalance(const Vector &state,double time,
+    const RANSWallEvolutionData &data) const
+{
+    namespace J=RANSWallSolveJson;
+    Require(AcceptedAWF() && !Mapped() && m_dimension==2 && m_eta==0,"neutral balance is a read-only flat accepted-AWF diagnostic");
+    const auto before=RANSWallR3::Hash(state),refBefore=RANSWallR3::Hash(m_reference);
+    const auto emit=[&](const ResidualResolutionResult &r)
+    {
+        std::vector<std::pair<std::string,std::string>> terms;
+        for(const auto &[key,v]:r.terms)terms.push_back({key,J::Numbers(v)});
+        return J::Object({{"terms",J::Object(terms)},{"constraints",J::Constraints(r.constraints)},
+            {"native_scaled_block_norms",J::Numbers(Norms(r.terms.at("total_constrained"),r.constraints,m_robustUstar))}});
+    };
+    const auto a=ResidualResolutionComponents(m_reference,m_reference,0,time,data,false,false,true);
+    const auto original=ResidualResolutionComponents(m_reference,m_reference,0,time,data,false,true,true);
+    const auto represented=ResidualResolutionComponents(m_reference,m_reference,0,time,data,false);
+    const auto retained=ResidualResolutionComponents(state,state,0,time,data,false);
+    std::vector<std::string> blocks;
+    for(int b=0;b<InnerPressure();++b)
+    {
+        std::vector<int> free;for(int i=0;i<size[b];++i)if(!retained.constraints.count(offset[b]+i))free.push_back(i);
+        const auto mass=fields[b]->Mass();WallMatrix ff(free.size(),Vector(free.size()));
+        for(int i=0;i<free.size();++i)for(int j=0;j<free.size();++j)ff[i][j]=mass[free[i]][free[j]];
+        blocks.push_back(J::Object({{"block",J::Number(b)},{"offset",J::Number(offset[b])},
+            {"free_local_rows",J::Numbers(free)},{"consistent_free_mass",J::Rows(ff)}}));
+    }
+    const double us=m_robustUstar,K0=m_parameters.model.Q()*us*us,kap=m_parameters.model.Kappa();
+    double tensorDifference=0,productionDifference=0;RANSWallCoordinate worst{};
+    for(const auto &q:m_outer)
+    {
+        const double z=Distance(q.v.coordinate),epsilon=us*us*us/(kap*z);RANSTensor G{};G[0][2]=us/(kap*z);
+        const auto selected=OuterClosure(K0,epsilon,G,q.v.coordinate);
+        const auto base=EvaluateRANSClosure(m_parameters.model.Model(),K0,epsilon,G,z,m_parameters.model.Parameters(),0);
+        productionDifference=std::max(productionDifference,std::abs(selected.production-base.production));
+        for(int i=0;i<3;++i)for(int j=0;j<3;++j)if(std::abs(selected.reynoldsStress[i][j]-base.reynoldsStress[i][j])>tensorDifference)
+        {tensorDifference=std::abs(selected.reynoldsStress[i][j]-base.reynoldsStress[i][j]);worst=q.v.coordinate;}
+    }
+    const auto exact=Profile(K0,{0,0,0},1);const double H=m_parameters.geometry.height;
+    std::map<int,Vector> element;
+    auto locate=[&](const VolumePoint &q,bool inner)
+    {
+        auto &v=element[q.v.geometry];if(v.empty())v=Vector(11);
+        const double z=Distance(q.v.coordinate),UH=exact->Reference().matchingVelocity;
+        const double u0=inner?exact->Original().Velocity(z,{UH,0},{0,0})[0]:UH+us/kap*std::log(z/H);
+        const double g0=inner?exact->Original().VelocityGradient(z,{UH,0},{0,0})[0]:us/(kap*z);
+        const auto gu=q.v.Gradient(state,offset[0]),gw=q.v.Gradient(state,offset[1]);
+        const double div=gu[0]+gw[2],u=q.v.Value(state,offset[0]),w=q.v.Value(state,offset[1]);
+        const double k=q.v.Value(state,offset[K()]),kr=inner?exact->ReferenceK(z):K0;
+        const double gk=q.v.Gradient(state,offset[K()])[2],gkr=inner?exact->ReferenceKGradient(z):0.;
+        v[0]=inner?0:1;v[1]+=q.weight;v[2]+=q.weight*div*div;
+        v[3]+=q.weight*((u-u0)*(u-u0)+w*w);v[4]+=q.weight*(gu[2]-g0)*(gu[2]-g0);
+        v[5]+=q.weight*(k-kr)*(k-kr);v[6]+=q.weight*(gk-gkr)*(gk-gkr);
+        v[7]=std::max(v[7],std::abs(div));v[8]=std::max(v[8],std::abs(gu[0]));
+        v[9]=std::max(v[9],std::abs(gw[2]));v[10]+=q.weight*div;
+    };
+    for(const auto &ray:m_rays)for(const auto &q:ray.points)locate(q,true);
+    for(const auto &q:m_outer)locate(q,false);
+    std::vector<std::string> elements;
+    for(const auto &[geometry,v]:element)
+    {
+        const auto &native=fields[0]->Elements();
+        auto e=std::find_if(native.begin(),native.end(),[&](const auto &x){return x.geometry==geometry;});
+        Require(e!=native.end(),"neutral diagnostic lost native element provenance");
+        elements.push_back(J::Object({{"geometry",J::Number(geometry)},{"lower",J::Numbers(e->lower)},
+            {"upper",J::Numbers(e->upper)},{"values",J::Numbers(v)}}));
+    }
+    Require(before==RANSWallR3::Hash(state) && refBefore==RANSWallR3::Hash(m_reference),"neutral balance modified archived fields/reference");
+    return J::Object({{"analytical_selected",emit(a)},{"analytical_Original",emit(original)},
+        {"archived_reference_representation",emit(represented)},{"retained_state",emit(retained)},
+        {"mass_metrics",J::List(blocks)},{"analytical_maximum_stress_difference",J::Number(tensorDifference)},
+        {"analytical_maximum_production_difference",J::Number(productionDifference)},{"stress_difference_point",J::Numbers(worst)},
+        {"reference_operators",CompareOuterOperators(m_reference,time,data)},
+        {"element_values_columns",J::Quote("outer_flag,physical_measure,divergence_squared,U_reference_error_squared,dU_dz_error_squared,k_reference_error_squared,dk_dz_error_squared,max_abs_divergence,max_abs_du_dx,max_abs_dw_dz,integrated_divergence")},
+        {"element_values",J::List(elements)},
+        {"reference_sha256",J::Quote(refBefore)},{"state_sha256",J::Quote(before)},
+        {"analytical_semantics",J::Quote("direct analytical values AND gradients under native test rows/quadrature; not a residual of the represented coefficient field; native boundaries and relative pressure offset retained")},
+        {"governing_solves","0"},{"physical_commits","0"}});
+}
+
 std::string RANSWallEvolutionPatch::EvaluationReuseChecks(const Vector &state,const Vector &history,
     double time,const RANSWallEvolutionData &data)
 {

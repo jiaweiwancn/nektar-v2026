@@ -151,7 +151,7 @@ std::string RANSWallEvolutionPatch::PhysicalKBands(const Vector &s,double time,
 }
 
 std::string RANSWallEvolutionPatch::HeightComparison(const Vector &s,const Vector &history,double time,
-    const RANSWallEvolutionData &data,const Vector &reportingBreakpoints) const
+    const RANSWallEvolutionData &data,const Vector &reportingBreakpoints,bool completeOuterEpsilon) const
 {
     RANSWallTiming::Scope timing("output.physical_comparison");
     const auto hash=RANSWallR3::Hash(s);const double H=m_parameters.geometry.height,us=m_robustUstar;
@@ -202,7 +202,7 @@ std::string RANSWallEvolutionPatch::HeightComparison(const Vector &s,const Vecto
         samples["x"].push_back(p[0]);samples["z"].push_back(r);
         kErrors[0]+=weight*(k-k0)*(k-k0);kErrors[1]+=weight*(kg-kg0)*(kg-kg0);
         samples["pressure"].push_back(Point(r<H?InnerPressure():OuterPressure(),p).Value(s,offset[r<H?InnerPressure():OuterPressure()]));
-        if(r>=2)
+        if(r>=(completeOuterEpsilon?H:2.))
         {
             const double epsilon=Point(Epsilon(),p).Value(s,offset[Epsilon()]);
             samples["epsilon_weights"].push_back(weight);samples["epsilon"].push_back(epsilon);samples["reference_epsilon"].push_back(us*us*us/(kap*r));
@@ -293,6 +293,7 @@ std::string RANSWallEvolutionPatch::HeightComparison(const Vector &s,const Vecto
         {"scaled_native_spatial_blocks",J::Numbers(scaled)},{"dimensional_mass_dual_spatial_first4",J::Numbers(dimensional)},
         {"common_normalized_spatial_first4",J::Numbers(common)},{"common_scales_U_K_E_H_V",J::Numbers(Vector{us,K0,us*us*us/(kap*2),2,24})},
         {"common_reporting_knots",J::Numbers(knots)},{"common_reporting_queries_valid",J::Boolean(invalid.empty())},
+        {"epsilon_reporting_lower",J::Number(completeOuterEpsilon?H:2.)},
         {"invalid_production_diagnostic_points",J::List(invalid)},{"representation_L2_velocity_gradient_production_referenceProduction",J::Numbers(errors)},
         {"representation_L2_k_gradient",J::Numbers(kErrors)},{"wall_formulation",FormulationMetadata()},
         {"common_samples",J::Object(physical)},{"profiles",J::List(profiles)},{"fixed_bands",PhysicalKBands(s,time,data)},

@@ -189,6 +189,23 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
                 "R3 requires its explicit serial exact-target input and bound nonconverged predictor");
         }
         m_session->LoadSolverInfo("RANSWallRestart",m_restart,"None");m_session->LoadSolverInfo("RANSWallCheckpoint",m_checkpointBase,"None");
+        m_session->LoadSolverInfo("RANSWallDiagnosticIVP",m_diagnosticIVP,"Off");
+        Require(m_diagnosticIVP=="Off" || m_diagnosticIVP=="LateStateIMEX1V1","unknown diagnostic IVP contract");
+        if(m_diagnosticIVP!="Off")
+        {
+            std::string parentDt;
+            m_session->LoadSolverInfo("RANSWallIVPParent",m_ivpParent,"None");
+            m_session->LoadSolverInfo("RANSWallIVPParentSHA256",m_ivpParentHash,"");
+            m_session->LoadSolverInfo("RANSWallIVPParentTimeStep",parentDt,"");
+            std::size_t used=0;m_ivpParentDt=std::stod(parentDt,&used);
+            Require(used==parentDt.size() && std::isfinite(m_ivpParentDt) && m_ivpParentDt>0 &&
+                m_ivpParent!="None" && m_ivpParentHash.size()==64 && m_restart=="None" &&
+                m_patch->AcceptedAWF() && m_patch->PimpleSingleSweep() && m_order==1 && m_neutral &&
+                m_eta==0 && m_session->GetComm()->GetSize()==1 && !m_patch->Mapped(),
+                "LateStateIMEX1V1 requires an explicit validated flat neutral serial parent, no ordinary restart");
+            for(const std::string name:{"BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter"})
+                Require(!m_serialSession->DefinesFunction(name),"late IVP supports only the archived unforced problem");
+        }
         Require(m_timestep>0,"evolution requires positive fixed TimeStep");m_data=RANSWallEvolutionData(dim);
         for(int a=0;a<dim;++a)
         {m_data.innerBody[a]=Function("BodyForceInner",expected[a]);m_data.outerBody[a]=Function("BodyForceOuter",expected[a]);}
@@ -220,7 +237,52 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
     RANSWallTiming::Scope timing("startup.initialize");
     try
     {
-        (void)dump;m_state=m_neutral?m_patch->NeutralReference(m_ustar,m_direction):m_patch->Project(Functions("InitialConditions"),m_time);
+        (void)dump;double rawResidualSeconds=0.;
+        if(m_diagnosticIVP!="Off")
+        {
+            Require(RANSWallR3::HashFile(m_ivpParent+"/State.bin")==m_ivpParentHash,"late IVP parent checkpoint SHA256 differs");
+            // Validate the parent with its ORIGINAL dt and full physical
+            // signature. Only then create a fresh target-dt integrator.
+            auto parentSignature=[&]()
+            {
+                double saved=m_serialSession->GetParameter("TimeStep");
+                struct Restore {LibUtilities::SessionReaderSharedPtr session;double value;
+                    ~Restore(){session->SetParameter("TimeStep",value);}} restore{m_serialSession,saved};
+                m_serialSession->SetParameter("TimeStep",m_ivpParentDt);return PhysicsSignature();
+            };
+            const auto parent=RANSWallTimeIntegration::ReadCheckpoint(m_ivpParent,parentSignature(),1,m_ivpParentDt,
+                m_patch->Size(),m_patch->DifferentialSize());
+            Require(parent.eta==m_eta,"late IVP parent eta differs");
+            m_time=parent.integration.time;m_state=parent.coupledState;m_initial=parent.fixedReference;
+            m_data.fixedBoundary=m_patch->FixedReferenceBoundary(parent.fixedReference);
+            m_patch->RestoreReference(parent.fixedReference,parent.fixedDefect,parent.eta,m_data,m_time);
+            m_implicitData=m_data;
+            if(m_patch->TransitionEnabled())m_implicitData.sensorBody=m_data.outerBody;
+            for(auto *body:{&m_implicitData.innerBody,&m_implicitData.outerBody})for(auto &f:*body)f=[](const RANSWallCoordinate&,double){return 0.;};
+            m_signature=PhysicsSignature();
+            m_integrator=std::make_unique<RANSWallTimeIntegration>(1,m_timestep,
+                [this](const Vector &h,double t,double lambda){return Implicit(h,t,lambda);},
+                [this](const Vector &s,double t){return Explicit(s,t);});
+            // Initialise computes this IVP's own explicit/history slots at
+            // the retained physical t0. No parent slot is copied or rescaled.
+            m_integrator->Initialise(Vector(m_state.begin(),m_state.begin()+m_patch->DifferentialSize()),m_time);
+            m_rawNorms=m_patch->Norms(m_patch->Residual(m_initial,m_initial,0,m_time,m_data,false),m_patch->Constraints(m_initial,m_time,m_data),m_ustar);
+            m_correctedNorms=m_patch->Norms(m_patch->Residual(m_initial,m_initial,0,m_time,m_data),m_patch->Constraints(m_initial,m_time,m_data),m_ustar);
+            Require(m_patch->InitializationWork()==Vector({0.,0.}),"late IVP performed forbidden initialization Lift");
+            namespace J=RANSWallSolveJson;const auto seed=m_integrator->Capture();
+            std::vector<std::string> history;for(const auto &v:seed.history)history.push_back(J::Quote(RANSWallR3::Hash(v)));
+            m_ivpIdentity=J::Object({{"mode",J::Quote(m_diagnosticIVP)},{"parent_checkpoint",J::Quote(m_ivpParent)},
+                {"parent_checkpoint_sha256",J::Quote(m_ivpParentHash)},{"parent_dt",J::Number(m_ivpParentDt)},
+                {"parent_steps",J::Number(parent.integration.steps)},{"physical_t0",J::Number(m_time)},
+                {"new_ivp_steps","0"},{"dt",J::Number(m_timestep)},{"seed_sha256",J::Quote(RANSWallR3::Hash(m_state))},
+                {"fixed_reference_sha256",J::Quote(RANSWallR3::Hash(parent.fixedReference))},
+                {"fixed_defect_sha256",J::Quote(RANSWallR3::Hash(parent.fixedDefect))},
+                {"initial_native_history_sha256",J::List(history)},{"initial_native_history_times",J::Numbers(seed.times)},
+                {"initialization_lift_calls_iterations",J::Numbers(m_patch->InitializationWork())}});
+        }
+        else
+        {
+        m_state=m_neutral?m_patch->NeutralReference(m_ustar,m_direction):m_patch->Project(Functions("InitialConditions"),m_time);
         if(m_neutral)m_data.fixedBoundary=m_patch->FixedReferenceBoundary(m_state);
         else if(m_patch->Mapped() || m_patch->MatchingEnabled() || m_patch->CappedDestruction())
             m_state=m_patch->Lift(m_state,m_time,m_data);
@@ -228,7 +290,7 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
         m_patch->SetReference(m_state,m_data,m_time,m_eta);m_initial=m_state;
         const auto residualStart=std::chrono::steady_clock::now();
         m_rawNorms=m_patch->Norms(m_patch->Residual(m_state,m_state,0,m_time,m_data,false),m_patch->Constraints(m_state,m_time,m_data),m_ustar);
-        const double rawResidualSeconds=std::chrono::duration<double>(std::chrono::steady_clock::now()-residualStart).count();
+        rawResidualSeconds=std::chrono::duration<double>(std::chrono::steady_clock::now()-residualStart).count();
         m_correctedNorms=m_patch->Norms(m_patch->Residual(m_state,m_state,0,m_time,m_data),m_patch->Constraints(m_state,m_time,m_data),m_ustar);
         m_implicitData=m_data;
         if(m_patch->TransitionEnabled())m_implicitData.sensorBody=m_data.outerBody;
@@ -261,6 +323,7 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
                 m_state=m_patch->Lift(m_state,m_time,m_data);
             }
             m_integrator->Initialise(Vector(m_state.begin(),m_state.begin()+m_patch->DifferentialSize()),m_time);
+        }
         }
         m_historyReady=true;
         RANSWallEvolutionPatch::EvaluationScope evaluation(*m_patch,m_data,m_time);
@@ -899,6 +962,7 @@ void RANSEquilibriumWallEvolution::WriteReport() const
        <<",\"k_bound_work_controls\":"<<m_patch->PimpleKBoundControls()
        <<",\"implicit_callback_count\":"<<m_implicitCallbacks
        <<",\"initialization_lift_calls_iterations\":"<<RANSWallSolveJson::Numbers(m_patch->InitializationWork())
+       <<",\"diagnostic_ivp\":"<<m_ivpIdentity
        <<",\"pimple_attempts\":"<<RANSWallSolveJson::List(m_patch->PimpleRecords());
     out<<",\"physical_samples\":{";int sampleCount=0;
     for(const auto &[name,values]:m_physicalSamples){if(sampleCount++)out<<',';out<<Quoted(name)<<':';Write(out,values);}out<<'}';

@@ -516,8 +516,13 @@ int main(int argc,char **argv)
                 diagnostics.push_back({"selected_state",patch.ConstitutiveStateDiagnostic(state,time,data,witnesses)});
                 completeAudits.push_back({"selected_state",Maps(patch.CompleteRestrictedAudit(state,history,alpha,time,data))});
                 diagnostics.push_back({"operators",patch.CompareOuterOperators(state,time,data)});
+                if(packet.get<bool>("neutral_reference_balance",false))
+                {
+                    Require(strictSpatialReadback,"neutral reference balance requires strict immutable checkpoint provenance");
+                    diagnostics.push_back({"neutral_reference_balance",patch.NeutralReferenceBalance(state,time,data)});
+                }
                 const auto panels=packet.get_child_optional("reporting_breakpoints")?Read(packet,"reporting_breakpoints"):Vector{};
-                diagnostics.push_back({"physical",patch.HeightComparison(state,state,time,data,panels)});
+                diagnostics.push_back({"physical",patch.HeightComparison(state,state,time,data,panels,packet.get<bool>("complete_outer_epsilon",false))});
                 if(packet.get<bool>("export_k_mass",false))
                 {
                     const auto constraints=patch.Constraints(state,time,data);std::vector<int> free;

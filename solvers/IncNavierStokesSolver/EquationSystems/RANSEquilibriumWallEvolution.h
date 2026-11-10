@@ -55,6 +55,9 @@ private:
     int m_implicitCallbacks=0,m_pimpleRejectStep=0,m_pimpleHardAuditRejectStep=0;
     RANSWallEvolutionPatch::Diagnostic m_physicalSamples;
     std::string m_restart,m_checkpointBase,m_lastCheckpoint,m_signature;
+    // Explicit new IMEX1 IVP; never a changed-dt production restart.
+    std::string m_diagnosticIVP="Off",m_ivpParent="None",m_ivpParentHash,m_ivpIdentity="null";
+    double m_ivpParentDt=0;
     bool m_chartFunctions=false;
     Vector m_roughnessBudget,m_energyBudget,m_finalStageLoads;
     std::vector<Vector> m_regionalStageLoads;

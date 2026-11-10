@@ -86,13 +86,23 @@ const std::vector<std::string> &RANSWallResolutionSpatialTerms()
 
 RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::ResidualResolutionComponents(
     const Vector &state,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data,bool anchored,
-    bool originalOuterCounterfactual) const
+    bool originalOuterCounterfactual,bool analyticalReference) const
 {
     Require(m_comm->GetSize()==1 && m_dimension==2 && !Mapped() && ((m_transitionEnabled && m_cappedDestruction) || AcceptedAWF()),
         "R3 residual-resolution audit requires serial flat2D Upstream+Capped");
     Require(state.size()==Size() && history.size()==Size() && alpha>=0 && m_eta==0,
         "R3 residual-resolution audit requires frozen unanchored valid state/history");
     (void)anchored;
+    Require(!analyticalReference || (AcceptedAWF() && alpha==0),"analytical weak loads require the flat accepted neutral alpha=0 diagnostic");
+    const double us=m_robustUstar,H=m_parameters.geometry.height,K0=m_parameters.model.Q()*us*us;
+    const auto exact=analyticalReference?Profile(K0,{0,0,0},1):nullptr;
+    double pressureJump=0.;
+    if(analyticalReference)
+    {
+        RANSTensor G{};G[0][2]=us/(m_parameters.model.Kappa()*H);
+        const auto c=EvaluateRANSClosure(m_parameters.model.Model(),K0,exact->Dissipation(H),G,H,m_parameters.model.Parameters(),0);
+        pressureJump=c.reynoldsStress[2][2]-2*K0/3;
+    }
     ResidualResolutionResult result;result.constraints=Constraints(state,time,data);
     result.effectiveState=ExternalLift(state,time,data);const auto &s=result.effectiveState;
     Refresh(s,time,&data);Buckets buckets;
@@ -104,8 +114,18 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
     {
         RANSTensor G{},stress{},cancelled{};RANSVector u{};
         for(int a=0;a<m_dimension;++a){u[PhysicalAxis(a)]=q.v.Value(s,offset[a]);G[PhysicalAxis(a)]=q.v.Gradient(s,offset[a]);}
-        const double k=q.v.Value(s,offset[K()]),pi=q.p.Value(s,offset[inner?InnerPressure():OuterPressure()]);
-        const auto gk=q.v.Gradient(s,offset[K()]);double dk=0,de=0,epsilon=0,sk=0,se=0;
+        double k=q.v.Value(s,offset[K()]),pi=q.p.Value(s,offset[inner?InnerPressure():OuterPressure()]);
+        auto gk=q.v.Gradient(s,offset[K()]);double dk=0,de=0,epsilon=0,sk=0,se=0;
+        if(analyticalReference)
+        {
+            const double z=Distance(q.v.coordinate),UH=exact->Reference().matchingVelocity;
+            u={};G={};gk={};
+            u[0]=inner?exact->Original().Velocity(z,{UH,0},{0,0})[0]:UH+us/m_parameters.model.Kappa()*std::log(z/H);
+            G[0][2]=inner?exact->Original().VelocityGradient(z,{UH,0},{0,0})[0]:us/(m_parameters.model.Kappa()*z);
+            k=inner?exact->ReferenceK(z):K0;gk[2]=inner?exact->ReferenceKGradient(z):0.;
+            pi=inner?pressureJump*(upper[2]-H)/upper[2]:-pressureJump*H/upper[2];
+            if(inner)profile=exact.get();
+        }
         if(inner)
         {
             const double nt=profile->Original().EddyViscosity(Distance(q.v.coordinate));
@@ -129,7 +149,7 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
         }
         else
         {
-            epsilon=q.e.Value(s,offset[Epsilon()]);const auto c=originalOuterCounterfactual?
+            epsilon=analyticalReference?us*us*us/(m_parameters.model.Kappa()*Distance(q.v.coordinate)):q.e.Value(s,offset[Epsilon()]);const auto c=originalOuterCounterfactual?
                 EvaluateRANSClosure(m_parameters.model.Model(),k,epsilon,G,Distance(q.v.coordinate),m_parameters.model.Parameters(),0):
                 OuterClosure(k,epsilon,G,q.v.coordinate);
             dk=c.kDiffusion;de=c.epsilonDiffusion;sk=c.kSource+data.outerKSource(q.v.coordinate,time);
@@ -178,7 +198,8 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
         load("legacy_spatial",inner?InnerPressure():OuterPressure(),q.p,divergence,{},q.weight);
         if(!inner)
         {
-            const auto ge=q.e.Gradient(s,offset[Epsilon()]);Flux ed{},ea{},ef{};
+            auto ge=q.e.Gradient(s,offset[Epsilon()]);Flux ed{},ea{},ef{};
+            if(analyticalReference){ge={};ge[2]=-epsilon/Distance(q.v.coordinate);}
             for(int b=0;b<3;++b){ed[b]=de*ge[b];ea[b]=-u[b]*epsilon;ef[b]=de*ge[b]-u[b]*epsilon;}
             load("epsilon_diffusion",Epsilon(),q.e,0,ed,q.weight);
             load("conservative_advection",Epsilon(),q.e,0,ea,q.weight);
@@ -186,7 +207,7 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
         }
     };
     for(const auto &ray:m_rays)
-    {const auto force=CartesianForcing(s,ray.coordinate,time,data,false);for(const auto &q:ray.points)evaluate(q,true,ray.profile.get(),force,&ray.destruction);}
+    {const auto force=analyticalReference?RANSVector{}:CartesianForcing(s,ray.coordinate,time,data,false);for(const auto &q:ray.points)evaluate(q,true,ray.profile.get(),force,&ray.destruction);}
     for(const auto &q:m_outer)evaluate(q,false,nullptr,{},nullptr);
     const auto prescribed=OwnedBodyLoad(time,data);
     for(int row=0;row<Size();++row)
