@@ -83,7 +83,7 @@ def main():
     meta=root/'publication-lineage'/out.name;meta.mkdir(parents=True,exist_ok=False)
     figures=a.figures.resolve() if a.figures else root/'figures'
     observer=a.observer_root.resolve() if a.observer_root else root;study=a.study.resolve() if a.study else root/'study'
-    source=observer/'source';build=observer/'build';git=lambda *v:subprocess.check_output(['git','-c','core.filemode=false','-C',str(source),*v],text=True).strip()
+    source=Path(__file__).resolve().parents[4];build=observer/'build';git=lambda *v:subprocess.check_output(['git','-c','core.filemode=false','-C',str(source),*v],text=True).strip()
     tracked=[source/f for f in subprocess.check_output(['git','-C',str(source),'ls-files'],text=True).splitlines() if (source/f).is_file()]
     content={str(f.relative_to(source)):file_hash(f) for f in tracked};write_once(meta/'source-content.json',content)
     runtime={}
@@ -114,14 +114,14 @@ def main():
         configuration=artifacts([root/'configure.log',build/'CMakeCache.txt']),
         producer_runtime=read(root/'study/EP/design.json')['runtime'],
         accepted_readback_runtime=read(study/'EP/design.json')['runtime'],
-        observer_root=str(observer),study_root=str(study),producer_root=str(root),
+        observer_root=str(observer),native_observer_source=str(observer/'source'),publication_source=str(source),study_root=str(study),producer_root=str(root),
         observer_commands=artifacts([observer/'command-receipts.json']),source_equivalence=artifacts(list(root.glob('*equivalence*.json'))+list(observer.glob('*equivalence*.json'))),finite_scope='reference-Dirichlet strip [0,1]x[0,2]; serial flat2D p3; finite observation and angular inventories; no global or long-time theorem')
     manifest['numerical_environment']=dict(python=sys.version,numpy=__import__('numpy').__version__,scipy=__import__('scipy').__version__,
         sympy=__import__('sympy').__version__,compiler=subprocess.check_output(['c++','--version'],text=True),platform=subprocess.check_output(['uname','-a'],text=True),
         allocation=dict(initial_build_workers=1,later_build_workers=4,policy_concurrency=2,test_parallel=1,ranks=1,numerical_threads=1,total_worker_cap=72))
     manifest['independent_proofs']=artifacts([root/'regression-verification.json',root/'shared-legacy-accounting-supplement.json',root/'legacy-control-accounting-supplement.json',
         *root.glob('independent-gradient-*/receipt.json'),*root.glob('independent-gradient-*/result.json'),
-        *root.glob('all-step-transactions-*.json'),root/'parent-readback-proof/EP/proof.json',root/'arithmetic-cache-proof/EP/proof.json'])
+        *root.glob('all-step-transactions-*.json'),*root.glob('terminal-gates-*.json'),root/'parent-readback-proof/EP/proof.json',root/'arithmetic-cache-proof/EP/proof.json'])
     for context in (manifest['producer_runtime'],manifest['accepted_readback_runtime']):
         for value in context.values():
             if file_hash(value['path'])!=value['sha256']:raise ValueError('recorded runtime binary changed')
@@ -134,6 +134,9 @@ def main():
         path=study/policy/'summary.json'
         if not path.exists():continue
         s=read(path);policies[policy]={k:s.get(k) for k in ('qualification','components','longer_interpretation','stationarity','ledger_totals','cost_design','mesh_inventory','arithmetic_envelope')}
+        certificate=read(root/('terminal-gates-'+policy+'.json'));verify_artifacts(certificate['inputs'])
+        policies[policy]['qualification']=certificate['qualification'];policies[policy]['components']=certificate['qualification']['components']
+        policies[policy]['complete_gate_receipt']=artifacts([root/('terminal-gates-'+policy+'.json')])
         # Cost scouts are inherited, not re-executed during observer replay.
         # Account the complete original producer inventory, including scouts.
         accounting,packets=native_accounting(read(root/'study'/policy/'summary.json'),policy);runs.extend(accounting);stages.update(packets)
@@ -194,7 +197,7 @@ def main():
     csv_file(out/'run-accounting.csv',runs);write_once(out/'accepted-stage-lineage.json',stages)
     write_once(out/'audit-witnesses.json',witnesses)
     for path in [root/'regression-verification.json',root/'shared-legacy-accounting-supplement.json',root/'legacy-control-accounting-supplement.json',root/'command-receipts.json',
-                 root/'ledger-EP.json',root/'ledger-Budget.json',*root.glob('all-step-transactions-*.json')]:
+                 root/'ledger-EP.json',root/'ledger-Budget.json',*root.glob('all-step-transactions-*.json'),*root.glob('terminal-gates-*.json')]:
         if path.exists():shutil.copyfile(path,out/path.name)
     if observer!=root:shutil.copyfile(observer/'command-receipts.json',out/'observer-command-receipts.json')
     receipt=dict(schema='WJ4PublicationV1',manifest_sha256=file_hash(meta/'manifest.json'),policies={p:v['qualification'] for p,v in policies.items()},

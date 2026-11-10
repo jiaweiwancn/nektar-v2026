@@ -16,7 +16,7 @@ import shutil
 import subprocess
 import sys
 import time
-from wj_immutable import Ledger,artifacts,read,write_once,file_hash
+from wj_immutable import Ledger,artifacts,read,write_once,file_hash,verify_artifacts
 from run_cls_epawf_picard import THREADS
 
 
@@ -37,6 +37,8 @@ def main():
             raise ValueError('final immutable observer summary is incomplete: '+policy)
         if read(root/('all-step-transactions-'+policy+'.json')).get('status')!='PASS':
             raise ValueError('all-step transaction replay is incomplete: '+policy)
+        gates=read(root/('terminal-gates-'+policy+'.json'));verify_artifacts(gates['inputs'])
+        if gates.get('schema')!='WJ4CompleteGateReceiptV1' or gates.get('governing_attempts')!=0:raise ValueError('complete gate certificate missing: '+policy)
     scripts=Path(__file__).resolve().parent;env=os.environ.copy();env.update(THREADS)
     allocation=root/('publication-'+out.name+'-allocation.json')
     subprocess.run([sys.executable,'-B',str(scripts/'wj4_resources.py'),'--reserve','8','--output',str(allocation)],env=env,check=True)

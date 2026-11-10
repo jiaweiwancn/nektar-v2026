@@ -18,6 +18,7 @@ from wj4_measure import rule,boundary_rule,owned_rule,evaluate,comparison,sensit
 from wj_immutable import (Ledger,write_once,atomic,read,file_hash,artifacts,verify_artifacts,
                           runtime,execution_intent,digest,xml_identity)
 from wj_qualification import component,aggregate,wj3_gates
+from wj4_qualification import wj4_gates
 from run_wj3_native import Study as WJ3Study
 from run_cls_epawf_picard import THREADS,require,state_hash
 from test_wj2_native import independent_loads,reference_comparison,digest_object
@@ -39,7 +40,7 @@ class Study:
         self.runtime={str(p):runtime(p) for p in (args.solver,args.probe)}
         native_code=artifacts([SCRIPTS/'wj2_cases.py',SCRIPTS/'cls_epawf_m4_cases.py',SCRIPTS/'cls_epawf_m3_cases.py',SCRIPTS/'EquilibriumWallFlat.xml'])
         self.code=dict(native_case_inputs=native_code,execution_engine=artifacts([SCRIPTS/'wj_immutable.py']))
-        self.measure_code=artifacts([SCRIPTS/p for p in ('run_wj4_native.py','wj4_measure.py','wj3_measure.py','wj_qualification.py','test_wj2_native.py','validate_wj1.py')])
+        self.measure_code=artifacts([SCRIPTS/p for p in ('run_wj4_native.py','wj4_measure.py','wj3_measure.py','wj_qualification.py','wj4_qualification.py','test_wj2_native.py','validate_wj1.py')])
         self.measure_version=digest(self.measure_code)[:12]
         design=dict(schema='WJ4FrozenIntentV1',policy=args.policy,runtime=self.runtime,governing_code=self.code,
             strip=[0.,1.,0.,2.],boundary='reference differential-field Dirichlet at both lateral boundaries and top',
@@ -378,7 +379,9 @@ class Study:
 
     def finish(self):
         required={k:self.s['components'].get(k,component('NOT_RUN','required component missing')) for k in ('mesh_inventory','horizontal','resource_design','longer','transactions')}
-        self.s['qualification']=aggregate({**self.s['components'],**required})
+        complete=wj4_gates(self.s,self.design,self.ledger.totals())
+        self.s['components'].update({k:complete['components'][k] for k in ('horizontal','longer') if k in complete.get('components',{})})
+        self.s['qualification']=complete
         self.s['longer_interpretation']='CONDITIONAL finite reference-Dirichlet strip evidence' if required['horizontal']['status']!='PASS' else 'finite reference-Dirichlet strip evidence'
         self.save()
 

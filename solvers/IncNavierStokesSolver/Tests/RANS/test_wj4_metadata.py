@@ -13,6 +13,20 @@ from wj_qualification import wj3_gates,aggregate
 from wj_immutable import write_once,execution_intent,artifacts,verify_artifacts,Ledger,xml_identity,read
 
 class Gates(unittest.TestCase):
+    def test_every_common_time_is_required(self):
+        from wj4_qualification import sensitivity_sequence,FIELDS,SCOPES
+        design=dict(amplitudes={f:1. for f in FIELDS},budgets=dict(L2=1e-4,sampled_Linf=1e-3),sensitivity_fraction=.1)
+        floor={f:dict(L2=1e-14,sampled_Linf=1e-14) for f in FIELDS}
+        pair={scope:dict(fields={f:dict(measure=1.,normalized_L2=0.,normalized_sampled_Linf=0.) for f in FIELDS}) for scope in SCOPES}
+        cases={'0':copy.deepcopy(pair),'1':copy.deepcopy(pair)}
+        self.assertEqual(sensitivity_sequence(cases,floor,design,('0','1'))['status'],'PASS')
+        for value,status in ((2e-5,'UNRESOLVED'),(-1.,'FAIL'),(float('nan'),'FAIL')):
+            changed=copy.deepcopy(cases);changed['0']['full']['fields']['u']['normalized_L2']=value
+            self.assertEqual(sensitivity_sequence(changed,floor,design,('0','1'))['status'],status)
+        self.assertEqual(sensitivity_sequence({'1':pair},floor,design,('0','1'))['status'],'NOT_RUN')
+        changed=copy.deepcopy(cases);del changed['0']['full']['fields']['k']
+        self.assertEqual(sensitivity_sequence(changed,floor,design,('0','1'))['status'],'FAIL')
+
     def setUp(self):
         self.s=json.loads((Path(__file__).resolve().parents[4]/'docs/plans/wj3-linux/EP.json').read_text())
     def test_existing_evidence(self):

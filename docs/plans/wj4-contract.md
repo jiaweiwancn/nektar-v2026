@@ -164,3 +164,12 @@ publication and every governing artifact. Compact tables retain regional weak
 loads and their signed sums, independent source/diffusion defects, interface
 trace moments, regional residual norms and frozen arithmetic packets. Regional
 norms are explicitly not added to reconstruct a total norm.
+
+Every declared common-time sensitivity gate contributes, including nonterminal
+observations. Required arithmetic milestones, complete observation coverage,
+fresh-startup identities and actual work limits are separate checks. A failing
+early comparison cannot be hidden by a passing terminal comparison. A new
+metadata-only `requalify_wj4.py` receipt applies the same complete gates to
+already immutable observations, without reopening a probe or solver. The
+original observer source stays pinned when later qualification/publication code
+uses a separate source worktree.
