@@ -1,5 +1,17 @@
 # Nonlinear duration and response qualification
 
+A95 Natural / Accepted passes the complete four-member neutral qualification
+through T=.5 (theta=.1). A93 reaches the same duration with passing physical
+accuracy, admissibility and timestep bounds, but fails the fixed-common vertical
+momentum reduction; its response is not admitted. A95's T=.016 controlled
+response resolves pressure, vertical velocity, nonlinear shear stress and full
+production with passing space/timestep uncertainty. Its conditional extension
+and selected EP/half-amplitude controls are reported separately below.
+
+The Accepted response's T=.1 extension stops at a read-only native weak-balance
+gate. A frozen control identifies incorrect containing-element selection at
+moving-cutoff integration points; the original response remains unqualified.
+
 Starting revision: `dfd94161fd9d97f7f1a8ce2966e9cc9461b6d686`, clean implementation
 worktree, no newer local or remote commits. The previous evidence and eight
 unresolved epsilon temporal-order observations remain immutable. Specifications
@@ -268,6 +280,63 @@ two prescribed wall-source constructions affect the baseline-subtracted
 pressure, nonlinear shear stress and production responses under one A95 outer
 closure. It adds no EP T=.5 or open-boundary claim. These controls retain the
 existing accuracy/domain criteria and cannot admit an A93 perturbation.
+
+A95's complete neutral final audit and the additional inner-only qualification
+subsequently pass. At T=.016 the Accepted response's scaled RMS signals on the
+primary pair are Pi=3.77347e-4, w=3.32463e-5, Qxz=1.42792e-4 and P=1.91826e-4.
+Their spatial differences are respectively 5.42e-8, 2.08e-9, 4.00e-8 and
+4.58e-8. Maximum timestep differences are 2.71e-6, 9.18e-8, 7.05e-7 and
+1.28e-6, all below the predeclared response-specific limits. The measured
+Accepted receipt is hashed into the A95/EP selection before its advancement.
+
+The first EP admission correctly rejects older primary observers without
+accepted-state hashes. New read-only scalar supplements are selected with the
+explicit `--scalar-observer-root` interface; the original observers and rejected
+admission log remain unchanged. All four supplemented short histories and
+frozen quadrature pass before the new EP admission is written.
+
+## First response failure and geometric witness
+
+All four A95 Accepted responses reach T=.016 with passing physical accuracy,
+domain and response space/timestep comparisons. Their first additional spatial
+audit fails analytical vertical-momentum weak balance: maximum row load
+1.2308036225e-9, scaled 2.9848536942e-9 against the unchanged 1e-9 criterion
+(with the existing 1e-12 absolute floor). Native physical-term reconstruction
+agrees to 2.49e-14; the epsilon constant-test reaction identity also passes.
+These checks test different properties and retain separate outcomes.
+
+The frozen B5 packet contains 156 integration points outside the bounds of the
+element chosen for their test basis, by at most 9.8861908243e-12. For example,
+z=.014912396178320015 lies above the mesh node .01491239617830955, but the native
+locator selects geometry 4 rather than containing geometry 5. The shared
+`RANSWallGlobalField::LocateElement` admits neighboring elements within 1e-11
+and chooses the lowest geometry ID. `Refresh` uses this locator for the moving
+wall-profile quadrature. Near a fixed cell boundary, the new profile panels
+therefore acquire basis rows from the adjacent cell. The counterexample is
+inside the wall region, separate from exact-interface side sampling.
+
+The read-only control keeps every coordinate, quadrature weight, coefficient,
+time and consumed boundary value fixed. It exports native test bases using
+the explicit containing geometry. The Stokes defect in the radial direction
+falls from 1.4848854007e-8 to 5.8684761338e-15. The analytical momentum-z weak
+defect falls to 5.0401848493e-16 and the original weak-balance criterion passes
+on those counterfactual test bases. The original constant-normal-traction
+load's scaled native free mass-dual norm is 4.1313245389e-6; its counterfactual
+value is 2.5597805389e-13. This identifies a geometric ownership defect without
+feeding the counterfactual into production assembly or modifying a trajectory.
+
+The frozen control returns nonzero for the original failed qualification. Its
+successful diagnosis does not relabel the response or resume it to T=.1.
+The original sealed first-failure receipt is retained. A separately named
+supplement completes independent spatial, scalar and frozen-quadrature checks
+after that failure. The response auditor now gathers independent checks while
+preserving a nonzero overall exit; its status output also reports the actual
+failed numerical check instead of printing an unconditional "pass".
+
+The A93 T=.5 common-w failure remains separate. Its measured constant-flux
+quadrature effect is much smaller than its dominant evolved common load;
+the current control does not establish that ownership alone explains A93's
+failed reduction. Both limitations must remain visible in the next package.
 
 Concurrent external starts produced a conservative schedule census of 75; the
 immediate active census was 67. An owned process family was suspended promptly.
