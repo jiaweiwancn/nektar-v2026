@@ -6,7 +6,7 @@
 all completed artifacts and advances only missing milestones with native history.
 No field, checkpoint signature, timestep or boundary vector is rewritten.
 """
-import argparse,gzip,json,math,os,subprocess,sys,tempfile,time,xml.etree.ElementTree as ET
+import argparse,gzip,json,math,os,shutil,subprocess,sys,tempfile,time,xml.etree.ElementTree as ET
 from pathlib import Path
 from contextlib import nullcontext
 os.environ.update(dict.fromkeys(('OMP_NUM_THREADS','OPENBLAS_NUM_THREADS','MKL_NUM_THREADS','BLIS_NUM_THREADS','NUMEXPR_NUM_THREADS'),'1'))
@@ -81,7 +81,7 @@ def main():
   if a.velocity_amplitude:
    with (pre/'zero-step-solver.log').open('w') as f:c=subprocess.run([str(solver),'case.xml'],cwd=pre,stdout=f,stderr=subprocess.STDOUT,timeout=a.timeout)
    z=load(pre/'case.evolution.json');assert c.returncode==0 and z['time']==0 and z['steps']==0 and not z['failure'],z.get('failure')
-   actual_initial=dict(state_sha256=exact_vector_hash(z['state']),state_coefficients=z['state'],history_sha256=sha(Path(z['checkpoint'])/'State.bin'),history_source=str(Path(z['checkpoint'])/'State.bin'),receipt=z['initialization_receipt'])
+   actual_initial=dict(schema='ActualPerturbedInitialV2',state_sha256=exact_vector_hash(z['state']),state_coefficients=z['state'],history_sha256=sha(Path(z['checkpoint'])/'State.bin'),history_source=str(out/'actual-initial/State.bin'),history_header=header(Path(z['checkpoint'])),receipt=z['initialization_receipt'])
    actual=probe(sampler,pre,replay_request(seed,grid,state=z['state']));initial=dict(actual['observation'],grid_weights=weights)
   request=dict(schema='NeutralPilotV1',model=a.model,policy=a.policy,wall=a.wall,descriptor=seed['observation']['resolved_descriptor'],
    knots=selected_knots(ref,a),degree=a.degree,pressure_degree=a.degree-2,columns=a.columns,quadrature=seed['observation']['actual_quadrature'],
@@ -94,8 +94,15 @@ def main():
   if a.mesh_file:request['declared_mesh']=dict(file_sha256=sha(a.mesh_file),specification=load(a.mesh_file))
   if actual_initial:request['actual_initial']=actual_initial
   admission=RequestManifest(out,request,a.resume)
+  if actual_initial:
+   initdir=out/'actual-initial'
+   if a.resume:assert admission.completed(initdir),'actual initial artifacts are not sealed'
+   else:
+    initdir.mkdir();shutil.copy2(Path(z['checkpoint'])/'State.bin',initdir/'State.bin')
+    for source_name,target_name in [('case.evolution.json','native-initialization.json'),('case.xml','case.xml'),('zero-step-solver.log','solver.log')]:shutil.copy2(pre/source_name,initdir/target_name)
+    write_json(initdir/'observation.json',initial);admission.seal(initdir,['State.bin','native-initialization.json','case.xml','solver.log','observation.json'])
   if not a.resume:
-   write_json(out/'initial-packet.json',seed);write_json(out/'evaluation-grid.json',dict(grid=grid,weights=weights));write_json(out/'initial-metrics.json',dict(accuracy=accuracy(ref,initial,initial,weights),residual=initial['audit_alpha_zero'],identity=seed['initialization_receipt'],dof=initial['sizes'],analytical=ref.self_check()))
+   write_json(out/'initial-packet.json',seed);write_json(out/'evaluation-grid.json',dict(grid=grid,weights=weights));write_json(out/'initial-metrics.json',dict(accuracy=accuracy(ref,initial,initial,weights),residual=initial['audit_alpha_zero'],identity=actual_initial['receipt'] if actual_initial else seed['initialization_receipt'],neutral_reference_identity=seed['initialization_receipt'],dof=initial['sizes'],analytical=ref.self_check()))
   result=load(out/'results.json') if a.resume and (out/'results.json').exists() else dict(status='running',execution_status='running',numerical_accuracy_status='not_assessed',milestones=[],request_sha256=admission.payload['sha256'])
   if result.get('first_failure'):
    print(json.dumps(dict(status='preserved_failure',failure=result['first_failure'])));return 1

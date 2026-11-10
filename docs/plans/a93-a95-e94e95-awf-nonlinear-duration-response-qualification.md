@@ -64,3 +64,18 @@ physical and absolute field/traction accuracy gates. A93/EP is the preselected
 short wall-source/production comparison, with all four companions at .016;
 extend only for a specific resolved wall question. No temporal order, global
 stability or open-outflow claim follows from these experiments.
+
+Pressure, vertical velocity, Qxz and full-production responses must be resolved
+for extension to .1; individual smaller scalar/stress responses retain their
+unresolved labels. Stress response uses scale u_star^2 and production response
+uses epsilon(H). Initial coefficients and native zero-step history are sealed
+separately from the neutral reference; their stable artifact identities are
+checked on every same-space temporal comparison and exact resume.
+
+For exactly divergence-free planar flow, A93's Q:S vanishes because the two
+nonzero strain eigenvalues are opposite and Omega^2 is a multiple of the
+identity on that plane. A95's commutator has zero contraction with S generally.
+This special kinematic fact does not permit dropping full production: the
+variable viscosity responds, Qxz can be nonzero, and the discrete raw gradient
+can have divergence. Report the nonlinear and isotropic production contributions
+separately and keep the general three-dimensional constitutive evidence intact.

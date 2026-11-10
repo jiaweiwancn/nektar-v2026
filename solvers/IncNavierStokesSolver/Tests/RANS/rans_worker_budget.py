@@ -19,10 +19,10 @@ def spawn(root, command, **kwargs):
             covered.update(more)
         other=sum(threads for pid,(parent,threads,name,args) in processes.items() if pid not in covered and (name.startswith(('IncNavier','RANS','Nek','cc1plus','f951','orted','mpiexec')) or (name.startswith('python') and 'nektar' in args)))
         # A runner/probe family needs <=8 threads (Python + solver + ORTE).
-        # Keep another eight threads unallocated for unrelated campaign startup.
+        # Keep sixteen threads unallocated for unrelated campaign startup.
         booked=other+8*len(leases)
-        if booked+8+8>72:
+        if booked+8+16>72:
             path.write_text(json.dumps(leases)+'\n');return None
         process=subprocess.Popen(command,**kwargs);leases.append(process.pid);path.write_text(json.dumps(leases)+'\n')
-        with (root/'worker-bookings.jsonl').open('a') as out:out.write(json.dumps(dict(pid=process.pid,external_threads=other,reserved_families=len(leases),booked_threads=other+8*len(leases),unallocated_reserve=8,limit=72))+'\n')
+        with (root/'worker-bookings.jsonl').open('a') as out:out.write(json.dumps(dict(pid=process.pid,external_threads=other,reserved_families=len(leases),booked_threads=other+8*len(leases),unallocated_reserve=16,limit=72))+'\n')
         return process

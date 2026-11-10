@@ -4,15 +4,22 @@
 import argparse,hashlib,json
 from pathlib import Path
 from qualify_rans_preservation import load
-from rans_qualification import compare_samples,write_json
+from rans_qualification import compare_samples,write_json,exact_vector_hash
 from rans_request_manifest import RequestManifest
 from rans_preservation_oracle import Reference
 from run_rans_neutral_pilot import scaled,FIELDS
 
-def compare(root,labels,T):
+def compare(root,labels,T,inputs_only=False):
     folders=[root/'campaigns'/label for label in labels];reqs=[load(f/'request-manifest.json')['request'] for f in folders];metrics=[];samples=[];provenance=[]
     for key in ('model','policy','wall','descriptor','boundary_policy','runtime','velocity_amplitude'):
         if any(q[key]!=reqs[0][key] for q in reqs[1:]):raise ValueError('physics/runtime identity differs '+key)
+    for req in reqs:
+        if req.get('actual_initial'):
+            from continue_cls_epawf_pimple import header
+            actual=req['actual_initial']
+            if actual.get('schema')!='ActualPerturbedInitialV2' or exact_vector_hash(actual['state_coefficients'])!=actual['state_sha256']:raise ValueError('actual perturbed coefficient binding invalid')
+            h=header(Path(actual['history_source']).parent,full=True)
+            if h['sha256']!=actual['history_sha256'] or h['steps']!=0 or h['time']!=0 or h['dt']!=req['dt'] or exact_vector_hash(h['coupled_state'])!=actual['state_sha256']:raise ValueError('actual perturbed initial native history invalid')
     if reqs[0]['dt']!=reqs[1]['dt'] or reqs[2]['dt']!=reqs[0]['dt']/2 or reqs[3]['dt']!=reqs[1]['dt']/2:raise ValueError('invalid dt pair')
     for a,b in ((0,2),(1,3)):
         for key in ('knots','degree','pressure_degree','columns','quadrature','raw_neutral_sha256','boundary','declared_mesh'):
@@ -29,6 +36,9 @@ def compare(root,labels,T):
         if not admission.completed(endpoint):raise ValueError('incomplete endpoint '+str(endpoint))
         m=load(endpoint/'metrics.json');s=load(endpoint/'endpoint-samples.json');assert m['status']=='pass' and abs(m['time']-T)<1e-13
         metrics.append(m);samples.append(s);provenance.append(dict(label=folder.name,request_sha256=admission.payload['sha256'],space={k:request[k] for k in ('knots','degree','pressure_degree','quadrature','columns')},dt=request['dt'],time=m['time'],history=m['history_identity'],state_sha256=m['final_state_sha256'],metrics_sha256=hashlib.sha256((endpoint/'metrics.json').read_bytes()).hexdigest(),source=str(endpoint)))
+    if inputs_only:
+        for sample in samples:compare_samples(samples[0],sample,samples[0]['grid_weights'])
+        return dict(status='verified_inputs',requests=reqs,metrics=metrics,samples=samples,provenance=provenance,scope='input/endpoint identities only; no neutral error-reduction criterion applied')
     ref=Reference(reqs[0]['model'],reqs[0]['policy'],reqs[0]['wall']);weights=samples[0]['grid_weights'];dh=scaled(compare_samples(samples[0],samples[1],weights),ref);dc=scaled(compare_samples(samples[0],samples[2],weights),ref);df=scaled(compare_samples(samples[1],samples[3],weights),ref);fields={}
     for f in FIELDS:
         ec,ef=[m['reference_error'][f]['weighted_RMS'] for m in metrics[:2]];h=dh[f]['weighted_RMS'];limit=max(1e-7,.1*h);ratio=ef/ec if ec>1e-10 else None
