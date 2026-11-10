@@ -30,13 +30,16 @@ class Study:
     def __init__(self,args):
         require(platform.system()=='Linux','compiled Linux is authoritative')
         started=time.time()
-        self.a=args;self.root=args.output.resolve()/args.policy;self.root.mkdir(parents=True,exist_ok=True)
+        self.a=args;self.read_only_reprocess=getattr(args,'mode',None)=='reprocess'
+        parent=getattr(args,'native_study',None)
+        self.native_parent=parent.resolve()/args.policy if parent else None
+        self.root=args.output.resolve()/args.policy;self.root.mkdir(parents=True,exist_ok=True)
         self.summary=self.root/'summary.json';self.s=read(self.summary) if self.summary.exists() else dict(schema='WJ4StudyV1',policy=args.policy,execution={},components={})
         os.environ.update(THREADS)
         self.runtime={str(p):runtime(p) for p in (args.solver,args.probe)}
         native_code=artifacts([SCRIPTS/'wj2_cases.py',SCRIPTS/'cls_epawf_m4_cases.py',SCRIPTS/'cls_epawf_m3_cases.py',SCRIPTS/'EquilibriumWallFlat.xml'])
         self.code=dict(native_case_inputs=native_code,execution_engine=artifacts([SCRIPTS/'wj_immutable.py']))
-        self.measure_code=artifacts([SCRIPTS/p for p in ('wj4_measure.py','wj3_measure.py','test_wj2_native.py','validate_wj1.py')])
+        self.measure_code=artifacts([SCRIPTS/p for p in ('run_wj4_native.py','wj4_measure.py','wj3_measure.py','wj_qualification.py','test_wj2_native.py','validate_wj1.py')])
         self.measure_version=digest(self.measure_code)[:12]
         design=dict(schema='WJ4FrozenIntentV1',policy=args.policy,runtime=self.runtime,governing_code=self.code,
             strip=[0.,1.,0.,2.],boundary='reference differential-field Dirichlet at both lateral boundaries and top',
@@ -47,10 +50,17 @@ class Study:
             source_order=16,basis_points=[8,8],observation_order_z=6,observation_order_x=4,independent_x_order=6,
             physics='WJHighRe Original DevStrainRawWorkV1; physical epsilon; uncapped calibrated wall; eta0; zero forces; one sweep U,p,k,epsilon; reuse/verify Off; StopOnBound On',
             observation_scope='common composite physical quadrature; explicit element/face traces; one full-domain pressure gauge')
-        write_once(self.root/'design.json',design);self.design=design
+        if self.native_parent:
+            require(self.read_only_reprocess,'a native parent is only valid for read-only reprocessing')
+            design['native_parent']=artifacts([self.native_parent/'summary.json',self.native_parent/'design.json'])
+        write_once(self.root/'design.json',design)
+        if self.s.get('design_sha256'):require(self.s['design_sha256']==file_hash(self.root/'design.json'),'immutable experiment design bytes changed')
+        self.design=design
         self.ledger=Ledger(Path(os.environ.get('WJ4_PACKAGE_ROOT',str(args.output.parent))),args.policy)
         self.session='driver-'+uuid.uuid4().hex
         self.ledger.begin_session(self.session,started)
+        for name in ('mesh_inventory','horizontal','resource_design','longer','transactions'):
+            self.s['components'].setdefault(name,component('NOT_RUN','required component not executed'))
         self.s.update(design_sha256=file_hash(self.root/'design.json'),runtime=self.runtime,measurement_code=self.measure_code,
             source_revision=subprocess.check_output(['git','-C',str(SCRIPTS.parents[3]),'rev-parse','HEAD'],text=True).strip())
         self.save()
@@ -63,10 +73,11 @@ class Study:
         argv=list(map(str,argv));folder.mkdir(parents=True,exist_ok=True)
         intent=execution_intent(argv,inputs,self.measure_code if measurement else self.code,self.runtime,settings)
         write_once(folder/'execution-intent.json',intent);receipt=folder/'receipt.json'
+        for value in self.runtime.values():
+            require(file_hash(value['path'])==value['sha256'],'runtime binary changed before execution/reuse')
+            for path,h in value['libraries'].items():require(file_hash(path)==h,'runtime dependency changed before execution/reuse')
+        require(not self.read_only_reprocess or Path(argv[0])!=self.a.solver or receipt.exists(),'measurement-only reprocessing cannot launch a native run')
         if receipt.exists():
-            for value in self.runtime.values():
-                require(file_hash(value['path'])==value['sha256'],'runtime binary changed before reuse')
-                for path,h in value['libraries'].items():require(file_hash(path)==h,'runtime dependency changed before reuse')
             r=read(receipt);require(r['intent_sha256']==digest(intent),'cached execution fingerprint mismatch')
             verify_artifacts(r['artifacts']);return r
         require(not (folder/'command.log').exists(),'unreconciled attempt retained; inspect ledger and choose a new attempt name')
@@ -88,7 +99,9 @@ class Study:
         write_once(receipt,r);self.ledger.finish(label,actual,r['seconds'],str(receipt));self.save();return r
 
     def native(self,name,steps=0,cp=None,dt=3.2e-5,level=1,nx=1,reject=0,arithmetic_time=None):
-        folder=self.root/name;xml=folder/'case.xml';xknots=[i/nx for i in range(nx+1)]
+        folder=(self.native_parent or self.root)/name;xml=folder/'case.xml'
+        require(not self.read_only_reprocess or (xml.exists() and (folder/'receipt.json').exists()),'measurement-only reprocessing requires an existing native receipt')
+        xknots=[i/nx for i in range(nx+1)]
         options=dict(steps=steps,restart=str(Path(cp).resolve()) if cp else None,dt=dt,level=level,xknots=xknots,
             policy=self.a.policy,reject=reject,arithmetic_time=arithmetic_time,stop_on_bound=True)
         if xml.exists():
@@ -103,7 +116,20 @@ class Study:
                 set_info(tree,'RANSWallPimpleArithmetic','On');set_info(tree,'RANSWallPimpleArithmeticTime',format(arithmetic_time,'.17g'))
             write(tree,xml);write_once(folder/'requested-intent.json',options);write_once(folder/'xml-identity.json',xml_identity(xml))
         report=folder/'case.evolution.json';inputs=[xml]+([Path(cp)/'State.bin'] if cp else [])
-        r=self.execute(folder,[self.a.solver,xml],inputs,options,steps,[report])
+        if self.native_parent:
+            # Preserve original producer receipts/runtime. The new observer is
+            # a separate serialized-checkpoint consumer, never a governing run.
+            verify_artifacts(self.design['native_parent'])
+            intent=json.loads((folder/'execution-intent.json').read_text())
+            r=read(folder/'receipt.json')
+            require(r['intent_sha256']==digest(intent),'parent native intent fingerprint differs')
+            require(intent['argv']==[str(self.a.solver),str(xml)],'parent native argv differs')
+            verify_artifacts(intent['inputs']);verify_artifacts(r['artifacts'])
+            for code in intent['code'].values():verify_artifacts(code)
+            for value in intent['runtime'].values():
+                require(file_hash(value['path'])==value['sha256'],'parent runtime binary changed')
+                for path,h in value['libraries'].items():require(file_hash(path)==h,'parent dependency changed')
+        else:r=self.execute(folder,[self.a.solver,xml],inputs,options,steps,[report])
         d=read(report) if report.exists() else None
         self.s['execution'][name]=dict(status='PASS' if r['exit_code']==0 and d and not d.get('failure') else 'OBSTRUCTED',
             receipt=str(folder/'receipt.json'),receipt_sha256=file_hash(folder/'receipt.json'),report=str(report),
@@ -133,7 +159,9 @@ class Study:
         c=dict(path=str(output),sha256=file_hash(output),report_sha256=file_hash(report),checkpoint_sha256=file_hash(cp/'State.bin'),
             observation_sha256=digest(physical),boundary_quadrature_sha256=digest([[x,z,w] for (x,z),w in boundary_rule(xorder=xorder).items()]),time=m['time'],steps=d['steps'],state_sha256=m['state_sha256'],history_sha256=m['stage_history_sha256'],
             spatial_residual=m['spatial_mass_dual_norms'],stage_defect=m['completed_stage']['mass_dual_norms'] if m['completed_stage'] else None,
-            errors=evaluate(m,self.a.policy,xorder),witness_replay=replay_witnesses(m['audit']))
+            errors=evaluate(m,self.a.policy,xorder),
+            gradient_replay=dict(witness=m.get('strong_divergence_witness'),max_defect=m.get('fast_independent_gradient_max_defect'),
+                observations=m.get('independent_gradient_observations')),witness_replay=replay_witnesses(m['audit']))
         if assembly:
             checks=raw['assembly_checks'];checks['policy']=self.a.policy
             c['independent_loads']=independent_loads(checks,self.a.policy,d['offsets'])
@@ -193,27 +221,49 @@ class Study:
         # Independent horizontal integration increase on both startup fields.
         q=[]
         for nx in (1,2):
-            d=read(self.root/('horizontal-Nx%d-cp0'%nx)/'case.evolution.json');m,c=self.measure('horizontal-Nx%d-q6'%nx,d,self.root/('horizontal-Nx%d-cp0'%nx),nx=nx,xorder=6)
+            d=read((self.native_parent or self.root)/('horizontal-Nx%d-cp0'%nx)/'case.evolution.json');m,c=self.measure('horizontal-Nx%d-q6'%nx,d,(self.native_parent or self.root)/('horizontal-Nx%d-cp0'%nx),nx=nx,xorder=6)
             base=records[str(nx)]['initial']['errors']['continuum_error']['full']['fields'];new=c['errors']['continuum_error']['full']['fields']
             delta={f:abs(base[f]['L2']-new[f]['L2']) for f in base};require(max(delta.values())<1e-10,'horizontal quadrature increase is material')
             q.append(dict(nx=nx,order=[4,6],L2_delta=delta,absolute_floor=1e-10))
         self.s['horizontal_quadrature']=q;self.save()
 
     def arithmetic(self,name,d,m):
-        folder=self.root/('measure-'+self.measure_version)/name;path=folder/'arithmetic.json'
-        if path.exists():return read(path)
-        intent=dict(report_state=state_hash(d['state']),measurement_state=m['state_sha256'],code=self.measure_code)
+        folder=self.root/('measure-'+self.measure_version)/name;path=folder/'arithmetic.json';receipt=folder/'arithmetic-receipt.json'
+        packets={};inputs=[]
+        for field in ('momentum','pressure','k','epsilon'):
+            entry=d['pimple_attempts'][-1][field+'_arithmetic'];packet=read(Path(entry['path']))
+            require(file_hash(entry['path'])==entry['sha256'],'arithmetic source packet changed')
+            inputs.extend([Path(entry['path']),Path(packet['matrix']['path']),Path(packet['mass_or_correction_map']['path'])])
+            packets[field]=entry['sha256']
+        intent=dict(report_state=state_hash(d['state']),measurement_state=m['state_sha256'],
+            callback_history=m['stage_history_sha256'],time=d['time'],packets=packets,inputs=artifacts(inputs),code=self.measure_code,runtime=self.runtime)
+        write_once(folder/'arithmetic-intent.json',intent)
+        if path.exists():
+            require(receipt.exists(),'unbound cached arithmetic; use a new measurement lineage')
+            r=read(receipt);require(r['intent_sha256']==digest(intent),'cached arithmetic intent mismatch')
+            verify_artifacts(r['artifacts']);return read(path)
+        require(not receipt.exists(),'orphan arithmetic receipt')
         label=str(folder.relative_to(self.a.output))+'/svd';self.ledger.reserve(label,intent,0,300)
         start=time.time()
         try:value=arithmetic(d,m)
         except Exception:
             self.ledger.finish(label,0,time.time()-start,'failed offline arithmetic');raise
         value['scope']='finite frozen-system estimate at declared early/middle/end checkpoints; envelopes are not a nonlinear perturbation theorem'
-        write_once(path,value);self.ledger.finish(label,0,time.time()-start,str(path));self.save();return value
+        write_once(path,value)
+        write_once(receipt,dict(intent_sha256=digest(intent),artifacts=artifacts([path]),seconds=time.time()-start))
+        self.ledger.finish(label,0,time.time()-start,str(receipt));self.save();return value
 
     def cost(self):
+        if self.native_parent:
+            frozen=read(self.native_parent/'cost-design.json');parent=read(self.native_parent/'summary.json')
+            require(parent['cost_design']==frozen,'parent frozen cost design differs')
+            write_once(self.root/'cost-design.json',frozen);self.s['cost_design']=frozen
+            self.s['components']['resource_design']=parent['components']['resource_design']
+            self.s['inherited_cost_design']=artifacts([self.native_parent/'cost-design.json']);self.save();return
         if (self.root/'cost-design.json').exists():
-            self.s['cost_design']=read(self.root/'cost-design.json');self.save();return
+            frozen=read(self.root/'cost-design.json')
+            require(self.s.get('cost_design')==frozen,'frozen cost design differs from its saved summary')
+            self.save();return
         d,r,f=self.native('cost-fine-cp0',level=2);self.valid(d,r)
         s,rr,sf=self.native('cost-fine-4',4,d['checkpoint'],level=2,arithmetic_time=4*3.2e-5);self.valid(s,rr)
         m,c=self.measure('cost-fine-4',s,sf,level=2)
@@ -302,8 +352,8 @@ class Study:
         if len(rows)<2:
             self.s['components']['transactions']=component('NOT_RUN','no retained late32-step segment');return
         end=int(rows[-1]['steps']);start=end-32
-        original=self.root/('longer-coarse-'+str(end));whole=read(original/'case.evolution.json')
-        predecessor=self.root/('longer-coarse-'+str(start));first=read(predecessor/'case.evolution.json');cp=Path(first['checkpoint'])
+        original=(self.native_parent or self.root)/('longer-coarse-'+str(end));whole=read(original/'case.evolution.json')
+        predecessor=(self.native_parent or self.root)/('longer-coarse-'+str(start));first=read(predecessor/'case.evolution.json');cp=Path(first['checkpoint'])
         immutable=artifacts([cp/'State.bin'])
         a,rc,af=self.native('transaction-first16',16,cp,level=2);self.valid(a,rc)
         b,rc,bf=self.native('transaction-second16',16,a['checkpoint'],level=2);self.valid(b,rc)
@@ -334,16 +384,32 @@ class Study:
 
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--solver',type=Path,required=True);p.add_argument('--probe',type=Path,required=True)
-    p.add_argument('--output',type=Path,required=True);p.add_argument('--policy',choices=('EP','Budget'),required=True)
-    p.add_argument('--mode',choices=('inventory','horizontal','cost','longer','all','report'),required=True);a=p.parse_args()
-    a.output=a.output.resolve();a.solver=a.solver.resolve();a.probe=a.probe.resolve();s=Study(a)
+    p.add_argument('--output',type=Path,required=True);p.add_argument('--native-study',type=Path);p.add_argument('--policy',choices=('EP','Budget'),required=True)
+    p.add_argument('--mode',choices=('inventory','horizontal','cost','longer','all','reprocess','report'),required=True);a=p.parse_args()
+    a.output=a.output.resolve();a.solver=a.solver.resolve();a.probe=a.probe.resolve()
+    archived=None
+    if a.mode=='reprocess':
+        old=(a.native_study.resolve() if a.native_study else a.output)/a.policy/'summary.json';require(old.exists(),'no immutable native study to reprocess')
+        data=old.read_bytes();h=file_hash(old);directory=a.output/a.policy/'summary-lineage';directory.mkdir(parents=True,exist_ok=True)
+        target=directory/(h+'.json')
+        if target.exists():require(target.read_bytes()==data,'archived summary bytes differ')
+        else:
+            with target.open('xb') as stream:stream.write(data)
+        archived=dict(path=str(target),sha256=h)
+    s=Study(a)
     try:
-        for mode in (('inventory','horizontal','cost','longer') if a.mode=='all' else (a.mode,)):
+        for mode in (('inventory','horizontal','cost','longer') if a.mode in ('all','reprocess') else (a.mode,)):
             if mode!='report':getattr(s,mode)()
         if s.s.get('failure') and (s.s.get('failure_mode')==a.mode or a.mode=='all'):
             s.s.setdefault('resolved_harness_failures',[]).append(dict(reason=s.s.pop('failure'),mode=s.s.pop('failure_mode',None),
                 resolution_source=s.s['source_revision'],measurement_code=s.measure_code))
             if a.mode in ('all','cost'):s.s['components'].pop(a.mode,None)
+        if a.mode=='reprocess':
+            ledger=read(s.ledger.file)
+            own=[r for r in ledger['entries'].values() if r.get('session')==s.session]
+            require(all(r.get('actual_attempts',r['reserved_attempts'])==0 for r in own),'reprocessing launched a scheduled native attempt')
+            s.s['read_only_reprocessing']=dict(archived_summary=archived,new_measurement_code=s.measure_code,
+                governing_launches=0,governing_attempts=0,session=s.session,old_receipts_retained=True)
         s.finish()
     except Exception as error:
         s.s['components'][a.mode]=component('RESOURCE_LIMIT' if 'RESOURCE_LIMIT' in str(error) else 'FAIL',str(error));s.s['failure']=str(error);s.s['failure_mode']=a.mode;s.finish();raise

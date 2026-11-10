@@ -10,6 +10,8 @@ def component(status,reason='',**evidence):
 
 def aggregate(parts):
     if not parts:return component('NOT_RUN','no components')
+    if any(not isinstance(p,dict) or p.get('status') not in STATUSES for p in parts.values()):
+        return component('FAIL','invalid or incomplete component status',components=parts)
     states=[p['status'] for p in parts.values()]
     for status in ('FAIL','OBSTRUCTED','RESOURCE_LIMIT','UNRESOLVED','NOT_RUN'):
         if status in states:return component(status,'required components are not all PASS',components=parts)
@@ -31,12 +33,13 @@ def wj3_gates(s):
     parts={}
     rows=s.get('spatial',[])
     if len(rows)!=3:parts['spatial']=component('NOT_RUN','three spatial levels required')
+    elif any(not isinstance(r,dict) or not isinstance(r.get('raw_reference_norms'),list) or len(r['raw_reference_norms'])!=8 for r in rows):parts['spatial']=component('NOT_RUN','incomplete spatial residual blocks')
     elif not finite(rows):parts['spatial']=component('FAIL','nonfinite spatial evidence')
     else:
         tests={}
         for j,name in ((0,'u'),(2,'k'),(3,'entire_outer_epsilon')):
             v=[r['raw_reference_norms'][j] for r in rows]
-            ok=all((a<=1e-11 and b<=1e-11) or 0<=b<a for a,b in zip(v,v[1:]))
+            ok=all(isinstance(a,(float,int)) and not isinstance(a,bool) and a>=0 for a in v) and all((a<=1e-11 and b<=1e-11) or 0<=b<a for a,b in zip(v,v[1:]))
             tests[name]=component('PASS' if ok else 'FAIL','decreasing residual or declared absolute floor',values=v)
         parts['spatial']=aggregate(tests)
     rates=s.get('temporal',{}).get('rates',{})
@@ -45,9 +48,10 @@ def wj3_gates(s):
     for f in required:
         r=rates.get(f)
         if r is None:tr[f]=component('NOT_RUN','missing common-time differences');continue
+        if not isinstance(r,dict):tr[f]=component('FAIL','invalid temporal packet');continue
         if not finite(r):tr[f]=component('FAIL','nonfinite temporal evidence');continue
         a,b,floor=(r.get(k) for k in ('A','B','comparison_floor'))
-        if any(v is None for v in (a,b,floor)) or min(a,b,floor)<0:tr[f]=component('FAIL','invalid difference/floor');continue
+        if any(not isinstance(v,(int,float)) or isinstance(v,bool) for v in (a,b,floor)) or min(a,b,floor)<0:tr[f]=component('FAIL','invalid difference/floor');continue
         if min(a,b)<=floor:
             constant=r.get('classification')=='roundoff_limited_constant' and max(a,b)<=floor
             tr[f]=component('PASS' if constant else 'UNRESOLVED','roundoff-limited constant' if constant else 'differences not resolved',A=a,B=b,floor=floor)
@@ -57,7 +61,7 @@ def wj3_gates(s):
     parts['temporal']=aggregate(tr)
     main=s.get('main',[])
     parts['trajectories']=component('OBSTRUCTED' if s.get('main_obstructions') else
-        'PASS' if len(main)==3 and all('comparison' in r and not r.get('obstruction') for r in main) else 'NOT_RUN',
+        'PASS' if len(main)==3 and all(isinstance(r,dict) and r.get('comparison') and not r.get('obstruction') and r.get('steps')==n for r,n in zip(main,(32,64,128))) else 'NOT_RUN',
         'all three frozen-target trajectories required')
     parts['cross_mesh']=component('OBSTRUCTED' if s.get('cross_obstruction') else 'PASS' if s.get('cross_mesh',{}).get('comparison') else 'NOT_RUN',
         'same-time cross-mesh trajectory required')

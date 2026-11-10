@@ -17,7 +17,7 @@ SUITES=dict(controls=(CONTROL,24,0),native=('WJNativeEP|WJNativeBudget|RANSWJSha
 def main():
     p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--label',default='qualification');p.add_argument('--suite',choices=SUITES,required=True);a=p.parse_args()
     root=a.root.resolve();build=root/'build';scripts=Path(__file__).resolve().parent
-    env=os.environ.copy();env.update(THREADS);env['WJ4_PACKAGE_ROOT']=str(root);env['LD_LIBRARY_PATH']=str(build/'geometry-lib')+':'+env.get('LD_LIBRARY_PATH','')
+    env=os.environ.copy();env.update(THREADS);env['WJ4_PACKAGE_ROOT']=os.environ.get('WJ4_PACKAGE_ROOT',str(root));env['LD_LIBRARY_PATH']=str(build/'geometry-lib')+':'+env.get('LD_LIBRARY_PATH','')
     regex,count,reserve=SUITES[a.suite];regex='^('+regex+')$';label=a.label+'-'+a.suite
     inventory=subprocess.check_output(['ctest','--test-dir',str(build),'--show-only=json-v1','-R',regex],env=env,text=True)
     import json
@@ -26,7 +26,7 @@ def main():
     write_once(root/(label+'-inventory.json'),json.loads(inventory))
     allocation=root/(label+'-allocation.json')
     subprocess.run(['python3','-B',str(scripts/'wj4_resources.py'),'--reserve','10','--output',str(allocation)],env=env,check=True)
-    ledgers={p:Ledger(root,p) for p in ('EP','Budget')}
+    ledgers={p:Ledger(Path(env['WJ4_PACKAGE_ROOT']),p) for p in ('EP','Budget')}
     if a.suite!='composite':
         for l in ledgers.values():l.reserve('ctest/'+label,dict(regex=regex,inventory_sha256=file_hash(root/(label+'-inventory.json'))),reserve,1200)
     start=time.time()

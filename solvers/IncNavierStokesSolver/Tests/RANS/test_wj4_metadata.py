@@ -7,7 +7,7 @@ from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import patch
-from wj_qualification import wj3_gates
+from wj_qualification import wj3_gates,aggregate
 from wj_immutable import write_once,execution_intent,artifacts,verify_artifacts,Ledger,xml_identity,read
 
 class Gates(unittest.TestCase):
@@ -27,6 +27,19 @@ class Gates(unittest.TestCase):
         self.assertEqual(wj3_gates(s)['status'],'FAIL')
         s=copy.deepcopy(self.s);s['spatial']=s['spatial'][:2]
         self.assertEqual(wj3_gates(s)['status'],'NOT_RUN')
+    def test_incomplete_blocks_and_negative_norms(self):
+        s=copy.deepcopy(self.s);s['spatial'][0]['raw_reference_norms']=[]
+        self.assertNotEqual(wj3_gates(s)['status'],'PASS')
+        s=copy.deepcopy(self.s);s['spatial'][0]['raw_reference_norms'][0]=-1.
+        self.assertEqual(wj3_gates(s)['status'],'FAIL')
+    def test_incomplete_native_targets(self):
+        s=copy.deepcopy(self.s);s['main'][0]['steps']=1
+        self.assertEqual(wj3_gates(s)['status'],'NOT_RUN')
+        s=copy.deepcopy(self.s);s['main'][0]['comparison']=None
+        self.assertEqual(wj3_gates(s)['status'],'NOT_RUN')
+    def test_unknown_component_cannot_pass(self):
+        for value in ({},{'status':'UNKNOWN'},None):
+            self.assertEqual(aggregate({'required':value})['status'],'FAIL')
     def test_constant_is_distinct(self):
         self.s['temporal']['rates']['k'].update(A=1e-16,B=2e-16,classification='roundoff_limited_constant')
         self.assertEqual(wj3_gates(self.s)['status'],'PASS')
@@ -35,7 +48,7 @@ class Immutable(unittest.TestCase):
     def test_changed_intents_and_artifacts(self):
         with tempfile.TemporaryDirectory() as temp:
             root=Path(temp);files=[]
-            for name in ('case.xml','State.bin','solver','report.json','log'):
+            for name in ('case.xml','State.bin','solver','report.json','log','arithmetic.json','matrix.bin','metric.bin'):
                 p=root/name;p.write_bytes(name.encode());files.append(p)
             base=execution_intent(['solver','case.xml'],files,{'code':'v1'},{'runtime':'v1'},{'dt':1e-5,'mesh':[0,.5,1]})
             write_once(root/'intent.json',base);write_once(root/'intent.json',base)
