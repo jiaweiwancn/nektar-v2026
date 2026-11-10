@@ -64,7 +64,10 @@ def main():
                 fields=('state','grid_values','grid_gradients','grid_traction','grid_regions','grid_sides','grid_geometry_by_field')
                 equal=all(packets[0]['observation'][key]==packets[1]['observation'][key] for key in fields)
                 equal &= packets[0]['native_constitutive']==packets[1]['native_constitutive']
-                assert equal;rows[-1]['ordinary_samples_bitwise_equal']=True
+                assert equal;rows[-1]['ordinary_serialized_samples_exactly_equal']=True
+                for key in ('raw_initial_sha256','effective_initial_sha256','fixed_reference_sha256'):
+                    assert packets[0]['initialization_receipt'][key]==packets[1]['initialization_receipt'][key]
+                rows[-1]['ordinary_native_coefficient_hashes_equal']=True
                 if model=='A95' and wall=='Accepted':
                     target=folder/'legacy-near';target.mkdir();shutil.copy2(folder/'case.xml',target/'case.xml')
                     code,body=run(target,a.legacy_probe,request)
