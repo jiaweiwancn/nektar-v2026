@@ -203,7 +203,8 @@ int main(int argc,char **argv)
             for(int index=0;index<grid.size();++index)
             {
                 const auto &q=grid[index];const int side=sides.empty()?0:sides[index];
-                const bool outer=q[2]>p.geometry.height || (q[2]==p.geometry.height && side==1);
+                const bool atInterface=std::abs(q[2]-p.geometry.height)<1e-12;
+                const bool outer=atInterface?side==1:q[2]>p.geometry.height;
                 if(!outer)continue;
                 const auto v=patch.Point(0,q,side),e=patch.Point(patch.Epsilon(),q,side);
                 const double k=v.Value(state,patch.offset[patch.K()]),epsilon=e.Value(state,patch.offset[patch.Epsilon()]);
@@ -292,7 +293,8 @@ int main(int argc,char **argv)
             for(int i=0;i<grid.size();++i)
             {
                 const auto &q=grid[i];const int side=sides.empty()?0:sides[i];
-                bool outer=q[2]>p.geometry.height || (q[2]==p.geometry.height && side==1);
+                const bool atInterface=std::abs(q[2]-p.geometry.height)<1e-12;
+                bool outer=atInterface?side==1:q[2]>p.geometry.height;
                 if(!geometries.empty())
                 {
                     const auto &elements=patch.fields[0]->Elements();
