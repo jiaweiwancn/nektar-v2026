@@ -26,7 +26,10 @@ def file_hash(path):
         for chunk in iter(lambda:f.read(1024*1024),b''):h.update(chunk)
     return h.hexdigest()
 
-def read(path):return json.loads(Path(path).read_text())
+# Native JSON can spell binary64 negative zero as the integer token -0.
+# Reading every numeric token as binary64 preserves its sign for exact
+# checkpoint/history replay; discrete loop controls are explicitly cast.
+def read(path):return json.loads(Path(path).read_text(),parse_int=float)
 
 def atomic(path,value):
     path=Path(path);tmp=path.with_name(path.name+'.tmp-'+str(os.getpid()))

@@ -244,7 +244,8 @@ class Study:
             initial=z
             m,c=self.measure('longer-'+tag+'-cp0',z,f,level=2);measurements[(j,0)]=m
             row=dict(dt=dt,target_steps=n,target_time=.008192,initial=c,initial_primary_sha256=state_hash(z['state']),
-                initial_history_sha256=digest_object(z['native_history']),native_time_labels=z['native_history_times'],trajectory=[])
+                initial_history_sha256=digest_object(z['native_history']),native_time_labels=z['native_history_times'],
+                native_dt_signature_sha256=digest(z['signature']),trajectory=[])
             cp=z['checkpoint']
             for end in range(block,n+1,block):
                 arithmetic_time=end*dt if end in (block,n//2,n) else None
@@ -271,6 +272,7 @@ class Study:
                     floors[f]['sampled_Linf']=max(floors[f]['sampled_Linf'],c['arithmetic']['estimated_sampled_comparison_floor'][f])
         pairs={}
         for window in sorted(set(t for j,t in measurements if j==0)&set(t for j,t in measurements if j==1)):
+            require(abs(measurements[(0,window)]['time']-measurements[(1,window)]['time'])<=2e-15,'native physical common times differ beyond arithmetic tolerance')
             d=comparison(measurements[(0,window)],measurements[(1,window)],self.a.policy)
             pairs[str(window)]=dict(time=measurements[(0,window)]['time'],fine_time=measurements[(1,window)]['time'],comparison=d,
                 gate=sensitivity_gate(d,floors))

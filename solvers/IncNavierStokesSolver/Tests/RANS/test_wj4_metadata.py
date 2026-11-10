@@ -2,12 +2,13 @@
 # SPDX-License-Identifier: MIT
 import copy
 import json
+import struct
 from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import patch
 from wj_qualification import wj3_gates
-from wj_immutable import write_once,execution_intent,artifacts,verify_artifacts,Ledger,xml_identity
+from wj_immutable import write_once,execution_intent,artifacts,verify_artifacts,Ledger,xml_identity,read
 
 class Gates(unittest.TestCase):
     def setUp(self):
@@ -47,6 +48,13 @@ class Immutable(unittest.TestCase):
                 file.write_bytes(old)
             write_once(root/'design.json',{'T':.008192})
             with self.assertRaisesRegex(ValueError,'intent/design mismatch'):write_once(root/'design.json',{'T':.004096})
+    def test_native_negative_zero(self):
+        with tempfile.TemporaryDirectory() as temp:
+            p=Path(temp)/'state.json';p.write_text('{"state":[-0,0,-0.0]}')
+            values=read(p)['state']
+            self.assertEqual(struct.pack('<d',values[0]),struct.pack('<d',-0.0))
+            self.assertEqual(struct.pack('<d',values[1]),struct.pack('<d',0.0))
+            self.assertEqual(struct.pack('<d',values[2]),struct.pack('<d',-0.0))
     def test_xml_bytes_and_semantics(self):
         with tempfile.TemporaryDirectory() as temp:
             p=Path(temp)/'case.xml';p.write_text('<N><P>TimeStep=1e-5</P></N>')
