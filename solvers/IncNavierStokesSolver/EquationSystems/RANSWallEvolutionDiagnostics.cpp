@@ -332,6 +332,21 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
     result["energy"]=energy;result["roughness"]=RoughnessBudget(s,time,data);
     return result;
 }
+std::string RANSWallEvolutionPatch::InitializationReceipt(const Vector &state,const Vector &reference,double time,
+    const RANSWallEvolutionData &data,const RANSWallEvolutionData &implicit,const std::map<int,double> &generated) const
+{
+    namespace H=RANSWallR3;namespace J=RANSWallSolveJson;
+    const auto live=ExternalConstraints(time,data),other=ExternalConstraints(time,implicit);
+    auto hash=[](const std::map<int,double> &map){Vector bytes;for(const auto &[row,value]:map){bytes.push_back(row);bytes.push_back(value);}return H::Hash(bytes);};
+    const auto effective=ExternalLift(state,time,data);double difference=0,boundaryDifference=0;
+    for(int i=0;i<state.size();++i)difference=std::max(difference,std::abs(state[i]-effective[i]));
+    for(const auto &[row,value]:live)if(generated.count(row))boundaryDifference=std::max(boundaryDifference,std::abs(value-generated.at(row)));
+    return J::Object({{"raw_initial_sha256",J::Quote(H::Hash(state))},{"effective_initial_sha256",J::Quote(H::Hash(effective))},
+        {"fixed_reference_sha256",J::Quote(H::Hash(reference))},{"explicit_boundary_sha256",J::Quote(hash(live))},
+        {"implicit_boundary_sha256",J::Quote(hash(other))},{"boundary_hash_format",J::Quote("sorted row-as-f64,value pairs, native little endian")},
+        {"raw_effective_max_difference",J::Number(difference)},{"source_target_boundary_max_difference",J::Number(boundaryDifference)},
+        {"live_fixed_boundary",J::Constraints(live)},{"effective_initial",J::Numbers(effective)}});
+}
 std::string RANSWallEvolutionPatch::PreservationIdentity() const
 {
     std::ostringstream out;out<<std::setprecision(17)<<"NeutralVerification-v1:"<<m_parameters.model.Signature()
@@ -346,7 +361,7 @@ std::string RANSWallEvolutionPatch::PreservationIdentity() const
     return out.str();
 }
 std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,double time,
-    const RANSWallEvolutionData &data,bool basis,const std::vector<RANSWallCoordinate> &grid) const
+    const RANSWallEvolutionData &data,bool basis,const std::vector<RANSWallCoordinate> &grid,const std::vector<int> &sides) const
 {
     namespace J=RANSWallSolveJson;
     Require(NewModels() && Dimension()==2 && !Mapped() && m_comm->GetSize()==1,
@@ -364,7 +379,7 @@ std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,doubl
             {"region",J::Number(region)},{"velocity_k",row(q.v)},{"pressure",row(q.p)},
             {"epsilon",region==1?row(q.e):"null"}});
     };
-    std::vector<std::string> volume,faces,mass,profiles,values,gradients,regions;
+    std::vector<std::string> volume,faces,mass,profiles,values,gradients,regions,observedSides,provenance,tractions;
     std::size_t ni=0,no=m_outer.size();
     for(const auto &ray:m_rays)
     {
@@ -402,16 +417,25 @@ std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,doubl
         for(const auto &q:Quadrature(InnerPressure()+region))mass.push_back(J::Object({
             {"coordinate",J::Numbers(q.coordinate)},{"weight",J::Number(q.weight)},{"region",J::Number(region)},{"pressure",row(q)}}));
     }
-    for(const auto &p:grid)
+    Require(sides.empty() || sides.size()==grid.size(),"sample side count differs");
+    for(int index=0;index<grid.size();++index)
     {
-        const int region=p[2]<H?0:1;Vector v;std::vector<Vector> g;
+        const auto &p=grid[index];const bool interface=std::abs(p[2]-H)<1e-12;
+        const int side=sides.empty()?0:sides[index];
+        Require(interface?(side==-1 || side==1):side==0,"ambiguous interface sample: declare inner=-1 or outer=+1 at H; interior side must be zero");
+        const int region=interface?(side<0?0:1):(p[2]<H?0:1);Vector v,geometry;std::vector<Vector> g;
         for(int b:{0,1,K(),Epsilon(),InnerPressure()+region})
         {
-            if(b==Epsilon() && region==0){v.push_back(0.);g.push_back({0,0,0});continue;}
-            const auto q=Point(b,p);v.push_back(q.Value(state,offset[b]));
+            if(b==Epsilon() && region==0){v.push_back(0.);g.push_back({0,0,0});geometry.push_back(-1);continue;}
+            const auto q=Point(b,p,side);v.push_back(q.Value(state,offset[b]));geometry.push_back(q.geometry);
             const auto derivative=q.Gradient(state,offset[b]);g.emplace_back(derivative.begin(),derivative.end());
         }
+        RANSTensor G{},stress{};for(int a=0;a<2;++a)for(int j=0;j<3;++j)G[PhysicalAxis(a)][j]=g[a][j];
+        if(region==0){const auto profile=StateProfile(state,p,time,data);stress=RANSWallInnerMeanStress(InnerStress(v[2],profile->Original().EddyViscosity(Distance(p)),G),m_parameters.geometry.molecularNu,v[4]);}
+        else{const auto law=OuterClosure(v[2],v[3],G,p);for(int a=0;a<3;++a)for(int j=0;j<3;++j)stress[a][j]=-law.reynoldsStress[a][j]+(a==j?2*v[2]/3-v[4]:0.);}
+        Vector traction;for(int a=0;a<3;++a)traction.push_back(stress[a][2]);tractions.push_back(J::Numbers(traction));
         values.push_back(J::Numbers(v));gradients.push_back(J::Rows(g));regions.push_back(J::Number(region));
+        observedSides.push_back(J::Number(side));provenance.push_back(J::Numbers(geometry));
     }
     const auto audit=CompleteRestrictedAudit(state,state,0,time,data);
     std::vector<std::pair<std::string,std::string>> diagnostic;
@@ -432,7 +456,7 @@ std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,doubl
         {"profiles",J::List(profiles)},{"volume",J::List(volume)},{"faces",J::List(faces)},{"pressure_mass",J::List(mass)},
         {"audit_alpha_zero",J::Object(diagnostic)},
         {"grid",J::Rows(grid)},{"grid_regions",J::List(regions)},
-        {"grid_values",J::List(values)},{"grid_gradients",J::List(gradients)}});
+        {"grid_sides",J::List(observedSides)},{"grid_geometry_by_field",J::List(provenance)},{"grid_traction",J::List(tractions)},{"grid_values",J::List(values)},{"grid_gradients",J::List(gradients)}});
 }
 
 namespace

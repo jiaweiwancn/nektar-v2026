@@ -79,8 +79,12 @@ int main(int argc,char **argv)
         std::vector<RANSWallCoordinate> grid;
         if(auto points=request.get_child_optional("grid"))for(const auto &item:*points)
         {RANSWallCoordinate q{};int i=0;for(const auto &v:item.second){Require(i<3,"invalid verification coordinate");q[i++]=v.second.get_value<double>();}Require(i==3,"invalid verification coordinate");grid.push_back(q);}
+        std::vector<int> sides;if(auto selected=request.get_child_optional("grid_sides"))for(const auto &v:*selected)sides.push_back(v.second.get_value<int>());
+        double receiptUs,receiptDx,receiptDy;session->LoadParameter("RANSWallFrictionVelocity",receiptUs,.4);session->LoadParameter("RANSWallDirectionX",receiptDx,1.);session->LoadParameter("RANSWallDirectionY",receiptDy,0.);
+        const auto targetReference=patch.NeutralReference(receiptUs,{receiptDx,receiptDy});
+        const auto receipt=patch.InitializationReceipt(state,reference,time,data,data,patch.FixedReferenceBoundary(targetReference));
         const auto stateCopy=state;
-        const auto observation=patch.PreservationPacket(state,time,data,request.get<bool>("export_basis",false),grid);
+        const auto observation=patch.PreservationPacket(state,time,data,request.get<bool>("export_basis",false),grid,sides);
         Require(state==stateCopy,"read-only verification modified coefficients");
         const auto elapsed=std::chrono::duration<double>(std::chrono::steady_clock::now()-start).count();
         Tree observed;std::istringstream input(observation);boost::property_tree::read_json(input,observed);
@@ -115,7 +119,7 @@ int main(int argc,char **argv)
         const std::string output=J::Object({{"status",J::Quote(physical?"pass":"fail")},{"execution",J::Quote("completed")},
             {"physical_admissibility",J::Quote(physical?"pass":"fail")},
             {"accuracy",J::Quote("not_assessed_by_sampling_adapter")},{"performed_time_steps","0"},{"initial_history",initialHistory.empty()?"null":J::Quote(initialHistory)},
-            {"reference",J::Numbers(reference)},{"fixed_boundary",J::Constraints(data.fixedBoundary)},
+            {"initialization_receipt",receipt},{"reference",J::Numbers(reference)},{"fixed_boundary",J::Constraints(data.fixedBoundary)},
             {"elapsed_seconds",J::Number(elapsed)},{"observation",observation}});
         std::ofstream file(argv[3]);Require(bool(file),"cannot write verification output");file<<output<<'\n';
         return physical?0:1;

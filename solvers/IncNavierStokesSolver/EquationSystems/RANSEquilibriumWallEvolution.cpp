@@ -212,6 +212,8 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
                 m_session->GetComm()->GetSize()==1 && m_r3PredictorFile!="None",
                 "R3 requires its explicit serial exact-target input and bound nonconverged predictor");
         }
+        m_session->LoadSolverInfo("RANSWallNeutralBoundaryPolicy",m_neutralBoundaryPolicy,"Legacy");
+        Require(m_neutralBoundaryPolicy=="Legacy" || (m_neutralBoundaryPolicy=="FrozenReferenceV1" && m_neutral && m_eta==0 && m_patch->NewModels() && m_patch->PimpleSingleSweep()),"unsupported neutral boundary policy");
         m_session->LoadSolverInfo("RANSWallRestart",m_restart,"None");m_session->LoadSolverInfo("RANSWallCheckpoint",m_checkpointBase,"None");
         Require(m_timestep>0,"evolution requires positive fixed TimeStep");m_data=RANSWallEvolutionData(dim);
         for(int a=0;a<dim;++a)
@@ -249,14 +251,9 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
         else if(m_patch->Mapped() || m_patch->MatchingEnabled() || m_patch->CappedDestruction())
             m_state=m_patch->Lift(m_state,m_time,m_data);
         if(m_neutral && m_patch->MatchingEnabled())m_state=m_patch->Lift(m_state,m_time,m_data);
-        m_patch->SetReference(m_state,m_data,m_time,m_eta);m_initial=m_state;
-        const auto residualStart=std::chrono::steady_clock::now();
-        m_rawNorms=m_patch->Norms(m_patch->Residual(m_state,m_state,0,m_time,m_data,false),m_patch->Constraints(m_state,m_time,m_data),m_ustar);
-        const double rawResidualSeconds=std::chrono::duration<double>(std::chrono::steady_clock::now()-residualStart).count();
-        m_correctedNorms=m_patch->Norms(m_patch->Residual(m_state,m_state,0,m_time,m_data),m_patch->Constraints(m_state,m_time,m_data),m_ustar);
-        m_implicitData=m_data;
-        if(m_patch->TransitionEnabled())m_implicitData.sensorBody=m_data.outerBody;
-        for(auto *body:{&m_implicitData.innerBody,&m_implicitData.outerBody})for(auto &f:*body)f=[](const RANSWallCoordinate&,double){return 0.;};
+        if(!(m_neutralBoundaryPolicy=="FrozenReferenceV1" && m_restart!="None"))m_patch->SetReference(m_state,m_data,m_time,m_eta);
+        m_initial=m_state;
+        const auto generatedBoundary=m_data.fixedBoundary;
         m_signature=PhysicsSignature();
         m_integrator=std::make_unique<RANSWallTimeIntegration>(m_order,m_timestep,
             [this](const Vector &h,double t,double lambda){return Implicit(h,t,lambda);},
@@ -265,6 +262,7 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
         {
             const auto checkpoint=RANSWallTimeIntegration::ReadCheckpoint(m_restart,m_signature,m_order,m_timestep,m_patch->Size(),m_patch->DifferentialSize());
             Require(checkpoint.eta==m_eta,"checkpoint eta differs");
+            if(m_neutralBoundaryPolicy=="FrozenReferenceV1"){m_data.fixedBoundary=m_patch->FixedReferenceBoundary(checkpoint.fixedReference);m_data.Touch();m_implicitData=m_data;}
             m_patch->RestoreReference(checkpoint.fixedReference,checkpoint.fixedDefect,checkpoint.eta,m_data,m_time);
             m_state=checkpoint.coupledState;m_initial=checkpoint.fixedReference;
             m_integrator->Restore(checkpoint.integration);m_time=m_integrator->Time();
@@ -287,6 +285,14 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
             m_integrator->Initialise(Vector(m_state.begin(),m_state.begin()+m_patch->DifferentialSize()),m_time);
         }
         m_historyReady=true;
+        m_implicitData=m_data;
+        if(m_patch->TransitionEnabled())m_implicitData.sensorBody=m_data.outerBody;
+        for(auto *body:{&m_implicitData.innerBody,&m_implicitData.outerBody})for(auto &f:*body)f=[](const RANSWallCoordinate&,double){return 0.;};
+        const auto residualStart=std::chrono::steady_clock::now();
+        m_rawNorms=m_patch->Norms(m_patch->Residual(m_state,m_state,0,m_time,m_data,false),m_patch->Constraints(m_state,m_time,m_data),m_ustar);
+        const double rawResidualSeconds=std::chrono::duration<double>(std::chrono::steady_clock::now()-residualStart).count();
+        m_correctedNorms=m_patch->Norms(m_patch->Residual(m_state,m_state,0,m_time,m_data),m_patch->Constraints(m_state,m_time,m_data),m_ustar);
+        if(m_patch->NewModels())m_initializationReceipt=m_patch->InitializationReceipt(m_state,m_patch->Reference(),m_time,m_data,m_implicitData,generatedBoundary);
         RANSWallEvolutionPatch::EvaluationScope evaluation(*m_patch,m_data,m_time);
         if(m_patch->PimpleKBoundEnabled())
         {
@@ -916,6 +922,7 @@ void RANSEquilibriumWallEvolution::WriteReport() const
        <<",\"time\":"<<m_time<<",\"dt\":"<<m_timestep<<",\"steps\":"<<snapshot.steps<<",\"order\":"<<m_order
        <<",\"chi\":"<<(m_patch->AcceptedAWF()?"null":RANSWallSolveJson::Number(m_patch->Parameters().chi))<<",\"eta\":"<<m_eta<<",\"neutral_reference\":"<<(m_neutral?"true":"false")
        <<",\"condensed\":"<<(m_condensed?"true":"false")<<",\"checkpoint\":"<<Quoted(m_lastCheckpoint)<<",\"signature\":"<<Quoted(m_signature);
+    out<<",\"neutral_boundary_policy\":"<<Quoted(m_neutralBoundaryPolicy)<<",\"initialization_receipt\":"<<m_initializationReceipt;
     if(m_patch->NewModels())out<<",\"resolved_physics\":"<<Quoted(m_patch->Parameters().model.Signature());
     out<<",\"wall_formulation\":"<<m_patch->FormulationMetadata()<<",\"wall_policy\":"<<Quoted(m_patch->WallPolicyName())
        <<",\"audit_revision\":"<<Quoted(m_patch->AuditRevision())

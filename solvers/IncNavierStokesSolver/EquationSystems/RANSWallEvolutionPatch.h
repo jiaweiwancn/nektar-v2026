@@ -65,9 +65,10 @@ public:
     // Read-only verification. This identity excludes declared quadrature
     // overrides, allowing the very same coefficient state to be integrated
     // at several orders; it includes physics, mesh, spaces and native maps.
+    std::string InitializationReceipt(const Vector&,const Vector&,double,const RANSWallEvolutionData&,const RANSWallEvolutionData&,const std::map<int,double>&) const;
     std::string PreservationIdentity() const;
     std::string PreservationPacket(const Vector &state,double time,const RANSWallEvolutionData &data,
-        bool basis,const std::vector<RANSWallCoordinate> &grid={}) const;
+        bool basis,const std::vector<RANSWallCoordinate> &grid={},const std::vector<int> &sides={}) const;
     std::string EvaluationReuseChecks(const Vector &,const Vector &,double,const RANSWallEvolutionData &);
     RANSWallEvolutionPatch(const LibUtilities::SessionReaderSharedPtr &serialSession,
         const SpatialDomains::MeshGraphSharedPtr &graph,
