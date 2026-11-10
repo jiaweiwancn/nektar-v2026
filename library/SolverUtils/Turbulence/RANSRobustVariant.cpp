@@ -52,10 +52,22 @@ RANSClosureValues Modify(RANSClosureValues result, RANSModel model, double k,
                     gradient[j][i]-variant.referenceStrain[i][j]);
             result.reynoldsStress[i][j] = Cast(static_cast<Real>(result.reynoldsStress[i][j])+increment);
             result.cubicStress[i][j] = Cast(static_cast<Real>(variant.beta)*result.cubicStress[i][j]);
+            // Legacy CLS uses the full raw symmetric gradient, including its
+            // trace. Keep the returned generic fields consistent with the
+            // modified covariance without changing that physical convention.
+            const Real deviator = static_cast<Real>(result.reynoldsStress[i][j])-
+                (i==j ? 2.0L*k/3.0L : 0.0L);
+            result.deviatoricStress[i][j] = Cast(deviator);
+            result.anisotropy[i][j] = Cast(deviator/k);
+            result.stressRemainder[i][j] = Cast(deviator+
+                static_cast<Real>(result.eddyViscosity)*
+                (static_cast<Real>(gradient[i][j])+gradient[j][i]));
             production -= static_cast<Real>(result.reynoldsStress[i][j])*gradient[i][j];
         }
     }
     result.production = Cast(production);
+    result.productionDev = Cast(production+2.0L*k/3.0L*
+        (static_cast<Real>(gradient[0][0])+gradient[1][1]+gradient[2][2]));
     result.kSource = Cast(production-epsilon);
     result.epsilonProduction = Cast(static_cast<Real>(parameters.cEpsilon1)*epsilon/k*production);
     result.epsilonSource = Cast(static_cast<Real>(result.epsilonProduction)-

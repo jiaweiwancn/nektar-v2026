@@ -51,7 +51,7 @@ SOLVER_UTILS_EXPORT double CLSYapFunction(double lengthRatio,
                                         const RANSParameters &parameters = {});
 SOLVER_UTILS_EXPORT std::array<double, 7> CLSCubicCoefficients(double cMu);
 
-/** grad[i][j] = dU_i/dx_j in a fixed nonrotating Cartesian frame. S and Omega
+/** Legacy Standard/CLS API: grad[i][j] = dU_i/dx_j in a fixed nonrotating Cartesian frame. S and Omega
  * have no factor 1/2. The model assumes incompressibility; the raw gradient is
  * used and its divergence is reported, not silently projected away. For CLS,
  * epsilon is the transported modified dissipation in the high-Re outer limit,

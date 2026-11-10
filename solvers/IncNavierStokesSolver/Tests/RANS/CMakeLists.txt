@@ -602,3 +602,8 @@ if(Python3_Interpreter_FOUND)
 endif()
 set_tests_properties(WJKernelContracts PROPERTIES PROCESSORS 1 TIMEOUT 120
     ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
+add_executable(RANSReturnedFieldsProbe ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSReturnedFieldsProbe.cpp)
+target_link_libraries(RANSReturnedFieldsProbe RANSKernels)
+add_test(NAME RANSReturnedFieldsChecks COMMAND RANSReturnedFieldsProbe)
+set_tests_properties(RANSReturnedFieldsChecks PROPERTIES PROCESSORS 1 TIMEOUT 60
+    ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
