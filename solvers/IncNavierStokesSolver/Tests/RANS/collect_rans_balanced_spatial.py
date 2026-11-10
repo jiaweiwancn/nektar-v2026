@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
 """Complete compact receipts for the balanced spatial study; missing gates fail."""
-import argparse,gzip,hashlib,json,subprocess,sys
+import argparse,gzip,hashlib,json,subprocess,sys,platform
+import numpy,scipy
 from pathlib import Path
 from qualify_rans_preservation import load
-from rans_qualification import write_json,exact_vector_hash
+from rans_qualification import write_json,exact_vector_hash,THREADS
 from rans_request_manifest import RequestManifest
 
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
@@ -14,6 +15,8 @@ def receipt(path):
 def compact_spatial(s):
  d={k:v for k,v in s.items() if k not in ('one_sided_jumps','constrained_reactions')};byz={}
  for j in s['one_sided_jumps']:byz.setdefault(j['coordinate'][2],[]).append(j)
+ d['element_localization']=[dict(row,terms={field:{name:term for name,term in terms.items() if any(value!=0 for value in term.values())} for field,terms in row['terms'].items() if any(any(value!=0 for value in term.values()) for term in terms.values())}) for row in d['element_localization']]
+ d['dominant_native_rows_with_basis_support']={k:v[:20] for k,v in d['dominant_native_rows_with_basis_support'].items()}
  d['one_sided_jump_summary']=[]
  for z,items in sorted(byz.items()):
   worst_t=max(items,key=lambda j:sum(x*x for x in j['traction']));worst_k=max(items,key=lambda j:abs(j['k_flux']));w=[j['one_sided'][0]['weight'] for j in items];total=sum(w)
@@ -31,7 +34,7 @@ def compact_analysis(d):
 
 def main():
  p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args();r=a.root.resolve();out=a.output;out.mkdir(parents=True,exist_ok=False)
- result=dict(schema='BalancedSpatialEvidenceV1',starting_revision='3b0961e12142d7eca56d75962feebfffa34630cc',source_report=subprocess.check_output(['git','-C',str(r/'source'),'rev-parse','HEAD'],text=True).strip(),verification={},initial_screens={},initial_gates={},evolved_audits={},required_short_comparisons={},cases=[],duration={},failures=[],scope='serial flat2D prescribed-reference patch; unchanged equations; full native and fixed-common tests')
+ result=dict(schema='BalancedSpatialEvidenceV1',environment=dict(python=sys.version,numpy=numpy.__version__,scipy=scipy.__version__,platform=platform.platform(),threads=THREADS,ranks=1,aggregate_worker_limit=72),starting_revision='3b0961e12142d7eca56d75962feebfffa34630cc',source_report=subprocess.check_output(['git','-C',str(r/'source'),'rev-parse','HEAD'],text=True).strip(),verification={},initial_screens={},initial_gates={},evolved_audits={},required_short_comparisons={},cases=[],duration={},failures=[],scope='serial flat2D prescribed-reference patch; unchanged equations; full native and fixed-common tests')
  for dirname in ('runtime','runtime-resolution-v2'):
   for n in ('source-build.json','actual-loaded-libraries.json','lineage.json'):
    p=r/dirname/n
@@ -70,6 +73,9 @@ def main():
     witness=dict(label=folder.name,metric=m,failure=native.get('failure'),state=native.get('state'),rejected_state=native.get('rejected_state'),history=native.get('native_history'),events=native.get('physical_range_events'))
     with gzip.open(out/(folder.name+'-'+str(m['target'])+'-failure.json.gz'),'wt') as f:json.dump(witness,f)
     (out/(folder.name+'-failure.xml')).write_bytes((p.parent/'case.xml').read_bytes());result['failures'].append(dict(label=folder.name,target=m['target'],failure=m.get('failure')))
+  observer=folder/'scalar-observations/results.json'
+  if observer.exists():
+   obs=load(observer);row['scalar_observations']={k:v for k,v in obs.items() if k not in ('observations',)};row['scalar_observations_source_sha256']=sha(observer)
   result['cases'].append(row)
  for p in sorted((r/'comparisons').glob('*duration*.json')):result['duration'][p.stem]=receipt(p)
  if (r/'duration-admission.json').exists():result['duration_admission']=receipt(r/'duration-admission.json')

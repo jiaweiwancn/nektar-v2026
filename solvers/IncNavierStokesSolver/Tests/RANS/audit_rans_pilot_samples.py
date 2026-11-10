@@ -28,7 +28,7 @@ def main():
  out=folder/'scalar-observations';out.mkdir(exist_ok=False);seed=load(folder/'initial-packet.json')
  # Use an unchanged session; no solver action or checkpoint mutation.
  import shutil
- shutil.copy2(folder/'T-0.0016/case.xml',out/'case.xml')
+ shutil.copy2(folder/('T-'+format(req['horizons'][0],'.4f'))/'case.xml',out/'case.xml')
  packet=probe(r/'runtime/RANSPreservationProbe',out,replay_request(seed,[],export_basis=True,state=seed['reference']))['observation'];off=packet['offsets'];n=packet['sizes'];points=packet['volume']+packet['faces'];groups={}
  for region,name in ((0,'inner_k'),(1,'outer_k')):
   q=[x for x in points if x['region']==region];groups[name]=(matrix([x['velocity_k'] for x in q],n[2]),q,2)

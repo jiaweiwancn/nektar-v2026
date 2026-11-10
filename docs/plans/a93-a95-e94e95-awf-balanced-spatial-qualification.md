@@ -158,3 +158,126 @@ pass. If the coarser duration pair fails uncertainty while admissible, one
 separately initialized .002/.001 cohort is the predeclared targeted refinement;
 do not relax the criterion or alter an existing checkpoint. Any hard accuracy
 or physical failure retains its rejected state and last accepted history.
+
+## Verification corrections and supplemented evidence
+
+`collect_rans_neutral_pilot.py` now exports all twelve required detailed bodies
+from `natural-schedule`, including both A93 .016 bodies. Each carries three
+case/request/space/dt/runtime identities, actual consumed raw/effective/reference
+and both live-boundary hashes, endpoint/report/sample/state/history identities,
+fieldwise errors, differences, limits and classifications. The supplement is a
+new export; historical receipts are untouched. An isolated omission of
+A93/Accepted/.016 returns exit 1 for the intended missing-file reason. Printed
+outer-epsilon load/reaction defects now have an explicit scaled classifier;
+a deliberately doubled tolerance witness returns exit 1, while the recognized
+negative-control suite returns 0.
+
+`NeutralV1` rejects a negative-x reference specifically as diagnostic
+ineligibility. Forward closures retain their existing supported scope. The
+native report explicitly labels legacy D entries as change from the fixed
+neutral polynomial, not drift from a perturbed initial state. Both positive-x
+E94E95 wall controls preserve every accepted state, native history and numeric
+state-audit receipt bitwise against 3b0961e's runtime. A zero-step A95 velocity
+perturbation separately has zero drift from its actual initialized vector and
+nonzero change from the fixed neutral reference. The first fixture failed
+because it pre-created the generator's exclusive output directory; its log is
+preserved and the corrected fixture uses a fresh directory.
+
+Explicit-parent native test exports have valid, unknown-geometry, wrong-count
+and conflicting-interface-side controls. All intended results are observed.
+The targeted CTest selection passes 3/3, including 724 spectrum/domain/ground
+assertions in the native helper. Unchanged constitutive/wall kernels,
+evolution/history/cache/rollback sources and independent analytical-oracle
+contents are checked by content against the reviewed baseline. Reuse is scoped
+to those unchanged components; new observation paths receive fresh checks.
+
+## Why the wall refinements differ
+
+Element stress loads individually contain large internal-boundary contributions
+that cancel after assembly. They must not be interpreted as additive local
+residual norms. The export retains those physical terms and reactions, and
+additionally partitions the assembled dual energy r^T M^-1 r by exact native
+basis-support mass fractions. Signed contributions sum to the original squared
+norm; coordinates, support geometry and field/equation are retained.
+
+On the base mesh the inactive original-epsilon panel contributes approximately
+62--63% of momentum dual energy and 91% of accepted inner-k energy. EP k is
+instead dominated by .02--.04, .04--.1 and .1--.25. Nearwall8 removes most of the
+accepted wall's small-panel defect, but the newly available EP modes on .07--.1
+then carry about 79% of its k dual energy. Its full native norm increases even
+though the same fixed common tests improve. Interface8 resolves the EP bulk
+panels and interface while leaving almost all accepted small-panel energy.
+
+Removing only the inactive epsilon mesh breakpoint lowers full momentum from
+.108/.111 to .0659/.0658 (EP/accepted), and accepted inner k from .1008 to .0275.
+Common momentum is essentially unchanged; accepted common k slightly increases
+(.007652 to .007885). Thus that mesh-only control demonstrates sensitivity to
+new test modes, not a cure for the physical spatial defect. Every active
+viscosity, cutoff, roughness/forcing and interface break remains represented
+and native profile integration retains its physical panels.
+
+The selected 2355/2997 hierarchy resolves both the small-panel/budget region and
+the dominant bulk/interface contributions. The fixed common test space is p3
+with pressure p1 on the active-break base mesh, unchanged across all candidates
+within one model/wall/policy. P is constructed from native basis cross mass;
+value/gradient, mass congruence, exact free-ID constraints and orientation checks
+precede P^T r restriction. Full native norms remain alongside those restrictions.
+Raw-to-effective coordinate shifts in evolved replays are at most 1e-11 and
+are explicit. Native physical/source coordinates and weights are never changed.
+
+## E94E95 residual results
+
+All entries below use the existing dimensionless physical mass-dual scales.
+Common k includes the assembled shared equation once; native inner-k excludes
+the separately reported shared rows. Small differences between them are not
+silently identified as the same norm.
+
+| Wall | Space/time | Native U | Native inner k | Common U | Common k |
+|---|---|---:|---:|---:|---:|
+| EP | B5 initial | .131300 | .00183904 | .0199993 | .000241191 |
+| EP | B11 initial | .0134396 | .000184628 | .00153787 | .0000126857 |
+| EP | B5 .016 | .000560082 | .000155467 | .000392345 | .000125627 |
+| EP | B11 .016 | .0000126612 | .00000216634 | .00000357527 | .000000740115 |
+| Accepted | B5 initial | .130617 | .0563665 | .0200098 | .00826489 |
+| Accepted | B11 initial | .0127152 | .00803083 | .00156286 | .00107652 |
+| Accepted | B5 .016 | .000572601 | .000159732 | .000399322 | .000127750 |
+| Accepted | B11 .016 | .0000129984 | .00000234189 | .00000366510 | .000000755087 |
+
+The term sum reproduces the native **unmasked** operator within the predeclared
+accumulation tolerance. Constraint replacement is checked independently against
+the constrained result; prescribed-row loads remain reactions. Inner/outer
+stress, conservative advection, k diffusion/production/prescribed destruction,
+outer k, model-specific epsilon diffusion/production/destruction, continuity,
+gauge and shared rows are separate. The diagnostic never feeds evolution.
+
+The source/profile and outer/mass/interface quadrature checks increase
+48/12/12/12/12 to 64/16/16/16/16 with identical coefficients and live boundaries.
+Both initial spaces and both evolved .016 states pass the 1%-of-spatial-change
+criterion with absolute floor 1e-10. GL10/8 versus GL14/10 physical evaluation
+also passes on identical coefficients. The actual rules, projection quadrature,
+profile panels, frozen state hashes and target boundary identities are recorded.
+
+Independent analytical values/gradients evaluated against native tests verify
+the continuum weak balances. EP plateau source moments vanish; accepted source
+moments are nonzero and cancel with diffusion and boundary terms. These checks
+remain distinct from the represented and evolved spatial residuals above and
+from time-discrete stage residuals.
+
+The outer-epsilon constant test is a limited receipt on this prescribed-side,
+single-column patch: all its nonzero constant coefficients are constrained.
+Consequently load minus prescribed-row reaction is bookkeeping, not an
+independent free-equation conservation theorem. Its finite scaled tolerance
+still classifies failures. Nonconstant free tests, source/storage identities,
+full native/common residuals and interface balances provide separate evidence.
+No zero dependent-epsilon boundary rate is assumed; no semidiscrete scalar-rate
+claim is made.
+
+## Duration-admission outcome so far
+
+The scoped admission selects E94E95 Natural Accepted, whose nonconstant wall has
+the larger qualified E94E95 scalar residual and reference error. The .004/.002
+fresh-history cohort passes execution, physical and field-accuracy checks at
+.016 but **fails pressure timestep uncertainty**: 4.1630e-7 exceeds 1.9186e-7.
+Its nonzero process result and all four trajectories remain archived. The
+predeclared .002/.001 independent-history refinement is the next experiment;
+no .5 result is inferred from the successful short .0004/.0002 study.
