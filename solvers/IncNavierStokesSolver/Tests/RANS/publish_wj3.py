@@ -75,8 +75,9 @@ def main():
     require(all(n<=500 for n in attempts.values()),'total package attempt cap exceeded')
     write_json(root/'package-attempt-index.json',attempt_index)
     tests={}
+    smoke_label='ctest-readonly-publication' if any(r['label']=='ctest-readonly-publication' for r in manifest['command_receipts']) else 'ctest-readonly-final'
     for row in manifest['command_receipts']:
-        if row['label'] not in ('ctest-regressions','ctest-native-transactions','ctest-readonly-final'):continue
+        if row['label'] not in ('ctest-regressions','ctest-native-transactions',smoke_label):continue
         text=Path(row['log']).read_text();matches=re.findall(r'(\d+)% tests passed, (\d+) tests failed out of (\d+)',text)
         require(row['exit_code']==0 and matches,'selected CTest failure/missing result')
         percent,failed,total=map(int,matches[-1]);require(percent==100 and failed==0,'CTest result is not PASS')
@@ -85,7 +86,7 @@ def main():
     extras={}
     for name in ('run-env.sh','processes-start.txt','processes-before-four-workers.txt','processes-before-main.txt',
         'processes-during-main-and-tests.txt','processes-before-cross-mesh.txt','cross-mesh-allocation.json',
-        'parallel-main-returns.json','parallel-main-resumed-returns.json','superseded-build-stop.json','build-initial.log','configure-initial.log'):
+        'parallel-main-returns.json','parallel-main-resumed-returns.json','native-source-equivalence.json','inventory-verification.json','superseded-build-stop.json','build-initial.log','configure-initial.log'):
         file=root/name
         if file.exists():extras[name]=dict(path=str(file),sha256=sha(file))
     receipt=dict(schema='WJ3PublicationV1',tested_source=manifest['source_revision'],tested_tree=manifest['source_tree'],
