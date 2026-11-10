@@ -1,0 +1,86 @@
+-- Configuring done
+CMake Warning at CMakeLists.txt:290 (add_executable):
+  Cannot generate a safe runtime search path for target IncNavierStokesSolver
+  because there is a cycle in the constraint graph:
+
+    dir 0 is [/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/dependency]
+      dir 1 must precede it due to runtime library [libSpatialDomains.so.5.9.0]
+    dir 1 is [/home/jay/.local/opt/nektar-v2026-mpi/lib64]
+      dir 0 must precede it due to runtime library [libSpatialDomains.so.5.9.0]
+    dir 2 is [/home/jay/build/nektar-v2026-mpi/ThirdParty/dist/lib]
+    dir 3 is [/usr/lib/x86_64-linux-gnu/openmpi/lib]
+
+  Some of these libraries may not be found correctly.
+
+
+CMake Warning at CMakeLists.txt:294 (add_executable):
+  Cannot generate a safe runtime search path for target RANSFieldAudit
+  because there is a cycle in the constraint graph:
+
+    dir 0 is [/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/dependency]
+      dir 1 must precede it due to runtime library [libSpatialDomains.so.5.9.0]
+    dir 1 is [/home/jay/.local/opt/nektar-v2026-mpi/lib64]
+      dir 0 must precede it due to runtime library [libSpatialDomains.so.5.9.0]
+    dir 2 is [/home/jay/build/nektar-v2026-mpi/ThirdParty/dist/lib]
+    dir 3 is [/usr/lib/x86_64-linux-gnu/openmpi/lib]
+
+  Some of these libraries may not be found correctly.
+
+
+CMake Warning at CMakeLists.txt:296 (add_executable):
+  Cannot generate a safe runtime search path for target RANSWallFieldAudit
+  because there is a cycle in the constraint graph:
+
+    dir 0 is [/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/dependency]
+      dir 1 must precede it due to runtime library [libSpatialDomains.so.5.9.0]
+    dir 1 is [/home/jay/.local/opt/nektar-v2026-mpi/lib64]
+      dir 0 must precede it due to runtime library [libSpatialDomains.so.5.9.0]
+    dir 2 is [/home/jay/build/nektar-v2026-mpi/ThirdParty/dist/lib]
+    dir 3 is [/usr/lib/x86_64-linux-gnu/openmpi/lib]
+
+  Some of these libraries may not be found correctly.
+
+
+CMake Warning at CMakeLists.txt:299 (add_executable):
+  Cannot generate a safe runtime search path for target RANSObservationAudit
+  because there is a cycle in the constraint graph:
+
+    dir 0 is [/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/dependency]
+      dir 1 must precede it due to runtime library [libSpatialDomains.so.5.9.0]
+    dir 1 is [/home/jay/.local/opt/nektar-v2026-mpi/lib64]
+      dir 0 must precede it due to runtime library [libSpatialDomains.so.5.9.0]
+    dir 2 is [/home/jay/build/nektar-v2026-mpi/ThirdParty/dist/lib]
+    dir 3 is [/usr/lib/x86_64-linux-gnu/openmpi/lib]
+
+  Some of these libraries may not be found correctly.
+
+
+-- Generating done
+-- Build files have been written to: /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/build
+Consolidate compiler generated dependencies of target RANSKernels
+[ 30%] Built target RANSKernels
+Consolidate compiler generated dependencies of target RANSPreservationProbe
+[ 38%] Building CXX object CMakeFiles/RANSPreservationProbe.dir/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/library/UnitTests/SolverUtils/RANSPreservationProbe.cpp.o
+In file included from /usr/include/boost/smart_ptr/detail/sp_thread_sleep.hpp:22,
+                 from /usr/include/boost/smart_ptr/detail/yield_k.hpp:23,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_gcc_atomic.hpp:14,
+                 from /usr/include/boost/smart_ptr/detail/spinlock.hpp:42,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp:25,
+                 from /usr/include/boost/smart_ptr/shared_ptr.hpp:29,
+                 from /usr/include/boost/shared_ptr.hpp:17,
+                 from /usr/include/boost/program_options/variables_map.hpp:13,
+                 from /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/library/LibUtilities/BasicUtils/SessionReader.h:48,
+                 from /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/library/SpatialDomains/Conditions.h:43,
+                 from /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/library/MultiRegions/MultiRegions.hpp:38,
+                 from /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/library/MultiRegions/AssemblyMap/AssemblyMap.h:40,
+                 from /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/library/MultiRegions/AssemblyMap/AssemblyMapCG.h:40,
+                 from /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/library/MultiRegions/ContField.h:38,
+                 from /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.h:7,
+                 from /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.h:8,
+                 from /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h:7,
+                 from /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/library/UnitTests/SolverUtils/RANSPreservationProbe.cpp:2:
+/usr/include/boost/bind.hpp:36:1: note: ‘#pragma message: The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace boost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.’
+   36 | BOOST_PRAGMA_MESSAGE(
+      | ^~~~~~~~~~~~~~~~~~~~
+[ 46%] Linking CXX executable RANSPreservationProbe
+[100%] Built target RANSPreservationProbe

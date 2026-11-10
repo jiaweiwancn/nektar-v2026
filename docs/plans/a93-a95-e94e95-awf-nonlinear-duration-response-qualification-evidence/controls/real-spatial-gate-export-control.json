@@ -1,0 +1,46 @@
+{
+  "status": "pass",
+  "exit_code": 1,
+  "command": [
+    "python3",
+    "-B",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/collect_rans_nonlinear_qualification.py",
+    "--root",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110",
+    "--admissions",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/admissions/A93-N-Accepted-loader-v2.json",
+    "--regression-receipt",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/targeted-regressions-final-v4.json",
+    "--forward-interface-receipt",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/forward-interface-exact-scope-status.json",
+    "--output",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/export-A93-spatial-failure-control"
+  ],
+  "preserved_reports": true,
+  "witnesses": [
+    {
+      "cohort": "A93-N-Accepted-duration-0.002",
+      "time": 0.5,
+      "gate": "evolved_spatial_reduction",
+      "witness": "A93-N-Accepted-duration-0.002-spatial-gate-failure.json.gz",
+      "sha256": "b1f5aae43f2ceb06ce4d5c5de98e2c492c3339911969bfbdfd9f05c781d5b583"
+    }
+  ],
+  "allocation_census": {
+    "external": 47,
+    "active_before_actions": 54,
+    "allowed_families": 1,
+    "paused_pids": [
+      476411,
+      476510,
+      476511,
+      512538,
+      528193,
+      528194,
+      528818,
+      528821
+    ],
+    "maximum_observed_active_before_actions": 71,
+    "time_unix": 1794324667.279953
+  }
+}

@@ -1,0 +1,2013 @@
+{
+  "status": "pass",
+  "execution_status": "completed",
+  "reconstruction_status": "pass",
+  "configuration": {
+    "model": "A95",
+    "policy": "Natural",
+    "wall": "Accepted",
+    "descriptor": "A95:OriginalHighRe-v1:A0=6.5:As=3lambdaMax(Sd)/norm(Sd):Q=2sqrt(1-9Cmu^2(s*tau)^2)[O,S]/(1+6sr*tau^2):q=3.8220004260766363:kappa=0.40406099529852102:policy=Natural:sigmaK=1:sigmaE=1.3:Ceps1=1.4399999999999999:Ceps2=1.9199999999999999:wall=AcceptedBudgetAWF:compatible-q-kappa-v1:outerNu=0:innerNu=1.5e-05:eps_tilde=TotalEpsilon:DeviatoricStrainV1:NoRegularization:NoYap:source=Ceps1*epsilon*P/k:wallSink=P-Ew(K):frozen-prescribed-zero-reaction"
+  },
+  "time": 0.016,
+  "quadrature_status": "pass",
+  "quadrature": [
+    {
+      "kind": "perturbed",
+      "member": "B5",
+      "equation": "inner_k",
+      "term": "storage_backward_difference",
+      "changes": {
+        "volume": 9.182326733280129e-15,
+        "face": 0.0
+      },
+      "limit": 3.507711123881066e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B5",
+      "equation": "inner_k",
+      "term": "stage_source",
+      "changes": {
+        "volume": 6.579540176034591e-17,
+        "face": 0.0
+      },
+      "limit": 3.988844152431989e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B5",
+      "equation": "inner_k",
+      "term": "instantaneous_source",
+      "changes": {
+        "volume": 1.1244277671506112e-16,
+        "face": 0.0
+      },
+      "limit": 3.984388746688232e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B5",
+      "equation": "inner_k",
+      "term": "stage_physical_boundary_flux",
+      "changes": {
+        "volume": 1.1011428314305904e-20,
+        "face": 2.6240834642867047e-14
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B5",
+      "equation": "inner_k",
+      "term": "instantaneous_physical_boundary_flux",
+      "changes": {
+        "volume": 1.1011428314305904e-20,
+        "face": 2.624083252528468e-14
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B5",
+      "equation": "inner_k",
+      "term": "frozen_stage_physical_defect",
+      "changes": {
+        "volume": 9.248114088227476e-15,
+        "face": 2.624083506638352e-14
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B5",
+      "equation": "inner_k",
+      "term": "instantaneous_physical_defect",
+      "changes": {
+        "volume": 9.069872945136753e-15,
+        "face": 2.6240831678251732e-14
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B5",
+      "equation": "inner_k",
+      "term": "frozen_operator_splitting",
+      "changes": {
+        "volume": 1.782375961402558e-16,
+        "face": 2.5940384009662948e-21
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B5",
+      "equation": "outer_k",
+      "term": "storage_backward_difference",
+      "changes": {
+        "volume": 2.4633649341274794e-15,
+        "face": 0.0
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B5",
+      "equation": "outer_k",
+      "term": "stage_source",
+      "changes": {
+        "volume": 6.165489295593008e-17,
+        "face": 0.0
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B5",
+      "equation": "outer_k",
+      "term": "instantaneous_source",
+      "changes": {
+        "volume": 6.20873032755034e-17,
+        "face": 0.0
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B5",
+      "equation": "outer_k",
+      "term": "stage_physical_boundary_flux",
+      "changes": {
+        "volume": 1.6940658945086007e-21,
+        "face": 6.240820170757069e-16
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B5",
+      "equation": "outer_k",
+      "term": "instantaneous_physical_boundary_flux",
+      "changes": {
+        "volume": 1.6940658945086007e-21,
+        "face": 6.240863581195616e-16
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B5",
+      "equation": "outer_k",
+      "term": "frozen_stage_physical_defect",
+      "changes": {
+        "volume": 2.5250187682922254e-15,
+        "face": 6.240837111416014e-16
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B5",
+      "equation": "outer_k",
+      "term": "instantaneous_physical_defect",
+      "changes": {
+        "volume": 2.525450755095325e-15,
+        "face": 6.240854052074959e-16
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B5",
+      "equation": "outer_k",
+      "term": "frozen_operator_splitting",
+      "changes": {
+        "volume": 4.326502019509607e-19,
+        "face": 4.327808964877441e-21
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B5",
+      "equation": "outer_epsilon",
+      "term": "storage_backward_difference",
+      "changes": {
+        "volume": 4.609805714776184e-15,
+        "face": 0.0
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B5",
+      "equation": "outer_epsilon",
+      "term": "stage_source",
+      "changes": {
+        "volume": 1.942890293094024e-16,
+        "face": 0.0
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B5",
+      "equation": "outer_epsilon",
+      "term": "instantaneous_source",
+      "changes": {
+        "volume": 1.3877787807814457e-16,
+        "face": 0.0
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B5",
+      "equation": "outer_epsilon",
+      "term": "stage_physical_boundary_flux",
+      "changes": {
+        "volume": 2.7755575615628914e-16,
+        "face": 1.0852430065710905e-14
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B5",
+      "equation": "outer_epsilon",
+      "term": "instantaneous_physical_boundary_flux",
+      "changes": {
+        "volume": 2.7755575615628914e-16,
+        "face": 1.0880185641326534e-14
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B5",
+      "equation": "outer_epsilon",
+      "term": "frozen_stage_physical_defect",
+      "changes": {
+        "volume": 4.709377825857716e-15,
+        "face": 1.0869953483323702e-14
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B5",
+      "equation": "outer_epsilon",
+      "term": "instantaneous_physical_defect",
+      "changes": {
+        "volume": 5.03793851796587e-15,
+        "face": 1.0869955177389597e-14
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B5",
+      "equation": "outer_epsilon",
+      "term": "frozen_operator_splitting",
+      "changes": {
+        "volume": 3.2856288909986103e-16,
+        "face": 0.0
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B5",
+      "equation": "whole_patch_k",
+      "term": "storage_backward_difference",
+      "changes": {
+        "volume": 3.3594800525433774e-15,
+        "face": 0.0
+      },
+      "limit": 1.710133486364566e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B5",
+      "equation": "whole_patch_k",
+      "term": "stage_source",
+      "changes": {
+        "volume": 2.0688779736686286e-18,
+        "face": 0.0
+      },
+      "limit": 1.9199687133755568e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B5",
+      "equation": "whole_patch_k",
+      "term": "instantaneous_source",
+      "changes": {
+        "volume": 8.726683994029517e-17,
+        "face": 0.0
+      },
+      "limit": 1.9177158973835605e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B5",
+      "equation": "whole_patch_k",
+      "term": "stage_physical_boundary_flux",
+      "changes": {
+        "volume": 3.5998900258307764e-21,
+        "face": 1.3432465106234955e-14
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B5",
+      "equation": "whole_patch_k",
+      "term": "instantaneous_physical_boundary_flux",
+      "changes": {
+        "volume": 3.5998900258307764e-21,
+        "face": 1.3432466376784376e-14
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B5",
+      "equation": "whole_patch_k",
+      "term": "frozen_stage_physical_defect",
+      "changes": {
+        "volume": 3.3615451188687834e-15,
+        "face": 1.3432467012059086e-14
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B5",
+      "equation": "whole_patch_k",
+      "term": "instantaneous_physical_defect",
+      "changes": {
+        "volume": 3.2722119420536613e-15,
+        "face": 1.3432465317993192e-14
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B5",
+      "equation": "whole_patch_k",
+      "term": "frozen_operator_splitting",
+      "changes": {
+        "volume": 8.933529439749018e-17,
+        "face": 0.0
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B5",
+      "equation": "whole_patch_k",
+      "term": "interface_frozen_outward_flux_sum",
+      "changes": {
+        "volume": 9.26442286059391e-23,
+        "face": 6.690236794328888e-21
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B5",
+      "equation": "whole_patch_k",
+      "term": "interface_current_outward_flux_sum",
+      "changes": {
+        "volume": 9.26442286059391e-23,
+        "face": 6.7431763535322816e-21
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B11",
+      "equation": "inner_k",
+      "term": "storage_backward_difference",
+      "changes": {
+        "volume": 2.6955519115629337e-15,
+        "face": 0.0
+      },
+      "limit": 3.507711123881066e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B11",
+      "equation": "inner_k",
+      "term": "stage_source",
+      "changes": {
+        "volume": 1.2990690202155028e-16,
+        "face": 0.0
+      },
+      "limit": 3.988844152431989e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B11",
+      "equation": "inner_k",
+      "term": "instantaneous_source",
+      "changes": {
+        "volume": 4.914823973148352e-17,
+        "face": 0.0
+      },
+      "limit": 3.984388746688232e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B11",
+      "equation": "inner_k",
+      "term": "stage_physical_boundary_flux",
+      "changes": {
+        "volume": 1.5670109524204556e-20,
+        "face": 4.814378994614675e-15
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B11",
+      "equation": "inner_k",
+      "term": "instantaneous_physical_boundary_flux",
+      "changes": {
+        "volume": 1.5670109524204556e-20,
+        "face": 4.814377724065254e-15
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B11",
+      "equation": "inner_k",
+      "term": "frozen_stage_physical_defect",
+      "changes": {
+        "volume": 2.5656289159153856e-15,
+        "face": 4.814379418131148e-15
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B11",
+      "equation": "inner_k",
+      "term": "instantaneous_physical_defect",
+      "changes": {
+        "volume": 2.7446815165695776e-15,
+        "face": 4.814377724065254e-15
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B11",
+      "equation": "inner_k",
+      "term": "frozen_operator_splitting",
+      "changes": {
+        "volume": 1.7905442706898456e-16,
+        "face": 1.7205356741102976e-21
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B11",
+      "equation": "outer_k",
+      "term": "storage_backward_difference",
+      "changes": {
+        "volume": 6.693564363262176e-15,
+        "face": 0.0
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B11",
+      "equation": "outer_k",
+      "term": "stage_source",
+      "changes": {
+        "volume": 5.5072176406343286e-17,
+        "face": 0.0
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B11",
+      "equation": "outer_k",
+      "term": "instantaneous_source",
+      "changes": {
+        "volume": 5.960062630060159e-17,
+        "face": 0.0
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B11",
+      "equation": "outer_k",
+      "term": "stage_physical_boundary_flux",
+      "changes": {
+        "volume": 2.117582368135751e-22,
+        "face": 1.56020885433753e-15
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B11",
+      "equation": "outer_k",
+      "term": "instantaneous_physical_boundary_flux",
+      "changes": {
+        "volume": 2.117582368135751e-22,
+        "face": 1.5602113954363717e-15
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B11",
+      "equation": "outer_k",
+      "term": "frozen_stage_physical_defect",
+      "changes": {
+        "volume": 6.638491975097596e-15,
+        "face": 1.5602092778540036e-15
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B11",
+      "equation": "outer_k",
+      "term": "instantaneous_physical_defect",
+      "changes": {
+        "volume": 6.633963736961575e-15,
+        "face": 1.5602126659857926e-15
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B11",
+      "equation": "outer_k",
+      "term": "frozen_operator_splitting",
+      "changes": {
+        "volume": 4.528497870733831e-18,
+        "face": 2.597347123416507e-21
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B11",
+      "equation": "outer_epsilon",
+      "term": "storage_backward_difference",
+      "changes": {
+        "volume": 9.297821369704147e-15,
+        "face": 0.0
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B11",
+      "equation": "outer_epsilon",
+      "term": "stage_source",
+      "changes": {
+        "volume": 0.0,
+        "face": 0.0
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B11",
+      "equation": "outer_epsilon",
+      "term": "instantaneous_source",
+      "changes": {
+        "volume": 1.942890293094024e-16,
+        "face": 0.0
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B11",
+      "equation": "outer_epsilon",
+      "term": "stage_physical_boundary_flux",
+      "changes": {
+        "volume": 2.7755575615628914e-17,
+        "face": 2.4980018054066022e-15
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B11",
+      "equation": "outer_epsilon",
+      "term": "instantaneous_physical_boundary_flux",
+      "changes": {
+        "volume": 2.7755575615628914e-17,
+        "face": 2.4424906541753444e-15
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B11",
+      "equation": "outer_epsilon",
+      "term": "frozen_stage_physical_defect",
+      "changes": {
+        "volume": 9.254522739506402e-15,
+        "face": 2.4916016244571487e-15
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B11",
+      "equation": "outer_epsilon",
+      "term": "instantaneous_physical_defect",
+      "changes": {
+        "volume": 9.446185966679316e-15,
+        "face": 2.4368409444171582e-15
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B11",
+      "equation": "outer_epsilon",
+      "term": "frozen_operator_splitting",
+      "changes": {
+        "volume": 1.9166166214719511e-16,
+        "face": 5.4760474899198604e-17
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B11",
+      "equation": "whole_patch_k",
+      "term": "storage_backward_difference",
+      "changes": {
+        "volume": 4.694561525544344e-15,
+        "face": 0.0
+      },
+      "limit": 1.710133486364566e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B11",
+      "equation": "whole_patch_k",
+      "term": "stage_source",
+      "changes": {
+        "volume": 9.249578608193278e-17,
+        "face": 0.0
+      },
+      "limit": 1.9199687133755568e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B11",
+      "equation": "whole_patch_k",
+      "term": "instantaneous_source",
+      "changes": {
+        "volume": 5.232757789900254e-18,
+        "face": 0.0
+      },
+      "limit": 1.9177158973835605e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B11",
+      "equation": "whole_patch_k",
+      "term": "stage_physical_boundary_flux",
+      "changes": {
+        "volume": 2.964615315390051e-21,
+        "face": 1.6270785056332311e-15
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B11",
+      "equation": "whole_patch_k",
+      "term": "instantaneous_physical_boundary_flux",
+      "changes": {
+        "volume": 2.752857078576476e-21,
+        "face": 1.6270761762926262e-15
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B11",
+      "equation": "whole_patch_k",
+      "term": "frozen_stage_physical_defect",
+      "changes": {
+        "volume": 4.60206383363828e-15,
+        "face": 1.6270791409079416e-15
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B11",
+      "equation": "whole_patch_k",
+      "term": "instantaneous_physical_defect",
+      "changes": {
+        "volume": 4.689325167864418e-15,
+        "face": 1.627077446842047e-15
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B11",
+      "equation": "whole_patch_k",
+      "term": "frozen_operator_splitting",
+      "changes": {
+        "volume": 8.726317387582034e-17,
+        "face": 1.7205356741102976e-21
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B11",
+      "equation": "whole_patch_k",
+      "term": "interface_frozen_outward_flux_sum",
+      "changes": {
+        "volume": 7.940933880509066e-23,
+        "face": 6.782881022934827e-21
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "perturbed",
+      "member": "B11",
+      "equation": "whole_patch_k",
+      "term": "interface_current_outward_flux_sum",
+      "changes": {
+        "volume": 7.940933880509066e-23,
+        "face": 6.8027333576361e-21
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B5",
+      "equation": "inner_k",
+      "term": "storage_backward_difference",
+      "changes": {
+        "volume": 2.5602134637066744e-15,
+        "face": 0.0
+      },
+      "limit": 3.5077195241265343e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B5",
+      "equation": "inner_k",
+      "term": "stage_source",
+      "changes": {
+        "volume": 2.849943994990764e-16,
+        "face": 0.0
+      },
+      "limit": 3.98872980272796e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B5",
+      "equation": "inner_k",
+      "term": "instantaneous_source",
+      "changes": {
+        "volume": 2.0137440697362541e-16,
+        "face": 0.0
+      },
+      "limit": 3.984278047958156e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B5",
+      "equation": "inner_k",
+      "term": "stage_physical_boundary_flux",
+      "changes": {
+        "volume": 2.964615315390051e-21,
+        "face": 1.3659687200050078e-14
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B5",
+      "equation": "inner_k",
+      "term": "instantaneous_physical_boundary_flux",
+      "changes": {
+        "volume": 2.964615315390051e-21,
+        "face": 1.3659686988291841e-14
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B5",
+      "equation": "inner_k",
+      "term": "frozen_stage_physical_defect",
+      "changes": {
+        "volume": 2.845204845650876e-15,
+        "face": 1.3659687200050078e-14
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B5",
+      "equation": "inner_k",
+      "term": "instantaneous_physical_defect",
+      "changes": {
+        "volume": 2.7615851178232212e-15,
+        "face": 1.3659686988291841e-14
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B5",
+      "equation": "inner_k",
+      "term": "frozen_operator_splitting",
+      "changes": {
+        "volume": 8.362011593692097e-17,
+        "face": 4.328545672610496e-22
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B5",
+      "equation": "outer_k",
+      "term": "storage_backward_difference",
+      "changes": {
+        "volume": 1.859192159463083e-14,
+        "face": 0.0
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B5",
+      "equation": "outer_k",
+      "term": "stage_source",
+      "changes": {
+        "volume": 6.033030547999177e-17,
+        "face": 0.0
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B5",
+      "equation": "outer_k",
+      "term": "instantaneous_source",
+      "changes": {
+        "volume": 5.3937618786888003e-17,
+        "face": 0.0
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B5",
+      "equation": "outer_k",
+      "term": "stage_physical_boundary_flux",
+      "changes": {
+        "volume": 1.9852334701272664e-23,
+        "face": 4.790544776226333e-15
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B5",
+      "equation": "outer_k",
+      "term": "instantaneous_physical_boundary_flux",
+      "changes": {
+        "volume": 1.9852334701272664e-23,
+        "face": 4.7905447729176106e-15
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B5",
+      "equation": "outer_k",
+      "term": "frozen_stage_physical_defect",
+      "changes": {
+        "volume": 1.8652251918308796e-14,
+        "face": 4.790544776226333e-15
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B5",
+      "equation": "outer_k",
+      "term": "instantaneous_physical_defect",
+      "changes": {
+        "volume": 1.8645859232856463e-14,
+        "face": 4.79054477250402e-15
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B5",
+      "equation": "outer_k",
+      "term": "frozen_operator_splitting",
+      "changes": {
+        "volume": 6.392685684977391e-18,
+        "face": 3.381423871237279e-24
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B5",
+      "equation": "outer_epsilon",
+      "term": "storage_backward_difference",
+      "changes": {
+        "volume": 4.754478612949335e-15,
+        "face": 0.0
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B5",
+      "equation": "outer_epsilon",
+      "term": "stage_source",
+      "changes": {
+        "volume": 2.7755575615628914e-17,
+        "face": 0.0
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B5",
+      "equation": "outer_epsilon",
+      "term": "instantaneous_source",
+      "changes": {
+        "volume": 1.6653345369377348e-16,
+        "face": 0.0
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B5",
+      "equation": "outer_epsilon",
+      "term": "stage_physical_boundary_flux",
+      "changes": {
+        "volume": 2.498001805406602e-16,
+        "face": 3.3861802251067274e-15
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B5",
+      "equation": "outer_epsilon",
+      "term": "instantaneous_physical_boundary_flux",
+      "changes": {
+        "volume": 2.7755575615628914e-16,
+        "face": 3.497202527569243e-15
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B5",
+      "equation": "outer_epsilon",
+      "term": "frozen_stage_physical_defect",
+      "changes": {
+        "volume": 4.462979064935433e-15,
+        "face": 3.3951495099247624e-15
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B5",
+      "equation": "outer_epsilon",
+      "term": "instantaneous_physical_defect",
+      "changes": {
+        "volume": 4.654640730391351e-15,
+        "face": 3.5046704729580494e-15
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B5",
+      "equation": "outer_epsilon",
+      "term": "frozen_operator_splitting",
+      "changes": {
+        "volume": 1.916616664446569e-16,
+        "face": 1.0952095223147143e-16
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B5",
+      "equation": "whole_patch_k",
+      "term": "storage_backward_difference",
+      "changes": {
+        "volume": 8.015854077042607e-15,
+        "face": 0.0
+      },
+      "limit": 1.7101270389525377e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B5",
+      "equation": "whole_patch_k",
+      "term": "stage_source",
+      "changes": {
+        "volume": 1.1233202715720762e-16,
+        "face": 0.0
+      },
+      "limit": 1.919931760614975e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B5",
+      "equation": "whole_patch_k",
+      "term": "instantaneous_source",
+      "changes": {
+        "volume": 7.371838913028503e-17,
+        "face": 0.0
+      },
+      "limit": 1.9176807607679388e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B5",
+      "equation": "whole_patch_k",
+      "term": "stage_physical_boundary_flux",
+      "changes": {
+        "volume": 1.4823076576950256e-21,
+        "face": 4.4345645506264e-15
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B5",
+      "equation": "whole_patch_k",
+      "term": "instantaneous_physical_boundary_flux",
+      "changes": {
+        "volume": 1.4823076576950256e-21,
+        "face": 4.4345642329890445e-15
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B5",
+      "equation": "whole_patch_k",
+      "term": "frozen_stage_physical_defect",
+      "changes": {
+        "volume": 7.903523505723277e-15,
+        "face": 4.4345645506264e-15
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B5",
+      "equation": "whole_patch_k",
+      "term": "instantaneous_physical_defect",
+      "changes": {
+        "volume": 7.94213709081064e-15,
+        "face": 4.4345642329890445e-15
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B5",
+      "equation": "whole_patch_k",
+      "term": "frozen_operator_splitting",
+      "changes": {
+        "volume": 3.861355280793245e-17,
+        "face": 3.246393098586533e-22
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B5",
+      "equation": "whole_patch_k",
+      "term": "interface_frozen_outward_flux_sum",
+      "changes": {
+        "volume": 5.293955920339377e-23,
+        "face": 6.7696461331339785e-21
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B5",
+      "equation": "whole_patch_k",
+      "term": "interface_current_outward_flux_sum",
+      "changes": {
+        "volume": 5.955700410381799e-23,
+        "face": 6.75641124333313e-21
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B11",
+      "equation": "inner_k",
+      "term": "storage_backward_difference",
+      "changes": {
+        "volume": 1.2011732419305075e-15,
+        "face": 0.0
+      },
+      "limit": 3.5077195241265343e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B11",
+      "equation": "inner_k",
+      "term": "stage_source",
+      "changes": {
+        "volume": 6.070172115555665e-17,
+        "face": 0.0
+      },
+      "limit": 3.98872980272796e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B11",
+      "equation": "inner_k",
+      "term": "instantaneous_source",
+      "changes": {
+        "volume": 4.553861048112055e-17,
+        "face": 0.0
+      },
+      "limit": 3.984278047958156e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B11",
+      "equation": "inner_k",
+      "term": "stage_physical_boundary_flux",
+      "changes": {
+        "volume": 1.2281977735187355e-20,
+        "face": 1.1658011126350711e-14
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B11",
+      "equation": "inner_k",
+      "term": "instantaneous_physical_boundary_flux",
+      "changes": {
+        "volume": 1.2281977735187355e-20,
+        "face": 1.1658011973383659e-14
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B11",
+      "equation": "inner_k",
+      "term": "frozen_stage_physical_defect",
+      "changes": {
+        "volume": 1.1404593479850565e-15,
+        "face": 1.1658011338108948e-14
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B11",
+      "equation": "inner_k",
+      "term": "instantaneous_physical_defect",
+      "changes": {
+        "volume": 1.246699725943848e-15,
+        "face": 1.1658011973383659e-14
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B11",
+      "equation": "inner_k",
+      "term": "frozen_operator_splitting",
+      "changes": {
+        "volume": 1.062405350714091e-16,
+        "face": 6.492850820658422e-22
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B11",
+      "equation": "outer_k",
+      "term": "storage_backward_difference",
+      "changes": {
+        "volume": 2.1844152115485546e-15,
+        "face": 0.0
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B11",
+      "equation": "outer_k",
+      "term": "stage_source",
+      "changes": {
+        "volume": 6.26211110489247e-17,
+        "face": 0.0
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B11",
+      "equation": "outer_k",
+      "term": "instantaneous_source",
+      "changes": {
+        "volume": 5.865682314784594e-17,
+        "face": 0.0
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B11",
+      "equation": "outer_k",
+      "term": "stage_physical_boundary_flux",
+      "changes": {
+        "volume": 8.271806125530277e-25,
+        "face": 9.036790058783355e-15
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B11",
+      "equation": "outer_k",
+      "term": "instantaneous_physical_boundary_flux",
+      "changes": {
+        "volume": 8.271806125530277e-25,
+        "face": 9.036790058783355e-15
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B11",
+      "equation": "outer_k",
+      "term": "frozen_stage_physical_defect",
+      "changes": {
+        "volume": 2.247036321977094e-15,
+        "face": 9.036790058783355e-15
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B11",
+      "equation": "outer_k",
+      "term": "instantaneous_physical_defect",
+      "changes": {
+        "volume": 2.2430720334556297e-15,
+        "face": 9.03679005857656e-15
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B11",
+      "equation": "outer_k",
+      "term": "frozen_operator_splitting",
+      "changes": {
+        "volume": 3.964288546505822e-18,
+        "face": 0.0
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B11",
+      "equation": "outer_epsilon",
+      "term": "storage_backward_difference",
+      "changes": {
+        "volume": 4.893412900541556e-15,
+        "face": 0.0
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B11",
+      "equation": "outer_epsilon",
+      "term": "stage_source",
+      "changes": {
+        "volume": 1.6653345369377348e-16,
+        "face": 0.0
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B11",
+      "equation": "outer_epsilon",
+      "term": "instantaneous_source",
+      "changes": {
+        "volume": 3.3306690738754696e-16,
+        "face": 0.0
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B11",
+      "equation": "outer_epsilon",
+      "term": "stage_physical_boundary_flux",
+      "changes": {
+        "volume": 2.7755575615628914e-17,
+        "face": 1.2156942119645464e-14
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B11",
+      "equation": "outer_epsilon",
+      "term": "instantaneous_physical_boundary_flux",
+      "changes": {
+        "volume": 2.7755575615628914e-17,
+        "face": 1.2156942119645464e-14
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B11",
+      "equation": "outer_epsilon",
+      "term": "frozen_stage_physical_defect",
+      "changes": {
+        "volume": 5.037963849544949e-15,
+        "face": 1.2156825679084996e-14
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B11",
+      "equation": "outer_epsilon",
+      "term": "instantaneous_physical_defect",
+      "changes": {
+        "volume": 4.545119555599827e-15,
+        "face": 1.2156825705554776e-14
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B11",
+      "equation": "outer_epsilon",
+      "term": "frozen_operator_splitting",
+      "changes": {
+        "volume": 4.928442850270812e-16,
+        "face": 0.0
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B11",
+      "equation": "whole_patch_k",
+      "term": "storage_backward_difference",
+      "changes": {
+        "volume": 4.916210253408736e-16,
+        "face": 0.0
+      },
+      "limit": 1.7101270389525377e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B11",
+      "equation": "whole_patch_k",
+      "term": "stage_source",
+      "changes": {
+        "volume": 6.16613714344876e-17,
+        "face": 0.0
+      },
+      "limit": 1.919931760614975e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B11",
+      "equation": "whole_patch_k",
+      "term": "instantaneous_source",
+      "changes": {
+        "volume": 6.5590608384290036e-18,
+        "face": 0.0
+      },
+      "limit": 1.9176807607679388e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B11",
+      "equation": "whole_patch_k",
+      "term": "stage_physical_boundary_flux",
+      "changes": {
+        "volume": 2.8587361969832636e-21,
+        "face": 1.034739387069058e-14
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B11",
+      "equation": "whole_patch_k",
+      "term": "instantaneous_physical_boundary_flux",
+      "changes": {
+        "volume": 2.8587361969832636e-21,
+        "face": 1.0347394294207054e-14
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B11",
+      "equation": "whole_patch_k",
+      "term": "frozen_stage_physical_defect",
+      "changes": {
+        "volume": 5.53285309278298e-16,
+        "face": 1.034739387069058e-14
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B11",
+      "equation": "whole_patch_k",
+      "term": "instantaneous_physical_defect",
+      "changes": {
+        "volume": 4.981828514440904e-16,
+        "face": 1.0347394294207054e-14
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B11",
+      "equation": "whole_patch_k",
+      "term": "frozen_operator_splitting",
+      "changes": {
+        "volume": 5.5102406704106014e-17,
+        "face": 4.32848104912514e-22
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B11",
+      "equation": "whole_patch_k",
+      "term": "interface_frozen_outward_flux_sum",
+      "changes": {
+        "volume": 8.933550615572699e-23,
+        "face": 6.749793798432706e-21
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "member": "B11",
+      "equation": "whole_patch_k",
+      "term": "interface_current_outward_flux_sum",
+      "changes": {
+        "volume": 9.26442286059391e-23,
+        "face": 6.746485075982494e-21
+      },
+      "limit": 1e-09,
+      "status": "pass"
+    }
+  ],
+  "finite_defects": [
+    {
+      "kind": "perturbed",
+      "equation": "inner_k",
+      "signed_values": {
+        "B5": 1.22754913476591e-05,
+        "B11": 1.2324169766402434e-05,
+        "B5-dt2": 1.2083776832070063e-05,
+        "B11-dt2": 1.2141176104587743e-05
+      },
+      "fine_over_coarse": 1.0039654965625973,
+      "spatial_status": "failed_or_unresolved",
+      "residual_floor": 5e-09,
+      "quadrature_uncertainty": 2.624083506638352e-14,
+      "timestep_difference": 1.9171451558903649e-07,
+      "temporal_limit": 4.867841874333443e-09,
+      "temporal_status": "unresolved",
+      "frozen_operator_splitting": {
+        "B5": 1.8498352577999874e-07,
+        "B11": 1.8453798541886264e-07,
+        "B5-dt2": 9.187688813097533e-08,
+        "B11-dt2": 9.179110203026093e-08
+      }
+    },
+    {
+      "kind": "perturbed",
+      "equation": "outer_k",
+      "signed_values": {
+        "B5": 1.426296466716817e-05,
+        "B11": 1.4264374494125109e-05,
+        "B5-dt2": 1.4138426530664948e-05,
+        "B11-dt2": 1.4140173101389183e-05
+      },
+      "fine_over_coarse": 1.0000988452954795,
+      "spatial_status": "failed_or_unresolved",
+      "residual_floor": 5e-09,
+      "quadrature_uncertainty": 6.638491975097596e-15,
+      "timestep_difference": 1.245381365032211e-07,
+      "temporal_limit": 1e-09,
+      "temporal_status": "unresolved",
+      "frozen_operator_splitting": {
+        "B5": -8.094082022548503e-09,
+        "B11": -8.099104228156901e-09,
+        "B5-dt2": -4.035006417231675e-09,
+        "B11-dt2": -4.037403697136096e-09
+      }
+    },
+    {
+      "kind": "perturbed",
+      "equation": "outer_epsilon",
+      "signed_values": {
+        "B5": 1.38970309241065e-05,
+        "B11": 1.3897411419526158e-05,
+        "B5-dt2": 1.386008931851596e-05,
+        "B11-dt2": 1.3861911114266844e-05
+      },
+      "fine_over_coarse": 1.0000273796195558,
+      "spatial_status": "failed_or_unresolved",
+      "residual_floor": 5e-09,
+      "quadrature_uncertainty": 1.0869953483323702e-14,
+      "timestep_difference": 3.694160559053915e-08,
+      "temporal_limit": 1e-09,
+      "temporal_status": "unresolved",
+      "frozen_operator_splitting": {
+        "B5": -1.900530344293496e-08,
+        "B11": -1.9001172312616827e-08,
+        "B5-dt2": -9.523954327012966e-09,
+        "B11-dt2": -9.525725089148843e-09
+      }
+    },
+    {
+      "kind": "perturbed",
+      "equation": "whole_patch_k",
+      "signed_values": {
+        "B5": 1.3230383829264703e-05,
+        "B11": 1.3250752343672228e-05,
+        "B5-dt2": 1.3083425753604126e-05,
+        "B11-dt2": 1.3103576593684121e-05
+      },
+      "fine_over_coarse": 1.0015395255852269,
+      "spatial_status": "failed_or_unresolved",
+      "residual_floor": 5e-09,
+      "quadrature_uncertainty": 1.3432467012059086e-14,
+      "timestep_difference": 1.471757499881072e-07,
+      "temporal_limit": 2.03685144075251e-09,
+      "temporal_status": "unresolved",
+      "frozen_operator_splitting": {
+        "B5": 8.844471353232332e-08,
+        "B11": 8.821943198746203e-08,
+        "B5-dt2": 4.3920936178471926e-08,
+        "B11-dt2": 4.387684428973838e-08
+      }
+    },
+    {
+      "kind": "baseline",
+      "equation": "inner_k",
+      "signed_values": {
+        "B5": -1.7029871922818932e-06,
+        "B11": -1.6542676649437353e-06,
+        "B5-dt2": -1.7134156009706536e-06,
+        "B11-dt2": -1.6559680833400128e-06
+      },
+      "fine_over_coarse": 0.9713917241662418,
+      "spatial_status": "failed_or_unresolved",
+      "residual_floor": 5e-09,
+      "quadrature_uncertainty": 1.3659687200050078e-14,
+      "timestep_difference": 1.0428408688760464e-08,
+      "temporal_limit": 4.871952733815785e-09,
+      "temporal_status": "unresolved",
+      "frozen_operator_splitting": {
+        "B5": 2.5327440803073183e-11,
+        "B11": -4.198479244161218e-10,
+        "B5-dt2": -1.414345523844538e-10,
+        "B11-dt2": -2.2698442764446262e-10
+      }
+    },
+    {
+      "kind": "baseline",
+      "equation": "outer_k",
+      "signed_values": {
+        "B5": -3.1024704676888278e-09,
+        "B11": -1.680538732387624e-09,
+        "B5-dt2": -3.4496589013752344e-09,
+        "B11-dt2": -1.6918031370982475e-09
+      },
+      "fine_over_coarse": 0.5416775920640863,
+      "spatial_status": "unresolved_floor",
+      "residual_floor": 5e-09,
+      "quadrature_uncertainty": 1.8652251918308796e-14,
+      "timestep_difference": 3.4718843368640666e-10,
+      "temporal_limit": 1e-09,
+      "temporal_status": "pass",
+      "frozen_operator_splitting": {
+        "B5": 9.563627796853844e-12,
+        "B11": 4.53913584200039e-12,
+        "B5-dt2": 5.123919804425044e-12,
+        "B11-dt2": 2.725026215628485e-12
+      }
+    },
+    {
+      "kind": "baseline",
+      "equation": "outer_epsilon",
+      "signed_values": {
+        "B5": 1.464026832360075e-07,
+        "B11": 1.46863442920002e-07,
+        "B5-dt2": 1.4485516368070002e-07,
+        "B11-dt2": 1.4677849526596468e-07
+      },
+      "fine_over_coarse": 1.0031472079186674,
+      "spatial_status": "failed_or_unresolved",
+      "residual_floor": 5e-09,
+      "quadrature_uncertainty": 1.2156825679084996e-14,
+      "timestep_difference": 1.5475195553074786e-09,
+      "temporal_limit": 1e-09,
+      "temporal_status": "unresolved",
+      "frozen_operator_splitting": {
+        "B5": 2.51768407800212e-11,
+        "B11": 2.928204201268986e-11,
+        "B5-dt2": 1.6542510088840193e-11,
+        "B11-dt2": 1.4754471022736003e-11
+      }
+    },
+    {
+      "kind": "baseline",
+      "equation": "whole_patch_k",
+      "signed_values": {
+        "B5": -8.224476587953603e-07,
+        "B11": -8.020718944047839e-07,
+        "B5-dt2": -8.221489245690081e-07,
+        "B11-dt2": -8.019909146041281e-07
+      },
+      "fine_over_coarse": 0.9752254576049001,
+      "spatial_status": "failed_or_unresolved",
+      "residual_floor": 5e-09,
+      "quadrature_uncertainty": 1.034739387069058e-14,
+      "timestep_difference": 2.987342263521739e-10,
+      "temporal_limit": 2.037576439057633e-09,
+      "temporal_status": "pass",
+      "frozen_operator_splitting": {
+        "B5": 1.7445534433128114e-11,
+        "B11": -2.0765439596754198e-10,
+        "B5-dt2": -6.815531719296161e-11,
+        "B11-dt2": -1.1212970159335947e-10
+      }
+    }
+  ],
+  "baseline_subtracted_budgets": {
+    "inner_k": {
+      "B5": {
+        "storage_backward_difference": 1.2237066935381887e-05,
+        "stage_source": -3.87358325497796e-06,
+        "instantaneous_source": -4.058541501806906e-06,
+        "stage_physical_boundary_flux": 2.132171650418857e-06,
+        "instantaneous_physical_boundary_flux": 2.1321716989086073e-06,
+        "frozen_stage_physical_defect": 1.3978478539940993e-05,
+        "instantaneous_physical_defect": 1.4163436738280187e-05,
+        "frozen_operator_splitting": 1.8495819833919568e-07
+      },
+      "B11": {
+        "storage_backward_difference": 1.2237067775406435e-05,
+        "stage_source": -3.873594689948363e-06,
+        "instantaneous_source": -4.058552571679914e-06,
+        "stage_physical_boundary_flux": 2.1322250340086263e-06,
+        "instantaneous_physical_boundary_flux": 2.132225082396899e-06,
+        "frozen_stage_physical_defect": 1.397843743134617e-05,
+        "instantaneous_physical_defect": 1.4163395264689448e-05,
+        "frozen_operator_splitting": 1.8495783334327877e-07
+      },
+      "B5-dt2": {
+        "storage_backward_difference": 1.2005414031048134e-05,
+        "stage_source": -4.0022203804143205e-06,
+        "instantaneous_source": -4.094238728220435e-06,
+        "stage_physical_boundary_flux": 2.2104419784217373e-06,
+        "instantaneous_physical_boundary_flux": 2.210442003544491e-06,
+        "frozen_stage_physical_defect": 1.3797192433040717e-05,
+        "instantaneous_physical_defect": 1.3889210755724076e-05,
+        "frozen_operator_splitting": 9.201832268335978e-08
+      },
+      "B11-dt2": {
+        "storage_backward_difference": 1.2005415081488008e-05,
+        "stage_source": -4.002231659364002e-06,
+        "instantaneous_source": -4.0942497707634744e-06,
+        "stage_physical_boundary_flux": 2.210502552924259e-06,
+        "instantaneous_physical_boundary_flux": 2.210502577865826e-06,
+        "frozen_stage_physical_defect": 1.3797144187927755e-05,
+        "instantaneous_physical_defect": 1.3889162274385658e-05,
+        "frozen_operator_splitting": 9.20180864579054e-08
+      }
+    },
+    "outer_k": {
+      "B5": {
+        "storage_backward_difference": 1.5024127250526646e-05,
+        "stage_source": 1.6922806695413158e-06,
+        "instantaneous_source": 1.7003843352741063e-06,
+        "stage_physical_boundary_flux": -9.34220556650528e-07,
+        "instantaneous_physical_boundary_flux": -9.342205767329733e-07,
+        "frozen_stage_physical_defect": 1.4266067137635858e-05,
+        "instantaneous_physical_defect": 1.4257963491985513e-05,
+        "frozen_operator_splitting": -8.103645650345356e-09
+      },
+      "B11": {
+        "storage_backward_difference": 1.5024125121019687e-05,
+        "stage_source": 1.6922847139595943e-06,
+        "instantaneous_source": 1.7003883778239821e-06,
+        "stage_physical_boundary_flux": -9.34214625797403e-07,
+        "instantaneous_physical_boundary_flux": -9.342146462977919e-07,
+        "frozen_stage_physical_defect": 1.4266055032857496e-05,
+        "instantaneous_physical_defect": 1.4257951389493499e-05,
+        "frozen_operator_splitting": -8.103643363998901e-09
+      },
+      "B5-dt2": {
+        "storage_backward_difference": 1.4964688116347871e-05,
+        "stage_source": 1.7095108109455106e-06,
+        "instantaneous_source": 1.7135509533167993e-06,
+        "stage_physical_boundary_flux": -8.866988841639647e-07,
+        "instantaneous_physical_boundary_flux": -8.866988961982173e-07,
+        "frozen_stage_physical_defect": 1.4141876189566323e-05,
+        "instantaneous_physical_defect": 1.4137836059229288e-05,
+        "frozen_operator_splitting": -4.0401303370361e-09
+      },
+      "B11-dt2": {
+        "storage_backward_difference": 1.496468396708595e-05,
+        "stage_source": 1.7095150469739035e-06,
+        "instantaneous_source": 1.713555187947287e-06,
+        "stage_physical_boundary_flux": -8.866959844142326e-07,
+        "instantaneous_physical_boundary_flux": -8.866959966642644e-07,
+        "frozen_stage_physical_defect": 1.4141864904526282e-05,
+        "instantaneous_physical_defect": 1.413782477580293e-05,
+        "frozen_operator_splitting": -4.0401287233517245e-09
+      }
+    },
+    "outer_epsilon": {
+      "B5": {
+        "storage_backward_difference": 9.616783269063468e-06,
+        "stage_source": 4.757451497500176e-06,
+        "instantaneous_source": 4.765007424106793e-06,
+        "stage_physical_boundary_flux": -8.891296469304422e-06,
+        "instantaneous_physical_boundary_flux": -8.879821915663832e-06,
+        "frozen_stage_physical_defect": 1.3750628240870492e-05,
+        "instantaneous_physical_defect": 1.3731597760586776e-05,
+        "frozen_operator_splitting": -1.9030480283714983e-08
+      },
+      "B11": {
+        "storage_backward_difference": 9.616794474189506e-06,
+        "stage_source": 4.7574572538122695e-06,
+        "instantaneous_source": 4.765013178475996e-06,
+        "stage_physical_boundary_flux": -8.891210756228896e-06,
+        "instantaneous_physical_boundary_flux": -8.879736226513613e-06,
+        "frozen_stage_physical_defect": 1.3750547976606156e-05,
+        "instantaneous_physical_defect": 1.3731517522251525e-05,
+        "frozen_operator_splitting": -1.9030454354629516e-08
+      },
+      "B5-dt2": {
+        "storage_backward_difference": 9.733705822512599e-06,
+        "stage_source": 4.780155384936924e-06,
+        "instantaneous_source": 4.783896052296122e-06,
+        "stage_physical_boundary_flux": -8.761683717273261e-06,
+        "instantaneous_physical_boundary_flux": -8.755883887795468e-06,
+        "frozen_stage_physical_defect": 1.371523415483526e-05,
+        "instantaneous_physical_defect": 1.3705693657998157e-05,
+        "frozen_operator_splitting": -9.540496837101806e-09
+      },
+      "B11-dt2": {
+        "storage_backward_difference": 9.733723207875627e-06,
+        "stage_source": 4.780161446643616e-06,
+        "instantaneous_source": 4.783902113059124e-06,
+        "stage_physical_boundary_flux": -8.761570857801493e-06,
+        "instantaneous_physical_boundary_flux": -8.755771044588467e-06,
+        "frozen_stage_physical_defect": 1.371513261900088e-05,
+        "instantaneous_physical_defect": 1.3705592139440706e-05,
+        "frozen_operator_splitting": -9.54047956017158e-09
+      }
+    },
+    "whole_patch_k": {
+      "B5": {
+        "storage_backward_difference": 1.363059709295427e-05,
+        "stage_source": -1.0906512927183152e-06,
+        "instantaneous_source": -1.1790785832663927e-06,
+        "stage_physical_boundary_flux": 6.684168976125229e-07,
+        "instantaneous_physical_boundary_flux": 6.6841692016271e-07,
+        "frozen_stage_physical_defect": 1.4052831488060063e-05,
+        "instantaneous_physical_defect": 1.4141258756057953e-05,
+        "frozen_operator_splitting": 8.84272679978902e-08,
+        "interface_frozen_outward_flux_sum": -6.944135072836418e-08,
+        "interface_current_outward_flux_sum": -6.944135907489857e-08
+      },
+      "B11": {
+        "storage_backward_difference": 1.3630596448213066e-05,
+        "stage_source": -1.0906549879943733e-06,
+        "instantaneous_source": -1.1790820969279548e-06,
+        "stage_physical_boundary_flux": 6.684271981304279e-07,
+        "instantaneous_physical_boundary_flux": 6.684272206805797e-07,
+        "frozen_stage_physical_defect": 1.4052824238077012e-05,
+        "instantaneous_physical_defect": 1.414125132446044e-05,
+        "frozen_operator_splitting": 8.842708638342958e-08,
+        "interface_frozen_outward_flux_sum": -6.94219940248207e-08,
+        "interface_current_outward_flux_sum": -6.942200263103074e-08
+      },
+      "B5-dt2": {
+        "storage_backward_difference": 1.3485051073698e-05,
+        "stage_source": -1.1463547847344053e-06,
+        "instantaneous_source": -1.1903438874518183e-06,
+        "stage_physical_boundary_flux": 7.258311802592734e-07,
+        "instantaneous_physical_boundary_flux": 7.258311914810213e-07,
+        "frozen_stage_physical_defect": 1.3905574678173135e-05,
+        "instantaneous_physical_defect": 1.39495637696688e-05,
+        "frozen_operator_splitting": 4.398909149566489e-08,
+        "interface_frozen_outward_flux_sum": -6.395963313038457e-08,
+        "interface_current_outward_flux_sum": -6.395963780788165e-08
+      },
+      "B11-dt2": {
+        "storage_backward_difference": 1.3485049524286977e-05,
+        "stage_source": -1.1463583061950544e-06,
+        "instantaneous_source": -1.1903472914080985e-06,
+        "stage_physical_boundary_flux": 7.258403221937829e-07,
+        "instantaneous_physical_boundary_flux": 7.25840333415495e-07,
+        "frozen_stage_physical_defect": 1.3905567508288248e-05,
+        "instantaneous_physical_defect": 1.3949556482279582e-05,
+        "frozen_operator_splitting": 4.398897399133174e-08,
+        "interface_frozen_outward_flux_sum": -6.393703793876513e-08,
+        "interface_current_outward_flux_sum": -6.393704281470996e-08
+      }
+    }
+  },
+  "conservation_status": "finite physical defects, with spatial and temporal classifications; no exact conservation theorem",
+  "scope": "actual accepted storage and frozen-stage source, independently integrated physical face fluxes; no prescribed-row reaction used, dependent epsilon boundary storage retained; pairs bound uncertainty, not temporal order"
+}

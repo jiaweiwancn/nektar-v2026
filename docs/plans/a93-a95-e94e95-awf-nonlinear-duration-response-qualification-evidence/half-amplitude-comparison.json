@@ -1,0 +1,627 @@
+{
+  "status": "pass",
+  "configuration": {
+    "model": "A95",
+    "policy": "Natural",
+    "wall": "Accepted",
+    "descriptor": "A95:OriginalHighRe-v1:A0=6.5:As=3lambdaMax(Sd)/norm(Sd):Q=2sqrt(1-9Cmu^2(s*tau)^2)[O,S]/(1+6sr*tau^2):q=3.8220004260766363:kappa=0.40406099529852102:policy=Natural:sigmaK=1:sigmaE=1.3:Ceps1=1.4399999999999999:Ceps2=1.9199999999999999:wall=AcceptedBudgetAWF:compatible-q-kappa-v1:outerNu=0:innerNu=1.5e-05:eps_tilde=TotalEpsilon:DeviatoricStrainV1:NoRegularization:NoYap:source=Ceps1*epsilon*P/k:wallSink=P-Ew(K):frozen-prescribed-zero-reaction"
+  },
+  "time": 0.016,
+  "full_amplitude": 2e-05,
+  "half_amplitude": 1e-05,
+  "checks": [
+    {
+      "field": "u",
+      "member": 0,
+      "half_signal_RMS": 1.6433385711608564e-05,
+      "departure_from_linear_scaling_RMS": 7.976011142318243e-11,
+      "limit": 1.6433385711608565e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "u",
+      "member": 1,
+      "half_signal_RMS": 1.643338478659191e-05,
+      "departure_from_linear_scaling_RMS": 7.976454133701017e-11,
+      "limit": 1.643338478659191e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "u",
+      "member": 2,
+      "half_signal_RMS": 1.644458869935538e-05,
+      "departure_from_linear_scaling_RMS": 8.225256455764448e-11,
+      "limit": 1.6444588699355382e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "u",
+      "member": 3,
+      "half_signal_RMS": 1.6444587750826833e-05,
+      "departure_from_linear_scaling_RMS": 8.227104129655886e-11,
+      "limit": 1.6444587750826833e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "w",
+      "member": 0,
+      "half_signal_RMS": 1.6623171737184088e-05,
+      "departure_from_linear_scaling_RMS": 6.053781786227304e-11,
+      "limit": 1.662317173718409e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "w",
+      "member": 1,
+      "half_signal_RMS": 1.6623172486008336e-05,
+      "departure_from_linear_scaling_RMS": 6.053778088844332e-11,
+      "limit": 1.6623172486008336e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "w",
+      "member": 2,
+      "half_signal_RMS": 1.664699303007282e-05,
+      "departure_from_linear_scaling_RMS": 6.132417025233861e-11,
+      "limit": 1.664699303007282e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "w",
+      "member": 3,
+      "half_signal_RMS": 1.6646993828530528e-05,
+      "departure_from_linear_scaling_RMS": 6.13254398416413e-11,
+      "limit": 1.6646993828530528e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "k",
+      "member": 0,
+      "half_signal_RMS": 1.6480515718544282e-07,
+      "departure_from_linear_scaling_RMS": 8.915789051670587e-12,
+      "limit": 5e-07,
+      "status": "pass",
+      "signal_status": "unresolved_floor"
+    },
+    {
+      "field": "k",
+      "member": 1,
+      "half_signal_RMS": 1.648052564562202e-07,
+      "departure_from_linear_scaling_RMS": 8.917878417072588e-12,
+      "limit": 5e-07,
+      "status": "pass",
+      "signal_status": "unresolved_floor"
+    },
+    {
+      "field": "k",
+      "member": 2,
+      "half_signal_RMS": 1.6568776946685886e-07,
+      "departure_from_linear_scaling_RMS": 8.994824607931435e-12,
+      "limit": 5e-07,
+      "status": "pass",
+      "signal_status": "unresolved_floor"
+    },
+    {
+      "field": "k",
+      "member": 3,
+      "half_signal_RMS": 1.656878395560933e-07,
+      "departure_from_linear_scaling_RMS": 9.002181292590305e-12,
+      "limit": 5e-07,
+      "status": "pass",
+      "signal_status": "unresolved_floor"
+    },
+    {
+      "field": "epsilon_outer",
+      "member": 0,
+      "half_signal_RMS": 1.9154476422486165e-07,
+      "departure_from_linear_scaling_RMS": 1.6786698291094316e-11,
+      "limit": 5e-07,
+      "status": "pass",
+      "signal_status": "unresolved_floor"
+    },
+    {
+      "field": "epsilon_outer",
+      "member": 1,
+      "half_signal_RMS": 1.9154468697324132e-07,
+      "departure_from_linear_scaling_RMS": 1.6786604218635997e-11,
+      "limit": 5e-07,
+      "status": "pass",
+      "signal_status": "unresolved_floor"
+    },
+    {
+      "field": "epsilon_outer",
+      "member": 2,
+      "half_signal_RMS": 1.9401708041407244e-07,
+      "departure_from_linear_scaling_RMS": 1.706106491643841e-11,
+      "limit": 5e-07,
+      "status": "pass",
+      "signal_status": "unresolved_floor"
+    },
+    {
+      "field": "epsilon_outer",
+      "member": 3,
+      "half_signal_RMS": 1.9401700949257572e-07,
+      "departure_from_linear_scaling_RMS": 1.7060975357885493e-11,
+      "limit": 5e-07,
+      "status": "pass",
+      "signal_status": "unresolved_floor"
+    },
+    {
+      "field": "Pi",
+      "member": 0,
+      "half_signal_RMS": 0.00018866994996031243,
+      "departure_from_linear_scaling_RMS": 6.061153481480041e-09,
+      "limit": 1.8866994996031245e-05,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Pi",
+      "member": 1,
+      "half_signal_RMS": 0.00018866998187109493,
+      "departure_from_linear_scaling_RMS": 6.061196795146976e-09,
+      "limit": 1.8866998187109495e-05,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Pi",
+      "member": 2,
+      "half_signal_RMS": 0.00018851296695365812,
+      "departure_from_linear_scaling_RMS": 6.115342184222863e-09,
+      "limit": 1.8851296695365812e-05,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Pi",
+      "member": 3,
+      "half_signal_RMS": 0.00018851299835116077,
+      "departure_from_linear_scaling_RMS": 6.115396192390978e-09,
+      "limit": 1.885129983511608e-05,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "pi_mechanical",
+      "member": 0,
+      "half_signal_RMS": 0.00018862912385475,
+      "departure_from_linear_scaling_RMS": 6.0669113535656105e-09,
+      "limit": 1.8862912385475002e-05,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "pi_mechanical",
+      "member": 1,
+      "half_signal_RMS": 0.00018862915589202664,
+      "departure_from_linear_scaling_RMS": 6.066954668679458e-09,
+      "limit": 1.8862915589202664e-05,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "pi_mechanical",
+      "member": 2,
+      "half_signal_RMS": 0.00018847231676443182,
+      "departure_from_linear_scaling_RMS": 6.121086533808944e-09,
+      "limit": 1.8847231676443184e-05,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "pi_mechanical",
+      "member": 3,
+      "half_signal_RMS": 0.0001884723482970978,
+      "departure_from_linear_scaling_RMS": 6.121140577886578e-09,
+      "limit": 1.8847234829709783e-05,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Tzz",
+      "member": 0,
+      "half_signal_RMS": 0.00018624647948091511,
+      "departure_from_linear_scaling_RMS": 5.448720639195318e-09,
+      "limit": 1.8624647948091513e-05,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Tzz",
+      "member": 1,
+      "half_signal_RMS": 0.0001862464979798159,
+      "departure_from_linear_scaling_RMS": 5.448819839400431e-09,
+      "limit": 1.8624649797981593e-05,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Tzz",
+      "member": 2,
+      "half_signal_RMS": 0.00018620686356876054,
+      "departure_from_linear_scaling_RMS": 5.505017108955659e-09,
+      "limit": 1.8620686356876056e-05,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Tzz",
+      "member": 3,
+      "half_signal_RMS": 0.00018620688040522175,
+      "departure_from_linear_scaling_RMS": 5.5052821969827405e-09,
+      "limit": 1.8620688040522175e-05,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Txz",
+      "member": 0,
+      "half_signal_RMS": 7.035006235762124e-05,
+      "departure_from_linear_scaling_RMS": 4.158892006172381e-09,
+      "limit": 7.035006235762124e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Txz",
+      "member": 1,
+      "half_signal_RMS": 7.035006287552777e-05,
+      "departure_from_linear_scaling_RMS": 4.159197982691665e-09,
+      "limit": 7.035006287552777e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Txz",
+      "member": 2,
+      "half_signal_RMS": 7.043750006465971e-05,
+      "departure_from_linear_scaling_RMS": 4.168575817634842e-09,
+      "limit": 7.043750006465972e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Txz",
+      "member": 3,
+      "half_signal_RMS": 7.043750044871096e-05,
+      "departure_from_linear_scaling_RMS": 4.16962210844208e-09,
+      "limit": 7.043750044871096e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Rxx",
+      "member": 0,
+      "half_signal_RMS": 7.383998402712566e-05,
+      "departure_from_linear_scaling_RMS": 5.680193561444732e-09,
+      "limit": 7.383998402712566e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Rxx",
+      "member": 1,
+      "half_signal_RMS": 7.383998306202428e-05,
+      "departure_from_linear_scaling_RMS": 5.680175033102538e-09,
+      "limit": 7.383998306202428e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Rxx",
+      "member": 2,
+      "half_signal_RMS": 7.395424136398372e-05,
+      "departure_from_linear_scaling_RMS": 5.697628071681872e-09,
+      "limit": 7.395424136398372e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Rxx",
+      "member": 3,
+      "half_signal_RMS": 7.395424004231883e-05,
+      "departure_from_linear_scaling_RMS": 5.697609887588137e-09,
+      "limit": 7.3954240042318835e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Ryy",
+      "member": 0,
+      "half_signal_RMS": 3.7120910291510857e-06,
+      "departure_from_linear_scaling_RMS": 6.509450178944582e-10,
+      "limit": 5e-07,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Ryy",
+      "member": 1,
+      "half_signal_RMS": 3.712072294673091e-06,
+      "departure_from_linear_scaling_RMS": 6.509301771293508e-10,
+      "limit": 5e-07,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Ryy",
+      "member": 2,
+      "half_signal_RMS": 3.7905350802886855e-06,
+      "departure_from_linear_scaling_RMS": 6.705560207097105e-10,
+      "limit": 5e-07,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Ryy",
+      "member": 3,
+      "half_signal_RMS": 3.790516958974167e-06,
+      "departure_from_linear_scaling_RMS": 6.705353670006362e-10,
+      "limit": 5e-07,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Rzz",
+      "member": 0,
+      "half_signal_RMS": 7.413779419601726e-05,
+      "departure_from_linear_scaling_RMS": 5.8679664504025095e-09,
+      "limit": 7.413779419601726e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Rzz",
+      "member": 1,
+      "half_signal_RMS": 7.413779339777723e-05,
+      "departure_from_linear_scaling_RMS": 5.867949601605953e-09,
+      "limit": 7.413779339777723e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Rzz",
+      "member": 2,
+      "half_signal_RMS": 7.424944442378355e-05,
+      "departure_from_linear_scaling_RMS": 5.887457429934704e-09,
+      "limit": 7.424944442378356e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Rzz",
+      "member": 3,
+      "half_signal_RMS": 7.424944275744968e-05,
+      "departure_from_linear_scaling_RMS": 5.887440766379114e-09,
+      "limit": 7.4249442757449685e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Rxz",
+      "member": 0,
+      "half_signal_RMS": 9.498476451137247e-05,
+      "departure_from_linear_scaling_RMS": 5.85999016732534e-09,
+      "limit": 9.498476451137247e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Rxz",
+      "member": 1,
+      "half_signal_RMS": 9.498476563186493e-05,
+      "departure_from_linear_scaling_RMS": 5.860018021497301e-09,
+      "limit": 9.498476563186493e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Rxz",
+      "member": 2,
+      "half_signal_RMS": 9.511611799539327e-05,
+      "departure_from_linear_scaling_RMS": 5.876243756021723e-09,
+      "limit": 9.511611799539328e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Rxz",
+      "member": 3,
+      "half_signal_RMS": 9.511611891159883e-05,
+      "departure_from_linear_scaling_RMS": 5.876273687198873e-09,
+      "limit": 9.511611891159883e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Qxx",
+      "member": 0,
+      "half_signal_RMS": 2.9571916002036973e-05,
+      "departure_from_linear_scaling_RMS": 5.9071327961824e-09,
+      "limit": 2.9571916002036973e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Qxx",
+      "member": 1,
+      "half_signal_RMS": 2.9571918666624687e-05,
+      "departure_from_linear_scaling_RMS": 5.907117567581921e-09,
+      "limit": 2.957191866662469e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Qxx",
+      "member": 2,
+      "half_signal_RMS": 2.9612807282067827e-05,
+      "departure_from_linear_scaling_RMS": 5.929219376879824e-09,
+      "limit": 2.961280728206783e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Qxx",
+      "member": 3,
+      "half_signal_RMS": 2.9612810244443425e-05,
+      "departure_from_linear_scaling_RMS": 5.929202660332226e-09,
+      "limit": 2.9612810244443426e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Qyy",
+      "member": 0,
+      "half_signal_RMS": 0.0,
+      "departure_from_linear_scaling_RMS": 0.0,
+      "limit": 5e-07,
+      "status": "pass",
+      "signal_status": "unresolved_floor"
+    },
+    {
+      "field": "Qyy",
+      "member": 1,
+      "half_signal_RMS": 0.0,
+      "departure_from_linear_scaling_RMS": 0.0,
+      "limit": 5e-07,
+      "status": "pass",
+      "signal_status": "unresolved_floor"
+    },
+    {
+      "field": "Qyy",
+      "member": 2,
+      "half_signal_RMS": 0.0,
+      "departure_from_linear_scaling_RMS": 0.0,
+      "limit": 5e-07,
+      "status": "pass",
+      "signal_status": "unresolved_floor"
+    },
+    {
+      "field": "Qyy",
+      "member": 3,
+      "half_signal_RMS": 0.0,
+      "departure_from_linear_scaling_RMS": 0.0,
+      "limit": 5e-07,
+      "status": "pass",
+      "signal_status": "unresolved_floor"
+    },
+    {
+      "field": "Qzz",
+      "member": 0,
+      "half_signal_RMS": 2.9571916002036973e-05,
+      "departure_from_linear_scaling_RMS": 5.9071327961824e-09,
+      "limit": 2.9571916002036973e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Qzz",
+      "member": 1,
+      "half_signal_RMS": 2.9571918666624687e-05,
+      "departure_from_linear_scaling_RMS": 5.907117567581921e-09,
+      "limit": 2.957191866662469e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Qzz",
+      "member": 2,
+      "half_signal_RMS": 2.9612807282067827e-05,
+      "departure_from_linear_scaling_RMS": 5.929219376879824e-09,
+      "limit": 2.961280728206783e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Qzz",
+      "member": 3,
+      "half_signal_RMS": 2.9612810244443425e-05,
+      "departure_from_linear_scaling_RMS": 5.929202660332226e-09,
+      "limit": 2.9612810244443426e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Qxz",
+      "member": 0,
+      "half_signal_RMS": 7.139596542718823e-05,
+      "departure_from_linear_scaling_RMS": 5.203957600265515e-09,
+      "limit": 7.139596542718823e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Qxz",
+      "member": 1,
+      "half_signal_RMS": 7.139596424624648e-05,
+      "departure_from_linear_scaling_RMS": 5.2039759685233164e-09,
+      "limit": 7.139596424624648e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Qxz",
+      "member": 2,
+      "half_signal_RMS": 7.151286770418055e-05,
+      "departure_from_linear_scaling_RMS": 5.235650511382353e-09,
+      "limit": 7.151286770418055e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "Qxz",
+      "member": 3,
+      "half_signal_RMS": 7.151286584732632e-05,
+      "departure_from_linear_scaling_RMS": 5.235674855233688e-09,
+      "limit": 7.151286584732633e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "P",
+      "member": 0,
+      "half_signal_RMS": 9.591595264463679e-05,
+      "departure_from_linear_scaling_RMS": 7.636406278736509e-09,
+      "limit": 9.59159526446368e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "P",
+      "member": 1,
+      "half_signal_RMS": 9.59159643710619e-05,
+      "departure_from_linear_scaling_RMS": 7.636384743899658e-09,
+      "limit": 9.59159643710619e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "P",
+      "member": 2,
+      "half_signal_RMS": 9.60954806436609e-05,
+      "departure_from_linear_scaling_RMS": 7.686443771725575e-09,
+      "limit": 9.609548064366091e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    },
+    {
+      "field": "P",
+      "member": 3,
+      "half_signal_RMS": 9.609549440182352e-05,
+      "departure_from_linear_scaling_RMS": 7.686422781584267e-09,
+      "limit": 9.609549440182352e-06,
+      "status": "pass",
+      "signal_status": "resolved"
+    }
+  ],
+  "scope": "bounded amplitude response; no exact linearity or decay theorem"
+}

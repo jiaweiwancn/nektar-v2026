@@ -1,0 +1,30 @@
+{
+  "status": "pass",
+  "checks": [
+    {
+      "name": "configure-ctest-current",
+      "command": [
+        "cmake",
+        "-S",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/build"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "ctest-current",
+      "command": [
+        "ctest",
+        "--test-dir",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/build",
+        "-j",
+        "1",
+        "--output-on-failure",
+        "-R",
+        "^(RANSDurationCoverageContract|RANSNonlinearEvidenceContract|RANSPilotEvidenceContract|RANSQualificationFailureContract)$"
+      ],
+      "exit_code": 0
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "status": "pass",
+  "actual_exit_code": 1,
+  "expected_reason": "response_baseline_perturbation_invalid",
+  "result": {
+    "status": "fail",
+    "failure": "ValueError('response_baseline_perturbation_invalid')",
+    "scope": "preserved incomplete response analysis; native packets and logs retained"
+  },
+  "command": [
+    "python3",
+    "-B",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/compare_rans_nonlinear_response.py",
+    "--root",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110",
+    "--perturbed",
+    "A93-N-Accepted-duration-0.002-B5",
+    "A93-N-Accepted-duration-0.002-B11",
+    "A93-N-Accepted-duration-0.002-B5-dt2",
+    "A93-N-Accepted-duration-0.002-B11-dt2",
+    "--baseline",
+    "A93-N-Accepted-duration-0.002-B5",
+    "A93-N-Accepted-duration-0.002-B11",
+    "A93-N-Accepted-duration-0.002-B5-dt2",
+    "A93-N-Accepted-duration-0.002-B11-dt2",
+    "--time",
+    ".016",
+    "--output-directory",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/neutral-as-perturbed-negative-control"
+  ]
+}

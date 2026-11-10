@@ -1,0 +1,90 @@
+{
+  "status": "fail",
+  "events": [
+    {
+      "name": "A95-N-EP-B5-dt2",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/audit_rans_pilot_samples.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-balanced-20261110",
+        "--label",
+        "A95-N-EP-B5-dt2",
+        "--through-time",
+        ".016",
+        "--output-directory",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/reused-short-observers/A95-N-EP-B5-dt2",
+        "--tmp-directory",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/tmp"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "A95-N-EP-B11-dt2",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/audit_rans_pilot_samples.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-balanced-20261110",
+        "--label",
+        "A95-N-EP-B11-dt2",
+        "--through-time",
+        ".016",
+        "--output-directory",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/reused-short-observers/A95-N-EP-B11-dt2",
+        "--tmp-directory",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/tmp"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "A95-EP-frozen-quadrature",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/check_rans_balanced_state_quadrature.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110",
+        "--campaign-root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-balanced-20261110",
+        "--analysis-runtime",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/runtime-resolution-v3",
+        "--model",
+        "A95",
+        "--policy",
+        "Natural",
+        "--walls",
+        "EP",
+        "--label-prefix",
+        "A95-N-EP",
+        "--time",
+        ".016",
+        "--output-label",
+        "frozen-quadrature-A95-N-EP"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "A95-EP-admission",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/admit_rans_balanced_duration.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110",
+        "--previous-root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-balanced-20261110",
+        "--model",
+        "A95",
+        "--wall",
+        "EP",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/admissions/A95-N-EP-loader-v2.json"
+      ],
+      "exit_code": 1
+    }
+  ],
+  "scope": "read-only short-evidence supplementation; no new EP trajectory admitted yet"
+}

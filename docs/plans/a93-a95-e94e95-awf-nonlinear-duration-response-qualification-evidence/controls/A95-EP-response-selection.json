@@ -1,0 +1,117 @@
+{
+  "status": "selected",
+  "model": "A95",
+  "policy": "Natural",
+  "walls": [
+    "Accepted",
+    "EP"
+  ],
+  "horizon": 0.016,
+  "amplitude": 2e-05,
+  "half_amplitude": 1e-05,
+  "timesteps": [
+    0.002,
+    0.001
+  ],
+  "Accepted_short_result_sha256": "172a6c82e6edb7b7af2693a18e30cc83714e3f2570232952ed1d76e8f52a9c1e",
+  "observed_core_response": {
+    "Pi": {
+      "response_RMS": [
+        0.0003773465513803009,
+        0.00037734661521156705,
+        0.00037703264086775304,
+        0.0003770327036682098
+      ],
+      "response_L2": [
+        0.0010672972213534749,
+        0.0010672974018955594,
+        0.0010664093483450415,
+        0.0010664095259715568
+      ],
+      "spatial_difference": 5.4188139631501625e-08,
+      "timestep_differences": [
+        2.707057659984184e-06,
+        2.7070547390518263e-06
+      ],
+      "spatial_limit": 3.773466152115671e-05,
+      "temporal_limit": 1.8867330760578354e-05,
+      "signal_status": "resolved",
+      "spatial_status": "pass",
+      "temporal_status": "pass"
+    },
+    "w": {
+      "response_RMS": [
+        3.324634455566751e-05,
+        3.324634605360692e-05,
+        3.329398728988111e-05,
+        3.329398888706765e-05
+      ],
+      "response_L2": [
+        9.403486273990781e-05,
+        9.403486697672025e-05,
+        9.416961674165461e-05,
+        9.416962125918036e-05
+      ],
+      "spatial_difference": 2.0762132820012633e-09,
+      "timestep_differences": [
+        9.179006206163475e-08,
+        9.178991881610519e-08
+      ],
+      "spatial_limit": 3.329398888706765e-06,
+      "temporal_limit": 1.6646994443533826e-06,
+      "signal_status": "resolved",
+      "spatial_status": "pass",
+      "temporal_status": "pass"
+    },
+    "Qxz": {
+      "response_RMS": [
+        0.00014279172072366935,
+        0.00014279171836960265,
+        0.00014302551894426123,
+        0.00014302551523541604
+      ],
+      "response_L2": [
+        0.00028558344144733865,
+        0.00028558343673920525,
+        0.0002860510378885224,
+        0.000286051030470832
+      ],
+      "spatial_difference": 3.998991436303455e-08,
+      "timestep_differences": [
+        7.04527005134978e-07,
+        7.045941238605568e-07
+      ],
+      "spatial_limit": 1.4302551894426123e-05,
+      "temporal_limit": 7.1512759472130615e-06,
+      "signal_status": "resolved",
+      "spatial_status": "pass",
+      "temporal_status": "pass"
+    },
+    "P": {
+      "response_RMS": [
+        0.0001918261094909194,
+        0.00019182613293453144,
+        0.00019218516477677102,
+        0.0001921851922827678
+      ],
+      "response_L2": [
+        0.0003836522189818387,
+        0.0003836522658690628,
+        0.00038437032955354193,
+        0.0003843703845655355
+      ],
+      "spatial_difference": 4.583571346099002e-08,
+      "timestep_differences": [
+        1.2782384209943986e-06,
+        1.2782333082446816e-06
+      ],
+      "spatial_limit": 1.921851922827678e-05,
+      "temporal_limit": 9.60925961413839e-06,
+      "signal_status": "resolved",
+      "spatial_status": "pass",
+      "temporal_status": "pass"
+    }
+  },
+  "rationale": "A93 duration common vertical-momentum gate failed. A95 neutral duration passes and its short pressure/w/Qxz/P response is resolved. Compare the wall/reference/source constructions under this qualified nonlinear outer closure.",
+  "scope": "EP response only .016; no EP .5 admission, no relaxation of response uncertainty or physical gates"
+}

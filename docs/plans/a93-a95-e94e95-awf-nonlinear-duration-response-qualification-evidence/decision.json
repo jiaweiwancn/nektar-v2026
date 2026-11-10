@@ -1,0 +1,104 @@
+{
+  "schema": "NonlinearDurationResponseDecisionV1",
+  "status": "failed_unresolved_or_incomplete",
+  "scientific_process_exit": 1,
+  "starting_revision": "dfd94161fd9d97f7f1a8ce2966e9cc9461b6d686",
+  "numerical_export_source_revision": "c33b08bc9b64d9859c925bf13226ff300723c728",
+  "export_packager_source_revision": "9c2da47a9f6f6a8c0bb5be393cbe201f2107290a",
+  "required_scope_classification": {
+    "status": "failed_unresolved_or_incomplete",
+    "scopes": {
+      "aggregate_negative_controls": "pass",
+      "actual_initial_binding": "pass",
+      "targeted_regressions": "pass",
+      "historical_receipt_bytes": "pass",
+      "current_solver_libraries": "pass",
+      "current_diagnostic_libraries": "pass",
+      "forward_interface_tolerance": "pass",
+      "physical_budget_controls": "pass",
+      "physical_budget_accounting": "pass",
+      "A93-duration": "failed_unresolved_or_incomplete",
+      "A93-response": "not_admitted",
+      "A95-duration": "pass",
+      "A95-response": "failed_unresolved_or_incomplete",
+      "half-amplitude": "pass",
+      "selected-EP-control": "failed_unresolved_or_incomplete"
+    },
+    "failures": [
+      "A93-duration:neutral_duration_not_qualified",
+      "A95-response:response_failed_or_unresolved",
+      "selected-EP-control:ep_response_missing_or_failed"
+    ]
+  },
+  "cohorts": {
+    "A93-N-Accepted-duration-0.002": {
+      "numerical_status": "failed_unresolved_or_incomplete",
+      "classification": {
+        "process_and_endpoint_coverage": "pass",
+        "field_and_timestep": "pass",
+        "spatial_reconstruction": "pass",
+        "dominant_spatial_reduction": "fail",
+        "fixed_common_inner_k": "pass",
+        "scalar_coverage": "pass",
+        "frozen_quadrature": "pass",
+        "native_constitutive": "pass"
+      }
+    },
+    "A95-N-Accepted-duration-0.002": {
+      "numerical_status": "pass",
+      "classification": {
+        "process_and_endpoint_coverage": "pass",
+        "field_and_timestep": "pass",
+        "spatial_reconstruction": "pass",
+        "dominant_spatial_reduction": "pass",
+        "fixed_common_inner_k": "pass",
+        "scalar_coverage": "pass",
+        "frozen_quadrature": "pass",
+        "native_constitutive": "pass"
+      }
+    }
+  },
+  "response_statuses": {
+    "A95-N-Accepted-response-1e-05-dt-0.002": "failed_response_audit",
+    "A95-N-Accepted-response-2e-05-dt-0.002": "failed_response_audit",
+    "A95-N-EP-response-2e-05-dt-0.002": "failed_response_audit"
+  },
+  "all_complete_comparison_bodies": "complete-results.json.gz",
+  "failures": [
+    {
+      "cohort": "A93-N-Accepted-duration-0.002",
+      "time": 0.5,
+      "gate": "evolved_spatial_reduction",
+      "witness": "A93-N-Accepted-duration-0.002-spatial-gate-failure.json.gz",
+      "sha256": "5d7e9844583e49bb15a1f3901db21a8226966f6cd3e1fbb7b560751ceb5b08d1"
+    },
+    {
+      "cohort": "A95-N-Accepted-response-1e-05-dt-0.002",
+      "time": 0.016,
+      "gate": "response_native_spatial_audit",
+      "witness": "A95-N-Accepted-response-1e-05-dt-0.002-0.016-response-audit-failure.json.gz",
+      "sha256": "7a7d0c9bd2e293b5160eddbcaa49a422a7f9210308a379c4a48b7bc002bf4e56"
+    },
+    {
+      "cohort": "A95-N-Accepted-response-2e-05-dt-0.002",
+      "time": 0.016,
+      "gate": "response_native_spatial_audit",
+      "witness": "A95-N-Accepted-response-2e-05-dt-0.002-0.016-response-audit-failure.json.gz",
+      "sha256": "89410f9b8acac22049b14c76322f9b249fd84b2a93c271c1b8086b2a02fbaed4"
+    },
+    {
+      "cohort": "A95-N-EP-response-2e-05-dt-0.002",
+      "time": 0.016,
+      "gate": "response_native_spatial_audit",
+      "witness": "A95-N-EP-response-2e-05-dt-0.002-0.016-response-audit-failure.json.gz",
+      "sha256": "301055ef8514c9ee5e792420874ec6249c1437965c6cf9f23732012c1bee790b"
+    }
+  ],
+  "costs": {
+    "segments": 40,
+    "accepted_steps": 3192,
+    "instrumented_exclusive_process_CPU_seconds": 22066.554799000023
+  },
+  "scope": "serial flat2D prescribed-reference patch; failed response audits do not qualify a longer response",
+  "packager_status": "completed read-only export; this status does not override scientific gates"
+}

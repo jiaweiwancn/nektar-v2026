@@ -1,0 +1,5 @@
+from pathlib import Path
+import subprocess,os,json
+r=Path(__file__).resolve().parent;t=r/'source/solvers/IncNavierStokesSolver/Tests/RANS';env=dict(os.environ,OMP_NUM_THREADS='1',OPENBLAS_NUM_THREADS='1',MKL_NUM_THREADS='1',BLIS_NUM_THREADS='1',NUMEXPR_NUM_THREADS='1',PYTHONDONTWRITEBYTECODE='1',TMPDIR=str(r/'tmp'));labels=['A93-N-Accepted-duration-0.002-'+m for m in ('B5','B11','B5-dt2','B11-dt2')];out=r/'neutral-as-perturbed-negative-control';cmd=['python3','-B',str(t/'compare_rans_nonlinear_response.py'),'--root',str(r),'--perturbed',*labels,'--baseline',*labels,'--time','.016','--output-directory',str(out)]
+with (r/'neutral-as-perturbed-process.log').open('x') as f:code=subprocess.run(cmd,env=env,stdout=f,stderr=subprocess.STDOUT).returncode
+result=json.loads((out/'results.json').read_text());ok=code!=0 and 'response_baseline_perturbation_invalid' in result.get('failure','');(r/'neutral-as-perturbed-negative-control.json').write_text(json.dumps(dict(status='pass' if ok else 'fail',actual_exit_code=code,expected_reason='response_baseline_perturbation_invalid',result=result,command=cmd),indent=2)+'\n')

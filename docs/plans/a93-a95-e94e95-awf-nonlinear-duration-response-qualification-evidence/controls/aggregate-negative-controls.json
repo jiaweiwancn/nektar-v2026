@@ -1,0 +1,204 @@
+{
+  "status": "pass",
+  "checks": [
+    {
+      "name": "positive",
+      "status": "pass",
+      "actual_exit_code": 0,
+      "expected_reason": null,
+      "result": {
+        "status": "pass",
+        "failures": [],
+        "coverage_status": "pass",
+        "evolved_reduction_status": "pass"
+      },
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/classify_rans_duration_bundle.py",
+        "--request",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/aggregate-negative-controls/request.json",
+        "--receipt",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/aggregate-negative-controls/positive-receipt.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/aggregate-negative-controls/positive-result.json"
+      ]
+    },
+    {
+      "name": "missing-time",
+      "status": "pass",
+      "actual_exit_code": 1,
+      "expected_reason": "missing_required_time",
+      "result": {
+        "status": "fail",
+        "failures": [
+          "missing_required_time:0.1",
+          "missing_required_time:0.1"
+        ],
+        "coverage_status": "fail",
+        "evolved_reduction_status": "pass"
+      },
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/classify_rans_duration_bundle.py",
+        "--request",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/aggregate-negative-controls/request.json",
+        "--receipt",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/aggregate-negative-controls/missing-time-receipt.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/aggregate-negative-controls/missing-time-result.json"
+      ]
+    },
+    {
+      "name": "wrong-model",
+      "status": "pass",
+      "actual_exit_code": 1,
+      "expected_reason": "configuration_mismatch",
+      "result": {
+        "status": "fail",
+        "failures": [
+          "configuration_mismatch:model"
+        ],
+        "coverage_status": "fail",
+        "evolved_reduction_status": "pass"
+      },
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/classify_rans_duration_bundle.py",
+        "--request",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/aggregate-negative-controls/request.json",
+        "--receipt",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/aggregate-negative-controls/wrong-model-receipt.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/aggregate-negative-controls/wrong-model-result.json"
+      ]
+    },
+    {
+      "name": "wrong-wall",
+      "status": "pass",
+      "actual_exit_code": 1,
+      "expected_reason": "configuration_mismatch",
+      "result": {
+        "status": "fail",
+        "failures": [
+          "configuration_mismatch:wall"
+        ],
+        "coverage_status": "fail",
+        "evolved_reduction_status": "pass"
+      },
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/classify_rans_duration_bundle.py",
+        "--request",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/aggregate-negative-controls/request.json",
+        "--receipt",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/aggregate-negative-controls/wrong-wall-receipt.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/aggregate-negative-controls/wrong-wall-result.json"
+      ]
+    },
+    {
+      "name": "missing-space",
+      "status": "pass",
+      "actual_exit_code": 1,
+      "expected_reason": "missing_companion",
+      "result": {
+        "status": "fail",
+        "failures": [
+          "missing_companion:B11"
+        ],
+        "coverage_status": "fail",
+        "evolved_reduction_status": "pass"
+      },
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/classify_rans_duration_bundle.py",
+        "--request",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/aggregate-negative-controls/request.json",
+        "--receipt",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/aggregate-negative-controls/missing-space-receipt.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/aggregate-negative-controls/missing-space-result.json"
+      ]
+    },
+    {
+      "name": "missing-timestep",
+      "status": "pass",
+      "actual_exit_code": 1,
+      "expected_reason": "missing_companion",
+      "result": {
+        "status": "fail",
+        "failures": [
+          "missing_companion:B11-dt2"
+        ],
+        "coverage_status": "fail",
+        "evolved_reduction_status": "pass"
+      },
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/classify_rans_duration_bundle.py",
+        "--request",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/aggregate-negative-controls/request.json",
+        "--receipt",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/aggregate-negative-controls/missing-timestep-receipt.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/aggregate-negative-controls/missing-timestep-result.json"
+      ]
+    },
+    {
+      "name": "short-observer",
+      "status": "pass",
+      "actual_exit_code": 1,
+      "expected_reason": "scalar_horizon_incomplete",
+      "result": {
+        "status": "fail",
+        "failures": [
+          "scalar_horizon_incomplete:B11-dt2"
+        ],
+        "coverage_status": "fail",
+        "evolved_reduction_status": "pass"
+      },
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/classify_rans_duration_bundle.py",
+        "--request",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/aggregate-negative-controls/request.json",
+        "--receipt",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/aggregate-negative-controls/short-observer-receipt.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/aggregate-negative-controls/short-observer-result.json"
+      ]
+    },
+    {
+      "name": "bad-evolved-reduction",
+      "status": "pass",
+      "actual_exit_code": 1,
+      "expected_reason": "evolved_reduction_failed",
+      "result": {
+        "status": "fail",
+        "failures": [
+          "evolved_reduction_failed:0.016"
+        ],
+        "coverage_status": "pass",
+        "evolved_reduction_status": "fail"
+      },
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/classify_rans_duration_bundle.py",
+        "--request",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/aggregate-negative-controls/request.json",
+        "--receipt",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/aggregate-negative-controls/bad-evolved-reduction-receipt.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/aggregate-negative-controls/bad-evolved-reduction-result.json"
+      ]
+    }
+  ]
+}

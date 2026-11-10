@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/run_rans_balanced_duration.py", line 51, in <module>
+    raise SystemExit(main())
+  File "/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/run_rans_configuration_duration.py", line 18, in main
+    for name,value in request['runtime'].items():require(value==ad['runtime'][name],'admitted_runtime_changed:'+name)
+  File "/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/rans_duration_contract.py", line 14, in require
+    raise ValueError(reason)
+ValueError: admitted_runtime_changed:IncNavierStokesSolver

@@ -1,0 +1,154 @@
+{
+  "status": "failed_or_unresolved",
+  "execution_status": "completed",
+  "reconstruction_status": "pass",
+  "configuration": {
+    "model": "A95",
+    "policy": "Natural",
+    "wall": "Accepted",
+    "descriptor": "A95:OriginalHighRe-v1:A0=6.5:As=3lambdaMax(Sd)/norm(Sd):Q=2sqrt(1-9Cmu^2(s*tau)^2)[O,S]/(1+6sr*tau^2):q=3.8220004260766363:kappa=0.40406099529852102:policy=Natural:sigmaK=1:sigmaE=1.3:Ceps1=1.4399999999999999:Ceps2=1.9199999999999999:wall=AcceptedBudgetAWF:compatible-q-kappa-v1:outerNu=0:innerNu=1.5e-05:eps_tilde=TotalEpsilon:DeviatoricStrainV1:NoRegularization:NoYap:source=Ceps1*epsilon*P/k:wallSink=P-Ew(K):frozen-prescribed-zero-reaction"
+  },
+  "time": 0.016,
+  "quadrature_status": "pass",
+  "checks": [
+    {
+      "kind": "perturbed",
+      "equation": "inner_k",
+      "signed_values": {
+        "B5": 1.22754913476591e-05,
+        "B11": 1.2324169766402434e-05,
+        "B5-dt2": 1.2083776832070063e-05,
+        "B11-dt2": 1.2141176104587743e-05
+      },
+      "spatial_status": "failed_or_unresolved",
+      "residual_floor": 5e-09,
+      "maximum_ratio": 0.85,
+      "fine_over_coarse": 1.0039654965625973,
+      "timestep_difference": 1.9171451558903649e-07,
+      "temporal_limit": 4.867841874333443e-09,
+      "temporal_status": "unresolved"
+    },
+    {
+      "kind": "perturbed",
+      "equation": "outer_k",
+      "signed_values": {
+        "B5": 1.426296466716817e-05,
+        "B11": 1.4264374494125109e-05,
+        "B5-dt2": 1.4138426530664948e-05,
+        "B11-dt2": 1.4140173101389183e-05
+      },
+      "spatial_status": "failed_or_unresolved",
+      "residual_floor": 5e-09,
+      "maximum_ratio": 0.85,
+      "fine_over_coarse": 1.0000988452954795,
+      "timestep_difference": 1.245381365032211e-07,
+      "temporal_limit": 1e-09,
+      "temporal_status": "unresolved"
+    },
+    {
+      "kind": "perturbed",
+      "equation": "outer_epsilon",
+      "signed_values": {
+        "B5": 1.38970309241065e-05,
+        "B11": 1.3897411419526158e-05,
+        "B5-dt2": 1.386008931851596e-05,
+        "B11-dt2": 1.3861911114266844e-05
+      },
+      "spatial_status": "failed_or_unresolved",
+      "residual_floor": 5e-09,
+      "maximum_ratio": 0.85,
+      "fine_over_coarse": 1.0000273796195558,
+      "timestep_difference": 3.694160559053915e-08,
+      "temporal_limit": 1e-09,
+      "temporal_status": "unresolved"
+    },
+    {
+      "kind": "perturbed",
+      "equation": "whole_patch_k",
+      "signed_values": {
+        "B5": 1.3230383829264703e-05,
+        "B11": 1.3250752343672228e-05,
+        "B5-dt2": 1.3083425753604126e-05,
+        "B11-dt2": 1.3103576593684121e-05
+      },
+      "spatial_status": "failed_or_unresolved",
+      "residual_floor": 5e-09,
+      "maximum_ratio": 0.85,
+      "fine_over_coarse": 1.0015395255852269,
+      "timestep_difference": 1.471757499881072e-07,
+      "temporal_limit": 2.03685144075251e-09,
+      "temporal_status": "unresolved"
+    },
+    {
+      "kind": "baseline",
+      "equation": "inner_k",
+      "signed_values": {
+        "B5": -1.7029871922818932e-06,
+        "B11": -1.6542676649437353e-06,
+        "B5-dt2": -1.7134156009706536e-06,
+        "B11-dt2": -1.6559680833400128e-06
+      },
+      "spatial_status": "failed_or_unresolved",
+      "residual_floor": 5e-09,
+      "maximum_ratio": 0.85,
+      "fine_over_coarse": 0.9713917241662418,
+      "timestep_difference": 1.0428408688760464e-08,
+      "temporal_limit": 4.871952733815785e-09,
+      "temporal_status": "unresolved"
+    },
+    {
+      "kind": "baseline",
+      "equation": "outer_k",
+      "signed_values": {
+        "B5": -3.1024704676888278e-09,
+        "B11": -1.680538732387624e-09,
+        "B5-dt2": -3.4496589013752344e-09,
+        "B11-dt2": -1.6918031370982475e-09
+      },
+      "spatial_status": "unresolved_floor",
+      "residual_floor": 5e-09,
+      "maximum_ratio": 0.85,
+      "fine_over_coarse": 0.5416775920640863,
+      "timestep_difference": 3.4718843368640666e-10,
+      "temporal_limit": 1e-09,
+      "temporal_status": "pass"
+    },
+    {
+      "kind": "baseline",
+      "equation": "outer_epsilon",
+      "signed_values": {
+        "B5": 1.464026832360075e-07,
+        "B11": 1.46863442920002e-07,
+        "B5-dt2": 1.4485516368070002e-07,
+        "B11-dt2": 1.4677849526596468e-07
+      },
+      "spatial_status": "failed_or_unresolved",
+      "residual_floor": 5e-09,
+      "maximum_ratio": 0.85,
+      "fine_over_coarse": 1.0031472079186674,
+      "timestep_difference": 1.5475195553074786e-09,
+      "temporal_limit": 1e-09,
+      "temporal_status": "unresolved"
+    },
+    {
+      "kind": "baseline",
+      "equation": "whole_patch_k",
+      "signed_values": {
+        "B5": -8.224476587953603e-07,
+        "B11": -8.020718944047839e-07,
+        "B5-dt2": -8.221489245690081e-07,
+        "B11-dt2": -8.019909146041281e-07
+      },
+      "spatial_status": "failed_or_unresolved",
+      "residual_floor": 5e-09,
+      "maximum_ratio": 0.85,
+      "fine_over_coarse": 0.9752254576049001,
+      "timestep_difference": 2.987342263521739e-10,
+      "temporal_limit": 2.037576439057633e-09,
+      "temporal_status": "pass"
+    }
+  ],
+  "source": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/physical-budget-analyses/A95-N-Accepted-response-2e-05-dt-0.002-0.016/results.json",
+  "source_sha256": "8b52b8e43789e53bdb268ea946e2f199672fd8c70578b40810be0b688827d869",
+  "scope": "accuracy/convergence of finite physical flux defects; separate from successful reconstruction and prescribed-row reaction identities; original receipt remains unchanged"
+}

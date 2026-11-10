@@ -1,0 +1,36 @@
+Internal ctest changing into directory: /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/build
+Test project /media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/build
+    Start 48: RANSPilotEvidenceContract
+1/5 Test #48: RANSPilotEvidenceContract ..........   Passed    1.06 sec
+    Start 49: RANSDurationCoverageContract
+2/5 Test #49: RANSDurationCoverageContract .......   Passed    9.92 sec
+    Start 50: RANSNonlinearEvidenceContract
+3/5 Test #50: RANSNonlinearEvidenceContract ......   Passed    0.99 sec
+    Start 51: RANSQualificationFailureContract
+4/5 Test #51: RANSQualificationFailureContract ...   Passed    0.13 sec
+    Start 52: RANSForwardInterfaceTolerance
+5/5 Test #52: RANSForwardInterfaceTolerance ......***Failed    0.30 sec
+output=/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/tmp/rans-forward-sides-zd8ai258
+Traceback (most recent call last):
+  File "/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/check_rans_forward_interface_tolerance.py", line 88, in <module>
+    if __name__=='__main__':raise SystemExit(main())
+  File "/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/check_rans_forward_interface_tolerance.py", line 36, in main
+    case_xml(folder,model,'Natural',wall,steps=0,degree=3,radial_knots=ref.knots(),
+  File "/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/run_a93_a95_e94e95_matrix.py", line 30, in case_xml
+    provider=Probe(descriptor_probe)
+  File "/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/validate_a93_a95_e94e95.py", line 73, in __init__
+    def __init__(self,path):self.p=subprocess.Popen([str(path)],stdin=subprocess.PIPE,stdout=subprocess.PIPE,text=True,bufsize=1)
+  File "/usr/lib/python3.10/subprocess.py", line 971, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/usr/lib/python3.10/subprocess.py", line 1863, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: '/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/build/RANSNewModelsProbe'
+
+
+80% tests passed, 1 tests failed out of 5
+
+Total Test time (real) =  12.55 sec
+
+The following tests FAILED:
+	 52 - RANSForwardInterfaceTolerance (Failed)
+Errors while running CTest

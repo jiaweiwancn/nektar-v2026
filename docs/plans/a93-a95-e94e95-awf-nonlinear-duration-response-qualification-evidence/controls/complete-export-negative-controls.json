@@ -1,0 +1,284 @@
+{
+  "status": "pass",
+  "checks": [
+    {
+      "name": "positive",
+      "status": "pass",
+      "exit_code": 0,
+      "expected_reason": null,
+      "result": {
+        "status": "pass",
+        "scopes": {
+          "aggregate_negative_controls": "pass",
+          "actual_initial_binding": "pass",
+          "targeted_regressions": "pass",
+          "historical_receipt_bytes": "pass",
+          "current_solver_libraries": "pass",
+          "current_diagnostic_libraries": "pass",
+          "A93-duration": "pass",
+          "A93-response": "pass",
+          "A95-duration": "pass",
+          "A95-response": "pass",
+          "half-amplitude": "pass",
+          "selected-EP-control": "pass"
+        },
+        "failures": []
+      },
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/rans_nonlinear_evidence_contract.py",
+        "--input",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/complete-export-negative-controls/positive-input.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/complete-export-negative-controls/positive-result.json"
+      ]
+    },
+    {
+      "name": "missing-time",
+      "status": "pass",
+      "exit_code": 1,
+      "expected_reason": "missing_required_time",
+      "result": {
+        "status": "failed_unresolved_or_incomplete",
+        "scopes": {
+          "aggregate_negative_controls": "pass",
+          "actual_initial_binding": "pass",
+          "targeted_regressions": "pass",
+          "historical_receipt_bytes": "pass",
+          "current_solver_libraries": "pass",
+          "current_diagnostic_libraries": "pass",
+          "A93-duration": "failed_unresolved_or_incomplete",
+          "A93-response": "not_admitted",
+          "A95-duration": "pass",
+          "A95-response": "pass",
+          "half-amplitude": "pass",
+          "selected-EP-control": "failed_unresolved_or_incomplete"
+        },
+        "failures": [
+          "A93-duration:missing_required_time:0.1",
+          "selected-EP-control:ep_model_neutral_not_qualified"
+        ]
+      },
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/rans_nonlinear_evidence_contract.py",
+        "--input",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/complete-export-negative-controls/missing-time-input.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/complete-export-negative-controls/missing-time-result.json"
+      ]
+    },
+    {
+      "name": "foreign-model",
+      "status": "pass",
+      "exit_code": 1,
+      "expected_reason": "configuration_mismatch",
+      "result": {
+        "status": "failed_unresolved_or_incomplete",
+        "scopes": {
+          "aggregate_negative_controls": "pass",
+          "actual_initial_binding": "pass",
+          "targeted_regressions": "pass",
+          "historical_receipt_bytes": "pass",
+          "current_solver_libraries": "pass",
+          "current_diagnostic_libraries": "pass",
+          "A93-duration": "pass",
+          "A93-response": "pass",
+          "A95-duration": "failed_unresolved_or_incomplete",
+          "A95-response": "not_admitted",
+          "half-amplitude": "pass",
+          "selected-EP-control": "pass"
+        },
+        "failures": [
+          "A95-duration:configuration_mismatch:model"
+        ]
+      },
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/rans_nonlinear_evidence_contract.py",
+        "--input",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/complete-export-negative-controls/foreign-model-input.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/complete-export-negative-controls/foreign-model-result.json"
+      ]
+    },
+    {
+      "name": "missing-response",
+      "status": "pass",
+      "exit_code": 1,
+      "expected_reason": "A95-response",
+      "result": {
+        "status": "failed_unresolved_or_incomplete",
+        "scopes": {
+          "aggregate_negative_controls": "pass",
+          "actual_initial_binding": "pass",
+          "targeted_regressions": "pass",
+          "historical_receipt_bytes": "pass",
+          "current_solver_libraries": "pass",
+          "current_diagnostic_libraries": "pass",
+          "A93-duration": "pass",
+          "A93-response": "pass",
+          "A95-duration": "pass",
+          "A95-response": "failed_unresolved_or_incomplete",
+          "half-amplitude": "pass",
+          "selected-EP-control": "pass"
+        },
+        "failures": [
+          "A95-response:'A95'"
+        ]
+      },
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/rans_nonlinear_evidence_contract.py",
+        "--input",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/complete-export-negative-controls/missing-response-input.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/complete-export-negative-controls/missing-response-result.json"
+      ]
+    },
+    {
+      "name": "missing-response-audit",
+      "status": "pass",
+      "exit_code": 1,
+      "expected_reason": "response_final_audit_missing",
+      "result": {
+        "status": "failed_unresolved_or_incomplete",
+        "scopes": {
+          "aggregate_negative_controls": "pass",
+          "actual_initial_binding": "pass",
+          "targeted_regressions": "pass",
+          "historical_receipt_bytes": "pass",
+          "current_solver_libraries": "pass",
+          "current_diagnostic_libraries": "pass",
+          "A93-duration": "pass",
+          "A93-response": "failed_unresolved_or_incomplete",
+          "A95-duration": "pass",
+          "A95-response": "pass",
+          "half-amplitude": "pass",
+          "selected-EP-control": "pass"
+        },
+        "failures": [
+          "A93-response:response_final_audit_missing"
+        ]
+      },
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/rans_nonlinear_evidence_contract.py",
+        "--input",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/complete-export-negative-controls/missing-response-audit-input.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/complete-export-negative-controls/missing-response-audit-result.json"
+      ]
+    },
+    {
+      "name": "missing-physical-budget",
+      "status": "pass",
+      "exit_code": 1,
+      "expected_reason": "physical_flux_reconstruction_missing",
+      "result": {
+        "status": "failed_unresolved_or_incomplete",
+        "scopes": {
+          "aggregate_negative_controls": "pass",
+          "actual_initial_binding": "pass",
+          "targeted_regressions": "pass",
+          "historical_receipt_bytes": "pass",
+          "current_solver_libraries": "pass",
+          "current_diagnostic_libraries": "pass",
+          "A93-duration": "pass",
+          "A93-response": "failed_unresolved_or_incomplete",
+          "A95-duration": "pass",
+          "A95-response": "pass",
+          "half-amplitude": "pass",
+          "selected-EP-control": "pass"
+        },
+        "failures": [
+          "A93-response:physical_flux_reconstruction_missing"
+        ]
+      },
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/rans_nonlinear_evidence_contract.py",
+        "--input",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/complete-export-negative-controls/missing-physical-budget-input.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/complete-export-negative-controls/missing-physical-budget-result.json"
+      ]
+    },
+    {
+      "name": "old-library-map",
+      "status": "pass",
+      "exit_code": 1,
+      "expected_reason": "current_diagnostic_libraries",
+      "result": {
+        "status": "failed_unresolved_or_incomplete",
+        "scopes": {
+          "aggregate_negative_controls": "pass",
+          "actual_initial_binding": "pass",
+          "targeted_regressions": "pass",
+          "historical_receipt_bytes": "pass",
+          "current_solver_libraries": "pass",
+          "current_diagnostic_libraries": "failed_unresolved_or_incomplete",
+          "A93-duration": "pass",
+          "A93-response": "pass",
+          "A95-duration": "pass",
+          "A95-response": "pass",
+          "half-amplitude": "pass",
+          "selected-EP-control": "pass"
+        },
+        "failures": [
+          "current_diagnostic_libraries:'current_diagnostic_libraries'"
+        ]
+      },
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/rans_nonlinear_evidence_contract.py",
+        "--input",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/complete-export-negative-controls/old-library-map-input.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/complete-export-negative-controls/old-library-map-result.json"
+      ]
+    },
+    {
+      "name": "no-wall-comparison",
+      "status": "pass",
+      "exit_code": 1,
+      "expected_reason": "common_grid_wall_comparison",
+      "result": {
+        "status": "failed_unresolved_or_incomplete",
+        "scopes": {
+          "aggregate_negative_controls": "pass",
+          "actual_initial_binding": "pass",
+          "targeted_regressions": "pass",
+          "historical_receipt_bytes": "pass",
+          "current_solver_libraries": "pass",
+          "current_diagnostic_libraries": "pass",
+          "A93-duration": "pass",
+          "A93-response": "pass",
+          "A95-duration": "pass",
+          "A95-response": "pass",
+          "half-amplitude": "pass",
+          "selected-EP-control": "failed_unresolved_or_incomplete"
+        },
+        "failures": [
+          "selected-EP-control:common_grid_wall_comparison_missing_or_failed"
+        ]
+      },
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/rans_nonlinear_evidence_contract.py",
+        "--input",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/complete-export-negative-controls/no-wall-comparison-input.json",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/complete-export-negative-controls/no-wall-comparison-result.json"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "status": "pass",
+  "actual_exit_code": 1,
+  "command": [
+    "python3",
+    "-B",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/collect_rans_balanced_spatial.py",
+    "--root",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110",
+    "--admissions",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/admissions/A93-N-Accepted-loader-v2.json",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/admissions/A95-N-Accepted-loader-v2.json",
+    "--output",
+    "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/partial-export-negative-control"
+  ],
+  "classification": {
+    "status": "failed_unresolved_or_incomplete",
+    "scopes": {
+      "aggregate_negative_controls": "pass",
+      "actual_initial_binding": "pass",
+      "targeted_regressions": "pass",
+      "historical_receipt_bytes": "pass",
+      "current_solver_libraries": "pass",
+      "current_diagnostic_libraries": "pass",
+      "A93-duration": "failed_unresolved_or_incomplete",
+      "A93-response": "not_admitted",
+      "A95-duration": "failed_unresolved_or_incomplete",
+      "A95-response": "not_admitted",
+      "half-amplitude": "not_admitted",
+      "selected-EP-control": "not_admitted"
+    },
+    "failures": [
+      "A93-duration:neutral_duration_not_qualified",
+      "A95-duration:neutral_duration_not_qualified"
+    ]
+  },
+  "reason": "incomplete ongoing duration experiment must retain a complete report and exit nonzero"
+}

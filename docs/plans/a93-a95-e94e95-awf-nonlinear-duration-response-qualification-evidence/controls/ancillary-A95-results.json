@@ -1,0 +1,109 @@
+{
+  "status": "failed_or_unresolved",
+  "events": [
+    {
+      "name": "A95-EP-short-neutral",
+      "exit_code": 0,
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/run_rans_balanced_duration.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110",
+        "--admission",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/admissions/A95-N-EP-loader-v3.json",
+        "--dt",
+        ".002",
+        "--max-time",
+        ".016",
+        "--concurrency",
+        "2"
+      ]
+    },
+    {
+      "name": "A95-EP-short-response",
+      "exit_code": 1,
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/run_rans_nonlinear_response.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110",
+        "--admission",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/admissions/A95-N-EP-loader-v3.json",
+        "--accepted-neutral-proof",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/duration-audits/A95-N-Accepted-duration-0.002-0.5/results.json",
+        "--dt",
+        ".002",
+        "--max-time",
+        ".016",
+        "--amplitude",
+        "2e-5",
+        "--concurrency",
+        "2"
+      ]
+    },
+    {
+      "name": "A95-Accepted-half-response",
+      "exit_code": 1,
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/run_rans_nonlinear_response.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110",
+        "--admission",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/admissions/A95-N-Accepted-loader-v2.json",
+        "--accepted-neutral-proof",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/duration-audits/A95-N-Accepted-duration-0.002-0.5/results.json",
+        "--dt",
+        ".002",
+        "--max-time",
+        ".016",
+        "--amplitude",
+        "1e-5",
+        "--concurrency",
+        "2"
+      ]
+    },
+    {
+      "name": "A95-half-amplitude-comparison",
+      "exit_code": 0,
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/compare_rans_half_response.py",
+        "--full",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/response-cohorts/A95-N-Accepted-response-2e-05-dt-0.002/T-0.016",
+        "--half",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/response-cohorts/A95-N-Accepted-response-1e-05-dt-0.002/T-0.016",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/half-amplitude-comparison/results.json"
+      ]
+    },
+    {
+      "name": "A95-wall-response-comparison",
+      "exit_code": 0,
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/compare_rans_wall_responses.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110",
+        "--model",
+        "A95",
+        "--accepted-prefix",
+        "A95-N-Accepted-response-2e-05-dt-0.002",
+        "--ep-prefix",
+        "A95-N-EP-response-2e-05-dt-0.002",
+        "--dt",
+        ".002",
+        "--time",
+        ".016",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/wall-response-comparison"
+      ]
+    }
+  ],
+  "scope": "selected EP only through .016; half amplitude at .016; accepted model neutral .5 admission required"
+}

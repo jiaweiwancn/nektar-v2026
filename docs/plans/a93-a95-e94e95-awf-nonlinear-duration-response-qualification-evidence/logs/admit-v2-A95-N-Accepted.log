@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/admit_rans_balanced_duration.py", line 24, in <module>
+    raise SystemExit(main())
+  File "/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/admit_rans_configuration.py", line 84, in main
+    for check in quad['checks']:identity(check['configuration'],config);require(abs(check['time']-.016)<1e-13,'quadrature_time_mismatch')
+  File "/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/rans_duration_contract.py", line 25, in identity
+    require(request.get('descriptor') == config['descriptor'], 'configuration_mismatch:descriptor')
+  File "/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-nonlinear-20261110/source/solvers/IncNavierStokesSolver/Tests/RANS/rans_duration_contract.py", line 14, in require
+    raise ValueError(reason)
+ValueError: configuration_mismatch:descriptor

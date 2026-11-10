@@ -1,0 +1,6 @@
+from pathlib import Path
+import subprocess,json,os,sys
+r=Path(__file__).resolve().parent;t=r/'source/solvers/IncNavierStokesSolver/Tests/RANS';env=dict(os.environ,OMP_NUM_THREADS='1',OPENBLAS_NUM_THREADS='1',MKL_NUM_THREADS='1',BLIS_NUM_THREADS='1',NUMEXPR_NUM_THREADS='1',PYTHONDONTWRITEBYTECODE='1',TMPDIR=str(r/'tmp'));cmd=['python3','-B',str(t/'collect_rans_balanced_spatial.py'),'--root',str(r),'--admissions',str(r/'admissions/A93-N-Accepted-loader-v2.json'),str(r/'admissions/A95-N-Accepted-loader-v2.json'),'--output',str(r/'partial-export-negative-control')]
+with (r/'partial-export-process.log').open('x') as f:code=subprocess.run(cmd,env=env,stdout=f,stderr=subprocess.STDOUT).returncode
+path=r/'partial-export-negative-control/summary.json';data=json.loads(path.read_text()) if path.exists() else {};ok=code!=0 and data.get('status')=='failed_unresolved_or_incomplete' and any('neutral_duration_not_qualified' in s for s in data.get('required_scope_classification',{}).get('failures',[]))
+(r/'partial-export-negative-control.json').write_text(json.dumps(dict(status='pass' if ok else 'fail',actual_exit_code=code,command=cmd,classification=data.get('required_scope_classification'),reason='incomplete ongoing duration experiment must retain a complete report and exit nonzero'),indent=2)+'\n')
