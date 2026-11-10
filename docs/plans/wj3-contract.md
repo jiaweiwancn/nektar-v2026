@@ -42,7 +42,9 @@ coefficient and external boundary value is verified. It does not form or advance
 an integration callback. The solver report is SHA-bound and must match the
 checkpoint state, physical signature, time and step. For an evolved state its
 last_stage_history/time/alpha are additionally matched to the accepted WJ audit
-packet's hashes and context. A startup has no completed-stage residual.
+packet's hashes and context. Each immutable accepted-stage packet also retains
+its actual callback-history vector, permitting intermediate checkpoint readback
+against the report's accepted-state lineage without callback reconstruction. A startup has no completed-stage residual.
 
 Measurements retain separately:
 

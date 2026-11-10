@@ -466,19 +466,29 @@ int main(int argc,char **argv)
             const auto reportHash=RANSWallR3::HashFile(reportPath);
             Require(reportHash==packet.get<std::string>("native_report_sha256"),"WJ accepted report SHA256 differs");
             Tree report;boost::property_tree::read_json(reportPath,report);
-            Require(report.get<std::string>("signature")==packet.get<std::string>("native_signature") &&
-                RANSWallR3::Hash(Read(report,"state"))==RANSWallR3::Hash(state) && report.get<double>("time")==time,
-                "WJ accepted report state/signature/time differs from checkpoint");
+            Require(report.get<std::string>("signature")==packet.get<std::string>("native_signature"),
+                "WJ accepted report signature differs from checkpoint");
             const auto cp=RANSWallTimeIntegration::ReadCheckpoint(packet.get<std::string>("native_checkpoint"),
                 packet.get<std::string>("native_signature"),1,serial->GetParameter("TimeStep"),patch.Size(),patch.DifferentialSize());
-            Require(report.get<std::size_t>("steps")==cp.integration.steps,"WJ accepted report step differs from checkpoint");
+            const auto reportSteps=report.get<std::size_t>("steps");
+            const auto &accepted=report.get_child("accepted_states"),&packets=report.get_child("wj_audit_packets");
+            Require(!accepted.empty() && accepted.size()==packets.size() && reportSteps+1>=accepted.size(),"WJ accepted-stage lineage shape differs");
+            const auto first=reportSteps+1-accepted.size();
+            Require(first<=cp.integration.steps && cp.integration.steps<=reportSteps,"WJ checkpoint step outside accepted-stage lineage");
+            auto ai=accepted.begin();auto pi=packets.begin();std::advance(ai,cp.integration.steps-first);std::advance(pi,cp.integration.steps-first);
+            Vector acceptedState;for(const auto &v:ai->second)acceptedState.push_back(v.second.get_value<double>());
+            Require(RANSWallR3::Hash(acceptedState)==RANSWallR3::Hash(state) && pi->second.get<double>("time")==time,
+                "WJ accepted-stage state/time differs from checkpoint");
             Vector stageHistory;double stageAlpha=0;
             if(cp.integration.steps>0)
             {
-                stageHistory=Read(report,"last_stage_history");stageAlpha=report.get<double>("last_stage_alpha");
-                Require(stageHistory.size()==state.size() && report.get<double>("last_stage_time")==time &&
-                    stageAlpha==1/serial->GetParameter("TimeStep"),"WJ completed-stage context differs from accepted checkpoint");
-                const auto &binding=report.get_child("wj_audit_packets").back().second;
+                const auto &binding=pi->second;
+                stageHistory=Read(binding,"callback_history");stageAlpha=binding.get<double>("alpha_mass");
+                Require(stageHistory.size()==state.size() && stageAlpha==1/serial->GetParameter("TimeStep"),
+                    "WJ completed-stage context differs from accepted checkpoint");
+                if(cp.integration.steps==reportSteps)
+                    Require(report.get<double>("last_stage_time")==time && report.get<double>("last_stage_alpha")==stageAlpha &&
+                        RANSWallR3::Hash(Read(report,"last_stage_history"))==RANSWallR3::Hash(stageHistory),"WJ last callback differs from immutable accepted-stage packet");
                 Require(binding.get<std::string>("state_sha256")==RANSWallR3::Hash(state) &&
                     binding.get<std::string>("stage_history_sha256")==RANSWallR3::Hash(stageHistory) &&
                     binding.get<double>("time")==time && binding.get<double>("alpha_mass")==stageAlpha,

@@ -159,3 +159,27 @@ def arithmetic(report,measurement):
         propagation='2*N accumulated worst observed terminal frozen-system uncertainty; finite short-trajectory diagnostic estimate, not a rigorous nonlinear perturbation bound',
         excludes=['physical spatial residual','nonlinear one-sweep stage defect'],
         evaluation_sensitivity=measurement['arithmetic_evaluation_sensitivity'])
+
+
+def checkpoint_payload(directory):
+    """Read immutable native binary64 values; the compiled reader independently
+    validates schema/checksum/signature and all slots before any measurement.
+    This function never creates or modifies a checkpoint.
+    """
+    import struct
+    data=(Path(directory)/'State.bin').read_bytes();position=0
+    def scalar(fmt):
+        nonlocal position
+        value=struct.unpack_from('<'+fmt,data,position)[0];position+=struct.calcsize('<'+fmt);return value
+    def vector():
+        nonlocal position
+        n=scalar('Q');require(n<100000000,'invalid native vector size')
+        result=list(struct.unpack_from('<'+str(n)+'d',data,position));position+=8*n;return result
+    magic,endian,schema=[scalar('Q') for _ in range(3)];n=scalar('Q')
+    signature=data[position:position+n].decode();position+=n
+    order=scalar('Q');steps=scalar('Q');t,dt,eta=[scalar('d') for _ in range(3)]
+    primary=vector();history=[vector() for _ in range(scalar('Q'))];times=vector();state=vector();reference=vector();defect=vector()
+    require(position==len(data)-8,'checkpoint trailing data or unsupported schema')
+    return dict(signature=signature,order=order,steps=steps,time=t,dt=dt,eta=eta,state=state,
+        native_differential_state=primary,native_history=history,native_history_times=times,checkpoint=str(directory),
+        reference_sha256=__import__('run_cls_epawf_picard').state_hash(reference))

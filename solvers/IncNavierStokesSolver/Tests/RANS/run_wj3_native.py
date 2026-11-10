@@ -12,11 +12,12 @@ from pathlib import Path
 import platform
 import subprocess
 import time
+import uuid
 import xml.etree.ElementTree as ET
 import numpy as np
 from numpy.testing import assert_allclose
 from wj2_cases import case_xml
-from wj3_measure import observations,errors,compare,replay_witnesses,arithmetic,FIELDS,wall,K0
+from wj3_measure import observations,errors,compare,replay_witnesses,arithmetic,FIELDS,wall,K0,checkpoint_payload
 from test_wj2_native import digest_object,independent_loads,reference_comparison
 from compare_cls_epawf_pimple import same_history
 from cls_epawf_m3_cases import set_info,set_parameter,write
@@ -112,6 +113,16 @@ class Study:
         write_json(folder/'comparison.json',compact)
         return m,compact
 
+    def intermediate(self,name,report,folder,step):
+        candidates=[]
+        for cp in folder.glob('checkpoint*'):
+            if cp.is_dir() and (cp/'State.bin').exists():
+                payload=checkpoint_payload(cp)
+                if payload['steps']==step:candidates.append(payload)
+        require(candidates,'missing immutable intermediate checkpoint')
+        payload=candidates[0];view=dict(report);view.update(payload)
+        return self.measure(name,view,folder)
+
     def smoke(self):
         z,r,f=self.native('smoke-cp0',level=0);self.valid(z,r)
         s,r,sf=self.native('smoke-step',1,z['checkpoint'],level=0,arithmetic_time=1e-6);self.valid(s,r)
@@ -134,7 +145,10 @@ class Study:
             z,r,f=self.native('spatial-L'+str(level),level=level);self.valid(z,r)
             require(len(z['state'])==(639,1257,2493)[level],'unexpected tensor-cubic mesh size')
             m,c=self.measure('spatial-measure-L'+str(level),z,f,assembly=True)
-            rows.append(dict(level=level,unknowns=len(z['state']),raw_reference_norms=z['raw_reference_norms'],comparison=c))
+            first,fr,ff=self.native('spatial-first-step-L'+str(level),1,z['checkpoint'],level=level)
+            self.valid(first,fr);fm,fc=self.measure('spatial-first-measure-L'+str(level),first,ff)
+            rows.append(dict(level=level,unknowns=len(z['state']),raw_reference_norms=z['raw_reference_norms'],comparison=c,
+                first_step_pressure_adjustment=fc['field_errors']['initial_drift'],first_step_comparison=fc))
             self.s['spatial']=rows;self.save()
         expected_k=[.013013171987,.002727140552] if self.a.policy=='EP' else [.270481784118,.063982673543]
         for i in (0,1):
@@ -184,7 +198,7 @@ class Study:
         require(chosen is not None,'no fully admissible four-step scout')
         cost=max(s['seconds_per_step'] for s in scouts if s['status']=='admissible')
         # Declared BEFORE main trajectories. Cross-mesh level0 keeps this
-        # bounded dense-backend pilot within a 90-minute per-policy wall cap.
+        # bounded dense-backend pilot within a 60-minute per-policy remaining trajectory cap.
         # Level2 remains spatially qualified, temporally open.
         self.s['frozen_design']=dict(D=chosen,T=32*chosen,T_ustar_over_H=16*chosen,
             main_steps=[32,64,128],main_dt=[chosen,chosen/2,chosen/4],mesh_unknowns=1257,
@@ -210,12 +224,26 @@ class Study:
             s,rc,sf=self.native('main-'+str(n),n,z['checkpoint'],dt=dt,arithmetic_time=T)
             try:self.valid(s,rc)
             except ValueError as error:
-                self.s['main_obstruction']=dict(reason=str(error),frozen_T=T,result=str(sf/'case.evolution.json'),
-                    accepted_steps=s['steps'] if s else None);self.save();return
+                obstruction=dict(reason=str(error),frozen_T=T,result=str(sf/'case.evolution.json'),
+                    accepted_steps=s['steps'] if s else None,dt=dt)
+                self.s.setdefault('main_obstructions',[]).append(obstruction)
+                results.append(dict(requested_steps=n,steps=s['steps'] if s else 0,dt=dt,result=str(sf/'case.evolution.json'),obstruction=obstruction))
+                self.s['main']=results;self.save();continue
             require(abs(s['time']-T)<1e-15,'common-time trajectory missed frozen target')
             m,c=self.measure('main-'+str(n)+'-measure',s,sf)
             floor=arithmetic(s,m);results.append(dict(steps=n,dt=dt,comparison=c,arithmetic=floor,result=str(sf/'case.evolution.json')))
             self.s['main']=results;self.save()
+        if any('obstruction' in row for row in results):
+            common_steps=min(int(round(row['steps']*row['dt']/D)) for row in results)
+            self.s['common_earlier_time']=common_steps*D
+            if common_steps>0:
+                earlier=[]
+                for j,row in enumerate(results):
+                    report=load(Path(row['result']));folder=Path(row['result']).parent
+                    m,c=self.intermediate('main-earlier-'+str(j),report,folder,common_steps*2**j);earlier.append(m)
+                self.s['earlier_comparisons']=dict(A=compare(earlier[0],earlier[1],self.a.policy),B=compare(earlier[1],earlier[2],self.a.policy),
+                    interpretation='frozen target obstructed; common earlier time retained; no rate without arithmetic floor')
+            self.save();return
         measurements=[load(Path(row['comparison']['path']))['measurements'] for row in results]
         A=compare(measurements[0],measurements[1],self.a.policy);B=compare(measurements[1],measurements[2],self.a.policy)
         rates={}
@@ -223,7 +251,12 @@ class Study:
             a,b=A['fields'][f]['L2'],B['fields'][f]['L2'];floor=max(row['arithmetic']['estimated_comparison_floor'][f] for row in results)
             rates[f]=dict(A=a,B=b,comparison_floor=floor,resolved=min(a,b)>floor,
                 p=math.log2(a/b) if min(a,b)>floor else None)
-        self.s['temporal']=dict(A=A,B=B,rates=rates);self.save()
+        self.s['temporal']=dict(A=A,B=B,rates=rates)
+        half=[]
+        for j,row in enumerate(results):
+            report=load(Path(row['result']));m,c=self.intermediate('main-half-'+str(j),report,Path(row['result']).parent,(16,32,64)[j]);half.append(m)
+        self.s['common_half_time']=dict(time=T/2,A=compare(half[0],half[1],self.a.policy),B=compare(half[1],half[2],self.a.policy))
+        self.save()
         # Same T, finest dt, independently projected other mesh.
         z,r,f=self.native('cross-cp0',dt=D/4,level=design['cross_mesh_level']);self.valid(z,r)
         s,rc,sf=self.native('cross-128',128,z['checkpoint'],dt=D/4,level=design['cross_mesh_level'],arithmetic_time=T)
@@ -261,8 +294,9 @@ def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--solver',type=Path,required=True);p.add_argument('--probe',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True);p.add_argument('--policy',choices=('EP','Budget'),required=True)
     p.add_argument('--mode',choices=('smoke','spatial','scout','main'),required=True);a=p.parse_args();a.solver=a.solver.resolve();a.probe=a.probe.resolve()
+    if a.mode=='smoke':a.output=a.output/('run-'+uuid.uuid4().hex[:12])
     s=Study(a)
-    try:getattr(s,{'main':'main_runs'}.get(a.mode,a.mode))();s.s[a.mode+'_gate']='PASS';s.save()
+    try:getattr(s,{'main':'main_runs'}.get(a.mode,a.mode))();s.s[a.mode+'_gate']='OBSTRUCTED' if a.mode=='main' and s.s.get('main_obstructions') else 'PASS';s.save()
     except Exception as error:s.s[a.mode+'_gate']='FAIL';s.s['failure']=str(error);s.save();raise
     print(s.file)
 

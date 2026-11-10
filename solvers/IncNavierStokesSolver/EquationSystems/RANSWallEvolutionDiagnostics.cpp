@@ -790,7 +790,7 @@ std::string RANSWallEvolutionPatch::WJAuditPacket(const Diagnostic &audit,const 
             {"scope",J::Quote("finite NativeElementSideV2 spatial inventory; x-z propagation only")}})});
     }
     return J::Object({{"schema",J::Quote("WJFiniteAuditV2")},{"state_sha256",J::Quote(RANSWallR3::Hash(state))},
-        {"stage_history_sha256",J::Quote(RANSWallR3::Hash(history))},{"phase",J::Quote(phase)},
+        {"stage_history_sha256",J::Quote(RANSWallR3::Hash(history))},{"callback_history",alpha>0?J::Numbers(history):"null"},{"phase",J::Quote(phase)},
         {"time",J::Number(time)},{"alpha_mass",J::Number(alpha)},{"conditions",J::Object(conditions)},
         {"failure_categories",J::List(failures)},{"principal_witnesses",J::Object(witnesses)}});
 }
