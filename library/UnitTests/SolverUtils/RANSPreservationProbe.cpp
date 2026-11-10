@@ -34,9 +34,10 @@ std::string Row(const RANSWallGlobalPoint &p)
 // constant-test loads and prescribed-row reactions. IMEX1, unforced one sweep.
 std::string PhysicalScalarBudget(RANSWallEvolutionPatch &patch,
     const RANSWallPatchParameters &parameters,const Vector &state,const Vector &previous,
-    double dt,double time,const RANSWallEvolutionData &data)
+    double dt,double time,const RANSWallEvolutionData &data,int faceOrder)
 {
     Require(dt>0 && previous.size()==state.size(),"invalid physical budget history");
+    Require(faceOrder==16 || faceOrder==24 || faceOrder==32,"unsupported physical budget face order");
     auto flow=previous;
     for(int b:{0,1,patch.InnerPressure(),patch.OuterPressure()})
         std::copy_n(state.begin()+patch.offset[b],patch.size[b],flow.begin()+patch.offset[b]);
@@ -91,7 +92,7 @@ std::string PhysicalScalarBudget(RANSWallEvolutionPatch &patch,
     {
         const double z=axis==0?(side<0?patch.lower[0]:patch.upper[0]):
             (side<0?(region==0?0.:parameters.geometry.height):(region==0?parameters.geometry.height:patch.upper[2]));
-        for(const auto &face:patch.Surface(0,axis,z,side,16))
+        for(const auto &face:patch.Surface(0,axis,z,side,faceOrder))
         {
             const auto &v=face.test;const auto &element=patch.fields[0]->Elements().at(v.element);
             if((element.lower[2]>=parameters.geometry.height?1:0)!=region)continue;
@@ -127,7 +128,7 @@ std::string PhysicalScalarBudget(RANSWallEvolutionPatch &patch,
     }
     return J::Object({{"schema",J::Quote("PhysicalFrozenStageScalarBudgetV1")},{"time",J::Number(time)},
         {"dt",J::Number(dt)},{"equations",J::Object(rows)},{"physical_faces",J::List(faces)},
-        {"face_order","16"},{"wall_local_reaction_rate","0"},
+        {"face_order",J::Number(faceOrder)},{"wall_local_reaction_rate","0"},
         {"scope",J::Quote("independently integrated storage, frozen one-sweep scalar source and physical gradient/advective face flux; no prescribed-row reaction used. Dependent epsilon boundary storage is retained, with no inner epsilon equation. Finite discretization defects are observations, not forced balances.")}});
 }
 }
@@ -315,7 +316,7 @@ int main(int argc,char **argv)
             const auto scheme=session->GetTimeIntScheme();
             Require(scheme.method=="IMEX" && scheme.variant.empty() && scheme.order==1,"physical stage budget requires IMEX1");
             double dt;session->LoadParameter("TimeStep",dt);Require(time>0,"physical stage budget needs an advanced state");
-            physicalBudget=PhysicalScalarBudget(patch,p,state,Values(request,"previous_state"),dt,time,data);
+            physicalBudget=PhysicalScalarBudget(patch,p,state,Values(request,"previous_state"),dt,time,data,request.get<int>("physical_face_order",16));
         }
         Require(state==stateCopy,"read-only verification modified coefficients");
         const auto elapsed=std::chrono::duration<double>(std::chrono::steady_clock::now()-start).count();
