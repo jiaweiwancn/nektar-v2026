@@ -22,8 +22,17 @@ from continue_cls_epawf_pimple import header
 FIELDS=('u','v','k','epsilon_outer','Pi')
 TARGETS=(.0016,.016,.05,.1)
 
+def selected_knots(ref,a):
+ knots=nested(ref.knots(),a.level)
+ if a.refinement=='Interface8V1':
+  # Retain the dense backend limit: split six largest inner intervals and
+  # two outer intervals, including the one adjacent to H.
+  selected=[(.02,.04),(.04,.1),(.1,.25),(.25,.5),(.5,1.),(1.,2.),(2.,2.25),(2.5,3.)]
+  knots=sorted(set(knots+[(x+y)/2 for x,y in selected]))
+ return knots
+
 def configure(folder,a,ref,steps,restart=None):
- case_xml(folder,a.model,a.policy,a.wall,steps=steps,dt=a.dt,restart=restart,descriptor_probe=a.root/'runtime/RANSNewModelsProbe',radial_knots=nested(ref.knots(),a.level),degree=a.degree,quadrature=Q[a.quadrature_index],checkpoint_interval=max(steps,1),cache=a.cache,boundary_policy='FrozenReferenceV1',xknots=[-1.,0.,1.] if a.columns==2 else [-1.,1.])
+ case_xml(folder,a.model,a.policy,a.wall,steps=steps,dt=a.dt,restart=restart,descriptor_probe=a.root/'runtime/RANSNewModelsProbe',radial_knots=selected_knots(ref,a),degree=a.degree,quadrature=Q[a.quadrature_index],checkpoint_interval=max(steps,1),cache=a.cache,boundary_policy='FrozenReferenceV1',xknots=[-1.,0.,1.] if a.columns==2 else [-1.,1.])
  root=ET.parse(folder/'case.xml').getroot();set_info(root,'RANSWallPilotAccuracy','NeutralV1')
  if a.velocity_amplitude:
   # Streamfunction a*(1-x*x)^2*f(z). Both f,f' vanish at each
@@ -43,7 +52,7 @@ def accuracy(ref,packet,initial,weights):
  return dict(reference_error=scaled(rep,ref),change_from_initial=scaled(compare_samples(packet,base,weights),ref),gradient_weighted_RMS=rep['gradient_weighted_RMS'],global_pressure_gauge=rep['global_pressure_gauge_shifts'])
 
 def main():
- p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--label',required=True);p.add_argument('--model',choices=('E94E95','A95','A93'),default='E94E95');p.add_argument('--policy',choices=('Natural','Prescribed'),default='Natural');p.add_argument('--wall',choices=('EP','Accepted'),required=True);p.add_argument('--degree',type=int,default=5);p.add_argument('--level',type=int,default=0);p.add_argument('--columns',type=int,choices=(1,2),default=1);p.add_argument('--dt',type=float,default=.0001);p.add_argument('--max-time',type=float,default=.0016);p.add_argument('--quadrature-index',type=int,choices=(0,1,2),default=1);p.add_argument('--velocity-amplitude',type=float,default=0.);p.add_argument('--cache',choices=('Off','ExactStepV1'),default='ExactStepV1');p.add_argument('--resume',action='store_true');p.add_argument('--timeout',type=int,default=3600);a=p.parse_args();a.root=a.root.resolve()
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--label',required=True);p.add_argument('--model',choices=('E94E95','A95','A93'),default='E94E95');p.add_argument('--policy',choices=('Natural','Prescribed'),default='Natural');p.add_argument('--wall',choices=('EP','Accepted'),required=True);p.add_argument('--degree',type=int,default=5);p.add_argument('--level',type=int,default=0);p.add_argument('--refinement',choices=('Base','Interface8V1'),default='Base');p.add_argument('--columns',type=int,choices=(1,2),default=1);p.add_argument('--dt',type=float,default=.0001);p.add_argument('--max-time',type=float,default=.0016);p.add_argument('--quadrature-index',type=int,choices=(0,1,2),default=1);p.add_argument('--velocity-amplitude',type=float,default=0.);p.add_argument('--cache',choices=('Off','ExactStepV1'),default='ExactStepV1');p.add_argument('--resume',action='store_true');p.add_argument('--timeout',type=int,default=3600);a=p.parse_args();a.root=a.root.resolve()
  if a.degree<4 or a.level<0:raise ValueError('declared pilot candidate requires degree >=4, nonnegative refinement')
  r=a.root;out=r/'campaigns'/a.label;ref=Reference(a.model,a.policy,a.wall)
  os.environ.update(THREADS,LD_LIBRARY_PATH=str(r/'runtime/lib'),TMPDIR=str(r/'tmp'))
@@ -54,7 +63,7 @@ def main():
   pre=Path(tmp)/'seed';configure(pre,a,ref,0);seed=probe(sampler,pre,dict(operation='neutral',grid=grid,export_basis=False))
   initial=dict(seed['observation'],grid_weights=weights)
   request=dict(schema='NeutralPilotV1',model=a.model,policy=a.policy,wall=a.wall,descriptor=seed['observation']['resolved_descriptor'],
-   knots=nested(ref.knots(),a.level),degree=a.degree,pressure_degree=a.degree-2,columns=a.columns,quadrature=seed['observation']['actual_quadrature'],
+   knots=selected_knots(ref,a),degree=a.degree,pressure_degree=a.degree-2,columns=a.columns,quadrature=seed['observation']['actual_quadrature'],
    dt=a.dt,horizons=TARGETS,integration='native IMEX1 PimpleSingleSweep',history='native same-method restart; independently initialized for each dt',
    initialization='constrained neutral projection plus declared divergence-free streamfunction',velocity_amplitude=a.velocity_amplitude,perturbation='StreamfunctionPolyV1',
    raw_neutral_sha256=exact_vector_hash(initial['state']),reference_sha256=exact_vector_hash(seed['reference']),boundary_policy='FrozenReferenceV1',boundary=seed['fixed_boundary'],
@@ -81,7 +90,7 @@ def main():
     except subprocess.TimeoutExpired:code=124
    elapsed=time.monotonic()-t0;report=load(folder/'case.evolution.json') if (folder/'case.evolution.json').exists() else {}
    complete=code==0 and not report.get('failure') and abs(report.get('time',-1)-T)<1e-13 and report.get('steps')==round(T/a.dt)
-   metric=dict(time=report.get('time'),theta=report.get('time',0)*ref.us/ref.H,target=T,exit_code=code,wall_seconds=elapsed,seconds_per_step=elapsed/max(1,steps),steps=report.get('steps'),execution_status='completed' if complete else 'failed',
+   metric=dict(time=report.get('time'),theta=report.get('time',0)*ref.us/ref.H,target=T,exit_code=code,wall_seconds=elapsed,seconds_per_step=elapsed/max(1,len(report.get('pimple_attempts',[]))),requested_steps=steps,steps=report.get('steps'),execution_status='completed' if complete else 'failed',
     initialization_receipt=report.get('initialization_receipt'),extrema=audited_extrema(report),failure=report.get('failure'),configuration_sha256=sha(folder/'case.xml'))
    audits=report.get('state_audits',[]);metric['all_audited_accuracy']=[dict(time=t,values=x['pilot_accuracy_E_D_wall_gauge']) for t,x in zip(report.get('audit_times',[]),audits,strict=True) if 'pilot_accuracy_E_D_wall_gauge' in x]
    metric['final_stage_residual']=report.get('stage_audits',[])[-1:];metric['final_audit']=audits[-1] if audits else None

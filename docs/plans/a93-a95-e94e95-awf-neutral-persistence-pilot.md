@@ -95,3 +95,28 @@ coefficient norm. The cubic CLS implementation is unchanged; other unsupported
 degrees remain rejected. Independent known-root and narrow-negative-well tests
 check this extension before a new runtime is frozen. The failed campaign is
 never resumed with changed source/runtime identities.
+
+### Evolved space selection, before extended pilots
+
+E94E95 natural EP and accepted h0/p4 versus h0/p5 pass the evolved-space gate
+at T=.0016 with dt=.0004. Field-error fine/coarse ratios are .126--.402;
+both independent dt=.0002 controls satisfy the predeclared uncertainty gate.
+The p4 continuations first exceed reconstructed interface traction tolerance
+at T=.0028 (last committed T=.0024). Field errors remain within targets; this
+is a pointwise numerical-accuracy failure, not loss of weak conservation or
+constitutive admissibility. Both full candidate states/histories are retained.
+
+Full h1/p5 would exceed the existing 3000-unknown dense-backend guard and remains
+rejected. The next targeted comparator is `Interface8V1`: split the six inner
+intervals [.02,.04],[.04,.1],[.1,.25],[.25,.5],[.5,1],[1,2] and outer intervals
+[2,2.25],[2.5,3]. Thus both neighbors of H are refined, with fixed mesh and the
+same continuum boundary specification. Base p5 remains the candidate, and this
+partial h refinement is the genuinely finer comparator. No backend or accuracy
+limit is increased. Compare them and a base-p5 dt/2 control at .0016 and .016
+before advancing .05/.1.
+
+The profiled base p5 four-step jobs cost 6.8/8.5 seconds per requested step
+including initialization, with exclusive domain computation 8.0/11.5 seconds
+across 16 stage checks. The entire physical audit costs only about 1.4 seconds
+per job; restricted-mass caching cannot remove the dominant mandatory domain
+work. No diagnostic optimization is introduced without a measured benefit.
