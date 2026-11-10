@@ -19,7 +19,7 @@ from validate_a93_a95_e94e95 import Probe
 
 
 def case_xml(folder,model,policy,wall,steps=16,dt=.0001,restart=None,cache='Off',reject=0,refine=False,perturb=0.,descriptor_probe=None,
-             radial_knots=None,degree=3,quadrature=None,checkpoint_interval=1):
+             radial_knots=None,degree=3,quadrature=None,checkpoint_interval=1,epsilon_perturbation=0.):
     folder.mkdir(parents=True,exist_ok=False)
     xml=session(ORIGINAL,folder/'case.xml','outer6');root=ET.parse(xml).getroot()
     knots=[0.,.0025,.005,.01,.02,.04,.1,.25,.5,1.,2.,2.25,2.5,3.,3.5,4.]
@@ -62,6 +62,9 @@ def case_xml(folder,model,policy,wall,steps=16,dt=.0001,restart=None,cache='Off'
     if perturb and wall=='EP':
         function=ET.SubElement(root.find('CONDITIONS'),'FUNCTION',{'NAME':'InitialPerturbationInner'})
         ET.SubElement(function,'E',{'VAR':'k','VALUE':str(perturb)+'*K0*sin(3.141592653589793*(x+1)/2)^2*(1-3*(y/RANSWallHeight)^2+2*(y/RANSWallHeight)^3)'})
+    if epsilon_perturbation:
+        function=ET.SubElement(root.find("CONDITIONS"),"FUNCTION",{"NAME":"InitialPerturbationOuter"})
+        ET.SubElement(function,"E",{"VAR":"eps_tilde","VALUE":str(epsilon_perturbation*.4**3/(kap*2.))+"*sin(3.141592653589793*(x+1)/2)^2*sin(3.141592653589793*(y-2)/2)^2"})
     write(root,xml)
     return xml
 

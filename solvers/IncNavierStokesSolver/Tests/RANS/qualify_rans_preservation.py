@@ -68,7 +68,7 @@ def series_gate(values,uncertainty=1e-10):
 
 class Campaign:
     def __init__(self,args):
-        self.r=args.root.resolve();self.phase=args.phase;self.models=tuple(args.models);self.temporal_quadrature=Q[args.quadrature_index];self.output=self.r/('preservation-'+args.phase+('-'+args.label if args.label else ''));self.output.mkdir(exist_ok=True)
+        self.r=args.root.resolve();self.phase=args.phase;self.models=tuple(args.models);self.policies=tuple(args.policies);self.epsilon_perturbation=args.epsilon_perturbation;self.temporal_quadrature=Q[args.quadrature_index];self.output=self.r/('preservation-'+args.phase+('-'+args.label if args.label else ''));self.output.mkdir(exist_ok=True)
         self.solver=self.r/'runtime/IncNavierStokesSolver';self.descriptor=self.r/'runtime/RANSNewModelsProbe';self.sampler=self.r/'runtime/RANSPreservationProbe'
         self.manifest=load(self.r/'runtime/source-build.json');self.result=dict(schema=1,phase=self.phase,checks=[],status='running',
             runtime_manifest_sha256=sha(self.r/'runtime/source-build.json'),runtime_source=self.manifest['revision'],ranks=1,threads=THREADS,
@@ -185,7 +185,7 @@ class Campaign:
         spatial=load(self.r/'preservation-spatial/evaluation-grid.json');grid=spatial['grid'];weights=spatial['weights']
         self.grid_weights=weights;expected=[];tables=[]
         for model in self.models:
-            for policy in POLICIES:
+            for policy in self.policies:
                 for wall in WALLS:
                     ref=Reference(model,policy,wall);tag='-'.join((model,policy,wall));runs=[]
                     for j,dt in enumerate((1e-4,5e-5,2.5e-5)):
@@ -195,13 +195,14 @@ class Campaign:
                             env_value=str(folder/'timing.jsonl');os.environ['NEKTAR_RANS_TIMING_FILE']=env_value
                             if (folder/'temporal-metrics.json').exists():return load(folder/'temporal-metrics.json')
                             options=dict(steps=steps,dt=dt,descriptor_probe=self.descriptor,
-                                radial_knots=ref.knots(),degree=3,quadrature=self.temporal_quadrature,cache='ExactStepV1',checkpoint_interval=steps)
+                                radial_knots=ref.knots(),degree=3,quadrature=self.temporal_quadrature,cache='ExactStepV1',checkpoint_interval=steps,epsilon_perturbation=self.epsilon_perturbation)
                             row=load(folder/'result.json') if (folder/'result.json').exists() else run_case(self.solver,folder,ref.model,ref.policy,ref.wall,**options)
                             if row['status']!='pass':return dict(status='fail',execution=row)
                             report=load(folder/'case.evolution.json')
                             # Reconstruct exactly the initializer on these same spaces.
                             initial=probe(self.sampler,folder,dict(operation='neutral',export_basis=False,grid=[]))
-                            if exact_vector_hash(initial['observation']['state'])!=exact_vector_hash(report['accepted_states'][0]):raise AssertionError('probe/native initial coefficients differ')
+                            if exact_vector_hash(initial['observation']['state'])!=exact_vector_hash(report['fixed_reference']):raise AssertionError('probe/native neutral reference coefficients differ')
+                            if not self.epsilon_perturbation and exact_vector_hash(initial['observation']['state'])!=exact_vector_hash(report['accepted_states'][0]):raise AssertionError('probe/native initial coefficients differ')
                             request=replay_request(initial,grid,state=report['state'],time=report['time'])
                             full=probe(self.sampler,folder,request)
                             packet=full['observation'];packet['grid_weights']=weights
@@ -211,6 +212,10 @@ class Campaign:
                                 refreshed_trace_defect_max=max(s['refreshed_trace_defect'] for s in report['pimple_attempts']),
                                 source_splitting_defects={k:max(abs(s.get(k,0)) for s in report['pimple_attempts']) for k in ('momentum_splitting_identity_defect','k_same_state_source_storage_defect','epsilon_same_state_source_storage_defect')},
                                 extrema=audited_extrema(report),drift=representation(ref,packet,weights))
+                            result['initial_outer_epsilon_perturbation_over_epsilon_H']=self.epsilon_perturbation
+                            if self.epsilon_perturbation:
+                                unperturbed=load(self.r/('preservation-temporal-Q0-'+ref.model)/(tag+'-dt'+str(j))/'state-packet.json')['observation']
+                                result['perturbation_response_vs_unperturbed']=compare_samples(packet,dict(unperturbed,grid_weights=weights),weights)
                             write_json(folder/'endpoint-samples.json',packet);write_json(folder/'temporal-metrics.json',result)
                             (folder/'packet.json').unlink();return result
                         self.check(name,trajectory)
@@ -228,6 +233,8 @@ class Campaign:
                             table['fields'][field]=dict(differences_weighted_RMS=[d1,d2],differences_L2=[ab['fields'][field]['L2'],bc['fields'][field]['L2']],
                                 order=order,uncertainty_floor=uncertainty,status='unresolved_floor' if not measured else 'pass' if .8<=order<=1.2 else 'fail')
                         table['status']='fail' if any(x['status']=='fail' for x in table['fields'].values()) else 'pass'
+                        table['convergence_status']='failed' if table['status']=='fail' else 'partially_unresolved' if any(x['status']=='unresolved_floor' for x in table['fields'].values()) else 'demonstrated'
+                        table['initial_outer_epsilon_perturbation_over_epsilon_H']=self.epsilon_perturbation
                         table['initial_state_sha256']=runs[0][1]['initial_sha256'];table['terminal_time']=.0016
                     tables.append(table);self.result['temporal_tables']=tables;self.save()
         self.result['expected_check_names']=expected;self.result['coverage']=coverage(self.result['checks'],set(expected),key=lambda x:x['name'])
@@ -239,7 +246,7 @@ class Campaign:
         self.save();return 0 if self.result['status']=='pass' else 1
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--phase',choices=('spatial','temporal'),required=True);p.add_argument('--models',nargs='+',choices=MODELS,default=list(MODELS));p.add_argument('--label',default='');p.add_argument('--quadrature-index',type=int,choices=(0,1,2),default=2);a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--phase',choices=('spatial','temporal'),required=True);p.add_argument('--models',nargs='+',choices=MODELS,default=list(MODELS));p.add_argument('--label',default='');p.add_argument('--policies',nargs='+',choices=POLICIES,default=list(POLICIES));p.add_argument('--epsilon-perturbation',type=float,default=0.);p.add_argument('--quadrature-index',type=int,choices=(0,1,2),default=2);a=p.parse_args()
     c=Campaign(a)
     try:getattr(c,a.phase)()
     except Exception as error:c.result['checks'].append(dict(name='orchestration',status='fail',failure=repr(error)));c.save()

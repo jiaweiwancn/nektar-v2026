@@ -97,6 +97,7 @@ def physical_grid(knots,order=10,xorder=8):
 def representation(ref,packet,weights):
     grid=packet['grid'];regions=packet['grid_regions']
     target=dict(time=packet['time'],grid=grid,grid_regions=regions,grid_weights=weights,grid_values=[ref.at(float(p[2]),r)['values'].tolist() for p,r in zip(grid,regions,strict=True)])
+    if "grid_weights" in packet and not np.array_equal(np.asarray(packet["grid_weights"]),np.asarray(weights)):raise ValueError("reference comparison weights differ")
     numerical_packet=dict(packet,grid_weights=weights)
     result=compare_samples(numerical_packet,target,weights)
     numerical=np.asarray(packet['grid_gradients']);exact=np.asarray([ref.at(float(p[2]),r)['gradient'] for p,r in zip(grid,regions,strict=True)])
