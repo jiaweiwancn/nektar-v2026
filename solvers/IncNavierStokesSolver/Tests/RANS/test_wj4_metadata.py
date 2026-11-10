@@ -56,6 +56,9 @@ class Immutable(unittest.TestCase):
                 tests=[dict(name='control',command=['/bin/IncNavierStokesSolver',str(p)]),dict(name='kernel',command=['/bin/WJKernelProbe'])]
                 rows=legacy_control_budget(tests);self.assertEqual(len(rows),1);self.assertEqual(rows[0]['attempts'],expected)
                 self.assertEqual(rows[0]['policy'],'SharedLegacyControl')
+            p.write_text('<N><PARAMETERS/></N>')
+            self.assertEqual(legacy_control_budget([dict(name='RANSEquilibriumWallStageSmoke',command=['IncNavierStokesSolver',str(p)])])[0]['attempts'],1)
+            with self.assertRaisesRegex(ValueError,'missing/invalid'):legacy_control_budget([dict(name='ordinary',command=['IncNavierStokesSolver',str(p)])])
 
     def test_transaction_intermediate_packets_are_required(self):
         from verify_wj4_transactions import verify

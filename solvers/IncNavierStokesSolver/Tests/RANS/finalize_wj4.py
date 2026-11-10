@@ -24,8 +24,9 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     for name in ('root','observer-root','study','output'):p.add_argument('--'+name,type=Path,required=True)
     a=p.parse_args();root=a.root.resolve();observer=a.observer_root.resolve();study=a.study.resolve();out=a.output.resolve()
+    figures=root/('figures-'+out.name)
     if platform.system()!='Linux':raise ValueError('Linux is authoritative')
-    if out.exists() or (root/'figures').exists():raise ValueError('publication output is write-once; choose a new root/lineage')
+    if out.exists() or figures.exists():raise ValueError('publication output is write-once; choose a new root/lineage')
     ledgers={p:Ledger(root,p) for p in ('EP','Budget')}
     for policy,l in ledgers.items():
         ledger=read(l.file)
@@ -37,7 +38,7 @@ def main():
         if read(root/('all-step-transactions-'+policy+'.json')).get('status')!='PASS':
             raise ValueError('all-step transaction replay is incomplete: '+policy)
     scripts=Path(__file__).resolve().parent;env=os.environ.copy();env.update(THREADS)
-    allocation=root/'publication-allocation.json'
+    allocation=root/('publication-'+out.name+'-allocation.json')
     subprocess.run([sys.executable,'-B',str(scripts/'wj4_resources.py'),'--reserve','8','--output',str(allocation)],env=env,check=True)
     label=str(out)+'/publication';intent=dict(study=artifacts([study/p/'summary.json' for p in ('EP','Budget')]),
         code=artifacts([scripts/p for p in ('finalize_wj4.py','publish_wj4.py','plot_wj4.py')]))
@@ -50,8 +51,8 @@ def main():
     start=time.time();failure=None
     try:
         for name,argv in (
-            ('final-figures',[sys.executable,'-B',str(scripts/'plot_wj4.py'),'--study',str(study),'--output',str(root/'figures')]),
-            ('final-publication',[sys.executable,'-B',str(scripts/'publish_wj4.py'),'--root',str(root),'--observer-root',str(observer),'--study',str(study),'--output',str(out)])):
+            ('publication-'+out.name+'-figures',[sys.executable,'-B',str(scripts/'plot_wj4.py'),'--study',str(study),'--output',str(figures)]),
+            ('publication-'+out.name+'-seal',[sys.executable,'-B',str(scripts/'publish_wj4.py'),'--root',str(root),'--observer-root',str(observer),'--study',str(study),'--output',str(out),'--figures',str(figures)])):
             subprocess.run([sys.executable,'-B',str(scripts/'wj3_receipts.py'),'--root',str(observer),'--label',name,'--',*argv],env=env,check=True)
     except Exception as error:
         failure=str(error);raise

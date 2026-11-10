@@ -63,13 +63,28 @@ def native_accounting(summary,policy):
             failed_candidate_sha256=state_hash(d['rejected_state']) if d.get('rejected_state') else None)
     return rows,lineage
 
+def load_tables(c,context,loads,weak):
+    for name,error in c.get('independent_loads',{}).get('load_max_absolute_errors',{}).items():
+        loads.append(dict(**context,load=name,max_absolute_error=error,
+            quadrature_points=c['independent_loads']['quadrature_points'],state_sha256=c['state_sha256']))
+    for mode,r in c.get('independent_weak_modes',{}).get('modes',{}).items():
+        for region,fields in zip(('inner','outer'),r['regional_loads']):
+            for field,terms in zip(('u','v','k','outer_epsilon'),fields):
+                for term,value in zip(('storage','convection','stress_or_diffusion','negative_source','roughness'),terms):
+                    weak.append(dict(**context,mode=mode,region=region,field=field,term=term,physical_load=value,max_independent_absolute_error=r['max_absolute_error']))
+        for term,values in (('signed_volume_sum',r['signed_sum']),('prescribed_exterior_reaction',r['prescribed_exterior_reaction'])):
+            for field,value in zip(('u','v','k','outer_epsilon'),values):
+                weak.append(dict(**context,mode=mode,region='inner+outer',field=field,term=term,physical_load=value,max_independent_absolute_error=r['max_absolute_error']))
+
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--observer-root',type=Path);p.add_argument('--study',type=Path);a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--observer-root',type=Path);p.add_argument('--study',type=Path);p.add_argument('--figures',type=Path);a=p.parse_args()
     root=a.root.resolve();out=a.output.resolve();out.mkdir(parents=True,exist_ok=False)
+    meta=root/'publication-lineage'/out.name;meta.mkdir(parents=True,exist_ok=False)
+    figures=a.figures.resolve() if a.figures else root/'figures'
     observer=a.observer_root.resolve() if a.observer_root else root;study=a.study.resolve() if a.study else root/'study'
     source=observer/'source';build=observer/'build';git=lambda *v:subprocess.check_output(['git','-c','core.filemode=false','-C',str(source),*v],text=True).strip()
     tracked=[source/f for f in subprocess.check_output(['git','-C',str(source),'ls-files'],text=True).splitlines() if (source/f).is_file()]
-    content={str(f.relative_to(source)):file_hash(f) for f in tracked};write_once(root/'wj4-source-content.json',content)
+    content={str(f.relative_to(source)):file_hash(f) for f in tracked};write_once(meta/'source-content.json',content)
     runtime={}
     for name in ('IncNavierStokesSolver','RANSWallResolutionProbe','WJKernelProbe'):
         from wj_immutable import runtime as identity
@@ -79,19 +94,19 @@ def main():
         if scope.exists():
             for f in scope.rglob('*'):
                 if f.is_file() and (f.suffix in ('.json','.xml','.bin','.log') or f.name=='State.bin'):index[str(f)]=dict(bytes=f.stat().st_size,sha256=file_hash(f))
-    write_once(root/'wj4-artifact-index.json',index)
+    write_once(meta/'artifact-index.json',index)
     inventory=read(observer/'inventory.json');tests={}
     for r in read(root/'command-receipts.json')+(read(observer/'command-receipts.json') if observer!=root else []):
         if not r['label'].startswith('ctest-'):continue
         matches=re.findall(r'(\d+)% tests passed, (\d+) tests failed out of (\d+)',Path(r['log']).read_text())
         tests[str(Path(r['log']).parent)+'/'+r['label']]=dict(exit_code=r['exit_code'],result=matches[-1] if matches else None,log=r['log'],sha256=r['log_sha256'],seconds=r['seconds'])
     manifest=dict(schema='WJ4LinuxManifestV1',root=str(root),source_revision=git('rev-parse','HEAD'),source_tree=git('rev-parse','HEAD^{tree}'),source_status=git('status','--short'),
-        source_content=dict(path=str(root/'wj4-source-content.json'),sha256=file_hash(root/'wj4-source-content.json')),
+        source_content=dict(path=str(meta/'source-content.json'),sha256=file_hash(meta/'source-content.json')),
         specification_sha256={name:content['docs/literature/'+name] for name in ('wj_earsm_neutral_abl_ep_awf_note.tex','wj_earsm_budget_cutoff_awf_appendix.tex')},
         runtime=runtime,arithmetic_policy='Release C++17 -ffp-contract=off -fno-fast-math; all numerical library threads=1',
         effective_flags={name:(build/'CMakeFiles'/ (name+'.dir')/'flags.make').read_text() for name in ('IncNavierStokesSolver','RANSWallResolutionProbe','RANSKernels')},
         inventory=dict(count=len(inventory['tests']),path=str(observer/'inventory.json'),sha256=file_hash(observer/'inventory.json')),
-        artifact_index=dict(count=len(index),path=str(root/'wj4-artifact-index.json'),sha256=file_hash(root/'wj4-artifact-index.json')),
+        artifact_index=dict(count=len(index),path=str(meta/'artifact-index.json'),sha256=file_hash(meta/'artifact-index.json')),
         command_receipts=dict(path=str(root/'command-receipts.json'),sha256=file_hash(root/'command-receipts.json')),tests=tests,
         ledger={policy:dict(path=str(root/('ledger-'+policy+'.json')),sha256=file_hash(root/('ledger-'+policy+'.json'))) for policy in ('EP','Budget') if (root/('ledger-'+policy+'.json')).exists()},
         allocation_receipts=artifacts(list(root.glob('*allocation*.json'))+list(root.glob('processes*.txt'))+list(observer.glob('*allocation*.json'))),
@@ -111,8 +126,9 @@ def main():
             if file_hash(value['path'])!=value['sha256']:raise ValueError('recorded runtime binary changed')
             for path,h in value['libraries'].items():
                 if file_hash(path)!=h:raise ValueError('recorded dependency changed')
-    write_once(root/'wj4-manifest.json',manifest);write_once(out/'manifest.json',manifest)
+    write_once(meta/'manifest.json',manifest);write_once(out/'manifest.json',manifest)
     rows=[];interfaces=[];windows=[];differences=[];residuals=[];horizontal=[];audits=[];witnesses={};policies={};runs=[];stages={}
+    loads=[];weak=[];regional=[];trace=[];arithmetic=[];hypotheses={}
     for policy in ('EP','Budget'):
         path=study/policy/'summary.json'
         if not path.exists():continue
@@ -125,6 +141,13 @@ def main():
         for group in ('horizontal','longer'):
             for key,trajectory in s.get(group,{}).items():
                 for c in [trajectory['initial']]+trajectory.get('trajectory',[]):
+                    context=dict(policy=policy,group=group,trajectory=key,steps=c['steps'],time=c['time'])
+                    load_tables(c,context,loads,weak)
+                    if c.get('continuum_hypotheses'):hypotheses[policy+'/'+group+'/'+key]=c['continuum_hypotheses']
+                    for system,r in c.get('arithmetic',{}).get('systems',{}).items():arithmetic.append(dict(**context,system=system,**r))
+                    for row in c['errors']['interface_trace_moments']['moments']:
+                        for i,field in enumerate(('traction_x','traction_y','traction_z','k_flux')):trace.append(dict(**context,mode=row['mode'],field=field,
+                            native_Gauss8=row['native_Gauss8'][i],independent_composite=row['independent_composite'][i],max_absolute_difference=row['max_absolute_difference']))
                     for kind in ('initial_representation','continuum_error','initial_drift'):
                         for scope in ('full','central','constrained_boundary'):
                             for field,r in c['errors'][kind][scope]['fields'].items():
@@ -137,6 +160,9 @@ def main():
                             maximum_horizontal_spread=span['sampled_horizontal_spread'][j],height=span['z'],side=span['side'],mean_at_height=span['sampled_horizontal_mean'][j],
                             mean_rule=span['mean_rule'],vertical_velocity_max=max(r['vertical_velocity_max'] for r in c['errors']['horizontal_samples'])))
                     raw=read(Path(c['path']))['measurements'];packet=raw['audit']
+                    for region,values in zip(('inner','outer'),raw['regional_spatial_mass_dual_norms']):
+                        for block,value in zip(('u','v','k','entire_outer_epsilon','inner_continuity','outer_continuity','gauge','boundary_trace'),values):
+                            regional.append(dict(**context,region=region,block=block,norm=value,scope='native region-restricted operator with same constraints; separately normed pieces are not additive'))
                     for condition,r in packet['conditions'].items():audits.append(dict(policy=policy,group=group,trajectory=key,steps=c['steps'],time=c['time'],
                         condition=condition,passed=r['passed'],margins=json.dumps(r['margins']),state_sha256=c['state_sha256']))
                     witness_key=policy+'/'+group+'/'+key+'/'+str(c['steps'])
@@ -148,6 +174,9 @@ def main():
                         boundary_divergence=c['errors']['divergence_by_scope']['constrained_boundary']['normalized_maximum'],accuracy_status=c['errors']['accuracy_gate']['status']))
                     for i,name in enumerate(('u','v','k','entire_outer_epsilon','inner_continuity','outer_continuity','gauge','boundary_trace')):
                         residuals.append(dict(policy=policy,group=group,trajectory=key,steps=c['steps'],time=c['time'],block=name,spatial=c['spatial_residual'][i],stage=c['stage_defect'][i] if c['stage_defect'] else None))
+                for name in ('independent_obstruction_loads',):
+                    c=trajectory.get(name)
+                    if c:load_tables(c,dict(policy=policy,group=group,trajectory=key,steps=c['steps'],time=c['time']),loads,weak)
         for key,c in s.get('horizontal_comparisons',{}).items():
             for scope in ('full','central','constrained_boundary'):
                 for field,r in c[scope]['fields'].items():differences.append(dict(policy=policy,kind='horizontal',index=key,scope=scope,field=field,**{k:v for k,v in r.items() if k!='maximum_provenance'}))
@@ -156,21 +185,23 @@ def main():
                 for field,r in c['comparison'][scope]['fields'].items():differences.append(dict(policy=policy,kind='timestep',index=key,time=c['time'],fine_time=c['fine_time'],scope=scope,field=field,**{k:v for k,v in r.items() if k!='maximum_provenance'}))
         for r in s.get('stationarity',{}).get('windows',[]):windows.append(dict(policy=policy,trajectory=r['trajectory'],steps=json.dumps(r['steps']),times=json.dumps(r['times']),status=r['status'],**r['V']))
         write_once(out/(policy+'.json'),policies[policy])
-    for name,data in (('fields',rows),('interfaces',interfaces),('windows',windows),('differences',differences),('residuals',residuals),('horizontal-spread',horizontal),('audit-margins',audits)):csv_file(out/(name+'.csv'),data)
+    for name,data in (('fields',rows),('interfaces',interfaces),('windows',windows),('differences',differences),('residuals',residuals),('horizontal-spread',horizontal),('audit-margins',audits),
+        ('independent-loads',loads),('weak-loads',weak),('regional-residuals',regional),('trace-moments',trace),('arithmetic',arithmetic)):csv_file(out/(name+'.csv'),data)
+    write_once(out/'startup-hypotheses.json',hypotheses)
     csv_file(out/'run-accounting.csv',runs);write_once(out/'accepted-stage-lineage.json',stages)
     write_once(out/'audit-witnesses.json',witnesses)
     for path in [root/'regression-verification.json',root/'shared-legacy-accounting-supplement.json',root/'legacy-control-accounting-supplement.json',root/'command-receipts.json',
                  root/'ledger-EP.json',root/'ledger-Budget.json',*root.glob('all-step-transactions-*.json')]:
         if path.exists():shutil.copyfile(path,out/path.name)
     if observer!=root:shutil.copyfile(observer/'command-receipts.json',out/'observer-command-receipts.json')
-    receipt=dict(schema='WJ4PublicationV1',manifest_sha256=file_hash(root/'wj4-manifest.json'),policies={p:v['qualification'] for p,v in policies.items()},
-        tables=artifacts(list(out.glob('*.csv'))),figures=artifacts(list((root/'figures').glob('*'))),
-        evidence_bridge=artifacts([root/'wj4-manifest.json',root/'wj4-artifact-index.json',root/'wj4-source-content.json',root/'command-receipts.json']),
+    receipt=dict(schema='WJ4PublicationV1',manifest_sha256=file_hash(meta/'manifest.json'),policies={p:v['qualification'] for p,v in policies.items()},
+        tables=artifacts(list(out.glob('*.csv'))),figures=artifacts(list(figures.glob('*'))),
+        evidence_bridge=artifacts([meta/'manifest.json',meta/'artifact-index.json',meta/'source-content.json',root/'command-receipts.json']),
         measurement_only_requalification=artifacts(list((root/'requalification').glob('*.json'))),
         original_wj3_receipts=artifacts([source/'docs/plans/wj3-linux'/name for name in ('publication.json','receipt.json','manifest.json','EP.json','Budget.json')]))
     receipt['compact_identities']=artifacts(list(out.glob('*.json')))
     write_once(out/'receipt.json',receipt)
-    if (root/'figures').exists():shutil.copytree(root/'figures',out/'figures')
+    if figures.exists():shutil.copytree(figures,out/'figures')
     for file in out.rglob('*'):
         if file.is_file():file.chmod(0o644)
     print(out/'receipt.json')

@@ -30,6 +30,8 @@ def legacy_control_budget(tests):
         for p in ET.parse(path).getroot().findall('.//PARAMETERS/P'):
             key,_,value=(p.text or '').partition('=')
             if key.strip().lower()=='numsteps':n=int(value.strip())
+        # The standalone stage fixture has no NumSteps parameter or evolution.
+        if n is None and test['name']=='RANSEquilibriumWallStageSmoke':n=0
         if n is None or n<0:raise ValueError('missing/invalid legacy control step target: '+str(path))
         rows.append(dict(test=test['name'],xml=str(path),xml_sha256=file_hash(path),requested_steps=n,
             policy='SharedLegacyControl',attempts=max(1,n),charge_scope='conservative legacy control step/invocation budget units; not WJ one-sweep counts'))

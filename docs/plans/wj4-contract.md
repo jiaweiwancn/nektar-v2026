@@ -157,3 +157,10 @@ both policy caps: NumSteps, or one invocation for a zero-step standalone stage
 control. These are explicitly distinct from native WJ one-sweep attempts and
 do not receive WJ solve-count claims. Their complete shared wall time is charged
 to both policies. Failed selections retain the unreconciled reservation.
+
+Publication metadata and figures are versioned by the new output lineage.
+A reporting repair can use a fresh output name while preserving a failed
+publication and every governing artifact. Compact tables retain regional weak
+loads and their signed sums, independent source/diffusion defects, interface
+trace moments, regional residual norms and frozen arithmetic packets. Regional
+norms are explicitly not added to reconstruct a total norm.
