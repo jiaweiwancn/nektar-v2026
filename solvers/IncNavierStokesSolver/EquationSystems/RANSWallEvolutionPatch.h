@@ -66,6 +66,9 @@ public:
     // overrides, allowing the very same coefficient state to be integrated
     // at several orders; it includes physics, mesh, spaces and native maps.
     std::string InitializationReceipt(const Vector&,const Vector&,double,const RANSWallEvolutionData&,const RANSWallEvolutionData&,const std::map<int,double>&) const;
+    // Read-only accuracy monitor. Cached rows/targets depend only on this
+    // immutable space and the stored neutral reference, never on validity.
+    Vector NeutralAccuracy(const Vector&,double,const RANSWallEvolutionData&) const;
     std::string PreservationIdentity() const;
     std::string PreservationPacket(const Vector &state,double time,const RANSWallEvolutionData &data,
         bool basis,const std::vector<RANSWallCoordinate> &grid={},const std::vector<int> &sides={}) const;
@@ -588,6 +591,13 @@ private:
     std::map<int,double> m_referenceConstraints;
     double m_eta=0;
     mutable std::shared_ptr<SolverCache> m_solver;
+    struct AccuracyPoint
+    {
+        RANSWallGlobalPoint velocity,epsilon,pressure;
+        std::array<double,5> exact{},initial{};
+        bool outer=false;
+    };
+    mutable std::vector<AccuracyPoint> m_accuracyPoints;
     // Opt-in, serial first-failure diagnostics. A counterfactual same-stage
     // fresh-Jacobian retry is recorded separately and never advances history.
     bool m_solveDiagnostics=false,m_solveDiagnosticReplay=false,m_solveDiagnosticAdmissible=false;

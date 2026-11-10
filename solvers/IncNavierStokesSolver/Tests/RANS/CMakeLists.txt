@@ -435,6 +435,8 @@ set_tests_properties(RANSObservationKernels PROPERTIES
     PROCESSORS 1 TIMEOUT 120 ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1")
 find_package(Python3 QUIET COMPONENTS Interpreter)
 if(Python3_Interpreter_FOUND)
+    add_test(NAME RANSImmutableRequestManifest COMMAND ${Python3_EXECUTABLE} -B ${CMAKE_CURRENT_LIST_DIR}/test_rans_request_manifest.py)
+    set_tests_properties(RANSImmutableRequestManifest PROPERTIES PROCESSORS 1 TIMEOUT 30)
     add_test(NAME RANSWallTimingChecks COMMAND ${Python3_EXECUTABLE} -B
         ${CMAKE_CURRENT_LIST_DIR}/test_rans_wall_timing.py $<TARGET_FILE:RANSWallTimingChecks>)
     set_tests_properties(RANSWallTimingChecks PROPERTIES PROCESSORS 1 TIMEOUT 30)

@@ -55,7 +55,7 @@ private:
     int m_implicitCallbacks=0,m_pimpleRejectStep=0,m_pimpleHardAuditRejectStep=0;
     RANSWallEvolutionPatch::Diagnostic m_physicalSamples;
     std::string m_restart,m_checkpointBase,m_lastCheckpoint,m_signature;
-    std::string m_neutralBoundaryPolicy="Legacy",m_initializationReceipt="null";
+    std::string m_neutralBoundaryPolicy="Legacy",m_initializationReceipt="null",m_pilotAccuracy="Off";
     bool m_chartFunctions=false;
     Vector m_roughnessBudget,m_energyBudget,m_finalStageLoads;
     std::vector<Vector> m_regionalStageLoads;

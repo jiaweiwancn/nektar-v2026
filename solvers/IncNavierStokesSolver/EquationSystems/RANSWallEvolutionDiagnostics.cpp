@@ -23,6 +23,64 @@ double MinimumEigenvalue(RANSTensor a)
     return RANSWallSolveJson::Eigenvalues(a)[0];
 }
 }
+RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::NeutralAccuracy(const Vector &s,double time,const RANSWallEvolutionData &data) const
+{
+    RANSWallTiming::Scope timing("audit.neutral_accuracy");
+    Require(NewModels() && m_dimension==2 && !Mapped() && m_comm->GetSize()==1,"neutral accuracy requires serial flat 2D new models");
+    const double us=m_robustUstar,H=m_parameters.geometry.height,Z=upper[2],K0=m_parameters.model.Q()*us*us;
+    const double A=us*us*us/m_parameters.model.Kappa();const auto profile=Profile(K0);
+    const double UH=profile->Reference().matchingVelocity;
+    RANSTensor G{};G[0][2]=us/(m_parameters.model.Kappa()*H);
+    const auto c=OuterClosure(K0,A/H,G,{0,0,H});
+    const double jump=c.reynoldsStress[2][2]-2*K0/3;
+    const std::array<double,2> pi{jump*(Z-H)/Z,-jump*H/Z};
+    if(m_accuracyPoints.empty())for(const auto &q:Quadrature(0))
+    {
+        AccuracyPoint p;p.velocity=q;p.outer=q.coordinate[2]>H;
+        p.pressure=Point(InnerPressure()+p.outer,q.coordinate);
+        if(p.outer)p.epsilon=Point(Epsilon(),q.coordinate);
+        const double z=q.coordinate[2];
+        p.exact={p.outer?UH+us/m_parameters.model.Kappa()*std::log(z/H):profile->Original().Velocity(z,{UH,0},{0,0})[0],
+            0.,p.outer || !AcceptedAWF()?K0:profile->ReferenceK(z),p.outer?A/z:0.,pi[p.outer]};
+        p.initial={q.Value(m_reference,offset[0]),q.Value(m_reference,offset[1]),q.Value(m_reference,offset[K()]),
+            p.outer?p.epsilon.Value(m_reference,offset[Epsilon()]):0.,p.pressure.Value(m_reference,offset[InnerPressure()+p.outer])};
+        m_accuracyPoints.push_back(std::move(p));
+    }
+    const std::array<double,5> scale{us,us,K0,A/H,us*us};
+    std::array<long double,5> e{},d{},volume{};long double pe=0,pd=0;
+    for(const auto &p:m_accuracyPoints)
+    {
+        const double v=p.pressure.Value(s,offset[InnerPressure()+p.outer]);
+        pe+=p.velocity.weight*(v-p.exact[4]);pd+=p.velocity.weight*(v-p.initial[4]);
+        volume[4]+=p.velocity.weight;
+    }
+    const double eg=pe/volume[4],dg=pd/volume[4];volume[4]=0;
+    for(const auto &p:m_accuracyPoints)
+    {
+        const auto &q=p.velocity;
+        const std::array<double,5> v{q.Value(s,offset[0]),q.Value(s,offset[1]),q.Value(s,offset[K()]),
+            p.outer?p.epsilon.Value(s,offset[Epsilon()]):0.,p.pressure.Value(s,offset[InnerPressure()+p.outer])};
+        for(int j=0;j<5;++j)if(j!=3 || p.outer)
+        {
+            const double a=(v[j]-p.exact[j]-(j==4?eg:0.))/scale[j],b=(v[j]-p.initial[j]-(j==4?dg:0.))/scale[j];
+            e[j]+=q.weight*a*a;d[j]+=q.weight*b*b;volume[j]+=q.weight;
+        }
+    }
+    Vector result(12);for(int j=0;j<5;++j){result[j]=std::sqrt(e[j]/volume[j]);result[5+j]=std::sqrt(d[j]/volume[j]);}
+    RANSVector wall{};double area=0;
+    for(const auto &f:Surface(0,2,0.,-1,8))
+    {
+        const auto &q=f.test;RANSTensor g{};for(int a=0;a<2;++a)g[PhysicalAxis(a)]=q.Gradient(s,offset[a]);
+        const auto live=StateProfile(s,q.coordinate,time,data);
+        const auto t=RANSWallInnerMeanStress(InnerStress(q.Value(s,offset[K()]),live->Original().EddyViscosity(0.),g),m_parameters.geometry.molecularNu,
+            Point(InnerPressure(),q.coordinate).Value(s,offset[InnerPressure()])-eg);
+        const double w=f.weight*std::hypot(f.area[0],f.area[1],f.area[2]);area+=w;
+        for(int a=0;a<3;++a)wall[a]+=w*(t[a][2]-(a==0?us*us:a==2?-pi[0]:0.));
+    }
+    for(double v:wall)result[10]+=v*v;result[10]=std::sqrt(result[10])/area/(us*us);result[11]=eg;
+    Require(std::all_of(result.begin(),result.end(),[](double v){return std::isfinite(v);}),"nonfinite neutral accuracy measurement");
+    return result;
+}
 RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s,const Vector &history,
     double alpha,double time,const RANSWallEvolutionData &data,double ustar,bool constitutiveReconstruction) const
 {

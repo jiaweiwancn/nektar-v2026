@@ -214,6 +214,8 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         }
         m_session->LoadSolverInfo("RANSWallNeutralBoundaryPolicy",m_neutralBoundaryPolicy,"Legacy");
         Require(m_neutralBoundaryPolicy=="Legacy" || (m_neutralBoundaryPolicy=="FrozenReferenceV1" && m_neutral && m_eta==0 && m_patch->NewModels() && m_patch->PimpleSingleSweep()),"unsupported neutral boundary policy");
+        m_session->LoadSolverInfo("RANSWallPilotAccuracy",m_pilotAccuracy,"Off");
+        Require(m_pilotAccuracy=="Off" || (m_pilotAccuracy=="NeutralV1" && m_neutral && m_eta==0 && m_patch->NewModels() && m_patch->PimpleSingleSweep()),"unsupported pilot accuracy policy");
         m_session->LoadSolverInfo("RANSWallRestart",m_restart,"None");m_session->LoadSolverInfo("RANSWallCheckpoint",m_checkpointBase,"None");
         Require(m_timestep>0,"evolution requires positive fixed TimeStep");m_data=RANSWallEvolutionData(dim);
         for(int a=0;a<dim;++a)
@@ -403,6 +405,15 @@ void RANSEquilibriumWallEvolution::RecordAudit(const Vector &state,const Vector 
         }
         const bool forced=alpha>0 && m_pimpleHardAuditRejectStep>0 && m_integrator->Steps()+1==m_pimpleHardAuditRejectStep;
         if(forced)reasons.push_back("deliberate_PIMPLE_hard_audit_rejection");
+        if(reasons.empty() && m_pilotAccuracy=="NeutralV1")
+        {
+            const auto accuracy=m_patch->NeutralAccuracy(state,time,alpha?m_implicitData:m_data);
+            audit["pilot_accuracy_E_D_wall_gauge"]=accuracy;
+            for(int j:{0,2,3,4})if(accuracy[j]>1e-3)reasons.push_back("pilot_reference_accuracy_exit_field_"+std::to_string(j));
+            if(accuracy[1]>1e-4)reasons.push_back("pilot_vertical_velocity_accuracy_exit");
+            if(accuracy[10]>1e-3)reasons.push_back("pilot_mean_wall_traction_accuracy_exit");
+            if(audit.at("interface")[3]/(m_ustar*m_ustar)>1e-3)reasons.push_back("pilot_interface_traction_accuracy_exit");
+        }
         if(!reasons.empty())
         {
             m_rejectedState=state;m_rangeEvents.push_back({time,alpha,state,history,audit,reasons,true});

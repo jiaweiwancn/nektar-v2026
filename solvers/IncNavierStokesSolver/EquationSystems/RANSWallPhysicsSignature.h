@@ -24,6 +24,8 @@ inline std::string RANSWallPhysicsSignature(const RANSWallEvolutionPatch &patch,
     if(patch.PimpleSingleSweep())s<<":temporal_coupling=PimpleSingleSweep"<<patch.PimpleKBoundSignature();
     std::string boundaryPolicy;session->LoadSolverInfo("RANSWallNeutralBoundaryPolicy",boundaryPolicy,"Legacy");
     if(boundaryPolicy!="Legacy")s<<":neutral_boundary="<<boundaryPolicy;
+    std::string pilot;session->LoadSolverInfo("RANSWallPilotAccuracy",pilot,"Off");
+    if(pilot!="Off")s<<":pilot_accuracy="<<pilot;
     for(const auto &[name,value]:session->GetParameters())
         if(!(patch.ColumnAverageK() && name=="RANSWALLSAMPLEHEIGHT") && !RANSWallEvolutionPatch::PimpleKBoundWorkParameter(name) && name!="NUMSTEPS" && name!="IO_CHECKSTEPS" && name!="IO_INFOSTEPS" && name!="IO_TIMER_LEVEL" && name!="RANSWALLOWNERSHIPSHIFT" && name!="RANSWALLPIMPLEREJECTSTEP" && name!="RANSWALLPIMPLEHARDAUDITREJECTSTEP" && name!="RANSWALLPIMPLEKFLOORRELATIVE" && name!="RANSWALLPIMPLEBUDGETTIME")s<<'|'<<name<<'='<<value;
     const std::vector<std::string> names{"InitialConditionsInner","InitialConditionsOuter","InitialPerturbationInner","InitialPerturbationOuter","BoundaryValuesInner","BoundaryValuesOuter",
