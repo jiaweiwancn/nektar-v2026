@@ -94,7 +94,33 @@ int main(int argc,char **argv)
         const auto receipt=patch.InitializationReceipt(state,reference,time,data,data,patch.FixedReferenceBoundary(targetReference));
         const auto stateCopy=state;
         const auto observation=patch.PreservationPacket(state,time,data,request.get<bool>("export_basis",false),grid,sides);
-        std::string resolution="null",testBasis="null";
+        std::string resolution="null",testBasis="null",constitutive="null";
+        if(request.get<bool>("export_constitutive",false))
+        {
+            std::vector<std::string> rows;
+            for(int index=0;index<grid.size();++index)
+            {
+                const auto &q=grid[index];const int side=sides.empty()?0:sides[index];
+                const bool outer=q[2]>p.geometry.height || (q[2]==p.geometry.height && side==1);
+                if(!outer)continue;
+                const auto v=patch.Point(0,q,side),e=patch.Point(patch.Epsilon(),q,side);
+                const double k=v.Value(state,patch.offset[patch.K()]),epsilon=e.Value(state,patch.offset[patch.Epsilon()]);
+                RANSTensor gradient{};gradient[0]=v.Gradient(state,patch.offset[0]);gradient[2]=v.Gradient(state,patch.offset[1]);
+                const auto law=patch.OuterClosure(k,epsilon,gradient,q);
+                const auto pressure=patch.Point(patch.OuterPressure(),q,side).Value(state,patch.offset[patch.OuterPressure()]);
+                rows.push_back(J::Object({{"sample_index",J::Number(index)},{"coordinate",J::Numbers(q)},
+                    {"side",J::Number(side)},{"geometry",J::Number(v.geometry)},{"raw_gradient",J::Rows(gradient)},
+                    {"k",J::Number(k)},{"epsilon",J::Number(epsilon)},{"Pi",J::Number(pressure)},
+                    {"R",J::Rows(law.reynoldsStress)},{"Q",J::Rows(law.quadraticStress)},
+                    {"P",J::Number(law.production)},{"c_mu",J::Number(law.cMu)},
+                    {"nu_t",J::Number(law.eddyViscosity)},{"raw_divergence",J::Number(law.divergence)},
+                    {"epsilon_production",J::Number(law.epsilonProduction)},{"epsilon_destruction",J::Number(law.epsilonDestruction)},
+                    {"a95_radicand",law.a95RadicandDefined?J::Number(law.a95Radicand):"null"}}));
+            }
+            constitutive=J::Object({{"schema",J::Quote("NativeForwardConstitutiveV1")},
+                {"descriptor",J::Quote(p.model.Signature())},{"samples",J::List(rows)},
+                {"gradient_convention",J::Quote("A_ij=d_j U_i; DeviatoricStrainV1 for invariants and Q; full R contracted with raw A")}});
+        }
         if(request.get<bool>("export_resolution",false))
         {
             const auto r=patch.ResidualResolution(state,state,0.,time,data,false,true);
@@ -217,7 +243,7 @@ int main(int argc,char **argv)
             {"accuracy",J::Quote("not_assessed_by_sampling_adapter")},{"performed_time_steps","0"},{"initial_history",initialHistory.empty()?"null":J::Quote(initialHistory)},
             {"initialization_receipt",receipt},{"reference",J::Numbers(reference)},{"fixed_boundary",J::Constraints(data.fixedBoundary)},
             {"elapsed_seconds",J::Number(elapsed)},{"observation",observation},
-            {"resolution",resolution},{"test_basis",testBasis}});
+            {"resolution",resolution},{"test_basis",testBasis},{"native_constitutive",constitutive}});
         std::ofstream file(argv[3]);Require(bool(file),"cannot write verification output");file<<output<<'\n';
         return physical?0:1;
     }

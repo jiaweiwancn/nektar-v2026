@@ -22,7 +22,8 @@ def compare(root,labels,T):
             if receipt[0][key]!=receipt[1][key]:raise ValueError('actual consumed inputs differ '+key)
         if any(x['raw_effective_max_difference']!=0 for x in receipt):raise ValueError('initial effective lift differs')
         for i,x in zip((a,b),receipt,strict=True):
-            if x['raw_initial_sha256']!=reqs[i]['raw_neutral_sha256'] or x['fixed_reference_sha256']!=reqs[i]['reference_sha256'] or x['explicit_boundary_sha256']!=x['implicit_boundary_sha256']:raise ValueError('actual inputs do not match declared initialization')
+            expected=reqs[i].get('actual_initial',{}).get('state_sha256',reqs[i]['raw_neutral_sha256'])
+            if x['raw_initial_sha256']!=expected or x['fixed_reference_sha256']!=reqs[i]['reference_sha256'] or x['explicit_boundary_sha256']!=x['implicit_boundary_sha256']:raise ValueError('actual inputs do not match declared initialization')
     for folder,request in zip(folders,reqs,strict=True):
         admission=RequestManifest(folder,request,True);endpoint=folder/('T-'+format(T,'.4f'))
         if not admission.completed(endpoint):raise ValueError('incomplete endpoint '+str(endpoint))

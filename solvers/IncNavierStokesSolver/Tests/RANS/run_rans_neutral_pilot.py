@@ -60,7 +60,6 @@ def main():
  p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--label',required=True);p.add_argument('--model',choices=('E94E95','A95','A93'),default='E94E95');p.add_argument('--policy',choices=('Natural','Prescribed'),default='Natural');p.add_argument('--wall',choices=('EP','Accepted'),required=True);p.add_argument('--degree',type=int,choices=(4,5),default=5);p.add_argument('--level',type=int,default=0);p.add_argument('--refinement',choices=('Base','Interface8V1'),default='Base');p.add_argument('--columns',type=int,choices=(1,2),default=1);p.add_argument('--dt',type=float,default=.0001);p.add_argument('--max-time',type=float,default=.0016);p.add_argument('--quadrature-index',type=int,choices=(0,1,2),default=1);p.add_argument('--velocity-amplitude',type=float,default=0.);p.add_argument('--mesh-file',type=Path);p.add_argument('--milestones',type=float,nargs='+',default=list(TARGETS));p.add_argument('--cache',choices=('Off','ExactStepV1'),default='ExactStepV1');p.add_argument('--resume',action='store_true');p.add_argument('--timeout',type=int,default=3600);a=p.parse_args();a.root=a.root.resolve()
  if a.degree<4 or a.level<0:raise ValueError('declared pilot candidate requires degree >=4, nonnegative refinement')
  if a.milestones!=sorted(set(a.milestones)) or a.milestones[0] not in (.0016,.016) or any(t<=0 or t>.5 for t in a.milestones):raise ValueError('invalid bounded milestone contract')
- if a.milestones[0]!=.0016 and a.velocity_amplitude:raise ValueError('duration cohort supports unperturbed independent histories only')
  r=a.root;out=r/'campaigns'/a.label;ref=Reference(a.model,a.policy,a.wall)
  os.environ.update(THREADS,LD_LIBRARY_PATH=str(r/'runtime/lib'),TMPDIR=str(r/'tmp'))
  # One common physical grid resolves both declared candidates and profile breaks.
@@ -82,7 +81,7 @@ def main():
   if a.velocity_amplitude:
    with (pre/'zero-step-solver.log').open('w') as f:c=subprocess.run([str(solver),'case.xml'],cwd=pre,stdout=f,stderr=subprocess.STDOUT,timeout=a.timeout)
    z=load(pre/'case.evolution.json');assert c.returncode==0 and z['time']==0 and z['steps']==0 and not z['failure'],z.get('failure')
-   actual_initial=dict(state_sha256=exact_vector_hash(z['state']),history_sha256=sha(Path(z['checkpoint'])/'State.bin'),receipt=z['initialization_receipt'])
+   actual_initial=dict(state_sha256=exact_vector_hash(z['state']),state_coefficients=z['state'],history_sha256=sha(Path(z['checkpoint'])/'State.bin'),history_source=str(Path(z['checkpoint'])/'State.bin'),receipt=z['initialization_receipt'])
    actual=probe(sampler,pre,replay_request(seed,grid,state=z['state']));initial=dict(actual['observation'],grid_weights=weights)
   request=dict(schema='NeutralPilotV1',model=a.model,policy=a.policy,wall=a.wall,descriptor=seed['observation']['resolved_descriptor'],
    knots=selected_knots(ref,a),degree=a.degree,pressure_degree=a.degree-2,columns=a.columns,quadrature=seed['observation']['actual_quadrature'],
@@ -126,7 +125,7 @@ def main():
     final=probe(sampler,folder,req);packet=dict(final['observation'],grid_weights=weights)
     # Perturbed initial state must be sampled from the actual initialized vector.
     if a.velocity_amplitude:
-     first=(out/'T-0.0016'/'case.evolution.json');ir=load(first) if first.exists() else report
+     first=(out/('T-'+format(a.milestones[0],'.4f'))/'case.evolution.json');ir=load(first) if first.exists() else report
      initreq=replay_request(seed,grid,state=ir['accepted_states'][0],time=0.);ip=probe(sampler,folder,initreq);initial=dict(ip['observation'],grid_weights=weights)
     metric.update(accuracy(ref,packet,initial,weights));metric['spatial_alpha_zero']=residual_metrics(packet['audit_alpha_zero']);metric['spatial_alpha_zero_full']=packet['audit_alpha_zero'];write_json(folder/'endpoint-samples.json',packet)
     checks=[metric['reference_error'][f]['weighted_RMS']<=(1e-4 if f=='v' else 1e-3) for f in FIELDS]
