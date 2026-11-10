@@ -96,6 +96,19 @@ calculation. Nonzero physical finite-element budget defects are classified by
 quadrature, space and timestep comparisons, not forced to zero. This diagnostic
 does not establish a mean-plus-turbulent energy theorem.
 
+Before the response experiments, the physical-budget controls are declared as
+volume orders 48/64 and independent physical-face orders 16/32. Both primary
+spaces and both timestep companions are observed. Budgets are signed integrated
+rates divided by volume times `K0*u_star/H` (k) or `epsilon(H)*u_star/H`
+(epsilon), rather than RMS field norms. Quadrature changes must be at most
+`max(1e-9, .01*spatial_difference)` to interpret their spatial differences.
+Finite-defect spatial reduction uses the same .85 ratio above a 5e-9 floor and
+five times quadrature uncertainty. Timestep differences in those defects are
+compared with `max(1e-9,.1*spatial_difference)`. These diagnostic classifications
+remain separate from the established field-response gates; unresolved physical
+flux or temporal contributions are reported explicitly, without forcing a zero
+budget or identifying prescribed-row reactions with physical face fluxes.
+
 ## Completed preparation and first milestone
 
 The stronger admission initially found missing scalar observers on the old dt/2
