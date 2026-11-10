@@ -51,8 +51,9 @@ def native_accounting(summary,policy):
             raw_corrected_k_hashes_equal=all(b['raw_sha256']==b['corrected_sha256'] for b in bounds),
             maximum_added_k_storage_residual=max((abs(a.get('k_added_storage_residual',0)) for a in attempts),default=0)))
         stage_present=bool(d['last_stage_history'])
+        accepted_callback=stage_present and d['implicit_callback_count']>0 and d['last_stage_alpha']>0 and abs(d['last_stage_time']-d['time'])<=2e-15
         callback_context=('failed_attempt_not_accepted' if d.get('failure') and stage_present else
-                          'completed_accepted' if stage_present else 'inapplicable_startup')
+                          'completed_accepted' if accepted_callback else 'inapplicable_startup_or_frozen_readback')
         lineage[policy+'/'+name]=dict(report=str(path),report_sha256=file_hash(path),state_sha256=state_hash(d['state']),
             callback_context=callback_context,usable_as_accepted_stage=callback_context=='completed_accepted',
             native_history_sha256=digest(d['native_history']),native_history_times=d['native_history_times'],
@@ -133,7 +134,9 @@ def main():
         path=study/policy/'summary.json'
         if not path.exists():continue
         s=read(path);policies[policy]={k:s.get(k) for k in ('qualification','components','longer_interpretation','stationarity','ledger_totals','cost_design','mesh_inventory','arithmetic_envelope')}
-        accounting,packets=native_accounting(s,policy);runs.extend(accounting);stages.update(packets)
+        # Cost scouts are inherited, not re-executed during observer replay.
+        # Account the complete original producer inventory, including scouts.
+        accounting,packets=native_accounting(read(root/'study'/policy/'summary.json'),policy);runs.extend(accounting);stages.update(packets)
         policies[policy]['read_only_reprocessing']=s.get('read_only_reprocessing')
         policies[policy]['all_step_transaction_verification']=read(root/('all-step-transactions-'+policy+'.json'))
         policies[policy]['publication_snapshot_ledger_totals']=__import__('wj_immutable').Ledger(root,policy).totals()
