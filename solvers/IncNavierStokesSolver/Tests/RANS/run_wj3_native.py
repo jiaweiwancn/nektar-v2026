@@ -18,7 +18,7 @@ import numpy as np
 from numpy.testing import assert_allclose
 from wj2_cases import case_xml
 from wj3_measure import observations,errors,compare,replay_witnesses,arithmetic,FIELDS,wall,K0,checkpoint_payload
-from test_wj2_native import digest_object,independent_loads,reference_comparison
+from test_wj2_native import digest_object,independent_loads,reference_comparison,resting_functions
 from compare_cls_epawf_pimple import same_history
 from cls_epawf_m3_cases import set_info,set_parameter,write
 from run_cls_epawf_picard import THREADS,load,state_hash,sha,require,write_json
@@ -51,12 +51,15 @@ class Study:
             log=str(folder/'command.log'),log_sha256=sha(folder/'command.log'))
         write_json(receipt,r);self.s['receipts'].append(r);self.save();return r
 
-    def native(self,name,steps=0,cp=None,dt=1e-6,level=1,normal=16,reject=0,arithmetic_time=None):
+    def native(self,name,steps=0,cp=None,dt=1e-6,level=1,normal=16,reject=0,arithmetic_time=None,floor_relative=None,resting=False):
         folder=self.root/name;xml=folder/'case.xml'
         if not xml.exists():
             require(self.s['scheduled_attempts']+steps<=500,'500-attempt WJ work cap would be exceeded')
             xml=case_xml(folder,self.a.policy,steps,cp,level=level,normal=normal,dt=dt,hard_reject=reject)
             tree=ET.parse(xml).getroot();set_info(tree,'RANSWallPimpleSnapshotDirectory',str(folder/'pimple-states'))
+            set_info(tree,'RANSWallPimpleStopOnBound','On')
+            if floor_relative is not None:set_parameter(tree,'RANSWallPimpleKFloorRelative',floor_relative)
+            if resting:resting_functions(tree)
             if arithmetic_time is not None:
                 set_info(tree,'RANSWallPimpleArithmetic','On');set_info(tree,'RANSWallPimpleArithmeticTime',format(arithmetic_time,'.17g'))
             write(tree,xml)
@@ -137,7 +140,16 @@ class Study:
         write_json(folder/'input.json',payload)
         bad=self.execute([self.a.probe,sf/'case.xml',folder/'input.json',folder/'result.json'],folder)
         require(bad['exit_code']!=0 and 'WJ accepted report SHA256 differs' in (folder/'command.log').read_text(),'wrong stage binding rejection')
-        self.s['smoke']=dict(status='PASS',comparison=c,passive_observer_bitwise=True,arithmetic=arithmetic(s,m));self.save()
+        near=1-1e-12;large=1.28e-4
+        iz,ir,_=self.native('smoke-projection-cp0',level=0,dt=large,floor_relative=near,resting=True);self.valid(iz,ir)
+        stopped,sr,stf=self.native('smoke-projection-stop',4,iz['checkpoint'],level=0,dt=large,floor_relative=near,resting=True)
+        require(stopped and 'WJ_baseline_material_mass_projection_exit' in stopped.get('failure',''), 'wrong material-bound stopping reason')
+        require(same_history(iz,stopped) and len(stopped['pimple_attempts'])==1,'material projection advanced history or ran further scheduled attempts')
+        require(all(stopped['pimple_attempts'][0][c]==1 for c in COUNTS) and stopped['pimple_attempts'][0]['bound_activations']>0,
+            'projection stop did not retain complete attempt/correction accounting')
+        self.s['smoke']=dict(status='PASS',comparison=c,passive_observer_bitwise=True,arithmetic=arithmetic(s,m),
+            material_projection_stop=dict(result=str(stf/'case.evolution.json'),accepted_unchanged=True,attempts=1))
+        self.save()
 
     def spatial(self):
         rows=[]

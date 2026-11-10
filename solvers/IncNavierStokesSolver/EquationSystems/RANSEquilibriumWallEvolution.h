@@ -51,7 +51,7 @@ private:
     double m_eta=0,m_ustar=.4,m_tolerance=2e-12,m_stageTime=0,m_stageAlpha=0;
     std::array<double,2> m_direction{1,0};
     int m_maximumIterations=20,m_order=2;
-    bool m_condensed=false,m_neutral=true;
+    bool m_condensed=false,m_neutral=true,m_wjStopOnBound=false;
     int m_implicitCallbacks=0,m_pimpleRejectStep=0,m_pimpleHardAuditRejectStep=0;
     RANSWallEvolutionPatch::Diagnostic m_physicalSamples;
     std::string m_restart,m_checkpointBase,m_lastCheckpoint,m_signature;

@@ -112,7 +112,11 @@ element breakpoints. Rough-reference hypotheses zv<=0, d>=2nu, Lambda>=1 are
 checked separately from represented-field acceptance.
 
 Scouts use dt=1e-6,4e-6,1.6e-5,6.4e-5,1.28e-4, up to four fresh steps each,
-stopping at the first hard failure or material projection. Each dt owns a fresh
+stopping at the first hard failure or material projection. The WJ-3
+StopOnBound execution control rejects a fully scheduled material-correction
+candidate before commit/history advance; no subsequent scout step runs. A
+fresh near-reference numerical-floor fixture verifies this stopping path.
+It does not change the physical signature or saved metadata. Each dt owns a fresh
 native CP0 and native signature; primary/gauge and corresponding physical
 histories must agree. No signature or history is edited. After cost measurement,
 the driver writes a frozen D,T=32D design before any 32/64/128-step main run.

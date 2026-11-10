@@ -166,6 +166,10 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
             m_session->LoadParameter("RANSWallPimpleRejectStep",m_pimpleRejectStep,0);
             m_session->LoadParameter("RANSWallPimpleHardAuditRejectStep",m_pimpleHardAuditRejectStep,0);
             Require(m_pimpleRejectStep>=0 && m_pimpleHardAuditRejectStep>=0,"invalid deliberate PIMPLE rejection step");
+            std::string stopBound;m_session->LoadSolverInfo("RANSWallPimpleStopOnBound",stopBound,"Off");
+            Require(stopBound=="Off" || (stopBound=="On" && m_patch->WJ()),"stop-on-bound pilot control requires WJ PIMPLE");
+            m_wjStopOnBound=stopBound=="On";
+
         }
         m_session->LoadSolverInfo("RANSWallStageTest",m_stageTest,"Off");
         Require(m_stageTest=="Off" || m_stageTest=="MatchedR2" || m_stageTest=="FrozenScalarR2" ||
@@ -294,6 +298,7 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
         {
             const auto bounded=m_patch->ApplyPimpleKBound(m_state,m_state,m_time,m_data);
             m_initialKBoundCheck=bounded.report;
+            Require(!m_wjStopOnBound || !bounded.activated,"WJ_baseline_initial_mass_projection_exit");
             Require(bounded.success && bounded.state==m_state,"k-bound configuration must preserve the represented initial/restarted state and prescribed data");
         }
         if(m_patch->NonlinearPolicyName()=="ScalarFeasibleR2" || m_patch->NonlinearPolicyName()=="ScalarFeasibleR3")
@@ -383,6 +388,13 @@ void RANSEquilibriumWallEvolution::RecordAudit(const Vector &state,const Vector 
         if(audit.at("wj_hard_admissible")[0]!=1)
             for(const auto &[name,values]:audit)if(name.find("wj_condition_")==0 && values[0]!=1)
                 reasons.push_back("WJ_"+name.substr(13)+"_exit");
+        if(alpha>0 && m_wjStopOnBound)
+        {
+            Require(!m_patch->PimpleRecords().empty(),"WJ baseline missing completed attempt record");
+            boost::property_tree::ptree attempt;std::istringstream input(m_patch->PimpleRecords().back());
+            boost::property_tree::read_json(input,attempt);
+            if(attempt.get<int>("bound_activations")>0)reasons.push_back("WJ_baseline_material_mass_projection_exit");
+        }
         if(alpha>0 && m_pimpleHardAuditRejectStep>0 && m_integrator->Steps()+1==m_pimpleHardAuditRejectStep)
             reasons.push_back("deliberate_PIMPLE_WJ_hard_audit_rejection");
         if(!reasons.empty())
