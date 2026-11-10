@@ -19,13 +19,13 @@ from validate_a93_a95_e94e95 import Probe
 
 
 def case_xml(folder,model,policy,wall,steps=16,dt=.0001,restart=None,cache='Off',reject=0,refine=False,perturb=0.,descriptor_probe=None,
-             radial_knots=None,degree=3,quadrature=None,checkpoint_interval=1,epsilon_perturbation=0.):
+             radial_knots=None,degree=3,quadrature=None,checkpoint_interval=1,epsilon_perturbation=0.,boundary_policy="Legacy",xknots=None):
     folder.mkdir(parents=True,exist_ok=False)
     xml=session(ORIGINAL,folder/'case.xml','outer6');root=ET.parse(xml).getroot()
     knots=[0.,.0025,.005,.01,.02,.04,.1,.25,.5,1.,2.,2.25,2.5,3.,3.5,4.]
     if refine:knots=sorted(set(knots+[(a+b)/2 for a,b in zip(knots[:-1],knots[1:])]))
     if radial_knots is not None:knots=radial_knots
-    tensor_mesh(root,knots,degree,2,2.,1.,points=[max(8,degree+3)]*2,xknots=[-1.,1.])
+    tensor_mesh(root,knots,degree,2,2.,1.,points=[max(8,degree+3)]*2,xknots=[-1.,1.] if xknots is None else xknots)
     if descriptor_probe is None:raise ValueError('case construction requires the resolved descriptor probe')
     provider=Probe(descriptor_probe)
     resolved=provider.closure(model,[[0.,0.,0.],[0.,0.,0.],[0.,0.,0.]],policy=policy)
@@ -43,6 +43,7 @@ def case_xml(folder,model,policy,wall,steps=16,dt=.0001,restart=None,cache='Off'
         'RANSWallRestart':str(restart.resolve()) if restart else 'None','RANSWallCheckpoint':str(folder.resolve()/'checkpoint'),
         'RANSWallPicardGroundProjection':'Off','RANSWallPicardKNewton':'Off','RANSWallPicardReduced':'Off',
         'RANSWallPicardEquilibrateK':'Off','RANSWallPicardContinuation':'Off'}
+    if boundary_policy!='Legacy':infos['RANSWallNeutralBoundaryPolicy']=boundary_policy
     for key,value in infos.items():set_info(root,key,value)
     params={'NumSteps':steps,'TimeStep':dt,'Time':0.,'RANSWallHeight':2.,'RANSWallSampleHeight':2.,'RANSWallTailStart':2.,
         'RANSWallRoughness':.1,'Kinvis':1.5e-5,'RANSWallFrictionVelocity':.4,'RANSWallEta':0.,'RANSWallChi':1. if wall=='EP' else 0.,

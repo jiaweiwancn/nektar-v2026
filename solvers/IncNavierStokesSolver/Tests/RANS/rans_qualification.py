@@ -38,6 +38,8 @@ def compare_samples(a,b,weights):
     ga,gb=np.asarray(a['grid'],float),np.asarray(b['grid'],float)
     va,vb=np.asarray(a['grid_values'],float),np.asarray(b['grid_values'],float)
     ra,rb=np.asarray(a['grid_regions'],int),np.asarray(b['grid_regions'],int)
+    sa=np.asarray(a.get('grid_sides',[0]*len(ra)),int);sb=np.asarray(b.get('grid_sides',[0]*len(rb)),int)
+    if sa.shape!=sb.shape or not np.array_equal(sa,sb):raise ValueError('sample sides differ')
     w=np.asarray(weights,float)
     if ga.shape!=gb.shape or ga.ndim!=2 or ga.shape[1]!=3 or not np.array_equal(ga,gb):raise ValueError('physical coordinates differ')
     if va.shape!=vb.shape or va.shape!=(len(ga),5) or len(w)!=len(ga):raise ValueError('physical sample array lengths differ')

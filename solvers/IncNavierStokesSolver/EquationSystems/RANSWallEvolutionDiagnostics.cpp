@@ -379,7 +379,7 @@ std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,doubl
             {"region",J::Number(region)},{"velocity_k",row(q.v)},{"pressure",row(q.p)},
             {"epsilon",region==1?row(q.e):"null"}});
     };
-    std::vector<std::string> volume,faces,mass,profiles,values,gradients,regions,observedSides,provenance,tractions;
+    std::vector<std::string> volume,faces,mass,profiles,values,gradients,regions,observedSides,provenance,tractions,dependentEpsilon;
     std::size_t ni=0,no=m_outer.size();
     for(const auto &ray:m_rays)
     {
@@ -434,6 +434,7 @@ std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,doubl
         if(region==0){const auto profile=StateProfile(state,p,time,data);stress=RANSWallInnerMeanStress(InnerStress(v[2],profile->Original().EddyViscosity(Distance(p)),G),m_parameters.geometry.molecularNu,v[4]);}
         else{const auto law=OuterClosure(v[2],v[3],G,p);for(int a=0;a<3;++a)for(int j=0;j<3;++j)stress[a][j]=-law.reynoldsStress[a][j]+(a==j?2*v[2]/3-v[4]:0.);}
         Vector traction;for(int a=0;a<3;++a)traction.push_back(stress[a][2]);tractions.push_back(J::Numbers(traction));
+        dependentEpsilon.push_back(region==0?J::Number(DependentEpsilon(state,p,time,data)):"null");
         values.push_back(J::Numbers(v));gradients.push_back(J::Rows(g));regions.push_back(J::Number(region));
         observedSides.push_back(J::Number(side));provenance.push_back(J::Numbers(geometry));
     }
@@ -456,7 +457,7 @@ std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,doubl
         {"profiles",J::List(profiles)},{"volume",J::List(volume)},{"faces",J::List(faces)},{"pressure_mass",J::List(mass)},
         {"audit_alpha_zero",J::Object(diagnostic)},
         {"grid",J::Rows(grid)},{"grid_regions",J::List(regions)},
-        {"grid_sides",J::List(observedSides)},{"grid_geometry_by_field",J::List(provenance)},{"grid_traction",J::List(tractions)},{"grid_values",J::List(values)},{"grid_gradients",J::List(gradients)}});
+        {"grid_inner_prescribed_epsilon",J::List(dependentEpsilon)},{"grid_sides",J::List(observedSides)},{"grid_geometry_by_field",J::List(provenance)},{"grid_traction",J::List(tractions)},{"grid_values",J::List(values)},{"grid_gradients",J::List(gradients)}});
 }
 
 namespace

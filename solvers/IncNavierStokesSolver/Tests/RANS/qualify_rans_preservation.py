@@ -21,6 +21,9 @@ import numpy as np
 from rans_preservation_oracle import Reference,physical_grid,weak_balance,representation
 from run_a93_a95_e94e95_matrix import case_xml,run_case
 from run_cls_epawf_picard import sha
+from rans_request_manifest import RequestManifest
+from run_cls_epawf_pimple import identity
+import tempfile
 
 Q=((32,8,8,8,8),(48,12,12,12,12),(64,16,16,16,16))
 MODELS=('E94E95','A95','A93');POLICIES=('Natural','Prescribed');WALLS=('EP','Accepted')
@@ -68,16 +71,42 @@ def series_gate(values,uncertainty=1e-10):
 
 class Campaign:
     def __init__(self,args):
-        self.r=args.root.resolve();self.phase=args.phase;self.models=tuple(args.models);self.policies=tuple(args.policies);self.walls=tuple(args.walls);self.epsilon_perturbation=args.epsilon_perturbation;self.temporal_quadrature=Q[args.quadrature_index];self.output=self.r/('preservation-'+args.phase+('-'+args.label if args.label else ''));self.output.mkdir(exist_ok=True)
+        self.r=args.root.resolve();self.phase=args.phase;self.models=tuple(args.models);self.policies=tuple(args.policies);self.walls=tuple(args.walls);self.epsilon_perturbation=args.epsilon_perturbation;self.temporal_quadrature=Q[args.quadrature_index];self.output=self.r/('preservation-'+args.phase+('-'+args.label if args.label else ''));self.horizon=args.horizon;self.boundary_policy=args.boundary_policy
         self.solver=self.r/'runtime/IncNavierStokesSolver';self.descriptor=self.r/'runtime/RANSNewModelsProbe';self.sampler=self.r/'runtime/RANSPreservationProbe'
         self.manifest=load(self.r/'runtime/source-build.json');self.result=dict(schema=1,phase=self.phase,checks=[],status='running',
             runtime_manifest_sha256=sha(self.r/'runtime/source-build.json'),runtime_source=self.manifest['revision'],ranks=1,threads=THREADS,
             source=subprocess.check_output(['git','-C',str(Path(__file__).resolve().parents[4]),'rev-parse','HEAD'],text=True).strip())
         if sha(self.solver)!=self.manifest['solver']['sha256']:raise RuntimeError('frozen solver identity changed')
         os.environ.update(THREADS,LD_LIBRARY_PATH=str(self.r/'runtime/lib'),TMPDIR=str(self.r/'tmp'))
+        request=dict(verification_schema='PreservationCampaignV2',phase=self.phase,models=self.models,policies=self.policies,walls=self.walls,
+            quadrature=list(self.temporal_quadrature),horizon=self.horizon,timesteps=[1e-4,5e-5,2.5e-5],integration='native IMEX1 PimpleSingleSweep consistent histories',
+            epsilon_perturbation=self.epsilon_perturbation,boundary_policy=args.boundary_policy,boundary_identity=args.boundary_identity,
+            runtime={name:identity(path) for name,path in [('solver',self.solver),('sampler',self.sampler),('descriptor',self.descriptor)]},initial_data=[])
+        if self.output.exists() and not args.resume:raise FileExistsError('destination exists: explicit identical --resume required')
+        if self.phase=='temporal':
+            evaluation=load(self.r/'preservation-spatial/evaluation-grid.json')
+            request['evaluation']=dict(grid=evaluation['grid'],weights=evaluation['weights'],sides=[0]*len(evaluation['grid']),export_basis=False)
+        else:request['evaluation']=dict(construction='union of all nested reference partitions, GL10 normal / GL8 x',export_basis=True)
+        with tempfile.TemporaryDirectory(prefix='request-preflight-',dir=self.r/'tmp') as tmp:
+            for m in self.models:
+                for policy in self.policies:
+                    for wall in self.walls:
+                        ref=Reference(m,policy,wall);folder=Path(tmp)/('-'.join((m,policy,wall)))
+                        self.config(folder,ref,ref.knots(),q=self.temporal_quadrature)
+                        full=probe(self.sampler,folder,dict(operation='neutral',export_basis=False,grid=[]))
+                        request['initial_data'].append(dict(model=m,policy=policy,wall=wall,mesh=ref.knots(),degree=3,pressure_degree=1,
+                            resolved=full['observation']['resolved_descriptor'],raw_sha256=exact_vector_hash(full['observation']['state']),
+                            reference_sha256=exact_vector_hash(full['reference']),boundary=full['fixed_boundary'],representation='native constrained neutral projection'))
+        self.admission=RequestManifest(self.output,request,args.resume)
+        if args.resume and (self.output/'results.json').exists():self.result=load(self.output/'results.json')
+        self.resume=args.resume
         self.save()
     def save(self):write_json(self.output/'results.json',self.result)
     def check(self,name,fn):
+        if self.resume and any(x['name']==name and x['status']=='pass' for x in self.result['checks']):
+            folder=self.output/name.replace('-reference','-h0')
+            if self.admission.completed(folder):return
+        self.result['checks']=[x for x in self.result['checks'] if x['name']!=name]
         start=time.monotonic()
         try:
             value=fn();status=value.get('status','pass')
@@ -87,11 +116,11 @@ class Campaign:
         self.save();print(json.dumps({k:self.result['checks'][-1][k] for k in ('name','status','seconds')}),flush=True)
     def config(self,folder,ref,knots,p=3,q=Q[0],steps=0,dt=.0001,perturb=0.):
         return case_xml(folder,ref.model,ref.policy,ref.wall,steps=steps,dt=dt,descriptor_probe=self.descriptor,radial_knots=knots,degree=p,
-                        quadrature=q,checkpoint_interval=max(steps,1),cache='ExactStepV1',perturb=perturb)
+                        quadrature=q,boundary_policy=self.boundary_policy,checkpoint_interval=max(steps,1),cache='ExactStepV1',perturb=perturb)
     def frozen(self,label,ref,knots,p=3,q=Q[0],base=None,basis=False,grid=None):
         folder=self.output/label
         config=dict(model=ref.model,policy=ref.policy,wall=ref.wall,knots=knots,degree=p,quadrature=list(q),runtime_manifest_sha256=self.result['runtime_manifest_sha256'])
-        if (folder/'metrics.json').exists() and (folder/'state-packet.json').exists():
+        if self.resume and self.admission.completed(folder):
             metrics=load(folder/'metrics.json')
             if metrics.get('configuration')!=config:raise RuntimeError('existing frozen result identity mismatch')
             return load(folder/'state-packet.json'),metrics
@@ -105,6 +134,7 @@ class Campaign:
         if basis:metrics['analytical_weak_balance']=weak_balance(ref,packet)
         if grid:metrics['representation']=representation(ref,packet,self.grid_weights)
         write_json(folder/'metrics.json',metrics)
+        self.admission.seal(folder,['case.xml','metrics.json','state-packet.json'])
         if basis:archive_basis(folder)
         else:(folder/'packet.json').unlink()
         return full,metrics
@@ -191,12 +221,13 @@ class Campaign:
                     for j,dt in enumerate((1e-4,5e-5,2.5e-5)):
                         name=tag+'-dt'+str(j);expected.append(name)
                         def trajectory(j=j,dt=dt,ref=ref,tag=tag):
-                            folder=self.output/(tag+'-dt'+str(j));steps=round(.0016/dt)
+                            folder=self.output/(tag+'-dt'+str(j));steps=round(self.horizon/dt)
                             env_value=str(folder/'timing.jsonl');os.environ['NEKTAR_RANS_TIMING_FILE']=env_value
-                            if (folder/'temporal-metrics.json').exists():return load(folder/'temporal-metrics.json')
+                            if self.resume and self.admission.completed(folder):return load(folder/'temporal-metrics.json')
                             options=dict(steps=steps,dt=dt,descriptor_probe=self.descriptor,
-                                radial_knots=ref.knots(),degree=3,quadrature=self.temporal_quadrature,cache='ExactStepV1',checkpoint_interval=steps,epsilon_perturbation=self.epsilon_perturbation)
-                            row=load(folder/'result.json') if (folder/'result.json').exists() else run_case(self.solver,folder,ref.model,ref.policy,ref.wall,**options)
+                                radial_knots=ref.knots(),degree=3,quadrature=self.temporal_quadrature,cache='ExactStepV1',checkpoint_interval=steps,boundary_policy=self.boundary_policy,epsilon_perturbation=self.epsilon_perturbation)
+                            row=load(folder/'result.json') if self.resume and self.admission.completed(folder,'trajectory-artifacts.json') else run_case(self.solver,folder,ref.model,ref.policy,ref.wall,**options)
+                            if row['status']=='pass':self.admission.seal(folder,['case.xml','result.json','case.evolution.json'],'trajectory-artifacts.json')
                             if row['status']!='pass':return dict(status='fail',execution=row)
                             report=load(folder/'case.evolution.json')
                             # Reconstruct exactly the initializer on these same spaces.
@@ -217,6 +248,7 @@ class Campaign:
                                 unperturbed=load(self.r/('preservation-temporal-Q0-'+ref.model)/(tag+'-dt'+str(j))/'state-packet.json')['observation']
                                 result['perturbation_response_vs_unperturbed']=compare_samples(packet,dict(unperturbed,grid_weights=weights),weights)
                             write_json(folder/'endpoint-samples.json',packet);write_json(folder/'temporal-metrics.json',result)
+                            self.admission.seal(folder,['case.xml','result.json','case.evolution.json','temporal-metrics.json','endpoint-samples.json'])
                             (folder/'packet.json').unlink();return result
                         self.check(name,trajectory)
                         folder=self.output/name
@@ -235,7 +267,7 @@ class Campaign:
                         table['status']='fail' if any(x['status']=='fail' for x in table['fields'].values()) else 'pass'
                         table['convergence_status']='failed' if table['status']=='fail' else 'partially_unresolved' if any(x['status']=='unresolved_floor' for x in table['fields'].values()) else 'demonstrated'
                         table['initial_outer_epsilon_perturbation_over_epsilon_H']=self.epsilon_perturbation
-                        table['initial_state_sha256']=runs[0][1]['initial_sha256'];table['terminal_time']=.0016
+                        table['initial_state_sha256']=runs[0][1]['initial_sha256'];table['terminal_time']=self.horizon
                     tables.append(table);self.result['temporal_tables']=tables;self.save()
         self.result['expected_check_names']=expected;self.result['coverage']=coverage(self.result['checks'],set(expected),key=lambda x:x['name'])
     def finish(self):
@@ -247,7 +279,7 @@ class Campaign:
         self.save();return 0 if self.result['status']=='pass' else 2 if self.result['status']=='unresolved' else 1
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--phase',choices=('spatial','temporal'),required=True);p.add_argument('--models',nargs='+',choices=MODELS,default=list(MODELS));p.add_argument('--label',default='');p.add_argument('--policies',nargs='+',choices=POLICIES,default=list(POLICIES));p.add_argument('--walls',nargs='+',choices=WALLS,default=list(WALLS));p.add_argument('--epsilon-perturbation',type=float,default=0.);p.add_argument('--quadrature-index',type=int,choices=(0,1,2),default=2);a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--resume',action='store_true');p.add_argument('--horizon',type=float,default=.0016);p.add_argument('--boundary-policy',default='Legacy',choices=('Legacy','FrozenReferenceV1'));p.add_argument('--boundary-identity',default='native-neutral-reference');p.add_argument('--phase',choices=('spatial','temporal'),required=True);p.add_argument('--models',nargs='+',choices=MODELS,default=list(MODELS));p.add_argument('--label',default='');p.add_argument('--policies',nargs='+',choices=POLICIES,default=list(POLICIES));p.add_argument('--walls',nargs='+',choices=WALLS,default=list(WALLS));p.add_argument('--epsilon-perturbation',type=float,default=0.);p.add_argument('--quadrature-index',type=int,choices=(0,1,2),default=2);a=p.parse_args()
     c=Campaign(a)
     try:getattr(c,a.phase)()
     except Exception as error:c.result['checks'].append(dict(name='orchestration',status='fail',failure=repr(error)));c.save()
