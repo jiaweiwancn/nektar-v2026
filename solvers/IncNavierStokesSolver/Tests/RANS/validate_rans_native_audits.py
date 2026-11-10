@@ -33,15 +33,16 @@ def fixture(folder,label,descriptor):
                             ('k',str(K)),('eps_tilde',str(-epsilon if label=='inactive_invalid_scalar' else epsilon)),('p','0')]:
             ET.SubElement(fn,'E',{'VAR':field,'VALUE':value})
     if label=='near_boundary_A95_forward':
-        H=1e-6;Z=4.;a=6.5/(math.sqrt(18)-3)*(1-1e-13);sink=1/(2*cl*cl*nu)
-        tensor_mesh(root,[0.,H,1.,2.,3.,Z],3,2,3.,1.,points=[8,8],xknots=[-4.,-3.,-2.25,-2.,-1.])
-        for key,value in (('RANSWallHeight',H),('RANSWallSampleHeight',H),('RANSWallTailStart',H),('RANSWallChi',0.)):set_parameter(root,key,value)
+        H=2.;a=6.5/(math.sqrt(18)-3)*(1-1e-13);K=1e-8;sink=K**1.5/(cl*H)
+        tensor_mesh(root,[0.,1.,2.,3.,4.],4,2,3.,1.,points=[8,8],xknots=[-4.,-3.,-2.25,-2.,-1.])
+        r='((y-2)/2)';shape='(3*'+r+'^2-2*'+r+'^3)'
         for fn in root.findall('./CONDITIONS/FUNCTION'):
             inner=fn.get('NAME').endswith('Inner')
             for e in fn:
                 field=e.get('VAR')
-                value={'u':str(-a)+'*x'+('*y/'+str(H) if inner else ''),'v':str(a)+'*y','k':'1',
-                    'eps_tilde':str(sink) if inner else '1+'+str(sink-1)+'*(4-y)/'+str(Z-H),'p':'0'}[field]
+                value={'u':'0' if inner else str(-a)+'*x*'+shape,
+                    'v':'0' if inner else str(2*a)+'*('+r+'^3-0.5*'+r+'^4)',
+                    'k':str(K),'eps_tilde':str(sink) if inner else str(sink)+'+'+str(K-sink)+'*'+shape,'p':'0'}[field]
                 e.set('VALUE',value)
     write(root,xml);return xml
 
