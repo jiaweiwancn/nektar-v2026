@@ -42,7 +42,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
     {
         if(!m_pimpleArithmetic || (m_pimpleArithmeticTime>=0 && std::abs(time-m_pimpleArithmeticTime)>1e-14))return;
         std::filesystem::create_directories(m_pimpleSnapshotDirectory);
-        const auto stem=(std::filesystem::path(m_pimpleSnapshotDirectory)/(name+"-t"+J::Number(time)+"-"+RANSWallR3::Hash(history).substr(0,12))).string();
+        const auto stem=(std::filesystem::path(m_pimpleSnapshotDirectory)/("arithmetic-"+name+"-t"+J::Number(time)+"-"+RANSWallR3::Hash(history).substr(0,12))).string();
         auto save=[&](const WallMatrix &a,const std::string &suffix){const auto file=stem+suffix;std::ofstream out(file,std::ios::binary);
             for(const auto &r:a)out.write(reinterpret_cast<const char*>(r.data()),r.size()*sizeof(double));
             out.close();Require(out.good(),"passive arithmetic matrix write failed");
