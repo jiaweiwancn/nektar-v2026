@@ -17,7 +17,7 @@ def receipt(path):
     return dict(load(path),source=str(path),source_sha256=sha(path))
 
 
-def main():
+def collect():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--admissions',type=Path,nargs='+',required=True);p.add_argument('--regression-receipt',type=Path);p.add_argument('--forward-interface-receipt',type=Path);p.add_argument('--output',type=Path,required=True);a=p.parse_args();r=a.root.resolve();out=a.output;out.mkdir(parents=True,exist_ok=False);result=dict(schema='NonlinearDurationResponseEvidenceV1',starting_revision='dfd94161fd9d97f7f1a8ce2966e9cc9461b6d686',source_report=subprocess.check_output(['git','-C',str(r/'source'),'rev-parse','HEAD'],text=True).strip(),environment=dict(platform=platform.platform(),python=sys.version,threads=THREADS,ranks=1,worker_limit=72),admissions={},cohorts={},cases=[],responses={},failures=[],verification={})
     for name in ('workspace.json','historical-receipt-byte-verification.json','actual-initial-regression.json','resource-census-exception.json','worker-guard-status.json'):
         result['verification'][name]=receipt(r/name)
@@ -89,6 +89,8 @@ def main():
                 if comparison.get('status')!='pass' and passing:comparison=dict(passing[-1],previous_receipts=[comparison,*[v for v in candidates if v.get('status')!='pass']])
                 row['comparisons'][str(T)]=comparison;audit=receipt(r/'duration-audits'/(cohort+'-'+str(T))/'results.json')
                 if audit.get('status')=='pass':
+                    aq=load(Path(audit['source']).parent/'request-manifest.json')['request']
+                    require(RequestManifest(Path(audit['source']).parent,aq,True).completed(Path(audit['source']).parent),'duration_audit_unsealed_or_changed')
                     check=aggregate(dict(cfg,audit_times=[t for t in ad['milestones'] if t<=T+1e-13]),audit);require(check['status']=='pass','aggregate_receipt_invalid:'+cohort)
                 if 'spatial_audits' in audit:
                     audit['spatial_audits']={m:dict(value,checks=[compact_analysis(c) for c in value['checks']]) for m,value in audit['spatial_audits'].items()}
@@ -203,6 +205,26 @@ def main():
     with gzip.open(complete,'wt',compresslevel=9) as f:json.dump(result,f,separators=(',',':'),allow_nan=False)
     light={k:v for k,v in result.items() if k not in ('cases','cohorts','admissions','responses')};light.update(complete_results=dict(file=complete.name,sha256=sha(complete)),admissions={k:dict(status=v['status'],configuration=v['configuration'],source=v['source'],source_sha256=v['source_sha256']) for k,v in result['admissions'].items()},cohorts={k:dict(numerical_status=v['numerical_status'],classification=v['classification'],comparison_statuses={t:x['status'] for t,x in v['comparisons'].items()},audit_statuses={t:x['status'] for t,x in v['audits'].items()}) for k,v in result['cohorts'].items()},response_statuses={k:v['status'] for k,v in result['responses'].items()})
     write_json(out/'summary.json',light);print(result['status']);return 0 if result['status']=='pass' else 1
+
+
+def main():
+    # Identity rejection must leave a structured receipt too. Never replace a
+    # completed destination, including on a malformed reuse request.
+    small=argparse.ArgumentParser(add_help=False);small.add_argument('--output',type=Path);small.add_argument('--root',type=Path);small.add_argument('--admissions',type=Path,nargs='+')
+    args,_=small.parse_known_args();existed=bool(args.output and args.output.exists())
+    try:return collect()
+    except Exception as error:
+        import time
+        body=dict(status='fail',execution_status='failed_before_complete_export',failure=repr(error),
+            command=sys.argv,root=str(args.root),existing_destination_preserved=existed,
+            admissions={str(p):dict(sha256=sha(p),content_utf8=p.read_text(errors='replace')) for p in (args.admissions or []) if p.is_file()})
+        if args.output:
+            if existed:path=args.output.with_name(args.output.name+'-rejected-'+str(time.time_ns())+'.json')
+            else:
+                args.output.mkdir(parents=True,exist_ok=True);path=args.output/'export-failure.json'
+            write_json(path,body);print(str(path))
+        else:print(json.dumps(body,allow_nan=False))
+        return 1
 
 
 if __name__=='__main__':raise SystemExit(main())
