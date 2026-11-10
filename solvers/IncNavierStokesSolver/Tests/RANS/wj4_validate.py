@@ -35,16 +35,17 @@ def main():
     elapsed=time.time()-start
     index=[]
     if a.suite in ('native','readonly'):
-        scopes=[build/('wj2-native-'+p) for p in ('EP','Budget')] if a.suite=='native' else [build/'wj3-smoke']
+        scopes=[build/('wj2-native-'+p) for p in ('EP','Budget')]+[build/'wj2-legacy-transaction'] if a.suite=='native' else [build/'wj3-smoke']
         for scope in scopes:
-            for file in scope.rglob('case.evolution.json'):
+            for file in scope.rglob('*.evolution.json'):
                 d=read(file)
-                if d.get('turbulence_model')=='WJHighRe' and file.stat().st_mtime>=start:
-                    index.append(dict(path=str(file),sha256=file_hash(file),policy='Budget' if 'Budget' in d['wall_policy'] else 'EP',attempts=len(d['pimple_attempts']),failure=d.get('failure')))
+                if 'pimple_attempts' in d and file.stat().st_mtime>=start:
+                    policy=('Budget' if 'Budget' in d['wall_policy'] else 'EP') if d.get('turbulence_model')=='WJHighRe' else 'SharedLegacy'
+                    index.append(dict(path=str(file),sha256=file_hash(file),policy=policy,attempts=len(d['pimple_attempts']),failure=d.get('failure')))
     if a.suite!='composite':
-        for policy,l in ledgers.items():l.finish('ctest/'+label,sum(r['attempts'] for r in index if r['policy']==policy),elapsed,str(root/('ctest-'+label+'.log')))
+        for policy,l in ledgers.items():l.finish('ctest/'+label,sum(r['attempts'] for r in index if r['policy'] in (policy,'SharedLegacy')),elapsed,str(root/('ctest-'+label+'.log')))
     write_once(root/(label+'-accounting.json'),dict(exit_code=rc,seconds=elapsed,attempt_index=index,
-        wall_attribution='full shared/control CTest time conservatively charged to each policy; composite sessions account their own policy wall time',
+        wall_attribution='full shared/control CTest time and shared legacy scheduled attempts conservatively charged to each policy; composite sessions account their own policy wall time',
         ledgers={p:l.totals() for p,l in ledgers.items()}))
     log=build/'Testing/Temporary/LastTest.log'
     if log.exists():(root/(label+'-LastTest.log')).write_bytes(log.read_bytes())
