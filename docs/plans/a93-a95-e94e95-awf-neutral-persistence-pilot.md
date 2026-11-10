@@ -172,3 +172,68 @@ gates at .0016 and .016. At .016, base/fine velocity errors are approximately
 the finer accepted-wall case reach .05 with zero bound/correction calls. These
 are bounded accuracy observations, not measured temporal orders or long-time
 stability results. The subsequent .1 and remaining-model results follow below.
+
+## Reproduction commands
+
+Use a fresh Linux destination, with a clean source snapshot and available
+worker budget. The original `p5/runtime` and every campaign/checkpoint are
+immutable. `TESTED_HEAD` below means the final branch revision reported with
+this document; its governing C++ hashes match compiled ce11c23.
+
+```bash
+export REPRO=/media/jay/新加卷/nektar-v2026-runs/a93-pilot-reproduction
+export ORIGINAL=/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-pilot-20261110
+export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
+export BLIS_NUM_THREADS=1 NUMEXPR_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1
+mkdir -p "$REPRO/dependency" "$REPRO/tmp"
+git -C /media/jay/新加卷/nektar-v2026 worktree add --detach "$REPRO/source" TESTED_HEAD
+cp "$ORIGINAL/p5/runtime/lib/libSpatialDomains.so.5.9.0" "$REPRO/dependency/"
+export TMPDIR="$REPRO/tmp"
+export T="$REPRO/source/solvers/IncNavierStokesSolver/Tests/RANS"
+cmake -S "$T" -B "$REPRO/build" \
+  -DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake \
+  -DRANS_BUILD_SOLVER=ON -DCMAKE_BUILD_TYPE=Release \
+  -DRANS_PREBUILT_SPATIAL_LIBRARY="$REPRO/dependency/libSpatialDomains.so.5.9.0" \
+  '-DCMAKE_CXX_FLAGS=-fno-fast-math -ffp-contract=off -D_GLIBCXX_ASSERTIONS'
+cmake --build "$REPRO/build" --parallel 8 --target IncNavierStokesSolver \
+  RANSPreservationProbe RANSNewModelsProbe RANSNativeDiagnosticChecks
+python3 -B "$T/freeze_rans_pilot_runtime.py" --source "$REPRO/source" \
+  --build "$REPRO/build" --output "$REPRO/runtime"
+python3 -B "$T/check_rans_frozen_initial_history.py" --root "$REPRO"
+python3 -B "$T/check_rans_interface_sides.py" --root "$REPRO"
+python3 -B "$T/schedule_rans_neutral_pilot.py" --root "$REPRO" --concurrency 4
+```
+
+The scheduler validates immutable requests and staged comparisons, restricts
+numerical libraries to one thread, accounts for existing Nektar/Python/compiler
+jobs, and reserves ten worker threads before starting another controller. A
+separate native control/probe slot must share the same 72-worker total. It
+never modifies other controllers. A failed/unresolved gate is retained and
+prevents only that continuation.
+
+A single admissible reference and genuine restart continuation can be reproduced
+without the full scheduler:
+
+```bash
+python3 -B "$T/run_rans_neutral_pilot.py" --root "$REPRO" \
+  --label E-natural-accepted-example --model E94E95 --wall Accepted --dt .0004
+python3 -B "$T/run_rans_neutral_pilot.py" --root "$REPRO" \
+  --label E-natural-accepted-example --model E94E95 --wall Accepted --dt .0004 \
+  --resume --max-time .016
+```
+
+Use `--refinement Interface8V1` for the finer 2793-unknown comparator, and a new
+label with `--dt .0002` for its independent-history temporal control. Keep the
+same dt when continuing a checkpoint. The `--max-time` operational limit does
+not change the immutable requested milestone set (.0016,.016,.05,.1).
+
+The velocity control uses `--model A95 --wall EP --velocity-amplitude .00002`;
+its actual zero-step native initialization and history hashes are bound before
+advancement. `analyze_rans_velocity_pressure.py` compares it to the unperturbed
+numerical trajectory at identical times. Two-column p4 sensitivity uses
+`--degree 4 --columns 2`; comparisons are resampled on x panels [-1,0],[0,1].
+The selected coefficient-policy/cache/CLS controls are reproduced by
+`run_rans_pilot_controls.py --root "$REPRO" --cls-baseline
+/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-awf-20261109/cls-reviewed-whole4`.
+Exact inputs, commands, request hashes and source/native-history locations are
+retained in the evidence index.

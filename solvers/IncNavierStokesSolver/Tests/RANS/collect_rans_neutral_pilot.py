@@ -25,6 +25,11 @@ def main():
     for c in d['checks']:
      if 'initialization_receipts' in c:c['initialization_receipts']=[compact_init(x) for x in c['initialization_receipts']]
    if key=='native-controls':d={k:d[k] for k in ('status','checks','required_check_names','coverage') if k in d}
+   if key=='selected-controls':
+    for c in d['checks']:
+     v=c.get('result',{})
+     if 'metrics' in v:
+      m=v['metrics'];request=v['request'];c['result']=dict(label=v['label'],request_sha256=request['sha256'],descriptor=request['request']['descriptor'],reference_error=m.get('reference_error'),initialization=compact_init(m.get('initialization_receipt')),history=m.get('history_identity'),source_and_constraint_maxima=m.get('source_and_constraint_maxima'))
    result['verification'][key]=dict(status=d.get('status'),source=str(path),sha256=sha(path));write_json(out/(key+'.json'),d)
   else:result['verification'][key]=dict(status='not_attempted',source=str(path))
  for folder in sorted((r/'campaigns').iterdir()):
@@ -37,7 +42,7 @@ def main():
    m=load(f);rep=load(f.parent/'case.evolution.json') if (f.parent/'case.evolution.json').exists() else {};attempts=rep.get('pimple_attempts',[]);audits=rep.get('state_audits',[]);times=rep.get('audit_times',[])
    item={k:m.get(k) for k in ('target','time','theta','status','failure','execution_status','accuracy_status','reference_error','change_from_initial','gradient_weighted_RMS','spatial_alpha_zero','final_stage_residual','source_and_constraint_maxima','history_identity','final_state_sha256','seconds_per_step','wall_seconds','steps')};item['initialization']=compact_init(m.get('initialization_receipt'));item['native_report_sha256']=sha(f.parent/'case.evolution.json') if rep else None
    calls=sum(x.get('bound_calls',0) for x in attempts);item['corrections']=dict(calls=calls,activations=sum(x.get('bound_activations',0) for x in attempts),signed_integral=0. if calls==0 else None,absolute_integral=0. if calls==0 else None)
-   item['extrema']={k:v for k,v in m.get('extrema',{}).items() if k!='final_state'};item['final_extrema']=m.get('extrema',{}).get('final_state');item['accuracy_maxima']={};item['cutoff_motion']=[]
+   item['extrema']={k:v for k,v in m.get('extrema',{}).items() if k!='final_state'};item['final_extrema']={k:v for k,v in (m.get('extrema',{}).get('final_state') or {}).items() if any(t in k for t in ('domain','covariance','radicand','interface','trace','cutoff','continuity'))};item['accuracy_maxima']={};item['cutoff_motion']=[]
    for t,d in zip(times,audits,strict=True):
     vals=d.get('pilot_accuracy_E_D_wall_gauge',[])
     for j,name in enumerate(('u','v','k','epsilon_outer','Pi')):
@@ -45,6 +50,7 @@ def main():
    for step in attempts:
     for stage,d in step.items():
      if stage.endswith('_domain') and isinstance(d,dict) and 'cutoff_range' in d:item['cutoff_motion'].append(dict(time=step['time'],stage=stage,range=d['cutoff_range'],required=d.get('required_cutoff_count'),budget_minimum=d.get('minimum_required_budget_ratio')))
+   motion=item.pop('cutoff_motion');item['cutoff_motion_summary']=dict(samples=len(motion),minimum=min(motion,key=lambda x:x['range'][0]) if motion else None,maximum=max(motion,key=lambda x:x['range'][1]) if motion else None,first=motion[:1],last=motion[-1:])
    item['momentum_k_weak_load_reaction']=audits[-1].get('momentum_k_load_and_boundary_reaction') if audits else None
    item['energy_budget']=rep.get('energy_budget');item['roughness_budget']=rep.get('roughness_budget')
    row['milestones'].append(item)
