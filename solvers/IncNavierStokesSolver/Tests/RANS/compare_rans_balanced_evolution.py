@@ -17,7 +17,7 @@ def compare(root,labels,T):
     for a,b in ((0,2),(1,3)):
         for key in ('knots','degree','pressure_degree','columns','quadrature','raw_neutral_sha256','boundary','declared_mesh'):
             if reqs[a].get(key)!=reqs[b].get(key):raise ValueError('same-space initial request differs '+key)
-        receipt=[load(folders[i]/'T-0.0016/metrics.json')['initialization_receipt'] for i in (a,b)]
+        receipt=[load(folders[i]/('T-'+format(reqs[i]['horizons'][0],'.4f'))/'metrics.json')['initialization_receipt'] for i in (a,b)]
         for key in ('raw_initial_sha256','effective_initial_sha256','fixed_reference_sha256','explicit_boundary_sha256','implicit_boundary_sha256'):
             if receipt[0][key]!=receipt[1][key]:raise ValueError('actual consumed inputs differ '+key)
         if any(x['raw_effective_max_difference']!=0 for x in receipt):raise ValueError('initial effective lift differs')

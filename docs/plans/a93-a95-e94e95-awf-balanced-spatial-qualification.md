@@ -138,3 +138,23 @@ raw/effective displacement. Do not change native lookup, clamping, equations,
 quadrature weights, physical source coordinates or identity tolerances.
 Separate frozen solver and revised diagnostic-probe runtimes preserve all
 ongoing trajectories. The first failed common-test receipts remain failures.
+
+## Duration-cost contract (before duration-cohort runs)
+
+E94E95 .016 costs are 5.9--7.5 seconds/step for Balanced5 and 7.0--8.5 for
+Balanced11. Extending the .0002 fine companion would take several hours.
+To keep the conditional experiment affordable, use a **fresh**, independently
+initialized duration cohort at dt=.004/.002, on both members of the already
+selected pair. Its milestones are .016,.1,.5. This changes neither a stored
+history nor its timestep/signature; within each new trajectory continuation
+through .1 to .5 uses genuine unchanged-method native restart. The original
+.0004/.0002 short histories and receipts remain immutable.
+
+Require the same field/traction/admissibility/conservation gates and
+`delta_t <= max(1e-7,.1*delta_h)` on both spaces at **each** new horizon. No
+new temporal order is inferred. Admit this cohort only for an evidence-selected
+limiting combination after its full/common spatial and short uncertainty gates
+pass. If the coarser duration pair fails uncertainty while admissible, one
+separately initialized .002/.001 cohort is the predeclared targeted refinement;
+do not relax the criterion or alter an existing checkpoint. Any hard accuracy
+or physical failure retains its rejected state and last accepted history.
