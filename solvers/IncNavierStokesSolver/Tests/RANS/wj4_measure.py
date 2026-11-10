@@ -21,6 +21,9 @@ def rule(xmeshes=((0.,1.),(0.,.5,1.)),order=6,xorder=4):
         for zl,zh in zip(zs,zs[1:]):
             for x,w in zip(xl+(gx+1)*(xh-xl)/2,wx*(xh-xl)/2):
                 for z,v in zip(zl+(gz+1)*(zh-zl)/2,wz*(zh-zl)/2):rows.append([float(x),0.,float(z),float(w*v),0,0])
+    for xl,xh in zip(xs,xs[1:]):
+        for x in xl+(gx+1)*(xh-xl)/2:
+            for side in (-1,1):rows.append([float(x),0.,1.,0.,side,0])
     # Complete face intersections plus common dense horizontal maximum samples.
     # Explicit x-side is distinct from the radial side at H.
     samplex=sorted(set(xs+np.linspace(xs[0],xs[-1],33).tolist()))
@@ -78,7 +81,7 @@ def regional_norms(d,w,outer,rows):
         constrained_boundary_sample=physical_norms(d,bw,outer,rows,boundary,g),
         boundary_scope='sampled RMS and maximum on both lateral boundaries and top; own sample count, not a volume L2')
 
-def evaluate(m,policy):
+def evaluate(m,policy,xorder=4):
     v,initial,ref,w,outer=arrays(m,policy)
     metrics={key:regional_norms(d,w,outer,m['observations']) for key,d in
         (('continuum_error',v-ref),('initial_drift',v-initial),('initial_representation',initial-ref))}
@@ -90,11 +93,54 @@ def evaluate(m,policy):
         sampled_K=[min(f['sampled_K'] for f in flux),max(f['sampled_K'] for f in flux)],
         cutoff=[min(f['cutoff'] for f in flux),max(f['cutoff'] for f in flux)])
     metrics['strong_divergence']=m['strong_divergence_sampled_Linf']*2
+    rows=m['observations'];div=np.array([abs(r['raw_G'][0]+r['raw_G'][8])*2 for r in rows])
+    masks=dict(full=np.ones(len(rows),bool),central=np.array([.25<=r['position'][0]<=.75 for r in rows]),
+        constrained_boundary=np.array([r['position'][0] in (0.,1.) or r['position'][2]==2 for r in rows]))
+    metrics['divergence_by_scope']={}
+    for scope,mask in masks.items():
+        ids=np.flatnonzero(mask);i=int(ids[np.argmax(div[mask])]);r=rows[i]
+        metrics['divergence_by_scope'][scope]=dict(normalized_maximum=float(div[i]),
+            witness={k:r[k] for k in ('position','geometry','element','side','requested_x_side','face_sides_xz','raw_G','value')})
+    # Complement interface Gauss points with both H sides at every common
+    # horizontal face/corner and maximum-observation point.
+    bykey={}
+    for r in rows:
+        if r['position'][2]==1:bykey.setdefault((r['position'][0],r['requested_x_side']),{})[r['side']]=r
+    face=[]
+    for key,pair in bykey.items():
+        if -1 not in pair or 1 not in pair:raise ValueError('missing H observation side')
+        i,o=pair[-1],pair[1];K=i['value'][2];a,zv,t,A,c=wall(K)
+        fi=(1.5e-5+a*max(1-zv,0))*i['grad_k'][2];fo=-CSTAR*o['value'][2]**2/o['value'][3]*o['grad_k'][2]
+        traction=np.array(i['stress'])[:,2]-np.array(o['stress'])[:,2]
+        face.append(dict(x=key[0],requested_x_side=key[1],inner_geometry=i['geometry'],outer_geometry=o['geometry'],
+            traction=float(np.linalg.norm(traction))/.25,traction_jump=traction.tolist(),k_flux_jump=fi+fo,
+            k_flux=abs(fi+fo)/(K0*.5),pressure_offset=abs(i['value'][5]-o['value'][5]-jump)/.25,
+            sampled_K=K,cutoff=c,epsilon_trace=abs(o['value'][3]-A)))
+    for field in ('traction','k_flux','pressure_offset','epsilon_trace'):
+        metrics['interface'][field]=max(metrics['interface'][field],max(r[field] for r in face))
+    metrics['face_interfaces']=face
+    gx,wx=np.polynomial.legendre.leggauss(xorder);cuts=[0,.25,.5,.75,1]
+    weights={float(x):float(w) for lo,hi in zip(cuts,cuts[1:]) for x,w in zip(lo+(gx+1)*(hi-lo)/2,wx*(hi-lo)/2)}
+    moments=[]
+    for mode in (0,1):
+        independent_value=np.zeros(4);native_value=np.zeros(4)
+        for r in face:
+            if r['x'] in weights and r['requested_x_side']==0:
+                x=r['x'];phi=x*(1-x)*(2*x-1)**mode
+                independent_value+=weights[x]*phi*np.array(r['traction_jump']+[r['k_flux_jump']])
+        for r in m['interfaces']:
+            x=r['position'][0];phi=x*(1-x)*(2*x-1)**mode
+            native_value+=r['weight']*phi*np.array((np.array(r['inner_outward_traction'])+r['outer_outward_traction']).tolist()+[sum(r['opposing_k_diffusive_flux'])])
+        assert_allclose(native_value,independent_value,rtol=2e-7,atol=5e-10,err_msg='independent interface trace moments')
+        moments.append(dict(mode=mode,native_Gauss8=native_value.tolist(),independent_composite=independent_value.tolist(),max_absolute_difference=float(max(abs(native_value-independent_value)))))
+    metrics['interface_trace_moments']=dict(order_x=xorder,panels=cuts,moments=moments,
+        scope='pointwise constitutive traction/diffusive flux moments; separate from signed regional volume loads and algebraic value trace')
     # Horizontal mean/spread at each common height/side, include face traces.
     spread=[]
     for z,side in sorted(set((r['position'][2],r['side']) for r in m['observations'])):
         ids=[i for i,r in enumerate(m['observations']) if r['position'][2]==z and r['side']==side]
-        a=v[ids];spread.append(dict(z=z,side=side,sampled_horizontal_mean=np.mean(a,axis=0).tolist(),
+        a=v[ids];spread.append(dict(z=z,side=side,sampled_horizontal_mean=np.average(a,axis=0,weights=w[ids] if sum(w[ids])>0 else None).tolist(),
+            mean_rule='composite physical x Gauss weights' if sum(w[ids])>0 else 'zero-weight trace inventory arithmetic mean',
             sampled_horizontal_spread=np.ptp(a,axis=0).tolist(),vertical_velocity_max=float(max(abs(a[:,1])))))
     metrics['horizontal_samples']=spread
     tests={}
@@ -112,11 +158,11 @@ def evaluate(m,policy):
 def sensitivity_gate(diff,uncertainty,volume=2.):
     tests={}
     for field,row in diff['full']['fields'].items():
-        measure=row['measure'];floor=uncertainty[field]/(AMP[field]*math.sqrt(measure))
-        # Offline physical L2 arithmetic estimate is not a sampled-maximum bound.
-        # Linf uncertainty separately conservatively uses physical floor * 100
-        # on this finite observation inventory; it is labelled an estimate.
-        for norm,uf in (('L2',floor),('sampled_Linf',100*floor)):
+        measure=row['measure'];entry=uncertainty[field]
+        if not isinstance(entry,dict):entry=dict(L2=entry,sampled_Linf=entry)
+        floor=entry['L2']/(AMP[field]*math.sqrt(measure))
+        sampled=entry['sampled_Linf']/AMP[field]
+        for norm,uf in (('L2',floor),('sampled_Linf',sampled)):
             v=row['normalized_'+norm];limit=.1*BUDGET[norm]
             tests[field+'/'+norm]=component('PASS' if v+uf<=limit else 'UNRESOLVED','difference plus finite diagnostic uncertainty <=10% budget',
                 value=v,uncertainty=uf,limit=limit,resolved=v>uf)
@@ -144,10 +190,11 @@ def independent_weak(checks,native):
             r=(z-lo)/(H-lo) if inner else (hi-z)/(hi-H);dr=1/(H-lo) if inner else -1/(hi-H)
             phi=xx*r;dphi=np.array([dx*r,0,xx*dr]);a=expected[mode,side]
             for f,value in enumerate([u[0],u[2],k]+([] if inner else [e])):
-                a[f,0]+=w*phi*alpha*(value-(h[f] if h else value))
-                a[f,1]-=w*float(dphi@u)*value
-                a[f,2]+=w*float(dphi@(stress[(0,2)[f]] if f<2 else dk*gk if f==2 else de*ge))
-                a[f,3]-=w*phi*(sk if f==2 else se if f==3 else 0)
+                test=phi if f!=3 else phi*(1-r);gradient=dphi if f!=3 else np.array([dx*r*(1-r),0,xx*dr*(1-2*r)])
+                a[f,0]+=w*test*alpha*(value-(h[f] if h else value))
+                a[f,1]-=w*float(gradient@u)*value
+                a[f,2]+=w*float(gradient@(stress[(0,2)[f]] if f<2 else dk*gk if f==2 else de*ge))
+                a[f,3]-=w*test*(sk if f==2 else se if f==3 else 0)
                 # Both support elements are above h: roughness force is zero.
                 if z<=.1:raise ValueError('weak support entered roughness force region')
     errors={}

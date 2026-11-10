@@ -9,6 +9,7 @@ from pathlib import Path
 import platform
 import subprocess
 import time
+import uuid
 import xml.etree.ElementTree as ET
 from numpy.testing import assert_allclose
 from wj2_cases import case_xml
@@ -28,6 +29,7 @@ SCRIPTS=Path(__file__).resolve().parent
 class Study:
     def __init__(self,args):
         require(platform.system()=='Linux','compiled Linux is authoritative')
+        started=time.time()
         self.a=args;self.root=args.output.resolve()/args.policy;self.root.mkdir(parents=True,exist_ok=True)
         self.summary=self.root/'summary.json';self.s=read(self.summary) if self.summary.exists() else dict(schema='WJ4StudyV1',policy=args.policy,execution={},components={})
         os.environ.update(THREADS)
@@ -47,6 +49,8 @@ class Study:
             observation_scope='common composite physical quadrature; explicit element/face traces; one full-domain pressure gauge')
         write_once(self.root/'design.json',design);self.design=design
         self.ledger=Ledger(args.output.parent,args.policy)
+        self.session='driver-'+uuid.uuid4().hex
+        self.ledger.begin_session(self.session,started)
         self.s.update(design_sha256=file_hash(self.root/'design.json'),runtime=self.runtime,measurement_code=self.measure_code,
             source_revision=subprocess.check_output(['git','-C',str(SCRIPTS.parents[3]),'rev-parse','HEAD'],text=True).strip())
         self.save()
@@ -60,6 +64,9 @@ class Study:
         intent=execution_intent(argv,inputs,self.measure_code if measurement else self.code,self.runtime,settings)
         write_once(folder/'execution-intent.json',intent);receipt=folder/'receipt.json'
         if receipt.exists():
+            for value in self.runtime.values():
+                require(file_hash(value['path'])==value['sha256'],'runtime binary changed before reuse')
+                for path,h in value['libraries'].items():require(file_hash(path)==h,'runtime dependency changed before reuse')
             r=read(receipt);require(r['intent_sha256']==digest(intent),'cached execution fingerprint mismatch')
             verify_artifacts(r['artifacts']);return r
         require(not (folder/'command.log').exists(),'unreconciled attempt retained; inspect ledger and choose a new attempt name')
@@ -125,7 +132,7 @@ class Study:
         c=dict(path=str(output),sha256=file_hash(output),report_sha256=file_hash(report),checkpoint_sha256=file_hash(cp/'State.bin'),
             observation_sha256=digest(physical),time=m['time'],steps=d['steps'],state_sha256=m['state_sha256'],history_sha256=m['stage_history_sha256'],
             spatial_residual=m['spatial_mass_dual_norms'],stage_defect=m['completed_stage']['mass_dual_norms'] if m['completed_stage'] else None,
-            errors=evaluate(m,self.a.policy),witness_replay=replay_witnesses(m['audit']))
+            errors=evaluate(m,self.a.policy,xorder),witness_replay=replay_witnesses(m['audit']))
         if assembly:
             checks=raw['assembly_checks'];checks['policy']=self.a.policy
             c['independent_loads']=independent_loads(checks,self.a.policy,d['offsets'])
@@ -157,10 +164,12 @@ class Study:
             records[str(nx)]['last_result']=str(producer/'case.evolution.json');self.s['horizontal']=records;self.save()
         common=sorted(set(t for n,t in measurements if n==1)&set(t for n,t in measurements if n==2))
         comparisons={str(t):comparison(measurements[(1,t)],measurements[(2,t)],self.a.policy) for t in common}
-        floors={f:0. for f in FIELDS+('velocity',)}
+        floors={f:dict(L2=0.,sampled_Linf=0.) for f in FIELDS+('velocity',)}
         for row in records.values():
             for c in row['trajectory']:
-                for f,v in c.get('arithmetic',{}).get('estimated_comparison_floor',{}).items():floors[f]=max(floors[f],v)
+                for f,v in c.get('arithmetic',{}).get('estimated_comparison_floor',{}).items():
+                    floors[f]['L2']=max(floors[f]['L2'],v)
+                    floors[f]['sampled_Linf']=max(floors[f]['sampled_Linf'],c['arithmetic']['estimated_sampled_comparison_floor'][f])
         gate=sensitivity_gate(comparisons[str(common[-1])],floors)
         required=all(row['trajectory'] and row['trajectory'][-1]['steps']==128 and not row.get('accuracy_obstruction') and not row.get('hard_obstruction') for row in records.values())
         self.s['horizontal_comparisons']=comparisons
@@ -233,16 +242,18 @@ class Study:
                 if c['errors']['accuracy_gate']['status']!='PASS':row['accuracy_obstruction']=c['errors']['accuracy_gate'];break
             row['last_producer']=str(producer);trajectories[tag]=row;self.s['longer']=trajectories;self.save()
         targets=all(v['trajectory'] and v['trajectory'][-1]['steps']==v['target_steps'] and not v.get('hard_obstruction') and not v.get('accuracy_obstruction') for v in trajectories.values())
-        floors={f:0. for f in FIELDS+('velocity',)}
+        floors={f:dict(L2=0.,sampled_Linf=0.) for f in FIELDS+('velocity',)}
         for row in trajectories.values():
             for c in row['trajectory']:
-                for f,v in c.get('arithmetic',{}).get('estimated_comparison_floor',{}).items():floors[f]=max(floors[f],v)
+                for f,v in c.get('arithmetic',{}).get('estimated_comparison_floor',{}).items():
+                    floors[f]['L2']=max(floors[f]['L2'],v)
+                    floors[f]['sampled_Linf']=max(floors[f]['sampled_Linf'],c['arithmetic']['estimated_sampled_comparison_floor'][f])
         pairs={}
         for window in sorted(set(t for j,t in measurements if j==0)&set(t for j,t in measurements if j==1)):
             d=comparison(measurements[(0,window)],measurements[(1,window)],self.a.policy)
             pairs[str(window)]=dict(time=measurements[(0,window)]['time'],fine_time=measurements[(1,window)]['time'],comparison=d,
                 gate=sensitivity_gate(d,floors))
-        self.s['timestep_comparisons']=pairs;self.s['arithmetic_envelope']=dict(estimated_comparison_floor=floors,scope='maximum early/middle/end finite frozen estimates; sampled Linf reserve=100 times normalized physical L2 estimate, not a norm theorem')
+        self.s['timestep_comparisons']=pairs;self.s['arithmetic_envelope']=dict(estimated_comparison_floor=floors,scope='maximum early/middle/end finite frozen estimates; finite observation basis-row norms and native full-mass eigenvalues convert scalar/velocity uncertainties; pressure uses its coefficient estimate; not a nonlinear theorem')
         self.s['components']['longer']=aggregate(dict(target=component('PASS' if targets else 'OBSTRUCTED','full frozen T4 pair with inactive correction and accuracy required'),
             sensitivity=pairs[str(max(map(int,pairs)))]['gate'] if pairs else component('NOT_RUN')))
         self.stationarity(trajectories,measurements)
@@ -308,6 +319,8 @@ def main():
         s.finish()
     except Exception as error:
         s.s['components'][a.mode]=component('RESOURCE_LIMIT' if 'RESOURCE_LIMIT' in str(error) else 'FAIL',str(error));s.s['failure']=str(error);s.finish();raise
+    finally:
+        s.ledger.finish_session(s.session);s.save()
     print(s.summary)
 
 if __name__=='__main__':main()

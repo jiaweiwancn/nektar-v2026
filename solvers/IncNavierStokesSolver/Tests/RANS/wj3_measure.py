@@ -144,7 +144,8 @@ def arithmetic(report,measurement):
             raw_floor[0:2]+=velocity
             raw_floor[4:6]+=coefficient*math.sqrt(packet['physical_mass_operator_bound'])
         else:
-            physical=coefficient*math.sqrt(max(np.linalg.eigvalsh(M)[-1],0))
+            physical_spectrum=np.linalg.eigvalsh(M)
+            physical=coefficient*math.sqrt(max(physical_spectrum[-1],0))
             if name=='momentum':
                 velocity_metric=math.sqrt(packet['physical_mass_operator_bound']);raw_floor[:2]+=physical
             else:raw_floor[2 if name=='k' else 3]+=physical
@@ -162,7 +163,9 @@ def arithmetic(report,measurement):
         systems[name]=dict(size=n,frozen_history_mass_norm_amplification=amplification,sigma_min=float(singular[-1]),sigma_max=float(singular[0]),
             condition_2=float(singular[0]/singular[-1]),long_double_residual_2=residual,
             rounding_formation_reserve_2=formation,coefficient_error_estimate=float(coefficient),
-            matrix_sha256=mt['sha256'],packet_sha256=entry['sha256'])
+            matrix_sha256=mt['sha256'],packet_sha256=entry['sha256'],
+            physical_metric_min_eigenvalue=float(physical_spectrum[0]) if name!='pressure' else None,
+            physical_mass_operator_bound=packet['physical_mass_operator_bound'])
     # A declared frozen-system diagnostic estimate, not a nonlinear theorem:
     # mass-metric history-map propagation, factor two for compared trajectories,
     # 100x safety reserve. Evaluation sensitivity is measured independently.
@@ -172,7 +175,20 @@ def arithmetic(report,measurement):
     floor=100*(2*propagation*raw_floor+np.sqrt(2)*np.array(measurement['arithmetic_evaluation_sensitivity']))
     floor[5]+=2*floor[2]/3
     floors=dict(zip(FIELDS,map(float,floor)));floors['velocity']=math.hypot(floors['u'],floors['v'])
-    return dict(systems=systems,estimated_comparison_floor=floors,
+    sampled=None;point_factors=None
+    if 'evaluation_basis_row_norm_max' in measurement:
+        rows=np.array(measurement['evaluation_basis_row_norm_max'])
+        point_factors=np.ones(6)
+        for indices,name in (([0,1],'momentum'),([2],'k'),([3],'epsilon')):
+            minimum=systems[name]['physical_metric_min_eigenvalue']
+            require(minimum>0,'nonpositive full frozen physical metric')
+            for i in indices:point_factors[i]=rows[i]/math.sqrt(minimum)
+        point_factors[4]=rows[4]/math.sqrt(systems['pressure']['physical_mass_operator_bound'])
+        point_factors[5]=point_factors[4]
+        values=floor*point_factors;values[5]=values[4]+2*values[2]/3
+        sampled=dict(zip(FIELDS,map(float,values)));sampled['velocity']=math.hypot(values[0],values[1])
+    return dict(systems=systems,estimated_comparison_floor=floors,estimated_sampled_comparison_floor=sampled,
+        sampled_conversion_factors=point_factors.tolist() if point_factors is not None else None,
         raw_one_step_physical_error_estimate=dict(zip(FIELDS,map(float,raw_floor))),safety_factor=100,
         propagation='terminal frozen-system uncertainty summed over N steps using terminal frozen history-map mass-norm amplification; factor2 for a pair of trajectories; finite diagnostic estimate, not a nonlinear perturbation theorem',
         accumulated_propagation_factors=propagation.tolist(),frozen_history_map_amplifications=growth.tolist(),

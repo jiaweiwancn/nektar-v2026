@@ -85,13 +85,30 @@ class Ledger:
             d=read(self.file)
             if d['attempt_cap']!=cap or d['wall_cap_seconds']!=wall_cap:raise ValueError('ledger limit mismatch')
     def lock(self):return locked(self.file.with_suffix('.lock'))
+    def begin_session(self,label,started_epoch=None):
+        with self.lock():
+            d=read(self.file);sessions=d.setdefault('sessions',{})
+            if label in sessions:raise ValueError('session already exists')
+            sessions[label]=dict(started_epoch=time.time() if started_epoch is None else started_epoch,status='RUNNING')
+            atomic(self.file,d)
+        self.session=label
+    def finish_session(self,label):
+        with self.lock():
+            d=read(self.file);e=d['sessions'][label]
+            if e['status']!='RUNNING':raise ValueError('session already closed')
+            e.update(seconds=time.time()-e['started_epoch'],status='FINISHED');atomic(self.file,d)
     def totals(self,d=None):
-        d=d or read(self.file)
-        # Unknown attempts after a crash retain the full reservation. Elapsed
-        # wall time is charged while an entry is outstanding, including downtime.
-        entries=list(d['entries'].values())
+        d=d or read(self.file);entries=list(d['entries'].values())
+        command_seconds=sum(e.get('seconds',max(e['reserved_seconds'],time.time()-e['started_epoch'])) for e in entries)
+        # Process-session wall time includes Python algebra, quadrature, SVD,
+        # report/checkpoint I/O and cache verification. Command times within a
+        # session are not counted twice. Crashed sessions remain conservatively
+        # charged until explicitly reconciled with an immutable process receipt.
+        sessions=list(d.get('sessions',{}).values())
+        seconds=sum(e.get('seconds',max(0,time.time()-e['started_epoch'])) for e in sessions)
+        seconds+=sum(e.get('seconds',max(e['reserved_seconds'],time.time()-e['started_epoch'])) for e in entries if not e.get('session'))
         return dict(attempts=sum(e.get('actual_attempts',e['reserved_attempts']) for e in entries),
-            seconds=sum(e.get('seconds',max(e['reserved_seconds'],time.time()-e['started_epoch'])) for e in entries))
+            seconds=seconds,command_seconds=command_seconds)
     def reserve(self,label,intent,attempts,seconds):
         if attempts<0 or int(attempts)!=attempts or seconds<=0:raise ValueError('invalid reservation')
         with self.lock():
@@ -99,7 +116,7 @@ class Ledger:
             if label in d['entries']:raise ValueError('immutable attempt already reserved: '+label)
             totals=self.totals(d)
             if totals['attempts']+attempts>self.cap or totals['seconds']+seconds>self.wall_cap:raise RuntimeError('RESOURCE_LIMIT: package work reservation exceeds cap')
-            d['entries'][label]=dict(intent_sha256=digest(intent),reserved_attempts=attempts,reserved_seconds=seconds,started_epoch=time.time(),status='RUNNING')
+            d['entries'][label]=dict(intent_sha256=digest(intent),reserved_attempts=attempts,reserved_seconds=seconds,started_epoch=time.time(),status='RUNNING',session=getattr(self,'session',None))
             atomic(self.file,d)
     def finish(self,label,attempts,seconds,receipt):
         with self.lock():

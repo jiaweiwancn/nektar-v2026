@@ -5,8 +5,9 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 from wj_qualification import wj3_gates
-from wj_immutable import write_once,execution_intent,artifacts,verify_artifacts,Ledger
+from wj_immutable import write_once,execution_intent,artifacts,verify_artifacts,Ledger,xml_identity
 
 class Gates(unittest.TestCase):
     def setUp(self):
@@ -46,6 +47,30 @@ class Immutable(unittest.TestCase):
                 file.write_bytes(old)
             write_once(root/'design.json',{'T':.008192})
             with self.assertRaisesRegex(ValueError,'intent/design mismatch'):write_once(root/'design.json',{'T':.004096})
+    def test_xml_bytes_and_semantics(self):
+        with tempfile.TemporaryDirectory() as temp:
+            p=Path(temp)/'case.xml';p.write_text('<N><P>TimeStep=1e-5</P></N>')
+            first=xml_identity(p);p.write_text('<N>\n<P>TimeStep=1e-5</P></N>')
+            second=xml_identity(p)
+            self.assertNotEqual(first['sha256'],second['sha256'])
+            self.assertEqual(first['semantic_sha256'],second['semantic_sha256'])
+            p.write_text('<N><P>TimeStep=2e-5</P></N>')
+            self.assertNotEqual(first['semantic_sha256'],xml_identity(p)['semantic_sha256'])
+    def test_session_wall_time_is_not_reset_or_double_counted(self):
+        with tempfile.TemporaryDirectory() as temp:
+            l=Ledger(temp,'EP',cap=3,wall_cap=200)
+            with patch('wj_immutable.time.time',return_value=1000):l.begin_session('first')
+            with patch('wj_immutable.time.time',return_value=1010):
+                l.reserve('command',{},1,100);l.finish('command',1,5,'receipt')
+                self.assertEqual(l.totals()['seconds'],10)
+            with patch('wj_immutable.time.time',return_value=1020):l.finish_session('first')
+            l=Ledger(temp,'EP',cap=3,wall_cap=200)
+            self.assertEqual(l.totals()['seconds'],20)
+            with patch('wj_immutable.time.time',return_value=2000):l.begin_session('second')
+            with patch('wj_immutable.time.time',return_value=2030):
+                self.assertEqual(l.totals()['seconds'],50)
+                l.finish_session('second')
+            self.assertEqual(l.totals()['seconds'],50)
     def test_persistent_reservations(self):
         with tempfile.TemporaryDirectory() as temp:
             l=Ledger(temp,'EP',cap=3,wall_cap=200);l.reserve('a',{},2,100)

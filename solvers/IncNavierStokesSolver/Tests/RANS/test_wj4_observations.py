@@ -34,6 +34,7 @@ def main():
             assert_allclose(row['L2'],qc['errors'][kind]['full']['fields'][field]['L2'],rtol=1e-8,atol=1e-10)
     write_once(s.root/'focused-result.json',dict(status='PASS',unknowns=1109,corner=corner,independent_loads=c['independent_loads'],
         weak_modes=c['independent_weak_modes'],governing_diagnostic_solves=0,composite_orders=[4,6],actual_completed_stage=True))
+    s.ledger.finish_session(s.session);s.save()
     print(s.root/'focused-result.json')
 
 if __name__=='__main__':main()
