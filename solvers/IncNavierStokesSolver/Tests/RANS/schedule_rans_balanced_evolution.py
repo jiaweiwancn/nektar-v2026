@@ -21,7 +21,8 @@ def main():
  p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--model',choices=('E94E95','A95','A93'),default='E94E95');p.add_argument('--policy',choices=('Natural','Prescribed'),default='Natural');p.add_argument('--walls',nargs='+',choices=('EP','Accepted'),default=['EP','Accepted']);p.add_argument('--time',type=float,choices=(.0016,.016,.1,.5),required=True);p.add_argument('--concurrency',type=int,default=4);a=p.parse_args();assert 1<=a.concurrency<=4
  r=a.root.resolve();source=Path(__file__).parent;out=r/'evolution-schedules'/(a.model+'-'+a.policy+'-'+str(a.time));out.mkdir(parents=True,exist_ok=False);env=dict(os.environ,**THREADS);queue=[];running={};completed=[]
  for wall in a.walls:
-  if a.model=='E94E95' and a.policy=='Natural':assert load(r/('initial-gate-'+wall+'.json'))['status']=='pass'
+  initial=r/('initial-gate-'+wall+'.json') if a.model=='E94E95' and a.policy=='Natural' else r/('initial-gate-'+a.model+'-'+a.policy+'-'+wall+'.json')
+  assert load(initial)['status']=='pass'
   if a.time>.0016:
    previous=.0016 if a.time==.016 else .016 if a.time==.1 else .1
    assert load(r/'comparisons'/(a.model+'-'+a.policy+'-'+wall+'-'+str(previous)+'.json'))['status']=='pass','preceding evolved gate not passed'

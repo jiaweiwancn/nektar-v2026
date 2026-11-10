@@ -116,3 +116,25 @@ energy rather than raw element stress loads that cancel between neighbors.
 The predeclared 15% full/common dominant-residual reduction, field and temporal
 uncertainty gates remain unchanged. No trajectory is admitted until this
 initial screen establishes a meaningful pair.
+
+The E94E95 pair passes at both .0016 and .016, including independent dt/2
+controls on **both** members. At .016 fine/coarse reference-error ratios are
+about .040 for U, .034 for w, .027--.045 for k, .325 for epsilon and .058 for Pi.
+These are spatial/uncertainty receipts, not measured temporal orders.
+Before A93/A95 screening, require their non-floor vertical-momentum defects to
+reduce on both full and common tests as well as the already declared U/k gate.
+Use the identical selected mesh strategy, including a base-p5 benchmark.
+
+First read-only evolved replays exposed two diagnostic mistakes, retained in
+`replay-previous*.log` and their complete native packets. An exact time equality
+rejected an archived time .016-1.04e-17; use the existing 1e-13 endpoint tolerance
+and retain both actual and nominal time. More substantially, near moving
+cutoffs the native field lookup allows roundoff-outside points and its basis
+evaluator clamps local coordinates. Side-zero lookup and raw coordinates do
+not always describe the fine test row's actual polynomial branch. The new
+**read-only** test-basis export selects the exact parent element; common tests
+also use the fine basis's effective (clamped) coordinate. Export the maximum
+raw/effective displacement. Do not change native lookup, clamping, equations,
+quadrature weights, physical source coordinates or identity tolerances.
+Separate frozen solver and revised diagnostic-probe runtimes preserve all
+ongoing trajectories. The first failed common-test receipts remain failures.
