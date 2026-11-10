@@ -75,7 +75,11 @@ def main():
         td=read(model+'-temporal','preservation-temporal-Q0-'+model+'/reanalysis.json',None)
         if td.get('status') not in ('pass','unresolved'):errors.append(dict(input=model+'-temporal',status=td.get('status')))
         temporal.extend(td.get('temporal_tables',[]))
-        pd=read(model+'-perturbed','preservation-temporal-perturbed-'+model+'/results.json')
+        pd=read(model+'-perturbed','preservation-temporal-perturbed-'+model+'/results.json',None)
+        if pd.get('status') not in ('pass','unresolved'):errors.append(dict(input=model+'-perturbed',status=pd.get('status')))
+        if model=='A95':
+            target=read('targeted-A95-EP-signal','preservation-temporal-perturbed-A95-EP-1pct/results.json')
+            pd=dict(pd,temporal_tables=[t for t in pd.get('temporal_tables',[]) if t['wall']!='EP']+target.get('temporal_tables',[]))
         perturb.extend(pd.get('temporal_tables',[]))
         for prefix,container in (('Q0-',temporal_runs),('perturbed-',perturb_runs)):
             for f in sorted((r/('preservation-temporal-'+prefix+model)).glob('*/temporal-metrics.json')):
@@ -97,10 +101,12 @@ def main():
             if set(row['fields'])!={'u','v','k','epsilon_outer','Pi'} or any(f['status']=='fail' for f in row['fields'].values()):errors.append(dict(input=label,reason='field coverage or measured order failed',model=row['model'],wall=row['wall']))
     unresolved=[dict(model=t['model'],policy=t['kappa_policy'],wall=t['wall'],field=name,**value) for t in temporal for name,value in t['fields'].items() if value['status']=='unresolved_floor']
     write_json(a.output/'temporal-results.json',dict(execution='completed' if len(temporal_runs)==36 else 'missing',convergence='partially_unresolved' if unresolved else 'demonstrated',tables=temporal,runs=temporal_runs,unresolved=unresolved))
-    write_json(a.output/'perturbation-results.json',dict(status='pass' if len(perturb)==6 and all(t['status']=='pass' for t in perturb) else 'fail',tables=perturb,runs=perturb_runs))
+    targeted_metrics=[load(p) for p in (r/'preservation-temporal-perturbed-A95-EP-1pct').glob('*/temporal-metrics.json')]
+    if len(targeted_metrics)!=3:errors.append(dict(input='targeted-perturbation',reason='three timesteps required'))
+    write_json(a.output/'perturbation-results.json',dict(targeted_runs=targeted_metrics,status='pass' if len(perturb)==6 and all(t['status']=='pass' for t in perturb) else 'fail',tables=perturb,runs=perturb_runs))
     if len(temporal_runs)!=36 or len(perturb_runs)!=18:errors.append(dict(input='temporal-run-coverage',neutral=len(temporal_runs),perturbed=len(perturb_runs)))
     write_json(a.output/'timing-results.json',dict(cases=timings))
-    uncertainty=read('uncertainty','uncertainty/results.json');write_json(a.output/'uncertainty-results.json',uncertainty)
+    uncertainty=read('uncertainty','uncertainty-final.json');write_json(a.output/'uncertainty-results.json',uncertainty)
     control=read('controls','continuation-controls/qualification.json');cv=native_check_coverage(control.get('checks',[]),control.get('expected_check_names'))
     if cv['status']!='pass':errors.append(dict(input='continuation-coverage',coverage=cv))
     extras=read('extra-regressions','extra-regressions.json');regression=read('standard-CLS','regression/baseline.json')
