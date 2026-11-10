@@ -47,6 +47,30 @@ class Gates(unittest.TestCase):
         self.assertEqual(wj3_gates(self.s)['status'],'PASS')
 
 class Immutable(unittest.TestCase):
+    def test_transaction_intermediate_packets_are_required(self):
+        from verify_wj4_transactions import verify
+        with tempfile.TemporaryDirectory() as temp:
+            attempts=[]
+            for i in range(32):
+                path=Path(temp)/(str(i)+'.json');path.write_text(json.dumps(dict(raw=[i],corrected=[i])))
+                attempts.append(dict(history_sha256=str(i),incoming_sha256=str(i),time=i+1,alpha=1.,governing_solves_complete=True,
+                    scheduled_complete=True,momentum_predictor_solves=1,pressure_system_solves=1,k_transport_solves=1,
+                    epsilon_transport_solves=1,bound_calls=1,bound_activations=0,additional_governing_equation_solves=0,
+                    additional_correction_or_restoration_solves=0,k_snapshot=str(path)))
+            whole=dict(accepted_states=[[i] for i in range(33)],audit_times=list(range(33)),
+                state_audits=[dict(k=i) for i in range(33)],wj_audit_packets=[dict(k=i) for i in range(33)],pimple_attempts=attempts,
+                state=[32.],native_history=[[32.]],native_history_times=[32.],time=32.,steps=32,physical_samples=dict(k=[32.]))
+            first=copy.deepcopy(whole);second=copy.deepcopy(whole)
+            for key in ('accepted_states','audit_times','state_audits','wj_audit_packets'):
+                first[key]=first[key][:17];second[key]=second[key][16:]
+            first['pimple_attempts']=first['pimple_attempts'][:16];second['pimple_attempts']=second['pimple_attempts'][16:]
+            self.assertEqual(verify(whole,first,second)['status'],'PASS')
+            for key in ('accepted_states','audit_times','state_audits','wj_audit_packets','pimple_attempts'):
+                changed=copy.deepcopy(second)
+                if key=='pimple_attempts':changed[key][4]['history_sha256']='changed'
+                else:changed[key][4]='changed'
+                with self.assertRaisesRegex(ValueError,'mismatch'):verify(whole,first,changed)
+
     def test_orphan_command_log_is_retained(self):
         from wj3_receipts import command
         with tempfile.TemporaryDirectory() as temp:

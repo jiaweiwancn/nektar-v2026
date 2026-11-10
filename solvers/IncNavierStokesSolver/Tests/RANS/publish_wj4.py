@@ -105,7 +105,7 @@ def main():
         allocation=dict(initial_build_workers=1,later_build_workers=4,policy_concurrency=2,test_parallel=1,ranks=1,numerical_threads=1,total_worker_cap=72))
     manifest['independent_proofs']=artifacts([root/'regression-verification.json',root/'shared-legacy-accounting-supplement.json',
         *root.glob('independent-gradient-*/receipt.json'),*root.glob('independent-gradient-*/result.json'),
-        root/'parent-readback-proof/EP/proof.json',root/'arithmetic-cache-proof/EP/proof.json'])
+        *root.glob('all-step-transactions-*.json'),root/'parent-readback-proof/EP/proof.json',root/'arithmetic-cache-proof/EP/proof.json'])
     for context in (manifest['producer_runtime'],manifest['accepted_readback_runtime']):
         for value in context.values():
             if file_hash(value['path'])!=value['sha256']:raise ValueError('recorded runtime binary changed')
@@ -119,6 +119,7 @@ def main():
         s=read(path);policies[policy]={k:s.get(k) for k in ('qualification','components','longer_interpretation','stationarity','ledger_totals','cost_design','mesh_inventory','arithmetic_envelope')}
         accounting,packets=native_accounting(s,policy);runs.extend(accounting);stages.update(packets)
         policies[policy]['read_only_reprocessing']=s.get('read_only_reprocessing')
+        policies[policy]['all_step_transaction_verification']=read(root/('all-step-transactions-'+policy+'.json'))
         policies[policy]['publication_snapshot_ledger_totals']=__import__('wj_immutable').Ledger(root,policy).totals()
         policies[policy]['heavy_summary']=dict(path=str(path),sha256=file_hash(path),bytes=path.stat().st_size)
         for group in ('horizontal','longer'):
@@ -159,7 +160,7 @@ def main():
     csv_file(out/'run-accounting.csv',runs);write_once(out/'accepted-stage-lineage.json',stages)
     write_once(out/'audit-witnesses.json',witnesses)
     for path in [root/'regression-verification.json',root/'shared-legacy-accounting-supplement.json',root/'command-receipts.json',
-                 root/'ledger-EP.json',root/'ledger-Budget.json']:
+                 root/'ledger-EP.json',root/'ledger-Budget.json',*root.glob('all-step-transactions-*.json')]:
         if path.exists():shutil.copyfile(path,out/path.name)
     if observer!=root:shutil.copyfile(observer/'command-receipts.json',out/'observer-command-receipts.json')
     receipt=dict(schema='WJ4PublicationV1',manifest_sha256=file_hash(root/'wj4-manifest.json'),policies={p:v['qualification'] for p,v in policies.items()},

@@ -34,6 +34,8 @@ def main():
         s=read(study/policy/'summary.json')
         if not s.get('qualification') or s.get('read_only_reprocessing',{}).get('governing_attempts')!=0:
             raise ValueError('final immutable observer summary is incomplete: '+policy)
+        if read(root/('all-step-transactions-'+policy+'.json')).get('status')!='PASS':
+            raise ValueError('all-step transaction replay is incomplete: '+policy)
     scripts=Path(__file__).resolve().parent;env=os.environ.copy();env.update(THREADS)
     allocation=root/'publication-allocation.json'
     subprocess.run([sys.executable,'-B',str(scripts/'wj4_resources.py'),'--reserve','8','--output',str(allocation)],env=env,check=True)
