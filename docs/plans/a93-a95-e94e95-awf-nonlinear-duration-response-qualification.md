@@ -249,6 +249,26 @@ augmented pressure, the constitutive-stress remainder, and advection, and
 localizes the varying-flux buckets with their constant bucket explicitly kept.
 It changes no evolution equation or residual used by the solver.
 
+## Conditional A95 response and EP control selection
+
+A95's T=.5 evolved primary pair passes all six native/common dominant-equation
+checks: u, inner k and w on native tests; u, global k and w on the fixed common
+tests. The w ratios are .375064 native and .463096 common. Remaining final
+scalar coverage, quadrature and constitutive checks must pass before response
+admission, together with the additional inner-only common-k qualification.
+
+A93's failed neutral gate prevents its preselected EP response. The conditional
+replacement is A95/EP at T=.016, using the same B5/B11 spaces, .002/.001 histories,
+StreamfunctionPolyV1 amplitude 2e-5, physical observation grid and response
+uncertainty criteria. An A95 Accepted half-amplitude 1e-5 control is limited to
+.016. Selection will bind the observed Accepted short response before the EP
+response advances; EP neutral preparation is independently read-only/short.
+The comparison asks how constant versus nonconstant inner-reference k and the
+two prescribed wall-source constructions affect the baseline-subtracted
+pressure, nonlinear shear stress and production responses under one A95 outer
+closure. It adds no EP T=.5 or open-boundary claim. These controls retain the
+existing accuracy/domain criteria and cannot admit an A93 perturbation.
+
 Concurrent external starts produced a conservative schedule census of 75; the
 immediate active census was 67. An owned process family was suspended promptly.
 The record is retained rather than claiming the original census stayed below
