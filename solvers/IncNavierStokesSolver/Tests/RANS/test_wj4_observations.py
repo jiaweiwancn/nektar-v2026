@@ -7,7 +7,7 @@ import uuid
 import numpy as np
 from numpy.testing import assert_allclose
 from run_wj4_native import Study
-from wj4_measure import rule
+from wj4_measure import rule,boundary_rule
 from wj_immutable import write_once
 
 
@@ -16,6 +16,8 @@ def main():
     p.add_argument('--output',type=Path,required=True);p.add_argument('--policy',choices=('EP','Budget'),required=True);a=p.parse_args()
     a.output=a.output.resolve()/('run-'+uuid.uuid4().hex[:12]);a.solver=a.solver.resolve();a.probe=a.probe.resolve();s=Study(a)
     physical=rule();weighted=np.array([r for r in physical if r[3]>0]);x,z,w=weighted[:,0],weighted[:,2],weighted[:,3]
+    boundary=boundary_rule();assert_allclose(sum(boundary.values()),5.,rtol=0,atol=3e-14)
+    assert_allclose(sum(w for (x,z),w in boundary.items() if z>1),3.,rtol=0,atol=3e-14)
     assert_allclose([sum(w),w@(x**6),w@(z**6)],[2,2/7,128/7],rtol=2e-14,atol=2e-14)
     z,r,f=s.native('cp0',level=0,nx=2);s.valid(z,r)
     assert len(z['state'])==1109

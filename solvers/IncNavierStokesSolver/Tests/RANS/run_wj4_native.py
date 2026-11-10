@@ -14,7 +14,7 @@ import xml.etree.ElementTree as ET
 from numpy.testing import assert_allclose
 from wj2_cases import case_xml
 from wj3_measure import checkpoint_payload,replay_witnesses,arithmetic,FIELDS
-from wj4_measure import rule,owned_rule,evaluate,comparison,sensitivity_gate,independent_weak,AMP,BUDGET
+from wj4_measure import rule,boundary_rule,owned_rule,evaluate,comparison,sensitivity_gate,independent_weak,AMP,BUDGET
 from wj_immutable import (Ledger,write_once,atomic,read,file_hash,artifacts,verify_artifacts,
                           runtime,execution_intent,digest,xml_identity)
 from wj_qualification import component,aggregate,wj3_gates
@@ -131,7 +131,7 @@ class Study:
         raw=read(output);m=raw['measurements']
         require(m['state_sha256']==m['state_after_sha256'] and m['stage_history_sha256']==m['stage_history_after_sha256'] and m['governing_solves']==0,'read-only mutation or solve')
         c=dict(path=str(output),sha256=file_hash(output),report_sha256=file_hash(report),checkpoint_sha256=file_hash(cp/'State.bin'),
-            observation_sha256=digest(physical),time=m['time'],steps=d['steps'],state_sha256=m['state_sha256'],history_sha256=m['stage_history_sha256'],
+            observation_sha256=digest(physical),boundary_quadrature_sha256=digest([[x,z,w] for (x,z),w in boundary_rule(xorder=xorder).items()]),time=m['time'],steps=d['steps'],state_sha256=m['state_sha256'],history_sha256=m['stage_history_sha256'],
             spatial_residual=m['spatial_mass_dual_norms'],stage_defect=m['completed_stage']['mass_dual_norms'] if m['completed_stage'] else None,
             errors=evaluate(m,self.a.policy,xorder),witness_replay=replay_witnesses(m['audit']))
         if assembly:
@@ -172,7 +172,11 @@ class Study:
                 records[str(nx)]['trajectory'].append(c);measurements[(nx,end)]=m;cp=d['checkpoint'];last=d
                 self.s['horizontal']=records;self.save()
                 if c['errors']['accuracy_gate']['status']!='PASS':
-                    records[str(nx)]['accuracy_obstruction']=dict(frozen_target=.004096,accepted_time=d['time'],gate=c['errors']['accuracy_gate']);break
+                    records[str(nx)]['accuracy_obstruction']=dict(frozen_target=.004096,accepted_time=d['time'],gate=c['errors']['accuracy_gate'])
+                    if end!=128:
+                        _,loads=self.measure('horizontal-Nx%d-%d-obstruction-loads'%(nx,end),d,producer,nx=nx,assembly=True)
+                        records[str(nx)]['independent_obstruction_loads']=loads
+                    break
             records[str(nx)]['last_result']=str(producer/'case.evolution.json');self.s['horizontal']=records;self.save()
         common=sorted(set(t for n,t in measurements if n==1)&set(t for n,t in measurements if n==2))
         comparisons={str(t):comparison(measurements[(1,t)],measurements[(2,t)],self.a.policy) for t in common}
@@ -251,7 +255,12 @@ class Study:
                 if arithmetic_time is not None:c['arithmetic']=self.arithmetic('longer-'+tag+'-'+str(end),d,m)
                 row['trajectory'].append(c);measurements[(j,int(end/block))]=m;cp=d['checkpoint']
                 trajectories[tag]=row;self.s['longer']=trajectories;self.save()
-                if c['errors']['accuracy_gate']['status']!='PASS':row['accuracy_obstruction']=c['errors']['accuracy_gate'];break
+                if c['errors']['accuracy_gate']['status']!='PASS':
+                    row['accuracy_obstruction']=c['errors']['accuracy_gate']
+                    if end!=n:
+                        _,loads=self.measure('longer-'+tag+'-'+str(end)+'-obstruction-loads',d,producer,level=2,assembly=True)
+                        row['independent_obstruction_loads']=loads
+                    break
             row['last_producer']=str(producer);trajectories[tag]=row;self.s['longer']=trajectories;self.save()
         targets=all(v['trajectory'] and v['trajectory'][-1]['steps']==v['target_steps'] and not v.get('hard_obstruction') and not v.get('accuracy_obstruction') for v in trajectories.values())
         floors={f:dict(L2=0.,sampled_Linf=0.) for f in FIELDS+('velocity',)}
@@ -317,7 +326,7 @@ class Study:
 
     def finish(self):
         required={k:self.s['components'].get(k,component('NOT_RUN','required component missing')) for k in ('mesh_inventory','horizontal','resource_design','longer','transactions')}
-        self.s['qualification']=aggregate(required)
+        self.s['qualification']=aggregate({**self.s['components'],**required})
         self.s['longer_interpretation']='CONDITIONAL finite reference-Dirichlet strip evidence' if required['horizontal']['status']!='PASS' else 'finite reference-Dirichlet strip evidence'
         self.save()
 
@@ -329,9 +338,13 @@ def main():
     try:
         for mode in (('inventory','horizontal','cost','longer') if a.mode=='all' else (a.mode,)):
             if mode!='report':getattr(s,mode)()
+        if s.s.get('failure') and (s.s.get('failure_mode')==a.mode or a.mode=='all'):
+            s.s.setdefault('resolved_harness_failures',[]).append(dict(reason=s.s.pop('failure'),mode=s.s.pop('failure_mode',None),
+                resolution_source=s.s['source_revision'],measurement_code=s.measure_code))
+            if a.mode in ('all','cost'):s.s['components'].pop(a.mode,None)
         s.finish()
     except Exception as error:
-        s.s['components'][a.mode]=component('RESOURCE_LIMIT' if 'RESOURCE_LIMIT' in str(error) else 'FAIL',str(error));s.s['failure']=str(error);s.finish();raise
+        s.s['components'][a.mode]=component('RESOURCE_LIMIT' if 'RESOURCE_LIMIT' in str(error) else 'FAIL',str(error));s.s['failure']=str(error);s.s['failure_mode']=a.mode;s.finish();raise
     finally:
         s.ledger.finish_session(s.session);s.save()
     print(s.summary)

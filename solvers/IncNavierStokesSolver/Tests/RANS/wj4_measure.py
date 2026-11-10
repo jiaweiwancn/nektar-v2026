@@ -24,6 +24,11 @@ def rule(xmeshes=((0.,1.),(0.,.5,1.)),order=6,xorder=4):
     for xl,xh in zip(xs,xs[1:]):
         for x in xl+(gx+1)*(xh-xl)/2:
             for side in (-1,1):rows.append([float(x),0.,1.,0.,side,0])
+    for zl,zh in zip(zs,zs[1:]):
+        for z in zl+(gz+1)*(zh-zl)/2:
+            for x in (xs[0],xs[-1]):rows.append([float(x),0.,float(z),0.,0,0])
+    for xl,xh in zip(xs,xs[1:]):
+        for x in xl+(gx+1)*(xh-xl)/2:rows.append([float(x),0.,2.,0.,0,0])
     # Complete face intersections plus common dense horizontal maximum samples.
     # Explicit x-side is distinct from the radial side at H.
     samplex=sorted(set(xs+np.linspace(xs[0],xs[-1],33).tolist()))
@@ -33,6 +38,17 @@ def rule(xmeshes=((0.,1.),(0.,.5,1.)),order=6,xorder=4):
                 for xside in ((-1,1) if x in xs[1:-1] else (0,)):
                     rows.append([float(x),0.,float(z),0.,side,xside])
     return rows
+
+def boundary_rule(order=6,xorder=4):
+    _,zv,_,_,zc=wall(K0)
+    xs=[0,.25,.5,.75,1];zs=sorted(set(normal_knots(2)+[z for z in (zc,zv,.1,.5,1) if 0<z<2]))
+    gx,wx=np.polynomial.legendre.leggauss(xorder);gz,wz=np.polynomial.legendre.leggauss(order);weights={}
+    for lo,hi in zip(zs,zs[1:]):
+        for z,w in zip(lo+(gz+1)*(hi-lo)/2,wz*(hi-lo)/2):
+            for x in (0.,1.):weights[(x,float(z))]=float(w)
+    for lo,hi in zip(xs,xs[1:]):
+        for x,w in zip(lo+(gx+1)*(hi-lo)/2,wx*(hi-lo)/2):weights[(float(x),2.)]=float(w)
+    return weights
 
 def owned_rule(physical,level,xknots):
     zknots=normal_knots(level);nx=len(xknots)-1;result=[]
@@ -70,20 +86,20 @@ def comparison(a,b,policy):
     same_rule(a,b);av,_,_,w,outer=arrays(a,policy);bv,_,_,_,_=arrays(b,policy)
     return regional_norms(av-bv,w,outer,a['observations'])
 
-def regional_norms(d,w,outer,rows):
+def regional_norms(d,w,outer,rows,xorder=4):
     allnorm=physical_norms(d,w,outer,rows);g=allnorm['overall_pressure_gauge_shift']
     x=np.array([r['position'][0] for r in rows]);z=np.array([r['position'][2] for r in rows]);
     central=(x>=.25)&(x<=.75)
-    # Boundary is a sampled trace norm, not a zero-measure volume integral.
     boundary=(x==min(x))|(x==max(x))|(z==2)
-    bw=np.array([1. if b else 0. for b in boundary])
+    weights=boundary_rule(xorder=xorder)
+    bw=np.array([weights.get((r['position'][0],r['position'][2]),0.) for r in rows])
     return dict(full=allnorm,central=physical_norms(d,w,outer,rows,central,g),
-        constrained_boundary_sample=physical_norms(d,bw,outer,rows,boundary,g),
-        boundary_scope='sampled RMS and maximum on both lateral boundaries and top; own sample count, not a volume L2')
+        constrained_boundary=physical_norms(d,bw,outer,rows,boundary,g),
+        boundary_scope='physical trace L2 on both lateral boundaries and top; own surface measure (5; epsilon3); pressure sampled there is an algebraic multiplier')
 
 def evaluate(m,policy,xorder=4):
     v,initial,ref,w,outer=arrays(m,policy)
-    metrics={key:regional_norms(d,w,outer,m['observations']) for key,d in
+    metrics={key:regional_norms(d,w,outer,m['observations'],xorder) for key,d in
         (('continuum_error',v-ref),('initial_drift',v-initial),('initial_representation',initial-ref))}
     flux=m['interfaces'];jump=-K0/(81/20)
     metrics['interface']=dict(traction=max(np.linalg.norm(np.array(f['inner_outward_traction'])+f['outer_outward_traction']) for f in flux)/.25,
@@ -157,15 +173,18 @@ def evaluate(m,policy,xorder=4):
 
 def sensitivity_gate(diff,uncertainty,volume=2.):
     tests={}
-    for field,row in diff['full']['fields'].items():
-        measure=row['measure'];entry=uncertainty[field]
-        if not isinstance(entry,dict):entry=dict(L2=entry,sampled_Linf=entry)
-        floor=entry['L2']/(AMP[field]*math.sqrt(measure))
-        sampled=entry['sampled_Linf']/AMP[field]
-        for norm,uf in (('L2',floor),('sampled_Linf',sampled)):
-            v=row['normalized_'+norm];limit=.1*BUDGET[norm]
-            tests[field+'/'+norm]=component('PASS' if v+uf<=limit else 'UNRESOLVED','difference plus finite diagnostic uncertainty <=10% budget',
-                value=v,uncertainty=uf,limit=limit,resolved=v>uf)
+    for scope in ('full','central','constrained_boundary'):
+        for field,row in diff[scope]['fields'].items():
+            measure=row['measure'];entry=uncertainty[field]
+            if not isinstance(entry,dict):entry=dict(L2=entry,sampled_Linf=entry)
+            sampled=entry['sampled_Linf']/AMP[field]
+            # A trace L2 is bounded using the finite point envelope and its own
+            # surface measure, never by reinterpreting a volume L2 uncertainty.
+            floor=sampled if scope=='constrained_boundary' else entry['L2']/(AMP[field]*math.sqrt(measure))
+            for norm,uf in (('L2',floor),('sampled_Linf',sampled)):
+                v=row['normalized_'+norm];limit=.1*BUDGET[norm]
+                tests[scope+'/'+field+'/'+norm]=component('PASS' if v+uf<=limit else 'UNRESOLVED','difference plus finite diagnostic uncertainty <=10% budget',
+                    value=v,uncertainty=uf,limit=limit,resolved=v>uf)
     return aggregate(tests)
 
 def independent_weak(checks,native):

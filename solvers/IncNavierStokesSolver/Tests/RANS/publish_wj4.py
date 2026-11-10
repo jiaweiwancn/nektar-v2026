@@ -60,7 +60,7 @@ def main():
             for key,trajectory in s.get(group,{}).items():
                 for c in [trajectory['initial']]+trajectory.get('trajectory',[]):
                     for kind in ('initial_representation','continuum_error','initial_drift'):
-                        for scope in ('full','central','constrained_boundary_sample'):
+                        for scope in ('full','central','constrained_boundary'):
                             for field,r in c['errors'][kind][scope]['fields'].items():
                                 prov=r['maximum_provenance'];rows.append(dict(policy=policy,group=group,trajectory=key,steps=c['steps'],time=c['time'],kind=kind,scope=scope,field=field,
                                     L2=r['L2'],sampled_Linf=r['sampled_Linf'],measure=r['measure'],normalized_L2=r['normalized_L2'],normalized_sampled_Linf=r['normalized_sampled_Linf'],maximum_position=json.dumps(prov['position']),
