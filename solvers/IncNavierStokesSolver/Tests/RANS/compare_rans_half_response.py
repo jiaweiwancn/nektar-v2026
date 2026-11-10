@@ -13,6 +13,7 @@ from rans_duration_contract import require
 
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--full',type=Path,required=True);p.add_argument('--half',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args();full,half=[load(x/'results.json') for x in (a.full,a.half)];require(full['configuration']==half['configuration'] and full['timesteps']==half['timesteps'],'half_response_configuration_mismatch');require(abs(full['time']-half['time'])<1e-13 and full['amplitude']==2*half['amplitude'],'half_response_amplitude_or_time_mismatch')
+    require(full['evaluation_identity']==half['evaluation_identity'],'half_response_coordinate_or_side_identity_mismatch')
     for path,d in ((a.full,full),(a.half,half)):require(sha(path/'response-vectors.npz')==d['response_vectors_sha256'],'half_response_vectors_changed')
     f,h=[np.load(x/'response-vectors.npz') for x in (a.full,a.half)];rows=[]
     for name in full['fields']:

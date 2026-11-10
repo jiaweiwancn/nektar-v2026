@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
 """Matched baseline-subtracted responses, never a neutral-error ratio gate."""
-import argparse,gzip,json,os,shutil
+import argparse,gzip,hashlib,json,os,shutil
 from pathlib import Path
 os.environ.update(dict.fromkeys(('OMP_NUM_THREADS','OPENBLAS_NUM_THREADS','MKL_NUM_THREADS','BLIS_NUM_THREADS','NUMEXPR_NUM_THREADS'),'1'))
 import numpy as np
 from compare_rans_balanced_evolution import compare
 from rans_duration_contract import require,identity
-from rans_request_manifest import sha,runtime_identity
+from rans_request_manifest import sha,runtime_identity,canonical
 from rans_qualification import write_json
 from rans_preservation_oracle import Reference
 from qualify_rans_preservation import load,replay_request
@@ -53,6 +53,8 @@ def main():
     resolved=all(fields[n]['signal_status']=='resolved' for n in ('Pi','w','Qxz','P'))
     np.savez_compressed(out/'response-vectors.npz',**{str(i)+'_'+name:values[0] for i,row in enumerate(arrays) for name,values in row.items()},**{name+'_weights':value[1] for name,value in arrays[0].items()})
     result=dict(status=status,configuration=config,time=a.time,theta=a.time*ref.us/ref.H,amplitude=requests[0]['velocity_amplitude'],timesteps=[requests[0]['dt'],requests[2]['dt']],fields=fields,core_pressure_velocity_nonlinear_production_response_resolved=resolved,eligible_for_extension=status=='pass' and resolved,initialization=initial,provenance=provenance,independent_constitutive=checks,conservation=conservation,analytical_reference_errors=[m['reference_error'] for m in pert['metrics']],actual_initial_drifts=[m['change_from_initial'] for m in pert['metrics']],diagnostic_runtime=runtime_identity(runtime/'RANSPreservationProbe'),response_vectors_sha256=sha(out/'response-vectors.npz'),scope='departure from matched numerical baselines; no neutral spatial-error ratio, monotone-decay or temporal-order claim')
+    sample=pert['samples'][0];evaluation={k:sample[k] for k in ('grid','grid_regions','grid_sides','grid_weights')}
+    result['evaluation_identity']=dict(sha256=hashlib.sha256(canonical(evaluation)).hexdigest(),samples=len(weights),pressure_gauge='one global volume-weighted shift')
     write_json(out/'results.json',result);print(status);return 0 if status=='pass' else 1
 
 

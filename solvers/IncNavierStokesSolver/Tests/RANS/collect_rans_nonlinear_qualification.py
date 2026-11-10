@@ -43,8 +43,12 @@ def main():
     for name,path in (('aggregate_negative_controls',r/'aggregate-negative-controls/results.json'),
                       ('actual_initial_binding',r/'actual-initial-regression.json'),
                       ('historical_receipt_bytes',r/'historical-receipt-byte-verification.json'),
-                      ('targeted_regressions',r/'targeted-regressions.json')):
+                      ('targeted_regressions',r/'targeted-regressions-current.json')):
         scope_input['verification'][name]=receipt(path)
+    current=scope_input['verification']['targeted_regressions']
+    if current.get('status')=='pass':
+        valid=bool(current.get('source_file_sha256')) and all(sha(r/'source/solvers/IncNavierStokesSolver/Tests/RANS'/name)==digest for name,digest in current['source_file_sha256'].items())
+        if not valid:current['status']='fail';current['failure']='tested_script_identity_changed'
     for name,folder,binary in (('current_solver_libraries','runtime','IncNavierStokesSolver'),
                                ('current_diagnostic_libraries','runtime-resolution-v3','RANSPreservationProbe')):
         value=receipt(r/folder/'actual-loaded-libraries-current.json')
