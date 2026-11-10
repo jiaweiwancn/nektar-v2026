@@ -149,7 +149,7 @@ for label in ('cls-reviewed-whole4','cls-reviewed-restart2'):
         folder=r/label;report=json.loads((folder/'case.evolution.json').read_text());manifest={}
         from types import SimpleNamespace
         norms=readback(SimpleNamespace(resolution_probe=resolution,timeout=120),folder,report['state'],report['last_stage_history'],report['last_stage_time'],report['last_stage_alpha'],manifest)
-        error=max(abs(x-y) for x,y in zip(norms,report['stage_audits'][-1][6:]))
+        error=max(abs(x-y) for x,y in zip(norms,report['stage_audits'][-1][6:],strict=True))
         assert error<1e-8, 'independent native CLS residual replay differs'
         return dict(maximum_absolute_norm_difference=error,receipt_sha256=sha(folder/'readback.json'))
     extra('legacy-resolution-'+label,resolution_check)

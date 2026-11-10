@@ -21,7 +21,14 @@ int main()
             if(rotate)for(int i=0;i<3;++i)for(int j=0;j<3;++j)for(int k=0;k<3;++k)
                 a[i][j]+=scale*rotation[i][k]*spectrum[k]*rotation[j][k];
             else for(int i=0;i<3;++i)a[i][i]=scale*spectrum[i];
-            const auto eigen=J::Eigenvalues(a);
+            const auto full=J::Eigensystem(a);const auto eigen=J::Eigenvalues(a);
+            require(eigen==full.eigenvalues);
+            for(int i=0;i<3;++i)for(int j=0;j<3;++j)
+            {
+                double product=0,normal=0;for(int k=0;k<3;++k){product+=a[i][k]/scale*full.vectors[k][j];normal+=full.vectors[k][i]*full.vectors[k][j];}
+                require(std::abs(product-eigen[j]/scale*full.vectors[i][j])<3e-13);
+                require(std::abs(normal-(i==j?1.:0.))<3e-13);
+            }
             for(int i=0;i<3;++i){const double error=std::abs(eigen[i]/scale-spectrum[i]);worst=std::max(worst,error);require(error<2e-13);}
             require(J::CovarianceAdmissible(eigen[0],scale)==(spectrum[0]>=0));
         }

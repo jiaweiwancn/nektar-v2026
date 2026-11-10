@@ -15,6 +15,8 @@ dependencies('numpy','scipy')
 from run_a93_a95_e94e95_matrix import case_xml
 from cls_epawf_m4_cases import tensor_mesh
 from run_cls_epawf_picard import set_info,set_parameter,write,sha
+from a93_a95_e94e95_note_wall_oracle import Kernel
+from validate_a93_a95_e94e95 import constants
 
 def fixture(folder,label,descriptor):
     wall='Accepted' if label=='accepted_invalid_cutoff' else 'EP'
@@ -44,6 +46,13 @@ def fixture(folder,label,descriptor):
                     'v':'0' if inner else str(2*a)+'*('+r+'^3-0.5*'+r+'^4)',
                     'k':str(K),'eps_tilde':str(sink) if inner else str(sink)+'+'+str(K-sink)+'*'+shape,'p':'0'}[field]
                 e.set('VALUE',value)
+    if label.startswith('covariance_scale_'):
+        scale=1. if label.endswith('ordinary') else 1e-16
+        q,kap,_=constants('E94E95','Natural');nu=1.5e-5*math.sqrt(scale)
+        kernel=Kernel(scale,nu,2.,0.);g=4*scale/kernel.nt(2.);eH=scale**1.5/(2.55*2)
+        set_parameter(root,'Kinvis',nu);set_parameter(root,'RANSWallFrictionVelocity',math.sqrt(scale/q))
+        for fn in root.findall('./CONDITIONS/FUNCTION'):
+            for e in fn:e.set('VALUE',{'u':str(g)+'*y','v':'0','k':str(scale),'eps_tilde':str(2*eH)+'/max(y,0.01)','p':'0'}[e.get('VAR')])
     write(root,xml);return xml
 
 def main():
@@ -53,7 +62,7 @@ def main():
     if a.output is None:temporary=tempfile.TemporaryDirectory(prefix='native-rans-audits-');a.output=Path(temporary.name)
     else:a.output.mkdir(parents=True,exist_ok=False)
     result=dict(schema=1,checks=[],status='running',scope='initialization and actual native audit only; no steps')
-    for label in ('inactive_chi_zero','outside_spatial_support','active_invalid_cutoff','accepted_invalid_cutoff','inactive_invalid_scalar','inactive_invalid_constitutive','near_boundary_A95_forward'):
+    for label in ('inactive_chi_zero','outside_spatial_support','active_invalid_cutoff','accepted_invalid_cutoff','inactive_invalid_scalar','inactive_invalid_constitutive','near_boundary_A95_forward','covariance_scale_ordinary','covariance_scale_small'):
         folder=a.output/label;fixture(folder,label,a.descriptor_probe)
         with (folder/'solver.log').open('w') as f:
             completed=subprocess.run([str(a.solver),'case.xml'],cwd=folder,stdout=f,stderr=subprocess.STDOUT,env=dict(os.environ,**THREADS),timeout=180)
@@ -63,7 +72,11 @@ def main():
         expected_reason=('covariance_or_budget' if a.before and baseline else
             'radicand' if label in ('inactive_invalid_constitutive','near_boundary_A95_forward') else
             'epsilon' if label=='inactive_invalid_scalar' else 'inadmissib')
-        if baseline and not a.before:
+        if label.startswith('covariance_scale_'):
+            before_defect=a.before and label.endswith('small')
+            success=completed.returncode==0 and not r.get('failure') if before_defect else completed.returncode!=0 and 'covariance' in log.lower()
+            expected_reason='old false covariance acceptance' if before_defect else 'covariance'
+        elif baseline and not a.before:
             success=completed.returncode==0 and not r.get('failure') and r.get('steps')==0
             if success:
                 audit=r['state_audits'][0];success=audit['wall_cutoff_activity'][0]==0 and audit['wall_cutoff_required_budget'][0]==1 and audit['accepted_awf_scalar_domain'][7]<1
@@ -76,9 +89,9 @@ def main():
                 success=completed.returncode!=0 and 'inadmissible evolution volume/sampler' in log
                 expected_reason='legacy collective physical-state rejection (specific cause masked)'
         result['checks'].append(dict(name=label,status='pass' if success else 'fail',execution_exit=completed.returncode,
-            intended_outcome='before_defect_rejection' if a.before and baseline else 'baseline_defined' if baseline else 'forward_physical_state_valid' if diagnostic and not a.before else 'expected_rejection',
+            intended_outcome='before_defect_false_acceptance' if a.before and label=='covariance_scale_small' else 'before_defect_rejection' if a.before and baseline else 'baseline_defined' if baseline else 'forward_physical_state_valid' if diagnostic and not a.before else 'expected_rejection',
             expected_reason=None if (baseline or diagnostic) and not a.before else expected_reason,xml_sha256=sha(folder/'case.xml'),log=str(folder/'solver.log'),failure=r.get('failure')))
         write_json(a.output/'audits.json',result)
-    result['status']='pass' if len(result['checks'])==7 and all(x['status']=='pass' for x in result['checks']) else 'fail';write_json(a.output/'audits.json',result)
+    result['status']='pass' if len(result['checks'])==9 and all(x['status']=='pass' for x in result['checks']) else 'fail';write_json(a.output/'audits.json',result)
     print(json.dumps(result));return 0 if result['status']=='pass' else 1
 if __name__=='__main__':sys.exit(main())

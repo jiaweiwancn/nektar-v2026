@@ -97,7 +97,7 @@ def main():
             check(row['status']=='pass','spatial/quadrature-refined trajectory rejected')
             coarse=whole['raw_reference_norms'];fine=r['raw_reference_norms']
             return dict(coarse_initial_residual=coarse,fine_initial_residual=fine,
-                residual_ratios=[y/x if x>1e-12 else None for x,y in zip(coarse,fine)],coarse_drift=whole['step_audits'][-1],fine_drift=r['step_audits'][-1])
+                residual_ratios=[y/x if x>1e-12 else None for x,y in zip(coarse,fine,strict=True)],coarse_drift=whole['step_audits'][-1],fine_drift=r['step_audits'][-1])
         record('spatial-quadrature-refinement-'+wall,spatial)
         def perturb(wall=wall,whole=whole):
             row,r=control('perturbed-'+wall,wall=wall,steps=8,perturb=.005)

@@ -74,6 +74,7 @@ def run_case(solver,folder,model,policy,wall,**kwargs):
     with (folder/'solver.log').open('w') as f:
         try:completed=subprocess.run([str(solver),'case.xml'],cwd=folder,env=dict(os.environ,**THREADS),stdout=f,stderr=subprocess.STDOUT,timeout=1800);code=completed.returncode
         except subprocess.TimeoutExpired:code=124
+        except OSError as error:code=127;f.write(str(error)+"\n")
     row=dict(model=model,kappa_policy=policy,wall=wall,options={k:str(v) if isinstance(v,Path) else v for k,v in kwargs.items()},exit_code=code,
         xml_sha256=sha(xml),path=str(folder),status='fail',report=None)
     report=folder/'case.evolution.json'
@@ -114,7 +115,10 @@ def main():
         for policy in a.policies:
             for wall in a.walls:
                 folder=a.output/(model+'-'+policy+'-'+wall)
-                row=run_case(a.solver,folder,model,policy,wall,steps=a.steps,descriptor_probe=a.descriptor_probe)
+                try:row=run_case(a.solver,folder,model,policy,wall,steps=a.steps,descriptor_probe=a.descriptor_probe)
+                except Exception as error:
+                    row=dict(model=model,kappa_policy=policy,wall=wall,path=str(folder),status='fail',execution_status='failed_or_incomplete',failure=repr(error))
+                    if folder.exists():(folder/'result.json').write_text(json.dumps(row,indent=2)+'\n')
                 summary['cases'].append(row);(a.output/'matrix.json').write_text(json.dumps(summary,indent=2)+'\n')
                 print(json.dumps({k:row.get(k) for k in ('model','kappa_policy','wall','status','accepted_steps','failure')}),flush=True)
     expected={(m,p,w) for m in a.models for p in a.policies for w in a.walls}
