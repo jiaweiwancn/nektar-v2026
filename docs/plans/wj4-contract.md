@@ -134,3 +134,12 @@ creates a separate measurement/code lineage. Original summaries are archived
 byte-for-byte. Actual accepted callback packets always come from the producing
 report. SVD caches have their own immutable input/output receipts. All extra
 observer/test work remains charged to the same package-wide ledger.
+
+Final publication has two immutable layers to avoid a hash/accounting cycle.
+The inner manifest and receipt bind the measurement-time snapshots. After the
+figure/publication commands finish and their reserved wall time is reconciled,
+an outer `publication.json` binds the inner receipt, final ledgers and complete
+command receipts. Interrupted command logs require a new label. Compact run
+accounting includes every scheduled/partial solve count, projection reserve and
+raw/corrected hash equality; accepted-stage lineage binds callback history to
+its producing report, checkpoint, signature and physical samples.
