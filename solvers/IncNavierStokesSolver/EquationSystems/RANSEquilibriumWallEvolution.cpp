@@ -199,7 +199,7 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         m_data.innerKSource=Function("ScalarSourceInner","k");m_data.outerKSource=Function("ScalarSourceOuter","k");m_data.outerEpsilonSource=Function("ScalarSourceOuter",m_patch->EpsilonName());
         if(m_patch->WJ())
         {
-            Require(m_neutral && m_direction[1]==0 && !m_chartFunctions,"WJ-2 requires the physical neutral serial flat pilot");
+            Require(m_direction[1]==0 && !m_chartFunctions,"WJ-2 requires physical functions on the serial flat pilot");
             for(const std::string name:{"Gravity","g","RANSWallGravity"})
                 Require(!m_session->DefinesParameter(name) || m_session->GetParameter(name)==0,"WJ-2 pilot requires zero gravity");
             for(const std::string name:{"BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter"})
@@ -239,7 +239,7 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
             savedWJ=std::make_unique<RANSWallTimeIntegration::Checkpoint>(RANSWallTimeIntegration::ReadCheckpoint(
                 m_restart,m_signature,m_order,m_timestep,m_patch->Size(),m_patch->DifferentialSize()));
             Require(savedWJ->eta==m_eta,"checkpoint eta differs");
-            m_data.fixedBoundary=m_patch->FixedReferenceBoundary(savedWJ->fixedReference);
+            if(m_neutral)m_data.fixedBoundary=m_patch->FixedReferenceBoundary(savedWJ->fixedReference);
             m_patch->RestoreReference(savedWJ->fixedReference,savedWJ->fixedDefect,savedWJ->eta,m_data,m_time);
             m_state=savedWJ->coupledState;m_initial=savedWJ->fixedReference;
             Require(m_patch->InitializationWork()==Vector({0.,0.}),"WJ restart constructed or lifted a new reference");

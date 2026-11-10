@@ -52,6 +52,18 @@ def wall(K,nu=1.5e-5,H=1.,h=.1):
     return a,zv,t,A,c
 
 
+def resting_functions(tree):
+    """Physical direct-epsilon functions; no legacy eps_tilde facade."""
+    set_info(tree,'RANSWallReference','Functions')
+    K=QE*.25;epsilon=.125/KAPPA
+    for family in ('InitialConditions','BoundaryValues'):
+        for side in ('Inner','Outer'):
+            f=ET.SubElement(tree.find('CONDITIONS'),'FUNCTION',{'NAME':family+side})
+            values=dict(u=0.,v=0.,k=K,p=0.)
+            if side=='Outer':values['epsilon']=epsilon
+            for variable,value in values.items():ET.SubElement(f,'E',{'VAR':variable,'VALUE':format(value,'.17g')})
+
+
 def independent_loads(checks,policy,offsets):
     n=int(offsets[-1])+1
     names=('inner_k_production','inner_k_destruction','outer_k_production','outer_k_destruction',
@@ -223,6 +235,15 @@ def main():
         quadrature,rc,_=native('quadrature-32',normal=32);valid(quadrature,rc)
         summary['representation_check']=dict(coarse=zero['raw_reference_norms'],refined=refinement['raw_reference_norms'],
             quadrature32=quadrature['raw_reference_norms'],coarse_unknowns=len(zero['state']),refined_unknowns=len(refinement['state']))
+        functions,rc,_=native('direct-epsilon-functions',mutate=resting_functions);valid(functions,rc)
+        assert_allclose(functions['state_audits'][-1]['wj_Praw_Pdev_ranges'],[0.]*4,atol=1e-13,rtol=0)
+        assert_allclose(functions['state_audits'][-1]['wj_root_minimum_scaled_residual'][0],1.8,atol=1e-14,rtol=0)
+        functions_back,rc,_=native('functions-zero-restart',0,Path(functions['checkpoint']),mutate=resting_functions)
+        valid(functions_back,rc)
+        require(same_history(functions,functions_back) and functions_back['initialization_lift_calls_iterations']==[0.,0.],
+            'direct epsilon function checkpoint changed its state/history or lifted on readback')
+        summary['direct_epsilon_function_semantics']=dict(exact_checkpoint_readback=True,
+            raw_zero_velocity_norms=functions['raw_reference_norms'],epsilon_name=functions['epsilon_semantics'])
         whole,rc,_=native('whole2',2,cp0);valid(whole,rc)
         first,rc,_=native('split1',1,cp0);valid(first,rc);cp1=Path(first['checkpoint']);immutable1=sha(cp1/'State.bin')
         second,rc,second_folder=native('restart1',1,cp1);valid(second,rc)
