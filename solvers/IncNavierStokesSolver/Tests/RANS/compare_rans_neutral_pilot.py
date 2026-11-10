@@ -15,7 +15,13 @@ def compare(root,coarse,fine,control,T):
  for key in ('model','policy','wall','descriptor','boundary_policy','runtime','velocity_amplitude'):
   if any(r[key]!=requests[0][key] for r in requests[1:]):raise ValueError('comparison identity differs: '+key)
  if requests[0]['dt']!=requests[1]['dt'] or requests[2]['dt']!=requests[0]['dt']/2:raise ValueError('comparison timesteps differ')
- if any(requests[0][k]!=requests[2][k] for k in ('knots','degree','pressure_degree','quadrature','raw_neutral_sha256','boundary')):raise ValueError('same-space temporal initial/boundary identity differs')
+ if any(requests[0][k]!=requests[2][k] for k in ('knots','degree','pressure_degree','quadrature','columns','raw_neutral_sha256','boundary')):raise ValueError('same-space temporal initial/boundary identity differs')
+ # Same-space temporal controls must match the effective inputs actually
+ # consumed, not merely request-side seed hashes.
+ actual=[load(f/'T-0.0016/metrics.json')['initialization_receipt'] for f in (folders[0],folders[2])]
+ keys=('raw_initial_sha256','effective_initial_sha256','fixed_reference_sha256','explicit_boundary_sha256','implicit_boundary_sha256')
+ if any(actual[0][k]!=actual[1][k] for k in keys):raise ValueError('actual initial/effective/boundary identities differ')
+ if any(x['raw_effective_max_difference']!=0 for x in actual):raise ValueError('actual initialization lift changed inputs')
  metrics=[];samples=[]
  for f,r in zip(folders,requests,strict=True):
   m=RequestManifest(f,r,True);p=f/('T-'+format(T,'.4f'))
@@ -29,7 +35,7 @@ def compare(root,coarse,fine,control,T):
   fields[f]=dict(coarse_reference_RMS=ec,fine_reference_RMS=ef,fine_over_coarse=reduction,spatial_difference_RMS=delta,temporal_difference_RMS=td,temporal_limit=tol,
    spatial_status='unresolved_floor' if reduction is None else 'pass' if reduction<=.85 else 'fail',temporal_uncertainty_status='pass' if td<=tol else 'unresolved',triangle_status='pass' if delta<=ec+ef+1e-12 else 'fail')
  status='pass' if all(f['spatial_status'] in ('pass','unresolved_floor') and f['temporal_uncertainty_status']=='pass' and f['triangle_status']=='pass' for f in fields.values()) else 'unresolved'
- return dict(status=status,time=T,theta=T*ref.us/ref.H,coarse=coarse,fine=fine,temporal_control=control,fields=fields,scope='evolved spatial reduction and dt/2 uncertainty; no inferred temporal order')
+ return dict(status=status,actual_temporal_initial_and_boundary_inputs_identical=True,time=T,theta=T*ref.us/ref.H,coarse=coarse,fine=fine,temporal_control=control,fields=fields,scope='evolved spatial reduction and dt/2 uncertainty; no inferred temporal order')
 
 def main():
  p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--coarse',required=True);p.add_argument('--fine',required=True);p.add_argument('--control',required=True);p.add_argument('--time',type=float,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args()

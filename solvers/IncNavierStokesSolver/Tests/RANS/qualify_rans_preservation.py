@@ -288,6 +288,8 @@ class Campaign:
         statuses.extend(t['status'] for t in self.result.get('spatial_tables',{}).values())
         self.result['status']='pass' if statuses and all(s=='pass' for s in statuses) and self.result.get('coverage',{}).get('status')=='pass' else 'fail'
         if self.result['status']=='pass' and any(t.get('convergence_status')=='partially_unresolved' for t in self.result.get('temporal_tables',[])):self.result['status']='unresolved'
+        self.result['execution_status']='completed' if self.result.get('coverage',{}).get('status')=='pass' and all(x['status']=='pass' for x in self.result['checks']) else 'failed_or_incomplete'
+        if self.result['execution_status']=='completed':self.result.pop('reason',None)
         self.save();return 0 if self.result['status']=='pass' else 2 if self.result['status']=='unresolved' else 1
 
 def main():
