@@ -14,6 +14,7 @@ from scipy.sparse import csr_matrix
 from qualify_rans_preservation import probe,replay_request,load
 from rans_qualification import THREADS,write_json,exact_vector_hash
 from rans_request_manifest import RequestManifest
+from rans_preservation_oracle import Reference,weak_balance
 
 def matrix(rows,n):
  data=[];ids=[];offset=[0]
@@ -61,7 +62,8 @@ def main():
    assert exact_vector_hash(old)==attempt['incoming_sha256'],'one-sweep stage reconstruction identity mismatch'
   for event in report.get('physical_range_events',[]):
    if event.get('state'):observe(event['state'],event['time'],'rejected_candidate')
- result=dict(status='pass' if not failure else 'fail',scope='fixed reference-quadrature and native face rows; extrema over all retained accepted states and reconstructed one-sweep scalar stages',minimum=minima,maximum=maxima,observations=records,failures=failure,
+ weak=weak_balance(Reference(req['model'],req['policy'],req['wall']),packet)
+ result=dict(status='pass' if not failure and weak['status']=='pass' else 'fail',analytical_weak_balance=weak,scope='fixed reference-quadrature and native face rows; extrema over all retained accepted states and reconstructed one-sweep scalar stages',minimum=minima,maximum=maxima,observations=records,failures=failure,
   epsilon_weak_budgets=epsilon_weak_budgets,source_packet_sha256=__import__('hashlib').sha256((out/'packet.json').read_bytes()).hexdigest(),roundoff_floor=1e-12,mandatory_native_domain_audits_unchanged=True)
  write_json(out/'results.json',result)
  with (out/'packet.json').open('rb') as src,gzip.open(out/'native-basis.json.gz','wb',compresslevel=3) as dst:__import__('shutil').copyfileobj(src,dst)
