@@ -170,7 +170,7 @@ add_executable(RANSPressureActionProbe
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionDiagnostics.cpp)
 target_include_directories(RANSPressureActionProbe PRIVATE ${RANS_SOURCE_ROOT}/solvers)
 target_link_libraries(RANSPressureActionProbe RANSKernels ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
-foreach(rans_r3_probe RANSNonpressureActionProbe RANSWallResolutionProbe)
+foreach(rans_r3_probe RANSNonpressureActionProbe RANSWallResolutionProbe RANSPreservationProbe)
     add_executable(${rans_r3_probe}
         ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/${rans_r3_probe}.cpp
         ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.cpp
@@ -198,6 +198,9 @@ foreach(rans_r3_probe RANSNonpressureActionProbe RANSWallResolutionProbe)
     endif()
 endforeach()
 target_sources(RANSWallResolutionProbe PRIVATE
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallTimeIntegration.cpp
+    ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSHistory.cpp)
+target_sources(RANSPreservationProbe PRIVATE
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallTimeIntegration.cpp
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSHistory.cpp)
 add_executable(RANSDurableProgressProbe ${RANS_SOURCE_ROOT}/docs/plans/cls-epawf-revised-evidence/m8-r3/durable-probe.cpp)
@@ -581,6 +584,12 @@ endif()
 add_executable(RANSNewModelsProbe
     ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSNewModelsProbe.cpp)
 target_link_libraries(RANSNewModelsProbe RANSKernels)
+add_executable(RANSNativeDiagnosticChecks ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/RANSNativeDiagnosticChecks.cpp)
+target_include_directories(RANSNativeDiagnosticChecks PRIVATE ${RANS_SOURCE_ROOT}/solvers)
+target_link_libraries(RANSNativeDiagnosticChecks RANSKernels)
+add_test(NAME RANSNativeDiagnosticChecks COMMAND RANSNativeDiagnosticChecks)
+set_tests_properties(RANSNativeDiagnosticChecks PROPERTIES PROCESSORS 1 TIMEOUT 30
+    ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     target_compile_options(RANSNewModelsProbe PRIVATE -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror)
 endif()

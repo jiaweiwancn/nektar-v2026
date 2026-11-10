@@ -107,12 +107,14 @@ RANSWallGlobalPoint RANSWallEvolutionPatch::Point(int block,const RANSWallCoordi
 {return m_evaluation?*EvaluationRow(block,fields[block]->LocateElement(p,side),p):Transform(fields[block]->Point(p,side));}
 std::vector<RANSWallGlobalPoint> RANSWallEvolutionPatch::Quadrature(int block,int order) const
 {
+    if(!order && m_massOrder)order=m_massOrder;
     if(!order && Mapped())order=std::max(m_parameters.normalOrder,m_parameters.tangentialOrder);
     auto q=fields[block]->Quadrature(order);for(auto &p:q)p=Transform(std::move(p));return q;
 }
 std::vector<RANSWallEvolutionPatch::FacePoint> RANSWallEvolutionPatch::Surface(int block,int axis,double position,int side,int order) const
 {
     Require((axis==0 || axis==2 || (m_dimension==3 && axis==1)) && (side==-1 || side==1),"invalid chart face");
+    if(m_interfaceOrder && (order==0 || order==8))order=m_interfaceOrder;
     if(!order)order=std::max(m_parameters.normalOrder,m_parameters.tangentialOrder);
     const auto key=std::make_tuple(block,axis,position,side,order);
     // Only exact native faces enter the lifetime catalog; moving surfaces do not.
@@ -447,6 +449,11 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
             for(int j=0;j<g->GetNumVerts();++j){double x,y,z;g->GetVertex(j)->GetCoords(x,y,z);a=std::min(a,x);b=std::max(b,x);}
             for(double foot:{-m_mapping.lengthX,m_mapping.lengthX})Require(!(a<foot-1e-12 && b>foot+1e-12),"C1 hill foot requires an explicit native patch face");
         }
+    session->LoadParameter("RANSWallMassOrder",m_massOrder,0);
+    session->LoadParameter("RANSWallVolumeOrder",m_volumeOrder,0);
+    session->LoadParameter("RANSWallInterfaceOrder",m_interfaceOrder,0);
+    for(int value:{m_massOrder,m_volumeOrder,m_interfaceOrder})
+        Require(value==0 || (value>=4 && value<=64),"invalid explicit native quadrature order");
     auto velocity=std::make_shared<RANSWallGlobalField>(session,full,all,m_dimension);
     innerVelocity=std::make_shared<RANSWallGlobalField>(session,full,inner,m_dimension);
     outerVelocity=std::make_shared<RANSWallGlobalField>(session,full,outer,m_dimension);
@@ -496,7 +503,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         ray.outerV=Point(0,H,1);ray.outerP=Point(OuterPressure(),H,1);ray.outerK=Point(K(),H,1);
         m_rays.push_back(std::move(ray));
     }
-    for(const auto &q:outerVelocity->Quadrature(order))if(Owner(q.geometry)==m_comm->GetRank())
+    for(const auto &q:outerVelocity->Quadrature(m_volumeOrder?m_volumeOrder:order))if(Owner(q.geometry)==m_comm->GetRank())
         m_outer.push_back({Point(0,q.coordinate),Point(OuterPressure(),q.coordinate),
             Point(Epsilon(),q.coordinate),q.weight*(Mapped()?m_mapping.At(q.coordinate).determinant:1.)});
     m_solver=std::make_shared<SolverCache>();m_solver->free.resize(Gauge());m_solver->massFactors.resize(Gauge());

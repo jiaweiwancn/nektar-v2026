@@ -384,7 +384,11 @@ void RANSEquilibriumWallEvolution::RecordAudit(const Vector &state,const Vector 
         {
             const auto &cov=audit.at("accepted_awf_covariance");
             if(audit.at("admissible")[0]!=1)reasons.push_back("accepted_awf_sample_admissibility_exit");
-            if(audit.at("accepted_awf_hard_admissible")[0]!=1)reasons.push_back("accepted_awf_covariance_or_budget_exit");
+            const double K0=m_patch->Parameters().model.Q()*m_ustar*m_ustar;
+            if(!RANSWallSolveJson::CovarianceAdmissible(cov[0],K0) || !RANSWallSolveJson::CovarianceAdmissible(cov[1],K0))
+                reasons.push_back("model_aware_covariance_exit");
+            if(audit.at("wall_cutoff_required_budget")[0]!=1)
+                reasons.push_back(m_patch->AcceptedAWF()?"accepted_budget_cutoff_exit":"active_EP_cutoff_exit");
             if(domain[8]>1e-10)reasons.push_back("accepted_awf_reference_budget_residual");
             if(!reasons.empty())
                 for(const auto name:{"accepted_awf_inner_minimum_point","accepted_awf_outer_minimum_point"})

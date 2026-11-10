@@ -338,11 +338,11 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
         {
             if(name=="physical_sampled_K")result.minimumSampledK=std::min(result.minimumSampledK,value);
             if(Distance(q.coordinate)<=m_mapping.At(q.coordinate).height && side<=0)
-                result.minimumInnerK=std::min(result.minimumInnerK,value);
-            else result.minimumOuterK=std::min(result.minimumOuterK,value);
+            {if(value<result.minimumInnerK){result.minimumInnerK=value;result.scalarMinimumPoints[0]=q.coordinate;}}
+            else if(value<result.minimumOuterK){result.minimumOuterK=value;result.scalarMinimumPoints[1]=q.coordinate;}
         }
         else if(dependent)result.minimumTraceEpsilon=std::min(result.minimumTraceEpsilon,value);
-        else result.minimumOuterEpsilon=std::min(result.minimumOuterEpsilon,value);
+        else if(value<result.minimumOuterEpsilon){result.minimumOuterEpsilon=value;result.scalarMinimumPoints[2]=q.coordinate;}
         if(margin<result.minimumMargin || !std::isfinite(value))
         {result.minimumMargin=margin;result.limitingPoint=q.coordinate;result.limitingInventory=name;result.limitingFunctional=q.columnAverage?std::make_shared<RANSWallGlobalPoint>(q):nullptr;}
         if(retain || NewModels())result.observations.push_back({name,q.coordinate,block,q.geometry,side,value,scale,weight,strict,dependent,
@@ -376,9 +376,27 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
             result.minimumCutoff=std::min(result.minimumCutoff,profile->Reference().cutoff);
             result.maximumCutoff=std::max(result.maximumCutoff,profile->Reference().cutoff);
             result.profileBranches.push_back(AcceptedAWF()?'A':profile->Reference().weight==0?'B':profile->Reference().weight==1?'E':'M');
-            result.minimumBudgetRatio=std::min(result.minimumBudgetRatio,profile->Reference().productionBudget/profile->Reference().minimumBudget);
-            result.maximumBudgetRelativeDefect=std::max(result.maximumBudgetRelativeDefect,
-                std::abs(profile->Reference().budgetResidual)/std::max(1e-300,profile->Reference().productionBudget));
+            const auto &reference=profile->Reference();
+            const double ratio=reference.productionBudget/reference.minimumBudget;
+            result.minimumBudgetRatio=std::min(result.minimumBudgetRatio,ratio);
+            const bool required=AcceptedAWF() || reference.weight>0;
+            const std::string policy=AcceptedAWF()?"accepted_budget_required":required?"active_EP_required":
+                name.find("baseline_normalization")!=std::string::npos?"baseline_auxiliary_inactive":
+                m_parameters.chi==0?"EP_disabled":
+                m_transitionEnabled && WallCoordinate(p)>=m_transition.end?"EP_spatially_excluded":
+                ratio<1 || reference.reynolds<m_options.minimumReynolds?"EP_intrinsic_fallback":"EP_sensor_inactive";
+            ++result.counts["cutoff_policy/"+policy];
+            if(reference.weight>0)++result.activeCorrections;else ++result.inactiveProfiles;
+            if(reference.requestedWeight>0 && reference.weight==0)++result.fallbackProfiles;
+            if(required)
+            {
+                ++result.requiredCutoffs;
+                if(ratio<result.minimumRequiredBudgetRatio)
+                {result.minimumRequiredBudgetRatio=ratio;result.budgetPoint=p;}
+            }
+            if(required || !ModelAwareAudit())
+                result.maximumBudgetRelativeDefect=std::max(result.maximumBudgetRelativeDefect,
+                    std::abs(reference.budgetResidual)/std::max(1e-300,reference.productionBudget));
             const double scale=m_mapping.At(p).scale;
             for(const auto &q:profile->Quadrature())
             {
@@ -474,12 +492,30 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
             {
                 if(p.block!=K() && !p.dependentTrace)continue;
                 const auto provenance=ResolveObservation(p);
-                if(provenance.inner)continue;
                 const auto &row=*provenance.velocity;RANSTensor g{};
                 for(int a=0;a<m_dimension;++a)g[PhysicalAxis(a)]=row.Gradient(result.effectiveState,offset[a]);
                 const double k=EvaluationRow(K(),GeometryElement(K(),row.geometry),p.coordinate)->Value(result.effectiveState,offset[K()]);
-                const double ep=p.dependentTrace?p.value:EvaluationRow(Epsilon(),GeometryElement(Epsilon(),row.geometry),p.coordinate)->Value(result.effectiveState,offset[Epsilon()]);
-                try{(void)OuterClosure(k,ep,g,p.coordinate);}
+                try
+                {
+                    RANSTensor covariance{};
+                    if(provenance.inner)
+                    {
+                        const auto profile=StateProfile(result.effectiveState,p.coordinate,time,data);
+                        covariance=InnerStress(k,profile->Original().EddyViscosity(Distance(p.coordinate)),g).reynoldsStress;
+                    }
+                    else
+                    {
+                        const double ep=p.dependentTrace?p.value:EvaluationRow(Epsilon(),GeometryElement(Epsilon(),row.geometry),p.coordinate)->Value(result.effectiveState,offset[Epsilon()]);
+                        const auto law=OuterClosure(k,ep,g,p.coordinate);covariance=law.reynoldsStress;
+                        if(law.a95RadicandDefined && law.a95Radicand<result.minimumA95Radicand)
+                        {result.minimumA95Radicand=law.a95Radicand;result.radicandMinimumPoint=p.coordinate;
+                         result.radicandSide=provenance.radialSide;result.radicandGeometry=row.geometry;}
+                    }
+                    const int region=provenance.inner?0:1;const double minimum=J::Eigenvalues(covariance)[0];
+                    if(minimum<result.minimumCovariance[region])
+                    {result.minimumCovariance[region]=minimum;result.covarianceMinimumPoints[region]=p.coordinate;
+                     result.covarianceSides[region]=provenance.radialSide;result.covarianceGeometries[region]=row.geometry;}
+                }
                 catch(...)
                 {
                     result.limitingPoint=p.coordinate;result.limitingInventory="current_velocity_constitutive_domain";
@@ -524,6 +560,21 @@ std::string RANSWallEvolutionPatch::ScalarDomainJSON(const ScalarDomainResult &d
         {"minimum_b",d.normalizationApplicable?J::Number(d.minimumB):"null"},{"minimum_lambda",d.normalizationApplicable?J::Number(d.minimumLambda):"null"},
         {"normalization_applicable",J::Boolean(d.normalizationApplicable)},
         {"minimum_budget_ratio",J::Number(d.minimumBudgetRatio)},{"maximum_budget_relative_defect",J::Number(d.maximumBudgetRelativeDefect)},
+        {"required_cutoff_count",J::Number(d.requiredCutoffs)},
+        {"active_correction_profiles",J::Number(d.activeCorrections)},{"inactive_baseline_profiles",J::Number(d.inactiveProfiles)},
+        {"fallback_profiles",J::Number(d.fallbackProfiles)},
+        {"minimum_required_budget_ratio",d.requiredCutoffs?J::Number(d.minimumRequiredBudgetRatio):"null"},
+        {"required_cutoff_admissible",J::Boolean(d.RequiredBudgetAdmissible())},
+        {"cutoff_failure_reason",J::Quote(d.RequiredBudgetAdmissible()?"": "required_active_profile_budget_below_one")},
+        {"cutoff_limiting_point",J::Numbers(d.budgetPoint)},
+        {"scalar_minimum_points_inner_k_outer_k_epsilon",J::Rows(d.scalarMinimumPoints)},
+        {"sampled_covariance_minima",J::Numbers(d.minimumCovariance)},
+        {"covariance_minimum_points",J::Rows(d.covarianceMinimumPoints)},
+        {"covariance_minimum_sides",J::Numbers(d.covarianceSides)},
+        {"covariance_minimum_geometries",J::Numbers(d.covarianceGeometries)},
+        {"minimum_A95_radicand",d.minimumA95Radicand==1e300?"null":J::Number(d.minimumA95Radicand)},
+        {"A95_radicand_minimum_point",J::Numbers(d.radicandMinimumPoint)},
+        {"A95_radicand_side",J::Number(d.radicandSide)},{"A95_radicand_geometry",J::Number(d.radicandGeometry)},
         {"cutoff_range",J::Numbers(Vector{d.minimumCutoff,d.maximumCutoff})},
         {"inventory_counts",J::Object(counts)},{"profile_branch_pattern",J::Quote(d.profileBranches)}};
     if(locations)
@@ -2155,7 +2206,8 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
     const double K0=m_parameters.model.Q()*m_robustUstar*m_robustUstar;
     Vector outer{0,1e300,-1e300,1e300,-1e300,domain.minimumSampledK/K0,-1e300};
     double innerCov=1e300,outerCov=1e300;Vector innerPoint,outerPoint,gradientPoint,innerProvenance,outerProvenance;
-    Vector innerTensor,outerTensor,innerGradient,outerGradient;
+    Vector innerTensor,outerTensor,innerGradient,outerGradient,radicandPoint,radicandProvenance;
+    double minimumRadicand=1e300,maximumRadicand=-1e300;
     auto flatten=[](const RANSTensor &a){Vector v;for(const auto &row:a)for(double x:row)v.push_back(x);return v;};
     for(const auto &p:domain.observations)
     {
@@ -2177,6 +2229,15 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
         }
         const double epsilon=p.dependentTrace?p.value:EvaluationRow(Epsilon(),GeometryElement(Epsilon(),row.geometry),p.coordinate)->Value(domain.effectiveState,offset[Epsilon()]);
         const auto law=OuterClosure(k,epsilon,G,p.coordinate);const double cov=J::Eigenvalues(law.reynoldsStress)[0];
+        if(law.a95RadicandDefined)
+        {
+            maximumRadicand=std::max(maximumRadicand,law.a95Radicand);
+            if(law.a95Radicand<minimumRadicand)
+            {
+                minimumRadicand=law.a95Radicand;radicandPoint={p.coordinate[0],p.coordinate[1],p.coordinate[2],k,epsilon,law.a95Radicand};
+                radicandProvenance={double(row.geometry),double(row.element),double(provenance.radialSide),double(p.block)};
+            }
+        }
         if(cov<outerCov){outerCov=cov;outerPoint={p.coordinate[0],p.coordinate[1],p.coordinate[2],k,epsilon,cov};
             outerProvenance={double(row.geometry),double(row.element),double(provenance.radialSide),double(p.block)};
             if(NewModels()){outerTensor=flatten(law.reynoldsStress);outerGradient=flatten(G);}}
@@ -2198,7 +2259,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
     for(const auto &p:domain.observations)if(p.inventory=="physical_sampled_K")outer[6]=std::max(outer[6],p.value/K0);
     const bool box=outer[0]<=.001 && outer[1]>=.99 && outer[2]<=1.01 && outer[3]>=.98 && outer[4]<=1.02 &&
         outer[5]>=.99 && outer[6]<=1.01;
-    const bool covariance=innerCov>=-1e-10*K0 && outerCov>=-1e-10*K0;
+    const bool covariance=J::CovarianceAdmissible(innerCov,K0) && J::CovarianceAdmissible(outerCov,K0);
     if(rangesOnly || GroundSafeguard() || PimpleSingleSweep())audit["r4_outer_gradient_witness"]=gradientPoint;
     audit["r2_outer_range"]=outer;audit["r2_covariance"]={innerCov,outerCov};
     audit["r2_inner_minimum_point"]=innerPoint;audit["r2_outer_minimum_point"]=outerPoint;
@@ -2210,6 +2271,12 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
         audit["native_outer_covariance_tensor_row_major"]=outerTensor;
         audit["native_inner_covariance_witness_gradient_row_major"]=innerGradient;
         audit["native_outer_covariance_witness_gradient_row_major"]=outerGradient;
+        if(minimumRadicand!=1e300)
+        {
+            audit["native_A95_radicand_range"]={minimumRadicand,maximumRadicand};
+            audit["native_A95_minimum_radicand_point"]=radicandPoint;
+            audit["native_A95_minimum_radicand_geometry_element_side_block"]=radicandProvenance;
+        }
     }
     if(ModelAwareAudit())
     {
@@ -2221,7 +2288,11 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
         audit["accepted_awf_inner_minimum_point"]=audit.at("r2_inner_minimum_point");audit.erase("r2_inner_minimum_point");
         audit["accepted_awf_outer_minimum_point"]=audit.at("r2_outer_minimum_point");audit.erase("r2_outer_minimum_point");
         audit["accepted_awf_reference_departure"]=audit.at("r2_outer_range");audit.erase("r2_outer_range");
-        audit["accepted_awf_hard_admissible"]={covariance && domain.minimumBudgetRatio>=1.?1.:0.};
+        audit["wall_cutoff_activity"]={double(domain.requiredCutoffs),double(domain.activeCorrections),double(domain.inactiveProfiles),double(domain.fallbackProfiles)};
+        audit["wall_cutoff_required_budget"]={domain.RequiredBudgetAdmissible()?1.:0.,
+            domain.requiredCutoffs?domain.minimumRequiredBudgetRatio:0.,domain.maximumBudgetRelativeDefect};
+        audit["wall_cutoff_limiting_point"]=Vector(domain.budgetPoint.begin(),domain.budgetPoint.end());
+        audit["accepted_awf_hard_admissible"]={covariance && domain.RequiredBudgetAdmissible()?1.:0.};
     }
     else audit["r2_qualified"]={box && covariance && domain.minimumLambda>=.5?1.:0.};
     return audit;

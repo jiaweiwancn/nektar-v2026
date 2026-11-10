@@ -62,6 +62,12 @@ public:
         EvaluationScope(const EvaluationScope&)=delete;
     };
     std::string EvaluationReuseJSON() const;
+    // Read-only verification. This identity excludes declared quadrature
+    // overrides, allowing the very same coefficient state to be integrated
+    // at several orders; it includes physics, mesh, spaces and native maps.
+    std::string PreservationIdentity() const;
+    std::string PreservationPacket(const Vector &state,double time,const RANSWallEvolutionData &data,
+        bool basis,const std::vector<RANSWallCoordinate> &grid={}) const;
     std::string EvaluationReuseChecks(const Vector &,const Vector &,double,const RANSWallEvolutionData &);
     RANSWallEvolutionPatch(const LibUtilities::SessionReaderSharedPtr &serialSession,
         const SpatialDomains::MeshGraphSharedPtr &graph,
@@ -181,6 +187,18 @@ public:
             minimumOuterEpsilon=1e300,minimumSampledK=1e300,minimumTraceEpsilon=1e300,
             minimumB=1,minimumLambda=1,minimumCutoff=1e300,maximumCutoff=-1e300;
         double minimumBudgetRatio=1e300,maximumBudgetRelativeDefect=0.;
+        double minimumRequiredBudgetRatio=1e300;
+        int requiredCutoffs=0,activeCorrections=0,inactiveProfiles=0,fallbackProfiles=0;
+        RANSWallCoordinate budgetPoint{};
+        std::array<RANSWallCoordinate,3> scalarMinimumPoints{};
+        std::array<RANSWallCoordinate,2> covarianceMinimumPoints{};
+        std::array<double,2> minimumCovariance{1e300,1e300};
+        std::array<int,2> covarianceSides{0,0},covarianceGeometries{-1,-1};
+        double minimumA95Radicand=1e300;
+        RANSWallCoordinate radicandMinimumPoint{};
+        int radicandSide=0,radicandGeometry=-1;
+        bool RequiredBudgetAdmissible() const
+        {return requiredCutoffs==0 || minimumRequiredBudgetRatio>=1.;}
         std::map<std::string,int> counts;
         Vector effectiveState,traceState;
         RANSWallSharedInventory<ScalarObservation> observations;
@@ -347,6 +365,7 @@ public:
     std::string Signature() const;
     const std::string &ConstitutiveFailureContext() const { return m_solveInvalidContext; }
 private:
+    int m_massOrder=0,m_volumeOrder=0,m_interfaceOrder=0;
     class Factor
     {
     public:

@@ -32,6 +32,7 @@ inline std::string Quote(const std::string &value)
 inline std::string Number(double value)
 {
     if(!std::isfinite(value))return "null";
+    if(value==0 && std::signbit(value))return "-0.0";
     std::ostringstream out;out<<std::setprecision(17)<<value;return out.str();
 }
 inline std::string Boolean(bool value){return value?"true":"false";}
@@ -73,9 +74,24 @@ inline std::string ExceptionType(const std::exception &error)
     if(dynamic_cast<const std::runtime_error*>(&error))return "std::runtime_error";
     return typeid(error).name();
 }
-template<class Tensor> std::array<double,3> Eigenvalues(Tensor a)
+struct SymmetricSpectrum
 {
-    for(int step=0;step<48;++step)
+    std::array<double,3> eigenvalues{};
+    std::array<std::array<double,3>,3> vectors{};
+};
+template<class Tensor> SymmetricSpectrum Eigensystem(Tensor a)
+{
+    double scale=0;SymmetricSpectrum out;
+    for(int i=0;i<3;++i)out.vectors[i][i]=1;
+    for(const auto &row:a)for(double value:row)
+    {
+        if(!std::isfinite(value))throw std::invalid_argument("nonfinite covariance tensor");
+        scale=std::max(scale,std::abs(value));
+    }
+    if(scale==0)return out;
+    // Dimensionless work copy: the physical covariance is never modified.
+    for(auto &row:a)for(double &value:row)value/=scale;
+    for(int step=0;step<64;++step)
     {
         int p=0,q=1;for(int i=0;i<3;++i)for(int j=i+1;j<3;++j)
             if(std::abs(a[i][j])>std::abs(a[p][q])){p=i;q=j;}
@@ -83,11 +99,24 @@ template<class Tensor> std::array<double,3> Eigenvalues(Tensor a)
         const double angle=.5*std::atan2(2*a[p][q],a[q][q]-a[p][p]),c=std::cos(angle),s=std::sin(angle);
         const double pp=c*c*a[p][p]-2*s*c*a[p][q]+s*s*a[q][q];
         const double qq=s*s*a[p][p]+2*s*c*a[p][q]+c*c*a[q][q];
-        for(int k=0;k<3;++k)if(k!=p && k!=q)
-        {const double x=a[k][p],y=a[k][q];a[k][p]=a[p][k]=c*x-s*y;a[k][q]=a[q][k]=s*x+c*y;}
+        for(int k=0;k<3;++k)
+        {
+            if(k!=p && k!=q){const double x=a[k][p],y=a[k][q];a[k][p]=a[p][k]=c*x-s*y;a[k][q]=a[q][k]=s*x+c*y;}
+            const double x=out.vectors[k][p],y=out.vectors[k][q];out.vectors[k][p]=c*x-s*y;out.vectors[k][q]=s*x+c*y;
+        }
         a[p][p]=pp;a[q][q]=qq;a[p][q]=a[q][p]=0;
     }
-    std::array<double,3> result{a[0][0],a[1][1],a[2][2]};std::sort(result.begin(),result.end());return result;
+    std::array<int,3> order{0,1,2};std::sort(order.begin(),order.end(),[&](int i,int j){return a[i][i]<a[j][j];});
+    const auto vectors=out.vectors;
+    for(int j=0;j<3;++j){out.eigenvalues[j]=a[order[j]][order[j]]*scale;for(int i=0;i<3;++i)out.vectors[i][j]=vectors[i][order[j]];}
+    return out;
+}
+template<class Tensor> std::array<double,3> Eigenvalues(const Tensor &a)
+{return Eigensystem(a).eigenvalues;}
+inline bool CovarianceAdmissible(double minimum,double referenceK)
+{
+    if(!std::isfinite(minimum) || !std::isfinite(referenceK) || !(referenceK>0))return false;
+    return minimum>=0 || -minimum/referenceK<=1e-10;
 }
 } // namespace Nektar::RANSWallSolveJson
 #endif

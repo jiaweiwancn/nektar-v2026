@@ -6,6 +6,7 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallEvolutionResolution.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallForwardDiagnostics.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
 #include <algorithm>
 #include <cmath>
@@ -19,20 +20,7 @@ namespace
 {
 double MinimumEigenvalue(RANSTensor a)
 {
-    // Symmetric Jacobi rotations; covariance is a real symmetric tensor.
-    for(int step=0;step<32;++step)
-    {
-        int p=0,q=1;for(int i=0;i<3;++i)for(int j=i+1;j<3;++j)
-            if(std::abs(a[i][j])>std::abs(a[p][q])){p=i;q=j;}
-        if(std::abs(a[p][q])<1e-15*std::max({1.,std::abs(a[0][0]),std::abs(a[1][1]),std::abs(a[2][2])}))break;
-        const double angle=.5*std::atan2(2*a[p][q],a[q][q]-a[p][p]),c=std::cos(angle),s=std::sin(angle);
-        const double pp=c*c*a[p][p]-2*s*c*a[p][q]+s*s*a[q][q];
-        const double qq=s*s*a[p][p]+2*s*c*a[p][q]+c*c*a[q][q];
-        for(int k=0;k<3;++k)if(k!=p && k!=q)
-        {const double x=a[k][p],y=a[k][q];a[k][p]=a[p][k]=c*x-s*y;a[k][q]=a[q][k]=s*x+c*y;}
-        a[p][p]=pp;a[q][q]=qq;a[p][q]=a[q][p]=0;
-    }
-    return std::min({a[0][0],a[1][1],a[2][2]});
+    return RANSWallSolveJson::Eigenvalues(a)[0];
 }
 }
 RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s,const Vector &history,
@@ -84,7 +72,8 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
             }
             else
             {
-                const auto c=OuterClosure(k,epsilon,G,v.coordinate);
+                const auto c=NewModels()?RANSWallDiagnostics::Observe(m_parameters.model,k,epsilon,G,Distance(v.coordinate)).closure:
+                    OuterClosure(k,epsilon,G,v.coordinate);
                 covariance=c.reynoldsStress;
                 if(constitutiveReconstruction)
                 {
@@ -96,10 +85,13 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
                     range[3]=std::min(range[3],epsilon/e0);range[4]=std::max(range[4],epsilon/e0);
                     range[7]=std::max(range[7],std::abs(G[0][0]+G[1][1]+G[2][2])/g0);
                 }
-                const double h=1e-5*std::max(1.,std::abs(G[0][2]));auto plus=G,minus=G;plus[1][0]+=h;minus[1][0]-=h;
-                const auto cp=OuterClosure(k,epsilon,plus,v.coordinate);
-                const auto cm=OuterClosure(k,epsilon,minus,v.coordinate);
-                r[4]=std::min(r[4],-(cp.reynoldsStress[1][0]-cm.reynoldsStress[1][0])/(2*h));
+                if(!NewModels())
+                {
+                    const double h=1e-5*std::max(1.,std::abs(G[0][2]));auto plus=G,minus=G;plus[1][0]+=h;minus[1][0]-=h;
+                    const auto cp=OuterClosure(k,epsilon,plus,v.coordinate);
+                    const auto cm=OuterClosure(k,epsilon,minus,v.coordinate);
+                    r[4]=std::min(r[4],-(cp.reynoldsStress[1][0]-cm.reynoldsStress[1][0])/(2*h));
+                }
             }
             const double minimum=MinimumEigenvalue(covariance);
             r[3]=std::min(r[3],minimum);
@@ -145,6 +137,10 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
         for(int i=1;i<=4;++i)if(r[i]==sentinel)r[i]=0;
     }
     result["admissible"]={admissible?1.:0.};
+    // r[4] is a legacy tangent observation only. The new closures are forward
+    // qualified: an unavailable probe must neither invalidate a physical A95
+    // state nor be interpreted as a positive ellipticity certificate.
+    result["outer_tangent_diagnostic_available"]={NewModels()?0.:1.};
     if(constitutiveReconstruction)
     {
         for(int i:{0,2,4,6,7})m_comm->AllReduce(range[i],LibUtilities::ReduceMax);
@@ -336,31 +332,118 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
     result["energy"]=energy;result["roughness"]=RoughnessBudget(s,time,data);
     return result;
 }
+std::string RANSWallEvolutionPatch::PreservationIdentity() const
+{
+    std::ostringstream out;out<<std::setprecision(17)<<"NeutralVerification-v1:"<<m_parameters.model.Signature()
+        <<":"<<m_parameters.geometry.height<<":"<<m_parameters.geometry.roughness<<":"<<m_parameters.geometry.sampleHeight
+        <<":"<<m_parameters.geometry.tailStart<<":"<<m_parameters.chi<<":"<<WallPolicyName()<<":"<<m_robustUstar;
+    for(int b=0;b<Gauge();++b)
+    {
+        out<<"|"<<offset[b]<<","<<size[b];
+        for(const auto &e:fields[b]->Elements())out<<":"<<e.geometry<<","<<e.degree<<","<<e.lower[0]<<","<<e.upper[0]<<","<<e.lower[2]<<","<<e.upper[2];
+        for(const auto &q:fields[b]->Quadrature(2)){for(int id:q.ids)out<<","<<id;}
+    }
+    return out.str();
+}
+std::string RANSWallEvolutionPatch::PreservationPacket(const Vector &state,double time,
+    const RANSWallEvolutionData &data,bool basis,const std::vector<RANSWallCoordinate> &grid) const
+{
+    namespace J=RANSWallSolveJson;
+    Require(NewModels() && Dimension()==2 && !Mapped() && m_comm->GetSize()==1,
+        "verification is model-aware serial flat2D only");
+    Require(m_variantName=="Original" && !m_cappedDestruction && m_innerStress==RANSWallInnerStressModel::Linear,
+        "verification requires original outer, linear inner and prescribed uncapped sources");
+    EvaluationScope evaluation(*this,data,time);Refresh(state,time,&data);
+    auto row=[&](const RANSWallGlobalPoint &p)
+    {return J::Object({{"ids",J::Numbers(p.ids)},{"phi",J::Numbers(p.phi)},
+        {"derivative",J::Rows(p.derivative)},{"geometry",J::Number(p.geometry)},
+        {"element",J::Number(p.element)}});};
+    auto point=[&](const VolumePoint &q,int region)
+    {
+        return J::Object({{"coordinate",J::Numbers(q.v.coordinate)},{"weight",J::Number(q.weight)},
+            {"region",J::Number(region)},{"velocity_k",row(q.v)},{"pressure",row(q.p)},
+            {"epsilon",region==1?row(q.e):"null"}});
+    };
+    std::vector<std::string> volume,faces,mass,profiles,values,gradients,regions;
+    std::size_t ni=0,no=m_outer.size();
+    for(const auto &ray:m_rays)
+    {
+        ni+=ray.points.size();const auto &ref=ray.profile->Reference();
+        profiles.push_back(J::Object({{"coordinate",J::Numbers(ray.coordinate)},{"K",J::Number(ray.profile->K())},
+            {"chi",J::Number(ref.weight)},{"cutoff",J::Number(ref.cutoff)},{"budget_ratio",J::Number(ref.productionBudget/ref.minimumBudget)},
+            {"viscosity_intercept",J::Number(ray.profile->Original().ViscosityInterceptHeight())},
+            {"source_panels",J::Numbers(m_options.physicalBreakpoints)}}));
+        if(basis)for(const auto &q:ray.points)volume.push_back(point(q,0));
+    }
+    if(basis)for(const auto &q:m_outer)volume.push_back(point(q,1));
+    const double H=m_parameters.geometry.height;
+    if(basis)for(int region=0;region<2;++region)
+    {
+        for(int axis:{0,2})for(int side:{-1,1})
+        {
+            const double location=axis==0?(side<0?lower[0]:upper[0]):
+                (side<0?(region==0?0.:H):(region==0?H:upper[2]));
+            for(const auto &f:Surface(0,axis,location,side,m_interfaceOrder?m_interfaceOrder:8))
+            {
+                if((f.test.coordinate[2]<H?0:1)!=region && axis==0)continue;
+                if(axis==2 && location==H)
+                {
+                    const auto &e=fields[0]->Elements().at(f.test.element);
+                    if((e.lower[2]>=H?1:0)!=region)continue;
+                }
+                const auto pressure=GeometryPoint(InnerPressure()+region,f.test.geometry,f.test.coordinate);
+                faces.push_back(J::Object({{"coordinate",J::Numbers(f.test.coordinate)},{"weight",J::Number(f.weight)},
+                    {"area",J::Numbers(f.area)},{"region",J::Number(region)},
+                    {"interface",J::Boolean(axis==2 && location==H)},
+                    {"velocity_k",row(f.test)},{"pressure",row(pressure)},
+                    {"epsilon",region==1?row(GeometryPoint(Epsilon(),f.test.geometry,f.test.coordinate)):"null"}}));
+            }
+        }
+        for(const auto &q:Quadrature(InnerPressure()+region))mass.push_back(J::Object({
+            {"coordinate",J::Numbers(q.coordinate)},{"weight",J::Number(q.weight)},{"region",J::Number(region)},{"pressure",row(q)}}));
+    }
+    for(const auto &p:grid)
+    {
+        const int region=p[2]<H?0:1;Vector v;std::vector<Vector> g;
+        for(int b:{0,1,K(),Epsilon(),InnerPressure()+region})
+        {
+            if(b==Epsilon() && region==0){v.push_back(0.);g.push_back({0,0,0});continue;}
+            const auto q=Point(b,p);v.push_back(q.Value(state,offset[b]));
+            const auto derivative=q.Gradient(state,offset[b]);g.emplace_back(derivative.begin(),derivative.end());
+        }
+        values.push_back(J::Numbers(v));gradients.push_back(J::Rows(g));regions.push_back(J::Number(region));
+    }
+    const auto audit=CompleteRestrictedAudit(state,state,0,time,data);
+    std::vector<std::pair<std::string,std::string>> diagnostic;
+    for(const auto &[key,v]:audit)diagnostic.push_back({key,J::Numbers(v)});
+    std::vector<std::string> elements;
+    for(const auto &e:fields[0]->Elements())elements.push_back(J::Object({{"geometry",J::Number(e.geometry)},
+        {"degree",J::Number(e.degree)},{"lower",J::Numbers(e.lower)},{"upper",J::Numbers(e.upper)}}));
+    return J::Object({{"schema","1"},{"read_only","true"},{"time",J::Number(time)},{"identity",J::Quote(PreservationIdentity())},
+        {"resolved_descriptor",J::Quote(m_parameters.model.Signature())},{"state",J::Numbers(state)},
+        {"offsets",J::Numbers(offset)},{"sizes",J::Numbers(size)},{"elements",J::List(elements)},
+        {"actual_quadrature",J::Object({{"wall_normal",J::Number(m_parameters.normalOrder)},
+            {"wall_tangential",J::Number(m_parameters.tangentialOrder)},
+            {"outer_volume",J::Number(m_volumeOrder?m_volumeOrder:m_parameters.tangentialOrder)},
+            {"mass_override",J::Number(m_massOrder)},{"mass_default",J::Quote("max(8,p+3) per native field")},
+            {"interface",J::Number(m_interfaceOrder?m_interfaceOrder:8)},
+            {"reference_projection",J::Quote("Gauss32 on native radial elements, supplied breakpoints and geometric 1e-4*1.5^j subpanels")},
+            {"inner_volume_points",J::Number(ni)},{"outer_volume_points",J::Number(no)}})},
+        {"profiles",J::List(profiles)},{"volume",J::List(volume)},{"faces",J::List(faces)},{"pressure_mass",J::List(mass)},
+        {"audit_alpha_zero",J::Object(diagnostic)},
+        {"grid",J::Rows(grid)},{"grid_regions",J::List(regions)},
+        {"grid_values",J::List(values)},{"grid_gradients",J::List(gradients)}});
+}
+
 namespace
 {
 namespace CJ=RANSWallSolveJson;
 using CV=RANSWallAlgebra::Vector;
 struct Spectrum { CV eigenvalues; RANSTensor vectors{}; };
-Spectrum CovarianceSpectrum(RANSTensor a)
+Spectrum CovarianceSpectrum(const RANSTensor &a)
 {
-    RANSTensor v{};for(int i=0;i<3;++i)v[i][i]=1;
-    for(int step=0;step<64;++step)
-    {
-        int p=0,q=1;for(int i=0;i<3;++i)for(int j=i+1;j<3;++j)if(std::abs(a[i][j])>std::abs(a[p][q])){p=i;q=j;}
-        if(std::abs(a[p][q])<1e-16*std::max({1.,std::abs(a[0][0]),std::abs(a[1][1]),std::abs(a[2][2])}))break;
-        const double theta=.5*std::atan2(2*a[p][q],a[q][q]-a[p][p]),c=std::cos(theta),s=std::sin(theta);
-        const double pp=c*c*a[p][p]-2*s*c*a[p][q]+s*s*a[q][q],qq=s*s*a[p][p]+2*s*c*a[p][q]+c*c*a[q][q];
-        for(int k=0;k<3;++k)
-        {
-            if(k!=p && k!=q){const double x=a[k][p],y=a[k][q];a[k][p]=a[p][k]=c*x-s*y;a[k][q]=a[q][k]=s*x+c*y;}
-            const double x=v[k][p],y=v[k][q];v[k][p]=c*x-s*y;v[k][q]=s*x+c*y;
-        }
-        a[p][p]=pp;a[q][q]=qq;a[p][q]=a[q][p]=0;
-    }
-    std::array<int,3> order{0,1,2};std::sort(order.begin(),order.end(),[&](int i,int j){return a[i][i]<a[j][j];});
-    Spectrum out;for(int j:order)out.eigenvalues.push_back(a[j][j]);
-    for(int i=0;i<3;++i)for(int j=0;j<3;++j)out.vectors[i][j]=v[i][order[j]];
-    return out;
+    const auto eig=CJ::Eigensystem(a);
+    return {CV(eig.eigenvalues.begin(),eig.eigenvalues.end()),eig.vectors};
 }
 std::string TensorJSON(const RANSTensor &a)
 {std::vector<std::string> rows;for(const auto &r:a)rows.push_back(CJ::Numbers(r));return CJ::List(rows);}

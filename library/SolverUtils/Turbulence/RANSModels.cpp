@@ -171,7 +171,7 @@ RANSClosureValues NewClosure(RANSModel model,double k,double epsilon,
         ss+=s[i][j]*s[i][j];oo+=o[i][j]*o[i][j];
     }
     const Real eta=std::sqrt(2*ss),xi=std::sqrt(2*oo);
-    Real cmu,cq=0;
+    Real cmu,cq=0,physicalRadicand=0;
     if(model==RANSModel::A93)cmu=(2.L/3)/(1.25L+eta+.9L*xi);
     else
     {
@@ -182,12 +182,15 @@ RANSClosureValues NewClosure(RANSModel model,double k,double epsilon,
         if(!e)
         {
             const Real radicand=1-9*cmu*cmu*ss;
+            physicalRadicand=radicand;
             if(radicand<0)throw std::domain_error("A95 negative square-root radicand; no constitutive clipping");
             // radicand==0 is a forward value, not a smooth tangent promise.
             cq=std::sqrt(radicand)/(1+6*std::sqrt(ss)*std::sqrt(oo));
         }
     }
     RANSClosureValues result{};const Real nut=cmu*k*time;
+    result.a95RadicandDefined=model==RANSModel::A95;
+    result.a95Radicand=Cast(physicalRadicand);
     result.cMu=Cast(cmu);result.eddyViscosity=Cast(nut);
     if(!(result.eddyViscosity>0))throw std::range_error("New-model eddy viscosity underflow; no coefficient floor");
     result.strainInvariant=Cast(eta);result.rotationInvariant=Cast(xi);result.divergence=Cast(div);

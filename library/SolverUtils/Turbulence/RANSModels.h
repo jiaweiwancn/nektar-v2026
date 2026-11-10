@@ -35,6 +35,8 @@ struct RANSClosureValues
     RANSTensor reynoldsStress, quadraticStress, cubicStress;
     double production, kSource, epsilonProduction, epsilonDestruction, yap;
     double epsilonSource, momentumDiffusion, kDiffusion, epsilonDiffusion;
+    bool a95RadicandDefined=false;
+    double a95Radicand=0.;
 };
 
 SOLVER_UTILS_EXPORT double CLSCmu(double invariant);

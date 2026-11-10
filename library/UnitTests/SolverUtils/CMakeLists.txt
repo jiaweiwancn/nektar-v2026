@@ -1,4 +1,8 @@
 IF(TARGET SolverUtils)
+    ADD_NEKTAR_EXECUTABLE(RANSNativeDiagnosticChecks COMPONENT unit-test DEPENDS SolverUtils
+        SOURCES RANSNativeDiagnosticChecks.cpp)
+    TARGET_INCLUDE_DIRECTORIES(RANSNativeDiagnosticChecks PRIVATE ${CMAKE_SOURCE_DIR}/solvers)
+    ADD_TEST(NAME RANSNativeDiagnosticChecks COMMAND RANSNativeDiagnosticChecks)
     ADD_DEFINITIONS(-DENABLE_NEKTAR_EXCEPTIONS)
     ADD_NEKTAR_EXECUTABLE(SolverUtilsUnitTests
         COMPONENT unit-test DEPENDS SolverUtils
