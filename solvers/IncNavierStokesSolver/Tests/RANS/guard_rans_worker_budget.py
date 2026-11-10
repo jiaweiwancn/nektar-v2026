@@ -39,7 +39,10 @@ while not (r/'worker-guard.stop').exists():
   # A genuinely hung child still releases the parent's timeout after its
   # generous active-time allowance.
   limit=14400 if any(rows[p]['name'].startswith('IncNavier') for p in live_children) else 1800
-  if rows[root]['state'].startswith('T') and live_children and max(active_seconds.get(p,0.) for p in live_children)<limit:held_roots.add(root)
+  batch_children=[p for p in live_children if rows[p]['name'].startswith(('IncNavier','RANSPreserv','RANSWallResol'))]
+  # Interactive coefficient probes and loader queries need their Python parent
+  # to read/write pipes; never wait for those services to exit first.
+  if rows[root]['state'].startswith('T') and batch_children and max(active_seconds.get(p,0.) for p in batch_children)<limit:held_roots.add(root)
  events=[]
  for root,fam in families:
   for pid in sorted(fam,reverse=True):
