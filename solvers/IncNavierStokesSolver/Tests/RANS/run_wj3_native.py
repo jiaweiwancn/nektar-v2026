@@ -17,6 +17,8 @@ import xml.etree.ElementTree as ET
 import numpy as np
 from numpy.testing import assert_allclose
 from wj2_cases import case_xml
+from wj_qualification import wj3_gates
+from wj_immutable import write_once, runtime, execution_intent, artifacts, verify_artifacts, Ledger
 from wj3_measure import observations,errors,compare,replay_witnesses,arithmetic,FIELDS,wall,K0,checkpoint_payload
 from test_wj2_native import digest_object,independent_loads,reference_comparison,resting_functions
 from compare_cls_epawf_pimple import same_history
@@ -42,24 +44,64 @@ class Study:
         self.s['comparison_driver_revision']=subprocess.check_output(['git','-C',str(Path(__file__).resolve().parents[4]),'rev-parse','HEAD'],text=True).strip()
         self.s['measurement_driver_sha256']=sha(Path(__file__))
         self.s['physical_comparison_sha256']=sha(Path(__file__).with_name('wj3_measure.py'))
+        self.runtime_identity={str(p):runtime(p) for p in (args.solver,args.probe)}
+        self.code_identity=artifacts([Path(__file__),Path(__file__).with_name('wj3_measure.py'),
+            Path(__file__).with_name('wj2_cases.py'),Path(__file__).with_name('cls_epawf_m4_cases.py')])
+        self.ledger=Ledger(args.output,args.policy,cap=500,wall_cap=3600)
         self.save()
 
     def save(self):write_json(self.file,self.s)
 
     def execute(self,command,folder):
-        receipt=folder/'receipt.json'
-        if receipt.exists():return load(receipt)
-        start=time.time()
-        with (folder/'command.log').open('w') as log:
-            result=subprocess.run(list(map(str,command)),cwd=folder,stdout=log,stderr=subprocess.STDOUT,env=os.environ.copy(),timeout=3600)
-        r=dict(command=list(map(str,command)),exit_code=result.returncode,seconds=time.time()-start,
-            log=str(folder/'command.log'),log_sha256=sha(folder/'command.log'))
-        write_json(receipt,r);self.s['receipts'].append(r);self.save();return r
+        command=list(map(str,command));receipt=folder/'receipt.json'
+        inputs=[Path(x) for x in command[1:] if Path(x).is_file()]
+        for p in list(inputs):
+            if p.suffix=='.xml':
+                tree=ET.parse(p).getroot()
+                for q in tree.findall('./CONDITIONS/SOLVERINFO/I'):
+                    if q.get('PROPERTY')=='RANSWallRestart' and q.get('VALUE')!='None':inputs.append(Path(q.get('VALUE'))/'State.bin')
+            if p.name=='input.json':
+                packet=load(p)
+                for key in ('native_report','native_checkpoint'):
+                    if packet.get(key):inputs.append(Path(packet[key])/ 'State.bin' if key=='native_checkpoint' else Path(packet[key]))
+        intent=execution_intent(command,inputs,self.code_identity,self.runtime_identity,{})
+        write_once(folder/'execution-intent.json',intent)
+        if receipt.exists():
+            r=load(receipt);require(r['command']==command,'cached argv mismatch')
+            verify_artifacts(r['artifacts']);return r
+        require(not (folder/'command.log').exists(),'unreconciled execution: retain it and use a new attempt name')
+        steps=0
+        if Path(command[0])==self.a.solver:
+            for q in ET.parse(command[1]).findall('./CONDITIONS/PARAMETERS/P'):
+                key,_,value=q.text.partition('=')
+                if key.strip()=='NumSteps':steps=int(float(value))
+        label=str(folder.relative_to(self.a.output))
+        limit=min(1800.,max(120.,steps*15+120))
+        self.ledger.reserve(label,intent,steps,limit)
+        start=time.time();code=-1
+        try:
+            with (folder/'command.log').open('x') as log:
+                code=subprocess.run(command,cwd=folder,stdout=log,stderr=subprocess.STDOUT,env=os.environ.copy(),timeout=limit).returncode
+        except subprocess.TimeoutExpired:code=124
+        outputs=[folder/'command.log',folder/'case.evolution.json',folder/'result.json']
+        report=load(folder/'case.evolution.json') if (folder/'case.evolution.json').exists() else None
+        if report and report.get('checkpoint'):outputs.append(Path(report['checkpoint'])/'State.bin')
+        r=dict(command=command,exit_code=code,seconds=time.time()-start,log=str(folder/'command.log'),
+            log_sha256=sha(folder/'command.log'),artifacts=artifacts(outputs),intent=intent)
+        write_once(receipt,r)
+        self.ledger.finish(label,len(report['pimple_attempts']) if report else steps,r['seconds'],str(receipt))
+        self.s['receipts'].append(r);self.save();return r
 
     def native(self,name,steps=0,cp=None,dt=1e-6,level=1,normal=16,reject=0,arithmetic_time=None,floor_relative=None,resting=False):
         require(level in (0,1,2),'unsupported WJ normal refinement level')
         level=int(level)
         folder=self.root/name;xml=folder/'case.xml'
+        requested=dict(steps=steps,cp=str(cp) if cp else None,dt=dt,level=level,normal=normal,reject=reject,
+            arithmetic_time=arithmetic_time,floor_relative=floor_relative,resting=resting,policy=self.a.policy)
+        if xml.exists():
+            require((folder/'requested-intent.json').exists(),'unbound cached XML; use a new experiment root')
+            write_once(folder/'requested-intent.json',requested)
+            require(sha(xml)==load(folder/'xml-identity.json')['sha256'],'stale XML bytes')
         if not xml.exists():
             if folder.exists() and not any(folder.iterdir()):folder.rmdir()
             require(self.s['scheduled_attempts']+steps<=500,'500-attempt WJ work cap would be exceeded')
@@ -71,6 +113,8 @@ class Study:
             if arithmetic_time is not None:
                 set_info(tree,'RANSWallPimpleArithmetic','On');set_info(tree,'RANSWallPimpleArithmeticTime',format(arithmetic_time,'.17g'))
             write(tree,xml)
+            write_once(folder/'requested-intent.json',requested)
+            write_once(folder/'xml-identity.json',dict(sha256=sha(xml)))
         r=self.execute([self.a.solver,xml],folder)
         report=load(folder/'case.evolution.json') if (folder/'case.evolution.json').exists() else None
         index=folder/'identity.json'
@@ -224,7 +268,7 @@ class Study:
         # Declared BEFORE main trajectories. Cross-mesh level0 keeps this
         # bounded dense-backend pilot within a 60-minute per-policy remaining trajectory cap.
         # Level2 remains spatially qualified, temporally open.
-        self.s['frozen_design']=dict(D=chosen,T=32*chosen,T_ustar_over_H=16*chosen,
+        proposed=dict(D=chosen,T=32*chosen,T_ustar_over_H=16*chosen,
             main_steps=[32,64,128],main_dt=[chosen,chosen/2,chosen/4],mesh_unknowns=1257,
             cross_mesh_level=2 if fine_fits else 0,
             cross_mesh_unknowns=2493 if fine_fits else 639,cross_mesh_steps=128,
@@ -236,6 +280,12 @@ class Study:
             frozen_before_main_utc=time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),
             finer_temporal_mesh_open=not fine_fits,
             cross_mesh_cost_estimator='257 times measured 1257 scout step cost plus128 times measured 2493 full one-step process cost plus120 seconds observation reserve; choose2493 if below3600 seconds')
+        if 'frozen_design' in self.s:
+            old=self.s['frozen_design']
+            for key in ('D','T','main_steps','main_dt','mesh_unknowns','cross_mesh_level'):
+                require(old[key]==proposed[key],'frozen scout design differs; use a new root')
+        else:self.s['frozen_design']=proposed
+        write_once(self.root/'frozen-design.json',self.s['frozen_design'])
         self.save()
 
     def main_runs(self):
@@ -321,7 +371,13 @@ def main():
     p.add_argument('--mode',choices=('smoke','spatial','scout','main'),required=True);a=p.parse_args();a.solver=a.solver.resolve();a.probe=a.probe.resolve()
     if a.mode=='smoke':a.output=a.output/('run-'+uuid.uuid4().hex[:12])
     s=Study(a)
-    try:getattr(s,{'main':'main_runs'}.get(a.mode,a.mode))();s.s[a.mode+'_gate']='OBSTRUCTED' if a.mode=='main' and s.s.get('main_obstructions') else 'PASS';s.s.pop('failure',None);s.save()
+    try:
+        getattr(s,{'main':'main_runs'}.get(a.mode,a.mode))()
+        if a.mode in ('main','spatial'):
+            qualification=wj3_gates(s.s);s.s['qualification']=qualification
+            s.s[a.mode+'_gate']=qualification['status'] if a.mode=='main' else qualification['components']['spatial']['status']
+        else:s.s[a.mode+'_gate']='PASS'
+        s.s.pop('failure',None);s.save()
     except Exception as error:s.s[a.mode+'_gate']='FAIL';s.s['failure']=str(error);s.save();raise
     print(s.file)
 

@@ -16,7 +16,7 @@ def normal_knots(level=0):
     return knots
 
 
-def case_xml(folder,policy='EP',steps=0,restart=None,refined=False,normal=16,dt=1e-6,hard_reject=0,level=None):
+def case_xml(folder,policy='EP',steps=0,restart=None,refined=False,normal=16,dt=1e-6,hard_reject=0,level=None,xknots=None):
     folder=Path(folder);folder.mkdir(parents=True,exist_ok=False)
     root=ET.parse(Path(__file__).with_name('EquilibriumWallFlat.xml')).getroot()
     conditions=root.find('CONDITIONS')
@@ -28,7 +28,7 @@ def case_xml(folder,policy='EP',steps=0,restart=None,refined=False,normal=16,dt=
     if level is None:level=int(refined)
     if refined and level!=1:raise ValueError('refined=True is the level-1 compatibility spelling')
     knots=normal_knots(level)
-    tensor_mesh(root,knots,3,2,1.,1.,points=[8,8],xknots=[0.,1.])
+    tensor_mesh(root,knots,3,2,1.,1.,points=[8,8],xknots=[0.,1.] if xknots is None else xknots)
     for e in root.findall('./EXPANSIONS/E'):e.set('FIELDS',e.get('FIELDS').replace('eps_tilde','epsilon'))
     for v in conditions.findall('./VARIABLES/V'):
         if v.text=='eps_tilde':v.text='epsilon'

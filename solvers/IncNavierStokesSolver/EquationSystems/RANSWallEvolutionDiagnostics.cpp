@@ -802,8 +802,67 @@ std::string RANSWallEvolutionPatch::WJAuditPacket(const Diagnostic &audit,const 
 
 namespace Nektar
 {
+// Two exact tensor-cubic test functions shared across H. They vanish on
+// every prescribed exterior boundary. Regional volume loads have a signed
+// sum; separately normed terms must never be added to obtain this balance.
+std::string RANSWallEvolutionPatch::WJWeakLoads(const Vector &state,const Vector &history,double alpha,double time,
+    const RANSWallEvolutionData &data) const
+{
+    namespace J=RANSWallSolveJson;
+    const double H=m_parameters.geometry.height,L=upper[0]-lower[0];double lo=lower[2],hi=upper[2];
+    for(const auto &e:fields[0]->Elements())
+    {if(e.upper[2]==H)lo=std::max(lo,e.lower[2]);if(e.lower[2]==H)hi=std::min(hi,e.upper[2]);}
+    Require(lo<H && H<hi,"WJ weak mode support requires both H sides");
+    std::vector<std::string> modes;
+    for(int mode=0;mode<2;++mode)
+    {
+        // [region][field u,v,k,epsilon][storage,convection,stress_or_diffusion,source,roughness]
+        double loads[2][4][5]{};
+        auto evaluate=[&](const VolumePoint &q,bool inner,const EquilibriumAWFProfiles *profile,const RANSVector &force)
+        {
+            const auto &v=q.v;const double z=v.coordinate[2];if(z<lo || z>hi)return;
+            const double t=(v.coordinate[0]-lower[0])/L,b=t*(1-t),db=(1-2*t)/L;
+            const double x=mode==0?b:b*(2*t-1),dx=mode==0?db:db*(2*t-1)+2*b/L;
+            const double r=inner?(z-lo)/(H-lo):(hi-z)/(hi-H),dr=inner?1/(H-lo):-1/(hi-H);
+            const double phi=x*r;const RANSVector dphi{dx*r,0,x*dr};
+            RANSTensor G{},stress{};RANSVector u{};for(int a=0;a<m_dimension;++a){u[PhysicalAxis(a)]=v.Value(state,offset[a]);G[PhysicalAxis(a)]=v.Gradient(state,offset[a]);}
+            const double k=v.Value(state,offset[K()]),pi=q.p.Value(state,offset[inner?InnerPressure():OuterPressure()]);
+            double sk=0,se=0,dk=0,de=0,epsilon=0;
+            if(inner){const double nt=profile->Original().EddyViscosity(z);const auto law=InnerStress(k,nt,G);
+                stress=RANSWallInnerMeanStress(law,m_parameters.geometry.molecularNu,pi);sk=WallSource(state,v.coordinate,law.production,*profile).kSource;
+                dk=m_parameters.geometry.molecularNu+nt/SigmaK();}
+            else{epsilon=q.e.Value(state,offset[Epsilon()]);const auto c=OuterClosure(k,epsilon,G,v.coordinate);sk=c.kSource;se=c.epsilonSource;dk=c.kDiffusion;de=c.epsilonDiffusion;
+                for(int a=0;a<3;++a)for(int b=0;b<3;++b)stress[a][b]=-c.reynoldsStress[a][b]+(a==b?2*k/3-pi:0);}
+            auto &a=loads[inner?0:1];const auto gk=v.Gradient(state,offset[K()]);const auto ge=inner?RANSVector{}:q.e.Gradient(state,offset[Epsilon()]);
+            for(int f=0;f<(inner?3:4);++f)
+            {
+                const int block=f<2?f:f==2?K():Epsilon();const auto &row=f==3?q.e:v;
+                const double value=f<2?u[PhysicalAxis(f)]:f==2?k:epsilon;
+                a[f][0]+=q.weight*phi*alpha*(value-row.Value(history,offset[block]));
+                for(int axis=0;axis<3;++axis){a[f][1]-=q.weight*dphi[axis]*u[axis]*value;
+                    a[f][2]+=q.weight*dphi[axis]*(f<2?stress[PhysicalAxis(f)][axis]:f==2?dk*gk[axis]:de*ge[axis]);}
+                a[f][3]-=q.weight*phi*(f==2?sk:f==3?se:0);
+                if(inner && f<2 && z<=m_parameters.geometry.roughness)a[f][4]-=q.weight*phi*force[PhysicalAxis(f)];
+            }
+        };
+        Refresh(state,time,&data);
+        for(const auto &ray:m_rays){const auto force=CartesianForcing(state,ray.coordinate,time,data,false);for(const auto &q:ray.points)evaluate(q,true,ray.profile.get(),force);}
+        for(const auto &q:m_outer)evaluate(q,false,nullptr,{});
+        std::vector<std::string> regions;Vector sum(4);
+        for(int side=0;side<2;++side){std::vector<Vector> values;for(int f=0;f<4;++f){values.emplace_back(loads[side][f],loads[side][f]+5);for(double v:values.back())sum[f]+=v;}regions.push_back(J::Rows(values));}
+        modes.push_back(J::Object({{"mode",J::Number(mode)},{"regional_loads",J::List(regions)},{"signed_sum",J::Numbers(sum)},
+            {"prescribed_exterior_reaction",J::Numbers(Vector(4))},{"exterior_reaction_reason",J::Quote("test vanishes on both lateral boundaries, ground and top")}}));
+    }
+    return J::Object({{"schema",J::Quote("WJSharedInterfaceModesV1")},{"support_z",J::Numbers(Vector{lo,H,hi})},
+        {"x_bounds",J::Numbers(Vector{lower[0],upper[0]})},{"alpha_mass",J::Number(alpha)},
+        {"fields",J::Quote("u,v,k,outer_epsilon (outer trace reaction remains independent)")},
+        {"terms",J::Quote("storage,conservative convection,stress or scalar diffusion,negative source,roughness force")},
+        {"mode_definition",J::Quote("xhat(1-xhat)*(2*xhat-1)^mode times piecewise-linear hat through support_z")},
+        {"scope",J::Quote("regional signed weak volume loads; pointwise traction/flux jumps and trace moments are separate")},{"modes",J::List(modes)}});
+}
+
 std::string RANSWallEvolutionPatch::WJMeasurements(const Vector &state,const Vector &stageHistory,double stageAlpha,double time,
-    const RANSWallEvolutionData &data,const std::vector<std::array<double,5>> &observations) const
+    const RANSWallEvolutionData &data,const std::vector<std::array<double,6>> &observations) const
 {
     namespace J=RANSWallSolveJson;
     Require(WJ() && m_eta==0 && stageAlpha>=0,"WJ measurement requires unanchored selected model");
@@ -820,21 +879,33 @@ std::string RANSWallEvolutionPatch::WJMeasurements(const Vector &state,const Vec
         const RANSWallCoordinate p{o[0],o[1],o[2]};const int side=int(o[4]);
         Require(p[2]!=m_parameters.geometry.height || side!=0,"WJ H observation must name a side");
         const bool inner=p[2]<m_parameters.geometry.height || (p[2]==m_parameters.geometry.height && side<0);
-        const auto v=Point(0,p,side),pr=Point(inner?InnerPressure():OuterPressure(),p,side);
+        const int geometry=int(o[5]);
+        const auto v=geometry<0?Point(0,p,side):GeometryPoint(0,geometry,p);
+        const auto &element=fields[0]->Elements()[v.element];
+        Require((element.upper[2]<=m_parameters.geometry.height+1e-12)==inner,
+            "WJ observation geometry and radial side disagree");
+        const auto pr=GeometryPoint(inner?InnerPressure():OuterPressure(),v.geometry,p);
+        const int xface=std::abs(p[0]-element.lower[0])<1e-12?-1:std::abs(p[0]-element.upper[0])<1e-12?1:0;
+        const int zface=std::abs(p[2]-element.lower[2])<1e-12?-1:std::abs(p[2]-element.upper[2])<1e-12?1:0;
         RANSTensor g{};for(int a=0;a<m_dimension;++a)g[PhysicalAxis(a)]=v.Gradient(state,offset[a]);
         divergence=std::max(divergence,std::abs(g[0][0]+g[2][2]));
         auto values=[&](const Vector &s){const double k=v.Value(s,offset[K()]),pi=pr.Value(s,offset[inner?InnerPressure():OuterPressure()]);
-            return Vector{v.Value(s,offset[0]),v.Value(s,offset[1]),k,inner?0:Point(Epsilon(),p,side).Value(s,offset[Epsilon()]),pi,WJMechanicalPressure(pi,k,0)};};
+            return Vector{v.Value(s,offset[0]),v.Value(s,offset[1]),k,inner?0:GeometryPoint(Epsilon(),v.geometry,p).Value(s,offset[Epsilon()]),pi,WJMechanicalPressure(pi,k,0)};};
         const auto value=values(state),initial=values(m_reference);
         const int blocks[5]={0,1,K(),Epsilon(),inner?InnerPressure():OuterPressure()};Vector alternate(6);
-        if(observed++%std::max(1,int(observations.size()/64))==0)
+        if(observed++%std::max(1,int(observations.size()/64))==0 && xface==0 && zface==0)
         {for(int j=0;j<5;++j)if(j!=3 || !inner)alternate[j]=fields[blocks[j]]->NativeEvaluate(state,p,offset[blocks[j]],side)[0];
         alternate[5]=WJMechanicalPressure(alternate[4],alternate[2],0);
         for(int j=0;j<6;++j)evaluationSensitivity[j]=std::max(evaluationSensitivity[j],std::abs(value[j]-alternate[j]));}
         Vector G;for(const auto &r:g)G.insert(G.end(),r.begin(),r.end());
-        samples.push_back(J::Object({{"position",J::Numbers(p)},{"weight",J::Number(o[3])},{"side",J::Number(side)},
+        samples.push_back(J::Object({{"position",J::Numbers(p)},{"geometry",J::Number(v.geometry)},{"element",J::Number(v.element)},
+            {"face_sides_xz",J::Numbers(Vector{double(xface),double(zface)})},{"provenance",J::Quote("NativeElementSideV2")},{"weight",J::Number(o[3])},{"side",J::Number(side)},
             {"inner",J::Boolean(inner)},{"value",J::Numbers(value)},{"represented_initial",J::Numbers(initial)},
-            {"raw_G",J::Numbers(G)},{"grad_k",J::Numbers(v.Gradient(state,offset[K()]))}}));
+            {"raw_G",J::Numbers(G)},{"grad_k",J::Numbers(v.Gradient(state,offset[K()]))},
+            {"stress",J::Rows([&](){RANSTensor t{};const double k=value[2];if(inner){const auto profile=StateProfile(state,p,time,data);
+                t=RANSWallInnerMeanStress(InnerStress(k,profile->Original().EddyViscosity(p[2]),g),m_parameters.geometry.molecularNu,value[4]);}
+                else{const auto c=OuterClosure(k,value[3],g,p);for(int a=0;a<3;++a)for(int b=0;b<3;++b)t[a][b]=-c.reynoldsStress[a][b]+(a==b?2*k/3-value[4]:0);}
+                std::vector<Vector> rows;for(const auto &r:t)rows.emplace_back(r.begin(),r.end());return rows;}())}}));
     }
     for(const auto &f:Surface(0,2,m_parameters.geometry.height,1,8))
     {
@@ -866,7 +937,7 @@ std::string RANSWallEvolutionPatch::WJMeasurements(const Vector &state,const Vec
         {"completed_stage",stageAlpha>0?J::Object({{"alpha_mass",J::Number(stageAlpha)},{"time",J::Number(time)},
             {"history_sha256",J::Quote(historyHash)},{"residual",J::Numbers(stage)},{"mass_dual_norms",J::Numbers(Norms(stage,constraints,m_robustUstar))}}):"null"},
         {"regional_spatial_mass_dual_norms",J::Rows(std::vector<Vector>{Norms(Residual(state,state,0,time,data,false,true,0),constraints,m_robustUstar),Norms(Residual(state,state,0,time,data,false,true,1),constraints,m_robustUstar)})},
-        {"spatial_terms",J::Object(terms)},{"constraints",J::Constraints(constraints)},
+        {"spatial_terms",J::Object(terms)},{"weak_modes",WJWeakLoads(state,stageAlpha>0?stageHistory:state,stageAlpha,time,data)},{"constraints",J::Constraints(constraints)},
         {"residual_order",J::Quote("u,v,k,entire outer epsilon,inner continuity,outer continuity,gauge,boundary/trace; consistent mass dual physical scaling")},
         {"component_norm_warning",J::Quote("separately normed regional/source/diffusion/interface contributions are not linearly additive")},
         {"observations",J::List(samples)},{"interfaces",J::List(interfaces)},

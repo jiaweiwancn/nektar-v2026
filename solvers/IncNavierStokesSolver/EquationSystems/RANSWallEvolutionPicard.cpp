@@ -1269,7 +1269,8 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolveSegregatedPicard(
 
 namespace Nektar
 {
-std::string RANSWallEvolutionPatch::WJNativeChecks(const Vector &state,const RANSWallEvolutionData &data,double time) const
+std::string RANSWallEvolutionPatch::WJNativeChecks(const Vector &state,const RANSWallEvolutionData &data,double time,
+    const Vector &acceptedHistory,double acceptedAlpha) const
 {
     Require(WJ() && !Mapped() && m_dimension==2 && !CappedDestruction(),"WJ checks require the selected native pilot");
     const auto hash=RANSWallR3::Hash(state);const double alpha=1e6;
@@ -1368,7 +1369,11 @@ std::string RANSWallEvolutionPatch::WJNativeChecks(const Vector &state,const RAN
         std::vector<std::string> epsilonDerivatives;if(!inner)for(int axis:{0,2})epsilonDerivatives.push_back(J::Numbers(q.e.derivative[axis]));
         samples.push_back(J::Object({{"inner",J::Boolean(inner)},{"geometry",J::Number(v.geometry)},{"element",J::Number(v.element)},
             {"coordinate",J::Numbers(v.coordinate)},{"weight",J::Number(q.weight)},{"k",J::Number(k)},{"epsilon",J::Number(epsilon)},
-            {"G",J::Numbers(gradient)},{"velocity",J::Numbers(velocity)},{"reduced_pressure",J::Number(pi)},
+            {"G",J::Numbers(gradient)},{"velocity",J::Numbers(velocity)},
+            {"accepted_stage_alpha",J::Number(acceptedAlpha)},
+            {"accepted_history_values",J::Numbers(acceptedHistory.empty()?Vector{}:Vector{
+                v.Value(acceptedHistory,offset[0]),v.Value(acceptedHistory,offset[1]),v.Value(acceptedHistory,offset[K()]),
+                inner?0:q.e.Value(acceptedHistory,offset[Epsilon()])})},{"reduced_pressure",J::Number(pi)},
             {"mechanical_pressure_over_rho",J::Number(WJMechanicalPressure(pi,k,0))},
             {"grad_k",J::Numbers(gk)},{"grad_epsilon",J::Numbers(ge)},
             {"sampled_K",inner?J::Number(profile->K()):"null"},{"ids",J::Numbers(v.ids)},{"phi",J::Numbers(v.phi)},
