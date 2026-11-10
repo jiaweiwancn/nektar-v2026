@@ -387,3 +387,16 @@ trend. Do not extend the coarse arbitrary polynomial reference merely to hide
 its initial residual. Long production campaigns, physical benchmarks, complete
 temporal-order campaigns, terrain, true 3D, MPI and nonlinear/action solvers
 remain outside this package; their unsupported combinations remain guarded.
+
+## Follow-up boundary-isolation audit
+
+The archived fresh-history Q0/Q2 controls above fixed the stored initial
+coefficients but allowed the target solver to regenerate its external boundary
+map before checkpoint restoration. Their numerical values are retained as
+combined quadrature/boundary perturbation observations. Their strictly isolated
+quadrature interpretation is superseded by the `FrozenReferenceV1` controls in
+[a93-a95-e94e95-awf-neutral-persistence-pilot.md](a93-a95-e94e95-awf-neutral-persistence-pilot.md).
+Those controls verify the live explicit/implicit boundary maps and effective
+initial inputs consumed by native trajectories for all three accepted-wall
+models. No archived receipt, numerical threshold, or historical unresolved
+epsilon-order observation is changed.
