@@ -607,3 +607,13 @@ target_link_libraries(RANSReturnedFieldsProbe RANSKernels)
 add_test(NAME RANSReturnedFieldsChecks COMMAND RANSReturnedFieldsProbe)
 set_tests_properties(RANSReturnedFieldsChecks PROPERTIES PROCESSORS 1 TIMEOUT 60
     ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
+if(RANS_BUILD_SOLVER AND Python3_Interpreter_FOUND AND wj_dependencies EQUAL 0)
+    foreach(wj_policy EP Budget)
+        add_test(NAME WJNative${wj_policy} COMMAND ${Python3_EXECUTABLE} -B
+            ${CMAKE_CURRENT_LIST_DIR}/test_wj2_native.py
+            --solver $<TARGET_FILE:IncNavierStokesSolver> --probe $<TARGET_FILE:RANSWallResolutionProbe>
+            --policy ${wj_policy} --output ${CMAKE_CURRENT_BINARY_DIR}/wj2-native-${wj_policy})
+        set_tests_properties(WJNative${wj_policy} PROPERTIES PROCESSORS 1 TIMEOUT 1800
+            ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;NUMEXPR_NUM_THREADS=1")
+    endforeach()
+endif()

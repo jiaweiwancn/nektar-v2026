@@ -48,7 +48,8 @@ RANSWallAlgebra::Vector WJPrincipal(double k,double epsilon,const RANSTensor &g,
     for(int i=0;i<3;++i)for(int j=0;j<3;++j)for(int a=0;a<3;++a)for(int b=0;b<3;++b)
         matrix[i][j]-=h[i][a][b]*actions[j][a][b]/law.eddyViscosity;
     auto form=[&](double angle){const double c=std::cos(angle),s=std::sin(angle);const double v[3]={-c*s,-s*s,c*c};double result=0;
-        for(int i=0;i<3;++i)for(int j=0;j<3;++j)result+=v[i]*matrix[i][j]*v[j];return result;};
+        for(int i=0;i<3;++i)for(int j=0;j<3;++j){result+=v[i]*matrix[i][j]*v[j];}
+        return result;};
     const double pi=std::acos(-1.),spacing=pi/32;double best=1e300;
     for(int j=0;j<32;++j)
     {
@@ -701,6 +702,16 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::WJCompleteAudit(const
     const bool valid=covariance[0]>=-1e-10*K0 && covariance[1]>=-1e-10*K0 && root[0]>=1.8 && root[1]<1e-12 &&
         principal[0]>0 && principal[1]>0 && work[0]<1e-11 && scalar[6]>=1 && scalar[7]<1e-10;
     audit["wj_hard_admissible"]={valid?1.:0.};
+    RANSTensor adverse{};adverse[0][2]=3.5;
+    const auto bad=EvaluateWJClosure(1,1,adverse,m_parameters.wj);
+    RANSTensor h{};const RANSVector xi{1/std::sqrt(50.),0,-7/std::sqrt(50.)},a{7/std::sqrt(50.),0,1/std::sqrt(50.)};
+    for(int i=0;i<3;++i)for(int j=0;j<3;++j)h[i][j]=a[i]*xi[j];
+    const auto action=ApplyWJClosureDirection(1,1,adverse,0,0,h,m_parameters.wj);
+    double form=0;for(int i=0;i<3;++i)for(int j=0;j<3;++j)form-=h[i][j]*action.reynoldsStress[i][j]/bad.eddyViscosity;
+    RANSTensor commuting{{{2,1.5*std::sqrt(17.),0},{-1.5*std::sqrt(17.),2,0},{0,0,-4}}};
+    const auto psd=EvaluateWJClosure(1,1,commuting,m_parameters.wj);
+    audit["wj_separate_analytic_adverse_witnesses"]={bad.wj.n,form,RANSWallSolveJson::Eigenvalues(bad.reynoldsStress)[0],bad.production,
+        psd.wj.n,psd.reynoldsStress[0][0],psd.reynoldsStress[1][1],psd.reynoldsStress[2][2],psd.production};
     return audit;
 }
 }
