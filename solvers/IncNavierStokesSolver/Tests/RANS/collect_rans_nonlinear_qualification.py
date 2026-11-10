@@ -25,6 +25,8 @@ def main():
     result['verification']['complete-export-negative-controls']=receipt(r/'complete-export-negative-controls/results.json')
     for name in ('ctest-current.json','partial-export-negative-control.json','neutral-as-perturbed-negative-control.json','physical-budget-regression.json'):
         result['verification'][name]=receipt(r/name)
+    for name in ('ctest-final-v4.json','ctest-final-v5.json','build-ctest-descriptor.json','build-probe-exact-scope-control.json'):
+        result['verification'][name]=receipt(r/name)
     for name in ('forward-interface-tolerance-status.json','physical-budget-face-regression.json','build-probe-side-control.json'):
         result['verification'][name]=receipt(r/name)
     result['execution_schedules']=[]
@@ -104,6 +106,15 @@ def main():
                     for m in MEMBERS[:2]:require(inner['source_audit_sha256'][str(check['time'])][m]==sha(r/'evolved-audits'/(cohort+'-'+str(check['time'])+'-'+m)/'results.json'),'inner_common_source_audit_changed')
                 for check in inner['short_checks']:require(reduction(*[check['groups'][m]['inner']['mass_dual'] for m in MEMBERS[:2]])['status'] in ('pass','unresolved_floor'),'short_common_inner_reduction_failed')
             final=row['audits']['0.5'];complete=all(x.get('status')=='pass' for x in row['comparisons'].values()) and final.get('status')=='pass' and inner.get('status')=='pass'
+            row['classification']=dict(
+                process_and_endpoint_coverage='pass' if all(len(v.get('provenance',[]))==4 for v in row['comparisons'].values()) else 'incomplete',
+                field_and_timestep='pass' if all(v.get('status')=='pass' for v in row['comparisons'].values()) else 'failed_or_incomplete',
+                spatial_reconstruction='pass' if all(final.get('spatial_audits',{}).get(m,{}).get('status')=='pass' for m in MEMBERS[:2]) else 'failed_or_incomplete',
+                dominant_spatial_reduction=final.get('aggregate',{}).get('evolved_reduction_status','not_completed'),
+                fixed_common_inner_k=inner.get('status','not_completed'),
+                scalar_coverage=final.get('aggregate',{}).get('coverage_status','not_completed'),
+                frozen_quadrature=final.get('quadrature',{}).get('status','not_completed'),
+                native_constitutive='pass' if all(final.get('constitutive',{}).get(m,{}).get('status')=='pass' for m in MEMBERS[:2]) else 'failed_or_incomplete')
             failed_reductions=[v for v in final.get('evolved_reductions',[]) if v['status']!='pass']
             if failed_reductions:
                 first=min(failed_reductions,key=lambda v:v['time']);time=first['time']
@@ -190,7 +201,7 @@ def main():
     result['scope']='serial flat2D prescribed-reference patch; unsupported geometry/3D/MPI/actions unchanged; response and independent physical-flux scopes reported separately'
     complete=out/'complete-results.json.gz'
     with gzip.open(complete,'wt',compresslevel=9) as f:json.dump(result,f,separators=(',',':'),allow_nan=False)
-    light={k:v for k,v in result.items() if k not in ('cases','cohorts','admissions','responses')};light.update(complete_results=dict(file=complete.name,sha256=sha(complete)),admissions={k:dict(status=v['status'],configuration=v['configuration'],source=v['source'],source_sha256=v['source_sha256']) for k,v in result['admissions'].items()},cohorts={k:dict(numerical_status=v['numerical_status'],comparison_statuses={t:x['status'] for t,x in v['comparisons'].items()},audit_statuses={t:x['status'] for t,x in v['audits'].items()}) for k,v in result['cohorts'].items()},response_statuses={k:v['status'] for k,v in result['responses'].items()})
+    light={k:v for k,v in result.items() if k not in ('cases','cohorts','admissions','responses')};light.update(complete_results=dict(file=complete.name,sha256=sha(complete)),admissions={k:dict(status=v['status'],configuration=v['configuration'],source=v['source'],source_sha256=v['source_sha256']) for k,v in result['admissions'].items()},cohorts={k:dict(numerical_status=v['numerical_status'],classification=v['classification'],comparison_statuses={t:x['status'] for t,x in v['comparisons'].items()},audit_statuses={t:x['status'] for t,x in v['audits'].items()}) for k,v in result['cohorts'].items()},response_statuses={k:v['status'] for k,v in result['responses'].items()})
     write_json(out/'summary.json',light);print(result['status']);return 0 if result['status']=='pass' else 1
 
 
