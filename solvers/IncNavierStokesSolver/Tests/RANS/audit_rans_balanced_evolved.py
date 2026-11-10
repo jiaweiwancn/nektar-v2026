@@ -8,7 +8,7 @@ from rans_qualification import THREADS,write_json,exact_vector_hash
 from rans_preservation_oracle import Reference,weak_balance
 from qualify_rans_preservation import load,replay_request
 from rans_request_manifest import RequestManifest,runtime_identity
-from rans_spatial_resolution import analyze,common_test,test_parent_geometries
+from rans_spatial_resolution import analyze,common_test,test_parent_geometries,test_effective_coordinates
 from rans_pilot_evidence import epsilon_budget_gate
 import numpy as np
 from scipy.linalg import cho_factor,cho_solve
@@ -39,7 +39,7 @@ def main():
   endpoint=folder/('T-'+format(t,'.4f'));assert admission.completed(endpoint);native=load(endpoint/'case.evolution.json');assert abs(native['time']-t)<1e-13 and not native['failure'];destination=out/('T-'+format(t,'.4f'));destination.mkdir();shutil.copy2(endpoint/'case.xml',destination/'case.xml')
   request=replay_request(source,[],export_basis=True,state=native['state'],time=native['time']);request['fixed_boundary']=native['initialization_receipt']['live_fixed_boundary'];request['export_resolution']=True
   packet,seconds=run_probe(runtime,destination,request);assert exact_vector_hash(packet['observation']['state'])==exact_vector_hash(native['state'])
-  cross=out/('T-'+format(t,'.4f')+'-common-cross');cross.mkdir();shutil.copy2(common/'case.xml',cross/'case.xml');request=replay_request(cp,[q['coordinate'] for q in packet['observation']['volume']]);request['export_test_basis']=True;request['grid_test_geometries']=test_parent_geometries(cp,packet);xp,_=run_probe(runtime,cross,request)
+  cross=out/('T-'+format(t,'.4f')+'-common-cross');cross.mkdir();shutil.copy2(common/'case.xml',cross/'case.xml');request=replay_request(cp,test_effective_coordinates(packet));request['export_test_basis']=True;request['grid_test_geometries']=test_parent_geometries(cp,packet);xp,_=run_probe(runtime,cross,request)
   row=dict(status='pass',time=native['time'],nominal_target=t,trajectory_source=str(endpoint),trajectory_request_sha256=manifest['sha256'],native_report_sha256=hashlib.sha256((endpoint/'case.evolution.json').read_bytes()).hexdigest(),history=load(endpoint/'metrics.json')['history_identity'],
    state_sha256=exact_vector_hash(native['state']),live_boundary_sha256=native['initialization_receipt']['explicit_boundary_sha256'],
    spatial=analyze(packet,ref),common_test=common_test(cp,packet,xp,ref),analytical_weak_balance=weak_balance(ref,packet['observation']),

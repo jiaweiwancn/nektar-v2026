@@ -89,6 +89,12 @@ def test_parent_geometries(coarse,fine):
         parents[e['geometry']]=c['geometry']
     return [parents[q['velocity_k']['geometry']] for q in fine['observation']['volume']]
 
+def test_effective_coordinates(fine):
+    # The native BasisData evaluator clamps local coordinates to [-1,1].
+    # Preserve raw source coordinates in the packet; match its actual test row.
+    elements={e['geometry']:e for e in fine['observation']['elements']}
+    return [[min(max(q['coordinate'][a],elements[q['velocity_k']['geometry']]['lower'][a]),elements[q['velocity_k']['geometry']]['upper'][a]) for a in range(3)] for q in fine['observation']['volume']]
+
 def common_test(coarse,fine,cross,ref):
     """P = M_f^{-1} B_fc on native quadrature, then restrict by P^T.
 
@@ -118,4 +124,5 @@ def common_test(coarse,fine,cross,ref):
         for k in fr['physical_term_names']:
             value=p.T@np.array(fr['terms'][k])[fo['offsets'][b]:fo['offsets'][b]+nf];terms[k]=norm(value)
         result[name]=dict(prolongation_sha256=hashlib.sha256(np.asarray(P,dtype='<f8').tobytes()).hexdigest(),identity_checks=condition,coarse_common_mass_dual=norm(own),fine_restricted_common_mass_dual=norm(restricted),restricted_load_difference=norm(restricted-own),restricted_load=restricted.tolist(),common_free_ids=free.tolist(),common_mass_sha256=hashlib.sha256(np.asarray(M,dtype='<f8').tobytes()).hexdigest(),restricted_term_mass_dual=terms,common_free_test_count=len(free),fine_full_count=nf)
-    return dict(status='pass',fields=result,definition='P^T r_f on identical coarse free tests and physical coarse mass/normalization; full fine norms retained separately')
+    shifts=np.max(np.abs(np.array([q['coordinate'] for q in rows])-np.array(cross['observation']['grid'])),axis=1)
+    return dict(status='pass',raw_to_effective_test_coordinate=dict(maximum=float(np.max(shifts,initial=0.)),shifted_points=int(np.count_nonzero(shifts)),meaning='native basis-coordinate clamp at tolerated roundoff-outside element points; physical source points remain unchanged'),fields=result,definition='P^T r_f on identical coarse free tests and physical coarse mass/normalization; full fine norms retained separately')

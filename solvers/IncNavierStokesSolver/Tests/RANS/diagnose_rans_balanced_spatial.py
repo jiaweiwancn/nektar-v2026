@@ -9,7 +9,7 @@ from rans_preservation_oracle import Reference,physical_grid,representation,weak
 from rans_request_manifest import runtime_identity
 from qualify_rans_preservation import load,Q,nested,replay_request
 from run_a93_a95_e94e95_matrix import case_xml
-from rans_spatial_resolution import analyze,common_test,test_parent_geometries
+from rans_spatial_resolution import analyze,common_test,test_parent_geometries,test_effective_coordinates
 
 def run_probe(runtime,folder,request):
     write_json(folder/'request.json',request);t=time.monotonic()
@@ -46,7 +46,7 @@ def main():
         try:
             spec=choices[name];folder=out/name;case_xml(folder,a.model,a.policy,a.wall,steps=0,descriptor_probe=r/'runtime/RANSNewModelsProbe',radial_knots=spec['knots'],degree=spec['degree'],quadrature=Q[a.quadrature_index],boundary_policy='FrozenReferenceV1')
             packet,elapsed=run_probe(runtime,folder,dict(operation='neutral',grid=grid,export_basis=True,export_resolution=True));o=packet['observation']
-            cross=out/(name+'-common-cross');cross.mkdir();__import__('shutil').copy2(common/'case.xml',cross/'case.xml');request=replay_request(cp,[q['coordinate'] for q in o['volume']]);request['export_test_basis']=True;request['grid_test_geometries']=test_parent_geometries(cp,packet)
+            cross=out/(name+'-common-cross');cross.mkdir();__import__('shutil').copy2(common/'case.xml',cross/'case.xml');request=replay_request(cp,test_effective_coordinates(packet));request['export_test_basis']=True;request['grid_test_geometries']=test_parent_geometries(cp,packet)
             crosspacket,_=run_probe(runtime,cross,request)
             record=dict(name=name,status='pass',space=dict(spec,pressure_degree=spec['degree']-2,dof=sum(o['sizes']),block_sizes=o['sizes']),evolution_eligible=sum(o['sizes'])<=3000,
                 exact_source_runtime=intent['runtime'],initial_state_sha256=exact_vector_hash(o['state']),reference_sha256=exact_vector_hash(packet['reference']),initialization=packet['initialization_receipt'],
