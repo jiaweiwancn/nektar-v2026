@@ -297,7 +297,9 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     std::string arithmetic;session->LoadSolverInfo("RANSWallPimpleArithmetic",arithmetic,"Off");
     Require(arithmetic=="Off" || arithmetic=="On","invalid PIMPLE arithmetic observation switch");
     m_pimpleArithmetic=arithmetic=="On";
-    session->LoadParameter("RANSWallPimpleArithmeticTime",m_pimpleArithmeticTime,-1.);
+    std::string arithmeticTime;session->LoadSolverInfo("RANSWallPimpleArithmeticTime",arithmeticTime,"-1");
+    std::size_t consumed=0;m_pimpleArithmeticTime=std::stod(arithmeticTime,&consumed);
+    Require(consumed==arithmeticTime.size() && std::isfinite(m_pimpleArithmeticTime),"invalid passive arithmetic observation time");
 
     session->LoadParameter("RANSWallPimpleBudgetTime",m_pimpleBudgetTime,-1.);
     session->LoadSolverInfo("RANSWallFeasibleFile",m_feasibleTraceFile,"case.feasible.jsonl");

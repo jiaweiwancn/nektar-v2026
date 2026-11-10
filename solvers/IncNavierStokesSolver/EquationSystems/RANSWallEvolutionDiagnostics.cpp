@@ -769,6 +769,9 @@ std::string RANSWallEvolutionPatch::WJAuditPacket(const Diagnostic &audit,const 
             {"margins",J::Numbers(Vector(v.begin()+1,v.end()))}})});
         if(!pass)failures.push_back(J::Quote(category));
     }
+    for(const std::string name:{"scalar_domain","inner_covariance","outer_covariance","root_branch","root_residual",
+        "scalar_viscosities","principal_in_plane","principal_transverse","raw_work","profile_gate","profile_budget"})
+        if(!audit.count("wj_condition_"+name))conditions.push_back({name,J::Object({{"passed","null"},{"margins","[]"},{"evaluation",J::Quote("not_evaluated_after_scalar_domain_exit")}})});
     for(const std::string polarization:{"in_plane","transverse"})
     {
         const auto found=audit.find("wj_principal_"+polarization+"_witness");if(found==audit.end())continue;
@@ -790,6 +793,7 @@ std::string RANSWallEvolutionPatch::WJAuditPacket(const Diagnostic &audit,const 
             {"scope",J::Quote("finite NativeElementSideV2 spatial inventory; x-z propagation only")}})});
     }
     return J::Object({{"schema",J::Quote("WJFiniteAuditV2")},{"state_sha256",J::Quote(RANSWallR3::Hash(state))},
+        {"stage_context_sha256",J::Quote(RANSWallR3::Hash(RANSWallR3::Hash(state)+RANSWallR3::Hash(history)+J::Number(alpha)+"/"+J::Number(time)+"/"+phase))},
         {"stage_history_sha256",J::Quote(RANSWallR3::Hash(history))},{"callback_history",alpha>0?J::Numbers(history):"null"},{"phase",J::Quote(phase)},
         {"time",J::Number(time)},{"alpha_mass",J::Number(alpha)},{"conditions",J::Object(conditions)},
         {"failure_categories",J::List(failures)},{"principal_witnesses",J::Object(witnesses)}});

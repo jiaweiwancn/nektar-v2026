@@ -58,7 +58,7 @@ class Study:
             xml=case_xml(folder,self.a.policy,steps,cp,level=level,normal=normal,dt=dt,hard_reject=reject)
             tree=ET.parse(xml).getroot();set_info(tree,'RANSWallPimpleSnapshotDirectory',str(folder/'pimple-states'))
             if arithmetic_time is not None:
-                set_info(tree,'RANSWallPimpleArithmetic','On');set_parameter(tree,'RANSWallPimpleArithmeticTime',arithmetic_time)
+                set_info(tree,'RANSWallPimpleArithmetic','On');set_info(tree,'RANSWallPimpleArithmeticTime',format(arithmetic_time,'.17g'))
             write(tree,xml)
         r=self.execute([self.a.solver,xml],folder)
         report=load(folder/'case.evolution.json') if (folder/'case.evolution.json').exists() else None
@@ -68,9 +68,9 @@ class Study:
             self.s['scheduled_attempts']+=len(attempts)
             write_json(index,dict(xml_sha256=sha(xml),report_sha256=sha(folder/'case.evolution.json') if report else None,
                 scheduled_attempts=len(attempts),requested_steps=steps,dt=dt,level=level,
-                state_sha256=state_hash(report['state']) if report else None,
-                history_sha256=digest_object(report['native_history']) if report else None,
-                checkpoint=report['checkpoint'] if report else None,
+                state_sha256=state_hash(report['state']) if report and 'state' in report else None,
+                history_sha256=digest_object(report['native_history']) if report and 'native_history' in report else None,
+                checkpoint=report.get('checkpoint') if report else None,
                 checkpoint_sha256=sha(Path(report['checkpoint'])/'State.bin') if report and report.get('checkpoint') else None))
             self.save()
         return report,r,folder
