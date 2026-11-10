@@ -281,3 +281,124 @@ fresh-history cohort passes execution, physical and field-accuracy checks at
 Its nonzero process result and all four trajectories remain archived. The
 predeclared .002/.001 independent-history refinement is the next experiment;
 no .5 result is inferred from the successful short .0004/.0002 study.
+
+## Source mapping and reproduction
+
+| Responsibility | Implementation / evidence |
+|---|---|
+| Existing physical term assembly, with optional per-element export | `RANSWallEvolutionResolution.cpp`, `ResidualResolution` and `ResidualResolutionComponents`; production default does not collect elements |
+| Model-aware immutable replay and native test selectors | `library/UnitTests/SolverUtils/RANSPreservationProbe.cpp`; legacy CLS replay guard remains |
+| Diagnostic eligibility and D semantics | `RANSEquilibriumWallEvolution.cpp`, `NeutralAccuracy` in `RANSWallEvolutionDiagnostics.cpp` |
+| Full/native and fixed common-test analysis | `rans_spatial_resolution.py`, `explain_rans_spatial_residual.py`, `audit_rans_balanced_evolved.py` |
+| Complete previous bodies and epsilon budget classifier | `rans_pilot_evidence.py`, `collect_rans_neutral_pilot.py`, `check_rans_balanced_evidence.py` |
+| Selected fixed mesh / stage gates | `make_rans_balanced_meshes.py`, `classify_rans_balanced_spatial.py`, `compare_rans_balanced_evolution.py` |
+| Same-space inputs, histories and validated reuse | `run_rans_neutral_pilot.py`, immutable request manifests, `run_rans_balanced_duration.py` |
+| Scoped duration admission and failed pressure control | `admit_rans_balanced_duration.py`, `duration-admission.json`, the separate .004 and .002 cohort receipts |
+| Source reuse and complete export | `record_rans_balanced_source.py`, `collect_rans_balanced_spatial.py` |
+
+The solver runtime is frozen at source snapshot 577b5f1 with executable SHA256
+`389dee61618f51c9d451be2ddbdc0e83ee049351683da2eae3b59ab0758afcb4`.
+The revised explicit-parent diagnostic probe is separately frozen at 0a5496f
+under `runtime-resolution-v2`; its solver copy is byte-identical and is not
+used to replace any trajectory executable. Manifests include relevant source
+file contents/hashes, compiler/options, CMake cache, executable, direct linked
+libraries, actual loaded libraries and thread environment. Later changes are
+Python observation/orchestration and documentation. The source proof checks
+34 governing/history/geometry files and three independent-oracle files against
+3b0961e. Ordinary positive-x histories and numeric diagnostics are tested for
+bitwise equivalence; unsupported routes retain their guards.
+
+All heavy native states, histories, field data, basis/residual packets, logs,
+failed inputs and timing streams remain outside the checkout under the Linux
+root. `runtime` and `runtime-resolution-v2` are immutable. Source/build/tmp/
+run storage is isolated. Neither a shared installation nor any active CLS
+controller/library/checkpoint is replaced.
+
+These commands use a **new** Linux destination and the existing MPI-enabled SDK
+without installing into it. Recount other jobs before allocating workers.
+Python >=3.10, NumPy and SciPy are checked at CMake configuration.
+
+```bash
+export B=/media/jay/新加卷/nektar-v2026-runs/balanced-reproduction
+export ORIGINAL=/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-balanced-20261110
+export OLD=/media/jay/新加卷/nektar-v2026-runs/a93-a95-e94e95-pilot-20261110
+export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
+export BLIS_NUM_THREADS=1 NUMEXPR_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1
+mkdir -p "$B/dependency" "$B/tmp"
+git -C /media/jay/新加卷/nektar-v2026 worktree add --detach "$B/source" TESTED_HEAD
+cp "$ORIGINAL/runtime/lib/libSpatialDomains.so.5.9.0" "$B/dependency/"
+export T="$B/source/solvers/IncNavierStokesSolver/Tests/RANS"
+export TMPDIR="$B/tmp"
+cmake -S "$T" -B "$B/build" \
+  -DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake \
+  -DRANS_BUILD_SOLVER=ON -DCMAKE_BUILD_TYPE=Release \
+  -DRANS_PREBUILT_SPATIAL_LIBRARY="$B/dependency/libSpatialDomains.so.5.9.0" \
+  '-DCMAKE_CXX_FLAGS=-fno-fast-math -ffp-contract=off -D_GLIBCXX_ASSERTIONS'
+cmake --build "$B/build" --parallel 8 --target IncNavierStokesSolver \
+  RANSPreservationProbe RANSNewModelsProbe RANSNativeDiagnosticChecks
+python3 -B "$T/freeze_rans_pilot_runtime.py" --source "$B/source" \
+  --build "$B/build" --output "$B/runtime"
+python3 -B "$T/freeze_rans_pilot_runtime.py" --source "$B/source" \
+  --build "$B/build" --output "$B/runtime-resolution-v2"
+python3 -B "$T/check_rans_balanced_evidence.py" --root "$B" --previous-root "$OLD"
+python3 -B "$T/check_rans_balanced_diagnostics.py" --root "$B" --previous-root "$OLD"
+for wall in EP Accepted; do
+  python3 -B "$T/diagnose_rans_balanced_spatial.py" --root "$B" \
+    --wall "$wall" --label "initial-$wall"
+  python3 -B "$T/make_rans_balanced_meshes.py" --wall "$wall" \
+    --output "$B/meshes/E-N-$wall"
+  python3 -B "$T/diagnose_rans_balanced_spatial.py" --root "$B" \
+    --wall "$wall" --label "balanced-$wall" \
+    --specifications "$B/meshes/E-N-$wall/spaces.json"
+  python3 -B "$T/classify_rans_balanced_spatial.py" --root "$B" \
+    --wall "$wall" --output "$B/initial-gate-$wall.json"
+done
+python3 -B "$T/schedule_rans_balanced_evolution.py" --root "$B" --time .0016
+python3 -B "$T/schedule_rans_balanced_evolution.py" --root "$B" --time .016
+python3 -B "$T/qualify_rans_balanced_models.py" --root "$B"
+```
+
+Use `audit_rans_balanced_evolved.py --root "$B" --campaign-root "$B" --label
+E-N-Accepted-B11 --output-label balanced-E-N-Accepted-B11 --analysis-runtime
+"$B/runtime-resolution-v2"` for a representative complete .0016/.016 term
+replay; repeat for both members and all six natural combinations with their
+matching common directory. E defaults to `diagnosis/initial-WALL/common`;
+A93/A95 use `--common-directory diagnosis/MODEL-Natural-WALL/common`.
+The complete immutable command arrays, XMLs, artifact hashes and exact history
+paths are in each campaign/request/receipt directory.
+
+Frozen quadrature controls:
+
+```bash
+python3 -B "$T/check_rans_pilot_quadrature.py" --root "$B" \
+  --coarse-suffix B5 --fine-suffix B11 --output-label balanced-quadrature
+python3 -B "$T/check_rans_pilot_quadrature.py" --root "$B" \
+  --coarse-suffix B11 --fine-suffix B5 --output-label balanced-fine-quadrature
+python3 -B "$T/check_rans_balanced_state_quadrature.py" --root "$B" --time .016
+python3 -B "$T/check_rans_balanced_evaluation.py" --root "$B"
+python3 -B "$T/check_rans_common_test_sides.py" --root "$B"
+python3 -B "$T/check_rans_observer_baseline.py" --root "$B"
+```
+
+After the scoped prerequisites and complete term replays pass, create the
+immutable admission with `admit_rans_balanced_duration.py --root "$B"`. The
+original experiment verifies its existing admission instead of replacing it.
+The failed .004 cohort is a separate request and can be reproduced only into
+its own fresh destination/label. Passing duration continuations use:
+
+```bash
+python3 -B "$T/run_rans_balanced_duration.py" --root "$B" \
+  --model E94E95 --wall Accepted --dt .002 --max-time .016
+python3 -B "$T/run_rans_balanced_duration.py" --root "$B" \
+  --model E94E95 --wall Accepted --dt .002 --max-time .1 --resume
+# .5 remains conditional on the .1 four-member gate.
+python3 -B "$T/run_rans_balanced_duration.py" --root "$B" \
+  --model E94E95 --wall Accepted --dt .002 --max-time .5 --resume
+```
+
+The controller validates an immutable current request before using completed
+work, calls the native runner's exact-request validator even on completed
+members, and never edits checkpoint signatures, dt or histories. Larger worker
+allocations are not implied by these commands: at most four trajectory
+controllers plus two serial diagnostic slots share the 72-worker total with
+existing campaigns and numerical-library threads one.
