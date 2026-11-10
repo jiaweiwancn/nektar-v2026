@@ -96,8 +96,10 @@ def main():
             for f in scope.rglob('*'):
                 if f.is_file() and (f.suffix in ('.json','.xml','.bin','.log') or f.name=='State.bin'):index[str(f)]=dict(bytes=f.stat().st_size,sha256=file_hash(f))
     write_once(meta/'artifact-index.json',index)
-    inventory=read(observer/'inventory.json');tests={}
-    for r in read(root/'command-receipts.json')+(read(observer/'command-receipts.json') if observer!=root else []):
+    inventory=read(observer/'inventory.json');tests={};commands=read(root/'command-receipts.json')+(read(observer/'command-receipts.json') if observer!=root else [])
+    qualification=root/'qualification-validation'
+    if (qualification/'command-receipts.json').exists():commands+=read(qualification/'command-receipts.json')
+    for r in commands:
         if not r['label'].startswith('ctest-'):continue
         matches=re.findall(r'(\d+)% tests passed, (\d+) tests failed out of (\d+)',Path(r['log']).read_text())
         tests[str(Path(r['log']).parent)+'/'+r['label']]=dict(exit_code=r['exit_code'],result=matches[-1] if matches else None,log=r['log'],sha256=r['log_sha256'],seconds=r['seconds'])
@@ -116,6 +118,8 @@ def main():
         accepted_readback_runtime=read(study/'EP/design.json')['runtime'],
         observer_root=str(observer),native_observer_source=str(observer/'source'),publication_source=str(source),study_root=str(study),producer_root=str(root),
         observer_commands=artifacts([observer/'command-receipts.json']),source_equivalence=artifacts(list(root.glob('*equivalence*.json'))+list(observer.glob('*equivalence*.json'))),finite_scope='reference-Dirichlet strip [0,1]x[0,2]; serial flat2D p3; finite observation and angular inventories; no global or long-time theorem')
+    manifest['registered_complete_gate_supplement']=artifacts([qualification/'command-receipts.json',qualification/'inventory.json',qualification/'build/CMakeCache.txt',
+        *qualification.glob('*-metadata-inventory.json'),*qualification.glob('*-metadata-accounting.json'),*qualification.glob('*-metadata-LastTest.log')])
     manifest['numerical_environment']=dict(python=sys.version,numpy=__import__('numpy').__version__,scipy=__import__('scipy').__version__,
         sympy=__import__('sympy').__version__,compiler=subprocess.check_output(['c++','--version'],text=True),platform=subprocess.check_output(['uname','-a'],text=True),
         allocation=dict(initial_build_workers=1,later_build_workers=4,policy_concurrency=2,test_parallel=1,ranks=1,numerical_threads=1,total_worker_cap=72))
@@ -205,6 +209,7 @@ def main():
                  root/'ledger-EP.json',root/'ledger-Budget.json',*root.glob('all-step-transactions-*.json'),*root.glob('terminal-gates-*.json')]:
         if path.exists():shutil.copyfile(path,out/path.name)
     if observer!=root:shutil.copyfile(observer/'command-receipts.json',out/'observer-command-receipts.json')
+    if (qualification/'command-receipts.json').exists():shutil.copyfile(qualification/'command-receipts.json',out/'complete-gate-command-receipts.json')
     receipt=dict(schema='WJ4PublicationV1',manifest_sha256=file_hash(meta/'manifest.json'),policies={p:v['qualification'] for p,v in policies.items()},
         tables=artifacts(list(out.glob('*.csv'))),figures=artifacts(list(figures.glob('*'))),
         evidence_bridge=artifacts([meta/'manifest.json',meta/'artifact-index.json',meta/'source-content.json',root/'command-receipts.json']),
