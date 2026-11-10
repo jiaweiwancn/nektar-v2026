@@ -72,6 +72,7 @@ def main():
  for f in sorted(r.glob('*-space-*.json')):
   d=load(f);comparisons.append(dict(path=str(f),sha256=sha(f),**d))
  result['evolved_space_comparisons']=comparisons
+ result['exploratory_comparison_failures']=[x for x in comparisons if x.get('status')!='pass']
  expected={('E' if model=='E94E95' else model)+'-N-'+wall+'-h0p5' for model in ('E94E95','A95','A93') for wall in ('EP','Accepted')};actual={x['label']:x for x in result['cases']};gates={}
  for label in sorted(expected):
   c=actual.get(label);milestones={m['target']:m for m in c['milestones']} if c else {};gates[label]=dict(status='pass' if all(t in milestones and milestones[t]['status']=='pass' for t in (.0016,.016,.05,.1)) else 'failed' if c and any(m['status']=='fail' for m in c['milestones']) else 'not_completed',completed_times=sorted(milestones))

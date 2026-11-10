@@ -8,10 +8,10 @@ from qualify_rans_preservation import load,probe,replay_request,Q
 from run_cls_epawf_picard import set_parameter,write
 
 def main():
- p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);a=p.parse_args();r=a.root.resolve();out=r/'selected-quadrature';out.mkdir(exist_ok=False);os.environ.update(THREADS,LD_LIBRARY_PATH=str(r/'runtime/lib'),TMPDIR=str(r/'tmp'));result=dict(status='running',checks=[])
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--coarse-suffix',default='h0p5');p.add_argument('--fine-suffix',default='Interface8p5');p.add_argument('--output-label',default='selected-quadrature');a=p.parse_args();r=a.root.resolve();out=r/a.output_label;out.mkdir(exist_ok=False);os.environ.update(THREADS,LD_LIBRARY_PATH=str(r/'runtime/lib'),TMPDIR=str(r/'tmp'));result=dict(status='running',checks=[])
  for wall in ('EP','Accepted'):
   try:
-   coarse=r/'campaigns'/('E-N-'+wall+'-h0p5');fine=r/'campaigns'/('E-N-'+wall+'-Interface8p5');seed=load(coarse/'initial-packet.json');c=load(coarse/'initial-metrics.json')['residual'];f=load(fine/'initial-metrics.json')['residual'];folder=out/wall;folder.mkdir();root=ET.parse(coarse/'T-0.0016/case.xml').getroot()
+   coarse=r/'campaigns'/('E-N-'+wall+'-'+a.coarse_suffix);fine=r/'campaigns'/('E-N-'+wall+'-'+a.fine_suffix);seed=load(coarse/'initial-packet.json');c=load(coarse/'initial-metrics.json')['residual'];f=load(fine/'initial-metrics.json')['residual'];folder=out/wall;folder.mkdir();root=ET.parse(coarse/'T-0.0016/case.xml').getroot()
    for key,value in zip(('RANSWallNormalOrder','RANSWallTangentialOrder','RANSWallMassOrder','RANSWallVolumeOrder','RANSWallInterfaceOrder'),Q[2],strict=True):set_parameter(root,key,value)
    write(root,folder/'case.xml');full=probe(r/'runtime/RANSPreservationProbe',folder,replay_request(seed,[],state=seed['reference']));q=full['observation']['audit_alpha_zero'];receipt=full['initialization_receipt'];assert exact_vector_hash(seed['reference'])==receipt['raw_initial_sha256']==receipt['effective_initial_sha256'];assert receipt['explicit_boundary_sha256']==seed['initialization_receipt']['explicit_boundary_sha256']
    gates=[]

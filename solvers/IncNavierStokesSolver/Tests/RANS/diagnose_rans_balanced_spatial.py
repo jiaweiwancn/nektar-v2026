@@ -17,6 +17,11 @@ def run_probe(runtime,folder,request):
     if not (folder/'packet.json').exists():raise RuntimeError('missing native packet; exit '+str(c.returncode))
     data=load(folder/'packet.json')
     if c.returncode or data.get('status')!='pass':raise RuntimeError('native diagnostic failed '+str({k:v for k,v in data.items() if k not in ('observation','resolution','test_basis')}))
+    if 'grid_test_geometries' in request:
+        selected=request['grid_test_geometries'];actual=data.get('test_basis')
+        if actual is None or len(actual)!=len(selected):raise ValueError('explicit parent test basis unavailable')
+        for geometry,row in zip(selected,actual,strict=True):
+            if any(v is not None and v['geometry']!=geometry for v in row.values()):raise ValueError('native test basis did not consume explicit parent geometry')
     elapsed=time.monotonic()-t
     with (folder/'packet.json').open('rb') as src,gzip.open(folder/'packet.json.gz','wb',compresslevel=3) as dst:__import__('shutil').copyfileobj(src,dst)
     (folder/'packet.json').unlink()
