@@ -112,3 +112,25 @@ require all29 WJ-3 selected controls plus focused WJ-4 tests. Heavy data remain
 outside Git, indexed by immutable paths/hashes. Conclusions remain finite-strip,
 short-duration, serial flat2D observations; no global positivity, realizability,
 stability, long-time, native3D/MPI or terrain claim follows.
+
+## Independent gradient replay and observer lineage
+
+A horizontal accuracy crossing is replayed through native element-owned
+`BwdTrans`, `PhysDeriv` and `StdPhysEvaluate`. The fast gradient and the
+independent gradient retain the same explicit geometry/element at faces and
+H/corner intersections. Componentwise differences must fit
+`2e-11*(1+max(abs(fast),abs(native)))`; no derivative is replaced in the governing
+operator. The complete maximum-divergence witness and comparison defects are
+retained. This distinguishes a represented-field accuracy obstruction from a
+row/provenance error.
+
+A later observer build remains separate from the producing runtime. All matching
+native consumers are rebuilt and the29 prior selections rerun. Its new method
+is nonvirtual and adds no field/layout; existing governing methods and model
+constants are unchanged. Strict serialized-checkpoint/signature validation is
+still required. `--mode reprocess --native-study <producer-study>` verifies the
+original argv/XML/input/output/code/runtime receipts, launches no solver and
+creates a separate measurement/code lineage. Original summaries are archived
+byte-for-byte. Actual accepted callback packets always come from the producing
+report. SVD caches have their own immutable input/output receipts. All extra
+observer/test work remains charged to the same package-wide ledger.

@@ -93,6 +93,11 @@ public:
      * standard physical interpolation, not the fast tensor evaluation rows.
      * Returns value, dx,dy,dz in physical Cartesian axes.
      */
+    /** Explicit element ownership for independent derivative replay on a
+     * vertical face or H/corner intersection. No coordinate side is overloaded.
+     */
+    std::array<double,4> NativeEvaluateElement(const Vector &state,int element,
+        const Coordinate &coordinate,int offset=0) const;
     std::array<double,4> NativeEvaluate(const Vector &state,
                                        const Coordinate &coordinate,
                                        int offset=0, int side=0) const;

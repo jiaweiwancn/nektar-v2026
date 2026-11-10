@@ -875,7 +875,7 @@ std::string RANSWallEvolutionPatch::WJMeasurements(const Vector &state,const Vec
     std::vector<std::pair<std::string,std::string>> terms;
     for(const auto &[name,value]:resolution.terms)terms.push_back({name,J::Object({{"load",J::Numbers(value)},
         {"mass_dual_norms",J::Numbers(Norms(value,constraints,m_robustUstar))}})});
-    std::vector<std::string> samples,interfaces;double divergence=0;Vector evaluationSensitivity(6),basisNorm(6);int observed=0;
+    std::vector<std::string> samples,interfaces;double divergence=0;Vector evaluationSensitivity(6),basisNorm(6),gradientDefect(9);int observed=0,independentGradients=0;std::string divergenceWitness="null";
     for(const auto &o:observations)
     {
         const RANSWallCoordinate p{o[0],o[1],o[2]};const int side=int(o[4]);
@@ -890,7 +890,29 @@ std::string RANSWallEvolutionPatch::WJMeasurements(const Vector &state,const Vec
         const int xface=std::abs(p[0]-element.lower[0])<1e-12?-1:std::abs(p[0]-element.upper[0])<1e-12?1:0;
         const int zface=std::abs(p[2]-element.lower[2])<1e-12?-1:std::abs(p[2]-element.upper[2])<1e-12?1:0;
         RANSTensor g{};for(int a=0;a<m_dimension;++a)g[PhysicalAxis(a)]=v.Gradient(state,offset[a]);
-        divergence=std::max(divergence,std::abs(g[0][0]+g[2][2]));
+        const double div=std::abs(g[0][0]+g[2][2]);
+        if(div>=divergence || xface!=0 || zface!=0 || observed%std::max(1,int(observations.size()/64))==0)
+        {
+            ++independentGradients;RANSTensor native{};for(int a=0;a<m_dimension;++a)
+            {
+                const auto alternative=fields[a]->NativeEvaluateElement(state,GeometryElement(a,v.geometry),p,offset[a]);
+                for(int axis=0;axis<3;++axis){native[PhysicalAxis(a)][axis]=alternative[1+axis];
+                    const double defect=std::abs(g[PhysicalAxis(a)][axis]-alternative[1+axis]);
+                    gradientDefect[3*PhysicalAxis(a)+axis]=std::max(gradientDefect[3*PhysicalAxis(a)+axis],defect);
+                    Require(defect<=2e-11*(1+std::max(std::abs(g[PhysicalAxis(a)][axis]),std::abs(alternative[1+axis]))),
+                        "WJ fast/native element-owned gradient mismatch");}
+            }
+            if(div>=divergence){Vector fast,independent;for(int a=0;a<3;++a)for(int b=0;b<3;++b){fast.push_back(g[a][b]);independent.push_back(native[a][b]);}
+                divergenceWitness=J::Object({{"geometry",J::Number(v.geometry)},{"element",J::Number(v.element)},
+                    {"region",J::Quote(inner?"inner":"outer")},{"position",J::Numbers(p)},{"radial_side",J::Number(side)},
+                    {"requested_x_side",J::Number(o[6])},{"face_sides_xz",J::Numbers(Vector{double(xface),double(zface)})},
+                    {"raw_G",J::Numbers(fast)},{"independent_native_G",J::Numbers(independent)},
+                    {"raw_divergence",J::Number(g[0][0]+g[2][2])},{"independent_native_divergence",J::Number(native[0][0]+native[2][2])},
+                    {"state_sha256",J::Quote(stateHash)},{"stage_history_sha256",J::Quote(historyHash)},
+                    {"time",J::Number(time)},{"alpha_mass",J::Number(stageAlpha)},
+                    {"method",J::Quote("explicit native element BwdTrans/PhysDeriv/StdPhysEvaluate; no governing solve or projection")}});}
+        }
+        divergence=std::max(divergence,div);
         auto values=[&](const Vector &s){const double k=v.Value(s,offset[K()]),pi=pr.Value(s,offset[inner?InnerPressure():OuterPressure()]);
             return Vector{v.Value(s,offset[0]),v.Value(s,offset[1]),k,inner?0:GeometryPoint(Epsilon(),v.geometry,p).Value(s,offset[Epsilon()]),pi,WJMechanicalPressure(pi,k,0)};};
         const auto value=values(state),initial=values(m_reference);
@@ -947,7 +969,7 @@ std::string RANSWallEvolutionPatch::WJMeasurements(const Vector &state,const Vec
         {"residual_order",J::Quote("u,v,k,entire outer epsilon,inner continuity,outer continuity,gauge,boundary/trace; consistent mass dual physical scaling")},
         {"component_norm_warning",J::Quote("separately normed regional/source/diffusion/interface contributions are not linearly additive")},
         {"observations",J::List(samples)},{"interfaces",J::List(interfaces)},
-        {"strong_divergence_sampled_Linf",J::Number(divergence)},{"evaluation_basis_row_norm_max",J::Numbers(basisNorm)},{"arithmetic_evaluation_sensitivity",J::Numbers(evaluationSensitivity)},
+        {"strong_divergence_sampled_Linf",J::Number(divergence)},{"strong_divergence_witness",divergenceWitness},{"fast_independent_gradient_max_defect",J::Numbers(gradientDefect)},{"independent_gradient_observations",J::Number(independentGradients)},{"evaluation_basis_row_norm_max",J::Numbers(basisNorm)},{"arithmetic_evaluation_sensitivity",J::Numbers(evaluationSensitivity)},
         {"audit",WJAuditPacket(audit,state,stageAlpha>0?stageHistory:state,stageAlpha,time,stageAlpha>0?"accepted_checkpoint_stage":"startup_readback")}});
 }
 }

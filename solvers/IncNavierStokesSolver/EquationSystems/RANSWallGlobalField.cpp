@@ -468,6 +468,33 @@ std::array<double,4> RANSWallGlobalField::NativeEvaluate(
     return result;
 }
 
+// This independent native transform deliberately retains the same coefficient
+// ordering and sign map while requiring explicit element ownership.
+std::array<double,4> RANSWallGlobalField::NativeEvaluateElement(
+    const Vector &state,int element,const Coordinate &coordinate,int offset) const
+{
+    Require(offset>=0 && static_cast<std::size_t>(offset)+Size()<=state.size(),"invalid native probe coefficient shape");
+    const auto point=ElementPoint(element,coordinate);const auto exp=m_field->GetExp(point.element);
+    Array<OneD,NekDouble> coefficients(exp->GetNcoeffs()),values(exp->GetTotPoints()),
+        derivative(exp->GetTotPoints()),local(m_dimension);
+    for(int d=0;d<m_dimension;++d)
+    {
+        const int a=m_axes[d];const auto &element=m_elements[point.element];
+        local[d]=2*(coordinate[a]-element.lower[a])/(element.upper[a]-element.lower[a])-1;
+    }
+    for(std::size_t j=0;j<point.ids.size();++j)
+        coefficients[j]=m_field->GetLocalToGlobalMap()->GetLocalToGlobalSign(m_field->GetCoeff_Offset(point.element)+j)*
+                        state.at(offset+point.ids[j]);
+    exp->BwdTrans(coefficients,values);std::array<double,4> result{};
+    result[0]=exp->StdPhysEvaluate(local,values);
+    for(int d=0;d<m_dimension;++d)
+    {
+        exp->PhysDeriv(d,values,derivative);
+        result[1+m_axes[d]]=exp->StdPhysEvaluate(local,derivative);
+    }
+    return result;
+}
+
 RANSWallGlobalField::Vector RANSWallGlobalField::RadialProject(
     const std::function<double(double)> &function,
     const std::vector<std::array<double,3>> &constraints,const std::vector<double> &physicalBreakpoints) const

@@ -31,6 +31,8 @@ def main():
         assert {(r['side'],r['requested_x_side']) for r in corner}=={(-1,-1),(-1,1),(1,-1),(1,1)}
         assert all(r['provenance']=='NativeElementSideV2' for r in corner)
         assert m['completed_stage']['alpha_mass']==1/3.2e-5
+        witness=m['strong_divergence_witness'];assert_allclose(witness['raw_G'],witness['independent_native_G'],rtol=2e-11,atol=2e-11)
+        assert m['independent_gradient_observations']>=len(corner)
         q,qc=s.measure('step-q6',evolved,producer,level=0,nx=2,xorder=6)
         for kind in ('continuum_error','initial_drift'):
             for field,row in c['errors'][kind]['full']['fields'].items():
