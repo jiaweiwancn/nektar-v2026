@@ -1,5 +1,20 @@
 # Accepted budget AWF: finite-horizon temporal self-convergence
 
+**2026-11-10 late-state addition:** the
+[H=.5 Regularized/Linear common-state IVP](cls-awf-neutral-qualification.md#late-temporal-import-and-experiment)
+imports the retained T=6 coupled state and fixed reference exactly, then forms
+independent IMEX1 histories at dt=.000625/.0003125/.00015625. All 160/320/640
+steps reached elapsed .1 with no correction. The same-dt first step matches
+ordinary restart bitwise. At .1, U/W/k/epsilon/pressure/traction orders are
+.998/1.005/1.000/.999/1.016/1.019; estimated normalized errors for the original
+.000625 step are 2.08e-9/8.78e-10/2.56e-9/9.93e-9/1.15e-8/5.17e-10, all
+within the predeclared budgets. Epsilon covers the **complete .5<=z<=4**
+transport space with unchanged common normalization and an independent
+consistent-mass crosscheck. This bounds late local sensitivity and does not
+reconstruct accumulated startup-to-T6 error or establish timestep-independent
+steady roots. The bounded experiment stops at .1; no extension is warranted.
+The earlier H2-from-h0 study below remains a distinct qualification.
+
 2026-11-09, Asia/Shanghai; branch `codex/cls-epawf-pimple-one-sweep`.
 The [predeclared policy](cls-accepted-budget-awf-evidence/audit-cache-temporal/temporal-policy.json)
 was committed in `8f5db2c` before the new coarse/fine execution. Detailed native

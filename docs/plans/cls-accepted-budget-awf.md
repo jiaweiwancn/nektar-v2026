@@ -1,5 +1,18 @@
 # CLS-calibrated budget AWF: implementation and native evolution
 
+**2026-11-10 neutral-reference qualification:** the
+[same-H cutoff-refined pilot and late-state timestep study](cls-awf-neutral-qualification.md)
+are complete through T=.5 and elapsed .1 respectively. At matched T=.5,
+refinement changes mean traction from .1529640 to .1595634 (reference .16),
+reducing gradient/production errors substantially without bounding. The exact
+analytical neutral law balances; its native representation introduces the
+initial weak imbalance. Late local timestep errors are tiny and show coherent
+first-order scaling. A separate refined successor is running under the
+unchanged complete steady screen, capped at T=6; a justified unchanged H2
+successor is also capped at T=6. Exact dated frontiers and checkpoint/runtime
+identities are in the qualification evidence. Neither new successor is claimed
+steady. All completed datasets and frozen historical runtimes remain intact.
+
 **Final original pair, 2026-11-10 17:00:** Uniform G and Upstream-one both
 completed T=5 normally. Uniform G now passes three unchanged steady windows
 with full-outer-epsilon confirmation; Upstream-one remains a substantial
