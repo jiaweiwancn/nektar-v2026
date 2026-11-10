@@ -1,10 +1,16 @@
 # CLS-calibrated budget AWF: implementation and native evolution
 
-**2026-11-10 status and convergence:** both H=.5 graded Regularized companions
+**Final original pair, 2026-11-10 17:00:** Uniform G and Upstream-one both
+completed T=5 normally. Uniform G now passes three unchanged steady windows
+with full-outer-epsilon confirmation; Upstream-one remains a substantial
+correction-supported transient. Neither remains live. See the
+[final-pair assessment](cls-awf-steady-final-pair-20261110.md).
+
+**2026-11-10 10:23 status and convergence (historical):** both H=.5 graded Regularized companions
 completed T=6 and pass all three unchanged steady windows, now including full
 outer-epsilon confirmation. They are selected discrete steady candidates,
 with traction still about 4.59% below reference. H2 and Uniform H completed
-T=5; only Uniform G and Upstream-one remain running. See the
+T=5; Uniform G and Upstream-one were still running at this snapshot. See the
 [dated full assessment](cls-awf-steady-check-20261110.md).
 
 **T=6 continuation, 2026-11-09:** both H=.5 graded Regularized companions

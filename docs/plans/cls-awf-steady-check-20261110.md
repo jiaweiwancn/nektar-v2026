@@ -1,5 +1,11 @@
 # Campaign status and steady-convergence check — 2026-11-10
 
+**Later 17:00 update:** both formerly live runs completed T=5. The
+[final-pair assessment](cls-awf-steady-final-pair-20261110.md) confirms three
+passing windows for Uniform G, including its full outer epsilon region;
+Upstream-one still fails the steady screen. The 10:23 snapshot below is
+preserved as historical evidence.
+
 Live status refreshed **10:23:16 Asia/Shanghai** on the authoritative Linux
 server; the immutable window analysis was captured at 10:13:48.
 The two H=.5 graded budget-AWF campaigns have completed T=6 and pass all

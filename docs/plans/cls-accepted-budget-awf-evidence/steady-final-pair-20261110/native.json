@@ -1,0 +1,1776 @@
+{
+  "captured_Asia_Shanghai": "2026-11-10T17:00:23.778185+08:00",
+  "common_panel": {
+    "captured_Asia_Shanghai": "2026-11-10T16:40:25.542905+08:00",
+    "script_sha256": "4fec43fc95d36452e3b825c69bb2e7e3da3e89b89fd76ddf1695056c71f08aa1",
+    "policy": {
+      "version": "AcceptedAWFExploratoryWindowsV1",
+      "declared_date_Asia_Shanghai": "2026-11-08",
+      "primary_physical_window": 0.5,
+      "required_consecutive_windows": 3.0,
+      "secondary_drift_windows": [
+        0.1,
+        0.2
+      ],
+      "common_normalization": {
+        "U": 0.4,
+        "K": 0.5105080130598861,
+        "H": 2.0,
+        "volume": 24.0,
+        "outer_epsilon_volume": 12.0,
+        "epsilon": 0.07263583326186134,
+        "pressure": 0.16
+      },
+      "normalized_window_L2_change_maximum": {
+        "u": 0.0001,
+        "v": 0.0001,
+        "k": 0.0001,
+        "epsilon": 0.001,
+        "pressure": 0.001
+      },
+      "normalized_selected_spatial_residual_maximum_each_block": 0.001,
+      "relative_wall_stress_window_change_maximum": 0.0005,
+      "relative_matching_defect_maximum": 1e-05,
+      "bound_supply_per_time_relative_to_K0_volume_per_wall_time_maximum": 1e-05,
+      "scope": "Exploratory scientific classification only. No production gate or tolerance changes. Window changes must persist and full residuals must be small for a steady claim; stable fluctuation statistics are needed for a stationary-unsteady claim.",
+      "discretization_context": "Cutoff-v1 reference errors and coarse/fine differences in the existing report motivate a stringent drift screen, not a proof of continuum accuracy. Residuals are reported dimensionally and with fixed H=2 normalization. Reference error remains separate from time-window drift.",
+      "window_sensitivity": "Compare primary adjacent .5 windows and combined 1.0 windows once available. Secondary .1/.2 windows diagnose current drift without authorizing an early persistent-settling claim."
+    },
+    "policy_sha256": "5ab70c348311d7352501ea8b9884a67e6acdfb204ea238d68e8923e855890057",
+    "governing_solves": 0,
+    "physical_commits": 0,
+    "native_histories_advanced": false,
+    "cases": {
+      "UniformG": {
+        "campaign": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-G/trajectory",
+        "production_status": "targets_completed",
+        "frontier_steps": 8000.0,
+        "frontier_time": 5.000000000000251,
+        "selected_steps": [
+          5600,
+          6400,
+          7200,
+          8000
+        ],
+        "latest_completed_step": 8000,
+        "windows": [
+          {
+            "start": 3.4999999999998392,
+            "end": 3.9999999999997398,
+            "dimensional_field_change": {
+              "u": 4.9597047117135104e-05,
+              "v": 3.0822567654543424e-05,
+              "k": 0.00019139464572732518,
+              "epsilon": 1.7745084869552874e-07,
+              "common_gauge_shift": 2.255853136833184e-19,
+              "pressure": 0.00013047125235656734
+            },
+            "normalized_field_change": {
+              "u": 2.530988712203259e-05,
+              "v": 1.5729075690842643e-05,
+              "k": 7.6528217895917e-05,
+              "epsilon": 7.052393471755273e-07,
+              "pressure": 0.00016645208040389964
+            },
+            "relative_traction_change": 1.6377783651488897e-05,
+            "signed_correction_integral": 0.0,
+            "positive_correction_integral": 0.0,
+            "negative_correction_integral": 0.0,
+            "absolute_correction_integral": 0.0,
+            "normalized_signed_supply_rate": 0.0,
+            "normalized_absolute_supply_rate": 0.0,
+            "bound_activations": 0,
+            "fields_pass": true,
+            "residuals_pass": true,
+            "matching_pass": true,
+            "traction_pass": true,
+            "bound_supply_pass": true,
+            "common_screen_pass": true
+          },
+          {
+            "start": 3.9999999999997398,
+            "end": 4.499999999999996,
+            "dimensional_field_change": {
+              "u": 1.9159354987091237e-05,
+              "v": 9.015331025354064e-06,
+              "k": 7.162069469646669e-05,
+              "epsilon": 6.834066775093182e-08,
+              "common_gauge_shift": 3.651643607886299e-18,
+              "pressure": 4.538107797727536e-05
+            },
+            "normalized_field_change": {
+              "u": 9.777217399837857e-06,
+              "v": 4.600616848833278e-06,
+              "k": 2.8637186316051858e-05,
+              "epsilon": 2.7160494449312364e-07,
+              "pressure": 5.789608594884353e-05
+            },
+            "relative_traction_change": 5.276840953950812e-06,
+            "signed_correction_integral": 0.0,
+            "positive_correction_integral": 0.0,
+            "negative_correction_integral": 0.0,
+            "absolute_correction_integral": 0.0,
+            "normalized_signed_supply_rate": 0.0,
+            "normalized_absolute_supply_rate": 0.0,
+            "bound_activations": 0,
+            "fields_pass": true,
+            "residuals_pass": true,
+            "matching_pass": true,
+            "traction_pass": true,
+            "bound_supply_pass": true,
+            "common_screen_pass": true
+          },
+          {
+            "start": 4.499999999999996,
+            "end": 5.000000000000251,
+            "dimensional_field_change": {
+              "u": 8.89939521800773e-06,
+              "v": 5.891870945143659e-06,
+              "k": 2.45247289801473e-05,
+              "epsilon": 3.632123885043584e-08,
+              "common_gauge_shift": -2.09934476591856e-18,
+              "pressure": 2.6614192548429657e-05
+            },
+            "normalized_field_change": {
+              "u": 4.541453604892417e-06,
+              "v": 3.0066828012357544e-06,
+              "k": 9.806093561806832e-06,
+              "epsilon": 1.4435077072772095e-07,
+              "pressure": 3.395374565616403e-05
+            },
+            "relative_traction_change": 6.770700432603971e-07,
+            "signed_correction_integral": 0.0,
+            "positive_correction_integral": 0.0,
+            "negative_correction_integral": 0.0,
+            "absolute_correction_integral": 0.0,
+            "normalized_signed_supply_rate": 0.0,
+            "normalized_absolute_supply_rate": 0.0,
+            "bound_activations": 0,
+            "fields_pass": true,
+            "residuals_pass": true,
+            "matching_pass": true,
+            "traction_pass": true,
+            "bound_supply_pass": true,
+            "common_screen_pass": true
+          }
+        ],
+        "observations": {
+          "5600": {
+            "time": 3.4999999999998392,
+            "common_normalized_spatial_blocks": [
+              0.00037835709658311055,
+              0.00022147524015044904,
+              0.0011407857807127287,
+              0.0009733890875642513
+            ],
+            "native_scaled_spatial_blocks": [
+              9.458927414577762e-05,
+              5.536881003761225e-05,
+              0.00028519644517818217,
+              4.598831168926933e-05,
+              1.171025619921249e-16,
+              2.2083920682224658e-16,
+              1.5077186461126543e-17,
+              1.2306472926939001e-06
+            ],
+            "dimensional_spatial_blocks": [
+              0.00014828509235032856,
+              8.680021264463456e-05,
+              0.0005706138110970748,
+              4.89844250440701e-05
+            ],
+            "matching_defect": 3.575563662251008e-07,
+            "mean_wall_stress": 0.15280592982849825,
+            "relative_reference_traction_error": -0.044962938571885935,
+            "bound": {
+              "mode": "MassProjection",
+              "inventory_policy": "ConstitutiveV2",
+              "success": true,
+              "activations": 0.0,
+              "raw_ground": {
+                "admissible": true,
+                "minimum": 0.344362091960127,
+                "arithmetic_scale": 0.0,
+                "point": [
+                  -1.0,
+                  0.0,
+                  0.0
+                ],
+                "geometry": 2.0,
+                "extrema_checked": 19.0
+              },
+              "corrected_ground": {
+                "admissible": true,
+                "minimum": 0.344362091960127,
+                "arithmetic_scale": 0.0,
+                "point": [
+                  -1.0,
+                  0.0,
+                  0.0
+                ],
+                "geometry": 2.0,
+                "extrema_checked": 19.0
+              },
+              "raw_minimum": {
+                "value": 0.344362091960127,
+                "functional_kind": "Point",
+                "coordinate": [
+                  -1.0,
+                  0.0,
+                  0.0
+                ],
+                "geometry": 2.0,
+                "inventory": "reconstruction_native"
+              },
+              "corrected_minimum": {
+                "value": 0.344362091960127,
+                "functional_kind": "Point",
+                "coordinate": [
+                  -1.0,
+                  0.0,
+                  0.0
+                ],
+                "geometry": 2.0,
+                "inventory": "reconstruction_native"
+              },
+              "mass_norm_raw_step": 3.5314713889321033e-07,
+              "mass_norm_correction": 0.0,
+              "correction_to_step_ratio": 0.0,
+              "integral_total": 0.0,
+              "integrals_inner_outer_near_positive_negative": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "active_set_iterations": 0.0,
+              "mass_factor_applications": 0.0,
+              "kkt_solves": 0.0,
+              "seconds_total": 3.38111063,
+              "raw_sha256": "9ca90b338ddfbff248f1f56802878e0e9beb754973f0010f34f60f4f2ce6fad9",
+              "corrected_sha256": "9ca90b338ddfbff248f1f56802878e0e9beb754973f0010f34f60f4f2ce6fad9"
+            },
+            "strong_continuity": [
+              0.0647116711804633,
+              0.0032345974179060336,
+              1.4223461953588937e-16,
+              1.023675527415317e-15,
+              -7.1054269835186404e-15
+            ],
+            "interface": [
+              6.000000000000001,
+              -0.4467469631606714,
+              0.0016277140637773893,
+              0.005691728700272065,
+              0.005709686911873013,
+              0.0001206407623662971,
+              -2.1342519765377155e-16,
+              0.006365595745665296
+            ],
+            "covariance": [
+              0.08275353282839243,
+              0.15961835009638642
+            ],
+            "receipt": {
+              "source_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-G/trajectory/steps-005593-005600/case.evolution.json.gz",
+              "compressed_report_sha256": "6c8acff7b2ff3ed548b23e62d779c0dd323f5d6d3cb60012731217a0b064ff10",
+              "uncompressed_report_sha256": "db40fef5ef8d43aae0c63699e42481ba2fd7d593f0dd0a95dfdc48b91991e67e",
+              "checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-steady-final-pair-20261110/common-panel/UniformG/step-005600/checkpoint",
+              "checkpoint_sha256": "273e17e553f7d856de9f3343edcab4f62908a2da68f1daaeb237f20ca1908252",
+              "state_sha256": "9ca90b338ddfbff248f1f56802878e0e9beb754973f0010f34f60f4f2ce6fad9",
+              "native_history_sha256": [
+                "eb4094cb5631fb6764368903884caa4a3d994f1650cef2679812bba71a2150ad",
+                "3f1f6f76c52276c865bae097486a0ce164cd509c98c6410b677f516084ad7c3c"
+              ],
+              "native_history_times_sha256": "4a9b45c60d9a1b9e61181069f8baf0e603aec793f6d4123d33f92d12a053bdd1",
+              "physical_signature_sha256": "91b758a557f1ab66de79ff5a2c5019c8b3f6f25112ca88a90559be1bacd97141",
+              "audit_revision": "LegacyInterfaceV1",
+              "time": 3.4999999999998392,
+              "step": 5600
+            }
+          },
+          "6400": {
+            "time": 3.9999999999997398,
+            "common_normalized_spatial_blocks": [
+              0.00015627519123497538,
+              7.967500077288898e-05,
+              0.00047892002955301106,
+              0.0004901383311098372
+            ],
+            "native_scaled_spatial_blocks": [
+              3.906879780874384e-05,
+              1.9918750193222242e-05,
+              0.00011973000738825276,
+              2.3156859502443966e-05,
+              9.160914816745641e-17,
+              1.8096256647991705e-16,
+              1.0206747014414318e-17,
+              5.376554824440361e-07
+            ],
+            "dimensional_spatial_blocks": [
+              6.12471164770483e-05,
+              3.1226095543909334e-05,
+              0.00023955276082002986,
+              2.4665516234165348e-05
+            ],
+            "matching_defect": 1.5621221590052248e-07,
+            "mean_wall_stress": 0.152803309383114,
+            "relative_reference_traction_error": -0.044979316355537424,
+            "bound": {
+              "mode": "MassProjection",
+              "inventory_policy": "ConstitutiveV2",
+              "success": true,
+              "activations": 0.0,
+              "raw_ground": {
+                "admissible": true,
+                "minimum": 0.3431555850255587,
+                "arithmetic_scale": 0.0,
+                "point": [
+                  -1.0,
+                  0.0,
+                  0.0
+                ],
+                "geometry": 2.0,
+                "extrema_checked": 19.0
+              },
+              "corrected_ground": {
+                "admissible": true,
+                "minimum": 0.3431555850255587,
+                "arithmetic_scale": 0.0,
+                "point": [
+                  -1.0,
+                  0.0,
+                  0.0
+                ],
+                "geometry": 2.0,
+                "extrema_checked": 19.0
+              },
+              "raw_minimum": {
+                "value": 0.3431555850255587,
+                "functional_kind": "Point",
+                "coordinate": [
+                  -1.0,
+                  0.0,
+                  0.0
+                ],
+                "geometry": 2.0,
+                "inventory": "reconstruction_native"
+              },
+              "corrected_minimum": {
+                "value": 0.3431555850255587,
+                "functional_kind": "Point",
+                "coordinate": [
+                  -1.0,
+                  0.0,
+                  0.0
+                ],
+                "geometry": 2.0,
+                "inventory": "reconstruction_native"
+              },
+              "mass_norm_raw_step": 1.48408169784967e-07,
+              "mass_norm_correction": 0.0,
+              "correction_to_step_ratio": 0.0,
+              "integral_total": 0.0,
+              "integrals_inner_outer_near_positive_negative": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "active_set_iterations": 0.0,
+              "mass_factor_applications": 0.0,
+              "kkt_solves": 0.0,
+              "seconds_total": 3.402827216,
+              "raw_sha256": "4eeb3e4ed589b068cae4d4520f55ca89a3f81436e8034ea298839966b9610f91",
+              "corrected_sha256": "4eeb3e4ed589b068cae4d4520f55ca89a3f81436e8034ea298839966b9610f91"
+            },
+            "strong_continuity": [
+              0.06498673581290668,
+              0.0032380481238526897,
+              1.4398098971489092e-16,
+              1.0208424387804066e-15,
+              -7.105426988720178e-15
+            ],
+            "interface": [
+              6.000000000000001,
+              -0.4467948304714157,
+              0.0016296541330649763,
+              0.005691820017174641,
+              0.005733076097979739,
+              0.00012097723451160044,
+              -2.099489744382399e-16,
+              0.006366983714491347
+            ],
+            "covariance": [
+              0.08221208718827194,
+              0.1596711836275427
+            ],
+            "receipt": {
+              "source_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-G/trajectory/steps-006393-006400/case.evolution.json.gz",
+              "compressed_report_sha256": "79179b661c8172e7eb29221263981ee39c2bfc791644007ba27fff2ee5f46706",
+              "uncompressed_report_sha256": "f4589cc6432c21f80952d72cd0614832994d82ef88c02d0e6696ce14c5fe98f0",
+              "checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-steady-final-pair-20261110/common-panel/UniformG/step-006400/checkpoint",
+              "checkpoint_sha256": "2c830fc1a028bbf1ec9d92038eab3e851ddedc0940722c9313e83db94948e6d2",
+              "state_sha256": "4eeb3e4ed589b068cae4d4520f55ca89a3f81436e8034ea298839966b9610f91",
+              "native_history_sha256": [
+                "5cebbcf9bd4d72cc76350233e7f71e0bcb38349373dee60985834aa3de43096b",
+                "3f1f6f76c52276c865bae097486a0ce164cd509c98c6410b677f516084ad7c3c"
+              ],
+              "native_history_times_sha256": "406315b7b1fbf7184926c3caa76ca707401c41a4a1dff107a2a182c151fdc2b0",
+              "physical_signature_sha256": "91b758a557f1ab66de79ff5a2c5019c8b3f6f25112ca88a90559be1bacd97141",
+              "audit_revision": "LegacyInterfaceV1",
+              "time": 3.9999999999997398,
+              "step": 6400
+            }
+          },
+          "7200": {
+            "time": 4.499999999999996,
+            "common_normalized_spatial_blocks": [
+              7.072449258984583e-05,
+              4.415730964625136e-05,
+              0.00015703787073427725,
+              0.00020268499084923373
+            ],
+            "native_scaled_spatial_blocks": [
+              1.7681123147461455e-05,
+              1.1039327411562836e-05,
+              3.925946768356931e-05,
+              9.57596571915133e-06,
+              1.2313467065608587e-16,
+              1.7710498896007753e-16,
+              2.8545010322469915e-17,
+              1.3314050342532e-07
+            ],
+            "dimensional_spatial_blocks": [
+              2.7718227065979563e-05,
+              1.7306060327582942e-05,
+              7.854934679346315e-05,
+              1.0199834648502746e-05
+            ],
+            "matching_defect": 3.868308562880729e-08,
+            "mean_wall_stress": 0.15280246508856138,
+            "relative_reference_traction_error": -0.044984593196491396,
+            "bound": {
+              "mode": "MassProjection",
+              "inventory_policy": "ConstitutiveV2",
+              "success": true,
+              "activations": 0.0,
+              "raw_ground": {
+                "admissible": true,
+                "minimum": 0.3428526094173805,
+                "arithmetic_scale": 0.0,
+                "point": [
+                  -1.0,
+                  0.0,
+                  0.0
+                ],
+                "geometry": 2.0,
+                "extrema_checked": 19.0
+              },
+              "corrected_ground": {
+                "admissible": true,
+                "minimum": 0.3428526094173805,
+                "arithmetic_scale": 0.0,
+                "point": [
+                  -1.0,
+                  0.0,
+                  0.0
+                ],
+                "geometry": 2.0,
+                "extrema_checked": 19.0
+              },
+              "raw_minimum": {
+                "value": 0.3428526094173805,
+                "functional_kind": "Point",
+                "coordinate": [
+                  -1.0,
+                  0.0,
+                  0.0
+                ],
+                "geometry": 2.0,
+                "inventory": "reconstruction_native"
+              },
+              "corrected_minimum": {
+                "value": 0.3428526094173805,
+                "functional_kind": "Point",
+                "coordinate": [
+                  -1.0,
+                  0.0,
+                  0.0
+                ],
+                "geometry": 2.0,
+                "inventory": "reconstruction_native"
+              },
+              "mass_norm_raw_step": 4.8708635689376964e-08,
+              "mass_norm_correction": 0.0,
+              "correction_to_step_ratio": 0.0,
+              "integral_total": 0.0,
+              "integrals_inner_outer_near_positive_negative": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "active_set_iterations": 0.0,
+              "mass_factor_applications": 0.0,
+              "kkt_solves": 0.0,
+              "seconds_total": 3.356349113,
+              "raw_sha256": "a2862213874b753a35e8aade474be39409749db35473072e72fcea344d1bdcf3",
+              "corrected_sha256": "a2862213874b753a35e8aade474be39409749db35473072e72fcea344d1bdcf3"
+            },
+            "strong_continuity": [
+              0.06505779384736621,
+              0.0032359908473548918,
+              1.4436490739823393e-16,
+              1.0244445133902352e-15,
+              -7.105426990831405e-15
+            ],
+            "interface": [
+              6.000000000000001,
+              -0.4468161324801286,
+              0.0016293666553310424,
+              0.005691242303400707,
+              0.00573412612834856,
+              0.00012103600663541021,
+              -2.1335065875441317e-16,
+              0.006368751904924053
+            ],
+            "covariance": [
+              0.0820765336708981,
+              0.15969402859204157
+            ],
+            "receipt": {
+              "source_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-G/trajectory/steps-007193-007200/case.evolution.json.gz",
+              "compressed_report_sha256": "6b530587667450a4f6fe67083d6d7e84bcb64cfde1a6a1339d109f23227fb4e8",
+              "uncompressed_report_sha256": "f238ecf837b9a4b75cc69b6c593aa495d4538d5651264d3ca79a612613a56963",
+              "checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-steady-final-pair-20261110/common-panel/UniformG/step-007200/checkpoint",
+              "checkpoint_sha256": "9bc963effa29fa442c6dec74d5a1224d33a4e6a66a24ef7107698e791af0efe5",
+              "state_sha256": "a2862213874b753a35e8aade474be39409749db35473072e72fcea344d1bdcf3",
+              "native_history_sha256": [
+                "a47c54798d411b959dde2783d8dc6758f13629dbb31de5b20a26572a011bc95b",
+                "3f1f6f76c52276c865bae097486a0ce164cd509c98c6410b677f516084ad7c3c"
+              ],
+              "native_history_times_sha256": "b50c0a5ffb9595aa6b6d6a464d342fc0da83f1d6bbf678616c3e0cf19d0bc250",
+              "physical_signature_sha256": "91b758a557f1ab66de79ff5a2c5019c8b3f6f25112ca88a90559be1bacd97141",
+              "audit_revision": "LegacyInterfaceV1",
+              "time": 4.499999999999996,
+              "step": 7200
+            }
+          },
+          "8000": {
+            "time": 5.000000000000251,
+            "common_normalized_spatial_blocks": [
+              2.7158688791093006e-05,
+              1.5191313156946291e-05,
+              6.095008495778695e-05,
+              7.677710103822386e-05
+            ],
+            "native_scaled_spatial_blocks": [
+              6.78967219777325e-06,
+              3.7978282892365724e-06,
+              1.5237521239446738e-05,
+              3.6273770666360584e-06,
+              1.7043345852196214e-16,
+              2.254295640241136e-16,
+              3.684593320556206e-18,
+              5.27522500204374e-08
+            ],
+            "dimensional_spatial_blocks": [
+              1.0643988739395647e-05,
+              5.953754521175533e-06,
+              3.0486845867525148e-05,
+              3.863698698655923e-06
+            ],
+            "matching_defect": 1.532681454669005e-08,
+            "mean_wall_stress": 0.15280235675735446,
+            "relative_reference_traction_error": -0.04498527026653465,
+            "bound": {
+              "mode": "MassProjection",
+              "inventory_policy": "ConstitutiveV2",
+              "success": true,
+              "activations": 0.0,
+              "raw_ground": {
+                "admissible": true,
+                "minimum": 0.3427090451144582,
+                "arithmetic_scale": 0.0,
+                "point": [
+                  -1.0,
+                  0.0,
+                  0.0
+                ],
+                "geometry": 2.0,
+                "extrema_checked": 19.0
+              },
+              "corrected_ground": {
+                "admissible": true,
+                "minimum": 0.3427090451144582,
+                "arithmetic_scale": 0.0,
+                "point": [
+                  -1.0,
+                  0.0,
+                  0.0
+                ],
+                "geometry": 2.0,
+                "extrema_checked": 19.0
+              },
+              "raw_minimum": {
+                "value": 0.3427090451144582,
+                "functional_kind": "Point",
+                "coordinate": [
+                  -1.0,
+                  0.0,
+                  0.0
+                ],
+                "geometry": 2.0,
+                "inventory": "reconstruction_native"
+              },
+              "corrected_minimum": {
+                "value": 0.3427090451144582,
+                "functional_kind": "Point",
+                "coordinate": [
+                  -1.0,
+                  0.0,
+                  0.0
+                ],
+                "geometry": 2.0,
+                "inventory": "reconstruction_native"
+              },
+              "mass_norm_raw_step": 1.887269407061105e-08,
+              "mass_norm_correction": 0.0,
+              "correction_to_step_ratio": 0.0,
+              "integral_total": 0.0,
+              "integrals_inner_outer_near_positive_negative": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "active_set_iterations": 0.0,
+              "mass_factor_applications": 0.0,
+              "kkt_solves": 0.0,
+              "seconds_total": 3.42769518,
+              "raw_sha256": "8388bd8184c684a6e552961cb0a0292ff5f736b6cc35480724e8a1e3d55acab2",
+              "corrected_sha256": "8388bd8184c684a6e552961cb0a0292ff5f736b6cc35480724e8a1e3d55acab2"
+            },
+            "strong_continuity": [
+              0.06509427378467174,
+              0.003235215029619837,
+              1.4390920367261112e-16,
+              1.0240146259715301e-15,
+              -7.1054269920874874e-15
+            ],
+            "interface": [
+              6.000000000000001,
+              -0.44682275448123815,
+              0.0016294730735200889,
+              0.005691028438369375,
+              0.005736200262629498,
+              0.00012107360566745063,
+              -2.1374707017372818e-16,
+              0.006369619454041737
+            ],
+            "covariance": [
+              0.08201302903287311,
+              0.15970866853315438
+            ],
+            "receipt": {
+              "source_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-G/trajectory/steps-007993-008000/case.evolution.json.gz",
+              "compressed_report_sha256": "d2833b8d8942c3f183d0f80f5c74f32fa4fccdfb30d5e51ee8c0557a9d1e7f3f",
+              "uncompressed_report_sha256": "c4641a52c0f575778a6362306f95231152cd705a580f4aaa69f3cf1d5563189b",
+              "checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-steady-final-pair-20261110/common-panel/UniformG/step-008000/checkpoint",
+              "checkpoint_sha256": "85c5e9155e3c0239af0eadea43a33bb6b87d1dcc8fc837c09207af90bb4650d6",
+              "state_sha256": "8388bd8184c684a6e552961cb0a0292ff5f736b6cc35480724e8a1e3d55acab2",
+              "native_history_sha256": [
+                "12628782fa8de7b597d3530ad6ef0703203cf418f3e5b019b47df3bc28b2757f",
+                "3f1f6f76c52276c865bae097486a0ce164cd509c98c6410b677f516084ad7c3c"
+              ],
+              "native_history_times_sha256": "24aca8944d17339c1d00686d24f7ed4d1197e944a7fc71e5a57e86e5736f1b2b",
+              "physical_signature_sha256": "91b758a557f1ab66de79ff5a2c5019c8b3f6f25112ca88a90559be1bacd97141",
+              "audit_revision": "LegacyInterfaceV1",
+              "time": 5.000000000000251,
+              "step": 8000
+            }
+          }
+        },
+        "common_screen_passing_windows": 3,
+        "classification": "common_panel_steady_candidate_requires_full_outer_epsilon_confirmation",
+        "common_residual_persistence_pass": true,
+        "latest_residual_pass": true
+      },
+      "UpstreamOne": {
+        "campaign": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/selected-U05-one/trajectory",
+        "production_status": "targets_completed",
+        "frontier_steps": 8000.0,
+        "frontier_time": 5.000000000000251,
+        "selected_steps": [
+          5600,
+          6400,
+          7200,
+          8000
+        ],
+        "latest_completed_step": 8000,
+        "windows": [
+          {
+            "start": 3.4999999999998392,
+            "end": 3.9999999999997398,
+            "dimensional_field_change": {
+              "u": 0.015037669708301647,
+              "v": 0.010772253020715418,
+              "k": 0.04743766666334397,
+              "epsilon": 2.1820260666121613e-05,
+              "common_gauge_shift": 2.2887345283989372e-18,
+              "pressure": 0.017779444702732992
+            },
+            "normalized_field_change": {
+              "u": 0.007673878688717956,
+              "v": 0.0054971923501890676,
+              "k": 0.018967720215424862,
+              "epsilon": 8.671982411185385e-05,
+              "pressure": 0.02268258720402353
+            },
+            "relative_traction_change": 0.0013221809646844253,
+            "signed_correction_integral": 0.7020669805166403,
+            "positive_correction_integral": 1.3126953795275271,
+            "negative_correction_integral": -0.6106283990108877,
+            "absolute_correction_integral": 1.923323778538415,
+            "normalized_signed_supply_rate": 0.5730133534933227,
+            "normalized_absolute_supply_rate": 1.5697792928286338,
+            "bound_activations": 800,
+            "fields_pass": false,
+            "residuals_pass": false,
+            "matching_pass": false,
+            "traction_pass": false,
+            "bound_supply_pass": false,
+            "common_screen_pass": false
+          },
+          {
+            "start": 3.9999999999997398,
+            "end": 4.499999999999996,
+            "dimensional_field_change": {
+              "u": 0.017819713378206453,
+              "v": 0.012352482351682419,
+              "k": 0.05156719897075059,
+              "epsilon": 1.6082205451237904e-05,
+              "common_gauge_shift": -2.324451648719932e-18,
+              "pressure": 0.01939680988709065
+            },
+            "normalized_field_change": {
+              "u": 0.009093584404011017,
+              "v": 0.006303599753824233,
+              "k": 0.020618893617003066,
+              "epsilon": 6.391518641330402e-05,
+              "pressure": 0.024745982740179105
+            },
+            "relative_traction_change": 0.0007616278127217982,
+            "signed_correction_integral": 0.689719054394876,
+            "positive_correction_integral": 1.2931910044828374,
+            "negative_correction_integral": -0.6034719500879624,
+            "absolute_correction_integral": 1.8966629545707998,
+            "normalized_signed_supply_rate": 0.5629352174288778,
+            "normalized_absolute_supply_rate": 1.5480192491671183,
+            "bound_activations": 800,
+            "fields_pass": false,
+            "residuals_pass": false,
+            "matching_pass": false,
+            "traction_pass": false,
+            "bound_supply_pass": false,
+            "common_screen_pass": false
+          },
+          {
+            "start": 4.499999999999996,
+            "end": 5.000000000000251,
+            "dimensional_field_change": {
+              "u": 0.01906657065256354,
+              "v": 0.013245467109834591,
+              "k": 0.05587124387597519,
+              "epsilon": 2.0101644545759592e-05,
+              "common_gauge_shift": 1.2341359652728124e-18,
+              "pressure": 0.03558550711061373
+            },
+            "normalized_field_change": {
+              "u": 0.009729868592396908,
+              "v": 0.006759299129981621,
+              "k": 0.02233984503175737,
+              "epsilon": 7.988956255109306e-05,
+              "pressure": 0.0453991326349928
+            },
+            "relative_traction_change": 0.0005076296398417925,
+            "signed_correction_integral": 0.6891546318619256,
+            "positive_correction_integral": 1.2973740085899994,
+            "negative_correction_integral": -0.6082193767280745,
+            "absolute_correction_integral": 1.905593385318074,
+            "normalized_signed_supply_rate": 0.5624745467843831,
+            "normalized_absolute_supply_rate": 1.555308092272752,
+            "bound_activations": 800,
+            "fields_pass": false,
+            "residuals_pass": false,
+            "matching_pass": false,
+            "traction_pass": false,
+            "bound_supply_pass": false,
+            "common_screen_pass": false
+          }
+        ],
+        "observations": {
+          "5600": {
+            "time": 3.4999999999998392,
+            "common_normalized_spatial_blocks": [
+              0.13981886479518696,
+              0.0926957421496126,
+              8.580507736711676,
+              0.25278275068434514
+            ],
+            "native_scaled_spatial_blocks": [
+              0.03495471619879673,
+              0.023173935537403142,
+              2.1451269341779184,
+              0.01194286239352892,
+              2.0922092506344765e-16,
+              2.0300493581046805e-16,
+              1.1138483256394048e-17,
+              0.0012377324820348175
+            ],
+            "dimensional_spatial_blocks": [
+              0.05479758002614376,
+              0.03632916313522406,
+              4.291915540649545,
+              0.012720933346721775
+            ],
+            "matching_defect": 0.00035961492075148316,
+            "mean_wall_stress": 0.00548800352814975,
+            "relative_reference_traction_error": -0.965699977949064,
+            "bound": {
+              "mode": "MassProjection",
+              "inventory_policy": "ConstitutiveV3",
+              "success": true,
+              "activations": 1.0,
+              "raw_ground": {
+                "admissible": false,
+                "minimum": -0.009523193003685546,
+                "arithmetic_scale": 2.9435967797877714e-17,
+                "point": [
+                  -3.519307838630404,
+                  0.0,
+                  0.0
+                ],
+                "geometry": 0.0,
+                "extrema_checked": 18.0
+              },
+              "corrected_ground": {
+                "admissible": true,
+                "minimum": 5.105439546887894e-09,
+                "arithmetic_scale": 1.9385232096846887e-19,
+                "point": [
+                  -0.069307694286749,
+                  0.0,
+                  0.0
+                ],
+                "geometry": 3.0,
+                "extrema_checked": 19.0
+              },
+              "raw_minimum": {
+                "value": -0.00949458158855748,
+                "functional_kind": "Point",
+                "coordinate": [
+                  -3.5147143101099267,
+                  0.0,
+                  4.851384456304956e-07
+                ],
+                "geometry": 0.0,
+                "inventory": "constitutive_baseline_normalization_ray:pre_k"
+              },
+              "corrected_minimum": {
+                "value": 5.105334938040112e-09,
+                "functional_kind": "Point",
+                "coordinate": [
+                  1.0,
+                  0.0,
+                  0.03576029764080255
+                ],
+                "geometry": 3.0,
+                "inventory": "trace_baseline_normalization_ray"
+              },
+              "mass_norm_raw_step": 0.0021301191064483217,
+              "mass_norm_correction": 0.002127933231855133,
+              "correction_to_step_ratio": 0.9989738251788026,
+              "integral_total": 0.0008696465661489273,
+              "integrals_inner_outer_near_positive_negative": [
+                0.0009723135293698847,
+                -0.00010266696322095797,
+                0.0009723135293698847,
+                0.0016214854332366358,
+                -0.0007518388670877085
+              ],
+              "active_set_iterations": 71.0,
+              "mass_factor_applications": 84.0,
+              "kkt_solves": 68.0,
+              "seconds_total": 7.58924077,
+              "raw_sha256": "87ac0c55ff3bbcd921ef5e6b543ff708883d28baebbb0114a883885d0f23c5ce",
+              "corrected_sha256": "f6008d6227e08cf9574140a877e16b9b87716f481d5de8c056afcee677eda6a5"
+            },
+            "strong_continuity": [
+              0.5010896461687342,
+              0.06314740199721774,
+              3.8510861166685117e-16,
+              2.6603326191057898e-15,
+              -3.8580241696140825e-15
+            ],
+            "interface": [
+              6.000000000000001,
+              -0.5191430337863432,
+              0.03609384369059685,
+              0.12363212982706011,
+              0.22375132198103476,
+              0.08434019003169235,
+              -1.8834760140418183e-15,
+              -0.0032261820663364183
+            ],
+            "covariance": [
+              9.520799569444084e-10,
+              0.054255575878609026
+            ],
+            "receipt": {
+              "source_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/selected-U05-one/trajectory/steps-005593-005600/case.evolution.json.gz",
+              "compressed_report_sha256": "d2e7e033c5766a26dc38a5f8aa9a4cc9b2cb1db13d3c583e9c5a3b3fa95cf8df",
+              "uncompressed_report_sha256": "a8781dacc85abc0f8c4ff4975e1c2464b6d4ae47414c2e3ee70e86b086346ab2",
+              "checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-steady-final-pair-20261110/common-panel/UpstreamOne/step-005600/checkpoint",
+              "checkpoint_sha256": "54a5f13ae5e83faf1a1a50d33d3d13ead839681d07eebe1a6df5d7626418ac59",
+              "state_sha256": "f6008d6227e08cf9574140a877e16b9b87716f481d5de8c056afcee677eda6a5",
+              "native_history_sha256": [
+                "98c3ded73773f1e3a2de43aec50aa293431298af41a09a5b23767895400628d3",
+                "35286664740e173fcc6a3fb3e36da4345f232547376927ec76539d48cb6f870c"
+              ],
+              "native_history_times_sha256": "4a9b45c60d9a1b9e61181069f8baf0e603aec793f6d4123d33f92d12a053bdd1",
+              "physical_signature_sha256": "29a1f2d33f8a74225d638f6f2aea9791ee1cef482f75dda8282a37d8043782ae",
+              "audit_revision": "LegacyInterfaceV1",
+              "time": 3.4999999999998392,
+              "step": 5600
+            }
+          },
+          "6400": {
+            "time": 3.9999999999997398,
+            "common_normalized_spatial_blocks": [
+              0.17143506565723196,
+              0.12596997931643208,
+              8.64196410200049,
+              0.27774360922686964
+            ],
+            "native_scaled_spatial_blocks": [
+              0.04285876641430798,
+              0.031492494829108014,
+              2.1604910255001224,
+              0.013122152111639314,
+              2.0851800802944338e-16,
+              1.973212905961083e-16,
+              1.8857070988248858e-17,
+              0.0012344829452033837
+            ],
+            "dimensional_spatial_blocks": [
+              0.06718854958092006,
+              0.049369947557473516,
+              4.3226556247271315,
+              0.013977053144994344
+            ],
+            "matching_defect": 0.00035867078948961795,
+            "mean_wall_stress": 0.005699552482499258,
+            "relative_reference_traction_error": -0.9643777969843796,
+            "bound": {
+              "mode": "MassProjection",
+              "inventory_policy": "ConstitutiveV3",
+              "success": true,
+              "activations": 1.0,
+              "raw_ground": {
+                "admissible": false,
+                "minimum": -0.009538640837301226,
+                "arithmetic_scale": 2.948232560277387e-17,
+                "point": [
+                  -3.5208232931993275,
+                  0.0,
+                  0.0
+                ],
+                "geometry": 0.0,
+                "extrema_checked": 18.0
+              },
+              "corrected_ground": {
+                "admissible": true,
+                "minimum": 5.105457119422867e-09,
+                "arithmetic_scale": 1.6364993812138334e-20,
+                "point": [
+                  -0.06610412217770956,
+                  0.0,
+                  0.0
+                ],
+                "geometry": 3.0,
+                "extrema_checked": 19.0
+              },
+              "raw_minimum": {
+                "value": -0.009508452449810035,
+                "functional_kind": "Point",
+                "coordinate": [
+                  -3.5161030141695453,
+                  0.0,
+                  4.85014724598665e-07
+                ],
+                "geometry": 0.0,
+                "inventory": "constitutive_baseline_normalization_ray:pre_k"
+              },
+              "corrected_minimum": {
+                "value": 5.10554443167166e-09,
+                "functional_kind": "Point",
+                "coordinate": [
+                  -3.0,
+                  0.0,
+                  0.0
+                ],
+                "geometry": 0.0,
+                "inventory": "reconstruction_native"
+              },
+              "mass_norm_raw_step": 0.002147772085304892,
+              "mass_norm_correction": 0.0021450335357700297,
+              "correction_to_step_ratio": 0.9987249347574635,
+              "integral_total": 0.0008541222643082445,
+              "integrals_inner_outer_near_positive_negative": [
+                0.0009615996343505106,
+                -0.00010747737004226808,
+                0.0009615996343505106,
+                0.0016163296456096928,
+                -0.000762207381301448
+              ],
+              "active_set_iterations": 62.0,
+              "mass_factor_applications": 74.0,
+              "kkt_solves": 62.0,
+              "seconds_total": 5.244973532,
+              "raw_sha256": "ac3e1e4ff9e36f53ad41a918046195526a5f94595d26faf1c4de15fa7d0ee3b8",
+              "corrected_sha256": "9243e307647d1f3f97b93e5fffab2cdc4eab810f231cf754731c377a96ea2e9f"
+            },
+            "strong_continuity": [
+              0.43792469371914067,
+              0.060928113995180846,
+              4.01425854362758e-16,
+              2.6472348295283883e-15,
+              -3.858024001807372e-15
+            ],
+            "interface": [
+              6.000000000000001,
+              -0.5083564244694444,
+              0.03390401321423174,
+              0.1219585737347905,
+              0.21144778591234425,
+              0.08430011284342136,
+              -1.862930382873218e-15,
+              0.0009554332793651841
+            ],
+            "covariance": [
+              9.553158650636764e-10,
+              0.06541213414251786
+            ],
+            "receipt": {
+              "source_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/selected-U05-one/trajectory/steps-006393-006400/case.evolution.json.gz",
+              "compressed_report_sha256": "dbc6c83e036976a7b8074e35fba4af8cc499945c3f1bfc4ac63cd90960770d89",
+              "uncompressed_report_sha256": "0687930b3179f65aa90533ef7470d358149c44597eec54eedab40ed3f1b3b59c",
+              "checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-steady-final-pair-20261110/common-panel/UpstreamOne/step-006400/checkpoint",
+              "checkpoint_sha256": "2a84f66a07736c2564602b431b7753884498651babf9d4eab1277bd8d748a10d",
+              "state_sha256": "9243e307647d1f3f97b93e5fffab2cdc4eab810f231cf754731c377a96ea2e9f",
+              "native_history_sha256": [
+                "87dd023d0b264c9dbfc67c19c3eda38b74868e580423696f1028d68873feea24",
+                "35286664740e173fcc6a3fb3e36da4345f232547376927ec76539d48cb6f870c"
+              ],
+              "native_history_times_sha256": "406315b7b1fbf7184926c3caa76ca707401c41a4a1dff107a2a182c151fdc2b0",
+              "physical_signature_sha256": "29a1f2d33f8a74225d638f6f2aea9791ee1cef482f75dda8282a37d8043782ae",
+              "audit_revision": "LegacyInterfaceV1",
+              "time": 3.9999999999997398,
+              "step": 6400
+            }
+          },
+          "7200": {
+            "time": 4.499999999999996,
+            "common_normalized_spatial_blocks": [
+              0.18627353583490583,
+              0.12647208094629653,
+              8.690311270156615,
+              0.38942465786674985
+            ],
+            "native_scaled_spatial_blocks": [
+              0.04656838395872645,
+              0.031618020236574125,
+              2.1725778175391537,
+              0.018398585698425587,
+              2.4657654038297864e-16,
+              1.7790620962862606e-16,
+              1.0058516248644815e-17,
+              0.001275724980730334
+            ],
+            "dimensional_spatial_blocks": [
+              0.07300401846072906,
+              0.04956673040422355,
+              4.34683857155531,
+              0.019597243494192455
+            ],
+            "matching_defect": 0.0003706533879532792,
+            "mean_wall_stress": 0.00557769203246377,
+            "relative_reference_traction_error": -0.9651394247971015,
+            "bound": {
+              "mode": "MassProjection",
+              "inventory_policy": "ConstitutiveV3",
+              "success": true,
+              "activations": 1.0,
+              "raw_ground": {
+                "admissible": false,
+                "minimum": -0.00950199188675863,
+                "arithmetic_scale": 2.944771762866602e-17,
+                "point": [
+                  -3.5197427570441833,
+                  0.0,
+                  0.0
+                ],
+                "geometry": 0.0,
+                "extrema_checked": 18.0
+              },
+              "corrected_ground": {
+                "admissible": true,
+                "minimum": 5.1054208459542904e-09,
+                "arithmetic_scale": 2.8710373892427274e-17,
+                "point": [
+                  1.5090019390868068,
+                  0.0,
+                  0.0
+                ],
+                "geometry": 4.0,
+                "extrema_checked": 18.0
+              },
+              "raw_minimum": {
+                "value": -0.009472638256426242,
+                "functional_kind": "Point",
+                "coordinate": [
+                  -3.5150892895043233,
+                  0.0,
+                  4.846755975049709e-07
+                ],
+                "geometry": 0.0,
+                "inventory": "constitutive_baseline_normalization_ray:pre_k"
+              },
+              "corrected_minimum": {
+                "value": 5.105544430966929e-09,
+                "functional_kind": "Point",
+                "coordinate": [
+                  -2.75,
+                  0.0,
+                  0.0
+                ],
+                "geometry": 1.0,
+                "inventory": "reconstruction_dense"
+              },
+              "mass_norm_raw_step": 0.002164371691060184,
+              "mass_norm_correction": 0.0021593692021655516,
+              "correction_to_step_ratio": 0.9976887108091024,
+              "integral_total": 0.0008914910163577478,
+              "integrals_inner_outer_near_positive_negative": [
+                0.0009948659363077305,
+                -0.0001033749199499841,
+                0.0009948659363077305,
+                0.0016596296457581413,
+                -0.0007681386294003967
+              ],
+              "active_set_iterations": 63.0,
+              "mass_factor_applications": 74.0,
+              "kkt_solves": 63.0,
+              "seconds_total": 4.472798145,
+              "raw_sha256": "91b6d744b9c1c3ee29bd28658a2b5be39547745fa4513a03c6bafb2af2ff9ffc",
+              "corrected_sha256": "8780ecf906d5d5400093d833328787490cf57996f5f5b9472108d26dad0108c1"
+            },
+            "strong_continuity": [
+              0.5333678891308653,
+              0.07508001788281858,
+              3.673276960380889e-16,
+              2.667051482966758e-15,
+              -3.858024454269391e-15
+            ],
+            "interface": [
+              6.000000000000001,
+              -0.5137481389075911,
+              0.03640744572591292,
+              0.12340620202414318,
+              0.2219183128279807,
+              0.09091393555492996,
+              -1.885373367843668e-15,
+              -0.0032778716818434236
+            ],
+            "covariance": [
+              9.237589321598022e-10,
+              0.05424688640597931
+            ],
+            "receipt": {
+              "source_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/selected-U05-one/trajectory/steps-007193-007200/case.evolution.json.gz",
+              "compressed_report_sha256": "7d71302c145c16bfe06981bd2bd9c0c6d9b261f77505a60cbb3f33186dc08ba0",
+              "uncompressed_report_sha256": "a8f4df434ea97ac47164aa12a62b96126f8cc7b86c451d70b7b21f50520ebbb7",
+              "checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-steady-final-pair-20261110/common-panel/UpstreamOne/step-007200/checkpoint",
+              "checkpoint_sha256": "e9596ce3bb2200d62ba3d87a365e3ab29afe09f76469a1d3e3c641a6f3f4eb27",
+              "state_sha256": "8780ecf906d5d5400093d833328787490cf57996f5f5b9472108d26dad0108c1",
+              "native_history_sha256": [
+                "c2a257e5f1b3d05cff0cb0afbca20f5fcdf0c1c0373e6cec39b2eee7d79f3fd2",
+                "35286664740e173fcc6a3fb3e36da4345f232547376927ec76539d48cb6f870c"
+              ],
+              "native_history_times_sha256": "b50c0a5ffb9595aa6b6d6a464d342fc0da83f1d6bbf678616c3e0cf19d0bc250",
+              "physical_signature_sha256": "29a1f2d33f8a74225d638f6f2aea9791ee1cef482f75dda8282a37d8043782ae",
+              "audit_revision": "LegacyInterfaceV1",
+              "time": 4.499999999999996,
+              "step": 7200
+            }
+          },
+          "8000": {
+            "time": 5.000000000000251,
+            "common_normalized_spatial_blocks": [
+              0.23053774740303626,
+              0.15889869483047545,
+              8.517602007365886,
+              0.4678762919830494
+            ],
+            "native_scaled_spatial_blocks": [
+              0.057634436850759044,
+              0.039724673707618854,
+              2.129400501841471,
+              0.022105077016610568,
+              2.0234250880069422e-16,
+              1.6126770494968783e-16,
+              1.408192274810274e-17,
+              0.00256307795058899
+            ],
+            "dimensional_spatial_blocks": [
+              0.09035197561409225,
+              0.06227531570062145,
+              4.260450493864498,
+              0.023545210694616844
+            ],
+            "matching_defect": 0.0007446852106245405,
+            "mean_wall_stress": 0.005496471290089083,
+            "relative_reference_traction_error": -0.9656470544369432,
+            "bound": {
+              "mode": "MassProjection",
+              "inventory_policy": "ConstitutiveV3",
+              "success": true,
+              "activations": 1.0,
+              "raw_ground": {
+                "admissible": false,
+                "minimum": -0.009593262260287243,
+                "arithmetic_scale": 2.944964800465201e-17,
+                "point": [
+                  -3.5196290447402503,
+                  0.0,
+                  0.0
+                ],
+                "geometry": 0.0,
+                "extrema_checked": 18.0
+              },
+              "corrected_ground": {
+                "admissible": true,
+                "minimum": 5.1054315931967806e-09,
+                "arithmetic_scale": 2.88491488601723e-17,
+                "point": [
+                  1.5164085652801222,
+                  0.0,
+                  0.0
+                ],
+                "geometry": 4.0,
+                "extrema_checked": 19.0
+              },
+              "raw_minimum": {
+                "value": -0.009564349940834861,
+                "functional_kind": "Point",
+                "coordinate": [
+                  -3.5150122859045747,
+                  0.0,
+                  4.84206429000045e-07
+                ],
+                "geometry": 0.0,
+                "inventory": "constitutive_baseline_normalization_ray:pre_k"
+              },
+              "corrected_minimum": {
+                "value": 5.10554443167166e-09,
+                "functional_kind": "Point",
+                "coordinate": [
+                  -3.0,
+                  0.0,
+                  0.0
+                ],
+                "geometry": 0.0,
+                "inventory": "reconstruction_native"
+              },
+              "mass_norm_raw_step": 0.0021124185264899,
+              "mass_norm_correction": 0.002104847190651665,
+              "correction_to_step_ratio": 0.9964157974647118,
+              "integral_total": 0.0008375155785853359,
+              "integrals_inner_outer_near_positive_negative": [
+                0.0009410177276549439,
+                -0.0001035021490696082,
+                0.0009410177276549439,
+                0.0015747078169274535,
+                -0.0007371922383421171
+              ],
+              "active_set_iterations": 60.0,
+              "mass_factor_applications": 72.0,
+              "kkt_solves": 60.0,
+              "seconds_total": 4.397468795,
+              "raw_sha256": "d4094fdd16aaa15cac102094e5397a18a45110574d8bfc0c2eedc61384ed2d8a",
+              "corrected_sha256": "641096d2ad603245e7922c1f19f9d67e9c036fea4634705d48a1439d696dae4f"
+            },
+            "strong_continuity": [
+              0.45928047032891695,
+              0.054720828638471435,
+              3.6852031842782296e-16,
+              2.67662869259546e-15,
+              -3.858024187351516e-15
+            ],
+            "interface": [
+              6.000000000000001,
+              -0.5216480674260285,
+              0.035753478383315065,
+              0.1239817781558587,
+              0.2240587829545936,
+              0.0806584615848087,
+              -1.895239607613286e-15,
+              -0.0012329796809142594
+            ],
+            "covariance": [
+              9.607834693025563e-10,
+              0.05847201802990193
+            ],
+            "receipt": {
+              "source_report": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/selected-U05-one/trajectory/steps-007993-008000/case.evolution.json.gz",
+              "compressed_report_sha256": "8f08a76b723f3c0e9b1d7a03fd505e58e6741447f527049452e64ef469a0ec3e",
+              "uncompressed_report_sha256": "7977c24f591205dc893eb61feb03d8bc48c4f28767e8c50e603dd6f71a9693ba",
+              "checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-steady-final-pair-20261110/common-panel/UpstreamOne/step-008000/checkpoint",
+              "checkpoint_sha256": "708dd22b29628cfbcb7217aeb33584d633384becf3863c51919e41c9d0cfe40b",
+              "state_sha256": "641096d2ad603245e7922c1f19f9d67e9c036fea4634705d48a1439d696dae4f",
+              "native_history_sha256": [
+                "ca372ec2414cc2db9c9bd03160d5e4c10c6450c0d3a491b5024d5333517a6b4d",
+                "35286664740e173fcc6a3fb3e36da4345f232547376927ec76539d48cb6f870c"
+              ],
+              "native_history_times_sha256": "24aca8944d17339c1d00686d24f7ed4d1197e944a7fc71e5a57e86e5736f1b2b",
+              "physical_signature_sha256": "29a1f2d33f8a74225d638f6f2aea9791ee1cef482f75dda8282a37d8043782ae",
+              "audit_revision": "LegacyInterfaceV1",
+              "time": 5.000000000000251,
+              "step": 8000
+            }
+          }
+        },
+        "common_screen_passing_windows": 0,
+        "classification": "not_steady_by_declared_screen",
+        "common_residual_persistence_pass": false,
+        "latest_residual_pass": false
+      }
+    },
+    "selection": "Latest completed endpoint with three preceding endpoints separated by exactly .5; selection uses availability only. Also retain the latest completed report.",
+    "scope": "Common Ustar=.4,K0=.5105080131,E0=.0726358333,p0=.16,V=24 physical L2 panels; epsilon changes only on common z>=2. Full spatial epsilon residual uses the actual entire outer transport space. Negative classifications do not depend on omitting the lower outer epsilon region.",
+    "legacy_context": "The older long-time report used a broader 1e-3 exploratory field screen. This comparison explicitly uses the fixed H=2 common normalization and the supplied policy for all six cases; it does not silently substitute H-dependent native residual scales or infer stationarity from endpoint samples.",
+    "completed_Asia_Shanghai": "2026-11-10T16:40:40.127403+08:00"
+  },
+  "full_outer_epsilon": {
+    "status": "passed",
+    "case": "UniformG",
+    "probe_sha256": "0df6a85daa4d5c88274c952bb1babb0a68c0e7dfe5e03bbdbbdf2694785b55d6",
+    "script_sha256": "5dcda45a16013481568aabeb1945e7b646bf159c215f7e8cb2ad892e5e1fc242",
+    "common_panel_summary_sha256": "3b49d534c6a4746ea69e1ac6c4fb3fda77c24333c768deefac3ca426fa25c844",
+    "policy": {
+      "version": "AcceptedAWFExploratoryWindowsV1",
+      "declared_date_Asia_Shanghai": "2026-11-08",
+      "primary_physical_window": 0.5,
+      "required_consecutive_windows": 3.0,
+      "secondary_drift_windows": [
+        0.1,
+        0.2
+      ],
+      "common_normalization": {
+        "U": 0.4,
+        "K": 0.5105080130598861,
+        "H": 2.0,
+        "volume": 24.0,
+        "outer_epsilon_volume": 12.0,
+        "epsilon": 0.07263583326186134,
+        "pressure": 0.16
+      },
+      "normalized_window_L2_change_maximum": {
+        "u": 0.0001,
+        "v": 0.0001,
+        "k": 0.0001,
+        "epsilon": 0.001,
+        "pressure": 0.001
+      },
+      "normalized_selected_spatial_residual_maximum_each_block": 0.001,
+      "relative_wall_stress_window_change_maximum": 0.0005,
+      "relative_matching_defect_maximum": 1e-05,
+      "bound_supply_per_time_relative_to_K0_volume_per_wall_time_maximum": 1e-05,
+      "scope": "Exploratory scientific classification only. No production gate or tolerance changes. Window changes must persist and full residuals must be small for a steady claim; stable fluctuation statistics are needed for a stationary-unsteady claim.",
+      "discretization_context": "Cutoff-v1 reference errors and coarse/fine differences in the existing report motivate a stringent drift screen, not a proof of continuum accuracy. Residuals are reported dimensionally and with fixed H=2 normalization. Reference error remains separate from time-window drift.",
+      "window_sensitivity": "Compare primary adjacent .5 windows and combined 1.0 windows once available. Secondary .1/.2 windows diagnose current drift without authorizing an early persistent-settling claim."
+    },
+    "observations": {
+      "5600": {
+        "time": 3.4999999999998392,
+        "checkpoint_sha256": "273e17e553f7d856de9f3343edcab4f62908a2da68f1daaeb237f20ca1908252",
+        "state_sha256": "9ca90b338ddfbff248f1f56802878e0e9beb754973f0010f34f60f4f2ce6fad9",
+        "native_history_sha256": [
+          "eb4094cb5631fb6764368903884caa4a3d994f1650cef2679812bba71a2150ad",
+          "3f1f6f76c52276c865bae097486a0ce164cd509c98c6410b677f516084ad7c3c"
+        ],
+        "native_history_times_sha256": "4a9b45c60d9a1b9e61181069f8baf0e603aec793f6d4123d33f92d12a053bdd1",
+        "coefficients_sha256": "ac661b6f972238453669f7877ce5f7b2ae034267646188aa887c47604c7b0f6e",
+        "physical_volume": 21.000000000000142,
+        "constant_mass_error": 1.3500311979441904e-13,
+        "receipt": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-steady-final-pair-20261110/runtime/probe/RANSWallResolutionProbe",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-G/trajectory/steps-005593-005600/case.xml",
+            "input.json",
+            "result.json"
+          ],
+          "exit_code": 0,
+          "seconds": 3.0230470170499757,
+          "input_sha256": "619ded6a6c5ad551b3fda11ec314af1b4149e4c3b58df7a3a03eb1156de70bf1",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "output": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-steady-final-pair-20261110/full-outer-epsilon/step-005600/result.json",
+          "output_sha256": "ff227cce50818590556deae192696084e9121dc864fa266f15be828d91c99d08"
+        }
+      },
+      "6400": {
+        "time": 3.9999999999997398,
+        "checkpoint_sha256": "2c830fc1a028bbf1ec9d92038eab3e851ddedc0940722c9313e83db94948e6d2",
+        "state_sha256": "4eeb3e4ed589b068cae4d4520f55ca89a3f81436e8034ea298839966b9610f91",
+        "native_history_sha256": [
+          "5cebbcf9bd4d72cc76350233e7f71e0bcb38349373dee60985834aa3de43096b",
+          "3f1f6f76c52276c865bae097486a0ce164cd509c98c6410b677f516084ad7c3c"
+        ],
+        "native_history_times_sha256": "406315b7b1fbf7184926c3caa76ca707401c41a4a1dff107a2a182c151fdc2b0",
+        "coefficients_sha256": "55b513e4d07c99e50c7b801684f9831fbccfd4cdf1f9fde030cecca4ebf7cd3f",
+        "physical_volume": 21.000000000000142,
+        "constant_mass_error": 1.3500311979441904e-13,
+        "receipt": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-steady-final-pair-20261110/runtime/probe/RANSWallResolutionProbe",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-G/trajectory/steps-006393-006400/case.xml",
+            "input.json",
+            "result.json"
+          ],
+          "exit_code": 0,
+          "seconds": 4.777387313020881,
+          "input_sha256": "02bd1d3de56ec839bee6caeed3eb76b730d754ec5e46b45f3f03e9f527d8b7a0",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "output": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-steady-final-pair-20261110/full-outer-epsilon/step-006400/result.json",
+          "output_sha256": "2ad36d69547b1a9cbc0f7827f0deec780ae1319710207522d556dc9d126e8f34"
+        }
+      },
+      "7200": {
+        "time": 4.499999999999996,
+        "checkpoint_sha256": "9bc963effa29fa442c6dec74d5a1224d33a4e6a66a24ef7107698e791af0efe5",
+        "state_sha256": "a2862213874b753a35e8aade474be39409749db35473072e72fcea344d1bdcf3",
+        "native_history_sha256": [
+          "a47c54798d411b959dde2783d8dc6758f13629dbb31de5b20a26572a011bc95b",
+          "3f1f6f76c52276c865bae097486a0ce164cd509c98c6410b677f516084ad7c3c"
+        ],
+        "native_history_times_sha256": "b50c0a5ffb9595aa6b6d6a464d342fc0da83f1d6bbf678616c3e0cf19d0bc250",
+        "coefficients_sha256": "bc36a03205c0d5cbfa3f8926ae9bcda66b385fddf6de849b6b51b34a9c3d9bbb",
+        "physical_volume": 21.000000000000142,
+        "constant_mass_error": 1.3500311979441904e-13,
+        "receipt": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-steady-final-pair-20261110/runtime/probe/RANSWallResolutionProbe",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-G/trajectory/steps-007193-007200/case.xml",
+            "input.json",
+            "result.json"
+          ],
+          "exit_code": 0,
+          "seconds": 4.679307776968926,
+          "input_sha256": "45a087dfcd112008323c96a04f3abdd1536018aa21ca51a03e391b20ab6c514f",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "output": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-steady-final-pair-20261110/full-outer-epsilon/step-007200/result.json",
+          "output_sha256": "92d02af0ad2f509647e28627b9fc175316749b6196dc4db4b91af6976d6d75be"
+        }
+      },
+      "8000": {
+        "time": 5.000000000000251,
+        "checkpoint_sha256": "85c5e9155e3c0239af0eadea43a33bb6b87d1dcc8fc837c09207af90bb4650d6",
+        "state_sha256": "8388bd8184c684a6e552961cb0a0292ff5f736b6cc35480724e8a1e3d55acab2",
+        "native_history_sha256": [
+          "12628782fa8de7b597d3530ad6ef0703203cf418f3e5b019b47df3bc28b2757f",
+          "3f1f6f76c52276c865bae097486a0ce164cd509c98c6410b677f516084ad7c3c"
+        ],
+        "native_history_times_sha256": "24aca8944d17339c1d00686d24f7ed4d1197e944a7fc71e5a57e86e5736f1b2b",
+        "coefficients_sha256": "26b535f8da6656996ac1136645274e8d942843daeda858d79a891cbe35537d9b",
+        "physical_volume": 21.000000000000142,
+        "constant_mass_error": 1.3500311979441904e-13,
+        "receipt": {
+          "command": [
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-steady-final-pair-20261110/runtime/probe/RANSWallResolutionProbe",
+            "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-G/trajectory/steps-007993-008000/case.xml",
+            "input.json",
+            "result.json"
+          ],
+          "exit_code": 0,
+          "seconds": 3.023351860989351,
+          "input_sha256": "8ac26f4e0417bc3efbb5cd4f15df6c9d898b56a192f959747575560db2a9b575",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "output": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-steady-final-pair-20261110/full-outer-epsilon/step-008000/result.json",
+          "output_sha256": "56c4e3dcb183621dc81edd9db9191636e1d28829780b3c17c138f9605acf8b97"
+        }
+      }
+    },
+    "windows": [
+      {
+        "start": 3.4999999999998392,
+        "end": 3.9999999999997398,
+        "full_outer_epsilon_L2_change": 2.109392317008678e-05,
+        "full_outer_epsilon_normalized_change": 8.383315557632253e-05,
+        "mass_quadrature_norm_error": 1.3552527156068805e-20,
+        "full_outer_epsilon_pass": true,
+        "common_panel_screen_pass": true,
+        "complete_screen_pass": true
+      },
+      {
+        "start": 3.9999999999997398,
+        "end": 4.499999999999996,
+        "full_outer_epsilon_L2_change": 9.376155519772724e-06,
+        "full_outer_epsilon_normalized_change": 3.7263466736788547e-05,
+        "mass_quadrature_norm_error": 5.082197683525802e-21,
+        "full_outer_epsilon_pass": true,
+        "common_panel_screen_pass": true,
+        "complete_screen_pass": true
+      },
+      {
+        "start": 4.499999999999996,
+        "end": 5.000000000000251,
+        "full_outer_epsilon_L2_change": 3.6096237675586543e-06,
+        "full_outer_epsilon_normalized_change": 1.4345655307347515e-05,
+        "mass_quadrature_norm_error": 1.6940658945086007e-21,
+        "full_outer_epsilon_pass": true,
+        "common_panel_screen_pass": true,
+        "complete_screen_pass": true
+      }
+    ],
+    "governing_solves": 0,
+    "physical_commits": 0,
+    "native_history_advanced": false,
+    "metric": "actual full physical consistent outer-epsilon mass; retain prescribed and matching coefficients; fixed common E0*sqrt(12) normalization",
+    "started_Asia_Shanghai": "2026-11-10T16:54:17.990445+08:00",
+    "contract_rejections": {
+      "state": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-steady-final-pair-20261110/runtime/probe/RANSWallResolutionProbe",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-G/trajectory/steps-005593-005600/case.xml",
+          "input.json",
+          "result.json"
+        ],
+        "exit_code": 1,
+        "seconds": 1.4715968050295487,
+        "input_sha256": "6c8fd186498c7a1a9d0a6b6117d7f6a69901854847bf183e709e131c27e8d505",
+        "log_sha256": "0484f46a8d2748ad34e529ec1f5b28b36adaa87e09102cfe45723205cb622992",
+        "output": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-steady-final-pair-20261110/full-outer-epsilon/reject-state/result.json"
+      },
+      "history": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-steady-final-pair-20261110/runtime/probe/RANSWallResolutionProbe",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-G/trajectory/steps-005593-005600/case.xml",
+          "input.json",
+          "result.json"
+        ],
+        "exit_code": 1,
+        "seconds": 1.7693243030225858,
+        "input_sha256": "4ce89a3a86bf0fa664a8b056ea9dc8373213b6024fcdc7e0c32505a39b3192d8",
+        "log_sha256": "dfb0a85f3f8c159a42bc0ac616e0adae5c433fe1471e0d8addf319ef7163fdd6",
+        "output": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-steady-final-pair-20261110/full-outer-epsilon/reject-history/result.json"
+      },
+      "alpha": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-steady-final-pair-20261110/runtime/probe/RANSWallResolutionProbe",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-G/trajectory/steps-005593-005600/case.xml",
+          "input.json",
+          "result.json"
+        ],
+        "exit_code": 1,
+        "seconds": 1.467489586037118,
+        "input_sha256": "92b14363ad2314d5adf045f76227ad9c0b10a898cf95eee90cdd3c19d72968c6",
+        "log_sha256": "c68ef60fcf73350773663b776eae7246642e0a8e32a8133bc4aff728704a8f20",
+        "output": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-steady-final-pair-20261110/full-outer-epsilon/reject-alpha/result.json"
+      },
+      "signature": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-steady-final-pair-20261110/runtime/probe/RANSWallResolutionProbe",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-G/trajectory/steps-005593-005600/case.xml",
+          "input.json",
+          "result.json"
+        ],
+        "exit_code": 1,
+        "seconds": 1.81870078103384,
+        "input_sha256": "a0237630cfed4d9884695c7a57099864fb6fd27b3b685aa166bb68e2b5ed70c1",
+        "log_sha256": "cb4aecce2dee61823edaea8e95f029152e47ad2fdb21cd25d3b74c48a99b82c0",
+        "output": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-steady-final-pair-20261110/full-outer-epsilon/reject-signature/result.json"
+      },
+      "checksum": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-steady-final-pair-20261110/runtime/probe/RANSWallResolutionProbe",
+          "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-G/trajectory/steps-005593-005600/case.xml",
+          "input.json",
+          "result.json"
+        ],
+        "exit_code": 1,
+        "seconds": 0.917135727009736,
+        "input_sha256": "b4bf49e3eff670384cef04a9d083eee2996eefd81d35db3d25d624cb8b7a4a52",
+        "log_sha256": "cf216c456168fc9f3b7131ffbdf6efcc9cb05559d7cbc471c59601bd0288b08c",
+        "output": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-steady-final-pair-20261110/full-outer-epsilon/reject-checksum/result.json"
+      }
+    },
+    "passing_windows": 3,
+    "classification": "candidate_steady_selected_operator_at_declared_screen",
+    "completed_Asia_Shanghai": "2026-11-10T16:54:44.030024+08:00"
+  },
+  "campaigns": {
+    "UniformG": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-G/trajectory",
+      "status": "targets_completed",
+      "accepted_steps": 8000,
+      "accepted_time": 5.000000000000251,
+      "checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-G/trajectory/steps-007993-008000/checkpoint.3",
+      "checkpoint_sha256": "85c5e9155e3c0239af0eadea43a33bb6b87d1dcc8fc837c09207af90bb4650d6",
+      "coupled_state_sha256": "8388bd8184c684a6e552961cb0a0292ff5f736b6cc35480724e8a1e3d55acab2",
+      "immutable_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-steady-final-pair-20261110/compact/checkpoints/UniformG/8000-85c5e9155e3c0239af0eadea43a33bb6b87d1dcc8fc837c09207af90bb4650d6",
+      "native_history_sha256": [
+        "12628782fa8de7b597d3530ad6ef0703203cf418f3e5b019b47df3bc28b2757f",
+        "3f1f6f76c52276c865bae097486a0ce164cd509c98c6410b677f516084ad7c3c"
+      ],
+      "native_history_times_sha256": "24aca8944d17339c1d00686d24f7ed4d1197e944a7fc71e5a57e86e5736f1b2b",
+      "source_progress_sha256": "e4737a4a6ad7609ee11cdd7b3699b097fdc10caf717fabf619ad39adfc44c28d",
+      "driver_identity": null,
+      "native_identity": null,
+      "supervisor_identity": null,
+      "supervisor_start_matches": false,
+      "native_identity_matches": false,
+      "driver_start_matches": false,
+      "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-G/trajectory/runtime/IncNavierStokesSolver",
+      "executable_sha256": "aa1071c74de72601f47c97ed413995434e1496dba07095ee970ac361825cb98d",
+      "library_manifest": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-height-sampler-20261107/selected-G/trajectory/runtime/identity.json",
+      "library_manifest_sha256": "22e1fb488a9c07d26e27c2aa27f031c7ca19dfda68aaedb15995eb9918898294",
+      "next_target_step": null,
+      "next_target_time": null,
+      "completed_targets": [
+        32,
+        80,
+        160,
+        800,
+        1600,
+        3200,
+        8000
+      ],
+      "recorded_successor_completed_targets": [
+        32,
+        80,
+        160,
+        800,
+        1600,
+        3200,
+        8000
+      ],
+      "failure": null,
+      "prefix_steps": 4,
+      "cumulative_bound_integral": 0.0,
+      "audit_revision": "LegacyInterfaceV1",
+      "evaluation_reuse": "Off",
+      "handoff": null,
+      "completed_Asia_Shanghai": "2026-11-10T16:14:10.312969+08:00"
+    },
+    "UpstreamOne": {
+      "path": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/selected-U05-one/trajectory",
+      "status": "targets_completed",
+      "accepted_steps": 8000,
+      "accepted_time": 5.000000000000251,
+      "checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/selected-U05-one/trajectory/steps-007993-008000/checkpoint.3",
+      "checkpoint_sha256": "708dd22b29628cfbcb7217aeb33584d633384becf3863c51919e41c9d0cfe40b",
+      "coupled_state_sha256": "641096d2ad603245e7922c1f19f9d67e9c036fea4634705d48a1439d696dae4f",
+      "immutable_checkpoint": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-steady-final-pair-20261110/compact/checkpoints/UpstreamOne/8000-708dd22b29628cfbcb7217aeb33584d633384becf3863c51919e41c9d0cfe40b",
+      "native_history_sha256": [
+        "ca372ec2414cc2db9c9bd03160d5e4c10c6450c0d3a491b5024d5333517a6b4d",
+        "35286664740e173fcc6a3fb3e36da4345f232547376927ec76539d48cb6f870c"
+      ],
+      "native_history_times_sha256": "24aca8944d17339c1d00686d24f7ed4d1197e944a7fc71e5a57e86e5736f1b2b",
+      "source_progress_sha256": "b64d9be7aa4197f17861fdc6babb8621cd4e33efe62fbfbb0138db5829edf3b2",
+      "driver_identity": null,
+      "native_identity": null,
+      "supervisor_identity": null,
+      "supervisor_start_matches": false,
+      "native_identity_matches": false,
+      "driver_start_matches": false,
+      "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/selected-U05-one/trajectory/runtime/IncNavierStokesSolver",
+      "executable_sha256": "255190519d8dc7e9fa66e6fdf91acdc802d9562541a9b1d245f7c6d83fb7afbd",
+      "library_manifest": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-epawf-upstream-branches-20261107/selected-U05-one/trajectory/runtime/identity.json",
+      "library_manifest_sha256": "17ab2cb25067a713266d94d99b5f97a75261eefe312971617b3f6ee6d7582e8e",
+      "next_target_step": null,
+      "next_target_time": null,
+      "completed_targets": [
+        32,
+        80,
+        160,
+        800,
+        1600,
+        3200,
+        8000
+      ],
+      "recorded_successor_completed_targets": [
+        80,
+        160,
+        800,
+        1600,
+        3200,
+        8000
+      ],
+      "failure": null,
+      "prefix_steps": 32,
+      "cumulative_bound_integral": 7.2195704177269056,
+      "audit_revision": "LegacyInterfaceV1",
+      "evaluation_reuse": "Off",
+      "handoff": null,
+      "completed_Asia_Shanghai": "2026-11-10T14:49:23.619699+08:00"
+    }
+  },
+  "production_changes": false,
+  "governing_solves_added": 0,
+  "physical_commits_added": 0,
+  "native_histories_advanced": false,
+  "linux_root": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-steady-final-pair-20261110",
+  "compiled_probe_manifest": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/cls-awf-steady-final-pair-20261110/runtime/probe/identity.json",
+  "compiled_probe_manifest_sha256": "2bba3c9b2e05f873994452538a12718060c42fc7805219d0611daba607a72664",
+  "source_base": "ba0f3068c334bdbe43ce0cadf5ad3ad45340baae",
+  "source_files": {
+    "library/UnitTests/SolverUtils/RANSWallResolutionProbe.cpp": "e80b55e06d395b49fdb78adb0b35b728f4a883997f73f89b7a3d9ecd2bd82f45",
+    "solvers/IncNavierStokesSolver/Tests/RANS/confirm_cls_awf_outer_epsilon.py": "5dcda45a16013481568aabeb1945e7b646bf159c215f7e8cb2ad892e5e1fc242"
+  },
+  "diagnostic_library_closure_matches_validated_probe": true,
+  "native_processes": [
+    {
+      "identity": {
+        "pid": 452480,
+        "start": "42841533",
+        "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-balanced-20261110/runtime/IncNavierStokesSolver",
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-balanced-20261110/campaigns/A95-N-Accepted-B11-dt2/T-0.0160"
+      },
+      "command": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-balanced-20261110/runtime/IncNavierStokesSolver case.xml "
+    },
+    {
+      "identity": {
+        "pid": 453835,
+        "start": "42887350",
+        "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-balanced-20261110/runtime/IncNavierStokesSolver",
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-balanced-20261110/campaigns/E-N-Accepted-duration-0.004-B5-dt2/T-0.0160"
+      },
+      "command": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-balanced-20261110/runtime/IncNavierStokesSolver case.xml "
+    },
+    {
+      "identity": {
+        "pid": 453921,
+        "start": "42889142",
+        "executable": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-balanced-20261110/runtime/IncNavierStokesSolver",
+        "cwd": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-balanced-20261110/campaigns/E-N-Accepted-duration-0.004-B11-dt2/T-0.0160"
+      },
+      "command": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/a93-a95-e94e95-balanced-20261110/runtime/IncNavierStokesSolver case.xml "
+    }
+  ]
+}
