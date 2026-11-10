@@ -18,7 +18,7 @@ def main():
   for name in ('source-build.json','actual-loaded-libraries.json'):
    if (runtime/name).exists():
     dest=out/(("p5-" if runtime.parent==r else "first-")+name);dest.write_bytes((runtime/name).read_bytes())
- for key,path in [('frozen-boundary',base/'frozen-boundary-regression/results.json'),('interface-side',base/'interface-side-regression-v2/results.json'),('native-controls',r/'native-regression/qualification.json'),('validated-resume',r/'resume-cli-verification.json'),('ground-spectrum-domain',base/'ground-polynomial-unit.json')]:
+ for key,path in [('frozen-boundary',base/'frozen-boundary-regression/results.json'),('interface-side',base/'interface-side-regression-v2/results.json'),('native-controls',r/'native-regression/qualification.json'),('validated-resume',r/'resume-cli-verification.json'),('ground-spectrum-domain',base/'ground-polynomial-unit.json'),('mathematical-reuse',base/'mathematical-evidence-reuse.json'),('extended-ctest',base/'extended-ctest.json'),('velocity-pressure',r/'velocity-pressure-response.json'),('streamwise',r/'streamwise-sensitivity-v2/results.json'),('selected-controls',r/'selected-controls/results.json'),('selected-quadrature',r/'selected-quadrature/results.json')]:
   if path.exists():
    d=load(path)
    if key=='frozen-boundary':
@@ -63,7 +63,13 @@ def main():
  expected={('E' if model=='E94E95' else model)+'-N-'+wall+'-h0p5' for model in ('E94E95','A95','A93') for wall in ('EP','Accepted')};actual={x['label']:x for x in result['cases']};gates={}
  for label in sorted(expected):
   c=actual.get(label);milestones={m['target']:m for m in c['milestones']} if c else {};gates[label]=dict(status='pass' if all(t in milestones and milestones[t]['status']=='pass' for t in (.0016,.016,.05,.1)) else 'failed' if c and any(m['status']=='fail' for m in c['milestones']) else 'not_completed',completed_times=sorted(milestones))
- result['required_natural_pilots']=gates;result['status']='pass' if all(v['status']=='pass' for v in result['verification'].values()) and all(v['status']=='pass' for v in gates.values()) else 'incomplete_or_failed'
+ result['required_evolved_space_comparisons']={}
+ for model in ('E','A95','A93'):
+  for wall in ('EP','Accepted'):
+   for T in (.0016,.016):
+    name=model+'-N-'+wall+'-space-'+str(T);f=r/'natural-schedule'/(name+'.json');result['required_evolved_space_comparisons'][name]=load(f)['status'] if f.exists() else 'not_completed'
+ result['required_scalar_stage_observations']={label:actual.get(label,{}).get('read_only_scalar_stage_observations',{}).get('status','not_completed') for label in expected}
+ result['required_natural_pilots']=gates;result['status']='pass' if all(v['status']=='pass' for v in result['verification'].values()) and all(v['status']=='pass' for v in gates.values()) and all(v=='pass' for v in result['required_evolved_space_comparisons'].values()) and all(v=='pass' for v in result['required_scalar_stage_observations'].values()) else 'incomplete_or_failed'
  result['historical_epsilon_order_status']='eight previous observations remain unresolved; no retrospective threshold change';result['scope']='serial flat2D prescribed-reference bounded patch; no long-time, downstream ABL, curved/3D/MPI or physical validation claim'
  write_json(out/'summary.json',result);print(result['status']);return 0 if result['status']=='pass' else 1
 if __name__=='__main__':sys.exit(main())
