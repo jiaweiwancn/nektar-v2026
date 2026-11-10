@@ -83,3 +83,36 @@ new backend is authorized by this package.
 Pending native term diagnosis and candidate screening; this is not a completion
 receipt. Results, exact reproduction commands and remaining gates follow in
 logical commits.
+
+## Initial screen and localized candidates (before advancement)
+
+Both E94E95 walls pass the native term/reaction reconstruction and common-test
+inclusion checks on base p5, Interface8, Nearwall8, global h1/p5, h1/p4 and the
+inactive-breakpoint mesh-only control. Actual global h1/p4 count is 2471;
+global h1/p5 is 3801 and remains ineligible for evolution. h1/p4 increases full
+momentum and accepted inner-k norms relative to base p5, despite smaller loads
+on shared p3 tests, so it is not selected merely for its DOF count.
+
+Signed native dual-energy localization assigns about 62--63% of base momentum
+energy to the tiny original-epsilon panel, and about 91% of accepted k energy
+to that panel. EP k energy is mainly .02--.04 (63%), .04--.1 (20%) and .1--.25
+(12%). Nearwall8 removes the accepted near-wall defect but EP's new .07--.1
+modes dominate its increased full norm. Both walls improve on fixed shared
+tests under Nearwall8. Omitting the inactive original-epsilon mesh breakpoint
+reduces full norms but leaves common momentum nearly unchanged and slightly
+increases accepted common k. Thus removal alone is not physical consistency
+improvement and does not pass the balanced gate.
+
+The next bounded initialization screen is a nested p5 hierarchy on the base
+mesh with only that inactive epsilon mesh breakpoint omitted. Active viscosity,
+cutoff, roughness/forcing and interface breaks remain; profile quadrature is
+unchanged. `Balanced5V1` splits inner [0,.0025], [zc,.02], [.02,.04], [1,2] and
+outer [2,2.25]. `Balanced11V1` also splits [.0025,.005], [.04,.1], [.1,.25],
+[.25,.5], [.5,1] and outer [2.5,3]. Expected counts are 2355 and 2997 and must be
+verified natively. Both use velocity/k p5 and pressure p3, quadrature
+48/12/12/12/12. The exact per-model/policy cutoff is computed from its descriptor;
+no mesh motion is allowed. This allocation follows assembled-load support
+energy rather than raw element stress loads that cancel between neighbors.
+The predeclared 15% full/common dominant-residual reduction, field and temporal
+uncertainty gates remain unchanged. No trajectory is admitted until this
+initial screen establishes a meaningful pair.

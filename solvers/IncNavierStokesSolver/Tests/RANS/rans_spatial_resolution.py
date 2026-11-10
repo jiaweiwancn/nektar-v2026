@@ -105,5 +105,5 @@ def common_test(coarse,fine,cross,ref):
         terms={}
         for k in fr['physical_term_names']:
             value=p.T@np.array(fr['terms'][k])[fo['offsets'][b]:fo['offsets'][b]+nf];terms[k]=norm(value)
-        result[name]=dict(prolongation_sha256=hashlib.sha256(np.asarray(P,dtype='<f8').tobytes()).hexdigest(),identity_checks=condition,coarse_common_mass_dual=norm(own),fine_restricted_common_mass_dual=norm(restricted),restricted_load_difference=norm(restricted-own),restricted_term_mass_dual=terms,common_free_test_count=len(free),fine_full_count=nf)
+        result[name]=dict(prolongation_sha256=hashlib.sha256(np.asarray(P,dtype='<f8').tobytes()).hexdigest(),identity_checks=condition,coarse_common_mass_dual=norm(own),fine_restricted_common_mass_dual=norm(restricted),restricted_load_difference=norm(restricted-own),restricted_load=restricted.tolist(),common_free_ids=free.tolist(),common_mass_sha256=hashlib.sha256(np.asarray(M,dtype='<f8').tobytes()).hexdigest(),restricted_term_mass_dual=terms,common_free_test_count=len(free),fine_full_count=nf)
     return dict(status='pass',fields=result,definition='P^T r_f on identical coarse free tests and physical coarse mass/normalization; full fine norms retained separately')
