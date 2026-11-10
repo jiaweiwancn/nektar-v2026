@@ -49,7 +49,9 @@ def main():
                     guard=copy.deepcopy(request)
                     if kind in ('descriptor','identity'):guard[kind]='changed-'+guard[kind]
                     elif kind=='nonzero_time':guard['time']=.0016
-                    else:guard['state'][0]+=1e-3
+                    else:
+                        guard['state']=list(guard['state']) # break an intentional state/reference alias before perturbing
+                        guard['state'][-1]+=1e-3
                     guard['write_initial_history']=str(folder/('must-not-exist-'+kind));write_json(folder/('guard-'+kind+'.json'),guard)
                     with (folder/('guard-'+kind+'.log')).open('w') as f:c=subprocess.run([str(sampler),'case.xml','guard-'+kind+'.json','guard-'+kind+'-result.json'],cwd=folder,stdout=f,stderr=subprocess.STDOUT)
                     failure=load(folder/('guard-'+kind+'-result.json')).get('failure','')

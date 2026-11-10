@@ -54,6 +54,8 @@ def main():
         path=folder/'metrics.json'
         if not path.exists():continue
         d=load(path);alpha=d['native_alpha_zero']
+        d['actual_quadrature']['coefficient_initializer_wall_normal']=32 if folder.name.endswith(('-q1','-q2')) else d['configuration']['quadrature'][0]
+        d['actual_quadrature']['accepted_referenceK_nested_integral']='same normal order as coefficient initializer, before the fixed Gauss32 radial projection' if '-Accepted-' in folder.name else 'not applicable (constant inner k)'
         sc.append(dict(name=folder.name,configuration=d['configuration'],actual_quadrature=d['actual_quadrature'],state_sha256=d['state_sha256'],
             representation=d['representation'],coupled_norms=alpha['coupled_norms'],k_inner_outer_shared=alpha['native_k_inner_outer_shared_interface_dual'],
             interface=alpha['interface'],dependent_trace=alpha['common_velocity_k_dependent_epsilon_trace_defects'],pressure_and_gauge=alpha['coupled_norms'][4:]))
