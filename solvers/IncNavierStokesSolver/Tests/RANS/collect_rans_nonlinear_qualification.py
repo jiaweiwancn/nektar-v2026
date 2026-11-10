@@ -35,7 +35,7 @@ def main():
         result['execution_schedules'].append(row)
     result['common_scalar_partitions']={p.parent.name:receipt(p) for p in (r/'common-scalar-partitions').glob('*/results.json')}
     result['physical_budget_diagnostic_controls']={p.parent.name:receipt(p) for p in (r/'physical-budgets').glob('test-*/results.json')}
-    for name in ('runtime','runtime-resolution-v2','runtime-resolution-v3','runtime-budget-v4'):
+    for name in ('runtime','runtime-resolution-v2','runtime-resolution-v3','runtime-budget-v4','runtime-budget-v5'):
         for leaf in ('source-build.json','actual-loaded-libraries.json','actual-loaded-libraries-current.json','lineage.json'):
             path=r/name/leaf
             if path.exists():shutil.copy2(path,out/(name+'-'+leaf))
@@ -122,16 +122,20 @@ def main():
             data['audits'][time]=audit
             budgets={q.parent.name:receipt(q) for q in (r/'physical-budgets').glob(path.parent.name+'-*'+time+'*/results.json')}
             data.setdefault('physical_budgets',{})[time]=budgets
-            required_budgets={path.parent.name+'-'+kind+'-'+m+'-'+time+'-Q'+str(q) for kind in ('perturbed','baseline') for m in MEMBERS[:2] for q in (1,2)}
+            required_budgets={path.parent.name+'-'+kind+'-'+m+'-'+time+'-Q'+str(q)+suffix for kind in ('perturbed','baseline') for m in MEMBERS for q,suffix in (((1,''),(2,''),(2,'-F32')) if m in MEMBERS[:2] else ((2,'-F32'),))}
             coverage=required_budgets.issubset(budgets) and all(budgets[n]['status']=='pass' for n in required_budgets)
             if coverage:
                 for kind in ('perturbed','baseline'):
                     head=path.parent.name if kind=='perturbed' else prefix(**{k:controller['configuration'][k] for k in ('model','policy','wall')})+'-duration-'+str(controller['timesteps'][0])
-                    for m in MEMBERS[:2]:
+                    for m in MEMBERS:
                         report=r/'campaigns'/(head+'-'+m)/('T-'+format(float(time),'.4f'))/'case.evolution.json'
-                        for q in (1,2):
-                            value=budgets[path.parent.name+'-'+kind+'-'+m+'-'+time+'-Q'+str(q)]
+                        for q,suffix in (((1,''),(2,''),(2,'-F32')) if m in MEMBERS[:2] else ((2,'-F32'),)):
+                            value=budgets[path.parent.name+'-'+kind+'-'+m+'-'+time+'-Q'+str(q)+suffix]
                             identity(value['configuration'],controller['configuration']);require(value['source_report_sha256']==sha(report),'physical_budget_native_report_mismatch');require(abs(value['time']-float(time))<1e-13,'physical_budget_horizon_mismatch')
+                for name in required_budgets:
+                    folder=Path(budgets[name]['source']).parent;q=load(folder/'request-manifest.json')['request'];require(RequestManifest(folder,q,True).completed(folder),'physical_budget_unsealed');identity(q['configuration'],controller['configuration'])
+            budget_analysis=receipt(r/'physical-budget-analyses'/(path.parent.name+'-'+time)/'results.json');data.setdefault('physical_budget_analysis',{})[time]=budget_analysis
+            coverage=coverage and budget_analysis.get('execution_status')=='completed' and budget_analysis.get('reconstruction_status')=='pass'
             data.setdefault('physical_budget_coverage',{})[time]=dict(status='reconstructed' if coverage else 'not_completed',required=sorted(required_budgets),observed=sorted(budgets))
             rows.append(dict(time=float(time),status=body.get('status','not_completed'),audit_status=audit.get('status','not_completed'),physical_budget_status='reconstructed' if coverage else 'not_completed',companions={m:dict(last_time=float(time)) for m in MEMBERS} if len(body.get('provenance',[]))==8 else {}))
         result['responses'][path.parent.name]=data
