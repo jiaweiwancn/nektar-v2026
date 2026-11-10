@@ -13,7 +13,9 @@ from rans_spatial_resolution import analyze,common_test,test_parent_geometries,t
 
 def run_probe(runtime,folder,request):
     write_json(folder/'request.json',request);t=time.monotonic()
-    with (folder/'probe.log').open('w') as f:c=subprocess.run([str(runtime/'RANSPreservationProbe'),'case.xml','request.json','packet.json'],cwd=folder,stdout=f,stderr=subprocess.STDOUT,timeout=1200)
+    timeout=int(os.environ.get('NEKTAR_RANS_PROBE_TIMEOUT','1200'))
+    if not 1<=timeout<=14400:raise ValueError('invalid read-only diagnostic deadline')
+    with (folder/'probe.log').open('w') as f:c=subprocess.run([str(runtime/'RANSPreservationProbe'),'case.xml','request.json','packet.json'],cwd=folder,stdout=f,stderr=subprocess.STDOUT,timeout=timeout)
     if not (folder/'packet.json').exists():raise RuntimeError('missing native packet; exit '+str(c.returncode))
     data=load(folder/'packet.json')
     if c.returncode or data.get('status')!='pass':raise RuntimeError('native diagnostic failed '+str({k:v for k,v in data.items() if k not in ('observation','resolution','test_basis')}))
