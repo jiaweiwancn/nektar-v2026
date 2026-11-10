@@ -1,0 +1,20 @@
+{
+  "decision_date_Asia_Shanghai": "2026-11-10",
+  "decision": "Continue the completed cutoff-v1 H=.5 Regularized/Linear pilot from its own exact step-800 checkpoint, stopping on three passing unchanged half-unit windows including complete outer epsilon, or at maximum T=6.",
+  "pilot_accepted_steps": 800,
+  "pilot_physical_time": 0.4999999999999921,
+  "matched_coarse_refined_mean_traction": [0.1529640375018085, 0.15956338620364247],
+  "matched_coarse_refined_dU_dz_reference_error_physical_L2": [2.0610909099277435, 0.12438336931341347],
+  "matched_coarse_refined_production_reference_error_physical_L2": [0.6301505500525997, 0.03930422840979525],
+  "matched_coarse_refined_k_reference_error_physical_L2": [0.01419635946633422, 0.0007360821904978244],
+  "matched_coarse_refined_normalized_full_outer_epsilon_reference_error": [0.0029788138089202405, 0.0029346903785604874],
+  "refined_common_selected_spatial_residuals": [0.0029098662644626767, 0.001992913329069645, 0.004289591536492598, 0.0021001503831027963],
+  "refined_inner_outer_strong_divergence_L2": [0.003494618524271668, 0.001929517884015907],
+  "bound_activations_and_supply": [0, 0],
+  "interpretation": "Large resolved improvement in inner representation and traction, with little outer-epsilon improvement. The refined residual is still above the unchanged steady screen; k residual has risen from about .00346 at T=.28 to .00429 at .5, and strong divergence has grown. This is a useful transient sensitivity result, not a refined steady candidate or a spatial convergence order. Further bounded evolution tests persistence and those modes.",
+  "configuration": "Unchanged Accepted-AWF-05G/cutoff-v1, Regularized/Linear, dt=.000625, ExactStepV1, NativeElementSideV2, endpoint K and zm=H=.5, one U/p/epsilon/k solve plus one logical bound call; same frozen 177ce5e runtime.",
+  "maximum_global_step": 9600,
+  "added_steps_maximum": 8800,
+  "cost_limit": "At measured 7-8 wall seconds per step, at most about 20 hours and about 1.4GiB peak native RSS. One serial rank, all computational-library threads one. No automatic extension beyond T=6; no retry of a numerical rejection.",
+  "native_analysis": "/media/jay/新加卷/nektar-v2026-runs/cls-awf-neutral-qualification-20261110/spatial-pilot-final/summary.json"
+}

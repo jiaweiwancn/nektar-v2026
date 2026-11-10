@@ -1,0 +1,11 @@
+{
+  "decision_date_Asia_Shanghai": "2026-11-10",
+  "decision": "Stop the completed late-state triplet at elapsed time .1; no extension to .5 is needed.",
+  "native_analysis": "/media/jay/新加卷/nektar-v2026-runs/cls-awf-neutral-qualification-20261110/late-analysis/summary.json",
+  "accepted_steps_coarse_middle_fine": [160, 320, 640],
+  "dt_coarse_middle_fine": [0.000625, 0.0003125, 0.00015625],
+  "observed_order_at_elapsed_point1": {"u": 0.9982520022378873, "v": 1.0048441149297003, "k": 0.9996218381819555, "epsilon": 0.9994179507987185, "pressure": 1.0157576082931228, "traction": 1.0194070625737046},
+  "normalized_original_dt_Richardson_estimate_at_point1": {"u": 2.0803483211124782e-9, "v": 8.779245410405633e-10, "k": 2.560304505927725e-9, "epsilon": 9.934438362857933e-9, "pressure": 1.1471798933827947e-8, "relative_traction": 5.16557568785229e-10},
+  "basis": "All fields and traction pass the unchanged order band and accuracy targets at both .05 and .1. Full .5<=z<=4 epsilon quadrature agrees with the consistent mass to 2.8e-18 absolute or better. No correction activates. Extension would not resolve a remaining above-target local response.",
+  "limitation": "Common-state late-IVP sensitivity only. These estimates concern the original .000625 step over elapsed .1, not accumulated startup-to-T6 error, a timestep-independent steady root, spatial accuracy, or successful faithful Original-CLS evolution."
+}

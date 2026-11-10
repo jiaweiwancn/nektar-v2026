@@ -39,6 +39,7 @@ def main():
             atomic(a.output/'progress.json',out);time.sleep(2);continue
         progress = load_progress(a.campaign/'progress.json')
         require(max(progress['requested_targets'])<=a.maximum_step,'supervised continuation exceeds the authorized endpoint')
+        if out['status'] == 'waiting_for_native_progress': out['status'] = 'observing'
         out.update(accepted_steps=progress['accepted_steps'], accepted_time=progress['accepted_time'], checkpoint=progress['checkpoint'],
             checkpoint_sha256=progress.get('checkpoint_sha256'), native_identity=progress.get('native_identity'),
             updated_UTC=datetime.now(timezone.utc).isoformat())
