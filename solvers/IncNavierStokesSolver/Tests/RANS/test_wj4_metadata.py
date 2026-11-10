@@ -47,6 +47,16 @@ class Gates(unittest.TestCase):
         self.assertEqual(wj3_gates(self.s)['status'],'PASS')
 
 class Immutable(unittest.TestCase):
+    def test_legacy_control_budget_units(self):
+        from wj4_validate import legacy_control_budget
+        with tempfile.TemporaryDirectory() as temp:
+            p=Path(temp)/'case.xml'
+            for n,expected in ((0,1),(2,2)):
+                p.write_text('<N><PARAMETERS><P>NumSteps = '+str(n)+'</P></PARAMETERS></N>')
+                tests=[dict(name='control',command=['/bin/IncNavierStokesSolver',str(p)]),dict(name='kernel',command=['/bin/WJKernelProbe'])]
+                rows=legacy_control_budget(tests);self.assertEqual(len(rows),1);self.assertEqual(rows[0]['attempts'],expected)
+                self.assertEqual(rows[0]['policy'],'SharedLegacyControl')
+
     def test_transaction_intermediate_packets_are_required(self):
         from verify_wj4_transactions import verify
         with tempfile.TemporaryDirectory() as temp:

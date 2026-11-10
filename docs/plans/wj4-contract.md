@@ -143,3 +143,17 @@ command receipts. Interrupted command logs require a new label. Compact run
 accounting includes every scheduled/partial solve count, projection reserve and
 raw/corrected hash equality; accepted-stage lineage binds callback history to
 its producing report, checkpoint, signature and physical samples.
+
+`verify_wj4_transactions.py` additionally compares all 33 retained states/times
+and accepted audit packets in the late segment, all 32 incoming/callback-history
+hashes and solve counts, and every raw/corrected k snapshot. It joins the two
+restart halves while discarding only the duplicated startup at their shared
+endpoint. Final primary/gauge/GLM history and physical samples must agree too.
+This read-only packet check launches zero governing attempts; corruption of an
+intermediate packet fails even when the final state is unchanged.
+
+Ordinary standard/CLS/AWF solver controls also consume conservative units in
+both policy caps: NumSteps, or one invocation for a zero-step standalone stage
+control. These are explicitly distinct from native WJ one-sweep attempts and
+do not receive WJ solve-count claims. Their complete shared wall time is charged
+to both policies. Failed selections retain the unreconciled reservation.

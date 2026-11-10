@@ -6,13 +6,34 @@ import os
 from pathlib import Path
 import subprocess
 import time
+import xml.etree.ElementTree as ET
 from wj_immutable import Ledger,read,write_once,artifacts,file_hash
 from run_cls_epawf_picard import THREADS
 
 CONTROL='WJKernelContracts|WJIndependentOracle|RANSKernelUnitTests|RANSCLSEPAWFM1Oracle|RANSCLSEPAWFM2Oracle|RANSAcceptedAWFKernel|RANSEquilibriumProfilesNative|RANSProfileBranchChecks|RANSKBoundQPChecks|RANSHistoryRejectionChecks|RANSAcceptedAWFCases|RANSStressTangentOracle|RANSReturnedFieldsChecks|RANSObservationKernels|RANSWallTimingChecks|RANSEquilibriumTimeNative|RANSReducedModelChecks|RANSStandardTransportSmoke|RANSCLSTransportSmoke|RANSAWFOriginalSmoke|RANSAWFEquilibriumSmoke|RANSStandardAWFEquilibriumSmoke|RANSEquilibriumWallEvolutionSmoke|RANSEquilibriumWallStageSmoke'
-SUITES=dict(controls=(CONTROL,24,0),native=('WJNativeEP|WJNativeBudget|RANSWJSharedLegacyTransaction',3,100),
+SUITES=dict(controls=(CONTROL,24,32),native=('WJNativeEP|WJNativeBudget|RANSWJSharedLegacyTransaction',3,100),
     readonly=('WJReadOnlyStageEP|WJReadOnlyStageBudget',2,10),metadata=('WJQualificationMetadata',1,0),
     composite=('WJCompositeObservationEP|WJCompositeObservationBudget',2,0))
+
+def legacy_control_budget(tests):
+    """Conservatively charge ordinary solver controls to both policy caps.
+
+    These are not WJ one-sweep attempts. A zero-step standalone stage test
+    consumes one control-invocation unit; ordinary controls consume NumSteps.
+    Counts are reconciled only after a successful complete CTest selection.
+    """
+    rows=[]
+    for test in tests:
+        argv=test['command']
+        if Path(argv[0]).name!='IncNavierStokesSolver':continue
+        path=Path(argv[1]);n=None
+        for p in ET.parse(path).getroot().findall('.//PARAMETERS/P'):
+            key,_,value=(p.text or '').partition('=')
+            if key.strip().lower()=='numsteps':n=int(value.strip())
+        if n is None or n<0:raise ValueError('missing/invalid legacy control step target: '+str(path))
+        rows.append(dict(test=test['name'],xml=str(path),xml_sha256=file_hash(path),requested_steps=n,
+            policy='SharedLegacyControl',attempts=max(1,n),charge_scope='conservative legacy control step/invocation budget units; not WJ one-sweep counts'))
+    return rows
 
 def main():
     p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--label',default='qualification');p.add_argument('--suite',choices=SUITES,required=True);a=p.parse_args()
@@ -34,6 +55,7 @@ def main():
         'ctest','--test-dir',str(build),'-j','1','--output-on-failure','-R',regex],env=env).returncode
     elapsed=time.time()-start
     index=[]
+    if a.suite=='controls' and rc==0:index.extend(legacy_control_budget(tests))
     if a.suite in ('native','readonly'):
         scopes=[build/('wj2-native-'+p) for p in ('EP','Budget')]+[build/'wj2-legacy-transaction'] if a.suite=='native' else [build/'wj3-smoke']
         for scope in scopes:
@@ -43,7 +65,8 @@ def main():
                     policy=('Budget' if 'Budget' in d['wall_policy'] else 'EP') if d.get('turbulence_model')=='WJHighRe' else 'SharedLegacy'
                     index.append(dict(path=str(file),sha256=file_hash(file),policy=policy,attempts=len(d['pimple_attempts']),failure=d.get('failure')))
     if a.suite!='composite':
-        for policy,l in ledgers.items():l.finish('ctest/'+label,sum(r['attempts'] for r in index if r['policy'] in (policy,'SharedLegacy')),elapsed,str(root/('ctest-'+label+'.log')))
+        for policy,l in ledgers.items():l.finish('ctest/'+label,None if a.suite=='controls' and rc else
+            sum(r['attempts'] for r in index if r['policy'] in (policy,'SharedLegacy','SharedLegacyControl')),elapsed,str(root/('ctest-'+label+'.log')))
     write_once(root/(label+'-accounting.json'),dict(exit_code=rc,seconds=elapsed,attempt_index=index,
         wall_attribution='full shared/control CTest time and shared legacy scheduled attempts conservatively charged to each policy; composite sessions account their own policy wall time',
         ledgers={p:l.totals() for p,l in ledgers.items()}))

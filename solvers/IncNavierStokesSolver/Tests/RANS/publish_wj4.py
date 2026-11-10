@@ -103,7 +103,7 @@ def main():
     manifest['numerical_environment']=dict(python=sys.version,numpy=__import__('numpy').__version__,scipy=__import__('scipy').__version__,
         sympy=__import__('sympy').__version__,compiler=subprocess.check_output(['c++','--version'],text=True),platform=subprocess.check_output(['uname','-a'],text=True),
         allocation=dict(initial_build_workers=1,later_build_workers=4,policy_concurrency=2,test_parallel=1,ranks=1,numerical_threads=1,total_worker_cap=72))
-    manifest['independent_proofs']=artifacts([root/'regression-verification.json',root/'shared-legacy-accounting-supplement.json',
+    manifest['independent_proofs']=artifacts([root/'regression-verification.json',root/'shared-legacy-accounting-supplement.json',root/'legacy-control-accounting-supplement.json',
         *root.glob('independent-gradient-*/receipt.json'),*root.glob('independent-gradient-*/result.json'),
         *root.glob('all-step-transactions-*.json'),root/'parent-readback-proof/EP/proof.json',root/'arithmetic-cache-proof/EP/proof.json'])
     for context in (manifest['producer_runtime'],manifest['accepted_readback_runtime']):
@@ -159,7 +159,7 @@ def main():
     for name,data in (('fields',rows),('interfaces',interfaces),('windows',windows),('differences',differences),('residuals',residuals),('horizontal-spread',horizontal),('audit-margins',audits)):csv_file(out/(name+'.csv'),data)
     csv_file(out/'run-accounting.csv',runs);write_once(out/'accepted-stage-lineage.json',stages)
     write_once(out/'audit-witnesses.json',witnesses)
-    for path in [root/'regression-verification.json',root/'shared-legacy-accounting-supplement.json',root/'command-receipts.json',
+    for path in [root/'regression-verification.json',root/'shared-legacy-accounting-supplement.json',root/'legacy-control-accounting-supplement.json',root/'command-receipts.json',
                  root/'ledger-EP.json',root/'ledger-Budget.json',*root.glob('all-step-transactions-*.json')]:
         if path.exists():shutil.copyfile(path,out/path.name)
     if observer!=root:shutil.copyfile(observer/'command-receipts.json',out/'observer-command-receipts.json')
