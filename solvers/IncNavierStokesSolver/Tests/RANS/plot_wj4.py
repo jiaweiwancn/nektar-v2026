@@ -46,4 +46,22 @@ def main():
     for ext in ('png','pdf','svg'):fig.savefig(a.output/('wj4-horizontal-timestep.'+ext),dpi=170)
     plt.close(fig)
 
+    fig,axes=plt.subplots(1,2,figsize=(9,3.5),layout='constrained')
+    for ax,policy in zip(axes,('EP','Budget')):
+        for nx,trajectory in summaries[policy].get('horizontal',{}).items():
+            rows=[r for r in trajectory['trajectory'] if r['steps']==32]
+            if not rows:continue
+            raw=read(Path(rows[0]['path']))['measurements']
+            samples=[r for r in raw['observations'] if r['position'][2]==.1]
+            for side,style in ((-1,'o'),(0,'.'),(1,'x')):
+                selected=sorted([r for r in samples if r['requested_x_side']==side],key=lambda r:r['position'][0])
+                if selected:ax.plot([r['position'][0] for r in selected],[2*abs(r['raw_G'][0]+r['raw_G'][8]) for r in selected],
+                    style,markersize=3,label='Nx'+nx+' requested x side '+str(side))
+        ax.axhline(1e-3,color='k',ls=':',label='frozen divergence budget')
+        ax.set(xlabel='Physical x (m)',ylabel='Sampled |div U| H/u*',title=policy+' at z=h=0.1 m')
+        ax.grid(alpha=.2);ax.legend(fontsize=6)
+    fig.suptitle('Horizontal accuracy witness at step32: t=0.001024 s, t u*/H=0.000512; distinct element traces retained',fontsize=9)
+    for ext in ('png','pdf','svg'):fig.savefig(a.output/('wj4-horizontal-divergence-witness.'+ext),dpi=170)
+    plt.close(fig)
+
 if __name__=='__main__':main()
