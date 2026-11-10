@@ -96,6 +96,9 @@ def main():
         scheduled_package_attempts=attempts,attempt_cap_per_policy=500,
         package_attempt_index=dict(path=str(root/'package-attempt-index.json'),sha256=sha(root/'package-attempt-index.json')),
         summary_sha256={k:sha(root/'study-final'/k/'summary.json') for k in summaries},extra_receipts=extras,
+        independent_oracle_json=dict(path=str(root/'build/wj1-oracle.json'),sha256=sha(root/'build/wj1-oracle.json')),
+        native_final_json={k:dict(path=str(root/'study-final'/k/'main-128/case.evolution.json'),sha256=sha(root/'study-final'/k/'main-128/case.evolution.json')) for k in summaries},
+        figures={p.name:dict(path=str(p),sha256=sha(p)) for p in sorted((root/'figures').glob('*')) if p.is_file()},
         table_sha256={p.name:sha(p) for p in sorted(out.glob('*.csv'))},
         finite_scope='serial flat2D p3, one horizontal element, finite spatial/angle inventories, short T; no global positivity/realizability/stability or long-time/3D/MPI/terrain claim')
     write_json(out/'receipt.json',receipt);print(out/'receipt.json')
