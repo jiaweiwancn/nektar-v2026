@@ -55,7 +55,7 @@ def main():
   request=dict(schema='NeutralPilotV1',model=a.model,policy=a.policy,wall=a.wall,descriptor=seed['observation']['resolved_descriptor'],
    knots=nested(ref.knots(),a.level),degree=a.degree,pressure_degree=a.degree-2,columns=a.columns,quadrature=seed['observation']['actual_quadrature'],
    dt=a.dt,horizons=TARGETS,integration='native IMEX1 PimpleSingleSweep',history='native same-method restart; independently initialized for each dt',
-   initialization='constrained neutral projection plus declared divergence-free streamfunction',velocity_amplitude=a.velocity_amplitude,
+   initialization='constrained neutral projection plus declared divergence-free streamfunction',velocity_amplitude=a.velocity_amplitude,perturbation='StreamfunctionPolyV1',
    raw_neutral_sha256=exact_vector_hash(initial['state']),reference_sha256=exact_vector_hash(seed['reference']),boundary_policy='FrozenReferenceV1',boundary=seed['fixed_boundary'],
    runtime={n:identity(r/'runtime'/n) for n in ('IncNavierStokesSolver','RANSPreservationProbe','RANSNewModelsProbe')},
    evaluation=dict(grid=grid,weights=weights,sides=[0]*len(grid),export_basis=False,metric='physical weighted RMS and true L2; common global pressure gauge'),
@@ -84,7 +84,7 @@ def main():
     initialization_receipt=report.get('initialization_receipt'),extrema=audited_extrema(report),failure=report.get('failure'),configuration_sha256=sha(folder/'case.xml'))
    audits=report.get('state_audits',[]);metric['all_audited_accuracy']=[dict(time=t,values=x['pilot_accuracy_E_D_wall_gauge']) for t,x in zip(report.get('audit_times',[]),audits,strict=True) if 'pilot_accuracy_E_D_wall_gauge' in x]
    metric['final_stage_residual']=report.get('stage_audits',[])[-1:];metric['final_audit']=audits[-1] if audits else None
-   attempts=report.get('pimple_attempts',[]);metric['source_and_constraint_maxima']={k:max((abs(x.get(k,0)) for x in attempts),default=0.) for k in ('refreshed_trace_defect','momentum_splitting_identity_defect','k_same_state_source_storage_defect','epsilon_same_state_source_storage_defect','corrected_continuity_gauge','bound_calls')}
+   attempts=report.get('pimple_attempts',[]);metric['source_and_constraint_maxima']={k:max((float(np.max(np.abs(x.get(k,0)))) for x in attempts),default=0.) for k in ('refreshed_trace_defect','momentum_splitting_identity_defect','k_same_state_source_storage_defect','epsilon_same_state_source_storage_defect','corrected_continuity_gauge','bound_calls')}
    metric['energy_budget']=report.get('energy_budget');metric['roughness_budget']=report.get('roughness_budget')
    if complete:
     req=replay_request(seed,grid,state=report['state'],time=T);req['fixed_boundary']=report['initialization_receipt']['live_fixed_boundary']

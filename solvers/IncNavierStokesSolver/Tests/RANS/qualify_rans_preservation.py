@@ -86,7 +86,11 @@ class Campaign:
         if self.phase=='temporal':
             evaluation=load(self.r/'preservation-spatial/evaluation-grid.json')
             request['evaluation']=dict(grid=evaluation['grid'],weights=evaluation['weights'],sides=[0]*len(evaluation['grid']),export_basis=False)
-        else:request['evaluation']=dict(construction='union of all nested reference partitions, GL10 normal / GL8 x',export_basis=True)
+        else:
+            refs=[Reference(m,p,w) for m in self.models for p in self.policies for w in self.walls]
+            panels=sorted(set(v for ref in refs for v in nested(ref.knots(),2)));g,w=physical_grid(panels,10,8)
+            request['evaluation']=dict(grid=g,weights=w,sides=[0]*len(g),export_basis=True)
+            request['spatial_series']=dict(reference_degree=3,h_levels=[0,1,2],p_degrees=[3,4,5],quadratures=Q,representation='native constrained neutral RadialProject')
         with tempfile.TemporaryDirectory(prefix='request-preflight-',dir=self.r/'tmp') as tmp:
             for m in self.models:
                 for policy in self.policies:
@@ -140,7 +144,7 @@ class Campaign:
         return full,metrics
     def spatial(self):
         # A common evaluation grid spanning every refinement and reference breakpoint.
-        refs=[Reference(m,p,w) for m in MODELS for p in POLICIES for w in WALLS]
+        refs=[Reference(m,p,w) for m in self.models for p in self.policies for w in self.walls]
         allknots=sorted(set(v for r in refs for v in nested(r.knots(),2)))
         grid,self.grid_weights=physical_grid(allknots,10,8)
         write_json(self.output/'evaluation-grid.json',dict(grid=grid,weights=self.grid_weights,order=10,xorder=8,panels=allknots))
@@ -178,7 +182,8 @@ class Campaign:
         self.spatial_tables()
     def spatial_tables(self):
         tables={}
-        for wall in WALLS:
+        for wall in self.walls:
+            if 'E94E95' not in self.models or 'Natural' not in self.policies:continue
             tag='E94E95-Natural-'+wall
             paths=[self.output/(tag+s)/'metrics.json' for s in ('-h0','-h1','-h2','-p4','-p5','-q1','-q2')]
             if not all(p.exists() for p in paths):tables[tag]=dict(status='fail',reason='missing study levels');continue
