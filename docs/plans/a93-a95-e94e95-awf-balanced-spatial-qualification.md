@@ -216,6 +216,20 @@ new test modes, not a cure for the physical spatial defect. Every active
 viscosity, cutoff, roughness/forcing and interface break remains represented
 and native profile integration retains its physical panels.
 
+The term records identify the mathematical mechanism. In the EP reference k
+is constant, so its diffusion term is zero; the finite-element inner-k defect
+is principally the difference between production from the represented velocity
+gradient and the prescribed counterfactual p0(K). A globally constrained L2
+projection does not make its derivative error monotone under a local split.
+The newly available modes near .1 see that gradient/production defect, while
+old common moments improve. In the accepted reference k is nonconstant:
+diffusion and prescribed destruction minus production must cancel together.
+The first small panel strongly magnifies its represented flux/curvature error.
+Near-wall resolution therefore addresses an additional accepted-wall defect
+that EP does not have. Inner/outer stress and one-sided internal traction/flux
+jumps localize the corresponding momentum defects; shared weak conservation
+is reported separately from these reconstructed jumps.
+
 The selected 2355/2997 hierarchy resolves both the small-panel/budget region and
 the dominant bulk/interface contributions. The fixed common test space is p3
 with pressure p1 on the active-break base mesh, unchanged across all candidates
@@ -402,3 +416,27 @@ members, and never edits checkpoint signatures, dt or histories. Larger worker
 allocations are not implied by these commands: at most four trajectory
 controllers plus two serial diagnostic slots share the 72-worker total with
 existing campaigns and numerical-library threads one.
+
+## Nonlinear models and selected coefficient-policy coverage
+
+All six natural-kappa configurations pass initial full/common gates and evolved
+four-member comparisons at .0016 and .016. A93/A95 also pass the additional
+vertical-momentum gate, whose fine/candidate ratios are approximately .4667
+(full native) and .3426 (fixed common) in both walls. Their U reductions are
+.097--.103 full and .077--.110 common; inner-k reductions are .102--.143 full
+and .062--.135 common. These results retain full normal-stress and augmented
+pressure balance rather than substituting a scalar eddy-viscosity diagnosis.
+
+Independent evaluations retain outer Rxx, Ryy and Rzz; native full normal
+traction reconstructs Rzz and agrees below 1e-12. Native three-dimensional
+covariance and actual A95 radicand margins remain mandatory throughout all
+accepted states/stages. Normal-stress reference errors, pressure response,
+vertical velocity and native spatial residuals are recorded separately. This
+does not qualify true three-dimensional execution or model tangents.
+
+Two selected prescribed-kappa .41 controls pass on the fine space through
+.0016: A95/Accepted and A93/EP. Their actual descriptors carry the effective
+sigma-epsilon and distinct wall calibration. They complement earlier recorded
+controls but are not a new twelve-case prescribed campaign, spatial order or
+duration study. The eight historical unresolved epsilon-order observations
+retain their original receipt and criterion.
