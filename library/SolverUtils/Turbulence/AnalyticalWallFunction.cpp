@@ -234,6 +234,8 @@ EquilibriumWallFunction::EquilibriumWallFunction(
     const AWFGeometry &geometry,double k,const RANSNeutralReference &model,const AWFParameters &p)
     : m_original(geometry,k,p),m_model(model),m_reference{}
 {
+    if (model.Model()==RANSModel::WJHighRe)
+        throw std::invalid_argument("WJ requires the calibrated EquilibriumAWFProfiles::WJ factory");
     auto &r=m_reference;
     r.frictionVelocity=std::sqrt(k/model.Q()); r.traction=k/model.Q();
     r.matchingVelocity=Cast(static_cast<Real>(r.traction)*m_original.Integrals().j0);

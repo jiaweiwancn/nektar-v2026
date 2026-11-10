@@ -139,7 +139,9 @@ pressure variable.
 `EquilibriumAWFProfiles::WJ` requires explicit WJCalibratedEPAWF or
 WJCalibratedBudgetAWF, supplying c_mu_wall=C* and
 c_length_wall=kappa qe^(3/2), alpha=kappa/sqrt(qe). Direct construction with
-legacy wall coefficients rejects. Both select endpoint K=k(H). The existing
+legacy wall coefficients rejects. The older dissipation-only
+`EquilibriumWallFunction` rejects a WJ reference and directs callers to this
+factory, preventing a silent WJ/legacy-wall combination. Both select endpoint K=k(H). The existing
 `AnalyticalWallFunction` supplies unchanged signed vector momentum reconstruction,
 roughness correlation, negative zv, smooth h=0 limit and stable piecewise
 finite-nu J0/J1/J2/positive production moments. The baseline cutoff is

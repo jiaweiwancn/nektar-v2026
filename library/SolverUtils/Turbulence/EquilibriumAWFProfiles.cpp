@@ -159,13 +159,13 @@ EquilibriumAWFProfiles::EquilibriumAWFProfiles(const AWFProfileGeometry &geometr
                                       std::max(std::abs(a), std::abs(b));
         };
         if (geometry.sampleHeight != geometry.height || (AcceptedAWF() && geometry.tailStart != geometry.height))
-            throw std::invalid_argument("CLSCalibratedBudgetAWF requires endpoint z_K=z_m=H");
+            throw std::invalid_argument("Calibrated AWF requires endpoint z_K=H; budget also requires z_m=H");
         if (AcceptedAWF() && (options.requestedWeight != 1 ||
             options.failurePolicy != AWFFailurePolicy::RequirePreservation))
-            throw std::invalid_argument("CLSCalibratedBudgetAWF has no chi or fallback policy");
+            throw std::invalid_argument("Calibrated budget AWF has no chi or fallback policy");
         if (!same(wall.cMu, calibrated.cMu) || !same(wall.cLength, calibrated.cLength) ||
             wall.smoothIntercept != calibrated.smoothIntercept)
-            throw std::invalid_argument("CLSCalibratedBudgetAWF requires explicit calibrated wall parameters");
+            throw std::invalid_argument("Calibrated AWF requires explicit model-calibrated wall parameters");
     }
     for (double r : options.physicalBreakpoints)
     {
@@ -190,8 +190,8 @@ EquilibriumAWFProfiles::EquilibriumAWFProfiles(const AWFProfileGeometry &geometr
     }
     if (AcceptedAWF() || WJCalibrated())
     {
-        // The new model has a budget applicability condition, not the legacy
-        // chi/transition Reynolds gate. Re remains a reported scale only.
+        // Budget has no Reynolds gate. WJ EP retains the explicitly requested
+        // wall-regime gate, separate from the cutoff applicability condition.
         // On a flat column the native closed AWF moment avoids cancellation
         // in J0-nu*J2 and fixes the counterfactual production budget directly.
         ref.productionBudget = metric.kappa1 == 0 && metric.kappa2 == 0 ?
@@ -231,7 +231,7 @@ EquilibriumAWFProfiles::EquilibriumAWFProfiles(const AWFProfileGeometry &geometr
             while (BudgetDifference(std::exp(low)) < 0 && low > lowLimit)
             { low = std::max(lowLimit, highStart-span); span *= 2; }
             if (BudgetDifference(std::exp(low)) < 0)
-                throw std::range_error("CLSCalibratedBudgetAWF cutoff_unrepresentable");
+                throw std::range_error("Calibrated AWF cutoff_unrepresentable");
             for (int it = 0; it < 192; ++it)
             {
                 const double mid = low+(high-low)/2;
@@ -243,7 +243,7 @@ EquilibriumAWFProfiles::EquilibriumAWFProfiles(const AWFProfileGeometry &geometr
             ref.cutoff = std::exp(low+(high-low)/2);
         }
         if (!(ref.cutoff > 0 && ref.cutoff <= geometry.tailStart))
-            throw std::range_error("CLSCalibratedBudgetAWF cutoff_unrepresentable");
+            throw std::range_error("Calibrated AWF cutoff_unrepresentable");
         Corrected(0, ref.cutoff); // Reject an unrepresentable plateau, never floor it.
         ref.weight = AcceptedAWF() ? 1 : options.requestedWeight; // Budget has no physical chi.
         ref.reason = AWFFallbackReason::Active;

@@ -94,6 +94,7 @@ void SelfTest()
     AWFProfileGeometry geom{1.5e-5,1,.1,1,1};
     AWFProfileOptions opt; opt.formulation=AWFProfileFormulation::WJCalibratedBudgetAWF;
     const double K=ref.Q()*.25;
+    Reject([&]{ EquilibriumWallFunction({1.5e-5,1,.1,.5},K,ref); });
     auto wall=EquilibriumAWFProfiles::WJ(geom,K,ref,opt);
     Check(std::abs(wall.ReferenceK(0)-1.8887084080086511)<1e-11);
     Check(std::abs(wall.ReferenceKFlux(1))<1e-12 && wall.ReferenceKFlux(0)==0);

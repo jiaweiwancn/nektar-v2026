@@ -26,6 +26,7 @@ struct SOLVER_UTILS_EXPORT RANSParameters
 
 struct WJDiagnostics
 {
+    // q is the tensor coefficient denominator Q, not the neutral shear qe.
     double n = 0, s = 0, w = 0, i4 = 0, i5 = 0, q = 0;
     double rootResidual = 0, rootDerivative = 0;
     std::array<double, 5> beta{}; // beta_1, beta_3, beta_4, beta_6, beta_9
