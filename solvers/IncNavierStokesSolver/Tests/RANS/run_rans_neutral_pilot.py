@@ -65,8 +65,13 @@ def main():
   for xl,xr in [(-1.,0.),(0.,1.)]:
    for q,w in zip(g0,w0,strict=True):grid.append([(xl+xr)/2+(xr-xl)*q[0]/2,q[1],q[2]]);weights.append(w*(xr-xl)/2)
  sampler=r/'runtime/RANSPreservationProbe';solver=r/'runtime/IncNavierStokesSolver'
+ if out.exists() and not a.resume:raise FileExistsError('destination exists: explicit identical resume required')
  with nullcontext(tempfile.mkdtemp(prefix='pilot-request-',dir=r/'tmp')) as tmp:
-  pre=Path(tmp)/'seed';configure(pre,a,ref,0);seed=probe(sampler,pre,dict(operation='neutral',grid=grid,export_basis=False))
+  pre=Path(tmp)/'seed';configure(pre,a,ref,0)
+  normalized=ET.parse(pre/'case.xml').getroot();set_info(normalized,'RANSWallCheckpoint','DECLARED_NEW_OUTPUT')
+  intent=dict(schema='ReadOnlyInitializationIntentV1',normalized_session_sha256=__import__('hashlib').sha256(ET.tostring(normalized)).hexdigest(),grid=grid,weights=weights,operations=['read-only neutral binding']+(['zero-step native initialization'] if a.velocity_amplitude else []),runtime={n:runtime_identity(r/'runtime'/n) for n in ('IncNavierStokesSolver','RANSPreservationProbe','RANSNewModelsProbe')},time=0,steps=0)
+  with (pre/'immutable-initialization-intent.json').open('x') as f:json.dump(intent,f,sort_keys=True)
+  seed=probe(sampler,pre,dict(operation='neutral',grid=grid,export_basis=False))
   initial=dict(seed['observation'],grid_weights=weights);actual_initial=None
   if a.velocity_amplitude:
    with (pre/'zero-step-solver.log').open('w') as f:c=subprocess.run([str(solver),'case.xml'],cwd=pre,stdout=f,stderr=subprocess.STDOUT,timeout=a.timeout)

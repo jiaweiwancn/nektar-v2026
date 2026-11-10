@@ -101,6 +101,7 @@ class Campaign:
                     for wall in self.walls:
                         ref=Reference(m,policy,wall);folder=Path(tmp)/('-'.join((m,policy,wall)))
                         self.config(folder,ref,ref.knots(),q=self.temporal_quadrature)
+                        write_json(folder/'immutable-initialization-intent.json',dict(schema='ReadOnlyInitializationIntentV1',model=m,policy=policy,wall=wall,mesh=ref.knots(),degree=3,quadrature=list(self.temporal_quadrature),boundary_policy=self.boundary_policy,runtime=request['runtime'],operation='read-only neutral binding',time=0,steps=0))
                         full=probe(self.sampler,folder,dict(operation='neutral',export_basis=False,grid=[]))
                         request['initial_data'].append(dict(model=m,policy=policy,wall=wall,mesh=ref.knots(),degree=3,pressure_degree=1,
                             resolved=full['observation']['resolved_descriptor'],raw_sha256=exact_vector_hash(full['observation']['state']),

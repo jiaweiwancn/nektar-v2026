@@ -32,7 +32,9 @@ def main():
   q=[x for x in points if x['region']==region];groups[name]=(matrix([x['velocity_k'] for x in q],n[2]),q,2)
  q=[x for x in points if x['region']==1];groups['epsilon_outer']=(matrix([x['epsilon'] for x in q],n[3]),q,3)
  q=[x for x in packet['faces'] if x['interface'] and x['region']==0];groups['sampled_K']=(matrix([x['velocity_k'] for x in q],n[2]),q,2)
- records=[];minima={};maxima={};failure=[]
+ records=[];minima={};maxima={};failure=[];epsilon_weak_budgets=[]
+ em=groups['epsilon_outer'][0].toarray();constant,_,rank,_=np.linalg.lstsq(em,np.ones(em.shape[0]),rcond=None);assert rank==n[3] and np.max(np.abs(em@constant-1))<1e-12
+ assert np.max(np.abs(constant-np.rint(constant)))<1e-10;constant=np.rint(constant)
  def observe(state,t,stage):
   row=dict(time=t,stage=stage,fields={})
   for name,(m,q,b) in groups.items():
@@ -51,13 +53,16 @@ def main():
    if k:
     previous=states[k-1];observe(previous,t,'input/flow scalars')
     hybrid=list(previous);hybrid[off[3]:off[3]+n[3]]=state[off[3]:off[3]+n[3]];observe(hybrid,t,'epsilon scalars');observe(state,t,'k scalars')
+  if report.get('final_stage_loads'):
+   raw=np.array(report['final_stage_loads'][off[3]:off[3]+n[3]]);fixed={int(v[0])-off[3] for v in report['final_stage_constraints'] if off[3]<=int(v[0])<off[3]+n[3]}
+   total=float(constant@raw);reaction=sum(constant[i]*raw[i] for i in fixed);epsilon_weak_budgets.append(dict(time=report['time'],alpha=report['last_stage_alpha'],total_load=total,boundary_reaction=float(reaction),free_constant_test_defect=float(total-reaction),meaning='actual native time-discrete load and prescribed-row reaction; includes declared splitting defect'))
   # Check reconstructed input identity against the actual stage receipt.
   for old,attempt in zip(states[:-1],report['pimple_attempts'][:len(states)-1],strict=True):
    assert exact_vector_hash(old)==attempt['incoming_sha256'],'one-sweep stage reconstruction identity mismatch'
   for event in report.get('physical_range_events',[]):
    if event.get('state'):observe(event['state'],event['time'],'rejected_candidate')
  result=dict(status='pass' if not failure else 'fail',scope='fixed reference-quadrature and native face rows; extrema over all retained accepted states and reconstructed one-sweep scalar stages',minimum=minima,maximum=maxima,observations=records,failures=failure,
-  source_packet_sha256=__import__('hashlib').sha256((out/'packet.json').read_bytes()).hexdigest(),roundoff_floor=1e-12,mandatory_native_domain_audits_unchanged=True)
+  epsilon_weak_budgets=epsilon_weak_budgets,source_packet_sha256=__import__('hashlib').sha256((out/'packet.json').read_bytes()).hexdigest(),roundoff_floor=1e-12,mandatory_native_domain_audits_unchanged=True)
  write_json(out/'results.json',result)
  with (out/'packet.json').open('rb') as src,gzip.open(out/'native-basis.json.gz','wb',compresslevel=3) as dst:__import__('shutil').copyfileobj(src,dst)
  print(result['status']);return 0 if result['status']=='pass' else 1
