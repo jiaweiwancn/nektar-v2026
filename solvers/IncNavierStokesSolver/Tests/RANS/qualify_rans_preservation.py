@@ -40,7 +40,9 @@ def compact_packet(root):
 def probe(executable,folder,request):
     write_json(folder/'request.json',request)
     with (folder/'probe.log').open('w') as f:
-        child=subprocess.run([str(executable),'case.xml','request.json','packet.json'],cwd=folder,stdout=f,stderr=subprocess.STDOUT,timeout=600,env=dict(os.environ,**THREADS))
+        timeout=int(os.environ.get('NEKTAR_RANS_PROBE_TIMEOUT','600'))
+        if not 1<=timeout<=14400:raise ValueError('invalid read-only probe deadline')
+        child=subprocess.run([str(executable),'case.xml','request.json','packet.json'],cwd=folder,stdout=f,stderr=subprocess.STDOUT,timeout=timeout,env=dict(os.environ,**THREADS))
     path=folder/'packet.json'
     if not path.exists():raise RuntimeError('probe produced no packet; exit '+str(child.returncode))
     full=load(path)

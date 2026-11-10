@@ -47,8 +47,21 @@ def main():
             cohort=tag+'-duration-'+str(dt);control=r/'duration-cohorts'/cohort/'request-manifest.json'
             if not control.exists():continue
             request=load(control);RequestManifest(control.parent,request['request'],True);row=dict(controller_request=request,comparisons={},audits={},numerical_status='not_completed')
+            recovery_events=[]
+            for folder in (r/'duration-schedules').glob(cohort+'-*'):
+                if not (folder/'request-manifest.json').exists() or not (folder/'results.json').exists():continue
+                recovery=load(folder/'request-manifest.json');q=recovery['request']
+                if q.get('schema')!='UnchangedMethodExecutionRecoveryV1' or q.get('cohort')!=cohort:continue
+                require(q['cohort_request_sha256']==request['sha256'],'recovery_controller_identity_mismatch')
+                require(sha(q['previous_failure'])==q['previous_failure_sha256'],'recovery_failure_changed')
+                RequestManifest(folder,q,True);recovery_events.extend(load(folder/'results.json')['milestones'])
+            row['execution_recoveries']=recovery_events
             for T in ad['milestones']:
-                row['comparisons'][str(T)]=receipt(r/'comparisons'/(cohort+'-'+str(T)+'.json'));audit=receipt(r/'duration-audits'/(cohort+'-'+str(T))/'results.json')
+                comparison=receipt(r/'comparisons'/(cohort+'-'+str(T)+'.json'))
+                candidates=[receipt(Path(e['comparison'])) for e in recovery_events if abs(e['time']-T)<1e-13]
+                passing=[v for v in candidates if v.get('status')=='pass']
+                if comparison.get('status')!='pass' and passing:comparison=dict(passing[-1],previous_receipts=[comparison,*[v for v in candidates if v.get('status')!='pass']])
+                row['comparisons'][str(T)]=comparison;audit=receipt(r/'duration-audits'/(cohort+'-'+str(T))/'results.json')
                 if audit.get('status')=='pass':
                     check=aggregate(dict(cfg,audit_times=[t for t in ad['milestones'] if t<=T+1e-13]),audit);require(check['status']=='pass','aggregate_receipt_invalid:'+cohort)
                 if 'spatial_audits' in audit:

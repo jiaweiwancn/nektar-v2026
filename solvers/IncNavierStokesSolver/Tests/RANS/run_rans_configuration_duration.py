@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
 """Four companions, immutable configuration admission, gates before continuation."""
-import argparse,os,subprocess,sys,time
+import argparse,os,re,subprocess,sys,time
 from pathlib import Path
 from qualify_rans_preservation import load
 from rans_qualification import THREADS,write_json
@@ -13,11 +13,22 @@ from rans_worker_budget import spawn
 
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--admission',type=Path,required=True);p.add_argument('--dt',type=float,choices=(.002,.001),default=.002);p.add_argument('--max-time',type=float,choices=(.016,.1,.5),default=.016);p.add_argument('--concurrency',type=int,choices=(1,2,4),default=2);p.add_argument('--resume',action='store_true');a=p.parse_args();r=a.root.resolve();ad=load(a.admission);require(ad['status']=='pass','admission_failed');cfg=ad['configuration'];require([a.dt,a.dt/2] in ad['timestep_trials'],'timestep_trial_not_admitted');tag=prefix(cfg['model'],cfg['policy'],cfg['wall'])+'-duration-'+str(a.dt);source=Path(__file__).parent
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--admission',type=Path,required=True);p.add_argument('--dt',type=float,choices=(.002,.001),default=.002);p.add_argument('--max-time',type=float,choices=(.016,.1,.5),default=.016);p.add_argument('--concurrency',type=int,choices=(1,2,4),default=2);p.add_argument('--resume',action='store_true');p.add_argument('--receipt-tag');p.add_argument('--recovery-from',type=Path);a=p.parse_args();r=a.root.resolve();ad=load(a.admission);require(ad['status']=='pass','admission_failed');cfg=ad['configuration'];require([a.dt,a.dt/2] in ad['timestep_trials'],'timestep_trial_not_admitted');tag=prefix(cfg['model'],cfg['policy'],cfg['wall'])+'-duration-'+str(a.dt);source=Path(__file__).parent
     os.environ.update(THREADS,LD_LIBRARY_PATH=str(r/'runtime/lib'),TMPDIR=str(r/'tmp'))
     request=dict(schema='ConfigurationDurationControllerV2',configuration=cfg,admission_sha256=sha(a.admission),timesteps=[a.dt,a.dt/2],milestones=ad['milestones'],meshes=ad['meshes'],common_packet_sha256=ad['common_packet_sha256'],runtime={n:runtime_identity(r/'runtime'/n) for n in ad['runtime']},history=ad['history'],gates=ad['neutral_gates'])
     for name,value in request['runtime'].items():require(value==ad['runtime'][name],'admitted_runtime_changed:'+name)
-    cohort=RequestManifest(r/'duration-cohorts'/tag,request,a.resume);out=r/'duration-schedules'/(tag+'-'+str(a.max_time));out.mkdir(parents=True,exist_ok=a.resume);env=dict(os.environ,**THREADS);events=[]
+    cohort=RequestManifest(r/'duration-cohorts'/tag,request,a.resume);suffix=''
+    if a.receipt_tag:
+        require(a.resume and a.recovery_from and re.fullmatch('[A-Za-z0-9_-]+',a.receipt_tag),'invalid_recovery_receipt_request')
+        require(load(a.recovery_from)['status']!='pass','recovery_requires_preserved_failure')
+        suffix='-'+a.receipt_tag
+    else:require(a.recovery_from is None,'recovery_requires_new_receipt_tag')
+    out=r/'duration-schedules'/(tag+'-'+str(a.max_time)+suffix)
+    if a.receipt_tag:
+        recovery=dict(schema='UnchangedMethodExecutionRecoveryV1',configuration=cfg,cohort=tag,cohort_request_sha256=cohort.payload['sha256'],previous_failure=str(a.recovery_from.resolve()),previous_failure_sha256=sha(a.recovery_from),probe_timeout=int(os.environ.get('NEKTAR_RANS_PROBE_TIMEOUT','600')),receipt_tag=a.receipt_tag,scope='same immutable trajectories and native histories; new comparison receipts preserve the original failed execution')
+        recovery_seal=RequestManifest(out,recovery,out.exists() and a.resume)
+    else:out.mkdir(parents=True,exist_ok=a.resume)
+    env=dict(os.environ,**THREADS);events=[]
     for T in ad['milestones']:
         if T>a.max_time+1e-13:break
         labels=[tag+'-'+m for m in MEMBERS];queue=[];running={};done=[]
@@ -38,7 +49,7 @@ def main():
                 else:queue.pop(0);running[label]=(proc,stream,cmd)
             write_json(out/'progress.json',dict(status='running',time=T,workers=workers(),running=list(running),queued=[v[0] for v in queue],completed=done))
             if queue or running:time.sleep(5)
-        dest=r/'comparisons'/(tag+'-'+str(T)+'.json');dest.parent.mkdir(exist_ok=True)
+        dest=r/'comparisons'/(tag+'-'+str(T)+suffix+'.json');dest.parent.mkdir(exist_ok=True)
         try:
             result=compare(r,labels,T)
             if dest.exists():require(load(dest)==result,'completed_comparison_changed')
