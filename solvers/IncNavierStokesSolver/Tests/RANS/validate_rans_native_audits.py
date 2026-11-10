@@ -34,7 +34,7 @@ def fixture(folder,label,descriptor):
             ET.SubElement(fn,'E',{'VAR':field,'VALUE':value})
     if label=='near_boundary_A95_forward':
         H=1e-6;Z=4.;a=6.5/(math.sqrt(18)-3)*(1-1e-13);sink=1/(2*cl*cl*nu)
-        tensor_mesh(root,[0.,H,1.,2.,3.,Z],3,2,3.,1.,points=[8,8],xknots=[-1.,1.])
+        tensor_mesh(root,[0.,H,1.,2.,3.,Z],3,2,3.,1.,points=[8,8],xknots=[-4.,-3.,-2.25,-2.,-1.])
         for key,value in (('RANSWallHeight',H),('RANSWallSampleHeight',H),('RANSWallTailStart',H),('RANSWallChi',0.)):set_parameter(root,key,value)
         for fn in root.findall('./CONDITIONS/FUNCTION'):
             inner=fn.get('NAME').endswith('Inner')

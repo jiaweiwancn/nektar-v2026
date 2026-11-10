@@ -96,8 +96,9 @@ def physical_grid(knots,order=10,xorder=8):
 
 def representation(ref,packet,weights):
     grid=packet['grid'];regions=packet['grid_regions']
-    target=dict(time=packet['time'],grid=grid,grid_regions=regions,grid_values=[ref.at(float(p[2]),r)['values'].tolist() for p,r in zip(grid,regions,strict=True)])
-    result=compare_samples(packet,target,weights)
+    target=dict(time=packet['time'],grid=grid,grid_regions=regions,grid_weights=weights,grid_values=[ref.at(float(p[2]),r)['values'].tolist() for p,r in zip(grid,regions,strict=True)])
+    numerical_packet=dict(packet,grid_weights=weights)
+    result=compare_samples(numerical_packet,target,weights)
     numerical=np.asarray(packet['grid_gradients']);exact=np.asarray([ref.at(float(p[2]),r)['gradient'] for p,r in zip(grid,regions,strict=True)])
     w=np.asarray(weights);result['gradient_weighted_RMS']={}
     for j,name in enumerate(('u','v','k','epsilon_outer','Pi')):
