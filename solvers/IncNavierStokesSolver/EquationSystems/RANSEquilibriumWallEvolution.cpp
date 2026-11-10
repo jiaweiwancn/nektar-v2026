@@ -232,28 +232,42 @@ void RANSEquilibriumWallEvolution::v_DoInitialise(bool dump)
     RANSWallTiming::Scope timing("startup.initialize");
     try
     {
-        (void)dump;m_state=m_neutral?m_patch->NeutralReference(m_ustar,m_direction):m_patch->Project(Functions("InitialConditions"),m_time);
-        if(m_neutral)m_data.fixedBoundary=m_patch->FixedReferenceBoundary(m_state);
-        else if(m_patch->Mapped() || m_patch->MatchingEnabled() || m_patch->CappedDestruction())
-            m_state=m_patch->Lift(m_state,m_time,m_data);
-        if(m_neutral && m_patch->MatchingEnabled())m_state=m_patch->Lift(m_state,m_time,m_data);
-        m_patch->SetReference(m_state,m_data,m_time,m_eta);m_initial=m_state;
+        (void)dump;m_signature=PhysicsSignature();
+        std::unique_ptr<RANSWallTimeIntegration::Checkpoint> savedWJ;
+        if(m_patch->WJ() && m_restart!="None")
+        {
+            savedWJ=std::make_unique<RANSWallTimeIntegration::Checkpoint>(RANSWallTimeIntegration::ReadCheckpoint(
+                m_restart,m_signature,m_order,m_timestep,m_patch->Size(),m_patch->DifferentialSize()));
+            Require(savedWJ->eta==m_eta,"checkpoint eta differs");
+            m_data.fixedBoundary=m_patch->FixedReferenceBoundary(savedWJ->fixedReference);
+            m_patch->RestoreReference(savedWJ->fixedReference,savedWJ->fixedDefect,savedWJ->eta,m_data,m_time);
+            m_state=savedWJ->coupledState;m_initial=savedWJ->fixedReference;
+            Require(m_patch->InitializationWork()==Vector({0.,0.}),"WJ restart constructed or lifted a new reference");
+        }
+        else
+        {
+            m_state=m_neutral?m_patch->NeutralReference(m_ustar,m_direction):m_patch->Project(Functions("InitialConditions"),m_time);
+            if(m_neutral)m_data.fixedBoundary=m_patch->FixedReferenceBoundary(m_state);
+            else if(m_patch->Mapped() || m_patch->MatchingEnabled() || m_patch->CappedDestruction())
+                m_state=m_patch->Lift(m_state,m_time,m_data);
+            if(m_neutral && m_patch->MatchingEnabled())m_state=m_patch->Lift(m_state,m_time,m_data);
+            m_patch->SetReference(m_state,m_data,m_time,m_eta);m_initial=m_state;
+        }
         const auto residualStart=std::chrono::steady_clock::now();
-        m_rawNorms=m_patch->Norms(m_patch->Residual(m_state,m_state,0,m_time,m_data,false),m_patch->Constraints(m_state,m_time,m_data),m_ustar);
+        m_rawNorms=m_patch->Norms(m_patch->Residual(m_initial,m_initial,0,m_time,m_data,false),m_patch->Constraints(m_initial,m_time,m_data),m_ustar);
         const double rawResidualSeconds=std::chrono::duration<double>(std::chrono::steady_clock::now()-residualStart).count();
-        m_correctedNorms=m_patch->Norms(m_patch->Residual(m_state,m_state,0,m_time,m_data),m_patch->Constraints(m_state,m_time,m_data),m_ustar);
+        m_correctedNorms=m_patch->Norms(m_patch->Residual(m_initial,m_initial,0,m_time,m_data),m_patch->Constraints(m_initial,m_time,m_data),m_ustar);
         m_implicitData=m_data;
         if(m_patch->TransitionEnabled())m_implicitData.sensorBody=m_data.outerBody;
         for(auto *body:{&m_implicitData.innerBody,&m_implicitData.outerBody})for(auto &f:*body)f=[](const RANSWallCoordinate&,double){return 0.;};
-        m_signature=PhysicsSignature();
         m_integrator=std::make_unique<RANSWallTimeIntegration>(m_order,m_timestep,
             [this](const Vector &h,double t,double lambda){return Implicit(h,t,lambda);},
             [this](const Vector &s,double t){return Explicit(s,t);});
         if(m_restart!="None")
         {
-            const auto checkpoint=RANSWallTimeIntegration::ReadCheckpoint(m_restart,m_signature,m_order,m_timestep,m_patch->Size(),m_patch->DifferentialSize());
+            const auto checkpoint=savedWJ?*savedWJ:RANSWallTimeIntegration::ReadCheckpoint(m_restart,m_signature,m_order,m_timestep,m_patch->Size(),m_patch->DifferentialSize());
             Require(checkpoint.eta==m_eta,"checkpoint eta differs");
-            m_patch->RestoreReference(checkpoint.fixedReference,checkpoint.fixedDefect,checkpoint.eta,m_data,m_time);
+            if(!savedWJ)m_patch->RestoreReference(checkpoint.fixedReference,checkpoint.fixedDefect,checkpoint.eta,m_data,m_time);
             m_state=checkpoint.coupledState;m_initial=checkpoint.fixedReference;
             m_integrator->Restore(checkpoint.integration);m_time=m_integrator->Time();
         }

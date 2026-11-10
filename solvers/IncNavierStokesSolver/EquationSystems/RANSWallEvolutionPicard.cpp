@@ -1361,12 +1361,16 @@ std::string RANSWallEvolutionPatch::WJNativeChecks(const Vector &state,const RAN
         const auto &v=q.v;RANSTensor g{};for(int a=0;a<m_dimension;++a)g[PhysicalAxis(a)]=v.Gradient(state,offset[a]);
         Vector gradient;for(const auto &row:g)gradient.insert(gradient.end(),row.begin(),row.end());
         const double k=v.Value(state,offset[K()]),epsilon=inner?profile->Dissipation(v.coordinate[2]):q.e.Value(state,offset[Epsilon()]);
-        const auto gk=v.Gradient(state,offset[K()]);RANSVector ge{};if(!inner)ge=q.e.Gradient(state,offset[Epsilon()]);
+        const auto gk=v.Gradient(state,offset[K()]);RANSVector ge{},velocity{};if(!inner)ge=q.e.Gradient(state,offset[Epsilon()]);
+        for(int a=0;a<m_dimension;++a)velocity[PhysicalAxis(a)]=v.Value(state,offset[a]);
+        const double pi=q.p.Value(state,offset[inner?InnerPressure():OuterPressure()]);
         std::vector<std::string> derivatives;for(int axis:{0,2})derivatives.push_back(J::Numbers(v.derivative[axis]));
         std::vector<std::string> epsilonDerivatives;if(!inner)for(int axis:{0,2})epsilonDerivatives.push_back(J::Numbers(q.e.derivative[axis]));
         samples.push_back(J::Object({{"inner",J::Boolean(inner)},{"geometry",J::Number(v.geometry)},{"element",J::Number(v.element)},
             {"coordinate",J::Numbers(v.coordinate)},{"weight",J::Number(q.weight)},{"k",J::Number(k)},{"epsilon",J::Number(epsilon)},
-            {"G",J::Numbers(gradient)},{"grad_k",J::Numbers(gk)},{"grad_epsilon",J::Numbers(ge)},
+            {"G",J::Numbers(gradient)},{"velocity",J::Numbers(velocity)},{"reduced_pressure",J::Number(pi)},
+            {"mechanical_pressure_over_rho",J::Number(WJMechanicalPressure(pi,k,0))},
+            {"grad_k",J::Numbers(gk)},{"grad_epsilon",J::Numbers(ge)},
             {"sampled_K",inner?J::Number(profile->K()):"null"},{"ids",J::Numbers(v.ids)},{"phi",J::Numbers(v.phi)},
             {"derivative_xz",J::List(derivatives)},{"epsilon_ids",inner?"[]":J::Numbers(q.e.ids)},
             {"epsilon_phi",inner?"[]":J::Numbers(q.e.phi)},{"epsilon_derivative_xz",J::List(epsilonDerivatives)}}));
@@ -1410,6 +1414,31 @@ std::string RANSWallEvolutionPatch::WJNativeChecks(const Vector &state,const RAN
     const double traceDirection=(pp->Dissipation(anchor[2])-pm->Dissipation(anchor[2]))/(2*delta);
     const double traceExpected=1.5*StateProfile(state,anchor,time,data)->Dissipation(anchor[2])/sample;
     Require(std::abs(traceDirection-traceExpected)<1e-8,"WJ endpoint-K dependent trace response failed");
+    std::vector<std::string> interface;
+    for(const auto &f:Surface(0,2,m_parameters.geometry.height,1,8))
+    {
+        const auto p=f.test.coordinate;const auto vi=Point(0,p,-1),vo=Point(0,p,1);
+        RANSTensor gi{},go{};for(int a=0;a<m_dimension;++a)
+        {gi[PhysicalAxis(a)]=vi.Gradient(state,offset[a]);go[PhysicalAxis(a)]=vo.Gradient(state,offset[a]);}
+        const double ki=vi.Value(state,offset[K()]),ko=vo.Value(state,offset[K()]);
+        const double epsilon=Point(Epsilon(),p,1).Value(state,offset[Epsilon()]);
+        const double pii=Point(InnerPressure(),p,-1).Value(state,offset[InnerPressure()]);
+        const double pio=Point(OuterPressure(),p,1).Value(state,offset[OuterPressure()]);
+        const auto profile=StateProfile(state,p,time,data);
+        const double nt=profile->Original().EddyViscosity(p[2]);
+        const auto ti=RANSWallInnerMeanStress(InnerStress(ki,nt,gi),m_parameters.geometry.molecularNu,pii);
+        const auto co=OuterClosure(ko,epsilon,go,p);
+        Vector innerTraction(3),outerTraction(3);for(int a=0;a<3;++a)
+        {innerTraction[a]=ti[a][2];outerTraction[a]=co.reynoldsStress[a][2]-(a==2?2*ko/3-pio:0);}
+        const auto gki=vi.Gradient(state,offset[K()]),gko=vo.Gradient(state,offset[K()]);
+        interface.push_back(J::Object({{"coordinate",J::Numbers(p)},{"weight",J::Number(f.weight)},
+            {"opposing_normals",J::Numbers(Vector{1,-1})},{"inner_outward_traction",J::Numbers(innerTraction)},
+            {"outer_outward_traction",J::Numbers(outerTraction)},
+            {"inner_outer_k",J::Numbers(Vector{ki,ko})},{"epsilon_trace_target",J::Numbers(Vector{epsilon,profile->Dissipation(p[2])})},
+            {"inner_outer_pi",J::Numbers(Vector{pii,pio})},
+            {"inner_outer_mechanical_pressure",J::Numbers(Vector{WJMechanicalPressure(pii,ki,0),WJMechanicalPressure(pio,ko,0)})},
+            {"opposing_k_diffusive_flux",J::Numbers(Vector{(m_parameters.geometry.molecularNu+nt/SigmaK())*gki[2],-co.kDiffusion*gko[2]})}}));
+    }
     Require(hash==RANSWallR3::Hash(state),"WJ read-only check changed state");
     return J::Object({{"schema","1"},{"model",J::Quote("WJHighRe")},{"audit_revision",J::Quote(AuditRevision())},
         {"governing_solves","0"},{"state_unchanged","true"},{"state_sha256",J::Quote(hash)},
@@ -1418,7 +1447,9 @@ std::string RANSWallEvolutionPatch::WJNativeChecks(const Vector &state,const RAN
         {"max_same_state_defect",J::Number(blockError)},{"epsilon_retained_trace_column",J::Number(traceColumn)},
         {"zero_production_sink_point_error",J::Number(sinkPointError)},{"zero_production_sink_block_error",J::Number(sinkBlockError)},
         {"endpoint_K_cutoff_plus_minus",J::Numbers(Vector{pp->Reference().cutoff,pm->Reference().cutoff})},
+        {"endpoint_K_plus_minus",J::Numbers(Vector{sample+delta,sample-delta})},
         {"endpoint_K_trace_action_expected",J::Numbers(Vector{traceDirection,traceExpected})},
+        {"interface_flux",J::List(interface)},
         {"terms",J::Object(terms)},{"independent_quadrature",J::List(samples)},
         {"extracted_constitutive",J::List(constitutive)}});
 }

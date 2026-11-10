@@ -578,7 +578,7 @@ if(RANS_BUILD_SOLVER)
         "LD_LIBRARY_PATH=${CMAKE_CURRENT_BINARY_DIR}/geometry-lib:$ENV{LD_LIBRARY_PATH}")
 endif()
 
-# WJ-1 common-kernel probes: no native WJ PDE selection is enabled.
+# WJ-1 common-kernel probes remain independent of the WJ-2 native pilot.
 add_executable(WJKernelProbe ${RANS_SOURCE_ROOT}/library/UnitTests/SolverUtils/WJKernelProbe.cpp)
 target_link_libraries(WJKernelProbe RANSKernels)
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
@@ -616,4 +616,10 @@ if(RANS_BUILD_SOLVER AND Python3_Interpreter_FOUND AND wj_dependencies EQUAL 0)
         set_tests_properties(WJNative${wj_policy} PROPERTIES PROCESSORS 1 TIMEOUT 1800
             ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;NUMEXPR_NUM_THREADS=1;LD_LIBRARY_PATH=${CMAKE_CURRENT_BINARY_DIR}/geometry-lib:$ENV{LD_LIBRARY_PATH}")
     endforeach()
+    add_test(NAME RANSWJSharedLegacyTransaction COMMAND ${Python3_EXECUTABLE} -B
+        ${CMAKE_CURRENT_LIST_DIR}/test_wj2_legacy_transaction.py
+        --solver $<TARGET_FILE:IncNavierStokesSolver> --probe $<TARGET_FILE:RANSWallResolutionProbe>
+        --output ${CMAKE_CURRENT_BINARY_DIR}/wj2-legacy-transaction)
+    set_tests_properties(RANSWJSharedLegacyTransaction PROPERTIES PROCESSORS 1 TIMEOUT 1800
+        ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;NUMEXPR_NUM_THREADS=1;LD_LIBRARY_PATH=${CMAKE_CURRENT_BINARY_DIR}/geometry-lib:$ENV{LD_LIBRARY_PATH}")
 endif()

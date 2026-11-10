@@ -380,7 +380,7 @@ std::string LawJSON(const RANSClosureValues &c,double k,const RANSTensor &g,cons
 std::string RANSWallEvolutionPatch::ConstitutiveStateDiagnostic(const Vector &s,double time,
     const RANSWallEvolutionData &data,const std::vector<RANSWallCoordinate> &witnesses) const
 {
-    namespace J=RANSWallSolveJson;Require(AcceptedAWF() && !Mapped() && m_dimension==2,"constitutive forensic scope is accepted AWF flat2D");
+    namespace J=RANSWallSolveJson;Require(!WJ() && AcceptedAWF() && !Mapped() && m_dimension==2,"legacy constitutive forensic scope is CLS accepted AWF flat2D; use WJ native checks for WJ");
     const auto before=RANSWallR3::Hash(s);const auto domain=ScalarDomain(s,time,data,true);
     if(!domain.admissible)return J::Object({{"scalar_budget",ScalarDomainJSON(domain)}, {"covariance_evaluated","false"},{"state_sha256",J::Quote(before)}});
     Refresh(s,time,&data);double minimum[4]={1e300,1e300,1e300,1e300};std::string minima[4]={"null","null","null","null"};std::map<std::string,int> counts;

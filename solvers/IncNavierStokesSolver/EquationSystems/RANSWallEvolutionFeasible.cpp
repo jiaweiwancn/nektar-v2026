@@ -150,7 +150,7 @@ std::vector<RANSWallGlobalPoint> RANSWallEvolutionPatch::NormalizationRows(
 std::string RANSWallEvolutionPatch::BranchCoverageDiagnostic(const Vector &s,double time,
     const RANSWallEvolutionData &data,const std::vector<RANSWallCoordinate> &anchors) const
 {
-    Require(m_dimension==2 && !Mapped(),"branch diagnostic requires flat serial pilot");
+    Require(!WJ() && m_dimension==2 && !Mapped(),"legacy transition branch diagnostic is unsupported for WJ; use WJ native checks");
     const auto hash=RANSWallR3::Hash(s);std::vector<std::string> output;
     const auto declared=ScalarDomain(s,time,data,true,true);
     std::set<RANSWallCoordinate> declaredPoints;

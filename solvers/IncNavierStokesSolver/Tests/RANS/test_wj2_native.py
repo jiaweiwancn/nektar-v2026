@@ -19,6 +19,7 @@ import uuid
 import xml.etree.ElementTree as ET
 import numpy as np
 from numpy.testing import assert_allclose
+from scipy.integrate import quad
 from wj2_cases import case_xml
 from cls_epawf_m3_cases import set_info,set_parameter,write
 from run_cls_epawf_picard import THREADS,load,state_hash,sha,require,write_json
@@ -98,8 +99,54 @@ def independent_loads(checks,policy,offsets):
         d=independent(k+.13j*h,e-.04j*h,G.astype(complex)+1j*h*H,c['scalar'][12])
         assert_allclose(np.array(row['direction_R']).reshape(3,3),d['R'].imag/h,rtol=3e-10,atol=5e-11)
         assert_allclose(row['direction_sources_diffusion'],d['scalar'][[5,8,9,10]].imag/h,rtol=3e-10,atol=5e-11)
+    assert_allclose(checks['endpoint_K_cutoff_plus_minus'],
+        [wall(k)[4] for k in checks['endpoint_K_plus_minus']],rtol=3e-12,atol=3e-14)
     return dict(quadrature_points=source_count,load_max_absolute_errors=errors,
                 extracted_states=len(checks['extracted_constitutive']))
+
+
+def reference_comparison(checks,policy):
+    """Continuum conditions and represented errors are separate receipts."""
+    K=QE*.25;nu=1.5e-5;H=1.;a,zv,t,A,c=wall(K);d=nu-a*zv
+    def J(z):return math.log1p(a*z/d)/a
+    def Q(z):
+        E=A*(z/c if z<c else 1+math.log(z/c))
+        return E-t*t*(J(z)-nu*z/(d*(d+a*z)))
+    cache={}
+    def kref(z):
+        if policy=='EP':return K
+        if z not in cache:
+            cuts=sorted(set([z,H]+[p for p in (c,.1) if z<p<H]))
+            cache[z]=K-sum(quad(lambda s:Q(s)/(d+a*s),lo,hi,epsabs=1e-12,epsrel=3e-12)[0]
+                for lo,hi in zip(cuts[:-1],cuts[1:]))
+        return cache[z]
+    errors=dict(velocity=0.,k=0.,outer_epsilon=0.,inner_pi=0.,outer_pi=0.,mechanical_pressure=0.)
+    jump=-K/(81/20);pii=jump/2;pio=-jump/2
+    for row in checks['independent_quadrature']:
+        z=row['coordinate'][2];inner=row['inner'];kr=kref(z) if inner else K
+        u=t*J(z) if inner else t*J(H)+.5/KAPPA*math.log(z/H)
+        errors['velocity']=max(errors['velocity'],float(np.max(abs(np.array(row['velocity'])-[u,0,0]))))
+        errors['k']=max(errors['k'],abs(row['k']-kr))
+        key='inner_pi' if inner else 'outer_pi';pi=pii if inner else pio
+        errors[key]=max(errors[key],abs(row['reduced_pressure']-pi))
+        errors['mechanical_pressure']=max(errors['mechanical_pressure'],abs(row['mechanical_pressure_over_rho']-(pi-2*kr/3)))
+        if not inner:errors['outer_epsilon']=max(errors['outer_epsilon'],abs(row['epsilon']-.125/(KAPPA*z)))
+    interface=dict(shared_k_defect=0.,epsilon_trace_defect=0.,mechanical_jump_defect=0.,
+                   maximum_traction_jump=0.,maximum_k_flux_jump=0.)
+    for f in checks['interface_flux']:
+        assert_allclose(f['opposing_normals'],[1,-1],atol=0,rtol=0)
+        ki,ko=f['inner_outer_k'];ei,et=f['epsilon_trace_target'];pi,po=f['inner_outer_mechanical_pressure']
+        interface['shared_k_defect']=max(interface['shared_k_defect'],abs(ki-ko))
+        interface['epsilon_trace_defect']=max(interface['epsilon_trace_defect'],abs(ei-et))
+        interface['mechanical_jump_defect']=max(interface['mechanical_jump_defect'],abs(pi-po-jump))
+        interface['maximum_traction_jump']=max(interface['maximum_traction_jump'],
+            float(np.max(abs(np.array(f['inner_outward_traction'])+f['outer_outward_traction']))))
+        interface['maximum_k_flux_jump']=max(interface['maximum_k_flux_jump'],abs(sum(f['opposing_k_diffusive_flux'])))
+    require(interface['shared_k_defect']<1e-12 and interface['epsilon_trace_defect']<1e-10,'shared value/one epsilon trace differs')
+    return dict(continuum=dict(K=K,zv=zv,d=d,twice_nu=2*nu,Lambda=t*t*(J(H)-nu*H/(d*(d+a*H)))/A,
+        rough_proposition_hypotheses=zv<=0 and d>=2*nu and t*t*(J(H)-nu*H/(d*(d+a*H)))/A>=1,
+        Q0_endpoints=[Q(0),Q(H)],ground_reference_k=kref(0),pressure_jump=jump,
+        inner_covariance_lower_bound=(2*QE/3-1)*t),represented_max_absolute_errors=errors,interface=interface)
 
 
 def main():
@@ -161,6 +208,7 @@ def main():
         checks=result['checks'];require(checks['governing_solves']==0 and checks['state_unchanged'],'diagnostic mutated state')
         independent_result=independent_loads(checks,a.policy,report['offsets'])
         return dict(result=str(out/'result.json'),result_sha256=sha(out/'result.json'),independent=independent_result,
+                    reference_comparison=reference_comparison(checks,a.policy),
                     max_same_state_defect=checks['max_same_state_defect'],pressure_modes=checks['pressure_modes'])
     try:
         zero,rc,initial=native('initial');valid(zero,rc)
@@ -185,6 +233,7 @@ def main():
             whole['last_stage_time']==second['last_stage_time'],'restart last implicit history/time differs')
         summary['restart_exact']=True
         readback,rc,_=native('accepted-zero-step',0,cp1);valid(readback,rc)
+        require(readback['initialization_lift_calls_iterations']==[0.,0.],'accepted WJ readback lifted a new reference/state')
         require(same_history(first,readback),'accepted zero-step primary/history mismatch')
         require(digest_object(first['physical_samples'])==digest_object(readback['physical_samples']),'zero-step readback physical samples differ')
         summary['accepted_readonly']=frozen_readback('accepted-readonly',first,root/'split1');save()
