@@ -36,6 +36,7 @@ def main():
             row['logs'].append(dict(source=str(path),sha256=sha(path),tail=text[-5000:]))
         result['execution_schedules'].append(row)
     result['common_scalar_partitions']={p.parent.name:receipt(p) for p in (r/'common-scalar-partitions').glob('*/results.json')}
+    result['residual_failure_diagnoses']={p.parent.name:receipt(p) for p in (r/'residual-diagnosis').glob('*/results.json')}
     result['physical_budget_diagnostic_controls']={p.parent.name:receipt(p) for p in (r/'physical-budgets').glob('test-*/results.json')}
     for name in ('runtime','runtime-resolution-v2','runtime-resolution-v3','runtime-budget-v4','runtime-budget-v5','runtime-probe-v6','runtime-probe-v7'):
         for leaf in ('source-build.json','actual-loaded-libraries.json','actual-loaded-libraries-current.json','lineage.json'):
@@ -90,6 +91,26 @@ def main():
                     audit['spatial_audits']={m:dict(value,checks=[compact_analysis(c) for c in value['checks']]) for m,value in audit['spatial_audits'].items()}
                 row['audits'][str(T)]=audit
             final=row['audits']['0.5'];complete=all(x.get('status')=='pass' for x in row['comparisons'].values()) and final.get('status')=='pass'
+            failed_reductions=[v for v in final.get('evolved_reductions',[]) if v['status']!='pass']
+            if failed_reductions:
+                first=min(failed_reductions,key=lambda v:v['time']);time=first['time']
+                witness=dict(cohort=cohort,configuration=cfg,time=time,gate='evolved_spatial_reduction',
+                    reduction=first,aggregate=final.get('aggregate'),members={},
+                    meaning='post-step qualification failure; retained states are accepted physical states, no rejected timestep is invented')
+                for member in MEMBERS:
+                    endpoint=r/'campaigns'/(cohort+'-'+member)/('T-'+format(time,'.4f'))
+                    native=load(endpoint/'case.evolution.json');manifest=load(endpoint.parent/'request-manifest.json')
+                    require(RequestManifest(endpoint.parent,manifest['request'],True).completed(endpoint),'failure_witness_endpoint_unsealed')
+                    name=cohort+'-'+member+'-'+str(time)+'-spatial-gate.xml';shutil.copy2(endpoint/'case.xml',out/name)
+                    witness['members'][member]=dict(source=str(endpoint),configuration_file=name,
+                        configuration_sha256=sha(endpoint/'case.xml'),native_report_sha256=sha(endpoint/'case.evolution.json'),
+                        trajectory_request=manifest,source_fields={k:native[k] for k in (
+                            'signature','time','dt','order','state','initial','fixed_reference','initialization_receipt',
+                            'native_history','native_history_times','last_stage_history','last_stage_alpha',
+                            'last_stage_time','failure','rejected_state')})
+                name=cohort+'-spatial-gate-failure.json.gz'
+                with gzip.open(out/name,'wt') as f:json.dump(witness,f,separators=(',',':'),allow_nan=False)
+                result['failures'].append(dict(cohort=cohort,time=time,gate='evolved_spatial_reduction',witness=name,sha256=sha(out/name)))
             if complete:
                 required_times(list(row['comparisons'].values()),(.016,.1,.5))
                 selected=dict(configuration=cfg,status='pass',comparisons=[dict(time=v['time'],status=v['status']) for v in row['comparisons'].values()],final_audit_status=final['status'],companions={m:v['scalar_coverage'] for m,v in final['companions'].items()})

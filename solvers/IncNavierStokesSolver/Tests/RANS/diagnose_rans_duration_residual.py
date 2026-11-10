@@ -46,13 +46,42 @@ def common_vertical(common, packet, cross, analysis, ref):
     total=project(r['native']['spatial_unmasked'])
     require(np.max(np.abs(total-original['restricted_load']))<2e-11,'stored_common_load_changed')
     require(np.max(np.abs(sum(terms.values())-total))<2e-11,'common_term_reconstruction_failed')
-    local=[];elements={e['geometry']:e for e in o['elements']}
+    # Decompose actual stress into augmented pressure and its native remainder.
+    # This is diagnostic algebra, independent from the separately tested
+    # constitutive oracle. No reconstructed load is fed to the solver.
+    state=np.asarray(o['state']);pressure=np.asarray([
+        np.dot(q['pressure']['phi'],state[np.asarray(q['pressure']['ids'],int)+
+            o['offsets'][4+q['region']]]) for q in rows])
+    gradz=basis_matrix([q['velocity_k'] for q in rows],n,2)
+    pressure_load=p.T@np.asarray(gradz.T@(-weights*pressure))
+    stress=terms['inner_momentum_stress']+terms['outer_momentum_stress']
+    grouped=dict(augmented_pressure=pressure_load,
+        stress_without_augmented_pressure=stress-pressure_load,
+        conservative_advection=terms['conservative_advection'],
+        remaining=sum((v for k,v in terms.items() if k not in
+            ('inner_momentum_stress','outer_momentum_stress','conservative_advection')),
+            np.zeros(len(free))))
+    require(np.max(np.abs(sum(grouped.values())-total))<2e-11,'pressure_split_reconstruction_failed')
+    signed=lambda v:float(total@cho_solve(factor,v)/(scale*scale*norm(total))) if norm(total) else None
+    local=[];elements={e['geometry']:e for e in o['elements']};constant_sum=np.zeros(len(free))
+    # A globally constant vertical-momentum flux is a free-row null load.
+    # Retain it explicitly rather than ranking its large element boundary terms
+    # as though those artificial partition contributions were a local defect.
+    constant_flux=np.array([ref.t0,0.,-ref.pi[0]])
+    derivatives={0:basis_matrix([q['velocity_k'] for q in rows],n,0),2:gradz}
     for key,et in r['element_terms'].items():
         geometry=int(key.split(':')[1]);e=elements[geometry]
         vectors={k:project(v) for k,v in et.items() if k in terms}
         value=sum(vectors.values(),np.zeros(len(free)))
+        mask=np.asarray([q['velocity_k']['geometry']==geometry for q in rows])
+        constant=np.zeros(n)
+        for axis in (0,2):
+            derivative=derivatives[axis]
+            constant+=np.asarray(derivative.T@(weights*mask*constant_flux[axis]))
+        constant=p.T@constant;constant_sum+=constant
         local.append(dict(element=key,interval=[e['lower'][2],e['upper'][2]],
             physical_bounds=[e['lower'],e['upper']],total_common_mass_dual=norm(value),
+            varying_flux_common_mass_dual=norm(value-constant),
             physical_terms={k:norm(v) for k,v in vectors.items()}))
     support={i:[] for i in free}
     for e in co['elements']:
@@ -66,7 +95,11 @@ def common_vertical(common, packet, cross, analysis, ref):
         physical_term_norms={k:norm(v) for k,v in terms.items()},
         term_sum_reconstruction_maximum=float(np.max(np.abs(sum(terms.values())-total))),
         term_cancellation_ratio=norm(total)/sum(norm(v) for v in terms.values()),
-        dominant_elements=sorted(local,key=lambda q:q['total_common_mass_dual'],reverse=True)[:16],
+        pressure_stress_advection={k:dict(norm=norm(v),signed_projection_on_total=signed(v)) for k,v in grouped.items()},
+        globally_constant_flux_free_norm=norm(constant_sum),
+        constant_flux=constant_flux.tolist(),
+        localization_interpretation='varying flux subtracts each constant-flux element bucket for diagnosis only; the full residual and constant bucket remain reported',
+        dominant_elements=sorted(local,key=lambda q:q['varying_flux_common_mass_dual'],reverse=True)[:16],
         dominant_rows=[dict(common_id=int(free[j]),load=float(total[j]),
             diagonal_mass_scaled=float(total[j]/np.sqrt(M[j,j])/scale),support=support[free[j]]) for j in ranking])
     return body,total,norm
@@ -92,7 +125,8 @@ def main():
         analysis=packet.parent/'analysis.json';paths[member]=dict(packet=packet,cross=cross,analysis=analysis)
         row=load(analysis);identity(row['configuration'],cfg);require(abs(row['time']-a.time)<1e-13,'wrong_time')
         require(row['status']=='pass','source_analysis_failed');analyses[member]=row
-    request=dict(schema='DurationResidualFailureDiagnosisV1',configuration=cfg,time=a.time,
+    request=dict(schema='DurationResidualFailureDiagnosisV2',configuration=cfg,time=a.time,
+        diagnostic_source_sha256=sha(Path(__file__)),
         admission_sha256=sha(a.admission),source_sha256={m:{k:sha(v) for k,v in q.items()} for m,q in paths.items()},
         common_sha256=sha(cp_path),scope='read-only; retain original gates; compare residual loads on fixed tests',
         diagnostic_uncertainty=dict(residual_floor=1e-8,accumulation=1e-10,maximum_ratio=.85,
