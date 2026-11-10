@@ -48,7 +48,7 @@ class Study:
             physics='WJHighRe Original DevStrainRawWorkV1; physical epsilon; uncapped calibrated wall; eta0; zero forces; one sweep U,p,k,epsilon; reuse/verify Off; StopOnBound On',
             observation_scope='common composite physical quadrature; explicit element/face traces; one full-domain pressure gauge')
         write_once(self.root/'design.json',design);self.design=design
-        self.ledger=Ledger(args.output.parent,args.policy)
+        self.ledger=Ledger(Path(os.environ.get('WJ4_PACKAGE_ROOT',str(args.output.parent))),args.policy)
         self.session='driver-'+uuid.uuid4().hex
         self.ledger.begin_session(self.session,started)
         self.s.update(design_sha256=file_hash(self.root/'design.json'),runtime=self.runtime,measurement_code=self.measure_code,
