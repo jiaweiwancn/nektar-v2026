@@ -120,3 +120,55 @@ including initialization, with exclusive domain computation 8.0/11.5 seconds
 across 16 stage checks. The entire physical audit costs only about 1.4 seconds
 per job; restricted-mass caching cannot remove the dominant mandatory domain
 work. No diagnostic optimization is introduced without a measured benefit.
+
+### Boundary specification and runtime identities
+
+The sand-grain input is h_r=.1, not a separately fixed aerodynamic z0. The
+original roughness-intercept correlation is retained. Each model/wall/policy
+has U_H=u_star^2 J0(H) and outer U=U_H+u_star/kappa log(z/H), equivalently
+z0_m=H exp(-kappa*U_H/u_star), as allowed by the appendix's roughness compatibility
+condition. All compared spaces within a configuration use that same continuum
+reference. Mesh-dependent prescribed traces are its documented constrained
+polynomial representations. Both streamwise sides and the top prescribe the
+reference velocity/k/outer-epsilon traces; the ground has no slip and natural
+k flux. Pressure has one global gauge. This bounded patch cannot demonstrate
+open-outflow downstream ABL preservation.
+
+The first new runtime (source 8b91714, C++ content compiled at 4b76bc0) has solver
+SHA256 `411a6eb88e3b5aba89a589e687ce565fce8f7550b5c38cf27312ebd833543e25`.
+It records the cubic-only p5 failure. The qualified p4/p5 runtime is separately
+frozen under `p5/runtime`, source snapshot 99c6bf0 with identical C++ content to
+compiled ce11c23, solver SHA256
+`6f16a3366f67d2964f5a2ebb395d4f2f06f025058ab6679c24ac5f304dc08950`.
+Later changes are Python verification/orchestration and documentation only.
+Full source-file hashes, compiler flags, linked libraries and 122 actually
+loaded shared libraries/plugins are recorded. All numerical library thread
+counts are one. The eight unresolved historical epsilon observations and the
+historical overall unresolved receipt remain unchanged.
+
+### Verification receipts already completed
+
+* FrozenReferenceV1 accepted Q0/Q2 controls: all three models pass with identical
+  actual raw/effective/reference and explicit/implicit boundary hashes, zero
+  ExternalLift difference, native fresh histories, and matched final replay maps.
+  Descriptor, identity, nonzero time, unequal state/reference and boundary-map
+  negative controls reject for their intended reasons.
+* One-sided A95 interface values, different gradients, regional pressures and
+  independent full tractions pass. An ambiguous H observation rejects.
+* The immutable-request unit suite passes. CLI changes to runtime, quadrature,
+  perturbation, horizon or boundary identity reject without modifying the
+  aggregate receipt. Identical resume completes only the two missing native
+  cases and preserves the first case's sealed evidence. A two-point/T=.0001
+  reuse fixture fails its Pi temporal-order check and correctly exits 1; that
+  numerical failure is retained separately from verified reuse behavior.
+* The targeted CTest selection passes 4/4; extended spectrum/domain/ground-root
+  checks pass 724 assertions. The 22 affected restart/cache/rollback,
+  calibration/model rejection and unsupported-route controls pass, including
+  bitwise continuation of existing ordinary new-model histories.
+
+Base-p5 and Interface8V1 pass the E94E95 natural evolved-space and dt/2 uncertainty
+gates at .0016 and .016. At .016, base/fine velocity errors are approximately
+2.1e-5/7.4e-7 on u_star; both walls pass every field gate. Both base spaces and
+the finer accepted-wall case reach .05 with zero bound/correction calls. These
+are bounded accuracy observations, not measured temporal orders or long-time
+stability results. The subsequent .1 and remaining-model results follow below.
