@@ -26,6 +26,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
     const RANSWallEvolutionData &data, int &iterations) const
 {
     RANSWallTiming::Scope timing("pimple.sweep");
+    Require(!WJ() || Size()<=3000,"WJ PIMPLE retains the 3000-unknown dense evolution guard; larger meshes permit reference audits only");
     Require(s.size()==Size() && history.size()==s.size() &&
         std::isfinite(alpha) && alpha>0 && std::isfinite(time),"invalid PIMPLE stage input");
     const auto start=std::chrono::steady_clock::now();

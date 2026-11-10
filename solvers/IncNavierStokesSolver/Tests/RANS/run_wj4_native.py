@@ -79,11 +79,12 @@ class Study:
         except subprocess.TimeoutExpired:code=124;failure='RESOURCE_LIMIT: command timeout'
         except Exception as error:failure=str(error)
         report=folder/'case.evolution.json';d=read(report) if report.exists() else None
-        actual=len(d['pimple_attempts']) if d else steps
+        actual=len(d['pimple_attempts']) if d else 0 if steps==0 else None
         files=[folder/'command.log',*outputs]
         if d and d.get('checkpoint'):files.append(Path(d['checkpoint'])/'State.bin')
         r=dict(argv=argv,intent_sha256=digest(intent),started_epoch=start,seconds=time.time()-start,exit_code=code,
-            failure=failure,requested_steps=steps,actual_attempts=actual,artifacts=artifacts(files),threads=THREADS)
+            failure=failure,requested_steps=steps,actual_attempts=actual,charged_attempts=actual if actual is not None else steps,
+            attempt_scope='native report' if d else 'unknown; reservation remains charged' if steps else 'no scheduled steps',artifacts=artifacts(files),threads=THREADS)
         write_once(receipt,r);self.ledger.finish(label,actual,r['seconds'],str(receipt));self.save();return r
 
     def native(self,name,steps=0,cp=None,dt=3.2e-5,level=1,nx=1,reject=0,arithmetic_time=None):
@@ -140,6 +141,17 @@ class Study:
             if d['steps']==0:c['continuum_hypotheses']=reference_comparison(checks,self.a.policy)['continuum']
         write_once(folder/'comparison.json',c)
         return m,c
+
+    def inventory(self):
+        rows=[]
+        for level,nx,count in ((0,1,639),(0,2,1109),(0,4,2049),(1,1,1257),(1,2,2183),(2,1,2493),(2,2,4331)):
+            name='mesh-L%d-Nx%d-cp0'%(level,nx)
+            d,r,f=self.native(name,level=level,nx=nx);self.valid(d,r)
+            require(len(d['state'])==count,'unexpected native startup mesh size')
+            rows.append(dict(level=level,nx=nx,unknowns=len(d['state']),steps=d['steps'],report=str(f/'case.evolution.json'),
+                evolution_supported=count<=3000,native_report_sha256=file_hash(f/'case.evolution.json')))
+            self.s['mesh_inventory']=rows;self.save()
+        self.s['components']['mesh_inventory']=component('PASS',meshes=rows);self.save()
 
     def horizontal(self):
         records={};measurements={}
@@ -269,8 +281,9 @@ class Study:
                 a,b=measurements[(j,start//block)],measurements[(j,end//block)]
                 diff=comparison(a,b,self.a.policy)['full']['fields'];dt=b['time']-a['time']
                 V={f:2*diff[f]['normalized_L2']/dt for f in ('velocity','k','outer_epsilon')}
-                residual=b['spatial_mass_dual_norms'];passed=max(V.values())<=1e-5 and max(abs(residual[i]) for i in (0,1,2,3))<=1e-5
-                rows.append(dict(trajectory=tag,steps=[start,end],times=[a['time'],b['time']],V=V,spatial_residual=residual,status='PASS' if passed else 'NOT_REACHED'))
+                residual=b['spatial_mass_dual_norms'];start_residual=a['spatial_mass_dual_norms']
+                passed=max(V.values())<=1e-5 and max(abs(r[i]) for r in (start_residual,residual) for i in (0,1,2,3))<=1e-5 and max(abs(v) for r in (start_residual,residual) for v in r[4:])<=1e-10
+                rows.append(dict(trajectory=tag,steps=[start,end],times=[a['time'],b['time']],V=V,spatial_residual=residual,start_spatial_residual=start_residual,status='PASS' if passed else 'NOT_REACHED'))
         self.s['stationarity']=dict(status='REACHED' if len(rows)==6 and all(r['status']=='PASS' for r in rows) else 'NOT_REACHED',windows=rows)
 
     def transactions(self,trajectories):
@@ -303,7 +316,7 @@ class Study:
             immutable_checkpoint=immutable,producer=str(predecessor/'case.evolution.json'),failed_candidate_sha256=state_hash(rejected['rejected_state']),rejection_report=str(rf/'case.evolution.json'))
 
     def finish(self):
-        required={k:self.s['components'].get(k,component('NOT_RUN','required component missing')) for k in ('horizontal','resource_design','longer','transactions')}
+        required={k:self.s['components'].get(k,component('NOT_RUN','required component missing')) for k in ('mesh_inventory','horizontal','resource_design','longer','transactions')}
         self.s['qualification']=aggregate(required)
         self.s['longer_interpretation']='CONDITIONAL finite reference-Dirichlet strip evidence' if required['horizontal']['status']!='PASS' else 'finite reference-Dirichlet strip evidence'
         self.save()
@@ -311,10 +324,10 @@ class Study:
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--solver',type=Path,required=True);p.add_argument('--probe',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True);p.add_argument('--policy',choices=('EP','Budget'),required=True)
-    p.add_argument('--mode',choices=('horizontal','cost','longer','all','report'),required=True);a=p.parse_args()
+    p.add_argument('--mode',choices=('inventory','horizontal','cost','longer','all','report'),required=True);a=p.parse_args()
     a.output=a.output.resolve();a.solver=a.solver.resolve();a.probe=a.probe.resolve();s=Study(a)
     try:
-        for mode in (('horizontal','cost','longer') if a.mode=='all' else (a.mode,)):
+        for mode in (('inventory','horizontal','cost','longer') if a.mode=='all' else (a.mode,)):
             if mode!='report':getattr(s,mode)()
         s.finish()
     except Exception as error:

@@ -122,5 +122,6 @@ class Ledger:
         with self.lock():
             d=read(self.file);e=d['entries'][label]
             if e['status']!='RUNNING':raise ValueError('immutable attempt already reconciled')
-            if attempts>e['reserved_attempts']:raise ValueError('native attempts exceeded reservation')
-            e.update(actual_attempts=attempts,seconds=seconds,status='FINISHED',receipt=receipt);atomic(self.file,d)
+            if attempts is not None and attempts>e['reserved_attempts']:raise ValueError('native attempts exceeded reservation')
+            if attempts is not None:e['actual_attempts']=attempts
+            e.update(observed_attempts=attempts,seconds=seconds,status='FINISHED' if attempts is not None else 'FINISHED_UNKNOWN_ATTEMPTS',receipt=receipt);atomic(self.file,d)
