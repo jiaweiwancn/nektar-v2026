@@ -18,9 +18,10 @@ def csv_file(path,rows):
         w=csv.DictWriter(f,fieldnames=keys);w.writeheader();w.writerows(rows)
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--observer-root',type=Path);p.add_argument('--study',type=Path);a=p.parse_args()
     root=a.root.resolve();out=a.output.resolve();out.mkdir(parents=True,exist_ok=False)
-    source=root/'source';build=root/'build';git=lambda *v:subprocess.check_output(['git','-c','core.filemode=false','-C',str(source),*v],text=True).strip()
+    observer=a.observer_root.resolve() if a.observer_root else root;study=a.study.resolve() if a.study else root/'study'
+    source=observer/'source';build=observer/'build';git=lambda *v:subprocess.check_output(['git','-c','core.filemode=false','-C',str(source),*v],text=True).strip()
     tracked=[source/f for f in subprocess.check_output(['git','-C',str(source),'ls-files'],text=True).splitlines() if (source/f).is_file()]
     content={str(f.relative_to(source)):file_hash(f) for f in tracked};write_once(root/'wj4-source-content.json',content)
     runtime={}
@@ -28,31 +29,40 @@ def main():
         from wj_immutable import runtime as identity
         runtime[name]=identity(build/name)
     index={}
-    for scope in (root/'study',root/'build/wj4-observations',root/'build/wj3-smoke',root/'build/wj2-native-EP',root/'build/wj2-native-Budget'):
+    for scope in (root/'study',study,observer/'build/wj4-observations',observer/'build/wj3-smoke',observer/'build/wj2-native-EP',observer/'build/wj2-native-Budget',root/'build/wj4-observations',root/'build/wj3-smoke',root/'build/wj2-native-EP',root/'build/wj2-native-Budget'):
         if scope.exists():
             for f in scope.rglob('*'):
                 if f.is_file() and (f.suffix in ('.json','.xml','.bin','.log') or f.name=='State.bin'):index[str(f)]=dict(bytes=f.stat().st_size,sha256=file_hash(f))
     write_once(root/'wj4-artifact-index.json',index)
-    inventory=read(root/'inventory.json');tests={}
-    for r in read(root/'command-receipts.json'):
+    inventory=read(observer/'inventory.json');tests={}
+    for r in read(root/'command-receipts.json')+(read(observer/'command-receipts.json') if observer!=root else []):
         if not r['label'].startswith('ctest-'):continue
         matches=re.findall(r'(\d+)% tests passed, (\d+) tests failed out of (\d+)',Path(r['log']).read_text())
-        tests[r['label']]=dict(exit_code=r['exit_code'],result=matches[-1] if matches else None,log=r['log'],sha256=r['log_sha256'],seconds=r['seconds'])
+        tests[str(Path(r['log']).parent)+'/'+r['label']]=dict(exit_code=r['exit_code'],result=matches[-1] if matches else None,log=r['log'],sha256=r['log_sha256'],seconds=r['seconds'])
     manifest=dict(schema='WJ4LinuxManifestV1',root=str(root),source_revision=git('rev-parse','HEAD'),source_tree=git('rev-parse','HEAD^{tree}'),source_status=git('status','--short'),
         source_content=dict(path=str(root/'wj4-source-content.json'),sha256=file_hash(root/'wj4-source-content.json')),
         specification_sha256={name:content['docs/literature/'+name] for name in ('wj_earsm_neutral_abl_ep_awf_note.tex','wj_earsm_budget_cutoff_awf_appendix.tex')},
         runtime=runtime,arithmetic_policy='Release C++17 -ffp-contract=off -fno-fast-math; all numerical library threads=1',
         effective_flags={name:(build/'CMakeFiles'/ (name+'.dir')/'flags.make').read_text() for name in ('IncNavierStokesSolver','RANSWallResolutionProbe','RANSKernels')},
-        inventory=dict(count=len(inventory['tests']),path=str(root/'inventory.json'),sha256=file_hash(root/'inventory.json')),
+        inventory=dict(count=len(inventory['tests']),path=str(observer/'inventory.json'),sha256=file_hash(observer/'inventory.json')),
         artifact_index=dict(count=len(index),path=str(root/'wj4-artifact-index.json'),sha256=file_hash(root/'wj4-artifact-index.json')),
         command_receipts=dict(path=str(root/'command-receipts.json'),sha256=file_hash(root/'command-receipts.json')),tests=tests,
         ledger={policy:dict(path=str(root/('ledger-'+policy+'.json')),sha256=file_hash(root/('ledger-'+policy+'.json'))) for policy in ('EP','Budget') if (root/('ledger-'+policy+'.json')).exists()},
-        allocation_receipts=artifacts(list(root.glob('*allocation*.json'))+list(root.glob('processes*.txt'))),
-        configuration=artifacts([root/'configure.log',build/'CMakeCache.txt']),finite_scope='reference-Dirichlet strip [0,1]x[0,2]; serial flat2D p3; finite observation and angular inventories; no global or long-time theorem')
+        allocation_receipts=artifacts(list(root.glob('*allocation*.json'))+list(root.glob('processes*.txt'))+list(observer.glob('*allocation*.json'))),
+        configuration=artifacts([root/'configure.log',build/'CMakeCache.txt']),
+        producer_runtime=read(root/'study/EP/design.json')['runtime'],
+        accepted_readback_runtime=read(study/'EP/design.json')['runtime'],
+        observer_root=str(observer),study_root=str(study),producer_root=str(root),
+        observer_commands=artifacts([observer/'command-receipts.json']),source_equivalence=artifacts(list(root.glob('*equivalence*.json'))+list(observer.glob('*equivalence*.json'))),finite_scope='reference-Dirichlet strip [0,1]x[0,2]; serial flat2D p3; finite observation and angular inventories; no global or long-time theorem')
+    for context in (manifest['producer_runtime'],manifest['accepted_readback_runtime']):
+        for value in context.values():
+            if file_hash(value['path'])!=value['sha256']:raise ValueError('recorded runtime binary changed')
+            for path,h in value['libraries'].items():
+                if file_hash(path)!=h:raise ValueError('recorded dependency changed')
     write_once(root/'wj4-manifest.json',manifest);write_once(out/'manifest.json',manifest)
     rows=[];interfaces=[];windows=[];differences=[];residuals=[];horizontal=[];audits=[];witnesses={};policies={}
     for policy in ('EP','Budget'):
-        path=root/'study'/policy/'summary.json'
+        path=study/policy/'summary.json'
         if not path.exists():continue
         s=read(path);policies[policy]={k:s.get(k) for k in ('qualification','components','longer_interpretation','stationarity','ledger_totals','cost_design','mesh_inventory','arithmetic_envelope')}
         policies[policy]['heavy_summary']=dict(path=str(path),sha256=file_hash(path),bytes=path.stat().st_size)
