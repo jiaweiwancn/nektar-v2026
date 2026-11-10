@@ -84,6 +84,7 @@ private:
     std::vector<Vector> m_acceptedStates;
     std::vector<double> m_auditTimes;
     std::vector<RANSWallEvolutionPatch::Diagnostic> m_stateAudits;
+    std::vector<std::string> m_wjAuditPackets;
     static std::string solverTypeLookupId;
 };
 }

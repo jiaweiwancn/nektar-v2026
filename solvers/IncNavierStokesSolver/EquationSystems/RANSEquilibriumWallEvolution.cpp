@@ -380,7 +380,9 @@ void RANSEquilibriumWallEvolution::RecordAudit(const Vector &state,const Vector 
     if(m_patch->WJ())
     {
         std::vector<std::string> reasons;
-        if(audit.at("wj_hard_admissible")[0]!=1)reasons.push_back("WJ scalar/profile/covariance/principal audit exit");
+        if(audit.at("wj_hard_admissible")[0]!=1)
+            for(const auto &[name,values]:audit)if(name.find("wj_condition_")==0 && values[0]!=1)
+                reasons.push_back("WJ_"+name.substr(13)+"_exit");
         if(alpha>0 && m_pimpleHardAuditRejectStep>0 && m_integrator->Steps()+1==m_pimpleHardAuditRejectStep)
             reasons.push_back("deliberate_PIMPLE_WJ_hard_audit_rejection");
         if(!reasons.empty())
@@ -388,6 +390,7 @@ void RANSEquilibriumWallEvolution::RecordAudit(const Vector &state,const Vector 
             m_rejectedState=state;m_rangeEvents.push_back({time,alpha,state,history,audit,reasons,true});
             throw std::runtime_error("WJ hard audit exit; candidate/history retained: "+reasons.front());
         }
+        m_wjAuditPackets.push_back(m_patch->WJAuditPacket(audit,state,history,alpha,time,alpha>0?"completed_stage":"startup"));
         m_stateAudits.push_back(std::move(audit));m_auditTimes.push_back(time);m_acceptedStates.push_back(state);return;
     }
     if(m_patch->AcceptedAWF())
@@ -503,6 +506,7 @@ void RANSEquilibriumWallEvolution::v_DoSolve()
             const auto committedState=single?m_state:Vector{},committedHistory=single?m_lastHistory:Vector{};
             const auto committedSamples=single?m_physicalSamples:RANSWallEvolutionPatch::Diagnostic{};
             const double committedStageTime=m_stageTime,committedStageAlpha=m_stageAlpha;
+            const auto wjPackets=m_wjAuditPackets.size();
             const auto stages=m_stageAudits.size(),audits=m_stateAudits.size(),states=m_acceptedStates.size(),times=m_auditTimes.size();
             Vector diff;
             try{RANSWallTiming::Scope advanceTiming("native.advance");diff=m_integrator->Advance();}
@@ -513,7 +517,7 @@ void RANSEquilibriumWallEvolution::v_DoSolve()
                     if(m_rejectedState.empty())m_rejectedState=m_state;
                     m_state=committedState;m_lastHistory=committedHistory;m_physicalSamples=committedSamples;
                     m_stageTime=committedStageTime;m_stageAlpha=committedStageAlpha;
-                    m_stageAudits.resize(stages);m_stateAudits.resize(audits);m_acceptedStates.resize(states);m_auditTimes.resize(times);
+                    m_wjAuditPackets.resize(wjPackets);m_stageAudits.resize(stages);m_stateAudits.resize(audits);m_acceptedStates.resize(states);m_auditTimes.resize(times);
                 }
                 throw;
             }
@@ -1020,7 +1024,9 @@ void RANSEquilibriumWallEvolution::WriteReport() const
                 out<<"],\"state\":";Write(out,event.state);out<<",\"history\":";Write(out,event.history);
                 out<<",\"audit\":{";int count=0;
                 for(const auto &[name,value]:event.audit){if(count++)out<<',';out<<Quoted(name)<<':';Write(out,value);}
-                out<<"}}";
+                out<<'}';
+                if(m_patch->WJ())out<<",\"wj_packet\":"<<m_patch->WJAuditPacket(event.audit,event.state,event.history,event.alpha,event.time,"rejected_stage");
+                out<<'}';
             }
             out<<']';
         }
@@ -1031,6 +1037,7 @@ void RANSEquilibriumWallEvolution::WriteReport() const
         {if(i)out<<',';out<<'{';int count=0;for(const auto &[name,value]:m_stateAudits[i])
             {if(count++)out<<',';out<<Quoted(name)<<':';Write(out,value);}out<<'}';}out<<']';
     }
+    if(m_patch->WJ())out<<",\"wj_audit_packets\":"<<RANSWallSolveJson::List(m_wjAuditPackets);
     out<<",\"native_history\":";WriteRows(out,snapshot.history);out<<",\"native_history_times\":";Write(out,snapshot.times);
     out<<",\"last_stage_history\":";Write(out,m_lastHistory);out<<",\"last_stage_time\":"<<m_stageTime<<",\"last_stage_alpha\":"<<m_stageAlpha;
     const auto &mapping=m_patch->Mapping();

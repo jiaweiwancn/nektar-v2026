@@ -38,7 +38,8 @@ double MinimumEigenvalue(RANSTensor a)
 // plane. Reflection symmetry decouples the transverse polarization in this 2D
 // pilot. A coarse bracket followed by bounded minimization is a numerical
 // diagnostic on this plane, not a global 3D ellipticity certificate.
-RANSWallAlgebra::Vector WJPrincipal(double k,double epsilon,const RANSTensor &g,const WJParameters &p)
+struct WJPrincipalResult { std::array<double,2> value,angle; };
+WJPrincipalResult WJPrincipal(double k,double epsilon,const RANSTensor &g,const WJParameters &p)
 {
     const auto law=EvaluateWJClosure(k,epsilon,g,p,WJGradientPolicy::DevStrainRawWorkV1);
     std::array<RANSTensor,3> h{};h[0][0][0]=1;h[0][2][2]=-1;h[1][0][2]=1;h[2][2][0]=1;
@@ -50,7 +51,7 @@ RANSWallAlgebra::Vector WJPrincipal(double k,double epsilon,const RANSTensor &g,
     auto form=[&](double angle){const double c=std::cos(angle),s=std::sin(angle);const double v[3]={-c*s,-s*s,c*c};double result=0;
         for(int i=0;i<3;++i)for(int j=0;j<3;++j){result+=v[i]*matrix[i][j]*v[j];}
         return result;};
-    const double pi=std::acos(-1.),spacing=pi/32;double best=1e300;
+    const double pi=std::acos(-1.),spacing=pi/32;double best=1e300,bestAngle=0;
     for(int j=0;j<32;++j)
     {
         const double center=j*spacing;
@@ -58,13 +59,15 @@ RANSWallAlgebra::Vector WJPrincipal(double k,double epsilon,const RANSTensor &g,
         double lo=center-spacing,hi=center+spacing;
         for(int n=0;n<48;++n){const double x=lo+(hi-lo)*.3819660112501051,y=hi-(hi-lo)*.3819660112501051;
             if(form(x)<form(y))hi=y;else lo=x;}
-        best=std::min(best,form((lo+hi)/2));
+        const double angle=(lo+hi)/2,value=form(angle);
+        if(value<best){best=value;bestAngle=angle;}
     }
     RANSTensor hx{},hz{};hx[1][0]=1;hz[1][2]=1;
     const auto dx=ApplyWJClosureDirection(k,epsilon,g,0,0,hx,p,WJGradientPolicy::DevStrainRawWorkV1).reynoldsStress;
     const auto dz=ApplyWJClosureDirection(k,epsilon,g,0,0,hz,p,WJGradientPolicy::DevStrainRawWorkV1).reynoldsStress;
     const double a=-dx[1][0]/law.eddyViscosity,b=-(dx[1][2]+dz[1][0])/(2*law.eddyViscosity),c=-dz[1][2]/law.eddyViscosity;
-    return {best,(a+c-std::hypot(a-c,2*b))/2};
+    return {{best,(a+c-std::hypot(a-c,2*b))/2},
+        {bestAngle,.5*std::atan2(2*b,a-c)+pi/2}};
 }
 
 }
@@ -651,11 +654,13 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::WJCompleteAudit(const
         domain.minimumOuterEpsilon,domain.minimumSampledK,domain.minimumTraceEpsilon,
         domain.minimumBudgetRatio,domain.maximumBudgetRelativeDefect};
     audit["wj_hard_admissible"]={0};
+    audit["wj_condition_scalar_domain"]={domain.admissible?1.:0.,domain.minimumInnerK,domain.minimumOuterK,domain.minimumOuterEpsilon,domain.minimumTraceEpsilon};
     if(!domain.admissible){audit["admissible"]={0};return audit;}
     const auto scalar=audit["wj_scalar_domain"];
     if(!rangesOnly)audit=Audit(state,history,alpha,time,data,m_robustUstar,true);
     audit.erase("robust_source");audit.erase("outer_constitutive_range");
     audit["wj_scalar_domain"]=scalar;
+    audit["wj_condition_scalar_domain"]={1.,scalar[1],scalar[2],scalar[3],scalar[5]};
     const double K0=m_parameters.model.Q()*m_robustUstar*m_robustUstar;
     Vector covariance{1e300,1e300},root{1e300,0,1e300},viscosity{1e300,0,1e300,0},work{0,0},principal{1e300,1e300};
     Vector invariants{1e300,-1e300,1e300,-1e300,1e300,-1e300},production{1e300,-1e300,1e300,-1e300};
@@ -695,7 +700,24 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::WJCompleteAudit(const
         work[0]=std::max(work[0],std::max(std::abs(actual-law.production),std::abs(law.productionDev-law.production-2*k*law.divergence/3)));
         work[1]=std::max(work[1],std::abs(law.divergence));
         const auto values=WJPrincipal(k,epsilon,g,m_parameters.wj);
-        for(int i=0;i<2;++i)principal[i]=std::min(principal[i],values[i]);
+        for(int i=0;i<2;++i)if(values.value[i]<principal[i])
+        {
+            principal[i]=values.value[i];const double angle=values.angle[i],c=std::cos(angle),s=std::sin(angle);
+            const RANSVector xi{c,0,s},a=i==0?RANSVector{-s,0,c}:RANSVector{0,1,0};RANSTensor h{};
+            for(int a0=0;a0<3;++a0)for(int b=0;b<3;++b)h[a0][b]=a[a0]*xi[b];
+            const auto action=ApplyWJClosureDirection(k,epsilon,g,0,0,h,m_parameters.wj,WJGradientPolicy::DevStrainRawWorkV1);
+            double contraction=0,dot=0;for(int a0=0;a0<3;++a0){dot+=a[a0]*xi[a0];
+                for(int b=0;b<3;++b)contraction-=h[a0][b]*action.reynoldsStress[a0][b];}
+            const auto eigenvalues=RANSWallSolveJson::Eigenvalues(law.reynoldsStress);
+            Vector witness{double(row.geometry),double(row.element),1.,double(provenance.radialSide),
+                p.coordinate[0],p.coordinate[1],p.coordinate[2],k,epsilon,SampleK(state,p.coordinate),law.wj.n,
+                eigenvalues[0],eigenvalues[1],eigenvalues[2],law.eddyViscosity,law.scalarViscosity,
+                law.production,law.productionDev,law.divergence,law.wj.s,law.wj.w,law.wj.i4,law.wj.rootDerivative,
+                law.wj.rootResidual,angle,principal[i],dot,contraction,contraction/law.eddyViscosity};
+            witness.insert(witness.end(),xi.begin(),xi.end());witness.insert(witness.end(),a.begin(),a.end());
+            for(const auto &tensor:{g,action.reynoldsStress,h})for(const auto &r:tensor)witness.insert(witness.end(),r.begin(),r.end());
+            audit[i==0?"wj_principal_in_plane_witness":"wj_principal_transverse_witness"]=std::move(witness);
+        }
     }
     audit["wj_normalized_invariant_s_w_I4_ranges"]=invariants;audit["wj_Praw_Pdev_ranges"]=production;
     audit["wj_covariance"]=covariance;audit["wj_root_minimum_scaled_residual"]=root;
@@ -705,8 +727,19 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::WJCompleteAudit(const
     audit["wj_inner_minimum_geometry_element_side_x_z_k_covariance"]=innerWitness;
     audit["wj_outer_minimum_geometry_element_side_x_z_k_epsilon_covariance"]=outerWitness;
     audit["wj_cls_max_beta04_R1_R2_cap_applicable"]={0,0,0,0,0};
-    const bool valid=covariance[0]>=-1e-10*K0 && covariance[1]>=-1e-10*K0 && root[0]>=1.8 && root[1]<1e-12 && root[2]>0 &&
-        principal[0]>0 && principal[1]>0 && work[0]<1e-11 && scalar[6]>=1 && scalar[7]<1e-10;
+    auto condition=[&](const std::string &name,bool passed,Vector margins)
+    {margins.insert(margins.begin(),passed?1.:0.);audit["wj_condition_"+name]=std::move(margins);};
+    condition("inner_covariance",covariance[0]>=-1e-10*K0,{covariance[0]+1e-10*K0});
+    condition("outer_covariance",covariance[1]>=-1e-10*K0,{covariance[1]+1e-10*K0});
+    condition("root_branch",root[0]>=1.8 && root[2]>0,{root[0]-1.8,root[2]});
+    condition("root_residual",root[1]<1e-12,{1e-12-root[1]});
+    condition("scalar_viscosities",viscosity[0]>0 && viscosity[2]>0,{viscosity[0],viscosity[2]});
+    condition("principal_in_plane",principal[0]>0,{principal[0]});
+    condition("principal_transverse",principal[1]>0,{principal[1]});
+    condition("raw_work",work[0]<1e-11,{1e-11-work[0]});
+    condition("profile_gate",scalar[6]>=1,{scalar[6]-1});
+    condition("profile_budget",scalar[7]<1e-10,{1e-10-scalar[7]});
+    bool valid=true;for(const auto &[name,value]:audit)if(name.find("wj_condition_")==0)valid=valid && value[0]==1;
     audit["wj_hard_admissible"]={valid?1.:0.};
     RANSTensor adverse{};adverse[0][2]=3.5;
     const auto bad=EvaluateWJClosure(1,1,adverse,m_parameters.wj);
@@ -719,5 +752,120 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::WJCompleteAudit(const
     audit["wj_separate_analytic_adverse_witnesses"]={bad.wj.n,form,RANSWallSolveJson::Eigenvalues(bad.reynoldsStress)[0],bad.production,
         psd.wj.n,psd.reynoldsStress[0][0],psd.reynoldsStress[1][1],psd.reynoldsStress[2][2],psd.production};
     return audit;
+}
+}
+
+namespace Nektar
+{
+std::string RANSWallEvolutionPatch::WJAuditPacket(const Diagnostic &audit,const Vector &state,const Vector &history,
+    double alpha,double time,const std::string &phase) const
+{
+    namespace J=RANSWallSolveJson;std::vector<std::pair<std::string,std::string>> conditions,witnesses;
+    std::vector<std::string> failures;
+    for(const auto &[name,v]:audit)if(name.find("wj_condition_")==0)
+    {
+        const std::string category=name.substr(13);const bool pass=v[0]==1;
+        conditions.push_back({category,J::Object({{"passed",J::Boolean(pass)},
+            {"margins",J::Numbers(Vector(v.begin()+1,v.end()))}})});
+        if(!pass)failures.push_back(J::Quote(category));
+    }
+    for(const std::string polarization:{"in_plane","transverse"})
+    {
+        const auto found=audit.find("wj_principal_"+polarization+"_witness");if(found==audit.end())continue;
+        const auto &v=found->second;Require(v.size()==62,"WJ principal witness layout mismatch");
+        auto range=[&](int a,int b){return J::Numbers(Vector(v.begin()+a,v.begin()+b));};
+        witnesses.push_back({polarization,J::Object({{"geometry",J::Number(v[0])},{"element",J::Number(v[1])},
+            {"region",J::Quote("outer")},{"side",J::Number(v[3])},{"position",range(4,7)},
+            {"k",J::Number(v[7])},{"epsilon",J::Number(v[8])},{"sampled_K",J::Number(v[9])},
+            {"N",J::Number(v[10])},{"covariance_eigenvalues",range(11,14)},{"nu_eff",J::Number(v[14])},
+            {"nu_d",J::Number(v[15])},{"Praw",J::Number(v[16])},{"Pdev",J::Number(v[17])},
+            {"raw_divergence",J::Number(v[18])},{"s_w_I4",range(19,22)},{"F_N",J::Number(v[22])},
+            {"root_residual",J::Number(v[23])},{"angle_radians",J::Number(v[24])},
+            {"minimum_over_nu_eff",J::Number(v[25])},{"a_dot_xi",J::Number(v[26])},
+            {"minus_H_contract_dR",J::Number(v[27])},{"replayed_over_nu_eff",J::Number(v[28])},
+            {"xi",range(29,32)},{"polarization",range(32,35)},{"raw_G_row_major",range(35,44)},
+            {"dR_row_major",range(44,53)},{"H_row_major",range(53,62)},
+            {"normalization",J::Quote("unit xi, unit a perpendicular to xi; -H:dR/nu_eff; fixed positive k and epsilon")},
+            {"search",J::Quote(polarization=="in_plane"?"32 periodic angular brackets; 48 golden iterations per local minimum":"analytic symmetric 2x2 eigenvalue in x-z propagation plane")},
+            {"scope",J::Quote("finite NativeElementSideV2 spatial inventory; x-z propagation only")}})});
+    }
+    return J::Object({{"schema",J::Quote("WJFiniteAuditV2")},{"state_sha256",J::Quote(RANSWallR3::Hash(state))},
+        {"stage_history_sha256",J::Quote(RANSWallR3::Hash(history))},{"phase",J::Quote(phase)},
+        {"time",J::Number(time)},{"alpha_mass",J::Number(alpha)},{"conditions",J::Object(conditions)},
+        {"failure_categories",J::List(failures)},{"principal_witnesses",J::Object(witnesses)}});
+}
+}
+
+namespace Nektar
+{
+std::string RANSWallEvolutionPatch::WJMeasurements(const Vector &state,const Vector &stageHistory,double stageAlpha,double time,
+    const RANSWallEvolutionData &data,const std::vector<std::array<double,5>> &observations) const
+{
+    namespace J=RANSWallSolveJson;
+    Require(WJ() && m_eta==0 && stageAlpha>=0,"WJ measurement requires unanchored selected model");
+    const auto stateHash=RANSWallR3::Hash(state),historyHash=RANSWallR3::Hash(stageHistory),referenceHash=RANSWallR3::Hash(m_reference);
+    const auto constraints=Constraints(state,time,data);
+    const auto spatial=Residual(state,state,0,time,data,false);
+    const auto resolution=ResidualResolutionComponents(state,state,0,time,data,false);
+    std::vector<std::pair<std::string,std::string>> terms;
+    for(const auto &[name,value]:resolution.terms)terms.push_back({name,J::Object({{"load",J::Numbers(value)},
+        {"mass_dual_norms",J::Numbers(Norms(value,constraints,m_robustUstar))}})});
+    std::vector<std::string> samples,interfaces;double divergence=0;Vector evaluationSensitivity(6);
+    for(const auto &o:observations)
+    {
+        const RANSWallCoordinate p{o[0],o[1],o[2]};const int side=int(o[4]);
+        Require(p[2]!=m_parameters.geometry.height || side!=0,"WJ H observation must name a side");
+        const bool inner=p[2]<m_parameters.geometry.height || (p[2]==m_parameters.geometry.height && side<0);
+        const auto v=Point(0,p,side),pr=Point(inner?InnerPressure():OuterPressure(),p,side);
+        RANSTensor g{};for(int a=0;a<m_dimension;++a)g[PhysicalAxis(a)]=v.Gradient(state,offset[a]);
+        divergence=std::max(divergence,std::abs(g[0][0]+g[2][2]));
+        auto values=[&](const Vector &s){const double k=v.Value(s,offset[K()]),pi=pr.Value(s,offset[inner?InnerPressure():OuterPressure()]);
+            return Vector{v.Value(s,offset[0]),v.Value(s,offset[1]),k,inner?0:Point(Epsilon(),p,side).Value(s,offset[Epsilon()]),pi,WJMechanicalPressure(pi,k,0)};};
+        const auto value=values(state),initial=values(m_reference);
+        const int blocks[5]={0,1,K(),Epsilon(),inner?InnerPressure():OuterPressure()};Vector alternate(6);
+        for(int j=0;j<5;++j)if(j!=3 || !inner)alternate[j]=fields[blocks[j]]->NativeEvaluate(state,p,offset[blocks[j]],side)[0];
+        alternate[5]=WJMechanicalPressure(alternate[4],alternate[2],0);
+        for(int j=0;j<6;++j)evaluationSensitivity[j]=std::max(evaluationSensitivity[j],std::abs(value[j]-alternate[j]));
+        Vector G;for(const auto &r:g)G.insert(G.end(),r.begin(),r.end());
+        samples.push_back(J::Object({{"position",J::Numbers(p)},{"weight",J::Number(o[3])},{"side",J::Number(side)},
+            {"inner",J::Boolean(inner)},{"value",J::Numbers(value)},{"represented_initial",J::Numbers(initial)},
+            {"raw_G",J::Numbers(G)},{"grad_k",J::Numbers(v.Gradient(state,offset[K()]))}}));
+    }
+    for(const auto &f:Surface(0,2,m_parameters.geometry.height,1,8))
+    {
+        const auto p=f.test.coordinate;const auto vi=Point(0,p,-1),vo=Point(0,p,1);
+        RANSTensor gi{},go{};for(int a=0;a<m_dimension;++a){gi[PhysicalAxis(a)]=vi.Gradient(state,offset[a]);go[PhysicalAxis(a)]=vo.Gradient(state,offset[a]);}
+        const double ki=vi.Value(state,offset[K()]),ko=vo.Value(state,offset[K()]);
+        const double epsilon=Point(Epsilon(),p,1).Value(state,offset[Epsilon()]);
+        const double pii=Point(InnerPressure(),p,-1).Value(state,offset[InnerPressure()]),pio=Point(OuterPressure(),p,1).Value(state,offset[OuterPressure()]);
+        const auto profile=StateProfile(state,p,time,data);const double nt=profile->Original().EddyViscosity(p[2]);
+        const auto ti=RANSWallInnerMeanStress(InnerStress(ki,nt,gi),m_parameters.geometry.molecularNu,pii);
+        const auto co=OuterClosure(ko,epsilon,go,p);
+        Vector innerTraction(3),outerTraction(3);for(int a=0;a<3;++a){innerTraction[a]=ti[a][2];outerTraction[a]=co.reynoldsStress[a][2]-(a==2?2*ko/3-pio:0);}
+        interfaces.push_back(J::Object({{"position",J::Numbers(p)},{"weight",J::Number(f.weight)},
+            {"inner_outer_k",J::Numbers(Vector{ki,ko})},{"epsilon_trace_target",J::Numbers(Vector{epsilon,profile->Dissipation(p[2])})},
+            {"sampled_K",J::Number(profile->K())},{"cutoff",J::Number(profile->Reference().cutoff)},
+            {"inner_outer_pi",J::Numbers(Vector{pii,pio})},
+            {"inner_outer_mechanical_pressure",J::Numbers(Vector{WJMechanicalPressure(pii,ki,0),WJMechanicalPressure(pio,ko,0)})},
+            {"inner_outward_traction",J::Numbers(innerTraction)},{"outer_outward_traction",J::Numbers(outerTraction)},
+            {"opposing_k_diffusive_flux",J::Numbers(Vector{(m_parameters.geometry.molecularNu+nt/SigmaK())*vi.Gradient(state,offset[K()])[2],-co.kDiffusion*vo.Gradient(state,offset[K()])[2]})}}));
+    }
+    const auto audit=WJCompleteAudit(state,stageAlpha>0?stageHistory:state,stageAlpha,time,data,true);
+    const auto stage=stageAlpha>0?Residual(state,stageHistory,stageAlpha,time,data,false):Vector{};
+    Require(stateHash==RANSWallR3::Hash(state) && historyHash==RANSWallR3::Hash(stageHistory) && referenceHash==RANSWallR3::Hash(m_reference) && InitializationWork()==Vector({0.,0.}),"WJ observation mutated immutable state/history/reference or called Lift");
+    return J::Object({{"schema",J::Quote("WJReadOnlyComparisonV1")},{"state_sha256",J::Quote(stateHash)},
+        {"state_after_sha256",J::Quote(RANSWallR3::Hash(state))},{"stage_history_sha256",J::Quote(historyHash)},
+        {"stage_history_after_sha256",J::Quote(RANSWallR3::Hash(stageHistory))},{"represented_initial_sha256",J::Quote(referenceHash)},
+        {"time",J::Number(time)},{"alpha_mass_spatial","0"},{"eta","0"},{"governing_solves","0"},{"initialization_lift_calls_iterations",J::Numbers(InitializationWork())},
+        {"spatial_residual",J::Numbers(spatial)},{"spatial_mass_dual_norms",J::Numbers(Norms(spatial,constraints,m_robustUstar))},
+        {"completed_stage",stageAlpha>0?J::Object({{"alpha_mass",J::Number(stageAlpha)},{"time",J::Number(time)},
+            {"history_sha256",J::Quote(historyHash)},{"residual",J::Numbers(stage)},{"mass_dual_norms",J::Numbers(Norms(stage,constraints,m_robustUstar))}}):"null"},
+        {"regional_spatial_mass_dual_norms",J::Rows(std::vector<Vector>{Norms(Residual(state,state,0,time,data,false,true,0),constraints,m_robustUstar),Norms(Residual(state,state,0,time,data,false,true,1),constraints,m_robustUstar)})},
+        {"spatial_terms",J::Object(terms)},{"constraints",J::Constraints(constraints)},
+        {"residual_order",J::Quote("u,v,k,entire outer epsilon,inner continuity,outer continuity,gauge,boundary/trace; consistent mass dual physical scaling")},
+        {"component_norm_warning",J::Quote("separately normed regional/source/diffusion/interface contributions are not linearly additive")},
+        {"observations",J::List(samples)},{"interfaces",J::List(interfaces)},
+        {"strong_divergence_sampled_Linf",J::Number(divergence)},{"arithmetic_evaluation_sensitivity",J::Numbers(evaluationSensitivity)},
+        {"audit",WJAuditPacket(audit,state,stageAlpha>0?stageHistory:state,stageAlpha,time,stageAlpha>0?"accepted_checkpoint_stage":"startup_readback")}});
 }
 }

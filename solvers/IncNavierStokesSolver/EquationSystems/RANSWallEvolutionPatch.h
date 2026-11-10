@@ -354,6 +354,10 @@ public:
     std::string Signature() const;
     Diagnostic WJCompleteAudit(const Vector &state,const Vector &history,double alpha,double time,
         const RANSWallEvolutionData &data,bool rangesOnly=false) const;
+    std::string WJAuditPacket(const Diagnostic &,const Vector &state,const Vector &history,
+        double alpha,double time,const std::string &phase) const;
+    std::string WJMeasurements(const Vector &state,const Vector &stageHistory,double stageAlpha,double time,
+        const RANSWallEvolutionData &,const std::vector<std::array<double,5>> &observations) const;
     std::string WJNativeChecks(const Vector &state,const RANSWallEvolutionData &data,double time) const;
     const std::string &ConstitutiveFailureContext() const { return m_solveInvalidContext; }
 private:
@@ -592,7 +596,8 @@ private:
     std::string m_pimpleKBound="Off",m_pimpleSnapshotDirectory="pimple-states";
     std::string m_pimpleKInventory="LegacyV1";
     double m_pimpleKFloorRelative=1e-8,m_pimpleBudgetTime=-1.;
-    bool m_pimpleSnapshots=false;
+    bool m_pimpleSnapshots=false,m_pimpleArithmetic=false;
+    double m_pimpleArithmeticTime=-1;
     int m_kBoundMaxAdd=2000,m_kBoundMaxTotal=2000,m_kBoundMaxSeparations=2000;
     double m_kBoundMaxSeconds=900.;
     std::string m_kBoundTrace="Summary",m_kBoundTraceFile="None",m_kBoundDumpFile="None";

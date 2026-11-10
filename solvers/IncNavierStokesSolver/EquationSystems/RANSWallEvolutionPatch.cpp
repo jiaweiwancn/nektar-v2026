@@ -294,6 +294,11 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     Require(snapshots=="Off" || snapshots=="On","invalid PIMPLE snapshot selector");
     m_pimpleSnapshots=snapshots=="On" || PimpleKBoundEnabled();
     session->LoadSolverInfo("RANSWallPimpleSnapshotDirectory",m_pimpleSnapshotDirectory,"pimple-states");
+    std::string arithmetic;session->LoadSolverInfo("RANSWallPimpleArithmetic",arithmetic,"Off");
+    Require(arithmetic=="Off" || arithmetic=="On","invalid PIMPLE arithmetic observation switch");
+    m_pimpleArithmetic=arithmetic=="On";
+    session->LoadParameter("RANSWallPimpleArithmeticTime",m_pimpleArithmeticTime,-1.);
+
     session->LoadParameter("RANSWallPimpleBudgetTime",m_pimpleBudgetTime,-1.);
     session->LoadSolverInfo("RANSWallFeasibleFile",m_feasibleTraceFile,"case.feasible.jsonl");
     session->LoadSolverInfo("RANSWallR3ProgressFile",m_r3ProgressFile,"case.r3-progress.jsonl");

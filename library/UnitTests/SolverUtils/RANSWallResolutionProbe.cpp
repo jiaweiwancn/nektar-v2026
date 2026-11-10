@@ -284,7 +284,7 @@ int main(int argc,char **argv)
             Require(RANSWallR3::HashFile(archived.get<std::string>("matrix_file"))==archived.get<std::string>("matrix_sha256"),"archived frozen transport matrix SHA256 differs");
         }
         const bool strictSpatialReadback=packet.get_optional<std::string>("native_checkpoint") &&
-            ((patch.AcceptedAWF() && (operation=="accepted_awf" || operation=="height_comparison" || operation=="selected_original_operator")) || operation=="evaluation_reuse_checks" || (patch.WJ() && operation=="wj_checks"));
+            ((patch.AcceptedAWF() && (operation=="accepted_awf" || operation=="height_comparison" || operation=="selected_original_operator")) || operation=="evaluation_reuse_checks" || (patch.WJ() && (operation=="wj_checks" || operation=="wj_measure")));
         if(packet.get_optional<std::string>("native_checkpoint"))
         {
             Require((operation=="k_bound" || operation=="branch_coverage" || archivedStages || strictSpatialReadback) && !packet.get<bool>("projection_only",false),
@@ -459,6 +459,42 @@ int main(int argc,char **argv)
         const bool historyMatch=std::memcmp(history.data(),reference.data(),history.size()*sizeof(double))==0;
         Require(strictSpatialReadback || archivedStages || !packet.get<bool>("require_history_h0",true) || historyMatch,"packet history differs from rebuilt native h0");
         const double time=packet.get<double>("time"),alpha=packet.get<double>("alpha");
+        if(operation=="wj_measure")
+        {
+            Require(strictSpatialReadback && patch.WJ(),"WJ measurements require strict alpha=0 native checkpoint readback");
+            const auto reportPath=packet.get<std::string>("native_report");
+            const auto reportHash=RANSWallR3::HashFile(reportPath);
+            Require(reportHash==packet.get<std::string>("native_report_sha256"),"WJ accepted report SHA256 differs");
+            Tree report;boost::property_tree::read_json(reportPath,report);
+            Require(report.get<std::string>("signature")==packet.get<std::string>("native_signature") &&
+                RANSWallR3::Hash(Read(report,"state"))==RANSWallR3::Hash(state) && report.get<double>("time")==time,
+                "WJ accepted report state/signature/time differs from checkpoint");
+            const auto cp=RANSWallTimeIntegration::ReadCheckpoint(packet.get<std::string>("native_checkpoint"),
+                packet.get<std::string>("native_signature"),1,serial->GetParameter("TimeStep"),patch.Size(),patch.DifferentialSize());
+            Require(report.get<std::size_t>("steps")==cp.integration.steps,"WJ accepted report step differs from checkpoint");
+            Vector stageHistory;double stageAlpha=0;
+            if(cp.integration.steps>0)
+            {
+                stageHistory=Read(report,"last_stage_history");stageAlpha=report.get<double>("last_stage_alpha");
+                Require(stageHistory.size()==state.size() && report.get<double>("last_stage_time")==time &&
+                    stageAlpha==1/serial->GetParameter("TimeStep"),"WJ completed-stage context differs from accepted checkpoint");
+                const auto &binding=report.get_child("wj_audit_packets").back().second;
+                Require(binding.get<std::string>("state_sha256")==RANSWallR3::Hash(state) &&
+                    binding.get<std::string>("stage_history_sha256")==RANSWallR3::Hash(stageHistory) &&
+                    binding.get<double>("time")==time && binding.get<double>("alpha_mass")==stageAlpha,
+                    "WJ completed-stage audit binding differs");
+            }
+            std::vector<std::array<double,5>> observations;
+            for(const auto &entry:packet.get_child("observations"))
+            {std::array<double,5> q{};int i=0;for(const auto &v:entry.second){Require(i<5,"WJ observation shape");q[i++]=v.second.get_value<double>();}Require(i==5,"WJ observation shape");observations.push_back(q);}
+            const auto checkpointHash=RANSWallR3::HashFile(packet.get<std::string>("native_checkpoint")+"/State.bin");
+            std::ofstream out(argv[3]);out<<J::Object({{"replay",replayContext},{"native_report_sha256",J::Quote(reportHash)},
+                {"measurements",patch.WJMeasurements(state,stageHistory,stageAlpha,time,data,observations)},
+                {"assembly_checks",packet.get<bool>("export_assembly_checks",false)?patch.WJNativeChecks(state,data,time):"null"}})<<'\n';
+            Require(out.good() && checkpointHash==RANSWallR3::HashFile(packet.get<std::string>("native_checkpoint")+"/State.bin") &&
+                reportHash==RANSWallR3::HashFile(reportPath),"WJ measurement changed saved checkpoint/report bytes");
+            world->Finalise();return 0;
+        }
         if(operation=="wj_checks")
         {
             Require(strictSpatialReadback && patch.WJ(),"WJ checks require immutable native checkpoint readback");

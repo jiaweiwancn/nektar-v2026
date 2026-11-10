@@ -35,6 +35,27 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
     int momentumAttempts=0,pressureAttempts=0,epsilonAttempts=0,kAttempts=0;
     int boundCalls=0,boundActivations=0,boundIterations=0,boundMass=0,boundKKT=0;
     auto put=[&](const std::string &key,const std::string &value){record.emplace_back(key,value);};
+    // Passive copies of already assembled/factored systems. This observer never
+    // applies a factor or changes a governing right-hand side or trajectory.
+    auto arithmetic=[&](const std::string &name,const WallMatrix &matrix,const Vector &rhs,
+        const Vector &solution,const Vector &defect,const WallMatrix &mass,const std::vector<int> &rows)
+    {
+        if(!m_pimpleArithmetic || (m_pimpleArithmeticTime>=0 && std::abs(time-m_pimpleArithmeticTime)>1e-14))return;
+        std::filesystem::create_directories(m_pimpleSnapshotDirectory);
+        const auto stem=(std::filesystem::path(m_pimpleSnapshotDirectory)/(name+"-t"+J::Number(time)+"-"+RANSWallR3::Hash(history).substr(0,12))).string();
+        auto save=[&](const WallMatrix &a,const std::string &suffix){const auto file=stem+suffix;std::ofstream out(file,std::ios::binary);
+            for(const auto &r:a)out.write(reinterpret_cast<const char*>(r.data()),r.size()*sizeof(double));
+            out.close();Require(out.good(),"passive arithmetic matrix write failed");
+            return J::Object({{"path",J::Quote(std::filesystem::absolute(file).string())},{"sha256",J::Quote(RANSWallR3::HashFile(file))},
+                {"shape",J::Numbers(Vector{double(a.size()),double(a.empty()?0:a[0].size())})}});};
+        const auto file=stem+".json";std::ofstream out(file);
+        out<<J::Object({{"schema",J::Quote("WJFrozenArithmeticV1")},{"time",J::Number(time)},{"alpha_mass",J::Number(alpha)},
+            {"history_sha256",J::Quote(RANSWallR3::Hash(history))},{"matrix",save(matrix,".matrix.bin")},
+            {"mass_or_correction_map",save(mass,".metric.bin")},{"rows",J::Numbers(rows)},
+            {"rhs",J::Numbers(rhs)},{"solution",J::Numbers(solution)},{"linear_residual",J::Numbers(defect)},
+            {"additional_governing_solves","0"}})<<'\n';out.close();Require(out.good(),"passive arithmetic packet write failed");
+        put(name+"_arithmetic",J::Object({{"path",J::Quote(std::filesystem::absolute(file).string())},{"sha256",J::Quote(RANSWallR3::HashFile(file))}}));
+    };
     auto publish=[&](bool completed,const std::string &failure)
     {
         put("time",J::Number(time));put("alpha",J::Number(alpha));
@@ -130,6 +151,10 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
         for(int i=0;i<np;++i)pressureDefect[i]-=pressureRhs[i];
         Require(Maximum(pressureDefect)<=1e-10*std::max(1.,Maximum(pressureRhs)),"PIMPLE pressure linear residual");
         ++pressure;pressureSolveTiming.Stop();
+        Vector predictorRhs(nv);for(int i=0;i<nv;++i)predictorRhs[i]=-flow.residual[i];
+        arithmetic("momentum",a,predictorRhs,predictor,predictorDefect,m,std::vector<int>(flow.rows.begin(),flow.rows.begin()+nv));
+        arithmetic("pressure",schur,pressureRhs,dz,pressureDefect,bg,std::vector<int>(flow.rows.begin()+nv,flow.rows.end()));
+
         RANSWallTiming::Scope correctionTiming("flow.correction_validate");
         Vector bGz(nv),Gz=Multiply(g,dz),du=predictor;
         for(int i=0;i<nv;++i)for(int j=0;j<np;++j)bGz[i]+=bg[j][i]*dz[j];
@@ -235,6 +260,14 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
             if(b==K()) {budget("last_accepted",base);budget("post_flow",flowState);budget("pre_k",preScalar);}
             for(int i=0;i<block.rows.size();++i)s[block.rows[i]]+=delta[i];
             const std::string name=b==Epsilon()?"epsilon":"k";
+            if(m_pimpleArithmetic)
+            {
+                WallMatrix metric(block.rows.size(),Vector(block.rows.size()));
+                for(int i=0;i<block.rows.size();++i)for(int j=0;j<block.rows.size();++j)
+                    metric[i][j]=m_mass[b][block.rows[i]-offset[b]][block.rows[j]-offset[b]];
+                arithmetic(name,block.matrix,rhs,delta,linear,metric,block.rows);
+            }
+
             put(name+"_frozen_linear_residual",J::Number(Maximum(linear)));
             put(name+"_same_state_source_storage_defect",J::Number(Maximum(agreement)));
             if(b==Epsilon())
