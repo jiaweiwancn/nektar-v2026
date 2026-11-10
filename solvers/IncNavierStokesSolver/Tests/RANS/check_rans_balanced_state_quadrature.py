@@ -10,9 +10,9 @@ from diagnose_rans_balanced_spatial import run_probe
 from run_cls_epawf_picard import set_parameter,write
 
 def main():
- p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--time',type=float,default=.016);a=p.parse_args();r=a.root.resolve();runtime=r/'runtime-resolution-v2';out=r/('evolved-quadrature-'+str(a.time));out.mkdir(exist_ok=False);os.environ.update(THREADS,LD_LIBRARY_PATH=str(runtime/'lib'),TMPDIR=str(r/'tmp'));checks=[]
- for wall in ('EP','Accepted'):
-  folders=[r/'campaigns'/('E-N-'+wall+'-'+suffix) for suffix in ('B5','B11')];base=[load(f/('T-'+format(a.time,'.4f'))/'metrics.json')['spatial_alpha_zero_full'] for f in folders]
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--time',type=float,default=.016);p.add_argument('--walls',choices=('EP','Accepted'),nargs='+',default=['EP','Accepted']);p.add_argument('--label-prefix');a=p.parse_args();r=a.root.resolve();runtime=r/'runtime-resolution-v2';out=r/('evolved-quadrature-'+str(a.time));out.mkdir(exist_ok=False);os.environ.update(THREADS,LD_LIBRARY_PATH=str(runtime/'lib'),TMPDIR=str(r/'tmp'));checks=[]
+ for wall in a.walls:
+  folders=[r/'campaigns'/((a.label_prefix or ('E-N-'+wall))+'-'+suffix) for suffix in ('B5','B11')];base=[load(f/('T-'+format(a.time,'.4f'))/'metrics.json')['spatial_alpha_zero_full'] for f in folders]
   for index,folder in enumerate(folders):
    endpoint=folder/('T-'+format(a.time,'.4f'));native=load(endpoint/'case.evolution.json');seed=load(folder/'initial-packet.json');target=out/(wall+'-'+str(index));target.mkdir();root=ET.parse(endpoint/'case.xml').getroot()
    for key,value in zip(('RANSWallNormalOrder','RANSWallTangentialOrder','RANSWallMassOrder','RANSWallVolumeOrder','RANSWallInterfaceOrder'),Q[2],strict=True):set_parameter(root,key,value)
