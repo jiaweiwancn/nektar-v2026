@@ -603,6 +603,9 @@ if(NOT RANS_PYTHON_DEPENDENCY_STATUS EQUAL 0)
 endif()
 if(Python3_Interpreter_FOUND)
     add_test(NAME RANSPilotEvidenceContract COMMAND ${Python3_EXECUTABLE} -B ${CMAKE_CURRENT_LIST_DIR}/test_rans_pilot_evidence.py)
+    add_test(NAME RANSDurationCoverageContract COMMAND ${Python3_EXECUTABLE} -B ${CMAKE_CURRENT_LIST_DIR}/test_rans_duration_contract.py)
+    set_tests_properties(RANSDurationCoverageContract PROPERTIES PROCESSORS 1 TIMEOUT 30
+        ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
     set_tests_properties(RANSPilotEvidenceContract PROPERTIES PROCESSORS 1 TIMEOUT 30
         ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1")
     add_test(NAME RANSQualificationFailureContract COMMAND ${Python3_EXECUTABLE} -B ${CMAKE_CURRENT_LIST_DIR}/test_rans_qualification.py)

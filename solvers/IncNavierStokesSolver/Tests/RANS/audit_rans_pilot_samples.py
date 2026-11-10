@@ -23,9 +23,9 @@ def matrix(rows,n):
  return csr_matrix((data,ids,offset),shape=(len(rows),n))
 
 def main():
- p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--label',required=True);a=p.parse_args();r=a.root.resolve();folder=r/'campaigns'/a.label;req=load(folder/'request-manifest.json')['request'];admission=RequestManifest(folder,req,True)
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--label',required=True);p.add_argument('--through-time',type=float);p.add_argument('--output-label',default='scalar-observations');a=p.parse_args();r=a.root.resolve();folder=r/'campaigns'/a.label;req=load(folder/'request-manifest.json')['request'];admission=RequestManifest(folder,req,True)
  os.environ.update(THREADS,LD_LIBRARY_PATH=str(r/'runtime/lib'),TMPDIR=str(r/'tmp'))
- out=folder/'scalar-observations';out.mkdir(exist_ok=False);seed=load(folder/'initial-packet.json')
+ out=folder/a.output_label;out.mkdir(exist_ok=False);seed=load(folder/'initial-packet.json')
  # Use an unchanged session; no solver action or checkpoint mutation.
  import shutil
  shutil.copy2(folder/('T-'+format(req['horizons'][0],'.4f'))/'case.xml',out/'case.xml')
@@ -38,7 +38,7 @@ def main():
  em=groups['epsilon_outer'][0].toarray();constant,_,rank,_=np.linalg.lstsq(em,np.ones(em.shape[0]),rcond=None);assert rank==n[3] and np.max(np.abs(em@constant-1))<1e-12
  assert np.max(np.abs(constant-np.rint(constant)))<1e-10;constant=np.rint(constant)
  def observe(state,t,stage):
-  row=dict(time=t,stage=stage,fields={})
+  row=dict(time=t,stage=stage,fields={},state_sha256=exact_vector_hash(state))
   for name,(m,q,b) in groups.items():
    values=m@np.array(state[off[b]:off[b]+n[b]]);imin=int(np.argmin(values));imax=int(np.argmax(values));v={}
    for kind,i,allwin in [('minimum',imin,minima),('maximum',imax,maxima)]:
@@ -47,9 +47,12 @@ def main():
    row['fields'][name]=v
    if not np.all(np.isfinite(values)) or np.min(values)<0:failure.append(dict(time=t,stage=stage,field=name,minimum=float(np.min(values))))
   records.append(row)
+ reports=[];report_sources=[]
  for f in sorted(folder.glob('T-*/case.evolution.json')):
   if not admission.completed(f.parent):continue
-  report=load(f);states=report['accepted_states'];times=report['audit_times'];assert len(states)==len(times)
+  report=load(f)
+  if a.through_time is not None and report['time']>a.through_time+1e-13:continue
+  reports.append(report);report_sources.append(dict(path=str(f),sha256=__import__('hashlib').sha256(f.read_bytes()).hexdigest()));states=report['accepted_states'];times=report['audit_times'];assert len(states)==len(times)
   for k,(t,state) in enumerate(zip(times,states,strict=True)):
    observe(state,t,'accepted')
    if k:
@@ -67,6 +70,10 @@ def main():
  budget=epsilon_budget_gate(epsilon_weak_budgets,Reference(req['model'],req['policy'],req['wall']))
  result=dict(status='pass' if not failure and weak['status']=='pass' and budget['status']=='pass' else 'fail',epsilon_budget_gate=budget,analytical_weak_balance=weak,scope='fixed reference-quadrature and native face rows; extrema over all retained accepted states and reconstructed one-sweep scalar stages',minimum=minima,maximum=maxima,observations=records,failures=failure,
   epsilon_weak_budgets=epsilon_weak_budgets,source_packet_sha256=__import__('hashlib').sha256((out/'packet.json').read_bytes()).hexdigest(),roundoff_floor=1e-12,mandatory_native_domain_audits_unchanged=True)
+ from rans_duration_contract import scalar_coverage
+ result['configuration']={k:req[k] for k in ('model','policy','wall','descriptor')};result['trajectory_request_sha256']=admission.payload['sha256'];result['sealed_native_reports']=report_sources
+ result['coverage']=scalar_coverage(result,reports,result['configuration'],a.through_time if a.through_time is not None else max(x['time'] for x in reports))
+ result['epsilon_constant_test_interpretation']='prescribed-row reaction identity; all nonzero constant coefficients constrained on this one-column patch; not an independent physical conservation theorem'
  write_json(out/'results.json',result)
  with (out/'packet.json').open('rb') as src,gzip.open(out/'native-basis.json.gz','wb',compresslevel=3) as dst:__import__('shutil').copyfileobj(src,dst)
  print(result['status']);return 0 if result['status']=='pass' else 1

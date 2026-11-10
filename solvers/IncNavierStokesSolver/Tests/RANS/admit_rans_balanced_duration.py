@@ -17,4 +17,8 @@ def main():
  if a.verify_existing:assert canonical(load(path))==canonical(expected),'admission evidence changed'
  else:assert not path.exists();write_json(path,expected)
  output=r/'duration-admission-verification.json';assert not output.exists();write_json(output,dict(status='pass',admission_sha256=hashlib.sha256(path.read_bytes()).hexdigest(),required_proofs=len(proof),scope='selected E94E95 Natural Accepted cohort only; independent model qualification retains its own gates'));return 0
-if __name__=='__main__':raise SystemExit(main())
+if __name__=='__main__':
+ import sys
+ if '--model' in sys.argv:
+  from admit_rans_configuration import main
+ raise SystemExit(main())
