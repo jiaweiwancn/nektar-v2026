@@ -17,7 +17,9 @@ def classify(bundle):
 
     for name in ('aggregate_negative_controls', 'actual_initial_binding',
                  'targeted_regressions', 'historical_receipt_bytes',
-                 'current_solver_libraries', 'current_diagnostic_libraries'):
+                 'current_solver_libraries', 'current_diagnostic_libraries',
+                 'forward_interface_tolerance', 'physical_budget_controls',
+                 'physical_budget_accounting'):
         check(name, lambda name=name: require(
             bundle['verification'][name]['status'] == 'pass',
             'required_verification_missing_or_failed'))

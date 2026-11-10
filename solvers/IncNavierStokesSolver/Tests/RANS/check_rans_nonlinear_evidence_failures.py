@@ -18,7 +18,8 @@ def main():
     companions = {m: dict(last_time=.5) for m in MEMBERS}
     bundle = dict(verification={n: dict(status='pass') for n in (
         'aggregate_negative_controls', 'actual_initial_binding', 'targeted_regressions',
-        'historical_receipt_bytes', 'current_solver_libraries', 'current_diagnostic_libraries')},
+        'historical_receipt_bytes', 'current_solver_libraries', 'current_diagnostic_libraries',
+        'forward_interface_tolerance', 'physical_budget_controls', 'physical_budget_accounting')},
         neutral={}, responses={}, half_amplitude=dict(status='pass'))
     for model in ('A93', 'A95'):
         cfg = dict(model=model, policy='Natural', wall='Accepted')
