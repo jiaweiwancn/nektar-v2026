@@ -68,7 +68,7 @@ def series_gate(values,uncertainty=1e-10):
 
 class Campaign:
     def __init__(self,args):
-        self.r=args.root.resolve();self.phase=args.phase;self.output=self.r/('preservation-'+args.phase);self.output.mkdir(exist_ok=True)
+        self.r=args.root.resolve();self.phase=args.phase;self.models=tuple(args.models);self.output=self.r/('preservation-'+args.phase+('-'+args.label if args.label else ''));self.output.mkdir(exist_ok=True)
         self.solver=self.r/'runtime/IncNavierStokesSolver';self.descriptor=self.r/'runtime/RANSNewModelsProbe';self.sampler=self.r/'runtime/RANSPreservationProbe'
         self.manifest=load(self.r/'runtime/source-build.json');self.result=dict(schema=1,phase=self.phase,checks=[],status='running',
             runtime_manifest_sha256=sha(self.r/'runtime/source-build.json'),runtime_source=self.manifest['revision'],ranks=1,threads=THREADS,
@@ -184,7 +184,7 @@ class Campaign:
         # Quadrature is Q2, never inferred from changing only normal order.
         spatial=load(self.r/'preservation-spatial/evaluation-grid.json');grid=spatial['grid'];weights=spatial['weights']
         self.grid_weights=weights;expected=[];tables=[]
-        for model in MODELS:
+        for model in self.models:
             for policy in POLICIES:
                 for wall in WALLS:
                     ref=Reference(model,policy,wall);tag='-'.join((model,policy,wall));runs=[]
@@ -239,7 +239,7 @@ class Campaign:
         self.save();return 0 if self.result['status']=='pass' else 1
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--phase',choices=('spatial','temporal'),required=True);a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--phase',choices=('spatial','temporal'),required=True);p.add_argument('--models',nargs='+',choices=MODELS,default=list(MODELS));p.add_argument('--label',default='');a=p.parse_args()
     c=Campaign(a)
     try:getattr(c,a.phase)()
     except Exception as error:c.result['checks'].append(dict(name='orchestration',status='fail',failure=repr(error)));c.save()
