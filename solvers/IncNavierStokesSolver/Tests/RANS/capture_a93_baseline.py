@@ -15,7 +15,7 @@ from continue_cls_epawf_pimple import freeze
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--source',type=Path,required=True);p.add_argument('--build',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args()
     a.output.mkdir(parents=True,exist_ok=False);os.environ.update(THREADS)
-    def git(*args):return subprocess.check_output(['git','-C',str(a.source),*args],text=True).strip()
+    def git(*args):return subprocess.check_output(['git','-c','core.filemode=false','-C',str(a.source),*args],text=True).strip()
     record=dict(schema=1,revision=git('rev-parse','HEAD'),status=git('status','--porcelain'),threads=THREADS,ranks=1,commands=[],source_files={})
     for root in (a.source/'library/SolverUtils/Turbulence',a.source/'solvers/IncNavierStokesSolver'):
         for f in root.rglob('*'):
@@ -39,4 +39,5 @@ def main():
     record.update(accepted_steps=report['steps'],failure=report['failure'],initial_native_audit=report.get('state_audits',[])[:1],status='pass' if report['steps']==2 and not report['failure'] else 'fail')
     (a.output/'baseline.json').write_text(json.dumps(record,indent=2)+'\n')
     print(json.dumps(dict(status=record['status'],steps=report['steps'],failure=report['failure'])))
-if __name__=='__main__':main()
+    return 0 if record['status']=='pass' else 1
+if __name__=='__main__':sys.exit(main())
