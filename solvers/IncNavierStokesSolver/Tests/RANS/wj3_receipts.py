@@ -17,7 +17,14 @@ def command(args):
     with log.open('w') as stream:result=subprocess.run(argv,stdout=stream,stderr=subprocess.STDOUT,env=env)
     receipts.append(dict(label=args.label,command=argv,started_utc=datetime.fromtimestamp(start,timezone.utc).isoformat(),
         seconds=time.time()-start,exit_code=result.returncode,log=str(log),log_sha256=sha(log),threads=THREADS))
-    write_json(file,receipts);print(json.dumps(receipts[-1]));return result.returncode
+    current=receipts[-1]
+    import fcntl
+    with (root/'.receipt.lock').open('a') as lock:
+        fcntl.flock(lock,fcntl.LOCK_EX)
+        merged=json.loads(file.read_text()) if file.exists() else []
+        if any(r['label']==args.label for r in merged):raise ValueError('immutable receipt label already exists')
+        merged.append(current);write_json(file,merged)
+    print(json.dumps(current));return result.returncode
 
 
 def collect(args):
@@ -35,7 +42,7 @@ def collect(args):
             if p.is_file():libs[str(p.resolve())]=sha(p.resolve())
         runtime[name]=dict(path=str(binary),sha256=sha(binary),ldd=ldd,resolved_libraries=libs)
     artifacts={}
-    for scope in [root/'study',root/'study-final',build/'wj3-smoke',build/'wj2-native-EP',build/'wj2-native-Budget',build/'wj2-legacy-transaction']:
+    for scope in [root/'study',root/'study-final',build]:
         if not scope.exists():continue
         for f in scope.rglob('*'):
             if f.is_file() and (f.suffix in ('.json','.xml') or f.name=='State.bin'):
@@ -47,8 +54,9 @@ def collect(args):
     manifest=dict(schema='WJ3LinuxManifestV1',root=str(root),source_revision=git('rev-parse','HEAD'),source_tree=git('rev-parse','HEAD^{tree}'),
         source_status=git('status','--short'),source_content_sha256=sha(root/'source-content.json'),specification_sha256=specs,
         runtime=runtime,effective_flags=flags,cmake_cache_sha256=sha(build/'CMakeCache.txt'),
+        dependencies=dict(python=sys.version,numpy=__import__('numpy').__version__,scipy=__import__('scipy').__version__,sympy=__import__('sympy').__version__),
         compiler=subprocess.check_output(['c++','--version'],text=True),platform=subprocess.check_output(['uname','-a'],text=True),
-        allocation=dict(initial_build_workers=1,subsequent_build_workers=4,test_parallel=1,ranks=1,threads=THREADS,server_total_worker_limit=72),
+        allocation=dict(initial_build_workers=1,subsequent_build_workers=4,main_policy_concurrency=2,test_parallel=1,ranks=1,threads=THREADS,server_total_worker_limit=72),
         command_receipts=json.loads((root/'command-receipts.json').read_text()),command_receipts_sha256=sha(root/'command-receipts.json'),
         inventory=dict(path=str(root/'inventory.log'),sha256=sha(root/'inventory.log'),count=len(json.loads((root/'inventory.log').read_text())['tests'])),
         artifacts=dict(path=str(root/'artifact-index.json'),sha256=sha(root/'artifact-index.json'),count=len(artifacts)),

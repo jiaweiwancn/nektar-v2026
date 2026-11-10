@@ -37,6 +37,9 @@ class Study:
             attempt_limit=500,ranks=1,threads=THREADS,arithmetic_policy='-ffp-contract=off -fno-fast-math',
             physical_duration_units='seconds; dimensionless duration T*u*/H = T/2')
         require(self.s['solver_sha256']==sha(args.solver) and self.s['probe_sha256']==sha(args.probe),'runtime changed during immutable study; use a new root')
+        self.s['comparison_driver_revision']=subprocess.check_output(['git','-C',str(Path(__file__).resolve().parents[4]),'rev-parse','HEAD'],text=True).strip()
+        self.s['measurement_driver_sha256']=sha(Path(__file__))
+        self.s['physical_comparison_sha256']=sha(Path(__file__).with_name('wj3_measure.py'))
         self.save()
 
     def save(self):write_json(self.file,self.s)
@@ -264,7 +267,7 @@ class Study:
         measurements=[load(Path(row['comparison']['path']))['measurements'] for row in results]
         A=compare(measurements[0],measurements[1],self.a.policy);B=compare(measurements[1],measurements[2],self.a.policy)
         rates={}
-        for f in FIELDS:
+        for f in FIELDS+('velocity',):
             a,b=A['fields'][f]['L2'],B['fields'][f]['L2'];floor=max(row['arithmetic']['estimated_comparison_floor'][f] for row in results)
             rates[f]=dict(A=a,B=b,comparison_floor=floor,resolved=min(a,b)>floor,
                 p=math.log2(a/b) if min(a,b)>floor else None)

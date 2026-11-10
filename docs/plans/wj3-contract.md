@@ -55,7 +55,8 @@ Measurements retain separately:
 5. Same-time differences on a common physical observation rule.
 
 Residual norms use the existing consistent native mass dual and fixed physical
-scales. Their blocks include u,v,k, the entire outer epsilon region, inner and
+scales; the algebraic gauge and boundary/trace constraints use their fixed
+physical scalar/max scales. Their blocks include u,v,k, the entire outer epsilon region, inner and
 outer continuity, gauge and boundary/trace constraints. Source, diffusion,
 interface and regional load vectors are retained; their separately computed
 norms cannot be added as if they were signed vectors. Synthetic WJNativeChecks
@@ -127,8 +128,8 @@ The same-T cross-mesh run uses2493 if the measured full one-step process cost
 on that mesh, remaining main/restart work and an observation reserve fit;
 otherwise639, leaving finer-mesh temporal qualification open. The total cap is
 500 scheduled attempts per policy, including failed attempts. Work is serial,
-initially one build worker, then four after a current capacity snapshot; one test,
-numerical-library threads=1, below the server-wide
+initially one build worker, then four after a current capacity snapshot; CTest -j1, and subsequently two independent serial policy drivers after a
+current capacity snapshot; numerical-library threads=1, below the server-wide
 72-worker ceiling. No historical long campaign is included.
 
 Two common-time differences A and B produce p=log2(A/B) only above their

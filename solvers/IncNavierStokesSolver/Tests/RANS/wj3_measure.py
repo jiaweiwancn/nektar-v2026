@@ -69,6 +69,8 @@ def norms(difference,weights,outer):
         active=outer if j==3 else np.ones(len(w),dtype=bool)
         result[name]=dict(L2=float(np.sqrt(np.dot(w[active],d[active,j]**2))),
             sampled_Linf=float(max(abs(d[active,j]))))
+    speed=np.hypot(d[:,0],d[:,1])
+    result['velocity']=dict(L2=float(np.sqrt(np.dot(w,speed**2))),sampled_Linf=float(max(speed)))
     return dict(fields=result,overall_pressure_gauge_shift=shift)
 
 
@@ -169,7 +171,8 @@ def arithmetic(report,measurement):
     propagation=np.array([N if g<=1+1e-14 else math.expm1(N*math.log(g))/(g-1) for g in growth])
     floor=100*(2*propagation*raw_floor+np.sqrt(2)*np.array(measurement['arithmetic_evaluation_sensitivity']))
     floor[5]+=2*floor[2]/3
-    return dict(systems=systems,estimated_comparison_floor=dict(zip(FIELDS,map(float,floor))),
+    floors=dict(zip(FIELDS,map(float,floor)));floors['velocity']=math.hypot(floors['u'],floors['v'])
+    return dict(systems=systems,estimated_comparison_floor=floors,
         raw_one_step_physical_error_estimate=dict(zip(FIELDS,map(float,raw_floor))),safety_factor=100,
         propagation='terminal frozen-system uncertainty summed over N steps using terminal frozen history-map mass-norm amplification; factor2 for a pair of trajectories; finite diagnostic estimate, not a nonlinear perturbation theorem',
         accumulated_propagation_factors=propagation.tolist(),frozen_history_map_amplifications=growth.tolist(),
