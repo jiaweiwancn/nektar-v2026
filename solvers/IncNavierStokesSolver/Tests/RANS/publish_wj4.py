@@ -94,7 +94,7 @@ def main():
     for scope in (root/'study',study,observer/'build/wj4-observations',observer/'build/wj3-smoke',observer/'build/wj2-native-EP',observer/'build/wj2-native-Budget',root/'build/wj4-observations',root/'build/wj3-smoke',root/'build/wj2-native-EP',root/'build/wj2-native-Budget'):
         if scope.exists():
             for f in scope.rglob('*'):
-                if f.is_file() and (f.suffix in ('.json','.xml','.bin','.log') or f.name=='State.bin'):index[str(f)]=dict(bytes=f.stat().st_size,sha256=file_hash(f))
+                if f.is_file() and f.suffix!='.lock':index[str(f)]=dict(bytes=f.stat().st_size,sha256=file_hash(f))
     write_once(meta/'artifact-index.json',index)
     inventory=read(observer/'inventory.json');tests={};commands=read(root/'command-receipts.json')+(read(observer/'command-receipts.json') if observer!=root else [])
     qualification=root/'qualification-validation'
