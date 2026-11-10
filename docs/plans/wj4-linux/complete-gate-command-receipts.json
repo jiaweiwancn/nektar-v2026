@@ -1,0 +1,28 @@
+[
+  {
+    "label": "ctest-alltimes15-metadata",
+    "command": [
+      "ctest",
+      "--test-dir",
+      "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj4-20261110/qualification-validation/build",
+      "-j",
+      "1",
+      "--output-on-failure",
+      "-R",
+      "^(WJQualificationMetadata)$"
+    ],
+    "started_utc": "2026-11-10T17:06:19.597812+00:00",
+    "seconds": 2.1630139350891113,
+    "exit_code": 0,
+    "log": "/media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/wj4-20261110/qualification-validation/ctest-alltimes15-metadata.log",
+    "log_sha256": "b954c3302b06f43dc54deb89dd6fec1c714f7a01beb0903c1529a9c30170b64d",
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1"
+    }
+  }
+]
