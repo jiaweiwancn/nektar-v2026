@@ -4,6 +4,7 @@
 import argparse
 import csv
 import json
+import os
 from pathlib import Path
 import re
 import shutil
@@ -95,6 +96,12 @@ def main():
         if scope.exists():
             for f in scope.rglob('*'):
                 if f.is_file() and f.suffix!='.lock':index[str(f)]=dict(bytes=f.stat().st_size,sha256=file_hash(f))
+    # Include root-level oracle JSON and every generated regression field,
+    # checkpoint and log, while leaving compiler objects outside this index.
+    for directory in {root/'build',build}:
+        for f in directory.rglob('*'):
+            if f.is_file() and str(f) not in index and f.suffix in ('.json','.xml','.bin','.fld','.opt','.log'):
+                index[str(f)]=dict(bytes=f.stat().st_size,sha256=file_hash(f))
     write_once(meta/'artifact-index.json',index)
     inventory=read(observer/'inventory.json');tests={};commands=read(root/'command-receipts.json')+(read(observer/'command-receipts.json') if observer!=root else [])
     qualification=root/'qualification-validation'
@@ -120,6 +127,24 @@ def main():
         observer_commands=artifacts([observer/'command-receipts.json']),source_equivalence=artifacts(list(root.glob('*equivalence*.json'))+list(observer.glob('*equivalence*.json'))),finite_scope='reference-Dirichlet strip [0,1]x[0,2]; serial flat2D p3; finite observation and angular inventories; no global or long-time theorem')
     manifest['registered_complete_gate_supplement']=artifacts([qualification/'command-receipts.json',qualification/'inventory.json',qualification/'build/CMakeCache.txt',
         *qualification.glob('*-metadata-inventory.json'),*qualification.glob('*-metadata-accounting.json'),*qualification.glob('*-metadata-LastTest.log')])
+    # Regression suites use each build's geometry directory. Readback instead
+    # retains the producer geometry closure; record these roles separately.
+    regression=read(root/'regression-verification.json')['runtimes'];closures={}
+    previous=os.environ.get('LD_LIBRARY_PATH','')
+    try:
+        for directory in {root,observer}:
+            selected=set(regression[str(directory)]['names']);closure={}
+            os.environ['LD_LIBRARY_PATH']=str(directory/'build/geometry-lib')+':'+previous
+            for test in read(directory/'inventory.json')['tests']:
+                if test['name'] not in selected:continue
+                for arg in test.get('command',[]):
+                    p=Path(arg)
+                    if not p.is_file():continue
+                    with p.open('rb') as stream:elf=stream.read(4)==b'\x7fELF'
+                    if elf and str(p.resolve()) not in closure:closure[str(p.resolve())]=identity(p)
+            closures[str(directory)]=closure
+    finally:os.environ['LD_LIBRARY_PATH']=previous
+    manifest['regression_runtime_closures']=closures
     manifest['numerical_environment']=dict(python=sys.version,numpy=__import__('numpy').__version__,scipy=__import__('scipy').__version__,
         sympy=__import__('sympy').__version__,compiler=subprocess.check_output(['c++','--version'],text=True),platform=subprocess.check_output(['uname','-a'],text=True),
         allocation=dict(initial_build_workers=1,later_build_workers=4,policy_concurrency=2,test_parallel=1,ranks=1,numerical_threads=1,total_worker_cap=72))
