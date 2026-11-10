@@ -614,6 +614,11 @@ if(Python3_Interpreter_FOUND)
     add_test(NAME RANSQualificationFailureContract COMMAND ${Python3_EXECUTABLE} -B ${CMAKE_CURRENT_LIST_DIR}/test_rans_qualification.py)
     set_tests_properties(RANSQualificationFailureContract PROPERTIES PROCESSORS 1 TIMEOUT 30)
     if(RANS_BUILD_SOLVER)
+        add_test(NAME RANSForwardInterfaceTolerance COMMAND ${Python3_EXECUTABLE} -B
+            ${CMAKE_CURRENT_LIST_DIR}/check_rans_forward_interface_tolerance.py
+            --probe $<TARGET_FILE:RANSPreservationProbe> --descriptor-probe $<TARGET_FILE:RANSNewModelsProbe>)
+        set_tests_properties(RANSForwardInterfaceTolerance PROPERTIES PROCESSORS 1 TIMEOUT 600
+            ENVIRONMENT "OMP_NUM_THREADS=1;OPENBLAS_NUM_THREADS=1;MKL_NUM_THREADS=1;BLIS_NUM_THREADS=1;PYTHONDONTWRITEBYTECODE=1;TMPDIR=$ENV{TMPDIR}")
         add_test(NAME RANSFrozenBoundaryInterfaceRegression COMMAND ${Python3_EXECUTABLE} -B
             ${CMAKE_CURRENT_LIST_DIR}/test_rans_frozen_boundary_interface.py
             --solver $<TARGET_FILE:IncNavierStokesSolver> --sampler $<TARGET_FILE:RANSPreservationProbe>
