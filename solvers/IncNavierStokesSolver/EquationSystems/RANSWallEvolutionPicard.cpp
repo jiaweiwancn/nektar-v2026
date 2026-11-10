@@ -1390,14 +1390,21 @@ std::string RANSWallEvolutionPatch::WJNativeChecks(const Vector &state,const RAN
     for(const auto &v:outerVelocity->Quadrature(24))append({Point(0,v.coordinate),Point(OuterPressure(),v.coordinate),Point(Epsilon(),v.coordinate),v.weight},false,nullptr);
     // Extract actual native off-constraint states and test the common action
     // in a simultaneous k/epsilon/raw-G direction without changing the state.
+    auto extractedState=state;Vector nativeDirection(Size());
+    for(int a=0;a<m_dimension;++a)
+    {
+        const auto increment=fields[a]->Project([&](const RANSWallCoordinate &p){return (a==0?.07:-.13)*p[0];});
+        const auto direction=fields[a]->Project([&](const RANSWallCoordinate &p){return a==0?.2*p[0]+.3*p[2]:-.2*p[0]+.4*p[2];});
+        for(int j=0;j<size[a];++j){extractedState[offset[a]+j]+=increment[j];nativeDirection[offset[a]+j]=direction[j];}
+    }
     std::vector<std::string> constitutive;int extracted=0;
     for(const auto &q:m_outer)
     {
         if(extracted++>=4)break;
-        RANSTensor g{},h{{{.2,.1,.3},{0,-.1,0},{-.2,0,.4}}};
-        for(int a=0;a<m_dimension;++a)g[PhysicalAxis(a)]=q.v.Gradient(state,offset[a]);
-        g[0][0]+=.07;g[2][0]-=.13;
-        const double k=q.v.Value(state,offset[K()]),epsilon=q.e.Value(state,offset[Epsilon()]);
+        RANSTensor g{},h{};
+        for(int a=0;a<m_dimension;++a)
+        {g[PhysicalAxis(a)]=q.v.Gradient(extractedState,offset[a]);h[PhysicalAxis(a)]=q.v.Gradient(nativeDirection,offset[a]);}
+        const double k=q.v.Value(extractedState,offset[K()]),epsilon=q.e.Value(extractedState,offset[Epsilon()]);
         const auto c=OuterClosure(k,epsilon,g,q.v.coordinate),d=ApplyWJClosureDirection(k,epsilon,g,.13,-.04,h,m_parameters.wj,WJGradientPolicy::DevStrainRawWorkV1);
         Vector G,H,R,dR;for(int a=0;a<3;++a)for(int b=0;b<3;++b){G.push_back(g[a][b]);H.push_back(h[a][b]);R.push_back(c.reynoldsStress[a][b]);dR.push_back(d.reynoldsStress[a][b]);}
         constitutive.push_back(J::Object({{"coordinate",J::Numbers(q.v.coordinate)},{"k",J::Number(k)},{"epsilon",J::Number(epsilon)},
@@ -1451,6 +1458,8 @@ std::string RANSWallEvolutionPatch::WJNativeChecks(const Vector &state,const RAN
         {"endpoint_K_trace_action_expected",J::Numbers(Vector{traceDirection,traceExpected})},
         {"interface_flux",J::List(interface)},
         {"terms",J::Object(terms)},{"independent_quadrature",J::List(samples)},
+        {"extracted_native_fixture_sha256",J::Quote(RANSWallR3::Hash(extractedState))},
+        {"extracted_native_velocity_increments",J::List({J::Quote("0.07*x"),J::Quote("-0.13*x")})},
         {"extracted_constitutive",J::List(constitutive)}});
 }
 }

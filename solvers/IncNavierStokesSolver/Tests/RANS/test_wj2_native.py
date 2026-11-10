@@ -103,6 +103,8 @@ def independent_loads(checks,policy,offsets):
         errors[name]=float(np.max(abs(actual-expected[name])))
     for row in checks['extracted_constitutive']:
         k,e=row['k'],row['epsilon'];G=np.array(row['G']).reshape(3,3);H=np.array(row['direction_G']).reshape(3,3)
+        require(np.max(abs(G[1]))==0 and np.max(abs(G[:,1]))==0 and np.max(abs(H[1]))==0 and
+            np.max(abs(H[:,1]))==0,'native fixture lost the physical x-z embedding')
         c=independent(k,e,G)
         assert_allclose(np.array(row['R']).reshape(3,3),c['R'],rtol=3e-12,atol=3e-12)
         require(abs(row['divergence'])>.01 and abs(row['nu_eff']-row['nu_d'])>1e-5,'off-reference native action fixture is ineffective')
@@ -124,6 +126,9 @@ def reference_comparison(checks,policy):
     def Q(z):
         E=A*(z/c if z<c else 1+math.log(z/c))
         return E-t*t*(J(z)-nu*z/(d*(d+a*z)))
+    require(zv<=0 and d>=2*nu and t*t*(J(H)-nu*H/(d*(d+a*H)))/A>=1,
+        'continuum rough-reference proposition hypotheses failed')
+    assert_allclose([Q(0),Q(H)],[0.,0.],atol=1e-12,rtol=0)
     cache={}
     def kref(z):
         if policy=='EP':return K
