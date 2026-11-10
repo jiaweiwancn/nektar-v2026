@@ -14,6 +14,7 @@ from rans_worker_budget import spawn
 
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--admission',type=Path,required=True);p.add_argument('--dt',type=float,choices=(.002,.001),default=.002);p.add_argument('--max-time',type=float,choices=(.016,.1,.5),default=.016);p.add_argument('--concurrency',type=int,choices=(1,2,4),default=2);p.add_argument('--resume',action='store_true');a=p.parse_args();r=a.root.resolve();ad=load(a.admission);require(ad['status']=='pass','admission_failed');cfg=ad['configuration'];require([a.dt,a.dt/2] in ad['timestep_trials'],'timestep_trial_not_admitted');tag=prefix(cfg['model'],cfg['policy'],cfg['wall'])+'-duration-'+str(a.dt);source=Path(__file__).parent
+    os.environ.update(THREADS,LD_LIBRARY_PATH=str(r/'runtime/lib'),TMPDIR=str(r/'tmp'))
     request=dict(schema='ConfigurationDurationControllerV2',configuration=cfg,admission_sha256=sha(a.admission),timesteps=[a.dt,a.dt/2],milestones=ad['milestones'],meshes=ad['meshes'],common_packet_sha256=ad['common_packet_sha256'],runtime={n:runtime_identity(r/'runtime'/n) for n in ad['runtime']},history=ad['history'],gates=ad['neutral_gates'])
     for name,value in request['runtime'].items():require(value==ad['runtime'][name],'admitted_runtime_changed:'+name)
     cohort=RequestManifest(r/'duration-cohorts'/tag,request,a.resume);out=r/'duration-schedules'/(tag+'-'+str(a.max_time));out.mkdir(parents=True,exist_ok=a.resume);env=dict(os.environ,**THREADS);events=[]

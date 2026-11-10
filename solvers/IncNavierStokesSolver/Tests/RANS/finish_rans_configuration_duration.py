@@ -15,6 +15,7 @@ from rans_worker_budget import spawn
 
 def finish(r, admission_path, dt, T, resume=False):
     source=Path(__file__).parent;ad=load(admission_path);config=ad['configuration'];tag=prefix(config['model'],config['policy'],config['wall'])+'-duration-'+str(dt);runtime=r/'runtime-resolution-v3';require(runtime.exists(),'forward_probe_runtime_not_frozen')
+    os.environ.update(THREADS,LD_LIBRARY_PATH=str(runtime/'lib'),TMPDIR=str(r/'tmp'))
     common=Path(ad['common_directory']);require(sha(common/'packet.json.gz')==ad['common_packet_sha256'],'common_packet_changed');require(runtime_identity(runtime/'RANSPreservationProbe')==ad['duration_diagnostic_runtime'],'admitted_diagnostic_runtime_changed')
     times=[t for t in ad['milestones'] if t<=T+1e-13];out=r/'duration-audits'/(tag+'-'+str(T));labels={m:tag+'-'+m for m in MEMBERS}
     request=dict(schema='ConfigurationMilestoneAuditV2',configuration=config,timesteps=[dt,dt/2],required_times=times,meshes=ad['meshes'],common_packet_sha256=ad['common_packet_sha256'],admission_sha256=sha(admission_path),analysis_runtime=runtime_identity(runtime/'RANSPreservationProbe'),trajectory_requests={m:sha(r/'campaigns'/v/'request-manifest.json') for m,v in labels.items()})

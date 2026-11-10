@@ -31,7 +31,7 @@ def validate_audit(path,campaign,config,times,common):
 
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--previous-root',type=Path,required=True);p.add_argument('--model',choices=('A93','A95','E94E95'),required=True);p.add_argument('--policy',choices=('Natural','Prescribed'),default='Natural');p.add_argument('--wall',choices=('EP','Accepted'),required=True);a=p.parse_args();r=a.root.resolve();old=a.previous_root.resolve();os.environ.update(THREADS,LD_LIBRARY_PATH=str(r/'runtime/lib'),TMPDIR=str(r/'tmp'))
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--previous-root',type=Path,required=True);p.add_argument('--model',choices=('A93','A95','E94E95'),required=True);p.add_argument('--policy',choices=('Natural','Prescribed'),default='Natural');p.add_argument('--wall',choices=('EP','Accepted'),required=True);p.add_argument('--output',type=Path);a=p.parse_args();r=a.root.resolve();old=a.previous_root.resolve();os.environ.update(THREADS,LD_LIBRARY_PATH=str(r/'runtime/lib'),TMPDIR=str(r/'tmp'))
     tag=prefix(a.model,a.policy,a.wall);config=dict(model=a.model,policy=a.policy,wall=a.wall)
     first=old/'campaigns'/(tag+'-B5');req=load(first/'request-manifest.json')['request'];identity(req,config);config['descriptor']=req['descriptor']
     common=old/'diagnosis'/((a.model+'-'+a.policy+'-'+a.wall) if a.model!='E94E95' else 'initial-'+a.wall)/'common'
@@ -91,13 +91,13 @@ def main():
     output=dict(schema='ConfigurationDurationAdmissionV2',status='pass',configuration=config,
         required_short_times=list(SHORT_TIMES),milestones=[.016,.1,.5],timestep_trials=[[.002,.001],[.001,.0005]],
         meshes=meshes,common_directory=str(common),common_packet_sha256=sha(common/'packet.json.gz'),
-        runtime=runtimes,diagnostic_runtime=runtime_identity(r/'runtime-resolution-v2/RANSPreservationProbe'),duration_diagnostic_runtime=runtime_identity(r/'runtime-resolution-v3/RANSPreservationProbe'),
+        runtime=runtimes,diagnostic_runtime=runtime_identity(r/'runtime-resolution-v2/RANSPreservationProbe'),duration_diagnostic_runtime=load(r/'runtime-resolution-v3/source-build.json')['runtime'],
         runtime_reuse_bridges=bridges,governing_source_proof=source_proof,initial_gate=dict(source=str(initial),sha256=sha(initial),body=load(initial)),
         short_spatial_audits=audits,short_companions=companions,short_comparisons=comparisons,evolved_reductions=reductions,
         frozen_quadrature=dict(quad,source=str(quadpath),sha256=sha(quadpath),descriptor_bindings=quadrature_bindings),previous_root=str(old),
         neutral_gates=dict(field_RMS=1e-3,vertical_RMS=1e-4,wall_traction=1e-3,interface_traction=1e-3,temporal_floor=1e-7,temporal_fraction=.1,residual_floor=1e-8,residual_ratio=.85,residual_uncertainty=1e-10),
         history='independently initialized at each dt; unchanged-method restart within trajectory')
-    dest=r/'admissions'/(tag+'.json');dest.parent.mkdir(exist_ok=True);require(not dest.exists(),'admission_already_exists');write_json(dest,output);print(str(dest));return 0
+    dest=a.output or r/'admissions'/(tag+'.json');dest.parent.mkdir(exist_ok=True);require(not dest.exists(),'admission_already_exists');write_json(dest,output);print(str(dest));return 0
 
 
 if __name__=='__main__':raise SystemExit(main())
