@@ -62,6 +62,11 @@ def main():
   if obs.exists():
    d=load(obs);row['read_only_scalar_stage_observations']={k:d[k] for k in ('status','scope','minimum','maximum','epsilon_weak_budgets','analytical_weak_balance','source_packet_sha256')};row['observer_receipt_sha256']=sha(obs)
   row['status']=load(folder/'results.json').get('status') if (folder/'results.json').exists() else 'incomplete';result['cases'].append(row)
+ first=base/'campaigns/E-N-EP-h0p5/T-0.0016/case.evolution.json'
+ if first.exists():
+  d=load(first);witness=dict(label='first-p5-cubic-guard',source=str(first),failure=d.get('failure'),state=d.get('state'),history=d.get('native_history'),time=d.get('time'),steps=d.get('steps'),signature=d.get('signature'))
+  with gzip.open(out/'first-p5-cubic-guard.json.gz','wt') as stream:json.dump(witness,stream)
+  result['failures'].append({k:witness[k] for k in ('label','source','failure','time','steps')})
  comparisons=[]
  for f in sorted(r.glob('*-space-*.json')):
   d=load(f);comparisons.append(dict(path=str(f),sha256=sha(f),**d))
